@@ -996,24 +996,25 @@ broadcast_xmessage (GdkDisplay *display,
                                                            message_type_begin);
   
   {
-    XEvent xevent;
+    XClientMessageEvent xclient;
     const char *src;
     const char *src_end;
     char *dest;
     char *dest_end;
     
-    xevent.xclient.type = ClientMessage;
-    xevent.xclient.message_type = type_atom_begin;
-    xevent.xclient.display =xdisplay;
-    xevent.xclient.window = xwindow;
-    xevent.xclient.format = 8;
+		memset(&xclient, 0, sizeof (xclient));
+    xclient.type = ClientMessage;
+    xclient.message_type = type_atom_begin;
+    xclient.display =xdisplay;
+    xclient.window = xwindow;
+    xclient.format = 8;
 
     src = message;
     src_end = message + strlen (message) + 1; /* +1 to include nul byte */
     
     while (src != src_end)
       {
-        dest = &xevent.xclient.data.b[0];
+        dest = &xclient.data.b[0];
         dest_end = dest + 20;        
         
         while (dest != dest_end &&
@@ -1034,9 +1035,9 @@ broadcast_xmessage (GdkDisplay *display,
                     xroot_window,
                     False,
                     PropertyChangeMask,
-                    &xevent);
+                    (XEvent *)&xclient);
 
-        xevent.xclient.message_type = type_atom;
+        xclient.message_type = type_atom;
       }
   }
 

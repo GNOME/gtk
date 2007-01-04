@@ -2190,13 +2190,13 @@ gdk_wm_protocols_filter (GdkXEvent *xev,
 	   !_gdk_x11_display_is_root_window (display,
 					     xevent->xclient.window))
     {
-      XEvent xev = *xevent;
+      XClientMessageEvent xclient = xevent->xclient;
       
-      xev.xclient.window = GDK_WINDOW_XROOTWIN (win);
+      xclient.window = GDK_WINDOW_XROOTWIN (win);
       XSendEvent (GDK_WINDOW_XDISPLAY (win), 
-		  xev.xclient.window,
+		  xclient.window,
 		  False, 
-		  SubstructureRedirectMask | SubstructureNotifyMask, &xev);
+		  SubstructureRedirectMask | SubstructureNotifyMask, (XEvent *)&xclient);
 
       return GDK_FILTER_REMOVE;
     }

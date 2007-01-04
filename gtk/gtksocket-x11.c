@@ -120,28 +120,29 @@ _gtk_socket_windowing_send_key_event (GtkSocket *socket,
 				      GdkEvent  *gdk_event,
 				      gboolean   mask_key_presses)
 {
-  XEvent xevent;
+  XKeyEvent xkey;
   GdkScreen *screen = gdk_drawable_get_screen (socket->plug_window);
 
-  xevent.xkey.type = (gdk_event->type == GDK_KEY_PRESS) ? KeyPress : KeyRelease;
-  xevent.xkey.window = GDK_WINDOW_XWINDOW (socket->plug_window);
-  xevent.xkey.root = GDK_WINDOW_XWINDOW (gdk_screen_get_root_window (screen));
-  xevent.xkey.subwindow = None;
-  xevent.xkey.time = gdk_event->key.time;
-  xevent.xkey.x = 0;
-  xevent.xkey.y = 0;
-  xevent.xkey.x_root = 0;
-  xevent.xkey.y_root = 0;
-  xevent.xkey.state = gdk_event->key.state;
-  xevent.xkey.keycode = gdk_event->key.hardware_keycode;
-  xevent.xkey.same_screen = True;/* FIXME ? */
+  memset (&xkey, 0, sizeof (xkey));
+  xkey.type = (gdk_event->type == GDK_KEY_PRESS) ? KeyPress : KeyRelease;
+  xkey.window = GDK_WINDOW_XWINDOW (socket->plug_window);
+  xkey.root = GDK_WINDOW_XWINDOW (gdk_screen_get_root_window (screen));
+  xkey.subwindow = None;
+  xkey.time = gdk_event->key.time;
+  xkey.x = 0;
+  xkey.y = 0;
+  xkey.x_root = 0;
+  xkey.y_root = 0;
+  xkey.state = gdk_event->key.state;
+  xkey.keycode = gdk_event->key.hardware_keycode;
+  xkey.same_screen = True;/* FIXME ? */
 
   gdk_error_trap_push ();
   XSendEvent (GDK_WINDOW_XDISPLAY (socket->plug_window),
 	      GDK_WINDOW_XWINDOW (socket->plug_window),
 	      False,
 	      (mask_key_presses ? KeyPressMask : NoEventMask),
-	      &xevent);
+	      (XEvent *)&xkey);
   gdk_display_sync (gdk_screen_get_display (screen));
   gdk_error_trap_pop ();
 }
@@ -202,15 +203,16 @@ _gtk_socket_windowing_focus (GtkSocket       *socket,
 void
 _gtk_socket_windowing_send_configure_event (GtkSocket *socket)
 {
-  XEvent event;
+  XConfigureEvent xconfigure;
   gint x, y;
 
   g_return_if_fail (socket->plug_window != NULL);
 
-  event.xconfigure.type = ConfigureNotify;
+  memset (&xconfigure, 0, sizeof (xconfigure));
+  xconfigure.type = ConfigureNotify;
 
-  event.xconfigure.event = GDK_WINDOW_XWINDOW (socket->plug_window);
-  event.xconfigure.window = GDK_WINDOW_XWINDOW (socket->plug_window);
+  xconfigure.event = GDK_WINDOW_XWINDOW (socket->plug_window);
+  xconfigure.window = GDK_WINDOW_XWINDOW (socket->plug_window);
 
   /* The ICCCM says that synthetic events should have root relative
    * coordinates. We still aren't really ICCCM compliant, since
@@ -220,19 +222,19 @@ _gtk_socket_windowing_send_configure_event (GtkSocket *socket)
   gdk_window_get_origin (socket->plug_window, &x, &y);
   gdk_error_trap_pop ();
 			 
-  event.xconfigure.x = x;
-  event.xconfigure.y = y;
-  event.xconfigure.width = GTK_WIDGET(socket)->allocation.width;
-  event.xconfigure.height = GTK_WIDGET(socket)->allocation.height;
+  xconfigure.x = x;
+  xconfigure.y = y;
+  xconfigure.width = GTK_WIDGET(socket)->allocation.width;
+  xconfigure.height = GTK_WIDGET(socket)->allocation.height;
 
-  event.xconfigure.border_width = 0;
-  event.xconfigure.above = None;
-  event.xconfigure.override_redirect = False;
+  xconfigure.border_width = 0;
+  xconfigure.above = None;
+  xconfigure.override_redirect = False;
 
   gdk_error_trap_push ();
   XSendEvent (GDK_WINDOW_XDISPLAY (socket->plug_window),
 	      GDK_WINDOW_XWINDOW (socket->plug_window),
-	      False, NoEventMask, &event);
+	      False, NoEventMask, (XEvent *)&xconfigure);
   gdk_display_sync (gtk_widget_get_display (GTK_WIDGET (socket)));
   gdk_error_trap_pop ();
 }

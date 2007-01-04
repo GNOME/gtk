@@ -19,6 +19,7 @@
  */
 
 #include <config.h>
+#include <string.h>
 #include "gtkmain.h"
 #include "gtkprivate.h"
 #include "gtkxembed.h"
@@ -139,7 +140,7 @@ _gtk_xembed_send_message (GdkWindow        *recipient,
 			  glong             data2)
 {
   GdkDisplay *display;
-  XEvent xevent;
+  XClientMessageEvent xclient;
 
   if (!recipient)
     return;
@@ -150,20 +151,21 @@ _gtk_xembed_send_message (GdkWindow        *recipient,
   GTK_NOTE (PLUGSOCKET,
 	    g_message ("Sending %s", _gtk_xembed_message_name (message)));
 
-  xevent.xclient.window = GDK_WINDOW_XWINDOW (recipient);
-  xevent.xclient.type = ClientMessage;
-  xevent.xclient.message_type = gdk_x11_get_xatom_by_name_for_display (display, "_XEMBED");
-  xevent.xclient.format = 32;
-  xevent.xclient.data.l[0] = gtk_xembed_get_time ();
-  xevent.xclient.data.l[1] = message;
-  xevent.xclient.data.l[2] = detail;
-  xevent.xclient.data.l[3] = data1;
-  xevent.xclient.data.l[4] = data2;
+  memset (&xclient, 0, sizeof (xclient));
+  xclient.window = GDK_WINDOW_XWINDOW (recipient);
+  xclient.type = ClientMessage;
+  xclient.message_type = gdk_x11_get_xatom_by_name_for_display (display, "_XEMBED");
+  xclient.format = 32;
+  xclient.data.l[0] = gtk_xembed_get_time ();
+  xclient.data.l[1] = message;
+  xclient.data.l[2] = detail;
+  xclient.data.l[3] = data1;
+  xclient.data.l[4] = data2;
 
   gdk_error_trap_push ();
   XSendEvent (GDK_WINDOW_XDISPLAY(recipient),
 	      GDK_WINDOW_XWINDOW (recipient),
-	      False, NoEventMask, &xevent);
+	      False, NoEventMask, &xclient);
   gdk_display_sync (display);
   gdk_error_trap_pop ();
 }

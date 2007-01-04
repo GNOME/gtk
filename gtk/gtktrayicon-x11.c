@@ -266,6 +266,7 @@ gtk_tray_icon_send_manager_message (GtkTrayIcon *icon,
   XClientMessageEvent ev;
   Display *display;
   
+  memset (&ev, 0, sizeof (ev));
   ev.type = ClientMessage;
   ev.window = window;
   ev.message_type = icon->priv->system_tray_opcode_atom;
@@ -451,6 +452,7 @@ _gtk_tray_icon_send_message (GtkTrayIcon *icon,
 
       xdisplay = GDK_DISPLAY_XDISPLAY (gtk_widget_get_display (GTK_WIDGET (icon)));
       
+      memset (&ev, 0, sizeof (ev));
       ev.type = ClientMessage;
       ev.window = (Window)gtk_plug_get_id (GTK_PLUG (icon));
       ev.format = 8;
