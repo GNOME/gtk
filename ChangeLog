@@ -1,5 +1,10 @@
 2007-01-03  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkprintoperation.c (gtk_print_operation_finalize):
+	Don't leak the status string.
+
+2007-01-03  Matthias Clasen  <mclasen@redhat.com>
+
 	* gtk/gtkfilechooserdefault.c (update_chooser_entry):
 	Exit early if we can't get file info - this happens
 	if the iter points to the row where we are editing

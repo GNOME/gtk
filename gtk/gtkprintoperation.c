@@ -123,6 +123,7 @@ gtk_print_operation_finalize (GObject *object)
   g_free (priv->export_filename);
   g_free (priv->job_name);
   g_free (priv->custom_tab_label);
+  g_free (priv->status_string);
 
   if (priv->print_pages_idle_id > 0)
     g_source_remove (priv->print_pages_idle_id);
