@@ -923,6 +923,9 @@ gtk_handle_box_paint (GtkWidget      *widget,
       rect.height = DRAG_HANDLE_SIZE;
       handle_orientation = GTK_ORIENTATION_HORIZONTAL;
       break;
+    default: 
+      g_assert_not_reached ();
+      break;
     }
 
   if (gdk_rectangle_intersect (event ? &event->area : area, &rect, &dest))

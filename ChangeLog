@@ -1,5 +1,7 @@
 2007-01-04  Matthias Clasen  <mclasen@redhat.com>
 
+	* demos/gtk-demo/textscroll.c:
+	* gtk/gtkhandlebox.c:
 	* gtk/gtkcolorsel.c: Fix some compiler warnings.
 
 2007-01-03  Matthias Clasen  <mclasen@redhat.com>
