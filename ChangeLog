@@ -1,5 +1,12 @@
 2007-01-03  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtktextview.c: Rework the beep-on-uninserted-text
+	by calling the input method regardless of editability,
+	and beeping from the commit/preedit-changed handlers.
+	(#390514, Yevgen Muntyan)
+
+2007-01-03  Matthias Clasen  <mclasen@redhat.com>
+
 	Fix #332604, reported by Joe Wreschnig, patch
 	by Jan Arne Petersen and Behdad Esfahbod.
 

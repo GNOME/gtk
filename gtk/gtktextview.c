@@ -3874,11 +3874,12 @@ gtk_text_view_key_press_event (GtkWidget *widget, GdkEventKey *event)
   insert = gtk_text_buffer_get_insert (get_buffer (text_view));
   gtk_text_buffer_get_iter_at_mark (get_buffer (text_view), &iter, insert);
   can_insert = gtk_text_iter_can_insert (&iter, text_view->editable);
-  if (can_insert &&
-      gtk_im_context_filter_keypress (text_view->im_context, event))
+  if (gtk_im_context_filter_keypress (text_view->im_context, event))
     {
       text_view->need_im_reset = TRUE;
-      obscure = TRUE;
+      if (!can_insert)
+        gtk_text_view_reset_im_context (text_view);
+      obscure = can_insert;
       retval = TRUE;
     }
   /* Binding set */
@@ -3929,18 +3930,6 @@ gtk_text_view_key_press_event (GtkWidget *widget, GdkEventKey *event)
   
   gtk_text_view_reset_blink_time (text_view);
   gtk_text_view_pend_cursor_blink (text_view);
-
-  if (!retval)
-    {
-      /* We only want to beep if we are reasonably sure
-       * the event was meant to insert some character into
-       * the buffer, but failed.  We don't beep on events 
-       * which look like attempts to activate an accelerator.
-       */
-      if (!event->is_modifier && 
-          ((event->state & (gtk_accelerator_get_default_mod_mask () & ~GDK_SHIFT_MASK)) == 0))
-        gtk_widget_error_bell (widget);
-    } 
 
   return retval;
 }
@@ -6937,6 +6926,19 @@ gtk_text_view_preedit_changed_handler (GtkIMContext *context,
   gchar *str;
   PangoAttrList *attrs;
   gint cursor_pos;
+  GtkTextIter iter;
+
+  gtk_text_buffer_get_iter_at_mark (text_view->buffer, &iter, 
+				    gtk_text_buffer_get_insert (text_view->buffer));
+
+  /* Keypress events are passed to input method even if cursor position is not editable;
+   * so beep here if it's multi-key input sequence, input method will be reset in 
+   * key-press-event handler. */
+  if (!gtk_text_iter_can_insert (&iter, text_view->editable))
+    {
+      gtk_widget_error_bell (GTK_WIDGET (text_view));
+      return;
+    }
 
   gtk_im_context_get_preedit_string (context, &str, &attrs, &cursor_pos);
   gtk_text_layout_set_preedit_string (text_view->layout, str, attrs, cursor_pos);
