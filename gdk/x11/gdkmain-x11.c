@@ -804,7 +804,10 @@ _gdk_send_xevent (GdkDisplay *display,
 		       propagate, event_mask, event_send);
   XSync (GDK_DISPLAY_XDISPLAY (display), False);
   
-  return result && gdk_error_trap_pop() == Success;
+  if (gdk_error_trap_pop ())
+    return FALSE;
+ 
+  return result;
 }
 
 void

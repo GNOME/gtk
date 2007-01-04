@@ -1,5 +1,10 @@
 2007-01-03  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/*.c:
+	* gdk/x11/*.c: Apply a patch by Chris Wilson to
+	avoid spurious valgrind warnings from XSendEvent() 
+	calls.  (#392532)
+
 	* modules/printbackends/cups/gtkprintbackendcups.c: Close
 	the http connection after getting the PPD.
 
