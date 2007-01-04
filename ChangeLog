@@ -1,3 +1,13 @@
+2007-01-04  Matthias Clasen  <mclasen@redhat.com>
+
+	* demos/gtk-demo/textscroll.c:
+	* gtk/gtkiconview.c:
+	* gtk/gtkicontheme.c:
+	* gtk/gtkhandlebox.c:
+	* gtk/gtkfilechooserentry.c:
+	* gtk/gtkentrycompletion.c:
+	* gtk/gtkcolorsel.c: Fix some compiler warnings.
+
 2007-01-03  Matthias Clasen  <mclasen@redhat.com>
 
 	* NEWS: Updates

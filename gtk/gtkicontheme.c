@@ -877,7 +877,7 @@ insert_theme (GtkIconTheme *icon_theme, const char *theme_name)
   char **dirs;
   char **themes;
   GtkIconThemePrivate *priv;
-  IconTheme *theme;
+  IconTheme *theme = NULL;
   char *path;
   GKeyFile *theme_file;
   GError *error = NULL;

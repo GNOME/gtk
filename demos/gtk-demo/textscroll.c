@@ -109,7 +109,6 @@ setup_scroll (GtkTextView *textview,
 {
   GtkTextBuffer *buffer;
   GtkTextIter iter;
-  GtkTextMark *mark;
 
   buffer = gtk_text_view_get_buffer (textview);
   gtk_text_buffer_get_end_iter (buffer, &iter);
@@ -179,7 +178,6 @@ do_textscroll (GtkWidget *do_widget)
   if (!window)
     {
       GtkWidget *hbox;
-      GtkWidget *swindow;
 
       window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
       g_signal_connect (window, "destroy",

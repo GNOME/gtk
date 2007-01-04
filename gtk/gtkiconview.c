@@ -8923,7 +8923,6 @@ gtk_icon_view_accessible_is_child_selected (AtkSelection *selection,
   GtkWidget *widget;
   GtkIconView *icon_view;
   GtkIconViewItem *item;
-  GList *l;
 
   widget = GTK_ACCESSIBLE (selection)->widget;
   if (widget == NULL)

@@ -788,6 +788,7 @@ palette_change_color (GtkWidget         *drawing_area,
   gdk_color.red = UNSCALE (color[0]);
   gdk_color.green = UNSCALE (color[1]);
   gdk_color.blue = UNSCALE (color[2]);
+  gdk_color.pixel = 0;
 
   x = 0;
   y = 0;			/* Quiet GCC */
@@ -1442,7 +1443,7 @@ get_screen_color (GtkWidget *button)
       gtk_widget_add_events (grab_widget,
                              GDK_BUTTON_RELEASE_MASK | GDK_BUTTON_PRESS_MASK | GDK_POINTER_MOTION_MASK);
       
-      toplevel = gtk_widget_get_toplevel (colorsel);
+      toplevel = gtk_widget_get_toplevel (GTK_WIDGET (colorsel));
   
       if (GTK_IS_WINDOW (toplevel))
 	{
