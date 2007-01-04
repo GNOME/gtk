@@ -1,5 +1,15 @@
 2007-01-03  Matthias Clasen  <mclasen@redhat.com>
 
+	Fix #332604, reported by Joe Wreschnig, patch
+	by Jan Arne Petersen and Behdad Esfahbod.
+
+	* gtk/gtklabel.c (gtk_label_size_allocate): Only
+	set the width of the layout when necessary.
+	(get_layout_location): Use pango_layout_get_pixel_extents()
+	instead of pango_layout_get_width().
+
+2007-01-03  Matthias Clasen  <mclasen@redhat.com>
+
 	* modules/printbackends/cups/gtkprintbackendcups.c 
 	(available_choices): Don't leak conflicts.
 
