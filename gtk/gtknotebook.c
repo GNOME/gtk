@@ -1865,7 +1865,7 @@ gtk_notebook_size_request (GtkWidget      *widget,
 
 		  if (notebook->scrollable && vis_pages > 1 && 
 		      widget->requisition.height < tab_height)
-		    tab_height = tab_max + scroll_arrow_vlength + arrow_spacing;
+		    tab_height = tab_max + (2 * scroll_arrow_vlength + arrow_spacing);
 
 		  widget->requisition.width += tab_width;
 

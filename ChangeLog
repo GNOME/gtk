@@ -1,3 +1,9 @@
+2007-01-05  Carlos Garnacho  <carlosg@gnome.org>
+
+	* gtk/gtknotebook.c (gtk_notebook_size_request): take into account
+	both scroll arrows when calculating size request in GTK_POS_LEFT or
+	GTK_POS_RIGHT notebooks. (#393124, reported by Christian Persch)
+
 2007-01-05  Michael Natterer  <mitch@imendio.com>
 
 	* gtk/gtkwindow.c (gtk_window_key_release_event): chain up to
