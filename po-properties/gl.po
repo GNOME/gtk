@@ -15,7 +15,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gl\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-10-03 13:39-0400\n"
+"POT-Creation-Date: 2007-01-05 14:58-0500\n"
 "PO-Revision-Date: 2006-09-25 23:57+0200\n"
 "Last-Translator: Ignacio Casal Quinteiro <nacho.resa@gmail.com>\n"
 "Language-Team: Galego <trasno@ceu.fi.udc.es>\n"
@@ -302,12 +302,12 @@ msgid "The stock icon displayed in widgets representing this action."
 msgstr "A icona de inventario mostrada nos widgets representando esta acción."
 
 #: gtk/gtkaction.c:239 gtk/gtkcellrendererpixbuf.c:172 gtk/gtkimage.c:229
-#: gtk/gtkprinter.c:168 gtk/gtkstatusicon.c:170 gtk/gtkwindow.c:522
+#: gtk/gtkprinter.c:168 gtk/gtkstatusicon.c:171 gtk/gtkwindow.c:522
 msgid "Icon Name"
 msgstr "Nome da icona"
 
 #: gtk/gtkaction.c:240 gtk/gtkcellrendererpixbuf.c:173 gtk/gtkimage.c:230
-#: gtk/gtkstatusicon.c:171
+#: gtk/gtkstatusicon.c:172
 msgid "The name of the icon from the icon theme"
 msgstr "O nome da icona do tema de iconas"
 
@@ -378,7 +378,7 @@ msgstr "Sensible"
 msgid "Whether the action is enabled."
 msgstr "Indica se a acción está activada."
 
-#: gtk/gtkaction.c:301 gtk/gtkactiongroup.c:151 gtk/gtkstatusicon.c:205
+#: gtk/gtkaction.c:301 gtk/gtkactiongroup.c:151 gtk/gtkstatusicon.c:206
 #: gtk/gtktreeviewcolumn.c:185 gtk/gtkwidget.c:451
 msgid "Visible"
 msgstr "Visible"
@@ -588,6 +588,73 @@ msgstr "Obedecer ao fillo"
 msgid "Force aspect ratio to match that of the frame's child"
 msgstr "Forzar a proporción para que coincida coa forma do fillo"
 
+#: gtk/gtkassistant.c:261
+#, fuzzy
+msgid "Header Padding"
+msgstr "Recheo pola esquerda"
+
+#: gtk/gtkassistant.c:262
+#, fuzzy
+msgid "Number of pixels around the header."
+msgstr "Estilo do bisel arredor da barra de menús"
+
+#: gtk/gtkassistant.c:269
+#, fuzzy
+msgid "Content Padding"
+msgstr "Recheo inferior"
+
+#: gtk/gtkassistant.c:270
+#, fuzzy
+msgid "Number of pixels around the content pages."
+msgstr "Estilo de bisel arredor dos contidos"
+
+#: gtk/gtkassistant.c:286
+#, fuzzy
+msgid "Page type"
+msgstr "Tipo de empaquetado"
+
+#: gtk/gtkassistant.c:287
+#, fuzzy
+msgid "The type of the assistant page"
+msgstr "O tipo de mensaxe"
+
+#: gtk/gtkassistant.c:304
+#, fuzzy
+msgid "Page title"
+msgstr "Tamaño de páxina"
+
+#: gtk/gtkassistant.c:305
+#, fuzzy
+msgid "The title of the assistant page"
+msgstr "O título da fiestra"
+
+#: gtk/gtkassistant.c:321
+#, fuzzy
+msgid "Header image"
+msgstr "Cabeceiras pulsables"
+
+#: gtk/gtkassistant.c:322
+msgid "Header image for the assistant page"
+msgstr ""
+
+#: gtk/gtkassistant.c:338
+#, fuzzy
+msgid "Sidebar image"
+msgstr "A imaxe"
+
+#: gtk/gtkassistant.c:339
+msgid "Sidebar image for the assistant page"
+msgstr ""
+
+#: gtk/gtkassistant.c:354
+#, fuzzy
+msgid "Page complete"
+msgstr "Incremento de páxina"
+
+#: gtk/gtkassistant.c:355
+msgid "Whether all required fields on the page have been filled out"
+msgstr ""
+
 #: gtk/gtkbbox.c:92
 msgid "Minimum child width"
 msgstr "Anchura mínima do fillo"
@@ -645,7 +712,7 @@ msgstr ""
 "Se é VERDADEIRO, o fillo aparece nun grupo secundario de fillos, útil por "
 "exemplo para botóns de axuda"
 
-#: gtk/gtkbox.c:98 gtk/gtkexpander.c:209 gtk/gtkiconview.c:633
+#: gtk/gtkbox.c:98 gtk/gtkexpander.c:209 gtk/gtkiconview.c:635
 #: gtk/gtktreeviewcolumn.c:210
 msgid "Spacing"
 msgstr "Espaciado"
@@ -654,7 +721,7 @@ msgstr "Espaciado"
 msgid "The amount of space between children"
 msgstr "A cantidade de espazo entre fillos"
 
-#: gtk/gtkbox.c:108 gtk/gtknotebook.c:596 gtk/gtktable.c:165
+#: gtk/gtkbox.c:108 gtk/gtknotebook.c:597 gtk/gtktable.c:165
 #: gtk/gtktoolbar.c:572
 msgid "Homogeneous"
 msgstr "Homoxéneo"
@@ -696,7 +763,7 @@ msgstr "Espazo extra para colocar entre o fillo e seus veciños, en píxels"
 msgid "Pack type"
 msgstr "Tipo de empaquetado"
 
-#: gtk/gtkbox.c:138 gtk/gtknotebook.c:649
+#: gtk/gtkbox.c:138 gtk/gtknotebook.c:650
 msgid ""
 "A GtkPackType indicating whether the child is packed with reference to the "
 "start or end of the parent"
@@ -704,12 +771,12 @@ msgstr ""
 "Un GtkPackType que indica se o fillo debería estar empaquetado con "
 "referencia ao inicio ou final do pai"
 
-#: gtk/gtkbox.c:144 gtk/gtknotebook.c:627 gtk/gtkpaned.c:216
+#: gtk/gtkbox.c:144 gtk/gtknotebook.c:628 gtk/gtkpaned.c:219
 #: gtk/gtkruler.c:110
 msgid "Position"
 msgstr "Posición"
 
-#: gtk/gtkbox.c:145 gtk/gtknotebook.c:628
+#: gtk/gtkbox.c:145 gtk/gtknotebook.c:629
 msgid "The index of the child in the parent"
 msgstr "A posición do fillo no pai"
 
@@ -837,7 +904,7 @@ msgstr ""
 "Indica se as propiedades child_displacement_x/_y deberían afectar tamén ao "
 "rectángulo do foco"
 
-#: gtk/gtkbutton.c:462 gtk/gtkentry.c:514 gtk/gtkentry.c:857
+#: gtk/gtkbutton.c:462 gtk/gtkentry.c:519 gtk/gtkentry.c:862
 msgid "Inner Border"
 msgstr "Bordo interior"
 
@@ -1109,7 +1176,7 @@ msgstr "Extensor pechado pixbuf"
 msgid "Pixbuf for closed expander"
 msgstr "O pixbuf para o expansor pechado"
 
-#: gtk/gtkcellrendererpixbuf.c:136 gtk/gtkimage.c:171 gtk/gtkstatusicon.c:162
+#: gtk/gtkcellrendererpixbuf.c:136 gtk/gtkimage.c:171 gtk/gtkstatusicon.c:163
 msgid "Stock ID"
 msgstr "ID de inventario"
 
@@ -1118,7 +1185,7 @@ msgid "The stock ID of the stock icon to render"
 msgstr "O ID inventario da icona de inventario a renderizar"
 
 #: gtk/gtkcellrendererpixbuf.c:144 gtk/gtkrecentmanager.c:247
-#: gtk/gtkstatusicon.c:187
+#: gtk/gtkstatusicon.c:188
 msgid "Size"
 msgstr "Tamaño"
 
@@ -1147,7 +1214,7 @@ msgid "Value of the progress bar"
 msgstr "Valor da barra de progreso"
 
 #: gtk/gtkcellrendererprogress.c:134 gtk/gtkcellrenderertext.c:192
-#: gtk/gtkentry.c:557 gtk/gtkmessagedialog.c:152 gtk/gtkprogressbar.c:196
+#: gtk/gtkentry.c:562 gtk/gtkmessagedialog.c:153 gtk/gtkprogressbar.c:199
 #: gtk/gtktextbuffer.c:197
 msgid "Text"
 msgstr "Texto"
@@ -1155,6 +1222,33 @@ msgstr "Texto"
 #: gtk/gtkcellrendererprogress.c:135
 msgid "Text on the progress bar"
 msgstr "Texto na barra de progreso"
+
+#: gtk/gtkcellrendererspin.c:93 gtk/gtkprogressbar.c:123 gtk/gtkrange.c:324
+#: gtk/gtkspinbutton.c:204
+msgid "Adjustment"
+msgstr "Axuste"
+
+#: gtk/gtkcellrendererspin.c:94
+#, fuzzy
+msgid "The adjustment that holds the value of the spinbutton."
+msgstr "O axuste que mentén o valor do botón xiratorio"
+
+#: gtk/gtkcellrendererspin.c:109
+#, fuzzy
+msgid "Climb rate"
+msgstr "Tamaño da escala"
+
+#: gtk/gtkcellrendererspin.c:110 gtk/gtkspinbutton.c:213
+msgid "The acceleration rate when you hold down a button"
+msgstr "A tasa de aceleración cando mantén preso un botón"
+
+#: gtk/gtkcellrendererspin.c:123 gtk/gtkscale.c:142 gtk/gtkspinbutton.c:222
+msgid "Digits"
+msgstr "Díxitos"
+
+#: gtk/gtkcellrendererspin.c:124 gtk/gtkspinbutton.c:223
+msgid "The number of decimal places to display"
+msgstr "O número de lugares decimais a amosar"
 
 #: gtk/gtkcellrenderertext.c:193
 msgid "Text to render"
@@ -1185,19 +1279,19 @@ msgstr "Modo de parágrafo sinxelo"
 msgid "Whether or not to keep all text in a single paragraph"
 msgstr "Indica se debe manterse ou non todo o texto nun só parágrafo"
 
-#: gtk/gtkcellrenderertext.c:225 gtk/gtkcellview.c:144 gtk/gtktexttag.c:181
+#: gtk/gtkcellrenderertext.c:225 gtk/gtkcellview.c:141 gtk/gtktexttag.c:181
 msgid "Background color name"
 msgstr "Nome da cor de fondo"
 
-#: gtk/gtkcellrenderertext.c:226 gtk/gtkcellview.c:145 gtk/gtktexttag.c:182
+#: gtk/gtkcellrenderertext.c:226 gtk/gtkcellview.c:142 gtk/gtktexttag.c:182
 msgid "Background color as a string"
 msgstr "Cor de fondo como unha cadea"
 
-#: gtk/gtkcellrenderertext.c:233 gtk/gtkcellview.c:151 gtk/gtktexttag.c:189
+#: gtk/gtkcellrenderertext.c:233 gtk/gtkcellview.c:148 gtk/gtktexttag.c:189
 msgid "Background color"
 msgstr "Cor de fondo"
 
-#: gtk/gtkcellrenderertext.c:234 gtk/gtkcellview.c:152
+#: gtk/gtkcellrenderertext.c:234 gtk/gtkcellview.c:149
 msgid "Background color as a GdkColor"
 msgstr "Cor de fondo como GdkColor"
 
@@ -1217,12 +1311,12 @@ msgstr "Cor de primeiro plano"
 msgid "Foreground color as a GdkColor"
 msgstr "Cor de primeiro plano como GdkColor"
 
-#: gtk/gtkcellrenderertext.c:258 gtk/gtkentry.c:481 gtk/gtktexttag.c:249
-#: gtk/gtktextview.c:548
+#: gtk/gtkcellrenderertext.c:258 gtk/gtkentry.c:486 gtk/gtktexttag.c:249
+#: gtk/gtktextview.c:547
 msgid "Editable"
 msgstr "Editable"
 
-#: gtk/gtkcellrenderertext.c:259 gtk/gtktexttag.c:250 gtk/gtktextview.c:549
+#: gtk/gtkcellrenderertext.c:259 gtk/gtktexttag.c:250 gtk/gtktextview.c:548
 msgid "Whether the text can be modified by the user"
 msgstr "Indica se o texto pode modificarse polo usuario"
 
@@ -1329,7 +1423,7 @@ msgstr ""
 "isto como unha axuda cando está renderizando o texto. Se non comprende este "
 "parámetro probablemente non o necesite"
 
-#: gtk/gtkcellrenderertext.c:408 gtk/gtklabel.c:424 gtk/gtkprogressbar.c:218
+#: gtk/gtkcellrenderertext.c:408 gtk/gtklabel.c:424 gtk/gtkprogressbar.c:221
 msgid "Ellipsize"
 msgstr "Elipse"
 
@@ -1378,11 +1472,11 @@ msgstr "Aliñación"
 msgid "How to align the lines"
 msgstr "Cómo aliñar as liñas"
 
-#: gtk/gtkcellrenderertext.c:495 gtk/gtkcellview.c:174 gtk/gtktexttag.c:543
+#: gtk/gtkcellrenderertext.c:495 gtk/gtkcellview.c:171 gtk/gtktexttag.c:543
 msgid "Background set"
 msgstr "Establecer fondo"
 
-#: gtk/gtkcellrenderertext.c:496 gtk/gtkcellview.c:175 gtk/gtktexttag.c:544
+#: gtk/gtkcellrenderertext.c:496 gtk/gtkcellview.c:172 gtk/gtktexttag.c:544
 msgid "Whether this tag affects the background color"
 msgstr "Indica se esta marca afecta a cor de fondo"
 
@@ -1539,11 +1633,11 @@ msgstr "Tamaño do indicador"
 msgid "Size of check or radio indicator"
 msgstr "Tamaño do indicador de radio ou marcado"
 
-#: gtk/gtkcellview.c:166
+#: gtk/gtkcellview.c:163
 msgid "CellView model"
 msgstr "Modelo CellView"
 
-#: gtk/gtkcellview.c:167
+#: gtk/gtkcellview.c:164
 msgid "The model for cell view"
 msgstr "O modelo para a vista de celda"
 
@@ -1601,7 +1695,7 @@ msgstr "Título"
 msgid "The title of the color selection dialog"
 msgstr "O título do diálogo de selección da cor"
 
-#: gtk/gtkcolorbutton.c:202 gtk/gtkcolorsel.c:1871
+#: gtk/gtkcolorbutton.c:202 gtk/gtkcolorsel.c:1872
 msgid "Current Color"
 msgstr "Cor actual"
 
@@ -1609,7 +1703,7 @@ msgstr "Cor actual"
 msgid "The selected color"
 msgstr "A cor seleccionada"
 
-#: gtk/gtkcolorbutton.c:217 gtk/gtkcolorsel.c:1878
+#: gtk/gtkcolorbutton.c:217 gtk/gtkcolorsel.c:1879
 msgid "Current Alpha"
 msgstr "Alfa actual"
 
@@ -1619,37 +1713,37 @@ msgstr ""
 "O valor de opacidade actual (0 é completamente transparente, 65535 é "
 "completamente opaco)"
 
-#: gtk/gtkcolorsel.c:1857
+#: gtk/gtkcolorsel.c:1858
 msgid "Has Opacity Control"
 msgstr "Ten control de opacidade"
 
-#: gtk/gtkcolorsel.c:1858
+#: gtk/gtkcolorsel.c:1859
 msgid "Whether the color selector should allow setting opacity"
 msgstr "Indica se o selector de cor permite seleccionar a opacidade"
 
-#: gtk/gtkcolorsel.c:1864
+#: gtk/gtkcolorsel.c:1865
 msgid "Has palette"
 msgstr "Ten paleta"
 
-#: gtk/gtkcolorsel.c:1865
+#: gtk/gtkcolorsel.c:1866
 msgid "Whether a palette should be used"
 msgstr "Indica se se debe empregar unha paleta"
 
-#: gtk/gtkcolorsel.c:1872
+#: gtk/gtkcolorsel.c:1873
 msgid "The current color"
 msgstr "A cor actual"
 
-#: gtk/gtkcolorsel.c:1879
+#: gtk/gtkcolorsel.c:1880
 msgid "The current opacity value (0 fully transparent, 65535 fully opaque)"
 msgstr ""
 "O valor de opacidade actual (0 é completamente transparente, 65535 é "
 "completamente opaco)"
 
-#: gtk/gtkcolorsel.c:1893
+#: gtk/gtkcolorsel.c:1894
 msgid "Custom palette"
 msgstr "Paleta personalizada"
 
-#: gtk/gtkcolorsel.c:1894
+#: gtk/gtkcolorsel.c:1895
 msgid "Palette to use in the color selector"
 msgstr "Paleta que se empregará no selector de cores"
 
@@ -1738,7 +1832,7 @@ msgstr "Engadir tiradores aos menús"
 msgid "Whether dropdowns should have a tearoff menu item"
 msgstr "Indica se os despregables debe ter un elemento do menú como tirador"
 
-#: gtk/gtkcombobox.c:639 gtk/gtkentry.c:506
+#: gtk/gtkcombobox.c:639 gtk/gtkentry.c:511
 msgid "Has Frame"
 msgstr "Ten marco"
 
@@ -1874,40 +1968,40 @@ msgstr "Bordo do área de acción"
 msgid "Width of border around the button area at the bottom of the dialog"
 msgstr "Ancho do bordo arredor do área do botón na parte inferior da fiestra"
 
-#: gtk/gtkentry.c:461 gtk/gtklabel.c:389
+#: gtk/gtkentry.c:466 gtk/gtklabel.c:389
 msgid "Cursor Position"
 msgstr "Posición do cursor"
 
-#: gtk/gtkentry.c:462 gtk/gtklabel.c:390
+#: gtk/gtkentry.c:467 gtk/gtklabel.c:390
 msgid "The current position of the insertion cursor in chars"
 msgstr "A posición actual do cursor de inserción en caracteres"
 
-#: gtk/gtkentry.c:471 gtk/gtklabel.c:399
+#: gtk/gtkentry.c:476 gtk/gtklabel.c:399
 msgid "Selection Bound"
 msgstr "Límite de selección"
 
-#: gtk/gtkentry.c:472 gtk/gtklabel.c:400
+#: gtk/gtkentry.c:477 gtk/gtklabel.c:400
 msgid ""
 "The position of the opposite end of the selection from the cursor in chars"
 msgstr "A posición en caracteres do extremo oposto da selección desde o cursor"
 
-#: gtk/gtkentry.c:482
+#: gtk/gtkentry.c:487
 msgid "Whether the entry contents can be edited"
 msgstr "Indica se os contidos da entrada poden editarse"
 
-#: gtk/gtkentry.c:489
+#: gtk/gtkentry.c:494
 msgid "Maximum length"
 msgstr "Lonxitude máxima"
 
-#: gtk/gtkentry.c:490
+#: gtk/gtkentry.c:495
 msgid "Maximum number of characters for this entry. Zero if no maximum"
 msgstr "Número máximo de caracteres para esta entrada. Cero se non hai máximo"
 
-#: gtk/gtkentry.c:498
+#: gtk/gtkentry.c:503
 msgid "Visibility"
 msgstr "Visibilidade"
 
-#: gtk/gtkentry.c:499
+#: gtk/gtkentry.c:504
 msgid ""
 "FALSE displays the \"invisible char\" instead of the actual text (password "
 "mode)"
@@ -1915,32 +2009,32 @@ msgstr ""
 "FALSO amosa o \"carácter invisibel\" en lugar do texto actual (modo "
 "contrasinal)"
 
-#: gtk/gtkentry.c:507
+#: gtk/gtkentry.c:512
 msgid "FALSE removes outside bevel from entry"
 msgstr "FALSO quita o bisel exterior da entrada"
 
-#: gtk/gtkentry.c:515
+#: gtk/gtkentry.c:520
 msgid ""
 "Border between text and frame. Overrides the inner-border style property"
 msgstr ""
 "Bordo entre o texto e o marco. Toma precedencia sobre a propiedade de estilo "
 "do bordo interno"
 
-#: gtk/gtkentry.c:522
+#: gtk/gtkentry.c:527
 msgid "Invisible character"
 msgstr "Carácter invisibel"
 
-#: gtk/gtkentry.c:523
+#: gtk/gtkentry.c:528
 msgid "The character to use when masking entry contents (in \"password mode\")"
 msgstr ""
 "O carácter a usar cando se oculten os contidos da entrada (en \"modo "
 "contrasinal\")"
 
-#: gtk/gtkentry.c:530
+#: gtk/gtkentry.c:535
 msgid "Activates default"
 msgstr "Activar por omisión"
 
-#: gtk/gtkentry.c:531
+#: gtk/gtkentry.c:536
 msgid ""
 "Whether to activate the default widget (such as the default button in a "
 "dialog) when Enter is pressed"
@@ -1948,32 +2042,32 @@ msgstr ""
 "Indica se se debe activar o widget predeterminado (como o botón "
 "predeterminado nunha fiestra) cando se prema Intro"
 
-#: gtk/gtkentry.c:537
+#: gtk/gtkentry.c:542
 msgid "Width in chars"
 msgstr "Ancho en caracteres"
 
-#: gtk/gtkentry.c:538
+#: gtk/gtkentry.c:543
 msgid "Number of characters to leave space for in the entry"
 msgstr "Número de caracteres para deixar espazo para esta entrada"
 
-#: gtk/gtkentry.c:547
+#: gtk/gtkentry.c:552
 msgid "Scroll offset"
 msgstr "Compensación do desprazamento"
 
-#: gtk/gtkentry.c:548
+#: gtk/gtkentry.c:553
 msgid "Number of pixels of the entry scrolled off the screen to the left"
 msgstr ""
 "Cantidade de píxels da entrada desprazados fora da pantalla hacia a esquerda"
 
-#: gtk/gtkentry.c:558
+#: gtk/gtkentry.c:563
 msgid "The contents of the entry"
 msgstr "O contido da entrada"
 
-#: gtk/gtkentry.c:573 gtk/gtkmisc.c:73
+#: gtk/gtkentry.c:578 gtk/gtkmisc.c:73
 msgid "X align"
 msgstr "Aliñación X"
 
-#: gtk/gtkentry.c:574 gtk/gtkmisc.c:74
+#: gtk/gtkentry.c:579 gtk/gtkmisc.c:74
 msgid ""
 "The horizontal alignment, from 0 (left) to 1 (right). Reversed for RTL "
 "layouts."
@@ -1981,32 +2075,32 @@ msgstr ""
 "A aliñación horizontal, desde 0 (esquerda) ata 1(dereita). Ao revés para "
 "distribucións DAE."
 
-#: gtk/gtkentry.c:590
+#: gtk/gtkentry.c:595
 msgid "Truncate multiline"
 msgstr "Truncar multiliña"
 
-#: gtk/gtkentry.c:591
+#: gtk/gtkentry.c:596
 msgid "Whether to truncate multiline pastes to one line."
 msgstr "Indica se se truncan as pegadas multiliñas a unha liña."
 
-#: gtk/gtkentry.c:858
+#: gtk/gtkentry.c:863
 msgid "Border between text and frame."
 msgstr "Bordo entre o texto e o marco."
 
-#: gtk/gtkentry.c:863 gtk/gtklabel.c:620
+#: gtk/gtkentry.c:868 gtk/gtklabel.c:620
 msgid "Select on focus"
 msgstr "Seleccionar no foco"
 
-#: gtk/gtkentry.c:864
+#: gtk/gtkentry.c:869
 msgid "Whether to select the contents of an entry when it is focused"
 msgstr ""
 "Indica se se deben seleccionar os contidos dunha entrada cando obtén o foco"
 
-#: gtk/gtkentry.c:878
+#: gtk/gtkentry.c:883
 msgid "Password Hint Timeout"
 msgstr "Tempo de expiración do hint de contrasinal"
 
-#: gtk/gtkentry.c:879
+#: gtk/gtkentry.c:884
 msgid "How long to show the last inputted character in hidden entries"
 msgstr ""
 "Indica durante cánto tempo amosar o último carácter nas entradas agochadas"
@@ -2027,7 +2121,7 @@ msgstr "Lonxitude mínima de clave"
 msgid "Minimum length of the search key in order to look up matches"
 msgstr "Lonxitude mínima da clave de busca para buscar coincidencias"
 
-#: gtk/gtkentrycompletion.c:259 gtk/gtkiconview.c:554
+#: gtk/gtkentrycompletion.c:259 gtk/gtkiconview.c:556
 msgid "Text column"
 msgstr "Columna de texto"
 
@@ -2261,7 +2355,7 @@ msgid "Name of the GtkFileChooser backend to use by default"
 msgstr "Nome do backend do GtkFileChooser a usar por defecto"
 
 #: gtk/gtkfilesel.c:525 gtk/gtkimage.c:162 gtk/gtkrecentmanager.c:216
-#: gtk/gtkstatusicon.c:154
+#: gtk/gtkstatusicon.c:155
 msgid "Filename"
 msgstr "Nome de ficheiro"
 
@@ -2443,126 +2537,126 @@ msgstr ""
 "Indica se se debe usar o valor desde a propiedade snap_edge ou un valor "
 "derivado de handle_position"
 
-#: gtk/gtkiconview.c:517
+#: gtk/gtkiconview.c:519
 msgid "Selection mode"
 msgstr "Modo de selección"
 
-#: gtk/gtkiconview.c:518
+#: gtk/gtkiconview.c:520
 msgid "The selection mode"
 msgstr "O modo de selección"
 
-#: gtk/gtkiconview.c:536
+#: gtk/gtkiconview.c:538
 msgid "Pixbuf column"
 msgstr "Columna de pixbuf"
 
-#: gtk/gtkiconview.c:537
+#: gtk/gtkiconview.c:539
 msgid "Model column used to retrieve the icon pixbuf from"
 msgstr "Columna modelo usada para obter o pixbuf da icona"
 
-#: gtk/gtkiconview.c:555
+#: gtk/gtkiconview.c:557
 msgid "Model column used to retrieve the text from"
 msgstr "Columna modelo usada para obter o texto"
 
-#: gtk/gtkiconview.c:574
+#: gtk/gtkiconview.c:576
 msgid "Markup column"
 msgstr "Columna de marcado"
 
-#: gtk/gtkiconview.c:575
+#: gtk/gtkiconview.c:577
 msgid "Model column used to retrieve the text if using Pango markup"
 msgstr "Columna modelo usada para obter o texto se se emprega marcado Pango"
 
-#: gtk/gtkiconview.c:582
+#: gtk/gtkiconview.c:584
 msgid "Icon View Model"
 msgstr "Modelo de vista de icona"
 
-#: gtk/gtkiconview.c:583
+#: gtk/gtkiconview.c:585
 msgid "The model for the icon view"
 msgstr "O modelo para a vista de icona"
 
-#: gtk/gtkiconview.c:599
+#: gtk/gtkiconview.c:601
 msgid "Number of columns"
 msgstr "Número de columnas"
 
-#: gtk/gtkiconview.c:600
+#: gtk/gtkiconview.c:602
 msgid "Number of columns to display"
 msgstr "O número de columnas que se amosarán"
 
-#: gtk/gtkiconview.c:617
+#: gtk/gtkiconview.c:619
 msgid "Width for each item"
 msgstr "Anchura de cada elemento"
 
-#: gtk/gtkiconview.c:618
+#: gtk/gtkiconview.c:620
 msgid "The width used for each item"
 msgstr "A anchura usada por cada elemento"
 
-#: gtk/gtkiconview.c:634
+#: gtk/gtkiconview.c:636
 msgid "Space which is inserted between cells of an item"
 msgstr "Espazo que se introduce entre as celas dun elemento"
 
-#: gtk/gtkiconview.c:649
+#: gtk/gtkiconview.c:651
 msgid "Row Spacing"
 msgstr "Espaciado entre ringleiras"
 
-#: gtk/gtkiconview.c:650
+#: gtk/gtkiconview.c:652
 msgid "Space which is inserted between grid rows"
 msgstr "Espazo que se introduce entre as ringleiras do enreixado"
 
-#: gtk/gtkiconview.c:665
+#: gtk/gtkiconview.c:667
 msgid "Column Spacing"
 msgstr "Expaciado entre columnas"
 
-#: gtk/gtkiconview.c:666
+#: gtk/gtkiconview.c:668
 msgid "Space which is inserted between grid columns"
 msgstr "Espazo que se introduce entre as columnas do enreixado"
 
-#: gtk/gtkiconview.c:681
+#: gtk/gtkiconview.c:683
 msgid "Margin"
 msgstr "Marxe"
 
-#: gtk/gtkiconview.c:682
+#: gtk/gtkiconview.c:684
 msgid "Space which is inserted at the edges of the icon view"
 msgstr "Espazo que se introduce entre os bordos da vista de icona"
 
-#: gtk/gtkiconview.c:698 gtk/gtkprogressbar.c:128 gtk/gtktoolbar.c:484
+#: gtk/gtkiconview.c:700 gtk/gtkprogressbar.c:131 gtk/gtktoolbar.c:484
 #: gtk/gtktrayicon-x11.c:97
 msgid "Orientation"
 msgstr "Orientación"
 
-#: gtk/gtkiconview.c:699
+#: gtk/gtkiconview.c:701
 msgid ""
 "How the text and icon of each item are positioned relative to each other"
 msgstr ""
 "Como se sitúan o texto e a icona para cada elemento relativo aos demais"
 
-#: gtk/gtkiconview.c:715 gtk/gtktreeview.c:597 gtk/gtktreeviewcolumn.c:301
+#: gtk/gtkiconview.c:717 gtk/gtktreeview.c:597 gtk/gtktreeviewcolumn.c:301
 msgid "Reorderable"
 msgstr "Reordenable"
 
-#: gtk/gtkiconview.c:716 gtk/gtktreeview.c:598
+#: gtk/gtkiconview.c:718 gtk/gtktreeview.c:598
 msgid "View is reorderable"
 msgstr "Vista é reordenable"
 
-#: gtk/gtkiconview.c:723
+#: gtk/gtkiconview.c:725
 msgid "Selection Box Color"
 msgstr "Cor da caixa de selección"
 
-#: gtk/gtkiconview.c:724
+#: gtk/gtkiconview.c:726
 msgid "Color of the selection box"
 msgstr "Cor da caixa de selección"
 
-#: gtk/gtkiconview.c:730
+#: gtk/gtkiconview.c:732
 msgid "Selection Box Alpha"
 msgstr "Alfa da caixa de selección"
 
-#: gtk/gtkiconview.c:731
+#: gtk/gtkiconview.c:733
 msgid "Opacity of the selection box"
 msgstr "Opacidade da caixa de selección"
 
-#: gtk/gtkimage.c:130 gtk/gtkstatusicon.c:146
+#: gtk/gtkimage.c:130 gtk/gtkstatusicon.c:147
 msgid "Pixbuf"
 msgstr "Pixbuf"
 
-#: gtk/gtkimage.c:131 gtk/gtkstatusicon.c:147
+#: gtk/gtkimage.c:131 gtk/gtkstatusicon.c:148
 msgid "A GdkPixbuf to display"
 msgstr "Un GdkPixbuf a amosar"
 
@@ -2574,7 +2668,7 @@ msgstr "Mapa de píxels"
 msgid "A GdkPixmap to display"
 msgstr "Un GdkPixmap a amosar"
 
-#: gtk/gtkimage.c:146 gtk/gtkmessagedialog.c:214
+#: gtk/gtkimage.c:146 gtk/gtkmessagedialog.c:215
 msgid "Image"
 msgstr "Imaxe"
 
@@ -2590,11 +2684,11 @@ msgstr "Máscara"
 msgid "Mask bitmap to use with GdkImage or GdkPixmap"
 msgstr "Máscara de mapa de bits para usar con GdkImage ou GdkPixmap"
 
-#: gtk/gtkimage.c:163 gtk/gtkstatusicon.c:155
+#: gtk/gtkimage.c:163 gtk/gtkstatusicon.c:156
 msgid "Filename to load and display"
 msgstr "Nome de ficheiro a cargar e mostrar"
 
-#: gtk/gtkimage.c:172 gtk/gtkstatusicon.c:163
+#: gtk/gtkimage.c:172 gtk/gtkstatusicon.c:164
 msgid "Stock ID for a stock image to display"
 msgstr "ID de inventario para unha imaxe de inventario a amosar"
 
@@ -2632,11 +2726,11 @@ msgstr "Animación"
 msgid "GdkPixbufAnimation to display"
 msgstr "GdkPixbufAnimation a amosar"
 
-#: gtk/gtkimage.c:237 gtk/gtkstatusicon.c:178
+#: gtk/gtkimage.c:237 gtk/gtkstatusicon.c:179
 msgid "Storage type"
 msgstr "Tipo de almacenamiento"
 
-#: gtk/gtkimage.c:238 gtk/gtkstatusicon.c:179
+#: gtk/gtkimage.c:238 gtk/gtkstatusicon.c:180
 msgid "The representation being used for image data"
 msgstr "A representación empregada para os datos da imaxe"
 
@@ -2664,7 +2758,7 @@ msgstr "O texto da etiqueta"
 msgid "A list of style attributes to apply to the text of the label"
 msgstr "Unha lista de atributos de estilos para aplicar ao texto da etiqueta"
 
-#: gtk/gtklabel.c:323 gtk/gtktexttag.c:357 gtk/gtktextview.c:565
+#: gtk/gtklabel.c:323 gtk/gtktexttag.c:357 gtk/gtktextview.c:564
 msgid "Justification"
 msgstr "Xustificación"
 
@@ -2975,70 +3069,70 @@ msgstr "Menú"
 msgid "The dropdown menu"
 msgstr "O menú despregable"
 
-#: gtk/gtkmessagedialog.c:97
+#: gtk/gtkmessagedialog.c:98
 msgid "Image/label border"
 msgstr "Bordo da imaxe/etiqueta"
 
-#: gtk/gtkmessagedialog.c:98
+#: gtk/gtkmessagedialog.c:99
 msgid "Width of border around the label and image in the message dialog"
 msgstr "Ancho do bordo arredor da etiqueta e a imaxe na fiestra de mensaxes"
 
-#: gtk/gtkmessagedialog.c:113
+#: gtk/gtkmessagedialog.c:114
 msgid "Use separator"
 msgstr "Usar separador"
 
-#: gtk/gtkmessagedialog.c:114
+#: gtk/gtkmessagedialog.c:115
 msgid ""
 "Whether to put a separator between the message dialog's text and the buttons"
 msgstr ""
 "Indica se se debe poñer un separador entre o texto de diálogo da mensaxe e "
 "os botóns"
 
-#: gtk/gtkmessagedialog.c:127
+#: gtk/gtkmessagedialog.c:128
 msgid "Message Type"
 msgstr "Tipo de mensaxe"
 
-#: gtk/gtkmessagedialog.c:128
+#: gtk/gtkmessagedialog.c:129
 msgid "The type of message"
 msgstr "O tipo de mensaxe"
 
-#: gtk/gtkmessagedialog.c:135
+#: gtk/gtkmessagedialog.c:136
 msgid "Message Buttons"
 msgstr "Botóns de mensaxe"
 
-#: gtk/gtkmessagedialog.c:136
+#: gtk/gtkmessagedialog.c:137
 msgid "The buttons shown in the message dialog"
 msgstr "O botóns mostrados no diálogo de mensaxe"
 
-#: gtk/gtkmessagedialog.c:153
+#: gtk/gtkmessagedialog.c:154
 msgid "The primary text of the message dialog"
 msgstr "O texto primario do diálogo de mensaxe"
 
-#: gtk/gtkmessagedialog.c:168
+#: gtk/gtkmessagedialog.c:169
 msgid "Use Markup"
 msgstr "Usar marcado"
 
-#: gtk/gtkmessagedialog.c:169
+#: gtk/gtkmessagedialog.c:170
 msgid "The primary text of the title includes Pango markup."
 msgstr "O texto primario do título inclúe marcado Pango."
 
-#: gtk/gtkmessagedialog.c:183
+#: gtk/gtkmessagedialog.c:184
 msgid "Secondary Text"
 msgstr "Texto secundario"
 
-#: gtk/gtkmessagedialog.c:184
+#: gtk/gtkmessagedialog.c:185
 msgid "The secondary text of the message dialog"
 msgstr "O texto secundario do diálogo de mensaxe"
 
-#: gtk/gtkmessagedialog.c:199
+#: gtk/gtkmessagedialog.c:200
 msgid "Use Markup in secondary"
 msgstr "Usar marcado no secundario"
 
-#: gtk/gtkmessagedialog.c:200
+#: gtk/gtkmessagedialog.c:201
 msgid "The secondary text includes Pango markup."
 msgstr "O texto secundario inclúe marcado Pango."
 
-#: gtk/gtkmessagedialog.c:215
+#: gtk/gtkmessagedialog.c:216
 msgid "The image"
 msgstr "A imaxe"
 
@@ -3072,77 +3166,77 @@ msgstr ""
 "A cantidade de espazo a agregar por enriba e debaixo dun widget, medido en "
 "píxels"
 
-#: gtk/gtknotebook.c:524
+#: gtk/gtknotebook.c:525
 msgid "Page"
 msgstr "Páxina"
 
-#: gtk/gtknotebook.c:525
+#: gtk/gtknotebook.c:526
 msgid "The index of the current page"
 msgstr "O índice da páxina actual"
 
-#: gtk/gtknotebook.c:533
+#: gtk/gtknotebook.c:534
 msgid "Tab Position"
 msgstr "Posición do tabulador"
 
-#: gtk/gtknotebook.c:534
+#: gtk/gtknotebook.c:535
 msgid "Which side of the notebook holds the tabs"
 msgstr "Que lado do caderno contén solapas"
 
-#: gtk/gtknotebook.c:541
+#: gtk/gtknotebook.c:542
 msgid "Tab Border"
 msgstr "Bordo da solapa"
 
-#: gtk/gtknotebook.c:542
+#: gtk/gtknotebook.c:543
 msgid "Width of the border around the tab labels"
 msgstr "Ancho do bordo arredor da etiqueta da solapa"
 
-#: gtk/gtknotebook.c:550
+#: gtk/gtknotebook.c:551
 msgid "Horizontal Tab Border"
 msgstr "Bordo da solapa horizontal"
 
-#: gtk/gtknotebook.c:551
+#: gtk/gtknotebook.c:552
 msgid "Width of the horizontal border of tab labels"
 msgstr "Ancho do bordo horizontal das etiquetas das solapas"
 
-#: gtk/gtknotebook.c:559
+#: gtk/gtknotebook.c:560
 msgid "Vertical Tab Border"
 msgstr "Bordo da solapa vertical"
 
-#: gtk/gtknotebook.c:560
+#: gtk/gtknotebook.c:561
 msgid "Width of the vertical border of tab labels"
 msgstr "Ancho do bordo vertical das etiquetas das solapas"
 
-#: gtk/gtknotebook.c:568
+#: gtk/gtknotebook.c:569
 msgid "Show Tabs"
 msgstr "Amosar solapas"
 
-#: gtk/gtknotebook.c:569
+#: gtk/gtknotebook.c:570
 msgid "Whether tabs should be shown or not"
 msgstr "Indica se as solapas deben amosarse ou non"
 
-#: gtk/gtknotebook.c:575
+#: gtk/gtknotebook.c:576
 msgid "Show Border"
 msgstr "Amosar bordo"
 
-#: gtk/gtknotebook.c:576
+#: gtk/gtknotebook.c:577
 msgid "Whether the border should be shown or not"
 msgstr "Indica se o bordo debe amosarse ou non"
 
-#: gtk/gtknotebook.c:582
+#: gtk/gtknotebook.c:583
 msgid "Scrollable"
 msgstr "Desprazable"
 
-#: gtk/gtknotebook.c:583
+#: gtk/gtknotebook.c:584
 msgid "If TRUE, scroll arrows are added if there are too many tabs to fit"
 msgstr ""
 "Se é VERDADEIRO, agréganse frechas de desprazamento se hai demasiadas "
 "solapas para entrar"
 
-#: gtk/gtknotebook.c:589
+#: gtk/gtknotebook.c:590
 msgid "Enable Popup"
 msgstr "Activar emerxente"
 
-#: gtk/gtknotebook.c:590
+#: gtk/gtknotebook.c:591
 msgid ""
 "If TRUE, pressing the right mouse button on the notebook pops up a menu that "
 "you can use to go to a page"
@@ -3150,120 +3244,120 @@ msgstr ""
 "Se é VERDADEIRO, premendo o botón dereito do rato no caderno emerxe un menú "
 "que pode usar para ir a unha páxina"
 
-#: gtk/gtknotebook.c:597
+#: gtk/gtknotebook.c:598
 msgid "Whether tabs should have homogeneous sizes"
 msgstr "Indica se as solapas deben ter tamaños homoxéneos"
 
-#: gtk/gtknotebook.c:603
+#: gtk/gtknotebook.c:604
 msgid "Group ID"
 msgstr "ID de grupo"
 
-#: gtk/gtknotebook.c:604
+#: gtk/gtknotebook.c:605
 msgid "Group ID for tabs drag and drop"
 msgstr "ID de grupo para o arrastrar e soltar das solapas"
 
-#: gtk/gtknotebook.c:613
+#: gtk/gtknotebook.c:614
 msgid "Tab label"
 msgstr "Etiqueta da solapa"
 
-#: gtk/gtknotebook.c:614
+#: gtk/gtknotebook.c:615
 msgid "The string displayed on the child's tab label"
 msgstr "A cadea amosada na etiqueta da solapa filla"
 
-#: gtk/gtknotebook.c:620
+#: gtk/gtknotebook.c:621
 msgid "Menu label"
 msgstr "Etiqueta de menú"
 
-#: gtk/gtknotebook.c:621
+#: gtk/gtknotebook.c:622
 msgid "The string displayed in the child's menu entry"
 msgstr "A cadea amosada na entrada de menú fillo"
 
-#: gtk/gtknotebook.c:634
+#: gtk/gtknotebook.c:635
 msgid "Tab expand"
 msgstr "Expansión da solapa"
 
-#: gtk/gtknotebook.c:635
+#: gtk/gtknotebook.c:636
 msgid "Whether to expand the child's tab or not"
 msgstr "Indica se se deben expandir as solapas fillas ou non"
 
-#: gtk/gtknotebook.c:641
+#: gtk/gtknotebook.c:642
 msgid "Tab fill"
 msgstr "Recheo da solapa"
 
-#: gtk/gtknotebook.c:642
+#: gtk/gtknotebook.c:643
 msgid "Whether the child's tab should fill the allocated area or not"
 msgstr "Indica se as solapas fillas deberían rechear a área asignada ou non"
 
-#: gtk/gtknotebook.c:648
+#: gtk/gtknotebook.c:649
 msgid "Tab pack type"
 msgstr "Tipo de empaquetamento da solapa"
 
-#: gtk/gtknotebook.c:655
+#: gtk/gtknotebook.c:656
 msgid "Tab reorderable"
 msgstr "Solapa reordenable"
 
-#: gtk/gtknotebook.c:656
+#: gtk/gtknotebook.c:657
 msgid "Whether the tab is reorderable by user action or not"
 msgstr "Indica se a solapa se pode ou non reordenar por unha acción do usuario"
 
-#: gtk/gtknotebook.c:662
+#: gtk/gtknotebook.c:663
 msgid "Tab detachable"
 msgstr "Solapa desacoplable"
 
-#: gtk/gtknotebook.c:663
+#: gtk/gtknotebook.c:664
 msgid "Whether the tab is detachable"
 msgstr "Indica se a solapa é desacoplable"
 
-#: gtk/gtknotebook.c:678 gtk/gtkscrollbar.c:83
+#: gtk/gtknotebook.c:679 gtk/gtkscrollbar.c:83
 msgid "Secondary backward stepper"
 msgstr "Separador traseiro secundario"
 
-#: gtk/gtknotebook.c:679
+#: gtk/gtknotebook.c:680
 msgid ""
 "Display a second backward arrow button on the opposite end of the tab area"
 msgstr ""
 "Amosa unha segunda frecha de retroceso no extremo oposto da área de "
 "tabulación"
 
-#: gtk/gtknotebook.c:694 gtk/gtkscrollbar.c:91
+#: gtk/gtknotebook.c:695 gtk/gtkscrollbar.c:91
 msgid "Secondary forward stepper"
 msgstr "Separador dianteiro secundario"
 
-#: gtk/gtknotebook.c:695
+#: gtk/gtknotebook.c:696
 msgid ""
 "Display a second forward arrow button on the opposite end of the tab area"
 msgstr ""
 "Amosar unha segunda frecha de avance no extremo oposto da área de tabulación"
 
-#: gtk/gtknotebook.c:709 gtk/gtkscrollbar.c:67
+#: gtk/gtknotebook.c:710 gtk/gtkscrollbar.c:67
 msgid "Backward stepper"
 msgstr "Separador traseiro"
 
-#: gtk/gtknotebook.c:710 gtk/gtkscrollbar.c:68
+#: gtk/gtknotebook.c:711 gtk/gtkscrollbar.c:68
 msgid "Display the standard backward arrow button"
 msgstr "Amosar o botón estándar de frecha de retroceso"
 
-#: gtk/gtknotebook.c:724 gtk/gtkscrollbar.c:75
+#: gtk/gtknotebook.c:725 gtk/gtkscrollbar.c:75
 msgid "Forward stepper"
 msgstr "Separador dianteiro"
 
-#: gtk/gtknotebook.c:725 gtk/gtkscrollbar.c:76
+#: gtk/gtknotebook.c:726 gtk/gtkscrollbar.c:76
 msgid "Display the standard forward arrow button"
 msgstr "Amosar o botón estándar de frecha de avance"
 
-#: gtk/gtknotebook.c:739
+#: gtk/gtknotebook.c:740
 msgid "Tab overlap"
 msgstr "Solapamento da solapa"
 
-#: gtk/gtknotebook.c:740
+#: gtk/gtknotebook.c:741
 msgid "Size of tab overlap area"
 msgstr "Tamaño da área de solapamento da solapa"
 
-#: gtk/gtknotebook.c:755
+#: gtk/gtknotebook.c:756
 msgid "Tab curvature"
 msgstr "Curvatura da solapa"
 
-#: gtk/gtknotebook.c:756
+#: gtk/gtknotebook.c:757
 msgid "Size of tab curvature"
 msgstr "Tamaño da curvatura da solapa"
 
@@ -3287,58 +3381,58 @@ msgstr "Tamaño do indicador descolgable"
 msgid "Spacing around indicator"
 msgstr "Espaciado arredor do indicador"
 
-#: gtk/gtkpaned.c:217
+#: gtk/gtkpaned.c:220
 msgid ""
 "Position of paned separator in pixels (0 means all the way to the left/top)"
 msgstr ""
 "Posición do separador enmarcado en píxels (0 significa todo o traxecto hacia "
 "a esquerda/enriba)"
 
-#: gtk/gtkpaned.c:225
+#: gtk/gtkpaned.c:228
 msgid "Position Set"
 msgstr "Establecer posición"
 
-#: gtk/gtkpaned.c:226
+#: gtk/gtkpaned.c:229
 msgid "TRUE if the Position property should be used"
 msgstr "VERDADEIRO se a propiedade posición debe ser empregada"
 
-#: gtk/gtkpaned.c:232
+#: gtk/gtkpaned.c:235
 msgid "Handle Size"
 msgstr "Tamaño do tirador"
 
-#: gtk/gtkpaned.c:233
+#: gtk/gtkpaned.c:236
 msgid "Width of handle"
 msgstr "Anchura do tirador"
 
-#: gtk/gtkpaned.c:249
+#: gtk/gtkpaned.c:252
 msgid "Minimal Position"
 msgstr "Posición mínima"
 
-#: gtk/gtkpaned.c:250
+#: gtk/gtkpaned.c:253
 msgid "Smallest possible value for the \"position\" property"
 msgstr "O valor máis pequeno posible para a propiedade \"posición\""
 
-#: gtk/gtkpaned.c:267
+#: gtk/gtkpaned.c:270
 msgid "Maximal Position"
 msgstr "Posición máxima"
 
-#: gtk/gtkpaned.c:268
+#: gtk/gtkpaned.c:271
 msgid "Largest possible value for the \"position\" property"
 msgstr "O valor máis grande posible para a propiedade \"posición\""
 
-#: gtk/gtkpaned.c:285
+#: gtk/gtkpaned.c:288
 msgid "Resize"
 msgstr "Redimensionar"
 
-#: gtk/gtkpaned.c:286
+#: gtk/gtkpaned.c:289
 msgid "If TRUE, the child expands and shrinks along with the paned widget"
 msgstr "Se é VERDADEIRO, o fillo expándese e encolle xunto co widget"
 
-#: gtk/gtkpaned.c:301
+#: gtk/gtkpaned.c:304
 msgid "Shrink"
 msgstr "Encoller"
 
-#: gtk/gtkpaned.c:302
+#: gtk/gtkpaned.c:305
 msgid "If TRUE, the child can be made smaller than its requisition"
 msgstr "Se é VERDADEIRO, o fillo pode facerse máis pequeno que seus requisitos"
 
@@ -3449,11 +3543,11 @@ msgstr "Configuración"
 msgid "Printer settings"
 msgstr "Configuración da impresora"
 
-#: gtk/gtkprintjob.c:143 gtk/gtkprintjob.c:144 gtk/gtkprintunixdialog.c:226
+#: gtk/gtkprintjob.c:143 gtk/gtkprintjob.c:144 gtk/gtkprintunixdialog.c:227
 msgid "Page Setup"
 msgstr "Configuración da páxina"
 
-#: gtk/gtkprintjob.c:152 gtk/gtkprintoperation.c:984
+#: gtk/gtkprintjob.c:152 gtk/gtkprintoperation.c:985
 msgid "Track Print Status"
 msgstr "Seguemento do estado de impresión"
 
@@ -3466,51 +3560,59 @@ msgstr ""
 "estado despois de que os datos de impresión sexan enviados ao servidor de "
 "impresoras ou á impresora."
 
-#: gtk/gtkprintoperation.c:857
+#: gtk/gtkprintoperation-unix.c:188
+msgid "Default command to run when displaying a print preview"
+msgstr ""
+
+#: gtk/gtkprintoperation-unix.c:189
+msgid "Command to run when displaying a print preview"
+msgstr ""
+
+#: gtk/gtkprintoperation.c:858
 msgid "Default Page Setup"
 msgstr "Configuración da páxina predeterminada"
 
-#: gtk/gtkprintoperation.c:858
+#: gtk/gtkprintoperation.c:859
 msgid "The GtkPageSetup used by default"
 msgstr "A GtkPageSetup usada por defecto"
 
-#: gtk/gtkprintoperation.c:876 gtk/gtkprintunixdialog.c:244
+#: gtk/gtkprintoperation.c:877 gtk/gtkprintunixdialog.c:245
 msgid "Print Settings"
 msgstr "Configuración de impresión"
 
-#: gtk/gtkprintoperation.c:877 gtk/gtkprintunixdialog.c:245
+#: gtk/gtkprintoperation.c:878 gtk/gtkprintunixdialog.c:246
 msgid "The GtkPrintSettings used for initializing the dialog"
 msgstr "Os GtkPrintSettings empregados para inicializar o diálogo"
 
-#: gtk/gtkprintoperation.c:895
+#: gtk/gtkprintoperation.c:896
 msgid "Job Name"
 msgstr "Nome do traballo"
 
-#: gtk/gtkprintoperation.c:896
+#: gtk/gtkprintoperation.c:897
 msgid "A string used for identifying the print job."
 msgstr "Unha cadea usada para identificar o traballo de impresión."
 
-#: gtk/gtkprintoperation.c:919
+#: gtk/gtkprintoperation.c:920
 msgid "Number of Pages"
 msgstr "Número de páxinas"
 
-#: gtk/gtkprintoperation.c:920
+#: gtk/gtkprintoperation.c:921
 msgid "The number of pages in the document."
 msgstr "O número de páxinas no documento."
 
-#: gtk/gtkprintoperation.c:941 gtk/gtkprintunixdialog.c:234
+#: gtk/gtkprintoperation.c:942 gtk/gtkprintunixdialog.c:235
 msgid "Current Page"
 msgstr "Páxina actual"
 
-#: gtk/gtkprintoperation.c:942 gtk/gtkprintunixdialog.c:235
+#: gtk/gtkprintoperation.c:943 gtk/gtkprintunixdialog.c:236
 msgid "The current page in the document"
 msgstr "A páxina actual no documento"
 
-#: gtk/gtkprintoperation.c:963
+#: gtk/gtkprintoperation.c:964
 msgid "Use full page"
 msgstr "Usar a páxina completa"
 
-#: gtk/gtkprintoperation.c:964
+#: gtk/gtkprintoperation.c:965
 msgid ""
 "TRUE if the the origin of the context should be at the corner of the page "
 "and not the corner of the imageable area"
@@ -3518,7 +3620,7 @@ msgstr ""
 "TRUE se a orixe do contexto debería estar na esquina da páxina e non na "
 "esquina da área da imaxe"
 
-#: gtk/gtkprintoperation.c:985
+#: gtk/gtkprintoperation.c:986
 msgid ""
 "TRUE if the print operation will continue to report on the print job status "
 "after the print data has been sent to the printer or print server."
@@ -3527,67 +3629,67 @@ msgstr ""
 "impresión despois de que os datos de impresión sexan enviados ao servidor de "
 "impresoras ou á impresora."
 
-#: gtk/gtkprintoperation.c:1002
+#: gtk/gtkprintoperation.c:1003
 msgid "Unit"
 msgstr "Unidade"
 
-#: gtk/gtkprintoperation.c:1003
+#: gtk/gtkprintoperation.c:1004
 msgid "The unit in which distances can be measured in the context"
 msgstr "A unidade na que se poden medir as distancias no contexto"
 
-#: gtk/gtkprintoperation.c:1020
+#: gtk/gtkprintoperation.c:1021
 msgid "Show Dialog"
 msgstr "Amosar diálogo"
 
-#: gtk/gtkprintoperation.c:1021
+#: gtk/gtkprintoperation.c:1022
 msgid "TRUE if a progress dialog is shown while printing."
 msgstr "TRUE se se amosa ao imprimir un diálogo de progreso."
 
-#: gtk/gtkprintoperation.c:1044
+#: gtk/gtkprintoperation.c:1045
 msgid "Allow Async"
 msgstr "Permitir asíncrono"
 
-#: gtk/gtkprintoperation.c:1045
+#: gtk/gtkprintoperation.c:1046
 msgid "TRUE if print process may run asynchronous."
 msgstr "TRUE se o proceso de impresión pode executarse asíncronamente"
 
-#: gtk/gtkprintoperation.c:1068 gtk/gtkprintoperation.c:1069
+#: gtk/gtkprintoperation.c:1069 gtk/gtkprintoperation.c:1070
 msgid "Export filename"
 msgstr "Exportar nome de ficheiro"
 
-#: gtk/gtkprintoperation.c:1083
+#: gtk/gtkprintoperation.c:1084
 msgid "Status"
 msgstr "Estado"
 
-#: gtk/gtkprintoperation.c:1084
+#: gtk/gtkprintoperation.c:1085
 msgid "The status of the print operation"
 msgstr "O estado da operación de impresión"
 
-#: gtk/gtkprintoperation.c:1104
+#: gtk/gtkprintoperation.c:1105
 msgid "Status String"
 msgstr "Cadea de estado"
 
-#: gtk/gtkprintoperation.c:1105
+#: gtk/gtkprintoperation.c:1106
 msgid "A human-readable description of the status"
 msgstr "Unha descrición lexible por humanos do estado"
 
-#: gtk/gtkprintoperation.c:1123
+#: gtk/gtkprintoperation.c:1124
 msgid "Custom tab label"
 msgstr "Etiqueta de solapa personalizada"
 
-#: gtk/gtkprintoperation.c:1124
+#: gtk/gtkprintoperation.c:1125
 msgid "Label for the tab containing custom widgets."
 msgstr "Etiqueta para a solapa contendo widgets personalizados."
 
-#: gtk/gtkprintunixdialog.c:227
+#: gtk/gtkprintunixdialog.c:228
 msgid "The GtkPageSetup to use"
 msgstr "O GtkPageSetup a usar"
 
-#: gtk/gtkprintunixdialog.c:252
+#: gtk/gtkprintunixdialog.c:253
 msgid "Selected Printer"
 msgstr "Impresora seleccionada"
 
-#: gtk/gtkprintunixdialog.c:253
+#: gtk/gtkprintunixdialog.c:254
 msgid "The GtkPrinter which is selected"
 msgstr "O GtkPrinter que está seleccionado"
 
@@ -3637,40 +3739,36 @@ msgstr ""
 "Un número entre 0.0 e 1.0 que especifica a aliñación vertical do texto no "
 "widget de progreso"
 
-#: gtk/gtkprogressbar.c:120 gtk/gtkrange.c:324 gtk/gtkspinbutton.c:204
-msgid "Adjustment"
-msgstr "Axuste"
-
-#: gtk/gtkprogressbar.c:121
+#: gtk/gtkprogressbar.c:124
 msgid "The GtkAdjustment connected to the progress bar (Deprecated)"
 msgstr "O GtkAdjustment conectado á barra de progreso (Obsoleto)"
 
-#: gtk/gtkprogressbar.c:129
+#: gtk/gtkprogressbar.c:132
 msgid "Orientation and growth direction of the progress bar"
 msgstr "Orientación e dirección do crecemento da barra de progreso"
 
-#: gtk/gtkprogressbar.c:137
+#: gtk/gtkprogressbar.c:140
 msgid "Bar style"
 msgstr "Estilo da barra"
 
-#: gtk/gtkprogressbar.c:138
+#: gtk/gtkprogressbar.c:141
 msgid "Specifies the visual style of the bar in percentage mode (Deprecated)"
 msgstr "Especifica o estilo visual da barra no modo porcentaxe (Obsoleto)"
 
-#: gtk/gtkprogressbar.c:146
+#: gtk/gtkprogressbar.c:149
 msgid "Activity Step"
 msgstr "Avance de actividade"
 
-#: gtk/gtkprogressbar.c:147
+#: gtk/gtkprogressbar.c:150
 msgid "The increment used for each iteration in activity mode (Deprecated)"
 msgstr ""
 "O incremento empregado para cada iteración no modo actividade (Obsoleto)"
 
-#: gtk/gtkprogressbar.c:156
+#: gtk/gtkprogressbar.c:159
 msgid "Activity Blocks"
 msgstr "Bloques de actividade"
 
-#: gtk/gtkprogressbar.c:157
+#: gtk/gtkprogressbar.c:160
 msgid ""
 "The number of blocks which can fit in the progress bar area in activity mode "
 "(Deprecated)"
@@ -3678,11 +3776,11 @@ msgstr ""
 "A cantidade de bloques que poden caber na área da barra de progreso no modo "
 "actividade (Obsoleto)"
 
-#: gtk/gtkprogressbar.c:166
+#: gtk/gtkprogressbar.c:169
 msgid "Discrete Blocks"
 msgstr "Bloques discretos"
 
-#: gtk/gtkprogressbar.c:167
+#: gtk/gtkprogressbar.c:170
 msgid ""
 "The number of discrete blocks in a progress bar (when shown in the discrete "
 "style)"
@@ -3690,28 +3788,28 @@ msgstr ""
 "O número de bloques discretos na barra de progreso (cando se amose no estilo "
 "discreto)"
 
-#: gtk/gtkprogressbar.c:176
+#: gtk/gtkprogressbar.c:179
 msgid "Fraction"
 msgstr "Fracción"
 
-#: gtk/gtkprogressbar.c:177
+#: gtk/gtkprogressbar.c:180
 msgid "The fraction of total work that has been completed"
 msgstr "A fracción do traballo total que foi completado"
 
-#: gtk/gtkprogressbar.c:186
+#: gtk/gtkprogressbar.c:189
 msgid "Pulse Step"
 msgstr "Avance do pulso"
 
-#: gtk/gtkprogressbar.c:187
+#: gtk/gtkprogressbar.c:190
 msgid "The fraction of total progress to move the bouncing block when pulsed"
 msgstr ""
 "A fracción do progreso total para mover o bloque rebotador cando é pulsado"
 
-#: gtk/gtkprogressbar.c:197
+#: gtk/gtkprogressbar.c:200
 msgid "Text to be displayed in the progress bar"
 msgstr "Texto que será amosado na barra de progreso"
 
-#: gtk/gtkprogressbar.c:219
+#: gtk/gtkprogressbar.c:222
 msgid ""
 "The preferred place to ellipsize the string, if the progressbar does not "
 "have enough room to display the entire string, if at all"
@@ -3964,11 +4062,11 @@ msgstr "A orde de colocación dos elementos amosados"
 msgid "The current filter for selecting which resources are displayed"
 msgstr "O filtro actual para seleccionar qué recursos se amosan"
 
-#: gtk/gtkrecentchoosermenu.c:208
+#: gtk/gtkrecentchoosermenu.c:210
 msgid "Show Numbers"
 msgstr "Amosar números"
 
-#: gtk/gtkrecentchoosermenu.c:209
+#: gtk/gtkrecentchoosermenu.c:211
 msgid "Whether the items should be displayed with a number"
 msgstr "Indica se os elementos deberían amosarse cun número"
 
@@ -4021,10 +4119,6 @@ msgstr "Métrica"
 #: gtk/gtkruler.c:137
 msgid "The metric used for the ruler"
 msgstr "A métrica que se usa para a regra"
-
-#: gtk/gtkscale.c:142 gtk/gtkspinbutton.c:222
-msgid "Digits"
-msgstr "Díxitos"
 
 #: gtk/gtkscale.c:143
 msgid "The number of decimal places that are displayed in the value"
@@ -4493,14 +4587,6 @@ msgstr "O axuste que mentén o valor do botón xiratorio"
 msgid "Climb Rate"
 msgstr "Tamaño da escala"
 
-#: gtk/gtkspinbutton.c:213
-msgid "The acceleration rate when you hold down a button"
-msgstr "A tasa de aceleración cando mantén preso un botón"
-
-#: gtk/gtkspinbutton.c:223
-msgid "The number of decimal places to display"
-msgstr "O número de lugares decimais a amosar"
-
 #: gtk/gtkspinbutton.c:232
 msgid "Snap to Ticks"
 msgstr "Axustarse aos ticks"
@@ -4564,19 +4650,19 @@ msgstr ""
 msgid "Style of bevel around the statusbar text"
 msgstr "Estilo do bisel arredor do texto da barra de estado"
 
-#: gtk/gtkstatusicon.c:188
+#: gtk/gtkstatusicon.c:189
 msgid "The size of the icon"
 msgstr "O tamaño da icona"
 
-#: gtk/gtkstatusicon.c:197
+#: gtk/gtkstatusicon.c:198
 msgid "Blinking"
 msgstr "Palpabrexo"
 
-#: gtk/gtkstatusicon.c:198
+#: gtk/gtkstatusicon.c:199
 msgid "Whether or not the status icon is blinking"
 msgstr "Indica se a icona de estado palpabrexa"
 
-#: gtk/gtkstatusicon.c:206
+#: gtk/gtkstatusicon.c:207
 msgid "Whether or not the status icon is visible"
 msgstr "Indica ou non se o estado da icona é visible"
 
@@ -4847,7 +4933,7 @@ msgstr ""
 "recomendada. Pango define previamente algunhas escalas talas como "
 "PANGO_SCALE_X_LARGE"
 
-#: gtk/gtktexttag.c:358 gtk/gtktextview.c:566
+#: gtk/gtktexttag.c:358 gtk/gtktextview.c:565
 msgid "Left, right, or center justification"
 msgstr "Xustificación á esquerda, dereita ou centro"
 
@@ -4864,7 +4950,7 @@ msgstr ""
 msgid "Left margin"
 msgstr "Marxe esquerda"
 
-#: gtk/gtktexttag.c:385 gtk/gtktextview.c:575
+#: gtk/gtktexttag.c:385 gtk/gtktextview.c:574
 msgid "Width of the left margin in pixels"
 msgstr "Ancho da marxe esquerda en píxels"
 
@@ -4872,15 +4958,15 @@ msgstr "Ancho da marxe esquerda en píxels"
 msgid "Right margin"
 msgstr "Marxe dereita"
 
-#: gtk/gtktexttag.c:395 gtk/gtktextview.c:585
+#: gtk/gtktexttag.c:395 gtk/gtktextview.c:584
 msgid "Width of the right margin in pixels"
 msgstr "Ancho da marxe dereita en píxels"
 
-#: gtk/gtktexttag.c:405 gtk/gtktextview.c:594
+#: gtk/gtktexttag.c:405 gtk/gtktextview.c:593
 msgid "Indent"
 msgstr "Sangrar"
 
-#: gtk/gtktexttag.c:406 gtk/gtktextview.c:595
+#: gtk/gtktexttag.c:406 gtk/gtktextview.c:594
 msgid "Amount to indent the paragraph, in pixels"
 msgstr "Cantidade de píxels para o sangrado do parágrafo"
 
@@ -4896,7 +4982,7 @@ msgstr ""
 msgid "Pixels above lines"
 msgstr "Píxels enriba das liñas"
 
-#: gtk/gtktexttag.c:427 gtk/gtktextview.c:519
+#: gtk/gtktexttag.c:427 gtk/gtktextview.c:518
 msgid "Pixels of blank space above paragraphs"
 msgstr "Píxels de espazo en branco enriba do parágrafos"
 
@@ -4904,7 +4990,7 @@ msgstr "Píxels de espazo en branco enriba do parágrafos"
 msgid "Pixels below lines"
 msgstr "Píxels debaixo das liñas"
 
-#: gtk/gtktexttag.c:437 gtk/gtktextview.c:529
+#: gtk/gtktexttag.c:437 gtk/gtktextview.c:528
 msgid "Pixels of blank space below paragraphs"
 msgstr "Píxels de espazo en branco debaixo dos parágrafos"
 
@@ -4912,22 +4998,22 @@ msgstr "Píxels de espazo en branco debaixo dos parágrafos"
 msgid "Pixels inside wrap"
 msgstr "Píxels dentro do axuste"
 
-#: gtk/gtktexttag.c:447 gtk/gtktextview.c:539
+#: gtk/gtktexttag.c:447 gtk/gtktextview.c:538
 msgid "Pixels of blank space between wrapped lines in a paragraph"
 msgstr "Píxels de espazo en branco entre as liñas axustadas nun parágrafo"
 
-#: gtk/gtktexttag.c:474 gtk/gtktextview.c:557
+#: gtk/gtktexttag.c:474 gtk/gtktextview.c:556
 msgid ""
 "Whether to wrap lines never, at word boundaries, or at character boundaries"
 msgstr ""
 "Indica se nunca deben axustarse as liñas, aos límites das palabras ou aos "
 "límites dos caracteres"
 
-#: gtk/gtktexttag.c:483 gtk/gtktextview.c:604
+#: gtk/gtktexttag.c:483 gtk/gtktextview.c:603
 msgid "Tabs"
 msgstr "Solapas"
 
-#: gtk/gtktexttag.c:484 gtk/gtktextview.c:605
+#: gtk/gtktexttag.c:484 gtk/gtktextview.c:604
 msgid "Custom tabs for this text"
 msgstr "Solapas personalizadas para este texto"
 
@@ -5064,67 +5150,67 @@ msgstr "Establecer o fondo do parágrafo"
 msgid "Whether this tag affects the paragraph background color"
 msgstr "Indica se esta etiqueta afecta a cor de fondo do parágrafo"
 
-#: gtk/gtktextview.c:518
+#: gtk/gtktextview.c:517
 msgid "Pixels Above Lines"
 msgstr "Píxels sobre as liñas"
 
-#: gtk/gtktextview.c:528
+#: gtk/gtktextview.c:527
 msgid "Pixels Below Lines"
 msgstr "Píxels debaixo das liñas"
 
-#: gtk/gtktextview.c:538
+#: gtk/gtktextview.c:537
 msgid "Pixels Inside Wrap"
 msgstr "Píxels dentro do axuste"
 
-#: gtk/gtktextview.c:556
+#: gtk/gtktextview.c:555
 msgid "Wrap Mode"
 msgstr "Modo axuste"
 
-#: gtk/gtktextview.c:574
+#: gtk/gtktextview.c:573
 msgid "Left Margin"
 msgstr "Marxe esquerda"
 
-#: gtk/gtktextview.c:584
+#: gtk/gtktextview.c:583
 msgid "Right Margin"
 msgstr "Marxe dereita"
 
-#: gtk/gtktextview.c:612
+#: gtk/gtktextview.c:611
 msgid "Cursor Visible"
 msgstr "Cursor visible"
 
-#: gtk/gtktextview.c:613
+#: gtk/gtktextview.c:612
 msgid "If the insertion cursor is shown"
 msgstr "Se se amosa o cursor de inserción"
 
-#: gtk/gtktextview.c:620
+#: gtk/gtktextview.c:619
 msgid "Buffer"
 msgstr "Búfer"
 
-#: gtk/gtktextview.c:621
+#: gtk/gtktextview.c:620
 msgid "The buffer which is displayed"
 msgstr "O búfer que se está amosando"
 
-#: gtk/gtktextview.c:628
+#: gtk/gtktextview.c:627
 msgid "Overwrite mode"
 msgstr "Modo de sobreescritura"
 
-#: gtk/gtktextview.c:629
+#: gtk/gtktextview.c:628
 msgid "Whether entered text overwrites existing contents"
 msgstr "Indica se o texto introducido sobreescribe o existente"
 
-#: gtk/gtktextview.c:636
+#: gtk/gtktextview.c:635
 msgid "Accepts tab"
 msgstr "Acepta tabulación"
 
-#: gtk/gtktextview.c:637
+#: gtk/gtktextview.c:636
 msgid "Whether Tab will result in a tab character being entered"
 msgstr "Indica se Tab resultará nun carácter tabulador introducido"
 
-#: gtk/gtktextview.c:646
+#: gtk/gtktextview.c:645
 msgid "Error underline color"
 msgstr "Cor de subraiado de erros"
 
-#: gtk/gtktextview.c:647
+#: gtk/gtktextview.c:646
 msgid "Color with which to draw error-indication underlines"
 msgstr "Cor co cal debuxar o subraiado de indicación de erros"
 

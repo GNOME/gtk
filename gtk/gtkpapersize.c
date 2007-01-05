@@ -62,20 +62,20 @@ static const PaperInfo *
 lookup_paper_info (const gchar *name)
 {
   int lower = 0;
-  int upper = G_N_ELEMENTS (standard_names_offsets) - 1;
+  int upper = G_N_ELEMENTS (_gtk_standard_names_offsets) - 1;
   int mid;
   int cmp;
 
   do 
     {
        mid = (lower + upper) / 2;
-       cmp = strcmp (name, paper_names + standard_names_offsets[mid].name);
+       cmp = strcmp (name, _gtk_paper_names + _gtk_standard_names_offsets[mid].name);
        if (cmp < 0)
          upper = mid - 1;
        else if (cmp > 0)
          lower = mid + 1;
        else
-	 return &standard_names_offsets[mid];
+	 return &_gtk_standard_names_offsets[mid];
     }
   while (lower <= upper);
 
@@ -284,21 +284,21 @@ gtk_paper_size_new_from_ppd (const gchar *ppd_name,
 	g_strndup (ppd_name, strlen (ppd_name) - strlen (".Transverse"));
     }
   
-  for (i = 0; i < G_N_ELEMENTS(standard_names_offsets); i++)
+  for (i = 0; i < G_N_ELEMENTS (_gtk_standard_names_offsets); i++)
     {
-      if (standard_names_offsets[i].ppd_name != -1 &&
-	  strcmp (paper_names + standard_names_offsets[i].ppd_name, lookup_ppd_name) == 0)
+      if (_gtk_standard_names_offsets[i].ppd_name != -1 &&
+	  strcmp (_gtk_paper_names + _gtk_standard_names_offsets[i].ppd_name, lookup_ppd_name) == 0)
 	{
-	  size = gtk_paper_size_new_from_info (&standard_names_offsets[i]);
+	  size = gtk_paper_size_new_from_info (&_gtk_standard_names_offsets[i]);
 	  goto out;
 	}
     }
   
-  for (i = 0; i < G_N_ELEMENTS(extra_ppd_names_offsets); i++)
+  for (i = 0; i < G_N_ELEMENTS (_gtk_extra_ppd_names_offsets); i++)
     {
-      if (strcmp (paper_names + extra_ppd_names_offsets[i].ppd_name, lookup_ppd_name) == 0)
+      if (strcmp (_gtk_paper_names + _gtk_extra_ppd_names_offsets[i].ppd_name, lookup_ppd_name) == 0)
 	{
-	  size = gtk_paper_size_new (paper_names + extra_ppd_names_offsets[i].standard_name);
+	  size = gtk_paper_size_new (_gtk_paper_names + _gtk_extra_ppd_names_offsets[i].standard_name);
 	  goto out;
 	}
     }
@@ -311,7 +311,7 @@ gtk_paper_size_new_from_ppd (const gchar *ppd_name,
 
   if (size->info == NULL ||
       size->info->ppd_name == -1 ||
-      strcmp (paper_names + size->info->ppd_name, ppd_name) != 0)
+      strcmp (_gtk_paper_names + size->info->ppd_name, ppd_name) != 0)
     size->ppd_name = g_strdup (ppd_name);
   
   g_free (freeme);
@@ -446,7 +446,7 @@ gtk_paper_size_get_name (GtkPaperSize *size)
   if (size->name)
     return size->name;
   g_assert (size->info != NULL);
-  return paper_names + size->info->name;
+  return _gtk_paper_names + size->info->name;
 }
 
 /**
@@ -469,7 +469,7 @@ gtk_paper_size_get_display_name (GtkPaperSize *size)
 
   g_assert (size->info != NULL);
 
-  display_name = paper_names + size->info->display_name;
+  display_name = _gtk_paper_names + size->info->display_name;
   return g_strip_context (display_name, gettext (display_name));
 }
 
@@ -490,7 +490,7 @@ gtk_paper_size_get_ppd_name (GtkPaperSize *size)
   if (size->ppd_name)
     return size->ppd_name;
   if (size->info)
-    return paper_names + size->info->ppd_name;
+    return _gtk_paper_names + size->info->ppd_name;
   return NULL;
 }
 

@@ -1,5 +1,21 @@
 2007-01-05  Matthias Clasen  <mclasen@redhat.com>
 
+	* === Released 2.10.7 ===
+
+	* NEWS: Updates
+
+2007-01-05  Matthias Clasen  <mclasen@redhat.com>
+
+	* docus/tutorial/gtk-tut.sgml: Fix a formatting error
+
+	* gtk/gtkpapersize.c:
+	* gtk/paper_names.c:
+	* gtk/paper_names_offsets.c:
+	* gtk/gen-paper-names.c: Prefix non-static variables
+	with _gtk.
+	
+	* gdk/x11/xsettings-common.h: Add xsettings_client_new_with_grab_funcs.
+
 	* gtk/gtkmenu.c (gtk_menu_paint): Take the scroll arrow into
 	account when drawing the background.  (#393166, Benjamin Berg)
 

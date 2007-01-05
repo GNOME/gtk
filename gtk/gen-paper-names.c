@@ -188,7 +188,7 @@ main (int argc, char *argv[])
   printf ("#endif\n\n");
 
   /* write strings */
-  printf ("const char paper_names[] =");
+  printf ("const char _gtk_paper_names[] =");
   for (i = 0; i < n_names; i++)
     {
       if (names[i].suffix == -1)
@@ -204,7 +204,7 @@ main (int argc, char *argv[])
 	  "  int display_name;\n"
 	  "  int ppd_name;\n"
 	  "} PaperInfo;\n\n"
-          "const PaperInfo standard_names_offsets[] = {\n");
+          "const PaperInfo _gtk_standard_names_offsets[] = {\n");
 
   for (i = 0; i < n_infos; i++)
     {
@@ -227,7 +227,7 @@ main (int argc, char *argv[])
   printf ("const struct {\n"
 	  "  int ppd_name;\n"
 	  "  int standard_name;\n"
-	  "} extra_ppd_names_offsets[] = {\n");
+	  "} _gtk_extra_ppd_names_offsets[] = {\n");
 
   for (i = 0; i < n_extra; i++)
     {

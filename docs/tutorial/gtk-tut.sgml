@@ -66,7 +66,6 @@ low-level functions for accessing the underlying windowing functions
 (Xlib in the case of the X windows system), and gdk-pixbuf, a library for
 client-side image manipulation.</para>
 
-</para>
 <para>GTK is essentially an object oriented application programmers
 interface (API). Although written completely in C, it is implemented
 using the idea of classes and callback functions (pointers to

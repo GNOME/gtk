@@ -1,3 +1,7 @@
+2007-01-05  Matthias Clasen  <mclasen@redhat.com>
+
+	* === Released 2.10.7 ===
+
 2007-01-04  Matthias Clasen  <mclasen@redhat.com>
 
 	* io-bmp.c (OneLine32): Fix a warning

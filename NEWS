@@ -152,6 +152,11 @@ Overview of Changes from GTK+ 2.10.6 to 2.10.7
  392315	gdk_drawable_get_size() call in unrealized GtkEntry
  392457	GtkAssistant sometimes forgets to reset current_page whil...
  392532	valgrindify use of XSendEvent
+ 332266	gdk_draw_layout fails for coordinates >= 2^21
+ 346616 Selected item not visible in the popup in list mode
+ 392646	Fix cross-compilation
+ 393124	misdrawing of tabs
+ 393166	background box of the "bin_window" not placed correctly
 
 * Updated translations (ar,as,bn_IN,ca,en_CA,en_GB,
     es,et,fi,fr,gu,he,hi,hy,hu,ka,mk,ml,mr,nb,nl,
