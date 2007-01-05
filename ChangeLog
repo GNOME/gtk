@@ -1,3 +1,11 @@
+2007-01-05  Kristian Rietveld  <kris@gtk.org>
+
+	Merge from HEAD.
+
+	* gtk/gtktreeview.c (gtk_tree_view_row_changed): do allow to
+	invalidate nodes if the tree view is not realized. (#363147,
+	Carlos Garnacho, Miguel Cabrera).
+
 2007-01-05  Matthias Clasen  <mclasen@redhat.com>
 
 	* configure.in: Bump version
