@@ -2301,8 +2301,9 @@ get_layout_location (GtkLabel  *label,
       width = pango_layout_get_width (label->layout);
       pango_layout_get_pixel_extents (label->layout, NULL, &logical);
 
-      /* width may be -1 */
-      req_width = MIN(PANGO_PIXELS (width), logical.width);
+      req_width = logical.width;
+      if (width != -1)
+        req_width = MIN(PANGO_PIXELS (width), req_width);
       req_width += 2 * misc->xpad;
     }
   else
