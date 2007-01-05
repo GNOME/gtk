@@ -2512,12 +2512,17 @@ gtk_menu_paint (GtkWidget      *widget,
     }
   else if (event->window == menu->bin_window)
     {
+      gint y = -border_y + menu->scroll_offset;
+
+      if (menu->upper_arrow_visible && !menu->tearoff_active)
+        y -= scroll_arrow_height;
+
       gtk_paint_box (widget->style,
 		     menu->bin_window,
 		     GTK_STATE_NORMAL,
 		     GTK_SHADOW_OUT,
 		     NULL, widget, "menu",
-		     - border_x, menu->scroll_offset - border_y, 
+		     - border_x, y,
 		     width, height);
     }
 }
