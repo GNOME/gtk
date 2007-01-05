@@ -1,3 +1,9 @@
+2007-01-04  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtkcombobox.c (gtk_combo_box_popup): move set_cursor
+	after realization of the popup window, so clamp node doesn't fail.
+	(#346616, Tommi Komulainen, patch by Kristian Rietveld).
+
 2007-01-04  Behdad Esfahbod  <behdad@gnome.org>
 
 	* gtk/gtklabel.c (get_layout_location): Fix uninitialized width
