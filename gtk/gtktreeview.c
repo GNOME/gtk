@@ -8056,11 +8056,6 @@ gtk_tree_view_row_changed (GtkTreeModel *model,
 
   g_return_if_fail (path != NULL || iter != NULL);
 
-  if (!GTK_WIDGET_REALIZED (tree_view))
-    /* We can just ignore ::changed signals if we aren't realized, as we don't care about sizes
-     */
-    return;
-
   if (tree_view->priv->cursor != NULL)
     cursor_path = gtk_tree_row_reference_get_path (tree_view->priv->cursor);
   else
@@ -8097,7 +8092,8 @@ gtk_tree_view_row_changed (GtkTreeModel *model,
       && tree_view->priv->fixed_height >= 0)
     {
       _gtk_rbtree_node_set_height (tree, node, tree_view->priv->fixed_height);
-      gtk_tree_view_node_queue_redraw (tree_view, tree, node);
+      if (GTK_WIDGET_REALIZED (tree_view))
+	gtk_tree_view_node_queue_redraw (tree_view, tree, node);
     }
   else
     {
@@ -8118,7 +8114,7 @@ gtk_tree_view_row_changed (GtkTreeModel *model,
     }
 
  done:
-  if (!tree_view->priv->fixed_height_mode)
+  if (GTK_WIDGET_REALIZED (tree_view) && !tree_view->priv->fixed_height_mode)
     install_presize_handler (tree_view);
   if (free_path)
     gtk_tree_path_free (path);
