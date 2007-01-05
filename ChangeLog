@@ -1,7 +1,7 @@
 2007-01-05  Kristian Rietveld  <kris@gtk.org>
 
 	* gtk/gtktreeview.c (gtk_tree_view_dy_to_top_row): handle tree
-	== NULL.  (Fixes #392259, reported by Christian Persch).
+	== NULL.  (Fixes #392685, reported by Yevgen Muntyan).
 
 2007-01-05  Kristian Rietveld  <kris@gtk.org>
 
