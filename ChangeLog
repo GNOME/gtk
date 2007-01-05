@@ -1,5 +1,10 @@
 2007-01-05  Kristian Rietveld  <kris@gtk.org>
 
+	* gtk/gtktreeview.c (gtk_tree_view_dy_to_top_row): handle tree
+	== NULL.  (Fixes #392259, reported by Christian Persch).
+
+2007-01-05  Kristian Rietveld  <kris@gtk.org>
+
 	* gtk/gtktreeview.c (gtk_tree_view_row_changed): do allow to
 	invalidate nodes if the tree view is not realized. (#363147,
 	Carlos Garnacho, Miguel Cabrera).

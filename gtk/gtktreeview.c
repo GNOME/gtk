@@ -6290,9 +6290,18 @@ gtk_tree_view_dy_to_top_row (GtkTreeView *tree_view)
       offset = _gtk_rbtree_find_offset (tree_view->priv->tree,
 					tree_view->priv->dy,
 					&tree, &node);
-      path = _gtk_tree_view_find_path (tree_view, tree, node);
-      gtk_tree_view_set_top_row (tree_view, path, offset);
-      gtk_tree_path_free (path);
+
+      if (tree == NULL)
+        {
+	  tree_view->priv->top_row = NULL;
+	  tree_view->priv->top_row_dy = 0;
+	}
+      else
+        {
+	  path = _gtk_tree_view_find_path (tree_view, tree, node);
+	  gtk_tree_view_set_top_row (tree_view, path, offset);
+	  gtk_tree_path_free (path);
+	}
     }
 }
 
