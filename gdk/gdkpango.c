@@ -899,8 +899,22 @@ gdk_draw_layout_line_with_colors (GdkDrawable      *drawable,
       PangoMatrix tmp_matrix;
       
       tmp_matrix = *matrix;
-      tmp_matrix.x0 = x;
-      tmp_matrix.y0 = y;
+      tmp_matrix.x0 += x;
+      tmp_matrix.y0 += y;
+      pango_renderer_set_matrix (renderer, &tmp_matrix);
+
+      x = 0;
+      y = 0;
+    }
+  /* Fall back to introduce a matrix if the coords would scale out of range.
+   * The x and y here will be added to in-layout coordinates.  So we cannot
+   * support the entire range here safely.  So, we just accept the middle half
+   * and use fallback for the rest. */
+  else if (GDK_PANGO_UNITS_OVERFLOWS (x, y))
+    {
+      PangoMatrix tmp_matrix = PANGO_MATRIX_INIT;
+      tmp_matrix.x0 += x;
+      tmp_matrix.y0 += y;
       pango_renderer_set_matrix (renderer, &tmp_matrix);
 
       x = 0;
@@ -1020,6 +1034,16 @@ gdk_draw_layout_with_colors (GdkDrawable     *drawable,
       tmp_matrix.y0 += y - rect.y;
       pango_renderer_set_matrix (renderer, &tmp_matrix);
       
+      x = 0;
+      y = 0;
+    }
+  else if (GDK_PANGO_UNITS_OVERFLOWS (x, y))
+    {
+      PangoMatrix tmp_matrix = PANGO_MATRIX_INIT;
+      tmp_matrix.x0 = x;
+      tmp_matrix.y0 = y;
+      pango_renderer_set_matrix (renderer, &tmp_matrix);
+
       x = 0;
       y = 0;
     }

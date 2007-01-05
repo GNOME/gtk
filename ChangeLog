@@ -1,3 +1,12 @@
+2007-01-05  Behdad Esfahbod  <behdad@gnome.org>
+
+	* gdk/gdkprivate.h:
+	* gdk/gdkpango.c (gdk_draw_layout_line_with_colors),
+	(gdk_draw_layout_with_colors):
+	* gdk/gdkwindow.c (gdk_window_draw_glyphs_transformed):
+	Avoid overflow when converting coordinates to Pango units. (#332266,
+	Jody Goldberg)
+
 2007-01-04  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtkcombobox.c (gtk_combo_box_popup): move set_cursor

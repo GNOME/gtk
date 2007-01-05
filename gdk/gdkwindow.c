@@ -1738,6 +1738,15 @@ gdk_window_draw_glyphs_transformed (GdkDrawable      *drawable,
 	  tmp_matrix.y0 -= y_offset;
 	  matrix = &tmp_matrix;
 	}
+      else if (GDK_PANGO_UNITS_OVERFLOWS (x_offset, y_offset))
+	{
+	  PangoMatrix identity = PANGO_MATRIX_INIT;
+	  
+	  tmp_matrix = identity;
+	  tmp_matrix.x0 -= x_offset;
+	  tmp_matrix.y0 -= y_offset;
+	  matrix = &tmp_matrix;
+	}
       else
 	{
 	  x -= x_offset * PANGO_SCALE;
