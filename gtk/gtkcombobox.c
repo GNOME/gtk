@@ -1756,7 +1756,7 @@ static void
 gtk_combo_box_real_popup (GtkComboBox *combo_box)
 {
   gint x, y, width, height;
-  GtkTreePath *path, *ppath;
+  GtkTreePath *path = NULL, *ppath;
   GtkWidget *toplevel;
 
   if (!GTK_WIDGET_REALIZED (combo_box))
@@ -1789,9 +1789,6 @@ gtk_combo_box_real_popup (GtkComboBox *combo_box)
       if (gtk_tree_path_up (ppath))
 	gtk_tree_view_expand_to_path (GTK_TREE_VIEW (combo_box->priv->tree_view),
 				      ppath);
-      gtk_tree_view_set_cursor (GTK_TREE_VIEW (combo_box->priv->tree_view),
-				path, NULL, FALSE);
-      gtk_tree_path_free (path);
       gtk_tree_path_free (ppath);
     }
   gtk_tree_view_set_hover_expand (GTK_TREE_VIEW (combo_box->priv->tree_view), 
@@ -1799,6 +1796,13 @@ gtk_combo_box_real_popup (GtkComboBox *combo_box)
   
   /* popup */
   gtk_widget_show (combo_box->priv->popup_window);
+
+  if (path)
+    {
+      gtk_tree_view_set_cursor (GTK_TREE_VIEW (combo_box->priv->tree_view),
+				path, NULL, FALSE);
+      gtk_tree_path_free (path);
+    }
 
   gtk_widget_grab_focus (combo_box->priv->popup_window);
   gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (combo_box->priv->button),
