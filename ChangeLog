@@ -1,3 +1,10 @@
+2007-01-05  Michael Natterer  <mitch@imendio.com>
+
+	Merged from HEAD:
+
+	* gtk/gtkwindow.c (gtk_window_key_release_event): chain up to
+	the right function (fix taken from maemo-gtk).
+
 2007-01-05  Behdad Esfahbod  <behdad@gnome.org>
 
 	* gdk/gdkprivate.h:

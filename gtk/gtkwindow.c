@@ -4720,7 +4720,7 @@ gtk_window_key_release_event (GtkWidget   *widget,
 
   /* Chain up, invokes binding set */
   if (!handled)
-    handled = GTK_WIDGET_CLASS (gtk_window_parent_class)->key_press_event (widget, event);
+    handled = GTK_WIDGET_CLASS (gtk_window_parent_class)->key_release_event (widget, event);
 
   return handled;
 }
