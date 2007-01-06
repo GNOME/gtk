@@ -1,3 +1,8 @@
+2007-01-05  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtknotebook.c (gtk_notebook_set_menu_label_text): Left-align
+	menu labels.  (#393255, Michail Crayson)
+
 2007-01-05  Kristian Rietveld  <kris@gtk.org>
 
 	* gtk/gtktreeview.c (gtk_tree_view_dy_to_top_row): handle tree
