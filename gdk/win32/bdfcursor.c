@@ -47,7 +47,9 @@ typedef struct {
 static GSList *fonts = NULL;
 static GSList *cursors = NULL;
 
-gint dw,dh;
+static gint dw,dh;
+
+static gboolean debug = FALSE;
 
 #define HEX(c) (((c) >= '0' && (c) <= '9') ? \
 	((c) - '0') : (toupper(c) - 'A' + 10))
@@ -74,10 +76,11 @@ cursor_info_t *ci;
 
 	for (y = 0; y < ci->height; y++)
 	{
+		printf("/* ");
 		for (x = 0; x < ci->width; x++)
 		{
 			if (ci->hotx == x && ci->hoty == y)
-				printf ("o");
+				printf("o");
 			else
 				switch (ci->data[y*ci->width+x])
 				{
@@ -92,7 +95,7 @@ cursor_info_t *ci;
 					break;
 				}
 		}
-		printf("\n");
+		printf(" */\n");
 	}
 }
 
@@ -144,6 +147,8 @@ gchar *fname;
 			{
 				font_info_t *nfi;
 
+				if (debug)
+					printf(" %*s*/\n", dw, "");
 				startchar = FALSE;
 				startbitmap = FALSE;
 
@@ -171,13 +176,19 @@ gchar *fname;
 					bitmap[px+cx] =
 						(mask & HEX(line[cx/4])) != 0;
 
-					/*printf(bitmap[px+cx] ? "X" : " ");*/
+					if (debug)
+						printf(bitmap[px+cx] ? "X" : " ");
 				}
 				py++;
-				/*printf("\n");*/
+				if (debug)
+					printf(" %*s*/\n/* %*s", dw-w, "", dw+dx, "");
 			}
 			else if (!strncasecmp("BBX ", line, 4))
+			{
 				sscanf(p+4, "%d %d %d %d", &w, &h, &x, &y);
+				if (debug)
+					printf("/* %s: */\n/* %*s", charname, dw+dx, "");
+			}
 			else if (!strncasecmp("ENCODING ", line, 9))
 			{
 				if (sscanf(p+9, "%d %d", &tmp, &id) != 2)
@@ -346,7 +357,8 @@ static int dump_cursors()
 
 	for (ptr = cursors; ptr; ptr = ptr->next)
 	{
-		/* print_cursor(ptr->data); */
+		if (debug)
+			print_cursor(ptr->data);
 		fprintf(f, "%s, \n", dump_cursor(ptr->data));
 	}
 
@@ -365,6 +377,9 @@ gchar **argv;
 		printf("Usage: %s [BDF cursor file]\n", argv[0]);
 		return -1;
 	}
+
+	if (g_getenv ("BDFCURSOR_DEBUG") != NULL)
+	  debug = TRUE;
 
 	if (read_bdf_font(argv[1]) || !fonts)
 	{
