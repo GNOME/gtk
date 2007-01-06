@@ -6976,7 +6976,10 @@ gtk_notebook_set_menu_label_text (GtkNotebook *notebook,
   g_return_if_fail (GTK_IS_NOTEBOOK (notebook));
 
   if (menu_text)
-    menu_label = gtk_label_new (menu_text);
+    {
+      menu_label = gtk_label_new (menu_text);
+      gtk_misc_set_alignment (GTK_MISC (menu_label), 0.0, 0.5);
+    }
   gtk_notebook_set_menu_label (notebook, child, menu_label);
   gtk_widget_child_notify (child, "menu-label");
 }
