@@ -1,5 +1,4 @@
-# translation of hi.po to Hindi
-# translation of gk.hi.po to Hindi
+# translation of gtk+.hi.po to Hindi
 # This file is distributed under the same license as the PACKAGE package.
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER.
 # G Karunakar <karunakar@freedomink.org>, 2003.
@@ -11,7 +10,7 @@ msgstr ""
 "Project-Id-Version: hi\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2006-07-02 10:45-0400\n"
-"PO-Revision-Date: 2006-01-06 10:45+0530\n"
+"PO-Revision-Date: 2007-01-07 18:30+0530\n"
 "Last-Translator: Rajesh Ranjan <rranjan@redhat.com>\n"
 "Language-Team: Hindi <fedora-trans-hi@redhat.com>\n"
 "MIME-Version: 1.0\n"
@@ -1187,7 +1186,7 @@ msgstr "Backslash"
 #.
 #: gtk/gtkcalendar.c:696
 msgid "calendar:MY"
-msgstr "कैलेंडर:MY"
+msgstr "calendar:MY"
 
 #  Translate to calendar:week_start:0 if you want Sunday to be the
 #  * first day of the week to calendar:week_start:1 if you want Monday
@@ -1198,7 +1197,7 @@ msgstr "कैलेंडर:MY"
 #.
 #: gtk/gtkcalendar.c:720
 msgid "calendar:week_start:0"
-msgstr "कैलेंडर:week_start:1"
+msgstr "calendar:week_start:0"
 
 #. Translators:  This is a text measurement template.
 #. * Translate it to the widest year text.
