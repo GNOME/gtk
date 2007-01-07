@@ -89,6 +89,7 @@ gdk_pixbuf_copy
 </SECTION>
 
 <SECTION>
+<INCLUDE>gdk-pixbuf/gdk-pixdata.h</INCLUDE>
 <FILE>inline</FILE>
 GdkPixdata
 GdkPixdataType
