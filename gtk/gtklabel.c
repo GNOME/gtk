@@ -1864,7 +1864,7 @@ get_label_char_width (GtkLabel *label)
 }
 
 static void
-invalidate_wrap_width (GtkLabel *label)
+gtk_label_invalidate_wrap_width (GtkLabel *label)
 {
   GtkLabelPrivate *priv;
 
