@@ -49,6 +49,7 @@
 
 typedef struct
 {
+  gint wrap_width;
   gint width_chars;
   gint max_width_chars;
 }
@@ -162,6 +163,7 @@ static void gtk_label_create_window       (GtkLabel *label);
 static void gtk_label_destroy_window      (GtkLabel *label);
 static void gtk_label_clear_layout        (GtkLabel *label);
 static void gtk_label_ensure_layout       (GtkLabel *label);
+static void gtk_label_invalidate_wrap_width (GtkLabel *label);
 static void gtk_label_select_region_index (GtkLabel *label,
                                            gint      anchor_index,
                                            gint      end_index);
@@ -783,6 +785,7 @@ gtk_label_init (GtkLabel *label)
   priv = GTK_LABEL_GET_PRIVATE (label);
   priv->width_chars = -1;
   priv->max_width_chars = -1;
+  priv->wrap_width = -1;
   label->label = NULL;
 
   label->jtype = GTK_JUSTIFY_LEFT;
@@ -1600,6 +1603,7 @@ gtk_label_set_width_chars (GtkLabel *label,
     {
       priv->width_chars = n_chars;
       g_object_notify (G_OBJECT (label), "width-chars");
+      gtk_label_invalidate_wrap_width (label);
       gtk_widget_queue_resize (GTK_WIDGET (label));
     }
 }
@@ -1647,6 +1651,7 @@ gtk_label_set_max_width_chars (GtkLabel *label,
       priv->max_width_chars = n_chars;
 
       g_object_notify (G_OBJECT (label), "max-width-chars");
+      gtk_label_invalidate_wrap_width (label);
       gtk_widget_queue_resize (GTK_WIDGET (label));
     }
 }
@@ -1696,9 +1701,10 @@ gtk_label_set_line_wrap (GtkLabel *label,
   if (label->wrap != wrap)
     {
       label->wrap = wrap;
-      g_object_notify (G_OBJECT (label), "wrap");
-      
+
+      gtk_label_clear_layout (label);
       gtk_widget_queue_resize (GTK_WIDGET (label));
+      g_object_notify (G_OBJECT (label), "wrap");
     }
 }
 
@@ -1819,55 +1825,77 @@ gtk_label_clear_layout (GtkLabel *label)
     }
 }
 
-typedef struct _LabelWrapWidth LabelWrapWidth;
-struct _LabelWrapWidth
+static gint
+get_label_char_width (GtkLabel *label)
 {
-  gint width;
-  PangoFontDescription *font_desc;
-};
+  GtkLabelPrivate *priv;
+  PangoContext *context;
+  PangoFontMetrics *metrics;
+  gint char_width, digit_width, char_pixels, w;
+  
+  priv = GTK_LABEL_GET_PRIVATE (label);
+  
+  context = pango_layout_get_context (label->layout);
+  metrics = pango_context_get_metrics (context, GTK_WIDGET (label)->style->font_desc, 
+				       pango_context_get_language (context));
+  
+  char_width = pango_font_metrics_get_approximate_char_width (metrics);
+  digit_width = pango_font_metrics_get_approximate_digit_width (metrics);
+  char_pixels = MAX (char_width, digit_width);
+  pango_font_metrics_unref (metrics);
+  
+  if (priv->width_chars < 0)
+    {
+      PangoRectangle rect;
+      
+      pango_layout_set_width (label->layout, -1);
+      pango_layout_get_extents (label->layout, NULL, &rect);
+      
+      w = char_pixels * MAX (priv->max_width_chars, 3);
+      w = MIN (rect.width, w);
+    }
+  else
+    {
+      /* enforce minimum width for ellipsized labels at ~3 chars */
+      w = char_pixels * MAX (priv->width_chars, 3);
+    }
+  
+  return w;
+}
 
 static void
-label_wrap_width_free (gpointer data)
+invalidate_wrap_width (GtkLabel *label)
 {
-  LabelWrapWidth *wrap_width = data;
-  pango_font_description_free (wrap_width->font_desc);
-  g_slice_free (LabelWrapWidth, wrap_width);
+  GtkLabelPrivate *priv;
+
+  priv = GTK_LABEL_GET_PRIVATE (label);
+
+  priv->wrap_width = -1;
 }
 
 static gint
 get_label_wrap_width (GtkLabel *label)
 {
-  PangoLayout *layout;
-  GtkStyle *style = GTK_WIDGET (label)->style;
-  static GQuark quark_label_wrap_width = 0;
-  LabelWrapWidth *wrap_width;
+  GtkLabelPrivate *priv;
 
-  if (quark_label_wrap_width == 0)
-    quark_label_wrap_width = g_quark_from_static_string ("gtk-label-wrap-width");
-
-  wrap_width = g_object_get_qdata (G_OBJECT (style), quark_label_wrap_width);
-  if (!wrap_width)
+  priv = GTK_LABEL_GET_PRIVATE (label);
+  
+  if (priv->wrap_width < 0)
     {
-      wrap_width = g_slice_new0 (LabelWrapWidth);
-      g_object_set_qdata_full (G_OBJECT (style), quark_label_wrap_width,
-			       wrap_width, label_wrap_width_free);
+      if (priv->width_chars > 0 || priv->max_width_chars > 0)
+	priv->wrap_width = get_label_char_width (label);
+      else
+	{
+	  PangoLayout *layout;
+  
+	  layout = gtk_widget_create_pango_layout (GTK_WIDGET (label), 
+						   "This long string gives a good enough length for any line to have.");
+	  pango_layout_get_size (layout, &priv->wrap_width, NULL);
+	  g_object_unref (layout);
+	}
     }
 
-  if (wrap_width->font_desc && 
-      pango_font_description_equal (wrap_width->font_desc, style->font_desc))
-    return wrap_width->width;
-
-  if (wrap_width->font_desc)
-    pango_font_description_free (wrap_width->font_desc);
-
-  wrap_width->font_desc = pango_font_description_copy (style->font_desc);
-
-  layout = gtk_widget_create_pango_layout (GTK_WIDGET (label), 
-					   "This long string gives a good enough length for any line to have.");
-  pango_layout_get_size (layout, &wrap_width->width, NULL);
-  g_object_unref (layout);
-
-  return wrap_width->width;
+  return priv->wrap_width;
 }
 
 static void
@@ -2122,36 +2150,7 @@ gtk_label_size_request (GtkWidget      *widget,
     width += aux_info->width;
   else if (label->ellipsize || priv->width_chars > 0 || priv->max_width_chars > 0)
     {
-      PangoContext *context;
-      PangoFontMetrics *metrics;
-      gint char_width, digit_width, char_pixels, w;
-
-      context = pango_layout_get_context (label->layout);
-      metrics = pango_context_get_metrics (context, widget->style->font_desc, 
-					   pango_context_get_language (context));
-
-      char_width = pango_font_metrics_get_approximate_char_width (metrics);
-      digit_width = pango_font_metrics_get_approximate_digit_width (metrics);
-      char_pixels = MAX (char_width, digit_width);
-      pango_font_metrics_unref (metrics);
-
-      if (priv->width_chars < 0)
-	{
-	  PangoRectangle rect;
-
-	  pango_layout_set_width (label->layout, -1);
-	  pango_layout_get_extents (label->layout, NULL, &rect);
-
-	  w = char_pixels * MAX (priv->max_width_chars, 3);
-	  w = MIN (rect.width, w);
-	}
-      else
-	{
-	  /* enforce minimum width for ellipsized labels at ~3 chars */
-	  w = char_pixels * MAX (priv->width_chars, 3);
-	}
-
-      width += PANGO_PIXELS (w);
+      width += PANGO_PIXELS (get_label_char_width (label));
     }
   else
     width += PANGO_PIXELS (logical_rect.width);
@@ -2259,6 +2258,7 @@ gtk_label_style_set (GtkWidget *widget,
 
   /* We have to clear the layout, fonts etc. may have changed */
   gtk_label_clear_layout (label);
+  gtk_label_invalidate_wrap_width (label);
 }
 
 static void 

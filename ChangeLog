@@ -1,3 +1,9 @@
+2007-01-06  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtklabel.c: Make line wrapping work with width-chars
+	and max-width-chars, and simplify the storage of wrap-width.
+	(#322580, Itai Bar-Haim)
+
 2007-01-06  Tor Lillqvist  <tml@novell.com>
 
 	* gdk/win32/cursor.bdf: New file. Downloaded from
