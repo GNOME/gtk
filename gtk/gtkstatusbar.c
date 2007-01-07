@@ -142,6 +142,15 @@ gtk_statusbar_class_init (GtkStatusbarClass *class)
  							 P_("Whether the statusbar has a grip for resizing the toplevel"),
  							 TRUE,
  							 GTK_PARAM_READWRITE));
+
+  /** 
+   * GtkStatusbar::text-pushed:
+   * @statusbar: the object which received the signal.
+   * @context_id: the context id of the relevant message/statusbar.
+   * @text: the message that was pushed.
+   * 
+   * Is emitted whenever a new message gets pushed onto a statusbar's stack.
+   */
   statusbar_signals[SIGNAL_TEXT_PUSHED] =
     g_signal_new (I_("text_pushed"),
 		  G_OBJECT_CLASS_TYPE (class),
@@ -152,6 +161,15 @@ gtk_statusbar_class_init (GtkStatusbarClass *class)
 		  G_TYPE_NONE, 2,
 		  G_TYPE_UINT,
 		  G_TYPE_STRING);
+
+  /**
+   * GtkStatusbar::text-popped:
+   * @statusbar: the object which received the signal.
+   * @context_id: the context id of the relevant message/statusbar.
+   * @text: the message that was just popped.
+   *
+   * Is emitted whenever a new message is popped off a statusbar's stack.
+   */
   statusbar_signals[SIGNAL_TEXT_POPPED] =
     g_signal_new (I_("text_popped"),
 		  G_OBJECT_CLASS_TYPE (class),
@@ -207,6 +225,13 @@ gtk_statusbar_init (GtkStatusbar *statusbar)
   statusbar->keys = NULL;
 }
 
+/**
+ * gtk_statusbar_new:
+ *
+ * Creates a new #GtkStatusbar ready for messages.
+ *
+ * Returns: the new #GtkStatusbar
+ */
 GtkWidget* 
 gtk_statusbar_new (void)
 {
@@ -226,6 +251,18 @@ gtk_statusbar_update (GtkStatusbar *statusbar,
   gtk_label_set_text (GTK_LABEL (statusbar->label), text);
 }
 
+/**
+ * gtk_statusbar_get_context_id:
+ * @statusbar: a #GtkStatusbar
+ * @context_description: textual description of what context 
+ *                       the new message is being used in
+ *
+ * Returns a new context identifier, given a description 
+ * of the actual context. Note that the description is 
+ * <emphasis>not</emphasis> shown in the UI.
+ *
+ * Returns: an integer id
+ */
 guint
 gtk_statusbar_get_context_id (GtkStatusbar *statusbar,
 			      const gchar  *context_description)
@@ -253,6 +290,18 @@ gtk_statusbar_get_context_id (GtkStatusbar *statusbar,
   return *id;
 }
 
+/**
+ * gtk_statusbar_push:
+ * @statusbar: a #GtkStatusbar
+ * @context_id: the message's context id, as returned by
+ *              gtk_statusbar_get_context_id()
+ * @text: the message to add to the statusbar
+ * 
+ * Pushes a new message onto a statusbar's stack.
+ *
+ * Returns: a message id that can be used with 
+ *          gtk_statusbar_remove().
+ */
 guint
 gtk_statusbar_push (GtkStatusbar *statusbar,
 		    guint	  context_id,
@@ -279,6 +328,18 @@ gtk_statusbar_push (GtkStatusbar *statusbar,
   return msg->message_id;
 }
 
+/**
+ * gtk_statusbar_pop:
+ * @statusbar: a #GtkStatusBar
+ * @context_id: a context identifier
+ * 
+ * Removes the first message in the #GtkStatusBar's stack
+ * with the given context id. 
+ *
+ * Note that this may not change the displayed message, if 
+ * the message at the top of the stack has a different 
+ * context id.
+ */
 void
 gtk_statusbar_pop (GtkStatusbar *statusbar,
 		   guint	 context_id)
@@ -316,6 +377,15 @@ gtk_statusbar_pop (GtkStatusbar *statusbar,
 		 msg ? msg->text : NULL);
 }
 
+/**
+ * gtk_statusbar_remove:
+ * @statusbar: a #GtkStatusBar
+ * @context_id: a context identifier
+ * @message_id: a message identifier, as returned by gtk_statusbar_push()
+ *
+ * Forces the removal of a message from a statusbar's stack. 
+ * The exact @context_id and @message_id must be specified.
+ */
 void
 gtk_statusbar_remove (GtkStatusbar *statusbar,
 		      guint	   context_id,
@@ -357,6 +427,14 @@ gtk_statusbar_remove (GtkStatusbar *statusbar,
     }
 }
 
+/**
+ * gtk_statusbar_set_has_resize_grip:
+ * @statusbar: a #GtkStatusBar
+ * @setting: %TRUE to have a resize grip
+ *
+ * Sets whether the statusbar has a resize grip. 
+ * %TRUE by default.
+ */
 void
 gtk_statusbar_set_has_resize_grip (GtkStatusbar *statusbar,
 				   gboolean      setting)
@@ -387,6 +465,14 @@ gtk_statusbar_set_has_resize_grip (GtkStatusbar *statusbar,
     }
 }
 
+/**
+ * gtk_statusbar_get_has_resize_grip:
+ * @statusbar: a #GtkStatusBar
+ * 
+ * Returns whether the statusbar has a resize grip.
+ *
+ * Returns: %TRUE if the statusbar has a resize grip.
+ */
 gboolean
 gtk_statusbar_get_has_resize_grip (GtkStatusbar *statusbar)
 {

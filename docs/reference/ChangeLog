@@ -1,3 +1,8 @@
+2007-01-07  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/tmpl/gtkstatusbar.sgml: Move docs inline and
+	expand them a bit.
+
 2007-01-02  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/tmpl/gtktextbuffer.sgml: Document rich text
