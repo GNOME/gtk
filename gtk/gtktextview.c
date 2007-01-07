@@ -8182,7 +8182,7 @@ set_window_width (GtkTextView      *text_view,
                                    width, 0);
           /* if the widget is already realized we need to realize the child manually */
           if (GTK_WIDGET_REALIZED (text_view))
-            text_window_realize (*winp, GTK_WIDGET (text_view)->window);
+            text_window_realize (*winp, GTK_WIDGET (text_view));
         }
       else
         {
@@ -8222,7 +8222,7 @@ set_window_height (GtkTextView      *text_view,
 
           /* if the widget is already realized we need to realize the child manually */
           if (GTK_WIDGET_REALIZED (text_view))
-            text_window_realize (*winp, GTK_WIDGET (text_view)->window);
+            text_window_realize (*winp, GTK_WIDGET (text_view));
         }
       else
         {
