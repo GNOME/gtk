@@ -1,5 +1,10 @@
 2007-01-07  Matthias Clasen  <mclasen@redhat.com>
 
+	* gdk-pixbuf/gdk-pixbuf-sections.txt: Correct the include
+	for GdkPixdata.  (#394000, Samuel Cormier-Iijima)
+
+2007-01-07  Matthias Clasen  <mclasen@redhat.com>
+
 	* gtk/tmpl/gtkstatusbar.sgml: Move docs inline and
 	expand them a bit.
 
