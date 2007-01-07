@@ -1,3 +1,9 @@
+2007-01-07  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtktextview.c (gtk_text_view_set_border_window_size):
+	Call text_window_realize() with the correct parameters.
+	(#393813, Yevgen Muntyan)
+
 2007-01-05  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtknotebook.c (gtk_notebook_set_menu_label_text): Left-align
