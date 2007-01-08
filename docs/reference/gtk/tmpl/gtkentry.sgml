@@ -223,15 +223,22 @@ Appends the given text to the contents of the widget.
 
 @entry: a #GtkEntry.
 @text: the text to append.
+@Deprecated: gtk_entry_append_text() is deprecated and should not
+   be used in newly-written code. Use gtk_editable_insert_text()
+   instead.
 
 
 <!-- ##### FUNCTION gtk_entry_prepend_text ##### -->
 <para>
-Prepends the given text to the contents of th ewidget.
+Prepends the given text to the contents of the widget.
 </para>
 
 @entry: a #GtkEntry.
 @text: the text to prepend.
+@Deprecated: gtk_entry_prepend_text() is deprecated and should not
+   be used in newly-written code. Use gtk_editable_insert_text()
+   instead.
+
 
 
 <!-- ##### FUNCTION gtk_entry_set_position ##### -->

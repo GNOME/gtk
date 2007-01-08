@@ -1,3 +1,8 @@
+2007-01-08  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/tmpl/gtkentry.sgml: Expand deprecation notes for
+	gtk_entry_append/prepend_text.  (#394034, Micah Carrick)
+
 2007-01-07  Matthias Clasen  <mclasen@redhat.com>
 
 	* gdk-pixbuf/gdk-pixbuf-sections.txt: Correct the include
