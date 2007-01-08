@@ -4239,6 +4239,7 @@ expander_changed_cb (GtkExpander           *expander,
 		     GParamSpec            *pspec,
 		     GtkFileChooserDefault *impl)
 {
+  impl->expand_folders = gtk_expander_get_expanded(GTK_EXPANDER (impl->save_expander));
   update_appearance (impl);
 }
 
@@ -5439,16 +5440,21 @@ settings_load (GtkFileChooserDefault *impl)
   GtkFileChooserSettings *settings;
   LocationMode location_mode;
   gboolean show_hidden;
+  gboolean expand_folders;
 
   settings = _gtk_file_chooser_settings_new ();
 
   location_mode = _gtk_file_chooser_settings_get_location_mode (settings);
   show_hidden = _gtk_file_chooser_settings_get_show_hidden (settings);
+  expand_folders = _gtk_file_chooser_settings_get_expand_folders (settings);
 
   g_object_unref (settings);
 
   location_mode_set (impl, location_mode, TRUE);
   gtk_file_chooser_set_show_hidden (GTK_FILE_CHOOSER (impl), show_hidden);
+  impl->expand_folders = expand_folders;
+  if (impl->save_expander)
+    gtk_expander_set_expanded (GTK_EXPANDER (impl->save_expander), expand_folders);
 }
 
 static void
@@ -5460,6 +5466,7 @@ settings_save (GtkFileChooserDefault *impl)
 
   _gtk_file_chooser_settings_set_location_mode (settings, impl->location_mode);
   _gtk_file_chooser_settings_set_show_hidden (settings, gtk_file_chooser_get_show_hidden (GTK_FILE_CHOOSER (impl)));
+  _gtk_file_chooser_settings_set_expand_folders (settings, impl->expand_folders);
 
   /* NULL GError */
   _gtk_file_chooser_settings_save (settings, NULL);

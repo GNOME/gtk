@@ -42,6 +42,7 @@
 #define ELEMENT_TOPLEVEL	"gtkfilechooser"
 #define ELEMENT_LOCATION	"location"
 #define ELEMENT_SHOW_HIDDEN     "show_hidden"
+#define ELEMENT_EXPAND_FOLDERS  "expand_folders"
 #define ATTRIBUTE_VERSION       "version"
 #define ATTRIBUTE_MODE		"mode"
 #define ATTRIBUTE_VALUE         "value"
@@ -69,6 +70,7 @@ set_defaults (GtkFileChooserSettings *settings)
 {
   settings->location_mode = LOCATION_MODE_PATH_BAR;
   settings->show_hidden = FALSE;
+  settings->expand_folders = FALSE;
 }
 
 typedef enum {
@@ -77,7 +79,8 @@ typedef enum {
   STATE_ERROR,
   STATE_IN_TOPLEVEL,
   STATE_IN_LOCATION,
-  STATE_IN_SHOW_HIDDEN
+  STATE_IN_SHOW_HIDDEN,
+  STATE_IN_EXPAND_FOLDERS
 } State;
 
 struct parse_state {
@@ -271,6 +274,34 @@ parse_start_element_cb (GMarkupParseContext *context,
 			   value_str);
 	    }
 	}
+      else if (EQ (element_name, ELEMENT_EXPAND_FOLDERS))
+	{
+	  const char *value_str;
+
+	  state->state = STATE_IN_EXPAND_FOLDERS;
+
+	  value_str = get_attribute_value (attribute_names, attribute_values, ATTRIBUTE_VALUE);
+
+	  if (!value_str)
+	    set_missing_attribute_error (state, line, col, ATTRIBUTE_VALUE, error);
+	  else if (EQ (value_str, VALUE_TRUE))
+	    state->settings->expand_folders = TRUE;
+	  else if (EQ (value_str, VALUE_FALSE))
+	    state->settings->expand_folders = FALSE;
+	  else
+	    {
+	      state->state = STATE_ERROR;
+	      g_set_error (error,
+			   G_MARKUP_ERROR,
+			   G_MARKUP_ERROR_INVALID_CONTENT,
+			   _("Line %d, column %d: expected \"%s\" or \"%s\", but found \"%s\" instead"),
+			   line,
+			   col,
+			   VALUE_FALSE,
+			   VALUE_TRUE,
+			   value_str);
+	    }
+	}
       else
 	set_unexpected_element_error (state, line, col, element_name, error);
 
@@ -333,6 +364,14 @@ parse_end_element_cb (GMarkupParseContext *context,
 	state->state = STATE_IN_TOPLEVEL;
       else
 	set_unexpected_element_end_error (state, line, col, ELEMENT_SHOW_HIDDEN, element_name, error);
+
+      break;
+
+    case STATE_IN_EXPAND_FOLDERS:
+      if (EQ (element_name, ELEMENT_EXPAND_FOLDERS))
+	state->state = STATE_IN_TOPLEVEL;
+      else
+	set_unexpected_element_end_error (state, line, col, ELEMENT_EXPAND_FOLDERS, element_name, error);
 
       break;
 
@@ -454,11 +493,26 @@ _gtk_file_chooser_settings_set_show_hidden (GtkFileChooserSettings *settings,
   settings->show_hidden = show_hidden ? TRUE : FALSE;
 }
 
+gboolean
+_gtk_file_chooser_settings_get_expand_folders (GtkFileChooserSettings *settings)
+{
+  ensure_settings_read (settings);
+  return settings->expand_folders;
+}
+
+void
+_gtk_file_chooser_settings_set_expand_folders (GtkFileChooserSettings *settings,
+					       gboolean expand_folders)
+{
+  settings->expand_folders = expand_folders ? TRUE : FALSE;
+}
+
 static char *
 settings_to_markup (GtkFileChooserSettings *settings)
 {
   const char *location_mode_str;
   const char *show_hidden_str;
+  const char *expand_folders_str;
 
   if (settings->location_mode == LOCATION_MODE_PATH_BAR)
     location_mode_str = MODE_PATH_BAR;
@@ -471,14 +525,17 @@ settings_to_markup (GtkFileChooserSettings *settings)
     }
 
   show_hidden_str = settings->show_hidden ? VALUE_TRUE : VALUE_FALSE;
+  expand_folders_str = settings->expand_folders ? VALUE_TRUE : VALUE_FALSE;
 
   return g_strdup_printf
     ("<" ELEMENT_TOPLEVEL ">\n"						/* <gtkfilechooser>               */
      "  <" ELEMENT_LOCATION " " ATTRIBUTE_MODE "=\"%s\"/>\n"		/*   <location mode="path-bar"/>  */
      "  <" ELEMENT_SHOW_HIDDEN " " ATTRIBUTE_VALUE "=\"%s\"/>\n"	/*   <show_hidden value="false"/> */
+     "  <" ELEMENT_EXPAND_FOLDERS " " ATTRIBUTE_VALUE "=\"%s\"/>\n"	/*   <expand_folders value="false"/> */
      "</" ELEMENT_TOPLEVEL ">\n",					/* </gtkfilechooser>              */
      location_mode_str,
-     show_hidden_str);
+     show_hidden_str,
+     expand_folders_str);
 }
 
 gboolean
