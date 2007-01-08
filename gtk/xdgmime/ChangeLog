@@ -1,6 +1,11 @@
 2007-01-07  Matthias Clasen  <mclasen@redhat.com>
 
-	* xdgmimecache.c (_xdg_mime_cache_list_mime_parents): Fix
+	* xdgmimecache.c (cache_glob_node_lookup_suffix): Don't return "" 
+	as match.  (fd.o #9544, Yevgen Muntyan)
+
+2007-01-07  Matthias Clasen  <mclasen@redhat.com>
+
+	* xdgmimecache.c (_xdg_mime_cache_list_mime_parents): Fix 
 	several problems with this function.  (fd.o #9560, Yevgen Muntyan)
 
 2007-01-05  Matthias Clasen  <mclasen@redhat.com>
