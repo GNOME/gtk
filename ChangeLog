@@ -1,3 +1,9 @@
+2007-01-08  Emmanuele Bassi  <ebassi@gnome.org>
+
+	* gtk/gtkrecentchoosermenu.c (gtk_recent_chooser_menu_create_item):
+	Don't leak the icon pixbuf after setting it to the image menu
+	item.  Found by Paolo Borelli.
+
 2007-01-08  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtktreemodel.c (gtk_tree_path_to_string): Don't 
@@ -9,7 +15,7 @@
 	* gtk/gtkmodules.c (_gtk_modules_init): Set 
 	default_display_opened before loading modules.  (#393102,
 	Brian Cameron)
- 
+
 2007-01-07  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtktextview.c (gtk_text_view_set_border_window_size):
