@@ -1,5 +1,11 @@
 2007-01-08  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtktreemodel.c (gtk_tree_path_to_string): Don't 
+	corrupt memory when faced with paths with ridiculously
+	large indices. Found by the GTKVTS test suite.  
+
+2007-01-08  Matthias Clasen  <mclasen@redhat.com>
+
 	* gtk/gtkmodules.c (_gtk_modules_init): Set 
 	default_display_opened before loading modules.  (#393102,
 	Brian Cameron)

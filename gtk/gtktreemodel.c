@@ -494,22 +494,24 @@ gtk_tree_path_new_from_indices (gint first_index,
 gchar *
 gtk_tree_path_to_string (GtkTreePath *path)
 {
-  gchar *retval, *ptr;
-  gint i;
+  gchar *retval, *ptr, *end;
+  gint i, n;
 
   g_return_val_if_fail (path != NULL, NULL);
 
   if (path->depth == 0)
     return NULL;
 
-  ptr = retval = g_new0 (gchar, path->depth*8);
-  g_sprintf (retval, "%d", path->indices[0]);
-  while (*ptr != '\000')
+  n = path->depth * 12;
+  ptr = retval = g_new0 (gchar, n);
+  end = ptr + n;
+  g_snprintf (retval, end - ptr, "%d", path->indices[0]);
+  while (*ptr != '\000') 
     ptr++;
 
   for (i = 1; i < path->depth; i++)
     {
-      g_sprintf (ptr, ":%d", path->indices[i]);
+      g_snprintf (ptr, end - ptr, ":%d", path->indices[i]);
       while (*ptr != '\000')
 	ptr++;
     }
