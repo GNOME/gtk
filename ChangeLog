@@ -1,3 +1,13 @@
+2006-01-08  Peter Teichman  <peter@novell.com>
+
+	* gtk/gtkfilechooserdefault.c:
+	* gtk/gtkfilechooserprivate.h:
+	* gtk/gtkfilechoosersettings.c:
+	* gtk/gtkfilechoosersettings.h:
+	Save the expanded state of the folder browser with the file
+	chooser settings.  Resolves the expander portions of (#153828,
+	Lemmit Kaplinski)
+
 2007-01-08  Emmanuele Bassi  <ebassi@gnome.org>
 
 	* gtk/gtkrecentchoosermenu.c (gtk_recent_chooser_menu_create_item):

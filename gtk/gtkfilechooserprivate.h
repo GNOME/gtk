@@ -265,6 +265,7 @@ struct _GtkFileChooserDefault
   guint list_sort_ascending : 1;
   guint changing_folder : 1;
   guint shortcuts_current_folder_active : 1;
+  guint expand_folders : 1;
 
 #if 0
   guint shortcuts_drag_outside : 1;
