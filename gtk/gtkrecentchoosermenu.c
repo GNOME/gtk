@@ -933,6 +933,7 @@ gtk_recent_chooser_menu_create_item (GtkRecentChooserMenu *menu,
         
       image = gtk_image_new_from_pixbuf (icon);
       gtk_image_menu_item_set_image (GTK_IMAGE_MENU_ITEM (item), image);
+      g_object_unref (icon);
     }
 
   g_signal_connect (item, "activate",
