@@ -850,9 +850,11 @@ _xdg_mime_cache_unalias_mime_type (const char *mime)
 char **
 _xdg_mime_cache_list_mime_parents (const char *mime)
 {
-  int i, j, p;
+  int i, j, k, p;
   char *all_parents[128]; /* we'll stop at 128 */ 
   char **result;
+
+  mime = xdg_mime_unalias_mime_type (mime);
 
   p = 0;
   for (i = 0; _caches[i]; i++)
@@ -864,15 +866,19 @@ _xdg_mime_cache_list_mime_parents (const char *mime)
 
       for (j = 0; j < n_entries; j++)
 	{
-	  xdg_uint32_t mimetype_offset = GET_UINT32 (cache->buffer, list_offset + 4 + 8 * i);
-	  xdg_uint32_t parents_offset = GET_UINT32 (cache->buffer, list_offset + 4 + 8 * i + 4);
-	  
+	  xdg_uint32_t mimetype_offset = GET_UINT32 (cache->buffer, list_offset + 4 + 8 * j);
+	  xdg_uint32_t parents_offset = GET_UINT32 (cache->buffer, list_offset + 4 + 8 * j + 4);
+
 	  if (strcmp (cache->buffer + mimetype_offset, mime) == 0)
 	    {
+	      xdg_uint32_t parent_mime_offset;
 	      xdg_uint32_t n_parents = GET_UINT32 (cache->buffer, parents_offset);
-	      
-	      for (j = 0; j < n_parents; j++)
-		all_parents[p++] = cache->buffer + parents_offset + 4 + 4 * j;
+
+	      for (k = 0; k < n_parents && p < 127; k++)
+		{
+		  parent_mime_offset = GET_UINT32 (cache->buffer, parents_offset + 4 + 4 * k);
+		  all_parents[p++] = cache->buffer + parent_mime_offset;
+		}
 
 	      break;
 	    }
