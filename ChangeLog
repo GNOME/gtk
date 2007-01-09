@@ -1,3 +1,8 @@
+2007-01-09  Behdad Esfahbod  <behdad@gnome.org>
+
+	* configure.in: Fix comment for --with-included-loaders.  That option
+	affects builds with module loading enabled too.
+
 2006-01-08  Peter Teichman  <peter@novell.com>
 
 	* gtk/gtkfilechooserdefault.c:

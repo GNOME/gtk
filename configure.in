@@ -876,7 +876,7 @@ AC_MSG_CHECKING(pixbuf loaders to build)
 dnl due to an autoconf bug, commas in the first arg to
 dnl AC_HELP_STRING cause problems.
 dnl AC_HELP_STRING([--with-included-loaders=LOADER1 LOADER2 ...],
-dnl                [build the specified loaders into gdk-pixbuf (only used if module loading disabled)])
+dnl                [build the specified loaders into gdk-pixbuf])
 AC_ARG_WITH(included_loaders,
 [  --with-included-loaders=LOADER1,LOADER2,...
                           build the specified loaders into gdk-pixbuf])
