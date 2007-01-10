@@ -1,3 +1,8 @@
+2007-01-09  Matthias Clasen  <mclasen@redhat.com>
+
+	* configure.in: Fix the directfb cairo test. (#394855,
+	Josselin Mouette)
+
 2006-01-08  Peter Teichman  <peter@novell.com>
 
 	Merge from trunk.

@@ -1419,7 +1419,7 @@ if test "x$gdktarget" = "xdirectfb"; then
   DIRECTFB_REQUIRED_VERSION=0.9.24
   AC_MSG_CHECKING(for DirectFB)
 
-  if $PKG_CONFIG --atleast-version $DIRECTFB_REQUIRED_VERSION directfb -a $PKG_CONFIG --exists cairo-directfb ; then
+  if $PKG_CONFIG --atleast-version $DIRECTFB_REQUIRED_VERSION directfb && $PKG_CONFIG --exists cairo-directfb ; then
       AC_MSG_RESULT(found)
       GDK_EXTRA_CFLAGS="`$PKG_CONFIG --cflags cairo-directfb` $GDK_EXTRA_CFLAGS"
       GDK_EXTRA_LIBS="`$PKG_CONFIG --libs cairo-directfb` $GDK_EXTRA_LIBS"
