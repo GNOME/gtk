@@ -1,3 +1,9 @@
+2007-01-10  Kristian Rietveld  <kris@imendio.com>
+
+	* gtk/gtkcellrenderertoggle.c (gtk_cell_renderer_toggle_init):
+	refactor to initialize indicator_size to TOGGLE_WIDTH instead
+	of the hardcoded value of 12.
+
 2007-01-09  Matthias Clasen  <mclasen@redhat.com>
 
 	* configure.in: Fix the directfb cairo test. (#394855,

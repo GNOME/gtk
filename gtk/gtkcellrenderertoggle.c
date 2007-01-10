@@ -103,7 +103,7 @@ gtk_cell_renderer_toggle_init (GtkCellRendererToggle *celltoggle)
   GTK_CELL_RENDERER (celltoggle)->xpad = 2;
   GTK_CELL_RENDERER (celltoggle)->ypad = 2;
 
-  priv->indicator_size = 12;
+  priv->indicator_size = TOGGLE_WIDTH;
   priv->inconsistent = FALSE;
 }
 
