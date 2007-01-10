@@ -873,55 +873,6 @@ gdk_draw_layout_line_with_colors (GdkDrawable      *drawable,
   release_renderer (renderer);
 }
 
-/* Gets the bounds of a layout in device coordinates. Note cut-and-paste
- * between here and gtklabel.c */
-static void
-get_rotated_layout_bounds (PangoLayout  *layout,
-			   GdkRectangle *rect)
-{
-  PangoContext *context = pango_layout_get_context (layout);
-  const PangoMatrix *matrix = pango_context_get_matrix (context);
-  gdouble x_min = 0, x_max = 0, y_min = 0, y_max = 0; /* quiet gcc */
-  PangoRectangle logical_rect;
-  gint i, j;
-
-  pango_layout_get_extents (layout, NULL, &logical_rect);
-  
-  for (i = 0; i < 2; i++)
-    {
-      gdouble x = (i == 0) ? logical_rect.x : logical_rect.x + logical_rect.width;
-      for (j = 0; j < 2; j++)
-	{
-	  gdouble y = (j == 0) ? logical_rect.y : logical_rect.y + logical_rect.height;
-	  
-	  gdouble xt = (x * matrix->xx + y * matrix->xy) / PANGO_SCALE + matrix->x0;
-	  gdouble yt = (x * matrix->yx + y * matrix->yy) / PANGO_SCALE + matrix->y0;
-	  
-	  if (i == 0 && j == 0)
-	    {
-	      x_min = x_max = xt;
-	      y_min = y_max = yt;
-	    }
-	  else
-	    {
-	      if (xt < x_min)
-		x_min = xt;
-	      if (yt < y_min)
-		y_min = yt;
-	      if (xt > x_max)
-		x_max = xt;
-	      if (yt > y_max)
-		y_max = yt;
-	    }
-	}
-    }
-  
-  rect->x = floor (x_min);
-  rect->width = ceil (x_max) - rect->x;
-  rect->y = floor (y_min);
-  rect->height = floor (y_max) - rect->y;
-}
-
 /**
  * gdk_draw_layout_with_colors:
  * @drawable:  the drawable on which to draw string
@@ -970,9 +921,11 @@ gdk_draw_layout_with_colors (GdkDrawable     *drawable,
   if (matrix)
     {
       PangoMatrix tmp_matrix;
-      GdkRectangle rect;
+      PangoRectangle rect;
 
-      get_rotated_layout_bounds (layout, &rect);
+      pango_layout_get_extents (layout, NULL, &rect);
+      pango_matrix_transform_rectangle (matrix, &rect);
+      pango_extents_to_pixels (&rect, NULL);
       
       tmp_matrix = *matrix;
       tmp_matrix.x0 += x - rect.x;

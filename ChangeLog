@@ -1,3 +1,11 @@
+2007-01-10  Behdad Esfahbod  <behdad@gnome.org>
+
+	* gdk/gdkpango.c (gdk_draw_layout_with_colors):
+	* gtk/gtklabel.c (gtk_label_size_request):
+	Use pango_matrix_transform_rectangle(). (#340141)
+
+	* configure.in: Bump pango requirement to 1.15.3.
+
 2007-01-10  Kristian Rietveld  <kris@imendio.com>
 
 	* gtk/gtkcellrenderertoggle.c (gtk_cell_renderer_toggle_init):
