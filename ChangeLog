@@ -1,3 +1,8 @@
+2007-01-09  Matthias Clasen  <mclasen@redhat.com>
+
+	* configure.in: Fix the directfb cairo test. (#394855, 
+	Josselin Mouette)
+
 2007-01-09  Behdad Esfahbod  <behdad@gnome.org>
 
 	* configure.in: Fix comment for --with-included-loaders.  That option
