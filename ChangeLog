@@ -1,3 +1,10 @@
+2007-01-11  Kjartan Maraas  <kmaraas@gnome.org>
+
+	* gtk/gtkfilesystemunix.c: (expand_tilde):
+	Make a single tilde go to $HOME in the location entry.
+	Patch from Yevgen Muntyan. Closes the gtk+ part of
+	bug #334168.
+
 2007-01-10  Behdad Esfahbod  <behdad@gnome.org>
 
 	* gdk/gdkpango.c (gdk_draw_layout_with_colors):
