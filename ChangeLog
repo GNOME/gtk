@@ -1,3 +1,9 @@
+2007-01-11  Kjartan Maraas  <kmaraas@gnome.org>
+
+	* gtk/gtkfilesystemunix.c: (expand_tilde): Merge fix
+	for making tilde go to $HOME in the location entry.
+	Patch from Yevgen Muntyan. Closes bug #334168.
+
 2007-01-10  Kristian Rietveld  <kris@imendio.com>
 
 	* gtk/gtkcellrenderertoggle.c (gtk_cell_renderer_toggle_init):

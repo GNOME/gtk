@@ -1457,10 +1457,8 @@ expand_tilde (const char *filename)
   notilde = filename + 1;
 
   slash = strchr (notilde, G_DIR_SEPARATOR);
-  if (!slash)
-    return NULL;
 
-  if (slash == notilde)
+  if (slash == notilde || !*notilde)
     {
       home = g_get_home_dir ();
 
@@ -1472,7 +1470,11 @@ expand_tilde (const char *filename)
       char *username;
       struct passwd *passwd;
 
-      username = g_strndup (notilde, slash - notilde);
+      if (slash)
+        username = g_strndup (notilde, slash - notilde);
+      else
+        username = g_strdup (notilde);
+
       passwd = getpwnam (username);
       g_free (username);
 
@@ -1482,7 +1484,10 @@ expand_tilde (const char *filename)
       home = passwd->pw_dir;
     }
 
-  return g_build_filename (home, G_DIR_SEPARATOR_S, slash + 1, NULL);
+  if (slash)
+    return g_build_filename (home, G_DIR_SEPARATOR_S, slash + 1, NULL);
+  else
+    return g_strdup (home);
 }
 
 static gboolean
