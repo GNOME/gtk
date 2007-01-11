@@ -1,3 +1,8 @@
+2007-01-11  Richard Hult  <richard@imendio.com>
+
+	* demos/gtk-demo/main.c: (load_file): Close the file after it's
+	loaded (bug #395316).
+
 2007-01-11  Kjartan Maraas  <kmaraas@gnome.org>
 
 	* gtk/gtkfilesystemunix.c: (expand_tilde): Merge fix

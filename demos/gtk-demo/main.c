@@ -575,6 +575,8 @@ load_file (const gchar *filename)
 	}
     }
 
+  fclose (file);
+  
   fontify ();
 
   g_string_free (buffer, TRUE);
