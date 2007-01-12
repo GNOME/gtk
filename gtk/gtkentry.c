@@ -1745,7 +1745,7 @@ gtk_entry_button_press (GtkWidget      *widget,
 	       */
 	      entry->in_drag = TRUE;
 	      entry->drag_start_x = event->x + entry->scroll_offset;
-	      entry->drag_start_y = event->y + entry->scroll_offset;
+	      entry->drag_start_y = event->y;
 	    }
 	  else
             gtk_editable_set_position (editable, tmp_pos);
