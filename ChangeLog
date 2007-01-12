@@ -1,3 +1,11 @@
+2007-01-12  Michael Natterer  <mitch@imendio.com>
+
+	Merge from trunk:
+
+	* gtk/gtkentry.c (gtk_entry_button_press): don't add
+	entry->scroll_offset to entry->drag_start_y. Fixes the entry
+	starting drags after ridiculously small mouse movements.
+
 2007-01-11  Richard Hult  <richard@imendio.com>
 
 	* demos/gtk-demo/main.c: (load_file): Close the file after it's
