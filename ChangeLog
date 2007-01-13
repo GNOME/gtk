@@ -1,3 +1,10 @@
+2007-01-13  Hans Breuer <hans@breuer.org>
+
+	Merge from trunk:
+
+	* gtk/gtkprintoperation-win32.c : take the custom tab label from
+	gtk_print_operation_set_custom_tab_label() into account (bug #390746).
+	
 2007-01-13  Pascal Terjan  <pterjan@linuxfr.org>
 
 	Merge from trunk:

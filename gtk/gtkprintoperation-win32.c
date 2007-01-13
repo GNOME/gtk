@@ -1356,7 +1356,7 @@ create_application_page (GtkPrintOperation *op)
   WORD baseunitX, baseunitY;
   WORD *array;
   GtkRequisition requisition;
-  const char *app_name;
+  const char *tab_label;
 
   /* Make the template the size of the custom widget size request */
   gtk_widget_size_request (op->priv->custom_widget, &requisition);
@@ -1386,11 +1386,15 @@ create_application_page (GtkPrintOperation *op)
   page.dwFlags = PSP_DLGINDIRECT | PSP_USETITLE | PSP_PREMATURE;
   page.hInstance = GetModuleHandle (NULL);
   page.pResource = template;
-  app_name = g_get_application_name ();
-  if (app_name == NULL)
-    app_name = _("Application");
-  page.pszTitle = g_utf8_to_utf16 (app_name, 
+  
+  tab_label = op->priv->custom_tab_label;
+  if (tab_label == NULL)
+    tab_label = g_get_application_name ();
+  if (tab_label == NULL)
+    tab_label = _("Application");
+  page.pszTitle = g_utf8_to_utf16 (tab_label, 
 				   -1, NULL, NULL, NULL);
+
   page.pfnDlgProc = pageDlgProc;
   page.pfnCallback = NULL;
   page.lParam = (LPARAM) op;
