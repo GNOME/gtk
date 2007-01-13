@@ -1,3 +1,10 @@
+2007-01-13  Pascal Terjan  <pterjan@linuxfr.org>
+
+	Merge from trunk:
+
+	* gtk/gtknotebook.c (gtk_notebook_draw_focus): fix crasher if
+	cur_page is NULL (bug #395326).
+
 2007-01-12  Michael Natterer  <mitch@imendio.com>
 
 	Merge from trunk:

@@ -2969,8 +2969,8 @@ gtk_notebook_draw_focus (GtkWidget      *widget,
   GtkNotebook *notebook = GTK_NOTEBOOK (widget);
 
   if (GTK_WIDGET_HAS_FOCUS (widget) && GTK_WIDGET_DRAWABLE (widget) &&
-      notebook->cur_page->tab_label->window == event->window &&
-      notebook->show_tabs && notebook->cur_page)
+      notebook->show_tabs && notebook->cur_page &&
+      notebook->cur_page->tab_label->window == event->window)
     {
       GtkNotebookPage *page;
       GdkRectangle area;
