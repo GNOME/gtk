@@ -1,5 +1,8 @@
 2007-01-13  Hans Breuer <hans@breuer.org>
 
+	* gtk/gtkprintoperation-win32.c : take the custom tab label from
+	gtk_print_operation_set_custom_tab_label() into account (bug #390746).
+
 	* gtk/gtkimmulticontext.c : don't include "gtkprivate.h" to avoid
 	differing definitions of GTK_LOCALEDIR (bug #396175).
 
