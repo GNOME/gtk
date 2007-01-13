@@ -1,3 +1,13 @@
+2007-01-13  Hans Breuer <hans@breuer.org>
+
+	* gtk/gtkimmulticontext.c : don't include "gtkprivate.h" to avoid
+	differing definitions of GTK_LOCALEDIR (bug #396175).
+
+	* gtk/gtktreeview.c : use g_snprintf instead of snprintf, which is
+	not available everywhere
+
+	* gtk/makefile.msc.in : updated
+
 2007-01-12  Michael Natterer  <mitch@imendio.com>
 
 	* gtk/gtkentry.c (gtk_entry_button_press): don't add

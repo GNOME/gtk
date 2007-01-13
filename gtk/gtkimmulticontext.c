@@ -27,8 +27,16 @@
 #include "gtkmain.h"
 #include "gtkradiomenuitem.h"
 #include "gtkintl.h"
-#include "gtkprivate.h"
 #include "gtkalias.h"
+
+/* Do *not* include "gtkprivate.h" in this file. If you do, the
+ * the two definitions of GTK_LOCALEDIR will trigger a wrong 
+ * warning in gtk_im_multicontext_append_menuitems()
+ */
+
+#ifdef __GTK_PRIVATE_H__
+#error gtkprivate.h should not be included in this file
+#endif
 
 struct _GtkIMMulticontextPrivate
 {
