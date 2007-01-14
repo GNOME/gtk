@@ -1,3 +1,8 @@
+2007-01-13  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtkradiobutton.c (gtk_radio_button_focus): Avoid
+	a compiler warning.  (#395045, Chris Wilson)
+
 2007-01-13  Hans Breuer <hans@breuer.org>
 
 	* gtk/gtkprintoperation-win32.c : take the custom tab label from
