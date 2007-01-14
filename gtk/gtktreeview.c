@@ -4391,13 +4391,13 @@ gtk_tree_view_bin_expose (GtkWidget      *widget,
 	       * less messy way).
 	       */
 	      if (is_first && is_last)
-		snprintf (new_detail, 127, "%s", detail);
+		g_snprintf (new_detail, 127, "%s", detail);
 	      else if (is_first)
-		snprintf (new_detail, 127, "%s_start", detail);
+		g_snprintf (new_detail, 127, "%s_start", detail);
 	      else if (is_last)
-		snprintf (new_detail, 127, "%s_end", detail);
+		g_snprintf (new_detail, 127, "%s_end", detail);
 	      else
-		snprintf (new_detail, 128, "%s_middle", detail);
+		g_snprintf (new_detail, 128, "%s_middle", detail);
 
 	      gtk_paint_flat_box (widget->style,
 				  event->window,

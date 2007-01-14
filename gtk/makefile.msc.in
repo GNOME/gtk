@@ -37,7 +37,9 @@ DEFINES = \
 	-DPANGO_ENABLE_BACKEND \
 	-DGTK_VERSION=\"$(GTK_VER)\" -DGTK_BINARY_VERSION=\"$(GTK_BINARY_VERSION)\" \
 	-DGTK_HOST=\"win32\" \
-	-DGTK_FILE_SYSTEM_ENABLE_UNSUPPORTED
+	-DGTK_FILE_SYSTEM_ENABLE_UNSUPPORTED \
+	-DGTK_PRINT_BACKENDS=\"file,lpr\"	\
+	-DGTK_PRINT_PREVIEW_COMMAND="\"evince --unlink-tempfile --preview %f\""
 
 TOUCH = copy makefile.msc+nul
 
@@ -135,6 +137,7 @@ gtk_OBJECTS = 					\
 	gtkfilechooserdialog.obj			\
 	gtkfilechooserembed.obj		\
 	gtkfilechooserentry.obj			\
+	gtkfilechoosersettings.obj	\
 	gtkfilechooserutils.obj			\
 	gtkfilechooserwidget.obj			\
 	gtkfilefilter.obj			\
@@ -194,12 +197,21 @@ gtk_OBJECTS = 					\
 	gtkobject.obj				\
 	gtkoldeditable.obj			\
 	gtkoptionmenu.obj			\
+	gtkpagesetup.obj	\
 	gtkpaned.obj				\
+	gtkpapersize.obj	\
 	gtkpathbar.obj				\
 	gtkpixmap.obj				\
 	gtkplug.obj				\
 	gtkplug-win32.obj				\
-	gtkpreview.obj				\
+	gtkpreview.obj	\
+	gtkprint-win32.obj	\
+	gtkprintcontext.obj	\
+	gtkprintoperation.obj	\
+	gtkprintoperationpreview.obj	\
+	gtkprintoperation-win32.obj	\
+	gtkprintsettings.obj	\
+	gtkprintutils.obj	\
 	gtkprogress.obj				\
 	gtkprogressbar.obj			\
 	gtkradioaction.obj			\
@@ -289,6 +301,7 @@ gtk_OBJECTS = 					\
 	gtkvseparator.obj			\
 	gtkwidget.obj				\
 	gtkwin32embed.obj			\
+	gtkwin32embedwidget.obj			\
 	gtkwindow.obj				\
 	gtkwindow-decorate.obj
 
@@ -399,10 +412,15 @@ gtk_public_h_sources =		\
 	gtkobject.h		\
 	gtkoldeditable.h	\
 	gtkoptionmenu.h		\
+	gtkpagesetup.h		\
 	gtkpaned.h		\
+	gtkpapersize.h		\
 	gtkpixmap.h		\
 	gtkplug.h		\
 	gtkpreview.h		\
+	gtkprintcontext.h	\
+	gtkprintoperation.h	\
+	gtkprintsettings.h	\
 	gtkprivate.h		\
 	gtkprogress.h		\
 	gtkprogressbar.h	\
@@ -503,8 +521,8 @@ generated : $(GENERATED)
 gtk.def: gtk.symbols makefile.msc
 	echo EXPORTS > gtk.def
 	cl /EP -DINCLUDE_VARIABLES -DG_OS_WIN32 -DALL_FILES \
-		-DG_GNUC_CONST= -DG_GNUC_NULL_TERMINATED= \
-		gtk.symbols >> gtk.def
+		-DG_GNUC_MALLOC= -DG_GNUC_CONST= -DG_GNUC_NULL_TERMINATED= -DG_GNUC_NORETURN= \
+		-DG_GNUC_PRINTF=;G_GNUC_PRINTF gtk.symbols >> gtk.def
 
 gtkalias.h: gtk.symbols
 	cl /EP -DG_OS_WIN32 -DGTK_WINDOWING_WIN32 -DINCLUDE_INTERNAL_SYMBOLS gtk.symbols | $(PERL) makegtkalias.pl > gtkalias.h
@@ -564,7 +582,7 @@ libgtk-win32-$(GTK_VER)-0.dll : $(gtk_OBJECTS) gtk.def gtk-win32.res
 	$(CC) $(CFLAGS) -LD -Fm -Fe$@ $(gtk_OBJECTS) gtk-win32.res \
 	$(GDK_LIBS) $(GDK_PIXBUF_LIBS) $(PANGO_LIBS) $(INTL_LIBS) $(GLIB_LIBS) $(GMODULE_LIBS) \
 	$(CAIRO_LIBS) $(PANGOCAIRO_LIBS) \
-	gdi32.lib user32.lib advapi32.lib wsock32.lib shell32.lib ole32.lib \
+	gdi32.lib user32.lib advapi32.lib wsock32.lib shell32.lib ole32.lib comdlg32.lib winspool.lib comctl32.lib \
 	$(LDFLAGS) /implib:gtk-win32-$(GTK_VER).lib /def:gtk.def
 
 gtk-win32-$(GTK_VER)s.lib : $(gtk_OBJECTS)
@@ -574,7 +592,7 @@ gtk-query-immodules-$(GTK_VER).exe : queryimmodules.obj
 	$(CC) $(CFLAGS) -Fe$@ queryimmodules.obj $(GTK_LIBS) $(GLIB_LIBS) $(PANGO_LIBS) $(LDFLAGS)
 
 gtk-update-icon-cache.exe : updateiconcache.obj
-	$(CC) $(CFLAGS) -Fe$@ updateiconcache.obj $(GDK_PIXBUF_LIBS) $(GLIB_LIBS) $(PANGO_LIBS) $(LDFLAGS)
+	$(CC) $(CFLAGS) -Fe$@ updateiconcache.obj $(GDK_PIXBUF_LIBS) $(GLIB_LIBS) $(INTL_LIBS) $(PANGO_LIBS) $(LDFLAGS)
 
 gtk-x11-$(GTK_VER).dll : $(gtk_OBJECTS) gtk.def
 	$(CC) $(CFLAGS) -LD -Fm -Fegtk-x11-$(GTK_VER).dll $(gtk_OBJECTS) ../gdk/gdk-x11-$(GTK_VER).lib $(GDK_PIXBUF_LIBS) $(PANGO_LIBS) $(INTL_LIBS) $(GLIB_LIBS) gdi32.lib user32.lib advapi32.lib $(LDFLAGS) /def:gtk.def

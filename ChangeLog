@@ -1,3 +1,12 @@
+2007-01-14  Hans Breuer <hans@breuer.org>
+
+	Merge from trunk:
+
+	* gtk/gtktreeview.c : use g_snprintf instead of snprintf, which is
+	not available everywhere
+
+	* gtk/makefile.msc.in : updated
+
 2007-01-13  Matthias Clasen  <mclasen@redhat.com>
 
 	Merge from trunk:
