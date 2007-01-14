@@ -1321,6 +1321,7 @@ if test "x$gdktarget" = "xx11"; then
     AC_DEFINE(HAVE_XFIXES, 1, Have the XFIXES X extension)
     
     X_PACKAGES="$X_PACKAGES xfixes"
+    GTK_PACKAGES_FOR_X="$GTK_PACKAGES_FOR_X xfixes"
   fi
 
   if $have_base_x_pc ; then
