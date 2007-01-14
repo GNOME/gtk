@@ -1850,9 +1850,12 @@ find_menu_position (GNode      *node,
       else
 	prev_child = NODE_INFO (sibling)->proxy;
 
-      g_return_val_if_fail (GTK_IS_WIDGET (prev_child), FALSE);
+      if (!GTK_IS_WIDGET (prev_child))
+        return FALSE;
+
       menushell = gtk_widget_get_parent (prev_child);
-      g_return_val_if_fail (GTK_IS_MENU_SHELL (menushell), FALSE);
+      if (!GTK_IS_MENU_SHELL (menushell))
+        return FALSE;
 
       pos = g_list_index (GTK_MENU_SHELL (menushell)->children, prev_child) + 1;
     }
@@ -1915,9 +1918,12 @@ find_toolbar_position (GNode      *node,
       else
 	prev_child = NODE_INFO (sibling)->proxy;
 
-      g_return_val_if_fail (GTK_IS_WIDGET (prev_child), FALSE);
+      if (!GTK_IS_WIDGET (prev_child))
+        return FALSE;
+
       toolbar = gtk_widget_get_parent (prev_child);
-      g_return_val_if_fail (GTK_IS_TOOLBAR (toolbar), FALSE);
+      if (!GTK_IS_TOOLBAR (toolbar))
+        return FALSE;
 
       pos = gtk_toolbar_get_item_index (GTK_TOOLBAR (toolbar),
 					GTK_TOOL_ITEM (prev_child)) + 1;
@@ -2437,16 +2443,18 @@ update_node (GtkUIManager *self,
 	  gtk_menu_item_set_submenu (GTK_MENU_ITEM (info->proxy), NULL);
 	  gtk_action_connect_proxy (action, info->proxy);
 	}
-      g_signal_connect (info->proxy, "notify::visible",
-			G_CALLBACK (update_smart_separators), NULL);
-      if (in_popup) 
-	{
-	  /* don't show accels in popups */
-	  GtkWidget *label = GTK_BIN (info->proxy)->child;
-	  g_object_set (label,
-			"accel-closure", NULL,
-			NULL);
-	}
+
+      if (info->proxy)
+        {
+          g_signal_connect (info->proxy, "notify::visible",
+			    G_CALLBACK (update_smart_separators), NULL);
+          if (in_popup) 
+	    {
+	      /* don't show accels in popups */
+	      GtkWidget *label = GTK_BIN (info->proxy)->child;
+	      g_object_set (label, "accel-closure", NULL, NULL);
+	    }
+        }
       
       break;
     case NODE_TYPE_TOOLITEM:
@@ -2487,19 +2495,21 @@ update_node (GtkUIManager *self,
 	  gtk_action_connect_proxy (action, info->proxy);
 	}
 
-      /* FIXME: we must re-set the tooltip, since tooltips on toolitems can't be 
-       * set before the toolitem is added to the toolbar.
-       */
-      {
-	gchar *tooltip;
+      if (info->proxy)
+        {
+          /* FIXME: we must re-set the tooltip, since tooltips on 
+           * toolitems can't be set before the toolitem is added 
+           * to the toolbar.
+           */
+	  gchar *tooltip;
 
-	g_object_get (G_OBJECT (action), "tooltip", &tooltip, NULL);
-	g_object_set (G_OBJECT (action), "tooltip", tooltip, NULL);
-	g_free (tooltip);
-      }
-
-      g_signal_connect (info->proxy, "notify::visible",
-			G_CALLBACK (update_smart_separators), NULL);
+	  g_object_get (G_OBJECT (action), "tooltip", &tooltip, NULL);
+	  g_object_set (G_OBJECT (action), "tooltip", tooltip, NULL);
+	  g_free (tooltip);
+     
+          g_signal_connect (info->proxy, "notify::visible",
+			    G_CALLBACK (update_smart_separators), NULL);
+        }
       break;
     case NODE_TYPE_SEPARATOR:
       if (NODE_INFO (node->parent)->type == NODE_TYPE_TOOLBAR ||

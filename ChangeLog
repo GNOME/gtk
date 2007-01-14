@@ -1,5 +1,10 @@
 2007-01-13  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkuimanager.c: Don't crash if menu or toolbar
+	positions can't be found.  (#396161, Hans Breuer)
+
+2007-01-13  Matthias Clasen  <mclasen@redhat.com>
+
 	* gtk/gtkselection.c (_gtk_selection_request): Plug 
 	memory leaks.  (#396160, Carlos Garcia Campos)
 
