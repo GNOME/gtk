@@ -1,3 +1,10 @@
+2007-01-13  Matthias Clasen  <mclasen@redhat.com>
+
+	Merge from trunk:
+
+	* gtk/gtkradiobutton.c (gtk_radio_button_focus): Avoid
+	a compiler warning.  (#395045, Chris Wilson)
+
 2007-01-13  Hans Breuer <hans@breuer.org>
 
 	Merge from trunk:
