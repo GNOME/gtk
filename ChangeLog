@@ -1,5 +1,10 @@
 2007-01-13  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkselection.c (_gtk_selection_request): Plug 
+	memory leaks.  (#396160, Carlos Garcia Campos)
+
+2007-01-13  Matthias Clasen  <mclasen@redhat.com>
+
 	* configure.in: Link libgtk against Xfixes.  (#396074,
 	Tommi Komulainen)
 

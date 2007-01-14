@@ -2132,6 +2132,7 @@ _gtk_selection_request (GtkWidget *widget,
 						 event->time);
 	  g_free (mult_atoms);
 	  g_free (info);
+          gdk_error_trap_pop ();
 	  return TRUE;
 	}
       gdk_error_trap_pop ();
@@ -2168,6 +2169,8 @@ _gtk_selection_request (GtkWidget *widget,
 	      info->conversions[i].target = ((GdkAtom *)mult_atoms)[2*i];
 	      info->conversions[i].property = ((GdkAtom *)mult_atoms)[2*i+1];
 	    }
+
+	  g_free (mult_atoms);
 	}
     }
   else				/* only a single conversion */
