@@ -1,6 +1,13 @@
 2007-01-13  Matthias Clasen  <mclasen@redhat.com>
 
 	Merge from trunk:
+	
+	* configure.in: Link libgtk against Xfixes.  (#396074,
+	Tommi Komulainen)
+
+2007-01-13  Matthias Clasen  <mclasen@redhat.com>
+
+	Merge from trunk:
 
 	* gtk/gtkradiobutton.c (gtk_radio_button_focus): Avoid
 	a compiler warning.  (#395045, Chris Wilson)
