@@ -1,3 +1,9 @@
+2007-01-14  Christian Persch  <chpe@svn.gnome.org>
+
+	* gtk/gtkclipboard.c: (gtk_clipboard_set_text),
+	(gtk_clipboard_set_image): Use gtk_target_table_new_from_list and
+	gtk_target_table_free instead of duplicating the code. Bug #396493.
+
 2007-01-13  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtkuimanager.c: Don't crash if menu or toolbar
