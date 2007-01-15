@@ -42,6 +42,7 @@
 #include "gtkseparatormenuitem.h"
 #include "gtkmenu.h"
 #include "gtkimage.h"
+#include "gtklabel.h"
 #include "gtkobject.h"
 #include "gtktooltips.h"
 #include "gtktypebuiltins.h"
@@ -54,6 +55,9 @@ struct _GtkRecentChooserMenuPrivate
   
   /* size of the icons of the menu items */  
   gint icon_size;
+
+  /* max size of the menu item label */
+  gint label_width;
 
   /* RecentChooser properties */
   gint limit;  
@@ -90,6 +94,7 @@ enum {
 
 #define FALLBACK_ICON_SIZE 	32
 #define FALLBACK_ITEM_LIMIT 	10
+#define DEFAULT_LABEL_WIDTH     30
 
 #define GTK_RECENT_CHOOSER_MENU_GET_PRIVATE(obj)	(G_TYPE_INSTANCE_GET_PRIVATE ((obj), GTK_TYPE_RECENT_CHOOSER_MENU, GtkRecentChooserMenuPrivate))
 
@@ -229,6 +234,8 @@ gtk_recent_chooser_menu_init (GtkRecentChooserMenu *menu)
   priv->sort_type = GTK_RECENT_SORT_NONE;
   
   priv->icon_size = FALLBACK_ICON_SIZE;
+  
+  priv->label_width = DEFAULT_LABEL_WIDTH;
   
   priv->current_filter = NULL;
     
@@ -892,8 +899,8 @@ gtk_recent_chooser_menu_create_item (GtkRecentChooserMenu *menu,
 				     gint                  count)
 {
   GtkRecentChooserMenuPrivate *priv;
-  gchar *label;
-  GtkWidget *item, *image;
+  gchar *text;
+  GtkWidget *item, *image, *label;
   GdkPixbuf *icon;
 
   g_assert (info != NULL);
@@ -912,19 +919,31 @@ gtk_recent_chooser_menu_create_item (GtkRecentChooserMenu *menu,
       
       /* avoid clashing mnemonics */
       if (count <= 10)
-        label = g_strdup_printf ("_%d. %s", count, escaped);
+        text = g_strdup_printf ("_%d. %s", count, escaped);
       else
-        label = g_strdup_printf ("%d. %s", count, escaped);
+        text = g_strdup_printf ("%d. %s", count, escaped);
       
-      item = gtk_image_menu_item_new_with_mnemonic (label);
+      item = gtk_image_menu_item_new_with_mnemonic (text);
       
       g_free (escaped);
       g_free (name);
     }
   else
     {
-      label = g_strdup (gtk_recent_info_get_display_name (info));
-      item = gtk_image_menu_item_new_with_label (label);
+      text = g_strdup (gtk_recent_info_get_display_name (info));
+      item = gtk_image_menu_item_new_with_label (text);
+    }
+
+  g_free (text);
+
+  /* ellipsize the menu item label, in case the recent document
+   * display name is huge.
+   */
+  label = GTK_BIN (item)->child;
+  if (label)
+    {
+      gtk_label_set_ellipsize (GTK_LABEL (label), PANGO_ELLIPSIZE_END);
+      gtk_label_set_max_width_chars (GTK_LABEL (label), priv->label_width);
     }
   
   if (priv->show_icons)
@@ -939,8 +958,6 @@ gtk_recent_chooser_menu_create_item (GtkRecentChooserMenu *menu,
   g_signal_connect (item, "activate",
   		    G_CALLBACK (item_activate_cb),
   		    menu);
-
-  g_free (label);
 
   return item;
 }

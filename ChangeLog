@@ -1,3 +1,8 @@
+2007-01-15  Emmanuele Bassi  <ebassi@gnome.org>
+
+	* gtk/gtkrecentchoosermenu.c: Ellipsize the menu items label
+	if they grow too much. (#357303)
+
 2007-01-14  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtkicontheme.c (theme_lookup_icon): When finding a matching
