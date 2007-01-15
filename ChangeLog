@@ -1,3 +1,11 @@
+2007-01-14  Matthias Clasen  <mclasen@redhat.com>
+
+	Merge from trunk:
+
+	* gtk/gtkicontheme.c (theme_lookup_icon): When finding a matching
+	non-scalable dir, keep going and look for a closer match.
+	(#395830, Luca Ferretti)
+
 2007-01-14  Hans Breuer <hans@breuer.org>
 
 	Merge from trunk:

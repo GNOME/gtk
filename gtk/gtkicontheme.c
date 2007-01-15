@@ -1877,12 +1877,13 @@ theme_lookup_icon (IconTheme          *theme,
   char *file;
   int min_difference, difference;
   BuiltinIcon *closest_builtin = NULL;
-  gboolean smaller, has_larger;
+  gboolean smaller, has_larger, match;
   IconSuffix suffix;
 
   min_difference = G_MAXINT;
   min_dir = NULL;
   has_larger = FALSE;
+  match = FALSE;
 
   /* Builtin icons are logically part of the default theme and
    * are searched before other subdirectories of the default theme.
@@ -1916,31 +1917,55 @@ theme_lookup_icon (IconTheme          *theme,
 
 	  if (difference == 0)
 	    {
-	      min_dir = dir;
-	      break;
+              if (dir->type == ICON_THEME_DIR_SCALABLE)
+                {
+                  /* don't pick scalable if we already found
+                   * a matching non-scalable dir
+                   */
+                  if (!match)
+                    {
+	              min_dir = dir;
+	              break;
+                    }
+                }
+              else
+                {
+                  /* for a matching non-scalable dir keep
+                   * going and look for a closer match
+                   */             
+                  difference = abs (size - dir->size);
+                  if (!match || difference < min_difference)
+                    {
+                      match = TRUE;
+                      min_difference = difference;
+	              min_dir = dir;
+                    }
+                  if (difference == 0)
+                    break;
+                }
+	    } 
+  
+          if (!match)
+            {
+	      if (!has_larger)
+	        {
+	          if (difference < min_difference || smaller)
+	  	    {
+		      min_difference = difference;
+		      min_dir = dir;
+		      has_larger = smaller;
+	 	    }
+	        }
+	      else
+	        {
+	          if (difference < min_difference && smaller)
+		    {
+		      min_difference = difference;
+		      min_dir = dir;
+		    }
+	        }
 	    }
-
-	  if (!has_larger)
-	    {
-	      if (difference < min_difference || smaller)
-		{
-		  min_difference = difference;
-		  min_dir = dir;
-		  closest_builtin = NULL;
-		  has_larger = smaller;
-		}
-	    }
-	  else
-	    {
-	      if (difference < min_difference && smaller)
-		{
-		  min_difference = difference;
-		  min_dir = dir;
-		  closest_builtin = NULL;
-		}
-	    }
-
-	}
+        }
 
       l = l->next;
 
@@ -1951,9 +1976,6 @@ theme_lookup_icon (IconTheme          *theme,
 	}
     }
 
-  if (closest_builtin)
-    return icon_info_new_builtin (closest_builtin);
-  
   if (min_dir)
     {
       GtkIconInfo *icon_info = icon_info_new ();
@@ -2019,7 +2041,10 @@ theme_lookup_icon (IconTheme          *theme,
       
       return icon_info;
     }
- 
+
+  if (closest_builtin)
+    return icon_info_new_builtin (closest_builtin);
+  
   return NULL;
 }
 
