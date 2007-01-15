@@ -1,3 +1,9 @@
+2007-01-14  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtkicontheme.c (theme_lookup_icon): When finding a matching
+	non-scalable dir, keep going and look for a closer match.
+	(#395830, Luca Ferretti)
+
 2007-01-14  Christian Persch  <chpe@svn.gnome.org>
 
 	* gtk/gtkclipboard.c: (gtk_clipboard_set_text),
