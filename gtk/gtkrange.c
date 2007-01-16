@@ -1418,12 +1418,16 @@ range_grab_add (GtkRange      *range,
 static void
 range_grab_remove (GtkRange *range)
 {
+  MouseLocation location;
+
   gtk_grab_remove (GTK_WIDGET (range));
-  
+ 
+  location = range->layout->grab_location; 
   range->layout->grab_location = MOUSE_OUTSIDE;
   range->layout->grab_button = 0;
 
-  if (gtk_range_update_mouse_location (range))
+  if (gtk_range_update_mouse_location (range) ||
+      location != MOUSE_OUTSIDE)
     gtk_widget_queue_draw (GTK_WIDGET (range));
 }
 
