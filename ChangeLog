@@ -1,3 +1,8 @@
+2007-01-16  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtkrange.c (range_grab_remove): Queue a redraw when the
+	grab changes.  (#396470, Benjamin Berg)
+
 2007-01-15  Emmanuele Bassi  <ebassi@gnome.org>
 
 	* gtk/gtkrecentchoosermenu.c: Ellipsize the menu items label
