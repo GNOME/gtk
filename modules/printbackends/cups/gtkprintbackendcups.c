@@ -517,7 +517,12 @@ cups_dispatch_watch_check (GSource *source)
 	  else
 	    dispatch->data_poll->events = 0;
 	}
+
+#ifdef HAVE_CUPS_API_1_2
       dispatch->data_poll->fd = httpGetFd (dispatch->request->http);
+#else
+      dispatch->data_poll->fd = dispatch->request->http->fd;
+#fi
     }
     
   if (poll_state != GTK_CUPS_HTTP_IDLE)  
