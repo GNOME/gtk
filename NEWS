@@ -1,3 +1,31 @@
+Overview of Changes from GTK+ 2.10.7 to 2.10.8
+==============================================
+
+* Bugs fixed:
+ 393102 _gtk_modules_init assumes display is not opened instead o...
+ 395326	Gedit crashed no open text documents
+ 394855	impossible to build the directfb version
+ 396161	GtkUIManager crashing on unknown action in ui-file
+ 334168	Single '~' in location entry doesn't go to $HOME
+ 363147	GTKFileChoser Does not Show Desktop and Home after Uncol...
+ 390746	Custom tab title not set correctly on Microsoft Windows
+ 393813	Segfault in gtk_text_view_set_border_window_size()
+ 395316	File leak in gtk-demo
+ 395830	Wrong named icon lookup when requested size matches two s...
+ 396074	libgtk should link against Xfixes
+ 396160	Memory leak in gtkselection
+ 396175	wrong GtkWarning: Input method gtk-im-context-simple shou...
+ 396470	Missing slider redraw in GtkRange if activate-slider is set
+ 153828	Filechooser does not remember state
+ 357303	Gnome Main Menu Recent Documents extended by long file na...
+ 394000	Documentation error for GdkPixdata
+ 392504	The crosshair mouse cursor look a bit funny
+ 393255	GtkNotebook: Menu label centered instead of left aligned
+ 395045	gtk_radio_button_focus: Harmless compiler warning
+
+* Updated translations (bg,lt,sl)
+
+
 Overview of Changes from GTK+ 2.10.6 to 2.10.7
 ==============================================
 
