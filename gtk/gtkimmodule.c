@@ -42,8 +42,8 @@
 #include "gtkalias.h"
 
 /* Do *not* include "gtkprivate.h" in this file. If you do, the
- * correct_libdir_prefix() function below will have to move somewhere
- * else.
+ * correct_libdir_prefix() and correct_localedir_prefix() functions
+ * below will have to move somewhere else.
  */
 
 #ifdef __GTK_PRIVATE_H__
@@ -217,12 +217,7 @@ add_module (GtkIMModule *module, GSList *infos)
   modules_list = g_slist_prepend (modules_list, module);
 }
 
-#if defined (G_OS_WIN32) && defined (GTK_LIBDIR)
-/* This is needes on Win32, but not wanted when compiling with MSVC,
- * as the makefile.msc doesn't define any GTK_LIBDIR value.
- */
-
-#define DO_CORRECT_LIBDIR_PREFIX /* Flag to check below whether to call this */
+#ifdef G_OS_WIN32
 
 static void
 correct_libdir_prefix (gchar **path)
@@ -244,6 +239,21 @@ correct_libdir_prefix (gchar **path)
       extern const gchar *_gtk_get_libdir ();
       gchar *tem = *path;
       *path = g_strconcat (_gtk_get_libdir (), tem + strlen (GTK_LIBDIR), NULL);
+      g_free (tem);
+    }
+}
+
+static void
+correct_localedir_prefix (gchar **path)
+{
+  /* As above, but for GTK_LOCALEDIR. Use separate function in case
+   * GTK_LOCALEDIR isn't a subfolder of GTK_LIBDIR.
+   */
+  if (strncmp (*path, GTK_LOCALEDIR, strlen (GTK_LOCALEDIR)) == 0)
+    {
+      extern const gchar *_gtk_get_localedir ();
+      gchar *tem = *path;
+      *path = g_strconcat (_gtk_get_localedir (), tem + strlen (GTK_LOCALEDIR), NULL);
       g_free (tem);
     }
 }
@@ -311,7 +321,7 @@ gtk_im_module_initialize (void)
 	    }
 
 	  module->path = g_strdup (tmp_buf->str);
-#ifdef DO_CORRECT_LIBDIR_PREFIX
+#ifdef G_OS_WIN32
 	  correct_libdir_prefix (&module->path);
 #endif
 	  g_type_module_set_name (G_TYPE_MODULE (module), module->path);
@@ -337,8 +347,8 @@ gtk_im_module_initialize (void)
 	  if (!pango_scan_string (&p, tmp_buf))
 	    goto context_error;
 	  info->domain_dirname = g_strdup (tmp_buf->str);
-#ifdef DO_CORRECT_LIBDIR_PREFIX
-	  correct_libdir_prefix ((char **) &info->domain_dirname);
+#ifdef G_OS_WIN32
+	  correct_localedir_prefix ((char **) &info->domain_dirname);
 #endif
 
 	  if (!pango_scan_string (&p, tmp_buf))
@@ -402,7 +412,11 @@ _gtk_im_module_list (const GtkIMContextInfo ***contexts,
 {
   int n = 0;
 
-  static const GtkIMContextInfo simple_context_info = {
+  static
+#ifndef G_OS_WIN32
+	  const
+#endif
+		GtkIMContextInfo simple_context_info = {
     SIMPLE_ID,
     N_("Default"),
     GETTEXT_PACKAGE,
@@ -414,8 +428,24 @@ _gtk_im_module_list (const GtkIMContextInfo ***contexts,
     ""
   };
 
+#ifdef G_OS_WIN32
+  static gboolean beenhere = FALSE;
+#endif
+
   if (!contexts_hash)
     gtk_im_module_initialize ();
+
+#ifdef G_OS_WIN32
+  if (!beenhere)
+    {
+      beenhere = TRUE;
+      /* correct_localedir_prefix() requires its parameter to be a
+       * malloced string
+       */
+      simple_context_info.domain_dirname = g_strdup (simple_context_info.domain_dirname);
+      correct_localedir_prefix ((char **) &simple_context_info.domain_dirname);
+    }
+#endif
 
   if (n_contexts)
     *n_contexts = (n_loaded_contexts + 1);

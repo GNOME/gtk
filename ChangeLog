@@ -1,3 +1,22 @@
+2007-01-17  Tor Lillqvist  <tml@novell.com>
+
+	Proper fix for #396175:
+
+	* gtk/gtkimmulticontext.c: Revert change by Hans Breuer below: Do
+	include gtkprivate.h. On Win32 we do want to use the redefinition
+	of GTK_LOCALEDIR as a call to the function _gtk_get_localedir().
+
+	* gtk/gtkimmodule.c: Instead, correct the prefix also on
+	simple_context_info.domain_dirname. Do the prefix corrections
+	always on Win32, not just when GTK_LIBDIR is defined. i.e., until
+	now they were done only in the autoconfiscated gcc builds. Hans
+	needs to make sure GTK_LIBDIR and GTK_LOCALEDIR are defined also
+	in MSVC builds now.
+	(correct_localedir_prefix): New function, like
+	correct_libdir_prefix(), but for GTK_LOCALEDIR.
+	(_gtk_im_module_list): Call correct_localedir_prefix() on
+	simple_context_info.domain_dirname.
+
 2007-01-16  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtkrange.c (range_grab_remove): Queue a redraw when the
