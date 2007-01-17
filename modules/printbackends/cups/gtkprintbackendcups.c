@@ -524,7 +524,7 @@ cups_dispatch_watch_check (GSource *source)
       dispatch->data_poll->fd = httpGetFd (dispatch->request->http);
 #else
       dispatch->data_poll->fd = dispatch->request->http->fd;
-#fi
+#endif
     }
     
   if (poll_state != GTK_CUPS_HTTP_IDLE)  
