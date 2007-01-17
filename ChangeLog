@@ -13,7 +13,10 @@
 	needs to make sure GTK_LIBDIR and GTK_LOCALEDIR are defined also
 	in MSVC builds now.
 	(correct_localedir_prefix): New function, like
-	correct_libdir_prefix(), but for GTK_LOCALEDIR.
+	correct_libdir_prefix(), but for GTK_LOCALEDIR, in case
+	GTK_LOCALEDIR is not a descendant of GTK_LIBDIR.
+	(gtk_im_module_initialize): Thus call correct_localedir_prefix()
+	on the domain_dirname instead of correct_libdir_prefix().
 	(_gtk_im_module_list): Call correct_localedir_prefix() on
 	simple_context_info.domain_dirname.
 
