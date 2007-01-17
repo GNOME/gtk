@@ -941,6 +941,8 @@ gtk_recent_chooser_menu_create_item (GtkRecentChooserMenu *menu,
       item = gtk_image_menu_item_new_with_label (text);
     }
 
+  g_free (text);
+
   label = GTK_BIN (item)->child;
   if (label)
     {
@@ -961,9 +963,6 @@ gtk_recent_chooser_menu_create_item (GtkRecentChooserMenu *menu,
   g_signal_connect (item, "activate",
   		    G_CALLBACK (item_activate_cb),
   		    menu);
-
-out:
-  g_free (label);
 
   return item;
 }
