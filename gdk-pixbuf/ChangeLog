@@ -1,3 +1,10 @@
+2007-01-16  Matthias Clasen  <mclasen@redhat.com>
+
+	* gdk-pixbuf-loader.c (gdk_pixbuf_loader_write): Just
+	call gdk_pixbuf_loader_close to close the loader in
+	the error case. Fixes memory leaks in the error case,
+	pointed out by David Necas.
+
 2007-01-04  Matthias Clasen  <mclasen@redhat.com>
 
 	* io-bmp.c (OneLine32): Fix a warning

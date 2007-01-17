@@ -472,16 +472,7 @@ gdk_pixbuf_loader_write (GdkPixbufLoader *loader,
 
  fail:
         gdk_pixbuf_loader_ensure_error (loader, error);
-
-        priv->closed = TRUE;
-
-        if (priv->image_module && priv->holds_threadlock) 
-		{
-                	_gdk_pixbuf_unlock (priv->image_module);
-                	priv->holds_threadlock = FALSE;
-        	}
-
-        g_signal_emit (loader, pixbuf_loader_signals[CLOSED], 0);
+        gdk_pixbuf_loader_close (loader, NULL);
 
         return FALSE;
 }
