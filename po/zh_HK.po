@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.10.2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-01-05 14:57-0500\n"
+"POT-Creation-Date: 2007-01-16 23:43-0500\n"
 "PO-Revision-Date: 2006-09-04 02:19+0800\n"
 "Last-Translator: Woodman Tuen <wmtuen@gmail.com>\n"
 "Language-Team: Chinese (Hong Kong) <community@linuxhall.org>\n"
@@ -1598,136 +1598,137 @@ msgid "Select which types of files are shown"
 msgstr "選擇顯示哪種類型的檔案"
 
 #. Label
-#: gtk/gtkfilechooserdefault.c:4322 gtk/gtkprinteroptionwidget.c:788
+#: gtk/gtkfilechooserdefault.c:4323 gtk/gtkprinteroptionwidget.c:788
 msgid "_Name:"
 msgstr "名稱(_N)："
 
-#: gtk/gtkfilechooserdefault.c:4364
+#: gtk/gtkfilechooserdefault.c:4365
 msgid "_Browse for other folders"
 msgstr "瀏覽其它資料夾(_B)"
 
-#: gtk/gtkfilechooserdefault.c:4599
+#: gtk/gtkfilechooserdefault.c:4600
 msgid "Type a file name"
 msgstr "輸入檔案名稱"
 
 #. Create Folder
-#: gtk/gtkfilechooserdefault.c:4636
+#: gtk/gtkfilechooserdefault.c:4637
 msgid "Create Fo_lder"
 msgstr "建立資料夾(_L)"
 
-#: gtk/gtkfilechooserdefault.c:4646
+#: gtk/gtkfilechooserdefault.c:4647
 msgid "_Location:"
 msgstr "位置(_L)："
 
-#: gtk/gtkfilechooserdefault.c:4886
+#: gtk/gtkfilechooserdefault.c:4887
 msgid "Save in _folder:"
 msgstr "儲存於資料夾(_F)："
 
-#: gtk/gtkfilechooserdefault.c:4888
+#: gtk/gtkfilechooserdefault.c:4889
 msgid "Create in _folder:"
 msgstr "新增於資料夾(_F)："
 
-#: gtk/gtkfilechooserdefault.c:6390
+#: gtk/gtkfilechooserdefault.c:6397
 #, c-format
 msgid "Cannot change to folder because it is not local"
 msgstr "無法進入資料夾，因為它不是本地資料夾"
 
-#: gtk/gtkfilechooserdefault.c:6963 gtk/gtkfilechooserdefault.c:6984
+#: gtk/gtkfilechooserdefault.c:6970 gtk/gtkfilechooserdefault.c:6991
 #, c-format
 msgid "Shortcut %s already exists"
 msgstr "捷徑 %s 已經存在"
 
-#: gtk/gtkfilechooserdefault.c:7074
+#: gtk/gtkfilechooserdefault.c:7081
 #, c-format
 msgid "Shortcut %s does not exist"
 msgstr "捷徑 %s 不存在"
 
-#: gtk/gtkfilechooserdefault.c:7329
+#: gtk/gtkfilechooserdefault.c:7336
 #, c-format
 msgid "A file named \"%s\" already exists.  Do you want to replace it?"
 msgstr "名為“%s”的檔案已經存在。要取代它嗎？"
 
-#: gtk/gtkfilechooserdefault.c:7332
+#: gtk/gtkfilechooserdefault.c:7339
 #, c-format
 msgid ""
 "The file already exists in \"%s\".  Replacing it will overwrite its contents."
 msgstr "檔案已經存在於“%s”。取代它的話會複寫其內容。"
 
-#: gtk/gtkfilechooserdefault.c:7337
+#: gtk/gtkfilechooserdefault.c:7344
 msgid "_Replace"
 msgstr "取代(_R)"
 
-#: gtk/gtkfilechooserdefault.c:8033
+#: gtk/gtkfilechooserdefault.c:8040
 #, c-format
 msgid "Could not mount %s"
 msgstr "無法掛載 %s"
 
-#: gtk/gtkfilechooserdefault.c:8427
+#: gtk/gtkfilechooserdefault.c:8434
 msgid "Type name of new folder"
 msgstr "請輸入新資料夾名稱"
 
-#: gtk/gtkfilechooserdefault.c:8472
+#: gtk/gtkfilechooserdefault.c:8479
 #, c-format
 msgid "%d byte"
 msgid_plural "%d bytes"
 msgstr[0] "%d 位元組"
 
-#: gtk/gtkfilechooserdefault.c:8474
+#: gtk/gtkfilechooserdefault.c:8481
 #, c-format
 msgid "%.1f KB"
 msgstr "%.1f KB"
 
-#: gtk/gtkfilechooserdefault.c:8476
+#: gtk/gtkfilechooserdefault.c:8483
 #, c-format
 msgid "%.1f MB"
 msgstr "%.1f MB"
 
-#: gtk/gtkfilechooserdefault.c:8478
+#: gtk/gtkfilechooserdefault.c:8485
 #, c-format
 msgid "%.1f GB"
 msgstr "%.1f GB"
 
-#: gtk/gtkfilechooserdefault.c:8526 gtk/gtkfilechooserdefault.c:8550
+#: gtk/gtkfilechooserdefault.c:8533 gtk/gtkfilechooserdefault.c:8557
 msgid "Unknown"
 msgstr "未知"
 
-#: gtk/gtkfilechooserdefault.c:8537
+#: gtk/gtkfilechooserdefault.c:8544
 msgid "Today"
 msgstr "今天"
 
-#: gtk/gtkfilechooserdefault.c:8539
+#: gtk/gtkfilechooserdefault.c:8546
 msgid "Yesterday"
 msgstr "昨天"
 
-#: gtk/gtkfilechoosersettings.c:123
+#: gtk/gtkfilechoosersettings.c:126
 #, c-format
 msgid "Line %d, column %d: missing attribute \"%s\""
 msgstr "行 %d，列 %d：遺漏屬性“%s”"
 
-#: gtk/gtkfilechoosersettings.c:140
+#: gtk/gtkfilechoosersettings.c:143
 #, c-format
 msgid "Line %d, column %d: unexpected element \"%s\""
 msgstr "行 %d，列 %d：不是預設的元素“%s”"
 
-#: gtk/gtkfilechoosersettings.c:158
+#: gtk/gtkfilechoosersettings.c:161
 #, c-format
 msgid ""
 "Line %d, column %d: expected end of element \"%s\", but got element for \"%s"
 "\" instead"
 msgstr "行 %d，列 %d：預設結束的元素應為“%s”，但取得“%s”的元素"
 
-#: gtk/gtkfilechoosersettings.c:202
+#: gtk/gtkfilechoosersettings.c:205
 #, c-format
 msgid ""
 "Line %d, column %d: expected \"%s\" at the toplevel, but found \"%s\" instead"
 msgstr "行 %d，列 %d：預設應為“%s”在最上層，但找到“%s”"
 
-#: gtk/gtkfilechoosersettings.c:238 gtk/gtkfilechoosersettings.c:266
+#: gtk/gtkfilechoosersettings.c:241 gtk/gtkfilechoosersettings.c:269
+#: gtk/gtkfilechoosersettings.c:297
 #, c-format
 msgid "Line %d, column %d: expected \"%s\" or \"%s\", but found \"%s\" instead"
 msgstr "行 %d，列 %d：預設應為“%s”或“%s”，但找到“%s”"
 
-#: gtk/gtkfilechoosersettings.c:516
+#: gtk/gtkfilechoosersettings.c:573
 #, c-format
 msgid "Could not create directory: %s"
 msgstr "無法建立資料夾：%s"
@@ -1881,7 +1882,7 @@ msgid "(Empty)"
 msgstr "（空的）"
 
 #: gtk/gtkfilesystemunix.c:975 gtk/gtkfilesystemunix.c:1223
-#: gtk/gtkfilesystemunix.c:2211 gtk/gtkfilesystemunix.c:2251
+#: gtk/gtkfilesystemunix.c:2216 gtk/gtkfilesystemunix.c:2256
 #: gtk/gtkfilesystemwin32.c:2396 gtk/gtkfilesystemwin32.c:2446
 #, c-format
 msgid "Error getting information for '%s': %s"
@@ -1903,17 +1904,17 @@ msgid ""
 "Please use a different name."
 msgstr "名稱“%s”是無效的，因為它包含了字符‘%s’。請選擇另一個名稱。"
 
-#: gtk/gtkfilesystemunix.c:1893 gtk/gtkfilesystemwin32.c:2076
+#: gtk/gtkfilesystemunix.c:1898 gtk/gtkfilesystemwin32.c:2076
 #, c-format
 msgid "Bookmark saving failed: %s"
 msgstr "儲存書籤失敗：%s"
 
-#: gtk/gtkfilesystemunix.c:1948 gtk/gtkfilesystemwin32.c:2131
+#: gtk/gtkfilesystemunix.c:1953 gtk/gtkfilesystemwin32.c:2131
 #, c-format
 msgid "'%s' already exists in the bookmarks list"
 msgstr "‘%s’已存在於書籤中"
 
-#: gtk/gtkfilesystemunix.c:2020 gtk/gtkfilesystemwin32.c:2203
+#: gtk/gtkfilesystemunix.c:2025 gtk/gtkfilesystemwin32.c:2203
 #, c-format
 msgid "'%s' does not exist in the bookmarks list"
 msgstr "‘%s’不存在於書籤中"
@@ -2007,7 +2008,7 @@ msgstr ""
 msgid "Icon '%s' not present in theme"
 msgstr "圖示‘%s’不存在於佈景主題中"
 
-#: gtk/gtkimmodule.c:407
+#: gtk/gtkimmodule.c:421
 msgid "Default"
 msgstr "預設"
 
@@ -2329,7 +2330,7 @@ msgstr "執行預覽時發生錯誤"
 msgid "Error printing"
 msgstr "打印錯誤"
 
-#: gtk/gtkprintoperation-unix.c:375 gtk/gtkprintoperation-win32.c:1391
+#: gtk/gtkprintoperation-unix.c:375 gtk/gtkprintoperation-win32.c:1394
 msgid "Application"
 msgstr "應用程式"
 
@@ -2353,33 +2354,33 @@ msgstr "需要使用者干預"
 msgid "Custom size"
 msgstr "自訂大小"
 
-#: gtk/gtkprintoperation-win32.c:1481 gtk/gtkprintoperation-win32.c:1504
-#: gtk/gtkprintoperation-win32.c:1552
+#: gtk/gtkprintoperation-win32.c:1485 gtk/gtkprintoperation-win32.c:1508
+#: gtk/gtkprintoperation-win32.c:1556
 #, c-format
 msgid "Not enough free memory"
 msgstr "記憶體不足"
 
-#: gtk/gtkprintoperation-win32.c:1557
+#: gtk/gtkprintoperation-win32.c:1561
 #, c-format
 msgid "Invalid argument to PrintDlgEx"
 msgstr "給 PrintDlgEx 的參數無效"
 
-#: gtk/gtkprintoperation-win32.c:1562
+#: gtk/gtkprintoperation-win32.c:1566
 #, c-format
 msgid "Invalid pointer to PrintDlgEx"
 msgstr "給 PrintDlgEx 的指標無效"
 
-#: gtk/gtkprintoperation-win32.c:1567
+#: gtk/gtkprintoperation-win32.c:1571
 #, c-format
 msgid "Invalid handle to PrintDlgEx"
 msgstr "給 PrintDlgEx 的處理無效"
 
-#: gtk/gtkprintoperation-win32.c:1572
+#: gtk/gtkprintoperation-win32.c:1576
 #, c-format
 msgid "Unspecified error"
 msgstr "無法指定的錯誤"
 
-#: gtk/gtkprintoperation-win32.c:1623
+#: gtk/gtkprintoperation-win32.c:1627
 #, c-format
 msgid "Error from StartDoc"
 msgstr "來自 StartDoc 的錯誤"
@@ -2602,26 +2603,26 @@ msgstr "清除清單(_C)"
 msgid "Show _Private Resources"
 msgstr "顯示私有資源(_P)"
 
-#: gtk/gtkrecentchoosermenu.c:456 gtk/gtkrecentchoosermenu.c:512
+#: gtk/gtkrecentchoosermenu.c:463 gtk/gtkrecentchoosermenu.c:519
 #, c-format
 msgid "No recently used resource found with URI `%s'"
 msgstr "在 URI ‘%s’ 中找不到最近曾使用的資源"
 
-#: gtk/gtkrecentchoosermenu.c:536 gtk/gtkrecentchoosermenu.c:544
+#: gtk/gtkrecentchoosermenu.c:543 gtk/gtkrecentchoosermenu.c:551
 #, c-format
 msgid "This function is not implemented for widgets of class '%s'"
 msgstr "此函數還未在視窗元件的類別‘%s’中實現"
 
-#: gtk/gtkrecentchoosermenu.c:884
+#: gtk/gtkrecentchoosermenu.c:891
 #, c-format
 msgid "Open '%s'"
 msgstr "開啟‘%s’"
 
-#: gtk/gtkrecentchoosermenu.c:916
+#: gtk/gtkrecentchoosermenu.c:923
 msgid "Unknown item"
 msgstr "不明項目"
 
-#: gtk/gtkrecentchoosermenu.c:1017
+#: gtk/gtkrecentchoosermenu.c:1033
 msgid "No items found"
 msgstr "找不到項目"
 
@@ -3077,7 +3078,7 @@ msgstr "第 %2$d 行第 %3$d 字有非預設的開始標記‘%1$s’"
 msgid "Unexpected character data on line %d char %d"
 msgstr "第 %d 行第 %d 字有非預設的字符資料"
 
-#: gtk/gtkuimanager.c:2234
+#: gtk/gtkuimanager.c:2240
 msgid "Empty"
 msgstr "空的"
 

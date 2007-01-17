@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.3.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-01-05 14:58-0500\n"
+"POT-Creation-Date: 2007-01-16 23:43-0500\n"
 "PO-Revision-Date: 2006-09-04 15:35+0200\n"
 "Last-Translator: Jordi Mallach <jordi@sindominio.net>\n"
 "Language-Team: Catalan <tradgnome@softcatala.org>\n"
@@ -4044,11 +4044,11 @@ msgstr "L'ordre d'ordenació dels elements seleccionats"
 msgid "The current filter for selecting which resources are displayed"
 msgstr "El filtre actual per seleccionar quins fitxers es mostraran"
 
-#: gtk/gtkrecentchoosermenu.c:210
+#: gtk/gtkrecentchoosermenu.c:215
 msgid "Show Numbers"
 msgstr "Mostra els nombres"
 
-#: gtk/gtkrecentchoosermenu.c:211
+#: gtk/gtkrecentchoosermenu.c:216
 msgid "Whether the items should be displayed with a number"
 msgstr "Si els elements s'han de mostrar amb un nombre"
 

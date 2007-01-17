@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-properties.gtk-2-10.hi\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-01-05 14:58-0500\n"
+"POT-Creation-Date: 2007-01-16 23:43-0500\n"
 "PO-Revision-Date: 2007-01-07 18:50+0530\n"
 "Last-Translator: Rajesh Ranjan <rranjan@redhat.com>\n"
 "Language-Team: Hindi <fedora-trans-hi@redhat.com>\n"
@@ -3933,11 +3933,11 @@ msgstr "दिखाये जाने वाले मदों का छा�
 msgid "The current filter for selecting which resources are displayed"
 msgstr "कौन सा संसाधन प्रदर्शित है यह चुनने के लिये मौजूदा फिल्टर"
 
-#: gtk/gtkrecentchoosermenu.c:210
+#: gtk/gtkrecentchoosermenu.c:215
 msgid "Show Numbers"
 msgstr "संख्या दिखाएँ"
 
-#: gtk/gtkrecentchoosermenu.c:211
+#: gtk/gtkrecentchoosermenu.c:216
 msgid "Whether the items should be displayed with a number"
 msgstr "क्या मद को संख्या के साथ दिखाया जाना है"
 

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 2.16\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-01-05 14:57-0500\n"
+"POT-Creation-Date: 2007-01-16 23:43-0500\n"
 "PO-Revision-Date: 2006-11-19 16:50+0000\n"
 "Last-Translator: Duarte Loreto <happyguy_pt@hotmail.com>\n"
 "Language-Team: Portuguese <gnome_pt@yahoogroups.com>\n"
@@ -1627,120 +1627,120 @@ msgid "Select which types of files are shown"
 msgstr "Seleccionar que tipos de ficheiros são apresentados"
 
 #. Label
-#: gtk/gtkfilechooserdefault.c:4322 gtk/gtkprinteroptionwidget.c:788
+#: gtk/gtkfilechooserdefault.c:4323 gtk/gtkprinteroptionwidget.c:788
 msgid "_Name:"
 msgstr "_Nome:"
 
-#: gtk/gtkfilechooserdefault.c:4364
+#: gtk/gtkfilechooserdefault.c:4365
 msgid "_Browse for other folders"
 msgstr "Procurar _outras pastas"
 
-#: gtk/gtkfilechooserdefault.c:4599
+#: gtk/gtkfilechooserdefault.c:4600
 msgid "Type a file name"
 msgstr "Introduza um nome de ficheiro"
 
 #. Create Folder
-#: gtk/gtkfilechooserdefault.c:4636
+#: gtk/gtkfilechooserdefault.c:4637
 msgid "Create Fo_lder"
 msgstr "Criar _Pasta"
 
-#: gtk/gtkfilechooserdefault.c:4646
+#: gtk/gtkfilechooserdefault.c:4647
 msgid "_Location:"
 msgstr "_Localização:"
 
-#: gtk/gtkfilechooserdefault.c:4886
+#: gtk/gtkfilechooserdefault.c:4887
 msgid "Save in _folder:"
 msgstr "Gravar na _pasta:"
 
-#: gtk/gtkfilechooserdefault.c:4888
+#: gtk/gtkfilechooserdefault.c:4889
 msgid "Create in _folder:"
 msgstr "Criar na _pasta:"
 
-#: gtk/gtkfilechooserdefault.c:6390
+#: gtk/gtkfilechooserdefault.c:6397
 #, c-format
 msgid "Cannot change to folder because it is not local"
 msgstr "Incapaz de ir para a pasta por não ser local"
 
-#: gtk/gtkfilechooserdefault.c:6963 gtk/gtkfilechooserdefault.c:6984
+#: gtk/gtkfilechooserdefault.c:6970 gtk/gtkfilechooserdefault.c:6991
 #, c-format
 msgid "Shortcut %s already exists"
 msgstr "Atalho %s já existe"
 
-#: gtk/gtkfilechooserdefault.c:7074
+#: gtk/gtkfilechooserdefault.c:7081
 #, c-format
 msgid "Shortcut %s does not exist"
 msgstr "Atalho %s não existe"
 
-#: gtk/gtkfilechooserdefault.c:7329
+#: gtk/gtkfilechooserdefault.c:7336
 #, c-format
 msgid "A file named \"%s\" already exists.  Do you want to replace it?"
 msgstr "Já existe um ficheiro denominado \"%s\". Deseja substituí-lo?"
 
-#: gtk/gtkfilechooserdefault.c:7332
+#: gtk/gtkfilechooserdefault.c:7339
 #, c-format
 msgid ""
 "The file already exists in \"%s\".  Replacing it will overwrite its contents."
 msgstr ""
 "O ficheiro já existe em \"%s\". Substituí-lo irá sobrepor o seu conteúdo."
 
-#: gtk/gtkfilechooserdefault.c:7337
+#: gtk/gtkfilechooserdefault.c:7344
 msgid "_Replace"
 msgstr "_Substituir"
 
-#: gtk/gtkfilechooserdefault.c:8033
+#: gtk/gtkfilechooserdefault.c:8040
 #, c-format
 msgid "Could not mount %s"
 msgstr "Incapaz de montar %s"
 
-#: gtk/gtkfilechooserdefault.c:8427
+#: gtk/gtkfilechooserdefault.c:8434
 msgid "Type name of new folder"
 msgstr "Introduza o nome da nova pasta"
 
-#: gtk/gtkfilechooserdefault.c:8472
+#: gtk/gtkfilechooserdefault.c:8479
 #, c-format
 msgid "%d byte"
 msgid_plural "%d bytes"
 msgstr[0] "%d byte"
 msgstr[1] "%d bytes"
 
-#: gtk/gtkfilechooserdefault.c:8474
+#: gtk/gtkfilechooserdefault.c:8481
 #, c-format
 msgid "%.1f KB"
 msgstr "%.1f KB"
 
-#: gtk/gtkfilechooserdefault.c:8476
+#: gtk/gtkfilechooserdefault.c:8483
 #, c-format
 msgid "%.1f MB"
 msgstr "%.1f MB"
 
-#: gtk/gtkfilechooserdefault.c:8478
+#: gtk/gtkfilechooserdefault.c:8485
 #, c-format
 msgid "%.1f GB"
 msgstr "%.1f GB"
 
-#: gtk/gtkfilechooserdefault.c:8526 gtk/gtkfilechooserdefault.c:8550
+#: gtk/gtkfilechooserdefault.c:8533 gtk/gtkfilechooserdefault.c:8557
 msgid "Unknown"
 msgstr "Desconhecido"
 
-#: gtk/gtkfilechooserdefault.c:8537
+#: gtk/gtkfilechooserdefault.c:8544
 msgid "Today"
 msgstr "Hoje"
 
-#: gtk/gtkfilechooserdefault.c:8539
+#: gtk/gtkfilechooserdefault.c:8546
 msgid "Yesterday"
 msgstr "Ontem"
 
-#: gtk/gtkfilechoosersettings.c:123
+#: gtk/gtkfilechoosersettings.c:126
 #, c-format
 msgid "Line %d, column %d: missing attribute \"%s\""
 msgstr "Linha %d, coluna %d: atributo \"%s\" inexistente"
 
-#: gtk/gtkfilechoosersettings.c:140
+#: gtk/gtkfilechoosersettings.c:143
 #, c-format
 msgid "Line %d, column %d: unexpected element \"%s\""
 msgstr "Linha %d, coluna %d: elemento \"%s\" inesperado"
 
-#: gtk/gtkfilechoosersettings.c:158
+#: gtk/gtkfilechoosersettings.c:161
 #, c-format
 msgid ""
 "Line %d, column %d: expected end of element \"%s\", but got element for \"%s"
@@ -1749,7 +1749,7 @@ msgstr ""
 "Linha %d, coluna %d: esperava o final do elemento \"%s\", mas foi obtido o "
 "elemento \"%s\""
 
-#: gtk/gtkfilechoosersettings.c:202
+#: gtk/gtkfilechoosersettings.c:205
 #, c-format
 msgid ""
 "Line %d, column %d: expected \"%s\" at the toplevel, but found \"%s\" instead"
@@ -1757,13 +1757,14 @@ msgstr ""
 "Linha %d, coluna %d: esperado \"%s\" no nível de topo, mas foi encontrado \"%"
 "s\""
 
-#: gtk/gtkfilechoosersettings.c:238 gtk/gtkfilechoosersettings.c:266
+#: gtk/gtkfilechoosersettings.c:241 gtk/gtkfilechoosersettings.c:269
+#: gtk/gtkfilechoosersettings.c:297
 #, c-format
 msgid "Line %d, column %d: expected \"%s\" or \"%s\", but found \"%s\" instead"
 msgstr ""
 "Linha %d, coluna %d: esperado \"%s\" ou \"%s\", mas foi encontrado \"%s\""
 
-#: gtk/gtkfilechoosersettings.c:516
+#: gtk/gtkfilechoosersettings.c:573
 #, c-format
 msgid "Could not create directory: %s"
 msgstr "Incapaz de criar o directório: %s"
@@ -1923,7 +1924,7 @@ msgid "(Empty)"
 msgstr "(Vazio)"
 
 #: gtk/gtkfilesystemunix.c:975 gtk/gtkfilesystemunix.c:1223
-#: gtk/gtkfilesystemunix.c:2211 gtk/gtkfilesystemunix.c:2251
+#: gtk/gtkfilesystemunix.c:2216 gtk/gtkfilesystemunix.c:2256
 #: gtk/gtkfilesystemwin32.c:2396 gtk/gtkfilesystemwin32.c:2446
 #, c-format
 msgid "Error getting information for '%s': %s"
@@ -1946,17 +1947,17 @@ msgid ""
 msgstr ""
 "O nome \"%s\" não é válido pois contém o caracter \"%s\". Utilize outro nome."
 
-#: gtk/gtkfilesystemunix.c:1893 gtk/gtkfilesystemwin32.c:2076
+#: gtk/gtkfilesystemunix.c:1898 gtk/gtkfilesystemwin32.c:2076
 #, c-format
 msgid "Bookmark saving failed: %s"
 msgstr "Falha ao gravar marcador: %s"
 
-#: gtk/gtkfilesystemunix.c:1948 gtk/gtkfilesystemwin32.c:2131
+#: gtk/gtkfilesystemunix.c:1953 gtk/gtkfilesystemwin32.c:2131
 #, c-format
 msgid "'%s' already exists in the bookmarks list"
 msgstr "'%s' já existe na lista de marcadores"
 
-#: gtk/gtkfilesystemunix.c:2020 gtk/gtkfilesystemwin32.c:2203
+#: gtk/gtkfilesystemunix.c:2025 gtk/gtkfilesystemwin32.c:2203
 #, c-format
 msgid "'%s' does not exist in the bookmarks list"
 msgstr "'%s' não existe na lista de marcadores"
@@ -2050,7 +2051,7 @@ msgstr ""
 msgid "Icon '%s' not present in theme"
 msgstr "Ícone '%s' não existe no tema"
 
-#: gtk/gtkimmodule.c:407
+#: gtk/gtkimmodule.c:421
 msgid "Default"
 msgstr "Omissão"
 
@@ -2372,7 +2373,7 @@ msgstr "Erro ao iniciar a antevisão"
 msgid "Error printing"
 msgstr "Erro ao imprimir"
 
-#: gtk/gtkprintoperation-unix.c:375 gtk/gtkprintoperation-win32.c:1391
+#: gtk/gtkprintoperation-unix.c:375 gtk/gtkprintoperation-win32.c:1394
 msgid "Application"
 msgstr "Aplicação"
 
@@ -2396,33 +2397,33 @@ msgstr "Necessita de intervenção humana"
 msgid "Custom size"
 msgstr "Tamanho personalizado"
 
-#: gtk/gtkprintoperation-win32.c:1481 gtk/gtkprintoperation-win32.c:1504
-#: gtk/gtkprintoperation-win32.c:1552
+#: gtk/gtkprintoperation-win32.c:1485 gtk/gtkprintoperation-win32.c:1508
+#: gtk/gtkprintoperation-win32.c:1556
 #, c-format
 msgid "Not enough free memory"
 msgstr "Memória livre insuficiente"
 
-#: gtk/gtkprintoperation-win32.c:1557
+#: gtk/gtkprintoperation-win32.c:1561
 #, c-format
 msgid "Invalid argument to PrintDlgEx"
 msgstr "Argumento inválido para PrintDlgEx"
 
-#: gtk/gtkprintoperation-win32.c:1562
+#: gtk/gtkprintoperation-win32.c:1566
 #, c-format
 msgid "Invalid pointer to PrintDlgEx"
 msgstr "Apontador inválido para PrintDlgEx"
 
-#: gtk/gtkprintoperation-win32.c:1567
+#: gtk/gtkprintoperation-win32.c:1571
 #, c-format
 msgid "Invalid handle to PrintDlgEx"
 msgstr "Gestor inválido para PrintDlgEx"
 
-#: gtk/gtkprintoperation-win32.c:1572
+#: gtk/gtkprintoperation-win32.c:1576
 #, c-format
 msgid "Unspecified error"
 msgstr "Erro não especificado"
 
-#: gtk/gtkprintoperation-win32.c:1623
+#: gtk/gtkprintoperation-win32.c:1627
 #, c-format
 msgid "Error from StartDoc"
 msgstr "Erro de StartDoc"
@@ -2645,27 +2646,27 @@ msgstr "_Limpar a Lista"
 msgid "Show _Private Resources"
 msgstr "Apresentar os Recursos _Privados"
 
-#: gtk/gtkrecentchoosermenu.c:456 gtk/gtkrecentchoosermenu.c:512
+#: gtk/gtkrecentchoosermenu.c:463 gtk/gtkrecentchoosermenu.c:519
 #, c-format
 msgid "No recently used resource found with URI `%s'"
 msgstr "Nenhum recurso utilizado recentemente encontrado com o URI `%s'"
 
-#: gtk/gtkrecentchoosermenu.c:536 gtk/gtkrecentchoosermenu.c:544
+#: gtk/gtkrecentchoosermenu.c:543 gtk/gtkrecentchoosermenu.c:551
 #, c-format
 msgid "This function is not implemented for widgets of class '%s'"
 msgstr ""
 "Esta funcionalidade não se encontra implementada para widgets da classe '%s'"
 
-#: gtk/gtkrecentchoosermenu.c:884
+#: gtk/gtkrecentchoosermenu.c:891
 #, c-format
 msgid "Open '%s'"
 msgstr "Abrir '%s'"
 
-#: gtk/gtkrecentchoosermenu.c:916
+#: gtk/gtkrecentchoosermenu.c:923
 msgid "Unknown item"
 msgstr "Item desconhecido"
 
-#: gtk/gtkrecentchoosermenu.c:1017
+#: gtk/gtkrecentchoosermenu.c:1033
 msgid "No items found"
 msgstr "Nenhum item encontrado"
 
@@ -3119,7 +3120,7 @@ msgstr "Início de etiqueta '%s' inesperado na linha %d caracter %d"
 msgid "Unexpected character data on line %d char %d"
 msgstr "Dados de caracter inesperados na linha %d caracter %d"
 
-#: gtk/gtkuimanager.c:2234
+#: gtk/gtkuimanager.c:2240
 msgid "Empty"
 msgstr "Vazio"
 

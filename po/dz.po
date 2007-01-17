@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+.HEAD.dz\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-01-05 14:57-0500\n"
+"POT-Creation-Date: 2007-01-16 23:43-0500\n"
 "PO-Revision-Date: 2006-09-29 12:40+0530\n"
 "Last-Translator: Mindu Dorji\n"
 "Language-Team: DZONGKHA <pgeyleg@dit.gov.bt>\n"
@@ -1623,56 +1623,56 @@ msgid "Select which types of files are shown"
 msgstr "སྟོན་ཏེ་ཡོད་མི་ ཡིག་སྣོད་ཀྱི་དབྱེ་བ་ཚུ་ སེལ་འཐུ་འབད།"
 
 #. Label
-#: gtk/gtkfilechooserdefault.c:4322 gtk/gtkprinteroptionwidget.c:788
+#: gtk/gtkfilechooserdefault.c:4323 gtk/gtkprinteroptionwidget.c:788
 msgid "_Name:"
 msgstr "མིང་:(_N)"
 
-#: gtk/gtkfilechooserdefault.c:4364
+#: gtk/gtkfilechooserdefault.c:4365
 msgid "_Browse for other folders"
 msgstr "སྣོད་འཛིན་གཞན་གྱི་དོན་ལུ་བརྡ་འཚོལ།(_B)"
 
-#: gtk/gtkfilechooserdefault.c:4599
+#: gtk/gtkfilechooserdefault.c:4600
 msgid "Type a file name"
 msgstr "་ཡིག་སྣོད་ཀྱི་མིང་ཅིག་ཡིག་དཔར་རྐྱབས།"
 
 #. Create Folder
-#: gtk/gtkfilechooserdefault.c:4636
+#: gtk/gtkfilechooserdefault.c:4637
 msgid "Create Fo_lder"
 msgstr "སྣོད་འཛིན་གསར་བསྐྲུན་འབད།(_l)"
 
-#: gtk/gtkfilechooserdefault.c:4646
+#: gtk/gtkfilechooserdefault.c:4647
 msgid "_Location:"
 msgstr "གནས་ཁོངས་:(_L)"
 
-#: gtk/gtkfilechooserdefault.c:4886
+#: gtk/gtkfilechooserdefault.c:4887
 msgid "Save in _folder:"
 msgstr "སྣོད་འཛིན་ནང༌སྲུངས།(_f)"
 
-#: gtk/gtkfilechooserdefault.c:4888
+#: gtk/gtkfilechooserdefault.c:4889
 msgid "Create in _folder:"
 msgstr "སྣོད་འཛིན་ནང་གསར་བསྐྲུན་འབད།(_f)"
 
-#: gtk/gtkfilechooserdefault.c:6390
+#: gtk/gtkfilechooserdefault.c:6397
 #, c-format
 msgid "Cannot change to folder because it is not local"
 msgstr "ཉེ་གནས་མེནམ་ལས་ སྣོད་འཛིན་ལུ་ བསྒྱུར་བཅོས་འབད་མི་ཚུགས།"
 
-#: gtk/gtkfilechooserdefault.c:6963 gtk/gtkfilechooserdefault.c:6984
+#: gtk/gtkfilechooserdefault.c:6970 gtk/gtkfilechooserdefault.c:6991
 #, c-format
 msgid "Shortcut %s already exists"
 msgstr "མགྱོགས་ཐབས་ %s ཧེ་མ་ལས་ར་འདུག"
 
-#: gtk/gtkfilechooserdefault.c:7074
+#: gtk/gtkfilechooserdefault.c:7081
 #, c-format
 msgid "Shortcut %s does not exist"
 msgstr "མགྱོགས་ཐབས་ %s མིན་འདུག"
 
-#: gtk/gtkfilechooserdefault.c:7329
+#: gtk/gtkfilechooserdefault.c:7336
 #, c-format
 msgid "A file named \"%s\" already exists.  Do you want to replace it?"
 msgstr "ཡིག་སྣོད་མིང་\"%s\" འབད་མི་ཅིག་ ཧེ་མ་ལས་ར་འདུག དེ་གི་ཚབ་བཙུགས་ནི་ཨིན་ན?"
 
-#: gtk/gtkfilechooserdefault.c:7332
+#: gtk/gtkfilechooserdefault.c:7339
 #, c-format
 msgid ""
 "The file already exists in \"%s\".  Replacing it will overwrite its contents."
@@ -1680,64 +1680,64 @@ msgstr ""
 "\"%s\" ནང་ལུ་ ཡིག་སྣོད་དེ་ ཧེ་མ་ལས་ར་འདུག དེ་གི་ཚབ་བཙུགས་པ་ཅིན་ དེ་ནང་ཡོད་པའི་ནང་དོན་ཚུ་ ཚབ་"
 "སྲུང་འབད་འོང་།"
 
-#: gtk/gtkfilechooserdefault.c:7337
+#: gtk/gtkfilechooserdefault.c:7344
 msgid "_Replace"
 msgstr "ཚབ་བཙུགས།(_R)"
 
-#: gtk/gtkfilechooserdefault.c:8033
+#: gtk/gtkfilechooserdefault.c:8040
 #, c-format
 msgid "Could not mount %s"
 msgstr "%s སྦྱར་བརྩེགས་འབད་མ་ཚུགས། "
 
-#: gtk/gtkfilechooserdefault.c:8427
+#: gtk/gtkfilechooserdefault.c:8434
 msgid "Type name of new folder"
 msgstr "སྣོད་འཛིན་གསར་པའི་མིང་ ཡིག་དཔར་རྐྱབས།"
 
-#: gtk/gtkfilechooserdefault.c:8472
+#: gtk/gtkfilechooserdefault.c:8479
 #, c-format
 msgid "%d byte"
 msgid_plural "%d bytes"
 msgstr[0] "བ་ཡིཊི་%d།"
 msgstr[1] "བ་ཡིཊསི་%d།"
 
-#: gtk/gtkfilechooserdefault.c:8474
+#: gtk/gtkfilechooserdefault.c:8481
 #, c-format
 msgid "%.1f KB"
 msgstr "%.1f ཀེ་བི།"
 
-#: gtk/gtkfilechooserdefault.c:8476
+#: gtk/gtkfilechooserdefault.c:8483
 #, c-format
 msgid "%.1f MB"
 msgstr "%.1f ཨེམ་བི།"
 
-#: gtk/gtkfilechooserdefault.c:8478
+#: gtk/gtkfilechooserdefault.c:8485
 #, c-format
 msgid "%.1f GB"
 msgstr "%.1f  ཇི་བི།"
 
-#: gtk/gtkfilechooserdefault.c:8526 gtk/gtkfilechooserdefault.c:8550
+#: gtk/gtkfilechooserdefault.c:8533 gtk/gtkfilechooserdefault.c:8557
 msgid "Unknown"
 msgstr "མ་ཤེསཔ།"
 
-#: gtk/gtkfilechooserdefault.c:8537
+#: gtk/gtkfilechooserdefault.c:8544
 msgid "Today"
 msgstr "ད་རིས།"
 
-#: gtk/gtkfilechooserdefault.c:8539
+#: gtk/gtkfilechooserdefault.c:8546
 msgid "Yesterday"
 msgstr "ཁ་རྩང༌།"
 
-#: gtk/gtkfilechoosersettings.c:123
+#: gtk/gtkfilechoosersettings.c:126
 #, c-format
 msgid "Line %d, column %d: missing attribute \"%s\""
 msgstr "གྱལ་རིམ་%d། ཀེར་ཐིག་%d་: ཁྱད་ཆོས་\"%s\" བརླག་སྟོར་ཞུགས་ནུག"
 
-#: gtk/gtkfilechoosersettings.c:140
+#: gtk/gtkfilechoosersettings.c:143
 #, c-format
 msgid "Line %d, column %d: unexpected element \"%s\""
 msgstr "གྱལ་རིམ་%d། ཀེར་ཐིག་%d་: རེ་བ་མེད་པའི་ཆ་ཤས་\"%s\"།"
 
-#: gtk/gtkfilechoosersettings.c:158
+#: gtk/gtkfilechoosersettings.c:161
 #, c-format
 msgid ""
 "Line %d, column %d: expected end of element \"%s\", but got element for \"%s"
@@ -1746,7 +1746,7 @@ msgstr ""
 "གྱལ་རིམ་%d། ཀེར་ཐིག་%d་: \"%s\"ཆ་ཤས་རེ་བ་བསྐྱེད་ཅི། དེ་འབདཝ་ད་དེ་གི་ཚབ་ལུ་ \"%s\"གི་ཆ་ཤས་"
 "ཐོབ་ཅི།"
 
-#: gtk/gtkfilechoosersettings.c:202
+#: gtk/gtkfilechoosersettings.c:205
 #, c-format
 msgid ""
 "Line %d, column %d: expected \"%s\" at the toplevel, but found \"%s\" instead"
@@ -1754,14 +1754,15 @@ msgstr ""
 "གྱལ་རིམ་%d། ཀེར་ཐིག་%d་: མཐོ་རིམ་ལུ་\"%s\"གི་རེ་བ་བསྐྱེད་ཅི། དེ་འབདཝ་ད་ དེ་གི་ཚབ་ལུ་\"%s\"ཐོབ་"
 "ཅི།"
 
-#: gtk/gtkfilechoosersettings.c:238 gtk/gtkfilechoosersettings.c:266
+#: gtk/gtkfilechoosersettings.c:241 gtk/gtkfilechoosersettings.c:269
+#: gtk/gtkfilechoosersettings.c:297
 #, c-format
 msgid "Line %d, column %d: expected \"%s\" or \"%s\", but found \"%s\" instead"
 msgstr ""
 "གྱལ་རིམ་%d། ཀེར་ཐིག་%d་: \"%s\" ཡང་ན་ \"%s\"གི་རེ་བ་བསྐྱེད་ཅི། དེ་འབདཝ་ད་ དེ་གི་ཚབ་ལུ་\"%s"
 "\"ཐོབ་ཅི།"
 
-#: gtk/gtkfilechoosersettings.c:516
+#: gtk/gtkfilechoosersettings.c:573
 #, c-format
 msgid "Could not create directory: %s"
 msgstr "སྣོད་ཐོ་ %s གསར་བསྐྲུན་འབད་མ་ཚུགས།"
@@ -1917,7 +1918,7 @@ msgid "(Empty)"
 msgstr "(སྟོངམ)"
 
 #: gtk/gtkfilesystemunix.c:975 gtk/gtkfilesystemunix.c:1223
-#: gtk/gtkfilesystemunix.c:2211 gtk/gtkfilesystemunix.c:2251
+#: gtk/gtkfilesystemunix.c:2216 gtk/gtkfilesystemunix.c:2256
 #: gtk/gtkfilesystemwin32.c:2396 gtk/gtkfilesystemwin32.c:2446
 #, c-format
 msgid "Error getting information for '%s': %s"
@@ -1939,17 +1940,17 @@ msgid ""
 "Please use a different name."
 msgstr "མིང་\"%s\" དེ་ནང་ ཡིག་འབྲུ་\"%s\"ཡོདཔ་ལས་ ནུས་མེད་ཨིན་པས། མིང་སོ་སོ་ཅིག་ ལག་ལེན་འཐབ།"
 
-#: gtk/gtkfilesystemunix.c:1893 gtk/gtkfilesystemwin32.c:2076
+#: gtk/gtkfilesystemunix.c:1898 gtk/gtkfilesystemwin32.c:2076
 #, c-format
 msgid "Bookmark saving failed: %s"
 msgstr "དེབ་རྟགས་སྲུང་བཞག་འབད་མ་ཚུགས་: (%s)"
 
-#: gtk/gtkfilesystemunix.c:1948 gtk/gtkfilesystemwin32.c:2131
+#: gtk/gtkfilesystemunix.c:1953 gtk/gtkfilesystemwin32.c:2131
 #, c-format
 msgid "'%s' already exists in the bookmarks list"
 msgstr "'དེབ་རྟགས་ཐོ་ཡིག་ནང་ '%s' ཧེ་མ་ལས་ར་འདུག"
 
-#: gtk/gtkfilesystemunix.c:2020 gtk/gtkfilesystemwin32.c:2203
+#: gtk/gtkfilesystemunix.c:2025 gtk/gtkfilesystemwin32.c:2203
 #, c-format
 msgid "'%s' does not exist in the bookmarks list"
 msgstr "དེབ་རྟགས་ཐོ་ཡིག་ནང་'%s'མིན་འདུག"
@@ -2042,7 +2043,7 @@ msgstr ""
 msgid "Icon '%s' not present in theme"
 msgstr "ངོས་དཔར་ ’%s’ དེ་ བརྗོད་དོན་ནང་མིན་འདུག"
 
-#: gtk/gtkimmodule.c:407
+#: gtk/gtkimmodule.c:421
 msgid "Default"
 msgstr "སྔོན་སྒྲིག"
 
@@ -2364,7 +2365,7 @@ msgstr "སྔོན་ལྟ་གསར་བཙུགས་འབད་ནི
 msgid "Error printing"
 msgstr "དཔར་བསྐྲུན་ལུ་འཛོལ་བ།"
 
-#: gtk/gtkprintoperation-unix.c:375 gtk/gtkprintoperation-win32.c:1391
+#: gtk/gtkprintoperation-unix.c:375 gtk/gtkprintoperation-win32.c:1394
 msgid "Application"
 msgstr "གློག་རིམ།"
 
@@ -2388,33 +2389,33 @@ msgstr "ལག་ལེན་པའི་བར་བཀག་དགོ་པས
 msgid "Custom size"
 msgstr "སྲོལ་སྒྲིག་གི་ཚད།"
 
-#: gtk/gtkprintoperation-win32.c:1481 gtk/gtkprintoperation-win32.c:1504
-#: gtk/gtkprintoperation-win32.c:1552
+#: gtk/gtkprintoperation-win32.c:1485 gtk/gtkprintoperation-win32.c:1508
+#: gtk/gtkprintoperation-win32.c:1556
 #, c-format
 msgid "Not enough free memory"
 msgstr "དྲན་ཚད་ལངམ་མིན་འདུག"
 
-#: gtk/gtkprintoperation-win32.c:1557
+#: gtk/gtkprintoperation-win32.c:1561
 #, c-format
 msgid "Invalid argument to PrintDlgEx"
 msgstr "ཌི་ཨེལ་ཇི་ཨི་ཨེསི་དཔར་བསྐྲུན་འབད་ནི་ལུ་ ནུས་མེད་སྒྲུབ་རྟགས།"
 
-#: gtk/gtkprintoperation-win32.c:1562
+#: gtk/gtkprintoperation-win32.c:1566
 #, c-format
 msgid "Invalid pointer to PrintDlgEx"
 msgstr "ཌི་ཨེལ་ཇི་ཨི་ཨེསི་དཔར་བསྐྲུན་འབད་ནི་ལུ་ ནུས་མེད་དཔག་ཕྱེད།"
 
-#: gtk/gtkprintoperation-win32.c:1567
+#: gtk/gtkprintoperation-win32.c:1571
 #, c-format
 msgid "Invalid handle to PrintDlgEx"
 msgstr "PrintDlgEx ལུ་ནུས་མེད་བཤེད་བཟུང་།"
 
-#: gtk/gtkprintoperation-win32.c:1572
+#: gtk/gtkprintoperation-win32.c:1576
 #, c-format
 msgid "Unspecified error"
 msgstr "གསལ་བཀོད་མ་འབད་བའི་འཛོལ་བ།"
 
-#: gtk/gtkprintoperation-win32.c:1623
+#: gtk/gtkprintoperation-win32.c:1627
 #, c-format
 msgid "Error from StartDoc"
 msgstr "འགོ་བཙུགས་ཡིག་ཆ་ནང་ལས་འཛོལ་བ།"
@@ -2637,26 +2638,26 @@ msgstr "ཐོ་ཡིག་བསལ།(_C)"
 msgid "Show _Private Resources"
 msgstr "སྒེར་གྱི་ཐོན་ཁུངས་ཚུ་སྟོན།(_P)"
 
-#: gtk/gtkrecentchoosermenu.c:456 gtk/gtkrecentchoosermenu.c:512
+#: gtk/gtkrecentchoosermenu.c:463 gtk/gtkrecentchoosermenu.c:519
 #, c-format
 msgid "No recently used resource found with URI `%s'"
 msgstr "ཡུ་ཨར་ཨའི་%sདང་གཅིག་ཁར་ འཕྲལ་ཁམས་ལག་ལེན་འཐབ་མི་ ཐོན་ཁུངས་མ་ཐོབ།"
 
-#: gtk/gtkrecentchoosermenu.c:536 gtk/gtkrecentchoosermenu.c:544
+#: gtk/gtkrecentchoosermenu.c:543 gtk/gtkrecentchoosermenu.c:551
 #, c-format
 msgid "This function is not implemented for widgets of class '%s'"
 msgstr "ལས་འགན་འདི་ཝི་གེཊིསི་དབྱེ་རིགས་'%s'གི་དོན་ལུ་ལག་ལེན་མ་འཐབ་པས།"
 
-#: gtk/gtkrecentchoosermenu.c:884
+#: gtk/gtkrecentchoosermenu.c:891
 #, c-format
 msgid "Open '%s'"
 msgstr "'%s'ཁ་ཕྱེ།"
 
-#: gtk/gtkrecentchoosermenu.c:916
+#: gtk/gtkrecentchoosermenu.c:923
 msgid "Unknown item"
 msgstr "མ་ཤེས་པའི་རྣམ་གྲངས།"
 
-#: gtk/gtkrecentchoosermenu.c:1017
+#: gtk/gtkrecentchoosermenu.c:1033
 msgid "No items found"
 msgstr "རྣམ་གྲངས་གཅིག་ཡང་མ་ཐོབ།"
 
@@ -3110,7 +3111,7 @@ msgstr "རེ་བ་མེད་པའི་འགོ་བཙུགས་ར
 msgid "Unexpected character data on line %d char %d"
 msgstr "འབྲེལ་ལམ་ %d ལུ་ ཡིག་འབྲུ་ %d གི་ རེ་བ་མེད་པའི་ ཡིག་འབྲུའི་གནད་སྡུད།"
 
-#: gtk/gtkuimanager.c:2234
+#: gtk/gtkuimanager.c:2240
 msgid "Empty"
 msgstr "སྟོངམ།"
 

@@ -32,7 +32,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-properties.HEAD\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-01-05 14:58-0500\n"
+"POT-Creation-Date: 2007-01-16 23:43-0500\n"
 "PO-Revision-Date: 2004-03-07 18:05+0200\n"
 "Last-Translator: Mətin Əmirov <metin@karegen.com>\n"
 "Language-Team: Azerbaijani Turkish <translation-team-az@lists.sourceforge."
@@ -4139,12 +4139,12 @@ msgstr "Düymənin açma/qapama halı göstərilməsi"
 msgid "The current filter for selecting which resources are displayed"
 msgstr "Hansı faylların göstəriləcəyini seçən hazırkı süzgəc"
 
-#: gtk/gtkrecentchoosermenu.c:210
+#: gtk/gtkrecentchoosermenu.c:215
 #, fuzzy
 msgid "Show Numbers"
 msgstr "Həftə Nömrələrini Göstər"
 
-#: gtk/gtkrecentchoosermenu.c:211
+#: gtk/gtkrecentchoosermenu.c:216
 #, fuzzy
 msgid "Whether the items should be displayed with a number"
 msgstr "Menyulara ayırma qulplarının əlavə edilməsi"

@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.6\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-01-05 14:58-0500\n"
+"POT-Creation-Date: 2007-01-16 23:43-0500\n"
 "PO-Revision-Date: 2006-07-07 09:39+0300\n"
 "Last-Translator: Ilkka Tuohela <hile@iki.fi>\n"
 "Language-Team: Finnish <gnome-fi-laatu@lists.sourceforge.net>\n"
@@ -3988,11 +3988,11 @@ msgstr "Näytettävien kohteiden järjestystapa"
 msgid "The current filter for selecting which resources are displayed"
 msgstr "Nykyinen suodatin, jolla valitaan näytettävät resurssit"
 
-#: gtk/gtkrecentchoosermenu.c:210
+#: gtk/gtkrecentchoosermenu.c:215
 msgid "Show Numbers"
 msgstr "Näytä numerot"
 
-#: gtk/gtkrecentchoosermenu.c:211
+#: gtk/gtkrecentchoosermenu.c:216
 msgid "Whether the items should be displayed with a number"
 msgstr "Näytetäänkö kohteet numeron kanssa"
 

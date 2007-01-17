@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-properties\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-01-05 14:58-0500\n"
+"POT-Creation-Date: 2007-01-16 23:43-0500\n"
 "PO-Revision-Date: 2004-02-06 21:52+1300\n"
 "Last-Translator: John C Barstow <jbowtie@amathaine.com>\n"
 "Language-Team: Maori <maori@nzlinux.org.nz>\n"
@@ -3919,11 +3919,11 @@ msgstr ""
 msgid "The current filter for selecting which resources are displayed"
 msgstr ""
 
-#: gtk/gtkrecentchoosermenu.c:210
+#: gtk/gtkrecentchoosermenu.c:215
 msgid "Show Numbers"
 msgstr ""
 
-#: gtk/gtkrecentchoosermenu.c:211
+#: gtk/gtkrecentchoosermenu.c:216
 msgid "Whether the items should be displayed with a number"
 msgstr ""
 

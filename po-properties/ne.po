@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk-properties.gnome-2-14.ne\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-01-05 14:58-0500\n"
+"POT-Creation-Date: 2007-01-16 23:43-0500\n"
 "PO-Revision-Date: 2006-06-27 13:58+0545\n"
 "Last-Translator: Shiva Pokharel <pokharelshiva@hotmail.com>\n"
 "Language-Team: Nepali <info@mpp.org.np>\n"
@@ -4023,12 +4023,12 @@ msgstr "यदि बटनको टगल भाग प्रदर्शि�
 msgid "The current filter for selecting which resources are displayed"
 msgstr "कुन फाइल प्रदर्शन गर्नेको चयन गर्नका लागि हालको फिल्टर"
 
-#: gtk/gtkrecentchoosermenu.c:210
+#: gtk/gtkrecentchoosermenu.c:215
 #, fuzzy
 msgid "Show Numbers"
 msgstr "सप्ताहका सङ्ख्याहरू प्रदर्शनुहोस्"
 
-#: gtk/gtkrecentchoosermenu.c:211
+#: gtk/gtkrecentchoosermenu.c:216
 #, fuzzy
 msgid "Whether the items should be displayed with a number"
 msgstr "जब च्यात्ने क्षमता भएको मेनु वस्तुहरू मेनुमा थप्न सकिन्छ "

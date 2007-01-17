@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-properties.HEAD.sq\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-01-05 14:58-0500\n"
+"POT-Creation-Date: 2007-01-16 23:43-0500\n"
 "PO-Revision-Date: 2005-07-28 11:09+0200\n"
 "Last-Translator: Laurent Dhima <laurenti@alblinux.net>\n"
 "Language-Team: Albanian <gnome-albanian-perkthyesit@lists.sourceforge.net>\n"
@@ -4133,12 +4133,12 @@ msgstr "Nëse pjesa shkëput e butonit shfaqet"
 msgid "The current filter for selecting which resources are displayed"
 msgstr "Filtri aktual për të zgjedhur se çfarë files duhen shfaqur"
 
-#: gtk/gtkrecentchoosermenu.c:210
+#: gtk/gtkrecentchoosermenu.c:215
 #, fuzzy
 msgid "Show Numbers"
 msgstr "Shfaq Numrat e Javëve"
 
-#: gtk/gtkrecentchoosermenu.c:211
+#: gtk/gtkrecentchoosermenu.c:216
 #, fuzzy
 msgid "Whether the items should be displayed with a number"
 msgstr "Nëse shkëputësi i elementëve të menusë duhet t'u shtohet menuve"

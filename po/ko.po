@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.10.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-01-05 14:57-0500\n"
+"POT-Creation-Date: 2007-01-16 23:43-0500\n"
 "PO-Revision-Date: 2006-08-18 00:44+0900\n"
 "Last-Translator: Changwoo Ryu <cwryu@debian.org>\n"
 "Language-Team: Gnome Korea <gnome-kr-hackers@lists.kldp.net>\n"
@@ -1607,119 +1607,119 @@ msgid "Select which types of files are shown"
 msgstr "어떤 종류의 파일을 표시할 지 선택합니다"
 
 #. Label
-#: gtk/gtkfilechooserdefault.c:4322 gtk/gtkprinteroptionwidget.c:788
+#: gtk/gtkfilechooserdefault.c:4323 gtk/gtkprinteroptionwidget.c:788
 msgid "_Name:"
 msgstr "이름(_N):"
 
-#: gtk/gtkfilechooserdefault.c:4364
+#: gtk/gtkfilechooserdefault.c:4365
 msgid "_Browse for other folders"
 msgstr "다른 폴더 찾아보기(_B)"
 
-#: gtk/gtkfilechooserdefault.c:4599
+#: gtk/gtkfilechooserdefault.c:4600
 msgid "Type a file name"
 msgstr "파일 이름을 입력하십시오"
 
 #. Create Folder
-#: gtk/gtkfilechooserdefault.c:4636
+#: gtk/gtkfilechooserdefault.c:4637
 msgid "Create Fo_lder"
 msgstr "폴더 만들기(_L)"
 
-#: gtk/gtkfilechooserdefault.c:4646
+#: gtk/gtkfilechooserdefault.c:4647
 msgid "_Location:"
 msgstr "위치(_L):"
 
-#: gtk/gtkfilechooserdefault.c:4886
+#: gtk/gtkfilechooserdefault.c:4887
 msgid "Save in _folder:"
 msgstr "폴더에 저장(_F):"
 
-#: gtk/gtkfilechooserdefault.c:4888
+#: gtk/gtkfilechooserdefault.c:4889
 msgid "Create in _folder:"
 msgstr "폴더에 만들기(_F):"
 
-#: gtk/gtkfilechooserdefault.c:6390
+#: gtk/gtkfilechooserdefault.c:6397
 #, c-format
 msgid "Cannot change to folder because it is not local"
 msgstr "로컬 폴더가 아니므로 폴더로 이동할 수 없습니다"
 
-#: gtk/gtkfilechooserdefault.c:6963 gtk/gtkfilechooserdefault.c:6984
+#: gtk/gtkfilechooserdefault.c:6970 gtk/gtkfilechooserdefault.c:6991
 #, c-format
 msgid "Shortcut %s already exists"
 msgstr "%s 바로 가기가 이미 있습니다"
 
-#: gtk/gtkfilechooserdefault.c:7074
+#: gtk/gtkfilechooserdefault.c:7081
 #, c-format
 msgid "Shortcut %s does not exist"
 msgstr "%s 바로 가기가 없습니다"
 
-#: gtk/gtkfilechooserdefault.c:7329
+#: gtk/gtkfilechooserdefault.c:7336
 #, c-format
 msgid "A file named \"%s\" already exists.  Do you want to replace it?"
 msgstr "이름이 \"%s\"인 파일이 이미 있습니다.  이 파일을 바꾸시겠습니까?"
 
-#: gtk/gtkfilechooserdefault.c:7332
+#: gtk/gtkfilechooserdefault.c:7339
 #, c-format
 msgid ""
 "The file already exists in \"%s\".  Replacing it will overwrite its contents."
 msgstr ""
 "\"%s\" 안에 파일이 이미 있습니다.  파일을 바꾸면 그 내용을 덮어 쓰게 됩니다."
 
-#: gtk/gtkfilechooserdefault.c:7337
+#: gtk/gtkfilechooserdefault.c:7344
 msgid "_Replace"
 msgstr "바꾸기(_R)"
 
-#: gtk/gtkfilechooserdefault.c:8033
+#: gtk/gtkfilechooserdefault.c:8040
 #, c-format
 msgid "Could not mount %s"
 msgstr "%s을(를) 마운트할 수 없습니다"
 
-#: gtk/gtkfilechooserdefault.c:8427
+#: gtk/gtkfilechooserdefault.c:8434
 msgid "Type name of new folder"
 msgstr "새 폴더의 이름을 넣으십시오"
 
-#: gtk/gtkfilechooserdefault.c:8472
+#: gtk/gtkfilechooserdefault.c:8479
 #, c-format
 msgid "%d byte"
 msgid_plural "%d bytes"
 msgstr[0] "%d바이트"
 
-#: gtk/gtkfilechooserdefault.c:8474
+#: gtk/gtkfilechooserdefault.c:8481
 #, c-format
 msgid "%.1f KB"
 msgstr "%.1f KB"
 
-#: gtk/gtkfilechooserdefault.c:8476
+#: gtk/gtkfilechooserdefault.c:8483
 #, c-format
 msgid "%.1f MB"
 msgstr "%.1f MB"
 
-#: gtk/gtkfilechooserdefault.c:8478
+#: gtk/gtkfilechooserdefault.c:8485
 #, c-format
 msgid "%.1f GB"
 msgstr "%.1f GB"
 
-#: gtk/gtkfilechooserdefault.c:8526 gtk/gtkfilechooserdefault.c:8550
+#: gtk/gtkfilechooserdefault.c:8533 gtk/gtkfilechooserdefault.c:8557
 msgid "Unknown"
 msgstr "모름"
 
-#: gtk/gtkfilechooserdefault.c:8537
+#: gtk/gtkfilechooserdefault.c:8544
 msgid "Today"
 msgstr "오늘"
 
-#: gtk/gtkfilechooserdefault.c:8539
+#: gtk/gtkfilechooserdefault.c:8546
 msgid "Yesterday"
 msgstr "어제"
 
-#: gtk/gtkfilechoosersettings.c:123
+#: gtk/gtkfilechoosersettings.c:126
 #, c-format
 msgid "Line %d, column %d: missing attribute \"%s\""
 msgstr "%d줄, %d열: \"%s\" 속성이 없습니다"
 
-#: gtk/gtkfilechoosersettings.c:140
+#: gtk/gtkfilechoosersettings.c:143
 #, c-format
 msgid "Line %d, column %d: unexpected element \"%s\""
 msgstr "%d줄, %d열: 예상치 못한 \"%s\" 엘리먼트가 나왔습니다"
 
-#: gtk/gtkfilechoosersettings.c:158
+#: gtk/gtkfilechoosersettings.c:161
 #, c-format
 msgid ""
 "Line %d, column %d: expected end of element \"%s\", but got element for \"%s"
@@ -1728,7 +1728,7 @@ msgstr ""
 "%d줄, %d열: \"%s\" 엘리먼트가 끝나야 하는데, \"%s\"에 대한 엘리먼트가 나왔습"
 "니다"
 
-#: gtk/gtkfilechoosersettings.c:202
+#: gtk/gtkfilechoosersettings.c:205
 #, c-format
 msgid ""
 "Line %d, column %d: expected \"%s\" at the toplevel, but found \"%s\" instead"
@@ -1736,14 +1736,15 @@ msgstr ""
 "%d줄, %d열: 맨 위에 \"%s\" 엘리먼트가 와야 하는데, \"%s\" 엘리먼트가 나왔습니"
 "다"
 
-#: gtk/gtkfilechoosersettings.c:238 gtk/gtkfilechoosersettings.c:266
+#: gtk/gtkfilechoosersettings.c:241 gtk/gtkfilechoosersettings.c:269
+#: gtk/gtkfilechoosersettings.c:297
 #, c-format
 msgid "Line %d, column %d: expected \"%s\" or \"%s\", but found \"%s\" instead"
 msgstr ""
 "%d줄, %d열: \"%s\" 혹은 \"%s\" 엘리먼트가 와야 하는데, \"%s\" 엘리먼트가 나왔"
 "습니다"
 
-#: gtk/gtkfilechoosersettings.c:516
+#: gtk/gtkfilechoosersettings.c:573
 #, c-format
 msgid "Could not create directory: %s"
 msgstr "디렉토리를 만들 수 없습니다: %s"
@@ -1901,7 +1902,7 @@ msgid "(Empty)"
 msgstr "(빈 파일)"
 
 #: gtk/gtkfilesystemunix.c:975 gtk/gtkfilesystemunix.c:1223
-#: gtk/gtkfilesystemunix.c:2211 gtk/gtkfilesystemunix.c:2251
+#: gtk/gtkfilesystemunix.c:2216 gtk/gtkfilesystemunix.c:2256
 #: gtk/gtkfilesystemwin32.c:2396 gtk/gtkfilesystemwin32.c:2446
 #, c-format
 msgid "Error getting information for '%s': %s"
@@ -1925,17 +1926,17 @@ msgstr ""
 "\"%s\"(이)라는 이름은 쓸 수 없습니다. 이름에 \"%s\" 문자가 들어 있습니다. 다"
 "른 이름을 사용하십시오."
 
-#: gtk/gtkfilesystemunix.c:1893 gtk/gtkfilesystemwin32.c:2076
+#: gtk/gtkfilesystemunix.c:1898 gtk/gtkfilesystemwin32.c:2076
 #, c-format
 msgid "Bookmark saving failed: %s"
 msgstr "책갈피 저장이 실패했습니다: %s"
 
-#: gtk/gtkfilesystemunix.c:1948 gtk/gtkfilesystemwin32.c:2131
+#: gtk/gtkfilesystemunix.c:1953 gtk/gtkfilesystemwin32.c:2131
 #, c-format
 msgid "'%s' already exists in the bookmarks list"
 msgstr "책갈피 목록에 '%s'이(가) 이미 있습니다"
 
-#: gtk/gtkfilesystemunix.c:2020 gtk/gtkfilesystemwin32.c:2203
+#: gtk/gtkfilesystemunix.c:2025 gtk/gtkfilesystemwin32.c:2203
 #, c-format
 msgid "'%s' does not exist in the bookmarks list"
 msgstr "책갈피 목록에 '%s'이(가) 없습니다"
@@ -2030,7 +2031,7 @@ msgstr ""
 msgid "Icon '%s' not present in theme"
 msgstr "테마에 '%s' 아이콘이 없습니다"
 
-#: gtk/gtkimmodule.c:407
+#: gtk/gtkimmodule.c:421
 msgid "Default"
 msgstr "기본"
 
@@ -2352,7 +2353,7 @@ msgstr "미리 보기 실행 오류"
 msgid "Error printing"
 msgstr "인쇄 오류"
 
-#: gtk/gtkprintoperation-unix.c:375 gtk/gtkprintoperation-win32.c:1391
+#: gtk/gtkprintoperation-unix.c:375 gtk/gtkprintoperation-win32.c:1394
 msgid "Application"
 msgstr "프로그램"
 
@@ -2376,33 +2377,33 @@ msgstr "사용자 조작 필요"
 msgid "Custom size"
 msgstr "사용자 지정 크기"
 
-#: gtk/gtkprintoperation-win32.c:1481 gtk/gtkprintoperation-win32.c:1504
-#: gtk/gtkprintoperation-win32.c:1552
+#: gtk/gtkprintoperation-win32.c:1485 gtk/gtkprintoperation-win32.c:1508
+#: gtk/gtkprintoperation-win32.c:1556
 #, c-format
 msgid "Not enough free memory"
 msgstr "메모리가 부족합니다"
 
-#: gtk/gtkprintoperation-win32.c:1557
+#: gtk/gtkprintoperation-win32.c:1561
 #, c-format
 msgid "Invalid argument to PrintDlgEx"
 msgstr "PrintDlgEx에 인자가 잘못되었습니다"
 
-#: gtk/gtkprintoperation-win32.c:1562
+#: gtk/gtkprintoperation-win32.c:1566
 #, c-format
 msgid "Invalid pointer to PrintDlgEx"
 msgstr "PrintDlgEx에 포인터가 잘못되었습니다"
 
-#: gtk/gtkprintoperation-win32.c:1567
+#: gtk/gtkprintoperation-win32.c:1571
 #, c-format
 msgid "Invalid handle to PrintDlgEx"
 msgstr "PrintDlgEx에 핸들이 잘못되었습니다"
 
-#: gtk/gtkprintoperation-win32.c:1572
+#: gtk/gtkprintoperation-win32.c:1576
 #, c-format
 msgid "Unspecified error"
 msgstr "알 수 없는 오류가 있습니다"
 
-#: gtk/gtkprintoperation-win32.c:1623
+#: gtk/gtkprintoperation-win32.c:1627
 #, c-format
 msgid "Error from StartDoc"
 msgstr "StartDoc에 오류가 있습니다"
@@ -2625,26 +2626,26 @@ msgstr "목록 비우기(_C)"
 msgid "Show _Private Resources"
 msgstr "개인 리소스 표시(_P)"
 
-#: gtk/gtkrecentchoosermenu.c:456 gtk/gtkrecentchoosermenu.c:512
+#: gtk/gtkrecentchoosermenu.c:463 gtk/gtkrecentchoosermenu.c:519
 #, c-format
 msgid "No recently used resource found with URI `%s'"
 msgstr "`%s' URI에 최근에 사용한 리소스가 없습니다"
 
-#: gtk/gtkrecentchoosermenu.c:536 gtk/gtkrecentchoosermenu.c:544
+#: gtk/gtkrecentchoosermenu.c:543 gtk/gtkrecentchoosermenu.c:551
 #, c-format
 msgid "This function is not implemented for widgets of class '%s'"
 msgstr "이 기능은 '%s' 클래스의 위젯에서 구현되지 않았습니다"
 
-#: gtk/gtkrecentchoosermenu.c:884
+#: gtk/gtkrecentchoosermenu.c:891
 #, c-format
 msgid "Open '%s'"
 msgstr "'%s' 열기"
 
-#: gtk/gtkrecentchoosermenu.c:916
+#: gtk/gtkrecentchoosermenu.c:923
 msgid "Unknown item"
 msgstr "알 수 없는 항목"
 
-#: gtk/gtkrecentchoosermenu.c:1017
+#: gtk/gtkrecentchoosermenu.c:1033
 msgid "No items found"
 msgstr "항목이 없습니다"
 
@@ -3098,7 +3099,7 @@ msgstr "갑작스런 시작 태그 '%s' (%d번째 줄 문자 %d)"
 msgid "Unexpected character data on line %d char %d"
 msgstr "갑작스런 문자 데이터 (%d번째 줄 문자 %d)"
 
-#: gtk/gtkuimanager.c:2234
+#: gtk/gtkuimanager.c:2240
 msgid "Empty"
 msgstr "비었음"
 

@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-properties.gtk-2-10\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-01-05 14:58-0500\n"
+"POT-Creation-Date: 2007-01-16 23:43-0500\n"
 "PO-Revision-Date: 2006-09-26 01:32+0200\n"
 "Last-Translator: Vladimer Sichinava <vsichi@gnome.org>\n"
 "Language-Team: Georgian <www.gia.ge>\n"
@@ -3982,11 +3982,11 @@ msgstr "სორტირების რიგი ელემენტებ�
 msgid "The current filter for selecting which resources are displayed"
 msgstr "მიმდინარე ფილტრი სასურველი რესურსების საჩვენებლად ასარჩევად"
 
-#: gtk/gtkrecentchoosermenu.c:210
+#: gtk/gtkrecentchoosermenu.c:215
 msgid "Show Numbers"
 msgstr "ნომრების ჩვენება"
 
-#: gtk/gtkrecentchoosermenu.c:211
+#: gtk/gtkrecentchoosermenu.c:216
 msgid "Whether the items should be displayed with a number"
 msgstr "გადაინომროს თუ არა ნაჩვენები ელემენტები"
 

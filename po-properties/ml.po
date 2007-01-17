@@ -32,7 +32,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ml\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-01-05 14:58-0500\n"
+"POT-Creation-Date: 2007-01-16 23:43-0500\n"
 "PO-Revision-Date: 2006-09-03 17:17+0530\n"
 "Last-Translator: Ani Peter <apeter@redhat.com>\n"
 "Language-Team: Malayalam\n"
@@ -3941,11 +3941,11 @@ msgstr "പ്രദര്‍ശിപ്പിക്കുന്ന വസ്�
 msgid "The current filter for selecting which resources are displayed"
 msgstr ""
 
-#: gtk/gtkrecentchoosermenu.c:210
+#: gtk/gtkrecentchoosermenu.c:215
 msgid "Show Numbers"
 msgstr "അക്കങ്ങള്‍ പ്രദര്‍ശിപ്പിക്കുക"
 
-#: gtk/gtkrecentchoosermenu.c:211
+#: gtk/gtkrecentchoosermenu.c:216
 msgid "Whether the items should be displayed with a number"
 msgstr "വസ്തുക്കള്‍ അക്കങ്ങളോടൊപ്പം പ്രദര്‍ശിപ്പിക്കണമോ എന്ന്"
 

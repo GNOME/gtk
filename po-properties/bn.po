@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-properties\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-01-05 14:58-0500\n"
+"POT-Creation-Date: 2007-01-16 23:43-0500\n"
 "PO-Revision-Date: 2006-08-28 01:01+0600\n"
 "Last-Translator: Mahay Alam Khan (মাহে আলম) <makl10n@yahoo.com>\n"
 "Language-Team: Bangla <gnome-translation@BengaLinux.Org>\n"
@@ -4105,12 +4105,12 @@ msgstr ""
 "যে সকল ফাইলের নাম দেখানো হবে, তাদের বাছাই করার কাজে বর্তমানে যে ফিল্টারটি "
 "ব্যবহৃত হচ্ছে"
 
-#: gtk/gtkrecentchoosermenu.c:210
+#: gtk/gtkrecentchoosermenu.c:215
 #, fuzzy
 msgid "Show Numbers"
 msgstr "সপ্তাহের নম্বর প্রদর্শন করো"
 
-#: gtk/gtkrecentchoosermenu.c:211
+#: gtk/gtkrecentchoosermenu.c:216
 #, fuzzy
 msgid "Whether the items should be displayed with a number"
 msgstr "টিয়ারঅফ (Tearoff) মেনু আইটেমকে মেনুতে যোগ করা হবে কিনা"

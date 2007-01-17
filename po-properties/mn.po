@@ -13,7 +13,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-properties.HEAD\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-01-05 14:58-0500\n"
+"POT-Creation-Date: 2007-01-16 23:43-0500\n"
 "PO-Revision-Date: 2004-03-09 12:13+0100\n"
 "Last-Translator: Sanlig Badral <badral@openmn.org>\n"
 "Language-Team: Mongolian <openmn-core@lists.sf.net>\n"
@@ -4559,13 +4559,13 @@ msgstr "Хэрэв түлхүүр товч нь дарагдсан байдла�
 msgid "The current filter for selecting which resources are displayed"
 msgstr "Ямар файлууд харуулахыг сонгох идэвхитэй шүүлтүүр"
 
-#: gtk/gtkrecentchoosermenu.c:210
+#: gtk/gtkrecentchoosermenu.c:215
 #, fuzzy
 msgid "Show Numbers"
 msgstr "Долоо хоногийн тоо харуулах"
 
 # gtk/gtkcheckmenuitem.c:116
-#: gtk/gtkrecentchoosermenu.c:211
+#: gtk/gtkrecentchoosermenu.c:216
 #, fuzzy
 msgid "Whether the items should be displayed with a number"
 msgstr "Тасалбар цэсний элемент цэс рүү нэмэгдэх эсэх"
