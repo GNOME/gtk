@@ -5,8 +5,14 @@
 ZIP=/tmp/gtk+-@GTK_VERSION@.zip
 DEVZIP=/tmp/gtk+-dev-@GTK_VERSION@.zip
 cd @prefix@
-rm $ZIP
 
+mkdir -p share/doc/gtk+-@GTK_VERSION@
+cp -p @abs_srcdir@/COPYING share/doc/gtk+-@GTK_VERSION@
+
+mkdir -p share/doc/gtk+-dev-@GTK_VERSION@
+cp -p @abs_srcdir@/COPYING share/doc/gtk+-dev-@GTK_VERSION@
+
+rm $ZIP
 zip $ZIP -@ <<EOF
 COPYING.LIB-2
 etc/gtk-2.0/gdk-pixbuf.loaders
@@ -28,6 +34,8 @@ zip $ZIP share/themes/MS-Windows/gtk-2.0/gtkrc
 
 zip $ZIP lib/locale/*/LC_MESSAGES/gtk20.mo
 zip $ZIP lib/locale/*/LC_MESSAGES/gtk20-properties.mo
+
+zip $ZIP share/doc/gtk+-@GTK_VERSION@
 
 rm $DEVZIP
 zip -r $DEVZIP -@ <<EOF
@@ -54,3 +62,4 @@ share/gtk-doc/html/gdk
 share/gtk-doc/html/gtk
 EOF
 
+zip $DEVZIP share/doc/gtk+-dev-@GTK_VERSION@
