@@ -982,7 +982,7 @@ gtk_drag_highlight_expose (GtkWidget      *widget,
       
       gtk_paint_shadow (widget->style, widget->window,
 		        GTK_STATE_NORMAL, GTK_SHADOW_OUT,
-		        NULL, widget, "dnd",
+		        &event->area, widget, "dnd",
 			x, y, width, height);
 
       cr = gdk_cairo_create (widget->window);

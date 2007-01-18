@@ -155,14 +155,14 @@ gtk_check_button_paint (GtkWidget    *widget,
 	  
 	  if (interior_focus && child && GTK_WIDGET_VISIBLE (child))
 	    gtk_paint_focus (widget->style, widget->window, GTK_WIDGET_STATE (widget),
-			     NULL, widget, "checkbutton",
+			     area, widget, "checkbutton",
 			     child->allocation.x - focus_width - focus_pad,
 			     child->allocation.y - focus_width - focus_pad,
 			     child->allocation.width + 2 * (focus_width + focus_pad),
 			     child->allocation.height + 2 * (focus_width + focus_pad));
 	  else
 	    gtk_paint_focus (widget->style, widget->window, GTK_WIDGET_STATE (widget), 
-			     NULL, widget, "checkbutton",
+			     area, widget, "checkbutton",
 			     border_width + widget->allocation.x,
 			     border_width + widget->allocation.y,
 			     widget->allocation.width - 2 * border_width,

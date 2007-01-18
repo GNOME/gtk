@@ -656,7 +656,7 @@ gtk_viewport_paint (GtkWidget    *widget,
 
       gtk_paint_shadow (widget->style, widget->window,
 			GTK_STATE_NORMAL, viewport->shadow_type,
-			NULL, widget, "viewport",
+			area, widget, "viewport",
 			0, 0, -1, -1);
     }
 }

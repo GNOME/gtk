@@ -159,7 +159,8 @@ static void   gtk_entry_size_request         (GtkWidget        *widget,
 					      GtkRequisition   *requisition);
 static void   gtk_entry_size_allocate        (GtkWidget        *widget,
 					      GtkAllocation    *allocation);
-static void   gtk_entry_draw_frame           (GtkWidget        *widget);
+static void   gtk_entry_draw_frame           (GtkWidget        *widget,
+                                              GdkRectangle     *area);
 static gint   gtk_entry_expose               (GtkWidget        *widget,
 					      GdkEventExpose   *event);
 static gint   gtk_entry_button_press         (GtkWidget        *widget,
@@ -1505,7 +1506,8 @@ gtk_entry_size_allocate (GtkWidget     *widget,
 }
 
 static void
-gtk_entry_draw_frame (GtkWidget *widget)
+gtk_entry_draw_frame (GtkWidget    *widget,
+                      GdkRectangle *area)
 {
   gint x = 0, y = 0;
   gint width, height;
@@ -1529,7 +1531,7 @@ gtk_entry_draw_frame (GtkWidget *widget)
 
   gtk_paint_shadow (widget->style, widget->window,
 		    GTK_STATE_NORMAL, GTK_SHADOW_IN,
-		    NULL, widget, "entry",
+		    area, widget, "entry",
 		    x, y, width, height);
 
   if (GTK_WIDGET_HAS_FOCUS (widget) && !interior_focus)
@@ -1540,7 +1542,7 @@ gtk_entry_draw_frame (GtkWidget *widget)
       height += 2 * focus_width;
       
       gtk_paint_focus (widget->style, widget->window, GTK_WIDGET_STATE (widget), 
-		       NULL, widget, "entry",
+		       area, widget, "entry",
 		       0, 0, width, height);
     }
 }
@@ -1552,7 +1554,7 @@ gtk_entry_expose (GtkWidget      *widget,
   GtkEntry *entry = GTK_ENTRY (widget);
 
   if (widget->window == event->window)
-    gtk_entry_draw_frame (widget);
+    gtk_entry_draw_frame (widget, &event->area);
   else if (entry->text_area == event->window)
     {
       gint area_width, area_height;
@@ -1561,7 +1563,7 @@ gtk_entry_expose (GtkWidget      *widget,
 
       gtk_paint_flat_box (widget->style, entry->text_area, 
 			  GTK_WIDGET_STATE(widget), GTK_SHADOW_NONE,
-			  NULL, widget, "entry_bg", 
+			  &event->area, widget, "entry_bg",
 			  0, 0, area_width, area_height);
       
       if ((entry->visible || entry->invisible_char != 0) &&
