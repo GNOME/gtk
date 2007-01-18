@@ -16,16 +16,16 @@ INCLUDES = \
 LDADDS = $(GDK_DEP_LIBS)
 
 if HAVE_WINTAB
-libwntab32x_a = .libs/libwntab32x.a
+libwntab32x_a = libwntab32x.a
 
-.libs/libwntab32x.a: $(WINTAB_LIB)
+libwntab32x.a: $(WINTAB_LIB)
 	cp $< $@
 endif
 
 if HAVE_IE55
-libie55uuid_a = .libs/libie55uuid.a
+libie55uuid_a = libie55uuid.a
 
-.libs/libie55uuid.a: $(IE55_UUID_LIB)
+libie55uuid.a: $(IE55_UUID_LIB)
 	cp $< $@
 endif
 
@@ -37,9 +37,7 @@ SUBDIRS=rc
 
 EXTRA_DIST = \
 	bdfcursor.c \
-	makefile.msc	\
-	libie55uuid.la	\
-	libwntab32x.la
+	makefile.msc
 
 libgdk_win32_la_SOURCES = \
 	xcursors.h \

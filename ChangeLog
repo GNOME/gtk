@@ -1,3 +1,14 @@
+2007-01-18  Tor Lillqvist  <tml@novell.com>
+
+	* gdk-pixbuf/Makefile.am
+	* gdk/Makefile.am
+	* gdk/win32/Makefile.am
+	* gtk/Makefile.am: Fixes for building outside srcdir on
+	Win32. (#336819, #340113) Drop distributing the handmade .la
+	libtool wrappers for the wntab32x and ie55uid libraries. It's too
+	much trouble making them work when building outside srcdir. Just
+	link to these libraries direcly using -Wl,libfoo.a.
+
 2007-01-17  Matthias Clasen <mclasen@redhat.com>
 
 	* gtk/Makefile.am: Fix a typo.  (#397330, Yongsu Park)
