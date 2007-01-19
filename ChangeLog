@@ -9,9 +9,9 @@
 	* acconfig.h
 	* config.h.win32.in: Drop HAVE_WINTAB.
 
-	* gdk/win32/gdkevents-win32.c 
-	* gdk/win32/gdkinput.c 
-	* gdk/win32/gdkinput-win32.h 	
+	* gdk/win32/gdkevents-win32.c
+	* gdk/win32/gdkinput.c
+	* gdk/win32/gdkinput-win32.h
 	* gdk/win32/gdkinput-win32.c
 	* gdk/win32/gdkmain-win32.c: Make HAVE_WINTAB ifdef blocks
 	unconditional.
