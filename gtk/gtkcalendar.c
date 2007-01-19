@@ -2758,7 +2758,7 @@ move_focus (GtkCalendar *calendar,
 	    gint         direction)
 {
   GtkTextDirection text_dir = gtk_widget_get_direction (GTK_WIDGET (calendar));
-
+ 
   if ((text_dir == GTK_TEXT_DIR_LTR && direction == -1) ||
       (text_dir == GTK_TEXT_DIR_RTL && direction == 1)) 
     {
@@ -2769,6 +2769,11 @@ move_focus (GtkCalendar *calendar,
 	  calendar->focus_col = 6;
 	  calendar->focus_row--;
 	}
+
+      if (calendar->focus_col < 0)
+        calendar->focus_col = 6;
+      if (calendar->focus_row < 0)
+        calendar->focus_row = 5;
     }
   else 
     {
@@ -2779,6 +2784,11 @@ move_focus (GtkCalendar *calendar,
 	  calendar->focus_col = 0;
 	  calendar->focus_row++;
 	}
+
+      if (calendar->focus_col < 0)
+        calendar->focus_col = 0;
+      if (calendar->focus_row < 0)
+        calendar->focus_row = 0;
     }
 }
 
@@ -2798,6 +2808,7 @@ gtk_calendar_key_press (GtkWidget   *widget,
   old_focus_row = calendar->focus_row;
   old_focus_col = calendar->focus_col;
 
+  g_print ("focus %d %d\n", old_focus_row, old_focus_col));
   switch (event->keyval)
     {
     case GDK_KP_Left:
@@ -2835,6 +2846,10 @@ gtk_calendar_key_press (GtkWidget   *widget,
 	{
 	  if (calendar->focus_row > 0)
 	    calendar->focus_row--;
+          if (calendar->focus_row < 0)
+            calendar->focus_row = 5;
+          if (calendar->focus_col < 0)
+            calendar->focus_col = 6;
 	  calendar_invalidate_day (calendar, old_focus_row, old_focus_col);
 	  calendar_invalidate_day (calendar, calendar->focus_row,
 				   calendar->focus_col);
@@ -2849,6 +2864,8 @@ gtk_calendar_key_press (GtkWidget   *widget,
 	{
 	  if (calendar->focus_row < 5)
 	    calendar->focus_row++;
+          if (calendar->focus_col < 0)
+            calendar->focus_col = 0;
 	  calendar_invalidate_day (calendar, old_focus_row, old_focus_col);
 	  calendar_invalidate_day (calendar, calendar->focus_row,
 				   calendar->focus_col);

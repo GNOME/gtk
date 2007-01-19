@@ -1,3 +1,10 @@
+2007-01-18  Matthias Clasen  <mclasen@redhat.com>
+
+	Merge from trunk:
+	
+	* gtk/gtkcalendar.c: Fix problems with the initial
+	focus in GtkCalendar.  (#397783, Vincent Untz)
+
 2007-01-19  Robert Ögren  <gtk@roboros.com>
 
 	Fix for bug #143460 - missed tablet clicks on Windows
