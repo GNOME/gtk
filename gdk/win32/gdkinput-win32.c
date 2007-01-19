@@ -40,7 +40,8 @@
 #ifdef HAVE_WINTAB
 
 #define PACKETDATA (PK_CONTEXT | PK_CURSOR | PK_BUTTONS | PK_X | PK_Y  | PK_NORMAL_PRESSURE | PK_ORIENTATION)
-#define PACKETMODE (PK_BUTTONS)
+/* We want everything in absolute mode */
+#define PACKETMODE (0)
 #include <pktdef.h>
 
 #define DEBUG_WINTAB 1		/* Verbose debug messages enabled */
@@ -323,7 +324,7 @@ _gdk_input_wintab_init_check (void)
 	  /* According to the specs, if the function fails we must try again */
 	  /* with a smaller queue size */
 	  GDK_NOTE (INPUT, g_print("Attempting to increase queue size\n"));
-	  for (i = 128; i >= 1; i >>= 1)
+	  for (i = 32; i >= 1; i >>= 1)
 	    {
 	      if (WTQueueSizeSet(*hctx, i))
 		{
@@ -712,6 +713,11 @@ _gdk_input_other_event (GdkEvent  *event,
   PACKET packet;
   gint k;
   gint x, y;
+  guint translated_buttons, button_diff, button_mask;
+  /* Translation from tablet button state to GDK button state for
+   * buttons 1-3 - swap button 2 and 3.
+   */
+  static guint button_map[8] = {0, 1, 4, 5, 2, 3, 6, 7};
 
   if (event->any.window != wintab_window)
     {
@@ -777,23 +783,41 @@ _gdk_input_other_event (GdkEvent  *event,
 
       g_assert (k == gdkdev->info.num_axes);
 
-      if (HIWORD (packet.pkButtons) != TBN_NONE)
-	{
-	  /* Gdk buttons are numbered 1.. */
-	  event->button.button = 1 + LOWORD (packet.pkButtons);
+      translated_buttons = button_map[packet.pkButtons & 0x07] | (packet.pkButtons & ~0x07);
 
-	  if (HIWORD (packet.pkButtons) == TBN_UP)
+      if (translated_buttons != gdkdev->button_state)
+	{
+	  /* At least one button has changed state so produce a button event
+	   * If more than one button has changed state (unlikely),
+	   * just care about the first and act on the next the next time
+	   * we get a packet
+	   */
+	  button_diff = translated_buttons ^ gdkdev->button_state;
+	  
+	  /* Gdk buttons are numbered 1.. */
+	  event->button.button = 1;
+
+	  for (button_mask = 1; button_mask != 0x80000000;
+	       button_mask <<= 1, event->button.button++)
+	    {
+	      if (button_diff & button_mask)
+	        {
+		  /* Found a button that has changed state */
+		  break;
+		}
+	    }
+
+	  if (!(translated_buttons & button_mask))
 	    {
 	      event->any.type = GDK_BUTTON_RELEASE;
 	      masktest = GDK_BUTTON_RELEASE_MASK;
-	      gdkdev->button_state &= ~(1 << LOWORD (packet.pkButtons));
 	    }
 	  else
 	    {
 	      event->any.type = GDK_BUTTON_PRESS;
 	      masktest = GDK_BUTTON_PRESS_MASK;
-	      gdkdev->button_state |= 1 << LOWORD (packet.pkButtons);
 	    }
+	  gdkdev->button_state ^= button_mask;
 	}
       else
 	{
@@ -932,44 +956,6 @@ _gdk_input_other_event (GdkEvent  *event,
 	  GDK_NOTE (EVENTS_OR_INPUT,
 		    g_print ("WINTAB motion: %g,%g\n",
 			     event->motion.x, event->motion.y));
-
-	  /* Check for missing release or press events for the normal
-	   * pressure button. At least on my ArtPadII I sometimes miss a
-	   * release event?
-	   */
-	  if ((gdkdev->pktdata & PK_NORMAL_PRESSURE
-	       && (event->motion.state & GDK_BUTTON1_MASK)
-	       && packet.pkNormalPressure <= MAX (0, (gint) gdkdev->npbtnmarks[0] - 2))
-	      || (gdkdev->pktdata & PK_NORMAL_PRESSURE
-		  && !(event->motion.state & GDK_BUTTON1_MASK)
-		  && packet.pkNormalPressure > gdkdev->npbtnmarks[1] + 2))
-	    {
-	      GdkEvent *event2 = gdk_event_copy (event);
-	      if (event->motion.state & GDK_BUTTON1_MASK)
-		{
-		  event2->button.type = GDK_BUTTON_RELEASE;
-		  gdkdev->button_state &= ~1;
-		}
-	      else
-		{
-		  event2->button.type = GDK_BUTTON_PRESS;
-		  gdkdev->button_state |= 1;
-		}
-	      event2->button.state = ((gdkdev->button_state << 8)
-				      & (GDK_BUTTON1_MASK | GDK_BUTTON2_MASK
-					 | GDK_BUTTON3_MASK | GDK_BUTTON4_MASK
-					 | GDK_BUTTON5_MASK))
-				     | key_state;
-	      event2->button.button = 1;
-	      GDK_NOTE (EVENTS_OR_INPUT,
-			g_print ("WINTAB synthesized button %s: %d %g,%gg\n",
-				 (event2->button.type == GDK_BUTTON_PRESS ?
-				  "press" : "release"),
-				 event2->button.button,
-				 event2->button.x,
-				 event2->button.y));
-	      _gdk_event_queue_append (display, event2);
-	    }
 	}
       return TRUE;
 
@@ -1098,6 +1084,7 @@ _gdk_input_grab_pointer (GdkWindow    *window,
   else
     { 
       x_grab_window = NULL;
+#if 0
       tmp_list = _gdk_input_devices;
       while (tmp_list)
 	{
@@ -1114,6 +1101,7 @@ _gdk_input_grab_pointer (GdkWindow    *window,
 	  
 	  tmp_list = tmp_list->next;
 	}
+#endif
     }
 #endif
 
