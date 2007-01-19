@@ -2769,7 +2769,6 @@ gtk_calendar_key_press (GtkWidget   *widget,
   old_focus_row = calendar->focus_row;
   old_focus_col = calendar->focus_col;
 
-  g_print ("focus %d %d\n", old_focus_row, old_focus_col));
   switch (event->keyval)
     {
     case GDK_KP_Left:
