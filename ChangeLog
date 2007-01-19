@@ -1,3 +1,18 @@
+2007-01-19  Robert Ögren  <gtk@roboros.com>
+
+	Fix for bug #143460 - missed tablet clicks on Windows
+
+	* gdk/win32/gdkinput-win32.c (_gdk_input_wintab_init_check):
+	Request absolute reporting of tablet button state, and cut down
+	the packet queue size a bit.
+	(_gdk_input_other_event): Change button state handling
+	accordingly. Also drop the no longer necessary code that detects
+	missed clicks/releases for button 1. The switch to absolute button
+	state should prevent missed events for all buttons. Additionally,
+	swap button 2 and 3.
+	(_gdk_input_grab_pointer): Don't reset button_state, that will only
+	cause a new press event as soon as the next tablet packet arrives.
+
 2007-01-19  Tor Lillqvist  <tml@novell.com>
 
 	Build Wintab support always on Windows. Don't require the Wintab
