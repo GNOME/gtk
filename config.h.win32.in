@@ -40,7 +40,6 @@
 #endif /* _MSC_VER */
 /* #undef HAVE_XFREE_XINERAMA */
 /* #undef HAVE_XINERAMA */
-#define HAVE_WINTAB 1
 /* #undef HAVE_XCONVERTCASE */
 /* #undef HAVE_XFT */
 

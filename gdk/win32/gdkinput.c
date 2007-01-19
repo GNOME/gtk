@@ -37,16 +37,6 @@
 #include "gdkinput.h"
 #include "gdkprivate.h"
 
-/* When ther necessary stuff is in
- * gdkinput.h, gdkinternals.h and
- * gdkprivate.h, these includes shouldn't be here.
- */
-
-#include <windows.h>
-#ifdef HAVE_WINTAB
-#include <wintab.h>
-#endif
-
 #include "gdkinput-win32.h"
 
 static GdkDeviceAxis gdk_input_core_axes[] = {
@@ -119,18 +109,14 @@ gdk_device_get_type (void)
 GList *
 gdk_devices_list (void)
 {
-#ifdef HAVE_WINTAB
   _gdk_input_wintab_init_check ();
-#endif /* HAVE_WINTAB */
   return _gdk_input_devices;
 }
 
 GList *
 gdk_display_list_devices (GdkDisplay *dpy)
 {
-#ifdef HAVE_WINTAB
   _gdk_input_wintab_init_check ();
-#endif /* HAVE_WINTAB */
   return _gdk_input_devices;
 }
 
@@ -276,9 +262,8 @@ gdk_input_set_extension_events (GdkWindow *window, gint mask,
 
   if (mask != 0)
     {
-#ifdef HAVE_WINTAB
       _gdk_input_wintab_init_check ();
-#endif /* HAVE_WINTAB */
+
       iw = g_new(GdkInputWindow,1);
 
       iw->window = window;

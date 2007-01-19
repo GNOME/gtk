@@ -27,9 +27,8 @@
 #ifndef __GDK_INPUT_WIN32_H__
 #define __GDK_INPUT_WIN32_H__
 
-#ifdef HAVE_WINTAB
+#include <windows.h>
 #include <wintab.h>
-#endif
 
 typedef struct _GdkAxisInfo    GdkAxisInfo;
 typedef struct _GdkDevicePrivate GdkDevicePrivate;
@@ -85,7 +84,6 @@ struct _GdkDevicePrivate
 
   gint *last_axis_data;
   gint last_buttons;
-#ifdef HAVE_WINTAB
   /* WINTAB stuff: */
   HCTX hctx;
   /* Cursor number */
@@ -96,7 +94,6 @@ struct _GdkDevicePrivate
   UINT npbtnmarks[2];
   /* Azimuth and altitude axis */
   AXIS orientation_axes[2];
-#endif
 };
 
 struct _GdkInputWindow
@@ -166,9 +163,7 @@ gboolean         _gdk_device_get_history     (GdkDevice         *device,
 					      GdkTimeCoord    ***events,
 					      gint              *n_events);
 
-#ifdef HAVE_WINTAB
 void		_gdk_input_wintab_init_check (void);
 void		_gdk_input_set_tablet_active (void);
-#endif /* HAVE_WINTAB */
 
 #endif /* __GDK_INPUT_WIN32_H__ */

@@ -3442,7 +3442,6 @@ gdk_event_translate (MSG  *msg,
 	}
       break;
 
-#ifdef HAVE_WINTAB
     case WM_ACTIVATE:
       /* Bring any tablet contexts to the top of the overlap order when
        * one of our windows is activated.
@@ -3483,7 +3482,6 @@ gdk_event_translate (MSG  *msg,
       else
 	gdk_event_free (event);
       break;
-#endif
     }
 
 done:

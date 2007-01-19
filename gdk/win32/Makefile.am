@@ -15,15 +15,6 @@ INCLUDES = \
 
 LDADDS = $(GDK_DEP_LIBS)
 
-if HAVE_WINTAB
-libwntab32x_a = libwntab32x.a
-
-libwntab32x.a: $(WINTAB_LIB)
-	cp $< $@
-endif
-
-noinst_DATA = $(libwntab32x_a)
-
 noinst_LTLIBRARIES = libgdk-win32.la
 
 SUBDIRS=rc
@@ -63,7 +54,9 @@ libgdk_win32_la_SOURCES = \
 	gdkwin32.h \
 	gdkwin32id.c \
 	gdkwindow-win32.c \
-	gdkwindow-win32.h
+	gdkwindow-win32.h \
+	wintab.h \
+	pktdef.h
 
 libgdkinclude_HEADERS =		\
 	gdkwin32.h

@@ -1,3 +1,41 @@
+2007-01-19  Tor Lillqvist  <tml@novell.com>
+
+	Build Wintab support always on Windows. Don't require the Wintab
+	SDK.
+
+	* configure.in: Drop the --with-wintab option. Drop the
+	HAVE_WINTAB feature test macro and Automake variable.
+
+	* acconfig.h
+	* config.h.win32.in: Drop HAVE_WINTAB.
+
+	* gdk/win32/gdkevents-win32.c 
+	* gdk/win32/gdkinput.c 
+	* gdk/win32/gdkinput-win32.h 	
+	* gdk/win32/gdkinput-win32.c
+	* gdk/win32/gdkmain-win32.c: Make HAVE_WINTAB ifdef blocks
+	unconditional.
+
+	* gdk/win32/gdkinput-win32.c (_gdk_input_wintab_init_check): Try
+	to load wintab32.dll dynamically here. If it is found look up the
+	handful Wintab functions we use.
+	(rest of file): Use these function pointers instead of calling the
+	functions from wntab32x.lib. The code in wntab32x.lib did the same
+	thing anyway: tried to load wintab32.dll, and looked up the
+	addresses of the actual functions from it.
+
+	* gdk/Makefile.am
+	* gdk/win32/Makefile.am: Drop the libwntab32x hacks.
+
+	* gdk/win32/wintab.h
+	* gdk/win32/pktdef.h: New files. Copied from the Wintab
+	SDK. Copyright blurb says: "The text and information contained in
+	this file may be freely used, copied, or distributed without
+	compensation or licensing restrictions."
+
+	* README.win32: Update a bit. Remove the text about the Wintab
+	SDK.
+
 2007-01-18  Tor Lillqvist  <tml@novell.com>
 
 	* gdk-pixbuf/Makefile.am

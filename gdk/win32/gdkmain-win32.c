@@ -79,12 +79,10 @@ _gdk_windowing_init (void)
 {
   gchar buf[10];
 
-#ifdef HAVE_WINTAB
   if (getenv ("GDK_IGNORE_WINTAB") != NULL)
     _gdk_input_ignore_wintab = TRUE;
   else if (getenv ("GDK_USE_WINTAB") != NULL)
     _gdk_input_ignore_wintab = FALSE;
-#endif
 
   if (gdk_synchronize)
     GdiSetBatchLimit (1);
@@ -862,11 +860,9 @@ _gdk_win32_message_to_string (UINT msg)
       CASE (WM_PENWINFIRST);
       CASE (WM_PENWINLAST);
       CASE (WM_APP);
-#ifdef HAVE_WINTAB
       CASE (WT_PACKET);
       CASE (WT_CSRCHANGE);
       CASE (WT_PROXIMITY);
-#endif
 #undef CASE
     default:
       if (msg >= WM_HANDHELDFIRST && msg <= WM_HANDHELDLAST)
