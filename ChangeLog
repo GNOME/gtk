@@ -1,3 +1,14 @@
+2007-01-18  Tor Lillqvist  <tml@novell.com>
+
+	* gdk-pixbuf/Makefile.am
+	* gdk/Makefile.am
+	* gdk/win32/Makefile.am
+	* gtk/Makefile.am: Fixes for building outside srcdir on
+	Win32. (#336819, #340113) Drop distributing the handmade .la
+	libtool wrapper for the wntab32x library. It's too much trouble
+	making it work when building outside srcdir. Just link to the
+	library direcly using -Wl,win32/libwntab32x.a.
+
 2007-01-18  Michael Natterer  <mitch@imendio.com>
 
 	* gtk/gtkcheckbutton.c

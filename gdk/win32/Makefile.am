@@ -16,9 +16,9 @@ INCLUDES = \
 LDADDS = $(GDK_DEP_LIBS)
 
 if HAVE_WINTAB
-libwntab32x_a = .libs/libwntab32x.a
+libwntab32x_a = libwntab32x.a
 
-.libs/libwntab32x.a: $(WINTAB_LIB)
+libwntab32x.a: $(WINTAB_LIB)
 	cp $< $@
 endif
 
@@ -30,8 +30,7 @@ SUBDIRS=rc
 
 EXTRA_DIST = \
 	bdfcursor.c \
-	makefile.msc	\
-	libwntab32x.la
+	makefile.msc
 
 libgdk_win32_la_SOURCES = \
 	xcursors.h \

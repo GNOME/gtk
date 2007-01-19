@@ -47,16 +47,16 @@ endif
 
 if OS_WIN32
 gtk_def = gtk.def
-gtk_win32_symbols = -export-symbols $(gtk_def)
+gtk_win32_symbols = -export-symbols $(srcdir)/gtk.def
 
 gtk_win32_res = gtk-win32-res.o
-gtk_win32_res_ldflag = -Wl,$(gtk_win32_res)
+gtk_win32_res_ldflag = -Wl,gtk-win32-res.o
 
 gtk-win32-res.o : gtk-win32.rc
 	$(WINDRES) gtk-win32.rc $@
 
 install-def-file: gtk.def
-	$(INSTALL) $(gtk_def) $(DESTDIR)$(libdir)/gtk-win32-2.0.def
+	$(INSTALL) $(srcdir)/gtk.def $(DESTDIR)$(libdir)/gtk-win32-2.0.def
 uninstall-def-file:
 	-rm $(DESTDIR)$(libdir)/gtk-win32-2.0.def
 else
@@ -68,7 +68,7 @@ if MS_LIB_AVAILABLE
 noinst_DATA = gtk-win32-$(GTK_API_VERSION).lib
 
 gtk-win32-$(GTK_API_VERSION).lib: libgtk-win32-$(GTK_API_VERSION).la gtk.def
-	lib -name:libgtk-win32-$(GTK_API_VERSION)-@LT_CURRENT_MINUS_AGE@.dll -def:gtk.def -out:$@
+	lib -name:libgtk-win32-$(GTK_API_VERSION)-@LT_CURRENT_MINUS_AGE@.dll -def:$(srcdir)/gtk.def -out:$@
 
 install-ms-lib:
 	$(INSTALL) gtk-win32-$(GTK_API_VERSION).lib $(DESTDIR)$(libdir)
