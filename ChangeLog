@@ -1,3 +1,9 @@
+2007-01-19  Kristian Rietveld  <kris@imendio.com>
+
+	* gtk/gtktreeview.c (gtk_tree_view_motion_bin_window),
+	(add_scroll_timeout), (gtk_tree_view_drag_motion): factor out
+	add_scroll_timeout().  (taken from maemo-gtk).
+
 2007-01-18  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtkcalendar.c: Fix problems with the initial

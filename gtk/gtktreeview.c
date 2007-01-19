@@ -462,8 +462,9 @@ static void gtk_tree_view_tree_window_to_tree_coords (GtkTreeView *tree_view,
 						      gint        *tx,
 						      gint        *ty);
 
-static gboolean scroll_row_timeout                       (gpointer     data);
-static void remove_scroll_timeout                    (GtkTreeView *tree_view);
+static gboolean scroll_row_timeout                   (gpointer     data);
+static void     add_scroll_timeout                   (GtkTreeView *tree_view);
+static void     remove_scroll_timeout                (GtkTreeView *tree_view);
 
 static guint tree_view_signals [LAST_SIGNAL] = { 0 };
 
@@ -3917,10 +3918,7 @@ gtk_tree_view_motion_bin_window (GtkWidget      *widget,
     {
       gtk_tree_view_update_rubber_band (tree_view);
 
-      if (tree_view->priv->scroll_timeout == 0)
-        {
-	  tree_view->priv->scroll_timeout = gdk_threads_add_timeout (150, scroll_row_timeout, tree_view);
-	}
+      add_scroll_timeout (tree_view);
     }
 
   /* only check for an initiated drag when a button is pressed */
@@ -6620,6 +6618,16 @@ drag_scan_timeout (gpointer data)
 #endif /* 0 */
 
 static void
+add_scroll_timeout (GtkTreeView *tree_view)
+{
+  if (tree_view->priv->scroll_timeout == 0)
+    {
+      tree_view->priv->scroll_timeout =
+	gdk_threads_add_timeout (150, scroll_row_timeout, tree_view);
+    }
+}
+
+static void
 remove_scroll_timeout (GtkTreeView *tree_view)
 {
   if (tree_view->priv->scroll_timeout != 0)
@@ -7157,10 +7165,9 @@ gtk_tree_view_drag_motion (GtkWidget        *widget,
           tree_view->priv->open_dest_timeout =
             gdk_threads_add_timeout (AUTO_EXPAND_TIMEOUT, open_row_timeout, tree_view);
         }
-      else if (tree_view->priv->scroll_timeout == 0)
+      else
         {
-	  tree_view->priv->scroll_timeout =
-	    gdk_threads_add_timeout (150, scroll_row_timeout, tree_view);
+	  add_scroll_timeout (tree_view);
 	}
 
       if (target == gdk_atom_intern_static_string ("GTK_TREE_MODEL_ROW"))
