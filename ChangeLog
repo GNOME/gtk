@@ -1,3 +1,8 @@
+2007-01-19  Michael Emmel  <mike.emmel@gmail.com>
+
+	* gdk/directfb/gdkevents-directfb.c: added fixes for window
+	crossing events frm Attilio Fiandrotti<attilio.fiandrotti@gmail.com>
+
 2007-01-19  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtkcalendar.c: Fix build breakage.
