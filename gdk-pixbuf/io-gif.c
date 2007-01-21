@@ -1526,7 +1526,7 @@ gdk_pixbuf__gif_image_stop_load (gpointer data, GError **error)
 	GifContext *context = (GifContext *) data;
         gboolean retval = TRUE;
         
-        if (context->state != GIF_DONE) {
+        if (context->state != GIF_DONE || context->animation->frames == NULL) {
                 g_set_error (error,
                              GDK_PIXBUF_ERROR,
                              GDK_PIXBUF_ERROR_CORRUPT_IMAGE,

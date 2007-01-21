@@ -1,3 +1,9 @@
+2007-01-21  Matthias Clasen  <mclasen@redhat.com>
+
+	* io-gif.c (gdk_pixbuf__gif_image_stop_load): Return an
+	error if we didn't successfully load a frame.  (#394190,
+	Felix Riemann)
+
 2007-01-17  Michael Natterer  <mitch@imendio.com>
 
 	Patch taken from maemo-gtk:
