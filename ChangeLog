@@ -1,3 +1,13 @@
+2007-01-22  Chris Wilson <chris@chris-wilson.co.uk>
+
+	Bug 399314 – Add G_GNUC_WARN_UNUSED_RESULT to gtk_style_attach
+
+	* gtk/gtkstyle.h:
+		Cause gcc to issue a warning if the style returned from
+		gtk_style_attach is not used. Failure to update
+		widget->style causes some very difficult to reproduce bugs,
+		eg Bug 353498 – crash in Terminal: changing icon theme.
+
 2007-01-19  Michael Emmel  <mike.emmel@gmail.com>
 
 	* gdk/directfb/gdkevents-directfb.c: added fixes for window

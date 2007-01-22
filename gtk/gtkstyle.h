@@ -427,7 +427,7 @@ GType     gtk_style_get_type                 (void) G_GNUC_CONST;
 GtkStyle* gtk_style_new			     (void);
 GtkStyle* gtk_style_copy		     (GtkStyle	   *style);
 GtkStyle* gtk_style_attach		     (GtkStyle	   *style,
-					      GdkWindow	   *window);
+					      GdkWindow	   *window) G_GNUC_WARN_UNUSED_RESULT;
 void	  gtk_style_detach		     (GtkStyle	   *style);
 
 #ifndef GTK_DISABLE_DEPRECATED
