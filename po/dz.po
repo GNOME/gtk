@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+.HEAD.dz\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-01-16 23:43-0500\n"
+"POT-Creation-Date: 2007-01-22 12:38-0500\n"
 "PO-Revision-Date: 2006-09-29 12:40+0530\n"
 "Last-Translator: Mindu Dorji\n"
 "Language-Team: DZONGKHA <pgeyleg@dit.gov.bt>\n"
@@ -463,7 +463,7 @@ msgstr "པི་སི་ཨེགསི་ གཟུགས་བརྙན་�
 msgid "Bits per channel of PNG image is invalid."
 msgstr "པི་ཨེན་ཇི་ གཟུགས་བརྙན་གྱི་ རྒྱུ་ལམ་རེ་རེའི་ བིཊིསི་ཚུ་ ནུས་མེད་ཨིན་པས།"
 
-#: gdk-pixbuf/io-png.c:136
+#: gdk-pixbuf/io-png.c:136 gdk-pixbuf/io-png.c:619
 #, c-format
 msgid "Transformed PNG has zero width or height."
 msgstr "བཟོ་བསྒྱུར་ཅན་གྱི་ པི་ཨེན་ཇི་ལུ་ རྒྱ་ཚད་དམ་མཐོ་ཚད་ ཀླད་ཀོར་འདུག"
@@ -488,12 +488,12 @@ msgstr "བཟོ་བསྒྱུར་ཅན་གྱི་ པི་ཨེ�
 msgid "Fatal error in PNG image file: %s"
 msgstr "པི་ཨེན་ཇི་ གཟུགས་བརྙན་ཡིག་སྣོད་ %s ནང་ ཚབས་ཆེན་གྱི་འཛོལ་བ།"
 
-#: gdk-pixbuf/io-png.c:301
+#: gdk-pixbuf/io-png.c:311
 #, c-format
 msgid "Insufficient memory to load PNG file"
 msgstr "པི་ཨེན་ཇི་ ཡིག་སྣོད་མངོན་གསལ་འབད་ནིའི་ དྲན་ཚད་ལངམ་མིན་འདུག"
 
-#: gdk-pixbuf/io-png.c:618
+#: gdk-pixbuf/io-png.c:634
 #, c-format
 msgid ""
 "Insufficient memory to store a %ld by %ld image; try exiting some "
@@ -502,29 +502,29 @@ msgstr ""
 " གཟུགས་བརྙན་ %ld གིས་ %ld གསོག་འཇོག་འབད་ནིའི་ དྲན་ཚད་ལངམ་མིན་འདུག དྲན་ཚད་ལག་ལེན་མར་ཕབ་ཀྱི་"
 "དོན་ལུ་ གློག་རིམ་ལ་ལོ་ཅིག་ ཕྱིར་འཐོད་འབད་ནི་ལུ་ འབད་རྩོལ་བསྐྱེད།"
 
-#: gdk-pixbuf/io-png.c:669
+#: gdk-pixbuf/io-png.c:685
 #, c-format
 msgid "Fatal error reading PNG image file"
 msgstr "པི་ཨེན་ཇི་ གཟུགས་བརྙན་གྱི་ ཡིག་སྣོད་ལྷག་ནི་ལུ་ ཚབས་ཆེན་གྱི་འཛོལ་བ།"
 
-#: gdk-pixbuf/io-png.c:718
+#: gdk-pixbuf/io-png.c:734
 #, c-format
 msgid "Fatal error reading PNG image file: %s"
 msgstr "པི་ཨེན་ཇི་ གཟུགས་བརྙན་གྱི་ཡིག་སྣོད་ %s ལྷག་ནི་ལུ་ ཚབས་ཆེན་གྱི་འཛོལ་བ།"
 
-#: gdk-pixbuf/io-png.c:810
+#: gdk-pixbuf/io-png.c:826
 #, c-format
 msgid ""
 "Keys for PNG text chunks must have at least 1 and at most 79 characters."
 msgstr ""
 "པི་ཨེན་ཇི་ ཚིག་ཡིག་གི་དུམ་བུ་ཚུའི་ ལྡེ་མིག་ཚུ་ལུ་ ཉུང་ཤོས་ཡིག་འབྲུ་ ༡ དང་ མང་ཤོས་ཡིག་འབྲུ་ ༧༩ འོང་དགོ"
 
-#: gdk-pixbuf/io-png.c:818
+#: gdk-pixbuf/io-png.c:834
 #, c-format
 msgid "Keys for PNG text chunks must be ASCII characters."
 msgstr "པི་ཨེན་ཇི་གི་ ཚིག་ཡིག་དུམ་བུའི་ལྡེ་མིག་ཚུ་ ཡིག་འབྲུ་ ཨེ་ཨེསི་སི་ཨའི་ཨའི་ ཨིན་དགོ"
 
-#: gdk-pixbuf/io-png.c:831
+#: gdk-pixbuf/io-png.c:847
 #, c-format
 msgid ""
 "PNG compression level must be a value between 0 and 9; value '%s' could not "
@@ -533,7 +533,7 @@ msgstr ""
 "པི་ཨེན་ཇི་གི་ ཨེབ་བཙུགས་གནས་རིམ་དེ་ བེ་ལུ་ ༠ ལས་ ༩ གི་བར་ན་འོང་དགོ  བེ་ལུ་ ’%s’ དེ་ མིང་དཔྱད་"
 "འབད་མ་ཚུགས།"
 
-#: gdk-pixbuf/io-png.c:843
+#: gdk-pixbuf/io-png.c:859
 #, c-format
 msgid ""
 "PNG compression level must be a value between 0 and 9; value '%d' is not "
@@ -541,14 +541,14 @@ msgid ""
 msgstr ""
 "པི་ཨེན་ཇི་གི་ ཨེབ་བཙུགས་གནས་རིམ་དེ་ བེ་ལུ་ ༠ ལས་ ༩ གི་བར་ན་འོང་དགོ  བེ་ལུ་ ’%d’ དེ་མི་ཆོག"
 
-#: gdk-pixbuf/io-png.c:883
+#: gdk-pixbuf/io-png.c:899
 #, c-format
 msgid "Value for PNG text chunk %s cannot be converted to ISO-8859-1 encoding."
 msgstr ""
 "པི་ཨེན་ཇི་གི་ ཚིག་ཡིག་གྱི་དུམ་བུ་ %s གི་ བེ་ལུ་དེ་ ཨའི་ཨེསི་ཨོ་ -༨༨༥༩-༡ ཨིན་ཀོ་ཌིང་ལུ་ གཞི་བསྒྱུར་འབད་"
 "མི་བཏུབ།"
 
-#: gdk-pixbuf/io-png.c:1026
+#: gdk-pixbuf/io-png.c:1042
 msgid "The PNG image format"
 msgstr "པི་ཨེན་ཇི་ གཟུགས་བརྙན་གྱི་རྩ་སྒྲིག"
 
@@ -2657,7 +2657,7 @@ msgstr "'%s'ཁ་ཕྱེ།"
 msgid "Unknown item"
 msgstr "མ་ཤེས་པའི་རྣམ་གྲངས།"
 
-#: gtk/gtkrecentchoosermenu.c:1033
+#: gtk/gtkrecentchoosermenu.c:1032
 msgid "No items found"
 msgstr "རྣམ་གྲངས་གཅིག་ཡང་མ་ཐོབ།"
 
@@ -3980,80 +3980,80 @@ msgstr "བེཊི་ན་མིསི། (ཝི་ཨའི་ཀིའུ�
 msgid "X Input Method"
 msgstr "ཨེགསི་ ཨིན་པུཊི་གི་ ཐབས་ཤེས།"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1451
+#: modules/printbackends/cups/gtkprintbackendcups.c:1456
 msgid "Two Sided"
 msgstr "ཕྱོགས་གཉིས་ལྡན།"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1452
+#: modules/printbackends/cups/gtkprintbackendcups.c:1457
 msgid "Paper Type"
 msgstr "ཤོག་ཀུའི་དབྱེ་བ།"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1453
+#: modules/printbackends/cups/gtkprintbackendcups.c:1458
 msgid "Paper Source"
 msgstr "ཤོག་ཀུ་འབྱུང་ས།"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1454
+#: modules/printbackends/cups/gtkprintbackendcups.c:1459
 msgid "Output Tray"
 msgstr "ཨའུཊི་པུཊི་ཤོག་སྣོད།"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1463
+#: modules/printbackends/cups/gtkprintbackendcups.c:1468
 msgid "One Sided"
 msgstr "ཕྱོགས་གཅིགམ།"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1464
-#: modules/printbackends/cups/gtkprintbackendcups.c:1465
 #: modules/printbackends/cups/gtkprintbackendcups.c:1469
+#: modules/printbackends/cups/gtkprintbackendcups.c:1470
+#: modules/printbackends/cups/gtkprintbackendcups.c:1474
 msgid "Auto Select"
 msgstr "རང་བཞིན་སེལ་འཐུ།"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1466
-#: modules/printbackends/cups/gtkprintbackendcups.c:1467
-#: modules/printbackends/cups/gtkprintbackendcups.c:1468
-#: modules/printbackends/cups/gtkprintbackendcups.c:1932
+#: modules/printbackends/cups/gtkprintbackendcups.c:1471
+#: modules/printbackends/cups/gtkprintbackendcups.c:1472
+#: modules/printbackends/cups/gtkprintbackendcups.c:1473
+#: modules/printbackends/cups/gtkprintbackendcups.c:1937
 msgid "Printer Default"
 msgstr "དཔར་འཕྲུལ་སྔོན་སྒྲིག"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2125
+#: modules/printbackends/cups/gtkprintbackendcups.c:2130
 msgid "Urgent"
 msgstr "འཕྲལ་མཁོ།"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2125
+#: modules/printbackends/cups/gtkprintbackendcups.c:2130
 msgid "High"
 msgstr "མཐོ་བ།"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2125
+#: modules/printbackends/cups/gtkprintbackendcups.c:2130
 msgid "Medium"
 msgstr "བར་མ།"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2125
+#: modules/printbackends/cups/gtkprintbackendcups.c:2130
 msgid "Low"
 msgstr "དམའ་བ།"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2127
+#: modules/printbackends/cups/gtkprintbackendcups.c:2132
 msgid "None"
 msgstr "ཅི་མེད།"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2127
+#: modules/printbackends/cups/gtkprintbackendcups.c:2132
 msgid "Classified"
 msgstr "དབྱེ་བ་བཟོ་ཡོདཔ།"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2127
+#: modules/printbackends/cups/gtkprintbackendcups.c:2132
 msgid "Confidential"
 msgstr "གསང་བྱ།"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2127
+#: modules/printbackends/cups/gtkprintbackendcups.c:2132
 msgid "Secret"
 msgstr "གསང་བ།"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2127
+#: modules/printbackends/cups/gtkprintbackendcups.c:2132
 msgid "Standard"
 msgstr "ཚད་ལྡན།"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2127
+#: modules/printbackends/cups/gtkprintbackendcups.c:2132
 msgid "Top Secret"
 msgstr "ཧ་ཅང་གསང་བ།"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2127
+#: modules/printbackends/cups/gtkprintbackendcups.c:2132
 msgid "Unclassified"
 msgstr "དབྱེ་བ་མ་བཟོཝ།"
 

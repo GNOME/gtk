@@ -14,7 +14,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.10.7\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-01-16 23:43-0500\n"
+"POT-Creation-Date: 2007-01-22 12:38-0500\n"
 "PO-Revision-Date: 2006-11-02 12:46+0100\n"
 "Last-Translator: Christophe Merlet (RedFox) <redfox@redfoxcenter.org>\n"
 "Language-Team: GNOME French Team <gnomefr@traduc.org>\n"
@@ -476,7 +476,7 @@ msgstr "Le format d'image PCX"
 msgid "Bits per channel of PNG image is invalid."
 msgstr "Le nombre de bits par canal de l'image PNG n'est pas valide."
 
-#: gdk-pixbuf/io-png.c:136
+#: gdk-pixbuf/io-png.c:136 gdk-pixbuf/io-png.c:619
 #, c-format
 msgid "Transformed PNG has zero width or height."
 msgstr "Le PNG transformé a une largeur ou une hauteur nulle."
@@ -503,12 +503,12 @@ msgstr ""
 msgid "Fatal error in PNG image file: %s"
 msgstr "Erreur fatale dans le fichier d'image PNG : %s"
 
-#: gdk-pixbuf/io-png.c:301
+#: gdk-pixbuf/io-png.c:311
 #, c-format
 msgid "Insufficient memory to load PNG file"
 msgstr "Mémoire insuffisante pour charger le fichier PNG"
 
-#: gdk-pixbuf/io-png.c:618
+#: gdk-pixbuf/io-png.c:634
 #, c-format
 msgid ""
 "Insufficient memory to store a %ld by %ld image; try exiting some "
@@ -517,17 +517,17 @@ msgstr ""
 "Mémoire insuffisante pour stocker une image de %ld sur %ld ; essayez de "
 "quitter quelques applications pour réduire la mémoire occupée"
 
-#: gdk-pixbuf/io-png.c:669
+#: gdk-pixbuf/io-png.c:685
 #, c-format
 msgid "Fatal error reading PNG image file"
 msgstr "Erreur fatale lors de la lecture d'une image PNG"
 
-#: gdk-pixbuf/io-png.c:718
+#: gdk-pixbuf/io-png.c:734
 #, c-format
 msgid "Fatal error reading PNG image file: %s"
 msgstr "Erreur fatale lors de la lecture du fichier d'image PNG : %s"
 
-#: gdk-pixbuf/io-png.c:810
+#: gdk-pixbuf/io-png.c:826
 #, c-format
 msgid ""
 "Keys for PNG text chunks must have at least 1 and at most 79 characters."
@@ -535,12 +535,12 @@ msgstr ""
 "Les clés pour les chunks texte PNG doivent avoir au moins 1 et au plus 79 "
 "caractères."
 
-#: gdk-pixbuf/io-png.c:818
+#: gdk-pixbuf/io-png.c:834
 #, c-format
 msgid "Keys for PNG text chunks must be ASCII characters."
 msgstr "Les clés pour les chunks texte PNG doivent être des caractères ASCII."
 
-#: gdk-pixbuf/io-png.c:831
+#: gdk-pixbuf/io-png.c:847
 #, c-format
 msgid ""
 "PNG compression level must be a value between 0 and 9; value '%s' could not "
@@ -549,7 +549,7 @@ msgstr ""
 "Le niveau de compression PNG doit être une valeur entre 0 et 9 ; la valeur "
 "« %s » n'est pas interprétable."
 
-#: gdk-pixbuf/io-png.c:843
+#: gdk-pixbuf/io-png.c:859
 #, c-format
 msgid ""
 "PNG compression level must be a value between 0 and 9; value '%d' is not "
@@ -558,14 +558,14 @@ msgstr ""
 "La niveau de compression PNG doit être une valeur entre 0 et 9 ; la valeur "
 "« %d » n'est pas autorisée."
 
-#: gdk-pixbuf/io-png.c:883
+#: gdk-pixbuf/io-png.c:899
 #, c-format
 msgid "Value for PNG text chunk %s cannot be converted to ISO-8859-1 encoding."
 msgstr ""
 "La valeur pour le chunk texte PNG %s ne peut pas être convertie dans le "
 "codage ISO-8859-1."
 
-#: gdk-pixbuf/io-png.c:1026
+#: gdk-pixbuf/io-png.c:1042
 msgid "The PNG image format"
 msgstr "Le format d'image PNG"
 
@@ -2691,7 +2691,7 @@ msgstr "Ouvrir « %s »"
 msgid "Unknown item"
 msgstr "Élément inconnu"
 
-#: gtk/gtkrecentchoosermenu.c:1033
+#: gtk/gtkrecentchoosermenu.c:1032
 msgid "No items found"
 msgstr "Aucun élément trouvé"
 
@@ -4014,80 +4014,80 @@ msgstr "Vietnamien (VIQR)"
 msgid "X Input Method"
 msgstr "Méthode de saisie X"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1451
+#: modules/printbackends/cups/gtkprintbackendcups.c:1456
 msgid "Two Sided"
 msgstr "Recto verso"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1452
+#: modules/printbackends/cups/gtkprintbackendcups.c:1457
 msgid "Paper Type"
 msgstr "Type de papier"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1453
+#: modules/printbackends/cups/gtkprintbackendcups.c:1458
 msgid "Paper Source"
 msgstr "Source du papier"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1454
+#: modules/printbackends/cups/gtkprintbackendcups.c:1459
 msgid "Output Tray"
 msgstr "Bac de sortie"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1463
+#: modules/printbackends/cups/gtkprintbackendcups.c:1468
 msgid "One Sided"
 msgstr "Recto"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1464
-#: modules/printbackends/cups/gtkprintbackendcups.c:1465
 #: modules/printbackends/cups/gtkprintbackendcups.c:1469
+#: modules/printbackends/cups/gtkprintbackendcups.c:1470
+#: modules/printbackends/cups/gtkprintbackendcups.c:1474
 msgid "Auto Select"
 msgstr "Sélection automatique"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1466
-#: modules/printbackends/cups/gtkprintbackendcups.c:1467
-#: modules/printbackends/cups/gtkprintbackendcups.c:1468
-#: modules/printbackends/cups/gtkprintbackendcups.c:1932
+#: modules/printbackends/cups/gtkprintbackendcups.c:1471
+#: modules/printbackends/cups/gtkprintbackendcups.c:1472
+#: modules/printbackends/cups/gtkprintbackendcups.c:1473
+#: modules/printbackends/cups/gtkprintbackendcups.c:1937
 msgid "Printer Default"
 msgstr "Défaut"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2125
+#: modules/printbackends/cups/gtkprintbackendcups.c:2130
 msgid "Urgent"
 msgstr "Urgent"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2125
+#: modules/printbackends/cups/gtkprintbackendcups.c:2130
 msgid "High"
 msgstr "Haute"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2125
+#: modules/printbackends/cups/gtkprintbackendcups.c:2130
 msgid "Medium"
 msgstr "Moyenne"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2125
+#: modules/printbackends/cups/gtkprintbackendcups.c:2130
 msgid "Low"
 msgstr "Basse"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2127
+#: modules/printbackends/cups/gtkprintbackendcups.c:2132
 msgid "None"
 msgstr "Aucune"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2127
+#: modules/printbackends/cups/gtkprintbackendcups.c:2132
 msgid "Classified"
 msgstr "Classifié"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2127
+#: modules/printbackends/cups/gtkprintbackendcups.c:2132
 msgid "Confidential"
 msgstr "Confidentiel"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2127
+#: modules/printbackends/cups/gtkprintbackendcups.c:2132
 msgid "Secret"
 msgstr "Secret"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2127
+#: modules/printbackends/cups/gtkprintbackendcups.c:2132
 msgid "Standard"
 msgstr "Standard"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2127
+#: modules/printbackends/cups/gtkprintbackendcups.c:2132
 msgid "Top Secret"
 msgstr "Top secret"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2127
+#: modules/printbackends/cups/gtkprintbackendcups.c:2132
 msgid "Unclassified"
 msgstr "Non classifié"
 

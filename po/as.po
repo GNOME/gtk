@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: as\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-01-16 23:43-0500\n"
+"POT-Creation-Date: 2007-01-22 12:38-0500\n"
 "PO-Revision-Date: 2006-12-18 11:42+0530\n"
 "Last-Translator: Amitakhya Phukan <aphukan@redhat.com>\n"
 "Language-Team: Assamese <assam@mm.assam-glug.org>\n"
@@ -457,7 +457,7 @@ msgstr "PCX প্ৰতিমুৰ্তিৰ আকৃতি"
 msgid "Bits per channel of PNG image is invalid."
 msgstr "PNG ৰ প্ৰতিটো প্ৰণালীৰ বিট অবৈধ ।"
 
-#: gdk-pixbuf/io-png.c:136
+#: gdk-pixbuf/io-png.c:136 gdk-pixbuf/io-png.c:619
 #, c-format
 msgid "Transformed PNG has zero width or height."
 msgstr "পৰিবৰ্ত্তিত PNG ৰ শুণ্য বহল বা উচ্চতা ।"
@@ -482,12 +482,12 @@ msgstr "পৰিবৰ্ত্তিত PNG ত অসমৰ্থিত প�
 msgid "Fatal error in PNG image file: %s"
 msgstr "PNG প্ৰতিমুৰ্তিৰ নথিপত্ৰত ভয়াবহ ভুল: %s"
 
-#: gdk-pixbuf/io-png.c:301
+#: gdk-pixbuf/io-png.c:311
 #, c-format
 msgid "Insufficient memory to load PNG file"
 msgstr "PNG নথিপত্ৰ তুলিব'লৈ অপৰ্য্যাপ্ত স্মৃতিশক্তি"
 
-#: gdk-pixbuf/io-png.c:618
+#: gdk-pixbuf/io-png.c:634
 #, c-format
 msgid ""
 "Insufficient memory to store a %ld by %ld image; try exiting some "
@@ -496,28 +496,28 @@ msgstr ""
 "এটা %ld ক %ld প্ৰতিমুৰ্তি হিচাপে সংৰক্ষণ কৰিব'লৈ অপৰ্য্যাপ্ত স্মৃতিশক্তি; কিছুমান "
 "অনুপ্ৰয়োগৰ পৰা প্ৰস্থান কৰিব'লৈ চেষ্টা কৰক স্মৃতিশক্তিৰ ব্যৱহাৰ কম কৰিব'লৈ"
 
-#: gdk-pixbuf/io-png.c:669
+#: gdk-pixbuf/io-png.c:685
 #, c-format
 msgid "Fatal error reading PNG image file"
 msgstr "PNG প্ৰতিমুৰ্তিৰ নথিপত্ৰ পঢ়োঁতে ভয়াবহ ভুল"
 
-#: gdk-pixbuf/io-png.c:718
+#: gdk-pixbuf/io-png.c:734
 #, c-format
 msgid "Fatal error reading PNG image file: %s"
 msgstr "PNG প্ৰতিমুৰ্তিৰ নথিপত্ৰ পঢ়োঁতে ভয়াবহ ভুল: %s"
 
-#: gdk-pixbuf/io-png.c:810
+#: gdk-pixbuf/io-png.c:826
 #, c-format
 msgid ""
 "Keys for PNG text chunks must have at least 1 and at most 79 characters."
 msgstr "PNG লিপি খণ্ডৰ চাবিত অতি কমেও ১টা আৰু অতি বেচি ৭৯টা আখৰ হ'ব লাগিব ।"
 
-#: gdk-pixbuf/io-png.c:818
+#: gdk-pixbuf/io-png.c:834
 #, c-format
 msgid "Keys for PNG text chunks must be ASCII characters."
 msgstr "PNG লিপি খণ্ডৰ চাবি ASCII আখৰ হ'ব লাগিব ।"
 
-#: gdk-pixbuf/io-png.c:831
+#: gdk-pixbuf/io-png.c:847
 #, c-format
 msgid ""
 "PNG compression level must be a value between 0 and 9; value '%s' could not "
@@ -526,19 +526,19 @@ msgstr ""
 "PNG সঞ্চাপনৰ স্তৰ ০ আৰু ৯ ৰ মাজৰ এটা মান হ'ব লাগিব; '%s' মানৰ বিশ্লেষণ কৰিব পৰা "
 "ন'গ'ল ।"
 
-#: gdk-pixbuf/io-png.c:843
+#: gdk-pixbuf/io-png.c:859
 #, c-format
 msgid ""
 "PNG compression level must be a value between 0 and 9; value '%d' is not "
 "allowed."
 msgstr "PNG সঞ্চাপনৰ স্তৰ ০ আৰু ৯ ৰ মাজৰ এটা মান হ'ব লাগিব; '%d' মানৰ অনুমতি নাই ।"
 
-#: gdk-pixbuf/io-png.c:883
+#: gdk-pixbuf/io-png.c:899
 #, c-format
 msgid "Value for PNG text chunk %s cannot be converted to ISO-8859-1 encoding."
 msgstr "PNG লিপি খণ্ড %s ৰ মান ISO-8859-1 সঙ্কেতলৈ সলনি কৰিব নোৱাৰি"
 
-#: gdk-pixbuf/io-png.c:1026
+#: gdk-pixbuf/io-png.c:1042
 msgid "The PNG image format"
 msgstr "PNG প্ৰতিমুৰ্তিৰ আকৃতি"
 
@@ -2642,7 +2642,7 @@ msgstr "'%s' খোলক"
 msgid "Unknown item"
 msgstr "অজ্ঞাত বস্তু"
 
-#: gtk/gtkrecentchoosermenu.c:1033
+#: gtk/gtkrecentchoosermenu.c:1032
 msgid "No items found"
 msgstr "কোনো বস্তু পোৱা ন'গ'ল"
 
@@ -3965,80 +3965,80 @@ msgstr "ভিয়েতনামি (VIQR)"
 msgid "X Input Method"
 msgstr "X নিবেশ পদ্ধতি"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1451
+#: modules/printbackends/cups/gtkprintbackendcups.c:1456
 msgid "Two Sided"
 msgstr "দ্বিপাৰ্শ্বিক"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1452
+#: modules/printbackends/cups/gtkprintbackendcups.c:1457
 msgid "Paper Type"
 msgstr "কাগজৰ ধৰণ"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1453
+#: modules/printbackends/cups/gtkprintbackendcups.c:1458
 msgid "Paper Source"
 msgstr "কাগজৰ উৎস"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1454
+#: modules/printbackends/cups/gtkprintbackendcups.c:1459
 msgid "Output Tray"
 msgstr "নিৰ্গমৰ ডলা"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1463
+#: modules/printbackends/cups/gtkprintbackendcups.c:1468
 msgid "One Sided"
 msgstr "একপাক্ষিক"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1464
-#: modules/printbackends/cups/gtkprintbackendcups.c:1465
 #: modules/printbackends/cups/gtkprintbackendcups.c:1469
+#: modules/printbackends/cups/gtkprintbackendcups.c:1470
+#: modules/printbackends/cups/gtkprintbackendcups.c:1474
 msgid "Auto Select"
 msgstr "স্বয়ং নিৰ্ব্বাচন কৰক"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1466
-#: modules/printbackends/cups/gtkprintbackendcups.c:1467
-#: modules/printbackends/cups/gtkprintbackendcups.c:1468
-#: modules/printbackends/cups/gtkprintbackendcups.c:1932
+#: modules/printbackends/cups/gtkprintbackendcups.c:1471
+#: modules/printbackends/cups/gtkprintbackendcups.c:1472
+#: modules/printbackends/cups/gtkprintbackendcups.c:1473
+#: modules/printbackends/cups/gtkprintbackendcups.c:1937
 msgid "Printer Default"
 msgstr "মুদ্ৰক অবিকল্পিত"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2125
+#: modules/printbackends/cups/gtkprintbackendcups.c:2130
 msgid "Urgent"
 msgstr "অতি আৱশ্যক"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2125
+#: modules/printbackends/cups/gtkprintbackendcups.c:2130
 msgid "High"
 msgstr "তীব্ৰ"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2125
+#: modules/printbackends/cups/gtkprintbackendcups.c:2130
 msgid "Medium"
 msgstr "মধ্যমীয়া"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2125
+#: modules/printbackends/cups/gtkprintbackendcups.c:2130
 msgid "Low"
 msgstr "নিম্ন"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2127
+#: modules/printbackends/cups/gtkprintbackendcups.c:2132
 msgid "None"
 msgstr "একো নাই"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2127
+#: modules/printbackends/cups/gtkprintbackendcups.c:2132
 msgid "Classified"
 msgstr "শ্ৰেণীভুক্ত"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2127
+#: modules/printbackends/cups/gtkprintbackendcups.c:2132
 msgid "Confidential"
 msgstr "গুপুত"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2127
+#: modules/printbackends/cups/gtkprintbackendcups.c:2132
 msgid "Secret"
 msgstr "গোপণীয়"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2127
+#: modules/printbackends/cups/gtkprintbackendcups.c:2132
 msgid "Standard"
 msgstr "মানদণ্ড স্বৰূপ"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2127
+#: modules/printbackends/cups/gtkprintbackendcups.c:2132
 msgid "Top Secret"
 msgstr "পৰম গোপণীয়"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2127
+#: modules/printbackends/cups/gtkprintbackendcups.c:2132
 msgid "Unclassified"
 msgstr "শ্ৰেণীভুক্ত নকৰা"
 

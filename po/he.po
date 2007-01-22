@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+.HEAD.he\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-01-16 23:43-0500\n"
+"POT-Creation-Date: 2007-01-22 12:38-0500\n"
 "PO-Revision-Date: 2006-04-13 20:09+0300\n"
 "Last-Translator: Yair Hershkovitz <yairhr@gmail.com>\n"
 "Language-Team: Hebrew <he@li.org>\n"
@@ -456,7 +456,7 @@ msgstr "פורמט תמונת PCX"
 msgid "Bits per channel of PNG image is invalid."
 msgstr "הסיביות לערוץ של קובץ PNG אינן תקינות."
 
-#: gdk-pixbuf/io-png.c:136
+#: gdk-pixbuf/io-png.c:136 gdk-pixbuf/io-png.c:619
 #, c-format
 msgid "Transformed PNG has zero width or height."
 msgstr "Transformed PNG has zero width or height."
@@ -481,12 +481,12 @@ msgstr "Transformed PNG has unsupported number of channels, must be 3 or 4."
 msgid "Fatal error in PNG image file: %s"
 msgstr "שגיאה חמורה בקובץ תמונת PNG: %s"
 
-#: gdk-pixbuf/io-png.c:301
+#: gdk-pixbuf/io-png.c:311
 #, c-format
 msgid "Insufficient memory to load PNG file"
 msgstr "אין מספיק זיכרון לטעינת קובץ PNG"
 
-#: gdk-pixbuf/io-png.c:618
+#: gdk-pixbuf/io-png.c:634
 #, c-format
 msgid ""
 "Insufficient memory to store a %ld by %ld image; try exiting some "
@@ -495,49 +495,49 @@ msgstr ""
 "אין מספיק זיכרון לשמירת %ld על-ידי תמונת %ld; נסה לצאת ממספר יישומים כדי "
 "להקטין את השימוש בזיכרון"
 
-#: gdk-pixbuf/io-png.c:669
+#: gdk-pixbuf/io-png.c:685
 #, c-format
 msgid "Fatal error reading PNG image file"
 msgstr "שגיאה חמורה בקריאת קובץ PNG"
 
-#: gdk-pixbuf/io-png.c:718
+#: gdk-pixbuf/io-png.c:734
 #, c-format
 msgid "Fatal error reading PNG image file: %s"
 msgstr "שגיאה חמורה בקריאת קובץ PNG: %s"
 
-#: gdk-pixbuf/io-png.c:810
+#: gdk-pixbuf/io-png.c:826
 #, c-format
 msgid ""
 "Keys for PNG text chunks must have at least 1 and at most 79 characters."
 msgstr ""
 "Keys for PNG text chunks must have at least 1 and at most 79 characters."
 
-#: gdk-pixbuf/io-png.c:818
+#: gdk-pixbuf/io-png.c:834
 #, c-format
 msgid "Keys for PNG text chunks must be ASCII characters."
 msgstr "Keys for PNG text chunks must be ASCII characters."
 
-#: gdk-pixbuf/io-png.c:831
+#: gdk-pixbuf/io-png.c:847
 #, c-format
 msgid ""
 "PNG compression level must be a value between 0 and 9; value '%s' could not "
 "be parsed."
 msgstr "איכות קובץ PNG חייבת להיות בין 0 ל 100, הערך '%s' לא יכול להיות מפורש."
 
-#: gdk-pixbuf/io-png.c:843
+#: gdk-pixbuf/io-png.c:859
 #, c-format
 msgid ""
 "PNG compression level must be a value between 0 and 9; value '%d' is not "
 "allowed."
 msgstr "איכות קובץ PNG חייבת להיות בין 0 ל 100, הערך '%d' אינו מורשה."
 
-#: gdk-pixbuf/io-png.c:883
+#: gdk-pixbuf/io-png.c:899
 #, c-format
 msgid "Value for PNG text chunk %s cannot be converted to ISO-8859-1 encoding."
 msgstr ""
 "Value for PNG text chunk %s cannot be converted to ISO-8859-1 encoding."
 
-#: gdk-pixbuf/io-png.c:1026
+#: gdk-pixbuf/io-png.c:1042
 msgid "The PNG image format"
 msgstr "פורמט תמונת PNG"
 
@@ -2642,7 +2642,7 @@ msgstr "פתח '%s'"
 msgid "Unknown item"
 msgstr "פריט לא ידוע"
 
-#: gtk/gtkrecentchoosermenu.c:1033
+#: gtk/gtkrecentchoosermenu.c:1032
 msgid "No items found"
 msgstr "לא נמצאו פריטים"
 
@@ -3966,80 +3966,80 @@ msgstr "ויאטנמית (VIQR)"
 msgid "X Input Method"
 msgstr "שיטת הקלט של X"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1451
+#: modules/printbackends/cups/gtkprintbackendcups.c:1456
 msgid "Two Sided"
 msgstr "שני צדדים"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1452
+#: modules/printbackends/cups/gtkprintbackendcups.c:1457
 msgid "Paper Type"
 msgstr "סוג נייר"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1453
+#: modules/printbackends/cups/gtkprintbackendcups.c:1458
 msgid "Paper Source"
 msgstr "מקור נייר"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1454
+#: modules/printbackends/cups/gtkprintbackendcups.c:1459
 msgid "Output Tray"
 msgstr "מגש פלט"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1463
+#: modules/printbackends/cups/gtkprintbackendcups.c:1468
 msgid "One Sided"
 msgstr "צד אחד"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1464
-#: modules/printbackends/cups/gtkprintbackendcups.c:1465
 #: modules/printbackends/cups/gtkprintbackendcups.c:1469
+#: modules/printbackends/cups/gtkprintbackendcups.c:1470
+#: modules/printbackends/cups/gtkprintbackendcups.c:1474
 msgid "Auto Select"
 msgstr "בחירה אוטומטית"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1466
-#: modules/printbackends/cups/gtkprintbackendcups.c:1467
-#: modules/printbackends/cups/gtkprintbackendcups.c:1468
-#: modules/printbackends/cups/gtkprintbackendcups.c:1932
+#: modules/printbackends/cups/gtkprintbackendcups.c:1471
+#: modules/printbackends/cups/gtkprintbackendcups.c:1472
+#: modules/printbackends/cups/gtkprintbackendcups.c:1473
+#: modules/printbackends/cups/gtkprintbackendcups.c:1937
 msgid "Printer Default"
 msgstr "ברירת המחדל של המדפסת"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2125
+#: modules/printbackends/cups/gtkprintbackendcups.c:2130
 msgid "Urgent"
 msgstr "דחוף"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2125
+#: modules/printbackends/cups/gtkprintbackendcups.c:2130
 msgid "High"
 msgstr ""
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2125
+#: modules/printbackends/cups/gtkprintbackendcups.c:2130
 msgid "Medium"
 msgstr ""
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2125
+#: modules/printbackends/cups/gtkprintbackendcups.c:2130
 msgid "Low"
 msgstr ""
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2127
+#: modules/printbackends/cups/gtkprintbackendcups.c:2132
 msgid "None"
 msgstr "ללא"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2127
+#: modules/printbackends/cups/gtkprintbackendcups.c:2132
 msgid "Classified"
 msgstr "מסווג"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2127
+#: modules/printbackends/cups/gtkprintbackendcups.c:2132
 msgid "Confidential"
 msgstr "חסוי"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2127
+#: modules/printbackends/cups/gtkprintbackendcups.c:2132
 msgid "Secret"
 msgstr "סודי"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2127
+#: modules/printbackends/cups/gtkprintbackendcups.c:2132
 msgid "Standard"
 msgstr "רגיל"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2127
+#: modules/printbackends/cups/gtkprintbackendcups.c:2132
 msgid "Top Secret"
 msgstr "סודי ביותר"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2127
+#: modules/printbackends/cups/gtkprintbackendcups.c:2132
 msgid "Unclassified"
 msgstr "לא מסווג"
 

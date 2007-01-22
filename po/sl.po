@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: GTK+\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-01-16 23:43-0500\n"
+"POT-Creation-Date: 2007-01-22 12:38-0500\n"
 "PO-Revision-Date: 2007-01-16 11:46+0100\n"
 "Last-Translator: Matic Žgur <mr.zgur@gmail.com>\n"
 "Language-Team: Slovenian GNOME Translation Team <gnome-si@googlegroups.com>\n"
@@ -470,7 +470,7 @@ msgstr "Vrsta zapisa slike PCX"
 msgid "Bits per channel of PNG image is invalid."
 msgstr "Podatek o bitih na kanal slike PNG ni veljaven."
 
-#: gdk-pixbuf/io-png.c:136
+#: gdk-pixbuf/io-png.c:136 gdk-pixbuf/io-png.c:619
 #, c-format
 msgid "Transformed PNG has zero width or height."
 msgstr "Preoblikovan PNG ima nično višino ali širino"
@@ -495,12 +495,12 @@ msgstr "Pretvorjen PNG ima nepodprto število kanalov, mora biti 3 ali 4."
 msgid "Fatal error in PNG image file: %s"
 msgstr "Usodna napak v slikovni datoteki PNG: %s"
 
-#: gdk-pixbuf/io-png.c:301
+#: gdk-pixbuf/io-png.c:311
 #, c-format
 msgid "Insufficient memory to load PNG file"
 msgstr "Ni dovolj pomnilnika za naložitev datoteke PNG"
 
-#: gdk-pixbuf/io-png.c:618
+#: gdk-pixbuf/io-png.c:634
 #, c-format
 msgid ""
 "Insufficient memory to store a %ld by %ld image; try exiting some "
@@ -509,28 +509,28 @@ msgstr ""
 "Ni dovolj pomnilnika za shranitev slike velikosti %ld x %ld; za sprostitev "
 "pomnilnika zaprite nekaj programov"
 
-#: gdk-pixbuf/io-png.c:669
+#: gdk-pixbuf/io-png.c:685
 #, c-format
 msgid "Fatal error reading PNG image file"
 msgstr "Usodna napaka med branjem slikovne datoteke PNG"
 
-#: gdk-pixbuf/io-png.c:718
+#: gdk-pixbuf/io-png.c:734
 #, c-format
 msgid "Fatal error reading PNG image file: %s"
 msgstr "Usodna napaka med branjem slikovne datoteke PNG: %s"
 
-#: gdk-pixbuf/io-png.c:810
+#: gdk-pixbuf/io-png.c:826
 #, c-format
 msgid ""
 "Keys for PNG text chunks must have at least 1 and at most 79 characters."
 msgstr "Ključi za sklope besedila PNG morajo imeti vsaj 1 in največ 79 znakov."
 
-#: gdk-pixbuf/io-png.c:818
+#: gdk-pixbuf/io-png.c:834
 #, c-format
 msgid "Keys for PNG text chunks must be ASCII characters."
 msgstr "Ključi za sklope besedila PNG morajo biti znaki ASCII."
 
-#: gdk-pixbuf/io-png.c:831
+#: gdk-pixbuf/io-png.c:847
 #, c-format
 msgid ""
 "PNG compression level must be a value between 0 and 9; value '%s' could not "
@@ -539,7 +539,7 @@ msgstr ""
 "Stopnja stiskanja PNG mora biti vrednost med 0 in 9; vrednost '%s' ne more "
 "biti razčlenjena."
 
-#: gdk-pixbuf/io-png.c:843
+#: gdk-pixbuf/io-png.c:859
 #, c-format
 msgid ""
 "PNG compression level must be a value between 0 and 9; value '%d' is not "
@@ -547,14 +547,14 @@ msgid ""
 msgstr ""
 "Kvaliteta JPEG mora biti vrednost med 0 in 100; vrednost '%d' ni dovoljena."
 
-#: gdk-pixbuf/io-png.c:883
+#: gdk-pixbuf/io-png.c:899
 #, c-format
 msgid "Value for PNG text chunk %s cannot be converted to ISO-8859-1 encoding."
 msgstr ""
 "Vrednosti za PNG sklop besedila %s  ni mogoče pretvoriti v kodiranje ISO-"
 "8859-1."
 
-#: gdk-pixbuf/io-png.c:1026
+#: gdk-pixbuf/io-png.c:1042
 msgid "The PNG image format"
 msgstr "Vrsta zapisa slike PNG"
 
@@ -2661,7 +2661,7 @@ msgstr "Odpri '%s'"
 msgid "Unknown item"
 msgstr "Neznan predmet"
 
-#: gtk/gtkrecentchoosermenu.c:1033
+#: gtk/gtkrecentchoosermenu.c:1032
 msgid "No items found"
 msgstr "Noben predmet ni bil najden"
 
@@ -3984,80 +3984,80 @@ msgstr "Vietnamski (VIQR)"
 msgid "X Input Method"
 msgstr "Vnosni način X"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1451
+#: modules/printbackends/cups/gtkprintbackendcups.c:1456
 msgid "Two Sided"
 msgstr "Dvostransko"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1452
+#: modules/printbackends/cups/gtkprintbackendcups.c:1457
 msgid "Paper Type"
 msgstr "Vrsta papirja"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1453
+#: modules/printbackends/cups/gtkprintbackendcups.c:1458
 msgid "Paper Source"
 msgstr "Izvor papirja"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1454
+#: modules/printbackends/cups/gtkprintbackendcups.c:1459
 msgid "Output Tray"
 msgstr "Pladenj za papir"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1463
+#: modules/printbackends/cups/gtkprintbackendcups.c:1468
 msgid "One Sided"
 msgstr "Enostransko"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1464
-#: modules/printbackends/cups/gtkprintbackendcups.c:1465
 #: modules/printbackends/cups/gtkprintbackendcups.c:1469
+#: modules/printbackends/cups/gtkprintbackendcups.c:1470
+#: modules/printbackends/cups/gtkprintbackendcups.c:1474
 msgid "Auto Select"
 msgstr "Samodejno izberi"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1466
-#: modules/printbackends/cups/gtkprintbackendcups.c:1467
-#: modules/printbackends/cups/gtkprintbackendcups.c:1468
-#: modules/printbackends/cups/gtkprintbackendcups.c:1932
+#: modules/printbackends/cups/gtkprintbackendcups.c:1471
+#: modules/printbackends/cups/gtkprintbackendcups.c:1472
+#: modules/printbackends/cups/gtkprintbackendcups.c:1473
+#: modules/printbackends/cups/gtkprintbackendcups.c:1937
 msgid "Printer Default"
 msgstr "Privzeto za tiskalnik"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2125
+#: modules/printbackends/cups/gtkprintbackendcups.c:2130
 msgid "Urgent"
 msgstr "Nujno"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2125
+#: modules/printbackends/cups/gtkprintbackendcups.c:2130
 msgid "High"
 msgstr "Visoka"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2125
+#: modules/printbackends/cups/gtkprintbackendcups.c:2130
 msgid "Medium"
 msgstr "Srednja"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2125
+#: modules/printbackends/cups/gtkprintbackendcups.c:2130
 msgid "Low"
 msgstr "Nizka"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2127
+#: modules/printbackends/cups/gtkprintbackendcups.c:2132
 msgid "None"
 msgstr "Noben"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2127
+#: modules/printbackends/cups/gtkprintbackendcups.c:2132
 msgid "Classified"
 msgstr "Omejeno"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2127
+#: modules/printbackends/cups/gtkprintbackendcups.c:2132
 msgid "Confidential"
 msgstr "Zaupno"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2127
+#: modules/printbackends/cups/gtkprintbackendcups.c:2132
 msgid "Secret"
 msgstr "Skrivno"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2127
+#: modules/printbackends/cups/gtkprintbackendcups.c:2132
 msgid "Standard"
 msgstr "Standardno"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2127
+#: modules/printbackends/cups/gtkprintbackendcups.c:2132
 msgid "Top Secret"
 msgstr "Najstrožja skrivnost"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2127
+#: modules/printbackends/cups/gtkprintbackendcups.c:2132
 msgid "Unclassified"
 msgstr "Neomejeno"
 

@@ -1,3 +1,9 @@
+2007-01-22  Matthias Clasen  <mclasen@redhat.com>
+
+	* === 2.10.9 ===
+
+	* NEWS: Updates
+
 2007-01-19  Matthias Clasen  <mclasen@redhat.com>
 
 	*gtk/gtkcalendar.c: Fix build breakage

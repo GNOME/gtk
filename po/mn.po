@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: mn\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-01-16 23:43-0500\n"
+"POT-Creation-Date: 2007-01-22 12:38-0500\n"
 "PO-Revision-Date: 2004-03-17 17:16+0100\n"
 "Last-Translator: Sanlig Badral <badral@openmn.org>\n"
 "Language-Team: Mongolian <openmn-gnome@lists.sf.net>\n"
@@ -542,7 +542,7 @@ msgid "Bits per channel of PNG image is invalid."
 msgstr "PNG зургийн суваг тус бүрийн битүүд хүчингүй байна."
 
 # gdk-pixbuf/io-png.c:136
-#: gdk-pixbuf/io-png.c:136
+#: gdk-pixbuf/io-png.c:136 gdk-pixbuf/io-png.c:619
 #, c-format
 msgid "Transformed PNG has zero width or height."
 msgstr "Хөрвөсөн PNG тэг өргөн ба өндөртэй болов."
@@ -570,13 +570,13 @@ msgid "Fatal error in PNG image file: %s"
 msgstr "PNG зургийн файлд хүнд алдаа : %s"
 
 # gdk-pixbuf/io-png.c:310
-#: gdk-pixbuf/io-png.c:301
+#: gdk-pixbuf/io-png.c:311
 #, c-format
 msgid "Insufficient memory to load PNG file"
 msgstr "PNG зургийн файлыг ачаалахад санах ой хүрэхгүй байна"
 
 # gdk-pixbuf/io-png.c:634
-#: gdk-pixbuf/io-png.c:618
+#: gdk-pixbuf/io-png.c:634
 #, c-format
 msgid ""
 "Insufficient memory to store a %ld by %ld image; try exiting some "
@@ -586,19 +586,19 @@ msgstr ""
 "багасгахын тулд ашиглаж байгаа зарим программаа хаах хэрэгтэй."
 
 # gdk-pixbuf/io-png.c:685
-#: gdk-pixbuf/io-png.c:669
+#: gdk-pixbuf/io-png.c:685
 #, c-format
 msgid "Fatal error reading PNG image file"
 msgstr "PNG зургийн файлыг уншихад ноцтой алдаа"
 
 # gdk-pixbuf/io-png.c:734
-#: gdk-pixbuf/io-png.c:718
+#: gdk-pixbuf/io-png.c:734
 #, c-format
 msgid "Fatal error reading PNG image file: %s"
 msgstr "PNG зургийн файлыг уншихад ноцтой алдаа %s "
 
 # gdk-pixbuf/io-png.c:800
-#: gdk-pixbuf/io-png.c:810
+#: gdk-pixbuf/io-png.c:826
 #, c-format
 msgid ""
 "Keys for PNG text chunks must have at least 1 and at most 79 characters."
@@ -606,14 +606,14 @@ msgstr ""
 "PNG хэсэг текстийн түлхүүр нь 1 ба 79 хүртэл тэмдэгтүүдээр байвал зүгээр."
 
 # gdk-pixbuf/io-png.c:808
-#: gdk-pixbuf/io-png.c:818
+#: gdk-pixbuf/io-png.c:834
 #, c-format
 msgid "Keys for PNG text chunks must be ASCII characters."
 msgstr ""
 "PNG хэсэг текстэд түлхүүр нь ASCII тэмдэгтүүд байвал зүгээр набора ASCII."
 
 # gdk-pixbuf/io-jpeg.c:664
-#: gdk-pixbuf/io-png.c:831
+#: gdk-pixbuf/io-png.c:847
 #, fuzzy, c-format
 msgid ""
 "PNG compression level must be a value between 0 and 9; value '%s' could not "
@@ -623,7 +623,7 @@ msgstr ""
 "ялгал хийж чадсангүй"
 
 # gdk-pixbuf/io-jpeg.c:679
-#: gdk-pixbuf/io-png.c:843
+#: gdk-pixbuf/io-png.c:859
 #, fuzzy, c-format
 msgid ""
 "PNG compression level must be a value between 0 and 9; value '%d' is not "
@@ -633,14 +633,14 @@ msgstr ""
 "зөвшөөрөгдөөгүй."
 
 # gdk-pixbuf/io-png.c:829
-#: gdk-pixbuf/io-png.c:883
+#: gdk-pixbuf/io-png.c:899
 #, fuzzy, c-format
 msgid "Value for PNG text chunk %s cannot be converted to ISO-8859-1 encoding."
 msgstr ""
 "PNG хэсэг текстэд утга нь %s -г ISO-8859-1 хувиргагч руу хөрвүүлж чадсангүй."
 
 # gdk-pixbuf/io-pnm.c:560 gdk-pixbuf/io-pnm.c:602
-#: gdk-pixbuf/io-png.c:1026
+#: gdk-pixbuf/io-png.c:1042
 msgid "The PNG image format"
 msgstr "PNG төрлийн зураг."
 
@@ -3007,7 +3007,7 @@ msgid "Unknown item"
 msgstr "Тодорхойгүй"
 
 # gdk-pixbuf/io-xpm.c:1235
-#: gtk/gtkrecentchoosermenu.c:1033
+#: gtk/gtkrecentchoosermenu.c:1032
 #, fuzzy
 msgid "No items found"
 msgstr "XPM биш толгой олдлоо"
@@ -4412,88 +4412,88 @@ msgstr "Вьетнам (VIQR)"
 msgid "X Input Method"
 msgstr "Х оролтын тогтолцоо"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1451
+#: modules/printbackends/cups/gtkprintbackendcups.c:1456
 msgid "Two Sided"
 msgstr ""
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1452
+#: modules/printbackends/cups/gtkprintbackendcups.c:1457
 msgid "Paper Type"
 msgstr ""
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1453
+#: modules/printbackends/cups/gtkprintbackendcups.c:1458
 msgid "Paper Source"
 msgstr ""
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1454
+#: modules/printbackends/cups/gtkprintbackendcups.c:1459
 msgid "Output Tray"
 msgstr ""
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1463
+#: modules/printbackends/cups/gtkprintbackendcups.c:1468
 msgid "One Sided"
 msgstr ""
 
 # gtk/gtkfontsel.c:1253
-#: modules/printbackends/cups/gtkprintbackendcups.c:1464
-#: modules/printbackends/cups/gtkprintbackendcups.c:1465
 #: modules/printbackends/cups/gtkprintbackendcups.c:1469
+#: modules/printbackends/cups/gtkprintbackendcups.c:1470
+#: modules/printbackends/cups/gtkprintbackendcups.c:1474
 #, fuzzy
 msgid "Auto Select"
 msgstr "Бичгийн сонголт"
 
 # gtk/gtkwindow.c:466
-#: modules/printbackends/cups/gtkprintbackendcups.c:1466
-#: modules/printbackends/cups/gtkprintbackendcups.c:1467
-#: modules/printbackends/cups/gtkprintbackendcups.c:1468
-#: modules/printbackends/cups/gtkprintbackendcups.c:1932
+#: modules/printbackends/cups/gtkprintbackendcups.c:1471
+#: modules/printbackends/cups/gtkprintbackendcups.c:1472
+#: modules/printbackends/cups/gtkprintbackendcups.c:1473
+#: modules/printbackends/cups/gtkprintbackendcups.c:1937
 #, fuzzy
 msgid "Printer Default"
 msgstr "Стандарт"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2125
+#: modules/printbackends/cups/gtkprintbackendcups.c:2130
 msgid "Urgent"
 msgstr ""
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2125
+#: modules/printbackends/cups/gtkprintbackendcups.c:2130
 msgid "High"
 msgstr ""
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2125
+#: modules/printbackends/cups/gtkprintbackendcups.c:2130
 msgid "Medium"
 msgstr ""
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2125
+#: modules/printbackends/cups/gtkprintbackendcups.c:2130
 msgid "Low"
 msgstr ""
 
 # gtk/gtkinputdialog.c:519
-#: modules/printbackends/cups/gtkprintbackendcups.c:2127
+#: modules/printbackends/cups/gtkprintbackendcups.c:2132
 #, fuzzy
 msgid "None"
 msgstr "байхгүй"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2127
+#: modules/printbackends/cups/gtkprintbackendcups.c:2132
 msgid "Classified"
 msgstr ""
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2127
+#: modules/printbackends/cups/gtkprintbackendcups.c:2132
 msgid "Confidential"
 msgstr ""
 
 # gtk/gtkinputdialog.c:246
-#: modules/printbackends/cups/gtkprintbackendcups.c:2127
+#: modules/printbackends/cups/gtkprintbackendcups.c:2132
 #, fuzzy
 msgid "Secret"
 msgstr "Дэлгэц"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2127
+#: modules/printbackends/cups/gtkprintbackendcups.c:2132
 msgid "Standard"
 msgstr ""
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2127
+#: modules/printbackends/cups/gtkprintbackendcups.c:2132
 msgid "Top Secret"
 msgstr ""
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2127
+#: modules/printbackends/cups/gtkprintbackendcups.c:2132
 msgid "Unclassified"
 msgstr ""
 

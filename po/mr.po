@@ -47,7 +47,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+.gtk-2-10.mr\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-01-16 23:43-0500\n"
+"POT-Creation-Date: 2007-01-22 12:38-0500\n"
 "PO-Revision-Date: 2006-12-14 11:47+0530\n"
 "Last-Translator: Rahul Bhalerao <b.rahul.pm@gmail.com>\n"
 "Language-Team: Marathi\n"
@@ -575,7 +575,7 @@ msgid "Bits per channel of PNG image is invalid."
 msgstr "PNG चित्रामधील प्रती ओळीतील कणसमुहांची(बिट्स) संख्या अवैध आहे."
 
 # gdk-pixbuf/io-png.c:136
-#: gdk-pixbuf/io-png.c:136
+#: gdk-pixbuf/io-png.c:136 gdk-pixbuf/io-png.c:619
 #, c-format
 msgid "Transformed PNG has zero width or height."
 msgstr "परिवर्तित PNG मधील ऊंची  किंवा रुंदी शुन्य आहे."
@@ -606,13 +606,13 @@ msgid "Fatal error in PNG image file: %s"
 msgstr "PNG प्रतिमा %s फाइल मध्ये  घातक त्रुटी आहेः"
 
 # gdk-pixbuf/io-png.c:310
-#: gdk-pixbuf/io-png.c:301
+#: gdk-pixbuf/io-png.c:311
 #, c-format
 msgid "Insufficient memory to load PNG file"
 msgstr "PNG फाइल सुरु करण्यासाठी पुरेशी स्मरणशक्ती नाही"
 
 # gdk-pixbuf/io-png.c:634
-#: gdk-pixbuf/io-png.c:618
+#: gdk-pixbuf/io-png.c:634
 #, c-format
 msgid ""
 "Insufficient memory to store a %ld by %ld image; try exiting some "
@@ -622,32 +622,32 @@ msgstr ""
 "बाबीकाढून उपलब्ध स्मरणशक्तीचा साठा वाढवा"
 
 # gdk-pixbuf/io-png.c:685
-#: gdk-pixbuf/io-png.c:669
+#: gdk-pixbuf/io-png.c:685
 #, c-format
 msgid "Fatal error reading PNG image file"
 msgstr "PNG प्रतिमेची फाइल वाचताना घातक चुक झाली आहे"
 
 # gdk-pixbuf/io-png.c:734
-#: gdk-pixbuf/io-png.c:718
+#: gdk-pixbuf/io-png.c:734
 #, c-format
 msgid "Fatal error reading PNG image file: %s"
 msgstr "PNG प्रतिमेची %sफाइल वाचताना घातक चुक झाली आहे:"
 
 # gdk-pixbuf/io-png.c:800
-#: gdk-pixbuf/io-png.c:810
+#: gdk-pixbuf/io-png.c:826
 #, c-format
 msgid ""
 "Keys for PNG text chunks must have at least 1 and at most 79 characters."
 msgstr "PNG पाठ चंकसाठी कळा किमान १ आणि कमाल ७९ अक्षरी असाव्यात."
 
 # gdk-pixbuf/io-png.c:808
-#: gdk-pixbuf/io-png.c:818
+#: gdk-pixbuf/io-png.c:834
 #, c-format
 msgid "Keys for PNG text chunks must be ASCII characters."
 msgstr "PNG पाठ चंकसाठी कळा ASCII अक्षरांच्याच असाव्यात."
 
 # gdk-pixbuf/io-jpeg.c:664
-#: gdk-pixbuf/io-png.c:831
+#: gdk-pixbuf/io-png.c:847
 #, c-format
 msgid ""
 "PNG compression level must be a value between 0 and 9; value '%s' could not "
@@ -657,7 +657,7 @@ msgstr ""
 "नाही."
 
 # gdk-pixbuf/io-jpeg.c:679
-#: gdk-pixbuf/io-png.c:843
+#: gdk-pixbuf/io-png.c:859
 #, c-format
 msgid ""
 "PNG compression level must be a value between 0 and 9; value '%d' is not "
@@ -665,13 +665,13 @@ msgid ""
 msgstr "PNG संकुचन स्तराचे मुल्य ० ते ९ च्या दरम्यानच असायला हवे; मुल्य '%d' अनुमत केलेलेनाही."
 
 # gdk-pixbuf/io-png.c:829
-#: gdk-pixbuf/io-png.c:883
+#: gdk-pixbuf/io-png.c:899
 #, c-format
 msgid "Value for PNG text chunk %s cannot be converted to ISO-8859-1 encoding."
 msgstr "PNG पाठ चंक %s चे मुल्य ISO-8859-1 एनकोडिंगमध्ये परिवर्तीत केले जाऊ शकत नाही."
 
 # gdk-pixbuf/io-pnm.c:560 gdk-pixbuf/io-pnm.c:602
-#: gdk-pixbuf/io-png.c:1026
+#: gdk-pixbuf/io-png.c:1042
 msgid "The PNG image format"
 msgstr "PNM प्रतिमा स्वरूप"
 
@@ -3001,7 +3001,7 @@ msgid "Unknown item"
 msgstr "अपरिचित बाब"
 
 # gdk-pixbuf/io-xpm.c:1235
-#: gtk/gtkrecentchoosermenu.c:1033
+#: gtk/gtkrecentchoosermenu.c:1032
 msgid "No items found"
 msgstr "बाबी सापडल्या नाहीत"
 
@@ -4522,88 +4522,88 @@ msgstr "विएतनामी (VIQR)"
 msgid "X Input Method"
 msgstr "X आदान पध्दत "
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1451
+#: modules/printbackends/cups/gtkprintbackendcups.c:1456
 msgid "Two Sided"
 msgstr "पाठपोट"
 
 # gtk/gtkmessagedialog.c:113
-#: modules/printbackends/cups/gtkprintbackendcups.c:1452
+#: modules/printbackends/cups/gtkprintbackendcups.c:1457
 msgid "Paper Type"
 msgstr "कागद प्रकार"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1453
+#: modules/printbackends/cups/gtkprintbackendcups.c:1458
 msgid "Paper Source"
 msgstr "कागद स्त्रोत"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1454
+#: modules/printbackends/cups/gtkprintbackendcups.c:1459
 msgid "Output Tray"
 msgstr "प्रदान ट्रे"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1463
+#: modules/printbackends/cups/gtkprintbackendcups.c:1468
 msgid "One Sided"
 msgstr "एका बाजूचे"
 
 # gtk/gtkfontsel.c:1253
-#: modules/printbackends/cups/gtkprintbackendcups.c:1464
-#: modules/printbackends/cups/gtkprintbackendcups.c:1465
 #: modules/printbackends/cups/gtkprintbackendcups.c:1469
+#: modules/printbackends/cups/gtkprintbackendcups.c:1470
+#: modules/printbackends/cups/gtkprintbackendcups.c:1474
 msgid "Auto Select"
 msgstr "स्वयं निवडणे"
 
 # gtk/gtkwindow.c:466
-#: modules/printbackends/cups/gtkprintbackendcups.c:1466
-#: modules/printbackends/cups/gtkprintbackendcups.c:1467
-#: modules/printbackends/cups/gtkprintbackendcups.c:1468
-#: modules/printbackends/cups/gtkprintbackendcups.c:1932
+#: modules/printbackends/cups/gtkprintbackendcups.c:1471
+#: modules/printbackends/cups/gtkprintbackendcups.c:1472
+#: modules/printbackends/cups/gtkprintbackendcups.c:1473
+#: modules/printbackends/cups/gtkprintbackendcups.c:1937
 msgid "Printer Default"
 msgstr "मुलभूत प्रिंटर"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2125
+#: modules/printbackends/cups/gtkprintbackendcups.c:2130
 msgid "Urgent"
 msgstr "तातडीने"
 
 # gtk/gtklayout.c:642
-#: modules/printbackends/cups/gtkprintbackendcups.c:2125
+#: modules/printbackends/cups/gtkprintbackendcups.c:2130
 msgid "High"
 msgstr "उंच"
 
 # gtk/gtkoptionmenu.c:188
-#: modules/printbackends/cups/gtkprintbackendcups.c:2125
+#: modules/printbackends/cups/gtkprintbackendcups.c:2130
 msgid "Medium"
 msgstr "मध्यम"
 
 # gtk/gtkruler.c:118
-#: modules/printbackends/cups/gtkprintbackendcups.c:2125
+#: modules/printbackends/cups/gtkprintbackendcups.c:2130
 msgid "Low"
 msgstr "खाली"
 
 # gtk/gtkinputdialog.c:519
-#: modules/printbackends/cups/gtkprintbackendcups.c:2127
+#: modules/printbackends/cups/gtkprintbackendcups.c:2132
 msgid "None"
 msgstr "काहीच नाही"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2127
+#: modules/printbackends/cups/gtkprintbackendcups.c:2132
 msgid "Classified"
 msgstr "वर्गीकृत"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2127
+#: modules/printbackends/cups/gtkprintbackendcups.c:2132
 msgid "Confidential"
 msgstr "गुप्त"
 
 # gtk/gtkinputdialog.c:246
-#: modules/printbackends/cups/gtkprintbackendcups.c:2127
+#: modules/printbackends/cups/gtkprintbackendcups.c:2132
 msgid "Secret"
 msgstr "गुपित"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2127
+#: modules/printbackends/cups/gtkprintbackendcups.c:2132
 msgid "Standard"
 msgstr "मानक"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2127
+#: modules/printbackends/cups/gtkprintbackendcups.c:2132
 msgid "Top Secret"
 msgstr "उच्च गुपित"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2127
+#: modules/printbackends/cups/gtkprintbackendcups.c:2132
 msgid "Unclassified"
 msgstr "अवर्गिकृत"
 

@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+.gtk-2-10\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-01-16 23:43-0500\n"
+"POT-Creation-Date: 2007-01-22 12:38-0500\n"
 "PO-Revision-Date: 2007-01-07 21:27+0530\n"
 "Last-Translator: A S Alam <aalam@users.sf.net>\n"
 "Language-Team: Punjabi <fedora-trans-pa@redhat.com>\n"
@@ -458,7 +458,7 @@ msgstr "PCX ਚਿੱਤਰ ਫਾਰਮੈਟ"
 msgid "Bits per channel of PNG image is invalid."
 msgstr "PNG ਚਿੱਤਰ ਵਿੱਚ ਬਿੱਟ ਪ੍ਰਤੀ ਚੈਨਲ ਗਲਤ ਹੈ"
 
-#: gdk-pixbuf/io-png.c:136
+#: gdk-pixbuf/io-png.c:136 gdk-pixbuf/io-png.c:619
 #, c-format
 msgid "Transformed PNG has zero width or height."
 msgstr "ਤਬਦੀਲ PNG ਦੀ ਸਿਫ਼ਰ ਚੌੜਾਈ ਜਾਂ ਉਚਾਈ ਹੈ"
@@ -483,12 +483,12 @@ msgstr "ਤਬਦੀਲ PNG ਵਿੱਚ ਬਿਨ-ਸਹਾਇਤਾ ਪ੍ਰ�
 msgid "Fatal error in PNG image file: %s"
 msgstr "PNG ਚਿੱਤਰ ਫਾਇਲ ਵਿੱਚ ਘਾਤਕ ਗਲਤੀ: %s"
 
-#: gdk-pixbuf/io-png.c:301
+#: gdk-pixbuf/io-png.c:311
 #, c-format
 msgid "Insufficient memory to load PNG file"
 msgstr "PNG ਫਾਇਲ ਨੂੰ ਲੋਡ ਕਰਨ ਲਈ ਲੋੜੀਦੀ ਮੈਮੋਰੀ ਨਹੀ ਹੈ"
 
-#: gdk-pixbuf/io-png.c:618
+#: gdk-pixbuf/io-png.c:634
 #, c-format
 msgid ""
 "Insufficient memory to store a %ld by %ld image; try exiting some "
@@ -497,28 +497,28 @@ msgstr ""
 "%ld X %ld ਚਿੱਤਰ ਨੂੰ ਲੋਡ ਕਰਨ ਲਈ ਲੋੜੀਦੀ ਮੈਮੋਰੀ ਨਹੀ ਹੈ ਕੁਝ ਕਾਰਜ ਬੰਦ ਕਰਕੇ ਮੈਮੋਰੀ ਦੀ ਵਰਤੋ ਨੂੰ ਘੱਟ "
 "ਕਰੋ।"
 
-#: gdk-pixbuf/io-png.c:669
+#: gdk-pixbuf/io-png.c:685
 #, c-format
 msgid "Fatal error reading PNG image file"
 msgstr "PNG ਚਿੱਤਰ ਫਾਇਲ ਪੜ੍ਹਨ ਵਿੱਚ ਘਾਤਕ ਗਲਤੀ"
 
-#: gdk-pixbuf/io-png.c:718
+#: gdk-pixbuf/io-png.c:734
 #, c-format
 msgid "Fatal error reading PNG image file: %s"
 msgstr "PNG ਚਿੱਤਰ ਫਾਇਲ ਪੜ੍ਹਨ ਵਿੱਚ ਘਾਤਕ ਗਲਤੀ: %s"
 
-#: gdk-pixbuf/io-png.c:810
+#: gdk-pixbuf/io-png.c:826
 #, c-format
 msgid ""
 "Keys for PNG text chunks must have at least 1 and at most 79 characters."
 msgstr "PNG ਵਿੱਚ ਪਾਠ ਹੋਣ ਲਈ ਅੱਖਰਾਂ ਦੀ ਗਿਣਤੀ ਨਿਊਨਤਮ 1 ਅਤੇ ਅਧਿਕਤਮ 79 ਹੋ ਸਕਦੀ ਹੈ।"
 
-#: gdk-pixbuf/io-png.c:818
+#: gdk-pixbuf/io-png.c:834
 #, c-format
 msgid "Keys for PNG text chunks must be ASCII characters."
 msgstr "PNG ਪਾਠ ਲਈ ਅੱਖਰ ASCII ਅੱਖਰ ਹੋਣੇ ਜ਼ਰੂਰੀ ਹਨ"
 
-#: gdk-pixbuf/io-png.c:831
+#: gdk-pixbuf/io-png.c:847
 #, c-format
 msgid ""
 "PNG compression level must be a value between 0 and 9; value '%s' could not "
@@ -527,19 +527,19 @@ msgstr ""
 "PNG ਨਪੀੜਨ ਪੱਧਰ ਦਾ ਮੁੱਲ 0 ਤੋਂ 9 ਦੇ ਵਿੱਚ ਹੀ ਹੋਣਾ ਚਾਹੀਦਾ ਹੈ, ਮੁੱਲ '%s' ਨੂੰ ਪਾਰਸ ਨਹੀ ਕੀਤਾ ਜਾ "
 "ਸਕਿਆ।"
 
-#: gdk-pixbuf/io-png.c:843
+#: gdk-pixbuf/io-png.c:859
 #, c-format
 msgid ""
 "PNG compression level must be a value between 0 and 9; value '%d' is not "
 "allowed."
 msgstr "PNG ਨਪੀੜਨ ਪੱਧਰ ਦਾ ਮੁੱਲ 0 ਤੋਂ 9 ਦੇ ਵਿੱਚ ਹੀ ਹੋਣਾ ਚਾਹੀਦਾ ਹੈ, ਮੁੱਲ '%d' ਮਨਜ਼ੂਰ ਨਹੀਂ ਹੈ।"
 
-#: gdk-pixbuf/io-png.c:883
+#: gdk-pixbuf/io-png.c:899
 #, c-format
 msgid "Value for PNG text chunk %s cannot be converted to ISO-8859-1 encoding."
 msgstr "PNG ਪਾਠ %s ਦਾ ਮੁੱਲ ਨੂੰ ISO-8859-1 ਇੰਕੋਡਿੰਗ ਵਿੱਚ ਤਬਦੀਲ ਨਹੀ ਕੀਤਾ ਜਾ ਸਕਦਾ ਹੈ।"
 
-#: gdk-pixbuf/io-png.c:1026
+#: gdk-pixbuf/io-png.c:1042
 msgid "The PNG image format"
 msgstr "PNG ਫਾਇਲ ਫਾਰਮੈਟ"
 
@@ -2632,7 +2632,7 @@ msgstr "'%s' ਖੋਲ੍ਹੋ"
 msgid "Unknown item"
 msgstr "ਅਣਜਾਣ ਇਕਾਈ"
 
-#: gtk/gtkrecentchoosermenu.c:1033
+#: gtk/gtkrecentchoosermenu.c:1032
 msgid "No items found"
 msgstr "ਕੋਈ ਇਕਾਈ ਨਹੀਂ ਲੱਭੀ"
 
@@ -3955,80 +3955,80 @@ msgstr "ਵੀਅਤਨਾਮੀ (VIQR)"
 msgid "X Input Method"
 msgstr "X ਇੰਪੁੱਟ ਢੰਗ"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1451
+#: modules/printbackends/cups/gtkprintbackendcups.c:1456
 msgid "Two Sided"
 msgstr "ਦੋ ਪਾਸੀਂ"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1452
+#: modules/printbackends/cups/gtkprintbackendcups.c:1457
 msgid "Paper Type"
 msgstr "ਸਫ਼ਾ ਕਿਸਮ"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1453
+#: modules/printbackends/cups/gtkprintbackendcups.c:1458
 msgid "Paper Source"
 msgstr "ਸਫ਼ਾ ਸਰੋਤ"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1454
+#: modules/printbackends/cups/gtkprintbackendcups.c:1459
 msgid "Output Tray"
 msgstr "ਆਉਟਪੁੱਟ ਟਰੇ"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1463
+#: modules/printbackends/cups/gtkprintbackendcups.c:1468
 msgid "One Sided"
 msgstr "ਇੱਕ ਪਾਸੀਂ"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1464
-#: modules/printbackends/cups/gtkprintbackendcups.c:1465
 #: modules/printbackends/cups/gtkprintbackendcups.c:1469
+#: modules/printbackends/cups/gtkprintbackendcups.c:1470
+#: modules/printbackends/cups/gtkprintbackendcups.c:1474
 msgid "Auto Select"
 msgstr "ਆਟੋ ਚੋਣ"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1466
-#: modules/printbackends/cups/gtkprintbackendcups.c:1467
-#: modules/printbackends/cups/gtkprintbackendcups.c:1468
-#: modules/printbackends/cups/gtkprintbackendcups.c:1932
+#: modules/printbackends/cups/gtkprintbackendcups.c:1471
+#: modules/printbackends/cups/gtkprintbackendcups.c:1472
+#: modules/printbackends/cups/gtkprintbackendcups.c:1473
+#: modules/printbackends/cups/gtkprintbackendcups.c:1937
 msgid "Printer Default"
 msgstr "ਪਰਿੰਟਰ ਮੂਲ"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2125
+#: modules/printbackends/cups/gtkprintbackendcups.c:2130
 msgid "Urgent"
 msgstr "ਜ਼ਰੂਰੀ"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2125
+#: modules/printbackends/cups/gtkprintbackendcups.c:2130
 msgid "High"
 msgstr "ਉੱਚ"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2125
+#: modules/printbackends/cups/gtkprintbackendcups.c:2130
 msgid "Medium"
 msgstr "ਮੱਧਮ"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2125
+#: modules/printbackends/cups/gtkprintbackendcups.c:2130
 msgid "Low"
 msgstr "ਘੱਟ"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2127
+#: modules/printbackends/cups/gtkprintbackendcups.c:2132
 msgid "None"
 msgstr "ਕੋਈ ਨਹੀਂ"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2127
+#: modules/printbackends/cups/gtkprintbackendcups.c:2132
 msgid "Classified"
 msgstr "ਵਰਗੀਕ੍ਰਿਤ"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2127
+#: modules/printbackends/cups/gtkprintbackendcups.c:2132
 msgid "Confidential"
 msgstr "ਗੁਪਤ"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2127
+#: modules/printbackends/cups/gtkprintbackendcups.c:2132
 msgid "Secret"
 msgstr "ਗੁਪਤ"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2127
+#: modules/printbackends/cups/gtkprintbackendcups.c:2132
 msgid "Standard"
 msgstr "ਮਿਆਰੀ"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2127
+#: modules/printbackends/cups/gtkprintbackendcups.c:2132
 msgid "Top Secret"
 msgstr "ਉੱਚ ਗੁਪਤ"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2127
+#: modules/printbackends/cups/gtkprintbackendcups.c:2132
 msgid "Unclassified"
 msgstr "ਨਾ-ਵਰਗੀਕ੍ਰਿਤ"
 

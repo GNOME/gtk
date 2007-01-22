@@ -43,7 +43,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+.gtk-2-10.ml\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-01-16 23:43-0500\n"
+"POT-Creation-Date: 2007-01-22 12:38-0500\n"
 "PO-Revision-Date: 2006-12-11 10:05+0530\n"
 "Last-Translator: Ani Peter <apeter@redhat.com>\n"
 "Language-Team: Malayalam\n"
@@ -503,7 +503,7 @@ msgstr "PCX ഇമേജ് ഫോര്‍മാറ്റ്"
 msgid "Bits per channel of PNG image is invalid."
 msgstr "PNG ഇമേജിന്‍റെ ഓരോ ചാനലിലും ഉളള ബിറ്റുകള്‍ അസാധുവാണ്."
 
-#: gdk-pixbuf/io-png.c:136
+#: gdk-pixbuf/io-png.c:136 gdk-pixbuf/io-png.c:619
 #, c-format
 msgid "Transformed PNG has zero width or height."
 msgstr "ട്രാന്‍സ്ഫോം ചെയ്യപ്പെട്ട PNG-യുടെ വീതിയും നീളവും പൂജ്യമാണ്."
@@ -530,12 +530,12 @@ msgstr ""
 msgid "Fatal error in PNG image file: %s"
 msgstr "PNG ഇമേജ് ഫയലില്‍ കാര്യമായ പിഴവ്: %s"
 
-#: gdk-pixbuf/io-png.c:301
+#: gdk-pixbuf/io-png.c:311
 #, c-format
 msgid "Insufficient memory to load PNG file"
 msgstr "PNG ഫയല്‍ ലോഡ് ചെയ്യുന്നതിന് മെമ്മറി ആവശ്യത്തിനില്ല"
 
-#: gdk-pixbuf/io-png.c:618
+#: gdk-pixbuf/io-png.c:634
 #, c-format
 msgid ""
 "Insufficient memory to store a %ld by %ld image; try exiting some "
@@ -544,17 +544,17 @@ msgstr ""
 "ഒരു %ld by %ld ഇമേജ് സംരക്ഷിക്കുന്നതിന് ആവശ്യമായ മെമ്മറിയില്ല്; ആയതിനാല്‍ ചില ആപ്ളിക്കേഷനില്‍ "
 "നിന്നും പുറത്ത് വന്ന് മെമ്മറി ഉപയോഗം കുറച്ചശേഷം വീണ്ടും ശ്രമിക്കുക"
 
-#: gdk-pixbuf/io-png.c:669
+#: gdk-pixbuf/io-png.c:685
 #, c-format
 msgid "Fatal error reading PNG image file"
 msgstr "PNG ഇമേജ് ഫയല്‍ വായിക്കുന്നതില്‍ കാര്യമായ പിഴവ്"
 
-#: gdk-pixbuf/io-png.c:718
+#: gdk-pixbuf/io-png.c:734
 #, c-format
 msgid "Fatal error reading PNG image file: %s"
 msgstr "PNG ഇമേജ് ഫയല്‍ വായിക്കുന്നതില്‍ കാര്യമായ പിഴവ്: %s"
 
-#: gdk-pixbuf/io-png.c:810
+#: gdk-pixbuf/io-png.c:826
 #, c-format
 msgid ""
 "Keys for PNG text chunks must have at least 1 and at most 79 characters."
@@ -562,12 +562,12 @@ msgstr ""
 "PNG ടെക്സ്റ്റ് ചങ്കിനുളള കീകള്‍ക്ക് ഏറ്റവും കുറഞ്ഞത് 1-ഉം ഏറ്റവും കൂടിയത് 79-ഉം അക്ഷരങ്ങളോ "
 "അക്കങ്ങളോ ഉണ്ടായിരിക്കണം."
 
-#: gdk-pixbuf/io-png.c:818
+#: gdk-pixbuf/io-png.c:834
 #, c-format
 msgid "Keys for PNG text chunks must be ASCII characters."
 msgstr "PNG ടെക്സ്റ്റ് ചങ്കിനുളള കീകള്‍ ASCII അക്ഷരങ്ങള്‍ ആവണം."
 
-#: gdk-pixbuf/io-png.c:831
+#: gdk-pixbuf/io-png.c:847
 #, c-format
 msgid ""
 "PNG compression level must be a value between 0 and 9; value '%s' could not "
@@ -576,7 +576,7 @@ msgstr ""
 "PNG കംപ്രഷന്‍റെ മൂല്ല്യം 0-നും 9-നും ഇടയ്ക്കായിരിക്കണം; '%s' എന്ന മൂല്ല്യം പാഴ്സ് ചെയ്യുവാന്‍ "
 "സാധിച്ചില്ല."
 
-#: gdk-pixbuf/io-png.c:843
+#: gdk-pixbuf/io-png.c:859
 #, c-format
 msgid ""
 "PNG compression level must be a value between 0 and 9; value '%d' is not "
@@ -584,12 +584,12 @@ msgid ""
 msgstr ""
 "PNG കംപ്രഷന്‍റെ മൂല്ല്യം 0-നും 9-നും ഇടയ്ക്കായിരിക്കണം; '%d' എന്ന മൂല്ല്യം അനുവദിക്കുന്നതല്ല."
 
-#: gdk-pixbuf/io-png.c:883
+#: gdk-pixbuf/io-png.c:899
 #, c-format
 msgid "Value for PNG text chunk %s cannot be converted to ISO-8859-1 encoding."
 msgstr "PNG ടെക്സ്റ്റ് ചങ്ക് എന്ന %s ISO-8859-1 എന്‍കോഡിങിലേക്ക് വേര്‍തിരിക്കുവാന്‍ സാധ്യമല്ല."
 
-#: gdk-pixbuf/io-png.c:1026
+#: gdk-pixbuf/io-png.c:1042
 msgid "The PNG image format"
 msgstr "PNG ഇമേജ് ഫോര്‍മാറ്റ്"
 
@@ -2691,7 +2691,7 @@ msgstr "'%s' തുറക്കുക"
 msgid "Unknown item"
 msgstr "(അറിയാത്ത ഇനം)"
 
-#: gtk/gtkrecentchoosermenu.c:1033
+#: gtk/gtkrecentchoosermenu.c:1032
 msgid "No items found"
 msgstr "ഐറ്റമൊന്നും ഇല്ല"
 
@@ -4014,80 +4014,80 @@ msgstr "വിയറ്റ്നാമീസ് (VIQR)"
 msgid "X Input Method"
 msgstr "X എന്ന എന്‍റര്‍ ചെയ്യുന്ന രീതി"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1451
+#: modules/printbackends/cups/gtkprintbackendcups.c:1456
 msgid "Two Sided"
 msgstr "ഒരു പേപ്പറിന്‍റെ രണ്ടു വശവും പ്രിന്‍റ് ചെയ്യുക"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1452
+#: modules/printbackends/cups/gtkprintbackendcups.c:1457
 msgid "Paper Type"
 msgstr "ഏത് തരത്തിലുളള പേപ്പര്‍ ആണ് ഉപയോഗിക്കുന്നത് "
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1453
+#: modules/printbackends/cups/gtkprintbackendcups.c:1458
 msgid "Paper Source"
 msgstr "പേപ്പറിന്‍റെ ഉറവിടം"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1454
+#: modules/printbackends/cups/gtkprintbackendcups.c:1459
 msgid "Output Tray"
 msgstr "ഔട്ട് പുട്ട് ട്രെ"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1463
+#: modules/printbackends/cups/gtkprintbackendcups.c:1468
 msgid "One Sided"
 msgstr "ഒരു വശത്ത് മാത്രം പ്രിന്‍റ് ചെയ്യുക"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1464
-#: modules/printbackends/cups/gtkprintbackendcups.c:1465
 #: modules/printbackends/cups/gtkprintbackendcups.c:1469
+#: modules/printbackends/cups/gtkprintbackendcups.c:1470
+#: modules/printbackends/cups/gtkprintbackendcups.c:1474
 msgid "Auto Select"
 msgstr "കംപ്യൂട്ടര്‍ തനിയെ തിരഞ്ഞെടുക്കുക"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1466
-#: modules/printbackends/cups/gtkprintbackendcups.c:1467
-#: modules/printbackends/cups/gtkprintbackendcups.c:1468
-#: modules/printbackends/cups/gtkprintbackendcups.c:1932
+#: modules/printbackends/cups/gtkprintbackendcups.c:1471
+#: modules/printbackends/cups/gtkprintbackendcups.c:1472
+#: modules/printbackends/cups/gtkprintbackendcups.c:1473
+#: modules/printbackends/cups/gtkprintbackendcups.c:1937
 msgid "Printer Default"
 msgstr "ഡീഫോള്‍ട്ടായ പ്രിന്‍റര്‍"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2125
+#: modules/printbackends/cups/gtkprintbackendcups.c:2130
 msgid "Urgent"
 msgstr "അത്യാവശ്യം"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2125
+#: modules/printbackends/cups/gtkprintbackendcups.c:2130
 msgid "High"
 msgstr "സാന്ദ്രത കൂടിയത് "
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2125
+#: modules/printbackends/cups/gtkprintbackendcups.c:2130
 msgid "Medium"
 msgstr "സാധാരണ സാന്ദ്രത"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2125
+#: modules/printbackends/cups/gtkprintbackendcups.c:2130
 msgid "Low"
 msgstr "സാന്ദ്രത കുറഞ്ഞത്"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2127
+#: modules/printbackends/cups/gtkprintbackendcups.c:2132
 msgid "None"
 msgstr "ശൂന്യം"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2127
+#: modules/printbackends/cups/gtkprintbackendcups.c:2132
 msgid "Classified"
 msgstr "പൊതുവായ അറിവിലേക്കുളളതല്ലാത്തത്"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2127
+#: modules/printbackends/cups/gtkprintbackendcups.c:2132
 msgid "Confidential"
 msgstr "രഹസ്യ സ്വഭാവമുളളത് "
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2127
+#: modules/printbackends/cups/gtkprintbackendcups.c:2132
 msgid "Secret"
 msgstr "രഹസ്യം"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2127
+#: modules/printbackends/cups/gtkprintbackendcups.c:2132
 msgid "Standard"
 msgstr "സര്‍വ്വ സാധാരണമായത് "
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2127
+#: modules/printbackends/cups/gtkprintbackendcups.c:2132
 msgid "Top Secret"
 msgstr "അതീവ രഹസ്യമായത് "
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2127
+#: modules/printbackends/cups/gtkprintbackendcups.c:2132
 msgid "Unclassified"
 msgstr "പൊതുവായ അറിവിലേക്കുളളത്"
 

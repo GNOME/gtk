@@ -1,3 +1,7 @@
+2007-01-22  Matthias Clasen  <mclasen@redhat.com>
+
+	* === 2.10.9 ===
+
 2007-01-21  Matthias Clasen  <mclasen@redhat.com>
 
 	* io-gif.c (gdk_pixbuf__gif_image_stop_load): Return an

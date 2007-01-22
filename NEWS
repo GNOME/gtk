@@ -1,3 +1,23 @@
+Overview of Changes from GTK+ 2.10.8 to 2.10.9
+==============================================
+
+* Printing support:
+ - Fix build with cups 1.1
+
+* Recent menu support:
+ - Fix a double-free bug that causes panel crashes
+
+* Bugs fixed:
+ 394190 crash when opening a gif with a manipulated header
+ 363437 gnome-panel crash to gtkrecentmanager code
+ 143460 Missed tablet button click/release events on win32 (wintab)
+ 336819 GTK won't compile with mingw on linux
+ 397330 GTK+ 2.10.7 source release does not have 'gtksocket-stub....
+ 397581 Build is failing (typo)
+ 397621 io-png.c: Don't load iconv for ASCII text chunks
+ 397783 Initial focus in calendar 
+
+
 Overview of Changes from GTK+ 2.10.7 to 2.10.8
 ==============================================
 
