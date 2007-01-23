@@ -1,3 +1,9 @@
+2007-01-23  Carlos Garcia Campos  <carlosgc@gnome.org>
+
+	* gtk/gtkpagesetup.c
+	(gtk_page_setup_set_paper_size_and_default_margins): Fix memory leak.
+	Fixes bug #399907.
+
 2007-01-23  Murray Cumming  <murrayc@murrayc.com>
 
 	* gtk/gtktreemodel.c: gtk_tree_path_next(): 
