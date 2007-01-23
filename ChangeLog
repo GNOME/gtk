@@ -1,3 +1,9 @@
+2007-01-23  Murray Cumming  <murrayc@murrayc.com>
+
+	* gtk/gtktreemodel.c: gtk_tree_path_next(): 
+	Add a note to the documentation about the changed path being only a 
+	path to a potential node, so you must check that it really exists.
+
 2007-01-22  Matthias Clasen  <mclasen@redhat.com>
 
 	* configure.in: Bump version

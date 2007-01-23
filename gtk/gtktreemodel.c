@@ -775,7 +775,8 @@ gtk_tree_path_is_descendant (GtkTreePath *path,
  * gtk_tree_path_next:
  * @path: A #GtkTreePath.
  *
- * Moves the @path to point to the next node at the current depth.
+ * Moves the @path to point to the next potential node at the current depth.
+ * You must use gtk_tree_model_get_iter() to discover whether a corresponding row actually exists.
  **/
 void
 gtk_tree_path_next (GtkTreePath *path)
