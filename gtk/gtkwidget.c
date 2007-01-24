@@ -4531,19 +4531,10 @@ void
 gtk_widget_set_state (GtkWidget           *widget,
 		      GtkStateType         state)
 {
-  gboolean touchscreen;
-
   g_return_if_fail (GTK_IS_WIDGET (widget));
 
   if (state == GTK_WIDGET_STATE (widget))
     return;
-
-  g_object_get (gtk_widget_get_settings (widget),
-                "gtk-touchscreen-mode", &touchscreen,
-                NULL);
-  
-  if (touchscreen && state == GTK_STATE_PRELIGHT)
-    state = GTK_STATE_NORMAL;
 
   if (state == GTK_STATE_INSENSITIVE)
     gtk_widget_set_sensitive (widget, FALSE);
