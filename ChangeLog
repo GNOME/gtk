@@ -1,3 +1,12 @@
+2007-01-24  Michael Natterer  <mitch@imendio.com>
+
+	Merge from trunk:
+
+	* gtk/gtkwidget.c (gtk_widget_set_state): revert generic disabling
+	of PRELIGHT state for the reasons given in bug #135666. Widget
+	states are sometimes abused or otherwise used wrongly for historic
+	reasons, causing this part of the patch to break e.g. menu items.
+
 2007-01-24  Roozbeh Pournader  <roozbeh@farsiweb.info>
 
 	* README: Remove mention of no-longer-existing PATCH
