@@ -1,3 +1,10 @@
+2007-01-25  Matthias Clasen  <mclasen@redhat.com>
+
+	Merge from trunk:
+
+	* gdk/gdkwindow.c: Reduce locking overhead by not repeatedly getting
+	the paintable iface.  
+
 2007-01-24  Michael Natterer  <mitch@imendio.com>
 
 	Merge from trunk:

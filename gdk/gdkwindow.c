@@ -981,10 +981,13 @@ gdk_window_begin_paint_region (GdkWindow *window,
   if (GDK_WINDOW_DESTROYED (window))
     return;
 
-  if (GDK_IS_PAINTABLE (private->impl) &&
-      GDK_PAINTABLE_GET_IFACE (private->impl)->begin_paint_region) 
+  if (GDK_IS_PAINTABLE (private->impl)) 
     {
-      GDK_PAINTABLE_GET_IFACE (private->impl)->begin_paint_region (GDK_PAINTABLE (private->impl), region);
+      GdkPaintableIface *iface = GDK_PAINTABLE_GET_IFACE (private->impl);
+
+      if (iface->begin_paint_region)
+        iface->begin_paint_region ((GdkPaintable*)private->impl, region);
+
       return;
     }
 
@@ -1049,10 +1052,12 @@ gdk_window_end_paint (GdkWindow *window)
   if (GDK_WINDOW_DESTROYED (window))
     return;
 
-  if (GDK_IS_PAINTABLE (private->impl) &&
-      GDK_PAINTABLE_GET_IFACE (private->impl)->end_paint) 
+  if (GDK_IS_PAINTABLE (private->impl))
     {
-      GDK_PAINTABLE_GET_IFACE (private->impl)->end_paint (GDK_PAINTABLE (private->impl));
+      GdkPaintableIface *iface = GDK_PAINTABLE_GET_IFACE (private->impl);
+
+      if (iface->end_paint)
+        iface->end_paint ((GdkPaintable*)private->impl);
       return;
     }
 
@@ -2428,10 +2433,13 @@ gdk_window_process_updates (GdkWindow *window,
   g_return_if_fail (window != NULL);
   g_return_if_fail (GDK_IS_WINDOW (window));
   
-  if (GDK_IS_PAINTABLE (private->impl) &&
-      GDK_PAINTABLE_GET_IFACE (private->impl)->process_updates)
+  if (GDK_IS_PAINTABLE (private->impl))
     {
-      GDK_PAINTABLE_GET_IFACE (private->impl)->process_updates (GDK_PAINTABLE (private->impl), update_children);
+      GdkPaintableIface *iface = GDK_PAINTABLE_GET_IFACE (private->impl);
+
+      if (iface->process_updates)
+        iface->process_updates ((GdkPaintable*)private->impl, update_children);
+
       return;
     }
   
@@ -2564,11 +2572,13 @@ gdk_window_invalidate_maybe_recurse (GdkWindow *window,
   if (private->input_only || !GDK_WINDOW_IS_MAPPED (window))
     return;
 
-  if (GDK_IS_PAINTABLE (private->impl) &&
-      GDK_PAINTABLE_GET_IFACE (private->impl)->invalidate_maybe_recurse)
+  if (GDK_IS_PAINTABLE (private->impl))
     {
-      GDK_PAINTABLE_GET_IFACE (private->impl)->invalidate_maybe_recurse (GDK_PAINTABLE (private->impl), region,
-									 child_func, user_data);
+      GdkPaintableIface *iface = GDK_PAINTABLE_GET_IFACE (private->impl);
+
+      if (iface->invalidate_maybe_recurse)
+        iface->invalidate_maybe_recurse ((GdkPaintable*)private->impl, 
+                                         region, child_func, user_data);
       return;
     }
 
