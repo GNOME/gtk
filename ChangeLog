@@ -4,7 +4,7 @@
 	destroy the XIM only if it exists. While the code does look safe
 	in general, there can be corner cases where the "reconnecting"
 	boolean being FALSE does not correspond to the XIM being
-	allocated (fix taken from maemo-gtk).
+	allocated (fixes #329450, fix taken from maemo-gtk).
 
 Fri Jan 26 13:07:07 2007  Tim Janik  <timj@imendio.com>
 
