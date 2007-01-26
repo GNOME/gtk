@@ -1,3 +1,13 @@
+2007-01-26  Michael Natterer  <mitch@imendio.com>
+
+	Merge from trunk:
+
+	* modules/input/gtkimcontextxim.c (gtk_im_context_xim_finalize):
+	destroy the XIM only if it exists. While the code does look safe
+	in general, there can be corner cases where the "reconnecting"
+	boolean being FALSE does not correspond to the XIM being
+	allocated (fixes #329450, fix taken from maemo-gtk).
+
 2007-01-25  Matthias Clasen  <mclasen@redhat.com>
 
 	Merge from trunk:
