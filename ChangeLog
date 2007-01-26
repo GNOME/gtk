@@ -1,3 +1,8 @@
+Fri Jan 26 13:07:07 2007  Tim Janik  <timj@imendio.com>
+
+	* gtk/gtkstyle.c (draw_insertion_cursor): clamp cursor coordinates to
+	window bounds (fix from Maemo Gtk).
+
 2007-01-26  Michael Natterer  <mitch@imendio.com>
 
 	* gtk/gtkentrycompletion.c (gtk_entry_completion_insert_prefix):
