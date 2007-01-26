@@ -1,3 +1,12 @@
+2007-01-26  Michael Natterer  <mitch@imendio.com>
+
+	* gtk/gtkentrycompletion.c (gtk_entry_completion_insert_prefix):
+	only block/unblock completion->priv->insert_text_id if it is
+	actually connected. While this can't happen the way GtkEntry
+	itself uses the completion, it's still public API and should not
+	blindly call functions that will spit warnings (fix taken from
+	maemo-gtk).
+
 2007-01-25  Matthias Clasen  <mclasen@redhat.com>
 
 	* gdk/gdkwindow.c: Reduce locking overhead by not repeatedly getting
