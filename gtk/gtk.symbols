@@ -1489,6 +1489,7 @@ gtk_file_system_win32_new
 
 #if IN_HEADER(__GTK_FILESEL_H__)
 #if IN_FILE(__GTK_FILESEL_C__)
+#ifndef GTK_DISABLE_DEPRECATED
 gtk_file_selection_complete
 gtk_file_selection_get_filename PRIVATE
 #ifdef G_OS_WIN32
@@ -1508,6 +1509,7 @@ gtk_file_selection_set_filename_utf8
 #endif
 gtk_file_selection_set_select_multiple
 gtk_file_selection_show_fileop_buttons
+#endif
 #endif
 #endif
 
@@ -3021,8 +3023,10 @@ gtk_rc_set_default_files_utf8
 gtk_rc_style_copy
 gtk_rc_style_get_type G_GNUC_CONST
 gtk_rc_style_new
+#ifndef GTK_DISABLE_DEPRECATED
 gtk_rc_style_ref
 gtk_rc_style_unref
+#endif
 #endif
 #endif
 

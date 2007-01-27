@@ -168,8 +168,11 @@ void	  gtk_rc_add_class_style	(GtkRcStyle   *rc_style,
 GType       gtk_rc_style_get_type   (void) G_GNUC_CONST;
 GtkRcStyle* gtk_rc_style_new        (void);
 GtkRcStyle* gtk_rc_style_copy       (GtkRcStyle *orig);
+
+#ifndef GTK_DISABLE_DEPRECATED
 void        gtk_rc_style_ref        (GtkRcStyle *rc_style);
 void        gtk_rc_style_unref      (GtkRcStyle *rc_style);
+#endif
 
 gchar*		gtk_rc_find_module_in_path	(const gchar 	*module_file);
 gchar*		gtk_rc_get_theme_dir		(void);

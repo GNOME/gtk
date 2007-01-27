@@ -6,6 +6,10 @@ Prompt the user for a file or directory name
 
 <!-- ##### SECTION Long_Description ##### -->
 <para>
+#GtkFileSelection has been superseded by the newer #GtkFileChooser family
+of widgets.
+</para>
+<para>
 #GtkFileSelection should be used to retrieve file or directory names from 
 the user. It will create a new dialog window containing a directory list, 
 and a file list corresponding to the current working directory. The filesystem 
@@ -93,53 +97,35 @@ void create_file_selection (void) {
 <!-- ##### STRUCT GtkFileSelection ##### -->
 <para>
 The #GtkFileSelection struct contains the following #GtkWidget fields:
-
-<informaltable pgwide="1" frame="none" role="struct">
-<tgroup cols="2"><colspec colwidth="2*"/><colspec colwidth="8*"/>
-<tbody>
-
-<row>
-<entry>*fileop_dialog;</entry>
-<entry>the dialog box used to display the #GtkFileSelection. It can be customized by adding/removing widgets from it using the standard #GtkDialog functions.</entry>
-</row>
-
-<row>
-<entry>*ok_button, *cancel_button;</entry>
-<entry>the two main buttons that signals should be connected to in order to perform an action when the user hits either OK or Cancel.</entry>
-</row>
-
-<row>
-<entry>*history_pulldown;</entry>
-<entry>the #GtkOptionMenu used to create the drop-down directory history.</entry>
-</row>
-
-<row>
-<entry>*fileop_c_dir, *fileop_del_file, *fileop_ren_file;</entry>
-<entry>the buttons that appear at the top of the file selection dialog. These "operation buttons" can be hidden and redisplayed with gtk_file_selection_hide_fileop_buttons() and  gtk_file_selection_show_fileop_buttons() respectively.</entry>
-</row>
-
-</tbody></tgroup></informaltable>
-
 </para>
+
+@fileop_dialog: the dialog box used to display the #GtkFileSelection. 
+   It can be customized by adding/removing widgets from it using the 
+   standard #GtkDialog functions.
+@ok_button: 
+@cancel_button: the two main buttons that signals should be connected 
+    to in order to perform an action when the user hits either OK or 
+    Cancel.
+@history_pulldown: the #GtkOptionMenu used to create the drop-down 
+    directory history.
+@fileop_c_dir: 
+@fileop_del_file: 
+@fileop_ren_file: the buttons that appear at the top of the file 
+    selection dialog. These "operation buttons" can be hidden and 
+    redisplayed with gtk_file_selection_hide_fileop_buttons() and  
+    gtk_file_selection_show_fileop_buttons() respectively.
 
 @dir_list: 
 @file_list: 
 @selection_entry: 
 @selection_text: 
 @main_vbox: 
-@ok_button: 
-@cancel_button: 
 @help_button: 
-@history_pulldown: 
 @history_menu: 
 @history_list: 
-@fileop_dialog: 
 @fileop_entry: 
 @fileop_file: 
 @cmpl_state: 
-@fileop_c_dir: 
-@fileop_del_file: 
-@fileop_ren_file: 
 @button_area: 
 @action_area: 
 
@@ -165,6 +151,7 @@ Creates a new file selection dialog box. By default it will contain a #GtkTreeVi
 
 @title: a message that will be placed in the file requestor's titlebar.
 @Returns: the new file selection.
+@Deprecated: Use gtk_file_chooser_dialog_new() instead
 
 
 <!-- ##### FUNCTION gtk_file_selection_set_filename ##### -->

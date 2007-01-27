@@ -24,6 +24,8 @@
  * GTK+ at ftp://ftp.gtk.org/pub/gtk/. 
  */
 
+#ifndef GTK_DISABLE_DEPRECATED
+
 #ifndef __GTK_FILESEL_H__
 #define __GTK_FILESEL_H__
 
@@ -121,3 +123,5 @@ G_END_DECLS
 
 
 #endif /* __GTK_FILESEL_H__ */
+
+#endif /* GTK_DISABLE_DEPRECATED */

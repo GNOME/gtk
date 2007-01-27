@@ -1,3 +1,10 @@
+2007-01-27  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtkfilesel.h:
+	* gtk/gtkrc.h:
+	* gtk/gtk.symbols: Add deprecation guards for gtk_rc_style_ref/unref
+	and the old file selector.  (#348256)
+
 2007-01-26  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtkiconview.c: Documentation fixes (#400530, Anders Brander)

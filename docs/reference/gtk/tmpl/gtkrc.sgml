@@ -1064,6 +1064,7 @@ Increments the reference count of a #GtkRcStyle.
 </para>
 
 @rc_style: a #GtkRcStyle
+@Deprecated: Use g_object_ref() instead
 
 
 <!-- ##### FUNCTION gtk_rc_style_unref ##### -->
@@ -1073,5 +1074,6 @@ frees if the result is 0.
 </para>
 
 @rc_style: a #GtkRcStyle
+@Deprecated: Use g_object_unref() instead
 
 

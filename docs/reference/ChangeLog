@@ -1,3 +1,7 @@
+2007-01-27  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/sgml/gtkfilesel.sgml: Add deprecation information.
+
 2007-01-08  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/tmpl/gtkentry.sgml: Expand deprecation notes for
