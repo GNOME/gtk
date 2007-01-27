@@ -247,6 +247,7 @@ testspinbutton_SOURCES =    	\
 	testspinbutton.c
 
 teststatusicon_SOURCES =    	\
+	prop-editor.c		\
 	teststatusicon.c
 
 testmerge_SOURCES = 		\

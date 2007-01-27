@@ -22,6 +22,7 @@
  */
 
 #include <gtk/gtk.h>
+#include "prop-editor.h"
 
 typedef enum
 {
@@ -54,6 +55,13 @@ orientation_changed_cb (GtkStatusIcon *icon)
 
   g_object_get (icon, "orientation", &orientation, NULL);
   g_print ("status icon %p orientation changed to %d\n", icon, orientation);
+}
+
+static void
+screen_changed_cb (GtkStatusIcon *icon)
+{
+  g_print ("status icon %p screen changed to %p\n", icon,
+	   gtk_status_icon_get_screen (icon));
 }
 
 static void
@@ -216,6 +224,20 @@ check_activated (GtkCheckMenuItem *item)
 }
 
 static void
+do_properties (GtkMenuItem   *item,
+	       GtkStatusIcon *icon)
+{
+	static GtkWidget *editor = NULL;
+
+	if (editor == NULL) {
+		editor = create_prop_editor (G_OBJECT (icon), GTK_TYPE_STATUS_ICON);
+		g_signal_connect (editor, "destroy", G_CALLBACK (gtk_widget_destroyed), &editor);
+	}
+
+	gtk_window_present (GTK_WINDOW (editor));
+}
+
+static void
 do_quit (GtkMenuItem *item)
 {
   GSList *l;
@@ -255,6 +277,13 @@ popup_menu (GtkStatusIcon *icon,
 
   gtk_widget_show (menuitem);
 
+  menuitem = gtk_image_menu_item_new_from_stock (GTK_STOCK_PROPERTIES, NULL);
+  g_signal_connect (menuitem, "activate", G_CALLBACK (do_properties), icon);
+
+  gtk_menu_shell_append (GTK_MENU_SHELL (menu), menuitem);
+
+  gtk_widget_show (menuitem);
+
   menuitem = gtk_menu_item_new_with_label ("Quit");
   g_signal_connect (menuitem, "activate", G_CALLBACK (do_quit), NULL);
 
@@ -263,7 +292,8 @@ popup_menu (GtkStatusIcon *icon,
   gtk_widget_show (menuitem);
 
   gtk_menu_popup (GTK_MENU (menu), 
-		  NULL, NULL, NULL, NULL, 
+		  NULL, NULL,
+		  gtk_status_icon_position_menu, icon,
 		  button, activate_time);
 }
 
@@ -290,6 +320,7 @@ main (int argc, char **argv)
       g_signal_connect (icon, "size-changed", G_CALLBACK (size_changed_cb), NULL);
       g_signal_connect (icon, "notify::embedded", G_CALLBACK (embedded_changed_cb), NULL);
       g_signal_connect (icon, "notify::orientation", G_CALLBACK (orientation_changed_cb), NULL);
+      g_signal_connect (icon, "notify::screen", G_CALLBACK (screen_changed_cb), NULL);
       g_print ("icon size %d\n", gtk_status_icon_get_size (icon));
       gtk_status_icon_set_blinking (GTK_STATUS_ICON (icon), FALSE);
 
@@ -301,6 +332,8 @@ main (int argc, char **argv)
 
       icons = g_slist_append (icons, icon);
  
+      update_icons ();
+
       timeout = gdk_threads_add_timeout (2000, timeout_handler, icon);
     }
 

@@ -1,5 +1,15 @@
 2007-01-27  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkstatusicon.c:
+	* gtk/gtktrayicon-x11.c: Fix GtkStatusIcon to not
+	take up space on the panel if it is invisible.  (340110, Christian
+	Persch)
+
+	* tests/teststatusicon.c:
+	* tests/Makefile.am: Updates
+
+2007-01-27  Matthias Clasen  <mclasen@redhat.com>
+
 	* gtk/gtkfilesel.h:
 	* gtk/gtkrc.h:
 	* gtk/gtk.symbols: Add deprecation guards for gtk_rc_style_ref/unref

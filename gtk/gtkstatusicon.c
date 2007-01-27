@@ -130,6 +130,9 @@ struct _GtkStatusIconPrivate
   guint         visible : 1;
 };
 
+static GObject* gtk_status_icon_constructor      (GType                  type,
+                                                  guint                  n_construct_properties,
+                                                  GObjectConstructParam *construct_params);
 static void     gtk_status_icon_finalize         (GObject        *object);
 static void     gtk_status_icon_set_property     (GObject        *object,
 						  guint           prop_id,
@@ -162,6 +165,7 @@ gtk_status_icon_class_init (GtkStatusIconClass *class)
 {
   GObjectClass *gobject_class = (GObjectClass *) class;
 
+  gobject_class->constructor  = gtk_status_icon_constructor;
   gobject_class->finalize     = gtk_status_icon_finalize;
   gobject_class->set_property = gtk_status_icon_set_property;
   gobject_class->get_property = gtk_status_icon_get_property;
@@ -478,12 +482,10 @@ gtk_status_icon_init (GtkStatusIcon *status_icon)
 		    	    G_CALLBACK (gtk_status_icon_screen_changed), status_icon);
   priv->image = gtk_image_new ();
   gtk_container_add (GTK_CONTAINER (priv->tray_icon), priv->image);
+  gtk_widget_show (priv->image);
 
   g_signal_connect_swapped (priv->image, "size-allocate",
 			    G_CALLBACK (gtk_status_icon_size_allocate), status_icon);
-
-  gtk_widget_show (priv->image);
-  gtk_widget_show (priv->tray_icon);
 
   status_icon->priv->tooltips = gtk_tooltips_new ();
   g_object_ref_sink (priv->tooltips);
@@ -539,6 +541,30 @@ gtk_status_icon_init (GtkStatusIcon *status_icon)
   QUARTZ_POOL_RELEASE;
 
 #endif 
+}
+
+static GObject*
+gtk_status_icon_constructor (GType                  type,
+                             guint                  n_construct_properties,
+                             GObjectConstructParam *construct_params)
+{
+  GObject *object;
+  GtkStatusIcon *status_icon;
+  GtkStatusIconPrivate *priv;
+  
+  object = G_OBJECT_CLASS (gtk_status_icon_parent_class)->constructor (type,
+                                                                       n_construct_properties,
+                                                                       construct_params);
+
+#ifdef GDK_WINDOWING_X11
+  status_icon = GTK_STATUS_ICON (object);
+  priv = status_icon->priv;
+  
+  if (priv->visible)
+    gtk_widget_show (priv->tray_icon);
+#endif
+
+  return object;
 }
 
 static void
@@ -1651,8 +1677,10 @@ gtk_status_icon_set_visible (GtkStatusIcon *status_icon,
 #ifdef GDK_WINDOWING_X11
       if (visible)
 	gtk_widget_show (priv->tray_icon);
-      else
+      else if (GTK_WIDGET_REALIZED (priv->tray_icon)) {
 	gtk_widget_hide (priv->tray_icon);
+	gtk_widget_unrealize (priv->tray_icon);
+      }
 #endif
 #ifdef GDK_WINDOWING_WIN32
       if (priv->nid.hWnd != NULL)
