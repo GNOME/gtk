@@ -62,16 +62,62 @@ static gchar *var_name = "-";
 #define ALIGN_VALUE(this, boundary) \
   (( ((unsigned long)(this)) + (((unsigned long)(boundary)) -1)) & (~(((unsigned long)(boundary))-1)))
 
-static gboolean
+#ifdef HAVE_FTW_H
+
+#include <ftw.h>
+
+static struct stat cache_stat;
+static gboolean cache_up_to_date;
+
+static int check_dir_mtime (const char        *dir, 
+                            const struct stat *sb,
+                            int                tf)
+{
+  if (tf != FTW_NS && sb->st_mtime > cache_stat.st_mtime)
+    {
+      cache_up_to_date = FALSE;
+      /* stop tree walk */
+      return 1;
+    }
+
+  return 0;
+}
+
+ gboolean
+ is_cache_up_to_date (const gchar *path)
+ {
+  gchar *cache_path;
+  gint retval;
+
+  cache_path = g_build_filename (path, CACHE_NAME, NULL);
+  retval = g_stat (cache_path, &cache_stat);
+  g_free (cache_path);
+  
+  if (retval < 0)
+    {
+      /* Cache file not found */
+      return FALSE;
+    }
+
+  cache_up_to_date = TRUE;
+
+  ftw (path, check_dir_mtime, 20);
+
+  return cache_up_to_date;
+}
+
+#else  /* !HAVE_FTW_H */
+
+gboolean
 is_cache_up_to_date (const gchar *path)
 {
   struct stat path_stat, cache_stat;
   gchar *cache_path;
-  int retval;
+  int retval; 
   
   retval = g_stat (path, &path_stat);
 
-  if (retval < 0)
+  if (retval < 0) 
     {
       /* We can't stat the path,
        * assume we have a updated cache */
@@ -91,6 +137,8 @@ is_cache_up_to_date (const gchar *path)
   /* Check mtime */
   return cache_stat.st_mtime >= path_stat.st_mtime;
 }
+
+#endif  /* !HAVE_FTW_H */
 
 static gboolean
 has_theme_index (const gchar *path)
