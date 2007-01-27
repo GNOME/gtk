@@ -4938,7 +4938,7 @@ update_pixbuf_cell (GtkIconView *icon_view)
 /**
  * gtk_icon_view_set_text_column:
  * @icon_view: A #GtkIconView.
- * @column: A column in the currently used model.
+ * @column: A column in the currently used model, or -1 to display no text
  * 
  * Sets the column with text for @icon_view to be @column. The text
  * column must be of type #G_TYPE_STRING.
@@ -4999,7 +4999,7 @@ gtk_icon_view_get_text_column (GtkIconView  *icon_view)
 /**
  * gtk_icon_view_set_markup_column:
  * @icon_view: A #GtkIconView.
- * @column: A column in the currently used model.
+ * @column: A column in the currently used model, or -1 to display no text
  * 
  * Sets the column with markup information for @icon_view to be
  * @column. The markup column must be of type #G_TYPE_STRING.
@@ -5062,7 +5062,7 @@ gtk_icon_view_get_markup_column (GtkIconView  *icon_view)
 /**
  * gtk_icon_view_set_pixbuf_column:
  * @icon_view: A #GtkIconView.
- * @column: A column in the currently used model.
+ * @column: A column in the currently used model, or -1 to disable
  * 
  * Sets the column with pixbufs for @icon_view to be @column. The pixbuf
  * column must be of type #GDK_TYPE_PIXBUF

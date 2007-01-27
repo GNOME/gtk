@@ -1,5 +1,9 @@
 2007-01-26  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkiconview.c: Documentation fixes (#400530, Anders Brander)
+
+2007-01-26  Matthias Clasen  <mclasen@redhat.com>
+
 	* gtk/updateiconcache.c: Check the mtime of all directories,
 	not just the toplevel, if ftw() is available.  (#331671, Behdad
 	Esfahbod)
