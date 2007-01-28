@@ -1,5 +1,10 @@
 2007-01-28  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkframe.c (gtk_frame_size_allocation): Fix a 
+	problem with large y thickness.  (#136592, Xan Lopez)
+
+2007-01-28  Matthias Clasen  <mclasen@redhat.com>
+
 	* gtk/gtkaction.c (gtk_action_new): Use canonical
 	property names.  
 
