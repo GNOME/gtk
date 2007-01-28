@@ -501,7 +501,8 @@ gtk_tool_button_property_notify (GObject          *object,
 {
   GtkToolButton *button = GTK_TOOL_BUTTON (object);
 
-  if (button->priv->contents_invalid)
+  if (button->priv->contents_invalid ||
+      strcmp ("is-important", pspec->name) == 0)
     gtk_tool_button_construct_contents (GTK_TOOL_ITEM (object));
 
   if (parent_class->notify)
