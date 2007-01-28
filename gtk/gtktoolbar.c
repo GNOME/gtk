@@ -1445,6 +1445,7 @@ gtk_toolbar_size_allocate (GtkWidget     *widget,
   gboolean overflowing;
   gboolean size_changed;
   GtkAllocation item_area;
+  GtkShadowType shadow_type;
   
   size_changed = FALSE;
   if (widget->allocation.x != allocation->x		||
@@ -1476,13 +1477,15 @@ gtk_toolbar_size_allocate (GtkWidget     *widget,
   gtk_widget_get_child_requisition (GTK_WIDGET (priv->arrow_button),
 				    &arrow_requisition);
   
+  shadow_type = get_shadow_type (toolbar);
+
   if (toolbar->orientation == GTK_ORIENTATION_HORIZONTAL)
     {
       available_size = size = allocation->width - 2 * border_width;
       short_size = allocation->height - 2 * border_width;
       arrow_size = arrow_requisition.width;
       
-      if (get_shadow_type (toolbar) != GTK_SHADOW_NONE)
+      if (shadow_type != GTK_SHADOW_NONE)
 	{
 	  available_size -= 2 * widget->style->xthickness;
 	  short_size -= 2 * widget->style->ythickness;
@@ -1494,7 +1497,7 @@ gtk_toolbar_size_allocate (GtkWidget     *widget,
       short_size = allocation->width - 2 * border_width;
       arrow_size = arrow_requisition.height;
       
-      if (get_shadow_type (toolbar) != GTK_SHADOW_NONE)
+      if (shadow_type != GTK_SHADOW_NONE)
 	{
 	  available_size -= 2 * widget->style->ythickness;
 	  short_size -= 2 * widget->style->xthickness;
@@ -1672,7 +1675,7 @@ gtk_toolbar_size_allocate (GtkWidget     *widget,
       allocations[i].x += allocation->x;
       allocations[i].y += allocation->y;
       
-      if (get_shadow_type (toolbar) != GTK_SHADOW_NONE)
+      if (shadow_type != GTK_SHADOW_NONE)
 	{
 	  allocations[i].x += widget->style->xthickness;
 	  allocations[i].y += widget->style->ythickness;
@@ -1684,7 +1687,7 @@ gtk_toolbar_size_allocate (GtkWidget     *widget,
       arrow_allocation.x += allocation->x;
       arrow_allocation.y += allocation->y;
       
-      if (get_shadow_type (toolbar) != GTK_SHADOW_NONE)
+      if (shadow_type != GTK_SHADOW_NONE)
 	{
 	  arrow_allocation.x += widget->style->xthickness;
 	  arrow_allocation.y += widget->style->ythickness;
@@ -1693,7 +1696,7 @@ gtk_toolbar_size_allocate (GtkWidget     *widget,
 
   item_area.x += allocation->x;
   item_area.y += allocation->y;
-  if (get_shadow_type (toolbar) != GTK_SHADOW_NONE)
+  if (shadow_type != GTK_SHADOW_NONE)
     {
       item_area.x += widget->style->xthickness;
       item_area.y += widget->style->ythickness;
@@ -1803,10 +1806,16 @@ static void
 gtk_toolbar_update_button_relief (GtkToolbar *toolbar)
 {
   GtkToolbarPrivate *priv = GTK_TOOLBAR_GET_PRIVATE (toolbar);
+  GtkReliefStyle relief;
+
+  relief = get_button_relief (toolbar);
+
+  if (relief != gtk_button_get_relief (GTK_BUTTON (priv->arrow_button)))
+    {
+      gtk_toolbar_reconfigured (toolbar);
   
-  gtk_toolbar_reconfigured (toolbar);
-  
-  gtk_button_set_relief (GTK_BUTTON (priv->arrow_button), get_button_relief (toolbar));
+      gtk_button_set_relief (GTK_BUTTON (priv->arrow_button), relief);
+    }
 }
 
 static void
@@ -1816,7 +1825,7 @@ gtk_toolbar_style_set (GtkWidget *widget,
   GtkToolbarPrivate *priv = GTK_TOOLBAR_GET_PRIVATE (widget);
   
   priv->max_homogeneous_pixels = -1;
-  
+
   if (GTK_WIDGET_REALIZED (widget))
     gtk_style_set_background (widget->style, widget->window, widget->state);
   
@@ -2064,13 +2073,13 @@ gtk_toolbar_screen_changed (GtkWidget *widget,
                           toolbar);
 
       priv->settings = g_object_ref (settings);
+
+      style_change_notify (toolbar);
+      icon_size_change_notify (toolbar);
+      animation_change_notify (toolbar);
     }
   else
     priv->settings = NULL;
-
-  style_change_notify (toolbar);
-  icon_size_change_notify (toolbar);
-  animation_change_notify (toolbar);
 }
 
 static int
@@ -3994,13 +4003,11 @@ toolbar_content_expose (ToolbarContent *content,
       
       if (child->type == GTK_TOOLBAR_CHILD_SPACE)
 	{
-	  if (get_space_style (toolbar) == GTK_TOOLBAR_SPACE_LINE &&
-	      content->u.compatibility.space_visible)
-	    {
-	      _gtk_toolbar_paint_space_line (GTK_WIDGET (toolbar), toolbar,
-					     &expose->area,
-					     &content->u.compatibility.space_allocation);
-	    }
+	  if (content->u.compatibility.space_visible &&
+              get_space_style (toolbar) == GTK_TOOLBAR_SPACE_LINE)
+	     _gtk_toolbar_paint_space_line (GTK_WIDGET (toolbar), toolbar,
+					    &expose->area,
+					    &content->u.compatibility.space_allocation);
 	  return;
 	}
       
@@ -4028,15 +4035,11 @@ toolbar_content_visible (ToolbarContent *content,
       
       if (toolbar->orientation == GTK_ORIENTATION_HORIZONTAL &&
 	  gtk_tool_item_get_visible_horizontal (item))
-	{
-	  return TRUE;
-	}
+	return TRUE;
       
       if ((toolbar->orientation == GTK_ORIENTATION_VERTICAL &&
 	   gtk_tool_item_get_visible_vertical (item)))
-	{
-	  return TRUE;
-	}
+	return TRUE;
       
       return FALSE;
       break;

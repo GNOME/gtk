@@ -265,10 +265,11 @@ gtk_tool_item_finalize (GObject *object)
 }
 
 static void
-gtk_tool_item_parent_set   (GtkWidget   *toolitem,
-			    GtkWidget   *prev_parent)
+gtk_tool_item_parent_set (GtkWidget   *toolitem,
+			  GtkWidget   *prev_parent)
 {
-  _gtk_tool_item_toolbar_reconfigured (GTK_TOOL_ITEM (toolitem));
+  if (GTK_WIDGET (toolitem)->parent != NULL)
+    _gtk_tool_item_toolbar_reconfigured (GTK_TOOL_ITEM (toolitem));
 }
 
 static void

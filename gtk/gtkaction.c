@@ -739,26 +739,13 @@ connect_proxy (GtkAction     *action,
     }
   else if (GTK_IS_TOOL_ITEM (proxy))
     {
-      /* toolbar item specific synchronisers ... */
-
-      g_object_set (proxy,
-		    "visible-horizontal", action->private_data->visible_horizontal,
-		    "visible-vertical",	action->private_data->visible_vertical,
-		    "is-important", action->private_data->is_important,
-		    NULL);
-
-      gtk_action_sync_tooltip (action, proxy);
-
-      g_signal_connect_object (proxy, "create_menu_proxy",
-			       G_CALLBACK (gtk_action_create_menu_proxy),
-			       action, 0);
-
-      gtk_tool_item_rebuild_menu (GTK_TOOL_ITEM (proxy));
-
       /* toolbar button specific synchronisers ... */
       if (GTK_IS_TOOL_BUTTON (proxy))
 	{
 	  g_object_set (proxy,
+		        "visible-horizontal", action->private_data->visible_horizontal,
+		        "visible-vertical", action->private_data->visible_vertical,
+		        "is-important", action->private_data->is_important,
 			"label", action->private_data->short_label,
 			"use-underline", TRUE,
 			"stock-id", action->private_data->stock_id,
@@ -768,7 +755,23 @@ connect_proxy (GtkAction     *action,
 	  g_signal_connect_object (proxy, "clicked",
 				   G_CALLBACK (gtk_action_activate), action,
 				   G_CONNECT_SWAPPED);
-	}
+        }
+      else 
+        {
+           g_object_set (proxy,
+	 	         "visible-horizontal", action->private_data->visible_horizontal,
+		         "visible-vertical", action->private_data->visible_vertical,
+		         "is-important", action->private_data->is_important,
+		         NULL);
+       }
+
+      gtk_action_sync_tooltip (action, proxy);
+
+      g_signal_connect_object (proxy, "create_menu_proxy",
+			       G_CALLBACK (gtk_action_create_menu_proxy),
+			       action, 0);
+
+      gtk_tool_item_rebuild_menu (GTK_TOOL_ITEM (proxy));
     }
   else if (GTK_IS_BUTTON (proxy))
     {

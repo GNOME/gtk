@@ -1,5 +1,16 @@
 2007-01-27  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtktoolbar.c:
+	* gtk/gtktoolitem.c:
+	* gtk/gtktoolbutton.c: Rearrange things so that setting
+	multiple properties causes not more than a single 
+	reconstruction of the contents.
+
+	* gtk/gtkaction.c (connect_proxy): Set all tool button 
+	properties in one go.
+
+2007-01-27  Matthias Clasen  <mclasen@redhat.com>
+
 	* gtk/gtkstatusicon.c:
 	* gtk/gtktrayicon-x11.c: Fix GtkStatusIcon to not
 	take up space on the panel if it is invisible.  (340110, Christian
