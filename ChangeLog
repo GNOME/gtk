@@ -1,3 +1,8 @@
+2007-01-28  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtkaction.c (gtk_action_new): Use canonical
+	property names.  
+
 2007-01-27  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtknotebook.c (gtk_notebook_draw_arrow):
