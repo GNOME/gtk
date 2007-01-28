@@ -1,5 +1,11 @@
 2007-01-27  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtknotebook.c (gtk_notebook_draw_arrow):
+	(gtk_notebook_draw_focus): Avoid some unnecessary 
+	gtk_widget_get_style() calls.
+
+2007-01-27  Matthias Clasen  <mclasen@redhat.com>
+
 	* gtk/gtktoolbar.c:
 	* gtk/gtktoolitem.c:
 	* gtk/gtktoolbutton.c: Rearrange things so that setting
