@@ -1,5 +1,12 @@
 2007-01-28  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtktoolbar.c: Reinstate gtk_toolbar_content_new_compatibility()
+	that was mistakenly "cleaned up" a while ago. Also
+	revert a problematic change to the screen_changed
+	handler.  (#401598, Søren Sandmann)
+
+2007-01-28  Matthias Clasen  <mclasen@redhat.com>
+
 	* gtk/gtkframe.c (gtk_frame_size_allocation): Fix a 
 	problem with large y thickness.  (#136592, Xan Lopez)
 

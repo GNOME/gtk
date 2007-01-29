@@ -38,6 +38,7 @@
 #include "gtkseparatortoolitem.h"
 #include "gtkmenu.h"
 #include "gtkradiobutton.h"
+#include "gtktoolbar.h"
 #include "gtkbindings.h"
 #include <gdk/gdkkeysyms.h>
 #include "gtkmarshalers.h"
@@ -241,6 +242,12 @@ static GtkToolbarSpaceStyle get_space_style      (GtkToolbar *toolbar);
 static ToolbarContent *toolbar_content_new_tool_item        (GtkToolbar          *toolbar,
 							     GtkToolItem         *item,
 							     gboolean             is_placeholder,
+							     gint                 pos);
+static ToolbarContent *toolbar_content_new_compatibility    (GtkToolbar          *toolbar,
+							     GtkToolbarChildType  type,
+							     GtkWidget           *widget,
+							     GtkWidget           *icon,
+							     GtkWidget           *label,
 							     gint                 pos);
 static void            toolbar_content_remove               (ToolbarContent      *content,
 							     GtkToolbar          *toolbar);
@@ -1444,6 +1451,7 @@ gtk_toolbar_size_allocate (GtkWidget     *widget,
   GtkRequisition arrow_requisition;
   gboolean overflowing;
   gboolean size_changed;
+  gdouble elapsed;
   GtkAllocation item_area;
   GtkShadowType shadow_type;
   
@@ -1727,6 +1735,7 @@ gtk_toolbar_size_allocate (GtkWidget     *widget,
 	}
     }
 
+  elapsed = g_timer_elapsed (priv->timer, NULL);
   for (list = priv->content, i = 0; list != NULL; list = list->next, ++i)
     {
       ToolbarContent *content = list->data;
@@ -2073,13 +2082,13 @@ gtk_toolbar_screen_changed (GtkWidget *widget,
                           toolbar);
 
       priv->settings = g_object_ref (settings);
-
-      style_change_notify (toolbar);
-      icon_size_change_notify (toolbar);
-      animation_change_notify (toolbar);
     }
   else
     priv->settings = NULL;
+
+  style_change_notify (toolbar);
+  icon_size_change_notify (toolbar);
+  animation_change_notify (toolbar);
 }
 
 static int
@@ -3737,6 +3746,7 @@ internal_insert_element (GtkToolbar          *toolbar,
 			 gboolean             use_stock)
 {
   GtkWidget *box;
+  ToolbarContent *content;
   char *free_me = NULL;
 
   GtkWidget *child_widget;
@@ -3846,6 +3856,9 @@ internal_insert_element (GtkToolbar          *toolbar,
 			    tooltip_text, tooltip_private_text);
     }
   
+  content = toolbar_content_new_compatibility (toolbar, type, child_widget,
+					       child_icon, child_label, position);
+  
   if (free_me)
     g_free (free_me);
   
@@ -3916,6 +3929,54 @@ toolbar_content_new_tool_item (GtkToolbar  *toolbar,
 
   gtk_widget_queue_resize (GTK_WIDGET (toolbar));
   priv->need_rebuild = TRUE;
+  
+  return content;
+}
+
+static ToolbarContent *
+toolbar_content_new_compatibility (GtkToolbar          *toolbar,
+				   GtkToolbarChildType  type,
+				   GtkWidget		*widget,
+				   GtkWidget		*icon,
+				   GtkWidget		*label,
+				   gint			 pos)
+{
+  ToolbarContent *content;
+  GtkToolbarChild *child;
+  GtkToolbarPrivate *priv = GTK_TOOLBAR_GET_PRIVATE (toolbar);
+  
+  content = g_new0 (ToolbarContent, 1);
+
+  child = &(content->u.compatibility.child);
+  
+  content->type = COMPATIBILITY;
+  child->type = type;
+  child->widget = widget;
+  child->icon = icon;
+  child->label = label;
+  
+  if (type != GTK_TOOLBAR_CHILD_SPACE)
+    {
+      gtk_widget_set_parent (child->widget, GTK_WIDGET (toolbar));
+    }
+  else
+    {
+      content->u.compatibility.space_visible = TRUE;
+      gtk_widget_queue_resize (GTK_WIDGET (toolbar));
+    }
+ 
+  if (type == GTK_TOOLBAR_CHILD_BUTTON ||
+      type == GTK_TOOLBAR_CHILD_TOGGLEBUTTON ||
+      type == GTK_TOOLBAR_CHILD_RADIOBUTTON)
+    {
+      set_child_packing_and_visibility (toolbar, child);
+    }
+
+  priv->content = g_list_insert (priv->content, content, pos);
+  toolbar->children = g_list_insert (toolbar->children, child, pos);
+  priv->need_rebuild = TRUE;
+  
+  toolbar->num_children++;
   
   return content;
 }
