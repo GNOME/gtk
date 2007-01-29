@@ -1,3 +1,11 @@
+2007-01-29  Michael Natterer  <mitch@imendio.com>
+
+	* gtk/gtkmenuitem.c (gtk_menu_item_select)
+	(gtk_menu_item_deselect): queue a draw on the parent_menu_item of
+	this menu item's menu, to enable themeing menu items depending on
+	whether something is selected in their submenu (patch taken from
+	maemo-gtk).
+
 2007-01-28  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtktoolbar.c: Reinstate gtk_toolbar_content_new_compatibility()

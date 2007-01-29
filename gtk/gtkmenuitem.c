@@ -385,16 +385,38 @@ void
 gtk_menu_item_select (GtkMenuItem *menu_item)
 {
   g_return_if_fail (GTK_IS_MENU_ITEM (menu_item));
-  
+
   gtk_item_select (GTK_ITEM (menu_item));
+
+  /* Enable themeing of the parent menu item depending on whether
+   * something is selected in its submenu
+   */
+  if (GTK_IS_MENU (GTK_WIDGET (menu_item)->parent))
+    {
+      GtkMenu *menu = GTK_MENU (GTK_WIDGET (menu_item)->parent);
+
+      if (menu->parent_menu_item)
+        gtk_widget_queue_draw (GTK_WIDGET (menu->parent_menu_item));
+    }
 }
 
 void
 gtk_menu_item_deselect (GtkMenuItem *menu_item)
 {
   g_return_if_fail (GTK_IS_MENU_ITEM (menu_item));
-  
+
   gtk_item_deselect (GTK_ITEM (menu_item));
+
+  /* Enable themeing of the parent menu item depending on whether
+   * something is selected in its submenu
+   */
+  if (GTK_IS_MENU (GTK_WIDGET (menu_item)->parent))
+    {
+      GtkMenu *menu = GTK_MENU (GTK_WIDGET (menu_item)->parent);
+
+      if (menu->parent_menu_item)
+        gtk_widget_queue_draw (GTK_WIDGET (menu->parent_menu_item));
+    }
 }
 
 void
