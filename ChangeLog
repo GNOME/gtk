@@ -1,3 +1,9 @@
+2007-01-30  Matthias Clasen  <mclasen@redhat.com>
+
+	* gdk/x11/gdkwindow-x11.c (gdk_x11_window_move_to_current_desktop):
+	(gdk_x11_window_set_user_time): Be more careful about toplevel
+	possibly being NULL.  (#402453, Sebastian Bacher)
+
 Tue Jan 30 12:09:56 2007  Tim Janik  <timj@gtk.org>
 
 	* gtk/gtksettings.c: cleaned up ::color-hash registration to not abuse
