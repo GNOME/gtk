@@ -2016,6 +2016,10 @@ void
 gdk_x11_window_move_to_current_desktop (GdkWindow *window)
 {
   GdkToplevelX11 *toplevel;
+
+  g_return_if_fail (GDK_IS_WINDOW (window));
+  g_return_if_fail (GDK_WINDOW_TYPE (window) != GDK_WINDOW_CHILD);
+
   toplevel = _gdk_x11_window_get_toplevel (window);
 
   if (toplevel->on_all_desktops)
@@ -3781,6 +3785,7 @@ gdk_window_add_colormap_windows (GdkWindow *window)
 
   if (GDK_WINDOW_DESTROYED (window))
     return;
+
   toplevel = gdk_window_get_toplevel (window);
   
   old_windows = NULL;
@@ -4232,7 +4237,8 @@ gdk_x11_window_set_user_time (GdkWindow *window,
   if (timestamp_long != GDK_CURRENT_TIME)
     display_x11->user_time = timestamp_long;
 
-  toplevel->user_time = timestamp_long;
+  if (toplevel)
+    toplevel->user_time = timestamp_long;
 }
 
 #define GDK_SELECTION_MAX_SIZE(display)                                 \
