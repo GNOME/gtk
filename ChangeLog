@@ -1,3 +1,13 @@
+2007-01-31  Tor Lillqvist  <tml@novell.com>
+
+	* gdk/win32/gdkinput-win32.c (print_cursor): New debugging
+	function.
+	(_gdk_input_wintab_init_check): Call it when debugging output is
+	requested.
+	(_gdk_input_wintab_init_check): Skip duplicated cursors for Wacom
+	tablets. The Wacom driver reports duplicated cursors with
+	physid==0. Fix verified by Robert Ögren.
+
 2007-01-30  Felix Riemann  <friemann@svn.gnome.org>
 
 	* modules/printbackends/file/gtkprintbackendfile.c:
