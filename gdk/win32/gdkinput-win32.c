@@ -193,6 +193,135 @@ print_lc(LOGCONTEXT *lc)
 	  lc->lcSysSensX / 65536., lc->lcSysSensY / 65536.);
 }
 
+static void
+print_cursor (int index)
+{
+  int size;
+  int i;
+  char *name;
+  BOOL active;
+  WTPKT wtpkt;
+  BYTE buttons;
+  BYTE buttonbits;
+  char *btnnames;
+  char *p;
+  BYTE buttonmap[32];
+  BYTE sysbtnmap[32];
+  BYTE npbutton;
+  UINT npbtnmarks[2];
+  UINT *npresponse;
+  BYTE tpbutton;
+  UINT tpbtnmarks[2];
+  UINT *tpresponse;
+  DWORD physid;
+  UINT mode;
+  UINT minpktdata;
+  UINT minbuttons;
+  UINT capabilities;
+
+  size = WTInfo (WTI_CURSORS + index, CSR_NAME, NULL);
+  name = g_malloc (size + 1);
+  WTInfo (WTI_CURSORS + index, CSR_NAME, name);
+  g_print ("NAME: %s\n", name);
+  WTInfo (WTI_CURSORS + index, CSR_ACTIVE, &active);
+  g_print ("ACTIVE: %s\n", active ? "YES" : "NO");
+  WTInfo (WTI_CURSORS + index, CSR_PKTDATA, &wtpkt);
+  g_print ("PKTDATA: %#x:", (guint) wtpkt);
+#define BIT(x) if (wtpkt & PK_##x) g_print (" " #x)
+  BIT (CONTEXT);
+  BIT (STATUS);
+  BIT (TIME);
+  BIT (CHANGED);
+  BIT (SERIAL_NUMBER);
+  BIT (BUTTONS);
+  BIT (X);
+  BIT (Y);
+  BIT (Z);
+  BIT (NORMAL_PRESSURE);
+  BIT (TANGENT_PRESSURE);
+  BIT (ORIENTATION);
+  BIT (ROTATION);
+#undef BIT
+  g_print ("\n");
+  WTInfo (WTI_CURSORS + index, CSR_BUTTONS, &buttons);
+  g_print ("BUTTONS: %d\n", buttons);
+  WTInfo (WTI_CURSORS + index, CSR_BUTTONBITS, &buttonbits);
+  g_print ("BUTTONBITS: %d\n", buttonbits);
+  size = WTInfo (WTI_CURSORS + index, CSR_BTNNAMES, NULL);
+  g_print ("BTNNAMES:");
+  if (size > 0)
+    {
+      btnnames = g_malloc (size + 1);
+      WTInfo (WTI_CURSORS + index, CSR_BTNNAMES, btnnames);
+      p = btnnames;
+      while (*p)
+	{
+	  g_print (" %s", p);
+	  p += strlen (p) + 1;
+	}
+    }
+  g_print ("\n");
+  WTInfo (WTI_CURSORS + index, CSR_BUTTONMAP, buttonmap);
+  g_print ("BUTTONMAP:");
+  for (i = 0; i < buttons; i++)
+    g_print (" %d", buttonmap[i]);
+  g_print ("\n");
+  WTInfo (WTI_CURSORS + index, CSR_SYSBTNMAP, sysbtnmap);
+  g_print ("SYSBTNMAP:");
+  for (i = 0; i < buttons; i++)
+    g_print (" %d", sysbtnmap[i]);
+  g_print ("\n");
+  WTInfo (WTI_CURSORS + index, CSR_NPBUTTON, &npbutton);
+  g_print ("NPBUTTON: %d\n", npbutton);
+  WTInfo (WTI_CURSORS + index, CSR_NPBTNMARKS, npbtnmarks);
+  g_print ("NPBTNMARKS: %d %d\n", npbtnmarks[0], npbtnmarks[1]);
+  size = WTInfo (WTI_CURSORS + index, CSR_NPRESPONSE, NULL);
+  g_print ("NPRESPONSE:");
+  if (size > 0)
+    {
+      npresponse = g_malloc (size);
+      WTInfo (WTI_CURSORS + index, CSR_NPRESPONSE, npresponse);
+      for (i = 0; i < size / sizeof (UINT); i++)
+	g_print (" %d", npresponse[i]);
+    }
+  g_print ("\n");
+  WTInfo (WTI_CURSORS + index, CSR_TPBUTTON, &tpbutton);
+  g_print ("TPBUTTON: %d\n", tpbutton);
+  WTInfo (WTI_CURSORS + index, CSR_TPBTNMARKS, tpbtnmarks);
+  g_print ("TPBTNMARKS: %d %d\n", tpbtnmarks[0], tpbtnmarks[1]);
+  size = WTInfo (WTI_CURSORS + index, CSR_TPRESPONSE, NULL);
+  g_print ("TPRESPONSE:");
+  if (size > 0)
+    {
+      tpresponse = g_malloc (size);
+      WTInfo (WTI_CURSORS + index, CSR_TPRESPONSE, tpresponse);
+      for (i = 0; i < size / sizeof (UINT); i++)
+	g_print (" %d", tpresponse[i]);
+    }
+  g_print ("\n");
+  WTInfo (WTI_CURSORS + index, CSR_PHYSID, &physid);
+  g_print ("PHYSID: %#x\n", (guint) physid);
+  WTInfo (WTI_CURSORS + index, CSR_CAPABILITIES, &capabilities);
+  g_print ("CAPABILITIES: %#x:", capabilities);
+#define BIT(x) if (capabilities & CRC_##x) g_print (" " #x)
+  BIT (MULTIMODE);
+  BIT (AGGREGATE);
+  BIT (INVERT);
+#undef BIT
+  g_print ("\n");
+  if (capabilities & CRC_MULTIMODE)
+    {
+      WTInfo (WTI_CURSORS + index, CSR_MODE, &mode);
+      g_print ("MODE: %d\n", mode);
+    }
+  if (capabilities & CRC_AGGREGATE)
+    {
+      WTInfo (WTI_CURSORS + index, CSR_MINPKTDATA, &minpktdata);
+      g_print ("MINPKTDATA: %d\n", minpktdata);
+      WTInfo (WTI_CURSORS + index, CSR_MINBUTTONS, &minbuttons);
+      g_print ("MINBUTTONS: %d\n", minbuttons);
+    }
+}
 #endif
 
 void
@@ -205,6 +334,7 @@ _gdk_input_wintab_init_check (void)
   HCTX *hctx;
   UINT ndevices, ncursors, ncsrtypes, firstcsr, hardware;
   BOOL active;
+  DWORD physid;
   AXIS axis_x, axis_y, axis_npressure, axis_or[3];
   int i, k;
   int devix, cursorix;
@@ -336,11 +466,29 @@ _gdk_input_wintab_init_check (void)
 	    GDK_NOTE (INPUT, g_print("Whoops, no queue size could be set\n"));
 	  for (cursorix = firstcsr; cursorix < firstcsr + ncsrtypes; cursorix++)
 	    {
+#ifdef DEBUG_WINTAB
+	      GDK_NOTE (INPUT, (g_print("Cursor %d:\n", cursorix), print_cursor (cursorix)));
+#endif
 	      active = FALSE;
 	      WTInfo (WTI_CURSORS + cursorix, CSR_ACTIVE, &active);
 	      if (!active)
 		continue;
+
+	      /* Wacom tablets seem to report cursors corresponding to
+	       * nonexistent pens or pucks. At least my ArtPad II
+	       * reports six cursors: a puck, pressure stylus and
+	       * eraser stylus, and then the same three again. I only
+	       * have a pressure-sensitive pen. The puck instances,
+	       * and the second instances of the styluses report
+	       * physid zero. So at least for Wacom, skip cursors with
+	       * physid zero.
+	       */
+	      WTInfo (WTI_CURSORS + cursorix, CSR_PHYSID, &physid);
+	      if (strcmp (devname, "WACOM Tablet") == 0 && physid == 0)
+		continue;
+
 	      gdkdev = g_object_new (GDK_TYPE_DEVICE, NULL);
+
 	      WTInfo (WTI_CURSORS + cursorix, CSR_NAME, csrname);
 	      gdkdev->info.name = g_strconcat (devname, " ", csrname, NULL);
 	      gdkdev->info.source = GDK_SOURCE_PEN;
