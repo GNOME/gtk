@@ -1,3 +1,8 @@
+Tue Jan 30 12:09:56 2007  Tim Janik  <timj@gtk.org>
+
+	* gtk/gtksettings.c: cleaned up ::color-hash registration to not abuse
+	class_n_properties and leave an uninitialized value array behind.
+
 2007-01-29  Michael Natterer  <mitch@imendio.com>
 
 	* gtk/gtkmenuitem.c (gtk_menu_item_select)

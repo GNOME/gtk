@@ -620,14 +620,14 @@ gtk_settings_class_init (GtkSettingsClass *class)
    *
    * Since: 2.10
    */
-  g_object_class_install_property (gobject_class,
-				   PROP_COLOR_HASH,
-				   g_param_spec_boxed ("color-hash",
-						       P_("Color Hash"),
-						       P_("A hash table representation of the color scheme."),
-						       G_TYPE_HASH_TABLE,
-						       GTK_PARAM_READABLE));
-  class_n_properties++;
+  result = settings_install_property_parser (class, 
+                                             g_param_spec_boxed ("color-hash",
+                                                                 P_("Color Hash"),
+                                                                 P_("A hash table representation of the color scheme."),
+                                                                 G_TYPE_HASH_TABLE,
+                                                                 GTK_PARAM_READABLE),
+                                             NULL);
+  g_assert (result == PROP_COLOR_HASH);
 
   result = settings_install_property_parser (class, 
                                              g_param_spec_string ("gtk-file-chooser-backend",
@@ -777,8 +777,10 @@ gtk_settings_get_property (GObject     *object,
   GType value_type = G_VALUE_TYPE (value);
   GType fundamental_type = G_TYPE_FUNDAMENTAL (value_type);
 
-  if (property_id == PROP_COLOR_HASH)
+  /* handle internal properties */
+  switch (property_id)
     {
+    case PROP_COLOR_HASH:
       g_value_set_boxed (value, get_color_hash (settings));
       return;
     }
@@ -1023,6 +1025,12 @@ settings_install_property_parser (GtkSettingsClass   *class,
     case G_TYPE_DOUBLE:
     case G_TYPE_STRING:
       break;
+    case G_TYPE_BOXED:
+      if (strcmp (g_param_spec_get_name (pspec), "color-hash") == 0)
+        {
+          break;
+        }
+      /* fall through */
     default:
       if (!parser)
         {
