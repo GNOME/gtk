@@ -1219,6 +1219,24 @@ gtk_about_dialog_get_authors (GtkAboutDialog *about)
   return (const gchar * const *) priv->authors;
 }
 
+static void
+update_credits_button_visibility (GtkAboutDialog *about)
+{
+  GtkAboutDialogPrivate *priv = about->private_data;
+  gboolean show;
+
+  show = priv->authors != NULL ||
+         priv->documenters != NULL ||
+         priv->artists != NULL ||
+         (priv->translator_credits != NULL &&
+          strcmp (priv->translator_credits, "translator_credits") &&
+          strcmp (priv->translator_credits, "translator-credits"));
+  if (show)
+    gtk_widget_show (priv->credits_button);
+  else
+    gtk_widget_hide (priv->credits_button);
+}
+
 /**
  * gtk_about_dialog_set_authors:
  * @about: a #GtkAboutDialog
@@ -1244,8 +1262,7 @@ gtk_about_dialog_set_authors (GtkAboutDialog  *about,
   priv->authors = g_strdupv ((gchar **)authors);
   g_strfreev (tmp);
 
-  if (priv->authors != NULL)
-    gtk_widget_show (priv->credits_button);
+  update_credits_button_visibility (about);
 
   g_object_notify (G_OBJECT (about), "authors");
 }
@@ -1300,8 +1317,7 @@ gtk_about_dialog_set_documenters (GtkAboutDialog *about,
   priv->documenters = g_strdupv ((gchar **)documenters);
   g_strfreev (tmp);
 
-  if (priv->documenters != NULL)
-    gtk_widget_show (priv->credits_button);
+  update_credits_button_visibility (about);
 
   g_object_notify (G_OBJECT (about), "documenters");
 }
@@ -1356,8 +1372,7 @@ gtk_about_dialog_set_artists (GtkAboutDialog *about,
   priv->artists = g_strdupv ((gchar **)artists);
   g_strfreev (tmp);
 
-  if (priv->artists != NULL)
-    gtk_widget_show (priv->credits_button);
+  update_credits_button_visibility (about);
 
   g_object_notify (G_OBJECT (about), "artists");
 }
@@ -1423,8 +1438,7 @@ gtk_about_dialog_set_translator_credits (GtkAboutDialog *about,
   priv->translator_credits = g_strdup (translator_credits);
   g_free (tmp);
 
-  if (priv->translator_credits != NULL)
-    gtk_widget_show (priv->credits_button);
+  update_credits_button_visibility (about);
 
   g_object_notify (G_OBJECT (about), "translator-credits");
 }
