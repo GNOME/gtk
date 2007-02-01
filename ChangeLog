@@ -1,3 +1,8 @@
+Thu Feb  1 12:22:06 2007  Tim Janik  <timj@imendio.com>
+
+	* gtk/gtkcombobox.c (gtk_combo_box_list_destroy): remove extra reference
+	that gtkcombobox keeps on priv->popup_widget if it's a tree view.
+
 2007-01-31  Christian Persch  <chpe@svn.gnome.org>
 
 	* gtk/gtkaboutdialog.c: (update_credits_button_visibility),

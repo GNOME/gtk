@@ -1479,7 +1479,6 @@ gtk_combo_box_list_position (GtkComboBox *combo_box,
 			     gint        *width,
 			     gint        *height)
 {
-  GtkWidget *sample;
   GdkScreen *screen;
   gint monitor_num;
   GdkRectangle monitor;
@@ -1488,7 +1487,7 @@ gtk_combo_box_list_position (GtkComboBox *combo_box,
   
   /* under windows, the drop down list is as wide as the combo box itself.
      see bug #340204 */
-  sample = combo_box;
+  GtkWidget *sample = GTK_WIDGET (combo_box);
 
   gdk_window_get_origin (sample->window, x, y);
 
@@ -3570,7 +3569,11 @@ gtk_combo_box_list_destroy (GtkComboBox *combo_box)
   gtk_widget_destroy (combo_box->priv->tree_view);
 
   combo_box->priv->tree_view = NULL;
-  combo_box->priv->popup_widget = NULL;
+  if (combo_box->priv->popup_widget)
+    {
+      g_object_unref (combo_box->priv->popup_widget);
+      combo_box->priv->popup_widget = NULL;
+    }
 }
 
 /* callbacks */
