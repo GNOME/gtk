@@ -1,9 +1,14 @@
 2007-02-01  Michael Natterer  <mitch@imendio.com>
 
+	* gtk/gtkmenu.c (gtk_menu_paint): pass &event->area to
+	gtk_paint_box() calls.
+
+2007-02-01  Michael Natterer  <mitch@imendio.com>
+
 	* gtk/gtkmenu.c (gtk_menu_button_press)
 	(gtk_menu_button_release)
 	(gtk_menu_button_scroll): remove redundant and confusing
-	if(GTK_IS_MENU(widget)) checks because "widget" is always a
+	if (GTK_IS_MENU (widget)) checks because "widget" is always a
 	GtkMenu here.
 
 Thu Feb  1 12:22:06 2007  Tim Janik  <timj@imendio.com>
