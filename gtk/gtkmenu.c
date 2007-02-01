@@ -2555,30 +2555,25 @@ gtk_menu_show (GtkWidget *widget)
 }
 
 static gboolean
-gtk_menu_button_scroll (GtkWidget      *widget,
+gtk_menu_button_scroll (GtkMenu        *menu,
                         GdkEventButton *event)
 {
-  if (GTK_IS_MENU (widget))
+  if (menu->upper_arrow_prelight || menu->lower_arrow_prelight)
     {
-      GtkMenu *menu = GTK_MENU (widget);
+      GtkSettings *settings = gtk_widget_get_settings (GTK_WIDGET (menu));
+      gboolean     touchscreen_mode;
 
-      if (menu->upper_arrow_prelight || menu->lower_arrow_prelight)
-        {
-          GtkSettings *settings = gtk_widget_get_settings (widget);
-          gboolean     touchscreen_mode;
+      g_object_get (G_OBJECT (settings),
+                    "gtk-touchscreen-mode", &touchscreen_mode,
+                    NULL);
 
-          g_object_get (G_OBJECT (settings),
-                        "gtk-touchscreen-mode", &touchscreen_mode,
-                        NULL);
+      if (touchscreen_mode)
+        gtk_menu_handle_scrolling (menu,
+                                   event->x_root, event->y_root,
+                                   event->type == GDK_BUTTON_PRESS,
+                                   FALSE);
 
-          if (touchscreen_mode)
-            gtk_menu_handle_scrolling (menu,
-                                       event->x_root, event->y_root,
-                                       event->type == GDK_BUTTON_PRESS,
-                                       FALSE);
-
-          return TRUE;
-        }
+      return TRUE;
     }
 
   return FALSE;
@@ -2593,7 +2588,7 @@ gtk_menu_button_press (GtkWidget      *widget,
 
   /* Don't pop down the menu for presses over scroll arrows
    */
-  if (gtk_menu_button_scroll (widget, event))
+  if (gtk_menu_button_scroll (GTK_MENU (widget), event))
     return TRUE;
 
   return GTK_WIDGET_CLASS (gtk_menu_parent_class)->button_press_event (widget, event);
@@ -2603,15 +2598,12 @@ static gboolean
 gtk_menu_button_release (GtkWidget      *widget,
 			 GdkEventButton *event)
 {
-  if (GTK_IS_MENU (widget))
-    {
-      GtkMenuPrivate *priv = gtk_menu_get_private (GTK_MENU (widget));
+  GtkMenuPrivate *priv = gtk_menu_get_private (GTK_MENU (widget));
 
-      if (priv->ignore_button_release)
-        {
-          priv->ignore_button_release = FALSE;
-          return FALSE;
-        }
+  if (priv->ignore_button_release)
+    {
+      priv->ignore_button_release = FALSE;
+      return FALSE;
     }
 
   if (event->type != GDK_BUTTON_RELEASE)
@@ -2619,7 +2611,7 @@ gtk_menu_button_release (GtkWidget      *widget,
 
   /* Don't pop down the menu for releases over scroll arrows
    */
-  if (gtk_menu_button_scroll (widget, event))
+  if (gtk_menu_button_scroll (GTK_MENU (widget), event))
     return TRUE;
 
   return GTK_WIDGET_CLASS (gtk_menu_parent_class)->button_release_event (widget, event);
