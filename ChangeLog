@@ -1,3 +1,9 @@
+2007-02-02  Mariano Suárez-Alvarez  <mariano@gnome.org>
+
+	* gtk/gtkcellrenderertext.c(gtk_cell_renderer_text_class_init):
+	be a little more helpful with the docs on GtkCellRendererText:alignment.
+	Bug #403409.
+
 2007-01-31  Christian Persch  <chpe@svn.gnome.org>
 
 	* gtk/gtkaboutdialog.c: (update_credits_button_visibility),
