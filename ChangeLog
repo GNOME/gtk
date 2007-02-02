@@ -1,3 +1,9 @@
+2007-02-02  Mariano Suárez-Alvarez  <mariano@gnome.org>
+
+	* gtk/gtkcellrenderertext.c(gtk_cell_renderer_text_class_init):
+	be a little more helpful with the docs on GtkCellRendererText:alignment.
+	Bug #403409.
+
 2007-02-01  Michael Natterer  <mitch@imendio.com>
 
 	* gtk/gtkmenu.c (gtk_menu_paint): pass &event->area to

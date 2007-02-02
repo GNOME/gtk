@@ -475,7 +475,11 @@ gtk_cell_renderer_text_class_init (GtkCellRendererTextClass *class)
   /**
    * GtkCellRendererText:alignment:
    *
-   * Specifies how to align the lines of text.
+   * Specifies how to align the lines of text with respect to each other. 
+   *
+   * Note that this property describes how to align the lines of text in 
+   * case there are several of them. The "xalign" property of #GtkCellRenderer, 
+   * on the other hand, sets the horizontal alignment of the whole text.
    *
    * Since: 2.10
    */
