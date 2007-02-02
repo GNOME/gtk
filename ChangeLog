@@ -1,3 +1,8 @@
+2007-02-02  Kristian Rietveld  <kris@gtk.org>
+
+	* gtk/gtktreeview.c (gtk_tree_view_row_changed): remove unused
+	style_get of vertical-separator. (#403165, Chris Wilson).
+
 2007-02-02  Christian Persch  <chpe@svn.gnome.org>
 
 	* gtk/gtkfilechoosersettings.c: (get_config_filename),

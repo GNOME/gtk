@@ -8066,7 +8066,6 @@ gtk_tree_view_row_changed (GtkTreeModel *model,
   GtkRBTree *tree;
   GtkRBNode *node;
   gboolean free_path = FALSE;
-  gint vertical_separator;
   GList *list;
   GtkTreePath *cursor_path;
 
@@ -8083,8 +8082,6 @@ gtk_tree_view_row_changed (GtkTreeModel *model,
 
   if (cursor_path != NULL)
     gtk_tree_path_free (cursor_path);
-
-  gtk_widget_style_get (GTK_WIDGET (data), "vertical-separator", &vertical_separator, NULL);
 
   if (path == NULL)
     {
