@@ -1,3 +1,12 @@
+2007-02-02  Christian Persch  <chpe@svn.gnome.org>
+
+	* gtk/gtkfilechoosersettings.c: (get_config_filename),
+	(ensure_settings_read), (_gtk_file_chooser_settings_init),
+	(_gtk_file_chooser_settings_set_show_hidden),
+	(_gtk_file_chooser_settings_set_expand_folders),
+	(_gtk_file_chooser_settings_save): Use a simple key file instead of a
+	markup file. Bug #399592.
+
 2007-02-02  Mariano Suárez-Alvarez  <mariano@gnome.org>
 
 	* gtk/gtkcellrenderertext.c(gtk_cell_renderer_text_class_init):

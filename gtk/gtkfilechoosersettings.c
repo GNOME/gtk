@@ -32,24 +32,18 @@
 #include <config.h>
 #include <errno.h>
 #include <string.h>
+#include <glib/gkeyfile.h>
 #include <glib/gi18n-lib.h>
 #include "gtkfilechoosersettings.h"
 #include "gtkalias.h"
 
-/* Increment this every time you change the configuration format */
-#define CONFIG_VERSION 0
+#define SETTINGS_GROUP		"Filechooser Settings"
+#define LOCATION_MODE_KEY	"LocationMode"
+#define SHOW_HIDDEN_KEY		"ShowHidden"
+#define EXPAND_FOLDERS_KEY	"ExpandFolders"
 
-#define ELEMENT_TOPLEVEL	"gtkfilechooser"
-#define ELEMENT_LOCATION	"location"
-#define ELEMENT_SHOW_HIDDEN     "show_hidden"
-#define ELEMENT_EXPAND_FOLDERS  "expand_folders"
-#define ATTRIBUTE_VERSION       "version"
-#define ATTRIBUTE_MODE		"mode"
-#define ATTRIBUTE_VALUE         "value"
-#define MODE_PATH_BAR		"path-bar"
-#define MODE_FILENAME_ENTRY	"filename-entry"
-#define VALUE_TRUE              "true"
-#define VALUE_FALSE             "false"
+#define MODE_PATH_BAR          "path-bar"
+#define MODE_FILENAME_ENTRY    "filename-entry"
 
 #define EQ(a, b) (g_ascii_strcasecmp ((a), (b)) == 0)
 
@@ -62,387 +56,81 @@ get_config_dirname (void)
 static char *
 get_config_filename (void)
 {
-  return g_build_filename (g_get_user_config_dir (), "gtk-2.0", "gtkfilechooser", NULL);
-}
-
-static void
-set_defaults (GtkFileChooserSettings *settings)
-{
-  settings->location_mode = LOCATION_MODE_PATH_BAR;
-  settings->show_hidden = FALSE;
-  settings->expand_folders = FALSE;
-}
-
-typedef enum {
-  STATE_START,
-  STATE_END,
-  STATE_ERROR,
-  STATE_IN_TOPLEVEL,
-  STATE_IN_LOCATION,
-  STATE_IN_SHOW_HIDDEN,
-  STATE_IN_EXPAND_FOLDERS
-} State;
-
-struct parse_state {
-  GtkFileChooserSettings *settings;
-  int version;
-  State state;
-};
-
-static const char *
-get_attribute_value (const char **attribute_names,
-		     const char **attribute_values,
-		     const char *attribute)
-{
-  const char **name;
-  const char **value;
-
-  name = attribute_names;
-  value = attribute_values;
-
-  while (*name)
-    {
-      if (EQ (*name, attribute))
-	return *value;
-
-      name++;
-      value++;
-    }
-
-  return NULL;
-}
-
-static void
-set_missing_attribute_error (struct parse_state *state,
-			     int line,
-			     int col,
-			     const char *attribute,
-			     GError **error)
-{
-  state->state = STATE_ERROR;
-  g_set_error (error,
-	       G_MARKUP_ERROR,
-	       G_MARKUP_ERROR_INVALID_CONTENT,
-	       _("Line %d, column %d: missing attribute \"%s\""),
-	       line,
-	       col,
-	       attribute);
-}
-
-static void
-set_unexpected_element_error (struct parse_state *state,
-			      int line,
-			      int col,
-			      const char *element,
-			      GError **error)
-{
-  state->state = STATE_ERROR;
-  g_set_error (error,
-	       G_MARKUP_ERROR,
-	       G_MARKUP_ERROR_UNKNOWN_ELEMENT,
-	       _("Line %d, column %d: unexpected element \"%s\""),
-	       line,
-	       col,
-	       element);
-}
-
-static void
-set_unexpected_element_end_error (struct parse_state *state,
-				  int line,
-				  int col,
-				  const char *expected_element,
-				  const char *unexpected_element,
-				  GError **error)
-{
-  state->state = STATE_ERROR;
-  g_set_error (error,
-	       G_MARKUP_ERROR,
-	       G_MARKUP_ERROR_UNKNOWN_ELEMENT,
-	       _("Line %d, column %d: expected end of element \"%s\", but found end for element \"%s\" instead"),
-	       line,
-	       col,
-	       expected_element,
-	       unexpected_element);
-}
-
-
-static void
-parse_start_element_cb (GMarkupParseContext *context,
-			const char *element_name,
-			const char **attribute_names,
-			const char **attribute_values,
-			gpointer data,
-			GError **error)
-{
-  struct parse_state *state;
-  int line, col;
-
-  state = data;
-  g_markup_parse_context_get_position (context, &line, &col);
-
-  switch (state->state)
-    {
-    case STATE_START:
-      if (EQ (element_name, ELEMENT_TOPLEVEL))
-	{
-	  const char *version_str;
-
-	  state->state = STATE_IN_TOPLEVEL;
-
-	  version_str = get_attribute_value (attribute_names, attribute_values, ATTRIBUTE_VERSION);
-	  if (!version_str)
-	    state->version = -1;
-	  else
-	    if (sscanf (version_str, "%d", &state->version) != 1 || state->version < 0)
-	      state->version = -1;
-	}
-      else
-	{
-	  state->state = STATE_ERROR;
-	  g_set_error (error,
-		       G_MARKUP_ERROR,
-		       G_MARKUP_ERROR_UNKNOWN_ELEMENT,
-		       _("Line %d, column %d: expected \"%s\" at the toplevel, but found \"%s\" instead"),
-		       line,
-		       col,
-		       ELEMENT_TOPLEVEL,
-		       element_name);
-	}
-      break;
-
-    case STATE_END:
-      g_assert_not_reached ();
-      break;
-
-    case STATE_ERROR:
-      g_assert_not_reached ();
-      break;
-
-    case STATE_IN_TOPLEVEL:
-      if (EQ (element_name, ELEMENT_LOCATION))
-	{
-	  const char *location_mode_str;
-
-	  state->state = STATE_IN_LOCATION;
-
-	  location_mode_str = get_attribute_value (attribute_names, attribute_values, ATTRIBUTE_MODE);
-	  if (!location_mode_str)
-	    set_missing_attribute_error (state, line, col, ATTRIBUTE_MODE, error);
-	  else if (EQ (location_mode_str, MODE_PATH_BAR))
-	    state->settings->location_mode = LOCATION_MODE_PATH_BAR;
-	  else if (EQ (location_mode_str, MODE_FILENAME_ENTRY))
-	    state->settings->location_mode = LOCATION_MODE_FILENAME_ENTRY;
-	  else
-	    {
-	      state->state = STATE_ERROR;
-	      g_set_error (error,
-			   G_MARKUP_ERROR,
-			   G_MARKUP_ERROR_INVALID_CONTENT,
-			   _("Line %d, column %d: expected \"%s\" or \"%s\", but found \"%s\" instead"),
-			   line,
-			   col,
-			   MODE_PATH_BAR,
-			   MODE_FILENAME_ENTRY,
-			   location_mode_str);
-	    }
-	}
-      else if (EQ (element_name, ELEMENT_SHOW_HIDDEN))
-	{
-	  const char *value_str;
-
-	  state->state = STATE_IN_SHOW_HIDDEN;
-
-	  value_str = get_attribute_value (attribute_names, attribute_values, ATTRIBUTE_VALUE);
-
-	  if (!value_str)
-	    set_missing_attribute_error (state, line, col, ATTRIBUTE_VALUE, error);
-	  else if (EQ (value_str, VALUE_TRUE))
-	    state->settings->show_hidden = TRUE;
-	  else if (EQ (value_str, VALUE_FALSE))
-	    state->settings->show_hidden = FALSE;
-	  else
-	    {
-	      state->state = STATE_ERROR;
-	      g_set_error (error,
-			   G_MARKUP_ERROR,
-			   G_MARKUP_ERROR_INVALID_CONTENT,
-			   _("Line %d, column %d: expected \"%s\" or \"%s\", but found \"%s\" instead"),
-			   line,
-			   col,
-			   VALUE_FALSE,
-			   VALUE_TRUE,
-			   value_str);
-	    }
-	}
-      else if (EQ (element_name, ELEMENT_EXPAND_FOLDERS))
-	{
-	  const char *value_str;
-
-	  state->state = STATE_IN_EXPAND_FOLDERS;
-
-	  value_str = get_attribute_value (attribute_names, attribute_values, ATTRIBUTE_VALUE);
-
-	  if (!value_str)
-	    set_missing_attribute_error (state, line, col, ATTRIBUTE_VALUE, error);
-	  else if (EQ (value_str, VALUE_TRUE))
-	    state->settings->expand_folders = TRUE;
-	  else if (EQ (value_str, VALUE_FALSE))
-	    state->settings->expand_folders = FALSE;
-	  else
-	    {
-	      state->state = STATE_ERROR;
-	      g_set_error (error,
-			   G_MARKUP_ERROR,
-			   G_MARKUP_ERROR_INVALID_CONTENT,
-			   _("Line %d, column %d: expected \"%s\" or \"%s\", but found \"%s\" instead"),
-			   line,
-			   col,
-			   VALUE_FALSE,
-			   VALUE_TRUE,
-			   value_str);
-	    }
-	}
-      else
-	set_unexpected_element_error (state, line, col, element_name, error);
-
-      break;
-
-    case STATE_IN_LOCATION:
-    case STATE_IN_SHOW_HIDDEN:
-      set_unexpected_element_error (state, line, col, element_name, error);
-      break;
-
-    default:
-      g_assert_not_reached ();
-    }
-}
-
-static void
-parse_end_element_cb (GMarkupParseContext *context,
-		      const char *element_name,
-		      gpointer data,
-		      GError **error)
-{
-  struct parse_state *state;
-  int line, col;
-
-  state = data;
-  g_markup_parse_context_get_position (context, &line, &col);
-
-  switch (state->state)
-    {
-    case STATE_START:
-      g_assert_not_reached ();
-      break;
-
-    case STATE_END:
-      g_assert_not_reached ();
-      break;
-
-    case STATE_ERROR:
-      g_assert_not_reached ();
-      break;
-
-    case STATE_IN_TOPLEVEL:
-      if (EQ (element_name, ELEMENT_TOPLEVEL))
-	state->state = STATE_END;
-      else
-	set_unexpected_element_end_error (state, line, col, ELEMENT_TOPLEVEL, element_name, error);
-
-      break;
-
-    case STATE_IN_LOCATION:
-      if (EQ (element_name, ELEMENT_LOCATION))
-	state->state = STATE_IN_TOPLEVEL;
-      else
-	set_unexpected_element_end_error (state, line, col, ELEMENT_LOCATION, element_name, error);
-
-      break;
-
-    case STATE_IN_SHOW_HIDDEN:
-      if (EQ (element_name, ELEMENT_SHOW_HIDDEN))
-	state->state = STATE_IN_TOPLEVEL;
-      else
-	set_unexpected_element_end_error (state, line, col, ELEMENT_SHOW_HIDDEN, element_name, error);
-
-      break;
-
-    case STATE_IN_EXPAND_FOLDERS:
-      if (EQ (element_name, ELEMENT_EXPAND_FOLDERS))
-	state->state = STATE_IN_TOPLEVEL;
-      else
-	set_unexpected_element_end_error (state, line, col, ELEMENT_EXPAND_FOLDERS, element_name, error);
-
-      break;
-
-    default:
-      g_assert_not_reached ();
-    }
-}
-
-static gboolean
-parse_config (GtkFileChooserSettings *settings,
-	      const char *contents,
-	      GError **error)
-{
-  GMarkupParser parser = { NULL, };
-  GMarkupParseContext *context;
-  struct parse_state state;
-  gboolean retval;
-
-  parser.start_element = parse_start_element_cb;
-  parser.end_element = parse_end_element_cb;
-
-  state.settings = settings;
-  state.version = -1;
-  state.state = STATE_START;
-
-  context = g_markup_parse_context_new (&parser,
-					0,
-					&state,
-					NULL);
-
-  retval = g_markup_parse_context_parse (context, contents, -1, error);
-  g_markup_parse_context_free (context);
-
-  return retval;
-}
-
-static gboolean
-read_config (GtkFileChooserSettings *settings,
-	     GError **error)
-{
-  char *filename;
-  char *contents;
-  gsize contents_len;
-  gboolean success;
-
-  filename = get_config_filename ();
-
-  success = g_file_get_contents (filename, &contents, &contents_len, error);
-  g_free (filename);
-
-  if (!success)
-    {
-      set_defaults (settings);
-      return FALSE;
-    }
-
-  success = parse_config (settings, contents, error);
-
-  g_free (contents);
-
-  return success;
+  return g_build_filename (g_get_user_config_dir (), "gtk-2.0", "gtkfilechooser.ini", NULL);
 }
 
 static void
 ensure_settings_read (GtkFileChooserSettings *settings)
 {
+  GError *error;
+  GKeyFile *key_file;
+  gchar *location_mode_str, *filename;
+  gboolean value;
+
   if (settings->settings_read)
     return;
 
-  /* NULL GError */
-  read_config (settings, NULL);
+  key_file = g_key_file_new ();
+
+  filename = get_config_filename ();
+
+  error = NULL;
+  if (!g_key_file_load_from_file (key_file, filename, 0, &error))
+    {
+      /* Don't warn on non-existent file */
+      if (error->domain != G_FILE_ERROR ||
+	  error->code != G_FILE_ERROR_NOENT)
+        g_warning ("Failed to read filechooser settings from \"%s\": %s",
+                   filename, error->message);
+
+      g_error_free (error);
+      goto out;
+    }
+
+  if (!g_key_file_has_group (key_file, SETTINGS_GROUP))
+    goto out;
+
+  location_mode_str = g_key_file_get_string (key_file, SETTINGS_GROUP,
+					     LOCATION_MODE_KEY, NULL);
+  if (location_mode_str)
+    {
+      if (EQ (location_mode_str, MODE_PATH_BAR))
+        settings->location_mode = LOCATION_MODE_PATH_BAR;
+      else if (EQ (location_mode_str, MODE_FILENAME_ENTRY))
+        settings->location_mode = LOCATION_MODE_FILENAME_ENTRY;
+      else
+        g_warning ("Unknown location mode '%s' encountered in filechooser settings",
+		   location_mode_str);
+
+      g_free (location_mode_str);
+    }
+
+  value = g_key_file_get_boolean (key_file, SETTINGS_GROUP,
+				  SHOW_HIDDEN_KEY, &error);
+  if (error)
+    {
+      g_warning ("Failed to read show-hidden setting in filechooser settings: %s",
+		 error->message);
+      g_clear_error (&error);
+    }
+  else
+    settings->show_hidden = value != FALSE;
+
+  value = g_key_file_get_boolean (key_file, SETTINGS_GROUP,
+				  EXPAND_FOLDERS_KEY, &error);
+  if (error)
+    {
+      g_warning ("Failed to read expand-folders setting in filechooser settings: %s",
+		 error->message);
+      g_clear_error (&error);
+    }
+  else
+    settings->expand_folders = value != FALSE;
+
+ out:
+
+  g_key_file_free (key_file);
+  g_free (filename);
 
   settings->settings_read = TRUE;
 }
@@ -457,6 +145,9 @@ _gtk_file_chooser_settings_class_init (GtkFileChooserSettingsClass *class)
 static void
 _gtk_file_chooser_settings_init (GtkFileChooserSettings *settings)
 {
+  settings->location_mode = LOCATION_MODE_PATH_BAR;
+  settings->show_hidden = FALSE;
+  settings->expand_folders = FALSE;
 }
 
 GtkFileChooserSettings *
@@ -490,7 +181,7 @@ void
 _gtk_file_chooser_settings_set_show_hidden (GtkFileChooserSettings *settings,
 					    gboolean show_hidden)
 {
-  settings->show_hidden = show_hidden ? TRUE : FALSE;
+  settings->show_hidden = show_hidden != FALSE;
 }
 
 gboolean
@@ -504,15 +195,27 @@ void
 _gtk_file_chooser_settings_set_expand_folders (GtkFileChooserSettings *settings,
 					       gboolean expand_folders)
 {
-  settings->expand_folders = expand_folders ? TRUE : FALSE;
+  settings->expand_folders = expand_folders != FALSE;
 }
 
-static char *
-settings_to_markup (GtkFileChooserSettings *settings)
+gboolean
+_gtk_file_chooser_settings_save (GtkFileChooserSettings *settings,
+				 GError                **error)
 {
-  const char *location_mode_str;
-  const char *show_hidden_str;
-  const char *expand_folders_str;
+  const gchar *location_mode_str;
+  gchar *filename;
+  gchar *dirname;
+  gchar *contents;
+  gsize len;
+  gboolean retval;
+  GKeyFile *key_file;
+
+  g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
+
+  filename = get_config_filename ();
+  dirname = NULL;
+
+  retval = FALSE;
 
   if (settings->location_mode == LOCATION_MODE_PATH_BAR)
     location_mode_str = MODE_PATH_BAR;
@@ -521,42 +224,28 @@ settings_to_markup (GtkFileChooserSettings *settings)
   else
     {
       g_assert_not_reached ();
-      return NULL;
+      return FALSE;
     }
 
-  show_hidden_str = settings->show_hidden ? VALUE_TRUE : VALUE_FALSE;
-  expand_folders_str = settings->expand_folders ? VALUE_TRUE : VALUE_FALSE;
+  key_file = g_key_file_new ();
 
-  return g_strdup_printf
-    ("<" ELEMENT_TOPLEVEL ">\n"						/* <gtkfilechooser>               */
-     "  <" ELEMENT_LOCATION " " ATTRIBUTE_MODE "=\"%s\"/>\n"		/*   <location mode="path-bar"/>  */
-     "  <" ELEMENT_SHOW_HIDDEN " " ATTRIBUTE_VALUE "=\"%s\"/>\n"	/*   <show_hidden value="false"/> */
-     "  <" ELEMENT_EXPAND_FOLDERS " " ATTRIBUTE_VALUE "=\"%s\"/>\n"	/*   <expand_folders value="false"/> */
-     "</" ELEMENT_TOPLEVEL ">\n",					/* </gtkfilechooser>              */
-     location_mode_str,
-     show_hidden_str,
-     expand_folders_str);
-}
+  /* Initialise with the on-disk keyfile, so we keep unknown options */
+  g_key_file_load_from_file (key_file, filename, 0, NULL);
 
-gboolean
-_gtk_file_chooser_settings_save (GtkFileChooserSettings *settings,
-				 GError                **error)
-{
-  char *contents;
-  char *filename;
-  char *dirname;
-  gboolean retval;
+  g_key_file_set_string (key_file, SETTINGS_GROUP,
+			 LOCATION_MODE_KEY, location_mode_str);
+  g_key_file_set_boolean (key_file, SETTINGS_GROUP,
+			  SHOW_HIDDEN_KEY, settings->show_hidden);
+  g_key_file_set_boolean (key_file, SETTINGS_GROUP,
+			  EXPAND_FOLDERS_KEY, settings->expand_folders);
 
-  g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
+  contents = g_key_file_to_data (key_file, &len, error);
+  g_key_file_free (key_file);
 
-  contents = settings_to_markup (settings);
+  if (!contents)
+    goto out;
 
-  filename = get_config_filename ();
-  dirname = NULL;
-
-  retval = FALSE;
-
-  if (!g_file_set_contents (filename, contents, -1, NULL))
+  if (!g_file_set_contents (filename, contents, len, NULL))
     {
       char *dirname;
       int saved_errno;
@@ -575,7 +264,7 @@ _gtk_file_chooser_settings_save (GtkFileChooserSettings *settings,
 	  goto out;
 	}
 
-      if (!g_file_set_contents (filename, contents, -1, error))
+      if (!g_file_set_contents (filename, contents, len, error))
 	goto out;
     }
 
