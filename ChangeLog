@@ -1,3 +1,8 @@
+2007-02-04  Tor Lillqvist  <tml@novell.com>
+
+	* gdk/win32/gdkcursor-win32.c: Don't define BITMAPV5HEADER on
+	mingw with w32api >= 3.8, which has it in wingdi.h. (#403896)
+
 2007-02-02  Kristian Rietveld  <kris@gtk.org>
 
 	* gtk/gtktreeview.c (gtk_tree_view_row_changed): remove unused
