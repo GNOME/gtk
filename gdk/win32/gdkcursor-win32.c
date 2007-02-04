@@ -31,7 +31,7 @@
 
 #include "xcursors.h"
 
-#if (defined(__MINGW32__) && __W32API_MAJOR_VERSION <= 3 && __W32API_MINOR_VERSION < 8) || (defined(_MSC_VER) && (WINVER < 0x0500))
+#if (defined(__MINGW32__) && (__W32API_MAJOR_VERSION < 3 || (__W32API_MAJOR_VERSION == 3 && __W32API_MINOR_VERSION < 8))) || (defined(_MSC_VER) && (WINVER < 0x0500))
 typedef struct { 
   DWORD        bV5Size; 
   LONG         bV5Width; 
