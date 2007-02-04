@@ -355,7 +355,6 @@ gtk_private_h_sources =		\
 	gtkrecentchooserdefault.h \
 	gtkrecentchooserprivate.h \
 	gtkrecentchooserutils.h \
-	gtksequence.h		\
 	gtksocketprivate.h	\
 	gtktextbtree.h		\
 	gtktextbufferserialize.h\
@@ -525,7 +524,6 @@ gtk_base_c_sources =            \
 	gtkseparator.c		\
 	gtkseparatormenuitem.c	\
 	gtkseparatortoolitem.c	\
-	gtksequence.c		\
 	gtksettings.c		\
 	gtksignal.c		\
 	gtksizegroup.c		\
