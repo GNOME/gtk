@@ -466,12 +466,15 @@ sys_font_to_pango_font (XpThemeClass klazz, XpThemeFont type, char *buf,
 		{
 		    pt_size = -MulDiv (lf.lfHeight, 72,
 				       GetDeviceCaps (hDC, LOGPIXELSY));
-		    ReleaseDC (hwnd, hDC);
 		}
 	    else
 		pt_size = 10;
 
 	    font = get_family_name (&lf, hDC);
+
+	    if (hDC)
+	      ReleaseDC (hwnd, hDC);
+
 	    if(!(font && *font))
 	    	return NULL;
 
@@ -1988,8 +1991,6 @@ draw_box (GtkStyle * style,
 		{
                 RECT rect;
                 HDC dc;
-                gboolean rtl = (gtk_widget_get_direction(widget) == GTK_TEXT_DIR_RTL);
-                gboolean up = !strcmp (detail, "spinbutton_up");
 
                 dc = get_window_dc( style, window, state_type,
                                     x, y, width, height, &rect );
@@ -2409,7 +2410,6 @@ draw_extension (GtkStyle * style,
 	    int tab_part = XP_THEME_ELEMENT_TAB_ITEM;
 	    int real_gap_side = gtk_notebook_get_tab_pos (notebook);
 	    int border_width = gtk_container_get_border_width (GTK_CONTAINER (notebook));
-	    gboolean last_tab;
 
 	    /* why this differs from the above gap_side, i have no idea... */
 	    if (real_gap_side == GTK_POS_LEFT)
@@ -2528,6 +2528,8 @@ draw_extension (GtkStyle * style,
 			     }
 
 			   gdk_draw_pixbuf (window, NULL, pixbuf, 0, 0, x2, y2, w2, h2, GDK_RGB_DITHER_NONE, 0, 0);
+
+			   g_object_unref (G_OBJECT (pixbuf));
 
 			   if (real_gap_side == GTK_POS_LEFT || real_gap_side == GTK_POS_RIGHT)
 			     {

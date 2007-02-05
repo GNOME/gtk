@@ -1,3 +1,10 @@
+2007-02-05  Dom Lachowicz <domlachowicz@gmail.com>
+
+	* modules/engines/ms-windows/msw_style.c: Fix bug 404506, caused
+	by prematurely releasing a DC. By Hiroyuki Yamamoto
+	* modules/engines/ms-windows/msw_style.c: Fix bug 403470 - leaking 
+	pixbufs when drawing rotated tabs. By Daniel Atallah
+	
 2007-02-05  Michael Natterer  <mitch@imendio.com>
 
 	* gtk/gtksettings.c: add new boolean settings gtk-enable-accels
