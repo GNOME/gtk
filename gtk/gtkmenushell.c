@@ -685,6 +685,7 @@ gtk_menu_shell_key_press (GtkWidget   *widget,
 			  GdkEventKey *event)
 {
   GtkMenuShell *menu_shell;
+  gboolean enable_mnemonics;
   
   g_return_val_if_fail (GTK_IS_MENU_SHELL (widget), FALSE);
   g_return_val_if_fail (event != NULL, FALSE);
@@ -697,7 +698,14 @@ gtk_menu_shell_key_press (GtkWidget   *widget,
   if (gtk_bindings_activate_event (GTK_OBJECT (widget), event))
     return TRUE;
 
-  return gtk_menu_shell_activate_mnemonic (menu_shell, event);
+  g_object_get (gtk_widget_get_settings (widget),
+		"gtk-enable-mnemonics", &enable_mnemonics,
+		NULL);
+
+  if (enable_mnemonics)
+    return gtk_menu_shell_activate_mnemonic (menu_shell, event);
+
+  return FALSE;
 }
 
 static gint

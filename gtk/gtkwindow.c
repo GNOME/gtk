@@ -7698,13 +7698,29 @@ gtk_window_activate_key (GtkWindow   *window,
 
   if (found_entry)
     {
+      gboolean enable_mnemonics;
+      gboolean enable_accels;
+
+      g_object_get (gtk_widget_get_settings (GTK_WIDGET (window)),
+                    "gtk-enable-mnemonics", &enable_mnemonics,
+                    "gtk-enable-accels", &enable_accels,
+                    NULL);
+
       if (found_entry->is_mnemonic)
-	return gtk_window_mnemonic_activate (window, found_entry->keyval, found_entry->modifiers);
+        {
+          if (enable_mnemonics)
+            return gtk_window_mnemonic_activate (window, found_entry->keyval,
+                                                 found_entry->modifiers);
+        }
       else
-	return gtk_accel_groups_activate (G_OBJECT (window), found_entry->keyval, found_entry->modifiers);
+        {
+          if (enable_accels)
+            return gtk_accel_groups_activate (G_OBJECT (window), found_entry->keyval,
+                                              found_entry->modifiers);
+        }
     }
-  else
-    return FALSE;
+
+  return FALSE;
 }
 
 static void

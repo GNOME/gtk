@@ -1,5 +1,24 @@
 2007-02-05  Michael Natterer  <mitch@imendio.com>
 
+	* gtk/gtksettings.c: add new boolean settings gtk-enable-accels
+	and gtk-enable-mnemonics which enable/disable accelerators and
+	mnemonics (bug #72375, based on a patch from Tommi Komulainen).
+
+	* gtk/gtkwindow.c (gtk_window_activate_key)
+	* gtk/gtkmenushell.c (gtk_menu_shell_key_press): don't invoke them
+	if the resp. setting is FALSE.
+
+	* gtk/gtkaccellabel.c (gtk_accel_label_refetch)
+	* gtk/gtklabel.c (gtk_label_set_pattern_internal): don't display
+	them if the setting is FALSE.
+
+	* gtk/gtklabel.c: added signal connection to the screen's settings
+	object and traverse all widgets on the screen when the setting
+	changes. It's slightly ugly to also update GtkAccelLabels here,
+	but less ugly than connecting and traversing all widgets twice.
+
+2007-02-05  Michael Natterer  <mitch@imendio.com>
+
 	* gtk/gtktextbuffer.h (enum GtkTextBufferTargetInfo): changed
 	values from G_MAXUINT-0, -1, -2 to -1, -2, -3 so we stay within
 	ansi C enum value limits. Fixes bug #46757.

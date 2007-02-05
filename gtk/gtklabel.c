@@ -27,6 +27,7 @@
 #include <math.h>
 #include <string.h>
 #include "gtklabel.h"
+#include "gtkaccellabel.h"
 #include "gtkdnd.h"
 #include "gtkmain.h"
 #include "gtkmarshalers.h"
@@ -969,11 +970,75 @@ gtk_label_hierarchy_changed (GtkWidget *widget,
 }
 
 static void
+label_shortcut_setting_apply (GtkLabel *label)
+{
+  gtk_label_recalculate (label);
+  if (GTK_IS_ACCEL_LABEL (label))
+    gtk_accel_label_refetch (GTK_ACCEL_LABEL (label));
+}
+
+static void
+label_shortcut_setting_traverse_container (GtkWidget *widget,
+                                           gpointer   data)
+{
+  if (GTK_IS_LABEL (widget))
+    label_shortcut_setting_apply (GTK_LABEL (widget));
+  else if (GTK_IS_CONTAINER (widget))
+    gtk_container_forall (GTK_CONTAINER (widget),
+                          label_shortcut_setting_traverse_container, data);
+}
+
+static void
+label_shortcut_setting_changed (GtkSettings *settings)
+{
+  GList *list, *l;
+
+  list = gtk_window_list_toplevels ();
+
+  for (l = list; l ; l = l->next)
+    {
+      GtkWidget *widget = l->data;
+
+      if (gtk_widget_get_settings (widget) == settings)
+        gtk_container_forall (GTK_CONTAINER (widget),
+                              label_shortcut_setting_traverse_container, NULL);
+    }
+
+  g_list_free (list);
+}
+
+static void
 gtk_label_screen_changed (GtkWidget *widget,
 			  GdkScreen *old_screen)
 {
-  gtk_label_clear_layout (GTK_LABEL (widget));
+  GtkSettings *settings;
+  gboolean shortcuts_connected;
+
+  if (!gtk_widget_has_screen (widget))
+    return;
+
+  settings = gtk_widget_get_settings (widget);
+
+  shortcuts_connected =
+    GPOINTER_TO_INT (g_object_get_data (G_OBJECT (settings),
+                                        "gtk-label-shortcuts-connected"));
+
+  if (! shortcuts_connected)
+    {
+      g_signal_connect (settings, "notify::gtk-enable-mnemonics",
+                        G_CALLBACK (label_shortcut_setting_changed),
+                        NULL);
+      g_signal_connect (settings, "notify::gtk-enable-accels",
+                        G_CALLBACK (label_shortcut_setting_changed),
+                        NULL);
+
+      g_object_set_data (G_OBJECT (settings), "gtk-label-shortcuts-connected",
+                         GINT_TO_POINTER (TRUE));
+    }
+
+  label_shortcut_setting_apply (GTK_LABEL (widget));
 }
+
 
 static void
 label_mnemonic_widget_weak_notify (gpointer      data,
@@ -1461,9 +1526,15 @@ gtk_label_set_pattern_internal (GtkLabel    *label,
 				const gchar *pattern)
 {
   PangoAttrList *attrs;
+  gboolean enable_mnemonics;
+
   g_return_if_fail (GTK_IS_LABEL (label));
-  
-  if (pattern)
+
+  g_object_get (gtk_widget_get_settings (GTK_WIDGET (label)),
+		"gtk-enable-mnemonics", &enable_mnemonics,
+		NULL);
+
+  if (enable_mnemonics && pattern)
     attrs = gtk_label_pattern_to_attrs (label, pattern);
   else
     attrs = NULL;

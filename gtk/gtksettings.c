@@ -100,7 +100,9 @@ enum {
   PROP_COLOR_HASH,
   PROP_FILE_CHOOSER_BACKEND,
   PROP_PRINT_BACKENDS,
-  PROP_PRINT_PREVIEW_COMMAND
+  PROP_PRINT_PREVIEW_COMMAND,
+  PROP_ENABLE_MNEMONICS,
+  PROP_ENABLE_ACCELS
 };
 
 
@@ -676,6 +678,40 @@ gtk_settings_class_init (GtkSettingsClass *class)
                                                                   GTK_PARAM_READWRITE),
                                              NULL); 
   g_assert (result == PROP_PRINT_PREVIEW_COMMAND);
+
+  /**
+   * GtkSettings:gtk-enable-mnemonics:
+   *
+   * Whether labels and menu items should have visible mnemonics which
+   * can be activated.
+   *
+   * Since: 2.12
+   */
+  result = settings_install_property_parser (class,
+                                             g_param_spec_boolean ("gtk-enable-mnemonics",
+                                                                   P_("Enable Mnemonics"),
+                                                                   P_("Whether labels should have mnemonics"),
+                                                                   TRUE,
+                                                                   GTK_PARAM_READWRITE),
+                                             NULL);
+  g_assert (result == PROP_ENABLE_MNEMONICS);
+
+  /**
+   * GtkSettings:gtk-enable-accels:
+   *
+   * Whether menu items should have visible accelerators which can be
+   * activated.
+   *
+   * Since: 2.12
+   */
+  result = settings_install_property_parser (class,
+                                             g_param_spec_boolean ("gtk-enable-accels",
+                                                                   P_("Enable Accelerators"),
+                                                                   P_("Whether menu items should have accelerators"),
+                                                                   TRUE,
+                                                                   GTK_PARAM_READWRITE),
+                                             NULL);
+  g_assert (result == PROP_ENABLE_ACCELS);
 }
 
 static void

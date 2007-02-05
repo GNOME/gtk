@@ -664,6 +664,8 @@ _gtk_accel_label_class_get_accelerator_label (GtkAccelLabelClass *klass,
 gboolean
 gtk_accel_label_refetch (GtkAccelLabel *accel_label)
 {
+  gboolean enable_accels;
+
   g_return_val_if_fail (GTK_IS_ACCEL_LABEL (accel_label), FALSE);
 
   if (accel_label->accel_string)
@@ -672,7 +674,11 @@ gtk_accel_label_refetch (GtkAccelLabel *accel_label)
       accel_label->accel_string = NULL;
     }
 
-  if (accel_label->accel_closure)
+  g_object_get (gtk_widget_get_settings (GTK_WIDGET (accel_label)),
+                "gtk-enable-accels", &enable_accels,
+                NULL);
+
+  if (enable_accels && accel_label->accel_closure)
     {
       GtkAccelKey *key = gtk_accel_group_find (accel_label->accel_group, find_accel, accel_label->accel_closure);
 
