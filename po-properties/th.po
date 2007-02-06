@@ -1,16 +1,17 @@
 # Thai translation for gtk+.
-# Copyright (C) 2003 Free Software Foundation, Inc.
+# Copyright (C) 2003-2007 Free Software Foundation, Inc.
 # This file is distributed under the same license as the gtk+ package.
 # Paisa Seeluangsawat <paisa@users.sf.net>, 2003.
+# Neutron Soutmun <neo.neutron@gmail.com>, 2007.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-01-22 12:38-0500\n"
-"PO-Revision-Date: 2004-02-16 21:19-0600\n"
-"Last-Translator: Paisa Seeluangsawat <paisa@users.sf.net>\n"
-"Language-Team: Thai <L10n@opentle.net>\n"
+"POT-Creation-Date: 2007-01-23 03:22+0000\n"
+"PO-Revision-Date: 2007-02-06 22:54+0700\n"
+"Last-Translator: Theppitak Karoonboonyanan <thep@linux.thai.net>\n"
+"Language-Team: Thai <l10n@opentle.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -21,7 +22,7 @@ msgstr ""
 
 #: gdk-pixbuf/gdk-pixbuf.c:90
 msgid "The number of samples per pixel"
-msgstr ""
+msgstr "จำนวนตัวอย่างต่อพิกเซล"
 
 #: gdk-pixbuf/gdk-pixbuf.c:99
 msgid "Colorspace"
@@ -41,15 +42,16 @@ msgstr ""
 
 #: gdk-pixbuf/gdk-pixbuf.c:122
 msgid "Bits per Sample"
-msgstr ""
+msgstr "บิตต่อตัวอย่าง"
 
 #: gdk-pixbuf/gdk-pixbuf.c:123
 msgid "The number of bits per sample"
-msgstr ""
+msgstr "จำนวนบิตต่อตัวอย่าง"
 
-#: gdk-pixbuf/gdk-pixbuf.c:132 gtk/gtklayout.c:618 gtk/gtktreeviewcolumn.c:201
+#: gdk-pixbuf/gdk-pixbuf.c:132 gtk/gtklayout.c:618
+#: gtk/gtktreeviewcolumn.c:201
 msgid "Width"
-msgstr ""
+msgstr "ความกว้าง"
 
 #: gdk-pixbuf/gdk-pixbuf.c:133
 msgid "The number of columns of the pixbuf"
@@ -57,7 +59,7 @@ msgstr ""
 
 #: gdk-pixbuf/gdk-pixbuf.c:142 gtk/gtklayout.c:627
 msgid "Height"
-msgstr ""
+msgstr "ความสูง"
 
 #: gdk-pixbuf/gdk-pixbuf.c:143
 msgid "The number of rows of the pixbuf"
@@ -70,11 +72,11 @@ msgstr ""
 #: gdk-pixbuf/gdk-pixbuf.c:160
 msgid ""
 "The number of bytes between the start of a row and the start of the next row"
-msgstr ""
+msgstr "จำนวนไบต์ระหว่างจุดเริ่มแถวปัจจุบันและจุดเริ่มแถวถัดไป"
 
 #: gdk-pixbuf/gdk-pixbuf.c:169
 msgid "Pixels"
-msgstr ""
+msgstr "พิกเซล"
 
 #: gdk-pixbuf/gdk-pixbuf.c:170
 msgid "A pointer to the pixel data of the pixbuf"
@@ -114,7 +116,7 @@ msgstr ""
 
 #: gtk/gtkaboutdialog.c:206
 msgid "Program name"
-msgstr ""
+msgstr "ชื่อโปรแกรม"
 
 #: gtk/gtkaboutdialog.c:207
 msgid ""
@@ -124,12 +126,11 @@ msgstr ""
 
 #: gtk/gtkaboutdialog.c:221
 msgid "Program version"
-msgstr ""
+msgstr "รุ่นโปรแกรม"
 
 #: gtk/gtkaboutdialog.c:222
-#, fuzzy
 msgid "The version of the program"
-msgstr "ชื่อของแบบอักษรที่เลือก"
+msgstr "รุ่นของโปรแกรม"
 
 #: gtk/gtkaboutdialog.c:236
 msgid "Copyright string"
@@ -170,9 +171,8 @@ msgid "Authors"
 msgstr ""
 
 #: gtk/gtkaboutdialog.c:324
-#, fuzzy
 msgid "List of authors of the program"
-msgstr "ชื่อของแบบอักษรที่เลือก"
+msgstr "รายชื่อผู้เขียนโปรแกรม"
 
 #: gtk/gtkaboutdialog.c:340
 msgid "Documenters"
@@ -210,9 +210,8 @@ msgid ""
 msgstr ""
 
 #: gtk/gtkaboutdialog.c:407
-#, fuzzy
 msgid "Logo Icon Name"
-msgstr "ชื่อแบบอักษร"
+msgstr "ชื่อไอคอนโลโก้"
 
 #: gtk/gtkaboutdialog.c:408
 msgid "A named icon to use as the logo for the about box."
@@ -283,17 +282,16 @@ msgstr ""
 msgid "The stock icon displayed in widgets representing this action."
 msgstr ""
 
-#: gtk/gtkaction.c:239 gtk/gtkcellrendererpixbuf.c:172 gtk/gtkimage.c:229
-#: gtk/gtkprinter.c:168 gtk/gtkstatusicon.c:171 gtk/gtkwindow.c:522
-#, fuzzy
+#: gtk/gtkaction.c:239 gtk/gtkcellrendererpixbuf.c:172
+#: gtk/gtkimage.c:229 gtk/gtkprinter.c:168 gtk/gtkstatusicon.c:171
+#: gtk/gtkwindow.c:522
 msgid "Icon Name"
-msgstr "ชื่อแบบอักษร"
+msgstr "ชื่อไอคอน"
 
-#: gtk/gtkaction.c:240 gtk/gtkcellrendererpixbuf.c:173 gtk/gtkimage.c:230
-#: gtk/gtkstatusicon.c:172
-#, fuzzy
+#: gtk/gtkaction.c:240 gtk/gtkcellrendererpixbuf.c:173
+#: gtk/gtkimage.c:230 gtk/gtkstatusicon.c:172
 msgid "The name of the icon from the icon theme"
-msgstr "ชื่อของแบบอักษรที่เลือก"
+msgstr "ชื่อไอคอนจากชุดตกแต่ง"
 
 #: gtk/gtkaction.c:246 gtk/gtktoolitem.c:130
 msgid "Visible when horizontal"
@@ -343,8 +341,8 @@ msgstr ""
 msgid "When TRUE, empty menu proxies for this action are hidden."
 msgstr ""
 
-#: gtk/gtkaction.c:294 gtk/gtkactiongroup.c:144 gtk/gtkcellrenderer.c:193
-#: gtk/gtkwidget.c:458
+#: gtk/gtkaction.c:294 gtk/gtkactiongroup.c:144
+#: gtk/gtkcellrenderer.c:193 gtk/gtkwidget.c:458
 msgid "Sensitive"
 msgstr ""
 
@@ -352,8 +350,9 @@ msgstr ""
 msgid "Whether the action is enabled."
 msgstr ""
 
-#: gtk/gtkaction.c:301 gtk/gtkactiongroup.c:151 gtk/gtkstatusicon.c:206
-#: gtk/gtktreeviewcolumn.c:185 gtk/gtkwidget.c:451
+#: gtk/gtkaction.c:301 gtk/gtkactiongroup.c:151
+#: gtk/gtkstatusicon.c:206 gtk/gtktreeviewcolumn.c:185
+#: gtk/gtkwidget.c:451
 msgid "Visible"
 msgstr ""
 
@@ -389,55 +388,48 @@ msgid "Value"
 msgstr ""
 
 #: gtk/gtkadjustment.c:87
-#, fuzzy
 msgid "The value of the adjustment"
-msgstr "ชื่อของแบบอักษรที่เลือก"
+msgstr "ค่าของที่ปรับค่า"
 
 #: gtk/gtkadjustment.c:103
 msgid "Minimum Value"
 msgstr ""
 
 #: gtk/gtkadjustment.c:104
-#, fuzzy
 msgid "The minimum value of the adjustment"
-msgstr "ชื่อของแบบอักษรที่เลือก"
+msgstr "ค่าต่ำสุดของที่ปรับค่า"
 
 #: gtk/gtkadjustment.c:123
 msgid "Maximum Value"
 msgstr ""
 
 #: gtk/gtkadjustment.c:124
-#, fuzzy
 msgid "The maximum value of the adjustment"
-msgstr "ชื่อของแบบอักษรที่เลือก"
+msgstr "ค่าสูงสุดของที่ปรับค่า"
 
 #: gtk/gtkadjustment.c:140
 msgid "Step Increment"
 msgstr ""
 
 #: gtk/gtkadjustment.c:141
-#, fuzzy
 msgid "The step increment of the adjustment"
-msgstr "ชื่อของแบบอักษรที่เลือก"
+msgstr "ขั้นการเพิ่มค่าของที่ปรับค่า"
 
 #: gtk/gtkadjustment.c:157
 msgid "Page Increment"
 msgstr ""
 
 #: gtk/gtkadjustment.c:158
-#, fuzzy
 msgid "The page increment of the adjustment"
-msgstr "ชื่อของแบบอักษรที่เลือก"
+msgstr "ขั้นการเพิ่มหน้าของที่ปรับค่า"
 
 #: gtk/gtkadjustment.c:177
-#, fuzzy
 msgid "Page Size"
-msgstr "ขนาด"
+msgstr ""
 
 #: gtk/gtkadjustment.c:178
-#, fuzzy
 msgid "The page size of the adjustment"
-msgstr "ชื่อของแบบอักษรที่เลือก"
+msgstr "ขนาดหน้าของที่ปรับค่า"
 
 #: gtk/gtkalignment.c:92
 msgid "Horizontal alignment"
@@ -732,7 +724,7 @@ msgstr ""
 #: gtk/gtkbox.c:144 gtk/gtknotebook.c:628 gtk/gtkpaned.c:219
 #: gtk/gtkruler.c:110
 msgid "Position"
-msgstr ""
+msgstr "ตำแหน่ง"
 
 #: gtk/gtkbox.c:145 gtk/gtknotebook.c:629
 msgid "The index of the child in the parent"
@@ -764,7 +756,8 @@ msgid ""
 "If set, the label is used to pick a stock item instead of being displayed"
 msgstr ""
 
-#: gtk/gtkbutton.c:223 gtk/gtkcombobox.c:647 gtk/gtkfilechooserbutton.c:372
+#: gtk/gtkbutton.c:223 gtk/gtkcombobox.c:647
+#: gtk/gtkfilechooserbutton.c:372
 msgid "Focus on click"
 msgstr ""
 
@@ -888,7 +881,7 @@ msgstr "เดือน"
 
 #: gtk/gtkcalendar.c:426
 msgid "The selected month (as a number between 0 and 11)"
-msgstr "เดือนที่เลือก (เป็นเลขระหว่าง 0 และ 11)"
+msgstr "เดือนที่เลือก (เป็นเลขระหว่าง 0 ถึง 11)"
 
 #: gtk/gtkcalendar.c:432
 msgid "Day"
@@ -898,7 +891,7 @@ msgstr "วัน"
 msgid ""
 "The selected day (as a number between 1 and 31, or 0 to unselect the "
 "currently selected day)"
-msgstr "วันที่เลือก (เป็นเลขระหว่าง 1 และ 31 ตั้งเป็น 0 จะยกเลิกวันที่เลือกไว้)"
+msgstr "วันที่เลือก (เป็นเลขระหว่าง 1 ถึง 31 ตั้งเป็น 0 จะยกเลิกวันที่เลือกไว้)"
 
 #: gtk/gtkcalendar.c:447
 msgid "Show Heading"
@@ -1121,7 +1114,8 @@ msgstr ""
 msgid "Pixbuf for closed expander"
 msgstr ""
 
-#: gtk/gtkcellrendererpixbuf.c:136 gtk/gtkimage.c:171 gtk/gtkstatusicon.c:163
+#: gtk/gtkcellrendererpixbuf.c:136 gtk/gtkimage.c:171
+#: gtk/gtkstatusicon.c:163
 msgid "Stock ID"
 msgstr ""
 
@@ -1159,8 +1153,8 @@ msgid "Value of the progress bar"
 msgstr ""
 
 #: gtk/gtkcellrendererprogress.c:134 gtk/gtkcellrenderertext.c:192
-#: gtk/gtkentry.c:562 gtk/gtkmessagedialog.c:153 gtk/gtkprogressbar.c:199
-#: gtk/gtktextbuffer.c:197
+#: gtk/gtkentry.c:562 gtk/gtkmessagedialog.c:153
+#: gtk/gtkprogressbar.c:199 gtk/gtktextbuffer.c:197
 msgid "Text"
 msgstr ""
 
@@ -1168,8 +1162,8 @@ msgstr ""
 msgid "Text on the progress bar"
 msgstr ""
 
-#: gtk/gtkcellrendererspin.c:93 gtk/gtkprogressbar.c:123 gtk/gtkrange.c:324
-#: gtk/gtkspinbutton.c:204
+#: gtk/gtkcellrendererspin.c:93 gtk/gtkprogressbar.c:123
+#: gtk/gtkrange.c:324 gtk/gtkspinbutton.c:204
 msgid "Adjustment"
 msgstr ""
 
@@ -1185,7 +1179,8 @@ msgstr ""
 msgid "The acceleration rate when you hold down a button"
 msgstr ""
 
-#: gtk/gtkcellrendererspin.c:123 gtk/gtkscale.c:142 gtk/gtkspinbutton.c:222
+#: gtk/gtkcellrendererspin.c:123 gtk/gtkscale.c:142
+#: gtk/gtkspinbutton.c:222
 msgid "Digits"
 msgstr ""
 
@@ -1221,15 +1216,18 @@ msgstr ""
 msgid "Whether or not to keep all text in a single paragraph"
 msgstr ""
 
-#: gtk/gtkcellrenderertext.c:225 gtk/gtkcellview.c:141 gtk/gtktexttag.c:181
+#: gtk/gtkcellrenderertext.c:225 gtk/gtkcellview.c:141
+#: gtk/gtktexttag.c:181
 msgid "Background color name"
 msgstr ""
 
-#: gtk/gtkcellrenderertext.c:226 gtk/gtkcellview.c:142 gtk/gtktexttag.c:182
+#: gtk/gtkcellrenderertext.c:226 gtk/gtkcellview.c:142
+#: gtk/gtktexttag.c:182
 msgid "Background color as a string"
 msgstr ""
 
-#: gtk/gtkcellrenderertext.c:233 gtk/gtkcellview.c:148 gtk/gtktexttag.c:189
+#: gtk/gtkcellrenderertext.c:233 gtk/gtkcellview.c:148
+#: gtk/gtktexttag.c:189
 msgid "Background color"
 msgstr ""
 
@@ -1253,12 +1251,13 @@ msgstr ""
 msgid "Foreground color as a GdkColor"
 msgstr ""
 
-#: gtk/gtkcellrenderertext.c:258 gtk/gtkentry.c:486 gtk/gtktexttag.c:249
-#: gtk/gtktextview.c:547
+#: gtk/gtkcellrenderertext.c:258 gtk/gtkentry.c:486
+#: gtk/gtktexttag.c:249 gtk/gtktextview.c:547
 msgid "Editable"
 msgstr ""
 
-#: gtk/gtkcellrenderertext.c:259 gtk/gtktexttag.c:250 gtk/gtktextview.c:548
+#: gtk/gtkcellrenderertext.c:259 gtk/gtktexttag.c:250
+#: gtk/gtktextview.c:548
 msgid "Whether the text can be modified by the user"
 msgstr ""
 
@@ -1360,7 +1359,8 @@ msgid ""
 "probably don't need it"
 msgstr ""
 
-#: gtk/gtkcellrenderertext.c:408 gtk/gtklabel.c:424 gtk/gtkprogressbar.c:221
+#: gtk/gtkcellrenderertext.c:408 gtk/gtklabel.c:424
+#: gtk/gtkprogressbar.c:221
 msgid "Ellipsize"
 msgstr ""
 
@@ -1405,11 +1405,13 @@ msgstr ""
 msgid "How to align the lines"
 msgstr ""
 
-#: gtk/gtkcellrenderertext.c:495 gtk/gtkcellview.c:171 gtk/gtktexttag.c:543
+#: gtk/gtkcellrenderertext.c:495 gtk/gtkcellview.c:171
+#: gtk/gtktexttag.c:543
 msgid "Background set"
 msgstr ""
 
-#: gtk/gtkcellrenderertext.c:496 gtk/gtkcellview.c:172 gtk/gtktexttag.c:544
+#: gtk/gtkcellrenderertext.c:496 gtk/gtkcellview.c:172
+#: gtk/gtktexttag.c:544
 msgid "Whether this tag affects the background color"
 msgstr ""
 
@@ -1574,11 +1576,13 @@ msgstr ""
 msgid "The model for cell view"
 msgstr ""
 
-#: gtk/gtkcheckbutton.c:69 gtk/gtkcheckmenuitem.c:110 gtk/gtkoptionmenu.c:168
+#: gtk/gtkcheckbutton.c:69 gtk/gtkcheckmenuitem.c:110
+#: gtk/gtkoptionmenu.c:168
 msgid "Indicator Size"
 msgstr ""
 
-#: gtk/gtkcheckbutton.c:77 gtk/gtkexpander.c:235 gtk/gtkoptionmenu.c:174
+#: gtk/gtkcheckbutton.c:77 gtk/gtkexpander.c:235
+#: gtk/gtkoptionmenu.c:174
 msgid "Indicator Spacing"
 msgstr ""
 
@@ -1620,7 +1624,8 @@ msgid "Whether or not to give the color an alpha value"
 msgstr ""
 
 #: gtk/gtkcolorbutton.c:187 gtk/gtkfilechooserbutton.c:386
-#: gtk/gtkfontbutton.c:143 gtk/gtkprintjob.c:116 gtk/gtktreeviewcolumn.c:258
+#: gtk/gtkfontbutton.c:143 gtk/gtkprintjob.c:116
+#: gtk/gtktreeviewcolumn.c:258
 msgid "Title"
 msgstr ""
 
@@ -1917,7 +1922,7 @@ msgstr ""
 
 #: gtk/gtkentry.c:494
 msgid "Maximum length"
-msgstr ""
+msgstr "ความยาวสูงสุด"
 
 #: gtk/gtkentry.c:495
 msgid "Maximum number of characters for this entry. Zero if no maximum"
@@ -2204,7 +2209,8 @@ msgstr ""
 msgid "Application supplied widget for extra options."
 msgstr ""
 
-#: gtk/gtkfilechooser.c:246 gtk/gtkfilesel.c:539 gtk/gtkrecentchooser.c:142
+#: gtk/gtkfilechooser.c:246 gtk/gtkfilesel.c:539
+#: gtk/gtkrecentchooser.c:142
 msgid "Select Multiple"
 msgstr ""
 
@@ -2437,9 +2443,8 @@ msgid "Selection mode"
 msgstr ""
 
 #: gtk/gtkiconview.c:520
-#, fuzzy
 msgid "The selection mode"
-msgstr "ปีที่เลือก"
+msgstr "โหมดการเลือก"
 
 #: gtk/gtkiconview.c:538
 msgid "Pixbuf column"
@@ -2513,8 +2518,8 @@ msgstr ""
 msgid "Space which is inserted at the edges of the icon view"
 msgstr ""
 
-#: gtk/gtkiconview.c:700 gtk/gtkprogressbar.c:131 gtk/gtktoolbar.c:484
-#: gtk/gtktrayicon-x11.c:97
+#: gtk/gtkiconview.c:700 gtk/gtkprogressbar.c:131
+#: gtk/gtktoolbar.c:484 gtk/gtktrayicon-x11.c:97
 msgid "Orientation"
 msgstr ""
 
@@ -2523,7 +2528,8 @@ msgid ""
 "How the text and icon of each item are positioned relative to each other"
 msgstr ""
 
-#: gtk/gtkiconview.c:717 gtk/gtktreeview.c:597 gtk/gtktreeviewcolumn.c:301
+#: gtk/gtkiconview.c:717 gtk/gtktreeview.c:597
+#: gtk/gtktreeviewcolumn.c:301
 msgid "Reorderable"
 msgstr ""
 
@@ -2604,9 +2610,8 @@ msgid "Symbolic size to use for stock icon, icon set or named icon"
 msgstr ""
 
 #: gtk/gtkimage.c:204
-#, fuzzy
 msgid "Pixel size"
-msgstr "ขนาด"
+msgstr "ขนาดพิกเซล"
 
 #: gtk/gtkimage.c:205
 msgid "Pixel size to use for named icon"
@@ -3308,17 +3313,16 @@ msgid "List of the GtkPrintBackend backends to use by default"
 msgstr ""
 
 #: gtk/gtkprinter.c:120
-#, fuzzy
 msgid "Name of the printer"
-msgstr "ชื่อของแบบอักษรที่เลือก"
+msgstr "ชื่อเครื่องพิมพ์"
 
 #: gtk/gtkprinter.c:126
 msgid "Backend"
-msgstr ""
+msgstr "แบ็กเอ็นด์"
 
 #: gtk/gtkprinter.c:127
 msgid "Backend for the printer"
-msgstr ""
+msgstr "แบ็กเอ็นด์สำหรับเครื่องพิมพ์"
 
 #: gtk/gtkprinter.c:133
 msgid "Is Virtual"
@@ -3388,7 +3392,7 @@ msgstr ""
 
 #: gtk/gtkprintjob.c:125
 msgid "Printer"
-msgstr ""
+msgstr "เครื่องพิมพ์"
 
 #: gtk/gtkprintjob.c:126
 msgid "Printer to print the job to"
@@ -3402,7 +3406,8 @@ msgstr ""
 msgid "Printer settings"
 msgstr ""
 
-#: gtk/gtkprintjob.c:143 gtk/gtkprintjob.c:144 gtk/gtkprintunixdialog.c:227
+#: gtk/gtkprintjob.c:143 gtk/gtkprintjob.c:144
+#: gtk/gtkprintunixdialog.c:227
 #, fuzzy
 msgid "Page Setup"
 msgstr "ขนาด"
@@ -3455,18 +3460,16 @@ msgid "Number of Pages"
 msgstr ""
 
 #: gtk/gtkprintoperation.c:921
-#, fuzzy
 msgid "The number of pages in the document."
-msgstr "ชื่อของแบบอักษรที่เลือก"
+msgstr "จำนวนหน้าในเอกสาร"
 
 #: gtk/gtkprintoperation.c:942 gtk/gtkprintunixdialog.c:235
 msgid "Current Page"
 msgstr ""
 
 #: gtk/gtkprintoperation.c:943 gtk/gtkprintunixdialog.c:236
-#, fuzzy
 msgid "The current page in the document"
-msgstr "ชื่อของแบบอักษรที่เลือก"
+msgstr "หน้าปัจจุบันในเอกสาร"
 
 #: gtk/gtkprintoperation.c:964
 msgid "Use full page"
@@ -3518,9 +3521,8 @@ msgid "Status"
 msgstr ""
 
 #: gtk/gtkprintoperation.c:1085
-#, fuzzy
 msgid "The status of the print operation"
-msgstr "ชื่อของแบบอักษรที่เลือก"
+msgstr "สถานะของการสั่งพิมพ์"
 
 #: gtk/gtkprintoperation.c:1105
 msgid "Status String"
@@ -3543,9 +3545,8 @@ msgid "The GtkPageSetup to use"
 msgstr ""
 
 #: gtk/gtkprintunixdialog.c:253
-#, fuzzy
 msgid "Selected Printer"
-msgstr "ปีที่เลือก"
+msgstr "เครื่องพิมพ์ที่เลือก"
 
 #: gtk/gtkprintunixdialog.c:254
 msgid "The GtkPrinter which is selected"
@@ -3670,7 +3671,8 @@ msgid ""
 "is the current action of its group."
 msgstr ""
 
-#: gtk/gtkradioaction.c:128 gtk/gtkradiobutton.c:82 gtk/gtkradiomenuitem.c:342
+#: gtk/gtkradioaction.c:128 gtk/gtkradiobutton.c:82
+#: gtk/gtkradiomenuitem.c:342
 msgid "Group"
 msgstr ""
 
@@ -3679,9 +3681,8 @@ msgid "The radio action whose group this action belongs to."
 msgstr ""
 
 #: gtk/gtkradioaction.c:144
-#, fuzzy
 msgid "The current value"
-msgstr "สีปัจจุบัน"
+msgstr "ค่าปัจจุบัน"
 
 #: gtk/gtkradioaction.c:145
 msgid ""
@@ -3739,7 +3740,7 @@ msgstr ""
 
 #: gtk/gtkrange.c:357
 msgid "Slider Width"
-msgstr ""
+msgstr "ความกว้างปุ่มรางเลื่อน"
 
 #: gtk/gtkrange.c:358
 msgid "Width of scrollbar or scale thumb"
@@ -3874,9 +3875,8 @@ msgid "Limit"
 msgstr ""
 
 #: gtk/gtkrecentchooser.c:155
-#, fuzzy
 msgid "The maximum number of items to be displayed"
-msgstr "ชื่อของแบบอักษรที่เลือก"
+msgstr "จำนวนรายการสูงสุดที่จะแสดง"
 
 #: gtk/gtkrecentchooser.c:162
 msgid "Sort Type"
@@ -4010,11 +4010,13 @@ msgid ""
 "Display a second forward arrow button on the opposite end of the scrollbar"
 msgstr ""
 
-#: gtk/gtkscrolledwindow.c:221 gtk/gtktext.c:541 gtk/gtktreeview.c:557
+#: gtk/gtkscrolledwindow.c:221 gtk/gtktext.c:541
+#: gtk/gtktreeview.c:557
 msgid "Horizontal Adjustment"
 msgstr ""
 
-#: gtk/gtkscrolledwindow.c:228 gtk/gtktext.c:549 gtk/gtktreeview.c:565
+#: gtk/gtkscrolledwindow.c:228 gtk/gtktext.c:549
+#: gtk/gtktreeview.c:565
 msgid "Vertical Adjustment"
 msgstr ""
 
@@ -4136,7 +4138,7 @@ msgstr ""
 
 #: gtk/gtksettings.c:230
 msgid "Theme Name"
-msgstr ""
+msgstr "ชื่อชุดตกแต่ง"
 
 #: gtk/gtksettings.c:231
 msgid "Name of theme RC file to load"
@@ -4433,9 +4435,8 @@ msgid "Style of bevel around the statusbar text"
 msgstr ""
 
 #: gtk/gtkstatusicon.c:189
-#, fuzzy
 msgid "The size of the icon"
-msgstr "ชื่อของแบบอักษรที่เลือก"
+msgstr "ขนาดของไอคอน"
 
 #: gtk/gtkstatusicon.c:198
 msgid "Blinking"
@@ -4592,7 +4593,7 @@ msgstr ""
 
 #: gtk/gtktextbuffer.c:228
 msgid "Cursor position"
-msgstr ""
+msgstr "ตำแหน่งเคอร์เซอร์"
 
 #: gtk/gtktextbuffer.c:229
 msgid ""
@@ -4662,11 +4663,11 @@ msgstr ""
 
 #: gtk/gtktexttag.c:240
 msgid "Text direction"
-msgstr ""
+msgstr "ทิศทางข้อความ"
 
 #: gtk/gtktexttag.c:241
 msgid "Text direction, e.g. right-to-left or left-to-right"
-msgstr ""
+msgstr "ทิศทางข้อความ เช่น ขวาไปซ้าย หรือ ซ้ายไปขวา"
 
 #: gtk/gtktexttag.c:290
 msgid "Font style as a PangoStyle, e.g. PANGO_STYLE_ITALIC"
@@ -4717,7 +4718,7 @@ msgstr ""
 
 #: gtk/gtktexttag.c:394
 msgid "Right margin"
-msgstr ""
+msgstr "กั้นหน้าขวา"
 
 #: gtk/gtktexttag.c:395 gtk/gtktextview.c:584
 msgid "Width of the right margin in pixels"
@@ -4725,7 +4726,7 @@ msgstr ""
 
 #: gtk/gtktexttag.c:405 gtk/gtktextview.c:593
 msgid "Indent"
-msgstr ""
+msgstr "การร่นบรรทัด"
 
 #: gtk/gtktexttag.c:406 gtk/gtktextview.c:594
 msgid "Amount to indent the paragraph, in pixels"
@@ -4924,11 +4925,11 @@ msgstr ""
 
 #: gtk/gtktextview.c:573
 msgid "Left Margin"
-msgstr ""
+msgstr "กั้นหน้าซ้าย"
 
 #: gtk/gtktextview.c:583
 msgid "Right Margin"
-msgstr ""
+msgstr "กั้นหน้าขวา"
 
 #: gtk/gtktextview.c:611
 msgid "Cursor Visible"
@@ -5126,14 +5127,12 @@ msgid "The stock icon displayed on the item"
 msgstr ""
 
 #: gtk/gtktoolbutton.c:218
-#, fuzzy
 msgid "Icon name"
-msgstr "ชื่อแบบอักษร"
+msgstr "ชื่อไอคอน"
 
 #: gtk/gtktoolbutton.c:219
-#, fuzzy
 msgid "The name of the themed icon displayed on the item"
-msgstr "ชื่อของแบบอักษรที่เลือก"
+msgstr "ชื่อของชุดตกแต่งไอคอนที่แสดงในรายการ"
 
 #: gtk/gtktoolbutton.c:225
 msgid "Icon widget"
@@ -5158,9 +5157,8 @@ msgid ""
 msgstr ""
 
 #: gtk/gtktrayicon-x11.c:98
-#, fuzzy
 msgid "The orientation of the tray"
-msgstr "ชื่อของแบบอักษรที่เลือก"
+msgstr "แนววางของถาด"
 
 #: gtk/gtktreemodelsort.c:274
 msgid "TreeModelSort Model"
@@ -5426,7 +5424,7 @@ msgstr ""
 
 #: gtk/gtktreeviewcolumn.c:238
 msgid "Minimum Width"
-msgstr ""
+msgstr "ความกว้างต่ำสุด"
 
 #: gtk/gtktreeviewcolumn.c:239
 msgid "Minimum allowed width of the column"
