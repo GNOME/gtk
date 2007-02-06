@@ -65,6 +65,7 @@
 #include "gtksettings.h"
 #include "gtkwidget.h"
 #include "gtkwindow.h"
+#include "gtktooltip.h"
 #include "gtkprivate.h"
 #include "gtkdebug.h"
 #include "gtkalias.h"
@@ -1592,6 +1593,20 @@ gtk_main_do_event (GdkEvent *event)
     default:
       g_assert_not_reached ();
       break;
+    }
+
+  if (event->type == GDK_ENTER_NOTIFY
+      || event->type == GDK_LEAVE_NOTIFY
+      || event->type == GDK_BUTTON_PRESS
+      || event->type == GDK_2BUTTON_PRESS
+      || event->type == GDK_3BUTTON_PRESS
+      || event->type == GDK_KEY_PRESS
+      || event->type == GDK_DRAG_ENTER
+      || event->type == GDK_GRAB_BROKEN
+      || event->type == GDK_MOTION_NOTIFY
+      || event->type == GDK_SCROLL)
+    {
+      _gtk_tooltip_handle_event (event);
     }
   
   tmp_list = current_events;

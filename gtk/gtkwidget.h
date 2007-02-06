@@ -140,6 +140,8 @@ typedef struct _GtkWidgetClass	   GtkWidgetClass;
 typedef struct _GtkWidgetAuxInfo   GtkWidgetAuxInfo;
 typedef struct _GtkWidgetShapeInfo GtkWidgetShapeInfo;
 typedef struct _GtkClipboard	   GtkClipboard;
+typedef struct _GtkTooltip         GtkTooltip;
+typedef struct _GtkWindow          GtkWindow;
 typedef void     (*GtkCallback)        (GtkWidget        *widget,
 					gpointer	  data);
 
@@ -409,8 +411,13 @@ struct _GtkWidgetClass
 
   void         (* composited_changed) (GtkWidget *widget);
 
+  gboolean     (* query_tooltip)      (GtkWidget  *widget,
+				       gint        x,
+				       gint        y,
+				       gboolean    keyboard_tooltip,
+				       GtkTooltip *tooltip);
+
   /* Padding for future expansion */
-  void (*_gtk_reserved4) (void);
   void (*_gtk_reserved5) (void);
   void (*_gtk_reserved6) (void);
   void (*_gtk_reserved7) (void);
@@ -776,6 +783,12 @@ void   gtk_widget_add_mnemonic_label    (GtkWidget *widget,
 					 GtkWidget *label);
 void   gtk_widget_remove_mnemonic_label (GtkWidget *widget,
 					 GtkWidget *label);
+
+void            gtk_widget_set_tooltip_window    (GtkWidget *widget,
+					          GtkWindow *custom_window);
+GtkWindow      *gtk_widget_get_tooltip_window    (GtkWidget *widget);
+void            gtk_widget_trigger_tooltip_query (GtkWidget *widget);
+
 
 GType           gtk_requisition_get_type (void) G_GNUC_CONST;
 GtkRequisition *gtk_requisition_copy     (const GtkRequisition *requisition);

@@ -82,7 +82,8 @@ noinst_PROGRAMS =			\
 	pixbuf-threads			\
 	testmerge			\
 	testactions			\
-	testgrouping
+	testgrouping			\
+	testtooltips
 
 autotestfilechooser_DEPENDENCIES = $(TEST_DEPS)
 simple_DEPENDENCIES = $(TEST_DEPS)
@@ -134,6 +135,7 @@ testxinerama_DEPENDENCIES = $(TEST_DEPS)
 testmerge_DEPENDENCIES = $(TEST_DEPS)
 testactions_DEPENDENCIES = $(TEST_DEPS)
 testgrouping_DEPENDENCIES = $(TEST_DEPS)
+testtooltips_DEPENDENCIES = $(TEST_DEPS)
 
 autotestfilechooser_LDADD = $(LDADDS)
 simple_LDADD = $(LDADDS)
@@ -192,6 +194,7 @@ pixbuf_threads_LDADD = $(LDADDS) $(GLIB_LIBS)
 testmerge_LDADD = $(LDADDS)
 testactions_LDADD = $(LDADDS)
 testgrouping_LDADD = $(LDADDS)
+testtooltips_LDADD = $(LDADDS)
 
 autotestfilechooser_SOURCES =	\
 	autotestfilechooser.c
@@ -266,6 +269,9 @@ testrecentchooser_SOURCES = 	\
 
 testgrouping_SOURCES =		\
 	testgrouping.c
+
+testtoooltips_SOURCES =		\
+	testtooltips.c
 
 EXTRA_DIST = 			\
 	prop-editor.h		\

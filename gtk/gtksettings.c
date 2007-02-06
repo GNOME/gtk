@@ -94,6 +94,9 @@ enum {
   PROP_COLOR_SCHEME,
   PROP_ENABLE_ANIMATIONS,
   PROP_TOUCHSCREEN_MODE,
+  PROP_TOOLTIP_TIMEOUT,
+  PROP_TOOLTIP_BROWSE_TIMEOUT,
+  PROP_TOOLTIP_BROWSE_MODE_TIMEOUT,
   PROP_KEYNAV_CURSOR_ONLY,
   PROP_KEYNAV_WRAP_AROUND,
   PROP_ERROR_BELL,
@@ -555,6 +558,73 @@ gtk_settings_class_init (GtkSettingsClass *class)
                                              NULL);
 
   g_assert (result == PROP_TOUCHSCREEN_MODE);
+
+  /**
+   * GtkSettings:gtk-tooltip-timeout:
+   *
+   * Time, in milliseconds, after which a tooltip could appear if the
+   * cursor is hovering on top of a widget.
+   *
+   * Since: 2.12
+   */
+  result = settings_install_property_parser (class,
+					     g_param_spec_int ("gtk-tooltip-timeout",
+ 							       P_("Tooltip timeout"),
+ 							       P_("Timeout before tooltip is shown"),
+ 							       0, G_MAXINT,
+							       1500,
+ 							       GTK_PARAM_READWRITE),
+					     NULL);
+
+  g_assert (result == PROP_TOOLTIP_TIMEOUT);
+
+  /**
+   * GtkSettings:gtk-tooltip-browse-timeout:
+   *
+   * Controls the time after which tooltips will appear when
+   * browse mode is enabled, in milliseconds.
+   *
+   * Browse mode is enabled when the mouse pointer moves off an object
+   * where a tooltip was currently being displayed.  If the mouse pointer
+   * hits another object before the browse mode timeout expires (see
+   * gtk-tooltip-browse-mode-timeout), it will take the amount of
+   * milliseconds specified by this setting to popup the tooltip
+   * for the new object.
+   *
+   * Since: 2.12
+   */
+  result = settings_install_property_parser (class,
+					     g_param_spec_int ("gtk-tooltip-browse-timeout",
+ 							       P_("Tooltip browse timeout"),
+ 							       P_("Timeout before tooltip is shown when browse mode is enabled"),
+ 							       0, G_MAXINT,
+							       100,
+ 							       GTK_PARAM_READWRITE),
+					     NULL);
+
+  g_assert (result == PROP_TOOLTIP_BROWSE_TIMEOUT);
+
+  /**
+   * GtkSettings:gtk-tooltip-browse-mode-timeout:
+   *
+   * Amount of time, in milliseconds, after which the browse mode
+   * will be disabled.
+   *
+   * See GtkSettings:gtk-tooltip-browse-timeout for more information
+   * about browse mode.
+   *
+   * Since: 2.12
+   */
+  result = settings_install_property_parser (class,
+					     g_param_spec_int ("gtk-tooltip-browse-mode-timeout",
+ 							       P_("Tooltip browse mode timeout"),
+ 							       P_("Timeout after which browse mode is disabled"),
+ 							       0, G_MAXINT,
+							       500,
+ 							       GTK_PARAM_READWRITE),
+					     NULL);
+
+  g_assert (result == PROP_TOOLTIP_BROWSE_MODE_TIMEOUT);
 
   /**
    * GtkSettings:gtk-keynav-cursor-only:

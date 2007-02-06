@@ -1,3 +1,33 @@
+2007-02-06  Kristian Rietveld  <kris@imendio.com>
+
+	New tooltips API.
+
+	* gtk/Makefile.am
+	* gtk/gtk.h
+	* gtk/gtk.symbols: build system foo.
+
+	* gtk/gtkmain.c (gtk_main_do_event): call tooltip event handler
+	hook for appropriate events.
+
+	* gtk/gtkmarshalers.list: add BOOLEAN:INT,INT,BOOLEAN,OBJECT.
+
+	* gtk/gtkrc.c: add style for gtk-tooltip.
+
+	* gtk/gtksettings.c (gtk_settings_class_init): make the
+	different tooltip timeouts configurable.
+
+	* gtk/gtkwidget.[ch]: add new properties, signals, make sure
+	tooltips are hidden on unmap, destroy, update window event
+	mask on realize, hook into focus change and show help
+	handlers.
+
+	* gtk/gtkwindow.h: move GtkWindow typdef to gtkwidget.h ...
+
+	* gtk/gtktooltip.[ch]: new files.
+
+	* tests/Makefile.am
+	* tests/testtooltips.c: add test application.
+
 2007-02-05  Dom Lachowicz <domlachowicz@gmail.com>
 
 	* modules/engines/ms-windows/msw_style.c: Fix bug 404506, caused
