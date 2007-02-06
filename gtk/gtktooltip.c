@@ -180,6 +180,8 @@ gtk_tooltip_finalize (GObject *object)
 					    tooltip);
       gtk_widget_destroy (tooltip->window);
     }
+
+  G_OBJECT_CLASS (gtk_tooltip_parent_class)->finalize (object);
 }
 
 /* public API */
@@ -599,10 +601,7 @@ static void
 gtk_tooltip_show_tooltip (GdkDisplay *display)
 {
   gint x, y;
-  gint w, h;
-  gint monitor_num;
   GdkScreen *screen;
-  GdkRectangle monitor;
 
   GdkWindow *window;
   GtkWidget *tooltip_widget;
@@ -684,15 +683,6 @@ gtk_tooltip_show_tooltip (GdkDisplay *display)
       y += cursor_size / 2;
     }
 
-  if (tooltip->current_window)
-    {
-      GtkRequisition requisition;
-
-      gtk_widget_size_request (GTK_WIDGET (tooltip->current_window), &requisition);
-      w = requisition.width;
-      h = requisition.height;
-    }
-
   screen = gtk_widget_get_screen (tooltip_widget);
 
   if (screen != gtk_widget_get_screen (tooltip->window))
@@ -709,20 +699,27 @@ gtk_tooltip_show_tooltip (GdkDisplay *display)
 
   tooltip->tooltip_widget = tooltip_widget;
 
-  monitor_num = gdk_screen_get_monitor_at_point (screen, x, y);
-  gdk_screen_get_monitor_geometry (screen, monitor_num, &monitor);
-
-  if (x + w > monitor.x + monitor.width)
-    x -= x - (monitor.x + monitor.width) + w;
-  else if (x < monitor.x)
-    x = monitor.x;
-
-  if (y + h > monitor.y + monitor.height)
-    y -= y - (monitor.y + monitor.height) + h;
-
   /* Show it */
   if (tooltip->current_window)
     {
+      gint monitor_num;
+      GdkRectangle monitor;
+      GtkRequisition requisition;
+
+      gtk_widget_size_request (GTK_WIDGET (tooltip->current_window),
+                               &requisition);
+
+      monitor_num = gdk_screen_get_monitor_at_point (screen, x, y);
+      gdk_screen_get_monitor_geometry (screen, monitor_num, &monitor);
+
+      if (x + requisition.width > monitor.x + monitor.width)
+        x -= x - (monitor.x + monitor.width) + requisition.width;
+      else if (x < monitor.x)
+        x = monitor.x;
+
+      if (y + requisition.height > monitor.y + monitor.height)
+        y -= y - (monitor.y + monitor.height) + requisition.height;
+
       gtk_window_move (GTK_WINDOW (tooltip->current_window), x, y);
       gtk_widget_show (GTK_WIDGET (tooltip->current_window));
     }
