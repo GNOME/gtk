@@ -1,3 +1,8 @@
+2007-02-06  Matthias Clasen  <mclasen@redhat.com>
+
+	* gdk-pixbuf-loader.c (gdk_pixbuf_loader_close): Protect
+	against stop_load begin broken.  (#403255, Lucas Mazzardo Veloso)
+
 2007-01-22  Matthias Clasen  <mclasen@redhat.com>
 
 	* === 2.10.9 ===

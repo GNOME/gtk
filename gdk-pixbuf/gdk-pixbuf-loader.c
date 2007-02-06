@@ -711,8 +711,10 @@ gdk_pixbuf_loader_close (GdkPixbufLoader *loader,
 
         if (priv->image_module && priv->image_module->stop_load && priv->context) 
                 {
-                        if (!priv->image_module->stop_load (priv->context, error))
+                        GError *tmp = NULL;
+                        if (!priv->image_module->stop_load (priv->context, &tmp) || tmp)
                                 {
+					g_propagate_error (error, tmp);
                                         gdk_pixbuf_loader_ensure_error (loader, error);
                                         retval = FALSE;
                                 }
