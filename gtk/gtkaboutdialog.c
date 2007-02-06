@@ -1781,7 +1781,7 @@ credits_motion_notify_event (GtkWidget *text_view,
 
   set_cursor_if_appropriate (about, GTK_TEXT_VIEW (text_view), x, y);
 
-  gdk_window_get_pointer (text_view->window, NULL, NULL, NULL);
+  gdk_event_request_motions (event);
 
   return FALSE;
 }

@@ -1,3 +1,17 @@
+Tue Feb  6 15:53:59 2007  Tim Janik  <timj@imendio.com>
+
+	* gtk/gtktextview.c (gtk_text_view_motion_event):
+	* gtk/gtkspinbutton.c (gtk_spin_button_motion_notify):
+	* gtk/gtkaboutdialog.c (credits_motion_notify_event):
+	* gtk/gtkhruler.c (gtk_hruler_motion_notify):
+	* gtk/gtkvruler.c (gtk_vruler_motion_notify): 
+	* gtk/gtkentry.c (gtk_entry_motion_notify):
+	* gtk/gtktooltip.c (_gtk_tooltip_handle_event):
+	* gtk/gtkhsv.c (gtk_hsv_motion): call gdk_event_request_motions()                              
+	for new motion events after receiving motion hints.
+
+	* gdk/gdkevents.[hc]: added gdk_event_request_motions().
+
 2007-02-06  Kristian Rietveld  <kris@imendio.com>
 
 	* gtk/gtktooltip.c (find_topmost_widget_coords_from_event):

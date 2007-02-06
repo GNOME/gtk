@@ -529,6 +529,7 @@ gboolean  gdk_event_get_root_coords	(GdkEvent	 *event,
 gboolean  gdk_event_get_axis            (GdkEvent        *event,
                                          GdkAxisUse       axis_use,
                                          gdouble         *value);
+void      gdk_event_request_motions     (GdkEventMotion  *event);
 void	  gdk_event_handler_set 	(GdkEventFunc    func,
 					 gpointer        data,
 					 GDestroyNotify  notify);

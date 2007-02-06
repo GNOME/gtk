@@ -851,18 +851,11 @@ gtk_hsv_motion (GtkWidget      *widget,
   if (priv->mode == DRAG_NONE)
     return FALSE;
   
-  if (event->is_hint)
-    {
-      gdk_window_get_pointer (priv->window, &ix, &iy, &mods);
-      x = ix;
-      y = iy;
-    }
-  else
-    {
-      x = event->x;
-      y = event->y;
-    }
-  
+  gdk_event_request_motions (event);
+  x = event->x;
+  y = event->y;
+  mods = event->state;
+
   if (priv->mode == DRAG_H)
     {
       gtk_hsv_set_color (hsv, compute_v (hsv, x, y), priv->s, priv->v);

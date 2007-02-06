@@ -89,10 +89,8 @@ gtk_hruler_motion_notify (GtkWidget      *widget,
 
   ruler = GTK_RULER (widget);
 
-  if (event->is_hint)
-    gdk_window_get_pointer (widget->window, &x, NULL, NULL);
-  else
-    x = event->x;
+  gdk_event_request_motions (event);
+  x = event->x;
 
   ruler->position = ruler->lower + ((ruler->upper - ruler->lower) * x) / widget->allocation.width;
   g_object_notify (G_OBJECT (ruler), "position");

@@ -1872,8 +1872,8 @@ gtk_entry_motion_notify (GtkWidget      *widget,
   if (entry->select_lines)
     return TRUE;
 
-  if (event->is_hint || (entry->text_area != event->window))
-    gdk_window_get_pointer (entry->text_area, NULL, NULL, NULL);
+  if (entry->text_area != event->window)
+    gdk_event_request_motions (event);
 
   if (entry->in_drag)
     {

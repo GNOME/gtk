@@ -4170,10 +4170,10 @@ gtk_text_view_motion_event (GtkWidget *widget, GdkEventMotion *event)
   if (event->window == text_view->text_window->bin_window &&
       text_view->drag_start_x >= 0)
     {
-      gint x, y;
+      gint x = event->x;
+      gint y = event->y;
 
-      gdk_window_get_pointer (text_view->text_window->bin_window,
-                              &x, &y, NULL);
+      gdk_event_request_motions (event);
 
       if (gtk_drag_check_threshold (widget,
 				    text_view->drag_start_x, 

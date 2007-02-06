@@ -835,6 +835,26 @@ gdk_event_get_axis (GdkEvent   *event,
 }
 
 /**
+ * gdk_event_request_motions:
+ * @event: a valid #GdkEvent
+ *
+ * Request more motion notifies if #event is a motion notify hint event.
+ * This funciton should be used instead of gdk_window_get_pointer() to
+ * request further motion notifies, because it also works for extension
+ * events where motion notifies are provided for devices other than the
+ * core pointer.
+ *
+ * Since: 2.12
+ **/
+void
+gdk_event_request_motions (GdkEventMotion *event)
+{
+  g_return_if_fail (event != NULL);
+  if (event->type == GDK_MOTION_NOTIFY && event->is_hint)
+    gdk_device_get_state (event->device, event->window, NULL, NULL);
+}
+
+/**
  * gdk_event_set_screen:
  * @event: a #GdkEvent
  * @screen: a #GdkScreen
