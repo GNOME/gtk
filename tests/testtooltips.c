@@ -115,7 +115,7 @@ query_tooltip_tree_view_cb (GtkWidget  *widget,
   gtk_tree_model_get (model, &iter, 0, &tmp, -1);
   pathstring = gtk_tree_path_to_string (path);
 
-  snprintf (buffer, 511, "<b>Path %s:</b> %s", pathstring, tmp);
+  g_snprintf (buffer, 511, "<b>Path %s:</b> %s", pathstring, tmp);
   gtk_tooltip_set_markup (tooltip, buffer);
 
   gtk_tree_path_free (path);

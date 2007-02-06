@@ -500,15 +500,12 @@ find_topmost_widget_coords_from_event (GdkEvent *event,
   gdouble dx, dy;
   GtkWidget *tmp;
   GtkWidget *orig;
-  gboolean has_tooltip;
 
   gdk_event_get_coords (event, &dx, &dy);
   tx = dx;
   ty = dy;
 
   orig = tmp = find_widget_under_pointer (event->any.window, &tx, &ty);
-
-  g_object_get (tmp, "has-tooltip", &has_tooltip, NULL);
 
   if (tmp && (x != NULL || y != NULL))
     {
