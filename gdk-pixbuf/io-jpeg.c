@@ -307,6 +307,8 @@ gdk_pixbuf__jpeg_image_load (FILE *f, GError **error)
 			g_object_unref (pixbuf);
 
 		jpeg_destroy_decompress (&cinfo);
+
+		/* error should have been set by fatal_error_handler () */
 		return NULL;
 	}
 
@@ -715,8 +717,13 @@ gdk_pixbuf__jpeg_image_load_increment (gpointer data,
 			height = cinfo->image_height;
 			if (context->size_func) {
 				(* context->size_func) (&width, &height, context->user_data);
-				if (width == 0 || height == 0)
+				if (width == 0 || height == 0) {
+					g_set_error (error,
+						     GDK_PIXBUF_ERROR,
+						     GDK_PIXBUF_ERROR_CORRUPT_IMAGE,
+						     _("Transformed JPEG has zero width or height."));
 					return FALSE;
+				}
 			}
 			
 			for (cinfo->scale_denom = 2; cinfo->scale_denom <= 8; cinfo->scale_denom *= 2) {
