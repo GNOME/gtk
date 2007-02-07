@@ -43,6 +43,7 @@ gdk_event_handler_set
 gdk_event_new
 gdk_event_peek
 gdk_event_put
+gdk_event_request_motions
 gdk_event_set_screen
 gdk_get_show_events
 gdk_set_show_events
