@@ -1000,6 +1000,7 @@ typedef struct
   GList *items;
   gint n_items;
   gint loaded_items;
+  gint displayed_items;
   GtkRecentChooserMenu *menu;
 } MenuPopulateData;
 
@@ -1033,6 +1034,8 @@ idle_populate_func (gpointer data)
       
           gtk_menu_shell_prepend (GTK_MENU_SHELL (pdata->menu), item);
           gtk_widget_show (item);
+
+          pdata->displayed_items = 1;
 
 	  /* no items: add a placeholder menu */
           GDK_THREADS_LEAVE ();
@@ -1077,7 +1080,7 @@ idle_populate_func (gpointer data)
 
   item = gtk_recent_chooser_menu_create_item (pdata->menu,
                                               info,
-					      pdata->loaded_items);
+					      pdata->displayed_items);
   if (!item)
     goto check_and_return;
       
@@ -1091,6 +1094,8 @@ idle_populate_func (gpointer data)
    */
   gtk_menu_shell_prepend (GTK_MENU_SHELL (pdata->menu), item);
   gtk_widget_show (item);
+
+  pdata->displayed_items += 1;
       
   /* mark the menu item as one of our own */
   g_object_set_data (G_OBJECT (item), "gtk-recent-menu-mark",
@@ -1123,6 +1128,25 @@ check_and_return:
 static void
 idle_populate_clean_up (gpointer data)
 {
+  MenuPopulateData *pdata = data;
+
+  if (!pdata->displayed_items)
+    {
+      GtkWidget *item;
+
+      item = gtk_menu_item_new_with_label (_("No items found"));
+      gtk_widget_set_sensitive (item, FALSE);
+
+      /* we also mark this item, so that it gets removed when rebuilding
+       * the menu on the next map event
+       */
+      g_object_set_data (G_OBJECT (item), "gtk-recent-menu-mark",
+                         GINT_TO_POINTER (1));
+      
+      gtk_menu_shell_prepend (GTK_MENU_SHELL (pdata->menu), item);
+      gtk_widget_show (item);
+    }
+
   g_slice_free (MenuPopulateData, data);
 }
 
@@ -1138,6 +1162,7 @@ gtk_recent_chooser_menu_populate (GtkRecentChooserMenu *menu)
   pdata->items = NULL;
   pdata->n_items = 0;
   pdata->loaded_items = 0;
+  pdata->displayed_items = 0;
   pdata->menu = menu;
 
   menu->priv->icon_size = get_icon_size_for_widget (GTK_WIDGET (menu));

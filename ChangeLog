@@ -1,3 +1,16 @@
+2007-02-08  Emmanuele Bassi  <ebassi@gnome.org>
+
+	* gtk/gtkrecentchoosermenu.c (idle_populate_func): Keep count
+	of the displayed items to build the menu items mnemonic instead
+	of the overall item count. (#377164)
+
+	(idle_populate_clean_up): Append a menu item if all the items
+	got filtered in the idle populate function. (#405696)
+
+	* tests/Makefile.am:
+	* tests/testrecentchoosermenu.c: Add a test for the
+	GtkRecentChooserMenu widget.
+
 Thu Feb  8 13:07:08 2007  Tim Janik  <timj@imendio.com>
 
 	* applied patch from Xan Lopez which adds GTK_BUTTONBOX_CENTER to
