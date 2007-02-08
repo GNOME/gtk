@@ -1,3 +1,17 @@
+Thu Feb  8 13:07:08 2007  Tim Janik  <timj@imendio.com>
+
+	* applied patch from Xan Lopez which adds GTK_BUTTONBOX_CENTER to
+	GtkButtonBox (bug #336159).
+
+	* gtk/gtkenums.h:
+	* gtk/gtkvbbox.c, gtk/gtkhbbox.c, gtk/gtkbbox.c:
+	support GTK_BUTTONBOX_CENTER.
+
+	* tests/testbbox.c: new button box test, which allows testing of 
+	the various button box properties.
+
+	* tests/testgtk.c: added GTK_BUTTONBOX_CENTER. to button box test.
+
 2007-02-07  Cody Russell  <bratsche@gnome.org>
 
 	* gdk/gdk.symbols: Add gdk_event_request_motions
@@ -16,7 +30,7 @@ Tue Feb  6 15:53:59 2007  Tim Janik  <timj@imendio.com>
 	* gtk/gtkvruler.c (gtk_vruler_motion_notify): 
 	* gtk/gtkentry.c (gtk_entry_motion_notify):
 	* gtk/gtktooltip.c (_gtk_tooltip_handle_event):
-	* gtk/gtkhsv.c (gtk_hsv_motion): call gdk_event_request_motions()                              
+	* gtk/gtkhsv.c (gtk_hsv_motion): call gdk_event_request_motions()
 	for new motion events after receiving motion hints.
 
 	* gdk/gdkevents.[hc]: added gdk_event_request_motions().

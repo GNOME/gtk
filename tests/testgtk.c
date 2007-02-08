@@ -1133,23 +1133,27 @@ create_button_box (GtkWidget *widget)
     vbox = gtk_vbox_new (FALSE, 0);
     gtk_container_set_border_width (GTK_CONTAINER (vbox), 10);
     gtk_container_add (GTK_CONTAINER (frame_horz), vbox);
-
+    
     gtk_box_pack_start (GTK_BOX (vbox), 
-	   create_bbox (TRUE, "Spread", 40, 85, 20, GTK_BUTTONBOX_SPREAD),
+                        create_bbox (TRUE, "Spread", 40, 85, 20, GTK_BUTTONBOX_SPREAD),
 			TRUE, TRUE, 0);
-
+    
     gtk_box_pack_start (GTK_BOX (vbox), 
-	   create_bbox (TRUE, "Edge", 40, 85, 20, GTK_BUTTONBOX_EDGE),
+                        create_bbox (TRUE, "Edge", 40, 85, 20, GTK_BUTTONBOX_EDGE),
 			TRUE, TRUE, 5);
-
+    
     gtk_box_pack_start (GTK_BOX (vbox), 
-	   create_bbox (TRUE, "Start", 40, 85, 20, GTK_BUTTONBOX_START),
+                        create_bbox (TRUE, "Start", 40, 85, 20, GTK_BUTTONBOX_START),
 			TRUE, TRUE, 5);
-
+    
     gtk_box_pack_start (GTK_BOX (vbox), 
-	   create_bbox (TRUE, "End", 40, 85, 20, GTK_BUTTONBOX_END),
+                        create_bbox (TRUE, "End", 40, 85, 20, GTK_BUTTONBOX_END),
 			TRUE, TRUE, 5);
-
+    
+    gtk_box_pack_start (GTK_BOX (vbox),
+                        create_bbox (TRUE, "Center", 40, 85, 20, GTK_BUTTONBOX_CENTER),
+			TRUE, TRUE, 5);
+    
     frame_vert = gtk_frame_new ("Vertical Button Boxes");
     gtk_box_pack_start (GTK_BOX (main_vbox), frame_vert, TRUE, TRUE, 10);
     
@@ -1158,19 +1162,23 @@ create_button_box (GtkWidget *widget)
     gtk_container_add (GTK_CONTAINER (frame_vert), hbox);
 
     gtk_box_pack_start (GTK_BOX (hbox), 
-	   create_bbox (FALSE, "Spread", 30, 85, 20, GTK_BUTTONBOX_SPREAD),
+                        create_bbox (FALSE, "Spread", 30, 85, 20, GTK_BUTTONBOX_SPREAD),
 			TRUE, TRUE, 0);
-
+    
     gtk_box_pack_start (GTK_BOX (hbox), 
-	   create_bbox (FALSE, "Edge", 30, 85, 20, GTK_BUTTONBOX_EDGE),
+                        create_bbox (FALSE, "Edge", 30, 85, 20, GTK_BUTTONBOX_EDGE),
 			TRUE, TRUE, 5);
-
+    
     gtk_box_pack_start (GTK_BOX (hbox), 
-	   create_bbox (FALSE, "Start", 30, 85, 20, GTK_BUTTONBOX_START),
+                        create_bbox (FALSE, "Start", 30, 85, 20, GTK_BUTTONBOX_START),
 			TRUE, TRUE, 5);
-
+    
     gtk_box_pack_start (GTK_BOX (hbox), 
-	   create_bbox (FALSE, "End", 30, 85, 20, GTK_BUTTONBOX_END),
+                        create_bbox (FALSE, "End", 30, 85, 20, GTK_BUTTONBOX_END),
+			TRUE, TRUE, 5);
+    
+    gtk_box_pack_start (GTK_BOX (hbox),
+                        create_bbox (FALSE, "Center", 30, 85, 20, GTK_BUTTONBOX_CENTER),
 			TRUE, TRUE, 5);
   }
 

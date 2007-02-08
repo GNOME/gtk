@@ -253,7 +253,7 @@ gtk_button_box_set_layout (GtkButtonBox      *widget,
 {
   g_return_if_fail (GTK_IS_BUTTON_BOX (widget));
   g_return_if_fail (layout_style >= GTK_BUTTONBOX_DEFAULT_STYLE &&
-		    layout_style <= GTK_BUTTONBOX_END);
+		    layout_style <= GTK_BUTTONBOX_CENTER);
 
   if (widget->layout_style != layout_style)
     {

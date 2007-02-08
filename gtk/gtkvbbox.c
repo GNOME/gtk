@@ -84,7 +84,7 @@ void
 gtk_vbutton_box_set_layout_default (GtkButtonBoxStyle layout)
 {
   g_return_if_fail (layout >= GTK_BUTTONBOX_DEFAULT_STYLE &&
-		    layout <= GTK_BUTTONBOX_END);
+		    layout <= GTK_BUTTONBOX_CENTER);
 
   default_layout_style = layout;
 }
@@ -151,6 +151,7 @@ gtk_vbutton_box_size_request (GtkWidget      *widget,
       case GTK_BUTTONBOX_EDGE:
       case GTK_BUTTONBOX_START:
       case GTK_BUTTONBOX_END:
+      case GTK_BUTTONBOX_CENTER:
         requisition->height =
 		nvis_children*child_height + ((nvis_children-1)*spacing);
 	break;
@@ -237,6 +238,16 @@ gtk_vbutton_box_size_allocate (GtkWidget     *widget,
       - child_height * (nvis_children - n_secondaries)
       - spacing * (nvis_children - n_secondaries - 1)
       - GTK_CONTAINER (box)->border_width;
+    secondary_y = allocation->y + GTK_CONTAINER (box)->border_width;
+    break;
+  case GTK_BUTTONBOX_CENTER:
+    childspacing = spacing;
+    y = allocation->y + 
+      (allocation->height
+       - (child_height * (nvis_children - n_secondaries)
+	  + spacing * (nvis_children - n_secondaries - 1)))/2
+      + (n_secondaries * child_height + n_secondaries * spacing)/2
+      + GTK_CONTAINER (box)->border_width;
     secondary_y = allocation->y + GTK_CONTAINER (box)->border_width;
     break;
   default:
