@@ -1,5 +1,5 @@
 # translation of gtk+.gtk-2-10.ar.po to Arabic
-# Copyright (C) 2002,2003, 2004, 2006 Free Software Foundation, Inc.
+# Copyright (C) 2002,2003, 2004, 2006, 2007 Free Software Foundation, Inc.
 #
 # Sayed Jaffer Al-Mosawi <mosawi@arabeyes.org>, 2002.
 # Isam Bayazidi <bayazidi@arabeyes.org>, 2002.
@@ -7,48 +7,48 @@
 # Arafat Medini <lumina@silverpen.de>, 2004.
 # Ayman Hourieh <aymanh@gmail.com>, 2004.
 # Djihed Afifi <djihed@gmail.com>, 2006.
-# Khaled Hosny <khaledhosny@eglug.org>, 2006.
+# Khaled Hosny <khaledhosny@eglug.org>, 2006, 2007.
 # Seba Barto <nanoosaamar@yahoo.com>, 2006.
-
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk_[1].gtk_2_10\n"
-"POT-Creation-Date: \n"
-"PO-Revision-Date: 2006-12-29 13:50+0200\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2007-02-09 07:57-0800\n"
+"PO-Revision-Date: 2007-02-09 18:53+0200\n"
 "Last-Translator: Khaled Hosny <khaledhosny@eglug.org>\n"
-"Language-Team: Arabic <doc@arabeyes>\n"
+"Language-Team: Arabic <doc@arabeyes.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: KBabel 1.11.4\n"
-"Plural-Forms: nplurals=4; plural=n==1 ? 0 : n==2 ? 1 : n>=3 && n<=10 ? 2 : 3\n\n"
+"Plural-Forms: Plural-Forms: nplurals=4; plural=n==1 ? 0 : n==2 ? 1 : n>=3 && n<=10 ? 2 : 3\n"
+"\n"
 
-#: ../gdk-pixbuf/gdk-pixbuf-animation.c:154
-#: ../gdk-pixbuf/gdk-pixbuf-io.c:858
-#: ../gdk-pixbuf/gdk-pixbuf-io.c:1113
-#: ../tests/testfilechooser.c:218
+#: ../gdk-pixbuf/gdk-pixbuf-animation.c:154 ../gdk-pixbuf/gdk-pixbuf-io.c:858
+#: ../gdk-pixbuf/gdk-pixbuf-io.c:1113 ../tests/testfilechooser.c:218
 #, c-format
 msgid "Failed to open file '%s': %s"
 msgstr "فشل فتح الملف '%s': %s"
 
-#: ../gdk-pixbuf/gdk-pixbuf-animation.c:167
-#: ../gdk-pixbuf/gdk-pixbuf-io.c:870
+#: ../gdk-pixbuf/gdk-pixbuf-animation.c:167 ../gdk-pixbuf/gdk-pixbuf-io.c:870
 #, c-format
 msgid "Image file '%s' contains no data"
 msgstr "لا يحتوي ملف الصورة '%s' على بيانات"
 
-#: ../gdk-pixbuf/gdk-pixbuf-animation.c:209
-#: ../gdk-pixbuf/gdk-pixbuf-io.c:907
-#: ../gdk-pixbuf/gdk-pixbuf-io.c:1164
-#: ../tests/testfilechooser.c:263
+#: ../gdk-pixbuf/gdk-pixbuf-animation.c:209 ../gdk-pixbuf/gdk-pixbuf-io.c:907
+#: ../gdk-pixbuf/gdk-pixbuf-io.c:1164 ../tests/testfilechooser.c:263
 #, c-format
 msgid "Failed to load image '%s': reason not known, probably a corrupt image file"
 msgstr "فشل تحميل الصورة '%s': السبب مجهول، ربما يكون ملف الصورة تالفاً"
 
 #: ../gdk-pixbuf/gdk-pixbuf-animation.c:242
 #, c-format
-msgid "Failed to load animation '%s': reason not known, probably a corrupt animation file"
-msgstr "فشل تحميل الرسوم المتحرّكة '%s': السبب مجهول، ربما يكون ملف الرسوم المتحرّكة تالفاً"
+msgid ""
+"Failed to load animation '%s': reason not known, probably a corrupt "
+"animation file"
+msgstr ""
+"فشل تحميل الرسوم المتحرّكة '%s': السبب مجهول، ربما يكون ملف الرسوم المتحرّكة "
+"تالفاً"
 
 #: ../gdk-pixbuf/gdk-pixbuf-io.c:463
 #, c-format
@@ -57,11 +57,12 @@ msgstr "لا يمكن تحميل وحدة تحميل الصور: %s: %s"
 
 #: ../gdk-pixbuf/gdk-pixbuf-io.c:478
 #, c-format
-msgid "Image-loading module %s does not export the proper interface; perhaps it's from a different GTK version?"
+msgid ""
+"Image-loading module %s does not export the proper interface; perhaps it's "
+"from a different GTK version?"
 msgstr "وحدة تحميل الصور %s لا تصدّر الواجهة الصحيحة؛ قد تكون من إصدارة GTK مغايرة؟"
 
-#: ../gdk-pixbuf/gdk-pixbuf-io.c:647
-#: ../gdk-pixbuf/gdk-pixbuf-io.c:699
+#: ../gdk-pixbuf/gdk-pixbuf-io.c:647 ../gdk-pixbuf/gdk-pixbuf-io.c:699
 #, c-format
 msgid "Image type '%s' is not supported"
 msgstr "نوع الصورة '%s' غير مدعوم"
@@ -85,8 +86,7 @@ msgstr "فشل تحميل الصورة '%s': %s"
 msgid "Error writing to image file: %s"
 msgstr "فشلت الكتابة إلى ملف الصورة: %s"
 
-#: ../gdk-pixbuf/gdk-pixbuf-io.c:1438
-#: ../gdk-pixbuf/gdk-pixbuf-io.c:1569
+#: ../gdk-pixbuf/gdk-pixbuf-io.c:1438 ../gdk-pixbuf/gdk-pixbuf-io.c:1569
 #, c-format
 msgid "This build of gdk-pixbuf does not support saving the image format: %s"
 msgstr "بناء gdk-pixbuf هذا لا يدعم حفظ صيغة الصور: %s"
@@ -110,18 +110,23 @@ msgstr "فشل فتح '%s' لكتابة: %s"
 
 #: ../gdk-pixbuf/gdk-pixbuf-io.c:1771
 #, c-format
-msgid "Failed to close '%s' while writing image, all data may not have been saved: %s"
+msgid ""
+"Failed to close '%s' while writing image, all data may not have been saved: %"
+"s"
 msgstr "فشل غلق '%s' أثناء كتابة الصورة، من الممكن أنّه لم يتم حفظ كل البيانات: % s"
 
-#: ../gdk-pixbuf/gdk-pixbuf-io.c:1991
-#: ../gdk-pixbuf/gdk-pixbuf-io.c:2041
+#: ../gdk-pixbuf/gdk-pixbuf-io.c:1991 ../gdk-pixbuf/gdk-pixbuf-io.c:2041
 msgid "Insufficient memory to save image into a buffer"
 msgstr "ذاكرة غير كافية لحفظ الصورة في الذاكرة الوسيطة"
 
 #: ../gdk-pixbuf/gdk-pixbuf-loader.c:321
 #, c-format
-msgid "Internal error: Image loader module '%s' failed to complete an operation, but didn't give a reason for the failure"
-msgstr "خطأ داخلي: فشلت وحدة تحميل الصور '%s' في إنهاء احدى العمليات، لكنّها لم تعطي سببا للفشل"
+msgid ""
+"Internal error: Image loader module '%s' failed to complete an operation, "
+"but didn't give a reason for the failure"
+msgstr ""
+"خطأ داخلي: فشلت وحدة تحميل الصور '%s' في إنهاء احدى العمليات، لكنّها لم تعطي "
+"سببا للفشل"
 
 #: ../gdk-pixbuf/gdk-pixbuf-loader.c:364
 #, c-format
@@ -136,8 +141,7 @@ msgstr "ترويسة الصورة تالفة"
 msgid "Image format unknown"
 msgstr "صيغة الصورة مجهولة"
 
-#: ../gdk-pixbuf/gdk-pixdata.c:157
-#: ../gdk-pixbuf/gdk-pixdata.c:487
+#: ../gdk-pixbuf/gdk-pixdata.c:157 ../gdk-pixbuf/gdk-pixdata.c:487
 msgid "Image pixel data corrupt"
 msgstr "البيانات البكسلية للصورة تالفة"
 
@@ -158,22 +162,17 @@ msgstr "قطعة أيقونة غير متوقعة في الرسوم المتحر
 msgid "Unsupported animation type"
 msgstr "نوع رسوم متحرّكة غير مدعوم"
 
-#: ../gdk-pixbuf/io-ani.c:348
-#: ../gdk-pixbuf/io-ani.c:536
+#: ../gdk-pixbuf/io-ani.c:348 ../gdk-pixbuf/io-ani.c:536
 msgid "Invalid header in animation"
 msgstr "ترويسة غير صالحة في الرسوم المتحرّكة"
 
-#: ../gdk-pixbuf/io-ani.c:358
-#: ../gdk-pixbuf/io-ani.c:380
-#: ../gdk-pixbuf/io-ani.c:439
-#: ../gdk-pixbuf/io-ani.c:458
-#: ../gdk-pixbuf/io-ani.c:509
-#: ../gdk-pixbuf/io-ani.c:581
+#: ../gdk-pixbuf/io-ani.c:358 ../gdk-pixbuf/io-ani.c:380
+#: ../gdk-pixbuf/io-ani.c:439 ../gdk-pixbuf/io-ani.c:458
+#: ../gdk-pixbuf/io-ani.c:509 ../gdk-pixbuf/io-ani.c:581
 msgid "Not enough memory to load animation"
 msgstr "الذاكرة غير كافية لتحميل الرسوم المتحرّكة"
 
-#: ../gdk-pixbuf/io-ani.c:398
-#: ../gdk-pixbuf/io-ani.c:415
+#: ../gdk-pixbuf/io-ani.c:398 ../gdk-pixbuf/io-ani.c:415
 #: ../gdk-pixbuf/io-ani.c:426
 msgid "Malformed chunk in animation"
 msgstr "قطعة مشوّهة في الصور المتحرّكة"
@@ -182,36 +181,33 @@ msgstr "قطعة مشوّهة في الصور المتحرّكة"
 msgid "The ANI image format"
 msgstr "صيغة ANI للصورة"
 
-#: ../gdk-pixbuf/io-bmp.c:228
-#: ../gdk-pixbuf/io-bmp.c:306
-#: ../gdk-pixbuf/io-bmp.c:338
-#: ../gdk-pixbuf/io-bmp.c:361
-#: ../gdk-pixbuf/io-bmp.c:442
+#: ../gdk-pixbuf/io-bmp.c:230 ../gdk-pixbuf/io-bmp.c:327
+#: ../gdk-pixbuf/io-bmp.c:359 ../gdk-pixbuf/io-bmp.c:382
+#: ../gdk-pixbuf/io-bmp.c:485
 msgid "BMP image has bogus header data"
 msgstr "صورة BMP لها بيانات ترويسة زائفة"
 
-#: ../gdk-pixbuf/io-bmp.c:239
-#: ../gdk-pixbuf/io-bmp.c:401
+#: ../gdk-pixbuf/io-bmp.c:241 ../gdk-pixbuf/io-bmp.c:422
 msgid "Not enough memory to load bitmap image"
 msgstr "الذاكرة غير كافية لتحميل صورة bitmap"
 
-#: ../gdk-pixbuf/io-bmp.c:287
+#: ../gdk-pixbuf/io-bmp.c:308
 msgid "BMP image has unsupported header size"
 msgstr "صورة BMP لها حجم ترويسة غير مدعوم"
 
-#: ../gdk-pixbuf/io-bmp.c:325
+#: ../gdk-pixbuf/io-bmp.c:346
 msgid "Topdown BMP images cannot be compressed"
 msgstr "صور BMP أعلى-أسفل لا يمكن ضغطها"
 
-#: ../gdk-pixbuf/io-bmp.c:1203
+#: ../gdk-pixbuf/io-bmp.c:1307
 msgid "Couldn't allocate memory for saving BMP file"
 msgstr "تعذّر توزيع ذاكرة لحفظ ملف BMP"
 
-#: ../gdk-pixbuf/io-bmp.c:1244
+#: ../gdk-pixbuf/io-bmp.c:1348
 msgid "Couldn't write to BMP file"
 msgstr "تعذّر الكتابة في ملف BMP "
 
-#: ../gdk-pixbuf/io-bmp.c:1293
+#: ../gdk-pixbuf/io-bmp.c:1397
 msgid "The BMP image format"
 msgstr "صيغة صورة BMP"
 
@@ -220,9 +216,8 @@ msgstr "صيغة صورة BMP"
 msgid "Failure reading GIF: %s"
 msgstr "خطأ أثناء قراءة GIF: %s"
 
-#: ../gdk-pixbuf/io-gif.c:496
-#: ../gdk-pixbuf/io-gif.c:1472
-#: ../gdk-pixbuf/io-gif.c:1633
+#: ../gdk-pixbuf/io-gif.c:496 ../gdk-pixbuf/io-gif.c:1477
+#: ../gdk-pixbuf/io-gif.c:1638
 msgid "GIF file was missing some data (perhaps it was truncated somehow?)"
 msgstr "افتقد ملف GIF بعض البيانات (ربما استقطعت بكيفية ما؟)"
 
@@ -247,52 +242,49 @@ msgstr "وُجدت شِفرة غير سليمة"
 msgid "Circular table entry in GIF file"
 msgstr "خانة جدول دائرية في ملف GIF"
 
-#: ../gdk-pixbuf/io-gif.c:866
-#: ../gdk-pixbuf/io-gif.c:1459
-#: ../gdk-pixbuf/io-gif.c:1506
-#: ../gdk-pixbuf/io-gif.c:1621
+#: ../gdk-pixbuf/io-gif.c:866 ../gdk-pixbuf/io-gif.c:1464
+#: ../gdk-pixbuf/io-gif.c:1511 ../gdk-pixbuf/io-gif.c:1626
 msgid "Not enough memory to load GIF file"
 msgstr "الذاكرة غير كافية لتحميل ملف GIF"
 
-#: ../gdk-pixbuf/io-gif.c:951
+#: ../gdk-pixbuf/io-gif.c:956
 msgid "Not enough memory to composite a frame in GIF file"
 msgstr "ذاكرة غير كافية لتشكيل إطار في ملف GIF"
 
-#: ../gdk-pixbuf/io-gif.c:1123
+#: ../gdk-pixbuf/io-gif.c:1128
 msgid "GIF image is corrupt (incorrect LZW compression)"
 msgstr "صورة GIF تالفة (ضغط LZW غير سليم)"
 
-#: ../gdk-pixbuf/io-gif.c:1173
+#: ../gdk-pixbuf/io-gif.c:1178
 msgid "File does not appear to be a GIF file"
 msgstr "يبدو أن الملف ليس ملف GIF"
 
-#: ../gdk-pixbuf/io-gif.c:1185
+#: ../gdk-pixbuf/io-gif.c:1190
 #, c-format
 msgid "Version %s of the GIF file format is not supported"
 msgstr "الإصدارة %s لتهيئة ملف GIF غير مدعومة"
 
-#: ../gdk-pixbuf/io-gif.c:1294
-msgid "GIF image has no global colormap, and a frame inside it has no local colormap."
+#: ../gdk-pixbuf/io-gif.c:1299
+msgid ""
+"GIF image has no global colormap, and a frame inside it has no local "
+"colormap."
 msgstr "ليس لصورة GIF مخطط ألوان عام، والاطار الذي بداخلها لا يملك مخطط ألوان محلي."
 
-#: ../gdk-pixbuf/io-gif.c:1528
+#: ../gdk-pixbuf/io-gif.c:1533
 msgid "GIF image was truncated or incomplete."
 msgstr "صورة GIF مقطّعة أو غير كاملة."
 
-#: ../gdk-pixbuf/io-gif.c:1680
+#: ../gdk-pixbuf/io-gif.c:1685
 msgid "The GIF image format"
 msgstr "صيغة GIF للصورة"
 
-#: ../gdk-pixbuf/io-ico.c:219
-#: ../gdk-pixbuf/io-ico.c:279
-#: ../gdk-pixbuf/io-ico.c:348
-#: ../gdk-pixbuf/io-ico.c:411
+#: ../gdk-pixbuf/io-ico.c:219 ../gdk-pixbuf/io-ico.c:279
+#: ../gdk-pixbuf/io-ico.c:348 ../gdk-pixbuf/io-ico.c:411
 #: ../gdk-pixbuf/io-ico.c:441
 msgid "Not enough memory to load icon"
 msgstr "الذاكرة غير كافية لتحميل الأيقونة"
 
-#: ../gdk-pixbuf/io-ico.c:256
-#: ../gdk-pixbuf/io-ico.c:269
+#: ../gdk-pixbuf/io-ico.c:256 ../gdk-pixbuf/io-ico.c:269
 #: ../gdk-pixbuf/io-ico.c:338
 msgid "Invalid header in icon"
 msgstr "ترويسة غير صحيحة في الأيقونة"
@@ -339,34 +331,39 @@ msgstr "صيغة ICO للصورة"
 msgid "Error interpreting JPEG image file (%s)"
 msgstr "خطأ في تفسير ملف صورة JPEG (%s)"
 
-#: ../gdk-pixbuf/io-jpeg.c:352
-msgid "Insufficient memory to load image, try exiting some applications to free memory"
+#: ../gdk-pixbuf/io-jpeg.c:354
+msgid ""
+"Insufficient memory to load image, try exiting some applications to free "
+"memory"
 msgstr "الذاكرة غير كافية لتحميل الصورة، حاوِل الخروج من بعض التطبيقات لتحرير الذاكرة"
 
-#: ../gdk-pixbuf/io-jpeg.c:386
-#: ../gdk-pixbuf/io-jpeg.c:588
+#: ../gdk-pixbuf/io-jpeg.c:388 ../gdk-pixbuf/io-jpeg.c:590
 #, c-format
 msgid "Unsupported JPEG color space (%s)"
 msgstr "فضاء ألوان JPEG غير مدعوم (%s)"
 
-#: ../gdk-pixbuf/io-jpeg.c:484
-#: ../gdk-pixbuf/io-jpeg.c:741
-#: ../gdk-pixbuf/io-jpeg.c:975
-#: ../gdk-pixbuf/io-jpeg.c:984
+#: ../gdk-pixbuf/io-jpeg.c:486 ../gdk-pixbuf/io-jpeg.c:748
+#: ../gdk-pixbuf/io-jpeg.c:982 ../gdk-pixbuf/io-jpeg.c:991
 msgid "Couldn't allocate memory for loading JPEG file"
 msgstr "لم يمكن توزيع ذاكرة لتحميل ملف JPEG"
 
-#: ../gdk-pixbuf/io-jpeg.c:926
+#: ../gdk-pixbuf/io-jpeg.c:724
+msgid "Transformed JPEG has zero width or height."
+msgstr "صورة JPEG المُحوّلة ذات عرض أو إرتفاع صفري."
+
+#: ../gdk-pixbuf/io-jpeg.c:933
 #, c-format
-msgid "JPEG quality must be a value between 0 and 100; value '%s' could not be parsed."
+msgid ""
+"JPEG quality must be a value between 0 and 100; value '%s' could not be "
+"parsed."
 msgstr "يجب أن تكون جودة ال JPEG قيمة بين 0 و 100، لذلك لم يمكن تحليل القيمة '%s'."
 
-#: ../gdk-pixbuf/io-jpeg.c:941
+#: ../gdk-pixbuf/io-jpeg.c:948
 #, c-format
 msgid "JPEG quality must be a value between 0 and 100; value '%d' is not allowed."
 msgstr "يجب أن تكون جودة ال JPEG قيمة بين 0 و 100، القيمة '%d' غير مسموح بها."
 
-#: ../gdk-pixbuf/io-jpeg.c:1103
+#: ../gdk-pixbuf/io-jpeg.c:1110
 msgid "The JPEG image format"
 msgstr "JPEG صيغة صورة"
 
@@ -374,8 +371,7 @@ msgstr "JPEG صيغة صورة"
 msgid "Couldn't allocate memory for header"
 msgstr "لا يمكن توزيع ذاكرة للترويسة"
 
-#: ../gdk-pixbuf/io-pcx.c:206
-#: ../gdk-pixbuf/io-pcx.c:566
+#: ../gdk-pixbuf/io-pcx.c:206 ../gdk-pixbuf/io-pcx.c:566
 msgid "Couldn't allocate memory for context buffer"
 msgstr "لا يمكن توزيع ذاكرة للذاكرة الوسيطة للحالة"
 
@@ -383,13 +379,11 @@ msgstr "لا يمكن توزيع ذاكرة للذاكرة الوسيطة للح
 msgid "Image has invalid width and/or height"
 msgstr "ارتفاع الصورة و/أو عرضها غير صحيحين"
 
-#: ../gdk-pixbuf/io-pcx.c:619
-#: ../gdk-pixbuf/io-pcx.c:680
+#: ../gdk-pixbuf/io-pcx.c:619 ../gdk-pixbuf/io-pcx.c:680
 msgid "Image has unsupported bpp"
 msgstr " الصورة بها bpp غير مدعوم"
 
-#: ../gdk-pixbuf/io-pcx.c:624
-#: ../gdk-pixbuf/io-pcx.c:632
+#: ../gdk-pixbuf/io-pcx.c:624 ../gdk-pixbuf/io-pcx.c:632
 #, c-format
 msgid "Image has unsupported number of %d-bit planes"
 msgstr " الصورة بها عدد غير مدعوم من مستويات %d-بت"
@@ -422,7 +416,7 @@ msgstr "صيغة PCX للصورة"
 msgid "Bits per channel of PNG image is invalid."
 msgstr "عدد البتّات لكل قناة في صورة PNG غير صحيحة."
 
-#: ../gdk-pixbuf/io-png.c:136
+#: ../gdk-pixbuf/io-png.c:136 ../gdk-pixbuf/io-png.c:619
 msgid "Transformed PNG has zero width or height."
 msgstr "صورة PNG المُحوّلة بها عرض أو إرتفاع بقيمة صفر"
 
@@ -443,48 +437,56 @@ msgstr "صورة PNG المحولة بها عدد غير مدعوم من الق�
 msgid "Fatal error in PNG image file: %s"
 msgstr "خطأ قاتل في ملف صورة PNG: %s"
 
-#: ../gdk-pixbuf/io-png.c:301
+#: ../gdk-pixbuf/io-png.c:311
 msgid "Insufficient memory to load PNG file"
 msgstr "الذاكرة غير كافية لتحميل ملف PNG"
 
-#: ../gdk-pixbuf/io-png.c:618
+#: ../gdk-pixbuf/io-png.c:634
 #, c-format
-msgid "Insufficient memory to store a %ld by %ld image; try exiting some applications to reduce memory usage"
-msgstr "ذاكرة غير كافية لتخزين%ld من طرف صورة%ld ، حاول الخروج من بعض التطبيقات لتخفيف استخدام الذاكرة"
+msgid ""
+"Insufficient memory to store a %ld by %ld image; try exiting some "
+"applications to reduce memory usage"
+msgstr ""
+"ذاكرة غير كافية لتخزين%ld من طرف صورة%ld ، حاول الخروج من بعض التطبيقات "
+"لتخفيف استخدام الذاكرة"
 
-#: ../gdk-pixbuf/io-png.c:669
+#: ../gdk-pixbuf/io-png.c:685
 msgid "Fatal error reading PNG image file"
 msgstr "خطأ قاتل عند قراءة ملف صورة PNG"
 
-#: ../gdk-pixbuf/io-png.c:718
+#: ../gdk-pixbuf/io-png.c:734
 #, c-format
 msgid "Fatal error reading PNG image file: %s"
 msgstr "خطأ قاتل عند قراءة ملف صورة PNG: %s"
 
-#: ../gdk-pixbuf/io-png.c:810
+#: ../gdk-pixbuf/io-png.c:826
 msgid "Keys for PNG text chunks must have at least 1 and at most 79 characters."
 msgstr "يجب أن يكون لمفاتيح قطع PNG النصية رمزً واحاًد على الأقل و 79 كحد أقصى."
 
-#: ../gdk-pixbuf/io-png.c:818
+#: ../gdk-pixbuf/io-png.c:834
 msgid "Keys for PNG text chunks must be ASCII characters."
 msgstr "يجب أن تكون المفاتيح للمقاطع النصية ل PNG رموز ASCII."
 
-#: ../gdk-pixbuf/io-png.c:831
+#: ../gdk-pixbuf/io-png.c:847
 #, c-format
-msgid "PNG compression level must be a value between 0 and 9; value '%s' could not be parsed."
+msgid ""
+"PNG compression level must be a value between 0 and 9; value '%s' could not "
+"be parsed."
 msgstr "يجب أن يكون مستوى ضغط PNG قيمة بين 0 و 100، لذلك تعذّر تحليل القيمة '%s'."
 
-#: ../gdk-pixbuf/io-png.c:843
+#: ../gdk-pixbuf/io-png.c:859
 #, c-format
-msgid "PNG compression level must be a value between 0 and 9; value '%d' is not allowed."
+msgid ""
+"PNG compression level must be a value between 0 and 9; value '%d' is not "
+"allowed."
 msgstr "يجب أن يكون مستوي ضغط PNG قيمة بين 0 و 100، القيمة '%d' غير مسموح بها."
 
-#: ../gdk-pixbuf/io-png.c:883
+#: ../gdk-pixbuf/io-png.c:899
 #, c-format
 msgid "Value for PNG text chunk %s cannot be converted to ISO-8859-1 encoding."
 msgstr "لا يمكن تحويل قيمة مقطع PNG النصي %s إلى ترميز ISO-8859-1."
 
-#: ../gdk-pixbuf/io-png.c:1026
+#: ../gdk-pixbuf/io-png.c:1042
 msgid "The PNG image format"
 msgstr "صيغة PNG للصورة"
 
@@ -516,8 +518,7 @@ msgstr "قيمة اللون القصوى في ملف PNM هي 0"
 msgid "Maximum color value in PNM file is too large"
 msgstr "قيمة اللون القصوى في ملف PNM كبيرة جداً"
 
-#: ../gdk-pixbuf/io-pnm.c:431
-#: ../gdk-pixbuf/io-pnm.c:461
+#: ../gdk-pixbuf/io-pnm.c:431 ../gdk-pixbuf/io-pnm.c:461
 #: ../gdk-pixbuf/io-pnm.c:506
 msgid "Raw PNM image type is invalid"
 msgstr "نوع صورة PNM الخام غير صحيح"
@@ -530,8 +531,7 @@ msgstr "مُحمِّل صور PNM لا يَدعم الصيغة الفرعية ه
 msgid "Premature end-of-file encountered"
 msgstr "انتهى الملف قبل أوانه"
 
-#: ../gdk-pixbuf/io-pnm.c:743
-#: ../gdk-pixbuf/io-pnm.c:974
+#: ../gdk-pixbuf/io-pnm.c:743 ../gdk-pixbuf/io-pnm.c:974
 msgid "Raw PNM formats require exactly one whitespace before sample data"
 msgstr "صيغ PNM الخام تحتاج إلى وَضع فراغ واحد قبل بيانات النموذج"
 
@@ -567,8 +567,7 @@ msgstr "لصورة RAS نوع مجهول"
 msgid "unsupported RAS image variation"
 msgstr "إنحراف صورة RAS غير مدعوم"
 
-#: ../gdk-pixbuf/io-ras.c:171
-#: ../gdk-pixbuf/io-ras.c:200
+#: ../gdk-pixbuf/io-ras.c:171 ../gdk-pixbuf/io-ras.c:200
 msgid "Not enough memory to load RAS image"
 msgstr "ذاكرة غير كافية لتحميل صورة RAS"
 
@@ -616,10 +615,8 @@ msgstr "لا يمكن توزيع ذاكرة ترويسة TGA"
 msgid "TGA image has invalid dimensions"
 msgstr "صورة TGA لها أبعاد غير سليمة"
 
-#: ../gdk-pixbuf/io-tga.c:771
-#: ../gdk-pixbuf/io-tga.c:780
-#: ../gdk-pixbuf/io-tga.c:790
-#: ../gdk-pixbuf/io-tga.c:800
+#: ../gdk-pixbuf/io-tga.c:771 ../gdk-pixbuf/io-tga.c:780
+#: ../gdk-pixbuf/io-tga.c:790 ../gdk-pixbuf/io-tga.c:800
 #: ../gdk-pixbuf/io-tga.c:807
 msgid "TGA image type not supported"
 msgstr "نوع صورة TGA غير مدعوم"
@@ -648,20 +645,16 @@ msgstr "لا يمكن تلقي إرتفاع الصورة (ملف TIFF رديء)"
 msgid "Width or height of TIFF image is zero"
 msgstr "عرض أو إرتفاع صورة TIFF هو الصفر"
 
-#: ../gdk-pixbuf/io-tiff.c:197
-#: ../gdk-pixbuf/io-tiff.c:206
+#: ../gdk-pixbuf/io-tiff.c:197 ../gdk-pixbuf/io-tiff.c:206
 msgid "Dimensions of TIFF image too large"
 msgstr "أبعاد صورة TIFF كبيرة جداً"
 
-#: ../gdk-pixbuf/io-tiff.c:225
-#: ../gdk-pixbuf/io-tiff.c:237
-#: ../gdk-pixbuf/io-tiff.c:286
-#: ../gdk-pixbuf/io-tiff.c:572
+#: ../gdk-pixbuf/io-tiff.c:225 ../gdk-pixbuf/io-tiff.c:237
+#: ../gdk-pixbuf/io-tiff.c:286 ../gdk-pixbuf/io-tiff.c:572
 msgid "Insufficient memory to open TIFF file"
 msgstr "ذاكرة غير كافية لفتح ملف TIFF"
 
-#: ../gdk-pixbuf/io-tiff.c:251
-#: ../gdk-pixbuf/io-tiff.c:294
+#: ../gdk-pixbuf/io-tiff.c:251 ../gdk-pixbuf/io-tiff.c:294
 msgid "Failed to load RGB data from TIFF file"
 msgstr "فشل تحميل بيانات RGB من ملف TIFF"
 
@@ -669,13 +662,11 @@ msgstr "فشل تحميل بيانات RGB من ملف TIFF"
 msgid "Failed to open TIFF image"
 msgstr "فشل فتح صورة TIFF"
 
-#: ../gdk-pixbuf/io-tiff.c:373
-#: ../gdk-pixbuf/io-tiff.c:756
+#: ../gdk-pixbuf/io-tiff.c:373 ../gdk-pixbuf/io-tiff.c:756
 msgid "TIFFClose operation failed"
 msgstr "فشلت عملية TIFFClose"
 
-#: ../gdk-pixbuf/io-tiff.c:504
-#: ../gdk-pixbuf/io-tiff.c:517
+#: ../gdk-pixbuf/io-tiff.c:504 ../gdk-pixbuf/io-tiff.c:517
 msgid "Failed to load TIFF image"
 msgstr "فشل تحميل صورة TIFF"
 
@@ -755,8 +746,7 @@ msgstr "ملف XPM له عدد غير صحيح من المحارف لكل بكس
 msgid "XPM file has invalid number of colors"
 msgstr "ملف XPM له عدد غير صحيح من الألوان"
 
-#: ../gdk-pixbuf/io-xpm.c:522
-#: ../gdk-pixbuf/io-xpm.c:531
+#: ../gdk-pixbuf/io-xpm.c:522 ../gdk-pixbuf/io-xpm.c:531
 #: ../gdk-pixbuf/io-xpm.c:583
 msgid "Cannot allocate memory for loading XPM image"
 msgstr "لا يمكن توزيع ذاكرة لتحميل صورة XPM"
@@ -822,10 +812,7 @@ msgstr "شارات تنقيح Gdk التي ستضبط"
 #. Placeholder in --gdk-no-debug=FLAGS in --help output
 #. Placeholder in --gtk-debug=FLAGS in --help output
 #. Placeholder in --gtk-no-debug=FLAGS in --help output
-#: ../gdk/gdk.c:130
-#: ../gdk/gdk.c:133
-#: ../gtk/gtkmain.c:412
-#: ../gtk/gtkmain.c:415
+#: ../gdk/gdk.c:130 ../gdk/gdk.c:133 ../gtk/gtkmain.c:412 ../gtk/gtkmain.c:415
 msgid "FLAGS"
 msgstr "FLAGS"
 
@@ -1001,8 +988,7 @@ msgstr "COLORS"
 msgid "Make X calls synchronous"
 msgstr "اجعل نداءات X متزامنة"
 
-#: ../gtk/gtkaboutdialog.c:273
-#: ../gtk/gtkaboutdialog.c:2080
+#: ../gtk/gtkaboutdialog.c:273 ../gtk/gtkaboutdialog.c:2094
 msgid "License"
 msgstr "الترخيص"
 
@@ -1025,23 +1011,23 @@ msgstr "ال_ترخيص"
 msgid "About %s"
 msgstr "حَوْل  %s"
 
-#: ../gtk/gtkaboutdialog.c:2008
+#: ../gtk/gtkaboutdialog.c:2022
 msgid "Credits"
 msgstr "شكر وتقدير"
 
-#: ../gtk/gtkaboutdialog.c:2034
+#: ../gtk/gtkaboutdialog.c:2048
 msgid "Written by"
 msgstr "كتَبَهُ"
 
-#: ../gtk/gtkaboutdialog.c:2037
+#: ../gtk/gtkaboutdialog.c:2051
 msgid "Documented by"
 msgstr "وثّقه"
 
-#: ../gtk/gtkaboutdialog.c:2049
+#: ../gtk/gtkaboutdialog.c:2063
 msgid "Translated by"
 msgstr "ترجَمَهُ"
 
-#: ../gtk/gtkaboutdialog.c:2053
+#: ../gtk/gtkaboutdialog.c:2067
 msgid "Artwork by"
 msgstr "جمَّلَهُ"
 
@@ -1159,8 +1145,7 @@ msgstr "2000"
 #. * digits.  That needs support from your system and locale definition
 #. * too.
 #.
-#: ../gtk/gtkcalendar.c:1661
-#: ../gtk/gtkcalendar.c:2239
+#: ../gtk/gtkcalendar.c:1661 ../gtk/gtkcalendar.c:2239
 #, c-format
 msgid "calendar:day:digits|%d"
 msgstr "%Id"
@@ -1176,8 +1161,7 @@ msgstr "%Id"
 #. * digits.  That needs support from your system and locale definition
 #. * too.
 #.
-#: ../gtk/gtkcalendar.c:1695
-#: ../gtk/gtkcalendar.c:2113
+#: ../gtk/gtkcalendar.c:1695 ../gtk/gtkcalendar.c:2113
 #, c-format
 msgid "calendar:week:digits|%d"
 msgstr "%Id"
@@ -1209,20 +1193,17 @@ msgstr "معطّل"
 #. * an accelerator when the cell is clicked to change the
 #. * acelerator.
 #.
-#: ../gtk/gtkcellrendereraccel.c:384
-#: ../gtk/gtkcellrendereraccel.c:595
+#: ../gtk/gtkcellrendereraccel.c:384 ../gtk/gtkcellrendereraccel.c:595
 msgid "New accelerator..."
 msgstr "مسرّع جديد..."
 
 #. do not translate the part before the |
-#: ../gtk/gtkcellrendererprogress.c:237
-#: ../gtk/gtkcellrendererprogress.c:295
+#: ../gtk/gtkcellrendererprogress.c:237 ../gtk/gtkcellrendererprogress.c:295
 #, c-format
 msgid "progress bar label|%d %%"
 msgstr "%d %%"
 
-#: ../gtk/gtkcolorbutton.c:189
-#: ../gtk/gtkcolorbutton.c:560
+#: ../gtk/gtkcolorbutton.c:189 ../gtk/gtkcolorbutton.c:560
 msgid "Pick a Color"
 msgstr "اختر لوناً"
 
@@ -1231,99 +1212,121 @@ msgid "Received invalid color data\n"
 msgstr "تم تلقي بيانات لون غير سليمة\n"
 
 #: ../gtk/gtkcolorsel.c:562
-msgid "The previously-selected color, for comparison to the color you're selecting now. You can drag this color to a palette entry, or select this color as current by dragging it to the other color swatch alongside."
-msgstr "اللون المُختار سابقاً، للمقارنة باللون الذي اخترتَه الآن. يُمكِنك سحب هذا اللون لخانة لوحة ألوان، أو انتقاءه كاللون الحالي بسحبه للمربع اللوني."
+msgid ""
+"The previously-selected color, for comparison to the color you're selecting "
+"now. You can drag this color to a palette entry, or select this color as "
+"current by dragging it to the other color swatch alongside."
+msgstr ""
+"اللون المُختار سابقاً، للمقارنة باللون الذي اخترتَه الآن. يُمكِنك سحب هذا اللون "
+"لخانة لوحة ألوان، أو انتقاءه كاللون الحالي بسحبه للمربع اللوني."
 
 #: ../gtk/gtkcolorsel.c:567
-msgid "The color you've chosen. You can drag this color to a palette entry to save it for use in the future."
-msgstr "اللون الذي اخترته. تستطيع سحب هذا اللون إلى خانة لوحة الألوان لحفظه حتى تستخدمه مستقبلاً."
+msgid ""
+"The color you've chosen. You can drag this color to a palette entry to save "
+"it for use in the future."
+msgstr ""
+"اللون الذي اخترته. تستطيع سحب هذا اللون إلى خانة لوحة الألوان لحفظه حتى "
+"تستخدمه مستقبلاً."
 
-#: ../gtk/gtkcolorsel.c:954
+#: ../gtk/gtkcolorsel.c:955
 msgid "_Save color here"
 msgstr "ا_حفظ اللون هنا"
 
-#: ../gtk/gtkcolorsel.c:1159
-msgid "Click this palette entry to make it the current color. To change this entry, drag a color swatch here or right-click it and select \"Save color here.\""
-msgstr "انقر خانة لوحة الألوان هذه لجعلها اللون الحالي. لتغيير هذه الخانة إسحب عينة لون إلى هنا أو انقر الزر الأيمن للفأرة واختر \"احفظ اللون هنا.\""
+#: ../gtk/gtkcolorsel.c:1160
+msgid ""
+"Click this palette entry to make it the current color. To change this entry, "
+"drag a color swatch here or right-click it and select \"Save color here.\""
+msgstr ""
+"انقر خانة لوحة الألوان هذه لجعلها اللون الحالي. لتغيير هذه الخانة إسحب عينة "
+"لون إلى هنا أو انقر الزر الأيمن للفأرة واختر \"احفظ اللون هنا.\""
 
-#: ../gtk/gtkcolorsel.c:1937
-msgid "Select the color you want from the outer ring. Select the darkness or lightness of that color using the inner triangle."
-msgstr "اختر اللون الذي تريده من الحلقة الخارجية. اختر ظلمة أو إضاءة ذلك اللون باستخدام المثلث الداخلي."
+#: ../gtk/gtkcolorsel.c:1938
+msgid ""
+"Select the color you want from the outer ring. Select the darkness or "
+"lightness of that color using the inner triangle."
+msgstr ""
+"اختر اللون الذي تريده من الحلقة الخارجية. اختر ظلمة أو إضاءة ذلك اللون "
+"باستخدام المثلث الداخلي."
 
-#: ../gtk/gtkcolorsel.c:1962
-msgid "Click the eyedropper, then click a color anywhere on your screen to select that color."
+#: ../gtk/gtkcolorsel.c:1963
+msgid ""
+"Click the eyedropper, then click a color anywhere on your screen to select "
+"that color."
 msgstr "انقر القطّارة ثم انقر أيّ لون في أيّ مكان على الشاشة لانتقاء ذلك اللون."
 
-#: ../gtk/gtkcolorsel.c:1971
+#: ../gtk/gtkcolorsel.c:1972
 msgid "_Hue:"
 msgstr "ال_تدرج:"
 
-#: ../gtk/gtkcolorsel.c:1972
+#: ../gtk/gtkcolorsel.c:1973
 msgid "Position on the color wheel."
 msgstr "الموقع على عجلة اللون."
 
-#: ../gtk/gtkcolorsel.c:1974
+#: ../gtk/gtkcolorsel.c:1975
 msgid "_Saturation:"
 msgstr "الت_شبع:"
 
-#: ../gtk/gtkcolorsel.c:1975
+#: ../gtk/gtkcolorsel.c:1976
 msgid "\"Deepness\" of the color."
 msgstr "عمق\" اللون\"."
 
-#: ../gtk/gtkcolorsel.c:1976
+#: ../gtk/gtkcolorsel.c:1977
 msgid "_Value:"
 msgstr "ال_قيمة:"
 
-#: ../gtk/gtkcolorsel.c:1977
+#: ../gtk/gtkcolorsel.c:1978
 msgid "Brightness of the color."
 msgstr "سُطوع اللون."
 
-#: ../gtk/gtkcolorsel.c:1978
+#: ../gtk/gtkcolorsel.c:1979
 msgid "_Red:"
 msgstr "_أحمر:"
 
-#: ../gtk/gtkcolorsel.c:1979
+#: ../gtk/gtkcolorsel.c:1980
 msgid "Amount of red light in the color."
 msgstr "كمية الضوء الأحمر في اللون."
 
-#: ../gtk/gtkcolorsel.c:1980
+#: ../gtk/gtkcolorsel.c:1981
 msgid "_Green:"
 msgstr "أ_خضر:"
 
-#: ../gtk/gtkcolorsel.c:1981
+#: ../gtk/gtkcolorsel.c:1982
 msgid "Amount of green light in the color."
 msgstr "كمية الضوء الأخضر في اللون."
 
-#: ../gtk/gtkcolorsel.c:1982
+#: ../gtk/gtkcolorsel.c:1983
 msgid "_Blue:"
 msgstr "أ_زرق:"
 
-#: ../gtk/gtkcolorsel.c:1983
+#: ../gtk/gtkcolorsel.c:1984
 msgid "Amount of blue light in the color."
 msgstr "كمية الضوء الأزرق في اللون."
 
-#: ../gtk/gtkcolorsel.c:1986
+#: ../gtk/gtkcolorsel.c:1987
 msgid "Op_acity:"
 msgstr "ال_عتامة:"
 
-#: ../gtk/gtkcolorsel.c:1994
-#: ../gtk/gtkcolorsel.c:2005
+#: ../gtk/gtkcolorsel.c:1995 ../gtk/gtkcolorsel.c:2006
 msgid "Transparency of the color."
 msgstr "شفافية اللون."
 
-#: ../gtk/gtkcolorsel.c:2012
+#: ../gtk/gtkcolorsel.c:2013
 msgid "Color _name:"
 msgstr "ا_سم اللون:"
 
-#: ../gtk/gtkcolorsel.c:2027
-msgid "You can enter an HTML-style hexadecimal color value, or simply a color name such as 'orange' in this entry."
-msgstr "يمكنك إدخال قيمة لون بالنظام الست عشري و أسلوب HTML، أو اسم لون بكل بساطة مثل 'البرتقالي' في هذه الخانة."
+#: ../gtk/gtkcolorsel.c:2028
+msgid ""
+"You can enter an HTML-style hexadecimal color value, or simply a color name "
+"such as 'orange' in this entry."
+msgstr ""
+"يمكنك إدخال قيمة لون بالنظام الست عشري و أسلوب HTML، أو اسم لون بكل بساطة "
+"مثل 'البرتقالي' في هذه الخانة."
 
-#: ../gtk/gtkcolorsel.c:2057
+#: ../gtk/gtkcolorsel.c:2058
 msgid "_Palette:"
 msgstr "_لوحة الألوان:"
 
-#: ../gtk/gtkcolorsel.c:2086
+#: ../gtk/gtkcolorsel.c:2087
 msgid "Color Wheel"
 msgstr "عجلة اللّون"
 
@@ -1331,20 +1334,16 @@ msgstr "عجلة اللّون"
 msgid "Color Selection"
 msgstr "انتقاء اللون"
 
-#: ../gtk/gtkentry.c:4918
-#: ../gtk/gtktextview.c:7238
+#: ../gtk/gtkentry.c:5007 ../gtk/gtktextview.c:7281
 msgid "Input _Methods"
 msgstr "طرق ال_إدخال"
 
-#: ../gtk/gtkentry.c:4932
-#: ../gtk/gtktextview.c:7252
+#: ../gtk/gtkentry.c:5021 ../gtk/gtktextview.c:7295
 msgid "_Insert Unicode Control Character"
 msgstr "أ_درج محرف تحكم يونيكود"
 
-#: ../gtk/gtkfilechooser.c:1694
-#: ../gtk/gtkfilechooser.c:1738
-#: ../gtk/gtkfilechooser.c:1813
-#: ../gtk/gtkfilechooser.c:1857
+#: ../gtk/gtkfilechooser.c:1694 ../gtk/gtkfilechooser.c:1738
+#: ../gtk/gtkfilechooser.c:1813 ../gtk/gtkfilechooser.c:1857
 #, c-format
 msgid "Invalid filename: %s"
 msgstr "اسم ملف غير سليم: %s"
@@ -1353,8 +1352,7 @@ msgstr "اسم ملف غير سليم: %s"
 msgid "Select A File"
 msgstr "اختر ملف"
 
-#: ../gtk/gtkfilechooserbutton.c:68
-#: ../gtk/gtkfilechooserdefault.c:1690
+#: ../gtk/gtkfilechooserbutton.c:68 ../gtk/gtkfilechooserdefault.c:1690
 msgid "Desktop"
 msgstr "سطح المكتب"
 
@@ -1383,8 +1381,12 @@ msgid "The folder could not be created"
 msgstr "تعذّر انشاء المجلّد"
 
 #: ../gtk/gtkfilechooserdefault.c:964
-msgid "The folder could not be created, as a file with the same name already exists.  Try using a different name for the folder, or rename the file first."
-msgstr "تعذّر انشاء المجلد بسبب وجود ملف يحمل نفس الإسم. حاول استخدام اسم آخر للمجلد، أو أعِد تسمية الملف أولا."
+msgid ""
+"The folder could not be created, as a file with the same name already "
+"exists.  Try using a different name for the folder, or rename the file first."
+msgstr ""
+"تعذّر انشاء المجلد بسبب وجود ملف يحمل نفس الإسم. حاول استخدام اسم آخر للمجلد، "
+"أو أعِد تسمية الملف أولا."
 
 #: ../gtk/gtkfilechooserdefault.c:977
 msgid "Invalid file name"
@@ -1444,8 +1446,7 @@ msgstr "أماكن"
 msgid "_Places"
 msgstr "_أماكن"
 
-#: ../gtk/gtkfilechooserdefault.c:3599
-#: ../gtk/gtkstock.c:317
+#: ../gtk/gtkfilechooserdefault.c:3599 ../gtk/gtkstock.c:317
 msgid "_Add"
 msgstr "أ_ضف"
 
@@ -1453,8 +1454,7 @@ msgstr "أ_ضف"
 msgid "Add the selected folder to the Bookmarks"
 msgstr "أضِف المجلد المحدد لعلامات المواقع"
 
-#: ../gtk/gtkfilechooserdefault.c:3611
-#: ../gtk/gtkstock.c:404
+#: ../gtk/gtkfilechooserdefault.c:3611 ../gtk/gtkstock.c:404
 msgid "_Remove"
 msgstr "_احذِف"
 
@@ -1479,8 +1479,7 @@ msgstr "أ_ضف لعلامات المواقع"
 msgid "Show _Hidden Files"
 msgstr "أظهر الملفات ال_مخفيّة"
 
-#: ../gtk/gtkfilechooserdefault.c:4059
-#: ../gtk/gtkfilesel.c:729
+#: ../gtk/gtkfilechooserdefault.c:4059 ../gtk/gtkfilesel.c:729
 msgid "Files"
 msgstr "ملفات"
 
@@ -1501,75 +1500,73 @@ msgid "Select which types of files are shown"
 msgstr "انتقي انواع الملفات التي ستعرض"
 
 #. Label
-#: ../gtk/gtkfilechooserdefault.c:4322
-#: ../gtk/gtkprinteroptionwidget.c:780
+#: ../gtk/gtkfilechooserdefault.c:4323 ../gtk/gtkprinteroptionwidget.c:788
 msgid "_Name:"
 msgstr "الإ_سم:"
 
-#: ../gtk/gtkfilechooserdefault.c:4364
+#: ../gtk/gtkfilechooserdefault.c:4365
 msgid "_Browse for other folders"
 msgstr "_تصفّح لأدلّة أخرى"
 
-#: ../gtk/gtkfilechooserdefault.c:4599
+#: ../gtk/gtkfilechooserdefault.c:4600
 msgid "Type a file name"
 msgstr "اكتب اسم ملف"
 
 #. Create Folder
-#: ../gtk/gtkfilechooserdefault.c:4636
+#: ../gtk/gtkfilechooserdefault.c:4637
 msgid "Create Fo_lder"
 msgstr "انشيء _مجلّد"
 
-#: ../gtk/gtkfilechooserdefault.c:4646
+#: ../gtk/gtkfilechooserdefault.c:4647
 msgid "_Location:"
 msgstr "ال_موقع:"
 
-#: ../gtk/gtkfilechooserdefault.c:4886
+#: ../gtk/gtkfilechooserdefault.c:4887
 msgid "Save in _folder:"
 msgstr "احفظ في ال_مجلّد:"
 
-#: ../gtk/gtkfilechooserdefault.c:4888
+#: ../gtk/gtkfilechooserdefault.c:4889
 msgid "Create in _folder:"
 msgstr "انشيء في ال _مجلّد:"
 
-#: ../gtk/gtkfilechooserdefault.c:6384
+#: ../gtk/gtkfilechooserdefault.c:6397
 msgid "Cannot change to folder because it is not local"
 msgstr "لا يمكن التحويل إلى مجلّد لأنه غير محلي"
 
-#: ../gtk/gtkfilechooserdefault.c:6957
-#: ../gtk/gtkfilechooserdefault.c:6978
+#: ../gtk/gtkfilechooserdefault.c:6970 ../gtk/gtkfilechooserdefault.c:6991
 #, c-format
 msgid "Shortcut %s already exists"
 msgstr "الاختصار %s  موجود مسبقا"
 
-#: ../gtk/gtkfilechooserdefault.c:7068
+#: ../gtk/gtkfilechooserdefault.c:7081
 #, c-format
 msgid "Shortcut %s does not exist"
 msgstr "الاختصار %s غير موجود."
 
-#: ../gtk/gtkfilechooserdefault.c:7323
+#: ../gtk/gtkfilechooserdefault.c:7336
 #, c-format
 msgid "A file named \"%s\" already exists.  Do you want to replace it?"
 msgstr "هناك ملف باسم \"%s\" موجود حاليا. أتريد استبداله؟"
 
-#: ../gtk/gtkfilechooserdefault.c:7326
+#: ../gtk/gtkfilechooserdefault.c:7339
 #, c-format
 msgid "The file already exists in \"%s\".  Replacing it will overwrite its contents."
 msgstr "الملف موجود بالفعل في  \"%s\". استبداله سيكتب فوق محتواه."
 
-#: ../gtk/gtkfilechooserdefault.c:7331
+#: ../gtk/gtkfilechooserdefault.c:7344
 msgid "_Replace"
 msgstr "است_بدِل"
 
-#: ../gtk/gtkfilechooserdefault.c:8027
+#: ../gtk/gtkfilechooserdefault.c:8040
 #, c-format
 msgid "Could not mount %s"
 msgstr "لا يمكن ضَمّ %s"
 
-#: ../gtk/gtkfilechooserdefault.c:8421
+#: ../gtk/gtkfilechooserdefault.c:8434
 msgid "Type name of new folder"
 msgstr "اكتب اسما للمجلد الجديد"
 
-#: ../gtk/gtkfilechooserdefault.c:8466
+#: ../gtk/gtkfilechooserdefault.c:8479
 #, c-format
 msgid "%d byte"
 msgid_plural "%d bytes"
@@ -1578,61 +1575,64 @@ msgstr[1] "%d بايت"
 msgstr[2] "%d ًبايتا"
 msgstr[3] "%d ًبايتا"
 
-#: ../gtk/gtkfilechooserdefault.c:8468
+#: ../gtk/gtkfilechooserdefault.c:8481
 #, c-format
 msgid "%.1f KB"
 msgstr "%.1f ك.ب."
 
-#: ../gtk/gtkfilechooserdefault.c:8470
+#: ../gtk/gtkfilechooserdefault.c:8483
 #, c-format
 msgid "%.1f MB"
 msgstr "%.1f ميجابايت"
 
-#: ../gtk/gtkfilechooserdefault.c:8472
+#: ../gtk/gtkfilechooserdefault.c:8485
 #, c-format
 msgid "%.1f GB"
 msgstr "%.1f جيجابايت"
 
-#: ../gtk/gtkfilechooserdefault.c:8520
-#: ../gtk/gtkfilechooserdefault.c:8544
+#: ../gtk/gtkfilechooserdefault.c:8533 ../gtk/gtkfilechooserdefault.c:8557
 msgid "Unknown"
 msgstr "مجهول"
 
-#: ../gtk/gtkfilechooserdefault.c:8531
+#: ../gtk/gtkfilechooserdefault.c:8544
 msgid "Today"
 msgstr "اليوم"
 
-#: ../gtk/gtkfilechooserdefault.c:8533
+#: ../gtk/gtkfilechooserdefault.c:8546
 msgid "Yesterday"
 msgstr "الأمس"
 
-#: ../gtk/gtkfilechoosersettings.c:123
+#: ../gtk/gtkfilechoosersettings.c:126
 #, c-format
 msgid "Line %d, column %d: missing attribute \"%s\""
 msgstr "السطر %d العمود %d: الصفة \"%s\" مفقودة"
 
-#: ../gtk/gtkfilechoosersettings.c:140
+#: ../gtk/gtkfilechoosersettings.c:143
 #, c-format
 msgid "Line %d, column %d: unexpected element \"%s\""
 msgstr "السطر %d العمود %d: عنصر غير متوقع \"%s\""
 
-#: ../gtk/gtkfilechoosersettings.c:158
+#: ../gtk/gtkfilechoosersettings.c:161
 #, c-format
-msgid "Line %d, column %d: expected end of element \"%s\", but got element for \"%s\" instead"
-msgstr "السطر %d العمود %d: نهاية غير متوقعة للعنصر\"%s\"، لكن حصلت على عنصر لـ\"%s\" كبديل  "
+msgid ""
+"Line %d, column %d: expected end of element \"%s\", but got element for \"%s"
+"\" instead"
+msgstr ""
+"السطر %d العمود %d: نهاية غير متوقعة للعنصر\"%s\"، لكن حصلت على عنصر لـ\"%s"
+"\" كبديل  "
 
-#: ../gtk/gtkfilechoosersettings.c:202
+#: ../gtk/gtkfilechoosersettings.c:205
 #, c-format
 msgid "Line %d, column %d: expected \"%s\" at the toplevel, but found \"%s\" instead"
 msgstr "السطر %d العمود %d: توقعت \"%s\" في المستوى الأعلى، لكن وجدت \"%s\" كبديل"
 
-#: ../gtk/gtkfilechoosersettings.c:238
-#: ../gtk/gtkfilechoosersettings.c:266
+#: ../gtk/gtkfilechoosersettings.c:241 ../gtk/gtkfilechoosersettings.c:269
+#: ../gtk/gtkfilechoosersettings.c:297
 #, c-format
 msgid "Line %d, column %d: expected \"%s\" or \"%s\", but found \"%s\" instead"
 msgstr "السطر %d العمود %d: توقعت \"%s\" أو \"%s\"، لكن وجدت \"%s\" كبديل"
 
-#: ../gtk/gtkfilechoosersettings.c:516
+#: ../gtk/gtkfilechoosersettings.c:573
 #, c-format
 msgid "Could not create directory: %s"
 msgstr "لا يمكن إنشاء المجلّد %s:"
@@ -1649,8 +1649,7 @@ msgstr "_مجلّدات"
 msgid "_Files"
 msgstr "م_لفات"
 
-#: ../gtk/gtkfilesel.c:820
-#: ../gtk/gtkfilesel.c:2207
+#: ../gtk/gtkfilesel.c:820 ../gtk/gtkfilesel.c:2207
 #, c-format
 msgid "Folder unreadable: %s"
 msgstr "المجلّد غير قابل للقراءة: %s"
@@ -1658,7 +1657,8 @@ msgstr "المجلّد غير قابل للقراءة: %s"
 #: ../gtk/gtkfilesel.c:949
 #, c-format
 msgid ""
-"The file \"%s\" resides on another machine (called %s) and may not be available to this program.\n"
+"The file \"%s\" resides on another machine (called %s) and may not be "
+"available to this program.\n"
 "Are you sure that you want to select it?"
 msgstr ""
 "الملف \"%s\" موجود في جهاز آخر (باسم %s) وقد لا يكون متوفّراً لهذا البرنامج.\n"
@@ -1681,10 +1681,8 @@ msgstr "أ_عد تسمية ملف"
 msgid "The folder name \"%s\" contains symbols that are not allowed in filenames"
 msgstr "اسم المجلّد \"%s\" يحوي رموزاً غير مسموح بإستخدامها في أسماء الملفات"
 
-#: ../gtk/gtkfilesel.c:1408
-#: ../gtk/gtkfilesel.c:1417
-#: ../gtk/gtkfilesystemunix.c:1062
-#: ../gtk/gtkfilesystemwin32.c:1177
+#: ../gtk/gtkfilesel.c:1408 ../gtk/gtkfilesel.c:1417
+#: ../gtk/gtkfilesystemunix.c:1062 ../gtk/gtkfilesystemwin32.c:1177
 #, c-format
 msgid "Error creating directory '%s': %s"
 msgstr "خطأ عند إنشاء الدليل '%s' :  %s "
@@ -1701,15 +1699,12 @@ msgstr "ا_سم المجلّد:"
 msgid "C_reate"
 msgstr "أن_شيء"
 
-#: ../gtk/gtkfilesel.c:1533
-#: ../gtk/gtkfilesel.c:1640
-#: ../gtk/gtkfilesel.c:1653
+#: ../gtk/gtkfilesel.c:1533 ../gtk/gtkfilesel.c:1640 ../gtk/gtkfilesel.c:1653
 #, c-format
 msgid "The filename \"%s\" contains symbols that are not allowed in filenames"
 msgstr "اسم الملف \"%s\" يحوي رموزا غير مسموح بإستخدامها في أسماء الملفات"
 
-#: ../gtk/gtkfilesel.c:1536
-#: ../gtk/gtkfilesel.c:1546
+#: ../gtk/gtkfilesel.c:1536 ../gtk/gtkfilesel.c:1546
 #, c-format
 msgid "Error deleting file '%s': %s"
 msgstr "خطأ أثناء حذف الملف '%s':  %s"
@@ -1757,8 +1752,12 @@ msgstr "الإ_نتقاء:"
 
 #: ../gtk/gtkfilesel.c:3112
 #, c-format
-msgid "The filename \"%s\" couldn't be converted to UTF-8. (try setting the environment variable G_FILENAME_ENCODING): %s"
-msgstr "لم أستطع تحويل اسم الملف \"%s\" إلى UTF-8 (حاول ضبط المتغير البيئي G_BROKEN_FILENAMES): %s"
+msgid ""
+"The filename \"%s\" couldn't be converted to UTF-8. (try setting the "
+"environment variable G_FILENAME_ENCODING): %s"
+msgstr ""
+"لم أستطع تحويل اسم الملف \"%s\" إلى UTF-8 (حاول ضبط المتغير البيئي "
+"G_BROKEN_FILENAMES): %s"
 
 #: ../gtk/gtkfilesel.c:3115
 msgid "Invalid UTF-8"
@@ -1785,18 +1784,14 @@ msgstr "لا يمكن الحصول على المجلّد الجذر"
 msgid "(Empty)"
 msgstr "(فارغ)"
 
-#: ../gtk/gtkfilesystemunix.c:975
-#: ../gtk/gtkfilesystemunix.c:1223
-#: ../gtk/gtkfilesystemunix.c:2211
-#: ../gtk/gtkfilesystemunix.c:2251
-#: ../gtk/gtkfilesystemwin32.c:2396
-#: ../gtk/gtkfilesystemwin32.c:2446
+#: ../gtk/gtkfilesystemunix.c:975 ../gtk/gtkfilesystemunix.c:1223
+#: ../gtk/gtkfilesystemunix.c:2211 ../gtk/gtkfilesystemunix.c:2251
+#: ../gtk/gtkfilesystemwin32.c:2396 ../gtk/gtkfilesystemwin32.c:2446
 #, c-format
 msgid "Error getting information for '%s': %s"
 msgstr "خطأ أثناء تلقي معلومات لـ '%s': %s"
 
-#: ../gtk/gtkfilesystemunix.c:1168
-#: ../gtk/gtkfilesystemwin32.c:1284
+#: ../gtk/gtkfilesystemunix.c:1168 ../gtk/gtkfilesystemwin32.c:1284
 msgid "This file system does not support mounting"
 msgstr "نظام الملفات هذا لا يدعم الضمّ"
 
@@ -1804,26 +1799,24 @@ msgstr "نظام الملفات هذا لا يدعم الضمّ"
 msgid "File System"
 msgstr "نظام ملفات"
 
-#: ../gtk/gtkfilesystemunix.c:1344
-#: ../gtk/gtkfilesystemwin32.c:1461
+#: ../gtk/gtkfilesystemunix.c:1344 ../gtk/gtkfilesystemwin32.c:1461
 #, c-format
-msgid "The name \"%s\" is not valid because it contains the character \"%s\". Please use a different name."
+msgid ""
+"The name \"%s\" is not valid because it contains the character \"%s\". "
+"Please use a different name."
 msgstr "الإسم \"%s\" غير صالح لانه يحتوي المحرف \"%s\". رجاء استخدم اسم مختلف."
 
-#: ../gtk/gtkfilesystemunix.c:1893
-#: ../gtk/gtkfilesystemwin32.c:2076
+#: ../gtk/gtkfilesystemunix.c:1893 ../gtk/gtkfilesystemwin32.c:2076
 #, c-format
 msgid "Bookmark saving failed: %s"
 msgstr "فشل حفظ علامة الموقع: %s"
 
-#: ../gtk/gtkfilesystemunix.c:1948
-#: ../gtk/gtkfilesystemwin32.c:2131
+#: ../gtk/gtkfilesystemunix.c:1948 ../gtk/gtkfilesystemwin32.c:2131
 #, c-format
 msgid "'%s' already exists in the bookmarks list"
 msgstr "'%s' موجود بالفعل في قائمة علامات المواقع"
 
-#: ../gtk/gtkfilesystemunix.c:2020
-#: ../gtk/gtkfilesystemwin32.c:2203
+#: ../gtk/gtkfilesystemunix.c:2020 ../gtk/gtkfilesystemwin32.c:2203
 #, c-format
 msgid "'%s' does not exist in the bookmarks list"
 msgstr "'%s' غير موجود في قائمة علامات المواقع"
@@ -1843,8 +1836,7 @@ msgstr "قرص شبكة (%s)"
 msgid "%s (%s)"
 msgstr "%s (%s)"
 
-#: ../gtk/gtkfontbutton.c:145
-#: ../gtk/gtkfontbutton.c:267
+#: ../gtk/gtkfontbutton.c:145 ../gtk/gtkfontbutton.c:267
 msgid "Pick a Font"
 msgstr "اختر خطاً"
 
@@ -1900,7 +1892,7 @@ msgstr "قيمة _جاما"
 msgid "Error loading icon: %s"
 msgstr "خطأ عند تحميل الأيقونة: %s"
 
-#: ../gtk/gtkicontheme.c:1318
+#: ../gtk/gtkicontheme.c:1319
 #, c-format
 msgid ""
 "Could not find the icon '%s'. The '%s' theme\n"
@@ -1913,12 +1905,12 @@ msgstr ""
 "يمكنك تلقي نسخة من:\n"
 "\t%s"
 
-#: ../gtk/gtkicontheme.c:1387
+#: ../gtk/gtkicontheme.c:1388
 #, c-format
 msgid "Icon '%s' not present in theme"
 msgstr "الأيقونة '%s' غير موجودة في السِمة"
 
-#: ../gtk/gtkimmodule.c:407
+#: ../gtk/gtkimmodule.c:421
 msgid "Default"
 msgstr "الإفتراضي"
 
@@ -1988,8 +1980,7 @@ msgstr "_عجلة:"
 msgid "none"
 msgstr "لا شيء"
 
-#: ../gtk/gtkinputdialog.c:610
-#: ../gtk/gtkinputdialog.c:646
+#: ../gtk/gtkinputdialog.c:610 ../gtk/gtkinputdialog.c:646
 msgid "(disabled)"
 msgstr "(معطّل)"
 
@@ -2044,16 +2035,15 @@ msgstr "خيارات GTK+"
 msgid "Show GTK+ Options"
 msgstr "اعرض خيارات GTK+"
 
-#: ../gtk/gtknotebook.c:772
+#: ../gtk/gtknotebook.c:773
 msgid "Arrow spacing"
 msgstr "مباعدة الأسهم"
 
-#: ../gtk/gtknotebook.c:773
+#: ../gtk/gtknotebook.c:774
 msgid "Scroll arrow spacing"
 msgstr "المباعدة بواسطة السهم القابل للف"
 
-#: ../gtk/gtknotebook.c:4222
-#: ../gtk/gtknotebook.c:6801
+#: ../gtk/gtknotebook.c:4260 ../gtk/gtknotebook.c:6805
 #, c-format
 msgid "Page %u"
 msgstr "صفحة %u"
@@ -2064,11 +2054,11 @@ msgstr "صفحة %u"
 #. * Do *not* translate it to "predefinito:mm", if it
 #. * it isn't default:mm or default:inch it will not work
 #.
-#: ../gtk/gtkpagesetupunixdialog.c:153
+#: ../gtk/gtkpagesetupunixdialog.c:154
 msgid "default:mm"
 msgstr "default:mm"
 
-#: ../gtk/gtkpagesetupunixdialog.c:338
+#: ../gtk/gtkpagesetupunixdialog.c:339
 msgid ""
 "<b>Any Printer</b>\n"
 "For portable documents"
@@ -2076,17 +2066,15 @@ msgstr ""
 "<b>أي طابعة</b>\n"
 "للوثائق القابلة للنقل"
 
-#: ../gtk/gtkpagesetupunixdialog.c:906
-#: ../gtk/gtkpagesetupunixdialog.c:1420
+#: ../gtk/gtkpagesetupunixdialog.c:908 ../gtk/gtkpagesetupunixdialog.c:1424
 msgid "mm"
 msgstr "مم"
 
-#: ../gtk/gtkpagesetupunixdialog.c:908
-#: ../gtk/gtkpagesetupunixdialog.c:1418
+#: ../gtk/gtkpagesetupunixdialog.c:910 ../gtk/gtkpagesetupunixdialog.c:1422
 msgid "inch"
 msgstr "بوصة"
 
-#: ../gtk/gtkpagesetupunixdialog.c:927
+#: ../gtk/gtkpagesetupunixdialog.c:929
 #, c-format
 msgid ""
 "Margins:\n"
@@ -2101,136 +2089,134 @@ msgstr ""
 "فوق: %s %s\n"
 "أسفل: %s %s"
 
-#: ../gtk/gtkpagesetupunixdialog.c:978
+#: ../gtk/gtkpagesetupunixdialog.c:980
 msgid "Manage Custom Sizes..."
 msgstr "أدِر المقاسات المخصّصة..."
 
-#: ../gtk/gtkpagesetupunixdialog.c:1026
+#: ../gtk/gtkpagesetupunixdialog.c:1028
 msgid "_Format for:"
 msgstr "_صيغة لـ:"
 
-#: ../gtk/gtkpagesetupunixdialog.c:1047
+#: ../gtk/gtkpagesetupunixdialog.c:1049
 msgid "_Paper size:"
 msgstr "_مقاس الورقة:"
 
-#: ../gtk/gtkpagesetupunixdialog.c:1083
+#: ../gtk/gtkpagesetupunixdialog.c:1085
 msgid "_Orientation:"
 msgstr "الإ_تجاه:"
 
-#: ../gtk/gtkpagesetupunixdialog.c:1148
-#: ../gtk/gtkprintunixdialog.c:2106
+#: ../gtk/gtkpagesetupunixdialog.c:1150 ../gtk/gtkprintunixdialog.c:2118
 msgid "Page Setup"
 msgstr "إعداد الصفحة"
 
-#: ../gtk/gtkpagesetupunixdialog.c:1465
+#: ../gtk/gtkpagesetupunixdialog.c:1469
 msgid "Margins from Printer..."
 msgstr "الحواف من الطابعة..."
 
-#: ../gtk/gtkpagesetupunixdialog.c:1625
+#: ../gtk/gtkpagesetupunixdialog.c:1629
 #, c-format
 msgid "Custom Size %d"
 msgstr "مقاس مخصّص %d"
 
-#: ../gtk/gtkpagesetupunixdialog.c:1853
+#: ../gtk/gtkpagesetupunixdialog.c:1858
 msgid "Manage Custom Sizes"
 msgstr "أدِر المقاسات المخصّصة"
 
-#: ../gtk/gtkpagesetupunixdialog.c:1949
+#: ../gtk/gtkpagesetupunixdialog.c:1954
 msgid "_Width:"
 msgstr "_عرض:"
 
-#: ../gtk/gtkpagesetupunixdialog.c:1961
+#: ../gtk/gtkpagesetupunixdialog.c:1966
 msgid "_Height:"
 msgstr "ا_رتفاع:"
 
-#: ../gtk/gtkpagesetupunixdialog.c:1973
+#: ../gtk/gtkpagesetupunixdialog.c:1978
 msgid "Paper Size"
 msgstr "مقاس الورقة"
 
-#: ../gtk/gtkpagesetupunixdialog.c:1983
+#: ../gtk/gtkpagesetupunixdialog.c:1988
 msgid "_Top:"
 msgstr "_فوق:"
 
-#: ../gtk/gtkpagesetupunixdialog.c:1995
+#: ../gtk/gtkpagesetupunixdialog.c:2000
 msgid "_Bottom:"
 msgstr "أ_سفل:"
 
-#: ../gtk/gtkpagesetupunixdialog.c:2007
+#: ../gtk/gtkpagesetupunixdialog.c:2012
 msgid "_Left:"
 msgstr "_يسار:"
 
-#: ../gtk/gtkpagesetupunixdialog.c:2019
+#: ../gtk/gtkpagesetupunixdialog.c:2024
 msgid "_Right:"
 msgstr "_يمين:"
 
-#: ../gtk/gtkpagesetupunixdialog.c:2060
+#: ../gtk/gtkpagesetupunixdialog.c:2065
 msgid "Paper Margins"
 msgstr "حواف الورق"
 
-#: ../gtk/gtkprinteroptionwidget.c:679
+#: ../gtk/gtkprinteroptionwidget.c:687
 msgid "Not available"
 msgstr "غير متوفر"
 
-#: ../gtk/gtkprinteroptionwidget.c:792
+#: ../gtk/gtkprinteroptionwidget.c:800
 msgid "_Save in folder:"
 msgstr "ا_حفظ في مجلّد:"
 
 #. translators, strip the prefix up to and including the first |
-#: ../gtk/gtkprintoperation.c:1475
+#: ../gtk/gtkprintoperation.c:1476
 msgid "print operation status|Initial state"
 msgstr "الحالة المبدئية"
 
 #. translators, strip the prefix up to and including the first |
-#: ../gtk/gtkprintoperation.c:1477
+#: ../gtk/gtkprintoperation.c:1478
 msgid "print operation status|Preparing to print"
 msgstr "جارِ التحضير للطبع"
 
 #. translators, strip the prefix up to and including the first |
-#: ../gtk/gtkprintoperation.c:1479
+#: ../gtk/gtkprintoperation.c:1480
 msgid "print operation status|Generating data"
 msgstr "جارِ توليد البيانات"
 
 #. translators, strip the prefix up to and including the first |
-#: ../gtk/gtkprintoperation.c:1481
+#: ../gtk/gtkprintoperation.c:1482
 msgid "print operation status|Sending data"
 msgstr "جارِ إرسال البيانات"
 
 #. translators, strip the prefix up to and including the first |
-#: ../gtk/gtkprintoperation.c:1483
+#: ../gtk/gtkprintoperation.c:1484
 msgid "print operation status|Waiting"
 msgstr "جارِ الإنتظار"
 
 #. translators, strip the prefix up to and including the first |
-#: ../gtk/gtkprintoperation.c:1485
+#: ../gtk/gtkprintoperation.c:1486
 msgid "print operation status|Blocking on issue"
 msgstr "موقّفة لسبب"
 
 #. translators, strip the prefix up to and including the first |
-#: ../gtk/gtkprintoperation.c:1487
+#: ../gtk/gtkprintoperation.c:1488
 msgid "print operation status|Printing"
 msgstr "جارِ الطبع"
 
 #. translators, strip the prefix up to and including the first |
-#: ../gtk/gtkprintoperation.c:1489
+#: ../gtk/gtkprintoperation.c:1490
 msgid "print operation status|Finished"
 msgstr "انتهى"
 
 #. translators, strip the prefix up to and including the first |
-#: ../gtk/gtkprintoperation.c:1491
+#: ../gtk/gtkprintoperation.c:1492
 msgid "print operation status|Finished with error"
 msgstr "انتهى مع أخطاء"
 
-#: ../gtk/gtkprintoperation.c:1966
+#: ../gtk/gtkprintoperation.c:1967
 #, c-format
 msgid "Preparing %d"
 msgstr "جارِ تحضير %d"
 
-#: ../gtk/gtkprintoperation.c:1968
-#: ../gtk/gtkprintoperation.c:2224
+#: ../gtk/gtkprintoperation.c:1969 ../gtk/gtkprintoperation.c:2225
 msgid "Preparing"
 msgstr "جارِ التحضير"
 
-#: ../gtk/gtkprintoperation.c:1971
+#: ../gtk/gtkprintoperation.c:1972
 #, c-format
 msgid "Printing %d"
 msgstr "جارِ طباعة %d"
@@ -2243,221 +2229,219 @@ msgstr "حدث خطأ عند تشغيل المعاينة"
 msgid "Error printing"
 msgstr "حدث خطأ عند الطبع"
 
-#: ../gtk/gtkprintoperation-unix.c:375
-#: ../gtk/gtkprintoperation-win32.c:1390
+#: ../gtk/gtkprintoperation-unix.c:375 ../gtk/gtkprintoperation-win32.c:1394
 msgid "Application"
 msgstr "تطبيق"
 
-#: ../gtk/gtkprintoperation-win32.c:563
+#: ../gtk/gtkprintoperation-win32.c:564
 msgid "Printer offline"
 msgstr "الطابعة غير متصلة"
 
-#: ../gtk/gtkprintoperation-win32.c:565
+#: ../gtk/gtkprintoperation-win32.c:566
 msgid "Out of paper"
 msgstr "نَفَذ الورق"
 
-#: ../gtk/gtkprintoperation-win32.c:567
+#: ../gtk/gtkprintoperation-win32.c:568
 msgid "Paused"
 msgstr "أَوقِفَ مؤقتاً"
 
-#: ../gtk/gtkprintoperation-win32.c:569
+#: ../gtk/gtkprintoperation-win32.c:570
 msgid "Need user intervention"
 msgstr "بحاجة لتدخّل المستخدم"
 
-#: ../gtk/gtkprintoperation-win32.c:669
+#: ../gtk/gtkprintoperation-win32.c:670
 msgid "Custom size"
 msgstr "مقاس مخصصّ"
 
-#: ../gtk/gtkprintoperation-win32.c:1480
-#: ../gtk/gtkprintoperation-win32.c:1503
-#: ../gtk/gtkprintoperation-win32.c:1551
+#: ../gtk/gtkprintoperation-win32.c:1485 ../gtk/gtkprintoperation-win32.c:1508
+#: ../gtk/gtkprintoperation-win32.c:1556
 msgid "Not enough free memory"
 msgstr "الذاكرة الخالية لا تكفي"
 
-#: ../gtk/gtkprintoperation-win32.c:1556
+#: ../gtk/gtkprintoperation-win32.c:1561
 msgid "Invalid argument to PrintDlgEx"
 msgstr "معامل غير صحيح لـ PrintDlgEx"
 
-#: ../gtk/gtkprintoperation-win32.c:1561
+#: ../gtk/gtkprintoperation-win32.c:1566
 msgid "Invalid pointer to PrintDlgEx"
 msgstr "مؤشّر غير صحيح ل PrintDlgEx"
 
-#: ../gtk/gtkprintoperation-win32.c:1566
+#: ../gtk/gtkprintoperation-win32.c:1571
 msgid "Invalid handle to PrintDlgEx"
 msgstr "مقبض غير صحيح ل PrintDlgEx"
 
-#: ../gtk/gtkprintoperation-win32.c:1571
+#: ../gtk/gtkprintoperation-win32.c:1576
 msgid "Unspecified error"
 msgstr "خطأ غير محدد"
 
-#: ../gtk/gtkprintoperation-win32.c:1622
+#: ../gtk/gtkprintoperation-win32.c:1627
 msgid "Error from StartDoc"
 msgstr "خطأ من StartDoc "
 
-#: ../gtk/gtkprintunixdialog.c:1450
+#: ../gtk/gtkprintunixdialog.c:1462
 msgid "Printer"
 msgstr "الطابعة"
 
-#: ../gtk/gtkprintunixdialog.c:1458
+#: ../gtk/gtkprintunixdialog.c:1470
 msgid "Location"
 msgstr "الموقع"
 
-#: ../gtk/gtkprintunixdialog.c:1467
+#: ../gtk/gtkprintunixdialog.c:1479
 msgid "Status"
 msgstr "الحالة"
 
-#: ../gtk/gtkprintunixdialog.c:1489
+#: ../gtk/gtkprintunixdialog.c:1501
 msgid "Print Pages"
 msgstr "اطبع الصفحات"
 
-#: ../gtk/gtkprintunixdialog.c:1493
+#: ../gtk/gtkprintunixdialog.c:1505
 msgid "_All"
 msgstr "ال_كل"
 
-#: ../gtk/gtkprintunixdialog.c:1500
+#: ../gtk/gtkprintunixdialog.c:1512
 msgid "C_urrent"
 msgstr "ال_حالي"
 
-#: ../gtk/gtkprintunixdialog.c:1509
+#: ../gtk/gtkprintunixdialog.c:1521
 msgid "Ra_nge: "
 msgstr "ال_مدى:"
 
-#: ../gtk/gtkprintunixdialog.c:1527
+#: ../gtk/gtkprintunixdialog.c:1539
 msgid "Copies"
 msgstr "نُسَخْ"
 
 #. FIXME chpe: too much space between Copies and spinbutton, put those 2 in a hbox and make it span 2 columns
-#: ../gtk/gtkprintunixdialog.c:1532
+#: ../gtk/gtkprintunixdialog.c:1544
 msgid "Copie_s:"
 msgstr "نُسَ_خ:"
 
-#: ../gtk/gtkprintunixdialog.c:1550
+#: ../gtk/gtkprintunixdialog.c:1562
 msgid "C_ollate"
 msgstr "_صفحة بصفحة"
 
-#: ../gtk/gtkprintunixdialog.c:1558
+#: ../gtk/gtkprintunixdialog.c:1570
 msgid "_Reverse"
 msgstr "م_قلوب"
 
-#: ../gtk/gtkprintunixdialog.c:1575
+#: ../gtk/gtkprintunixdialog.c:1587
 msgid "General"
 msgstr "عامّ"
 
-#: ../gtk/gtkprintunixdialog.c:1962
+#: ../gtk/gtkprintunixdialog.c:1974
 msgid "Layout"
 msgstr "التصميم"
 
-#: ../gtk/gtkprintunixdialog.c:1966
+#: ../gtk/gtkprintunixdialog.c:1978
 #: ../modules/printbackends/file/gtkprintbackendfile.c:493
 msgid "Pages per _sheet:"
 msgstr "الصفحات لكل _ورقة :"
 
-#: ../gtk/gtkprintunixdialog.c:1982
+#: ../gtk/gtkprintunixdialog.c:1994
 msgid "T_wo-sided:"
 msgstr "ذو _وجهين:"
 
-#: ../gtk/gtkprintunixdialog.c:1997
+#: ../gtk/gtkprintunixdialog.c:2009
 msgid "_Only print:"
 msgstr "اطبع _فقط:"
 
 #. In enum order
-#: ../gtk/gtkprintunixdialog.c:2012
+#: ../gtk/gtkprintunixdialog.c:2024
 msgid "All sheets"
 msgstr "كل الصفحات"
 
-#: ../gtk/gtkprintunixdialog.c:2013
+#: ../gtk/gtkprintunixdialog.c:2025
 msgid "Even sheets"
 msgstr "الصفحات الزوجية"
 
-#: ../gtk/gtkprintunixdialog.c:2014
+#: ../gtk/gtkprintunixdialog.c:2026
 msgid "Odd sheets"
 msgstr "الصفحات الفردية"
 
-#: ../gtk/gtkprintunixdialog.c:2017
+#: ../gtk/gtkprintunixdialog.c:2029
 msgid "Sc_ale:"
 msgstr "_مقياس:"
 
-#: ../gtk/gtkprintunixdialog.c:2044
+#: ../gtk/gtkprintunixdialog.c:2056
 msgid "Paper"
 msgstr "ورق"
 
-#: ../gtk/gtkprintunixdialog.c:2048
+#: ../gtk/gtkprintunixdialog.c:2060
 msgid "Paper _type:"
 msgstr "نوع الورق:"
 
-#: ../gtk/gtkprintunixdialog.c:2063
+#: ../gtk/gtkprintunixdialog.c:2075
 msgid "Paper _source:"
 msgstr "_مصدر الورق:"
 
-#: ../gtk/gtkprintunixdialog.c:2078
+#: ../gtk/gtkprintunixdialog.c:2090
 msgid "Output t_ray:"
 msgstr "_لوحة الخرْج:"
 
-#: ../gtk/gtkprintunixdialog.c:2129
+#: ../gtk/gtkprintunixdialog.c:2141
 msgid "Job Details"
 msgstr "تفاصيل المهمّة"
 
-#: ../gtk/gtkprintunixdialog.c:2135
+#: ../gtk/gtkprintunixdialog.c:2147
 msgid "Pri_ority:"
 msgstr "الأو_لوية:"
 
-#: ../gtk/gtkprintunixdialog.c:2150
+#: ../gtk/gtkprintunixdialog.c:2162
 msgid "_Billing info:"
 msgstr " _معلومات الدفع:"
 
-#: ../gtk/gtkprintunixdialog.c:2168
+#: ../gtk/gtkprintunixdialog.c:2180
 msgid "Print Document"
 msgstr "اطبع المستند"
 
-#: ../gtk/gtkprintunixdialog.c:2174
+#: ../gtk/gtkprintunixdialog.c:2186
 msgid "_Now"
 msgstr "الآ_ن"
 
-#: ../gtk/gtkprintunixdialog.c:2181
+#: ../gtk/gtkprintunixdialog.c:2193
 msgid "A_t:"
 msgstr "_في:"
 
-#: ../gtk/gtkprintunixdialog.c:2196
+#: ../gtk/gtkprintunixdialog.c:2208
 msgid "On _hold"
 msgstr "تحت الإن_تظار"
 
-#: ../gtk/gtkprintunixdialog.c:2215
+#: ../gtk/gtkprintunixdialog.c:2227
 msgid "Add Cover Page"
 msgstr "أضِف صفحة غلاف"
 
-#: ../gtk/gtkprintunixdialog.c:2221
+#: ../gtk/gtkprintunixdialog.c:2233
 msgid "Be_fore:"
 msgstr "ق_بل:"
 
-#: ../gtk/gtkprintunixdialog.c:2236
+#: ../gtk/gtkprintunixdialog.c:2248
 msgid "_After:"
 msgstr "ب_عد:"
 
-#: ../gtk/gtkprintunixdialog.c:2251
+#: ../gtk/gtkprintunixdialog.c:2263
 msgid "Job"
 msgstr "مَهمّة"
 
-#: ../gtk/gtkprintunixdialog.c:2317
+#: ../gtk/gtkprintunixdialog.c:2329
 msgid "Advanced"
 msgstr "متقدّم"
 
-#: ../gtk/gtkprintunixdialog.c:2352
+#: ../gtk/gtkprintunixdialog.c:2364
 msgid "Image Quality"
 msgstr "جودة الصورة"
 
-#: ../gtk/gtkprintunixdialog.c:2355
+#: ../gtk/gtkprintunixdialog.c:2367
 msgid "Color"
 msgstr "اللون"
 
-#: ../gtk/gtkprintunixdialog.c:2358
+#: ../gtk/gtkprintunixdialog.c:2370
 msgid "Finishing"
 msgstr "جارِ الإنهاء"
 
-#: ../gtk/gtkprintunixdialog.c:2368
+#: ../gtk/gtkprintunixdialog.c:2380
 msgid "Some of the settings in the dialog conflict"
 msgstr "بعض الإعدادات في الحوار تتعارض"
 
-#: ../gtk/gtkprintunixdialog.c:2391
+#: ../gtk/gtkprintunixdialog.c:2403
 msgid "Print"
 msgstr "اطبع"
 
@@ -2474,8 +2458,7 @@ msgstr "زرّ ال radio tool الذي ينتمي هذا الزرّ إلى مج
 msgid "Unable to find include file: \"%s\""
 msgstr "لا يمكن إيجاد ملف الاحتواء: \"%s\""
 
-#: ../gtk/gtkrc.c:3471
-#: ../gtk/gtkrc.c:3474
+#: ../gtk/gtkrc.c:3471 ../gtk/gtkrc.c:3474
 #, c-format
 msgid "Unable to locate image file in pixmap_path: \"%s\""
 msgstr "لا يمكن إيجاد موقع ملف الصورة في pixmap_path: \"%s\""
@@ -2484,8 +2467,7 @@ msgstr "لا يمكن إيجاد موقع ملف الصورة في pixmap_path: 
 msgid "Select which type of documents are shown"
 msgstr "اختر أنواع المستندات التي ستعرض"
 
-#: ../gtk/gtkrecentchooserdefault.c:1123
-#: ../gtk/gtkrecentchooserdefault.c:1160
+#: ../gtk/gtkrecentchooserdefault.c:1123 ../gtk/gtkrecentchooserdefault.c:1160
 #, c-format
 msgid "No item for URI '%s' found"
 msgstr "لا يوجد عنصر للعنوان '%s'"
@@ -2514,35 +2496,31 @@ msgstr "ا_مسح القائمة"
 msgid "Show _Private Resources"
 msgstr "أظهِر الموارِد ال_خاصة"
 
-#: ../gtk/gtkrecentchoosermenu.c:431
-#: ../gtk/gtkrecentchoosermenu.c:487
+#: ../gtk/gtkrecentchoosermenu.c:463 ../gtk/gtkrecentchoosermenu.c:519
 #, c-format
 msgid "No recently used resource found with URI `%s'"
 msgstr "لا توجد موارد حديثة الإستخدام بالعنوان  (URI) `%s'"
 
-#: ../gtk/gtkrecentchoosermenu.c:511
-#: ../gtk/gtkrecentchoosermenu.c:519
+#: ../gtk/gtkrecentchoosermenu.c:543 ../gtk/gtkrecentchoosermenu.c:551
 #, c-format
 msgid "This function is not implemented for widgets of class '%s'"
 msgstr "هذه الوظيفة غير مدعومة للنوع '%s'"
 
-#: ../gtk/gtkrecentchoosermenu.c:859
+#: ../gtk/gtkrecentchoosermenu.c:891
 #, c-format
 msgid "Open '%s'"
 msgstr "افتح '%s'"
 
-#: ../gtk/gtkrecentchoosermenu.c:891
+#: ../gtk/gtkrecentchoosermenu.c:923
 msgid "Unknown item"
 msgstr "عنصر مجهول"
 
-#: ../gtk/gtkrecentchoosermenu.c:992
+#: ../gtk/gtkrecentchoosermenu.c:1032
 msgid "No items found"
 msgstr "لم يُعثر على أي عنصر"
 
-#: ../gtk/gtkrecentmanager.c:1059
-#: ../gtk/gtkrecentmanager.c:1209
-#: ../gtk/gtkrecentmanager.c:1219
-#: ../gtk/gtkrecentmanager.c:1278
+#: ../gtk/gtkrecentmanager.c:1059 ../gtk/gtkrecentmanager.c:1209
+#: ../gtk/gtkrecentmanager.c:1219 ../gtk/gtkrecentmanager.c:1278
 #, c-format
 msgid "Unable to find an item with URI '%s'"
 msgstr "لا يُمكن إيجاد عنصر بالعنوان (URI) '%s'"
@@ -2991,7 +2969,7 @@ msgstr "شارة بدء غير متوقّعة '%s' عند السطر %d الرم
 msgid "Unexpected character data on line %d char %d"
 msgstr "بيانات رمز غير متوقّعة عند السطر %d الرمز %d"
 
-#: ../gtk/gtkuimanager.c:2228
+#: ../gtk/gtkuimanager.c:2240
 msgid "Empty"
 msgstr "فارغ"
 
@@ -3451,8 +3429,7 @@ msgid "paper size|10x14"
 msgstr "10x14"
 
 #. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:187
-#: ../gtk/paper_names_offsets.c:189
+#: ../gtk/paper_names_offsets.c:187 ../gtk/paper_names_offsets.c:189
 msgid "paper size|10x15"
 msgstr "10x15"
 
@@ -3861,92 +3838,92 @@ msgstr "فيتنامية (VIQR)"
 msgid "X Input Method"
 msgstr "طريقة إدخال X"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1455
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1456
 msgid "Two Sided"
 msgstr "ذو جانبين"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1456
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1457
 msgid "Paper Type"
 msgstr "نوع الورق"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1457
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1458
 msgid "Paper Source"
 msgstr "مصدر الورق"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1458
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1459
 msgid "Output Tray"
 msgstr "لوحة الخرْج"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1467
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1468
 msgid "One Sided"
 msgstr "أحادي الجانب"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1468
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:1469
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1473
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1470
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1474
 msgid "Auto Select"
 msgstr "انتقاء تلقائي"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1470
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:1471
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:1472
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1934
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1473
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1937
 msgid "Printer Default"
 msgstr "إفتراضي الطابعة"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2127
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2130
 msgid "Urgent"
 msgstr "عاجِل"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2127
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2130
 msgid "High"
 msgstr "عال"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2127
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2130
 msgid "Medium"
 msgstr "متوسط"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2127
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2130
 msgid "Low"
 msgstr "منخفض"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2129
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2132
 msgid "None"
 msgstr "لا شيء"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2129
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2132
 msgid "Classified"
 msgstr "مصنّف"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2129
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2132
 msgid "Confidential"
 msgstr "سرّي"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2129
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2132
 msgid "Secret"
 msgstr "سر"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2129
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2132
 msgid "Standard"
 msgstr "معياري"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2129
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2132
 msgid "Top Secret"
 msgstr "سرّي للغاية"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2129
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2132
 msgid "Unclassified"
 msgstr "غير مصنّف"
 
-#: ../modules/printbackends/lpr/gtkprintbackendlpr.c:397
+#: ../modules/printbackends/lpr/gtkprintbackendlpr.c:399
 msgid "Print to LPR"
 msgstr "اطبع لـ LPR"
 
-#: ../modules/printbackends/lpr/gtkprintbackendlpr.c:422
+#: ../modules/printbackends/lpr/gtkprintbackendlpr.c:424
 msgid "Pages Per Sheet"
 msgstr "صفحات بكل ورقة "
 
-#: ../modules/printbackends/lpr/gtkprintbackendlpr.c:429
+#: ../modules/printbackends/lpr/gtkprintbackendlpr.c:431
 msgid "Command Line"
 msgstr "سطر الأوامر"
 
@@ -3972,7 +3949,7 @@ msgstr "PostScript"
 msgid "File"
 msgstr "ملف"
 
-#: ../modules/printbackends/file/gtkprintbackendfile.c:542
+#: ../modules/printbackends/file/gtkprintbackendfile.c:543
 msgid "_Output format"
 msgstr "صيغة ال_خرْج"
 
@@ -4015,14 +3992,12 @@ msgstr "حدث خطأ مجهول عند محاولة فتح %s"
 msgid "No deserialize function found for format %s"
 msgstr "لا وظيفة تفكيك موجودة للنوع %s"
 
-#: ../gtk/gtktextbufferserialize.c:796
-#: ../gtk/gtktextbufferserialize.c:822
+#: ../gtk/gtktextbufferserialize.c:796 ../gtk/gtktextbufferserialize.c:822
 #, c-format
 msgid "Both \"id\" and \"name\" were found on the <%s> element"
 msgstr "كلا \"id\" و \"name\" لم يوجدا في العنصر <%s>"
 
-#: ../gtk/gtktextbufferserialize.c:806
-#: ../gtk/gtktextbufferserialize.c:832
+#: ../gtk/gtktextbufferserialize.c:806 ../gtk/gtktextbufferserialize.c:832
 #, c-format
 msgid "The attribute \"%s\" was found twice on the <%s> element"
 msgstr "الصفة \"%s\" معادة مرتان في نفس العنصر <%s>"
@@ -4042,8 +4017,7 @@ msgstr "العنصر <%s> ليس له لا صفة \"name\" ولا \"id\""
 msgid "Attribute \"%s\" repeated twice on the same <%s> element"
 msgstr "الصفة \"%s\" مكررة مرتان في نفس العنصر <%s>"
 
-#: ../gtk/gtktextbufferserialize.c:961
-#: ../gtk/gtktextbufferserialize.c:986
+#: ../gtk/gtktextbufferserialize.c:961 ../gtk/gtktextbufferserialize.c:986
 #, c-format
 msgid "Attribute \"%s\" is invalid on <%s> element in this context"
 msgstr "الصفة \"%s\" خاطئة في العنصر <%s> في هذا السياق"
@@ -4062,10 +4036,8 @@ msgstr "شارة مجهولة موجودة و لا يمكن إنشاء الشا�
 msgid "Tag \"%s\" does not exist in buffer and tags can not be created."
 msgstr "الشارة \"%s\" غير موجودة في النص و لا يمكن إنشاء الشارات."
 
-#: ../gtk/gtktextbufferserialize.c:1144
-#: ../gtk/gtktextbufferserialize.c:1219
-#: ../gtk/gtktextbufferserialize.c:1320
-#: ../gtk/gtktextbufferserialize.c:1394
+#: ../gtk/gtktextbufferserialize.c:1144 ../gtk/gtktextbufferserialize.c:1219
+#: ../gtk/gtktextbufferserialize.c:1320 ../gtk/gtktextbufferserialize.c:1394
 #, c-format
 msgid "Element <%s> is not allowed below <%s>"
 msgstr "العنصر <%s> غير مسموح به تحت <%s>"
@@ -4105,8 +4077,7 @@ msgstr "الشارة \"%s\" لها خاصية غير صالحة \"%s\""
 msgid "Outermost element in text must be <text_view_markup> not <%s>"
 msgstr "العنصر العلوي في نص يجب أن يكون <text_view_markup> و ليس <%s>"
 
-#: ../gtk/gtktextbufferserialize.c:1358
-#: ../gtk/gtktextbufferserialize.c:1374
+#: ../gtk/gtktextbufferserialize.c:1358 ../gtk/gtktextbufferserialize.c:1374
 #, c-format
 msgid "A <%s> element has already been specified"
 msgstr "عنصر <%s> تم تحديده بالفعل"
