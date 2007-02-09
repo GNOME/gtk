@@ -1,3 +1,30 @@
+2007-02-09  Emmanuele Bassi  <ebassi@gnome.org>
+
+	* gtk/gtkrecentchoosermenu.c: Add support for both prepending
+	and appending custom menu items.
+
+	(gtk_recent_chooser_menu_constructor): Add a placeholder menu
+	item for the empty menu case, and for giving us a starting
+	point for the recent items populating process.
+
+	(gtk_recent_chooser_menu_insert_item),
+	(gtk_recent_chooser_menu_dispose_items): Insert an item at
+	the position following the placeholder (and find that position
+	if needed).
+
+	(idle_populate_func), (idle_populate_clean_up): Show the
+	placeholder menu item, instead of creating one each time.
+
+	(gtk_recent_chooser_menu_populate): Kill some indirections
+	and hide the placeholder before populating the menu.
+
+	(set_recent_manager): Remember to remove the idle population
+	source if the manager changes.
+
+	* tests/testrecentchoosermenu.c: Test the appending and
+	prepending of the menu items to the recent chooser menu
+	widget.
+
 2007-02-08  Emmanuele Bassi  <ebassi@gnome.org>
 
 	* gtk/gtkrecentchoosermenu.c (idle_populate_func): Keep count

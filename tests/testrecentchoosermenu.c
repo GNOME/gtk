@@ -56,6 +56,8 @@ static GtkWidget *
 create_recent_chooser_menu (void)
 {
   GtkWidget *menu;
+  GtkRecentFilter *filter;
+  GtkWidget *menuitem;
   
   menu = gtk_recent_chooser_menu_new_for_manager (manager);
 
@@ -66,11 +68,37 @@ create_recent_chooser_menu (void)
   gtk_recent_chooser_menu_set_show_numbers (GTK_RECENT_CHOOSER_MENU (menu),
                                             TRUE);
 
+  filter = gtk_recent_filter_new ();
+  gtk_recent_filter_set_name (filter, "Gedit files");
+  gtk_recent_filter_add_application (filter, "gedit");
+  gtk_recent_chooser_add_filter (GTK_RECENT_CHOOSER (menu), filter);
+  gtk_recent_chooser_set_filter (GTK_RECENT_CHOOSER (menu), filter);
+
   g_signal_connect (menu, "item-activated",
                     G_CALLBACK (item_activated_cb),
                     NULL);
 
   gtk_widget_show (menu);
+
+  menuitem = gtk_separator_menu_item_new ();
+  gtk_menu_shell_prepend (GTK_MENU_SHELL (menu), menuitem);
+  gtk_widget_show (menuitem);
+
+  menuitem = gtk_menu_item_new_with_label ("Test prepend");
+  gtk_menu_shell_prepend (GTK_MENU_SHELL (menu), menuitem);
+  gtk_widget_show (menuitem);
+
+  menuitem = gtk_separator_menu_item_new ();
+  gtk_menu_shell_append (GTK_MENU_SHELL (menu), menuitem);
+  gtk_widget_show (menuitem);
+
+  menuitem = gtk_menu_item_new_with_label ("Test append");
+  gtk_menu_shell_append (GTK_MENU_SHELL (menu), menuitem);
+  gtk_widget_show (menuitem);
+
+  menuitem = gtk_image_menu_item_new_from_stock (GTK_STOCK_CLEAR, NULL);
+  gtk_menu_shell_append (GTK_MENU_SHELL (menu), menuitem);
+  gtk_widget_show (menuitem);
 
   return menu;
 }
