@@ -1,3 +1,9 @@
+2007-02-10  Emmanuele Bassi  <ebassi@gnome.org>
+
+	* gtk/gtkrecentchoosermenu.c: Fix the english of the comment;
+	remove some type checking; use better variable naming for the
+	internal menu item markers.
+
 2007-02-09  Emmanuele Bassi  <ebassi@gnome.org>
 
 	* gtk/gtkrecentchoosermenu.c: Add support for both prepending

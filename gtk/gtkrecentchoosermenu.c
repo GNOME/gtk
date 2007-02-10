@@ -321,15 +321,15 @@ gtk_recent_chooser_menu_constructor (GType                  type,
   
   g_assert (priv->manager);
 
-  /* we create a placeholder menuitem, to be used in the case
-   * were the menu is empty. this placeholder will stay around
+  /* we create a placeholder menuitem, to be used in case
+   * the menu is empty. this placeholder will stay around
    * for the entire lifetime of the menu, and we just hide it
    * when it's not used. we have to do this, and do it here,
    * because we need a marker for the beginning of the recent
    * items list, so that we can insert the new items at the
-   * right place when populating the menu, in case the user
-   * appended or prepended custom menuitems to the recent
-   * chooser menu widget.
+   * right place when idly populating the menu in case the
+   * user appended or prepended custom menu items to the
+   * recent chooser menu widget.
    */
   priv->placeholder = gtk_menu_item_new_with_label (_("No items found"));
   gtk_widget_set_sensitive (priv->placeholder, FALSE);
@@ -999,23 +999,27 @@ gtk_recent_chooser_menu_insert_item (GtkRecentChooserMenu *menu,
 {
   GtkRecentChooserMenuPrivate *priv = menu->priv;
   gint real_position;
-  GList *children, *l;
 
   if (priv->first_recent_item_pos == -1)
     {
+      GList *children, *l;
+
       children = gtk_container_get_children (GTK_CONTAINER (menu));
+
       for (real_position = 0, l = children;
            l != NULL;
            real_position += 1, l = l->next)
         {
-          GtkWidget *child = l->data;
-          gint mark = 0;
+          GObject *child = l->data;
+          gboolean is_placeholder = FALSE;
 
-          mark = GPOINTER_TO_INT (g_object_get_data (G_OBJECT (child),
-                                                     "gtk-recent-menu-placeholder"));
-          if (mark == 1)
+          is_placeholder =
+            GPOINTER_TO_INT (g_object_get_data (child, "gtk-recent-menu-placeholder"));
+
+          if (is_placeholder)
             break;
         }
+
       g_list_free (children);
       priv->first_recent_item_pos = real_position;
     }
@@ -1037,12 +1041,13 @@ gtk_recent_chooser_menu_dispose_items (GtkRecentChooserMenu *menu)
   for (l = children; l != NULL; l = l->next)
     {
       GtkWidget *menu_item = GTK_WIDGET (l->data);
-      gint mark = 0;
+      gboolean has_mark = FALSE;
       
       /* check for our mark, in order to remove just the items we own */
-      mark = GPOINTER_TO_INT (g_object_get_data (G_OBJECT (menu_item),
-                                                 "gtk-recent-menu-mark"));
-      if (mark == 1)
+      has_mark =
+        GPOINTER_TO_INT (g_object_get_data (G_OBJECT (menu_item), "gtk-recent-menu-mark"));
+
+      if (has_mark)
         {
           GtkRecentInfo *info;
           
@@ -1145,8 +1150,9 @@ idle_populate_func (gpointer data)
   pdata->displayed_items += 1;
       
   /* mark the menu item as one of our own */
-  g_object_set_data (G_OBJECT (item), "gtk-recent-menu-mark",
-      		     GINT_TO_POINTER (1));
+  g_object_set_data (G_OBJECT (item),
+                     "gtk-recent-menu-mark",
+      		     GINT_TO_POINTER (TRUE));
       
   /* attach the RecentInfo object to the menu item, and own a reference
    * to it, so that it will be destroyed with the menu item when it's
