@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 2.18\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-01-31 22:11+0000\n"
-"PO-Revision-Date: 2007-01-31 22:15+0000\n"
+"POT-Creation-Date: 2007-02-10 13:39+0000\n"
+"PO-Revision-Date: 2007-02-10 13:40+0000\n"
 "Last-Translator: Duarte Loreto <happyguy_pt@hotmail.com>\n"
 "Language-Team: Portuguese <gnome_pt@yahoogroups.com>\n"
 "MIME-Version: 1.0\n"
@@ -332,7 +332,7 @@ msgstr "O formato de imagem ICO"
 msgid "Error interpreting JPEG image file (%s)"
 msgstr "Erro ao interpretar ficheiro de imagem JPEG (%s)"
 
-#: ../gdk-pixbuf/io-jpeg.c:352
+#: ../gdk-pixbuf/io-jpeg.c:354
 msgid ""
 "Insufficient memory to load image, try exiting some applications to free "
 "memory"
@@ -340,17 +340,21 @@ msgstr ""
 "Memória insuficiente para ler imagem, tente terminar algumas aplicações para "
 "libertar memória"
 
-#: ../gdk-pixbuf/io-jpeg.c:386 ../gdk-pixbuf/io-jpeg.c:588
+#: ../gdk-pixbuf/io-jpeg.c:388 ../gdk-pixbuf/io-jpeg.c:590
 #, c-format
 msgid "Unsupported JPEG color space (%s)"
 msgstr "Espaço de cor JPEG não suportado (%s)"
 
-#: ../gdk-pixbuf/io-jpeg.c:484 ../gdk-pixbuf/io-jpeg.c:741
-#: ../gdk-pixbuf/io-jpeg.c:975 ../gdk-pixbuf/io-jpeg.c:984
+#: ../gdk-pixbuf/io-jpeg.c:486 ../gdk-pixbuf/io-jpeg.c:748
+#: ../gdk-pixbuf/io-jpeg.c:982 ../gdk-pixbuf/io-jpeg.c:991
 msgid "Couldn't allocate memory for loading JPEG file"
 msgstr "Incapaz de alocar memória para ler ficheiro JPEG"
 
-#: ../gdk-pixbuf/io-jpeg.c:926
+#: ../gdk-pixbuf/io-jpeg.c:724
+msgid "Transformed JPEG has zero width or height."
+msgstr "JPEG transformado tem largura ou altura zero."
+
+#: ../gdk-pixbuf/io-jpeg.c:933
 #, c-format
 msgid ""
 "JPEG quality must be a value between 0 and 100; value '%s' could not be "
@@ -359,14 +363,14 @@ msgstr ""
 "Qualidade JPEG tem de ser um valor entre 0 e 100; incapaz de parsear valor '%"
 "s'."
 
-#: ../gdk-pixbuf/io-jpeg.c:941
+#: ../gdk-pixbuf/io-jpeg.c:948
 #, c-format
 msgid ""
 "JPEG quality must be a value between 0 and 100; value '%d' is not allowed."
 msgstr ""
 "Qualidade JPEG tem de ser um valor entre 0 e 100; valor '%d' não é permitido."
 
-#: ../gdk-pixbuf/io-jpeg.c:1103
+#: ../gdk-pixbuf/io-jpeg.c:1110
 msgid "The JPEG image format"
 msgstr "O formato de imagem JPEG"
 
@@ -2550,7 +2554,7 @@ msgstr "Abrir '%s'"
 msgid "Unknown item"
 msgstr "Item desconhecido"
 
-#: ../gtk/gtkrecentchoosermenu.c:1032
+#: ../gtk/gtkrecentchoosermenu.c:1033 ../gtk/gtkrecentchoosermenu.c:1146
 msgid "No items found"
 msgstr "Nenhum item encontrado"
 
