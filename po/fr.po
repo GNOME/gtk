@@ -15,8 +15,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.10.7\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-01-23 20:17+0100\n"
-"PO-Revision-Date: 2007-01-23 20:27+0100\n"
+"POT-Creation-Date: 2007-02-11 03:54+0100\n"
+"PO-Revision-Date: 2007-02-11 03:54+0100\n"
 "Last-Translator: Stéphane Raimbault <stephane.raimbault@gmail.com>\n"
 "Language-Team: GNOME French Team <gnomefr@traduc.org>\n"
 "MIME-Version: 1.0\n"
@@ -40,14 +40,18 @@ msgstr "Le fichier image « %s » ne contient pas de données"
 #, c-format
 msgid ""
 "Failed to load image '%s': reason not known, probably a corrupt image file"
-msgstr "Impossible de charger l'image « %s » : raison inconnue, probablement un fichier d'image corrompu"
+msgstr ""
+"Impossible de charger l'image « %s » : raison inconnue, probablement un "
+"fichier d'image corrompu"
 
 #: ../gdk-pixbuf/gdk-pixbuf-animation.c:242
 #, c-format
 msgid ""
 "Failed to load animation '%s': reason not known, probably a corrupt "
 "animation file"
-msgstr "Impossible de charger l'animation « %s » : raison inconnue, probablement un fichier d'animation corrompu"
+msgstr ""
+"Impossible de charger l'animation « %s » : raison inconnue, probablement un "
+"fichier d'animation corrompu"
 
 #: ../gdk-pixbuf/gdk-pixbuf-io.c:463
 #, c-format
@@ -340,7 +344,7 @@ msgstr "Le format d'image ICO"
 msgid "Error interpreting JPEG image file (%s)"
 msgstr "Erreur d'interprétation du fichier d'image JPEG (%s)"
 
-#: ../gdk-pixbuf/io-jpeg.c:352
+#: ../gdk-pixbuf/io-jpeg.c:354
 msgid ""
 "Insufficient memory to load image, try exiting some applications to free "
 "memory"
@@ -348,17 +352,21 @@ msgstr ""
 "Mémoire insuffisante pour charger l'image, essayez de quitter quelques "
 "applications pour libérer de la mémoire"
 
-#: ../gdk-pixbuf/io-jpeg.c:386 ../gdk-pixbuf/io-jpeg.c:588
+#: ../gdk-pixbuf/io-jpeg.c:388 ../gdk-pixbuf/io-jpeg.c:590
 #, c-format
 msgid "Unsupported JPEG color space (%s)"
 msgstr "Espace de couleur JPEG non pris en charge (%s)"
 
-#: ../gdk-pixbuf/io-jpeg.c:484 ../gdk-pixbuf/io-jpeg.c:741
-#: ../gdk-pixbuf/io-jpeg.c:975 ../gdk-pixbuf/io-jpeg.c:984
+#: ../gdk-pixbuf/io-jpeg.c:486 ../gdk-pixbuf/io-jpeg.c:748
+#: ../gdk-pixbuf/io-jpeg.c:982 ../gdk-pixbuf/io-jpeg.c:991
 msgid "Couldn't allocate memory for loading JPEG file"
 msgstr "Impossible d'allouer de la mémoire pour le chargement du fichier JPEG"
 
-#: ../gdk-pixbuf/io-jpeg.c:926
+#: ../gdk-pixbuf/io-jpeg.c:724
+msgid "Transformed JPEG has zero width or height."
+msgstr "Le PNG transformé a une largeur ou une hauteur nulle."
+
+#: ../gdk-pixbuf/io-jpeg.c:933
 #, c-format
 msgid ""
 "JPEG quality must be a value between 0 and 100; value '%s' could not be "
@@ -367,7 +375,7 @@ msgstr ""
 "La qualité JPEG doit être une valeur entre 0 et 100 ; la valeur « %s » n'est "
 "pas interprétable."
 
-#: ../gdk-pixbuf/io-jpeg.c:941
+#: ../gdk-pixbuf/io-jpeg.c:948
 #, c-format
 msgid ""
 "JPEG quality must be a value between 0 and 100; value '%d' is not allowed."
@@ -375,7 +383,7 @@ msgstr ""
 "La qualité JPEG doit être une valeur entre 0 et 100 ; la valeur « %d » n'est "
 "pas autorisée."
 
-#: ../gdk-pixbuf/io-jpeg.c:1103
+#: ../gdk-pixbuf/io-jpeg.c:1110
 msgid "The JPEG image format"
 msgstr "Le format d'image JPEG"
 
@@ -1019,7 +1027,7 @@ msgstr "COULEURS"
 msgid "Make X calls synchronous"
 msgstr "Faire des appels X synchrone"
 
-#: ../gtk/gtkaboutdialog.c:273 ../gtk/gtkaboutdialog.c:2080
+#: ../gtk/gtkaboutdialog.c:273 ../gtk/gtkaboutdialog.c:2094
 msgid "License"
 msgstr "Licence"
 
@@ -1042,23 +1050,23 @@ msgstr "_Licence"
 msgid "About %s"
 msgstr "À propos de %s"
 
-#: ../gtk/gtkaboutdialog.c:2008
+#: ../gtk/gtkaboutdialog.c:2022
 msgid "Credits"
 msgstr "Crédits"
 
-#: ../gtk/gtkaboutdialog.c:2034
+#: ../gtk/gtkaboutdialog.c:2048
 msgid "Written by"
 msgstr "Écrit par"
 
-#: ../gtk/gtkaboutdialog.c:2037
+#: ../gtk/gtkaboutdialog.c:2051
 msgid "Documented by"
 msgstr "Documenté par"
 
-#: ../gtk/gtkaboutdialog.c:2049
+#: ../gtk/gtkaboutdialog.c:2063
 msgid "Translated by"
 msgstr "Traduit par"
 
-#: ../gtk/gtkaboutdialog.c:2053
+#: ../gtk/gtkaboutdialog.c:2067
 msgid "Artwork by"
 msgstr "Graphisme par"
 
@@ -1838,7 +1846,7 @@ msgid "(Empty)"
 msgstr "(Vide)"
 
 #: ../gtk/gtkfilesystemunix.c:975 ../gtk/gtkfilesystemunix.c:1223
-#: ../gtk/gtkfilesystemunix.c:2216 ../gtk/gtkfilesystemunix.c:2256
+#: ../gtk/gtkfilesystemunix.c:2211 ../gtk/gtkfilesystemunix.c:2251
 #: ../gtk/gtkfilesystemwin32.c:2396 ../gtk/gtkfilesystemwin32.c:2446
 #, c-format
 msgid "Error getting information for '%s': %s"
@@ -1861,17 +1869,17 @@ msgstr ""
 "Le nom « %s » n'est pas valide car il contient le caractère « %s ». Veuillez "
 "utiliser un nom différent."
 
-#: ../gtk/gtkfilesystemunix.c:1898 ../gtk/gtkfilesystemwin32.c:2076
+#: ../gtk/gtkfilesystemunix.c:1893 ../gtk/gtkfilesystemwin32.c:2076
 #, c-format
 msgid "Bookmark saving failed: %s"
 msgstr "L'enregistrement du signet a échoué : %s"
 
-#: ../gtk/gtkfilesystemunix.c:1953 ../gtk/gtkfilesystemwin32.c:2131
+#: ../gtk/gtkfilesystemunix.c:1948 ../gtk/gtkfilesystemwin32.c:2131
 #, c-format
 msgid "'%s' already exists in the bookmarks list"
 msgstr "« %s » existe déjà dans la liste des signets"
 
-#: ../gtk/gtkfilesystemunix.c:2025 ../gtk/gtkfilesystemwin32.c:2203
+#: ../gtk/gtkfilesystemunix.c:2020 ../gtk/gtkfilesystemwin32.c:2203
 #, c-format
 msgid "'%s' does not exist in the bookmarks list"
 msgstr "« %s » n'existe pas dans la liste des signets"
@@ -2574,7 +2582,7 @@ msgstr "Ouvrir « %s »"
 msgid "Unknown item"
 msgstr "Élément inconnu"
 
-#: ../gtk/gtkrecentchoosermenu.c:1032
+#: ../gtk/gtkrecentchoosermenu.c:1033 ../gtk/gtkrecentchoosermenu.c:1146
 msgid "No items found"
 msgstr "Aucun élément trouvé"
 
@@ -4008,7 +4016,7 @@ msgstr "Postscript"
 msgid "File"
 msgstr "Fichier"
 
-#: ../modules/printbackends/file/gtkprintbackendfile.c:542
+#: ../modules/printbackends/file/gtkprintbackendfile.c:543
 msgid "_Output format"
 msgstr "Format de _sortie"
 
