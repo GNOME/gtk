@@ -735,16 +735,19 @@ gtk_tooltip_show_tooltip (GdkDisplay *display)
 static void
 gtk_tooltip_hide_tooltip (GtkTooltip *tooltip)
 {
-  if (!tooltip || !GTK_TOOLTIP_VISIBLE (tooltip))
+  if (!tooltip)
     return;
-
-  tooltip->tooltip_widget = NULL;
 
   if (tooltip->timeout_id)
     {
       g_source_remove (tooltip->timeout_id);
       tooltip->timeout_id = 0;
     }
+
+  if (!GTK_TOOLTIP_VISIBLE (tooltip))
+    return;
+
+  tooltip->tooltip_widget = NULL;
 
   if (!tooltip->keyboard_mode_enabled)
     {

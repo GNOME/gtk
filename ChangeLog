@@ -1,3 +1,8 @@
+2007-02-13  Kristian Rietveld  <kris@imendio.com>
+
+	* gtk/gtktooltip.c (gtk_tooltip_hide_tooltip): stop any
+	pending tooltip timeout. (Fixes #406110, Carlos Garnacho).
+
 2007-02-10  Emmanuele Bassi  <ebassi@gnome.org>
 
 	* gtk/gtkrecentchoosermenu.c: Fix the english of the comment;
