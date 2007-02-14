@@ -2900,6 +2900,7 @@ gtk_menu_motion_notify  (GtkWidget	   *widget,
 	  send_event->crossing.y_root = event->y_root;
 	  send_event->crossing.x = event->x;
 	  send_event->crossing.y = event->y;
+          send_event->crossing.state = event->state;
 
 	  /* We send the event to 'widget', the currently active menu,
 	   * instead of 'menu', the menu that the pointer is in. This
