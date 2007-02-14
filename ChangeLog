@@ -1,3 +1,10 @@
+2007-02-14  Stefan Kost  <ensonic@users.sf.net>
+
+	reviewed by: Matthias Clasen  <mclasen@redhat.com>
+
+	* configure.in: determine installation prefixes of dependent libs to
+	crossreference docs (#407146).
+
 2007-02-14  Kristian Rietveld  <kris@imendio.com>
 
 	* gtk/gtktooltip.c (child_location_foreach): check return value
