@@ -1,5 +1,12 @@
 2007-02-14  Kristian Rietveld  <kris@imendio.com>
 
+	* gtk/gtktooltip.c (child_location_foreach): check return value
+	of gtk_widget_translate_coordinates() so we cannot end up
+	using uninitialized x, y values.  (#407863, patch from Carlos
+	Garnacho).
+
+2007-02-14  Kristian Rietveld  <kris@imendio.com>
+
 	* gtk/gtktreeviewcolumn.c (_gtk_tree_view_column_realize_button):
 	use TREE_VIEW_DRAG_WIDTH/2 when calculating the drag window
 	position instead of a hardcoded value.  (Taken from maemo-gtk).

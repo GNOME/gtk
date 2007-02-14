@@ -390,16 +390,14 @@ static void
 child_location_foreach (GtkWidget *child,
 			gpointer   data)
 {
+  gint x, y;
   struct ChildLocation *child_loc = data;
 
-  if (!child_loc->child)
-    {
-      gint x, y;
-
+  if (!child_loc->child &&
       gtk_widget_translate_coordinates (child_loc->container, child,
 					child_loc->x, child_loc->y,
-					&x, &y);
-
+					&x, &y))
+    {
       if (x >= 0 && x < child->allocation.width
 	  && y >= 0 && y < child->allocation.height)
         {
