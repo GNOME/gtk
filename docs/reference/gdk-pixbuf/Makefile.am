@@ -62,7 +62,9 @@ content_files =				\
 HTML_IMAGES = composite.png
 
 # Extra options to supply to gtkdoc-fixref
-FIXXREF_OPTIONS=
+FIXXREF_OPTIONS= --extra-dir=$(GLIB_PREFIX)/share/gtk-doc/html/gobject \
+	--extra-dir=$(GLIB_PREFIX)/share/gtk-doc/html/glib
+
 
 include $(top_srcdir)/gtk-doc.make
 

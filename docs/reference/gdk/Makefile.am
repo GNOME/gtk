@@ -143,7 +143,11 @@ HTML_IMAGES =				\
 	images/xterm.png 
 
 # Extra options to supply to gtkdoc-fixref
-FIXXREF_OPTIONS=--extra-dir=../gdk-pixbuf/html
+FIXXREF_OPTIONS=--extra-dir=../gdk-pixbuf/html \
+	--extra-dir=$(GLIB_PREFIX)/share/gtk-doc/html/gobject \
+	--extra-dir=$(GLIB_PREFIX)/share/gtk-doc/html/glib \
+	--extra-dir=$(CAIRO_PREFIX)/share/gtk-doc/html/cairo
+
 
 include $(top_srcdir)/gtk-doc.make
 
