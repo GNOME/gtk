@@ -1847,139 +1847,8 @@ handle_configure_event (MSG       *msg,
 
       append_event (event);
     }
-}
 
-static void
-erase_background (GdkWindow *window,
-		  HDC        hdc)
-{
-  HDC bgdc = NULL;
-  HBRUSH hbr = NULL;
-  HPALETTE holdpal = NULL;
-  RECT rect;
-  COLORREF bg;
-  GdkColormap *colormap;
-  GdkColormapPrivateWin32 *colormap_private;
-  int x, y;
-  int x_offset, y_offset;
-  
-  if (((GdkWindowObject *) window)->input_only ||
-      ((GdkWindowObject *) window)->bg_pixmap == GDK_NO_BG ||
-      GDK_WINDOW_IMPL_WIN32 (((GdkWindowObject *) window)->impl)->position_info.no_bg)
-    {
-      return;
-    }
-
-  colormap = gdk_drawable_get_colormap (window);
-
-  if (colormap &&
-      (colormap->visual->type == GDK_VISUAL_PSEUDO_COLOR ||
-       colormap->visual->type == GDK_VISUAL_STATIC_COLOR))
-    {
-      int k;
-	  
-      colormap_private = GDK_WIN32_COLORMAP_DATA (colormap);
-
-      if (!(holdpal = SelectPalette (hdc,  colormap_private->hpal, FALSE)))
-        WIN32_GDI_FAILED ("SelectPalette");
-      else if ((k = RealizePalette (hdc)) == GDI_ERROR)
-	WIN32_GDI_FAILED ("RealizePalette");
-      else if (k > 0)
-	GDK_NOTE (COLORMAP, g_print ("erase_background: realized %p: %d colors\n",
-				     colormap_private->hpal, k));
-    }
-  
-  x_offset = y_offset = 0;
-  while (window && ((GdkWindowObject *) window)->bg_pixmap == GDK_PARENT_RELATIVE_BG)
-    {
-      /* If this window should have the same background as the parent,
-       * fetch the parent. (And if the same goes for the parent, fetch
-       * the grandparent, etc.)
-       */
-      x_offset += ((GdkWindowObject *) window)->x;
-      y_offset += ((GdkWindowObject *) window)->y;
-      window = GDK_WINDOW (((GdkWindowObject *) window)->parent);
-    }
-  
-  if (GDK_WINDOW_IMPL_WIN32 (((GdkWindowObject *) window)->impl)->position_info.no_bg)
-    {
-      /* Improves scolling effect, e.g. main buttons of testgtk */
-      return;
-    }
-
-  GetClipBox (hdc, &rect);
-
-  if (((GdkWindowObject *) window)->bg_pixmap == NULL)
-    {
-      bg = _gdk_win32_colormap_color (GDK_DRAWABLE_IMPL_WIN32 (((GdkWindowObject *) window)->impl)->colormap,
-				      ((GdkWindowObject *) window)->bg_color.pixel);
-      
-      if (!(hbr = CreateSolidBrush (bg)))
-	WIN32_GDI_FAILED ("CreateSolidBrush");
-      else if (!FillRect (hdc, &rect, hbr))
-	WIN32_GDI_FAILED ("FillRect");
-      if (hbr != NULL)
-	DeleteObject (hbr);
-    }
-  else if (((GdkWindowObject *) window)->bg_pixmap != GDK_NO_BG)
-    {
-      GdkPixmap *pixmap = ((GdkWindowObject *) window)->bg_pixmap;
-      GdkPixmapImplWin32 *pixmap_impl = GDK_PIXMAP_IMPL_WIN32 (GDK_PIXMAP_OBJECT (pixmap)->impl);
-      
-      if (x_offset == 0 && y_offset == 0 &&
-	  pixmap_impl->width <= 8 && pixmap_impl->height <= 8)
-	{
-	  if (!(hbr = CreatePatternBrush (GDK_PIXMAP_HBITMAP (pixmap))))
-	    WIN32_GDI_FAILED ("CreatePatternBrush");
-	  else if (!FillRect (hdc, &rect, hbr))
-	    WIN32_GDI_FAILED ("FillRect");
-	  if (hbr != NULL)
-	    DeleteObject (hbr);
-	}
-      else
-	{
-	  HGDIOBJ oldbitmap;
-
-	  if (!(bgdc = CreateCompatibleDC (hdc)))
-	    {
-	      WIN32_GDI_FAILED ("CreateCompatibleDC");
-	      return;
-	    }
-	  if (!(oldbitmap = SelectObject (bgdc, GDK_PIXMAP_HBITMAP (pixmap))))
-	    {
-	      WIN32_GDI_FAILED ("SelectObject");
-	      DeleteDC (bgdc);
-	      return;
-	    }
-	  x = -x_offset;
-	  while (x < rect.right)
-	    {
-	      if (x + pixmap_impl->width >= rect.left)
-		{
-		  y = -y_offset;
-		  while (y < rect.bottom)
-		    {
-		      if (y + pixmap_impl->height >= rect.top)
-			{
-			  if (!BitBlt (hdc, x, y,
-				       pixmap_impl->width, pixmap_impl->height,
-				       bgdc, 0, 0, SRCCOPY))
-			    {
-			      WIN32_GDI_FAILED ("BitBlt");
-			      SelectObject (bgdc, oldbitmap);
-			      DeleteDC (bgdc);
-			      return;
-			    }
-			}
-		      y += pixmap_impl->height;
-		    }
-		}
-	      x += pixmap_impl->width;
-	    }
-	  SelectObject (bgdc, oldbitmap);
-	  DeleteDC (bgdc);
-	}
-    }
+  g_main_context_iteration (NULL, FALSE);
 }
 
 GdkRegion *
@@ -2968,7 +2837,6 @@ gdk_event_translate (MSG  *msg,
       if (GDK_WINDOW_DESTROYED (window))
 	break;
 
-      erase_background (window, (HDC) msg->wParam);
       return_val = TRUE;
       *ret_valp = 1;
       break;
