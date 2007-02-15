@@ -64,13 +64,6 @@ enum {
   PROP_TAKE_FOCUS
 };
 
-typedef void (*GtkMenuShellSignal1) (GtkObject           *object,
-				     GtkMenuDirectionType arg1,
-				     gpointer             data);
-typedef void (*GtkMenuShellSignal2) (GtkObject *object,
-				     gboolean   arg1,
-				     gpointer   data);
-
 /* Terminology:
  * 
  * A menu item can be "selected", this means that it is displayed
