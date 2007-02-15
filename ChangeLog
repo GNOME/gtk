@@ -1,10 +1,10 @@
 2007-02-15  Cody Russell  <bratsche@gnome.org>
 
-	* gdk/win32/gdkevents.c: Make sure we get enough main context iterations
-	while we're resizing so that the window contents are resized more 
-	smoothly (#389765).
+	* gdk/win32/gdkevents-win32.c: Make sure we get enough main context 
+	iterations while we're resizing so that the window contents are resized 
+	more smoothly (#389765).
 
-	* gdk/win32/gdkevents.c: Fix flickering widgets when window contents
+	* gdk/win32/gdkevents-win32.c: Fix flickering widgets when window contents
 	are resized (#310522).
 
 2007-02-15  Matthias Clasen  <mclasen@redhat.com>
