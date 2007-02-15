@@ -738,6 +738,7 @@ _gtk_text_btree_delete (GtkTextIter *start,
   GtkTextBTree *tree;
   GtkTextLine *start_line;
   GtkTextLine *end_line;
+  GtkTextLine *line;
   GtkTextLine *deleted_lines = NULL;        /* List of lines we've deleted */
   gint start_byte_offset;
 
@@ -989,7 +990,6 @@ _gtk_text_btree_delete (GtkTextIter *start,
       view = tree->views;
       while (view)
         {
-          GtkTextLine *line;
           GtkTextLineData *ld;
 
           gint deleted_width = 0;
@@ -1006,9 +1006,6 @@ _gtk_text_btree_delete (GtkTextIter *start,
                   deleted_width = MAX (deleted_width, ld->width);
                   deleted_height += ld->height;
                 }
-
-              if (!view->next)
-                gtk_text_line_destroy (tree, line);
 
               line = next_line;
             }
@@ -1041,6 +1038,16 @@ _gtk_text_btree_delete (GtkTextIter *start,
             gtk_text_btree_node_check_valid_upward (ancestor_node->parent, view->view_id);
 
           view = view->next;
+        }
+
+      line = deleted_lines;
+      while (line)
+        {
+          GtkTextLine *next_line = line->next;
+
+          gtk_text_line_destroy (tree, line);
+
+          line = next_line;
         }
 
       /* avoid dangling pointer */
