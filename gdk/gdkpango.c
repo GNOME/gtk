@@ -1364,8 +1364,8 @@ gdk_pango_layout_get_clip_region (PangoLayout *layout,
       baseline = pango_layout_iter_get_baseline (iter);      
 
       line_region = layout_iter_get_line_clip_region(iter, 
-						     x_origin + logical_rect.x / PANGO_SCALE,
-						     y_origin + baseline / PANGO_SCALE,
+						     x_origin + PANGO_PIXELS (logical_rect.x),
+						     y_origin + PANGO_PIXELS (baseline),
 						     index_ranges,
 						     n_ranges);
 

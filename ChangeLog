@@ -1,3 +1,8 @@
+2007-02-16  Behdad Esfahbod  <behdad@gnome.org>
+
+	* gdk/gdkpango.c (gdk_pango_layout_get_clip_region): Use PANGO_PIXELS
+	instead of division. (#334617)
+
 2007-02-16  Kristian Rietveld  <kris@gtk.org>
 
 	* gtk/gtktreeprivate.h: add cursor_offset field.
