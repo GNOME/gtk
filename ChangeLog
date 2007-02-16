@@ -1,5 +1,14 @@
 2007-02-16  Kristian Rietveld  <kris@gtk.org>
 
+	* gtk/gtktreeprivate.h: add cursor_offset field.
+
+	* gtk/gtktreeview.c (gtk_tree_view_init),
+	(gtk_tree_view_move_cursor_page_up_down): fix off by one error
+	in page up/down handling by memorizing the offset into the cursor
+	row.  (Fixes #399809, reported by Bruce Bowler).
+
+2007-02-16  Kristian Rietveld  <kris@gtk.org>
+
 	* gtk/gtktreeview.c (gtk_tree_view_search_dialog_hide): send
 	a focus-in event to the tree view after hiding the search dialog.
 	(#356515, Rich Burridge, Peter Parente).

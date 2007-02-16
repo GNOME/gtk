@@ -121,6 +121,7 @@ struct _GtkTreeViewPrivate
   /* we cache it for simplicity of the code */
   gint dy;
   gint drag_column_x;
+  gint cursor_offset;
 
   GtkTreeViewColumn *expander_column;
   GtkTreeViewColumn *edited_column;

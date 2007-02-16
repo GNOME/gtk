@@ -1284,6 +1284,7 @@ gtk_tree_view_init (GtkTreeView *tree_view)
 
   /* We need some padding */
   tree_view->priv->dy = 0;
+  tree_view->priv->cursor_offset = 0;
   tree_view->priv->n_columns = 0;
   tree_view->priv->header_height = 1;
   tree_view->priv->x_drag = 0;
@@ -9625,13 +9626,25 @@ gtk_tree_view_move_cursor_page_up_down (GtkTreeView *tree_view,
 
   y = _gtk_rbtree_node_find_offset (cursor_tree, cursor_node);
   window_y = RBTREE_Y_TO_TREE_WINDOW_Y (tree_view, y);
+  y += tree_view->priv->cursor_offset;
   y += count * (int)tree_view->priv->vadjustment->page_increment;
   y = CLAMP (y, (gint)tree_view->priv->vadjustment->lower,  (gint)tree_view->priv->vadjustment->upper - vertical_separator);
 
   if (y >= tree_view->priv->height)
     y = tree_view->priv->height - 1;
 
-  y -= _gtk_rbtree_find_offset (tree_view->priv->tree, y, &cursor_tree, &cursor_node);
+  tree_view->priv->cursor_offset =
+    _gtk_rbtree_find_offset (tree_view->priv->tree, y,
+			     &cursor_tree, &cursor_node);
+
+  if (tree_view->priv->cursor_offset >= BACKGROUND_HEIGHT (cursor_node))
+    {
+      _gtk_rbtree_next_full (cursor_tree, cursor_node,
+			     &cursor_tree, &cursor_node);
+      tree_view->priv->cursor_offset -= BACKGROUND_HEIGHT (cursor_node);
+    }
+
+  y -= tree_view->priv->cursor_offset;
   cursor_path = _gtk_tree_view_find_path (tree_view, cursor_tree, cursor_node);
   g_return_if_fail (cursor_path != NULL);
   gtk_tree_view_real_set_cursor (tree_view, cursor_path, TRUE, FALSE);
