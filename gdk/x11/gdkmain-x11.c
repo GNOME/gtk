@@ -504,6 +504,12 @@ _gdk_xgrab_check_destroy (GdkWindow *window)
     }
 }
 
+#define GDK_ANY_BUTTON_MASK (GDK_BUTTON1_MASK | \
+                             GDK_BUTTON2_MASK | \
+                             GDK_BUTTON3_MASK | \
+                             GDK_BUTTON4_MASK | \
+                             GDK_BUTTON5_MASK)
+
 /**
  * _gdk_xgrab_check_button_event:
  * @window: a #GdkWindow
@@ -533,7 +539,7 @@ _gdk_xgrab_check_button_event (GdkWindow *window,
     case ButtonRelease:
       if (display_x11->pointer_xgrab_window &&
 	  display_x11->pointer_xgrab_implicit &&
-	  (xevent->xbutton.state & ~(GDK_BUTTON1_MASK << (xevent->xbutton.button - 1))) == 0)
+	  (xevent->xbutton.state & GDK_ANY_BUTTON_MASK & ~(GDK_BUTTON1_MASK << (xevent->xbutton.button - 1))) == 0)
 	{
 	  display_x11->pointer_xgrab_window = NULL;
 	}
