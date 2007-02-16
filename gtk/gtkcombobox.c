@@ -2276,19 +2276,14 @@ gtk_combo_box_expose_event (GtkWidget      *widget,
 {
   GtkComboBox *combo_box = GTK_COMBO_BOX (widget);
 
-  if (!combo_box->priv->tree_view)
-    {
-      gtk_container_propagate_expose (GTK_CONTAINER (widget),
-				      combo_box->priv->button, event);
-    }
-  else
-    {
-      gtk_container_propagate_expose (GTK_CONTAINER (widget),
-                                      combo_box->priv->button, event);
+  gtk_container_propagate_expose (GTK_CONTAINER (widget),
+				  combo_box->priv->button, event);
 
-      if (combo_box->priv->cell_view_frame)
-        gtk_container_propagate_expose (GTK_CONTAINER (widget),
-                                        combo_box->priv->cell_view_frame, event);
+  if (combo_box->priv->tree_view &&
+      combo_box->priv->cell_view_frame)
+    {
+      gtk_container_propagate_expose (GTK_CONTAINER (widget),
+				      combo_box->priv->cell_view_frame, event);
     }
 
   gtk_container_propagate_expose (GTK_CONTAINER (widget),
