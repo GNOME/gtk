@@ -13725,6 +13725,7 @@ gtk_tree_view_search_dialog_hide (GtkWidget   *search_dialog,
   send_focus_change (GTK_WIDGET (tree_view->priv->search_entry), FALSE);
   gtk_widget_hide (search_dialog);
   gtk_entry_set_text (GTK_ENTRY (tree_view->priv->search_entry), "");
+  send_focus_change (GTK_WIDGET (tree_view), TRUE);
 }
 
 static void
