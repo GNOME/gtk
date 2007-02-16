@@ -62,14 +62,25 @@ query_tooltip_text_view_cb (GtkWidget  *widget,
 			    GtkTooltip *tooltip,
 			    gpointer    data)
 {
-  gint bx, by, trailing;
   GtkTextTag *tag = data;
   GtkTextIter iter;
   GtkTextView *text_view = GTK_TEXT_VIEW (widget);
 
-  gtk_text_view_window_to_buffer_coords (text_view, GTK_TEXT_WINDOW_TEXT,
-					 x, y, &bx, &by);
-  gtk_text_view_get_iter_at_position (text_view, &iter, &trailing, bx, by);
+  if (keyboard_tip)
+    {
+      gint offset;
+
+      g_object_get (text_view->buffer, "cursor-position", &offset, NULL);
+      gtk_text_buffer_get_iter_at_offset (text_view->buffer, &iter, offset);
+    }
+  else
+    {
+      gint bx, by, trailing;
+
+      gtk_text_view_window_to_buffer_coords (text_view, GTK_TEXT_WINDOW_TEXT,
+					     x, y, &bx, &by);
+      gtk_text_view_get_iter_at_position (text_view, &iter, &trailing, bx, by);
+    }
 
   if (gtk_text_iter_has_tag (&iter, tag))
     gtk_tooltip_set_markup (tooltip, "Tooltip on text tag");

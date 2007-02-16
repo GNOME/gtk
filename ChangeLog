@@ -1,3 +1,8 @@
+2007-02-16  Kristian Rietveld  <kris@imendio.com>
+
+	* tests/testtooltips.c (query_tooltip_text_view_cb): also handle
+	keyboard tooltips. (#408325, Matthias Clasen).
+
 2007-02-16  Xan Lopez  <xan@gnome.org>
 
 	* gtk/gtkcombobox.c (gtk_combo_box_expose_event): Cleanup the logic
