@@ -136,6 +136,7 @@ const guint gtk_binary_age = GTK_BINARY_AGE;
 const guint gtk_interface_age = GTK_INTERFACE_AGE;
 
 static guint gtk_main_loop_level = 0;
+static gint pre_initialized = FALSE;
 static gint gtk_initialized = FALSE;
 static GList *current_events = NULL;
 
@@ -350,7 +351,7 @@ static gboolean do_setlocale = TRUE;
 void
 gtk_disable_setlocale (void)
 {
-  if (gtk_initialized)
+  if (pre_initialized)
     g_warning ("gtk_disable_setlocale() must be called before gtk_init()");
     
   do_setlocale = FALSE;
@@ -519,6 +520,11 @@ do_pre_parse_initialization (int    *argc,
   g_set_message_handler (gtk_message);
   g_set_print_handler (gtk_print);
 #endif
+
+  if (pre_initialized)
+    return;
+
+  pre_initialized = TRUE;
 
   if (do_setlocale)
     {

@@ -1,3 +1,8 @@
+2007-02-16  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtkmain.c: Run pre_parse_hook only once.  (#403139, Kjartan
+	Maraas)
+
 2007-02-15  Matthias Clasen  <mclasen@redhat.com>
 
 	* gdk/x11/gdmain-x11.c (_gdk_xgrab_check_button_event): Be more
