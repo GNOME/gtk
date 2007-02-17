@@ -1,12 +1,12 @@
 # gtk+ ko.po
 # Sung-Hyun Nam <namsh@lgic.co.kr>, 1998
-# Changwoo Ryu <cwryu@debian.org>, 2002-2006
+# Changwoo Ryu <cwryu@debian.org>, 2002-2006, 2007.
 msgid ""
 msgstr ""
-"Project-Id-Version: gtk+ 2.10.1\n"
+"Project-Id-Version: gtk+\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-02-04 04:35+0900\n"
-"PO-Revision-Date: 2007-02-04 04:37+0900\n"
+"POT-Creation-Date: 2007-02-17 21:27+0900\n"
+"PO-Revision-Date: 2007-02-17 21:28+0900\n"
 "Last-Translator: Changwoo Ryu <cwryu@debian.org>\n"
 "Language-Team: Gnome Korea <gnome-kr-hackers@lists.kldp.net>\n"
 "MIME-Version: 1.0\n"
@@ -324,7 +324,7 @@ msgstr "ICO 그림 형식"
 msgid "Error interpreting JPEG image file (%s)"
 msgstr "JPEG 파일 해석 중 오류 (%s)"
 
-#: ../gdk-pixbuf/io-jpeg.c:352
+#: ../gdk-pixbuf/io-jpeg.c:354
 msgid ""
 "Insufficient memory to load image, try exiting some applications to free "
 "memory"
@@ -332,17 +332,21 @@ msgstr ""
 "그림을 읽어들이기에 메모리가 부족합니다.  메모리를 확보하려면 실행중인 프로그"
 "램을 끝내보십시오"
 
-#: ../gdk-pixbuf/io-jpeg.c:386 ../gdk-pixbuf/io-jpeg.c:588
+#: ../gdk-pixbuf/io-jpeg.c:388 ../gdk-pixbuf/io-jpeg.c:590
 #, c-format
 msgid "Unsupported JPEG color space (%s)"
 msgstr "지원하지 않는 JPEG 색 공간 (%s)"
 
-#: ../gdk-pixbuf/io-jpeg.c:484 ../gdk-pixbuf/io-jpeg.c:741
-#: ../gdk-pixbuf/io-jpeg.c:975 ../gdk-pixbuf/io-jpeg.c:984
+#: ../gdk-pixbuf/io-jpeg.c:486 ../gdk-pixbuf/io-jpeg.c:748
+#: ../gdk-pixbuf/io-jpeg.c:982 ../gdk-pixbuf/io-jpeg.c:991
 msgid "Couldn't allocate memory for loading JPEG file"
 msgstr "JPEG파일을 읽는 중 메모리 할당을 할 수 없습니다"
 
-#: ../gdk-pixbuf/io-jpeg.c:926
+#: ../gdk-pixbuf/io-jpeg.c:724
+msgid "Transformed JPEG has zero width or height."
+msgstr "변환된 JPEG의 너비나 높이가 0입니다."
+
+#: ../gdk-pixbuf/io-jpeg.c:933
 #, c-format
 msgid ""
 "JPEG quality must be a value between 0 and 100; value '%s' could not be "
@@ -350,14 +354,14 @@ msgid ""
 msgstr ""
 "JPEG 화질은 0에서 100 사이의 값이어야 합니다; '%s' 값을 분석할 수 없습니다."
 
-#: ../gdk-pixbuf/io-jpeg.c:941
+#: ../gdk-pixbuf/io-jpeg.c:948
 #, c-format
 msgid ""
 "JPEG quality must be a value between 0 and 100; value '%d' is not allowed."
 msgstr ""
 "JPEG 화질은 0에서 100 사이의 값이어야 합니다; '%d' 값은 쓸 수 없습니다."
 
-#: ../gdk-pixbuf/io-jpeg.c:1103
+#: ../gdk-pixbuf/io-jpeg.c:1110
 msgid "The JPEG image format"
 msgstr "JPEG 그림 형식"
 
@@ -483,7 +487,7 @@ msgstr ""
 msgid "Value for PNG text chunk %s cannot be converted to ISO-8859-1 encoding."
 msgstr "PNG 텍스트 부분 %s의 값을 ISO-8859-1 인코딩으로 변환할 수 없습니다."
 
-#: ../gdk-pixbuf/io-png.c:1042
+#: ../gdk-pixbuf/io-png.c:1044
 msgid "The PNG image format"
 msgstr "PNG 그림 형식"
 
@@ -812,7 +816,7 @@ msgstr "설정할 GDK 디버깅 플래그"
 #. Placeholder in --gdk-no-debug=FLAGS in --help output
 #. Placeholder in --gtk-debug=FLAGS in --help output
 #. Placeholder in --gtk-no-debug=FLAGS in --help output
-#: ../gdk/gdk.c:130 ../gdk/gdk.c:133 ../gtk/gtkmain.c:412 ../gtk/gtkmain.c:415
+#: ../gdk/gdk.c:130 ../gdk/gdk.c:133 ../gtk/gtkmain.c:413 ../gtk/gtkmain.c:416
 msgid "FLAGS"
 msgstr "<플래그>"
 
@@ -2008,27 +2012,27 @@ msgid "Cl_ear"
 msgstr "비우기(_E)"
 
 #. Description of --gtk-module=MODULES in --help output
-#: ../gtk/gtkmain.c:405
+#: ../gtk/gtkmain.c:406
 msgid "Load additional GTK+ modules"
 msgstr "GTK+ 모듈을 추가로 읽어들입니다"
 
 #. Placeholder in --gtk-module=MODULES in --help output
-#: ../gtk/gtkmain.c:406
+#: ../gtk/gtkmain.c:407
 msgid "MODULES"
 msgstr "<모듈>"
 
 #. Description of --g-fatal-warnings in --help output
-#: ../gtk/gtkmain.c:408
+#: ../gtk/gtkmain.c:409
 msgid "Make all warnings fatal"
 msgstr "모든 경고를 치명적인 것으로 간주합니다"
 
 #. Description of --gtk-debug=FLAGS in --help output
-#: ../gtk/gtkmain.c:411
+#: ../gtk/gtkmain.c:412
 msgid "GTK+ debugging flags to set"
 msgstr "설정할 GTK+ 디버깅 플래그"
 
 #. Description of --gtk-no-debug=FLAGS in --help output
-#: ../gtk/gtkmain.c:414
+#: ../gtk/gtkmain.c:415
 msgid "GTK+ debugging flags to unset"
 msgstr "설정 해제할 GTK+ 디버깅 플래그"
 
@@ -2037,15 +2041,15 @@ msgstr "설정 해제할 GTK+ 디버깅 플래그"
 #. * Do *not* translate it to "predefinito:LTR", if it
 #. * it isn't default:LTR or default:RTL it will not work
 #.
-#: ../gtk/gtkmain.c:645
+#: ../gtk/gtkmain.c:651
 msgid "default:LTR"
 msgstr "default:LTR"
 
-#: ../gtk/gtkmain.c:742
+#: ../gtk/gtkmain.c:748
 msgid "GTK+ Options"
 msgstr "GTK+ 옵션"
 
-#: ../gtk/gtkmain.c:742
+#: ../gtk/gtkmain.c:748
 msgid "Show GTK+ Options"
 msgstr "GTK+ 옵션 표시"
 
@@ -2529,7 +2533,7 @@ msgstr "'%s' 열기"
 msgid "Unknown item"
 msgstr "알 수 없는 항목"
 
-#: ../gtk/gtkrecentchoosermenu.c:1032
+#: ../gtk/gtkrecentchoosermenu.c:1033 ../gtk/gtkrecentchoosermenu.c:1146
 msgid "No items found"
 msgstr "항목이 없습니다"
 
