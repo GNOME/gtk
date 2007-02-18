@@ -3189,7 +3189,8 @@ gtk_text_layout_move_iter_visually (GtkTextLayout *layout,
           
  	  gtk_text_layout_free_line_display (layout, display);
  	  display = gtk_text_layout_get_line_display (layout, line, FALSE);
-          new_index = _gtk_text_line_byte_count (line);
+          gtk_text_iter_forward_to_line_end (&lineiter);
+          new_index = gtk_text_iter_get_visible_line_index (&lineiter);
         }
       else if (new_index > byte_count)
         {

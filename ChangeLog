@@ -1,3 +1,11 @@
+2007-02-18  Matthias Clasen  <mclasen@redhat.com>
+
+	Merged from trunk:
+
+	* gtk/gtktextlayout.c (gtk_text_layout_move_iter_visually):
+	Ignore invisible text when going to end of the previous line.
+	(#382565)
+
 2007-02-16  Kristian Rietveld  <kris@gtk.org>
 
 	Merged from trunk:
