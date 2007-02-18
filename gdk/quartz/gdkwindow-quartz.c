@@ -275,6 +275,8 @@ gdk_window_quartz_process_all_updates (void)
 	  gdk_region_destroy (private->update_area);
 	  private->update_area = NULL;
 	  
+          GDK_QUARTZ_ALLOC_POOL;
+
 	  for (i = 0; i < n_rects; i++) 
 	    {
 	      [impl->view setNeedsDisplayInRect:NSMakeRect (rects[i].x, rects[i].y,
@@ -282,6 +284,8 @@ gdk_window_quartz_process_all_updates (void)
 	    }
 	  
 	  [impl->view displayIfNeeded];
+
+          GDK_QUARTZ_RELEASE_POOL;
 
 	  g_free (rects);
 	}
@@ -731,10 +735,14 @@ _gdk_windowing_window_destroy (GdkWindow *window,
 	  _gdk_quartz_update_mouse_window (_gdk_root);
 	}
 
+      GDK_QUARTZ_ALLOC_POOL;
+
       if (impl->toplevel)
 	[impl->toplevel close];
       else if (impl->view)
 	[impl->view release];
+
+      GDK_QUARTZ_RELEASE_POOL;
     }
 }
 

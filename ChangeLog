@@ -1,5 +1,12 @@
 2007-02-18  Richard Hult  <richard@imendio.com>
 
+	* gdk/quartz/gdkwindow-quartz.c:
+	(gdk_window_quartz_process_all_updates),
+	(_gdk_windowing_window_destroy): Setup release pools to plug two leaks,
+	patch from Erik van Pienbroek, fixes bug #396649.
+
+2007-02-18  Richard Hult  <richard@imendio.com>
+
 	* gdk/quartz/gdkevents-quartz.c: Add stub for 
 	gdk_display_add_client_message_filter, patch from Taybin Rutkin. Fixes
 	bug #405870.
