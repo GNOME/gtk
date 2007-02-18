@@ -1320,6 +1320,23 @@ gdk_flush (void)
   /* Not supported. */
 }
 
+void 
+gdk_display_add_client_message_filter (GdkDisplay   *display,
+				       GdkAtom       message_type,
+				       GdkFilterFunc func,
+				       gpointer      data)
+{
+  /* Not supported. */
+}
+
+void 
+gdk_add_client_message_filter (GdkAtom       message_type,
+			       GdkFilterFunc func,
+			       gpointer      data)
+{
+  /* Not supported. */
+}
+
 void
 gdk_display_sync (GdkDisplay *display)
 {

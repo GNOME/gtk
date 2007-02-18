@@ -164,4 +164,7 @@ extern GdkWindow *_gdk_quartz_pointer_grab_window;
 
 NSImage *_gdk_quartz_pixbuf_to_ns_image (GdkPixbuf *pixbuf);
 
+NSEvent *_gdk_quartz_event_loop_get_current     (void);
+void     _gdk_quartz_event_loop_release_current (void);
+
 #endif /* __GDK_PRIVATE_QUARTZ_H__ */
