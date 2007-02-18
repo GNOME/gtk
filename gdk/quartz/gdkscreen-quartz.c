@@ -139,7 +139,13 @@ get_mm_from_pixels (NSScreen *screen, int pixels)
    * 72 is the number of points per inch, 
    * and 25.4 is the number of millimeters per inch.
    */
-  return ((pixels / [screen userSpaceScaleFactor]) / 72) * 25.4;
+#if MAC_OS_X_VERSION_MAX_ALLOWED > MAC_OS_X_VERSION_10_3
+  float dpi = [screen userSpaceScaleFactor] * 72.0;
+#else
+  float dpi = 96.0 / 72.0;
+#endif
+
+  return (pixels / dpi) * 25.4;
 }
 
 gint

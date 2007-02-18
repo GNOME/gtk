@@ -1,7 +1,7 @@
 #ifndef __GDK_QUARTZ_H__
 #define __GDK_QUARTZ_H__
 
-#include <Quartz/Quartz.h>
+#include <AppKit/AppKit.h>
 #include "gdk/gdkprivate.h"
 #include "gdkprivate-quartz.h"
 #include "gdkdrawable-quartz.h"

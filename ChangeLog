@@ -1,3 +1,14 @@
+2007-02-18  Richard Hult  <richard@imendio.com>
+
+	* gdk/quartz/GdkQuartzView.h:
+	* gdk/quartz/GdkQuartzWindow.h:
+	* gdk/quartz/gdkquartz.h: Import AppKit.h instead of Quartz.h.
+	* gdk/quartz/gdkscreen-quartz.c: (get_mm_from_pixels): Don't use 
+	userSpaceScaleFactor for 10.3. Those changes bring us closer to working
+	on panther, patch from Mathias Hasselmann.
+	
+	* gdk/quartz/gdkeventloop-quartz.c: Add includes to fix build warnings.
+
 2007-02-16  Behdad Esfahbod  <behdad@gnome.org>
 
 	* gdk/gdkpango.c (gdk_pango_layout_get_clip_region): Use PANGO_PIXELS
