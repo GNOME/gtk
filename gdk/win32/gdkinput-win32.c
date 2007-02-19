@@ -530,7 +530,7 @@ _gdk_input_wintab_init_check (void)
 	  
 	  if (gdkdev->pktdata & PK_ORIENTATION)
 	    gdkdev->info.num_axes += 2; /* x and y tilt */
-	  (*p_WTInfoA) (WTI_CURSORS + cursorix, CSR_NPBTNMARKS, &gdkdev->npbtnmarks);
+
 	  gdkdev->info.axes = g_new (GdkDeviceAxis, gdkdev->info.num_axes);
 	  gdkdev->axes = g_new (GdkAxisInfo, gdkdev->info.num_axes);
 	  gdkdev->last_axis_data = g_new (gint, gdkdev->info.num_axes);
@@ -538,12 +538,9 @@ _gdk_input_wintab_init_check (void)
 	  k = 0;
 	  if (gdkdev->pktdata & PK_X)
 	    {
-	      gdkdev->axes[k].xresolution =
-		gdkdev->axes[k].resolution = axis_x.axResolution / 65535.;
-	      gdkdev->axes[k].xmin_value =
-		gdkdev->axes[k].min_value = axis_x.axMin;
-	      gdkdev->axes[k].xmax_value =
-		gdkdev->axes[k].max_value = axis_x.axMax;
+	      gdkdev->axes[k].resolution = axis_x.axResolution / 65535.;
+	      gdkdev->axes[k].min_value = axis_x.axMin;
+	      gdkdev->axes[k].max_value = axis_x.axMax;
 	      gdkdev->info.axes[k].use = GDK_AXIS_X;
 	      gdkdev->info.axes[k].min = axis_x.axMin;
 	      gdkdev->info.axes[k].max = axis_x.axMax;
@@ -551,12 +548,9 @@ _gdk_input_wintab_init_check (void)
 	    }
 	  if (gdkdev->pktdata & PK_Y)
 	    {
-	      gdkdev->axes[k].xresolution =
-		gdkdev->axes[k].resolution = axis_y.axResolution / 65535.;
-	      gdkdev->axes[k].xmin_value =
-		gdkdev->axes[k].min_value = axis_y.axMin;
-	      gdkdev->axes[k].xmax_value =
-		gdkdev->axes[k].max_value = axis_y.axMax;
+	      gdkdev->axes[k].resolution = axis_y.axResolution / 65535.;
+	      gdkdev->axes[k].min_value = axis_y.axMin;
+	      gdkdev->axes[k].max_value = axis_y.axMax;
 	      gdkdev->info.axes[k].use = GDK_AXIS_Y;
 	      gdkdev->info.axes[k].min = axis_y.axMin;
 	      gdkdev->info.axes[k].max = axis_y.axMax;
@@ -564,12 +558,9 @@ _gdk_input_wintab_init_check (void)
 	    }
 	  if (gdkdev->pktdata & PK_NORMAL_PRESSURE)
 	    {
-	      gdkdev->axes[k].xresolution =
-		gdkdev->axes[k].resolution = axis_npressure.axResolution / 65535.;
-	      gdkdev->axes[k].xmin_value =
-		gdkdev->axes[k].min_value = axis_npressure.axMin;
-	      gdkdev->axes[k].xmax_value =
-		gdkdev->axes[k].max_value = axis_npressure.axMax;
+	      gdkdev->axes[k].resolution = axis_npressure.axResolution / 65535.;
+	      gdkdev->axes[k].min_value = axis_npressure.axMin;
+	      gdkdev->axes[k].max_value = axis_npressure.axMax;
 	      gdkdev->info.axes[k].use = GDK_AXIS_PRESSURE;
 	      /* GIMP seems to expect values in the range 0-1 */
 	      gdkdev->info.axes[k].min = 0.0; /*axis_npressure.axMin;*/
@@ -587,12 +578,9 @@ _gdk_input_wintab_init_check (void)
 		  /* Wintab gives us aximuth and altitude, which
 		   * we convert to x and y tilt in the -1000..1000 range
 		   */
-		  gdkdev->axes[k].xresolution =
-		    gdkdev->axes[k].resolution = 1000;
-		  gdkdev->axes[k].xmin_value =
-		    gdkdev->axes[k].min_value = -1000;
-		  gdkdev->axes[k].xmax_value =
-		    gdkdev->axes[k].max_value = 1000;
+		  gdkdev->axes[k].resolution = 1000;
+		  gdkdev->axes[k].min_value = -1000;
+		  gdkdev->axes[k].max_value = 1000;
 		  gdkdev->info.axes[k].use = axis;
 		  gdkdev->info.axes[k].min = -1000;
 		  gdkdev->info.axes[k].max = 1000;
@@ -606,11 +594,8 @@ _gdk_input_wintab_init_check (void)
 				    gdkdev->info.name,
 				    gdkdev->info.num_axes));
 	  for (i = 0; i < gdkdev->info.num_axes; i++)
-	    GDK_NOTE (INPUT, g_print ("... axis %d: %d--%d@%d (%d--%d@%d)\n",
+	    GDK_NOTE (INPUT, g_print ("... axis %d: %d--%d@%d\n",
 				      i,
-				      gdkdev->axes[i].xmin_value, 
-				      gdkdev->axes[i].xmax_value, 
-				      gdkdev->axes[i].xresolution, 
 				      gdkdev->axes[i].min_value, 
 				      gdkdev->axes[i].max_value, 
 				      gdkdev->axes[i].resolution));
@@ -887,7 +872,7 @@ _gdk_input_other_event (GdkEvent  *event,
   display = gdk_drawable_get_display (window);
 
   GDK_NOTE (EVENTS_OR_INPUT,
-	    g_print ("gdk_input_win32_other_event: window=%p %+d%+d\n",
+	    g_print ("_gdk_input_other_event: window=%p %+d%+d\n",
 		     GDK_WINDOW_HWND (window), x, y));
   
   if (msg->message == WT_PACKET)
@@ -1175,7 +1160,7 @@ _gdk_input_grab_pointer (GdkWindow    *window,
   new_window = NULL;
   need_ungrab = FALSE;
 
-  GDK_NOTE (INPUT, g_print ("gdk_input_win32_grab_pointer: %p %d %p\n",
+  GDK_NOTE (INPUT, g_print ("_gdk_input_grab_pointer: %p %d %p\n",
 			   GDK_WINDOW_HWND (window),
 			   owner_events,
 			   (confine_to ? GDK_WINDOW_HWND (confine_to) : 0)));
@@ -1263,7 +1248,7 @@ _gdk_input_ungrab_pointer (guint32 time)
   GdkDevicePrivate *gdkdev;
   GList *tmp_list;
 
-  GDK_NOTE (INPUT, g_print ("gdk_input_win32_ungrab_pointer\n"));
+  GDK_NOTE (INPUT, g_print ("_gdk_input_ungrab_pointer\n"));
 
   tmp_list = _gdk_input_windows;
   while (tmp_list)

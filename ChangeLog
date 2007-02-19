@@ -1,3 +1,18 @@
+2007-02-19  Tor Lillqvist  <tml@novell.com>
+
+	* gdk/win32/gdkinput.c
+	(gdk_device_finalize, gdk_device_class_init): Remove.
+	(gdk_device_get_type): Drop class init function. The X11 version
+	doesn't have one either.
+	(gdk_devices_list): Call gdk_display_list_devices() on _gdk_display.
+	(gdk_display_list_devices): Check that the argument is
+	_gdk_display.
+
+	* gdk/win32/gdkinput-win32.h (GdkAxisInfo, GdkDevicePrivate):
+	Cleanup: remove unused fields.
+	* gdk/win32/gdkinput-win32.c: Corresponding changes. Fix function
+	names in a few debugging printouts.
+
 2007-02-18  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtktextlayout.c (gtk_text_layout_move_iter_visually):

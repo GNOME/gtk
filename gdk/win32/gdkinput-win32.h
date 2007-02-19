@@ -37,13 +37,7 @@ typedef struct _GdkInputWindow GdkInputWindow;
 /* information about a device axis */
 struct _GdkAxisInfo
 {
-  /* reported x resolution */
-  gint xresolution;
-
-  /* reported x minimum/maximum values */
-  gint xmin_value, xmax_value;
-
-  /* calibrated resolution (for aspect ration) - only relative values
+  /* calibrated resolution (for aspect ratio) - only relative values
      between axes used */
   gint resolution;
   
@@ -56,8 +50,6 @@ struct _GdkDeviceClass
   GObjectClass parent_class;
 };
 
-#define GDK_INPUT_NUM_EVENTC 6
-
 struct _GdkDevicePrivate
 {
   GdkDevice info;
@@ -65,33 +57,16 @@ struct _GdkDevicePrivate
   /* information about the axes */
   GdkAxisInfo *axes;
 
-  /* minimum key code for device */
-  gint min_keycode;	       
-
-  int buttonpress_type, buttonrelease_type, keypress_type,
-      keyrelease_type, motionnotify_type, proximityin_type, 
-      proximityout_type, changenotify_type;
-
-  /* true if we need to select a different set of events, but
-     can't because this is the core pointer */
-  gint needs_update;
-
-  /* Mask of buttons (used for button grabs) */
   gint button_state;
 
-  /* true if we've claimed the device as active. (used only for XINPUT_GXI) */
-  gint claimed;
-
   gint *last_axis_data;
-  gint last_buttons;
+
   /* WINTAB stuff: */
   HCTX hctx;
   /* Cursor number */
   UINT cursor;
   /* The cursor's CSR_PKTDATA */
   WTPKT pktdata;
-  /* CSR_NPBTNMARKS */
-  UINT npbtnmarks[2];
   /* Azimuth and altitude axis */
   AXIS orientation_axes[2];
 };
