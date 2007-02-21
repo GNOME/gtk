@@ -6340,7 +6340,7 @@ msgid ""
 "Hint to help the desktop environment understand what kind of window this is "
 "and how to treat it."
 msgstr ""
-"Вказівка, що допомагає середовищу стільниці зрозуміти якого типу є це вікно "
+"Вказівка, що допомагає середовищу зрозуміти якого типу є це вікно "
 "і як його необхідно обробляти"
 
 #: ../gtk/gtkwindow.c:563

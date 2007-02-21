@@ -1404,7 +1404,7 @@ msgstr "Виберіть файл"
 
 #: ../gtk/gtkfilechooserbutton.c:69 ../gtk/gtkfilechooserdefault.c:1683
 msgid "Desktop"
-msgstr "Стільниця"
+msgstr "Робочий стіл"
 
 #: ../gtk/gtkfilechooserbutton.c:70
 msgid "(None)"
