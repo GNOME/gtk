@@ -1,3 +1,8 @@
+2007-02-23  Dom Lachowicz  <domlachowicz@gmail.com>
+
+	* modules/engines/ms-windows/msw_style.c: Bug 411118 - bad bevel for
+	progress bar on windows classic. Match from Mathias Hasselmann.
+	
 2007-02-19  Tor Lillqvist  <tml@novell.com>
 
 	* gdk/win32/gdkinput.c

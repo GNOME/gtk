@@ -2052,12 +2052,14 @@ draw_box (GtkStyle * style,
 		    GtkProgressBar *progress_bar = GTK_PROGRESS_BAR (widget);
 		    XpThemeElement xp_progress_bar =
 			map_gtk_progress_bar_to_xp (progress_bar, FALSE);
-		    if (xp_theme_draw
-			(window, xp_progress_bar, style, x, y, width, height,
-			 state_type, area))
+
+		    if (xp_theme_draw (window, xp_progress_bar, style, x, y,
+							   width, height, state_type, area))
 			{
 			    return;
 			}
+
+			shadow_type = GTK_SHADOW_NONE;
 		}
 	}
     else if (detail && strcmp (detail, "menuitem") == 0)
