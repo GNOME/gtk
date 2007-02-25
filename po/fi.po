@@ -12,7 +12,7 @@ msgstr ""
 "Project-Id-Version: gtk+ 2.2.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2007-02-20 08:29+0300\n"
-"PO-Revision-Date: 2007-02-20 08:31+0300\n"
+"PO-Revision-Date: 2007-02-25 19:15+0300\n"
 "Last-Translator: Ilkka Tuohela <hile@iki.fi>\n"
 "Language-Team: Finnish <gnome-fi-laatu@lists.sourceforge.net>\n"
 "MIME-Version: 1.0\n"
@@ -429,7 +429,7 @@ msgstr "Muunnetun PNG:n leveys tai korkeus on nolla."
 
 #: ../gdk-pixbuf/io-png.c:144
 msgid "Bits per channel of transformed PNG is not 8."
-msgstr "Muunnetussa PNG:ssä ei ole 8 bittiä kanavaa kohden."
+msgstr "Muunnetussa PNG-kuvassa ei ole 8 bittiä kanavaa kohden."
 
 #: ../gdk-pixbuf/io-png.c:153
 msgid "Transformed PNG not RGB or RGBA."
@@ -437,7 +437,7 @@ msgstr "Muunnettu PNG ei ole RGB tai RGBA."
 
 #: ../gdk-pixbuf/io-png.c:162
 msgid "Transformed PNG has unsupported number of channels, must be 3 or 4."
-msgstr "Muunettussa PNG:ssä on tukematon määrä kanavia; täytyy olla 3 tai 4."
+msgstr "Muunettussa PNG-kuvassa on tukematon määrä kanavia; täytyy olla 3 tai 4."
 
 #: ../gdk-pixbuf/io-png.c:183
 #, c-format
@@ -754,7 +754,7 @@ msgstr "XPM-tiedoston kuvan korkeus on <= 0"
 
 #: ../gdk-pixbuf/io-xpm.c:501
 msgid "XPM has invalid number of chars per pixel"
-msgstr "XPM:ssä on väärä määrä merkkejä kuvapistettä kohden"
+msgstr "XPM-tiedostossa on väärä määrä merkkejä kuvapistettä kohden"
 
 #: ../gdk-pixbuf/io-xpm.c:510
 msgid "XPM file has invalid number of colors"
@@ -1814,7 +1814,7 @@ msgstr "(Tyhjä)"
 #: ../gtk/gtkfilesystemwin32.c:2396 ../gtk/gtkfilesystemwin32.c:2446
 #, c-format
 msgid "Error getting information for '%s': %s"
-msgstr "Virhe kohteen \"%s\" tietojen hakemisessa: %s"
+msgstr "Virhe haettaessa kohteen \"%s\" tietoja: %s"
 
 #: ../gtk/gtkfilesystemunix.c:1168 ../gtk/gtkfilesystemwin32.c:1284
 msgid "This file system does not support mounting"
@@ -2716,7 +2716,7 @@ msgstr "Pienennä sisennystä"
 
 #: ../gtk/gtkstock.c:358
 msgid "_Index"
-msgstr "_Hakemisto"
+msgstr "_Indeksi"
 
 #: ../gtk/gtkstock.c:359
 msgid "_Information"
@@ -4144,7 +4144,7 @@ msgstr "Hajautustaulun kirjoitus epäonnistui\n"
 
 #: ../gtk/updateiconcache.c:1128
 msgid "Failed to write directory index\n"
-msgstr "Hakemistoindeksin kirjoitus epäonnistui\n"
+msgstr "Kansioindeksin kirjoitus epäonnistui\n"
 
 #: ../gtk/updateiconcache.c:1136
 msgid "Failed to rewrite header\n"
@@ -4200,7 +4200,7 @@ msgid ""
 "No theme index file in '%s'.\n"
 "If you really want to create an icon cache here, use --ignore-theme-index.\n"
 msgstr ""
-"Teeman indeksitiedostoa ei löydy hakemistosta \"%s\"\n"
+"Teeman indeksitiedostoa ei löydy kansiosta \"%s\"\n"
 "Jos haluat todella luoda kuvakevälimuistin tähän, käytä valitsinta\n"
 "--ignore-theme-index.\n"
 
