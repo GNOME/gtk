@@ -2500,6 +2500,13 @@ void
 gdk_window_set_icon_name (GdkWindow   *window, 
 			  const gchar *name)
 {
+  /* In case I manage to confuse this again (or somebody else does):
+   * Please note that "icon name" here really *does* mean the name or
+   * title of an window minimized as an icon on the desktop, or in the
+   * taskbar. It has nothing to do with the freedesktop.org icon
+   * naming stuff.
+   */
+
   g_return_if_fail (GDK_IS_WINDOW (window));
 
   if (GDK_WINDOW_DESTROYED (window))
