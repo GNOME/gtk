@@ -1,3 +1,4 @@
+/* -*- Mode: C; c-file-style: "gnu"; tab-width: 8 -*- */
 /* GTK - The GIMP Toolkit
  * gtkfilechooserdialog.c: File selector dialog
  * Copyright (C) 2003, Red Hat, Inc.
@@ -150,14 +151,15 @@ file_chooser_widget_file_activated (GtkFileChooser       *chooser,
 }
 
 static void
-file_chooser_widget_update_hints (GtkFileChooserDialog *dialog)
+file_chooser_widget_update_hints (GtkFileChooserDialog *dialog,
+				  gint                  width)
 {
   GtkFileChooserDialogPrivate *priv;
   GdkGeometry geometry;
 
   priv = GTK_FILE_CHOOSER_DIALOG_GET_PRIVATE (dialog);
 
-  geometry.min_width = -1;
+  geometry.min_width = (!priv->resize_horizontally ? width : -1);
   geometry.min_height = -1;
   geometry.max_width = (priv->resize_horizontally?G_MAXSHORT:-1);
   geometry.max_height = (priv->resize_vertically?G_MAXSHORT:-1);
@@ -247,7 +249,7 @@ file_chooser_widget_default_realized_size_changed (GtkWidget            *widget,
     {
       update_hints = TRUE;
     }
-  
+
   if (resize_vertically && priv->resize_vertically)
     {
       dy = default_height - priv->default_height;
@@ -280,7 +282,7 @@ file_chooser_widget_default_realized_size_changed (GtkWidget            *widget,
 
   /* Only store the size if we can resize in that direction. */
   if (update_hints)
-    file_chooser_widget_update_hints (dialog);
+    file_chooser_widget_update_hints (dialog, width);
 }
 
 static void
@@ -305,7 +307,7 @@ file_chooser_widget_default_unrealized_size_changed (GtkWidget            *widge
   height = priv->default_height + GTK_WIDGET (dialog)->requisition.height - priv->widget->requisition.height;
 
   gtk_window_set_default_size (GTK_WINDOW (dialog), width, height);
-  file_chooser_widget_update_hints (dialog);
+  file_chooser_widget_update_hints (dialog, width);
 }
 
 static void
