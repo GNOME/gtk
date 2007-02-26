@@ -1,3 +1,4 @@
+/* -*- Mode: C; c-file-style: "gnu"; tab-width: 8 -*- */
 /* GTK - The GIMP Toolkit
  * gtkfilechooserdefault.c: Default implementation of GtkFileChooser
  * Copyright (C) 2003, Red Hat, Inc.
@@ -241,7 +242,7 @@ typedef enum {
 #define FALLBACK_ICON_SIZE 16
 
 #define PREVIEW_HBOX_SPACING 12
-#define NUM_LINES 40
+#define NUM_LINES 45
 #define NUM_CHARS 60
 
 static void gtk_file_chooser_default_iface_init       (GtkFileChooserIface        *iface);
@@ -4643,7 +4644,6 @@ browse_widgets_create (GtkFileChooserDefault *impl)
   /* Paned widget */
   hpaned = gtk_hpaned_new ();
   gtk_widget_show (hpaned);
-  gtk_paned_set_position (GTK_PANED (hpaned), 200); /* FIXME: this sucks */
   gtk_box_pack_start (GTK_BOX (vbox), hpaned, TRUE, TRUE, 0);
 
   widget = shortcuts_pane_create (impl, size_group);
@@ -7124,7 +7124,6 @@ find_good_size_from_style (GtkWidget *widget,
   gint default_width, default_height;
   int font_size;
   GtkRequisition req;
-  GtkRequisition preview_req;
 
   g_assert (widget->style != NULL);
   impl = GTK_FILE_CHOOSER_DEFAULT (widget);
@@ -7135,15 +7134,20 @@ find_good_size_from_style (GtkWidget *widget,
   default_width = font_size * NUM_CHARS;
   default_height = font_size * NUM_LINES;
 
-  /* Use at least the requisition size not including the preview widget */
-  gtk_widget_size_request (widget, &req);
-
   if (impl->preview_widget_active && impl->preview_widget)
-    gtk_widget_size_request (impl->preview_box, &preview_req);
-  else
-    preview_req.width = 0;
+    {
+      gtk_widget_size_request (impl->preview_box, &req);
+      default_width += PREVIEW_HBOX_SPACING + req.width;
+    }
 
-  default_width = MAX (default_width, (req.width - (preview_req.width + PREVIEW_HBOX_SPACING)));
+  if (impl->extra_widget)
+    {
+      gtk_widget_size_request (impl->extra_align, &req);
+      default_height += GTK_BOX (widget)->spacing + req.height;
+    }
+
+  gtk_widget_size_request (widget, &req);
+  default_width = MAX (default_width, req.width);
   default_height = MAX (default_height, req.height);
 
   *width = default_width;
@@ -7158,11 +7162,7 @@ gtk_file_chooser_default_get_default_size (GtkFileChooserEmbed *chooser_embed,
   GtkFileChooserDefault *impl;
 
   impl = GTK_FILE_CHOOSER_DEFAULT (chooser_embed);
-
   find_good_size_from_style (GTK_WIDGET (chooser_embed), default_width, default_height);
-
-  if (impl->preview_widget_active && impl->preview_widget)
-    *default_width += impl->preview_box->requisition.width + PREVIEW_HBOX_SPACING;
 }
 
 static void

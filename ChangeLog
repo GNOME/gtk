@@ -1,5 +1,19 @@
 2007-02-26  Matthias Clasen <mclasen@redhat.com>
 
+	Apply a patch by Carlos Garnacho to fix several problems
+	with filechooser size handling (#325477, #151169, 143213,
+	#153785)
+
+	* gtk/gtkfilechooserdefault.c: Increase NUM_LINES slightly.
+	(browse_widgets_create): Don't force the paned position to 200.
+	(find_good_size_from_style): Take the size of the extra widget
+	into account.
+
+	* gtk/gtkfilechooserdialog.c (file_chooser_widget_update_hints):
+	Accept a minimal width parameter. Update all callers.
+
+2007-02-26  Matthias Clasen <mclasen@redhat.com>
+
 	* gtk/gtkprintunixdialog.c: Change the label to "Pages per side",
 	which is more accurate, suggested by Tim Waugh. String change! 
 
