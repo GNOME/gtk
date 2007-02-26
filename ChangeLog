@@ -1,3 +1,12 @@
+2007-02-26  Chris Wilson  <chris@chris-wilson.co.uk>
+
+	Bug 409101 – invalid read to gtkicontheme.c insert_theme(), might cause gnome-panel crash
+
+	* gtk/gtkicontheme.c: (scan_directory):
+		Reorder the replacement of the shared base_name key, so that we
+		avoid dereferencing the string in the icon_theme->all_icon
+		hash table after freeing it from the dir->icons hash table.
+
 2007-02-26  Tor Lillqvist  <tml@novell.com>
 
 	* gdk/win32/gdkwindow-win32.c (gdk_window_set_icon_name): Add
