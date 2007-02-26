@@ -1989,7 +1989,7 @@ create_page_setup_page (GtkPrintUnixDialog *dialog)
   gtk_box_pack_start (GTK_BOX (hbox), frame, TRUE, TRUE, 0);
   gtk_widget_show (table);
 
-  label = gtk_label_new_with_mnemonic (_("Pages per _sheet:"));
+  label = gtk_label_new_with_mnemonic (_("Pages per _side:"));
   gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
   gtk_widget_show (label);
   gtk_table_attach (GTK_TABLE (table), label,
