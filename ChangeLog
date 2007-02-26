@@ -1,3 +1,8 @@
+2007-02-26  Matthias Clasen <mclasen@redhat.com>
+
+	* gtk/gtkprinteroptionwidget.c: Make the folder selection for
+	print-to-file work. Reported by Ian Collier.
+
 2007-02-26  Chris Wilson  <chris@chris-wilson.co.uk>
 
 	Bug 409101 – invalid read to gtkicontheme.c insert_theme(), might cause gnome-panel crash

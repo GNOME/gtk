@@ -480,7 +480,7 @@ filesave_changed_cb (GtkWidget              *button,
         {
           gchar *directory;
 
-          directory = gtk_file_chooser_get_current_folder (GTK_FILE_CHOOSER (priv->combo));
+          directory = gtk_file_chooser_get_filename (GTK_FILE_CHOOSER (priv->combo));
           path = g_build_filename (directory, file, NULL);
 
           g_free (directory);
@@ -490,7 +490,7 @@ filesave_changed_cb (GtkWidget              *button,
 
       g_free (path);
     }
-
+ 
   if (uri)
     gtk_printer_option_set (priv->source, uri);
 
@@ -812,7 +812,7 @@ construct_widgets (GtkPrinterOptionWidget *widget)
 
         g_signal_connect (priv->entry, "changed", G_CALLBACK (filesave_changed_cb), widget);
 
-        g_signal_connect (priv->combo, "current-folder-changed", G_CALLBACK (filesave_changed_cb), widget);
+        g_signal_connect (priv->combo, "selection-changed", G_CALLBACK (filesave_changed_cb), widget);
       }
       break;
     default:
