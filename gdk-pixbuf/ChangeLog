@@ -1,3 +1,8 @@
+2007-02-27  Felix Riemann  <friemann@svn.gnome.org>
+
+	* io-ico.c: (fill_info): Add image/x-ico to supported mime types.
+	Fixes bug #393599.
+
 2007-02-16  Matthias Clasen  <mclasen@redhat.com>
 
 	* io-png.c: Don't leak in the error path.  (#405539, Daniel Atallah)
