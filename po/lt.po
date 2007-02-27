@@ -11,14 +11,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: lt\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-02-22 01:21+0200\n"
+"POT-Creation-Date: 2007-02-27 15:48+0200\n"
 "PO-Revision-Date: 2007-02-22 01:25+0200\n"
 "Last-Translator: Gintautas Miliauskas <gintas@akl.lt>\n"
 "Language-Team: Lithuanian <gnome-lt@lists.akl.lt>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms:  nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+"Plural-Forms:  nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && (n%"
+"100<10 || n%100>=20) ? 1 : 2);\n"
 "X-Generator: KBabel 1.11.4\n"
 
 #: ../gdk-pixbuf/gdk-pixbuf-animation.c:154 ../gdk-pixbuf/gdk-pixbuf-io.c:847
@@ -35,7 +36,8 @@ msgstr "Paveikslėlio faile „%s“ nėra duomenų"
 #: ../gdk-pixbuf/gdk-pixbuf-animation.c:209 ../gdk-pixbuf/gdk-pixbuf-io.c:896
 #: ../gdk-pixbuf/gdk-pixbuf-io.c:1153 ../tests/testfilechooser.c:263
 #, c-format
-msgid "Failed to load image '%s': reason not known, probably a corrupt image file"
+msgid ""
+"Failed to load image '%s': reason not known, probably a corrupt image file"
 msgstr ""
 "Nepavyko įkelti paveikslėlio „%s“: nežinoma priežastis, tikriausiai "
 "sugadintas failas"
@@ -136,7 +138,8 @@ msgstr ""
 #: ../gdk-pixbuf/gdk-pixbuf-loader.c:364
 #, c-format
 msgid "Incremental loading of image type '%s' is not supported"
-msgstr "Laipsniškas apdorojimas piešinių, kurių tipas yra „%s“, yra nepalaikomas"
+msgstr ""
+"Laipsniškas apdorojimas piešinių, kurių tipas yra „%s“, yra nepalaikomas"
 
 #: ../gdk-pixbuf/gdk-pixdata.c:147
 msgid "Image header corrupt"
@@ -223,7 +226,8 @@ msgstr "Klaida skaitant GIF: %s"
 #: ../gdk-pixbuf/io-gif.c:496 ../gdk-pixbuf/io-gif.c:1477
 #: ../gdk-pixbuf/io-gif.c:1638
 msgid "GIF file was missing some data (perhaps it was truncated somehow?)"
-msgstr "GIF failui trūksta dalies duomenų (galbūt ji buvo kaip nors sugadinta?)"
+msgstr ""
+"GIF failui trūksta dalies duomenų (galbūt ji buvo kaip nors sugadinta?)"
 
 #: ../gdk-pixbuf/io-gif.c:505
 #, c-format
@@ -370,8 +374,10 @@ msgstr ""
 
 #: ../gdk-pixbuf/io-jpeg.c:946
 #, c-format
-msgid "JPEG quality must be a value between 0 and 100; value '%d' is not allowed."
-msgstr "JPEG kokybės reikšmė turi būti tarp 0 ir 100; reikšmė „%d“ yra neleistina."
+msgid ""
+"JPEG quality must be a value between 0 and 100; value '%d' is not allowed."
+msgstr ""
+"JPEG kokybės reikšmė turi būti tarp 0 ir 100; reikšmė „%d“ yra neleistina."
 
 #: ../gdk-pixbuf/io-jpeg.c:1114
 msgid "The JPEG image format"
@@ -470,7 +476,8 @@ msgid "Fatal error reading PNG image file: %s"
 msgstr "Įvyko mirtina klaida skaitant PNG paveikslėlių failą: %s"
 
 #: ../gdk-pixbuf/io-png.c:826
-msgid "Keys for PNG text chunks must have at least 1 and at most 79 characters."
+msgid ""
+"Keys for PNG text chunks must have at least 1 and at most 79 characters."
 msgstr "PNG tekstiniai raktai turi turėti nuo 1 iki 79 simbolių."
 
 #: ../gdk-pixbuf/io-png.c:834
@@ -482,7 +489,8 @@ msgstr "PNG tekstiniai raktai turi naudoti tik ASCII simbolius."
 msgid ""
 "PNG compression level must be a value between 0 and 9; value '%s' could not "
 "be parsed."
-msgstr "PNG suspaudimo lygis turi būti reikšmė tarp 0 ir 9: reikšmės „%s“ nesuprasta."
+msgstr ""
+"PNG suspaudimo lygis turi būti reikšmė tarp 0 ir 9: reikšmės „%s“ nesuprasta."
 
 #: ../gdk-pixbuf/io-png.c:859
 #, c-format
@@ -496,7 +504,8 @@ msgstr ""
 #: ../gdk-pixbuf/io-png.c:899
 #, c-format
 msgid "Value for PNG text chunk %s cannot be converted to ISO-8859-1 encoding."
-msgstr "PNG tekstinės dalies reikšmė %s negali būti perkoduota į ISO-8859-1 koduotę."
+msgstr ""
+"PNG tekstinės dalies reikšmė %s negali būti perkoduota į ISO-8859-1 koduotę."
 
 #: ../gdk-pixbuf/io-png.c:1050
 msgid "The PNG image format"
@@ -1587,8 +1596,10 @@ msgstr "Failas pavadinimu „%s“ jau egzistuoja. Ar norite jį perrašyti?"
 
 #: ../gtk/gtkfilechooserdefault.c:7324
 #, c-format
-msgid "The file already exists in \"%s\".  Replacing it will overwrite its contents."
-msgstr "Failas vietoje „%s“ jau egzistuoja. Pakeitus jį, jo turinys bus perrašytas."
+msgid ""
+"The file already exists in \"%s\".  Replacing it will overwrite its contents."
+msgstr ""
+"Failas vietoje „%s“ jau egzistuoja. Pakeitus jį, jo turinys bus perrašytas."
 
 #: ../gtk/gtkfilechooserdefault.c:7329
 msgid "_Replace"
@@ -1687,8 +1698,10 @@ msgstr "Pe_rvadinti failą"
 
 #: ../gtk/gtkfilesel.c:1406
 #, c-format
-msgid "The folder name \"%s\" contains symbols that are not allowed in filenames"
-msgstr "Aplanko pavadinime „%s“ yra simbolių, kurių negalima naudoti failų varduose"
+msgid ""
+"The folder name \"%s\" contains symbols that are not allowed in filenames"
+msgstr ""
+"Aplanko pavadinime „%s“ yra simbolių, kurių negalima naudoti failų varduose"
 
 #: ../gtk/gtkfilesel.c:1451
 msgid "New Folder"
@@ -4082,7 +4095,8 @@ msgstr "„%s“ nėra tinkamas požymio pavadinimas"
 
 #: ../gtk/gtktextbufferserialize.c:1193
 #, c-format
-msgid "\"%s\" could not be converted to a value of type \"%s\" for attribute \"%s\""
+msgid ""
+"\"%s\" could not be converted to a value of type \"%s\" for attribute \"%s\""
 msgstr "„%s“ nepavyko konvertuoti į „%s“ tipo reikšmę atributui „%s“"
 
 #: ../gtk/gtktextbufferserialize.c:1202
@@ -4119,7 +4133,8 @@ msgid "Serialized data is malformed"
 msgstr "Nuoseklinti duomenys yra netinkamai suformuoti"
 
 #: ../gtk/gtktextbufferserialize.c:1866
-msgid "Serialized data is malformed. First section isn't GTKTEXTBUFFERCONTENTS-0001"
+msgid ""
+"Serialized data is malformed. First section isn't GTKTEXTBUFFERCONTENTS-0001"
 msgstr ""
 "Nuoseklinti duomenys yra netinkamai suformuoti. Pirmas skyrius nėra "
 "GTKTEXTBUFFERCONTENTS-0001"
@@ -4198,4 +4213,3 @@ msgstr ""
 "„%s“ nėra temos indekso failo.\n"
 "Jei tikrai čia norite sukurti piktogramos podėlį, naudokite --ignore-theme-"
 "index.\n"
-
