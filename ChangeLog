@@ -2,6 +2,13 @@
 
 	Merge from trunk:
 
+	* gtk/gtksettings.c: Make color scheme update properly
+	when changing themes.  (#402131, Benjamin Berg)
+
+2007-02-28  Matthias Clasen <mclasen@redhat.com>
+
+	Merge from trunk:
+
 	* gtk/gtkrc.c: Don't leak references to the color-hash
 	gotten from GtkSettings.  (#409357, Benjamin Berg)
 

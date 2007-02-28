@@ -1646,13 +1646,12 @@ add_color_to_hash (gchar      *name,
 		   GdkColor   *color, 
 		   GHashTable *target)
 {
-  GdkColor *old, *new;
+  GdkColor *old;
 
   old = g_hash_table_lookup (target, name);
   if (!old || !gdk_color_equal (old, color))
     {
-      new = gdk_color_copy (color);
-      g_hash_table_insert (target, g_strdup (name), new);
+      g_hash_table_insert (target, g_strdup (name), gdk_color_copy (color));
       
       return TRUE;
     }
@@ -1699,7 +1698,7 @@ add_colors_to_hash_from_string (GHashTable  *hash,
 	}
 
       if (gdk_color_parse (p, &color))
-	changed = add_color_to_hash (name, &color, hash);
+	changed |= add_color_to_hash (name, &color, hash);
     }
 
   g_free (copy);
