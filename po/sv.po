@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-02-08 03:18+0000\n"
-"PO-Revision-Date: 2007-02-14 23:34+0100\n"
+"POT-Creation-Date: 2007-02-15 03:17+0000\n"
+"PO-Revision-Date: 2007-02-28 22:36+0100\n"
 "Last-Translator: Daniel Nylander <po@danielnylander.se>\n"
 "Language-Team: Swedish <tp-sv@listor.tp-sv.se>\n"
 "MIME-Version: 1.0\n"
@@ -1414,15 +1414,15 @@ msgstr "%1$s på %2$s"
 #: ../gtk/gtkfilechooserdefault.c:2593
 #, c-format
 msgid "Add the folder '%s' to the bookmarks"
-msgstr "Lägg till mappen \"%s\" till bokmärkena"
+msgstr "Lägg till mappen \"%s\" till dina bokmärken"
 
 #: ../gtk/gtkfilechooserdefault.c:2634
 msgid "Add the current folder to the bookmarks"
-msgstr "LÄgg till den aktuella mappen till bokmärkena"
+msgstr "LÄgg till den aktuella mappen till dina bokmärken"
 
 #: ../gtk/gtkfilechooserdefault.c:2636
 msgid "Add the selected folders to the bookmarks"
-msgstr "Lägg till de valda mapparna till bokmärkena"
+msgstr "Lägg till de valda mapparna till dina bokmärken"
 
 #: ../gtk/gtkfilechooserdefault.c:2676
 #, c-format
@@ -1459,7 +1459,7 @@ msgstr "_Lägg till"
 
 #: ../gtk/gtkfilechooserdefault.c:3606
 msgid "Add the selected folder to the Bookmarks"
-msgstr "Lägg till den valda mappen i bokmärkena"
+msgstr "Lägg till den valda mappen i dina bokmärken"
 
 #: ../gtk/gtkfilechooserdefault.c:3611
 #: ../gtk/gtkstock.c:404
@@ -1481,7 +1481,7 @@ msgstr "Kunde inte välja filen \"%s\" eftersom det är ett ogiltigt namn på en
 
 #: ../gtk/gtkfilechooserdefault.c:3908
 msgid "_Add to Bookmarks"
-msgstr "_Lägg till i bokmärkena"
+msgstr "_Lägg till i bokmärken"
 
 #: ../gtk/gtkfilechooserdefault.c:3922
 msgid "Show _Hidden Files"
@@ -2545,7 +2545,8 @@ msgstr "Öppna \"%s\""
 msgid "Unknown item"
 msgstr "Okänt objekt"
 
-#: ../gtk/gtkrecentchoosermenu.c:1032
+#: ../gtk/gtkrecentchoosermenu.c:1033
+#: ../gtk/gtkrecentchoosermenu.c:1146
 msgid "No items found"
 msgstr "Inga objekt hittades"
 
