@@ -661,9 +661,6 @@ gtk_rc_color_hash_changed (GtkSettings  *settings,
   
   g_object_get (settings, "color-hash", &context->color_hash, NULL);
 
-  if (context->color_hash)
-    g_hash_table_ref (context->color_hash);
-
   if (!context->reloading)
     gtk_rc_reparse_all_for_settings (settings, TRUE);
 }
@@ -689,9 +686,6 @@ gtk_rc_context_get (GtkSettings *settings)
 		    "gtk-font-name", &context->font_name,
 		    "color-hash", &context->color_hash,
 		    NULL);
-
-      if (context->color_hash)
-        g_hash_table_ref (context->color_hash);
 
       g_signal_connect (settings,
 			"notify::gtk-theme-name",
