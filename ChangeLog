@@ -1,4 +1,9 @@
-2006-02-28  Tristan Van Berkom <tvb@gnome.org>
+2007-02-28  Matthias Clasen <mclasen@redhat.com>
+
+	* gtk/gtkrc.c: Don't leak references to the color-hash 
+	gotten from GtkSettings.  (#409357, Benjamin Berg)
+
+2007-02-28  Tristan Van Berkom <tvb@gnome.org>
 
 	* gtk/gtkradiobutton.c: Fixed a warning from
 	g_object_set (radiobutton, "group", NULL, NULL).
