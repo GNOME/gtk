@@ -144,10 +144,13 @@ gtk_radio_button_set_property (GObject      *object,
   switch (prop_id)
     {
       GSList *slist;
+      GtkRadioButton *button;
 
     case PROP_GROUP:
-      if (G_VALUE_HOLDS_OBJECT (value))
-	slist = gtk_radio_button_get_group ((GtkRadioButton*) g_value_get_object (value));
+        button = g_value_get_object (value);
+
+      if (button)
+	slist = gtk_radio_button_get_group (button);
       else
 	slist = NULL;
       gtk_radio_button_set_group (radio_button, slist);
