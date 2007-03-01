@@ -618,10 +618,11 @@ gtk_settings_get_property (GObject     *object,
     {
       g_value_set_boxed (value, get_color_hash (settings));
       return;
-    case PROP_COLOR_SCHEME:
+    }
+  else if (property_id == PROP_COLOR_SCHEME)
+    {
       g_value_take_string (value, get_color_scheme (settings));
       return;
-    default: ;
     }
 
   /* For enums and strings, we need to get the value as a string,

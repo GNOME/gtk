@@ -1,3 +1,9 @@
+2007-03-01  Murray Cumming  <murrayc@murrayc.com>
+
+	* gtk/gtksettings.c: (gtk_settings_get_property): Fix the build, by 
+	converting the case statement to an if else. I am only guessing that 
+	this is the desired logic.
+
 2007-03-01  Matthias Clasen <mclasen@redhat.com>
 
 	Merge from trunk:
