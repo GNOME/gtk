@@ -2079,31 +2079,6 @@ update_color_hash (ColorSchemeData   *data,
   return TRUE;
 }
 
-struct _GtkRcContext
-{
-  GHashTable *rc_style_ht;
-  GtkSettings *settings;
-  GSList *rc_sets_widget;
-  GSList *rc_sets_widget_class;
-  GSList *rc_sets_class;
-
-  /* The files we have parsed, to reread later if necessary */
-  GSList *rc_files;
-
-  gchar *theme_name;
-  gchar *key_theme_name;
-  gchar *font_name;
-
-  gchar **pixmap_path;
-
-  gint default_priority;
-  GtkStyle *default_style;
-
-  GHashTable *color_hash;
-
-  guint reloading : 1;
-};
-
 static void
 merge_color_scheme (GtkSettings       *settings, 
 		    const GValue      *value, 
