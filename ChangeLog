@@ -1,3 +1,10 @@
+2007-03-01  Matthias Clasen <mclasen@redhat.com>
+
+	* gtk/gtksettings.c: Always store gtk-color-scheme
+	values from all sources in the ColorSchemeData struct
+	and ignore the property_value for gtk-color-scheme.
+	This fixes #412596, reported by Thomas Wood.
+
 2007-02-28  Matthias Clasen <mclasen@redhat.com>
 
 	* gtk/gtksettings.c: Make color scheme update properly
