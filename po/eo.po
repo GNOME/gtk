@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+2.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-03-03 19:47+0100\n"
+"POT-Creation-Date: 2007-03-03 20:34+0100\n"
 "PO-Revision-Date: 2007-02-26 02:54+0200\n"
 "Last-Translator: Antono Vasiljev <antono.vasiljev@gmail.com>\n"
 "Language-Team: Eo-tradukado <http://eo-tradukado.tuxfamily.org>\n"
@@ -837,151 +837,151 @@ msgstr "Gdk malcimaj flagoj por malmarki"
 
 #: ../gdk/keyname-table.h:3940
 msgid "keyboard label|BackSpace"
-msgstr "klavara etikedo|Retropaŝo"
+msgstr "Retropaŝo"
 
 #: ../gdk/keyname-table.h:3941
 msgid "keyboard label|Tab"
-msgstr "klavara etikedo|Tab"
+msgstr "Tab"
 
 #: ../gdk/keyname-table.h:3942
 msgid "keyboard label|Return"
-msgstr "klavara etikedo|Enen"
+msgstr "Enen"
 
 #: ../gdk/keyname-table.h:3943
 msgid "keyboard label|Pause"
-msgstr "klavara etikedo|Paŭzo"
+msgstr "Paŭzo"
 
 #: ../gdk/keyname-table.h:3944
 msgid "keyboard label|Scroll_Lock"
-msgstr "klavara etikedo|RulumBaskulo"
+msgstr "RulumBaskulo"
 
 #: ../gdk/keyname-table.h:3945
 msgid "keyboard label|Sys_Req"
-msgstr "klavara etikedo|Sistemo"
+msgstr "Sistemo"
 
 #: ../gdk/keyname-table.h:3946
 msgid "keyboard label|Escape"
-msgstr "klavara etikedo|Eskapo"
+msgstr "Eskapo"
 
 #: ../gdk/keyname-table.h:3947
 msgid "keyboard label|Multi_key"
-msgstr "klavara etikedo|Plurklavo"
+msgstr "Plurklavo"
 
 #: ../gdk/keyname-table.h:3948
 msgid "keyboard label|Home"
-msgstr "klavara etikedo|Hejmo"
+msgstr "Hejmo"
 
 #: ../gdk/keyname-table.h:3949
 msgid "keyboard label|Left"
-msgstr "klavara etikedo|KP_Maldekstren"
+msgstr "Maldekstren"
 
 #: ../gdk/keyname-table.h:3950
 msgid "keyboard label|Up"
-msgstr "klavara etikedo|Supren"
+msgstr "Supren"
 
 #: ../gdk/keyname-table.h:3951
 msgid "keyboard label|Right"
-msgstr "klavara etikedo|Dekstren"
+msgstr "Dekstren"
 
 #: ../gdk/keyname-table.h:3952
 msgid "keyboard label|Down"
-msgstr "klavara etikedo|Malsupren"
+msgstr "Malsupren"
 
 #: ../gdk/keyname-table.h:3953
 msgid "keyboard label|Page_Up"
-msgstr "klavara etikedo|Paĝo_Supren"
+msgstr "Paĝo_Supren"
 
 #: ../gdk/keyname-table.h:3954
 msgid "keyboard label|Page_Down"
-msgstr "klavara etikedo|Paĝo_Malsupren"
+msgstr "Paĝo_Malsupren"
 
 #: ../gdk/keyname-table.h:3955
 msgid "keyboard label|End"
-msgstr "klavara etikedo|Fino"
+msgstr "Fino"
 
 #: ../gdk/keyname-table.h:3956
 msgid "keyboard label|Begin"
-msgstr "klavara etikedo|Komenco"
+msgstr "Komenco"
 
 #: ../gdk/keyname-table.h:3957
 msgid "keyboard label|Print"
-msgstr "klavara etikedo|Presu"
+msgstr "Presu"
 
 #: ../gdk/keyname-table.h:3958
 msgid "keyboard label|Insert"
-msgstr "klavara etikedo|Enmetu"
+msgstr "Enmetu"
 
 #: ../gdk/keyname-table.h:3959
 msgid "keyboard label|Num_Lock"
-msgstr "klavara etikedo|Num_Baskulo"
+msgstr "Num_Baskulo"
 
 #: ../gdk/keyname-table.h:3960
 msgid "keyboard label|KP_Space"
-msgstr "klavara etikedo|KP_Spaceto"
+msgstr "KP_Spaceto"
 
 #: ../gdk/keyname-table.h:3961
 msgid "keyboard label|KP_Tab"
-msgstr "klavara etikedo|KP_Tabo"
+msgstr "KP_Tabo"
 
 #: ../gdk/keyname-table.h:3962
 msgid "keyboard label|KP_Enter"
-msgstr "klavara etikedo|KP_Enigo"
+msgstr "KP_Enigo"
 
 #: ../gdk/keyname-table.h:3963
 msgid "keyboard label|KP_Home"
-msgstr "klavara etikedo|KP_Hejmo"
+msgstr "KP_Hejmo"
 
 #: ../gdk/keyname-table.h:3964
 msgid "keyboard label|KP_Left"
-msgstr "klavara etikedo|KP_Maldekstren"
+msgstr "KP_Maldekstren"
 
 #: ../gdk/keyname-table.h:3965
 msgid "keyboard label|KP_Up"
-msgstr "klavara etikedo|KP_Supren"
+msgstr "KP_Supren"
 
 #: ../gdk/keyname-table.h:3966
 msgid "keyboard label|KP_Right"
-msgstr "klavara etikedo|KP_Dekstren"
+msgstr "KP_Dekstren"
 
 #: ../gdk/keyname-table.h:3967
 msgid "keyboard label|KP_Down"
-msgstr "klavara etikedo|KP_Malsupren"
+msgstr "KP_Malsupren"
 
 #: ../gdk/keyname-table.h:3968
 msgid "keyboard label|KP_Page_Up"
-msgstr "klavara etikedo|KP_Paĝon_Supren"
+msgstr "KP_Paĝon_Supren"
 
 #: ../gdk/keyname-table.h:3969
 msgid "keyboard label|KP_Prior"
-msgstr "klavara etikedo|KP_Antaŭe"
+msgstr "KP_Antaŭe"
 
 #: ../gdk/keyname-table.h:3970
 msgid "keyboard label|KP_Page_Down"
-msgstr "klavara etikedo|KP_Paĝon_Malsupren"
+msgstr "KP_Paĝon_Malsupren"
 
 #: ../gdk/keyname-table.h:3971
 msgid "keyboard label|KP_Next"
-msgstr "klavara etikedo|KP_Sekva"
+msgstr "KP_Sekva"
 
 #: ../gdk/keyname-table.h:3972
 msgid "keyboard label|KP_End"
-msgstr "klavara etikedo|KP_Fino"
+msgstr "KP_Fino"
 
 #: ../gdk/keyname-table.h:3973
 msgid "keyboard label|KP_Begin"
-msgstr "klavara etikedo|KB_Komenco"
+msgstr "KB_Komenco"
 
 #: ../gdk/keyname-table.h:3974
 msgid "keyboard label|KP_Insert"
-msgstr "klavara etikedo|KP_Enmetu"
+msgstr "KP_Enmetu"
 
 #: ../gdk/keyname-table.h:3975
 msgid "keyboard label|KP_Delete"
-msgstr "klavara etikedo|KP_Forigu"
+msgstr "KP_Forigu"
 
 #: ../gdk/keyname-table.h:3976
 msgid "keyboard label|Delete"
-msgstr "klavara etikedo|Forigu"
+msgstr "Forigu"
 
 #. Description of --sync in --help output
 #: ../gdk/win32/gdkmain-win32.c:54
@@ -1070,7 +1070,7 @@ msgstr "Artaĵoj de"
 #.
 #: ../gtk/gtkaccellabel.c:90
 msgid "keyboard label|Shift"
-msgstr "klavara etikedo|Maj"
+msgstr "Maj"
 
 #. This is the text that should appear next to menu accelerators
 #. * that use the control key. If the text on this key isn't typically
@@ -1081,7 +1081,7 @@ msgstr "klavara etikedo|Maj"
 #.
 #: ../gtk/gtkaccellabel.c:98
 msgid "keyboard label|Ctrl"
-msgstr "klavara etikedo|Ktrl"
+msgstr "Ktrl"
 
 #. This is the text that should appear next to menu accelerators
 #. * that use the alt key. If the text on this key isn't typically
@@ -1092,7 +1092,7 @@ msgstr "klavara etikedo|Ktrl"
 #.
 #: ../gtk/gtkaccellabel.c:106
 msgid "keyboard label|Alt"
-msgstr "klavara etikedo|Alt"
+msgstr "Alt"
 
 #. This is the text that should appear next to menu accelerators
 #. * that use the super key. If the text on this key isn't typically
@@ -1102,7 +1102,7 @@ msgstr "klavara etikedo|Alt"
 #.
 #: ../gtk/gtkaccellabel.c:580
 msgid "keyboard label|Super"
-msgstr "klavara etikedo|Super"
+msgstr "Super"
 
 #. This is the text that should appear next to menu accelerators
 #. * that use the hyper key. If the text on this key isn't typically
@@ -1112,7 +1112,7 @@ msgstr "klavara etikedo|Super"
 #.
 #: ../gtk/gtkaccellabel.c:594
 msgid "keyboard label|Hyper"
-msgstr "klavara etikedo|Hyper"
+msgstr "Hyper"
 
 #. This is the text that should appear next to menu accelerators
 #. * that use the meta key. If the text on this key isn't typically
@@ -1122,17 +1122,17 @@ msgstr "klavara etikedo|Hyper"
 #.
 #: ../gtk/gtkaccellabel.c:608
 msgid "keyboard label|Meta"
-msgstr "keyboard label|Meta"
+msgstr "Meta"
 
 #. do not translate the part before the |
 #: ../gtk/gtkaccellabel.c:622
 msgid "keyboard label|Space"
-msgstr "keyboard label|Spaceto"
+msgstr "Spaceto"
 
 #. do not translate the part before the |
 #: ../gtk/gtkaccellabel.c:626
 msgid "keyboard label|Backslash"
-msgstr "keyboard label|Deklivo"
+msgstr "Deklivo"
 
 #. Translate to calendar:YM if you want years to be displayed
 #. * before months; otherwise translate to calendar:MY.
@@ -1197,7 +1197,7 @@ msgstr "%d"
 #: ../gtk/gtkcalendar.c:1660 ../gtk/gtkcalendar.c:2078
 #, c-format
 msgid "calendar:week:digits|%d"
-msgstr "calendar:week:digits|%d"
+msgstr "%d"
 
 #. Translators: This dictates how the year is displayed in
 #. * gtkcalendar widget.  See strftime() manual for the format.
@@ -1234,7 +1234,7 @@ msgstr "Nova rapidigilo..."
 #: ../gtk/gtkcellrendererprogress.c:278 ../gtk/gtkcellrendererprogress.c:365
 #, c-format
 msgid "progress bar label|%d %%"
-msgstr "Etikedo por progresmontrilo|%d %%"
+msgstr "%d %%"
 
 #: ../gtk/gtkcolorbutton.c:189 ../gtk/gtkcolorbutton.c:560
 msgid "Pick a Color"
@@ -2653,42 +2653,42 @@ msgstr "_Lasu tutekrane"
 #. translators, strip the prefix up to and including the first |
 #: ../gtk/gtkstock.c:338
 msgid "Navigation|_Bottom"
-msgstr "Navigo|_Malsupre"
+msgstr "_Malsupre"
 
 #. translators, strip the prefix up to and including the first |
 #: ../gtk/gtkstock.c:340
 msgid "Navigation|_First"
-msgstr "Navigo|_Unua"
+msgstr "_Unua"
 
 #. translators, strip the prefix up to and including the first |
 #: ../gtk/gtkstock.c:342
 msgid "Navigation|_Last"
-msgstr "Navigo|_Lasta"
+msgstr "_Lasta"
 
 #. translators, strip the prefix up to and including the first |
 #: ../gtk/gtkstock.c:344
 msgid "Navigation|_Top"
-msgstr "Navigo|_Supre"
+msgstr "_Supre"
 
 #. translators, strip the prefix up to and including the first |
 #: ../gtk/gtkstock.c:346
 msgid "Navigation|_Back"
-msgstr "Navigo|_Retro"
+msgstr "_Retro"
 
 #. translators, strip the prefix up to and including the first |
 #: ../gtk/gtkstock.c:348
 msgid "Navigation|_Down"
-msgstr "Navigo|_Malsupren"
+msgstr "_Malsupren"
 
 #. translators, strip the prefix up to and including the first |
 #: ../gtk/gtkstock.c:350
 msgid "Navigation|_Forward"
-msgstr "Navigo|_Antaŭen"
+msgstr "_Antaŭen"
 
 #. translators, strip the prefix up to and including the first |
 #: ../gtk/gtkstock.c:352
 msgid "Navigation|_Up"
-msgstr "Navigo|_Supren"
+msgstr "_Supren"
 
 #: ../gtk/gtkstock.c:353
 msgid "_Harddisk"
@@ -2729,62 +2729,62 @@ msgstr "Salti al"
 #. translators, strip the prefix up to and including the first |
 #: ../gtk/gtkstock.c:363
 msgid "Justify|_Center"
-msgstr "Ĝisrandigu|_Centru"
+msgstr "_Centru"
 
 #. translators, strip the prefix up to and including the first |
 #: ../gtk/gtkstock.c:365
 msgid "Justify|_Fill"
-msgstr "Ĝisrandigu|_Plenigu"
+msgstr "_Plenigu"
 
 #. translators, strip the prefix up to and including the first |
 #: ../gtk/gtkstock.c:367
 msgid "Justify|_Left"
-msgstr "Ĝisrandigu|_Maldekstren"
+msgstr "_Maldekstren"
 
 #. translators, strip the prefix up to and including the first |
 #: ../gtk/gtkstock.c:369
 msgid "Justify|_Right"
-msgstr "Ĝisrandigu|_Dekstren"
+msgstr "_Dekstren"
 
 #. translators, strip the prefix up to and including the first |
 #: ../gtk/gtkstock.c:372
 msgid "Media|_Forward"
-msgstr "Mediaĵoj|_Antaŭen"
+msgstr "_Antaŭen"
 
 #. translators, strip the prefix up to and including the first |
 #: ../gtk/gtkstock.c:374
 msgid "Media|_Next"
-msgstr "Mediaĵoj|_Sekva"
+msgstr "_Sekva"
 
 #. translators, strip the prefix up to and including the first |
 #: ../gtk/gtkstock.c:376
 msgid "Media|P_ause"
-msgstr "Mediaĵoj|_Paŭzu"
+msgstr "_Paŭzu"
 
 #. translators, strip the prefix up to and including the first |
 #: ../gtk/gtkstock.c:378
 msgid "Media|_Play"
-msgstr "Mediaĵoj|_Ludu"
+msgstr "_Ludu"
 
 #. translators, strip the prefix up to and including the first |
 #: ../gtk/gtkstock.c:380
 msgid "Media|Pre_vious"
-msgstr "Mediaĵoj|_Antaŭa"
+msgstr "_Antaŭa"
 
 #. translators, strip the prefix up to and including the first |
 #: ../gtk/gtkstock.c:382
 msgid "Media|_Record"
-msgstr "Mediaĵoj|_Registru"
+msgstr "_Registru"
 
 #. translators, strip the prefix up to and including the first |
 #: ../gtk/gtkstock.c:384
 msgid "Media|R_ewind"
-msgstr "Mediaĵoj|Rekomencu"
+msgstr "Rekomencu"
 
 #. translators, strip the prefix up to and including the first |
 #: ../gtk/gtkstock.c:386
 msgid "Media|_Stop"
-msgstr "Mediaĵoj|_Stop"
+msgstr "_Stop"
 
 #: ../gtk/gtkstock.c:387
 msgid "_Network"
