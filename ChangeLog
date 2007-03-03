@@ -1,3 +1,7 @@
+2007-03-03	Guillaume Savaton <llumeao@gmail.com>
+
+	* configure.in: Added Esperanto (eo) to ALL_LINGUAS
+
 2007-03-01  Matthias Clasen <mclasen@redhat.com>
 
 	* gtk/gtksettings.c: Always store gtk-color-scheme
