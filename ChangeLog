@@ -1,3 +1,7 @@
+2007-03-04  Ihar Hrachyshka <iharh@gnome.org>
+
+	* configure.in: Added be@latin to ALL_LINGUAS.
+
 2007-03-01  Murray Cumming  <murrayc@murrayc.com>
 
 	* gtk/gtksettings.c: (gtk_settings_get_property): Fix the build, by 
