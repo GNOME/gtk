@@ -2,20 +2,20 @@
 # This file is distributed under the same license as the gtk+ package.
 # Copyright (C) 2005 THE gtk+'S COPYRIGHT HOLDER.
 # Erdal Ronahi <erdal.ronahi@gmail.com, pckurd@hotmail.com>, 2005, 2006.
-# 
-# 
+#
+#
 msgid ""
 msgstr ""
 "Project-Id-Version: ku\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2006-12-23 22:19+0100\n"
-"PO-Revision-Date: 2006-12-23 22:32+0100\n"
+"PO-Revision-Date: 2007-03-04 16:47+0100\n"
 "Last-Translator: Erdal Ronahi <erdal.ronahi@gmail.com>\n"
 "Language-Team: Kurdish <ku@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural= n != 1"
+"Plural-Forms: nplurals=2; plural= n != 1\n"
 
 #: ../gdk-pixbuf/gdk-pixbuf-animation.c:154
 #: ../gdk-pixbuf/gdk-pixbuf-io.c:847
@@ -717,7 +717,7 @@ msgstr "Bîr têra vekirina dosya wêneyê XBM nake"
 
 #: ../gdk-pixbuf/io-xbm.c:453
 msgid "Failed to write to temporary file when loading XBM image"
-msgstr ""
+msgstr "Dema wêneya XBM hatiye barkirin nivîsandina pelê demî serneket"
 
 #: ../gdk-pixbuf/io-xbm.c:494
 msgid "The XBM image format"
@@ -1021,12 +1021,12 @@ msgstr "Lîsansa bernameyê"
 #. Add the credits button
 #: ../gtk/gtkaboutdialog.c:502
 msgid "C_redits"
-msgstr "_pêbawerî"
+msgstr "_Spas"
 
 #. Add the license button
 #: ../gtk/gtkaboutdialog.c:515
 msgid "_License"
-msgstr "_Peyman"
+msgstr "_Lîsans"
 
 #: ../gtk/gtkaboutdialog.c:756
 #, c-format
@@ -1134,7 +1134,7 @@ msgstr "Backslash"
 #.
 #: ../gtk/gtkcalendar.c:670
 msgid "calendar:MY"
-msgstr "calendar: ya min"
+msgstr "calendar:MY"
 
 #. Translate to calendar:week_start:0 if you want Sunday to be the
 #. * first day of the week to calendar:week_start:1 if you want Monday
@@ -1142,7 +1142,7 @@ msgstr "calendar: ya min"
 #.
 #: ../gtk/gtkcalendar.c:708
 msgid "calendar:week_start:0"
-msgstr "Salname:Hefte_destpêk:0"
+msgstr "Salname:week_start:0"
 
 #. Translators:  This is a text measurement template.
 #. * Translate it to the widest year text.
