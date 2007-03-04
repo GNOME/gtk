@@ -1,17 +1,17 @@
 # Esperanto translation of gtk+
 # Copyright (C) 1998-2007 Free Software Foundation, Inc.
 # This file is distributed under the same license as the gtk+ package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #
-#, fuzzy
+# Guillaume SAVATON <llumeao@gmail.com>, 2007
+#
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-properties 2.10\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2007-03-03 19:56+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
+"Last-Translator: Guillaume Savaton <llumeao@gmail.com>\n"
+"Language-Team: Eo-Tradukado <http://eo-tradukado.tuxfamily.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
