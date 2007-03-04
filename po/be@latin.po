@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-menus\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-03-04 15:47+0200\n"
-"PO-Revision-Date: 2007-02-08 23:37+0100\n"
+"POT-Creation-Date: 2007-03-04 21:48+0200\n"
+"PO-Revision-Date: 2007-03-04 17:41+0100\n"
 "Last-Translator: Alaksandar Navicki <zolak@lacinka.org>\n"
 "Language-Team: Belarusian Latin <i18n@mova.org>\n"
 "MIME-Version: 1.0\n"
@@ -878,24 +878,20 @@ msgid "keyboard label|Home"
 msgstr "Home"
 
 #: ../gdk/keyname-table.h:3949
-#, fuzzy
 msgid "keyboard label|Left"
-msgstr "KP_Left"
+msgstr "KP_Uleva"
 
 #: ../gdk/keyname-table.h:3950
-#, fuzzy
 msgid "keyboard label|Up"
-msgstr "KP_Up"
+msgstr "KP_Uvierch"
 
 #: ../gdk/keyname-table.h:3951
-#, fuzzy
 msgid "keyboard label|Right"
-msgstr "KP_Right"
+msgstr "KP_Uprava"
 
 #: ../gdk/keyname-table.h:3952
-#, fuzzy
 msgid "keyboard label|Down"
-msgstr "KP_Down"
+msgstr "KP_Uniz"
 
 #: ../gdk/keyname-table.h:3953
 msgid "keyboard label|Page_Up"
@@ -1655,7 +1651,7 @@ msgstr "Učora"
 #: ../gtk/gtkfilechoosersettings.c:262 ../gtk/gtkfilesel.c:1408
 #: ../gtk/gtkfilesel.c:1417 ../gtk/gtkfilesystemunix.c:1047
 #: ../gtk/gtkfilesystemwin32.c:1164
-#, fuzzy, c-format
+#, c-format
 msgid "Error creating folder '%s': %s"
 msgstr "Pamyłka pry tvareńni katalohu \"%s\": %s"
 
@@ -2324,7 +2320,6 @@ msgid "C_urrent"
 msgstr "_Dziejnaja"
 
 #: ../gtk/gtkprintunixdialog.c:1533
-#, fuzzy
 msgid "Ra_nge"
 msgstr "Ab_siah: "
 
@@ -2333,6 +2328,8 @@ msgid ""
 "Specify one or more page ranges,\n"
 " e.g. 1-3,7,11"
 msgstr ""
+"Akreśl adzin albo bolej absiahaŭ staronki,\n"
+" naprykład 1-3,7,11"
 
 #: ../gtk/gtkprintunixdialog.c:1553
 msgid "Copies"
@@ -2360,7 +2357,6 @@ msgid "Layout"
 msgstr "Schiema"
 
 #: ../gtk/gtkprintunixdialog.c:1992
-#, fuzzy
 msgid "Pages per _side:"
 msgstr "Staronak _na arkuš:"
 
@@ -3957,7 +3953,7 @@ msgstr "Niesklasyfikavanaje"
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:2227
 #, c-format
 msgid "Custom.%2fx%.2f"
-msgstr ""
+msgstr "Ułasny.%2fx%.2f"
 
 #: ../modules/printbackends/lpr/gtkprintbackendlpr.c:399
 msgid "Print to LPR"
@@ -4162,7 +4158,6 @@ msgid "Failed to write hash table\n"
 msgstr "Niemahčyma zapisać tablicu hashu\n"
 
 #: ../gtk/updateiconcache.c:1386
-#, fuzzy
 msgid "Failed to write folder index\n"
 msgstr "Niemahčyma zapisać indeks katalohu\n"
 
@@ -4195,7 +4190,6 @@ msgid "Cache file created successfully.\n"
 msgstr "Paśpiachova stvorany fajł buferu.\n"
 
 #: ../gtk/updateiconcache.c:1542
-#, fuzzy
 msgid "Overwrite an existing cache, even if up to date"
 msgstr "Nadpisańnie dziejnaha buferu, navat kali jon aktualny"
 
