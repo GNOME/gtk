@@ -1,11 +1,11 @@
 # Biełaruski pierakład gtk+.
 # Copyright (C) 2007 THE gtk+'s COPYRIGHT HOLDER
 # This file is distributed under the same license as the gtk+ package.
-# Alaksandar Navicki <zolak@lacinka.org>, 2006. Łacinka.org
+# Alaksandar Navicki <zolak@lacinka.org>, 2007. Łacinka.org
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: gnome-menus\n"
+"Project-Id-Version: gtk+\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2007-03-04 15:38+0200\n"
 "PO-Revision-Date: 2007-02-08 23:37+0100\n"
