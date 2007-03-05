@@ -1,3 +1,8 @@
+2007-03-04  Ihar Hrachyshka <iharh@gnome.org>
+
+	* be@latin.po: Added .po file with no translations to fix some
+	problems.
+
 2007-03-04	Guillaume Savaton  <llumeao@gmail.com>
 
 	* eo.po: Removed "fuzzy" comment before po header (resulted in msgfmt
