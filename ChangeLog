@@ -1,3 +1,8 @@
+2007-03-04  Claudio Saavedra  <csaavedra@alumnos.utalca.cl>
+
+	* configure.in: Removed be@latin from ALL_LINGUAS, as it's currently
+	breaking the build.
+
 2007-03-04  Ihar Hrachyshka <iharh@gnome.org>
 
 	* configure.in: Added be@latin to ALL_LINGUAS
