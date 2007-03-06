@@ -1,3 +1,9 @@
+2007-03-06  Tor Lillqvist  <tml@novell.com>
+
+	* gdk/Makefile.am
+	* gtk/Makefile.am: Further fixes for building on Win32 outside
+	srcdir. (#413492, Mathias Hasselmann)
+
 2007-03-04  Ihar Hrachyshka <iharh@gnome.org>
 
 	* configure.in: Added be@latin to ALL_LINGUAS. Problems seems to be
@@ -676,7 +682,7 @@ Fri Jan 26 13:07:07 2007  Tim Janik  <timj@imendio.com>
 	* gdk/Makefile.am
 	* gdk/win32/Makefile.am
 	* gtk/Makefile.am: Fixes for building outside srcdir on
-	Win32. (#336819, #340113) Drop distributing the handmade .la
+	Win32. (#336819, #340013) Drop distributing the handmade .la
 	libtool wrapper for the wntab32x library. It's too much trouble
 	making it work when building outside srcdir. Just link to the
 	library direcly using -Wl,win32/libwntab32x.a.

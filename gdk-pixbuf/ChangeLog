@@ -1,3 +1,8 @@
+2007-03-06  Tor Lillqvist  <tml@novell.com>
+
+	* Makefile.am: Further fixes for building on Win32 outside
+	srcdir. (#413492, Mathias Hasselmann)
+
 2007-03-05  Matthias Clasen <mclasen@redhat.com>
 
 	* io-tga.c: (gdk_pixbuf__tga_stop_load): Flip rle-encoded

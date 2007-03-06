@@ -158,11 +158,11 @@ libgdk_win32_2_0_la_SOURCES = $(common_sources) gdkkeynames.c
 libgdk_win32_2_0_la_LIBADD = win32/libgdk-win32.la $(GDK_DEP_LIBS) \
   $(top_builddir)/gdk-pixbuf/libgdk_pixbuf-$(GTK_API_VERSION).la
 libgdk_win32_2_0_la_DEPENDENCIES = win32/libgdk-win32.la win32/rc/gdk-win32-res.o gdk.def
-libgdk_win32_2_0_la_LDFLAGS = -Wl,win32/rc/gdk-win32-res.o -export-symbols $(srcdir)/gdk.def $(LDADD)
+libgdk_win32_2_0_la_LDFLAGS = -Wl,win32/rc/gdk-win32-res.o -export-symbols gdk.def $(LDADD)
 
 if OS_WIN32
 install-def-file: gdk.def
-	$(INSTALL) $(srcdir)/gdk.def $(DESTDIR)$(libdir)/gdk-win32-2.0.def
+	$(INSTALL) gdk.def $(DESTDIR)$(libdir)/gdk-win32-2.0.def
 uninstall-def-file:
 	-rm $(DESTDIR)$(libdir)/gdk-win32-2.0.def
 else
@@ -174,7 +174,7 @@ if MS_LIB_AVAILABLE
 noinst_DATA = gdk-win32-$(GTK_API_VERSION).lib
 
 gdk-win32-$(GTK_API_VERSION).lib: libgdk-win32-$(GTK_API_VERSION).la gdk.def
-	lib -name:libgdk-win32-$(GTK_API_VERSION)-@LT_CURRENT_MINUS_AGE@.dll -def:$(srcdir)/gdk.def -out:$@
+	lib -name:libgdk-win32-$(GTK_API_VERSION)-@LT_CURRENT_MINUS_AGE@.dll -def:gdk.def -out:$@
 
 install-ms-lib:
 	$(INSTALL) gdk-win32-$(GTK_API_VERSION).lib $(DESTDIR)$(libdir)
