@@ -7,7 +7,7 @@ endif
 
 if OS_WIN32
 gdk_pixbuf_def = gdk_pixbuf.def
-gdk_pixbuf_symbols = -export-symbols $(srcdir)/gdk_pixbuf.def
+gdk_pixbuf_symbols = -export-symbols gdk_pixbuf.def
 
 gdk_pixbuf_win32_res = gdk_pixbuf-win32-res.o
 gdk_pixbuf_win32_res_ldflag = -Wl,gdk_pixbuf-win32-res.o
@@ -16,7 +16,7 @@ gdk_pixbuf-win32-res.o : gdk_pixbuf.rc
 	$(WINDRES) gdk_pixbuf.rc $@
 
 install-def-file:
-	$(INSTALL) $(srcdir)/gdk_pixbuf.def $(DESTDIR)$(libdir)/gdk_pixbuf-$(GTK_API_VERSION).def
+	$(INSTALL) gdk_pixbuf.def $(DESTDIR)$(libdir)/gdk_pixbuf-$(GTK_API_VERSION).def
 uninstall-def-file:
 	-rm $(DESTDIR)$(libdir)/gdk_pixbuf-$(GTK_API_VERSION).def
 else
@@ -28,7 +28,7 @@ if MS_LIB_AVAILABLE
 noinst_DATA = gdk_pixbuf-$(GTK_API_VERSION).lib
 
 gdk_pixbuf-$(GTK_API_VERSION).lib: libgdk_pixbuf-$(GTK_API_VERSION).la gdk_pixbuf.def
-	lib -name:libgdk_pixbuf-$(GTK_API_VERSION)-@LT_CURRENT_MINUS_AGE@.dll -def:$(srcdir)/gdk_pixbuf.def -out:$@
+	lib -name:libgdk_pixbuf-$(GTK_API_VERSION)-@LT_CURRENT_MINUS_AGE@.dll -def:gdk_pixbuf.def -out:$@
 
 install-ms-lib:
 	$(INSTALL) gdk_pixbuf-$(GTK_API_VERSION).lib $(DESTDIR)$(libdir)
