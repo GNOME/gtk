@@ -1,3 +1,10 @@
+2007-03-05  Matthias Clasen <mclasen@redhat.com>
+
+	Merge from trunk:
+
+	* io-tga.c: (gdk_pixbuf__tga_stop_load): Flip rle-encoded
+	images even if they haven't been completely loaded.  (#347106)
+
 2007-02-27  Felix Riemann  <friemann@svn.gnome.org>
 
 	* io-ico.c: (fill_info): Add image/x-ico to supported mime types.

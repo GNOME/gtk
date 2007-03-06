@@ -504,8 +504,9 @@ static guint parse_rle_data_pseudocolor(TGAContext *ctx)
 		}
 	}
 
-	if (ctx->pbuf_bytes_done == ctx->pbuf_bytes)
+	if (ctx->pbuf_bytes_done == ctx->pbuf_bytes) 
 		ctx->done = TRUE;
+	
 	return n;
 }
 
@@ -657,8 +658,10 @@ static gboolean parse_rle_data(TGAContext *ctx, GError **err)
 		 * perfect, but doing it during the rle decoding in place
 		 * is considerably more work. 
 		 */
-		if (!(ctx->hdr->flags & TGA_ORIGIN_UPPER))
+		if (!(ctx->hdr->flags & TGA_ORIGIN_UPPER)) {
 			pixbuf_flip_vertically (ctx->pbuf);
+			ctx->hdr->flags |= TGA_ORIGIN_UPPER;
+		}
 
 	}
 		
@@ -933,6 +936,13 @@ static gboolean gdk_pixbuf__tga_stop_load(gpointer data, GError **err)
 	TGAContext *ctx = (TGAContext *) data;
 	g_return_val_if_fail(ctx != NULL, FALSE);
 
+	if (!(ctx->hdr->flags & TGA_ORIGIN_UPPER) && ctx->run_length_encoded) {
+		pixbuf_flip_vertically (ctx->pbuf);
+		if (ctx->ufunc)
+			(*ctx->ufunc) (ctx->pbuf, 0, 0,
+				       ctx->pbuf->width, ctx->pbuf->height,
+			       	       ctx->udata);
+	}
 	if (ctx->hdr)
 	  g_free (ctx->hdr);
 	if (ctx->cmap) {
