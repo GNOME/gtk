@@ -377,6 +377,9 @@ display_closed (GdkDisplay   *display,
 static void
 update_current_theme (GtkIconTheme *icon_theme)
 {
+#define theme_changed(_old, _new) \
+  ((_old && !_new) || (!_old && _new) || \
+   (_old && _new && strcmp (_old, _new) != 0))
   GtkIconThemePrivate *priv = icon_theme->priv;
 
   if (!priv->custom_theme)
@@ -393,27 +396,25 @@ update_current_theme (GtkIconTheme *icon_theme)
 			"gtk-fallback-icon-theme", &fallback_theme, NULL);
 	}
 
-      if (!theme)
+      /* ensure that the current theme (even when just the default)
+       * is searched before any fallback theme
+       */
+      if (!theme && fallback_theme)
 	theme = g_strdup (DEFAULT_THEME_NAME);
 
-      if (strcmp (priv->current_theme, theme) != 0)
+      if (theme_changed (priv->current_theme, theme))
 	{
 	  g_free (priv->current_theme);
 	  priv->current_theme = theme;
-
 	  changed = TRUE;
 	}
       else
 	g_free (theme);
 
-      if ((priv->fallback_theme && !fallback_theme) ||
-	  (!priv->fallback_theme && fallback_theme) ||
-	  (priv->fallback_theme && fallback_theme &&
-	   strcmp (priv->fallback_theme, fallback_theme) != 0))
+      if (theme_changed (priv->fallback_theme, fallback_theme))
 	{
 	  g_free (priv->fallback_theme);
 	  priv->fallback_theme = fallback_theme;
-
 	  changed = TRUE;
 	}
       else
@@ -422,6 +423,7 @@ update_current_theme (GtkIconTheme *icon_theme)
       if (changed)
 	do_theme_change (icon_theme);
     }
+#undef theme_changed
 }
 
 /* Callback when the icon theme GtkSetting changes
@@ -548,7 +550,6 @@ gtk_icon_theme_init (GtkIconTheme *icon_theme)
   icon_theme->priv = priv;
 
   priv->custom_theme = FALSE;
-  priv->current_theme = g_strdup (DEFAULT_THEME_NAME);
 
   xdg_data_dirs = g_get_system_data_dirs ();
   for (i = 0; xdg_data_dirs[i]; i++) ;
@@ -609,6 +610,9 @@ static void
 do_theme_change (GtkIconTheme *icon_theme)
 {
   GtkIconThemePrivate *priv = icon_theme->priv;
+
+  if (!priv->themes_valid)
+    return;
   
   GTK_NOTE (ICONTHEME, 
 	    g_print ("change to icon theme \"%s\"\n", priv->current_theme));
@@ -849,7 +853,7 @@ gtk_icon_theme_set_custom_theme (GtkIconTheme *icon_theme,
   if (theme_name != NULL)
     {
       priv->custom_theme = TRUE;
-      if (strcmp (theme_name, priv->current_theme) != 0)
+      if (!priv->current_theme || strcmp (theme_name, priv->current_theme) != 0)
 	{
 	  g_free (priv->current_theme);
 	  priv->current_theme = g_strdup (theme_name);
@@ -859,9 +863,12 @@ gtk_icon_theme_set_custom_theme (GtkIconTheme *icon_theme,
     }
   else
     {
-      priv->custom_theme = FALSE;
+      if (priv->custom_theme)
+	{
+	  priv->custom_theme = FALSE;
 
-      update_current_theme (icon_theme);
+	  update_current_theme (icon_theme);
+	}
     }
 }
 
@@ -1030,7 +1037,8 @@ load_themes (GtkIconTheme *icon_theme)
 
   priv->all_icons = g_hash_table_new (g_str_hash, g_str_equal);
   
-  insert_theme (icon_theme, priv->current_theme);
+  if (priv->current_theme)
+    insert_theme (icon_theme, priv->current_theme);
 
   /* Always look in the "default" icon theme, and in a fallback theme */
   if (priv->fallback_theme)
