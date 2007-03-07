@@ -1,3 +1,10 @@
+2007-03-08  Mathias Hasselmann <mathias.hasselmann@gmx.de>
+
+	* gtk/gtkfilesystemwin32.c: Use Windows shell icons. Icons are
+	stored in the current theme with the name
+	"gtk-win32-shell-icon;PATH;INDEX". PATH and INDEX reference shell
+	icons as reported by SHGetFileInfoW. (#412221)
+
 2007-03-07  Matthias Clasen <mclasen@redhat.com>
 
 	* gtk/gtkexpander.c (gtk_expander_paint_focus): Draw the
