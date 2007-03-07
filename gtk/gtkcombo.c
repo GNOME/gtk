@@ -939,6 +939,7 @@ gtk_combo_init (GtkCombo * combo)
 		    G_CALLBACK (gtk_combo_popup_button_leave), combo);
 
   combo->popwin = gtk_window_new (GTK_WINDOW_POPUP);
+  gtk_widget_set_name (combo->popwin, "gtk-combo-popup-window");
   gtk_window_set_type_hint (GTK_WINDOW (combo->popwin), GDK_WINDOW_TYPE_HINT_COMBO);
   g_object_ref (combo->popwin);
   gtk_window_set_resizable (GTK_WINDOW (combo->popwin), FALSE);

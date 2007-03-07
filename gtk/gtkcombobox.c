@@ -1177,6 +1177,7 @@ gtk_combo_box_set_popup_widget (GtkComboBox *combo_box,
 	  GtkWidget *toplevel;
 	  
           combo_box->priv->popup_window = gtk_window_new (GTK_WINDOW_POPUP);
+          gtk_widget_set_name (combo_box->priv->popup_window, "gtk-combobox-popup-window");
 
 	  gtk_window_set_type_hint (GTK_WINDOW (combo_box->priv->popup_window),
 				    GDK_WINDOW_TYPE_HINT_COMBO);
@@ -2518,6 +2519,8 @@ gtk_combo_box_menu_setup (GtkComboBox *combo_box,
 
   /* create our funky menu */
   menu = gtk_menu_new ();
+  gtk_widget_set_name (menu, "gtk-combobox-popup-menu");
+  
   g_signal_connect (menu, "key_press_event",
 		    G_CALLBACK (gtk_combo_box_menu_key_press), combo_box);
   gtk_combo_box_set_popup_widget (combo_box, menu);

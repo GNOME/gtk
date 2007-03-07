@@ -1,3 +1,12 @@
+2007-03-07  Matthias Clasen <mclasen@redhat.com>
+
+	Merge from trunk:
+
+	* gtk/gtkcombo.c: (gtk_combo_init):
+	* gtk/gtkcombobox.c: (gtk_combo_box_set_popup_widget),
+	(gtk_combo_box_menu_setup): Set names on the popup 
+	widgets to make them themable. (#414975, Benjamin Berg)
+
 2007-03-07	Guillaume Savaton <llumeao@gmail.com>
 
 	* Added Esperanto (eo) to ALL_LINGUAS in configure.in
