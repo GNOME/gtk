@@ -1,10 +1,19 @@
+2007-03-07  Michael Natterer  <mitch@imendio.com>
+
+	Merge from trunk:
+
+	* gtk/gtkcellrendereraccel.c: use multihead safe ungrab functions
+	instead of gdk_keyboard_ungrab() and gdk_pointer_ungrab(), remove
+	empty finalize() implementation, some cosmetic cleanup
+	(bug #415645).
+
 2007-03-06  Chris Wilson  <chris@chris-wilson.co.uk>
 
 	* gtk/gtkicontheme.c (update_current_theme), (gtk_icon_theme_init),
 	(do_theme_change), (gtk_icon_theme_set_custom_theme),
 	(load_themes):
-		Be careful not to trigger a style reset before we have loaded
-		any icon themes. (#414875).
+	Be careful not to trigger a style reset before we have loaded
+	any icon themes. (#414875).
 
 2007-03-06  Tor Lillqvist  <tml@novell.com>
 
