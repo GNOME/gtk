@@ -23,12 +23,13 @@
 # kostas:29Jan2004, move to properties, updated translation
 # kostas:03Mar2004, one more update
 # ta panta rei <ta_panta_rei@flashmail.con>
+#
 msgid ""
 msgstr ""
 "Project-Id-Version: el\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2007-01-22 12:38-0500\n"
-"PO-Revision-Date: 2007-03-07 21:20+0800\n"
+"PO-Revision-Date: 2007-03-08 00:41+0800\n"
 "Last-Translator: Simos Xenitellis <simos@gnome.org>\n"
 "Language-Team: Greek <team@gnome.gr>\n"
 "MIME-Version: 1.0\n"
