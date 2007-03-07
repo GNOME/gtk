@@ -789,6 +789,7 @@ gtk_expander_paint_focus (GtkExpander  *expander,
 {
   GtkWidget *widget;
   GtkExpanderPrivate *priv;
+  GdkRectangle rect;
   gint x, y, width, height;
   gboolean interior_focus;
   gint border_width;
@@ -815,35 +816,47 @@ gtk_expander_paint_focus (GtkExpander  *expander,
   
   width = height = 0;
 
-  if (priv->label_widget && GTK_WIDGET_VISIBLE (priv->label_widget))
+  if (priv->label_widget)
     {
-      GtkAllocation label_allocation = priv->label_widget->allocation;
+      if (GTK_WIDGET_VISIBLE (priv->label_widget))
+	{
+	  GtkAllocation label_allocation = priv->label_widget->allocation;
 
-      width  = label_allocation.width;
-      height = label_allocation.height;
-    }
+	  width  = label_allocation.width;
+	  height = label_allocation.height;
+	}
 
-  width  += 2 * focus_pad + 2 * focus_width;
-  height += 2 * focus_pad + 2 * focus_width;
+      width  += 2 * focus_pad + 2 * focus_width;
+      height += 2 * focus_pad + 2 * focus_width;
 
-  x = widget->allocation.x + border_width;
-  y = widget->allocation.y + border_width;
+      x = widget->allocation.x + border_width;
+      y = widget->allocation.y + border_width;
 
-  if (ltr)
-    {
-      if (interior_focus)
-	x += expander_spacing * 2 + expander_size;
+      if (ltr)
+	{
+	  if (interior_focus)
+	    x += expander_spacing * 2 + expander_size;
+	}
+      else
+	{
+	  x += widget->allocation.width - 2 * border_width
+	    - expander_spacing * 2 - expander_size - width;
+	}
+
+      if (!interior_focus)
+	{
+	  width += expander_size + 2 * expander_spacing;
+	  height = MAX (height, expander_size + 2 * expander_spacing);
+	}
     }
   else
     {
-      x += widget->allocation.width - 2 * border_width
-	- expander_spacing * 2 - expander_size - width;
-    }
+      get_expander_bounds (expander, &rect);
 
-  if (!interior_focus)
-    {
-      width += expander_size + 2 * expander_spacing;
-      height = MAX (height, expander_size + 2 * expander_spacing);
+      x = rect.x - focus_pad;
+      y = rect.y - focus_pad;
+      width = rect.width + 2 * focus_pad;
+      height = rect.height + 2 * focus_pad;
     }
       
   gtk_paint_focus (widget->style, widget->window, GTK_WIDGET_STATE (widget),
