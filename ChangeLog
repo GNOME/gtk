@@ -1,5 +1,11 @@
 2007-03-07  Matthias Clasen <mclasen@redhat.com>
 
+	* gtk/gtkexpander.c (gtk_expander_paint_focus): Draw the
+	focus around the arrow if there is no label widget.
+	(#124045, Cody Russell)
+
+2007-03-07  Matthias Clasen <mclasen@redhat.com>
+
 	Merge from trunk:
 
 	* gtk/gtkcombo.c: (gtk_combo_init):
