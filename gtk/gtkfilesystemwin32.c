@@ -2,6 +2,8 @@
  * gtkfilesystemwin32.c: Default implementation of GtkFileSystem for Windows
  * Copyright (C) 2003, Red Hat, Inc.
  * Copyright (C) 2004, Hans Breuer
+ * Copyright (C) 2007, Novell, Inc.
+ * Copyright (C) 2007, Mathias Hasselmann
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
