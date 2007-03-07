@@ -1,6 +1,5 @@
-# translation of el.po to Greek
 # gtk+ Greek PO file
-# Copyright (C) 1999, 2000, 2001, 2002,2003, 2004, 2005 Free Software Foundation, Inc.
+# Copyright (C) 1999, 2000, 2001, 2002,2003, 2004, 2005, 2006, 2007 Free Software Foundation, Inc.
 #
 # spyros: initial translation, 1999.
 # simos: 186 messages, 20Apr2002, first log entry.
@@ -27,8 +26,8 @@ msgstr ""
 "Project-Id-Version: el\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2007-01-22 12:38-0500\n"
-"PO-Revision-Date: 2006-09-04 12:42+0300\n"
-"Last-Translator: Kostas Papadimas <pkst@gnome.org>\n"
+"PO-Revision-Date: 2007-03-07 16:52+0800\n"
+"Last-Translator: Simos Xenitellis <simos@gnome.org>\n"
 "Language-Team: Greek <team@gnome.gr>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -609,71 +608,60 @@ msgstr ""
 "του πλαισίου"
 
 #: gtk/gtkassistant.c:261
-#, fuzzy
 msgid "Header Padding"
-msgstr "Αριστερό γέμισμα"
+msgstr "Γέμισμα κεφαλίδας"
 
 #: gtk/gtkassistant.c:262
-#, fuzzy
 msgid "Number of pixels around the header."
-msgstr "Στυλ των γωνιών γύρω από την εργαλειοθήκη μενού"
+msgstr "Αριθμός εικονοστοιχείων γύρω από την κεφαλίδα."
 
 #: gtk/gtkassistant.c:269
-#, fuzzy
 msgid "Content Padding"
-msgstr "Γέμισμα προς τα κάτω"
+msgstr "Γέμισμα περιεχομένου"
 
 #: gtk/gtkassistant.c:270
-#, fuzzy
 msgid "Number of pixels around the content pages."
-msgstr "Είδος γωνίας γύρω από τα περιεχόμενα"
+msgstr "Αριθμός εικονοστοιχείων γύρω από τις σελίδες περιεχομένου."
 
 #: gtk/gtkassistant.c:286
-#, fuzzy
 msgid "Page type"
-msgstr "Τύπος συσκευασίας"
+msgstr "Είδος σελίδας"
 
 #: gtk/gtkassistant.c:287
-#, fuzzy
 msgid "The type of the assistant page"
-msgstr "Ο τύπος του μηνύματος"
+msgstr "Το είδος της σελίδας βοηθού"
 
 #: gtk/gtkassistant.c:304
-#, fuzzy
 msgid "Page title"
-msgstr "Μέγεθος σελίδας"
+msgstr "Τίτλος σελίδας"
 
 #: gtk/gtkassistant.c:305
-#, fuzzy
 msgid "The title of the assistant page"
-msgstr "Ο τίτλος του παραθύρου"
+msgstr "Ο τίτλος της σελίδας βοηθού"
 
 #: gtk/gtkassistant.c:321
-#, fuzzy
 msgid "Header image"
-msgstr "Δυνατότητα Κλικ στις Κεφαλίδες"
+msgstr "Εικόνα κεφαλίδας"
 
 #: gtk/gtkassistant.c:322
 msgid "Header image for the assistant page"
-msgstr ""
+msgstr "Εικόνα κεφαλίδας για τη σελίδα βοηθού"
 
 #: gtk/gtkassistant.c:338
-#, fuzzy
 msgid "Sidebar image"
-msgstr "Η εικόνα"
+msgstr "Πλευρική εικόνα"
 
 #: gtk/gtkassistant.c:339
 msgid "Sidebar image for the assistant page"
-msgstr ""
+msgstr "Πλευρική εικόνα για τη σελίδα βοηθού"
 
 #: gtk/gtkassistant.c:354
-#, fuzzy
 msgid "Page complete"
-msgstr "Αύξηση σελίδας"
+msgstr "Συμπληρωμένη σελίδα"
 
 #: gtk/gtkassistant.c:355
 msgid "Whether all required fields on the page have been filled out"
-msgstr ""
+msgstr "Αν όλα τα απαιτούμενα πεδία της σελίδας έχουν συμπληρωθεί"
 
 #: gtk/gtkbbox.c:92
 msgid "Minimum child width"
@@ -1256,14 +1244,12 @@ msgid "Adjustment"
 msgstr "Ρύθμιση"
 
 #: gtk/gtkcellrendererspin.c:94
-#, fuzzy
 msgid "The adjustment that holds the value of the spinbutton."
-msgstr "Η ρύθμιση που κρατάει την τιμή του spinbutton"
+msgstr "Η ρύθμιση που διατηρεί την τιμή του spinbutton"
 
 #: gtk/gtkcellrendererspin.c:109
-#, fuzzy
 msgid "Climb rate"
-msgstr "Ρυθμός Αναρρίχησης"
+msgstr "Ρυθμός αναρρίχησης"
 
 #: gtk/gtkcellrendererspin.c:110 gtk/gtkspinbutton.c:213
 msgid "The acceleration rate when you hold down a button"
@@ -3414,7 +3400,7 @@ msgstr "Δεδομένα χρήστη"
 
 #: gtk/gtkobject.c:368
 msgid "Anonymous User Data Pointer"
-msgstr ""
+msgstr "Anonymous User Data Pointer"
 
 #: gtk/gtkoptionmenu.c:162
 msgid "The menu of options"
@@ -3432,7 +3418,7 @@ msgstr "Διάστημα γύρω από το δείκτη"
 msgid ""
 "Position of paned separator in pixels (0 means all the way to the left/top)"
 msgstr ""
-"Θέση του διαχωριστικού σε εικονοστοιχεία (0 σημαίνει προσανατολισμός πρός "
+"Θέση του διαχωριστικού σε εικονοστοιχεία (0 σημαίνει προσανατολισμός προς "
 "αριστερά/πάνω "
 
 #: gtk/gtkpaned.c:228
@@ -3602,14 +3588,16 @@ msgid ""
 "TRUE if the print job will continue to emit status-changed signals after the "
 "print data has been sent to the printer or print server."
 msgstr ""
+"TRUE αν η εργασία εκτύπωσης θα συνεχίσει να στέλνει σήματα αλλαγή-κατάστασης "
+"και μετά την αποστολή των δεδομένων εκτύπωσης στον εκτυπωτή ή εξυπηρετητή εκτυπώσεων."
 
 #: gtk/gtkprintoperation-unix.c:188
 msgid "Default command to run when displaying a print preview"
-msgstr ""
+msgstr "Προεπιλεγμένη εντολή για εκτέλεση κατά την εμφάνιση προεπισκόπησης εκτύπωσης"
 
 #: gtk/gtkprintoperation-unix.c:189
 msgid "Command to run when displaying a print preview"
-msgstr ""
+msgstr "Εντολή για εκτέλεση κατά την εμφάνιση προεπισκόπησης εκτύπωσης"
 
 #: gtk/gtkprintoperation.c:858
 msgid "Default Page Setup"
@@ -3663,12 +3651,17 @@ msgid ""
 "TRUE if the the origin of the context should be at the corner of the page "
 "and not the corner of the imageable area"
 msgstr ""
+"TRUE αν το σημείο αναφοράς του περιεχομένου να είναι στη γωνία της σελίδας "
+"και όχι στη γωνία της περιοχής imageable" 
 
 #: gtk/gtkprintoperation.c:986
 msgid ""
 "TRUE if the print operation will continue to report on the print job status "
 "after the print data has been sent to the printer or print server."
 msgstr ""
+"TRUE αν η λειτουργία εκτύπωσης θα συνεχίσει να αναφέρει για τη κατάσταση της "
+"εργασίας εκτύπωσης και μετά την αποστολή των δεδομένων εκτύπωσης στον "
+"εκτυπωτή ή εξυπηρετητή εκτυπώσεων."
 
 #: gtk/gtkprintoperation.c:1003
 msgid "Unit"
@@ -3676,7 +3669,7 @@ msgstr "Μονάδα"
 
 #: gtk/gtkprintoperation.c:1004
 msgid "The unit in which distances can be measured in the context"
-msgstr ""
+msgstr "Η μονάδα μέτρης αποστάσεων στο περιεχόμενο αυτό"
 
 #: gtk/gtkprintoperation.c:1021
 msgid "Show Dialog"
@@ -3684,7 +3677,7 @@ msgstr "Εμφάνιση διαλόγου"
 
 #: gtk/gtkprintoperation.c:1022
 msgid "TRUE if a progress dialog is shown while printing."
-msgstr ""
+msgstr "TRUE αν ο διάλογος προόδου θα φαίνεται κατά την εκτύπωση."
 
 #: gtk/gtkprintoperation.c:1045
 msgid "Allow Async"
@@ -3692,7 +3685,7 @@ msgstr "Να επιτρέπεται Async"
 
 #: gtk/gtkprintoperation.c:1046
 msgid "TRUE if print process may run asynchronous."
-msgstr ""
+msgstr "TRUE αν η λειτουργία εκτύπωσης μπορεί να εκτελεστεί ασύγχρονα."
 
 #: gtk/gtkprintoperation.c:1069 gtk/gtkprintoperation.c:1070
 msgid "Export filename"
@@ -3720,7 +3713,7 @@ msgstr "Προσαρμοσμένη ετικέτα καρτέλας"
 
 #: gtk/gtkprintoperation.c:1125
 msgid "Label for the tab containing custom widgets."
-msgstr ""
+msgstr "Ετικέτα για την καρτέλα που περιέχει παραμετροποιήσιμα συστατικά."
 
 #: gtk/gtkprintunixdialog.c:228
 msgid "The GtkPageSetup to use"
@@ -3890,6 +3883,8 @@ msgid ""
 "The value property of the currently active member of the group to which this "
 "action belongs."
 msgstr ""
+"Η ιδιότητα τιμής του τρέχοντος ενεργού μέλους της ομάδας στην οποία ανήκει "
+"η ενέργεια."
 
 #: gtk/gtkradiobutton.c:83
 msgid "The radio button whose group this widget belongs to."
@@ -3925,27 +3920,29 @@ msgstr "Αντιστρoφή κινήσεων κύλισης για την αύξ
 
 #: gtk/gtkrange.c:340
 msgid "Lower stepper sensitivity"
-msgstr ""
+msgstr "Ευαισθησία κατώτερου stepper"
 
 #: gtk/gtkrange.c:341
 msgid ""
 "The sensitivity policy for the stepper that points to the adjustment's lower "
 "side"
 msgstr ""
+"Η πολιτική ευαισθησίας του stepper που δείχνει στην κατώτερη πλευρά της ρύθμισης"
 
 #: gtk/gtkrange.c:349
 msgid "Upper stepper sensitivity"
-msgstr ""
+msgstr "Ευαισθησία ανώτερου stepper"
 
 #: gtk/gtkrange.c:350
 msgid ""
 "The sensitivity policy for the stepper that points to the adjustment's upper "
 "side"
 msgstr ""
+"Η πολιτική ευαισθησίας του stepper που δείχνει στην ανώτερη πλευρά της ρύθμισης"
 
 #: gtk/gtkrange.c:357
 msgid "Slider Width"
-msgstr "Πλάτος Kύλισης"
+msgstr "Πλάτος κύλισης"
 
 #: gtk/gtkrange.c:358
 msgid "Width of scrollbar or scale thumb"
@@ -3961,7 +3958,7 @@ msgstr "Διάστημα μεταξύ thumb/steppers και εξωτερικού
 
 #: gtk/gtkrange.c:373
 msgid "Stepper Size"
-msgstr "Μέγεθος Bήματος"
+msgstr "Μέγεθος stepper"
 
 #: gtk/gtkrange.c:374
 msgid "Length of step buttons at ends"
@@ -3973,7 +3970,7 @@ msgstr "Διαστήματα Bημάτων"
 
 #: gtk/gtkrange.c:390
 msgid "Spacing between step buttons and thumb"
-msgstr "Διάστημα μεταξύ κουμπιών βήματος και  thumb"
+msgstr "Διάστημα μεταξύ κουμπιών βήματος και thumb"
 
 #: gtk/gtkrange.c:397
 msgid "Arrow X Displacement"
@@ -3999,23 +3996,27 @@ msgstr ""
 
 #: gtk/gtkrange.c:414
 msgid "Draw slider ACTIVE during drag"
-msgstr ""
+msgstr "Απεικόνιση μπάρας κύλισης ΕΝΕΡΓΗ όταν σύρεται"
 
 #: gtk/gtkrange.c:415
 msgid ""
 "With this option set to TRUE, sliders will be drawn ACTIVE and with shadow "
 "IN while they are dragged"
 msgstr ""
+"Με την επιλογή αυτή σε TRUE, οι μπάρες κύλισης θα απεικονίζονται ΕΝΕΡΓΗ και "
+"με σκίαση ΜΕΣΑ καθώς τις σύρετε"
 
 #: gtk/gtkrange.c:426
 msgid "Trough Side Details"
-msgstr ""
+msgstr "Λεπτομέρειες κοίλου πλευράς"
 
 #: gtk/gtkrange.c:427
 msgid ""
 "When TRUE, the parts of the trough on the two sides of the slider are drawn "
 "with different details"
 msgstr ""
+"Όταν TRUE, τα μέρη του κοίλου στις δύο πλευρές της μπάρας κύλισης απεικονίζονται "
+"με διαφορετικές λεπτομέρειες"
 
 #: gtk/gtkrange.c:443
 msgid "Trough Under Steppers"
@@ -4026,6 +4027,8 @@ msgid ""
 "Whether to draw trought for full length of range or exclude the steppers and "
 "spacing"
 msgstr ""
+"Αν θα απεικονιστεί κοίλο για το πλήρες μήκος της περιοχής ή να αποκλειστούν "
+"οι steppers και τα διαστήματα"
 
 #: gtk/gtkrecentchooser.c:112
 msgid "Recent Manager"
@@ -4413,7 +4416,7 @@ msgstr "Σύρσιμο αφετηρίας"
 #: gtk/gtksettings.c:276
 msgid "Number of pixels the cursor can move before dragging"
 msgstr ""
-"Αριθμός εικονοστοιχείων που μπορεί να μετακινηθεί ο δρομέας πρίν να σύρει"
+"Αριθμός εικονοστοιχείων που μπορεί να μετακινηθεί ο δρομέας πριν να σύρει"
 
 #: gtk/gtksettings.c:284
 msgid "Font Name"
