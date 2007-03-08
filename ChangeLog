@@ -1,3 +1,11 @@
+2007-03-08  Kristian Rietveld  <kris@gtk.org>
+
+	Revert revision 17315:
+
+	* gtk/gtktreeview.c (gtk_tree_view_search_dialog_hide): send
+	a focus-in event to the tree view after hiding the search dialog.
+	(#356515, Rich Burridge, Peter Parente).
+
 2007-03-08  Mathias Hasselmann <mathias.hasselmann@gmx.de>
 
 	* gtk/gtkfilesystemwin32.c: Use Windows shell icons. Icons are
