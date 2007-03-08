@@ -29,6 +29,7 @@
 
 #include "gdk-pixbuf-private.h"
 #include "gdk-pixbuf-animation.h"
+#include "gdk-pixbuf-scaled-anim.h"
 #include "gdk-pixbuf-io.h"
 #include "gdk-pixbuf-loader.h"
 #include "gdk-pixbuf-marshal.h"
@@ -277,7 +278,15 @@ gdk_pixbuf_loader_prepare (GdkPixbuf          *pixbuf,
         else
                 anim = gdk_pixbuf_non_anim_new (pixbuf);
   
-        priv->animation = anim;
+	if (priv->needs_scale) {
+		priv->animation  = _gdk_pixbuf_scaled_anim_new (anim, 	
+                                         (double) priv->width / gdk_pixbuf_get_width (pixbuf),
+                                         (double) priv->height / gdk_pixbuf_get_height (pixbuf),
+					  1.0);
+			g_object_unref (anim);
+	}
+	else
+        	priv->animation = anim;
   
         if (!priv->needs_scale)
                 g_signal_emit (loader, pixbuf_loader_signals[AREA_PREPARED], 0);
@@ -728,21 +737,8 @@ gdk_pixbuf_loader_close (GdkPixbufLoader *loader,
 
         if (priv->needs_scale) 
                 {
-                        GdkPixbuf *tmp, *pixbuf;
-                        
-                        tmp = gdk_pixbuf_animation_get_static_image (priv->animation);
-                        g_object_ref (tmp);
-                        pixbuf = gdk_pixbuf_new (GDK_COLORSPACE_RGB, tmp->has_alpha, 8, priv->width, priv->height);
-                        g_object_unref (priv->animation);
-                        priv->animation = gdk_pixbuf_non_anim_new (pixbuf);
-                        g_object_unref (pixbuf);
+
                         g_signal_emit (loader, pixbuf_loader_signals[AREA_PREPARED], 0);
-                        gdk_pixbuf_scale (tmp, pixbuf, 0, 0, priv->width, priv->height, 0, 0,
-                                          (double) priv->width / tmp->width,
-                                          (double) priv->height / tmp->height,
-                                          GDK_INTERP_BILINEAR); 
-                        g_object_unref (tmp);
-                        
                         g_signal_emit (loader, pixbuf_loader_signals[AREA_UPDATED], 0, 
                                        0, 0, priv->width, priv->height);
                 }

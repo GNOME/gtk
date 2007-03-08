@@ -1,3 +1,13 @@
+2007-03-08  Matthias Clasen <mclasen@redhat.com>
+
+	* gdk-pixbuf-scaled-anim.[hc]: Implement an animation
+	wrapper for scaling animations.  
+
+	* gdk-pixbuf-loader.c: Use GdkPixbufScaledAnim to scale
+	animations.  (#335752, Mike Morrison)
+
+	* Makefile.am: Glue.
+
 2007-03-06  Tor Lillqvist  <tml@novell.com>
 
 	* Makefile.am: Further fixes for building on Win32 outside

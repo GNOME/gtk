@@ -346,6 +346,7 @@ libgdk_pixbuf_2_0_la_SOURCES =   \
 	gdk-pixbuf-loader.c	 \
 	gdk-pixbuf-scale.c	 \
 	gdk-pixbuf-simple-anim.c \
+	gdk-pixbuf-scaled-anim.c \
 	gdk-pixbuf-util.c	 \
 	gdk-pixdata.c		 \
 	gdk-pixbuf-enum-types.c
@@ -380,6 +381,7 @@ libgdk_pixbufinclude_HEADERS =  	\
 noinst_HEADERS = 		\
 	gdk-pixbuf-alias.h	\
 	gdk-pixbuf-private.h	\
+	gdk-pixbuf-scaled-anim.h \
 	xpm-color-table.h
 
 BUILT_SOURCES = 		\
