@@ -96,7 +96,7 @@ static const LPCWSTR class_descriptors[] = {
     L"Trackbar"			/* XP_THEME_CLASS_TRACKBAR */
 };
 
-static const short element_part_map[] = {
+static const short element_part_map[XP_THEME_ELEMENT__SIZEOF] = {
     BP_CHECKBOX,
     BP_CHECKBOX,
     BP_PUSHBUTTON,

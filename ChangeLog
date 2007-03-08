@@ -1,5 +1,12 @@
 2007-03-08  Mathias Hasselmann <mathias.hasselmann@gmx.de>
 
+	* modules/engines/ms-windows/msw_style.c: Use proper border style
+	when drawing shadow of scrolled windows on Windows XP (#168326)
+	* modules/engines/ms-windows/xp_theme.c: Explicitly set size of
+	element_part_map array to ensure it always is large enough.
+	
+2007-03-08  Mathias Hasselmann <mathias.hasselmann@gmx.de>	
+
 	* gtk/gtkcombobox.c: Add shadow-type style property, set shadow-type
 	property of GtkEntry accordingly, unify size-allocation of toggle
 	button (#411123, patch from Mathias Hasselmann).

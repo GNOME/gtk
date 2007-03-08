@@ -2692,10 +2692,13 @@ draw_shadow (GtkStyle * style,
 	    return;
 	}
 
-    if( detail && !strcmp( detail, "spinbutton" ) )
-		{
+    if (detail && !strcmp (detail, "scrolled_window") &&
+        xp_theme_draw (window, XP_THEME_ELEMENT_EDIT_TEXT, style,
+                       x, y, width, height, state_type, area))
         return;
-    }
+
+    if (detail && !strcmp (detail, "spinbutton"))
+        return;
 
     if (detail && !strcmp (detail, "menu"))
 			{
