@@ -844,20 +844,32 @@ setup_msw_rc_style (void)
     gtk_rc_parse_string (buf);
 
     /* size of combo box toggle button */
-		g_snprintf (buf, sizeof(buf),
-	    "style \"msw-combo-button\" = \"msw-default\"\n"
+    g_snprintf (buf, sizeof(buf),
+		"style \"msw-combobox-button\" = \"msw-default\"\n"
 		"{\n"
-  		"xthickness = 0\n"
-  		"ythickness = 0\n"
-  		"GtkButton::default-border = { 0, 0, 0, 0 }\n"
-  		"GtkButton::default-outside-border = { 0, 0, 0, 0 }\n"
-  		"GtkButton::child-displacement-x = 0\n"
-  		"GtkButton::child-displacement-y = 0\n"
-  		"GtkWidget::focus-padding = 0\n"
-  		"GtkWidget::focus-line-width = 0\n"
+		"xthickness = 0\n"
+		"ythickness = 0\n"
+		"GtkButton::default-border = { 0, 0, 0, 0 }\n"
+		"GtkButton::default-outside-border = { 0, 0, 0, 0 }\n"
+		"GtkButton::child-displacement-x = 0\n"
+		"GtkButton::child-displacement-y = 0\n"
+		"GtkWidget::focus-padding = 0\n"
+		"GtkWidget::focus-line-width = 0\n"
 		"}\n"
-	    "widget_class \"*ComboBox*ToggleButton*\" style \"msw-combo-button\"\n");
-    	gtk_rc_parse_string (buf);
+		"widget_class \"*ComboBox*ToggleButton*\" style \"msw-combobox-button\"\n");
+    gtk_rc_parse_string (buf);
+
+    g_snprintf (buf, sizeof(buf),
+		"style \"msw-combobox\" = \"msw-default\"\n"
+		"{\n"
+		"GtkComboBox::shadow-type = in\n"
+		"xthickness = %d\n"
+		"ythickness = %d\n"
+		"}\n"
+		"class \"GtkComboBox\" style \"msw-combobox\"\n",
+		GetSystemMetrics (SM_CXEDGE),
+		GetSystemMetrics (SM_CYEDGE));
+    gtk_rc_parse_string (buf);
 
     /* size of tree view header */
     g_snprintf (buf, sizeof(buf),
@@ -1036,111 +1048,22 @@ combo_box_draw_arrow (GtkStyle * style,
 	    GdkRectangle * area,
 	    GtkWidget * widget)
 {
-    HDC dc;
-    RECT rect;
-
-    if (xp_theme_draw (window, XP_THEME_ELEMENT_COMBOBUTTON,
-		       style, widget->allocation.x, widget->allocation.y,
-		       widget->allocation.width, widget->allocation.height,
-		       state, area))
-	{
-	    return TRUE;
-	}
-    else if ( !xp_theme_is_active () && widget && GTK_IS_TOGGLE_BUTTON(widget->parent) )
-    {
-        dc = get_window_dc( style, window, state, area->x, area->y, area->width, area->height, &rect );
-        InflateRect( &rect, 1, 1 );
-        DrawFrameControl( dc, &rect, DFC_SCROLL, DFCS_SCROLLDOWN | 
-            (GTK_TOGGLE_BUTTON(widget->parent)->active ? DFCS_PUSHED|DFCS_FLAT : 0) );
-        release_window_dc( style, window, state );
+    if (xp_theme_is_active ())
         return TRUE;
-    }
-    return FALSE;
-}
 
-/* This is ugly because no box drawing function is invoked for the combo
-   box as a whole, so we draw part of the entire box in every subwidget.
-   We do this by finding the allocation of the combo box in the given
-   window's coordinates and drawing.  The xp drawing routines take care
-   of the clipping. */
-static gboolean
-combo_box_draw_box (GtkStyle * style,
-	  GdkWindow * window,
-	  GtkStateType state_type,
-	  GtkShadowType shadow_type,
-	  GdkRectangle * area,
-	  GtkWidget * widget,
-	  const gchar * detail, gint x, gint y, gint width, gint height)
-{
-    GtkWidget* combo_box;
-    GdkRectangle combo_alloc;
-    HDC dc;
-    RECT rect;
-
-    if (!widget)
-	return FALSE;
-    for (combo_box = widget->parent; combo_box; combo_box = combo_box->parent)
-	{
-	    if (GTK_IS_COMBO_BOX(combo_box))
-		break;
-	}
-    if (!combo_box)
-	return FALSE;
-
-    combo_alloc = combo_box->allocation;
-    if (window != combo_box->window)
-	{
-	    GtkWidget* tmp;
-	    for (tmp = widget; tmp && tmp != combo_box; tmp = widget->parent)
-		{
-		    if (tmp->parent && tmp->window != tmp->parent->window)
-			{
-			    combo_alloc.x -= tmp->allocation.x;
-			    combo_alloc.y -= tmp->allocation.y;
-			}
-		}
-	}
-
-    if (xp_theme_draw (window, XP_THEME_ELEMENT_EDIT_TEXT,
-		       style, combo_alloc.x, combo_alloc.y,
-                       combo_alloc.width, combo_alloc.height,
-		       state_type, area))
-	return TRUE;
-    else
+    if (widget && GTK_IS_TOGGLE_BUTTON(widget->parent) )
     {
-        UINT edges = 0;
-        gboolean rtl = (gtk_widget_get_direction (widget) == GTK_TEXT_DIR_RTL);
+	DWORD border;
+        RECT rect;
+        HDC dc;
 
-        if( !strcmp(detail, "button") )
-            edges = BF_BOTTOM|BF_TOP|(rtl ? BF_LEFT : BF_RIGHT);
-        else if( !strcmp( detail, "frame") || !strcmp( detail, "entry" ) )
-            edges = BF_BOTTOM|BF_TOP|(rtl ? BF_RIGHT : BF_LEFT);
-        else
-            return TRUE;
-        dc = get_window_dc( style, window, state_type, x, y, width, height, &rect );
-        DrawEdge( dc, &rect, EDGE_SUNKEN, edges );
+        dc = get_window_dc( style, window, state, area->x, area->y, area->width, area->height, &rect );
+	border = (GTK_TOGGLE_BUTTON(widget->parent)->active ? DFCS_PUSHED|DFCS_FLAT : 0);
 
-        /* Fill blank area between frame/entry and button */
-        if( !strcmp(detail, "button") ) {  /* button */
-            if( rtl ) {
-                rect.left = rect.right;
-                rect.right += 2;
-            }
-            else
-                rect.right = rect.left + 2;
-        }
-        else{ /* frame or entry */
-            if( rtl ) {
-                rect.right = rect.left;
-                rect.left -= 2;
-            }
-            else
-                rect.left = rect.right - 2;
-        }
-        rect.top += 2;
-        rect.bottom -= 2;
-        FillRect( dc, &rect, GetSysColorBrush(COLOR_WINDOW) );
-        release_window_dc( style, window, state_type );
+        InflateRect( &rect, 1, 1 );
+        DrawFrameControl (dc, &rect, DFC_SCROLL, DFCS_SCROLLDOWN | border);
+
+        release_window_dc( style, window, state );
         return TRUE;
     }
 
@@ -1587,6 +1510,8 @@ draw_arrow (GtkStyle * style,
                 case GTK_ARROW_RIGHT:
                     btn_type = DFCS_SCROLLRIGHT;
                     break;
+                case GTK_ARROW_NONE:
+					break;
                 }
                 if( state == GTK_STATE_INSENSITIVE )
                     btn_type |= DFCS_INACTIVE;
@@ -1926,13 +1851,26 @@ draw_box (GtkStyle * style,
 	  GtkWidget * widget,
 	  const gchar * detail, gint x, gint y, gint width, gint height)
 {
-    if (is_combo_box_child (widget)
-	&& combo_box_draw_box (style, window, state_type, shadow_type,
-	                       area, widget, detail, x, y, width, height))
-	{
+    if (is_combo_box_child (widget) && detail && !strcmp (detail, "button")) {
+        RECT rect;
+        HDC dc;
+        int cx;
+           
+        dc = get_window_dc (style, window, state_type, x, y, width - cx, height, &rect);
+        FillRect (dc, &rect, GetSysColorBrush(COLOR_WINDOW));
+        release_window_dc (style, window, state_type);
+
+	cx = 2 * GetSystemMetrics (SM_CXEDGE) + 16; /* TODO evaluate arrow width */
+        x += width - cx;
+        width = cx;
+
+	if (xp_theme_is_active () && xp_theme_draw (
+	    window, XP_THEME_ELEMENT_COMBOBUTTON, style,
+	    x, y, width, height, state_type, area))
 	    return;
-	}
-    else if (detail &&
+    }
+
+    if (detail &&
 	(!strcmp (detail, "button") || !strcmp (detail, "buttondefault")))
 	{
 	    if (GTK_IS_TREE_VIEW (widget->parent)
@@ -2370,6 +2308,8 @@ static void DrawTab(HDC hdc, const RECT R, gint32 aPosition, gboolean aSelected,
        SetRect(&lightRect, R.left, R.bottom-3, R.left+2, R.bottom-1);
        SetRect(&shadeRect, R.right-2, R.bottom-3, R.right, R.bottom-1);
        break;
+     default:
+       g_return_if_reached();
    }
 
    /* Background */
@@ -2699,12 +2639,6 @@ draw_shadow (GtkStyle * style,
     gboolean is_handlebox;
     gboolean is_toolbar;
 
-    if (is_combo_box_child (widget)
-	&& combo_box_draw_box (style, window, state_type, shadow_type,
-	                       area, widget, detail, x, y, width, height))
-        {
-	    return;
-	}
     if( detail && !strcmp( detail, "frame") )
 	{
         HDC dc;
@@ -2731,27 +2665,31 @@ draw_shadow (GtkStyle * style,
                 InflateRect( &rect, -1, -1 );
                 draw_3d_border(dc, &rect, TRUE);
                 break;
+            case GTK_SHADOW_NONE:
+                break;
             }
         }
         release_window_dc( style, window, state_type );
         return;
     }
-    if (detail && !strcmp (detail, "entry") )
+    if (detail && (!strcmp (detail, "entry") || !strcmp (detail, "combobox")) )
 	{
-	    if ( xp_theme_draw (window, XP_THEME_ELEMENT_EDIT_TEXT, style,
-			       x, y, width, height, state_type, area))
-		{
-		    return;
-		}
-            if( shadow_type == GTK_SHADOW_IN ) {
-                HDC dc;
-                RECT rect;
-                dc = get_window_dc( style, window, state_type, 
-                                    x, y, width, height, &rect );
-                DrawEdge( dc, &rect, EDGE_SUNKEN, BF_RECT );
-                release_window_dc( style, window, state_type );
-		return;
-            }
+            if( shadow_type != GTK_SHADOW_IN )
+	    	return;
+
+	    if ( !xp_theme_draw (window, XP_THEME_ELEMENT_EDIT_TEXT, style,
+				 x, y, width, height, state_type, area))
+	    {
+		HDC dc;
+		RECT rect;
+
+		dc = get_window_dc (style, window, state_type, 
+				    x, y, width, height, &rect);
+		DrawEdge (dc, &rect, EDGE_SUNKEN, BF_RECT);
+		release_window_dc (style, window, state_type);
+	    }
+
+	    return;
 	}
 
     if( detail && !strcmp( detail, "spinbutton" ) )
@@ -2777,7 +2715,7 @@ draw_shadow (GtkStyle * style,
         if( widget ) {
             HDC dc;
             RECT rect;
-            HGDIOBJ old_pen;
+            HGDIOBJ old_pen = NULL;
             GtkPositionType pos;
 
             sanitize_size (window, &width, &height);
@@ -2837,7 +2775,8 @@ draw_shadow (GtkStyle * style,
                 MoveToEx( dc, rect.left, rect.bottom-1, NULL );
                 LineTo( dc, rect.right, rect.bottom-1 );
 		}
-            SelectObject( dc, old_pen );
+            if (old_pen)
+                SelectObject( dc, old_pen );
             release_window_dc( style, window, state_type );
 			}
         return;

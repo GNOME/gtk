@@ -85,6 +85,10 @@ struct _GtkEntryPrivate
   guint blink_time;  /* time in msec the cursor has blinked since last user event */
   guint real_changed : 1;
   guint change_count : 8;
+
+  gint focus_width;
+  gboolean interior_focus;
+  GtkShadowType shadow_type;
 };
 
 typedef struct _GtkEntryPasswordHint GtkEntryPasswordHint;
@@ -126,7 +130,8 @@ enum {
   PROP_SCROLL_OFFSET,
   PROP_TEXT,
   PROP_XALIGN,
-  PROP_TRUNCATE_MULTILINE
+  PROP_TRUNCATE_MULTILINE,
+  PROP_SHADOW_TYPE
 };
 
 static guint signals[LAST_SIGNAL] = { 0 };
@@ -600,6 +605,22 @@ gtk_entry_class_init (GtkEntryClass *class)
                                                          FALSE,
                                                          GTK_PARAM_READWRITE));
 
+  /**
+   * GtkEntry:shadow-type:
+   *
+   * Which kind of shadow to draw around the entry when has-frame is set.
+   *
+   * Since: 2.12
+   */
+  g_object_class_install_property (gobject_class,
+                                   PROP_SHADOW_TYPE,
+                                   g_param_spec_enum ("shadow-type",
+                                                      P_("Shadow type"),
+                                                      P_("Which kind of shadow to draw around the entry when has-frame is set"),
+                                                      GTK_TYPE_SHADOW_TYPE,
+                                                      GTK_SHADOW_IN,
+                                                      GTK_PARAM_READWRITE));
+
   signals[POPULATE_POPUP] =
     g_signal_new (I_("populate_popup"),
 		  G_OBJECT_CLASS_TYPE (gobject_class),
@@ -917,6 +938,7 @@ gtk_entry_set_property (GObject         *object,
                         const GValue    *value,
                         GParamSpec      *pspec)
 {
+  GtkEntryPrivate *priv = GTK_ENTRY_GET_PRIVATE (object);
   GtkEntry *entry = GTK_ENTRY (object);
 
   switch (prop_id)
@@ -987,6 +1009,10 @@ gtk_entry_set_property (GObject         *object,
       entry->truncate_multiline = g_value_get_boolean (value);
       break;
 
+    case PROP_SHADOW_TYPE:
+      priv->shadow_type = g_value_get_enum (value);
+      break;
+
     case PROP_SCROLL_OFFSET:
     case PROP_CURSOR_POSITION:
     default:
@@ -1001,6 +1027,7 @@ gtk_entry_get_property (GObject         *object,
                         GValue          *value,
                         GParamSpec      *pspec)
 {
+  GtkEntryPrivate *priv = GTK_ENTRY_GET_PRIVATE (object);
   GtkEntry *entry = GTK_ENTRY (object);
 
   switch (prop_id)
@@ -1047,6 +1074,9 @@ gtk_entry_get_property (GObject         *object,
     case PROP_TRUNCATE_MULTILINE:
       g_value_set_boolean (value, entry->truncate_multiline);
       break;
+    case PROP_SHADOW_TYPE:
+      g_value_set_enum (value, priv->shadow_type);
+      break;
 
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -1074,6 +1104,7 @@ gtk_entry_init (GtkEntry *entry)
   entry->editing_canceled = FALSE;
   entry->has_frame = TRUE;
   entry->truncate_multiline = FALSE;
+  priv->shadow_type = GTK_SHADOW_IN;
   priv->xalign = 0.0;
 
   gtk_drag_dest_set (GTK_WIDGET (entry),
@@ -1307,13 +1338,7 @@ _gtk_entry_get_borders (GtkEntry *entry,
 			gint     *yborder)
 {
   GtkWidget *widget = GTK_WIDGET (entry);
-  gint focus_width;
-  gboolean interior_focus;
-
-  gtk_widget_style_get (widget,
-			"interior-focus", &interior_focus,
-			"focus-line-width", &focus_width,
-			NULL);
+  GtkEntryPrivate *priv = GTK_ENTRY_GET_PRIVATE (widget);
 
   if (entry->has_frame)
     {
@@ -1326,10 +1351,10 @@ _gtk_entry_get_borders (GtkEntry *entry,
       *yborder = 0;
     }
 
-  if (!interior_focus)
+  if (!priv->interior_focus)
     {
-      *xborder += focus_width;
-      *yborder += focus_width;
+      *xborder += priv->focus_width;
+      *yborder += priv->focus_width;
     }
 }
 
@@ -1382,13 +1407,7 @@ get_text_area_size (GtkEntry *entry,
   gint xborder, yborder;
   GtkRequisition requisition;
   GtkWidget *widget = GTK_WIDGET (entry);
-  gboolean interior_focus;
-  gint focus_width;
-
-  gtk_widget_style_get (widget,
-                        "interior-focus", &interior_focus,
-                        "focus-line-width", &focus_width,
-                        NULL);
+  GtkEntryPrivate *priv = GTK_ENTRY_GET_PRIVATE (widget);
 
   gtk_widget_get_child_requisition (widget, &requisition);
   _gtk_entry_get_borders (entry, &xborder, &yborder);
@@ -1398,8 +1417,8 @@ get_text_area_size (GtkEntry *entry,
   else
     frame_height = requisition.height;
 
-  if (GTK_WIDGET_HAS_FOCUS (widget) && !interior_focus)
-      frame_height -= 2 * focus_width;
+  if (GTK_WIDGET_HAS_FOCUS (widget) && !priv->interior_focus)
+      frame_height -= 2 * priv->focus_width;
 
   if (x)
     *x = xborder;
@@ -1509,37 +1528,29 @@ static void
 gtk_entry_draw_frame (GtkWidget    *widget,
                       GdkRectangle *area)
 {
-  gint x = 0, y = 0;
-  gint width, height;
-  gboolean interior_focus;
-  gint focus_width;
-  
-  gtk_widget_style_get (widget,
-			"interior-focus", &interior_focus,
-			"focus-line-width", &focus_width,
-			NULL);
+  GtkEntryPrivate *priv = GTK_ENTRY_GET_PRIVATE (widget);
+  gint x = 0, y = 0, width, height;
   
   gdk_drawable_get_size (widget->window, &width, &height);
   
-  if (GTK_WIDGET_HAS_FOCUS (widget) && !interior_focus)
+  if (GTK_WIDGET_HAS_FOCUS (widget) && !priv->interior_focus)
     {
-      x += focus_width;
-      y += focus_width;
-      width -= 2 * focus_width;
-      height -= 2 * focus_width;
+      x += priv->focus_width;
+      y += priv->focus_width;
+      width -= 2 * priv->focus_width;
+      height -= 2 * priv->focus_width;
     }
 
   gtk_paint_shadow (widget->style, widget->window,
-		    GTK_STATE_NORMAL, GTK_SHADOW_IN,
-		    area, widget, "entry",
-		    x, y, width, height);
+		    GTK_STATE_NORMAL, priv->shadow_type,
+		    area, widget, "entry", x, y, width, height);
 
-  if (GTK_WIDGET_HAS_FOCUS (widget) && !interior_focus)
+  if (GTK_WIDGET_HAS_FOCUS (widget) && !priv->interior_focus)
     {
-      x -= focus_width;
-      y -= focus_width;
-      width += 2 * focus_width;
-      height += 2 * focus_width;
+      x -= priv->focus_width;
+      y -= priv->focus_width;
+      width += 2 * priv->focus_width;
+      height += 2 * priv->focus_width;
       
       gtk_paint_focus (widget->style, widget->window, GTK_WIDGET_STATE (widget), 
 		       area, widget, "entry",
@@ -2335,7 +2346,13 @@ gtk_entry_style_set	(GtkWidget      *widget,
 			 GtkStyle       *previous_style)
 {
   GtkEntry *entry = GTK_ENTRY (widget);
+  GtkEntryPrivate *priv = GTK_ENTRY_GET_PRIVATE (entry);
 
+  gtk_widget_style_get (widget,
+			"focus-line-width", &priv->focus_width,
+			"interior-focus", &priv->interior_focus,
+			NULL);
+  
   gtk_entry_recompute (entry);
 
   if (previous_style && GTK_WIDGET_REALIZED (widget))

@@ -1,5 +1,16 @@
 2007-03-08  Mathias Hasselmann <mathias.hasselmann@gmx.de>
 
+	* gtk/gtkcombobox.c: Add shadow-type style property, set shadow-type
+	property of GtkEntry accordingly, unify size-allocation of toggle
+	button (#411123, patch from Mathias Hasselmann).
+	* gtk/gtkentry.c: Add shadow-type property. Query style properties
+	on style changes only (#411123, patch from Mathias Hasselmann).
+	* modules/engines/ms-windows/msw_style.c: Drop combo_box_draw_box
+	hack as GtkComboBox emits drawing requests now (#411123, patch 
+	from Mathias Hasselmann).
+	
+2007-03-08  Mathias Hasselmann <mathias.hasselmann@gmx.de>
+
 	* gtk/gtkscrolledindow.c: Improve look of GtkScrolledWindow on Windows
 	by implementing a scrollbars-within-bevel style property. (#168326)
 	

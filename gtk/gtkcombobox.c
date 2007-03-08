@@ -79,6 +79,7 @@ struct _GtkComboBoxPrivate
   gint row_column;
 
   gint wrap_width;
+  GtkShadowType shadow_type;
 
   GtkTreeRowReference *active_row;
 
@@ -775,6 +776,21 @@ gtk_combo_box_class_init (GtkComboBoxClass *klass)
 							     15,
 							     GTK_PARAM_READABLE));
 
+  /**
+   * GtkComboBox:shadow-type:
+   *
+   * Which kind of shadow to draw around the combo box.
+   *
+   * Since: 2.12
+   */
+  gtk_widget_class_install_style_property (widget_class,
+                                           g_param_spec_enum ("shadow-type",
+                                                              P_("Shadow type"),
+                                                              P_("Which kind of shadow to draw around the combo box"),
+                                                              GTK_TYPE_SHADOW_TYPE,
+                                                              GTK_SHADOW_NONE,
+                                                              GTK_PARAM_READABLE));
+
   g_type_class_add_private (object_class, sizeof (GtkComboBoxPrivate));
 }
 
@@ -1019,6 +1035,10 @@ gtk_combo_box_check_appearance (GtkComboBox *combo_box)
       if (!GTK_IS_MENU (combo_box->priv->popup_widget))
 	gtk_combo_box_menu_setup (combo_box, TRUE);
     }
+
+  gtk_widget_style_get (GTK_WIDGET (combo_box),
+			"shadow-type", &combo_box->priv->shadow_type,
+			NULL);
 }
 
 static void
@@ -1032,6 +1052,11 @@ gtk_combo_box_style_set (GtkWidget *widget,
   if (combo_box->priv->tree_view && combo_box->priv->cell_view)
     gtk_cell_view_set_background_color (GTK_CELL_VIEW (combo_box->priv->cell_view), 
 					&widget->style->base[GTK_WIDGET_STATE (widget)]);
+
+  if (GTK_IS_ENTRY (GTK_BIN (combo_box)->child))
+    g_object_set (GTK_BIN (combo_box)->child, "shadow-type",
+                  GTK_SHADOW_NONE == combo_box->priv->shadow_type ?
+                  GTK_SHADOW_IN : GTK_SHADOW_NONE, NULL);
 }
 
 static void
@@ -1343,6 +1368,9 @@ gtk_combo_box_menu_position_below (GtkMenu  *menu,
 	sx += child->allocation.x;
 	sy += child->allocation.y;
       }
+
+   if (GTK_SHADOW_NONE != combo_box->priv->shadow_type)
+     sx -= GTK_WIDGET (combo_box)->style->xthickness;
 
    gtk_widget_size_request (GTK_WIDGET (menu), &req);
 
@@ -2026,13 +2054,36 @@ gtk_combo_box_size_request (GtkWidget      *widget,
       requisition->height = MAX (requisition->height, button_req.height);
       requisition->width += button_req.width;
     }
+
+  if (GTK_SHADOW_NONE != combo_box->priv->shadow_type)
+    {
+      requisition->height += 2 * widget->style->ythickness;
+      requisition->width += 2 * widget->style->xthickness;
+    }
 }
+
+#define GTK_COMBO_BOX_SIZE_ALLOCATE_BUTTON 					\
+  gtk_widget_size_request (combo_box->priv->button, &req); 			\
+  										\
+  if (is_rtl) 									\
+    child.x = allocation->x + shadow_width;					\
+  else										\
+    child.x = allocation->x + allocation->width - req.width - shadow_width;	\
+    										\
+  child.y = allocation->y + shadow_height;					\
+  child.width = req.width;							\
+  child.height = allocation->height - 2 * shadow_height;			\
+  child.width = MAX (1, child.width);						\
+  child.height = MAX (1, child.height);						\
+  										\
+  gtk_widget_size_allocate (combo_box->priv->button, &child);
 
 static void
 gtk_combo_box_size_allocate (GtkWidget     *widget,
                              GtkAllocation *allocation)
 {
   GtkComboBox *combo_box = GTK_COMBO_BOX (widget);
+  gint shadow_width, shadow_height;
   gint focus_width, focus_pad;
   GtkAllocation child;
   GtkRequisition req;
@@ -2045,6 +2096,17 @@ gtk_combo_box_size_allocate (GtkWidget     *widget,
 			"focus-padding", &focus_pad,
 			NULL);
 
+  if (GTK_SHADOW_NONE != combo_box->priv->shadow_type)
+    {
+      shadow_width = widget->style->xthickness;
+      shadow_height = widget->style->ythickness;
+    }
+  else
+    {
+      shadow_width = 0;
+      shadow_height = 0;
+    }
+
   if (!combo_box->priv->tree_view)
     {
       if (combo_box->priv->cell_view)
@@ -2053,6 +2115,11 @@ gtk_combo_box_size_allocate (GtkWidget     *widget,
           gint width;
 
           /* menu mode */
+          allocation->x += shadow_width;
+          allocation->y += shadow_height;
+          allocation->width -= 2 * shadow_width;
+          allocation->height -= 2 * shadow_height;
+
           gtk_widget_size_allocate (combo_box->priv->button, allocation);
 
           /* set some things ready */
@@ -2113,24 +2180,14 @@ gtk_combo_box_size_allocate (GtkWidget     *widget,
         }
       else
         {
-          gtk_widget_size_request (combo_box->priv->button, &req);
-          if (is_rtl)
-            child.x = allocation->x;
-          else
-            child.x = allocation->x + allocation->width - req.width;
-          child.y = allocation->y;
-          child.width = req.width;
-          child.height = allocation->height;
-	  child.width = MAX (1, child.width);
-	  child.height = MAX (1, child.height);
-          gtk_widget_size_allocate (combo_box->priv->button, &child);
+          GTK_COMBO_BOX_SIZE_ALLOCATE_BUTTON
 
           if (is_rtl)
-            child.x = allocation->x + req.width;
+            child.x = allocation->x + req.width + shadow_width;
           else
-            child.x = allocation->x;
-          child.y = allocation->y;
-          child.width = allocation->width - req.width;
+            child.x = allocation->x + shadow_width;
+          child.y = allocation->y + shadow_height;
+          child.width = allocation->width - req.width - 2 * shadow_width;
 	  child.width = MAX (1, child.width);
 	  child.height = MAX (1, child.height);
           gtk_widget_size_allocate (GTK_BIN (widget)->child, &child);
@@ -2141,17 +2198,7 @@ gtk_combo_box_size_allocate (GtkWidget     *widget,
       /* list mode */
 
       /* button */
-      gtk_widget_size_request (combo_box->priv->button, &req);
-      if (is_rtl)
-        child.x = allocation->x;
-      else
-        child.x = allocation->x + allocation->width - req.width;
-      child.y = allocation->y;
-      child.width = req.width;
-      child.height = allocation->height;
-      child.width = MAX (1, child.width);
-      child.height = MAX (1, child.height);
-      gtk_widget_size_allocate (combo_box->priv->button, &child);
+      GTK_COMBO_BOX_SIZE_ALLOCATE_BUTTON
 
       /* frame */
       if (is_rtl)
@@ -2191,6 +2238,8 @@ gtk_combo_box_size_allocate (GtkWidget     *widget,
       gtk_widget_size_allocate (GTK_BIN (combo_box)->child, &child);
     }
 }
+
+#undef GTK_COMBO_BOX_ALLOCATE_BUTTON
 
 static void
 gtk_combo_box_unset_model (GtkComboBox *combo_box)
@@ -2276,6 +2325,16 @@ gtk_combo_box_expose_event (GtkWidget      *widget,
                             GdkEventExpose *event)
 {
   GtkComboBox *combo_box = GTK_COMBO_BOX (widget);
+
+  if (GTK_WIDGET_DRAWABLE (widget) &&
+      GTK_SHADOW_NONE != combo_box->priv->shadow_type)
+    {
+      gtk_paint_shadow (widget->style, widget->window,
+                        GTK_STATE_NORMAL, combo_box->priv->shadow_type,
+                        NULL, widget, "combobox",
+                        widget->allocation.x, widget->allocation.y,
+                        widget->allocation.width, widget->allocation.height);
+    }
 
   gtk_container_propagate_expose (GTK_CONTAINER (widget),
 				  combo_box->priv->button, event);
