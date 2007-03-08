@@ -1,5 +1,10 @@
 2007-03-08  Mathias Hasselmann <mathias.hasselmann@gmx.de>
 
+	* gtk/gtkscrolledindow.c: Improve look of GtkScrolledWindow on Windows
+	by implementing a scrollbars-within-bevel style property. (#168326)
+	
+2007-03-08  Mathias Hasselmann <mathias.hasselmann@gmx.de>
+
 	* gtk/gtkfilesystemwin32.c: Use Windows shell icons. Icons are
 	stored in the current theme with the name
 	"gtk-win32-shell-icon;PATH;INDEX". PATH and INDEX reference shell

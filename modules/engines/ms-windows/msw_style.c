@@ -830,6 +830,11 @@ setup_msw_rc_style (void)
 		11);
     gtk_rc_parse_string (buf);
 
+    gtk_rc_parse_string (    
+                "style \"msw-scrolled-window\" = \"msw-default\"\n"
+                "{GtkScrolledWindow::scrollbars-within-bevel = 1}\n"
+                "class \"GtkScrolledWindow\" style \"msw-scrolled-window\"\n");
+
     /* radio/check button sizes */
     g_snprintf (buf, sizeof (buf),
 		"style \"msw-checkbutton\" = \"msw-button\"\n"
