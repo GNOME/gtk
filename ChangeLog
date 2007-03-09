@@ -1,5 +1,9 @@
 2007-03-09  Matthias Clasen <mclasen@redhat.com>
 
+	* gdk/x11/gdkasync.c: Fix the build
+
+2007-03-09  Matthias Clasen <mclasen@redhat.com>
+
 	* gtk/gtkfilesystemwin32.c (get_icon_path): Remove
 	C99isms.  (#416525, Kazuki Iwamoto)
 
