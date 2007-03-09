@@ -1,5 +1,12 @@
 2007-03-09  Matthias Clasen <mclasen@redhat.com>
 
+	* modules/input/gtkimcontextxim.c 
+	(gtk_im_context_xim_filter_keypress): Don't commit
+	modifier-adorned characters.  (#331369, #335796, Lin Ma
+	and others)
+
+2007-03-09  Matthias Clasen <mclasen@redhat.com>
+
 	* Everywhere: Remove unnecessary NULL checks before
 	g_free().  (#369666, Morten Welinder, Djihed Afifi)
 
