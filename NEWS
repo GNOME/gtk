@@ -1,3 +1,48 @@
+Overview of Changes from GTK+ 2.10.9 to 2.10.10
+===============================================
+
+* Bugs fixed:
+ 329450	Crash on IM switch ... (was already reported earlier)
+ 406757 crash in Movie Player: Souhaite lire un DVD ave...
+ 382565	GtkTextView invisible text crash
+ 402453	crash to IA__gdk_x11_window_set_user_time
+ 409101	invalid read to gtkicontheme.c insert_theme(), might caus...
+ 413032	Locking issue with xcb in IA__gdk_display_sync
+ 402131	Theme color scheme is sometimes ignored on theme switches
+ 405327	io-jpeg can return FALSE without setting a GError
+ 124045 GtkExpander should draw the focus around the arrow when t...
+ 143213	shorcut selector on gtkfilechooser use too much horizonta...
+ 151169	Filechooser comes up too big
+ 153785	Filechooser expands horizontally
+ 347106	tga images upside down
+ 356515	[a11y] Orca unable to read items in Evolution "Select a F...
+ 377164	Strange numbers in GtkRecentChooserMenu
+ 386618	Resizing columns need focusing first
+ 389765	Win32: Resizing a window does not repaint it often enough...
+ 393599	Previous and Next menus not active in a folder with *.ico...
+ 399907	Memory leak in gtk_page_setup dialog
+ 402565	[PATCH]GtkPrintBackendFile leaks string
+ 402806	GtkAboutDialog showing empty "contributors"
+ 403139	Leak reported by valgrind
+ 403255	gdk_pixbuf_loader_close returns TRUE but sets *error
+ 403409	Add a helpful comment on GtkCellRendererText:alignment
+ 403896	gtk+-2.10.9 fails to compile against win32api-3.8 due to ...
+ 405539	gdk_pixbuf_save() for PNG saver can return FALSE without ...
+ 405696	Make parent menu item insensitive if no items are to be s...
+ 409357	leak in color scheme code
+ 412221	Icons not working with Win32 file-system backend.
+ 412596	Setting the colour scheme property of GtkSettings has no ...
+ 413492	Minor build tweaks
+ 413664	Dragging tab greys out chat windows
+ 415645	Fix and clean up GtkCellRendererAccel
+ 310522	Buttons flicker and redraw slowly
+ 396899	glib mentions non-existing PATCH bugzilla keyword
+ 408018	GtkTextBuffer memory leak
+ 414875	Rendering the first icon triggers a style reset
+ 325477	Just make File Chooser window bigger
+ 414975	the popped up menu cannot have special theming
+
+
 Overview of Changes from GTK+ 2.10.8 to 2.10.9
 ==============================================
 

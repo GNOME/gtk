@@ -1,5 +1,9 @@
 2007-03-08  Matthias Clasen <mclasen@redhat.com>
 
+	* NEWS: Updates
+
+2007-03-08  Matthias Clasen <mclasen@redhat.com>
+
 	Merged from trunk:
 
 	* gdk/x11/gdkasync.c (send_event_handler): Defer the callbacks
