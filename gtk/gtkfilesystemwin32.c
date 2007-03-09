@@ -1414,13 +1414,12 @@ get_icon_path (const gchar *filename,
 	       gint        *index)
 {
   gchar *path = NULL;
+  SHFILEINFOW shfi;
+  wchar_t *wfn;
 
   g_return_val_if_fail (NULL != filename, NULL);
   g_return_val_if_fail ('\0' != *filename, NULL);
   g_return_val_if_fail (NULL != index, NULL);
-
-  SHFILEINFOW shfi;
-  wchar_t *wfn;
 
   wfn = g_utf8_to_utf16 (filename, -1, NULL, NULL, NULL);
 
