@@ -1,3 +1,8 @@
+2007-03-09  Leonardo Ferreira Fontenelle  <leonardof@svn.gnome.org>
+
+	* pt_BR.po: Fixes in Brazilian Portuguese translation for better
+	consistency.
+
 2007-03-09  Josep Puigdemont i Casamajó  <josep.puigdemont@gmail.com>
 
 	* ca.po: Updated Catalan translation.
