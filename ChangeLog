@@ -1,5 +1,14 @@
 2007-03-09  Matthias Clasen <mclasen@redhat.com>
 
+	Merge from trunk:
+
+	* modules/input/gtkimcontextxim.c 
+	(gtk_im_context_xim_filter_keypress): Don't commit
+	modifier-adorned characters.  (#331369, #335796, 
+	Lin Ma and others)
+
+2007-03-09  Matthias Clasen <mclasen@redhat.com>
+
 	* gdk/x11/gdkasync.c: Fix the build
 
 2007-03-09  Matthias Clasen <mclasen@redhat.com>

@@ -728,6 +728,10 @@ gtk_im_context_xim_filter_keypress (GtkIMContext *context,
   if (XFilterEvent ((XEvent *)&xevent, GDK_DRAWABLE_XID (context_xim->client_window)))
     return TRUE;
   
+  if (event->state &
+      (gtk_accelerator_get_default_mod_mask () & ~(GDK_SHIFT_MASK | GDK_CONTROL_MASK))) 
+    return FALSE;
+
  again:
   if (ic)
     num_bytes = XmbLookupString (ic, &xevent, buffer, buffer_size, &keysym, &status);
