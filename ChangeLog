@@ -1,5 +1,12 @@
 2007-03-09  Matthias Clasen <mclasen@redhat.com>
 
+	* Everywhere: Remove unnecessary NULL checks before
+	g_free().  (#369666, Morten Welinder, Djihed Afifi)
+
+	* configure.in: Check for ftw.h
+
+2007-03-09  Matthias Clasen <mclasen@redhat.com>
+
 	* gtk/gtkfilesystemwin32.c (get_icon_path): Remove
 	C99isms.  (#416525, Kazuki Iwamoto)
 

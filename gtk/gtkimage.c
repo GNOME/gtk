@@ -1894,8 +1894,7 @@ gtk_image_reset (GtkImage *image)
       break;
 
     case GTK_IMAGE_ICON_NAME:
-      if (image->data.name.icon_name)
-	g_free (image->data.name.icon_name);
+      g_free (image->data.name.icon_name);
       image->data.name.icon_name = NULL;
       if (image->data.name.pixbuf)
 	g_object_unref (image->data.name.pixbuf);

@@ -809,8 +809,8 @@ gtk_about_dialog_set_version (GtkAboutDialog *about,
   priv = (GtkAboutDialogPrivate *)about->private_data;
   
   tmp = priv->version;
-  priv->version = version ? g_strdup (version) : NULL;
-  g_free (tmp);
+  priv->version = g_strdup (version);
+  g_free (tmp); 
 
   update_name_version (about);
 
@@ -862,7 +862,7 @@ gtk_about_dialog_set_copyright (GtkAboutDialog *about,
   priv = (GtkAboutDialogPrivate *)about->private_data;
 	
   tmp = priv->copyright;
-  priv->copyright = copyright ? g_strdup (copyright) : NULL;
+  priv->copyright = g_strdup (copyright);
   g_free (tmp);
   
   if (priv->copyright != NULL) 

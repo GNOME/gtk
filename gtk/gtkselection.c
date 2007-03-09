@@ -1116,8 +1116,7 @@ gtk_selection_data_set (GtkSelectionData *selection_data,
 			const guchar	 *data,
 			gint		  length)
 {
-  if (selection_data->data)
-    g_free (selection_data->data);
+  g_free (selection_data->data);
   
   selection_data->type = type;
   selection_data->format = format;
@@ -2933,8 +2932,7 @@ gtk_selection_data_free (GtkSelectionData *data)
 {
   g_return_if_fail (data != NULL);
   
-  if (data->data)
-    g_free (data->data);
+  g_free (data->data);
   
   g_free (data);
 }

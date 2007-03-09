@@ -283,8 +283,7 @@ gdk_pixbuf__png_image_load (FILE *f, GError **error)
 	}
 
 	if (setjmp (png_ptr->jmpbuf)) {
-	    	if (rows)
-		  	g_free (rows);
+	    	g_free (rows);
 
 		if (pixbuf)
 			g_object_unref (pixbuf);

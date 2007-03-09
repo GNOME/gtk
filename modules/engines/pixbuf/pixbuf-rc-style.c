@@ -375,8 +375,7 @@ theme_parse_detail(GScanner * scanner,
   if (token != G_TOKEN_STRING)
     return G_TOKEN_STRING;
 
-  if (data->match_data.detail)
-    g_free (data->match_data.detail);
+  g_free (data->match_data.detail);
   
   data->match_data.detail = g_strdup(scanner->value.v_string);
 
@@ -622,8 +621,7 @@ theme_image_unref (ThemeImage *data)
   data->refcount--;
   if (data->refcount == 0)
     {
-      if (data->match_data.detail)
-	g_free (data->match_data.detail);
+      g_free (data->match_data.detail);
       if (data->background)
 	theme_pixbuf_destroy (data->background);
       if (data->overlay)

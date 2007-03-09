@@ -3859,8 +3859,7 @@ internal_insert_element (GtkToolbar          *toolbar,
   content = toolbar_content_new_compatibility (toolbar, type, child_widget,
 					       child_icon, child_label, position);
   
-  if (free_me)
-    g_free (free_me);
+  g_free (free_me);
   
   return child_widget;
 }

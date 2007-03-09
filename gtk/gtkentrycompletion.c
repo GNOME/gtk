@@ -573,8 +573,7 @@ gtk_entry_completion_finalize (GObject *object)
   if (priv->action_view)
     g_object_unref (priv->action_view);
 
-  if (priv->case_normalized_key)
-    g_free (priv->case_normalized_key);
+  g_free (priv->case_normalized_key);
 
   if (priv->popup_window)
     gtk_widget_destroy (priv->popup_window);
@@ -1095,8 +1094,7 @@ gtk_entry_completion_complete (GtkEntryCompletion *completion)
   if (!completion->priv->filter_model)
     return;
   
-  if (completion->priv->case_normalized_key)
-    g_free (completion->priv->case_normalized_key);
+  g_free (completion->priv->case_normalized_key);
 
   tmp = g_utf8_normalize (gtk_entry_get_text (GTK_ENTRY (completion->priv->entry)),
                           -1, G_NORMALIZE_ALL);

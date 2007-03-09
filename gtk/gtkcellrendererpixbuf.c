@@ -336,8 +336,7 @@ gtk_cell_renderer_pixbuf_set_property (GObject      *object,
       priv->stock_size = g_value_get_uint (value);
       break;
     case PROP_STOCK_DETAIL:
-      if (priv->stock_detail)
-        g_free (priv->stock_detail);
+      g_free (priv->stock_detail);
       priv->stock_detail = g_value_dup_string (value);
       break;
     case PROP_ICON_NAME:

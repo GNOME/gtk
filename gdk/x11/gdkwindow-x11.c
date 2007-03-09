@@ -194,8 +194,7 @@ gdk_window_impl_x11_finalize (GObject *object)
 	_gdk_xid_table_remove (display, window_impl->toplevel->focus_window);
     }
 
-  if (window_impl->toplevel)
-    g_free (window_impl->toplevel);
+  g_free (window_impl->toplevel);
 
   if (window_impl->cursor)
     gdk_cursor_unref (window_impl->cursor);

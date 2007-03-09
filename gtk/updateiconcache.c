@@ -523,8 +523,7 @@ maybe_cache_image_data (Image       *image,
 
       image->image_data = idata;
 
-      if (path2)
-	g_free (path2);
+      g_free (path2);
     }
 }
 
@@ -572,8 +571,7 @@ maybe_cache_icon_data (Image       *image,
 
       image->icon_data = idata;
 
-      if (path2)
-	g_free (path2);
+      g_free (path2);
     }
 }
 

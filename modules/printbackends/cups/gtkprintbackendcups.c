@@ -613,8 +613,7 @@ cups_dispatch_watch_finalize (GSource *source)
       dispatch->backend = NULL;
     }
 
-  if (dispatch->data_poll != NULL)
-    g_free (dispatch->data_poll);
+  g_free (dispatch->data_poll);
 }
 
 static GSourceFuncs _cups_dispatch_watch_funcs = {

@@ -200,8 +200,7 @@ gtk_preview_size (GtkPreview *preview,
       GTK_WIDGET (preview)->requisition.width = width;
       GTK_WIDGET (preview)->requisition.height = height;
 
-      if (preview->buffer)
-	g_free (preview->buffer);
+      g_free (preview->buffer);
       preview->buffer = NULL;
     }
 }
@@ -416,8 +415,7 @@ gtk_preview_finalize (GObject *object)
   g_return_if_fail (GTK_IS_PREVIEW (object));
 
   preview = GTK_PREVIEW (object);
-  if (preview->buffer)
-    g_free (preview->buffer);
+  g_free (preview->buffer);
   preview->type = (GtkPreviewType) -1;
 
   G_OBJECT_CLASS (gtk_preview_parent_class)->finalize (object);
@@ -549,8 +547,7 @@ gtk_preview_make_buffer (GtkPreview *preview)
       (preview->buffer_width != width) ||
       (preview->buffer_height != height))
     {
-      if (preview->buffer)
-	g_free (preview->buffer);
+      g_free (preview->buffer);
 
       preview->buffer_width = width;
       preview->buffer_height = height;

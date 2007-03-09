@@ -999,10 +999,8 @@ insert_theme (GtkIconTheme *icon_theme, const char *theme_name)
 static void
 free_unthemed_icon (UnthemedIcon *unthemed_icon)
 {
-  if (unthemed_icon->svg_filename)
-    g_free (unthemed_icon->svg_filename);
-  if (unthemed_icon->no_svg_filename)
-    g_free (unthemed_icon->no_svg_filename);
+  g_free (unthemed_icon->svg_filename);
+  g_free (unthemed_icon->no_svg_filename);
   g_slice_free (UnthemedIcon, unthemed_icon);
 }
 
@@ -2434,11 +2432,9 @@ gtk_icon_info_free (GtkIconInfo *icon_info)
 {
   g_return_if_fail (icon_info != NULL);
 
-  if (icon_info->filename)
-    g_free (icon_info->filename);
+  g_free (icon_info->filename);
 #ifdef G_OS_WIN32
-  if (icon_info->cp_filename)
-    g_free (icon_info->cp_filename);
+  g_free (icon_info->cp_filename);
 #endif
   if (icon_info->pixbuf)
     g_object_unref (icon_info->pixbuf);
@@ -2560,8 +2556,7 @@ load_svg_at_size (const gchar *filename,
  bail:
   if (loader)
     g_object_unref (loader);
-  if (contents)
-    g_free (contents);
+  g_free (contents);
   
   return pixbuf;
 }

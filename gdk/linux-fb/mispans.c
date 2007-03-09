@@ -195,7 +195,7 @@ void miAppendSpans(SpanGroup *spanGroup, SpanGroup *otherGroup, Spans *spans)
 
 void miFreeSpanGroup(SpanGroup *spanGroup)
 {
-    if (spanGroup->group != NULL) g_free(spanGroup->group);
+    g_free(spanGroup->group);
 }
 
 static void QuickSortSpansX(register GdkSpan points[], register int numSpans)
@@ -368,10 +368,8 @@ void miFillUniqueSpanGroup(GdkDrawable *pDraw, GdkGC *pGC, SpanGroup *spanGroup)
 
 	if (!yspans || !ysizes)
 	{
-	    if (yspans)
-		g_free (yspans);
-	    if (ysizes)
-		g_free (ysizes);
+	    g_free (yspans);
+	    g_free (ysizes);
 	    miDisposeSpanGroup (spanGroup);
 	    return;
 	}
@@ -438,8 +436,7 @@ void miFillUniqueSpanGroup(GdkDrawable *pDraw, GdkGC *pGC, SpanGroup *spanGroup)
 	    }
 	    g_free (yspans);
 	    g_free (ysizes);
-	    if (points)
-		g_free (points);
+	    g_free (points);
 	    return;
 	}
 	count = 0;

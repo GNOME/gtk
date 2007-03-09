@@ -2386,8 +2386,7 @@ gtk_file_selection_file_changed (GtkTreeSelection *selection,
 
   if (index != -1)
     {
-      if (fs->last_selected != NULL)
-	g_free (fs->last_selected);
+      g_free (fs->last_selected);
 
       fs->last_selected = g_strdup (g_ptr_array_index (new_names, index));
       filename = get_real_filename (fs->last_selected, FALSE);
@@ -2701,14 +2700,10 @@ cmpl_free_state (CompletionState* cmpl_state)
   cmpl_free_dir_list (cmpl_state->directory_storage);
   cmpl_free_dir_sent_list (cmpl_state->directory_sent_storage);
 
-  if (cmpl_state->user_dir_name_buffer)
-    g_free (cmpl_state->user_dir_name_buffer);
-  if (cmpl_state->user_directories)
-    g_free (cmpl_state->user_directories);
-  if (cmpl_state->the_completion.text)
-    g_free (cmpl_state->the_completion.text);
-  if (cmpl_state->updated_text)
-    g_free (cmpl_state->updated_text);
+  g_free (cmpl_state->user_dir_name_buffer);
+  g_free (cmpl_state->user_directories);
+  g_free (cmpl_state->the_completion.text);
+  g_free (cmpl_state->updated_text);
 
   g_free (cmpl_state);
 }
@@ -3948,10 +3943,8 @@ get_pwdb (CompletionState* cmpl_state)
 
 error:
 
-  if (cmpl_state->user_dir_name_buffer)
-    g_free (cmpl_state->user_dir_name_buffer);
-  if (cmpl_state->user_directories)
-    g_free (cmpl_state->user_directories);
+  g_free (cmpl_state->user_dir_name_buffer);
+  g_free (cmpl_state->user_directories);
 
   cmpl_state->user_dir_name_buffer = NULL;
   cmpl_state->user_directories = NULL;

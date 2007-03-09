@@ -360,8 +360,7 @@ gtk_recent_manager_finalize (GObject *object)
   if (priv->poll_timeout)
     g_source_remove (priv->poll_timeout);
   
-  if (priv->filename)
-    g_free (priv->filename);
+  g_free (priv->filename);
   
   if (priv->recent_items)
     g_bookmark_file_free (priv->recent_items);
@@ -1737,11 +1736,9 @@ recent_app_info_free (RecentAppInfo *app_info)
   if (!app_info)
     return;
   
-  if (app_info->name)
-    g_free (app_info->name);
+  g_free (app_info->name);
   
-  if (app_info->exec)
-    g_free (app_info->exec);
+  g_free (app_info->exec);
   
   g_free (app_info);
 }

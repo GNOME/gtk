@@ -232,8 +232,7 @@ gtk_combo_entry_key_press (GtkEntry * entry, GdkEventKey * event, GtkCombo * com
 	  gtk_editable_set_position (editable, pos);
 	}
 
-      if (nprefix)
-	g_free (nprefix);
+      g_free (nprefix);
       g_free (prefix);
       g_completion_free (cmpl);
 

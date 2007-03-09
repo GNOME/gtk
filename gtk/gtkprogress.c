@@ -273,8 +273,7 @@ gtk_progress_finalize (GObject *object)
   if (progress->offscreen_pixmap)
     g_object_unref (progress->offscreen_pixmap);
 
-  if (progress->format)
-    g_free (progress->format);
+  g_free (progress->format);
 
   G_OBJECT_CLASS (gtk_progress_parent_class)->finalize (object);
 }

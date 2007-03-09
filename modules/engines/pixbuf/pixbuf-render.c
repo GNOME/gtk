@@ -487,8 +487,7 @@ theme_pixbuf_set_filename (ThemePixbuf *theme_pb,
       theme_pb->pixbuf = NULL;
     }
 
-  if (theme_pb->filename)
-    g_free (theme_pb->filename);
+  g_free (theme_pb->filename);
 
   if (filename)
     theme_pb->filename = g_strdup (filename);

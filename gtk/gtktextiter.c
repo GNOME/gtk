@@ -1325,8 +1325,7 @@ gtk_text_iter_get_tags (const GtkTextIter *iter)
   /* No tags, use default style */
   if (tags == NULL || tag_count == 0)
     {
-      if (tags)
-        g_free (tags);
+      g_free (tags);
 
       return NULL;
     }
@@ -1743,8 +1742,7 @@ gtk_text_iter_get_attributes (const GtkTextIter  *iter,
   /* No tags, use default style */
   if (tags == NULL || tag_count == 0)
     {
-      if (tags)
-        g_free (tags);
+      g_free (tags);
 
       return FALSE;
     }

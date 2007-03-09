@@ -350,8 +350,7 @@ gtk_curve_interpolate (GtkCurve *c, gint width, gint height)
   if (c->num_points != width)
     {
       c->num_points = width;
-      if (c->point)
-	g_free (c->point);
+      g_free (c->point);
       c->point = g_malloc (c->num_points * sizeof (c->point[0]));
     }
 
@@ -687,8 +686,7 @@ gtk_curve_set_curve_type (GtkCurve *c, GtkCurveType new_type)
 	}
       else if (c->curve_type == GTK_CURVE_TYPE_FREE)
 	{
-	  if (c->ctlpoint)
-	    g_free (c->ctlpoint);
+	  g_free (c->ctlpoint);
 	  c->num_ctlpoints = 9;
 	  c->ctlpoint = g_malloc (c->num_ctlpoints * sizeof (*c->ctlpoint));
 
@@ -746,8 +744,7 @@ gtk_curve_size_graph (GtkCurve *curve)
 static void
 gtk_curve_reset_vector (GtkCurve *curve)
 {
-  if (curve->ctlpoint)
-    g_free (curve->ctlpoint);
+  g_free (curve->ctlpoint);
 
   curve->num_ctlpoints = 2;
   curve->ctlpoint = g_malloc (2 * sizeof (curve->ctlpoint[0]));
@@ -1030,10 +1027,8 @@ gtk_curve_finalize (GObject *object)
   curve = GTK_CURVE (object);
   if (curve->pixmap)
     g_object_unref (curve->pixmap);
-  if (curve->point)
-    g_free (curve->point);
-  if (curve->ctlpoint)
-    g_free (curve->ctlpoint);
+  g_free (curve->point);
+  g_free (curve->ctlpoint);
 
   G_OBJECT_CLASS (parent_class)->finalize (object);
 }

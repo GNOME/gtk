@@ -7017,8 +7017,7 @@ gtk_icon_view_item_accessible_action_set_description (AtkAction   *action,
 
   item = GTK_ICON_VIEW_ITEM_ACCESSIBLE (action);
 
-  if (item->action_descriptions[i])
-    g_free (item->action_descriptions[i]);
+  g_free (item->action_descriptions[i]);
 
   item->action_descriptions[i] = g_strdup (description);
 

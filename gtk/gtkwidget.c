@@ -7238,8 +7238,7 @@ gtk_widget_finalize (GObject *object)
   g_object_unref (widget->style);
   widget->style = NULL;
 
-  if (widget->name)
-    g_free (widget->name);
+  g_free (widget->name);
   
   aux_info =_gtk_widget_get_aux_info (widget, FALSE);
   if (aux_info)

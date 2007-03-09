@@ -240,8 +240,7 @@ gdk_property_change (GdkWindow    *window,
 	      WIN32_API_FAILED ("GlobalAlloc");
 	      if (!CloseClipboard ())
 		WIN32_API_FAILED ("CloseClipboard");
-	      if (buf != NULL)
-		g_free (buf);
+	      g_free (buf);
 	      return;
 	    }
 

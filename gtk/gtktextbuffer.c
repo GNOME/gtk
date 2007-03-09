@@ -4318,8 +4318,7 @@ _gtk_text_buffer_get_line_log_attrs (GtkTextBuffer     *buffer,
     }
   
   /* Not in cache; open up the first cache entry */
-  if (cache->entries[ATTR_CACHE_SIZE-1].attrs)
-    g_free (cache->entries[ATTR_CACHE_SIZE-1].attrs);
+  g_free (cache->entries[ATTR_CACHE_SIZE-1].attrs);
   
   g_memmove (cache->entries + 1, cache->entries,
              sizeof (CacheEntry) * (ATTR_CACHE_SIZE - 1));

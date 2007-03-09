@@ -592,8 +592,7 @@ gtk_cell_renderer_text_finalize (GObject *object)
 
   pango_font_description_free (celltext->font);
 
-  if (celltext->text)
-    g_free (celltext->text);
+  g_free (celltext->text);
 
   if (celltext->extra_attrs)
     pango_attr_list_unref (celltext->extra_attrs);
@@ -1009,8 +1008,7 @@ gtk_cell_renderer_text_set_property (GObject      *object,
   switch (param_id)
     {
     case PROP_TEXT:
-      if (celltext->text)
-        g_free (celltext->text);
+      g_free (celltext->text);
 
       if (priv->markup_set)
         {
@@ -1054,8 +1052,7 @@ gtk_cell_renderer_text_set_property (GObject      *object,
 	    return;
 	  }
 
-	if (celltext->text)
-	  g_free (celltext->text);
+	g_free (celltext->text);
 
 	if (celltext->extra_attrs)
 	  pango_attr_list_unref (celltext->extra_attrs);

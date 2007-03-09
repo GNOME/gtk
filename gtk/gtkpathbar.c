@@ -1144,8 +1144,7 @@ button_data_free (ButtonData *button_data)
     gtk_file_path_free (button_data->path);
   button_data->path = NULL;
 
-  if (button_data->dir_name)
-    g_free (button_data->dir_name);
+  g_free (button_data->dir_name);
   button_data->dir_name = NULL;
 
   button_data->button = NULL;

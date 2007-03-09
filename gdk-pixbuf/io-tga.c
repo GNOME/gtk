@@ -228,8 +228,7 @@ static IOBuffer *io_buffer_free_segment(IOBuffer *buffer,
 static void io_buffer_free(IOBuffer *buffer)
 {
 	g_return_if_fail(buffer != NULL);
-	if (buffer->data)
-		g_free(buffer->data);
+	g_free(buffer->data);
 	g_free(buffer);
 }
 
@@ -943,11 +942,9 @@ static gboolean gdk_pixbuf__tga_stop_load(gpointer data, GError **err)
 				       ctx->pbuf->width, ctx->pbuf->height,
 			       	       ctx->udata);
 	}
-	if (ctx->hdr)
-	  g_free (ctx->hdr);
+	g_free (ctx->hdr);
 	if (ctx->cmap) {
-	  if (ctx->cmap->cols)
-	    g_free (ctx->cmap->cols);
+	  g_free (ctx->cmap->cols);
 	  g_free (ctx->cmap);
 	}
 	if (ctx->pbuf)

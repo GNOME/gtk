@@ -2130,8 +2130,7 @@ gdk_window_draw_trapezoids (GdkDrawable   *drawable,
   else
     gdk_draw_trapezoids (private->impl, gc, trapezoids, n_trapezoids);
   
-  if (new_trapezoids)
-    g_free (new_trapezoids);
+  g_free (new_trapezoids);
 
   RESTORE_GC (gc);
 }

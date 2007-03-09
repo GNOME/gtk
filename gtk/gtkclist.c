@@ -2525,8 +2525,7 @@ set_cell_contents (GtkCList    *clist,
       !GTK_CLIST_AUTO_RESIZE_BLOCKED (clist))
     column_auto_resize (clist, clist_row, column, requisition.width);
 
-  if (old_text)
-    g_free (old_text);
+  g_free (old_text);
   if (old_pixmap)
     gdk_pixmap_unref (old_pixmap);
   if (old_mask)
@@ -6324,8 +6323,7 @@ column_title_new (GtkCList    *clist,
 		  gint         column,
 		  const gchar *title)
 {
-  if (clist->column[column].title)
-    g_free (clist->column[column].title);
+  g_free (clist->column[column].title);
 
   clist->column[column].title = g_strdup (title);
 }
@@ -6336,8 +6334,7 @@ columns_delete (GtkCList *clist)
   gint i;
 
   for (i = 0; i < clist->columns; i++)
-    if (clist->column[i].title)
-      g_free (clist->column[i].title);
+    g_free (clist->column[i].title);
       
   g_free (clist->column);
 }

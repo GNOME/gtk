@@ -835,8 +835,7 @@ miComputeWideEllipse(int lw, miArc *parc, gboolean *mustFree)
     spdata = lruent->spdata;
     if (!spdata || spdata->k != k)
     {
-	if (spdata)
-	    g_free(spdata);
+	g_free(spdata);
 	spdata = (miArcSpanData *)g_malloc(sizeof(miArcSpanData) +
 					 sizeof(miArcSpan) * (k + 2));
 	lruent->spdata = spdata;

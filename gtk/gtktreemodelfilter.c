@@ -375,8 +375,7 @@ gtk_tree_model_filter_finalize (GObject *object)
   if (filter->priv->root)
     gtk_tree_model_filter_free_level (filter, filter->priv->root);
 
-  if (filter->priv->modify_types)
-    g_free (filter->priv->modify_types);
+  g_free (filter->priv->modify_types);
   
   if (filter->priv->modify_destroy)
     filter->priv->modify_destroy (filter->priv->modify_data);

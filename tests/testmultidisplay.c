@@ -39,8 +39,7 @@ get_screen_response (GtkDialog *dialog,
 {
   if (response_id == GTK_RESPONSE_DELETE_EVENT)
     return;
-  if (screen2_name)
-    g_free (screen2_name);
+  g_free (screen2_name);
   screen2_name = g_strdup (gtk_entry_get_text (entry));
 }
 

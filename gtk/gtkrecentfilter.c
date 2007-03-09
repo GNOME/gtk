@@ -128,8 +128,7 @@ gtk_recent_filter_finalize (GObject *object)
 {
   GtkRecentFilter *filter = GTK_RECENT_FILTER (object);
   
-  if (filter->name)
-    g_free (filter->name);
+  g_free (filter->name);
   
   if (filter->rules)
     {
@@ -202,8 +201,7 @@ gtk_recent_filter_set_name (GtkRecentFilter *filter,
 {
   g_return_if_fail (GTK_IS_RECENT_FILTER (filter));
   
-  if (filter->name)
-    g_free (filter->name);
+  g_free (filter->name);
   
   if (name)
     filter->name = g_strdup (name);

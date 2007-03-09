@@ -465,8 +465,7 @@ gdk_event_free (GdkEvent *event)
 
     case GDK_BUTTON_PRESS:
     case GDK_BUTTON_RELEASE:
-      if (event->button.axes)
-	g_free (event->button.axes);
+      g_free (event->button.axes);
       break;
       
     case GDK_EXPOSE:
@@ -475,8 +474,7 @@ gdk_event_free (GdkEvent *event)
       break;
       
     case GDK_MOTION_NOTIFY:
-      if (event->motion.axes)
-	g_free (event->motion.axes);
+      g_free (event->motion.axes);
       break;
       
     case GDK_SETTING:

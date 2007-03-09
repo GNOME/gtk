@@ -3402,8 +3402,7 @@ gtk_entry_create_layout (GtkEntry *entry,
       
   pango_layout_set_attributes (layout, tmp_attrs);
 
-  if (preedit_string)
-    g_free (preedit_string);
+  g_free (preedit_string);
   if (preedit_attrs)
     pango_attr_list_unref (preedit_attrs);
       

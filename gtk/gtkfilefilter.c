@@ -130,8 +130,7 @@ gtk_file_filter_finalize (GObject  *object)
   g_slist_foreach (filter->rules, (GFunc)filter_rule_free, NULL);
   g_slist_free (filter->rules);
 
-  if (filter->name)
-    g_free (filter->name);
+  g_free (filter->name);
 
   G_OBJECT_CLASS (gtk_file_filter_parent_class)->finalize (object);
 }
@@ -179,8 +178,7 @@ gtk_file_filter_set_name (GtkFileFilter *filter,
 {
   g_return_if_fail (GTK_IS_FILE_FILTER (filter));
   
-  if (filter->name)
-    g_free (filter->name);
+  g_free (filter->name);
 
   filter->name = g_strdup (name);
 }

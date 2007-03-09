@@ -846,8 +846,7 @@ gtk_file_chooser_entry_changed (GtkEditable *editable)
 	file_part_pos = 0;
     }
 
-  if (chooser_entry->file_part)
-    g_free (chooser_entry->file_part);
+  g_free (chooser_entry->file_part);
 
   chooser_entry->file_part = file_part;
   chooser_entry->file_part_pos = file_part_pos;

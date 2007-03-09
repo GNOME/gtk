@@ -251,8 +251,7 @@ _gdk_windowing_gc_copy (GdkGC *dst_gc,
   dst_quartz_gc->cap_style = src_quartz_gc->cap_style;
   dst_quartz_gc->join_style = src_quartz_gc->join_style;
 
-  if (dst_quartz_gc->dash_lengths)
-    g_free (dst_quartz_gc->dash_lengths);
+  g_free (dst_quartz_gc->dash_lengths);
   dst_quartz_gc->dash_lengths = g_memdup (src_quartz_gc->dash_lengths,
 					  sizeof (float) * src_quartz_gc->dash_count);
   dst_quartz_gc->dash_count = src_quartz_gc->dash_count;

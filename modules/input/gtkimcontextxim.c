@@ -1159,8 +1159,7 @@ preedit_draw_callback (XIC                           xic,
 
   context->preedit_length += diff;
 
-  if (new_text)
-    g_free (new_text);
+  g_free (new_text);
 
   if (!context->finalizing)
     g_signal_emit_by_name (context, "preedit_changed");

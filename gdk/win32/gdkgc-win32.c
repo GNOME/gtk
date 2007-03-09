@@ -107,8 +107,7 @@ gdk_gc_win32_finalize (GObject *object)
   if (win32_gc->values_mask & GDK_GC_FONT)
     gdk_font_unref (win32_gc->font);
   
-  if (win32_gc->pen_dashes)
-    g_free (win32_gc->pen_dashes);
+  g_free (win32_gc->pen_dashes);
   
   G_OBJECT_CLASS (parent_class)->finalize (object);
 }
@@ -618,8 +617,7 @@ _gdk_windowing_gc_copy (GdkGC *dst_gc,
   if (dst_win32_gc->font != NULL)
     gdk_font_unref (dst_win32_gc->font);
 
-  if (dst_win32_gc->pen_dashes)
-    g_free (dst_win32_gc->pen_dashes);
+  g_free (dst_win32_gc->pen_dashes);
   
   dst_win32_gc->hcliprgn = src_win32_gc->hcliprgn;
   if (dst_win32_gc->hcliprgn)

@@ -1862,8 +1862,7 @@ settings_update_font_options (GtkSettings *settings)
 	hint_style = CAIRO_HINT_STYLE_FULL;
     }
 
-  if (hint_style_str)
-    g_free (hint_style_str);
+  g_free (hint_style_str);
 
   cairo_font_options_set_hint_style (options, hint_style);
 

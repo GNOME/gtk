@@ -639,8 +639,7 @@ init_xinerama_support (GdkScreen * screen)
   int opcode, firstevent, firsterror;
 #endif
 
-  if (screen_x11->monitors)
-    g_free (screen_x11->monitors);
+  g_free (screen_x11->monitors);
   
 #ifdef HAVE_XINERAMA  
   if (XQueryExtension (GDK_SCREEN_XDISPLAY (screen), "XINERAMA",

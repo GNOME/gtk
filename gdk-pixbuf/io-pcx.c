@@ -103,16 +103,12 @@ fill_pcx_context(struct pcx_context *context)
 static void
 free_pcx_context(struct pcx_context *context, gboolean unref_pixbuf)
 {
-	if(context->header)
-		g_free(context->header);
-	if(context->buf)
-		g_free(context->buf);
+	g_free(context->header);
+	g_free(context->buf);
 	if(unref_pixbuf && context->pixbuf)
 		g_object_unref(context->pixbuf);
-	if(context->line)
-		g_free(context->line);
-	if(context->p_data)
-		g_free(context->p_data);
+	g_free(context->line);
+	g_free(context->p_data);
 
 	g_free(context);
 }

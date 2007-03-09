@@ -537,8 +537,7 @@ gtk_text_layout_set_preedit_string (GtkTextLayout *layout,
   g_return_if_fail (GTK_IS_TEXT_LAYOUT (layout));
   g_return_if_fail (preedit_attrs != NULL || preedit_string == NULL);
 
-  if (layout->preedit_string)
-    g_free (layout->preedit_string);
+  g_free (layout->preedit_string);
 
   if (layout->preedit_attrs)
     pango_attr_list_unref (layout->preedit_attrs);
@@ -1087,8 +1086,7 @@ get_style (GtkTextLayout *layout,
       gtk_text_attributes_ref (layout->default_style);
       layout->one_style_cache = layout->default_style;
 
-      if (tags)
-        g_free (tags);
+      g_free (tags);
 
       return layout->default_style;
     }

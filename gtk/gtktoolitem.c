@@ -254,8 +254,7 @@ gtk_tool_item_finalize (GObject *object)
 {
   GtkToolItem *item = GTK_TOOL_ITEM (object);
 
-  if (item->priv->menu_item_id)
-    g_free (item->priv->menu_item_id);
+  g_free (item->priv->menu_item_id);
   
   if (item->priv->menu_item)
     g_object_unref (item->priv->menu_item);
@@ -1068,8 +1067,7 @@ gtk_tool_item_set_proxy_menu_item (GtkToolItem *tool_item,
   g_return_if_fail (menu_item == NULL || GTK_IS_MENU_ITEM (menu_item));
   g_return_if_fail (menu_item_id != NULL);
 
-  if (tool_item->priv->menu_item_id)
-    g_free (tool_item->priv->menu_item_id);
+  g_free (tool_item->priv->menu_item_id);
       
   tool_item->priv->menu_item_id = g_strdup (menu_item_id);
 

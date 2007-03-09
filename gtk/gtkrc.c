@@ -1166,14 +1166,12 @@ gtk_rc_style_finalize (GObject *object)
   rc_style = GTK_RC_STYLE (object);
   rc_priv = GTK_RC_STYLE_GET_PRIVATE (rc_style);
 
-  if (rc_style->name)
-    g_free (rc_style->name);
+  g_free (rc_style->name);
   if (rc_style->font_desc)
     pango_font_description_free (rc_style->font_desc);
       
   for (i = 0; i < 5; i++)
-    if (rc_style->bg_pixmap_name[i])
-      g_free (rc_style->bg_pixmap_name[i]);
+    g_free (rc_style->bg_pixmap_name[i]);
   
   /* Now remove all references to this rc_style from
    * realized_style_ht
@@ -3039,8 +3037,7 @@ gtk_rc_parse_style (GtkRcContext *context,
 	  
 	  for (i = 0; i < 5; i++)
 	    {
-	      if (rc_style->bg_pixmap_name[i])
-		g_free (rc_style->bg_pixmap_name[i]);
+	      g_free (rc_style->bg_pixmap_name[i]);
 	      rc_style->bg_pixmap_name[i] = g_strdup (parent_style->bg_pixmap_name[i]);
 	    }
 	}
@@ -3395,8 +3392,7 @@ gtk_rc_parse_bg_pixmap (GtkRcContext *context,
   
   if (pixmap_file)
     {
-      if (rc_style->bg_pixmap_name[state])
-	g_free (rc_style->bg_pixmap_name[state]);
+      g_free (rc_style->bg_pixmap_name[state]);
       rc_style->bg_pixmap_name[state] = pixmap_file;
     }
   
@@ -4051,8 +4047,7 @@ gtk_rc_parse_im_module_file (GScanner *scanner)
   if (token != G_TOKEN_STRING)
     return G_TOKEN_STRING;
 
-  if (im_module_file)
-    g_free (im_module_file);
+  g_free (im_module_file);
     
   im_module_file = g_strdup (scanner->value.v_string);
 

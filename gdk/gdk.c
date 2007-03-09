@@ -692,8 +692,7 @@ gdk_get_program_class (void)
 void
 gdk_set_program_class (const char *program_class)
 {
-  if (gdk_progclass)
-    g_free (gdk_progclass);
+  g_free (gdk_progclass);
 
   gdk_progclass = g_strdup (program_class);
 }

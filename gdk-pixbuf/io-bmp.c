@@ -691,8 +691,7 @@ static gboolean gdk_pixbuf__bmp_image_stop_load(gpointer data, GError **error)
 	
 	g_return_val_if_fail(context != NULL, TRUE);
 
-	if (context->Colormap != NULL)
-		g_free(context->Colormap);
+	g_free(context->Colormap);
 
 	if (context->pixbuf)
 		g_object_unref(context->pixbuf);

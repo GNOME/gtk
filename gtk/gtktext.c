@@ -940,8 +940,7 @@ gtk_text_insert (GtkText        *text,
  	  g_free (text->text.ch);
  	  text->text.wc = g_new (GdkWChar, INITIAL_BUFFER_SIZE);
  	  text->text_len = INITIAL_BUFFER_SIZE;
- 	  if (text->scratch_buffer.ch)
- 	    g_free (text->scratch_buffer.ch);
+ 	  g_free (text->scratch_buffer.ch);
  	  text->scratch_buffer.wc = NULL;
  	  text->scratch_buffer_len = 0;
  	}
@@ -1224,13 +1223,11 @@ gtk_text_finalize (GObject *object)
   
   if (text->use_wchar)
     {
-      if (text->scratch_buffer.wc)
-	g_free (text->scratch_buffer.wc);
+      g_free (text->scratch_buffer.wc);
     }
   else
     {
-      if (text->scratch_buffer.ch)
-	g_free (text->scratch_buffer.ch);
+      g_free (text->scratch_buffer.ch);
     }
   
   g_list_free (text->tab_stops);

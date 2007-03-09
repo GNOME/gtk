@@ -526,8 +526,7 @@ gdk_rgb_free_info (GdkRgbInfo *image_info)
 {
   GSList *tmp_list;
   
-  if (image_info->stage_buf)
-    g_free (image_info->stage_buf);
+  g_free (image_info->stage_buf);
   
   if (image_info->gray_cmap)
     gdk_rgb_cmap_free (image_info->gray_cmap);
@@ -535,11 +534,9 @@ gdk_rgb_free_info (GdkRgbInfo *image_info)
   if (image_info->own_gc)
     g_object_unref (image_info->own_gc);
 
-  if (image_info->colorcube)
-    g_free (image_info->colorcube);
+  g_free (image_info->colorcube);
   
-  if (image_info->colorcube_d)
-    g_free (image_info->colorcube_d);
+  g_free (image_info->colorcube_d);
 
   tmp_list = image_info->cmap_info_list;
   while (tmp_list)
