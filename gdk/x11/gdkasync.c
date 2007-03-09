@@ -112,6 +112,18 @@ struct _SetInputFocusState
   gulong get_input_focus_req;
 };
 
+static gboolean
+callback_idle (gpointer data)
+{
+  SendEventState *state = (SendEventState *)data;  
+  
+  state->callback (state->window, !state->have_error, state->data);
+
+  g_free (state);
+
+  return FALSE;
+}
+
 static Bool
 send_event_handler (Display *dpy,
 		    xReply  *rep,
@@ -147,11 +159,9 @@ send_event_handler (Display *dpy,
 	}
 
       if (state->callback)
-	state->callback (state->window, !state->have_error, state->data);
+        gdk_threads_add_idle (callback_idle, state);
 
       DeqAsyncHandler(state->dpy, &state->async);
-
-      g_free (state);
 
       return (rep->generic.type != X_Error);
     }

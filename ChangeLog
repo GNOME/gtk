@@ -1,5 +1,15 @@
 2007-03-08  Matthias Clasen <mclasen@redhat.com>
 
+	Merged from trunk:
+
+	* gdk/x11/gdkasync.c (send_event_handler): Defer the callbacks
+	to an idle to avoid deadlock with xcb-ified libX11.  (#413032,
+	Sebastian Dröge)
+
+2007-03-08  Matthias Clasen <mclasen@redhat.com>
+
+	Merged from trunk:
+
 	* gtk/gtknotebook.c (gtk_notebook_real_insert_page):
 	Set child visibility to FALSE here; it will be turned
 	back on in switch_page.  (#413664, Carlos Garnacho)
