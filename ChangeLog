@@ -1,3 +1,9 @@
+2007-03-08  Matthias Clasen <mclasen@redhat.com>
+
+	* gtk/gtknotebook.c (gtk_notebook_real_insert_page):
+	Set child visibility to FALSE here; it will be turned
+	back on in switch_page.  (#413664, Carlos Garnacho)
+	
 2007-03-08  Mathias Hasselmann <mathias.hasselmann@gmx.de>
 
 	* modules/engines/ms-windows/msw_style.c: Use proper border style

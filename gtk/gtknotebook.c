@@ -3969,9 +3969,10 @@ gtk_notebook_real_insert_page (GtkNotebook *notebook,
   if (!menu_label)
     page->default_menu = TRUE;
   else  
-    {
-      g_object_ref_sink (page->menu_label);
-    }
+    g_object_ref_sink (page->menu_label);
+
+  /* child visible will be turned on by switch_page below */
+  gtk_widget_set_child_visible (child, FALSE);
 
   if (notebook->menu)
     gtk_notebook_menu_item_create (notebook,
@@ -3986,9 +3987,6 @@ gtk_notebook_real_insert_page (GtkNotebook *notebook,
   if (!notebook->first_tab)
     notebook->first_tab = notebook->children;
 
-  /* child visible will be turned on by switch_page below */
-  gtk_widget_set_child_visible (child, FALSE);
-  
   if (tab_label)
     {
       if (notebook->show_tabs && GTK_WIDGET_VISIBLE (child))
