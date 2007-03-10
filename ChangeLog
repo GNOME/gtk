@@ -1,3 +1,9 @@
+2007-03-10  Kristian Rietveld  <kris@gtk.org>
+
+	* gtk/gtktreeview.c (gtk_tree_view_search_dialog_hide): only
+	hide the search dialog and send focus events if the search dialog
+	is currently visible.
+
 2007-03-10  Richard Hult  <richard@imendio.com>
 
 	* gdk/quartz/gdkdrawable-quartz.c:
