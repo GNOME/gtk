@@ -1,3 +1,7 @@
+2007-03-10  Matthias Clasen <mclasen@redhat.com>
+
+	* tests/print-editor.c: Plug some leaks.
+
 2007-03-09  Matthias Clasen <mclasen@redhat.com>
 
 	* gtk/gtktextview.c (gtk_text_view_end_selection_drag):
