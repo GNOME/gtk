@@ -363,6 +363,8 @@ draw_page (GtkPrintOperation *operation,
     }
   while (i < end &&
 	 pango_layout_iter_next_line (iter));
+
+  pango_layout_iter_free (iter);
 }
 
 static void
@@ -635,6 +637,8 @@ print_done (GtkPrintOperation *op,
 
   g_free (print_data->text);
   g_free (print_data->font);
+  g_list_free (print_data->page_breaks);
+  g_object_unref (print_data->layout);
   g_free (print_data);
   
   if (!gtk_print_operation_is_finished (op))
