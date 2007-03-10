@@ -13682,10 +13682,14 @@ gtk_tree_view_search_dialog_hide (GtkWidget   *search_dialog,
       tree_view->priv->typeselect_flush_timeout = 0;
     }
 	
-  /* send focus-in event */
-  send_focus_change (GTK_WIDGET (tree_view->priv->search_entry), FALSE);
-  gtk_widget_hide (search_dialog);
-  gtk_entry_set_text (GTK_ENTRY (tree_view->priv->search_entry), "");
+  if (GTK_WIDGET_VISIBLE (search_dialog))
+    {
+      /* send focus-in event */
+      send_focus_change (GTK_WIDGET (tree_view->priv->search_entry), FALSE);
+      gtk_widget_hide (search_dialog);
+      gtk_entry_set_text (GTK_ENTRY (tree_view->priv->search_entry), "");
+      send_focus_change (GTK_WIDGET (tree_view), TRUE);
+    }
 }
 
 static void

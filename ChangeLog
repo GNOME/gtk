@@ -1,5 +1,14 @@
 2007-03-10  Kristian Rietveld  <kris@gtk.org>
 
+	Updated fix for #356515, merged from trunk:
+
+	* gtk/gtktreeview.c (gtk_tree_view_search_dialog_hide): send
+	a focus-in event to the tree view after hiding the search dialog;
+	only hide the search dialog and send the focus events when the
+	dialog is currently visible.
+
+2007-03-10  Kristian Rietveld  <kris@gtk.org>
+
 	Merge from trunk:
 
 	* gtk/gtktreemodelsort.c (gtk_tree_model_sort_ref_node),
