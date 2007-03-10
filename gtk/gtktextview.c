@@ -294,8 +294,7 @@ static void     gtk_text_view_reset_im_context       (GtkTextView        *text_v
 static void     gtk_text_view_start_selection_drag   (GtkTextView        *text_view,
                                                       const GtkTextIter  *iter,
                                                       GdkEventButton     *event);
-static gboolean gtk_text_view_end_selection_drag     (GtkTextView        *text_view,
-                                                      GdkEventButton     *event);
+static gboolean gtk_text_view_end_selection_drag     (GtkTextView        *text_view);
 static void     gtk_text_view_start_selection_dnd    (GtkTextView        *text_view,
                                                       const GtkTextIter  *iter,
                                                       GdkEventMotion     *event);
@@ -3723,7 +3722,7 @@ gtk_text_view_grab_notify (GtkWidget *widget,
 {
   if (!was_grabbed)
     {
-      gtk_text_view_end_selection_drag (GTK_TEXT_VIEW (widget), NULL);
+      gtk_text_view_end_selection_drag (GTK_TEXT_VIEW (widget));
       gtk_text_view_unobscure_mouse_cursor (GTK_TEXT_VIEW (widget));
     }
 }
@@ -4041,7 +4040,7 @@ gtk_text_view_button_press_event (GtkWidget *widget, GdkEventButton *event)
     {
       GtkTextIter iter;
 
-      gtk_text_view_end_selection_drag (text_view, event);      
+      gtk_text_view_end_selection_drag (text_view);
 
       gtk_text_layout_get_iter_at_pixel (text_view->layout,
 					 &iter,
@@ -4073,7 +4072,7 @@ gtk_text_view_button_release_event (GtkWidget *widget, GdkEventButton *event)
           text_view->drag_start_y = -1;
         }
 
-      if (gtk_text_view_end_selection_drag (GTK_TEXT_VIEW (widget), event))
+      if (gtk_text_view_end_selection_drag (GTK_TEXT_VIEW (widget)))
         return TRUE;
       else if (text_view->pending_place_cursor_button == event->button)
         {
@@ -4139,6 +4138,8 @@ static gint
 gtk_text_view_focus_out_event (GtkWidget *widget, GdkEventFocus *event)
 {
   GtkTextView *text_view = GTK_TEXT_VIEW (widget);
+
+  gtk_text_view_end_selection_drag (text_view);
 
   gtk_widget_queue_draw (widget);
 
@@ -5876,8 +5877,7 @@ gtk_text_view_start_selection_drag (GtkTextView       *text_view,
 
 /* returns whether we were really dragging */
 static gboolean
-gtk_text_view_end_selection_drag (GtkTextView    *text_view, 
-				  GdkEventButton *event)
+gtk_text_view_end_selection_drag (GtkTextView    *text_view) 
 {
   if (text_view->selection_drag_handler == 0)
     return FALSE;
@@ -6096,7 +6096,7 @@ gtk_text_view_destroy_layout (GtkTextView *text_view)
         }
       
       gtk_text_view_stop_cursor_blink (text_view);
-      gtk_text_view_end_selection_drag (text_view, NULL);
+      gtk_text_view_end_selection_drag (text_view);
 
       g_object_unref (text_view->layout);
       text_view->layout = NULL;

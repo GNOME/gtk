@@ -1,5 +1,13 @@
 2007-03-09  Matthias Clasen <mclasen@redhat.com>
 
+	* gtk/gtktextview.c (gtk_text_view_end_selection_drag):
+	Get rid of the unused event argument. Update all callers.
+
+	* gtk/gtktextview.c (gtk_text_view_focus_out): Call
+	gtk_text_view_end_selection_drag.  (#351671, Boyd Timothy)
+
+2007-03-09  Matthias Clasen <mclasen@redhat.com>
+
 	* modules/input/gtkimcontextxim.c 
 	(gtk_im_context_xim_filter_keypress): Don't commit
 	modifier-adorned characters.  (#331369, #335796, Lin Ma
