@@ -2,6 +2,15 @@
 
 	Merge from trunk:
 
+	* gtk/gtktreemodelsort.c (gtk_tree_model_sort_ref_node),
+	(gtk_tree_model_sort_real_unref_node): when (un)reffing an
+	element, also (un)ref its parent elements. (Fixes #364946,
+	reported by many, testcase by Andreas Koehler).
+
+2007-03-10  Kristian Rietveld  <kris@gtk.org>
+
+	Merge from trunk:
+
 	* gtk/gtktreemodelsort.c (gtk_tree_model_sort_row_changed),
 	(gtk_tree_model_sort_sort_level): ref count nodes the proper way,
 	(gtk_tree_model_sort_ref_node), (gtk_tree_model_sort_real_unref_node),

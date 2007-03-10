@@ -1172,6 +1172,7 @@ gtk_tree_model_sort_ref_node (GtkTreeModel *tree_model,
 {
   GtkTreeModelSort *tree_model_sort = (GtkTreeModelSort *) tree_model;
   GtkTreeIter child_iter;
+  GtkTreeIter tmp_iter;
   SortLevel *level;
   SortElt *elt;
 
@@ -1180,13 +1181,29 @@ gtk_tree_model_sort_ref_node (GtkTreeModel *tree_model,
 
   GET_CHILD_ITER (tree_model_sort, &child_iter, iter);
 
+  /* Reference the node in the child model */
   gtk_tree_model_ref_node (tree_model_sort->child_model, &child_iter);
 
+  /* Increase the reference count of this element and its level */
   level = iter->user_data;
   elt = iter->user_data2;
 
   elt->ref_count++;
   level->ref_count++;
+
+  /* Increase the reference count of all parent elements */
+  tmp_iter.stamp = tree_model_sort->stamp;
+  tmp_iter.user_data = level->parent_level;
+  tmp_iter.user_data2 = level->parent_elt;;
+
+  while (tmp_iter.user_data2)
+    {
+      gtk_tree_model_sort_ref_node (tree_model, &tmp_iter);
+
+      tmp_iter.user_data2 = SORT_LEVEL (tmp_iter.user_data)->parent_elt;
+      tmp_iter.user_data = SORT_LEVEL (tmp_iter.user_data)->parent_level;
+    }
+
   if (level->ref_count == 1)
     {
       SortLevel *parent_level = level->parent_level;
@@ -1211,6 +1228,7 @@ gtk_tree_model_sort_real_unref_node (GtkTreeModel *tree_model,
 				     gboolean      propagate_unref)
 {
   GtkTreeModelSort *tree_model_sort = (GtkTreeModelSort *) tree_model;
+  GtkTreeIter tmp_iter;
   SortLevel *level;
   SortElt *elt;
 
@@ -1232,6 +1250,19 @@ gtk_tree_model_sort_real_unref_node (GtkTreeModel *tree_model,
 
   elt->ref_count--;
   level->ref_count--;
+
+  /* Decrease the reference count of all parent elements */
+  tmp_iter.stamp = tree_model_sort->stamp;
+  tmp_iter.user_data = level->parent_level;
+  tmp_iter.user_data2 = level->parent_elt;;
+
+  while (tmp_iter.user_data2)
+    {
+      gtk_tree_model_sort_real_unref_node (tree_model, &tmp_iter, FALSE);
+
+      tmp_iter.user_data2 = SORT_LEVEL (tmp_iter.user_data)->parent_elt;
+      tmp_iter.user_data = SORT_LEVEL (tmp_iter.user_data)->parent_level;
+    }
 
   if (level->ref_count == 0)
     {
