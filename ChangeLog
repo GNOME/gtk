@@ -1,5 +1,9 @@
 2007-03-10  Richard Hult  <richard@imendio.com>
 
+	* gdk/quartz/gdkdisplay-quartz.c: (gdk_display_get_name): Plug a leak.
+
+2007-03-10  Richard Hult  <richard@imendio.com>
+
 	* gdk/quartz/GdkQuartzView.c: Remove unneccesary exposure mask check.
 
 2007-03-10  Richard Hult  <richard@imendio.com>

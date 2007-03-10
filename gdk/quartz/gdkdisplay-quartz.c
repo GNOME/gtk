@@ -75,8 +75,12 @@ gdk_display_get_name (GdkDisplay *display)
 {
   static gchar *display_name = NULL;
 
-  if (! display_name)
-    display_name = g_strdup ([[[NSHost currentHost] name] UTF8String]);
+  if (!display_name)
+    {
+      GDK_QUARTZ_ALLOC_POOL;
+      display_name = g_strdup ([[[NSHost currentHost] name] UTF8String]);
+      GDK_QUARTZ_RELEASE_POOL;
+    }
 
   return display_name;
 }
