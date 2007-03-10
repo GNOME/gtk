@@ -1,5 +1,10 @@
 2007-03-10  Richard Hult  <richard@imendio.com>
 
+	* gdk/quartz/gdkprivate-quartz.h: Add missing function signature to fix
+	a build warning.
+
+2007-03-10  Richard Hult  <richard@imendio.com>
+
 	* gdk/quartz/gdkdisplay-quartz.c: (gdk_display_get_name): Plug a leak.
 
 2007-03-10  Richard Hult  <richard@imendio.com>
