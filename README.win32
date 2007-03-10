@@ -112,14 +112,14 @@ flag to configure if you use that. If you use nmake and you don't care
 for Wintab, undefine HAVE_WINTAB in config.h.win32 and remove
 references to the wntab32x library from the makefile before building.
 
-ActiveIMM
-=========
+Active IMM
+==========
 
-If you want to build a GTK+ that supports ActiveIMM (the Input Method
-Manager for non-EastAsia locales that can be used on Win9x/NT4), you
-need the dimm.h header file. But that is rather pointless now as both
-Win9x or NT4 have reached their end of life. ActiveIMM developer bits
-are somewhat difficult to find, it was last found at
+If you want to build a GTK+ that supports Active IMM (the Input Method
+Manager than can be used in non-EastAsian versions of NT4 or Win9x),
+you need the dimm.h header file. But that is rather pointless now as
+both Win9x or NT4 have reached their end of life. Active IMM developer
+bits are somewhat difficult to find, they were last found at
 http://msdn.microsoft.com/downloads/samples/internet/wizard/ . If you
 use "autoconfiscated" build, pass the --with-ie55 flag to configure
 specifying the location of the ie55_lib directory created by
