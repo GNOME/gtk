@@ -1,7 +1,7 @@
 /* gdkwindow-quartz.c
  *
  * Copyright (C) 1995-1997 Peter Mattis, Spencer Kimball and Josh MacDonald
- * Copyright (C) 2005 Imendio AB
+ * Copyright (C) 2005-2007 Imendio AB
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -145,45 +145,47 @@ gdk_window_impl_quartz_begin_paint_region (GdkPaintable *paintable,
 					   GdkRegion    *region)
 {
   GdkWindowImplQuartz *impl = GDK_WINDOW_IMPL_QUARTZ (paintable);
+  GdkDrawableImplQuartz *drawable_impl;
   int n_rects;
   GdkRectangle *rects;
   GdkPixmap *bg_pixmap;
   GdkWindow *window;
-  
-  bg_pixmap = GDK_WINDOW_OBJECT (GDK_DRAWABLE_IMPL_QUARTZ (impl)->wrapper)->bg_pixmap;
+
+  drawable_impl = GDK_DRAWABLE_IMPL_QUARTZ (impl);
+  bg_pixmap = GDK_WINDOW_OBJECT (drawable_impl->wrapper)->bg_pixmap;
 
   if (impl->begin_paint_count == 0)
     impl->paint_clip_region = gdk_region_copy (region);
   else
     gdk_region_union (impl->paint_clip_region, region);
 
-  impl->begin_paint_count ++;
+  impl->begin_paint_count++;
 
   if (bg_pixmap == GDK_NO_BG)
     return;
-	
+
   gdk_region_get_rectangles (region, &rects, &n_rects);
-  
+
   if (bg_pixmap == NULL)
     {
-      CGContextRef context = gdk_quartz_drawable_get_context (GDK_DRAWABLE (impl), FALSE);
+      CGContextRef cg_context;
+      gfloat r, g, b, a;
       gint i;
-    
+
+      cg_context = gdk_quartz_drawable_get_context (GDK_DRAWABLE (impl), FALSE);
+      gdk_quartz_get_rgba_from_pixel (gdk_drawable_get_colormap (drawable_impl->wrapper),
+				      GDK_WINDOW_OBJECT (drawable_impl->wrapper)->bg_color.pixel,
+				      &r, &g, &b, &a);
+ 
       for (i = 0; i < n_rects; i++) 
         {
-	  gfloat r, g, b, a;
-
-	  gdk_quartz_get_rgba_from_pixel (gdk_drawable_get_colormap (GDK_DRAWABLE_IMPL_QUARTZ (impl)->wrapper),
-					  GDK_WINDOW_OBJECT (GDK_DRAWABLE_IMPL_QUARTZ (impl)->wrapper)->bg_color.pixel,
-					  &r, &g, &b, &a);
-
-	  CGContextSetRGBFillColor (context, r, g, b, a);
-          CGContextFillRect (context,
+	  CGContextSetRGBFillColor (cg_context, r, g, b, a);
+          CGContextFillRect (cg_context,
 			     CGRectMake (rects[i].x, rects[i].y,
 					 rects[i].width, rects[i].height));
         }
-      
-      gdk_quartz_drawable_release_context (GDK_DRAWABLE (impl), context);
+
+      gdk_quartz_drawable_release_context (GDK_DRAWABLE (impl), cg_context);
     }
   else
     {
@@ -191,10 +193,10 @@ gdk_window_impl_quartz_begin_paint_region (GdkPaintable *paintable,
       int x_offset, y_offset;
       int width, height;
       GdkGC *gc;
-      
+
       x_offset = y_offset = 0;
-      
-      window = GDK_WINDOW (GDK_DRAWABLE_IMPL_QUARTZ (impl)->wrapper);
+
+      window = GDK_WINDOW (drawable_impl->wrapper);
       while (window && ((GdkWindowObject *) window)->bg_pixmap == GDK_PARENT_RELATIVE_BG)
         {
           /* If this window should have the same background as the parent,
@@ -210,9 +212,9 @@ gdk_window_impl_quartz_begin_paint_region (GdkPaintable *paintable,
        * want to look into that for this. 
        */
       gc = gdk_gc_new (GDK_DRAWABLE (impl));
-      
+
       gdk_drawable_get_size (GDK_DRAWABLE (bg_pixmap), &width, &height);
-      
+
       x = -x_offset;
       while (x < (rects[0].x + rects[0].width))
         {
@@ -229,10 +231,10 @@ gdk_window_impl_quartz_begin_paint_region (GdkPaintable *paintable,
             }
           x += width;
         }
-      
-      g_object_unref (G_OBJECT (gc));
+
+      g_object_unref (gc);
     }
-  
+
   g_free (rects);
 }
 
@@ -241,7 +243,7 @@ gdk_window_impl_quartz_end_paint (GdkPaintable *paintable)
 {
   GdkWindowImplQuartz *impl = GDK_WINDOW_IMPL_QUARTZ (paintable);
 
-  impl->begin_paint_count --;
+  impl->begin_paint_count--;
 
   if (impl->begin_paint_count == 0)
     {
@@ -261,6 +263,8 @@ gdk_window_quartz_process_all_updates (void)
 
   g_slist_foreach (old_update_windows, (GFunc) g_object_ref, NULL);
   
+  GDK_QUARTZ_ALLOC_POOL;
+
   while (tmp_list)
     {
       GdkWindowObject *private = tmp_list->data;
@@ -275,17 +279,13 @@ gdk_window_quartz_process_all_updates (void)
 	  gdk_region_destroy (private->update_area);
 	  private->update_area = NULL;
 	  
-          GDK_QUARTZ_ALLOC_POOL;
-
 	  for (i = 0; i < n_rects; i++) 
 	    {
 	      [impl->view setNeedsDisplayInRect:NSMakeRect (rects[i].x, rects[i].y,
-							    rects[i].width, rects[i].height)];
+	      						    rects[i].width, rects[i].height)];
 	    }
 	  
 	  [impl->view displayIfNeeded];
-
-          GDK_QUARTZ_RELEASE_POOL;
 
 	  g_free (rects);
 	}
@@ -293,6 +293,8 @@ gdk_window_quartz_process_all_updates (void)
       g_object_unref (tmp_list->data);
       tmp_list = tmp_list->next;
     }
+
+  GDK_QUARTZ_RELEASE_POOL;
 
   g_slist_free (old_update_windows);
 }
@@ -373,25 +375,25 @@ _gdk_window_impl_quartz_get_type (void)
 
   if (!object_type)
     {
-      static const GTypeInfo object_info =
-      {
-        sizeof (GdkWindowImplQuartzClass),
-        (GBaseInitFunc) NULL,
-        (GBaseFinalizeFunc) NULL,
-        (GClassInitFunc) gdk_window_impl_quartz_class_init,
-        NULL,           /* class_finalize */
-        NULL,           /* class_data */
-        sizeof (GdkWindowImplQuartz),
-        0,              /* n_preallocs */
-        (GInstanceInitFunc) gdk_window_impl_quartz_init,
-      };
-      
-      static const GInterfaceInfo paintable_info = 
-      {
-	(GInterfaceInitFunc) gdk_window_impl_quartz_paintable_init,
-	NULL,
-	NULL
-      };
+      const GTypeInfo object_info =
+	{
+	  sizeof (GdkWindowImplQuartzClass),
+	  (GBaseInitFunc) NULL,
+	  (GBaseFinalizeFunc) NULL,
+	  (GClassInitFunc) gdk_window_impl_quartz_class_init,
+	  NULL,           /* class_finalize */
+	  NULL,           /* class_data */
+	  sizeof (GdkWindowImplQuartz),
+	  0,              /* n_preallocs */
+	  (GInstanceInitFunc) gdk_window_impl_quartz_init,
+	};
+
+      const GInterfaceInfo paintable_info = 
+	{
+	  (GInterfaceInitFunc) gdk_window_impl_quartz_paintable_init,
+	  NULL,
+	  NULL
+	};
 
       object_type = g_type_register_static (GDK_TYPE_DRAWABLE_IMPL_QUARTZ,
                                             "GdkWindowImplQuartz",
@@ -400,7 +402,7 @@ _gdk_window_impl_quartz_get_type (void)
 				   GDK_TYPE_PAINTABLE,
 				   &paintable_info);
     }
-  
+
   return object_type;
 }
 
@@ -737,6 +739,8 @@ _gdk_windowing_window_destroy (GdkWindow *window,
 
       GDK_QUARTZ_ALLOC_POOL;
 
+      _gdk_quartz_drawable_finish (GDK_DRAWABLE (impl));
+
       if (impl->toplevel)
 	[impl->toplevel close];
       else if (impl->view)
@@ -908,10 +912,10 @@ move_resize_window_internal (GdkWindow *window,
     {
       if (!private->input_only)
 	{
-	  [impl->view setFrame:NSMakeRect (private->x, private->y, 
-					   impl->width, impl->height)];
+	  NSRect nsrect;
 
-	  /* FIXME: Maybe we should use setNeedsDisplayInRect instead */
+	  nsrect = NSMakeRect (private->x, private->y, impl->width, impl->height);
+	  [impl->view setFrame: nsrect];
 	  [impl->view setNeedsDisplay:YES];
 	}
     }

@@ -168,4 +168,6 @@ void     _gdk_quartz_event_loop_init            (void);
 NSEvent *_gdk_quartz_event_loop_get_current     (void);
 void     _gdk_quartz_event_loop_release_current (void);
 
+void     _gdk_quartz_drawable_finish (GdkDrawable *drawable);
+
 #endif /* __GDK_PRIVATE_QUARTZ_H__ */

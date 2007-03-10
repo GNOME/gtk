@@ -40,11 +40,13 @@ typedef struct _GdkDrawableImplQuartzClass GdkDrawableImplQuartzClass;
 
 struct _GdkDrawableImplQuartz
 {
-  GdkDrawable parent_instance;
+  GdkDrawable      parent_instance;
 
-  GdkDrawable *wrapper;
+  GdkDrawable     *wrapper;
 
-  GdkColormap *colormap;
+  GdkColormap     *colormap;
+
+  cairo_surface_t *cairo_surface;
 };
  
 struct _GdkDrawableImplQuartzClass 
@@ -52,10 +54,11 @@ struct _GdkDrawableImplQuartzClass
   GdkDrawableClass parent_class;
 };
 
-GType gdk_drawable_impl_quartz_get_type (void);
-
-CGContextRef gdk_quartz_drawable_get_context (GdkDrawable *drawable, gboolean antialias);
-void gdk_quartz_drawable_release_context (GdkDrawable *drawable, CGContextRef context);
+GType        gdk_drawable_impl_quartz_get_type   (void);
+CGContextRef gdk_quartz_drawable_get_context     (GdkDrawable  *drawable, 
+						  gboolean      antialias);
+void         gdk_quartz_drawable_release_context (GdkDrawable  *drawable, 
+						  CGContextRef  context);
 
 G_END_DECLS
 

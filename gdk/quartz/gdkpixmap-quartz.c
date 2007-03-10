@@ -48,6 +48,8 @@ gdk_pixmap_impl_quartz_finalize (GObject *object)
 
   CGImageRelease (impl->image);
 
+  _gdk_quartz_drawable_finish (GDK_DRAWABLE (impl));
+
   G_OBJECT_CLASS (parent_class)->finalize (object);
 }
 

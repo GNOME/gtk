@@ -1,5 +1,28 @@
 2007-03-10  Richard Hult  <richard@imendio.com>
 
+	* gdk/quartz/gdkdrawable-quartz.c:
+	(gdk_quartz_ref_cairo_surface): Reuse the surface during its lifetime.
+	(gdk_quartz_drawable_get_context): Update for the new quartz cairo 
+	surface API (#410442). Don't lock focus unless called outside of an 
+	expose event.
+	(gdk_quartz_drawable_release_context): Only flush the CG context and 
+	unlock focus if called outside of expose.
+	(_gdk_quartz_drawable_finish): New function, used to free the cached
+	cairo surface.
+
+	* gdk/quartz/gdkwindow-quartz.c:
+	(gdk_window_impl_quartz_begin_paint_region): A few small style changes.
+	(_gdk_window_impl_quartz_get_type): No need to make the type info
+	static.
+	(gdk_window_quartz_process_all_updates): Move the autorelease pool
+	allocation and freeing outside the loop.
+	(_gdk_windowing_window_destroy): Finish the drawable.
+	(move_resize_window_internal): Small cleanup and remove comment.
+
+	* gdk/quartz/gdkpixmap-quartz.c: Finish the drawable.
+
+2007-03-10  Richard Hult  <richard@imendio.com>
+
 	* gdk/quartz/gdkprivate-quartz.h: Add missing function signature to fix
 	a build warning.
 
