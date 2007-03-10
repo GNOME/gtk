@@ -1370,16 +1370,7 @@ gdk_screen_get_setting (GdkScreen   *screen,
 			const gchar *name,
 			GValue      *value)
 {
-  /* FIXME: This should be fetched from the correct preference value. See:
-     http://developer.apple.com/documentation/UserExperience/\
-     Conceptual/OSXHIGuidelines/XHIGText/chapter_13_section_2.html
-  */
-  if (strcmp (name, "gtk-font-name") == 0)
-    {
-      g_value_set_string (value, "Lucida Grande 12");
-      return TRUE;
-    }
-  else if (strcmp (name, "gtk-double-click-time") == 0)
+  if (strcmp (name, "gtk-double-click-time") == 0)
     {
       NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
       float t;

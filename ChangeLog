@@ -1,3 +1,8 @@
+2007-03-10  Richard Hult  <richard@imendio.com>
+
+	* gdk/quartz/gdkevents-quartz.c: (gdk_screen_get_setting): Don't set
+	the font name here, leave that to themes, fixes #387508.
+
 2007-03-10  Kristian Rietveld  <kris@gtk.org>
 
 	* gtk/gtktreemodelsort.c (gtk_tree_model_sort_ref_node),
