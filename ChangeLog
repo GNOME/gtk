@@ -1,3 +1,10 @@
+2007-03-10  Kristian Rietveld  <kris@gtk.org>
+
+	* gtk/gtktreemodelsort.c (gtk_tree_model_sort_ref_node),
+	(gtk_tree_model_sort_real_unref_node): when (un)reffing an
+	element, also (un)ref its parent elements. (Fixes #364946,
+	reported by many, testcase by Andreas Koehler).
+
 2007-03-10  Matthias Clasen <mclasen@redhat.com>
 
 	* gtk/gtkprintoperation-unix.c: Initialize the do_preview
