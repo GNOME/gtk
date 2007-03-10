@@ -550,6 +550,7 @@ _gtk_print_operation_platform_backend_run_dialog_async (GtkPrintOperation       
   rdata = g_new (PrintResponseData, 1);
   rdata->op = g_object_ref (op);
   rdata->do_print = FALSE;
+  rdata->do_preview = FALSE;
   rdata->result = GTK_PRINT_OPERATION_RESULT_CANCEL;
   rdata->print_cb = print_cb;
   rdata->parent = parent;
@@ -686,6 +687,7 @@ _gtk_print_operation_platform_backend_run_dialog (GtkPrintOperation *op,
    
   rdata.op = op;
   rdata.do_print = FALSE;
+  rdata.do_preview = FALSE;
   rdata.result = GTK_PRINT_OPERATION_RESULT_CANCEL;
   rdata.print_cb = NULL;
   rdata.destroy = NULL;

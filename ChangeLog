@@ -1,5 +1,8 @@
 2007-03-10  Matthias Clasen <mclasen@redhat.com>
 
+	* gtk/gtkprintoperation-unix.c: Initialize the do_preview
+	field of PrintResponseData.  (#396703, Christian Persch)
+
 	* tests/print-editor.c: Plug some leaks.
 
 2007-03-09  Matthias Clasen <mclasen@redhat.com>
