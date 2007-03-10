@@ -80,7 +80,7 @@
       gdk_region_union_with_rect (region, &gdk_rect);
     }
 
-  if (!gdk_region_empty (region) && private->event_mask & GDK_EXPOSURE_MASK)
+  if (!gdk_region_empty (region))
     {
       GdkEvent event;
       
@@ -96,11 +96,11 @@
       event.expose.region = region;
       event.expose.area = gdk_rect;
       
-      impl->in_paint_rect_count ++;
+      impl->in_paint_rect_count++;
 
       (*_gdk_event_func) (&event, _gdk_event_data);
 
-      impl->in_paint_rect_count --;
+      impl->in_paint_rect_count--;
 
       g_object_unref (gdk_window);
     }
