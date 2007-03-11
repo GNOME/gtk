@@ -1,3 +1,8 @@
+2007-03-12  Christian Persch  <chpe@gnome.org>
+
+	* gtk/gtkfilechooserdefault.c: (browse_widgets_create): Don't make the
+	Location: label bold. Bug #372449.
+
 2007-03-10  Kristian Rietveld  <kris@gtk.org>
 
 	Updated fix for #356515, merged from trunk:
