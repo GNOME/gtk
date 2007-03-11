@@ -1,3 +1,7 @@
+2007-03-11	Guillaume Savaton  <llumeao@gmail.com>
+
+	* eo.po: Filled revision date (default value prevented correct build)
+
 2007-03-11  Mugurel Tudor  <mugurelu@gnome.ro>
 
 	* ro.po: Updated Romanian translation by
