@@ -1,3 +1,8 @@
+2007-03-11  Raphael Higino  <raphaelh@svn.gnome.org>
+
+	* pt_BR.po: Updated Brazilian Portuguese translation
+	by Og Maciel <ogmaciel@ubuntu.com>.
+
 2007-03-11	Guillaume Savaton <llumeao@gmail.com>
 
 	* eo.po: Filled po revision date (prevented correct compilation)
