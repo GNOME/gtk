@@ -1,7 +1,7 @@
 General Information
 ===================
 
-This is GTK+ version 2.10.9. GTK+ is a multi-platform toolkit for
+This is GTK+ version 2.10.10. GTK+ is a multi-platform toolkit for
 creating graphical user interfaces. Offering a complete set of widgets,
 GTK+ is suitable for projects ranging from small one-off projects to
 complete application suites.
@@ -251,7 +251,8 @@ report.
 Otherwise, enter a new bug report that describes the patch, and attach
 the patch to that bug report.
 
-Bug reports containing patches that add to or change the GTK+ programming
-interface should include the API keyword in their keyword fields.
+Bug reports containing patches should include the PATCH keyword in their
+keyword fields. If the patch adds to or changes the GTK+ programming
+interface, the API keyword should also be included.
   
 Patches should be in unified diff form. (The -u option to GNU diff.)

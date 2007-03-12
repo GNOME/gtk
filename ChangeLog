@@ -1,10 +1,16 @@
 2007-03-12  Matthias Clasen  <mclasen@redhat.com>
 
+	* === Released 2.10.10 ===
+
+	* NEWS: Updates
+
+2007-03-12  Matthias Clasen  <mclasen@redhat.com>
+
 	Merge from trunk: 
 
-        * gtk/gtkspinbutton.c (gtk_spin_button_style_set): Set
-        the background of the panel window on style changes. (#402144,
-        Benjamin Berg)
+	* gtk/gtkspinbutton.c (gtk_spin_button_style_set): Set
+	the background of the panel window on style changes. (#402144,
+	Benjamin Berg)
 
 2007-03-12  Matthias Clasen  <mclasen@redhat.com>
 

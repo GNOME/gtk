@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-01-22 12:38-0500\n"
+"POT-Creation-Date: 2007-03-12 11:13-0400\n"
 "PO-Revision-Date: 2002-12-19 16:10+0200\n"
 "Last-Translator: Artis Trops <hornet@navigator.lv>\n"
 "Language-Team: Latvian <ll10nt@os.lv>\n"
@@ -410,7 +410,7 @@ msgid "Whether the action group is visible."
 msgstr "Vai logdaļa ir redzama"
 
 #: gtk/gtkadjustment.c:86 gtk/gtkcellrendererprogress.c:116
-#: gtk/gtkspinbutton.c:265
+#: gtk/gtkspinbutton.c:268
 msgid "Value"
 msgstr "Vērtība"
 
@@ -1121,40 +1121,40 @@ msgstr "Šūnas fona iestādījums"
 msgid "Whether this tag affects the cell background color"
 msgstr "Vai šis tags ietekmē šūnas fona krāsu"
 
-#: gtk/gtkcellrendereraccel.c:107
+#: gtk/gtkcellrendereraccel.c:104
 #, fuzzy
 msgid "Accelerator key"
 msgstr "Paātrinātāja Logdaļa"
 
-#: gtk/gtkcellrendereraccel.c:108
+#: gtk/gtkcellrendereraccel.c:105
 #, fuzzy
 msgid "The keyval of the accelerator"
 msgstr "Logdaļas nosaukums"
 
-#: gtk/gtkcellrendereraccel.c:124
+#: gtk/gtkcellrendereraccel.c:121
 #, fuzzy
 msgid "Accelerator modifiers"
 msgstr "Paātrinātāja Logdaļa"
 
-#: gtk/gtkcellrendereraccel.c:125
+#: gtk/gtkcellrendereraccel.c:122
 msgid "The modifier mask of the accelerator"
 msgstr ""
 
-#: gtk/gtkcellrendereraccel.c:142
+#: gtk/gtkcellrendereraccel.c:139
 #, fuzzy
 msgid "Accelerator keycode"
 msgstr "Paātrinātāja Logdaļa"
 
-#: gtk/gtkcellrendereraccel.c:143
+#: gtk/gtkcellrendereraccel.c:140
 msgid "The hardware keycode of the accelerator"
 msgstr ""
 
-#: gtk/gtkcellrendereraccel.c:162
+#: gtk/gtkcellrendereraccel.c:159
 #, fuzzy
 msgid "Accelerator Mode"
 msgstr "Paātrinātāja Logdaļa"
 
-#: gtk/gtkcellrendereraccel.c:163
+#: gtk/gtkcellrendereraccel.c:160
 #, fuzzy
 msgid "The type of accelerators"
 msgstr "Ziņojuma tips"
@@ -1262,7 +1262,7 @@ msgid "Text on the progress bar"
 msgstr "Teksts, ko attēlot progresa joslā"
 
 #: gtk/gtkcellrendererspin.c:93 gtk/gtkprogressbar.c:123 gtk/gtkrange.c:324
-#: gtk/gtkspinbutton.c:204
+#: gtk/gtkspinbutton.c:207
 msgid "Adjustment"
 msgstr "Noregulējums"
 
@@ -1276,15 +1276,15 @@ msgstr "Noregulēšana, kas pārvalda giešanās pogas vērtību"
 msgid "Climb rate"
 msgstr "Kāpinājuma Koeficients"
 
-#: gtk/gtkcellrendererspin.c:110 gtk/gtkspinbutton.c:213
+#: gtk/gtkcellrendererspin.c:110 gtk/gtkspinbutton.c:216
 msgid "The acceleration rate when you hold down a button"
 msgstr "Paātrinājuma koeficients, kad jūs turat nospiestu pogu"
 
-#: gtk/gtkcellrendererspin.c:123 gtk/gtkscale.c:142 gtk/gtkspinbutton.c:222
+#: gtk/gtkcellrendererspin.c:123 gtk/gtkscale.c:142 gtk/gtkspinbutton.c:225
 msgid "Digits"
 msgstr "Cipari"
 
-#: gtk/gtkcellrendererspin.c:124 gtk/gtkspinbutton.c:223
+#: gtk/gtkcellrendererspin.c:124 gtk/gtkspinbutton.c:226
 msgid "The number of decimal places to display"
 msgstr "Parādāmo decimālo vietu skaits"
 
@@ -1349,11 +1349,11 @@ msgid "Foreground color as a GdkColor"
 msgstr "Priekšplāna krāsa kā GdkColor"
 
 #: gtk/gtkcellrenderertext.c:258 gtk/gtkentry.c:486 gtk/gtktexttag.c:249
-#: gtk/gtktextview.c:547
+#: gtk/gtktextview.c:546
 msgid "Editable"
 msgstr "Rediģējams"
 
-#: gtk/gtkcellrenderertext.c:259 gtk/gtktexttag.c:250 gtk/gtktextview.c:548
+#: gtk/gtkcellrenderertext.c:259 gtk/gtktexttag.c:250 gtk/gtktextview.c:547
 msgid "Whether the text can be modified by the user"
 msgstr "Vai tekstu var modificēt lietotājs"
 
@@ -1497,133 +1497,133 @@ msgstr "Platums"
 msgid "The width at which the text is wrapped"
 msgstr "Pozīcija, kurā pašreizējā vērtība tiek parādīta"
 
-#: gtk/gtkcellrenderertext.c:484 gtk/gtktreeviewcolumn.c:291
+#: gtk/gtkcellrenderertext.c:488 gtk/gtktreeviewcolumn.c:291
 msgid "Alignment"
 msgstr "Centrēšana"
 
-#: gtk/gtkcellrenderertext.c:485
+#: gtk/gtkcellrenderertext.c:489
 #, fuzzy
 msgid "How to align the lines"
 msgstr "Kā zīmēt rīkjoslu"
 
-#: gtk/gtkcellrenderertext.c:495 gtk/gtkcellview.c:171 gtk/gtktexttag.c:543
+#: gtk/gtkcellrenderertext.c:499 gtk/gtkcellview.c:171 gtk/gtktexttag.c:543
 msgid "Background set"
 msgstr "Fona iestādījums"
 
-#: gtk/gtkcellrenderertext.c:496 gtk/gtkcellview.c:172 gtk/gtktexttag.c:544
+#: gtk/gtkcellrenderertext.c:500 gtk/gtkcellview.c:172 gtk/gtktexttag.c:544
 msgid "Whether this tag affects the background color"
 msgstr "Vai šis tags ietekmē fona krāsu"
 
-#: gtk/gtkcellrenderertext.c:499 gtk/gtktexttag.c:555
+#: gtk/gtkcellrenderertext.c:503 gtk/gtktexttag.c:555
 msgid "Foreground set"
 msgstr "Priekšplāna iestādījums"
 
-#: gtk/gtkcellrenderertext.c:500 gtk/gtktexttag.c:556
+#: gtk/gtkcellrenderertext.c:504 gtk/gtktexttag.c:556
 msgid "Whether this tag affects the foreground color"
 msgstr "Vai šis tags ietekmē prikšplāna krāsu"
 
-#: gtk/gtkcellrenderertext.c:503 gtk/gtktexttag.c:563
+#: gtk/gtkcellrenderertext.c:507 gtk/gtktexttag.c:563
 msgid "Editability set"
 msgstr "Rediģējamības iestādījums"
 
-#: gtk/gtkcellrenderertext.c:504 gtk/gtktexttag.c:564
+#: gtk/gtkcellrenderertext.c:508 gtk/gtktexttag.c:564
 msgid "Whether this tag affects text editability"
 msgstr "Vai šis tags ietekmē teksta rediģējamību"
 
-#: gtk/gtkcellrenderertext.c:507 gtk/gtktexttag.c:567
+#: gtk/gtkcellrenderertext.c:511 gtk/gtktexttag.c:567
 msgid "Font family set"
 msgstr "Fonta saimess iestādījums"
 
-#: gtk/gtkcellrenderertext.c:508 gtk/gtktexttag.c:568
+#: gtk/gtkcellrenderertext.c:512 gtk/gtktexttag.c:568
 msgid "Whether this tag affects the font family"
 msgstr "Vai šis tags ietekmē fonta saimi"
 
-#: gtk/gtkcellrenderertext.c:511 gtk/gtktexttag.c:571
+#: gtk/gtkcellrenderertext.c:515 gtk/gtktexttag.c:571
 msgid "Font style set"
 msgstr "Fonta stila iestādījums"
 
-#: gtk/gtkcellrenderertext.c:512 gtk/gtktexttag.c:572
+#: gtk/gtkcellrenderertext.c:516 gtk/gtktexttag.c:572
 msgid "Whether this tag affects the font style"
 msgstr "Vai šis tags ietekmē fonta stilu"
 
-#: gtk/gtkcellrenderertext.c:515 gtk/gtktexttag.c:575
+#: gtk/gtkcellrenderertext.c:519 gtk/gtktexttag.c:575
 msgid "Font variant set"
 msgstr "Fonta varianta iestādījums"
 
-#: gtk/gtkcellrenderertext.c:516 gtk/gtktexttag.c:576
+#: gtk/gtkcellrenderertext.c:520 gtk/gtktexttag.c:576
 msgid "Whether this tag affects the font variant"
 msgstr "Vai šis tags ietekmē fonta variantu"
 
-#: gtk/gtkcellrenderertext.c:519 gtk/gtktexttag.c:579
+#: gtk/gtkcellrenderertext.c:523 gtk/gtktexttag.c:579
 msgid "Font weight set"
 msgstr "Fonta platuma iestādījums"
 
-#: gtk/gtkcellrenderertext.c:520 gtk/gtktexttag.c:580
+#: gtk/gtkcellrenderertext.c:524 gtk/gtktexttag.c:580
 msgid "Whether this tag affects the font weight"
 msgstr "Vai šis tags ietekmē fonta platumu"
 
-#: gtk/gtkcellrenderertext.c:523 gtk/gtktexttag.c:583
+#: gtk/gtkcellrenderertext.c:527 gtk/gtktexttag.c:583
 msgid "Font stretch set"
 msgstr "Fonta izstiepšanās iestadījums"
 
-#: gtk/gtkcellrenderertext.c:524 gtk/gtktexttag.c:584
+#: gtk/gtkcellrenderertext.c:528 gtk/gtktexttag.c:584
 msgid "Whether this tag affects the font stretch"
 msgstr "Vai šis tags ietekmē fonta izstiepšanos"
 
-#: gtk/gtkcellrenderertext.c:527 gtk/gtktexttag.c:587
+#: gtk/gtkcellrenderertext.c:531 gtk/gtktexttag.c:587
 msgid "Font size set"
 msgstr "Fonta izmēra iestādījums"
 
-#: gtk/gtkcellrenderertext.c:528 gtk/gtktexttag.c:588
+#: gtk/gtkcellrenderertext.c:532 gtk/gtktexttag.c:588
 msgid "Whether this tag affects the font size"
 msgstr "Vai šis tags ietekmē fonta izmēru"
 
-#: gtk/gtkcellrenderertext.c:531 gtk/gtktexttag.c:591
+#: gtk/gtkcellrenderertext.c:535 gtk/gtktexttag.c:591
 msgid "Font scale set"
 msgstr "Fonta mēroga iestādījums"
 
-#: gtk/gtkcellrenderertext.c:532 gtk/gtktexttag.c:592
+#: gtk/gtkcellrenderertext.c:536 gtk/gtktexttag.c:592
 msgid "Whether this tag scales the font size by a factor"
 msgstr "Vai šis tags ietekmē fonta izmēru pēc koeficienta"
 
-#: gtk/gtkcellrenderertext.c:535 gtk/gtktexttag.c:611
+#: gtk/gtkcellrenderertext.c:539 gtk/gtktexttag.c:611
 msgid "Rise set"
 msgstr "Pacēluma iestādījums"
 
-#: gtk/gtkcellrenderertext.c:536 gtk/gtktexttag.c:612
+#: gtk/gtkcellrenderertext.c:540 gtk/gtktexttag.c:612
 msgid "Whether this tag affects the rise"
 msgstr "Vai šis tags ietekmē pacēlumu"
 
-#: gtk/gtkcellrenderertext.c:539 gtk/gtktexttag.c:627
+#: gtk/gtkcellrenderertext.c:543 gtk/gtktexttag.c:627
 msgid "Strikethrough set"
 msgstr "Caursvītrošanas iestādījums"
 
-#: gtk/gtkcellrenderertext.c:540 gtk/gtktexttag.c:628
+#: gtk/gtkcellrenderertext.c:544 gtk/gtktexttag.c:628
 msgid "Whether this tag affects strikethrough"
 msgstr "Vai šis tags ietekmē caursvītrošanu"
 
-#: gtk/gtkcellrenderertext.c:543 gtk/gtktexttag.c:635
+#: gtk/gtkcellrenderertext.c:547 gtk/gtktexttag.c:635
 msgid "Underline set"
 msgstr "Pasvītrošanas iestādījums"
 
-#: gtk/gtkcellrenderertext.c:544 gtk/gtktexttag.c:636
+#: gtk/gtkcellrenderertext.c:548 gtk/gtktexttag.c:636
 msgid "Whether this tag affects underlining"
 msgstr "Vai šis tags ietekmē pasvītrošanu"
 
-#: gtk/gtkcellrenderertext.c:547 gtk/gtktexttag.c:599
+#: gtk/gtkcellrenderertext.c:551 gtk/gtktexttag.c:599
 msgid "Language set"
 msgstr "Valodas iestādījums"
 
-#: gtk/gtkcellrenderertext.c:548 gtk/gtktexttag.c:600
+#: gtk/gtkcellrenderertext.c:552 gtk/gtktexttag.c:600
 msgid "Whether this tag affects the language the text is rendered as"
 msgstr "Vai šis tags ietekmē valodu, kādā teksts tiek atveidots"
 
-#: gtk/gtkcellrenderertext.c:551
+#: gtk/gtkcellrenderertext.c:555
 #, fuzzy
 msgid "Ellipsize set"
 msgstr "Pacēluma iestādījums"
 
-#: gtk/gtkcellrenderertext.c:552
+#: gtk/gtkcellrenderertext.c:556
 #, fuzzy
 msgid "Whether this tag affects the ellipsize mode"
 msgstr "Vai šis tags ietekmē pacēlumu"
@@ -2408,11 +2408,11 @@ msgstr "Loga visraksts"
 msgid "The desired width of the button widget, in characters."
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:613
+#: gtk/gtkfilechooserdefault.c:614
 msgid "Default file chooser backend"
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:614
+#: gtk/gtkfilechooserdefault.c:615
 #, fuzzy
 msgid "Name of the GtkFileChooser backend to use by default"
 msgstr "Noklusētā fonta nosaukums"
@@ -2846,7 +2846,7 @@ msgstr "Iezīmes teksts"
 msgid "A list of style attributes to apply to the text of the label"
 msgstr "Stila atribūtu saraksts, kuru pieleietot iezīmes tekstam"
 
-#: gtk/gtklabel.c:323 gtk/gtktexttag.c:357 gtk/gtktextview.c:564
+#: gtk/gtklabel.c:323 gtk/gtktexttag.c:357 gtk/gtktextview.c:563
 msgid "Justification"
 msgstr "Izlīdzināšana"
 
@@ -4713,19 +4713,19 @@ msgid ""
 "If TRUE, unmapped widgets are ignored when determining the size of the group"
 msgstr ""
 
-#: gtk/gtkspinbutton.c:205
+#: gtk/gtkspinbutton.c:208
 msgid "The adjustment that holds the value of the spinbutton"
 msgstr "Noregulēšana, kas pārvalda giešanās pogas vērtību"
 
-#: gtk/gtkspinbutton.c:212
+#: gtk/gtkspinbutton.c:215
 msgid "Climb Rate"
 msgstr "Kāpinājuma Koeficients"
 
-#: gtk/gtkspinbutton.c:232
+#: gtk/gtkspinbutton.c:235
 msgid "Snap to Ticks"
 msgstr "Aizsisties uz Tikšķiem"
 
-#: gtk/gtkspinbutton.c:233
+#: gtk/gtkspinbutton.c:236
 msgid ""
 "Whether erroneous values are automatically changed to a spin button's "
 "nearest step increment"
@@ -4733,38 +4733,38 @@ msgstr ""
 "Vai kļūdainas vērtības tiek automāiski pārmainītas uz griešanās pogas tuvāko "
 "soļa palielinājumu"
 
-#: gtk/gtkspinbutton.c:240
+#: gtk/gtkspinbutton.c:243
 msgid "Numeric"
 msgstr "Skaitliska"
 
-#: gtk/gtkspinbutton.c:241
+#: gtk/gtkspinbutton.c:244
 msgid "Whether non-numeric characters should be ignored"
 msgstr "Vai neciparu rakstzīmes būtu jāignorē"
 
-#: gtk/gtkspinbutton.c:248
+#: gtk/gtkspinbutton.c:251
 msgid "Wrap"
 msgstr "Aplauzt"
 
-#: gtk/gtkspinbutton.c:249
+#: gtk/gtkspinbutton.c:252
 msgid "Whether a spin button should wrap upon reaching its limits"
 msgstr "Vai griešanās pogai būtu jaaplaužas, sasniedzot tās robežas"
 
-#: gtk/gtkspinbutton.c:256
+#: gtk/gtkspinbutton.c:259
 msgid "Update Policy"
 msgstr "Atjaunināšanas Politika"
 
-#: gtk/gtkspinbutton.c:257
+#: gtk/gtkspinbutton.c:260
 msgid ""
 "Whether the spin button should update always, or only when the value is legal"
 msgstr ""
 "Vai griešanās pogai būtu vienmēr jāatjauninās vai tikai, kad vētība ir "
 "nepieļaujama"
 
-#: gtk/gtkspinbutton.c:266
+#: gtk/gtkspinbutton.c:269
 msgid "Reads the current value, or sets a new value"
 msgstr "Nolasa pašreizējo vērtību vai  iestata jaunu vērtību"
 
-#: gtk/gtkspinbutton.c:275
+#: gtk/gtkspinbutton.c:278
 #, fuzzy
 msgid "Style of bevel around the spin button"
 msgstr "Konusa stils ap saturu"
@@ -5067,7 +5067,7 @@ msgstr ""
 "Šis rekvizīts piemērojas tēmas izmaiņām utt., tāpēc tiek rekomendēts. Pango "
 "pirmsnosaka dažus mērogus, tādas kā PANGO_SCALE_X_LARGE"
 
-#: gtk/gtktexttag.c:358 gtk/gtktextview.c:565
+#: gtk/gtktexttag.c:358 gtk/gtktextview.c:564
 msgid "Left, right, or center justification"
 msgstr "Pa labi, kreisi vai centrēts izlīdzinājums"
 
@@ -5084,7 +5084,7 @@ msgstr ""
 msgid "Left margin"
 msgstr "Kreisā mala"
 
-#: gtk/gtktexttag.c:385 gtk/gtktextview.c:574
+#: gtk/gtktexttag.c:385 gtk/gtktextview.c:573
 msgid "Width of the left margin in pixels"
 msgstr "Atkāpe no kreisās malas pikseļos"
 
@@ -5092,15 +5092,15 @@ msgstr "Atkāpe no kreisās malas pikseļos"
 msgid "Right margin"
 msgstr "Labā mala"
 
-#: gtk/gtktexttag.c:395 gtk/gtktextview.c:584
+#: gtk/gtktexttag.c:395 gtk/gtktextview.c:583
 msgid "Width of the right margin in pixels"
 msgstr "Atkāpe no labās puses pikseļos"
 
-#: gtk/gtktexttag.c:405 gtk/gtktextview.c:593
+#: gtk/gtktexttag.c:405 gtk/gtktextview.c:592
 msgid "Indent"
 msgstr "Atkāpe"
 
-#: gtk/gtktexttag.c:406 gtk/gtktextview.c:594
+#: gtk/gtktexttag.c:406 gtk/gtktextview.c:593
 msgid "Amount to indent the paragraph, in pixels"
 msgstr "Daudzums pikseļos, kādā veidot atkāpi rindkopai"
 
@@ -5117,7 +5117,7 @@ msgstr ""
 msgid "Pixels above lines"
 msgstr "Pikseļi virs rindiņām"
 
-#: gtk/gtktexttag.c:427 gtk/gtktextview.c:518
+#: gtk/gtktexttag.c:427 gtk/gtktextview.c:517
 msgid "Pixels of blank space above paragraphs"
 msgstr "Tukšas vietas pikseļi virs rindkopām"
 
@@ -5125,7 +5125,7 @@ msgstr "Tukšas vietas pikseļi virs rindkopām"
 msgid "Pixels below lines"
 msgstr "Pikseļi zem rindiņām"
 
-#: gtk/gtktexttag.c:437 gtk/gtktextview.c:528
+#: gtk/gtktexttag.c:437 gtk/gtktextview.c:527
 msgid "Pixels of blank space below paragraphs"
 msgstr "Tukšas vietas pikseļi zem rindkopām"
 
@@ -5133,20 +5133,20 @@ msgstr "Tukšas vietas pikseļi zem rindkopām"
 msgid "Pixels inside wrap"
 msgstr "Pikseļu iekšpusē iekļaušana"
 
-#: gtk/gtktexttag.c:447 gtk/gtktextview.c:538
+#: gtk/gtktexttag.c:447 gtk/gtktextview.c:537
 msgid "Pixels of blank space between wrapped lines in a paragraph"
 msgstr "Pikseļu daudzums atstarpē starp aplauztām rindiņām paragrāfā"
 
-#: gtk/gtktexttag.c:474 gtk/gtktextview.c:556
+#: gtk/gtktexttag.c:474 gtk/gtktextview.c:555
 msgid ""
 "Whether to wrap lines never, at word boundaries, or at character boundaries"
 msgstr "Vai aplauzt rindiņas nekad, vārdu robežās vai rakstzīmju robežās"
 
-#: gtk/gtktexttag.c:483 gtk/gtktextview.c:603
+#: gtk/gtktexttag.c:483 gtk/gtktextview.c:602
 msgid "Tabs"
 msgstr "Tabuācijas"
 
-#: gtk/gtktexttag.c:484 gtk/gtktextview.c:604
+#: gtk/gtktexttag.c:484 gtk/gtktextview.c:603
 msgid "Custom tabs for this text"
 msgstr "Pašrocīgas tabulācijas šim tekstam"
 
@@ -5289,69 +5289,69 @@ msgstr "Šūnas fona iestādījums"
 msgid "Whether this tag affects the paragraph background color"
 msgstr "Vai šis tags ietekmē fona krāsu"
 
-#: gtk/gtktextview.c:517
+#: gtk/gtktextview.c:516
 msgid "Pixels Above Lines"
 msgstr "Pikseļi Virs Rindiņām"
 
-#: gtk/gtktextview.c:527
+#: gtk/gtktextview.c:526
 msgid "Pixels Below Lines"
 msgstr "Pikseļi Zem Rindiņām"
 
-#: gtk/gtktextview.c:537
+#: gtk/gtktextview.c:536
 msgid "Pixels Inside Wrap"
 msgstr "Pikseļu Iekšpusē Iekļaušana"
 
-#: gtk/gtktextview.c:555
+#: gtk/gtktextview.c:554
 msgid "Wrap Mode"
 msgstr "Aplaušanas Režīms"
 
-#: gtk/gtktextview.c:573
+#: gtk/gtktextview.c:572
 msgid "Left Margin"
 msgstr "Kreisā Mala"
 
-#: gtk/gtktextview.c:583
+#: gtk/gtktextview.c:582
 msgid "Right Margin"
 msgstr "Labā Mala"
 
-#: gtk/gtktextview.c:611
+#: gtk/gtktextview.c:610
 msgid "Cursor Visible"
 msgstr "Kursors Redzams"
 
-#: gtk/gtktextview.c:612
+#: gtk/gtktextview.c:611
 msgid "If the insertion cursor is shown"
 msgstr "Vai ievietošanas kursors tiek parādīts"
 
-#: gtk/gtktextview.c:619
+#: gtk/gtktextview.c:618
 msgid "Buffer"
 msgstr ""
 
-#: gtk/gtktextview.c:620
+#: gtk/gtktextview.c:619
 msgid "The buffer which is displayed"
 msgstr ""
 
-#: gtk/gtktextview.c:627
+#: gtk/gtktextview.c:626
 #, fuzzy
 msgid "Overwrite mode"
 msgstr "Izmēru maiņas režīms"
 
-#: gtk/gtktextview.c:628
+#: gtk/gtktextview.c:627
 msgid "Whether entered text overwrites existing contents"
 msgstr ""
 
-#: gtk/gtktextview.c:635
+#: gtk/gtktextview.c:634
 msgid "Accepts tab"
 msgstr ""
 
-#: gtk/gtktextview.c:636
+#: gtk/gtktextview.c:635
 msgid "Whether Tab will result in a tab character being entered"
 msgstr ""
 
-#: gtk/gtktextview.c:645
+#: gtk/gtktextview.c:644
 #, fuzzy
 msgid "Error underline color"
 msgstr "Priekšplāna krāsa"
 
-#: gtk/gtktextview.c:646
+#: gtk/gtktextview.c:645
 #, fuzzy
 msgid "Color with which to draw error-indication underlines"
 msgstr "Krāsa, ar kuru zīmēt ievietošanas kursoru"

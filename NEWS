@@ -54,6 +54,12 @@ Overview of Changes from GTK+ 2.10.9 to 2.10.10
  356515 [a11y] Orca unable to read items in Evolution "Select a F...
  416525 gtkfilesystemwin32.c: C99 declaration
  372449 no need to emphasise the "Location" label
+ 402144 spinbutton window background not reset on theme switch
+
+* New and updated translations (ar,be@latin,bg,ca,de,
+  dz,el,en_GB,eo,fi,fr,gu,hu,ja,ko,lt,mk,ml,nb,nl,pl,
+  pt,pt_BR,ro,ru,sl,sq,sr,sr@Latn,sv,ta,th,uk,vi,zh_CN,
+  zh_HK,zh_TW)
 
 
 Overview of Changes from GTK+ 2.10.8 to 2.10.9

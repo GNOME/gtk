@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-properties\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-01-22 12:38-0500\n"
+"POT-Creation-Date: 2007-03-12 11:13-0400\n"
 "PO-Revision-Date: 2004-04-09 17:26+0300\n"
 "Last-Translator: Baris Cicek <baris@teamforce.name.tr>\n"
 "Language-Team: Turkish <gnome-turk@gnome.org>\n"
@@ -445,7 +445,7 @@ msgstr "Eylem grubunun görünür olup olmaması."
 
 # gtk/gtkspinbutton.c:264
 #: gtk/gtkadjustment.c:86 gtk/gtkcellrendererprogress.c:116
-#: gtk/gtkspinbutton.c:265
+#: gtk/gtkspinbutton.c:268
 msgid "Value"
 msgstr "Değer"
 
@@ -1232,45 +1232,45 @@ msgid "Whether this tag affects the cell background color"
 msgstr "Sekmenin hücre arkaplanının rengini etkilemesi"
 
 # gtk/gtkaccellabel.c:115
-#: gtk/gtkcellrendereraccel.c:107
+#: gtk/gtkcellrendereraccel.c:104
 #, fuzzy
 msgid "Accelerator key"
 msgstr "Hızlandırıcı Parçası"
 
 # gtk/gtkwidget.c:393
-#: gtk/gtkcellrendereraccel.c:108
+#: gtk/gtkcellrendereraccel.c:105
 #, fuzzy
 msgid "The keyval of the accelerator"
 msgstr "Ayarlamanın değeri"
 
 # gtk/gtkaccellabel.c:115
-#: gtk/gtkcellrendereraccel.c:124
+#: gtk/gtkcellrendereraccel.c:121
 #, fuzzy
 msgid "Accelerator modifiers"
 msgstr "Hızlandırıcı Parçası"
 
-#: gtk/gtkcellrendereraccel.c:125
+#: gtk/gtkcellrendereraccel.c:122
 msgid "The modifier mask of the accelerator"
 msgstr ""
 
 # gtk/gtkaccellabel.c:115
-#: gtk/gtkcellrendereraccel.c:142
+#: gtk/gtkcellrendereraccel.c:139
 #, fuzzy
 msgid "Accelerator keycode"
 msgstr "Hızlandırıcı Parçası"
 
-#: gtk/gtkcellrendereraccel.c:143
+#: gtk/gtkcellrendereraccel.c:140
 msgid "The hardware keycode of the accelerator"
 msgstr ""
 
 # gtk/gtkaccellabel.c:115
-#: gtk/gtkcellrendereraccel.c:162
+#: gtk/gtkcellrendereraccel.c:159
 #, fuzzy
 msgid "Accelerator Mode"
 msgstr "Hızlandırıcı Parçası"
 
 # gtk/gtklabel.c:199
-#: gtk/gtkcellrendereraccel.c:163
+#: gtk/gtkcellrendereraccel.c:160
 #, fuzzy
 msgid "The type of accelerators"
 msgstr "İletinin türü"
@@ -1389,7 +1389,7 @@ msgstr "Süreç çubuğunda gösterilecek metin"
 
 # gtk/gtkprogressbar.c:131 gtk/gtkrange.c:265 gtk/gtkspinbutton.c:203
 #: gtk/gtkcellrendererspin.c:93 gtk/gtkprogressbar.c:123 gtk/gtkrange.c:324
-#: gtk/gtkspinbutton.c:204
+#: gtk/gtkspinbutton.c:207
 msgid "Adjustment"
 msgstr "Ayarlama"
 
@@ -1406,17 +1406,17 @@ msgid "Climb rate"
 msgstr "Tırmanma Oranı"
 
 # gtk/gtkspinbutton.c:212
-#: gtk/gtkcellrendererspin.c:110 gtk/gtkspinbutton.c:213
+#: gtk/gtkcellrendererspin.c:110 gtk/gtkspinbutton.c:216
 msgid "The acceleration rate when you hold down a button"
 msgstr "Bir düğme basılı tuttulduğunda hızlanma oranı"
 
 # gtk/gtkscale.c:148 gtk/gtkspinbutton.c:221
-#: gtk/gtkcellrendererspin.c:123 gtk/gtkscale.c:142 gtk/gtkspinbutton.c:222
+#: gtk/gtkcellrendererspin.c:123 gtk/gtkscale.c:142 gtk/gtkspinbutton.c:225
 msgid "Digits"
 msgstr "Basamaklar"
 
 # gtk/gtkspinbutton.c:222
-#: gtk/gtkcellrendererspin.c:124 gtk/gtkspinbutton.c:223
+#: gtk/gtkcellrendererspin.c:124 gtk/gtkspinbutton.c:226
 msgid "The number of decimal places to display"
 msgstr "Gösterilecek ondalık yerlerin sayısı"
 
@@ -1496,12 +1496,12 @@ msgstr "Bir GdkColor olarak önplan rengi"
 # gtk/gtkcellrenderertext.c:211 gtk/gtkentry.c:396 gtk/gtktexttag.c:276
 # gtk/gtktextview.c:552
 #: gtk/gtkcellrenderertext.c:258 gtk/gtkentry.c:486 gtk/gtktexttag.c:249
-#: gtk/gtktextview.c:547
+#: gtk/gtktextview.c:546
 msgid "Editable"
 msgstr "Düzenlenebilir"
 
 # gtk/gtkcellrenderertext.c:212 gtk/gtktexttag.c:277 gtk/gtktextview.c:553
-#: gtk/gtkcellrenderertext.c:259 gtk/gtktexttag.c:250 gtk/gtktextview.c:548
+#: gtk/gtkcellrenderertext.c:259 gtk/gtktexttag.c:250 gtk/gtktextview.c:547
 msgid "Whether the text can be modified by the user"
 msgstr "Metnin kullanıcı tarafından değiştirilmesi"
 
@@ -1679,164 +1679,164 @@ msgid "The width at which the text is wrapped"
 msgstr "Değerin gösterileceği yer"
 
 # gtk/gtktreeviewcolumn.c:243
-#: gtk/gtkcellrenderertext.c:484 gtk/gtktreeviewcolumn.c:291
+#: gtk/gtkcellrenderertext.c:488 gtk/gtktreeviewcolumn.c:291
 msgid "Alignment"
 msgstr "Hizalama"
 
 # gtk/gtktoolbar.c:233
-#: gtk/gtkcellrenderertext.c:485
+#: gtk/gtkcellrenderertext.c:489
 #, fuzzy
 msgid "How to align the lines"
 msgstr "Araç çubuğunun nasıl çizileceği"
 
 # gtk/gtkcellrenderertext.c:342 gtk/gtktexttag.c:511
-#: gtk/gtkcellrenderertext.c:495 gtk/gtkcellview.c:171 gtk/gtktexttag.c:543
+#: gtk/gtkcellrenderertext.c:499 gtk/gtkcellview.c:171 gtk/gtktexttag.c:543
 msgid "Background set"
 msgstr "Arkaplan ayarı"
 
 # gtk/gtkcellrenderertext.c:343 gtk/gtktexttag.c:512
-#: gtk/gtkcellrenderertext.c:496 gtk/gtkcellview.c:172 gtk/gtktexttag.c:544
+#: gtk/gtkcellrenderertext.c:500 gtk/gtkcellview.c:172 gtk/gtktexttag.c:544
 msgid "Whether this tag affects the background color"
 msgstr "Bu etiketin arkaplan rengini etkilemesi"
 
 # gtk/gtkcellrenderertext.c:346 gtk/gtktexttag.c:523
-#: gtk/gtkcellrenderertext.c:499 gtk/gtktexttag.c:555
+#: gtk/gtkcellrenderertext.c:503 gtk/gtktexttag.c:555
 msgid "Foreground set"
 msgstr "Önplan ayarı"
 
 # gtk/gtkcellrenderertext.c:347 gtk/gtktexttag.c:524
-#: gtk/gtkcellrenderertext.c:500 gtk/gtktexttag.c:556
+#: gtk/gtkcellrenderertext.c:504 gtk/gtktexttag.c:556
 msgid "Whether this tag affects the foreground color"
 msgstr "Bu etiketin önplan rengini etkilemesi"
 
 # gtk/gtkcellrenderertext.c:350 gtk/gtktexttag.c:531
-#: gtk/gtkcellrenderertext.c:503 gtk/gtktexttag.c:563
+#: gtk/gtkcellrenderertext.c:507 gtk/gtktexttag.c:563
 msgid "Editability set"
 msgstr "Düzenlenebilirlik ayarı"
 
 # gtk/gtkcellrenderertext.c:351 gtk/gtktexttag.c:532
-#: gtk/gtkcellrenderertext.c:504 gtk/gtktexttag.c:564
+#: gtk/gtkcellrenderertext.c:508 gtk/gtktexttag.c:564
 msgid "Whether this tag affects text editability"
 msgstr "Bu etiketin metin düzeltilebilirliğini etkilemesi"
 
 # gtk/gtkcellrenderertext.c:354 gtk/gtktexttag.c:535
-#: gtk/gtkcellrenderertext.c:507 gtk/gtktexttag.c:567
+#: gtk/gtkcellrenderertext.c:511 gtk/gtktexttag.c:567
 msgid "Font family set"
 msgstr "Yazıtipi ailesi ayarı"
 
 # gtk/gtkcellrenderertext.c:355 gtk/gtktexttag.c:536
-#: gtk/gtkcellrenderertext.c:508 gtk/gtktexttag.c:568
+#: gtk/gtkcellrenderertext.c:512 gtk/gtktexttag.c:568
 msgid "Whether this tag affects the font family"
 msgstr "Bu etiketin yazıtipi ailesini etkilemesi"
 
 # gtk/gtkcellrenderertext.c:358 gtk/gtktexttag.c:539
-#: gtk/gtkcellrenderertext.c:511 gtk/gtktexttag.c:571
+#: gtk/gtkcellrenderertext.c:515 gtk/gtktexttag.c:571
 msgid "Font style set"
 msgstr "Yazıtipi biçemi ayarı"
 
 # gtk/gtkcellrenderertext.c:359 gtk/gtktexttag.c:540
-#: gtk/gtkcellrenderertext.c:512 gtk/gtktexttag.c:572
+#: gtk/gtkcellrenderertext.c:516 gtk/gtktexttag.c:572
 msgid "Whether this tag affects the font style"
 msgstr "Bu etiketin yazıtipi biçemini etkilemesi"
 
 # gtk/gtkcellrenderertext.c:362 gtk/gtktexttag.c:543
-#: gtk/gtkcellrenderertext.c:515 gtk/gtktexttag.c:575
+#: gtk/gtkcellrenderertext.c:519 gtk/gtktexttag.c:575
 msgid "Font variant set"
 msgstr "Yazıtipi türevi ayarı"
 
 # gtk/gtkcellrenderertext.c:363 gtk/gtktexttag.c:544
-#: gtk/gtkcellrenderertext.c:516 gtk/gtktexttag.c:576
+#: gtk/gtkcellrenderertext.c:520 gtk/gtktexttag.c:576
 msgid "Whether this tag affects the font variant"
 msgstr "Bu etiketin yazıtipi türevini etkilemesi"
 
 # gtk/gtkcellrenderertext.c:366 gtk/gtktexttag.c:547
-#: gtk/gtkcellrenderertext.c:519 gtk/gtktexttag.c:579
+#: gtk/gtkcellrenderertext.c:523 gtk/gtktexttag.c:579
 msgid "Font weight set"
 msgstr "Yazıtipi kalınlığı ayarı"
 
 # gtk/gtkcellrenderertext.c:367 gtk/gtktexttag.c:548
-#: gtk/gtkcellrenderertext.c:520 gtk/gtktexttag.c:580
+#: gtk/gtkcellrenderertext.c:524 gtk/gtktexttag.c:580
 msgid "Whether this tag affects the font weight"
 msgstr "Bu etiketin yazıtipi kalınlığını etkilemesi"
 
 # gtk/gtkcellrenderertext.c:370 gtk/gtktexttag.c:551
-#: gtk/gtkcellrenderertext.c:523 gtk/gtktexttag.c:583
+#: gtk/gtkcellrenderertext.c:527 gtk/gtktexttag.c:583
 msgid "Font stretch set"
 msgstr "Yazıtipi alanı ayarı"
 
 # gtk/gtkcellrenderertext.c:371 gtk/gtktexttag.c:552
-#: gtk/gtkcellrenderertext.c:524 gtk/gtktexttag.c:584
+#: gtk/gtkcellrenderertext.c:528 gtk/gtktexttag.c:584
 msgid "Whether this tag affects the font stretch"
 msgstr "Bu etiketin yazıtipi alanını etkilemesi"
 
 # gtk/gtkcellrenderertext.c:374 gtk/gtktexttag.c:555
-#: gtk/gtkcellrenderertext.c:527 gtk/gtktexttag.c:587
+#: gtk/gtkcellrenderertext.c:531 gtk/gtktexttag.c:587
 msgid "Font size set"
 msgstr "Yazıtipi boyutu ayarı"
 
 # gtk/gtkcellrenderertext.c:375 gtk/gtktexttag.c:556
-#: gtk/gtkcellrenderertext.c:528 gtk/gtktexttag.c:588
+#: gtk/gtkcellrenderertext.c:532 gtk/gtktexttag.c:588
 msgid "Whether this tag affects the font size"
 msgstr "Bu etiketin yazıtipi yüksekliğini etkilemesi"
 
 # gtk/gtkcellrenderertext.c:378 gtk/gtktexttag.c:559
-#: gtk/gtkcellrenderertext.c:531 gtk/gtktexttag.c:591
+#: gtk/gtkcellrenderertext.c:535 gtk/gtktexttag.c:591
 msgid "Font scale set"
 msgstr "Yazıtipi oran ayarı"
 
 # gtk/gtkcellrenderertext.c:379 gtk/gtktexttag.c:560
-#: gtk/gtkcellrenderertext.c:532 gtk/gtktexttag.c:592
+#: gtk/gtkcellrenderertext.c:536 gtk/gtktexttag.c:592
 msgid "Whether this tag scales the font size by a factor"
 msgstr "Bu etiketin yazıtipi boyutunu bir çarpan ile oranlaması"
 
 # gtk/gtkcellrenderertext.c:382 gtk/gtktexttag.c:579
-#: gtk/gtkcellrenderertext.c:535 gtk/gtktexttag.c:611
+#: gtk/gtkcellrenderertext.c:539 gtk/gtktexttag.c:611
 msgid "Rise set"
 msgstr "Çıkıntı ayarı"
 
 # gtk/gtkcellrenderertext.c:383 gtk/gtktexttag.c:580
-#: gtk/gtkcellrenderertext.c:536 gtk/gtktexttag.c:612
+#: gtk/gtkcellrenderertext.c:540 gtk/gtktexttag.c:612
 msgid "Whether this tag affects the rise"
 msgstr "Bu etiketin çıkıntısını etkilemesi"
 
 # gtk/gtkcellrenderertext.c:386 gtk/gtktexttag.c:595
-#: gtk/gtkcellrenderertext.c:539 gtk/gtktexttag.c:627
+#: gtk/gtkcellrenderertext.c:543 gtk/gtktexttag.c:627
 msgid "Strikethrough set"
 msgstr "Üstüçizgili ayarı"
 
 # gtk/gtkcellrenderertext.c:387 gtk/gtktexttag.c:596
-#: gtk/gtkcellrenderertext.c:540 gtk/gtktexttag.c:628
+#: gtk/gtkcellrenderertext.c:544 gtk/gtktexttag.c:628
 msgid "Whether this tag affects strikethrough"
 msgstr "Bu etiketin üstüçizgiye etkisi"
 
 # gtk/gtkcellrenderertext.c:390 gtk/gtktexttag.c:603
-#: gtk/gtkcellrenderertext.c:543 gtk/gtktexttag.c:635
+#: gtk/gtkcellrenderertext.c:547 gtk/gtktexttag.c:635
 msgid "Underline set"
 msgstr "Altçizgili ayarları"
 
 # gtk/gtkcellrenderertext.c:391 gtk/gtktexttag.c:604
-#: gtk/gtkcellrenderertext.c:544 gtk/gtktexttag.c:636
+#: gtk/gtkcellrenderertext.c:548 gtk/gtktexttag.c:636
 msgid "Whether this tag affects underlining"
 msgstr "Bu etiketin altçizgiye etkisi"
 
 # gtk/gtktexttag.c:567
-#: gtk/gtkcellrenderertext.c:547 gtk/gtktexttag.c:599
+#: gtk/gtkcellrenderertext.c:551 gtk/gtktexttag.c:599
 msgid "Language set"
 msgstr "Dil ayarı"
 
 # gtk/gtktexttag.c:568
-#: gtk/gtkcellrenderertext.c:548 gtk/gtktexttag.c:600
+#: gtk/gtkcellrenderertext.c:552 gtk/gtktexttag.c:600
 msgid "Whether this tag affects the language the text is rendered as"
 msgstr "Bu etiketin metnin tarandığı dili etkilemesi"
 
 # gtk/gtkcellrenderertext.c:382 gtk/gtktexttag.c:579
-#: gtk/gtkcellrenderertext.c:551
+#: gtk/gtkcellrenderertext.c:555
 #, fuzzy
 msgid "Ellipsize set"
 msgstr "Çıkıntı ayarı"
 
 # gtk/gtkcellrenderertext.c:383 gtk/gtktexttag.c:580
-#: gtk/gtkcellrenderertext.c:552
+#: gtk/gtkcellrenderertext.c:556
 #, fuzzy
 msgid "Whether this tag affects the ellipsize mode"
 msgstr "Bu etiketin çıkıntısını etkilemesi"
@@ -2715,11 +2715,11 @@ msgstr "Yazıtipi seçim penceresinin başlığı"
 msgid "The desired width of the button widget, in characters."
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:613
+#: gtk/gtkfilechooserdefault.c:614
 msgid "Default file chooser backend"
 msgstr "Öntanımlı dosya seçici temeli"
 
-#: gtk/gtkfilechooserdefault.c:614
+#: gtk/gtkfilechooserdefault.c:615
 msgid "Name of the GtkFileChooser backend to use by default"
 msgstr "Öntanımlı olarak kullanılacak GtkFileChooser temelinin adı"
 
@@ -3206,7 +3206,7 @@ msgid "A list of style attributes to apply to the text of the label"
 msgstr "Etiket metnine uygulanacak özniteliklerin listesi"
 
 # gtk/gtklabel.c:227 gtk/gtktexttag.c:377 gtk/gtktextview.c:569
-#: gtk/gtklabel.c:323 gtk/gtktexttag.c:357 gtk/gtktextview.c:564
+#: gtk/gtklabel.c:323 gtk/gtktexttag.c:357 gtk/gtktextview.c:563
 msgid "Justification"
 msgstr "İç hizalama"
 
@@ -5287,22 +5287,22 @@ msgid ""
 msgstr ""
 
 # gtk/gtkspinbutton.c:204
-#: gtk/gtkspinbutton.c:205
+#: gtk/gtkspinbutton.c:208
 msgid "The adjustment that holds the value of the spinbutton"
 msgstr "Döndürme düğmesi değerini tutan ayar"
 
 # gtk/gtkspinbutton.c:211
-#: gtk/gtkspinbutton.c:212
+#: gtk/gtkspinbutton.c:215
 msgid "Climb Rate"
 msgstr "Tırmanma Oranı"
 
 # gtk/gtkspinbutton.c:231
-#: gtk/gtkspinbutton.c:232
+#: gtk/gtkspinbutton.c:235
 msgid "Snap to Ticks"
 msgstr "Çizgilere Atla"
 
 # gtk/gtkspinbutton.c:232
-#: gtk/gtkspinbutton.c:233
+#: gtk/gtkspinbutton.c:236
 msgid ""
 "Whether erroneous values are automatically changed to a spin button's "
 "nearest step increment"
@@ -5311,43 +5311,43 @@ msgstr ""
 "olarak değiştirmesi"
 
 # gtk/gtkspinbutton.c:239
-#: gtk/gtkspinbutton.c:240
+#: gtk/gtkspinbutton.c:243
 msgid "Numeric"
 msgstr "Sayısal"
 
 # gtk/gtkspinbutton.c:240
-#: gtk/gtkspinbutton.c:241
+#: gtk/gtkspinbutton.c:244
 msgid "Whether non-numeric characters should be ignored"
 msgstr "Rakam olmayan karakterlerin yoksayılması"
 
 # gtk/gtkspinbutton.c:247
-#: gtk/gtkspinbutton.c:248
+#: gtk/gtkspinbutton.c:251
 msgid "Wrap"
 msgstr "Sarmala"
 
 # gtk/gtkspinbutton.c:248
-#: gtk/gtkspinbutton.c:249
+#: gtk/gtkspinbutton.c:252
 msgid "Whether a spin button should wrap upon reaching its limits"
 msgstr "Döndürme düğmesinin sınır değere ulaştığında başa dönmesi"
 
 # gtk/gtkspinbutton.c:255
-#: gtk/gtkspinbutton.c:256
+#: gtk/gtkspinbutton.c:259
 msgid "Update Policy"
 msgstr "Güncelleme Kuralı"
 
 # gtk/gtkspinbutton.c:256
-#: gtk/gtkspinbutton.c:257
+#: gtk/gtkspinbutton.c:260
 msgid ""
 "Whether the spin button should update always, or only when the value is legal"
 msgstr "Döndürme düğmesinin her zaman güncel olması ya da sadece değer uygunsa"
 
 # gtk/gtkspinbutton.c:265
-#: gtk/gtkspinbutton.c:266
+#: gtk/gtkspinbutton.c:269
 msgid "Reads the current value, or sets a new value"
 msgstr "Ya mevcut değer okunur ya da yeni değer atanır"
 
 # gtk/gtkmenubar.c:155
-#: gtk/gtkspinbutton.c:275
+#: gtk/gtkspinbutton.c:278
 msgid "Style of bevel around the spin button"
 msgstr "Döndürme düğmesinin çevresindeki kanar biçemi"
 
@@ -5693,7 +5693,7 @@ msgstr ""
 "önceden atamıştır, mesela PANGO_SCALE_X_LARGE"
 
 # gtk/gtktexttag.c:378 gtk/gtktextview.c:570
-#: gtk/gtktexttag.c:358 gtk/gtktextview.c:565
+#: gtk/gtktexttag.c:358 gtk/gtktextview.c:564
 msgid "Left, right, or center justification"
 msgstr "Sola, sağa veya ortaya hizalama"
 
@@ -5713,7 +5713,7 @@ msgid "Left margin"
 msgstr "Sol kenar boşluğu"
 
 # gtk/gtktexttag.c:395 gtk/gtktextview.c:579
-#: gtk/gtktexttag.c:385 gtk/gtktextview.c:574
+#: gtk/gtktexttag.c:385 gtk/gtktextview.c:573
 msgid "Width of the left margin in pixels"
 msgstr "Benek cinsinden sol kenar boşluğunun genişliği"
 
@@ -5723,17 +5723,17 @@ msgid "Right margin"
 msgstr "Sağ kenar boşluğu"
 
 # gtk/gtktexttag.c:405 gtk/gtktextview.c:589
-#: gtk/gtktexttag.c:395 gtk/gtktextview.c:584
+#: gtk/gtktexttag.c:395 gtk/gtktextview.c:583
 msgid "Width of the right margin in pixels"
 msgstr "Benek cinsinden sağ kenar boşluğunun genişliği"
 
 # gtk/gtktexttag.c:415 gtk/gtktextview.c:598
-#: gtk/gtktexttag.c:405 gtk/gtktextview.c:593
+#: gtk/gtktexttag.c:405 gtk/gtktextview.c:592
 msgid "Indent"
 msgstr "Girinti"
 
 # gtk/gtktexttag.c:416 gtk/gtktextview.c:599
-#: gtk/gtktexttag.c:406 gtk/gtktextview.c:594
+#: gtk/gtktexttag.c:406 gtk/gtktextview.c:593
 msgid "Amount to indent the paragraph, in pixels"
 msgstr "Benek olarak paragraf satırbaşı girintisi"
 
@@ -5753,7 +5753,7 @@ msgid "Pixels above lines"
 msgstr "Satırların üstündeki benekler"
 
 # gtk/gtktexttag.c:437 gtk/gtktextview.c:523
-#: gtk/gtktexttag.c:427 gtk/gtktextview.c:518
+#: gtk/gtktexttag.c:427 gtk/gtktextview.c:517
 msgid "Pixels of blank space above paragraphs"
 msgstr "Benek cinsinden paragraf üstündeki boş alan"
 
@@ -5763,7 +5763,7 @@ msgid "Pixels below lines"
 msgstr "Satırların altındaki benekler"
 
 # gtk/gtktexttag.c:447 gtk/gtktextview.c:533
-#: gtk/gtktexttag.c:437 gtk/gtktextview.c:528
+#: gtk/gtktexttag.c:437 gtk/gtktextview.c:527
 msgid "Pixels of blank space below paragraphs"
 msgstr "Benek cinsinden paragraf altındaki boş alan"
 
@@ -5773,12 +5773,12 @@ msgid "Pixels inside wrap"
 msgstr "Bölünmüşler içindeki benekler"
 
 # gtk/gtktexttag.c:457 gtk/gtktextview.c:543
-#: gtk/gtktexttag.c:447 gtk/gtktextview.c:538
+#: gtk/gtktexttag.c:447 gtk/gtktextview.c:537
 msgid "Pixels of blank space between wrapped lines in a paragraph"
 msgstr "Benek cinsinden paragraf satırları arasındaki boş alan"
 
 # gtk/gtktexttag.c:484 gtk/gtktextview.c:561
-#: gtk/gtktexttag.c:474 gtk/gtktextview.c:556
+#: gtk/gtktexttag.c:474 gtk/gtktextview.c:555
 msgid ""
 "Whether to wrap lines never, at word boundaries, or at character boundaries"
 msgstr ""
@@ -5786,12 +5786,12 @@ msgstr ""
 "karakter sınırlarında olması"
 
 # gtk/gtktexttag.c:493 gtk/gtktextview.c:608
-#: gtk/gtktexttag.c:483 gtk/gtktextview.c:603
+#: gtk/gtktexttag.c:483 gtk/gtktextview.c:602
 msgid "Tabs"
 msgstr "Sekmeler"
 
 # gtk/gtktexttag.c:494 gtk/gtktextview.c:609
-#: gtk/gtktexttag.c:484 gtk/gtktextview.c:604
+#: gtk/gtktexttag.c:484 gtk/gtktextview.c:603
 msgid "Custom tabs for this text"
 msgstr "Bu metin için özel sekmeler"
 
@@ -5969,77 +5969,77 @@ msgid "Whether this tag affects the paragraph background color"
 msgstr "Bu etiketin arkaplan rengini etkilemesi"
 
 # gtk/gtktextview.c:522
-#: gtk/gtktextview.c:517
+#: gtk/gtktextview.c:516
 msgid "Pixels Above Lines"
 msgstr "Satırların Üstüneki Benekler"
 
 # gtk/gtktextview.c:532
-#: gtk/gtktextview.c:527
+#: gtk/gtktextview.c:526
 msgid "Pixels Below Lines"
 msgstr "Satırların Altındaki Benekler"
 
 # gtk/gtktextview.c:542
-#: gtk/gtktextview.c:537
+#: gtk/gtktextview.c:536
 msgid "Pixels Inside Wrap"
 msgstr "Sarmalar Arasındaki Benekler"
 
 # gtk/gtktextview.c:560
-#: gtk/gtktextview.c:555
+#: gtk/gtktextview.c:554
 msgid "Wrap Mode"
 msgstr "Sarma Kipi"
 
 # gtk/gtktextview.c:578
-#: gtk/gtktextview.c:573
+#: gtk/gtktextview.c:572
 msgid "Left Margin"
 msgstr "Sol Kenar Boşluğu"
 
 # gtk/gtktextview.c:588
-#: gtk/gtktextview.c:583
+#: gtk/gtktextview.c:582
 msgid "Right Margin"
 msgstr "Sağ Kenar Boşluğu"
 
 # gtk/gtktextview.c:616
-#: gtk/gtktextview.c:611
+#: gtk/gtktextview.c:610
 msgid "Cursor Visible"
 msgstr "Görünür İmleç"
 
 # gtk/gtktextview.c:617
-#: gtk/gtktextview.c:612
+#: gtk/gtktextview.c:611
 msgid "If the insertion cursor is shown"
 msgstr "Ekleme imleci gösterilirse"
 
-#: gtk/gtktextview.c:619
+#: gtk/gtktextview.c:618
 msgid "Buffer"
 msgstr "Tampon"
 
-#: gtk/gtktextview.c:620
+#: gtk/gtktextview.c:619
 msgid "The buffer which is displayed"
 msgstr "Görüntülenecek tampon"
 
 # gtk/gtkcontainer.c:207
-#: gtk/gtktextview.c:627
+#: gtk/gtktextview.c:626
 msgid "Overwrite mode"
 msgstr "Üzerine yazma kipi"
 
-#: gtk/gtktextview.c:628
+#: gtk/gtktextview.c:627
 msgid "Whether entered text overwrites existing contents"
 msgstr "Girilen metnin mevcut içeriğin üstüne yazılması"
 
-#: gtk/gtktextview.c:635
+#: gtk/gtktextview.c:634
 msgid "Accepts tab"
 msgstr "Sekme kabul ediyor"
 
-#: gtk/gtktextview.c:636
+#: gtk/gtktextview.c:635
 msgid "Whether Tab will result in a tab character being entered"
 msgstr "Tab'ın girilen bir tab karakteri olarak sonuçlanması"
 
 # gtk/gtkcellrenderertext.c:202 gtk/gtktexttag.c:250
-#: gtk/gtktextview.c:645
+#: gtk/gtktextview.c:644
 msgid "Error underline color"
 msgstr "Hata altçizgisinin rengi"
 
 # gtk/gtkentry.c:457
-#: gtk/gtktextview.c:646
+#: gtk/gtktextview.c:645
 msgid "Color with which to draw error-indication underlines"
 msgstr "Hata belirten altçizgilerin çizileceği renk"
 
