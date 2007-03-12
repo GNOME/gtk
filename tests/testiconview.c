@@ -329,14 +329,27 @@ static void
 do_popup_menu (GtkWidget      *icon_list, 
 	       GdkEventButton *event)
 {
+  GtkIconView *icon_view = GTK_ICON_VIEW (icon_list); 
   GtkWidget *menu;
   GtkWidget *menuitem;
-  GtkTreePath *path;
+  GtkTreePath *path = NULL;
   int button, event_time;
   ItemData *data;
+  GList *list;
 
-  path = gtk_icon_view_get_path_at_pos (GTK_ICON_VIEW (icon_list), 
-                                        event->x, event->y);
+  if (event)
+    path = gtk_icon_view_get_path_at_pos (icon_view, event->x, event->y);
+  else
+    {
+      list = gtk_icon_view_get_selected_items (icon_view);
+
+      if (list)
+        {
+          path = (GtkTreePath*)list->data;
+          g_list_foreach (list->next, gtk_tree_path_free, NULL);
+          g_list_free (list);
+        }
+    }
 
   if (!path)
     return;
@@ -344,7 +357,7 @@ do_popup_menu (GtkWidget      *icon_list,
   menu = gtk_menu_new ();
 
   data = g_new0 (ItemData, 1);
-  data->icon_list = GTK_ICON_VIEW (icon_list);
+  data->icon_list = icon_view;
   data->path = path;
   g_object_set_data_full (G_OBJECT (menu), "item-path", data, (GDestroyNotify)free_item_data);
 
