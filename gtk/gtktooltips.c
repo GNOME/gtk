@@ -783,7 +783,7 @@ gtk_tooltips_get_info_from_tip_window (GtkWindow    *tip_window,
   if (tooltips)
     *tooltips = current_tooltips;
   if (current_widget)
-    *current_widget = has_tips ? current_tooltips->active_tips_data->widget : NULL;
+    *current_widget = (has_tips && current_tooltips->active_tips_data) ? current_tooltips->active_tips_data->widget : NULL;
 
   return has_tips;
 }
