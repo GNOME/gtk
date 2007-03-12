@@ -1,3 +1,11 @@
+2007-03-12  Matthias Clasen  <mclasen@redhat.com>
+
+	Merge from trunk:
+
+	* gtk/gtkfilechooserbutton.c (change_icon_theme_get_info_cb):
+	Handle the row reference path being NULL.  (#410565, Joe Markus
+	Clarke, patch by Chris Wilson)
+
 2007-03-11  Matthias Clasen  <mclasen@redhat.com>
 
 	Merge from trunk:

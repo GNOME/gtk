@@ -1217,17 +1217,20 @@ change_icon_theme_get_info_cb (GtkFileSystemHandle *handle,
       width = MAX (width, gdk_pixbuf_get_width (pixbuf));
 
       path = gtk_tree_row_reference_get_path (data->row_ref);
-      gtk_tree_model_get_iter (data->button->priv->model, &iter, path);
-      gtk_tree_path_free (path);
+      if (path) 
+        {
+          gtk_tree_model_get_iter (data->button->priv->model, &iter, path);
+          gtk_tree_path_free (path);
 
-      gtk_list_store_set (GTK_LIST_STORE (data->button->priv->model), &iter,
-			  ICON_COLUMN, pixbuf,
-			  -1);
+          gtk_list_store_set (GTK_LIST_STORE (data->button->priv->model), &iter,
+	  		      ICON_COLUMN, pixbuf,
+			      -1);
+
+          g_object_set (data->button->priv->icon_cell,
+		        "width", width,
+		        NULL);
+        }
       g_object_unref (pixbuf);
-
-      g_object_set (data->button->priv->icon_cell,
-		    "width", width,
-		    NULL);
     }
 
 out:
