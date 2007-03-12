@@ -1,3 +1,8 @@
+2007-03-11  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtktextview.c (gtk_text_view_set_buffer): Set first_para_mark
+	to NULL.  (#396805, Colin Leroy, patch by Mariano Suárez-Alvarez)
+	
 2007-03-12  Kristian Rietveld  <kris@gtk.org>
 
 	* gtk/gtkfilechooserdefault.c (check_save_entry): immediately

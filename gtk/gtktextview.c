@@ -1177,6 +1177,7 @@ gtk_text_view_set_buffer (GtkTextView   *text_view,
                                             text_view);
       g_object_unref (text_view->buffer);
       text_view->dnd_mark = NULL;
+      text_view->first_para_mark = NULL;
 
       if (GTK_WIDGET_REALIZED (text_view))
 	{
