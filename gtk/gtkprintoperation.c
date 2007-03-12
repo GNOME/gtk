@@ -670,7 +670,7 @@ gtk_print_operation_class_init (GtkPrintOperationClass *class)
    *   pango_font_description_free (desc);
    *   
    *   pango_layout_set_text (layout, "some text", -1);
-   *   pango_layout_set_width (layout, width);
+   *   pango_layout_set_width (layout, width * PANGO_SCALE);
    *   pango_layout_set_alignment (layout, PANGO_ALIGN_CENTER);
    *      		      
    *   pango_layout_get_size (layout, NULL, &amp;layout_height);

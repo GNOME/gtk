@@ -1,5 +1,8 @@
 2007-03-12  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkprintoperation.c: Fix an oversight in an
+	example.  (#381083, Ian Puleston)
+
 	* gtk/gtkcombobox.c: Clean up and clarify docs.  (#412484)
 
 2007-03-12  Matthias Clasen  <mclasen@redhat.com>
