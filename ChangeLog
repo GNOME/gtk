@@ -1,5 +1,10 @@
 2007-03-12  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkcellrenderertext.c (gtk_cell_renderer_text_get_property):
+	Don't copy PangoLanguage.  (#340031, Morten Welinder)
+
+2007-03-12  Matthias Clasen  <mclasen@redhat.com>
+
 	* gtk/gtkfilechooserbutton.c (change_icon_theme_get_info_cb):
 	Handle the row reference path being NULL.  (#410565, Joe Markus
 	Clarke, patch by Chris Wilson)

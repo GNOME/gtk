@@ -731,7 +731,7 @@ gtk_cell_renderer_text_get_property (GObject        *object,
       break;  
 
     case PROP_LANGUAGE:
-      g_value_set_string (value, pango_language_to_string (priv->language));
+      g_value_set_static_string (value, pango_language_to_string (priv->language));
       break;
 
     case PROP_ELLIPSIZE:
