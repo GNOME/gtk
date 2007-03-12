@@ -1,3 +1,9 @@
+2007-03-12  Kristian Rietveld  <kris@gtk.org>
+
+	* gtk/gtkfilechooserdefault.c (check_save_entry): immediately
+	bail out if current_folder is NULL. (#350988, lots of reporters,
+	modified patch by Jan Darmochwal).
+
 2007-03-10  Kristian Rietveld  <kris@gtk.org>
 
 	* gtk/gtktreeview.c (gtk_tree_view_search_dialog_hide): only
