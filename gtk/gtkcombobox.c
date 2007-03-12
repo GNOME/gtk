@@ -615,9 +615,9 @@ gtk_combo_box_class_init (GtkComboBoxClass *klass)
    * If this is set to a non-negative value, it must be the index of a column 
    * of type %G_TYPE_INT in the model. 
    *
-   * The values of that column are used to determine how many rows a value 
-   * in the list will span. Therefore, the values in the model column pointed 
-   * to by this property must be greater than zero and not larger than wrap-width.
+   * The values of that column are used to determine how many rows a value in 
+   * the list will span. Therefore, the values in the model column pointed to 
+   * by this property must be greater than zero and not larger than wrap-width.
    *
    * Since: 2.4
    */
@@ -659,7 +659,8 @@ gtk_combo_box_class_init (GtkComboBoxClass *klass)
    *
    * The item which is currently active. If the model is a non-flat treemodel,
    * and the active item is not an immediate child of the root of the tree,
-   * this property has the value <literal>gtk_tree_path_get_indices (path)[0]</literal>,
+   * this property has the value 
+   * <literal>gtk_tree_path_get_indices (path)[0]</literal>,
    * where <literal>path</literal> is the #GtkTreePath of the active item.
    *
    * Since: 2.4
@@ -1771,7 +1772,7 @@ popup_grab_on_window (GdkWindow *window,
  * applications should have little use for it.
  *
  * Since: 2.4
- **/
+ */
 void
 gtk_combo_box_popup (GtkComboBox *combo_box)
 {
@@ -1859,7 +1860,7 @@ gtk_combo_box_real_popup (GtkComboBox *combo_box)
  * applications should have little use for it.
  *
  * Since: 2.4
- **/
+ */
 void
 gtk_combo_box_popdown (GtkComboBox *combo_box)
 {
@@ -4433,11 +4434,11 @@ gtk_combo_box_new_with_model (GtkTreeModel *model)
 
 /**
  * gtk_combo_box_get_wrap_width:
- * @combo_box: A #GtkComboBox.
+ * @combo_box: A #GtkComboBox
  *
- * Returns the wrap width which is used to determine the number
- * of columns for the popup menu. If the wrap width is larger than
- * 1, the combo box is in table mode.
+ * Returns the wrap width which is used to determine the number of columns 
+ * for the popup menu. If the wrap width is larger than 1, the combo box 
+ * is in table mode.
  *
  * Returns: the wrap width.
  *
@@ -4453,8 +4454,8 @@ gtk_combo_box_get_wrap_width (GtkComboBox *combo_box)
 
 /**
  * gtk_combo_box_set_wrap_width:
- * @combo_box: A #GtkComboBox.
- * @width: Preferred number of columns.
+ * @combo_box: A #GtkComboBox
+ * @width: Preferred number of columns
  *
  * Sets the wrap width of @combo_box to be @width. The wrap width is basically
  * the preferred number of columns when you want the popup to be layed out
@@ -4482,7 +4483,7 @@ gtk_combo_box_set_wrap_width (GtkComboBox *combo_box,
 
 /**
  * gtk_combo_box_get_row_span_column:
- * @combo_box: A #GtkComboBox.
+ * @combo_box: A #GtkComboBox
  *
  * Returns the column with row span information for @combo_box.
  *
@@ -4532,7 +4533,7 @@ gtk_combo_box_set_row_span_column (GtkComboBox *combo_box,
 
 /**
  * gtk_combo_box_get_column_span_column:
- * @combo_box: A #GtkComboBox.
+ * @combo_box: A #GtkComboBox
  *
  * Returns the column with column span information for @combo_box.
  *
@@ -4550,8 +4551,8 @@ gtk_combo_box_get_column_span_column (GtkComboBox *combo_box)
 
 /**
  * gtk_combo_box_set_column_span_column:
- * @combo_box: A #GtkComboBox.
- * @column_span: A column in the model passed during construction.
+ * @combo_box: A #GtkComboBox
+ * @column_span: A column in the model passed during construction
  *
  * Sets the column with column span information for @combo_box to be
  * @column_span. The column span column contains integers which indicate
@@ -4582,7 +4583,7 @@ gtk_combo_box_set_column_span_column (GtkComboBox *combo_box,
 
 /**
  * gtk_combo_box_get_active:
- * @combo_box: A #GtkComboBox.
+ * @combo_box: A #GtkComboBox
  *
  * Returns the index of the currently active item, or -1 if there's no
  * active item. If the model is a non-flat treemodel, and the active item 
@@ -4590,8 +4591,8 @@ gtk_combo_box_set_column_span_column (GtkComboBox *combo_box,
  * <literal>gtk_tree_path_get_indices (path)[0]</literal>, where 
  * <literal>path</literal> is the #GtkTreePath of the active item.
  *
- * Return value: An integer which is the index of the currently active item, or
- * -1 if there's no active item.
+ * Return value: An integer which is the index of the currently active item, 
+ *     or -1 if there's no active item.
  *
  * Since: 2.4
  */
@@ -4617,9 +4618,9 @@ gtk_combo_box_get_active (GtkComboBox *combo_box)
 
 /**
  * gtk_combo_box_set_active:
- * @combo_box: A #GtkComboBox.
+ * @combo_box: A #GtkComboBox
  * @index_: An index in the model passed during construction, or -1 to have
- * no active item.
+ * no active item
  *
  * Sets the active item of @combo_box to be the item at @index.
  *
@@ -4709,14 +4710,14 @@ gtk_combo_box_set_active_internal (GtkComboBox *combo_box,
 /**
  * gtk_combo_box_get_active_iter:
  * @combo_box: A #GtkComboBox
- * @iter: The uninitialized #GtkTreeIter.
+ * @iter: The uninitialized #GtkTreeIter
  * 
  * Sets @iter to point to the current active item, if it exists.
  * 
  * Return value: %TRUE, if @iter was set
  *
  * Since: 2.4
- **/
+ */
 gboolean
 gtk_combo_box_get_active_iter (GtkComboBox     *combo_box,
                                GtkTreeIter     *iter)
@@ -4739,13 +4740,13 @@ gtk_combo_box_get_active_iter (GtkComboBox     *combo_box,
 /**
  * gtk_combo_box_set_active_iter:
  * @combo_box: A #GtkComboBox
- * @iter: The #GtkTreeIter.
+ * @iter: The #GtkTreeIter
  * 
  * Sets the current active item to be the one referenced by @iter. 
  * @iter must correspond to a path of depth one.
  * 
  * Since: 2.4
- **/
+ */
 void
 gtk_combo_box_set_active_iter (GtkComboBox     *combo_box,
                                GtkTreeIter     *iter)
@@ -4761,15 +4762,15 @@ gtk_combo_box_set_active_iter (GtkComboBox     *combo_box,
 
 /**
  * gtk_combo_box_set_model:
- * @combo_box: A #GtkComboBox.
- * @model: A #GtkTreeModel.
+ * @combo_box: A #GtkComboBox
+ * @model: A #GtkTreeModel
  *
  * Sets the model used by @combo_box to be @model. Will unset a previously set 
  * model (if applicable). If model is %NULL, then it will unset the model.
  *
  * Note that this function does not clear the cell renderers, you have to 
- * call gtk_combo_box_cell_layout_clear() yourself if you need to set up 
- * different cell renderers for the new model.
+ * call gtk_cell_layout_clear() yourself if you need to set up different 
+ * cell renderers for the new model.
  *
  * Since: 2.4
  */
@@ -4830,7 +4831,7 @@ gtk_combo_box_set_model (GtkComboBox  *combo_box,
 
 /**
  * gtk_combo_box_get_model
- * @combo_box: A #GtkComboBox.
+ * @combo_box: A #GtkComboBox
  *
  * Returns the #GtkTreeModel which is acting as data source for @combo_box.
  *
@@ -4885,8 +4886,8 @@ gtk_combo_box_new_text (void)
 
 /**
  * gtk_combo_box_append_text:
- * @combo_box: A #GtkComboBox constructed using gtk_combo_box_new_text().
- * @text: A string.
+ * @combo_box: A #GtkComboBox constructed using gtk_combo_box_new_text()
+ * @text: A string
  *
  * Appends @string to the list of strings stored in @combo_box. Note that
  * you can only use this function with combo boxes constructed with
@@ -4913,9 +4914,9 @@ gtk_combo_box_append_text (GtkComboBox *combo_box,
 
 /**
  * gtk_combo_box_insert_text:
- * @combo_box: A #GtkComboBox constructed using gtk_combo_box_new_text().
- * @position: An index to insert @text.
- * @text: A string.
+ * @combo_box: A #GtkComboBox constructed using gtk_combo_box_new_text()
+ * @position: An index to insert @text
+ * @text: A string
  *
  * Inserts @string at @position in the list of strings stored in @combo_box.
  * Note that you can only use this function with combo boxes constructed
@@ -4944,8 +4945,8 @@ gtk_combo_box_insert_text (GtkComboBox *combo_box,
 
 /**
  * gtk_combo_box_prepend_text:
- * @combo_box: A #GtkComboBox constructed with gtk_combo_box_new_text().
- * @text: A string.
+ * @combo_box: A #GtkComboBox constructed with gtk_combo_box_new_text()
+ * @text: A string
  *
  * Prepends @string to the list of strings stored in @combo_box. Note that
  * you can only use this function with combo boxes constructed with
@@ -4972,8 +4973,8 @@ gtk_combo_box_prepend_text (GtkComboBox *combo_box,
 
 /**
  * gtk_combo_box_remove_text:
- * @combo_box: A #GtkComboBox constructed with gtk_combo_box_new_text().
- * @position: Index of the item to remove.
+ * @combo_box: A #GtkComboBox constructed with gtk_combo_box_new_text()
+ * @position: Index of the item to remove
  *
  * Removes the string at @position from @combo_box. Note that you can only use
  * this function with combo boxes constructed with gtk_combo_box_new_text().
@@ -5000,7 +5001,7 @@ gtk_combo_box_remove_text (GtkComboBox *combo_box,
 
 /**
  * gtk_combo_box_get_active_text:
- * @combo_box: A #GtkComboBox constructed with gtk_combo_box_new_text().
+ * @combo_box: A #GtkComboBox constructed with gtk_combo_box_new_text()
  *
  * Returns the currently active string in @combo_box or %NULL if none
  * is selected.  Note that you can only use this function with combo
@@ -5327,7 +5328,7 @@ gtk_combo_box_start_editing (GtkCellEditable *cell_editable,
  * Gets the current value of the :add-tearoffs property.
  * 
  * Return value: the current value of the :add-tearoffs property.
- **/
+ */
 gboolean
 gtk_combo_box_get_add_tearoffs (GtkComboBox *combo_box)
 {
@@ -5345,7 +5346,7 @@ gtk_combo_box_get_add_tearoffs (GtkComboBox *combo_box)
  * menu item.
  *
  * Since: 2.6
- **/
+ */
 void
 gtk_combo_box_set_add_tearoffs (GtkComboBox *combo_box,
 				gboolean     add_tearoffs)
@@ -5397,7 +5398,7 @@ gtk_combo_box_update_title (GtkComboBox *combo_box)
 /**
  * gtk_combo_box_set_title:
  * @combo_box: a #GtkComboBox 
- * @title: a title for the menu in tearoff mode.
+ * @title: a title for the menu in tearoff mode
  *  
  * Sets the menu's title in tearoff mode.
  *
@@ -5441,7 +5442,7 @@ _gtk_combo_box_editing_canceled (GtkComboBox *combo_box)
  * Returns: the accessible object corresponding to the combo box's popup.
  *
  * Since: 2.6
- **/
+ */
 AtkObject*
 gtk_combo_box_get_popup_accessible (GtkComboBox *combo_box)
 {
@@ -5467,7 +5468,7 @@ gtk_combo_box_get_popup_accessible (GtkComboBox *combo_box)
  * Return value: the current row separator function.
  *
  * Since: 2.6
- **/
+ */
 GtkTreeViewRowSeparatorFunc 
 gtk_combo_box_get_row_separator_func (GtkComboBox *combo_box)
 {
@@ -5488,7 +5489,7 @@ gtk_combo_box_get_row_separator_func (GtkComboBox *combo_box)
  * function is %NULL, no separators are drawn. This is the default value.
  *
  * Since: 2.6
- **/
+ */
 void
 gtk_combo_box_set_row_separator_func (GtkComboBox                 *combo_box,
 				      GtkTreeViewRowSeparatorFunc  func,
@@ -5526,7 +5527,7 @@ gtk_combo_box_set_row_separator_func (GtkComboBox                 *combo_box,
  * the main area of the application.
  *
  * Since: 2.6
- **/
+ */
 void
 gtk_combo_box_set_focus_on_click (GtkComboBox *combo_box,
 				  gboolean     focus_on_click)
@@ -5558,7 +5559,7 @@ gtk_combo_box_set_focus_on_click (GtkComboBox *combo_box,
  *     clicked with the mouse.
  *
  * Since: 2.6
- **/
+ */
 gboolean
 gtk_combo_box_get_focus_on_click (GtkComboBox *combo_box)
 {

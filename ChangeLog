@@ -1,5 +1,9 @@
 2007-03-12  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkcombobox.c: Clean up and clarify docs.  (#412484)
+
+2007-03-12  Matthias Clasen  <mclasen@redhat.com>
+
 	* gtk/gtkspinbutton.c (gtk_spin_button_style_set): Set
 	the background of the panel window on style changes. (#402144,
 	Benjamin Berg)
