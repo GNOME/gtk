@@ -482,7 +482,10 @@ gtk_size_group_widget_destroyed (GtkWidget    *widget,
  * and the requisition of the other widgets in the size group.
  * Whether this applies horizontally, vertically, or in both directions
  * depends on the mode of the size group. See gtk_size_group_set_mode().
- **/
+ *
+ * When the widget is destroyed or no longer referenced elsewhere, it will 
+ * be removed from the size group.
+ */
 void
 gtk_size_group_add_widget (GtkSizeGroup     *size_group,
 			   GtkWidget        *widget)

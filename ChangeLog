@@ -1,5 +1,8 @@
 2007-03-12  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtksizegroup.c (gtk_size_group_add_widget): Clarify
+	docs.  (#345844, Torsten Schoenfeld)
+
 	* gdk/x11/gdkevents-x11.c (gdk_display_add_client_message_filter):
 	* gdk/gdkwindow.c (gdk_window_add_filter): Add
 	cross-references.  (#351252, Vincent Untz)
