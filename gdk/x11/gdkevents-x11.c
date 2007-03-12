@@ -359,6 +359,8 @@ gdk_event_apply_filters (XEvent *xevent,
  * @data: user data to pass to @func.
  *
  * Adds a filter to be called when X ClientMessage events are received.
+ * See gdk_window_add_filter() if you are interested in filtering other
+ * types of events.
  *
  * Since: 2.2
  **/ 

@@ -675,7 +675,9 @@ gdk_window_peek_children (GdkWindow *window)
  * easy to break GDK and/or GTK+, so you have to know what you're
  * doing. Pass %NULL for @window to get all events for all windows,
  * instead of events for a specific window.
- * 
+ *
+ * See gdk_display_add_client_message_filter() if you are interested
+ * in X ClientMessage events.
  **/
 void          
 gdk_window_add_filter (GdkWindow     *window,
