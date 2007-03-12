@@ -1,3 +1,11 @@
+2007-03-12  Kristian Rietveld  <kris@gtk.org>
+
+	Merge from trunk:
+
+	* gtk/gtkfilechooserdefault.c (check_save_entry): immediately
+	bail out if current_folder is NULL. (#350988, lots of reporters,
+	modified patch by Jan Darmochwal).
+
 2007-03-12  Christian Persch  <chpe@gnome.org>
 
 	* gtk/gtkfilechooserdefault.c: (browse_widgets_create): Don't make the

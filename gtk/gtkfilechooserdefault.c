@@ -6641,6 +6641,16 @@ check_save_entry (GtkFileChooserDefault *impl,
   *is_empty_ret = FALSE;
 
   current_folder = _gtk_file_chooser_entry_get_current_folder (chooser_entry);
+  if (!current_folder)
+    {
+      *path_ret = NULL;
+      *is_well_formed_ret = FALSE;
+      *is_file_part_empty_ret = FALSE;
+      *is_folder = FALSE;
+
+      return;
+    }
+
   file_part = _gtk_file_chooser_entry_get_file_part (chooser_entry);
 
   if (!file_part || file_part[0] == '\0')
