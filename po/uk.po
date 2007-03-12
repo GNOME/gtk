@@ -2315,11 +2315,11 @@ msgstr "Стан"
 
 #: ../gtk/gtkprintunixdialog.c:1513
 msgid "Print Pages"
-msgstr "Друк сторінки"
+msgstr "Друкувати сторінки"
 
 #: ../gtk/gtkprintunixdialog.c:1517
 msgid "_All"
-msgstr "_Все"
+msgstr "_Всі"
 
 #: ../gtk/gtkprintunixdialog.c:1524
 msgid "C_urrent"
