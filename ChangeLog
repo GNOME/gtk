@@ -1,5 +1,10 @@
 2007-03-11  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtktooltips.c (gtk_tooltips_get_info_from_tip_window):
+	Don't crash if active_tips_data is NULL.  (#382904, Li Yuan)
+
+2007-03-11  Matthias Clasen  <mclasen@redhat.com>
+
 	* gtk/gtktextview.c (gtk_text_view_set_buffer): Set first_para_mark
 	to NULL.  (#396805, Colin Leroy, patch by Mariano Suárez-Alvarez)
 	
