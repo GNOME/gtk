@@ -914,9 +914,6 @@ gtk_binding_entry_add_signal (GtkBindingSet  *binding_set,
       arg->arg_type = va_arg (args, GtkType);
       switch (G_TYPE_FUNDAMENTAL (arg->arg_type))
 	{
-	  /* for elaborated commenting about var args collection, take a look
-	   * at gtk_arg_collect_value() in gtkargcollector.c
-	   */
 	case G_TYPE_CHAR:
 	case G_TYPE_UCHAR:
 	case G_TYPE_INT:

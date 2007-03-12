@@ -1,5 +1,10 @@
 2007-03-12  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkbindings.c (gtk_binding_entry_add_signal): Remove
+	an obsolete comment.  (#402169, Xan Lopez)
+
+2007-03-12  Matthias Clasen  <mclasen@redhat.com>
+
 	* gtk/gtkcellrenderertext.c (gtk_cell_renderer_text_get_property):
 	Don't copy PangoLanguage.  (#340031, Morten Welinder)
 
