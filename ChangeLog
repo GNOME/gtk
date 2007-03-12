@@ -1,5 +1,9 @@
 2007-03-12  Matthias Clasen  <mclasen@redhat.com>
 
+	* NEWS: Updates
+
+2007-03-12  Matthias Clasen  <mclasen@redhat.com>
+
 	Merge from trunk:
 
 	* gtk/gtkfilechooserbutton.c (change_icon_theme_get_info_cb):

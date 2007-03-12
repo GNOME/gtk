@@ -41,6 +41,19 @@ Overview of Changes from GTK+ 2.10.9 to 2.10.10
  414875	Rendering the first icon triggers a style reset
  325477	Just make File Chooser window bigger
  414975	the popped up menu cannot have special theming
+ 331369 Menu short cuts do not work
+ 350988 crash with File Open in non-exisiting directory
+ 364946 crash in gtk_tree_model: Adding new account, or entering ...
+ 351671 textview should stop selecting when losing focus
+ 382904 Application crashed in gtk+
+ 385637 crash in testiconview
+ 396703 crash in testnouiprint
+ 396805 GtkTextView: crash on unsetting the GtkTextBuffer when in...
+ 410565 gnome-terminal crashes editing current profile
+ 335796 Gtk accelerator key event can't be passed to other widget...
+ 356515 [a11y] Orca unable to read items in Evolution "Select a F...
+ 416525 gtkfilesystemwin32.c: C99 declaration
+ 372449 no need to emphasise the "Location" label
 
 
 Overview of Changes from GTK+ 2.10.8 to 2.10.9
