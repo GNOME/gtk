@@ -110,6 +110,8 @@ static void gtk_spin_button_grab_notify    (GtkWidget          *widget,
 					    gboolean            was_grabbed);
 static void gtk_spin_button_state_changed  (GtkWidget          *widget,
 					    GtkStateType        previous_state);
+static void gtk_spin_button_style_set      (GtkWidget          *widget,
+                                            GtkStyle           *previous_style);
 static void gtk_spin_button_draw_arrow     (GtkSpinButton      *spin_button, 
 					    GtkArrowType        arrow_type);
 static gint gtk_spin_button_timer          (GtkSpinButton      *spin_button);
@@ -191,6 +193,7 @@ gtk_spin_button_class_init (GtkSpinButtonClass *class)
   widget_class->focus_out_event = gtk_spin_button_focus_out;
   widget_class->grab_notify = gtk_spin_button_grab_notify;
   widget_class->state_changed = gtk_spin_button_state_changed;
+  widget_class->style_set = gtk_spin_button_style_set;
 
   entry_class->activate = gtk_spin_button_activate;
 
@@ -973,6 +976,19 @@ gtk_spin_button_state_changed (GtkWidget    *widget,
       spin_button_redraw (spin);
     }
 }
+
+static void
+gtk_spin_button_style_set (GtkWidget *widget,
+		           GtkStyle  *previous_style)
+{
+  GtkSpinButton *spin = GTK_SPIN_BUTTON (widget);
+
+  if (previous_style && GTK_WIDGET_REALIZED (widget))
+    gtk_style_set_background (widget->style, spin->panel, GTK_STATE_NORMAL);
+
+  (* GTK_WIDGET_CLASS (gtk_spin_button_parent_class)->style_set) (widget, previous_style);
+}
+
 
 static gint
 gtk_spin_button_scroll (GtkWidget      *widget,
