@@ -1079,7 +1079,36 @@ gdk_notify_startup_complete (void)
   if (!G_LIKELY (display_x11->trusted_client))
     return;
 
-  escaped_id = escape_for_xmessage (display_x11->startup_notification_id);
+  gdk_notify_startup_complete_with_id (display_x11->startup_notification_id);
+}
+
+/**
+ * gdk_notify_startup_complete_with_id:
+ * @startup_id: a startup-notification identifier, for which notification
+ *              process should be completed
+ * 
+ * Indicates to the GUI environment that the application has finished
+ * loading, using a given identifier.
+ * 
+ * GTK+ will call this function automatically for #GtkWindow with custom
+ * startup-notification identifier unless
+ * gtk_window_set_auto_startup_notification() is called to disable
+ * that feature.
+ *
+ * Since: 2.12
+ **/
+void
+gdk_notify_startup_complete_with_id (const gchar* startup_id)
+{
+  GdkDisplay *display;
+  gchar *escaped_id;
+  gchar *message;
+
+  display = gdk_display_get_default ();
+  if (!display)
+    return;
+
+  escaped_id = escape_for_xmessage (startup_id);
   message = g_strdup_printf ("remove: ID=%s", escaped_id);
   g_free (escaped_id);
 
@@ -1090,7 +1119,6 @@ gdk_notify_startup_complete (void)
 
   g_free (message);
 }
-
 
 /**
  * gdk_display_supports_selection_notification:
@@ -1290,6 +1318,21 @@ gdk_display_supports_input_shapes (GdkDisplay *display)
   return GDK_DISPLAY_X11 (display)->have_input_shapes;
 }
 
+
+/**
+ * gdk_x11_display_get_startup_notification_id:
+ * @display: a #GdkDisplay
+ *
+ * Returns: the startup notification ID for 
+ * @display.
+ *
+ * Since: 2.12
+ */
+G_CONST_RETURN gchar *
+gdk_x11_display_get_startup_notification_id (GdkDisplay *display)
+{
+  return GDK_DISPLAY_X11 (display)->startup_notification_id;
+}
 
 #define __GDK_DISPLAY_X11_C__
 #include "gdkaliasdef.c"

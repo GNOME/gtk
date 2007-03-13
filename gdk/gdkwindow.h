@@ -482,6 +482,8 @@ void	      gdk_window_set_title	   (GdkWindow	  *window,
 					    const gchar	  *title);
 void          gdk_window_set_role          (GdkWindow       *window,
 					    const gchar     *role);
+void          gdk_window_set_startup_id    (GdkWindow       *window,
+					    const gchar     *startup_id);					  
 void          gdk_window_set_transient_for (GdkWindow       *window, 
 					    GdkWindow       *parent);
 void	      gdk_window_set_background	 (GdkWindow	  *window,

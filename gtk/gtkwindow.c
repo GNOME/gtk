@@ -26,6 +26,8 @@
 
 #include <config.h>
 #include <string.h>
+#include <stdlib.h>
+#include <errno.h>
 #include <limits.h>
 #include "gdk/gdk.h"
 #include "gdk/gdkkeysyms.h"
@@ -94,6 +96,9 @@ enum {
   /* Readonly properties */
   PROP_IS_ACTIVE,
   PROP_HAS_TOPLEVEL_FOCUS,
+  
+  /* Writeonly properties */
+  PROP_STARTUP_ID,
   
   LAST_ARG
 };
@@ -177,6 +182,8 @@ struct _GtkWindowPrivate
 
   guint reset_type_hint : 1;
   GdkWindowTypeHint type_hint;
+
+  gchar *startup_id;
 };
 
 static void gtk_window_dispose            (GObject           *object);
@@ -344,6 +351,33 @@ add_arrow_bindings (GtkBindingSet    *binding_set,
                                 GTK_TYPE_DIRECTION_TYPE, direction);
 }
 
+static guint32
+extract_time_from_startup_id (const gchar* startup_id)
+{
+  gchar *timestr = g_strrstr (startup_id, "_TIME");
+  guint32 retval = GDK_CURRENT_TIME;
+
+  if (timestr)
+    {
+      gchar *end;
+      guint32 timestamp; 
+    
+      /* Skip past the "_TIME" part */
+      timestr += 5;
+    
+      timestamp = strtoul (timestr, &end, 0);
+      if (end != timestr && errno == 0)
+        retval = timestamp;
+    }
+
+  return retval;
+}
+
+static gboolean
+startup_id_is_fake (const gchar* startup_id)
+{
+  return strncmp (startup_id, "_TIME", 5) == 0;
+}
 
 static void
 gtk_window_class_init (GtkWindowClass *klass)
@@ -429,6 +463,23 @@ gtk_window_class_init (GtkWindowClass *klass)
 							P_("Unique identifier for the window to be used when restoring a session"),
 							NULL,
 							GTK_PARAM_READWRITE));
+							
+  /**
+   * GtkWindow:startup-id:
+   *
+   * The :startup-id is a write-only property for setting window's
+   * startup notification identifier. See gtk_window_set_startup_id()
+   * for more details.
+   *
+   * Since: 2.12
+   */							
+  g_object_class_install_property (gobject_class,
+                                   PROP_ROLE,
+                                   g_param_spec_string ("startup-id",
+							P_("Startup ID"),
+							P_("Unique startup identifier for the window used by startup-notification"),
+							NULL,
+							GTK_PARAM_WRITABLE));
 
   g_object_class_install_property (gobject_class,
                                    PROP_ALLOW_SHRINK,
@@ -810,6 +861,7 @@ gtk_window_init (GtkWindow *window)
   priv->focus_on_map = TRUE;
   priv->deletable = TRUE;
   priv->type_hint = GDK_WINDOW_TYPE_HINT_NORMAL;
+  priv->startup_id = NULL;
 
   colormap = _gtk_widget_peek_colormap ();
   if (colormap)
@@ -846,6 +898,9 @@ gtk_window_set_property (GObject      *object,
     case PROP_ROLE:
       gtk_window_set_role (window, g_value_get_string (value));
       break;
+    case PROP_STARTUP_ID:
+      gtk_window_set_startup_id (window, g_value_get_string (value));
+      break; 
     case PROP_ALLOW_SHRINK:
       window->allow_shrink = g_value_get_boolean (value);
       gtk_widget_queue_resize (GTK_WIDGET (window));
@@ -1198,6 +1253,60 @@ gtk_window_set_role (GtkWindow   *window,
     gdk_window_set_role (GTK_WIDGET (window)->window, window->wm_role);
 
   g_object_notify (G_OBJECT (window), "role");
+}
+
+/**
+ * gtk_window_set_startup_id:
+ * @window: a #GtkWindow
+ * @startup_id: a string with startup-notification identifier
+ *
+ * Startup notification identifiers are used by desktop environment to 
+ * track application startup, to provide user feedback and other 
+ * features. This function changes the corresponding property on the
+ * underlying GdkWindow. Normally, startup identifier is managed 
+ * automatically and you should only use this function in special cases
+ * like transferring focus from other processes. You should use this
+ * function before calling gtk_window_present() or any equivalent
+ * function generating a window map event.
+ *
+ * This function is only useful on X11, not with other GTK+ targets.
+ * 
+ * Since: 2.12
+ **/
+void
+gtk_window_set_startup_id (GtkWindow   *window,
+                           const gchar *startup_id)
+{
+  GtkWindowPrivate *priv = GTK_WINDOW_GET_PRIVATE (window);
+
+  g_return_if_fail (GTK_IS_WINDOW (window));
+  
+  g_free (priv->startup_id);
+  priv->startup_id = g_strdup (startup_id);
+  
+  if (GTK_WIDGET_REALIZED (window))
+    {
+      /* Here we differentiate real and "fake" startup notification IDs,
+       * constructed on purpose just to pass interaction timestamp
+       */  
+      if (startup_id_is_fake (priv->startup_id))
+        {
+          guint32 timestamp = extract_time_from_startup_id (priv->startup_id);
+
+          gtk_window_present_with_time (window, timestamp);
+        }
+      else 
+        {
+          gdk_window_set_startup_id (GTK_WIDGET (window)->window,
+                                     priv->startup_id);
+          
+          /* If window is mapped, terminate the startup-notification too */
+          if (GTK_WIDGET_MAPPED (window) && !disable_startup_notification)
+            gdk_notify_startup_complete_with_id (priv->startup_id);
+        }
+    }
+
+  g_object_notify (G_OBJECT (window), "startup-id");
 }
 
 /**
@@ -4149,11 +4258,22 @@ gtk_window_map (GtkWidget *widget)
   if (window->frame)
     gdk_window_show (window->frame);
 
-  if (!disable_startup_notification &&
-      !sent_startup_notification)
+  if (!disable_startup_notification)
     {
-      sent_startup_notification = TRUE;
-      gdk_notify_startup_complete ();
+      /* Do we have a custom startup-notification id? */
+      if (priv->startup_id != NULL)
+        {
+          /* Make sure we have a "real" id */
+          if (!startup_id_is_fake (priv->startup_id)) 
+            gdk_notify_startup_complete_with_id (priv->startup_id);
+            
+          priv->startup_id = NULL;
+        }
+      else if (!sent_startup_notification)
+        {
+          sent_startup_notification = TRUE;
+          gdk_notify_startup_complete ();
+        }
     }
 }
 
@@ -4223,7 +4343,6 @@ gtk_window_realize (GtkWidget *widget)
   GtkWindowPrivate *priv;
   
   window = GTK_WINDOW (widget);
-
   priv = GTK_WINDOW_GET_PRIVATE (window);
 
   /* ensure widget tree is properly size allocated */
@@ -4377,6 +4496,17 @@ gtk_window_realize (GtkWidget *widget)
     gdk_window_set_modal_hint (widget->window, TRUE);
   else
     gdk_window_set_modal_hint (widget->window, FALSE);
+    
+  if (priv->startup_id)
+    {
+#ifdef GDK_WINDOWING_X11
+      guint32 timestamp = extract_time_from_startup_id (priv->startup_id);
+      if (timestamp != GDK_CURRENT_TIME)
+        gdk_x11_window_set_user_time (widget->window, timestamp);
+#endif
+      if (!startup_id_is_fake (priv->startup_id)) 
+        gdk_window_set_startup_id (widget->window, priv->startup_id);
+    }
 
   /* Icons */
   gtk_window_realize_icon (window);

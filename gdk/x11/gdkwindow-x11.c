@@ -2897,6 +2897,40 @@ gdk_window_set_role (GdkWindow   *window,
 }
 
 /**
+ * gdk_window_set_startup_id:
+ * @window: a toplevel #GdkWindow
+ * @startup_id: a string with startup-notification identifier
+ *
+ * When using GTK+, typically you should use gtk_window_set_startup_id()
+ * instead of this low-level function.
+ *
+ * Since: 2.12
+ *
+ **/
+void          
+gdk_window_set_startup_id (GdkWindow   *window,
+		     const gchar *startup_id)
+{
+  GdkDisplay *display;
+  
+  g_return_if_fail (GDK_IS_WINDOW (window));
+
+  display = gdk_drawable_get_display (window);
+
+  if (!GDK_WINDOW_DESTROYED (window))
+    {
+      if (startup_id)
+	XChangeProperty (GDK_DISPLAY_XDISPLAY (display), GDK_WINDOW_XID (window),
+			 gdk_x11_get_xatom_by_name_for_display (display, "_NET_STARTUP_ID"), 
+			 gdk_x11_get_xatom_by_name_for_display (display, "UTF8_STRING"), 8,
+			 PropModeReplace, startup_id, strlen (startup_id));
+      else
+	XDeleteProperty (GDK_DISPLAY_XDISPLAY (display), GDK_WINDOW_XID (window),
+			 gdk_x11_get_xatom_by_name_for_display (display, "_NET_STARTUP_ID"));
+    }
+}
+
+/**
  * gdk_window_set_transient_for:
  * @window: a toplevel #GdkWindow
  * @parent: another toplevel #GdkWindow

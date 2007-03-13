@@ -1,3 +1,30 @@
+2007-03-13  Emmanuele Bassi  <ebassi@gnome.org>
+
+	Apply patch by Vytautas Liuolia for changing the startup
+	notification id on a window in the X11 backend. (#347375)
+
+	* gdk/gdk.h:
+	* gdk/gdkx.h:
+	* gdk/x11/gdkdisplay-x11.c: Add gdk_notify_startup_complete_wit_id()
+	and gdk_x11_display_get_startup_notification_id().
+
+	* gdk/gdkwindow.h:
+	* gdk/x11/gdkwindow-x11.c: Add gdk_window_set_startup_id().
+
+	* gtk/gtkwindow.h:
+	* gtk/gtkwindow.c: Add gtk_window_set_startup_id(), used to
+	change the startup notification id.
+	
+	(gtk_window_class_init), (gtk_window_init),
+	(gtk_window_set_property): Add write-only "startup-id" property
+	to GtkWindow.
+
+	(gtk_window_realize): Set the startup notification id
+	on a GtkWindow if it's valid.
+
+	(gtk_window_map): If we have another valid startup notification
+	id then finish the notification process.
+
 2007-03-13  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtknotebook.c (gtk_notebook_real_insert_page):

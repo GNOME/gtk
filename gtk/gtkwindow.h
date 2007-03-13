@@ -178,6 +178,8 @@ void       gtk_window_set_wmclass              (GtkWindow           *window,
 						const gchar         *wmclass_class);
 void       gtk_window_set_role                 (GtkWindow           *window,
                                                 const gchar         *role);
+void       gtk_window_set_startup_id           (GtkWindow           *window,
+                                                const gchar         *startup_id);
 G_CONST_RETURN gchar *gtk_window_get_role      (GtkWindow           *window);
 void       gtk_window_add_accel_group          (GtkWindow           *window,
 						GtkAccelGroup	    *accel_group);

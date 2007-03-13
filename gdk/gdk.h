@@ -177,6 +177,8 @@ gboolean gdk_event_send_client_message_for_display (GdkDisplay *display,
 
 void gdk_notify_startup_complete (void);
 
+void gdk_notify_startup_complete_with_id (const gchar* startup_id);
+
 /* Threading
  */
 
