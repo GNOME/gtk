@@ -1,3 +1,10 @@
+2007-03-13  Matthias Clasen  <mclasen@redhat.com>
+
+	Merge from trunk:
+
+	* gtk/gtknotebook.c (gtk_notebook_real_insert_page):
+	Fix tabbed browsing in epiphany.  (#413664, Christian Persch)
+
 2007-03-12  Matthias Clasen  <mclasen@redhat.com>
 	
 	* configure.in: Bump version
