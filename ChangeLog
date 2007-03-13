@@ -1,3 +1,8 @@
+2007-03-13  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtknotebook.c (gtk_notebook_real_insert_page):
+	Fix tabbed browsing in epiphany.  (#413664, Christian Persch)
+
 2007-03-12  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtksizegroup.c (gtk_size_group_add_widget): Clarify
