@@ -13,7 +13,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: pl\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-03-12 11:11-0400\n"
+"POT-Creation-Date: 2007-03-14 01:21-0400\n"
 "PO-Revision-Date: 2006-11-17 20:47+0100\n"
 "Last-Translator: Marek Stepien <marcoos@aviary.pl>\n"
 "Language-Team: GNOME PL Team <translators@gnomepl.org>\n"
@@ -2198,7 +2198,7 @@ msgstr "Odstęp strzałki"
 msgid "Scroll arrow spacing"
 msgstr "Odstęp strzałki przewijania"
 
-#: gtk/gtknotebook.c:4258 gtk/gtknotebook.c:6803
+#: gtk/gtknotebook.c:4259 gtk/gtknotebook.c:6804
 #, c-format
 msgid "Page %u"
 msgstr "Strona %u"

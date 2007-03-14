@@ -441,7 +441,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+.gtk-2-10.gu\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-03-12 11:11-0400\n"
+"POT-Creation-Date: 2007-03-14 01:21-0400\n"
 "PO-Revision-Date: 2007-03-02 12:03+0530\n"
 "Last-Translator: Ankit Patel <ankit@redhat.com>\n"
 "Language-Team: Gujarati <fedora-trans-gu@redhat.com>\n"
@@ -2624,7 +2624,7 @@ msgstr "તીર જગ્યા"
 msgid "Scroll arrow spacing"
 msgstr "તીર જગ્યા સરકાવો"
 
-#: gtk/gtknotebook.c:4258 gtk/gtknotebook.c:6803
+#: gtk/gtknotebook.c:4259 gtk/gtknotebook.c:6804
 #, c-format
 msgid "Page %u"
 msgstr "પાનું %u"

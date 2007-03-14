@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.8.2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-03-12 11:11-0400\n"
+"POT-Creation-Date: 2007-03-14 01:21-0400\n"
 "PO-Revision-Date: 2007-03-09 00:51+0100\n"
 "Last-Translator: Jordi Mallach <jordi@sindominio.net>\n"
 "Language-Team: Catalan <tradgnome@softcatala.org>\n"
@@ -2198,7 +2198,7 @@ msgstr "Espaiat de les fletxes"
 msgid "Scroll arrow spacing"
 msgstr "Espaiat de les fletxes de desplaçament"
 
-#: gtk/gtknotebook.c:4258 gtk/gtknotebook.c:6803
+#: gtk/gtknotebook.c:4259 gtk/gtknotebook.c:6804
 #, c-format
 msgid "Page %u"
 msgstr "Pàgina %u"

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+2.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-03-12 11:11-0400\n"
+"POT-Creation-Date: 2007-03-14 01:21-0400\n"
 "PO-Revision-Date: 2007-02-26 02:54+0200\n"
 "Last-Translator: Antono Vasiljev <antono.vasiljev@gmail.com>\n"
 "Language-Team: Eo-tradukado <http://eo-tradukado.tuxfamily.org>\n"
@@ -2181,7 +2181,7 @@ msgstr "Spaco inter sagetoj"
 msgid "Scroll arrow spacing"
 msgstr "Spaco inter rulsagetoj"
 
-#: gtk/gtknotebook.c:4258 gtk/gtknotebook.c:6803
+#: gtk/gtknotebook.c:4259 gtk/gtknotebook.c:6804
 #, c-format
 msgid "Page %u"
 msgstr "Paĝo %u"

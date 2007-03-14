@@ -1,3 +1,10 @@
+Overview of Changes from GTK+ 2.10.10 to 2.10.11
+================================================
+
+* Redo a GtkNotebook change that broke tabbed
+  browsing in Epiphany
+
+
 Overview of Changes from GTK+ 2.10.9 to 2.10.10
 ===============================================
 
