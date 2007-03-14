@@ -1,3 +1,19 @@
+2007-03-14  Michael Natterer  <mitch@imendio.com>
+
+	Make gtk_widget_set_extension_events() work on already realized
+	widgets (bug #379550, Tommi Komulainen)
+
+	* gdk/x11/gdkinput.c (gdk_input_set_extension_events): allow to be
+	called multiple times without leaking and work correctly when
+	already realized (don't rely on a configure event following).
+
+	* gtk/gtkwidget.c (gtk_widget_set_extension_events_internal): new
+	internal function which walks the GdkWindow tree and sets the
+	extension events on all windows that belong to the widget.
+
+	(gtk_widget_realize)
+	(gtk_widget_set_extension_events): use the new function.
+
 2007-03-14  Emmanuele Bassi  <ebassi@gnome.org>
 
 	Various clean ups in the GtkRecent code. (see #338843)

@@ -313,29 +313,42 @@ gdk_input_set_extension_events (GdkWindow *window, gint mask,
   if (mode == GDK_EXTENSION_EVENTS_NONE)
     mask = 0;
 
+  iw = _gdk_input_window_find (window);
+
   if (mask != 0)
     {
-      iw = g_new(GdkInputWindow,1);
+      if (!iw)
+        {
+          iw = g_new(GdkInputWindow,1);
 
-      iw->window = window;
-      iw->mode = mode;
+          iw->window = window;
+          iw->mode = mode;
 
-      iw->obscuring = NULL;
-      iw->num_obscuring = 0;
-      iw->grabbed = FALSE;
+          iw->obscuring = NULL;
+          iw->num_obscuring = 0;
+          iw->grabbed = FALSE;
 
-      display_x11->input_windows = g_list_append(display_x11->input_windows,iw);
+          display_x11->input_windows = g_list_append(display_x11->input_windows,iw);
+        }
+
       window_private->extension_events = mask;
 
+#ifndef XINPUT_NONE
       /* Add enter window events to the event mask */
-      /* FIXME, this is not needed for XINPUT_NONE */
+      /* this is not needed for XINPUT_NONE */
       gdk_window_set_events (window,
 			     gdk_window_get_events (window) | 
 			     GDK_ENTER_NOTIFY_MASK);
+
+      /* we might not receive ConfigureNotify so get the root_relative_geometry
+       * now, just in case */
+      _gdk_input_get_root_relative_geometry (GDK_WINDOW_XDISPLAY (window),
+                                             GDK_WINDOW_XWINDOW (window),
+                                             &iw->root_x, &iw->root_y, NULL, NULL);
+#endif /* !XINPUT_NONE */
     }
   else
     {
-      iw = _gdk_input_window_find (window);
       if (iw)
 	{
 	  display_x11->input_windows = g_list_remove(display_x11->input_windows,iw);
