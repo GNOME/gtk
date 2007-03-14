@@ -1,3 +1,28 @@
+2007-03-14  Emmanuele Bassi  <ebassi@gnome.org>
+
+	Various clean ups in the GtkRecent code. (see #338843)
+
+	* gtk/gtkrecentchooserdefault.c:
+	* gtk/gtkrecentchoosermenu.c:
+	* gtk/gtkrecentchooserprivate.h:
+	* gtk/gtkrecentchooserutils.c: Move the recent chooser function
+	for getting the sorted and clamped list of recent files from the
+	manager outside the implementations.
+
+	* gtk/gtkrecentchooserdefault.c (chooser_set_sort_type): Repopulate
+	the list when the sorting order changes.
+
+	(gtk_recent_chooser_default_dispose),
+	(gtk_recent_chooser_default_finalize): Move object unref and
+	source removal from finalize to dispose.
+
+	* gtk/gtkrecentchooser.c (gtk_recent_chooser_type_init): Relax the
+	prerequisite for the GtkRecentChooser interface implementations,
+	from GtkObject to GObject.
+
+	(gtk_recent_chooser_class_init): Use GTK_PARAM_* instead of
+	G_PARAM_*
+
 2007-03-13  Emmanuele Bassi  <ebassi@gnome.org>
 
 	Apply patch by Vytautas Liuolia for changing the startup

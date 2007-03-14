@@ -294,3 +294,139 @@ delegate_item_activated (GtkRecentChooser *receiver,
 {
   _gtk_recent_chooser_item_activated (GTK_RECENT_CHOOSER (user_data));
 }
+
+static gint
+sort_recent_items_mru (GtkRecentInfo *a,
+		       GtkRecentInfo *b,
+		       gpointer       unused)
+{
+  g_assert (a != NULL && b != NULL);
+  
+  return (gtk_recent_info_get_modified (a) < gtk_recent_info_get_modified (b));
+}
+
+static gint
+sort_recent_items_lru (GtkRecentInfo *a,
+		       GtkRecentInfo *b,
+		       gpointer       unused)
+{
+  g_assert (a != NULL && b != NULL);
+  
+  return (gtk_recent_info_get_modified (a) > gtk_recent_info_get_modified (b));
+}
+
+typedef struct
+{
+  GtkRecentSortFunc func;
+  gpointer data;
+} SortRecentData;
+
+/* our proxy sorting function */
+static gint
+sort_recent_items_proxy (gpointer *a,
+                         gpointer *b,
+                         gpointer  user_data)
+{
+  GtkRecentInfo *info_a = (GtkRecentInfo *) a;
+  GtkRecentInfo *info_b = (GtkRecentInfo *) b;
+  SortRecentData *sort_recent = user_data;
+
+  if (sort_recent->func)
+    return (* sort_recent->func) (info_a,
+                                  info_b,
+                                  sort_recent->data);
+  
+  /* fallback */
+  return 0;
+}
+
+/*
+ * _gtk_recent_chooser_get_items:
+ * @chooser: a #GtkRecentChooser
+ * @sort_func: sorting function, or %NULL
+ * @sort_data: sorting function data, or %NULL
+ *
+ * Default implementation for getting the (sorted and clamped) list
+ * of recently used resources from a #GtkRecentChooser. This function
+ * should be used by implementations of the #GtkRecentChooser
+ * interface inside the GtkRecentChooser::get_items vfunc.
+ *
+ * Return value: a list of #GtkRecentInfo objects
+ */
+GList *
+_gtk_recent_chooser_get_items (GtkRecentChooser  *chooser,
+                               GtkRecentSortFunc  sort_func,
+                               gpointer           sort_data)
+{
+  GtkRecentManager *manager;
+  gint limit;
+  GtkRecentSortType sort_type;
+  GList *items;
+  GCompareDataFunc compare_func;
+  gint length;
+
+  g_return_val_if_fail (GTK_IS_RECENT_CHOOSER (chooser), NULL);
+
+  manager = _gtk_recent_chooser_get_recent_manager (chooser);
+  if (!manager)
+    return NULL;
+
+  items = gtk_recent_manager_get_items (manager);
+  if (!items)
+    return NULL;
+
+  limit = gtk_recent_chooser_get_limit (chooser);
+  if (limit == 0)
+    return NULL;
+
+  sort_type = gtk_recent_chooser_get_sort_type (chooser);
+  switch (sort_type)
+    {
+    case GTK_RECENT_SORT_NONE:
+      compare_func = NULL;
+      break;
+    case GTK_RECENT_SORT_MRU:
+      compare_func = (GCompareDataFunc) sort_recent_items_mru;
+      break;
+    case GTK_RECENT_SORT_LRU:
+      compare_func = (GCompareDataFunc) sort_recent_items_lru;
+      break;
+    case GTK_RECENT_SORT_CUSTOM:
+      compare_func = (GCompareDataFunc) sort_recent_items_proxy;
+      break;
+    default:
+      g_assert_not_reached ();
+      break;
+    }
+
+  if (compare_func)
+    {
+      SortRecentData *sort_recent;
+
+      sort_recent = g_slice_new (SortRecentData);
+      sort_recent->func = sort_func;
+      sort_recent->data = sort_data;
+
+      items = g_list_sort_with_data (items, compare_func, sort_recent);
+
+      g_slice_free (SortRecentData, sort_recent);
+    }
+  
+  length = g_list_length (items);
+  if ((limit != -1) && (length > limit))
+    {
+      GList *clamp, *l;
+      
+      clamp = g_list_nth (items, limit - 1);
+      if (!clamp)
+        return items;
+      
+      l = clamp->next;
+      clamp->next = NULL;
+    
+      g_list_foreach (l, (GFunc) gtk_recent_info_unref, NULL);
+      g_list_free (l);
+    }
+
+  return items;
+}

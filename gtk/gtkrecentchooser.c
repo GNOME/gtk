@@ -56,7 +56,7 @@ gtk_recent_chooser_get_type (void)
 						    (GClassInitFunc) gtk_recent_chooser_class_init,
 						    0, NULL, 0);
       
-      g_type_interface_add_prerequisite (chooser_type, GTK_TYPE_OBJECT);
+      g_type_interface_add_prerequisite (chooser_type, G_TYPE_OBJECT);
     }
   
   return chooser_type;
@@ -112,43 +112,43 @@ gtk_recent_chooser_class_init (gpointer g_iface)
   				       			    P_("Recent Manager"),
   				       			    P_("The RecentManager object to use"),
   				       			    GTK_TYPE_RECENT_MANAGER,
-  				       			    G_PARAM_WRITABLE | G_PARAM_CONSTRUCT_ONLY));
+  				       			    GTK_PARAM_WRITABLE | G_PARAM_CONSTRUCT_ONLY));
   g_object_interface_install_property (g_iface,
    				       g_param_spec_boolean ("show-private",
    							     P_("Show Private"),
    							     P_("Whether the private items should be displayed"),
    							     FALSE,
-   							     G_PARAM_READWRITE));
+   							     GTK_PARAM_READWRITE));
   g_object_interface_install_property (g_iface,
   				       g_param_spec_boolean ("show-tips",
   				       			     P_("Show Tooltips"),
   				       			     P_("Whether there should be a tooltip on the item"),
   				       			     FALSE,
-  				       			     G_PARAM_READWRITE));
+  				       			     GTK_PARAM_READWRITE));
   g_object_interface_install_property (g_iface,
   				       g_param_spec_boolean ("show-icons",
   				       			     P_("Show Icons"),
   				       			     P_("Whether there should be an icon near the item"),
   				       			     TRUE,
-  				       			     G_PARAM_READWRITE));
+  				       			     GTK_PARAM_READWRITE));
   g_object_interface_install_property (g_iface,
   				       g_param_spec_boolean ("show-not-found",
   				       			     P_("Show Not Found"),
   				       			     P_("Whether the items pointing to unavailable resources should be displayed"),
   				       			     FALSE,
-  				       			     G_PARAM_READWRITE));
+  				       			     GTK_PARAM_READWRITE));
   g_object_interface_install_property (g_iface,
    				       g_param_spec_boolean ("select-multiple",
    							     P_("Select Multiple"),
    							     P_("Whether to allow multiple items to be selected"),
    							     FALSE,
-   							     G_PARAM_READWRITE));
+   							     GTK_PARAM_READWRITE));
   g_object_interface_install_property (g_iface,
 		  		       g_param_spec_boolean ("local-only",
 					       		     P_("Local only"),
 							     P_("Whether the selected resource(s) should be limited to local file: URIs"),
 							     TRUE,
-							     G_PARAM_READWRITE));
+							     GTK_PARAM_READWRITE));
   g_object_interface_install_property (g_iface,
    				       g_param_spec_int ("limit",
    							 P_("Limit"),
@@ -156,20 +156,20 @@ gtk_recent_chooser_class_init (gpointer g_iface)
    							 -1,
    							 G_MAXINT,
    							 -1,
-   							 G_PARAM_READWRITE));
+   							 GTK_PARAM_READWRITE));
   g_object_interface_install_property (g_iface,
 		  		       g_param_spec_enum ("sort-type",
 					       		  P_("Sort Type"),
 							  P_("The sorting order of the items displayed"),
 							  GTK_TYPE_RECENT_SORT_TYPE,
 							  GTK_RECENT_SORT_NONE,
-							  G_PARAM_READWRITE));
+							  GTK_PARAM_READWRITE));
   g_object_interface_install_property (g_iface,
   				       g_param_spec_object ("filter",
   				       			    P_("Filter"),
   				       			    P_("The current filter for selecting which resources are displayed"),
   				       			    GTK_TYPE_RECENT_FILTER,
-  				       			    G_PARAM_READWRITE));
+  				       			    GTK_PARAM_READWRITE));
 }
 
 GQuark

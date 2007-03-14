@@ -75,6 +75,7 @@
 #include "gtkrecentchooserutils.h"
 #include "gtkrecentchooserdefault.h"
 
+#include "gtkprivate.h"
 #include "gtkalias.h"
 
 
@@ -178,6 +179,7 @@ static GObject *gtk_recent_chooser_default_constructor  (GType                  
 						         guint                         n_construct_prop,
 						         GObjectConstructParam        *construct_params);
 static void     gtk_recent_chooser_default_finalize     (GObject                      *object);
+static void     gtk_recent_chooser_default_dispose      (GObject                      *object);
 static void     gtk_recent_chooser_default_set_property (GObject                      *object,
 						         guint                         prop_id,
 						         const GValue                 *value,
@@ -313,10 +315,11 @@ _gtk_recent_chooser_default_class_init (GtkRecentChooserDefaultClass *klass)
   GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
 
-  gobject_class->constructor = gtk_recent_chooser_default_constructor;  
-  gobject_class->finalize = gtk_recent_chooser_default_finalize;
+  gobject_class->constructor = gtk_recent_chooser_default_constructor;
   gobject_class->set_property = gtk_recent_chooser_default_set_property;
   gobject_class->get_property = gtk_recent_chooser_default_get_property;
+  gobject_class->dispose = gtk_recent_chooser_default_dispose;
+  gobject_class->finalize = gtk_recent_chooser_default_finalize;
   
   widget_class->map = gtk_recent_chooser_default_map;
   widget_class->show_all = gtk_recent_chooser_default_show_all;
@@ -359,17 +362,17 @@ _gtk_recent_chooser_default_init (GtkRecentChooserDefault *impl)
 
 static GObject *
 gtk_recent_chooser_default_constructor (GType                  type,
-				        guint                  n_construct_prop,
-				        GObjectConstructParam *construct_params)
+				        guint                  n_params,
+				        GObjectConstructParam *params)
 {
+  GObjectClass *parent_class;
   GtkRecentChooserDefault *impl;
   GObject *object;
-  
   GtkWidget *scrollw;
   GtkCellRenderer *renderer;
-  
-  object = G_OBJECT_CLASS (_gtk_recent_chooser_default_parent_class)->constructor (type, n_construct_prop, construct_params);
 
+  parent_class = G_OBJECT_CLASS (_gtk_recent_chooser_default_parent_class);
+  object = parent_class->constructor (type, n_params, params);
   impl = GTK_RECENT_CHOOSER_DEFAULT (object);
   
   g_assert (impl->manager);
@@ -397,7 +400,8 @@ gtk_recent_chooser_default_constructor (GType                  type,
   g_signal_connect (impl->recent_view, "drag_data_get",
 		    G_CALLBACK (recent_view_drag_data_get_cb), impl);
 
-  g_object_set_data (G_OBJECT (impl->recent_view), "GtkRecentChooserDefault", impl);
+  g_object_set_data (G_OBJECT (impl->recent_view),
+                     "GtkRecentChooserDefault", impl);
   
   gtk_container_add (GTK_CONTAINER (scrollw), impl->recent_view);
   gtk_widget_show (impl->recent_view);
@@ -587,15 +591,19 @@ gtk_recent_chooser_default_get_property (GObject    *object,
 }
 
 static void
-gtk_recent_chooser_default_finalize (GObject *object)
+gtk_recent_chooser_default_dispose (GObject *object)
 {
   GtkRecentChooserDefault *impl = GTK_RECENT_CHOOSER_DEFAULT (object);
 
+  if (impl->load_id)
+    {
+      g_source_remove (impl->load_id);
+      impl->load_id = 0;
+    }
+
   if (impl->recent_items)
     {
-      g_list_foreach (impl->recent_items,
-		      (GFunc) gtk_recent_info_unref,
-		      NULL);
+      g_list_foreach (impl->recent_items, (GFunc) gtk_recent_info_unref, NULL);
       g_list_free (impl->recent_items);
       impl->recent_items = NULL;
     }
@@ -606,36 +614,55 @@ gtk_recent_chooser_default_finalize (GObject *object)
       impl->manager_changed_id = 0;
     }
 
+  if (impl->filters)
+    {
+      g_slist_foreach (impl->filters, (GFunc) g_object_unref, NULL);
+      g_slist_free (impl->filters);
+      impl->filters = NULL;
+    }
+  
+  if (impl->current_filter)
+    {
+      g_object_unref (impl->current_filter);
+      impl->current_filter = NULL;
+    }
+
+  if (impl->recent_store_filter)
+    {
+      g_object_unref (impl->recent_store_filter);
+      impl->recent_store_filter = NULL;
+    }
+
+  if (impl->recent_store)
+    {
+      g_object_unref (impl->recent_store);
+      impl->recent_store = NULL;
+    }
+
+  if (impl->tooltips)
+    {
+      g_object_unref (impl->tooltips);
+      impl->tooltips = NULL;
+    }
+
+  G_OBJECT_CLASS (_gtk_recent_chooser_default_parent_class)->dispose (object);
+}
+
+static void
+gtk_recent_chooser_default_finalize (GObject *object)
+{
+  GtkRecentChooserDefault *impl = GTK_RECENT_CHOOSER_DEFAULT (object);
+
   impl->manager = NULL; 
   
   if (impl->sort_data_destroy)
     {
       impl->sort_data_destroy (impl->sort_data);
-      
       impl->sort_data_destroy = NULL;
-      impl->sort_data = NULL;
-      impl->sort_func = NULL;
-    }
-    
-  if (impl->filters)
-    {
-      g_slist_foreach (impl->filters,
-      		       (GFunc) g_object_unref,
-      		       NULL);
-      g_slist_free (impl->filters);    
     }
   
-  if (impl->current_filter)
-    g_object_unref (impl->current_filter);
-
-  if (impl->recent_store_filter)
-    g_object_unref (impl->recent_store_filter);
-
-  if (impl->recent_store)
-    g_object_unref (impl->recent_store);
-
-  if (impl->tooltips)
-    g_object_unref (impl->tooltips);
+  impl->sort_data = NULL;
+  impl->sort_func = NULL;
   
   G_OBJECT_CLASS (_gtk_recent_chooser_default_parent_class)->finalize (object);
 }
@@ -879,9 +906,9 @@ reload_recent_items (GtkRecentChooserDefault *impl)
 
   impl->load_state = LOAD_EMPTY;
   impl->load_id = gdk_threads_add_idle_full (G_PRIORITY_HIGH_IDLE + 30,
-		      		   load_recent_items,
-				   impl,
-				   cleanup_after_load);
+                                             load_recent_items,
+                                             impl,
+                                             cleanup_after_load);
 }
 
 /* taken form gtkfilechooserdialog.c */
@@ -1209,11 +1236,11 @@ gtk_recent_chooser_default_set_sort_func (GtkRecentChooser  *chooser,
   if (impl->sort_data_destroy)
     {
       impl->sort_data_destroy (impl->sort_data);
-      
-      impl->sort_func = NULL;
-      impl->sort_data = NULL;
       impl->sort_data_destroy = NULL;
     }
+      
+  impl->sort_func = NULL;
+  impl->sort_data = NULL;
   
   if (sort_func)
     {
@@ -1223,129 +1250,22 @@ gtk_recent_chooser_default_set_sort_func (GtkRecentChooser  *chooser,
     }
 }
 
-static gint
-sort_recent_items_mru (GtkRecentInfo *a,
-		       GtkRecentInfo *b,
-		       gpointer       unused)
-{
-  g_assert (a != NULL && b != NULL);
-  
-  return (gtk_recent_info_get_modified (a) < gtk_recent_info_get_modified (b));
-}
-
-static gint
-sort_recent_items_lru (GtkRecentInfo *a,
-		       GtkRecentInfo *b,
-		       gpointer       unused)
-{
-  g_assert (a != NULL && b != NULL);
-  
-  return (gtk_recent_info_get_modified (a) > gtk_recent_info_get_modified (b));
-}
-
-/* our proxy sorting function */
-static gint
-sort_recent_items_proxy (gpointer *a,
-			 gpointer *b,
-			 gpointer  user_data)
-{
-  GtkRecentInfo *info_a = (GtkRecentInfo *) a;
-  GtkRecentInfo *info_b = (GtkRecentInfo *) b;
-  GtkRecentChooserDefault *impl = GTK_RECENT_CHOOSER_DEFAULT (user_data);
-
-  if (impl->sort_func)
-    return (* impl->sort_func) (info_a,
-    				info_b,
-      				impl->sort_data);
-  
-  /* fallback */
-  return 0;
-}
-
-static void
-chooser_set_sort_type (GtkRecentChooserDefault *impl,
-		       GtkRecentSortType        sort_type)
-{
-  if (impl->sort_type == sort_type)
-    return;
-
-  impl->sort_type = sort_type;
-}
-
 static GList *
 gtk_recent_chooser_default_get_items (GtkRecentChooser *chooser)
 {
   GtkRecentChooserDefault *impl;
-  gint limit;
-  GtkRecentSortType sort_type;
-  GList *items;
-  GCompareDataFunc compare_func;
-  gint length;
-  
+
   impl = GTK_RECENT_CHOOSER_DEFAULT (chooser);
-  
-  if (!impl->manager)
-    return NULL;
 
-  items = gtk_recent_manager_get_items (impl->manager);
-  if (!items)
-    return NULL;
- 
-  limit = gtk_recent_chooser_get_limit (chooser);
-  if (limit == 0)
-    return NULL;
-
-  sort_type = gtk_recent_chooser_get_sort_type (chooser);
-  switch (sort_type)
-    {
-    case GTK_RECENT_SORT_NONE:
-      compare_func = NULL;
-      break;
-    case GTK_RECENT_SORT_MRU:
-      compare_func = (GCompareDataFunc) sort_recent_items_mru;
-      break;
-    case GTK_RECENT_SORT_LRU:
-      compare_func = (GCompareDataFunc) sort_recent_items_lru;
-      break;
-    case GTK_RECENT_SORT_CUSTOM:
-      compare_func = (GCompareDataFunc) sort_recent_items_proxy;
-      break;
-    default:
-      g_assert_not_reached ();
-      break;
-    }
-  
-  /* sort the items; the filtering will be dealt with using
-   * the treeview's own filter object
-   */
-  if (compare_func)
-    items = g_list_sort_with_data (items, compare_func, impl);
-  
-  length = g_list_length (items);
-  if ((limit != -1) && (length > limit))
-    {
-      GList *clamp, *l;
-      
-      clamp = g_list_nth (items, limit - 1);
-      if (!clamp)
-        return items;
-      
-      l = clamp->next;
-      clamp->next = NULL;
-    
-      g_list_foreach (l, (GFunc) gtk_recent_info_unref, NULL);
-      g_list_free (l);
-    }
-  
-  return items;
+  return _gtk_recent_chooser_get_items (chooser,
+                                        impl->sort_func,
+                                        impl->sort_data);
 }
 
 static GtkRecentManager *
 gtk_recent_chooser_default_get_recent_manager (GtkRecentChooser *chooser)
 {
-  GtkRecentChooserDefault *impl = GTK_RECENT_CHOOSER_DEFAULT (chooser);
-  
-  return impl->manager;
+  return GTK_RECENT_CHOOSER_DEFAULT (chooser)->manager;
 }
 
 static void
@@ -1565,6 +1485,19 @@ set_current_filter (GtkRecentChooserDefault *impl,
       g_object_notify (G_OBJECT (impl), "filter");
     }
 }
+
+static void
+chooser_set_sort_type (GtkRecentChooserDefault *impl,
+		       GtkRecentSortType        sort_type)
+{
+  if (impl->sort_type == sort_type)
+    return;
+
+  impl->sort_type = sort_type;
+  
+  reload_recent_items (impl);
+}
+
 
 static GtkIconTheme *
 get_icon_theme_for_widget (GtkWidget *widget)
