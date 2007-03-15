@@ -51,7 +51,6 @@
 
 2007-03-15  Emmanuele Bassi  <ebassi@gnome.org>
 
->>>>>>> .r17523
 	* gtk/gtkrecentchooserprivate.h:
 	* gtk/gtkrecentchooserutils.c: Move filtering of the recent
 	files list into the shared implementation; do the filtering
