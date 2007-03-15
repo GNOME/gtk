@@ -635,9 +635,9 @@ gtk_recent_manager_new (void)
  * gtk_recent_manager_get_for_screen().
  *
  * Return value: A unique #GtkRecentManager associated with the
- *   default screen. This recent manager is associated to the
+ *   default screen. This recent manager is associated with the
  *   screen and can be used as long as the screen is open.
- *   Do no ref or unref it.
+ *   Do not ref or unref it.
  *
  * Since: 2.10
  */

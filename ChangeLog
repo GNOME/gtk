@@ -2,6 +2,13 @@
 
 	Merge from trunk:
 
+	* gtk/gtkrecentmanager.c: Fix documentation errors. (Morten
+	Welinder)
+
+2007-03-15  Emmanuele Bassi  <ebassi@gnome.org>
+
+	Merge from trunk:
+
 	* gtk/gtkrecentchooserprivate.h:
 	* gtk/gtkrecentchooserutils.c: Share between the widgets
 	the recent chooser function for getting the filtered, sorted
