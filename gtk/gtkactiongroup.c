@@ -913,7 +913,7 @@ gtk_action_group_add_toggle_actions_full (GtkActionGroup             *action_gro
       g_object_unref (action);
     }
 
-    shared_data_unref (shared_data);
+  shared_data_unref (shared_data);
 }
 
 /**

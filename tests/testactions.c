@@ -56,6 +56,19 @@ radio_action (GtkAction *action)
 }
 
 static void
+recent_action (GtkAction *action)
+{
+  const gchar *name = gtk_action_get_name (action);
+  const gchar *typename = G_OBJECT_TYPE_NAME (action);
+  gchar *uri = gtk_recent_chooser_get_current_uri (GTK_RECENT_CHOOSER (action));
+
+  g_message ("Action %s (type=%s) activated (uri=%s)",
+             name, typename,
+             uri ? uri : "no item selected");
+  g_free (uri);
+}
+
+static void
 toggle_cnp_actions (GtkAction *action)
 {
   gboolean sensitive;
@@ -181,46 +194,49 @@ static const gchar *ui_info =
 "      <menuitem name=\"bold1\" action=\"bold\" />\n"
 "      <menuitem name=\"bold2\" action=\"bold\" />\n"
 "      <separator name=\"sep2\" />\n"
-"      <menuitem name=\"toggle-cnp\" action=\"toggle-cnp\" />\n"
+"      <menuitem name=\"recent\" action=\"recent\" />\n"
 "      <separator name=\"sep3\" />\n"
+"      <menuitem name=\"toggle-cnp\" action=\"toggle-cnp\" />\n"
+"      <separator name=\"sep4\" />\n"
 "      <menuitem name=\"quit\" action=\"quit\" />\n"
 "    </menu>\n"
 "    <menu name=\"Menu _2\" action=\"Menu2Action\">\n"
 "      <menuitem name=\"cut\" action=\"cut\" />\n"
 "      <menuitem name=\"copy\" action=\"copy\" />\n"
 "      <menuitem name=\"paste\" action=\"paste\" />\n"
-"      <separator name=\"sep4\"/>\n"
-"      <menuitem name=\"bold\" action=\"bold\" />\n"
 "      <separator name=\"sep5\"/>\n"
+"      <menuitem name=\"bold\" action=\"bold\" />\n"
+"      <separator name=\"sep6\"/>\n"
 "      <menuitem name=\"justify-left\" action=\"justify-left\" />\n"
 "      <menuitem name=\"justify-center\" action=\"justify-center\" />\n"
 "      <menuitem name=\"justify-right\" action=\"justify-right\" />\n"
 "      <menuitem name=\"justify-fill\" action=\"justify-fill\" />\n"
-"      <separator name=\"sep6\"/>\n"
-"      <menuitem  name=\"customise-accels\" action=\"customise-accels\" />\n"
 "      <separator name=\"sep7\"/>\n"
+"      <menuitem  name=\"customise-accels\" action=\"customise-accels\" />\n"
+"      <separator name=\"sep8\"/>\n"
 "      <menuitem action=\"toolbar-icons\" />\n"
 "      <menuitem action=\"toolbar-text\" />\n"
 "      <menuitem action=\"toolbar-both\" />\n"
 "      <menuitem action=\"toolbar-both-horiz\" />\n"
-"      <separator name=\"sep8\"/>\n"
+"      <separator name=\"sep9\"/>\n"
 "      <menuitem action=\"toolbar-small-icons\" />\n"
 "      <menuitem action=\"toolbar-large-icons\" />\n"
 "    </menu>\n"
-  "    <menu name=\"DynamicMenu\" action=\"Menu3Action\" />\n"
+"    <menu name=\"DynamicMenu\" action=\"Menu3Action\" />\n"
 "  </menubar>\n"
 "  <toolbar name=\"toolbar\">\n"
 "    <toolitem name=\"cut\" action=\"cut\" />\n"
 "    <toolitem name=\"copy\" action=\"copy\" />\n"
 "    <toolitem name=\"paste\" action=\"paste\" />\n"
-"    <separator name=\"sep9\" />\n"
-"    <toolitem name=\"bold\" action=\"bold\" />\n"
+"    <toolitem name=\"recent\" action=\"recent\" />\n"
 "    <separator name=\"sep10\" />\n"
+"    <toolitem name=\"bold\" action=\"bold\" />\n"
+"    <separator name=\"sep11\" />\n"
 "    <toolitem name=\"justify-left\" action=\"justify-left\" />\n"
 "    <toolitem name=\"justify-center\" action=\"justify-center\" />\n"
 "    <toolitem name=\"justify-right\" action=\"justify-right\" />\n"
 "    <toolitem name=\"justify-fill\" action=\"justify-fill\" />\n"
-"    <separator name=\"sep11\"/>\n"
+"    <separator name=\"sep12\"/>\n"
 "    <toolitem name=\"quit\" action=\"quit\" />\n"
 "  </toolbar>\n"
 "  <popup name=\"popup\">\n"
@@ -383,10 +399,22 @@ create_window (GtkActionGroup *action_group)
 int
 main (int argc, char **argv)
 {
+  GtkAction *action;
+
   gtk_init (&argc, &argv);
 
   if (g_file_test ("accels", G_FILE_TEST_IS_REGULAR))
     gtk_accel_map_load ("accels");
+
+  action = gtk_recent_action_new ("recent",
+                                  "Open Recent", "Open recent files",
+                                  NULL);
+  g_signal_connect (action, "item-activated",
+                    G_CALLBACK (recent_action),
+                    NULL);
+  g_signal_connect (action, "activate",
+                    G_CALLBACK (recent_action),
+                    NULL);
 
   action_group = gtk_action_group_new ("TestActions");
   gtk_action_group_add_actions (action_group, 
@@ -403,6 +431,7 @@ main (int argc, char **argv)
 				      toolbar_entries, n_toolbar_entries, 
 				      GTK_TOOLBAR_BOTH,
 				      G_CALLBACK (radio_action), NULL);
+  gtk_action_group_add_action_with_accel (action_group, action, NULL);
 
   create_window (action_group);
 
@@ -422,7 +451,8 @@ main (int argc, char **argv)
       }
   }
 #endif
-
+  
+  g_object_unref (action);
   g_object_unref (action_group);
 
   gtk_accel_map_save ("accels");

@@ -250,6 +250,7 @@ gtk_public_h_sources =          \
 	gtkradiotoolbutton.h	\
 	gtkrange.h		\
 	gtkrc.h			\
+	gtkrecentaction.h	\
 	gtkrecentchooser.h 	\
 	gtkrecentchooserdialog.h \
 	gtkrecentchoosermenu.h 	\
@@ -509,6 +510,7 @@ gtk_base_c_sources =            \
 	gtkrange.c		\
 	gtkrbtree.c 		\
 	gtkrc.c			\
+	gtkrecentaction.c	\
 	gtkrecentchooserdefault.c \
 	gtkrecentchooserdialog.c \
 	gtkrecentchoosermenu.c 	\

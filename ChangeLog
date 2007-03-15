@@ -1,3 +1,23 @@
+2007-03-15  Emmanuele Bassi  <ebassi@gnome.org>
+
+	* gtk/gtkaction.[ch]: Add GtkActionClass::get_submenu() vfunc:
+	actions providing a menu item or a menu tool button with already
+	a submenu should return the GtkMenu widget.
+
+	* gtk/gtkuimanager.c (update_node): If an action provides its
+	own submenu, use it instead of adding an empty one
+
+	* gtk/gtkrecentaction.[ch]: Add GtkRecentAction, an action
+	implementing the GtkRecentChooser interface for displaying the
+	list of recently used files into menus and toolbars generated
+	using GtkUIManager. (#338843)
+
+	* gtk/Makefile.am:
+	* gtk/gtk.h:
+	* gtk/gtk.symbols: Add GtkRecentAction API to the build.
+
+	* tests/testactions.c: Exercise the GtkRecentAction API.
+
 2007-03-15  Chris Wilson  <chris@chris-wilson.co.uk>
 
 	* gtk/gtkicontheme.c (ensure_valid_themes), (rescan_themes),
@@ -25,6 +45,7 @@
 
 2007-03-15  Emmanuele Bassi  <ebassi@gnome.org>
 
+>>>>>>> .r17523
 	* gtk/gtkrecentchooserprivate.h:
 	* gtk/gtkrecentchooserutils.c: Move filtering of the recent
 	files list into the shared implementation; do the filtering

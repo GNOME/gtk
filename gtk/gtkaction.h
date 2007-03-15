@@ -73,8 +73,9 @@ struct _GtkActionClass
   void       (* disconnect_proxy)   (GtkAction *action,
 				     GtkWidget *proxy);
 
+  GtkWidget *(* get_submenu)        (GtkAction *action);
+
   /* Padding for future expansion */
-  void (*_gtk_reserved1) (void);
   void (*_gtk_reserved2) (void);
   void (*_gtk_reserved3) (void);
   void (*_gtk_reserved4) (void);
@@ -109,6 +110,7 @@ void         gtk_action_connect_accelerator    (GtkAction     *action);
 void         gtk_action_disconnect_accelerator (GtkAction     *action);
 G_CONST_RETURN gchar *gtk_action_get_accel_path (GtkAction     *action);
 GClosure    *gtk_action_get_accel_closure      (GtkAction     *action);
+GtkWidget *  gtk_action_get_submenu            (GtkAction     *action);
 
 /* protected ... for use by child actions */
 void         gtk_action_block_activate_from    (GtkAction     *action,

@@ -3030,6 +3030,16 @@ gtk_rc_style_unref
 #endif
 #endif
 
+#if IN_HEADER(__GTK_RECENT_ACTION_H__)
+#if IN_FILE(__GTK_RECENT_ACTION_C__)
+gtk_recent_action_get_type G_GNUC_CONST
+gtk_recent_action_new
+gtk_recent_action_new_for_manager
+gtk_recent_action_set_show_numbers
+gtk_recent_action_get_show_numbers
+#endif
+#endif
+
 #if IN_HEADER(__GTK_RECENT_CHOOSER_H__)
 #if IN_FILE(__GTK_RECENT_CHOOSER_C__)
 gtk_recent_chooser_set_show_private

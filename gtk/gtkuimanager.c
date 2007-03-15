@@ -2204,8 +2204,9 @@ update_node (GtkUIManager *self,
     case NODE_TYPE_MENU:
       {
 	GtkWidget *prev_submenu = NULL;
-	GtkWidget *menu;
+	GtkWidget *menu = NULL;
 	GList *siblings;
+
 	/* remove the proxy if it is of the wrong type ... */
 	if (info->proxy &&  
 	    G_OBJECT_TYPE (info->proxy) != GTK_ACTION_GET_CLASS (action)->menu_item_type)
@@ -2226,26 +2227,39 @@ update_node (GtkUIManager *self,
 	    g_object_unref (info->proxy);
 	    info->proxy = NULL;
 	  }
+
 	/* create proxy if needed ... */
 	if (info->proxy == NULL)
 	  {
-	    GtkWidget *tearoff;
-	    GtkWidget *filler;
+            /* ... if the action already provides a menu, then use
+             * that menu instead of creating an empty one
+             */
+            if (NODE_INFO (node->parent)->type == NODE_TYPE_TOOLITEM &&
+                GTK_ACTION_GET_CLASS (action)->get_submenu)
+              {
+                menu = gtk_action_get_submenu (action);
+              }
+
+            if (!menu)
+              {
+                GtkWidget *tearoff;
+                GtkWidget *filler;
 	    
-	    menu = gtk_menu_new ();
-	    gtk_widget_set_name (menu, info->name);
-	    tearoff = gtk_tearoff_menu_item_new ();
-	    gtk_widget_set_no_show_all (tearoff, TRUE);
-	    gtk_menu_shell_append (GTK_MENU_SHELL (menu), tearoff);
-	    filler = gtk_menu_item_new_with_label (_("Empty"));
-	    g_object_set_data (G_OBJECT (filler),
-			       I_("gtk-empty-menu-item"),
-			       GINT_TO_POINTER (TRUE));
-	    gtk_widget_set_sensitive (filler, FALSE);
-	    gtk_widget_set_no_show_all (filler, TRUE);
-	    gtk_menu_shell_append (GTK_MENU_SHELL (menu), filler);
+                menu = gtk_menu_new ();
+                gtk_widget_set_name (menu, info->name);
+                tearoff = gtk_tearoff_menu_item_new ();
+                gtk_widget_set_no_show_all (tearoff, TRUE);
+                gtk_menu_shell_append (GTK_MENU_SHELL (menu), tearoff);
+                filler = gtk_menu_item_new_with_label (_("Empty"));
+                g_object_set_data (G_OBJECT (filler),
+                                   I_("gtk-empty-menu-item"),
+                                   GINT_TO_POINTER (TRUE));
+                gtk_widget_set_sensitive (filler, FALSE);
+                gtk_widget_set_no_show_all (filler, TRUE);
+                gtk_menu_shell_append (GTK_MENU_SHELL (menu), filler);
+              }
 	    
-	    if (NODE_INFO (node->parent)->type == NODE_TYPE_TOOLITEM)
+            if (NODE_INFO (node->parent)->type == NODE_TYPE_TOOLITEM)
 	      {
 		info->proxy = menu;
 		g_object_ref_sink (info->proxy);
@@ -2284,6 +2298,7 @@ update_node (GtkUIManager *self,
 	  menu = info->proxy;
 	else
 	  menu = gtk_menu_item_get_submenu (GTK_MENU_ITEM (info->proxy));
+
 	siblings = gtk_container_get_children (GTK_CONTAINER (menu));
 	if (siblings != NULL && GTK_IS_TEAROFF_MENU_ITEM (siblings->data))
 	  {
