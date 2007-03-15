@@ -1,3 +1,20 @@
+2007-03-15  Emmanuele Bassi  <ebassi@gnome.org>
+
+	* gtk/gtkrecentchooserprivate.h:
+	* gtk/gtkrecentchooserutils.c: Move filtering of the recent
+	files list into the shared implementation; do the filtering
+	before the sorting, so that we always clamp on the desired
+	size. (#418219)
+
+	* gtk/gtkrecentchoosermenu.c: Remove the filtering of the
+	list, as it's already been done.
+
+	* gtk/gtkrecentchooserdefault.c: Ditto; also remove the
+	GtkTreeModelFilter: just reload the view if the sorting and
+	filtering properties change.
+
+	* gtk/testrecentchoosermenu.c: Exercise the limit property.
+
 2007-03-14  Michael Natterer  <mitch@imendio.com>
 
 	Make gtk_widget_set_extension_events() work on already realized

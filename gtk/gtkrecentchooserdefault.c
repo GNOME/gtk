@@ -115,7 +115,6 @@ struct _GtkRecentChooserDefault
   
   GtkWidget *recent_view;
   GtkListStore *recent_store;
-  GtkTreeModel *recent_store_filter;
   GtkTreeViewColumn *icon_column;
   GtkTreeViewColumn *meta_column;
   GtkCellRenderer *meta_renderer;
@@ -233,10 +232,6 @@ static void set_recent_manager (GtkRecentChooserDefault *impl,
 
 static void chooser_set_sort_type (GtkRecentChooserDefault *impl,
 				   GtkRecentSortType        sort_type);
-
-static gboolean recent_store_filter_func (GtkTreeModel *model,
-					  GtkTreeIter  *iter,
-					  gpointer      user_data);
 
 static void recent_manager_changed_cb (GtkRecentManager  *manager,
 			               gpointer           user_data);
@@ -491,10 +486,6 @@ gtk_recent_chooser_default_set_property (GObject      *object,
       break;
     case GTK_RECENT_CHOOSER_PROP_SHOW_PRIVATE:
       impl->show_private = g_value_get_boolean (value);
-      
-      if (impl->recent_store && impl->recent_store_filter)
-        gtk_tree_model_filter_refilter (GTK_TREE_MODEL_FILTER (impl->recent_store_filter));
-
       if (impl->recent_popup_menu_show_private_item)
 	{
           GtkCheckMenuItem *item = GTK_CHECK_MENU_ITEM (impl->recent_popup_menu_show_private_item);
@@ -502,12 +493,11 @@ gtk_recent_chooser_default_set_property (GObject      *object,
           gtk_check_menu_item_set_active (item, impl->show_private);
 	  g_signal_handlers_unblock_by_func (item, G_CALLBACK (show_private_toggled_cb), impl);
         }
+      reload_recent_items (impl);
       break;
     case GTK_RECENT_CHOOSER_PROP_SHOW_NOT_FOUND:
       impl->show_not_found = g_value_get_boolean (value);
-      
-      if (impl->recent_store && impl->recent_store_filter)
-        gtk_tree_model_filter_refilter (GTK_TREE_MODEL_FILTER (impl->recent_store_filter));
+      reload_recent_items (impl);
       break;
     case GTK_RECENT_CHOOSER_PROP_SHOW_TIPS:
       impl->show_tips = g_value_get_boolean (value);
@@ -531,9 +521,11 @@ gtk_recent_chooser_default_set_property (GObject      *object,
       break;
     case GTK_RECENT_CHOOSER_PROP_LOCAL_ONLY:
       impl->local_only = g_value_get_boolean (value);
+      reload_recent_items (impl);
       break;
     case GTK_RECENT_CHOOSER_PROP_LIMIT:
       impl->limit = g_value_get_int (value);
+      reload_recent_items (impl);
       break;
     case GTK_RECENT_CHOOSER_PROP_SORT_TYPE:
       chooser_set_sort_type (impl, g_value_get_enum (value));
@@ -625,12 +617,6 @@ gtk_recent_chooser_default_dispose (GObject *object)
     {
       g_object_unref (impl->current_filter);
       impl->current_filter = NULL;
-    }
-
-  if (impl->recent_store_filter)
-    {
-      g_object_unref (impl->recent_store_filter);
-      impl->recent_store_filter = NULL;
     }
 
   if (impl->recent_store)
@@ -753,17 +739,10 @@ static void
 chooser_set_model (GtkRecentChooserDefault *impl)
 {
   g_assert (impl->recent_store != NULL);
-  g_assert (impl->recent_store_filter == NULL);
   g_assert (impl->load_state == LOAD_LOADING);
-  
-  impl->recent_store_filter = gtk_tree_model_filter_new (GTK_TREE_MODEL (impl->recent_store), NULL);
-  gtk_tree_model_filter_set_visible_func (GTK_TREE_MODEL_FILTER (impl->recent_store_filter),
-		  			  recent_store_filter_func,
-					  impl,
-					  NULL);
-  
+
   gtk_tree_view_set_model (GTK_TREE_VIEW (impl->recent_view),
-      			   impl->recent_store_filter);
+                           GTK_TREE_MODEL (impl->recent_store));
   gtk_tree_view_columns_autosize (GTK_TREE_VIEW (impl->recent_view));
   gtk_tree_view_set_enable_search (GTK_TREE_VIEW (impl->recent_view), TRUE);
   gtk_tree_view_set_search_column (GTK_TREE_VIEW (impl->recent_view),
@@ -836,13 +815,7 @@ load_recent_items (gpointer user_data)
       impl->recent_items = NULL;
       impl->n_recent_items = 0;
       impl->loaded_items = 0;
-      
-      if (impl->recent_store_filter)
-        {
-          g_object_unref (impl->recent_store_filter);
-	  impl->recent_store_filter = NULL;
-	}
-      
+
       /* load the filled up model */
       chooser_set_model (impl);
 
@@ -1258,6 +1231,7 @@ gtk_recent_chooser_default_get_items (GtkRecentChooser *chooser)
   impl = GTK_RECENT_CHOOSER_DEFAULT (chooser);
 
   return _gtk_recent_chooser_get_items (chooser,
+                                        impl->current_filter,
                                         impl->sort_func,
                                         impl->sort_data);
 }
@@ -1354,103 +1328,6 @@ gtk_recent_chooser_default_list_filters (GtkRecentChooser *chooser)
   return g_slist_copy (impl->filters);
 }
 
-static gboolean
-get_is_recent_filtered (GtkRecentChooserDefault *impl,
-			GtkRecentInfo           *info)
-{
-  GtkRecentFilter *current_filter;
-  GtkRecentFilterInfo filter_info;
-  GtkRecentFilterFlags needed;
-  gboolean retval;
-
-  g_assert (info != NULL);
-  
-  if (!impl->current_filter)
-    return FALSE;
-  
-  current_filter = impl->current_filter;
-  needed = gtk_recent_filter_get_needed (current_filter);
-  
-  filter_info.contains = GTK_RECENT_FILTER_URI | GTK_RECENT_FILTER_MIME_TYPE;
-  
-  filter_info.uri = gtk_recent_info_get_uri (info);
-  filter_info.mime_type = gtk_recent_info_get_mime_type (info);
-  
-  if (needed & GTK_RECENT_FILTER_DISPLAY_NAME)
-    {
-      filter_info.display_name = gtk_recent_info_get_display_name (info);
-      filter_info.contains |= GTK_RECENT_FILTER_DISPLAY_NAME;
-    }
-  else
-    filter_info.uri = NULL;
-  
-  if (needed & GTK_RECENT_FILTER_APPLICATION)
-    {
-      filter_info.applications = (const gchar **) gtk_recent_info_get_applications (info, NULL);
-      filter_info.contains |= GTK_RECENT_FILTER_APPLICATION;
-    }
-  else
-    filter_info.applications = NULL;
-
-  if (needed & GTK_RECENT_FILTER_GROUP)
-    {
-      filter_info.groups = (const gchar **) gtk_recent_info_get_groups (info, NULL);
-      filter_info.contains |= GTK_RECENT_FILTER_GROUP;
-    }
-  else
-    filter_info.groups = NULL;
-
-  if (needed & GTK_RECENT_FILTER_AGE)
-    {
-      filter_info.age = gtk_recent_info_get_age (info);
-      filter_info.contains |= GTK_RECENT_FILTER_AGE;
-    }
-  else
-    filter_info.age = -1;
-  
-  retval = gtk_recent_filter_filter (current_filter, &filter_info);
-  
-  /* this we own */
-  if (filter_info.applications)
-    g_strfreev ((gchar **) filter_info.applications);
-  if (filter_info.groups)
-    g_strfreev ((gchar **) filter_info.groups);
-  
-  return !retval;
-}
-
-static gboolean
-recent_store_filter_func (GtkTreeModel *model,
-                          GtkTreeIter  *iter,
-                          gpointer      user_data)
-{
-  GtkRecentChooserDefault *impl = GTK_RECENT_CHOOSER_DEFAULT (user_data);
-  GtkRecentInfo *info = NULL;
-
-  if (!impl->current_filter)
-    return TRUE;
-  
-  gtk_tree_model_get (model, iter,
-                      RECENT_INFO_COLUMN, &info,
-                      -1);
-  if (!info)
-    return TRUE;
-    
-  if (get_is_recent_filtered (impl, info))
-    return FALSE;
-  
-  if (impl->local_only && !gtk_recent_info_is_local (info))
-    return FALSE;
-  
-  if ((!impl->show_private) && gtk_recent_info_get_private_hint (info))
-    return FALSE;
-  
-  if ((!impl->show_not_found) && !gtk_recent_info_exists (info))
-    return FALSE;
-      
-  return TRUE;
-}
-
 static void
 set_current_filter (GtkRecentChooserDefault *impl,
 		    GtkRecentFilter         *filter)
@@ -1477,11 +1354,9 @@ set_current_filter (GtkRecentChooserDefault *impl,
         gtk_combo_box_set_active (GTK_COMBO_BOX (impl->filter_combo),
                                   filter_idx);
       
-      if (impl->recent_store && impl->recent_store_filter)
-        {
-          gtk_tree_model_filter_refilter (GTK_TREE_MODEL_FILTER (impl->recent_store_filter));
-        }
-      
+      if (impl->recent_store)
+        reload_recent_items (impl);
+
       g_object_notify (G_OBJECT (impl), "filter");
     }
 }
@@ -1490,12 +1365,13 @@ static void
 chooser_set_sort_type (GtkRecentChooserDefault *impl,
 		       GtkRecentSortType        sort_type)
 {
-  if (impl->sort_type == sort_type)
-    return;
+  if (impl->sort_type != sort_type)
+    {
+      impl->sort_type = sort_type;
+      reload_recent_items (impl);
 
-  impl->sort_type = sort_type;
-  
-  reload_recent_items (impl);
+      g_object_notify (G_OBJECT (impl), "sort-type");
+    }
 }
 
 

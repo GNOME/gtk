@@ -32,6 +32,7 @@ G_BEGIN_DECLS
 
 GtkRecentManager *_gtk_recent_chooser_get_recent_manager (GtkRecentChooser  *chooser);
 GList *           _gtk_recent_chooser_get_items          (GtkRecentChooser  *chooser,
+                                                          GtkRecentFilter   *filter,
                                                           GtkRecentSortFunc  func,
                                                           gpointer           data);
 

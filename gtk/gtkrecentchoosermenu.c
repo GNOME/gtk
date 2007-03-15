@@ -625,6 +625,7 @@ gtk_recent_chooser_menu_get_items (GtkRecentChooser *chooser)
   GtkRecentChooserMenuPrivate *priv = menu->priv;
 
   return _gtk_recent_chooser_get_items (chooser,
+                                        priv->current_filter,
                                         priv->sort_func,
                                         priv->sort_data);
 }
@@ -697,76 +698,10 @@ gtk_recent_chooser_menu_set_current_filter (GtkRecentChooserMenu *menu,
       priv->current_filter = filter;
       g_object_ref_sink (priv->current_filter);
     }
+
+  gtk_recent_chooser_menu_populate (menu);
   
   g_object_notify (G_OBJECT (menu), "filter");
-}
-
-static gboolean
-get_is_recent_filtered (GtkRecentChooserMenu *menu,
-			GtkRecentInfo        *info)
-{
-  GtkRecentChooserMenuPrivate *priv;
-  GtkRecentFilter *current_filter;
-  GtkRecentFilterInfo filter_info;
-  GtkRecentFilterFlags needed;
-  gboolean retval;
-
-  g_assert (info != NULL);
-
-  priv = menu->priv;
-  
-  if (!priv->current_filter)
-    return FALSE;
-  
-  current_filter = priv->current_filter;
-  needed = gtk_recent_filter_get_needed (current_filter);
-  
-  filter_info.contains = GTK_RECENT_FILTER_URI | GTK_RECENT_FILTER_MIME_TYPE;
-  
-  filter_info.uri = gtk_recent_info_get_uri (info);
-  filter_info.mime_type = gtk_recent_info_get_mime_type (info);
-  
-  if (needed & GTK_RECENT_FILTER_DISPLAY_NAME)
-    {
-      filter_info.display_name = gtk_recent_info_get_display_name (info);
-      filter_info.contains |= GTK_RECENT_FILTER_DISPLAY_NAME;
-    }
-  else
-    filter_info.uri = NULL;
-  
-  if (needed & GTK_RECENT_FILTER_APPLICATION)
-    {
-      filter_info.applications = (const gchar **) gtk_recent_info_get_applications (info, NULL);
-      filter_info.contains |= GTK_RECENT_FILTER_APPLICATION;
-    }
-  else
-    filter_info.applications = NULL;
-
-  if (needed & GTK_RECENT_FILTER_GROUP)
-    {
-      filter_info.groups = (const gchar **) gtk_recent_info_get_groups (info, NULL);
-      filter_info.contains |= GTK_RECENT_FILTER_GROUP;
-    }
-  else
-    filter_info.groups = NULL;
-  
-  if (needed & GTK_RECENT_FILTER_AGE)
-    {
-      filter_info.age = gtk_recent_info_get_age (info);
-      filter_info.contains |= GTK_RECENT_FILTER_AGE;
-    }
-  else
-    filter_info.age = -1;
-  
-  retval = gtk_recent_filter_filter (current_filter, &filter_info);
-  
-  /* this we own */
-  if (filter_info.applications)
-    g_strfreev ((gchar **) filter_info.applications);
-  if (filter_info.groups)
-    g_strfreev ((gchar **) filter_info.groups);
-  
-  return !retval;
 }
 
 /* taken from libeel/eel-strings.c */
@@ -1021,33 +956,6 @@ idle_populate_func (gpointer data)
     }
 
   info = g_list_nth_data (pdata->items, pdata->loaded_items);
-
-  /* skip non-local items on request */
-  if (priv->local_only &&
-      !gtk_recent_info_is_local (info))
-    {
-      goto check_and_return;
-    }
-      
-  /* skip private items on request */
-  if (!priv->show_private &&
-      gtk_recent_info_get_private_hint (info))
-    {
-      goto check_and_return;
-    }
-
-  /* skip non-existing items on request */
-  if (!priv->show_not_found &&
-      !gtk_recent_info_exists (info))
-    {
-      goto check_and_return;
-    }
-  /* filter items based on the currently set filter object */
-  if (get_is_recent_filtered (pdata->menu, info))
-    {
-      goto check_and_return;
-    }
-
   item = gtk_recent_chooser_menu_create_item (pdata->menu,
                                               info,
 					      pdata->displayed_items);
