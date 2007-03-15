@@ -1,3 +1,11 @@
+2007-03-15  Emmanuele Bassi  <ebassi@gnome.org>
+
+	Merge from trunk:
+
+	* gtk/gtkrecentmanager.c (gtk_recent_manager_add_item): Remove
+	unused GError; do not allocate GtkRecentData and use a variable
+	on the stack. (#418673, Morten Welinder)
+
 2007-03-15  Chris Wilson  <chris@chris-wilson.co.uk>
 
 	* gtk/gtkicontheme.c (ensure_valid_themes), (rescan_themes),

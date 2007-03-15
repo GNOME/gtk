@@ -836,17 +836,15 @@ gboolean
 gtk_recent_manager_add_item (GtkRecentManager  *manager,
 			     const gchar       *uri)
 {
-  GtkRecentData *recent_data;
-  GError *add_error;
+  GtkRecentData recent_data;
   gboolean retval;
   
   g_return_val_if_fail (GTK_IS_RECENT_MANAGER (manager), FALSE);
   g_return_val_if_fail (uri != NULL, FALSE);
 
-  recent_data = g_slice_new (GtkRecentData);
-  
-  recent_data->display_name = NULL;
-  recent_data->description = NULL;
+  recent_data.display_name = NULL;
+  recent_data.description = NULL;
+  recent_data.mime_type = NULL;
   
 #ifdef G_OS_UNIX
   if (has_case_prefix (uri, "file:/"))
@@ -855,34 +853,33 @@ gtk_recent_manager_add_item (GtkRecentManager  *manager,
       const gchar *mime_type;
       
       filename = g_filename_from_uri (uri, NULL, NULL);
-      mime_type = xdg_mime_get_mime_type_for_file (filename, NULL);
-      if (!mime_type)
-        recent_data->mime_type = g_strdup (GTK_RECENT_DEFAULT_MIME);
-      else
-        recent_data->mime_type = g_strdup (mime_type);
-      
-      g_free (filename);
+      if (filename)
+        {
+          mime_type = xdg_mime_get_mime_type_for_file (filename, NULL);
+          if (mime_type && *mime_type)
+            recent_data.mime_type = g_strdup (mime_type);
+
+          g_free (filename);
+        }
+
+      if (!recent_data.mime_type)
+        recent_data.mime_type = g_strdup (GTK_RECENT_DEFAULT_MIME);
     }
   else
 #endif
-    recent_data->mime_type = g_strdup (GTK_RECENT_DEFAULT_MIME);
+    recent_data.mime_type = g_strdup (GTK_RECENT_DEFAULT_MIME);
   
-  recent_data->app_name = g_strdup (g_get_application_name ());
-  recent_data->app_exec = g_strjoin (" ", g_get_prgname (), "%u", NULL);
+  recent_data.app_name = g_strdup (g_get_application_name ());
+  recent_data.app_exec = g_strjoin (" ", g_get_prgname (), "%u", NULL);
+  recent_data.groups = NULL;
+  recent_data.is_private = FALSE;
   
-  recent_data->groups = NULL;
+  retval = gtk_recent_manager_add_full (manager, uri, &recent_data);
   
-  recent_data->is_private = FALSE;
-  
-  add_error = NULL;
-  retval = gtk_recent_manager_add_full (manager, uri, recent_data);
-  
-  g_free (recent_data->mime_type);
-  g_free (recent_data->app_name);
-  g_free (recent_data->app_exec);
+  g_free (recent_data.mime_type);
+  g_free (recent_data.app_name);
+  g_free (recent_data.app_exec);
 
-  g_slice_free (GtkRecentData, recent_data);
-  
   return retval;
 }
 
