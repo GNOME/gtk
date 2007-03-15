@@ -57,7 +57,6 @@ void   _gtk_recent_chooser_set_delegate        (GtkRecentChooser      *receiver,
 
 GQuark _gtk_recent_chooser_delegate_get_quark  (void) G_GNUC_CONST;
 
-
 G_END_DECLS
 
 #endif /* __GTK_RECENT_CHOOSER_UTILS_H__ */

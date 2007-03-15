@@ -1,3 +1,22 @@
+2007-03-15  Emmanuele Bassi  <ebassi@gnome.org>
+
+	Merge from trunk:
+
+	* gtk/gtkrecentchooserprivate.h:
+	* gtk/gtkrecentchooserutils.c: Share between the widgets
+	the recent chooser function for getting the filtered, sorted
+	and clamped list of recent files from the manager. (#418219)
+
+	* gtk/gtkrecentchoosermenu.c: Use the newly defined
+	_gtk_recent_chooser_get_items() function; remove some
+	pointer indirections.
+
+	* gtk/gtkrecentchooserdefault.c: Reload the items every time
+	a property affecting the view is changed; move the objects
+	unref and the source removal into the dispose function; use
+	the newly defined _gtk_recent_chooser_get_items()
+	function. (see #338843)
+
 2007-03-14  Matthias Clasen  <mclasen@redhat.com>
 	
 	* configure.in: Bump version

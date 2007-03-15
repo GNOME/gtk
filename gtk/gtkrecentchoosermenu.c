@@ -53,6 +53,8 @@
 #include "gtkrecentchooserutils.h"
 #include "gtkrecentchooserprivate.h"
 #include "gtkrecentchoosermenu.h"
+
+#include "gtkprivate.h"
 #include "gtkalias.h"
 
 struct _GtkRecentChooserMenuPrivate
@@ -215,7 +217,7 @@ gtk_recent_chooser_menu_class_init (GtkRecentChooserMenuClass *klass)
 							 P_("Show Numbers"),
 							 P_("Whether the items should be displayed with a number"),
 							 FALSE,
-							 G_PARAM_READWRITE));
+							 GTK_PARAM_READWRITE));
   
   g_type_class_add_private (klass, sizeof (GtkRecentChooserMenuPrivate));
 }
@@ -330,26 +332,27 @@ gtk_recent_chooser_menu_set_property (GObject      *object,
 				      GParamSpec   *pspec)
 {
   GtkRecentChooserMenu *menu = GTK_RECENT_CHOOSER_MENU (object);
+  GtkRecentChooserMenuPrivate *priv = menu->priv;
   
   switch (prop_id)
     {
     case PROP_SHOW_NUMBERS:
-      menu->priv->show_numbers = g_value_get_boolean (value);
+      priv->show_numbers = g_value_get_boolean (value);
       break;
     case GTK_RECENT_CHOOSER_PROP_RECENT_MANAGER:
       set_recent_manager (menu, g_value_get_object (value));
       break;
     case GTK_RECENT_CHOOSER_PROP_SHOW_PRIVATE:
-      menu->priv->show_private = g_value_get_boolean (value);
+      priv->show_private = g_value_get_boolean (value);
       break;
     case GTK_RECENT_CHOOSER_PROP_SHOW_NOT_FOUND:
-      menu->priv->show_not_found = g_value_get_boolean (value);
+      priv->show_not_found = g_value_get_boolean (value);
       break;
     case GTK_RECENT_CHOOSER_PROP_SHOW_TIPS:
       gtk_recent_chooser_menu_set_show_tips (menu, g_value_get_boolean (value));
       break;
     case GTK_RECENT_CHOOSER_PROP_SHOW_ICONS:
-      menu->priv->show_icons = g_value_get_boolean (value);
+      priv->show_icons = g_value_get_boolean (value);
       break;
     case GTK_RECENT_CHOOSER_PROP_SELECT_MULTIPLE:
       g_warning ("%s: Choosers of type `%s' do not support selecting multiple items.",
@@ -357,10 +360,10 @@ gtk_recent_chooser_menu_set_property (GObject      *object,
                  G_OBJECT_TYPE_NAME (object));
       break;
     case GTK_RECENT_CHOOSER_PROP_LOCAL_ONLY:
-      menu->priv->local_only = g_value_get_boolean (value);
+      priv->local_only = g_value_get_boolean (value);
       break;
     case GTK_RECENT_CHOOSER_PROP_LIMIT:
-      menu->priv->limit = g_value_get_int (value);
+      priv->limit = g_value_get_int (value);
       break;
     case GTK_RECENT_CHOOSER_PROP_SORT_TYPE:
       chooser_set_sort_type (menu, g_value_get_enum (value));
@@ -381,32 +384,33 @@ gtk_recent_chooser_menu_get_property (GObject    *object,
 				      GParamSpec *pspec)
 {
   GtkRecentChooserMenu *menu = GTK_RECENT_CHOOSER_MENU (object);
+  GtkRecentChooserMenuPrivate *priv = menu->priv;
   
   switch (prop_id)
     {
     case PROP_SHOW_NUMBERS:
-      g_value_set_boolean (value, menu->priv->show_numbers);
+      g_value_set_boolean (value, priv->show_numbers);
       break;
     case GTK_RECENT_CHOOSER_PROP_SHOW_TIPS:
-      g_value_set_boolean (value, menu->priv->show_tips);
+      g_value_set_boolean (value, priv->show_tips);
       break;
     case GTK_RECENT_CHOOSER_PROP_LIMIT:
-      g_value_set_int (value, menu->priv->limit);
+      g_value_set_int (value, priv->limit);
       break;
     case GTK_RECENT_CHOOSER_PROP_LOCAL_ONLY:
-      g_value_set_boolean (value, menu->priv->local_only);
+      g_value_set_boolean (value, priv->local_only);
       break;
     case GTK_RECENT_CHOOSER_PROP_SORT_TYPE:
-      g_value_set_enum (value, menu->priv->sort_type);
+      g_value_set_enum (value, priv->sort_type);
       break;
     case GTK_RECENT_CHOOSER_PROP_SHOW_PRIVATE:
-      g_value_set_boolean (value, menu->priv->show_private);
+      g_value_set_boolean (value, priv->show_private);
       break;
     case GTK_RECENT_CHOOSER_PROP_SHOW_NOT_FOUND:
-      g_value_set_boolean (value, menu->priv->show_not_found);
+      g_value_set_boolean (value, priv->show_not_found);
       break;
     case GTK_RECENT_CHOOSER_PROP_SHOW_ICONS:
-      g_value_set_boolean (value, menu->priv->show_icons);
+      g_value_set_boolean (value, priv->show_icons);
       break;
     case GTK_RECENT_CHOOSER_PROP_SELECT_MULTIPLE:
       g_warning ("%s: Choosers of type `%s' do not support selecting multiple items.",
@@ -414,7 +418,7 @@ gtk_recent_chooser_menu_get_property (GObject    *object,
                  G_OBJECT_TYPE_NAME (object));
       break;
     case GTK_RECENT_CHOOSER_PROP_FILTER:
-      g_value_set_object (value, menu->priv->current_filter);
+      g_value_set_object (value, priv->current_filter);
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -433,6 +437,7 @@ gtk_recent_chooser_menu_set_current_uri (GtkRecentChooser  *chooser,
   gboolean found = FALSE;
   
   children = gtk_container_get_children (GTK_CONTAINER (menu));
+  
   for (l = children; l != NULL; l = l->next)
     {
       GtkRecentInfo *info;
@@ -565,11 +570,12 @@ gtk_recent_chooser_menu_set_sort_func (GtkRecentChooser  *chooser,
   if (priv->sort_data_destroy)
     {
       priv->sort_data_destroy (priv->sort_data);
-      
-      priv->sort_func = NULL;
-      priv->sort_data = NULL;
       priv->sort_data_destroy = NULL;
     }
+      
+  priv->sort_func = NULL;
+  priv->sort_data = NULL;
+  priv->sort_data_destroy = NULL;
   
   if (sort_func)
     {
@@ -577,45 +583,6 @@ gtk_recent_chooser_menu_set_sort_func (GtkRecentChooser  *chooser,
       priv->sort_data = sort_data;
       priv->sort_data_destroy = data_destroy;
     }
-}
-
-static gint
-sort_recent_items_mru (GtkRecentInfo *a,
-		       GtkRecentInfo *b,
-		       gpointer       unused)
-{
-  g_assert (a != NULL && b != NULL);
-  
-  return (gtk_recent_info_get_modified (a) < gtk_recent_info_get_modified (b));
-}
-
-static gint
-sort_recent_items_lru (GtkRecentInfo *a,
-		       GtkRecentInfo *b,
-		       gpointer       unused)
-{
-  g_assert (a != NULL && b != NULL);
-  
-  return (gtk_recent_info_get_modified (a) > gtk_recent_info_get_modified (b));
-}
-
-/* our proxy sorting function */
-static gint
-sort_recent_items_proxy (gpointer *a,
-			 gpointer *b,
-			 gpointer  user_data)
-{
-  GtkRecentInfo *info_a = (GtkRecentInfo *) a;
-  GtkRecentInfo *info_b = (GtkRecentInfo *) b;
-  GtkRecentChooserMenu *menu = GTK_RECENT_CHOOSER_MENU (user_data);
-
-  if (menu->priv->sort_func)
-    return (* menu->priv->sort_func) (info_a,
-    				      info_b,
-    				      menu->priv->sort_data);
-  
-  /* fallback */
-  return 0;
 }
 
 static void
@@ -633,66 +600,12 @@ static GList *
 gtk_recent_chooser_menu_get_items (GtkRecentChooser *chooser)
 {
   GtkRecentChooserMenu *menu = GTK_RECENT_CHOOSER_MENU (chooser);
-  GtkRecentChooserMenuPrivate *priv;
-  gint limit;
-  GtkRecentSortType sort_type;
-  GList *items;
-  GCompareDataFunc compare_func;
-  gint length;
-  
-  priv = menu->priv;
-  
-  if (!priv->manager)
-    return NULL;
-  
-  limit = gtk_recent_chooser_get_limit (chooser);
-  if (limit == 0)
-    return NULL;
+  GtkRecentChooserMenuPrivate *priv = menu->priv;
 
-  sort_type = gtk_recent_chooser_get_sort_type (chooser);
-  switch (sort_type)
-    {
-    case GTK_RECENT_SORT_NONE:
-      compare_func = NULL;
-      break;
-    case GTK_RECENT_SORT_MRU:
-      compare_func = (GCompareDataFunc) sort_recent_items_mru;
-      break;
-    case GTK_RECENT_SORT_LRU:
-      compare_func = (GCompareDataFunc) sort_recent_items_lru;
-      break;
-    case GTK_RECENT_SORT_CUSTOM:
-      compare_func = (GCompareDataFunc) sort_recent_items_proxy;
-      break;
-    default:
-      g_assert_not_reached ();
-      break;
-    }
-
-  items = gtk_recent_manager_get_items (priv->manager);
-  if (!items)
-    return NULL;
-  
-  if (compare_func)  
-    items = g_list_sort_with_data (items, compare_func, menu);
- 
-  length = g_list_length (items);
-  if ((limit != -1) && (length > limit))
-    {
-      GList *clamp, *l;
-
-      clamp = g_list_nth (items, limit - 1);
-      if (!clamp)
-        return items;
-
-      l = clamp->next;
-      clamp->next = NULL;      
-      
-      g_list_foreach (l, (GFunc) gtk_recent_info_unref, NULL);
-      g_list_free (l);
-    }
-
-  return items;
+  return _gtk_recent_chooser_get_items (chooser,
+                                        priv->current_filter,
+                                        priv->sort_func,
+                                        priv->sort_data);
 }
 
 static GtkRecentManager *
@@ -763,76 +676,10 @@ gtk_recent_chooser_menu_set_current_filter (GtkRecentChooserMenu *menu,
       priv->current_filter = filter;
       g_object_ref_sink (priv->current_filter);
     }
+
+  gtk_recent_chooser_menu_populate (menu);
   
   g_object_notify (G_OBJECT (menu), "filter");
-}
-
-static gboolean
-get_is_recent_filtered (GtkRecentChooserMenu *menu,
-			GtkRecentInfo        *info)
-{
-  GtkRecentChooserMenuPrivate *priv;
-  GtkRecentFilter *current_filter;
-  GtkRecentFilterInfo filter_info;
-  GtkRecentFilterFlags needed;
-  gboolean retval;
-
-  g_assert (info != NULL);
-
-  priv = menu->priv;
-  
-  if (!priv->current_filter)
-    return FALSE;
-  
-  current_filter = priv->current_filter;
-  needed = gtk_recent_filter_get_needed (current_filter);
-  
-  filter_info.contains = GTK_RECENT_FILTER_URI | GTK_RECENT_FILTER_MIME_TYPE;
-  
-  filter_info.uri = gtk_recent_info_get_uri (info);
-  filter_info.mime_type = gtk_recent_info_get_mime_type (info);
-  
-  if (needed & GTK_RECENT_FILTER_DISPLAY_NAME)
-    {
-      filter_info.display_name = gtk_recent_info_get_display_name (info);
-      filter_info.contains |= GTK_RECENT_FILTER_DISPLAY_NAME;
-    }
-  else
-    filter_info.uri = NULL;
-  
-  if (needed & GTK_RECENT_FILTER_APPLICATION)
-    {
-      filter_info.applications = (const gchar **) gtk_recent_info_get_applications (info, NULL);
-      filter_info.contains |= GTK_RECENT_FILTER_APPLICATION;
-    }
-  else
-    filter_info.applications = NULL;
-
-  if (needed & GTK_RECENT_FILTER_GROUP)
-    {
-      filter_info.groups = (const gchar **) gtk_recent_info_get_groups (info, NULL);
-      filter_info.contains |= GTK_RECENT_FILTER_GROUP;
-    }
-  else
-    filter_info.groups = NULL;
-  
-  if (needed & GTK_RECENT_FILTER_AGE)
-    {
-      filter_info.age = gtk_recent_info_get_age (info);
-      filter_info.contains |= GTK_RECENT_FILTER_AGE;
-    }
-  else
-    filter_info.age = -1;
-  
-  retval = gtk_recent_filter_filter (current_filter, &filter_info);
-  
-  /* this we own */
-  if (filter_info.applications)
-    g_strfreev ((gchar **) filter_info.applications);
-  if (filter_info.groups)
-    g_strfreev ((gchar **) filter_info.groups);
-  
-  return !retval;
 }
 
 /* taken from libeel/eel-strings.c */
@@ -944,7 +791,7 @@ gtk_recent_chooser_menu_create_item (GtkRecentChooserMenu *menu,
   g_free (text);
 
   label = GTK_BIN (item)->child;
-  if (label)
+  if (GTK_IS_LABEL (label))
     {
       gtk_label_set_ellipsize (GTK_LABEL (label), PANGO_ELLIPSIZE_END);
       gtk_label_set_max_width_chars (GTK_LABEL (label), priv->label_width);
@@ -1058,33 +905,6 @@ idle_populate_func (gpointer data)
     }
 
   info = g_list_nth_data (pdata->items, pdata->loaded_items);
-
-  /* skip non-local items on request */
-  if (priv->local_only &&
-      !gtk_recent_info_is_local (info))
-    {
-      goto check_and_return;
-    }
-      
-  /* skip private items on request */
-  if (!priv->show_private &&
-      gtk_recent_info_get_private_hint (info))
-    {
-      goto check_and_return;
-    }
-
-  /* skip non-existing items on request */
-  if (!priv->show_not_found &&
-      !gtk_recent_info_exists (info))
-    {
-      goto check_and_return;
-    }
-  /* filter items based on the currently set filter object */
-  if (get_is_recent_filtered (pdata->menu, info))
-    {
-      goto check_and_return;
-    }
-
   item = gtk_recent_chooser_menu_create_item (pdata->menu,
                                               info,
 					      pdata->displayed_items);
@@ -1352,7 +1172,7 @@ gtk_recent_chooser_menu_get_show_numbers (GtkRecentChooserMenu *menu)
  *
  * Sets whether a number should be added to the items of @menu.  The
  * numbers are shown to provide a unique character for a mnemonic to
- * be used inside the menu item's label.  Only the first the items
+ * be used inside ten menu item's label.  Only the first the items
  * get a number to avoid clashes.
  *
  * Since: 2.10

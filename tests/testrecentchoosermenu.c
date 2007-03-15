@@ -59,6 +59,7 @@ create_recent_chooser_menu (void)
   
   menu = gtk_recent_chooser_menu_new_for_manager (manager);
 
+  gtk_recent_chooser_set_limit (GTK_RECENT_CHOOSER (menu), 4);
   gtk_recent_chooser_set_local_only (GTK_RECENT_CHOOSER (menu), TRUE);
   gtk_recent_chooser_set_show_icons (GTK_RECENT_CHOOSER (menu), TRUE);
   gtk_recent_chooser_set_sort_type (GTK_RECENT_CHOOSER (menu),

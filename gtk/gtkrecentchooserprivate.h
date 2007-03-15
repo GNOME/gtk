@@ -30,12 +30,14 @@
 
 G_BEGIN_DECLS
 
-#define GTK_DEFAULT_RECENT_MANAGER 	"gtk-recent-manager-default"
+GtkRecentManager *_gtk_recent_chooser_get_recent_manager (GtkRecentChooser  *chooser);
+GList *           _gtk_recent_chooser_get_items          (GtkRecentChooser  *chooser,
+                                                          GtkRecentFilter   *filter,
+                                                          GtkRecentSortFunc  func,
+                                                          gpointer           data);
 
-GtkRecentManager *_gtk_recent_chooser_get_recent_manager (GtkRecentChooser *chooser);
-
-void              _gtk_recent_chooser_item_activated     (GtkRecentChooser *chooser);
-void              _gtk_recent_chooser_selection_changed  (GtkRecentChooser *chooser);
+void              _gtk_recent_chooser_item_activated     (GtkRecentChooser  *chooser);
+void              _gtk_recent_chooser_selection_changed  (GtkRecentChooser  *chooser);
 
 G_END_DECLS
  
