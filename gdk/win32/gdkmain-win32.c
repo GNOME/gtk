@@ -218,6 +218,17 @@ gdk_notify_startup_complete (void)
 {
 }
 
+void
+gdk_notify_startup_complete_with_id (const gchar* startup_id)
+{
+}
+
+void          
+gdk_window_set_startup_id (GdkWindow   *window,
+			   const gchar *startup_id)
+{
+}
+
 #ifdef G_ENABLE_DEBUG
 
 /*

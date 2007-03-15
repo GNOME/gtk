@@ -1,3 +1,10 @@
+2007-03-15  Tor Lillqvist  <tml@novell.com>
+
+	* gdk/gdk.symbols: Add gdk_notify_startup_complete_with_id and
+	gdk_window_set_startup_id.
+
+	* gdk/win32/gdkmain-win32.c: Add dummy implementations of the above.
+
 2007-03-15  Emmanuele Bassi  <ebassi@gnome.org>
 
 	* gtk/gtkrecentchooserprivate.h:
@@ -63,7 +70,7 @@
 
 	* gdk/gdk.h:
 	* gdk/gdkx.h:
-	* gdk/x11/gdkdisplay-x11.c: Add gdk_notify_startup_complete_wit_id()
+	* gdk/x11/gdkdisplay-x11.c: Add gdk_notify_startup_complete_with_id()
 	and gdk_x11_display_get_startup_notification_id().
 
 	* gdk/gdkwindow.h:
