@@ -1,4 +1,4 @@
-2007-03-16  Xan Lopez  <xan@localhost>
+2007-03-16  Xan Lopez  <xan@gnome.org>
 
 	* gtk/gtkwidget.c: Fix documentation error in
 	gtk_widget_set_redraw_on_allocate.
