@@ -415,6 +415,7 @@ printer_added_cb (GtkPrintBackend    *backend,
   GtkPrintUnixDialogPrivate *priv = dialog->priv;
   GtkTreeIter iter, filter_iter;
   GtkTreeSelection *selection;
+  GtkTreePath *path;
 
   gtk_list_store_append (GTK_LIST_STORE (priv->printer_list), &iter);
   
@@ -434,7 +435,8 @@ printer_added_cb (GtkPrintBackend    *backend,
 
   gtk_tree_model_filter_convert_child_iter_to_iter (priv->printer_list_filter,
 						    &filter_iter, &iter);
-  
+  path = gtk_tree_model_get_path (GTK_TREE_MODEL (priv->printer_list_filter), &filter_iter);
+
   selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (priv->printer_treeview));
   
   if (priv->waiting_for_printer != NULL &&
@@ -443,6 +445,8 @@ printer_added_cb (GtkPrintBackend    *backend,
     {
       priv->internal_printer_change = TRUE;
       gtk_tree_selection_select_iter (selection, &filter_iter);
+      gtk_tree_view_scroll_to_cell (GTK_TREE_VIEW (priv->printer_treeview),
+                                    path, NULL, TRUE, 0.5, 0.0);
       priv->internal_printer_change = FALSE;
       g_free (priv->waiting_for_printer);
       priv->waiting_for_printer = NULL;
@@ -452,8 +456,12 @@ printer_added_cb (GtkPrintBackend    *backend,
     {
       priv->internal_printer_change = TRUE;
       gtk_tree_selection_select_iter (selection, &filter_iter);
+      gtk_tree_view_scroll_to_cell (GTK_TREE_VIEW (priv->printer_treeview),
+                                    path, NULL, TRUE, 0.5, 0.0);
       priv->internal_printer_change = FALSE;
     }
+
+  gtk_tree_path_free (path);
 }
 
 static void
