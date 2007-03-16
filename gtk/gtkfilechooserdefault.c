@@ -7145,12 +7145,24 @@ find_good_size_from_style (GtkWidget *widget,
   gint default_width, default_height;
   int font_size;
   GtkRequisition req;
+  GdkScreen *screen;
+  double resolution;
 
   g_assert (widget->style != NULL);
   impl = GTK_FILE_CHOOSER_DEFAULT (widget);
 
+  screen = gtk_widget_get_screen (widget);
+  if (screen)
+    {
+      resolution = gdk_screen_get_resolution (screen);
+      if (resolution < 0.0) /* will be -1 if the resolution is not defined in the GdkScreen */
+	resolution = 96.0;
+    }
+  else
+    resolution = 96.0; /* wheeee */
+
   font_size = pango_font_description_get_size (widget->style->font_desc);
-  font_size = PANGO_PIXELS (font_size);
+  font_size = PANGO_PIXELS (font_size) * resolution / 72.0;
 
   default_width = font_size * NUM_CHARS;
   default_height = font_size * NUM_LINES;

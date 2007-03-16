@@ -1,3 +1,11 @@
+2007-03-15  Federico Mena Quintero  <federico@novell.com>
+
+	* gtk/gtkfilechooserdefault.c (find_good_size_from_style):
+	PANGO_PIXELS() gives us device units, which are *points* in
+	pangocairo's parlance, but we want actual pixels.  So, get the
+	screen's resolution to compute the actual number of pixels.
+	Fixes bug #418585.
+
 2007-03-15  Emmanuele Bassi  <ebassi@gnome.org>
 
 	Merge from trunk:
