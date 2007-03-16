@@ -4845,7 +4845,7 @@ gtk_widget_set_double_buffered (GtkWidget *widget,
  * allocation changes. By default, this setting is %TRUE and
  * the entire widget is redrawn on every size change. If your widget
  * leaves the upper left unchanged when made bigger, turning this
- * setting on will improve performance.
+ * setting off will improve performance.
 
  * Note that for %NO_WINDOW widgets setting this flag to %FALSE turns
  * off all allocation on resizing: the widget will not even redraw if

@@ -1,3 +1,8 @@
+2007-03-16  Xan Lopez  <xan@localhost>
+
+	* gtk/gtkwidget.c: Fix documentation error in
+	gtk_widget_set_redraw_on_allocate.
+
 2007-03-16  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtkprintunixdialog.c (printer_added_cb): Scroll to
