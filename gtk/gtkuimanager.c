@@ -2234,10 +2234,11 @@ update_node (GtkUIManager *self,
             /* ... if the action already provides a menu, then use
              * that menu instead of creating an empty one
              */
-            if (NODE_INFO (node->parent)->type == NODE_TYPE_TOOLITEM &&
-                GTK_ACTION_GET_CLASS (action)->get_submenu)
+            if ((NODE_INFO (node->parent)->type == NODE_TYPE_TOOLITEM ||
+                 NODE_INFO (node->parent)->type == NODE_TYPE_MENUITEM) &&
+                GTK_ACTION_GET_CLASS (action)->create_menu)
               {
-                menu = gtk_action_get_submenu (action);
+                menu = gtk_action_create_menu (action);
               }
 
             if (!menu)

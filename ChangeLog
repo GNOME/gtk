@@ -1,3 +1,15 @@
+2007-03-16  Emmanuele Bassi  <ebassi@gnome.org>
+
+	* gtk/gtkaction.h:
+	* gtk/gtkaction.c: Rename get_submenu() to create_menu();
+	rename gtk_action_get_submenu() to gtk_action_create_menu().
+
+	* gtk/gtkrecentaction.c: Update for GtkAction change.
+
+	* gtk/gtkuimanager.c (update_node): Update for GtkAction change;
+	also, use the menu from the GtkAction for both menuitem and
+	toolitem nodes.
+
 2007-03-16  Xan Lopez  <xan@gnome.org>
 
 	* gtk/gtkwidget.c: Fix documentation error in

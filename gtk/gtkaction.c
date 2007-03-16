@@ -180,12 +180,12 @@ gtk_action_class_init (GtkActionClass *klass)
 
   klass->create_menu_item = create_menu_item;
   klass->create_tool_item = create_tool_item;
+  klass->create_menu = NULL;
   klass->connect_proxy = connect_proxy;
   klass->disconnect_proxy = disconnect_proxy;
 
   klass->menu_item_type = GTK_TYPE_IMAGE_MENU_ITEM;
   klass->toolbar_item_type = GTK_TYPE_TOOL_BUTTON;
-  klass->get_submenu = NULL;
 
   g_object_class_install_property (gobject_class,
 				   PROP_NAME,
@@ -1777,24 +1777,24 @@ gtk_action_disconnect_accelerator (GtkAction *action)
 }
 
 /**
- * gtk_action_get_submenu:
+ * gtk_action_create_menu:
  * @action: a #GtkAction
  *
  * If @action provides a #GtkMenu widget as a submenu for the menu
- * item or the toolbar item it creates, this function returns that
- * widget.
+ * item or the toolbar item it creates, this function returns an
+ * instance of that menu.
  *
  * Return value: the menu item provided by the action, or %NULL.
  *
  * Since: 2.12
  */
 GtkWidget *
-gtk_action_get_submenu (GtkAction *action)
+gtk_action_create_menu (GtkAction *action)
 {
   g_return_val_if_fail (GTK_IS_ACTION (action), FALSE);
 
-  if (GTK_ACTION_GET_CLASS (action)->get_submenu)
-    return GTK_ACTION_GET_CLASS (action)->get_submenu (action);
+  if (GTK_ACTION_GET_CLASS (action)->create_menu)
+    return GTK_ACTION_GET_CLASS (action)->create_menu (action);
 
   return NULL;
 }

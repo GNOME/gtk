@@ -386,7 +386,7 @@ gtk_recent_action_disconnect_proxy (GtkAction *action,
 }
 
 static GtkWidget *
-gtk_recent_action_get_submenu (GtkAction *action)
+gtk_recent_action_create_menu (GtkAction *action)
 {
   GtkRecentAction *recent_action = GTK_RECENT_ACTION (action);
   GtkRecentActionPrivate *priv = recent_action->priv;
@@ -430,7 +430,7 @@ gtk_recent_action_create_menu_item (GtkAction *action)
   GtkWidget *menu;
   GtkWidget *menuitem;
 
-  menu = gtk_recent_action_get_submenu (action);
+  menu = gtk_recent_action_create_menu (action);
   menuitem = g_object_new (GTK_TYPE_IMAGE_MENU_ITEM, NULL);
   gtk_menu_item_set_submenu (GTK_MENU_ITEM (menuitem), menu);
   gtk_widget_show (menu);
@@ -444,7 +444,7 @@ gtk_recent_action_create_tool_item (GtkAction *action)
   GtkWidget *menu;
   GtkWidget *toolitem;
 
-  menu = gtk_recent_action_get_submenu (action);
+  menu = gtk_recent_action_create_menu (action);
   toolitem = g_object_new (GTK_TYPE_MENU_TOOL_BUTTON, NULL);
   gtk_menu_tool_button_set_menu (GTK_MENU_TOOL_BUTTON (toolitem), menu);
   gtk_widget_show (menu);
@@ -652,7 +652,7 @@ gtk_recent_action_class_init (GtkRecentActionClass *klass)
   action_class->disconnect_proxy = gtk_recent_action_disconnect_proxy;
   action_class->create_menu_item = gtk_recent_action_create_menu_item;
   action_class->create_tool_item = gtk_recent_action_create_tool_item;
-  action_class->get_submenu = gtk_recent_action_get_submenu;
+  action_class->create_menu = gtk_recent_action_create_menu;
   action_class->menu_item_type = GTK_TYPE_IMAGE_MENU_ITEM;
   action_class->toolbar_item_type = GTK_TYPE_MENU_TOOL_BUTTON;
 
