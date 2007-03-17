@@ -1,8 +1,8 @@
 2007-03-17  Chris Wilson  <chris@chris-wilson.co.uk>
 
 	* gdk/x11/gdkvisual-x11.c (_gdk_visual_init):
-		Initialise nxvisuals to 0 in order to handle
-		XGetVisualInfo() failures gracefully. (#419171)
+	Initialise nxvisuals to 0 in order to handle XGetVisualInfo()
+	failures gracefully. (#419171)
 
 2007-03-17  Emmanuele Bassi  <ebassi@gnome.org>
 
