@@ -1,4 +1,15 @@
+2007-03-17  Emmanuele Bassi  <ebassi@gnome.org>
+
+	* gtk/gtkrecentaction.c (recent_chooser_set_property),
+	(gtk_recent_action_set_property): Remove useless inlined
+	function and propagate the properties to the GtkRecentChooser
+	objects we create, instead of all the proxies.
+
+	(set_current_filter): Remove 'inline' marker.
+
 2007-03-16  Emmanuele Bassi  <ebassi@gnome.org>
+
+	Apply changes suggested by Michael Natterer. (#338843)
 
 	* gtk/gtkaction.h:
 	* gtk/gtkaction.c: Rename get_submenu() to create_menu();

@@ -81,23 +81,6 @@ G_DEFINE_TYPE_WITH_CODE (GtkRecentAction,
                          G_IMPLEMENT_INTERFACE (GTK_TYPE_RECENT_CHOOSER,
                                                 gtk_recent_chooser_iface_init));
 
-static inline void
-recent_chooser_set_property (GtkRecentAction *action,
-                             const gchar     *property_name,
-                             const GValue    *value)
-{
-  GSList *proxies, *l;
-
-  proxies = gtk_action_get_proxies (GTK_ACTION (action));
-  for (l = proxies; l != NULL; l = l->next)
-    {
-      GObject *proxy = l->data;
-
-      g_object_set_property (proxy, property_name, value);
-    }
-  g_slist_free (proxies);
-}
-
 static gboolean
 gtk_recent_action_set_current_uri (GtkRecentChooser  *chooser,
                                    const gchar       *uri,
@@ -227,7 +210,7 @@ gtk_recent_action_set_sort_func (GtkRecentChooser  *chooser,
     }
 }
 
-static inline void
+static void
 set_current_filter (GtkRecentAction *action,
                     GtkRecentFilter *filter)
 {
@@ -540,6 +523,7 @@ gtk_recent_action_set_property (GObject      *gobject,
 {
   GtkRecentAction *action = GTK_RECENT_ACTION (gobject);
   GtkRecentActionPrivate *priv = action->priv;
+  GSList *l;
 
   switch (prop_id)
     {
@@ -583,7 +567,13 @@ gtk_recent_action_set_property (GObject      *gobject,
       return;
     }
 
-  recent_chooser_set_property (action, pspec->name, value);
+  /* propagate the properties to the proxies we have created */
+  for (l = priv->choosers; l != NULL; l = l->next)
+    {
+      GObject *proxy = l->data;
+
+      g_object_set_property (proxy, pspec->name, value);
+    }
 }
 
 static void
