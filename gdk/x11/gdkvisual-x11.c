@@ -119,6 +119,7 @@ _gdk_visual_init (GdkScreen *screen)
   g_return_if_fail (GDK_IS_SCREEN (screen));
   screen_x11 = GDK_SCREEN_X11 (screen);
 
+  nxvisuals = 0;
   visual_template.screen = screen_x11->screen_num;
   visual_list = XGetVisualInfo (screen_x11->xdisplay, VisualScreenMask, &visual_template, &nxvisuals);
   
