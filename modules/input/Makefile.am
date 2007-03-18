@@ -91,6 +91,17 @@ if USE_WIN32
 IM_IME_MODULE=im-ime.la 
 endif
 
+multipress_defs = -DMULTIPRESS_LOCALEDIR=\""$(mplocaledir)"\" -DMULTIPRESS_CONFDIR=\""$(DESTDIR)$(sysconfdir)/gtk-2.0"\"
+im_multipress_la_CPPFLAGS = $(multipress_defs)
+im_multipress_la_LDFLAGS = -rpath $(moduledir) -avoid-version -module $(no_undefined)
+im_multipress_la_SOURCES =	\
+	gtkimcontextmultipress.c	\
+	gtkimcontextmultipress.h	\
+	immultipress.c
+
+imconffiledir = $(DESTDIR)$(sysconfdir)/gtk-2.0
+dist_imconffile_DATA = im-multipress.conf
+
 if CROSS_COMPILING
 RUN_QUERY_IMMODULES_TEST=false
 else
@@ -132,6 +143,7 @@ module_LTLIBRARIES =				\
 	im-ti-er.la				\
 	im-ti-et.la				\
 	im-viqr.la				\
+	im-multipress.la			\
 	$(IM_IME_MODULE)
 
 gtk.immodules: Makefile.am $(module_LTLIBRARIES)

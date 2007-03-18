@@ -1,3 +1,13 @@
+2007-03-18  Matthias Clasen <mclasen@redhat.com> 
+
+	* modules/input/gtkimcontextmultipress.[hc]:
+	* modules/input/im-multipress.conf:
+	* modules/input/immultipress.c:
+	* modules/input/README.multipress: Add the multipress input
+	method.  (#417446, Johannes Schmid, Murray Cumming)
+
+	* modules/input/Makefile.am: Glue
+
 2007-03-17  Chris Wilson  <chris@chris-wilson.co.uk>
 
 	* gdk/x11/gdkvisual-x11.c (_gdk_visual_init):
