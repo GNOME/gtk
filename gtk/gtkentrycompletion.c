@@ -1500,7 +1500,7 @@ gtk_entry_completion_compute_prefix (GtkEntryCompletion *completion)
 	  else
 	    {
 	      gchar *p = prefix;
-	      const gchar *q = text;
+	      gchar *q = text;
 	      
 	      while (*p && *p == *q)
 		{
@@ -1509,6 +1509,19 @@ gtk_entry_completion_compute_prefix (GtkEntryCompletion *completion)
 		}
 	      
 	      *p = '\0';
+              
+              if (p > prefix)
+                {
+                  /* strip a partial multibyte character */
+                  q = g_utf8_find_prev_char (prefix, p);
+                  switch (g_utf8_get_char_validated (q, p - q))
+                    {
+                    case (gunichar)-2:
+                    case (gunichar)-1:
+                      *q = 0;
+                    default: ;
+                    }
+                }
 	    }
 	}
       

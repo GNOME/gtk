@@ -1,5 +1,10 @@
 2007-03-18  Matthias Clasen <mclasen@redhat.com> 
 
+	* gtk/gtkentrycompletion.c (gtk_entry_completion_compute_prefix):
+	Ensure that the prefix is valid UTF-8.  (#419568, Nickolay V. Shmyrev)
+
+2007-03-18  Matthias Clasen <mclasen@redhat.com> 
+
 	* modules/input/gtkimcontextmultipress.[hc]:
 	* modules/input/im-multipress.conf:
 	* modules/input/immultipress.c:
