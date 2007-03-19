@@ -141,6 +141,7 @@ about_cb (GtkAction *action,
 			 "authors", authors,
 			 "documenters", documentors,
 			 "logo", transparent,
+                         "title", "About GTK+ Code Demos",
 			 NULL);
 
   g_object_unref (transparent);
