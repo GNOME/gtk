@@ -1,3 +1,10 @@
+2007-03-18  Matthias Clasen <mclasen@redhat.com> 
+
+	Merge from trunk:
+
+	* gtk/gtkentrycompletion.c (gtk_entry_completion_compute_prefix):
+	Ensure that the prefix is valid UTF-8.  (#419568, Nickolay V. Shmyrev)
+
 2007-03-17  Chris Wilson  <chris@chris-wilson.co.uk>
 
 	* gdk/x11/gdkvisual-x11.c (_gdk_visual_init):
