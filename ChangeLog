@@ -1,3 +1,23 @@
+2007-03-20  Kristian Rietveld  <kris@gtk.org>
+
+	* gtk/gtktreeviewcolumn.c:
+	* gtk/gtktreeprivate.h: add _gtk_tree_view_column_get_focus_area().
+
+	* gtk/gtktreeview.c (gtk_tree_view_clamp_column_visible): add
+	focus_to_cell parameter, rework to handle clamping columns which
+	are bigger than the available page size better,
+	(gtk_tree_view_key_press): remove code handling moving the focus
+	to other column headers,
+	(gtk_tree_view_header_focus): add clamp_column_visible parameter,
+	fix RTL support, don't wrap around when moving focus to other
+	column headers, call gtk_tree_view_clamp_column_visible() instead
+	of duplicating code,
+	(gtk_tree_view_focus): only clamp the column visible when we are
+	explicitly moving to another column header (fixes #399555, Charles
+	Kerr),
+	(gtk_tree_view_move_cursor_left_right): update call to
+	gtk_tree_view_clamp_column_visible().
+
 2007-03-19  Matthias Clasen <mclasen@redhat.com> 
 
 	* demos/gtk-demo/appwindow.c: Explicitly set the title on the

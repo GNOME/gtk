@@ -352,7 +352,8 @@ static void     gtk_tree_view_clamp_node_visible             (GtkTreeView       
 							      GtkRBTree         *tree,
 							      GtkRBNode         *node);
 static void     gtk_tree_view_clamp_column_visible           (GtkTreeView       *tree_view,
-							      GtkTreeViewColumn *column);
+							      GtkTreeViewColumn *column,
+							      gboolean           focus_to_cell);
 static gboolean gtk_tree_view_maybe_begin_dragging_row       (GtkTreeView       *tree_view,
 							      GdkEventMotion    *event);
 static void     gtk_tree_view_focus_to_cursor                (GtkTreeView       *tree_view);
@@ -5087,7 +5088,6 @@ gtk_tree_view_key_press (GtkWidget   *widget,
   if (GTK_TREE_VIEW_FLAG_SET (tree_view, GTK_TREE_VIEW_HEADERS_VISIBLE))
     {
       GList *focus_column;
-      gint focus_column_width = 0;
       gboolean rtl;
 
       rtl = (gtk_widget_get_direction (GTK_WIDGET (tree_view)) == GTK_TEXT_DIR_RTL);
@@ -5100,9 +5100,6 @@ gtk_tree_view_key_press (GtkWidget   *widget,
 
           if (GTK_WIDGET_HAS_FOCUS (column->button))
             break;
-
-          if (column->visible)
-            focus_column_width += GTK_TREE_VIEW_COLUMN (column)->width;
         }
 
       if (focus_column &&
@@ -5217,61 +5214,6 @@ gtk_tree_view_key_press (GtkWidget   *widget,
                 gtk_tree_view_move_column_after (tree_view, column, col);
               else
                 gtk_widget_error_bell (widget);
-            }
-
-          return TRUE;
-        }
-
-      if (focus_column &&
-          (event->keyval == GDK_Left || event->keyval == GDK_KP_Left
-           || event->keyval == GDK_Right || event->keyval == GDK_KP_Right))
-        {
-          if ((event->keyval == (rtl ? GDK_Right : GDK_Left)
-               || event->keyval == (rtl ? GDK_KP_Right : GDK_KP_Left)))
-            {
-              GList *tmp;
-
-              for (tmp = focus_column->prev; tmp; tmp = tmp->prev)
-                if (GTK_TREE_VIEW_COLUMN (tmp->data)->visible)
-                  break;
-
-              if (!tmp)
-                {
-                  gtk_widget_error_bell (widget);
-                  return TRUE;
-                }
-
-              tree_view->priv->focus_column = GTK_TREE_VIEW_COLUMN (tmp->data);
-              gtk_widget_grab_focus (tree_view->priv->focus_column->button);
-              focus_column_width -= tree_view->priv->focus_column->width;
-              gtk_adjustment_set_value (tree_view->priv->hadjustment,
-                                        CLAMP (focus_column_width,
-                                               tree_view->priv->hadjustment->lower,
-                                               tree_view->priv->hadjustment->upper - tree_view->priv->hadjustment->page_size));
-            }
-          else if ((event->keyval == (rtl ? GDK_Left : GDK_Right)
-                    || event->keyval == (rtl ? GDK_KP_Left : GDK_KP_Right)))
-            {
-              GList *tmp;
-
-              for (tmp = focus_column->next; tmp; tmp = tmp->next)
-                if (GTK_TREE_VIEW_COLUMN (tmp->data)->visible)
-                  break;
-
-              if (!tmp)
-                {
-                  gtk_widget_error_bell (widget);
-                  return TRUE;
-                }
-
-              tree_view->priv->focus_column = GTK_TREE_VIEW_COLUMN (tmp->data);
-
-              gtk_widget_grab_focus (tree_view->priv->focus_column->button);
-              focus_column_width += tree_view->priv->focus_column->width;
-              gtk_adjustment_set_value (tree_view->priv->hadjustment,
-                                        CLAMP (focus_column_width,
-                                               tree_view->priv->hadjustment->lower,
-                                               tree_view->priv->hadjustment->upper - tree_view->priv->hadjustment->page_size));
             }
 
           return TRUE;
@@ -7578,7 +7520,8 @@ gtk_tree_view_get_fixed_height_mode (GtkTreeView *tree_view)
  */
 static gboolean
 gtk_tree_view_header_focus (GtkTreeView      *tree_view,
-			    GtkDirectionType  dir)
+			    GtkDirectionType  dir,
+			    gboolean          clamp_column_visible)
 {
   GtkWidget *focus_child;
 
@@ -7619,12 +7562,7 @@ gtk_tree_view_header_focus (GtkTreeView      *tree_view,
     }
 
 
-   rtl = (gtk_widget_get_direction (GTK_WIDGET (tree_view)) == GTK_TEXT_DIR_RTL);
-   if (rtl) {
-     GList *temp = first_column;
-     first_column = last_column;
-     last_column = temp;
-   }
+  rtl = (gtk_widget_get_direction (GTK_WIDGET (tree_view)) == GTK_TEXT_DIR_RTL);
 
   switch (dir)
     {
@@ -7669,16 +7607,10 @@ gtk_tree_view_header_focus (GtkTreeView      *tree_view,
 	if (GTK_TREE_VIEW_COLUMN (tmp_list->data)->button == focus_child)
 	  break;
 
-      if (tmp_list == first_column && dir == GTK_DIR_LEFT)
-	{
-	  focus_child = GTK_TREE_VIEW_COLUMN (last_column->data)->button;
-	  gtk_widget_grab_focus (focus_child);
-	  break;
-	}
-      else if (tmp_list == last_column && dir == GTK_DIR_RIGHT)
-	{
-	  focus_child = GTK_TREE_VIEW_COLUMN (first_column->data)->button;
-	  gtk_widget_grab_focus (focus_child);
+      if ((tmp_list == first_column && dir == (rtl ? GTK_DIR_RIGHT : GTK_DIR_LEFT))
+	  || (tmp_list == last_column && dir == (rtl ? GTK_DIR_LEFT : GTK_DIR_RIGHT)))
+        {
+	  gtk_widget_error_bell (GTK_WIDGET (tree_view));
 	  break;
 	}
 
@@ -7686,7 +7618,7 @@ gtk_tree_view_header_focus (GtkTreeView      *tree_view,
 	{
 	  GtkTreeViewColumn *column;
 
-	  if (dir == GTK_DIR_RIGHT)
+	  if (dir == (rtl ? GTK_DIR_LEFT : GTK_DIR_RIGHT))
 	    tmp_list = tmp_list->next;
 	  else
 	    tmp_list = tmp_list->prev;
@@ -7723,20 +7655,11 @@ gtk_tree_view_header_focus (GtkTreeView      *tree_view,
 	    break;
 	  }
 
-      /* If the following isn't true, then the view is smaller then the scrollpane.
-       */
-      if ((focus_child->allocation.x + focus_child->allocation.width) <=
-	  (tree_view->priv->hadjustment->upper))
-	{
-	  /* Scroll to the button, if needed */
-	  if ((tree_view->priv->hadjustment->value + tree_view->priv->hadjustment->page_size) <
-	      (focus_child->allocation.x + focus_child->allocation.width))
-	    gtk_adjustment_set_value (tree_view->priv->hadjustment,
-				      focus_child->allocation.x + focus_child->allocation.width -
-				      tree_view->priv->hadjustment->page_size);
-	  else if (tree_view->priv->hadjustment->value > focus_child->allocation.x)
-	    gtk_adjustment_set_value (tree_view->priv->hadjustment,
-				      focus_child->allocation.x);
+      if (clamp_column_visible)
+        {
+	  gtk_tree_view_clamp_column_visible (tree_view,
+					      tree_view->priv->focus_column,
+					      FALSE);
 	}
     }
 
@@ -7770,7 +7693,7 @@ gtk_tree_view_focus (GtkWidget        *widget,
 	{
 	case GTK_DIR_LEFT:
 	case GTK_DIR_RIGHT:
-	  gtk_tree_view_header_focus (tree_view, direction);
+	  gtk_tree_view_header_focus (tree_view, direction, TRUE);
 	  return TRUE;
 	case GTK_DIR_TAB_BACKWARD:
 	case GTK_DIR_UP:
@@ -7788,14 +7711,14 @@ gtk_tree_view_focus (GtkWidget        *widget,
   /* Case 2. We don't have focus at all. */
   if (!GTK_WIDGET_HAS_FOCUS (container))
     {
-      if (!gtk_tree_view_header_focus (tree_view, direction))
+      if (!gtk_tree_view_header_focus (tree_view, direction, FALSE))
 	gtk_widget_grab_focus (widget);
       return TRUE;
     }
 
   /* Case 3. We have focus already. */
   if (direction == GTK_DIR_TAB_BACKWARD)
-    return (gtk_tree_view_header_focus (tree_view, direction));
+    return (gtk_tree_view_header_focus (tree_view, direction, FALSE));
   else if (direction == GTK_DIR_TAB_FORWARD)
     return FALSE;
 
@@ -8832,18 +8755,76 @@ gtk_tree_view_clamp_node_visible (GtkTreeView *tree_view,
 
 static void
 gtk_tree_view_clamp_column_visible (GtkTreeView       *tree_view,
-				    GtkTreeViewColumn *column)
+				    GtkTreeViewColumn *column,
+				    gboolean           focus_to_cell)
 {
+  gint x, width;
+
   if (column == NULL)
     return;
-  if ((tree_view->priv->hadjustment->value + tree_view->priv->hadjustment->page_size) <
-      (column->button->allocation.x + column->button->allocation.width))
-    gtk_adjustment_set_value (tree_view->priv->hadjustment,
-			      column->button->allocation.x + column->button->allocation.width -
-			      tree_view->priv->hadjustment->page_size);
-  else if (tree_view->priv->hadjustment->value > column->button->allocation.x)
-    gtk_adjustment_set_value (tree_view->priv->hadjustment,
-			      column->button->allocation.x);
+
+  x = column->button->allocation.x;
+  width = column->button->allocation.width;
+
+  if (width > tree_view->priv->hadjustment->page_size)
+    {
+      /* The column is larger than the horizontal page size.  If the
+       * column has cells which can be focussed individually, then we make
+       * sure the cell which gets focus is fully visible (if even the
+       * focus cell is bigger than the page size, we make sure the
+       * left-hand side of the cell is visible).
+       *
+       * If the column does not have those so-called special cells, we
+       * make sure the left-hand side of the column is visible.
+       */
+
+      if (focus_to_cell && gtk_tree_view_has_special_cell (tree_view))
+        {
+	  GtkTreePath *cursor_path;
+	  GdkRectangle background_area, cell_area, focus_area;
+
+	  cursor_path = gtk_tree_row_reference_get_path (tree_view->priv->cursor);
+
+	  gtk_tree_view_get_cell_area (tree_view,
+				       cursor_path, column, &cell_area);
+	  gtk_tree_view_get_background_area (tree_view,
+					     cursor_path, column,
+					     &background_area);
+
+	  gtk_tree_path_free (cursor_path);
+
+	  _gtk_tree_view_column_get_focus_area (column,
+						&background_area,
+						&cell_area,
+						&focus_area);
+
+	  x = focus_area.x;
+	  width = focus_area.width;
+
+	  if (width < tree_view->priv->hadjustment->page_size)
+	    {
+	      if ((tree_view->priv->hadjustment->value + tree_view->priv->hadjustment->page_size) < (x + width))
+		gtk_adjustment_set_value (tree_view->priv->hadjustment,
+					  x + width - tree_view->priv->hadjustment->page_size);
+	      else if (tree_view->priv->hadjustment->value > x)
+		gtk_adjustment_set_value (tree_view->priv->hadjustment, x);
+	    }
+	}
+
+      gtk_adjustment_set_value (tree_view->priv->hadjustment,
+				CLAMP (x,
+				       tree_view->priv->hadjustment->lower,
+				       tree_view->priv->hadjustment->upper
+				       - tree_view->priv->hadjustment->page_size));
+    }
+  else
+    {
+      if ((tree_view->priv->hadjustment->value + tree_view->priv->hadjustment->page_size) < (x + width))
+	  gtk_adjustment_set_value (tree_view->priv->hadjustment,
+				    x + width - tree_view->priv->hadjustment->page_size);
+      else if (tree_view->priv->hadjustment->value > x)
+	gtk_adjustment_set_value (tree_view->priv->hadjustment, x);
+  }
 }
 
 /* This function could be more efficient.  I'll optimize it if profiling seems
@@ -9755,7 +9736,8 @@ gtk_tree_view_move_cursor_left_right (GtkTreeView *tree_view,
       gtk_widget_error_bell (GTK_WIDGET (tree_view));
     }
 
-  gtk_tree_view_clamp_column_visible (tree_view, tree_view->priv->focus_column);
+  gtk_tree_view_clamp_column_visible (tree_view,
+				      tree_view->priv->focus_column, TRUE);
 }
 
 static void

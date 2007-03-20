@@ -3146,6 +3146,24 @@ _gtk_tree_view_column_cell_event (GtkTreeViewColumn  *tree_column,
 						   path_string);
 }
 
+void
+_gtk_tree_view_column_get_focus_area (GtkTreeViewColumn *tree_column,
+				      GdkRectangle      *background_area,
+				      GdkRectangle      *cell_area,
+				      GdkRectangle      *focus_area)
+{
+  gtk_tree_view_column_cell_process_action (tree_column,
+					    NULL,
+					    background_area,
+					    cell_area,
+					    0,
+					    CELL_ACTION_FOCUS,
+					    NULL,
+					    focus_area,
+					    NULL, NULL, NULL);
+}
+
+
 /* cell list manipulation */
 static GList *
 gtk_tree_view_column_cell_first (GtkTreeViewColumn *tree_column)
