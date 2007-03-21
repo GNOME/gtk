@@ -1,3 +1,12 @@
+2007-03-21  Rodney Dawes  <dobey@novell.com>
+
+	* gtk/gtk.symbols:
+	* gtk/gtkicontheme.[ch]:
+	* docs/reference/gtk/gtk-sections.txt:
+	* tests/testicontheme.c:
+	Add a new API call gtk_icon_theme_list_contexts so that one can
+	choose icons from a theme by context (#420719)
+	
 2007-03-21  Ross Burton  <ross@burtonini.com>
 
 	* gtk/gtktexttag.c:

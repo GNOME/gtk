@@ -200,6 +200,8 @@ static GtkIconInfo *theme_lookup_icon (IconTheme        *theme,
 static void         theme_list_icons  (IconTheme        *theme,
 				       GHashTable       *icons,
 				       GQuark            context);
+static void         theme_list_contexts  (IconTheme        *theme,
+					  GHashTable       *contexts);
 static void         theme_subdir_load (GtkIconTheme     *icon_theme,
 				       IconTheme        *theme,
 				       GKeyFile         *theme_file,
@@ -1649,6 +1651,51 @@ gtk_icon_theme_list_icons (GtkIconTheme *icon_theme,
 }
 
 /**
+ * gtk_icon_theme_list_contexts:
+ * @icon_theme: a #GtkIconTheme
+ *
+ * Gets the list of contexts available within the current
+ * hierarchy of icon themes
+ *
+ * Return value: a #GList list holding the names of all the
+ *  contexts in the theme. You must first free each element
+ *  in the list with g_free(), then free the list itself
+ *  with g_list_free().
+ *
+ * Since: 2.12
+ **/
+GList *
+gtk_icon_theme_list_contexts (GtkIconTheme *icon_theme)
+{
+  GtkIconThemePrivate *priv;
+  GHashTable *contexts;
+  GList *list, *l;
+
+  priv = icon_theme->priv;
+  
+  ensure_valid_themes (icon_theme);
+
+  contexts = g_hash_table_new (g_str_hash, g_str_equal);
+
+  l = priv->themes;
+  while (l != NULL)
+    {
+      theme_list_contexts (l->data, contexts);
+      l = l->next;
+    }
+
+  list = NULL;
+
+  g_hash_table_foreach (contexts,
+			add_key_to_list,
+			&list);
+
+  g_hash_table_destroy (contexts);
+
+  return list;
+}
+
+/**
  * gtk_icon_theme_get_example_icon_name:
  * @icon_theme: a #GtkIconTheme
  * 
@@ -2105,6 +2152,25 @@ theme_list_icons (IconTheme  *theme,
 				    icons);
 	    }
 	}
+      l = l->next;
+    }
+}
+
+static void
+theme_list_contexts (IconTheme  *theme, 
+		     GHashTable *contexts)
+{
+  GList *l = theme->dirs;
+  IconThemeDir *dir;
+  const char *context;
+
+  while (l != NULL)
+    {
+      dir = l->data;
+
+      context = g_quark_to_string (dir->context);
+      g_hash_table_replace (contexts, context, NULL);
+
       l = l->next;
     }
 }

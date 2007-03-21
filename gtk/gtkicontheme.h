@@ -139,6 +139,7 @@ GdkPixbuf *   gtk_icon_theme_load_icon             (GtkIconTheme                
 
 GList *       gtk_icon_theme_list_icons            (GtkIconTheme                *icon_theme,
 						    const gchar                 *context);
+GList *       gtk_icon_theme_list_contexts         (GtkIconTheme                *icon_theme);
 char *        gtk_icon_theme_get_example_icon_name (GtkIconTheme                *icon_theme);
 
 gboolean      gtk_icon_theme_rescan_if_needed      (GtkIconTheme                *icon_theme);
