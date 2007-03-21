@@ -1,3 +1,8 @@
+2007-03-21  Ross Burton  <ross@burtonini.com>
+
+	* gtk/gtktexttag.c:
+	Document the ::event signal (#420703).
+
 2007-03-20  Kristian Rietveld  <kris@gtk.org>
 
 	* gtk/gtktreeviewcolumn.c:

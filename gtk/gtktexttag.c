@@ -649,7 +649,20 @@ gtk_text_tag_class_init (GtkTextTagClass *klass)
   ADD_SET_PROP ("paragraph-background-set", PROP_PARAGRAPH_BACKGROUND_SET,
                 P_("Paragraph background set"),
                 P_("Whether this tag affects the paragraph background color"));
-  
+
+  /**
+   * GtkTextTag::event:
+   * @tag: the #GtkTextTag on which the signal is emitted
+   * @object: the object the event was fired from (typically a #GtkTextView)
+   * @event: the event which triggered the signal
+   * @iter: a #GtkTextIter pointing at the location the event occured
+   *
+   * The ::event signal is emitted when an event occurs on a region of the
+   * buffer marked with this tag.
+   *
+   * Returns: %TRUE to stop other handlers from being invoked for the
+   * event. %FALSE to propagate the event further.
+   */
   signals[EVENT] =
     g_signal_new (I_("event"),
                   G_OBJECT_CLASS_TYPE (object_class),
