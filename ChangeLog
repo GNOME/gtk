@@ -1,3 +1,13 @@
+2007-03-22  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtksettings.c (merge_color_scheme): Freeze property
+	notification.
+	* gtk/gtksettings.c (_gtk_settings_handle_event): Handle
+	the gtk-color-scheme xsetting being unset.
+
+	* gtk/gtkrc.c (gtk_rc_reparse_all_for_settings): Handle
+	recursion locally.
+
 2007-03-21  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtkprintoperation-unix.c: Remove leftover debug spew.

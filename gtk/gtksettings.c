@@ -1697,18 +1697,17 @@ _gtk_settings_handle_event (GdkEventSetting *event)
  
   if (pspec) 
     {
-      property_id =  pspec->param_id;
+      property_id = pspec->param_id;
 
       if (property_id == PROP_COLOR_SCHEME)
         {
           GValue value = { 0, };
 
           g_value_init (&value, G_TYPE_STRING);
-          if (gdk_screen_get_setting (settings->screen, pspec->name, &value))
-            {
-              merge_color_scheme (settings, &value, GTK_SETTINGS_SOURCE_XSETTING);
-              g_value_unset (&value);
-            }
+          if (!gdk_screen_get_setting (settings->screen, pspec->name, &value))
+            g_value_set_static_string (&value, "");
+          merge_color_scheme (settings, &value, GTK_SETTINGS_SOURCE_XSETTING);
+          g_value_unset (&value);
         }
 
       g_object_notify (G_OBJECT (settings), pspec->name);
@@ -2086,6 +2085,8 @@ merge_color_scheme (GtkSettings       *settings,
   ColorSchemeData *data;
   const gchar *colors;
 
+  g_object_freeze_notify (G_OBJECT (settings));
+
   colors = g_value_get_string (value);
 
   settings_update_color_scheme (settings);
@@ -2095,6 +2096,8 @@ merge_color_scheme (GtkSettings       *settings,
   
   if (update_color_hash (data, colors, source))
     g_object_notify (G_OBJECT (settings), "color-hash");
+
+  g_object_thaw_notify (G_OBJECT (settings));
 }
 
 static GHashTable *

@@ -663,8 +663,7 @@ gtk_rc_color_hash_changed (GtkSettings  *settings,
   
   g_object_get (settings, "color-hash", &context->color_hash, NULL);
 
-  if (!context->reloading)
-    gtk_rc_reparse_all_for_settings (settings, TRUE);
+  gtk_rc_reparse_all_for_settings (settings, TRUE);
 }
 
 static GtkRcContext *
@@ -1716,6 +1715,9 @@ gtk_rc_reparse_all_for_settings (GtkSettings *settings,
   g_return_val_if_fail (GTK_IS_SETTINGS (settings), FALSE);
 
   context = gtk_rc_context_get (settings);
+
+  if (context->reloading)
+    return FALSE;
 
   if (!force_load)
     {
