@@ -1,3 +1,9 @@
+2007-03-21  Matthias Clasen <mclasen@redhat.com> 
+
+	Mrege from trunk:
+
+	* gtk/gtkprintoperation-unix.c: Remove leftover debug spew.
+
 2007-03-18  Matthias Clasen <mclasen@redhat.com> 
 
 	Merge from trunk:

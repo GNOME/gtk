@@ -659,8 +659,6 @@ _gtk_print_operation_platform_backend_create_preview_surface (GtkPrintOperation 
   fd = g_mkstemp (filename);
   *target = filename;
   
-  g_print ("target is %s\n", filename);
-
   paper_size = gtk_page_setup_get_paper_size (page_setup);
   w = gtk_paper_size_get_width (paper_size, GTK_UNIT_POINTS);
   h = gtk_paper_size_get_height (paper_size, GTK_UNIT_POINTS);
