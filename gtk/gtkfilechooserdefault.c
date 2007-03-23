@@ -79,7 +79,6 @@
 #include <string.h>
 #include <time.h>
 
-
 
 #ifdef HAVE_UNISTD_H
 #include <unistd.h>
@@ -137,7 +136,7 @@ _gtk_file_chooser_profile_log (const char *func, int indent, const char *msg1, c
 #define profile_msg(x, y)
 #endif
 
-
+
 
 typedef struct _GtkFileChooserDefaultClass GtkFileChooserDefaultClass;
 
@@ -162,6 +161,7 @@ enum {
   DESKTOP_FOLDER,
   QUICK_BOOKMARK,
   LOCATION_TOGGLE_POPUP,
+  SHOW_HIDDEN,
   LAST_SIGNAL
 };
 
@@ -324,6 +324,7 @@ static void home_folder_handler    (GtkFileChooserDefault *impl);
 static void desktop_folder_handler (GtkFileChooserDefault *impl);
 static void quick_bookmark_handler (GtkFileChooserDefault *impl,
 				    gint                   bookmark_index);
+static void show_hidden_handler    (GtkFileChooserDefault *impl);
 static void update_appearance      (GtkFileChooserDefault *impl);
 
 static void set_current_filter   (GtkFileChooserDefault *impl,
@@ -451,7 +452,7 @@ static GtkTreeModel *shortcuts_model_filter_new (GtkFileChooserDefault *impl,
 						 GtkTreeModel          *child_model,
 						 GtkTreePath           *root);
 
-
+
 
 G_DEFINE_TYPE_WITH_CODE (GtkFileChooserDefault, _gtk_file_chooser_default, GTK_TYPE_VBOX,
 			 G_IMPLEMENT_INTERFACE (GTK_TYPE_FILE_CHOOSER,
@@ -547,6 +548,14 @@ _gtk_file_chooser_default_class_init (GtkFileChooserDefaultClass *class)
 			     NULL, NULL,
 			     _gtk_marshal_VOID__INT,
 			     G_TYPE_NONE, 1, G_TYPE_INT);
+  signals[SHOW_HIDDEN] =
+    _gtk_binding_signal_new ("show-hidden",
+			     G_OBJECT_CLASS_TYPE (class),
+			     G_SIGNAL_RUN_FIRST | G_SIGNAL_ACTION,
+			     G_CALLBACK (show_hidden_handler),
+			     NULL, NULL,
+			     _gtk_marshal_VOID__VOID,
+			     G_TYPE_NONE, 0);
 
   binding_set = gtk_binding_set_by_class (class);
 
@@ -575,7 +584,6 @@ _gtk_file_chooser_default_class_init (GtkFileChooserDefaultClass *class)
 				GDK_v, GDK_CONTROL_MASK,
 				"location-popup-on-paste",
 				0);
-
   gtk_binding_entry_add_signal (binding_set,
 				GDK_Up, GDK_MOD1_MASK,
 				"up-folder",
@@ -610,6 +618,10 @@ _gtk_file_chooser_default_class_init (GtkFileChooserDefaultClass *class)
 				GDK_d, GDK_MOD1_MASK,
 				"desktop-folder",
 				0);
+  gtk_binding_entry_add_signal (binding_set,
+				GDK_h, GDK_CONTROL_MASK,
+                                "show-hidden",
+                                0);
 
   for (i = 0; i < 10; i++)
     gtk_binding_entry_add_signal (binding_set,
@@ -8725,7 +8737,14 @@ quick_bookmark_handler (GtkFileChooserDefault *impl,
   switch_to_shortcut (impl, bookmark_pos);
 }
 
-
+static void
+show_hidden_handler (GtkFileChooserDefault *impl)
+{
+  g_object_set (impl,
+		"show-hidden", !impl->show_hidden,
+		NULL);
+}
+
 
 /* Drag and drop interfaces */
 
