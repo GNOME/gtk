@@ -1,3 +1,11 @@
+2007-03-23  Matthias Clasen  <mclasen@redhat.com>
+
+	Merge from trunk:
+
+	* gtk/gtkfilechooserdefault.c: Add a keybinding to
+	toggle the visibility of the location entry.  (#383354, 
+	John Pye, patch by Carlos Garnacho)
+
 2007-03-22  Matthias Clasen  <mclasen@redhat.com>
 
 	Merge from trunk:

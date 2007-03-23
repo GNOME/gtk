@@ -162,6 +162,7 @@ enum {
   HOME_FOLDER,
   DESKTOP_FOLDER,
   QUICK_BOOKMARK,
+  LOCATION_TOGGLE_POPUP,
   LAST_SIGNAL
 };
 
@@ -317,6 +318,7 @@ static void           gtk_file_chooser_default_initial_focus          (GtkFileCh
 static void location_popup_handler (GtkFileChooserDefault *impl,
 				    const gchar           *path);
 static void location_popup_on_paste_handler (GtkFileChooserDefault *impl);
+static void location_toggle_popup_handler   (GtkFileChooserDefault *impl);
 static void up_folder_handler      (GtkFileChooserDefault *impl);
 static void down_folder_handler    (GtkFileChooserDefault *impl);
 static void home_folder_handler    (GtkFileChooserDefault *impl);
@@ -498,6 +500,14 @@ _gtk_file_chooser_default_class_init (GtkFileChooserDefaultClass *class)
 			     NULL, NULL,
 			     _gtk_marshal_VOID__VOID,
 			     G_TYPE_NONE, 0);
+  signals[LOCATION_TOGGLE_POPUP] =
+    _gtk_binding_signal_new (I_("location-toggle-popup"),
+			     G_OBJECT_CLASS_TYPE (class),
+			     G_SIGNAL_RUN_FIRST | G_SIGNAL_ACTION,
+			     G_CALLBACK (location_toggle_popup_handler),
+			     NULL, NULL,
+			     _gtk_marshal_VOID__VOID,
+			     G_TYPE_NONE, 0);
   signals[UP_FOLDER] =
     _gtk_binding_signal_new (I_("up-folder"),
 			     G_OBJECT_CLASS_TYPE (class),
@@ -543,8 +553,8 @@ _gtk_file_chooser_default_class_init (GtkFileChooserDefaultClass *class)
 
   gtk_binding_entry_add_signal (binding_set,
 				GDK_l, GDK_CONTROL_MASK,
-				"location-popup",
-				1, G_TYPE_STRING, "");
+				"location-toggle-popup",
+				0);
 
   gtk_binding_entry_add_signal (binding_set,
 				GDK_slash, 0,
@@ -4557,28 +4567,40 @@ location_mode_set (GtkFileChooserDefault *impl,
   impl->location_mode = new_mode;
 }
 
+static void
+toggle_location_mode (GtkFileChooserDefault *impl,
+                      gboolean               set_button)
+{
+  LocationMode new_mode;
+
+  /* toggle value */
+  new_mode = (impl->location_mode == LOCATION_MODE_PATH_BAR) ?
+    LOCATION_MODE_FILENAME_ENTRY : LOCATION_MODE_PATH_BAR;
+
+  location_mode_set (impl, new_mode, set_button);
+}
+
+static void
+location_toggle_popup_handler (GtkFileChooserDefault *impl)
+{
+  toggle_location_mode (impl, TRUE);
+}
+
 /* Callback used when one of the location mode buttons is toggled */
 static void
 location_button_toggled_cb (GtkToggleButton *toggle,
 			    GtkFileChooserDefault *impl)
 {
   gboolean is_active;
-  LocationMode new_mode;
 
   is_active = gtk_toggle_button_get_active (toggle);
 
   if (is_active)
-    {
-      g_assert (impl->location_mode == LOCATION_MODE_PATH_BAR);
-      new_mode = LOCATION_MODE_FILENAME_ENTRY;
-    }
+    g_assert (impl->location_mode == LOCATION_MODE_PATH_BAR);
   else
-    {
-      g_assert (impl->location_mode == LOCATION_MODE_FILENAME_ENTRY);
-      new_mode = LOCATION_MODE_PATH_BAR;
-    }
+    g_assert (impl->location_mode == LOCATION_MODE_FILENAME_ENTRY);
 
-  location_mode_set (impl, new_mode, FALSE);
+  toggle_location_mode (impl, FALSE);
 }
 
 /* Creates a toggle button for the location entry. */
@@ -8307,7 +8329,8 @@ list_selection_changed (GtkTreeSelection      *selection,
 
  out:
 
-  update_chooser_entry (impl);
+  if (impl->location_entry)
+    update_chooser_entry (impl);
   check_preview_change (impl);
   bookmarks_check_add_sensitivity (impl);
 
