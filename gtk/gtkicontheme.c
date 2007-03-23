@@ -2718,7 +2718,7 @@ icon_info_ensure_scale_and_pixbuf (GtkIconInfo *icon_info,
     return TRUE;
 
   /* At this point, we need to actually get the icon; either from the
-   * builting image or by loading the file
+   * builtin image or by loading the file
    */
   if (icon_info->cache_pixbuf)
     source_pixbuf = g_object_ref (icon_info->cache_pixbuf);
@@ -2753,7 +2753,7 @@ icon_info_ensure_scale_and_pixbuf (GtkIconInfo *icon_info,
    * the job. This is a bit of a waste when we scale here
    * and never get the final pixbuf; at the cost of a bit of
    * extra complexity, we could keep the source pixbuf around
-   * but not actually scale it until neede.
+   * but not actually scale it until needed.
    */
     
   if (icon_info->scale == 1.0)
