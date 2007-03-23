@@ -1,3 +1,11 @@
+2007-03-23  Jakub Steiner <jimmac@ximian.com>
+
+	* gtk-dialog-authentication.svg
+	* gtk-dialog-error.svg
+	* gtk-dialog-info.svg
+	* gtk-dialog-question.svg
+	* gtk-dialog-warning.svg: Start with a Tango face-lift.
+
 2007-03-23  Rodney Dawes  <dobey@novell.com>
 
 	* gtk/gtkicontheme.c: Fix a couple of comment typos (#421627)
