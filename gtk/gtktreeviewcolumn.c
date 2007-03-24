@@ -2695,14 +2695,14 @@ gtk_tree_view_column_cell_process_action (GtkTreeViewColumn  *tree_column,
   real_background_area = *background_area;
 
 
-  if (rtl)
-    depth = real_background_area.width - real_cell_area.width - horizontal_separator/2;
-  else
-    depth = real_cell_area.x - real_background_area.x - horizontal_separator/2;
-
   real_cell_area.x += focus_line_width;
   real_cell_area.y += focus_line_width;
   real_cell_area.height -= 2 * focus_line_width;
+
+  if (rtl)
+    depth = real_background_area.width - real_cell_area.width;
+  else
+    depth = real_cell_area.x - real_background_area.x;
 
   /* Find out how much extra space we have to allocate */
   for (list = tree_column->cell_list; list; list = list->next)
