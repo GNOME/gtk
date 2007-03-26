@@ -680,6 +680,7 @@ gtk_rc_context_get (GtkSettings *settings)
       context->rc_sets_class = NULL;
       context->rc_files = NULL;
       context->default_style = NULL;
+      context->reloading = FALSE;
 
       g_object_get (settings,
 		    "gtk-theme-name", &context->theme_name,

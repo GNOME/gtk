@@ -1,3 +1,7 @@
+2007-03-26  Christian Persch  <chpe@gnome.org>
+
+	* gtk/gtkrc.c: (gtk_rc_context_get): Initialise variable. Bug #423064.
+
 2007-03-24  Kristian Rietveld  <kris@gtk.org>
 
 	* gtk/gtktreeviewcolumn.c (gtk_tree_view_column_cell_process_action):
