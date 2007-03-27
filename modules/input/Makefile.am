@@ -98,6 +98,7 @@ im_multipress_la_SOURCES =	\
 	gtkimcontextmultipress.c	\
 	gtkimcontextmultipress.h	\
 	immultipress.c
+im_multipress_la_LIBADD = $(LDADDS)
 
 imconffiledir = $(DESTDIR)$(sysconfdir)/gtk-2.0
 dist_imconffile_DATA = im-multipress.conf

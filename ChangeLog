@@ -1,3 +1,7 @@
+2007-03-27  Tor Lillqvist  <tml@novell.com>
+
+	* modules/input/Makefile.am: Use LDADDS for im-multipress.la, too: 
+
 2007-03-26  Christian Persch  <chpe@gnome.org>
 
 	* gtk/gtkrc.c: (gtk_rc_context_get): Initialise variable. Bug #423064.
