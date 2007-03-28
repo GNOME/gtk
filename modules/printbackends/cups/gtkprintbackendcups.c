@@ -577,10 +577,17 @@ cups_dispatch_watch_dispatch (GSource     *source,
             g_print ("CUPS Backend: %s <source %p>\n", G_STRFUNC, source));
 
   if (gtk_cups_result_is_error (result))
-    g_warning ("Error result: %s", gtk_cups_result_get_error_string (result));
+    {
+      GTK_NOTE (PRINTING, 
+                g_print("Error result: %s (type %i, status %i, code %i)\n", 
+                        gtk_cups_result_get_error_string (result),
+                        gtk_cups_result_get_error_type (result),
+                        gtk_cups_result_get_error_status (result),
+                        gtk_cups_result_get_error_code (result)));
+     }
 
   ep_callback (GTK_PRINT_BACKEND (dispatch->backend), result, user_data);
-
+    
   return FALSE;
 }
 
@@ -1228,7 +1235,18 @@ cups_request_ppd_cb (GtkPrintBackendCups *print_backend,
 
   if (gtk_cups_result_is_error (result))
     {
-      g_signal_emit_by_name (printer, "details-acquired", FALSE);
+      gboolean success = FALSE;
+
+      /* if we get a 404 then it is just a raw printer without a ppd
+         and not an error */
+      if ((gtk_cups_result_get_error_type (result) == GTK_CUPS_ERROR_HTTP) &&
+          (gtk_cups_result_get_error_status (result) == HTTP_NOT_FOUND))
+        {
+          gtk_printer_set_has_details (printer, TRUE);
+          success = TRUE;
+        } 
+        
+      g_signal_emit_by_name (printer, "details-acquired", success);
       return;
     }
 

@@ -1,4 +1,13 @@
-2007-03-23  Matthias Clasen  <mclasen@redhat.com>
+2007-03-28  Matthias Clasen  <mclasen@redhat.com>
+
+	Merge from trunk:
+
+	* modules/printbackends/cups/gtkcupsutils.[hc]:
+	* modules/printbackends/cups/gtkprintbackendcups.c: Apply
+	a patch by John Palmieri to make the cups print backend support
+	raw printers.  
+
+2007-03-28  Kristian Rietveld  <kris@imendio.com>
 
 	Merge from trunk:
 
