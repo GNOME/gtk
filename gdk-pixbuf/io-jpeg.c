@@ -518,6 +518,7 @@ static gboolean
 gdk_pixbuf__jpeg_image_stop_load (gpointer data, GError **error)
 {
 	JpegProgContext *context = (JpegProgContext *) data;
+        gboolean retval;
 
 	g_return_val_if_fail (context != NULL, TRUE);
 	
@@ -530,11 +531,13 @@ gdk_pixbuf__jpeg_image_stop_load (gpointer data, GError **error)
 	
 	/* if we have an error? */
 	if (sigsetjmp (context->jerr.setjmp_buffer, 1)) {
-		jpeg_destroy_decompress (&context->cinfo);
+                retval = FALSE;
 	} else {
-		jpeg_finish_decompress(&context->cinfo);
-		jpeg_destroy_decompress(&context->cinfo);
+		jpeg_finish_decompress (&context->cinfo);
+                retval = TRUE;
 	}
+
+        jpeg_destroy_decompress (&context->cinfo);
 
 	if (context->cinfo.src) {
 		my_src_ptr src = (my_src_ptr) context->cinfo.src;
@@ -544,7 +547,7 @@ gdk_pixbuf__jpeg_image_stop_load (gpointer data, GError **error)
 
 	g_free (context);
 
-        return TRUE;
+        return retval;
 }
 
 
@@ -686,16 +689,16 @@ gdk_pixbuf__jpeg_image_load_increment (gpointer data,
 			src->pub.bytes_in_buffer += num_copy;
 			bufhd += num_copy;
 			num_left -= num_copy;
-		} else {
-		/* did anything change from last pass, if not return */
-			if (first) {
-				last_bytes_left = src->pub.bytes_in_buffer;
-				first = FALSE;
-			} else if (src->pub.bytes_in_buffer == last_bytes_left)
-				spinguard++;
-			else
-				last_bytes_left = src->pub.bytes_in_buffer;
 		}
+
+                /* did anything change from last pass, if not return */
+                if (first) {
+                        last_bytes_left = src->pub.bytes_in_buffer;
+                        first = FALSE;
+                } else if (src->pub.bytes_in_buffer == last_bytes_left)
+                        spinguard++;
+                else
+                        last_bytes_left = src->pub.bytes_in_buffer;
 
 		/* should not go through twice and not pull bytes out of buf */
 		if (spinguard > 2)
