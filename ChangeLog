@@ -1,3 +1,9 @@
+2007-03-28  Kristian Rietveld  <kris@imendio.com>
+
+	* gtk/gtkwidget.c (gtk_widget_set_tooltip_window): don't unref
+	tooltip_window, since this is handled by set_qdata_full() already.
+	(#412001, Torsten Schoenfeld).
+
 2007-03-27  Tor Lillqvist  <tml@novell.com>
 
 	* modules/input/Makefile.am: Use LDADDS for im-multipress.la, too: 

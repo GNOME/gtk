@@ -8481,9 +8481,6 @@ gtk_widget_set_tooltip_window (GtkWidget *widget,
   if (custom_window)
     g_object_ref (custom_window);
 
-  if (tooltip_window)
-    g_object_unref (tooltip_window);
-
   tooltip_window = custom_window;
   g_object_set_qdata_full (G_OBJECT (widget), quark_tooltip_window,
 			   tooltip_window, g_object_unref);
