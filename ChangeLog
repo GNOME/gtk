@@ -1,3 +1,10 @@
+2007-03-28  Matthias Clasen  <mclasen@redhat.com>
+
+	* modules/printbackends/cups/gtkcupsutils.[hc]:
+	* modules/printbackends/cups/gtkprintbackendcups.c: Apply
+	a patch by John Palmieri to make the cups print backend support
+	raw printers.  
+
 2007-03-28  Kristian Rietveld  <kris@imendio.com>
 
 	* gtk/gtkwidget.c (gtk_widget_set_tooltip_window): don't unref

@@ -51,6 +51,11 @@ struct _GtkCupsResult
 {
   gchar *error_msg;
   ipp_t *ipp_response;
+  GtkCupsErrorType error_type;
+
+  /* some error types like HTTP_ERROR have a status and a code */
+  int error_status;            
+  int error_code;
 
   guint is_error : 1;
   guint is_ipp_response : 1;
@@ -77,15 +82,20 @@ static GtkCupsRequestStateFunc get_states[] = {
 };
 
 static void
-gtk_cups_result_set_error (GtkCupsResult *result, 
-                           const char    *error_msg,
+gtk_cups_result_set_error (GtkCupsResult    *result,
+                           GtkCupsErrorType  error_type,
+                           int               error_status,
+                           int               error_code, 
+                           const char       *error_msg,
 			   ...)
 {
   va_list args;
 
   result->is_ipp_response = FALSE;
-
   result->is_error = TRUE;
+  result->error_type = error_type;
+  result->error_status = error_status;
+  result->error_code = error_code;
 
   va_start (args, error_msg);
   result->error_msg = g_strdup_vprintf (error_msg, args);
@@ -214,7 +224,13 @@ gtk_cups_request_read_write (GtkCupsRequest *request)
   if (request->attempts > _GTK_CUPS_MAX_ATTEMPTS && 
       request->state != GTK_CUPS_REQUEST_DONE)
     {
-      gtk_cups_result_set_error (request->result, "Too many failed attempts");
+      /* TODO: should add a status or error code for too many failed attempts */
+      gtk_cups_result_set_error (request->result, 
+                                 GTK_CUPS_ERROR_GENERAL,
+                                 0,
+                                 0, 
+                                 "Too many failed attempts");
+
       request->state = GTK_CUPS_REQUEST_DONE;
       request->poll_state = GTK_CUPS_HTTP_IDLE;
     }
@@ -629,7 +645,12 @@ _post_send (GtkCupsRequest *request)
           request->state = GTK_CUPS_POST_DONE;
           request->poll_state = GTK_CUPS_HTTP_IDLE;
 
-          gtk_cups_result_set_error (request->result, "Failed Post");
+          /* TODO: should add a status or error code for failed post */
+          gtk_cups_result_set_error (request->result,
+                                     GTK_CUPS_ERROR_GENERAL,
+                                     0,
+                                     0,
+                                     "Failed Post");
         }
 
       request->attempts++;
@@ -656,12 +677,16 @@ _post_write_request (GtkCupsRequest *request)
 
   if (ipp_status == IPP_ERROR)
     {
+      int cups_error = cupsLastError ();
       request->state = GTK_CUPS_POST_DONE;
       request->poll_state = GTK_CUPS_HTTP_IDLE;
  
       gtk_cups_result_set_error (request->result, 
+                                 GTK_CUPS_ERROR_IPP,
+                                 ipp_status,
+                                 cups_error,
                                  "%s", 
-                                 ippErrorString (cupsLastError ()));
+                                 ippErrorString (cups_error));
       return;
     }
 
@@ -717,7 +742,10 @@ _post_write_data (GtkCupsRequest *request)
           request->state = GTK_CUPS_POST_DONE;
 	  request->poll_state = GTK_CUPS_HTTP_IDLE;
      
-          gtk_cups_result_set_error (request->result, 
+          gtk_cups_result_set_error (request->result,
+                                     GTK_CUPS_ERROR_IO,
+                                     io_status,
+                                     error->code, 
                                      "Error reading from cache file: %s",
                                      error->message);
 
@@ -747,7 +775,10 @@ _post_write_data (GtkCupsRequest *request)
           request->state = GTK_CUPS_POST_DONE;
 	  request->poll_state = GTK_CUPS_HTTP_IDLE;
      
-          gtk_cups_result_set_error (request->result, 
+          gtk_cups_result_set_error (request->result,
+                                     GTK_CUPS_ERROR_HTTP,
+                                     http_status,
+                                     http_errno, 
                                      "Error writing to socket in Post %s", 
                                      g_strerror (http_errno));
           return;
@@ -782,7 +813,12 @@ _post_check (GtkCupsRequest *request)
       request->state = GTK_CUPS_POST_DONE;
       request->poll_state = GTK_CUPS_HTTP_IDLE;
       
-      gtk_cups_result_set_error (request->result, "Can't prompt for authorization");
+      /* TODO: create a not implemented error code */
+      gtk_cups_result_set_error (request->result, 
+                                 GTK_CUPS_ERROR_GENERAL,
+                                 0,
+                                 0,
+                                 "Can't prompt for authorization");
       return;
     }
   else if (http_status == HTTP_ERROR)
@@ -802,7 +838,12 @@ _post_check (GtkCupsRequest *request)
           request->state = GTK_CUPS_POST_DONE;
           request->poll_state = GTK_CUPS_HTTP_IDLE;
      
-          gtk_cups_result_set_error (request->result, "Unknown HTTP error");
+          gtk_cups_result_set_error (request->result,
+                                     GTK_CUPS_ERROR_HTTP,
+                                     http_status,
+                                     error, 
+                                     "Unknown HTTP error");
+
           return;
         }
     }
@@ -834,7 +875,10 @@ _post_check (GtkCupsRequest *request)
       else
         {
           request->state = GTK_CUPS_POST_DONE;
-          gtk_cups_result_set_error (request->result, 
+          gtk_cups_result_set_error (request->result,
+                                     GTK_CUPS_ERROR_HTTP,
+                                     http_status,
+                                     http_errno, 
                                      "HTTP Error in POST %s", 
                                      g_strerror (http_errno));
          request->poll_state = GTK_CUPS_HTTP_IDLE;
@@ -885,8 +929,13 @@ _post_read_response (GtkCupsRequest *request)
 
   if (ipp_status == IPP_ERROR)
     {
-      gtk_cups_result_set_error (request->result, "%s", 
-                                 ippErrorString (cupsLastError ()));
+      int ipp_error = cupsLastError ();
+      gtk_cups_result_set_error (request->result,  
+                                 GTK_CUPS_ERROR_IPP,
+                                 ipp_status,
+                                 ipp_error,
+                                 "%s",
+                                 ippErrorString (ipp_error));
       
       ippDelete (request->result->ipp_response);
       request->result->ipp_response = NULL;
@@ -911,8 +960,12 @@ _get_send (GtkCupsRequest *request)
 
   if (request->data_io == NULL)
     {
-      gtk_cups_result_set_error (request->result, 
+      gtk_cups_result_set_error (request->result,
+                                 GTK_CUPS_ERROR_IO,
+                                 G_IO_STATUS_ERROR,
+                                 G_IO_CHANNEL_ERROR_FAILED, 
                                  "Get requires an open io channel");
+
       request->state = GTK_CUPS_GET_DONE;
       request->poll_state = GTK_CUPS_HTTP_IDLE;
 
@@ -930,8 +983,13 @@ _get_send (GtkCupsRequest *request)
         {
           request->state = GTK_CUPS_GET_DONE;
           request->poll_state = GTK_CUPS_HTTP_IDLE;
-	  
-          gtk_cups_result_set_error (request->result, "Failed Get");
+	 
+          /* TODO: should add a status or error code for failed GET */ 
+          gtk_cups_result_set_error (request->result, 
+                                     GTK_CUPS_ERROR_GENERAL,
+                                     0,
+                                     0,
+                                     "Failed Get");
         }
 
       request->attempts++;
@@ -968,8 +1026,13 @@ _get_check (GtkCupsRequest *request)
       g_warning ("NOT IMPLEMENTED: We need to prompt for authorization in a non blocking manner");
       request->state = GTK_CUPS_GET_DONE;
       request->poll_state = GTK_CUPS_HTTP_IDLE;
- 
-      gtk_cups_result_set_error (request->result, "Can't prompt for authorization");
+
+      /* TODO: should add a status or error code for not implemented */ 
+      gtk_cups_result_set_error (request->result, 
+                                 GTK_CUPS_ERROR_GENERAL,
+                                 0,
+                                 0,
+                                 "Can't prompt for authorization");
       return;
     }
 /* TODO: detect ssl in configure.ac */
@@ -988,7 +1051,7 @@ _get_check (GtkCupsRequest *request)
       request->attempts++;
       goto again;
     }
-#endif 
+#endif
   else if (http_status != HTTP_OK)
     {
       int http_errno;
@@ -1000,7 +1063,10 @@ _get_check (GtkCupsRequest *request)
       else
         {
           request->state = GTK_CUPS_GET_DONE;
-          gtk_cups_result_set_error (request->result, 
+          gtk_cups_result_set_error (request->result,
+                                     GTK_CUPS_ERROR_HTTP,
+                                     http_status,
+                                     http_errno, 
                                      "HTTP Error in GET %s", 
                                      g_strerror (http_errno));
           request->poll_state = GTK_CUPS_HTTP_IDLE;
@@ -1078,7 +1144,11 @@ _get_read_data (GtkCupsRequest *request)
       request->state = GTK_CUPS_POST_DONE;
       request->poll_state = GTK_CUPS_HTTP_IDLE;
     
-      gtk_cups_result_set_error (request->result, error->message);
+      gtk_cups_result_set_error (request->result,
+                                 GTK_CUPS_ERROR_IO,
+                                 io_status,
+                                 error->code, 
+                                 error->message);
       g_error_free (error);
     }
 }
@@ -1099,6 +1169,24 @@ ipp_t *
 gtk_cups_result_get_response (GtkCupsResult *result)
 {
   return result->ipp_response;
+}
+
+GtkCupsErrorType
+gtk_cups_result_get_error_type (GtkCupsResult *result)
+{
+  return result->error_type;
+}
+
+int
+gtk_cups_result_get_error_status (GtkCupsResult *result)
+{
+  return result->error_status;
+}
+
+int
+gtk_cups_result_get_error_code (GtkCupsResult *result)
+{
+  return result->error_code;
 }
 
 const char *

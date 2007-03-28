@@ -33,6 +33,14 @@ typedef struct _GtkCupsResult   GtkCupsResult;
 
 typedef enum
 {
+  GTK_CUPS_ERROR_HTTP,
+  GTK_CUPS_ERROR_IPP,
+  GTK_CUPS_ERROR_IO,
+  GTK_CUPS_ERROR_GENERAL
+} GtkCupsErrorType;
+
+typedef enum
+{
   GTK_CUPS_POST,
   GTK_CUPS_GET
 } GtkCupsRequestType;
@@ -126,6 +134,9 @@ void             gtk_cups_request_encode_option   (GtkCupsRequest     *request,
 						   const gchar        *value);
 gboolean         gtk_cups_result_is_error         (GtkCupsResult      *result);
 ipp_t          * gtk_cups_result_get_response     (GtkCupsResult      *result);
+GtkCupsErrorType gtk_cups_result_get_error_type   (GtkCupsResult      *result);
+int              gtk_cups_result_get_error_status (GtkCupsResult      *result);
+int              gtk_cups_result_get_error_code   (GtkCupsResult      *result);
 const char     * gtk_cups_result_get_error_string (GtkCupsResult      *result);
 
 G_END_DECLS
