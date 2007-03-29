@@ -1,3 +1,9 @@
+2007-03-29  Michael Natterer  <mitch@imendio.com>
+
+	* gtk/gtkmenu.c: get rid of local GtkSettings variables by moving
+	gtk_widget_get_settings() into the g_object_get() call. Some small
+	indentation fixes.
+
 2007-03-28  Matthias Clasen  <mclasen@redhat.com>
 
 	* modules/printbackends/cups/gtkcupsutils.[hc]:
