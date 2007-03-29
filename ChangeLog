@@ -1,5 +1,18 @@
 2007-03-29  Michael Natterer  <mitch@imendio.com>
 
+	Don't close menus on clicks on their border area (bug #423761).
+	(modified patch from maemo-gtk).
+
+	* gtk/gtkmenu.c (gtk_menu_button_press)
+	(gtk_menu_button_release): bail out early if the click was on the
+	menu's border (not on any item and not outside the window).
+
+	(pointer_in_menu_window): new utility function which checks if
+	passed root coords are inside the menu_shell or one of its
+	parent shells.
+
+2007-03-29  Michael Natterer  <mitch@imendio.com>
+
 	* gtk/gtkmenu.c: get rid of local GtkSettings variables by moving
 	gtk_widget_get_settings() into the g_object_get() call. Some small
 	indentation fixes.

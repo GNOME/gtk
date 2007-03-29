@@ -2579,15 +2579,54 @@ gtk_menu_button_scroll (GtkMenu        *menu,
 }
 
 static gboolean
+pointer_in_menu_window (GtkWidget *widget,
+                        gdouble    x_root,
+                        gdouble    y_root)
+{
+  GtkMenu *menu = GTK_MENU (widget);
+
+  if (GTK_WIDGET_MAPPED (menu->toplevel))
+    {
+      GtkMenuShell *menu_shell;
+      gint          window_x, window_y;
+
+      gdk_window_get_position (menu->toplevel->window, &window_x, &window_y);
+
+      if (x_root >= window_x && x_root < window_x + widget->allocation.width &&
+          y_root >= window_y && y_root < window_y + widget->allocation.height)
+        return TRUE;
+
+      menu_shell = GTK_MENU_SHELL (widget);
+
+      if (GTK_IS_MENU (menu_shell->parent_menu_shell))
+        return pointer_in_menu_window (menu_shell->parent_menu_shell,
+                                       x_root, y_root);
+    }
+
+  return FALSE;
+}
+
+static gboolean
 gtk_menu_button_press (GtkWidget      *widget,
                        GdkEventButton *event)
 {
   if (event->type != GDK_BUTTON_PRESS)
     return FALSE;
 
-  /* Don't pop down the menu for presses over scroll arrows
+  /* Don't pass down to menu shell for presses over scroll arrows
    */
   if (gtk_menu_button_scroll (GTK_MENU (widget), event))
+    return TRUE;
+
+  /*  Don't pass down to menu shell if a non-menuitem part of the menu
+   *  was clicked. The check for the event_widget being a GtkMenuShell
+   *  works because we have the pointer grabbed on menu_shell->window
+   *  with owner_events=TRUE, so all events that are either outside
+   *  the menu or on its border are delivered relative to
+   *  menu_shell->window.
+   */
+  if (GTK_IS_MENU_SHELL (gtk_get_event_widget ((GdkEvent *) event)) &&
+      pointer_in_menu_window (widget, event->x_root, event->y_root))
     return TRUE;
 
   return GTK_WIDGET_CLASS (gtk_menu_parent_class)->button_press_event (widget, event);
@@ -2608,9 +2647,16 @@ gtk_menu_button_release (GtkWidget      *widget,
   if (event->type != GDK_BUTTON_RELEASE)
     return FALSE;
 
-  /* Don't pop down the menu for releases over scroll arrows
+  /* Don't pass down to menu shell for releases over scroll arrows
    */
   if (gtk_menu_button_scroll (GTK_MENU (widget), event))
+    return TRUE;
+
+  /*  Don't pass down to menu shell if a non-menuitem part of the menu
+   *  was clicked (see comment in button_press()).
+   */
+  if (GTK_IS_MENU_SHELL (gtk_get_event_widget ((GdkEvent *) event)) &&
+      pointer_in_menu_window (widget, event->x_root, event->y_root))
     return TRUE;
 
   return GTK_WIDGET_CLASS (gtk_menu_parent_class)->button_release_event (widget, event);
