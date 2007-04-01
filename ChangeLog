@@ -1,5 +1,11 @@
 2007-04-01  Cody Russell  <bratsche@gnome.org>
 
+	* modules/engines/ms-windows/msw_style.c: Unref the
+	rotated pixbuf.  Somehow this got applied to HEAD
+	but not to gtk-2-10.  (Daniel Atallah, #403470)
+
+2007-04-01  Cody Russell  <bratsche@gnome.org>
+
 	Merge from trunk:
 
         * modules/engines/ms-windows/msw_style.c: Fix rendering of

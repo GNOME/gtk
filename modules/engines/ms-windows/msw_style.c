@@ -2536,6 +2536,8 @@ draw_extension (GtkStyle * style,
 
 			   gdk_draw_pixbuf (window, NULL, pixbuf, 0, 0, x2, y2, w2, h2, GDK_RGB_DITHER_NONE, 0, 0);
 
+			   g_object_unref (G_OBJECT (pixbuf));
+
 			   if (real_gap_side == GTK_POS_LEFT || real_gap_side == GTK_POS_RIGHT || real_gap_side == GTK_POS_BOTTOM)
 			     {
 			       g_object_unref (pixmap);
