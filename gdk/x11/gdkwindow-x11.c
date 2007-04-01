@@ -614,6 +614,12 @@ setup_toplevel_window (GdkWindow *window,
 		   XA_WINDOW, 32, PropModeReplace,
 		   (guchar *) &GDK_DISPLAY_X11 (screen_x11->display)->leader_window, 1);
 
+  if (toplevel->focus_window != None)
+    XChangeProperty (xdisplay, xid, 
+                     gdk_x11_get_xatom_by_name_for_display (screen_x11->display, "_NET_WM_USER_TIME_WINDOW"),
+                     XA_WINDOW, 32, PropModeReplace,
+                     (guchar *) &toplevel->focus_window, 1);
+
   if (!obj->focus_on_map)
     gdk_x11_window_set_user_time (window, 0);
   else if (GDK_DISPLAY_X11 (screen_x11->display)->user_time != 0)
@@ -4256,6 +4262,7 @@ gdk_x11_window_set_user_time (GdkWindow *window,
   GdkDisplayX11 *display_x11;
   GdkToplevelX11 *toplevel;
   glong timestamp_long = (glong)timestamp;
+  Window xid;
 
   g_return_if_fail (GDK_IS_WINDOW (window));
 
@@ -4266,7 +4273,20 @@ gdk_x11_window_set_user_time (GdkWindow *window,
   display_x11 = GDK_DISPLAY_X11 (display);
   toplevel = _gdk_x11_window_get_toplevel (window);
 
-  XChangeProperty (GDK_DISPLAY_XDISPLAY (display), GDK_WINDOW_XID (window),
+  if (!toplevel)
+    {
+      g_warning ("gdk_window_set_user_time called on non-toplevel\n");
+      return;
+    }
+
+  if (toplevel->focus_window != None &&
+      gdk_x11_screen_supports_net_wm_hint (GDK_WINDOW_SCREEN (window),
+                                           gdk_atom_intern_static_string ("_NET_WM_USER_TIME_WINDOW")))
+    xid = toplevel->focus_window;
+  else
+    xid = GDK_WINDOW_XID (window);
+
+  XChangeProperty (GDK_DISPLAY_XDISPLAY (display), xid,
                    gdk_x11_get_xatom_by_name_for_display (display, "_NET_WM_USER_TIME"),
                    XA_CARDINAL, 32, PropModeReplace,
                    (guchar *)&timestamp_long, 1);
