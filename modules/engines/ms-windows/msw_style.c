@@ -2466,18 +2466,12 @@ draw_extension (GtkStyle * style,
 	      }
 	    else if (real_gap_side == GTK_POS_BOTTOM)
 	      {
-		x2 = x;
-		y2 = y + (state_type == GTK_STATE_NORMAL ? 0 : notebook->tab_vborder);
+		x2 = 0;
+		y2 = 0;
 		w2 = width;
 		h2 = height - (state_type == GTK_STATE_NORMAL ? 0 : notebook->tab_vborder * 2);
-		target = window;
-
-		/* If we are currently drawing the right-most tab (any state)... */
-		if (widget->allocation.x + widget->allocation.width - border_width == x + width)
-		  {
-		    x2--;
-		    w2--;
-		  }
+		pixmap = gdk_pixmap_new (window, w2, h2, -1);
+		target = pixmap;
 	      }
 
 	    if (xp_theme_draw (target, tab_part, style, x2, y2, w2, h2, state_type, NULL /*area*/))
@@ -2526,10 +2520,23 @@ draw_extension (GtkStyle * style,
 				   h2--;
 				 }
 			     }
+                           else if (real_gap_side == GTK_POS_BOTTOM)
+                             {
+				x2 = x;
+				y2 = y + (state_type == GTK_STATE_NORMAL ? 0 : notebook->tab_vborder);
+				w2 = width;
+				h2 = height - (state_type == GTK_STATE_NORMAL ? 0 : notebook->tab_vborder * 2);
+				/* If we are currently drawing the right-most tab (any state)... */
+				if (widget->allocation.x + widget->allocation.width - border_width == x + width)
+				  {
+				    x2--;
+				    w2--;
+				  }
+                             }
 
 			   gdk_draw_pixbuf (window, NULL, pixbuf, 0, 0, x2, y2, w2, h2, GDK_RGB_DITHER_NONE, 0, 0);
 
-			   if (real_gap_side == GTK_POS_LEFT || real_gap_side == GTK_POS_RIGHT)
+			   if (real_gap_side == GTK_POS_LEFT || real_gap_side == GTK_POS_RIGHT || real_gap_side == GTK_POS_BOTTOM)
 			     {
 			       g_object_unref (pixmap);
 			     }
