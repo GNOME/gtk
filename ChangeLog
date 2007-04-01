@@ -1,3 +1,8 @@
+2007-04-01  Cody Russell  <bratsche@gnome.org>
+
+	* modules/engines/ms-windows/msw_style.c: Fix rendering of
+	notebook tabs when they are bottom-oriented.  Fixes #399253.
+
 2007-03-31  Elijah Newren  <newren gmail com>
 
 	* gdk/x11/gdkwindow-x11.c (setup_toplevel_window,
