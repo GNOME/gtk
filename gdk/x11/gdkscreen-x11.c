@@ -600,12 +600,16 @@ check_xfree_xinerama (GdkScreen *screen)
       GdkScreenX11 *screen_x11 = GDK_SCREEN_X11 (screen);
       XineramaScreenInfo *monitors = XineramaQueryScreens (GDK_SCREEN_XDISPLAY (screen),
 							   &screen_x11->num_monitors);
-      if (screen_x11->num_monitors <= 0)
+      if (screen_x11->num_monitors <= 0 || monitors == NULL)
 	{
-	  /* FIXME: We need to trap errors, since XINERAMA isn't always XINERAMA.
-	   *        I don't think the num_monitors <= 0 check has any validity.
-	   */ 
-	  g_error ("error while retrieving Xinerama information");
+	  /* If Xinerama doesn't think we have any monitors, try acting as
+	   * though we had no Xinerama. If the "no monitors" condition
+	   * is because XRandR 1.2 is currently switching between CRTCs,
+	   * we'll be notified again when we have our monitor back,
+	   * and can go back into Xinerama-ish mode at that point. */
+	  if (monitors)
+	    XFree (monitors);
+	  return FALSE;
 	}
       else
 	{

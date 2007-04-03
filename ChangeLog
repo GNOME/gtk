@@ -1,3 +1,9 @@
+2007-04-03  Loïc Minier  <lool@dooz.org>
+
+	* gdk/x11/gdkscreen-x11.c: (check_xfree_xinerama): Revert to
+	non-xinerama mode when XineramaQueryScreens returns NULL; patch from
+	Simon McVittie; #425786.
+
 2007-04-01  Cody Russell  <bratsche@gnome.org>
 
 	* modules/engines/ms-windows/msw_style.c: Unref the
