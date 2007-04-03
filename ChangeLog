@@ -1,3 +1,9 @@
+2007-04-03  Behdad Esfahbod  <behdad@gnome.org>
+
+	* gtk/gtksettings.c (settings_update_font_options): Don't set
+	metrics-hinting font option.  Rely on the default value which is
+	on for all raster cairo surfaces. (#425985)
+
 2007-04-03  Loïc Minier  <lool@dooz.org>
 
 	* gdk/x11/gdkscreen-x11.c: (check_xfree_xinerama): Revert to
