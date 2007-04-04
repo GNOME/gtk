@@ -1,3 +1,9 @@
+2007-04-04  Kristian Rietveld  <kris@imendio.com>
+
+	* gtk/gtktooltip.c (tooltip_browse_mode_expired),
+	(gtk_tooltip_hide_tooltip), (tooltip_popup_timeout),
+	(gtk_tooltip_start_delay): use new gdk_threads API.
+
 2007-04-03  Behdad Esfahbod  <behdad@gnome.org>
 
 	* gtk/gtksettings.c (settings_update_font_options): Don't set

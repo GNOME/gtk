@@ -526,8 +526,6 @@ tooltip_browse_mode_expired (gpointer data)
 {
   GtkTooltip *tooltip;
 
-  GDK_THREADS_ENTER ();
-
   tooltip = GTK_TOOLTIP (data);
 
   tooltip->browse_mode_enabled = FALSE;
@@ -536,8 +534,6 @@ tooltip_browse_mode_expired (gpointer data)
   /* destroy tooltip */
   g_object_set_data (G_OBJECT (gtk_widget_get_display (tooltip->window)),
 		     "gdk-display-current-tooltip", NULL);
-
-  GDK_THREADS_LEAVE ();
 
   return FALSE;
 }
@@ -763,10 +759,10 @@ gtk_tooltip_hide_tooltip (GtkTooltip *tooltip)
        */
       if (!tooltip->browse_mode_timeout_id)
 	tooltip->browse_mode_timeout_id =
-	  g_timeout_add_full (0, timeout,
-			      tooltip_browse_mode_expired,
-			      g_object_ref (tooltip),
-			      g_object_unref);
+	  gdk_threads_add_timeout_full (0, timeout,
+					tooltip_browse_mode_expired,
+					g_object_ref (tooltip),
+					g_object_unref);
     }
   else
     {
@@ -790,8 +786,6 @@ tooltip_popup_timeout (gpointer data)
   GdkDisplay *display;
   GtkTooltip *tooltip;
 
-  GDK_THREADS_ENTER ();
-
   display = GDK_DISPLAY_OBJECT (data);
 
   gtk_tooltip_show_tooltip (display);
@@ -799,8 +793,6 @@ tooltip_popup_timeout (gpointer data)
   tooltip = g_object_get_data (G_OBJECT (display),
 			       "gdk-display-current-tooltip");
   tooltip->timeout_id = 0;
-
-  GDK_THREADS_LEAVE ();
 
   return FALSE;
 }
@@ -828,10 +820,10 @@ gtk_tooltip_start_delay (GdkDisplay *display)
   else
     g_object_get (settings, "gtk-tooltip-timeout", &timeout, NULL);
 
-  tooltip->timeout_id = g_timeout_add_full (0, timeout,
-					    tooltip_popup_timeout,
-					    g_object_ref (display),
-					    g_object_unref);
+  tooltip->timeout_id = gdk_threads_add_timeout_full (0, timeout,
+						      tooltip_popup_timeout,
+						      g_object_ref (display),
+						      g_object_unref);
 }
 
 void
