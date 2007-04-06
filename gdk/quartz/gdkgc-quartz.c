@@ -268,14 +268,24 @@ static void
 gdk_quartz_draw_tiled_pattern (void         *info,
 			       CGContextRef  context)
 {
-  GdkGC      *gc = GDK_GC (info);
-  CGImageRef  pattern_image;
+  GdkGC       *gc = GDK_GC (info);
+  GdkGCQuartz *private = GDK_GC_QUARTZ (gc);
+  CGImageRef   pattern_image;
+  size_t       width, height;
 
   pattern_image = GDK_PIXMAP_IMPL_QUARTZ (GDK_PIXMAP_OBJECT (_gdk_gc_get_tile (gc))->impl)->image;
 
-  CGContextDrawImage (context, CGRectMake (0, 0,
-					   CGImageGetWidth (pattern_image),
-					   CGImageGetHeight (pattern_image)),
+  width = CGImageGetWidth (pattern_image);
+  height = CGImageGetHeight (pattern_image);
+
+  if (private->is_window)
+    {
+      CGContextTranslateCTM (context, 0, height);
+      CGContextScaleCTM (context, 1.0, -1.0);
+    }
+
+  CGContextDrawImage (context, 
+		      CGRectMake (0, 0, width, height),
 		      pattern_image);
 }
 
@@ -294,8 +304,9 @@ gdk_quartz_draw_stippled_pattern (void         *info,
 		     CGImageGetHeight (pattern_image));
 
   CGContextClipToMask (context, rect, pattern_image);
-  gdk_quartz_get_rgba_from_pixel (gc->colormap, _gdk_gc_get_fg_pixel (gc),
-				  &r, &g, &b, &a);
+  _gdk_quartz_colormap_get_rgba_from_pixel (gc->colormap, 
+					    _gdk_gc_get_fg_pixel (gc),
+					    &r, &g, &b, &a);
   CGContextSetRGBFillColor (context, r, g, b, a);
   CGContextFillRect (context, rect);
 }
@@ -314,22 +325,25 @@ gdk_quartz_draw_opaque_stippled_pattern (void         *info,
 		     CGImageGetWidth (pattern_image),
 		     CGImageGetHeight (pattern_image));
 
-  gdk_quartz_get_rgba_from_pixel (gc->colormap, _gdk_gc_get_bg_pixel (gc),
-				  &r, &g, &b, &a);
+  _gdk_quartz_colormap_get_rgba_from_pixel (gc->colormap, 
+					    _gdk_gc_get_bg_pixel (gc),
+					    &r, &g, &b, &a);
   CGContextSetRGBFillColor (context, r, g, b, a);
   CGContextFillRect (context, rect);
 
   CGContextClipToMask (context, rect, pattern_image);
-  gdk_quartz_get_rgba_from_pixel (gc->colormap, _gdk_gc_get_fg_pixel (gc),
-				  &r, &g, &b, &a);
+  _gdk_quartz_colormap_get_rgba_from_pixel (gc->colormap, 
+					    _gdk_gc_get_fg_pixel (gc),
+					    &r, &g, &b, &a);
   CGContextSetRGBFillColor (context, r, g, b, a);
   CGContextFillRect (context, rect);
 }
 
 void
-gdk_quartz_update_context_from_gc (CGContextRef                context,
-				   GdkGC                      *gc,
-				   GdkQuartzContextValuesMask  mask)
+_gdk_quartz_gc_update_cg_context (GdkGC                      *gc,
+				  GdkDrawable                *drawable,
+				  CGContextRef                context,
+				  GdkQuartzContextValuesMask  mask)
 {
   GdkGCQuartz *private;
   guint32      fg_pixel;
@@ -435,8 +449,9 @@ gdk_quartz_update_context_from_gc (CGContextRef                context,
       CGLineJoin line_join = kCGLineJoinMiter;
       gfloat     r, g, b, a;
 
-      gdk_quartz_get_rgba_from_pixel (gc->colormap, fg_pixel,
-				      &r, &g, &b, &a);
+      _gdk_quartz_colormap_get_rgba_from_pixel (gc->colormap, 
+						fg_pixel,
+						&r, &g, &b, &a);
       CGContextSetRGBStrokeColor (context, r, g, b, a);
 
       CGContextSetLineWidth (context, MAX (G_MINFLOAT, private->line_width));
@@ -500,8 +515,9 @@ gdk_quartz_update_context_from_gc (CGContextRef                context,
 
       if (fill == GDK_SOLID)
 	{
-	  gdk_quartz_get_rgba_from_pixel (gc->colormap, fg_pixel,
-					  &r, &g, &b, &a);
+	  _gdk_quartz_colormap_get_rgba_from_pixel (gc->colormap, 
+						    fg_pixel,
+						    &r, &g, &b, &a);
 	  CGContextSetRGBFillColor (context, r, g, b, a);
 	}
       else
@@ -512,6 +528,7 @@ gdk_quartz_update_context_from_gc (CGContextRef                context,
 	      gfloat     width, height;
 	      gboolean   is_colored = FALSE;
 	      CGPatternCallbacks callbacks =  { 0, NULL, NULL };
+	      CGPoint    phase;
 
 	      switch (fill)
 		{
@@ -537,6 +554,9 @@ gdk_quartz_update_context_from_gc (CGContextRef                context,
 	      width  = CGImageGetWidth (pattern_image);
 	      height = CGImageGetHeight (pattern_image);
 
+	      phase = CGPointApplyAffineTransform (CGPointMake (gc->ts_x_origin, gc->ts_y_origin), CGContextGetCTM (context));
+	      CGContextSetPatternPhase (context, CGSizeMake (phase.x, phase.y));
+
 	      private->ts_pattern = CGPatternCreate (private,
 						     CGRectMake (0, 0, width, height),
 						     CGAffineTransformIdentity,
@@ -554,17 +574,22 @@ gdk_quartz_update_context_from_gc (CGContextRef                context,
 	  CGColorSpaceRelease (baseSpace);
 
 	  if (fill == GDK_STIPPLED)
-	    gdk_quartz_get_rgba_from_pixel (gc->colormap, fg_pixel,
-                                            &colors[0], &colors[1],
-					    &colors[2], &colors[3]);
- 
+	    _gdk_quartz_colormap_get_rgba_from_pixel (gc->colormap, fg_pixel,
+						      &colors[0], &colors[1],
+						      &colors[2], &colors[3]);
+
 	  CGContextSetFillPattern (context, private->ts_pattern,
 				   (fill == GDK_STIPPLED) ? colors : &alpha);
-	}
+       }
     }
 
   if (mask & GDK_QUARTZ_CONTEXT_TEXT)
     {
       /* FIXME: implement text */
     }
+
+  if (GDK_IS_WINDOW_IMPL_QUARTZ (drawable))
+      private->is_window = TRUE;
+  else
+      private->is_window = FALSE;
 }

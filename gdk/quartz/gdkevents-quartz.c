@@ -397,7 +397,7 @@ get_event_mask_from_ns_event (NSEvent *nsevent)
     case NSKeyUp:
     case NSFlagsChanged:
       {
-        switch (_gdk_quartz_key_event_type (nsevent))
+        switch (_gdk_quartz_keys_event_type (nsevent))
 	  {
 	  case GDK_KEY_PRESS:
 	    return GDK_KEY_PRESS_MASK;
@@ -431,8 +431,8 @@ create_focus_event (GdkWindow *window,
 
 /* Note: Used to both set a new focus window and to unset the old one. */
 void
-_gdk_quartz_update_focus_window (GdkWindow *window,
-				 gboolean   got_focus)
+_gdk_quartz_events_update_focus_window (GdkWindow *window,
+					gboolean   got_focus)
 {
   GdkEvent *event;
 
@@ -704,11 +704,11 @@ synthesize_crossing_events (GdkWindow      *window,
 	synthesize_enter_event (window, nsevent, mode, GDK_NOTIFY_UNKNOWN);
     }
   
-  _gdk_quartz_update_mouse_window (window);
+  _gdk_quartz_events_update_mouse_window (window);
 }
 
 void 
-_gdk_quartz_send_map_events (GdkWindow *window)
+_gdk_quartz_events_send_map_events (GdkWindow *window)
 {
   GList *list;
   GdkWindow *interested_window;
@@ -726,12 +726,12 @@ _gdk_quartz_send_map_events (GdkWindow *window)
     }
 
   for (list = private->children; list != NULL; list = list->next)
-    _gdk_quartz_send_map_events ((GdkWindow *)list->data);
+    _gdk_quartz_events_send_map_events ((GdkWindow *)list->data);
 }
 
 /* Get current mouse window */
 GdkWindow *
-_gdk_quartz_get_mouse_window (void)
+_gdk_quartz_events_get_mouse_window (void)
 {
   if (_gdk_quartz_pointer_grab_window && !pointer_grab_owner_events)
     return _gdk_quartz_pointer_grab_window;
@@ -741,7 +741,7 @@ _gdk_quartz_get_mouse_window (void)
 
 /* Update mouse window */
 void 
-_gdk_quartz_update_mouse_window (GdkWindow *window)
+_gdk_quartz_events_update_mouse_window (GdkWindow *window)
 {
   if (window)
     g_object_ref (window);
@@ -753,7 +753,7 @@ _gdk_quartz_update_mouse_window (GdkWindow *window)
 
 /* Update current cursor */
 void
-_gdk_quartz_update_cursor (GdkWindow *window)
+_gdk_quartz_events_update_cursor (GdkWindow *window)
 {
   GdkWindowObject *private = GDK_WINDOW_OBJECT (window);
   NSCursor *nscursor = nil;
@@ -801,7 +801,7 @@ find_window_for_event (NSEvent *nsevent, gint *x, gint *y)
       NSPoint point = [nsevent locationInWindow];
       GdkWindow *mouse_window;
 
-      mouse_window = _gdk_quartz_find_child_window_by_point (toplevel, point.x, point.y, x, y);
+      mouse_window = _gdk_quartz_window_find_child_by_point (toplevel, point.x, point.y, x, y);
 
       if (!mouse_window)
 	mouse_window = _gdk_root;
@@ -817,7 +817,7 @@ find_window_for_event (NSEvent *nsevent, gint *x, gint *y)
 	    {
 	      synthesize_crossing_events (mouse_window, GDK_CROSSING_NORMAL, nsevent, *x, *y);
 	      
-	      _gdk_quartz_update_cursor (mouse_window);
+	      _gdk_quartz_events_update_cursor (mouse_window);
 	    }
 	}
     }
@@ -882,7 +882,7 @@ find_window_for_event (NSEvent *nsevent, gint *x, gint *y)
 	  }
         else
 	  {
-	    mouse_window = _gdk_quartz_find_child_window_by_point (toplevel, point.x, point.y, x, y);
+	    mouse_window = _gdk_quartz_window_find_child_by_point (toplevel, point.x, point.y, x, y);
 	  }
 
 	event_mask = get_event_mask_from_ns_event (nsevent);
@@ -901,7 +901,7 @@ find_window_for_event (NSEvent *nsevent, gint *x, gint *y)
 	point = [nsevent locationInWindow];
 	toplevel = [(GdkQuartzView *)[nswindow contentView] gdkWindow];
 	
-	mouse_window = _gdk_quartz_find_child_window_by_point (toplevel, point.x, point.y, x, y);
+	mouse_window = _gdk_quartz_window_find_child_by_point (toplevel, point.x, point.y, x, y);
 	
 	synthesize_crossing_events (mouse_window, GDK_CROSSING_NORMAL, nsevent, *x, *y);
       }
@@ -1067,7 +1067,7 @@ create_key_event (GdkWindow *window, NSEvent *nsevent, GdkEventType type)
 				       &event->key.keyval,
 				       NULL, NULL, NULL);
 
-  event->key.is_modifier = _gdk_quartz_key_is_modifier (event->key.hardware_keycode);
+  event->key.is_modifier = _gdk_quartz_keys_is_modifier (event->key.hardware_keycode);
 
   event->key.string = NULL;
 
@@ -1117,7 +1117,8 @@ create_key_event (GdkWindow *window, NSEvent *nsevent, GdkEventType type)
 }
 
 static GdkEventMask current_mask = 0;
-GdkEventMask _gdk_quartz_get_current_event_mask (void)
+GdkEventMask 
+_gdk_quartz_events_get_current_event_mask (void)
 {
   return current_mask;
 }
@@ -1284,7 +1285,7 @@ gdk_event_translate (NSEvent *nsevent)
       {
         GdkEventType type;
 
-        type = _gdk_quartz_key_event_type (nsevent);
+        type = _gdk_quartz_keys_event_type (nsevent);
         if (type == GDK_NOTHING)
           return FALSE;
         

@@ -184,7 +184,7 @@ gdk_cursor_new_from_pixmap (GdkPixmap      *source,
   return cursor;
 }
 
-NSImage *
+static NSImage *
 _gdk_quartz_pixbuf_to_ns_image (GdkPixbuf *pixbuf)
 {
   NSBitmapImageRep  *bitmap_rep;

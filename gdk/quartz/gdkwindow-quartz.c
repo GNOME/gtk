@@ -173,7 +173,7 @@ gdk_window_impl_quartz_begin_paint_region (GdkPaintable *paintable,
       gint i;
 
       cg_context = gdk_quartz_drawable_get_context (GDK_DRAWABLE (impl), FALSE);
-      gdk_quartz_get_rgba_from_pixel (gdk_drawable_get_colormap (drawable_impl->wrapper),
+      _gdk_quartz_colormap_get_rgba_from_pixel (gdk_drawable_get_colormap (drawable_impl->wrapper),
 				      GDK_WINDOW_OBJECT (drawable_impl->wrapper)->bg_color.pixel,
 				      &r, &g, &b, &a);
  
@@ -424,8 +424,9 @@ get_default_title (void)
   return title;
 }
 
+/* FIXME: Should probably be in screen instead. */
 gint 
-_gdk_quartz_get_inverted_screen_y (gint y)
+_gdk_quartz_window_get_inverted_screen_y (gint y)
 {
   NSRect rect = [[NSScreen mainScreen] frame];
 
@@ -434,12 +435,12 @@ _gdk_quartz_get_inverted_screen_y (gint y)
 
 static GdkWindow *
 find_child_window_by_point_helper (GdkWindow *window,
-				   int        x,
-				   int        y,
-				   int        x_offset,
-				   int        y_offset,
-				   int       *x_ret,
-				   int       *y_ret)
+				   gint       x,
+				   gint       y,
+				   gint       x_offset,
+				   gint       y_offset,
+				   gint      *x_ret,
+				   gint      *y_ret)
 {
   GList *l;
 
@@ -479,11 +480,11 @@ find_child_window_by_point_helper (GdkWindow *window,
  * flipped.
  */
 GdkWindow *
-_gdk_quartz_find_child_window_by_point (GdkWindow *toplevel,
-					int        x,
-					int        y,
-					int       *x_ret,
-					int       *y_ret)
+_gdk_quartz_window_find_child_by_point (GdkWindow *toplevel,
+					gint       x,
+					gint       y,
+					gint      *x_ret,
+					gint      *y_ret)
 {
   GdkWindowObject *private = (GdkWindowObject *)toplevel;
   GdkWindowImplQuartz *impl = GDK_WINDOW_IMPL_QUARTZ (private->impl);
@@ -632,9 +633,10 @@ gdk_window_new (GdkWindow     *parent,
     case GDK_WINDOW_DIALOG:
     case GDK_WINDOW_TEMP:
       {
-	NSRect content_rect = NSMakeRect (private->x, 
-					  _gdk_quartz_get_inverted_screen_y (private->y) - impl->height,
-					  impl->width, impl->height);
+	NSRect content_rect = 
+	  NSMakeRect (private->x, 
+		      _gdk_quartz_window_get_inverted_screen_y (private->y) - impl->height,
+		      impl->width, impl->height);
 	const char *title;
 	int style_mask;
 
@@ -732,10 +734,8 @@ _gdk_windowing_window_destroy (GdkWindow *window,
     {
       GdkWindowImplQuartz *impl = GDK_WINDOW_IMPL_QUARTZ (GDK_WINDOW_OBJECT (window)->impl);
 
-      if (window == _gdk_quartz_get_mouse_window ()) 
-	{
-	  _gdk_quartz_update_mouse_window (_gdk_root);
-	}
+      if (window == _gdk_quartz_events_get_mouse_window ()) 
+	_gdk_quartz_events_update_mouse_window (_gdk_root);
 
       GDK_QUARTZ_ALLOC_POOL;
 
@@ -797,7 +797,7 @@ show_window_internal (GdkWindow *window,
     }
 
   if (all_parents_shown (private->parent))
-    _gdk_quartz_send_map_events (window);
+    _gdk_quartz_events_send_map_events (window);
 
   gdk_synthesize_window_state (window, GDK_WINDOW_STATE_WITHDRAWN, 0);
 
@@ -899,9 +899,10 @@ move_resize_window_internal (GdkWindow *window,
 
   if (impl->toplevel)
     {
-      NSRect content_rect = NSMakeRect (private->x, 
-					_gdk_quartz_get_inverted_screen_y (private->y) ,
-					impl->width, impl->height);
+      NSRect content_rect = 
+	NSMakeRect (private->x, 
+		    _gdk_quartz_window_get_inverted_screen_y (private->y) ,
+		    impl->width, impl->height);
       NSRect frame_rect = [impl->toplevel frameRectForContentRect:content_rect];
       
       frame_rect.origin.y -= frame_rect.size.height;
@@ -1099,7 +1100,7 @@ gdk_window_set_cursor (GdkWindow *window,
 
   impl->nscursor = nscursor;
 
-  _gdk_quartz_update_cursor (_gdk_quartz_get_mouse_window ());
+  _gdk_quartz_events_update_cursor (_gdk_quartz_events_get_mouse_window ());
 }
 
 void
@@ -1146,7 +1147,7 @@ gdk_window_get_origin (GdkWindow *window,
   content_rect = [impl->toplevel contentRectForFrameRect:[impl->toplevel frame]];
 
   tmp_x = content_rect.origin.x;
-  tmp_y = _gdk_quartz_get_inverted_screen_y (content_rect.origin.y + content_rect.size.height);
+  tmp_y = _gdk_quartz_window_get_inverted_screen_y (content_rect.origin.y + content_rect.size.height);
 
   while (private != GDK_WINDOW_OBJECT (toplevel))
     {
@@ -1238,15 +1239,15 @@ _gdk_windowing_window_get_pointer (GdkDisplay      *display,
   if (window == _gdk_root)
     {
       point = [NSEvent mouseLocation];
-      y_tmp = _gdk_quartz_get_inverted_screen_y (point.y);
-      *mask = _gdk_quartz_get_current_event_mask ();
+      y_tmp = _gdk_quartz_window_get_inverted_screen_y (point.y);
+      *mask = _gdk_quartz_events_get_current_event_mask ();
     }
   else
     {
       NSWindow *nswindow = impl->toplevel;
       point = [nswindow mouseLocationOutsideOfEventStream];
       y_tmp = impl->height - point.y;
-      *mask = _gdk_quartz_get_current_event_mask ();
+      *mask = _gdk_quartz_events_get_current_event_mask ();
     }
   x_tmp = point.x;
 
@@ -1261,7 +1262,7 @@ _gdk_windowing_window_get_pointer (GdkDisplay      *display,
   *x = x_tmp;
   *y = y_tmp;
 
-  return _gdk_quartz_find_child_window_by_point (window,
+  return _gdk_quartz_window_find_child_by_point (window,
 						 point.x, point.y,
 						 &x_tmp, &y_tmp);
 }
@@ -1747,7 +1748,7 @@ gdk_window_get_frame_extents (GdkWindow    *window,
   ns_rect = [impl->toplevel frame];
 
   rect->x = ns_rect.origin.x;
-  rect->y = _gdk_quartz_get_inverted_screen_y (ns_rect.origin.y + ns_rect.size.height);
+  rect->y = _gdk_quartz_window_get_inverted_screen_y (ns_rect.origin.y + ns_rect.size.height);
   rect->width = ns_rect.size.width;
   rect->height = ns_rect.size.height;
 }

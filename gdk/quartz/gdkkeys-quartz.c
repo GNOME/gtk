@@ -591,7 +591,7 @@ gdk_keymap_translate_keyboard_state (GdkKeymap       *keymap,
  * GDK_KEY_PRESS, GDK_KEY_RELEASE, GDK_NOTHING (should be ignored)
  */
 GdkEventType
-_gdk_quartz_key_event_type (NSEvent *event)
+_gdk_quartz_keys_event_type (NSEvent *event)
 {
   unsigned short keycode;
   unsigned int flags;
@@ -631,7 +631,7 @@ _gdk_quartz_key_event_type (NSEvent *event)
 }
 
 gboolean
-_gdk_quartz_key_is_modifier (guint keycode)
+_gdk_quartz_keys_is_modifier (guint keycode)
 {
   gint i;
   

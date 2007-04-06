@@ -137,10 +137,12 @@ gdk_quartz_draw_rectangle (GdkDrawable *drawable,
   if (!context)
     return;
 
-  gdk_quartz_update_context_from_gc (context, gc,
-				     filled ?
-				     GDK_QUARTZ_CONTEXT_FILL :
-				     GDK_QUARTZ_CONTEXT_STROKE);
+  _gdk_quartz_gc_update_cg_context (gc, 
+				    drawable,
+				    context,
+				    filled ?
+				    GDK_QUARTZ_CONTEXT_FILL : 
+				    GDK_QUARTZ_CONTEXT_STROKE);
 
   if (filled)
     {
@@ -175,10 +177,10 @@ gdk_quartz_draw_arc (GdkDrawable *drawable,
   if (!context)
     return;
 
-  gdk_quartz_update_context_from_gc (context, gc,
-				     filled ?
-				     GDK_QUARTZ_CONTEXT_FILL :
-				     GDK_QUARTZ_CONTEXT_STROKE);
+  _gdk_quartz_gc_update_cg_context (gc, drawable, context,
+				    filled ?
+				    GDK_QUARTZ_CONTEXT_FILL :
+				    GDK_QUARTZ_CONTEXT_STROKE);
 
   CGContextSaveGState (context);
 
@@ -230,10 +232,10 @@ gdk_quartz_draw_polygon (GdkDrawable *drawable,
   if (!context)
     return;
 
-  gdk_quartz_update_context_from_gc (context, gc,
-				     filled ?
-				     GDK_QUARTZ_CONTEXT_FILL :
-				     GDK_QUARTZ_CONTEXT_STROKE);
+  _gdk_quartz_gc_update_cg_context (gc, drawable, context,
+				    filled ?
+				    GDK_QUARTZ_CONTEXT_FILL :
+				    GDK_QUARTZ_CONTEXT_STROKE);
 
   if (filled)
     {
@@ -320,8 +322,8 @@ gdk_quartz_draw_drawable (GdkDrawable *drawable,
       if (!context)
 	return;
 
-      gdk_quartz_update_context_from_gc (context, gc,
-					 GDK_QUARTZ_CONTEXT_STROKE);
+      _gdk_quartz_gc_update_cg_context (gc, drawable, context,
+					GDK_QUARTZ_CONTEXT_STROKE);
 
       CGContextClipToRect (context, CGRectMake (xdest, ydest, width, height));
       CGContextTranslateCTM (context, xdest - xsrc, ydest - ysrc);
@@ -350,9 +352,9 @@ gdk_quartz_draw_points (GdkDrawable *drawable,
   if (!context)
     return;
 
-  gdk_quartz_update_context_from_gc (context, gc,
-				     GDK_QUARTZ_CONTEXT_STROKE |
-				     GDK_QUARTZ_CONTEXT_FILL);
+  _gdk_quartz_gc_update_cg_context (gc, drawable, context,
+				    GDK_QUARTZ_CONTEXT_STROKE |
+				    GDK_QUARTZ_CONTEXT_FILL);
 
   /* Just draw 1x1 rectangles */
   for (i = 0; i < npoints; i++) 
@@ -376,8 +378,8 @@ gdk_quartz_draw_segments (GdkDrawable    *drawable,
   if (!context)
     return;
 
-  gdk_quartz_update_context_from_gc (context, gc,
-				     GDK_QUARTZ_CONTEXT_STROKE);
+  _gdk_quartz_gc_update_cg_context (gc, drawable, context,
+				    GDK_QUARTZ_CONTEXT_STROKE);
 
   for (i = 0; i < nsegs; i++)
     {
@@ -402,7 +404,7 @@ gdk_quartz_draw_lines (GdkDrawable *drawable,
   if (!context)
     return;
 
-  gdk_quartz_update_context_from_gc (context, gc,
+  _gdk_quartz_gc_update_cg_context (gc, drawable, context,
 				     GDK_QUARTZ_CONTEXT_STROKE);
 
   CGContextMoveToPoint (context, points[0].x + 0.5, points[0].y + 0.5);
@@ -460,8 +462,8 @@ gdk_quartz_draw_pixbuf (GdkDrawable     *drawable,
   CGDataProviderRelease (data_provider);
   CGColorSpaceRelease (colorspace);
 
-  gdk_quartz_update_context_from_gc (context, gc,
-				     GDK_QUARTZ_CONTEXT_STROKE);
+  _gdk_quartz_gc_update_cg_context (gc, drawable, context,
+				    GDK_QUARTZ_CONTEXT_STROKE);
 
   CGContextClipToRect (context, CGRectMake (dest_x, dest_y, width, height));
   CGContextTranslateCTM (context, dest_x - src_x, dest_y - src_y + pixbuf_height);
@@ -506,8 +508,8 @@ gdk_quartz_draw_image (GdkDrawable     *drawable,
   CGDataProviderRelease (data_provider);
   CGColorSpaceRelease (colorspace);
 
-  gdk_quartz_update_context_from_gc (context, gc,
-				     GDK_QUARTZ_CONTEXT_STROKE);
+  _gdk_quartz_gc_update_cg_context (gc, drawable, context,
+				    GDK_QUARTZ_CONTEXT_STROKE);
 
   CGContextClipToRect (context, CGRectMake (xdest, ydest, width, height));
   CGContextTranslateCTM (context, xdest - xsrc, ydest - ysrc + image->height);
@@ -562,7 +564,7 @@ gdk_drawable_impl_quartz_class_init (GdkDrawableImplQuartzClass *klass)
   drawable_class->get_screen = gdk_quartz_get_screen;
   drawable_class->get_visual = gdk_quartz_get_visual;
 
-  drawable_class->_copy_to_image = _gdk_quartz_copy_to_image;
+  drawable_class->_copy_to_image = _gdk_quartz_image_copy_to_image;
 }
 
 GType

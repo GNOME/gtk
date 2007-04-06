@@ -59,14 +59,14 @@
 {
   GdkWindow *window = [[self contentView] gdkWindow];
 
-  _gdk_quartz_update_focus_window (window, TRUE);
+  _gdk_quartz_events_update_focus_window (window, TRUE);
 }
 
 -(void)windowDidResignKey:(NSNotification *)aNotification
 {
   GdkWindow *window = [[self contentView] gdkWindow];
 
-  _gdk_quartz_update_focus_window (window, FALSE);
+  _gdk_quartz_events_update_focus_window (window, FALSE);
 }
 
 -(void)windowDidMove:(NSNotification *)aNotification
@@ -78,7 +78,7 @@
   GdkEvent *event;
 
   private->x = content_rect.origin.x;
-  private->y = _gdk_quartz_get_inverted_screen_y (content_rect.origin.y) - impl->height;
+  private->y = _gdk_quartz_window_get_inverted_screen_y (content_rect.origin.y) - impl->height;
 
   /* Synthesize a configure event */
   event = gdk_event_new (GDK_CONFIGURE);
@@ -298,7 +298,7 @@ update_context_from_dragging_info (id <NSDraggingInfo> sender)
   event.dnd.context = current_context;
   event.dnd.time = GDK_CURRENT_TIME;
   event.dnd.x_root = screen_point.x;
-  event.dnd.y_root = _gdk_quartz_get_inverted_screen_y (screen_point.y);
+  event.dnd.y_root = _gdk_quartz_window_get_inverted_screen_y (screen_point.y);
 
   (*_gdk_event_func) (&event, _gdk_event_data);
 
@@ -321,7 +321,7 @@ update_context_from_dragging_info (id <NSDraggingInfo> sender)
   event.dnd.context = current_context;
   event.dnd.time = GDK_CURRENT_TIME;
   event.dnd.x_root = screen_point.x;
-  event.dnd.y_root = _gdk_quartz_get_inverted_screen_y (screen_point.y);
+  event.dnd.y_root = _gdk_quartz_window_get_inverted_screen_y (screen_point.y);
 
   (*_gdk_event_func) (&event, _gdk_event_data);
 

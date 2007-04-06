@@ -27,14 +27,14 @@
 static GObjectClass *parent_class;
 
 GdkImage *
-_gdk_quartz_copy_to_image (GdkDrawable *drawable,
-			   GdkImage    *image,
-			   gint         src_x,
-			   gint         src_y,
-			   gint         dest_x,
-			   gint         dest_y,
-			   gint         width,
-			   gint         height)
+_gdk_quartz_image_copy_to_image (GdkDrawable *drawable,
+				 GdkImage    *image,
+				 gint         src_x,
+				 gint         src_y,
+				 gint         dest_x,
+				 gint         dest_y,
+				 gint         width,
+				 gint         height)
 {
   /* FIXME: Implement */
   return NULL;

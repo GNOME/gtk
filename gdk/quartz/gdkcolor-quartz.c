@@ -170,12 +170,12 @@ gdk_colormap_get_screen (GdkColormap *cmap)
 }
 
 void
-gdk_quartz_get_rgba_from_pixel (GdkColormap *colormap,
-				guint32      pixel,
-				float       *red,
-				float       *green,
-				float       *blue,
-				float       *alpha)
+_gdk_quartz_colormap_get_rgba_from_pixel (GdkColormap *colormap,
+					  guint32      pixel,
+					  float       *red,
+					  float       *green,
+					  float       *blue,
+					  float       *alpha)
 {
   *red   = (pixel >> 16 & 0xff) / 255.0;
   *green = (pixel >> 8  & 0xff) / 255.0;

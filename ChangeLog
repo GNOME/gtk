@@ -1,3 +1,12 @@
+2007-04-06  Richard Hult  <richard@imendio.com>
+
+	* gdk/quartz/: Clean up namespaces to make the code more
+	maintainable.
+
+	* gdk/quartz/gdkdrawable-quartz.c:
+	* gdk/quartz/gdkgc-quartz.c: Fix bug #418384, alignment of tiled
+	images, by setting the pattern phase for the CG pattern.
+
 2007-04-04  Kristian Rietveld  <kris@imendio.com>
 
 	* gtk/gtktooltip.c (tooltip_browse_mode_expired),
