@@ -767,7 +767,7 @@ gtk_notebook_class_init (GtkNotebookClass *class)
   /**
    * GtkNotebook:arrow-spacing:
    *
-   * The "arrow-size" property defines the spacing between the scroll
+   * The "arrow-spacing" property defines the spacing between the scroll
    * arrows and the tabs.
    *
    * Since: 2.10

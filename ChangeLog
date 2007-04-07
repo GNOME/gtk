@@ -1,3 +1,9 @@
+2007-04-07  Xan Lopez  <xan@gnome.org>
+
+	* gtk/gtknotebook.c (gtk_notebook_class_init): 
+	s/arrow-size/arrow-spacing in the arrow-spacing
+	style property docs.
+
 2007-04-06  Richard Hult  <richard@imendio.com>
 
 	* gdk/quartz/: Clean up namespaces to make the code more
