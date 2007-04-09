@@ -1,3 +1,9 @@
+2007-04-09  Matthias Clasen  <mclasen@redhat.com>
+
+	* xdgmimeglob.c (_xdg_glob_hash_insert_text): Duplicate the
+	mime_type when storing it in a hash node, to avoid leaks. 
+	Update all callers.
+
 2007-01-07  Matthias Clasen  <mclasen@redhat.com>
 
 	* xdgmimecache.c (cache_glob_node_lookup_suffix): Don't return "" 
