@@ -1,3 +1,14 @@
+2007-04-10  Matthias Clasen  <mclasen@redhat.com>
+
+	Merged from trunk:
+
+	* gdk/x11/xsettings-client.[hc]: Change the XSettingsWatchFunc
+	to return a Bool to indicate success. Update callers and
+	implementors. Based on a patch by Owen Taylor.
+
+	* gdk/x11/gdkevents-x11.c (gdk_xsettings_watch_cb): Don't
+	leak a reference to gdkwin.
+
 2007-04-03  Loïc Minier  <lool@dooz.org>
 
 	* gdk/x11/gdkscreen-x11.c: (check_xfree_xinerama): Revert to

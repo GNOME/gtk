@@ -441,9 +441,19 @@ check_manager_window (XSettingsClient *client)
   XFlush (client->display);
 
   if (client->manager_window && client->watch)
-    client->watch (client->manager_window, True, 
-		   PropertyChangeMask | StructureNotifyMask,
-		   client->cb_data);
+    {
+      if (!client->watch (client->manager_window, True, 
+			  PropertyChangeMask | StructureNotifyMask,
+			  client->cb_data))
+	{
+	  /* Inability to watch the window probably means that it was destroyed
+	   * after we ungrabbed
+	   */
+	  client->manager_window = None;
+	  return;
+	}
+    }
+      
   
   read_settings (client);
 }
