@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: gtk+-properties HEAD\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2006-08-07 00:08+0200\n"
-"PO-Revision-Date: 2006-11-11 23:18+0200\n"
+"PO-Revision-Date: 2007-04-07 14:08+0300\n"
 "Last-Translator: Ivar Smolin <okul@linux.ee>\n"
 "Language-Team: Estonian <gnome-et@linux.ee>\n"
 "MIME-Version: 1.0\n"
@@ -1901,11 +1901,11 @@ msgstr ""
 
 #: ../gtk/gtkentry.c:539
 msgid "Width in chars"
-msgstr ""
+msgstr "Laius märkides"
 
 #: ../gtk/gtkentry.c:540
 msgid "Number of characters to leave space for in the entry"
-msgstr ""
+msgstr "Kirje jaoks jäetava ruumi suurus märkides"
 
 #: ../gtk/gtkentry.c:549
 msgid "Scroll offset"
@@ -2597,7 +2597,7 @@ msgstr ""
 
 #: ../gtk/gtklabel.c:323 ../gtk/gtktexttag.c:357 ../gtk/gtktextview.c:565
 msgid "Justification"
-msgstr ""
+msgstr "Joondus"
 
 #: ../gtk/gtklabel.c:324
 msgid ""
@@ -2961,21 +2961,21 @@ msgstr "Püstine joondus: 0 - ülevalt, 1 - alt"
 
 #: ../gtk/gtkmisc.c:93
 msgid "X pad"
-msgstr ""
+msgstr "X-polsterdus"
 
 #: ../gtk/gtkmisc.c:94
 msgid ""
 "The amount of space to add on the left and right of the widget, in pixels"
-msgstr ""
+msgstr "Vidina külgedele jäetava vaba ruumi laius pikslites"
 
 #: ../gtk/gtkmisc.c:103
 msgid "Y pad"
-msgstr ""
+msgstr "Y-polsterdus"
 
 #: ../gtk/gtkmisc.c:104
 msgid ""
 "The amount of space to add on the top and bottom of the widget, in pixels"
-msgstr ""
+msgstr "Vidinast üles- ja allapoole jäetava vaba ruumi laius pikslites"
 
 #: ../gtk/gtknotebook.c:527
 msgid "Page"
@@ -2983,7 +2983,7 @@ msgstr "Lehekülg"
 
 #: ../gtk/gtknotebook.c:528
 msgid "The index of the current page"
-msgstr ""
+msgstr "Käesoleva lehe indeks"
 
 #: ../gtk/gtknotebook.c:536
 msgid "Tab Position"
@@ -3269,31 +3269,31 @@ msgstr "On virtuaalne"
 
 #: ../gtk/gtkprinter.c:134
 msgid "FALSE if this represents a real hardware printer"
-msgstr ""
+msgstr "Riistvaralise printeri korral on see märkimata"
 
 #: ../gtk/gtkprinter.c:140
 msgid "Accepts PDF"
-msgstr ""
+msgstr "PDF-i tugi"
 
 #: ../gtk/gtkprinter.c:141
 msgid "TRUE if this printer can accept PDF"
-msgstr ""
+msgstr "Märgitud juhul, kui printer toetab PDF-i"
 
 #: ../gtk/gtkprinter.c:147
 msgid "Accepts PostScript"
-msgstr ""
+msgstr "PostScript'i tugi"
 
 #: ../gtk/gtkprinter.c:148
 msgid "TRUE if this printer can accept PostScript"
-msgstr ""
+msgstr "Märgitud juhul, kui printer toetab PostScript'i"
 
 #: ../gtk/gtkprinter.c:154
 msgid "State Message"
-msgstr ""
+msgstr "Olekusõnum"
 
 #: ../gtk/gtkprinter.c:155
 msgid "String giving the current state of the printer"
-msgstr ""
+msgstr "Printeri käesolevat olekut väljendav string"
 
 #: ../gtk/gtkprinter.c:161
 msgid "Location"
@@ -3305,7 +3305,7 @@ msgstr "Printeri asukoht"
 
 #: ../gtk/gtkprinter.c:169
 msgid "The icon name to use for the printer"
-msgstr ""
+msgstr "Printeri jaoks kasutatava ikooni nimi"
 
 #: ../gtk/gtkprinter.c:175
 msgid "Job Count"
