@@ -111,7 +111,7 @@ static GdkFilterReturn gdk_wm_protocols_filter (GdkXEvent *xev,
 static GSource *gdk_display_source_new (GdkDisplay *display);
 static gboolean gdk_check_xpending     (GdkDisplay *display);
 
-static void gdk_xsettings_watch_cb  (Window            window,
+static Bool gdk_xsettings_watch_cb  (Window            window,
 				     Bool              is_start,
 				     long              mask,
 				     void             *cb_data);
@@ -2993,7 +2993,7 @@ gdk_xsettings_client_event_filter (GdkXEvent *xevent,
     return GDK_FILTER_CONTINUE;
 }
 
-static void 
+static Bool
 gdk_xsettings_watch_cb (Window   window,
 			Bool	 is_start,
 			long     mask,
@@ -3006,16 +3006,39 @@ gdk_xsettings_watch_cb (Window   window,
 
   if (is_start)
     {
-      if (!gdkwin)
-	gdkwin = gdk_window_foreign_new_for_display (gdk_screen_get_display (screen), window);
-      
+      if (gdkwin)
+	g_object_ref (gdkwin);
+      else
+	{
+	  gdkwin = gdk_window_foreign_new_for_display (gdk_screen_get_display (screen), window);
+	  
+	  /* gdk_window_foreign_new_for_display() can fail and return NULL if the
+	   * window has already been destroyed.
+	   */
+	  if (!gdkwin)
+	    return False;
+	}
+
       gdk_window_add_filter (gdkwin, gdk_xsettings_client_event_filter, screen);
     }
   else
     {
-      if (gdkwin)
-        gdk_window_remove_filter (gdkwin, gdk_xsettings_client_event_filter, screen);
+      if (!gdkwin)
+	{
+	  /* gdkwin should not be NULL here, since if starting the watch succeeded
+	   * we have a reference on the window. It might mean that the caller didn't
+	   * remove the watch when it got a DestroyNotify event. Or maybe the
+	   * caller ignored the return value when starting the watch failed.
+	   */
+	  g_warning ("gdk_xsettings_watch_cb(): Couldn't find window to unwatch");
+	  return False;
+	}
+      
+      gdk_window_remove_filter (gdkwin, gdk_xsettings_client_event_filter, screen);
+      g_object_unref (gdkwin);
     }
+
+  return True;
 }
 
 #define __GDK_EVENTS_X11_C__

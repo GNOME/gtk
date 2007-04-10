@@ -43,7 +43,7 @@ typedef void (*XSettingsNotifyFunc) (const char       *name,
 				     XSettingsAction   action,
 				     XSettingsSetting *setting,
 				     void             *cb_data);
-typedef void (*XSettingsWatchFunc)  (Window            window,
+typedef Bool (*XSettingsWatchFunc)  (Window            window,
 				     Bool              is_start,
 				     long              mask,
 				     void             *cb_data);
