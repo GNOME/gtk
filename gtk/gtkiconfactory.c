@@ -2658,24 +2658,6 @@ _gtk_icon_set_invalidate_caches (void)
   ++cache_serial;
 }
 
-static void
-listify_foreach (gpointer key, gpointer value, gpointer data)
-{
-  GSList **list = data;
-
-  *list = g_slist_prepend (*list, key);
-}
-
-static GSList *
-g_hash_table_get_keys (GHashTable *table)
-{
-  GSList *list = NULL;
-
-  g_hash_table_foreach (table, listify_foreach, &list);
-
-  return list;
-}
-
 /**
  * _gtk_icon_factory_list_ids:
  * 
@@ -2685,11 +2667,11 @@ g_hash_table_get_keys (GHashTable *table)
  * 
  * Return value: List of ids in icon factories
  **/
-GSList*
+GList*
 _gtk_icon_factory_list_ids (void)
 {
   GSList *tmp_list;
-  GSList *ids;
+  GList *ids;
 
   ids = NULL;
 
@@ -2698,13 +2680,13 @@ _gtk_icon_factory_list_ids (void)
   tmp_list = all_icon_factories;
   while (tmp_list != NULL)
     {
-      GSList *these_ids;
+      GList *these_ids;
       
       GtkIconFactory *factory = GTK_ICON_FACTORY (tmp_list->data);
 
       these_ids = g_hash_table_get_keys (factory->icons);
       
-      ids = g_slist_concat (ids, these_ids);
+      ids = g_list_concat (ids, these_ids);
       
       tmp_list = g_slist_next (tmp_list);
     }

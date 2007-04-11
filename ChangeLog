@@ -1,3 +1,14 @@
+2007-04-11  Chris Wilson  <chris@chris-wilson.co.uk>
+
+	* gtk/gtkiconfactory.c (_gtk_icon_factory_list_ids):
+	* gtk/gtkstock.c (gtk_stock_list_ids):
+	    Switch over to use glib's new g_hash_table_get_keys() rather
+	    than our own static implementation.
+
+	* gtk/gtkiconfactory.h: Update to return a GList.
+
+	* configure.in: Bump required version to 2.13.1
+
 2007-04-11  Ronald S. Bultje  <rbultje@ronald.bitfreak.net>
 
 	* gdk/quartz/gdkeventloop-quartz.c: Protect the polling thread

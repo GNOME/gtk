@@ -183,24 +183,6 @@ gtk_stock_lookup (const gchar  *stock_id,
   return found != NULL;
 }
 
-static void
-listify_foreach (gpointer key, gpointer value, gpointer data)
-{
-  GSList **list = data;
-
-  *list = g_slist_prepend (*list, key);
-}
-
-static GSList *
-g_hash_table_get_keys (GHashTable *table)
-{
-  GSList *list = NULL;
-
-  g_hash_table_foreach (table, listify_foreach, &list);
-
-  return list;
-}
-
 /**
  * gtk_stock_list_ids:
  * 
@@ -213,42 +195,40 @@ g_hash_table_get_keys (GHashTable *table)
 GSList*
 gtk_stock_list_ids (void)
 {
-  GSList *ids;
-  GSList *icon_ids;
+  GList *ids;
+  GList *icon_ids;
   GSList *retval;
-  GSList *tmp_list;
   const gchar *last_id;
   
   init_stock_hash ();
 
   ids = g_hash_table_get_keys (stock_hash);
   icon_ids = _gtk_icon_factory_list_ids ();
-  ids = g_slist_concat (ids, icon_ids);
+  ids = g_list_concat (ids, icon_ids);
 
-  ids = g_slist_sort (ids, (GCompareFunc)strcmp);
+  ids = g_list_sort (ids, (GCompareFunc)strcmp);
 
   last_id = NULL;
   retval = NULL;
-  tmp_list = ids;
-  while (tmp_list != NULL)
+  while (ids != NULL)
     {
-      GSList *next;
+      GList *next;
 
-      next = g_slist_next (tmp_list);
+      next = g_list_next (ids);
 
-      if (last_id && strcmp (tmp_list->data, last_id) == 0)
+      if (last_id && strcmp (ids->data, last_id) == 0)
         {
           /* duplicate, ignore */
         }
       else
         {
-          retval = g_slist_prepend (retval, g_strdup (tmp_list->data));
-          last_id = tmp_list->data;
+          retval = g_slist_prepend (retval, g_strdup (ids->data));
+          last_id = ids->data;
         }
 
-      g_slist_free_1 (tmp_list);
+      g_list_free_1 (ids);
       
-      tmp_list = next;
+      ids = next;
     }
 
   return retval;
