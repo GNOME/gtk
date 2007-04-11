@@ -1,3 +1,12 @@
+2007-04-11  Chris Wilson  <chris@chris-wilson.co.uk>
+
+	* gtk/gtkiconfactory.c (hash_table_get_keys),
+	(_gtk_icon_factory_list_ids):
+	* gtk/gtkstock.c (hash_table_get_keys), (gtk_stock_list_ids):
+	    s/g_hash_table_get_keys/hash_table_get_keys/
+	    Avoid the naming conflict with the recent GLib implementation
+	    of the similar function.
+
 2007-04-10  Matthias Clasen  <mclasen@redhat.com>
 
 	Merged from trunk:

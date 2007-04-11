@@ -192,7 +192,7 @@ listify_foreach (gpointer key, gpointer value, gpointer data)
 }
 
 static GSList *
-g_hash_table_get_keys (GHashTable *table)
+hash_table_get_keys (GHashTable *table)
 {
   GSList *list = NULL;
 
@@ -221,7 +221,7 @@ gtk_stock_list_ids (void)
   
   init_stock_hash ();
 
-  ids = g_hash_table_get_keys (stock_hash);
+  ids = hash_table_get_keys (stock_hash);
   icon_ids = _gtk_icon_factory_list_ids ();
   ids = g_slist_concat (ids, icon_ids);
 
