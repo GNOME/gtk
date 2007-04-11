@@ -13,6 +13,7 @@ static NSEvent *current_event;
 
 static GPollFunc old_poll_func;
 
+static gboolean select_fd_waiting = FALSE;
 static pthread_t select_thread = 0;
 static int wakeup_pipe[2];
 static pthread_mutex_t pollfd_mutex = PTHREAD_MUTEX_INITIALIZER;
@@ -116,20 +117,24 @@ select_thread_func (void *arg)
 {
   int n_active_fds;
 
+  pthread_mutex_lock (&pollfd_mutex);
+  pthread_cond_signal (&ready_cond);
+
   while (1)
     {
-      pthread_mutex_lock (&pollfd_mutex);
+      char c;
+      int n;
+
       pthread_cond_wait (&ready_cond, &pollfd_mutex);
 
+      pthread_mutex_unlock (&pollfd_mutex);
+      select_fd_waiting = TRUE;
       n_active_fds = old_poll_func (pollfds, n_pollfds, -1);
-      if (pipe_pollfd->revents)
-	{
-	  char c;
-	  int n;
-
-	  n = read (pipe_pollfd->fd, &c, 1);
-
-	  g_assert (n == 1);
+      select_fd_waiting = FALSE;
+      pthread_mutex_lock (&pollfd_mutex);
+      n = read (pipe_pollfd->fd, &c, 1);
+      if (n == 1)
+        {
 	  g_assert (c == 'A');
 
 	  n_active_fds --;
@@ -143,6 +148,8 @@ select_thread_func (void *arg)
 	  if (CFRunLoopIsWaiting (main_thread_run_loop))
 	    CFRunLoopWakeUp (main_thread_run_loop);
 	}
+
+      pthread_mutex_lock (&pollfd_mutex);
     }
 }
 
@@ -166,10 +173,14 @@ poll_func (GPollFD *ufds, guint nfds, gint timeout_)
         CFRunLoopAddSource (main_thread_run_loop, select_main_thread_source, kCFRunLoopDefaultMode);
 
         pipe (wakeup_pipe);
-        pthread_create (&select_thread, NULL, select_thread_func, NULL);
-      }
+        fcntl(wakeup_pipe[0], F_SETFL, O_NONBLOCK);
 
-      pthread_mutex_lock (&pollfd_mutex);
+        pthread_mutex_lock (&pollfd_mutex);
+        pthread_create (&select_thread, NULL, select_thread_func, NULL);
+        pthread_cond_wait (&ready_cond, &pollfd_mutex);
+      } else
+        pthread_mutex_lock (&pollfd_mutex);
+
       n_pollfds = nfds;
       g_free (pollfds);
       pollfds = g_memdup (ufds, sizeof (GPollFD) * nfds);
@@ -185,10 +196,9 @@ poll_func (GPollFD *ufds, guint nfds, gint timeout_)
             }
         }
 
-      pthread_mutex_unlock (&pollfd_mutex);
-
       /* Start our thread */
       pthread_cond_signal (&ready_cond);
+      pthread_mutex_unlock (&pollfd_mutex);
     }
 
   if (timeout_ == -1)
@@ -235,12 +245,14 @@ poll_func (GPollFD *ufds, guint nfds, gint timeout_)
     }
 
   /* There were no active fds, break out of the other thread's poll() */
-  if (n_active == 0 && wakeup_pipe[1])
+  pthread_mutex_lock (&pollfd_mutex);
+  if (select_fd_waiting && wakeup_pipe[1])
     {
       char c = 'A';
 
       write (wakeup_pipe[1], &c, 1);
     }
+  pthread_mutex_unlock (&pollfd_mutex);
 
   if (event) 
     {

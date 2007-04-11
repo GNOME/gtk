@@ -1,3 +1,11 @@
+2007-04-11  Ronald S. Bultje  <rbultje@ronald.bitfreak.net>
+
+	* gdk/quartz/gdkeventloop-quartz.c: Protect the polling thread
+	  setup and shutdown function by mutexes and read the wakeup
+	  pipe unconditionally and unblocking. This should make the main
+	  loop always be woken up when using g_idle_add() from another
+	  thread in the Quartz backend (#425271).
+
 2007-04-10  Matthias Clasen  <mclasen@redhat.com>
 
 	* gdk/x11/xsettings-client.[hc]: Change the XSettingsWatchFunc
