@@ -1,3 +1,8 @@
+2007-04-12  Jakub Steiner <jimmac@ximian.com>
+
+	* gtk/stock-icons/*: update the stock icons to follow the Tango
+		style guidelines
+
 2007-04-11  Chris Wilson  <chris@chris-wilson.co.uk>
 
 	* gtk/gtkiconfactory.c (_gtk_icon_factory_list_ids):

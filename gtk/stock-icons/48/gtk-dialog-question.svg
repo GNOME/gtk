@@ -313,30 +313,6 @@
        r="16.440233"
        gradientTransform="matrix(1,0,0,0.3064516,0,27.957085)"
        gradientUnits="userSpaceOnUse" />
-    <filter
-       inkscape:collect="always"
-       x="-0.1621802"
-       width="1.3243604"
-       y="-0.5292196"
-       height="2.0584392"
-       id="filter5351">
-      <feGaussianBlur
-         inkscape:collect="always"
-         stdDeviation="2.2219003"
-         id="feGaussianBlur5353" />
-    </filter>
-    <filter
-       inkscape:collect="always"
-       x="-0.13906136"
-       width="1.2781227"
-       y="-0.31584874"
-       height="1.6316975"
-       id="filter5405">
-      <feGaussianBlur
-         inkscape:collect="always"
-         stdDeviation="1.9524851"
-         id="feGaussianBlur5407" />
-    </filter>
     <radialGradient
        inkscape:collect="always"
        xlink:href="#linearGradient5197"
@@ -405,18 +381,18 @@
      inkscape:pageopacity="0"
      inkscape:pageshadow="2"
      inkscape:zoom="1"
-     inkscape:cx="41.930058"
-     inkscape:cy="23.538135"
+     inkscape:cx="32.436625"
+     inkscape:cy="38.699199"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      width="48px"
      height="48px"
      borderlayer="true"
      inkscape:showpageshadow="false"
-     showgrid="false"
+     showgrid="true"
      inkscape:window-width="1047"
      inkscape:window-height="987"
-     inkscape:window-x="776"
+     inkscape:window-x="423"
      inkscape:window-y="62" />
   <metadata
      id="metadata4691">
@@ -503,17 +479,17 @@
        inkscape:original="M 9.40625 4.5 C 4.2279885 4.5 2.0090417 8.8178153 4.59375 12.53125 L 19.75 40.625 C 21.349391 44.385256 26.437096 44.599551 28.34375 40.5 L 43.65625 12.28125 C 45.859738 8.3258566 43.587994 4.5000002 39.28125 4.5 L 9.40625 4.5 z "
        inkscape:radius="-3.6827748"
        sodipodi:type="inkscape:offset"
-       transform="matrix(0.7633128,0,0,0.7627297,5.5362371,3.7551506)" />
+       transform="matrix(0.822668,0,0,0.8220397,4.1113759,3.2723036)" />
     <text
        xml:space="preserve"
        style="font-size:17.38947296px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;text-align:start;line-height:125%;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;font-family:'Bitstream Vera Sans'"
        x="19.042044"
-       y="25.90625"
+       y="26.90625"
        id="text5258"
        sodipodi:linespacing="125%"><tspan
          sodipodi:role="line"
          id="tspan5260"
          x="19.042044"
-         y="25.90625">?</tspan></text>
+         y="26.90625">?</tspan></text>
   </g>
 </svg>
