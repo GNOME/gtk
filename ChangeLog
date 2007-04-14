@@ -1,3 +1,10 @@
+2007-04-14  Yevgen Muntyan <muntyan@tamu.edu>
+
+	* gtk/gtkselection.c (selection_get_text_plain): fixed
+	wrong g_convert_with_fallback() call which caused
+	gtk_selection_data_get_text() return invalid UTF-8 for
+	non-ASCII text in text/plain selection (#382824).
+
 2007-04-12  Jakub Steiner <jimmac@ximian.com>
 
 	* gtk/stock-icons/*: update the stock icons to follow the Tango

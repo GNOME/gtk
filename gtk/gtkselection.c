@@ -1310,7 +1310,7 @@ selection_get_text_plain (GtkSelectionData *selection_data)
     {
       gchar *tmp = str;
       str = g_convert_with_fallback (tmp, len, 
-				     charset, "UTF-8", 
+				     "UTF-8", charset,
 				     NULL, NULL, &len, &error);
       g_free (tmp);
 
