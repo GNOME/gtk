@@ -1,3 +1,11 @@
+2007-04-16  Alexander Larsson  <alexl@redhat.com>
+
+	Merged from trunk:
+
+	* gtk/gtkprintoperation.c (gtk_print_operation_run):
+	Make async print preview work by actually starting
+	the print process in that case (#424168)
+
 2007-04-11  Chris Wilson  <chris@chris-wilson.co.uk>
 
 	* gtk/gtkiconfactory.c (hash_table_get_keys),

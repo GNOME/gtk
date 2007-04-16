@@ -2386,12 +2386,14 @@ gtk_print_operation_run (GtkPrintOperation        *op,
   GtkPrintOperationResult result;
   GtkPageSetup *page_setup;
   gboolean do_print;
+  gboolean run_print_pages;
   
   g_return_val_if_fail (GTK_IS_PRINT_OPERATION (op), 
                         GTK_PRINT_OPERATION_RESULT_ERROR);
 
   priv = op->priv;
 
+  run_print_pages = TRUE;
   do_print = FALSE;
   priv->error = NULL;
   priv->action = action;
@@ -2427,6 +2429,7 @@ gtk_print_operation_run (GtkPrintOperation        *op,
 							      parent,
 							      print_pages);
       result = GTK_PRINT_OPERATION_RESULT_IN_PROGRESS;
+      run_print_pages = FALSE; /* print_pages is called asynchronously from dialog */
     }
 #endif
   else
@@ -2438,7 +2441,7 @@ gtk_print_operation_run (GtkPrintOperation        *op,
 								 &do_print);
     }
 
-  if (result != GTK_PRINT_OPERATION_RESULT_IN_PROGRESS)
+  if (run_print_pages)
     print_pages (op, parent, do_print, result);
 
   if (priv->error && error)
