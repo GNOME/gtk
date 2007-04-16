@@ -1,3 +1,9 @@
+2007-04-16  Alexander Larsson  <alexl@redhat.com>
+
+	* gtk/gtkprintoperation.c (gtk_print_operation_run):
+	Make async print preview work by actually starting
+	the print process in that case (#424168)
+
 2007-04-14  Yevgen Muntyan <muntyan@tamu.edu>
 
 	* gtk/gtkselection.c (selection_get_text_plain): fixed
