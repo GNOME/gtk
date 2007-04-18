@@ -253,6 +253,34 @@ gdk_window_impl_quartz_end_paint (GdkPaintable *paintable)
 }
 
 static void
+gdk_window_quartz_process_updates_internal (GdkWindow *window)
+{
+  GdkWindowObject *private = (GdkWindowObject *) window;
+  GdkWindowImplQuartz *impl = (GdkWindowImplQuartz *) private->impl;
+      
+  if (private->update_area)
+    {
+      int i, n_rects;
+      GdkRectangle *rects;
+
+      gdk_region_get_rectangles (private->update_area, &rects, &n_rects);
+
+      gdk_region_destroy (private->update_area);
+      private->update_area = NULL;
+
+      for (i = 0; i < n_rects; i++) 
+	{
+	  [impl->view setNeedsDisplayInRect:NSMakeRect (rects[i].x, rects[i].y,
+							rects[i].width, rects[i].height)];
+	}
+
+      [impl->view displayIfNeeded];
+
+      g_free (rects);
+    }
+}
+
+static void
 gdk_window_quartz_process_all_updates (void)
 {
   GSList *old_update_windows = update_windows;
@@ -267,28 +295,7 @@ gdk_window_quartz_process_all_updates (void)
 
   while (tmp_list)
     {
-      GdkWindowObject *private = tmp_list->data;
-      GdkWindowImplQuartz *impl = (GdkWindowImplQuartz *) private->impl;
-      int i, n_rects;
-      GdkRectangle *rects;
-      
-      if (private->update_area)
-	{
-	  gdk_region_get_rectangles (private->update_area, &rects, &n_rects);
-
-	  gdk_region_destroy (private->update_area);
-	  private->update_area = NULL;
-	  
-	  for (i = 0; i < n_rects; i++) 
-	    {
-	      [impl->view setNeedsDisplayInRect:NSMakeRect (rects[i].x, rects[i].y,
-	      						    rects[i].width, rects[i].height)];
-	    }
-	  
-	  [impl->view displayIfNeeded];
-
-	  g_free (rects);
-	}
+      gdk_window_quartz_process_updates_internal (tmp_list->data);
 
       g_object_unref (tmp_list->data);
       tmp_list = tmp_list->next;
@@ -350,12 +357,9 @@ gdk_window_impl_quartz_process_updates (GdkPaintable *paintable,
 
   if (private->update_area)
     {
-      gdk_region_destroy (private->update_area);
-      private->update_area = NULL;
-    }  
-
-  [impl->view setNeedsDisplay: YES];
-  update_windows = g_slist_remove (update_windows, private);
+      gdk_window_quartz_process_updates_internal ((GdkWindow *) private);
+      update_windows = g_slist_remove (update_windows, private);
+    }
 }
 
 static void

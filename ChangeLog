@@ -1,3 +1,12 @@
+2007-04-18  Richard Hult  <richard@imendio.com>
+
+	* gdk/quartz/gdkwindow-quartz.c:
+	(gdk_window_quartz_process_updates_internal),
+	(gdk_window_quartz_process_all_updates),
+	(gdk_window_impl_quartz_process_updates): Refactor the process 
+	updates functions to share code between them. Also fixes bug 
+	#427660 by not updating larger regions than necessary.
+
 2007-04-18  Matthias Clasen  <mclasen@redhat.com>
 
 	* gdk/gdkregion-generic.h (GROWREGION): Handle the case
