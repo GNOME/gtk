@@ -1,3 +1,10 @@
+2007-04-18  Matthias Clasen  <mclasen@redhat.com>
+
+	Merged from trunk:
+
+	* gdk/gdkregion-generic.h (GROWREGION): Handle the case
+	of nRects == 0 correctly.  
+	
 2007-04-18  Emmanuele Bassi  <ebassi@gnome.org>
 
 	Merged from trunk:
