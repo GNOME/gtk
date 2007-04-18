@@ -1,3 +1,9 @@
+2007-04-18  Emmanuele Bassi  <ebassi@gnome.org>
+
+	* gtk/gtkrecentmanager.c (gtk_recent_manager_lookup_item): Fix
+	a leak by not increasing the refcount of the GtkRecentInfo
+	object when returning it (thanks to Matthias Clasen).
+
 2007-04-16  Alexander Larsson  <alexl@redhat.com>
 
 	* gtk/gtkprintoperation.c (gtk_print_operation_run):

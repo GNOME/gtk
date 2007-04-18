@@ -1231,7 +1231,7 @@ gtk_recent_manager_lookup_item (GtkRecentManager  *manager,
       return NULL;
     }
  
-  return gtk_recent_info_ref (info);
+  return info;
 }
 
 /**
