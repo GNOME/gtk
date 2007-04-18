@@ -83,14 +83,20 @@ struct _GdkRegion
               (idRect)->extents.y2 = (r)->y2;\
         }
 
-#define GROWREGION(reg, nRects){  					         \
-	  if ((reg)->rects == &(reg)->extents) {                                 \
-            (reg)->rects = g_new (GdkRegionBox, (nRects));		         \
-            (reg)->rects[0] = reg->extents;                                      \
-          }                                                                      \
-          else                                                                   \
-            (reg)->rects = g_renew (GdkRegionBox, (reg)->rects, (nRects));       \
-	  (reg)->size = (nRects);                                                \
+#define GROWREGION(reg, nRects) {  					   \
+	  if ((nRects) == 0) {						   \
+            if ((reg)->rects != &(reg)->extents) {			   \
+	      g_free ((reg)->rects);					   \
+              (reg)->rects = &(reg)->extents;				   \
+	    }								   \
+	  }  								   \
+	  else if ((reg)->rects == &(reg)->extents) {                      \
+            (reg)->rects = g_new (GdkRegionBox, (nRects));		   \
+            (reg)->rects[0] = (reg)->extents;                              \
+          }                                                                \
+          else                                                             \
+            (reg)->rects = g_renew (GdkRegionBox, (reg)->rects, (nRects)); \
+	  (reg)->size = (nRects);                                          \
        }				 
 
 /*
