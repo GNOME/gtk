@@ -1,3 +1,10 @@
+2007-04-19  Cody Russell <bratsche@gnome.org>
+
+	Merged from trunk:
+
+        * modules/engines/ms-windows/msw_style.c: Fix menuitem rendering
+        for Windows Vista.  (#392015, Hiroyuki Yamamoto)
+
 2007-04-18  Matthias Clasen  <mclasen@redhat.com>
 
 	Merged from trunk:

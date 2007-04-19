@@ -1784,13 +1784,9 @@ draw_menu_item(GdkWindow* window, GtkWidget* widget, GtkStyle* style,
     HDC dc;
     RECT rect;
 
-    if ( xp_theme_is_active() ) {
-        return xp_theme_draw( window, XP_THEME_ELEMENT_MENU_ITEM, style,
-                              x, y, width, height, state_type, area );
-    }
-
     if( (parent = gtk_widget_get_parent(widget))
-        &&  GTK_IS_MENU_BAR(parent) )
+        && GTK_IS_MENU_BAR(parent)
+        && !xp_theme_is_active() )
     {
         bar = GTK_MENU_SHELL(parent);
 
