@@ -1256,6 +1256,7 @@ gtk_icon_theme_lookup_icon (GtkIconTheme       *icon_theme,
   UnthemedIcon *unthemed_icon;
   gboolean allow_svg;
   gboolean use_builtin;
+  gboolean generic_fallback;
 
   g_return_val_if_fail (GTK_IS_ICON_THEME (icon_theme), NULL);
   g_return_val_if_fail (icon_name != NULL, NULL);
@@ -1273,15 +1274,33 @@ gtk_icon_theme_lookup_icon (GtkIconTheme       *icon_theme,
   else
     allow_svg = priv->pixbuf_supports_svg;
 
-  use_builtin = (flags & GTK_ICON_LOOKUP_USE_BUILTIN);
-
+  use_builtin = flags & GTK_ICON_LOOKUP_USE_BUILTIN;
+  generic_fallback = flags & GTK_ICON_LOOKUP_GENERIC_FALLBACK;
+  
   ensure_valid_themes (icon_theme);
 
   for (l = priv->themes; l; l = l->next)
     {
       IconTheme *theme = l->data;
       
-      icon_info = theme_lookup_icon (theme, icon_name, size, allow_svg, use_builtin);
+      gchar *name = g_strdup (icon_name);
+      gchar *s;
+
+      while (TRUE)
+        {
+          icon_info = theme_lookup_icon (theme, name, size, allow_svg, use_builtin);
+          if (icon_info || !generic_fallback)
+            break;
+
+          s = strrchr (name, '-');
+          if (!s)
+            break;
+  
+          *s = '\0';   
+        }
+
+      g_free (name); 
+
       if (icon_info)
 	goto out;
     }

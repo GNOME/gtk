@@ -1,3 +1,9 @@
+2007-04-19  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtkicontheme.h:
+	* gtk/gtkicontheme.c: Add GTK_ICON_LOOKUP_GENERIC_FALLBACK
+	icon lookup flag and implement it.  (#396901, Luca Ferreti)
+	
 2007-04-18  Richard Hult  <richard@imendio.com>
 
 	* gdk/quartz/gdkwindow-quartz.c:
