@@ -2497,6 +2497,9 @@ draw_extension (GtkStyle * style,
 		    HDC dc;
 		    gint32 aPosition;
 
+		   if (real_gap_side == GTK_POS_BOTTOM)
+		       g_object_unref (pixmap);
+
 		    dc = get_window_dc(style, window, state_type, x, y, width, height, &rect);
 
 		    if (real_gap_side == GTK_POS_TOP)
@@ -2519,6 +2522,9 @@ draw_extension (GtkStyle * style,
 		    release_window_dc (style, window, state_type);
                     return;
 		}
+
+		if (real_gap_side == GTK_POS_LEFT || real_gap_side == GTK_POS_RIGHT)
+		    g_object_unref (pixmap);
 	}
     parent_class->draw_extension
 	(style, window, state_type, shadow_type, area, widget, detail,
