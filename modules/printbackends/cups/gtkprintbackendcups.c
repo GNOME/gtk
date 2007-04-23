@@ -59,6 +59,9 @@ typedef struct _GtkPrintBackendCupsClass GtkPrintBackendCupsClass;
 #define _CUPS_MAX_ATTEMPTS 10 
 #define _CUPS_MAX_CHUNK_SIZE 8192
 
+/* define this to see warnings about ignored ppd options */
+#undef PRINT_IGNORED_OPTIONS
+
 #define _CUPS_MAP_ATTR_INT(attr, v, a) {if (!g_ascii_strcasecmp (attr->name, (a))) v = attr->values[0].integer;}
 #define _CUPS_MAP_ATTR_STR(attr, v, a) {if (!g_ascii_strcasecmp (attr->name, (a))) v = attr->values[0].string.text;}
 
@@ -266,7 +269,7 @@ _cairo_write_to_cups (void                *closure,
   error = NULL;
 
   GTK_NOTE (PRINTING,
-            g_print ("CUPS Backend: Writting %i byte chunk to temp file\n", length));
+            g_print ("CUPS Backend: Writing %i byte chunk to temp file\n", length));
 
   while (length > 0) 
     {
@@ -275,7 +278,8 @@ _cairo_write_to_cups (void                *closure,
       if (error != NULL)
 	{
 	  GTK_NOTE (PRINTING,
-                    g_print ("CUPS Backend: Error writting to temp file, %s\n", error->message));
+                    g_print ("CUPS Backend: Error writing to temp file, %s\n", 
+                             error->message));
 
           g_error_free (error);
 	  return CAIRO_STATUS_WRITE_ERROR;
@@ -972,8 +976,9 @@ cups_request_printer_list_cb (GtkPrintBackendCups *cups_backend,
 
   if (gtk_cups_result_is_error (result))
     {
-      g_warning ("Error getting printer list: %s", 
-                 gtk_cups_result_get_error_string (result));
+      GTK_NOTE (PRINTING, 
+                g_warning ("CUPS Backend: Error getting printer list: %s", 
+        	           gtk_cups_result_get_error_string (result)));
 
       goto done;
     }
@@ -1308,7 +1313,9 @@ cups_request_ppd (GtkPrinter *printer)
 
   if (error != NULL)
     {
-      g_warning ("%s", error->message);
+      GTK_NOTE (PRINTING, 
+                g_warning ("CUPS Backend: Failed to create temp file, %s\n", 
+                           error->message));
       g_error_free (error);
       httpClose (http);
       g_free (ppd_filename);
@@ -1466,7 +1473,8 @@ ppd_text_to_utf8 (ppd_file_t *ppd_file,
 
   if (res == NULL)
     {
-      g_warning ("unable to convert PPD text");
+      GTK_NOTE (PRINTING,
+                g_warning ("CUPS Backend: Unable to convert PPD text\n"));
       res = g_strdup ("???");
     }
   
@@ -1932,19 +1940,25 @@ create_pickone_option (ppd_file_t   *ppd_file,
 		  option = gtk_printer_option_new (gtk_name, label,
 				         GTK_PRINTER_OPTION_TYPE_PICKONE_STRING);
 		  break;
+#ifdef PRINT_IGNORED_OPTIONS
                 case PPD_CUSTOM_POINTS: 
-		  g_warning ("Not Supported: PPD Custom Points Option");
+		  g_warning ("CUPS Backend: PPD Custom Points Option not supported");
 		  break;
                 case PPD_CUSTOM_CURVE:
-                  g_warning ("Not Supported: PPD Custom Curve Option");
+                  g_warning ("CUPS Backend: PPD Custom Curve Option not supported");
 		  break;
                 case PPD_CUSTOM_INVCURVE: 	
-		  g_warning ("Not Supported: PPD Custom Inverse Curve Option");
+		  g_warning ("CUPS Backend: PPD Custom Inverse Curve Option not supported");
 		  break;
+#endif
+                default: 
+                  break;
 		}
 	    }
+#ifdef PRINT_IGNORED_OPTIONS
 	  else
-	    g_warning ("Not Supported: PPD Custom Option has more than one parameter");
+	    g_warning ("CUPS Backend: Multi-parameter PPD Custom Option not supported");
+#endif
 	}
 #endif /* HAVE_CUPS_API_1_2 */
 
@@ -1972,7 +1986,7 @@ create_pickone_option (ppd_file_t   *ppd_file,
     }
 #ifdef PRINT_IGNORED_OPTIONS
   else
-    g_warning ("Ignoring pickone %s\n", ppd_option->text);
+    g_warning ("CUPS Backend: Ignoring pickone %s\n", ppd_option->text);
 #endif
   g_free (available);
 
@@ -2011,7 +2025,7 @@ create_boolean_option (ppd_file_t   *ppd_file,
     }
 #ifdef PRINT_IGNORED_OPTIONS
   else
-    g_warning ("Ignoring boolean %s\n", ppd_option->text);
+    g_warning ("CUPS Backend: Ignoring boolean %s\n", ppd_option->text);
 #endif
   g_free (available);
 
@@ -2074,9 +2088,10 @@ handle_option (GtkPrinterOptionSet *set,
     {
       option = create_boolean_option (ppd_file, ppd_option, name);
     }
+#ifdef PRINT_IGNORED_OPTIONS
   else
-    g_warning ("Ignored pickmany setting %s\n", ppd_option->text);
-  
+    g_warning ("CUPS Backend: Ignoring pickmany setting %s\n", ppd_option->text);
+#endif  
   
   if (option)
     {
@@ -2302,8 +2317,10 @@ set_conflicts_from_option (GtkPrinterOptionSet *set,
 
       if (option)
 	gtk_printer_option_set_has_conflict (option, TRUE);
+#ifdef PRINT_IGNORED_OPTIONS
       else
-	g_warning ("conflict for option %s ignored", ppd_option->keyword);
+	g_warning ("CUPS Backend: Ignoring conflict for option %s", ppd_option->keyword);
+#endif
       
       g_free (name);
     }
