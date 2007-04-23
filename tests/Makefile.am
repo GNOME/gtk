@@ -279,7 +279,7 @@ testrecentchooser_SOURCES = 	\
 testgrouping_SOURCES =		\
 	testgrouping.c
 
-testtoooltips_SOURCES =		\
+testtooltips_SOURCES =		\
 	testtooltips.c
 
 testrecentchoosermenu_SOURCES =	\

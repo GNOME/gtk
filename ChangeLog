@@ -1,3 +1,8 @@
+2007-04-23  Michael Natterer  <mitch@imendio.com>
+
+	* tests/Makefile.am (testtooltips_SOURCES): fix typo:
+	testtoooltips_SOURCES -> testtooltips_SOURCES.
+
 2007-04-19  Cody Russell <bratsche@gnome.org>
 
 	* modules/engines/ms-windows/msw_style.c: Fix menuitem rendering
