@@ -1,3 +1,11 @@
+2007-04-23  Cody Russell <bratsche@gnome.org>
+
+	Backported from trunk:
+
+	* modules/engines/ms-windows/msw_style.c: Fix prematurely
+	released DC that prevented fonts with multi-byte font names from
+	being loaded. (#404506, Hiroyuki Yamamoto)
+
 2007-04-23  Matthias Clasen  <mclasen@redhat.com>
 
 	Mreged from trunk:

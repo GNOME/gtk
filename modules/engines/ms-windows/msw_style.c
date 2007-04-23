@@ -466,12 +466,15 @@ sys_font_to_pango_font (XpThemeClass klazz, XpThemeFont type, char *buf,
 		{
 		    pt_size = -MulDiv (lf.lfHeight, 72,
 				       GetDeviceCaps (hDC, LOGPIXELSY));
-		    ReleaseDC (hwnd, hDC);
 		}
 	    else
 		pt_size = 10;
 
 	    font = get_family_name (&lf, hDC);
+
+	    if (hDC)
+	      ReleaseDC (hwnd, hDC);
+
 	    if(!(font && *font))
 	    	return NULL;
 
