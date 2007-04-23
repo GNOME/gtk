@@ -1,3 +1,10 @@
+2007-04-23  Matthias Clasen  <mclasen@redhat.com>
+
+	Mreged from trunk:
+
+	* modules/printbackends/cups/gtkprintbackendcups.c: Reduce
+	the amount of debug spew if we are not debugging.
+	
 2007-04-19  Cody Russell <bratsche@gnome.org>
 
 	Backported from trunk:
