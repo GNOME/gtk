@@ -2241,7 +2241,7 @@ scan_directory (GtkIconThemePrivate *icon_theme,
       base_name = strip_suffix (name);
 
       hash_suffix = GPOINTER_TO_INT (g_hash_table_lookup (dir->icons, base_name));
-      g_hash_table_insert (icon_theme->all_icons, base_name, NULL);
+      g_hash_table_replace (icon_theme->all_icons, base_name, NULL);
       g_hash_table_replace (dir->icons, base_name, GUINT_TO_POINTER (hash_suffix| suffix));
     }
   
