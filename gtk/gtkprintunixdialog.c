@@ -1652,22 +1652,33 @@ dialog_get_page_ranges (GtkPrintUnixDialog *dialog,
   p = text;
   while (*p)
     {
-      start = (int)strtol (p, &next, 10);
-      if (start < 1)
-	start = 1;
+      while (isspace (*p)) p++;
+
+      if (*p == '-')
+        {
+          /* a half-open range like -2 */
+          start = 1;
+        }
+      else
+        {
+          start = (int)strtol (p, &next, 10);
+          if (start < 1)
+	    start = 1;
+          p = next;
+        }
+      
       end = start;
 
-      if (next != p)
-	{
-	  p = next;
+      while (isspace (*p)) p++;
 
-	  if (*p == '-')
-	    {
-	      p++;
-	      end = (int)strtol (p, NULL, 10);
-	      if (end < start)
-		end = start;
-	    }
+      if (*p == '-')
+	{
+	  p++;
+	  end = (int)strtol (p, &next, 10);
+          if (next == p) /* a half-open range like 2- */
+            end = 0;
+	  else if (end < start)
+	    end = start;
 	}
 
       ranges[i].start = start - 1;
@@ -1685,6 +1696,9 @@ dialog_get_page_ranges (GtkPrintUnixDialog *dialog,
 
   *n_ranges_out = i;
   
+  for (i = 0; i < *n_ranges_out; i++)
+    g_print ("[%d, %d]\n", ranges[i].start, ranges[i].end);
+
   return ranges;
 }
 
@@ -1702,6 +1716,8 @@ dialog_set_page_ranges (GtkPrintUnixDialog *dialog,
       g_string_append_printf (s, "%d", ranges[i].start + 1);
       if (ranges[i].end > ranges[i].start)
 	g_string_append_printf (s, "-%d", ranges[i].end + 1);
+      else if (ranges[i].end == -1)
+        g_string_append (s, "-");
       
       if (i != n_ranges - 1)
 	g_string_append (s, ",");

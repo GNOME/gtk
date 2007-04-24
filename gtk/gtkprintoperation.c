@@ -214,7 +214,7 @@ preview_iface_is_selected (GtkPrintOperationPreview *preview,
       for (i = 0; i < priv->num_page_ranges; i++)
 	{
 	  if (page_nr >= priv->page_ranges[i].start &&
-	      page_nr <= priv->page_ranges[i].end)
+	      (page_nr <= priv->page_ranges[i].end || page_ranges[i].end == -1)
 	    return TRUE;
 	}
       return FALSE;
@@ -2018,6 +2018,7 @@ print_pages_idle (gpointer user_data)
   GtkPrintOperationPrivate *priv; 
   GtkPageSetup *page_setup;
   gboolean done = FALSE;
+  gint i;
 
   data = (PrintPagesData*)user_data;
   priv = data->op->priv;
@@ -2067,6 +2068,9 @@ print_pages_idle (gpointer user_data)
 	{
 	  data->ranges = priv->page_ranges;
 	  data->num_ranges = priv->num_page_ranges;
+          for (i = 0; i < data->num_ranges; i++)
+            if (data->ranges[i].end == -1)
+              data->ranges[i].end = priv->nr_of_pages - 1;
 	}
       else if (priv->print_pages == GTK_PRINT_PAGES_CURRENT &&
 	       priv->current_page != -1)
