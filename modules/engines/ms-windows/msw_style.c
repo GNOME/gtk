@@ -2245,22 +2245,23 @@ draw_tab (GtkStyle * style,
   (no system API for this, but DrawEdge can draw all the parts of a tab) */
 static void DrawTab(HDC hdc, const RECT R, gint32 aPosition, gboolean aSelected,
                      gboolean aDrawLeft, gboolean aDrawRight)
- {
-   gint32 leftFlag, topFlag, rightFlag, lightFlag, shadeFlag;
-   RECT topRect, sideRect, bottomRect, lightRect, shadeRect;
-   gint32 selectedOffset, lOffset, rOffset;
+{
+  gint32 leftFlag, topFlag, rightFlag, lightFlag, shadeFlag;
+  RECT topRect, sideRect, bottomRect, lightRect, shadeRect;
+  gint32 selectedOffset, lOffset, rOffset;
 
-   selectedOffset = aSelected ? 1 : 0;
-   lOffset = aDrawLeft ? 2 : 0;
-   rOffset = aDrawRight ? 2 : 0;
+  selectedOffset = aSelected ? 1 : 0;
+  lOffset = aDrawLeft ? 2 : 0;
+  rOffset = aDrawRight ? 2 : 0;
 
-   /* Get info for tab orientation/position (Left, Top, Right, Bottom) */
-   switch (aPosition) {
-     case BF_LEFT:
-       leftFlag = BF_TOP; topFlag = BF_LEFT;
-       rightFlag = BF_BOTTOM;
-       lightFlag = BF_DIAGONAL_ENDTOPRIGHT;
-       shadeFlag = BF_DIAGONAL_ENDBOTTOMRIGHT;
+  /* Get info for tab orientation/position (Left, Top, Right, Bottom) */
+  switch (aPosition)
+    {
+    case BF_LEFT:
+      leftFlag = BF_TOP; topFlag = BF_LEFT;
+      rightFlag = BF_BOTTOM;
+      lightFlag = BF_DIAGONAL_ENDTOPRIGHT;
+      shadeFlag = BF_DIAGONAL_ENDBOTTOMRIGHT;
 
       SetRect(&topRect, R.left, R.top+lOffset, R.right, R.bottom-rOffset);
       SetRect(&sideRect, R.left+2, R.top, R.right-2+selectedOffset, R.bottom);
@@ -2268,263 +2269,356 @@ static void DrawTab(HDC hdc, const RECT R, gint32 aPosition, gboolean aSelected,
       SetRect(&lightRect, R.left, R.top, R.left+3, R.top+3);
       SetRect(&shadeRect, R.left+1, R.bottom-2, R.left+2, R.bottom-1);
       break;
+
     case BF_TOP:
-       leftFlag = BF_LEFT; topFlag = BF_TOP;
-       rightFlag = BF_RIGHT;
-       lightFlag = BF_DIAGONAL_ENDTOPRIGHT;
-       shadeFlag = BF_DIAGONAL_ENDBOTTOMRIGHT;
+      leftFlag = BF_LEFT; topFlag = BF_TOP;
+      rightFlag = BF_RIGHT;
+      lightFlag = BF_DIAGONAL_ENDTOPRIGHT;
+      shadeFlag = BF_DIAGONAL_ENDBOTTOMRIGHT;
 
-       SetRect(&topRect, R.left+lOffset, R.top, R.right-rOffset, R.bottom);
-       SetRect(&sideRect, R.left, R.top+2, R.right, R.bottom-1+selectedOffset);
-       SetRect(&bottomRect, R.left, R.bottom-1, R.right, R.bottom);
-       SetRect(&lightRect, R.left, R.top, R.left+3, R.top+3);
-       SetRect(&shadeRect, R.right-2, R.top+1, R.right-1, R.top+2);
-       break;
-     case BF_RIGHT:
-       leftFlag = BF_TOP; topFlag = BF_RIGHT;
-       rightFlag = BF_BOTTOM;
-       lightFlag = BF_DIAGONAL_ENDTOPLEFT;
-       shadeFlag = BF_DIAGONAL_ENDBOTTOMLEFT;
+      SetRect(&topRect, R.left+lOffset, R.top, R.right-rOffset, R.bottom);
+      SetRect(&sideRect, R.left, R.top+2, R.right, R.bottom-1+selectedOffset);
+      SetRect(&bottomRect, R.left, R.bottom-1, R.right, R.bottom);
+      SetRect(&lightRect, R.left, R.top, R.left+3, R.top+3);
+      SetRect(&shadeRect, R.right-2, R.top+1, R.right-1, R.top+2);
+      break;
+    case BF_RIGHT:
+      leftFlag = BF_TOP; topFlag = BF_RIGHT;
+      rightFlag = BF_BOTTOM;
+      lightFlag = BF_DIAGONAL_ENDTOPLEFT;
+      shadeFlag = BF_DIAGONAL_ENDBOTTOMLEFT;
 
-       SetRect(&topRect, R.left, R.top+lOffset, R.right, R.bottom-rOffset);
-       SetRect(&sideRect, R.left+2-selectedOffset, R.top, R.right-2, R.bottom);
-       SetRect(&bottomRect, R.left, R.top, R.left+2, R.bottom);
-       SetRect(&lightRect, R.right-3, R.top, R.right-1, R.top+2);
-       SetRect(&shadeRect, R.right-2, R.bottom-3, R.right, R.bottom-1);
-       break;
-     case BF_BOTTOM:
-       leftFlag = BF_LEFT; topFlag = BF_BOTTOM;
-       rightFlag = BF_RIGHT;
-       lightFlag = BF_DIAGONAL_ENDTOPLEFT;
-       shadeFlag = BF_DIAGONAL_ENDBOTTOMLEFT;
+      SetRect(&topRect, R.left, R.top+lOffset, R.right, R.bottom-rOffset);
+      SetRect(&sideRect, R.left+2-selectedOffset, R.top, R.right-2, R.bottom);
+      SetRect(&bottomRect, R.left, R.top, R.left+2, R.bottom);
+      SetRect(&lightRect, R.right-3, R.top, R.right-1, R.top+2);
+      SetRect(&shadeRect, R.right-2, R.bottom-3, R.right, R.bottom-1);
+      break;
 
-       SetRect(&topRect, R.left+lOffset, R.top, R.right-rOffset, R.bottom);
-       SetRect(&sideRect, R.left, R.top+2-selectedOffset, R.right, R.bottom-2);
-       SetRect(&bottomRect, R.left, R.top, R.right, R.top+2);
-       SetRect(&lightRect, R.left, R.bottom-3, R.left+2, R.bottom-1);
-       SetRect(&shadeRect, R.right-2, R.bottom-3, R.right, R.bottom-1);
-       break;
-     default:
-       g_return_if_reached();
+    case BF_BOTTOM:
+      leftFlag = BF_LEFT; topFlag = BF_BOTTOM;
+      rightFlag = BF_RIGHT;
+      lightFlag = BF_DIAGONAL_ENDTOPLEFT;
+      shadeFlag = BF_DIAGONAL_ENDBOTTOMLEFT;
+
+      SetRect(&topRect, R.left+lOffset, R.top, R.right-rOffset, R.bottom);
+      SetRect(&sideRect, R.left, R.top+2-selectedOffset, R.right, R.bottom-2);
+      SetRect(&bottomRect, R.left, R.top, R.right, R.top+2);
+      SetRect(&lightRect, R.left, R.bottom-3, R.left+2, R.bottom-1);
+      SetRect(&shadeRect, R.right-2, R.bottom-3, R.right, R.bottom-1);
+      break;
+
+    default:
+      g_return_if_reached();
+    }
+  
+  /* Background */
+  FillRect(hdc, &R, (HBRUSH) (COLOR_3DFACE+1) );
+
+  /* Tab "Top" */
+  DrawEdge(hdc, &topRect, EDGE_RAISED, BF_SOFT | topFlag);
+
+  /* Tab "Bottom" */
+  if (!aSelected)
+    DrawEdge(hdc, &bottomRect, EDGE_RAISED, BF_SOFT | topFlag);
+
+  /* Tab "Sides" */
+  if (!aDrawLeft)
+    leftFlag = 0;
+  if (!aDrawRight)
+    rightFlag = 0;
+  DrawEdge(hdc, &sideRect, EDGE_RAISED, BF_SOFT | leftFlag | rightFlag);
+
+  /* Tab Diagonal Corners */
+  if (aDrawLeft)
+    DrawEdge(hdc, &lightRect, EDGE_RAISED, BF_SOFT | lightFlag);
+
+  if (aDrawRight)
+    DrawEdge(hdc, &shadeRect, EDGE_RAISED, BF_SOFT | shadeFlag);
+}
+
+static gboolean
+draw_themed_tab_button (GtkStyle *style,
+                        GdkWindow *window,
+                        GtkStateType state_type,
+                        GtkNotebook *notebook,
+                        gint x, gint y,
+                        gint width, gint height,
+                        gint gap_side)
+{
+  GdkPixmap *pixmap = NULL;
+  gint border_width = gtk_container_get_border_width (GTK_CONTAINER (notebook));
+  GtkWidget *widget = GTK_WIDGET (notebook);
+  GdkRectangle draw_rect, clip_rect;
+  GdkPixbufRotation rotation = GDK_PIXBUF_ROTATE_NONE;
+
+  if (gap_side == GTK_POS_TOP)
+    {
+      int widget_right;
+
+      if (state_type == GTK_STATE_NORMAL)
+        {
+          draw_rect.x = x;
+          draw_rect.y = y;
+          draw_rect.width = width + 2;
+          draw_rect.height = height;
+
+          clip_rect = draw_rect;
+          clip_rect.height--;
+        }
+      else
+        {
+          draw_rect.x = x + 2;
+          draw_rect.y = y;
+          draw_rect.width = width - 2;
+          draw_rect.height = height - 2;
+          clip_rect = draw_rect;
+        }
+
+      /* If we are currently drawing the right-most tab, and if that tab is the selected tab... */
+      widget_right = widget->allocation.x + widget->allocation.width - border_width - 2;
+      if (draw_rect.x + draw_rect.width >= widget_right)
+        {
+          draw_rect.width = clip_rect.width = widget_right - draw_rect.x;
+        }
+    }
+  if (gap_side == GTK_POS_BOTTOM)
+    {
+      int widget_right;
+    
+      if (state_type == GTK_STATE_NORMAL)
+        {
+          draw_rect.x = x;
+          draw_rect.y = y;
+          draw_rect.width = width + 2;
+          draw_rect.height = height;
+
+          clip_rect = draw_rect;
+        }
+      else
+        {
+          draw_rect.x = x + 2;
+          draw_rect.y = y + 2;
+          draw_rect.width = width - 2;
+          draw_rect.height = height - 2;
+          clip_rect = draw_rect;
+        }
+
+      /* If we are currently drawing the right-most tab, and if that tab is the selected tab... */
+      widget_right = widget->allocation.x + widget->allocation.width - border_width - 2;
+      if (draw_rect.x + draw_rect.width >= widget_right)
+        {
+          draw_rect.width = clip_rect.width = widget_right - draw_rect.x;
+        }
+
+      rotation = GDK_PIXBUF_ROTATE_UPSIDEDOWN;
+    }
+  else if (gap_side == GTK_POS_LEFT)
+    {
+      int widget_bottom;
+
+      if (state_type == GTK_STATE_NORMAL)
+        {
+          draw_rect.x = x;
+          draw_rect.y = y;
+          draw_rect.width = width;
+          draw_rect.height = height + 2;
+
+          clip_rect = draw_rect;
+          clip_rect.width--;
+        }
+      else
+        {
+          draw_rect.x = x;
+          draw_rect.y = y + 2;
+          draw_rect.width = width - 2;
+          draw_rect.height = height - 2;
+          clip_rect = draw_rect;
+        }
+
+      /* If we are currently drawing the bottom-most tab, and if that tab is the selected tab... */
+      widget_bottom = widget->allocation.x + widget->allocation.height - border_width - 2;
+      if (draw_rect.y + draw_rect.height >= widget_bottom)
+        {
+          draw_rect.height = clip_rect.height = widget_bottom - draw_rect.y;
+        }
+
+      rotation = GDK_PIXBUF_ROTATE_COUNTERCLOCKWISE;
+    }
+  else if (gap_side == GTK_POS_RIGHT)
+    {
+      int widget_bottom;
+
+      if (state_type == GTK_STATE_NORMAL)
+        {
+          draw_rect.x = x + 1;
+          draw_rect.y = y;
+          draw_rect.width = width;
+          draw_rect.height = height + 2;
+
+          clip_rect = draw_rect;
+          clip_rect.width--;
+        }
+      else
+        {
+          draw_rect.x = x + 2;
+          draw_rect.y = y + 2;
+          draw_rect.width = width - 2;
+          draw_rect.height = height - 2;
+          clip_rect = draw_rect;
+        }
+
+      /* If we are currently drawing the bottom-most tab, and if that tab is the selected tab... */
+      widget_bottom = widget->allocation.x + widget->allocation.height - border_width - 2;
+      if (draw_rect.y + draw_rect.height >= widget_bottom)
+        {
+          draw_rect.height = clip_rect.height = widget_bottom - draw_rect.y;
+        }
+
+      rotation = GDK_PIXBUF_ROTATE_CLOCKWISE;
+    }
+
+  if (gap_side == GTK_POS_TOP)
+    {
+      if (!xp_theme_draw (window, XP_THEME_ELEMENT_TAB_ITEM, style,
+                          draw_rect.x, draw_rect.y,
+                          draw_rect.width,draw_rect.height,
+                          state_type, &clip_rect))
+        {
+          return FALSE;
+        }
+    }
+  else
+    {
+      GdkPixbuf *pixbuf;
+      GdkPixbuf *rotated;
+
+      if (gap_side == GTK_POS_LEFT || gap_side == GTK_POS_RIGHT)
+        {
+          pixmap = gdk_pixmap_new (window, clip_rect.height, clip_rect.width, -1);
+          if (!xp_theme_draw (pixmap, XP_THEME_ELEMENT_TAB_ITEM, style,
+                              draw_rect.y - clip_rect.y, draw_rect.x - clip_rect.x,
+                              draw_rect.height, draw_rect.width, state_type, 0))
+            {
+              g_object_unref (pixmap);
+              return FALSE;
+            }
+
+          pixbuf = gdk_pixbuf_get_from_drawable (NULL, pixmap, NULL, 0, 0, 0, 0,
+                                                 clip_rect.height, clip_rect.width);
+          g_object_unref (pixmap);
+        }
+      else
+        {
+          pixmap = gdk_pixmap_new (window, clip_rect.width, clip_rect.height, -1);
+          if (!xp_theme_draw (pixmap, XP_THEME_ELEMENT_TAB_ITEM, style,
+                              draw_rect.x - clip_rect.x, draw_rect.y - clip_rect.y,
+                              draw_rect.width, draw_rect.height, state_type, 0))
+            {
+              g_object_unref (pixmap);
+              return FALSE;
+            }
+
+          pixbuf = gdk_pixbuf_get_from_drawable (NULL, pixmap, NULL, 0, 0, 0, 0,
+                                                 clip_rect.width, clip_rect.height);
+          g_object_unref (pixmap);
+        }
+
+      rotated = gdk_pixbuf_rotate_simple (pixbuf, rotation);
+      g_object_unref (pixbuf);
+      pixbuf = rotated;
+
+      gdk_draw_pixbuf (window, NULL, pixbuf, 0, 0, clip_rect.x, clip_rect.y,
+                       clip_rect.width, clip_rect.height, GDK_RGB_DITHER_NONE, 0, 0);
+      g_object_unref (pixbuf);
+    }
+  
+  return TRUE;
+}
+
+static gboolean
+draw_tab_button (GtkStyle *style,
+                 GdkWindow *window,
+                 GtkStateType state_type,
+                 GtkShadowType shadow_type,
+                 GdkRectangle *area,
+                 GtkWidget *widget,
+                 const gchar *detail,
+                 gint x, gint y,
+                 gint width, gint height,
+                 gint gap_side)
+{
+  if (gap_side == GTK_POS_TOP || gap_side == GTK_POS_BOTTOM)
+   {
+     /* experimental tab-drawing code from mozilla */
+     RECT rect;
+     HDC dc;
+     gint32 aPosition;
+
+     dc = get_window_dc (style, window, state_type, x, y, width, height, &rect);
+
+     if (gap_side == GTK_POS_TOP)
+       aPosition = BF_TOP;
+     else if (gap_side == GTK_POS_BOTTOM)
+       aPosition = BF_BOTTOM;
+     else if (gap_side == GTK_POS_LEFT)
+       aPosition = BF_LEFT;
+     else
+       aPosition = BF_RIGHT;
+
+     if(state_type == GTK_STATE_PRELIGHT)
+       state_type = GTK_STATE_NORMAL;
+     if (area)
+       gdk_gc_set_clip_rectangle (style->dark_gc[state_type], area);
+
+     DrawTab (dc, rect, aPosition,
+              state_type != GTK_STATE_PRELIGHT,
+              (gap_side != GTK_POS_LEFT),
+              (gap_side != GTK_POS_RIGHT));
+     if (area)
+       gdk_gc_set_clip_rectangle (style->dark_gc[state_type], NULL);
+
+     release_window_dc (style, window, state_type);
+     return TRUE;
    }
 
-   /* Background */
-   FillRect(hdc, &R, (HBRUSH) (COLOR_3DFACE+1) );
-
-   /* Tab "Top" */
-   DrawEdge(hdc, &topRect, EDGE_RAISED, BF_SOFT | topFlag);
-
-   /* Tab "Bottom" */
-   if (!aSelected)
-     DrawEdge(hdc, &bottomRect, EDGE_RAISED, BF_SOFT | topFlag);
-
-   /* Tab "Sides" */
-   if (!aDrawLeft)
-     leftFlag = 0;
-   if (!aDrawRight)
-     rightFlag = 0;
-   DrawEdge(hdc, &sideRect, EDGE_RAISED, BF_SOFT | leftFlag | rightFlag);
-
-   /* Tab Diagonal Corners */
-   if (aDrawLeft)
-     DrawEdge(hdc, &lightRect, EDGE_RAISED, BF_SOFT | lightFlag);
-
-   if (aDrawRight)
-     DrawEdge(hdc, &shadeRect, EDGE_RAISED, BF_SOFT | shadeFlag);
- }
+  return FALSE;
+}
 
 static void
-draw_extension (GtkStyle * style,
-		GdkWindow * window,
-		GtkStateType state_type,
-		GtkShadowType shadow_type,
-		GdkRectangle * area,
-		GtkWidget * widget,
-		const gchar * detail,
-		gint x,
-		gint y, gint width, gint height, GtkPositionType gap_side)
+draw_extension (GtkStyle *style,
+                GdkWindow *window,
+                GtkStateType state_type,
+                GtkShadowType shadow_type,
+                GdkRectangle *area,
+                GtkWidget *widget,
+                const gchar *detail,
+                gint x, gint y,
+                gint width, gint height,
+                GtkPositionType gap_side)
 {
-    if (widget && GTK_IS_NOTEBOOK (widget) && detail && !strcmp (detail, "tab"))
-	{
-	    GtkNotebook *notebook = GTK_NOTEBOOK (widget);
-	    GdkPixmap *pixmap = NULL;
-	    GdkDrawable *target = NULL;
-	    gint x2 = 0, y2 = 0, w2 = width, h2 = height;
-	    int tab_part = XP_THEME_ELEMENT_TAB_ITEM;
-	    int real_gap_side = gtk_notebook_get_tab_pos (notebook);
-	    int border_width = gtk_container_get_border_width (GTK_CONTAINER (notebook));
+  if (widget && GTK_IS_NOTEBOOK (widget) && detail && !strcmp (detail, "tab"))
+    {
+      GtkNotebook *notebook = GTK_NOTEBOOK (widget);
 
-	    /* why this differs from the above gap_side, i have no idea... */
-	    if (real_gap_side == GTK_POS_LEFT)
-	      {
-		/* Create "rotated" pixmap.. swap width and height */
-		pixmap = gdk_pixmap_new (window, height, width, -1);
-		target = pixmap;
-		x2 = 0;
-		y2 = 0;
-		w2 = height;
-		h2 = width - (state_type == GTK_STATE_NORMAL ? 0 : notebook->tab_hborder);
+      /* Why this differs from gap_side, I have no idea.. */
+      int real_gap_side = gtk_notebook_get_tab_pos (notebook);
 
-		/* If we are currently rendering the bottom-most tab, and if that tab is the selected tab... */
-		if (widget->allocation.y + widget->allocation.height - border_width == y + height &&
-		    state_type == GTK_STATE_NORMAL)
-		  {
-		    w2--;
-		  }
-	      }
-	    else if (real_gap_side == GTK_POS_RIGHT)
-	      {
-		/* Create "rotated" pixmap.. swap width and height */
-		x2 = 0;
-		y2 = 0;
-		w2 = height;
-		h2 = width - (state_type == GTK_STATE_NORMAL ? 0 : notebook->tab_hborder);
-		pixmap = gdk_pixmap_new (window, w2, h2, -1);
-		target = pixmap;
-
-		/* If we are currently rendering the bottom-most tab, and if that tab is the selected tab... */
-		if (widget->allocation.y + widget->allocation.height - border_width == y + height &&
-		    state_type == GTK_STATE_NORMAL)
-		  {
-		    w2--;
-		  }
-	      }
-	    else if (real_gap_side == GTK_POS_TOP)
-	      {
-		target = window;
-		x2 = x;
-		y2 = y;
-		w2 = width;
-		if (state_type == GTK_STATE_NORMAL)
-		  h2 = height;
-		else
-		  h2 = height - notebook->tab_vborder;
-
-		/* If we are currently drawing the right-most tab, and if that tab is the selected tab... */
-		if (widget->allocation.x + widget->allocation.width - border_width == x + width &&
-		    state_type == GTK_STATE_NORMAL)
-		  {
-		    x2--;
-		  }
-	      }
-	    else if (real_gap_side == GTK_POS_BOTTOM)
-	      {
-		x2 = 0;
-		y2 = 0;
-		w2 = width;
-		h2 = height - (state_type == GTK_STATE_NORMAL ? 0 : notebook->tab_vborder * 2);
-		pixmap = gdk_pixmap_new (window, w2, h2, -1);
-		target = pixmap;
-	      }
-
-	    if (xp_theme_draw (target, tab_part, style, x2, y2, w2, h2, state_type, NULL /*area*/))
-		{
-		    GdkPixbufRotation rotation = GDK_PIXBUF_ROTATE_NONE;
-		    if (real_gap_side == GTK_POS_BOTTOM)
-		        rotation = GDK_PIXBUF_ROTATE_UPSIDEDOWN;
-		    else if (real_gap_side == GTK_POS_LEFT)
-		        rotation = GDK_PIXBUF_ROTATE_COUNTERCLOCKWISE;
-		    else if (real_gap_side == GTK_POS_RIGHT)
-		        rotation = GDK_PIXBUF_ROTATE_CLOCKWISE;
-
-		    if (rotation != GDK_PIXBUF_ROTATE_NONE)
-			{
-			   GdkPixbuf * pixbuf, * rotated;
-
-			   pixbuf = gdk_pixbuf_get_from_drawable (NULL, target, NULL, x2, y2, 0, 0, w2, h2);
-
-			   rotated = gdk_pixbuf_rotate_simple (pixbuf, rotation);
-			   g_object_unref (pixbuf);
-			   pixbuf = rotated;
-
-			   if (real_gap_side == GTK_POS_RIGHT)
-			     {
-			       x2 = x + (state_type == GTK_STATE_NORMAL ? 0 : notebook->tab_hborder);
-			       y2 = y;
-			       w2 = width - (state_type == GTK_STATE_NORMAL ? 0 : notebook->tab_hborder);
-			       h2 = height;
-
-			       if (widget->allocation.y + widget->allocation.height - border_width == y + height &&
-				   state_type == GTK_STATE_NORMAL)
-				 {
-				   h2--;
-				 }
-			     }
-			   else if (real_gap_side == GTK_POS_LEFT)
-			     {
-			       x2 = x;
-			       y2 = y;
-			       w2 = width - (state_type == GTK_STATE_NORMAL ? 0 : notebook->tab_hborder);
-			       h2 = height;
-
-			       if (widget->allocation.y + widget->allocation.height - border_width == y + height &&
-				   state_type == GTK_STATE_NORMAL)
-				 {
-				   h2--;
-				 }
-			     }
-			   else if (real_gap_side == GTK_POS_BOTTOM)
-			     {
-			       x2 = x;
-			       y2 = y + (state_type == GTK_STATE_NORMAL ? 0 : notebook->tab_vborder);
-			       w2 = width;
-			       h2 = height - (state_type == GTK_STATE_NORMAL ? 0 : notebook->tab_vborder * 2);
-			       /* If we are currently drawing the right-most tab (any state)... */
-			       if (widget->allocation.x + widget->allocation.width - border_width == x + width)
-				 {
-				   x2--;
-				   w2--;
-				 }
-			     }
-
-			   gdk_draw_pixbuf (window, NULL, pixbuf, 0, 0, x2, y2, w2, h2, GDK_RGB_DITHER_NONE, 0, 0);
-
-			   g_object_unref (G_OBJECT (pixbuf));
-
-			   if (real_gap_side == GTK_POS_LEFT || real_gap_side == GTK_POS_RIGHT || real_gap_side == GTK_POS_BOTTOM)
-			     {
-			       g_object_unref (pixmap);
-			     }
-			}
-		    return;
-		} else if (real_gap_side == GTK_POS_TOP || real_gap_side == GTK_POS_BOTTOM) {
-		    /* experimental tab-drawing code from mozilla */
-		    RECT rect;
-		    HDC dc;
-		    gint32 aPosition;
-
-		   if (real_gap_side == GTK_POS_BOTTOM)
-		       g_object_unref (pixmap);
-
-		    dc = get_window_dc(style, window, state_type, x, y, width, height, &rect);
-
-		    if (real_gap_side == GTK_POS_TOP)
-		        aPosition = BF_TOP;
-		    else if (real_gap_side == GTK_POS_BOTTOM)
-		        aPosition = BF_BOTTOM;
-		    else if (real_gap_side == GTK_POS_LEFT)
-		        aPosition = BF_LEFT;
-		    else
-		        aPosition = BF_RIGHT;
-
-                    if( state_type == GTK_STATE_PRELIGHT )
-                        state_type = GTK_STATE_NORMAL;
-		    if (area)
-		        gdk_gc_set_clip_rectangle (style->dark_gc[state_type], area);
-		    DrawTab (dc, rect, aPosition, state_type != GTK_STATE_PRELIGHT, (real_gap_side != GTK_POS_LEFT), (real_gap_side != GTK_POS_RIGHT));
-		    if (area)
-		        gdk_gc_set_clip_rectangle (style->dark_gc[state_type], NULL);
-
-		    release_window_dc (style, window, state_type);
-                    return;
-		}
-
-		if (real_gap_side == GTK_POS_LEFT || real_gap_side == GTK_POS_RIGHT)
-		    g_object_unref (pixmap);
-	}
-    parent_class->draw_extension
-	(style, window, state_type, shadow_type, area, widget, detail,
-	 x, y, width, height, gap_side);
+      if (!draw_themed_tab_button (style, window, state_type,
+                                   GTK_NOTEBOOK (widget), x, y,
+                                   width, height, real_gap_side))
+        {
+          if (!draw_tab_button (style, window, state_type,
+                                shadow_type, area, widget,
+                                detail,
+                                x, y, width, height, gap_side))
+            {
+              parent_class->draw_extension (style, window, state_type,
+                                            shadow_type, area, widget, detail,
+                                            x, y, width, height, real_gap_side);
+            }
+        }
+    }
 }
 
 static void
