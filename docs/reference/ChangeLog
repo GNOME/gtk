@@ -1,6 +1,11 @@
+2007-04-25  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/tmpl/gtkdialog.sgml: Fix a wrong cross reference.
+	(#431289, Bastian Nocera)
+
 2007-03-19  Matthias Clasen  <mclasen@redhat.com>
 
-	* tmpl/gtkaboutdialog.sgml: Add a paragraph about setting
+	* gtk/tmpl/gtkaboutdialog.sgml: Add a paragraph about setting
 	the title on the dialog.
 
 2007-02-14  Stefan Kost  <ensonic@users.sf.net>

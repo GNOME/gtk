@@ -186,7 +186,7 @@ Flags used to influence dialog construction.
 </para>
 
 @GTK_DIALOG_MODAL: Make the constructed dialog modal, 
-  see gtk_widget_set_modal().
+  see gtk_window_set_modal().
 @GTK_DIALOG_DESTROY_WITH_PARENT: Destroy the dialog when its
   parent is destroyed, see gtk_window_set_destroy_with_parent().
 @GTK_DIALOG_NO_SEPARATOR: Don't put a separator between the
