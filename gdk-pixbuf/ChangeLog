@@ -1,3 +1,8 @@
+2007-04-25  Matthias Clasen <mclasen@redhat.com>
+
+	* gdk-pixbuf-scaled-anim.c (gdk_pixbuf_scaled_anim_iter_finalize):
+	Chain up.  (#433125, Christian Persch)
+
 Wed Mar 28 15:27:35 2007  Tim Janik  <timj@imendio.com>
 
 	* io-jpeg.c: applied JPEG loader fix from maemo. this fix makes sure

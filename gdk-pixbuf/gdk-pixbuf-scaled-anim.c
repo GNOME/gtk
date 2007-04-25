@@ -105,6 +105,8 @@ gdk_pixbuf_scaled_anim_finalize (GObject *object)
 		g_object_unref (scaled->current);
 		scaled->current = NULL;
 	}
+
+	G_OBJECT_CLASS (gdk_pixbuf_scaled_anim_parent_class)->finalize (object);
 }
 
 static gboolean
@@ -211,7 +213,6 @@ get_pixbuf (GdkPixbufAnimationIter *iter)
 {
 	GdkPixbufScaledAnimIter *scaled = (GdkPixbufScaledAnimIter *)iter;
 	GdkPixbuf *pixbuf;
-	gboolean force_update;
 
 	pixbuf = gdk_pixbuf_animation_iter_get_pixbuf (scaled->iter);
 	return get_scaled_pixbuf (scaled->scaled, pixbuf);
@@ -241,6 +242,8 @@ gdk_pixbuf_scaled_anim_iter_finalize (GObject *object)
         
 	g_object_unref (iter->iter);
    	g_object_unref (iter->scaled);
+
+	G_OBJECT_CLASS (gdk_pixbuf_scaled_anim_iter_parent_class)->finalize (object);
 }
 
 static void
