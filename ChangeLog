@@ -1,5 +1,10 @@
 2007-04-25  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtktreeview.c (gtk_tree_view_style_set): Set the background
+	of the header window again.  (#431067, Benjamin Berg)
+
+2007-04-25  Matthias Clasen  <mclasen@redhat.com>
+
 	* gtk/gtkicontheme.c (theme_lookup_icon): Set the filename to
 	NULL for builtin icons, sinc gtk_icon_info_get_builtin_pixbuf()
 	depends on it. 

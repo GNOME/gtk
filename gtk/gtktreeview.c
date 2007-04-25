@@ -7751,6 +7751,7 @@ gtk_tree_view_style_set (GtkWidget *widget,
     {
       gdk_window_set_back_pixmap (widget->window, NULL, FALSE);
       gdk_window_set_background (tree_view->priv->bin_window, &widget->style->base[widget->state]);
+      gtk_style_set_background (widget->style, tree_view->priv->header_window, GTK_STATE_NORMAL);
 
       gtk_tree_view_set_grid_lines (tree_view, tree_view->priv->grid_lines);
       gtk_tree_view_set_enable_tree_lines (tree_view, tree_view->priv->tree_lines_enabled);
