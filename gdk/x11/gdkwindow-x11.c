@@ -929,6 +929,9 @@ gdk_window_new (GdkWindow     *parent,
       break;
     }
 
+  if (attributes_mask & GDK_WA_TYPE_HINT)
+    gdk_window_set_type_hint (window, attributes->type_hint);
+
   return window;
 }
 

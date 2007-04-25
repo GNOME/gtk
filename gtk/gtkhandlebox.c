@@ -441,7 +441,8 @@ gtk_handle_box_realize (GtkWidget *widget)
 			   GDK_LEAVE_NOTIFY_MASK |
 			   GDK_FOCUS_CHANGE_MASK |
 			   GDK_STRUCTURE_MASK);
-  attributes_mask = GDK_WA_X | GDK_WA_Y | GDK_WA_VISUAL | GDK_WA_COLORMAP;
+  attributes.type_hint = GDK_WINDOW_TYPE_HINT_TOOLBAR;
+  attributes_mask = GDK_WA_X | GDK_WA_Y | GDK_WA_VISUAL | GDK_WA_COLORMAP | GDK_WA_TYPE_HINT;
   hb->float_window = gdk_window_new (gtk_widget_get_root_window (widget),
 				     &attributes, attributes_mask);
   gdk_window_set_user_data (hb->float_window, widget);

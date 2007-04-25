@@ -85,14 +85,15 @@ typedef enum
  */
 typedef enum
 {
-  GDK_WA_TITLE	  = 1 << 1,
-  GDK_WA_X	  = 1 << 2,
-  GDK_WA_Y	  = 1 << 3,
-  GDK_WA_CURSOR	  = 1 << 4,
-  GDK_WA_COLORMAP = 1 << 5,
-  GDK_WA_VISUAL	  = 1 << 6,
-  GDK_WA_WMCLASS  = 1 << 7,
-  GDK_WA_NOREDIR  = 1 << 8
+  GDK_WA_TITLE	   = 1 << 1,
+  GDK_WA_X	   = 1 << 2,
+  GDK_WA_Y	   = 1 << 3,
+  GDK_WA_CURSOR	   = 1 << 4,
+  GDK_WA_COLORMAP  = 1 << 5,
+  GDK_WA_VISUAL	   = 1 << 6,
+  GDK_WA_WMCLASS   = 1 << 7,
+  GDK_WA_NOREDIR   = 1 << 8,
+  GDK_WA_TYPE_HINT = 1 << 9
 } GdkWindowAttributesType;
 
 /* Size restriction enumeration.
@@ -213,6 +214,7 @@ struct _GdkWindowAttr
   gchar *wmclass_name;
   gchar *wmclass_class;
   gboolean override_redirect;
+  GdkWindowTypeHint type_hint;
 };
 
 struct _GdkGeometry

@@ -311,12 +311,13 @@ get_default_title (void)
  *   get its own class
  */
 static ATOM
-RegisterGdkClass (GdkWindowType wtype)
+RegisterGdkClass (GdkWindowType wtype, GdkWindowTypeHint wtype_hint)
 {
-  static ATOM klassTOPLEVEL = 0;
-  static ATOM klassDIALOG   = 0;
-  static ATOM klassCHILD    = 0;
-  static ATOM klassTEMP     = 0;
+  static ATOM klassTOPLEVEL   = 0;
+  static ATOM klassDIALOG     = 0;
+  static ATOM klassCHILD      = 0;
+  static ATOM klassTEMP       = 0;
+  static ATOM klassTEMPSHADOW = 0;
   static HICON hAppIcon = NULL;
   static HICON hAppIconSm = NULL;
   static WNDCLASSEXW wcl; 
@@ -412,14 +413,35 @@ RegisterGdkClass (GdkWindowType wtype)
       break;
       
     case GDK_WINDOW_TEMP:
-      if (0 == klassTEMP)
-	{
-	  wcl.lpszClassName = L"gdkWindowTemp";
-	  wcl.style |= CS_SAVEBITS;
-	  ONCE_PER_CLASS ();
-	  klassTEMP = RegisterClassExW (&wcl);
-	}
-      klass = klassTEMP;
+      if ((wtype_hint == GDK_WINDOW_TYPE_HINT_MENU) ||
+          (wtype_hint == GDK_WINDOW_TYPE_HINT_DROPDOWN_MENU) ||
+          (wtype_hint == GDK_WINDOW_TYPE_HINT_POPUP_MENU) ||
+          (wtype_hint == GDK_WINDOW_TYPE_HINT_TOOLTIP))
+        {
+          if (klassTEMPSHADOW == 0)
+            {
+              wcl.lpszClassName = "gdkWindowTempShadow";
+              wcl.style |= CS_SAVEBITS;
+              if (_winver >= 0x0501) /* Windows XP (5.1) or above */
+                wcl.style |= 0x00020000; /* CS_DROPSHADOW */
+              ONCE_PER_CLASS ();
+              klassTEMPSHADOW = RegisterClassEx (&wcl);
+            }
+
+          klass = klassTEMPSHADOW;
+        }
+       else
+        {
+          if (klassTEMP == 0)
+            {
+              wcl.lpszClassName = "gdkWindowTemp";
+              wcl.style |= CS_SAVEBITS;
+              ONCE_PER_CLASS ();
+              klassTEMP = RegisterClassEx (&wcl);
+            }
+
+          klass = klassTEMP;
+        }
       break;
       
     default:
@@ -638,10 +660,15 @@ gdk_window_new_internal (GdkWindow     *parent,
 
   private->event_mask = GDK_STRUCTURE_MASK | attributes->event_mask;
       
+  if (attributes_mask & GDK_WA_TYPE_HINT)
+    impl->type_hint = attributes->type_hint;
+  else
+    impl->type_hint = GDK_WINDOW_TYPE_HINT_NORMAL;
+
   if (private->parent)
     private->parent->children = g_list_prepend (private->parent->children, window);
 
-  klass = RegisterGdkClass (private->window_type);
+  klass = RegisterGdkClass (private->window_type, impl->type_hint);
 
   wtitle = g_utf8_to_utf16 (title, -1, NULL, NULL, NULL);
   
