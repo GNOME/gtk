@@ -116,9 +116,9 @@ main (int argc, char *argv[])
       if (argc >= 5)
 	size = atoi (argv[4]);
       
-      icon_info = gtk_icon_theme_lookup_icon (icon_theme, argv[3], size, 0);
+      icon_info = gtk_icon_theme_lookup_icon (icon_theme, argv[3], size, GTK_ICON_LOOKUP_USE_BUILTIN);
       g_print ("icon for %s at %dx%d is %s\n", argv[3], size, size,
-	       icon_info ? gtk_icon_info_get_filename (icon_info) : "<none>");
+	       icon_info ? (gtk_icon_info_get_builtin_pixbuf (icon_info) ? "<builtin>" : gtk_icon_info_get_filename (icon_info)) : "<none>");
 
       if (icon_info) 
 	{

@@ -2,6 +2,16 @@
 
 	Merged from trunk:
 
+	* gtk/gtkicontheme.c (theme_lookup_icon): Set the filename to
+	NULL for builtin icons, since gtk_icon_info_get_builtin_pixbuf()
+	depends on it.
+
+	* tests/testicontheme.c: Report builtin icons.
+
+2007-04-25  Matthias Clasen  <mclasen@redhat.com>
+
+	Merged from trunk:
+
 	* gtk/gtkprintoperation.c (preview_iface_end_preview): Don't 
 	crash if end_run is not set.  (#424168, Matthias Hasselmann)
 

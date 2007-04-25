@@ -2019,13 +2019,23 @@ theme_lookup_icon (IconTheme          *theme,
       suffix = best_suffix (suffix, allow_svg);
       g_assert (suffix != ICON_SUFFIX_NONE);
       
-      file = g_strconcat (icon_name, string_from_suffix (suffix), NULL);
-      icon_info->filename = g_build_filename (min_dir->dir, file, NULL);
-      g_free (file);
+      if (min_dir->dir)
+        {
+          file = g_strconcat (icon_name, string_from_suffix (suffix), NULL);
+          icon_info->filename = g_build_filename (min_dir->dir, file, NULL);
+          g_free (file);
 #ifdef G_OS_WIN32
-      icon_info->cp_filename = g_locale_from_utf8 (icon_info->filename,
+          icon_info->cp_filename = g_locale_from_utf8 (icon_info->filename,
 						   -1, NULL, NULL, NULL);
 #endif
+        }
+      else
+        {
+          icon_info->filename = NULL;
+#ifdef G_OS_WIN32
+          icon_info->cp_filename = NULL;
+#endif
+        }
       
       if (min_dir->icon_data != NULL)
 	icon_info->data = g_hash_table_lookup (min_dir->icon_data, icon_name);
