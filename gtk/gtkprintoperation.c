@@ -186,8 +186,9 @@ preview_iface_end_preview (GtkPrintOperationPreview *preview)
 
   if (op->priv->rloop)
     g_main_loop_quit (op->priv->rloop);
-
-  op->priv->end_run (op, op->priv->is_sync, TRUE);
+  
+  if (op->priv->end_run)
+    op->priv->end_run (op, op->priv->is_sync, TRUE);
   
   g_signal_emit (op, signals[DONE], 0,
 		 GTK_PRINT_OPERATION_RESULT_APPLY);
