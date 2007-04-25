@@ -1,5 +1,19 @@
 2007-04-25  Michael Natterer  <mitch@imendio.com>
 
+	* gtk/gtkmenu.c (gtk_menu_handle_scrolling): fix ACTIVE state of
+	scroll buttons (we were setting the state to ACTIVE but
+	immediately overwriting it with NORMAL or PRELIGHT). Also got rid
+	of many separate calls to gdk_window_invalidate_rect() by
+	remembering the old button state and only invalidating the area if
+	the state has changed (addresses parts of bug #433242, Tommi
+	Komulainen).
+
+	(gtk_menu_scroll_to): change the arrow states only if changing
+	from or to INSENSITIVE state, so we don't overwrite the ACTIVE
+	state set by above function.
+
+2007-04-25  Michael Natterer  <mitch@imendio.com>
+
 	* gtk/gtkprintoperation.c (preview_iface_is_selected): fix the
 	build. Dunno if the fix is right, but I think it is.
 
