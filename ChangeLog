@@ -1,3 +1,10 @@
+2007-04-25  Matthias Clasen  <mclasen@redhat.com>
+
+	Merged from trunk:
+
+	* gtk/gtkprintoperation.c (preview_iface_end_preview): Don't 
+	crash if end_run is not set.  (#424168, Matthias Hasselmann)
+
 2007-04-25  Michael Natterer  <mitch@imendio.com>
 
 	Merged from trunk:
