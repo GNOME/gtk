@@ -1,5 +1,11 @@
 2007-04-25  Matthias Clasen <mclasen@redhat.com>
 
+	* gdk-pixbuf-simple-anim.c (gdk_pixbuf_simple_anim_add_frame):
+	Don't double the delay time of the first frame.  (#431997,
+	Björn Lindqvist)
+
+2007-04-25  Matthias Clasen <mclasen@redhat.com>
+
 	* gdk-pixbuf-scaled-anim.c (gdk_pixbuf_scaled_anim_iter_finalize):
 	Chain up.  (#433125, Christian Persch)
 
