@@ -1,3 +1,8 @@
+2007-04-25  Jakub Steiner <jimmac@ximian.com>
+
+	* gtk/stock-icons/16/gtk-close.{png,svg}: added 16x16 version of
+		gtk-close as per discussion in bug #431740.
+
 2007-04-25  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtktreeview.c (gtk_tree_view_style_set): Set the background
