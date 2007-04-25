@@ -1,3 +1,8 @@
+2007-04-25  Michael Natterer  <mitch@imendio.com>
+
+	* gtk/gtkprintoperation.c (preview_iface_is_selected): fix the
+	build. Dunno if the fix is right, but I think it is.
+
 2007-04-25  Kristian Rietveld  <kris@imendio.com>
 
 	* gtk/gtktooltip.c (find_topmost_widget_coords_from_event):

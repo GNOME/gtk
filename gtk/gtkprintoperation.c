@@ -214,7 +214,7 @@ preview_iface_is_selected (GtkPrintOperationPreview *preview,
       for (i = 0; i < priv->num_page_ranges; i++)
 	{
 	  if (page_nr >= priv->page_ranges[i].start &&
-	      (page_nr <= priv->page_ranges[i].end || page_ranges[i].end == -1)
+	      (page_nr <= priv->page_ranges[i].end || priv->page_ranges[i].end == -1))
 	    return TRUE;
 	}
       return FALSE;
