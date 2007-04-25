@@ -497,26 +497,17 @@ find_topmost_widget_coords_from_event (GdkEvent *event,
   gint tx, ty;
   gdouble dx, dy;
   GtkWidget *tmp;
-  GtkWidget *orig;
 
   gdk_event_get_coords (event, &dx, &dy);
   tx = dx;
   ty = dy;
 
-  orig = tmp = find_widget_under_pointer (event->any.window, &tx, &ty);
+  tmp = find_widget_under_pointer (event->any.window, &tx, &ty);
 
-  if (tmp && (x != NULL || y != NULL))
-    {
-      if (tmp != orig)
-	gtk_widget_translate_coordinates (orig, tmp, tx, ty, x, y);
-      else
-        {
-	  if (x)
-	    *x = tx;
-	  if (y)
-	    *y = ty;
-	}
-    }
+  if (x)
+    *x = tx;
+  if (y)
+    *y = ty;
 
   return tmp;
 }
