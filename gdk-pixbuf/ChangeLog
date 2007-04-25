@@ -1,3 +1,11 @@
+2007-04-25  Matthias Clasen <mclasen@redhat.com>
+
+	Merge from trunk:
+
+	* gdk-pixbuf-simple-anim.c (gdk_pixbuf_simple_anim_add_frame):
+	Don't double the delay time of the first frame.  (#431997,
+	Björn Lindqvist)
+
 2007-03-14  Matthias Clasen  <mclasen@redhat.com>
 
 	* === Released 2.10.11 ===

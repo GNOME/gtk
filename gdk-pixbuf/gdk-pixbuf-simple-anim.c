@@ -426,7 +426,7 @@ gdk_pixbuf_simple_anim_add_frame (GdkPixbufSimpleAnim *animation,
   g_return_if_fail (animation != NULL);
   g_return_if_fail (pixbuf != NULL);
   
-  nframe = g_list_length (animation->frames) + 1;
+  nframe = g_list_length (animation->frames);
   
   frame = g_new0 (GdkPixbufFrame, 1);
   frame->delay_time = (gint) (1000 / animation->rate);
