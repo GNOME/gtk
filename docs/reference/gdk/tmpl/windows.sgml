@@ -237,6 +237,7 @@ Attributes to use for a newly-created window.
 @wmclass_name: don't use (see gtk_window_set_wmclass())
 @wmclass_class: don't use (see gtk_window_set_wmclass())
 @override_redirect: %TRUE to bypass the window manager
+@type_hint: a hint of the function of the window
 
 <!-- ##### ENUM GdkWindowAttributesType ##### -->
 <para>
@@ -256,6 +257,7 @@ corresponding flag in #GdkWindowAttributesType.
 @GDK_WA_VISUAL: Honor the visual field
 @GDK_WA_WMCLASS: Honor the wmclass_class and wmclass_name fields
 @GDK_WA_NOREDIR: Honor the override_redirect field
+@GDK_WA_TYPE_HINT: Honor the type_hint field
 
 <!-- ##### FUNCTION gdk_window_new ##### -->
 <para>

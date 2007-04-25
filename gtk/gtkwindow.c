@@ -4324,8 +4324,9 @@ gtk_window_realize (GtkWidget *widget)
 			    GDK_LEAVE_NOTIFY_MASK |
 			    GDK_FOCUS_CHANGE_MASK |
 			    GDK_STRUCTURE_MASK);
+  attributes.type_hint = priv->type_hint;
 
-  attributes_mask |= GDK_WA_VISUAL | GDK_WA_COLORMAP;
+  attributes_mask |= GDK_WA_VISUAL | GDK_WA_COLORMAP | GDK_WA_TYPE_HINT;
   attributes_mask |= (window->title ? GDK_WA_TITLE : 0);
   attributes_mask |= (window->wmclass_name ? GDK_WA_WMCLASS : 0);
   
@@ -4357,8 +4358,6 @@ gtk_window_realize (GtkWidget *widget)
   if (!priv->deletable)
     gdk_window_set_functions (widget->window, GDK_FUNC_ALL | GDK_FUNC_CLOSE);
 
-  gdk_window_set_type_hint (widget->window, priv->type_hint);
- 
   if (gtk_window_get_skip_pager_hint (window))
     gdk_window_set_skip_pager_hint (widget->window, TRUE);
 

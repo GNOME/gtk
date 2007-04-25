@@ -691,6 +691,9 @@ gdk_window_new (GdkWindow     *parent,
 
   GDK_QUARTZ_RELEASE_POOL;
 
+  if (attributes_mask & GDK_WA_TYPE_HINT)
+    gdk_window_set_type_hint (window, attributes->type_hint);
+
   return window;
 }
 

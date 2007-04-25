@@ -268,6 +268,9 @@ gdk_window_new (GdkWindow     *parent,
   if (parent_private)
     parent_private->children = g_list_prepend (parent_private->children, window);
   
+  if (attributes_mask & GDK_WA_TYPE_HINT)
+    gdk_window_set_type_hint (window, attributes->type_hint);
+
   return window;
 }
 
