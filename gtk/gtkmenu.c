@@ -2868,7 +2868,7 @@ gtk_menu_motion_notify  (GtkWidget	   *widget,
 
   if (definitely_within_item (menu_item, event->x, event->y))
     menu_shell->activate_time = 0;
-  
+
   need_enter = (menu->navigation_region != NULL || menu_shell->ignore_enter);
 
   /* Check to see if we are within an active submenu's navigation region
@@ -3177,36 +3177,39 @@ gtk_menu_handle_scrolling (GtkMenu *menu,
 
   if (priv->upper_arrow_state != GTK_STATE_INSENSITIVE)
     {
+      gboolean     arrow_pressed = FALSE;
+      GtkStateType arrow_state   = GTK_STATE_NORMAL;
+
       if (menu->upper_arrow_visible && !menu->tearoff_active)
         {
           if (touchscreen_mode)
             {
-              if (enter && menu->upper_arrow_prelight &&
-                  menu->timeout_id == 0)
+              if (enter && menu->upper_arrow_prelight)
                 {
-                  /* Deselect the active item so that
-                   * any submenus are popped down
-                   */
-                  gtk_menu_shell_deselect (menu_shell);
-
-                  gtk_menu_remove_scroll_timeout (menu);
-                  menu->scroll_step = -MENU_SCROLL_STEP2; /* always fast */
-
-                  if (!motion)
+                  if (menu->timeout_id == 0)
                     {
-                      /* Only do stuff on click. */
-                      gtk_menu_start_scrolling (menu);
-                      priv->upper_arrow_state = GTK_STATE_ACTIVE;
-                    }
+                      /* Deselect the active item so that
+                       * any submenus are popped down
+                       */
+                      gtk_menu_shell_deselect (menu_shell);
 
-                  gdk_window_invalidate_rect (GTK_WIDGET (menu)->window,
-                                              &rect, FALSE);
+                      gtk_menu_remove_scroll_timeout (menu);
+                      menu->scroll_step = -MENU_SCROLL_STEP2; /* always fast */
+
+                      if (!motion)
+                        {
+                          /* Only do stuff on click. */
+                          gtk_menu_start_scrolling (menu);
+                          arrow_pressed = TRUE;
+                        }
+                    }
+                  else
+                    {
+                      arrow_pressed = TRUE;
+                    }
                 }
               else if (!enter)
                 {
-                  gdk_window_invalidate_rect (GTK_WIDGET (menu)->window,
-                                              &rect, FALSE);
-
                   gtk_menu_stop_scrolling (menu);
                 }
             }
@@ -3220,8 +3223,6 @@ gtk_menu_handle_scrolling (GtkMenu *menu,
                 {
                   menu->upper_arrow_prelight = TRUE;
                   menu->scroll_fast = scroll_fast;
-                  gdk_window_invalidate_rect (GTK_WIDGET (menu)->window,
-                                              &rect, FALSE);
 
                   /* Deselect the active item so that
                    * any submenus are popped down
@@ -3239,16 +3240,23 @@ gtk_menu_handle_scrolling (GtkMenu *menu,
                 }
               else if (!enter && !in_arrow && menu->upper_arrow_prelight)
                 {
-                  gdk_window_invalidate_rect (GTK_WIDGET (menu)->window,
-                                              &rect, FALSE);
-
                   gtk_menu_stop_scrolling (menu);
                 }
             }
         }
 
-      priv->upper_arrow_state = menu->upper_arrow_prelight ?
-        GTK_STATE_PRELIGHT : GTK_STATE_NORMAL;
+      if (arrow_pressed)
+        arrow_state = GTK_STATE_ACTIVE;
+      else if (menu->upper_arrow_prelight)
+        arrow_state = GTK_STATE_PRELIGHT;
+
+      if (arrow_state != priv->upper_arrow_state)
+        {
+          priv->upper_arrow_state = arrow_state;
+
+          gdk_window_invalidate_rect (GTK_WIDGET (menu)->window,
+                                      &rect, FALSE);
+        }
     }
 
   /*  lower arrow handling  */
@@ -3271,36 +3279,39 @@ gtk_menu_handle_scrolling (GtkMenu *menu,
 
   if (priv->lower_arrow_state != GTK_STATE_INSENSITIVE)
     {
+      gboolean     arrow_pressed = FALSE;
+      GtkStateType arrow_state   = GTK_STATE_NORMAL;
+
       if (menu->lower_arrow_visible && !menu->tearoff_active)
         {
           if (touchscreen_mode)
             {
-              if (enter && menu->lower_arrow_prelight &&
-                  menu->timeout_id == 0)
+              if (enter && menu->lower_arrow_prelight)
                 {
-                  /* Deselect the active item so that
-                   * any submenus are popped down
-                   */
-                  gtk_menu_shell_deselect (menu_shell);
-
-                  gtk_menu_remove_scroll_timeout (menu);
-                  menu->scroll_step = MENU_SCROLL_STEP2; /* always fast */
-
-                  if (!motion)
+                  if (menu->timeout_id == 0)
                     {
-                      /* Only do stuff on click. */
-                      gtk_menu_start_scrolling (menu);
-                      priv->lower_arrow_state = GTK_STATE_ACTIVE;
-                    }
+                      /* Deselect the active item so that
+                       * any submenus are popped down
+                       */
+                      gtk_menu_shell_deselect (menu_shell);
 
-                  gdk_window_invalidate_rect (GTK_WIDGET (menu)->window,
-                                              &rect, FALSE);
+                      gtk_menu_remove_scroll_timeout (menu);
+                      menu->scroll_step = MENU_SCROLL_STEP2; /* always fast */
+
+                      if (!motion)
+                        {
+                          /* Only do stuff on click. */
+                          gtk_menu_start_scrolling (menu);
+                          arrow_pressed = TRUE;
+                        }
+                    }
+                  else
+                    {
+                      arrow_pressed = TRUE;
+                    }
                 }
               else if (!enter)
                 {
-                  gdk_window_invalidate_rect (GTK_WIDGET (menu)->window,
-                                              &rect, FALSE);
-
                   gtk_menu_stop_scrolling (menu);
                 }
             }
@@ -3314,8 +3325,6 @@ gtk_menu_handle_scrolling (GtkMenu *menu,
                 {
                   menu->lower_arrow_prelight = TRUE;
                   menu->scroll_fast = scroll_fast;
-                  gdk_window_invalidate_rect (GTK_WIDGET (menu)->window,
-                                              &rect, FALSE);
 
                   /* Deselect the active item so that
                    * any submenus are popped down
@@ -3333,16 +3342,23 @@ gtk_menu_handle_scrolling (GtkMenu *menu,
                 }
               else if (!enter && !in_arrow && menu->lower_arrow_prelight)
                 {
-                  gdk_window_invalidate_rect (GTK_WIDGET (menu)->window,
-                                              &rect, FALSE);
-
                   gtk_menu_stop_scrolling (menu);
                 }
             }
         }
 
-      priv->lower_arrow_state = menu->lower_arrow_prelight ?
-        GTK_STATE_PRELIGHT : GTK_STATE_NORMAL;
+      if (arrow_pressed)
+        arrow_state = GTK_STATE_ACTIVE;
+      else if (menu->lower_arrow_prelight)
+        arrow_state = GTK_STATE_PRELIGHT;
+
+      if (arrow_state != priv->lower_arrow_state)
+        {
+          priv->lower_arrow_state = arrow_state;
+
+          gdk_window_invalidate_rect (GTK_WIDGET (menu)->window,
+                                      &rect, FALSE);
+        }
     }
 }
 
@@ -4044,13 +4060,13 @@ gtk_menu_scroll_to (GtkMenu *menu,
 
           if (offset <= 0)
             priv->upper_arrow_state = GTK_STATE_INSENSITIVE;
-          else
+          else if (priv->upper_arrow_state == GTK_STATE_INSENSITIVE)
             priv->upper_arrow_state = menu->upper_arrow_prelight ?
               GTK_STATE_PRELIGHT : GTK_STATE_NORMAL;
 
           if (offset >= menu_height - view_height)
             priv->lower_arrow_state = GTK_STATE_INSENSITIVE;
-          else
+          else if (priv->lower_arrow_state == GTK_STATE_INSENSITIVE)
             priv->lower_arrow_state = menu->lower_arrow_prelight ?
               GTK_STATE_PRELIGHT : GTK_STATE_NORMAL;
 
