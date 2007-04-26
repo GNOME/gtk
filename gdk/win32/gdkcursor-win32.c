@@ -75,6 +75,12 @@ _gdk_win32_data_to_wcursor (GdkCursorType cursor_type)
   if (i >= G_N_ELEMENTS (cursors) || !cursors[i].name)
     return NULL;
 
+  /* use real win32 cursor if possible */
+  if (cursors[i].builtin)
+    {
+      return LoadCursor (NULL, cursors[i].builtin);
+    }
+
   w = GetSystemMetrics (SM_CXCURSOR);
   h = GetSystemMetrics (SM_CYCURSOR);
 
