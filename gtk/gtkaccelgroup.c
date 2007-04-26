@@ -130,7 +130,7 @@ gtk_accel_group_finalize (GObject *object)
 
       if (entry->accel_path_quark)
 	{
-	  const gchar *accel_path = g_quark_to_string (entry[i].accel_path_quark);
+	  const gchar *accel_path = g_quark_to_string (entry->accel_path_quark);
 
 	  _gtk_accel_map_remove_group (accel_path, accel_group);
 	}
