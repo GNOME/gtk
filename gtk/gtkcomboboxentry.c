@@ -32,8 +32,6 @@
 
 struct _GtkComboBoxEntryPrivate
 {
-  GtkWidget *entry;
-
   GtkCellRenderer *text_renderer;
   gint text_column;
 };
@@ -46,6 +44,10 @@ static void gtk_combo_box_entry_get_property     (GObject               *object,
                                                   guint                  prop_id,
                                                   GValue                *value,
                                                   GParamSpec            *pspec);
+static void gtk_combo_box_entry_add              (GtkContainer          *container,
+						  GtkWidget             *child);
+static void gtk_combo_box_entry_remove           (GtkContainer          *container,
+						  GtkWidget             *child);
 
 static gchar *gtk_combo_box_entry_get_active_text (GtkComboBox *combo_box);
 static void gtk_combo_box_entry_active_changed   (GtkComboBox           *combo_box,
@@ -72,6 +74,7 @@ gtk_combo_box_entry_class_init (GtkComboBoxEntryClass *klass)
 {
   GObjectClass *object_class;
   GtkWidgetClass *widget_class;
+  GtkContainerClass *container_class;
   GtkComboBoxClass *combo_class;
   
   object_class = (GObjectClass *)klass;
@@ -81,6 +84,10 @@ gtk_combo_box_entry_class_init (GtkComboBoxEntryClass *klass)
   widget_class = (GtkWidgetClass *)klass;
   widget_class->mnemonic_activate = gtk_combo_box_entry_mnemonic_activate;
   widget_class->grab_focus = gtk_combo_box_entry_grab_focus;
+
+  container_class = (GtkContainerClass *)klass;
+  container_class->add = gtk_combo_box_entry_add;
+  container_class->remove = gtk_combo_box_entry_remove;
 
   combo_class = (GtkComboBoxClass *)klass;
   combo_class->get_active_text = gtk_combo_box_entry_get_active_text;
@@ -102,15 +109,14 @@ gtk_combo_box_entry_class_init (GtkComboBoxEntryClass *klass)
 static void
 gtk_combo_box_entry_init (GtkComboBoxEntry *entry_box)
 {
+  GtkWidget *entry;
+
   entry_box->priv = GTK_COMBO_BOX_ENTRY_GET_PRIVATE (entry_box);
   entry_box->priv->text_column = -1;
 
-  entry_box->priv->entry = gtk_entry_new ();
-  /* this flag is a hack to tell the entry to fill its allocation.
-   */
-  GTK_ENTRY (entry_box->priv->entry)->is_cell_renderer = TRUE;
-  gtk_container_add (GTK_CONTAINER (entry_box), entry_box->priv->entry);
-  gtk_widget_show (entry_box->priv->entry);
+  entry = gtk_entry_new ();
+  gtk_widget_show (entry);
+  gtk_container_add (GTK_CONTAINER (entry_box), entry);
 
   entry_box->priv->text_renderer = gtk_cell_renderer_text_new ();
   gtk_cell_layout_pack_start (GTK_CELL_LAYOUT (entry_box),
@@ -118,12 +124,8 @@ gtk_combo_box_entry_init (GtkComboBoxEntry *entry_box)
 
   gtk_combo_box_set_active (GTK_COMBO_BOX (entry_box), -1);
 
-  g_signal_connect (entry_box->priv->entry, "changed",
-                    G_CALLBACK (gtk_combo_box_entry_contents_changed),
-                    entry_box);
   g_signal_connect (entry_box, "changed",
                     G_CALLBACK (gtk_combo_box_entry_active_changed), NULL);
-  has_frame_changed (entry_box, NULL, NULL);
   g_signal_connect (entry_box, "notify::has-frame", G_CALLBACK (has_frame_changed), NULL);
 }
 
@@ -168,6 +170,47 @@ gtk_combo_box_entry_get_property (GObject    *object,
 }
 
 static void
+gtk_combo_box_entry_add (GtkContainer *container,
+			 GtkWidget    *child)
+{
+  GtkComboBoxEntry *entry_box = GTK_COMBO_BOX_ENTRY (container);
+
+  if (!GTK_IS_ENTRY (child))
+    {
+      g_warning ("Attempting to add a widget with type %s to a GtkComboBoxEntry "
+		 "(need an instance of GtkEntry or of a subclass)",
+                 G_OBJECT_TYPE_NAME (child));
+      return;
+    }
+
+  GTK_CONTAINER_CLASS (gtk_combo_box_entry_parent_class)->add (container, child);
+
+  /* this flag is a hack to tell the entry to fill its allocation.
+   */
+  GTK_ENTRY (child)->is_cell_renderer = TRUE;
+
+  g_signal_connect (child, "changed",
+		    G_CALLBACK (gtk_combo_box_entry_contents_changed),
+		    entry_box);
+  has_frame_changed (entry_box, NULL, NULL);
+}
+
+static void
+gtk_combo_box_entry_remove (GtkContainer *container,
+			    GtkWidget    *child)
+{
+  if (child && child == GTK_BIN (container)->child)
+    {
+      g_signal_handlers_disconnect_by_func (child,
+					    gtk_combo_box_entry_contents_changed,
+					    container);
+      GTK_ENTRY (child)->is_cell_renderer = FALSE;
+    }
+
+  GTK_CONTAINER_CLASS (gtk_combo_box_entry_parent_class)->remove (container, child);
+}
+
+static void
 gtk_combo_box_entry_active_changed (GtkComboBox *combo_box,
                                     gpointer     user_data)
 {
@@ -178,21 +221,26 @@ gtk_combo_box_entry_active_changed (GtkComboBox *combo_box,
 
   if (gtk_combo_box_get_active_iter (combo_box, &iter))
     {
-      g_signal_handlers_block_by_func (entry_box->priv->entry,
-				       gtk_combo_box_entry_contents_changed,
-				       combo_box);
+      GtkEntry *entry = GTK_ENTRY (GTK_BIN (combo_box)->child);
 
-      model = gtk_combo_box_get_model (combo_box);
+      if (entry)
+	{
+	  g_signal_handlers_block_by_func (entry,
+					   gtk_combo_box_entry_contents_changed,
+					   combo_box);
 
-      gtk_tree_model_get (model, &iter, 
-			  entry_box->priv->text_column, &str, 
-			  -1);
-      gtk_entry_set_text (GTK_ENTRY (entry_box->priv->entry), str);
-      g_free (str);
+	  model = gtk_combo_box_get_model (combo_box);
 
-      g_signal_handlers_unblock_by_func (entry_box->priv->entry,
-					 gtk_combo_box_entry_contents_changed,
-					 combo_box);
+	  gtk_tree_model_get (model, &iter, 
+			      entry_box->priv->text_column, &str, 
+			      -1);
+	  gtk_entry_set_text (entry, str);
+	  g_free (str);
+
+	  g_signal_handlers_unblock_by_func (entry,
+					     gtk_combo_box_entry_contents_changed,
+					     combo_box);
+	}
     }
 }
 
@@ -201,11 +249,14 @@ has_frame_changed (GtkComboBoxEntry *entry_box,
 		   GParamSpec       *pspec,
 		   gpointer          data)
 {
-  gboolean has_frame;
+  if (GTK_BIN (entry_box)->child)
+    {
+      gboolean has_frame;
   
-  g_object_get (entry_box, "has-frame", &has_frame, NULL);
+      g_object_get (entry_box, "has-frame", &has_frame, NULL);
 
-  gtk_entry_set_has_frame (GTK_ENTRY (entry_box->priv->entry), has_frame);
+      gtk_entry_set_has_frame (GTK_ENTRY (GTK_BIN (entry_box)->child), has_frame);
+    }
 }
 
 static void
@@ -323,9 +374,10 @@ static gboolean
 gtk_combo_box_entry_mnemonic_activate (GtkWidget *widget,
 				       gboolean   group_cycling)
 {
-  GtkComboBoxEntry *entry_box = GTK_COMBO_BOX_ENTRY (widget);
+  GtkBin *entry_box = GTK_BIN (widget);
 
-  gtk_widget_grab_focus (entry_box->priv->entry);
+  if (entry_box->child)
+    gtk_widget_grab_focus (entry_box->child);
 
   return TRUE;
 }
@@ -333,9 +385,10 @@ gtk_combo_box_entry_mnemonic_activate (GtkWidget *widget,
 static void
 gtk_combo_box_entry_grab_focus (GtkWidget *widget)
 {
-  GtkComboBoxEntry *entry_box = GTK_COMBO_BOX_ENTRY (widget);
+  GtkBin *entry_box = GTK_BIN (widget);
 
-  gtk_widget_grab_focus (entry_box->priv->entry);
+  if (entry_box->child)
+    gtk_widget_grab_focus (entry_box->child);
 }
 
 
@@ -372,10 +425,10 @@ gtk_combo_box_entry_new_text (void)
 static gchar *
 gtk_combo_box_entry_get_active_text (GtkComboBox *combo_box)
 {
-  GtkComboBoxEntry *combo = GTK_COMBO_BOX_ENTRY (combo_box);
+  GtkBin *combo = GTK_BIN (combo_box);
 
-  if (combo->priv->entry)
-    return g_strdup (gtk_entry_get_text (GTK_ENTRY (combo->priv->entry)));
+  if (combo->child)
+    return g_strdup (gtk_entry_get_text (GTK_ENTRY (combo->child)));
 
   return NULL;
 }

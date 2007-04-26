@@ -246,11 +246,87 @@ fill_combo_entry (GtkWidget *entry)
   gtk_combo_box_append_text (GTK_COMBO_BOX (entry), "Three");
 }
 
+
+/* A simple validating entry */
+
+#define TYPE_MASK_ENTRY             (mask_entry_get_type ())
+#define MASK_ENTRY(obj)             (G_TYPE_CHECK_INSTANCE_CAST ((obj), TYPE_MASK_ENTRY, MaskEntry))
+#define MASK_ENTRY_CLASS(vtable)    (G_TYPE_CHECK_CLASS_CAST ((vtable), TYPE_MASK_ENTRY, MaskEntryClass))
+#define IS_MASK_ENTRY(obj)          (G_TYPE_CHECK_INSTANCE_TYPE ((obj), TYPE_MASK_ENTRY))
+#define IS_MASK_ENTRY_CLASS(vtable) (G_TYPE_CHECK_CLASS_TYPE ((vtable), TYPE_MASK_ENTRY))
+#define MASK_ENTRY_GET_CLASS(inst)  (G_TYPE_INSTANCE_GET_CLASS ((inst), TYPE_MASK_ENTRY, MaskEntryClass))
+
+
+typedef struct _MaskEntry MaskEntry;
+struct _MaskEntry
+{
+  GtkEntry entry;
+  gchar *mask;
+};
+
+typedef struct _MaskEntryClass MaskEntryClass;
+struct _MaskEntryClass
+{
+  GtkEntryClass parent_class;
+};
+
+
+static void mask_entry_editable_init (GtkEditableClass *iface);
+
+G_DEFINE_TYPE_WITH_CODE (MaskEntry, mask_entry, GTK_TYPE_ENTRY,
+			 G_IMPLEMENT_INTERFACE (GTK_TYPE_EDITABLE,
+						mask_entry_editable_init));
+
+
+static void
+mask_entry_set_background (MaskEntry *entry)
+{
+  static const GdkColor error_color = { 0, 65535, 60000, 60000 };
+
+  if (entry->mask)
+    {
+      if (!g_regex_match_simple (entry->mask, gtk_entry_get_text (GTK_ENTRY (entry)), 0, 0))
+	{
+	  gtk_widget_modify_base (GTK_WIDGET (entry), GTK_STATE_NORMAL, &error_color);
+	  return;
+	}
+    }
+
+  gtk_widget_modify_base (GTK_WIDGET (entry), GTK_STATE_NORMAL, NULL);
+}
+
+
+static void
+mask_entry_changed (GtkEditable *editable)
+{
+  mask_entry_set_background (MASK_ENTRY (editable));
+}
+
+
+static void
+mask_entry_init (MaskEntry *entry)
+{
+  entry->mask = NULL;
+}
+
+
+static void
+mask_entry_class_init (MaskEntryClass *klass)
+{ }
+
+
+static void
+mask_entry_editable_init (GtkEditableClass *iface)
+{
+  iface->changed = mask_entry_changed;
+}
+
+
 GtkWidget *
 do_combobox (GtkWidget *do_widget)
 {
   static GtkWidget *window = NULL;
-  GtkWidget *vbox, *frame, *box, *combo;
+  GtkWidget *vbox, *frame, *box, *combo, *entry;
   GtkTreeModel *model;
   GtkCellRenderer *renderer;
   GtkTreePath *path;
@@ -343,7 +419,7 @@ do_combobox (GtkWidget *do_widget)
     gtk_tree_path_free (path);
     gtk_combo_box_set_active_iter (GTK_COMBO_BOX (combo), &iter);
 
-    /* A GtkComboBoxEntry 
+    /* A GtkComboBoxEntry with validation.
      */
     frame = gtk_frame_new ("Editable");
     gtk_box_pack_start (GTK_BOX (vbox), frame, FALSE, FALSE, 0);
@@ -356,6 +432,12 @@ do_combobox (GtkWidget *do_widget)
     fill_combo_entry (combo);
     gtk_container_add (GTK_CONTAINER (box), combo);
     
+    entry = g_object_new (TYPE_MASK_ENTRY, NULL);
+    MASK_ENTRY (entry)->mask = "^([0-9]*|One|Two|2\302\275|Three)$";
+     
+    gtk_container_remove (GTK_CONTAINER (combo), GTK_BIN (combo)->child);
+    gtk_container_add (GTK_CONTAINER (combo), entry);
+  
   }
 
   if (!GTK_WIDGET_VISIBLE (window))
