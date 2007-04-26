@@ -1,5 +1,10 @@
 2007-04-26  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkuimanager.c (gtk_ui_manager_add_ui): Accept
+	unnamed separators.  (#369112, Christian Persch)
+
+2007-04-26  Matthias Clasen  <mclasen@redhat.com>
+
 	* gtk/gtkaccelgroup.c (gtk_accel_group_finalize): Don't access
 	invalid memory.  (#429732, Armin Burgmeier)
 

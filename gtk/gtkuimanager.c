@@ -1609,7 +1609,7 @@ gtk_ui_manager_add_ui (GtkUIManager        *self,
 
   g_return_if_fail (GTK_IS_UI_MANAGER (self));  
   g_return_if_fail (merge_id > 0);
-  g_return_if_fail (name != NULL);
+  g_return_if_fail (name != NULL || type == GTK_UI_MANAGER_SEPARATOR);
 
   node = get_node (self, path, NODE_TYPE_UNDECIDED, FALSE);
   sibling = NULL;
@@ -1710,7 +1710,7 @@ gtk_ui_manager_add_ui (GtkUIManager        *self,
     }
    
   child = get_child_node (self, node, sibling,
-			  name, strlen (name),
+			  name, name ? strlen (name) : 0,
 			  node_type, TRUE, top);
 
   if (action != NULL)
