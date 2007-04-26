@@ -406,6 +406,7 @@ gtk_print_backend_lpr_init (GtkPrintBackendLpr *backend)
 
   gtk_print_backend_add_printer (GTK_PRINT_BACKEND (backend), printer);
   g_object_unref (printer);
+  gtk_print_backend_set_list_done (GTK_PRINT_BACKEND (backend));
 }
 
 static GtkPrinterOptionSet *

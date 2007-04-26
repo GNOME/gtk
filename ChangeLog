@@ -1,5 +1,11 @@
 2007-04-26  Matthias Clasen  <mclasen@redhat.com>
 
+	* modules/printbackends/lpr/gtkprintbackendlpr.c
+	(gtk_print_backend_lpr_init): Mark the printer list as done. 
+	(#428665, Bogdan Gheorghe)
+
+2007-04-26  Matthias Clasen  <mclasen@redhat.com>
+
 	* Makefile.am:
 	* gtk/Makefile.am: Don't install UNIX-printing headers and
 	support files on non-UNIX platforms.  (#425655, Vincent Geddes)
