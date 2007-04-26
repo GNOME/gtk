@@ -359,7 +359,7 @@ maybe_append_separator_to_path (GtkFileChooserEntry *chooser_entry,
 				GtkFilePath         *path,
 				gchar               *display_name)
 {
-  if (path)
+  if (!g_str_has_suffix (display_name, G_DIR_SEPARATOR_S) && path)
     {
       GtkFileInfo *info;
 	    
@@ -377,7 +377,6 @@ maybe_append_separator_to_path (GtkFileChooserEntry *chooser_entry,
 	  
 	  gtk_file_info_free (info);
 	}
-
     }
 
   return display_name;
@@ -572,8 +571,10 @@ update_current_folder_files (GtkFileChooserEntry *chooser_entry,
 				       NULL); /* NULL-GError */
       if (info)
 	{
-	  const gchar *display_name = gtk_file_info_get_display_name (info);
+	  gchar *display_name = g_strdup (gtk_file_info_get_display_name (info));
 	  GtkTreeIter iter;
+
+          display_name = maybe_append_separator_to_path (chooser_entry, path, display_name);
 
 	  gtk_list_store_append (chooser_entry->completion_store, &iter);
 	  gtk_list_store_set (chooser_entry->completion_store, &iter,
@@ -582,6 +583,7 @@ update_current_folder_files (GtkFileChooserEntry *chooser_entry,
 			      -1);
 
 	  gtk_file_info_free (info);
+          g_free (display_name);
 	}
     }
 

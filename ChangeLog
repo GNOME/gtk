@@ -1,5 +1,10 @@
 2007-04-26  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkfilechooserentry.c: Append a '/' to directory names
+	in the completion popup.  (#431323, Maarten Maathuis)
+
+2007-04-26  Matthias Clasen  <mclasen@redhat.com>
+
 	* demo/gtk-demo/combobox.c: Add a simple validation demo. 
 	* gtk/gtkcomboboxentry.c: Make it possible to add arbitrary
 	children to a GtkComboBoxEntry.  (#426401, Paul Pogonyshev)
