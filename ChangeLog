@@ -2,6 +2,14 @@
 
 	Merged from trunk:
 
+	* Makefile.am:
+	* gtk/Makefile.am: Don't install UNIX-printing headers and
+	support files on non-UNIX platforms.  (#425655, Vincent Geddes)
+
+2007-04-26  Matthias Clasen  <mclasen@redhat.com>
+
+	Merged from trunk:
+
 	* gtk/gtkuimanager.c (gtk_ui_manager_add_ui): Accept
 	unnamed separators.  (#369112, Christian Persch)
 
