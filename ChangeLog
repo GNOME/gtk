@@ -1,3 +1,10 @@
+2007-04-26  Tor Lillqvist  <tml@novell.com>
+
+	* gtk/gtkinputdialog.c (gtk_input_dialog_fill_axes)
+	(gtk_input_dialog_fill_keys): Remove old child of scrolled window
+	before adding a new one when switching what input device is being
+	handled. (#399425)
+
 2007-04-26  Matthias Clasen  <mclasen@redhat.com>
 
 	Merged from trunk:

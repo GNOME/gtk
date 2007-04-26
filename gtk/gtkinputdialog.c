@@ -530,6 +530,7 @@ gtk_input_dialog_fill_axes(GtkInputDialog *inputd, GdkDevice *info)
   GtkWidget *option_menu;
   GtkWidget *label;
   GtkWidget *viewport;
+  GtkWidget *old_child;
 
   /* remove all the old items */
   if (inputd->axis_list)
@@ -542,6 +543,9 @@ gtk_input_dialog_fill_axes(GtkInputDialog *inputd, GdkDevice *info)
   gtk_table_set_col_spacings (GTK_TABLE (inputd->axis_list), 12);
   
   viewport = gtk_viewport_new (NULL, NULL);
+  old_child = gtk_bin_get_child (GTK_BIN (inputd->axis_listbox));
+  if (old_child != NULL)
+    gtk_widget_destroy (old_child);
   gtk_container_add (GTK_CONTAINER (inputd->axis_listbox), viewport);
   gtk_viewport_set_shadow_type (GTK_VIEWPORT (viewport), GTK_SHADOW_NONE);
   gtk_widget_show (viewport);
@@ -678,6 +682,7 @@ gtk_input_dialog_fill_keys(GtkInputDialog *inputd, GdkDevice *info)
   GtkWidget *button;
   GtkWidget *hbox;
   GtkWidget *viewport;
+  GtkWidget *old_child;
 
   char buffer[32];
   
@@ -693,6 +698,9 @@ gtk_input_dialog_fill_keys(GtkInputDialog *inputd, GdkDevice *info)
   gtk_table_set_col_spacings (GTK_TABLE (inputd->keys_list), 12);
   
   viewport = gtk_viewport_new (NULL, NULL);
+  old_child = gtk_bin_get_child (GTK_BIN (inputd->keys_listbox));
+  if (old_child != NULL)
+    gtk_widget_destroy (old_child);
   gtk_container_add (GTK_CONTAINER (inputd->keys_listbox), viewport);
   gtk_viewport_set_shadow_type (GTK_VIEWPORT (viewport), GTK_SHADOW_NONE);
   gtk_widget_show (viewport);
