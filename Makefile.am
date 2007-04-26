@@ -134,7 +134,11 @@ gdk-$(GDKTARGET)-2.0-uninstalled.pc: gdk-2.0-uninstalled.pc
 	cp gdk-2.0-uninstalled.pc gdk-$(GDKTARGET)-2.0-uninstalled.pc
 
 pkgconfigdir = $(libdir)/pkgconfig
-pkgconfig_DATA= gdk-pixbuf-2.0.pc gdk-$(GDKTARGET)-2.0.pc gtk+-$(GDKTARGET)-2.0.pc gtk+-unix-print-2.0.pc
+pkgconfig_DATA= gdk-pixbuf-2.0.pc gdk-$(GDKTARGET)-2.0.pc gtk+-$(GDKTARGET)-2.0.pc
+
+if OS_UNIX
+pkgconfig_DATA += gtk+-unix-print-2.0.pc
+endif
 
 DISTCLEANFILES =				\
 	gtk+-unix-print-2.0.pc			\

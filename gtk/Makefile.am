@@ -319,12 +319,13 @@ gtk_public_h_sources =          \
 	gtkwidget.h		\
 	gtkwindow.h
 
+if OS_UNIX
 gtk_unix_print_public_h_sources =    \
 	gtkpagesetupunixdialog.h	\
 	gtkprintunixdialog.h		\
 	gtkprinter.h			\
 	gtkprintjob.h
-
+endif
 
 # Installed header files without compatibility guarantees
 # that are not included in gtk/gtk.h
