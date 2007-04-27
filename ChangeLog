@@ -1,5 +1,10 @@
 2007-04-27  Matthias Clasen  <mclasen@redhat.com>
 
+	* gdk/x11/gdkgeometry-x11.c: Make list handling code
+	easier to read.  (#63820, Tilman Sauerbeck)
+
+2007-04-27  Matthias Clasen  <mclasen@redhat.com>
+
 	* gtkassistant.c:
 	* gtkiconfactory.c:
 	* gtkiconview.c:
