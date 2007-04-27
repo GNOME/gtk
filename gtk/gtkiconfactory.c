@@ -1928,7 +1928,7 @@ gtk_icon_source_get_type (void)
   static GType our_type = 0;
   
   if (our_type == 0)
-    our_type = g_boxed_type_register_static ("GtkIconSource",
+    our_type = g_boxed_type_register_static (I_("GtkIconSource"),
 					     (GBoxedCopyFunc) gtk_icon_source_copy,
 					     (GBoxedFreeFunc) gtk_icon_source_free);
 

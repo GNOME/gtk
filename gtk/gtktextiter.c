@@ -29,6 +29,7 @@
 #include "gtktextiter.h"
 #include "gtktextbtree.h"
 #include "gtktextiterprivate.h"
+#include "gtkintl.h"
 #include "gtkdebug.h"
 #include "gtkalias.h"
 #include <string.h>
@@ -437,7 +438,7 @@ gtk_text_iter_get_type (void)
   static GType our_type = 0;
   
   if (our_type == 0)
-    our_type = g_boxed_type_register_static ("GtkTextIter",
+    our_type = g_boxed_type_register_static (I_("GtkTextIter"),
 					     (GBoxedCopyFunc) gtk_text_iter_copy,
 					     (GBoxedFreeFunc) gtk_text_iter_free);
 

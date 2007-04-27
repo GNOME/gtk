@@ -1438,7 +1438,7 @@ gtk_recent_info_get_type (void)
   static GType info_type = 0;
   
   if (!info_type)
-    info_type = g_boxed_type_register_static ("GtkRecentInfo",
+    info_type = g_boxed_type_register_static (I_("GtkRecentInfo"),
     					      (GBoxedCopyFunc) gtk_recent_info_ref,
     					      (GBoxedFreeFunc) gtk_recent_info_unref);
   return info_type;

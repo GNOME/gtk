@@ -52,7 +52,7 @@ gtk_paper_size_get_type (void)
   static GType our_type = 0;
   
   if (our_type == 0)
-    our_type = g_boxed_type_register_static ("GtkPaperSize",
+    our_type = g_boxed_type_register_static (I_("GtkPaperSize"),
 					     (GBoxedCopyFunc)gtk_paper_size_copy,
 					     (GBoxedFreeFunc)gtk_paper_size_free);
   return our_type;

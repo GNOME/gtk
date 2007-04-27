@@ -1,3 +1,13 @@
+2007-04-27  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtkassistant.c:
+	* gtkiconfactory.c:
+	* gtkiconview.c:
+	* gtkpapersize.c:
+	* gtkrecentmanager.c:
+	* gtktextiter.c: Internalize some strings, pointed out
+	by Damon Chaplin.
+
 2007-04-27  Xan Lopez  <xan@gnome.org>
 
 	Support inline-selection in entries (#318459)

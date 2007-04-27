@@ -9071,7 +9071,7 @@ gtk_icon_view_accessible_get_type (void)
       tinfo.instance_size = query.instance_size;
  
       type = g_type_register_static (derived_atk_type, 
-                                     "GtkIconViewAccessible", 
+                                     I_("GtkIconViewAccessible"), 
                                      &tinfo, 0);
       g_type_add_interface_static (type, ATK_TYPE_COMPONENT,
                                    &atk_component_info);
@@ -9134,7 +9134,7 @@ gtk_icon_view_accessible_factory_get_type (void)
       };
 
       type = g_type_register_static (ATK_TYPE_OBJECT_FACTORY, 
-                                    "GtkIconViewAccessibleFactory",
+                                    I_("GtkIconViewAccessibleFactory"),
                                     &tinfo, 0);
     }
   return type;

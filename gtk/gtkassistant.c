@@ -2265,7 +2265,7 @@ gtk_assistant_accessible_get_type (void)
       g_type_query (derived_atk_type, &query);
       
       type = g_type_register_static_simple (derived_atk_type, 
-					    "GtkAssistantAccessible", 
+					    I_("GtkAssistantAccessible"), 
 					    query.class_size,
 					    (GClassInitFunc) gtk_assistant_accessible_class_init,
 					    query.instance_size,
@@ -2315,7 +2315,7 @@ gtk_assistant_accessible_factory_get_type (void)
   if (!type) 
     {
       type = g_type_register_static_simple (ATK_TYPE_OBJECT_FACTORY, 
-					    "GtkAssistantAccessibleFactory",
+					    I_("GtkAssistantAccessibleFactory"),
 					    sizeof (AtkObjectFactoryClass),
 					    (GClassInitFunc) gtk_assistant_accessible_factory_class_init,
 					    sizeof (AtkObjectFactory),
