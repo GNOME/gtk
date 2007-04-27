@@ -1,3 +1,46 @@
+2007-04-27  Michael Natterer  <mitch@imendio.com>
+
+	Merged heavily modified patch from maemo-gtk which enables opening
+	and closing submenus on click, and introduces some usability
+	changes when gtk-touchscreen-mode is enabled (bug #128968):
+
+	* gtk/gtkmenushell.c (struct GtkMenuShellPrivate): added boolean
+	"activated_submenu" to indicate that the current mouse operation
+	(click or drag) has opened a submenu.
+
+	(gtk_menu_shell_button_press): pop up submenus without delay
+	and record the fact in "activated_submenu".
+
+	(gtk_menu_shell_button_release): if a submenu was explicitely
+	opened, or not opened by this release's button_press, or enough
+	time has passed since timeout-opening it, close the submenu here.
+
+	(gtk_menu_shell_enter_notify): when entering a menu item with
+	any mouse button pressed, open its submenu.
+
+	(gtk_real_menu_shell_move_current): in touchsreen mode, close the
+	submenu when moving the focus away from it via keyboard-navigation.
+
+	* gtk/gtkmenuitem.[ch] (_gtk_menu_item_popup_submenu): added
+	parameter "gboolean with_delay" so GtkMenuShell can control this
+	for the different scenarios of submenu showing.
+
+	(_gtk_menu_item_popdown_submenu): new function. also needed by
+	GtkMenuShell for closing submenus on click.
+
+	Renamed internal function gtk_menu_item_select_timeout() to
+	gtk_menu_item_popup_timeout().
+
+	(gtk_menu_item_real_popup_submenu): new utility function which
+	does the actual popup and records the exact time of the popup when
+	the menu was timeout-opened (using g_get_current_time()).
+
+	(gtk_real_menu_item_select): don't add the popup timeout when in
+	touchscreen mode.
+
+	* gtk/gtkmenu.c (gtk_menu_popup): in touchscreen mode, select the
+	first item of every opened menu.
+
 2007-04-26  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtkfilechooserentry.c: Append a '/' to directory names

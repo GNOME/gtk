@@ -1429,6 +1429,19 @@ gtk_menu_popup (GtkMenu		    *menu,
 
   gtk_menu_scroll_to (menu, menu->scroll_offset);
 
+  /* if no item is selected, select the first one */
+  if (!menu_shell->active_menu_item)
+    {
+      gboolean touchscreen_mode;
+
+      g_object_get (gtk_widget_get_settings (GTK_WIDGET (menu)),
+                    "gtk-touchscreen-mode", &touchscreen_mode,
+                    NULL);
+
+      if (touchscreen_mode)
+        gtk_menu_shell_select_first (menu_shell, TRUE);
+    }
+
   /* Once everything is set up correctly, map the toplevel window on
      the screen.
    */
