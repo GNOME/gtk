@@ -300,6 +300,20 @@ compute_intermediate_position (GdkXPositionInfo *position_info,
 }
 
 static void
+translate_pos (GdkWindowParentPos *dest, GdkWindowParentPos *src,
+               GdkWindowObject *obj, GdkXPositionInfo *pos_info,
+               gboolean set_clip)
+{
+  dest->x = src->x + obj->x;
+  dest->y = src->y + obj->y;
+  dest->x11_x = src->x11_x + pos_info->x;
+  dest->x11_y = src->x11_y + pos_info->y;
+
+  if (set_clip)
+      dest->clip_rect = pos_info->clip_rect;
+}
+
+static void
 gdk_window_guffaw_scroll (GdkWindow    *window,
 			  gint          dx,
 			  gint          dy)
@@ -317,11 +331,7 @@ gdk_window_guffaw_scroll (GdkWindow    *window,
   gdk_window_compute_parent_pos (impl, &parent_pos);
   gdk_window_compute_position (impl, &parent_pos, &new_info);
 
-  parent_pos.x += obj->x;
-  parent_pos.y += obj->y;
-  parent_pos.x11_x += new_info.x;
-  parent_pos.x11_y += new_info.y;
-  parent_pos.clip_rect = new_info.clip_rect;
+  translate_pos (&parent_pos, &parent_pos, obj, &new_info, TRUE);
 
   _gdk_x11_window_tmp_unset_bg (window, FALSE);;
 
@@ -645,11 +655,7 @@ _gdk_window_move_resize_child (GdkWindow *window,
 
   gdk_window_clip_changed (window, &impl->position_info.clip_rect, &new_info.clip_rect);
 
-  parent_pos.x += obj->x;
-  parent_pos.y += obj->y;
-  parent_pos.x11_x += new_info.x;
-  parent_pos.x11_y += new_info.y;
-  parent_pos.clip_rect = new_info.clip_rect;
+  translate_pos (&parent_pos, &parent_pos, obj, &new_info, TRUE);
 
   d_xoffset = new_info.x_offset - impl->position_info.x_offset;
   d_yoffset = new_info.y_offset - impl->position_info.y_offset;
@@ -869,10 +875,8 @@ gdk_window_compute_parent_pos (GdkWindowImplX11      *window,
 
       gdk_rectangle_intersect (&parent_pos->clip_rect, &tmp_clip, &parent_pos->clip_rect);
 
-      parent_pos->x += parent->x;
-      parent_pos->y += parent->y;
-      parent_pos->x11_x += impl->position_info.x;
-      parent_pos->x11_y += impl->position_info.y;
+      translate_pos (parent_pos, parent_pos, parent,
+                     &impl->position_info, FALSE);
 
       clip_xoffset += parent->x;
       clip_yoffset += parent->y;
@@ -898,11 +902,7 @@ gdk_window_premove (GdkWindow          *window,
 
   gdk_window_clip_changed (window, &impl->position_info.clip_rect, &new_info.clip_rect);
 
-  this_pos.x = parent_pos->x + obj->x;
-  this_pos.y = parent_pos->y + obj->y;
-  this_pos.x11_x = parent_pos->x11_x + new_info.x;
-  this_pos.x11_y = parent_pos->x11_y + new_info.y;
-  this_pos.clip_rect = new_info.clip_rect;
+  translate_pos (&this_pos, parent_pos, obj, &new_info, TRUE);
 
   unmap_if_needed (window, &new_info);
 
@@ -942,11 +942,7 @@ gdk_window_postmove (GdkWindow          *window,
   
   gdk_window_compute_position (impl, parent_pos, &new_info);
 
-  this_pos.x = parent_pos->x + obj->x;
-  this_pos.y = parent_pos->y + obj->y;
-  this_pos.x11_x = parent_pos->x11_x + new_info.x;
-  this_pos.x11_y = parent_pos->x11_y + new_info.y;
-  this_pos.clip_rect = new_info.clip_rect;
+  translate_pos (&this_pos, parent_pos, obj, &new_info, TRUE);
 
   d_xoffset = new_info.x_offset - impl->position_info.x_offset;
   d_yoffset = new_info.y_offset - impl->position_info.y_offset;

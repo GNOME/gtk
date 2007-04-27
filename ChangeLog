@@ -1,5 +1,10 @@
 2007-04-27  Matthias Clasen  <mclasen@redhat.com>
 
+	* gdk/x11/gdkgeometry-x11.c: Factor out translate_pos().
+	(#63820, Tilman Sauerbeck)
+
+2007-04-27  Matthias Clasen  <mclasen@redhat.com>
+
 	* gdk/x11/gdkgeometry-x11.c: Factor out window mapping
 	and unmapping functions.  (#63820, Tilman Sauerbeck)
 
