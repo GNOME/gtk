@@ -314,6 +314,30 @@ translate_pos (GdkWindowParentPos *dest, GdkWindowParentPos *src,
 }
 
 static void
+move (GdkWindow *window, GdkXPositionInfo *pos)
+{
+  XMoveWindow (GDK_WINDOW_XDISPLAY (window),
+               GDK_WINDOW_XID (window), pos->x, pos->y);
+}
+
+static void
+move_relative (GdkWindow *window, GdkRectangle *rect,
+               gint dx, gint dy)
+{
+  XMoveWindow (GDK_WINDOW_XDISPLAY (window),
+               GDK_WINDOW_XID (window),
+               rect->x + dx, rect->y + dy);
+}
+
+static void
+move_resize (GdkWindow *window, GdkRectangle *pos)
+{
+  XMoveResizeWindow (GDK_WINDOW_XDISPLAY (window),
+                     GDK_WINDOW_XID (window),
+                     pos->x, pos->y, pos->width, pos->height);
+}
+
+static void
 gdk_window_guffaw_scroll (GdkWindow    *window,
 			  gint          dx,
 			  gint          dy)
@@ -343,9 +367,7 @@ gdk_window_guffaw_scroll (GdkWindow    *window,
   compute_intermediate_position (&impl->position_info, &new_info, d_xoffset, d_yoffset,
 				 &new_position);
   
-  XMoveResizeWindow (GDK_WINDOW_XDISPLAY (window),
-		     GDK_WINDOW_XID (window),
-		     new_position.x, new_position.y, new_position.width, new_position.height);
+  move_resize (window, &new_position);
   
   for (l = obj->children; l; l = l->next)
     {
@@ -358,17 +380,12 @@ gdk_window_guffaw_scroll (GdkWindow    *window,
       gdk_window_premove (child, &parent_pos);
     }
   
-  XMoveWindow (GDK_WINDOW_XDISPLAY (window),
-	       GDK_WINDOW_XID (window),
-	       new_position.x - d_xoffset, new_position.y - d_yoffset);
+  move_relative (window, &new_position, -d_xoffset, -d_yoffset);
   
   if (dx < 0 || dy < 0)
     gdk_window_queue_translation (window, NULL, MIN (dx, 0), MIN (dy, 0));
   
-  XMoveResizeWindow (GDK_WINDOW_XDISPLAY (window),
-		     GDK_WINDOW_XID (window),
-		     impl->position_info.x, impl->position_info.y,
-		     impl->position_info.width, impl->position_info.height);
+  move_resize (window, (GdkRectangle *) &impl->position_info);
   
   if (impl->position_info.no_bg)
     _gdk_x11_window_tmp_reset_bg (window, FALSE);
@@ -672,22 +689,16 @@ _gdk_window_move_resize_child (GdkWindow *window,
       compute_intermediate_position (&impl->position_info, &new_info, d_xoffset, d_yoffset,
 				     &new_position);
       
-      XMoveResizeWindow (GDK_WINDOW_XDISPLAY (window),
-			 GDK_WINDOW_XID (window),
-			 new_position.x, new_position.y, new_position.width, new_position.height);
+      move_resize (window, &new_position);
       
       g_list_foreach (obj->children, (GFunc) gdk_window_premove, &parent_pos);
 
-      XMoveWindow (GDK_WINDOW_XDISPLAY (window),
-		   GDK_WINDOW_XID (window),
-		   new_position.x + dx, new_position.y + dy);
+      move_relative (window, &new_position, dx, dy);
       
       if (d_xoffset > 0 || d_yoffset > 0)
 	gdk_window_queue_translation (window, NULL, MAX (d_xoffset, 0), MAX (d_yoffset, 0));
       
-      XMoveResizeWindow (GDK_WINDOW_XDISPLAY (window),
-			 GDK_WINDOW_XID (window),
-			 new_info.x, new_info.y, new_info.width, new_info.height);
+      move_resize (window, (GdkRectangle *) &new_info);
 
       reset_backgrounds (window);
 
@@ -707,13 +718,9 @@ _gdk_window_move_resize_child (GdkWindow *window,
       g_list_foreach (obj->children, (GFunc) gdk_window_premove, &parent_pos);
 
       if (is_resize)
-	XMoveResizeWindow (GDK_WINDOW_XDISPLAY (window),
-			   GDK_WINDOW_XID (window),
-			   new_info.x, new_info.y, new_info.width, new_info.height);
+          move_resize (window, (GdkRectangle *) &new_info);
       else
-	XMoveWindow (GDK_WINDOW_XDISPLAY (window),
-		     GDK_WINDOW_XID (window),
-		     new_info.x, new_info.y);
+          move (window, &new_info);
 
       g_list_foreach (obj->children, (GFunc) gdk_window_postmove, &parent_pos);
 
@@ -919,9 +926,7 @@ gdk_window_premove (GdkWindow          *window,
       compute_intermediate_position (&impl->position_info, &new_info, d_xoffset, d_yoffset,
 				     &new_position);
 
-      XMoveResizeWindow (GDK_DRAWABLE_XDISPLAY (window),
-			 GDK_DRAWABLE_XID (window),
-			 new_position.x, new_position.y, new_position.width, new_position.height);
+      move_resize (window, &new_position);
     }
 
   g_list_foreach (obj->children, (GFunc) gdk_window_premove, &this_pos);
@@ -952,9 +957,7 @@ gdk_window_postmove (GdkWindow          *window,
       if (d_xoffset > 0 || d_yoffset > 0)
 	gdk_window_queue_translation (window, NULL, MAX (d_xoffset, 0), MAX (d_yoffset, 0));
 	
-      XMoveResizeWindow (GDK_DRAWABLE_XDISPLAY (window),
-			 GDK_DRAWABLE_XID (window),
-			 new_info.x, new_info.y, new_info.width, new_info.height);
+      move_resize (window, (GdkRectangle *) &new_info);
     }
 
   map_if_needed (window, &new_info);
