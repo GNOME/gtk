@@ -1,3 +1,19 @@
+2007-04-27  Xan Lopez  <xan@gnome.org>
+
+	Support inline-selection in entries (#318459)
+	
+	* gtk/gtkentry.c:
+	* gtk/gtkentrycompletion.c:
+	* gtk/gtkentrycompletion.h:
+	* gtk/gtkentryprivate.h:
+
+	When enabled cursor-match is emited when the cursor is on
+	a possible completion on the list. The default implementation
+	will replace the contents on the entry with the contents of
+	the text column in the completion model.
+
+	Review and improvements by Matthias Clasen.
+
 2007-04-27  Michael Natterer  <mitch@imendio.com>
 
 	Merged heavily modified patch from maemo-gtk which enables opening

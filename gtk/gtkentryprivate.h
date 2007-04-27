@@ -64,6 +64,8 @@ struct _GtkEntryCompletionPrivate
   guint popup_completion  : 1;
   guint popup_set_width   : 1;
   guint popup_single_match : 1;
+  guint inline_selection   : 1;
+
   GSource *check_completion_idle;
 };
 
