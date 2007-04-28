@@ -1,3 +1,10 @@
+2007-04-28  Matthias Clasen  <mclasen@redhat.com>
+
+	Merge from trunk:
+
+	* demos/gtk-demo/printing.c: Fix the headers in the print
+	demo.  (#423722, Yevgen Muntyan)
+
 2007-04-26  Tor Lillqvist  <tml@novell.com>
 
 	* gtk/gtkinputdialog.c (gtk_input_dialog_fill_axes)
