@@ -5,7 +5,7 @@
 	* gtk/gtkentrycompletion.h:
 	* gtk/gtkentryprivate.h:
 
-	Rember the user input that triggered the completion, add
+	Remember the user input that triggered the completion, add
 	API to the retrieve it and reset the entry contents to it
 	if the user cancels the tentative completion during
 	the inline-selection.
