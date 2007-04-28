@@ -709,7 +709,7 @@ gtk_extra_sources =				\
 #
 # setup GTK+ sources and their dependencies
 #
-MAINTAINERCLEANFILES = $(gtk_built_sources) $(stamp_files)
+MAINTAINERCLEANFILES = $(gtk_built_sources) $(stamp_files) $(GENERATED_ICONS)
 EXTRA_HEADERS =
 EXTRA_DIST = $(gtk_private_h_sources) $(gtk_extra_sources)
 EXTRA_DIST += $(gtk_built_sources)

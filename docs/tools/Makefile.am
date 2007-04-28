@@ -32,4 +32,9 @@ doc_shooter_SOURCES=	\
 	widgets.h
 
 clean-local:
-	rm -f *.png
+	for file in gnome-foot.png *.png; do \
+	  case "$$file" in \
+	    gnome-foot.png|gnome-gmush.png) ;; \
+	    *) rm -f $$file ;; \
+	  esac ; \
+	done
