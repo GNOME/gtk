@@ -1520,7 +1520,9 @@ gtk_drag_dest_find_target (GtkWidget      *widget,
 	  if (tmp_source->data == GUINT_TO_POINTER (pair->target))
 	    {
 	      if ((!(pair->flags & GTK_TARGET_SAME_APP) || source_widget) &&
-		  (!(pair->flags & GTK_TARGET_SAME_WIDGET) || (source_widget == widget)))
+		  (!(pair->flags & GTK_TARGET_SAME_WIDGET) || (source_widget == widget)) &&
+                  (!(pair->flags & GTK_TARGET_OTHER_APP) || !source_widget) &&
+                  (!(pair->flags & GTK_TARGET_OTHER_WIDGET) || (source_widget != widget)))
 		return pair->target;
 	      else
 		break;

@@ -1,5 +1,11 @@
 2007-04-28  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkdnd.[hc]: Add GTK_TARGET_OTHER_{APP,WIDGET} to
+	restrict drags within an application/widget.  (#163141, 
+	Jorn Baayen)
+
+2007-04-28  Matthias Clasen  <mclasen@redhat.com>
+
 	* docs/tools/Makefile.am:
 	* gtk/Makefile.am: Make make clean clean.  (#410160, Tommi
 	Komulainen)

@@ -46,7 +46,9 @@ typedef enum {
  */
 typedef enum {
   GTK_TARGET_SAME_APP = 1 << 0,    /*< nick=same-app >*/
-  GTK_TARGET_SAME_WIDGET = 1 << 1  /*< nick=same-widget >*/
+  GTK_TARGET_SAME_WIDGET = 1 << 1, /*< nick=same-widget >*/
+  GTK_TARGET_OTHER_APP = 1 << 2,   /*< nick=other-app >*/
+  GTK_TARGET_OTHER_WIDGET = 1 << 3 /*< nick=other-widget >*/
 } GtkTargetFlags;
 
 /* Destination side */
