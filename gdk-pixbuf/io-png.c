@@ -343,8 +343,8 @@ gdk_pixbuf__png_image_load (FILE *f, GError **error)
 static void png_error_callback  (png_structp png_read_ptr,
                                  png_const_charp error_msg);
 
-static void png_warning_callback(png_structp png_read_ptr,
-                                 png_const_charp warning_msg);
+static void png_warning_callback (png_structp png_read_ptr,
+                                  png_const_charp warning_msg);
 
 /* Called at the start of the progressive load */
 static void png_info_callback   (png_structp png_read_ptr,
@@ -738,8 +738,8 @@ png_error_callback(png_structp png_read_ptr,
 }
 
 static void
-png_warning_callback(png_structp png_read_ptr,
-                     png_const_charp warning_msg)
+png_warning_callback (png_structp png_read_ptr,
+                      png_const_charp warning_msg)
 {
         LoadContext* lc;
         
@@ -860,9 +860,7 @@ static gboolean real_save_png (GdkPixbuf        *pixbuf,
                                        return FALSE;
                                }
                        } else {
-                               g_warning ("Bad option name '%s' passed to PNG saver",
-                                          *kiter);
-                               return FALSE;
+                               g_warning ("Unrecognized parameter (%s) passed to PNG saver.", *kiter);
                        }
 
                        ++kiter;

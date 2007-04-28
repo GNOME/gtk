@@ -1,3 +1,9 @@
+2007-04-28  Matthias Clasen <mclasen@redhat.com>
+
+	* io-png.c:
+	* io-jpeg.c: Accept unknown parameters with a warning 
+	when saving.  (#405539, Daniel Atallah)
+
 2007-04-25  Matthias Clasen <mclasen@redhat.com>
 
 	* gdk-pixbuf-simple-anim.c (gdk_pixbuf_simple_anim_add_frame):

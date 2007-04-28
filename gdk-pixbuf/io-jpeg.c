@@ -952,9 +952,7 @@ real_save_jpeg (GdkPixbuf          *pixbuf,
                                        return FALSE;
                                }
                        } else {
-                               g_warning ("Bad option name '%s' passed to JPEG saver",
-                                          *kiter);
-                               return FALSE;
+                               g_warning ("Unrecognized parameter (%s) passed to JPEG saver.", *kiter);
                        }
                
                        ++kiter;
@@ -970,7 +968,14 @@ real_save_jpeg (GdkPixbuf          *pixbuf,
 
        /* no image data? abort */
        pixels = gdk_pixbuf_get_pixels (pixbuf);
-       g_return_val_if_fail (pixels != NULL, FALSE);
+
+	if (pixels == NULL) {
+		g_set_error (error,
+			     GDK_PIXBUF_ERROR,
+			     GDK_PIXBUF_ERROR_CORRUPT_IMAGE,
+			     _("Image contains no pixels."));
+		return FALSE;
+	}
 
        /* Allocate a small buffer to convert image data,
 	* and a larger buffer if doing to_callback save.
