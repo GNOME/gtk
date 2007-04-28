@@ -1,3 +1,15 @@
+2007-04-28  Xan Lopez  <xan@gnome.org>
+
+	* gtk/gtkentry.c:
+	* gtk/gtkentrycompletion.c:
+	* gtk/gtkentrycompletion.h:
+	* gtk/gtkentryprivate.h:
+
+	Rember the user input that triggered the completion, add
+	API to the retrieve it and reset the entry contents to it
+	if the user cancels the tentative completion during
+	the inline-selection.
+	
 2007-04-27  Matthias Clasen  <mclasen@redhat.com>
 
 	* gdk/x11/gdkgeometry-x11.c: Factor out window movement

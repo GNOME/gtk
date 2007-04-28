@@ -5691,7 +5691,12 @@ gtk_entry_completion_key_press (GtkWidget   *widget,
               sel = gtk_tree_view_get_selection (GTK_TREE_VIEW (completion->priv->tree_view));
               if (!gtk_tree_selection_get_selected (sel, &model, &iter))
                 return FALSE;
-
+              
+              if (completion->priv->completion_prefix == NULL)
+                {
+                  completion->priv->completion_prefix = g_strdup (gtk_entry_get_text (GTK_ENTRY (completion->priv->entry)));
+                }
+              
               g_signal_emit_by_name (completion, "cursor_on_match", model,
                                      &iter, &entry_set);
             }
@@ -5720,10 +5725,23 @@ gtk_entry_completion_key_press (GtkWidget   *widget,
 
       if (completion->priv->inline_selection)
         {
+          /* Escape rejects the tentative completion */
           if (event->keyval == GDK_Escape)
-            gtk_editable_delete_selection (GTK_EDITABLE (widget));
-          /* Move the cursor to the end */
-          gtk_editable_set_position (GTK_EDITABLE (widget), -1);
+            {
+              gtk_entry_set_text (GTK_ENTRY (completion->priv->entry), completion->priv->completion_prefix);
+            }
+
+          /* Move the cursor to the end for Right/Esc, to the
+             beginning for Left */
+          if (event->keyval == GDK_Right ||
+              event->keyval == GDK_KP_Right ||
+              event->keyval == GDK_Escape)
+            gtk_editable_set_position (GTK_EDITABLE (widget), -1);
+          else
+            gtk_editable_set_position (GTK_EDITABLE (widget), 0);
+
+          g_free (completion->priv->completion_prefix);
+          completion->priv->completion_prefix = NULL;
         }
 
       return TRUE;
@@ -5737,7 +5755,13 @@ gtk_entry_completion_key_press (GtkWidget   *widget,
 
       _gtk_entry_reset_im_context (GTK_ENTRY (widget));
       _gtk_entry_completion_popdown (completion);
-      
+
+      if (completion->priv->completion_prefix)
+        {
+           g_free (completion->priv->completion_prefix);
+           completion->priv->completion_prefix = NULL;
+        }
+
       gtk_widget_child_focus (gtk_widget_get_toplevel (widget), dir);
 
       return TRUE;

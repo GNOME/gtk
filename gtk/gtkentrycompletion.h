@@ -119,8 +119,7 @@ void                gtk_entry_completion_set_popup_single_match (GtkEntryComplet
                                                                  gboolean                     popup_single_match);
 gboolean            gtk_entry_completion_get_popup_single_match (GtkEntryCompletion          *completion);
 
-void                gtk_entry_completion_insert_completion_text (GtkEntryCompletion *completion,
-								 const gchar *text);
+const gchar         *gtk_entry_completion_get_completion_prefix (GtkEntryCompletion *completion);
 /* convenience */
 void                gtk_entry_completion_set_text_column        (GtkEntryCompletion          *completion,
                                                                  gint                         column);

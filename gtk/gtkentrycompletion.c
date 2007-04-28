@@ -67,71 +67,71 @@ enum
 
 #define GTK_ENTRY_COMPLETION_GET_PRIVATE(obj)(G_TYPE_INSTANCE_GET_PRIVATE ((obj), GTK_TYPE_ENTRY_COMPLETION, GtkEntryCompletionPrivate))
 
-static void     gtk_entry_completion_cell_layout_init    (GtkCellLayoutIface      *iface);
-static void     gtk_entry_completion_set_property        (GObject                 *object,
-                                                          guint                    prop_id,
-                                                          const GValue            *value,
-                                                          GParamSpec              *pspec);
-static void     gtk_entry_completion_get_property        (GObject                 *object,
-                                                          guint                    prop_id,
-                                                          GValue                  *value,
-                                                          GParamSpec              *pspec);
-static void     gtk_entry_completion_finalize            (GObject                 *object);
+static void                                                             gtk_entry_completion_cell_layout_init    (GtkCellLayoutIface      *iface);
+static void     gtk_entry_completion_set_property        (GObject      *object,
+                                                          guint         prop_id,
+                                                          const GValue *value,
+                                                          GParamSpec   *pspec);
+static void     gtk_entry_completion_get_property        (GObject      *object,
+                                                          guint         prop_id,
+                                                          GValue       *value,
+                                                          GParamSpec   *pspec);
+static void                                                             gtk_entry_completion_finalize            (GObject                 *object);
 
-static void     gtk_entry_completion_pack_start          (GtkCellLayout           *cell_layout,
-                                                          GtkCellRenderer         *cell,
-                                                          gboolean                 expand);
-static void     gtk_entry_completion_pack_end            (GtkCellLayout           *cell_layout,
-                                                          GtkCellRenderer         *cell,
-                                                          gboolean                 expand);
-static void     gtk_entry_completion_clear               (GtkCellLayout           *cell_layout);
-static void     gtk_entry_completion_add_attribute       (GtkCellLayout           *cell_layout,
-                                                          GtkCellRenderer         *cell,
-                                                          const char              *attribute,
-                                                          gint                     column);
-static void     gtk_entry_completion_set_cell_data_func  (GtkCellLayout           *cell_layout,
-                                                          GtkCellRenderer         *cell,
-                                                          GtkCellLayoutDataFunc    func,
-                                                          gpointer                 func_data,
-                                                          GDestroyNotify           destroy);
-static void     gtk_entry_completion_clear_attributes    (GtkCellLayout           *cell_layout,
-                                                          GtkCellRenderer         *cell);
-static void     gtk_entry_completion_reorder             (GtkCellLayout           *cell_layout,
-                                                          GtkCellRenderer         *cell,
-                                                          gint                     position);
+static void     gtk_entry_completion_pack_start          (GtkCellLayout         *cell_layout,
+                                                          GtkCellRenderer       *cell,
+                                                          gboolean               expand);
+static void     gtk_entry_completion_pack_end            (GtkCellLayout         *cell_layout,
+                                                          GtkCellRenderer       *cell,
+                                                          gboolean               expand);
+static void                                                                      gtk_entry_completion_clear               (GtkCellLayout           *cell_layout);
+static void     gtk_entry_completion_add_attribute       (GtkCellLayout         *cell_layout,
+                                                          GtkCellRenderer       *cell,
+                                                          const char            *attribute,
+                                                          gint                   column);
+static void     gtk_entry_completion_set_cell_data_func  (GtkCellLayout         *cell_layout,
+                                                          GtkCellRenderer       *cell,
+                                                          GtkCellLayoutDataFunc  func,
+                                                          gpointer               func_data,
+                                                          GDestroyNotify         destroy);
+static void     gtk_entry_completion_clear_attributes    (GtkCellLayout         *cell_layout,
+                                                          GtkCellRenderer       *cell);
+static void     gtk_entry_completion_reorder             (GtkCellLayout         *cell_layout,
+                                                          GtkCellRenderer       *cell,
+                                                          gint                   position);
 
-static gboolean gtk_entry_completion_visible_func        (GtkTreeModel            *model,
-                                                          GtkTreeIter             *iter,
-                                                          gpointer                 data);
-static gboolean gtk_entry_completion_popup_key_event     (GtkWidget               *widget,
-                                                          GdkEventKey             *event,
-                                                          gpointer                 user_data);
-static gboolean gtk_entry_completion_popup_button_press  (GtkWidget               *widget,
-                                                          GdkEventButton          *event,
-                                                          gpointer                 user_data);
-static gboolean gtk_entry_completion_list_button_press   (GtkWidget               *widget,
-                                                          GdkEventButton          *event,
-                                                          gpointer                 user_data);
-static gboolean gtk_entry_completion_action_button_press (GtkWidget               *widget,
-                                                          GdkEventButton          *event,
-                                                          gpointer                 user_data);
-static void     gtk_entry_completion_selection_changed   (GtkTreeSelection        *selection,
-                                                          gpointer                 data);
-static gboolean	gtk_entry_completion_list_enter_notify	 (GtkWidget               *widget,
-							  GdkEventCrossing        *event,
-							  gpointer                 data);
-static gboolean gtk_entry_completion_list_motion_notify	 (GtkWidget		  *widget,
-							  GdkEventMotion          *event,
-							  gpointer 		   data);
-static void     gtk_entry_completion_insert_action       (GtkEntryCompletion      *completion,
-                                                          gint                     index,
-                                                          const gchar             *string,
-                                                          gboolean                 markup);
-static void     gtk_entry_completion_action_data_func    (GtkTreeViewColumn       *tree_column,
-                                                          GtkCellRenderer         *cell,
-                                                          GtkTreeModel            *model,
-                                                          GtkTreeIter             *iter,
-                                                          gpointer                 data);
+static gboolean gtk_entry_completion_visible_func        (GtkTreeModel       *model,
+                                                          GtkTreeIter        *iter,
+                                                          gpointer            data);
+static gboolean gtk_entry_completion_popup_key_event     (GtkWidget          *widget,
+                                                          GdkEventKey        *event,
+                                                          gpointer            user_data);
+static gboolean gtk_entry_completion_popup_button_press  (GtkWidget          *widget,
+                                                          GdkEventButton     *event,
+                                                          gpointer            user_data);
+static gboolean gtk_entry_completion_list_button_press   (GtkWidget          *widget,
+                                                          GdkEventButton     *event,
+                                                          gpointer            user_data);
+static gboolean gtk_entry_completion_action_button_press (GtkWidget          *widget,
+                                                          GdkEventButton     *event,
+                                                          gpointer            user_data);
+static void     gtk_entry_completion_selection_changed   (GtkTreeSelection   *selection,
+                                                          gpointer            data);
+static gboolean	gtk_entry_completion_list_enter_notify	 (GtkWidget          *widget,
+							  GdkEventCrossing   *event,
+							  gpointer            data);
+static gboolean gtk_entry_completion_list_motion_notify	 (GtkWidget	     *widget,
+							  GdkEventMotion     *event,
+							  gpointer 	      data);
+static void     gtk_entry_completion_insert_action       (GtkEntryCompletion *completion,
+                                                          gint                index,
+                                                          const gchar        *string,
+                                                          gboolean            markup);
+static void     gtk_entry_completion_action_data_func    (GtkTreeViewColumn  *tree_column,
+                                                          GtkCellRenderer    *cell,
+                                                          GtkTreeModel       *model,
+                                                          GtkTreeIter        *iter,
+                                                          gpointer            data);
 
 static gboolean gtk_entry_completion_match_selected      (GtkEntryCompletion *completion,
 							  GtkTreeModel       *model,
@@ -141,6 +141,11 @@ static gboolean gtk_entry_completion_real_insert_prefix  (GtkEntryCompletion *co
 static gboolean gtk_entry_completion_cursor_on_match     (GtkEntryCompletion *completion,
 							  GtkTreeModel       *model,
 							  GtkTreeIter        *iter);
+static gboolean gtk_entry_completion_insert_completion   (GtkEntryCompletion *completion,
+                                                          GtkTreeModel       *model,
+                                                          GtkTreeIter        *iter);
+static void     gtk_entry_completion_insert_completion_text (GtkEntryCompletion *completion,
+                                                             const gchar *text);
 
 static guint entry_completion_signals[LAST_SIGNAL] = { 0 };
 
@@ -1631,12 +1636,33 @@ gtk_entry_completion_real_insert_prefix (GtkEntryCompletion *completion,
   return TRUE;
 }
 
-void
+/**
+ * gtk_entry_completion_get_completion_prefix:
+ * @completion: a #GtkEntryCompletion
+ * 
+ * Get the original text entered by the user that triggered
+ * the completion or NULL if there's no completion ongoing.
+ * 
+ * Since: 2.12
+ **/
+
+const gchar*
+gtk_entry_completion_get_completion_prefix (GtkEntryCompletion *completion)
+{
+  g_return_val_if_fail (GTK_IS_ENTRY_COMPLETION (completion), NULL);
+
+  return completion->priv->completion_prefix;
+}
+
+static void
 gtk_entry_completion_insert_completion_text (GtkEntryCompletion *completion,
 					     const gchar *text)
 {
   GtkEntryCompletionPrivate *priv = completion->priv;
+  gchar *needle;
   gint len;
+
+  priv = completion->priv;
 
   if (priv->changed_id > 0)
     {
@@ -1650,9 +1676,15 @@ gtk_entry_completion_insert_completion_text (GtkEntryCompletion *completion,
 			      completion->priv->insert_text_id);
     }
 
-  gtk_editable_get_selection_bounds (GTK_EDITABLE (priv->entry), &len, NULL);
   gtk_entry_set_text (GTK_ENTRY (priv->entry), text);
-  gtk_editable_select_region (GTK_EDITABLE (priv->entry), len, -1);
+  needle = g_strstr_len (text, -1, completion->priv->completion_prefix);
+  if (needle)
+    {
+      len = g_utf8_strlen (text, -1) - g_utf8_strlen (needle, -1)
+        + g_utf8_strlen (priv->completion_prefix, -1);
+      gtk_editable_select_region (GTK_EDITABLE (priv->entry),
+                                  len, -1);
+    }
 
   if (priv->changed_id > 0)
     {
@@ -1667,14 +1699,12 @@ gtk_entry_completion_insert_completion_text (GtkEntryCompletion *completion,
     }
 }
 
-gboolean
+static gboolean
 gtk_entry_completion_insert_completion (GtkEntryCompletion *completion,
 					GtkTreeModel       *model,
 					GtkTreeIter        *iter)
 {
   gchar *str = NULL;
-
-  g_return_val_if_fail (GTK_IS_TREE_MODEL (model), FALSE);
 
   if (completion->priv->text_column < 0)
     return FALSE;
