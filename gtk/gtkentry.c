@@ -2432,7 +2432,6 @@ gtk_entry_real_insert_text (GtkEditable *editable,
   GtkEntry *entry = GTK_ENTRY (editable);
   gint index;
   gint n_chars;
-  guint password_hint_timeout;
 
   if (new_text_length < 0)
     new_text_length = strlen (new_text);
@@ -2502,28 +2501,32 @@ gtk_entry_real_insert_text (GtkEditable *editable,
   if (entry->selection_bound > *position)
     entry->selection_bound += n_chars;
 
-  g_object_get (gtk_widget_get_settings (GTK_WIDGET (entry)),
-                "gtk-entry-password-hint-timeout", &password_hint_timeout,
-                NULL);
-
-  if (password_hint_timeout > 0 && n_chars == 1 && !entry->visible &&
-      (new_text_length < PASSWORD_HINT_MAX))
+  if (n_chars == 1 && !entry->visible && (new_text_length < PASSWORD_HINT_MAX))
     {
-      GtkEntryPasswordHint *password_hint = g_object_get_qdata (G_OBJECT (entry),
-                                                                quark_password_hint);
+      guint password_hint_timeout;
 
-      if (! password_hint)
+      g_object_get (gtk_widget_get_settings (GTK_WIDGET (entry)),
+                    "gtk-entry-password-hint-timeout", &password_hint_timeout,
+                    NULL);
+
+      if (password_hint_timeout > 0)
         {
-          password_hint = g_new0 (GtkEntryPasswordHint, 1);
-          g_object_set_qdata_full (G_OBJECT (entry), quark_password_hint,
-                                   password_hint,
-                                   (GDestroyNotify) gtk_entry_password_hint_free);
-        }
+          GtkEntryPasswordHint *password_hint = g_object_get_qdata (G_OBJECT (entry),
+                                                                    quark_password_hint);
 
-      memset (&password_hint->password_hint, 0x0, PASSWORD_HINT_MAX);
-      password_hint->password_hint_length = new_text_length;
-      memcpy (&password_hint->password_hint, new_text, new_text_length);
-      password_hint->password_hint_position = *position + n_chars;
+          if (!password_hint)
+            {
+              password_hint = g_new0 (GtkEntryPasswordHint, 1);
+              g_object_set_qdata_full (G_OBJECT (entry), quark_password_hint,
+                                       password_hint,
+                                       (GDestroyNotify) gtk_entry_password_hint_free);
+            }
+
+          memset (&password_hint->password_hint, 0x0, PASSWORD_HINT_MAX);
+          password_hint->password_hint_length = new_text_length;
+          memcpy (&password_hint->password_hint, new_text, new_text_length);
+          password_hint->password_hint_position = *position + n_chars;
+       }
     }
   else
     {
