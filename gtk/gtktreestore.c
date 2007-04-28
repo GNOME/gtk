@@ -884,7 +884,7 @@ gtk_tree_store_set_valist_internal (GtkTreeStore *tree_store,
       GValue value = { 0, };
       gchar *error = NULL;
 
-      if (column >= tree_store->n_columns)
+      if (column < 0 || column >= tree_store->n_columns)
 	{
 	  g_warning ("%s: Invalid column number %d added to iter (remember to end your list of columns with a -1)", G_STRLOC, column);
 	  break;

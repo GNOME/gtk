@@ -1,3 +1,10 @@
+2007-04-28  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtkliststore.c (gtk_list_store_set_valist_internal):
+	* gtk/gtktreestore.c (gtk_tree_store_set_valist_internal):
+	Recognize negative column indices as invalid.  (#415260,
+	Chris Wilson)
+
 2007-04-28  Ronald Bultje  <rbultje@ronald.bitfreak.net>
 
 	* gdk/quartz/gdkeventloop-quartz.c: (select_thread_func),
