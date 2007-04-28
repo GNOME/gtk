@@ -1,5 +1,10 @@
 2007-04-28  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkstatusicon.c (gtk_status_icon_get_size): Add
+	a note about being embedded.  (#340107, Christian Persch)
+
+2007-04-28  Matthias Clasen  <mclasen@redhat.com>
+
 	* gtk/gtkdnd.[hc]: Add GTK_TARGET_OTHER_{APP,WIDGET} to
 	restrict drags within an application/widget.  (#163141, 
 	Jorn Baayen)

@@ -1503,6 +1503,9 @@ gtk_status_icon_get_icon_name (GtkStatusIcon *status_icon)
  * if the size of the notification area changes. For other
  * storage types, the size-changed signal can be used to
  * react to size changes.
+ *
+ * Note that the returned size is only meaningful while the 
+ * status icon is embedded (see gtk_status_icon_is_embedded()).
  * 
  * Return value: the size that is available for the image
  *
