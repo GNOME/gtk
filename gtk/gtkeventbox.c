@@ -369,7 +369,6 @@ gtk_event_box_set_above_child (GtkEventBox *event_box,
 }
 
 
-
 static void
 gtk_event_box_realize (GtkWidget *widget)
 {
@@ -420,7 +419,10 @@ gtk_event_box_realize (GtkWidget *widget)
   if (!visible_window || priv->above_child)
     {
       attributes.wclass = GDK_INPUT_ONLY;
-      attributes_mask = GDK_WA_X | GDK_WA_Y;
+      if (!visible_window)
+        attributes_mask = GDK_WA_X | GDK_WA_Y;
+      else
+        attributes_mask = 0;
 
       priv->event_window = gdk_window_new (widget->window,
 					   &attributes, attributes_mask);

@@ -2,6 +2,12 @@
 	
 	Merge from trunk:
 
+	* gtk/gtkeventbox.c (gtk_event_box_realize): Fix the offsets
+	of the input-only window if we also have a visible window. 
+	(#405089)
+
+2007-04-28  Matthias Clasen  <mclasen@redhat.com>
+
 	* gtk/gtkliststore.c (gtk_list_store_set_valist_internal):
 	* gtk/gtktreestore.c (gtk_tree_store_set_valist_internal):
 	Recognize negative column indices as invalid.  (#415260,
