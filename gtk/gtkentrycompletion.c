@@ -1677,7 +1677,7 @@ gtk_entry_completion_insert_completion_text (GtkEntryCompletion *completion,
     }
 
   gtk_entry_set_text (GTK_ENTRY (priv->entry), text);
-  needle = g_strstr_len (text, -1, completion->priv->completion_prefix);
+  needle = strstr (text, completion->priv->completion_prefix);
   if (needle)
     {
       len = g_utf8_strlen (text, -1) - g_utf8_strlen (needle, -1)
