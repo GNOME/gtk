@@ -1,5 +1,15 @@
 2007-04-28  Matthias Clasen  <mclasen@redhat.com>
 
+	Merge from trunk
+
+	* gdk/win32/bdfcursor.c (compose_cursors_from_fonts):
+	* gtk/gtkcombobox.c (gtk_combo_box_cell_layout_reorder):
+	* gtk/gtkfilesystemmodel.c (got_root_folder_cb):
+	(get_children_folder_cb): Plug memory leaks caused by wrong
+	use of g_slist_remove_link().  (#405515, Nicolas Peninguy)
+
+2007-04-28  Matthias Clasen  <mclasen@redhat.com>
+
 	Merge from trunk:
 
 	* demos/gtk-demo/printing.c: Fix the headers in the print

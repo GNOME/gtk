@@ -615,7 +615,7 @@ got_root_folder_cb (GtkFileSystemHandle *handle,
   if (!tmp_list)
     goto out;
 
-  model->pending_handles = g_slist_remove_link (model->pending_handles,
+  model->pending_handles = g_slist_delete_link (model->pending_handles,
  						tmp_list);
 
   if (cancelled || !folder)
@@ -1528,7 +1528,7 @@ get_children_get_folder_cb (GtkFileSystemHandle *handle,
   if (!tmp_list)
     goto out;
 
-  data->model->pending_handles = g_slist_remove_link (data->model->pending_handles, tmp_list);
+  data->model->pending_handles = g_slist_delete_link (data->model->pending_handles, tmp_list);
 
   if (cancelled || !folder)
     {

@@ -279,7 +279,7 @@ static void compose_cursors_from_fonts()
 {
 	GSList *l;
 
-	for (l = g_slist_copy(fonts); l; l = g_slist_remove_link(l,l))
+	for (l = g_slist_copy (fonts); l; l = g_slist_delete_link (l,l))
 	{
 		font_info_t *fi = l->data;
 		gchar *name;

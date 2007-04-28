@@ -4288,7 +4288,7 @@ gtk_combo_box_cell_layout_reorder (GtkCellLayout   *layout,
 
   g_return_if_fail (link != NULL);
 
-  combo_box->priv->cells = g_slist_remove_link (combo_box->priv->cells, link);
+  combo_box->priv->cells = g_slist_delete_link (combo_box->priv->cells, link);
   combo_box->priv->cells = g_slist_insert (combo_box->priv->cells, info,
                                            position);
 
