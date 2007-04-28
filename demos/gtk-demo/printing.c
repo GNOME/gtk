@@ -61,8 +61,9 @@ draw_page (GtkPrintOperation *operation,
   PrintData *data = (PrintData *)user_data;
   cairo_t *cr;
   PangoLayout *layout;
-  gdouble width, text_height;
-  gint line, i, layout_height;
+  gint text_width, text_height;
+  gdouble width;
+  gint line, i;
   PangoFontDescription *desc;
   gchar *page_str;
 
@@ -85,21 +86,25 @@ draw_page (GtkPrintOperation *operation,
   pango_font_description_free (desc);
 
   pango_layout_set_text (layout, data->filename, -1);
-  pango_layout_set_width (layout, width);
-  pango_layout_set_alignment (layout, PANGO_ALIGN_CENTER);
-			      
-  pango_layout_get_size (layout, NULL, &layout_height);
-  text_height = (gdouble)layout_height / PANGO_SCALE;
+  pango_layout_get_pixel_size (layout, &text_width, &text_height);
 
-  cairo_move_to (cr, width / 2,  (HEADER_HEIGHT - text_height) / 2);
+  if (text_width > width)
+    {
+      pango_layout_set_width (layout, width);
+      pango_layout_set_ellipsize (layout, PANGO_ELLIPSIZE_START);
+      pango_layout_get_pixel_size (layout, &text_width, &text_height);
+    }
+
+  cairo_move_to (cr, (width - text_width) / 2,  (HEADER_HEIGHT - text_height) / 2);
   pango_cairo_show_layout (cr, layout);
 
   page_str = g_strdup_printf ("%d/%d", page_nr + 1, data->num_pages);
   pango_layout_set_text (layout, page_str, -1);
   g_free (page_str);
-  pango_layout_set_alignment (layout, PANGO_ALIGN_RIGHT);
-			      
-  cairo_move_to (cr, width - 2, (HEADER_HEIGHT - text_height) / 2);
+
+  pango_layout_set_width (layout, -1);
+  pango_layout_get_pixel_size (layout, &text_width, &text_height);
+  cairo_move_to (cr, width - text_width - 4, (HEADER_HEIGHT - text_height) / 2);
   pango_cairo_show_layout (cr, layout);
   
   g_object_unref (layout);
