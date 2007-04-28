@@ -1,5 +1,11 @@
 2007-04-28  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkentry.c (gtk_entry_grab_focus): Only call
+	g_object_get() when necessary.  (#373137, Morten Welinder,
+	patch by Xan Lopez)
+
+2007-04-28  Matthias Clasen  <mclasen@redhat.com>
+
 	* gtk/gtkstatusicon.c (gtk_status_icon_get_size): Add
 	a note about being embedded.  (#340107, Christian Persch)
 

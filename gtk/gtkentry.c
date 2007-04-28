@@ -2146,13 +2146,16 @@ gtk_entry_grab_focus (GtkWidget        *widget)
   
   GTK_WIDGET_CLASS (gtk_entry_parent_class)->grab_focus (widget);
 
-  g_object_get (gtk_widget_get_settings (widget),
-		"gtk-entry-select-on-focus",
-		&select_on_focus,
-		NULL);
+  if (entry->editable && !entry->in_click)
+    {
+      g_object_get (gtk_widget_get_settings (widget),
+                    "gtk-entry-select-on-focus",
+                    &select_on_focus,
+                    NULL);
   
-  if (select_on_focus && entry->editable && !entry->in_click)
-    gtk_editable_select_region (GTK_EDITABLE (widget), 0, -1);
+      if (select_on_focus)
+        gtk_editable_select_region (GTK_EDITABLE (widget), 0, -1);
+    }
 }
 
 static void 
