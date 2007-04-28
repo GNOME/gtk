@@ -1,3 +1,10 @@
+2007-04-28  Ronald Bultje  <rbultje@ronald.bitfreak.net>
+
+	* gdk/quartz/gdkeventloop-quartz.c: (select_thread_func),
+	(poll_func): fix two more potential races that could happen when
+	an application is polling in the mainloop and a separate thread
+	tries to wake it up using g_idle_add(). Fixes #425271 comment 5.
+
 2007-04-28  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtkentry.c (gtk_entry_grab_focus): 

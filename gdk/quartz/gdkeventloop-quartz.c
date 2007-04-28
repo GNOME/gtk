@@ -13,7 +13,7 @@ static NSEvent *current_event;
 
 static GPollFunc old_poll_func;
 
-static gboolean select_fd_waiting = FALSE;
+static gboolean select_fd_waiting = FALSE, ready_for_poll = FALSE;
 static pthread_t select_thread = 0;
 static int wakeup_pipe[2];
 static pthread_mutex_t pollfd_mutex = PTHREAD_MUTEX_INITIALIZER;
@@ -118,20 +118,23 @@ select_thread_func (void *arg)
   int n_active_fds;
 
   pthread_mutex_lock (&pollfd_mutex);
-  pthread_cond_signal (&ready_cond);
 
   while (1)
     {
       char c;
       int n;
 
+      ready_for_poll = TRUE;
+      pthread_cond_signal (&ready_cond);
       pthread_cond_wait (&ready_cond, &pollfd_mutex);
+      ready_for_poll = FALSE;
 
-      pthread_mutex_unlock (&pollfd_mutex);
       select_fd_waiting = TRUE;
+      pthread_cond_signal (&ready_cond);
+      pthread_mutex_unlock (&pollfd_mutex);
       n_active_fds = old_poll_func (pollfds, n_pollfds, -1);
-      select_fd_waiting = FALSE;
       pthread_mutex_lock (&pollfd_mutex);
+      select_fd_waiting = FALSE;
       n = read (pipe_pollfd->fd, &c, 1);
       if (n == 1)
         {
@@ -177,9 +180,11 @@ poll_func (GPollFD *ufds, guint nfds, gint timeout_)
 
         pthread_mutex_lock (&pollfd_mutex);
         pthread_create (&select_thread, NULL, select_thread_func, NULL);
-        pthread_cond_wait (&ready_cond, &pollfd_mutex);
       } else
         pthread_mutex_lock (&pollfd_mutex);
+
+      while (!ready_for_poll)
+        pthread_cond_wait (&ready_cond, &pollfd_mutex);
 
       n_pollfds = nfds;
       g_free (pollfds);
@@ -198,6 +203,7 @@ poll_func (GPollFD *ufds, guint nfds, gint timeout_)
 
       /* Start our thread */
       pthread_cond_signal (&ready_cond);
+      pthread_cond_wait (&ready_cond, &pollfd_mutex);
       pthread_mutex_unlock (&pollfd_mutex);
     }
 
