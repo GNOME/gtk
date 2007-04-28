@@ -1,3 +1,11 @@
+2007-04-28  Matthias Clasen <mclasen@redhat.com>
+
+	Merge from trunk:
+
+	* io-png.c:
+	* io-jpeg.c: Accept unknown parameters with a warning 
+	when saving.  (#405539, Daniel Atallah)
+
 2007-04-25  Matthias Clasen <mclasen@redhat.com>
 
 	Merge from trunk:
