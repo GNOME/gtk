@@ -732,7 +732,7 @@ gtk_list_store_set_valist_internal (GtkListStore *list_store,
       GValue value = { 0, };
       gchar *error = NULL;
 
-      if (column >= list_store->n_columns)
+      if (column < 0 || column >= list_store->n_columns)
 	{
 	  g_warning ("%s: Invalid column number %d added to iter (remember to end your list of columns with a -1)", G_STRLOC, column);
 	  break;

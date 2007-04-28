@@ -1,6 +1,15 @@
 2007-04-28  Matthias Clasen  <mclasen@redhat.com>
+	
+	Merge from trunk:
 
-	Merge from trunk
+	* gtk/gtkliststore.c (gtk_list_store_set_valist_internal):
+	* gtk/gtktreestore.c (gtk_tree_store_set_valist_internal):
+	Recognize negative column indices as invalid.  (#415260,
+	Chris Wilson)
+
+2007-04-28  Matthias Clasen  <mclasen@redhat.com>
+
+	Merge from trunk:
 
 	* gdk/win32/bdfcursor.c (compose_cursors_from_fonts):
 	* gtk/gtkcombobox.c (gtk_combo_box_cell_layout_reorder):
