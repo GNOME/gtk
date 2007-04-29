@@ -797,7 +797,7 @@ printer_changed_callback (GtkComboBox            *combo_box,
       gtk_tree_model_get (gtk_combo_box_get_model (combo_box), &iter,
 			  PRINTER_LIST_COL_PRINTER, &printer, -1);
 
-      if (printer == NULL || _gtk_printer_has_details (printer))
+      if (printer == NULL || gtk_printer_has_details (printer))
 	fill_paper_sizes_from_printer (dialog, printer);
       else
 	{
@@ -805,7 +805,7 @@ printer_changed_callback (GtkComboBox            *combo_box,
 	  priv->request_details_tag =
 	    g_signal_connect (printer, "details-acquired",
 			      G_CALLBACK (printer_changed_finished_callback), dialog);
-	  _gtk_printer_request_details (printer);
+	  gtk_printer_request_details (printer);
 
 	}
 
@@ -1737,7 +1737,7 @@ margins_from_printer_changed (CustomPaperDialog *data)
 
       if (printer)
 	{
-	  if (_gtk_printer_has_details (printer))
+	  if (gtk_printer_has_details (printer))
 	    {
 	      set_margins_from_printer (data, printer);
 	      gtk_combo_box_set_active (combo, 0);
@@ -1748,7 +1748,7 @@ margins_from_printer_changed (CustomPaperDialog *data)
 	      data->request_details_tag =
 		g_signal_connect (printer, "details-acquired",
 				  G_CALLBACK (get_margins_finished_callback), data);
-	      _gtk_printer_request_details (printer);
+	      gtk_printer_request_details (printer);
 	    }
 
 	  g_object_unref (printer);

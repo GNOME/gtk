@@ -582,9 +582,21 @@ gtk_printer_set_job_count (GtkPrinter *printer,
   return TRUE;
 }
 
+/**
+ * gtk_printer_has_details:
+ * @printer: a #GtkPrinter
+ * 
+ * Returns whether the printer details are available.
+ * 
+ * Return value: %TRUE if @printer details are available
+ *
+ * Since: 2.12
+ */
 gboolean
-_gtk_printer_has_details (GtkPrinter *printer)
+gtk_printer_has_details (GtkPrinter *printer)
 {
+  g_return_val_if_fail (GTK_IS_PRINTER (printer), FALSE);
+
   return printer->priv->has_details;
 }
 
@@ -727,10 +739,23 @@ gtk_printer_set_is_default (GtkPrinter *printer,
   printer->priv->is_default = TRUE;
 }
 
+/**
+ * gtk_printer_request_details:
+ * @printer: a #GtkPrinter
+ * 
+ * Requests the printer details. When the details are available,
+ * the "details-acquired" signal will be emitted on @printer.
+ * 
+ * Since: 2.12
+ */
 void
-_gtk_printer_request_details (GtkPrinter *printer)
+gtk_printer_request_details (GtkPrinter *printer)
 {
-  GtkPrintBackendClass *backend_class = GTK_PRINT_BACKEND_GET_CLASS (printer->priv->backend);
+  GtkPrintBackendClass *backend_class;
+
+  g_return_if_fail (GTK_IS_PRINTER (printer));
+
+  backend_class = GTK_PRINT_BACKEND_GET_CLASS (printer->priv->backend);
   backend_class->printer_request_details (printer);
 }
 
@@ -788,7 +813,9 @@ _gtk_printer_create_cairo_surface (GtkPrinter       *printer,
  * gtk_printer_list_papers:
  * @printer:
  * 
- * Lists all the page sizes @printer supports.
+ * Lists all the paper sizes @printer supports.
+ * This will return and empty list unless the printer's details are available, see
+ * gtk_printer_has_details() and gtk_printer_request_details().
  * 
  * Return value: a newly allocated list of newly allocated #GtkPageSetup:s.
  *

@@ -30,12 +30,11 @@
 
 G_BEGIN_DECLS
 
-gboolean             _gtk_printer_has_details               (GtkPrinter          *printer);
-void                 _gtk_printer_request_details           (GtkPrinter          *printer);
 GtkPrinterOptionSet *_gtk_printer_get_options               (GtkPrinter          *printer,
 							     GtkPrintSettings    *settings,
 							     GtkPageSetup        *page_setup,
-							     GtkPrintCapabilities capabilities);gboolean             _gtk_printer_mark_conflicts            (GtkPrinter          *printer,
+							     GtkPrintCapabilities capabilities);
+gboolean             _gtk_printer_mark_conflicts            (GtkPrinter          *printer,
 							     GtkPrinterOptionSet *options);
 void                 _gtk_printer_get_settings_from_options (GtkPrinter          *printer,
 							     GtkPrinterOptionSet *options,

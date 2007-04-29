@@ -1,3 +1,14 @@
+2007-04-29  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtk.symbols:
+	* gtk/gtkprinter-private.h:
+	* gtk/gtkprinter.[hc]: Make gtk_printer_has_details() and
+	gtk_printer_request_details() public.
+
+	* gtk/gtkpagesetupunixdialog.c:
+	* gtk/gtkprintunixdialog.c: Update callers.  (#389203, 
+	Christian Persch)
+
 2007-04-28  Matthias Clasen  <mclasen@redhat.com>
 
 	* configure.in: Add --enable-test-print-backend, defaulting

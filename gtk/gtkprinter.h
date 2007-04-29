@@ -80,9 +80,10 @@ gboolean                 gtk_printer_is_default        (GtkPrinter      *printer
 gboolean                 gtk_printer_accepts_pdf       (GtkPrinter      *printer);
 gboolean                 gtk_printer_accepts_ps        (GtkPrinter      *printer);
 GList                   *gtk_printer_list_papers       (GtkPrinter      *printer);
-
 gint                     gtk_printer_compare           (GtkPrinter *a,
 							GtkPrinter *b);
+gboolean                 gtk_printer_has_details       (GtkPrinter       *printer);
+void                     gtk_printer_request_details   (GtkPrinter       *printer);
 
 typedef gboolean (*GtkPrinterFunc) (GtkPrinter *printer,
 				    gpointer    data);

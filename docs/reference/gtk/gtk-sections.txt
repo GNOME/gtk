@@ -6214,6 +6214,8 @@ gtk_printer_accepts_ps
 gtk_printer_accepts_pdf
 gtk_printer_list_papers
 gtk_printer_compare
+gtk_printer_has_details
+gtk_printer_request_details
 GtkPrinterFunc
 gtk_enumerate_printers
 

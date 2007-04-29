@@ -1245,13 +1245,13 @@ selected_printer_changed (GtkTreeSelection   *selection,
 			  -1);
     }
   
-  if (printer != NULL && !_gtk_printer_has_details (printer))
+  if (printer != NULL && !gtk_printer_has_details (printer))
     {
       gtk_dialog_set_response_sensitive (GTK_DIALOG (dialog), GTK_RESPONSE_OK, FALSE);
       priv->request_details_tag =
 	g_signal_connect (printer, "details-acquired",
 			  G_CALLBACK (printer_details_acquired), dialog);
-      _gtk_printer_request_details (printer);
+      gtk_printer_request_details (printer);
       g_object_unref (printer);
       return;
     }

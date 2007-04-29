@@ -1,3 +1,7 @@
+2007-04-29  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtk-sections.txt: Add gtk_printer_{has,request}_details
+
 2007-04-28  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/tmpl/gtkdnd.sgml: Document GTK_TARGET_OTHER_*
