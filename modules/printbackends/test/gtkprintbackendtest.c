@@ -458,7 +458,7 @@ gtk_print_backend_test_init (GtkPrintBackendTest *backend)
   int i;
 
   /* make 100 of these printers */
-  for (i=0; i<100; i++)
+  for (i = 0; i < 100; i++)
     {
       char *name;
       name = g_strdup_printf ("%s %i", _("Print to Test Printer"), i);
@@ -574,13 +574,13 @@ test_printer_request_details (GtkPrinter *printer)
   gint time;
   /* set the timer to succeed or fail at a random time interval */
   /* weight twords the shorter end */
-  weight = g_random_int_range(0, 100);
+  weight = g_random_int_range (0, 100);
   if (weight < 50)
-    time = g_random_int_range(0, 2);
+    time = g_random_int_range (0, 2);
   else if (weight < 75)
-    time = g_random_int_range(1, 5);
+    time = g_random_int_range (1, 5);
   else
-    time = g_random_int_range(1, 10);
+    time = g_random_int_range (1, 10);
 
   g_message ("Gathering details in %i seconds", time);
 
@@ -589,10 +589,7 @@ test_printer_request_details (GtkPrinter *printer)
   else
     time *= 1000;
 
-  g_timeout_add(time, 
-                (GSourceFunc) test_printer_details_aquired_cb,
-                printer
-               );
+  g_timeout_add (time, (GSourceFunc) test_printer_details_aquired_cb, printer);
 }
 
 
