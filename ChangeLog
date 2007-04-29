@@ -2,6 +2,14 @@
 
 	Merge from trunk:
 
+	* gtk/gtkprintoperation.c (print_pages_idle): Also check
+	the default handler when deciding whether to emit the
+	paginate signal.  (#345345, Yevgen Muntyan)
+
+2007-04-29  Matthias Clasen  <mclasen@redhat.com>
+
+	Merge from trunk:
+
 	* gtk/gtkpagesetupunixdialog.c (gtk_page_setup_unix_dialog_finalize):
 	Free the custom paper list.  (#403267, Felix Riemann)
 
