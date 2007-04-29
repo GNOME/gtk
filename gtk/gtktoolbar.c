@@ -4923,7 +4923,8 @@ _gtk_toolbar_elide_underscores (const gchar *original)
       else
 	{
 	  last_underscore = FALSE;
-	  if (*p != '_' && original + 2 <= p && p + 1 <= end && p[-2] == '(' && p[1] == ')')
+	  if (original + 2 <= p && p + 1 <= end && 
+              p[-2] == '(' && p[-1] == '_' && p[0] != '_' && p[1] == ')')
 	    {
 	      q--;
 	      *q = '\0';
