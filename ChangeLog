@@ -1,5 +1,11 @@
 2007-04-29  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtktoolbar.c (_gtk_toolbar_elide_underscores): 
+	Only strip parentheses of the form (_x).  (#434261,
+	Brian Wellington)
+
+2007-04-29  Matthias Clasen  <mclasen@redhat.com>
+
 	* gtk/gtkprintoperation-unix.c
 	(_gtk_print_operation_platform_backend_launch_preview):
 	Support passing a print settings file to the preview 
