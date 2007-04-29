@@ -965,17 +965,7 @@ real_save_jpeg (GdkPixbuf          *pixbuf,
 
        w = gdk_pixbuf_get_width (pixbuf);
        h = gdk_pixbuf_get_height (pixbuf);
-
-       /* no image data? abort */
        pixels = gdk_pixbuf_get_pixels (pixbuf);
-
-	if (pixels == NULL) {
-		g_set_error (error,
-			     GDK_PIXBUF_ERROR,
-			     GDK_PIXBUF_ERROR_CORRUPT_IMAGE,
-			     _("Image contains no pixels."));
-		return FALSE;
-	}
 
        /* Allocate a small buffer to convert image data,
 	* and a larger buffer if doing to_callback save.
