@@ -461,13 +461,16 @@ gtk_print_backend_test_init (GtkPrintBackendTest *backend)
   for (i = 0; i < 100; i++)
     {
       char *name;
+ 
       name = g_strdup_printf ("%s %i", _("Print to Test Printer"), i);
       printer = g_object_new (GTK_TYPE_PRINTER,
 			      "name", name,
 			      "backend", backend,
 			      "is-virtual", FALSE, /* treat printer like a real one*/
 			      NULL); 
-      g_free(name);
+      g_free (name);
+
+      g_message ("TEST Backend: Adding printer %d\n", i);
 
       gtk_printer_set_has_details (printer, FALSE);
       gtk_printer_set_icon_name (printer, "gtk-delete"); /* use a delete icon just for fun */
@@ -489,13 +492,7 @@ test_printer_get_options (GtkPrinter           *printer,
   GtkPrinterOptionSet *set;
   GtkPrinterOption *option;
   const gchar *n_up[] = { "1" };
-  const gchar *format_names[N_FORMATS] = { N_("PDF"), N_("Postscript") };
-  const gchar *supported_formats[N_FORMATS];
-  gchar *display_format_names[N_FORMATS];
-  gint n_formats = 0;
   OutputFormat format;
-  gchar *uri;
-  gint current_format = 0;
 
   format = format_from_settings (settings);
 
@@ -553,8 +550,8 @@ test_printer_details_aquired_cb (GtkPrinter *printer)
   gboolean success;
   gint weight;
 
-  /* weight twords success */
-  weight = g_random_int_range(0, 100);
+  /* weight towards success */
+  weight = g_random_int_range (0, 100);
 
   success = FALSE;
   if (weight < 75)
@@ -573,7 +570,7 @@ test_printer_request_details (GtkPrinter *printer)
   gint weight;
   gint time;
   /* set the timer to succeed or fail at a random time interval */
-  /* weight twords the shorter end */
+  /* weight towards the shorter end */
   weight = g_random_int_range (0, 100);
   if (weight < 50)
     time = g_random_int_range (0, 2);
