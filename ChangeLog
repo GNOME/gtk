@@ -1,3 +1,11 @@
+2007-04-29  Xan Lopez  <xan@gnome.org>
+
+	* docs/faq/gtk-faq.sgml: Fix typo in FAQ (#373706,
+	Diego Escalante Urrelo).
+
+	I'm fixing gtk-faq.sgml as it seems this is the file
+	we actually use...
+
 2007-04-29  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtktoolbar.c (_gtk_toolbar_elide_underscores): 

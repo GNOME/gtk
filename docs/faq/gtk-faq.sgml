@@ -2815,7 +2815,7 @@ the Label widget, which can be done using:</para>
 GtkTooltips in itself is not a GtkWidget (though a GtkObject)
 and as such is not attempted to match any widget styles.</para>
 
-<para>So, you resource file should look something like:</para>
+<para>So, your resource file should look something like:</para>
 
 <programlisting role="C">
 style "postie"
