@@ -30,6 +30,7 @@
 #include <stdlib.h>       
 #include <fcntl.h>
 
+#include <glib/gstdio.h>
 #include "gtkprintoperation-private.h"
 #include "gtkmarshal.h"
 #include "gtkmessagedialog.h"
@@ -124,14 +125,12 @@ shell_command_substitute_file (const gchar *cmd,
                                gboolean    *settings_filename_replaced)
 {
   const gchar *inptr, *start;
-  gchar *result;
   GString *final;
 
   g_return_val_if_fail (cmd != NULL, NULL);
   g_return_val_if_fail (pdf_filename != NULL, NULL);
   g_return_val_if_fail (settings_filename != NULL, NULL);
 
-  result = NULL;
   final = g_string_new (NULL);
 
   *pdf_filename_replaced = FALSE;
@@ -170,11 +169,7 @@ shell_command_substitute_file (const gchar *cmd,
     }
   g_string_append (final, start);
 
-  result = final->str;
-
-  g_string_free (final, FALSE);
-
-  return result;
+  return g_string_free (final, FALSE);
 }
 
 void
@@ -189,14 +184,15 @@ _gtk_print_operation_platform_backend_launch_preview (GtkPrintOperation *op,
   gchar *preview_cmd;
   GtkSettings *settings;
   GtkPrintSettings *print_settings;
-  gchar *settings_filename;
+  gchar *settings_filename = NULL;
   gchar *quoted_filename;
   gchar *quoted_settings_filename;
-  gboolean filename_used;
-  gboolean settings_used;
+  gboolean filename_used = FALSE;
+  gboolean settings_used = FALSE;
   GdkScreen *screen;
   GError *error = NULL;
   gint fd;
+  gboolean retval;
 
   cairo_surface_destroy (surface);
  
@@ -205,11 +201,15 @@ _gtk_print_operation_platform_backend_launch_preview (GtkPrintOperation *op,
   else
     screen = gdk_screen_get_default ();
 
-  settings_filename = g_build_filename (g_get_tmp_dir (), "settingsXXXXXX.ini", NULL);
-  fd = g_mkstemp (settings_filename);
+  fd = g_file_open_tmp ("settingsXXXXXX.ini", &settings_filename, &error);
+  if (fd < 0) 
+    goto out;
 
   print_settings = gtk_print_operation_get_print_settings (op);
-  if (!gtk_print_settings_to_file (print_settings, settings_filename, &error))
+  retval = gtk_print_settings_to_file (print_settings, settings_filename, &error);
+  close (fd);
+
+  if (!retval)
     goto out;
 
   settings = gtk_settings_get_for_screen (screen);
@@ -233,8 +233,6 @@ _gtk_print_operation_platform_backend_launch_preview (GtkPrintOperation *op,
   g_strfreev (argv);
 
  out:
-  close (fd);
-
   if (error != NULL)
     {
       GtkWidget *edialog;
