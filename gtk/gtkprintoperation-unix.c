@@ -118,20 +118,26 @@ op_unix_free (GtkPrintOperationUnix *op_unix)
 
 static gchar *
 shell_command_substitute_file (const gchar *cmd,
-			       const gchar *filename)
+			       const gchar *pdf_filename,
+			       const gchar *settings_filename,
+                               gboolean    *pdf_filename_replaced,
+                               gboolean    *settings_filename_replaced)
 {
   const gchar *inptr, *start;
   gchar *result;
   GString *final;
 
   g_return_val_if_fail (cmd != NULL, NULL);
-  g_return_val_if_fail (filename != NULL, NULL);
+  g_return_val_if_fail (pdf_filename != NULL, NULL);
+  g_return_val_if_fail (settings_filename != NULL, NULL);
 
   result = NULL;
   final = g_string_new (NULL);
 
-  start = inptr = cmd;
+  *pdf_filename_replaced = FALSE;
+  *settings_filename_replaced = FALSE;
 
+  start = inptr = cmd;
   while ((inptr = strchr (inptr, '%')) != NULL) 
     {
       g_string_append_len (final, start, inptr - start);
@@ -139,7 +145,13 @@ shell_command_substitute_file (const gchar *cmd,
       switch (*inptr) 
         {
           case 'f':
-            g_string_append (final, filename ? filename : "");
+            g_string_append (final, pdf_filename);
+            *pdf_filename_replaced = TRUE;
+            break;
+
+          case 's':
+            g_string_append (final, settings_filename);
+            *settings_filename_replaced = TRUE;
             break;
 
           case '%':
@@ -176,28 +188,51 @@ _gtk_print_operation_platform_backend_launch_preview (GtkPrintOperation *op,
   gchar *cmd;
   gchar *preview_cmd;
   GtkSettings *settings;
+  GtkPrintSettings *print_settings;
+  gchar *settings_filename;
   gchar *quoted_filename;
+  gchar *quoted_settings_filename;
+  gboolean filename_used;
+  gboolean settings_used;
   GdkScreen *screen;
   GError *error = NULL;
+  gint fd;
 
   cairo_surface_destroy (surface);
  
-  settings = gtk_settings_get_default ();
-  g_object_get (settings, "gtk-print-preview-command", &preview_cmd, NULL);
-
-  quoted_filename = g_shell_quote (filename);
-  cmd = shell_command_substitute_file (preview_cmd, quoted_filename);
-  g_shell_parse_argv (cmd, &argc, &argv, &error);
-
-  if (error != NULL)
-    goto out;
-
   if (parent)
     screen = gtk_window_get_screen (parent);
   else
     screen = gdk_screen_get_default ();
-  
+
+  settings_filename = g_build_filename (g_get_tmp_dir (), "settingsXXXXXX.ini", NULL);
+  fd = g_mkstemp (settings_filename);
+
+  print_settings = gtk_print_operation_get_print_settings (op);
+  if (!gtk_print_settings_to_file (print_settings, settings_filename, &error))
+    goto out;
+
+  close (fd);
+
+  settings = gtk_settings_get_for_screen (screen);
+  g_object_get (settings, "gtk-print-preview-command", &preview_cmd, NULL);
+
+  quoted_filename = g_shell_quote (filename);
+  quoted_settings_filename = g_shell_quote (settings_filename);
+  cmd = shell_command_substitute_file (preview_cmd, quoted_filename, quoted_settings_filename, &filename_used, &settings_used);
+  g_shell_parse_argv (cmd, &argc, &argv, &error);
+
+  g_free (preview_cmd);
+  g_free (quoted_filename);
+  g_free (quoted_settings_filename);
+  g_free (cmd);
+
+  if (error != NULL)
+    goto out;
+
   gdk_spawn_on_screen (screen, NULL, argv, NULL, G_SPAWN_SEARCH_PATH, NULL, NULL, NULL, &error);
+
+  g_strfreev (argv);
 
  out:
   if (error != NULL)
@@ -216,13 +251,19 @@ _gtk_print_operation_platform_backend_launch_preview (GtkPrintOperation *op,
 
       gtk_window_present (GTK_WINDOW (edialog));
 
-      g_error_free (error); 
+      g_error_free (error);
+
+      filename_used = FALSE; 
+      settings_used = FALSE;
    } 
 
-  g_free (cmd);
-  g_free (quoted_filename);
-  g_free (preview_cmd);
-  g_strfreev (argv);
+  if (!filename_used)
+    g_unlink (filename);
+
+  if (!settings_used)
+    g_unlink (settings_filename);
+
+  g_free (settings_filename);
 }
 
 static void

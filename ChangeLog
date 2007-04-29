@@ -1,5 +1,15 @@
 2007-04-29  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkprintoperation-unix.c
+	(_gtk_print_operation_platform_backend_launch_preview):
+	Support passing a print settings file to the preview 
+	command.  (#403717, Christian Persch)
+
+	* gtk/gtksettings.c: Document %s in the 
+	gtk-print-preview-command setting.
+
+2007-04-29  Matthias Clasen  <mclasen@redhat.com>
+
 	* gtk/gtkprintoperation.c (print_pages_idle): Also check
 	the default handler when deciding whether to emit the
 	paginate signal.  (#345345, Yevgen Muntyan)

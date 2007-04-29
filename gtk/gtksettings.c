@@ -733,10 +733,13 @@ gtk_settings_class_init (GtkSettingsClass *class)
    *
    * A command to run for displaying the print preview. The command
    * should contain a %f placeholder, which will get replaced by
-   * the path to the pdf file.
+   * the path to the pdf file. The command may also contain a %s
+   * placeholder, which will get replaced by the path to a file
+   * containing the print settings in the format produced by 
+   * gtk_print_settings_to_file().
    *
    * The preview application is responsible for removing the pdf file
-   * when it is done.
+   * and the print settings file when it is done.
    *
    * Since: 2.10
    */
