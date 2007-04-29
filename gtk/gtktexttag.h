@@ -125,8 +125,11 @@ struct _GtkTextTag
   guint editable_set : 1;
   guint language_set : 1;
   guint pg_bg_color_set : 1;
+
+  /* Whether these margins accumulate or override */
+  guint accumulative_margin : 1;
+
   guint pad1 : 1;
-  guint pad2 : 1;
 };
 
 struct _GtkTextTagClass

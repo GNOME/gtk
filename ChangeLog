@@ -1,5 +1,10 @@
 2007-04-28  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtktexttag.[hc]: Add a way to specify accumulative
+	margins.  (#344499, Nate Nielsen)
+
+2007-04-28  Matthias Clasen  <mclasen@redhat.com>
+
 	* gtk/gtkeventbox.c (gtk_event_box_realize): Fix the offsets
 	of the input-only window if we also have a visible window. 
 	(#405089)
