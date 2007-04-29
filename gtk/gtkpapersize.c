@@ -28,6 +28,7 @@
 
 #include "gtkpapersize.h"
 #include "gtkprintutils.h"
+#include "gtkprintoperation.h"  /* for GtkPrintError */
 #include "gtkintl.h"
 #include "gtkalias.h"
 
@@ -757,6 +758,135 @@ gtk_paper_size_get_default_right_margin (GtkPaperSize *size,
 
   margin = _gtk_print_convert_to_mm (0.25, GTK_UNIT_INCH);
   return _gtk_print_convert_from_mm (margin, unit);
+}
+
+/**
+ * gtk_paper_size_new_from_key_file:
+ * @key_file: the #GKeyFile to retrieve the papersize from
+ * @group_name: the name ofthe group in the key file to read,
+ *     or %NULL to read the first group
+ * @error: return location for an error, or %NULL
+ *
+ * Reads a paper size from the group @group_name in the key file
+ * @key_file. Returns a new #GtkPaperSize object with the restored
+ * paper size, or %NULL if an error occurred.
+ *
+ * Since: 2.12
+ */
+GtkPaperSize *
+gtk_paper_size_new_from_key_file (GKeyFile    *key_file,
+				  const gchar *group_name,
+				  GError     **error)
+{
+  GtkPaperSize *paper_size = NULL;
+  char *name = NULL, *ppd_name = NULL, *display_name = NULL, *freeme = NULL;
+  gdouble width, height;
+  gboolean retval = TRUE;
+  GError *err = NULL;
+
+  g_return_val_if_fail (key_file != NULL, NULL);
+
+  if (!group_name)
+    group_name = freeme = g_key_file_get_start_group (key_file);
+  if (!group_name || !g_key_file_has_group (key_file, group_name))
+    {
+      g_set_error (error,
+		   GTK_PRINT_ERROR,
+		   GTK_PRINT_ERROR_INVALID_FILE,
+		   _("Not a valid page setup file"));
+      retval = FALSE;
+      goto out;
+    }
+
+#define GET_DOUBLE(kf, group, name, v) \
+  v = g_key_file_get_double (kf, group, name, &err); \
+  if (err != NULL) \
+    {\
+      g_propagate_error (error, err);\
+      retval = FALSE;\
+      goto out;\
+    }
+
+  GET_DOUBLE (key_file, group_name, "Width", width);
+  GET_DOUBLE (key_file, group_name, "Height", height);
+
+#undef GET_DOUBLE
+
+  name = g_key_file_get_string (key_file, group_name,
+				"Name", NULL);
+  ppd_name = g_key_file_get_string (key_file, group_name,
+				    "PPDName", NULL);
+  display_name = g_key_file_get_string (key_file, group_name,
+					"DisplayName", NULL);
+  /* Fallback for old ~/.gtk-custom-paper entries */
+  if (!display_name)
+    display_name = g_strdup (name);
+
+  if (ppd_name != NULL)
+    paper_size = gtk_paper_size_new_from_ppd (ppd_name, display_name,
+			                      width, height);
+  else if (name != NULL)
+    paper_size = gtk_paper_size_new_custom (name, display_name,
+					    width, height, GTK_UNIT_MM);
+  else
+    {
+      g_set_error (error,
+		   GTK_PRINT_ERROR,
+		   GTK_PRINT_ERROR_INVALID_FILE,
+		   _("Not a valid page setup file"));
+      retval = FALSE;
+      goto out;
+    }
+  g_assert (paper_size != NULL);
+
+out:
+  g_free (ppd_name);
+  g_free (name);
+  g_free (display_name);
+  g_free (freeme);
+
+  return paper_size;
+}
+
+/**
+ * gtk_paper_size_to_key_file:
+ * @paper_size: a #GtkPaperSize
+ * @key_file: the #GKeyFile to save the paper size to
+ * @group_name: the group to add the settings to in @key_file
+ *
+ * This function adds the paper size from @paper_size to @key_file.
+ *
+ * Since: 2.12
+ */
+void
+gtk_paper_size_to_key_file (GtkPaperSize *paper_size,
+			    GKeyFile     *key_file,
+			    const gchar  *group_name)
+{
+  const char *name, *ppd_name, *display_name;
+
+  g_return_if_fail (paper_size != NULL);
+  g_return_if_fail (key_file != NULL);
+
+  name = gtk_paper_size_get_name (paper_size);
+  display_name = gtk_paper_size_get_display_name (paper_size);
+  ppd_name = gtk_paper_size_get_ppd_name (paper_size);
+
+  if (ppd_name != NULL) 
+    g_key_file_set_string (key_file, group_name,
+			   "PPDName", ppd_name);
+  else
+    g_key_file_set_string (key_file, group_name,
+			   "Name", name);
+
+  if (display_name) 
+    g_key_file_set_string (key_file, group_name,
+			   "DisplayName", display_name);
+
+  g_key_file_set_double (key_file, group_name,
+			 "Width", gtk_paper_size_get_width (paper_size, GTK_UNIT_MM));
+  g_key_file_set_double (key_file, group_name,
+			 "Height", gtk_paper_size_get_height (paper_size, GTK_UNIT_MM));
 }
 
 

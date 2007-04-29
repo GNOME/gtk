@@ -22,8 +22,12 @@
 
 #include "gtkpagesetup.h"
 #include "gtkprintutils.h"
+#include "gtkprintoperation.h" /* for GtkPrintError */
+#include "gtkintl.h"
+#include "gtktypebuiltins.h"
 #include "gtkalias.h"
 
+#define KEYFILE_GROUP_NAME "Page Setup"
 
 typedef struct _GtkPageSetupClass GtkPageSetupClass;
 
@@ -467,6 +471,262 @@ gtk_page_setup_get_page_height (GtkPageSetup *setup,
   return _gtk_print_convert_from_mm (height, unit);
 }
 
+
+/**
+ * gtk_page_setup_new_from_file:
+ * @file_name: the filename to read the page setup from
+ * @error: return location for an error, or %NULL
+ * 
+ * Reads the page setup from the file @file_name. Returns a 
+ * new #GtkPageSetup object with the restored page setup, 
+ * or %NULL if an error occurred. See gtk_page_setup_to_file().
+ *
+ * Return value: the restored #GtkPageSetup
+ * 
+ * Since: 2.12
+ */
+GtkPageSetup *
+gtk_page_setup_new_from_file (const gchar  *file_name,
+			      GError      **error)
+{
+  GtkPageSetup *page_setup;
+  GKeyFile *key_file;
+  GError *err = NULL;
+
+  g_return_val_if_fail (file_name != NULL, NULL);
+
+  key_file = g_key_file_new ();
+  if (!g_key_file_load_from_file (key_file, file_name, 0, &err))
+    {
+      g_key_file_free (key_file);
+      g_propagate_error (error, err);
+      return NULL;
+    }
+
+  page_setup = gtk_page_setup_new_from_key_file (key_file, NULL, error);
+  g_key_file_free (key_file);
+
+  return page_setup;
+}
+
+/* something like this should really be in gobject! */
+static guint
+string_to_enum (GType type,
+                const char *enum_string)
+{
+  GEnumClass *enum_class;
+  const GEnumValue *value;
+  guint retval = 0;
+
+  g_return_val_if_fail (enum_string != NULL, 0);
+
+  enum_class = g_type_class_ref (type);
+  value = g_enum_get_value_by_nick (enum_class, enum_string);
+  if (value)
+    retval = value->value;
+
+  g_type_class_unref (enum_class);
+
+  return retval;
+}
+
+/**
+ * gtk_page_setup_new_from_key_file:
+ * @key_file: the #GKeyFile to retrieve the page_setup from
+ * @group_name: the name of the group in the key_file to read, or %NULL
+ *              to use the default name "Page Setup"
+ * @error: return location for an error, or %NULL
+ * 
+ * Reads the page setup from the group @group_name in the key file
+ * @key_file. Returns a new #GtkPageSetup object with the restored
+ * page setup, or %NULL if an error occurred.
+ *
+ * Return value: the restored #GtkPageSetup
+ * 
+ * Since: 2.12
+ */
+GtkPageSetup *
+gtk_page_setup_new_from_key_file (GKeyFile     *key_file,
+			          const gchar  *group_name,
+				  GError      **error)
+{
+  GtkPageSetup *page_setup = NULL;
+  GtkPaperSize *paper_size;
+  gdouble top, bottom, left, right;
+  char *orientation = NULL, *freeme = NULL;
+  gboolean retval = TRUE;
+  GError *err = NULL;
+
+  g_return_val_if_fail (key_file != NULL, NULL);
+
+  if (!group_name)
+    group_name = KEYFILE_GROUP_NAME;
+
+  if (!g_key_file_has_group (key_file, group_name))
+    {
+      g_set_error (error,
+		   GTK_PRINT_ERROR,
+		   GTK_PRINT_ERROR_INVALID_FILE,
+		   _("Not a valid page setup file"));
+      retval = FALSE;
+      goto out;
+    }
+
+#define GET_DOUBLE(kf, group, name, v) \
+  v = g_key_file_get_double (kf, group, name, &err); \
+  if (err != NULL) \
+    { \
+      g_propagate_error (error, err);\
+      retval = FALSE;\
+      goto out;\
+    }
+
+  GET_DOUBLE (key_file, group_name, "MarginTop", top);
+  GET_DOUBLE (key_file, group_name, "MarginBottom", bottom);
+  GET_DOUBLE (key_file, group_name, "MarginLeft", left);
+  GET_DOUBLE (key_file, group_name, "MarginRight", right);
+
+#undef GET_DOUBLE
+
+  paper_size = gtk_paper_size_new_from_key_file (key_file, group_name, &err);
+  if (!paper_size)
+    {
+      g_propagate_error (error, err);
+      goto out;
+    }
+
+  page_setup = gtk_page_setup_new ();
+  gtk_page_setup_set_paper_size (page_setup, paper_size);
+  gtk_paper_size_free (paper_size);
+
+  gtk_page_setup_set_top_margin (page_setup, top, GTK_UNIT_MM);
+  gtk_page_setup_set_bottom_margin (page_setup, bottom, GTK_UNIT_MM);
+  gtk_page_setup_set_left_margin (page_setup, left, GTK_UNIT_MM);
+  gtk_page_setup_set_right_margin (page_setup, right, GTK_UNIT_MM);
+
+  orientation = g_key_file_get_string (key_file, group_name,
+				       "Orientation", NULL);
+  if (orientation)
+    {
+      gtk_page_setup_set_orientation (page_setup,
+				      string_to_enum (GTK_TYPE_PAGE_ORIENTATION,
+						      orientation));
+      g_free (orientation);
+    }
+
+out:
+  g_free (freeme);
+
+  return page_setup;
+}
+
+/**
+ * gtk_page_setup_to_file:
+ * @page_setup: a #GtkPageSetup
+ * @file_name: the file to save to
+ * @error: return location for errors, or %NULL
+ * 
+ * This function saves the print page_setup from @page_setup 
+ * to @file_name.
+ * 
+ * Return value: %TRUE on success
+ *
+ * Since: 2.12
+ */
+gboolean
+gtk_page_setup_to_file (GtkPageSetup  *page_setup,
+		        const char    *file_name,
+			GError       **error)
+{
+  GKeyFile *key_file;
+  gboolean retval = FALSE;
+  char *data = NULL;
+  gsize len;
+
+  g_return_val_if_fail (GTK_IS_PAGE_SETUP (page_setup), FALSE);
+  g_return_val_if_fail (file_name != NULL, FALSE);
+
+  key_file = g_key_file_new ();
+  gtk_page_setup_to_key_file (page_setup, key_file, NULL);
+
+  data = g_key_file_to_data (key_file, &len, error);
+  if (!data)
+    goto out;
+
+  retval = g_file_set_contents (file_name, data, len, error);
+
+out:
+  g_key_file_free (key_file);
+  g_free (data);
+
+  return retval;
+}
+
+/* something like this should really be in gobject! */
+static char *
+enum_to_string (GType type,
+                guint enum_value)
+{
+  GEnumClass *enum_class;
+  GEnumValue *value;
+  char *retval = NULL;
+
+  enum_class = g_type_class_ref (type);
+
+  value = g_enum_get_value (enum_class, enum_value);
+  if (value)
+    retval = g_strdup (value->value_nick);
+
+  g_type_class_unref (enum_class);
+
+  return retval;
+}
+
+/**
+ * gtk_page_setup_to_key_file:
+ * @page_setup: a #GtkPageSetup
+ * @key_file: the #GKeyFile to save the page setup to
+ * @group_name: the group to add the settings to in @key_file, 
+ *      or %NULL to use the default name "Page Setup"
+ * 
+ * This function adds the page setup from @page_setup to @key_file.
+ * 
+ * Since: 2.12
+ */
+void
+gtk_page_setup_to_key_file (GtkPageSetup *page_setup,
+			    GKeyFile     *key_file,
+			    const gchar  *group_name)
+{
+  GtkPaperSize *paper_size;
+  char *orientation;
+
+  g_return_if_fail (GTK_IS_PAGE_SETUP (page_setup));
+  g_return_if_fail (key_file != NULL);
+
+  if (!group_name)
+    group_name = KEYFILE_GROUP_NAME;
+
+  paper_size = gtk_page_setup_get_paper_size (page_setup);
+  g_assert (paper_size != NULL);
+
+  gtk_paper_size_to_key_file (paper_size, key_file, group_name);
+
+  g_key_file_set_double (key_file, group_name,
+			 "MarginTop", gtk_page_setup_get_top_margin (page_setup, GTK_UNIT_MM));
+  g_key_file_set_double (key_file, group_name,
+			 "MarginBottom", gtk_page_setup_get_bottom_margin (page_setup, GTK_UNIT_MM));
+  g_key_file_set_double (key_file, group_name,
+			 "MarginLeft", gtk_page_setup_get_left_margin (page_setup, GTK_UNIT_MM));
+  g_key_file_set_double (key_file, group_name,
+			 "MarginRight", gtk_page_setup_get_right_margin (page_setup, GTK_UNIT_MM));
+
+  orientation = enum_to_string (GTK_TYPE_PAGE_ORIENTATION,
+				gtk_page_setup_get_orientation (page_setup));
+  g_key_file_set_string (key_file, group_name,
+			 "Orientation", orientation);
+  g_free (orientation);
+}
 
 #define __GTK_PAGE_SETUP_C__
 #include "gtkaliasdef.c"

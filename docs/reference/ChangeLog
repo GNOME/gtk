@@ -1,5 +1,10 @@
 2007-04-29  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtk-sections.txt: Add new functions to serialize/
+	deserialize page setups and print settings.
+
+2007-04-29  Matthias Clasen  <mclasen@redhat.com>
+
 	* gtk/gtk-sections.txt: Add gtk_paper_size_get_builtins
 
 2007-04-29  Matthias Clasen  <mclasen@redhat.com>

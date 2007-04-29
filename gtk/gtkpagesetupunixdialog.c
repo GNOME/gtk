@@ -204,51 +204,18 @@ load_custom_papers (GtkListStore *store)
   groups = g_key_file_get_groups (keyfile, &n_groups);
   for (i = 0; i < n_groups; ++i)
     {
-      GError *error = NULL;
-      gdouble w, h, top, bottom, left, right;
-      GtkPaperSize *paper_size;
       GtkPageSetup *page_setup;
-      gchar *name;
       GtkTreeIter iter;
 
-      name = g_key_file_get_value (keyfile, groups[i], "Name", NULL);
-      if (!name)
+      page_setup = gtk_page_setup_new_from_key_file (keyfile, groups[i], NULL);
+      if (!page_setup)
         continue;
-
-#define GET_DOUBLE(kf, name, v) \
-      v = g_key_file_get_double (kf, groups[i], name, &error); \
-      if (error != NULL) \
-        {\
-          g_error_free (error);\
-          continue;\
-        }
-
-      GET_DOUBLE (keyfile, "Width", w);
-      GET_DOUBLE (keyfile, "Height", h);
-      GET_DOUBLE (keyfile, "MarginTop", top);
-      GET_DOUBLE (keyfile, "MarginBottom", bottom);
-      GET_DOUBLE (keyfile, "MarginLeft", left);
-      GET_DOUBLE (keyfile, "MarginRight", right);
-
-#undef GET_DOUBLE
-
-      page_setup = gtk_page_setup_new ();
-      paper_size = gtk_paper_size_new_custom (name, name, w, h, GTK_UNIT_MM);
-      gtk_page_setup_set_paper_size (page_setup, paper_size);
-      gtk_paper_size_free (paper_size);
-
-      gtk_page_setup_set_top_margin (page_setup, top, GTK_UNIT_MM);
-      gtk_page_setup_set_bottom_margin (page_setup, bottom, GTK_UNIT_MM);
-      gtk_page_setup_set_left_margin (page_setup, left, GTK_UNIT_MM);
-      gtk_page_setup_set_right_margin (page_setup, right, GTK_UNIT_MM);
 
       gtk_list_store_append (store, &iter);
       gtk_list_store_set (store, &iter,
 			  0, page_setup, 
 			  -1);
-
       g_object_unref (page_setup);
-      g_free (name);
     }
  
   g_strfreev (groups);
@@ -271,7 +238,6 @@ save_custom_papers (GtkListStore *store)
     {
       do
 	{
-	  GtkPaperSize *paper_size;
 	  GtkPageSetup *page_setup;
 	  gchar group[32];
 
@@ -279,21 +245,7 @@ save_custom_papers (GtkListStore *store)
 
 	  gtk_tree_model_get (model, &iter, 0, &page_setup, -1);
 
-	  paper_size = gtk_page_setup_get_paper_size (page_setup);
-	  g_key_file_set_string (keyfile, group, "Name", gtk_paper_size_get_name (paper_size));
-
-	  g_key_file_set_double (keyfile, group, "Width",
-				 gtk_page_setup_get_paper_width (page_setup, GTK_UNIT_MM));
-	  g_key_file_set_double (keyfile, group, "Height",
-				 gtk_page_setup_get_paper_height (page_setup, GTK_UNIT_MM));
-	  g_key_file_set_double (keyfile, group, "MarginTop",
-				 gtk_page_setup_get_top_margin (page_setup, GTK_UNIT_MM));
-	  g_key_file_set_double (keyfile, group, "MarginBottom",
-				 gtk_page_setup_get_bottom_margin (page_setup, GTK_UNIT_MM));
-	  g_key_file_set_double (keyfile, group, "MarginLeft",
-				 gtk_page_setup_get_left_margin (page_setup, GTK_UNIT_MM));
-	  g_key_file_set_double (keyfile, group, "MarginRight",
-				 gtk_page_setup_get_right_margin (page_setup, GTK_UNIT_MM));
+	  gtk_page_setup_to_key_file (page_setup, keyfile, group);
 	  
 	  ++i;
 	} while (gtk_tree_model_iter_next (model, &iter));

@@ -125,7 +125,8 @@ typedef enum
 {
   GTK_PRINT_ERROR_GENERAL,
   GTK_PRINT_ERROR_INTERNAL_ERROR,
-  GTK_PRINT_ERROR_NOMEM
+  GTK_PRINT_ERROR_NOMEM,
+  GTK_PRINT_ERROR_INVALID_FILE
 } GtkPrintError;
 
 GQuark gtk_print_error_quark (void);

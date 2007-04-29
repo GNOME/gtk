@@ -1,5 +1,21 @@
 2007-04-29  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkprintoperation.h: Add a new error code
+
+	* gtk/gtk.symbols:
+	* gtk/gtkpagesetup.[hc]:
+	* gtk/gtkpapersize.[hc]:
+	* gtk/gtkprintsettings.[hc]: Add functions to serialize 
+	and deserialize page setups and print settings to files 
+	and key files.  (#344515, Christian Persch)
+
+	* gtk/gtkpagesetupunixdialog.c: Adapt to the new functions.
+
+	* tests/print-editor.c: Use the new functions to persist 
+	page setup and print settings.
+
+2007-04-29  Matthias Clasen  <mclasen@redhat.com>
+
 	* gtk/gtkpagesetupunixdialog.c (gtk_page_setup_unix_dialog_finalize):
 	Free the custom paper list.  (#403267, Felix Riemann)
 

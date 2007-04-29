@@ -6332,6 +6332,11 @@ GTK_PRINT_SETTINGS_OUTPUT_URI
 GTK_PRINT_SETTINGS_WIN32_DRIVER_EXTRA
 GTK_PRINT_SETTINGS_WIN32_DRIVER_VERSION
 
+<SUBSECTION Serialization>
+gtk_print_settings_new_from_file
+gtk_print_settings_new_from_key_file
+gtk_print_settings_to_file
+gtk_print_settings_to_key_file
 
 <SUBSECTION Standard>
 GTK_TYPE_PRINT_SETTINGS
@@ -6375,6 +6380,10 @@ gtk_paper_size_get_default_left_margin
 gtk_paper_size_get_default_right_margin
 gtk_paper_size_get_default
 
+<SUBSECTION Serialization>
+gtk_paper_size_new_from_key_file
+gtk_paper_size_to_key_file
+
 <SUBSECTION Standard>
 GTK_TYPE_PAPER_SIZE
 <SUBSECTION Private>
@@ -6405,6 +6414,12 @@ gtk_page_setup_get_paper_width
 gtk_page_setup_get_paper_height
 gtk_page_setup_get_page_width
 gtk_page_setup_get_page_height
+
+<SUBSECTION Serialization>
+gtk_page_setup_new_from_file
+gtk_page_setup_new_from_key_file
+gtk_page_setup_to_file
+gtk_page_setup_to_key_file
 
 <SUBSECTION Standard>
 GTK_TYPE_PAGE_SETUP

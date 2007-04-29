@@ -84,6 +84,13 @@ gdouble gtk_paper_size_get_default_right_margin  (GtkPaperSize *size,
 
 G_CONST_RETURN gchar *gtk_paper_size_get_default (void);
 
+GtkPaperSize *gtk_paper_size_new_from_key_file (GKeyFile    *key_file,
+					        const gchar *group_name,
+					        GError     **error);
+void     gtk_paper_size_to_key_file            (GtkPaperSize *size,
+					        GKeyFile     *key_file,
+					        const gchar  *group_name);
+
 G_END_DECLS
 
 #endif /* __GTK_PAPER_SIZE_H__ */

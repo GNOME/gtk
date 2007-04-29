@@ -45,6 +45,8 @@ struct _GtkPrintSettingsClass
   GObjectClass parent_class;
 };
 
+#define KEYFILE_GROUP_NAME "Print Settings"
+
 G_DEFINE_TYPE (GtkPrintSettings, gtk_print_settings, G_TYPE_OBJECT)
 
 static void
@@ -1499,7 +1501,191 @@ gtk_print_settings_set_output_bin (GtkPrintSettings *settings,
 {
   gtk_print_settings_set (settings, GTK_PRINT_SETTINGS_OUTPUT_BIN, output_bin);
 }
+
+/**
+ * gtk_print_settings_new_from_file:
+ * @file_name: the filename to read the settings from
+ * @error: return location for errors, or %NULL
+ * 
+ * Reads the print settings from @filename. Returns a new #GtkPrintSettings
+ * object with the restored settings, or %NULL if an error occurred.
+ * See gtk_print_settings_to_file().
+ *
+ * Return value: the restored #GtkPrintSettings
+ * 
+ * Since: 2.12
+ */
+GtkPrintSettings *
+gtk_print_settings_new_from_file (const gchar  *file_name,
+			          GError      **error)
+{
+  GtkPrintSettings *settings;
+  GKeyFile *key_file;
+
+  g_return_val_if_fail (file_name != NULL, NULL);
+
+  key_file = g_key_file_new ();
+  if (!g_key_file_load_from_file (key_file, file_name, 0, error))
+    {
+      g_key_file_free (key_file);
+      return NULL;
+    }
+
+  settings = gtk_print_settings_new_from_key_file (key_file, NULL, error);
+  g_key_file_free (key_file);
+
+  return settings;
+}
+
+/**
+ * gtk_print_settings_new_from_key_file:
+ * @key_file: the #GKeyFile to retrieve the settings from
+ * @error: return location for errors, or %NULL
+ * 
+ * Reads the print settings from @key_file. Returns a new #GtkPrintSettings
+ * object with the restored settings, or %NULL if an error occurred.
+ *
+ * Return value: the restored #GtkPrintSettings
+ * 
+ * Since: 2.12
+ */
+GtkPrintSettings *
+gtk_print_settings_new_from_key_file (GKeyFile     *key_file,
+				      const gchar  *group_name,
+				      GError      **error)
+{
+  GtkPrintSettings *settings;
+  gchar **keys;
+  gsize n_keys, i;
+  GError *err = NULL;
+
+  g_return_val_if_fail (key_file != NULL, NULL);
+
+  if (!group_name)
+    group_name = KEYFILE_GROUP_NAME;
+
+  keys = g_key_file_get_keys (key_file,
+			      group_name,
+			      &n_keys,
+			      &err);
+  if (err != NULL)
+    {
+      g_propagate_error (error, err);
+      return NULL;
+    }
    
+  settings = gtk_print_settings_new ();
+
+  for (i = 0 ; i < n_keys; ++i)
+    {
+      gchar *value;
+
+      value = g_key_file_get_string (key_file,
+				     KEYFILE_GROUP_NAME,
+				     keys[i],
+				     NULL);
+      if (!value)
+        continue;
+
+      gtk_print_settings_set (settings, keys[i], value);
+      g_free (value);
+    }
+
+  g_strfreev (keys);
+
+  return settings;
+}
+
+/**
+ * gtk_print_settings_to_file:
+ * @settings: a #GtkPrintSettings
+ * @file_name: the file to save to
+ * @error: return location for errors, or %NULL
+ * 
+ * This function saves the print settings from @settings to @file_name.
+ * 
+ * Return value: %TRUE on success
+ *
+ * Since: 2.12
+ */
+gboolean
+gtk_print_settings_to_file (GtkPrintSettings  *settings,
+			    const gchar       *file_name,
+			    GError           **error)
+{
+  GKeyFile *key_file;
+  gboolean retval = FALSE;
+  char *data = NULL;
+  gsize len;
+  GError *err = NULL;
+
+  g_return_val_if_fail (GTK_IS_PRINT_SETTINGS (settings), FALSE);
+  g_return_val_if_fail (file_name != NULL, FALSE);
+
+  key_file = g_key_file_new ();
+  gtk_print_settings_to_key_file (settings, key_file, NULL);
+
+  data = g_key_file_to_data (key_file, &len, &err);
+  if (!data)
+    goto out;
+
+  retval = g_file_set_contents (file_name, data, len, &err);
+
+out:
+  if (err != NULL)
+    g_propagate_error (error, err);
+
+  g_key_file_free (key_file);
+  g_free (data);
+
+  return retval;
+}
+
+typedef struct {
+  GKeyFile *key_file;
+  const gchar *group_name;
+} SettingsData;
+
+static void
+add_value_to_key_file (const gchar  *key,
+		       const gchar  *value,
+		       SettingsData *data)
+{
+  g_key_file_set_string (data->key_file, data->group_name, key, value);
+}
+
+/**
+ * gtk_print_settings_to_key_file:
+ * @settings: a #GtkPrintSettings
+ * @key_file: the #GKeyFile to save the print settings to
+ * @group_name: the group to add the settings to in @key_file, or 
+ *     %NULL to use the default "Print Settings"
+ *
+ * This function adds the print settings from @settings to @key_file.
+ * 
+ * Since: 2.12
+ */
+void
+gtk_print_settings_to_key_file (GtkPrintSettings  *settings,
+			        GKeyFile          *key_file,
+				const gchar       *group_name)
+{
+  SettingsData data;
+
+  g_return_if_fail (GTK_IS_PRINT_SETTINGS (settings));
+  g_return_if_fail (key_file != NULL);
+
+  if (!group_name)
+    group_name = KEYFILE_GROUP_NAME;
+
+  data.key_file = key_file;
+  data.group_name = group_name;
+
+  gtk_print_settings_foreach (settings,
+			      (GtkPrintSettingsFunc) add_value_to_key_file,
+			      &data);
+}
+
 
 #define __GTK_PRINT_SETTINGS_C__
 #include "gtkaliasdef.c"

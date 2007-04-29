@@ -2512,6 +2512,10 @@ gtk_preview_uninit
 #if IN_FILE(__GTK_PAGE_SETUP_C__)
 gtk_page_setup_get_type G_GNUC_CONST
 gtk_page_setup_new
+gtk_page_setup_new_from_file
+gtk_page_setup_new_from_key_file
+gtk_page_setup_to_file
+gtk_page_setup_to_key_file
 gtk_page_setup_copy
 gtk_page_setup_get_orientation
 gtk_page_setup_set_orientation
@@ -2552,6 +2556,8 @@ gtk_paper_size_get_type G_GNUC_CONST
 gtk_paper_size_new
 gtk_paper_size_new_from_ppd
 gtk_paper_size_new_custom
+gtk_paper_size_new_from_key_file
+gtk_paper_size_to_key_file
 gtk_paper_size_copy
 gtk_paper_size_free
 gtk_paper_size_is_equal
@@ -2772,6 +2778,10 @@ gtk_print_run_page_setup_dialog_async
 #if IN_FILE(__GTK_PRINT_SETTINGS_C__)
 gtk_print_settings_get_type G_GNUC_CONST
 gtk_print_settings_new
+gtk_print_settings_new_from_file
+gtk_print_settings_new_from_key_file
+gtk_print_settings_to_file
+gtk_print_settings_to_key_file
 gtk_print_settings_copy
 gtk_print_settings_has_key
 gtk_print_settings_get

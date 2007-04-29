@@ -46,6 +46,18 @@ GType             gtk_print_settings_get_type (void) G_GNUC_CONST;
 GtkPrintSettings *gtk_print_settings_new      (void);
 
 GtkPrintSettings *gtk_print_settings_copy                    (GtkPrintSettings     *other);
+
+GtkPrintSettings *gtk_print_settings_new_from_file           (const gchar          *file_name,
+							      GError              **error);
+gboolean          gtk_print_settings_to_file                 (GtkPrintSettings     *settings,
+							      const gchar          *file_name,
+							      GError              **error);
+GtkPrintSettings *gtk_print_settings_new_from_key_file       (GKeyFile             *key_file,
+							      const gchar          *group_name,
+							      GError              **error);
+void              gtk_print_settings_to_key_file             (GtkPrintSettings     *settings,
+							      GKeyFile             *key_file,
+							      const gchar          *group_name);
 gboolean          gtk_print_settings_has_key                 (GtkPrintSettings     *settings,
 							      const gchar          *key);
 G_CONST_RETURN gchar *gtk_print_settings_get                (GtkPrintSettings     *settings,

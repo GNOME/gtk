@@ -372,9 +372,6 @@ do_page_setup (GtkAction *action)
 {
   GtkPageSetup *new_page_setup;
 
-  if (settings == NULL)
-    settings = gtk_print_settings_new ();
-  
   new_page_setup = gtk_print_run_page_setup_dialog (GTK_WINDOW (main_window),
 						    page_setup, settings);
 
@@ -830,8 +827,13 @@ create_window (void)
   GtkWidget *sw;
   GtkActionGroup *actions;
   GError *error;
+  GtkWindowGroup *group;
   
   main_window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+
+  group = gtk_window_group_new ();
+  gtk_window_group_add_window (group, GTK_WINDOW (main_window));
+  g_object_unref (group);
 
   gtk_window_set_default_size (GTK_WINDOW (main_window),
 			       400, 600);
@@ -929,8 +931,25 @@ create_window (void)
 int
 main (int argc, char **argv)
 {
+  GError *error = NULL;
+
   g_set_application_name ("Print editor");
   gtk_init (&argc, &argv);
+
+  settings = gtk_print_settings_new_from_file ("print-settings.ini", &error);
+  if (error) {
+    g_print ("Failed to load print settings: %s\n", error->message);
+    g_clear_error (&error);
+
+    settings = gtk_print_settings_new ();
+  }
+  g_assert (settings != NULL);
+
+  page_setup = gtk_page_setup_new_from_file ("page-setup.ini", &error);
+  if (error) {
+    g_print ("Failed to load page setup: %s\n", error->message);
+    g_clear_error (&error);
+  }
 
   create_window ();
 
@@ -938,5 +957,16 @@ main (int argc, char **argv)
     load_file (argv[1]);
   
   gtk_main ();
+
+  if (!gtk_print_settings_to_file (settings, "print-settings.ini", &error)) {
+    g_print ("Failed to save print settings: %s\n", error->message);
+    g_clear_error (&error);
+  }
+  if (page_setup &&
+      !gtk_page_setup_to_file (page_setup, "page-setup.ini", &error)) {
+    g_print ("Failed to save page setup: %s\n", error->message);
+    g_clear_error (&error);
+  }
+
   return 0;
 }
