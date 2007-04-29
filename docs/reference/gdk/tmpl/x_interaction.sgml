@@ -515,6 +515,25 @@ Since: 2.2
 @Returns: 
 
 
+<!-- ##### FUNCTION gdk_x11_display_broadcast_startup_message ##### -->
+<para>
+
+</para>
+
+@display: 
+@message_type: 
+@Varargs: 
+
+
+<!-- ##### FUNCTION gdk_x11_display_get_startup_notification_id ##### -->
+<para>
+
+</para>
+
+@display: 
+@Returns: 
+
+
 <!-- ##### FUNCTION gdk_x11_display_get_xdisplay ##### -->
 <para>
 

@@ -1351,6 +1351,15 @@ or %GDK_META_MASK in the state field of key events.
 @role: 
 
 
+<!-- ##### FUNCTION gdk_window_set_startup_id ##### -->
+<para>
+
+</para>
+
+@window: 
+@startup_id: 
+
+
 <!-- ##### FUNCTION gdk_window_set_group ##### -->
 <para>
 

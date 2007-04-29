@@ -12,6 +12,7 @@ gdk_set_locale
 gdk_set_sm_client_id
 gdk_exit
 gdk_notify_startup_complete
+gdk_notify_startup_complete_with_id
 
 <SUBSECTION>
 gdk_get_program_class
@@ -744,6 +745,7 @@ gdk_window_set_icon
 gdk_window_set_icon_name
 gdk_window_set_transient_for
 gdk_window_set_role
+gdk_window_set_startup_id
 gdk_window_set_group
 gdk_window_get_group
 gdk_window_set_decorations
@@ -1287,6 +1289,8 @@ gdk_x11_colormap_get_xcolormap
 gdk_x11_colormap_get_xdisplay
 gdk_x11_cursor_get_xcursor
 gdk_x11_cursor_get_xdisplay
+gdk_x11_display_broadcast_startup_message
+gdk_x11_display_get_startup_notification_id
 gdk_x11_display_get_xdisplay
 gdk_x11_display_grab
 gdk_x11_display_ungrab

@@ -125,6 +125,14 @@ of g_atexit()).
 
 
 
+<!-- ##### FUNCTION gdk_notify_startup_complete_with_id ##### -->
+<para>
+
+</para>
+
+@startup_id: 
+
+
 <!-- ##### FUNCTION gdk_get_program_class ##### -->
 <para>
 Gets the program class. Unless the program class has explicitly
