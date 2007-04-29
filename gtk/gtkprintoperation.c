@@ -2305,8 +2305,7 @@ gtk_print_operation_get_error (GtkPrintOperation  *op,
  * @error: Return location for errors, or %NULL
  * 
  * Runs the print operation, by first letting the user modify
- * print settings in the print dialog, and then print the
- * document.
+ * print settings in the print dialog, and then print the document.
  *
  * Normally that this function does not return until the rendering of all 
  * pages is complete. You can connect to the ::status-changed signal on
@@ -2354,6 +2353,9 @@ gtk_print_operation_get_error (GtkPrintOperation  *op,
  *  }
  * </programlisting></informalexample>
  *
+ * Note that gtk_print_operation_run() can only be called once on a
+ * given #GtkPrintOperation.
+ *
  * Return value: the result of the print operation. A return value of 
  *   %GTK_PRINT_OPERATION_RESULT_APPLY indicates that the printing was
  *   completed successfully. In this case, it is a good idea to obtain 
@@ -2378,9 +2380,10 @@ gtk_print_operation_run (GtkPrintOperation        *op,
   
   g_return_val_if_fail (GTK_IS_PRINT_OPERATION (op), 
                         GTK_PRINT_OPERATION_RESULT_ERROR);
-
+  g_return_val_if_fail (op->priv->status == GTK_PRINT_STATUS_INITIAL,
+                        GTK_PRINT_OPERATION_RESULT_ERROR);
   priv = op->priv;
-
+  
   run_print_pages = TRUE;
   do_print = FALSE;
   priv->error = NULL;
