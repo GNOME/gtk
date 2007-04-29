@@ -212,8 +212,6 @@ _gtk_print_operation_platform_backend_launch_preview (GtkPrintOperation *op,
   if (!gtk_print_settings_to_file (print_settings, settings_filename, &error))
     goto out;
 
-  close (fd);
-
   settings = gtk_settings_get_for_screen (screen);
   g_object_get (settings, "gtk-print-preview-command", &preview_cmd, NULL);
 
@@ -235,6 +233,8 @@ _gtk_print_operation_platform_backend_launch_preview (GtkPrintOperation *op,
   g_strfreev (argv);
 
  out:
+  close (fd);
+
   if (error != NULL)
     {
       GtkWidget *edialog;
@@ -245,7 +245,6 @@ _gtk_print_operation_platform_backend_launch_preview (GtkPrintOperation *op,
                                         _("Error launching preview") /* FIXME better text */);
       gtk_message_dialog_format_secondary_text (GTK_MESSAGE_DIALOG (edialog),
                                                 "%s", error->message);
-      gtk_window_set_modal (GTK_WINDOW (edialog), TRUE);
       g_signal_connect (edialog, "response",
                         G_CALLBACK (gtk_widget_destroy), NULL);
 

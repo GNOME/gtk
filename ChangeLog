@@ -1,3 +1,10 @@
+2007-04-29  Mattthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtkprintoperation-unix.c 
+	(_gtk_print_operation_platform_backend_launch_preview):
+	Don't leak a file descriptor, and don't make the error
+	dialog modal.  (#421985, Morten Welinder)
+
 2007-04-29  Xan Lopez  <xan@gnome.org>
 
 	* docs/faq/gtk-faq.sgml: Fix typo in FAQ (#373706,
