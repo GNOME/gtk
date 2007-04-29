@@ -1295,6 +1295,24 @@ if test "x$gdktarget" = "xx11"; then
     GTK_PACKAGES_FOR_X="$GTK_PACKAGES_FOR_X xfixes"
   fi
 
+  # Checks for Xcomposite extension
+
+  if $PKG_CONFIG --exists xcomposite ; then
+    AC_DEFINE(HAVE_XCOMPOSITE, 1, Have the XCOMPOSITE X extension)
+
+    X_PACKAGES="$X_PACKAGES xcomposite"
+    GTK_PACKAGES_FOR_X="$GTK_PACKAGES_FOR_X xcomposite"
+  fi
+
+  # Checks for Xdamage extension
+
+  if $PKG_CONFIG --exists xdamage ; then
+    AC_DEFINE(HAVE_XDAMAGE, 1, Have the XDAMAGE X extension)
+
+    X_PACKAGES="$X_PACKAGES xdamage"
+    GTK_PACKAGES_FOR_X="$GTK_PACKAGES_FOR_X xdamage"
+  fi
+
   if $have_base_x_pc ; then
     GDK_EXTRA_LIBS="$x_extra_libs"
   else
@@ -1724,6 +1742,7 @@ modules/printbackends/Makefile
 modules/printbackends/cups/Makefile
 modules/printbackends/lpr/Makefile
 modules/printbackends/file/Makefile
+modules/printbackends/test/Makefile
 perf/Makefile
 contrib/Makefile
 contrib/gdk-pixbuf-xlib/Makefile

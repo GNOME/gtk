@@ -1,6 +1,6 @@
 /* GTK - The GIMP Toolkit
  * gtkcupsutils.h: Statemachine implementation of POST and GET 
- * cup calls which can be used to create a non-blocking cups API
+ * cups calls which can be used to create a non-blocking cups API
  * Copyright (C) 2006, 2007 Red Hat, Inc.
  *
  * This library is free software; you can redistribute it and/or

@@ -1,5 +1,15 @@
 2007-04-28  Matthias Clasen  <mclasen@redhat.com>
 
+	* modules/printbackends/lpr/*:
+	* modules/printbackends/cups/*: Correct some copyright lines.
+
+	* configure.in:
+	* modules/printbackends/Makefile.am:
+	* modules/printbackends/test/*: Add a test print backend.
+	(#409089, John Palmieri)
+
+2007-04-28  Matthias Clasen  <mclasen@redhat.com>
+
 	* gtk/gtktexttag.[hc]: Add a way to specify accumulative
 	margins.  (#344499, Nate Nielsen)
 
