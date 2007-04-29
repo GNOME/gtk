@@ -1696,9 +1696,6 @@ dialog_get_page_ranges (GtkPrintUnixDialog *dialog,
 
   *n_ranges_out = i;
   
-  for (i = 0; i < *n_ranges_out; i++)
-    g_print ("[%d, %d]\n", ranges[i].start, ranges[i].end);
-
   return ranges;
 }
 
