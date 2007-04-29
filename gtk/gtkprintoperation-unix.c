@@ -212,7 +212,12 @@ _gtk_print_operation_platform_backend_launch_preview (GtkPrintOperation *op,
 
   cairo_surface_destroy (surface);
  
-  settings = gtk_settings_get_default ();
+  if (parent)
+    screen = gtk_window_get_screen (parent);
+  else
+    screen = gdk_screen_get_default ();
+  
+  settings = gtk_settings_get_for_screen (screen);
   g_object_get (settings, "gtk-print-preview-command", &preview_cmd, NULL);
 
   quoted_filename = g_shell_quote (filename);
@@ -222,11 +227,6 @@ _gtk_print_operation_platform_backend_launch_preview (GtkPrintOperation *op,
   if (error != NULL)
     goto out;
 
-  if (parent)
-    screen = gtk_window_get_screen (parent);
-  else
-    screen = gdk_screen_get_default ();
-  
   gdk_spawn_on_screen (screen, NULL, argv, NULL, G_SPAWN_SEARCH_PATH, NULL, NULL, NULL, &error);
 
  out:
@@ -240,13 +240,14 @@ _gtk_print_operation_platform_backend_launch_preview (GtkPrintOperation *op,
                                         _("Error launching preview") /* FIXME better text */);
       gtk_message_dialog_format_secondary_text (GTK_MESSAGE_DIALOG (edialog),
                                                 "%s", error->message);
-      gtk_window_set_modal (GTK_WINDOW (edialog), TRUE);
       g_signal_connect (edialog, "response",
                         G_CALLBACK (gtk_widget_destroy), NULL);
 
       gtk_window_present (GTK_WINDOW (edialog));
 
       g_error_free (error); 
+
+      g_unlink (filename);
    } 
 
   g_free (cmd);

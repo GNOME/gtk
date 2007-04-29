@@ -1,5 +1,13 @@
 2007-04-29  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkprintoperation-unix.c 
+	(_gtk_print_operatin_platform_launch_preview): Unlink the
+	file if launching the preview failed, use the settings from
+	the correct screen, and don't make the error dialog modal.
+	(#421985, Morten Welinder)
+
+2007-04-29  Matthias Clasen  <mclasen@redhat.com>
+
 	Merge from trunk:
 
 	* gtk/gtktoolbar.c (_gtk_toolbar_elide_underscores):
