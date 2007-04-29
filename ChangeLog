@@ -1,5 +1,10 @@
 2007-04-29  Matthias Clasen  <mclasen@redhat.com>
 
+	* modules/printbackends/cups/gtkprintbackendcups.c: Fix a
+	typo. String change !  (#406160, Stephane Raimbault)
+
+2007-04-29  Matthias Clasen  <mclasen@redhat.com>
+
 	* gtk/gtk.symbols:
 	* gtk/gtkpapersize.[hc]: Add a function to list the
 	builtin paper sizes.  (#382355, Christian Persch)

@@ -2256,7 +2256,7 @@ cups_printer_get_options (GtkPrinter           *printer,
         {
           gchar *custom_name;
 
-	  custom_name = g_strdup_printf (_("Custom.%2fx%.2f"),
+	  custom_name = g_strdup_printf (_("Custom %.2fx%.2f"),
 					 gtk_paper_size_get_width (paper_size, GTK_UNIT_POINTS),
 					 gtk_paper_size_get_height (paper_size, GTK_UNIT_POINTS));
           strncpy (option->defchoice, custom_name, PPD_MAX_NAME);
