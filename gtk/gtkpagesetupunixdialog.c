@@ -386,6 +386,12 @@ gtk_page_setup_unix_dialog_finalize (GObject *object)
       priv->page_setup_list = NULL;
     }
 
+  if (priv->custom_paper_list)
+    {
+      g_object_unref (priv->custom_paper_list);
+      priv->custom_paper_list = NULL;
+    }
+
   if (priv->print_settings)
     {
       g_object_unref (priv->print_settings);
