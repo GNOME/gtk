@@ -475,6 +475,7 @@ gtk_print_job_get_surface (GtkPrintJob  *job,
 			 &tmp_error);
   if (fd == -1)
     {
+      g_free (filename);
       g_propagate_error (error, tmp_error);
       return NULL;
     }
@@ -486,6 +487,7 @@ gtk_print_job_get_surface (GtkPrintJob  *job,
   if (!(gtk_debug_flags & GTK_DEBUG_PRINTING))
 #endif /* G_ENABLE_DEBUG */
   unlink (filename);
+  g_free (filename);
 
   paper_size = gtk_page_setup_get_paper_size (priv->page_setup);
   width = gtk_paper_size_get_width (paper_size, GTK_UNIT_POINTS);

@@ -1,5 +1,10 @@
 2007-04-29  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkprintjob.c (gtk_print_job_get_surface): Fix a 
+	small memory leak.  (#403251, Felix Riemann)
+
+2007-04-29  Matthias Clasen  <mclasen@redhat.com>
+
 	* modules/printbackends/cups/gtkprintbackendcups.c: Fix a
 	typo. String change !  (#406160, Stephane Raimbault)
 
