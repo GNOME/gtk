@@ -1,3 +1,10 @@
+2007-04-29  Dan Winship  <danw@novell.com>
+
+	* gdk/x11/gdkdisplay-x11.c
+	(gdk_x11_display_broadcast_startup_message): New method to
+	marshall and send a Startup Notification message. (from #415070)
+	(gdk_notify_startup_complete_with_id): Use that
+
 2007-04-29  Mattthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtkprintoperation-unix.c 

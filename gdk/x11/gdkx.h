@@ -148,6 +148,10 @@ void          gdk_x11_display_set_cursor_theme (GdkDisplay  *display,
 						const gchar *theme,
 						const gint   size);
 
+void gdk_x11_display_broadcast_startup_message (GdkDisplay *display,
+						const char *message_type,
+						...) G_GNUC_NULL_TERMINATED;
+
 /* returns TRUE if we support the given WM spec feature */
 gboolean gdk_x11_screen_supports_net_wm_hint (GdkScreen *screen,
 					      GdkAtom    property);
