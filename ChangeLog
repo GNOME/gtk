@@ -1,5 +1,13 @@
 2007-04-28  Matthias Clasen  <mclasen@redhat.com>
 
+	* configure.in: Add --enable-test-print-backend, defaulting
+	to no.
+
+	* modules/printbackends/Makefile.am: Make building the test
+	print backend conditional.
+
+2007-04-28  Matthias Clasen  <mclasen@redhat.com>
+
 	* modules/printbackends/lpr/*:
 	* modules/printbackends/cups/*: Correct some copyright lines.
 
