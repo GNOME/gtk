@@ -431,6 +431,33 @@ gtk_paper_size_is_equal (GtkPaperSize *size1,
 }
 
 /**
+ * gtk_paper_size_get_builtins:
+ *
+ * Creates a list of builtin paper sizes.
+ * 
+ * Return value: a newly allocated list of newly 
+ *    allocated #GtkPaperSize objects
+ *
+ * Since: 2.12
+ */
+GList *
+gtk_paper_size_get_builtins (void)
+{
+  GList *list = NULL;
+  guint i;
+
+  for (i = 0; i < G_N_ELEMENTS (standard_names_offsets); ++i)
+    {
+       GtkPaperSize *size;
+
+       size = gtk_paper_size_new_from_info (&standard_names_offsets[i]);
+       list = g_list_prepend (list, size);
+    }
+
+  return list;
+}
+
+/**
  * gtk_paper_size_get_name:
  * @size: a #GtkPaperSize object
  * 

@@ -1,5 +1,9 @@
 2007-04-29  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtk-sections.txt: Add gtk_paper_size_get_builtins
+
+2007-04-29  Matthias Clasen  <mclasen@redhat.com>
+
 	* gtk/gtk-sections.txt: Add gtk_printer_{has,request}_details
 
 2007-04-28  Matthias Clasen  <mclasen@redhat.com>
