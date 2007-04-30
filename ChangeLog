@@ -1,5 +1,10 @@
 2007-04-30  Tor Lillqvist  <tml@novell.com>
 
+	* gtk/gtkpapersize.c (gtk_paper_size_get_paper_sizes):
+	_gtk_load_custom_papers() exists only on Unix.
+
+2007-04-30  Tor Lillqvist  <tml@novell.com>
+
 	Add functionality to set overall opacity of a top-level
 	window. (#405316)
 
