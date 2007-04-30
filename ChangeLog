@@ -1,3 +1,8 @@
+2007-04-30  Richard Hult  <richard@imendio.com>
+
+	* gdk/quartz/gdkwindow-quartz.c: (gdk_window_set_opacity):
+	Implement.
+
 2007-04-30  Matthias Clasen  <mclasen@redhat.com>
 
 	* modules/printbackends/cups/gtkprintbackendcups.c: Get all

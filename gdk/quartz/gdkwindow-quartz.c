@@ -29,6 +29,9 @@ static gpointer parent_class;
 static GSList *update_windows = NULL;
 static guint update_idle = 0;
 
+#define WINDOW_IS_TOPLEVEL(window)		   \
+  (GDK_WINDOW_TYPE (window) != GDK_WINDOW_CHILD && \
+   GDK_WINDOW_TYPE (window) != GDK_WINDOW_FOREIGN)
 
 NSView *
 gdk_quartz_window_get_nsview (GdkWindow *window)
@@ -2023,4 +2026,25 @@ void
 gdk_window_beep (GdkWindow *window)
 {
   gdk_display_beep (_gdk_display);
+}
+
+void
+gdk_window_set_opacity (GdkWindow *window,
+			gdouble    opacity)
+{
+  GdkWindowObject *private = (GdkWindowObject *) window;
+  GdkWindowImplQuartz *impl = GDK_WINDOW_IMPL_QUARTZ (private->impl);
+
+  g_return_if_fail (GDK_IS_WINDOW (window));
+  g_return_if_fail (WINDOW_IS_TOPLEVEL (window));
+
+  if (GDK_WINDOW_DESTROYED (window))
+    return;
+
+  if (opacity < 0)
+    opacity = 0;
+  else if (opacity > 1)
+    opacity = 1;
+
+  [impl->toplevel setAlphaValue: opacity];
 }
