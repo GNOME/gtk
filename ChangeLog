@@ -1,3 +1,7 @@
+2007-04-30  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtktextview.c: Allow indents to be negative.  (#Bug 434308)
+
 2007-04-30  Michael Natterer  <mitch@imendio.com>
 
 	* gtk/gtkmenushell.c (gtk_menu_shell_enter_notify): pop up the

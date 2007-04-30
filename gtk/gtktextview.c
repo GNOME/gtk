@@ -603,7 +603,7 @@ gtk_text_view_class_init (GtkTextViewClass *klass)
                                    g_param_spec_int ("indent",
 						     P_("Indent"),
 						     P_("Amount to indent the paragraph, in pixels"),
-						     0,
+						     G_MININT,
 						     G_MAXINT,
 						     0,
 						     GTK_PARAM_READWRITE));
