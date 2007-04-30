@@ -1,4 +1,10 @@
 2007-04-30  Matthias Clasen <mclasen@redhat.com>
+	
+	* gtk/gtkprintoperation.c: Translate the default job
+	name, and don't utf8-validate the job name in the
+	setter.  (#421993, Morten Welinder)
+
+2007-04-30  Matthias Clasen <mclasen@redhat.com>
 
 	* gtk/gtkprintjob.c (gtk_print_job_get_surface): Use
 	g_unlink.  (#421990, Morten Welinder)
