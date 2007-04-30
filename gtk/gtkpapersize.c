@@ -433,10 +433,14 @@ gtk_paper_size_is_equal (GtkPaperSize *size1,
 		 gtk_paper_size_get_name (size2)) == 0;
 }
 
+GList * _gtk_load_custom_papers (void);
+
 /**
- * gtk_paper_size_get_builtins:
+ * gtk_paper_size_get_paper_sizes:
+ * @include_custom: whether to include custom paper sizes
+ *     as defined in the page setup dialog
  *
- * Creates a list of builtin paper sizes.
+ * Creates a list of known paper sizes.
  * 
  * Return value: a newly allocated list of newly 
  *    allocated #GtkPaperSize objects
@@ -444,10 +448,13 @@ gtk_paper_size_is_equal (GtkPaperSize *size1,
  * Since: 2.12
  */
 GList *
-gtk_paper_size_get_builtins (void)
+gtk_paper_size_get_paper_sizes (gboolean include_custom)
 {
   GList *list = NULL;
   guint i;
+
+  if (include_custom) 
+    list = _gtk_load_custom_papers ();
 
   for (i = 0; i < G_N_ELEMENTS (standard_names_offsets); ++i)
     {
@@ -457,8 +464,9 @@ gtk_paper_size_get_builtins (void)
        list = g_list_prepend (list, size);
     }
 
-  return list;
+  return g_list_reverse (list);
 }
+
 
 /**
  * gtk_paper_size_get_name:

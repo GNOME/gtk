@@ -6366,7 +6366,7 @@ gtk_paper_size_new_custom
 gtk_paper_size_copy
 gtk_paper_size_free
 gtk_paper_size_is_equal
-gtk_paper_size_get_builtins
+gtk_paper_size_get_paper_sizes
 gtk_paper_size_get_name
 gtk_paper_size_get_display_name
 gtk_paper_size_get_ppd_name

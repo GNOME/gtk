@@ -1,4 +1,18 @@
 2007-04-30  Matthias Clasen <mclasen@redhat.com>
+
+	* gtk/gtk.symbols:
+	* gtk/gtkpapersize.[hc]: Rename gtk_paper_size_get_builtins()
+	to gtk_paper_size_get_paper_sizes() and optionally include
+	custom paper sizes.
+
+	* gtk/gtkpagesetupunixdialog.c: Internally export a function
+	to load custom paper sizes.
+
+	* modules/printbackends/file/gtkprintbackendfile.c: Implement
+	printer_list_papers, returning all paper sizes.  (#434329,
+	Christian Persch)
+
+2007-04-30  Matthias Clasen <mclasen@redhat.com>
 	
 	* gtk/gtkprintoperation.c: Translate the default job
 	name, and don't utf8-validate the job name in the

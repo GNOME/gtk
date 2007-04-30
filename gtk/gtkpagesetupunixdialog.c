@@ -181,14 +181,15 @@ custom_paper_get_filename (void)
   return filename;
 }
 
-static void
-load_custom_papers (GtkListStore *store)
+GList *
+_gtk_load_custom_papers (void)
 {
   GKeyFile *keyfile;
   gchar *filename;
   gchar **groups;
   gsize n_groups, i;
   gboolean load_ok;
+  GList *result = NULL;
 
   filename = custom_paper_get_filename ();
 
@@ -198,7 +199,7 @@ load_custom_papers (GtkListStore *store)
   if (!load_ok)
     {
       g_key_file_free (keyfile);
-      return;
+      return NULL;
     }
 
   groups = g_key_file_get_groups (keyfile, &n_groups);
@@ -211,15 +212,34 @@ load_custom_papers (GtkListStore *store)
       if (!page_setup)
         continue;
 
+      result = g_list_prepend (result, page_setup);
+    }
+ 
+  g_strfreev (groups);
+  g_key_file_free (keyfile);
+
+  return g_list_reverse (result);
+}
+
+static void
+load_custom_papers (GtkListStore *store)
+{
+  GtkTreeIter iter;
+  GList *papers, *p;
+  GtkPageSetup *page_setup;
+  
+  papers = _gtk_load_custom_papers ();
+  for (p = papers; p; p = p->next)
+    {
+      page_setup = p->data;
       gtk_list_store_append (store, &iter);
       gtk_list_store_set (store, &iter,
 			  0, page_setup, 
 			  -1);
       g_object_unref (page_setup);
     }
- 
-  g_strfreev (groups);
-  g_key_file_free (keyfile);
+
+  g_list_free (papers); 
 }
 
 static void

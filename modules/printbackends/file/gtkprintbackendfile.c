@@ -103,6 +103,8 @@ static cairo_surface_t *    file_printer_create_cairo_surface      (GtkPrinter  
 								    gdouble                  height,
 								    GIOChannel              *cache_io);
 
+static GList *              file_printer_list_papers               (GtkPrinter              *printer);
+
 static void
 gtk_print_backend_file_register_type (GTypeModule *module)
 {
@@ -179,6 +181,7 @@ gtk_print_backend_file_class_init (GtkPrintBackendFileClass *class)
   backend_class->printer_get_options = file_printer_get_options;
   backend_class->printer_get_settings_from_options = file_printer_get_settings_from_options;
   backend_class->printer_prepare_for_print = file_printer_prepare_for_print;
+  backend_class->printer_list_papers = file_printer_list_papers;
 }
 
 /* return N_FORMATS if no explicit format in the settings */
@@ -599,4 +602,28 @@ file_printer_prepare_for_print (GtkPrinter       *printer,
 
   print_job->page_set = gtk_print_settings_get_page_set (settings);
   print_job->rotate_to_orientation = TRUE;
+}
+
+static GList *
+file_printer_list_papers (GtkPrinter *printer)
+{
+  GList *result = NULL;
+  GList *papers, *p;
+  GtkPageSetup *page_setup;
+
+  papers = gtk_paper_size_get_paper_sizes (TRUE);
+
+  for (p = papers; p; p = p->next)
+    {
+      GtkPaperSize *paper_size = p->data;
+
+      page_setup = gtk_page_setup_new ();
+      gtk_page_setup_set_paper_size (page_setup, paper_size);
+      gtk_paper_size_free (paper_size);
+      result = g_list_prepend (result, page_setup);
+    }
+
+  g_list_free (papers);
+
+  return g_list_reverse (result);
 }
