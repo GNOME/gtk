@@ -1,5 +1,11 @@
 2007-04-30  Matthias Clasen  <mclasen@redhat.com>
 
+	* modules/printbackends/cups/gtkprintbackendcups.c: Get all
+	the printer attributes when getting the list of printers,
+	not via separate requests.  (#387889, Krishan Purahoo)
+
+2007-04-30  Matthias Clasen  <mclasen@redhat.com>
+
 	Some more compiler warning fixes.
 
 	* gdk/directfb/gdkscreen-directfb.c (gdk_screen_is_composited):
