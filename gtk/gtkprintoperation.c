@@ -507,7 +507,8 @@ gtk_print_operation_create_custom_widget (GtkPrintOperation *operation)
 }
 
 static void
-gtk_print_operation_done (GtkPrintOperation *operation)
+gtk_print_operation_done (GtkPrintOperation       *operation,
+                          GtkPrintOperationResult  result)
 {
   GtkPrintOperationPrivate *priv = operation->priv;
 
