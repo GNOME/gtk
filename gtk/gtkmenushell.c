@@ -810,17 +810,25 @@ gtk_menu_shell_enter_notify (GtkWidget        *widget,
                * entering a menu item where we wouldn't want to show
                * its submenu.
                */
-              if ((event->state & (GDK_BUTTON1_MASK | GDK_BUTTON2_MASK | GDK_BUTTON2_MASK)) &&
-                  GTK_MENU_ITEM (menu_item)->submenu != NULL &&
-                  !GTK_WIDGET_VISIBLE (GTK_MENU_ITEM (menu_item)->submenu))
+              if ((event->state & (GDK_BUTTON1_MASK | GDK_BUTTON2_MASK | GDK_BUTTON3_MASK)) &&
+                  GTK_MENU_ITEM (menu_item)->submenu != NULL)
                 {
                   GtkMenuShellPrivate *priv;
 
                   priv = GTK_MENU_SHELL_GET_PRIVATE (menu_item->parent);
-
-                  _gtk_menu_item_popup_submenu (menu_item, TRUE);
-
                   priv->activated_submenu = TRUE;
+
+                  if (!GTK_WIDGET_VISIBLE (GTK_MENU_ITEM (menu_item)->submenu))
+                    {
+                      gboolean touchscreen_mode;
+
+                      g_object_get (gtk_widget_get_settings (widget),
+                                    "gtk-touchscreen-mode", &touchscreen_mode,
+                                    NULL);
+
+                      if (touchscreen_mode)
+                        _gtk_menu_item_popup_submenu (menu_item, TRUE);
+                    }
                 }
 	    }
 	}

@@ -1,5 +1,12 @@
 2007-04-30  Michael Natterer  <mitch@imendio.com>
 
+	* gtk/gtkmenushell.c (gtk_menu_shell_enter_notify): pop up the
+	submenu explicitely only in touchscreen mode since otherwise
+	selecting the item already pops up the submenu. Restores the
+	drag-selection timeout (spotted by Søren Sandmann, #128968).
+
+2007-04-30  Michael Natterer  <mitch@imendio.com>
+
 	* gtk/gtkpapersize.h: really rename gtk_paper_size_get_builtins()
 	to gtk_paper_size_get_paper_sizes().
 
