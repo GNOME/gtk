@@ -844,11 +844,31 @@ _gtk_printer_get_hard_margins (GtkPrinter *printer,
   backend_class->printer_get_hard_margins (printer, top, bottom, left, right);
 }
 
+/**
+ * gtk_printer_get_capabilities:
+ * @printer: a #GtkPrinter
+ * 
+ * Returns the printer's capabilities.
+ *
+ * This is useful when you're using #GtkPrintUnixDialog's manual-capabilities setting
+ * and need to know which settings the printer can handle and which you must
+ * handle yourself.
+ *
+ * This will return 0 unless the printer's details are available, see
+ * gtk_printer_has_details() and gtk_printer_request_details().
+ *  *
+ * Return value: the printer's capabilities
+ *
+ * Since: 2.12
+ */
 GtkPrintCapabilities
-_gtk_printer_get_capabilities (GtkPrinter *printer)
+gtk_printer_get_capabilities (GtkPrinter *printer)
 {
-  GtkPrintBackendClass *backend_class = GTK_PRINT_BACKEND_GET_CLASS (printer->priv->backend);
+  GtkPrintBackendClass *backend_class;
 
+  g_return_val_if_fail (GTK_IS_PRINTER (printer), 0);
+
+  backend_class = GTK_PRINT_BACKEND_GET_CLASS (printer->priv->backend);
   return backend_class->printer_get_capabilities (printer);
 }
 
@@ -1048,6 +1068,31 @@ gtk_enumerate_printers (GtkPrinterFunc func,
       g_main_loop_run (printer_list->loop);
       GDK_THREADS_ENTER ();  
     }
+}
+
+GType
+gtk_print_capabilities_get_type (void)
+{
+  static GType etype = 0;
+
+  if (G_UNLIKELY (etype == 0))
+    {
+      static const GFlagsValue values[] = {
+        { GTK_PRINT_CAPABILITY_PAGE_SET, "GTK_PRINT_CAPABILITY_PAGE_SET", "page-set" },
+        { GTK_PRINT_CAPABILITY_COPIES, "GTK_PRINT_CAPABILITY_COPIES", "copies" },
+        { GTK_PRINT_CAPABILITY_COLLATE, "GTK_PRINT_CAPABILITY_COLLATE", "collate" },
+        { GTK_PRINT_CAPABILITY_REVERSE, "GTK_PRINT_CAPABILITY_REVERSE", "reverse" },
+        { GTK_PRINT_CAPABILITY_SCALE, "GTK_PRINT_CAPABILITY_SCALE", "scale" },
+        { GTK_PRINT_CAPABILITY_GENERATE_PDF, "GTK_PRINT_CAPABILITY_GENERATE_PDF", "generate-pdf" },
+        { GTK_PRINT_CAPABILITY_GENERATE_PS, "GTK_PRINT_CAPABILITY_GENERATE_PS", "generate-ps" },
+        { GTK_PRINT_CAPABILITY_PREVIEW, "GTK_PRINT_CAPABILITY_PREVIEW", "preview" },
+        { 0, NULL, NULL }
+      };
+
+      etype = g_flags_register_static (I_("GtkPrintCapabilities"), values);
+    }
+
+  return etype;
 }
 
 

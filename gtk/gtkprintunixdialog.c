@@ -1283,7 +1283,7 @@ selected_printer_changed (GtkTreeSelection   *selection,
 
   if (printer != NULL)
     {
-      priv->printer_capabilities = _gtk_printer_get_capabilities (printer);
+      priv->printer_capabilities = gtk_printer_get_capabilities (printer);
       priv->options = _gtk_printer_get_options (printer, 
 						priv->initial_settings,
 						priv->page_setup,

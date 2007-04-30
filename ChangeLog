@@ -1,3 +1,15 @@
+2007-04-30  Christian Persch  <chpe@gnome.org>
+
+	* docs/reference/gtk/gtk-sections.txt:
+	* gtk/gtk.symbols:
+	* gtk/gtkprinter-private.h:
+	* gtk/gtkprinter.c: (gtk_printer_get_capabilities),
+	(gtk_print_capabilities_get_type):
+	* gtk/gtkprinter.h:
+	* gtk/gtkprintunixdialog.c: (selected_printer_changed):
+	Make gtk_printer_get_capabilities public, and move the
+	GtkPrintCapabilities definition to gtkprinter.h. Bug #390437.
+
 2007-04-30  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtkexpander.c (gtk_expander_realize): A NO_WINDOW widget

@@ -33,6 +33,21 @@ G_BEGIN_DECLS
 #define GTK_IS_PRINTER_CLASS(klass)       (G_TYPE_CHECK_CLASS_TYPE ((klass), GTK_TYPE_PRINTER))
 #define GTK_PRINTER_GET_CLASS(obj)        (G_TYPE_INSTANCE_GET_CLASS ((obj), GTK_TYPE_PRINTER, GtkPrinterClass))
 
+/* Note, this type is manually registered with GObject in gtkprinter.c
+ * If you add any flags, update the registration as well!
+ */
+typedef enum
+{
+  GTK_PRINT_CAPABILITY_PAGE_SET     = 1 << 0,
+  GTK_PRINT_CAPABILITY_COPIES       = 1 << 1,
+  GTK_PRINT_CAPABILITY_COLLATE      = 1 << 2,
+  GTK_PRINT_CAPABILITY_REVERSE      = 1 << 3,
+  GTK_PRINT_CAPABILITY_SCALE        = 1 << 4,
+  GTK_PRINT_CAPABILITY_GENERATE_PDF = 1 << 5,
+  GTK_PRINT_CAPABILITY_GENERATE_PS  = 1 << 6,
+  GTK_PRINT_CAPABILITY_PREVIEW      = 1 << 7
+} GtkPrintCapabilities;
+
 typedef struct _GtkPrinter          GtkPrinter;
 typedef struct _GtkPrinterClass     GtkPrinterClass;
 typedef struct _GtkPrinterPrivate   GtkPrinterPrivate;
@@ -84,6 +99,7 @@ gint                     gtk_printer_compare           (GtkPrinter *a,
 							GtkPrinter *b);
 gboolean                 gtk_printer_has_details       (GtkPrinter       *printer);
 void                     gtk_printer_request_details   (GtkPrinter       *printer);
+GtkPrintCapabilities     gtk_printer_get_capabilities  (GtkPrinter       *printer);
 
 typedef gboolean (*GtkPrinterFunc) (GtkPrinter *printer,
 				    gpointer    data);
