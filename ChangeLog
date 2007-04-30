@@ -19,7 +19,7 @@
 	* gtk/gtk.symbols: Add gtk_window_set_opacity and
 	gtk_window_get_opacity.
 
-	* gtk/gtkwindow.c (struct _GtkWindowPrivate,
+	* gtk/gtkwindow.c (struct _GtkWindowPrivate)
 	(gtk_window_class_init): Add opacity property, a double in the
 	range [0, 1].
 	(gtk_window_set_opacity, gtk_window_get_opacity): Implement.
