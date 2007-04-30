@@ -1791,7 +1791,7 @@ gtk_action_disconnect_accelerator (GtkAction *action)
 GtkWidget *
 gtk_action_create_menu (GtkAction *action)
 {
-  g_return_val_if_fail (GTK_IS_ACTION (action), FALSE);
+  g_return_val_if_fail (GTK_IS_ACTION (action), NULL);
 
   if (GTK_ACTION_GET_CLASS (action)->create_menu)
     return GTK_ACTION_GET_CLASS (action)->create_menu (action);

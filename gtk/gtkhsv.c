@@ -842,7 +842,6 @@ gtk_hsv_motion (GtkWidget      *widget,
   GtkHSV *hsv;
   HSVPrivate *priv;
   double x, y;
-  gint ix, iy;
   GdkModifierType mods;
   
   hsv = GTK_HSV (widget);

@@ -1295,9 +1295,9 @@ gtk_list_store_row_drop_possible (GtkTreeDragDest  *drag_dest,
 
 /* Reordering */
 static gint
-gtk_list_store_reorder_func (gconstpointer a,
-			     gconstpointer b,
-			     gpointer      user_data)
+gtk_list_store_reorder_func (GSequenceIter *a,
+			     GSequenceIter *b,
+			     gpointer       user_data)
 {
   GHashTable *new_positions = user_data;
   gint apos = GPOINTER_TO_INT (g_hash_table_lookup (new_positions, a));
@@ -1534,8 +1534,8 @@ gtk_list_store_move_after (GtkListStore *store,
     
 /* Sorting */
 static gint
-gtk_list_store_compare_func (gconstpointer a,
-			     gconstpointer b,
+gtk_list_store_compare_func (GSequenceIter *a,
+			     GSequenceIter *b,
 			     gpointer      user_data)
 {
   GtkListStore *list_store = user_data;

@@ -372,7 +372,6 @@ static void
 gtk_tray_icon_manager_window_destroyed (GtkTrayIcon *icon)
 {
   GtkWidget *widget = GTK_WIDGET (icon);
-  GdkWindow *gdkwin;
 
   g_return_if_fail (GTK_WIDGET_REALIZED (icon));
   g_return_if_fail (icon->priv->manager_window != None);
@@ -391,7 +390,6 @@ gtk_tray_icon_delete (GtkWidget   *widget,
 		      GdkEventAny *event)
 {
   GtkTrayIcon *icon = GTK_TRAY_ICON (widget);
-  GdkWindow *gdkwin;
 
   GTK_NOTE (PLUGSOCKET,
 	    g_print ("GtkStatusIcon %p: delete notify, tray manager window %x\n",

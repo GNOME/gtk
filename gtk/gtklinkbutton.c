@@ -442,7 +442,7 @@ gtk_link_button_clicked (GtkButton *button)
   GtkLinkButton *link_button = GTK_LINK_BUTTON (button);
 
   if (uri_func)
-    (* uri_func) (button, link_button->priv->uri, uri_func_data);
+    (* uri_func) (link_button, link_button->priv->uri, uri_func_data);
 
   link_button->priv->visited = TRUE;
 

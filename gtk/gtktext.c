@@ -2060,7 +2060,7 @@ gtk_text_key_press (GtkWidget   *widget,
 		  gtk_text_move_backward_character (text);
 		  break;
 		case 'c':
-		  gtk_editable_copy_clipboard (text);
+		  gtk_editable_copy_clipboard (GTK_EDITABLE (text));
 		  break;
 		case 'd':
 		  gtk_text_delete_forward_character (text);
@@ -2087,13 +2087,13 @@ gtk_text_key_press (GtkWidget   *widget,
 		  gtk_text_delete_line (text);
 		  break;
 		case 'v':
-		  gtk_editable_paste_clipboard (text);
+		  gtk_editable_paste_clipboard (GTK_EDITABLE (text));
 		  break;
 		case 'w':
 		  gtk_text_delete_backward_word (text);
 		  break;
 		case 'x':
-		  gtk_editable_cut_clipboard (text);
+		  gtk_editable_cut_clipboard (GTK_EDITABLE (text));
 		  break;
 		default:
 		  return_val = FALSE;

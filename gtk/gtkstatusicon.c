@@ -699,7 +699,7 @@ gtk_status_icon_get_property (GObject    *object,
       break;
     case PROP_ORIENTATION:
 #ifdef GDK_WINDOWING_X11
-      g_value_set_enum (value, _gtk_tray_icon_get_orientation (status_icon->priv->tray_icon));
+      g_value_set_enum (value, _gtk_tray_icon_get_orientation (GTK_TRAY_ICON (status_icon->priv->tray_icon)));
 #endif
 #ifdef GDK_WINDOWING_WIN32
       g_value_set_enum (value, status_icon->priv->orientation);

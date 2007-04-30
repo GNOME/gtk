@@ -1,3 +1,25 @@
+2007-04-30  Matthias Clasen  <mclasen@redhat.com>
+
+	Fix some compiler warnings.  (#433642, Kjartan Maraas)
+
+	* gtk/gtkfilesystemwin32.c (gtk_file_system_win32_get_info):
+	(gtk_file_system_win32_create_folder):
+	* gtk/gtkaction.c (gtk_action_create_menu): Fix NULL/FALSE confusion.  
+
+	* gtk/gtklinkbutton.c (gtk_link_button_clicked): Pass
+	the right type to uri_func.  
+	
+	* gtk/gtktext.c (gtk_text_key_press):
+	* gtk/gtkstatusicon.c (gtk_status_icon_get_property): 
+	* gtk/gtkxembed.c (_gtk_xembed_send_message): Add casts.
+
+	* gtk/gtktrayicon-x11.c (gtk_tray_icon_manager_window_destroyed): 
+	(gtk_tray_icon_delete):
+	* gtk/gtkprintunixdialog.c (create_main_page):
+	* gtk/gtkhsv.c (gtk_hsv_motion): Remove unused variables.
+
+	* gtk/gtkliststore.c: Adapt callbacks to GSequence types.
+
 2007-04-30  Cody Russell  <bratsche@gnome.org>
 
 	* gdk/win32/gdkwindow-win32.c: Reintroduced erase_background(),

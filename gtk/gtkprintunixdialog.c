@@ -1437,7 +1437,7 @@ create_main_page (GtkPrintUnixDialog *dialog)
   GtkPrintUnixDialogPrivate *priv = dialog->priv;
   GtkWidget *main_vbox, *label, *vbox, *hbox;
   GtkWidget *scrolled, *treeview, *frame, *table;
-  GtkWidget *entry, *spinbutton, *event_box;
+  GtkWidget *entry, *spinbutton;
   GtkWidget *radio, *check, *image;
   GtkCellRenderer *renderer;
   GtkTreeViewColumn *column;

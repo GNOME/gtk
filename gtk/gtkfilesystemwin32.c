@@ -973,8 +973,8 @@ gtk_file_system_win32_get_info (GtkFileSystem               *file_system,
   handle = create_handle (file_system);
 
   filename = gtk_file_path_get_string (path);
-  g_return_val_if_fail (filename != NULL, FALSE);
-  g_return_val_if_fail (g_path_is_absolute (filename), FALSE);
+  g_return_val_if_fail (filename != NULL, NULL);
+  g_return_val_if_fail (g_path_is_absolute (filename), NULL);
 
   if (!stat_with_error (filename, &wfad, &error))
     {
@@ -1148,7 +1148,7 @@ gtk_file_system_win32_create_folder (GtkFileSystem                    *file_syst
   system_win32 = GTK_FILE_SYSTEM_WIN32 (file_system);
 
   filename = gtk_file_path_get_string (path);
-  g_return_val_if_fail (filename != NULL, FALSE);
+  g_return_val_if_fail (filename != NULL, NULL);
   g_return_val_if_fail (g_path_is_absolute (filename), NULL);
 
   handle = create_handle (file_system);
