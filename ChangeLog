@@ -2,6 +2,25 @@
 
 	Merge from trunk:
 
+	Fix some issues with reference handling in the printing
+	code.  (#429902, Mathias Hasselmann)
+
+	* gtk/gtkprintoperation.c (gtk_print_operation_finalize):
+	Unref the print context, if we have one.
+	(gtk_print_operation_done): Add a default ::done handler
+	that unrefs the print context.
+	(preview_ready): Take a reference on the print operation 
+	preview here.
+	(print_pages_idle): ...not here,
+	(preview_print_idle_done): ...and release it here.
+
+	* tests/print-editor.c (preview_cb): Take a reference
+	on the print operation here.
+
+2007-04-29  Matthias Clasen <mclasen@redhat.com>
+
+	Merge from trunk:
+
 	Make the emission of ::end-print and ::done consistent
 	for previews.  (#347567, Yevgen Muntyan)
 

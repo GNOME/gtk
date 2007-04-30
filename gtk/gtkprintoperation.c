@@ -120,6 +120,9 @@ gtk_print_operation_finalize (GObject *object)
   if (priv->print_settings)
     g_object_unref (priv->print_settings);
   
+  if (priv->print_context)
+    g_object_unref (priv->print_context);
+
   g_free (priv->export_filename);
   g_free (priv->job_name);
   g_free (priv->custom_tab_label);
@@ -398,6 +401,8 @@ preview_print_idle_done (gpointer data)
   g_free (pop->filename);
 
   gtk_print_operation_preview_end_preview (pop->preview);
+
+  g_object_unref (op);
   g_free (pop);
   
   GDK_THREADS_LEAVE ();
@@ -455,6 +460,7 @@ preview_ready (GtkPrintOperationPreview *preview,
   pop->page_nr = 0;
   pop->print_context = context;
 
+  g_object_ref (preview);
   g_idle_add_full (G_PRIORITY_DEFAULT_IDLE + 10,
 	           preview_print_idle,
 		   pop,
@@ -503,6 +509,18 @@ gtk_print_operation_create_custom_widget (GtkPrintOperation *operation)
   return NULL;
 }
 
+static void
+gtk_print_operation_done (GtkPrintOperation *operation)
+{
+  GtkPrintOperationPrivate *priv = operation->priv;
+
+  if (priv->print_context)
+    {
+      g_object_unref (priv->print_context);
+      priv->print_context = NULL;
+    } 
+}
+
 static gboolean
 custom_widget_accumulator (GSignalInvocationHint *ihint,
 			   GValue                *return_accu,
@@ -531,6 +549,7 @@ gtk_print_operation_class_init (GtkPrintOperationClass *class)
  
   class->preview = gtk_print_operation_preview_handler; 
   class->create_custom_widget = gtk_print_operation_create_custom_widget;
+  class->done = gtk_print_operation_done;
   
   g_type_class_add_private (gobject_class, sizeof (GtkPrintOperationPrivate));
 
@@ -1945,7 +1964,6 @@ print_pages_idle_done (gpointer user_data)
 		   GTK_PRINT_OPERATION_RESULT_APPLY);
   
   g_object_unref (data->op);
-
   g_free (data);
 
   GDK_THREADS_LEAVE ();
@@ -2139,8 +2157,6 @@ print_pages_idle (gpointer user_data)
     {
       done = TRUE;
 
-      g_object_ref (data->op);
-      
       g_signal_emit_by_name (data->op, "ready", priv->print_context);
       goto out;
     }
