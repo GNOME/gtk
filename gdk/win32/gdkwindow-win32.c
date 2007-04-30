@@ -3399,3 +3399,33 @@ gdk_window_beep (GdkWindow *window)
 {
   gdk_display_beep (_gdk_display);
 }
+
+void
+gdk_window_set_opacity (GdkWindow *window,
+			gdouble    opacity)
+{
+  LONG exstyle;
+
+  g_return_if_fail (GDK_IS_WINDOW (window));
+  g_return_if_fail (WINDOW_IS_TOPLEVEL (window));
+
+  if (GDK_WINDOW_DESTROYED (window))
+    return;
+
+  if (opacity < 0)
+    opacity = 0;
+  else if (opacity > 1)
+    opacity = 1;
+
+  exstyle = GetWindowLong (GDK_WINDOW_HWND (window), GWL_EXSTYLE);
+
+  if (!(exstyle & WS_EX_LAYERED))
+    API_CALL (SetWindowLong, (GDK_WINDOW_HWND (window),
+			      GWL_EXSTYLE,
+			      exstyle | WS_EX_LAYERED));
+
+  API_CALL (SetLayeredWindowAttributes, (GDK_WINDOW_HWND (window),
+					 0,
+					 opacity * 0xff,
+					 LWA_ALPHA));
+}

@@ -740,6 +740,7 @@ gdk_window_set_icon_list
 gdk_window_set_icon
 gdk_window_set_icon_name
 gdk_window_beep
+gdk_window_set_opacity
 gdk_window_iconify
 gdk_window_deiconify
 gdk_window_stick

@@ -6402,5 +6402,54 @@ gdk_window_beep (GdkWindow *window)
     gdk_display_beep (display);
 }
 
+/**
+ * gdk_window_set_opacity:
+ * @window a top-level #GdkWindow
+ * @opacity: opacity
+ *
+ * Request the windowing system to make @window partially transparent,
+ * with opacity 0 being fully transparent and 1 fully opaque. (Values
+ * of the opacity parameter are clamped to the [0,1] range.) On X11
+ * this works only on X screens with a compositing manager running.
+ *
+ * For setting up per-pixel alpha, see gdk_screen_get_rgba_colormap().
+ *
+ * Since: 2.12
+ */
+void
+gdk_window_set_opacity (GdkWindow *window,
+			gdouble    opacity)
+{
+  GdkDisplay *display;
+  guint32 cardinal;
+  
+  g_return_if_fail (GDK_IS_WINDOW (window));
+  g_return_if_fail (WINDOW_IS_TOPLEVEL (window));
+
+  if (GDK_WINDOW_DESTROYED (window))
+    return;
+
+  display = gdk_drawable_get_display (window);
+
+  if (opacity < 0)
+    opacity = 0;
+  else if (opacity > 1)
+    opacity = 1;
+
+  cardinal = opacity * 0xffffffff;
+
+  if (cardinal == 0xffffffff)
+    XDeleteProperty (GDK_DISPLAY_XDISPLAY (display),
+		     GDK_WINDOW_XID (window),
+		     gdk_x11_get_xatom_by_name_for_display (display, "_NET_WM_WINDOW_OPACITY"));
+  else
+    XChangeProperty (GDK_DISPLAY_XDISPLAY (display),
+		     GDK_WINDOW_XID (window),
+		     gdk_x11_get_xatom_by_name_for_display (display, "_NET_WM_WINDOW_OPACITY"),
+		     XA_CARDINAL, 32,
+		     PropModeReplace,
+		     (guchar *) cardinal, 1);
+}
+
 #define __GDK_WINDOW_X11_C__
 #include "gdkaliasdef.c"

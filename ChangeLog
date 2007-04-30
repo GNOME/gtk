@@ -1,3 +1,21 @@
+2007-04-30  Tor Lillqvist  <tml@novell.com>
+
+	Add functionality to set overall opacity of a top-level
+	window. (#405316)
+
+	* gdk/gdk.symbols: Add gdk_window_set_opacity.
+
+	* gdk/x11/gdkwindow-x11.c
+	* gdk/win32/gdkwindow-win32.c: Implement
+	gdk_window_set_opacity(). On X11 use the _NET_WM_WINDOW_OPACITY
+	property. On Win32 use SetLayeredWindowAttributes(LWA_ALPHA).
+
+	* gdk/gdkwindow.h: Declare gdk_window_set_opacity().
+
+	* gdk/x11/gdkscreen-x11.c (gdk_screen_get_rgba_colormap): Document
+	that this is not implemented in the Windows backend. Add reference
+	to gdk_window_set_opacity().
+
 2007-04-30  Matthias Clasen <mclasen@redhat.com>
 
 	* gtk/gtk.symbols:

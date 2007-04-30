@@ -569,7 +569,8 @@ void          gdk_window_set_keep_above  (GdkWindow       *window,
                                           gboolean         setting);
 void          gdk_window_set_keep_below  (GdkWindow       *window,
                                           gboolean         setting);
-
+void          gdk_window_set_opacity     (GdkWindow       *window,
+                                          gdouble          opacity);
 void          gdk_window_register_dnd    (GdkWindow       *window);
 
 void gdk_window_begin_resize_drag (GdkWindow     *window,
