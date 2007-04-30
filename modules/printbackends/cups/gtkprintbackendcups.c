@@ -659,6 +659,7 @@ cups_request_execute (GtkPrintBackendCups              *print_backend,
   g_source_unref ((GSource *) dispatch);
 }
 
+#if 0
 static void
 cups_request_printer_info_cb (GtkPrintBackendCups *backend,
                               GtkCupsResult       *result,
@@ -779,7 +780,7 @@ cups_request_printer_info (GtkPrintBackendCups *print_backend,
                         g_strdup (printer_name),
                         (GDestroyNotify) g_free);
 }
-
+#endif
 
 typedef struct {
   GtkPrintBackendCups *print_backend;
@@ -992,9 +993,15 @@ cups_request_printer_list_cb (GtkPrintBackendCups *cups_backend,
   for (attr = response->attrs; attr != NULL; attr = attr->next)
     {
       GtkPrinter *printer;
-      const gchar *printer_name;
-      const gchar *printer_uri;
-      const gchar *member_uris;
+      const gchar *printer_name = NULL;
+      const gchar *printer_uri = NULL;
+      const gchar *member_uris = NULL;
+      const gchar *location = NULL;
+      const gchar *description = NULL;
+      const gchar *state_msg = NULL;
+      gint state = 0;
+      gint job_count = 0;
+      gboolean status_changed = FALSE;
       GList *node;
       
       /* Skip leading attributes until we hit a printer...
@@ -1005,9 +1012,6 @@ cups_request_printer_list_cb (GtkPrintBackendCups *cups_backend,
       if (attr == NULL)
         break;
 
-      printer_name = NULL;
-      printer_uri = NULL;
-      member_uris = NULL;
       while (attr != NULL && attr->group_tag == IPP_TAG_PRINTER)
       {
         if (!strcmp (attr->name, "printer-name") &&
@@ -1019,6 +1023,16 @@ cups_request_printer_list_cb (GtkPrintBackendCups *cups_backend,
 	else if (!strcmp (attr->name, "member-uris") &&
 		 attr->value_tag == IPP_TAG_URI)
 	  member_uris = attr->values[0].string.text;
+        else if (strcmp (attr->name, "printer-location") == 0)
+          location = attr->values[0].string.text;
+        else if (strcmp (attr->name, "printer-info") == 0)
+          description = attr->values[0].string.text;
+        else if (strcmp (attr->name, "printer-state-message") == 0)
+          state_msg = attr->values[0].string.text;
+        else if (strcmp (attr->name, "printer-state") == 0)
+          state = attr->values[0].integer;
+        else if (strcmp (attr->name, "queued-job-count") == 0)
+          job_count = attr->values[0].integer;
         else
 	  {
 	    GTK_NOTE (PRINTING,
@@ -1129,7 +1143,22 @@ cups_request_printer_list_cb (GtkPrintBackendCups *cups_backend,
 	  gtk_printer_set_is_new (printer, FALSE);
         }
 
+#if 0
+      /* Getting printer info with separate requests overwhelms cups
+       * when the printer list has more than a handful of printers.
+       */
       cups_request_printer_info (cups_backend, gtk_printer_get_name (printer));
+#endif
+
+      GTK_PRINTER_CUPS (printer)->state = state;
+      status_changed = gtk_printer_set_job_count (printer, job_count);
+      status_changed |= gtk_printer_set_location (printer, location);
+      status_changed |= gtk_printer_set_description (printer, description);
+      status_changed |= gtk_printer_set_state_message (printer, state_msg);
+
+      if (status_changed)
+        g_signal_emit_by_name (GTK_PRINT_BACKEND (backend),
+                               "printer-status-changed", printer);
 
       /* The ref is held by GtkPrintBackend, in add_printer() */
       g_object_unref (printer);
@@ -1164,7 +1193,12 @@ cups_request_printer_list (GtkPrintBackendCups *cups_backend)
     {
       "printer-name",
       "printer-uri-supported",
-      "member-uris"
+      "member-uris",
+      "printer-location",
+      "printer-info",
+      "printer-state-message",
+      "printer-state",
+      "queued-job-count"
     };
  
   if (cups_backend->list_printers_pending ||
