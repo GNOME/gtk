@@ -193,7 +193,7 @@ gtk_paper_size_new_from_info (const PaperInfo *info)
  * @name: a paper size name, or %NULL
  * 
  * Creates a new #GtkPaperSize object by parsing a 
- * PWG 5101.1-2002 PWG <!-- FIXME link here -->
+ * <ulink url="ftp://ftp.pwg.org/pub/pwg/candidates/cs-pwgmsn10-20020226-5101.1.pdf">PWG 5101.1-2002</ulink>
  * paper name. 
  *
  * If @name is %NULL, the default paper size is returned,
@@ -223,6 +223,8 @@ gtk_paper_size_new (const gchar *name)
       size->height = height;
       size->name = short_name;
       size->display_name = g_strdup (short_name);
+      if (strncmp (short_name, "custom", 6) == 0)
+        size->is_custom = TRUE;
     }
   else
     {

@@ -1,5 +1,11 @@
 2007-04-29  Matthias Clasen <mclasen@redhat.com>
 
+	* gtk/gtkpapersize.c (gtk_paper_size_new): Mark paper sizes
+	in the PWG "custom" namespace as custom. Add a link to 
+	the spec in the docs.  (#426416, Andreas Guelzow)
+
+2007-04-29  Matthias Clasen <mclasen@redhat.com>
+
 	* gtk/gtkprintoperation.c (gtk_print_operation_run): Document
 	that a print operation can be run only once, and add a 
 	corresponding g_return_if_fail().   (#379399, Masao Mutoh)
