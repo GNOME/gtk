@@ -486,7 +486,7 @@ gtk_print_job_get_surface (GtkPrintJob  *job,
   /* If we are debugging printing don't delete the tmp files */
   if (!(gtk_debug_flags & GTK_DEBUG_PRINTING))
 #endif /* G_ENABLE_DEBUG */
-  unlink (filename);
+  g_unlink (filename);
   g_free (filename);
 
   paper_size = gtk_page_setup_get_paper_size (priv->page_setup);
