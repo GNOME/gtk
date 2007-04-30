@@ -682,31 +682,6 @@ gtk_print_job_send (GtkPrintJob             *job,
                                   callback, user_data, dnotify);
 }
 
-GType
-gtk_print_capabilities_get_type (void)
-{
-  static GType etype = 0;
-
-  if (etype == 0)
-    {
-      static const GFlagsValue values[] = {
-        { GTK_PRINT_CAPABILITY_PAGE_SET, "GTK_PRINT_CAPABILITY_PAGE_SET", "page-set" },
-        { GTK_PRINT_CAPABILITY_COPIES, "GTK_PRINT_CAPABILITY_COPIES", "copies" },
-        { GTK_PRINT_CAPABILITY_COLLATE, "GTK_PRINT_CAPABILITY_COLLATE", "collate" },
-        { GTK_PRINT_CAPABILITY_REVERSE, "GTK_PRINT_CAPABILITY_REVERSE", "reverse" },
-        { GTK_PRINT_CAPABILITY_SCALE, "GTK_PRINT_CAPABILITY_SCALE", "scale" },
-        { GTK_PRINT_CAPABILITY_GENERATE_PDF, "GTK_PRINT_CAPABILITY_GENERATE_PDF", "generate-pdf" },
-        { GTK_PRINT_CAPABILITY_GENERATE_PS, "GTK_PRINT_CAPABILITY_GENERATE_PS", "generate-ps" },
-        { GTK_PRINT_CAPABILITY_PREVIEW, "GTK_PRINT_CAPABILITY_PREVIEW", "preview" },
-        { 0, NULL, NULL }
-      };
-
-      etype = g_flags_register_static (I_("GtkPrintCapabilities"), values);
-    }
-
-  return etype;
-}
-
 
 #define __GTK_PRINT_JOB_C__
 #include "gtkaliasdef.c"

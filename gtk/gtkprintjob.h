@@ -34,21 +34,6 @@ G_BEGIN_DECLS
 #define GTK_IS_PRINT_JOB_CLASS(klass)       (G_TYPE_CHECK_CLASS_TYPE ((klass), GTK_TYPE_PRINT_JOB))
 #define GTK_PRINT_JOB_GET_CLASS(obj)        (G_TYPE_INSTANCE_GET_CLASS ((obj), GTK_TYPE_PRINT_JOB, GtkPrintJobClass))
 
-/* Note, this type is manually registered with GObject in gtkprintjob.c
- * If you add any flags, update the registration as well 
- */
-typedef enum
-{
-  GTK_PRINT_CAPABILITY_PAGE_SET     = 1 << 0,
-  GTK_PRINT_CAPABILITY_COPIES       = 1 << 1,
-  GTK_PRINT_CAPABILITY_COLLATE      = 1 << 2,
-  GTK_PRINT_CAPABILITY_REVERSE      = 1 << 3,
-  GTK_PRINT_CAPABILITY_SCALE        = 1 << 4,
-  GTK_PRINT_CAPABILITY_GENERATE_PDF = 1 << 5,
-  GTK_PRINT_CAPABILITY_GENERATE_PS  = 1 << 6,
-  GTK_PRINT_CAPABILITY_PREVIEW      = 1 << 7
-} GtkPrintCapabilities;
-
 typedef struct _GtkPrintJob          GtkPrintJob;
 typedef struct _GtkPrintJobClass     GtkPrintJobClass;
 typedef struct _GtkPrintJobPrivate   GtkPrintJobPrivate;

@@ -6,6 +6,8 @@
 	* gtk/gtkprinter.c: (gtk_printer_get_capabilities),
 	(gtk_print_capabilities_get_type):
 	* gtk/gtkprinter.h:
+	* gtk/gtkprintjob.c:
+	* gtk/gtkprintjob.h:
 	* gtk/gtkprintunixdialog.c: (selected_printer_changed):
 	Make gtk_printer_get_capabilities public, and move the
 	GtkPrintCapabilities definition to gtkprinter.h. Bug #390437.
