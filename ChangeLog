@@ -1,3 +1,11 @@
+2007-04-30  Cody Russell  <bratsche@gnome.org>
+
+	* gdk/win32/gdkwindow-win32.c: Reintroduced erase_background(),
+	but now we're calling it from _gdk_windowing_window_clear_area()
+	instead of from the WM_ERASEBKGND event.  Also fixes the area
+	that is cleared so that it is not an extra row and column too
+	large.  (Neil Roberts, #415681)
+
 2007-04-30  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtktextview.c: Allow indents to be negative.  (#Bug 434308)
