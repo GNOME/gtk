@@ -1,3 +1,9 @@
+2007-04-30  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtkexpander.c (gtk_expander_realize): A NO_WINDOW widget
+	must not set the background of its window.  (#433972,
+	Guilherme Polo)
+
 2007-04-30  Richard Hult  <richard@imendio.com>
 
 	* gdk/quartz/gdkwindow-quartz.c: (gdk_window_set_opacity):
