@@ -2,6 +2,14 @@
 
 	Merge from trunk:
 
+	* gtk/gtksettings.c (settings_update_color_scheme):
+	Make sure we always have a color_hash.  (#423916, Jens
+	Granseuer)
+
+2007-04-30  Matthias Clasen  <mclasen@redhat.com>
+
+	Merge from trunk:
+
 	* gtk/gtkexpander.c (gtk_expander_realize): A NO_WINDOW widget
 	must not set the background of its window.  (#433972,
 	Guilherme Polo)
