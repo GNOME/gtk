@@ -1,5 +1,12 @@
 2007-04-30  Matthias Clasen  <mclasen@redhat.com>
 
+	Some more compiler warning fixes.
+
+	* gdk/directfb/gdkscreen-directfb.c (gdk_screen_is_composited):
+	Fix NULL/FALSE confusion.
+
+2007-04-30  Matthias Clasen  <mclasen@redhat.com>
+
 	Fix some compiler warnings.  (#433642, Kjartan Maraas)
 
 	* gtk/gtkfilesystemwin32.c (gtk_file_system_win32_get_info):

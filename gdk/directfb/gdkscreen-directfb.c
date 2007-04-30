@@ -215,7 +215,7 @@ gdk_screen_get_window_stack (GdkScreen *screen)
 gboolean
 gdk_screen_is_composited (GdkScreen *screen)
 {
-   g_return_val_if_fail (GDK_IS_SCREEN (screen), NULL);
+   g_return_val_if_fail (GDK_IS_SCREEN (screen), FALSE);
    return FALSE;
 } 
 
