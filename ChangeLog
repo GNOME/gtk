@@ -16,6 +16,19 @@
 	that this is not implemented in the Windows backend. Add reference
 	to gdk_window_set_opacity().
 
+	* gtk/gtk.symbols: Add gtk_window_set_opacity and
+	gtk_window_get_opacity.
+
+	* gtk/gtkwindow.c (struct _GtkWindowPrivate,
+	(gtk_window_class_init): Add opacity property, a double in the
+	range [0, 1].
+	(gtk_window_set_opacity, gtk_window_get_opacity): Implement.
+	(gtk_window_realize): If opacity is set, call
+	gdk_window_set_opacity().
+
+	* gtk/gtkwindow.h: Declare gtk_window_set_opacity() and
+	gtk_window_get_opacity().
+
 2007-04-30  Matthias Clasen <mclasen@redhat.com>
 
 	* gtk/gtk.symbols:

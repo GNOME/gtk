@@ -198,6 +198,9 @@ gboolean   gtk_window_activate_default	       (GtkWindow           *window);
 void       gtk_window_set_transient_for        (GtkWindow           *window, 
 						GtkWindow           *parent);
 GtkWindow *gtk_window_get_transient_for        (GtkWindow           *window);
+void       gtk_window_set_opacity              (GtkWindow           *window, 
+						gdouble              opacity);
+gdouble    gtk_window_get_opacity              (GtkWindow           *window);
 void       gtk_window_set_type_hint            (GtkWindow           *window, 
 						GdkWindowTypeHint    hint);
 GdkWindowTypeHint gtk_window_get_type_hint     (GtkWindow           *window);
