@@ -578,7 +578,7 @@ preview_cb (GtkPrintOperation        *op,
   gtk_print_context_set_cairo_context (context, cr, 72, 72);
   cairo_destroy (cr);
   
-  pop->op = op;
+  pop->op = g_object_ref (op);
   pop->preview = preview;
   pop->spin = page;
   pop->area = da;
