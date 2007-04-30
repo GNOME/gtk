@@ -1,5 +1,11 @@
 2007-04-29  Matthias Clasen <mclasen@redhat.com>
 
+	* gtk/gtkprintoperation.c (print_pages_idle): Don't get
+	stuck in a recursive mainloop if a synchronous preview
+	is cancelled.
+
+2007-04-29  Matthias Clasen <mclasen@redhat.com>
+
 	Make the emission of ::end-print and ::done consistent
 	for previews.  (#347567, Yevgen Muntyan)
 
@@ -10,7 +16,7 @@
 	(print_pages_idle): If a preview has been cancelled, don't
 	emit ::ready, but emit ::end-print. 
 
-	tests/print-editor.c: Use ::end-print to undo allocations
+	* tests/print-editor.c: Use ::end-print to undo allocations
 	from ::begin-print.
 
 2007-04-29  Matthias Clasen <mclasen@redhat.com>

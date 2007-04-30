@@ -1928,7 +1928,7 @@ print_pages_idle_done (gpointer user_data)
   if (priv->rloop && !data->is_preview) 
     g_main_loop_quit (priv->rloop);
 
-  if (!data->is_preview || priv->cancelled)
+  if (!data->is_preview)
     g_signal_emit (data->op, signals[DONE], 0,
 		   priv->cancelled ?
 		   GTK_PRINT_OPERATION_RESULT_CANCEL :
@@ -2143,10 +2143,11 @@ print_pages_idle (gpointer user_data)
     {
       _gtk_print_operation_set_status (data->op, GTK_PRINT_STATUS_FINISHED_ABORTED, NULL);
       
+      data->is_preview = FALSE;
       done = TRUE;
     }
 
-  if (done && (!data->is_preview || priv->cancelled))
+  if (done && !data->is_preview)
     {
       g_signal_emit (data->op, signals[END_PRINT], 0, priv->print_context);
       priv->end_run (data->op, priv->is_sync, priv->cancelled);
