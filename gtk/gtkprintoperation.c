@@ -190,8 +190,9 @@ preview_iface_end_preview (GtkPrintOperationPreview *preview)
   if (op->priv->end_run)
     op->priv->end_run (op, op->priv->is_sync, TRUE);
   
-  g_signal_emit (op, signals[DONE], 0,
-		 GTK_PRINT_OPERATION_RESULT_APPLY);
+  _gtk_print_operation_set_status (op, GTK_PRINT_STATUS_FINISHED, NULL);
+
+  g_signal_emit (op, signals[DONE], 0, GTK_PRINT_OPERATION_RESULT_APPLY);
 }
 
 static gboolean
@@ -252,8 +253,6 @@ preview_end_run (GtkPrintOperation *op,
 {
   g_free (op->priv->page_ranges);
   op->priv->page_ranges = NULL;
-
-  _gtk_print_operation_set_status (op, GTK_PRINT_STATUS_FINISHED, NULL);
 }
 
 
@@ -1929,7 +1928,7 @@ print_pages_idle_done (gpointer user_data)
   if (priv->rloop && !data->is_preview) 
     g_main_loop_quit (priv->rloop);
 
-  if (!data->is_preview)
+  if (!data->is_preview || priv->cancelled)
     g_signal_emit (data->op, signals[DONE], 0,
 		   priv->cancelled ?
 		   GTK_PRINT_OPERATION_RESULT_CANCEL :
@@ -2126,7 +2125,7 @@ print_pages_idle (gpointer user_data)
 	}
     }
  
-  if (data->is_preview)
+  if (data->is_preview && !priv->cancelled)
     {
       done = TRUE;
 
@@ -2147,7 +2146,7 @@ print_pages_idle (gpointer user_data)
       done = TRUE;
     }
 
-  if (done && !data->is_preview)
+  if (done && (!data->is_preview || priv->cancelled))
     {
       g_signal_emit (data->op, signals[END_PRINT], 0, priv->print_context);
       priv->end_run (data->op, priv->is_sync, priv->cancelled);

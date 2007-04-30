@@ -1,5 +1,20 @@
 2007-04-29  Matthias Clasen <mclasen@redhat.com>
 
+	Make the emission of ::end-print and ::done consistent
+	for previews.  (#347567, Yevgen Muntyan)
+
+	* gtk/gtkprintoperation.c (preview_iface_end_preview): Set
+	the finished status here.
+	(preview_end_run): ...and not here.
+	(print_pages_idle_done): Emit ::done for a cancelled preview.
+	(print_pages_idle): If a preview has been cancelled, don't
+	emit ::ready, but emit ::end-print. 
+
+	tests/print-editor.c: Use ::end-print to undo allocations
+	from ::begin-print.
+
+2007-04-29  Matthias Clasen <mclasen@redhat.com>
+
 	* gtk/gtkpapersize.c (gtk_paper_size_new): Mark paper sizes
 	in the PWG "custom" namespace as custom. Add a link to 
 	the spec in the docs.  (#426416, Andreas Guelzow)
