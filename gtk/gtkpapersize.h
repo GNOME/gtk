@@ -56,7 +56,7 @@ void          gtk_paper_size_free         (GtkPaperSize *size);
 gboolean      gtk_paper_size_is_equal     (GtkPaperSize *size1,
 					   GtkPaperSize *size2);
 
-GList        *gtk_paper_size_get_builtins (void);
+GList        *gtk_paper_size_get_paper_sizes (gboolean include_custom);
 
 /* The width is always the shortest side, measure in mm */
 G_CONST_RETURN gchar *gtk_paper_size_get_name         (GtkPaperSize *size);

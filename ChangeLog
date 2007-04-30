@@ -1,3 +1,8 @@
+2007-04-30  Michael Natterer  <mitch@imendio.com>
+
+	* gtk/gtkpapersize.h: really rename gtk_paper_size_get_builtins()
+	to gtk_paper_size_get_paper_sizes().
+
 2007-04-30  Tor Lillqvist  <tml@novell.com>
 
 	* gtk/gtkpapersize.c (gtk_paper_size_get_paper_sizes):
