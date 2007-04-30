@@ -1,3 +1,8 @@
+2007-04-30  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtksettings.c (settings_update_color_scheme):
+	Make sure we always have a color_hash.  (#423916, Jens Granseuer)
+
 2007-04-30  Christian Persch  <chpe@gnome.org>
 
 	* docs/reference/gtk/gtk-sections.txt:
