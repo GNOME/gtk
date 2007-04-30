@@ -164,7 +164,11 @@ gtk_print_operation_init (GtkPrintOperation *operation)
   priv->unit = GTK_UNIT_PIXEL;
 
   appname = g_get_application_name ();
-  priv->job_name = g_strdup_printf ("%s job #%d", appname, ++job_nr);
+  /* translators: this string is the default job title for print
+   * jobs. %s gets replaced by the application name, %d gets replaced
+   * by the job number.
+   */
+  priv->job_name = g_strdup_printf (_("%s job #%d"), appname, ++job_nr);
 }
 
 static void
@@ -1304,7 +1308,7 @@ gtk_print_operation_set_job_name (GtkPrintOperation *op,
   GtkPrintOperationPrivate *priv;
 
   g_return_if_fail (GTK_IS_PRINT_OPERATION (op));
-  g_return_if_fail (g_utf8_validate (job_name, -1, NULL));
+  g_return_if_fail (job_name != NULL);
 
   priv = op->priv;
 
