@@ -1,6 +1,7 @@
 /* GTK - The GIMP Toolkit
  * gtkpapersize.c: Paper Size
  * Copyright (C) 2006, Red Hat, Inc.
+ * Copyright © 2006, 2007 Christian Persch
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -180,7 +181,7 @@ gtk_paper_size_new_from_info (const PaperInfo *info)
 {
   GtkPaperSize *size;
   
-  size = g_new0 (GtkPaperSize, 1);
+  size = g_slice_new0 (GtkPaperSize);
   size->info = info;
   size->width = info->width;
   size->height = info->height;
@@ -217,7 +218,7 @@ gtk_paper_size_new (const gchar *name)
   
   if (parse_full_media_size_name (name, &short_name, &width, &height))
     {
-      size = g_new0 (GtkPaperSize, 1);
+      size = g_slice_new0 (GtkPaperSize);
 
       size->width = width;
       size->height = height;
@@ -234,7 +235,7 @@ gtk_paper_size_new (const gchar *name)
       else
 	{
 	  g_warning ("Unknown paper size %s\n", name);
-	  size = g_new0 (GtkPaperSize, 1);
+	  size = g_slice_new0 (GtkPaperSize);
 	  size->name = g_strdup (name);
 	  size->display_name = g_strdup (name);
 	  /* Default to A4 size */
@@ -349,7 +350,7 @@ gtk_paper_size_new_custom (const gchar *name,
   g_return_val_if_fail (name != NULL, NULL);
   g_return_val_if_fail (unit != GTK_UNIT_PIXEL, NULL);
 
-  size = g_new0 (GtkPaperSize, 1);
+  size = g_slice_new0 (GtkPaperSize);
   
   size->name = g_strdup (name);
   size->display_name = g_strdup (display_name);
@@ -376,7 +377,7 @@ gtk_paper_size_copy (GtkPaperSize *other)
 {
   GtkPaperSize *size;
 
-  size = g_new0 (GtkPaperSize, 1);
+  size = g_slice_new0 (GtkPaperSize);
 
   size->info = other->info;
   if (other->name)
@@ -407,7 +408,8 @@ gtk_paper_size_free (GtkPaperSize *size)
   g_free (size->name);
   g_free (size->display_name);
   g_free (size->ppd_name);
-  g_free (size);
+
+  g_slice_free (GtkPaperSize, size);
 }
 
 /**

@@ -1,5 +1,12 @@
 2007-05-02  Christian Persch  <chpe@gnome.org>
 
+	* gtk/gtkpapersize.c: (gtk_paper_size_new_from_info),
+	(gtk_paper_size_new), (gtk_paper_size_new_custom),
+	(gtk_paper_size_copy), (gtk_paper_size_free): Use GSlice to allocate
+	GtkPaperSize. Bug #434862.
+
+2007-05-02  Christian Persch  <chpe@gnome.org>
+
 	* gtk/gtkstatusbar.c: (gtk_statusbar_get_context_id),
 	(gtk_statusbar_expose_event): No need to allocate a guint; just stuff
 	the ID into the pointer directly. Bug #434865.
