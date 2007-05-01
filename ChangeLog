@@ -1,3 +1,12 @@
+2007-05-01  Michael Emmel  <mike.emmel@gmail.com>
+
+	* gdk/directfb/gdkdisplay-directfb.c:
+	Added stub gdk_notify_startup_complete_with_id to compile
+	* gdk/directfb/gdkwindow-directfb.c:
+	Added gdk_window_set_opacity
+	* gdk/directfb/gdkkeys-directfb.c:
+	Fix menu key handling crash Bug #413328
+
 2007-05-01  Christian Persch  <chpe@gnome.org>
 
 	* gtk/gtkprinter.h:

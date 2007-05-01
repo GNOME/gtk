@@ -1941,32 +1941,41 @@ gdk_keymap_translate_keyboard_state (GdkKeymap       *keymap,
 
 		if (directfb_keymap[index + i + 2 * group] != GDK_VoidSymbol)
 		{
-			*keyval = directfb_keymap[index + i + 2 * group];
+			if (keyval)
+				*keyval = directfb_keymap[index + i + 2 * group];
 
 			if (group && directfb_keymap[index + i] == *keyval)
 			{
-				*effective_group = 0;
-				*consumed_modifiers = 0;
+				if (effective_group)
+					*effective_group = 0;
+                if(consumed_modifiers)
+				    *consumed_modifiers = 0;
 			}
 			else
 			{
-				*effective_group = group;
-				*consumed_modifiers = GDK_MOD2_MASK;
+				if (effective_group)
+					*effective_group = group;
+                if(consumed_modifiers)
+				    *consumed_modifiers = GDK_MOD2_MASK;
 			}
-
-			*level = i;
+			if (level)
+				*level = i;
 
 			if (i && directfb_keymap[index + 2 * *effective_group] != *keyval)
-				*consumed_modifiers |= GDK_SHIFT_MASK;
+                if(consumed_modifiers)
+				    *consumed_modifiers |= GDK_SHIFT_MASK;
 
 			return TRUE;
 		}
 	}
-
-	*keyval             = 0;
-	*effective_group    = 0;
-	*level              = 0;
-	*consumed_modifiers = 0;
+	if (keyval)
+		*keyval             = 0;
+	if (effective_group)
+		*effective_group    = 0;
+	if (level)
+		*level              = 0;
+    if(consumed_modifiers)
+	    *consumed_modifiers = 0;
 
 	return FALSE;
 }

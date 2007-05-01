@@ -491,6 +491,26 @@ gdk_notify_startup_complete (void)
 {
 }
 
+/**
+ * gdk_notify_startup_complete_with_id:
+ * @startup_id: a startup-notification identifier, for which notification
+ *              process should be completed
+ * 
+ * Indicates to the GUI environment that the application has finished
+ * loading, using a given identifier.
+ * 
+ * GTK+ will call this function automatically for #GtkWindow with custom
+ * startup-notification identifier unless
+ * gtk_window_set_auto_startup_notification() is called to disable
+ * that feature.
+ *
+ * Since: 2.12
+ **/
+void
+gdk_notify_startup_complete_with_id (const gchar* startup_id)
+{
+}
+
 #define __GDK_DISPLAY_X11_C__
 #include "gdkaliasdef.c"
 

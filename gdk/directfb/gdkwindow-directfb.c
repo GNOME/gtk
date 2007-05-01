@@ -1704,6 +1704,23 @@ gdk_window_set_role (GdkWindow   *window,
   /* N/A */
 }
 
+/**
+ * gdk_window_set_startup_id:
+ * @window: a toplevel #GdkWindow
+ * @startup_id: a string with startup-notification identifier
+ *
+ * When using GTK+, typically you should use gtk_window_set_startup_id()
+ * instead of this low-level function.
+ *
+ * Since: 2.12
+ *
+ **/
+void          
+gdk_window_set_startup_id (GdkWindow   *window,
+		     const gchar *startup_id)
+{
+}
+
 void
 gdk_window_set_transient_for (GdkWindow *window,
                               GdkWindow *parent)
@@ -3000,6 +3017,41 @@ gdk_window_beep (GdkWindow *window)
   gdk_display_beep (gdk_display_get_default());
 }
 
+/**
+ * gdk_window_set_opacity:
+ * @window a top-level #GdkWindow
+ * @opacity: opacity
+ *
+ * Request the windowing system to make @window partially transparent,
+ * with opacity 0 being fully transparent and 1 fully opaque. (Values
+ * of the opacity parameter are clamped to the [0,1] range.) On X11
+ * this works only on X screens with a compositing manager running.
+ *
+ * For setting up per-pixel alpha, see gdk_screen_get_rgba_colormap().
+ *
+ * Since: 2.12
+ */
+void
+gdk_window_set_opacity (GdkWindow *window,
+			gdouble    opacity)
+{
+  GdkDisplay *display;
+  guint8 cardinal;
+  
+  g_return_if_fail (GDK_IS_WINDOW (window));
+
+  if (GDK_WINDOW_DESTROYED (window))
+    return;
+
+  display = gdk_drawable_get_display (window);
+
+  if (opacity < 0)
+    opacity = 0;
+  else if (opacity > 1)
+    opacity = 1;
+  cardinal = opacity * 0xff;
+  gdk_directfb_window_set_opacity(window,cardinal);
+}
 #define __GDK_WINDOW_X11_C__
 #include "gdkaliasdef.c"
 
