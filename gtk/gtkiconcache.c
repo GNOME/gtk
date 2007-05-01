@@ -128,12 +128,11 @@ _gtk_icon_cache_new_for_path (const gchar *path)
   info.n_directories = 0;
   info.flags = CHECK_OFFSETS|CHECK_STRINGS;
 
-  g_print ("validating %s\n", cache_filename);
   if (!_gtk_icon_cache_validate (&info))
     {
       g_mapped_file_free (map);
+      g_warning ("Icon cache '%s' is invalid\n", cache_filename);
 
-      GTK_NOTE (ICONTHEME, g_print ("invalid icon cache\n"));
       goto done;
     }
   
