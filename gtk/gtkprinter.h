@@ -26,12 +26,7 @@
 
 G_BEGIN_DECLS
 
-#define GTK_TYPE_PRINTER                  (gtk_printer_get_type ())
-#define GTK_PRINTER(obj)                  (G_TYPE_CHECK_INSTANCE_CAST ((obj), GTK_TYPE_PRINTER, GtkPrinter))
-#define GTK_PRINTER_CLASS(klass)          (G_TYPE_CHECK_CLASS_CAST ((klass), GTK_TYPE_PRINTER, GtkPrinterClass))
-#define GTK_IS_PRINTER(obj)               (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GTK_TYPE_PRINTER))
-#define GTK_IS_PRINTER_CLASS(klass)       (G_TYPE_CHECK_CLASS_TYPE ((klass), GTK_TYPE_PRINTER))
-#define GTK_PRINTER_GET_CLASS(obj)        (G_TYPE_INSTANCE_GET_CLASS ((obj), GTK_TYPE_PRINTER, GtkPrinterClass))
+#define GTK_TYPE_PRINT_CAPABILITIES (gtk_print_capabilities_get_type ())
 
 /* Note, this type is manually registered with GObject in gtkprinter.c
  * If you add any flags, update the registration as well!
@@ -47,6 +42,15 @@ typedef enum
   GTK_PRINT_CAPABILITY_GENERATE_PS  = 1 << 6,
   GTK_PRINT_CAPABILITY_PREVIEW      = 1 << 7
 } GtkPrintCapabilities;
+
+GType gtk_print_capabilities_get_type (void) G_GNUC_CONST;
+
+#define GTK_TYPE_PRINTER                  (gtk_printer_get_type ())
+#define GTK_PRINTER(obj)                  (G_TYPE_CHECK_INSTANCE_CAST ((obj), GTK_TYPE_PRINTER, GtkPrinter))
+#define GTK_PRINTER_CLASS(klass)          (G_TYPE_CHECK_CLASS_CAST ((klass), GTK_TYPE_PRINTER, GtkPrinterClass))
+#define GTK_IS_PRINTER(obj)               (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GTK_TYPE_PRINTER))
+#define GTK_IS_PRINTER_CLASS(klass)       (G_TYPE_CHECK_CLASS_TYPE ((klass), GTK_TYPE_PRINTER))
+#define GTK_PRINTER_GET_CLASS(obj)        (G_TYPE_INSTANCE_GET_CLASS ((obj), GTK_TYPE_PRINTER, GtkPrinterClass))
 
 typedef struct _GtkPrinter          GtkPrinter;
 typedef struct _GtkPrinterClass     GtkPrinterClass;

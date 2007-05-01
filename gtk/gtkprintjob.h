@@ -102,8 +102,6 @@ void                     gtk_print_job_send                   (GtkPrintJob      
 							       gpointer                  user_data,
 							       GDestroyNotify            dnotify);
 
-GType                    gtk_print_capabilities_get_type      (void) G_GNUC_CONST;
-
 G_END_DECLS
 
 #endif /* __GTK_PRINT_JOB_H__ */
