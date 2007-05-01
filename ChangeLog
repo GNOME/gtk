@@ -2,6 +2,33 @@
 
 	Merge from trunk:
 
+        * gtk/gtkfilechooserdefault.c (struct UpdateCurrentFolderData),
+        (update_current_folder_get_info_cb): add a new struct field to clear
+        the file entry after the current folder has been updated.
+
+        (gtk_file_chooser_default_update_current_folder),
+        (change_folder_and_display_error): Add a new function parameter to
+        trigger file entry clearing.
+
+        (edited_idle_create_folder_cb),
+        (file_list_drag_data_received_get_info_cb),
+        (gtk_file_chooser_default_map),
+        (gtk_file_chooser_default_set_current_folder),
+        (switch_to_selected_folder), (save_entry_get_info_cb),
+        (shortcuts_activate_volume_mount_cb), (shortcuts_activate_volume),
+        (shortcuts_activate_get_info_cb), (list_row_activated),
+        (path_bar_clicked): use new function parameter appropriately.
+
+        (gtk_file_chooser_default_should_respond): trigger file entry clearing
+        after the directory is updated instead of clearing it before, this way
+        we avoid reloading the completion model with the soon to be old folder,
+        causing a warning and a glitch in the folder where completion happens.
+        (#379414, Carlos Garnacho)
+
+2007-05-01  Matthias Clasen  <mclasen@redhat.com>
+
+	Merge from trunk:
+
 	* gtk/gtkiconcachevalidator.[hc]: Add an icon cache validator.
 
 	* gtk/updateiconcache.c: Validate the generated cache before
