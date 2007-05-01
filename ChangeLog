@@ -1,5 +1,10 @@
 2007-05-02  Christian Persch  <chpe@gnome.org>
 
+	* gtk/gtktreemodel.c: (gtk_tree_iter_copy), (gtk_tree_iter_free): Use
+	GSlice for gtk_tree_iter_copy. Bug #434863.
+
+2007-05-02  Christian Persch  <chpe@gnome.org>
+
 	* gtk/gtkpapersize.c: (gtk_paper_size_get_paper_sizes): Put only
 	GtkPaperSizes into the list, don't mix it with GtkPageSetups. Bug
 	#434861.

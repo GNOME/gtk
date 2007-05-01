@@ -864,7 +864,7 @@ gtk_tree_iter_copy (GtkTreeIter *iter)
 
   g_return_val_if_fail (iter != NULL, NULL);
 
-  retval = g_new (GtkTreeIter, 1);
+  retval = g_slice_new (GtkTreeIter);
   *retval = *iter;
 
   return retval;
@@ -882,7 +882,7 @@ gtk_tree_iter_free (GtkTreeIter *iter)
 {
   g_return_if_fail (iter != NULL);
 
-  g_free (iter);
+  g_slice_free (GtkTreeIter, iter);
 }
 
 GType
