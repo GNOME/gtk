@@ -454,6 +454,7 @@ gtk_base_c_sources =            \
 	gtkhseparator.c		\
 	gtkhsv.c		\
 	gtkiconcache.c		\
+	gtkiconcachevalidator.c	\
 	gtkiconfactory.c	\
 	gtkicontheme.c		\
 	gtkiconview.c		\
@@ -610,6 +611,7 @@ gtk_all_c_sources += $(gtk_os_unix_c_sources)
 if OS_UNIX
 gtk_private_h_sources += \
 	gtkfilesystemunix.h		\
+	gtkiconcachevalidator.h		\
 	gtkprintbackend.h		\
 	gtkprinter-private.h		\
 	gtkprinteroption.h		\
@@ -865,7 +867,8 @@ gtk_query_immodules_2_0_SOURCES = queryimmodules.c
 
 gtk_update_icon_cache_LDADD = $(top_builddir)/gdk-pixbuf/libgdk_pixbuf-$(GTK_API_VERSION).la
 
-gtk_update_icon_cache_SOURCES = updateiconcache.c
+gtk_update_icon_cache_SOURCES = \
+	updateiconcache.c 
 
 .PHONY: files test test-debug
 

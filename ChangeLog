@@ -1,3 +1,15 @@
+2007-05-01  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtkiconcachvalidator.[hc]: Add an icon cache validator.
+
+	* gtk/updateiconcache.c: Validate the generated cache before
+	moving it in place. Also add a --validate option to validate
+	an existing icon cache.
+
+	* gtk/gtkiconcache.c: Validate icon caches before using them.
+
+	* gtk/Makefile.am: Integrate it.
+
 2007-05-01  Michael Emmel  <mike.emmel@gmail.com>
 
 	* gdk/directfb/gdkdisplay-directfb.c:

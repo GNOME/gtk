@@ -39,12 +39,19 @@
 #include <glib/gstdio.h>
 #include <gdk-pixbuf/gdk-pixdata.h>
 #include <glib/gi18n.h>
+#include "gtkiconcachevalidator.h"
 
 static gboolean force_update = FALSE;
 static gboolean ignore_theme_index = FALSE;
 static gboolean quiet = FALSE;
 static gboolean index_only = FALSE;
+static gboolean validate = FALSE;
 static gchar *var_name = "-";
+
+/* Quite ugly - if we just add the c file to the
+ * list of sources in Makefile.am, libtool complains.
+ */
+#include "gtkiconcachevalidator.c"
 
 #define CACHE_NAME "icon-theme.cache"
 
@@ -1396,6 +1403,32 @@ write_file (FILE *cache, GHashTable *files, GList *directories)
   return TRUE;
 }
 
+static gboolean
+validate_file (const gchar *file)
+{
+  GMappedFile *map;
+  CacheInfo info;
+
+  map = g_mapped_file_new (file, FALSE, NULL);
+  if (!map)
+    return FALSE;
+
+  info.cache = g_mapped_file_get_contents (map);
+  info.cache_size = g_mapped_file_get_length (map);
+  info.n_directories = 0;
+  info.flags = CHECK_OFFSETS|CHECK_STRINGS|CHECK_PIXBUFS;
+
+  if (!_gtk_icon_cache_validate (&info)) 
+    {
+      g_mapped_file_free (map);
+      return FALSE;
+    }
+  
+  g_mapped_file_free (map);
+
+  return TRUE;
+}
+
 static void
 build_cache (const gchar *path)
 {
@@ -1444,6 +1477,13 @@ build_cache (const gchar *path)
   
   if (!retval)
     {
+      g_unlink (tmp_cache_path);
+      exit (1);
+    }
+
+  if (!validate_file (tmp_cache_path))
+    {
+      g_printerr (_("The generated cache was invalid.\n"));
       g_unlink (tmp_cache_path);
       exit (1);
     }
@@ -1542,6 +1582,7 @@ static GOptionEntry args[] = {
   { "index-only", 'i', 0, G_OPTION_ARG_NONE, &index_only, N_("Don't include image data in the cache"), NULL },
   { "source", 'c', 0, G_OPTION_ARG_STRING, &var_name, N_("Output a C header file"), "NAME" },
   { "quiet", 'q', 0, G_OPTION_ARG_NONE, &quiet, N_("Turn off verbose output"), NULL },
+  { "validate", 'v', 0, G_OPTION_ARG_NONE, &validate, N_("Validate existing icon cache"), NULL },
   { NULL }
 };
 
@@ -1569,6 +1610,28 @@ main (int argc, char **argv)
   path = g_locale_to_utf8 (path, -1, NULL, NULL, NULL);
 #endif
   
+  if (validate)
+    {
+       gchar *file = g_build_filename (path, CACHE_NAME, NULL);
+
+       if (!g_file_test (file, G_FILE_TEST_IS_REGULAR))
+         {
+            if (!quiet)
+              g_printerr (_("File not found: %s\n"), file);
+            exit (1);
+         }
+       if (!validate_file (file))
+         {
+           if (!quiet)
+             g_printerr (_("Not a valid icon cache: %s\n"), file);
+           exit (1);
+         }
+       else 
+         {
+           exit (0);
+         }
+    }
+
   if (!ignore_theme_index && !has_theme_index (path))
     {
       g_printerr (_("No theme index file in '%s'.\n"
