@@ -21,6 +21,7 @@
 
 #include "gtkdebug.h"
 #include "gtkiconcache.h"
+#include "gtkiconcachevalidator.h"
 #include "gtkalias.h"
 
 #include <glib/gstdio.h>
@@ -58,7 +59,7 @@ struct _GtkIconCache {
 GtkIconCache *
 _gtk_icon_cache_ref (GtkIconCache *cache)
 {
-  cache->ref_count ++;
+  cache->ref_count++;
   return cache;
 }
 
@@ -89,6 +90,7 @@ _gtk_icon_cache_new_for_path (const gchar *path)
   struct stat st;
   struct stat path_st;
   gchar *buffer = NULL;
+  CacheInfo info;
 
    /* Check if we have a cache file */
   cache_filename = g_build_filename (path, "icon-theme.cache", NULL);
@@ -121,25 +123,25 @@ _gtk_icon_cache_new_for_path (const gchar *path)
   if (!map)
     goto done;
 
-  /* Verify version */
-  buffer = g_mapped_file_get_contents (map);
-  if (GET_UINT16 (buffer, 0) != MAJOR_VERSION ||
-      GET_UINT16 (buffer, 2) != MINOR_VERSION)
+  info.cache = g_mapped_file_get_contents (map);
+  info.cache_size = g_mapped_file_get_length (map);
+  info.n_directories = 0;
+  info.flags = CHECK_OFFSETS|CHECK_STRINGS;
+
+  if (!_gtk_icon_cache_validate (&info))
     {
       g_mapped_file_free (map);
+      g_warning ("Icon cache '%s' is invalid\n", cache_filename);
 
-      GTK_NOTE (ICONTHEME, 
-		g_print ("wrong cache version\n"));
       goto done;
     }
   
-  GTK_NOTE (ICONTHEME, 
-	    g_print ("found cache for %s\n", path));
+  GTK_NOTE (ICONTHEME, g_print ("found cache for %s\n", path));
 
   cache = g_new0 (GtkIconCache, 1);
   cache->ref_count = 1;
   cache->map = map;
-  cache->buffer = buffer;
+  cache->buffer = g_mapped_file_get_contents (map);
 
  done:
   g_free (cache_filename);  
@@ -440,7 +442,7 @@ _gtk_icon_cache_get_icon (GtkIconCache *cache,
   length = GET_UINT32 (cache->buffer, pixel_data_offset + 4);
   
   if (!gdk_pixdata_deserialize (&pixdata, length, 
-				cache->buffer + pixel_data_offset + 8,
+				(guchar *)(cache->buffer + pixel_data_offset + 8),
 				&error))
     {
       GTK_NOTE (ICONTHEME,

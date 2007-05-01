@@ -1,3 +1,16 @@
+2007-05-01  Matthias Clasen  <mclasen@redhat.com>
+
+	Merge from trunk:
+
+	* gtk/gtkiconcachevalidator.[hc]: Add an icon cache validator.
+
+	* gtk/updateiconcache.c: Validate the generated cache before
+	moving it in place. 
+
+	* gtk/gtkiconcache.c: Validate icon caches before using them.
+
+	* gtk/Makefile.am: Integrate it.
+
 2007-04-30  Matthias Clasen  <mclasen@redhat.com>
 
 	Merge from trunk:
