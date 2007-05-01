@@ -1,5 +1,11 @@
 2007-05-02  Christian Persch  <chpe@gnome.org>
 
+	* gtk/gtkpapersize.c: (gtk_paper_size_get_paper_sizes): Put only
+	GtkPaperSizes into the list, don't mix it with GtkPageSetups. Bug
+	#434861.
+
+2007-05-02  Christian Persch  <chpe@gnome.org>
+
 	* gtk/gtkpapersize.c: (gtk_paper_size_new_from_info),
 	(gtk_paper_size_new), (gtk_paper_size_new_custom),
 	(gtk_paper_size_copy), (gtk_paper_size_free): Use GSlice to allocate
