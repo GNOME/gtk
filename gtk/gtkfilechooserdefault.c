@@ -278,6 +278,7 @@ static gboolean       gtk_file_chooser_default_set_current_folder 	   (GtkFileCh
 static gboolean       gtk_file_chooser_default_update_current_folder 	   (GtkFileChooser    *chooser,
 									    const GtkFilePath *path,
 									    gboolean           keep_trail,
+									    gboolean           clear_entry,
 									    GError           **error);
 static GtkFilePath *  gtk_file_chooser_default_get_current_folder 	   (GtkFileChooser    *chooser);
 static void           gtk_file_chooser_default_set_current_name   	   (GtkFileChooser    *chooser,
@@ -1007,7 +1008,8 @@ error_changing_folder_dialog (GtkFileChooserDefault *impl,
 /* Changes folders, displaying an error dialog if this fails */
 static gboolean
 change_folder_and_display_error (GtkFileChooserDefault *impl,
-				 const GtkFilePath     *path)
+				 const GtkFilePath     *path,
+				 gboolean               clear_entry)
 {
   GError *error;
   gboolean result;
@@ -1029,7 +1031,7 @@ change_folder_and_display_error (GtkFileChooserDefault *impl,
   path_copy = gtk_file_path_copy (path);
 
   error = NULL;
-  result = gtk_file_chooser_default_update_current_folder (GTK_FILE_CHOOSER (impl), path_copy, TRUE, &error);
+  result = gtk_file_chooser_default_update_current_folder (GTK_FILE_CHOOSER (impl), path_copy, TRUE, clear_entry, &error);
 
   if (!result)
     error_changing_folder_dialog (impl, path_copy, error);
@@ -2144,7 +2146,7 @@ edited_idle_create_folder_cb (GtkFileSystemHandle *handle,
     goto out;
 
   if (!error)
-    change_folder_and_display_error (impl, path);
+    change_folder_and_display_error (impl, path, FALSE);
   else
     error_creating_folder_dialog (impl, path, g_error_copy (error));
 
@@ -3788,7 +3790,7 @@ file_list_drag_data_received_get_info_cb (GtkFileSystemHandle *handle,
        data->impl->action == GTK_FILE_CHOOSER_ACTION_SAVE) &&
       data->uris[1] == 0 && !error &&
       gtk_file_info_get_is_folder (info))
-    change_folder_and_display_error (data->impl, data->path);
+    change_folder_and_display_error (data->impl, data->path, FALSE);
   else
     {
       GError *error = NULL;
@@ -5528,7 +5530,7 @@ gtk_file_chooser_default_map (GtkWidget *widget)
       if (impl->current_folder)
         {
           pending_select_paths_store_selection (impl);
-          change_folder_and_display_error (impl, impl->current_folder);
+          change_folder_and_display_error (impl, impl->current_folder, FALSE);
 	}
       break;
 
@@ -6253,7 +6255,7 @@ gtk_file_chooser_default_set_current_folder (GtkFileChooser    *chooser,
 					     const GtkFilePath *path,
 					     GError           **error)
 {
-  return gtk_file_chooser_default_update_current_folder (chooser, path, FALSE, error);
+  return gtk_file_chooser_default_update_current_folder (chooser, path, FALSE, FALSE, error);
 }
 
 
@@ -6262,6 +6264,7 @@ struct UpdateCurrentFolderData
   GtkFileChooserDefault *impl;
   GtkFilePath *path;
   gboolean keep_trail;
+  gboolean clear_entry;
   GtkFilePath *original_path;
   GError *original_error;
 };
@@ -6367,8 +6370,13 @@ update_current_folder_get_info_cb (GtkFileSystemHandle *handle,
   /* Set the folder on the save entry */
 
   if (impl->location_entry)
-    _gtk_file_chooser_entry_set_base_folder (GTK_FILE_CHOOSER_ENTRY (impl->location_entry),
-					     impl->current_folder);
+    {
+      _gtk_file_chooser_entry_set_base_folder (GTK_FILE_CHOOSER_ENTRY (impl->location_entry),
+					       impl->current_folder);
+
+      if (data->clear_entry)
+	_gtk_file_chooser_entry_set_file_part (GTK_FILE_CHOOSER_ENTRY (impl->location_entry), "");
+    }
 
   /* Create a new list model.  This is slightly evil; we store the result value
    * but perform more actions rather than returning immediately even if it
@@ -6398,6 +6406,7 @@ static gboolean
 gtk_file_chooser_default_update_current_folder (GtkFileChooser    *chooser,
 						const GtkFilePath *path,
 						gboolean           keep_trail,
+						gboolean           clear_entry,
 						GError           **error)
 {
   GtkFileChooserDefault *impl = GTK_FILE_CHOOSER_DEFAULT (chooser);
@@ -6427,6 +6436,7 @@ gtk_file_chooser_default_update_current_folder (GtkFileChooser    *chooser,
   data->impl = impl;
   data->path = gtk_file_path_copy (path);
   data->keep_trail = keep_trail;
+  data->clear_entry = clear_entry;
 
   impl->reload_state = RELOAD_HAS_FOLDER;
 
@@ -7291,7 +7301,7 @@ switch_to_selected_folder (GtkFileChooserDefault *impl)
 
   g_assert (closure.path && closure.num_selected == 1);
 
-  change_folder_and_display_error (impl, closure.path);
+  change_folder_and_display_error (impl, closure.path, FALSE);
 }
 
 /* Gets the GtkFileInfo for the selected row in the file list; assumes single
@@ -7586,7 +7596,7 @@ save_entry_get_info_cb (GtkFileSystemHandle *handle,
   else
     {
       /* This will display an error, which is what we want */
-      change_folder_and_display_error (data->impl, data->parent_path);
+      change_folder_and_display_error (data->impl, data->parent_path, FALSE);
     }
 
 out:
@@ -7831,8 +7841,7 @@ gtk_file_chooser_default_should_respond (GtkFileChooserEmbed *chooser_embed)
 	  if (impl->action == GTK_FILE_CHOOSER_ACTION_OPEN
 	      || impl->action == GTK_FILE_CHOOSER_ACTION_SAVE)
 	    {
-	      _gtk_file_chooser_entry_set_file_part (entry, "");
-	      change_folder_and_display_error (impl, path);
+	      change_folder_and_display_error (impl, path, TRUE);
 	      retval = FALSE;
 	    }
 	  else if (impl->action == GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER
@@ -8089,7 +8098,7 @@ shortcuts_activate_volume_mount_cb (GtkFileSystemHandle *handle,
   path = gtk_file_system_volume_get_base_path (impl->file_system, volume);
   if (path != NULL)
     {
-      change_folder_and_display_error (impl, path);
+      change_folder_and_display_error (impl, path, FALSE);
       gtk_file_path_free (path);
     }
 
@@ -8127,7 +8136,7 @@ shortcuts_activate_volume (GtkFileChooserDefault *impl,
       path = gtk_file_system_volume_get_base_path (impl->file_system, volume);
       if (path != NULL)
         {
-          change_folder_and_display_error (impl, path);
+          change_folder_and_display_error (impl, path, FALSE);
           gtk_file_path_free (path);
         }
     }
@@ -8160,7 +8169,7 @@ shortcuts_activate_get_info_cb (GtkFileSystemHandle *handle,
     goto out;
 
   if (!error && gtk_file_info_get_is_folder (info))
-    change_folder_and_display_error (data->impl, data->path);
+    change_folder_and_display_error (data->impl, data->path, FALSE);
   else
     gtk_file_chooser_default_select_path (GTK_FILE_CHOOSER (data->impl), data->path, NULL);
 
@@ -8360,7 +8369,7 @@ list_row_activated (GtkTreeView           *tree_view,
       const GtkFilePath *file_path;
 
       file_path = _gtk_file_system_model_get_path (impl->browse_files_model, &child_iter);
-      change_folder_and_display_error (impl, file_path);
+      change_folder_and_display_error (impl, file_path, FALSE);
 
       return;
     }
@@ -8380,7 +8389,7 @@ path_bar_clicked (GtkPathBar            *path_bar,
   if (child_path)
     pending_select_paths_add (impl, child_path);
 
-  if (!change_folder_and_display_error (impl, file_path))
+  if (!change_folder_and_display_error (impl, file_path, FALSE))
     return;
 
   /* Say we have "/foo/bar/[.baz]" and the user clicks on "bar".  We should then
