@@ -1,3 +1,9 @@
+2007-05-02  Christian Persch  <chpe@gnome.org>
+
+	* gtk/gtkstatusbar.c: (gtk_statusbar_get_context_id),
+	(gtk_statusbar_expose_event): No need to allocate a guint; just stuff
+	the ID into the pointer directly. Bug #434865.
+
 2007-05-01  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtkfilechooserdefault.c (struct UpdateCurrentFolderData),

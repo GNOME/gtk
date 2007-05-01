@@ -276,18 +276,17 @@ gtk_statusbar_get_context_id (GtkStatusbar *statusbar,
   /* we need to preserve namespaces on object datas */
   string = g_strconcat ("gtk-status-bar-context:", context_description, NULL);
 
-  id = g_object_get_data (G_OBJECT (statusbar), string);
-  if (!id)
+  id = GPOINTER_TO_UINT (g_object_get_data (G_OBJECT (statusbar), string));
+  if (id == 0)
     {
-      id = g_new (guint, 1);
-      *id = statusbar->seq_context_id++;
-      g_object_set_data_full (G_OBJECT (statusbar), string, id, g_free);
+      id = statusbar->seq_context_id++;
+      g_object_set_data_full (G_OBJECT (statusbar), string, GUINT_TO_POINTER (id), NULL);
       statusbar->keys = g_slist_prepend (statusbar->keys, string);
     }
   else
     g_free (string);
 
-  return *id;
+  return id;
 }
 
 /**
@@ -787,7 +786,7 @@ gtk_statusbar_expose_event (GtkWidget      *widget,
       gtk_paint_resize_grip (widget->style,
                              widget->window,
                              GTK_WIDGET_STATE (widget),
-                             NULL,
+                             &event->area,
                              widget,
                              "statusbar",
                              edge,
