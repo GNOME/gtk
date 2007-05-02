@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ru\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-03-14 01:22-0400\n"
+"POT-Creation-Date: 2007-05-02 13:20-0400\n"
 "PO-Revision-Date: 2007-03-03 20:27+0200\n"
 "Last-Translator: Leonid Kanter <leon@asplinux.ru>\n"
 "Language-Team:  <gnome-cyr@gnome.org>\n"
@@ -2335,11 +2335,11 @@ msgstr "Заголовок диалога выбора файлов."
 msgid "The desired width of the button widget, in characters."
 msgstr "Желаемая ширина виджета кнопки, в символах."
 
-#: gtk/gtkfilechooserdefault.c:614
+#: gtk/gtkfilechooserdefault.c:637
 msgid "Default file chooser backend"
 msgstr "Исходный движок для диалога выбора файлов"
 
-#: gtk/gtkfilechooserdefault.c:615
+#: gtk/gtkfilechooserdefault.c:638
 msgid "Name of the GtkFileChooser backend to use by default"
 msgstr "Наименование исходного движка виджета GtkFileChooser"
 
@@ -3533,7 +3533,7 @@ msgstr "Настройки принтера"
 msgid "Page Setup"
 msgstr "Настройки страницы"
 
-#: gtk/gtkprintjob.c:152 gtk/gtkprintoperation.c:985
+#: gtk/gtkprintjob.c:152 gtk/gtkprintoperation.c:1008
 msgid "Track Print Status"
 msgstr "Следить за состоянием принтера"
 
@@ -3555,51 +3555,51 @@ msgstr ""
 msgid "Command to run when displaying a print preview"
 msgstr "Команда, выполняемая при отображении предварительного просмотра печати"
 
-#: gtk/gtkprintoperation.c:858
+#: gtk/gtkprintoperation.c:881
 msgid "Default Page Setup"
 msgstr "Настройки страницы по умолчанию"
 
-#: gtk/gtkprintoperation.c:859
+#: gtk/gtkprintoperation.c:882
 msgid "The GtkPageSetup used by default"
 msgstr "Объект GtkPageSetup используемый по умолчанию"
 
-#: gtk/gtkprintoperation.c:877 gtk/gtkprintunixdialog.c:245
+#: gtk/gtkprintoperation.c:900 gtk/gtkprintunixdialog.c:245
 msgid "Print Settings"
 msgstr "Настройки печати"
 
-#: gtk/gtkprintoperation.c:878 gtk/gtkprintunixdialog.c:246
+#: gtk/gtkprintoperation.c:901 gtk/gtkprintunixdialog.c:246
 msgid "The GtkPrintSettings used for initializing the dialog"
 msgstr "Объект GtkPrintSettings, используемый для инициализации диалога"
 
-#: gtk/gtkprintoperation.c:896
+#: gtk/gtkprintoperation.c:919
 msgid "Job Name"
 msgstr "Имя задачи"
 
-#: gtk/gtkprintoperation.c:897
+#: gtk/gtkprintoperation.c:920
 msgid "A string used for identifying the print job."
 msgstr "Строка, используемая для идентификации задачи печати."
 
-#: gtk/gtkprintoperation.c:920
+#: gtk/gtkprintoperation.c:943
 msgid "Number of Pages"
 msgstr "Число страниц"
 
-#: gtk/gtkprintoperation.c:921
+#: gtk/gtkprintoperation.c:944
 msgid "The number of pages in the document."
 msgstr "Число страниц в документе."
 
-#: gtk/gtkprintoperation.c:942 gtk/gtkprintunixdialog.c:235
+#: gtk/gtkprintoperation.c:965 gtk/gtkprintunixdialog.c:235
 msgid "Current Page"
 msgstr "Текущая страница"
 
-#: gtk/gtkprintoperation.c:943 gtk/gtkprintunixdialog.c:236
+#: gtk/gtkprintoperation.c:966 gtk/gtkprintunixdialog.c:236
 msgid "The current page in the document"
 msgstr "Текущая страница документа"
 
-#: gtk/gtkprintoperation.c:964
+#: gtk/gtkprintoperation.c:987
 msgid "Use full page"
 msgstr "Использовать страницу целиком"
 
-#: gtk/gtkprintoperation.c:965
+#: gtk/gtkprintoperation.c:988
 msgid ""
 "TRUE if the the origin of the context should be at the corner of the page "
 "and not the corner of the imageable area"
@@ -3607,7 +3607,7 @@ msgstr ""
 "Установлено, если начало печатаемых данных должно располагаться в вершине "
 "страницы, а не в вершине отображаемой области"
 
-#: gtk/gtkprintoperation.c:986
+#: gtk/gtkprintoperation.c:1009
 msgid ""
 "TRUE if the print operation will continue to report on the print job status "
 "after the print data has been sent to the printer or print server."
@@ -3615,56 +3615,56 @@ msgstr ""
 "Установлено, если задача печати будет сообщать о своем состоянии даже после "
 "того, как данные будут отосланы на принтер или сервер печати."
 
-#: gtk/gtkprintoperation.c:1003
+#: gtk/gtkprintoperation.c:1026
 msgid "Unit"
 msgstr "Единицы"
 
-#: gtk/gtkprintoperation.c:1004
+#: gtk/gtkprintoperation.c:1027
 msgid "The unit in which distances can be measured in the context"
 msgstr "Единицы, в которых измеряются размеры"
 
-#: gtk/gtkprintoperation.c:1021
+#: gtk/gtkprintoperation.c:1044
 msgid "Show Dialog"
 msgstr "Показать диалог"
 
-#: gtk/gtkprintoperation.c:1022
+#: gtk/gtkprintoperation.c:1045
 msgid "TRUE if a progress dialog is shown while printing."
 msgstr ""
 "Установлено, если во время печати показывается диалог текущего состояния."
 
-#: gtk/gtkprintoperation.c:1045
+#: gtk/gtkprintoperation.c:1068
 msgid "Allow Async"
 msgstr "Разрешить асинхронно"
 
-#: gtk/gtkprintoperation.c:1046
+#: gtk/gtkprintoperation.c:1069
 msgid "TRUE if print process may run asynchronous."
 msgstr "Установлено, если процесс печати может происходить асинхронно."
 
-#: gtk/gtkprintoperation.c:1069 gtk/gtkprintoperation.c:1070
+#: gtk/gtkprintoperation.c:1092 gtk/gtkprintoperation.c:1093
 msgid "Export filename"
 msgstr "Файл"
 
-#: gtk/gtkprintoperation.c:1084
+#: gtk/gtkprintoperation.c:1107
 msgid "Status"
 msgstr "Состояние"
 
-#: gtk/gtkprintoperation.c:1085
+#: gtk/gtkprintoperation.c:1108
 msgid "The status of the print operation"
 msgstr "Состояние операции печати"
 
-#: gtk/gtkprintoperation.c:1105
+#: gtk/gtkprintoperation.c:1128
 msgid "Status String"
 msgstr "Строка состояния"
 
-#: gtk/gtkprintoperation.c:1106
+#: gtk/gtkprintoperation.c:1129
 msgid "A human-readable description of the status"
 msgstr "Описание статуса, показываемое пользователю"
 
-#: gtk/gtkprintoperation.c:1124
+#: gtk/gtkprintoperation.c:1147
 msgid "Custom tab label"
 msgstr "Настраиваемая метка вкладки"
 
-#: gtk/gtkprintoperation.c:1125
+#: gtk/gtkprintoperation.c:1148
 msgid "Label for the tab containing custom widgets."
 msgstr "Метка для вкладки, содержащей дополнительные элементы."
 
@@ -4057,11 +4057,11 @@ msgstr "Порядок сортировки отображаемых элеме�
 msgid "The current filter for selecting which resources are displayed"
 msgstr "Текущий фильтр для выбора отображаемых элементов"
 
-#: gtk/gtkrecentchoosermenu.c:215
+#: gtk/gtkrecentchoosermenu.c:217
 msgid "Show Numbers"
 msgstr "Показывать номера"
 
-#: gtk/gtkrecentchoosermenu.c:216
+#: gtk/gtkrecentchoosermenu.c:218
 msgid "Whether the items should be displayed with a number"
 msgstr "Показывать ли элементы вместе с номером"
 

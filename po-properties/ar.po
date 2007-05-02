@@ -13,7 +13,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-properties.gtk-2-10.ar\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-03-14 01:22-0400\n"
+"POT-Creation-Date: 2007-05-02 13:20-0400\n"
 "PO-Revision-Date: 2006-12-24 17:57+0100\n"
 "Last-Translator: Djihed Afifi <djihed@gmail.com>\n"
 "Language-Team: Arabic <support@arabeyes.org>\n"
@@ -2271,11 +2271,11 @@ msgstr "عنوان لحوار تصفّح الملفات."
 msgid "The desired width of the button widget, in characters."
 msgstr "العرض المطلوب لقطعة الزر، بالمحارف"
 
-#: gtk/gtkfilechooserdefault.c:614
+#: gtk/gtkfilechooserdefault.c:637
 msgid "Default file chooser backend"
 msgstr "خلفيّة منتقي الملفات الإفتراضيّة"
 
-#: gtk/gtkfilechooserdefault.c:615
+#: gtk/gtkfilechooserdefault.c:638
 msgid "Name of the GtkFileChooser backend to use by default"
 msgstr "اسم خلفية GtkFileChooser التي ستستخدم إفتراضيّا"
 
@@ -3436,7 +3436,7 @@ msgstr "تعيينات الطابعة"
 msgid "Page Setup"
 msgstr "إعداد الصفحة"
 
-#: gtk/gtkprintjob.c:152 gtk/gtkprintoperation.c:985
+#: gtk/gtkprintjob.c:152 gtk/gtkprintoperation.c:1008
 msgid "Track Print Status"
 msgstr "متابعة حالة الطبع"
 
@@ -3456,51 +3456,51 @@ msgstr "الأمر الإفتراضي المشغل عند عرض الطبع"
 msgid "Command to run when displaying a print preview"
 msgstr "الأمر المشغل عند عرض الطبع"
 
-#: gtk/gtkprintoperation.c:858
+#: gtk/gtkprintoperation.c:881
 msgid "Default Page Setup"
 msgstr "إعداد الصفحة الإفتراضي"
 
-#: gtk/gtkprintoperation.c:859
+#: gtk/gtkprintoperation.c:882
 msgid "The GtkPageSetup used by default"
 msgstr "الـ GtkPageSetup المستعمل افتراضيا"
 
-#: gtk/gtkprintoperation.c:877 gtk/gtkprintunixdialog.c:245
+#: gtk/gtkprintoperation.c:900 gtk/gtkprintunixdialog.c:245
 msgid "Print Settings"
 msgstr "تعيينات الطبع"
 
-#: gtk/gtkprintoperation.c:878 gtk/gtkprintunixdialog.c:246
+#: gtk/gtkprintoperation.c:901 gtk/gtkprintunixdialog.c:246
 msgid "The GtkPrintSettings used for initializing the dialog"
 msgstr "الـ GtkPrintSettings المستعمل لبدأ الحوار"
 
-#: gtk/gtkprintoperation.c:896
+#: gtk/gtkprintoperation.c:919
 msgid "Job Name"
 msgstr "اسم العمل"
 
-#: gtk/gtkprintoperation.c:897
+#: gtk/gtkprintoperation.c:920
 msgid "A string used for identifying the print job."
 msgstr "سلسلة تستخدم لتعريف وظيفة الطبع."
 
-#: gtk/gtkprintoperation.c:920
+#: gtk/gtkprintoperation.c:943
 msgid "Number of Pages"
 msgstr "عدد الصفحات"
 
-#: gtk/gtkprintoperation.c:921
+#: gtk/gtkprintoperation.c:944
 msgid "The number of pages in the document."
 msgstr "عدد الصفحات في المستند"
 
-#: gtk/gtkprintoperation.c:942 gtk/gtkprintunixdialog.c:235
+#: gtk/gtkprintoperation.c:965 gtk/gtkprintunixdialog.c:235
 msgid "Current Page"
 msgstr "الصفحة الحالية"
 
-#: gtk/gtkprintoperation.c:943 gtk/gtkprintunixdialog.c:236
+#: gtk/gtkprintoperation.c:966 gtk/gtkprintunixdialog.c:236
 msgid "The current page in the document"
 msgstr "الصفحة الحالية في المستند"
 
-#: gtk/gtkprintoperation.c:964
+#: gtk/gtkprintoperation.c:987
 msgid "Use full page"
 msgstr "استعمل صفحة كاملة"
 
-#: gtk/gtkprintoperation.c:965
+#: gtk/gtkprintoperation.c:988
 msgid ""
 "TRUE if the the origin of the context should be at the corner of the page "
 "and not the corner of the imageable area"
@@ -3508,7 +3508,7 @@ msgstr ""
 "صحيح إذا كان أصل السياق يجب أن يكون في زاوية الصفحة وليس عند زاوية المنطقة "
 "الصورية"
 
-#: gtk/gtkprintoperation.c:986
+#: gtk/gtkprintoperation.c:1009
 msgid ""
 "TRUE if the print operation will continue to report on the print job status "
 "after the print data has been sent to the printer or print server."
@@ -3516,55 +3516,55 @@ msgstr ""
 "صحيح اذا كانت عملية الطبع ستظل تبعث إشارات تغيير الحالة بعد ارسال بيانات "
 "الطبع لخادم الطباعة."
 
-#: gtk/gtkprintoperation.c:1003
+#: gtk/gtkprintoperation.c:1026
 msgid "Unit"
 msgstr "الوحدة"
 
-#: gtk/gtkprintoperation.c:1004
+#: gtk/gtkprintoperation.c:1027
 msgid "The unit in which distances can be measured in the context"
 msgstr "الوحدة في المسافات التي يمكن قياسها"
 
-#: gtk/gtkprintoperation.c:1021
+#: gtk/gtkprintoperation.c:1044
 msgid "Show Dialog"
 msgstr "اظهر الحوار"
 
-#: gtk/gtkprintoperation.c:1022
+#: gtk/gtkprintoperation.c:1045
 msgid "TRUE if a progress dialog is shown while printing."
 msgstr "صحيح إذا كان حوار التقدم معروضا عند الطبع"
 
-#: gtk/gtkprintoperation.c:1045
+#: gtk/gtkprintoperation.c:1068
 msgid "Allow Async"
 msgstr "اسمح بـ Async"
 
-#: gtk/gtkprintoperation.c:1046
+#: gtk/gtkprintoperation.c:1069
 msgid "TRUE if print process may run asynchronous."
 msgstr "صحيح اذا يتم تشغيل تطبيق الطباعة لا تزامنيا"
 
-#: gtk/gtkprintoperation.c:1069 gtk/gtkprintoperation.c:1070
+#: gtk/gtkprintoperation.c:1092 gtk/gtkprintoperation.c:1093
 msgid "Export filename"
 msgstr "صدّر اسم الملف"
 
-#: gtk/gtkprintoperation.c:1084
+#: gtk/gtkprintoperation.c:1107
 msgid "Status"
 msgstr "الحالة"
 
-#: gtk/gtkprintoperation.c:1085
+#: gtk/gtkprintoperation.c:1108
 msgid "The status of the print operation"
 msgstr "حالة عملية الطباعة"
 
-#: gtk/gtkprintoperation.c:1105
+#: gtk/gtkprintoperation.c:1128
 msgid "Status String"
 msgstr "نص الحالة"
 
-#: gtk/gtkprintoperation.c:1106
+#: gtk/gtkprintoperation.c:1129
 msgid "A human-readable description of the status"
 msgstr "وصف للحالة بصورة مفهومة للبشر"
 
-#: gtk/gtkprintoperation.c:1124
+#: gtk/gtkprintoperation.c:1147
 msgid "Custom tab label"
 msgstr "عنوان لسان مخصص"
 
-#: gtk/gtkprintoperation.c:1125
+#: gtk/gtkprintoperation.c:1148
 msgid "Label for the tab containing custom widgets."
 msgstr "تسمية اللسان المحتوي على القطع المخصصة"
 
@@ -3926,11 +3926,11 @@ msgstr "كيفية تصنيف العناصر المعروضة"
 msgid "The current filter for selecting which resources are displayed"
 msgstr "المرشّح الحالي لانتقاء الموارد المعروضة"
 
-#: gtk/gtkrecentchoosermenu.c:215
+#: gtk/gtkrecentchoosermenu.c:217
 msgid "Show Numbers"
 msgstr "اعرض الأرقام"
 
-#: gtk/gtkrecentchoosermenu.c:216
+#: gtk/gtkrecentchoosermenu.c:218
 msgid "Whether the items should be displayed with a number"
 msgstr "فيما إذا يتم عرض العناصر بعدد"
 

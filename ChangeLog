@@ -1,5 +1,7 @@
 2007-05-02  Matthias Clasen  <mclasen@redhat.com>
 
+	* === Released 2.10.12 ===
+
 	* gtk/Makefile.am: Forgotten changes for the icon cache validator
 
 2007-05-02  Kristian Rietveld  <kris@imendio.com>

@@ -23,7 +23,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-03-14 01:22-0400\n"
+"POT-Creation-Date: 2007-05-02 13:20-0400\n"
 "PO-Revision-Date: 2006-12-11 19:23+0100\n"
 "Last-Translator: Tino Meinen <a.t.meinen@chello.nl>\n"
 "Language-Team: Dutch <vertaling@vrijschrift.org>\n"
@@ -2385,11 +2385,11 @@ msgstr "De titel van het bestandsselectie-dialoogvenster."
 msgid "The desired width of the button widget, in characters."
 msgstr "De gewenste breedte van het knop-widget, in lettertekens."
 
-#: gtk/gtkfilechooserdefault.c:614
+#: gtk/gtkfilechooserdefault.c:637
 msgid "Default file chooser backend"
 msgstr "Standaard backend bestandkiezer"
 
-#: gtk/gtkfilechooserdefault.c:615
+#: gtk/gtkfilechooserdefault.c:638
 msgid "Name of the GtkFileChooser backend to use by default"
 msgstr "Naam van de gebruikte backend voor de bestandkiezer"
 
@@ -3600,7 +3600,7 @@ msgstr "Printerinstellingen"
 msgid "Page Setup"
 msgstr "Pagina-instellingen"
 
-#: gtk/gtkprintjob.c:152 gtk/gtkprintoperation.c:985
+#: gtk/gtkprintjob.c:152 gtk/gtkprintoperation.c:1008
 msgid "Track Print Status"
 msgstr "Printstatus volgen"
 
@@ -3623,54 +3623,54 @@ msgstr ""
 msgid "Command to run when displaying a print preview"
 msgstr "Opdracht die uitgevoerd wordt bij het tonen van een afdrukvoorbeeld"
 
-#: gtk/gtkprintoperation.c:858
+#: gtk/gtkprintoperation.c:881
 msgid "Default Page Setup"
 msgstr "Standaard pagina-instelling"
 
-#: gtk/gtkprintoperation.c:859
+#: gtk/gtkprintoperation.c:882
 msgid "The GtkPageSetup used by default"
 msgstr "De GtkPageSetup die standaard wordt gebruikt"
 
-#: gtk/gtkprintoperation.c:877 gtk/gtkprintunixdialog.c:245
+#: gtk/gtkprintoperation.c:900 gtk/gtkprintunixdialog.c:245
 msgid "Print Settings"
 msgstr "Afdrukinstellingen"
 
-#: gtk/gtkprintoperation.c:878 gtk/gtkprintunixdialog.c:246
+#: gtk/gtkprintoperation.c:901 gtk/gtkprintunixdialog.c:246
 msgid "The GtkPrintSettings used for initializing the dialog"
 msgstr ""
 "De GtkPrintSettings die gebruikt worden voor het initialiseren van het "
 "dialoogvenster"
 
-#: gtk/gtkprintoperation.c:896
+#: gtk/gtkprintoperation.c:919
 msgid "Job Name"
 msgstr "Naam printopdracht"
 
-#: gtk/gtkprintoperation.c:897
+#: gtk/gtkprintoperation.c:920
 msgid "A string used for identifying the print job."
 msgstr "Een tekenreeks die gebruikt word om de printopdracht te identificeren."
 
-#: gtk/gtkprintoperation.c:920
+#: gtk/gtkprintoperation.c:943
 msgid "Number of Pages"
 msgstr "Aantal pagina's"
 
-#: gtk/gtkprintoperation.c:921
+#: gtk/gtkprintoperation.c:944
 msgid "The number of pages in the document."
 msgstr "Het aantal pagina's in het document."
 
-#: gtk/gtkprintoperation.c:942 gtk/gtkprintunixdialog.c:235
+#: gtk/gtkprintoperation.c:965 gtk/gtkprintunixdialog.c:235
 msgid "Current Page"
 msgstr "Huidige pagina"
 
-#: gtk/gtkprintoperation.c:943 gtk/gtkprintunixdialog.c:236
+#: gtk/gtkprintoperation.c:966 gtk/gtkprintunixdialog.c:236
 msgid "The current page in the document"
 msgstr "De huidige pagina in het document"
 
-#: gtk/gtkprintoperation.c:964
+#: gtk/gtkprintoperation.c:987
 msgid "Use full page"
 msgstr "Hele pagina gebruiken"
 
 # afdrukbare/zichtbare
-#: gtk/gtkprintoperation.c:965
+#: gtk/gtkprintoperation.c:988
 msgid ""
 "TRUE if the the origin of the context should be at the corner of the page "
 "and not the corner of the imageable area"
@@ -3678,7 +3678,7 @@ msgstr ""
 "WAAR indien de oorsprong van de context in de hoek van de pagina moet staan "
 "en niet in de hoek van het afrukbare gebied"
 
-#: gtk/gtkprintoperation.c:986
+#: gtk/gtkprintoperation.c:1009
 msgid ""
 "TRUE if the print operation will continue to report on the print job status "
 "after the print data has been sent to the printer or print server."
@@ -3687,56 +3687,56 @@ msgstr ""
 "afdrukstatus nadat de afdrukgegevens naar de printer of print-server zijn "
 "verzonden."
 
-#: gtk/gtkprintoperation.c:1003
+#: gtk/gtkprintoperation.c:1026
 msgid "Unit"
 msgstr "Eenheid"
 
-#: gtk/gtkprintoperation.c:1004
+#: gtk/gtkprintoperation.c:1027
 msgid "The unit in which distances can be measured in the context"
 msgstr "De eenheden waarin afstanden gemeten kunnen worden in de context"
 
-#: gtk/gtkprintoperation.c:1021
+#: gtk/gtkprintoperation.c:1044
 msgid "Show Dialog"
 msgstr "Dialoogvenster tonen"
 
-#: gtk/gtkprintoperation.c:1022
+#: gtk/gtkprintoperation.c:1045
 msgid "TRUE if a progress dialog is shown while printing."
 msgstr "WAAR indien een voortgangsdialoog wordt getoond tijdens het afdrukken."
 
-#: gtk/gtkprintoperation.c:1045
+#: gtk/gtkprintoperation.c:1068
 msgid "Allow Async"
 msgstr "Async toestaan"
 
-#: gtk/gtkprintoperation.c:1046
+#: gtk/gtkprintoperation.c:1069
 msgid "TRUE if print process may run asynchronous."
 msgstr "WAAR indien het afdrukproces asynchroon mag verlopen."
 
-#: gtk/gtkprintoperation.c:1069 gtk/gtkprintoperation.c:1070
+#: gtk/gtkprintoperation.c:1092 gtk/gtkprintoperation.c:1093
 msgid "Export filename"
 msgstr "Bestandsnaam exporteren"
 
-#: gtk/gtkprintoperation.c:1084
+#: gtk/gtkprintoperation.c:1107
 msgid "Status"
 msgstr "Status"
 
 # printopdracht/printbewerking/afdrukopdracht
-#: gtk/gtkprintoperation.c:1085
+#: gtk/gtkprintoperation.c:1108
 msgid "The status of the print operation"
 msgstr "De status van de printopdracht"
 
-#: gtk/gtkprintoperation.c:1105
+#: gtk/gtkprintoperation.c:1128
 msgid "Status String"
 msgstr "Status-tekenreeks"
 
-#: gtk/gtkprintoperation.c:1106
+#: gtk/gtkprintoperation.c:1129
 msgid "A human-readable description of the status"
 msgstr "Een leesbare omschrijving van de status"
 
-#: gtk/gtkprintoperation.c:1124
+#: gtk/gtkprintoperation.c:1147
 msgid "Custom tab label"
 msgstr "Zelfgekozen tabblad-label"
 
-#: gtk/gtkprintoperation.c:1125
+#: gtk/gtkprintoperation.c:1148
 msgid "Label for the tab containing custom widgets."
 msgstr "Label voor het tabblad met zelfgekozen widgets."
 
@@ -4140,12 +4140,12 @@ msgstr "De sorteervolgorde van de getoonde items"
 msgid "The current filter for selecting which resources are displayed"
 msgstr "Het huidige filter dat bepaalt welke bestandstypen weergegeven worden"
 
-#: gtk/gtkrecentchoosermenu.c:215
+#: gtk/gtkrecentchoosermenu.c:217
 msgid "Show Numbers"
 msgstr "Nummers tonen"
 
 # niet helemaal strict vertaald, maar wel duidelijk
-#: gtk/gtkrecentchoosermenu.c:216
+#: gtk/gtkrecentchoosermenu.c:218
 msgid "Whether the items should be displayed with a number"
 msgstr "Of de items een nummer moeten krijgen"
 

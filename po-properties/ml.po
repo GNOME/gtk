@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-properties.gtk-2-10.ml\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-03-14 01:22-0400\n"
+"POT-Creation-Date: 2007-05-02 13:20-0400\n"
 "PO-Revision-Date: 2007-03-07 16:43+0530\n"
 "Last-Translator: Ani Peter <apeter@redhat.com>\n"
 "Language-Team: Malayalam <en@li.org>\n"
@@ -2273,11 +2273,11 @@ msgstr "ഫയല്‍ തിരഞ്ഞെടുക്കല്‍ ഡയല�
 msgid "The desired width of the button widget, in characters."
 msgstr "ബട്ടണ്‍ വിഡ്ജറ്റിന് ആവശ്യമുളള വീതി (അക്ഷരങ്ങളില്‍)."
 
-#: gtk/gtkfilechooserdefault.c:614
+#: gtk/gtkfilechooserdefault.c:637
 msgid "Default file chooser backend"
 msgstr "ഡീഫോള്‍ട്ടായ ഫയല്‍ തിരഞ്ഞെടുക്കല്‍ ബാക്കെന്‍ഡ്"
 
-#: gtk/gtkfilechooserdefault.c:615
+#: gtk/gtkfilechooserdefault.c:638
 msgid "Name of the GtkFileChooser backend to use by default"
 msgstr "ഡീഫോള്‍ട്ടായി ഉപയോഗിക്കുന്നതിനുളള GtkFileChooser ബാക്കെന്‍ഡിന്‍റെ പേര്"
 
@@ -3427,7 +3427,7 @@ msgstr "പ്രിന്‍ററിന്‍റെ ക്രമീകരണ�
 msgid "Page Setup"
 msgstr "പേജിന്‍റെ ക്രമീകരണം"
 
-#: gtk/gtkprintjob.c:152 gtk/gtkprintoperation.c:985
+#: gtk/gtkprintjob.c:152 gtk/gtkprintoperation.c:1008
 msgid "Track Print Status"
 msgstr "പ്രിന്‍റിന്‍റെ അവസ്ഥ കണ്ടുപിടിക്കുന്നു"
 
@@ -3445,111 +3445,111 @@ msgstr ""
 msgid "Command to run when displaying a print preview"
 msgstr ""
 
-#: gtk/gtkprintoperation.c:858
+#: gtk/gtkprintoperation.c:881
 msgid "Default Page Setup"
 msgstr "ഡീഫോള്‍ട്ടായ പേജ് സെറ്റപ്പ്"
 
-#: gtk/gtkprintoperation.c:859
+#: gtk/gtkprintoperation.c:882
 msgid "The GtkPageSetup used by default"
 msgstr "ഡീഫോള്‍ട്ടായി ഉപയോഗിക്കുന്ന GtkPageSetup"
 
-#: gtk/gtkprintoperation.c:877 gtk/gtkprintunixdialog.c:245
+#: gtk/gtkprintoperation.c:900 gtk/gtkprintunixdialog.c:245
 msgid "Print Settings"
 msgstr "പ്രിന്‍റ് ചെയ്യുന്നതിനുളള സജ്ജീകരണങ്ങള്‍"
 
-#: gtk/gtkprintoperation.c:878 gtk/gtkprintunixdialog.c:246
+#: gtk/gtkprintoperation.c:901 gtk/gtkprintunixdialog.c:246
 msgid "The GtkPrintSettings used for initializing the dialog"
 msgstr "ഡയലോഗ് ആരംഭിക്കുന്നതിനുളള GtkPrintSettings"
 
-#: gtk/gtkprintoperation.c:896
+#: gtk/gtkprintoperation.c:919
 msgid "Job Name"
 msgstr "ജോലിയുടെ പേര്"
 
-#: gtk/gtkprintoperation.c:897
+#: gtk/gtkprintoperation.c:920
 msgid "A string used for identifying the print job."
 msgstr "പ്രിന്‍റ് ജോലി തിരിച്ചറിയുന്നതിന് ഉപയോഗിക്കുന്ന സ്ട്രിങ്"
 
-#: gtk/gtkprintoperation.c:920
+#: gtk/gtkprintoperation.c:943
 msgid "Number of Pages"
 msgstr "പേജുകളുടെ എണ്ണം"
 
-#: gtk/gtkprintoperation.c:921
+#: gtk/gtkprintoperation.c:944
 msgid "The number of pages in the document."
 msgstr "രേഖയിലുളള പേജുകളുടെ എണ്ണം."
 
-#: gtk/gtkprintoperation.c:942 gtk/gtkprintunixdialog.c:235
+#: gtk/gtkprintoperation.c:965 gtk/gtkprintunixdialog.c:235
 msgid "Current Page"
 msgstr "നിലവിലുളള പേജ്"
 
-#: gtk/gtkprintoperation.c:943 gtk/gtkprintunixdialog.c:236
+#: gtk/gtkprintoperation.c:966 gtk/gtkprintunixdialog.c:236
 msgid "The current page in the document"
 msgstr "രേഖയില്‍ നിലവിലുളള പേജ്"
 
-#: gtk/gtkprintoperation.c:964
+#: gtk/gtkprintoperation.c:987
 msgid "Use full page"
 msgstr "മുഴുവന്‍ പേജ് ഉപയോഗിക്കുക"
 
-#: gtk/gtkprintoperation.c:965
+#: gtk/gtkprintoperation.c:988
 msgid ""
 "TRUE if the the origin of the context should be at the corner of the page "
 "and not the corner of the imageable area"
 msgstr ""
 
-#: gtk/gtkprintoperation.c:986
+#: gtk/gtkprintoperation.c:1009
 msgid ""
 "TRUE if the print operation will continue to report on the print job status "
 "after the print data has been sent to the printer or print server."
 msgstr ""
 
-#: gtk/gtkprintoperation.c:1003
+#: gtk/gtkprintoperation.c:1026
 msgid "Unit"
 msgstr "യൂണിറ്റ്"
 
-#: gtk/gtkprintoperation.c:1004
+#: gtk/gtkprintoperation.c:1027
 msgid "The unit in which distances can be measured in the context"
 msgstr "കോണ്‍ട്ടക്സ്റ്റില്‍ ദൂരം അളക്കുന്നതിനുളള യൂണിറ്റ്"
 
-#: gtk/gtkprintoperation.c:1021
+#: gtk/gtkprintoperation.c:1044
 msgid "Show Dialog"
 msgstr "ഡയലോഗ് കാണിക്കുക"
 
-#: gtk/gtkprintoperation.c:1022
+#: gtk/gtkprintoperation.c:1045
 msgid "TRUE if a progress dialog is shown while printing."
 msgstr "പ്രിന്‍റ് ചെയ്യുന്നതിനിടയില്‍ പുരോഗതിയുടെ ഡയലോഗ് കാണിച്ചാല്‍ TRUE ആണ്."
 
-#: gtk/gtkprintoperation.c:1045
+#: gtk/gtkprintoperation.c:1068
 msgid "Allow Async"
 msgstr "Async അനുവദിക്കുക"
 
-#: gtk/gtkprintoperation.c:1046
+#: gtk/gtkprintoperation.c:1069
 msgid "TRUE if print process may run asynchronous."
 msgstr ""
 
-#: gtk/gtkprintoperation.c:1069 gtk/gtkprintoperation.c:1070
+#: gtk/gtkprintoperation.c:1092 gtk/gtkprintoperation.c:1093
 msgid "Export filename"
 msgstr "ഫയലിന്‍റെ പേര് എക്സ്പോര്‍ട്ട് ചെയ്യുക"
 
-#: gtk/gtkprintoperation.c:1084
+#: gtk/gtkprintoperation.c:1107
 msgid "Status"
 msgstr "അവസ്ഥ"
 
-#: gtk/gtkprintoperation.c:1085
+#: gtk/gtkprintoperation.c:1108
 msgid "The status of the print operation"
 msgstr "പ്രിന്‍റ് പ്രക്രിയയുടെ അവസ്ഥ"
 
-#: gtk/gtkprintoperation.c:1105
+#: gtk/gtkprintoperation.c:1128
 msgid "Status String"
 msgstr "അവസ്ഥ കാണിക്കുന്ന സ്ട്രിങ്"
 
-#: gtk/gtkprintoperation.c:1106
+#: gtk/gtkprintoperation.c:1129
 msgid "A human-readable description of the status"
 msgstr "വായിക്കുവാന്‍ സാധ്യമായ അവസ്ഥയുടെ വിവരണം"
 
-#: gtk/gtkprintoperation.c:1124
+#: gtk/gtkprintoperation.c:1147
 msgid "Custom tab label"
 msgstr "ടാബിന്‍റെ ലേബല്‍ ഇഷ്ടമുളള രീതിയില്‍ ക്രമീകരിക്കുക"
 
-#: gtk/gtkprintoperation.c:1125
+#: gtk/gtkprintoperation.c:1148
 msgid "Label for the tab containing custom widgets."
 msgstr ""
 
@@ -3902,11 +3902,11 @@ msgstr "പ്രദര്‍ശിപ്പിക്കുന്ന വസ്�
 msgid "The current filter for selecting which resources are displayed"
 msgstr ""
 
-#: gtk/gtkrecentchoosermenu.c:215
+#: gtk/gtkrecentchoosermenu.c:217
 msgid "Show Numbers"
 msgstr "അക്കങ്ങള്‍ പ്രദര്‍ശിപ്പിക്കുക"
 
-#: gtk/gtkrecentchoosermenu.c:216
+#: gtk/gtkrecentchoosermenu.c:218
 msgid "Whether the items should be displayed with a number"
 msgstr "വസ്തുക്കള്‍ അക്കങ്ങളോടൊപ്പം പ്രദര്‍ശിപ്പിക്കണമോ എന്ന്"
 

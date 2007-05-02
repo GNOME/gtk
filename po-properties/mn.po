@@ -13,7 +13,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-properties.HEAD\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-03-14 01:22-0400\n"
+"POT-Creation-Date: 2007-05-02 13:20-0400\n"
 "PO-Revision-Date: 2004-03-09 12:13+0100\n"
 "Last-Translator: Sanlig Badral <badral@openmn.org>\n"
 "Language-Team: Mongolian <openmn-core@lists.sf.net>\n"
@@ -2637,12 +2637,12 @@ msgstr "Бичиг сонгогч цонхны гарчиг"
 msgid "The desired width of the button widget, in characters."
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:614
+#: gtk/gtkfilechooserdefault.c:637
 msgid "Default file chooser backend"
 msgstr "Стандарт файл сонгогч"
 
 # gtk/gtksettings.c:216
-#: gtk/gtkfilechooserdefault.c:615
+#: gtk/gtkfilechooserdefault.c:638
 msgid "Name of the GtkFileChooser backend to use by default"
 msgstr "Стандартаар хэрэглэх GtkFileChooser· бакэндын нэр"
 
@@ -3998,7 +3998,7 @@ msgstr ""
 msgid "Page Setup"
 msgstr "Хуудсын хэмжээ"
 
-#: gtk/gtkprintjob.c:152 gtk/gtkprintoperation.c:985
+#: gtk/gtkprintjob.c:152 gtk/gtkprintoperation.c:1008
 msgid "Track Print Status"
 msgstr ""
 
@@ -4017,132 +4017,132 @@ msgid "Command to run when displaying a print preview"
 msgstr ""
 
 # gtk/gtkwindow.c:476
-#: gtk/gtkprintoperation.c:858
+#: gtk/gtkprintoperation.c:881
 #, fuzzy
 msgid "Default Page Setup"
 msgstr "Стандалрт өндөр"
 
-#: gtk/gtkprintoperation.c:859
+#: gtk/gtkprintoperation.c:882
 msgid "The GtkPageSetup used by default"
 msgstr ""
 
-#: gtk/gtkprintoperation.c:877 gtk/gtkprintunixdialog.c:245
+#: gtk/gtkprintoperation.c:900 gtk/gtkprintunixdialog.c:245
 msgid "Print Settings"
 msgstr ""
 
-#: gtk/gtkprintoperation.c:878 gtk/gtkprintunixdialog.c:246
+#: gtk/gtkprintoperation.c:901 gtk/gtkprintunixdialog.c:246
 msgid "The GtkPrintSettings used for initializing the dialog"
 msgstr ""
 
 # gtk/gtksettings.c:215
-#: gtk/gtkprintoperation.c:896
+#: gtk/gtkprintoperation.c:919
 #, fuzzy
 msgid "Job Name"
 msgstr "Бичгийн нэр"
 
-#: gtk/gtkprintoperation.c:897
+#: gtk/gtkprintoperation.c:920
 msgid "A string used for identifying the print job."
 msgstr ""
 
-#: gtk/gtkprintoperation.c:920
+#: gtk/gtkprintoperation.c:943
 #, fuzzy
 msgid "Number of Pages"
 msgstr "Сувгийн тоо"
 
 # gtk/gtktable.c:157
-#: gtk/gtkprintoperation.c:921
+#: gtk/gtkprintoperation.c:944
 #, fuzzy
 msgid "The number of pages in the document."
 msgstr "Хүснэгт дэх мөрийн тоо"
 
 # gtk/gtkcolorsel.c:1725
-#: gtk/gtkprintoperation.c:942 gtk/gtkprintunixdialog.c:235
+#: gtk/gtkprintoperation.c:965 gtk/gtkprintunixdialog.c:235
 #, fuzzy
 msgid "Current Page"
 msgstr "Харгалзах альфа-суваг "
 
 # gtk/gtkcellrenderertoggle.c:131
-#: gtk/gtkprintoperation.c:943 gtk/gtkprintunixdialog.c:236
+#: gtk/gtkprintoperation.c:966 gtk/gtkprintunixdialog.c:236
 #, fuzzy
 msgid "The current page in the document"
 msgstr "Зэрэгцүүлэлтийн хуудсын хэмжээ"
 
 # gtk/gtklabel.c:294
-#: gtk/gtkprintoperation.c:964
+#: gtk/gtkprintoperation.c:987
 #, fuzzy
 msgid "Use full page"
 msgstr "Альпа хэрэглэх"
 
-#: gtk/gtkprintoperation.c:965
+#: gtk/gtkprintoperation.c:988
 msgid ""
 "TRUE if the the origin of the context should be at the corner of the page "
 "and not the corner of the imageable area"
 msgstr ""
 
-#: gtk/gtkprintoperation.c:986
+#: gtk/gtkprintoperation.c:1009
 msgid ""
 "TRUE if the print operation will continue to report on the print job status "
 "after the print data has been sent to the printer or print server."
 msgstr ""
 
-#: gtk/gtkprintoperation.c:1003
+#: gtk/gtkprintoperation.c:1026
 msgid "Unit"
 msgstr ""
 
-#: gtk/gtkprintoperation.c:1004
+#: gtk/gtkprintoperation.c:1027
 msgid "The unit in which distances can be measured in the context"
 msgstr ""
 
 # gtk/gtktable.c:174
-#: gtk/gtkprintoperation.c:1021
+#: gtk/gtkprintoperation.c:1044
 #, fuzzy
 msgid "Show Dialog"
 msgstr "Толгой мөр харуулах"
 
-#: gtk/gtkprintoperation.c:1022
+#: gtk/gtkprintoperation.c:1045
 msgid "TRUE if a progress dialog is shown while printing."
 msgstr ""
 
-#: gtk/gtkprintoperation.c:1045
+#: gtk/gtkprintoperation.c:1068
 #, fuzzy
 msgid "Allow Async"
 msgstr "Дүрмүүдийг зөвшөөрөх"
 
-#: gtk/gtkprintoperation.c:1046
+#: gtk/gtkprintoperation.c:1069
 msgid "TRUE if print process may run asynchronous."
 msgstr ""
 
 # gtk/gtkfilesel.c:536 gtk/gtkimage.c:161
-#: gtk/gtkprintoperation.c:1069 gtk/gtkprintoperation.c:1070
+#: gtk/gtkprintoperation.c:1092 gtk/gtkprintoperation.c:1093
 #, fuzzy
 msgid "Export filename"
 msgstr "Файлын нэр"
 
-#: gtk/gtkprintoperation.c:1084
+#: gtk/gtkprintoperation.c:1107
 msgid "Status"
 msgstr ""
 
 # gtk/gtkcellrenderertoggle.c:131
-#: gtk/gtkprintoperation.c:1085
+#: gtk/gtkprintoperation.c:1108
 #, fuzzy
 msgid "The status of the print operation"
 msgstr "Шилжилтийг идэвхжүүлэгч товчны төлөв "
 
-#: gtk/gtkprintoperation.c:1105
+#: gtk/gtkprintoperation.c:1128
 msgid "Status String"
 msgstr ""
 
-#: gtk/gtkprintoperation.c:1106
+#: gtk/gtkprintoperation.c:1129
 msgid "A human-readable description of the status"
 msgstr ""
 
 # gtk/gtkcolorsel.c:1739
-#: gtk/gtkprintoperation.c:1124
+#: gtk/gtkprintoperation.c:1147
 #, fuzzy
 msgid "Custom tab label"
 msgstr "Сонголт хийх өнгөний нийлүүлэг "
 
-#: gtk/gtkprintoperation.c:1125
+#: gtk/gtkprintoperation.c:1148
 msgid "Label for the tab containing custom widgets."
 msgstr ""
 
@@ -4559,13 +4559,13 @@ msgstr "Хэрэв түлхүүр товч нь дарагдсан байдла�
 msgid "The current filter for selecting which resources are displayed"
 msgstr "Ямар файлууд харуулахыг сонгох идэвхитэй шүүлтүүр"
 
-#: gtk/gtkrecentchoosermenu.c:215
+#: gtk/gtkrecentchoosermenu.c:217
 #, fuzzy
 msgid "Show Numbers"
 msgstr "Долоо хоногийн тоо харуулах"
 
 # gtk/gtkcheckmenuitem.c:116
-#: gtk/gtkrecentchoosermenu.c:216
+#: gtk/gtkrecentchoosermenu.c:218
 #, fuzzy
 msgid "Whether the items should be displayed with a number"
 msgstr "Тасалбар цэсний элемент цэс рүү нэмэгдэх эсэх"

@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk-properties.gnome-2-14.ne\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-03-14 01:22-0400\n"
+"POT-Creation-Date: 2007-05-02 13:20-0400\n"
 "PO-Revision-Date: 2006-06-27 13:58+0545\n"
 "Last-Translator: Shiva Pokharel <pokharelshiva@hotmail.com>\n"
 "Language-Team: Nepali <info@mpp.org.np>\n"
@@ -2307,11 +2307,11 @@ msgstr "फाइल रोज्ने संवादको शीर्षक
 msgid "The desired width of the button widget, in characters."
 msgstr "बटन विजेटको आवश्यक चौडाइ, क्यारेक्टरहरूमा"
 
-#: gtk/gtkfilechooserdefault.c:614
+#: gtk/gtkfilechooserdefault.c:637
 msgid "Default file chooser backend"
 msgstr "पूर्वनिर्धारित फाइल रोज्ने ब्याकेण्ड"
 
-#: gtk/gtkfilechooserdefault.c:615
+#: gtk/gtkfilechooserdefault.c:638
 msgid "Name of the GtkFileChooser backend to use by default"
 msgstr "पूर्वनिर्धारितद्वारा प्रयोग गरिएको जिटिके फाइल रोज्नेको नाम"
 
@@ -3506,7 +3506,7 @@ msgstr ""
 msgid "Page Setup"
 msgstr "पृष्ठ साइज"
 
-#: gtk/gtkprintjob.c:152 gtk/gtkprintoperation.c:985
+#: gtk/gtkprintjob.c:152 gtk/gtkprintoperation.c:1008
 msgid "Track Print Status"
 msgstr ""
 
@@ -3524,124 +3524,124 @@ msgstr ""
 msgid "Command to run when displaying a print preview"
 msgstr ""
 
-#: gtk/gtkprintoperation.c:858
+#: gtk/gtkprintoperation.c:881
 #, fuzzy
 msgid "Default Page Setup"
 msgstr "पूर्वनिर्धारित उचाइ"
 
-#: gtk/gtkprintoperation.c:859
+#: gtk/gtkprintoperation.c:882
 msgid "The GtkPageSetup used by default"
 msgstr ""
 
-#: gtk/gtkprintoperation.c:877 gtk/gtkprintunixdialog.c:245
+#: gtk/gtkprintoperation.c:900 gtk/gtkprintunixdialog.c:245
 msgid "Print Settings"
 msgstr ""
 
-#: gtk/gtkprintoperation.c:878 gtk/gtkprintunixdialog.c:246
+#: gtk/gtkprintoperation.c:901 gtk/gtkprintunixdialog.c:246
 msgid "The GtkPrintSettings used for initializing the dialog"
 msgstr ""
 
-#: gtk/gtkprintoperation.c:896
+#: gtk/gtkprintoperation.c:919
 #, fuzzy
 msgid "Job Name"
 msgstr "प्रतिमाको नाम"
 
-#: gtk/gtkprintoperation.c:897
+#: gtk/gtkprintoperation.c:920
 msgid "A string used for identifying the print job."
 msgstr ""
 
-#: gtk/gtkprintoperation.c:920
+#: gtk/gtkprintoperation.c:943
 #, fuzzy
 msgid "Number of Pages"
 msgstr "च्यानलहरूको सङ्ख्या"
 
-#: gtk/gtkprintoperation.c:921
+#: gtk/gtkprintoperation.c:944
 #, fuzzy
 msgid "The number of pages in the document."
 msgstr "तालिकामा पङ्क्तिहरूको सङ्ख्या"
 
-#: gtk/gtkprintoperation.c:942 gtk/gtkprintunixdialog.c:235
+#: gtk/gtkprintoperation.c:965 gtk/gtkprintunixdialog.c:235
 #, fuzzy
 msgid "Current Page"
 msgstr "हालको अल्फा"
 
-#: gtk/gtkprintoperation.c:943 gtk/gtkprintunixdialog.c:236
+#: gtk/gtkprintoperation.c:966 gtk/gtkprintunixdialog.c:236
 #, fuzzy
 msgid "The current page in the document"
 msgstr "संयोजनका लागि पृष्ठको साइज"
 
-#: gtk/gtkprintoperation.c:964
+#: gtk/gtkprintoperation.c:987
 #, fuzzy
 msgid "Use full page"
 msgstr "अल्फा प्रयोग गर्नुहोस्"
 
-#: gtk/gtkprintoperation.c:965
+#: gtk/gtkprintoperation.c:988
 msgid ""
 "TRUE if the the origin of the context should be at the corner of the page "
 "and not the corner of the imageable area"
 msgstr ""
 
-#: gtk/gtkprintoperation.c:986
+#: gtk/gtkprintoperation.c:1009
 msgid ""
 "TRUE if the print operation will continue to report on the print job status "
 "after the print data has been sent to the printer or print server."
 msgstr ""
 
-#: gtk/gtkprintoperation.c:1003
+#: gtk/gtkprintoperation.c:1026
 #, fuzzy
 msgid "Unit"
 msgstr "जरुरी"
 
-#: gtk/gtkprintoperation.c:1004
+#: gtk/gtkprintoperation.c:1027
 msgid "The unit in which distances can be measured in the context"
 msgstr ""
 
-#: gtk/gtkprintoperation.c:1021
+#: gtk/gtkprintoperation.c:1044
 #, fuzzy
 msgid "Show Dialog"
 msgstr "संवाद"
 
-#: gtk/gtkprintoperation.c:1022
+#: gtk/gtkprintoperation.c:1045
 msgid "TRUE if a progress dialog is shown while printing."
 msgstr ""
 
-#: gtk/gtkprintoperation.c:1045
+#: gtk/gtkprintoperation.c:1068
 #, fuzzy
 msgid "Allow Async"
 msgstr "खाली पार्न अनुमति दिनुहोस्"
 
-#: gtk/gtkprintoperation.c:1046
+#: gtk/gtkprintoperation.c:1069
 msgid "TRUE if print process may run asynchronous."
 msgstr ""
 
-#: gtk/gtkprintoperation.c:1069 gtk/gtkprintoperation.c:1070
+#: gtk/gtkprintoperation.c:1092 gtk/gtkprintoperation.c:1093
 #, fuzzy
 msgid "Export filename"
 msgstr "फाइलनाम"
 
-#: gtk/gtkprintoperation.c:1084
+#: gtk/gtkprintoperation.c:1107
 msgid "Status"
 msgstr ""
 
-#: gtk/gtkprintoperation.c:1085
+#: gtk/gtkprintoperation.c:1108
 #, fuzzy
 msgid "The status of the print operation"
 msgstr "बटनको टगल अवस्था"
 
-#: gtk/gtkprintoperation.c:1105
+#: gtk/gtkprintoperation.c:1128
 msgid "Status String"
 msgstr ""
 
-#: gtk/gtkprintoperation.c:1106
+#: gtk/gtkprintoperation.c:1129
 msgid "A human-readable description of the status"
 msgstr ""
 
-#: gtk/gtkprintoperation.c:1124
+#: gtk/gtkprintoperation.c:1147
 #, fuzzy
 msgid "Custom tab label"
 msgstr "अनुकूल रङदानी"
 
-#: gtk/gtkprintoperation.c:1125
+#: gtk/gtkprintoperation.c:1148
 msgid "Label for the tab containing custom widgets."
 msgstr ""
 
@@ -4023,12 +4023,12 @@ msgstr "यदि बटनको टगल भाग प्रदर्शि�
 msgid "The current filter for selecting which resources are displayed"
 msgstr "कुन फाइल प्रदर्शन गर्नेको चयन गर्नका लागि हालको फिल्टर"
 
-#: gtk/gtkrecentchoosermenu.c:215
+#: gtk/gtkrecentchoosermenu.c:217
 #, fuzzy
 msgid "Show Numbers"
 msgstr "सप्ताहका सङ्ख्याहरू प्रदर्शनुहोस्"
 
-#: gtk/gtkrecentchoosermenu.c:216
+#: gtk/gtkrecentchoosermenu.c:218
 #, fuzzy
 msgid "Whether the items should be displayed with a number"
 msgstr "जब च्यात्ने क्षमता भएको मेनु वस्तुहरू मेनुमा थप्न सकिन्छ "

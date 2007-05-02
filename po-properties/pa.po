@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-properties.gtk-2-10\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-03-14 01:22-0400\n"
+"POT-Creation-Date: 2007-05-02 13:20-0400\n"
 "PO-Revision-Date: 2007-02-18 22:13+0530\n"
 "Last-Translator: A S Alam <aalam@users.sf.net>\n"
 "Language-Team: Punjabi <punjabi-l10n@lists.sf.net>\n"
@@ -2254,11 +2254,11 @@ msgstr "ਫਾਇਲ ਚੋਣਕਾਰ ਵਾਰਤਾਲਾਪ ਦਾ ਨਾ�
 msgid "The desired width of the button widget, in characters."
 msgstr "ਬਟਨ ਵਿਦਗਿਟ ਦੀ ਲੋੜੀਦੀ ਚੌਰਾਈ ਅੱਖਰਾਂ ਵਿੱਚ ਹੈ।"
 
-#: gtk/gtkfilechooserdefault.c:614
+#: gtk/gtkfilechooserdefault.c:637
 msgid "Default file chooser backend"
 msgstr "ਮੂਲ ਫਾਇਲ ਚੋਣ ਬੈਕਐਡ"
 
-#: gtk/gtkfilechooserdefault.c:615
+#: gtk/gtkfilechooserdefault.c:638
 msgid "Name of the GtkFileChooser backend to use by default"
 msgstr "GtkFileChooser ਦਾ ਨਾਂ ਜੋ ਕਿ ਮੂਲ ਰੂਪ ਵਿੱਚ ਵਰਤਣਾ ਹੈ"
 
@@ -3412,7 +3412,7 @@ msgstr "ਪਰਿੰਟਰ ਸਥਾਪਨ"
 msgid "Page Setup"
 msgstr "ਸਫ਼ਾ ਸੈੱਟਅੱਪ"
 
-#: gtk/gtkprintjob.c:152 gtk/gtkprintoperation.c:985
+#: gtk/gtkprintjob.c:152 gtk/gtkprintoperation.c:1008
 msgid "Track Print Status"
 msgstr "ਛਾਪਈ ਹਾਲਤ ਦੀ ਜਾਂਚ"
 
@@ -3430,57 +3430,57 @@ msgstr "ਇੱਕ ਛਾਪਾਈ ਝਲਕ ਵੇਖਾਉਣ ਦੌਰਾਨ �
 msgid "Command to run when displaying a print preview"
 msgstr "ਇੱਕ ਛਪਾਈ ਝਲਕ ਵੇਖਾਉਣ ਦੌਰਾਨ ਚਲਾਉਣ ਲਈ ਕਮਾਂਡ"
 
-#: gtk/gtkprintoperation.c:858
+#: gtk/gtkprintoperation.c:881
 msgid "Default Page Setup"
 msgstr "ਮੂਲ ਸਫ਼ਾ ਸੈੱਟਅੱਪ"
 
-#: gtk/gtkprintoperation.c:859
+#: gtk/gtkprintoperation.c:882
 msgid "The GtkPageSetup used by default"
 msgstr "ਮੂਲ ਰੂਪ ਵਿੱਚ ਵਰਤਣ ਲਈ GtkPageSetup"
 
-#: gtk/gtkprintoperation.c:877 gtk/gtkprintunixdialog.c:245
+#: gtk/gtkprintoperation.c:900 gtk/gtkprintunixdialog.c:245
 msgid "Print Settings"
 msgstr "ਛਾਪਈ ਸਥਾਪਨ"
 
-#: gtk/gtkprintoperation.c:878 gtk/gtkprintunixdialog.c:246
+#: gtk/gtkprintoperation.c:901 gtk/gtkprintunixdialog.c:246
 msgid "The GtkPrintSettings used for initializing the dialog"
 msgstr "ਵਾਰਤਾਲਾਪ ਸ਼ੁਰੂ ਕਰਨ ਲਈ GtkPrintSettings"
 
-#: gtk/gtkprintoperation.c:896
+#: gtk/gtkprintoperation.c:919
 msgid "Job Name"
 msgstr "ਕੰਮ ਨਾਂ"
 
-#: gtk/gtkprintoperation.c:897
+#: gtk/gtkprintoperation.c:920
 msgid "A string used for identifying the print job."
 msgstr "ਛਪਾਈ ਕੰਮ ਦੀ ਪਛਾਣ ਕਰਨ ਲਈ ਇੱਕ ਸਤਰ ਹੈ।"
 
-#: gtk/gtkprintoperation.c:920
+#: gtk/gtkprintoperation.c:943
 msgid "Number of Pages"
 msgstr "ਸਫ਼ਿਆਂ ਦੀ ਗਿਣਤੀ"
 
-#: gtk/gtkprintoperation.c:921
+#: gtk/gtkprintoperation.c:944
 msgid "The number of pages in the document."
 msgstr "ਦਸਤਾਵੇਜ਼ ਵਿੱਚ ਸਫ਼ਿਆਂ ਦੀ ਗਿਣਤੀ ਹੈ।"
 
-#: gtk/gtkprintoperation.c:942 gtk/gtkprintunixdialog.c:235
+#: gtk/gtkprintoperation.c:965 gtk/gtkprintunixdialog.c:235
 msgid "Current Page"
 msgstr "ਮੌਜੂਦਾ ਸਫ਼ਾ"
 
-#: gtk/gtkprintoperation.c:943 gtk/gtkprintunixdialog.c:236
+#: gtk/gtkprintoperation.c:966 gtk/gtkprintunixdialog.c:236
 msgid "The current page in the document"
 msgstr "ਦਸਤਾਵੇਜ਼ ਵਿੱਚ ਮੌਜੂਦਾ ਸਫ਼ਿਆਂ ਦੀ ਗਿਣਤੀ"
 
-#: gtk/gtkprintoperation.c:964
+#: gtk/gtkprintoperation.c:987
 msgid "Use full page"
 msgstr "ਪੂਰਾ ਸਫ਼ਾ ਵਰਤੋਂ"
 
-#: gtk/gtkprintoperation.c:965
+#: gtk/gtkprintoperation.c:988
 msgid ""
 "TRUE if the the origin of the context should be at the corner of the page "
 "and not the corner of the imageable area"
 msgstr "ਸੱਚ, ਜੇ ਭਾਗ ਦਾ ਖੇਤਰ ਸਫ਼ੇ ਦੇ ਕੋਨੇ ਤੇ ਹੋਵੇ ਅਤੇ ਕੋਨਾ ਚਿੱਤਰ 'ਚ ਨਾ ਆਉਦਾ ਹੋਵੇ"
 
-#: gtk/gtkprintoperation.c:986
+#: gtk/gtkprintoperation.c:1009
 msgid ""
 "TRUE if the print operation will continue to report on the print job status "
 "after the print data has been sent to the printer or print server."
@@ -3488,55 +3488,55 @@ msgstr ""
 "ਸੱਚ, ਜੇ ਛਪਾਈ ਕਾਰਵਾਈ  ਛਪਾਈ ਕੰਮ ਹਾਲਤ ਨੂੰ ਪਰਿੰਟਰ ਜਾਂ ਛਪਾਈ ਸਰਵਰ ਦੇ ਬਾਦ ਛਪਾਈ ਡਾਟੇ ਦੇ ਬਾਅਦ "
 "ਰਿਪੋਰਟ ਦੇਵੇਗਾ।"
 
-#: gtk/gtkprintoperation.c:1003
+#: gtk/gtkprintoperation.c:1026
 msgid "Unit"
 msgstr "ਇਕਾਈ"
 
-#: gtk/gtkprintoperation.c:1004
+#: gtk/gtkprintoperation.c:1027
 msgid "The unit in which distances can be measured in the context"
 msgstr "ਪਰਸੰਗ ਵਿੱਚ ਦੂਰੀ ਮਾਪਣ ਵਾਸਤੇ ਇਕਾਈ"
 
-#: gtk/gtkprintoperation.c:1021
+#: gtk/gtkprintoperation.c:1044
 msgid "Show Dialog"
 msgstr "ਵਾਰਤਾਲਾਪ ਵੇਖਾਓ"
 
-#: gtk/gtkprintoperation.c:1022
+#: gtk/gtkprintoperation.c:1045
 msgid "TRUE if a progress dialog is shown while printing."
 msgstr "ਸੱਚ, ਜੇਕਰ ਛਪਾਈ ਦੌਰਾਨ ਤਰੱਕੀ ਵਾਰਤਾਲਾਪ ਵੇਖਾਉਣਾ ਹੈ।"
 
-#: gtk/gtkprintoperation.c:1045
+#: gtk/gtkprintoperation.c:1068
 msgid "Allow Async"
 msgstr "ਅਸਮਕਾਲੀ ਵਰਤੋਂ"
 
-#: gtk/gtkprintoperation.c:1046
+#: gtk/gtkprintoperation.c:1069
 msgid "TRUE if print process may run asynchronous."
 msgstr "ਸੱਚ, ਜੇਕਰ ਛਪਾਈ ਕਾਰਵਾਈ ਅਸਮਕਾਲੀ ਢੰਗ ਨਾਲ ਚੱਲ ਸਕਦਾ ਹੋਵੇ।"
 
-#: gtk/gtkprintoperation.c:1069 gtk/gtkprintoperation.c:1070
+#: gtk/gtkprintoperation.c:1092 gtk/gtkprintoperation.c:1093
 msgid "Export filename"
 msgstr "ਫਾਇਲ-ਨਾਂ ਨਿਰਯਾਤ"
 
-#: gtk/gtkprintoperation.c:1084
+#: gtk/gtkprintoperation.c:1107
 msgid "Status"
 msgstr "ਹਾਲਤ"
 
-#: gtk/gtkprintoperation.c:1085
+#: gtk/gtkprintoperation.c:1108
 msgid "The status of the print operation"
 msgstr "ਪਰਿੰਟਰ ਦੀ ਕਾਰਜਕਾਰੀ ਹਾਲਤ"
 
-#: gtk/gtkprintoperation.c:1105
+#: gtk/gtkprintoperation.c:1128
 msgid "Status String"
 msgstr "ਹਾਲਤ ਸਤਰ"
 
-#: gtk/gtkprintoperation.c:1106
+#: gtk/gtkprintoperation.c:1129
 msgid "A human-readable description of the status"
 msgstr "ਹਾਲਤ ਦੀ ਪੜ੍ਹਨਯੋਗ ਵੇਰਵਾ"
 
-#: gtk/gtkprintoperation.c:1124
+#: gtk/gtkprintoperation.c:1147
 msgid "Custom tab label"
 msgstr "ਮੌਜਦਾ ਟੈਬ ਲੇਬਲ"
 
-#: gtk/gtkprintoperation.c:1125
+#: gtk/gtkprintoperation.c:1148
 msgid "Label for the tab containing custom widgets."
 msgstr "ਕਸਟਮ ਵਿਦਗਿਟ ਰੱਖਣ ਵਾਲੀ ਟੈਬ ਲਈ ਲੇਬਲ ਹੈ।"
 
@@ -3899,11 +3899,11 @@ msgstr "ਇਕਾਈਆਂ ਵੇਖਾਉਣ ਲਈ ਕ੍ਰਮਬੱਧ ਢ�
 msgid "The current filter for selecting which resources are displayed"
 msgstr "ਚੋਣ ਲਈ ਮੌਜੂਦਾ ਫਿਲਟਰ, ਜਿਸ ਨਾਲ ਸਰੋਤ ਵੇਖਾਏ ਜਾਣ"
 
-#: gtk/gtkrecentchoosermenu.c:215
+#: gtk/gtkrecentchoosermenu.c:217
 msgid "Show Numbers"
 msgstr "ਗਿਣਤੀ ਵੇਖਾਓ"
 
-#: gtk/gtkrecentchoosermenu.c:216
+#: gtk/gtkrecentchoosermenu.c:218
 msgid "Whether the items should be displayed with a number"
 msgstr "ਕੀ ਇਕਾਈਆਂ ਨੂੰ ਇੱਕ ਨੰਬਰ ਵਾਂਗ ਵੇਖਾਇਆ ਜਾਵੇ"
 

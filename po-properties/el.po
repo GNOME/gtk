@@ -28,7 +28,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: el\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-03-14 01:22-0400\n"
+"POT-Creation-Date: 2007-05-02 13:20-0400\n"
 "PO-Revision-Date: 2007-03-08 03:04+0800\n"
 "Last-Translator: Simos Xenitellis <simos@gnome.org>\n"
 "Language-Team: Greek <team@gnome.gr>\n"
@@ -2373,11 +2373,11 @@ msgstr "Ο τίτλος του διαλόγου επιλογής αρχείου"
 msgid "The desired width of the button widget, in characters."
 msgstr "Το επιθυμητό πλάτος σε·χαρακτήρες. του γραφικού συστατικού."
 
-#: gtk/gtkfilechooserdefault.c:614
+#: gtk/gtkfilechooserdefault.c:637
 msgid "Default file chooser backend"
 msgstr "Προεπιλεγμένο backend επιλογέα αρχείων"
 
-#: gtk/gtkfilechooserdefault.c:615
+#: gtk/gtkfilechooserdefault.c:638
 msgid "Name of the GtkFileChooser backend to use by default"
 msgstr "Όνομα του GtkFileChooser backend για προεπιλεγμένη χρήση"
 
@@ -3583,7 +3583,7 @@ msgstr "Ρυθμίσεις εκτυπωτή"
 msgid "Page Setup"
 msgstr "Διαμόρφωση σελίδας"
 
-#: gtk/gtkprintjob.c:152 gtk/gtkprintoperation.c:985
+#: gtk/gtkprintjob.c:152 gtk/gtkprintoperation.c:1008
 msgid "Track Print Status"
 msgstr "Παρακολούθηση κατάστασης εκτύπωσης"
 
@@ -3605,54 +3605,54 @@ msgstr ""
 msgid "Command to run when displaying a print preview"
 msgstr "Εντολή για εκτέλεση κατά την εμφάνιση προεπισκόπησης εκτύπωσης"
 
-#: gtk/gtkprintoperation.c:858
+#: gtk/gtkprintoperation.c:881
 msgid "Default Page Setup"
 msgstr "Προεπιλεγμένη διαμόρφωση σελίδας"
 
-#: gtk/gtkprintoperation.c:859
+#: gtk/gtkprintoperation.c:882
 msgid "The GtkPageSetup used by default"
 msgstr "Το προεπιλεγμένο GtkPageSetup που χρησιμοποιείται "
 
-#: gtk/gtkprintoperation.c:877 gtk/gtkprintunixdialog.c:245
+#: gtk/gtkprintoperation.c:900 gtk/gtkprintunixdialog.c:245
 msgid "Print Settings"
 msgstr "Ρυθμίσεις εκτύπωσης"
 
-#: gtk/gtkprintoperation.c:878 gtk/gtkprintunixdialog.c:246
+#: gtk/gtkprintoperation.c:901 gtk/gtkprintunixdialog.c:246
 msgid "The GtkPrintSettings used for initializing the dialog"
 msgstr ""
 "Οι GtkPrintSettings που χρησιμοποιούνται για την αρχικοποίηση του διαλόγου"
 
-#: gtk/gtkprintoperation.c:896
+#: gtk/gtkprintoperation.c:919
 msgid "Job Name"
 msgstr "Όνομα εργασίας"
 
-#: gtk/gtkprintoperation.c:897
+#: gtk/gtkprintoperation.c:920
 msgid "A string used for identifying the print job."
 msgstr ""
 "Μια συμβολοσειρά που χρησιμοποιείται για την αναγνώριση της εργασίας "
 "εκτύπωσης"
 
-#: gtk/gtkprintoperation.c:920
+#: gtk/gtkprintoperation.c:943
 msgid "Number of Pages"
 msgstr "Αριθμός σελίδων"
 
-#: gtk/gtkprintoperation.c:921
+#: gtk/gtkprintoperation.c:944
 msgid "The number of pages in the document."
 msgstr "Ο αριθμός των σελίδων στο έγγραφο"
 
-#: gtk/gtkprintoperation.c:942 gtk/gtkprintunixdialog.c:235
+#: gtk/gtkprintoperation.c:965 gtk/gtkprintunixdialog.c:235
 msgid "Current Page"
 msgstr "Τρέχουσα σελίδα"
 
-#: gtk/gtkprintoperation.c:943 gtk/gtkprintunixdialog.c:236
+#: gtk/gtkprintoperation.c:966 gtk/gtkprintunixdialog.c:236
 msgid "The current page in the document"
 msgstr "Η τρέχουσα σελίδα στο έγγραφο"
 
-#: gtk/gtkprintoperation.c:964
+#: gtk/gtkprintoperation.c:987
 msgid "Use full page"
 msgstr "Χρήση πλήρης σελίδας"
 
-#: gtk/gtkprintoperation.c:965
+#: gtk/gtkprintoperation.c:988
 msgid ""
 "TRUE if the the origin of the context should be at the corner of the page "
 "and not the corner of the imageable area"
@@ -3660,7 +3660,7 @@ msgstr ""
 "TRUE αν το σημείο αναφοράς του περιεχομένου να είναι στη γωνία της σελίδας "
 "και όχι στη γωνία της περιοχής imageable"
 
-#: gtk/gtkprintoperation.c:986
+#: gtk/gtkprintoperation.c:1009
 msgid ""
 "TRUE if the print operation will continue to report on the print job status "
 "after the print data has been sent to the printer or print server."
@@ -3669,55 +3669,55 @@ msgstr ""
 "εργασίας εκτύπωσης και μετά την αποστολή των δεδομένων εκτύπωσης στον "
 "εκτυπωτή ή εξυπηρετητή εκτυπώσεων."
 
-#: gtk/gtkprintoperation.c:1003
+#: gtk/gtkprintoperation.c:1026
 msgid "Unit"
 msgstr "Μονάδα"
 
-#: gtk/gtkprintoperation.c:1004
+#: gtk/gtkprintoperation.c:1027
 msgid "The unit in which distances can be measured in the context"
 msgstr "Η μονάδα μέτρης αποστάσεων στο περιεχόμενο αυτό"
 
-#: gtk/gtkprintoperation.c:1021
+#: gtk/gtkprintoperation.c:1044
 msgid "Show Dialog"
 msgstr "Εμφάνιση διαλόγου"
 
-#: gtk/gtkprintoperation.c:1022
+#: gtk/gtkprintoperation.c:1045
 msgid "TRUE if a progress dialog is shown while printing."
 msgstr "TRUE αν ο διάλογος προόδου θα φαίνεται κατά την εκτύπωση."
 
-#: gtk/gtkprintoperation.c:1045
+#: gtk/gtkprintoperation.c:1068
 msgid "Allow Async"
 msgstr "Να επιτρέπεται Async"
 
-#: gtk/gtkprintoperation.c:1046
+#: gtk/gtkprintoperation.c:1069
 msgid "TRUE if print process may run asynchronous."
 msgstr "TRUE αν η λειτουργία εκτύπωσης μπορεί να εκτελεστεί ασύγχρονα."
 
-#: gtk/gtkprintoperation.c:1069 gtk/gtkprintoperation.c:1070
+#: gtk/gtkprintoperation.c:1092 gtk/gtkprintoperation.c:1093
 msgid "Export filename"
 msgstr "Εξαγωγή ονόματος αρχείου"
 
-#: gtk/gtkprintoperation.c:1084
+#: gtk/gtkprintoperation.c:1107
 msgid "Status"
 msgstr "Κατάσταση"
 
-#: gtk/gtkprintoperation.c:1085
+#: gtk/gtkprintoperation.c:1108
 msgid "The status of the print operation"
 msgstr "Η κατάσταση της εργασίας εκτύπωσης"
 
-#: gtk/gtkprintoperation.c:1105
+#: gtk/gtkprintoperation.c:1128
 msgid "Status String"
 msgstr "Αλφαριθμητικό κατάστασης"
 
-#: gtk/gtkprintoperation.c:1106
+#: gtk/gtkprintoperation.c:1129
 msgid "A human-readable description of the status"
 msgstr "Μια αναγνώσιμη περιγραφή της κατάστασης"
 
-#: gtk/gtkprintoperation.c:1124
+#: gtk/gtkprintoperation.c:1147
 msgid "Custom tab label"
 msgstr "Προσαρμοσμένη ετικέτα καρτέλας"
 
-#: gtk/gtkprintoperation.c:1125
+#: gtk/gtkprintoperation.c:1148
 msgid "Label for the tab containing custom widgets."
 msgstr "Ετικέτα για την καρτέλα που περιέχει παραμετροποιήσιμα συστατικά."
 
@@ -4112,11 +4112,11 @@ msgstr "Η σειρά ταξινόμησης των αντικειμένων π�
 msgid "The current filter for selecting which resources are displayed"
 msgstr "Το τρέχον φίλτρο για την επιλογή των πόρων που θα εμφανίζονται"
 
-#: gtk/gtkrecentchoosermenu.c:215
+#: gtk/gtkrecentchoosermenu.c:217
 msgid "Show Numbers"
 msgstr "Εμφάνιση αριθμών"
 
-#: gtk/gtkrecentchoosermenu.c:216
+#: gtk/gtkrecentchoosermenu.c:218
 msgid "Whether the items should be displayed with a number"
 msgstr "Αν τα αντικείμενα θα εμφανίζονται με αριθμούς"
 
