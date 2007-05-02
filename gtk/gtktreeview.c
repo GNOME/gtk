@@ -14610,7 +14610,12 @@ gtk_tree_view_grab_notify (GtkWidget *widget,
   tree_view->priv->in_grab = !was_grabbed;
 
   if (!was_grabbed)
-    tree_view->priv->pressed_button = -1;
+    {
+      tree_view->priv->pressed_button = -1;
+
+      if (tree_view->priv->rubber_band_status)
+	gtk_tree_view_stop_rubber_band (tree_view);
+    }
 }
 
 static void

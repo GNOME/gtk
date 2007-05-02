@@ -1,3 +1,8 @@
+2007-05-02  Kristian Rietveld  <kris@imendio.com>
+
+	* gtk/gtktreeview.c (gtk_tree_view_grab_notify): stop the rubber band
+	if it's active.
+
 2007-05-01  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtkiconcachevalidator.c: Don't be too strict when checking
