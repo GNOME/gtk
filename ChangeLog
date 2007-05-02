@@ -1,3 +1,9 @@
+2007-05-02  Armin Burgmeier  <armin@openismus.com>
+
+	* gtk/gtkcombobox.c: Destroy the menu in dispose instead of
+	finalize, because the menu might unparent itself from its parent and
+	cause a signal emission on a finalized object. (#430746)
+
 2007-05-02  Dom Lachowicz <domlachowicz@gmail.com>
 
 	* modules/engines/ms-windows/msw_style.c: MS-Windows Theme top tabs 
