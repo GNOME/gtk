@@ -1,3 +1,9 @@
+2007-05-01  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtkfilesystemmodel.c (_gtk_file_system_model_path_do):
+	Don't ignore the fact that gtk_file_system_get_parent() 
+	may return NULL.  (#424042, Jan Martinek)
+
 2007-05-01  Dan Winship  <danw@novell.com>
 
 	* gdk/x11/gdkwindow-x11.c (setup_toplevel_window): Make sure the
