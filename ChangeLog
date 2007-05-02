@@ -1,3 +1,8 @@
+Wed May  2 11:35:45 2007  Tim Janik  <timj@imendio.com>
+
+	* docs/faq/gtkfaq.sgml: removed, since this file is long outdated
+	and fully replaced by docs/faq/gtk-faq.sgml.
+
 2007-05-02  Kristian Rietveld  <kris@imendio.com>
 
 	* gtk/gtktreeview.c (gtk_tree_view_grab_notify): stop the rubber band
