@@ -345,6 +345,7 @@ gtk_private_h_sources =		\
 	gtkfilesystemunix.h	\
 	gtkhsv.h		\
 	gtkiconcache.h		\
+	gtkiconcachevalidator.h	\
 	gtkintl.h		\
 	gtkkeyhash.h		\
 	gtkmnemonichash.h	\
@@ -453,6 +454,7 @@ gtk_base_c_sources =            \
 	gtkhseparator.c		\
 	gtkhsv.c		\
 	gtkiconcache.c		\
+	gtkiconcachevalidator.c	\
 	gtkiconfactory.c	\
 	gtkicontheme.c		\
 	gtkiconview.c		\

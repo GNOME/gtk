@@ -1,3 +1,7 @@
+2007-05-02  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/Makefile.am: Forgotten changes for the icon cache validator
+
 2007-05-02  Kristian Rietveld  <kris@imendio.com>
 
 	Merge from trunk:
