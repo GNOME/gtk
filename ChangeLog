@@ -1,3 +1,10 @@
+2007-05-02  Kristian Rietveld  <kris@imendio.com>
+
+	Merge from trunk:
+
+	* gtk/gtktreeview.c (gtk_tree_view_grab_notify): stop the rubber band
+	if it's active.
+
 2007-05-01  Matthias Clasen  <mclasen@redhat.com>
 
 	* NEWS: Updates
