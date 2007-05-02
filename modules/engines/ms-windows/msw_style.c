@@ -2611,7 +2611,7 @@ draw_extension (GtkStyle *style,
           if (!draw_tab_button (style, window, state_type,
                                 shadow_type, area, widget,
                                 detail,
-                                x, y, width, height, gap_side))
+                                x, y, width, height, real_gap_side))
             {
               parent_class->draw_extension (style, window, state_type,
                                             shadow_type, area, widget, detail,

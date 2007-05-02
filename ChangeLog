@@ -1,3 +1,8 @@
+2007-05-02  Dom Lachowicz <domlachowicz@gmail.com>
+
+	* modules/engines/ms-windows/msw_style.c: MS-Windows Theme top tabs 
+	rendered upside down for non-XP theme (#435053, Daniel Atallah)
+
 Wed May  2 11:35:45 2007  Tim Janik  <timj@imendio.com>
 
 	* docs/faq/gtkfaq.sgml: removed, since this file is long outdated
