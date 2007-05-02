@@ -23,7 +23,7 @@
 #include <gdk-pixbuf/gdk-pixdata.h>
 
 
-#define VERBOSE(x) 
+#define VERBOSE(x) x
 
 #define check(name,condition) \
   if (!(condition)) \
@@ -262,8 +262,7 @@ check_image (CacheInfo *info,
          get_uint32 (info, offset + 4, &image_data_offset));
 
   check ("image index", index < info->n_directories);
-  check ("image flags", flags == 1 || flags == 2 || flags == 4 ||
-                        flags == 9 || flags == 10 || flags == 12);
+  check ("image flags", flags < 16);
 
   if (image_data_offset != 0) 
     {

@@ -1,4 +1,9 @@
 2007-05-01  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtkiconcachevalidator.c: Don't be too strict when checking
+	icon flags.  (#435062)
+
+2007-05-01  Matthias Clasen  <mclasen@redhat.com>
 	
 	* gtk/Makefile.am: When generating gtkbuiltincache.h, only copy
 	pngs.
