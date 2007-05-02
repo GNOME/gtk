@@ -1,3 +1,8 @@
+2007-05-01  Dan Winship  <danw@novell.com>
+
+	* gdk/x11/gdkwindow-x11.c (setup_toplevel_window): Make sure the
+	leader_window's WM_CLIENT_LEADER points to itself. #435028
+
 2007-05-02  Christian Persch  <chpe@gnome.org>
 
 	* gtk/gtktreemodel.c: (gtk_tree_iter_copy), (gtk_tree_iter_free): Use

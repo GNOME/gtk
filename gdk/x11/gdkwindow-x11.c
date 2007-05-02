@@ -572,6 +572,7 @@ setup_toplevel_window (GdkWindow *window,
   GdkScreenX11 *screen_x11 = GDK_SCREEN_X11 (GDK_WINDOW_SCREEN (parent));
   XSizeHints size_hints;
   long pid;
+  Window leader_window;
     
   if (GDK_WINDOW_TYPE (window) == GDK_WINDOW_DIALOG)
     XSetTransientForHint (xdisplay, xid, xparent);
@@ -608,11 +609,14 @@ setup_toplevel_window (GdkWindow *window,
 		   XA_CARDINAL, 32,
 		   PropModeReplace,
 		   (guchar *)&pid, 1);
-  
+
+  leader_window = GDK_DISPLAY_X11 (screen_x11->display)->leader_window;
+  if (!leader_window)
+    leader_window = xid;
   XChangeProperty (xdisplay, xid, 
 		   gdk_x11_get_xatom_by_name_for_display (screen_x11->display, "WM_CLIENT_LEADER"),
 		   XA_WINDOW, 32, PropModeReplace,
-		   (guchar *) &GDK_DISPLAY_X11 (screen_x11->display)->leader_window, 1);
+		   (guchar *) &leader_window, 1);
 
   if (toplevel->focus_window != None)
     XChangeProperty (xdisplay, xid, 
