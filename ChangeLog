@@ -2,6 +2,13 @@
 
 	Merge from trunk:
 
+	* gtk/gtkiconcachevalidator.c: Don't be too strict when checking
+	icon flags.  (#435062)
+
+2007-05-01  Matthias Clasen  <mclasen@redhat.com>
+
+	Merge from trunk:
+
 	* gtk/gtkfilesystemmodel.c (_gtk_file_system_model_path_do):
 	Don't ignore the fact that gtk_file_system_get_parent() 
 	may return NULL.  (#424042, Jan Martinek)
