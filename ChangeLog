@@ -1,4 +1,9 @@
 2007-05-01  Matthias Clasen  <mclasen@redhat.com>
+	
+	* gtk/Makefile.am: When generating gtkbuiltincache.h, only copy
+	pngs.
+
+2007-05-01  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtkfilesystemmodel.c (_gtk_file_system_model_path_do):
 	Don't ignore the fact that gtk_file_system_get_parent() 

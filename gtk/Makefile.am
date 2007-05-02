@@ -881,6 +881,7 @@ STOCK_ICONS = \
 	stock-icons/16/gtk-about.png  			\
 	stock-icons/16/gtk-add.png    			\
 	stock-icons/16/gtk-cdrom.png  			\
+	stock-icons/16/gtk-close.png  			\
 	stock-icons/16/gtk-connect.png        		\
 	stock-icons/16/gtk-convert.png        		\
 	stock-icons/16/gtk-copy.png   			\
@@ -1095,31 +1096,36 @@ GENERATED_ICONS = \
 # need to copy the icons so that we can replace the generated ones with
 # symlinks, even in the readonly srcdir case
 stamp-icons: $(STOCK_ICONS)
-	if [ ! -d stock-icons ]; then 						\
-          cp -R $(srcdir)/stock-icons .; 					\
-	  chmod -R u+w stock-icons;						\
-        fi &&									\
-	for i in 16 24; do							\
-	   (cd stock-icons/$$i							\
-	   && $(RM) gtk-go-back-rtl.png 					\
-	   && $(LN_S) gtk-go-forward-ltr.png gtk-go-back-rtl.png		\
-	   && $(RM) gtk-go-forward-rtl.png					\
-	   && $(LN_S) gtk-go-back-ltr.png gtk-go-forward-rtl.png		\
-	   && $(RM) gtk-goto-first-rtl.png 					\
-	   && $(LN_S) gtk-goto-last-ltr.png gtk-goto-first-rtl.png		\
-	   && $(RM) gtk-goto-last-rtl.png					\
-	   && $(LN_S) gtk-goto-first-ltr.png gtk-goto-last-rtl.png		\
-	   && $(RM) gtk-media-forward-rtl.png 					\
-	   && $(LN_S) gtk-media-rewind-ltr.png gtk-media-forward-rtl.png	\
-	   && $(RM) gtk-media-next-rtl.png					\
-	   && $(LN_S) gtk-media-previous-ltr.png gtk-media-next-rtl.png		\
-	   && $(RM) gtk-media-previous-rtl.png 					\
-	   && $(LN_S) gtk-media-next-ltr.png gtk-media-previous-rtl.png		\
-	   && $(RM) gtk-media-rewind-rtl.png					\
-	   && $(LN_S) gtk-media-forward-ltr.png gtk-media-rewind-rtl.png	\
-	   && $(RM) gtk-save.png						\
-	   && $(LN_S) gtk-floppy.png gtk-save.png)				\
-	done									\
+	if [ ! -d stock-icons ]; then 					\
+	  for d in 16 20 24 32 48; do 					\
+	    mkdir -p stock-icons/$$d; 					\
+	  done;								\
+	  for f in $(STOCK_ICONS); do					\
+	    cp $(srcdir)/$$f $$(dirname $$f);				\
+	  done;								\
+	  chmod -R u+w stock-icons;					\
+        fi &&								\
+	for i in 16 24; do						\
+	   (cd stock-icons/$$i						\
+	   && $(RM) gtk-go-back-rtl.png 				\
+	   && $(LN_S) gtk-go-forward-ltr.png gtk-go-back-rtl.png	\
+	   && $(RM) gtk-go-forward-rtl.png				\
+	   && $(LN_S) gtk-go-back-ltr.png gtk-go-forward-rtl.png	\
+	   && $(RM) gtk-goto-first-rtl.png 				\
+	   && $(LN_S) gtk-goto-last-ltr.png gtk-goto-first-rtl.png	\
+	   && $(RM) gtk-goto-last-rtl.png				\
+	   && $(LN_S) gtk-goto-first-ltr.png gtk-goto-last-rtl.png	\
+	   && $(RM) gtk-media-forward-rtl.png 				\
+	   && $(LN_S) gtk-media-rewind-ltr.png gtk-media-forward-rtl.png\
+	   && $(RM) gtk-media-next-rtl.png				\
+	   && $(LN_S) gtk-media-previous-ltr.png gtk-media-next-rtl.png	\
+	   && $(RM) gtk-media-previous-rtl.png 				\
+	   && $(LN_S) gtk-media-next-ltr.png gtk-media-previous-rtl.png	\
+	   && $(RM) gtk-media-rewind-rtl.png				\
+	   && $(LN_S) gtk-media-forward-ltr.png gtk-media-rewind-rtl.png\
+	   && $(RM) gtk-save.png					\
+	   && $(LN_S) gtk-floppy.png gtk-save.png)			\
+	done								\
 	&& touch stamp-icons
 
 if CROSS_COMPILING
