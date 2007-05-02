@@ -1134,7 +1134,7 @@ out:
  * @user_data: data to pass to @func
  * 
  * Locates @path within @model, referencing
- * (gtk_tree_model_ref_node ()) all parent nodes,
+ * (gtk_tree_model_ref_node()) all parent nodes,
  * calls @func passing in the path and iter for @path,
  * then unrefs all the parent nodes.
  *
@@ -1146,10 +1146,7 @@ out:
  *
  * This function is particularly useful for expanding
  * a #GtkTreeView to a particular point in the file system.
- * 
- * Return value: %TRUE if the path was successfully
- *  found in @model and @func was called.
- **/
+ */
 void
 _gtk_file_system_model_path_do (GtkFileSystemModel        *model,
 			        const GtkFilePath         *path,
@@ -1161,15 +1158,17 @@ _gtk_file_system_model_path_do (GtkFileSystemModel        *model,
   FileModelNode *node;
   struct RefPathData *info;
 
-  if (gtk_file_path_compare (path, model->root_path) == 0
-      || !gtk_file_system_get_parent (model->file_system, path, &parent_path, NULL))
+  if (gtk_file_path_compare (path, model->root_path) == 0 ||
+      !gtk_file_system_get_parent (model->file_system, path, &parent_path, NULL) ||
+      parent_path == NULL)
     return;
 
   paths = g_slist_prepend (paths, gtk_file_path_copy (path));
   while (gtk_file_path_compare (parent_path, model->root_path) != 0)
     {
       paths = g_slist_prepend (paths, parent_path);
-      if (!gtk_file_system_get_parent (model->file_system, parent_path, &parent_path, NULL))
+      if (!gtk_file_system_get_parent (model->file_system, parent_path, &parent_path, NULL) || 
+          parent_path == NULL)
         {
 	  gtk_file_paths_free (paths);
 	  return;
