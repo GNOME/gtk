@@ -1,5 +1,9 @@
 2007-05-01  Matthias Clasen  <mclasen@redhat.com>
 
+	* NEWS: Updates
+
+2007-05-01  Matthias Clasen  <mclasen@redhat.com>
+
 	Merge from trunk:
 
 	* gtk/gtkiconcachevalidator.c: Don't be too strict when checking

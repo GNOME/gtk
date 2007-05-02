@@ -1,3 +1,70 @@
+Overview of Changes from GTK+ 2.10.11 to 2.10.12
+================================================
+
+* Fixed bugs:
+ 379414 file chooser warnings when changing path in the entry
+ 418585 GtkFileChooserDefault sizing code is not DPI independent
+ 419568 Crash in search if start with special letter
+ 435062 build dies with icon cache validation
+ 379399 Segfault to call gtk_print_operation_run twice.
+ 387889 cups backend has problems when there are too many printers
+ 418531 invalid read to gtkicontheme.c gtk_icon_theme_lookup_icon...
+ 423916 crash in color scheme code
+ 424042 Segmentation fault while quickly pressing Alt+arrows
+ 415260 Protect against negative indices when setting values in G...
+ 419171 XGetVisualInfo() may not set nxvisuals
+ 128852 Gdk cursors don't look good on win32
+ 344657 Ctrl-H doesn't toggle "Show Hidden Files" setting
+ 345345 PrintOperation::paginate is not emitted for class handler
+ 347567 GtkPrintOperation::end-print is not emitted if it's cance...
+ 369112 gtk_ui_manager_add_ui should accept unnamed separator
+ 392015 Selected menu item invisible on Windows Vista
+ 399253 MS-Windows Theme Bottom Tab placement rendering glitches
+ 399425 gtk_input_dialog_fill_axes() adds child to gtkscrolledwin...
+ 403251 [patch] little memory leak in GtkPrintJob
+ 403267 [patch] memory leak in GtkPageSetupUnixDialog
+ 403470 MS-Windows Theme tab placement other than on top leaks a ...
+ 404506 Windows system fonts that have multi-byte font names cann...
+ 405089 Incorrect window placement for GtkEventBox private window
+ 405515 Minor leak in gtkfilesystemmodel.c
+ 405539 gdk_pixbuf_save() for PNG saver can return FALSE without ...
+ 415681 gdk_window_clear_area includes an extra line and column o...
+ 418219 GtkRecentChooser should apply filter before sorting and c...
+ 418403 Scroll to printer after selecting it from settings
+ 421985 _gtk_print_operation_platform_backend_launch_preview
+ 421990 gtk_print_job_get_surface
+ 421993 gtk_print_operation_init
+ 423064 Conditional jump or move depends on uninitialised value(s...
+ 423722 Fix printing header in gtk-demo
+ 424168 gtk_print_operation_run on async preview
+ 425655 Don't install gtk+-unix-print-2.0.pc on non-UNIX platforms
+ 425786 GDK segfaults if XineramaQueryScreens fails
+ 428665 Lpr Backend gets stuck in infinite loop during gtk_enumer...
+ 429902 GtkPrintOperation leaks cairo contextes
+ 431997 First delay of GdkPixbufAnimationIter is wrong
+ 433242 Inconsistent scroll arrow position calculations
+ 433972 Placing gtk.Expander inside a gtk.TextView() changes gtk....
+ 434261 _gtk_toolbar_elide_underscores incorrectly handles some s...
+ 383354 ctrl-L should make 'Location' entry disappear
+ 418673 gtk_recent_manager_add_item
+ 429732 gtk_accel_group_finalize accesses invalid memory
+ 435028 WM_CLIENT_LEADER is wrong on the leader_window
+ 431067 Background of the header window is not updated
+ 338843 add recent files support inside the ui manager
+ 148535 add drop shadow to menus, tooltips, etc. under Windows XP
+
+* Updated translations: 
+ Belarusian Latin  (be@latin)
+ Dzonka  (dz)
+ Greek  (el)
+ Spanish  (es)
+ Basque  (eu)
+ Italian  (it)
+ Galego  (gl)
+ Dutch  (nl)
+ Turkish  (tr)
+
+
 Overview of Changes from GTK+ 2.10.10 to 2.10.11
 ================================================
 
