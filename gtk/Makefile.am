@@ -335,6 +335,11 @@ gtk_semi_private_h_sources =    \
 
 # GTK+ header files that don't get installed
 gtk_private_h_sources =		\
+	gtkquery.h		\
+	gtksearchengine.h	\
+	gtksearchenginebeagle.h	\
+	gtksearchenginetracker.h\
+	gtksearchenginesimple.h	\
 	gtkdndcursors.h		\
 	gtkentryprivate.h	\
 	gtkfilechooserdefault.h	\
@@ -376,6 +381,11 @@ gtk_private_h_sources =		\
 
 # GTK+ C sources to build the library from
 gtk_base_c_sources =            \
+	gtkquery.c		\
+	gtksearchengine.c	\
+	gtksearchenginebeagle.c	\
+	gtksearchenginetracker.c\
+	gtksearchenginesimple.c	\
 	fnmatch.c		\
 	gtkaboutdialog.c	\
 	gtkaccelgroup.c		\

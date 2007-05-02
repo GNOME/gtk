@@ -1,3 +1,34 @@
+2007-05-02  Emmanuele Bassi  <ebassi@gnome.org>
+
+	Add search file support in the GtkFileChooser. Original patch
+	by Federico Mena Quintero; patch updated by Matthias Clasen.
+	See bug #344785.
+
+	* gtk/gtksearchengine.[ch]: Private search engine abstraction
+	object.
+
+	* gtk/gtksearchenginebeagle.[ch]: Private search engine
+	implementation using libbeagle (via g_module_open()).
+
+	* gtk/gtksearchenginesimple.[ch]: Private search engine
+	implementation using file tree walking.
+
+	* gtk/gtksearchenginetracker.[ch]: Private earch engine
+	implementation using libtracker (via g_module_open()).
+
+	* gtk/gtkquery.[ch]: Private query object for the search
+	engines.
+
+	* gtk/gtkfilechooserprivate.h:
+	* gtk/gtkfilechooserdefault.c: Use the GtkSearchEngine to
+	query a search engine backend using GtkQuery; create a new
+	operating mode, OPERATION_MODE_SEARCH, and call the common
+	operating mode OPERATION_MODE_BROWSE; add support for virtual
+	shortcuts inside the shortcuts model and create a new "Search"
+	virtual shortcut.
+
+	* gtk/Makefile.am: Update the build with the new files
+
 2007-05-02  Armin Burgmeier  <armin@openismus.com>
 
 	* gtk/gtkcombobox.c: Destroy the menu in dispose instead of

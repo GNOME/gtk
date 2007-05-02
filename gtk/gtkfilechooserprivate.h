@@ -25,6 +25,8 @@
 #include "gtkfilesystem.h"
 #include "gtkfilesystemmodel.h"
 #include "gtkliststore.h"
+#include "gtksearchengine.h"
+#include "gtkquery.h"
 #include "gtktooltips.h"
 #include "gtktreemodelsort.h"
 #include "gtktreestore.h"
@@ -147,6 +149,11 @@ typedef enum {
   LOCATION_MODE_FILENAME_ENTRY
 } LocationMode;
 
+typedef enum {
+  OPERATION_MODE_BROWSE,
+  OPERATION_MODE_SEARCH
+} OperationMode;
+
 struct _GtkFileChooserDefault
 {
   GtkVBox parent_instance;
@@ -175,10 +182,18 @@ struct _GtkFileChooserDefault
   GtkWidget *browse_files_popup_menu_add_shortcut_item;
   GtkWidget *browse_files_popup_menu_hidden_files_item;
   GtkWidget *browse_new_folder_button;
+  GtkWidget *browse_path_bar_hbox;
   GtkWidget *browse_path_bar;
 
   GtkFileSystemModel *browse_files_model;
   char *browse_files_last_selected_name;
+
+  /* Widgets for searching */
+  GtkWidget *search_hbox;
+  GtkWidget *search_entry;
+  GtkSearchEngine *search_engine;
+  GtkQuery *search_query;
+  GtkListStore *search_model;
 
   GtkWidget *filter_combo_hbox;
   GtkWidget *filter_combo;
@@ -195,7 +210,16 @@ struct _GtkFileChooserDefault
   LocationMode location_mode;
 
   GtkListStore *shortcuts_model;
-  GtkTreeModel *shortcuts_filter_model;
+
+  /* Filter for the shortcuts pane.  We filter out the "current folder" row and
+   * the separator that we use for the "Save in folder" combo.
+   */
+  GtkTreeModel *shortcuts_pane_filter_model;
+  
+  /* Filter for the "Save in folder" combo.  We filter out the Search row and
+   * its separator.
+   */
+  GtkTreeModel *shortcuts_combo_filter_model;
 
   GtkTreeModelSort *sort_model;
 
@@ -215,15 +239,14 @@ struct _GtkFileChooserDefault
   ReloadState reload_state;
   guint load_timeout_id;
 
+  OperationMode operation_mode;
+
   GSList *pending_select_paths;
 
   GtkFileFilter *current_filter;
   GSList *filters;
 
   GtkTooltips *tooltips;
-
-  gboolean has_home;
-  gboolean has_desktop;
 
   int num_volumes;
   int num_shortcuts;
@@ -239,6 +262,7 @@ struct _GtkFileChooserDefault
 
   GtkTreeViewColumn *list_name_column;
   GtkCellRenderer *list_name_renderer;
+  GtkTreeViewColumn *list_mtime_column;
 
   GSource *edited_idle;
   char *edited_new_text;
@@ -266,6 +290,9 @@ struct _GtkFileChooserDefault
   guint changing_folder : 1;
   guint shortcuts_current_folder_active : 1;
   guint expand_folders : 1;
+  guint has_home : 1;
+  guint has_desktop : 1;
+  guint has_search : 1;
 
 #if 0
   guint shortcuts_drag_outside : 1;
