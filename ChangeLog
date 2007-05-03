@@ -1,3 +1,8 @@
+Thu May  3 16:27:34 2007  Tim Janik  <timj@imendio.com>
+
+	* tests/testgtk.c (create_handle_box): made handle box test non-modal,
+	so other test can interact with handle boxes.
+
 2007-05-02  Emmanuele Bassi  <ebassi@gnome.org>
 
 	Add search file support in the GtkFileChooser. Original patch

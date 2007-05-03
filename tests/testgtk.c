@@ -2321,7 +2321,7 @@ create_handle_box (GtkWidget *widget)
     
     gtk_window_set_screen (GTK_WINDOW (window),
 			   gtk_widget_get_screen (widget));
-    gtk_window_set_modal (GTK_WINDOW (window), TRUE);
+    gtk_window_set_modal (GTK_WINDOW (window), FALSE);
     gtk_window_set_title (GTK_WINDOW (window),
 			  "Handle Box Test");
     gtk_window_set_resizable (GTK_WINDOW (window), TRUE);
@@ -2698,7 +2698,7 @@ create_get_image (GtkWidget *widget)
                                              src);
       
       gtk_box_pack_start (GTK_BOX (hbox),
-                          sw, TRUE, TRUE, 0);                          
+                          sw, TRUE, TRUE, 0);
 
 
       vbox = gtk_vbox_new (FALSE, 3);
