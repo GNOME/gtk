@@ -212,6 +212,7 @@ static guint combo_box_signals[LAST_SIGNAL] = {0,};
 
 static void     gtk_combo_box_cell_layout_init     (GtkCellLayoutIface *iface);
 static void     gtk_combo_box_cell_editable_init   (GtkCellEditableIface *iface);
+static void     gtk_combo_box_dispose              (GObject          *object);
 static void     gtk_combo_box_finalize             (GObject          *object);
 static void     gtk_combo_box_destroy              (GtkObject        *object);
 
@@ -478,6 +479,7 @@ gtk_combo_box_class_init (GtkComboBoxClass *klass)
   gtk_object_class->destroy = gtk_combo_box_destroy;
 
   object_class = (GObjectClass *)klass;
+  object_class->dispose = gtk_combo_box_dispose;
   object_class->finalize = gtk_combo_box_finalize;
   object_class->set_property = gtk_combo_box_set_property;
   object_class->get_property = gtk_combo_box_get_property;
@@ -5001,17 +5003,25 @@ gtk_combo_box_destroy (GtkObject *object)
 }
 
 static void
-gtk_combo_box_finalize (GObject *object)
+gtk_combo_box_dispose(GObject* object)
 {
   GtkComboBox *combo_box = GTK_COMBO_BOX (object);
-  GSList *i;
-  
+
   if (GTK_IS_MENU (combo_box->priv->popup_widget))
     {
       gtk_combo_box_menu_destroy (combo_box);
       gtk_menu_detach (GTK_MENU (combo_box->priv->popup_widget));
       combo_box->priv->popup_widget = NULL;
     }
+
+  G_OBJECT_CLASS (gtk_combo_box_parent_class)->dispose (object);
+}
+
+static void
+gtk_combo_box_finalize (GObject *object)
+{
+  GtkComboBox *combo_box = GTK_COMBO_BOX (object);
+  GSList *i;
   
   if (GTK_IS_TREE_VIEW (combo_box->priv->tree_view))
     gtk_combo_box_list_destroy (combo_box);
