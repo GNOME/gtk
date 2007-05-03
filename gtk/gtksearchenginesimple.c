@@ -77,8 +77,6 @@ finalize (GObject *object)
       simple->priv->query = NULL;
     }
   
-  g_free (simple->priv);
-  
   G_OBJECT_CLASS (_gtk_search_engine_simple_parent_class)->finalize (object);
 }
 
