@@ -2024,7 +2024,6 @@ gtk_label_ensure_layout (GtkLabel *label)
 	  align = PANGO_ALIGN_CENTER;
 	  break;
 	case GTK_JUSTIFY_FILL:
-	  /* FIXME: This just doesn't work to do this */
 	  align = rtl ? PANGO_ALIGN_RIGHT : PANGO_ALIGN_LEFT;
 	  pango_layout_set_justify (label->layout, TRUE);
 	  break;

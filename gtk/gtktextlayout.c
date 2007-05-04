@@ -1201,7 +1201,7 @@ set_para_values (GtkTextLayout      *layout,
                  GtkTextLineDisplay *display)
 {
   PangoAlignment pango_align = PANGO_ALIGN_LEFT;
-  int layout_width;
+  PangoWrapMode pango_wrap = PANGO_WRAP_WORD;
 
   switch (base_dir)
     {
@@ -1241,7 +1241,8 @@ set_para_values (GtkTextLayout      *layout,
       pango_align = PANGO_ALIGN_CENTER;
       break;
     case GTK_JUSTIFY_FILL:
-      g_warning ("FIXME we don't support GTK_JUSTIFY_FILL yet");
+      pango_align = (base_dir == PANGO_DIRECTION_LTR) ? PANGO_ALIGN_LEFT : PANGO_ALIGN_RIGHT;
+      pango_layout_set_justify (display->layout, TRUE);
       break;
     default:
       g_assert_not_reached ();
@@ -1269,24 +1270,25 @@ set_para_values (GtkTextLayout      *layout,
   switch (style->wrap_mode)
     {
     case GTK_WRAP_CHAR:
-      layout_width = layout->screen_width - display->left_margin - display->right_margin;
-      pango_layout_set_width (display->layout, layout_width * PANGO_SCALE);
-      pango_layout_set_wrap (display->layout, PANGO_WRAP_CHAR);
+      pango_wrap = PANGO_WRAP_CHAR;
       break;
     case GTK_WRAP_WORD:
-      layout_width = layout->screen_width - display->left_margin - display->right_margin;
-      pango_layout_set_width (display->layout, layout_width * PANGO_SCALE);
-      pango_layout_set_wrap (display->layout, PANGO_WRAP_WORD);
+      pango_wrap = PANGO_WRAP_WORD;
       break;
 
     case GTK_WRAP_WORD_CHAR:
-      layout_width = layout->screen_width - display->left_margin - display->right_margin;
-      pango_layout_set_width (display->layout, layout_width * PANGO_SCALE);
-      pango_layout_set_wrap (display->layout, PANGO_WRAP_WORD_CHAR);
+      pango_wrap = PANGO_WRAP_WORD_CHAR;
       break;
 
     case GTK_WRAP_NONE:
       break;
+    }
+
+  if (style->wrap_mode != GTK_WRAP_NONE)
+    {
+      int layout_width = (layout->screen_width - display->left_margin - display->right_margin);
+      pango_layout_set_width (display->layout, layout_width * PANGO_SCALE);
+      pango_layout_set_wrap (display->layout, pango_wrap);
     }
 
   display->total_width = MAX (layout->screen_width, layout->width) - display->left_margin - display->right_margin;
