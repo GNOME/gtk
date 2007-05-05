@@ -600,22 +600,23 @@ gdk_quartz_drawable_get_context (GdkDrawable *drawable,
 				 gboolean     antialias)
 {
   GdkDrawableImplQuartz *drawable_impl = GDK_DRAWABLE_IMPL_QUARTZ (drawable);
+  CGContextRef           cg_context;
 
   if (GDK_IS_WINDOW_IMPL_QUARTZ (drawable) &&
       GDK_WINDOW_DESTROYED (drawable_impl->wrapper))
     return NULL;
 
-  CGContextRef cg_context;
-  
   if (GDK_IS_WINDOW_IMPL_QUARTZ (drawable))
     {
       GdkWindowImplQuartz *window_impl = GDK_WINDOW_IMPL_QUARTZ (drawable);
-	  
-      /* Lock focus when not called as part of begin/end paint cycle. 
-       * This is needed to allow broken apps that draw outside of expose
-       * to still work (somewhat). 
+
+      /* Lock focus when not called as part of a drawRect call. This
+       * is needed when called from outside "real" expose events, for
+       * example for synthesized expose events when realizing windows
+       * and for widgets that send fake expose events like the arrow
+       * buttons in spinbuttons.
        */
-      if (window_impl->begin_paint_count == 0)
+      if (window_impl->in_paint_rect_count == 0)
 	{
 	  window_impl->pool = [[NSAutoreleasePool alloc] init];
 	  if (![window_impl->view lockFocusIfCanDraw])
@@ -695,19 +696,16 @@ gdk_quartz_drawable_release_context (GdkDrawable  *drawable,
       CGContextRestoreGState (cg_context);
       CGContextSetAllowsAntialiasing (cg_context, TRUE);
 
-      /* Only flush and unlock if called outside the expose, since it's
-       * already handled for otherwise.
-       */
-      if (window_impl->in_paint_rect_count == 0 && window_impl->begin_paint_count == 0)
+      /* See comment in gdk_quartz_drawable_get_context(). */
+      if (window_impl->in_paint_rect_count == 0)
 	{
-	  CGContextFlush (cg_context);
 	  [window_impl->view unlockFocus];
-	}
 
-      if (window_impl->pool)
-	{
-	  [window_impl->pool release];
-	  window_impl->pool = NULL;
+	  if (window_impl->pool)
+	    {
+	      [window_impl->pool release];
+	      window_impl->pool = NULL;
+	    }
 	}
     }
   else if (GDK_IS_PIXMAP_IMPL_QUARTZ (drawable))
