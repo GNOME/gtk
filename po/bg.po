@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ gtk-2-10\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-05-05 09:18+0300\n"
+"POT-Creation-Date: 2007-05-05 10:25+0300\n"
 "PO-Revision-Date: 2007-05-05 09:49+0300\n"
 "Last-Translator: Alexander Shopov <ash@contact.bg>\n"
 "Language-Team: Bulgarian <dict@fsa-bg.org>\n"
@@ -1245,7 +1245,7 @@ msgstr "Избор на цвят"
 
 #: ../gtk/gtkcolorbutton.c:449
 msgid "Received invalid color data\n"
-msgstr "Получени са невалидни данни за цвета\n"
+msgstr "Получени са неправилни данни за цвета\n"
 
 #: ../gtk/gtkcolorsel.c:562
 msgid ""
@@ -1386,7 +1386,7 @@ msgstr "_Вмъкване на контролен знак за Уникод"
 #: ../gtk/gtkfilechooser.c:1813 ../gtk/gtkfilechooser.c:1857
 #, c-format
 msgid "Invalid filename: %s"
-msgstr "Невалидно име на файла: %s"
+msgstr "Неправилно име на файл: %s"
 
 #: ../gtk/gtkfilechooserbutton.c:67
 msgid "Select A File"
@@ -1430,7 +1430,7 @@ msgstr ""
 
 #: ../gtk/gtkfilechooserdefault.c:1001
 msgid "Invalid file name"
-msgstr "Невалидно име на файл"
+msgstr "Неправилно име на файл"
 
 #: ../gtk/gtkfilechooserdefault.c:1011
 msgid "The folder contents could not be displayed"
@@ -1467,7 +1467,7 @@ msgstr "Премахване на отметката - „%s“"
 #, c-format
 msgid "Could not add a bookmark for '%s' because it is an invalid path name."
 msgstr ""
-"Не може да се добави отметка за „%s“, понеже това е невалидно име на път."
+"Не може да се добави отметка за „%s“, понеже това е неправилно име на път."
 
 #: ../gtk/gtkfilechooserdefault.c:3363
 msgid "Remove"
@@ -1511,7 +1511,7 @@ msgstr "Не може да бъде избран файл"
 #, c-format
 msgid "Could not select file '%s' because it is an invalid path name."
 msgstr ""
-"Файлът „%s“ не може да бъде избран, понеже това е невалидно име на път."
+"Файлът „%s“ не може да бъде избран, понеже това е неправилно име на път."
 
 #: ../gtk/gtkfilechooserdefault.c:3933
 msgid "_Add to Bookmarks"
@@ -2321,15 +2321,15 @@ msgstr "Няма достатъчно памет"
 
 #: ../gtk/gtkprintoperation-win32.c:1561
 msgid "Invalid argument to PrintDlgEx"
-msgstr "Невалиден аргумент за PrintDlgEx"
+msgstr "Неправилен аргумент за PrintDlgEx"
 
 #: ../gtk/gtkprintoperation-win32.c:1566
 msgid "Invalid pointer to PrintDlgEx"
-msgstr "Невалиден указател към PrintDlgEx"
+msgstr "Неправилен указател към PrintDlgEx"
 
 #: ../gtk/gtkprintoperation-win32.c:1571
 msgid "Invalid handle to PrintDlgEx"
-msgstr "Невалиден указател за работа с PrintDlgEx"
+msgstr "Неправилен указател за работа с PrintDlgEx"
 
 #: ../gtk/gtkprintoperation-win32.c:1576
 msgid "Unspecified error"
@@ -4185,7 +4185,7 @@ msgstr "Неуспех при замяната на заглавната час�
 #: ../gtk/updateiconcache.c:1162
 #, c-format
 msgid "Failed to write cache file: %s\n"
-msgstr "Неуспех при запазване на файла за временни данни: %s\n"
+msgstr "Неуспех при запазване на файла за временно съхранение на икони: %s\n"
 
 #: ../gtk/updateiconcache.c:1202
 #, c-format
@@ -4205,11 +4205,12 @@ msgstr "Грешка при преименуването на „%s“ обра�
 
 #: ../gtk/updateiconcache.c:1243
 msgid "Cache file created successfully.\n"
-msgstr "Файлът за временни данни е създаден успешно.\n"
+msgstr "Файлът за временно съхранение на икони е създаден успешно.\n"
 
 #: ../gtk/updateiconcache.c:1282
 msgid "Overwrite an existing cache, even if uptodate"
-msgstr "Презаписване на файла за временни данни дори и да е актуален"
+msgstr ""
+"Презаписване на файла за временно съхранение на икони дори и да е актуален"
 
 #: ../gtk/updateiconcache.c:1283
 msgid "Don't check for the existence of index.theme"
@@ -4217,7 +4218,9 @@ msgstr "Да не се проверява за съществуването на
 
 #: ../gtk/updateiconcache.c:1284
 msgid "Don't include image data in the cache"
-msgstr "Данните за изображения да не се записват във файл за временни данни"
+msgstr ""
+"Данните за изображения да не се записват във файл за временно съхранение на "
+"икони"
 
 #: ../gtk/updateiconcache.c:1285
 msgid "Output a C header file"
