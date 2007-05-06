@@ -7,45 +7,42 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-menus\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-04-28 21:24+0300\n"
-"PO-Revision-Date: 2007-03-04 17:41+0100\n"
-"Last-Translator: Alaksandar Navicki <zolak@lacinka.org>\n"
+"POT-Creation-Date: 2007-05-06 00:46+0300\n"
+"PO-Revision-Date: 2007-05-06 00:50+0300\n"
+"Last-Translator: Ihar Hrachyshka <ihar.hrachyshka@gmail.com>\n"
 "Language-Team: Belarusian Latin <i18n@mova.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "X-Poedit-Language: Belarsian Latin\n"
-"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%"
-"10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
 
-#: ../gdk-pixbuf/gdk-pixbuf-animation.c:154 ../gdk-pixbuf/gdk-pixbuf-io.c:847
-#: ../gdk-pixbuf/gdk-pixbuf-io.c:1102 ../tests/testfilechooser.c:218
+#: ../gdk-pixbuf/gdk-pixbuf-animation.c:154
+#: ../gdk-pixbuf/gdk-pixbuf-io.c:847
+#: ../gdk-pixbuf/gdk-pixbuf-io.c:1102
+#: ../tests/testfilechooser.c:218
 #, c-format
 msgid "Failed to open file '%s': %s"
 msgstr "Niemahčyma adčynić fajł '%s': %s"
 
-#: ../gdk-pixbuf/gdk-pixbuf-animation.c:167 ../gdk-pixbuf/gdk-pixbuf-io.c:859
+#: ../gdk-pixbuf/gdk-pixbuf-animation.c:167
+#: ../gdk-pixbuf/gdk-pixbuf-io.c:859
 #, c-format
 msgid "Image file '%s' contains no data"
 msgstr "Fajł vyjavy '%s' biaź źviestak"
 
-#: ../gdk-pixbuf/gdk-pixbuf-animation.c:209 ../gdk-pixbuf/gdk-pixbuf-io.c:896
-#: ../gdk-pixbuf/gdk-pixbuf-io.c:1153 ../tests/testfilechooser.c:263
+#: ../gdk-pixbuf/gdk-pixbuf-animation.c:209
+#: ../gdk-pixbuf/gdk-pixbuf-io.c:896
+#: ../gdk-pixbuf/gdk-pixbuf-io.c:1153
+#: ../tests/testfilechooser.c:263
 #, c-format
-msgid ""
-"Failed to load image '%s': reason not known, probably a corrupt image file"
-msgstr ""
-"Niemahčyma adčytać vyjavu \"%s\": pryčyna nieviadomaja; fajł vyjavy "
-"vierahodna paškodžany"
+msgid "Failed to load image '%s': reason not known, probably a corrupt image file"
+msgstr "Niemahčyma adčytać vyjavu \"%s\": pryčyna nieviadomaja; fajł vyjavy vierahodna paškodžany"
 
 #: ../gdk-pixbuf/gdk-pixbuf-animation.c:242
 #, c-format
-msgid ""
-"Failed to load animation '%s': reason not known, probably a corrupt "
-"animation file"
-msgstr ""
-"Niemahčyma adčytać animacyju '%s': pryčyna nieviadomaja; fajł z animacyjaj "
-"vierahodna paškodžany"
+msgid "Failed to load animation '%s': reason not known, probably a corrupt animation file"
+msgstr "Niemahčyma adčytać animacyju '%s': pryčyna nieviadomaja; fajł z animacyjaj vierahodna paškodžany"
 
 #: ../gdk-pixbuf/gdk-pixbuf-io.c:527
 #, c-format
@@ -54,14 +51,11 @@ msgstr "Niemahčyma zahruzić modul vyśviatleńnia vyjavaŭ: %s: %s"
 
 #: ../gdk-pixbuf/gdk-pixbuf-io.c:542
 #, c-format
-msgid ""
-"Image-loading module %s does not export the proper interface; perhaps it's "
-"from a different GTK version?"
-msgstr ""
-"Modul %s dziela vyśviatleńnia vyjavaŭ nie ekspartuje adpaviednaha "
-"interfejsu; moža jon pachodzić ź inšaj versii GTK+?"
+msgid "Image-loading module %s does not export the proper interface; perhaps it's from a different GTK version?"
+msgstr "Modul %s dziela vyśviatleńnia vyjavaŭ nie ekspartuje adpaviednaha interfejsu; moža jon pachodzić ź inšaj versii GTK+?"
 
-#: ../gdk-pixbuf/gdk-pixbuf-io.c:659 ../gdk-pixbuf/gdk-pixbuf-io.c:688
+#: ../gdk-pixbuf/gdk-pixbuf-io.c:659
+#: ../gdk-pixbuf/gdk-pixbuf-io.c:688
 #, c-format
 msgid "Image type '%s' is not supported"
 msgstr "Vyjavy typu '%s' nie absłuhoŭvajucca"
@@ -85,7 +79,8 @@ msgstr "Niemahčyma adčytać vyjavy '%s': %s"
 msgid "Error writing to image file: %s"
 msgstr "Pamyłka pry zapisie ŭ fajł vyjavy: %s"
 
-#: ../gdk-pixbuf/gdk-pixbuf-io.c:1427 ../gdk-pixbuf/gdk-pixbuf-io.c:1558
+#: ../gdk-pixbuf/gdk-pixbuf-io.c:1427
+#: ../gdk-pixbuf/gdk-pixbuf-io.c:1558
 #, c-format
 msgid "This build of gdk-pixbuf does not support saving the image format: %s"
 msgstr "Hetaja kopija gdk-pixbuf nie dazvalaje zapisvać vyjavu ŭ farmacie: %s"
@@ -110,31 +105,23 @@ msgstr "Niemahčyma adčynić '%s' dla zapisu: %s"
 
 #: ../gdk-pixbuf/gdk-pixbuf-io.c:1760
 #, c-format
-msgid ""
-"Failed to close '%s' while writing image, all data may not have been saved: %"
-"s"
-msgstr ""
-"Niemahčyma začynić fajł '%s' paśla zapisańnia ŭ im vyjavy. Častka źviestak "
-"mahła nie zapisacca: %s"
+msgid "Failed to close '%s' while writing image, all data may not have been saved: %s"
+msgstr "Niemahčyma začynić fajł '%s' paśla zapisańnia ŭ im vyjavy. Častka źviestak mahła nie zapisacca: %s"
 
-#: ../gdk-pixbuf/gdk-pixbuf-io.c:1980 ../gdk-pixbuf/gdk-pixbuf-io.c:2030
+#: ../gdk-pixbuf/gdk-pixbuf-io.c:1980
+#: ../gdk-pixbuf/gdk-pixbuf-io.c:2030
 msgid "Insufficient memory to save image into a buffer"
 msgstr "Nie staje pamiaci dziela zapisu vyjavy ŭ bufery"
 
 #: ../gdk-pixbuf/gdk-pixbuf-loader.c:330
 #, c-format
-msgid ""
-"Internal error: Image loader module '%s' failed to complete an operation, "
-"but didn't give a reason for the failure"
-msgstr ""
-"Unutranaja pamyłka: Modul '%s' jaki adčytvaje vyjavy nia skončyŭ aperacyi, "
-"ale pryčyny hetaha nie paviedamiŭ"
+msgid "Internal error: Image loader module '%s' failed to complete an operation, but didn't give a reason for the failure"
+msgstr "Unutranaja pamyłka: Modul '%s' jaki adčytvaje vyjavy nia skončyŭ aperacyi, ale pryčyny hetaha nie paviedamiŭ"
 
 #: ../gdk-pixbuf/gdk-pixbuf-loader.c:373
 #, c-format
 msgid "Incremental loading of image type '%s' is not supported"
-msgstr ""
-"Funkcyja pryrostavaha adčytvańnia vyjavaŭ typu \"%s\" nie absłuhoŭvajecca"
+msgstr "Funkcyja pryrostavaha adčytvańnia vyjavaŭ typu \"%s\" nie absłuhoŭvajecca"
 
 #: ../gdk-pixbuf/gdk-pixdata.c:147
 msgid "Image header corrupt"
@@ -144,7 +131,8 @@ msgstr "Paškodžany zahałovak vyjavy"
 msgid "Image format unknown"
 msgstr "Nieviadomy farmat vyjavy"
 
-#: ../gdk-pixbuf/gdk-pixdata.c:157 ../gdk-pixbuf/gdk-pixdata.c:487
+#: ../gdk-pixbuf/gdk-pixdata.c:157
+#: ../gdk-pixbuf/gdk-pixdata.c:487
 msgid "Image pixel data corrupt"
 msgstr "Paškodžanyja źviestki ab pikselach vyjavy"
 
@@ -164,17 +152,22 @@ msgstr "Nie padtrymvany frahment ikony ŭ animacyi"
 msgid "Unsupported animation type"
 msgstr "Niepadtrymvany typ animacyi"
 
-#: ../gdk-pixbuf/io-ani.c:348 ../gdk-pixbuf/io-ani.c:536
+#: ../gdk-pixbuf/io-ani.c:348
+#: ../gdk-pixbuf/io-ani.c:536
 msgid "Invalid header in animation"
 msgstr "Niapravilny zahałovak animacyi"
 
-#: ../gdk-pixbuf/io-ani.c:358 ../gdk-pixbuf/io-ani.c:380
-#: ../gdk-pixbuf/io-ani.c:439 ../gdk-pixbuf/io-ani.c:458
-#: ../gdk-pixbuf/io-ani.c:509 ../gdk-pixbuf/io-ani.c:581
+#: ../gdk-pixbuf/io-ani.c:358
+#: ../gdk-pixbuf/io-ani.c:380
+#: ../gdk-pixbuf/io-ani.c:439
+#: ../gdk-pixbuf/io-ani.c:458
+#: ../gdk-pixbuf/io-ani.c:509
+#: ../gdk-pixbuf/io-ani.c:581
 msgid "Not enough memory to load animation"
 msgstr "Nie staje pamiaci dziela zahruzki animacyi"
 
-#: ../gdk-pixbuf/io-ani.c:398 ../gdk-pixbuf/io-ani.c:415
+#: ../gdk-pixbuf/io-ani.c:398
+#: ../gdk-pixbuf/io-ani.c:415
 #: ../gdk-pixbuf/io-ani.c:426
 msgid "Malformed chunk in animation"
 msgstr "Paškodžany frahment animacyi"
@@ -183,13 +176,16 @@ msgstr "Paškodžany frahment animacyi"
 msgid "The ANI image format"
 msgstr "Farmat vyjavy ANI"
 
-#: ../gdk-pixbuf/io-bmp.c:230 ../gdk-pixbuf/io-bmp.c:327
-#: ../gdk-pixbuf/io-bmp.c:359 ../gdk-pixbuf/io-bmp.c:382
+#: ../gdk-pixbuf/io-bmp.c:230
+#: ../gdk-pixbuf/io-bmp.c:327
+#: ../gdk-pixbuf/io-bmp.c:359
+#: ../gdk-pixbuf/io-bmp.c:382
 #: ../gdk-pixbuf/io-bmp.c:485
 msgid "BMP image has bogus header data"
 msgstr "Pamyłkovy zahałovak vyjavy BMP"
 
-#: ../gdk-pixbuf/io-bmp.c:241 ../gdk-pixbuf/io-bmp.c:422
+#: ../gdk-pixbuf/io-bmp.c:241
+#: ../gdk-pixbuf/io-bmp.c:422
 msgid "Not enough memory to load bitmap image"
 msgstr "Nie staje pamiaci dziela adčytańnia bitmapy z fajłu"
 
@@ -218,7 +214,8 @@ msgstr "Farmat vyjavy BMP"
 msgid "Failure reading GIF: %s"
 msgstr "Pamyłka pry adčytańni vyjavy GIF: %s"
 
-#: ../gdk-pixbuf/io-gif.c:496 ../gdk-pixbuf/io-gif.c:1477
+#: ../gdk-pixbuf/io-gif.c:496
+#: ../gdk-pixbuf/io-gif.c:1477
 #: ../gdk-pixbuf/io-gif.c:1638
 msgid "GIF file was missing some data (perhaps it was truncated somehow?)"
 msgstr "Fajł GIF nia maje niekatorych źviestak (moža jaho padrezali?)"
@@ -244,8 +241,10 @@ msgstr "Sustrety pamyłkovy kod"
 msgid "Circular table entry in GIF file"
 msgstr "Zapiatleńnie pazycyi tablicy ŭ fajle GIF"
 
-#: ../gdk-pixbuf/io-gif.c:866 ../gdk-pixbuf/io-gif.c:1464
-#: ../gdk-pixbuf/io-gif.c:1511 ../gdk-pixbuf/io-gif.c:1626
+#: ../gdk-pixbuf/io-gif.c:866
+#: ../gdk-pixbuf/io-gif.c:1464
+#: ../gdk-pixbuf/io-gif.c:1511
+#: ../gdk-pixbuf/io-gif.c:1626
 msgid "Not enough memory to load GIF file"
 msgstr "Nie staje pamiaci dziela zahruzki fajłu GIF"
 
@@ -267,12 +266,8 @@ msgid "Version %s of the GIF file format is not supported"
 msgstr "Farmat GIF u versii %s nie absłuhoŭvajecca"
 
 #: ../gdk-pixbuf/io-gif.c:1299
-msgid ""
-"GIF image has no global colormap, and a frame inside it has no local "
-"colormap."
-msgstr ""
-"Vyjava GIF nia maje hlabalnaj palitry koleraŭ, a kadr unutry nia maje "
-"lakalnaj palitry."
+msgid "GIF image has no global colormap, and a frame inside it has no local colormap."
+msgstr "Vyjava GIF nia maje hlabalnaj palitry koleraŭ, a kadr unutry nia maje lakalnaj palitry."
 
 #: ../gdk-pixbuf/io-gif.c:1533
 msgid "GIF image was truncated or incomplete."
@@ -282,13 +277,16 @@ msgstr "Fajł GIF byŭ abrezany albo jon niapoŭny."
 msgid "The GIF image format"
 msgstr "Farmat vyjavy GIF"
 
-#: ../gdk-pixbuf/io-ico.c:217 ../gdk-pixbuf/io-ico.c:277
-#: ../gdk-pixbuf/io-ico.c:346 ../gdk-pixbuf/io-ico.c:409
+#: ../gdk-pixbuf/io-ico.c:217
+#: ../gdk-pixbuf/io-ico.c:277
+#: ../gdk-pixbuf/io-ico.c:346
+#: ../gdk-pixbuf/io-ico.c:409
 #: ../gdk-pixbuf/io-ico.c:439
 msgid "Not enough memory to load icon"
 msgstr "Nie staje pamiaci dziela zahruzki ikony"
 
-#: ../gdk-pixbuf/io-ico.c:254 ../gdk-pixbuf/io-ico.c:267
+#: ../gdk-pixbuf/io-ico.c:254
+#: ../gdk-pixbuf/io-ico.c:267
 #: ../gdk-pixbuf/io-ico.c:336
 msgid "Invalid header in icon"
 msgstr "Niapravilny zahałovak ikony"
@@ -336,20 +334,19 @@ msgid "Error interpreting JPEG image file (%s)"
 msgstr "Pamyłka pry interpretacyi fajłu z vyjavaj JPEG (%s)"
 
 #: ../gdk-pixbuf/io-jpeg.c:354
-msgid ""
-"Insufficient memory to load image, try exiting some applications to free "
-"memory"
-msgstr ""
-"Nie staje pamiaci dziela zahruzki fajłu, pasprabuj začynić peŭnyja afajłacyi "
-"kab vyzvalić pamiać"
+msgid "Insufficient memory to load image, try exiting some applications to free memory"
+msgstr "Nie staje pamiaci dziela zahruzki fajłu, pasprabuj začynić peŭnyja afajłacyi kab vyzvalić pamiać"
 
-#: ../gdk-pixbuf/io-jpeg.c:388 ../gdk-pixbuf/io-jpeg.c:593
+#: ../gdk-pixbuf/io-jpeg.c:388
+#: ../gdk-pixbuf/io-jpeg.c:593
 #, c-format
 msgid "Unsupported JPEG color space (%s)"
 msgstr "Prastora koleraŭ u fajle JPEG (%s) nie absłuhoŭvajecca"
 
-#: ../gdk-pixbuf/io-jpeg.c:486 ../gdk-pixbuf/io-jpeg.c:751
-#: ../gdk-pixbuf/io-jpeg.c:988 ../gdk-pixbuf/io-jpeg.c:997
+#: ../gdk-pixbuf/io-jpeg.c:486
+#: ../gdk-pixbuf/io-jpeg.c:751
+#: ../gdk-pixbuf/io-jpeg.c:978
+#: ../gdk-pixbuf/io-jpeg.c:987
 msgid "Couldn't allocate memory for loading JPEG file"
 msgstr "Nie staje pamiaci dziela zahruzki fajłu JPEG"
 
@@ -359,26 +356,15 @@ msgstr "Transfarmavanaja vyjava JPEG maje nulavuju šyryniu albo vyšyniu."
 
 #: ../gdk-pixbuf/io-jpeg.c:934
 #, c-format
-msgid ""
-"JPEG quality must be a value between 0 and 100; value '%s' could not be "
-"parsed."
-msgstr ""
-"Jakaść vyjavy JPEG musić być vartaściu ad 0 da 100; vartaść '%s' "
-"niapravilnaja."
+msgid "JPEG quality must be a value between 0 and 100; value '%s' could not be parsed."
+msgstr "Jakaść vyjavy JPEG musić być vartaściu ad 0 da 100; vartaść '%s' niapravilnaja."
 
 #: ../gdk-pixbuf/io-jpeg.c:949
 #, c-format
-msgid ""
-"JPEG quality must be a value between 0 and 100; value '%d' is not allowed."
-msgstr ""
-"Jakaść vyjavy JPEG musić być vartaściu ad 0 da 100; vartaść '%d' "
-"niedazvolenaja."
+msgid "JPEG quality must be a value between 0 and 100; value '%d' is not allowed."
+msgstr "Jakaść vyjavy JPEG musić być vartaściu ad 0 da 100; vartaść '%d' niedazvolenaja."
 
-#: ../gdk-pixbuf/io-jpeg.c:976
-msgid "Image contains no pixels."
-msgstr "Fajł vyjavy biaź pikselaŭ."
-
-#: ../gdk-pixbuf/io-jpeg.c:1122
+#: ../gdk-pixbuf/io-jpeg.c:1112
 msgid "The JPEG image format"
 msgstr "Farmat vyjavy JPEG"
 
@@ -386,7 +372,8 @@ msgstr "Farmat vyjavy JPEG"
 msgid "Couldn't allocate memory for header"
 msgstr "Niemahčyma prymierkavać pamiać dla zahałoŭka"
 
-#: ../gdk-pixbuf/io-pcx.c:202 ../gdk-pixbuf/io-pcx.c:560
+#: ../gdk-pixbuf/io-pcx.c:202
+#: ../gdk-pixbuf/io-pcx.c:560
 msgid "Couldn't allocate memory for context buffer"
 msgstr "Niemahčyma prymierkavać pamiać dla kantekstnaha bufera"
 
@@ -394,11 +381,13 @@ msgstr "Niemahčyma prymierkavać pamiać dla kantekstnaha bufera"
 msgid "Image has invalid width and/or height"
 msgstr "Vyjava maje niapravilnuju šyryniu i/albo vyšyniu"
 
-#: ../gdk-pixbuf/io-pcx.c:613 ../gdk-pixbuf/io-pcx.c:674
+#: ../gdk-pixbuf/io-pcx.c:613
+#: ../gdk-pixbuf/io-pcx.c:674
 msgid "Image has unsupported bpp"
 msgstr "Vyjava maje ŭ sabie vartaść bpp, a jana nie absłuhoŭvajecca"
 
-#: ../gdk-pixbuf/io-pcx.c:618 ../gdk-pixbuf/io-pcx.c:626
+#: ../gdk-pixbuf/io-pcx.c:618
+#: ../gdk-pixbuf/io-pcx.c:626
 #, c-format
 msgid "Image has unsupported number of %d-bit planes"
 msgstr "Vyjava maje ŭ sabie nie absłuhoŭvanuju kolkaść %d-bitnych płoskaściaŭ"
@@ -431,7 +420,8 @@ msgstr "Farmat vyjavy PCX"
 msgid "Bits per channel of PNG image is invalid."
 msgstr "Kolkaść bitaŭ na kanał vyjavy PNG niapravilnaja."
 
-#: ../gdk-pixbuf/io-png.c:136 ../gdk-pixbuf/io-png.c:618
+#: ../gdk-pixbuf/io-png.c:136
+#: ../gdk-pixbuf/io-png.c:618
 msgid "Transformed PNG has zero width or height."
 msgstr "Transfarmavany PNG maje nulavuju šyryniu albo vyšyniu."
 
@@ -445,9 +435,7 @@ msgstr "Transfarmavany PNG nie źjaŭlajecca RGB ani RGBA."
 
 #: ../gdk-pixbuf/io-png.c:162
 msgid "Transformed PNG has unsupported number of channels, must be 3 or 4."
-msgstr ""
-"Transfarmavany PNG maje ŭ sabie nie absłuhoŭvanuju kolkaść kanałaŭ, pavinna "
-"być 3 albo 4."
+msgstr "Transfarmavany PNG maje ŭ sabie nie absłuhoŭvanuju kolkaść kanałaŭ, pavinna być 3 albo 4."
 
 #: ../gdk-pixbuf/io-png.c:183
 #, c-format
@@ -460,12 +448,8 @@ msgstr "Nie staje pamiaci dziela zahruzki fajłu PNG"
 
 #: ../gdk-pixbuf/io-png.c:633
 #, c-format
-msgid ""
-"Insufficient memory to store a %ld by %ld image; try exiting some "
-"applications to reduce memory usage"
-msgstr ""
-"Nie staje pamiaci dziela zachoŭvańnia vyjavy pamierami %ld na %ld punktaŭ; "
-"pasprabuj źmienšyć zapatrabavańnie na pamiać začyniajučy niekatoryja prahramy"
+msgid "Insufficient memory to store a %ld by %ld image; try exiting some applications to reduce memory usage"
+msgstr "Nie staje pamiaci dziela zachoŭvańnia vyjavy pamierami %ld na %ld punktaŭ; pasprabuj źmienšyć zapatrabavańnie na pamiać začyniajučy niekatoryja prahramy"
 
 #: ../gdk-pixbuf/io-png.c:684
 msgid "Fatal error reading PNG image file"
@@ -477,8 +461,7 @@ msgid "Fatal error reading PNG image file: %s"
 msgstr "Surjoznaja pamyłka pry čytańni fajłu z vyjavaj PNG: %s"
 
 #: ../gdk-pixbuf/io-png.c:825
-msgid ""
-"Keys for PNG text chunks must have at least 1 and at most 79 characters."
+msgid "Keys for PNG text chunks must have at least 1 and at most 79 characters."
 msgstr "Klučy tekstavych elementaŭ PNG musiać mieć daŭžyniu ad 1 da 79 znakaŭ."
 
 #: ../gdk-pixbuf/io-png.c:833
@@ -487,28 +470,18 @@ msgstr "Klučy tekstavych elementaŭ PNG musiać być znakami ASCII."
 
 #: ../gdk-pixbuf/io-png.c:846
 #, c-format
-msgid ""
-"PNG compression level must be a value between 0 and 9; value '%s' could not "
-"be parsed."
-msgstr ""
-"Uzrovień kampresii vyjavy PNG musić być vartaściu ad 0 da 9; vartaść \"%s\" "
-"nia moža być apracavanaja."
+msgid "PNG compression level must be a value between 0 and 9; value '%s' could not be parsed."
+msgstr "Uzrovień kampresii vyjavy PNG musić być vartaściu ad 0 da 9; vartaść \"%s\" nia moža być apracavanaja."
 
 #: ../gdk-pixbuf/io-png.c:858
 #, c-format
-msgid ""
-"PNG compression level must be a value between 0 and 9; value '%d' is not "
-"allowed."
-msgstr ""
-"Uzrovień kampresii vyjavy PNG musić być vartaściu ad 0 da 9; vartaść \"%d\" "
-"niedapuščalnaja."
+msgid "PNG compression level must be a value between 0 and 9; value '%d' is not allowed."
+msgstr "Uzrovień kampresii vyjavy PNG musić być vartaściu ad 0 da 9; vartaść \"%d\" niedapuščalnaja."
 
 #: ../gdk-pixbuf/io-png.c:896
 #, c-format
 msgid "Value for PNG text chunk %s cannot be converted to ISO-8859-1 encoding."
-msgstr ""
-"Vartaść tekstavaha elementu PNG %s nia moža być pierakanvertavanaja na "
-"kadavańnie ISO-8859-1."
+msgstr "Vartaść tekstavaha elementu PNG %s nia moža być pierakanvertavanaja na kadavańnie ISO-8859-1."
 
 #: ../gdk-pixbuf/io-png.c:1047
 msgid "The PNG image format"
@@ -542,7 +515,8 @@ msgstr "Maksymalnaja vartaść koleru ŭ fajle PNM składaje 0"
 msgid "Maximum color value in PNM file is too large"
 msgstr "Maksymalnaja vartaść koleru ŭ fajle PNM zavialikaja"
 
-#: ../gdk-pixbuf/io-pnm.c:429 ../gdk-pixbuf/io-pnm.c:459
+#: ../gdk-pixbuf/io-pnm.c:429
+#: ../gdk-pixbuf/io-pnm.c:459
 #: ../gdk-pixbuf/io-pnm.c:504
 msgid "Raw PNM image type is invalid"
 msgstr "Typ suviraj vyjavy PNM niapravilny"
@@ -555,7 +529,8 @@ msgstr "Modul čytańnia vyjavaŭ PNM nie absłuhoŭvaje hetaha padfarmatu PNM"
 msgid "Premature end-of-file encountered"
 msgstr "Zaŭčasna zdaryŭsia kaniec fajłu"
 
-#: ../gdk-pixbuf/io-pnm.c:741 ../gdk-pixbuf/io-pnm.c:968
+#: ../gdk-pixbuf/io-pnm.c:741
+#: ../gdk-pixbuf/io-pnm.c:968
 msgid "Raw PNM formats require exactly one whitespace before sample data"
 msgstr "Suvory farmat PNM vymahaje dakładna adnaho prabiełu pierad źviestkami"
 
@@ -591,7 +566,8 @@ msgstr "Nieviadomy farmat vyjavy RAS"
 msgid "unsupported RAS image variation"
 msgstr "typ vyjavy RAS nie absłuhoŭvajecca"
 
-#: ../gdk-pixbuf/io-ras.c:171 ../gdk-pixbuf/io-ras.c:200
+#: ../gdk-pixbuf/io-ras.c:171
+#: ../gdk-pixbuf/io-ras.c:200
 msgid "Not enough memory to load RAS image"
 msgstr "Nie staje pamiaci dziela zahruzki vyjavy RAS"
 
@@ -639,8 +615,10 @@ msgstr "Niemahčyma prymierkavać pamiać na zahałovak vyjavy TGA"
 msgid "TGA image has invalid dimensions"
 msgstr "Vyjava TGA maje nieadpaviednyja pamiery"
 
-#: ../gdk-pixbuf/io-tga.c:773 ../gdk-pixbuf/io-tga.c:782
-#: ../gdk-pixbuf/io-tga.c:792 ../gdk-pixbuf/io-tga.c:802
+#: ../gdk-pixbuf/io-tga.c:773
+#: ../gdk-pixbuf/io-tga.c:782
+#: ../gdk-pixbuf/io-tga.c:792
+#: ../gdk-pixbuf/io-tga.c:802
 #: ../gdk-pixbuf/io-tga.c:809
 msgid "TGA image type not supported"
 msgstr "Typ vyjavy TGA nie absłuhoŭvajecca"
@@ -669,16 +647,20 @@ msgstr "Niemahčyma atrymać vyšyniu vyjavy (niapravilny fajł TIFF)"
 msgid "Width or height of TIFF image is zero"
 msgstr "Šyrynia albo vyšynia vyjavy TIFF roŭnaja nulu"
 
-#: ../gdk-pixbuf/io-tiff.c:197 ../gdk-pixbuf/io-tiff.c:206
+#: ../gdk-pixbuf/io-tiff.c:197
+#: ../gdk-pixbuf/io-tiff.c:206
 msgid "Dimensions of TIFF image too large"
 msgstr "Zavialikija pamiery vyjavy TIFF"
 
-#: ../gdk-pixbuf/io-tiff.c:225 ../gdk-pixbuf/io-tiff.c:237
-#: ../gdk-pixbuf/io-tiff.c:286 ../gdk-pixbuf/io-tiff.c:571
+#: ../gdk-pixbuf/io-tiff.c:225
+#: ../gdk-pixbuf/io-tiff.c:237
+#: ../gdk-pixbuf/io-tiff.c:286
+#: ../gdk-pixbuf/io-tiff.c:571
 msgid "Insufficient memory to open TIFF file"
 msgstr "Nie staje pamiaci dziela zahruzki fajłu TIFF"
 
-#: ../gdk-pixbuf/io-tiff.c:251 ../gdk-pixbuf/io-tiff.c:294
+#: ../gdk-pixbuf/io-tiff.c:251
+#: ../gdk-pixbuf/io-tiff.c:294
 msgid "Failed to load RGB data from TIFF file"
 msgstr "Niemahčyma zahruzić źviestki RGB z fajłu TIFF"
 
@@ -686,11 +668,13 @@ msgstr "Niemahčyma zahruzić źviestki RGB z fajłu TIFF"
 msgid "Failed to open TIFF image"
 msgstr "Niemahčyma adčynić vyjavu TIFF"
 
-#: ../gdk-pixbuf/io-tiff.c:373 ../gdk-pixbuf/io-tiff.c:752
+#: ../gdk-pixbuf/io-tiff.c:373
+#: ../gdk-pixbuf/io-tiff.c:752
 msgid "TIFFClose operation failed"
 msgstr "Aperacyja TIFFClose nie ŭdałasia"
 
-#: ../gdk-pixbuf/io-tiff.c:503 ../gdk-pixbuf/io-tiff.c:516
+#: ../gdk-pixbuf/io-tiff.c:503
+#: ../gdk-pixbuf/io-tiff.c:516
 msgid "Failed to load TIFF image"
 msgstr "Niemahčyma zahruzić vyjavu TIFF"
 
@@ -770,7 +754,8 @@ msgstr "Fajł XPM maje ŭ sabie niapravilnuju kolkaść znakaŭ na piksel"
 msgid "XPM file has invalid number of colors"
 msgstr "Fajł XPM maje ŭ sabie niapravilnuju kolkaść koleraŭ"
 
-#: ../gdk-pixbuf/io-xpm.c:522 ../gdk-pixbuf/io-xpm.c:531
+#: ../gdk-pixbuf/io-xpm.c:522
+#: ../gdk-pixbuf/io-xpm.c:531
 #: ../gdk-pixbuf/io-xpm.c:583
 msgid "Cannot allocate memory for loading XPM image"
 msgstr "Niemahčyma prymierkavać pamiać dziela zahruzki fajłu XPM"
@@ -836,7 +821,10 @@ msgstr "Ściažki adsočki Gdk"
 #. Placeholder in --gdk-no-debug=FLAGS in --help output
 #. Placeholder in --gtk-debug=FLAGS in --help output
 #. Placeholder in --gtk-no-debug=FLAGS in --help output
-#: ../gdk/gdk.c:140 ../gdk/gdk.c:143 ../gtk/gtkmain.c:414 ../gtk/gtkmain.c:417
+#: ../gdk/gdk.c:140
+#: ../gdk/gdk.c:143
+#: ../gtk/gtkmain.c:414
+#: ../gtk/gtkmain.c:417
 msgid "FLAGS"
 msgstr "ŚCIAŽKI"
 
@@ -1028,7 +1016,8 @@ msgstr "KOLERY"
 msgid "Make X calls synchronous"
 msgstr "Sinchronnaja łučnaść z serveram X"
 
-#: ../gtk/gtkaboutdialog.c:264 ../gtk/gtkaboutdialog.c:2061
+#: ../gtk/gtkaboutdialog.c:264
+#: ../gtk/gtkaboutdialog.c:2061
 msgid "License"
 msgstr "Licenzija"
 
@@ -1188,7 +1177,8 @@ msgstr "2000"
 #. * digits.  That needs support from your system and locale definition
 #. * too.
 #.
-#: ../gtk/gtkcalendar.c:1626 ../gtk/gtkcalendar.c:2204
+#: ../gtk/gtkcalendar.c:1626
+#: ../gtk/gtkcalendar.c:2204
 #, c-format
 msgid "calendar:day:digits|%d"
 msgstr "%d"
@@ -1204,7 +1194,8 @@ msgstr "%d"
 #. * digits.  That needs support from your system and locale definition
 #. * too.
 #.
-#: ../gtk/gtkcalendar.c:1660 ../gtk/gtkcalendar.c:2078
+#: ../gtk/gtkcalendar.c:1660
+#: ../gtk/gtkcalendar.c:2078
 #, c-format
 msgid "calendar:week:digits|%d"
 msgstr "%d"
@@ -1236,17 +1227,20 @@ msgstr "Adklučany"
 #. * an accelerator when the cell is clicked to change the
 #. * acelerator.
 #.
-#: ../gtk/gtkcellrendereraccel.c:364 ../gtk/gtkcellrendereraccel.c:576
+#: ../gtk/gtkcellrendereraccel.c:364
+#: ../gtk/gtkcellrendereraccel.c:576
 msgid "New accelerator..."
 msgstr "Novy skarot..."
 
 #. do not translate the part before the |
-#: ../gtk/gtkcellrendererprogress.c:278 ../gtk/gtkcellrendererprogress.c:365
+#: ../gtk/gtkcellrendererprogress.c:278
+#: ../gtk/gtkcellrendererprogress.c:365
 #, c-format
 msgid "progress bar label|%d %%"
 msgstr "%d %%"
 
-#: ../gtk/gtkcolorbutton.c:189 ../gtk/gtkcolorbutton.c:560
+#: ../gtk/gtkcolorbutton.c:189
+#: ../gtk/gtkcolorbutton.c:560
 msgid "Pick a Color"
 msgstr "Vybar koleru"
 
@@ -1255,51 +1249,28 @@ msgid "Received invalid color data\n"
 msgstr "Atrymanyja niapravilnyja źviestki koleru\n"
 
 #: ../gtk/gtkcolorsel.c:561
-msgid ""
-"The previously-selected color, for comparison to the color you're selecting "
-"now. You can drag this color to a palette entry, or select this color as "
-"current by dragging it to the other color swatch alongside."
-msgstr ""
-"Abrany raniej koler dziela paraŭnańnia z koleram abiranym ciapier. Možna "
-"pieraciahnuć hety koler na adnu z pazycyjaŭ palitry albo abrać jaho "
-"niepasredna pieraciahvajučy jaho na susiedni koler."
+msgid "The previously-selected color, for comparison to the color you're selecting now. You can drag this color to a palette entry, or select this color as current by dragging it to the other color swatch alongside."
+msgstr "Abrany raniej koler dziela paraŭnańnia z koleram abiranym ciapier. Možna pieraciahnuć hety koler na adnu z pazycyjaŭ palitry albo abrać jaho niepasredna pieraciahvajučy jaho na susiedni koler."
 
 #: ../gtk/gtkcolorsel.c:566
-msgid ""
-"The color you've chosen. You can drag this color to a palette entry to save "
-"it for use in the future."
-msgstr ""
-"Abrany koler. Hety koler ty možaš pieraciahnuć na adnu z pazycyjaŭ palitry, "
-"kab zachavać jaho na budučyniu."
+msgid "The color you've chosen. You can drag this color to a palette entry to save it for use in the future."
+msgstr "Abrany koler. Hety koler ty možaš pieraciahnuć na adnu z pazycyjaŭ palitry, kab zachavać jaho na budučyniu."
 
 #: ../gtk/gtkcolorsel.c:954
 msgid "_Save color here"
 msgstr "_Zapišy koler u hetym miescy"
 
 #: ../gtk/gtkcolorsel.c:1159
-msgid ""
-"Click this palette entry to make it the current color. To change this entry, "
-"drag a color swatch here or right-click it and select \"Save color here.\""
-msgstr ""
-"Klikni hety element palitry, kab abrać jaho ŭ jakaści dziejnaha koleru. Kab "
-"źmianić hety element, pieraciahni siudy prykład kolery albo klikni pravaj "
-"klavišaj i abiary \"Zapišy koler u hetym miescy\"."
+msgid "Click this palette entry to make it the current color. To change this entry, drag a color swatch here or right-click it and select \"Save color here.\""
+msgstr "Klikni hety element palitry, kab abrać jaho ŭ jakaści dziejnaha koleru. Kab źmianić hety element, pieraciahni siudy prykład kolery albo klikni pravaj klavišaj i abiary \"Zapišy koler u hetym miescy\"."
 
 #: ../gtk/gtkcolorsel.c:1937
-msgid ""
-"Select the color you want from the outer ring. Select the darkness or "
-"lightness of that color using the inner triangle."
-msgstr ""
-"Abiary žadany koler z vonkavaha kołca, trochkutnikam unutry abiary "
-"jaskravaść hetaha koleru."
+msgid "Select the color you want from the outer ring. Select the darkness or lightness of that color using the inner triangle."
+msgstr "Abiary žadany koler z vonkavaha kołca, trochkutnikam unutry abiary jaskravaść hetaha koleru."
 
 #: ../gtk/gtkcolorsel.c:1962
-msgid ""
-"Click the eyedropper, then click a color anywhere on your screen to select "
-"that color."
-msgstr ""
-"Klikni hetuju pipietku, a potym adzin z punktaŭ vyjavy, kab uziać ź jaho "
-"koler."
+msgid "Click the eyedropper, then click a color anywhere on your screen to select that color."
+msgstr "Klikni hetuju pipietku, a potym adzin z punktaŭ vyjavy, kab uziać ź jaho koler."
 
 #: ../gtk/gtkcolorsel.c:1971
 msgid "_Hue:"
@@ -1353,7 +1324,8 @@ msgstr "Kolkaść siniaha śviatła ŭ kolery."
 msgid "Op_acity:"
 msgstr "_Nieprazrystaść:"
 
-#: ../gtk/gtkcolorsel.c:1994 ../gtk/gtkcolorsel.c:2005
+#: ../gtk/gtkcolorsel.c:1994
+#: ../gtk/gtkcolorsel.c:2005
 msgid "Transparency of the color."
 msgstr "Prazrystaść koleru."
 
@@ -1362,12 +1334,8 @@ msgid "Color _name:"
 msgstr "Nazva _koleru:"
 
 #: ../gtk/gtkcolorsel.c:2027
-msgid ""
-"You can enter an HTML-style hexadecimal color value, or simply a color name "
-"such as 'orange' in this entry."
-msgstr ""
-"Možaš u hetym miescy padać šasnaccatkovuju vartaść koleru (jak u HTML) albo "
-"prosta nazvu koleru pa anhielsku, naprykład: 'orange'."
+msgid "You can enter an HTML-style hexadecimal color value, or simply a color name such as 'orange' in this entry."
+msgstr "Možaš u hetym miescy padać šasnaccatkovuju vartaść koleru (jak u HTML) albo prosta nazvu koleru pa anhielsku, naprykład: 'orange'."
 
 #: ../gtk/gtkcolorsel.c:2057
 msgid "_Palette:"
@@ -1381,16 +1349,20 @@ msgstr "Koła koleraŭ"
 msgid "Color Selection"
 msgstr "Vybar koleru"
 
-#: ../gtk/gtkentry.c:5081 ../gtk/gtktextview.c:7393
+#: ../gtk/gtkentry.c:5081
+#: ../gtk/gtktextview.c:7393
 msgid "Input _Methods"
 msgstr "_Metady ŭvodu"
 
-#: ../gtk/gtkentry.c:5095 ../gtk/gtktextview.c:7407
+#: ../gtk/gtkentry.c:5095
+#: ../gtk/gtktextview.c:7407
 msgid "_Insert Unicode Control Character"
 msgstr "_Ustaŭ kantrolny znak Unikodu"
 
-#: ../gtk/gtkfilechooser.c:1694 ../gtk/gtkfilechooser.c:1738
-#: ../gtk/gtkfilechooser.c:1813 ../gtk/gtkfilechooser.c:1857
+#: ../gtk/gtkfilechooser.c:1694
+#: ../gtk/gtkfilechooser.c:1738
+#: ../gtk/gtkfilechooser.c:1813
+#: ../gtk/gtkfilechooser.c:1857
 #, c-format
 msgid "Invalid filename: %s"
 msgstr "Niapravilnaja nazva fajłu: %s"
@@ -1399,7 +1371,8 @@ msgstr "Niapravilnaja nazva fajłu: %s"
 msgid "Select A File"
 msgstr "Vybar fajłu"
 
-#: ../gtk/gtkfilechooserbutton.c:69 ../gtk/gtkfilechooserdefault.c:1706
+#: ../gtk/gtkfilechooserbutton.c:69
+#: ../gtk/gtkfilechooserdefault.c:1812
 msgid "Desktop"
 msgstr "Stoł"
 
@@ -1411,35 +1384,31 @@ msgstr "(niama)"
 msgid "Other..."
 msgstr "Inšaje..."
 
-#: ../gtk/gtkfilechooserdefault.c:934
+#: ../gtk/gtkfilechooserdefault.c:982
 msgid "Could not retrieve information about the file"
 msgstr "Niemahčyma atrymać infarmacyju pra fajł"
 
-#: ../gtk/gtkfilechooserdefault.c:945
+#: ../gtk/gtkfilechooserdefault.c:993
 msgid "Could not add a bookmark"
 msgstr "Niemahčyma dadać zakładku"
 
-#: ../gtk/gtkfilechooserdefault.c:956
+#: ../gtk/gtkfilechooserdefault.c:1004
 msgid "Could not remove bookmark"
 msgstr "Niemahčyma vydalić zakładku"
 
-#: ../gtk/gtkfilechooserdefault.c:967
+#: ../gtk/gtkfilechooserdefault.c:1015
 msgid "The folder could not be created"
 msgstr "Niemahčyma stvaryć kataloh"
 
-#: ../gtk/gtkfilechooserdefault.c:980
-msgid ""
-"The folder could not be created, as a file with the same name already "
-"exists.  Try using a different name for the folder, or rename the file first."
-msgstr ""
-"Niemahčyma stvaryć kataloh, bo jsnuje ŭxo fajł z takoj nazvaj. Prydumaj "
-"inšuju nazvu katalohu albo źmiani nazvu fajłu."
+#: ../gtk/gtkfilechooserdefault.c:1028
+msgid "The folder could not be created, as a file with the same name already exists.  Try using a different name for the folder, or rename the file first."
+msgstr "Niemahčyma stvaryć kataloh, bo jsnuje ŭxo fajł z takoj nazvaj. Prydumaj inšuju nazvu katalohu albo źmiani nazvu fajłu."
 
-#: ../gtk/gtkfilechooserdefault.c:993
+#: ../gtk/gtkfilechooserdefault.c:1041
 msgid "Invalid file name"
 msgstr "Niapravilnaja nazva fajłu"
 
-#: ../gtk/gtkfilechooserdefault.c:1003
+#: ../gtk/gtkfilechooserdefault.c:1051
 msgid "The folder contents could not be displayed"
 msgstr "Niemahčyma pakazać źmieściva katalohu"
 
@@ -1447,177 +1416,198 @@ msgstr "Niemahčyma pakazać źmieściva katalohu"
 #. * is a hostname. Nautilus and the panel contain the same string
 #. * to translate.
 #.
-#: ../gtk/gtkfilechooserdefault.c:1510
+#: ../gtk/gtkfilechooserdefault.c:1577
 #, c-format
 msgid "%1$s on %2$s"
 msgstr "%1$s na %2$s"
 
-#: ../gtk/gtkfilechooserdefault.c:2609
+#: ../gtk/gtkfilechooserdefault.c:1748
+msgid "Search"
+msgstr "Šukaj"
+
+#: ../gtk/gtkfilechooserdefault.c:2749
 #, c-format
 msgid "Add the folder '%s' to the bookmarks"
 msgstr "Dadaje kataloh '%s' u zakładki"
 
-#: ../gtk/gtkfilechooserdefault.c:2650
+#: ../gtk/gtkfilechooserdefault.c:2800
 msgid "Add the current folder to the bookmarks"
 msgstr "Dadaje dziejny kataloh u zakładki"
 
-#: ../gtk/gtkfilechooserdefault.c:2652
+#: ../gtk/gtkfilechooserdefault.c:2802
 msgid "Add the selected folders to the bookmarks"
 msgstr "Dadaje zaznačanyja katalohi ŭ zakładki"
 
-#: ../gtk/gtkfilechooserdefault.c:2692
+#: ../gtk/gtkfilechooserdefault.c:2842
 #, c-format
 msgid "Remove the bookmark '%s'"
 msgstr "Vydalaje zakładku '%s'"
 
-#: ../gtk/gtkfilechooserdefault.c:3123
+#: ../gtk/gtkfilechooserdefault.c:3273
 #, c-format
 msgid "Could not add a bookmark for '%s' because it is an invalid path name."
-msgstr ""
-"Niemahčyma dadać zakładku dla '%s' bo heta niapravilnaja nazva ściežki."
+msgstr "Niemahčyma dadać zakładku dla '%s' bo heta niapravilnaja nazva ściežki."
 
-#: ../gtk/gtkfilechooserdefault.c:3354
+#: ../gtk/gtkfilechooserdefault.c:3498
 msgid "Remove"
 msgstr "Vydal"
 
-#: ../gtk/gtkfilechooserdefault.c:3363
+#: ../gtk/gtkfilechooserdefault.c:3507
 msgid "Rename..."
 msgstr "Źmiani nazvu..."
 
 #. Accessible object name for the file chooser's shortcuts pane
-#: ../gtk/gtkfilechooserdefault.c:3505
+#: ../gtk/gtkfilechooserdefault.c:3649
 msgid "Places"
 msgstr "Miescy"
 
 #. Column header for the file chooser's shortcuts pane
-#: ../gtk/gtkfilechooserdefault.c:3559
+#: ../gtk/gtkfilechooserdefault.c:3703
 msgid "_Places"
 msgstr "_Miescy"
 
-#: ../gtk/gtkfilechooserdefault.c:3615 ../gtk/gtkstock.c:297
+#: ../gtk/gtkfilechooserdefault.c:3758
+#: ../gtk/gtkstock.c:297
 msgid "_Add"
 msgstr "_Dadaj"
 
-#: ../gtk/gtkfilechooserdefault.c:3622
+#: ../gtk/gtkfilechooserdefault.c:3765
 msgid "Add the selected folder to the Bookmarks"
 msgstr "Dadaje abrany kataloh u zakładki"
 
-#: ../gtk/gtkfilechooserdefault.c:3627 ../gtk/gtkstock.c:384
+#: ../gtk/gtkfilechooserdefault.c:3770
+#: ../gtk/gtkstock.c:384
 msgid "_Remove"
 msgstr "_Vydal"
 
-#: ../gtk/gtkfilechooserdefault.c:3634
+#: ../gtk/gtkfilechooserdefault.c:3777
 msgid "Remove the selected bookmark"
 msgstr "Vydalaje abranuju zakładku"
 
-#: ../gtk/gtkfilechooserdefault.c:3730
+#: ../gtk/gtkfilechooserdefault.c:3873
 msgid "Could not select file"
 msgstr "Niemahčyma vybrać fajł"
 
-#: ../gtk/gtkfilechooserdefault.c:3867
+#: ../gtk/gtkfilechooserdefault.c:4010
 #, c-format
 msgid "Could not select file '%s' because it is an invalid path name."
 msgstr "Niemahčyma vybrać fajł '%s' bo heta niapravilnaja nazva ściežki."
 
-#: ../gtk/gtkfilechooserdefault.c:3924
+#: ../gtk/gtkfilechooserdefault.c:4067
 msgid "_Add to Bookmarks"
 msgstr "_Dadaj u zakładki"
 
-#: ../gtk/gtkfilechooserdefault.c:3938
+#: ../gtk/gtkfilechooserdefault.c:4081
 msgid "Show _Hidden Files"
 msgstr "Pakažy s_chavanyja fajły"
 
-#: ../gtk/gtkfilechooserdefault.c:4075 ../gtk/gtkfilesel.c:729
+#: ../gtk/gtkfilechooserdefault.c:4242
+#: ../gtk/gtkfilesel.c:729
 msgid "Files"
 msgstr "Fajły"
 
-#: ../gtk/gtkfilechooserdefault.c:4120
+#: ../gtk/gtkfilechooserdefault.c:4287
 msgid "Name"
 msgstr "Nazva"
 
-#: ../gtk/gtkfilechooserdefault.c:4145
+#: ../gtk/gtkfilechooserdefault.c:4312
 msgid "Size"
 msgstr "Pamier"
 
-#: ../gtk/gtkfilechooserdefault.c:4158
+#: ../gtk/gtkfilechooserdefault.c:4326
 msgid "Modified"
 msgstr "Zmadyfikavany"
 
-#: ../gtk/gtkfilechooserdefault.c:4190
+#: ../gtk/gtkfilechooserdefault.c:4361
 msgid "Select which types of files are shown"
 msgstr "Abiraje jakija vidy fajłaŭ pakazvać"
 
 #. Label
-#: ../gtk/gtkfilechooserdefault.c:4339 ../gtk/gtkprinteroptionwidget.c:786
+#: ../gtk/gtkfilechooserdefault.c:4565
+#: ../gtk/gtkprinteroptionwidget.c:786
 msgid "_Name:"
 msgstr "_Nazva:"
 
-#: ../gtk/gtkfilechooserdefault.c:4381
+#: ../gtk/gtkfilechooserdefault.c:4607
 msgid "_Browse for other folders"
 msgstr "_Prahladaj inšyja katalohi"
 
-#: ../gtk/gtkfilechooserdefault.c:4628
+#: ../gtk/gtkfilechooserdefault.c:4854
 msgid "Type a file name"
 msgstr "Uviadzi nazvu fajłu"
 
 #. Create Folder
-#: ../gtk/gtkfilechooserdefault.c:4664
+#: ../gtk/gtkfilechooserdefault.c:4891
 msgid "Create Fo_lder"
 msgstr "Stvary ka_taloh"
 
-#: ../gtk/gtkfilechooserdefault.c:4674
+#: ../gtk/gtkfilechooserdefault.c:4901
 msgid "_Location:"
 msgstr "Pałaž_eńnie:"
 
-#: ../gtk/gtkfilechooserdefault.c:4910
+#: ../gtk/gtkfilechooserdefault.c:5137
 msgid "Save in _folder:"
 msgstr "Zapis u k_atalozie:"
 
-#: ../gtk/gtkfilechooserdefault.c:4912
+#: ../gtk/gtkfilechooserdefault.c:5139
 msgid "Create in _folder:"
 msgstr "Stvary ŭ kat_alozie:"
 
-#: ../gtk/gtkfilechooserdefault.c:6416
+#: ../gtk/gtkfilechooserdefault.c:6681
 msgid "Cannot change to folder because it is not local"
 msgstr "Niemahčyma pierajści da katalohu, bo jon nie lakalny"
 
-#: ../gtk/gtkfilechooserdefault.c:6999 ../gtk/gtkfilechooserdefault.c:7020
+#: ../gtk/gtkfilechooserdefault.c:7288
+#: ../gtk/gtkfilechooserdefault.c:7309
 #, c-format
 msgid "Shortcut %s already exists"
 msgstr "Skarot %s užo jsnuje"
 
-#: ../gtk/gtkfilechooserdefault.c:7110
+#: ../gtk/gtkfilechooserdefault.c:7399
 #, c-format
 msgid "Shortcut %s does not exist"
 msgstr "Skarot %s nie jsnuje"
 
-#: ../gtk/gtkfilechooserdefault.c:7377
+#: ../gtk/gtkfilechooserdefault.c:7666
 #, c-format
 msgid "A file named \"%s\" already exists.  Do you want to replace it?"
 msgstr "Fajł pad nazvaj \"%s\" isnuje. Ty chočaš zamianić jaho?"
 
-#: ../gtk/gtkfilechooserdefault.c:7380
+#: ../gtk/gtkfilechooserdefault.c:7669
 #, c-format
-msgid ""
-"The file already exists in \"%s\".  Replacing it will overwrite its contents."
-msgstr ""
-"Fajł užo jsnuje ŭ \"%s\". Zamiena jaho pryviadzie da nadpisańnia jahonaha "
-"źmieściva."
+msgid "The file already exists in \"%s\".  Replacing it will overwrite its contents."
+msgstr "Fajł užo jsnuje ŭ \"%s\". Zamiena jaho pryviadzie da nadpisańnia jahonaha źmieściva."
 
-#: ../gtk/gtkfilechooserdefault.c:7385
+#: ../gtk/gtkfilechooserdefault.c:7674
 msgid "_Replace"
 msgstr "_Zamiani"
 
-#: ../gtk/gtkfilechooserdefault.c:8081
+#: ../gtk/gtkfilechooserdefault.c:8401
+msgid "Could not start the search process"
+msgstr "Niemahčyma ŭruchomić praces pošuku"
+
+#: ../gtk/gtkfilechooserdefault.c:8402
+msgid "The program was not able to create a connection to the indexer daemon.  Please make sure it is running."
+msgstr "Prahramie nie ŭdałosia spałučycca z demanam indeksacyi. Pravier, ci jon uruchomleny."
+
+#: ../gtk/gtkfilechooserdefault.c:8416
+msgid "Could not send the search request"
+msgstr "Niemahčyma dasłać zapyt na pošuk"
+
+#: ../gtk/gtkfilechooserdefault.c:8650
+msgid "Search:"
+msgstr "Šukaj:"
+
+#: ../gtk/gtkfilechooserdefault.c:8848
 #, c-format
 msgid "Could not mount %s"
 msgstr "Niemahčyma zamantavać %s"
 
-#: ../gtk/gtkfilechooserdefault.c:8476
+#: ../gtk/gtkfilechooserdefault.c:9298
 msgid "Type name of new folder"
 msgstr "Padaj nazvu novaha katalohu"
 
-#: ../gtk/gtkfilechooserdefault.c:8521
+#: ../gtk/gtkfilechooserdefault.c:9346
 #, c-format
 msgid "%d byte"
 msgid_plural "%d bytes"
@@ -1625,35 +1615,38 @@ msgstr[0] "%d bajt"
 msgstr[1] "%d bajty"
 msgstr[2] "%d bajtaŭ"
 
-#: ../gtk/gtkfilechooserdefault.c:8523
+#: ../gtk/gtkfilechooserdefault.c:9348
 #, c-format
 msgid "%.1f KB"
 msgstr "%.1f KB"
 
-#: ../gtk/gtkfilechooserdefault.c:8525
+#: ../gtk/gtkfilechooserdefault.c:9350
 #, c-format
 msgid "%.1f MB"
 msgstr "%.1f MB"
 
-#: ../gtk/gtkfilechooserdefault.c:8527
+#: ../gtk/gtkfilechooserdefault.c:9352
 #, c-format
 msgid "%.1f GB"
 msgstr "%.1f GB"
 
-#: ../gtk/gtkfilechooserdefault.c:8575 ../gtk/gtkfilechooserdefault.c:8599
+#: ../gtk/gtkfilechooserdefault.c:9417
+#: ../gtk/gtkfilechooserdefault.c:9441
 msgid "Unknown"
 msgstr "Nieviadomy"
 
-#: ../gtk/gtkfilechooserdefault.c:8586
+#: ../gtk/gtkfilechooserdefault.c:9428
 msgid "Today"
 msgstr "Siońnia"
 
-#: ../gtk/gtkfilechooserdefault.c:8588
+#: ../gtk/gtkfilechooserdefault.c:9430
 msgid "Yesterday"
 msgstr "Učora"
 
-#: ../gtk/gtkfilechoosersettings.c:262 ../gtk/gtkfilesel.c:1408
-#: ../gtk/gtkfilesel.c:1417 ../gtk/gtkfilesystemunix.c:1047
+#: ../gtk/gtkfilechoosersettings.c:262
+#: ../gtk/gtkfilesel.c:1408
+#: ../gtk/gtkfilesel.c:1417
+#: ../gtk/gtkfilesystemunix.c:1047
 #: ../gtk/gtkfilesystemwin32.c:1167
 #, c-format
 msgid "Error creating folder '%s': %s"
@@ -1671,7 +1664,8 @@ msgstr "_Katalohi"
 msgid "_Files"
 msgstr "_Fajły"
 
-#: ../gtk/gtkfilesel.c:820 ../gtk/gtkfilesel.c:2207
+#: ../gtk/gtkfilesel.c:820
+#: ../gtk/gtkfilesel.c:2207
 #, c-format
 msgid "Folder unreadable: %s"
 msgstr "Niemahčyma adčytać kataloh: %s"
@@ -1679,12 +1673,10 @@ msgstr "Niemahčyma adčytać kataloh: %s"
 #: ../gtk/gtkfilesel.c:949
 #, c-format
 msgid ""
-"The file \"%s\" resides on another machine (called %s) and may not be "
-"available to this program.\n"
+"The file \"%s\" resides on another machine (called %s) and may not be available to this program.\n"
 "Are you sure that you want to select it?"
 msgstr ""
-"Fajł \"%s\" znachodzicca na inšaj mašynie (pad nazvaj %s) i moža być "
-"niedastupny dla hetaj prahramy.\n"
+"Fajł \"%s\" znachodzicca na inšaj mašynie (pad nazvaj %s) i moža być niedastupny dla hetaj prahramy.\n"
 "Ty sapraŭdy chočaš jaho vybrać?"
 
 #: ../gtk/gtkfilesel.c:1079
@@ -1701,10 +1693,8 @@ msgstr "_Źmiani nazvu fajłu"
 
 #: ../gtk/gtkfilesel.c:1406
 #, c-format
-msgid ""
-"The folder name \"%s\" contains symbols that are not allowed in filenames"
-msgstr ""
-"Nazva katalohu \"%s\" maje ŭ sabie niedapuščalnyja ŭ nazvach fajłaŭ znaki"
+msgid "The folder name \"%s\" contains symbols that are not allowed in filenames"
+msgstr "Nazva katalohu \"%s\" maje ŭ sabie niedapuščalnyja ŭ nazvach fajłaŭ znaki"
 
 #: ../gtk/gtkfilesel.c:1451
 msgid "New Folder"
@@ -1718,12 +1708,15 @@ msgstr "Nazva f_olderu:"
 msgid "C_reate"
 msgstr "S_tvary"
 
-#: ../gtk/gtkfilesel.c:1533 ../gtk/gtkfilesel.c:1640 ../gtk/gtkfilesel.c:1653
+#: ../gtk/gtkfilesel.c:1533
+#: ../gtk/gtkfilesel.c:1640
+#: ../gtk/gtkfilesel.c:1653
 #, c-format
 msgid "The filename \"%s\" contains symbols that are not allowed in filenames"
 msgstr "Nazva \"%s\" maje ŭ sabie niedapuščalnyja ŭ nazvach fajłaŭ znaki"
 
-#: ../gtk/gtkfilesel.c:1536 ../gtk/gtkfilesel.c:1546
+#: ../gtk/gtkfilesel.c:1536
+#: ../gtk/gtkfilesel.c:1546
 #, c-format
 msgid "Error deleting file '%s': %s"
 msgstr "Pamyłka padčas vydaleńnia fajłu '%s': %s"
@@ -1771,12 +1764,8 @@ msgstr "_Vybar: "
 
 #: ../gtk/gtkfilesel.c:3107
 #, c-format
-msgid ""
-"The filename \"%s\" couldn't be converted to UTF-8. (try setting the "
-"environment variable G_FILENAME_ENCODING): %s"
-msgstr ""
-"Niemahčyma pierakanvertavać nazvu fajłu \"%s\" na UTF-8 (pasprabuj akreślić "
-"źmiennuju asiarodździa G_FILENAME_ENCODING): %s"
+msgid "The filename \"%s\" couldn't be converted to UTF-8. (try setting the environment variable G_FILENAME_ENCODING): %s"
+msgstr "Niemahčyma pierakanvertavać nazvu fajłu \"%s\" na UTF-8 (pasprabuj akreślić źmiennuju asiarodździa G_FILENAME_ENCODING): %s"
 
 #: ../gtk/gtkfilesel.c:3110
 msgid "Invalid UTF-8"
@@ -1799,18 +1788,22 @@ msgstr "Niemahčyma atrymać typovuju ikonu dla %s\n"
 msgid "Could not obtain root folder"
 msgstr "Hałoŭny folder (root) niedasiahalny"
 
-#: ../gtk/gtkfilesystemmodel.c:1339
+#: ../gtk/gtkfilesystemmodel.c:1338
 msgid "(Empty)"
 msgstr "(Pusty)"
 
-#: ../gtk/gtkfilesystemunix.c:960 ../gtk/gtkfilesystemunix.c:1208
-#: ../gtk/gtkfilesystemunix.c:2201 ../gtk/gtkfilesystemunix.c:2241
-#: ../gtk/gtkfilesystemwin32.c:2245 ../gtk/gtkfilesystemwin32.c:2295
+#: ../gtk/gtkfilesystemunix.c:960
+#: ../gtk/gtkfilesystemunix.c:1208
+#: ../gtk/gtkfilesystemunix.c:2201
+#: ../gtk/gtkfilesystemunix.c:2241
+#: ../gtk/gtkfilesystemwin32.c:2245
+#: ../gtk/gtkfilesystemwin32.c:2295
 #, c-format
 msgid "Error getting information for '%s': %s"
 msgstr "Pamyłka pry atrymańni infarmacyi dla \"%s\": %s"
 
-#: ../gtk/gtkfilesystemunix.c:1153 ../gtk/gtkfilesystemwin32.c:1274
+#: ../gtk/gtkfilesystemunix.c:1153
+#: ../gtk/gtkfilesystemwin32.c:1274
 msgid "This file system does not support mounting"
 msgstr "Hetaja systema fajłaŭ nie absłuhoŭvaje mantavańnia"
 
@@ -1818,26 +1811,26 @@ msgstr "Hetaja systema fajłaŭ nie absłuhoŭvaje mantavańnia"
 msgid "File System"
 msgstr "Systema fajłaŭ"
 
-#: ../gtk/gtkfilesystemunix.c:1329 ../gtk/gtkfilesystemwin32.c:1584
+#: ../gtk/gtkfilesystemunix.c:1329
+#: ../gtk/gtkfilesystemwin32.c:1584
 #, c-format
-msgid ""
-"The name \"%s\" is not valid because it contains the character \"%s\". "
-"Please use a different name."
-msgstr ""
-"Nazva \"%s\" niapravilnaja, bu ŭ joj sustrakajecca znak \"%s\". Vykarystaj "
-"inšuju nazvu."
+msgid "The name \"%s\" is not valid because it contains the character \"%s\". Please use a different name."
+msgstr "Nazva \"%s\" niapravilnaja, bu ŭ joj sustrakajecca znak \"%s\". Vykarystaj inšuju nazvu."
 
-#: ../gtk/gtkfilesystemunix.c:1883 ../gtk/gtkfilesystemwin32.c:1925
+#: ../gtk/gtkfilesystemunix.c:1883
+#: ../gtk/gtkfilesystemwin32.c:1925
 #, c-format
 msgid "Bookmark saving failed: %s"
 msgstr "Nie ŭdałosia zapisać zakładku: %s"
 
-#: ../gtk/gtkfilesystemunix.c:1938 ../gtk/gtkfilesystemwin32.c:1980
+#: ../gtk/gtkfilesystemunix.c:1938
+#: ../gtk/gtkfilesystemwin32.c:1980
 #, c-format
 msgid "'%s' already exists in the bookmarks list"
 msgstr "U śpisie zakładak užo jość '%s' "
 
-#: ../gtk/gtkfilesystemunix.c:2010 ../gtk/gtkfilesystemwin32.c:2052
+#: ../gtk/gtkfilesystemunix.c:2010
+#: ../gtk/gtkfilesystemwin32.c:2052
 #, c-format
 msgid "'%s' does not exist in the bookmarks list"
 msgstr "'%s' niama ŭ śpisie zakładak"
@@ -1857,7 +1850,8 @@ msgstr "Sieciŭny dysk (%s)"
 msgid "%s (%s)"
 msgstr "%s (%s)"
 
-#: ../gtk/gtkfontbutton.c:145 ../gtk/gtkfontbutton.c:267
+#: ../gtk/gtkfontbutton.c:145
+#: ../gtk/gtkfontbutton.c:267
 msgid "Pick a Font"
 msgstr "Vybar šryftu"
 
@@ -2001,7 +1995,8 @@ msgstr "_Koła:"
 msgid "none"
 msgstr "niama"
 
-#: ../gtk/gtkinputdialog.c:616 ../gtk/gtkinputdialog.c:652
+#: ../gtk/gtkinputdialog.c:616
+#: ../gtk/gtkinputdialog.c:652
 msgid "(disabled)"
 msgstr "(vyklučana)"
 
@@ -2064,7 +2059,8 @@ msgstr "Odstup strełki"
 msgid "Scroll arrow spacing"
 msgstr "Odstup strełki prakrutki"
 
-#: ../gtk/gtknotebook.c:4300 ../gtk/gtknotebook.c:6845
+#: ../gtk/gtknotebook.c:4300
+#: ../gtk/gtknotebook.c:6845
 #, c-format
 msgid "Page %u"
 msgstr "Staronka %u"
@@ -2079,7 +2075,7 @@ msgstr "Staronka %u"
 msgid "default:mm"
 msgstr "default:mm"
 
-#: ../gtk/gtkpagesetupunixdialog.c:291
+#: ../gtk/gtkpagesetupunixdialog.c:311
 msgid ""
 "<b>Any Printer</b>\n"
 "For portable documents"
@@ -2087,15 +2083,17 @@ msgstr ""
 "<b>Lubaja drukarka</b>\n"
 "Dla pieranosnych dakumentaŭ"
 
-#: ../gtk/gtkpagesetupunixdialog.c:866 ../gtk/gtkpagesetupunixdialog.c:1382
+#: ../gtk/gtkpagesetupunixdialog.c:886
+#: ../gtk/gtkpagesetupunixdialog.c:1402
 msgid "mm"
 msgstr "mm"
 
-#: ../gtk/gtkpagesetupunixdialog.c:868 ../gtk/gtkpagesetupunixdialog.c:1380
+#: ../gtk/gtkpagesetupunixdialog.c:888
+#: ../gtk/gtkpagesetupunixdialog.c:1400
 msgid "inch"
 msgstr "cali"
 
-#: ../gtk/gtkpagesetupunixdialog.c:887
+#: ../gtk/gtkpagesetupunixdialog.c:907
 #, c-format
 msgid ""
 "Margins:\n"
@@ -2110,68 +2108,69 @@ msgstr ""
 " Vierchniaje: %s %s\n"
 " Nižniaje: %s %s"
 
-#: ../gtk/gtkpagesetupunixdialog.c:938
+#: ../gtk/gtkpagesetupunixdialog.c:958
 msgid "Manage Custom Sizes..."
 msgstr "Kiruj ułasnymi pamierami..."
 
-#: ../gtk/gtkpagesetupunixdialog.c:986
+#: ../gtk/gtkpagesetupunixdialog.c:1006
 msgid "_Format for:"
 msgstr "_Farmat dla:"
 
-#: ../gtk/gtkpagesetupunixdialog.c:1007
+#: ../gtk/gtkpagesetupunixdialog.c:1027
 msgid "_Paper size:"
 msgstr "_Pamier papiery:"
 
-#: ../gtk/gtkpagesetupunixdialog.c:1043
+#: ../gtk/gtkpagesetupunixdialog.c:1063
 msgid "_Orientation:"
 msgstr "_Aryjentacyja:"
 
-#: ../gtk/gtkpagesetupunixdialog.c:1108 ../gtk/gtkprintunixdialog.c:2156
+#: ../gtk/gtkpagesetupunixdialog.c:1128
+#: ../gtk/gtkprintunixdialog.c:2153
 msgid "Page Setup"
 msgstr "Nałady staronki"
 
-#: ../gtk/gtkpagesetupunixdialog.c:1427
+#: ../gtk/gtkpagesetupunixdialog.c:1447
 msgid "Margins from Printer..."
 msgstr "Paboččy z drukarki..."
 
-#: ../gtk/gtkpagesetupunixdialog.c:1587
+#: ../gtk/gtkpagesetupunixdialog.c:1607
 #, c-format
 msgid "Custom Size %d"
 msgstr "Ułasny pamier %d"
 
-#: ../gtk/gtkpagesetupunixdialog.c:1816
+#: ../gtk/gtkpagesetupunixdialog.c:1836
 msgid "Manage Custom Sizes"
 msgstr "Kiravańnie ŭłasnymi pamierami"
 
-#: ../gtk/gtkpagesetupunixdialog.c:1912
+#: ../gtk/gtkpagesetupunixdialog.c:1932
 msgid "_Width:"
 msgstr "_Šyrynia:"
 
-#: ../gtk/gtkpagesetupunixdialog.c:1924
+#: ../gtk/gtkpagesetupunixdialog.c:1944
 msgid "_Height:"
 msgstr "_Vyšynia:"
 
-#: ../gtk/gtkpagesetupunixdialog.c:1936
+#: ../gtk/gtkpagesetupunixdialog.c:1956
 msgid "Paper Size"
 msgstr "Pamier papiery"
 
-#: ../gtk/gtkpagesetupunixdialog.c:1946
+#: ../gtk/gtkpagesetupunixdialog.c:1966
 msgid "_Top:"
 msgstr "_Vierchniaje:"
 
-#: ../gtk/gtkpagesetupunixdialog.c:1958
+#: ../gtk/gtkpagesetupunixdialog.c:1978
 msgid "_Bottom:"
 msgstr "_Nižniaje:"
 
-#: ../gtk/gtkpagesetupunixdialog.c:1970
+#: ../gtk/gtkpagesetupunixdialog.c:1990
 msgid "_Left:"
 msgstr "_Levaje:"
 
-#: ../gtk/gtkpagesetupunixdialog.c:1982
+#: ../gtk/gtkpagesetupunixdialog.c:2002
 msgid "_Right:"
 msgstr "_Pravaje:"
 
-#: ../gtk/gtkpagesetupunixdialog.c:2023
+#: ../gtk/gtkpagesetupunixdialog.c:2043
 msgid "Paper Margins"
 msgstr "Paboččy arkuša"
 
@@ -2183,74 +2182,85 @@ msgstr "Niedastupna"
 msgid "_Save in folder:"
 msgstr "_Zapis w foldery:"
 
+#. translators: this string is the default job title for print
+#. * jobs. %s gets replaced by the application name, %d gets replaced
+#. * by the job number.
+#.
+#: ../gtk/gtkprintoperation.c:171
+#, c-format
+msgid "%s job #%d"
+msgstr "%s, zadańnie #%d"
+
 #. translators, strip the prefix up to and including the first |
-#: ../gtk/gtkprintoperation.c:1469
+#: ../gtk/gtkprintoperation.c:1493
 msgid "print operation status|Initial state"
 msgstr "Pačatkovy stan"
 
 #. translators, strip the prefix up to and including the first |
-#: ../gtk/gtkprintoperation.c:1471
+#: ../gtk/gtkprintoperation.c:1495
 msgid "print operation status|Preparing to print"
 msgstr "Padrychtoŭka da vydruku"
 
 #. translators, strip the prefix up to and including the first |
-#: ../gtk/gtkprintoperation.c:1473
+#: ../gtk/gtkprintoperation.c:1497
 msgid "print operation status|Generating data"
 msgstr "Hieneravańnie źviestak"
 
 #. translators, strip the prefix up to and including the first |
-#: ../gtk/gtkprintoperation.c:1475
+#: ../gtk/gtkprintoperation.c:1499
 msgid "print operation status|Sending data"
 msgstr "Vysyłańnie źviestak"
 
 #. translators, strip the prefix up to and including the first |
-#: ../gtk/gtkprintoperation.c:1477
+#: ../gtk/gtkprintoperation.c:1501
 msgid "print operation status|Waiting"
 msgstr "Čakańnie"
 
 #. translators, strip the prefix up to and including the first |
-#: ../gtk/gtkprintoperation.c:1479
+#: ../gtk/gtkprintoperation.c:1503
 msgid "print operation status|Blocking on issue"
 msgstr "Blakavańnie zadańnia"
 
 #. translators, strip the prefix up to and including the first |
-#: ../gtk/gtkprintoperation.c:1481
+#: ../gtk/gtkprintoperation.c:1505
 msgid "print operation status|Printing"
 msgstr "Drukavańnie"
 
 #. translators, strip the prefix up to and including the first |
-#: ../gtk/gtkprintoperation.c:1483
+#: ../gtk/gtkprintoperation.c:1507
 msgid "print operation status|Finished"
 msgstr "Zavieršanaje"
 
 #. translators, strip the prefix up to and including the first |
-#: ../gtk/gtkprintoperation.c:1485
+#: ../gtk/gtkprintoperation.c:1509
 msgid "print operation status|Finished with error"
 msgstr "Zavieršanaje z pamyłkaj"
 
-#: ../gtk/gtkprintoperation.c:1956
+#: ../gtk/gtkprintoperation.c:1979
 #, c-format
 msgid "Preparing %d"
 msgstr "Padrychtoŭka %d"
 
-#: ../gtk/gtkprintoperation.c:1958 ../gtk/gtkprintoperation.c:2211
+#: ../gtk/gtkprintoperation.c:1981
+#: ../gtk/gtkprintoperation.c:2233
 msgid "Preparing"
 msgstr "Padrychtoŭka"
 
-#: ../gtk/gtkprintoperation.c:1961
+#: ../gtk/gtkprintoperation.c:1984
 #, c-format
 msgid "Printing %d"
 msgstr "Drukavańnie %d"
 
-#: ../gtk/gtkprintoperation-unix.c:210
+#: ../gtk/gtkprintoperation-unix.c:243
 msgid "Error launching preview"
 msgstr "Pamyłka ŭklučeńnia pieradahladu"
 
-#: ../gtk/gtkprintoperation-unix.c:244
+#: ../gtk/gtkprintoperation-unix.c:282
 msgid "Error printing"
 msgstr "Pamyłka padčas druku"
 
-#: ../gtk/gtkprintoperation-unix.c:346 ../gtk/gtkprintoperation-win32.c:1394
+#: ../gtk/gtkprintoperation-unix.c:384
+#: ../gtk/gtkprintoperation-win32.c:1394
 msgid "Application"
 msgstr "Aplikacyja"
 
@@ -2274,7 +2284,8 @@ msgstr "Vymahaje ŭmiašalnictva karystalnika"
 msgid "Custom size"
 msgstr "Ułasny pamier"
 
-#: ../gtk/gtkprintoperation-win32.c:1484 ../gtk/gtkprintoperation-win32.c:1507
+#: ../gtk/gtkprintoperation-win32.c:1484
+#: ../gtk/gtkprintoperation-win32.c:1507
 #: ../gtk/gtkprintoperation-win32.c:1555
 msgid "Not enough free memory"
 msgstr "Niama svabodnaj pamiaci"
@@ -2356,120 +2367,120 @@ msgstr "A_dvarotna"
 msgid "General"
 msgstr "Ahulnaje"
 
-#: ../gtk/gtkprintunixdialog.c:2012
+#: ../gtk/gtkprintunixdialog.c:2009
 msgid "Layout"
 msgstr "Schiema"
 
-#: ../gtk/gtkprintunixdialog.c:2016
+#: ../gtk/gtkprintunixdialog.c:2013
 msgid "Pages per _side:"
 msgstr "Staronak _na arkuš:"
 
-#: ../gtk/gtkprintunixdialog.c:2032
+#: ../gtk/gtkprintunixdialog.c:2029
 msgid "T_wo-sided:"
 msgstr "_Dvuchbakova:"
 
-#: ../gtk/gtkprintunixdialog.c:2047
+#: ../gtk/gtkprintunixdialog.c:2044
 msgid "_Only print:"
 msgstr "Vydruk _tolki:"
 
 #. In enum order
-#: ../gtk/gtkprintunixdialog.c:2062
+#: ../gtk/gtkprintunixdialog.c:2059
 msgid "All sheets"
 msgstr "Usie arkušy"
 
-#: ../gtk/gtkprintunixdialog.c:2063
+#: ../gtk/gtkprintunixdialog.c:2060
 msgid "Even sheets"
 msgstr "Cotnyja arkušy"
 
-#: ../gtk/gtkprintunixdialog.c:2064
+#: ../gtk/gtkprintunixdialog.c:2061
 msgid "Odd sheets"
 msgstr "Niacotnyja arkušy"
 
-#: ../gtk/gtkprintunixdialog.c:2067
+#: ../gtk/gtkprintunixdialog.c:2064
 msgid "Sc_ale:"
 msgstr "Maš_tab:"
 
-#: ../gtk/gtkprintunixdialog.c:2094
+#: ../gtk/gtkprintunixdialog.c:2091
 msgid "Paper"
 msgstr "Papiera"
 
-#: ../gtk/gtkprintunixdialog.c:2098
+#: ../gtk/gtkprintunixdialog.c:2095
 msgid "Paper _type:"
 msgstr "Vid papier_y:"
 
-#: ../gtk/gtkprintunixdialog.c:2113
+#: ../gtk/gtkprintunixdialog.c:2110
 msgid "Paper _source:"
 msgstr "Krynica pap_iery:"
 
-#: ../gtk/gtkprintunixdialog.c:2128
+#: ../gtk/gtkprintunixdialog.c:2125
 msgid "Output t_ray:"
 msgstr "_Padnos vyjścia:"
 
-#: ../gtk/gtkprintunixdialog.c:2179
+#: ../gtk/gtkprintunixdialog.c:2176
 msgid "Job Details"
 msgstr "Detali zadańnia"
 
-#: ../gtk/gtkprintunixdialog.c:2185
+#: ../gtk/gtkprintunixdialog.c:2182
 msgid "Pri_ority:"
 msgstr "Pry_jarytet:"
 
-#: ../gtk/gtkprintunixdialog.c:2200
+#: ../gtk/gtkprintunixdialog.c:2197
 msgid "_Billing info:"
 msgstr "Infarmacyja ab apłatac_h:"
 
-#: ../gtk/gtkprintunixdialog.c:2218
+#: ../gtk/gtkprintunixdialog.c:2215
 msgid "Print Document"
 msgstr "Vydruk dakumentu"
 
-#: ../gtk/gtkprintunixdialog.c:2224
+#: ../gtk/gtkprintunixdialog.c:2221
 msgid "_Now"
 msgstr "_Ciapier"
 
-#: ../gtk/gtkprintunixdialog.c:2231
+#: ../gtk/gtkprintunixdialog.c:2228
 msgid "A_t:"
 msgstr "_A:"
 
-#: ../gtk/gtkprintunixdialog.c:2246
+#: ../gtk/gtkprintunixdialog.c:2243
 msgid "On _hold"
 msgstr "Ustry_many"
 
-#: ../gtk/gtkprintunixdialog.c:2265
+#: ../gtk/gtkprintunixdialog.c:2262
 msgid "Add Cover Page"
 msgstr "Dadaj staronku na vokładku"
 
-#: ../gtk/gtkprintunixdialog.c:2271
+#: ../gtk/gtkprintunixdialog.c:2268
 msgid "Be_fore:"
 msgstr "P_ierad:"
 
-#: ../gtk/gtkprintunixdialog.c:2286
+#: ../gtk/gtkprintunixdialog.c:2283
 msgid "_After:"
 msgstr "_Paśla:"
 
-#: ../gtk/gtkprintunixdialog.c:2301
+#: ../gtk/gtkprintunixdialog.c:2298
 msgid "Job"
 msgstr "Zadańnie"
 
-#: ../gtk/gtkprintunixdialog.c:2367
+#: ../gtk/gtkprintunixdialog.c:2364
 msgid "Advanced"
 msgstr "Pašyranaje"
 
-#: ../gtk/gtkprintunixdialog.c:2402
+#: ../gtk/gtkprintunixdialog.c:2399
 msgid "Image Quality"
 msgstr "Jakaść vyjavy"
 
-#: ../gtk/gtkprintunixdialog.c:2405
+#: ../gtk/gtkprintunixdialog.c:2402
 msgid "Color"
 msgstr "Koler"
 
-#: ../gtk/gtkprintunixdialog.c:2408
+#: ../gtk/gtkprintunixdialog.c:2405
 msgid "Finishing"
 msgstr "Zaviaršeńnie"
 
-#: ../gtk/gtkprintunixdialog.c:2418
+#: ../gtk/gtkprintunixdialog.c:2415
 msgid "Some of the settings in the dialog conflict"
 msgstr "Nałady vakna častkova supiarečnyja"
 
-#: ../gtk/gtkprintunixdialog.c:2441
+#: ../gtk/gtkprintunixdialog.c:2438
 msgid "Print"
 msgstr "Vydruk"
 
@@ -2486,7 +2497,8 @@ msgstr "Hrupa, da jakoj adnosicca hetaje pole vybaru."
 msgid "Unable to find include file: \"%s\""
 msgstr "Niemahčyma znajści dałučany fajł: \"%s\""
 
-#: ../gtk/gtkrc.c:3466 ../gtk/gtkrc.c:3469
+#: ../gtk/gtkrc.c:3466
+#: ../gtk/gtkrc.c:3469
 #, c-format
 msgid "Unable to locate image file in pixmap_path: \"%s\""
 msgstr "Niemahčyma znajści fajł z vyjavaj na ściežcy: \"%s\""
@@ -2495,7 +2507,8 @@ msgstr "Niemahčyma znajści fajł z vyjavaj na ściežcy: \"%s\""
 msgid "Select which type of documents are shown"
 msgstr "Abiraje jakija vidy dakumentaŭ pakazvać"
 
-#: ../gtk/gtkrecentchooserdefault.c:1112 ../gtk/gtkrecentchooserdefault.c:1149
+#: ../gtk/gtkrecentchooserdefault.c:1112
+#: ../gtk/gtkrecentchooserdefault.c:1149
 #, c-format
 msgid "No item for URI '%s' found"
 msgstr "Dakument dla URI '%s' nia znojdzieny"
@@ -2538,12 +2551,14 @@ msgstr "Pakažy p_ryvatnyja resursy"
 msgid "No items found"
 msgstr "Elementy nia znojdzienyja"
 
-#: ../gtk/gtkrecentchoosermenu.c:490 ../gtk/gtkrecentchoosermenu.c:546
+#: ../gtk/gtkrecentchoosermenu.c:490
+#: ../gtk/gtkrecentchoosermenu.c:546
 #, c-format
 msgid "No recently used resource found with URI `%s'"
 msgstr "Niadaŭna ŭžyvany resurs z URI `%s' nia znojdzieny"
 
-#: ../gtk/gtkrecentchoosermenu.c:570 ../gtk/gtkrecentchoosermenu.c:578
+#: ../gtk/gtkrecentchoosermenu.c:570
+#: ../gtk/gtkrecentchoosermenu.c:578
 #, c-format
 msgid "This function is not implemented for widgets of class '%s'"
 msgstr "Funkcyja nie implementavanaja dla widgetaŭ klasy '%s'"
@@ -2557,8 +2572,10 @@ msgstr "Adčyni '%s'"
 msgid "Unknown item"
 msgstr "Nieviadomy element"
 
-#: ../gtk/gtkrecentmanager.c:1055 ../gtk/gtkrecentmanager.c:1205
-#: ../gtk/gtkrecentmanager.c:1215 ../gtk/gtkrecentmanager.c:1274
+#: ../gtk/gtkrecentmanager.c:1055
+#: ../gtk/gtkrecentmanager.c:1205
+#: ../gtk/gtkrecentmanager.c:1215
+#: ../gtk/gtkrecentmanager.c:1274
 #, c-format
 msgid "Unable to find an item with URI '%s'"
 msgstr "Niemahčyma znajści element z URI '%s'"
@@ -3468,7 +3485,8 @@ msgid "paper size|10x14"
 msgstr "10x14"
 
 #. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:187 ../gtk/paper_names_offsets.c:189
+#: ../gtk/paper_names_offsets.c:187
+#: ../gtk/paper_names_offsets.c:189
 msgid "paper size|10x15"
 msgstr "10x15"
 
@@ -3877,84 +3895,84 @@ msgstr "Vietnamski ((VIQR)"
 msgid "X Input Method"
 msgstr "Metad uvachodu X"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1490
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1524
 msgid "Two Sided"
 msgstr "Dvuchbakova"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1491
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1525
 msgid "Paper Type"
 msgstr "Typ papiery"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1492
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1526
 msgid "Paper Source"
 msgstr "Krynica papiery"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1493
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1527
 msgid "Output Tray"
 msgstr "Padnos vydačy"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1502
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1536
 msgid "One Sided"
 msgstr "Adnabakova"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1503
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1504
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1508
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1537
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1538
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1542
 msgid "Auto Select"
 msgstr "Aŭtamatyčny vybar"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1505
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1506
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1507
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1977
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1539
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1540
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1541
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2011
 msgid "Printer Default"
 msgstr "Zmoŭčanyja drukarki"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2171
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2205
 msgid "Urgent"
 msgstr "Važnaje"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2171
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2205
 msgid "High"
 msgstr "Vysoki"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2171
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2205
 msgid "Medium"
 msgstr "Siaredni"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2171
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2205
 msgid "Low"
 msgstr "Nizki"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2173
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2207
 msgid "None"
 msgstr "Niama"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2173
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2207
 msgid "Classified"
 msgstr "Sklasyfikavana"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2173
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2207
 msgid "Confidential"
 msgstr "Kanfidencyjnaje"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2173
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2207
 msgid "Secret"
 msgstr "Sakretnaje"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2173
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2207
 msgid "Standard"
 msgstr "Standartnaje"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2173
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2207
 msgid "Top Secret"
 msgstr "Zusim sakretna"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2173
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2207
 msgid "Unclassified"
 msgstr "Niesklasyfikavanaje"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2259
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2293
 #, c-format
 msgid "Custom %.2fx%.2f"
 msgstr "Ułasny %.2fx%.2f"
@@ -3972,32 +3990,32 @@ msgid "Command Line"
 msgstr "Zahadny radok"
 
 #. default filename used for print-to-file
-#: ../modules/printbackends/file/gtkprintbackendfile.c:232
+#: ../modules/printbackends/file/gtkprintbackendfile.c:235
 #, c-format
 msgid "output.%s"
 msgstr "vyjście.%s"
 
-#: ../modules/printbackends/file/gtkprintbackendfile.c:457
+#: ../modules/printbackends/file/gtkprintbackendfile.c:460
 msgid "Print to File"
 msgstr "Vydruk u fajł"
 
-#: ../modules/printbackends/file/gtkprintbackendfile.c:481
+#: ../modules/printbackends/file/gtkprintbackendfile.c:484
 msgid "PDF"
 msgstr "PDF"
 
-#: ../modules/printbackends/file/gtkprintbackendfile.c:481
+#: ../modules/printbackends/file/gtkprintbackendfile.c:484
 msgid "Postscript"
 msgstr "Postscript"
 
-#: ../modules/printbackends/file/gtkprintbackendfile.c:493
+#: ../modules/printbackends/file/gtkprintbackendfile.c:496
 msgid "Pages per _sheet:"
 msgstr "Staronak _na arkuš:"
 
-#: ../modules/printbackends/file/gtkprintbackendfile.c:534
+#: ../modules/printbackends/file/gtkprintbackendfile.c:537
 msgid "File"
 msgstr "Fajł"
 
-#: ../modules/printbackends/file/gtkprintbackendfile.c:543
+#: ../modules/printbackends/file/gtkprintbackendfile.c:546
 msgid "_Output format"
 msgstr "_Farmat vyjścia"
 
@@ -4040,12 +4058,14 @@ msgstr "Nieviadomaja pamyłka padčas sproby deseryjalizacyi %s"
 msgid "No deserialize function found for format %s"
 msgstr "Nia znojdzienaja funkcyja deseryjalizacyi dla farmatu %s"
 
-#: ../gtk/gtktextbufferserialize.c:796 ../gtk/gtktextbufferserialize.c:822
+#: ../gtk/gtktextbufferserialize.c:796
+#: ../gtk/gtktextbufferserialize.c:822
 #, c-format
 msgid "Both \"id\" and \"name\" were found on the <%s> element"
 msgstr "Jak \"id\" hetak i \"nazva\" byli znojdzienyja ŭ elemencie <%s>"
 
-#: ../gtk/gtktextbufferserialize.c:806 ../gtk/gtktextbufferserialize.c:832
+#: ../gtk/gtktextbufferserialize.c:806
+#: ../gtk/gtktextbufferserialize.c:832
 #, c-format
 msgid "The attribute \"%s\" was found twice on the <%s> element"
 msgstr "Atrybut \"%s\" byŭ dvojčy znojdzieny ŭ elemencie <%s>"
@@ -4065,7 +4085,8 @@ msgstr "Element <%s> nia maje atrybutu \"nazva\" ani atrybutu \"id\""
 msgid "Attribute \"%s\" repeated twice on the same <%s> element"
 msgstr "Atrybut \"%s\" vykarystany dvojčy na adnym i tym ža elemencie <%s>"
 
-#: ../gtk/gtktextbufferserialize.c:961 ../gtk/gtktextbufferserialize.c:986
+#: ../gtk/gtktextbufferserialize.c:961
+#: ../gtk/gtktextbufferserialize.c:986
 #, c-format
 msgid "Attribute \"%s\" is invalid on <%s> element in this context"
 msgstr "Atrybut \"%s\" niapravilny ŭ hetym kantekście na elemencie <%s>"
@@ -4082,11 +4103,12 @@ msgstr "Znojdzieny ananimny značnik i značniki nia mohuć być stvoranyja."
 #: ../gtk/gtktextbufferserialize.c:1045
 #, c-format
 msgid "Tag \"%s\" does not exist in buffer and tags can not be created."
-msgstr ""
-"Značnik \"%s\" nie jsnuje ŭ bufery i značniki nia mohuć być stvoranyja."
+msgstr "Značnik \"%s\" nie jsnuje ŭ bufery i značniki nia mohuć być stvoranyja."
 
-#: ../gtk/gtktextbufferserialize.c:1144 ../gtk/gtktextbufferserialize.c:1219
-#: ../gtk/gtktextbufferserialize.c:1320 ../gtk/gtktextbufferserialize.c:1394
+#: ../gtk/gtktextbufferserialize.c:1144
+#: ../gtk/gtktextbufferserialize.c:1219
+#: ../gtk/gtktextbufferserialize.c:1320
+#: ../gtk/gtktextbufferserialize.c:1394
 #, c-format
 msgid "Element <%s> is not allowed below <%s>"
 msgstr "Element <%s> niedapuščalny nižej <%s>"
@@ -4103,8 +4125,7 @@ msgstr "\"%s\" nie źjaŭlajecca pravilnaj nazvaj atrybutu"
 
 #: ../gtk/gtktextbufferserialize.c:1193
 #, c-format
-msgid ""
-"\"%s\" could not be converted to a value of type \"%s\" for attribute \"%s\""
+msgid "\"%s\" could not be converted to a value of type \"%s\" for attribute \"%s\""
 msgstr "\"%s\" nielha źmianić na vartaść typu \"%s\" dla atrybutu \"%s\""
 
 #: ../gtk/gtktextbufferserialize.c:1202
@@ -4127,7 +4148,8 @@ msgstr "Značnik \"%s\" maje niapravilny pryjarytet \"%s\""
 msgid "Outermost element in text must be <text_view_markup> not <%s>"
 msgstr "Vonkavy element tekstu musić być <text_view_markup> a nie <%s>"
 
-#: ../gtk/gtktextbufferserialize.c:1358 ../gtk/gtktextbufferserialize.c:1374
+#: ../gtk/gtktextbufferserialize.c:1358
+#: ../gtk/gtktextbufferserialize.c:1374
 #, c-format
 msgid "A <%s> element has already been specified"
 msgstr "Element <%s> užo akreśleny"
@@ -4141,79 +4163,94 @@ msgid "Serialized data is malformed"
 msgstr "Seryjalizavanyja źviestki niapravilna raźvityja"
 
 #: ../gtk/gtktextbufferserialize.c:1866
-msgid ""
-"Serialized data is malformed. First section isn't GTKTEXTBUFFERCONTENTS-0001"
-msgstr ""
-"Seryjalizavanyja źviestki niapravilna raźvityja. Pieršaja sekcyja nie "
-"źjaŭlajecca GTKEXTBUFFERCONTENTS-0001"
+msgid "Serialized data is malformed. First section isn't GTKTEXTBUFFERCONTENTS-0001"
+msgstr "Seryjalizavanyja źviestki niapravilna raźvityja. Pieršaja sekcyja nie źjaŭlajecca GTKEXTBUFFERCONTENTS-0001"
 
-#: ../gtk/updateiconcache.c:491 ../gtk/updateiconcache.c:551
+#: ../gtk/updateiconcache.c:498
+#: ../gtk/updateiconcache.c:558
 #, c-format
 msgid "different idatas found for symlinked '%s' and '%s'\n"
-msgstr ""
-"znojdzienyja roznyja iźviestki dla symbalična paviazanych \"%s\" i \"%s\"\n"
+msgstr "znojdzienyja roznyja iźviestki dla symbalična paviazanych \"%s\" i \"%s\"\n"
 
-#: ../gtk/updateiconcache.c:1372
+#: ../gtk/updateiconcache.c:1379
 msgid "Failed to write header\n"
 msgstr "Niemahčyma zapisać zahałovak\n"
 
-#: ../gtk/updateiconcache.c:1378
+#: ../gtk/updateiconcache.c:1385
 msgid "Failed to write hash table\n"
 msgstr "Niemahčyma zapisać tablicu hashu\n"
 
-#: ../gtk/updateiconcache.c:1384
+#: ../gtk/updateiconcache.c:1391
 msgid "Failed to write folder index\n"
 msgstr "Niemahčyma zapisać indeks katalohu\n"
 
-#: ../gtk/updateiconcache.c:1392
+#: ../gtk/updateiconcache.c:1399
 msgid "Failed to rewrite header\n"
 msgstr "Niemahčyma pierapisać zahałovak\n"
 
-#: ../gtk/updateiconcache.c:1418
+#: ../gtk/updateiconcache.c:1451
 #, c-format
 msgid "Failed to write cache file: %s\n"
 msgstr "Niemahčyma zapisać fajł buferu: %s\n"
 
-#: ../gtk/updateiconcache.c:1460
+#: ../gtk/updateiconcache.c:1486
+msgid "The generated cache was invalid.\n"
+msgstr "Zhieneravany cache byŭ chibnym.\n"
+
+#: ../gtk/updateiconcache.c:1500
 #, c-format
 msgid "Could not rename %s to %s: %s, removing %s then.\n"
 msgstr "Niemahčyma źmianić nazvu %s na %s: %s, vydaleńnie %s.\n"
 
-#: ../gtk/updateiconcache.c:1472
+#: ../gtk/updateiconcache.c:1512
 #, c-format
 msgid "Could not rename %s to %s: %s\n"
 msgstr "Niemahčyma źmianić nazvu %s na %s: %s\n"
 
-#: ../gtk/updateiconcache.c:1479
+#: ../gtk/updateiconcache.c:1519
 #, c-format
 msgid "Could not rename %s back to %s: %s.\n"
 msgstr "Niemahčyma źmianić nazvu %s viartańnie da %s: %s.\n"
 
-#: ../gtk/updateiconcache.c:1501
+#: ../gtk/updateiconcache.c:1541
 msgid "Cache file created successfully.\n"
 msgstr "Paśpiachova stvorany fajł buferu.\n"
 
-#: ../gtk/updateiconcache.c:1540
+#: ../gtk/updateiconcache.c:1580
 msgid "Overwrite an existing cache, even if up to date"
 msgstr "Nadpisańnie dziejnaha buferu, navat kali jon aktualny"
 
-#: ../gtk/updateiconcache.c:1541
+#: ../gtk/updateiconcache.c:1581
 msgid "Don't check for the existence of index.theme"
 msgstr "Biez pravierki jsnavańnia index.theme"
 
-#: ../gtk/updateiconcache.c:1542
+#: ../gtk/updateiconcache.c:1582
 msgid "Don't include image data in the cache"
 msgstr "Nie ŭklučajučy źviestak vyjavaŭ u bufer"
 
-#: ../gtk/updateiconcache.c:1543
+#: ../gtk/updateiconcache.c:1583
 msgid "Output a C header file"
 msgstr "Vyjście ŭ fajł zahałoŭka C"
 
-#: ../gtk/updateiconcache.c:1544
+#: ../gtk/updateiconcache.c:1584
 msgid "Turn off verbose output"
 msgstr "Vyklučeńnie zavialikaha vyjścia"
 
-#: ../gtk/updateiconcache.c:1574
+#: ../gtk/updateiconcache.c:1585
+msgid "Validate existing icon cache"
+msgstr "Spraŭdź najaŭny cache ikon"
+
+#: ../gtk/updateiconcache.c:1620
+#, c-format
+msgid "File not found: %s\n"
+msgstr "Fajł nia znojdzieny: %s\n"
+
+#: ../gtk/updateiconcache.c:1626
+#, c-format
+msgid "Not a valid icon cache: %s\n"
+msgstr "Chibny cache ikony: %s\n"
+
+#: ../gtk/updateiconcache.c:1637
 #, c-format
 msgid ""
 "No theme index file in '%s'.\n"
@@ -4222,37 +4259,33 @@ msgstr ""
 "Niama fajłu indeksu matyvu ŭ \"%s\".\n"
 "Kali ty sapraŭdy chočaš stvaryć tut bufar ikon, užyj --ignore-theme-index.\n"
 
+#~ msgid "Image contains no pixels."
+#~ msgstr "Fajł vyjavy biaź pikselaŭ."
 #~ msgid "Line %d, column %d: missing attribute \"%s\""
 #~ msgstr "Radok %d, kalona %d: adsutny atrybut \"%s\""
-
 #~ msgid "Line %d, column %d: unexpected element \"%s\""
 #~ msgstr "Radok %d, kalona %d: niečakany element \"%s\""
-
 #~ msgid ""
 #~ "Line %d, column %d: expected end of element \"%s\", but got element for "
 #~ "\"%s\" instead"
 #~ msgstr ""
 #~ "Radok %d, kalona %d: čakaŭsia kaniec elementu \"%s\", ale zamiest hetaha "
 #~ "jość element dla \"%s\""
-
 #~ msgid ""
 #~ "Line %d, column %d: expected \"%s\" at the toplevel, but found \"%s\" "
 #~ "instead"
 #~ msgstr ""
 #~ "Radok %d, kalona %d: čakali \"%s\" na najvyšejšym uzroŭni, ale zamiest "
 #~ "hetaha znajšli \"%s\""
-
 #~ msgid ""
 #~ "Line %d, column %d: expected \"%s\" or \"%s\", but found \"%s\" instead"
 #~ msgstr ""
 #~ "Radok %d, kalona %d: čakali \"%s\" albo \"%s\", ale zamiest hetaha "
 #~ "znajšli \"%s\""
-
 #~ msgid "Could not create directory: %s"
 #~ msgstr "Niemahčyma stvaryć kataloh: %s"
-
 #~ msgid "Thai (Broken)"
 #~ msgstr "Tajskaja (pamyłkovaja)"
-
 #~ msgid "PNM image format is invalid"
 #~ msgstr "Niapravilny format obrazu PNM"
+
