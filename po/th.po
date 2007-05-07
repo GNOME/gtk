@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: gtk+\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2007-05-02 13:19-0400\n"
-"PO-Revision-Date: 2007-02-11 11:45+0700\n"
+"PO-Revision-Date: 2007-05-07 14:04+0700\n"
 "Last-Translator: Theppitak Karoonboonyanan <thep@linux.thai.net>\n"
 "Language-Team: Thai <L10n@opentle.net>\n"
 "MIME-Version: 1.0\n"
@@ -2260,7 +2260,7 @@ msgstr "บันทึกในโ_ฟลเดอร์:"
 #: gtk/gtkprintoperation.c:171
 #, c-format
 msgid "%s job #%d"
-msgstr ""
+msgstr "งานพิมพ์ %s #%d"
 
 #. translators, strip the prefix up to and including the first |
 #: gtk/gtkprintoperation.c:1499
