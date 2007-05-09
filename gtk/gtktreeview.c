@@ -5075,6 +5075,14 @@ gtk_tree_view_key_press (GtkWidget   *widget,
 {
   GtkTreeView *tree_view = (GtkTreeView *) widget;
 
+  if (tree_view->priv->rubber_band_status)
+    {
+      if (event->keyval == GDK_Escape)
+	gtk_tree_view_stop_rubber_band (tree_view);
+
+      return TRUE;
+    }
+
   if (GTK_TREE_VIEW_FLAG_SET (tree_view, GTK_TREE_VIEW_IN_COLUMN_DRAG))
     {
       if (event->keyval == GDK_Escape)
@@ -5295,6 +5303,11 @@ static gboolean
 gtk_tree_view_key_release (GtkWidget   *widget,
 			   GdkEventKey *event)
 {
+  GtkTreeView *tree_view = GTK_TREE_VIEW (widget);
+
+  if (tree_view->priv->rubber_band_status)
+    return TRUE;
+
   return (* GTK_WIDGET_CLASS (gtk_tree_view_parent_class)->key_release_event) (widget, event);
 }
 

@@ -255,6 +255,10 @@ static gboolean         gtk_icon_view_button_press              (GtkWidget      
 								 GdkEventButton     *event);
 static gboolean         gtk_icon_view_button_release            (GtkWidget          *widget,
 								 GdkEventButton     *event);
+static gboolean         gtk_icon_view_key_press                 (GtkWidget          *widget,
+								 GdkEventKey        *event);
+static gboolean         gtk_icon_view_key_release               (GtkWidget          *widget,
+								 GdkEventKey        *event);
 static AtkObject       *gtk_icon_view_get_accessible            (GtkWidget          *widget);
 
 
@@ -484,6 +488,8 @@ gtk_icon_view_class_init (GtkIconViewClass *klass)
   widget_class->motion_notify_event = gtk_icon_view_motion;
   widget_class->button_press_event = gtk_icon_view_button_press;
   widget_class->button_release_event = gtk_icon_view_button_release;
+  widget_class->key_press_event = gtk_icon_view_key_press;
+  widget_class->key_release_event = gtk_icon_view_key_release;
   widget_class->drag_begin = gtk_icon_view_drag_begin;
   widget_class->drag_end = gtk_icon_view_drag_end;
   widget_class->drag_data_get = gtk_icon_view_drag_data_get;
@@ -2046,6 +2052,35 @@ gtk_icon_view_button_release (GtkWidget      *widget,
   remove_scroll_timeout (icon_view);
 
   return TRUE;
+}
+
+static gboolean
+gtk_icon_view_key_press (GtkWidget      *widget,
+			 GdkEventKey    *event)
+{
+  GtkIconView *icon_view = GTK_ICON_VIEW (widget);
+
+  if (icon_view->priv->doing_rubberband)
+    {
+      if (event->keyval == GDK_Escape)
+	gtk_icon_view_stop_rubberbanding (icon_view);
+
+      return TRUE;
+    }
+
+  return (* GTK_WIDGET_CLASS (gtk_icon_view_parent_class)->key_press_event) (widget, event);
+}
+
+static gboolean
+gtk_icon_view_key_release (GtkWidget      *widget,
+			   GdkEventKey    *event)
+{
+  GtkIconView *icon_view = GTK_ICON_VIEW (widget);
+
+  if (icon_view->priv->doing_rubberband)
+    return TRUE;
+
+  return (* GTK_WIDGET_CLASS (gtk_icon_view_parent_class)->key_press_event) (widget, event);
 }
 
 static void

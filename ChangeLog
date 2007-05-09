@@ -1,3 +1,12 @@
+2007-05-09  Kristian Rietveld  <kris@imendio.com>
+
+	* gtk/gtktreeview.c (gtk_tree_view_key_press),
+	(gtk_tree_view_key_release):
+	* gtk/gtkiconview.c (gtk_icon_view_class_init),
+	(gtk_icon_view_key_press),
+	(gtk_icon_view_key_release): Disable key bindings during rubber
+	banding, make pressing Esc stop rubber banding.  (#405027).
+
 2007-05-09  Emmanuele Bassi  <ebassi@gnome.org>
 
 	* gtk/gtkrecentmanager.c:
