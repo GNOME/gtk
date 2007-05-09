@@ -611,20 +611,23 @@ _gdk_windowing_window_destroy (GdkWindow *window,
   if (window == gdk_directfb_focused_window)
     gdk_directfb_change_focus (NULL);
 
+
+  if (impl->drawable.surface) {
+    GdkDrawableImplDirectFB *dimpl = GDK_DRAWABLE_IMPL_DIRECTFB (private->impl);
+    if(dimpl->cairo_surface) {
+      cairo_surface_destroy(dimpl->cairo_surface);
+      dimpl->cairo_surface= NULL;
+    }
+    impl->drawable.surface->Release (impl->drawable.surface);
+    impl->drawable.surface = NULL;
+  }
+
   if (!recursing && !foreign_destroy && impl->window ) {
     	impl->window->SetOpacity (impl->window,0);
    		impl->window->Close(impl->window);
       	impl->window->Release(impl->window);
-  }
-
-#if 0 /* let the finalizer kill it */
-  if (!recursing && !foreign_destroy)
-    {
-  		if (impl->window)
-    		impl->window->Destroy (impl->window);
   		impl->window = NULL;
 	}
-#endif
 }
 
 /* This function is called when the window is really gone.
@@ -1268,15 +1271,15 @@ _gdk_directfb_move_resize_child (GdkWindow *window,
 
   if (!private->input_only)
     {
-      if (impl->drawable.surface)
-        {
-          GdkDrawableImplDirectFB *dimpl;
-          dimpl    = GDK_DRAWABLE_IMPL_DIRECTFB (private->impl);
-          impl->drawable.surface->Release (impl->drawable.surface);
-          impl->drawable.surface = NULL;
+    if (impl->drawable.surface) {
+      GdkDrawableImplDirectFB *dimpl = GDK_DRAWABLE_IMPL_DIRECTFB (private->impl);
+      if(dimpl->cairo_surface) {
           cairo_surface_destroy(dimpl->cairo_surface);
           dimpl->cairo_surface= NULL;
         }
+    impl->drawable.surface->Release (impl->drawable.surface);
+    impl->drawable.surface = NULL;
+  }
 
       parent_impl = GDK_WINDOW_IMPL_DIRECTFB (GDK_WINDOW_OBJECT (private->parent)->impl);
 

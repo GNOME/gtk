@@ -38,12 +38,10 @@
 #include <stdlib.h>
 #include <string.h>
 
+#include "gdkcolor.h"
+#include "gdkinternals.h"
 #include "gdkdirectfb.h"
 #include "gdkprivate-directfb.h"
-
-#include "gdkinternals.h"
-
-#include "gdkcolor.h"
 #include "gdkalias.h"
 
 

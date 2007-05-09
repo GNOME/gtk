@@ -1,3 +1,19 @@
+2007-05-09  Loïc Minier  <lool@dooz.org>
+
+	* gdk/directfb/Makefile.am:
+	* gdk/directfb/gdkcolor-directfb.c:
+	* gdk/directfb/gdkevents-directfb.c: (dfb_events_io_func),
+	(gdk_event_translate):
+	* gdk/directfb/gdkkeys-directfb.c:
+	(gdk_keymap_translate_keyboard_state):
+	* gdk/directfb/gdkpixmap-directfb.c: (gdk_pixmap_new):
+	* gdk/directfb/gdkproperty-directfb.c: (gdk_atom_name):
+	* gdk/directfb/gdkscreen-directfb.c: (gdk_screen_is_composited):
+	* gdk/directfb/gdkwindow-directfb.c:
+	(_gdk_windowing_window_destroy), (_gdk_directfb_move_resize_child):
+	Backport misc directfb fixes from trunk; thanks Attilio Fiandrotti for
+	the patch.
+
 2007-05-02  Armin Burgmeier  <armin@openismus.com>
 
 	Merge from trunk:
