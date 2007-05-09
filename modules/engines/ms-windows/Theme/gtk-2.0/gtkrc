@@ -11,6 +11,9 @@ gtk-menu-images = 1
 # use the win32 button ordering instead of the GNOME HIG one, where applicable
 gtk-alternative-button-order = 1
 
+# use the win32 sort indicators direction, as in Explorer
+gtk-alternative-sort-arrows = 1
+
 style "msw-default"
 {
   GtkWidget::interior-focus = 1
@@ -41,3 +44,11 @@ style "msw-default"
   }
 }
 class "*" style "msw-default"
+
+binding "ms-windows-tree-view"
+{
+  bind "Right" { "expand-collapse-cursor-row" (1,1,0) }
+  bind "Left" { "expand-collapse-cursor-row" (1,0,0) }
+}
+
+class "GtkTreeView" binding "ms-windows-tree-view"

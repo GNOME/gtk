@@ -1,3 +1,11 @@
+2007-05-09  Dom Lachowicz <domlachowicz@gmail.com>
+
+	Merge from trunk:
+	
+	* modules/engines/ms-windows/Theme/gtk-2.0/gtkrc: GtkTreeView doesn't 
+	expand/collapse with Right/Left cursor keys on Windows
+	(#436269, Daniel Atallah)
+
 2007-05-09  Cody Russell  <bratsche@gnome.org>
 
 	Merge from trunk:
