@@ -44,3 +44,11 @@ style "msw-default"
   }
 }
 class "*" style "msw-default"
+
+binding "ms-windows-tree-view"
+{
+  bind "Right" { "expand-collapse-cursor-row" (1,1,0) }
+  bind "Left" { "expand-collapse-cursor-row" (1,0,0) }
+}
+
+class "GtkTreeView" binding "ms-windows-tree-view"
