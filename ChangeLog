@@ -1,3 +1,22 @@
+2007-05-09  Cody Russell  <bratsche@gnome.org>
+
+	* gtk/gtkmenu.c:
+	(get_arrows_border): New function to calculate the border sizes needed 
+	for the scroll arrows.
+	(get_arrows_visible_area): New function to calculate the arrows visible 
+	area.
+	(get_arrows_sensitive_area): New function to calculate the arrows
+	sensitive area.
+	(gtk_menu_paint): Refactored code to calculate the border sizes needed
+	for the scroll arrows into get_arrows_border and the code to calculate 
+	the visible area into get_arrows_visible_area.
+	(gtk_menu_handle_scrolling): Refactored arrow sensitive calculations
+	to get_arrows_sensitive_area.
+	(gtk_menu_realize, gtk_menu_size_allocate, gtk_menu_scroll_by,
+	gtk_menu_position, gtk_menu_scroll_to, gtk_menu_scroll_item_visible,
+	get_visible_size, get_menu_height, gtk_menu_real_move_scroll): Update
+	callers.  (From #436533, Tommi Komulainen)
+
 2007-05-09  Kristian Rietveld  <kris@imendio.com>
 
 	* gtk/gtktreeview.c (gtk_tree_view_key_press),
