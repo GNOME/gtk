@@ -2049,9 +2049,14 @@ gtk_recent_info_get_icon (GtkRecentInfo *info,
   if (info->mime_type)
     retval = get_icon_for_mime_type (info->mime_type, size);
 
-  /* this should never fail */  
+  /* this function should never fail */  
   if (!retval)
-    retval = get_icon_fallback (GTK_STOCK_FILE, size);
+    {
+      if (info->mime_type && strcmp (info->mime_type, "x-directory/normal") == 0)
+        retval = get_icon_fallback (GTK_STOCK_DIRECTORY, size);
+      else
+        retval = get_icon_fallback (GTK_STOCK_FILE, size);
+    }
   
   return retval;
 }
