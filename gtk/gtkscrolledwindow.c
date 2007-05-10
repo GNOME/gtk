@@ -1082,7 +1082,7 @@ gtk_scrolled_window_scroll_child (GtkScrolledWindow *scrolled_window,
     case GTK_SCROLL_END:
       break;
     default:
-      g_warning ("Invalid scroll type %u for GtkSpinButton::change-value", scroll);
+      g_warning ("Invalid scroll type %u for GtkScrolledWindow::scroll-child", scroll);
       return FALSE;
     }
 

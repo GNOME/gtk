@@ -1,5 +1,10 @@
 2007-05-10  Matthias Clasen <mclasen@redhat.com>
 
+	* gtk/gtkscrolledwindow.c (gtk_scrolled_window_scroll_child):
+	Correct a confusing warning.  (#437284, Björn Lindqvist)
+
+2007-05-10  Matthias Clasen <mclasen@redhat.com>
+
 	* gdk/gdkdraw.c (gdk_draw_pixbuf): Don't call into
 	the backend if the region is empty.  (#437081, Sven Neumann)
 
