@@ -733,7 +733,7 @@ gtk_button_construct_child (GtkButton *button)
       image = g_object_ref (priv->image);
       if (image->parent)
 	gtk_container_remove (GTK_CONTAINER (image->parent), image);
-      
+
       priv->image = NULL;
     }
   
@@ -1969,6 +1969,9 @@ gtk_button_set_image (GtkButton *button,
   g_return_if_fail (image == NULL || GTK_IS_WIDGET (image));
 
   priv = GTK_BUTTON_GET_PRIVATE (button);
+
+  if (priv->image && priv->image->parent)
+    gtk_container_remove (GTK_CONTAINER (priv->image->parent), priv->image);
 
   priv->image = image;
   priv->image_is_stock = (image == NULL);
