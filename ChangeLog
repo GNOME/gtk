@@ -1,5 +1,10 @@
 2007-05-10  Matthias Clasen <mclasen@redhat.com>
 
+	* gdk/gdkdraw.c (gdk_draw_pixbuf): Don't call into
+	the backend if the region is empty.  (#437081, Sven Neumann)
+
+2007-05-10  Matthias Clasen <mclasen@redhat.com>
+
 	* gtk/gtksearchenginesimple.c (search_visit_func);
 	Assume Posix nftw behaviour. 
 
