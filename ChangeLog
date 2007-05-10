@@ -1,5 +1,14 @@
 2007-05-10  Matthias Clasen <mclasen@redhat.com>
 
+	Merge from trunk:
+
+	* gtk/gtkbutton.c (gtk_button_set_image): Unparent the old
+	image before overwriting priv->image.  (#437281, Jochen Baier)
+
+2007-05-10  Matthias Clasen <mclasen@redhat.com>
+
+	Merge from trunk:
+
 	* gdk/gdkdraw.c (gdk_draw_pixbuf): Don't call into
 	the backend if the region is empty.  (#437081, Sven Neumann)
 
