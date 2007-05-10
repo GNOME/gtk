@@ -751,13 +751,17 @@ gdk_draw_pixbuf (GdkDrawable     *drawable,
   g_return_if_fail (gc == NULL || GDK_IS_GC (gc));
   g_return_if_fail (GDK_IS_PIXBUF (pixbuf));
 
+  if (width == 0 || height == 0)
+    return;
+
   if (width == -1)
     width = gdk_pixbuf_get_width (pixbuf);
   if (height == -1)
     height = gdk_pixbuf_get_height (pixbuf);
 
   GDK_DRAWABLE_GET_CLASS (drawable)->draw_pixbuf (drawable, gc, pixbuf,
-						  src_x, src_y, dest_x, dest_y, width, height,
+						  src_x, src_y, dest_x, dest_y,
+                                                  width, height,
 						  dither, x_dither, y_dither);
 }
 
