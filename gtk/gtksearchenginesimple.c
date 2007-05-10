@@ -193,7 +193,7 @@ search_visit_func (const char        *fpath,
   SearchThreadData *data;
   gint i;
   const gchar *name; 
-  gchar *lower_name, *path, *mime_type;
+  gchar *lower_name, *mime_type;
   gchar *uri;
   gboolean hit;
   GList *l;
@@ -210,8 +210,6 @@ search_visit_func (const char        *fpath,
   else
     name = fpath;
 
-  path = g_build_filename (data->path, fpath, NULL);
-  
   is_hidden = *name == '.';
 	
   hit = FALSE;
@@ -235,7 +233,7 @@ search_visit_func (const char        *fpath,
   if (hit && data->mime_types != NULL) 
     {
       hit = FALSE;
-      mime_type = xdg_mime_get_mime_type_for_file (path, (struct stat *)sb);
+      mime_type = xdg_mime_get_mime_type_for_file (fpath, (struct stat *)sb);
       for (l = data->mime_types; l != NULL; l = l->next) 
 	{
 	  if (strcmp (mime_type, l->data) == 0) 
@@ -250,7 +248,7 @@ search_visit_func (const char        *fpath,
 
   if (hit) 
     {
-      uri = g_filename_to_uri (path, NULL, NULL);
+      uri = g_filename_to_uri (fpath, NULL, NULL);
       data->uri_hits = g_list_prepend (data->uri_hits, uri);
     }
 

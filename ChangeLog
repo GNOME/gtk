@@ -1,3 +1,8 @@
+2007-05-10  Matthias Clasen <mclasen@redhat.com>
+
+	* gtk/gtksearchenginesimple.c (search_visit_func);
+	Assume Posix nftw behaviour. 
+
 2007-05-09  Dom Lachowicz <domlachowicz@gmail.com>
 
 	* modules/engines/ms-windows/Theme/gtk-2.0/gtkrc: GtkTreeView doesn't 
