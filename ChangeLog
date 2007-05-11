@@ -1,3 +1,11 @@
+2007-05-11  Michael Natterer  <mitch@imendio.com>
+
+	Merge from trunk:
+
+	* gtk/gtktextview.c (selection_motion_event_handler): call
+	gdk_device_get_state() so selecting works with XInput devices
+	too. Spotted by Tommi Komulainen.
+
 2007-05-10  Matthias Clasen <mclasen@redhat.com>
 
 	Merge from trunk:

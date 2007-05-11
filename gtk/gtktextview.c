@@ -5663,6 +5663,9 @@ selection_motion_event_handler (GtkTextView    *text_view,
 				GdkEventMotion *event, 
 				SelectionData  *data)
 {
+  if (event->type == GDK_MOTION_NOTIFY && event->is_hint)
+    gdk_device_get_state (event->device, event->window, NULL, NULL);
+
   if (data->granularity == SELECT_CHARACTERS) 
     {
       move_mark_to_pointer_and_scroll (text_view, "insert");
