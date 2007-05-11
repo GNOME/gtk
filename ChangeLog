@@ -1,4 +1,12 @@
 2007-05-11  Emmanuele Bassi  <ebassi@gnome.org>
+
+	GtkFileChooser search fixes and recent files support.  (#435342)
+
+	* gtk/gtkfilechooserprivate.h:
+	* gtk/gtkfilechooserdefault.c: Add support for showing the
+	recently used files list as a special shortcut item.
+
+2007-05-11  Emmanuele Bassi  <ebassi@gnome.org>
 	
 	GtkFileChooser search fixes and recent files support.  (#435342)
 

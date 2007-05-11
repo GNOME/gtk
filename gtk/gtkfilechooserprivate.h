@@ -25,6 +25,7 @@
 #include "gtkfilesystem.h"
 #include "gtkfilesystemmodel.h"
 #include "gtkliststore.h"
+#include "gtkrecentmanager.h"
 #include "gtksearchengine.h"
 #include "gtkquery.h"
 #include "gtktooltips.h"
@@ -151,7 +152,8 @@ typedef enum {
 
 typedef enum {
   OPERATION_MODE_BROWSE,
-  OPERATION_MODE_SEARCH
+  OPERATION_MODE_SEARCH,
+  OPERATION_MODE_RECENT
 } OperationMode;
 
 struct _GtkFileChooserDefault
@@ -188,12 +190,17 @@ struct _GtkFileChooserDefault
   GtkFileSystemModel *browse_files_model;
   char *browse_files_last_selected_name;
 
-  /* Widgets for searching */
+  /* Search */
   GtkWidget *search_hbox;
   GtkWidget *search_entry;
   GtkSearchEngine *search_engine;
   GtkQuery *search_query;
   GtkListStore *search_model;
+
+  /* Recently Used */
+  GtkRecentManager *recent_manager;
+  GtkListStore *recent_model;
+  guint load_recent_id;
 
   GtkWidget *filter_combo_hbox;
   GtkWidget *filter_combo;
@@ -293,6 +300,7 @@ struct _GtkFileChooserDefault
   guint has_home : 1;
   guint has_desktop : 1;
   guint has_search : 1;
+  guint has_recent : 1;
 
 #if 0
   guint shortcuts_drag_outside : 1;
