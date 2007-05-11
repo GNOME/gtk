@@ -2636,10 +2636,27 @@ add_bookmark_foreach_cb (GtkTreeModel *model,
 
   impl = (GtkFileChooserDefault *) data;
 
-  fs_model = impl->browse_files_model;
-  gtk_tree_model_sort_convert_iter_to_child_iter (impl->sort_model, &child_iter, iter);
+  switch (impl->operation_mode)
+    {
+    case OPERATION_MODE_BROWSE:
+      fs_model = impl->browse_files_model;
+      gtk_tree_model_sort_convert_iter_to_child_iter (impl->sort_model, &child_iter, iter);
+      file_path = _gtk_file_system_model_get_path (fs_model, &child_iter);
+      break;
 
-  file_path = _gtk_file_system_model_get_path (fs_model, &child_iter);
+    case OPERATION_MODE_SEARCH:
+      gtk_tree_model_get (GTK_TREE_MODEL (impl->search_model), iter,
+                          SEARCH_MODEL_COL_PATH, &file_path,
+                          -1);
+      break;
+
+    case OPERATION_MODE_RECENT:
+      gtk_tree_model_get (GTK_TREE_MODEL (impl->recent_model), iter,
+                          RECENT_MODEL_COL_PATH, &file_path,
+                          -1);
+      break;
+    }
+  
   shortcuts_add_bookmark_from_path (impl, file_path, -1);
 }
 
@@ -2751,10 +2768,26 @@ selection_check_foreach_cb (GtkTreeModel *model,
   closure = data;
   closure->num_selected++;
 
-  gtk_tree_model_sort_convert_iter_to_child_iter (closure->impl->sort_model, &child_iter, iter);
+  switch (closure->impl->operation_mode)
+    {
+    case OPERATION_MODE_BROWSE:
+      gtk_tree_model_sort_convert_iter_to_child_iter (closure->impl->sort_model, &child_iter, iter);
+      info = _gtk_file_system_model_get_info (closure->impl->browse_files_model, &child_iter);
+      is_folder = info ? gtk_file_info_get_is_folder (info) : FALSE;
+      break;
 
-  info = _gtk_file_system_model_get_info (closure->impl->browse_files_model, &child_iter);
-  is_folder = info ? gtk_file_info_get_is_folder (info) : FALSE;
+    case OPERATION_MODE_SEARCH:
+      gtk_tree_model_get (GTK_TREE_MODEL (closure->impl->search_model), iter,
+                          SEARCH_MODEL_COL_IS_FOLDER, &is_folder,
+                          -1);
+      break;
+
+    case OPERATION_MODE_RECENT:
+      gtk_tree_model_get (GTK_TREE_MODEL (closure->impl->recent_model), iter,
+                          RECENT_MODEL_COL_IS_FOLDER, &is_folder,
+                          -1);
+      break;
+    }
 
   closure->all_folders = closure->all_folders && is_folder;
   closure->all_files = closure->all_files && !is_folder;
@@ -2808,8 +2841,25 @@ get_selected_path_foreach_cb (GtkTreeModel *model,
 
   closure = data;
 
-  gtk_tree_model_sort_convert_iter_to_child_iter (closure->impl->sort_model, &child_iter, iter);
-  closure->path = _gtk_file_system_model_get_path (closure->impl->browse_files_model, &child_iter);
+  switch (closure->impl->operation_mode)
+    {
+    case OPERATION_MODE_BROWSE:
+      gtk_tree_model_sort_convert_iter_to_child_iter (closure->impl->sort_model, &child_iter, iter);
+      closure->path = _gtk_file_system_model_get_path (closure->impl->browse_files_model, &child_iter);
+      break;
+
+    case OPERATION_MODE_SEARCH:
+      gtk_tree_model_get (GTK_TREE_MODEL (closure->impl->search_model), iter,
+                          SEARCH_MODEL_COL_PATH, &closure->path,
+                          -1);
+      break;
+
+    case OPERATION_MODE_RECENT:
+      gtk_tree_model_get (GTK_TREE_MODEL (closure->impl->recent_model), iter,
+                          RECENT_MODEL_COL_PATH, &closure->path,
+                          -1);
+      break;
+    }
 }
 
 /* Returns a selected path from the file list */
@@ -2847,13 +2897,33 @@ update_tooltip (GtkTreeModel      *model,
 
   if (udata->tip == NULL)
     {
-      gtk_tree_model_sort_convert_iter_to_child_iter (udata->impl->sort_model,
-						      &child_iter,
-						      iter);
-  
-      info = _gtk_file_system_model_get_info (udata->impl->browse_files_model, &child_iter);
+      const gchar *display_name;
+
+      switch (udata->impl->operation_mode)
+        {
+        case OPERATION_MODE_BROWSE:
+          gtk_tree_model_sort_convert_iter_to_child_iter (udata->impl->sort_model,
+                                                          &child_iter,
+                                                          iter);
+          info = _gtk_file_system_model_get_info (udata->impl->browse_files_model, &child_iter);
+          display_name = gtk_file_info_get_display_name (info);
+          break;
+
+        case OPERATION_MODE_SEARCH:
+          gtk_tree_model_get (GTK_TREE_MODEL (udata->impl->search_model), iter,
+                              SEARCH_MODEL_COL_DISPLAY_NAME, &display_name,
+                              -1);
+          break;
+
+        case OPERATION_MODE_RECENT:
+          gtk_tree_model_get (GTK_TREE_MODEL (udata->impl->recent_model), iter,
+                              RECENT_MODEL_COL_DISPLAY_NAME, &display_name,
+                              -1);
+          break;
+        }
+
       udata->tip = g_strdup_printf (_("Add the folder '%s' to the bookmarks"),
-				    gtk_file_info_get_display_name (info));
+                                    display_name);
     }
 }
 
@@ -2869,20 +2939,6 @@ bookmarks_check_add_sensitivity (GtkFileChooserDefault *impl)
   gboolean all_folders;
   gboolean active;
   gchar *tip;
-
-  /* FIXME - Find a way to enable bookmarking items returned by
-   * a search query or inside the recently used files list
-   */
-  if (impl->operation_mode == OPERATION_MODE_SEARCH ||
-      impl->operation_mode == OPERATION_MODE_RECENT)
-    {
-      gtk_widget_set_sensitive (impl->browse_shortcuts_add_button, FALSE);
-      
-      if (impl->browse_files_popup_menu_add_shortcut_item)
-	gtk_widget_set_sensitive (impl->browse_files_popup_menu_add_shortcut_item, FALSE);
-      
-      return;
-    }
 
   selection_check (impl, &num_selected, NULL, &all_folders);
 
@@ -2902,26 +2958,26 @@ bookmarks_check_add_sensitivity (GtkFileChooserDefault *impl)
 
   if (impl->browse_files_popup_menu_add_shortcut_item)
     gtk_widget_set_sensitive (impl->browse_files_popup_menu_add_shortcut_item,
-			      (num_selected == 0) ? FALSE : active);
+                              (num_selected == 0) ? FALSE : active);
 
   if (active)
     {
       if (num_selected == 0)
-	tip = g_strdup_printf (_("Add the current folder to the bookmarks"));    
+        tip = g_strdup_printf (_("Add the current folder to the bookmarks"));
       else if (num_selected > 1)
-	tip = g_strdup_printf (_("Add the selected folders to the bookmarks"));
+        tip = g_strdup_printf (_("Add the selected folders to the bookmarks"));
       else
-	{
-	  GtkTreeSelection *selection;
-	  UpdateTooltipData data;
-	  
-	  selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (impl->browse_files_tree_view));
-	  data.impl = impl;
-	  data.tip = NULL;
-	  gtk_tree_selection_selected_foreach (selection, update_tooltip, &data);
-	  tip = data.tip;
-	  
-	}
+        {
+          GtkTreeSelection *selection;
+          UpdateTooltipData data;
+
+          selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (impl->browse_files_tree_view));
+          data.impl = impl;
+          data.tip = NULL;
+          gtk_tree_selection_selected_foreach (selection, update_tooltip, &data);
+          tip = data.tip;
+        }
+
       gtk_tooltips_set_tip (impl->tooltips, impl->browse_shortcuts_add_button, tip, NULL);
       g_free (tip);
     }
@@ -8673,8 +8729,15 @@ search_engine_finished_cb (GtkSearchEngine *engine,
   
   impl = GTK_FILE_CHOOSER_DEFAULT (data);
   
-  /* FMQ: if search was empty, say that we got no hits */
+#if 0
+  /* EB: setting the model here will avoid loads of row events,
+   * but it'll make the search look like blocked.
+   */
+  gtk_tree_view_set_model (GTK_TREE_VIEW (impl->browse_files_tree_view),
+                           GTK_TREE_MODEL (impl->search_model));
+#endif
 
+  /* FMQ: if search was empty, say that we got no hits */
   set_busy_cursor (impl, FALSE);
 }
 
@@ -8888,7 +8951,11 @@ search_setup_model (GtkFileChooserDefault *impl)
   gtk_tree_sortable_set_sort_column_id (GTK_TREE_SORTABLE (impl->search_model),
 					SEARCH_MODEL_COL_STAT,
 					GTK_SORT_DESCENDING);
-
+  
+  /* EB: setting the model here will make the hits list update feel
+   * more "alive" than setting the model at the end of the search
+   * run
+   */
   gtk_tree_view_set_model (GTK_TREE_VIEW (impl->browse_files_tree_view),
                            GTK_TREE_MODEL (impl->search_model));
 }
@@ -9208,9 +9275,6 @@ recent_setup_model (GtkFileChooserDefault *impl)
   gtk_tree_sortable_set_sort_column_id (GTK_TREE_SORTABLE (impl->recent_model),
 					RECENT_MODEL_COL_INFO,
 					GTK_SORT_DESCENDING);
-  
-  gtk_tree_view_set_model (GTK_TREE_VIEW (impl->browse_files_tree_view),
-                           GTK_TREE_MODEL (impl->recent_model));
 }
 
 typedef struct
@@ -9225,10 +9289,14 @@ static void
 recent_idle_cleanup (gpointer data)
 {
   RecentLoadData *load_data = data;
+  GtkFileChooserDefault *impl = load_data->impl;
 
-  set_busy_cursor (load_data->impl, FALSE);
+  gtk_tree_view_set_model (GTK_TREE_VIEW (impl->browse_files_tree_view),
+                           GTK_TREE_MODEL (impl->recent_model));
   
-  load_data->impl->load_recent_id = 0;
+  set_busy_cursor (impl, FALSE);
+  
+  impl->load_recent_id = 0;
   
   if (load_data->items)
     {
@@ -9981,7 +10049,6 @@ list_row_activated (GtkTreeView           *tree_view,
         if (is_folder)
           {
             change_folder_and_display_error (impl, file_path, FALSE);
-            search_switch_to_browse_mode (impl);
             return;
           }
 
@@ -10005,7 +10072,6 @@ list_row_activated (GtkTreeView           *tree_view,
         if (is_folder)
           {
             change_folder_and_display_error (impl, file_path, FALSE);
-            recent_switch_to_browse_mode (impl);
             return;
           }
         
