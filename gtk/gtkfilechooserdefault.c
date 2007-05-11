@@ -7976,8 +7976,8 @@ focus_browse_tree_view_if_possible (GtkFileChooserDefault *impl)
 {
   gboolean do_focus;
 
-  if ((impl->action == GTK_FILE_CHOOSER_ACTION_SAVE
-       || impl->action == GTK_FILE_CHOOSER_ACTION_CREATE_FOLDER)
+  if ((impl->action == GTK_FILE_CHOOSER_ACTION_SAVE ||
+       impl->action == GTK_FILE_CHOOSER_ACTION_CREATE_FOLDER)
       && !gtk_expander_get_expanded (GTK_EXPANDER (impl->save_expander)))
     do_focus = FALSE;
   else
@@ -8529,6 +8529,7 @@ search_hit_get_info_cb (GtkFileSystemHandle *handle,
   GtkFileSystemHandle *model_handle;
   gboolean is_folder = FALSE;
   char *mime_type;
+  char *display_name;
   struct SearchHitInsertRequest *request = data;
 
   path = gtk_tree_row_reference_get_path (request->row_ref);
@@ -8559,6 +8560,7 @@ search_hit_get_info_cb (GtkFileSystemHandle *handle,
       goto out;
     }
 
+  display_name = g_strdup (gtk_file_info_get_display_name (info));
   mime_type = g_strdup (gtk_file_info_get_mime_type (info));
   is_folder = gtk_file_info_get_is_folder (info);
   pixbuf = gtk_file_info_render_icon (info, GTK_WIDGET (request->impl),
@@ -8566,6 +8568,7 @@ search_hit_get_info_cb (GtkFileSystemHandle *handle,
 
   gtk_list_store_set (request->impl->search_model, &iter,
                       SEARCH_MODEL_COL_PIXBUF, pixbuf,
+                      SEARCH_MODEL_COL_DISPLAY_NAME, display_name,
                       SEARCH_MODEL_COL_MIME_TYPE, mime_type,
                       SEARCH_MODEL_COL_IS_FOLDER, is_folder,
                       -1);
@@ -8589,7 +8592,7 @@ search_add_hit (GtkFileChooserDefault *impl,
 {
   GtkFilePath *path;
   char *filename;
-  char *display_name;
+  char *tmp;
   char *collation_key;
   struct stat statbuf;
   struct stat *statbuf_copy;
@@ -8619,8 +8622,9 @@ search_add_hit (GtkFileChooserDefault *impl,
   statbuf_copy = g_new (struct stat, 1);
   *statbuf_copy = statbuf;
 
-  display_name = g_filename_display_name (filename);
-  collation_key = g_utf8_collate_key_for_filename (display_name, -1);
+  tmp = g_filename_display_name (filename);
+  collation_key = g_utf8_collate_key_for_filename (tmp, -1);
+  g_free (tmp);
 
   request = g_new0 (struct SearchHitInsertRequest, 1);
   request->impl = g_object_ref (impl);
@@ -8633,13 +8637,12 @@ search_add_hit (GtkFileChooserDefault *impl,
   gtk_tree_path_free (p);
 
   handle = gtk_file_system_get_info (impl->file_system, path,
-                                     GTK_FILE_INFO_IS_FOLDER | GTK_FILE_INFO_ICON | GTK_FILE_INFO_MIME_TYPE,
+                                     GTK_FILE_INFO_IS_FOLDER | GTK_FILE_INFO_ICON | GTK_FILE_INFO_MIME_TYPE | GTK_FILE_INFO_DISPLAY_NAME,
                                      search_hit_get_info_cb,
                                      request);
 
   gtk_list_store_set (impl->search_model, &iter,
                       SEARCH_MODEL_COL_PATH, path,
-                      SEARCH_MODEL_COL_DISPLAY_NAME, display_name,
                       SEARCH_MODEL_COL_COLLATION_KEY, collation_key,
                       SEARCH_MODEL_COL_STAT, statbuf_copy,
                       SEARCH_MODEL_COL_HANDLE, handle,
@@ -8959,21 +8962,18 @@ static void
 search_setup_widgets (GtkFileChooserDefault *impl)
 {
   GtkWidget *label;
-  gchar *text;
 
   impl->search_hbox = gtk_hbox_new (FALSE, 12);
 
   /* Label */
 
-  label = gtk_label_new (NULL);
-  text = g_strconcat ("<b>", _("Search:"), "</b>", NULL);
-  gtk_label_set_markup (GTK_LABEL (label), text);
-  g_free (text);
+  label = gtk_label_new_with_mnemonic (_("_Search:"));
   gtk_box_pack_start (GTK_BOX (impl->search_hbox), label, FALSE, FALSE, 0);
 
   /* Entry */
 
   impl->search_entry = gtk_entry_new ();
+  gtk_label_set_mnemonic_widget (GTK_LABEL (label), impl->search_entry);
   g_signal_connect (impl->search_entry, "activate",
 		    G_CALLBACK (search_entry_activate_cb),
 		    impl);
@@ -10173,31 +10173,52 @@ list_name_data_func (GtkTreeViewColumn *tree_column,
 
   if (impl->operation_mode == OPERATION_MODE_SEARCH)
     {
-      char *display_name;
+      GtkFilePath *file_path;
+      gchar *display_name, *tmp;
+      gchar *text;
 
       gtk_tree_model_get (GTK_TREE_MODEL (impl->search_model), iter,
-			  SEARCH_MODEL_COL_DISPLAY_NAME, &display_name,
+                          SEARCH_MODEL_COL_PATH, &file_path,
+                          SEARCH_MODEL_COL_DISPLAY_NAME, &display_name,
 			  -1);
+
+      tmp = gtk_file_system_path_to_filename (impl->file_system, file_path);
+      text = g_strdup_printf ("<b>%s</b>\n%s", display_name, tmp);
+      g_free (tmp);
+
       g_object_set (cell,
-		    "text", display_name,
+		    "markup", text,
 		    "sensitive", TRUE,
-		    "ellipsize", PANGO_ELLIPSIZE_START,
+		    "ellipsize", PANGO_ELLIPSIZE_END,
 		    NULL);
+      
+      g_free (text);
+
       return;
     }
 
   if (impl->operation_mode == OPERATION_MODE_RECENT)
     {
-      char *display_name;
+      GtkRecentInfo *recent_info;
+      char *tmp, *text;
 
       gtk_tree_model_get (GTK_TREE_MODEL (impl->recent_model), iter,
-                          RECENT_MODEL_COL_DISPLAY_NAME, &display_name,
+                          RECENT_MODEL_COL_INFO, &recent_info,
                           -1);
+      
+      tmp = gtk_recent_info_get_short_name (recent_info);
+      text = g_strdup_printf ("<b>%s</b>\n%s",
+                              tmp,
+                              gtk_recent_info_get_uri_display (recent_info));
+      g_free (tmp);
+
       g_object_set (cell,
-                    "text", display_name,
+                    "markup", text,
                     "sensitive", TRUE,
                     "ellipsize", PANGO_ELLIPSIZE_END,
                     NULL);
+      g_free (text);
+
       return;
     }
 
@@ -10514,7 +10535,15 @@ static void
 search_shortcut_handler (GtkFileChooserDefault *impl)
 {
   if (impl->has_search)
-    switch_to_shortcut (impl, shortcuts_get_index (impl, SHORTCUTS_SEARCH));
+    {
+      switch_to_shortcut (impl, shortcuts_get_index (impl, SHORTCUTS_SEARCH));
+
+      /* we want the entry widget to grab the focus the first
+       * time, not the browse_files_tree_view widget.
+       */
+      if (impl->search_entry)
+        gtk_widget_grab_focus (impl->search_entry);
+    }
 }
 
 /* Handler for the "recent-shortcut" keybinding signal */

@@ -2,6 +2,18 @@
 
 	GtkFileChooser search fixes and recent files support.  (#435342)
 
+	* gtk/gtkfilechooserdefault.c: UI fixes in the Search mode: add
+	a mnemonic to the label, de-boldify the label's text and assign
+	focus to the search entry when switching to the search mode.
+
+	(list_name_data_func): Split the text in both search and recent
+	files mode: on the first line use the short name and on the
+	second line use the full path.
+
+2007-05-11  Emmanuele Bassi  <ebassi@gnome.org>
+
+	GtkFileChooser search fixes and recent files support.  (#435342)
+
 	* gtk/gtkfilechooserprivate.h:
 	* gtk/gtkfilechooserdefault.c: Add support for showing the
 	recently used files list as a special shortcut item.
