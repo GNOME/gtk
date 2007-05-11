@@ -2645,13 +2645,17 @@ add_bookmark_foreach_cb (GtkTreeModel *model,
       break;
 
     case OPERATION_MODE_SEARCH:
-      gtk_tree_model_get (GTK_TREE_MODEL (impl->search_model), iter,
+      gtk_tree_model_filter_convert_iter_to_child_iter (impl->search_model_filter,
+                                                        &child_iter, iter);
+      gtk_tree_model_get (GTK_TREE_MODEL (impl->search_model), &child_iter,
                           SEARCH_MODEL_COL_PATH, &file_path,
                           -1);
       break;
 
     case OPERATION_MODE_RECENT:
-      gtk_tree_model_get (GTK_TREE_MODEL (impl->recent_model), iter,
+      gtk_tree_model_filter_convert_iter_to_child_iter (impl->recent_model_filter,
+                                                        &child_iter, iter);
+      gtk_tree_model_get (GTK_TREE_MODEL (impl->recent_model), &child_iter,
                           RECENT_MODEL_COL_PATH, &file_path,
                           -1);
       break;
@@ -2777,13 +2781,15 @@ selection_check_foreach_cb (GtkTreeModel *model,
       break;
 
     case OPERATION_MODE_SEARCH:
-      gtk_tree_model_get (GTK_TREE_MODEL (closure->impl->search_model), iter,
+      gtk_tree_model_filter_convert_iter_to_child_iter (closure->impl->search_model_filter, &child_iter, iter);
+      gtk_tree_model_get (GTK_TREE_MODEL (closure->impl->search_model), &child_iter,
                           SEARCH_MODEL_COL_IS_FOLDER, &is_folder,
                           -1);
       break;
 
     case OPERATION_MODE_RECENT:
-      gtk_tree_model_get (GTK_TREE_MODEL (closure->impl->recent_model), iter,
+      gtk_tree_model_filter_convert_iter_to_child_iter (closure->impl->recent_model_filter, &child_iter, iter);
+      gtk_tree_model_get (GTK_TREE_MODEL (closure->impl->recent_model), &child_iter,
                           RECENT_MODEL_COL_IS_FOLDER, &is_folder,
                           -1);
       break;
@@ -2849,13 +2855,15 @@ get_selected_path_foreach_cb (GtkTreeModel *model,
       break;
 
     case OPERATION_MODE_SEARCH:
-      gtk_tree_model_get (GTK_TREE_MODEL (closure->impl->search_model), iter,
+      gtk_tree_model_filter_convert_iter_to_child_iter (closure->impl->search_model_filter, &child_iter, iter);
+      gtk_tree_model_get (GTK_TREE_MODEL (closure->impl->search_model), &child_iter,
                           SEARCH_MODEL_COL_PATH, &closure->path,
                           -1);
       break;
 
     case OPERATION_MODE_RECENT:
-      gtk_tree_model_get (GTK_TREE_MODEL (closure->impl->recent_model), iter,
+      gtk_tree_model_filter_convert_iter_to_child_iter (closure->impl->recent_model_filter, &child_iter, iter);
+      gtk_tree_model_get (GTK_TREE_MODEL (closure->impl->recent_model), &child_iter,
                           RECENT_MODEL_COL_PATH, &closure->path,
                           -1);
       break;
@@ -2910,13 +2918,15 @@ update_tooltip (GtkTreeModel      *model,
           break;
 
         case OPERATION_MODE_SEARCH:
-          gtk_tree_model_get (GTK_TREE_MODEL (udata->impl->search_model), iter,
+          gtk_tree_model_filter_convert_iter_to_child_iter (udata->impl->search_model_filter, &child_iter, iter);
+          gtk_tree_model_get (GTK_TREE_MODEL (udata->impl->search_model), &child_iter,
                               SEARCH_MODEL_COL_DISPLAY_NAME, &display_name,
                               -1);
           break;
 
         case OPERATION_MODE_RECENT:
-          gtk_tree_model_get (GTK_TREE_MODEL (udata->impl->recent_model), iter,
+          gtk_tree_model_filter_convert_iter_to_child_iter (udata->impl->recent_model_filter, &child_iter, iter);
+          gtk_tree_model_get (GTK_TREE_MODEL (udata->impl->recent_model), &child_iter,
                               RECENT_MODEL_COL_DISPLAY_NAME, &display_name,
                               -1);
           break;
@@ -6636,9 +6646,10 @@ update_chooser_entry (GtkFileChooserDefault *impl)
     }
   else if (closure.num_selected == 1)
     {
+      GtkTreeIter child_iter;
+      
       if (impl->operation_mode == OPERATION_MODE_BROWSE)
         {
-          GtkTreeIter child_iter;
           const GtkFileInfo *info;
           gboolean change_entry;
 
@@ -6671,15 +6682,19 @@ update_chooser_entry (GtkFileChooserDefault *impl)
         }
       else if (impl->operation_mode == OPERATION_MODE_SEARCH)
         {
-          gtk_tree_model_get (GTK_TREE_MODEL (impl->search_model),
-                              &closure.first_selected_iter,
+          gtk_tree_model_filter_convert_iter_to_child_iter (impl->search_model_filter,
+                                                            &child_iter,
+                                                            &closure.first_selected_iter);
+          gtk_tree_model_get (GTK_TREE_MODEL (impl->search_model), &child_iter,
                               SEARCH_MODEL_COL_DISPLAY_NAME, &file_part,
                               -1);
         }
       else if (impl->operation_mode == OPERATION_MODE_RECENT)
         {
-          gtk_tree_model_get (GTK_TREE_MODEL (impl->recent_model),
-                              &closure.first_selected_iter,
+          gtk_tree_model_filter_convert_iter_to_child_iter (impl->recent_model_filter,
+                                                            &child_iter,
+                                                            &closure.first_selected_iter);
+          gtk_tree_model_get (GTK_TREE_MODEL (impl->recent_model), &child_iter,
                               RECENT_MODEL_COL_DISPLAY_NAME, &file_part,
                               -1);
         }
@@ -8734,7 +8749,7 @@ search_engine_finished_cb (GtkSearchEngine *engine,
    * but it'll make the search look like blocked.
    */
   gtk_tree_view_set_model (GTK_TREE_VIEW (impl->browse_files_tree_view),
-                           GTK_TREE_MODEL (impl->search_model));
+                           GTK_TREE_MODEL (impl->search_model_filter));
 #endif
 
   /* FMQ: if search was empty, say that we got no hits */
@@ -8811,6 +8826,9 @@ search_clear_model (GtkFileChooserDefault *impl,
 
   g_object_unref (impl->search_model);
   impl->search_model = NULL;
+  
+  g_object_unref (impl->search_model_filter);
+  impl->search_model_filter = NULL;
 
   if (remove_from_treeview)
     gtk_tree_view_set_model (GTK_TREE_VIEW (impl->browse_files_tree_view), NULL);
@@ -8872,9 +8890,20 @@ search_column_path_sort_func (GtkTreeModel *model,
 			      gpointer      user_data)
 {
   const char *collation_key_a, *collation_key_b;
+  gboolean is_folder_a, is_folder_b;
 
-  gtk_tree_model_get (model, a, SEARCH_MODEL_COL_COLLATION_KEY, &collation_key_a, -1);
-  gtk_tree_model_get (model, b, SEARCH_MODEL_COL_COLLATION_KEY, &collation_key_b, -1);
+  gtk_tree_model_get (model, a,
+                      SEARCH_MODEL_COL_IS_FOLDER, &is_folder_a,
+                      SEARCH_MODEL_COL_COLLATION_KEY, &collation_key_a,
+                      -1);
+  gtk_tree_model_get (model, b,
+                      SEARCH_MODEL_COL_IS_FOLDER, &is_folder_b,
+                      SEARCH_MODEL_COL_COLLATION_KEY, &collation_key_b,
+                      -1);
+
+  /* always show folders first */
+  if (is_folder_a != is_folder_b)
+    return is_folder_a ? 1 : -1;
 
   return strcmp (collation_key_a, collation_key_b);
 }
@@ -8887,6 +8916,7 @@ search_column_mtime_sort_func (GtkTreeModel *model,
 			       gpointer      user_data)
 {
   const struct stat *statbuf_a, *statbuf_b;
+  gboolean is_folder_a, is_folder_b;
 
   /* Note that although we store a whole struct stat in the model, we only
    * compare the mtime here.  If we add another column relative to a struct stat
@@ -8894,8 +8924,17 @@ search_column_mtime_sort_func (GtkTreeModel *model,
    * one as well.
    */
 
-  gtk_tree_model_get (model, a, SEARCH_MODEL_COL_STAT, &statbuf_a, -1);
-  gtk_tree_model_get (model, b, SEARCH_MODEL_COL_STAT, &statbuf_b, -1);
+  gtk_tree_model_get (model, a,
+                      SEARCH_MODEL_COL_IS_FOLDER, &is_folder_a,
+                      SEARCH_MODEL_COL_STAT, &statbuf_a,
+                      -1);
+  gtk_tree_model_get (model, b,
+                      SEARCH_MODEL_COL_IS_FOLDER, &is_folder_b,
+                      SEARCH_MODEL_COL_STAT, &statbuf_b,
+                      -1);
+
+  if (is_folder_a != is_folder_b)
+    return is_folder_a ? 1 : -1;
 
   if (statbuf_a->st_mtime < statbuf_b->st_mtime)
     return -1;
@@ -8905,11 +8944,90 @@ search_column_mtime_sort_func (GtkTreeModel *model,
     return 0;
 }
 
+static gboolean
+search_get_is_filtered (GtkFileChooserDefault *impl,
+                        const GtkFilePath     *path,
+                        const gchar           *display_name,
+                        const gchar           *mime_type)
+{
+  GtkFileFilterInfo filter_info;
+  GtkFileFilterFlags needed;
+  gboolean result;
+
+  if (!impl->current_filter)
+    return FALSE;
+
+  filter_info.contains = GTK_FILE_FILTER_DISPLAY_NAME | GTK_FILE_FILTER_MIME_TYPE;
+  needed = gtk_file_filter_get_needed (impl->current_filter);
+
+  filter_info.display_name = display_name;
+  filter_info.mime_type = mime_type;
+
+  if (needed & GTK_FILE_FILTER_FILENAME)
+    {
+      filter_info.filename = gtk_file_system_path_to_filename (impl->file_system, path);
+      if (filter_info.filename)
+        filter_info.contains |= GTK_FILE_FILTER_FILENAME;
+    }
+  else
+    filter_info.filename = NULL;
+
+  if (needed & GTK_FILE_FILTER_URI)
+    {
+      filter_info.uri = gtk_file_system_path_to_uri (impl->file_system, path);
+      if (filter_info.uri)
+        filter_info.contains |= GTK_FILE_FILTER_URI;
+    }
+  else
+    filter_info.uri = NULL;
+
+  result = gtk_file_filter_filter (impl->current_filter, &filter_info);
+
+  if (filter_info.filename)
+    g_free ((gchar *) filter_info.filename);
+  if (filter_info.uri)
+    g_free ((gchar *) filter_info.uri);
+
+  return !result;
+
+}
+
+/* Visibility function for the recent filter model */
+static gboolean
+search_model_visible_func (GtkTreeModel *model,
+                           GtkTreeIter  *iter,
+                           gpointer      user_data)
+{
+  GtkFileChooserDefault *impl = user_data;
+  GtkFilePath *file_path;
+  gchar *display_name, *mime_type;
+  gboolean is_folder;
+
+  if (!impl->current_filter)
+    return TRUE;
+
+  gtk_tree_model_get (model, iter,
+                      SEARCH_MODEL_COL_PATH, &file_path,
+                      SEARCH_MODEL_COL_IS_FOLDER, &is_folder,
+                      SEARCH_MODEL_COL_DISPLAY_NAME, &display_name,
+                      SEARCH_MODEL_COL_MIME_TYPE, &mime_type,
+                      -1);
+
+  if (!display_name)
+    return TRUE;
+
+  if (is_folder)
+    return TRUE;
+
+  return !search_get_is_filtered (impl, file_path, display_name, mime_type);
+}
+
 /* Creates the search_model and puts it in the tree view */
 static void
 search_setup_model (GtkFileChooserDefault *impl)
 {
   g_assert (impl->search_model == NULL);
+  g_assert (impl->search_model_filter == NULL);
 
   /* We store these columns in the search model:
    *
@@ -8952,12 +9070,18 @@ search_setup_model (GtkFileChooserDefault *impl)
 					SEARCH_MODEL_COL_STAT,
 					GTK_SORT_DESCENDING);
   
+  impl->search_model_filter =
+    GTK_TREE_MODEL_FILTER (gtk_tree_model_filter_new (GTK_TREE_MODEL (impl->search_model), NULL));
+  gtk_tree_model_filter_set_visible_func (impl->search_model_filter,
+                                          search_model_visible_func,
+                                          impl, NULL);
+
   /* EB: setting the model here will make the hits list update feel
    * more "alive" than setting the model at the end of the search
    * run
    */
   gtk_tree_view_set_model (GTK_TREE_VIEW (impl->browse_files_tree_view),
-                           GTK_TREE_MODEL (impl->search_model));
+                           GTK_TREE_MODEL (impl->search_model_filter));
 }
 
 /* Creates a new query with the specified text and launches it */
@@ -9122,6 +9246,7 @@ search_activate (GtkFileChooserDefault *impl)
   g_assert (impl->search_hbox == NULL);
   g_assert (impl->search_entry == NULL);
   g_assert (impl->search_model == NULL);
+  g_assert (impl->search_model_filter == NULL);
 
   search_setup_widgets (impl);
   file_list_set_sort_column_ids (impl);
@@ -9172,6 +9297,9 @@ recent_clear_model (GtkFileChooserDefault *impl,
 
   g_object_unref (impl->recent_model);
   impl->recent_model = NULL;
+
+  g_object_unref (impl->recent_model_filter);
+  impl->recent_model_filter = NULL;
 
   if (remove_from_treeview)
     gtk_tree_view_set_model (GTK_TREE_VIEW (impl->browse_files_tree_view), NULL);
@@ -9226,9 +9354,20 @@ recent_column_mtime_sort_func (GtkTreeModel *model,
 			       gpointer      user_data)
 {
   GtkRecentInfo *info_a, *info_b;
+  gboolean is_folder_a, is_folder_b;
 
-  gtk_tree_model_get (model, a, RECENT_MODEL_COL_INFO, &info_a, -1);
-  gtk_tree_model_get (model, b, RECENT_MODEL_COL_INFO, &info_b, -1);
+  gtk_tree_model_get (model, a,
+                      RECENT_MODEL_COL_IS_FOLDER, &is_folder_a,
+                      RECENT_MODEL_COL_INFO, &info_a,
+                      -1);
+  gtk_tree_model_get (model, b,
+                      RECENT_MODEL_COL_IS_FOLDER, &is_folder_b,
+                      RECENT_MODEL_COL_INFO, &info_b,
+                      -1);
+
+  /* folders always go first */
+  if (is_folder_a != is_folder_b)
+    return is_folder_a ? 1 : -1;
 
   if (gtk_recent_info_get_modified (info_a) < gtk_recent_info_get_modified (info_b))
     return -1;
@@ -9238,11 +9377,86 @@ recent_column_mtime_sort_func (GtkTreeModel *model,
     return 0;
 }
 
+static gboolean
+recent_get_is_filtered (GtkFileChooserDefault *impl,
+                        const GtkFilePath     *path,
+                        GtkRecentInfo         *recent_info)
+{
+  GtkFileFilterInfo filter_info;
+  GtkFileFilterFlags needed;
+  gboolean result;
+
+  if (!impl->current_filter)
+    return FALSE;
+
+  filter_info.contains = GTK_FILE_FILTER_DISPLAY_NAME | GTK_FILE_FILTER_MIME_TYPE;
+  needed = gtk_file_filter_get_needed (impl->current_filter);
+
+  filter_info.display_name = gtk_recent_info_get_display_name (recent_info);
+  filter_info.mime_type = gtk_recent_info_get_mime_type (recent_info);
+
+  if (needed & GTK_FILE_FILTER_FILENAME)
+    {
+      filter_info.filename = gtk_file_system_path_to_filename (impl->file_system, path);
+      if (filter_info.filename)
+        filter_info.contains |= GTK_FILE_FILTER_FILENAME;
+    }
+  else
+    filter_info.filename = NULL;
+
+  if (needed & GTK_FILE_FILTER_URI)
+    {
+      filter_info.uri = gtk_file_system_path_to_uri (impl->file_system, path);
+      if (filter_info.uri)
+        filter_info.contains |= GTK_FILE_FILTER_URI;
+    }
+  else
+    filter_info.uri = NULL;
+
+  result = gtk_file_filter_filter (impl->current_filter, &filter_info);
+
+  if (filter_info.filename)
+    g_free ((gchar *) filter_info.filename);
+  if (filter_info.uri)
+    g_free ((gchar *) filter_info.uri);
+
+  return !result;
+}
+
+/* Visibility function for the recent filter model */
+static gboolean
+recent_model_visible_func (GtkTreeModel *model,
+                           GtkTreeIter  *iter,
+                           gpointer      user_data)
+{
+  GtkFileChooserDefault *impl = user_data;
+  GtkFilePath *file_path;
+  GtkRecentInfo *recent_info;
+  gboolean is_folder;
+
+  if (!impl->current_filter)
+    return TRUE;
+
+  gtk_tree_model_get (model, iter,
+                      RECENT_MODEL_COL_INFO, &recent_info,
+                      RECENT_MODEL_COL_PATH, &file_path,
+                      RECENT_MODEL_COL_IS_FOLDER, &is_folder,
+                      -1);
+
+  if (!recent_info)
+    return TRUE;
+
+  if (is_folder)
+    return TRUE;
+
+  return !recent_get_is_filtered (impl, file_path, recent_info);
+}
 
 static void
 recent_setup_model (GtkFileChooserDefault *impl)
 {
   g_assert (impl->recent_model == NULL);
+  g_assert (impl->recent_model_filter == NULL);
 
   /* We store these columns in the search model:
    *
@@ -9271,10 +9485,16 @@ recent_setup_model (GtkFileChooserDefault *impl)
 				   recent_column_mtime_sort_func,
 				   impl,
 				   NULL);
-
   gtk_tree_sortable_set_sort_column_id (GTK_TREE_SORTABLE (impl->recent_model),
 					RECENT_MODEL_COL_INFO,
 					GTK_SORT_DESCENDING);
+
+  impl->recent_model_filter =
+    GTK_TREE_MODEL_FILTER (gtk_tree_model_filter_new (GTK_TREE_MODEL (impl->recent_model), NULL));
+  gtk_tree_model_filter_set_visible_func (impl->recent_model_filter,
+                                          recent_model_visible_func,
+                                          impl,
+                                          NULL);
 }
 
 typedef struct
@@ -9292,7 +9512,7 @@ recent_idle_cleanup (gpointer data)
   GtkFileChooserDefault *impl = load_data->impl;
 
   gtk_tree_view_set_model (GTK_TREE_VIEW (impl->browse_files_tree_view),
-                           GTK_TREE_MODEL (impl->recent_model));
+                           GTK_TREE_MODEL (impl->recent_model_filter));
   
   set_busy_cursor (impl, FALSE);
   
@@ -9602,6 +9822,12 @@ set_current_filter (GtkFileChooserDefault *impl,
       if (impl->browse_files_model)
 	install_list_model_filter (impl);
 
+      if (impl->search_model_filter)
+        gtk_tree_model_filter_refilter (impl->search_model_filter);
+
+      if (impl->recent_model_filter)
+        gtk_tree_model_filter_refilter (impl->recent_model_filter);
+
       g_object_notify (G_OBJECT (impl), "filter");
     }
 }
@@ -9628,12 +9854,13 @@ check_preview_change (GtkFileChooserDefault *impl)
   new_display_name = NULL;
   if (cursor_path)
     {
+      GtkTreeIter child_iter;
+
       if (impl->operation_mode == OPERATION_MODE_BROWSE)
 	{
 	  if (impl->sort_model)
 	    {
 	      GtkTreeIter iter;
-	      GtkTreeIter child_iter;
 	      const GtkFileInfo *new_info;
 
 	      gtk_tree_model_get_iter (GTK_TREE_MODEL (impl->sort_model), &iter, cursor_path);
@@ -9651,10 +9878,13 @@ check_preview_change (GtkFileChooserDefault *impl)
 	{
 	  GtkTreeIter iter;
 
-	  gtk_tree_model_get_iter (GTK_TREE_MODEL (impl->search_model), &iter, cursor_path);
+	  gtk_tree_model_get_iter (GTK_TREE_MODEL (impl->search_model_filter),
+                                   &iter, cursor_path);
 	  gtk_tree_path_free (cursor_path);
 
-	  gtk_tree_model_get (GTK_TREE_MODEL (impl->search_model), &iter,
+          gtk_tree_model_filter_convert_iter_to_child_iter (impl->search_model_filter,
+                                                            &child_iter, &iter);
+	  gtk_tree_model_get (GTK_TREE_MODEL (impl->search_model), &child_iter,
 			      SEARCH_MODEL_COL_PATH, &new_path,
 			      SEARCH_MODEL_COL_DISPLAY_NAME, &new_display_name,
 			      -1);
@@ -9663,10 +9893,14 @@ check_preview_change (GtkFileChooserDefault *impl)
         {
           GtkTreeIter iter;
 
-          gtk_tree_model_get_iter (GTK_TREE_MODEL (impl->recent_model), &iter, cursor_path);
+          gtk_tree_model_get_iter (GTK_TREE_MODEL (impl->recent_model_filter),
+                                   &iter, cursor_path);
           gtk_tree_path_free (cursor_path);
 
-          gtk_tree_model_get (GTK_TREE_MODEL (impl->recent_model), &iter,
+          gtk_tree_model_filter_convert_iter_to_child_iter (impl->recent_model_filter,
+                                                            &child_iter, &iter);
+
+          gtk_tree_model_get (GTK_TREE_MODEL (impl->recent_model), &child_iter,
                               RECENT_MODEL_COL_PATH, &new_path,
                               RECENT_MODEL_COL_DISPLAY_NAME, &new_display_name,
                               -1);
@@ -10030,6 +10264,7 @@ list_row_activated (GtkTreeView           *tree_view,
 		    GtkFileChooserDefault *impl)
 {
   GtkTreeIter iter;
+  GtkTreeIter child_iter;
 
   switch (impl->operation_mode)
     {
@@ -10038,10 +10273,12 @@ list_row_activated (GtkTreeView           *tree_view,
         GtkFilePath *file_path;
         gboolean is_folder;
 
-        if (!gtk_tree_model_get_iter (GTK_TREE_MODEL (impl->search_model), &iter, path))
+        if (!gtk_tree_model_get_iter (GTK_TREE_MODEL (impl->search_model_filter), &iter, path))
           return;
 
-        gtk_tree_model_get (GTK_TREE_MODEL (impl->search_model), &iter,
+        gtk_tree_model_filter_convert_iter_to_child_iter (impl->search_model_filter,
+                                                          &child_iter, &iter);
+        gtk_tree_model_get (GTK_TREE_MODEL (impl->search_model), &child_iter,
                             SEARCH_MODEL_COL_PATH, &file_path,
                             SEARCH_MODEL_COL_IS_FOLDER, &is_folder,
                             -1);
@@ -10061,10 +10298,13 @@ list_row_activated (GtkTreeView           *tree_view,
         GtkFilePath *file_path;
         gboolean is_folder;
 
-        if (!gtk_tree_model_get_iter (GTK_TREE_MODEL (impl->recent_model), &iter, path))
+        if (!gtk_tree_model_get_iter (GTK_TREE_MODEL (impl->recent_model_filter), &iter, path))
           return;
+        
+        gtk_tree_model_filter_convert_iter_to_child_iter (impl->recent_model_filter,
+                                                          &child_iter, &iter);
 
-        gtk_tree_model_get (GTK_TREE_MODEL (impl->recent_model), &iter,
+        gtk_tree_model_get (GTK_TREE_MODEL (impl->recent_model), &child_iter,
                             RECENT_MODEL_COL_PATH, &file_path,
                             RECENT_MODEL_COL_IS_FOLDER, &is_folder,
                             -1);
@@ -10081,7 +10321,6 @@ list_row_activated (GtkTreeView           *tree_view,
     
     case OPERATION_MODE_BROWSE:
       {
-        GtkTreeIter child_iter;
         const GtkFileInfo *info;
 
         if (!gtk_tree_model_get_iter (GTK_TREE_MODEL (impl->sort_model), &iter, path))
@@ -10160,17 +10399,27 @@ list_icon_data_func (GtkTreeViewColumn *tree_column,
   switch (impl->operation_mode)
     {
     case OPERATION_MODE_SEARCH:
-      gtk_tree_model_get (GTK_TREE_MODEL (impl->search_model), iter,
-                          SEARCH_MODEL_COL_PIXBUF, &pixbuf,
+      {
+        GtkTreeIter child_iter;
+
+        gtk_tree_model_filter_convert_iter_to_child_iter (impl->search_model_filter,
+                                                          &child_iter, iter);
+        gtk_tree_model_get (GTK_TREE_MODEL (impl->search_model), &child_iter,
+                            SEARCH_MODEL_COL_PIXBUF, &pixbuf,
                             -1);
-      sensitive = TRUE;
+        sensitive = TRUE;
+      }
       break;
 
     case OPERATION_MODE_RECENT:
       {
+        GtkTreeIter child_iter;
         GtkRecentInfo *info;
 
-        gtk_tree_model_get (GTK_TREE_MODEL (impl->recent_model), iter,
+        gtk_tree_model_filter_convert_iter_to_child_iter (impl->recent_model_filter,
+                                                          &child_iter, iter);
+
+        gtk_tree_model_get (GTK_TREE_MODEL (impl->recent_model), &child_iter,
                             RECENT_MODEL_COL_INFO, &info,
                             -1);
         
@@ -10239,11 +10488,13 @@ list_name_data_func (GtkTreeViewColumn *tree_column,
 
   if (impl->operation_mode == OPERATION_MODE_SEARCH)
     {
+      GtkTreeIter child_iter;
       GtkFilePath *file_path;
       gchar *display_name, *tmp;
       gchar *text;
 
-      gtk_tree_model_get (GTK_TREE_MODEL (impl->search_model), iter,
+      gtk_tree_model_filter_convert_iter_to_child_iter (impl->search_model_filter, &child_iter, iter);
+      gtk_tree_model_get (GTK_TREE_MODEL (impl->search_model), &child_iter,
                           SEARCH_MODEL_COL_PATH, &file_path,
                           SEARCH_MODEL_COL_DISPLAY_NAME, &display_name,
 			  -1);
@@ -10265,10 +10516,13 @@ list_name_data_func (GtkTreeViewColumn *tree_column,
 
   if (impl->operation_mode == OPERATION_MODE_RECENT)
     {
+      GtkTreeIter child_iter;
       GtkRecentInfo *recent_info;
       char *tmp, *text;
 
-      gtk_tree_model_get (GTK_TREE_MODEL (impl->recent_model), iter,
+      gtk_tree_model_filter_convert_iter_to_child_iter (impl->recent_model_filter, &child_iter, iter);
+
+      gtk_tree_model_get (GTK_TREE_MODEL (impl->recent_model), &child_iter,
                           RECENT_MODEL_COL_INFO, &recent_info,
                           -1);
       
@@ -10384,18 +10638,22 @@ list_mtime_data_func (GtkTreeViewColumn *tree_column,
 
   if (impl->operation_mode == OPERATION_MODE_SEARCH)
     {
+      GtkTreeIter child_iter;
       struct stat *statbuf;
 
-      gtk_tree_model_get (GTK_TREE_MODEL (impl->search_model), iter,
+      gtk_tree_model_filter_convert_iter_to_child_iter (impl->search_model_filter, &child_iter, iter);
+      gtk_tree_model_get (GTK_TREE_MODEL (impl->search_model), &child_iter,
 			  SEARCH_MODEL_COL_STAT, &statbuf,
 			  -1);
       time_mtime = statbuf->st_mtime;
     }
   else if (impl->operation_mode == OPERATION_MODE_RECENT)
     {
+      GtkTreeIter child_iter;
       GtkRecentInfo *info;
 
-      gtk_tree_model_get (GTK_TREE_MODEL (impl->recent_model), iter,
+      gtk_tree_model_filter_convert_iter_to_child_iter (impl->recent_model_filter, &child_iter, iter);
+      gtk_tree_model_get (GTK_TREE_MODEL (impl->recent_model), &child_iter,
                           RECENT_MODEL_COL_INFO, &info,
                           -1);
       time_mtime = (GtkFileTime) gtk_recent_info_get_modified (info);

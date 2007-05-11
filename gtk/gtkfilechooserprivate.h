@@ -190,17 +190,19 @@ struct _GtkFileChooserDefault
   GtkFileSystemModel *browse_files_model;
   char *browse_files_last_selected_name;
 
-  /* Search */
+  /* OPERATION_MODE_SEARCH */
   GtkWidget *search_hbox;
   GtkWidget *search_entry;
   GtkSearchEngine *search_engine;
   GtkQuery *search_query;
   GtkListStore *search_model;
+  GtkTreeModelFilter *search_model_filter;
 
-  /* Recently Used */
+  /* OPERATION_MODE_RECENT */
   GtkRecentManager *recent_manager;
   GtkListStore *recent_model;
   guint load_recent_id;
+  GtkTreeModelFilter *recent_model_filter;
 
   GtkWidget *filter_combo_hbox;
   GtkWidget *filter_combo;
