@@ -1,4 +1,20 @@
 2007-05-11  Emmanuele Bassi  <ebassi@gnome.org>
+	
+	GtkFileChooser search fixes and recent files support.  (#435342)
+
+	* gtk/gtkfilechooserdefault.c: Overall whitespace fixes and
+	indentation style consistency.
+
+	(list_row_activated): If the search hit is a folder, follow it
+	when activating the row, and switch back to browse mode.
+
+	(search_clear_model), (search_start_query),
+	(search_entry_activate_cb), (search_setup_widgets): Remember
+	the last query when switching between modes.
+
+2007-05-11  Emmanuele Bassi  <ebassi@gnome.org>
+
+	GtkFileChooser search fixes and recent files support.  (#435342)
 
 	* gtk/gtkfilechooserdefault.c:
 	(_gtk_file_chooser_default_class_init): Add key binding for
