@@ -104,7 +104,7 @@ _gtk_search_engine_init (GtkSearchEngine *engine)
 GtkSearchEngine *
 _gtk_search_engine_new (void)
 {
-  GtkSearchEngine *engine;
+  GtkSearchEngine *engine = NULL;
 	
 #ifdef HAVE_TRACKER
   engine = _gtk_search_engine_tracker_new ();
@@ -118,7 +118,9 @@ _gtk_search_engine_new (void)
     return engine;
 #endif
 
-  engine = _gtk_search_engine_simple_new ();
+  if (g_thread_supported ())
+    engine = _gtk_search_engine_simple_new ();
+  
   return engine;
 }
 

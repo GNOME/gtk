@@ -1,3 +1,10 @@
+2007-05-11  Emmanuele Bassi  <ebassi@gnome.org>
+
+	* gtk/gtksearchengine.c (_gtk_search_engine_new): Fall back
+	to GtkSearchEngineSimple only if gthread has already been
+	initialiased; otherwise, disable search support in the file
+	chooser widget.  (#435847)
+
 2007-05-10  Matthias Clasen <mclasen@redhat.com>
 
 	* gtk/gtkbutton.c (gtk_button_set_image): Unparent the old
