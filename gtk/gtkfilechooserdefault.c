@@ -261,6 +261,13 @@ static const GtkTargetEntry file_list_dest_targets[] = {
 
 static const int num_file_list_dest_targets = G_N_ELEMENTS (file_list_dest_targets); 
 
+/* Target types for dragging from the recent files list */
+static const GtkTargetEntry recent_list_source_targets[] = {
+  { "text/uri-list", 0, TEXT_URI_LIST }
+};
+
+static const int num_recent_list_source_targets = G_N_ELEMENTS (recent_list_source_targets);
+
 static gboolean
 search_is_possible (GtkFileChooserDefault *impl)
 {
@@ -526,6 +533,56 @@ static GtkTreeModel *shortcuts_pane_model_filter_new (GtkFileChooserDefault *imp
 						      GtkTreePath           *root);
 
 
+typedef struct {
+  GtkTreeModelSort parent;
+
+  GtkFileChooserDefault *impl;
+} RecentModelSort;
+
+typedef struct {
+  GtkTreeModelSortClass parent_class;
+} RecentModelSortClass;
+
+#define RECENT_MODEL_SORT_TYPE (_recent_model_sort_get_type ())
+#define RECENT_MODEL_SORT(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), RECENT_MODEL_SORT_TYPE, RecentModelSort))
+
+static void recent_model_sort_drag_source_iface_init (GtkTreeDragSourceIface *iface);
+
+G_DEFINE_TYPE_WITH_CODE (RecentModelSort,
+                         _recent_model_sort,
+                         GTK_TYPE_TREE_MODEL_SORT,
+                         G_IMPLEMENT_INTERFACE (GTK_TYPE_TREE_DRAG_SOURCE,
+                                                recent_model_sort_drag_source_iface_init));
+
+static GtkTreeModel *recent_model_sort_new (GtkFileChooserDefault *impl,
+                                            GtkTreeModel          *child_model);
+
+
+typedef struct {
+  GtkTreeModelSort parent;
+
+  GtkFileChooserDefault *impl;
+} SearchModelSort;
+
+typedef struct {
+  GtkTreeModelSortClass parent_class;
+} SearchModelSortClass;
+
+#define SEARCH_MODEL_SORT_TYPE (_search_model_sort_get_type ())
+#define SEARCH_MODEL_SORT(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), SEARCH_MODEL_SORT_TYPE, SearchModelSort))
+
+static void search_model_sort_drag_source_iface_init (GtkTreeDragSourceIface *iface);
+
+G_DEFINE_TYPE_WITH_CODE (SearchModelSort,
+                         _search_model_sort,
+                         GTK_TYPE_TREE_MODEL_SORT,
+                         G_IMPLEMENT_INTERFACE (GTK_TYPE_TREE_DRAG_SOURCE,
+                                                search_model_sort_drag_source_iface_init));
+
+static GtkTreeModel *search_model_sort_new (GtkFileChooserDefault *impl,
+                                            GtkTreeModel          *child_model);
+
+
 
 G_DEFINE_TYPE_WITH_CODE (GtkFileChooserDefault, _gtk_file_chooser_default, GTK_TYPE_VBOX,
 			 G_IMPLEMENT_INTERFACE (GTK_TYPE_FILE_CHOOSER,
@@ -9066,7 +9123,7 @@ search_setup_model (GtkFileChooserDefault *impl)
                                           impl, NULL);
 
   impl->search_model_sort =
-    GTK_TREE_MODEL_SORT (gtk_tree_model_sort_new_with_model (GTK_TREE_MODEL (impl->search_model_filter)));
+    GTK_TREE_MODEL_SORT (search_model_sort_new (impl, GTK_TREE_MODEL (impl->search_model_filter)));
   gtk_tree_sortable_set_sort_func (GTK_TREE_SORTABLE (impl->search_model_sort),
 				   SEARCH_MODEL_COL_PATH,
 				   search_column_path_sort_func,
@@ -9553,7 +9610,7 @@ recent_setup_model (GtkFileChooserDefault *impl)
    * real data inside the model.
    */
   impl->recent_model_sort =
-    GTK_TREE_MODEL_SORT (gtk_tree_model_sort_new_with_model (GTK_TREE_MODEL (impl->recent_model_filter)));
+    GTK_TREE_MODEL_SORT (recent_model_sort_new (impl, GTK_TREE_MODEL (impl->recent_model_filter)));
   gtk_tree_sortable_set_sort_func (GTK_TREE_SORTABLE (impl->recent_model_sort),
                                    RECENT_MODEL_COL_INFO,
                                    recent_column_mtime_sort_func,
@@ -11144,6 +11201,178 @@ shortcuts_pane_model_filter_new (GtkFileChooserDefault *impl,
 			"virtual-root", root,
 			NULL);
 
+  model->impl = impl;
+
+  return GTK_TREE_MODEL (model);
+}
+
+
+
+static gboolean
+recent_model_sort_row_draggable (GtkTreeDragSource *drag_source,
+                                 GtkTreePath       *path)
+{
+  RecentModelSort *model;
+  GtkTreeIter iter, child_iter;
+  gboolean is_folder;
+
+  model = RECENT_MODEL_SORT (drag_source);
+  if (!gtk_tree_model_get_iter (GTK_TREE_MODEL (model), &iter, path))
+    return FALSE;
+
+  recent_get_valid_child_iter (model->impl, &child_iter, &iter);
+  gtk_tree_model_get (GTK_TREE_MODEL (model->impl->recent_model), &child_iter,
+                      RECENT_MODEL_COL_IS_FOLDER, &is_folder,
+                      -1);
+
+  return is_folder;
+}
+
+static gboolean
+recent_model_sort_drag_data_get (GtkTreeDragSource *drag_source,
+                                 GtkTreePath       *path,
+			         GtkSelectionData  *selection_data)
+{
+  RecentModelSort *model;
+  GtkTreeIter iter, child_iter;
+  GtkFilePath *file_path;
+  gchar **uris;
+
+  model = RECENT_MODEL_SORT (drag_source);
+  if (!gtk_tree_model_get_iter (GTK_TREE_MODEL (model), &iter, path))
+    return FALSE;
+
+  recent_get_valid_child_iter (model->impl, &child_iter, &iter);
+  gtk_tree_model_get (GTK_TREE_MODEL (model->impl->recent_model), &child_iter,
+                      RECENT_MODEL_COL_PATH, &file_path,
+                      -1);
+  g_assert (file_path != NULL);
+
+  uris = g_new (gchar *, 2);
+  uris[0] = gtk_file_system_path_to_uri (model->impl->file_system, file_path);
+  uris[1] = NULL;
+
+  gtk_selection_data_set_uris (selection_data, uris);
+
+  g_strfreev (uris);
+
+  return TRUE;
+}
+
+static void
+recent_model_sort_drag_source_iface_init (GtkTreeDragSourceIface *iface)
+{
+  iface->row_draggable = recent_model_sort_row_draggable;
+  iface->drag_data_get = recent_model_sort_drag_data_get;
+}
+
+static void
+_recent_model_sort_class_init (RecentModelSortClass *klass)
+{
+
+}
+
+static void
+_recent_model_sort_init (RecentModelSort *model)
+{
+  model->impl = NULL;
+}
+
+static GtkTreeModel *
+recent_model_sort_new (GtkFileChooserDefault *impl,
+                       GtkTreeModel          *child_model)
+{
+  RecentModelSort *model;
+
+  model = g_object_new (RECENT_MODEL_SORT_TYPE,
+                        "model", child_model,
+                        NULL);
+  model->impl = impl;
+
+  return GTK_TREE_MODEL (model);
+}
+
+
+
+static gboolean
+search_model_sort_row_draggable (GtkTreeDragSource *drag_source,
+                                 GtkTreePath       *path)
+{
+  SearchModelSort *model;
+  GtkTreeIter iter, child_iter;
+  gboolean is_folder;
+
+  model = SEARCH_MODEL_SORT (drag_source);
+  if (!gtk_tree_model_get_iter (GTK_TREE_MODEL (model), &iter, path))
+    return FALSE;
+
+  search_get_valid_child_iter (model->impl, &child_iter, &iter);
+  gtk_tree_model_get (GTK_TREE_MODEL (model->impl->search_model), &child_iter,
+                      SEARCH_MODEL_COL_IS_FOLDER, &is_folder,
+                      -1);
+
+  return is_folder;
+}
+
+static gboolean
+search_model_sort_drag_data_get (GtkTreeDragSource *drag_source,
+                                 GtkTreePath       *path,
+			         GtkSelectionData  *selection_data)
+{
+  SearchModelSort *model;
+  GtkTreeIter iter, child_iter;
+  GtkFilePath *file_path;
+  gchar **uris;
+
+  model = SEARCH_MODEL_SORT (drag_source);
+  if (!gtk_tree_model_get_iter (GTK_TREE_MODEL (model), &iter, path))
+    return FALSE;
+
+  search_get_valid_child_iter (model->impl, &child_iter, &iter);
+  gtk_tree_model_get (GTK_TREE_MODEL (model->impl->search_model), &child_iter,
+                      RECENT_MODEL_COL_PATH, &file_path,
+                      -1);
+  g_assert (file_path != NULL);
+
+  uris = g_new (gchar *, 2);
+  uris[0] = gtk_file_system_path_to_uri (model->impl->file_system, file_path);
+  uris[1] = NULL;
+
+  gtk_selection_data_set_uris (selection_data, uris);
+
+  g_strfreev (uris);
+
+  return TRUE;
+}
+
+static void
+search_model_sort_drag_source_iface_init (GtkTreeDragSourceIface *iface)
+{
+  iface->row_draggable = search_model_sort_row_draggable;
+  iface->drag_data_get = search_model_sort_drag_data_get;
+}
+
+static void
+_search_model_sort_class_init (SearchModelSortClass *klass)
+{
+
+}
+
+static void
+_search_model_sort_init (SearchModelSort *model)
+{
+  model->impl = NULL;
+}
+
+static GtkTreeModel *
+search_model_sort_new (GtkFileChooserDefault *impl,
+                       GtkTreeModel          *child_model)
+{
+  SearchModelSort *model;
+
+  model = g_object_new (SEARCH_MODEL_SORT_TYPE,
+                        "model", child_model,
+                        NULL);
   model->impl = impl;
 
   return GTK_TREE_MODEL (model);
