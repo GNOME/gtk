@@ -3,6 +3,22 @@
 	GtkFileChooser search fixes and recent files support.  (#435342)
 
 	* gtk/gtkfilechooserprivate.h:
+	* gtk/gtkfilechooserdefault.c: Follow the sorting order of
+	the GtkTreeView displaying the files list.
+
+	(shortcuts_get_index), (shortcuts_insert_separator),
+	(shortcuts_model_create), (shortcuts_combo_filter_func): Remove
+	the separator between the Search and the Recently Used shortcuts.
+
+	(list_select_func), (list_icon_data_func), (list_name_data_func),
+	(list_mtime_data_func): Update the sensitivity of the row
+	depending on the GtkFileChooserAction used.
+
+2007-05-11  Emmanuele Bassi  <ebassi@gnome.org>
+
+	GtkFileChooser search fixes and recent files support.  (#435342)
+
+	* gtk/gtkfilechooserprivate.h:
 	* gtk/gtkfilechooserdefault.c: Update the contents of the
 	files list when changing the filter of the GtkFileChooserDefault
 	widget.

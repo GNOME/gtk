@@ -197,12 +197,14 @@ struct _GtkFileChooserDefault
   GtkQuery *search_query;
   GtkListStore *search_model;
   GtkTreeModelFilter *search_model_filter;
+  GtkTreeModelSort *search_model_sort;
 
   /* OPERATION_MODE_RECENT */
   GtkRecentManager *recent_manager;
   GtkListStore *recent_model;
   guint load_recent_id;
   GtkTreeModelFilter *recent_model_filter;
+  GtkTreeModelSort *recent_model_sort;
 
   GtkWidget *filter_combo_hbox;
   GtkWidget *filter_combo;
