@@ -993,7 +993,7 @@ gdk_draw_trapezoids (GdkDrawable    *drawable,
       cairo_move_to (cr, trapezoids[i].x11, trapezoids[i].y1);
       cairo_line_to (cr, trapezoids[i].x21, trapezoids[i].y1);
       cairo_line_to (cr, trapezoids[i].x22, trapezoids[i].y2);
-      cairo_line_to (cr, trapezoids[i].x21, trapezoids[i].y2);
+      cairo_line_to (cr, trapezoids[i].x12, trapezoids[i].y2);
       cairo_close_path (cr);
     }
 
