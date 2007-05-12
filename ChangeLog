@@ -1,3 +1,8 @@
+2007-05-12  Behdad Esfahbod  <behdad@gnome.org>
+
+	* gdk/gdkdraw.c (gdk_draw_trapezoids): Fix wrong cairo path
+	generation.  (#437879, Eddie C. Dost)
+
 2007-05-11  Michael Natterer  <mitch@imendio.com>
 
 	Merge from trunk:
