@@ -1778,8 +1778,6 @@ handle_configure_event (MSG       *msg,
 
       append_event (event);
     }
-
-  g_main_context_iteration (NULL, FALSE);
 }
 
 GdkRegion *
@@ -2907,7 +2905,8 @@ gdk_event_translate (MSG  *msg,
 		((GdkWindowObject *) window)->resize_count -= 1;
 	      
 	      handle_configure_event (msg, window);
-	      
+	      g_main_context_iteration (NULL, FALSE);
+
 	      /* Dispatch main loop - to realize resizes... */
 	      handle_stuff_while_moving_or_resizing ();
 	      
