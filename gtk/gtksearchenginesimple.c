@@ -30,7 +30,11 @@
 #include "xdgmime/xdgmime.h"
 
 #include <string.h>
+
+#ifdef HAVE_FTW_H
 #include <ftw.h>
+#endif
+
 #include <glib/gstrfuncs.h>
 
 #define BATCH_SIZE 500
@@ -184,6 +188,7 @@ send_batch (SearchThreadData *data)
 
 static GStaticPrivate search_thread_data = G_STATIC_PRIVATE_INIT;
 
+#ifdef HAVE_FTW_H
 static int
 search_visit_func (const char        *fpath,
 		   const struct stat *sb,
@@ -256,16 +261,18 @@ search_visit_func (const char        *fpath,
   
   if (data->n_processed_files > BATCH_SIZE)
     send_batch (data);
-	
+
   if (is_hidden)
     return FTW_SKIP_SUBTREE;
   else
     return FTW_CONTINUE;
 }
+#endif /* HAVE_FTW_H */
 
 static gpointer 
 search_thread_func (gpointer user_data)
 {
+#ifdef HAVE_FTW_H
   SearchThreadData *data;
   
   data = user_data;
@@ -277,6 +284,7 @@ search_thread_func (gpointer user_data)
   send_batch (data);
   
   g_idle_add (search_thread_done_idle, data);
+#endif
   
   return NULL;
 }
@@ -366,9 +374,9 @@ _gtk_search_engine_simple_init (GtkSearchEngineSimple *engine)
 GtkSearchEngine *
 _gtk_search_engine_simple_new (void)
 {
-  GtkSearchEngine *engine;
-  
-  engine = g_object_new (GTK_TYPE_SEARCH_ENGINE_SIMPLE, NULL);
-  
-  return engine;
+#ifdef HAVE_FTW_H
+  return g_object_new (GTK_TYPE_SEARCH_ENGINE_SIMPLE, NULL);
+#else
+  return NULL;
+#endif
 }
