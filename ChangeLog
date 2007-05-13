@@ -1,3 +1,12 @@
+2007-05-13  Cody Russell  <bratsche@gnome.org>
+
+	Merge from trunk:
+
+	* gdk/win32/gdkevents-win32.c: Only do the configure event context
+	iteration under WM_WINDOWPOSCHANGED instead of inside
+	handle_configure_event().  This fixes a bug that prevented window
+	contents from being redrawn after gtk_window_resize(). (#436721)
+
 2007-05-12  Behdad Esfahbod  <behdad@gnome.org>
 
 	* gdk/gdkdraw.c (gdk_draw_trapezoids): Fix wrong cairo path
