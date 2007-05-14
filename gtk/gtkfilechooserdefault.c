@@ -9508,7 +9508,7 @@ recent_column_path_sort_func (GtkTreeModel *model,
   if (!name_a)
     return 1;
 
-  if (!name_b);
+  if (!name_b)
     return -1;
 
   if (is_folder_a != is_folder_b)
