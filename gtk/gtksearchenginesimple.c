@@ -20,20 +20,23 @@
  * Based on nautilus-search-engine-simple.c
  */
 
+#include <config.h>
+
+#ifdef HAVE_GNU_FTW
 #define _XOPEN_SOURCE 500
 #define _GNU_SOURCE 
+#endif
 
-#include <config.h>
+#ifdef HAVE_FTW_H
+#include <ftw.h>
+#endif
+
 #include "gtksearchenginesimple.h"
 
 #define XDG_PREFIX _gtk_xdg
 #include "xdgmime/xdgmime.h"
 
 #include <string.h>
-
-#ifdef HAVE_FTW_H
-#include <ftw.h>
-#endif
 
 #include <glib/gstrfuncs.h>
 
@@ -205,9 +208,13 @@ search_visit_func (const char        *fpath,
   gboolean is_hidden;
   
   data = (SearchThreadData*)g_static_private_get (&search_thread_data);
-  
+
   if (data->cancelled)
+#ifdef HAVE_GNU_FTW
     return FTW_STOP;
+#else
+    return 1;
+#endif /* HAVE_GNU_FTW */
 
   name = strrchr (fpath, '/');
   if (name)
@@ -262,10 +269,14 @@ search_visit_func (const char        *fpath,
   if (data->n_processed_files > BATCH_SIZE)
     send_batch (data);
 
+#ifdef HAVE_GNU_FTW
   if (is_hidden)
     return FTW_SKIP_SUBTREE;
   else
     return FTW_CONTINUE;
+#else
+  return 0;
+#endif /* HAVE_GNU_FTW */
 }
 #endif /* HAVE_FTW_H */
 
@@ -279,12 +290,16 @@ search_thread_func (gpointer user_data)
   
   g_static_private_set (&search_thread_data, data, NULL);
 
-  nftw (data->path, search_visit_func, 20, FTW_ACTIONRETVAL | FTW_PHYS);
+  nftw (data->path, search_visit_func, 20,
+#ifdef HAVE_GNU_FTW
+        FTW_ACTIONRETVAL |
+#endif
+        FTW_PHYS);
 
   send_batch (data);
   
   g_idle_add (search_thread_done_idle, data);
-#endif
+#endif /* HAVE_FTW_H */
   
   return NULL;
 }

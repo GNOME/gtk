@@ -567,6 +567,17 @@ AC_CHECK_HEADERS(sys/time.h, AC_DEFINE(HAVE_SYS_TIME_H))
 AC_CHECK_HEADERS(unistd.h, AC_DEFINE(HAVE_UNISTD_H))
 AC_CHECK_HEADERS(ftw.h, AC_DEFINE(HAVE_FTW_H))
 
+AC_MSG_CHECKING([for GNU ftw extensions])
+AC_TRY_COMPILE([#define _XOPEN_SOURCE 500
+#define _GNU_SOURCE
+#include <ftw.h>], [int flags = FTW_ACTIONRETVAL;], gtk_ok=yes, gtk_ok=no)
+if test $gtk_ok = yes; then
+    AC_MSG_RESULT([yes])
+    AC_DEFINE(HAVE_GNU_FTW,1,[Have GNU ftw])
+else
+    AC_MSG_RESULT([no])
+fi
+
 saved_cflags="$CFLAGS"
 saved_ldflags="$LDFLAGS"
 

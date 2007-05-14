@@ -1,5 +1,13 @@
 2007-05-14  Emmanuele Bassi  <ebassi@gnome.org>
 
+	* configure.in: Add check for GNU extensions to ftw()/nftw().
+
+	* gtk/gtksearchenginesimple.c: Fix compilation on systems with
+	only POSIX-compliant ftw(). (#435797, based on a patch by
+	Richard Hult)
+
+2007-05-14  Emmanuele Bassi  <ebassi@gnome.org>
+
 	* gtk/gtkfilechooserdefault.c:
 	Convert the GtkTreeIter inside the sorting functions for the
 	search and recent modes. This doesn't yet fix the segfault when
