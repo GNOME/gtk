@@ -27,6 +27,13 @@ Installation
 See the file 'INSTALL'
 
 
+Release notes for 2.12
+======================
+
+* Functions: gtk_about_dialog_get/set_name() were deprecated in favour of
+  gtk_about_dialog_get/set_program_name(), the GtkAboutDialog now uses the
+  "program-name" property instead of the conflicting "name" property.
+
 Release notes for 2.10
 ======================
 

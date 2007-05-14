@@ -1,3 +1,10 @@
+2007-05-14  Tristan Van Berkom  <tvb@gnome.org>
+
+	* gtk/gtkaboutdialog.c: Functions: gtk_about_dialog_get/set_name() 
+	were deprecated in favour of gtk_about_dialog_get/set_program_name(), 
+	the GtkAboutDialog now uses the "program-name" property instead of 
+	the conflicting "name" property (fixes bug 345822).
+
 2007-05-14  Emmanuele Bassi  <ebassi@gnome.org>
 
 	* configure.in: Add check for GNU extensions to ftw()/nftw().
