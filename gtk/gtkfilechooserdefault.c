@@ -8936,14 +8936,19 @@ search_column_path_sort_func (GtkTreeModel *model,
 			      GtkTreeIter  *b,
 			      gpointer      user_data)
 {
+  GtkFileChooserDefault *impl = user_data;
+  GtkTreeIter child_a, child_b;
   const char *collation_key_a, *collation_key_b;
   gboolean is_folder_a, is_folder_b;
 
-  gtk_tree_model_get (model, a,
+  gtk_tree_model_filter_convert_iter_to_child_iter (GTK_TREE_MODEL_FILTER (model), &child_a, a);
+  gtk_tree_model_filter_convert_iter_to_child_iter (GTK_TREE_MODEL_FILTER (model), &child_b, b);
+
+  gtk_tree_model_get (GTK_TREE_MODEL (impl->search_model), &child_a,
                       SEARCH_MODEL_COL_IS_FOLDER, &is_folder_a,
                       SEARCH_MODEL_COL_COLLATION_KEY, &collation_key_a,
                       -1);
-  gtk_tree_model_get (model, b,
+  gtk_tree_model_get (GTK_TREE_MODEL (impl->search_model), &child_b,
                       SEARCH_MODEL_COL_IS_FOLDER, &is_folder_b,
                       SEARCH_MODEL_COL_COLLATION_KEY, &collation_key_b,
                       -1);
@@ -8968,20 +8973,24 @@ search_column_mtime_sort_func (GtkTreeModel *model,
 			       GtkTreeIter  *b,
 			       gpointer      user_data)
 {
+  GtkFileChooserDefault *impl = user_data;
+  GtkTreeIter child_a, child_b;
   const struct stat *statbuf_a, *statbuf_b;
   gboolean is_folder_a, is_folder_b;
+
+  gtk_tree_model_filter_convert_iter_to_child_iter (GTK_TREE_MODEL_FILTER (model), &child_a, a);
+  gtk_tree_model_filter_convert_iter_to_child_iter (GTK_TREE_MODEL_FILTER (model), &child_b, b);
 
   /* Note that although we store a whole struct stat in the model, we only
    * compare the mtime here.  If we add another column relative to a struct stat
    * (e.g. a file size column), we'll want another sort callback similar to this
    * one as well.
    */
-
-  gtk_tree_model_get (model, a,
+  gtk_tree_model_get (GTK_TREE_MODEL (impl->search_model), &child_a,
                       SEARCH_MODEL_COL_IS_FOLDER, &is_folder_a,
                       SEARCH_MODEL_COL_STAT, &statbuf_a,
                       -1);
-  gtk_tree_model_get (model, b,
+  gtk_tree_model_get (GTK_TREE_MODEL (impl->search_model), &child_b,
                       SEARCH_MODEL_COL_IS_FOLDER, &is_folder_b,
                       SEARCH_MODEL_COL_STAT, &statbuf_b,
                       -1);
@@ -9127,13 +9136,11 @@ search_setup_model (GtkFileChooserDefault *impl)
   gtk_tree_sortable_set_sort_func (GTK_TREE_SORTABLE (impl->search_model_sort),
 				   SEARCH_MODEL_COL_PATH,
 				   search_column_path_sort_func,
-				   impl,
-				   NULL);
+				   impl, NULL);
   gtk_tree_sortable_set_sort_func (GTK_TREE_SORTABLE (impl->search_model_sort),
 				   SEARCH_MODEL_COL_STAT,
 				   search_column_mtime_sort_func,
-				   impl,
-				   NULL);
+				   impl, NULL);
   gtk_tree_sortable_set_sort_column_id (GTK_TREE_SORTABLE (impl->search_model_sort),
 					SEARCH_MODEL_COL_STAT,
 					GTK_SORT_DESCENDING);
@@ -9440,14 +9447,19 @@ recent_column_mtime_sort_func (GtkTreeModel *model,
 			       GtkTreeIter  *b,
 			       gpointer      user_data)
 {
+  GtkFileChooserDefault *impl = user_data;
+  GtkTreeIter child_a, child_b;
   GtkRecentInfo *info_a, *info_b;
   gboolean is_folder_a, is_folder_b;
 
-  gtk_tree_model_get (model, a,
+  gtk_tree_model_filter_convert_iter_to_child_iter (GTK_TREE_MODEL_FILTER (model), &child_a, a);
+  gtk_tree_model_filter_convert_iter_to_child_iter (GTK_TREE_MODEL_FILTER (model), &child_b, b);
+
+  gtk_tree_model_get (GTK_TREE_MODEL (impl->recent_model), &child_a,
                       RECENT_MODEL_COL_IS_FOLDER, &is_folder_a,
                       RECENT_MODEL_COL_INFO, &info_a,
                       -1);
-  gtk_tree_model_get (model, b,
+  gtk_tree_model_get (GTK_TREE_MODEL (impl->recent_model), &child_b,
                       RECENT_MODEL_COL_IS_FOLDER, &is_folder_b,
                       RECENT_MODEL_COL_INFO, &info_b,
                       -1);
@@ -9476,16 +9488,31 @@ recent_column_path_sort_func (GtkTreeModel *model,
                               GtkTreeIter  *b,
                               gpointer      user_data)
 {
+  GtkFileChooserDefault *impl = user_data;
+  GtkTreeIter child_a, child_b;
+  gboolean is_folder_a, is_folder_b;
   gchar *name_a, *name_b;
 
-  gtk_tree_model_get (model, a, RECENT_MODEL_COL_DISPLAY_NAME, &name_a, -1);
-  gtk_tree_model_get (model, b, RECENT_MODEL_COL_DISPLAY_NAME, &name_b, -1);
+  gtk_tree_model_filter_convert_iter_to_child_iter (GTK_TREE_MODEL_FILTER (model), &child_a, a);
+  gtk_tree_model_filter_convert_iter_to_child_iter (GTK_TREE_MODEL_FILTER (model), &child_b, b);
+
+  gtk_tree_model_get (GTK_TREE_MODEL (impl->recent_model), &child_a,
+                      RECENT_MODEL_COL_IS_FOLDER, &is_folder_a,
+                      RECENT_MODEL_COL_DISPLAY_NAME, &name_a,
+                      -1);
+  gtk_tree_model_get (GTK_TREE_MODEL (impl->recent_model), &child_b,
+                      RECENT_MODEL_COL_IS_FOLDER, &is_folder_b,
+                      RECENT_MODEL_COL_DISPLAY_NAME, &name_b,
+                      -1);
 
   if (!name_a)
     return 1;
 
   if (!name_b);
     return -1;
+
+  if (is_folder_a != is_folder_b)
+    return is_folder_a ? 1 : -1;
 
   return strcmp (name_a, name_b);
 }
@@ -9612,16 +9639,19 @@ recent_setup_model (GtkFileChooserDefault *impl)
   impl->recent_model_sort =
     GTK_TREE_MODEL_SORT (recent_model_sort_new (impl, GTK_TREE_MODEL (impl->recent_model_filter)));
   gtk_tree_sortable_set_sort_func (GTK_TREE_SORTABLE (impl->recent_model_sort),
+				   RECENT_MODEL_COL_PATH,
+				   recent_column_path_sort_func,
+				   impl, NULL);
+  gtk_tree_sortable_set_sort_func (GTK_TREE_SORTABLE (impl->recent_model_sort),
                                    RECENT_MODEL_COL_INFO,
                                    recent_column_mtime_sort_func,
-                                   impl, NULL);
-  gtk_tree_sortable_set_sort_func (GTK_TREE_SORTABLE (impl->recent_model_sort),
-                                   RECENT_MODEL_COL_PATH,
-                                   recent_column_path_sort_func,
                                    impl, NULL);
   gtk_tree_sortable_set_sort_column_id (GTK_TREE_SORTABLE (impl->recent_model_sort),
                                         RECENT_MODEL_COL_INFO,
                                         GTK_SORT_DESCENDING);
+
+  gtk_tree_view_set_model (GTK_TREE_VIEW (impl->browse_files_tree_view),
+                           GTK_TREE_MODEL (impl->recent_model_sort));
 }
 
 typedef struct
@@ -9638,9 +9668,6 @@ recent_idle_cleanup (gpointer data)
   RecentLoadData *load_data = data;
   GtkFileChooserDefault *impl = load_data->impl;
 
-  gtk_tree_view_set_model (GTK_TREE_VIEW (impl->browse_files_tree_view),
-                           GTK_TREE_MODEL (impl->recent_model_sort));
-  
   set_busy_cursor (impl, FALSE);
   
   impl->load_recent_id = 0;
