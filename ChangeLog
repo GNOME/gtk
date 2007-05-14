@@ -1,5 +1,10 @@
 2007-05-14  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkscrolledwindow.c: Document scrollbars-within-bevel
+	as 2.12 addition.  (#438131, Mart Raudsepp)
+
+2007-05-14  Matthias Clasen  <mclasen@redhat.com>
+
 	* gtk/gtkvseparator.c (gtk_vseparator_size_request): Fix
 	size requisition for wide vertical separators.  (#438113, 
 	Benjamin Berg)

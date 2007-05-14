@@ -280,6 +280,13 @@ gtk_scrolled_window_class_init (GtkScrolledWindowClass *class)
 						      GTK_SHADOW_NONE,
                                                       GTK_PARAM_READABLE | GTK_PARAM_WRITABLE));
 
+  /**
+   * GtkScrolledWindow:scrollbars-within-bevel:
+   *
+   * Whether to place scrollbars within the scrolled window's bevel.
+   *
+   * Since: 2.12
+   */
   gtk_widget_class_install_style_property (widget_class,
 					   g_param_spec_boolean ("scrollbars-within-bevel",
 							         P_("Scrollbars within bevel"),
