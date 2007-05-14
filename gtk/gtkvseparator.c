@@ -75,9 +75,9 @@ gtk_vseparator_size_request (GtkWidget      *widget,
                         NULL);
 
   if (wide_separators)
-    requisition->height = separator_width;
+    requisition->width = separator_width;
   else
-    requisition->height = widget->style->xthickness;
+    requisition->width = widget->style->xthickness;
 }
 
 static gint

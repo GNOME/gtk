@@ -1,3 +1,11 @@
+2007-05-14  Matthias Clasen  <mclasen@redhat.com>
+
+	Merge from trunk:
+
+	* gtk/gtkvseparator.c (gtk_vseparator_size_request): Fix
+	size requisition for wide vertical separators.  (#438113,
+	Benjamin Berg)
+
 2007-05-13  Cody Russell  <bratsche@gnome.org>
 
 	Merge from trunk:
