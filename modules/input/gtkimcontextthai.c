@@ -288,7 +288,8 @@ gtk_im_context_thai_filter_keypress (GtkIMContext *context,
   if (event->type != GDK_KEY_PRESS)
     return FALSE;
 
-  if (event->state & (GDK_MODIFIER_MASK & ~GDK_SHIFT_MASK) ||
+  if (event->state & (GDK_MODIFIER_MASK
+                      & ~(GDK_SHIFT_MASK | GDK_LOCK_MASK | GDK_MOD2_MASK)) ||
       is_context_lost_key (event->keyval))
     {
 #ifndef GTK_IM_CONTEXT_THAI_NO_FALLBACK
