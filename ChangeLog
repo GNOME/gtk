@@ -1,3 +1,9 @@
+2007-05-14  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtkvseparator.c (gtk_vseparator_size_request): Fix
+	size requisition for wide vertical separators.  (#438113, 
+	Benjamin Berg)
+
 2007-05-13  Emmanuele Bassi  <ebassi@gnome.org>
 
 	* gtk/gtksearchenginesimple.c: Include <ftw.h> and use nftw() and
