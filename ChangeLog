@@ -1,3 +1,9 @@
+2007-05-15  Torsten Schoenfeld  <kaffeetisch@gmx.de>
+
+	* gtk/gtkprintoperation.c (pdf_end_run): Unset priv->platform_data and
+	priv->free_platform_data to prevent gtk_print_operation_finalize()
+	from freeing the cairo surface a second time.
+
 2007-05-14  Kristian Rietveld  <kris@gtk.org>
 
 	* gtk/gtkfilechooserdefault.c (recent_column_path_sort_func): remove
