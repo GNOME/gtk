@@ -1,3 +1,4 @@
+# translation of gtk+-properties.HEAD.es.po to Spanish
 # GTK+-properties Spanish translation.
 # Copyright © 1999-2006, 2007 Free Software Foundation, Inc.
 # This file is distributed under the same license as the gtk+ package.
@@ -14,8 +15,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-properties.HEAD.es\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-05-01 03:41+0100\n"
-"PO-Revision-Date: 2007-05-05 01:54+0200\n"
+"POT-Creation-Date: 2007-05-05 03:33+0100\n"
+"PO-Revision-Date: 2007-05-15 10:28+0200\n"
 "Last-Translator: Jorge González <jorgegonz@svn.gnome.org>\n"
 "Language-Team: Spanish <traductores@es.gnome.org>\n"
 "MIME-Version: 1.0\n"
@@ -808,7 +809,7 @@ msgstr ""
 "Si se selecciona, la etiqueta se utiliza para tomar un elemento del "
 "inventario en vez de para mostrarse"
 
-#: ../gtk/gtkbutton.c:223 ../gtk/gtkcombobox.c:715
+#: ../gtk/gtkbutton.c:223 ../gtk/gtkcombobox.c:717
 #: ../gtk/gtkfilechooserbutton.c:401
 msgid "Focus on click"
 msgstr "Enfocar al pulsar"
@@ -1225,7 +1226,9 @@ msgstr "Pulso"
 msgid ""
 "Set this to positive values to indicate that some progress is made, but you "
 "don't know how much."
-msgstr "Establezca esto a valores positivos para indicar que se realiza algún progreso, pero no se sabe cuánto."
+msgstr ""
+"Establezca esto a valores positivos para indicar que se realiza algún "
+"progreso, pero no se sabe cuánto."
 
 #: ../gtk/gtkcellrendererspin.c:93 ../gtk/gtkprogressbar.c:122
 #: ../gtk/gtkrange.c:332 ../gtk/gtkspinbutton.c:207
@@ -1462,7 +1465,7 @@ msgstr ""
 "Cómo romper la cadena en líneas múltiples, si el renderizador de la celda no "
 "tiene suficiente espacio para mostrar la cadena completa"
 
-#: ../gtk/gtkcellrenderertext.c:468 ../gtk/gtkcombobox.c:604
+#: ../gtk/gtkcellrenderertext.c:468 ../gtk/gtkcombobox.c:606
 msgid "Wrap width"
 msgstr "Ajustar anchura"
 
@@ -1811,103 +1814,103 @@ msgstr "Valor en la lista"
 msgid "Whether entered values must already be present in the list"
 msgstr "Indica si los valores introducidos deben estar ya presentes en la lista"
 
-#: ../gtk/gtkcombobox.c:587
+#: ../gtk/gtkcombobox.c:589
 msgid "ComboBox model"
 msgstr "Modelo de ComboBox"
 
-#: ../gtk/gtkcombobox.c:588
+#: ../gtk/gtkcombobox.c:590
 msgid "The model for the combo box"
 msgstr "El modelo para el ComboBox"
 
-#: ../gtk/gtkcombobox.c:605
+#: ../gtk/gtkcombobox.c:607
 msgid "Wrap width for laying out the items in a grid"
 msgstr "Ajusta la anchura para distribuir los elementos en una rejilla"
 
-#: ../gtk/gtkcombobox.c:627
+#: ../gtk/gtkcombobox.c:629
 msgid "Row span column"
 msgstr "Fila expande columna"
 
-#: ../gtk/gtkcombobox.c:628
+#: ../gtk/gtkcombobox.c:630
 msgid "TreeModel column containing the row span values"
 msgstr "Columna TreeModel que contiene los valores de expansión de la fila"
 
-#: ../gtk/gtkcombobox.c:649
+#: ../gtk/gtkcombobox.c:651
 msgid "Column span column"
 msgstr "Columna expande columna"
 
-#: ../gtk/gtkcombobox.c:650
+#: ../gtk/gtkcombobox.c:652
 msgid "TreeModel column containing the column span values"
 msgstr "Columna TreeModel que contiene los valores de expansión de columna"
 
-#: ../gtk/gtkcombobox.c:671
+#: ../gtk/gtkcombobox.c:673
 msgid "Active item"
 msgstr "Elemento activo"
 
-#: ../gtk/gtkcombobox.c:672
+#: ../gtk/gtkcombobox.c:674
 msgid "The item which is currently active"
 msgstr "El elemento que está activo actualmente"
 
-#: ../gtk/gtkcombobox.c:691 ../gtk/gtkuimanager.c:195
+#: ../gtk/gtkcombobox.c:693 ../gtk/gtkuimanager.c:195
 msgid "Add tearoffs to menus"
 msgstr "Añadir tiradores a los menús"
 
-#: ../gtk/gtkcombobox.c:692
+#: ../gtk/gtkcombobox.c:694
 msgid "Whether dropdowns should have a tearoff menu item"
 msgstr "Indica si los desplegables deben tener un tirador en el menú"
 
-#: ../gtk/gtkcombobox.c:707 ../gtk/gtkentry.c:519
+#: ../gtk/gtkcombobox.c:709 ../gtk/gtkentry.c:519
 msgid "Has Frame"
 msgstr "Tiene marco"
 
-#: ../gtk/gtkcombobox.c:708
+#: ../gtk/gtkcombobox.c:710
 msgid "Whether the combo box draws a frame around the child"
 msgstr "Indica si el ComboBox dibuja un marco alrededor del hijo"
 
-#: ../gtk/gtkcombobox.c:716
+#: ../gtk/gtkcombobox.c:718
 msgid "Whether the combo box grabs focus when it is clicked with the mouse"
 msgstr "Indica si el ComboBox obtiene el foco cuando se pulsa con el ratón"
 
-#: ../gtk/gtkcombobox.c:731 ../gtk/gtkmenu.c:484
+#: ../gtk/gtkcombobox.c:733 ../gtk/gtkmenu.c:484
 msgid "Tearoff Title"
 msgstr "Título del tirador"
 
-#: ../gtk/gtkcombobox.c:732
+#: ../gtk/gtkcombobox.c:734
 msgid ""
 "A title that may be displayed by the window manager when the popup is torn-"
 "off"
 msgstr "Un título que podría mostrar el gestor de ventanas al desprender el emergente"
 
-#: ../gtk/gtkcombobox.c:749
+#: ../gtk/gtkcombobox.c:751
 msgid "Popup shown"
 msgstr "Emergente mostrado"
 
-#: ../gtk/gtkcombobox.c:750
+#: ../gtk/gtkcombobox.c:752
 msgid "Whether the combo's dropdown is shown"
 msgstr "Indica si se muestra el desplegable del combo"
 
-#: ../gtk/gtkcombobox.c:756
+#: ../gtk/gtkcombobox.c:758
 msgid "Appears as list"
 msgstr "Aparece como una lista"
 
-#: ../gtk/gtkcombobox.c:757
+#: ../gtk/gtkcombobox.c:759
 msgid "Whether dropdowns should look like lists rather than menus"
 msgstr "Indica si los desplegables se parecen a listas en lugar de menús"
 
-#: ../gtk/gtkcombobox.c:773
+#: ../gtk/gtkcombobox.c:775
 msgid "Arrow Size"
 msgstr "Tamaño de la flecha"
 
-#: ../gtk/gtkcombobox.c:774
+#: ../gtk/gtkcombobox.c:776
 msgid "The minimum size of the arrow in the combo box"
 msgstr "El tamaño mínimo de la flecha en la caja combo"
 
-#: ../gtk/gtkcombobox.c:789 ../gtk/gtkentry.c:618 ../gtk/gtkhandlebox.c:176
+#: ../gtk/gtkcombobox.c:791 ../gtk/gtkentry.c:618 ../gtk/gtkhandlebox.c:176
 #: ../gtk/gtkmenubar.c:201 ../gtk/gtkstatusbar.c:186 ../gtk/gtktoolbar.c:622
 #: ../gtk/gtkviewport.c:122
 msgid "Shadow type"
 msgstr "Tipo de sombra"
 
-#: ../gtk/gtkcombobox.c:790
+#: ../gtk/gtkcombobox.c:792
 msgid "Which kind of shadow to draw around the combo box"
 msgstr "Qué clase de sombra dibujar alrededor de la caja combo"
 
@@ -2125,7 +2128,9 @@ msgstr "Indica si se truncan las pegadas multilíneas a una línea."
 
 #: ../gtk/gtkentry.c:619
 msgid "Which kind of shadow to draw around the entry when has-frame is set"
-msgstr "Qué clase de sombra dibujar alrededor de la entrada cuando has-frame está activado"
+msgstr ""
+"Qué clase de sombra dibujar alrededor de la entrada cuando has-frame está "
+"activado"
 
 #: ../gtk/gtkentry.c:887
 msgid "Border between text and frame."
@@ -2964,7 +2969,9 @@ msgstr "Desplazamiento vertical"
 msgid ""
 "When the menu is a submenu, position it this number of pixels offset "
 "vertically"
-msgstr "Cuando el menú es un submenú, colocarlo este número de píxeles de desplazamiento vertical"
+msgstr ""
+"Cuando el menú es un submenú, colocarlo este número de píxeles de "
+"desplazamiento vertical"
 
 #: ../gtk/gtkmenu.c:533
 msgid "Horizontal Offset"
@@ -2974,7 +2981,9 @@ msgstr "Desplazamiento horizontal"
 msgid ""
 "When the menu is a submenu, position it this number of pixels offset "
 "horizontally"
-msgstr "Cuando el menú es un submenú, colocarlo este número de píxeles de desplazamiento horizontal"
+msgstr ""
+"Cuando el menú es un submenú, colocarlo este número de píxeles de "
+"desplazamiento horizontal"
 
 #: ../gtk/gtkmenu.c:542
 msgid "Double Arrows"
@@ -4037,7 +4046,9 @@ msgstr "Carril bajo las flechas de deslizamiento"
 msgid ""
 "Whether to draw trough for full length of range or exclude the steppers and "
 "spacing"
-msgstr "Indica si se debe dibujar para la longitud completa del rango o excluir las flechas de desplazamiento y el espaciado"
+msgstr ""
+"Indica si se debe dibujar para la longitud completa del rango o excluir las "
+"flechas de desplazamiento y el espaciado"
 
 #: ../gtk/gtkrecentchooser.c:112
 msgid "Recent Manager"
@@ -4266,8 +4277,8 @@ msgid ""
 "Where the contents are located with respect to the scrollbars. This property "
 "only takes effect if \"window-placement-set\" is TRUE."
 msgstr ""
-"Dónde se colocan los contenidos respecto a las barras de desplazamiento. Esta "
-"propiedad sólo tiene efecto si \"window-placement-set\" es TRUE."
+"Dónde se colocan los contenidos respecto a las barras de desplazamiento. "
+"Esta propiedad sólo tiene efecto si \"window-placement-set\" es TRUE."
 
 #: ../gtk/gtkscrolledwindow.c:270
 msgid "Window Placement Set"
@@ -4315,8 +4326,8 @@ msgid ""
 "scrollbars, if not overridden by the scrolled window's own placement."
 msgstr ""
 "Dónde se coloca el contenido de las ventanas donde se hace scroll con "
-"respecto a las barras de desplazamiento, si no toma precedencia por el propio "
-"emplazamiento de la ventana donde se hizo scroll."
+"respecto a las barras de desplazamiento, si no toma precedencia por el "
+"propio emplazamiento de la ventana donde se hizo scroll."
 
 #: ../gtk/gtkseparatortoolitem.c:107
 msgid "Draw"
@@ -4536,13 +4547,13 @@ msgstr ""
 
 #: ../gtk/gtksettings.c:442
 msgid "Alternative sort indicator direction"
-msgstr ""
+msgstr "Dirección alternativa del indicador de ordenamiento"
 
 #: ../gtk/gtksettings.c:443
 msgid ""
 "Whether the direction of the sort indicators in list and tree views is "
 "inverted compared to the default (where down means ascending)"
-msgstr ""
+msgstr "Indica si la dirección de los indicadores de ordenamiento en la lista y vista de árbol está invertida en comparación con la predeterminada (donde abajo significa ascendente)"
 
 #: ../gtk/gtksettings.c:451
 msgid "Show the 'Input Methods' menu"
@@ -4630,19 +4641,19 @@ msgstr "Tiempo de expiración antes de que se muestre el consejo"
 
 #: ../gtk/gtksettings.c:598
 msgid "Tooltip browse timeout"
-msgstr ""
+msgstr "Tiempo de los consejos de navegación"
 
 #: ../gtk/gtksettings.c:599
 msgid "Timeout before tooltip is shown when browse mode is enabled"
-msgstr ""
+msgstr "Tiempo de expiración antes de que se muestre el consejo cuando el modo de navegación está activado"
 
 #: ../gtk/gtksettings.c:620
 msgid "Tooltip browse mode timeout"
-msgstr ""
+msgstr "Tiempo de los consejos en modo navegación"
 
 #: ../gtk/gtksettings.c:621
 msgid "Timeout after which browse mode is disabled"
-msgstr ""
+msgstr "Tiempo de expiración después del cual se desactiva el modo de navegación"
 
 #: ../gtk/gtksettings.c:640
 msgid "Keynav Cursor Only"
@@ -4988,7 +4999,9 @@ msgstr "Posición del cursor"
 
 #: ../gtk/gtktextbuffer.c:229
 msgid "The position of the insert mark (as offset from the beginning of the buffer)"
-msgstr "La posición de la marca de inserción (como un desplazamiento desde el principio del búfer)"
+msgstr ""
+"La posición de la marca de inserción (como un desplazamiento desde el "
+"principio del búfer)"
 
 #: ../gtk/gtktextbuffer.c:244
 msgid "Copy target list"
@@ -5148,7 +5161,9 @@ msgstr "Número de píxeles para el sangrado del párrafo"
 msgid ""
 "Offset of text above the baseline (below the baseline if rise is negative) "
 "in Pango units"
-msgstr "Desplazamiento del texto por encima de la línea base (por debajo de la línea base si la elevación es negativa) en unidades Pango"
+msgstr ""
+"Desplazamiento del texto por encima de la línea base (por debajo de la línea "
+"base si la elevación es negativa) en unidades Pango"
 
 #: ../gtk/gtktexttag.c:428
 msgid "Pixels above lines"
@@ -5214,11 +5229,11 @@ msgstr "Color de fondo del parágrafo como un (posiblemente no asignado) GdkColo
 
 #: ../gtk/gtktexttag.c:554
 msgid "Margin Accumulates"
-msgstr ""
+msgstr "Acumulación de márgenes"
 
 #: ../gtk/gtktexttag.c:555
 msgid "Whether left and right margins accumulate."
-msgstr ""
+msgstr "Indica si los márgenes izquierdo y derecho son acumulativos."
 
 #: ../gtk/gtktexttag.c:568
 msgid "Background full height set"
