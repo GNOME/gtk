@@ -1,6 +1,10 @@
+2007-05-15  David Lodge <dave@cirt.net>
+
+	* en_GB.po: Updated British English translation
+
 2007-05-15  Jorge Gonzalez <jorgegonz@svn.gnome.org> 
 
-        * es.po: Updated Spanish translation
+	* es.po: Updated Spanish translation
 
 2007-05-16  Ihar Hrachyshka <iharh@gnome.org>
 
@@ -13,7 +17,7 @@
 	
 2007-05-12 Jorge Gonzalez <jorgegonz@svn.gnome.org>
 
-        * es.po: Updated Spanish translation.
+	* es.po: Updated Spanish translation.
 
 2007-05-08  Kjartan Maraas  <kmaraas@gnome.org>
 
