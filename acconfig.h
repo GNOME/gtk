@@ -26,6 +26,8 @@
 #undef HAVE_PWD_H
 #undef HAVE_SHM_H
 #undef HAVE_STPCPY
+#undef HAVE_SYS_SYSINFO_H
+#undef HAVE_SYS_SYSTEMINFO_H
 #undef HAVE_XSHM_H
 #undef HAVE_SHAPE_EXT
 #undef HAVE_SOLARIS_XINERAMA
@@ -44,6 +46,8 @@
 
 #undef USE_GMODULE
 #undef USE_MMX
+#undef USE_MEDIALIB
+#undef USE_MEDIALIB25
 
 /* Define to use XKB extension */
 #undef HAVE_XKB

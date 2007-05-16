@@ -45,6 +45,15 @@ LDADD = \
 	$(no_undefined)							\
 	$(LIBTOOL_EXPORT_OPTIONS)
 
+if USE_MEDIALIB
+medialib_sources =  \
+    gdkmedialib.c
+medialib_h_sources =    \
+    gdkmedialib.h
+else
+medialib_sources =
+medialib_h_sources =
+endif
 
 #
 # setup source file variables
@@ -84,11 +93,13 @@ gdk_public_h_sources =				\
 
 gdk_headers =                     \
 	$(gdk_public_h_sources)   \
+	$(medialib_h_sources)     \
 	gdkenumtypes.h		  \
 	gdkprivate.h		  \
 	gdkalias.h
 
 gdk_c_sources =                 \
+	$(medialib_sources)     \
 	gdk.c			\
 	gdkcairo.c		\
 	gdkcolor.c		\

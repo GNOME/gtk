@@ -34,6 +34,13 @@ created in grayscale and direct color modes, and the visual is changed
 in cases where a "better" visual than the default is available.
 </para>
 
+<para>
+If GDK is built with the Sun mediaLib library, the GdkRGB functions are
+accelerated using mediaLib, which provides hardware acceleration on Intel,
+AMD, and Sparc chipsets.  If desired, mediaLib support can be turned off
+by setting the GDK_DISABLE_MEDIALIB environment variable.
+</para>
+
 <example>
 <title>A simple example program using GdkRGB</title>
 <programlisting>

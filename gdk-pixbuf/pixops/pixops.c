@@ -1,5 +1,8 @@
 /*
  * Copyright (C) 2000 Red Hat, Inc
+ * mediaLib integration Copyright (c) 2001-2007 Sun Microsystems, Inc.
+ * All rights reserved.  (Brian Cameron, Dmitriy Demin, James Cheng,
+ * Padraig O'Briain)
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -28,6 +31,25 @@
 #define SUBSAMPLE_MASK ((1 << SUBSAMPLE_BITS)-1)
 #define SCALE_SHIFT 16
 
+static void
+_pixops_scale_real (guchar        *dest_buf,
+                    int            render_x0,
+                    int            render_y0,
+                    int            render_x1,
+                    int            render_y1,
+                    int            dest_rowstride,
+                    int            dest_channels,
+                    gboolean       dest_has_alpha,
+                    const guchar  *src_buf,
+                    int            src_width,
+                    int            src_height,
+                    int            src_rowstride,
+                    int            src_channels,
+                    gboolean       src_has_alpha,
+                    double         scale_x,
+                    double         scale_y,
+                    PixopsInterpType  interp_type);
+
 typedef struct _PixopsFilter PixopsFilter;
 typedef struct _PixopsFilterDimension PixopsFilterDimension;
 
@@ -46,15 +68,173 @@ struct _PixopsFilter
 }; 
 
 typedef guchar *(*PixopsLineFunc) (int *weights, int n_x, int n_y,
-				   guchar *dest, int dest_x, guchar *dest_end, int dest_channels, int dest_has_alpha,
-				   guchar **src, int src_channels, gboolean src_has_alpha,
-				   int x_init, int x_step, int src_width,
-				   int check_size, guint32 color1, guint32 color2);
+				   guchar *dest, int dest_x, guchar *dest_end,
+				   int dest_channels, int dest_has_alpha,
+				   guchar **src, int src_channels,
+				   gboolean src_has_alpha, int x_init,
+				   int x_step, int src_width, int check_size,
+				   guint32 color1, guint32 color2);
+typedef void (*PixopsPixelFunc)   (guchar *dest, int dest_x, int dest_channels,
+				   int dest_has_alpha, int src_has_alpha,
+				   int check_size, guint32 color1,
+				   guint32 color2,
+				   guint r, guint g, guint b, guint a);
 
-typedef void (*PixopsPixelFunc) (guchar *dest, int dest_x, int dest_channels, int dest_has_alpha,
-				 int src_has_alpha, int check_size, guint32 color1,
-				 guint32 color2,
-				 guint r, guint g, guint b, guint a);
+#ifdef USE_MEDIALIB
+#include <stdlib.h>
+#include <dlfcn.h>
+#include <mlib_image.h>
+
+#ifdef HAVE_STRINGS_H
+#include <strings.h>
+#endif
+
+#ifdef HAVE_STRING_H
+#include <string.h>
+#endif
+
+#if defined(HAVE_SYS_SYSTEMINFO_H)
+#include <sys/systeminfo.h>
+#elif defined(HAVE_SYS_SYSINFO_H)
+#include <sys/sysinfo.h>
+#endif
+
+static void pixops_medialib_composite    (guchar          *dest_buf,
+                                          int              dest_width,
+                                          int              dest_height,
+                                          int              dest_rowstride,
+                                          int              dest_channels,
+                                          int              dest_has_alpha,
+                                          const guchar    *src_buf,
+                                          int              src_width,
+                                          int              src_height,
+                                          int              src_rowstride,
+                                          int              src_channels,
+                                          int              src_has_alpha,
+                                          int              dest_x,
+                                          int              dest_y,
+                                          int              dest_region_width,
+                                          int              dest_region_height,
+                                          double           offset_x,
+                                          double           offset_y,
+                                          double           scale_x,
+                                          double           scale_y,
+                                          PixopsInterpType interp_type,
+                                          int              overall_alpha);
+
+static void pixops_medialib_scale        (guchar          *dest_buf,
+                                          int              dest_width,
+                                          int              dest_height,
+                                          int              dest_rowstride,
+                                          int              dest_channels,
+                                          int              dest_has_alpha,
+                                          const guchar    *src_buf,
+                                          int              src_width,
+                                          int              src_height,
+                                          int              src_rowstride,
+                                          int              src_channels,
+                                          int              src_has_alpha,
+                                          int              dest_x,
+                                          int              dest_y,
+                                          int              dest_region_width,
+                                          int              dest_region_height,
+                                          double           offset_x,
+                                          double           offset_y,
+                                          double           scale_x,
+                                          double           scale_y,
+                                          PixopsInterpType interp_type);
+
+typedef struct _mlInterp mlInterp;
+
+struct _mlInterp
+{
+  double       tx;
+  double       ty;
+  PixopsFilter po_filter;
+  void         *interp_table;
+};
+
+static gboolean medialib_initialized = FALSE;
+static gboolean use_medialib         = TRUE;
+
+/*
+ * Sun mediaLib(tm) support.
+ *
+ *   http://www.sun.com/processors/vis/mlib.html
+ *
+ */
+static void
+_pixops_use_medialib ()
+{
+  char *mlib_version_string;
+  char  sys_info[257];
+  long  count;
+
+  medialib_initialized = TRUE; 
+
+  if (getenv ("GDK_DISABLE_MEDIALIB"))
+    {
+      use_medialib = FALSE;
+      return;
+    }
+
+  /*
+   * The imaging functions we want to use were added in mediaLib version 2.
+   * So turn off mediaLib support if the user has an older version.
+   * mlib_version returns a string in this format:
+   *
+   * mediaLib:0210:20011101:v8plusa
+   * ^^^^^^^^ ^^^^ ^^^^^^^^ ^^^^^^^
+   * libname  vers  build   ISALIST identifier
+   *                date    (in this case sparcv8plus+vis)
+   * 
+   * The first 2 digits of the version are the major version.  The 3rd digit
+   * is the minor version, and the 4th digit is the micro version.  So the
+   * above string corresponds to version 2.1.0.  In the following test we only
+   * care about the major version.
+   */
+  mlib_version_string = mlib_version ();
+
+  count = sysinfo (SI_ARCHITECTURE, &sys_info[0], 257);
+
+  if (count != -1)
+    {
+      if (strcmp (sys_info, "i386") == 0)
+        {
+          char *mlib_target_isa = &mlib_version_string[23];
+
+          /*
+           * For x86 processors mediaLib generic C implementation
+           * does not give any performance advantage so disable it
+           */
+          if (strncmp (mlib_target_isa, "sse", 3) != 0)
+            {
+              use_medialib = FALSE;
+              return;
+            }
+
+          /*
+           * For x86 processors use of libumem conflicts with
+           * mediaLib, so avoid using it.
+           */
+          if ((dlsym (RTLD_DEFAULT, "umem_alloc") != NULL) ||
+              (dlsym (RTLD_PROBE,   "umem_alloc") != NULL) ||
+              (dlsym (RTLD_NEXT,    "umem_alloc") != NULL) ||
+              (dlsym (RTLD_SELF,    "umem_alloc") != NULL))
+            {
+              use_medialib = FALSE;
+              return;
+            }
+        }
+    }
+  else
+    {
+      /* Failed to get system architecture, disable mediaLib anyway */
+      use_medialib = FALSE;
+      return;
+    }
+}
+#endif
 
 static int
 get_check_shift (int check_size)
@@ -241,7 +421,7 @@ pixops_composite_nearest (guchar        *dest_buf,
                 }
               break;
             }
-	);	      
+	);
     }
 }
 
@@ -509,7 +689,8 @@ composite_line_22_4a4 (int *weights, int n_x, int n_y,
       q0 = src0 + x_scaled * 4;
       q1 = src1 + x_scaled * 4;
       
-      pixel_weights = (int *)((char *)weights + ((x >> (SCALE_SHIFT - SUBSAMPLE_BITS - 4)) & (SUBSAMPLE_MASK << 4)));
+      pixel_weights = (int *)((char *)weights +
+	((x >> (SCALE_SHIFT - SUBSAMPLE_BITS - 4)) & (SUBSAMPLE_MASK << 4)));
       
       w1 = pixel_weights[0];
       w2 = pixel_weights[1];
@@ -553,11 +734,13 @@ composite_line_22_4a4 (int *weights, int n_x, int n_y,
 
 #ifdef USE_MMX
 static guchar *
-composite_line_22_4a4_mmx_stub (int *weights, int n_x, int n_y,
-				guchar *dest, int dest_x, guchar *dest_end, int dest_channels, int dest_has_alpha,
-				guchar **src, int src_channels, gboolean src_has_alpha,
-				int x_init, int x_step, int src_width,
-				int check_size, guint32 color1, guint32 color2)
+composite_line_22_4a4_mmx_stub (int *weights, int n_x, int n_y, guchar *dest,
+				int dest_x, guchar *dest_end,
+				int dest_channels, int dest_has_alpha,
+				guchar **src, int src_channels,
+				gboolean src_has_alpha, int x_init,
+				int x_step, int src_width, int check_size,
+				guint32 color1, guint32 color2)
 {
   guint32 mmx_weights[16][8];
   int j;
@@ -574,14 +757,16 @@ composite_line_22_4a4_mmx_stub (int *weights, int n_x, int n_y,
       mmx_weights[j][7] = 0x00010001 * (weights[4*j + 3] >> 8);
     }
 
-  return _pixops_composite_line_22_4a4_mmx (mmx_weights, dest, src[0], src[1], x_step, dest_end, x_init);
+  return _pixops_composite_line_22_4a4_mmx (mmx_weights, dest, src[0], src[1],
+					    x_step, dest_end, x_init);
 }
 #endif /* USE_MMX */
 
 static void
-composite_pixel_color (guchar *dest, int dest_x, int dest_channels, int dest_has_alpha,
-		       int src_has_alpha, int check_size, guint32 color1, guint32 color2,
-		       guint r, guint g, guint b, guint a)
+composite_pixel_color (guchar *dest, int dest_x, int dest_channels,
+		       int dest_has_alpha, int src_has_alpha, int check_size,
+		       guint32 color1, guint32 color2, guint r, guint g,
+		       guint b, guint a)
 {
   int dest_r, dest_g, dest_b;
   int check_shift = get_check_shift (check_size);
@@ -610,11 +795,12 @@ composite_pixel_color (guchar *dest, int dest_x, int dest_channels, int dest_has
 }
 
 static guchar *
-composite_line_color (int *weights, int n_x, int n_y,
-		      guchar *dest, int dest_x, guchar *dest_end, int dest_channels, int dest_has_alpha,
-		      guchar **src, int src_channels, gboolean src_has_alpha,
-		      int x_init, int x_step, int src_width,
-		      int check_size, guint32 color1, guint32 color2)
+composite_line_color (int *weights, int n_x, int n_y, guchar *dest,
+		      int dest_x, guchar *dest_end, int dest_channels,
+		      int dest_has_alpha, guchar **src, int src_channels,
+		      gboolean src_has_alpha, int x_init, int x_step,
+		      int src_width, int check_size, guint32 color1,
+		      guint32 color2)
 {
   int x = x_init;
   int i, j;
@@ -692,10 +878,13 @@ composite_line_color (int *weights, int n_x, int n_y,
 #ifdef USE_MMX
 static guchar *
 composite_line_color_22_4a4_mmx_stub (int *weights, int n_x, int n_y,
-				      guchar *dest, int dest_x, guchar *dest_end, int dest_channels, int dest_has_alpha,
-				      guchar **src, int src_channels, gboolean src_has_alpha,
+				      guchar *dest, int dest_x,
+				      guchar *dest_end, int dest_channels,
+				      int dest_has_alpha, guchar **src,
+				      int src_channels, gboolean src_has_alpha,
 				      int x_init, int x_step, int src_width,
-				      int check_size, guint32 color1, guint32 color2)
+				      int check_size, guint32 color1,
+				      guint32 color2)
 {
   guint32 mmx_weights[16][8];
   int check_shift = get_check_shift (check_size);
@@ -719,8 +908,8 @@ composite_line_color_22_4a4_mmx_stub (int *weights, int n_x, int n_y,
   colors[2] = (color2 & 0xff00) << 8 | (color2 & 0xff);
   colors[3] = (color2 & 0xff0000) >> 16;
 
-  return _pixops_composite_line_color_22_4a4_mmx (mmx_weights, dest, src[0], src[1], x_step, dest_end, x_init,
-						  dest_x, check_shift, colors);
+  return _pixops_composite_line_color_22_4a4_mmx (mmx_weights, dest, src[0],
+    src[1], x_step, dest_end, x_init, dest_x, check_shift, colors);
 }
 #endif /* USE_MMX */
 
@@ -758,11 +947,11 @@ scale_pixel (guchar *dest, int dest_x, int dest_channels, int dest_has_alpha,
 }
 
 static guchar *
-scale_line (int *weights, int n_x, int n_y,
-	    guchar *dest, int dest_x, guchar *dest_end, int dest_channels, int dest_has_alpha,
-	    guchar **src, int src_channels, gboolean src_has_alpha,
-	    int x_init, int x_step, int src_width,
-	    int check_size, guint32 color1, guint32 color2)
+scale_line (int *weights, int n_x, int n_y, guchar *dest, int dest_x,
+	    guchar *dest_end, int dest_channels, int dest_has_alpha,
+	    guchar **src, int src_channels, gboolean src_has_alpha, int x_init,
+	    int x_step, int src_width, int check_size, guint32 color1,
+	    guint32 color2)
 {
   int x = x_init;
   int i, j;
@@ -772,7 +961,8 @@ scale_line (int *weights, int n_x, int n_y,
       int x_scaled = x >> SCALE_SHIFT;
       int *pixel_weights;
 
-      pixel_weights = weights + ((x >> (SCALE_SHIFT - SUBSAMPLE_BITS)) & SUBSAMPLE_MASK) * n_x * n_y;
+      pixel_weights = weights +
+        ((x >> (SCALE_SHIFT - SUBSAMPLE_BITS)) & SUBSAMPLE_MASK) * n_x * n_y;
 
       if (src_has_alpha)
 	{
@@ -849,11 +1039,12 @@ scale_line (int *weights, int n_x, int n_y,
 
 #ifdef USE_MMX 
 static guchar *
-scale_line_22_33_mmx_stub (int *weights, int n_x, int n_y,
-			   guchar *dest, int dest_x, guchar *dest_end, int dest_channels, int dest_has_alpha,
-			   guchar **src, int src_channels, gboolean src_has_alpha,
-			   int x_init, int x_step, int src_width,
-			   int check_size, guint32 color1, guint32 color2)
+scale_line_22_33_mmx_stub (int *weights, int n_x, int n_y, guchar *dest,
+			   int dest_x, guchar *dest_end, int dest_channels,
+			   int dest_has_alpha, guchar **src, int src_channels,
+			   gboolean src_has_alpha, int x_init, int x_step,
+			   int src_width, int check_size, guint32 color1,
+			   guint32 color2)
 {
   guint32 mmx_weights[16][8];
   int j;
@@ -870,13 +1061,14 @@ scale_line_22_33_mmx_stub (int *weights, int n_x, int n_y,
       mmx_weights[j][7] = 0x00010001 * (weights[4*j + 3] >> 8);
     }
 
-  return _pixops_scale_line_22_33_mmx (mmx_weights, dest, src[0], src[1], x_step, dest_end, x_init);
+  return _pixops_scale_line_22_33_mmx (mmx_weights, dest, src[0], src[1],
+				       x_step, dest_end, x_init);
 }
 #endif /* USE_MMX */
 
 static guchar *
-scale_line_22_33 (int *weights, int n_x, int n_y,
-		  guchar *dest, int dest_x, guchar *dest_end, int dest_channels, int dest_has_alpha,
+scale_line_22_33 (int *weights, int n_x, int n_y, guchar *dest, int dest_x,
+		  guchar *dest_end, int dest_channels, int dest_has_alpha,
 		  guchar **src, int src_channels, gboolean src_has_alpha,
 		  int x_init, int x_step, int src_width,
 		  int check_size, guint32 color1, guint32 color2)
@@ -896,7 +1088,8 @@ scale_line_22_33 (int *weights, int n_x, int n_y,
       q0 = src0 + x_scaled * 3;
       q1 = src1 + x_scaled * 3;
       
-      pixel_weights = weights + ((x >> (SCALE_SHIFT - SUBSAMPLE_BITS)) & SUBSAMPLE_MASK) * 4;
+      pixel_weights = weights +
+        ((x >> (SCALE_SHIFT - SUBSAMPLE_BITS)) & SUBSAMPLE_MASK) * 4;
 
       w1 = pixel_weights[0];
       w2 = pixel_weights[1];
@@ -931,11 +1124,10 @@ scale_line_22_33 (int *weights, int n_x, int n_y,
 }
 
 static void
-process_pixel (int *weights, int n_x, int n_y,
-	       guchar *dest, int dest_x, int dest_channels, int dest_has_alpha,
-	       guchar **src, int src_channels, gboolean src_has_alpha,
-	       int x_start, int src_width,
-	       int check_size, guint32 color1, guint32 color2,
+process_pixel (int *weights, int n_x, int n_y, guchar *dest, int dest_x,
+	       int dest_channels, int dest_has_alpha, guchar **src,
+	       int src_channels, gboolean src_has_alpha, int x_start,
+	       int src_width, int check_size, guint32 color1, guint32 color2,
 	       PixopsPixelFunc pixel_func)
 {
   unsigned int r = 0, g = 0, b = 0, a = 0;
@@ -969,7 +1161,8 @@ process_pixel (int *weights, int n_x, int n_y,
 	}
     }
 
-  (*pixel_func) (dest, dest_x, dest_channels, dest_has_alpha, src_has_alpha, check_size, color1, color2, r, g, b, a);
+  (*pixel_func) (dest, dest_x, dest_channels, dest_has_alpha, src_has_alpha,
+    check_size, color1, color2, r, g, b, a);
 }
 
 static void 
@@ -1071,12 +1264,13 @@ pixops_process (guchar         *dest_buf,
 
   int scaled_x_offset = floor (filter->x.offset * (1 << SCALE_SHIFT));
 
-  /* Compute the index where we run off the end of the source buffer. The furthest
-   * source pixel we access at index i is:
+  /* Compute the index where we run off the end of the source buffer. The
+   * furthest source pixel we access at index i is:
    *
    *  ((render_x0 + i) * x_step + scaled_x_offset) >> SCALE_SHIFT + filter->x.n - 1
    *
-   * So, run_end_index is the smallest i for which this pixel is src_width, i.e, for which:
+   * So, run_end_index is the smallest i for which this pixel is src_width,
+   * i.e, for which:
    *
    *  (i + render_x0) * x_step >= ((src_width - filter->x.n + 1) << SCALE_SHIFT) - scaled_x_offset
    *
@@ -1144,11 +1338,12 @@ pixops_process (guchar         *dest_buf,
 	}
 
       new_outbuf = (*line_func) (run_weights, filter->x.n, filter->y.n,
-				 outbuf, dest_x,
-				 dest_buf + dest_rowstride * i + run_end_index * dest_channels,
+				 outbuf, dest_x, dest_buf + dest_rowstride *
+				 i + run_end_index * dest_channels,
 				 dest_channels, dest_has_alpha,
 				 line_bufs, src_channels, src_has_alpha,
-				 x, x_step, src_width, check_size, tcolor1, tcolor2);
+				 x, x_step, src_width, check_size, tcolor1,
+				 tcolor2);
 
       dest_x += (new_outbuf - outbuf) / dest_channels;
 
@@ -1384,30 +1579,30 @@ make_weights (PixopsFilter     *filter,
     }
 }
 
-void
-_pixops_composite_color (guchar         *dest_buf,
-			 int             render_x0,
-			 int             render_y0,
-			 int             render_x1,
-			 int             render_y1,
-			 int             dest_rowstride,
-			 int             dest_channels,
-			 gboolean        dest_has_alpha,
-			 const guchar   *src_buf,
-			 int             src_width,
-			 int             src_height,
-			 int             src_rowstride,
-			 int             src_channels,
-			 gboolean        src_has_alpha,
-			 double          scale_x,
-			 double          scale_y,
-			 PixopsInterpType   interp_type,
-			 int             overall_alpha,
-			 int             check_x,
-			 int             check_y,
-			 int             check_size,
-			 guint32         color1,
-			 guint32         color2)
+static void
+_pixops_composite_color_real (guchar          *dest_buf,
+			      int              render_x0,
+			      int              render_y0,
+			      int              render_x1,
+			      int              render_y1,
+			      int              dest_rowstride,
+			      int              dest_channels,
+			      gboolean         dest_has_alpha,
+			      const guchar    *src_buf,
+			      int              src_width,
+			      int              src_height,
+			      int              src_rowstride,
+			      int              src_channels,
+			      gboolean         src_has_alpha,
+			      double           scale_x,
+			      double           scale_y,
+			      PixopsInterpType interp_type,
+			      int              overall_alpha,
+			      int              check_x,
+			      int              check_y,
+			      int              check_size,
+			      guint32          color1,
+			      guint32          color2)
 {
   PixopsFilter filter;
   PixopsLineFunc line_func;
@@ -1422,22 +1617,15 @@ _pixops_composite_color (guchar         *dest_buf,
   if (scale_x == 0 || scale_y == 0)
     return;
 
-  if (!src_has_alpha && overall_alpha == 255)
-    {
-      _pixops_scale (dest_buf, render_x0, render_y0, render_x1, render_y1,
-		     dest_rowstride, dest_channels, dest_has_alpha,
-		     src_buf, src_width, src_height, src_rowstride, src_channels,
-		     src_has_alpha, scale_x, scale_y, interp_type);
-      return;
-    }
-
   if (interp_type == PIXOPS_INTERP_NEAREST)
     {
-      pixops_composite_color_nearest (dest_buf, render_x0, render_y0, render_x1, render_y1,
-				      dest_rowstride, dest_channels, dest_has_alpha,
-				      src_buf, src_width, src_height, src_rowstride, src_channels, src_has_alpha,
-				      scale_x, scale_y, overall_alpha,
-				      check_x, check_y, check_size, color1, color2);
+      pixops_composite_color_nearest (dest_buf, render_x0, render_y0,
+				      render_x1, render_y1, dest_rowstride,
+				      dest_channels, dest_has_alpha, src_buf,
+				      src_width, src_height, src_rowstride,
+				      src_channels, src_has_alpha, scale_x,
+				      scale_y, overall_alpha, check_x, check_y,
+				      check_size, color1, color2);
       return;
     }
   
@@ -1446,7 +1634,8 @@ _pixops_composite_color (guchar         *dest_buf,
 
 #ifdef USE_MMX
   if (filter.x.n == 2 && filter.y.n == 2 &&
-      dest_channels == 4 && src_channels == 4 && src_has_alpha && !dest_has_alpha && found_mmx)
+      dest_channels == 4 && src_channels == 4 &&
+      src_has_alpha && !dest_has_alpha && found_mmx)
     line_func = composite_line_color_22_4a4_mmx_stub;
   else
 #endif
@@ -1462,8 +1651,69 @@ _pixops_composite_color (guchar         *dest_buf,
   g_free (filter.y.weights);
 }
 
+void
+_pixops_composite_color (guchar          *dest_buf,
+			 int              dest_width,
+			 int              dest_height,
+			 int              dest_rowstride,
+			 int              dest_channels,
+			 gboolean         dest_has_alpha,
+			 const guchar    *src_buf,
+			 int              src_width,
+			 int              src_height,
+			 int              src_rowstride,
+			 int              src_channels,
+			 gboolean         src_has_alpha,
+			 int              dest_x,
+			 int              dest_y,
+			 int              dest_region_width,
+			 int              dest_region_height,
+			 double           offset_x,
+			 double           offset_y,
+			 double           scale_x,
+			 double           scale_y,
+			 PixopsInterpType interp_type,
+			 int              overall_alpha,
+			 int              check_x,
+			 int              check_y,
+			 int              check_size,
+			 guint32          color1,
+			 guint32          color2)
+{
+  guchar *new_dest_buf;
+  int render_x0;
+  int render_y0;
+  int render_x1;
+  int render_y1;
+
+  if (!src_has_alpha && overall_alpha == 255)
+    {
+      _pixops_scale (dest_buf, dest_width, dest_height, dest_rowstride,
+		     dest_channels, dest_has_alpha, src_buf, src_width,
+		     src_height, src_rowstride, src_channels, src_has_alpha,
+		     dest_x, dest_y, dest_region_width, dest_region_height,
+		     offset_x, offset_y, scale_x, scale_y, interp_type);
+      return;
+    }
+
+  new_dest_buf = dest_buf + dest_y * dest_rowstride + dest_x *
+                 dest_channels;
+  render_x0 = dest_x - offset_x;
+  render_y0 = dest_y - offset_y;
+  render_x1 = dest_x + dest_region_width  - offset_x;
+  render_y1 = dest_y + dest_region_height - offset_y;
+
+  _pixops_composite_color_real (new_dest_buf, render_x0, render_y0, render_x1,
+				render_y1, dest_rowstride, dest_channels,
+				dest_has_alpha, src_buf, src_width,
+				src_height, src_rowstride, src_channels,
+				src_has_alpha, scale_x, scale_y,
+				(PixopsInterpType)interp_type, overall_alpha,
+				check_x, check_y, check_size, color1, color2);
+}
+
 /**
- * _pixops_composite:
+ * _pixops_composite_real:
  * @dest_buf: pointer to location to store result
  * @render_x0: x0 of region of scaled source to store into @dest_buf
  * @render_y0: y0 of region of scaled source to store into @dest_buf
@@ -1486,25 +1736,25 @@ _pixops_composite_color (guchar         *dest_buf,
  * Scale source buffer by scale_x / scale_y, then composite a given rectangle
  * of the result into the destination buffer.
  **/
-void
-_pixops_composite (guchar        *dest_buf,
-		   int            render_x0,
-		   int            render_y0,
-		   int            render_x1,
-		   int            render_y1,
-		   int            dest_rowstride,
-		   int            dest_channels,
-		   gboolean       dest_has_alpha,
-		   const guchar  *src_buf,
-		   int            src_width,
-		   int            src_height,
-		   int            src_rowstride,
-		   int            src_channels,
-		   gboolean       src_has_alpha,
-		   double         scale_x,
-		   double         scale_y,
-		   PixopsInterpType  interp_type,
-		   int            overall_alpha)
+static void
+_pixops_composite_real (guchar          *dest_buf,
+			int              render_x0,
+			int              render_y0,
+			int              render_x1,
+			int              render_y1,
+			int              dest_rowstride,
+			int              dest_channels,
+			gboolean         dest_has_alpha,
+			const guchar    *src_buf,
+			int              src_width,
+			int              src_height,
+			int              src_rowstride,
+			int              src_channels,
+			gboolean         src_has_alpha,
+			double           scale_x,
+			double           scale_y,
+			PixopsInterpType interp_type,
+			int              overall_alpha)
 {
   PixopsFilter filter;
   PixopsLineFunc line_func;
@@ -1519,29 +1769,21 @@ _pixops_composite (guchar        *dest_buf,
   if (scale_x == 0 || scale_y == 0)
     return;
 
-  if (!src_has_alpha && overall_alpha == 255)
-    {
-      _pixops_scale (dest_buf, render_x0, render_y0, render_x1, render_y1,
-		     dest_rowstride, dest_channels, dest_has_alpha,
-		     src_buf, src_width, src_height, src_rowstride, src_channels,
-		     src_has_alpha, scale_x, scale_y, interp_type);
-      return;
-    }
-
   if (interp_type == PIXOPS_INTERP_NEAREST)
     {
-      pixops_composite_nearest (dest_buf, render_x0, render_y0, render_x1, render_y1,
-				dest_rowstride, dest_channels, dest_has_alpha,
-				src_buf, src_width, src_height, src_rowstride, src_channels,
-				src_has_alpha, scale_x, scale_y, overall_alpha);
+      pixops_composite_nearest (dest_buf, render_x0, render_y0, render_x1,
+				render_y1, dest_rowstride, dest_channels,
+				dest_has_alpha, src_buf, src_width, src_height,
+				src_rowstride, src_channels, src_has_alpha,
+				scale_x, scale_y, overall_alpha);
       return;
     }
   
   filter.overall_alpha = overall_alpha / 255.;
   make_weights (&filter, interp_type, scale_x, scale_y);
 
-  if (filter.x.n == 2 && filter.y.n == 2 &&
-      dest_channels == 4 && src_channels == 4 && src_has_alpha && !dest_has_alpha)
+  if (filter.x.n == 2 && filter.y.n == 2 && dest_channels == 4 &&
+      src_channels == 4 && src_has_alpha && !dest_has_alpha)
     {
 #ifdef USE_MMX
       if (found_mmx)
@@ -1564,23 +1806,361 @@ _pixops_composite (guchar        *dest_buf,
 }
 
 void
-_pixops_scale (guchar        *dest_buf,
-	       int            render_x0,
-	       int            render_y0,
-	       int            render_x1,
-	       int            render_y1,
-	       int            dest_rowstride,
-	       int            dest_channels,
-	       gboolean       dest_has_alpha,
-	       const guchar  *src_buf,
-	       int            src_width,
-	       int            src_height,
-	       int            src_rowstride,
-	       int            src_channels,
-	       gboolean       src_has_alpha,
-	       double         scale_x,
-	       double         scale_y,
-	       PixopsInterpType  interp_type)
+_pixops_composite (guchar          *dest_buf,
+                   int              dest_width,
+                   int              dest_height,
+                   int              dest_rowstride,
+                   int              dest_channels,
+                   int              dest_has_alpha,
+                   const guchar    *src_buf,
+                   int              src_width,
+                   int              src_height,
+                   int              src_rowstride,
+                   int              src_channels,
+                   int              src_has_alpha,
+                   int              dest_x,
+                   int              dest_y,
+                   int              dest_region_width,
+                   int              dest_region_height,
+                   double           offset_x,
+                   double           offset_y,
+                   double           scale_x,
+                   double           scale_y,
+                   PixopsInterpType interp_type,
+                   int              overall_alpha)
+{
+  guchar *new_dest_buf;
+  int render_x0;
+  int render_y0;
+  int render_x1;
+  int render_y1;
+
+  if (!src_has_alpha && overall_alpha == 255)
+    {
+      _pixops_scale (dest_buf, dest_width, dest_height, dest_rowstride,
+		     dest_channels, dest_has_alpha, src_buf, src_width,
+		     src_height, src_rowstride, src_channels, src_has_alpha,
+		     dest_x, dest_y, dest_region_width, dest_region_height,
+		     offset_x, offset_y, scale_x, scale_y, interp_type);
+      return;
+    }
+
+#ifdef USE_MEDIALIB
+  pixops_medialib_composite (dest_buf, dest_width, dest_height, dest_rowstride,
+                             dest_channels, dest_has_alpha, src_buf,
+                             src_width, src_height, src_rowstride,
+                             src_channels, src_has_alpha, dest_x, dest_y,
+                             dest_region_width, dest_region_height, offset_x,
+			     offset_y, scale_x, scale_y,
+                             (PixopsInterpType)interp_type, overall_alpha);
+  return;
+#endif
+
+  new_dest_buf = dest_buf + dest_y * dest_rowstride + dest_x * dest_channels;
+  render_x0 = dest_x - offset_x;
+  render_y0 = dest_y - offset_y;
+  render_x1 = dest_x + dest_region_width  - offset_x;
+  render_y1 = dest_y + dest_region_height - offset_y;
+
+  _pixops_composite_real (new_dest_buf, render_x0, render_y0, render_x1,
+			  render_y1, dest_rowstride, dest_channels,
+			  dest_has_alpha, src_buf, src_width, src_height,
+			  src_rowstride, src_channels, src_has_alpha, scale_x,
+			  scale_y, (PixopsInterpType)interp_type,
+			  overall_alpha);
+}
+
+#ifdef USE_MEDIALIB
+static void
+medialib_get_interpolation (mlInterp * ml_interp,
+                            PixopsInterpType interp_type,
+                            double scale_x,
+                            double scale_y,
+                            double overall_alpha)
+{
+  mlib_s32 leftPadding, topPadding;
+  ml_interp->interp_table = NULL;
+
+ /*
+  * medialib 2.1 and later supports scaling with user-defined interpolation
+  * tables, so this logic is used.  
+  *
+  * bilinear_magnify_make_weights builds an interpolation table of size 2x2 if
+  * the scale factor >= 1.0 and "ceil (1.0 + 1.0/scale)" otherwise.  These map
+  * most closely to MLIB_BILINEAR, which uses an interpolation table of size
+  * 2x2.
+  *
+  * tile_make_weights builds an interpolation table of size 2x2 if the scale
+  * factor >= 1.0 and "ceil (1.0 + 1.0/scale)" otherwise.  These map most
+  * closely to MLIB_BILINEAR, which uses an interpolation table of size 2x2.
+  *
+  * bilinear_box_make_weights builds an interpolation table of size 4x4 if the
+  * scale factor >= 1.0 and "ceil (1.0 + 1.0/scale)" otherwise.  These map most
+  * closely to MLIB_BICUBIC, which uses an interpolation table of size 4x4.
+  *
+  * PIXOPS_INTERP_NEAREST calls pixops_scale_nearest which does not use an
+  * interpolation table.  This maps to MLIB_NEAREST.
+  */
+  switch (interp_type)
+    {
+    case PIXOPS_INTERP_BILINEAR:
+      bilinear_magnify_make_weights (&(ml_interp->po_filter.x), scale_x);
+      bilinear_magnify_make_weights (&(ml_interp->po_filter.y), scale_y);
+      leftPadding = 0;
+      topPadding  = 0;
+
+      if (scale_x <= 1.0)
+          ml_interp->tx = 0.5 * (1 - scale_x);
+      else
+          ml_interp->tx = 0.0;
+
+      if (scale_y <= 1.0)
+          ml_interp->ty = 0.5 * (1 - scale_y);
+      else
+          ml_interp->ty = 0.0;
+
+      break;
+
+    case PIXOPS_INTERP_TILES:
+      tile_make_weights (&(ml_interp->po_filter.x), scale_x);
+      tile_make_weights (&(ml_interp->po_filter.y), scale_y);
+      leftPadding   = 0;
+      topPadding    = 0;
+      ml_interp->tx = 0.5 * (1 - scale_x);
+      ml_interp->ty = 0.5 * (1 - scale_y);
+      break;
+
+    case PIXOPS_INTERP_HYPER:
+      bilinear_box_make_weights (&(ml_interp->po_filter.x), scale_x);
+      bilinear_box_make_weights (&(ml_interp->po_filter.y), scale_y);
+      leftPadding   = 1;
+      topPadding    = 1;
+      ml_interp->tx = 0.5 * (1 - scale_x);
+      ml_interp->ty = 0.5 * (1 - scale_y);
+      break;
+
+    case PIXOPS_INTERP_NEAREST:
+    default:
+      /*
+       * Note that this function should not be called in the
+       * PIXOPS_INTERP_NEAREST case since it does not use an interpolation
+       * table.
+       */
+      g_assert_not_reached ();
+      break;
+    }
+
+ /* 
+  * If overall_alpha is not 1.0, then multiply the vectors built by the
+  * sqrt (overall_alpha).  This will cause overall_alpha to get evenly
+  * blended across both axis.
+  *
+  * Note there is no need to multiply the vectors built by the various
+  * make-weight functions by sqrt (overall_alpha) since the make-weight
+  * functions are called with overall_alpha hardcoded to 1.0.
+  */
+  if (overall_alpha != 1.0)
+    {
+      double sqrt_alpha = sqrt (overall_alpha);
+      int i;
+
+      for (i=0; i < SUBSAMPLE * ml_interp->po_filter.x.n; i++)
+         ml_interp->po_filter.x.weights[i] *= sqrt_alpha;
+      for (i=0; i < SUBSAMPLE * ml_interp->po_filter.y.n; i++)
+         ml_interp->po_filter.y.weights[i] *= sqrt_alpha;
+    }
+    
+  ml_interp->interp_table = (void *) mlib_ImageInterpTableCreate (MLIB_DOUBLE,
+    ml_interp->po_filter.x.n, ml_interp->po_filter.y.n, leftPadding,
+    topPadding, SUBSAMPLE_BITS, SUBSAMPLE_BITS, 8,
+    ml_interp->po_filter.x.weights, ml_interp->po_filter.y.weights);
+
+  g_free (ml_interp->po_filter.x.weights);
+  g_free (ml_interp->po_filter.y.weights);  
+}
+
+static void
+pixops_medialib_composite (guchar          *dest_buf,
+                           int              dest_width,
+                           int              dest_height,
+                           int              dest_rowstride,
+                           int              dest_channels,
+                           int              dest_has_alpha,
+                           const guchar    *src_buf,
+                           int              src_width,
+                           int              src_height,
+                           int              src_rowstride,
+                           int              src_channels,
+                           int              src_has_alpha,
+                           int              dest_x,
+                           int              dest_y,
+                           int              dest_region_width,
+                           int              dest_region_height,
+                           double           offset_x,
+                           double           offset_y,
+                           double           scale_x,
+                           double           scale_y,
+                           PixopsInterpType interp_type,
+                           int              overall_alpha)
+{
+  mlib_blend blend;
+  g_return_if_fail (!(dest_channels == 3 && dest_has_alpha));
+  g_return_if_fail (!(src_channels == 3 && src_has_alpha));
+
+  if (scale_x == 0 || scale_y == 0)
+    return;
+
+  if (!medialib_initialized)
+    _pixops_use_medialib ();
+
+  if (!use_medialib)
+    {
+      /* Use non-mediaLib version */
+      _pixops_composite_real (dest_buf + dest_y * dest_rowstride + dest_x *
+			      dest_channels, dest_x - offset_x, dest_y -
+			      offset_y, dest_x + dest_region_width - offset_x,
+			      dest_y + dest_region_height - offset_y,
+			      dest_rowstride, dest_channels, dest_has_alpha,
+			      src_buf, src_width, src_height, src_rowstride,
+			      src_channels, src_has_alpha, scale_x, scale_y,
+			      interp_type, overall_alpha);
+    }
+  else
+    {
+      mlInterp ml_interp;
+      mlib_image img_src, img_dest;
+      double ml_offset_x, ml_offset_y;
+
+      if (!src_has_alpha && overall_alpha == 255 &&
+	  dest_channels <= src_channels) 
+        {
+          pixops_medialib_scale (dest_buf, dest_region_width,
+				 dest_region_height, dest_rowstride,
+				 dest_channels, dest_has_alpha, src_buf,
+				 src_width, src_height, src_rowstride,
+				 src_channels, src_has_alpha, dest_x, dest_y,
+				 dest_region_width, dest_region_height,
+				 offset_x, offset_y, scale_x, scale_y,
+				 interp_type);
+          return;
+        }
+
+      mlib_ImageSetStruct (&img_src, MLIB_BYTE, src_channels,
+			   src_width, src_height, src_rowstride, src_buf);
+
+      if (dest_x == 0 && dest_y == 0 &&
+          dest_width  == dest_region_width &&
+          dest_height == dest_region_height)
+        {
+          mlib_ImageSetStruct (&img_dest, MLIB_BYTE, dest_channels,
+			       dest_width, dest_height, dest_rowstride,
+			       dest_buf);
+        }
+      else
+        {
+	  mlib_u8 *data = dest_buf + (dest_y * dest_rowstride) + 
+				     (dest_x * dest_channels);
+
+          mlib_ImageSetStruct (&img_dest, MLIB_BYTE, dest_channels,
+			       dest_region_width, dest_region_height,
+			       dest_rowstride, data);
+        }
+
+      ml_offset_x = floor (offset_x) - dest_x;
+      ml_offset_y = floor (offset_y) - dest_y;
+
+      if (interp_type == PIXOPS_INTERP_NEAREST)
+        {
+          blend = src_has_alpha ? MLIB_BLEND_GTK_SRC_OVER2 : MLIB_BLEND_GTK_SRC;
+
+          mlib_ImageZoomTranslateBlend (&img_dest,
+                                        &img_src,
+                                        scale_x,
+                                        scale_y,
+                                        ml_offset_x,
+                                        ml_offset_y,
+                                        MLIB_NEAREST,
+                                        MLIB_EDGE_SRC_EXTEND_INDEF,
+                                        blend,
+                                        overall_alpha,
+                                        1);
+        }
+      else
+        {
+          blend = src_has_alpha ? MLIB_BLEND_GTK_SRC_OVER : MLIB_BLEND_GTK_SRC;
+
+          if (interp_type == PIXOPS_INTERP_BILINEAR &&
+	      scale_x > 1.0 && scale_y > 1.0)
+            {
+              mlib_ImageZoomTranslateBlend (&img_dest,
+                                            &img_src,
+                                            scale_x,
+                                            scale_y,
+                                            ml_offset_x,
+                                            ml_offset_y,
+                                            MLIB_BILINEAR,
+                                            MLIB_EDGE_SRC_EXTEND_INDEF,
+                                            blend,
+                                            overall_alpha,
+                                            1);
+            }
+          else
+            {
+              medialib_get_interpolation (&ml_interp, interp_type, scale_x,
+					  scale_y, overall_alpha/255.0);
+
+              if (ml_interp.interp_table != NULL)
+                {
+                  mlib_ImageZoomTranslateTableBlend (&img_dest,
+                                                     &img_src,
+                                                     scale_x,
+                                                     scale_y,
+                                                     ml_offset_x + ml_interp.tx,
+                                                     ml_offset_y + ml_interp.ty,
+                                                     ml_interp.interp_table,
+                                                     MLIB_EDGE_SRC_EXTEND_INDEF,
+                                                     blend,
+                                                     1);
+                  mlib_ImageInterpTableDelete (ml_interp.interp_table);
+                }
+              else
+                {
+                  /* Should not happen - Use non-mediaLib version */
+                  _pixops_composite_real (dest_buf + dest_y * dest_rowstride +
+                                          dest_x * dest_channels,
+                                          dest_x - offset_x, dest_y - offset_y,
+                                          dest_x + dest_region_width - offset_x,
+                                          dest_y + dest_region_height - offset_y,
+                                          dest_rowstride, dest_channels,
+                                          dest_has_alpha, src_buf, src_width,
+                                          src_height, src_rowstride,
+                                          src_channels, src_has_alpha, scale_x,
+                                          scale_y, interp_type, overall_alpha);
+                }
+            }
+        }
+    }
+}
+#endif
+
+static void
+_pixops_scale_real (guchar        *dest_buf,
+		    int            render_x0,
+		    int            render_y0,
+		    int            render_x1,
+		    int            render_y1,
+		    int            dest_rowstride,
+		    int            dest_channels,
+		    gboolean       dest_has_alpha,
+		    const guchar  *src_buf,
+		    int            src_width,
+		    int            src_height,
+		    int            src_rowstride,
+		    int            src_channels,
+		    gboolean       src_has_alpha,
+		    double         scale_x,
+		    double         scale_y,
+		    PixopsInterpType  interp_type)
 {
   PixopsFilter filter;
   PixopsLineFunc line_func;
@@ -1598,9 +2178,10 @@ _pixops_scale (guchar        *dest_buf,
 
   if (interp_type == PIXOPS_INTERP_NEAREST)
     {
-      pixops_scale_nearest (dest_buf, render_x0, render_y0, render_x1, render_y1,
-			    dest_rowstride, dest_channels, dest_has_alpha,
-			    src_buf, src_width, src_height, src_rowstride, src_channels, src_has_alpha,
+      pixops_scale_nearest (dest_buf, render_x0, render_y0, render_x1,
+			    render_y1, dest_rowstride, dest_channels,
+			    dest_has_alpha, src_buf, src_width, src_height,
+			    src_rowstride, src_channels, src_has_alpha,
 			    scale_x, scale_y);
       return;
     }
@@ -1630,3 +2211,338 @@ _pixops_scale (guchar        *dest_buf,
   g_free (filter.y.weights);
 }
 
+void
+_pixops_scale (guchar          *dest_buf,
+               int              dest_width,
+               int              dest_height,
+               int              dest_rowstride,
+               int              dest_channels,
+               int              dest_has_alpha,
+               const guchar    *src_buf,
+               int              src_width,
+               int              src_height,
+               int              src_rowstride,
+               int              src_channels,
+               int              src_has_alpha,
+               int              dest_x,
+               int              dest_y,
+               int              dest_region_width,
+               int              dest_region_height,
+               double           offset_x,
+               double           offset_y,
+               double           scale_x,
+               double           scale_y,
+               PixopsInterpType interp_type)
+{
+  guchar *new_dest_buf;
+  int render_x0;
+  int render_y0;
+  int render_x1;
+  int render_y1;
+
+#ifdef USE_MEDIALIB
+  pixops_medialib_scale (dest_buf, dest_width, dest_height, dest_rowstride,
+                         dest_channels, dest_has_alpha, src_buf, src_width,
+                         src_height, src_rowstride, src_channels,
+                         src_has_alpha, dest_x, dest_y, dest_region_width,
+			 dest_region_height, offset_x, offset_y, scale_x,
+			 scale_y, (PixopsInterpType)interp_type);
+  return;
+#endif
+
+  new_dest_buf = dest_buf + dest_y * dest_rowstride + dest_x * dest_channels;
+  render_x0    = dest_x - offset_x;
+  render_y0    = dest_y - offset_y;
+  render_x1    = dest_x + dest_region_width  - offset_x;
+  render_y1    = dest_y + dest_region_height - offset_y;
+
+  _pixops_scale_real (new_dest_buf, render_x0, render_y0, render_x1,
+                      render_y1, dest_rowstride, dest_channels,
+                      dest_has_alpha, src_buf, src_width, src_height,
+                      src_rowstride, src_channels, src_has_alpha,
+                      scale_x, scale_y, (PixopsInterpType)interp_type);
+}
+
+#ifdef USE_MEDIALIB
+static void
+pixops_medialib_scale     (guchar          *dest_buf,
+                           int              dest_width,
+                           int              dest_height,
+                           int              dest_rowstride,
+                           int              dest_channels,
+                           int              dest_has_alpha,
+                           const guchar    *src_buf,
+                           int              src_width,
+                           int              src_height,
+                           int              src_rowstride,
+                           int              src_channels,
+                           int              src_has_alpha,
+                           int              dest_x,
+                           int              dest_y,
+                           int              dest_region_width,
+                           int              dest_region_height,
+                           double           offset_x,
+                           double           offset_y,
+                           double           scale_x,
+                           double           scale_y,
+                           PixopsInterpType interp_type)
+{
+  if (scale_x == 0 || scale_y == 0)
+    return;
+
+  if (!medialib_initialized)
+    _pixops_use_medialib ();
+ 
+  /*
+   * We no longer support mediaLib 2.1 because it has a core dumping problem
+   * in the mlib_ImageZoomTranslateTable function that has been corrected in
+   * 2.2.  Although the mediaLib_zoom function could be used, it does not
+   * work properly if the source and destination images have different 
+   * values for "has_alpha" or "num_channels".  The complicated if-logic
+   * required to support both versions is not worth supporting
+   * mediaLib 2.1 moving forward.
+   */
+  if (!use_medialib)
+    {
+      _pixops_scale_real (dest_buf + dest_y * dest_rowstride + dest_x *
+			  dest_channels, dest_x - offset_x, dest_y - offset_y, 
+			  dest_x + dest_region_width - offset_x,
+			  dest_y + dest_region_height - offset_y,
+			  dest_rowstride, dest_channels, dest_has_alpha,
+			  src_buf, src_width, src_height, src_rowstride,
+			  src_channels, src_has_alpha, scale_x, scale_y,
+			  interp_type);
+    }
+  else 
+    {
+      mlInterp ml_interp;
+      mlib_image img_orig_src, img_src, img_dest;
+      double ml_offset_x, ml_offset_y;
+      guchar *tmp_buf = NULL;
+
+      mlib_ImageSetStruct (&img_orig_src, MLIB_BYTE, src_channels, src_width, 
+			   src_height, src_rowstride, src_buf);
+
+      if (dest_x == 0 && dest_y == 0 &&
+          dest_width == dest_region_width &&
+          dest_height == dest_region_height)
+        {
+          mlib_ImageSetStruct (&img_dest, MLIB_BYTE, dest_channels,
+			       dest_width, dest_height, dest_rowstride,
+			       dest_buf);
+        }
+      else
+        {
+	  mlib_u8 *data = dest_buf + (dest_y * dest_rowstride) + 
+				     (dest_x * dest_channels);
+
+          mlib_ImageSetStruct (&img_dest, MLIB_BYTE, dest_channels,
+			       dest_region_width, dest_region_height,
+			       dest_rowstride, data);
+        }
+
+      ml_offset_x = floor (offset_x) - dest_x;
+      ml_offset_y = floor (offset_y) - dest_y;
+
+     /*
+      * Note that zoomTranslate and zoomTranslateTable are faster
+      * than zoomTranslateBlend and zoomTranslateTableBlend.  However
+      * the faster functions only work in the following case:
+      *
+      *   if (src_channels == dest_channels &&
+      *       (!src_alpha && interp_table != PIXOPS_INTERP_NEAREST))
+      *
+      * We use the faster versions if we can.
+      *
+      * Note when the interp_type is BILINEAR and the interpolation
+      * table will be size 2x2 (when both x/y scale factors > 1.0),
+      * then we do not bother building the interpolation table.   In
+      * this case we can just use MLIB_BILINEAR, which is faster than
+      * using a specified interpolation table.
+      */
+      img_src = img_orig_src;
+
+      if (!src_has_alpha)
+        {
+          if (src_channels > dest_channels)
+            {
+              int channels  = 3;
+              int rowstride = (channels * src_width + 3) & ~3;
+        
+              tmp_buf = g_malloc (src_rowstride * src_height);
+
+              if (src_buf != NULL)
+                {
+                  src_channels  = channels;
+                  src_rowstride = rowstride;
+          
+                  mlib_ImageSetStruct (&img_src, MLIB_BYTE, src_channels,
+				       src_width, src_height, src_rowstride,
+				       tmp_buf);
+                  mlib_ImageChannelExtract (&img_src, &img_orig_src, 0xE);  
+                }
+            }
+        }
+    
+      if (interp_type == PIXOPS_INTERP_NEAREST)
+        {
+          if (src_channels == dest_channels)
+            {
+              mlib_ImageZoomTranslate (&img_dest,
+                                       &img_src,
+                                       scale_x,
+                                       scale_y,
+                                       ml_offset_x,
+                                       ml_offset_y,
+                                       MLIB_NEAREST,
+                                       MLIB_EDGE_SRC_EXTEND_INDEF);
+            }
+          else
+            {
+              mlib_ImageZoomTranslateBlend (&img_dest,
+                                            &img_src,
+                                            scale_x,
+                                            scale_y,
+                                            ml_offset_x,
+                                            ml_offset_y,
+                                            MLIB_NEAREST,
+                                            MLIB_EDGE_SRC_EXTEND_INDEF,
+                                            MLIB_BLEND_GTK_SRC,
+                                            1.0,
+                                            1);
+            }
+        }
+      else if (src_channels == dest_channels && !src_has_alpha)
+        {
+          if (interp_type == PIXOPS_INTERP_BILINEAR &&
+              scale_x > 1.0 && scale_y > 1.0)
+            {
+               mlib_ImageZoomTranslate (&img_dest,
+                                        &img_src,
+                                        scale_x,
+                                        scale_y,
+                                        ml_offset_x,
+                                        ml_offset_y,
+                                        MLIB_BILINEAR,
+                                        MLIB_EDGE_SRC_EXTEND_INDEF);
+            }
+          else
+            {
+              medialib_get_interpolation (&ml_interp, interp_type,
+                                          scale_x, scale_y, 1.0);
+
+              if (ml_interp.interp_table != NULL)
+                {
+                  mlib_ImageZoomTranslateTable (&img_dest, 
+                                                &img_src,
+                                                scale_x,
+                                                scale_y,
+                                                ml_offset_x + ml_interp.tx,
+                                                ml_offset_y + ml_interp.ty,
+                                                ml_interp.interp_table,
+                                                MLIB_EDGE_SRC_EXTEND_INDEF);
+
+	          mlib_ImageInterpTableDelete (ml_interp.interp_table);
+                }
+              else
+                {
+                  /* Should not happen. */
+                  mlib_filter  ml_filter;
+
+                  switch (interp_type)
+                    {
+                    case PIXOPS_INTERP_BILINEAR:
+                      ml_filter = MLIB_BILINEAR;
+                      break;
+
+                    case PIXOPS_INTERP_TILES:
+                      ml_filter = MLIB_BILINEAR;
+                      break;
+
+                    case PIXOPS_INTERP_HYPER:
+                      ml_filter = MLIB_BICUBIC;
+                      break;
+                    }
+
+                  mlib_ImageZoomTranslate (&img_dest,
+                                           &img_src,
+                                           scale_x,
+                                           scale_y,
+                                           ml_offset_x,
+                                           ml_offset_y,
+                                           ml_filter,
+                                           MLIB_EDGE_SRC_EXTEND_INDEF);
+                }
+            }
+        }
+
+      /* Deal with case where src_channels != dest_channels || src_has_alpha */
+      else if (interp_type == PIXOPS_INTERP_BILINEAR &&
+               scale_x > 1.0 && scale_y > 1.0)
+        {
+          mlib_ImageZoomTranslateBlend (&img_dest,
+                                        &img_src,
+                                        scale_x,
+                                        scale_y,
+                                        ml_offset_x,
+                                        ml_offset_y,
+                                        MLIB_BILINEAR,
+                                        MLIB_EDGE_SRC_EXTEND_INDEF,
+                                        MLIB_BLEND_GTK_SRC,
+                                        1.0,
+                                        1);
+        }
+      else
+        {
+          medialib_get_interpolation (&ml_interp, interp_type,
+                                      scale_x, scale_y, 1.0);
+
+          if (ml_interp.interp_table != NULL)
+            {
+              mlib_ImageZoomTranslateTableBlend (&img_dest,
+                                                 &img_src,
+                                                 scale_x,
+                                                 scale_y,
+                                                 ml_offset_x + ml_interp.tx,
+                                                 ml_offset_y + ml_interp.ty,
+                                                 ml_interp.interp_table,
+                                                 MLIB_EDGE_SRC_EXTEND_INDEF,
+                                                 MLIB_BLEND_GTK_SRC,
+                                                 1);
+              mlib_ImageInterpTableDelete (ml_interp.interp_table);
+            }
+          else
+            {
+              mlib_filter  ml_filter;
+
+              switch (interp_type)
+                {
+                case PIXOPS_INTERP_BILINEAR:
+                  ml_filter = MLIB_BILINEAR;
+                  break;
+            
+                case PIXOPS_INTERP_TILES:
+                  ml_filter = MLIB_BILINEAR;
+                  break;
+
+                case PIXOPS_INTERP_HYPER:
+                  ml_filter = MLIB_BICUBIC;
+                  break;
+                }
+
+              mlib_ImageZoomTranslate (&img_dest,
+                                       &img_src,
+                                       scale_x,
+                                       scale_y,
+                                       ml_offset_x,
+                                       ml_offset_y,
+                                       ml_filter,
+                                       MLIB_EDGE_SRC_EXTEND_INDEF);
+            }
+        }
+
+      if (tmp_buf != NULL)
+        g_free (tmp_buf);
+    }
+}
+#endif

@@ -201,9 +201,13 @@ int main (int argc, char **argv)
 		start_timing ();
 		for (i = 0; i < ITERS; i++)
 		  {
-		    _pixops_scale (dest_buf, 0, 0, dest_width, dest_height, dest_rowstride, dest_channels, dest_has_alpha,
-				   src_buf, src_width, src_height, src_rowstride, src_channels, src_has_alpha,
-				   (double)dest_width / src_width, (double)dest_height / src_height,
+		    _pixops_scale (dest_buf, dest_width, dest_height,
+				   dest_rowstride, dest_channels,
+				   dest_has_alpha, src_buf, src_width,
+				   src_height, src_rowstride, src_channels,
+				   src_has_alpha, 0, 0, 0, 0, 0, 0,
+				   (double)dest_width / src_width,
+				   (double)dest_height / src_height,
 				   filter_level);
 		  }
 		scale_times[src_index][dest_index][filter_level] =
@@ -213,21 +217,32 @@ int main (int argc, char **argv)
 	    start_timing ();
 	    for (i = 0; i < ITERS; i++)
 	      {
-		_pixops_composite (dest_buf, 0, 0, dest_width, dest_height, dest_rowstride, dest_channels, dest_has_alpha,
-				   src_buf, src_width, src_height, src_rowstride, src_channels, src_has_alpha,
-				   (double)dest_width / src_width, (double)dest_height / src_height,
+		_pixops_composite (dest_buf, dest_width, dest_height,
+				   dest_rowstride, dest_channels,
+				   dest_has_alpha, src_buf, src_width,
+				   src_height, src_rowstride, src_channels,
+				   src_has_alpha, 0, 0, 0, 0, 0, 0,
+				   (double)dest_width / src_width,
+				   (double)dest_height / src_height,
 				   filter_level, 255);
 	      }
 	    composite_times[src_index][dest_index][filter_level] =
-	      stop_timing ("   composite\t\t", ITERS, dest_height * dest_width);
+	      stop_timing ("   composite\t\t", ITERS,
+			   dest_height * dest_width);
 
 	    start_timing ();
 	    for (i = 0; i < ITERS; i++)
 	      {
-		_pixops_composite_color (dest_buf, 0, 0, dest_width, dest_height, dest_rowstride, dest_channels, dest_has_alpha,
-					 src_buf, src_width, src_height, src_rowstride, src_channels, src_has_alpha,
-					 (double)dest_width / src_width, (double)dest_height / src_height,
-					 filter_level, 255, 0, 0, 16, 0xaaaaaa, 0x555555);
+		_pixops_composite_color (dest_buf, dest_width, dest_height,
+					 dest_rowstride, dest_channels,
+					 dest_has_alpha, src_buf, src_width,
+					 src_height, src_rowstride,
+					 src_channels, src_has_alpha, 0, 0,
+					 0, 0, 0, 0,
+					 (double)dest_width / src_width,
+					 (double)dest_height / src_height,
+					 filter_level, 255, 0, 0, 16,
+					 0xaaaaaa, 0x555555);
 	      }
 	    composite_color_times[src_index][dest_index][filter_level] =
 	      stop_timing ("   composite color\t", ITERS, dest_height * dest_width);

@@ -941,6 +941,32 @@ else
   STATIC_LIB_DEPS="$LIBTIFF $LIBJPEG $LIBPNG"
 fi
 
+# Checks to see whether we should include mediaLib
+# support.
+#
+AC_CHECK_HEADER(sys/systeminfo.h, AC_DEFINE(HAVE_SYS_SYSTEMINFO_H))
+AC_CHECK_HEADER(sys/sysinfo.h, AC_DEFINE(HAVE_SYS_SYSINFO_H))
+
+AC_MSG_CHECKING(for mediaLib 2.3)
+use_mlib25=no
+# Check for a mediaLib 2.3 function since that is what the GTK+ mediaLib
+# patch requires.
+AC_CHECK_LIB(mlib, mlib_ImageSetStruct, use_mlib=yes, use_mlib=no)
+if test $use_mlib = yes; then
+    AC_DEFINE(USE_MEDIALIB)
+    MEDIA_LIB=-lmlib
+
+    AC_MSG_CHECKING(for mediaLib 2.5)
+    # Check for a mediaLib 2.5 function since that is what is needed for
+    # gdk_rgb_convert integration.
+    AC_CHECK_LIB(mlib, mlib_VideoColorRGBint_to_BGRAint, use_mlib25=yes, use_mlib25=no)
+    if test $use_mlib25 = yes; then
+        AC_DEFINE(USE_MEDIALIB25)
+    fi
+fi
+AM_CONDITIONAL(USE_MEDIALIB, test $use_mlib = yes)
+AM_CONDITIONAL(USE_MEDIALIB25, test $use_mlib25 = yes)
+
 # Checks to see if we should compile in MMX support (there will be
 # a runtime test when the code is actually run to see if it should
 # be used - this just checks if we can compile it.)
@@ -1009,7 +1035,7 @@ fi
 AC_SUBST(REBUILD_PNGS)
 
 GDK_PIXBUF_PACKAGES="gmodule-no-export-2.0 gobject-2.0"
-GDK_PIXBUF_EXTRA_LIBS="$STATIC_LIB_DEPS $MATH_LIB"
+GDK_PIXBUF_EXTRA_LIBS="$STATIC_LIB_DEPS $MATH_LIB $MEDIA_LIB"
 GDK_PIXBUF_EXTRA_CFLAGS= 
 GDK_PIXBUF_DEP_LIBS="`$PKG_CONFIG --libs $GDK_PIXBUF_PACKAGES` $GDK_PIXBUF_EXTRA_LIBS"
 GDK_PIXBUF_DEP_CFLAGS="`$PKG_CONFIG --cflags  gthread-2.0 $GDK_PIXBUF_PACKAGES $PNG_DEP_CFLAGS_PACKAGES` $GDK_PIXBUF_EXTRA_CFLAGS"

@@ -1,3 +1,17 @@
+2007-05-16  Brian Cameron  <brian.cameron@sun.com>
+
+	* acconfig.h, configure.in, gdk/Makefile.am, gdkprivate.h, gdkrgb.c,
+	  gdkdraw.c, gdk-pixbuf/gdk-pixbuf-scale.c,
+	  gdk-pixbuf/pixops/Makefile.am, gdk-pixbuf/pixops/pixops.[ch],
+	  gdk-pixbuf/pixops/timescale.c:  Add Sun mediaLib support so that
+	  hardware acceleration via mediaLib is enabled if mediaLib is
+	  detected via configure.  Enhancement request #344813.  I was given
+	  permission to commit in the bug report by Matthias Clasen.
+	* gdk/medialib.[ch]: New files added for mediaLib support.
+	* docs/reference/gdk-pixbuf/tmpl/scaling.sgml,
+	  docs/reference/gdk/tmpl/rgb.sgml, gdk/gdkdraw.c:  Add docs for
+	  mediaLib support.
+
 2007-05-15  Torsten Schoenfeld  <kaffeetisch@gmx.de>
 
 	* gtk/gtkprintoperation.c (pdf_end_run): Unset priv->platform_data and
