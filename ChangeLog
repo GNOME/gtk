@@ -1,3 +1,9 @@
+2007-05-16  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtkpathbar.c: Add ATK names to the Up, Down, and Root
+	buttons. Keep the focus from vanishing when Up or Down arrows
+	become insensitive or invisible.  (#357005, Patrick Wade)
+
 2007-05-16  Brian Cameron  <brian.cameron@sun.com>
 
 	* acconfig.h, configure.in, gdk/Makefile.am, gdkprivate.h, gdkrgb.c,
