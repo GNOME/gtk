@@ -3932,22 +3932,10 @@ gtk_notebook_real_insert_page (GtkNotebook *notebook,
   g_return_val_if_fail (menu_label == NULL || GTK_IS_WIDGET (menu_label), -1);
 
   gtk_widget_freeze_child_notify (child);
-  
-  page = g_new (GtkNotebookPage, 1);
+
+  page = g_new0 (GtkNotebookPage, 1);
   page->child = child;
-  page->last_focus_child = NULL;
-  page->requisition.width = 0;
-  page->requisition.height = 0;
-  page->allocation.x = 0;
-  page->allocation.y = 0;
-  page->allocation.width = 0;
-  page->allocation.height = 0;
-  page->default_menu = FALSE;
-  page->default_tab = FALSE;
-  page->mnemonic_activate_signal = 0;
-  page->reorderable = FALSE;
-  page->detachable = FALSE;
-   
+
   nchildren = g_list_length (notebook->children);
   if ((position < 0) || (position > nchildren))
     position = nchildren;
@@ -3958,7 +3946,7 @@ gtk_notebook_real_insert_page (GtkNotebook *notebook,
     {
       page->default_tab = TRUE;
       if (notebook->show_tabs)
-	tab_label = gtk_label_new ("");
+	tab_label = gtk_label_new (NULL);
     }
   page->tab_label = tab_label;
   page->menu_label = menu_label;
@@ -4014,7 +4002,8 @@ gtk_notebook_real_insert_page (GtkNotebook *notebook,
   if (!notebook->cur_page)
     {
       gtk_notebook_switch_page (notebook, page, 0);
-      gtk_notebook_switch_focus_tab (notebook, NULL);
+      /* focus_tab is set in the switch_page method */
+      gtk_notebook_switch_focus_tab (notebook, notebook->focus_tab);
     }
 
   gtk_notebook_update_tab_states (notebook);
@@ -4664,7 +4653,7 @@ gtk_notebook_draw_arrow (GtkNotebook      *notebook,
 
       if (notebook->focus_tab &&
 	  !gtk_notebook_search_page (notebook, notebook->focus_tab,
-				      left? STEP_PREV : STEP_NEXT, TRUE))
+				     left ? STEP_PREV : STEP_NEXT, TRUE))
 	{
 	  shadow_type = GTK_SHADOW_ETCHED_IN;
 	  state_type = GTK_STATE_INSENSITIVE;

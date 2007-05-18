@@ -1,3 +1,10 @@
+2007-05-18  Carlos Garnacho  <carlos@imendio.com>
+
+	* gtk/gtknotebook.c (gtk_notebook_real_insert_page): Do not unset
+	the brand new current page if there was none set previously. Fixes
+	#425138 (Reported by Michail Crayson). Some code simplifications.
+	(gtk_notebook_draw_arrow): code style fix.
+
 2007-05-16  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtkpathbar.c: Add ATK names to the Up, Down, and Root
