@@ -1768,6 +1768,7 @@ gtk_icon_theme_list_contexts
 gtk_icon_theme_list_icons
 gtk_icon_theme_load_icon
 gtk_icon_theme_lookup_icon
+gtk_icon_theme_choose_icon
 gtk_icon_theme_new
 gtk_icon_theme_prepend_search_path PRIVATE
 #ifdef G_OS_WIN32
@@ -4452,6 +4453,16 @@ gtk_viewport_new
 gtk_viewport_set_hadjustment
 gtk_viewport_set_shadow_type
 gtk_viewport_set_vadjustment
+#endif
+#endif
+
+#if IN_HEADER(__GTK_SCALE_BUTTON_H__)
+#if IN_FILE(__GTK_SCALE_BUTTON_C__)
+gtk_scale_button_get_type G_GNUC_CONST
+gtk_scale_button_get_value
+gtk_scale_button_new
+gtk_scale_button_set_icons
+gtk_scale_button_set_value
 #endif
 #endif
 

@@ -1,3 +1,10 @@
+2007-05-18  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtk.symbols:
+	* gtk/gtkicontheme.h:
+	* gtk/gtkicontheme.c: Add a function to look up an icon from
+	a list of icon names.  (#396901, Luca Ferretti)
+
 2007-05-18  Emmanuele Bassi  <ebassi@gnome.org>
 
 	* gtk/gtkrecentchooserdefault.c:

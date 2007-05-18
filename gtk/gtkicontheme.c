@@ -1225,30 +1225,11 @@ ensure_valid_themes (GtkIconTheme *icon_theme)
   priv->loading_themes = FALSE;
 }
 
-/**
- * gtk_icon_theme_lookup_icon:
- * @icon_theme: a #GtkIconTheme
- * @icon_name: the name of the icon to lookup
- * @size: desired icon size
- * @flags: flags modifying the behavior of the icon lookup
- * 
- * Looks up a named icon and returns a structure containing
- * information such as the filename of the icon. The icon
- * can then be rendered into a pixbuf using
- * gtk_icon_info_load_icon(). (gtk_icon_theme_load_icon()
- * combines these two steps if all you need is the pixbuf.)
- * 
- * Return value: a #GtkIconInfo structure containing information
- * about the icon, or %NULL if the icon wasn't found. Free with
- * gtk_icon_info_free()
- *
- * Since: 2.4
- **/
-GtkIconInfo *
-gtk_icon_theme_lookup_icon (GtkIconTheme       *icon_theme,
-			    const gchar        *icon_name,
-			    gint                size,
-			    GtkIconLookupFlags  flags)
+static GtkIconInfo *
+choose_icon (GtkIconTheme       *icon_theme,
+	     const gchar        *icon_names[],
+	     gint                size,
+	     GtkIconLookupFlags  flags)
 {
   GtkIconThemePrivate *priv;
   GList *l;
@@ -1256,17 +1237,10 @@ gtk_icon_theme_lookup_icon (GtkIconTheme       *icon_theme,
   UnthemedIcon *unthemed_icon;
   gboolean allow_svg;
   gboolean use_builtin;
-  gboolean generic_fallback;
-
-  g_return_val_if_fail (GTK_IS_ICON_THEME (icon_theme), NULL);
-  g_return_val_if_fail (icon_name != NULL, NULL);
-  g_return_val_if_fail ((flags & GTK_ICON_LOOKUP_NO_SVG) == 0 ||
-			(flags & GTK_ICON_LOOKUP_FORCE_SVG) == 0, NULL);
+  gint i;
 
   priv = icon_theme->priv;
 
-  GTK_NOTE (ICONTHEME, 
-	    g_print ("gtk_icon_theme_lookup_icon %s\n", icon_name));
   if (flags & GTK_ICON_LOOKUP_NO_SVG)
     allow_svg = FALSE;
   else if (flags & GTK_ICON_LOOKUP_FORCE_SVG)
@@ -1275,7 +1249,6 @@ gtk_icon_theme_lookup_icon (GtkIconTheme       *icon_theme,
     allow_svg = priv->pixbuf_supports_svg;
 
   use_builtin = flags & GTK_ICON_LOOKUP_USE_BUILTIN;
-  generic_fallback = flags & GTK_ICON_LOOKUP_GENERIC_FALLBACK;
   
   ensure_valid_themes (icon_theme);
 
@@ -1283,29 +1256,21 @@ gtk_icon_theme_lookup_icon (GtkIconTheme       *icon_theme,
     {
       IconTheme *theme = l->data;
       
-      gchar *name = g_strdup (icon_name);
-      gchar *s;
-
-      while (TRUE)
+      for (i = 0; icon_names[i]; i++)
         {
-          icon_info = theme_lookup_icon (theme, name, size, allow_svg, use_builtin);
-          if (icon_info || !generic_fallback)
-            break;
-
-          s = strrchr (name, '-');
-          if (!s)
-            break;
-  
-          *s = '\0';   
+          icon_info = theme_lookup_icon (theme, icon_names[i], size, allow_svg, use_builtin);
+          if (icon_info)
+            goto out;
         }
-
-      g_free (name); 
-
-      if (icon_info)
-	goto out;
     }
 
-  unthemed_icon = g_hash_table_lookup (priv->unthemed_icons, icon_name);
+  for (i = 0; icon_names[i]; i++)
+    {
+      unthemed_icon = g_hash_table_lookup (priv->unthemed_icons, icon_names[i]);
+      if (unthemed_icon)
+        break;
+    }
+
   if (unthemed_icon)
     {
       icon_info = icon_info_new ();
@@ -1357,12 +1322,123 @@ gtk_icon_theme_lookup_icon (GtkIconTheme       *icon_theme,
 			   "was not found either, perhaps you need to install it.\n"
 			   "You can get a copy from:\n"
 			   "\t%s"),
-			 icon_name, DEFAULT_THEME_NAME, "http://icon-theme.freedesktop.org/releases");
+			 icon_names[0], DEFAULT_THEME_NAME, "http://icon-theme.freedesktop.org/releases");
 	    }
 	}
     }
 
   return icon_info;
+}
+
+
+/**
+ * gtk_icon_theme_lookup_icon:
+ * @icon_theme: a #GtkIconTheme
+ * @icon_name: the name of the icon to lookup
+ * @size: desired icon size
+ * @flags: flags modifying the behavior of the icon lookup
+ * 
+ * Looks up a named icon and returns a structure containing
+ * information such as the filename of the icon. The icon
+ * can then be rendered into a pixbuf using
+ * gtk_icon_info_load_icon(). (gtk_icon_theme_load_icon()
+ * combines these two steps if all you need is the pixbuf.)
+ * 
+ * Return value: a #GtkIconInfo structure containing information
+ * about the icon, or %NULL if the icon wasn't found. Free with
+ * gtk_icon_info_free()
+ *
+ * Since: 2.4
+ */
+GtkIconInfo *
+gtk_icon_theme_lookup_icon (GtkIconTheme       *icon_theme,
+			    const gchar        *icon_name,
+			    gint                size,
+			    GtkIconLookupFlags  flags)
+{
+  GtkIconInfo *info;
+
+  g_return_val_if_fail (GTK_IS_ICON_THEME (icon_theme), NULL);
+  g_return_val_if_fail (icon_name != NULL, NULL);
+  g_return_val_if_fail ((flags & GTK_ICON_LOOKUP_NO_SVG) == 0 ||
+			(flags & GTK_ICON_LOOKUP_FORCE_SVG) == 0, NULL);
+
+  GTK_NOTE (ICONTHEME, 
+	    g_print ("gtk_icon_theme_lookup_icon %s\n", icon_name));
+
+  if (flags & GTK_ICON_LOOKUP_GENERIC_FALLBACK)
+    {
+      gchar **names;
+      gint dashes, i;
+      gchar *p;
+ 
+      dashes = 0;
+      for (p = icon_name; *p; p++)
+        if (*p == '-')
+          dashes++;
+
+      names = g_new (gchar *, dashes + 2);
+      names[0] = g_strdup (icon_name);
+      for (i = 1; i <= dashes; i++)
+        {
+          names[i] = g_strdup (names[i - 1]);
+          p = strrchr (names[i], '-');
+          *p = '\0';
+        }
+      names[dashes + 1] = NULL;
+   
+      info = choose_icon (icon_theme, names, size, flags);
+      
+      g_strfreev (names);
+    }
+  else 
+    {
+      gchar *names[2];
+      
+      names[0] = icon_name;
+      names[1] = NULL;
+
+      info = choose_icon (icon_theme, names, size, flags);
+    }
+
+  return info;
+}
+
+/**
+ * gtk_icon_theme_choose_icon:
+ * @icon_theme: a #GtkIconTheme
+ * @icon_names: %NULL-terminated array of icon names to lookup
+ * @size: desired icon size
+ * @flags: flags modifying the behavior of the icon lookup
+ * 
+ * Looks up a named icon and returns a structure containing
+ * information such as the filename of the icon. The icon
+ * can then be rendered into a pixbuf using
+ * gtk_icon_info_load_icon(). (gtk_icon_theme_load_icon()
+ * combines these two steps if all you need is the pixbuf.)
+ *
+ * If @icon_names contains more than one name, this function 
+ * tries them all in the given order before falling back to 
+ * inherited icon themes.
+ * 
+ * Return value: a #GtkIconInfo structure containing information
+ * about the icon, or %NULL if the icon wasn't found. Free with
+ * gtk_icon_info_free()
+ *
+ * Since: 2.12
+ */
+GtkIconInfo *
+gtk_icon_theme_choose_icon (GtkIconTheme       *icon_theme,
+			    const gchar        *icon_names[],
+			    gint                size,
+			    GtkIconLookupFlags  flags)
+{
+  g_return_val_if_fail (GTK_IS_ICON_THEME (icon_theme), NULL);
+  g_return_val_if_fail (icon_names != NULL, NULL);
+  g_return_val_if_fail ((flags & GTK_ICON_LOOKUP_NO_SVG) == 0 ||
+			(flags & GTK_ICON_LOOKUP_FORCE_SVG) == 0, NULL);
+
+  return choose_icon (icon_theme, icon_names, size, flags);
 }
 
 /* Error quark */

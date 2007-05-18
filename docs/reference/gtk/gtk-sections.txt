@@ -3013,6 +3013,23 @@ gtk_scale_get_type
 </SECTION>
 
 <SECTION>
+<FILE>gtkscalebutton</FILE>
+<TITLE>GtkScaleButton</TITLE>
+GtkScaleButton
+gtk_scale_button_new
+gtk_scale_button_set_value
+gtk_scale_button_get_value
+gtk_scale_button_set_icons
+<SUBSECTION Standard>
+GTK_SCALE_BUTTON
+GTK_SCALE_IS_BUTTON
+GTK_TYPE_SCALE_BUTTON
+GTK_SCALE_BUTTON_GET_CLASS
+<SUBSECTION Private>
+gtk_scale_button_get_type
+</SECTION>
+
+<SECTION>
 <FILE>gtkscrollbar</FILE>
 <TITLE>GtkScrollbar</TITLE>
 GtkScrollbar
@@ -6003,6 +6020,7 @@ gtk_icon_theme_prepend_search_path
 gtk_icon_theme_set_custom_theme
 gtk_icon_theme_has_icon
 gtk_icon_theme_lookup_icon
+gtk_icon_theme_choose_icon
 gtk_icon_theme_load_icon
 gtk_icon_theme_list_contexts
 gtk_icon_theme_list_icons
