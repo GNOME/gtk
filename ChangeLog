@@ -1,3 +1,39 @@
+2007-05-18  Carlos Garnacho  <carlos@imendio.com>
+
+	Refactor GtkFileChooserDialog sizing.
+
+	* gtkfilechooserembed.[ch] (delegate_get_resizable_hints)
+	(_gtk_file_chooser_embed_get_resizable_hints):
+	s/resizable_hints/resizable/, return just one boolean value to
+	determine whether the filechooser should be resizable or not.
+
+	* gtkfilechooserprivate.h (struct GtkFileChooserDialogPrivate): remove
+	variables related to the GtkFileChooserEmbed get_default_size() and
+	get_resizable() implementations.
+	(struct GtkFileChooserDefault): Move default size management here.
+
+	* gtkfilechooserdefault.c (gtk_file_chooser_default_size_allocate):
+	Added, store currently allocated size to calculate default size later.
+	(gtk_file_chooser_default_get_resizable_hints):
+	s/resizable_hints/resizable/.
+	(gtk_file_chooser_default_set_property): Reload settings if the file
+	chooser action changes, this way the save expander state will be known
+	before mapping the window, avoiding wrong window positioning and
+	flickering. (#424299, #424309)
+	(find_good_size_from_style): Only get size from style if it wasn't set
+	previously.
+	(gtk_file_chooser_default_get_default_size): return default size based
+	on stored default size and preview/extra widget sizes.
+
+	* gtkfilechooserdialog.c (file_chooser_widget_update_hints)
+	(file_chooser_widget_realized_size_changed)
+	(file_chooser_widget_unrealized_size_changed): simplified to
+	(file_chooser_widget_size_changed): set window size and resizability
+	based on the GtkFileChooserEmbed interface implementation. (Bug
+	#420285, Tomeu Vizoso)
+	(gtk_file_chooser_dialog_map): force a dialog size change, so it's
+	clamped for sure to the 75% of the screen size.
+
 2007-05-14  Behdad Esfahbod  <behdad@gnome.org>
 
 	* modules/input/gtkimcontextthai.c
