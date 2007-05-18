@@ -112,10 +112,6 @@ struct _GtkFileChooserDialogPrivate
   char *file_system;
 
   /* for use with GtkFileChooserEmbed */
-  gint default_width;
-  gint default_height;
-  gboolean resize_horizontally;
-  gboolean resize_vertically;
   gboolean response_requested;
 };
 
@@ -288,6 +284,9 @@ struct _GtkFileChooserDefault
   GdkDragContext *shortcuts_drag_context;
   GSource *shortcuts_drag_outside_idle;
 #endif
+
+  gint default_width;
+  gint default_height;
 
   /* Flags */
 

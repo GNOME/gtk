@@ -324,6 +324,8 @@ static void     gtk_file_chooser_default_style_set      (GtkWidget             *
 							 GtkStyle              *previous_style);
 static void     gtk_file_chooser_default_screen_changed (GtkWidget             *widget,
 							 GdkScreen             *previous_screen);
+static void     gtk_file_chooser_default_size_allocate  (GtkWidget             *widget,
+							 GtkAllocation         *allocation);
 
 static gboolean       gtk_file_chooser_default_set_current_folder 	   (GtkFileChooser    *chooser,
 									    const GtkFilePath *path,
@@ -362,9 +364,7 @@ static GSList *       gtk_file_chooser_default_list_shortcut_folders  (GtkFileCh
 static void           gtk_file_chooser_default_get_default_size       (GtkFileChooserEmbed *chooser_embed,
 								       gint                *default_width,
 								       gint                *default_height);
-static void           gtk_file_chooser_default_get_resizable_hints    (GtkFileChooserEmbed *chooser_embed,
-								       gboolean            *resize_horizontally,
-								       gboolean            *resize_vertically);
+static gboolean       gtk_file_chooser_default_get_resizable          (GtkFileChooserEmbed *chooser_embed);
 static gboolean       gtk_file_chooser_default_should_respond         (GtkFileChooserEmbed *chooser_embed);
 static void           gtk_file_chooser_default_initial_focus          (GtkFileChooserEmbed *chooser_embed);
 
@@ -487,6 +487,7 @@ static void     search_switch_to_browse_mode (GtkFileChooserDefault *impl);
 static GSList  *search_get_selected_paths    (GtkFileChooserDefault *impl);
 static void     search_entry_activate_cb     (GtkEntry              *entry, 
 					      gpointer               data);
+static void     settings_load                (GtkFileChooserDefault *impl);
 static void     search_get_valid_child_iter  (GtkFileChooserDefault *impl,
                                               GtkTreeIter           *child_iter,
                                               GtkTreeIter           *iter);
@@ -613,6 +614,7 @@ _gtk_file_chooser_default_class_init (GtkFileChooserDefaultClass *class)
   widget_class->hierarchy_changed = gtk_file_chooser_default_hierarchy_changed;
   widget_class->style_set = gtk_file_chooser_default_style_set;
   widget_class->screen_changed = gtk_file_chooser_default_screen_changed;
+  widget_class->size_allocate = gtk_file_chooser_default_size_allocate;
 
   signals[LOCATION_POPUP] =
     _gtk_binding_signal_new (I_("location-popup"),
@@ -811,7 +813,7 @@ static void
 gtk_file_chooser_embed_default_iface_init (GtkFileChooserEmbedIface *iface)
 {
   iface->get_default_size = gtk_file_chooser_default_get_default_size;
-  iface->get_resizable_hints = gtk_file_chooser_default_get_resizable_hints;
+  iface->get_resizable = gtk_file_chooser_default_get_resizable;
   iface->should_respond = gtk_file_chooser_default_should_respond;
   iface->initial_focus = gtk_file_chooser_default_initial_focus;
 }
@@ -5473,6 +5475,7 @@ gtk_file_chooser_default_set_property (GObject      *object,
 	      }
 	    impl->action = action;
 	    update_appearance (impl);
+	    settings_load (impl);
 	  }
       }
       break;
@@ -5915,6 +5918,37 @@ gtk_file_chooser_default_screen_changed (GtkWidget *widget,
   g_signal_emit_by_name (widget, "default-size-changed");
 
   profile_end ("end", NULL);
+}
+
+static void
+gtk_file_chooser_default_size_allocate (GtkWidget     *widget,
+					GtkAllocation *allocation)
+{
+  GtkFileChooserDefault *impl;
+
+  impl = GTK_FILE_CHOOSER_DEFAULT (widget);
+
+  GTK_WIDGET_CLASS (_gtk_file_chooser_default_parent_class)->size_allocate (widget, allocation);
+
+  if (!gtk_file_chooser_default_get_resizable (GTK_FILE_CHOOSER_EMBED (impl)))
+    {
+      /* The dialog is not resizable, we shouldn't
+       * trust in the size it has in this stage
+       */
+      return;
+    }
+
+  impl->default_width = allocation->width;
+  impl->default_height = allocation->height;
+
+  if (impl->preview_widget_active &&
+      impl->preview_widget &&
+      GTK_WIDGET_DRAWABLE (impl->preview_widget))
+    impl->default_width -= impl->preview_widget->allocation.width + PREVIEW_HBOX_SPACING;
+
+  if (impl->extra_widget &&
+      GTK_WIDGET_DRAWABLE (impl->extra_widget))
+    impl->default_height -= GTK_BOX (widget)->spacing + impl->extra_widget->allocation.height;
 }
 
 static gboolean
@@ -7760,49 +7794,35 @@ find_good_size_from_style (GtkWidget *widget,
 			   gint      *height)
 {
   GtkFileChooserDefault *impl;
-  gint default_width, default_height;
   int font_size;
-  GtkRequisition req;
   GdkScreen *screen;
   double resolution;
 
   g_assert (widget->style != NULL);
   impl = GTK_FILE_CHOOSER_DEFAULT (widget);
 
-  screen = gtk_widget_get_screen (widget);
-  if (screen)
+  if (impl->default_width == 0 &&
+      impl->default_height == 0)
     {
-      resolution = gdk_screen_get_resolution (screen);
-      if (resolution < 0.0) /* will be -1 if the resolution is not defined in the GdkScreen */
-	resolution = 96.0;
-    }
-  else
-    resolution = 96.0; /* wheeee */
+      screen = gtk_widget_get_screen (widget);
+      if (screen)
+	{
+	  resolution = gdk_screen_get_resolution (screen);
+	  if (resolution < 0.0) /* will be -1 if the resolution is not defined in the GdkScreen */
+	    resolution = 96.0;
+	}
+      else
+	resolution = 96.0; /* wheeee */
 
-  font_size = pango_font_description_get_size (widget->style->font_desc);
-  font_size = PANGO_PIXELS (font_size) * resolution / 72.0;
+      font_size = pango_font_description_get_size (widget->style->font_desc);
+      font_size = PANGO_PIXELS (font_size) * resolution / 72.0;
 
-  default_width = font_size * NUM_CHARS;
-  default_height = font_size * NUM_LINES;
-
-  if (impl->preview_widget_active && impl->preview_widget)
-    {
-      gtk_widget_size_request (impl->preview_box, &req);
-      default_width += PREVIEW_HBOX_SPACING + req.width;
+      impl->default_width = font_size * NUM_CHARS;
+      impl->default_height = font_size * NUM_LINES;
     }
 
-  if (impl->extra_widget)
-    {
-      gtk_widget_size_request (impl->extra_align, &req);
-      default_height += GTK_BOX (widget)->spacing + req.height;
-    }
-
-  gtk_widget_size_request (widget, &req);
-  default_width = MAX (default_width, req.width);
-  default_height = MAX (default_height, req.height);
-
-  *width = default_width;
-  *height = default_height;
+  *width = impl->default_width;
+  *height = impl->default_height;
 }
 
 static void
@@ -7811,35 +7831,37 @@ gtk_file_chooser_default_get_default_size (GtkFileChooserEmbed *chooser_embed,
 					   gint                *default_height)
 {
   GtkFileChooserDefault *impl;
+  GtkRequisition req;
 
   impl = GTK_FILE_CHOOSER_DEFAULT (chooser_embed);
   find_good_size_from_style (GTK_WIDGET (chooser_embed), default_width, default_height);
+
+  if (impl->preview_widget_active &&
+      impl->preview_widget &&
+      GTK_WIDGET_VISIBLE (impl->preview_widget))
+    {
+      gtk_widget_size_request (impl->preview_box, &req);
+      *default_width += PREVIEW_HBOX_SPACING + req.width;
+    }
+
+  if (impl->extra_widget &&
+      GTK_WIDGET_VISIBLE (impl->extra_widget))
+    {
+      gtk_widget_size_request (impl->extra_align, &req);
+      *default_height += GTK_BOX (chooser_embed)->spacing + req.height;
+    }
 }
 
-static void
-gtk_file_chooser_default_get_resizable_hints (GtkFileChooserEmbed *chooser_embed,
-					      gboolean            *resize_horizontally,
-					      gboolean            *resize_vertically)
+static gboolean
+gtk_file_chooser_default_get_resizable (GtkFileChooserEmbed *chooser_embed)
 {
   GtkFileChooserDefault *impl;
 
-  g_return_if_fail (resize_horizontally != NULL);
-  g_return_if_fail (resize_vertically != NULL);
-
   impl = GTK_FILE_CHOOSER_DEFAULT (chooser_embed);
 
-  *resize_horizontally = TRUE;
-  *resize_vertically = TRUE;
-
-  if (impl->action == GTK_FILE_CHOOSER_ACTION_SAVE ||
-      impl->action == GTK_FILE_CHOOSER_ACTION_CREATE_FOLDER)
-    {
-      if (! gtk_expander_get_expanded (GTK_EXPANDER (impl->save_expander)))
-	{
-	  *resize_horizontally = FALSE;
-	  *resize_vertically = FALSE;
-	}
-    }
+  return (impl->action == GTK_FILE_CHOOSER_ACTION_OPEN ||
+	  impl->action == GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER ||
+	  gtk_expander_get_expanded (GTK_EXPANDER (impl->save_expander)));
 }
 
 struct switch_folder_closure {
