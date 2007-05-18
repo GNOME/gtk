@@ -1,5 +1,12 @@
 2007-05-18  Carlos Garnacho  <carlos@imendio.com>
 
+	* gtk/gtknotebook.c (gtk_notebook_init) (gtk_notebook_drag_motion)
+	(gtk_notebook_drag_drop): Allow widgets up in the hierarchy to run
+	their DnD handlers if the target doesn't match with anything the
+	notebook manages. (#350665, Joakim Lundborg).
+
+2007-05-18  Carlos Garnacho  <carlos@imendio.com>
+
 	Refactor GtkFileChooserDialog sizing.
 
 	* gtkfilechooserembed.[ch] (delegate_get_resizable_hints)

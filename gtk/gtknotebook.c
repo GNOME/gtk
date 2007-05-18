@@ -1011,8 +1011,7 @@ gtk_notebook_init (GtkNotebook *notebook)
   priv->during_detach = FALSE;
   priv->has_scrolled = FALSE;
 
-  gtk_drag_dest_set (GTK_WIDGET (notebook),
-		     GTK_DEST_DEFAULT_MOTION | GTK_DEST_DEFAULT_DROP,
+  gtk_drag_dest_set (GTK_WIDGET (notebook), 0,
 		     notebook_targets, G_N_ELEMENTS (notebook_targets),
                      GDK_ACTION_MOVE);
 
@@ -3236,18 +3235,17 @@ gtk_notebook_drag_motion (GtkWidget      *widget,
 	  gdk_drag_status (context, GDK_ACTION_MOVE, time);
 	  return TRUE;
 	}
+      else
+	{
+	  /* it's a tab, but doesn't share
+	   * ID with this notebook */
+	  gdk_drag_status (context, 0, time);
+	}
     }
 
   priv = GTK_NOTEBOOK_GET_PRIVATE (widget);
   x += widget->allocation.x;
   y += widget->allocation.y;
-
-  if (target == tab_target)
-    {
-      /* it's a tab, but doesn't share
-       * ID with this notebook */
-      gdk_drag_status (context, 0, time);
-    }
 
   if (gtk_notebook_get_event_window_position (notebook, &position) &&
       x >= position.x && x <= position.x + position.width &&
@@ -3275,7 +3273,7 @@ gtk_notebook_drag_motion (GtkWidget      *widget,
 	}
     }
 
-  return TRUE;
+  return (target == tab_target) ? TRUE : FALSE;
 }
 
 static void
@@ -3303,14 +3301,18 @@ gtk_notebook_drag_drop (GtkWidget        *widget,
 			gint              y,
 			guint             time)
 {
-  GdkAtom target;
+  GdkAtom target, tab_target;
 
   target = gtk_drag_dest_find_target (widget, context, NULL);
+  tab_target = gdk_atom_intern_static_string ("GTK_NOTEBOOK_TAB");
 
-  if (target == GDK_NONE)
-    gtk_drag_finish (context, FALSE, FALSE, time);
+  if (target == tab_target)
+    {
+      gtk_drag_get_data (widget, context, target, time);
+      return TRUE;
+    }
 
-  return TRUE;
+  return FALSE;
 }
 
 static void
