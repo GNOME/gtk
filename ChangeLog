@@ -1,5 +1,17 @@
 2007-05-18  Carlos Garnacho  <carlos@imendio.com>
 
+	Make combobox menu popdown keybindable (#433593)
+
+	* gtk/gtkcombobox.c (gtk_combo_box_class_init): Add "popdown" binding
+	signal and keybindings.
+	(gtk_combo_box_real_popdown): Added, "popdown" keybinding signal
+	handler.
+	(gtk_combo_box_menu_key_press):
+	(gtk_combo_box_list_key_press): forward the event to the combobox if
+	it wasn't handled by the menu.
+
+2007-05-18  Carlos Garnacho  <carlos@imendio.com>
+
 	* gtk/gtknotebook.c (gtk_notebook_init) (gtk_notebook_drag_motion)
 	(gtk_notebook_drag_drop): Allow widgets up in the hierarchy to run
 	their DnD handlers if the target doesn't match with anything the

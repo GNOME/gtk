@@ -39,6 +39,7 @@
 #include "gtkvseparator.h"
 #include "gtkwindow.h"
 #include "gtkprivate.h"
+#include "gtkmarshal.h"
 
 #include <gdk/gdkkeysyms.h>
 
@@ -189,6 +190,7 @@ enum {
   CHANGED,
   MOVE_ACTIVE,
   POPUP,
+  POPDOWN,
   LAST_SIGNAL
 };
 
@@ -295,6 +297,7 @@ static gchar *  gtk_combo_box_real_get_active_text (GtkComboBox      *combo_box)
 static void     gtk_combo_box_real_move_active     (GtkComboBox      *combo_box,
                                                     GtkScrollType     scroll);
 static void     gtk_combo_box_real_popup           (GtkComboBox      *combo_box);
+static gboolean gtk_combo_box_real_popdown         (GtkComboBox      *combo_box);
 
 /* listening to the model */
 static void     gtk_combo_box_model_row_inserted   (GtkTreeModel     *model,
@@ -530,11 +533,29 @@ gtk_combo_box_class_init (GtkComboBoxClass *klass)
                              g_cclosure_marshal_VOID__VOID,
                              G_TYPE_NONE, 0);
 
+  combo_box_signals[POPDOWN] =
+    _gtk_binding_signal_new (I_("popdown"),
+                             G_OBJECT_CLASS_TYPE (klass),
+                             G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
+                             G_CALLBACK (gtk_combo_box_real_popdown),
+                             NULL, NULL,
+                             gtk_marshal_BOOLEAN__VOID,
+                             G_TYPE_BOOLEAN, 0);
+
   /* key bindings */
   binding_set = gtk_binding_set_by_class (widget_class);
 
   gtk_binding_entry_add_signal (binding_set, GDK_Down, GDK_MOD1_MASK,
 				"popup", 0);
+  gtk_binding_entry_add_signal (binding_set, GDK_KP_Down, GDK_MOD1_MASK,
+				"popup", 0);
+
+  gtk_binding_entry_add_signal (binding_set, GDK_Up, GDK_MOD1_MASK,
+				"popdown", 0);
+  gtk_binding_entry_add_signal (binding_set, GDK_KP_Up, GDK_MOD1_MASK,
+				"popdown", 0);
+  gtk_binding_entry_add_signal (binding_set, GDK_Escape, 0,
+				"popdown", 0);
 
   gtk_binding_entry_add_signal (binding_set, GDK_Up, 0,
 				"move-active", 1,
@@ -752,7 +773,7 @@ gtk_combo_box_class_init (GtkComboBoxClass *klass)
                                                          P_("Whether the combo's dropdown is shown"),
                                                          FALSE,
                                                          GTK_PARAM_READABLE));
-  
+
   gtk_widget_class_install_style_property (widget_class,
                                            g_param_spec_boolean ("appears-as-list",
                                                                  P_("Appears as list"),
@@ -1850,6 +1871,18 @@ gtk_combo_box_real_popup (GtkComboBox *combo_box)
     }
 
   gtk_grab_add (combo_box->priv->popup_window);
+}
+
+static gboolean
+gtk_combo_box_real_popdown (GtkComboBox *combo_box)
+{
+  if (combo_box->priv->popup_shown)
+    {
+      gtk_combo_box_popdown (combo_box);
+      return TRUE;
+    }
+
+  return FALSE;
 }
 
 /**
@@ -3752,17 +3785,16 @@ gtk_combo_box_menu_key_press (GtkWidget   *widget,
 			      gpointer     data)
 {
   GtkComboBox *combo_box = GTK_COMBO_BOX (data);
-  guint state = event->state & gtk_accelerator_get_default_mod_mask ();
 
-  if ((event->keyval == GDK_Up || event->keyval == GDK_KP_Up) && 
-      state == GDK_MOD1_MASK)
+  if (!gtk_bindings_activate_event (GTK_OBJECT (widget), event))
     {
-      gtk_combo_box_popdown (combo_box);
-
-      return TRUE;
+      /* The menu hasn't managed the
+       * event, forward it to the combobox
+       */
+      gtk_bindings_activate_event (GTK_OBJECT (combo_box), event);
     }
-  
-  return FALSE;
+
+  return TRUE;
 }
 
 static gboolean
@@ -3772,21 +3804,7 @@ gtk_combo_box_list_key_press (GtkWidget   *widget,
 {
   GtkComboBox *combo_box = GTK_COMBO_BOX (data);
   GtkTreeIter iter;
-  guint state = event->state & gtk_accelerator_get_default_mod_mask ();
 
-  if (event->keyval == GDK_Escape ||
-      ((event->keyval == GDK_Up || event->keyval == GDK_KP_Up) && 
-       state == GDK_MOD1_MASK))
-    {
-      gtk_combo_box_popdown (combo_box);
-      
-      /* reset active item -- this is incredibly lame and ugly */
-      if (gtk_combo_box_get_active_iter (combo_box, &iter))
-	gtk_combo_box_set_active_iter (combo_box, &iter);
-      
-      return TRUE;
-    }
-    
   if (event->keyval == GDK_Return || event->keyval == GDK_KP_Enter ||
       event->keyval == GDK_space || event->keyval == GDK_KP_Space) 
   {
@@ -3807,7 +3825,15 @@ gtk_combo_box_list_key_press (GtkWidget   *widget,
     return TRUE;
   }
 
-  return FALSE;
+  if (!gtk_bindings_activate_event (GTK_OBJECT (widget), event))
+    {
+      /* The list hasn't managed the
+       * event, forward it to the combobox
+       */
+      gtk_bindings_activate_event (GTK_OBJECT (combo_box), event);
+    }
+
+  return TRUE;
 }
 
 static void
