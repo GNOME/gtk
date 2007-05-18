@@ -971,11 +971,8 @@ recent_meta_data_func (GtkTreeViewColumn *tree_column,
 		       gpointer           user_data)
 {
   GtkRecentInfo *info = NULL;
-  gchar *uri;
-  gchar *name;
-  GString *data;
-  
-  data = g_string_new (NULL);
+  gchar *uri, *name;
+  gchar *str;
   
   gtk_tree_model_get (model, iter,
                       RECENT_DISPLAY_NAME_COLUMN, &name,
@@ -987,18 +984,13 @@ recent_meta_data_func (GtkTreeViewColumn *tree_column,
   
   if (!name)
     name = gtk_recent_info_get_short_name (info);
- 
-  g_string_append_printf (data,
-  			  "<b>%s</b>\n"
-  			  "<small>Location: %s</small>",
-  			  name,
-  			  uri);
+
+  str = g_strconcat ("<b>", name, "</b>\n",
+                     "<small>", _("Location:"), " ", uri, "</small>",
+                     NULL);
   
-  g_object_set (cell,
-                "markup", data->str,
-                NULL);
+  g_object_set (cell, "markup", str, NULL);
   
-  g_string_free (data, TRUE);
   g_free (uri);
   g_free (name);
   gtk_recent_info_unref (info);
