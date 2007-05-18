@@ -1,3 +1,8 @@
+2007-05-18  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtkwindow.c (gtk_window_set_transient_for): Fix
+	doc typo.  (#438100, Vincent Untz)
+
 2007-05-18  Michael J. Chudobiak  <mjc@cvs.gnome.org>
 
 	* INSTALL.in:
@@ -83,6 +88,7 @@
 	#425138 (Reported by Michail Crayson). Some code simplifications.
 	(gtk_notebook_draw_arrow): code style fix.
 
+>>>>>>> .r17863
 2007-05-16  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtkpathbar.c: Add ATK names to the Up, Down, and Root
