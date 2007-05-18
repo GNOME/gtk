@@ -1,5 +1,9 @@
 2007-05-18  Carlos Garnacho  <carlos@imendio.com>
 
+	* gtk/gtkexpander.c: remove c++ style comment.
+
+2007-05-18  Carlos Garnacho  <carlos@imendio.com>
+
 	Make combobox menu popdown keybindable (#433593)
 
 	* gtk/gtkcombobox.c (gtk_combo_box_class_init): Add "popdown" binding

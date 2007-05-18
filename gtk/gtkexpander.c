@@ -411,7 +411,6 @@ gtk_expander_realize (GtkWidget *widget)
   gdk_window_set_user_data (priv->event_window, widget);
 
   widget->style = gtk_style_attach (widget->style, widget->window);
-  //gtk_style_set_background (widget->style, widget->window, GTK_STATE_NORMAL);
 }
 
 static void
