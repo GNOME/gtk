@@ -1,5 +1,14 @@
 2007-05-18  Emmanuele Bassi  <ebassi@gnome.org>
 
+	* gtk/gtkrecentchooserdefault.c:
+	(gtk_recent_chooser_default_dispose): Reset the state on dispose.
+
+	(cleanup_after_load): load_id != 0 && load_state == LOAD_EMPTY
+	is a valid state, if the main loop never had the chance to
+	properly spin at least once. (#438671)
+
+2007-05-18  Emmanuele Bassi  <ebassi@gnome.org>
+
 	* gtk/gtkrecentchooserdefault.c (recent_meta_data_func): Mark
 	string for translation. (#439437)
 

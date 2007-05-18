@@ -590,6 +590,7 @@ gtk_recent_chooser_default_dispose (GObject *object)
   if (impl->load_id)
     {
       g_source_remove (impl->load_id);
+      impl->load_state = LOAD_EMPTY;
       impl->load_id = 0;
     }
 
@@ -839,7 +840,8 @@ cleanup_after_load (gpointer user_data)
 
   if (impl->load_id != 0)
     {
-      g_assert ((impl->load_state == LOAD_PRELOAD) ||
+      g_assert ((impl->load_state == LOAD_EMPTY) ||
+                (impl->load_state == LOAD_PRELOAD) ||
 		(impl->load_state == LOAD_LOADING) ||
 		(impl->load_state == LOAD_FINISHED));
       
