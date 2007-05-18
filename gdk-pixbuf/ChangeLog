@@ -1,3 +1,17 @@
+2007-05-18  Michael J. Chudobiak  <mjc@cvs.gnome.org>
+
+	* gdk-pixbuf-scaled-anim.c: (get_scaled_pixbuf):
+	Preserve pixbuf options when generating a new scaled pixbuf.
+
+	* io-jpeg.c: (get_orientation), (gdk_pixbuf__jpeg_image_load),
+	(gdk_pixbuf__jpeg_image_load_increment): Read the exif
+	orientation tag and associate it with the "orientation" pixbuf
+	option. Renders libexif unnecessary in some applications.
+
+	* io-tiff.c: (tiff_image_parse): Read the tiff orientation tag,
+	compensate for the partial rotations performed by libtiff,
+	and generate an "orientation" option for the pixbuf.
+
 2007-04-29  Matthias Clasen <mclasen@redhat.com>
 
 	* io-jpeg.c: Remove a pointless check from the previous

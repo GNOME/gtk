@@ -121,13 +121,31 @@ static GdkPixbuf *
 get_scaled_pixbuf (GdkPixbufScaledAnim *scaled, 
                    GdkPixbuf           *pixbuf)
 {
+	GQuark  quark;
+	gchar **options;
+
 	if (scaled->current) 
 		g_object_unref (scaled->current);
 
+	/* Preserve the options associated with the original pixbuf 
+	   (if present), mostly so that client programs can use the
+	   "orientation" option (if present) to rotate the image 
+	   appropriately. gdk_pixbuf_scale_simple (and most other
+           gdk transform operations) does not preserve the attached
+           options when returning a new pixbuf. */
+
+	quark = g_quark_from_static_string ("gdk_pixbuf_options");
+	options = g_object_get_qdata (G_OBJECT (pixbuf), quark);
+
+	/* Get a new scaled pixbuf */
 	scaled->current  = gdk_pixbuf_scale_simple (pixbuf, 
 			(int) (gdk_pixbuf_get_width (pixbuf) * scaled->xscale),
 			(int) (gdk_pixbuf_get_height (pixbuf) * scaled->yscale),
 			GDK_INTERP_BILINEAR);
+
+	/* Copy the original pixbuf options to the scaled pixbuf */
+        if (options && scaled->current)
+	          g_object_set_qdata (G_OBJECT (scaled->current), quark, g_strdupv (options));
 
 	return scaled->current;
 }

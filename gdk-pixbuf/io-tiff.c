@@ -141,27 +141,14 @@ static void free_buffer (guchar *pixels, gpointer data)
 	g_free (pixels);
 }
 
-#if TIFFLIB_VERSION >= 20031226
-static gboolean tifflibversion (int *major, int *minor, int *revision)
-{
-        if (sscanf (TIFFGetVersion(), 
-                    "LIBTIFF, Version %d.%d.%d", 
-                    major, minor, revision) < 3)
-                return FALSE;
-
-        return TRUE;
-}
-#endif
-
 static GdkPixbuf *
 tiff_image_parse (TIFF *tiff, TiffContext *context, GError **error)
 {
 	guchar *pixels = NULL;
 	gint width, height, rowstride, bytes;
 	GdkPixbuf *pixbuf;
-#if TIFFLIB_VERSION >= 20031226
-        gint major, minor, revision;
-#endif
+	uint16 orientation = 0;
+	uint16 transform = 0;
 
         /* We're called with the lock held. */
         
@@ -238,95 +225,73 @@ tiff_image_parse (TIFF *tiff, TiffContext *context, GError **error)
                 return NULL;
         }
 
+	/* Set the "orientation" key associated with this image. libtiff 
+	   orientation handling is odd, so further processing is required
+	   by higher-level functions based on this tag. If the embedded
+	   orientation tag is 1-4, libtiff flips/mirrors the image as
+	   required, and no client processing is required - so we report 
+	   no orientation. Orientations 5-8 require rotations which would 
+	   swap the width and height of the image. libtiff does not do this. 
+	   Instead it interprets orientations 5-8 the same as 1-4. 
+	   See http://bugzilla.remotesensing.org/show_bug.cgi?id=1548.
+	   To correct for this, the client must apply the transform normally
+	   used for orientation 5 to both orientations 5 and 7, and apply
+	   the transform normally used for orientation 7 for both
+	   orientations 6 and 8. Then everythings works out OK! */
+	
+	TIFFGetField (tiff, TIFFTAG_ORIENTATION, &orientation);
+
+	switch (orientation) {
+		case 5:
+		case 7:
+			transform = 5;
+			break;
+		case 6:
+		case 8:
+			transform = 7;
+			break;
+		default:
+			transform = 0;
+			break;
+	}
+
+	if (transform > 0 ) {
+		gchar str[5];
+		snprintf (str, sizeof (str), "%d", transform);
+		gdk_pixbuf_set_option (pixbuf, "orientation", str);
+	}
+
 	if (context && context->prepare_func)
 		(* context->prepare_func) (pixbuf, NULL, context->user_data);
 
-#if TIFFLIB_VERSION >= 20031226
-        if (tifflibversion(&major, &minor, &revision) && major == 3 &&
-            (minor > 6 || (minor == 6 && revision > 0))) {                
-                if (!TIFFReadRGBAImageOriented (tiff, width, height, (uint32 *)pixels, ORIENTATION_TOPLEFT, 1) || global_error) 
-                {
-                        tiff_set_error (error,
-                                        GDK_PIXBUF_ERROR_FAILED,
-                                        _("Failed to load RGB data from TIFF file"));
-                        g_object_unref (pixbuf);
-                        return NULL;
-                }
+	if (!TIFFReadRGBAImageOriented (tiff, width, height, (uint32 *)pixels, ORIENTATION_TOPLEFT, 1) || global_error) {
+		tiff_set_error (error,
+                                GDK_PIXBUF_ERROR_FAILED,
+                                _("Failed to load RGB data from TIFF file"));
+		g_object_unref (pixbuf);
+		return NULL;
+	}
 
 #if G_BYTE_ORDER == G_BIG_ENDIAN
-                /* Turns out that the packing used by TIFFRGBAImage depends on 
-                 * the host byte order... 
-                 */ 
-                while (pixels < pixbuf->pixels + bytes) {
-                        uint32 pixel = *(uint32 *)pixels;
-                        int r = TIFFGetR(pixel);
-                        int g = TIFFGetG(pixel);
-                        int b = TIFFGetB(pixel);
-                        int a = TIFFGetA(pixel);
-                        *pixels++ = r;
-                        *pixels++ = g;
-                        *pixels++ = b;
-                        *pixels++ = a;
-                }
+	/* Turns out that the packing used by TIFFRGBAImage depends on 
+         * the host byte order... 
+         */ 
+	while (pixels < pixbuf->pixels + bytes) {
+		uint32 pixel = *(uint32 *)pixels;
+		int r = TIFFGetR(pixel);
+		int g = TIFFGetG(pixel);
+		int b = TIFFGetB(pixel);
+		int a = TIFFGetA(pixel);
+		*pixels++ = r;
+		*pixels++ = g;
+		*pixels++ = b;
+		*pixels++ = a;
+	}
 #endif
-        }
-        else 
-#endif
-              {
-                uint32 *rast, *tmp_rast;
-                gint x, y;
-                guchar *tmppix;
-
-                /* Yes, it needs to be _TIFFMalloc... */
-                rast = (uint32 *) _TIFFmalloc (width * height * sizeof (uint32));
-                if (!rast) {
-                        g_set_error (error,
-                                     GDK_PIXBUF_ERROR,
-                                     GDK_PIXBUF_ERROR_INSUFFICIENT_MEMORY,
-                                     _("Insufficient memory to open TIFF file"));
-                        g_object_unref (pixbuf);
-                        
-                        return NULL;
-                }
-                if (!TIFFReadRGBAImage (tiff, width, height, rast, 1) || global_error) {
-                        tiff_set_error (error,
-                                        GDK_PIXBUF_ERROR_FAILED,
-                                        _("Failed to load RGB data from TIFF file"));
-                        g_object_unref (pixbuf);
-                        _TIFFfree (rast);
-                        
-                        return NULL;
-                }
-                
-                pixels = gdk_pixbuf_get_pixels (pixbuf);
-                
-                g_assert (pixels);
-                
-                tmppix = pixels;
-                
-                for (y = 0; y < height; y++) {
-                        /* Unexplainable...are tiffs backwards? */
-                        /* Also looking at the GIMP plugin, this
-                         * whole reading thing can be a bit more
-                         * robust.
-                         */
-                        tmp_rast = rast + ((height - y - 1) * width);
-                        for (x = 0; x < width; x++) {
-                                tmppix[0] = TIFFGetR (*tmp_rast);
-                                tmppix[1] = TIFFGetG (*tmp_rast);
-                                tmppix[2] = TIFFGetB (*tmp_rast);
-                                tmppix[3] = TIFFGetA (*tmp_rast);
-                                tmp_rast++;
-                                tmppix += 4;
-                        }
-                }
-                
-                _TIFFfree (rast);
-             }
 
 	if (context && context->update_func)
 		(* context->update_func) (pixbuf, 0, 0, width, height, context->user_data);
-        
+
         return pixbuf;
 }
 
