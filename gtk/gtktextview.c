@@ -136,6 +136,7 @@ enum
   MOVE_FOCUS,
   MOVE_VIEWPORT,
   SELECT_ALL,
+  TOGGLE_CURSOR_VISIBLE,
   LAST_SIGNAL
 };
 
@@ -276,6 +277,7 @@ static void gtk_text_view_cut_clipboard    (GtkTextView           *text_view);
 static void gtk_text_view_copy_clipboard   (GtkTextView           *text_view);
 static void gtk_text_view_paste_clipboard  (GtkTextView           *text_view);
 static void gtk_text_view_toggle_overwrite (GtkTextView           *text_view);
+static void gtk_text_view_toggle_cursor_visible (GtkTextView      *text_view);
 static void gtk_text_view_move_focus       (GtkTextView           *text_view,
                                             GtkDirectionType       direction_type);
 static void gtk_text_view_unselect         (GtkTextView           *text_view);
@@ -825,10 +827,17 @@ gtk_text_view_class_init (GtkTextViewClass *klass)
 			     G_CALLBACK (gtk_text_view_select_all),
 			     NULL, NULL,
 			     _gtk_marshal_VOID__BOOLEAN,
-			     G_TYPE_NONE, 1,
-			     G_TYPE_BOOLEAN, TRUE);
+			     G_TYPE_NONE, 1, G_TYPE_BOOLEAN);
 
-  
+  signals[TOGGLE_CURSOR_VISIBLE] =
+    _gtk_binding_signal_new (I_("toggle_cursor_visible"),
+			     G_OBJECT_CLASS_TYPE (object_class),
+			     G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
+			     G_CALLBACK (gtk_text_view_toggle_cursor_visible),
+			     NULL, NULL,
+			     _gtk_marshal_VOID__VOID,
+			     G_TYPE_NONE, 0);
+
   /*
    * Key bindings
    */
@@ -1004,6 +1013,10 @@ gtk_text_view_class_init (GtkTextViewClass *klass)
 				"toggle_overwrite", 0);
   gtk_binding_entry_add_signal (binding_set, GDK_KP_Insert, 0,
 				"toggle_overwrite", 0);
+
+  /* Caret mode */
+  gtk_binding_entry_add_signal (binding_set, GDK_F7, 0,
+				"toggle_cursor_visible", 0);
 
   /* Control-tab focus motion */
   gtk_binding_entry_add_signal (binding_set, GDK_Tab, GDK_CONTROL_MASK,
@@ -2442,6 +2455,12 @@ gtk_text_view_get_tabs (GtkTextView *text_view)
   g_return_val_if_fail (GTK_IS_TEXT_VIEW (text_view), NULL);
 
   return text_view->tabs ? pango_tab_array_copy (text_view->tabs) : NULL;
+}
+
+static void
+gtk_text_view_toggle_cursor_visible (GtkTextView *text_view)
+{
+  gtk_text_view_set_cursor_visible (!text_view->cursor_visible);
 }
 
 /**

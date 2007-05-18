@@ -1,5 +1,10 @@
 2007-05-18  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtktextview.c: Add a toggle-cursor-visibility keybinding
+	signal, and bind F7 to it.  (#380048, Tim Miao)
+
+2007-05-18  Matthias Clasen  <mclasen@redhat.com>
+
 	* gtk/gtk.symbols:
 	* gtk/gtkicontheme.h:
 	* gtk/gtkicontheme.c: Add a function to look up an icon from
