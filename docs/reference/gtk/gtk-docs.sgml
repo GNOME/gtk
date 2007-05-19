@@ -163,6 +163,7 @@
 <!ENTITY GtkVButtonBox SYSTEM "xml/gtkvbbox.xml">
 <!ENTITY GtkVBox SYSTEM "xml/gtkvbox.xml">
 <!ENTITY GtkViewport SYSTEM "xml/gtkviewport.xml">
+<!ENTITY GtkVolumeButton SYSTEM "xml/gtkvolumebutton.xml">
 <!ENTITY GtkVPaned SYSTEM "xml/gtkvpaned.xml">
 <!ENTITY GtkVRuler SYSTEM "xml/gtkvruler.xml">
 <!ENTITY GtkVScale SYSTEM "xml/gtkvscale.xml">
@@ -395,6 +396,7 @@ that is, GUI components such as <link linkend="GtkButton">GtkButton</link> or
         &GtkScaleButton;
         &GtkToggleButton;
         &GtkLinkButton;
+	&GtkVolumeButton;
     </chapter>
 
     <chapter id="NumericEntry">
