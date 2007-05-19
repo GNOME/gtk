@@ -1,3 +1,7 @@
+2007-05-20  Bastien Nocera  <hadess@hadess.net>
+
+	* POTFILES.in: Add volume button to the list
+
 2007-05-19  Bastien Nocera  <hadess@hadess.net>
 
 	* POTFILES.in: Add scale button to the list

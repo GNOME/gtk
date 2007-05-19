@@ -197,6 +197,7 @@
 #include <gtk/gtkvbox.h>
 #include <gtk/gtkversion.h>
 #include <gtk/gtkviewport.h>
+#include <gtk/gtkvolumebutton.h>
 #include <gtk/gtkvpaned.h>
 #include <gtk/gtkvruler.h>
 #include <gtk/gtkvscale.h>

@@ -1,5 +1,10 @@
 2007-05-20  Bastien Nocera  <hadess@hadess.net>
 
+        * gtk/gtk-sections.txt: Add the GtkVolumeButton widget
+	to the docs
+
+2007-05-20  Bastien Nocera  <hadess@hadess.net>
+
 	* gtk/gtk-docs.sgml:
 	* gtk/gtk-sections.txt: add the GtkScaleButton widget
 	to the docs

@@ -1,3 +1,14 @@
+2007-05-20  Bastien Nocera  <hadess@hadess.net>
+
+	* gtk/Makefile.am:
+	* gtk/gtk.h:
+	* gtk/gtk.symbols:
+	* gtk/gtkvolumebutton.[ch]: Add the GtkVolumeButton widget,
+	a button that pops up a scale when clicked (Closes: #415775)
+	* tests/Makefile.am:
+	* tests/testvolumebutton.c: Add a test program for the
+	volume button
+
 2007-05-19  Bastien Nocera  <hadess@hadess.net>
 
 	reviewed by: Matthias Clasen <mclasen@redhat.com>

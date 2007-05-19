@@ -312,6 +312,7 @@ gtk_public_h_sources =          \
 	gtkvbbox.h		\
 	gtkvbox.h		\
 	gtkviewport.h		\
+	gtkvolumebutton.h	\
 	gtkvpaned.h		\
 	gtkvruler.h		\
 	gtkvscale.h		\
@@ -595,6 +596,7 @@ gtk_base_c_sources =            \
 	gtkuimanager.c		\
 	gtkvbbox.c		\
 	gtkvbox.c		\
+	gtkvolumebutton.c	\
 	gtkviewport.c		\
 	gtkvpaned.c		\
 	gtkvruler.c		\

@@ -229,6 +229,7 @@ gtk/gtkvbbox.c
 gtk/gtkvbox.c
 gtk/gtkwidget.c
 gtk/gtkviewport.c
+gtk/gtkvolumebutton.c
 gtk/gtkwindow.c
 gtk/gtkwindow-decorate.c
 gtk/gtkvpaned.c

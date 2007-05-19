@@ -85,7 +85,8 @@ noinst_PROGRAMS =			\
 	testmerge			\
 	testactions			\
 	testgrouping			\
-	testtooltips
+	testtooltips			\
+	testvolumebutton
 
 autotestfilechooser_DEPENDENCIES = $(TEST_DEPS)
 simple_DEPENDENCIES = $(TEST_DEPS)
@@ -140,6 +141,7 @@ testmerge_DEPENDENCIES = $(TEST_DEPS)
 testactions_DEPENDENCIES = $(TEST_DEPS)
 testgrouping_DEPENDENCIES = $(TEST_DEPS)
 testtooltips_DEPENDENCIES = $(TEST_DEPS)
+testvolumebutton_DEPENDENCIES = $(TEST_DEPS)
 
 autotestfilechooser_LDADD = $(LDADDS)
 simple_LDADD = $(LDADDS)
@@ -201,6 +203,7 @@ testmerge_LDADD = $(LDADDS)
 testactions_LDADD = $(LDADDS)
 testgrouping_LDADD = $(LDADDS)
 testtooltips_LDADD = $(LDADDS)
+testvolumebutton_LDADD = $(LDADDS)
 
 autotestfilechooser_SOURCES =	\
 	autotestfilechooser.c
@@ -284,6 +287,9 @@ testtooltips_SOURCES =		\
 
 testrecentchoosermenu_SOURCES =	\
 	testrecentchoosermenu.c
+
+testvolumebutton_SOURCES =	\
+	testvolumebutton.c
 
 EXTRA_DIST = 			\
 	prop-editor.h		\
