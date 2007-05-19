@@ -535,6 +535,21 @@ gtk_action_group_get_action (GtkActionGroup *action_group,
     (action_group, action_name);
 }
 
+static gboolean
+check_unique_action (GtkActionGroup *action_group,
+	             const gchar    *action_name)
+{
+  if (gtk_action_group_get_action (action_group, action_name) != NULL)
+    {
+      g_warning ("Refusing to add non-unique action '%s' to action group '%s'",
+	 	 action_name,
+		 action_group->private_data->name);
+      return FALSE;
+    }
+
+  return TRUE;
+}
+
 /**
  * gtk_action_group_add_action:
  * @action_group: the action group
@@ -556,6 +571,9 @@ gtk_action_group_add_action (GtkActionGroup *action_group,
   g_return_if_fail (GTK_IS_ACTION_GROUP (action_group));
   g_return_if_fail (GTK_IS_ACTION (action));
   g_return_if_fail (gtk_action_get_name (action) != NULL);
+  
+  if (!check_unique_action (action_group, gtk_action_get_name (action)))
+    return;
 
   g_hash_table_insert (action_group->private_data->actions, 
 		       g_strdup (gtk_action_get_name (action)),
@@ -592,6 +610,9 @@ gtk_action_group_add_action_with_accel (GtkActionGroup *action_group,
   GtkStockItem stock_item;
   gchar *name;
   gchar *stock_id;
+
+  if (!check_unique_action (action_group, gtk_action_get_name (action)))
+    return;
   
   g_object_get (action, "name", &name, "stock-id", &stock_id, NULL);
 
@@ -773,6 +794,9 @@ gtk_action_group_add_actions_full (GtkActionGroup       *action_group,
       const gchar *label;
       const gchar *tooltip;
 
+      if (!check_unique_action (action_group, entries[i].name))
+        continue;
+
       label = gtk_action_group_translate_string (action_group, entries[i].label);
       tooltip = gtk_action_group_translate_string (action_group, entries[i].tooltip);
 
@@ -876,6 +900,9 @@ gtk_action_group_add_toggle_actions_full (GtkActionGroup             *action_gro
       GtkToggleAction *action;
       const gchar *label;
       const gchar *tooltip;
+
+      if (!check_unique_action (action_group, entries[i].name))
+        continue;
 
       label = gtk_action_group_translate_string (action_group, entries[i].label);
       tooltip = gtk_action_group_translate_string (action_group, entries[i].tooltip);
@@ -988,6 +1015,9 @@ gtk_action_group_add_radio_actions_full (GtkActionGroup            *action_group
       GtkRadioAction *action;
       const gchar *label;
       const gchar *tooltip; 
+
+      if (!check_unique_action (action_group, entries[i].name))
+        continue;
 
       label = gtk_action_group_translate_string (action_group, entries[i].label);
       tooltip = gtk_action_group_translate_string (action_group, entries[i].tooltip);

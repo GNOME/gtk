@@ -1,5 +1,10 @@
 2007-05-18  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkactiongroup.c: Warn and refuse to add actions with
+	duplicate names.  (#150877, Tommi Komulainen)
+
+2007-05-18  Matthias Clasen  <mclasen@redhat.com>
+
 	* gtk/gtk.symbols:
 	* gtk/gtkentry.[hc]: Add gtk_entry_[gs]et_cursor_hadjustment()
 	to allow automatic scrolling in response to cursor movements
