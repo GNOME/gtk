@@ -11,7 +11,8 @@
 2007-05-18  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtkactiongroup.c: Warn and refuse to add actions with
-	duplicate names.  (#150877, Tommi Komulainen)
+	duplicate names.  (#150877, Tommi Komulainen, patch by Kalle
+	Vahlman)
 
 2007-05-18  Matthias Clasen  <mclasen@redhat.com>
 
