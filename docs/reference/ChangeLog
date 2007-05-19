@@ -1,5 +1,9 @@
 2007-05-18  Matthias Clasen <mclasen@redhat.com>
 
+	* gtk/gtk-sections.txt: Add gtk_entry_[gs]et_cursor_hadjustment.
+
+2007-05-18  Matthias Clasen <mclasen@redhat.com>
+
 	* gtk/gtk-sections.txt: Add generic icon lookup function
 
 2007-04-29  Dan Winship  <danw@novell.com>

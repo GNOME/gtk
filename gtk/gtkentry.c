@@ -89,6 +89,8 @@ struct _GtkEntryPrivate
   gint focus_width;
   gboolean interior_focus;
   GtkShadowType shadow_type;
+
+  GtkAdjustment *cursor_hadjustment;
 };
 
 typedef struct _GtkEntryPasswordHint GtkEntryPasswordHint;
@@ -352,6 +354,7 @@ static void         get_widget_window_size             (GtkEntry       *entry,
 							gint           *y,
 							gint           *width,
 							gint           *height);
+static void         gtk_entry_move_adjustments         (GtkEntry       *entry);
 
 /* Completion */
 static gint         gtk_entry_completion_timeout       (gpointer            data);
@@ -3129,8 +3132,11 @@ gtk_entry_set_positions (GtkEntry *entry,
 
   g_object_thaw_notify (G_OBJECT (entry));
 
-  if (changed)
-    gtk_entry_recompute (entry);
+  if (changed) 
+    {
+      gtk_entry_move_adjustments (entry);
+      gtk_entry_recompute (entry);
+    }
 }
 
 static void
@@ -3839,6 +3845,37 @@ gtk_entry_adjust_scroll (GtkEntry *entry)
     }
 
   g_object_notify (G_OBJECT (entry), "scroll-offset");
+}
+
+static void
+gtk_entry_move_adjustments (GtkEntry *entry)
+{
+  GtkEntryPrivate *priv = GTK_ENTRY_GET_PRIVATE (entry);
+  PangoContext *context;
+  PangoFontMetrics *metrics;
+  gint x, layout_x, border_x, border_y;
+  gint char_width;
+
+  if (!priv->cursor_hadjustment)
+    return;
+
+  /* Cursor position, layout offset, border width, and widget allocation */
+  gtk_entry_get_cursor_locations (entry, CURSOR_STANDARD, &x, NULL);
+  get_layout_position (entry, &layout_x, NULL);
+  _gtk_entry_get_borders (entry, &border_x, &border_y);
+  x += entry->widget.allocation.x + layout_x + border_x;
+
+  /* Approximate width of a char, so user can see what is ahead/behind */
+  context = gtk_widget_get_pango_context (GTK_WIDGET (entry));
+  metrics = pango_context_get_metrics (context, 
+                                       entry->widget.style->font_desc,
+				       pango_context_get_language (context));
+  char_width = pango_font_metrics_get_approximate_char_width (metrics) / PANGO_SCALE;
+
+  /* Scroll it */
+  gtk_adjustment_clamp_page (priv->cursor_hadjustment, 
+  			     x - (char_width + 1),   /* one char + one pixel before */
+			     x + (char_width + 2));  /* one char + cursor + one pixel after */
 }
 
 static gint
@@ -6066,6 +6103,64 @@ gtk_entry_get_completion (GtkEntry *entry)
                                      GTK_ENTRY_COMPLETION_KEY));
 
   return completion;
+}
+
+/**
+ * gtk_entry_set_cursor_hadjustment:
+ * @entry: a #GtkEntry
+ * @adjustment: an adjustment which should be adjusted when the cursor is moved,
+ *              or %NULL
+ *
+ * Hooks up an adjustment to the cursor position in an entry, so that when 
+ * the cursor is moved, the adjustment is scrolled to show that position. 
+ * See gtk_scrolled_window_get_hadjustment() for a typical way of obtaining 
+ * the adjustment.
+ *
+ * The adjustment has to be in pixel units and in the same coordinate system 
+ * as the entry. 
+ * 
+ * Since: 2.12
+ */
+void
+gtk_entry_set_cursor_hadjustment (GtkEntry      *entry,
+                                  GtkAdjustment *adjustment)
+{
+  GtkEntryPrivate *priv;
+
+  g_return_if_fail (GTK_IS_ENTRY (entry));
+  if (adjustment)
+    g_return_if_fail (GTK_IS_ADJUSTMENT (adjustment));
+
+  priv = GTK_ENTRY_GET_PRIVATE (entry);
+  if (priv->cursor_hadjustment)
+    g_object_unref (priv->cursor_hadjustment);
+  if (adjustment)
+    g_object_ref (adjustment);
+  priv->cursor_hadjustment = adjustment;
+}
+
+/**
+ * gtk_entry_get_cursor_hadjustment:
+ * @entry: a #GtkEntry
+ *
+ * Retrieves the horizontal cursor adjustment for the entry. 
+ * See gtk_entry_set_cursor_hadjustment().
+ *
+ * Return value: the horizontal cursor adjustment, or %NULL 
+ *   if none has been set.
+ * 
+ * Since: 2.12
+ */
+GtkAdjustment*
+gtk_entry_get_cursor_hadjustment (GtkEntry *entry)
+{
+  GtkEntryPrivate *priv;
+    
+  g_return_val_if_fail (GTK_IS_ENTRY (entry), NULL);
+
+  priv = GTK_ENTRY_GET_PRIVATE (entry);
+
+  return priv->cursor_hadjustment;
 }
 
 #define __GTK_ENTRY_C__

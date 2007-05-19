@@ -1138,6 +1138,8 @@ gtk_entry_get_max_length
 gtk_entry_get_visibility
 gtk_entry_set_completion
 gtk_entry_get_completion
+gtk_entry_set_cursor_hadjustment
+gtk_entry_get_cursor_hadjustment
 <SUBSECTION Standard>
 GTK_ENTRY
 GTK_IS_ENTRY
