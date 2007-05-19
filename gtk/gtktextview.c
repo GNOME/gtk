@@ -2460,7 +2460,7 @@ gtk_text_view_get_tabs (GtkTextView *text_view)
 static void
 gtk_text_view_toggle_cursor_visible (GtkTextView *text_view)
 {
-  gtk_text_view_set_cursor_visible (!text_view->cursor_visible);
+  gtk_text_view_set_cursor_visible (text_view, !text_view->cursor_visible);
 }
 
 /**
