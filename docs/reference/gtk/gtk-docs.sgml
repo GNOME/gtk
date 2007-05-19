@@ -108,6 +108,7 @@
 <!ENTITY GtkRecentManager SYSTEM "xml/gtkrecentmanager.xml">
 <!ENTITY GtkRuler SYSTEM "xml/gtkruler.xml">
 <!ENTITY GtkScale SYSTEM "xml/gtkscale.xml">
+<!ENTITY GtkScaleButton SYSTEM "xml/gtkscalebutton.xml">
 <!ENTITY GtkScrollbar SYSTEM "xml/gtkscrollbar.xml">
 <!ENTITY GtkScrolledWindow SYSTEM "xml/gtkscrolledwindow.xml">
 <!ENTITY GtkSeparator SYSTEM "xml/gtkseparator.xml">
@@ -391,6 +392,7 @@ that is, GUI components such as <link linkend="GtkButton">GtkButton</link> or
         &GtkButton;
         &GtkCheckButton;
         &GtkRadioButton;
+        &GtkScaleButton;
         &GtkToggleButton;
         &GtkLinkButton;
     </chapter>

@@ -1,3 +1,7 @@
+2007-05-19  Bastien Nocera  <hadess@hadess.net>
+
+	* POTFILES.in: Add scale button to the list
+
 2007-05-20  Yair Hershkovitz  <yairhr@gmail.com>
 
 	* he.po: Updated Hebrew translation.

@@ -3234,6 +3234,18 @@ gtk_scale_set_value_pos
 #endif
 #endif
 
+#if IN_HEADER(__GTK_SCALE_BUTTON_H__)
+#if IN_FILE(__GTK_SCALE_BUTTON_C__)
+gtk_scale_button_get_type G_GNUC_CONST
+gtk_scale_button_get_value
+gtk_scale_button_new
+gtk_scale_button_set_icons
+gtk_scale_button_set_value
+gtk_scale_button_get_adjustment
+gtk_scale_button_set_adjustment
+#endif
+#endif
+
 #if IN_HEADER(__GTK_SCROLLBAR_H__)
 #if IN_FILE(__GTK_SCROLLBAR_C__)
 gtk_scrollbar_get_type G_GNUC_CONST

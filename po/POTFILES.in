@@ -173,6 +173,7 @@ gtk/gtkrecentchoosermenu.c
 gtk/gtkrecentmanager.c
 gtk/gtkruler.c
 gtk/gtkscale.c
+gtk/gtkscalebutton.c
 gtk/gtkscrollbar.c
 gtk/gtkscrolledwindow.c
 gtk/gtkselection.c
