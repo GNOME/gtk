@@ -1,3 +1,13 @@
+2007-05-19  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtk.symbols:
+	* gtk/gtknotebook.[hc]: Deprecate gtk_notebook_[gs]et_group_id
+	in favour of new functions gtk_notebook_[gs]et_group, which
+	takes a pointer as group identifier and makes it easier to
+	avoid group id collisions.  (#386930, Christian Hammond)
+		
+	* tests/testnotebookdnd.c: Use new grouping api.
+
 2007-05-18  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtkactiongroup.c: Warn and refuse to add actions with

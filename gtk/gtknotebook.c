@@ -102,6 +102,7 @@ enum {
   PROP_PAGE,
   PROP_ENABLE_POPUP,
   PROP_GROUP_ID,
+  PROP_GROUP,
   PROP_HOMOGENEOUS
 };
 
@@ -156,7 +157,7 @@ typedef struct _GtkNotebookPrivate GtkNotebookPrivate;
 
 struct _GtkNotebookPrivate
 {
-  gint  group_id;
+  gpointer group;
   gint  mouse_x;
   gint  mouse_y;
   gint  pressed_button;
@@ -611,6 +612,12 @@ gtk_notebook_class_init (GtkNotebookClass *class)
 						     G_MAXINT,
 						     -1,
 						     GTK_PARAM_READWRITE));
+  g_object_class_install_property (gobject_class,
+				   PROP_GROUP,
+				   g_param_spec_pointer ("group",
+							 P_("Group"),
+							 P_("Group for tabs drag and drop"),
+							 GTK_PARAM_READWRITE));
 
   gtk_container_class_install_child_property (container_class,
 					      CHILD_PROP_TAB_LABEL,
@@ -1000,7 +1007,7 @@ gtk_notebook_init (GtkNotebook *notebook)
   notebook->has_after_previous  = 0;
   notebook->has_after_next      = 1;
 
-  priv->group_id = -1;
+  priv->group = NULL;
   priv->pressed_button = -1;
   priv->dnd_timer = 0;
   priv->switch_tab_timer = 0;
@@ -1410,6 +1417,9 @@ gtk_notebook_set_property (GObject         *object,
     case PROP_GROUP_ID:
       gtk_notebook_set_group_id (notebook, g_value_get_int (value));
       break;
+    case PROP_GROUP:
+      gtk_notebook_set_group (notebook, g_value_get_pointer (value));
+      break;
     default:
       break;
     }
@@ -1457,7 +1467,10 @@ gtk_notebook_get_property (GObject         *object,
       g_value_set_uint (value, notebook->tab_vborder);
       break;
     case PROP_GROUP_ID:
-      g_value_set_int (value, priv->group_id);
+      g_value_set_int (value, gtk_notebook_get_group_id (notebook));
+      break;
+    case PROP_GROUP:
+      g_value_set_pointer (value, priv->group);
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -3145,9 +3158,10 @@ gtk_notebook_drag_failed (GtkWidget      *widget,
       gdk_display_get_pointer (display, NULL, &x, &y, NULL);
 
       dest_notebook = (* window_creation_hook) (notebook,
-						priv->detached_tab->child,
-						x, y,
-						window_creation_hook_data);
+				                priv->detached_tab->child,
+				                x, y, 
+                                                window_creation_hook_data);
+
       if (dest_notebook)
 	do_detach_tab (notebook, dest_notebook, priv->detached_tab->child, 0, 0);
 
@@ -3217,17 +3231,16 @@ gtk_notebook_drag_motion (GtkWidget      *widget,
 
   if (target == tab_target)
     {
-      gint widget_group, source_widget_group;
+      gpointer widget_group, source_widget_group;
       GtkWidget *source_widget;
 
       source_widget = gtk_drag_get_source_widget (context);
       g_assert (source_widget);
 
-      widget_group = gtk_notebook_get_group_id (notebook);
-      source_widget_group = gtk_notebook_get_group_id (GTK_NOTEBOOK (source_widget));
+      widget_group = gtk_notebook_get_group (notebook);
+      source_widget_group = gtk_notebook_get_group (GTK_NOTEBOOK (source_widget));
 
-      if (widget_group != -1 &&
-	  source_widget_group != -1 &&
+      if (widget_group && source_widget_group &&
 	  widget_group == source_widget_group &&
 	  !(widget == GTK_NOTEBOOK (source_widget)->cur_page->child || 
 	    gtk_widget_is_ancestor (widget, GTK_NOTEBOOK (source_widget)->cur_page->child)))
@@ -7256,10 +7269,37 @@ gtk_notebook_set_window_creation_hook (GtkNotebookWindowCreationFunc  func,
  * not be able to exchange tabs with any other notebook.
  * 
  * Since: 2.10
- **/
+ * Deprecated:2.12: use gtk_notebook_set_group() instead.
+ */
 void
 gtk_notebook_set_group_id (GtkNotebook *notebook,
 			   gint         group_id)
+{
+  GtkNotebookPrivate *priv;
+  gpointer group;
+
+  g_return_if_fail (GTK_IS_NOTEBOOK (notebook));
+
+  /* add 1 to get rid of the -1/NULL difference */
+  group = GINT_TO_POINTER (group_id + 1);
+  gtk_notebook_set_group (notebook, group);
+}
+
+/**
+ * gtk_notebook_set_group:
+ * @notebook: a #GtkNotebook
+ * @group_id: a pointer to identify the notebook group, or %NULL to unset it
+ *
+ * Sets a group identificator pointer for @notebook, notebooks sharing
+ * the same group identificator pointer will be able to exchange tabs
+ * via drag and drop. A notebook with a %NULL group identificator will
+ * not be able to exchange tabs with any other notebook.
+ * 
+ * Since: 2.12
+ */
+void
+gtk_notebook_set_group (GtkNotebook *notebook,
+			gpointer     group)
 {
   GtkNotebookPrivate *priv;
 
@@ -7267,10 +7307,11 @@ gtk_notebook_set_group_id (GtkNotebook *notebook,
 
   priv = GTK_NOTEBOOK_GET_PRIVATE (notebook);
 
-  if (priv->group_id != group_id)
+  if (priv->group != group)
     {
-      priv->group_id = group_id;
+      priv->group = group;
       g_object_notify (G_OBJECT (notebook), "group-id");
+      g_object_notify (G_OBJECT (notebook), "group");
     }
 }
 
@@ -7283,7 +7324,8 @@ gtk_notebook_set_group_id (GtkNotebook *notebook,
  * Return Value: the group identificator, or -1 if none is set.
  *
  * Since: 2.10
- **/
+ * Deprecated:2.12: use gtk_notebook_get_group() instead.
+ */
 gint
 gtk_notebook_get_group_id (GtkNotebook *notebook)
 {
@@ -7292,7 +7334,30 @@ gtk_notebook_get_group_id (GtkNotebook *notebook)
   g_return_val_if_fail (GTK_IS_NOTEBOOK (notebook), -1);
 
   priv = GTK_NOTEBOOK_GET_PRIVATE (notebook);
-  return priv->group_id;
+
+  /* substract 1 to get rid of the -1/NULL difference */
+  return GPOINTER_TO_INT (priv->group - 1);
+}
+
+/**
+ * gtk_notebook_get_group:
+ * @notebook: a #GtkNotebook
+ * 
+ * Gets the current group identificator pointer for @notebook.
+ * 
+ * Return Value: the group identificator, or %NULL if none is set.
+ *
+ * Since: 2.12
+ **/
+gpointer
+gtk_notebook_get_group (GtkNotebook *notebook)
+{
+  GtkNotebookPrivate *priv;
+
+  g_return_val_if_fail (GTK_IS_NOTEBOOK (notebook), NULL);
+
+  priv = GTK_NOTEBOOK_GET_PRIVATE (notebook);
+  return priv->group;
 }
 
 /**
