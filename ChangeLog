@@ -1,3 +1,10 @@
+2007-05-20  Attilio Fiandrotti  <attilio.fiandrotti@gmail.com>
+
+        * gdk/directfb/gdkwindow-directfb.c:
+        * gdk/directfb/gdkdirectfb.h: Updated minimum DirectFB version
+        required to enable gdk_directfb_create_child_window.
+        (Closes: #437379)
+
 2007-05-20  Bastien Nocera  <hadess@hadess.net>
 
 	* gtk/Makefile.am:
