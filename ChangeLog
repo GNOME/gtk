@@ -1,3 +1,12 @@
+2007-05-20  Attilio Fiandrotti  <attilio.fiandrotti@gmail.com>
+
+        Merge from trunk:
+
+        * gdk/directfb/gdkwindow-directfb.c:
+        * gdk/directfb/gdkdirectfb.h: Updated minimum DirectFB version
+        required to enable gdk_directfb_create_child_window.
+        (Closes: #437379)
+
 2007-05-18  Carlos Garnacho  <carlos@imendio.com>
 
 	Refactor GtkFileChooserDialog sizing.
