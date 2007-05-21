@@ -1,3 +1,7 @@
+Mon May 21 13:58:32 2007  Tim Janik  <timj@imendio.com>
+
+	* gtk/gtkcombobox.c (gtk_combo_box_set_model): removed redundant check.
+
 2007-05-21  Tor Lillqvist  <tml@novell.com>
 
 	* gtk/gtkscalebutton.c (gtk_scale_popup): Make it work better with
@@ -170,7 +174,6 @@
 	#425138 (Reported by Michail Crayson). Some code simplifications.
 	(gtk_notebook_draw_arrow): code style fix.
 
->>>>>>> .r17863
 2007-05-16  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtkpathbar.c: Add ATK names to the Up, Down, and Root
