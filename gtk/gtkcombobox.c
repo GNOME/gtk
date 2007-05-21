@@ -4807,7 +4807,7 @@ gtk_combo_box_set_model (GtkComboBox  *combo_box,
                          GtkTreeModel *model)
 {
   g_return_if_fail (GTK_IS_COMBO_BOX (combo_box));
-  g_return_if_fail (GTK_IS_TREE_MODEL (model));
+  g_return_if_fail (model == NULL || GTK_IS_TREE_MODEL (model));
 
   if (model == combo_box->priv->model)
     return;
