@@ -694,8 +694,8 @@ gtk_scale_popup (GtkWidget *widget,
 
       d = GTK_WIDGET (priv->dock);
       monitor = gdk_screen_get_monitor_at_point (screen,
-						 button_event->x,
-						 button_event->y);
+						 button_event->x_root,
+						 button_event->y_root);
       gdk_screen_get_monitor_geometry (screen, monitor, &rect);
 
       y += button_event->y;
@@ -706,7 +706,7 @@ gtk_scale_popup (GtkWidget *widget,
 
       if (x < rect.x)
 	x = rect.x;
-      else if (x + d->allocation.width > rect.width - rect.x)
+      else if (x + d->allocation.width > rect.width + rect.x)
 	x = rect.x + rect.width - d->allocation.width;
     }
 
