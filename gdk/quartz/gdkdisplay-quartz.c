@@ -45,11 +45,15 @@ gdk_display_open (const gchar *display_name)
   if (_gdk_display != NULL)
     return NULL;
 
+  /* Initialize application */
+  [NSApplication sharedApplication];
+
   _gdk_display = g_object_new (GDK_TYPE_DISPLAY, NULL);
   _gdk_screen = g_object_new (GDK_TYPE_SCREEN, NULL);
 
-  /* Initialize application */
-  [NSApplication sharedApplication];
+  NSScreen *nsscreen;
+  nsscreen = [[NSScreen screens] objectAtIndex:0];
+  gdk_screen_set_resolution (_gdk_screen, 72.0 * [nsscreen userSpaceScaleFactor]);
 
   _gdk_visual_init ();
   gdk_screen_set_default_colormap (_gdk_screen,

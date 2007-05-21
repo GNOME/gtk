@@ -1,3 +1,10 @@
+2007-05-21  Richard Hult  <richard@imendio.com>
+
+	* gdk/quartz/gdkdisplay-quartz.c: (gdk_display_open): Set the
+	resolution.
+	
+	* gdk/quartz/gdkscreen-quartz.c: Use the autorelease pool macros.
+
 2007-05-21  Michael Natterer  <mitch@imendio.com>
 
 	* gtk/gtkcombobox.c (gtk_combo_box_set_model): revert last change.
