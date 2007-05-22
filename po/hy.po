@@ -1,6 +1,6 @@
 # translation of gtk+.HEAD.hy.po to armenian
 # This file is distributed under the same license as the gtk+ package.
-# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER.
+# Copyright (C) 2005 THE PACKAGE'S COPYRIGHT HOLDER.
 # Lilit Azizbekyan <l@freenet.am>, 2005.
 # Lilit Sargsyan <magicliliac@yahoo.co.uk>, 2005.
 # Norayr Chilingaryan <norik@freenet.am>, 2005.
