@@ -7275,7 +7275,6 @@ void
 gtk_notebook_set_group_id (GtkNotebook *notebook,
 			   gint         group_id)
 {
-  GtkNotebookPrivate *priv;
   gpointer group;
 
   g_return_if_fail (GTK_IS_NOTEBOOK (notebook));

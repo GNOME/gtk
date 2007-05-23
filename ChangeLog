@@ -1,3 +1,18 @@
+2007-05-23  Yevgen Muntyan  <muntyan@tamu.edu>
+
+	* gtk/gtkprintunixdialog.c: missing #include <ctype.h>.
+
+	* gtk/gtkhandlebox.c (gtk_handle_box_paint):
+	* gtk/gtkpagesetupunixdialog.c (_gtk_load_custom_papers):
+	* gtk/gtkstatusbar.c (gtk_statusbar_get_context_id):
+	* gtk/gtkiconcache.c (_gtk_icon_cache_new_for_path):
+	* gtk/gtktrayicon-x11.c (gtk_tray_icon_send_dock_request):
+	* gtk/gtkpreview.c (gtk_preview_finalize):
+	* gtk/gtknotebook.c (gtk_notebook_set_group_id):
+	* tests/testnotebookdnd.c (window_creation_function):
+	* tests/testiconview.c (do_popup_menu):
+	Fixed some compiler warnings (#440689).
+
 2007-05-23  Kristian Rietveld  <kris@imendio.com>
 
 	* gtk/gtktooltip.c (find_widget_under_pointer): translate coordinates

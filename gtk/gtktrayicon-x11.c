@@ -305,8 +305,8 @@ static void
 gtk_tray_icon_send_dock_request (GtkTrayIcon *icon)
 {
   GTK_NOTE (PLUGSOCKET,
-	    g_print ("GtkStatusIcon %p: sending dock request to manager window %x\n",
-	    	     icon, icon->priv->manager_window));
+	    g_print ("GtkStatusIcon %p: sending dock request to manager window %lx\n",
+	    	     icon, (gulong) icon->priv->manager_window));
 
   gtk_tray_icon_send_manager_message (icon,
 				      SYSTEM_TRAY_REQUEST_DOCK,
@@ -323,8 +323,8 @@ gtk_tray_icon_update_manager_window (GtkTrayIcon *icon)
   g_return_if_fail (GTK_WIDGET_REALIZED (icon));
 
   GTK_NOTE (PLUGSOCKET,
-	    g_print ("GtkStatusIcon %p: updating tray icon manager window, current manager window: %x\n",
-		     icon, icon->priv->manager_window));
+	    g_print ("GtkStatusIcon %p: updating tray icon manager window, current manager window: %lx\n",
+		     icon, (gulong) icon->priv->manager_window));
 
   if (icon->priv->manager_window != None)
     return;
@@ -351,8 +351,8 @@ gtk_tray_icon_update_manager_window (GtkTrayIcon *icon)
       GdkWindow *gdkwin;
 
       GTK_NOTE (PLUGSOCKET,
-		g_print ("GtkStatusIcon %p: is being managed by window %x\n",
-				icon, icon->priv->manager_window));
+		g_print ("GtkStatusIcon %p: is being managed by window %lx\n",
+				icon, (gulong) icon->priv->manager_window));
 
       gdkwin = gdk_window_lookup_for_display (gtk_widget_get_display (GTK_WIDGET (icon)),
 					      icon->priv->manager_window);
@@ -392,8 +392,8 @@ gtk_tray_icon_delete (GtkWidget   *widget,
   GtkTrayIcon *icon = GTK_TRAY_ICON (widget);
 
   GTK_NOTE (PLUGSOCKET,
-	    g_print ("GtkStatusIcon %p: delete notify, tray manager window %x\n",
-	    	     icon, icon->priv->manager_window));
+	    g_print ("GtkStatusIcon %p: delete notify, tray manager window %lx\n",
+	    	     icon, (gulong) icon->priv->manager_window));
 
   gtk_widget_hide (widget);
   gtk_widget_unrealize (widget);
@@ -416,11 +416,11 @@ gtk_tray_icon_realize (GtkWidget *widget)
   GTK_WIDGET_CLASS (gtk_tray_icon_parent_class)->realize (widget);
 
   GTK_NOTE (PLUGSOCKET,
-	    g_print ("GtkStatusIcon %p: realized, window: %x, socket window: %x\n",
+	    g_print ("GtkStatusIcon %p: realized, window: %lx, socket window: %lx\n",
 		     widget,
-		     GDK_WINDOW_XWINDOW (widget->window),
+		     (gulong) GDK_WINDOW_XWINDOW (widget->window),
 		     GTK_PLUG (icon)->socket_window ?
-			     GDK_WINDOW_XWINDOW (GTK_PLUG (icon)->socket_window) : 0));
+			     (gulong) GDK_WINDOW_XWINDOW (GTK_PLUG (icon)->socket_window) : 0UL));
 
   screen = gtk_widget_get_screen (widget);
   display = gdk_screen_get_display (screen);

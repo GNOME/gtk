@@ -858,7 +858,7 @@ gtk_handle_box_paint (GtkWidget      *widget,
 {
   GtkBin *bin;
   GtkHandleBox *hb;
-  guint width, height;
+  gint width, height;
   GdkRectangle rect;
   GdkRectangle dest;
   gint handle_position;

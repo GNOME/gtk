@@ -206,7 +206,6 @@ _gtk_load_custom_papers (void)
   for (i = 0; i < n_groups; ++i)
     {
       GtkPageSetup *page_setup;
-      GtkTreeIter iter;
 
       page_setup = gtk_page_setup_new_from_key_file (keyfile, groups[i], NULL);
       if (!page_setup)

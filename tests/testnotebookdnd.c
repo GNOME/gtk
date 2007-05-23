@@ -79,8 +79,8 @@ window_creation_function (GtkNotebook *source_notebook,
   window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
   notebook = gtk_notebook_new ();
 
-  gtk_notebook_set_group_id (GTK_NOTEBOOK (notebook),
-			     gtk_notebook_get_group_id (source_notebook));
+  gtk_notebook_set_group (GTK_NOTEBOOK (notebook),
+			  gtk_notebook_get_group (source_notebook));
 
   gtk_container_add (GTK_CONTAINER (window), notebook);
 

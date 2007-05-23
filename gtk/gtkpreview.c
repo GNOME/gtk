@@ -416,7 +416,6 @@ gtk_preview_finalize (GObject *object)
 
   preview = GTK_PREVIEW (object);
   g_free (preview->buffer);
-  preview->type = (GtkPreviewType) -1;
 
   G_OBJECT_CLASS (gtk_preview_parent_class)->finalize (object);
 }
