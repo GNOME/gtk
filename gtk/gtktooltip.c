@@ -463,6 +463,32 @@ find_widget_under_pointer (GdkWindow *window,
   child_loc.y = *y;
 
   gdk_window_get_user_data (window, (void **)&event_widget);
+
+  while (window && window != event_widget->window)
+    {
+      gint px, py;
+
+      gdk_window_get_position (window, &px, &py);
+      child_loc.x += px;
+      child_loc.y += py;
+
+      window = gdk_window_get_parent (window);
+    }
+
+  if (GTK_WIDGET_NO_WINDOW (event_widget))
+    {
+      child_loc.x += event_widget->allocation.x;
+      child_loc.y += event_widget->allocation.y;
+    }
+
+  /* Failing to find widget->window can happen for e.g. a detached handle box;
+   * chaining ::query-tooltip up to its parent probably makes little sense,
+   * and users better implement tooltips on handle_box->child.
+   * so we simply ignore the event for tooltips here.
+   */
+  if (!window)
+    return NULL;
+
   if (GTK_IS_CONTAINER (event_widget))
     {
       window_to_alloc (event_widget,
