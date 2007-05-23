@@ -38,7 +38,6 @@ struct _GtkPrintContext
   GtkPrintOperation *op;
   cairo_t *cr;
   GtkPageSetup *page_setup;
-  PangoFontMap *fontmap;
 
   gdouble surface_dpi_x;
   gdouble surface_dpi_y;
@@ -59,7 +58,6 @@ gtk_print_context_finalize (GObject *object)
 {
   GtkPrintContext *context = GTK_PRINT_CONTEXT (object);
 
-  g_object_unref (context->fontmap);
   if (context->page_setup)
     g_object_unref (context->page_setup);
 
@@ -92,10 +90,16 @@ _gtk_print_context_new (GtkPrintOperation *op)
 
   context->op = op;
   context->cr = NULL;
-  context->fontmap = pango_cairo_font_map_new ();
   
   return context;
 }
+
+static PangoFontMap *
+_gtk_print_context_get_fontmap (GtkPrintContext *context)
+{
+  return pango_cairo_font_map_get_default ();
+}
+
 /**
  * gtk_print_context_set_cairo_context:
  * @context: a #GtkPrintContext
@@ -149,12 +153,6 @@ gtk_print_context_set_cairo_context (GtkPrintContext *context,
   cairo_scale (context->cr,
 	       context->pixels_per_unit_x,
 	       context->pixels_per_unit_y);
-    
-  /* We use the unit-scaled resolution, as we still want 
-   * fonts given in points to work 
-   */
-  pango_cairo_font_map_set_resolution (PANGO_CAIRO_FONT_MAP (context->fontmap),
-				       dpi_y / context->pixels_per_unit_y);
 }
 
 
@@ -391,7 +389,7 @@ gtk_print_context_get_pango_fontmap (GtkPrintContext *context)
 {
   g_return_val_if_fail (GTK_IS_PRINT_CONTEXT (context), NULL);
 
-  return context->fontmap;
+  return _gtk_print_context_get_fontmap (context);
 }
 
 /**
@@ -413,13 +411,18 @@ gtk_print_context_create_pango_context (GtkPrintContext *context)
 
   g_return_val_if_fail (GTK_IS_PRINT_CONTEXT (context), NULL);
   
-  pango_context = pango_cairo_font_map_create_context (PANGO_CAIRO_FONT_MAP (context->fontmap));
+  pango_context = pango_cairo_font_map_create_context (PANGO_CAIRO_FONT_MAP (_gtk_print_context_get_fontmap (context)));
 
   options = cairo_font_options_create ();
   cairo_font_options_set_hint_metrics (options, CAIRO_HINT_METRICS_OFF);
   pango_cairo_context_set_font_options (pango_context, options);
   cairo_font_options_destroy (options);
   
+  /* We use the unit-scaled resolution, as we still want 
+   * fonts given in points to work 
+   */
+  pango_cairo_context_set_resolution (pango_context,
+				      context->surface_dpi_y / context->pixels_per_unit_y);
   return pango_context;
 }
 
