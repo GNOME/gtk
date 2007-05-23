@@ -1,3 +1,7 @@
+2007-05-23  Matthias Clasen  <mclasen@redhat.com>
+
+	* gdk-pixbuf.symbols: Add missing scaled-anim entries.
+
 2007-05-18  Michael J. Chudobiak  <mjc@cvs.gnome.org>
 
 	* gdk-pixbuf-scaled-anim.c: (get_scaled_pixbuf):
