@@ -36,6 +36,9 @@
 #include "gtktooltips.h"
 #include "gtkstock.h"
 
+#include "gtkalias.h"
+
+
 struct _GtkVolumeButton
 {
   GtkScaleButton  parent;
@@ -171,6 +174,6 @@ cb_value_changed (GtkVolumeButton *button, gdouble value, gpointer user_data)
   gtk_volume_button_update_tooltip (button);
 }
 
-/*
- * vim: sw=2 ts=8 cindent noai bs=2
- */
+
+#define __GTK_VOLUME_BUTTON_C__
+#include "gtkaliasdef.c"

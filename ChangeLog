@@ -1,3 +1,16 @@
+2007-05-23   Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtk.symbols: 
+	* gdk/x11/xsettings-common.h: 
+	* gdk/gdk.symbols: Add some missing symbols.
+
+	* gtk/paper_names_offsets.c:
+	* gtk/gen-paper-names.c: Make variables static.
+
+	* gtk/gtktooltip.[hc]:
+	* gtk/gtkvolumebutton.c:
+	* gtk/gtkscalebutton.c:  Fix up symbol aliasing.
+
 2007-05-23  Yevgen Muntyan  <muntyan@tamu.edu>
 
 	* gtk/gtkprintunixdialog.c: missing #include <ctype.h>.

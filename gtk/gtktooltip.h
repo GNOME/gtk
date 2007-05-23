@@ -19,8 +19,8 @@
  * Boston, MA 02111-1307, USA.
  */
 
-#ifndef __GTK_TOOLTIP__
-#define __GTK_TOOLTIP__
+#ifndef __GTK_TOOLTIP_H__
+#define __GTK_TOOLTIP_H__
 
 #include "gtkwidget.h"
 #include "gtkwindow.h"
@@ -52,4 +52,4 @@ void _gtk_tooltip_hide                 (GtkWidget   *widget);
 
 G_END_DECLS
 
-#endif /* __GTK_TOOLTIP__ */
+#endif /* __GTK_TOOLTIP_H__ */

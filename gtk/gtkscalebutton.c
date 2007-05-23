@@ -56,6 +56,8 @@
 #include <gdk/gdkkeysyms.h>
 #include "gtkscalebutton.h"
 
+#include "gtkalias.h"
+
 #define SCALE_SIZE 100
 #define CLICK_TIMEOUT 250
 
@@ -1241,6 +1243,6 @@ gtk_scale_button_scale_value_changed (GtkRange *range)
   g_object_notify (G_OBJECT (button), "value");
 }
  
-/*
- * vim: sw=2 ts=8 cindent noai bs=2
- */
+
+#define __GTK_SCALE_BUTTON_C__
+#include "gtkaliasdef.c"
