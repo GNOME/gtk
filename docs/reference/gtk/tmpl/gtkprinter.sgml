@@ -213,6 +213,15 @@ Printing support was added in GTK+ 2.10.
 @Returns: 
 
 
+<!-- ##### FUNCTION gtk_printer_list_papers ##### -->
+<para>
+
+</para>
+
+@printer: 
+@Returns: 
+
+
 <!-- ##### FUNCTION gtk_printer_compare ##### -->
 <para>
 
@@ -220,6 +229,32 @@ Printing support was added in GTK+ 2.10.
 
 @a: 
 @b: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_printer_has_details ##### -->
+<para>
+
+</para>
+
+@printer: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_printer_request_details ##### -->
+<para>
+
+</para>
+
+@printer: 
+
+
+<!-- ##### FUNCTION gtk_printer_get_capabilities ##### -->
+<para>
+
+</para>
+
+@printer: 
 @Returns: 
 
 

@@ -308,3 +308,49 @@ gdk_threads_enter()/gdk_threads_leave().
 @leave_fn: 
 
 
+<!-- ##### FUNCTION gdk_threads_add_idle ##### -->
+<para>
+
+</para>
+
+@function: 
+@data: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_threads_add_idle_full ##### -->
+<para>
+
+</para>
+
+@priority: 
+@function: 
+@data: 
+@notify: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_threads_add_timeout ##### -->
+<para>
+
+</para>
+
+@interval: 
+@function: 
+@data: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_threads_add_timeout_full ##### -->
+<para>
+
+</para>
+
+@priority: 
+@interval: 
+@function: 
+@data: 
+@notify: 
+@Returns: 
+
+

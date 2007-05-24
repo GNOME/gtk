@@ -50,6 +50,7 @@ of the attribute for each cell that is rendered.
 @set_cell_data_func: 
 @clear_attributes: 
 @reorder: 
+@get_cells: 
 
 <!-- ##### USER_FUNCTION GtkCellLayoutDataFunc ##### -->
 <para>
@@ -82,6 +83,15 @@ as appropriate.
 @cell_layout: 
 @cell: 
 @expand: 
+
+
+<!-- ##### FUNCTION gtk_cell_layout_get_cells ##### -->
+<para>
+
+</para>
+
+@cell_layout: 
+@Returns: 
 
 
 <!-- ##### FUNCTION gtk_cell_layout_reorder ##### -->

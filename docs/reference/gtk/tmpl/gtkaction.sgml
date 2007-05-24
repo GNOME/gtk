@@ -246,6 +246,15 @@ and should not be accessed directly.
 @Returns: 
 
 
+<!-- ##### FUNCTION gtk_action_create_menu ##### -->
+<para>
+
+</para>
+
+@action: 
+@Returns: 
+
+
 <!-- ##### FUNCTION gtk_action_connect_proxy ##### -->
 <para>
 

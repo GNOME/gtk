@@ -156,6 +156,11 @@ The #GtkEntry-struct struct contains only private data.
 
 </para>
 
+<!-- ##### ARG GtkEntry:shadow-type ##### -->
+<para>
+
+</para>
+
 <!-- ##### ARG GtkEntry:text ##### -->
 <para>
 
@@ -238,7 +243,6 @@ Prepends the given text to the contents of the widget.
 @Deprecated: gtk_entry_prepend_text() is deprecated and should not
    be used in newly-written code. Use gtk_editable_insert_text()
    instead.
-
 
 
 <!-- ##### FUNCTION gtk_entry_set_position ##### -->
@@ -497,6 +501,24 @@ use gtk_editable_set_editable() instead.
 
 
 <!-- ##### FUNCTION gtk_entry_get_completion ##### -->
+<para>
+
+</para>
+
+@entry: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_entry_set_cursor_hadjustment ##### -->
+<para>
+
+</para>
+
+@entry: 
+@adjustment: 
+
+
+<!-- ##### FUNCTION gtk_entry_get_cursor_hadjustment ##### -->
 <para>
 
 </para>

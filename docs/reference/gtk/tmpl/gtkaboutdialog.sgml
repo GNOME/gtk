@@ -98,7 +98,7 @@ only private fields and should not be directly accessed.
 
 </para>
 
-<!-- ##### ARG GtkAboutDialog:name ##### -->
+<!-- ##### ARG GtkAboutDialog:program-name ##### -->
 <para>
 
 </para>
@@ -146,6 +146,24 @@ only private fields and should not be directly accessed.
 
 
 <!-- ##### FUNCTION gtk_about_dialog_set_name ##### -->
+<para>
+
+</para>
+
+@about: 
+@name: 
+
+
+<!-- ##### FUNCTION gtk_about_dialog_get_program_name ##### -->
+<para>
+
+</para>
+
+@about: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_about_dialog_set_program_name ##### -->
 <para>
 
 </para>

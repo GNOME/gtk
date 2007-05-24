@@ -51,6 +51,11 @@ on all platforms supported by GTK+.
 
 @plug: the object which received the signal.
 
+<!-- ##### ARG GtkPlug:embedded ##### -->
+<para>
+
+</para>
+
 <!-- ##### FUNCTION gtk_plug_construct ##### -->
 <para>
 </para>

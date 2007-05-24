@@ -57,6 +57,13 @@ This should not be accessed directly.  Use the accessor functions below.
 </para>
 
 
+<!-- ##### SIGNAL GtkFileChooserButton::file-set ##### -->
+<para>
+
+</para>
+
+@filechooserbutton: the object which received the signal.
+
 <!-- ##### ARG GtkFileChooserButton:dialog ##### -->
 <para>
 

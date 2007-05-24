@@ -157,6 +157,15 @@ Name for the Legal paper size.
 @Returns: 
 
 
+<!-- ##### FUNCTION gtk_paper_size_get_paper_sizes ##### -->
+<para>
+
+</para>
+
+@include_custom: 
+@Returns: 
+
+
 <!-- ##### FUNCTION gtk_paper_size_get_name ##### -->
 <para>
 
@@ -270,5 +279,26 @@ Name for the Legal paper size.
 </para>
 
 @Returns: 
+
+
+<!-- ##### FUNCTION gtk_paper_size_new_from_key_file ##### -->
+<para>
+
+</para>
+
+@key_file: 
+@group_name: 
+@error: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_paper_size_to_key_file ##### -->
+<para>
+
+</para>
+
+@size: 
+@key_file: 
+@group_name: 
 
 

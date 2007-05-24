@@ -197,6 +197,16 @@ gtk_widget_style_get_valist() to obtain the value of a style property.
 @widget: the object which received the signal.
 @drag_context: 
 
+<!-- ##### SIGNAL GtkWidget::drag-failed ##### -->
+<para>
+
+</para>
+
+@widget: the object which received the signal.
+@arg1: 
+@arg2: 
+@Returns: 
+
 <!-- ##### SIGNAL GtkWidget::drag-leave ##### -->
 <para>
 
@@ -445,6 +455,18 @@ a widget changes from un-anchored to anchored or vice-versa.
 @event: 
 @Returns: %TRUE to stop other handlers from being invoked for the event. %FALSE to propagate the event further.
 
+<!-- ##### SIGNAL GtkWidget::query-tooltip ##### -->
+<para>
+
+</para>
+
+@widget: the object which received the signal.
+@arg1: 
+@arg2: 
+@arg3: 
+@arg4: 
+@Returns: 
+
 <!-- ##### SIGNAL GtkWidget::realize ##### -->
 <para>
 
@@ -644,6 +666,11 @@ a widget changes from un-anchored to anchored or vice-versa.
 
 </para>
 
+<!-- ##### ARG GtkWidget:has-tooltip ##### -->
+<para>
+
+</para>
+
 <!-- ##### ARG GtkWidget:height-request ##### -->
 <para>
 
@@ -680,6 +707,11 @@ a widget changes from un-anchored to anchored or vice-versa.
 </para>
 
 <!-- ##### ARG GtkWidget:style ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkWidget:tooltip-markup ##### -->
 <para>
 
 </para>

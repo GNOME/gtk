@@ -33,6 +33,11 @@ Sharing settings between applications
 
 </para>
 
+<!-- ##### ARG GtkSettings:gtk-alternative-sort-arrows ##### -->
+<para>
+
+</para>
+
 <!-- ##### ARG GtkSettings:gtk-button-images ##### -->
 <para>
 
@@ -93,7 +98,17 @@ Sharing settings between applications
 
 </para>
 
+<!-- ##### ARG GtkSettings:gtk-enable-accels ##### -->
+<para>
+
+</para>
+
 <!-- ##### ARG GtkSettings:gtk-enable-animations ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkSettings:gtk-enable-mnemonics ##### -->
 <para>
 
 </para>
@@ -114,6 +129,11 @@ Sharing settings between applications
 </para>
 
 <!-- ##### ARG GtkSettings:gtk-fallback-icon-theme ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkSettings:gtk-file-chooser-backend ##### -->
 <para>
 
 </para>
@@ -183,6 +203,16 @@ Sharing settings between applications
 
 </para>
 
+<!-- ##### ARG GtkSettings:gtk-print-backends ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkSettings:gtk-print-preview-command ##### -->
+<para>
+
+</para>
+
 <!-- ##### ARG GtkSettings:gtk-scrolled-window-placement ##### -->
 <para>
 
@@ -229,6 +259,21 @@ Sharing settings between applications
 </para>
 
 <!-- ##### ARG GtkSettings:gtk-toolbar-style ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkSettings:gtk-tooltip-browse-mode-timeout ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkSettings:gtk-tooltip-browse-timeout ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkSettings:gtk-tooltip-timeout ##### -->
 <para>
 
 </para>

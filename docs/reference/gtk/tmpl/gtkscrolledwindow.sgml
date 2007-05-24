@@ -95,6 +95,7 @@ only be accessed using the functions below.
 @scrolledwindow: the object which received the signal.
 @arg1: 
 @arg2: 
+@Returns: 
 
 <!-- ##### ARG GtkScrolledWindow:hadjustment ##### -->
 <para>
@@ -132,6 +133,11 @@ only be accessed using the functions below.
 </para>
 
 <!-- ##### ARG GtkScrolledWindow:scrollbar-spacing ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkScrolledWindow:scrollbars-within-bevel ##### -->
 <para>
 
 </para>

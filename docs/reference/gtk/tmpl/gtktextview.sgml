@@ -142,6 +142,13 @@ types related to the text widget and how they work together.
 @arg1: 
 @arg2: 
 
+<!-- ##### SIGNAL GtkTextView::toggle-cursor-visible ##### -->
+<para>
+
+</para>
+
+@textview: the object which received the signal.
+
 <!-- ##### SIGNAL GtkTextView::toggle-overwrite ##### -->
 <para>
 

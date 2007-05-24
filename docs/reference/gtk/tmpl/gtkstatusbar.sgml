@@ -45,6 +45,7 @@ recorded at the time it was added. This is done using gtk_statusbar_remove().
 
 <!-- ##### SECTION See_Also ##### -->
 
+
 <!-- ##### SECTION Stability_Level ##### -->
 
 
@@ -60,8 +61,8 @@ below.
 
 </para>
 
-@statusbar:
-@context_id:
+@statusbar: 
+@context_id: 
 @text: 
 
 <!-- ##### SIGNAL GtkStatusbar::text-pushed ##### -->
@@ -70,7 +71,7 @@ below.
 </para>
 
 @statusbar: 
-@context_id:
+@context_id: 
 @text: 
 
 <!-- ##### ARG GtkStatusbar:has-resize-grip ##### -->
@@ -97,7 +98,7 @@ below.
 </para>
 
 @statusbar: 
-@context_description:
+@context_description: 
 @Returns: 
 
 
@@ -106,10 +107,10 @@ below.
 
 </para>
 
-@statusbar:
-@context_id:
-@text:
-@Returns:
+@statusbar: 
+@context_id: 
+@text: 
+@Returns: 
 
 
 <!-- ##### FUNCTION gtk_statusbar_pop ##### -->
@@ -118,7 +119,7 @@ below.
 </para>
 
 @statusbar: 
-@context_id:
+@context_id: 
 
 
 <!-- ##### FUNCTION gtk_statusbar_remove ##### -->
@@ -126,9 +127,9 @@ below.
 
 </para>
 
-@statusbar:
-@context_id:
-@message_id:
+@statusbar: 
+@context_id: 
+@message_id: 
 
 
 <!-- ##### FUNCTION gtk_statusbar_set_has_resize_grip ##### -->
@@ -136,7 +137,7 @@ below.
 
 </para>
 
-@statusbar:
+@statusbar: 
 @setting: 
 
 
@@ -145,7 +146,7 @@ below.
 
 </para>
 
-@statusbar:
-@Returns:
+@statusbar: 
+@Returns: 
 
 

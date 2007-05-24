@@ -99,33 +99,32 @@ void create_file_selection (void) {
 The #GtkFileSelection struct contains the following #GtkWidget fields:
 </para>
 
-@fileop_dialog: the dialog box used to display the #GtkFileSelection. 
-   It can be customized by adding/removing widgets from it using the 
-   standard #GtkDialog functions.
+@dir_list: 
+@file_list: 
+@selection_entry: 
+@selection_text: 
+@main_vbox: 
 @ok_button: 
 @cancel_button: the two main buttons that signals should be connected 
     to in order to perform an action when the user hits either OK or 
     Cancel.
+@help_button: 
 @history_pulldown: the #GtkOptionMenu used to create the drop-down 
     directory history.
+@history_menu: 
+@history_list: 
+@fileop_dialog: the dialog box used to display the #GtkFileSelection. 
+   It can be customized by adding/removing widgets from it using the 
+   standard #GtkDialog functions.
+@fileop_entry: 
+@fileop_file: 
+@cmpl_state: 
 @fileop_c_dir: 
 @fileop_del_file: 
 @fileop_ren_file: the buttons that appear at the top of the file 
     selection dialog. These "operation buttons" can be hidden and 
     redisplayed with gtk_file_selection_hide_fileop_buttons() and  
     gtk_file_selection_show_fileop_buttons() respectively.
-
-@dir_list: 
-@file_list: 
-@selection_entry: 
-@selection_text: 
-@main_vbox: 
-@help_button: 
-@history_menu: 
-@history_list: 
-@fileop_entry: 
-@fileop_file: 
-@cmpl_state: 
 @button_area: 
 @action_area: 
 

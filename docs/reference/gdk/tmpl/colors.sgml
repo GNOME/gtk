@@ -289,3 +289,12 @@ The colormap structure contains the following public fields.
 @Returns: 
 
 
+<!-- ##### FUNCTION gdk_color_to_string ##### -->
+<para>
+
+</para>
+
+@color: 
+@Returns: 
+
+

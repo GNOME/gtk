@@ -78,12 +78,22 @@ on Win32 doesn't allow to embed arbitrary widgets.
 
 </para>
 
+<!-- ##### ARG GtkStatusIcon:embedded ##### -->
+<para>
+
+</para>
+
 <!-- ##### ARG GtkStatusIcon:file ##### -->
 <para>
 
 </para>
 
 <!-- ##### ARG GtkStatusIcon:icon-name ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkStatusIcon:orientation ##### -->
 <para>
 
 </para>

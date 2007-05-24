@@ -52,6 +52,11 @@ planned to be implemented in future releases.
 @arg2: 
 @Returns: 
 
+<!-- ##### ARG GtkTextTag:accumulative-margin ##### -->
+<para>
+
+</para>
+
 <!-- ##### ARG GtkTextTag:background ##### -->
 <para>
 

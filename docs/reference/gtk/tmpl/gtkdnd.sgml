@@ -69,10 +69,10 @@ constraints on an entry in a #GtkTargetTable.
 @GTK_TARGET_SAME_WIDGET: 
    If this is set, the target will only be selected
    for drags within a single widget.
-@GTK_TARGET_OTHER_APP:
+@GTK_TARGET_OTHER_APP: 
    If this is set, the target will not be selected
    for drags within a single application. Since 2.12
-@GTK_TARGET_OTHER_WIDGET:
+@GTK_TARGET_OTHER_WIDGET: 
    If this is set, the target will not be selected
    for drags withing a single widget. Since 2.12
 

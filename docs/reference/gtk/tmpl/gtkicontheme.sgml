@@ -137,6 +137,7 @@ gtk_icon_theme_set_custom_theme().
 @GTK_ICON_LOOKUP_NO_SVG: 
 @GTK_ICON_LOOKUP_FORCE_SVG: 
 @GTK_ICON_LOOKUP_USE_BUILTIN: 
+@GTK_ICON_LOOKUP_GENERIC_FALLBACK: 
 
 <!-- ##### MACRO GTK_ICON_THEME_ERROR ##### -->
 <para>
@@ -256,6 +257,18 @@ The #GQuark used for #GtkIconThemeError errors.
 @Returns: 
 
 
+<!-- ##### FUNCTION gtk_icon_theme_choose_icon ##### -->
+<para>
+
+</para>
+
+@icon_theme: 
+@icon_names: 
+@size: 
+@flags: 
+@Returns: 
+
+
 <!-- ##### FUNCTION gtk_icon_theme_load_icon ##### -->
 <para>
 
@@ -266,6 +279,15 @@ The #GQuark used for #GtkIconThemeError errors.
 @size: 
 @flags: 
 @error: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_icon_theme_list_contexts ##### -->
+<para>
+
+</para>
+
+@icon_theme: 
 @Returns: 
 
 

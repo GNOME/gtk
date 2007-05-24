@@ -60,6 +60,16 @@ The GtkEntryCompletion struct contains only private data.
 @entrycompletion: the object which received the signal.
 @arg1: 
 
+<!-- ##### SIGNAL GtkEntryCompletion::cursor-on-match ##### -->
+<para>
+
+</para>
+
+@entrycompletion: the object which received the signal.
+@arg1: 
+@arg2: 
+@Returns: 
+
 <!-- ##### SIGNAL GtkEntryCompletion::insert-prefix ##### -->
 <para>
 
@@ -80,6 +90,11 @@ The GtkEntryCompletion struct contains only private data.
 @Returns: 
 
 <!-- ##### ARG GtkEntryCompletion:inline-completion ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkEntryCompletion:inline-selection ##### -->
 <para>
 
 </para>
@@ -202,6 +217,15 @@ to the unmodified key via <literal>gtk_entry_get_text (GTK_ENTRY (gtk_entry_comp
 @completion: 
 
 
+<!-- ##### FUNCTION gtk_entry_completion_get_completion_prefix ##### -->
+<para>
+
+</para>
+
+@completion: 
+@Returns: 
+
+
 <!-- ##### FUNCTION gtk_entry_completion_insert_prefix ##### -->
 <para>
 
@@ -267,6 +291,24 @@ to the unmodified key via <literal>gtk_entry_get_text (GTK_ENTRY (gtk_entry_comp
 
 
 <!-- ##### FUNCTION gtk_entry_completion_get_inline_completion ##### -->
+<para>
+
+</para>
+
+@completion: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_entry_completion_set_inline_selection ##### -->
+<para>
+
+</para>
+
+@completion: 
+@inline_selection: 
+
+
+<!-- ##### FUNCTION gtk_entry_completion_get_inline_selection ##### -->
 <para>
 
 </para>

@@ -784,7 +784,7 @@ serialized with gtk_text_buffer_serialize(), and insert it at @iter.
 @user_data: user data that was specified when registering the format
 @error: return location for a #GError
 @Returns: %TRUE on success, %FALSE otherwise
- 
+
 
 <!-- ##### FUNCTION gtk_text_buffer_deserialize ##### -->
 <para>

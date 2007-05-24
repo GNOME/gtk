@@ -28,6 +28,11 @@ The #GtkCellRendererProgress cell renderer was added in GTK+ 2.6.
 </para>
 
 
+<!-- ##### ARG GtkCellRendererProgress:pulse ##### -->
+<para>
+
+</para>
+
 <!-- ##### ARG GtkCellRendererProgress:text ##### -->
 <para>
 

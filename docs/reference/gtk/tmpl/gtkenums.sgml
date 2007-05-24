@@ -84,6 +84,7 @@ contains. (See also: #GtkVButtonBox and #GtkHButtonBox).
 left for a HBox, or the top for a VBox).
 @GTK_BUTTONBOX_END: Buttons are grouped towards the end of a box, (on the
 right for a HBox, or the bottom for a VBox).
+@GTK_BUTTONBOX_CENTER: 
 
 <!-- ##### ENUM GtkCornerType ##### -->
 <para>

@@ -861,3 +861,45 @@ only "file://" URIs.
 
 
 
+<!-- ##### FUNCTION gtk_print_settings_new_from_file ##### -->
+<para>
+
+</para>
+
+@file_name: 
+@error: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_print_settings_new_from_key_file ##### -->
+<para>
+
+</para>
+
+@key_file: 
+@group_name: 
+@error: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_print_settings_to_file ##### -->
+<para>
+
+</para>
+
+@settings: 
+@file_name: 
+@error: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_print_settings_to_key_file ##### -->
+<para>
+
+</para>
+
+@settings: 
+@key_file: 
+@group_name: 
+
+

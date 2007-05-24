@@ -1181,6 +1181,7 @@ EXTRA_DIST +=                   \
 	makefile.msc		\
 	makefile.msc.in		\
 	makegtkalias.pl		\
+	aliasfilescheck.sh	\
 	abicheck.sh		\
 	pltcheck.sh
 

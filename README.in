@@ -34,10 +34,22 @@ Release notes for 2.12
   gtk_about_dialog_get/set_program_name(), the GtkAboutDialog now uses the
   "program-name" property instead of the conflicting "name" property.
 
+* The tiff loader now requires libtiff 3.6.0 or later.
+
+* Support for Windows 9x/ME has officially been removed. It hasn't worked
+  since 2.6 anyway.
+
+* The GtkTextBufferTargetInfo enumeration values have been changed from
+  G_MAXUINT-0, G_MAXUINT-1, G_MAXUINT-2, etc, to -1, -2, -3 to stay within
+  ANSI C limits.
+
+* A change in the handling of _NET_WM_USER_TIME properties on toplevel
+  windows can cause deadlock problems with window managers that are using
+  GDK for drawing decorations. In particular, metacity <= 2.18.0 is affected
+  by this. The problem has been fixed in metacity 2.18.1.
+
 Release notes for 2.10
 ======================
-
-* The tiff loader now requires libtiff 3.6.0 or later.
 
 * The hexadecimal Unicode input feature has been reworked. It no longer
   blocks the use of the sixteen Ctrl-Shift-<hex digit> key sequences. Now

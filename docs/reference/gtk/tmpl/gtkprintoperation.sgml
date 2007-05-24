@@ -303,6 +303,7 @@ A value of this type is returned by gtk_print_operation_run().
 @GTK_PRINT_ERROR_GENERAL: 
 @GTK_PRINT_ERROR_INTERNAL_ERROR: 
 @GTK_PRINT_ERROR_NOMEM: 
+@GTK_PRINT_ERROR_INVALID_FILE: 
 
 <!-- ##### MACRO GTK_PRINT_ERROR ##### -->
 <para>
