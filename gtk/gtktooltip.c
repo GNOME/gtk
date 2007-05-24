@@ -461,10 +461,13 @@ find_widget_under_pointer (GdkWindow *window,
   GtkWidget *event_widget;
   struct ChildLocation child_loc = { NULL, NULL, 0, 0 };
 
+  gdk_window_get_user_data (window, (void **)&event_widget);
+
+  if (!event_widget)
+    return NULL;
+
   child_loc.x = *x;
   child_loc.y = *y;
-
-  gdk_window_get_user_data (window, (void **)&event_widget);
 
   while (window && window != event_widget->window)
     {

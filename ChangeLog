@@ -1,3 +1,9 @@
+2007-05-24  Michael Natterer  <mitch@imendio.com>
+
+	* gtk/gtktooltip.c (find_widget_under_pointer): apply patch from
+	Bogdan Nicula which fixes a crash on GdkWindows which have no
+	GtkWidget as user_data (bug #440890).
+
 2007-05-24   Matthias Clasen  <mclasen@redhat.com>
 
 	* configure.in: Bump version
