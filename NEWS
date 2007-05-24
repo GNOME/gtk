@@ -1,5 +1,190 @@
+Overview of Changes from GTK+ 2.10.x to 2.11
+============================================
+
+* Printing support:
+ - Cups backend: Work with "BrowseShortNames Off"
+ - Cups backend: Fix handling of multi-valued options
+ - Cups backend: Work with raw printers
+ - Cups backend: don't lock up when met with larger numbers of printers 
+ - Improved sensitivity handling of controls in the unix dialog
+ - Support half-open ranges
+ - Add a test print backend for easier debugging
+ - Add API to list paper sizes
+ - Add API to serialize and deserialize page setups and print settings
+ - Print settings can be passed to the preview command 
+ - Make more GtkPrinter public
+
+* GtkFileChooser:
+ - Improve file chooser dialog size logic
+ - Add a GtkFileChooserButton::file-set signal
+ - Add a search mode with backends for Beagle, Tracker and simple search
+ - Add recent files support
+
+* New tooltips API, that allows complex tooltips (markup, images),
+  tooltips on insensitive widgets, tooltips on treeviews, etc
+
+* GtkScaleButton, GtkVolumeButton: new widgets for volume controls 
+  frequently seen in multimedia applications
+
+* Input Methods:
+ - New Thai and Lao input method
+ - New multipress input method for phone pads
+
+* Recent files:
+ - GtkRecentChooserMenu supports custom menu items
+ - GtkRecentAction was added
+
+* Keyboard navigation improvements:
+ - Infrastructure for notification of failed keyboard navigation
+ - Better support for restricted sets of keys
+ - Only handle keys for notebook tab reordering and scrolledwindow 
+   scrolling if it make sense
+ - Add settings gtk-enable-accels and gtk-enable-mnemonics to disable  
+   the display of accelerators and mnemonics
+ - Popup/popdown of comboboxes is keybindable
+
+* Windows port: 
+ - Windows 9x/ME is not supported anymore 
+ - Many ms-windows theme improvements
+ - The file chooser uses native icons
+ - Support drop shadows 
+ - Use native cursors
+
+* OS X port:
+ - Many improvements
+
+* Icon theme support:
+ - Add api to list contexts of an icon theme 
+ - The builtin stock icons have been replaced by a new set of icons 
+   which are visually compatible with Tango
+ - Support fallback to more generic icon names 
+ - Validate icon caches when they are created and before they are used
+
+* GtkRange has gained support for fill levels
+
+* GtkEntry:  
+ - inline-selection mode for entry completion that is closer to what 
+   web browsers need
+ - Add gtk_entry_set_cursor_hadjustment() to support automatic scrolling
+
+* GtkTextView:
+ - Support accumulative and negative margins
+ - GTK_JUSTIFY_FILL works
+
+* GtkLabel:
+ - GTK_JUSTIFY_FILL works
+
+* GtkStatusIcon: 
+ - Multiscreen support
+ - gtk_status_icon_position_menu() works on Windows
+ - Don't take up space when invisible
+
+* GtkCellRendererProgress:
+ - Respect themes 
+ - Support activity mode
+
+* GtkNotebook: 
+ - Support scrolling during tab DND
+ - Allow dropping tabs anywhere
+ - Deprecate numeric group-ids in favour of a more flexible group property
+
+* GtkTreeView:
+ - Lots of scrolling fixes
+ - Add a gtk-alternative-sort-arrows setting for drawing sort arrows
+   according to platform conventions
+
+* GtkButtonBox:
+ - Can center buttons now
+
+* GtkComboBoxEntry 
+ - Can add an arbitrary child widget
+
+* GtkAboutDialog:
+ - The "name" property has been replaced by "program-name" to avoid
+   a clash with the preexisting "name" property on GtkWidget
+
+* GDK changes:
+ - Add gdk_event_request_motions() which works with input devices
+ - Add API for changing startup notification id on a window
+ - Add API for sending startup notification messages
+ - Don't deadlock with xcb-based libX11
+ - The handling of _NET_WM_USER_TIME has been changed to reduce
+   the amount of root window property changes
+ - New gdk_threads api() to allow fully threadsafe handling of idles 
+   and timeouts
+
+* gdk-pixbuf changes: 
+ - Optional support for Sun mediaLib hardware acceleration
+ - Support exif rotations in tiffs and jpegs
+ - Allow arbitrary split between builtin vs modular loaders
+ - Support v5 and OS/2 bmps
+ - Support scaling animations
+
+* Miscellaneous GTK+ changes:
+ - New function gtk_window_set_opacity(), to set the opacity
+   of toplevel windows
+ - Allow to restrict drags within an application or widget 
+ - Support opening/closing of submenus on click
+ - Configurable cursor blinking timeout
+ - Insensitive widgets don't install cursors
+
+* Bug fixes:
+ - too many to list here
+
+* New and updated translations:
+ Arabic (ar)
+ Assamese (as)
+ Belarusian Latin (be@latin)
+ Bulgarian (bg)
+ Bengali (bn)
+ Catalan (ca)
+ Czech (cs)
+ Welsh (cy)
+ German (de)
+ Greek (el)
+ Canadian English (en_CA)
+ British English (en_GB)
+ Esperanto (eo)
+ Spanish (es)
+ Estonian (et)
+ Finnish (fi)
+ French (fr)
+ Gujarati (gu)
+ Hebrew (he)
+ Hindi (hi)
+ Hungarian (hu)
+ Indonesian (id)
+ Italian (it)
+ Kurdish (ku)
+ Lithuanian (lt)
+ Latvian (lv)
+ Macedonian (mk)
+ Malayalam (ml)
+ Marathi (mr)
+ Norwegian bokmål (nb)
+ Nepali (ne)
+ Oriya (or)
+ Brazilian Portugese (pt_BR)
+ Romanian (ro)
+ Russian (ru)
+ Slovenian (sl)
+ Serbian (sr) 
+ Serbian Latin (sr@Latn)
+ Swedish (sv)
+ Tamil (ta)
+ Thai (th)
+ Turkish (tr)
+ Ukainian (uk)
+ Vietnamese (vi)
+ Walloon (wa)
+ Simplified Chinese (zh_CN)
+ Chinese (Hong Kong) (zh_HK)
+ Chinese (Taiwan) (zh_TW)
+
+
 Overview of Changes from GTK+ 2.10.1 to 2.10.2
 ==============================================
+
 
 * Many fixes and improvements for the OS X backends
 
