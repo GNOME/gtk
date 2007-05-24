@@ -1,3 +1,7 @@
+2007-05-24  Matthias Clasen  <mclasen@redhat.com>
+
+	* modules/input/Makefile.am: Fix broken DESTDIR support
+
 2007-05-24  Michael Natterer  <mitch@imendio.com>
 
 	* gtk/gtktooltip.c (find_widget_under_pointer): apply patch from

@@ -91,7 +91,7 @@ if USE_WIN32
 IM_IME_MODULE=im-ime.la 
 endif
 
-multipress_defs = -DMULTIPRESS_LOCALEDIR=\""$(mplocaledir)"\" -DMULTIPRESS_CONFDIR=\""$(DESTDIR)$(sysconfdir)/gtk-2.0"\"
+multipress_defs = -DMULTIPRESS_LOCALEDIR=\""$(mplocaledir)"\" -DMULTIPRESS_CONFDIR=\""$(sysconfdir)/gtk-2.0"\"
 im_multipress_la_CPPFLAGS = $(multipress_defs)
 im_multipress_la_LDFLAGS = -rpath $(moduledir) -avoid-version -module $(no_undefined)
 im_multipress_la_SOURCES =	\
@@ -100,7 +100,7 @@ im_multipress_la_SOURCES =	\
 	immultipress.c
 im_multipress_la_LIBADD = $(LDADDS)
 
-imconffiledir = $(DESTDIR)$(sysconfdir)/gtk-2.0
+imconffiledir = $(sysconfdir)/gtk-2.0
 dist_imconffile_DATA = im-multipress.conf
 
 if CROSS_COMPILING
