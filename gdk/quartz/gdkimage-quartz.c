@@ -36,8 +36,67 @@ _gdk_quartz_image_copy_to_image (GdkDrawable *drawable,
 				 gint         width,
 				 gint         height)
 {
-  /* FIXME: Implement */
-  return NULL;
+  GdkScreen *screen;
+  
+  g_return_val_if_fail (GDK_IS_DRAWABLE_IMPL_QUARTZ (drawable), NULL);
+  g_return_val_if_fail (image != NULL || (dest_x == 0 && dest_y == 0), NULL);
+
+  screen = gdk_drawable_get_screen (drawable);
+  if (!image)
+    image = _gdk_image_new_for_depth (screen, GDK_IMAGE_FASTEST, NULL, 
+				      width, height,
+				      gdk_drawable_get_depth (drawable));
+  
+  if (GDK_IS_PIXMAP_IMPL_QUARTZ (drawable))
+    {
+      g_warning ("Copying a pixmap to an image is not implemented yet.");
+    }
+  else if (GDK_IS_WINDOW_IMPL_QUARTZ (drawable))
+    {
+      GdkQuartzView *view;
+      NSBitmapImageRep *rep;
+      NSRect rect;
+      guchar *data;
+      int x, y;
+      NSSize size;
+
+      view = GDK_WINDOW_IMPL_QUARTZ (drawable)->view;
+
+      /* We return the image even if we can't copy to it. */
+      if (![view lockFocusIfCanDraw])
+        return image;
+
+      rect = NSMakeRect (src_x, src_y, width, height);
+
+      rep = [[NSBitmapImageRep alloc] initWithFocusedViewRect: rect];
+      [view unlockFocus];
+	  
+      data = [rep bitmapData];
+      size = [rep size];
+
+      for (y = 0; y < size.height; y++)
+	{
+	  guchar *src = data + y * [rep bytesPerRow];
+
+	  for (x = 0; x < size.width; x++)
+	    {
+	      gint32 pixel;
+
+	      if (image->byte_order == GDK_LSB_FIRST)
+		pixel = src[0] << 8 | src[1] << 16 |src[2] << 24;
+	      else
+		pixel = src[0] << 16 | src[1] << 8 |src[2];
+
+	      src += 3;
+
+	      gdk_image_put_pixel (image, dest_x + x, dest_y + y, pixel);
+	    }
+	}
+
+      [rep release];
+    }
+
+  return image;
 }
 
 static void

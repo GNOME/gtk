@@ -1,3 +1,8 @@
+2007-05-25  Richard Hult  <richard@imendio.com>
+
+	* gdk/quartz/gdkimage-quartz.c: (_gdk_quartz_image_copy_to_image):
+	Implement copying from a window, part of bug #348493.
+
 2007-05-25  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtkprintoperation-unix.c (unix_end_run): Hold a 
