@@ -1,3 +1,8 @@
+2007-05-25  Xan Lopez  <xan@gnome.org>
+
+	* gtk/gtkaction.c: (gtk_action_set_short_label):
+	Use private->data->short_label to update the proxies.
+
 2007-05-25  Richard Hult  <richard@imendio.com>
 
 	* gdk/quartz/gdkimage-quartz.c: (_gdk_quartz_image_copy_to_image):
