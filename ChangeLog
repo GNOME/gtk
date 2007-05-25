@@ -1,7 +1,7 @@
 2007-05-25  Xan Lopez  <xan@gnome.org>
 
 	* gtk/gtkaction.c: (gtk_action_set_short_label):
-	Use private->data->short_label to update the proxies.
+	Use private->data->short_label to update the proxies. (#440780)
 
 2007-05-25  Matthias Clasen  <mclasen@redhat.com>
 
