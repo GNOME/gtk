@@ -789,18 +789,17 @@ gtk_menu_shell_enter_notify (GtkWidget        *widget,
 	  (GTK_IS_MENU_ITEM (menu_item) && 
 	   !_gtk_menu_item_is_selectable (menu_item)))
 	return TRUE;
-      
-      if ((menu_item->parent == widget) &&
-	  (menu_shell->active_menu_item != menu_item) &&
+
+      if (menu_item->parent == widget &&
 	  GTK_IS_MENU_ITEM (menu_item))
 	{
 	  if (menu_shell->ignore_enter)
 	    return TRUE;
-	  
-	  if ((event->detail != GDK_NOTIFY_INFERIOR) &&
-	      (GTK_WIDGET_STATE (menu_item) != GTK_STATE_PRELIGHT))
-	    {
-	      gtk_menu_shell_select_item (menu_shell, menu_item);
+
+	  if (event->detail != GDK_NOTIFY_INFERIOR)
+            {
+	      if (GTK_WIDGET_STATE (menu_item) != GTK_STATE_PRELIGHT)
+                gtk_menu_shell_select_item (menu_shell, menu_item);
 
               /* If any mouse button is down, and there is a submenu
                * that is not yet visible, activate it. It's sufficient

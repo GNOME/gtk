@@ -1,3 +1,12 @@
+2007-05-25  Michael Natterer  <mitch@imendio.com>
+
+	Merge fix from maemo-gtk:
+
+	* gtk/gtkmenushell.c (gtk_menu_shell_enter_notify): open submenus
+	also if the menu item we're entering is already selected. Also, it
+	makes no sense to forward the event to the parent menu shell if we
+	are entering a menu item of *this* menu shell.
+
 2007-05-24  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/stock-icons/*: Make sure all svg icons are added
