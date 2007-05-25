@@ -2,6 +2,14 @@
 
 	Merged from trunk:
 
+	* gtk/gtkprintoperation-unix.c (unix_end_run): Hold a
+	refence on the print operation until gtk_print_job_send()
+	is done.  (#440040, Chris Vine)
+
+2007-05-25  Matthias Clasen  <mclasen@redhat.com>
+
+	Merged from trunk:
+
 	* gtk/gtkiconview.c (gtk_icon_view_accessible_ref_child):
 	Don't crash and don't leak.  (#439565, Pedro Villavicencio)
 

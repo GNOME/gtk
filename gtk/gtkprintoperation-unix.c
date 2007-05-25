@@ -261,9 +261,8 @@ unix_finish_send  (GtkPrintJob *job,
                    gpointer     user_data, 
                    GError      *error)
 {
-  GtkPrintOperationUnix *op_unix;
-
-  op_unix = (GtkPrintOperationUnix *) user_data;
+  GtkPrintOperation *op = (GtkPrintOperation *) user_data;
+  GtkPrintOperationUnix *op_unix = op->priv->platform_data;
 
   if (error != NULL)
     {
@@ -286,6 +285,8 @@ unix_finish_send  (GtkPrintJob *job,
 
   if (op_unix->loop)
     g_main_loop_quit (op_unix->loop);
+
+  g_object_unref (op);
 }
 
 static void
@@ -305,9 +306,12 @@ unix_end_run (GtkPrintOperation *op,
   
   /* TODO: Check for error */
   if (op_unix->job != NULL)
-    gtk_print_job_send (op_unix->job,
-                        unix_finish_send, 
-                        op_unix, NULL);
+    {
+      g_object_ref (op);
+      gtk_print_job_send (op_unix->job,
+                          unix_finish_send, 
+                          op, NULL);
+    }
 
   if (wait)
     {
