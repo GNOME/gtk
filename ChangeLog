@@ -1,3 +1,10 @@
+2007-05-25  Matthias Clasen  <mclasen@redhat.com>
+
+	Merged from trunk:
+
+	* gtk/gtkiconview.c (gtk_icon_view_accessible_ref_child):
+	Don't crash and don't leak.  (#439565, Pedro Villavicencio)
+
 2007-05-20  Attilio Fiandrotti  <attilio.fiandrotti@gmail.com>
 
         Merge from trunk:

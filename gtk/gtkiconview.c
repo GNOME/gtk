@@ -8275,6 +8275,8 @@ gtk_icon_view_accessible_ref_child (AtkObject *accessible,
       obj = gtk_icon_view_accessible_find_child (accessible, index);
       if (!obj)
         {
+          gchar *text;
+
           obj = g_object_new (gtk_icon_view_item_accessible_get_type (), NULL);
           gtk_icon_view_item_accessible_info_new (accessible,
                                                   obj,
@@ -8286,8 +8288,12 @@ gtk_icon_view_accessible_ref_child (AtkObject *accessible,
           a11y_item->text_buffer = gtk_text_buffer_new (NULL);
 
 	  gtk_icon_view_set_cell_data (icon_view, item);
-          gtk_text_buffer_set_text (a11y_item->text_buffer, 
-				    get_text (icon_view, item), -1);
+          text = get_text (icon_view, item);
+          if (text)
+            {
+              gtk_text_buffer_set_text (a11y_item->text_buffer, text, -1);
+              g_free (text);
+            } 
 
           gtk_icon_view_item_accessible_set_visibility (a11y_item, FALSE);
           g_object_add_weak_pointer (G_OBJECT (widget), (gpointer) &(a11y_item->widget));
