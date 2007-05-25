@@ -2905,12 +2905,17 @@ gtk_icon_info_load_icon (GtkIconInfo *icon_info,
   g_return_val_if_fail (icon_info != NULL, NULL);
   g_return_val_if_fail (error == NULL || *error == NULL, NULL);
 
-  icon_info_ensure_scale_and_pixbuf (icon_info, FALSE);
-
-  if (icon_info->load_error)
+  if (!icon_info_ensure_scale_and_pixbuf (icon_info, FALSE))
     {
-      g_propagate_error (error, icon_info->load_error);
-      return NULL;
+      if (icon_info->load_error)
+        g_propagate_error (error, icon_info->load_error);
+      else
+        g_set_error (error,  
+                     GTK_ICON_THEME_ERROR,  
+                     GTK_ICON_THEME_NOT_FOUND,
+                     _("Failed to load icon"));
+ 
+     return NULL;
     }
 
   return g_object_ref (icon_info->pixbuf);

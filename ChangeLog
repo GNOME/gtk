@@ -1,3 +1,10 @@
+2007-05-25  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtkiconfactory.c: Improve a warning
+	* gtk/gtkicontheme.c (gtk_icon_info_load_icon): Always
+	set the error when returning NULL.  (#440982, Carlos Garcia
+	Campos)
+
 2007-05-25  Michael Natterer  <mitch@imendio.com>
 
 	Merge fix from maemo-gtk:
