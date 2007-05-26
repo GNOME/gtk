@@ -1351,8 +1351,9 @@ gdk_display_supports_input_shapes (GdkDisplay *display)
  * gdk_x11_display_get_startup_notification_id:
  * @display: a #GdkDisplay
  *
- * Returns: the startup notification ID for 
- * @display.
+ * Gets the startup notification ID for a display.
+ * 
+ * Returns: the startup notification ID for @display
  *
  * Since: 2.12
  */
