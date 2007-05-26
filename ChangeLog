@@ -1,5 +1,6 @@
 2007-05-26  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtktooltip.c:
 	* gtk/gtkstatusicon.c:
 	* gtk/gtkscalebutton.c:
 	* gtk/gtkrecentaction.c:

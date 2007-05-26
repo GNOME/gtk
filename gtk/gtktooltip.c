@@ -190,10 +190,10 @@ gtk_tooltip_finalize (GObject *object)
 
 /**
  * gtk_tooltip_set_markup:
- * @label: a #GtkTooltip
+ * @tooltip: a #GtkTooltip
  * @markup: a markup string (see <link linkend="PangoMarkupFormat">Pango markup format</link>) or %NULL
  *
- * Sets the text of the tooltip to be @str, which is marked up
+ * Sets the text of the tooltip to be @markup, which is marked up
  * with the <link
  * linkend="PangoMarkupFormat">Pango text markup language</link>.
  * If @markup is %NULL, the label will be hidden.
@@ -269,13 +269,13 @@ gtk_tooltip_set_icon_from_stock (GtkTooltip  *tooltip,
 
 /**
  * gtk_tooltip_set_custom:
- * tooltip: a #GtkTooltip
- * custom_widget: a #GtkWidget
+ * @tooltip: a #GtkTooltip
+ * @custom_widget: a #GtkWidget
  *
- * Replaces the widget packed into the tooltip with @custom_widget.  By
- * default a box with a #GtkImage and #GtkLabel is embedded in the tooltip,
- * which can be configured using gtk_tooltip_set_markup() and
- * gtk_tooltip_set_icon().
+ * Replaces the widget packed into the tooltip with @custom_widget.  
+ * By default a box with a #GtkImage and #GtkLabel is embedded in 
+ * the tooltip, which can be configured using gtk_tooltip_set_markup() 
+ * and gtk_tooltip_set_icon().
  *
  * Since: 2.12
  */
