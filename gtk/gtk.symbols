@@ -3552,6 +3552,7 @@ gtk_text_buffer_backspace
 gtk_text_buffer_begin_user_action
 gtk_text_buffer_copy_clipboard
 gtk_text_buffer_create_child_anchor
+gtk_text_buffer_add_mark
 gtk_text_buffer_create_mark
 gtk_text_buffer_create_tag 
 gtk_text_buffer_cut_clipboard
@@ -3789,6 +3790,7 @@ gtk_text_line_segment_split
 
 #if IN_HEADER(__GTK_TEXT_MARK_H__)
 #if IN_FILE(__GTK_TEXT_MARK_C__)
+gtk_text_mark_new
 gtk_text_mark_get_buffer
 gtk_text_mark_get_deleted
 gtk_text_mark_get_left_gravity

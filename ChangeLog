@@ -1,3 +1,22 @@
+2007-05-25  Matthias Clasen  <mclasen@redhat.com>
+
+	Allow to separate GtkTextMark creation from buffer insertion.
+	(#132818, Gustavo Giráldez, patch by Yevgen Muntyan)
+
+	* gtk/gtktextmarkprivate.h:
+	* gtk/gtktextmark.[hc] (gtk_text_mark_new): New function to 
+	create a GtkTextMark.
+
+	* gtk/gtktextbuffer.[hc] (gtk_text_buffer_add_mark): New 
+	function to add an existing mark to a buffer. 
+
+	* gtk/gtktextbtree.c: Allow adding existing marks.
+
+	* gtk/gtk.symbols: Add new functions.
+
+	* tests/testtextbuffer.c: Add some tests for new mark 
+	functionality.
+
 2007-05-25  Xan Lopez  <xan@gnome.org>
 
 	* gtk/gtkaction.c: (gtk_action_set_short_label):

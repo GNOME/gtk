@@ -247,6 +247,9 @@ GtkTextChildAnchor *gtk_text_buffer_create_child_anchor (GtkTextBuffer *buffer,
                                                          GtkTextIter   *iter);
 
 /* Mark manipulation */
+void           gtk_text_buffer_add_mark    (GtkTextBuffer     *buffer,
+                                            GtkTextMark       *mark,
+                                            const GtkTextIter *where);
 GtkTextMark   *gtk_text_buffer_create_mark (GtkTextBuffer     *buffer,
                                             const gchar       *mark_name,
                                             const GtkTextIter *where,

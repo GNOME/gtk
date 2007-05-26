@@ -3411,6 +3411,7 @@ gtk_text_buffer_create_child_anchor
 gtk_text_buffer_create_mark
 gtk_text_buffer_move_mark
 gtk_text_buffer_move_mark_by_name
+gtk_text_buffer_add_mark
 gtk_text_buffer_delete_mark
 gtk_text_buffer_delete_mark_by_name
 gtk_text_buffer_get_mark
@@ -3597,6 +3598,7 @@ gtk_text_iter_get_type
 <FILE>gtktextmark</FILE>
 <TITLE>GtkTextMark</TITLE>
 GtkTextMark
+gtk_text_mark_new
 gtk_text_mark_set_visible
 gtk_text_mark_get_visible
 gtk_text_mark_get_deleted

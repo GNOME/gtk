@@ -2080,6 +2080,44 @@ gtk_text_buffer_create_mark (GtkTextBuffer *buffer,
 }
 
 /**
+ * gtk_text_buffer_add_mark:
+ * @buffer: a #GtkTextBuffer
+ * @mark: the mark to add
+ * @where: location to place mark
+ *
+ * Adds the mark at position @where. The mark must not be added to
+ * another buffer, and if its name is not %NULL then there must not
+ * be another mark in the buffer with the same name.
+ *
+ * Emits the "mark_set" signal as notification of the mark's initial
+ * placement.
+ *
+ * Since: 2.12
+ **/
+void
+gtk_text_buffer_add_mark (GtkTextBuffer     *buffer,
+                          GtkTextMark       *mark,
+                          const GtkTextIter *where)
+{
+  const gchar *name;
+
+  g_return_if_fail (GTK_IS_TEXT_BUFFER (buffer));
+  g_return_if_fail (GTK_IS_TEXT_MARK (mark));
+  g_return_if_fail (where != NULL);
+  g_return_if_fail (gtk_text_mark_get_buffer (mark) == NULL);
+
+  name = gtk_text_mark_get_name (mark);
+
+  if (name != NULL && gtk_text_buffer_get_mark (buffer, name) != NULL)
+    {
+      g_critical ("Mark %s already exists in the buffer", name);
+      return;
+    }
+
+  gtk_text_buffer_set_mark (buffer, mark, NULL, where, FALSE, FALSE);
+}
+
+/**
  * gtk_text_buffer_move_mark:
  * @buffer: a #GtkTextBuffer
  * @mark: a #GtkTextMark
@@ -2129,13 +2167,13 @@ gtk_text_buffer_get_iter_at_mark (GtkTextBuffer *buffer,
  *
  * Deletes @mark, so that it's no longer located anywhere in the
  * buffer. Removes the reference the buffer holds to the mark, so if
- * you haven't called g_object_ref () on the mark, it will be freed. Even
+ * you haven't called g_object_ref() on the mark, it will be freed. Even
  * if the mark isn't freed, most operations on @mark become
- * invalid. There is no way to undelete a
- * mark. gtk_text_mark_get_deleted () will return TRUE after this
- * function has been called on a mark; gtk_text_mark_get_deleted ()
- * indicates that a mark no longer belongs to a buffer. The "mark_deleted"
- * signal will be emitted as notification after the mark is deleted.
+ * invalid, until it gets added to a buffer again with 
+ * gtk_text_buffer_add_mark(). Use gtk_text_mark_get_deleted() to  
+ * find out if a mark has been removed from its buffer.
+ * The "mark_deleted" signal will be emitted as notification after 
+ * the mark is deleted.
  **/
 void
 gtk_text_buffer_delete_mark (GtkTextBuffer *buffer,

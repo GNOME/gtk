@@ -48,6 +48,8 @@ static void line_separator_tests (void);
 
 static void logical_motion_tests (void);
 
+static void mark_tests (void);
+
 int
 main (int argc, char** argv)
 {
@@ -74,6 +76,9 @@ main (int argc, char** argv)
   
   /* Create a buffer */
   buffer = gtk_text_buffer_new (NULL);
+
+  /* Marks */
+  mark_tests ();
 
   /* Check that buffer starts with one empty line and zero chars */
 
@@ -1209,4 +1214,74 @@ logical_motion_tests (void)
   g_print ("Logical motion tests passed\n");
 
   g_object_unref (buffer);
+}
+
+static void
+mark_tests (void)
+{
+  GtkTextBuffer *buf1, *buf2;
+  GtkTextMark *mark;
+  GtkTextIter iter;
+
+  buf1 = gtk_text_buffer_new (NULL);
+  buf2 = gtk_text_buffer_new (NULL);
+
+  gtk_text_buffer_get_start_iter (buf1, &iter);
+  mark = gtk_text_buffer_create_mark (buf1, "foo", &iter, TRUE);
+  g_object_ref (mark);
+  gtk_text_mark_set_visible (mark, TRUE);
+  gtk_text_buffer_delete_mark (buf1, mark);
+
+  g_assert (gtk_text_mark_get_visible (mark));
+  g_assert (gtk_text_mark_get_left_gravity (mark));
+  g_assert (!strcmp ("foo", gtk_text_mark_get_name (mark)));
+  g_assert (gtk_text_mark_get_buffer (mark) == NULL);
+  g_assert (gtk_text_mark_get_deleted (mark));
+  g_assert (gtk_text_buffer_get_mark (buf1, "foo") == NULL);
+
+  gtk_text_buffer_get_start_iter (buf2, &iter);
+  gtk_text_buffer_add_mark (buf2, mark, &iter);
+  gtk_text_buffer_insert (buf2, &iter, "ewfwefwefwe", -1);
+  gtk_text_buffer_get_iter_at_mark (buf2, &iter, mark);
+
+  g_assert (gtk_text_mark_get_visible (mark));
+  g_assert (gtk_text_iter_is_start (&iter));
+  g_assert (gtk_text_mark_get_left_gravity (mark));
+  g_assert (!strcmp ("foo", gtk_text_mark_get_name (mark)));
+  g_assert (gtk_text_mark_get_buffer (mark) == buf2);
+  g_assert (!gtk_text_mark_get_deleted (mark));
+  g_assert (gtk_text_buffer_get_mark (buf2, "foo") == mark);
+
+  gtk_text_buffer_delete_mark (buf2, mark);
+  gtk_text_mark_set_visible (mark, FALSE);
+  g_object_unref (mark);
+
+  mark = gtk_text_mark_new ("blah", TRUE);
+  gtk_text_buffer_get_start_iter (buf1, &iter);
+  gtk_text_mark_set_visible (mark, TRUE);
+  gtk_text_buffer_add_mark (buf1, mark, &iter);
+
+  g_assert (gtk_text_mark_get_visible (mark));
+  g_assert (gtk_text_mark_get_buffer (mark) == buf1);
+  g_assert (!gtk_text_mark_get_deleted (mark));
+  g_assert (gtk_text_buffer_get_mark (buf1, "blah") == mark);
+  g_assert (!strcmp ("blah", gtk_text_mark_get_name (mark)));
+
+  gtk_text_mark_set_visible (mark, FALSE);
+  gtk_text_buffer_delete_mark (buf1, mark);
+  g_assert (!gtk_text_mark_get_visible (mark));
+  g_assert (gtk_text_buffer_get_mark (buf1, "blah") == NULL);
+  g_assert (gtk_text_mark_get_buffer (mark) == NULL);
+  g_assert (gtk_text_mark_get_deleted (mark));
+
+  gtk_text_buffer_get_start_iter (buf2, &iter);
+  gtk_text_buffer_add_mark (buf2, mark, &iter);
+  g_assert (gtk_text_mark_get_buffer (mark) == buf2);
+  g_assert (!gtk_text_mark_get_deleted (mark));
+  g_assert (gtk_text_buffer_get_mark (buf2, "blah") == mark);
+  g_assert (!strcmp ("blah", gtk_text_mark_get_name (mark)));
+
+  g_object_unref (mark);
+  g_object_unref (buf1);
+  g_object_unref (buf2);
 }

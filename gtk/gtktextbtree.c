@@ -2692,7 +2692,12 @@ real_set_mark (GtkTextBTree      *tree,
   g_return_val_if_fail (_gtk_text_iter_get_btree (where) == tree, NULL);
 
   if (existing_mark)
-    mark = existing_mark->segment;
+    {
+      if (gtk_text_mark_get_buffer (existing_mark) != NULL)
+	mark = existing_mark->segment;
+      else
+	mark = NULL;
+    }
   else if (name != NULL)
     mark = g_hash_table_lookup (tree->mark_table,
                                 name);
@@ -2752,9 +2757,13 @@ real_set_mark (GtkTextBTree      *tree,
     }
   else
     {
-      mark = _gtk_mark_segment_new (tree,
-                                    left_gravity,
-                                    name);
+      if (existing_mark)
+	g_object_ref (existing_mark);
+      else
+	existing_mark = gtk_text_mark_new (name, left_gravity);
+
+      mark = existing_mark->segment;
+      _gtk_mark_segment_set_tree (mark, tree);
 
       mark->body.mark.line = _gtk_text_iter_get_text_line (&iter);
 
@@ -2980,7 +2989,8 @@ gtk_text_mark_set_visible (GtkTextMark       *mark,
     {
       seg->body.mark.visible = setting;
 
-      redisplay_mark (seg);
+      if (seg->body.mark.tree)
+	redisplay_mark (seg);
     }
 }
 
