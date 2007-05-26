@@ -1,5 +1,6 @@
 2007-05-26  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkrecentaction.c:
 	* gtk/gtkrange.c:
 	* gtk/gtkprinter.c:
 	* gtk/gtkprintsettings.c:

@@ -767,10 +767,10 @@ gtk_recent_action_get_show_numbers (GtkRecentAction *action)
 /**
  * gtk_recent_action_set_show_numbers:
  * @action: a #GtkRecentAction
- * @show_numbers
+ * @show_numbers: %TRUE if the shown items should be numbered
  *
  * Sets whether a number should be added to the items shown by the
- * widgets representing @action. The  numbers are shown to provide
+ * widgets representing @action. The numbers are shown to provide
  * a unique character for a mnemonic to be used inside the menu item's
  * label. Only the first ten items get a number to avoid clashes.
  *
