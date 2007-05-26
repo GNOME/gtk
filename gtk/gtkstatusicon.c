@@ -1543,7 +1543,7 @@ gtk_status_icon_set_screen (GtkStatusIcon *status_icon,
 
 /** 
  * gtk_status_icon_get_screen:
- * @window: a #GtkStatusIcon.
+ * @status_icon: a #GtkStatusIcon
  *
  * Returns the #GdkScreen associated with @status_icon.
  *
