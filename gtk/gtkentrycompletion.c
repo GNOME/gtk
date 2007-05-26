@@ -1641,11 +1641,12 @@ gtk_entry_completion_real_insert_prefix (GtkEntryCompletion *completion,
  * @completion: a #GtkEntryCompletion
  * 
  * Get the original text entered by the user that triggered
- * the completion or NULL if there's no completion ongoing.
+ * the completion or %NULL if there's no completion ongoing.
+ * 
+ * Returns: the prefix for the current completion
  * 
  * Since: 2.12
  **/
-
 const gchar*
 gtk_entry_completion_get_completion_prefix (GtkEntryCompletion *completion)
 {
@@ -1937,6 +1938,16 @@ gtk_entry_completion_get_popup_single_match (GtkEntryCompletion *completion)
   return completion->priv->popup_single_match;
 }
 
+/**
+ * gtk_entry_completion_set_inline_selection:
+ * @completion: a #GtkEntryCompletion
+ * @inline_selection: %TRUE to do inline selection
+ * 
+ * Sets whether it is possible to cycle through the possible completions
+ * inside the entry.
+ * 
+ * Since: 2.12
+ **/
 void
 gtk_entry_completion_set_inline_selection (GtkEntryCompletion *completion,
 					   gboolean inline_selection)
@@ -1953,6 +1964,16 @@ gtk_entry_completion_set_inline_selection (GtkEntryCompletion *completion,
     }
 }
 
+/**
+ * gtk_entry_completion_get_inline_selection:
+ * @completion: a #GtkEntryCompletion
+ *
+ * Returns %TRUE if inline-selection mode is turned on.
+ *
+ * Returns: %TRUE if inline-selection mode is on
+ *
+ * Since: 2.12
+ **/
 gboolean
 gtk_entry_completion_get_inline_selection (GtkEntryCompletion *completion)
 {
