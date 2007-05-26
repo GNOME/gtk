@@ -3017,20 +3017,6 @@ gdk_window_beep (GdkWindow *window)
   gdk_display_beep (gdk_display_get_default());
 }
 
-/**
- * gdk_window_set_opacity:
- * @window a top-level #GdkWindow
- * @opacity: opacity
- *
- * Request the windowing system to make @window partially transparent,
- * with opacity 0 being fully transparent and 1 fully opaque. (Values
- * of the opacity parameter are clamped to the [0,1] range.) On X11
- * this works only on X screens with a compositing manager running.
- *
- * For setting up per-pixel alpha, see gdk_screen_get_rgba_colormap().
- *
- * Since: 2.12
- */
 void
 gdk_window_set_opacity (GdkWindow *window,
 			gdouble    opacity)

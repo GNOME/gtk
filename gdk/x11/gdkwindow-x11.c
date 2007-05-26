@@ -6408,7 +6408,7 @@ gdk_window_beep (GdkWindow *window)
 
 /**
  * gdk_window_set_opacity:
- * @window a top-level #GdkWindow
+ * @window: a top-level #GdkWindow
  * @opacity: opacity
  *
  * Request the windowing system to make @window partially transparent,
