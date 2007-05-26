@@ -220,7 +220,7 @@ gtk_text_mark_new (const gchar *name,
  * @mark: a #GtkTextMark
  * 
  * Returns %TRUE if the mark is visible (i.e. a cursor is displayed
- * for it)
+ * for it).
  * 
  * Return value: %TRUE if visible
  **/
@@ -282,7 +282,7 @@ gtk_text_mark_get_deleted (GtkTextMark *mark)
  * @mark: a #GtkTextMark
  * 
  * Gets the buffer this mark is located inside,
- * or NULL if the mark is deleted.
+ * or %NULL if the mark is deleted.
  * 
  * Return value: the mark's #GtkTextBuffer
  **/

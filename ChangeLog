@@ -1,5 +1,10 @@
 2007-05-25  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtktextmark.c:
+	* gtk/gtktextbuffer.c: Formatting fixes.
+
+2007-05-25  Matthias Clasen  <mclasen@redhat.com>
+
 	Allow to separate GtkTextMark creation from buffer insertion.
 	(#132818, Gustavo Giráldez, patch by Yevgen Muntyan)
 
