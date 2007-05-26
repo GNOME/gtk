@@ -1,3 +1,8 @@
+2007-05-26  Richard Hult  <richard@imendio.com>
+
+	* gtk/gtkprinter.c: (gtk_printer_set_location): Fix typo to get the
+	build working.
+
 2007-05-26  Matthias Clasen  <mclasen@redhat.com>
 
 	* configure.in: Require gtk-doc 1.6, for signal and property links.

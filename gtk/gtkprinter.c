@@ -511,7 +511,7 @@ gtk_printer_set_location (GtkPrinter  *printer,
   return TRUE;
 }
 
-**
+/**
  * gtk_printer_get_icon_name:
  * @printer: a #GtkPrinter
  * 
