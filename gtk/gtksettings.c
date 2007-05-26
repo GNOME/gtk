@@ -220,8 +220,8 @@ gtk_settings_class_init (GtkSettingsClass *class)
    *
    * Whether the cursor should blink. 
    *
-   * Also see the gtk-cursor-blink-timeout setting, which allows 
-   * more flexible control over cursor blinking.
+   * Also see the #GtkSettings:gtk-cursor-blink-timeout setting, 
+   * which allows more flexible control over cursor blinking.
    */
   result = settings_install_property_parser (class,
                                              g_param_spec_boolean ("gtk-cursor-blink",
@@ -247,7 +247,7 @@ gtk_settings_class_init (GtkSettingsClass *class)
    * The timer is reset after each user interaction.
    *
    * Setting this to zero has the same effect as setting
-   * gtk-cursor-blinks to %FALSE. 
+   * #GtkSettings:gtk-cursor-blinks to %FALSE. 
    *
    * Since: 2.12
    */
@@ -432,8 +432,8 @@ gtk_settings_class_init (GtkSettingsClass *class)
    * GtkSettings:gtk-alternative-sort-arrows:
    *
    * Controls the direction of the sort indicators in sorted list and tree
-   * views.  By default an arrow pointing down means the column is sorted
-   * in ascending order.  When set to %TRUE, this order will be inverted.
+   * views. By default an arrow pointing down means the column is sorted
+   * in ascending order. When set to %TRUE, this order will be inverted.
    *
    * Since: 2.12
    */
@@ -585,10 +585,10 @@ gtk_settings_class_init (GtkSettingsClass *class)
    * browse mode is enabled, in milliseconds.
    *
    * Browse mode is enabled when the mouse pointer moves off an object
-   * where a tooltip was currently being displayed.  If the mouse pointer
+   * where a tooltip was currently being displayed. If the mouse pointer
    * hits another object before the browse mode timeout expires (see
-   * gtk-tooltip-browse-mode-timeout), it will take the amount of
-   * milliseconds specified by this setting to popup the tooltip
+   * #GtkSettings:gtk-tooltip-browse-mode-timeout), it will take the 
+   * amount of milliseconds specified by this setting to popup the tooltip
    * for the new object.
    *
    * Since: 2.12
@@ -610,7 +610,7 @@ gtk_settings_class_init (GtkSettingsClass *class)
    * Amount of time, in milliseconds, after which the browse mode
    * will be disabled.
    *
-   * See GtkSettings:gtk-tooltip-browse-timeout for more information
+   * See #GtkSettings:gtk-tooltip-browse-timeout for more information
    * about browse mode.
    *
    * Since: 2.12
@@ -687,8 +687,8 @@ gtk_settings_class_init (GtkSettingsClass *class)
   /**
    * GtkSettings:color-hash:
    *
-   * Holds a hash table representation of the gtk-color-scheme setting,
-   * mapping color names to #GdkColor<!-- -->s. 
+   * Holds a hash table representation of the #GtkSettings:gtk-color-scheme 
+   * setting, mapping color names to #GdkColor<!-- -->s. 
    *
    * Since: 2.10
    */

@@ -192,8 +192,8 @@ gtk_image_class_init (GtkImageClass *class)
   /**
    * GtkImage:pixel-size:
    *
-   * The :pixel-size property can be used to specify a fixed size
-   * overriding the :icon-size property for images of type 
+   * The "pixel-size" property can be used to specify a fixed size
+   * overriding the #GtkImage:icon-size property for images of type 
    * %GTK_IMAGE_ICON_NAME. 
    *
    * Since: 2.6
@@ -218,7 +218,7 @@ gtk_image_class_init (GtkImageClass *class)
   /**
    * GtkImage:icon-name:
    *
-   * The name of the icon in the icon theme.  If the icon theme is
+   * The name of the icon in the icon theme. If the icon theme is
    * changed, the image will be updated automatically.
    *
    * Since: 2.6
@@ -489,8 +489,7 @@ gtk_image_new_from_pixmap (GdkPixmap *pixmap,
  * 
  * Creates a #GtkImage widget displaying a @image with a @mask.
  * A #GdkImage is a client-side image buffer in the pixel format of the
- * current display.
- * The #GtkImage does not assume a reference to the
+ * current display. The #GtkImage does not assume a reference to the
  * image or mask; you still need to unref them if you own references.
  * #GtkImage will add its own reference rather than adopting yours.
  * 
@@ -553,9 +552,9 @@ gtk_image_new_from_file   (const gchar *filename)
  * pixbuf; you still need to unref it if you own references.
  * #GtkImage will add its own reference rather than adopting yours.
  * 
- * Note that this function just creates an #GtkImage from the pixbuf.  The
- * #GtkImage created will not react to state changes.  Should you want that, you
- * should use gtk_image_new_from_icon_set().
+ * Note that this function just creates an #GtkImage from the pixbuf. The
+ * #GtkImage created will not react to state changes. Should you want that, 
+ * you should use gtk_image_new_from_icon_set().
  * 
  * Return value: a new #GtkImage
  **/
@@ -614,7 +613,6 @@ gtk_image_new_from_stock (const gchar    *stock_id,
  * The #GtkImage does not assume a reference to the
  * icon set; you still need to unref it if you own references.
  * #GtkImage will add its own reference rather than adopting yours.
- * 
  * 
  * Return value: a new #GtkImage
  **/
@@ -695,7 +693,6 @@ gtk_image_new_from_icon_name (const gchar    *icon_name,
  * @mask: a #GdkBitmap or %NULL
  *
  * See gtk_image_new_from_pixmap() for details.
- * 
  **/
 void
 gtk_image_set_from_pixmap (GtkImage  *image,
@@ -747,7 +744,6 @@ gtk_image_set_from_pixmap (GtkImage  *image,
  * @mask: a #GdkBitmap or %NULL
  *
  * See gtk_image_new_from_image() for details.
- * 
  **/
 void
 gtk_image_set_from_image  (GtkImage  *image,
@@ -798,7 +794,6 @@ gtk_image_set_from_image  (GtkImage  *image,
  * @filename: a filename or %NULL
  *
  * See gtk_image_new_from_file() for details.
- * 
  **/
 void
 gtk_image_set_from_file   (GtkImage    *image,
@@ -855,7 +850,6 @@ gtk_image_set_from_file   (GtkImage    *image,
  * @pixbuf: a #GdkPixbuf or %NULL
  *
  * See gtk_image_new_from_pixbuf() for details. 
- * 
  **/
 void
 gtk_image_set_from_pixbuf (GtkImage  *image,
@@ -895,7 +889,6 @@ gtk_image_set_from_pixbuf (GtkImage  *image,
  * @size: a stock icon size
  *
  * See gtk_image_new_from_stock() for details.
- * 
  **/
 void
 gtk_image_set_from_stock  (GtkImage       *image,
@@ -939,7 +932,6 @@ gtk_image_set_from_stock  (GtkImage       *image,
  * @size: a stock icon size
  *
  * See gtk_image_new_from_icon_set() for details.
- * 
  **/
 void
 gtk_image_set_from_icon_set  (GtkImage       *image,
@@ -1088,7 +1080,6 @@ gtk_image_get_storage_type (GtkImage *image)
  * %GTK_IMAGE_PIXMAP (see gtk_image_get_storage_type()).
  * The caller of this function does not own a reference to the
  * returned pixmap and mask.
- * 
  **/
 void
 gtk_image_get_pixmap (GtkImage   *image,
@@ -1138,7 +1129,6 @@ gtk_image_get_image  (GtkImage   *image,
  * gtk_image_get_pixbuf:
  * @image: a #GtkImage
  *
- *
  * Gets the #GdkPixbuf being displayed by the #GtkImage.
  * The storage type of the image must be %GTK_IMAGE_EMPTY or
  * %GTK_IMAGE_PIXBUF (see gtk_image_get_storage_type()).
@@ -1171,7 +1161,6 @@ gtk_image_get_pixbuf (GtkImage *image)
  * %GTK_IMAGE_STOCK (see gtk_image_get_storage_type()).
  * The returned string is owned by the #GtkImage and should not
  * be freed.
- * 
  **/
 void
 gtk_image_get_stock  (GtkImage        *image,
@@ -1201,7 +1190,6 @@ gtk_image_get_stock  (GtkImage        *image,
  * Gets the icon set and size being displayed by the #GtkImage.
  * The storage type of the image must be %GTK_IMAGE_EMPTY or
  * %GTK_IMAGE_ICON_SET (see gtk_image_get_storage_type()).
- * 
  **/
 void
 gtk_image_get_icon_set  (GtkImage        *image,
@@ -1222,7 +1210,6 @@ gtk_image_get_icon_set  (GtkImage        *image,
 /**
  * gtk_image_get_animation:
  * @image: a #GtkImage
- *
  *
  * Gets the #GdkPixbufAnimation being displayed by the #GtkImage.
  * The storage type of the image must be %GTK_IMAGE_EMPTY or

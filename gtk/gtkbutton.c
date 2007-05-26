@@ -309,7 +309,7 @@ gtk_button_class_init (GtkButtonClass *klass)
    *
    * Emitted when the button is pressed.
    * 
-   * @Deprecated: Use the GtkWidget::button-press-event signal.
+   * @Deprecated: Use the #GtkWidget::button-press-event signal.
    */ 
   button_signals[PRESSED] =
     g_signal_new (I_("pressed"),
@@ -326,7 +326,7 @@ gtk_button_class_init (GtkButtonClass *klass)
    *
    * Emitted when the button is released.
    * 
-   * @Deprecated: Use the GtkWidget::button-release-event signal.
+   * @Deprecated: Use the #GtkWidget::button-release-event signal.
    */ 
   button_signals[RELEASED] =
     g_signal_new (I_("released"),
@@ -358,7 +358,7 @@ gtk_button_class_init (GtkButtonClass *klass)
    *
    * Emitted when the pointer enters the button.
    * 
-   * @Deprecated: Use the GtkWidget::enter-notify-event signal.
+   * @Deprecated: Use the #GtkWidget::enter-notify-event signal.
    */ 
   button_signals[ENTER] =
     g_signal_new (I_("enter"),
@@ -375,7 +375,7 @@ gtk_button_class_init (GtkButtonClass *klass)
    *
    * Emitted when the pointer leaves the button.
    * 
-   * @Deprecated: Use the GtkWidget::leave-notify-event signal.
+   * @Deprecated: Use the #GtkWidget::leave-notify-event signal.
    */ 
   button_signals[LEAVE] =
     g_signal_new (I_("leave"),
@@ -390,10 +390,10 @@ gtk_button_class_init (GtkButtonClass *klass)
    * GtkButton::activate:
    * @widget: the object which received the signal.
    *
-   * The "activate" signal on GtkButton is an action signal and
+   * The ::activate signal on GtkButton is an action signal and
    * emitting it causes the button to animate press then release. 
    * Applications should never connect to this signal, but use the
-   * "clicked" signal.
+   * #GtkButton::clicked signal.
    */
   button_signals[ACTIVATE] =
     g_signal_new (I_("activate"),
@@ -438,8 +438,8 @@ gtk_button_class_init (GtkButtonClass *klass)
   /**
    * GtkButton:displace-focus:
    *
-   * Whether the child_displacement_x/child_displacement_y properties should also 
-   * affect the focus rectangle.
+   * Whether the child_displacement_x/child_displacement_y properties 
+   * should also affect the focus rectangle.
    *
    * Since: 2.6
    */
@@ -1651,7 +1651,7 @@ gtk_button_get_use_underline (GtkButton *button)
  * @button: a #GtkButton
  * @use_stock: %TRUE if the button should use a stock item
  *
- * If true, the label set on the button is used as a
+ * If %TRUE, the label set on the button is used as a
  * stock id to select the stock item for the button.
  */
 void
@@ -1953,7 +1953,7 @@ gtk_button_grab_notify (GtkWidget *widget,
  * @image: a widget to set as the image for the button
  *
  * Set the image of @button to the given widget. Note that
- * it depends on the gtk-button-images setting whether the
+ * it depends on the #GtkSettings:gtk-button-images setting whether the
  * image will be displayed or not, you don't have to call
  * gtk_widget_show() on @image yourself.
  *

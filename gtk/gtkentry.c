@@ -611,7 +611,8 @@ gtk_entry_class_init (GtkEntryClass *class)
   /**
    * GtkEntry:shadow-type:
    *
-   * Which kind of shadow to draw around the entry when has-frame is set.
+   * Which kind of shadow to draw around the entry when 
+   * #GtkEntry:has-frame is set to %TRUE.
    *
    * Since: 2.12
    */
@@ -880,7 +881,7 @@ gtk_entry_class_init (GtkEntryClass *class)
   /**
    * GtkEntry:inner-border:
    *
-   * Sets the text area's border between the text and the frame
+   * Sets the text area's border between the text and the frame.
    *
    * Since: 2.10
    */
@@ -4439,7 +4440,6 @@ gtk_entry_get_visibility (GtkEntry *entry)
  * invisible char is an asterisk ('*').  If you set the invisible char
  * to 0, then the user will get no feedback at all; there will be
  * no text on the screen as they type.
- * 
  **/
 void
 gtk_entry_set_invisible_char (GtkEntry *entry,
@@ -4460,7 +4460,7 @@ gtk_entry_set_invisible_char (GtkEntry *entry,
  * @entry: a #GtkEntry
  *
  * Retrieves the character displayed in place of the real characters
- * for entries with visisbility set to false. See gtk_entry_set_invisible_char().
+ * for entries with visibility set to false. See gtk_entry_set_invisible_char().
  *
  * Return value: the current invisible char, or 0, if the entry does not
  *               show invisible text at all. 
@@ -4490,7 +4490,7 @@ gtk_entry_set_editable (GtkEntry *entry,
  * See also gtk_editable_get_chars().
  *
  * Return value: a pointer to the contents of the widget as a
- *      string.  This string points to internally allocated
+ *      string. This string points to internally allocated
  *      storage in the widget and must not be freed, modified or
  *      stored.
  **/
@@ -4512,7 +4512,7 @@ gtk_entry_select_region  (GtkEntry       *entry,
 
 /**
  * gtk_entry_set_max_length:
- * @entry: a #GtkEntry.
+ * @entry: a #GtkEntry
  * @max: the maximum length of the entry, or 0 for no maximum.
  *   (other than the maximum length of entries.) The value passed in will
  *   be clamped to the range 0-65536.
@@ -4566,8 +4566,7 @@ gtk_entry_get_max_length (GtkEntry *entry)
  *
  * (For experts: if @setting is %TRUE, the entry calls
  * gtk_window_activate_default() on the window containing the entry, in
- * the default handler for the "activate" signal.)
- * 
+ * the default handler for the #GtkWidget::activate signal.)
  **/
 void
 gtk_entry_set_activates_default (GtkEntry *entry,
@@ -4609,7 +4608,6 @@ gtk_entry_get_activates_default (GtkEntry *entry)
  * <emphasis>request</emphasis>, the size can still be affected by
  * how you pack the widget into containers. If @n_chars is -1, the
  * size reverts to the default entry size.
- * 
  **/
 void
 gtk_entry_set_width_chars (GtkEntry *entry,
@@ -4718,7 +4716,7 @@ gtk_entry_set_inner_border (GtkEntry        *entry,
  * gtk_entry_get_inner_border:
  * @entry: a #GtkEntry
  *
- * This function returns the entry's inner-border property. See
+ * This function returns the entry's #GtkEntry:inner-border property. See
  * gtk_entry_set_inner_border() for more information.
  *
  * Return value: the entry's #GtkBorder, or %NULL if none was set.
@@ -4856,7 +4854,6 @@ gtk_entry_text_index_to_layout_index (GtkEntry *entry,
  * gtk_entry_layout_index_to_text_index() and
  * gtk_entry_text_index_to_layout_index() are needed to convert byte
  * indices in the layout to byte indices in the entry contents.
- * 
  **/
 void
 gtk_entry_get_layout_offsets (GtkEntry *entry,
@@ -6027,8 +6024,8 @@ connect_completion_signals (GtkEntry           *entry,
 
 /**
  * gtk_entry_set_completion:
- * @entry: A #GtkEntry.
- * @completion: The #GtkEntryCompletion or %NULL.
+ * @entry: A #GtkEntry
+ * @completion: The #GtkEntryCompletion or %NULL
  *
  * Sets @completion to be the auxiliary completion object to use with @entry.
  * All further configuration of the completion mechanism is done on
@@ -6084,7 +6081,7 @@ gtk_entry_set_completion (GtkEntry           *entry,
 
 /**
  * gtk_entry_get_completion:
- * @entry: A #GtkEntry.
+ * @entry: A #GtkEntry
  *
  * Returns the auxiliary completion object currently in use by @entry.
  *
@@ -6108,8 +6105,8 @@ gtk_entry_get_completion (GtkEntry *entry)
 /**
  * gtk_entry_set_cursor_hadjustment:
  * @entry: a #GtkEntry
- * @adjustment: an adjustment which should be adjusted when the cursor is moved,
- *              or %NULL
+ * @adjustment: an adjustment which should be adjusted when the cursor 
+ *              is moved, or %NULL
  *
  * Hooks up an adjustment to the cursor position in an entry, so that when 
  * the cursor is moved, the adjustment is scrolled to show that position. 

@@ -450,15 +450,15 @@ gtk_dialog_new_empty (const gchar     *title,
  * (#GTK_DIALOG_DESTROY_WITH_PARENT). After @flags, button
  * text/response ID pairs should be listed, with a %NULL pointer ending
  * the list. Button text can be either a stock ID such as
- * #GTK_STOCK_OK, or some arbitrary text.  A response ID can be
+ * #GTK_STOCK_OK, or some arbitrary text. A response ID can be
  * any positive number, or one of the values in the #GtkResponseType
  * enumeration. If the user clicks one of these dialog buttons,
- * #GtkDialog will emit the "response" signal with the corresponding
- * response ID. If a #GtkDialog receives the "delete_event" signal, it
- * will emit "response" with a response ID of #GTK_RESPONSE_DELETE_EVENT.
- * However, destroying a dialog does not emit the "response" signal;
- * so be careful relying on "response" when using
- * the #GTK_DIALOG_DESTROY_WITH_PARENT flag. Buttons are from left to right,
+ * #GtkDialog will emit the #GtkDialog::response signal with the corresponding
+ * response ID. If a #GtkDialog receives the #GtkWidget::delete-event signal, 
+ * it will emit ::response with a response ID of #GTK_RESPONSE_DELETE_EVENT.
+ * However, destroying a dialog does not emit the ::response signal;
+ * so be careful relying on ::response when using the 
+ * #GTK_DIALOG_DESTROY_WITH_PARENT flag. Buttons are from left to right,
  * so the first button in the list will be the leftmost button in the dialog.
  *
  * Here's a simple example:
@@ -541,11 +541,11 @@ action_widget_activated (GtkWidget *widget, GtkDialog *dialog)
  * @response_id: response ID for @child
  * 
  * Adds an activatable widget to the action area of a #GtkDialog,
- * connecting a signal handler that will emit the "response" signal on
- * the dialog when the widget is activated.  The widget is appended to
- * the end of the dialog's action area.  If you want to add a
- * non-activatable widget, simply pack it into the
- * <literal>action_area</literal> field of the #GtkDialog struct.
+ * connecting a signal handler that will emit the #GtkDialog::response 
+ * signal on the dialog when the widget is activated. The widget is 
+ * appended to the end of the dialog's action area. If you want to add a
+ * non-activatable widget, simply pack it into the @action_area field 
+ * of the #GtkDialog struct.
  **/
 void
 gtk_dialog_add_action_widget (GtkDialog *dialog,
@@ -598,9 +598,9 @@ gtk_dialog_add_action_widget (GtkDialog *dialog,
  * 
  * Adds a button with the given text (or a stock button, if @button_text is a
  * stock ID) and sets things up so that clicking the button will emit the
- * "response" signal with the given @response_id. The button is appended to the
- * end of the dialog's action area. The button widget is returned, but usually
- * you don't need it.
+ * #GtkDialog::response signal with the given @response_id. The button is 
+ * appended to the end of the dialog's action area. The button widget is 
+ * returned, but usually you don't need it.
  *
  * Return value: the button widget that was added
  **/
@@ -821,10 +821,10 @@ gtk_dialog_get_has_separator (GtkDialog *dialog)
  * @dialog: a #GtkDialog
  * @response_id: response ID 
  * 
- * Emits the "response" signal with the given response ID. Used to
- * indicate that the user has responded to the dialog in some way;
+ * Emits the #GtkDialog::response signal with the given response ID. 
+ * Used to indicate that the user has responded to the dialog in some way;
  * typically either you or gtk_dialog_run() will be monitoring the
- * "response" signal and take appropriate action.
+ * ::response signal and take appropriate action.
  **/
 void
 gtk_dialog_response (GtkDialog *dialog,
@@ -902,22 +902,23 @@ run_destroy_handler (GtkDialog *dialog, gpointer data)
  * @dialog: a #GtkDialog
  * 
  * Blocks in a recursive main loop until the @dialog either emits the
- * response signal, or is destroyed. If the dialog is destroyed during the call
- * to gtk_dialog_run(), gtk_dialog_returns #GTK_RESPONSE_NONE.
- * Otherwise, it returns the response ID from the "response" signal emission.
+ * #GtkDialog::response signal, or is destroyed. If the dialog is 
+ * destroyed during the call to gtk_dialog_run(), gtk_dialog_run() returns 
+ * #GTK_RESPONSE_NONE. Otherwise, it returns the response ID from the 
+ * ::response signal emission.
+ *
  * Before entering the recursive main loop, gtk_dialog_run() calls
  * gtk_widget_show() on the dialog for you. Note that you still
  * need to show any children of the dialog yourself.
  *
- * During gtk_dialog_run(), the default behavior of "delete_event" is
- * disabled; if the dialog receives "delete_event", it will not be
+ * During gtk_dialog_run(), the default behavior of #GtkWidget::delete-event 
+ * is disabled; if the dialog receives ::delete_event, it will not be
  * destroyed as windows usually are, and gtk_dialog_run() will return
- * #GTK_RESPONSE_DELETE_EVENT. Also, during gtk_dialog_run() the dialog will be
- * modal. You can force gtk_dialog_run() to return at any time by
- * calling gtk_dialog_response() to emit the "response"
- * signal. Destroying the dialog during gtk_dialog_run() is a very bad
- * idea, because your post-run code won't know whether the dialog was
- * destroyed or not.
+ * #GTK_RESPONSE_DELETE_EVENT. Also, during gtk_dialog_run() the dialog 
+ * will be modal. You can force gtk_dialog_run() to return at any time by
+ * calling gtk_dialog_response() to emit the ::response signal. Destroying 
+ * the dialog during gtk_dialog_run() is a very bad idea, because your 
+ * post-run code won't know whether the dialog was destroyed or not.
  *
  * After gtk_dialog_run() returns, you are responsible for hiding or
  * destroying the dialog if you wish to do so.
@@ -1115,9 +1116,10 @@ gtk_dialog_set_alternative_button_order_valist (GtkDialog *dialog,
  * @first_response_id: a response id used by one @dialog's buttons
  * @Varargs: a list of more response ids of @dialog's buttons, terminated by -1
  *
- * Sets an alternative button order. If the gtk-alternative-button-order 
- * setting is set to %TRUE, the dialog buttons are reordered according to 
- * the order of the response ids passed to this function.
+ * Sets an alternative button order. If the 
+ * #GtkSettings:gtk-alternative-button-order setting is set to %TRUE, 
+ * the dialog buttons are reordered according to the order of the 
+ * response ids passed to this function.
  *
  * By default, GTK+ dialogs use the button order advocated by the Gnome 
  * <ulink url="http://developer.gnome.org/projects/gup/hig/2.0/">Human 
@@ -1179,9 +1181,10 @@ gtk_dialog_set_alternative_button_order (GtkDialog *dialog,
  * @n_params: the number of response ids in @new_order
  * @new_order: an array of response ids of @dialog's buttons
  *
- * Sets an alternative button order. If the gtk-alternative-button-order 
- * setting is set to %TRUE, the dialog buttons are reordered according to 
- * the order of the response ids in @new_order.
+ * Sets an alternative button order. If the 
+ * #GtkSettings:gtk-alternative-button-order setting is set to %TRUE, 
+ * the dialog buttons are reordered according to the order of the 
+ * response ids in @new_order.
  *
  * See gtk_dialog_set_alternative_button_order() for more information.
  *

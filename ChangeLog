@@ -1,3 +1,18 @@
+2007-05-26  Matthias Clasen  <mclasen@redhat.com>
+
+	* configure.in: Require gtk-doc 1.6, for signal and property links.
+	* gtk/gtkbox.c:
+	* gtk/gtkbutton.c:
+	* gtk/gtkcontainer.c:
+	* gtk/gtkdialog.c:
+	* gtk/gtkentry.c:
+	* gtk/gtkimage.c:
+	* gtk/gtklabel.c:
+	* gtk/gtkmisc.c:
+	* gtk/gtksettings.c:
+	* gtk/gtkwidget.c: Documentation improvements, link signals
+	and properties where it makes sense.
+
 2007-05-25  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtktextmark.c:

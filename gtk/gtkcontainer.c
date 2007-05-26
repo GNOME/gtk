@@ -262,7 +262,7 @@ gtk_container_class_init (GtkContainerClass *class)
 
 /**
  * gtk_container_child_type: 
- * @container: a #GtkContainer.
+ * @container: a #GtkContainer
  *
  * Returns the type of the children supported by the container.
  *
@@ -487,7 +487,7 @@ gtk_container_child_get_property (GtkContainer *container,
  * @child: a widget which is a child of @container
  * @first_property_name: the name of the first property to set
  * @var_args: a %NULL-terminated list of property names and values, starting
- *           with @first_prop_name.
+ *           with @first_prop_name
  * 
  * Sets one or more child properties for @child and @container.
  **/
@@ -610,7 +610,7 @@ gtk_container_child_set_property (GtkContainer *container,
  * @widget: a widget to be placed inside @container 
  * @first_prop_name: the name of the first child property to set 
  * @Varargs: a %NULL-terminated list of property names and values, starting
- *           with @first_prop_name.
+ *           with @first_prop_name
  * 
  * Adds @widget to @container, setting child properties at the same time.
  * See gtk_container_add() and gtk_container_child_set() for more details.
@@ -650,7 +650,7 @@ gtk_container_add_with_properties (GtkContainer *container,
  * @child: a widget which is a child of @container
  * @first_prop_name: the name of the first property to set
  * @Varargs: a %NULL-terminated list of property names and values, starting
- *           with @first_prop_name.
+ *           with @first_prop_name
  * 
  * Sets one or more child properties for @child and @container.
  **/
@@ -677,7 +677,7 @@ gtk_container_child_set (GtkContainer      *container,
  * @child: a widget which is a child of @container
  * @first_prop_name: the name of the first property to get
  * @Varargs: a %NULL-terminated list of property names and #GValue*, 
- *           starting with @first_prop_name.
+ *           starting with @first_prop_name
  * 
  * Gets the values of one or more child properties for @child and @container.
  **/
@@ -878,8 +878,8 @@ gtk_container_get_property (GObject         *object,
 /**
  * gtk_container_set_border_width:
  * @container: a #GtkContainer
- * @border_width: amount of blank space to leave <emphasis>outside</emphasis> the container.
- *   Valid values are in the range 0-65535 pixels.
+ * @border_width: amount of blank space to leave <emphasis>outside</emphasis> 
+ *   the container. Valid values are in the range 0-65535 pixels.
  *
  * Sets the border width of the container.
  *
@@ -1003,8 +1003,8 @@ _gtk_container_dequeue_resize_handler (GtkContainer *container)
 
 /**
  * gtk_container_set_resize_mode:
- * @container: a #GtkContainer.
- * @resize_mode: the new resize mode.
+ * @container: a #GtkContainer
+ * @resize_mode: the new resize mode
  * 
  * Sets the resize mode for the container.
  *
@@ -1053,8 +1053,8 @@ gtk_container_get_resize_mode (GtkContainer *container)
 
 /**
  * gtk_container_set_reallocate_redraws:
- * @container: a #GtkContainer.
- * @needs_redraws: the new value for the container's @reallocate_redraws flag.
+ * @container: a #GtkContainer
+ * @needs_redraws: the new value for the container's @reallocate_redraws flag
  *
  * Sets the @reallocate_redraws flag of the container to the given value.
  * 
@@ -1263,7 +1263,7 @@ gtk_container_forall (GtkContainer *container,
  * @callback: a callback
  * @callback_data: callback user data
  * 
- * Invokes @callback on each non-internal child of @container.  See
+ * Invokes @callback on each non-internal child of @container. See
  * gtk_container_forall() for details on what constitutes an
  * "internal" child.  Most applications should use
  * gtk_container_foreach(), rather than gtk_container_forall().
@@ -1354,7 +1354,7 @@ gtk_container_set_focus_child (GtkContainer *container,
 
 /**
  * gtk_container_get_children:
- * @container: a #GtkContainer.
+ * @container: a #GtkContainer
  * 
  * Returns the container's non-internal children. See
  * gtk_container_forall() for details on what constitutes an "internal" child. 
@@ -1950,13 +1950,13 @@ gtk_container_focus_sort_left_right (GtkContainer     *container,
  * gtk_container_focus_sort:
  * @container: a #GtkContainer
  * @children:  a list of descendents of @container (they don't
- *             have to be direct children.
+ *             have to be direct children)
  * @direction: focus direction
  * @old_focus: widget to use for the starting position, or %NULL
  *             to determine this automatically.
- *             [ Note, this argument isn't used for GTK_DIR_TAB_*,
- *               which is the only @direction we use currently,
- *               so perhaps this argument should be removed ]
+ *             (Note, this argument isn't used for GTK_DIR_TAB_*,
+ *              which is the only @direction we use currently,
+ *              so perhaps this argument should be removed)
  * 
  * Sorts @children in the correct order for focusing with
  * direction type @direction.
@@ -2073,8 +2073,8 @@ chain_widget_destroyed (GtkWidget *widget,
 
 /**
  * gtk_container_set_focus_chain: 
- * @container: a #GtkContainer.
- * @focusable_widgets: the new focus chain.
+ * @container: a #GtkContainer
+ * @focusable_widgets: the new focus chain
  *
  * Sets a focus chain, overriding the one computed automatically by GTK+.
  * 
@@ -2165,7 +2165,7 @@ gtk_container_get_focus_chain (GtkContainer *container,
 
 /**
  * gtk_container_unset_focus_chain:
- * @container: a #GtkContainer.
+ * @container: a #GtkContainer
  * 
  * Removes a focus chain explicitly set with gtk_container_set_focus_chain().
  **/
@@ -2204,17 +2204,18 @@ gtk_container_unset_focus_chain (GtkContainer  *container)
 /**
  * gtk_container_set_focus_vadjustment:
  * @container: a #GtkContainer
- * @adjustment: an adjustment which should be adjusted when the focus is moved among the
- *   descendents of @container
+ * @adjustment: an adjustment which should be adjusted when the focus 
+ *   is moved among the descendents of @container
  * 
- * Hooks up an adjustment to focus handling in a container, so when a child of the 
- * container is focused, the adjustment is scrolled to show that widget. This function
- * sets the vertical alignment. See gtk_scrolled_window_get_vadjustment() for a typical
- * way of obtaining the adjustment and gtk_container_set_focus_hadjustment() for setting
+ * Hooks up an adjustment to focus handling in a container, so when a 
+ * child of the container is focused, the adjustment is scrolled to 
+ * show that widget. This function sets the vertical alignment. See 
+ * gtk_scrolled_window_get_vadjustment() for a typical way of obtaining 
+ * the adjustment and gtk_container_set_focus_hadjustment() for setting
  * the horizontal adjustment.
  *
- * The adjustments have to be in pixel units and in the same coordinate system as the 
- * allocation for immediate children of the container. 
+ * The adjustments have to be in pixel units and in the same coordinate 
+ * system as the allocation for immediate children of the container. 
  */
 void
 gtk_container_set_focus_vadjustment (GtkContainer  *container,
@@ -2238,7 +2239,7 @@ gtk_container_set_focus_vadjustment (GtkContainer  *container,
  * @container: a #GtkContainer
  *
  * Retrieves the vertical focus adjustment for the container. See
- * gtk_container_set_focus_vadjustment ().
+ * gtk_container_set_focus_vadjustment().
  *
  * Return value: the vertical focus adjustment, or %NULL if
  *   none has been set.
@@ -2258,17 +2259,18 @@ gtk_container_get_focus_vadjustment (GtkContainer *container)
 /**
  * gtk_container_set_focus_hadjustment:
  * @container: a #GtkContainer
- * @adjustment: an adjustment which should be adjusted when the focus is moved among the
- *   descendents of @container
+ * @adjustment: an adjustment which should be adjusted when the focus is 
+ *   moved among the descendents of @container
  * 
- * Hooks up an adjustment to focus handling in a container, so when a child of the 
- * container is focused, the adjustment is scrolled to show that widget. This function
- * sets the horizontal alignment. See gtk_scrolled_window_get_hadjustment() for a typical
- * way of obtaining the adjustment and gtk_container_set_focus_vadjustment() for setting
+ * Hooks up an adjustment to focus handling in a container, so when a child 
+ * of the container is focused, the adjustment is scrolled to show that 
+ * widget. This function sets the horizontal alignment. See gt
+ * k_scrolled_window_get_hadjustment() for a typical way of obtaining the 
+ * adjustment and gtk_container_set_focus_vadjustment() for setting
  * the vertical adjustment.
  *
- * The adjustments have to be in pixel units and in the same coordinate system as the 
- * allocation for immediate children of the container. 
+ * The adjustments have to be in pixel units and in the same coordinate 
+ * system as the allocation for immediate children of the container. 
  */
 void
 gtk_container_set_focus_hadjustment (GtkContainer  *container,
@@ -2426,7 +2428,7 @@ gtk_container_unmap (GtkWidget *widget)
  * the event's area with the child area, and sending the event.
  * 
  * In most cases, a container can simply either simply inherit the
- * ::expose implementation from #GtkContainer, or, do some drawing 
+ * #GtkWidget::expose implementation from #GtkContainer, or, do some drawing 
  * and then chain to the ::expose implementation from #GtkContainer.
  **/
 void
