@@ -5319,12 +5319,6 @@ GTK_WINDOW_CLASS
 GTK_IS_WINDOW_CLASS
 GTK_WINDOW_GET_CLASS
 
-<SUBSECTION>
-gtk_decorated_window_init
-gtk_decorated_window_calculate_frame_size
-gtk_decorated_window_set_title
-gtk_decorated_window_move_resize_window
-
 <SUBSECTION Private>
 gtk_window_get_type
 GtkWindowGeometryInfo
@@ -5546,19 +5540,6 @@ GTK_TYPE_BORDER
 <SUBSECTION Private>
 gtk_style_get_type
 gtk_border_get_type
-</SECTION>
-
-<SECTION>
-<FILE>gtkthemes</FILE>
-<TITLE>Themes</TITLE>
-<SUBSECTION Private>
-GtkThemeEngine
-gtk_theme_engine_get
-gtk_theme_engine_create_rc_style
-GTK_THEME_ENGINE
-GTK_IS_THEME_ENGINE
-GTK_TYPE_THEME_ENGINE
-gtk_theme_engine_get_type
 </SECTION>
 
 <SECTION>
