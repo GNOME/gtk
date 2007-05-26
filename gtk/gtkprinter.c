@@ -811,7 +811,7 @@ _gtk_printer_create_cairo_surface (GtkPrinter       *printer,
 
 /**
  * gtk_printer_list_papers:
- * @printer:
+ * @printer: a #GtkPrinter
  * 
  * Lists all the paper sizes @printer supports.
  * This will return and empty list unless the printer's details are 

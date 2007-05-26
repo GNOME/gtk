@@ -1540,10 +1540,12 @@ gtk_print_settings_new_from_file (const gchar  *file_name,
 /**
  * gtk_print_settings_new_from_key_file:
  * @key_file: the #GKeyFile to retrieve the settings from
+ * @group_name: the name of the group to use
  * @error: return location for errors, or %NULL
  * 
- * Reads the print settings from @key_file. Returns a new #GtkPrintSettings
- * object with the restored settings, or %NULL if an error occurred.
+ * Reads the print settings from the group @group_name in @key_file. 
+ * Returns a new #GtkPrintSettings object with the restored settings, 
+ * or %NULL if an error occurred.
  *
  * Return value: the restored #GtkPrintSettings
  * 

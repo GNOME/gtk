@@ -1,5 +1,7 @@
 2007-05-26  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkprinter.c:
+	* gtk/gtkprintsettings.c:
 	* gtk/gtkpapersize.c:
 	* gtk/gtkpagesetup.c:
 	* gtk/gtknotebook.c:
