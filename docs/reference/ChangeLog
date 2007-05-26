@@ -1,3 +1,7 @@
+2007-05-26   Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/*: Get the docs in shape
+
 2007-05-25   Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtk-sections.txt: Add new functions

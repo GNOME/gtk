@@ -473,6 +473,43 @@ gtk_button_get_type
 </SECTION>
 
 <SECTION>
+<FILE>gtkscalebutton</FILE>
+<TITLE>GtkScaleButton</TITLE>
+GtkScaleButton
+gtk_scale_button_new
+gtk_scale_button_set_icons
+gtk_scale_button_get_value
+gtk_scale_button_get_adjustment
+gtk_scale_button_set_adjustment
+<SUBSECTION Standard>
+GTK_TYPE_SCALE_BUTTON
+GTK_SCALE_BUTTON
+GTK_IS_SCALE_BUTTON
+GTK_SCALE_BUTTON_CLASS
+GTK_IS_SCALE_BUTTON_CLASS
+GTK_SCALE_BUTTON_GET_CLASS
+<SUBSECTION Private>
+gtk_scale_button_get_type
+GtkScaleButtonPrivate
+</SECTION>
+
+<SECTION>
+<FILE>gtkvolumebutton</FILE>
+<TITLE>GtkVolumeButton</TITLE>
+GtkVolumeButton
+gtk_volume_button_new
+<SUBSECTION Standard>
+GTK_VOLUME_BUTTON
+GTK_TYPE_VOLUME_BUTTON
+GTK_IS_VOLUME_BUTTON
+GTK_VOLUME_BUTTON_CLASS
+GTK_IS_VOLUME_BUTTON_CLASS
+GTK_VOLUME_BUTTON_GET_CLASS
+<SUBSECTION Private>
+gtk_volume_button_get_type
+</SECTION>
+
+<SECTION>
 <FILE>gtkcalendar</FILE>
 <TITLE>GtkCalendar</TITLE>
 GtkCalendar
@@ -2977,6 +3014,26 @@ gtk_recent_manager_error_quark
 </SECTION>
 
 <SECTION>
+<FILE>gtkrecentaction</FILE>
+<TITLE>GtkRecentAction</TITLE>
+GtkRecentAction
+gtk_recent_action_new
+gtk_recent_action_new_for_manager
+gtk_recent_action_get_show_numbers
+gtk_recent_action_set_show_numbers
+<SUBSECTION Standard>
+GTK_TYPE_RECENT_ACTION
+GTK_RECENT_ACTION
+GTK_IS_RECENT_ACTION
+GTK_RECENT_ACTION_CLASS
+GTK_IS_RECENT_ACTION_CLASS
+GTK_RECENT_ACTION_GET_CLASS
+<SUBSECTION Private>
+GtkRecentActionPrivate
+gtk_recent_action_get_type
+</SECTION>
+
+<SECTION>
 <FILE>gtkruler</FILE>
 <TITLE>GtkRuler</TITLE>
 GtkRuler
@@ -4073,6 +4130,25 @@ gtk_tooltips_get_type
 </SECTION>
 
 <SECTION>
+<FILE>gtktooltip</FILE>
+<TITLE>GtkTooltip</TITLE>
+gtk_tooltip_set_markup
+gtk_tooltip_set_icon
+gtk_tooltip_set_icon_from_stock
+gtk_tooltip_set_custom
+gtk_tooltip_trigger_tooltip_query
+gtk_tooltip_focus_in
+gtk_tooltip_focus_out
+gtk_tooltip_toggle_keyboard_mode
+gtk_tooltip_handle_event
+gtk_tooltip_hide
+<SUBSECTION Standard>
+GTK_TYPE_TOOLTIP
+<SUBSECTION Private>
+gtk_tooltip_get_type
+</SECTION>
+
+<SECTION>
 <FILE>gtktree</FILE>
 <TITLE>GtkTree</TITLE>
 GtkTree
@@ -5154,6 +5230,9 @@ gtk_widget_get_action
 gtk_widget_is_composited
 gtk_widget_error_bell
 gtk_widget_keynav_failed
+gtk_widget_get_tooltip_window
+gtk_widget_set_tooltip_window
+gtk_widget_trigger_tooltip_query
 <SUBSECTION>
 gtk_requisition_copy
 gtk_requisition_free
@@ -5272,6 +5351,8 @@ gtk_window_set_icon_list
 gtk_window_set_icon_from_file
 gtk_window_set_icon_name
 gtk_window_set_auto_startup_notification
+gtk_window_get_opacity
+gtk_window_set_opacity
 <SUBSECTION Standard>
 GTK_WINDOW
 GTK_IS_WINDOW
@@ -6234,7 +6315,7 @@ GTK_PRINT_UNIX_DIALOG_CLASS
 GTK_IS_PRINT_UNIX_DIALOG
 GTK_IS_PRINT_UNIX_DIALOG_CLASS
 GTK_PRINT_UNIX_DIALOG_GET_CLASS
-
+GTK_TYPE_PRINT_CAPABILITIES
 <SUBSECTION Private>
 GtkPrintUnixDialogPrivate
 gtk_print_unix_dialog_get_type

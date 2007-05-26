@@ -1,0 +1,66 @@
+<!-- ##### SECTION Title ##### -->
+GtkTooltip
+
+<!-- ##### SECTION Short_Description ##### -->
+
+
+<!-- ##### SECTION Long_Description ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### SECTION See_Also ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### SECTION Stability_Level ##### -->
+
+
+<!-- ##### FUNCTION gtk_tooltip_set_markup ##### -->
+<para>
+
+</para>
+
+@tooltip: 
+@markup: 
+
+
+<!-- ##### FUNCTION gtk_tooltip_set_icon ##### -->
+<para>
+
+</para>
+
+@tooltip: 
+@pixbuf: 
+
+
+<!-- ##### FUNCTION gtk_tooltip_set_icon_from_stock ##### -->
+<para>
+
+</para>
+
+@tooltip: 
+@stock_id: 
+@size: 
+
+
+<!-- ##### FUNCTION gtk_tooltip_set_custom ##### -->
+<para>
+
+</para>
+
+@tooltip: 
+@custom_widget: 
+
+
+<!-- ##### FUNCTION gtk_tooltip_trigger_tooltip_query ##### -->
+<para>
+
+</para>
+
+@display: 
+
+

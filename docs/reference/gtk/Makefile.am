@@ -41,6 +41,7 @@ IGNORE_HFILES=				\
 	gtkfilesystemwin32.h		\
 	gtkhsv.h			\
 	gtkiconcache.h			\
+        gtkiconcachevalidator.h         \
 	gtkiconthemeparser.h		\
 	gtkimmodule.h			\
 	gtkintl.h			\
@@ -58,15 +59,20 @@ IGNORE_HFILES=				\
 	gtkprintutils.h			\
 	gtkprintoperation-private.h	\
 	gtkprivate.h			\
+	gtkquery.h			\
 	gtkrbtree.h			\
 	gtkrecentchooserdefault.h	\
 	gtkrecentchooserutils.h		\
 	gtkrecentchooserprivate.h	\
+	gtksearchengine.h		\
+	gtksearchenginebeagle.h		\
+	gtksearchenginetracker.h	\
+	gtksearchenginesimple.h		\
 	gtksequence.h			\
 	gtksocketprivate.h		\
-	gtktreedatalist.h		\
-	gtktreeprivate.h		\
 	gtktextbtree.h			\
+	gtktextbufferserializ.h		\
+	gtktextchildprivate.h		\
 	gtktextdisplay.h		\
 	gtktextiterprivate.h		\
 	gtktextlayout.h			\
@@ -75,10 +81,14 @@ IGNORE_HFILES=				\
 	gtktexttagprivate.h		\
 	gtktexttypes.h			\
 	gtktextutil.h			\
+	gtkthemes.h			\
 	gtktoggleactionprivate.h	\
 	gtktrayicon.h			\
+	gtktreedatalist.h		\
+	gtktreeprivate.h		\
 	gtktypebuiltins.h		\
 	gtkxembed.h			\
+	gtkwindow-decorate.h		\
 	gtkwin32embed.h			\
 	gtkwin32embedwidget.h		\
 	xdgmime				\

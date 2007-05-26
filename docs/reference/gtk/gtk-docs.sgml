@@ -106,6 +106,7 @@
 <!ENTITY GtkRecentChooserWidget SYSTEM "xml/gtkrecentchooserwidget.xml">
 <!ENTITY GtkRecentFilter SYSTEM "xml/gtkrecentfilter.xml">
 <!ENTITY GtkRecentManager SYSTEM "xml/gtkrecentmanager.xml">
+<!ENTITY GtkRecentAction SYSTEM "xml/gtkrecentaction.xml">
 <!ENTITY GtkRuler SYSTEM "xml/gtkruler.xml">
 <!ENTITY GtkScale SYSTEM "xml/gtkscale.xml">
 <!ENTITY GtkScaleButton SYSTEM "xml/gtkscalebutton.xml">
@@ -393,9 +394,9 @@ that is, GUI components such as <link linkend="GtkButton">GtkButton</link> or
         &GtkButton;
         &GtkCheckButton;
         &GtkRadioButton;
-        &GtkScaleButton;
         &GtkToggleButton;
         &GtkLinkButton;
+        &GtkScaleButton;
 	&GtkVolumeButton;
     </chapter>
 
@@ -476,6 +477,7 @@ that is, GUI components such as <link linkend="GtkButton">GtkButton</link> or
         &GtkAction;
         &GtkToggleAction;
         &GtkRadioAction;
+        &GtkRecentAction;
     </chapter>
 
     <chapter id="SelectorWidgets">
@@ -654,6 +656,7 @@ that is, GUI components such as <link linkend="GtkButton">GtkButton</link> or
 
   &gtk-glossary;
 
+<!--
   <index>
     <title>Index</title>
   </index>
@@ -678,5 +681,6 @@ that is, GUI components such as <link linkend="GtkButton">GtkButton</link> or
   <index role="2.12">
     <title>Index of new symbols in 2.12</title>
   </index>  
+-->
 
 </book>
