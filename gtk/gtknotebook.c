@@ -7287,7 +7287,7 @@ gtk_notebook_set_group_id (GtkNotebook *notebook,
 /**
  * gtk_notebook_set_group:
  * @notebook: a #GtkNotebook
- * @group_id: a pointer to identify the notebook group, or %NULL to unset it
+ * @group: a pointer to identify the notebook group, or %NULL to unset it
  *
  * Sets a group identificator pointer for @notebook, notebooks sharing
  * the same group identificator pointer will be able to exchange tabs

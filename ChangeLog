@@ -1,5 +1,6 @@
 2007-05-26  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtknotebook.c:
 	* gtk/gtkentrycompletion.c: Document new api
 
 2007-05-26  Richard Hult  <richard@imendio.com>
