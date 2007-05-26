@@ -566,6 +566,8 @@ gdk_threads_add_idle_full (gint           priority,
  * assigning the default priority, #G_PRIORITY_DEFAULT_IDLE.
  *
  * See gdk_threads_add_idle_full().
+ *
+ * Return value: the ID (greater than 0) of the event source.
  * 
  * Since: 2.12
  */
@@ -670,6 +672,8 @@ gdk_threads_add_timeout_full (gint           priority,
  * assigning the default priority, #G_PRIORITY_DEFAULT.
  *
  * See gdk_threads_add_timeout_full().
+ * 
+ * Return value: the ID (greater than 0) of the event source.
  *
  * Since: 2.12
  */
