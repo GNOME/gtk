@@ -650,6 +650,7 @@ gdk_window_fullscreen
 gdk_window_unfullscreen
 gdk_window_set_keep_above
 gdk_window_set_keep_below
+gdk_window_set_opacity
 gdk_window_move
 gdk_window_resize
 gdk_window_move_resize
@@ -865,6 +866,7 @@ gdk_pango_context_get
 gdk_pango_context_get_for_screen
 gdk_pango_context_set_colormap
 GdkPangoAttrEmbossed
+GdkPangoAttrEmbossColor
 GdkPangoAttrStipple
 gdk_pango_attr_emboss_color_new
 gdk_pango_attr_embossed_new
@@ -1075,6 +1077,7 @@ gdk_event_get_state
 gdk_event_get_axis
 gdk_event_get_coords
 gdk_event_get_root_coords
+gdk_event_request_motions
 
 <SUBSECTION>
 gdk_event_handler_set
