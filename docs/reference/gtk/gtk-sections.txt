@@ -473,43 +473,6 @@ gtk_button_get_type
 </SECTION>
 
 <SECTION>
-<FILE>gtkscalebutton</FILE>
-<TITLE>GtkScaleButton</TITLE>
-GtkScaleButton
-gtk_scale_button_new
-gtk_scale_button_set_icons
-gtk_scale_button_get_value
-gtk_scale_button_get_adjustment
-gtk_scale_button_set_adjustment
-<SUBSECTION Standard>
-GTK_TYPE_SCALE_BUTTON
-GTK_SCALE_BUTTON
-GTK_IS_SCALE_BUTTON
-GTK_SCALE_BUTTON_CLASS
-GTK_IS_SCALE_BUTTON_CLASS
-GTK_SCALE_BUTTON_GET_CLASS
-<SUBSECTION Private>
-gtk_scale_button_get_type
-GtkScaleButtonPrivate
-</SECTION>
-
-<SECTION>
-<FILE>gtkvolumebutton</FILE>
-<TITLE>GtkVolumeButton</TITLE>
-GtkVolumeButton
-gtk_volume_button_new
-<SUBSECTION Standard>
-GTK_VOLUME_BUTTON
-GTK_TYPE_VOLUME_BUTTON
-GTK_IS_VOLUME_BUTTON
-GTK_VOLUME_BUTTON_CLASS
-GTK_IS_VOLUME_BUTTON_CLASS
-GTK_VOLUME_BUTTON_GET_CLASS
-<SUBSECTION Private>
-gtk_volume_button_get_type
-</SECTION>
-
-<SECTION>
 <FILE>gtkcalendar</FILE>
 <TITLE>GtkCalendar</TITLE>
 GtkCalendar
@@ -3091,8 +3054,10 @@ gtk_scale_button_get_adjustment
 gtk_scale_button_get_value
 <SUBSECTION Standard>
 GTK_SCALE_BUTTON
-GTK_SCALE_IS_BUTTON
+GTK_IS_SCALE_BUTTON
 GTK_TYPE_SCALE_BUTTON
+GTK_SCALE_BUTTON_CLASS
+GTK_IS_SCALE_BUTTON_CLASS
 GTK_SCALE_BUTTON_GET_CLASS
 <SUBSECTION Private>
 gtk_scale_button_get_type
@@ -3809,8 +3774,6 @@ GTK_TEXT_CHILD_ANCHOR_GET_CLASS
 gtk_text_view_get_type
 gtk_text_child_anchor_get_type
 GtkTextBTree
-GtkTextChildBody
-GtkTextPixbuf
 GtkTextWindow
 GtkTextPendingScroll
 </SECTION>
@@ -4137,11 +4100,6 @@ gtk_tooltip_set_icon
 gtk_tooltip_set_icon_from_stock
 gtk_tooltip_set_custom
 gtk_tooltip_trigger_tooltip_query
-gtk_tooltip_focus_in
-gtk_tooltip_focus_out
-gtk_tooltip_toggle_keyboard_mode
-gtk_tooltip_handle_event
-gtk_tooltip_hide
 <SUBSECTION Standard>
 GTK_TYPE_TOOLTIP
 <SUBSECTION Private>
@@ -4648,8 +4606,6 @@ gtk_tree_view_get_type
 <FILE>gtkcellview</FILE>
 <TITLE>GtkCellView</TITLE>
 GtkCellView
-gtk_cell_view_get_use_fg
-gtk_cell_view_set_use_fg
 gtk_cell_view_new
 gtk_cell_view_new_with_text
 gtk_cell_view_new_with_markup
@@ -4964,6 +4920,8 @@ gtk_volume_button_new
 GTK_VOLUME_BUTTON
 GTK_IS_VOLUME_BUTTON
 GTK_TYPE_VOLUME_BUTTON
+GTK_VOLUME_BUTTON_CLASS
+GTK_IS_VOLUME_BUTTON_CLASS
 GTK_VOLUME_BUTTON_GET_CLASS
 <SUBSECTION Private>
 gtk_volume_button_get_type

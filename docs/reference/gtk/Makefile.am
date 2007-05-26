@@ -88,7 +88,6 @@ IGNORE_HFILES=				\
 	gtktreeprivate.h		\
 	gtktypebuiltins.h		\
 	gtkxembed.h			\
-	gtkwindow-decorate.h		\
 	gtkwin32embed.h			\
 	gtkwin32embedwidget.h		\
 	xdgmime				\

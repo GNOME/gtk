@@ -408,16 +408,15 @@ gtk_scale_button_dispose (GObject *object)
 /**
  * gtk_scale_button_new
  * @size: a stock icon size
- * @lower: the minimum value of the scale (usually 0)
- * @upper: the maximum value of the scale (usually 100)
- * @step_increment: the stepping of value when a scroll-wheel event,
- * or up/down arrow event occurs (usually 2)
+ * @min: the minimum value of the scale (usually 0)
+ * @max: the maximum value of the scale (usually 100)
+ * @step: the stepping of value when a scroll-wheel event,
+ *        or up/down arrow event occurs (usually 2)
  * @icons: a %NULL-terminated array of icon names, or %NULL if
- * you want to set the list later with gtk_scale_button_set_icons(). See
- * gtk_scale_button_set_icons() for details.
+ *         you want to set the list later with gtk_scale_button_set_icons()
  *
- * Creates a #GtkScaleButton, with a range between lower and upper, with
- * a stepping of step_increment.
+ * Creates a #GtkScaleButton, with a range between @min and @max, with
+ * a stepping of @step.
  *
  * Return value: a new #GtkScaleButton
  *
@@ -425,9 +424,9 @@ gtk_scale_button_dispose (GObject *object)
  */
 GtkWidget *
 gtk_scale_button_new (GtkIconSize   size,
-		      gdouble       lower,
-		      gdouble       upper,
-		      gdouble       step_increment,
+		      gdouble       min,
+		      gdouble       max,
+		      gdouble       step,
 		      const gchar **icons)
 {
   GtkScaleButton *button;
@@ -439,10 +438,8 @@ gtk_scale_button_new (GtkIconSize   size,
   if (icons != NULL)
     gtk_scale_button_set_icons (button, icons);
 
-  gtk_range_set_range (GTK_RANGE (priv->scale), lower, upper);
-  gtk_range_set_increments (GTK_RANGE (priv->scale),
-			    step_increment,
-			    10 * step_increment);
+  gtk_range_set_range (GTK_RANGE (priv->scale), min, max);
+  gtk_range_set_increments (GTK_RANGE (priv->scale), step, 10 * step);
 
   if (priv->size != size)
     {
@@ -540,6 +537,8 @@ gtk_scale_button_set_icons (GtkScaleButton  *button,
  *
  * Gets the #GtkAdjustment associated with the #GtkScaleButton's scale.
  * See gtk_range_get_adjustment() for details.
+ *
+ * Returns: the adjustment associated with the scale
  *
  * Since: 2.12
  */
