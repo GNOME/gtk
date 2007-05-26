@@ -622,19 +622,18 @@ out:
 
 /**
  * gtk_page_setup_to_file:
- * @page_setup: a #GtkPageSetup
+ * @setup: a #GtkPageSetup
  * @file_name: the file to save to
  * @error: return location for errors, or %NULL
  * 
- * This function saves the print page_setup from @page_setup 
- * to @file_name.
+ * This function saves the information from @setup to @file_name.
  * 
  * Return value: %TRUE on success
  *
  * Since: 2.12
  */
 gboolean
-gtk_page_setup_to_file (GtkPageSetup  *page_setup,
+gtk_page_setup_to_file (GtkPageSetup  *setup,
 		        const char    *file_name,
 			GError       **error)
 {
@@ -643,11 +642,11 @@ gtk_page_setup_to_file (GtkPageSetup  *page_setup,
   char *data = NULL;
   gsize len;
 
-  g_return_val_if_fail (GTK_IS_PAGE_SETUP (page_setup), FALSE);
+  g_return_val_if_fail (GTK_IS_PAGE_SETUP (setup), FALSE);
   g_return_val_if_fail (file_name != NULL, FALSE);
 
   key_file = g_key_file_new ();
-  gtk_page_setup_to_key_file (page_setup, key_file, NULL);
+  gtk_page_setup_to_key_file (setup, key_file, NULL);
 
   data = g_key_file_to_data (key_file, &len, error);
   if (!data)
@@ -684,45 +683,45 @@ enum_to_string (GType type,
 
 /**
  * gtk_page_setup_to_key_file:
- * @page_setup: a #GtkPageSetup
+ * @setup: a #GtkPageSetup
  * @key_file: the #GKeyFile to save the page setup to
  * @group_name: the group to add the settings to in @key_file, 
  *      or %NULL to use the default name "Page Setup"
  * 
- * This function adds the page setup from @page_setup to @key_file.
+ * This function adds the page setup from @setup to @key_file.
  * 
  * Since: 2.12
  */
 void
-gtk_page_setup_to_key_file (GtkPageSetup *page_setup,
+gtk_page_setup_to_key_file (GtkPageSetup *setup,
 			    GKeyFile     *key_file,
 			    const gchar  *group_name)
 {
   GtkPaperSize *paper_size;
   char *orientation;
 
-  g_return_if_fail (GTK_IS_PAGE_SETUP (page_setup));
+  g_return_if_fail (GTK_IS_PAGE_SETUP (setup));
   g_return_if_fail (key_file != NULL);
 
   if (!group_name)
     group_name = KEYFILE_GROUP_NAME;
 
-  paper_size = gtk_page_setup_get_paper_size (page_setup);
+  paper_size = gtk_page_setup_get_paper_size (setup);
   g_assert (paper_size != NULL);
 
   gtk_paper_size_to_key_file (paper_size, key_file, group_name);
 
   g_key_file_set_double (key_file, group_name,
-			 "MarginTop", gtk_page_setup_get_top_margin (page_setup, GTK_UNIT_MM));
+			 "MarginTop", gtk_page_setup_get_top_margin (setup, GTK_UNIT_MM));
   g_key_file_set_double (key_file, group_name,
-			 "MarginBottom", gtk_page_setup_get_bottom_margin (page_setup, GTK_UNIT_MM));
+			 "MarginBottom", gtk_page_setup_get_bottom_margin (setup, GTK_UNIT_MM));
   g_key_file_set_double (key_file, group_name,
-			 "MarginLeft", gtk_page_setup_get_left_margin (page_setup, GTK_UNIT_MM));
+			 "MarginLeft", gtk_page_setup_get_left_margin (setup, GTK_UNIT_MM));
   g_key_file_set_double (key_file, group_name,
-			 "MarginRight", gtk_page_setup_get_right_margin (page_setup, GTK_UNIT_MM));
+			 "MarginRight", gtk_page_setup_get_right_margin (setup, GTK_UNIT_MM));
 
   orientation = enum_to_string (GTK_TYPE_PAGE_ORIENTATION,
-				gtk_page_setup_get_orientation (page_setup));
+				gtk_page_setup_get_orientation (setup));
   g_key_file_set_string (key_file, group_name,
 			 "Orientation", orientation);
   g_free (orientation);
