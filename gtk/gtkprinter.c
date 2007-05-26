@@ -477,7 +477,7 @@ gtk_printer_set_state_message (GtkPrinter  *printer,
  * gtk_printer_get_location:
  * @printer: a #GtkPrinter
  * 
- * Returns a  description of the location of the printer.
+ * Returns a description of the location of the printer.
  * 
  * Return value: the location of @printer
  *
@@ -511,7 +511,7 @@ gtk_printer_set_location (GtkPrinter  *printer,
   return TRUE;
 }
 
-/**
+**
  * gtk_printer_get_icon_name:
  * @printer: a #GtkPrinter
  * 
@@ -744,7 +744,7 @@ gtk_printer_set_is_default (GtkPrinter *printer,
  * @printer: a #GtkPrinter
  * 
  * Requests the printer details. When the details are available,
- * the "details-acquired" signal will be emitted on @printer.
+ * the #GtkPrinter::details-acquired signal will be emitted on @printer.
  * 
  * Since: 2.12
  */
@@ -814,10 +814,10 @@ _gtk_printer_create_cairo_surface (GtkPrinter       *printer,
  * @printer:
  * 
  * Lists all the paper sizes @printer supports.
- * This will return and empty list unless the printer's details are available, see
- * gtk_printer_has_details() and gtk_printer_request_details().
+ * This will return and empty list unless the printer's details are 
+ * available, see gtk_printer_has_details() and gtk_printer_request_details().
  * 
- * Return value: a newly allocated list of newly allocated #GtkPageSetup:s.
+ * Return value: a newly allocated list of newly allocated #GtkPageSetup s.
  *
  * Since: 2.12
  */
@@ -850,9 +850,9 @@ _gtk_printer_get_hard_margins (GtkPrinter *printer,
  * 
  * Returns the printer's capabilities.
  *
- * This is useful when you're using #GtkPrintUnixDialog's manual-capabilities setting
- * and need to know which settings the printer can handle and which you must
- * handle yourself.
+ * This is useful when you're using #GtkPrintUnixDialog's manual-capabilities 
+ * setting and need to know which settings the printer can handle and which 
+ * you must handle yourself.
  *
  * This will return 0 unless the printer's details are available, see
  * gtk_printer_has_details() and gtk_printer_request_details().

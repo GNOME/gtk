@@ -564,7 +564,7 @@ gtk_print_operation_class_init (GtkPrintOperationClass *class)
    *
    * If you enabled print status tracking then 
    * gtk_print_operation_is_finished() may still return %FALSE 
-   * after this was emitted.
+   * after #GtkPrintOperation::done was emitted.
    *
    * Since: 2.10
    */
@@ -585,7 +585,7 @@ gtk_print_operation_class_init (GtkPrintOperationClass *class)
    * Emitted after the user has finished changing print settings
    * in the dialog, before the actual rendering starts. 
    *
-   * A typical use for this signal is to use the parameters from the
+   * A typical use for ::begin-print is to use the parameters from the
    * #GtkPrintContext and paginate the document accordingly, and then
    * set the number of pages with gtk_print_operation_set_n_pages().
    *
@@ -605,17 +605,18 @@ gtk_print_operation_class_init (GtkPrintOperationClass *class)
    * @operation: the #GtkPrintOperation on which the signal was emitted
    * @context: the #GtkPrintContext for the current operation
    *
-   * Emitted after the begin-print signal, but before the actual 
-   * rendering starts. It keeps getting emitted until it returns %FALSE. 
+   * Emitted after the #GtkPrintOperation::begin-print signal, but before 
+   * the actual rendering starts. It keeps getting emitted until it 
+   * returns %FALSE. 
    *
-   * This signal is intended to be used for paginating the document
+   * The ::paginate signal is intended to be used for paginating the document
    * in small chunks, to avoid blocking the user interface for a long
    * time. The signal handler should update the number of pages using
    * gtk_print_operation_set_n_pages(), and return %TRUE if the document
    * has been completely paginated.
    *
    * If you don't need to do pagination in chunks, you can simply do
-   * it all in the begin-print handler, and set the number of pages
+   * it all in the ::begin-print handler, and set the number of pages
    * from there.
    *
    * Return value: %TRUE if pagination is complete
@@ -733,7 +734,7 @@ gtk_print_operation_class_init (GtkPrintOperationClass *class)
    *
    * Emitted after all pages have been rendered. 
    * A handler for this signal can clean up any resources that have
-   * been allocated in the ::begin-print handler.
+   * been allocated in the #GtkPrintOperation::begin-print handler.
    * 
    * Since: 2.10
    */
@@ -778,9 +779,9 @@ gtk_print_operation_class_init (GtkPrintOperationClass *class)
    *
    * The print dialog owns the returned widget, and its lifetime
    * isn't controlled by the app. However, the widget is guaranteed
-   * to stay around until the custom-widget-apply signal is emitted
-   * on the operation. Then you can read out any information you need
-   * from the widgets.
+   * to stay around until the #GtkPrintOperation::custom-widget-apply 
+   * signal is emitted on the operation. Then you can read out any 
+   * information you need from the widgets.
    *
    * Returns: A custom widget that gets embedded in the print dialog,
    *          or %NULL
@@ -801,10 +802,11 @@ gtk_print_operation_class_init (GtkPrintOperationClass *class)
    * @operation: the #GtkPrintOperation on which the signal was emitted
    * @widget: the custom widget added in create-custom-widget
    *
-   * Emitted right before begin-print if you added
-   * a custom widget in the create-custom-widget handler. When you get
-   * this signal you should read the information from the custom widgets,
-   * as the widgets are not guaraneed to be around at a later time.
+   * Emitted right before #GtkPrintOperation::begin-print if you added
+   * a custom widget in the #GtkPrintOperation:;create-custom-widget handler. 
+   * When you get this signal you should read the information from the 
+   * custom widgets, as the widgets are not guaraneed to be around at a 
+   * later time.
    *
    * Since: 2.10
    */
@@ -865,7 +867,7 @@ gtk_print_operation_class_init (GtkPrintOperationClass *class)
    * 
    * This page setup will be used by gtk_print_operation_run(),
    * but it can be overridden on a per-page basis by connecting
-   * to the ::request-page-setup signal.
+   * to the #GtkPrintOperation::request-page-setup signal.
    *
    * Since: 2.10
    */
@@ -921,13 +923,14 @@ gtk_print_operation_class_init (GtkPrintOperationClass *class)
    * The number of pages in the document. 
    *
    * This <emphasis>must</emphasis> be set to a positive number
-   * before the rendering starts. It may be set in a ::begin-print 
-   * signal hander.
+   * before the rendering starts. It may be set in a 
+   * #GtkPrintOperation::begin-print signal hander.
    *
-   * Note that the page numbers passed to the ::request-page-setup 
-   * and ::draw-page signals are 0-based, i.e. if the user chooses 
-   * to print all pages, the last ::draw-page signal will be for 
-   * page @n_pages - 1.
+   * Note that the page numbers passed to the 
+   * #GtkPrintOperation::request-page-setup and 
+   * #GtkPrintOperation::draw-page signals are 0-based, i.e. if 
+   * the user chooses to print all pages, the last ::draw-page signal 
+   * will be for page @n_pages - 1.
    *
    * Since: 2.10
    */
@@ -1173,7 +1176,7 @@ gtk_print_operation_new (void)
  *
  * This page setup will be used by gtk_print_operation_run(),
  * but it can be overridden on a per-page basis by connecting
- * to the ::request-page-setup signal.
+ * to the #GtkPrintOperation::request-page-setup signal.
  *
  * Since: 2.10
  **/
@@ -1320,13 +1323,14 @@ gtk_print_operation_set_job_name (GtkPrintOperation *op,
  * Sets the number of pages in the document. 
  *
  * This <emphasis>must</emphasis> be set to a positive number
- * before the rendering starts. It may be set in a ::begin-print 
- * signal hander.
+ * before the rendering starts. It may be set in a 
+ * #GtkPrintOperation::begin-print signal hander.
  *
- * Note that the page numbers passed to the ::request-page-setup 
- * and ::draw-page signals are 0-based, i.e. if the user chooses
- * to print all pages, the last ::draw-page signal will be
- * for page @n_pages - 1.
+ * Note that the page numbers passed to the 
+ * #GtkPrintOperation::request-page-setup 
+ * and #GtkPrintOperation::draw-page signals are 0-based, i.e. if 
+ * the user chooses to print all pages, the last ::draw-page signal 
+ * will be for page @n_pages - 1.
  *
  * Since: 2.10
  **/
@@ -2305,8 +2309,8 @@ print_pages (GtkPrintOperation       *op,
  * 
  * Call this when the result of a print operation is
  * %GTK_PRINT_OPERATION_RESULT_ERROR, either as returned by 
- * gtk_print_operation_run(), or in the ::done signal handler. 
- * The returned #GError will contain more details on what went wrong.
+ * gtk_print_operation_run(), or in the #GtkPrintOperation::done signal 
+ * handler. The returned #GError will contain more details on what went wrong.
  *
  * Since: 2.10
  **/
@@ -2333,15 +2337,16 @@ gtk_print_operation_get_error (GtkPrintOperation  *op,
  * print settings in the print dialog, and then print the document.
  *
  * Normally that this function does not return until the rendering of all 
- * pages is complete. You can connect to the ::status-changed signal on
- * @op to obtain some information about the progress of the print operation. 
+ * pages is complete. You can connect to the 
+ * #GtkPrintOperation::status-changed signal on @op to obtain some 
+ * information about the progress of the print operation. 
  * Furthermore, it may use a recursive mainloop to show the print dialog.
  *
  * If you call gtk_print_operation_set_allow_async() or set the allow-async
  * property the operation will run asyncronously if this is supported on the
- * platform. The ::done signal will be emitted with the operation results when
- * the operation is done (i.e. when the dialog is canceled, or when the print
- * succeeds or fails).
+ * platform. The #GtkPrintOperation::done signal will be emitted with the 
+ * operation results when the operation is done (i.e. when the dialog is 
+ * canceled, or when the print succeeds or fails).
  *
  * <informalexample><programlisting>
  * if (settings != NULL)
@@ -2471,7 +2476,8 @@ gtk_print_operation_run (GtkPrintOperation        *op,
  * @op: a #GtkPrintOperation
  *
  * Cancels a running print operation. This function may
- * be called from a begin-print, paginate or draw-page
+ * be called from a #GtkPrintOperation::begin-print, 
+ * #GtkPrintOperation::paginate or #GtkPrintOperation::draw-page
  * signal handler to stop the currently running print 
  * operation.
  *
