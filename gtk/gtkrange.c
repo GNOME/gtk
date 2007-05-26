@@ -1015,7 +1015,9 @@ gtk_range_set_show_fill_level (GtkRange *range,
  * gtk_range_get_show_fill_level:
  * @range: A #GtkRange
  *
- * Return value: Whether GtkRange displays a fill level graphics.
+ * Gets whether the range displays the fill level graphically.
+ *
+ * Return value: %TRUE if @range shows the fill level.
  *
  * Since: 2.12
  **/
@@ -1059,7 +1061,9 @@ gtk_range_set_restrict_to_fill_level (GtkRange *range,
  * gtk_range_get_restrict_to_fill_level:
  * @range: A #GtkRange
  *
- * Return value: Whether GtkRange is restricted to the fill level.
+ * Gets whether the range is restricted to the fill level.
+ *
+ * Return value: %TRUE if @range is restricted to the fill level.
  *
  * Since: 2.12
  **/
@@ -1073,8 +1077,8 @@ gtk_range_get_restrict_to_fill_level (GtkRange *range)
 
 /**
  * gtk_range_set_fill_level:
- * @range:   A #GtkRange
- * @positon: The new position of the fill level indicator
+ * @range: a #GtkRange
+ * @fill_level: the new position of the fill level indicator
  *
  * Set the new position of the fill level indicator.
  *
@@ -1119,7 +1123,9 @@ gtk_range_set_fill_level (GtkRange *range,
  * gtk_range_get_fill_level:
  * @range : A #GtkRange
  *
- * Return value: The current position of the fill level indicator.
+ * Gets the current position of the fill level indicator.
+ *
+ * Return value: The current fill level
  *
  * Since: 2.12
  **/
