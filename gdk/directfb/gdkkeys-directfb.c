@@ -1898,30 +1898,6 @@ gdk_keymap_get_entries_for_keyval (GdkKeymap     *keymap,
 	return (*n_keys > 0);
 }
 
-/**
- * gdk_keymap_translate_keyboard_state:
- * @keymap: a #GdkKeymap, or %NULL to use the default
- * @keycode: a hardware keycode
- * @state: a modifier state 
- * @group: active keyboard group
- * @keyval: return location for keyval
- * @effective_group: return location for effective group
- * @level: return location for level
- * @consumed_modifiers: return location for modifiers that were used to 
- *                      determine the group or level
- *
- * Translates the contents of a #GdkEventKey into a keyval, effective
- * group, and level. Modifiers that affected the translation and
- * are thus unavailable for application use are returned in
- * @consumed_modifiers.  See gdk_keyval_get_keys() for an explanation of
- * groups and levels.  The @effective_group is the group that was
- * actually used for the translation; some keys such as Enter are not
- * affected by the active keyboard group. The @level is derived from
- * @state. For convenience, #GdkEventKey already contains the translated
- * keyval, so this function isn't as useful as you might think.
- * 
- * Return value: %TRUE if there was a keyval bound to the keycode/state/group
- **/
 gboolean
 gdk_keymap_translate_keyboard_state (GdkKeymap       *keymap,
 		guint            keycode,

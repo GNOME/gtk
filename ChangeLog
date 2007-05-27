@@ -1,4 +1,9 @@
 2007-05-26  Matthias Clasen  <mclasen@redhat.com>
+
+	* gdk/directfb/gdkkeys-directfb.c: Remove duplicate doc comments
+	that cause problems when building the docs.
+
+2007-05-26  Matthias Clasen  <mclasen@redhat.com>
 	
 	* gdk/x11/gdkdisplay-x11.c: Update docs
 	* gdk/gdk.c: Update docs
