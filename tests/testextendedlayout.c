@@ -82,9 +82,66 @@ static GtkWidget*
 create_baseline ()
 {
   GtkWidget *table;
+  GtkWidget *child;
+  GtkWidget *view;
+  GtkWidget *label;
 
-  table = gtk_table_new (4, 3, FALSE);
+  table = gtk_table_new (3, 3, FALSE);
+  gtk_table_set_col_spacings (GTK_TABLE (table), 6);
+  gtk_table_set_row_spacings (GTK_TABLE (table), 6);
   gtk_container_set_border_width (GTK_CONTAINER (table), 12);
+
+  child = gtk_entry_new ();
+  gtk_entry_set_text (GTK_ENTRY (child), "Test...");
+  gtk_table_attach (GTK_TABLE (table), child, 1, 2, 0, 1, 
+                    GTK_FILL | GTK_EXPAND, GTK_FILL, 0, 0);
+
+  label = gtk_label_new_with_mnemonic ("_Title:");
+  allocation_guides = g_list_append (allocation_guides, label);
+  gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
+  gtk_label_set_mnemonic_widget  (GTK_LABEL (label), child);
+  gtk_table_attach (GTK_TABLE (table), label, 0, 1, 0, 1, 
+                    GTK_FILL, GTK_FILL, 0, 0);
+
+  label = gtk_label_new_with_mnemonic ("Notice on\ntwo rows.");
+  allocation_guides = g_list_append (allocation_guides, label);
+  gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.0);
+  gtk_table_attach (GTK_TABLE (table), label, 2, 3, 0, 2, 
+                    GTK_FILL, GTK_FILL, 0, 0);
+
+  child = gtk_font_button_new ();
+  gtk_table_attach (GTK_TABLE (table), child, 1, 2, 1, 2, 
+                    GTK_FILL | GTK_EXPAND, GTK_FILL, 0, 0);
+
+  label = gtk_label_new_with_mnemonic ("_Font:");
+  allocation_guides = g_list_append (allocation_guides, label);
+  gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
+  gtk_label_set_mnemonic_widget  (GTK_LABEL (label), child);
+  gtk_table_attach (GTK_TABLE (table), label, 0, 1, 1, 2, 
+                    GTK_FILL, GTK_FILL, 0, 0);
+
+  view = gtk_text_view_new ();
+  gtk_text_buffer_set_text (gtk_text_view_get_buffer (GTK_TEXT_VIEW (view)),
+                            "Lorem ipsem...", -1);
+
+  child = gtk_scrolled_window_new (NULL, NULL);
+  gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (child),
+                                  GTK_POLICY_NEVER, GTK_POLICY_AUTOMATIC);
+  gtk_scrolled_window_set_shadow_type (GTK_SCROLLED_WINDOW (child),
+                                       GTK_SHADOW_IN);
+  gtk_container_add (GTK_CONTAINER (child), view);
+
+  gtk_table_attach (GTK_TABLE (table), child, 1, 3, 2, 3, 
+                    GTK_FILL | GTK_EXPAND,
+                    GTK_FILL | GTK_EXPAND, 
+                    0, 0);
+
+  label = gtk_label_new_with_mnemonic ("_Comment:");
+  allocation_guides = g_list_append (allocation_guides, label);
+  gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.0);
+  gtk_label_set_mnemonic_widget  (GTK_LABEL (label), child);
+  gtk_table_attach (GTK_TABLE (table), label, 0, 1, 2, 3,
+                    GTK_FILL, GTK_FILL, 0, 0);
 
   return table;
 }
@@ -98,9 +155,9 @@ expose_page (GtkWidget      *page,
   GList *guides = user_data;
   GList *iter;
 
-/*  cairo_rectangle (cr, event->area.x, event->area.y,
+  cairo_rectangle (cr, event->area.x, event->area.y,
                        event->area.width, event->area.height);
-  cairo_clip (cr);*/
+  cairo_clip (cr);
 
   cairo_translate (cr, page->allocation.x - 0.5, 
                        page->allocation.y - 0.5);
@@ -119,20 +176,41 @@ expose_page (GtkWidget      *page,
           x1 = x0 + child->allocation.width;
           y1 = y0 + child->allocation.height;
 
-          cairo_move_to (cr, x0, 0);
-          cairo_line_to (cr, x0, page->allocation.height - 1);
+          if (GTK_IS_LABEL (child)) 
+            {
+              PangoLayout *layout;
+              PangoLayoutLine *line;
+              PangoRectangle log;
+              gint ybase;
 
-          cairo_move_to (cr, x1, 0);
-          cairo_line_to (cr, x1, page->allocation.height - 1);
+              layout = gtk_label_get_layout (GTK_LABEL (child));
+              line = pango_layout_get_line (layout, 0);
+              pango_layout_line_get_extents (line, NULL, &log);
+              gtk_label_get_layout_offsets (GTK_LABEL (child), NULL, &ybase);
 
-          cairo_move_to (cr, 0, y0);
-          cairo_line_to (cr, page->allocation.width - 1, y0);
+              ybase -= child->allocation.y;
+              ybase += PANGO_PIXELS (log.height);
 
-          cairo_move_to (cr, 0, y1);
-          cairo_line_to (cr, page->allocation.width - 1, y1);
+              cairo_move_to (cr, 0, y0 + ybase);
+              cairo_line_to (cr, page->allocation.width, y0 + ybase);
+            }
+          else
+            {
+              cairo_move_to (cr, x0, 0);
+              cairo_line_to (cr, x0, page->allocation.height);
 
-          cairo_stroke (cr);
-        }
+              cairo_move_to (cr, x1, 0);
+              cairo_line_to (cr, x1, page->allocation.height);
+
+              cairo_move_to (cr, 0, y0);
+              cairo_line_to (cr, page->allocation.width, y0);
+
+              cairo_move_to (cr, 0, y1);
+              cairo_line_to (cr, page->allocation.width, y1);
+            }
+
+            cairo_stroke (cr);
+      }
     }
 
   cairo_destroy (cr);
@@ -144,11 +222,7 @@ append_testcase(GtkWidget   *notebook,
                 GtkWidget   *testcase,
                 const gchar *caption)
 {
-  GtkWidget *alignment;
-
-  alignment = gtk_alignment_new (0.5, 0.5, 0.0, 0.0);
-  gtk_container_add (GTK_CONTAINER (alignment), testcase);
-  gtk_notebook_append_page (GTK_NOTEBOOK (notebook), alignment,
+  gtk_notebook_append_page (GTK_NOTEBOOK (notebook), testcase,
                             gtk_label_new (caption));
 
   g_signal_connect_after (testcase, "expose-event",

@@ -1,4 +1,9 @@
-2007-05-27  Mathias Hasselmann  <mathias.hasselmann@gmx.de>
+2007-04-21  Mathias Hasselmann  <mathias.hasselmann@gmx.de>
+
+	* tests/testextendedlayout.c: Initial implementation of base
+	line test.
+
+2007-04-20  Mathias Hasselmann  <mathias.hasselmann@gmx.de>
 
 	* tests/testextendedlayout.c, tests/Makefile.am,
 	ChangeLog.gtk-extended-layout: Creating testing framework,
