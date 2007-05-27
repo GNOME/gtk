@@ -1,5 +1,9 @@
 2007-05-26  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkentry.c: Move docs inline.
+
+2007-05-26  Matthias Clasen  <mclasen@redhat.com>
+
 	* gdk/directfb/gdkkeys-directfb.c: Remove duplicate doc comments
 	that cause problems when building the docs.
 

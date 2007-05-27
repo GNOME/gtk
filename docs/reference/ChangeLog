@@ -1,10 +1,20 @@
 2007-05-26   Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/tmpl/gtkentry.sgml: Move docs inline
+
+	* gtk/tmpl/gtklinkbutton.sgml:
+	* gtk/tmpl/gtkfilechooser.sgml:
+	* gtk/tmpl/gtkcellrenderer.sgml:
+	* gtk/tmpl/gtkenums.sgml:
+	* gtk/tmpl/gtkcontainer.sgml: Additions
+
+2007-05-26   Matthias Clasen  <mclasen@redhat.com>
+
 	* gdk/gdk-overrides.txt: Remove GdkBitmap
 	* gtk/gtk-sections.txt:
-	* gtk/gtkenums.sgml:
-	* gdk/rgb.sgml:
-	* gdk/gcs.sgml:
+	* gtk/tmpl/gtkenums.sgml:
+	* gdk/tmpl/rgb.sgml:
+	* gdk/tmpl/gcs.sgml:
 	* gdk/tmpl/pango_interaction.sgml:
 	* gdk/tmpl/windows.sgml: Additions
 

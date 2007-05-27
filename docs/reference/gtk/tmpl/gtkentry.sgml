@@ -186,10 +186,6 @@ The #GtkEntry-struct struct contains only private data.
 
 </para>
 
-<para>
-Creates a new #GtkEntry widget.
-</para>
-
 <!-- ##### ARG GtkEntry:inner-border ##### -->
 <para>
 
@@ -213,54 +209,38 @@ Creates a new #GtkEntry widget.
 
 <!-- ##### FUNCTION gtk_entry_set_text ##### -->
 <para>
-Sets the text in the widget to the given
-value, replacing the current contents.
+
 </para>
 
-@entry: a #GtkEntry.
-@text: the new text.
+@entry:
+@text:
 
 
 <!-- ##### FUNCTION gtk_entry_append_text ##### -->
 <para>
-Appends the given text to the contents of the widget.
+
 </para>
 
-@entry: a #GtkEntry.
-@text: the text to append.
-@Deprecated: gtk_entry_append_text() is deprecated and should not
-   be used in newly-written code. Use gtk_editable_insert_text()
-   instead.
+@entry: 
+@text: 
 
 
 <!-- ##### FUNCTION gtk_entry_prepend_text ##### -->
 <para>
-Prepends the given text to the contents of the widget.
+
 </para>
 
-@entry: a #GtkEntry.
-@text: the text to prepend.
-@Deprecated: gtk_entry_prepend_text() is deprecated and should not
-   be used in newly-written code. Use gtk_editable_insert_text()
-   instead.
+@entry:
+@text:
 
 
 <!-- ##### FUNCTION gtk_entry_set_position ##### -->
 <para>
-Sets the cursor position in an entry to the given 
-value. This function is obsolete. You should use
-gtk_editable_set_position() instead.
+
 </para>
 
-@entry: a #GtkEntry.
-@position: the position of the cursor. The cursor is displayed
-           before the character with the given (base 0) index
-           in the widget. The value must be less than or
-           equal to the number of characters in the widget.
-           A value of -1 indicates that the position should
-           be set after the last character in the entry.
-           Note that this position is in characters, not in
-           bytes.
+@entry: 
+@position: 
 
 
 <!-- ##### FUNCTION gtk_entry_get_text ##### -->
@@ -274,36 +254,21 @@ gtk_editable_set_position() instead.
 
 <!-- ##### FUNCTION gtk_entry_select_region ##### -->
 <para>
-Selects a region of text. The characters that
-are selected are those characters at positions from
-@start_pos up to, but not including @end_pos. If 
-@end_pos is negative, then the the characters selected
-will be those characters from @start_pos to the end
-of the text. This function is obsolete. You should
-use gtk_editable_select_region() instead.
+
 </para>
 
-@entry: a #GtkEntry.
-@start: the starting position.
-@end: the end position.
+@entry: 
+@start:
+@end: 
 
 
 <!-- ##### FUNCTION gtk_entry_set_visibility ##### -->
 <para>
-Sets whether the contents of the entry are visible or
-not. When visibility is set to %FALSE, characters
-are displayed as the invisible char, and will also appear
-that way when the text in the entry widget is copied
-elsewhere.
-</para>
-<para>
-The default invisible char is the asterisk '*', but it can
-be changed with gtk_entry_set_invisible_char().
+
 </para>
 
-@entry: a #GtkEntry.
-@visible: %TRUE if the contents of the entry are displayed
-          as plaintext.
+@entry: 
+@visible:
 
 
 <!-- ##### FUNCTION gtk_entry_set_invisible_char ##### -->
@@ -317,14 +282,11 @@ be changed with gtk_entry_set_invisible_char().
 
 <!-- ##### FUNCTION gtk_entry_set_editable ##### -->
 <para>
-Determines if the user can edit the text in the editable
-widget or not. This function is obsolete. You should
-use gtk_editable_set_editable() instead.
+
 </para>
 
-@entry: a #GtkEntry.
-@editable: %TRUE if the user is allowed to edit the text
-  in the widget.
+@entry: 
+@editable: 
 
 
 <!-- ##### FUNCTION gtk_entry_set_max_length ##### -->

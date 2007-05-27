@@ -4304,6 +4304,14 @@ gtk_entry_new_with_max_length (gint max)
   return GTK_WIDGET (entry);
 }
 
+/**
+ * gtk_entry_set_text:
+ * @entry: a #GtkEntry
+ * @text: the new text
+ *
+ * Sets the text in the widget to the given
+ * value, replacing the current contents.
+ */
 void
 gtk_entry_set_text (GtkEntry    *entry,
 		    const gchar *text)
@@ -4337,6 +4345,17 @@ gtk_entry_set_text (GtkEntry    *entry,
     g_signal_handler_unblock (entry, completion->priv->changed_id);
 }
 
+/**
+ * gtk_entry_append_text:
+ * @entry: a #GtkEntry
+ * @text: the text to append
+ *
+ * Appends the given text to the contents of the widget.
+ *
+ * Deprecated: gtk_entry_append_text() is deprecated and should not
+ *   be used in newly-written code. Use gtk_editable_insert_text()
+ *   instead.
+ */
 void
 gtk_entry_append_text (GtkEntry *entry,
 		       const gchar *text)
@@ -4350,6 +4369,17 @@ gtk_entry_append_text (GtkEntry *entry,
   gtk_editable_insert_text (GTK_EDITABLE (entry), text, -1, &tmp_pos);
 }
 
+/**
+ * gtk_entry_prepend_text:
+ * @entry: a #GtkEntry
+ * @text: the text to prepend
+ *
+ * Prepends the given text to the contents of the widget.
+ *
+ * Deprecated: gtk_entry_prepend_text() is deprecated and should not
+ *    be used in newly-written code. Use gtk_editable_insert_text()
+ *    instead.
+ */
 void
 gtk_entry_prepend_text (GtkEntry *entry,
 			const gchar *text)
@@ -4363,6 +4393,20 @@ gtk_entry_prepend_text (GtkEntry *entry,
   gtk_editable_insert_text (GTK_EDITABLE (entry), text, -1, &tmp_pos);
 }
 
+/**
+ * gtk_entry_set_position:
+ * @entry: a #GtkEntry
+ * @position:  the position of the cursor. The cursor is displayed
+ *    before the character with the given (base 0) index in the widget. 
+ *    The value must be less than or equal to the number of characters 
+ *    in the widget. A value of -1 indicates that the position should
+ *    be set after the last character in the entry. Note that this 
+ *    position is in characters, not in bytes.
+ *
+ * Sets the cursor position in an entry to the given value. 
+ *
+ * Deprecated: Use gtk_editable_set_position() instead.
+ */
 void
 gtk_entry_set_position (GtkEntry *entry,
 			gint       position)
@@ -4372,6 +4416,20 @@ gtk_entry_set_position (GtkEntry *entry,
   gtk_editable_set_position (GTK_EDITABLE (entry), position);
 }
 
+/**
+ * gtk_entry_set_visibility:
+ * @entry: a #GtkEntry
+ * @visible: %TRUE if the contents of the entry are displayed
+ *           as plaintext
+ *
+ * Sets whether the contents of the entry are visible or not. 
+ * When visibility is set to %FALSE, characters are displayed 
+ * as the invisible char, and will also appear that way when 
+ * the text in the entry widget is copied elsewhere.
+ *
+ * The default invisible char is the asterisk '*', but it can
+ * be changed with gtk_entry_set_invisible_char().
+ */
 void
 gtk_entry_set_visibility (GtkEntry *entry,
 			  gboolean visible)
@@ -4473,6 +4531,17 @@ gtk_entry_get_invisible_char (GtkEntry *entry)
   return entry->invisible_char;
 }
 
+/**
+ * gtk_entry_set_editable:
+ * @entry: a #GtkEntry
+ * @editable: %TRUE if the user is allowed to edit the text
+ *   in the widget
+ *
+ * Determines if the user can edit the text in the editable
+ * widget or not. 
+ *
+ * Deprecated: Use gtk_editable_set_editable() instead.
+ */
 void
 gtk_entry_set_editable (GtkEntry *entry,
 			gboolean  editable)
@@ -4502,6 +4571,20 @@ gtk_entry_get_text (GtkEntry *entry)
   return entry->text;
 }
 
+/**
+ * gtk_entry_select_region:
+ * @entry: a #GtkEntry
+ * @start: the starting position
+ * @end: the end position
+ *
+ * Selects a region of text. The characters that are selected are 
+ * those characters at positions from @start_pos up to, but not 
+ * including @end_pos. If @end_pos is negative, then the the characters 
+ * selected will be those characters from @start_pos to the end of 
+ * the text. 
+ *
+ * Deprecated: Use gtk_editable_select_region() instead.
+ */
 void       
 gtk_entry_select_region  (GtkEntry       *entry,
 			  gint            start,

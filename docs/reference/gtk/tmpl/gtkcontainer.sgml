@@ -161,12 +161,14 @@ changes, use gtk_widget_child_notify().
 
 <!-- ##### MACRO GTK_CONTAINER_WARN_INVALID_CHILD_PROPERTY_ID ##### -->
 <para>
-
+This macro should be used to emit a standard warning about unexpected
+properties in set_child_property() and get_child_property() implementations.
 </para>
 
-@object: 
-@property_id: 
-@pspec: 
+@object: the #GObject on which set_child_property() or get_child_property() 
+   was called
+@property_id: the numeric id of the property
+@pspec: the #GParamSpec of the property
 
 
 <!-- ##### MACRO gtk_container_border_width ##### -->

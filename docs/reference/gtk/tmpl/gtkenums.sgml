@@ -78,13 +78,13 @@ contains. (See also: #GtkVButtonBox and #GtkHButtonBox).
 </para>
 
 @GTK_BUTTONBOX_DEFAULT_STYLE: Default packing.
-@GTK_BUTTONBOX_SPREAD: Buttons are evenly spread across the ButtonBox.
-@GTK_BUTTONBOX_EDGE: Buttons are placed at the edges of the ButtonBox.
-@GTK_BUTTONBOX_START: Buttons are grouped towards the start of box, (on the
-left for a HBox, or the top for a VBox).
-@GTK_BUTTONBOX_END: Buttons are grouped towards the end of a box, (on the
-right for a HBox, or the bottom for a VBox).
-@GTK_BUTTONBOX_CENTER: 
+@GTK_BUTTONBOX_SPREAD: Buttons are evenly spread across the box.
+@GTK_BUTTONBOX_EDGE: Buttons are placed at the edges of the box.
+@GTK_BUTTONBOX_START: Buttons are grouped towards the start of the box, 
+  (on the left for a HBox, or the top for a VBox).
+@GTK_BUTTONBOX_END: Buttons are grouped towards the end of the box, 
+  (on the right for a HBox, or the bottom for a VBox).
+@GTK_BUTTONBOX_CENTER: Buttons are centered in the box. Since 2.12 
 
 <!-- ##### ENUM GtkCornerType ##### -->
 <para>
