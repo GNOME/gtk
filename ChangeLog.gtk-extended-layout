@@ -1,7 +1,12 @@
+2007-05-27  Mathias Hasselmann  <mathias.hasselmann@gmx.de>
+
+	* tests/testextendedlayout.c, tests/Makefile.am:
+	Build-fixes for testextendedlayout.
+
 2007-04-21  Mathias Hasselmann  <mathias.hasselmann@gmx.de>
 
-	* tests/testextendedlayout.c: Initial implementation of base
-	line test.
+	* tests/testextendedlayout.c: Initial implementation of
+	base line test.
 
 2007-04-20  Mathias Hasselmann  <mathias.hasselmann@gmx.de>
 
