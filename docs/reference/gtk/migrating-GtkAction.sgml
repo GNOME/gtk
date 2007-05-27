@@ -52,8 +52,8 @@
 
     <para>
       Normal actions are simply commands, such as
-      <symbol>FileSave</symbol> or <symbol>EditCopy</symbol>.  Toggle
-      actions can be active or inactive, such as
+      <symbol>FileSave</symbol> or <symbol>EditCopy</symbol>.  
+      Toggle actions can be active or inactive, such as
       <symbol>FormatBold</symbol> or <symbol>ViewShowRulers</symbol>.
       Radio actions define a set of items for which one and only one
       can be active at a time, for example, {
@@ -105,8 +105,8 @@
       pass back pointers to the widgets that got created.  This means
       that the structures cannot simply be kept around if the program
       requires multiple instances of the user interface (e.g. several
-      windows); each new invocation of gnome_app_fill_menu() would overwrite the
-      widget fields of the structures.
+      windows); each new invocation of gnome_app_fill_menu() would 
+      overwrite the widget fields of the structures.
     </para>
 
     <para>
@@ -135,15 +135,16 @@
 	  actions, toggle actions, and radio actions, and then create
 	  a separate array of #GtkActionEntry structures
 	  for each group.  This will allow you to create the necessary
-	  #GtkActionGroup objects.  Note that this does not describe the actual
-	  "shape" that your menus and toolbars will have; it simply
-	  defines the set of commands that will appear in them.
+	  #GtkActionGroup objects.  Note that this does not describe 
+          the actual "shape" that your menus and toolbars will have; 
+          it simply defines the set of commands that will appear in them.
 	</para>
       </listitem>
       <listitem>
 	<para>
 	  Create an XML description of your menus and toolbars for use
-	  with #GtkUIManager.  This defines the actual shape of the menus and toolbars.
+	  with #GtkUIManager.  This defines the actual shape of the menus 
+          and toolbars.
 	</para>
       </listitem>
       <listitem>
@@ -156,9 +157,10 @@
        <para>
          If your GnomeUIInfo entries use GNOME_APP_PIXMAP_DATA or 
          GNOME_APP_PIXMAP_FILENAME for pixmaps, you have to create a 
-         #GtkIconFactory, add it to the list of default factories, then create a 
-         #GtkIconSet for each of your own icons. Add the sets to the factory, and 
-         use the id in the #GtkActionEntry like a regular GTK+ stock id.
+         #GtkIconFactory, add it to the list of default factories, then 
+         create a #GtkIconSet for each of your own icons. Add the sets to 
+         the factory, and use the id in the #GtkActionEntry like a regular 
+         GTK+ stock id.
        </para>
       </listitem>
     </orderedlist>
@@ -168,8 +170,8 @@
 
       <para>
 	The following code shows a declaration of a simple menu bar to
-	be used with gnome_app_fill_menu() or similar.  The menu hierarchy looks 
-        like this:
+	be used with gnome_app_fill_menu() or similar.  The menu hierarchy i
+        looks like this:
       </para>
 
       <itemizedlist>

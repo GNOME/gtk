@@ -16,8 +16,7 @@
     editable case. 
     The selection of the display style &mdash; menu or list &mdash;
     is no longer done at the API level, but has been made themeable via
-    the style property 
-    <link linkend="GtkComboBox--appearance">GtkComboBox::appearance</link>.
+    the style property #GtkComboBox:appearance.
   </para>
 
   <section id="migrating-GtkOptionMenu">

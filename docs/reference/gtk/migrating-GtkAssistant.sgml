@@ -15,13 +15,15 @@
 
   <para>
     Since version 2.10, GTK+ provides the GtkAssistant widget as a replacement
-    for the <structname>GnomeDruid</structname> widget in the libgnomeui library.
+    for the <structname>GnomeDruid</structname> widget in the libgnomeui 
+    library.
   </para>
 
   <para>
-    Conceptually, both <structname>GtkAssistant</structname> and <structname>GnomeDruid</structname>
-    do the same task, but there are several areas where the API has been completely
-    redesigned, so this chapter covers the main changes between both widgets.
+    Conceptually, both <structname>GtkAssistant</structname> and
+    <structname>GnomeDruid</structname> do the same task, but there are 
+    several areas where the API has been completely redesigned, so this 
+    chapter covers the main changes between both widgets.
   </para>
 
   <section id="inserting-pages">
@@ -29,10 +31,12 @@
 
     <para>
       <structname>GnomeDruid</structname> was implemented as a container for
-	 <structname>GnomeDruidPage</structname> abstract objects, which are implemented by the
-	 <structname>GnomeDruidPageEdge</structname> and <structname>GnomeDruidPageStandard</structname>
-	 widgets. Instead, <structname>GtkAssistant</structname> allows any widget to be a page, and implements
-	 per-page settings (such as page type or title) as child properties. So instead of:
+	 <structname>GnomeDruidPage</structname> abstract objects, which are
+         implemented by the <structname>GnomeDruidPageEdge</structname> and 
+         <structname>GnomeDruidPageStandard</structname> widgets. Instead, 
+         <structname>GtkAssistant</structname> allows any widget to be a page, 
+         and implements per-page settings (such as page type or title) as 
+         child properties. So instead of:
     </para>
 
     <programlisting>

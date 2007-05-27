@@ -22,11 +22,9 @@
     </formalpara>
 
     <para>
-      The <link
-      linkend="GtkWidget-popup-menu">GtkWidget::popup_menu</link>
-      signal instructs the widget for which it is emitted to create a
-      context-sensitive popup menu.  By default, the <link
-      linkend="gtk-bindings">key binding mechanism</link> is set to
+      The #GtkWidget::popup_menu signal instructs the widget for which 
+      it is emitted to create a context-sensitive popup menu. By default, 
+      the <link linkend="gtk-bindings">key binding mechanism</link> is set to
       emit this signal when the
       <keycombo><keycap>Shift</keycap><keycap>F10</keycap></keycombo>
       or <keycap>Menu</keycap> keys are pressed while a widget has the
@@ -77,8 +75,8 @@ do_popup_menu (GtkWidget *my_widget, GdkEventButton *event)
 
       <listitem>
 	<para>
-	  In your button_press handler, call this function when you
-	  need to pop up a menu:
+	  In your ::button-press handler, call this function 
+          when you need to pop up a menu:
 	</para>
 
 	<programlisting>
@@ -99,7 +97,7 @@ my_widget_button_press_event_handler (GtkWidget *widget, GdkEventButton *event)
 
       <listitem>
 	<para>
-	  Implement a handler for the popup_menu signal:
+	  Implement a handler for the ::popup-menu signal:
 	</para>
 
 	<programlisting>
@@ -231,14 +229,14 @@ my_widget_expose_event_handler (GtkWidget *widget, GdkEventExpose *event)
       <structfield>state</structfield> field is a bit mask which
       indicates the modifier state at the time the key was pressed.
       Modifiers are keys like <keycap>Control</keycap> and
-      <keycap>NumLock</keycap>.  When implementing a <link
-      linkend="GtkWidget-key-press-event">GtkWidget::key_press_event</link>
-      handler, you should use gtk_accelerator_get_default_mod_mask() to
+      <keycap>NumLock</keycap>.  When implementing a 
+      #GtkWidget::key_press_event handler, you should use 
+      gtk_accelerator_get_default_mod_mask() to
       test against modifier keys.  This function returns a bit mask
       which encompasses all the modifiers which the user may be
       actively pressing, such as <keycap>Control</keycap>,
       <keycap>Shift</keycap>, and <keycap>Alt</keycap>, but ignores
-      "inocuous" modifiers such as <keycap>NumLock</keycap> and
+      "innocuous" modifiers such as <keycap>NumLock</keycap> and
       <keycap>CapsLock</keycap>.
     </para>
 
@@ -300,8 +298,7 @@ my_widget_key_press_event_handler (GtkWidget *widget, GdkEventKey *event)
       gtk_window_set_icon_name()) and images (see gtk_image_set_icon_name()).
       In GTK+ 2.8, you can also use named icons for drag-and-drop (see 
       gtk_drag_source_set_icon_name()) and in treeview cells (see the
-      <link linkend="GtkCellRendererPixbuf--icon-name">icon_name</link>
-      property of #GtkCellRendererPixbuf).
+      #GtkCellRendererPixbuf:icon_name property).
     </para>
   </section>
 </chapter>

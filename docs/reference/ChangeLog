@@ -1,5 +1,9 @@
 2007-05-26   Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/migrating*.sgml: Some cleanups
+
+2007-05-26   Matthias Clasen  <mclasen@redhat.com>
+
 	* gtk/tmpl/gtkentry.sgml: Move docs inline
 
 	* gtk/tmpl/gtklinkbutton.sgml:

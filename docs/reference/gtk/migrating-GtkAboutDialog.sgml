@@ -3,8 +3,9 @@
   <title>Migrating from GnomeAbout to GtkAboutDialog</title>
 
   <para>
-    Since version 2.6, GTK+ provides the #GtkAboutDialog widget as a replacement for 
-    the <structname>GnomeAbout</structname> dialog in the libgnomeui library.
+    Since version 2.6, GTK+ provides the #GtkAboutDialog widget as a 
+    replacement for the <structname>GnomeAbout</structname> dialog in 
+    the libgnomeui library.
   </para>
 
   <para>
@@ -66,17 +67,15 @@
     <itemizedlist>
       <listitem><para>
         You can specify license information with the 
-        <link linkend="GtkAboutDialog--license">license</link> property
+        #GtkAboutDialog:license property
       </para></listitem>
       <listitem><para>
         You can add separate credits for artists with the 
-        <link linkend="GtkAboutDialog--artists">artists</link> property
+        #GtkAboutDialog:artists property
       </para></listitem>
       <listitem><para>
         You can add a pointer to the website of your application, using the 
-        <link linkend="GtkAboutDialog--website">website</link> and
-        <link linkend="GtkAboutDialog--website-label">website-label</link> 
-        properties.
+        #GtkAboutDialog:website and #GtkAboutDialog:website-label properties.
       </para></listitem>
       <listitem><para>
         If your credits contain email addresses or URLs, you can turn them 
