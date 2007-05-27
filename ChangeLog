@@ -1,3 +1,9 @@
+2007-05-27  Tor Lillqvist  <tml@novell.com>
+
+	* configure.in (GDK_EXTRA_LISB): Drop bogus -user32 switch. Was
+	supposed to be -luser32, but he "l" was missing. But nobody has
+	noticed, so presumably unnecessary.
+
 2007-05-26  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtkentry.c: Move docs inline.
