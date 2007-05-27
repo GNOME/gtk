@@ -656,7 +656,6 @@ that is, GUI components such as <link linkend="GtkButton">GtkButton</link> or
 
   &gtk-glossary;
 
-<!--
   <index>
     <title>Index</title>
   </index>
@@ -681,6 +680,5 @@ that is, GUI components such as <link linkend="GtkButton">GtkButton</link> or
   <index role="2.12">
     <title>Index of new symbols in 2.12</title>
   </index>  
--->
 
 </book>

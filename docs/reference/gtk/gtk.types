@@ -122,12 +122,14 @@ gtk_radio_menu_item_get_type
 gtk_radio_tool_button_get_type
 gtk_range_get_type
 gtk_rc_style_get_type
+gtk_recent_action_get_type
 gtk_recent_chooser_get_type
 gtk_recent_chooser_dialog_get_type
 gtk_recent_chooser_menu_get_type
 gtk_recent_chooser_widget_get_type
 gtk_recent_manager_get_type
 gtk_ruler_get_type
+gtk_scale_button_get_type
 gtk_scale_get_type
 gtk_scrollbar_get_type
 gtk_scrolled_window_get_type
@@ -175,6 +177,7 @@ gtk_ui_manager_get_type
 gtk_vbox_get_type
 gtk_vbutton_box_get_type
 gtk_viewport_get_type
+gtk_volume_button_get_type
 gtk_vpaned_get_type
 gtk_vruler_get_type
 gtk_vscale_get_type
