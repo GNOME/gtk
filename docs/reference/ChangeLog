@@ -1,5 +1,15 @@
 2007-05-26   Matthias Clasen  <mclasen@redhat.com>
 
+	* gdk/gdk-overrides.txt: Remove GdkBitmap
+	* gtk/gtk-sections.txt:
+	* gtk/gtkenums.sgml:
+	* gdk/rgb.sgml:
+	* gdk/gcs.sgml:
+	* gdk/tmpl/pango_interaction.sgml:
+	* gdk/tmpl/windows.sgml: Additions
+
+2007-05-26   Matthias Clasen  <mclasen@redhat.com>
+
 	* gdk-pixbuf/gdk-pixbuf-sections.txt: 
 	* gdk/gdk-sections.txt: Add new api
 

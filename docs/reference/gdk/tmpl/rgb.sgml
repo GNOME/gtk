@@ -325,8 +325,9 @@ A private data structure which maps color indices to actual RGB
 colors. This is used only for gdk_draw_indexed_image().
 </para>
 
-@colors: 
-@n_colors: 
+@colors: The colors, represented as 0xRRGGBB integer values.
+@n_colors: The number of colors in the cmap.
+
 
 <!-- ##### FUNCTION gdk_rgb_gc_set_foreground ##### -->
 <para>

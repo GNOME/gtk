@@ -15,13 +15,6 @@ struct GdkPixmap
 };
 </STRUCT>
 <STRUCT>
-<NAME>GdkBitmap</NAME>
-struct GdkBitmap
-{
-  gpointer user_data;
-};
-</STRUCT>
-<STRUCT>
 <NAME>GdkDrawable</NAME>
 struct GdkDrawable
 {

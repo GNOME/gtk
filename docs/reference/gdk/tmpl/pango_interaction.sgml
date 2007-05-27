@@ -240,6 +240,14 @@ rendering the text.
 @attr: the #PangoAttribute.
 @embossed: the embossed bitmap.
 
+<!-- ##### STRUCT GdkPangoAttrEmbossColor ##### -->
+<para>
+A Pango text attribute specifying the color to emboss text with.
+</para>
+
+@attr: the #PangoAttribute
+@color: the color
+
 <!-- ##### STRUCT GdkPangoAttrStipple ##### -->
 <para>
 A Pango text attribute containing a stipple bitmap to be used when

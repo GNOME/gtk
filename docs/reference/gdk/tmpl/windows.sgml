@@ -202,7 +202,8 @@ window types.
 
 @GDK_WINDOW_TYPE_HINT_NORMAL: Normal toplevel window.
 @GDK_WINDOW_TYPE_HINT_DIALOG: Dialog window.
-@GDK_WINDOW_TYPE_HINT_MENU: Window used to implement a menu.
+@GDK_WINDOW_TYPE_HINT_MENU: Window used to implement a menu; GTK+ uses 
+  this hint only for torn-off menus, see #GtkTearoffMenuItem.
 @GDK_WINDOW_TYPE_HINT_TOOLBAR: Window used to implement toolbars.
 @GDK_WINDOW_TYPE_HINT_SPLASHSCREEN: Window used to display a splash 
   screen during application startup.
@@ -211,12 +212,14 @@ window types.
 @GDK_WINDOW_TYPE_HINT_DOCK: Used for creating dock or panel windows.
 @GDK_WINDOW_TYPE_HINT_DESKTOP: Used for creating the desktop background 
 window.
-@GDK_WINDOW_TYPE_HINT_DROPDOWN_MENU: 
-@GDK_WINDOW_TYPE_HINT_POPUP_MENU: 
-@GDK_WINDOW_TYPE_HINT_TOOLTIP: 
-@GDK_WINDOW_TYPE_HINT_NOTIFICATION: 
-@GDK_WINDOW_TYPE_HINT_COMBO: 
-@GDK_WINDOW_TYPE_HINT_DND: 
+@GDK_WINDOW_TYPE_HINT_DROPDOWN_MENU: A menu that belongs to a menubar.
+@GDK_WINDOW_TYPE_HINT_POPUP_MENU: A menu that does not belong to a menubar, 
+  e.g. a context menu.
+@GDK_WINDOW_TYPE_HINT_TOOLTIP: A tooltip.
+@GDK_WINDOW_TYPE_HINT_NOTIFICATION: A notification - typically a "bubble" 
+  that belongs to a status icon.
+@GDK_WINDOW_TYPE_HINT_COMBO: A popup from a combo box.
+@GDK_WINDOW_TYPE_HINT_DND: A window that is used to implement a DND cursor.
 
 <!-- ##### STRUCT GdkWindowAttr ##### -->
 <para>
@@ -451,6 +454,15 @@ Deprecated equivalent of g_object_unref()
 
 @window: 
 @setting: 
+
+
+<!-- ##### FUNCTION gdk_window_set_opacity ##### -->
+<para>
+
+</para>
+
+@window: 
+@opacity: 
 
 
 <!-- ##### FUNCTION gdk_window_move ##### -->

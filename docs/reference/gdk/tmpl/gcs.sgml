@@ -103,22 +103,22 @@ images, only %GDK_COPY, %GDK_XOR and %GDK_INVERT are generally
 useful. For bitmaps, %GDK_AND and %GDK_OR are also useful.
 </para>
 
-@GDK_COPY: 
-@GDK_INVERT: 
-@GDK_XOR: 
-@GDK_CLEAR: 
-@GDK_AND: 
-@GDK_AND_REVERSE: 
-@GDK_AND_INVERT: 
-@GDK_NOOP: 
-@GDK_OR: 
-@GDK_EQUIV: 
-@GDK_OR_REVERSE: 
-@GDK_COPY_INVERT: 
-@GDK_OR_INVERT: 
-@GDK_NAND: 
-@GDK_NOR: 
-@GDK_SET: 
+@GDK_COPY: <literal>dst = src</literal>
+@GDK_INVERT: <literal>dst = NOT dst</literal>
+@GDK_XOR: <literal>dst = src XOR dst</literal>
+@GDK_CLEAR: <literal>dst = 0</literal>
+@GDK_AND: <literal>dst = dst AND src</literal>
+@GDK_AND_REVERSE: <literal>dst = src AND (NOT dst)</literal>
+@GDK_AND_INVERT: <literal>dst = (NOT src) AND dst</literal>
+@GDK_NOOP: <literal>dst = dst</literal>
+@GDK_OR: <literal>dst = src OR dst</literal>
+@GDK_EQUIV: <literal>dst = (NOT src) XOR dst</literal>
+@GDK_OR_REVERSE: <literal>dst = src OR (NOT dst)</literal>
+@GDK_COPY_INVERT: <literal>dst = NOT src</literal>
+@GDK_OR_INVERT: <literal>dst = (NOT src) OR dst</literal>
+@GDK_NAND: <literal>dst = (NOT src) OR (NOT dst)</literal>
+@GDK_NOR: <literal>dst = (NOT src) AND (NOT dst)</literal>
+@GDK_SET: <literal>dst = 1</literal>
 
 <!-- ##### FUNCTION gdk_gc_new ##### -->
 <para>
