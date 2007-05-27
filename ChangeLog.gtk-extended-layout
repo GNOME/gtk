@@ -1,0 +1,6 @@
+2007-05-27  Mathias Hasselmann  <mathias.hasselmann@gmx.de>
+
+	* tests/testextendedlayout.c, tests/Makefile.am,
+	ChangeLog.gtk-extended-layout: Creating testing framework,
+	starting with natural size testing.
+

@@ -42,6 +42,7 @@ noinst_PROGRAMS =			\
 	testdnd				\
 	testellipsise			\
 	testentrycompletion 		\
+	testextendedlayout 		\
 	testfilechooser			\
 	testfilechooserbutton		\
 	testgtk				\
@@ -211,6 +212,9 @@ autotestfilechooser_SOURCES =	\
 testentrycompletion_SOURCES = 	\
 	prop-editor.c		\
 	testentrycompletion.c
+
+testextendedlayout_SOURCES = 	\
+	testextendedlayout.c
 
 testfilechooser_SOURCES = 	\
 	prop-editor.c		\
