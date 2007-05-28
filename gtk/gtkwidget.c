@@ -674,6 +674,7 @@ gtk_widget_class_init (GtkWidgetClass *klass)
 		  _gtk_marshal_VOID__BOXED,
 		  G_TYPE_NONE, 1,
 		  GDK_TYPE_RECTANGLE | G_SIGNAL_TYPE_STATIC_SCOPE);
+
   widget_signals[STATE_CHANGED] =
     g_signal_new (I_("state_changed"),
 		  G_TYPE_FROM_CLASS (gobject_class),
@@ -702,6 +703,17 @@ gtk_widget_class_init (GtkWidgetClass *klass)
 		  _gtk_marshal_VOID__OBJECT,
 		  G_TYPE_NONE, 1,
 		  GTK_TYPE_WIDGET);
+
+  /**
+   * GtkWidget::hierarchy-changed:
+   * @widget: the object on which the signal is emitted
+   * @previous_toplevel: the previous toplevel ancestor, or %NULL
+   *   if the widget was previously unanchored
+   *
+   * The ::hierarchy-changed signal is emitted when the
+   * anchored state of a widget changes. A widget is anchored,
+   * if it has an ancestor that is a toplevel window.
+   */
   widget_signals[HIERARCHY_CHANGED] =
     g_signal_new (I_("hierarchy_changed"),
 		  G_TYPE_FROM_CLASS (gobject_class),
@@ -711,6 +723,7 @@ gtk_widget_class_init (GtkWidgetClass *klass)
 		  _gtk_marshal_VOID__OBJECT,
 		  G_TYPE_NONE, 1,
 		  GTK_TYPE_WIDGET);
+
   /**
    * GtkWidget::style-set:
    * @widget: the object on which the signal is emitted
@@ -730,6 +743,14 @@ gtk_widget_class_init (GtkWidgetClass *klass)
 		  _gtk_marshal_VOID__OBJECT,
 		  G_TYPE_NONE, 1,
 		  GTK_TYPE_STYLE);
+/**
+ * GtkWidget::direction-changed:
+ * @widget: the object on which the signal is emitted
+ * @previous_direction: the previous text direction of @widget
+ *
+ * The ::direction-changed signal is emitted when the text direction
+ * of a widget changes.
+ */
   widget_signals[DIRECTION_CHANGED] =
     g_signal_new (I_("direction_changed"),
 		  G_TYPE_FROM_CLASS (gobject_class),
@@ -863,6 +884,15 @@ gtk_widget_class_init (GtkWidgetClass *klass)
 		  _gtk_marshal_BOOLEAN__BOXED,
 		  G_TYPE_BOOLEAN, 1,
 		  GDK_TYPE_EVENT | G_SIGNAL_TYPE_STATIC_SCOPE);
+
+  /**
+   * GtkWidget::composited-changed:
+   * @widget: the object on which the signal is emitted
+   *
+   * The ::composited-changed signal is emitted when the composited
+   * status of @widget<!-- -->s screen changes. 
+   * See gdk_screen_is_composited().
+   */
   widget_signals[COMPOSITED_CHANGED] =
     g_signal_new (I_("composited_changed"),
 		  G_TYPE_FROM_CLASS (gobject_class),
@@ -896,20 +926,20 @@ gtk_widget_class_init (GtkWidgetClass *klass)
                              G_TYPE_BOOLEAN, 1,
                              GTK_TYPE_DIRECTION_TYPE);
 
-/**
- * GtkWidget::delete-event:
- * @widget: the object which received the signal
- * @event: the event which triggered this signal
- *
- * The ::delete-event signal is emitted if a user requests that
- * a toplevel window is closed. The default handler for this signal
- * destroys the window. Connecting gtk_widget_hide_on_delete() to
- * this signal will cause the window to be hidden instead, so that
- * it can later be shown again without reconstructing it.
- *
- * Returns: %TRUE to stop other handlers from being invoked for the event. 
- *   %FALSE to propagate the event further.
- */
+  /**
+   * GtkWidget::delete-event:
+   * @widget: the object which received the signal
+   * @event: the event which triggered this signal
+   *
+   * The ::delete-event signal is emitted if a user requests that
+   * a toplevel window is closed. The default handler for this signal
+   * destroys the window. Connecting gtk_widget_hide_on_delete() to
+   * this signal will cause the window to be hidden instead, so that
+   * it can later be shown again without reconstructing it.
+   *
+   * Returns: %TRUE to stop other handlers from being invoked for the event. 
+   *   %FALSE to propagate the event further.
+   */
   widget_signals[DELETE_EVENT] =
     g_signal_new (I_("delete_event"),
 		  G_TYPE_FROM_CLASS (gobject_class),
@@ -920,19 +950,19 @@ gtk_widget_class_init (GtkWidgetClass *klass)
 		  G_TYPE_BOOLEAN, 1,
 		  GDK_TYPE_EVENT | G_SIGNAL_TYPE_STATIC_SCOPE);
 
-/**
- * GtkWidget::destroy-event:
- * @widget: the object which received the signal.
- * @event: the event which triggered this signal
- *
- * The ::destroy-event signal is emitted when a #GdkWindow is destroyed.
- * You rarely get this signal, because most widgets disconnect themselves 
- * from their window before they destroy it, so no widget owns the 
- * window at destroy time.
- * 
- * Returns: %TRUE to stop other handlers from being invoked for the event. 
- *   %FALSE to propagate the event further.
- */
+  /**
+   * GtkWidget::destroy-event:
+   * @widget: the object which received the signal.
+   * @event: the event which triggered this signal
+   *
+   * The ::destroy-event signal is emitted when a #GdkWindow is destroyed.
+   * You rarely get this signal, because most widgets disconnect themselves 
+   * from their window before they destroy it, so no widget owns the 
+   * window at destroy time.
+   * 
+   * Returns: %TRUE to stop other handlers from being invoked for the event. 
+   *   %FALSE to propagate the event further.
+   */
   widget_signals[DESTROY_EVENT] =
     g_signal_new (I_("destroy_event"),
 		  G_TYPE_FROM_CLASS (gobject_class),
@@ -1593,6 +1623,15 @@ gtk_widget_class_init (GtkWidgetClass *klass)
 		  NULL, NULL,
 		  _gtk_marshal_NONE__NONE,
 		  G_TYPE_NONE, 0);
+/**
+ * GtkWidget::screen-changed:
+ * @widget: the object on which the signal is emitted
+ * @previous_screen: the previous screen, or %NULL if the
+ *   widget was not associated with a screen before
+ *
+ * The ::screen-changed signal gets emitted when the
+ * screen of a widget has changed.
+ */
   widget_signals[SCREEN_CHANGED] =
     g_signal_new (I_("screen_changed"),
 		  G_TYPE_FROM_CLASS (gobject_class),
@@ -1606,13 +1645,14 @@ gtk_widget_class_init (GtkWidgetClass *klass)
  * GtkWidget::can-activate-accel:
  * @widget: the object which received the signal
  * @signal_id: the ID of a signal installed on @widget
- * @returns: %TRUE if the signal can be activated.
  *
  * Determines whether an accelerator that activates the signal
  * identified by @signal_id can currently be activated.
  * This signal is present to allow applications and derived
  * widgets to override the default #GtkWidget handling
  * for determining whether an accelerator can be activated.
+ *
+ * Returns: %TRUE if the signal can be activated.
  */
   widget_signals[CAN_ACTIVATE_ACCEL] =
      g_signal_new (I_("can_activate_accel"),
@@ -3724,8 +3764,9 @@ gtk_widget_remove_accelerator (GtkWidget      *widget,
  * Lists the closures used by @widget for accelerator group connections
  * with gtk_accel_group_connect_by_path() or gtk_accel_group_connect().
  * The closures can be used to monitor accelerator changes on @widget,
- * by connecting to the ::accel_changed signal of the #GtkAccelGroup of a 
- * closure which can be found out with gtk_accel_group_from_accel_closure().
+ * by connecting to the @GtkAccelGroup::accel-changed signal of the 
+ * #GtkAccelGroup of a closure which can be found out with 
+ * gtk_accel_group_from_accel_closure().
  */
 GList*
 gtk_widget_list_accel_closures (GtkWidget *widget)
@@ -5455,10 +5496,7 @@ static void
 gtk_widget_propagate_hierarchy_changed_recurse (GtkWidget *widget,
 						gpointer   client_data)
 {
-  gboolean new_anchored;
-  HierarchyChangedInfo *info = client_data;
-
-  new_anchored = GTK_WIDGET_TOPLEVEL (widget) ||
+  gboolean new_anchored = GTK_WIDGET_TOPLEVEL (widget) ||
                  (widget->parent && GTK_WIDGET_ANCHORED (widget->parent));
 
   if (GTK_WIDGET_ANCHORED (widget) != new_anchored)

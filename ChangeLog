@@ -1,5 +1,7 @@
 2007-05-28  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkwidget.c: Document some more signals
+
 	* gtk/gtktextview.c: Improve docs
 
 2007-05-27  Tor Lillqvist  <tml@novell.com>
