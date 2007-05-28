@@ -300,26 +300,32 @@ apply_filters (GdkWindow  *window,
   return result;
 }
 
-/* This function checks if the passed in window is interested in the
- * event mask. If so, it's returned. If not, the event can be propagated
- * to its parent.
+/* Checks if the passed in window is interested in the event mask, and
+ * if so, it's returned. If not, the event can be propagated through
+ * its ancestors until one with the right event mask is found, up to
+ * the nearest toplevel.
  */
 static GdkWindow *
-find_window_interested_in_event_mask (GdkWindow   *window, 
-				      GdkEventMask event_mask,
-				      gboolean     propagate)
+find_window_interested_in_event_mask (GdkWindow    *window, 
+				      GdkEventMask  event_mask,
+				      gboolean      propagate)
 {
-  while (window)
-    {
-      GdkWindowObject *private = GDK_WINDOW_OBJECT (window);
+  GdkWindowObject *private;
 
+  private = GDK_WINDOW_OBJECT (window);
+  while (private)
+    {
       if (private->event_mask & event_mask)
-	return window;
+	return (GdkWindow *)private;
 
       if (!propagate)
 	return NULL;
-      else
-	window = GDK_WINDOW (private->parent);
+
+      /* Don't traverse beyond toplevels. */
+      if (GDK_WINDOW_TYPE (private) != GDK_WINDOW_CHILD)
+	break;
+
+      private = private->parent;
     }
 
   return NULL;
