@@ -1,5 +1,10 @@
 2007-05-28  Richard Hult  <richard@imendio.com>
 
+	* gdk/quartz/gdkwindow-quartz.c: (_gdk_windowing_window_init): Set
+	a size for the root window.
+
+2007-05-28  Richard Hult  <richard@imendio.com>
+
 	* gdk/quartz/gdkwindow-quartz.c: Add comments about what various
 	coordinates are relative to.
 

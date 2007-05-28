@@ -723,10 +723,18 @@ void
 _gdk_windowing_window_init (void)
 {
   GdkWindowObject *private;
+  GdkWindowImplQuartz *impl;
+  NSRect rect;
 
   g_assert (_gdk_root == NULL);
 
   _gdk_root = g_object_new (GDK_TYPE_WINDOW, NULL);
+
+  /* Note: This needs to be reworked for multi-screen support. */
+  impl = GDK_WINDOW_IMPL_QUARTZ (GDK_WINDOW_OBJECT (_gdk_root)->impl);
+  rect = [[NSScreen mainScreen] frame];
+  impl->width = rect.size.width;
+  impl->height = rect.size.height;
 
   private = (GdkWindowObject *)_gdk_root;
 
