@@ -20,10 +20,17 @@
 #include <config.h>
 #include <gtk/gtk.h>
 
-GList *allocation_guides = NULL;
+typedef struct _TestCase TestCase;
+
+struct _TestCase
+{
+  const gchar *name;
+  GtkWidget *widget;
+  GList *guides;
+};
 
 static void
-append_natural_size_box (GtkWidget          *vbox,
+append_natural_size_box (TestCase           *test,
                          const gchar        *caption,
                          PangoEllipsizeMode  ellipsize)
 {
@@ -41,7 +48,7 @@ append_natural_size_box (GtkWidget          *vbox,
   gtk_box_pack_start (GTK_BOX (hbox), button, FALSE, TRUE, 0);
 
   if (PANGO_ELLIPSIZE_NONE == ellipsize)
-    allocation_guides = g_list_append (allocation_guides, button);
+    test->guides = g_list_append (test->guides, button);
 
   button = gtk_button_new_with_label ("The large Button");
   gtk_box_pack_start (GTK_BOX (hbox), button, TRUE, TRUE, 0);
@@ -50,74 +57,89 @@ append_natural_size_box (GtkWidget          *vbox,
   gtk_label_set_markup (GTK_LABEL (label), caption); 
   gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
 
-  gtk_box_pack_start (GTK_BOX (vbox), label, FALSE, TRUE, 0);
-  gtk_box_pack_start (GTK_BOX (vbox), hbox, FALSE, TRUE, 0);
+  gtk_box_pack_start (GTK_BOX (test->widget), label, FALSE, TRUE, 0);
+  gtk_box_pack_start (GTK_BOX (test->widget), hbox, FALSE, TRUE, 0);
 }
 
-static GtkWidget*
-create_natural_size ()
+static TestCase*
+create_natural_size_test ()
 {
-  GtkWidget *vbox = gtk_vbox_new (FALSE, 12);
-  gtk_container_set_border_width (GTK_CONTAINER (vbox), 12);
-  append_natural_size_box (vbox, "<b>No ellipsizing</b>", PANGO_ELLIPSIZE_NONE);
-  append_natural_size_box (vbox, "<b>Ellipsizing at start</b>", PANGO_ELLIPSIZE_START);
-  append_natural_size_box (vbox, "<b>Ellipsizing in the middle</b>", PANGO_ELLIPSIZE_MIDDLE);
-  append_natural_size_box (vbox, "<b>Ellipsizing at end</b>", PANGO_ELLIPSIZE_END);
+  TestCase *test = g_new0 (TestCase, 1);
 
-  return vbox;
+  test->name = "Natural Size";
+  test->widget = gtk_vbox_new (FALSE, 12);
+  gtk_container_set_border_width (GTK_CONTAINER (test->widget), 12);
+
+  append_natural_size_box (test,
+                           "<b>No ellipsizing</b>",
+                           PANGO_ELLIPSIZE_NONE);
+  append_natural_size_box (test,
+                           "<b>Ellipsizing at start</b>",
+                           PANGO_ELLIPSIZE_START);
+  append_natural_size_box (test,
+                           "<b>Ellipsizing in the middle</b>",
+                           PANGO_ELLIPSIZE_MIDDLE);
+  append_natural_size_box (test,
+                           "<b>Ellipsizing at end</b>",
+                           PANGO_ELLIPSIZE_END);
+
+  return test;
 }
 
-static GtkWidget*
-create_height_for_width ()
+static TestCase*
+create_height_for_width_test ()
 {
-  GtkWidget *vbox;
+  TestCase *test = g_new0 (TestCase, 1);
 
-  vbox = gtk_vbox_new (FALSE, 12);
-  gtk_container_set_border_width (GTK_CONTAINER (vbox), 12);
+  test->name = "Height for Width";
+  test->widget = gtk_vbox_new (FALSE, 12);
+  gtk_container_set_border_width (GTK_CONTAINER (test->widget), 12);
 
-  return vbox;
+  return test;
 }
 
-static GtkWidget*
-create_baseline ()
+static TestCase*
+create_baseline_test ()
 {
-  GtkWidget *table;
   GtkWidget *child;
   GtkWidget *view;
   GtkWidget *label;
 
-  table = gtk_table_new (3, 3, FALSE);
-  gtk_table_set_col_spacings (GTK_TABLE (table), 6);
-  gtk_table_set_row_spacings (GTK_TABLE (table), 6);
-  gtk_container_set_border_width (GTK_CONTAINER (table), 12);
+  TestCase *test = g_new0 (TestCase, 1);
+
+  test->name = "Baseline Alignment";
+  test->widget = gtk_table_new (3, 3, FALSE);
+  gtk_container_set_border_width (GTK_CONTAINER (test->widget), 12);
+  gtk_table_set_col_spacings (GTK_TABLE (test->widget), 6);
+  gtk_table_set_row_spacings (GTK_TABLE (test->widget), 6);
 
   child = gtk_entry_new ();
   gtk_entry_set_text (GTK_ENTRY (child), "Test...");
-  gtk_table_attach (GTK_TABLE (table), child, 1, 2, 0, 1, 
+  gtk_table_attach (GTK_TABLE (test->widget), child, 1, 2, 0, 1, 
                     GTK_FILL | GTK_EXPAND, GTK_FILL, 0, 0);
 
   label = gtk_label_new_with_mnemonic ("_Title:");
-  allocation_guides = g_list_append (allocation_guides, label);
+  test->guides = g_list_append (test->guides, label);
   gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
   gtk_label_set_mnemonic_widget  (GTK_LABEL (label), child);
-  gtk_table_attach (GTK_TABLE (table), label, 0, 1, 0, 1, 
+  gtk_table_attach (GTK_TABLE (test->widget), label, 0, 1, 0, 1, 
                     GTK_FILL, GTK_FILL, 0, 0);
 
   label = gtk_label_new_with_mnemonic ("Notice on\ntwo rows.");
-  allocation_guides = g_list_append (allocation_guides, label);
+  test->guides = g_list_append (test->guides, label);
   gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.0);
-  gtk_table_attach (GTK_TABLE (table), label, 2, 3, 0, 2, 
+  gtk_table_attach (GTK_TABLE (test->widget), label, 2, 3, 0, 2, 
                     GTK_FILL, GTK_FILL, 0, 0);
 
   child = gtk_font_button_new ();
-  gtk_table_attach (GTK_TABLE (table), child, 1, 2, 1, 2, 
+  gtk_table_attach (GTK_TABLE (test->widget), child, 1, 2, 1, 2, 
                     GTK_FILL | GTK_EXPAND, GTK_FILL, 0, 0);
 
   label = gtk_label_new_with_mnemonic ("_Font:");
-  allocation_guides = g_list_append (allocation_guides, label);
+  test->guides = g_list_append (test->guides, label);
   gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
   gtk_label_set_mnemonic_widget  (GTK_LABEL (label), child);
-  gtk_table_attach (GTK_TABLE (table), label, 0, 1, 1, 2, 
+  gtk_table_attach (GTK_TABLE (test->widget), label, 0, 1, 1, 2, 
                     GTK_FILL, GTK_FILL, 0, 0);
 
   view = gtk_text_view_new ();
@@ -131,19 +153,19 @@ create_baseline ()
                                        GTK_SHADOW_IN);
   gtk_container_add (GTK_CONTAINER (child), view);
 
-  gtk_table_attach (GTK_TABLE (table), child, 1, 3, 2, 3, 
+  gtk_table_attach (GTK_TABLE (test->widget), child, 1, 3, 2, 3, 
                     GTK_FILL | GTK_EXPAND,
                     GTK_FILL | GTK_EXPAND, 
                     0, 0);
 
   label = gtk_label_new_with_mnemonic ("_Comment:");
-  allocation_guides = g_list_append (allocation_guides, label);
+  test->guides = g_list_append (test->guides, label);
   gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.0);
   gtk_label_set_mnemonic_widget  (GTK_LABEL (label), child);
-  gtk_table_attach (GTK_TABLE (table), label, 0, 1, 2, 3,
+  gtk_table_attach (GTK_TABLE (test->widget), label, 0, 1, 2, 3,
                     GTK_FILL, GTK_FILL, 0, 0);
 
-  return table;
+  return test;
 }
 
 static gboolean           
@@ -219,17 +241,18 @@ expose_page (GtkWidget      *page,
 
 static void
 append_testcase(GtkWidget   *notebook,
-                GtkWidget   *testcase,
-                const gchar *caption)
+                TestCase    *test)
 {
-  gtk_notebook_append_page (GTK_NOTEBOOK (notebook), testcase,
-                            gtk_label_new (caption));
+  gtk_notebook_append_page (GTK_NOTEBOOK (notebook), test->widget,
+                            gtk_label_new (test->name));
 
-  g_signal_connect_after (testcase, "expose-event",
+  g_signal_connect_after (test->widget, "expose-event",
                           G_CALLBACK (expose_page),
-                          allocation_guides);
+                          test->guides);
+  g_object_set_data_full (G_OBJECT(test->widget), 
+                          "test-case", test, g_free);
 
-  allocation_guides = NULL;
+  test->guides = NULL;
 }
 
 int
@@ -242,9 +265,9 @@ main (int argc, char *argv[])
 
   notebook = gtk_notebook_new ();
 
-  append_testcase (notebook, create_natural_size (), "Natural Size");
-  append_testcase (notebook, create_height_for_width (), "Height for Width");
-  append_testcase (notebook, create_baseline (), "Baseline Alignment");
+  append_testcase (notebook, create_natural_size_test ());
+  append_testcase (notebook, create_height_for_width_test ());
+  append_testcase (notebook, create_baseline_test ());
 
   window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
   g_signal_connect (window, "destroy", G_CALLBACK (gtk_main_quit), NULL);
