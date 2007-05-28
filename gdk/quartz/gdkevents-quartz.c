@@ -785,33 +785,136 @@ _gdk_quartz_events_update_cursor (GdkWindow *window)
     [nscursor set];
 }
 
-/* This function finds the correct window to send an event to,
- * taking into account grabs (FIXME: not done yet), event propagation,
- * and event masks.
+/* Translates coordinates from an ancestor window + coords, to
+ * coordinates that are relative the child window.
+ */
+static void
+get_child_coordinates_from_ancestor (GdkWindow *ancestor_window,
+				     gint       ancestor_x,
+				     gint       ancestor_y,
+				     GdkWindow *child_window, 
+				     gint      *child_x, 
+				     gint      *child_y)
+{
+  GdkWindowObject *ancestor_private = GDK_WINDOW_OBJECT (ancestor_window);
+  GdkWindowObject *child_private = GDK_WINDOW_OBJECT (child_window);
+
+  while (child_private != ancestor_private)
+    {
+      ancestor_x -= child_private->x;
+      ancestor_y -= child_private->y;
+
+      child_private = child_private->parent;
+    }
+
+  *child_x = ancestor_x;
+  *child_y = ancestor_y;
+}
+
+/* Translates coordinates from a child window + coords, to
+ * coordinates that are relative the ancestor window.
+ */
+static void
+get_ancestor_coordinates_from_child (GdkWindow *child_window,
+				     gint       child_x,
+				     gint       child_y,
+				     GdkWindow *ancestor_window, 
+				     gint      *ancestor_x, 
+				     gint      *ancestor_y)
+{
+  GdkWindowObject *child_private = GDK_WINDOW_OBJECT (child_window);
+  GdkWindowObject *ancestor_private = GDK_WINDOW_OBJECT (ancestor_window);
+
+  while (child_private != ancestor_private)
+    {
+      child_x += child_private->x;
+      child_y += child_private->y;
+
+      child_private = child_private->parent;
+    }
+
+  *ancestor_x = child_x;
+  *ancestor_y = child_y;
+}
+
+/* Given a mouse NSEvent, returns the window in which the pointer
+ * position from the event is. The returned coordinates are relative
+ * to the found window, and normal GDK coordinates, not Quartz.
  */
 static GdkWindow *
-find_window_for_event (NSEvent *nsevent, gint *x, gint *y)
+find_window_for_mouse_nsevent (NSEvent *nsevent,
+			       gint    *x_ret,
+			       gint    *y_ret)
+{
+  NSWindow *nswindow;
+  GdkWindow *toplevel;
+  NSPoint point;
+  gint x_tmp, y_tmp;
+  GdkWindow *found_window;
+
+  nswindow = [nsevent window];
+  toplevel = [(GdkQuartzView *)[nswindow contentView] gdkWindow];
+
+  point = [nsevent locationInWindow];
+
+  x_tmp = point.x;
+
+  /* Flip the y coordinate. */
+  if (toplevel == _gdk_root)
+    y_tmp = _gdk_quartz_window_get_inverted_screen_y (point.y);
+  else
+    {
+      GdkWindowImplQuartz *impl;
+
+      impl = GDK_WINDOW_IMPL_QUARTZ (GDK_WINDOW_OBJECT (toplevel)->impl);
+      y_tmp = impl->height - point.y;
+    }
+
+  found_window = _gdk_quartz_window_find_child (toplevel, x_tmp, y_tmp);
+
+  /* Translate the coordinates so they are relative to the found
+   * window.
+   */
+  if (found_window)
+    get_child_coordinates_from_ancestor (toplevel,
+					 x_tmp, y_tmp,
+					 found_window,
+					 &x_tmp, &y_tmp);
+
+  *x_ret = x_tmp;
+  *y_ret = y_tmp;
+
+  return found_window;
+}
+
+/* This function finds the correct window to send an event to, taking
+ * into account grabs, event propagation, and event masks.
+ */
+static GdkWindow *
+find_window_for_nsevent (NSEvent *nsevent, gint *x, gint *y)
 {
   NSWindow *nswindow = [nsevent window];
   NSEventType event_type = [nsevent type];
 
   if (!nswindow)
     return NULL;
- 
-  /* Window where not created by GDK so the event should be handled by Quartz */
+
+  /* Window was not created by GDK so the event should be handled by Quartz. */
   if (![[nswindow contentView] isKindOfClass:[GdkQuartzView class]]) 
     return NULL;
-  
+
+  /* Synthesize crossing events when moving between child
+   * windows. Toplevels are handled with NSMouseEntered and
+   * NSMouseExited in the switch below.
+   */
   if (event_type == NSMouseMoved ||
       event_type == NSLeftMouseDragged ||
       event_type == NSRightMouseDragged ||
       event_type == NSOtherMouseDragged)
     {
-      GdkWindow *toplevel = [(GdkQuartzView *)[nswindow contentView] gdkWindow];
-      NSPoint point = [nsevent locationInWindow];
       GdkWindow *mouse_window;
 
-      mouse_window = _gdk_quartz_window_find_child_by_point (toplevel, point.x, point.y, x, y);
+      mouse_window = find_window_for_mouse_nsevent (nsevent, x, y);
 
       if (!mouse_window)
 	mouse_window = _gdk_root;
@@ -826,7 +929,6 @@ find_window_for_event (NSEvent *nsevent, gint *x, gint *y)
 	  if (current_mouse_window != mouse_window)
 	    {
 	      synthesize_crossing_events (mouse_window, GDK_CROSSING_NORMAL, nsevent, *x, *y);
-	      
 	      _gdk_quartz_events_update_cursor (mouse_window);
 	    }
 	}
@@ -846,73 +948,92 @@ find_window_for_event (NSEvent *nsevent, gint *x, gint *y)
     case NSRightMouseDragged:
     case NSOtherMouseDragged:
       {
-	GdkWindow *toplevel = [(GdkQuartzView *)[nswindow contentView] gdkWindow];
-	NSPoint point = [nsevent locationInWindow];
 	GdkWindow *mouse_window;
 	GdkEventMask event_mask;
 	GdkWindow *real_window;
 
-	if (_gdk_quartz_pointer_grab_window && !pointer_grab_owner_events)
+	/* From the docs for XGrabPointer:
+	 *
+	 * If owner_events is True and if a generated pointer event
+	 * would normally be reported to this client, it is reported
+	 * as usual. Otherwise, the event is reported with respect to
+	 * the grab_window and is reported only if selected by
+	 * event_mask. For either value of owner_events, unreported
+	 * events are discarded.
+	 *
+	 * This means we first try the owner, then the grab window,
+	 * then give up.
+	 */
+	if (_gdk_quartz_pointer_grab_window)
 	  {
+	    if (pointer_grab_owner_events)
+	      {
+		mouse_window = find_window_for_mouse_nsevent (nsevent, x, y);
+		event_mask = get_event_mask_from_ns_event (nsevent);
+		real_window = find_window_interested_in_event_mask (mouse_window, event_mask, TRUE);
+		
+		if (mouse_window && real_window && mouse_window != real_window)
+		  get_ancestor_coordinates_from_child (mouse_window,
+						       *x, *y,
+						       real_window,
+						       x, y);
+
+		if (real_window)
+		  return real_window;
+	      }
+
+	    /* FIXME: This part needs some fixing, it doesn't return
+	     * the right coordinates if the nsevent happens for a
+	     * different window than the grab window.
+	     */
 	    if (pointer_grab_event_mask & get_event_mask_from_ns_event (nsevent))
 	      {
-		int tempx, tempy;
-		GdkWindowObject *w;
-		GdkWindowObject *grab_toplevel;
+		GdkWindow *grab_toplevel;
+		NSPoint point;
+		int x_tmp, y_tmp;
 
-		w = GDK_WINDOW_OBJECT (_gdk_quartz_pointer_grab_window);
-		grab_toplevel = GDK_WINDOW_OBJECT (gdk_window_get_toplevel (_gdk_quartz_pointer_grab_window));
+		grab_toplevel = gdk_window_get_toplevel (_gdk_quartz_pointer_grab_window);
+		point = [nsevent locationInWindow];
 
-		tempx = point.x;
-		tempy = GDK_WINDOW_IMPL_QUARTZ (grab_toplevel->impl)->height -
-		  point.y;
+		x_tmp = point.x;
+		y_tmp = GDK_WINDOW_IMPL_QUARTZ (GDK_WINDOW_OBJECT (grab_toplevel)->impl)->height - point.y;
 
-		while (w != grab_toplevel)
-		  {
-		    tempx -= w->x;
-		    tempy -= w->y;
-
-		    w = w->parent;
-		  }
-
-		*x = tempx;
-		*y = tempy;
+		get_child_coordinates_from_ancestor (grab_toplevel,
+						     x_tmp, y_tmp, 
+						     _gdk_quartz_pointer_grab_window,
+						     x, y);
 
 		return _gdk_quartz_pointer_grab_window;
 	      }
-	    else
-	      {
-		return NULL;
-	      }
-	  }
 
-	if (!nswindow)
-	  {
-	    mouse_window = _gdk_root;
+	    return NULL;
 	  }
-        else
+	else 
 	  {
-	    mouse_window = _gdk_quartz_window_find_child_by_point (toplevel, point.x, point.y, x, y);
-	  }
+	    /* The non-grabbed case. */
+	    mouse_window = find_window_for_mouse_nsevent (nsevent, x, y);
+	    event_mask = get_event_mask_from_ns_event (nsevent);
+	    real_window = find_window_interested_in_event_mask (mouse_window, event_mask, TRUE);
+	    
+	    /* We have to translate the coordinates if the actual
+	     * window is different from the mouse window.
+	     */
+	    if (mouse_window && real_window && mouse_window != real_window)
+	      get_ancestor_coordinates_from_child (mouse_window,
+						   *x, *y,
+						   real_window,
+						   x, y);
 
-	event_mask = get_event_mask_from_ns_event (nsevent);
-	real_window = find_window_interested_in_event_mask (mouse_window, event_mask, TRUE);
-	
-	return real_window;
+	    return real_window;
+	  }
       }
       break;
       
     case NSMouseEntered:
       {
-	NSPoint point;
-	GdkWindow *toplevel;
 	GdkWindow *mouse_window;
 
-	point = [nsevent locationInWindow];
-	toplevel = [(GdkQuartzView *)[nswindow contentView] gdkWindow];
-	
-	mouse_window = _gdk_quartz_window_find_child_by_point (toplevel, point.x, point.y, x, y);
-	
+	mouse_window = find_window_for_mouse_nsevent (nsevent, x, y);
 	synthesize_crossing_events (mouse_window, GDK_CROSSING_NORMAL, nsevent, *x, *y);
       }
       break;
@@ -1179,7 +1300,7 @@ gdk_event_translate (NSEvent *nsevent)
 	}
     }
 
-  window = find_window_for_event (nsevent, &x, &y);
+  window = find_window_for_nsevent (nsevent, &x, &y);
 
   /* FIXME: During owner_event grabs, we don't find a window when there is a
    * click on a no-window widget, which makes popups etc still stay up. Need

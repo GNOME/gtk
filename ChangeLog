@@ -1,5 +1,18 @@
 2007-05-28  Richard Hult  <richard@imendio.com>
 
+	* gdk/quartz/gdkevents-quartz.c (get_child_coordinates_from_ancestor)
+	(get_ancestor_coordinates_from_child): Break out code that was
+	repeated into separate functions and call them instead.
+	(find_window_for_mouse_nsevent): Break out this from
+	find_window_for_nsevent to make the code clearer.
+	(find_window_for_nsevent): Use the above and fix the returned
+	coordinates in the process so that they are always relative the
+	found window, both for the normal case and during grabs. Still
+	needs fixing for the case where we get nsevents for a window other
+	than than grab window during grabs.
+
+2007-05-28  Richard Hult  <richard@imendio.com>
+
 	* gdk/quartz/gdkevents-quartz.c (gdk_event_translate): Fix typo,
  	we need both press and release in the mask to trigger implicit
 	grabs.
