@@ -215,6 +215,12 @@ expose_page (GtkWidget      *page,
 
               cairo_move_to (cr, 0, y0 + ybase);
               cairo_line_to (cr, page->allocation.width, y0 + ybase);
+
+              cairo_move_to (cr, x0, y0 + ybase - 5);
+              cairo_line_to (cr, x0, y0 + ybase + 2);
+
+              cairo_move_to (cr, x1, y0 + ybase - 5);
+              cairo_line_to (cr, x1, y0 + ybase + 2);
             }
           else
             {
