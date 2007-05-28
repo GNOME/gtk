@@ -94,7 +94,7 @@ gtk_print_operation_preview_base_init (gpointer g_iface)
  * @page_nr: the page to render
  *
  * Renders a page to the preview, using the print context that
- * was passed to the GtkPrintOperation::preview handler together
+ * was passed to the #GtkPrintOperation::preview handler together
  * with @preview.
  *
  * Note that this function requires a suitable cairo context to 

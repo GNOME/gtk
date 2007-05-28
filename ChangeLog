@@ -6,6 +6,10 @@
 
 2007-05-26  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkprintoperationpreview.c: Improve docs
+
+2007-05-26  Matthias Clasen  <mclasen@redhat.com>
+
 	* gtk/gtkentry.c: Move docs inline.
 
 2007-05-26  Matthias Clasen  <mclasen@redhat.com>
