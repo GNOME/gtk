@@ -140,6 +140,9 @@ GdkWindow *_gdk_quartz_window_find_child_by_point   (GdkWindow *toplevel,
 						     gint      *x_ret,
 						     gint      *y_ret);
 gint       _gdk_quartz_window_get_inverted_screen_y (gint       y);
+GdkWindow *_gdk_quartz_window_find_child            (GdkWindow *window,
+						     gint       x,
+						     gint       y);
 
 /* Events */
 void         _gdk_quartz_events_update_focus_window   (GdkWindow *new_window,

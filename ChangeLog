@@ -1,5 +1,16 @@
 2007-05-28  Richard Hult  <richard@imendio.com>
 
+	* gdk/quartz/gdkprivate-quartz.h:
+	* gdk/quartz/gdkwindow-quartz.c (find_child_window_helper)
+	(_gdk_quartz_window_find_child): Refactored version of
+	_gdk_quartz_window_find_child_by_point, that doesn't return any
+	coordinates as the users of this function already have the
+	coordinates and need to translate them differently.
+	(_gdk_windowing_window_get_pointer): Fixup coordinate translation.
+	(_gdk_windowing_window_at_pointer): Likewise.
+
+2007-05-28  Richard Hult  <richard@imendio.com>
+
 	* gdk/quartz/gdkevents-quartz.c
 	(find_window_interested_in_event_mask): Don't traverse beyond the
 	toplevel of the passed in window.

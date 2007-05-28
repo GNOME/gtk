@@ -443,6 +443,60 @@ _gdk_quartz_window_get_inverted_screen_y (gint y)
 }
 
 static GdkWindow *
+find_child_window_helper (GdkWindow *window,
+			  gint       x,
+			  gint       y,
+			  gint       x_offset,
+			  gint       y_offset)
+{
+  GList *l;
+
+  for (l = GDK_WINDOW_OBJECT (window)->children; l; l = l->next)
+    {
+      GdkWindowObject *private = l->data;
+      GdkWindowImplQuartz *impl = GDK_WINDOW_IMPL_QUARTZ (private->impl);
+      int temp_x, temp_y;
+
+      if (!GDK_WINDOW_IS_MAPPED (private))
+	continue;
+
+      temp_x = x_offset + private->x;
+      temp_y = y_offset + private->y;
+      
+      /* FIXME: Are there off by one errors here? */
+      if (x >= temp_x && y >= temp_y &&
+	  x < temp_x + impl->width && y < temp_y + impl->height) 
+	{
+	  /* Look for child windows. */
+	  return find_child_window_helper (l->data,
+					   x, y,
+					   temp_x, temp_y);
+	}
+    }
+  
+  return window;
+}
+
+/* Given a GdkWindow and coordinates relative to it, returns the
+ * window in which the point is. The returned window will be in the
+ * same subtree as the passed in window (including the passed in
+ * window), if no window is found, NULL is returned.
+ */
+GdkWindow *
+_gdk_quartz_window_find_child (GdkWindow *window,
+			       gint       x,
+			       gint       y)
+{
+  GdkWindowObject *private = GDK_WINDOW_OBJECT (window);
+  GdkWindowImplQuartz *impl = GDK_WINDOW_IMPL_QUARTZ (private->impl);
+
+  if (x >= 0 && y >= 0 && x < impl->width && y < impl->height)
+    return find_child_window_helper (window, x, y, 0, 0);
+
+  return NULL;
+}
+
+static GdkWindow *
 find_child_window_by_point_helper (GdkWindow *window,
 				   gint       x,
 				   gint       y,
@@ -1238,11 +1292,11 @@ _gdk_windowing_window_get_pointer (GdkDisplay      *display,
 				   gint            *y,
 				   GdkModifierType *mask)
 {
-  GdkWindow *toplevel;
-  GdkWindowImplQuartz *impl;
+  GdkWindowObject *toplevel;
   GdkWindowObject *private;
   NSPoint point;
   gint x_tmp, y_tmp;
+  GdkWindow *found_window;
 
   if (GDK_WINDOW_DESTROYED (window))
     {
@@ -1252,40 +1306,52 @@ _gdk_windowing_window_get_pointer (GdkDisplay      *display,
       return NULL;
     }
   
-  toplevel = gdk_window_get_toplevel (window);
-  impl = GDK_WINDOW_IMPL_QUARTZ (GDK_WINDOW_OBJECT (toplevel)->impl);
-  private = GDK_WINDOW_OBJECT (window);
+  toplevel = GDK_WINDOW_OBJECT (gdk_window_get_toplevel (window));
 
-  /* Must flip the y coordinate. */
+  *mask = _gdk_quartz_events_get_current_event_mask ();
+
+  /* Get the y coordinate, needs to be flipped. */
   if (window == _gdk_root)
     {
       point = [NSEvent mouseLocation];
+      x_tmp = point.x;
       y_tmp = _gdk_quartz_window_get_inverted_screen_y (point.y);
-      *mask = _gdk_quartz_events_get_current_event_mask ();
     }
   else
     {
-      NSWindow *nswindow = impl->toplevel;
-      point = [nswindow mouseLocationOutsideOfEventStream];
-      y_tmp = impl->height - point.y;
-      *mask = _gdk_quartz_events_get_current_event_mask ();
-    }
-  x_tmp = point.x;
+      GdkWindowImplQuartz *impl;
+      NSWindow *nswindow;
 
-  while (private != GDK_WINDOW_OBJECT (toplevel))
+      impl = GDK_WINDOW_IMPL_QUARTZ (toplevel->impl);
+      nswindow = impl->toplevel;
+
+      point = [nswindow mouseLocationOutsideOfEventStream];
+      x_tmp = point.x;
+      y_tmp = impl->height - point.y;
+    }
+
+  /* The coords are relative to the toplevel of the passed in window
+   * at this point, make them relative to the passed in window:
+   */
+  private = GDK_WINDOW_OBJECT (window);
+  while (private != toplevel)
     {
       x_tmp -= private->x;
       y_tmp -= private->y;
-    
+
       private = private->parent;
     }
+
+  found_window = _gdk_quartz_window_find_child (window, x_tmp, y_tmp);
+
+  /* We never return the root window. */
+  if (found_window == _gdk_root)
+    found_window = NULL;
 
   *x = x_tmp;
   *y = y_tmp;
 
-  return _gdk_quartz_window_find_child_by_point (window,
-						 point.x, point.y,
-						 &x_tmp, &y_tmp);
+  return found_window;
 }
 
 void
@@ -1304,11 +1370,40 @@ _gdk_windowing_window_at_pointer (GdkDisplay *display,
 				  gint       *win_y)
 {
   GdkModifierType mask;
+  GdkWindow *found_window;
+  gint x, y;
 
-  return _gdk_windowing_window_get_pointer (display,
-					    _gdk_root,
-					    win_x, win_y,
-					    &mask);
+  found_window = _gdk_windowing_window_get_pointer (display,
+						    _gdk_root,
+						    &x, &y,
+						    &mask);
+  if (found_window)
+    {
+      GdkWindowObject *private;
+
+      /* The coordinates returned above are relative the root, we want
+       * coordinates relative the window here. 
+       */
+      private = GDK_WINDOW_OBJECT (found_window);
+      while (private != GDK_WINDOW_OBJECT (_gdk_root))
+	{
+	  x -= private->x;
+	  y -= private->y;
+	  
+	  private = private->parent;
+	}
+
+      *win_x = x;
+      *win_y = y;
+    }
+  else
+    {
+      /* Mimic the X backend here, -1,-1 for unknown windows. */
+      *win_x = -1;
+      *win_y = -1;
+    }
+
+  return found_window;
 }
 
 GdkEventMask  
