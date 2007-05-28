@@ -43,8 +43,8 @@ gdk_quartz_window_get_nsview (GdkWindow *window)
 
 static void
 gdk_window_impl_quartz_get_size (GdkDrawable *drawable,
-				gint        *width,
-				gint        *height)
+				 gint        *width,
+				 gint        *height)
 {
   g_return_if_fail (GDK_IS_WINDOW_IMPL_QUARTZ (drawable));
 
@@ -431,7 +431,9 @@ get_default_title (void)
   return title;
 }
 
-/* FIXME: Should probably be in screen instead. */
+/* FIXME: It would be nice to have one function that takes an NSPoint
+ * and flips the coords for any window.
+ */
 gint 
 _gdk_quartz_window_get_inverted_screen_y (gint y)
 {
@@ -911,7 +913,7 @@ move_resize_window_internal (GdkWindow *window,
     {
       NSRect content_rect = 
 	NSMakeRect (private->x, 
-		    _gdk_quartz_window_get_inverted_screen_y (private->y) ,
+		    _gdk_quartz_window_get_inverted_screen_y (private->y),
 		    impl->width, impl->height);
       NSRect frame_rect = [impl->toplevel frameRectForContentRect:content_rect];
       
@@ -1206,6 +1208,7 @@ gdk_window_get_root_origin (GdkWindow *window,
     *y = rect.y;
 }
 
+/* Returns coordinates relative to the root. */
 void
 _gdk_windowing_get_pointer (GdkDisplay       *display,
 			    GdkScreen       **screen,
@@ -1219,7 +1222,7 @@ _gdk_windowing_get_pointer (GdkDisplay       *display,
   _gdk_windowing_window_get_pointer (_gdk_display, _gdk_root, x, y, mask);
 }
 
-/* Returns coordinates relative to the upper left corner of window. */
+/* Returns coordinates relative to the passed in window. */
 GdkWindow *
 _gdk_windowing_window_get_pointer (GdkDisplay      *display,
 				   GdkWindow       *window,
@@ -1286,6 +1289,7 @@ gdk_display_warp_pointer (GdkDisplay *display,
   CGDisplayMoveCursorToPoint (CGMainDisplayID (), CGPointMake (x, y));
 }
 
+/* Returns coordinates relative to the found window. */
 GdkWindow *
 _gdk_windowing_window_at_pointer (GdkDisplay *display,
 				  gint       *win_x,

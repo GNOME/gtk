@@ -1,3 +1,8 @@
+2007-05-28  Richard Hult  <richard@imendio.com>
+
+	* gdk/quartz/gdkwindow-quartz.c: Add comments about what various
+	coordinates are relative to.
+
 2007-05-28  Carlos Garnacho  <carlos@imendio.com>
 
 	* gtk/gtkwidget.c (gtk_widget_propagate_hierarchy_changed_recurse):
