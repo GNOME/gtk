@@ -156,6 +156,10 @@ pointer_ungrab_internal (gboolean only_if_implicit)
   g_object_unref (_gdk_quartz_pointer_grab_window);
   _gdk_quartz_pointer_grab_window = NULL;
 
+  pointer_grab_owner_events = FALSE;
+  pointer_grab_event_mask = 0;
+  pointer_grab_implicit = FALSE;
+
   /* FIXME: Send crossing events */
 }
 
@@ -1170,8 +1174,7 @@ gdk_event_translate (NSEvent *nsevent)
 	      generate_grab_broken_event (_gdk_quartz_pointer_grab_window,
 					  FALSE, pointer_grab_implicit,
 					  NULL);
-	      g_object_unref (_gdk_quartz_pointer_grab_window);
-	      _gdk_quartz_pointer_grab_window = NULL;
+	      pointer_ungrab_internal (FALSE);
 	    }
 	}
     }

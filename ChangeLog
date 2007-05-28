@@ -1,5 +1,12 @@
 2007-05-28  Richard Hult  <richard@imendio.com>
 
+	* gdk/quartz/gdkevents-quartz.c (pointer_ungrab_internal): Reset
+	all the grab state, to help debugging.
+	(gdk_event_translate): Use pointer_ungrab_internal instead of
+	duplicating the code here.
+
+2007-05-28  Richard Hult  <richard@imendio.com>
+
 	* gdk/quartz/gdkprivate-quartz.h:
 	* gdk/quartz/gdkwindow-quartz.c (find_child_window_helper)
 	(_gdk_quartz_window_find_child): Refactored version of
