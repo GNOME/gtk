@@ -27,6 +27,7 @@ struct _TestCase
   const gchar *name;
   GtkWidget *widget;
   GList *guides;
+  guint idle;
 };
 
 static void
@@ -168,35 +169,41 @@ create_baseline_test ()
   return test;
 }
 
-static gboolean           
-expose_page (GtkWidget      *page,
-             GdkEventExpose *event __attribute__((unused)),
-             gpointer        user_data)
+static gboolean
+draw_guides (gpointer data)
 {
-  cairo_t *cr = gdk_cairo_create (page->window);
-  GList *guides = user_data;
-  GList *iter;
+  TestCase *test = data;
+  GdkDrawable *target;
+  const GList *iter;
+  gint x0, y0;
 
-  cairo_rectangle (cr, event->area.x, event->area.y,
-                       event->area.width, event->area.height);
-  cairo_clip (cr);
+  GdkGCValues values;
+  GdkGC *gc;
 
-  cairo_translate (cr, page->allocation.x - 0.5, 
-                       page->allocation.y - 0.5);
+  gdk_color_parse ("#f00", &values.foreground);
+  values.subwindow_mode = GDK_INCLUDE_INFERIORS;
+  target = test->widget->window;
 
-  cairo_set_line_width (cr, 1);
-  cairo_set_source_rgba (cr, 1.0, 0.0, 0.0, 0.5);
+  gc = gdk_gc_new_with_values (target, &values, 
+                               GDK_GC_SUBWINDOW);
+  gdk_gc_set_rgb_fg_color (gc, &values.foreground);
 
-  for (iter = guides; iter; iter = iter->next)
+  x0 = test->widget->allocation.x;
+  y0 = test->widget->allocation.y;
+
+  for (iter = test->guides; iter; iter = iter->next)
     {
+      gint cx = test->widget->allocation.width;
+      gint cy = test->widget->allocation.height;
       GtkWidget *child = iter->data;
-      gint x0, y0, x1, y1;
+      gint xa, ya, xe, ye;
 
       if (GTK_WIDGET_VISIBLE (child) &&
-          gtk_widget_translate_coordinates (child, page, 0, 0, &x0, &y0))
+          gtk_widget_translate_coordinates (child, test->widget, 
+                                            0, 0, &xa, &ya))
         {
-          x1 = x0 + child->allocation.width;
-          y1 = y0 + child->allocation.height;
+          xe = xa + child->allocation.width - 1;
+          ye = ya + child->allocation.height - 1;
 
           if (GTK_IS_LABEL (child)) 
             {
@@ -211,38 +218,71 @@ expose_page (GtkWidget      *page,
               gtk_label_get_layout_offsets (GTK_LABEL (child), NULL, &ybase);
 
               ybase -= child->allocation.y;
-              ybase += PANGO_PIXELS (log.height);
+              ybase += PANGO_PIXELS (PANGO_ASCENT (log));
 
-              cairo_move_to (cr, 0, y0 + ybase);
-              cairo_line_to (cr, page->allocation.width, y0 + ybase);
+              gdk_draw_line (target, gc, x0, y0 + ya + ybase,
+                                         x0 + cx, y0 + ya + ybase);
 
-              cairo_move_to (cr, x0, y0 + ybase - 5);
-              cairo_line_to (cr, x0, y0 + ybase + 2);
+              gdk_draw_line (target, gc,
+                             x0 + xa, y0 + ya + ybase - 5,
+                             x0 + xa, y0 + ya + ybase + 2);
 
-              cairo_move_to (cr, x1, y0 + ybase - 5);
-              cairo_line_to (cr, x1, y0 + ybase + 2);
+              gdk_draw_line (target, gc,
+                             x0 + xe, y0 + ya + ybase - 5,
+                             x0 + xe, y0 + ya + ybase + 2);
             }
           else
             {
-              cairo_move_to (cr, x0, 0);
-              cairo_line_to (cr, x0, page->allocation.height);
-
-              cairo_move_to (cr, x1, 0);
-              cairo_line_to (cr, x1, page->allocation.height);
-
-              cairo_move_to (cr, 0, y0);
-              cairo_line_to (cr, page->allocation.width, y0);
-
-              cairo_move_to (cr, 0, y1);
-              cairo_line_to (cr, page->allocation.width, y1);
+              gdk_draw_line (target, gc, x0 + xa, y0,
+                                         x0 + xa, y0 + cy);
+              gdk_draw_line (target, gc, x0 + xe, y0,
+                                         x0 + xe, y0 + cy);
+              gdk_draw_line (target, gc, x0, y0 + ya,
+                                         x0 + cx, y0 + ya);
+              gdk_draw_line (target, gc, x0, y0 + ye,
+                                         x0 + cx, y0 + ye);
             }
-
-            cairo_stroke (cr);
       }
     }
 
-  cairo_destroy (cr);
+  g_object_unref (gc);
+  test->idle = 0;
+
   return FALSE;
+}
+
+static gboolean           
+on_expose (GtkWidget      *widget,
+           GdkEventExpose *event,
+           gpointer        data)
+{
+  TestCase *test = data;
+
+  if (0 == test->idle)
+    test->idle = g_idle_add (draw_guides, test);
+
+  return FALSE;
+}
+
+static void
+on_realize (GtkWidget *widget,
+            gpointer   data)
+{
+  TestCase *test = data;
+
+  if (widget->window != test->widget->window)
+    g_signal_connect_after (widget, "expose-event",
+                            G_CALLBACK (on_expose), test);
+}
+
+static void
+attach_sub_windows (GtkWidget *widget,
+                    gpointer   data)
+{
+  g_signal_connect_after (widget, "realize", G_CALLBACK (on_realize), data);
+
+  if (GTK_IS_CONTAINER (widget))
+    gtk_container_forall (GTK_CONTAINER (widget), attach_sub_windows, data);
 }
 
 static void
@@ -253,12 +293,14 @@ append_testcase(GtkWidget   *notebook,
                             gtk_label_new (test->name));
 
   g_signal_connect_after (test->widget, "expose-event",
-                          G_CALLBACK (expose_page),
-                          test->guides);
+                          G_CALLBACK (on_expose), test);
+  g_signal_connect_after (test->widget, "realize",
+                          G_CALLBACK (on_realize), test);
   g_object_set_data_full (G_OBJECT(test->widget), 
                           "test-case", test, g_free);
 
-  test->guides = NULL;
+  gtk_container_forall (GTK_CONTAINER (test->widget),
+                        attach_sub_windows, test);
 }
 
 int
