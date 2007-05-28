@@ -5496,6 +5496,7 @@ static void
 gtk_widget_propagate_hierarchy_changed_recurse (GtkWidget *widget,
 						gpointer   client_data)
 {
+  HierarchyChangedInfo *info = client_data;
   gboolean new_anchored = GTK_WIDGET_TOPLEVEL (widget) ||
                  (widget->parent && GTK_WIDGET_ANCHORED (widget->parent));
 
