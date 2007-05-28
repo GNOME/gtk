@@ -1,5 +1,11 @@
 2007-05-28  Richard Hult  <richard@imendio.com>
 
+	* gdk/quartz/gdkevents-quartz.c (gdk_event_translate): Fix typo,
+ 	we need both press and release in the mask to trigger implicit
+	grabs.
+
+2007-05-28  Richard Hult  <richard@imendio.com>
+
 	* gdk/quartz/gdkevents-quartz.c (pointer_ungrab_internal): Reset
 	all the grab state, to help debugging.
 	(gdk_event_translate): Use pointer_ungrab_internal instead of

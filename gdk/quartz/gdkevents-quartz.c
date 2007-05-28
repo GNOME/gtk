@@ -1208,7 +1208,7 @@ gdk_event_translate (NSEvent *nsevent)
 	 * in its mask, like X (and make it owner_events since that's what
 	 * implicit grabs are like).
 	 */
-	event_mask = (GDK_BUTTON_RELEASE_MASK | GDK_BUTTON_RELEASE_MASK);
+	event_mask = (GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK);
 	if (!_gdk_quartz_pointer_grab_window &&
 	    (GDK_WINDOW_OBJECT (window)->event_mask & event_mask) == event_mask)
 	  {
@@ -1231,8 +1231,7 @@ gdk_event_translate (NSEvent *nsevent)
       append_event (event);
       
       /* Ungrab implicit grab */
-      if (_gdk_quartz_pointer_grab_window &&
-	  pointer_grab_implicit)
+      if (_gdk_quartz_pointer_grab_window && pointer_grab_implicit)
 	pointer_ungrab_internal (TRUE);
       break;
 
