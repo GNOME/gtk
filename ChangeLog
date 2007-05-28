@@ -1,3 +1,15 @@
+2007-05-28  Carlos Garcia Campos  <carlosgc@gnome.org>
+
+	* gtk/gtkprinter.[ch]: Add new capability
+	GTK_PRINT_CAPABILITY_NUMBER_UP.
+	* docs/reference/gtk/tmpl/gtkprintunixdialog.sgml: 
+	* gtk/gtkprintunixdialog.c: (update_dialog_from_capabilities):
+	* modules/printbackends/file/gtkprintbackendfile.c:
+	(file_printer_get_options), (file_printer_get_settings_from_options):
+	* modules/printbackends/cups/gtkprintbackendcups.c:
+	(cups_printer_get_capabilities): Add a new print capability to specify
+	whether print dialog will offer printing multiple pages per sheet. (#398414)
+	
 2007-05-28  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtkwidget.c: Document some more signals
