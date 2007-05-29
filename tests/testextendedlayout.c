@@ -144,8 +144,16 @@ create_baseline_test ()
                     GTK_FILL, GTK_FILL, 0, 0);
 
   view = gtk_text_view_new ();
+  gtk_text_view_set_wrap_mode (GTK_TEXT_VIEW (view),
+                               GTK_WRAP_WORD);
+  test->guides = g_list_append (test->guides, view);
   gtk_text_buffer_set_text (gtk_text_view_get_buffer (GTK_TEXT_VIEW (view)),
-                            "Lorem ipsem...", -1);
+                            "Lorem ipsum dolor sit amet, consectetuer "
+                            "adipiscing elit. Aliquam sed erat. Proin lectus "
+                            "orci, venenatis pharetra, egestas id, tincidunt "
+                            "vel, eros. Integer fringilla. Aenean justo ipsum, "        
+                            "luctus ut, volutpat laoreet, vehicula in, libero.", 
+                            -1);
 
   child = gtk_scrolled_window_new (NULL, NULL);
   gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (child),
@@ -170,79 +178,166 @@ create_baseline_test ()
 }
 
 static gboolean
+get_extends (GtkWidget    *widget,
+             GtkWidget    *toplevel,
+             GdkRectangle *extends)
+{
+  *extends = widget->allocation;
+
+  return
+    GTK_WIDGET_VISIBLE (widget) &&
+    gtk_widget_translate_coordinates (widget, toplevel, 0, 0, 
+                                      &extends->x, &extends->y);
+}
+
+static gint
+get_baseline_of_layout (PangoLayout *layout)
+{
+  PangoLayoutLine *line = pango_layout_get_line_readonly (layout, 0);
+  PangoRectangle log;
+
+  pango_layout_line_get_extents (line, NULL, &log);
+  return PANGO_PIXELS (PANGO_ASCENT (log));
+}
+
+static gint
+get_baseline_of_label (GtkLabel *label)
+{
+  PangoLayout *layout = gtk_label_get_layout (label);
+  gint base;
+
+  gtk_label_get_layout_offsets (label, NULL, &base);
+
+  base -= GTK_WIDGET (label)->allocation.y;
+  base += get_baseline_of_layout (layout);
+
+  return base;
+}
+
+static gint
+get_baseline_of_text_view (GtkTextView *view)
+{
+  GtkTextBuffer *buffer = gtk_text_view_get_buffer (view);
+  GtkTextAttributes *attrs = gtk_text_view_get_default_attributes (view);
+  PangoContext *context = gtk_widget_get_pango_context (GTK_WIDGET (view));
+  PangoLayout *layout = pango_layout_new (context);
+
+  GtkTextIter start, end;
+  GdkRectangle bounds;
+  gchar *text;
+
+  gtk_text_buffer_get_start_iter (buffer, &start);
+  gtk_text_iter_get_attributes (&start, attrs);
+
+  end = start;
+  gtk_text_iter_forward_to_line_end (&end);
+  text = gtk_text_buffer_get_text (buffer, &start, &end, FALSE);
+  gtk_text_view_get_iter_location (view, &start, &bounds);
+
+  pango_layout_set_width (layout, PANGO_SCALE *
+                          GTK_WIDGET (view)->allocation.width);
+  pango_layout_set_font_description (layout, attrs->font);
+  pango_layout_set_wrap (layout, PANGO_WRAP_WORD);
+  pango_layout_set_text (layout, text, -1);
+
+  gtk_text_view_buffer_to_window_coords (view, GTK_TEXT_WINDOW_TEXT,
+                                         0, bounds.y, NULL, &bounds.y);
+  bounds.y += get_baseline_of_layout (layout);
+
+  gtk_text_attributes_unref (attrs);
+  g_object_unref (layout);
+  g_free (text);
+
+  return bounds.y;
+}
+
+static gint
+get_baseline (GtkWidget *widget)
+{
+  if (GTK_IS_LABEL (widget))
+    return get_baseline_of_label (GTK_LABEL (widget));
+  if (GTK_IS_TEXT_VIEW (widget))
+    return get_baseline_of_text_view (GTK_TEXT_VIEW (widget));
+
+  return -1;
+}
+
+static void
+draw_baseline (GdkDrawable  *drawable,
+               GdkGC        *gc,
+               GtkWidget    *toplevel,
+               GdkRectangle *extends,
+               gint          baseline)
+{
+  const gint x0 = toplevel->allocation.x;
+  const gint y0 = toplevel->allocation.y;
+  const gint cx = toplevel->allocation.width;
+
+  const gint xa = x0 + extends->x;
+  const gint xe = xa + extends->width - 1;
+  const gint ya = y0 + extends->y + baseline;
+
+  gdk_draw_line (drawable, gc, x0, ya, x0 + cx, ya);
+  gdk_draw_line (drawable, gc, xa, ya - 5, xa, ya + 2);
+  gdk_draw_line (drawable, gc, xe, ya - 5, xe, ya + 2);
+}
+
+static void
+draw_extends (GdkDrawable  *drawable,
+              GdkGC        *gc,
+              GtkWidget    *toplevel,
+              GdkRectangle *extends)
+{
+  const gint x0 = toplevel->allocation.x;
+  const gint y0 = toplevel->allocation.y;
+  const gint cx = toplevel->allocation.width;
+  const gint cy = toplevel->allocation.height;
+
+  const gint xa = x0 + extends->x;
+  const gint xe = xa + extends->width - 1;
+
+  const gint ya = y0 + extends->y;
+  const gint ye = ya + extends->height - 1;
+
+  gdk_draw_line (drawable, gc, xa, y0, xa, y0 + cy);
+  gdk_draw_line (drawable, gc, xe, y0, xe, y0 + cy);
+  gdk_draw_line (drawable, gc, x0, ya, x0 + cx, ya);
+  gdk_draw_line (drawable, gc, x0, ye, x0 + cx, ye);
+}
+
+static gboolean
 draw_guides (gpointer data)
 {
   TestCase *test = data;
-  GdkDrawable *target;
+  GdkDrawable *drawable;
   const GList *iter;
-  gint x0, y0;
 
   GdkGCValues values;
   GdkGC *gc;
 
   gdk_color_parse ("#f00", &values.foreground);
   values.subwindow_mode = GDK_INCLUDE_INFERIORS;
-  target = test->widget->window;
+  drawable = test->widget->window;
 
-  gc = gdk_gc_new_with_values (target, &values, 
+  gc = gdk_gc_new_with_values (drawable, &values, 
                                GDK_GC_SUBWINDOW);
   gdk_gc_set_rgb_fg_color (gc, &values.foreground);
 
-  x0 = test->widget->allocation.x;
-  y0 = test->widget->allocation.y;
 
   for (iter = test->guides; iter; iter = iter->next)
     {
-      gint cx = test->widget->allocation.width;
-      gint cy = test->widget->allocation.height;
       GtkWidget *child = iter->data;
-      gint xa, ya, xe, ye;
+      GdkRectangle extends;
 
-      if (GTK_WIDGET_VISIBLE (child) &&
-          gtk_widget_translate_coordinates (child, test->widget, 
-                                            0, 0, &xa, &ya))
+      if (get_extends (child, test->widget, &extends))
         {
-          xe = xa + child->allocation.width - 1;
-          ye = ya + child->allocation.height - 1;
+          const gint baseline = get_baseline (child);
 
-          if (GTK_IS_LABEL (child)) 
-            {
-              PangoLayout *layout;
-              PangoLayoutLine *line;
-              PangoRectangle log;
-              gint ybase;
-
-              layout = gtk_label_get_layout (GTK_LABEL (child));
-              line = pango_layout_get_line (layout, 0);
-              pango_layout_line_get_extents (line, NULL, &log);
-              gtk_label_get_layout_offsets (GTK_LABEL (child), NULL, &ybase);
-
-              ybase -= child->allocation.y;
-              ybase += PANGO_PIXELS (PANGO_ASCENT (log));
-
-              gdk_draw_line (target, gc, x0, y0 + ya + ybase,
-                                         x0 + cx, y0 + ya + ybase);
-
-              gdk_draw_line (target, gc,
-                             x0 + xa, y0 + ya + ybase - 5,
-                             x0 + xa, y0 + ya + ybase + 2);
-
-              gdk_draw_line (target, gc,
-                             x0 + xe, y0 + ya + ybase - 5,
-                             x0 + xe, y0 + ya + ybase + 2);
-            }
+          if (baseline >= 0)
+            draw_baseline (drawable, gc, test->widget, &extends, baseline);
           else
-            {
-              gdk_draw_line (target, gc, x0 + xa, y0,
-                                         x0 + xa, y0 + cy);
-              gdk_draw_line (target, gc, x0 + xe, y0,
-                                         x0 + xe, y0 + cy);
-              gdk_draw_line (target, gc, x0, y0 + ya,
-                                         x0 + cx, y0 + ya);
-              gdk_draw_line (target, gc, x0, y0 + ye,
-                                         x0 + cx, y0 + ye);
-            }
-      }
+            draw_extends (drawable, gc, test->widget, &extends);
+        }
     }
 
   g_object_unref (gc);
@@ -259,7 +354,12 @@ on_expose (GtkWidget      *widget,
   TestCase *test = data;
 
   if (0 == test->idle)
-    test->idle = g_idle_add (draw_guides, test);
+    {
+      if (widget != test->widget)
+        gtk_widget_queue_draw (test->widget);
+
+      test->idle = g_idle_add (draw_guides, test);
+    }
 
   return FALSE;
 }
