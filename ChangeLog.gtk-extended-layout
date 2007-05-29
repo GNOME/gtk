@@ -1,5 +1,9 @@
 2007-05-29  Mathias Hasselmann  <mathias.hasselmann@gmx.de>
 
+	* testextendedlayout.c: Implement formal testing.
+
+2007-05-29  Mathias Hasselmann  <mathias.hasselmann@gmx.de>
+
 	* testextendedlayout.c: Create initial heigth-for-width test.
 
 2007-05-29  Mathias Hasselmann  <mathias.hasselmann@gmx.de>
