@@ -20,7 +20,24 @@
 #include <config.h>
 #include <gtk/gtk.h>
 
+typedef enum _GuideType GuideType;
+
+typedef struct _Guide Guide;
 typedef struct _TestCase TestCase;
+
+enum _GuideType
+{
+  GUIDE_AUTOMATIC,
+  GUIDE_BASELINE,
+  GUIDE_INTERIOUR,
+  GUIDE_EXTERIOUR
+};
+
+struct _Guide
+{
+  GtkWidget *widget;
+  GuideType type;
+};
 
 struct _TestCase
 {
@@ -29,6 +46,46 @@ struct _TestCase
   GList *guides;
   guint idle;
 };
+
+static const gchar lorem_ipsum[] =
+  "Lorem ipsum dolor sit amet, consectetuer "
+  "adipiscing elit. Aliquam sed erat. Proin lectus "
+  "orci, venenatis pharetra, egestas id, tincidunt "
+  "vel, eros. Integer fringilla. Aenean justo ipsum, "        
+  "luctus ut, volutpat laoreet, vehicula in, libero.";
+
+static Guide*
+guide_new (GtkWidget *widget,
+           GuideType  type)
+{
+  Guide* self = g_new0 (Guide, 1);
+
+  self->widget = widget;
+  self->type = type;
+
+  return self;
+}
+
+static TestCase*
+test_case_new (const gchar *name,
+               GtkWidget   *widget)
+{
+  TestCase* self = g_new0 (TestCase, 1);
+
+  self->name = name;
+  self->widget = widget;
+
+  return self;
+}
+
+static void
+test_case_append_guide (TestCase  *self,
+                        GtkWidget *widget,
+                        GuideType  type)
+{
+  Guide *guide = guide_new (widget, type);
+  self->guides = g_list_append (self->guides, guide);
+}
 
 static void
 append_natural_size_box (TestCase           *test,
@@ -49,7 +106,7 @@ append_natural_size_box (TestCase           *test,
   gtk_box_pack_start (GTK_BOX (hbox), button, FALSE, TRUE, 0);
 
   if (PANGO_ELLIPSIZE_NONE == ellipsize)
-    test->guides = g_list_append (test->guides, button);
+    test_case_append_guide (test, button, GUIDE_AUTOMATIC);
 
   button = gtk_button_new_with_label ("The large Button");
   gtk_box_pack_start (GTK_BOX (hbox), button, TRUE, TRUE, 0);
@@ -65,10 +122,9 @@ append_natural_size_box (TestCase           *test,
 static TestCase*
 create_natural_size_test ()
 {
-  TestCase *test = g_new0 (TestCase, 1);
+  TestCase *test = test_case_new ("Natural Size",
+                                  gtk_vbox_new (FALSE, 12));
 
-  test->name = "Natural Size";
-  test->widget = gtk_vbox_new (FALSE, 12);
   gtk_container_set_border_width (GTK_CONTAINER (test->widget), 12);
 
   append_natural_size_box (test,
@@ -90,11 +146,31 @@ create_natural_size_test ()
 static TestCase*
 create_height_for_width_test ()
 {
-  TestCase *test = g_new0 (TestCase, 1);
+  PangoLayout *layout;
+  PangoRectangle log;
+  GtkWidget *child;
 
-  test->name = "Height for Width";
-  test->widget = gtk_vbox_new (FALSE, 12);
+  TestCase *test = test_case_new ("Height for Width",
+                                  gtk_hbox_new (FALSE, 12));
+
   gtk_container_set_border_width (GTK_CONTAINER (test->widget), 12);
+
+  child = gtk_label_new (lorem_ipsum);
+  gtk_label_set_line_wrap (GTK_LABEL (child), TRUE);
+  gtk_box_pack_start (GTK_BOX (test->widget), child, TRUE, TRUE, 0);
+  layout = gtk_label_get_layout (GTK_LABEL (child));
+
+  pango_layout_get_pixel_extents (layout, NULL, &log);
+  gtk_widget_set_size_request (test->widget, log.width * 3 / 2, -1);
+
+  test_case_append_guide (test, child, GUIDE_INTERIOUR);
+  test_case_append_guide (test, child, GUIDE_EXTERIOUR);
+
+  child = gtk_button_new ();
+  gtk_container_add (GTK_CONTAINER (child),
+                     gtk_image_new_from_stock (GTK_STOCK_DIALOG_INFO,
+                                               GTK_ICON_SIZE_DIALOG));
+  gtk_box_pack_start (GTK_BOX (test->widget), child, FALSE, TRUE, 0);
 
   return test;
 }
@@ -106,10 +182,9 @@ create_baseline_test ()
   GtkWidget *view;
   GtkWidget *label;
 
-  TestCase *test = g_new0 (TestCase, 1);
+  TestCase *test = test_case_new ("Baseline Alignment",
+                                  gtk_table_new (3, 3, FALSE));
 
-  test->name = "Baseline Alignment";
-  test->widget = gtk_table_new (3, 3, FALSE);
   gtk_container_set_border_width (GTK_CONTAINER (test->widget), 12);
   gtk_table_set_col_spacings (GTK_TABLE (test->widget), 6);
   gtk_table_set_row_spacings (GTK_TABLE (test->widget), 6);
@@ -120,14 +195,14 @@ create_baseline_test ()
                     GTK_FILL | GTK_EXPAND, GTK_FILL, 0, 0);
 
   label = gtk_label_new_with_mnemonic ("_Title:");
-  test->guides = g_list_append (test->guides, label);
+  test_case_append_guide (test, label, GUIDE_AUTOMATIC);
   gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
   gtk_label_set_mnemonic_widget  (GTK_LABEL (label), child);
   gtk_table_attach (GTK_TABLE (test->widget), label, 0, 1, 0, 1, 
                     GTK_FILL, GTK_FILL, 0, 0);
 
   label = gtk_label_new_with_mnemonic ("Notice on\ntwo rows.");
-  test->guides = g_list_append (test->guides, label);
+  test_case_append_guide (test, label, GUIDE_AUTOMATIC);
   gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.0);
   gtk_table_attach (GTK_TABLE (test->widget), label, 2, 3, 0, 2, 
                     GTK_FILL, GTK_FILL, 0, 0);
@@ -137,23 +212,19 @@ create_baseline_test ()
                     GTK_FILL | GTK_EXPAND, GTK_FILL, 0, 0);
 
   label = gtk_label_new_with_mnemonic ("_Font:");
-  test->guides = g_list_append (test->guides, label);
+  test_case_append_guide (test, label, GUIDE_AUTOMATIC);
   gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
   gtk_label_set_mnemonic_widget  (GTK_LABEL (label), child);
   gtk_table_attach (GTK_TABLE (test->widget), label, 0, 1, 1, 2, 
                     GTK_FILL, GTK_FILL, 0, 0);
 
   view = gtk_text_view_new ();
+  gtk_widget_set_size_request (view, 200, -1);
   gtk_text_view_set_wrap_mode (GTK_TEXT_VIEW (view),
                                GTK_WRAP_WORD);
-  test->guides = g_list_append (test->guides, view);
+  test_case_append_guide (test, view, GUIDE_AUTOMATIC);
   gtk_text_buffer_set_text (gtk_text_view_get_buffer (GTK_TEXT_VIEW (view)),
-                            "Lorem ipsum dolor sit amet, consectetuer "
-                            "adipiscing elit. Aliquam sed erat. Proin lectus "
-                            "orci, venenatis pharetra, egestas id, tincidunt "
-                            "vel, eros. Integer fringilla. Aenean justo ipsum, "        
-                            "luctus ut, volutpat laoreet, vehicula in, libero.", 
-                            -1);
+                            lorem_ipsum, -1);
 
   child = gtk_scrolled_window_new (NULL, NULL);
   gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (child),
@@ -168,7 +239,7 @@ create_baseline_test ()
                     0, 0);
 
   label = gtk_label_new_with_mnemonic ("_Comment:");
-  test->guides = g_list_append (test->guides, label);
+  test_case_append_guide (test, label, GUIDE_AUTOMATIC);
   gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.0);
   gtk_label_set_mnemonic_widget  (GTK_LABEL (label), child);
   gtk_table_attach (GTK_TABLE (test->widget), label, 0, 1, 2, 3,
@@ -190,14 +261,41 @@ get_extends (GtkWidget    *widget,
                                       &extends->x, &extends->y);
 }
 
+static gboolean
+get_interiour (GtkWidget    *widget,
+                GtkWidget    *toplevel,
+               GdkRectangle *extends)
+{
+  if (GTK_IS_LABEL (widget))
+    {
+      PangoLayout *layout;
+      PangoRectangle log;
+      GtkLabel *label;
+
+      label = GTK_LABEL (widget);
+      layout = gtk_label_get_layout (label);
+      pango_layout_get_pixel_extents (layout, NULL, &log);
+      gtk_label_get_layout_offsets (label, &log.x, &log.y);
+
+      log.x -= toplevel->allocation.x;
+      log.y -= toplevel->allocation.y;
+
+      g_assert (sizeof (log) == sizeof (*extends));
+      memcpy (extends, &log, sizeof (*extends));
+    }
+
+  return FALSE;
+}
+
 static gint
 get_baseline_of_layout (PangoLayout *layout)
 {
-  PangoLayoutLine *line = pango_layout_get_line_readonly (layout, 0);
+  PangoLayoutLine *line;
   PangoRectangle log;
 
-  pango_layout_line_get_extents (line, NULL, &log);
-  return PANGO_PIXELS (PANGO_ASCENT (log));
+  line = pango_layout_get_line_readonly (layout, 0);
+  pango_layout_line_get_pixel_extents (line, NULL, &log);
+  return PANGO_ASCENT (log);
 }
 
 static gint
@@ -326,12 +424,27 @@ draw_guides (gpointer data)
 
   for (iter = test->guides; iter; iter = iter->next)
     {
-      GtkWidget *child = iter->data;
+      const Guide *guide = iter->data;
       GdkRectangle extends;
 
-      if (get_extends (child, test->widget, &extends))
+      if (get_extends (guide->widget, test->widget, &extends))
         {
-          const gint baseline = get_baseline (child);
+          gint baseline = -1;
+
+          switch (guide->type)
+            {
+              case GUIDE_AUTOMATIC:
+              case GUIDE_BASELINE:
+                baseline = get_baseline (guide->widget);
+                break;
+
+              case GUIDE_INTERIOUR:
+                get_interiour (guide->widget, test->widget, &extends);
+                break;
+
+              case GUIDE_EXTERIOUR:
+                break;
+            }
 
           if (baseline >= 0)
             draw_baseline (drawable, gc, test->widget, &extends, baseline);
