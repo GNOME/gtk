@@ -1,3 +1,7 @@
+2007-05-28  Cody Russell  <bratsche@gnome.org>
+
+	* gdk/win32/xcursors.h: Fix initialization of last item. (#440511)
+
 2007-05-28  Richard Hult  <richard@imendio.com>
 
 	* gdk/quartz/gdkevents-quartz.c (get_child_coordinates_from_ancestor)
