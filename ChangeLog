@@ -1,3 +1,7 @@
+2007-05-28  Cody Russell  <bratsche@gnome.org>
+
+	* gdk/win32/xcursors.h: Fix initialization of last item. (#440511)
+
 2007-05-27  Tor Lillqvist  <tml@novell.com>
 
 	* configure.in (GDK_EXTRA_LISB): Drop bogus -user32 switch. Was
