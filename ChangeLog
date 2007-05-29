@@ -1,6 +1,7 @@
 2007-05-30  Xan Lopez  <xan@gnome.org>
 
 	* gtk/gtknotebook.c (gtk_notebook_set_current_page): Small cleanup.
+	Fixes #442172.
 
 2007-05-28  Cody Russell  <bratsche@gnome.org>
 
