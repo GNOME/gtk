@@ -1,3 +1,7 @@
+2007-05-30  Xan Lopez  <xan@gnome.org>
+
+	* gtk/gtknotebook.c (gtk_notebook_set_current_page): Small cleanup.
+
 2007-05-28  Cody Russell  <bratsche@gnome.org>
 
 	* gdk/win32/xcursors.h: Fix initialization of last item. (#440511)
