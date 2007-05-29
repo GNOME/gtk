@@ -6247,7 +6247,7 @@ gtk_notebook_get_current_page (GtkNotebook *notebook)
 /**
  * gtk_notebook_get_nth_page:
  * @notebook: a #GtkNotebook
- * @page_num: the index of a page in the noteobok, or -1
+ * @page_num: the index of a page in the notebook, or -1
  *            to get the last page.
  * 
  * Returns the child widget contained in page number @page_num.
@@ -6355,13 +6355,10 @@ gtk_notebook_set_current_page (GtkNotebook *notebook,
 
   g_return_if_fail (GTK_IS_NOTEBOOK (notebook));
 
-  if (page_num >= 0)
-    list = g_list_nth (notebook->children, page_num);
-  else
-    list = g_list_last (notebook->children);
+  if (page_num < 0)
+    page_num = g_list_length (notebook->children) - 1;
 
-  page_num = g_list_index (notebook->children, list);
-
+  list = g_list_nth (notebook->children, page_num);
   if (list)
     gtk_notebook_switch_page (notebook, GTK_NOTEBOOK_PAGE (list), page_num);
 }
