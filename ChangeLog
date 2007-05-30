@@ -1,3 +1,9 @@
+2007-05-30  Tor Lillqvist  <tml@novell.com>
+
+	* gdk/win32/gdkevents-win32.c (gdk_pointer_grab): Subtract the
+	multi-monitor offset from x and y before setting up the rectangle
+	for ClipCursor(). Fixes #442326.
+
 2007-05-30  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtkiconview.c (gtk_icon_view_layout): Queue a resize
