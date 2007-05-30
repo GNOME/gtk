@@ -1,3 +1,8 @@
+2007-05-30  Simos Xenitellis  <simos@gnome.org>
+
+	* gdk/gdkkeysyms-update.pl: Updated script to new upstream 
+	location of keysymdef.h (#442183)
+
 2007-05-30  Emmanuele Bassi  <ebassi@gnome.org>
 
 	* gtk/gtkfilechooserdefault.c (update_chooser_entry): Return
