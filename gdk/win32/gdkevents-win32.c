@@ -619,6 +619,9 @@ gdk_pointer_grab (GdkWindow    *window,
 	  gdk_window_get_origin (confine_to, &x, &y);
 	  gdk_drawable_get_size (confine_to, &width, &height);
 
+	  x -= _gdk_offset_x;
+	  y -= _gdk_offset_y;
+
 	  rect.left = x;
 	  rect.top = y;
 	  rect.right = x + width;
