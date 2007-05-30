@@ -1,3 +1,8 @@
+2007-05-30  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtkiconcachevalidator.c: Correct the handling
+	of display names.  (#441767, Marcin Bachry)
+
 2007-05-30  Xan Lopez  <xan@gnome.org>
 
 	* gtk/gtknotebook.c (gtk_notebook_set_current_page): Small cleanup.
@@ -77,6 +82,11 @@
 	(cups_printer_get_capabilities): Add a new print capability to specify
 	whether print dialog will offer printing multiple pages per sheet. (#398414)
 	
+2007-05-28  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtktoolbar.h: Actually undeprecate 
+	gtk_toolbar_[un]set_icon_size.  (#314172. Yevgen Muntyan)
+
 2007-05-28  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtkwidget.c: Document some more signals
