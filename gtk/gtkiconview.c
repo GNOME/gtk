@@ -2614,6 +2614,10 @@ gtk_icon_view_layout (GtkIconView *icon_view)
   gtk_icon_view_set_adjustment_upper (icon_view->priv->vadjustment, 
 				      icon_view->priv->height);
 
+  if (icon_view->priv->width != widget->requisition.width ||
+      icon_view->priv->height != widget->requisition.height)
+    gtk_widget_queue_resize_no_redraw (widget);
+
   if (GTK_WIDGET_REALIZED (icon_view))
     gdk_window_resize (icon_view->priv->bin_window,
 		       MAX (icon_view->priv->width, widget->allocation.width),
@@ -2634,7 +2638,7 @@ gtk_icon_view_layout (GtkIconView *icon_view)
       gtk_tree_path_free (path);
     }
   
-  gtk_widget_queue_draw (GTK_WIDGET (icon_view));
+  gtk_widget_queue_draw (widget);
 }
 
 static void 

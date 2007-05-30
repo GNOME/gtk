@@ -1,3 +1,8 @@
+2007-05-30  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtkiconview.c (gtk_icon_view_layout): Queue a resize
+	if the size changed.  (#418047, Alex Graveley)
+
 2007-05-30  Simos Xenitellis  <simos@gnome.org>
 
 	* gdk/gdkkeysyms-update.pl: Updated script to new upstream 
