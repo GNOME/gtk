@@ -1,3 +1,8 @@
+2007-05-30  Chris Wilson  <chris@chris-wilson.co.uk>
+
+	* io-jpeg.c (gdk_pixbuf__jpeg_image_stop_load):
+	Supply the current GError for fatal_error_handler(). (#441443)
+
 2007-05-02  Matthias Clasen  <mclasen@redhat.com>
 
 	* === Released 2.10.12 ===

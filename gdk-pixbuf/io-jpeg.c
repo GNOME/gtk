@@ -529,6 +529,7 @@ gdk_pixbuf__jpeg_image_stop_load (gpointer data, GError **error)
 		g_object_unref (context->pixbuf);
 	
 	/* if we have an error? */
+	context->jerr.error = error;
 	if (sigsetjmp (context->jerr.setjmp_buffer, 1)) {
 		jpeg_destroy_decompress (&context->cinfo);
 	} else {
