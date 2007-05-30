@@ -1,3 +1,10 @@
+2007-05-30  Matthias Clasen  <mclasen@redhat.com>
+
+	Merged from trunk:
+
+	* gtk/gtkiconview.c (gtk_icon_view_layout): Queue a resize
+	if the size changed.  (#418047, Alex Graveley)
+
 2007-05-28  Cody Russell  <bratsche@gnome.org>
 
 	* gdk/win32/xcursors.h: Fix initialization of last item. (#440511)
