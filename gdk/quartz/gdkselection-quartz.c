@@ -122,6 +122,15 @@ gdk_utf8_to_compound_text_for_display (GdkDisplay  *display,
   return 0;
 }
 
+void
+gdk_free_text_list (gchar **list)
+{
+  g_return_if_fail (list != NULL);
+
+  g_free (*list);
+  g_free (list);
+}
+
 static gint
 make_list (const gchar  *text,
 	   gint          length,
@@ -223,3 +232,4 @@ gdk_text_property_to_utf8_list_for_display (GdkDisplay    *display,
       return 0;
     }
 }
+
