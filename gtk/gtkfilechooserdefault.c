@@ -6702,6 +6702,7 @@ update_chooser_entry (GtkFileChooserDefault *impl)
   struct update_chooser_entry_selected_foreach_closure closure;
   const char *file_part;
 
+  /* no need to update the file chooser's entry if there's no entry */
   if (impl->operation_mode == OPERATION_MODE_SEARCH ||
       impl->operation_mode == OPERATION_MODE_RECENT ||
       !impl->location_entry)
@@ -6761,20 +6762,7 @@ update_chooser_entry (GtkFileChooserDefault *impl)
 	    _gtk_file_chooser_entry_set_file_part (GTK_FILE_CHOOSER_ENTRY (impl->location_entry),
                                                    impl->browse_files_last_selected_name);
 
-        }
-      else if (impl->operation_mode == OPERATION_MODE_SEARCH)
-        {
-          search_get_valid_child_iter (impl, &child_iter, &closure.first_selected_iter);
-          gtk_tree_model_get (GTK_TREE_MODEL (impl->search_model), &child_iter,
-                              SEARCH_MODEL_COL_DISPLAY_NAME, &file_part,
-                              -1);
-        }
-      else if (impl->operation_mode == OPERATION_MODE_RECENT)
-        {
-          recent_get_valid_child_iter (impl, &child_iter, &closure.first_selected_iter);
-          gtk_tree_model_get (GTK_TREE_MODEL (impl->recent_model), &child_iter,
-                              RECENT_MODEL_COL_DISPLAY_NAME, &file_part,
-                              -1);
+          return;
         }
     }
   else
@@ -10479,7 +10467,6 @@ list_selection_changed (GtkTreeSelection      *selection,
 
  out:
 
-  /* TODO - Change the following functions to make them accept MODE_SEARCH */
   if (impl->location_entry)
     update_chooser_entry (impl);
 
