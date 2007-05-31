@@ -1435,12 +1435,6 @@ get_layout (GtkCellRendererText *celltext,
     {
       pango_layout_set_width (layout, priv->wrap_width * PANGO_SCALE);
       pango_layout_set_wrap (layout, priv->wrap_mode);
-
-      if (pango_layout_get_line_count (layout) == 1)
-	{
-	  pango_layout_set_width (layout, -1);
-	  pango_layout_set_wrap (layout, PANGO_WRAP_CHAR);
-	}
     }
   else
     {
