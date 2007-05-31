@@ -1,5 +1,10 @@
 2007-05-31  Mathias Hasselmann  <mathias.hasselmann@gmx.de>
 
+	* tests/autotestfilechooser.c: Reactivate the other file-chooser
+	tests. Forgot that before commiting revision 17994.
+
+2007-05-31  Mathias Hasselmann  <mathias.hasselmann@gmx.de>
+
 	* gtk/gtkfilechooserdialog.c, tests/autotestfilechooser.c: Reset
 	the internal response_requested flag, once the response triggered by
 	file_chooser_widget_response_requested has been processed (#347883).

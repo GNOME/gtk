@@ -1084,16 +1084,12 @@ main (int argc, char **argv)
 
   /* Start tests */
 
-#if 0
   passed = passed && test_black_box ();
-#endif
   passed = passed && test_confirm_overwrite ();
-#if 0
   passed = passed && test_action_widgets ();
   passed = passed && test_reload ();
   passed = passed && test_button_folder_states ();
   passed = passed && test_folder_switch_and_filters ();
-#endif
   log_test (passed, "main(): main tests");
 
   /* Warnings and errors */
