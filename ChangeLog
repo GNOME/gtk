@@ -1,3 +1,9 @@
+2007-06-01  Kristian Rietveld  <kris@gtk.org>
+
+	* gtk/gtkcellrenderertext.c (get_size): transform the ink_rect using
+	pango_extents_to_pixels to avoid rounding errors.  (Fixes #430218,
+	Shlomi Israel).
+
 2007-05-31  Mathias Hasselmann  <mathias.hasselmann@gmx.de>
 
 	* tests/autotestfilechooser.c: Reactivate the other file-chooser
