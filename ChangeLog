@@ -1,3 +1,9 @@
+2007-05-31  Mathias Hasselmann  <mathias.hasselmann@gmx.de>
+
+	* gtk/gtkfilechooserdialog.c: Reset the internal response_requested flag,
+	once the response triggered by file_chooser_widget_response_requested has
+	been processed (#347883).
+
 2007-05-31  Kristian Rietveld  <kris@gtk.org>
 
 	Merge from trunk for #438750.

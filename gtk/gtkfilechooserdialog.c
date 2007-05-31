@@ -443,21 +443,24 @@ response_cb (GtkDialog *dialog,
 	     gint       response_id)
 {
   GtkFileChooserDialogPrivate *priv;
+  gboolean response_matters;
 
   priv = GTK_FILE_CHOOSER_DIALOG_GET_PRIVATE (dialog);
 
   /* Act only on response IDs we recognize */
-  if (!(response_id == GTK_RESPONSE_ACCEPT
-	|| response_id == GTK_RESPONSE_OK
-	|| response_id == GTK_RESPONSE_YES
-	|| response_id == GTK_RESPONSE_APPLY))
-    return;
+  response_matters = 
+       response_id == GTK_RESPONSE_ACCEPT
+    || response_id == GTK_RESPONSE_OK
+    || response_id == GTK_RESPONSE_YES
+    || response_id == GTK_RESPONSE_APPLY;
 
-  if (!priv->response_requested && !_gtk_file_chooser_embed_should_respond (GTK_FILE_CHOOSER_EMBED (priv->widget)))
+  if (response_matters && !priv->response_requested &&
+      !_gtk_file_chooser_embed_should_respond (GTK_FILE_CHOOSER_EMBED (priv->widget)))
     {
       g_signal_stop_emission_by_name (dialog, "response");
-      priv->response_requested = FALSE;
     }
+
+  priv->response_requested = FALSE;
 }
 
 static GtkWidget *
