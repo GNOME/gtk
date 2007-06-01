@@ -1,3 +1,11 @@
+2007-06-01  Michael Natterer  <mitch@imendio.com>
+
+	Merge from trunk:
+
+	* gtk/gtkmenuitem.c (gtk_menu_item_position_menu): don't switch
+	submenu opening direction for overlapping reasons if there is even
+	less space on the other side (bug #441863, Tommi Komulainen).
+
 2007-05-31  Mathias Hasselmann  <mathias.hasselmann@gmx.de>
 
 	* gtk/gtkfilechooserdialog.c: Reset the internal response_requested flag,
