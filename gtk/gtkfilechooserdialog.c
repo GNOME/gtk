@@ -423,18 +423,15 @@ response_cb (GtkDialog *dialog,
 	     gint       response_id)
 {
   GtkFileChooserDialogPrivate *priv;
-  gboolean response_matters;
 
   priv = GTK_FILE_CHOOSER_DIALOG_GET_PRIVATE (dialog);
 
   /* Act only on response IDs we recognize */
-  response_matters = 
-       response_id == GTK_RESPONSE_ACCEPT
-    || response_id == GTK_RESPONSE_OK
-    || response_id == GTK_RESPONSE_YES
-    || response_id == GTK_RESPONSE_APPLY;
-
-  if (response_matters && !priv->response_requested &&
+  if ((response_id == GTK_RESPONSE_ACCEPT ||
+       response_id == GTK_RESPONSE_OK     ||
+       response_id == GTK_RESPONSE_YES    ||
+       response_id == GTK_RESPONSE_APPLY) &&
+      !priv->response_requested &&
       !_gtk_file_chooser_embed_should_respond (GTK_FILE_CHOOSER_EMBED (priv->widget)))
     {
       g_signal_stop_emission_by_name (dialog, "response");

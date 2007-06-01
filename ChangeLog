@@ -1,3 +1,8 @@
+2007-06-01  Michael Natterer  <mitch@imendio.com>
+
+	* gtk/gtkfilechooserdialog.c (response_cb): change fix for #347883
+	to not obfuscate the code.
+
 2007-06-01  Yevgen Muntyan  <muntyan@tamu.edu>
 
 	Avoid recreating pangolayouts in GtkTextView on cursor movement
