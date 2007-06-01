@@ -48,6 +48,16 @@ Release notes for 2.12
   GDK for drawing decorations. In particular, metacity <= 2.18.0 is affected
   by this. The problem has been fixed in metacity 2.18.1.
 
+* Semi-private GtkTextLayout api has changed: new GtkTextLayout method
+  invalidate_cursors(), and new functions gtk_text_layout_invalidate_cursors()
+  and gtk_text_layout_cursors_changed(), which should be used in place of
+  gtk_text_layout_invalidate() and gtk_text_layout_changed() if invalidation
+  is due to marks moved or changed selection; new GtkTextLineDisplay structure
+  member. Source compatibility is preserved; binary compatibility may break
+  only if GtkTextLineDisplay structure was created on stack or as a part
+  of another structure (in particular GnomeCanvas and its clones do not need
+  recompiling).
+
 Release notes for 2.10
 ======================
 

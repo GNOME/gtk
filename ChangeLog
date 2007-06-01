@@ -1,3 +1,21 @@
+2007-06-01  Yevgen Muntyan  <muntyan@tamu.edu>
+
+	Avoid recreating pangolayouts in GtkTextView on cursor movement
+	(#435405, Behdad Esfahbod).
+
+	* gtk/gtktextlayout.c:
+	* gtk/gtktextlayout.h: new GtkTextLayout method invalidate_cursors(),
+	and functions gtk_text_layout_invalidate_cursors() and
+	gtk_text_layout_cursors_changed(), to use when invalidation is due
+	to moved marks or changed selection.
+
+	* gtk/gtktextbtree.c:
+	* gtk/gtktextbtree.h: use what's appropriate when invalidating layout.
+
+	* gtk/gtk.symbols: add new functions.
+
+	* README.in: added a note about changed GtkTextLayout API.
+
 2007-06-01  Alp Toker  <alp.toker@collabora.co.uk>
 
 	* gdk/gdkcairo.c (gdk_cairo_set_source_pixmap): Fix doc typos.

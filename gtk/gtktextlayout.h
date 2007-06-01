@@ -209,11 +209,14 @@ struct _GtkTextLayoutClass
                                  gint               x,
                                  gint               y);
 
+  void (*invalidate_cursors)    (GtkTextLayout     *layout,
+                                 const GtkTextIter *start,
+                                 const GtkTextIter *end);
+
   /* Padding for future expansion */
   void (*_gtk_reserved1) (void);
   void (*_gtk_reserved2) (void);
   void (*_gtk_reserved3) (void);
-  void (*_gtk_reserved4) (void);
 };
 
 struct _GtkTextAttrAppearance
@@ -254,6 +257,8 @@ struct _GtkTextLineDisplay
   GtkTextLine *line;
   
   GdkColor *pg_bg_color;
+
+  guint cursors_invalid : 1;
 };
 
 extern PangoAttrType gtk_text_attr_appearance_type;
@@ -327,6 +332,9 @@ void gtk_text_layout_get_iter_at_position (GtkTextLayout     *layout,
 void gtk_text_layout_invalidate        (GtkTextLayout     *layout,
                                         const GtkTextIter *start,
                                         const GtkTextIter *end);
+void gtk_text_layout_invalidate_cursors(GtkTextLayout     *layout,
+                                        const GtkTextIter *start,
+                                        const GtkTextIter *end);
 void gtk_text_layout_free_line_data    (GtkTextLayout     *layout,
                                         GtkTextLine       *line,
                                         GtkTextLineData   *line_data);
@@ -350,6 +358,10 @@ GtkTextLineData* gtk_text_layout_wrap  (GtkTextLayout   *layout,
                                         GtkTextLine     *line,
                                         GtkTextLineData *line_data); /* may be NULL */
 void     gtk_text_layout_changed              (GtkTextLayout     *layout,
+                                               gint               y,
+                                               gint               old_height,
+                                               gint               new_height);
+void     gtk_text_layout_cursors_changed      (GtkTextLayout     *layout,
                                                gint               y,
                                                gint               old_height,
                                                gint               new_height);

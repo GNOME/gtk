@@ -3715,6 +3715,7 @@ gtk_text_iter_toggles_tag
 #if IN_HEADER(__GTK_TEXT_LAYOUT_H__)
 #if IN_FILE(__GTK_TEXT_LAYOUT_C__)
 gtk_text_layout_changed
+gtk_text_layout_cursors_changed
 gtk_text_layout_clamp_iter_to_vrange
 gtk_text_layout_default_style_changed
 gtk_text_layout_free_line_data
@@ -3733,6 +3734,7 @@ gtk_text_layout_get_line_yrange
 gtk_text_layout_get_size
 gtk_text_layout_get_type G_GNUC_CONST
 gtk_text_layout_invalidate
+gtk_text_layout_invalidate_cursors
 gtk_text_layout_is_valid
 gtk_text_layout_iter_starts_line
 gtk_text_layout_move_iter_to_line_end
