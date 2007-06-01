@@ -1,5 +1,11 @@
 2007-06-01  Michael Natterer  <mitch@imendio.com>
 
+	* gtk/gtkmenuitem.c (gtk_menu_item_position_menu): don't switch
+	submenu opening direction for overlapping reasons if there is even
+	less space on the other side (bug #441863, Tommi Komulainen).
+
+2007-06-01  Michael Natterer  <mitch@imendio.com>
+
 	* gtk/gtkfilechooserdialog.c (response_cb): change fix for #347883
 	to not obfuscate the code.
 
