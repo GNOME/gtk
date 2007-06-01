@@ -1,5 +1,12 @@
 2007-06-01  Richard Hult  <richard@imendio.com>
 
+	* gdk/quartz/gdkevents-quartz.c:
+	(get_converted_window_coordinates), (create_crossing_event): Fix the
+	coordinates in crossing events so they are relative to the right
+	window.
+
+2007-06-01  Richard Hult  <richard@imendio.com>
+
 	* gdk/quartz/gdkevents-quartz.[ch]: Make function naming
 	consistent for the various functions that retrieve data from an
 	event.

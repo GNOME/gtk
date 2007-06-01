@@ -30,26 +30,43 @@
 
 #include "gdkscreen.h"
 #include "gdkkeysyms.h"
-
 #include "gdkprivate-quartz.h"
 
 /* This is the window the mouse is currently over */
-static GdkWindow *current_mouse_window;
+static GdkWindow   *current_mouse_window;
 
 /* This is the window corresponding to the key window */
-static GdkWindow *current_keyboard_window;
+static GdkWindow   *current_keyboard_window;
 
 /* This is the pointer grab window */
-GdkWindow *_gdk_quartz_pointer_grab_window;
-static gboolean pointer_grab_owner_events;
+GdkWindow          *_gdk_quartz_pointer_grab_window;
+static gboolean     pointer_grab_owner_events;
 static GdkEventMask pointer_grab_event_mask;
-static gboolean pointer_grab_implicit;
+static gboolean     pointer_grab_implicit;
 
 /* This is the keyboard grab window */
-GdkWindow *_gdk_quartz_keyboard_grab_window;
-static gboolean keyboard_grab_owner_events;
+GdkWindow *         _gdk_quartz_keyboard_grab_window;
+static gboolean     keyboard_grab_owner_events;
 
-static void append_event (GdkEvent *event);
+static void get_child_coordinates_from_ancestor (GdkWindow *ancestor_window,
+                                                 gint       ancestor_x,
+                                                 gint       ancestor_y,
+                                                 GdkWindow *child_window, 
+                                                 gint      *child_x, 
+                                                 gint      *child_y);
+static void get_ancestor_coordinates_from_child (GdkWindow *child_window,
+                                                 gint       child_x,
+                                                 gint       child_y,
+                                                 GdkWindow *ancestor_window, 
+                                                 gint      *ancestor_x, 
+                                                 gint      *ancestor_y);
+static void get_converted_window_coordinates    (GdkWindow *in_window,
+                                                 gint       in_x,
+                                                 gint       in_y,
+                                                 GdkWindow *out_window, 
+                                                 gint      *out_x, 
+                                                 gint      *out_y);
+static void append_event                        (GdkEvent  *event);
 
 void 
 _gdk_events_init (void)
@@ -533,6 +550,7 @@ convert_window_coordinates_to_root (GdkWindow *window,
     }
 }
 
+/* FIXME: Refactor and share with scroll event. */
 static GdkEvent *
 create_crossing_event (GdkWindow      *window, 
 		       NSEvent        *nsevent, 
@@ -541,18 +559,50 @@ create_crossing_event (GdkWindow      *window,
 		       GdkNotifyType   detail)
 {
   GdkEvent *event;
-  NSPoint point;
+  gint x_tmp, y_tmp;
 
   event = gdk_event_new (event_type);
-  
+
   event->crossing.window = window;
   event->crossing.subwindow = NULL; /* FIXME */
   event->crossing.time = get_time_from_ns_event (nsevent);
 
-  point = [nsevent locationInWindow];
-  event->crossing.x = point.x;
-  event->crossing.y = point.y;
-  convert_window_coordinates_to_root (window, event->crossing.x, event->crossing.y, 
+  /* Split out this block: */
+  {
+    NSWindow *nswindow;
+    GdkWindow *toplevel;
+    NSPoint point;
+
+    nswindow = [nsevent window];
+    point = [nsevent locationInWindow];
+
+    toplevel = [(GdkQuartzView *)[nswindow contentView] gdkWindow];
+
+    x_tmp = point.x;
+
+    /* Flip the y coordinate. */
+    if (toplevel == _gdk_root)
+      y_tmp = _gdk_quartz_window_get_inverted_screen_y (point.y);
+    else
+      {
+        GdkWindowImplQuartz *impl;
+
+        impl = GDK_WINDOW_IMPL_QUARTZ (GDK_WINDOW_OBJECT (toplevel)->impl);
+        y_tmp = impl->height - point.y;
+      }
+
+    get_converted_window_coordinates (toplevel,
+                                      x_tmp, y_tmp,
+                                      window,
+                                      &x_tmp, &y_tmp);
+    }
+
+  event->crossing.x = x_tmp;
+  event->crossing.y = y_tmp;
+
+  convert_window_coordinates_to_root (window, 
+                                      event->crossing.x, 
+                                      event->crossing.y, 
 				      &event->crossing.x_root,
 				      &event->crossing.y_root);
 
@@ -839,6 +889,47 @@ get_ancestor_coordinates_from_child (GdkWindow *child_window,
 
   *ancestor_x = child_x;
   *ancestor_y = child_y;
+}
+
+/* Translates coordinates relative to one window (in_window) into
+ * coordinates relative to another window (out_window).
+ */
+static void
+get_converted_window_coordinates (GdkWindow *in_window,
+                                  gint       in_x,
+                                  gint       in_y,
+                                  GdkWindow *out_window, 
+                                  gint      *out_x, 
+                                  gint      *out_y)
+{
+  GdkWindow *in_toplevel;
+  GdkWindow *out_toplevel;
+  int in_origin_x, in_origin_y;
+  int out_origin_x, out_origin_y;
+
+  /* First translate to "in" toplevel coordinates, then on to "out"
+   * toplevel coordinates, and finally to "out" child (the passed in
+   * window) coordinates.
+   */
+
+  in_toplevel = gdk_window_get_toplevel (in_window);
+  out_toplevel  = gdk_window_get_toplevel (out_window);
+
+  /* Translate in_x, in_y to "in" toplevel coordinates. */
+  get_ancestor_coordinates_from_child (in_window, in_x, in_y,
+                                       in_toplevel, &in_x, &in_y);
+
+  gdk_window_get_origin (in_toplevel, &in_origin_x, &in_origin_y);
+  gdk_window_get_origin (out_toplevel, &out_origin_x, &out_origin_y);
+
+  /* Translate in_x, in_y to "out" toplevel coordinates. */
+  in_x -= out_origin_x - in_origin_x;
+  in_y -= out_origin_y - in_origin_y;
+
+  get_child_coordinates_from_ancestor (out_toplevel, 
+                                       in_x, in_y,
+                                       out_window,
+                                       out_x, out_y);
 }
 
 /* Given a mouse NSEvent, returns the window in which the pointer
