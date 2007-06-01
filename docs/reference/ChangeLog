@@ -1,3 +1,8 @@
+2007-06-01   Matthias Clasen  <mclasen@redhat.com>
+	
+	* gdk/gdk-sections.txt: Add new composited window api
+	* gdk/tmpl/windows.sgml: Add composited window example
+
 2007-05-26   Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/migrating*.sgml: Some cleanups

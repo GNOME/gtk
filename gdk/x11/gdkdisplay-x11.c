@@ -54,6 +54,14 @@
 #include <X11/extensions/shape.h>
 #endif
 
+#ifdef HAVE_XCOMPOSITE
+#include <X11/extensions/Xcomposite.h>
+#endif
+
+#ifdef HAVE_XDAMAGE
+#include <X11/extensions/Xdamage.h>
+#endif
+
 
 static void   gdk_display_x11_dispose            (GObject            *object);
 static void   gdk_display_x11_finalize           (GObject            *object);
@@ -205,6 +213,29 @@ gdk_display_open (const gchar *display_name)
   else
 #endif
     display_x11->have_xfixes = FALSE;
+
+#ifdef HAVE_XCOMPOSITE
+  if (XCompositeQueryExtension (display_x11->xdisplay,
+				&ignore, &ignore))
+      display_x11->have_xcomposite = TRUE;
+  else
+#endif
+    display_x11->have_xcomposite = FALSE;
+
+#ifdef HAVE_XDAMAGE
+  if (XDamageQueryExtension (display_x11->xdisplay,
+			     &display_x11->xdamage_event_base,
+			     &ignore))
+    {
+      display_x11->have_xdamage = TRUE;
+
+      gdk_x11_register_standard_event_type (display,
+					    display_x11->xdamage_event_base,
+					    XDamageNumberEvents);
+    }
+  else
+#endif
+    display_x11->have_xdamage = FALSE;
 
   display_x11->have_shapes = FALSE;
   display_x11->have_input_shapes = FALSE;
@@ -1362,6 +1393,31 @@ gdk_x11_display_get_startup_notification_id (GdkDisplay *display)
 {
   return GDK_DISPLAY_X11 (display)->startup_notification_id;
 }
+
+/**
+ * gdk_display_supports_composite:
+ * @display: a #GdkDisplay
+ *
+ * Returns %TRUE if gdk_window_set_composited() can be used
+ * to redirect drawing on the window using compositing.
+ *
+ * Currently this only works on X11 with XComposite and
+ * XDamage extensions available.
+ *
+ * Returns: %TRUE if windows may be composited.
+ *
+ * Since: 2.12
+ */
+gboolean
+gdk_display_supports_composite (GdkDisplay *display)
+{
+  GdkDisplayX11 *x11_display = GDK_DISPLAY_X11 (display);
+
+  return x11_display->have_xcomposite &&
+	 x11_display->have_xdamage &&
+	 x11_display->have_xfixes;
+}
+
 
 #define __GDK_DISPLAY_X11_C__
 #include "gdkaliasdef.c"

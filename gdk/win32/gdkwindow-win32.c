@@ -3571,3 +3571,8 @@ gdk_window_set_opacity (GdkWindow *window,
 					 opacity * 0xff,
 					 LWA_ALPHA));
 }
+
+void
+_gdk_windowing_window_set_composited (GdkWindow *window, gboolean composited)
+{
+}

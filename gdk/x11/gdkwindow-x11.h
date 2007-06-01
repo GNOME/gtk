@@ -29,6 +29,10 @@
 
 #include <gdk/x11/gdkdrawable-x11.h>
 
+#ifdef HAVE_XDAMAGE
+#include <X11/extensions/Xdamage.h>
+#endif
+
 #ifdef HAVE_XSYNC
 #include <X11/extensions/sync.h>
 #endif
@@ -79,6 +83,10 @@ struct _GdkWindowImplX11
   gint8 toplevel_window_type;
   guint override_redirect : 1;
   guint use_synchronized_configure : 1;
+
+#if defined (HAVE_XCOMPOSITE) && defined(HAVE_XDAMAGE) && defined (HAVE_XFIXES)
+  Damage damage;
+#endif
 };
  
 struct _GdkWindowImplX11Class 

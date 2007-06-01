@@ -2155,3 +2155,8 @@ gdk_window_set_opacity (GdkWindow *window,
 
   [impl->toplevel setAlphaValue: opacity];
 }
+
+void
+_gdk_windowing_window_set_composited (GdkWindow *window, gboolean composited)
+{
+}

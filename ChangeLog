@@ -1,3 +1,28 @@
+2007-06-01  Matthias Clasen  <mclasen@redhat.com>
+
+	Add support for composited child windows.  (#412882, Ryan Lortie)
+
+	* gdk/gdk.symbols:
+	* gdk/gdkdisplay.h:
+	* gdk/gdkinternals.h:
+	* gdk/gdkwindow.[hc]: Add gdk_display_supports_composite() and
+	gdk_window_set_composited().
+
+	* gdk/x11/gdkevents-x11.c:
+	* gdk/x11/gdkdisplay-x11.[hc]:
+	* gdk/x11/gdkwindow-x11.[hc]: X11 implementation.
+
+	* gdk/win32/gdkdisplay-win32.c:
+	* gdk/win32/gdkwindow-win32.c: Dummy win32 implementration.
+
+	* gdk/quartz/gdkdisplay-quartz.c:
+	* gdk/quartz/gdkwindow-quartz.c: Dummy Quartz implementation.
+
+	* gdk/directfb/gdkdisplay-directfb.c:
+	* gdk/directfb/gdkwindow-directfb.c: Dummy DirectFB implementation.
+
+	* tests/testgtk.c: Add a "composited window" test.
+
 2007-06-01  Michael Natterer  <mitch@imendio.com>
 
 	* gtk/gtkmenuitem.c (gtk_menu_item_position_menu): don't switch

@@ -81,6 +81,10 @@ struct _GdkDisplayX11
   gboolean have_xfixes;
   gint xfixes_event_base;
 
+  gboolean have_xcomposite;
+  gboolean have_xdamage;
+  gint xdamage_event_base;
+
   /* If the SECURITY extension is in place, whether this client holds 
    * a trusted authorization and so is allowed to make various requests 
    * (grabs, properties etc.) Otherwise always TRUE. */

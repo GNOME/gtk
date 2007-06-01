@@ -337,6 +337,9 @@ void _gdk_windowing_window_destroy_foreign (GdkWindow *window);
 void _gdk_windowing_display_set_sm_client_id (GdkDisplay  *display,
 					      const gchar *sm_client_id);
 
+void _gdk_windowing_window_set_composited (GdkWindow *window,
+					   gboolean composited);
+
 #define GDK_TYPE_PAINTABLE            (_gdk_paintable_get_type ())
 #define GDK_PAINTABLE(obj)            (G_TYPE_CHECK_INSTANCE_CAST ((obj), GDK_TYPE_PAINTABLE, GdkPaintable))
 #define GDK_IS_PAINTABLE(obj)	      (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GDK_TYPE_PAINTABLE))
