@@ -1,3 +1,7 @@
+2007-06-01  Alp Toker  <alp.toker@collabora.co.uk>
+
+	* gdk/gdkcairo.c (gdk_cairo_set_source_pixmap): Fix doc typos.
+
 2007-05-31  Yevgen Muntyan  <muntyan@tamu.edu>
 
 	* gtk/gtkstyle.c (get_insertion_cursor_gc): use text colors from

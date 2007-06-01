@@ -233,7 +233,7 @@ gdk_cairo_set_source_pixbuf (cairo_t   *cr,
  * 
  * Sets the given pixmap as the source pattern for the Cairo context.
  * The pattern has an extend mode of %CAIRO_EXTEND_NONE and is aligned
- * so that the origin of @pixbuf is @pixbuf_x, @pixbuf_y
+ * so that the origin of @pixmap is @pixmap_x, @pixmap_y
  *
  * Since: 2.10
  **/
