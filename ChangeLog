@@ -1,3 +1,13 @@
+2007-06-01  Richard Hult  <richard@imendio.com>
+
+	* gdk/quartz/gdkevents-quartz.[ch]: Make function naming
+	consistent for the various functions that retrieve data from an
+	event.
+
+	* gdk/quartz/gdkprivate-quartz.h: 
+	* gdk/quartz/gdkwindow-quartz.[ch]: Remove the now unused
+	_gdk_quartz_window_find_child_by_point() function.
+
 2007-06-01  Matthias Clasen  <mclasen@redhat.com>
 
 	Add support for composited child windows.  (#412882, Ryan Lortie)

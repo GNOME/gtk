@@ -2,7 +2,7 @@
  *
  * Copyright (C) 1995-1997 Peter Mattis, Spencer Kimball and Josh MacDonald
  * Copyright (C) 1998-2002 Tor Lillqvist
- * Copyright (C) 2005-2006 Imendio AB
+ * Copyright (C) 2005-2007 Imendio AB
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -336,7 +336,7 @@ find_window_interested_in_event_mask (GdkWindow    *window,
 }
 
 static guint32
-get_event_time (NSEvent *event)
+get_time_from_ns_event (NSEvent *event)
 {
   double time = [event timestamp];
   
@@ -344,8 +344,12 @@ get_event_time (NSEvent *event)
 }
 
 static int
-convert_mouse_button_number (int button)
+get_mouse_button_from_ns_event (NSEvent *event)
 {
+  int button;
+
+  button = [event buttonNumber];
+
   switch (button)
     {
     case 0:
@@ -357,6 +361,28 @@ convert_mouse_button_number (int button)
     default:
       return button + 1;
     }
+}
+
+static GdkModifierType
+get_keyboard_modifiers_from_ns_event (NSEvent *nsevent)
+{
+  GdkModifierType modifiers = 0;
+  int nsflags;
+
+  nsflags = [nsevent modifierFlags];
+  
+  if (nsflags & NSAlphaShiftKeyMask)
+    modifiers |= GDK_LOCK_MASK;
+  if (nsflags & NSShiftKeyMask)
+    modifiers |= GDK_SHIFT_MASK;
+  if (nsflags & NSControlKeyMask)
+    modifiers |= GDK_CONTROL_MASK;
+  if (nsflags & NSCommandKeyMask)
+    modifiers |= GDK_MOD1_MASK;
+
+  /* FIXME: Support GDK_BUTTON_MASK */
+
+  return modifiers;
 }
 
 /* Return an event mask from an NSEvent */
@@ -397,7 +423,7 @@ get_event_mask_from_ns_event (NSEvent *nsevent)
 		GDK_POINTER_MOTION_HINT_MASK |
 		GDK_BUTTON_MOTION_MASK);
 
-	if (convert_mouse_button_number ([nsevent buttonNumber]) == 2)
+	if (get_mouse_button_from_ns_event (nsevent) == 2)
 	  mask |= (GDK_BUTTON2_MOTION_MASK | GDK_BUTTON2_MOTION_MASK | 
 		   GDK_BUTTON2_MASK);
 
@@ -488,28 +514,6 @@ gdk_window_is_ancestor (GdkWindow *ancestor,
 	  gdk_window_is_ancestor (ancestor, gdk_window_get_parent (window)));
 }
 
-static GdkModifierType
-get_keyboard_modifiers_from_nsevent (NSEvent *nsevent)
-{
-  GdkModifierType modifiers = 0;
-  int nsflags;
-
-  nsflags = [nsevent modifierFlags];
-  
-  if (nsflags & NSAlphaShiftKeyMask)
-    modifiers |= GDK_LOCK_MASK;
-  if (nsflags & NSShiftKeyMask)
-    modifiers |= GDK_SHIFT_MASK;
-  if (nsflags & NSControlKeyMask)
-    modifiers |= GDK_CONTROL_MASK;
-  if (nsflags & NSCommandKeyMask)
-    modifiers |= GDK_MOD1_MASK;
-
-  /* FIXME: Support GDK_BUTTON_MASK */
-
-  return modifiers;
-}
-
 static void
 convert_window_coordinates_to_root (GdkWindow *window,
 				    gdouble    x,
@@ -543,7 +547,7 @@ create_crossing_event (GdkWindow      *window,
   
   event->crossing.window = window;
   event->crossing.subwindow = NULL; /* FIXME */
-  event->crossing.time = get_event_time (nsevent);
+  event->crossing.time = get_time_from_ns_event (nsevent);
 
   point = [nsevent locationInWindow];
   event->crossing.x = point.x;
@@ -842,9 +846,9 @@ get_ancestor_coordinates_from_child (GdkWindow *child_window,
  * to the found window, and normal GDK coordinates, not Quartz.
  */
 static GdkWindow *
-find_window_for_mouse_nsevent (NSEvent *nsevent,
-			       gint    *x_ret,
-			       gint    *y_ret)
+find_window_for_mouse_ns_event (NSEvent *nsevent,
+                                gint    *x_ret,
+                                gint    *y_ret)
 {
   NSWindow *nswindow;
   GdkWindow *toplevel;
@@ -891,7 +895,9 @@ find_window_for_mouse_nsevent (NSEvent *nsevent,
  * into account grabs, event propagation, and event masks.
  */
 static GdkWindow *
-find_window_for_nsevent (NSEvent *nsevent, gint *x, gint *y)
+find_window_for_ns_event (NSEvent *nsevent, 
+                          gint    *x, 
+                          gint    *y)
 {
   NSWindow *nswindow = [nsevent window];
   NSEventType event_type = [nsevent type];
@@ -914,7 +920,7 @@ find_window_for_nsevent (NSEvent *nsevent, gint *x, gint *y)
     {
       GdkWindow *mouse_window;
 
-      mouse_window = find_window_for_mouse_nsevent (nsevent, x, y);
+      mouse_window = find_window_for_mouse_ns_event (nsevent, x, y);
 
       if (!mouse_window)
 	mouse_window = _gdk_root;
@@ -968,7 +974,7 @@ find_window_for_nsevent (NSEvent *nsevent, gint *x, gint *y)
 	  {
 	    if (pointer_grab_owner_events)
 	      {
-		mouse_window = find_window_for_mouse_nsevent (nsevent, x, y);
+		mouse_window = find_window_for_mouse_ns_event (nsevent, x, y);
 		event_mask = get_event_mask_from_ns_event (nsevent);
 		real_window = find_window_interested_in_event_mask (mouse_window, event_mask, TRUE);
 		
@@ -1011,7 +1017,7 @@ find_window_for_nsevent (NSEvent *nsevent, gint *x, gint *y)
 	else 
 	  {
 	    /* The non-grabbed case. */
-	    mouse_window = find_window_for_mouse_nsevent (nsevent, x, y);
+	    mouse_window = find_window_for_mouse_ns_event (nsevent, x, y);
 	    event_mask = get_event_mask_from_ns_event (nsevent);
 	    real_window = find_window_interested_in_event_mask (mouse_window, event_mask, TRUE);
 	    
@@ -1033,7 +1039,7 @@ find_window_for_nsevent (NSEvent *nsevent, gint *x, gint *y)
       {
 	GdkWindow *mouse_window;
 
-	mouse_window = find_window_for_mouse_nsevent (nsevent, x, y);
+	mouse_window = find_window_for_mouse_ns_event (nsevent, x, y);
 	synthesize_crossing_events (mouse_window, GDK_CROSSING_NORMAL, nsevent, *x, *y);
       }
       break;
@@ -1060,6 +1066,7 @@ find_window_for_nsevent (NSEvent *nsevent, gint *x, gint *y)
     case NSSystemDefined:
       /* We ignore these events */
       break;
+
     default:
       NSLog(@"Unhandled event %@", nsevent);
     }
@@ -1068,8 +1075,10 @@ find_window_for_nsevent (NSEvent *nsevent, gint *x, gint *y)
 }
 
 static GdkEvent *
-create_button_event (GdkWindow *window, NSEvent *nsevent,
-		     gint x, gint y)
+create_button_event (GdkWindow *window, 
+                     NSEvent   *nsevent,
+		     gint       x,
+                     gint       y)
 {
   GdkEvent *event;
   GdkEventType type;
@@ -1091,15 +1100,15 @@ create_button_event (GdkWindow *window, NSEvent *nsevent,
       g_assert_not_reached ();
     }
   
-  button = convert_mouse_button_number ([nsevent buttonNumber]);
+  button = get_mouse_button_from_ns_event (nsevent);
 
   event = gdk_event_new (type);
   event->button.window = window;
-  event->button.time = get_event_time (nsevent);
+  event->button.time = get_time_from_ns_event (nsevent);
   event->button.x = x;
   event->button.y = y;
   /* FIXME event->axes */
-  event->button.state = get_keyboard_modifiers_from_nsevent (nsevent);
+  event->button.state = get_keyboard_modifiers_from_ns_event (nsevent);
   event->button.button = button;
   event->button.device = _gdk_display->core_pointer;
   convert_window_coordinates_to_root (window, x, y, 
@@ -1110,7 +1119,10 @@ create_button_event (GdkWindow *window, NSEvent *nsevent,
 }
 
 static GdkEvent *
-create_motion_event (GdkWindow *window, NSEvent *nsevent, gint x, gint y)
+create_motion_event (GdkWindow *window, 
+                     NSEvent   *nsevent, 
+                     gint       x, 
+                     gint       y)
 {
   GdkEvent *event;
   GdkEventType type;
@@ -1122,7 +1134,7 @@ create_motion_event (GdkWindow *window, NSEvent *nsevent, gint x, gint y)
     case NSLeftMouseDragged:
     case NSRightMouseDragged:
     case NSOtherMouseDragged:
-      button = convert_mouse_button_number ([nsevent buttonNumber]);
+      button = get_mouse_button_from_ns_event (nsevent);
       /* Fall through */
     case NSMouseMoved:
       type = GDK_MOTION_NOTIFY;
@@ -1135,11 +1147,11 @@ create_motion_event (GdkWindow *window, NSEvent *nsevent, gint x, gint y)
   if (button >= 1 && button <= 5)
     state = (1 << (button + 7));
   
-  state |= get_keyboard_modifiers_from_nsevent (nsevent);
+  state |= get_keyboard_modifiers_from_ns_event (nsevent);
 
   event = gdk_event_new (type);
   event->motion.window = window;
-  event->motion.time = get_event_time (nsevent);
+  event->motion.time = get_time_from_ns_event (nsevent);
   event->motion.x = x;
   event->motion.y = y;
   /* FIXME event->axes */
@@ -1153,14 +1165,16 @@ create_motion_event (GdkWindow *window, NSEvent *nsevent, gint x, gint y)
 }
 
 static GdkEvent *
-create_scroll_event (GdkWindow *window, NSEvent *nsevent, GdkScrollDirection direction)
+create_scroll_event (GdkWindow          *window, 
+                     NSEvent            *nsevent, 
+                     GdkScrollDirection  direction)
 {
   GdkEvent *event;
   NSPoint point;
   
   event = gdk_event_new (GDK_SCROLL);
   event->scroll.window = window;
-  event->scroll.time = get_event_time (nsevent);
+  event->scroll.time = get_time_from_ns_event (nsevent);
 
   point = [nsevent locationInWindow];
   event->scroll.x = point.x;
@@ -1176,7 +1190,9 @@ create_scroll_event (GdkWindow *window, NSEvent *nsevent, GdkScrollDirection dir
 }
 
 static GdkEvent *
-create_key_event (GdkWindow *window, NSEvent *nsevent, GdkEventType type)
+create_key_event (GdkWindow    *window, 
+                  NSEvent      *nsevent, 
+                  GdkEventType  type)
 {
   GdkEvent *event;
   gchar buf[7];
@@ -1184,8 +1200,8 @@ create_key_event (GdkWindow *window, NSEvent *nsevent, GdkEventType type)
 
   event = gdk_event_new (type);
   event->key.window = window;
-  event->key.time = get_event_time (nsevent);
-  event->key.state = get_keyboard_modifiers_from_nsevent (nsevent);
+  event->key.time = get_time_from_ns_event (nsevent);
+  event->key.state = get_keyboard_modifiers_from_ns_event (nsevent);
   event->key.hardware_keycode = [nsevent keyCode];
   event->key.group = ([nsevent modifierFlags] & NSAlternateKeyMask) ? 1 : 0;
 
@@ -1267,7 +1283,7 @@ gdk_event_translate (NSEvent *nsevent)
       /* Apply global filters */
 
       GdkFilterReturn result = apply_filters (NULL, nsevent, _gdk_default_filters);
-      
+
       /* If result is GDK_FILTER_CONTINUE, we continue as if nothing
        * happened. If it is GDK_FILTER_REMOVE,
        * we return TRUE and won't send the message to Quartz.
@@ -1300,13 +1316,8 @@ gdk_event_translate (NSEvent *nsevent)
 	}
     }
 
-  window = find_window_for_nsevent (nsevent, &x, &y);
+  window = find_window_for_ns_event (nsevent, &x, &y);
 
-  /* FIXME: During owner_event grabs, we don't find a window when there is a
-   * click on a no-window widget, which makes popups etc still stay up. Need
-   * to figure out why that is.
-   */
-  
   if (!window)
     return FALSE;
 
