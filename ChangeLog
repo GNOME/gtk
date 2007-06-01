@@ -1,3 +1,9 @@
+2007-05-31  Yevgen Muntyan  <muntyan@tamu.edu>
+
+	* gtk/gtkstyle.c (get_insertion_cursor_gc): use text colors from
+	widget style to draw cursor instead of hardcoded black and grey
+	(#79585, comment #30).
+
 2007-06-01  Kristian Rietveld  <kris@gtk.org>
 
 	* gtk/gtkcellrenderertext.c (get_size): transform the ink_rect using

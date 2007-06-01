@@ -6641,24 +6641,26 @@ get_insertion_cursor_gc (GtkWidget *widget,
 	}
     }
 
+  /* Cursors in text widgets are drawn only in NORMAL state,
+   * so we can use text[GTK_STATE_NORMAL] as text color here */
   if (is_primary)
     {
       if (!cursor_info->primary_gc)
 	cursor_info->primary_gc = make_cursor_gc (widget,
 						  "cursor-color",
-						  &widget->style->black);
-	
+						  &widget->style->text[GTK_STATE_NORMAL]);
+
       return cursor_info->primary_gc;
     }
   else
     {
-      static const GdkColor gray = { 0, 0x8888, 0x8888, 0x8888 };
-      
       if (!cursor_info->secondary_gc)
 	cursor_info->secondary_gc = make_cursor_gc (widget,
 						    "secondary-cursor-color",
-						    &gray);
-	
+						    /* text_aa is the average of text and base colors,
+						     * in usual black-on-white case it's grey. */
+						    &widget->style->text_aa[GTK_STATE_NORMAL]);
+
       return cursor_info->secondary_gc;
     }
 }
