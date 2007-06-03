@@ -1,3 +1,7 @@
+2007-06-04   Emmanuele Bassi  <ebassi@gnome.org>
+
+	* gtk/gtk-sections.txt: Add new GtkRadioButton API.
+
 2007-06-03   Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/Makefile.am:
