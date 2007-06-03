@@ -1234,7 +1234,7 @@ choose_icon (GtkIconTheme       *icon_theme,
   GtkIconThemePrivate *priv;
   GList *l;
   GtkIconInfo *icon_info = NULL;
-  UnthemedIcon *unthemed_icon;
+  UnthemedIcon *unthemed_icon = NULL;
   gboolean allow_svg;
   gboolean use_builtin;
   gint i;

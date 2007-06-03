@@ -1,3 +1,9 @@
+2007-06-03  Torsten Schoenfeld  <kaffeetisch@gmx.de>
+
+	* gtk/gtkicontheme.c (choose_icon): Initialize unthemed_icon to NULL
+	to avoid accessing uninitialized memory when
+	gtk_icon_theme_choose_icon() is called with an empty names list.
+
 2007-06-03  Richard Hult  <richard@imendio.com>
 
 	* gdk/quartz/gdkevents-quartz.c: (create_crossing_event): Set the key
