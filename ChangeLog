@@ -1,3 +1,7 @@
+2007-06-03  Matthias Clasen  <mclasen@redhat.com>
+
+	* configure.in: Allow to disable Xinerama.  (#348065, Diego Pettenò)
+
 2007-06-03  Xan Lopez  <xan@gnome.org>
 
 	* gtk/gtknotebook.c: remove index parameter in gtk_notebook_switch_page

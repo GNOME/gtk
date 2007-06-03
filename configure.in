@@ -199,6 +199,10 @@ AC_ARG_ENABLE(xkb,
               [AC_HELP_STRING([--enable-xkb],
                               [support XKB [default=maybe]])],,
               [enable_xkb="maybe"])
+AC_ARG_ENABLE(xinerama,
+              [AC_HELP_STRING([--enable-xinerama],
+	                      [support xinerama extension if available [default=yes]])],,
+              [enable_xinerama="yes"])
 AC_ARG_ENABLE(rebuilds,
               [AC_HELP_STRING([--disable-rebuilds],
                               [disable all source autogeneration rules])],,
@@ -1230,12 +1234,12 @@ if test "x$gdktarget" = "xx11"; then
     fi
   fi
 
-  # Check for Xinerama extension (Solaris impl or Xfree impl)
-
-  gtk_save_cppflags="$CPPFLAGS"
-  CPPFLAGS="$CPPFLAGS $x_cflags"
+  if test "x$enable_xinerama" = "xyes"; then
+    # Check for Xinerama extension (Solaris impl or Xfree impl)
+    gtk_save_cppflags="$CPPFLAGS"
+    CPPFLAGS="$CPPFLAGS $x_cflags"
   
-  case "$host" in
+    case "$host" in
       *-*-solaris*)
           # Check for solaris
 	  AC_MSG_CHECKING(for Xinerama support on Solaris)
@@ -1278,8 +1282,9 @@ if test "x$gdktarget" = "xx11"; then
             AC_MSG_RESULT(no)
          fi
          ;;
-  esac
-
+    esac
+  fi
+  
   # set up things for XInput
 
   if test "x$with_xinput" = "xxfree" || test "x$with_xinput" = "xyes"; then
