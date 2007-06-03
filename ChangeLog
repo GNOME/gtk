@@ -1,3 +1,13 @@
+2007-06-03  Richard Hult  <richard@imendio.com>
+
+	* gdk/quartz/gdkevents-quartz.c: Make pointer grab emulation work a bit
+	better:
+	(gdk_display_pointer_is_grabbed): Do what the docs say and don't
+	consider implicit grabs here.
+	(gdk_pointer_grab): Overriding a grab by the same app should always be
+	succesful.
+	(gdk_event_translate): Implicit grabs should not be owner events.
+
 2007-06-03  Matthias Clasen  <mclasen@redhat.com>
 
 	* NEWS: Updates

@@ -183,7 +183,8 @@ pointer_ungrab_internal (gboolean only_if_implicit)
 gboolean
 gdk_display_pointer_is_grabbed (GdkDisplay *display)
 {
-  return _gdk_quartz_pointer_grab_window != NULL;
+  return (_gdk_quartz_pointer_grab_window != NULL && 
+          !pointer_grab_implicit);
 }
 
 gboolean
@@ -241,15 +242,11 @@ gdk_pointer_grab (GdkWindow    *window,
 
   if (_gdk_quartz_pointer_grab_window)
     {
-      if (_gdk_quartz_pointer_grab_window == window && !pointer_grab_implicit)
-        return GDK_GRAB_ALREADY_GRABBED;
-      else
-        {
-          if (_gdk_quartz_pointer_grab_window != window)
-            generate_grab_broken_event (_gdk_quartz_pointer_grab_window,
-					FALSE, pointer_grab_implicit, window);
-          pointer_ungrab_internal (TRUE);
-        }
+      if (_gdk_quartz_pointer_grab_window != window)
+        generate_grab_broken_event (_gdk_quartz_pointer_grab_window,
+                                    FALSE, pointer_grab_implicit, window);
+
+      pointer_ungrab_internal (FALSE);
     }
 
   return pointer_grab_internal (window, owner_events, event_mask, 
@@ -1428,14 +1425,13 @@ gdk_event_translate (NSEvent *nsevent)
 	GdkEventMask event_mask;
 
 	/* Emulate implicit grab, when the window has both PRESS and RELEASE
-	 * in its mask, like X (and make it owner_events since that's what
-	 * implicit grabs are like).
+	 * in its mask, like X.
 	 */
 	event_mask = (GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK);
 	if (!_gdk_quartz_pointer_grab_window &&
 	    (GDK_WINDOW_OBJECT (window)->event_mask & event_mask) == event_mask)
 	  {
-	    pointer_grab_internal (window, TRUE,
+	    pointer_grab_internal (window, FALSE,
 				   GDK_WINDOW_OBJECT (window)->event_mask,
 				   NULL, NULL, TRUE);
 	  }
