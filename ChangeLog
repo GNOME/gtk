@@ -1,3 +1,8 @@
+2007-06-03  Xan Lopez  <xan@gnome.org>
+
+	* gtk/gtknotebook.c: remove index parameter in gtk_notebook_switch_page
+	and remove g_return_if checks in private functions. (#443247)
+
 2007-06-01  Richard Hult  <richard@imendio.com>
 
 	* gdk/quartz/gdkevents-quartz.c:
