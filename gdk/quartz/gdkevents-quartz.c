@@ -605,8 +605,9 @@ create_crossing_event (GdkWindow      *window,
 
   event->crossing.mode = mode;
   event->crossing.detail = detail;
-  /* FIXME: focus */
-  /* FIXME: state, (button state too) */
+  event->crossing.state = get_keyboard_modifiers_from_ns_event (nsevent);
+
+  /* FIXME: focus and button state */
 
   return event;
 }
