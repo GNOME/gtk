@@ -1,5 +1,9 @@
 2007-06-03  Matthias Clasen  <mclasen@redhat.com>
 
+	* docs/tools/widgets.c: Add a volume button
+
+2007-06-03  Matthias Clasen  <mclasen@redhat.com>
+
 	* gtk/gtkradiobutton.c:
 	* gtk/gtkradiomenuitem.c: Fix doc typos.  
 

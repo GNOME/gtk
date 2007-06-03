@@ -912,6 +912,19 @@ create_image (void)
 }
 
 static WidgetInfo *
+create_volume_button (void)
+{
+  GtkWidget *button, *widget;
+
+  button = gtk_volume_button_new ();
+  gtk_scale_button_set_value (GTK_SCALE_BUTTON (button), 33);
+  /* Hack: get the private dock */
+  widget = GTK_SCALE_BUTTON (button)->plus_button->parent->parent->parent;
+  gtk_widget_show_all (widget);
+  return new_widget_info ("volumebutton", widget, ASIS);
+}
+
+static WidgetInfo *
 create_assistant (void)
 {
   GtkWidget *widget;
@@ -981,6 +994,7 @@ get_all_widgets (void)
   retval = g_list_prepend (retval, create_recent_chooser_dialog ());
   retval = g_list_prepend (retval, create_page_setup_dialog ());
   retval = g_list_prepend (retval, create_print_dialog ());
+  retval = g_list_prepend (retval, create_volume_button ());
 
   return retval;
 }

@@ -1,3 +1,9 @@
+2007-06-03   Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/Makefile.am:
+	* gtk/visual_index.xml:
+	* gtk/images/volumebutton.png: Volume button image
+
 2007-06-01   Matthias Clasen  <mclasen@redhat.com>
 	
 	* gdk/gdk-sections.txt: Add new composited window api

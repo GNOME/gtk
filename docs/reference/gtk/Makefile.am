@@ -313,6 +313,7 @@ HTML_IMAGES = \
 	$(srcdir)/images/statusbar.png					\
 	$(srcdir)/images/toggle-button.png				\
 	$(srcdir)/images/toolbar.png					\
+	$(srcdir)/images/volumebutton.png				\
 	$(srcdir)/images/window.png
 
 # Extra options to supply to gtkdoc-fixref
