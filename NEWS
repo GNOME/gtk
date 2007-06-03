@@ -1,3 +1,47 @@
+Overview of Changes from GTK+ 2.11.0 to 2.11.1
+==============================================
+
+* GtkTextView:
+ - Marks can be created independent from buffers
+ - Cursor color follows text color
+
+* OS X port:
+ - Many improvements
+
+* GDK:
+ - Add support for composited child windows
+
+* Bugs fixed:
+ 347883 do-overwrite-confirmation does nothing in 2.10
+ 440890 Crash in gtktooltip.c (GTK+ 2.11.0)
+ 440982 crash in gtk due to missing stock icon gtk-clear
+ 418047 GtkIconView sizing is very broken
+ 438440 All tests for Gtk2 failing when installing from CPAN
+ 314172 gtk_toolbar_set_icon_size() should be 'undeprecated'
+ 348493 _gdk_quartz_copy_to_image needs implementing for pixmaps
+ 398414 Printing to file with multiple pages per sheet
+ 412882 gdkwindow should support the concept of "composited"
+ 430218 Some file names are being cut unnecessarily with RTL Inte...
+ 435405 text view recreates pangolayouts all the time
+ 439565 Crash in GtkIconView a11y code
+ 440040 Reference counting in GtkPrintOperation goes awry
+ 440511 xcursors.h: illegal initializing
+ 440780 GtkAction set_short_label might be broken
+ 441443 jpeg loader does not set error upon abortion
+ 442172 Small cleanup in gtk_notebook_set_current_page and fix ty...
+ 442183 Updated gdk/gdkkeysyms-update.pl
+ 443247 Two GtkNotebook cleanups
+ 441767 Icon cache isn't validated properly
+ 442326 Overview navigator traps mouse on wrong screen in dual mo...
+ 79585 	GtkTextView API to change cursor color
+ 132818 Allow GtkTextMark subclasses to be used in GtkTextBuffer
+ 348065 [PATCH] Remove automagic status of xinerama dependency
+
+* Updated translations:
+ Thai (th)
+ Spanish (es)
+
+
 Overview of Changes from GTK+ 2.10.x to 2.11
 ============================================
 
