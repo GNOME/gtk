@@ -1,3 +1,16 @@
+2007-06-04  Emmanuele Bassi  <ebassi@gnome.org>
+
+	* gtk/gtkradiobutton.h:
+	* gtk/gtkradiobutton.c:
+	* gtk/gtk.symbols: Add gtk_radio_button_set_value(),
+	gtk_radio_button_get_current_value() and gtk_radio_button_get_value().
+	Use these functions to set and get an arbitrary integer associated to
+	a GtkRadioButton in a group, like the value associated to a
+	GtkRadioAction.
+
+	* tests/testgtk.c:
+	(create_radio_buttons), (radio_toggled_cb): Exercise the new API.
+
 2007-06-03  Torsten Schoenfeld  <kaffeetisch@gmx.de>
 
 	* gtk/gtkicontheme.c (choose_icon): Initialize unthemed_icon to NULL
