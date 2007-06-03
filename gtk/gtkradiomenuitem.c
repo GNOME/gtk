@@ -355,7 +355,7 @@ gtk_radio_menu_item_class_init (GtkRadioMenuItemClass *klass)
    * Emitted when the group of radio menu items that a radio menu item belongs
    * to changes. This is emitted when a radio menu item switches from
    * being alone to being part of a group of 2 or more menu items, or
-   * vice-versa, and when a buttton is moved from one group of 2 or
+   * vice-versa, and when a button is moved from one group of 2 or
    * more menu items ton a different one, but not when the composition
    * of the group that a menu item belongs to changes.
    *

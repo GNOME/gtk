@@ -1,5 +1,10 @@
 2007-06-03  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkradiobutton.c:
+	* gtk/gtkradiomenuitem.c: Fix doc typos.  
+
+2007-06-03  Matthias Clasen  <mclasen@redhat.com>
+
 	* configure.in: Allow to disable Xinerama.  (#348065, Diego Pettenò)
 
 2007-06-03  Xan Lopez  <xan@gnome.org>
