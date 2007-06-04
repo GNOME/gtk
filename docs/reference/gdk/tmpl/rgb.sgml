@@ -328,7 +328,6 @@ colors. This is used only for gdk_draw_indexed_image().
 @colors: The colors, represented as 0xRRGGBB integer values.
 @n_colors: The number of colors in the cmap.
 
-
 <!-- ##### FUNCTION gdk_rgb_gc_set_foreground ##### -->
 <para>
 Sets the foreground color in @gc to the specified color (or the

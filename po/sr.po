@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.10\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-05-24 00:20-0400\n"
+"POT-Creation-Date: 2007-06-04 12:18-0400\n"
 "PO-Revision-Date: 2007-03-11 18:22+0100\n"
 "Last-Translator: Горан Ракић <grakic@devbase.net>\n"
 "Language-Team: Serbian (sr) <gnom@prevod.org>\n"
@@ -597,24 +597,24 @@ msgstr ""
 "меморију"
 
 # графички дизајнери, како се ово преводи?
-#: gdk-pixbuf/io-jpeg.c:550 gdk-pixbuf/io-jpeg.c:755
+#: gdk-pixbuf/io-jpeg.c:550 gdk-pixbuf/io-jpeg.c:756
 #, c-format
 msgid "Unsupported JPEG color space (%s)"
 msgstr "Неподржан JPEG простор боја (%s)"
 
-#: gdk-pixbuf/io-jpeg.c:648 gdk-pixbuf/io-jpeg.c:919 gdk-pixbuf/io-jpeg.c:1152
-#: gdk-pixbuf/io-jpeg.c:1161
+#: gdk-pixbuf/io-jpeg.c:648 gdk-pixbuf/io-jpeg.c:920 gdk-pixbuf/io-jpeg.c:1153
+#: gdk-pixbuf/io-jpeg.c:1162
 #, c-format
 msgid "Couldn't allocate memory for loading JPEG file"
 msgstr "Не могу обезбедити меморију за учитавање JPEG датотеке"
 
 # колико њих ће ме тући због „преиначени"?
-#: gdk-pixbuf/io-jpeg.c:895
+#: gdk-pixbuf/io-jpeg.c:896
 #, c-format
 msgid "Transformed JPEG has zero width or height."
 msgstr "Преиначени ЈПЕГ има висину или ширину нула."
 
-#: gdk-pixbuf/io-jpeg.c:1108
+#: gdk-pixbuf/io-jpeg.c:1109
 #, c-format
 msgid ""
 "JPEG quality must be a value between 0 and 100; value '%s' could not be "
@@ -623,7 +623,7 @@ msgstr ""
 "Квалитет JPEG-а мора бити вредност између 0 и 100; не могу да разумем "
 "вредност „%s“."
 
-#: gdk-pixbuf/io-jpeg.c:1123
+#: gdk-pixbuf/io-jpeg.c:1124
 #, c-format
 msgid ""
 "JPEG quality must be a value between 0 and 100; value '%d' is not allowed."
@@ -631,7 +631,7 @@ msgstr ""
 "Квалитет JPEG-а мора бити вредност између 0 и 100; није дозвољена вредност „%"
 "d“."
 
-#: gdk-pixbuf/io-jpeg.c:1286
+#: gdk-pixbuf/io-jpeg.c:1287
 msgid "The JPEG image format"
 msgstr "JPEG запис слике"
 
@@ -1508,11 +1508,11 @@ msgstr "Точак боја"
 msgid "Color Selection"
 msgstr "Избор боје"
 
-#: gtk/gtkentry.c:5118 gtk/gtktextview.c:7414
+#: gtk/gtkentry.c:5198 gtk/gtktextview.c:7448
 msgid "Input _Methods"
 msgstr "_Начини уноса"
 
-#: gtk/gtkentry.c:5132 gtk/gtktextview.c:7428
+#: gtk/gtkentry.c:5212 gtk/gtktextview.c:7462
 msgid "_Insert Unicode Control Character"
 msgstr "_Убаци контролни Уникод знак"
 
@@ -1716,27 +1716,27 @@ msgstr "Сачувај у _фасцикли:"
 msgid "Create in _folder:"
 msgstr "Направи у _фасцикли:"
 
-#: gtk/gtkfilechooserdefault.c:7012
+#: gtk/gtkfilechooserdefault.c:7000
 #, c-format
 msgid "Cannot change to folder because it is not local"
 msgstr "Не могу да уђем у фасциклу зато што није локална"
 
-#: gtk/gtkfilechooserdefault.c:7628 gtk/gtkfilechooserdefault.c:7649
+#: gtk/gtkfilechooserdefault.c:7616 gtk/gtkfilechooserdefault.c:7637
 #, c-format
 msgid "Shortcut %s already exists"
 msgstr "Пречица %s већ постоји"
 
-#: gtk/gtkfilechooserdefault.c:7739
+#: gtk/gtkfilechooserdefault.c:7727
 #, c-format
 msgid "Shortcut %s does not exist"
 msgstr "Пречица %s не постоји"
 
-#: gtk/gtkfilechooserdefault.c:7994
+#: gtk/gtkfilechooserdefault.c:7982
 #, c-format
 msgid "A file named \"%s\" already exists.  Do you want to replace it?"
 msgstr "Датотека „%s“ већ постоји. Да ли да препишем преко?"
 
-#: gtk/gtkfilechooserdefault.c:7997
+#: gtk/gtkfilechooserdefault.c:7985
 #, c-format
 msgid ""
 "The file already exists in \"%s\".  Replacing it will overwrite its contents."
@@ -1744,41 +1744,41 @@ msgstr ""
 "Ова датотека већ постоји у „%s“. Ако је замените са новом, садржај ће бити "
 "преписан."
 
-#: gtk/gtkfilechooserdefault.c:8002
+#: gtk/gtkfilechooserdefault.c:7990
 msgid "_Replace"
 msgstr "_Замени"
 
-#: gtk/gtkfilechooserdefault.c:8833
+#: gtk/gtkfilechooserdefault.c:8821
 #, fuzzy
 msgid "Could not start the search process"
 msgstr "Не могу да сачувам остатак"
 
-#: gtk/gtkfilechooserdefault.c:8834
+#: gtk/gtkfilechooserdefault.c:8822
 msgid ""
 "The program was not able to create a connection to the indexer daemon.  "
 "Please make sure it is running."
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:8848
+#: gtk/gtkfilechooserdefault.c:8836
 #, fuzzy
 msgid "Could not send the search request"
 msgstr "Не могу да сачувам остатак"
 
 #. Label
-#: gtk/gtkfilechooserdefault.c:9274
+#: gtk/gtkfilechooserdefault.c:9262
 msgid "_Search:"
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:10160
+#: gtk/gtkfilechooserdefault.c:10148
 #, c-format
 msgid "Could not mount %s"
 msgstr "Не могу да прикључим %s"
 
-#: gtk/gtkfilechooserdefault.c:10801
+#: gtk/gtkfilechooserdefault.c:10788
 msgid "Type name of new folder"
 msgstr "Унесите име нове фасцикле"
 
-#: gtk/gtkfilechooserdefault.c:10849
+#: gtk/gtkfilechooserdefault.c:10836
 #, c-format
 msgid "%d byte"
 msgid_plural "%d bytes"
@@ -1786,30 +1786,30 @@ msgstr[0] "%d бајт"
 msgstr[1] "%d бајта"
 msgstr[2] "%d бајтова"
 
-#: gtk/gtkfilechooserdefault.c:10851
+#: gtk/gtkfilechooserdefault.c:10838
 #, c-format
 msgid "%.1f KB"
 msgstr "%.1f КБ"
 
-#: gtk/gtkfilechooserdefault.c:10853
+#: gtk/gtkfilechooserdefault.c:10840
 #, c-format
 msgid "%.1f MB"
 msgstr "%.1f МБ"
 
-#: gtk/gtkfilechooserdefault.c:10855
+#: gtk/gtkfilechooserdefault.c:10842
 #, c-format
 msgid "%.1f GB"
 msgstr "%.1f ГБ"
 
-#: gtk/gtkfilechooserdefault.c:10953 gtk/gtkfilechooserdefault.c:10977
+#: gtk/gtkfilechooserdefault.c:10940 gtk/gtkfilechooserdefault.c:10964
 msgid "Unknown"
 msgstr "Непознато"
 
-#: gtk/gtkfilechooserdefault.c:10964
+#: gtk/gtkfilechooserdefault.c:10951
 msgid "Today"
 msgstr "Данас"
 
-#: gtk/gtkfilechooserdefault.c:10966
+#: gtk/gtkfilechooserdefault.c:10953
 msgid "Yesterday"
 msgstr "Јуче"
 
@@ -2094,6 +2094,11 @@ msgstr ""
 msgid "Icon '%s' not present in theme"
 msgstr "Икона „%s“ није присутна у теми"
 
+#: gtk/gtkicontheme.c:2916
+#, fuzzy, c-format
+msgid "Failed to load icon"
+msgstr "Неуспело учитавање TIFF слике"
+
 #: gtk/gtkimmodule.c:421
 msgid "Default"
 msgstr "Подразумевано"
@@ -2236,20 +2241,20 @@ msgstr "Гтк+ опције"
 msgid "Show GTK+ Options"
 msgstr "Прикажи Гтк+ опције"
 
-#: gtk/gtknotebook.c:784
+#: gtk/gtknotebook.c:810
 msgid "Arrow spacing"
 msgstr "Размак код стрелица"
 
-#: gtk/gtknotebook.c:785
+#: gtk/gtknotebook.c:811
 msgid "Scroll arrow spacing"
 msgstr "Размак код стрелица за померање"
 
-#: gtk/gtknotebook.c:4304 gtk/gtknotebook.c:6849
+#: gtk/gtknotebook.c:4344 gtk/gtknotebook.c:6850
 #, c-format
 msgid "Page %u"
 msgstr "Лист %u"
 
-#: gtk/gtkpagesetup.c:570 gtk/gtkpapersize.c:823 gtk/gtkpapersize.c:863
+#: gtk/gtkpagesetup.c:570 gtk/gtkpapersize.c:825 gtk/gtkpapersize.c:865
 #, c-format
 msgid "Not a valid page setup file"
 msgstr ""
@@ -2311,7 +2316,7 @@ msgstr "Величина _папира:"
 msgid "_Orientation:"
 msgstr "_Усмерење:"
 
-#: gtk/gtkpagesetupunixdialog.c:1127 gtk/gtkprintunixdialog.c:2154
+#: gtk/gtkpagesetupunixdialog.c:1127 gtk/gtkprintunixdialog.c:2156
 msgid "Page Setup"
 msgstr "Подешавање стране"
 
@@ -2391,61 +2396,61 @@ msgid "%s job #%d"
 msgstr ""
 
 #. translators, strip the prefix up to and including the first |
-#: gtk/gtkprintoperation.c:1493
+#: gtk/gtkprintoperation.c:1497
 msgid "print operation status|Initial state"
 msgstr "Почетно стање"
 
 #. translators, strip the prefix up to and including the first |
-#: gtk/gtkprintoperation.c:1495
+#: gtk/gtkprintoperation.c:1499
 msgid "print operation status|Preparing to print"
 msgstr "Припрема пред штампу"
 
 #. translators, strip the prefix up to and including the first |
-#: gtk/gtkprintoperation.c:1497
+#: gtk/gtkprintoperation.c:1501
 msgid "print operation status|Generating data"
 msgstr "Стварање података"
 
 #. translators, strip the prefix up to and including the first |
-#: gtk/gtkprintoperation.c:1499
+#: gtk/gtkprintoperation.c:1503
 msgid "print operation status|Sending data"
 msgstr "Слање података"
 
 #. translators, strip the prefix up to and including the first |
-#: gtk/gtkprintoperation.c:1501
+#: gtk/gtkprintoperation.c:1505
 msgid "print operation status|Waiting"
 msgstr "Чекање"
 
 #. translators, strip the prefix up to and including the first |
-#: gtk/gtkprintoperation.c:1503
+#: gtk/gtkprintoperation.c:1507
 msgid "print operation status|Blocking on issue"
 msgstr "Заглављено због проблема"
 
 #. translators, strip the prefix up to and including the first |
-#: gtk/gtkprintoperation.c:1505
+#: gtk/gtkprintoperation.c:1509
 msgid "print operation status|Printing"
 msgstr "Штампање"
 
 #. translators, strip the prefix up to and including the first |
-#: gtk/gtkprintoperation.c:1507
+#: gtk/gtkprintoperation.c:1511
 msgid "print operation status|Finished"
 msgstr "Готово"
 
 #. translators, strip the prefix up to and including the first |
-#: gtk/gtkprintoperation.c:1509
+#: gtk/gtkprintoperation.c:1513
 msgid "print operation status|Finished with error"
 msgstr "Готово уз грешку"
 
-#: gtk/gtkprintoperation.c:1982
+#: gtk/gtkprintoperation.c:1986
 #, c-format
 msgid "Preparing %d"
 msgstr "Припремање %d"
 
-#: gtk/gtkprintoperation.c:1984 gtk/gtkprintoperation.c:2236
+#: gtk/gtkprintoperation.c:1988 gtk/gtkprintoperation.c:2240
 #, c-format
 msgid "Preparing"
 msgstr "Припремам"
 
-#: gtk/gtkprintoperation.c:1987
+#: gtk/gtkprintoperation.c:1991
 #, c-format
 msgid "Printing %d"
 msgstr "Штампам %d"
@@ -2455,12 +2460,12 @@ msgstr "Штампам %d"
 msgid "Error launching preview"
 msgstr "Грешка при покретању прегледа"
 
-#: gtk/gtkprintoperation-unix.c:282
+#: gtk/gtkprintoperation-unix.c:281
 #, c-format
 msgid "Error printing"
 msgstr "Грешка при штампању"
 
-#: gtk/gtkprintoperation-unix.c:384 gtk/gtkprintoperation-win32.c:1394
+#: gtk/gtkprintoperation-unix.c:388 gtk/gtkprintoperation-win32.c:1394
 msgid "Application"
 msgstr "Програм"
 
@@ -2515,35 +2520,35 @@ msgstr "Непозната грешка"
 msgid "Error from StartDoc"
 msgstr "Грешка у StartDoc"
 
-#: gtk/gtkprintunixdialog.c:1483
+#: gtk/gtkprintunixdialog.c:1485
 msgid "Printer"
 msgstr "Штампач"
 
-#: gtk/gtkprintunixdialog.c:1491
+#: gtk/gtkprintunixdialog.c:1493
 msgid "Location"
 msgstr "Путања"
 
-#: gtk/gtkprintunixdialog.c:1500
+#: gtk/gtkprintunixdialog.c:1502
 msgid "Status"
 msgstr "Стање"
 
-#: gtk/gtkprintunixdialog.c:1522
+#: gtk/gtkprintunixdialog.c:1524
 msgid "Print Pages"
 msgstr "Штампај странице"
 
-#: gtk/gtkprintunixdialog.c:1526
+#: gtk/gtkprintunixdialog.c:1528
 msgid "_All"
 msgstr "_Све"
 
-#: gtk/gtkprintunixdialog.c:1533
+#: gtk/gtkprintunixdialog.c:1535
 msgid "C_urrent"
 msgstr "Тренутну"
 
-#: gtk/gtkprintunixdialog.c:1542
+#: gtk/gtkprintunixdialog.c:1544
 msgid "Ra_nge"
 msgstr "Оп_сег"
 
-#: gtk/gtkprintunixdialog.c:1543
+#: gtk/gtkprintunixdialog.c:1545
 msgid ""
 "Specify one or more page ranges,\n"
 " e.g. 1-3,7,11"
@@ -2551,142 +2556,142 @@ msgstr ""
 "Наведи један или више опсега страница,\n"
 " нпр. 1-3,7,11"
 
-#: gtk/gtkprintunixdialog.c:1562
+#: gtk/gtkprintunixdialog.c:1564
 msgid "Copies"
 msgstr "Примерака"
 
 #. FIXME chpe: too much space between Copies and spinbutton, put those 2 in a hbox and make it span 2 columns
-#: gtk/gtkprintunixdialog.c:1567
+#: gtk/gtkprintunixdialog.c:1569
 msgid "Copie_s:"
 msgstr "Примера_ка:"
 
-#: gtk/gtkprintunixdialog.c:1585
+#: gtk/gtkprintunixdialog.c:1587
 msgid "C_ollate"
 msgstr "_Сложи"
 
-#: gtk/gtkprintunixdialog.c:1593
+#: gtk/gtkprintunixdialog.c:1595
 msgid "_Reverse"
 msgstr "_Обрни"
 
-#: gtk/gtkprintunixdialog.c:1610
+#: gtk/gtkprintunixdialog.c:1612
 msgid "General"
 msgstr "Опште"
 
-#: gtk/gtkprintunixdialog.c:2010
+#: gtk/gtkprintunixdialog.c:2012
 msgid "Layout"
 msgstr "Распоред"
 
-#: gtk/gtkprintunixdialog.c:2014
+#: gtk/gtkprintunixdialog.c:2016
 msgid "Pages per _side:"
 msgstr "_Страна на листу:"
 
-#: gtk/gtkprintunixdialog.c:2030
+#: gtk/gtkprintunixdialog.c:2032
 msgid "T_wo-sided:"
 msgstr "Д_вострано:"
 
-#: gtk/gtkprintunixdialog.c:2045
+#: gtk/gtkprintunixdialog.c:2047
 msgid "_Only print:"
 msgstr "Штампај сам_о:"
 
 #. In enum order
-#: gtk/gtkprintunixdialog.c:2060
+#: gtk/gtkprintunixdialog.c:2062
 msgid "All sheets"
 msgstr "Све листове"
 
-#: gtk/gtkprintunixdialog.c:2061
+#: gtk/gtkprintunixdialog.c:2063
 msgid "Even sheets"
 msgstr "Парне листове"
 
-#: gtk/gtkprintunixdialog.c:2062
+#: gtk/gtkprintunixdialog.c:2064
 msgid "Odd sheets"
 msgstr "Непарне листове"
 
-#: gtk/gtkprintunixdialog.c:2065
+#: gtk/gtkprintunixdialog.c:2067
 msgid "Sc_ale:"
 msgstr "Р_азмера:"
 
-#: gtk/gtkprintunixdialog.c:2092
+#: gtk/gtkprintunixdialog.c:2094
 msgid "Paper"
 msgstr "Папир"
 
-#: gtk/gtkprintunixdialog.c:2096
+#: gtk/gtkprintunixdialog.c:2098
 msgid "Paper _type:"
 msgstr "_Тип папира:"
 
-#: gtk/gtkprintunixdialog.c:2111
+#: gtk/gtkprintunixdialog.c:2113
 msgid "Paper _source:"
 msgstr "_Фиока за папир:"
 
-#: gtk/gtkprintunixdialog.c:2126
+#: gtk/gtkprintunixdialog.c:2128
 msgid "Output t_ray:"
 msgstr "Излазна т_рака:"
 
-#: gtk/gtkprintunixdialog.c:2177
+#: gtk/gtkprintunixdialog.c:2179
 msgid "Job Details"
 msgstr "Подаци о послу"
 
-#: gtk/gtkprintunixdialog.c:2183
+#: gtk/gtkprintunixdialog.c:2185
 msgid "Pri_ority:"
 msgstr "Важн_ост:"
 
 # bug(goran): ???
-#: gtk/gtkprintunixdialog.c:2198
+#: gtk/gtkprintunixdialog.c:2200
 msgid "_Billing info:"
 msgstr "Подаци за _фактурисање:"
 
-#: gtk/gtkprintunixdialog.c:2216
+#: gtk/gtkprintunixdialog.c:2218
 msgid "Print Document"
 msgstr "Штампај документ"
 
-#: gtk/gtkprintunixdialog.c:2222
+#: gtk/gtkprintunixdialog.c:2224
 msgid "_Now"
 msgstr "_Сад"
 
-#: gtk/gtkprintunixdialog.c:2229
+#: gtk/gtkprintunixdialog.c:2231
 msgid "A_t:"
 msgstr "_У:"
 
-#: gtk/gtkprintunixdialog.c:2244
+#: gtk/gtkprintunixdialog.c:2246
 msgid "On _hold"
 msgstr "На _чекању"
 
-#: gtk/gtkprintunixdialog.c:2263
+#: gtk/gtkprintunixdialog.c:2265
 msgid "Add Cover Page"
 msgstr "Додај насловну страну"
 
-#: gtk/gtkprintunixdialog.c:2269
+#: gtk/gtkprintunixdialog.c:2271
 msgid "Be_fore:"
 msgstr "П_ре:"
 
-#: gtk/gtkprintunixdialog.c:2284
+#: gtk/gtkprintunixdialog.c:2286
 msgid "_After:"
 msgstr "П_осле:"
 
-#: gtk/gtkprintunixdialog.c:2299
+#: gtk/gtkprintunixdialog.c:2301
 msgid "Job"
 msgstr "Посао"
 
-#: gtk/gtkprintunixdialog.c:2365
+#: gtk/gtkprintunixdialog.c:2367
 msgid "Advanced"
 msgstr "Напредно"
 
-#: gtk/gtkprintunixdialog.c:2400
+#: gtk/gtkprintunixdialog.c:2402
 msgid "Image Quality"
 msgstr "Квалитет слике"
 
-#: gtk/gtkprintunixdialog.c:2403
+#: gtk/gtkprintunixdialog.c:2405
 msgid "Color"
 msgstr "Боја"
 
-#: gtk/gtkprintunixdialog.c:2406
+#: gtk/gtkprintunixdialog.c:2408
 msgid "Finishing"
 msgstr "Завршавам"
 
-#: gtk/gtkprintunixdialog.c:2416
+#: gtk/gtkprintunixdialog.c:2418
 msgid "Some of the settings in the dialog conflict"
 msgstr "Нека подешавања у прозорчету се сударају"
 
-#: gtk/gtkprintunixdialog.c:2439
+#: gtk/gtkprintunixdialog.c:2441
 msgid "Print"
 msgstr "Штампај"
 
@@ -4449,24 +4454,24 @@ msgstr "излаз.%s"
 msgid "Print to File"
 msgstr "Штампај у датотеку"
 
-#: modules/printbackends/file/gtkprintbackendfile.c:484
+#: modules/printbackends/file/gtkprintbackendfile.c:485
 msgid "PDF"
 msgstr "ПДФ"
 
-#: modules/printbackends/file/gtkprintbackendfile.c:484
+#: modules/printbackends/file/gtkprintbackendfile.c:485
 msgid "Postscript"
 msgstr "Постскрипт"
 
-#: modules/printbackends/file/gtkprintbackendfile.c:496
+#: modules/printbackends/file/gtkprintbackendfile.c:497
 #: modules/printbackends/test/gtkprintbackendtest.c:501
 msgid "Pages per _sheet:"
 msgstr "_Страница на листу:"
 
-#: modules/printbackends/file/gtkprintbackendfile.c:537
+#: modules/printbackends/file/gtkprintbackendfile.c:543
 msgid "File"
 msgstr "Датотека"
 
-#: modules/printbackends/file/gtkprintbackendfile.c:546
+#: modules/printbackends/file/gtkprintbackendfile.c:552
 msgid "_Output format"
 msgstr "Ф_ормат излаза"
 

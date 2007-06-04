@@ -403,6 +403,14 @@ a widget changes from un-anchored to anchored or vice-versa.
 @event: 
 @Returns: %TRUE to stop other handlers from being invoked for the event. %FALSE to propagate the event further.
 
+<!-- ##### SIGNAL GtkWidget::move-focus ##### -->
+<para>
+
+</para>
+
+@widget: the object which received the signal.
+@arg1: 
+
 <!-- ##### SIGNAL GtkWidget::no-expose-event ##### -->
 <para>
 
@@ -2468,6 +2476,32 @@ This function is deprecated; it does nothing.
 @widget: 
 @direction: 
 @Returns: 
+
+
+<!-- ##### FUNCTION gtk_widget_get_tooltip_window ##### -->
+<para>
+
+</para>
+
+@widget: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_widget_set_tooltip_window ##### -->
+<para>
+
+</para>
+
+@widget: 
+@custom_window: 
+
+
+<!-- ##### FUNCTION gtk_widget_trigger_tooltip_query ##### -->
+<para>
+
+</para>
+
+@widget: 
 
 
 <!-- ##### FUNCTION gtk_requisition_copy ##### -->

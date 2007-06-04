@@ -426,6 +426,16 @@ types related to the text widget and how they work together.
 @where: 
 
 
+<!-- ##### FUNCTION gtk_text_buffer_add_mark ##### -->
+<para>
+
+</para>
+
+@buffer: 
+@mark: 
+@where: 
+
+
 <!-- ##### FUNCTION gtk_text_buffer_delete_mark ##### -->
 <para>
 

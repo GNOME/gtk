@@ -48,6 +48,17 @@ will be a popup menu allowing the users to switch pages.
 @arg1: 
 @Returns: 
 
+<!-- ##### SIGNAL GtkNotebook::create-window ##### -->
+<para>
+
+</para>
+
+@notebook: the object which received the signal.
+@widget: 
+@arg1: 
+@arg2: 
+@Returns: 
+
 <!-- ##### SIGNAL GtkNotebook::focus-tab ##### -->
 <para>
 

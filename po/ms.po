@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gtk+ 1.3.x\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-05-24 00:20-0400\n"
+"POT-Creation-Date: 2007-06-04 12:18-0400\n"
 "PO-Revision-Date: 2004-04-04 01:11+0730\n"
 "Last-Translator: Hasbullah Bin Pit <sebol@my-penguin.org>\n"
 "Language-Team: Projek Gabai <gabai-penyumbang@list.sourceforge.net>\n"
@@ -581,23 +581,23 @@ msgstr ""
 "Tak cukup memori untuk memuatkan imej, cuba keluar aplikasi lain untuk "
 "membebaskan memori"
 
-#: gdk-pixbuf/io-jpeg.c:550 gdk-pixbuf/io-jpeg.c:755
+#: gdk-pixbuf/io-jpeg.c:550 gdk-pixbuf/io-jpeg.c:756
 #, c-format
 msgid "Unsupported JPEG color space (%s)"
 msgstr "Ruang warna JPEG tidak disokong (%s)"
 
-#: gdk-pixbuf/io-jpeg.c:648 gdk-pixbuf/io-jpeg.c:919 gdk-pixbuf/io-jpeg.c:1152
-#: gdk-pixbuf/io-jpeg.c:1161
+#: gdk-pixbuf/io-jpeg.c:648 gdk-pixbuf/io-jpeg.c:920 gdk-pixbuf/io-jpeg.c:1153
+#: gdk-pixbuf/io-jpeg.c:1162
 #, c-format
 msgid "Couldn't allocate memory for loading JPEG file"
 msgstr "Tak dapat memperuntukkan memori bagi memuatkan fail JPEG"
 
-#: gdk-pixbuf/io-jpeg.c:895
+#: gdk-pixbuf/io-jpeg.c:896
 #, c-format
 msgid "Transformed JPEG has zero width or height."
 msgstr ""
 
-#: gdk-pixbuf/io-jpeg.c:1108
+#: gdk-pixbuf/io-jpeg.c:1109
 #, c-format
 msgid ""
 "JPEG quality must be a value between 0 and 100; value '%s' could not be "
@@ -606,14 +606,14 @@ msgstr ""
 "Kualiti JPEG mestilah diantara nilai 0 dan 100; nilai '%s' tak boleh "
 "dihantar."
 
-#: gdk-pixbuf/io-jpeg.c:1123
+#: gdk-pixbuf/io-jpeg.c:1124
 #, c-format
 msgid ""
 "JPEG quality must be a value between 0 and 100; value '%d' is not allowed."
 msgstr ""
 "Kualiti JPEG mestilah diantara nilai 0 dan 100; nilai '%d' tak diizinkan."
 
-#: gdk-pixbuf/io-jpeg.c:1286
+#: gdk-pixbuf/io-jpeg.c:1287
 msgid "The JPEG image format"
 msgstr "Format imej JPEG"
 
@@ -1480,11 +1480,11 @@ msgstr "Roda"
 msgid "Color Selection"
 msgstr "Pemilihan Warna"
 
-#: gtk/gtkentry.c:5118 gtk/gtktextview.c:7414
+#: gtk/gtkentry.c:5198 gtk/gtktextview.c:7448
 msgid "Input _Methods"
 msgstr "_Method input"
 
-#: gtk/gtkentry.c:5132 gtk/gtktextview.c:7428
+#: gtk/gtkentry.c:5212 gtk/gtktextview.c:7462
 msgid "_Insert Unicode Control Character"
 msgstr "Sel_itkan aksara Kawalan Unicode"
 
@@ -1704,100 +1704,100 @@ msgstr "Simpan di _folder:"
 msgid "Create in _folder:"
 msgstr "Cipta di _folder:"
 
-#: gtk/gtkfilechooserdefault.c:7012
+#: gtk/gtkfilechooserdefault.c:7000
 #, fuzzy, c-format
 msgid "Cannot change to folder because it is not local"
 msgstr "Tak dapat tukar ke folder kerana ianya bukan tempatan"
 
-#: gtk/gtkfilechooserdefault.c:7628 gtk/gtkfilechooserdefault.c:7649
+#: gtk/gtkfilechooserdefault.c:7616 gtk/gtkfilechooserdefault.c:7637
 #, fuzzy, c-format
 msgid "Shortcut %s already exists"
 msgstr "pintasan %s tak wujud"
 
-#: gtk/gtkfilechooserdefault.c:7739
+#: gtk/gtkfilechooserdefault.c:7727
 #, fuzzy, c-format
 msgid "Shortcut %s does not exist"
 msgstr "pintasan %s tak wujud"
 
-#: gtk/gtkfilechooserdefault.c:7994
+#: gtk/gtkfilechooserdefault.c:7982
 #, c-format
 msgid "A file named \"%s\" already exists.  Do you want to replace it?"
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:7997
+#: gtk/gtkfilechooserdefault.c:7985
 #, c-format
 msgid ""
 "The file already exists in \"%s\".  Replacing it will overwrite its contents."
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:8002
+#: gtk/gtkfilechooserdefault.c:7990
 #, fuzzy
 msgid "_Replace"
 msgstr "_Tukarnama"
 
-#: gtk/gtkfilechooserdefault.c:8833
+#: gtk/gtkfilechooserdefault.c:8821
 #, fuzzy
 msgid "Could not start the search process"
 msgstr "Tak dapat menyimpang yang selebihnya"
 
-#: gtk/gtkfilechooserdefault.c:8834
+#: gtk/gtkfilechooserdefault.c:8822
 msgid ""
 "The program was not able to create a connection to the indexer daemon.  "
 "Please make sure it is running."
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:8848
+#: gtk/gtkfilechooserdefault.c:8836
 #, fuzzy
 msgid "Could not send the search request"
 msgstr "Tak dapat menyimpang yang selebihnya"
 
 #. Label
-#: gtk/gtkfilechooserdefault.c:9274
+#: gtk/gtkfilechooserdefault.c:9262
 msgid "_Search:"
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:10160
+#: gtk/gtkfilechooserdefault.c:10148
 #, fuzzy, c-format
 msgid "Could not mount %s"
 msgstr ""
 "Tak dapat memilih %s:\n"
 "%s"
 
-#: gtk/gtkfilechooserdefault.c:10801
+#: gtk/gtkfilechooserdefault.c:10788
 msgid "Type name of new folder"
 msgstr "Taip nama bagi folder baru"
 
-#: gtk/gtkfilechooserdefault.c:10849
+#: gtk/gtkfilechooserdefault.c:10836
 #, c-format
 msgid "%d byte"
 msgid_plural "%d bytes"
 msgstr[0] ""
 msgstr[1] ""
 
-#: gtk/gtkfilechooserdefault.c:10851
+#: gtk/gtkfilechooserdefault.c:10838
 #, fuzzy, c-format
 msgid "%.1f KB"
 msgstr "%.1f K"
 
-#: gtk/gtkfilechooserdefault.c:10853
+#: gtk/gtkfilechooserdefault.c:10840
 #, fuzzy, c-format
 msgid "%.1f MB"
 msgstr "%.1f M"
 
-#: gtk/gtkfilechooserdefault.c:10855
+#: gtk/gtkfilechooserdefault.c:10842
 #, fuzzy, c-format
 msgid "%.1f GB"
 msgstr "%.1f G"
 
-#: gtk/gtkfilechooserdefault.c:10953 gtk/gtkfilechooserdefault.c:10977
+#: gtk/gtkfilechooserdefault.c:10940 gtk/gtkfilechooserdefault.c:10964
 msgid "Unknown"
 msgstr "Entah"
 
-#: gtk/gtkfilechooserdefault.c:10964
+#: gtk/gtkfilechooserdefault.c:10951
 msgid "Today"
 msgstr "Hari ini"
 
-#: gtk/gtkfilechooserdefault.c:10966
+#: gtk/gtkfilechooserdefault.c:10953
 msgid "Yesterday"
 msgstr "Semalam"
 
@@ -2087,6 +2087,11 @@ msgstr ""
 msgid "Icon '%s' not present in theme"
 msgstr "Ikon '%s' tak wujud pada tema"
 
+#: gtk/gtkicontheme.c:2916
+#, fuzzy, c-format
+msgid "Failed to load icon"
+msgstr "Gagal memuatkan imej TIFF"
+
 #: gtk/gtkimmodule.c:421
 msgid "Default"
 msgstr "Default"
@@ -2238,20 +2243,20 @@ msgstr ""
 msgid "Show GTK+ Options"
 msgstr ""
 
-#: gtk/gtknotebook.c:784
+#: gtk/gtknotebook.c:810
 msgid "Arrow spacing"
 msgstr ""
 
-#: gtk/gtknotebook.c:785
+#: gtk/gtknotebook.c:811
 msgid "Scroll arrow spacing"
 msgstr ""
 
-#: gtk/gtknotebook.c:4304 gtk/gtknotebook.c:6849
+#: gtk/gtknotebook.c:4344 gtk/gtknotebook.c:6850
 #, c-format
 msgid "Page %u"
 msgstr "Halaman %u"
 
-#: gtk/gtkpagesetup.c:570 gtk/gtkpapersize.c:823 gtk/gtkpapersize.c:863
+#: gtk/gtkpagesetup.c:570 gtk/gtkpapersize.c:825 gtk/gtkpapersize.c:865
 #, c-format
 msgid "Not a valid page setup file"
 msgstr ""
@@ -2309,7 +2314,7 @@ msgstr "_Ciri-ciri"
 msgid "_Orientation:"
 msgstr "Ke_tepuan:"
 
-#: gtk/gtkpagesetupunixdialog.c:1127 gtk/gtkprintunixdialog.c:2154
+#: gtk/gtkpagesetupunixdialog.c:1127 gtk/gtkprintunixdialog.c:2156
 #, fuzzy
 msgid "Page Setup"
 msgstr "Halaman %u"
@@ -2395,61 +2400,61 @@ msgid "%s job #%d"
 msgstr ""
 
 #. translators, strip the prefix up to and including the first |
-#: gtk/gtkprintoperation.c:1493
+#: gtk/gtkprintoperation.c:1497
 msgid "print operation status|Initial state"
 msgstr ""
 
 #. translators, strip the prefix up to and including the first |
-#: gtk/gtkprintoperation.c:1495
+#: gtk/gtkprintoperation.c:1499
 msgid "print operation status|Preparing to print"
 msgstr ""
 
 #. translators, strip the prefix up to and including the first |
-#: gtk/gtkprintoperation.c:1497
+#: gtk/gtkprintoperation.c:1501
 msgid "print operation status|Generating data"
 msgstr ""
 
 #. translators, strip the prefix up to and including the first |
-#: gtk/gtkprintoperation.c:1499
+#: gtk/gtkprintoperation.c:1503
 msgid "print operation status|Sending data"
 msgstr ""
 
 #. translators, strip the prefix up to and including the first |
-#: gtk/gtkprintoperation.c:1501
+#: gtk/gtkprintoperation.c:1505
 msgid "print operation status|Waiting"
 msgstr ""
 
 #. translators, strip the prefix up to and including the first |
-#: gtk/gtkprintoperation.c:1503
+#: gtk/gtkprintoperation.c:1507
 msgid "print operation status|Blocking on issue"
 msgstr ""
 
 #. translators, strip the prefix up to and including the first |
-#: gtk/gtkprintoperation.c:1505
+#: gtk/gtkprintoperation.c:1509
 msgid "print operation status|Printing"
 msgstr ""
 
 #. translators, strip the prefix up to and including the first |
-#: gtk/gtkprintoperation.c:1507
+#: gtk/gtkprintoperation.c:1511
 msgid "print operation status|Finished"
 msgstr ""
 
 #. translators, strip the prefix up to and including the first |
-#: gtk/gtkprintoperation.c:1509
+#: gtk/gtkprintoperation.c:1513
 msgid "print operation status|Finished with error"
 msgstr ""
 
-#: gtk/gtkprintoperation.c:1982
+#: gtk/gtkprintoperation.c:1986
 #, c-format
 msgid "Preparing %d"
 msgstr ""
 
-#: gtk/gtkprintoperation.c:1984 gtk/gtkprintoperation.c:2236
+#: gtk/gtkprintoperation.c:1988 gtk/gtkprintoperation.c:2240
 #, fuzzy, c-format
 msgid "Preparing"
 msgstr "Amaran"
 
-#: gtk/gtkprintoperation.c:1987
+#: gtk/gtkprintoperation.c:1991
 #, fuzzy, c-format
 msgid "Printing %d"
 msgstr "_Cetak"
@@ -2459,12 +2464,12 @@ msgstr "_Cetak"
 msgid "Error launching preview"
 msgstr ""
 
-#: gtk/gtkprintoperation-unix.c:282
+#: gtk/gtkprintoperation-unix.c:281
 #, c-format
 msgid "Error printing"
 msgstr ""
 
-#: gtk/gtkprintoperation-unix.c:384 gtk/gtkprintoperation-win32.c:1394
+#: gtk/gtkprintoperation-unix.c:388 gtk/gtkprintoperation-win32.c:1394
 #, fuzzy
 msgid "Application"
 msgstr "_Lokasi:"
@@ -2521,190 +2526,190 @@ msgstr ""
 msgid "Error from StartDoc"
 msgstr ""
 
-#: gtk/gtkprintunixdialog.c:1483
+#: gtk/gtkprintunixdialog.c:1485
 #, fuzzy
 msgid "Printer"
 msgstr "_Cetak"
 
-#: gtk/gtkprintunixdialog.c:1491
+#: gtk/gtkprintunixdialog.c:1493
 #, fuzzy
 msgid "Location"
 msgstr "_Lokasi:"
 
-#: gtk/gtkprintunixdialog.c:1500
+#: gtk/gtkprintunixdialog.c:1502
 msgid "Status"
 msgstr ""
 
-#: gtk/gtkprintunixdialog.c:1522
+#: gtk/gtkprintunixdialog.c:1524
 #, fuzzy
 msgid "Print Pages"
 msgstr "Pre_biu Cetakan"
 
-#: gtk/gtkprintunixdialog.c:1526
+#: gtk/gtkprintunixdialog.c:1528
 #, fuzzy
 msgid "_All"
 msgstr "_Isi"
 
-#: gtk/gtkprintunixdialog.c:1533
+#: gtk/gtkprintunixdialog.c:1535
 #, fuzzy
 msgid "C_urrent"
 msgstr "_Cipta"
 
-#: gtk/gtkprintunixdialog.c:1542
+#: gtk/gtkprintunixdialog.c:1544
 msgid "Ra_nge"
 msgstr ""
 
-#: gtk/gtkprintunixdialog.c:1543
+#: gtk/gtkprintunixdialog.c:1545
 msgid ""
 "Specify one or more page ranges,\n"
 " e.g. 1-3,7,11"
 msgstr ""
 
-#: gtk/gtkprintunixdialog.c:1562
+#: gtk/gtkprintunixdialog.c:1564
 msgid "Copies"
 msgstr ""
 
 #. FIXME chpe: too much space between Copies and spinbutton, put those 2 in a hbox and make it span 2 columns
-#: gtk/gtkprintunixdialog.c:1567
+#: gtk/gtkprintunixdialog.c:1569
 msgid "Copie_s:"
 msgstr ""
 
-#: gtk/gtkprintunixdialog.c:1585
+#: gtk/gtkprintunixdialog.c:1587
 #, fuzzy
 msgid "C_ollate"
 msgstr "_Cipta"
 
-#: gtk/gtkprintunixdialog.c:1593
+#: gtk/gtkprintunixdialog.c:1595
 #, fuzzy
 msgid "_Reverse"
 msgstr "Be_rbalik"
 
-#: gtk/gtkprintunixdialog.c:1610
+#: gtk/gtkprintunixdialog.c:1612
 msgid "General"
 msgstr ""
 
-#: gtk/gtkprintunixdialog.c:2010
+#: gtk/gtkprintunixdialog.c:2012
 msgid "Layout"
 msgstr ""
 
-#: gtk/gtkprintunixdialog.c:2014
+#: gtk/gtkprintunixdialog.c:2016
 #, fuzzy
 msgid "Pages per _side:"
 msgstr "_Ciri-ciri"
 
-#: gtk/gtkprintunixdialog.c:2030
+#: gtk/gtkprintunixdialog.c:2032
 msgid "T_wo-sided:"
 msgstr ""
 
-#: gtk/gtkprintunixdialog.c:2045
+#: gtk/gtkprintunixdialog.c:2047
 #, fuzzy
 msgid "_Only print:"
 msgstr "_Cetak"
 
 #. In enum order
-#: gtk/gtkprintunixdialog.c:2060
+#: gtk/gtkprintunixdialog.c:2062
 msgid "All sheets"
 msgstr ""
 
-#: gtk/gtkprintunixdialog.c:2061
+#: gtk/gtkprintunixdialog.c:2063
 msgid "Even sheets"
 msgstr ""
 
-#: gtk/gtkprintunixdialog.c:2062
+#: gtk/gtkprintunixdialog.c:2064
 msgid "Odd sheets"
 msgstr ""
 
-#: gtk/gtkprintunixdialog.c:2065
+#: gtk/gtkprintunixdialog.c:2067
 #, fuzzy
 msgid "Sc_ale:"
 msgstr "_Nilai:"
 
-#: gtk/gtkprintunixdialog.c:2092
+#: gtk/gtkprintunixdialog.c:2094
 msgid "Paper"
 msgstr ""
 
-#: gtk/gtkprintunixdialog.c:2096
+#: gtk/gtkprintunixdialog.c:2098
 #, fuzzy
 msgid "Paper _type:"
 msgstr "_Ciri-ciri"
 
-#: gtk/gtkprintunixdialog.c:2111
+#: gtk/gtkprintunixdialog.c:2113
 #, fuzzy
 msgid "Paper _source:"
 msgstr "_Ciri-ciri"
 
-#: gtk/gtkprintunixdialog.c:2126
+#: gtk/gtkprintunixdialog.c:2128
 msgid "Output t_ray:"
 msgstr ""
 
-#: gtk/gtkprintunixdialog.c:2177
+#: gtk/gtkprintunixdialog.c:2179
 msgid "Job Details"
 msgstr ""
 
-#: gtk/gtkprintunixdialog.c:2183
+#: gtk/gtkprintunixdialog.c:2185
 msgid "Pri_ority:"
 msgstr ""
 
-#: gtk/gtkprintunixdialog.c:2198
+#: gtk/gtkprintunixdialog.c:2200
 msgid "_Billing info:"
 msgstr ""
 
-#: gtk/gtkprintunixdialog.c:2216
+#: gtk/gtkprintunixdialog.c:2218
 msgid "Print Document"
 msgstr ""
 
-#: gtk/gtkprintunixdialog.c:2222
+#: gtk/gtkprintunixdialog.c:2224
 #, fuzzy
 msgid "_Now"
 msgstr "_Tidak"
 
-#: gtk/gtkprintunixdialog.c:2229
+#: gtk/gtkprintunixdialog.c:2231
 msgid "A_t:"
 msgstr ""
 
-#: gtk/gtkprintunixdialog.c:2244
+#: gtk/gtkprintunixdialog.c:2246
 #, fuzzy
 msgid "On _hold"
 msgstr "_Bold"
 
-#: gtk/gtkprintunixdialog.c:2263
+#: gtk/gtkprintunixdialog.c:2265
 msgid "Add Cover Page"
 msgstr ""
 
-#: gtk/gtkprintunixdialog.c:2269
+#: gtk/gtkprintunixdialog.c:2271
 msgid "Be_fore:"
 msgstr ""
 
-#: gtk/gtkprintunixdialog.c:2284
+#: gtk/gtkprintunixdialog.c:2286
 msgid "_After:"
 msgstr ""
 
-#: gtk/gtkprintunixdialog.c:2299
+#: gtk/gtkprintunixdialog.c:2301
 msgid "Job"
 msgstr ""
 
-#: gtk/gtkprintunixdialog.c:2365
+#: gtk/gtkprintunixdialog.c:2367
 msgid "Advanced"
 msgstr ""
 
-#: gtk/gtkprintunixdialog.c:2400
+#: gtk/gtkprintunixdialog.c:2402
 msgid "Image Quality"
 msgstr ""
 
-#: gtk/gtkprintunixdialog.c:2403
+#: gtk/gtkprintunixdialog.c:2405
 #, fuzzy
 msgid "Color"
 msgstr "_Warna"
 
-#: gtk/gtkprintunixdialog.c:2406
+#: gtk/gtkprintunixdialog.c:2408
 msgid "Finishing"
 msgstr ""
 
-#: gtk/gtkprintunixdialog.c:2416
+#: gtk/gtkprintunixdialog.c:2418
 msgid "Some of the settings in the dialog conflict"
 msgstr ""
 
-#: gtk/gtkprintunixdialog.c:2439
+#: gtk/gtkprintunixdialog.c:2441
 #, fuzzy
 msgid "Print"
 msgstr "_Cetak"
@@ -4485,26 +4490,26 @@ msgstr ""
 msgid "Print to File"
 msgstr "_Cetak"
 
-#: modules/printbackends/file/gtkprintbackendfile.c:484
+#: modules/printbackends/file/gtkprintbackendfile.c:485
 msgid "PDF"
 msgstr ""
 
-#: modules/printbackends/file/gtkprintbackendfile.c:484
+#: modules/printbackends/file/gtkprintbackendfile.c:485
 #, fuzzy
 msgid "Postscript"
 msgstr "_Cetak"
 
-#: modules/printbackends/file/gtkprintbackendfile.c:496
+#: modules/printbackends/file/gtkprintbackendfile.c:497
 #: modules/printbackends/test/gtkprintbackendtest.c:501
 msgid "Pages per _sheet:"
 msgstr ""
 
-#: modules/printbackends/file/gtkprintbackendfile.c:537
+#: modules/printbackends/file/gtkprintbackendfile.c:543
 #, fuzzy
 msgid "File"
 msgstr "Fail"
 
-#: modules/printbackends/file/gtkprintbackendfile.c:546
+#: modules/printbackends/file/gtkprintbackendfile.c:552
 msgid "_Output format"
 msgstr ""
 

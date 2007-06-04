@@ -212,8 +212,8 @@ The #GtkEntry-struct struct contains only private data.
 
 </para>
 
-@entry:
-@text:
+@entry: 
+@text: 
 
 
 <!-- ##### FUNCTION gtk_entry_append_text ##### -->
@@ -230,8 +230,8 @@ The #GtkEntry-struct struct contains only private data.
 
 </para>
 
-@entry:
-@text:
+@entry: 
+@text: 
 
 
 <!-- ##### FUNCTION gtk_entry_set_position ##### -->
@@ -258,7 +258,7 @@ The #GtkEntry-struct struct contains only private data.
 </para>
 
 @entry: 
-@start:
+@start: 
 @end: 
 
 
@@ -268,7 +268,7 @@ The #GtkEntry-struct struct contains only private data.
 </para>
 
 @entry: 
-@visible:
+@visible: 
 
 
 <!-- ##### FUNCTION gtk_entry_set_invisible_char ##### -->

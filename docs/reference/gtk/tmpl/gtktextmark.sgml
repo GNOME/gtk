@@ -62,6 +62,26 @@ Marks are typically created using the gtk_text_buffer_create_mark() function.
 </para>
 
 
+<!-- ##### ARG GtkTextMark:left-gravity ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkTextMark:name ##### -->
+<para>
+
+</para>
+
+<!-- ##### FUNCTION gtk_text_mark_new ##### -->
+<para>
+
+</para>
+
+@name: 
+@left_gravity: 
+@Returns: 
+
+
 <!-- ##### FUNCTION gtk_text_mark_set_visible ##### -->
 <para>
 

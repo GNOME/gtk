@@ -3089,13 +3089,14 @@ gdk_window_foreign_new (GdkNativeWindow anid)
 /**
  * gdk_window_set_composited:
  * @window: a #GdkWindow
+ * @composited: %TRUE to set the window as composited
  *
- * Sets a #GdkWindow as composited. Composited windows do
- * not automatically have their contents drawn to the screen.
- * Drawing is redirected to an offscreen buffer and an expose
- * event is emitted on the parent of the composited window.
- * It is the responsibility of the parent's expose handler to
- * manually merge the off-screen content onto the screen in
+ * Sets a #GdkWindow as composited, or unsets it. Composited 
+ * windows do not automatically have their contents drawn to 
+ * the screen. Drawing is redirected to an offscreen buffer 
+ * and an expose event is emitted on the parent of the composited 
+ * window. It is the responsibility of the parent's expose handler
+ * to manually merge the off-screen content onto the screen in
  * whatever way it sees fit. See <xref linkend="composited-window-example"/>
  * for an example.
  *

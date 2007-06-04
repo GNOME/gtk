@@ -213,6 +213,30 @@ GtkPacker
 Private Information
 
 
+<!-- ##### SECTION ./tmpl/gtkthemes.sgml:Long_Description ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### SECTION ./tmpl/gtkthemes.sgml:See_Also ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### SECTION ./tmpl/gtkthemes.sgml:Short_Description ##### -->
+
+
+
+<!-- ##### SECTION ./tmpl/gtkthemes.sgml:Stability_Level ##### -->
+
+
+
+<!-- ##### SECTION ./tmpl/gtkthemes.sgml:Title ##### -->
+Themes
+
+
 <!-- ##### SECTION ./tmpl/gtktreemodelsimple.sgml:Long_Description ##### -->
 <para>
 
@@ -1478,6 +1502,14 @@ produce superscript and subscript.
 </para>
 
 
+<!-- ##### SIGNAL GtkTextView::move-focus ##### -->
+<para>
+
+</para>
+
+@textview: the object which received the signal.
+@arg1: 
+
 <!-- ##### ARG GtkTextView:height-lines ##### -->
 <para>
 
@@ -1501,6 +1533,15 @@ produce superscript and subscript.
 
 </para>
 
+
+<!-- ##### SIGNAL GtkToolbar::move-focus ##### -->
+<para>
+
+</para>
+
+@toolbar: the object which received the signal.
+@arg1: 
+@Returns: 
 
 <!-- ##### ARG GtkToolbar:pack-end ##### -->
 <para>
@@ -1662,6 +1703,14 @@ the #GtkAdjustment which sets the range of the scale.
 </para>
 
 @window: the object which received the signal.
+
+<!-- ##### SIGNAL GtkWindow::move-focus ##### -->
+<para>
+
+</para>
+
+@window: the object which received the signal.
+@arg1: 
 
 <!-- ##### ARG GtkWindow:auto-shrink ##### -->
 <para>
@@ -2322,6 +2371,39 @@ This function is not usually used by users.
 @columns: 
 @tree_column: 
 @titles: 
+
+<!-- ##### FUNCTION gtk_decorated_window_calculate_frame_size ##### -->
+<para>
+
+</para>
+
+@window: 
+
+<!-- ##### FUNCTION gtk_decorated_window_init ##### -->
+<para>
+
+</para>
+
+@window: 
+
+<!-- ##### FUNCTION gtk_decorated_window_move_resize_window ##### -->
+<para>
+
+</para>
+
+@window: 
+@x: 
+@y: 
+@width: 
+@height: 
+
+<!-- ##### FUNCTION gtk_decorated_window_set_title ##### -->
+<para>
+
+</para>
+
+@window: 
+@title: 
 
 <!-- ##### FUNCTION gtk_drag_dest_handle_event ##### -->
 <para>

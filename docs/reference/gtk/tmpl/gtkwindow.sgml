@@ -53,14 +53,6 @@ Toplevel which can contain other widgets
 
 @window: the object which received the signal.
 
-<!-- ##### SIGNAL GtkWindow::move-focus ##### -->
-<para>
-
-</para>
-
-@window: the object which received the signal.
-@arg1: 
-
 <!-- ##### SIGNAL GtkWindow::set-focus ##### -->
 <para>
 
@@ -1167,40 +1159,21 @@ Deprecated alias for gtk_window_set_position().
 @setting: 
 
 
-<!-- ##### FUNCTION gtk_decorated_window_init ##### -->
+<!-- ##### FUNCTION gtk_window_get_opacity ##### -->
 <para>
 
 </para>
 
 @window: 
+@Returns: 
 
 
-<!-- ##### FUNCTION gtk_decorated_window_calculate_frame_size ##### -->
+<!-- ##### FUNCTION gtk_window_set_opacity ##### -->
 <para>
 
 </para>
 
 @window: 
-
-
-<!-- ##### FUNCTION gtk_decorated_window_set_title ##### -->
-<para>
-
-</para>
-
-@window: 
-@title: 
-
-
-<!-- ##### FUNCTION gtk_decorated_window_move_resize_window ##### -->
-<para>
-
-</para>
-
-@window: 
-@x: 
-@y: 
-@width: 
-@height: 
+@opacity: 
 
 

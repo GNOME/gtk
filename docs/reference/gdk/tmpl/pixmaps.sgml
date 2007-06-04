@@ -164,7 +164,7 @@ Deprecated equivalent of g_object_unref().
 
 
 
-<!-- ##### STRUCT GdkBitmap ##### -->
+<!-- ##### TYPEDEF GdkBitmap ##### -->
 <para>
 An opaque structure representing an offscreen drawable of depth
 1. Pointers to structures of type #GdkPixmap, #GdkBitmap, and
@@ -172,7 +172,6 @@ An opaque structure representing an offscreen drawable of depth
 refers generically to any of these types.
 </para>
 
-@user_data: 
 
 <!-- ##### MACRO gdk_bitmap_ref ##### -->
 <para>
