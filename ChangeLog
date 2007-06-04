@@ -1,5 +1,7 @@
 2007-06-04  Matthias Clasen  <mclasen@redhat.com>
 
+	* configure.in: Bump version
+
 	* === Released 2.11.1 ===
 
 	* gdk/gdkwindow.c (gdk_window_set_composited): Improve docs.
