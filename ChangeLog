@@ -1,3 +1,11 @@
+2007-06-04  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtkmarshalers.list:
+	* gtk/gtknotebook.[hc]: Add a create-window signal that allows
+	to override the global create-window-hook on a per-notebook
+	basis. The default handler falls back to the global hook.
+	(#386935, Christian Hammond)
+	
 2007-06-04  Emmanuele Bassi  <ebassi@gnome.org>
 
 	* gtk/gtkradiobutton.[ch]:

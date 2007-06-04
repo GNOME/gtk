@@ -116,8 +116,12 @@ struct _GtkNotebookClass
 				GtkWidget         *menu_label,
 				gint               position);
 
+  GtkNotebook (* create_window) (GtkNotebook       *notebook,
+                                 GtkWidget         *page,
+                                 gint               x,
+                                 gint               y);
+
   void (*_gtk_reserved1) (void);
-  void (*_gtk_reserved2) (void);
 };
 
 typedef GtkNotebook* (*GtkNotebookWindowCreationFunc) (GtkNotebook *source,
