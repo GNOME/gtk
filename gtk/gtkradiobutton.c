@@ -32,22 +32,12 @@
 #include "gtkintl.h"
 #include "gtkalias.h"
 
-#define GTK_RADIO_BUTTON_GET_PRIVATE(obj)       (G_TYPE_INSTANCE_GET_PRIVATE ((obj), GTK_TYPE_RADIO_BUTTON, GtkRadioButtonPrivate))
-
-#define GTK_RADIO_BUTTON_VALUE_UNSET    (G_MAXINT)
-
-typedef struct _GtkRadioButtonPrivate   GtkRadioButtonPrivate;
 
 enum {
   PROP_0,
-  PROP_GROUP,
-  PROP_VALUE
+  PROP_GROUP
 };
 
-struct _GtkRadioButtonPrivate
-{
-  gint value;
-};
 
 static void     gtk_radio_button_destroy        (GtkObject           *object);
 static gboolean gtk_radio_button_focus          (GtkWidget           *widget,
@@ -83,8 +73,6 @@ gtk_radio_button_class_init (GtkRadioButtonClass *class)
   button_class = (GtkButtonClass*) class;
   check_button_class = (GtkCheckButtonClass*) class;
 
-  g_type_class_add_private (class, sizeof (GtkRadioButtonPrivate));
-
   gobject_class->set_property = gtk_radio_button_set_property;
   gobject_class->get_property = gtk_radio_button_get_property;
 
@@ -95,25 +83,6 @@ gtk_radio_button_class_init (GtkRadioButtonClass *class)
 							P_("The radio button whose group this widget belongs to."),
 							GTK_TYPE_RADIO_BUTTON,
 							GTK_PARAM_WRITABLE));
-  /**
-   * GtkRadioButton:value:
-   *
-   * The value is an arbitrary integer which can be used as a
-   * convenient way to determine which button in a group is
-   * currently active in a ::toggled signal handler.
-   *
-   * Since: 2.12
-   */
-  g_object_class_install_property (gobject_class,
-                                   PROP_VALUE,
-                                   g_param_spec_int ("value",
-                                                     P_("Value"),
-                                                     P_("The value bound to the radio button"),
-                                                     G_MININT, G_MAXINT - 1,
-                                                     G_MAXINT - 1,
-                                                     GTK_PARAM_READWRITE));
-
-  
   object_class->destroy = gtk_radio_button_destroy;
 
   widget_class->focus = gtk_radio_button_focus;
@@ -149,11 +118,6 @@ gtk_radio_button_class_init (GtkRadioButtonClass *class)
 static void
 gtk_radio_button_init (GtkRadioButton *radio_button)
 {
-  GtkRadioButtonPrivate *priv;
-
-  priv = GTK_RADIO_BUTTON_GET_PRIVATE (radio_button);
-  priv->value = GTK_RADIO_BUTTON_VALUE_UNSET;
-
   GTK_WIDGET_SET_FLAGS (radio_button, GTK_NO_WINDOW);
   GTK_WIDGET_UNSET_FLAGS (radio_button, GTK_RECEIVES_DEFAULT);
 
@@ -183,16 +147,13 @@ gtk_radio_button_set_property (GObject      *object,
       GtkRadioButton *button;
 
     case PROP_GROUP:
-      button = g_value_get_object (value);
+        button = g_value_get_object (value);
 
       if (button)
 	slist = gtk_radio_button_get_group (button);
       else
 	slist = NULL;
       gtk_radio_button_set_group (radio_button, slist);
-      break;
-    case PROP_VALUE:
-      gtk_radio_button_set_value (radio_button, g_value_get_int (value));
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -206,13 +167,8 @@ gtk_radio_button_get_property (GObject    *object,
 			       GValue     *value,
 			       GParamSpec *pspec)
 {
-  GtkRadioButton *radio_button = GTK_RADIO_BUTTON (object);
-
   switch (prop_id)
     {
-    case PROP_VALUE:
-      g_value_set_int (value, gtk_radio_button_get_value (radio_button));
-      break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
@@ -784,106 +740,6 @@ gtk_radio_button_draw_indicator (GtkCheckButton *check_button,
 			area, widget, "radiobutton",
 			x, y, indicator_size, indicator_size);
     }
-}
-
-/**
- * gtk_radio_button_get_value:
- * @radio_button: a #GtkRadioButton
- *
- * Retrieve the value property of the @radio_button set using
- * gtk_radio_button_set_value. If no value was set, the position
- * of @radio_button in the radio button group is returned.
- *
- * Return value: the value property of the radio button
- *
- * Since: 2.12
- */
-gint
-gtk_radio_button_get_value (GtkRadioButton *radio_button)
-{
-  GtkRadioButtonPrivate *priv;
-  gint retval;
-
-  g_return_val_if_fail (GTK_IS_RADIO_BUTTON (radio_button), 0);
-
-  priv = GTK_RADIO_BUTTON_GET_PRIVATE (radio_button);
-  
-  retval = priv->value;
-
-  if (retval == GTK_RADIO_BUTTON_VALUE_UNSET)
-    {
-      gint index = g_slist_index (radio_button->group, radio_button);
-      gint length = g_slist_length (radio_button->group);
-      
-      retval = length - index;
-    }
-
-  return retval;
-}
-
-/**
- * gtk_radio_button_set_value:
- * @radio_button: a #GtkRadioButton
- * @value: the value bound to the radio button
- *
- * Set the value bound to the radio button. The value is an arbitrary
- * integer which can be used as a convenient way to determine which
- * radio button in a group is currently active in an ::toggled signal
- * handler.
- *
- * Since: 2.12
- */
-void
-gtk_radio_button_set_value (GtkRadioButton *radio_button,
-                            gint            value)
-{
-  GtkRadioButtonPrivate *priv;
-
-  g_return_if_fail (GTK_IS_RADIO_BUTTON (radio_button));
-  g_return_if_fail (value < GTK_RADIO_BUTTON_VALUE_UNSET);
-
-  priv = GTK_RADIO_BUTTON_GET_PRIVATE (radio_button);
-
-  if (priv->value != value)
-    {
-      g_object_ref (radio_button);
-
-      priv->value = value;
-
-      g_object_notify (G_OBJECT (radio_button), "value");
-      g_object_unref (radio_button);
-    }
-}
-
-/**
- * gtk_radio_button_get_current_value:
- * @radio_button: a #GtkRadioButton
- *
- * Returns the value of the currently selected radio button inside
- * the same group of @radio_button.
- *
- * Return value: the value set with gtk_radio_button_set_value() or
- *   the current position inside the group.
- *
- * Since: 2.12
- */
-gint
-gtk_radio_button_get_current_value (GtkRadioButton *radio_button)
-{
-  GSList *l;
-
-  g_return_val_if_fail (GTK_IS_RADIO_BUTTON (radio_button),
-                        GTK_RADIO_BUTTON_VALUE_UNSET);
-
-  for (l = radio_button->group; l; l = l->next)
-    {
-      GtkToggleButton *button = GTK_TOGGLE_BUTTON (l->data);
-
-      if (gtk_toggle_button_get_active (button))
-        return gtk_radio_button_get_value (GTK_RADIO_BUTTON (l->data));
-    }
-
-  return GTK_RADIO_BUTTON_VALUE_UNSET;
 }
 
 #define __GTK_RADIO_BUTTON_C__

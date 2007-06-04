@@ -2953,8 +2953,6 @@ gtk_radio_action_set_group
 #if IN_FILE(__GTK_RADIO_BUTTON_C__)
 gtk_radio_button_get_group
 gtk_radio_button_get_type G_GNUC_CONST
-gtk_radio_button_get_current_value
-gtk_radio_button_get_value
 gtk_radio_button_new
 gtk_radio_button_new_from_widget
 gtk_radio_button_new_with_label
@@ -2962,7 +2960,6 @@ gtk_radio_button_new_with_label_from_widget
 gtk_radio_button_new_with_mnemonic
 gtk_radio_button_new_with_mnemonic_from_widget
 gtk_radio_button_set_group
-gtk_radio_button_set_value
 #endif
 #endif
 

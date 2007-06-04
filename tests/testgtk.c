@@ -1108,26 +1108,6 @@ create_check_buttons (GtkWidget *widget)
  * GtkRadioButton
  */
 
-enum {
-  RADIO_1 =  0,
-  RADIO_2 = 10,
-  RADIO_3 = 20,
-  RADIO_4 = 30,
-  RADIO_5 = 40,
-  RADIO_6 = 42
-};
-
-static void
-radio_toggled_cb (GtkToggleButton *toggle_button,
-                  gpointer         user_data)
-{
-  GtkRadioButton *radio_button = GTK_RADIO_BUTTON (toggle_button);
-
-  g_print ("Radio button (value:%d) toggled (active:%s)\n",
-           gtk_radio_button_get_value (radio_button),
-           gtk_toggle_button_get_active (toggle_button) ? "yes" : "no");
-}
-
 static void
 create_radio_buttons (GtkWidget *widget)
 {
@@ -1163,22 +1143,17 @@ create_radio_buttons (GtkWidget *widget)
       gtk_box_pack_start (GTK_BOX (box1), box2, TRUE, TRUE, 0);
 
       button = gtk_radio_button_new_with_label (NULL, "button1");
-      gtk_radio_button_set_value (GTK_RADIO_BUTTON (button), RADIO_1);
-      g_signal_connect (button, "toggled", G_CALLBACK (radio_toggled_cb), NULL);
       gtk_box_pack_start (GTK_BOX (box2), button, TRUE, TRUE, 0);
 
       button = gtk_radio_button_new_with_label (
 	         gtk_radio_button_get_group (GTK_RADIO_BUTTON (button)),
 		 "button2");
       gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (button), TRUE);
-      g_signal_connect (button, "toggled", G_CALLBACK (radio_toggled_cb), NULL);
       gtk_box_pack_start (GTK_BOX (box2), button, TRUE, TRUE, 0);
 
       button = gtk_radio_button_new_with_label (
                  gtk_radio_button_get_group (GTK_RADIO_BUTTON (button)),
 		 "button3");
-      gtk_radio_button_set_value (GTK_RADIO_BUTTON (button), RADIO_3);
-      g_signal_connect (button, "toggled", G_CALLBACK (radio_toggled_cb), NULL);
       gtk_box_pack_start (GTK_BOX (box2), button, TRUE, TRUE, 0);
 
       button = gtk_radio_button_new_with_label (
@@ -1195,26 +1170,20 @@ create_radio_buttons (GtkWidget *widget)
       gtk_box_pack_start (GTK_BOX (box1), box2, TRUE, TRUE, 0);
 
       button = gtk_radio_button_new_with_label (NULL, "button4");
-      gtk_radio_button_set_value (GTK_RADIO_BUTTON (button), RADIO_4);
       gtk_toggle_button_set_mode (GTK_TOGGLE_BUTTON (button), FALSE);
-      g_signal_connect (button, "toggled", G_CALLBACK (radio_toggled_cb), NULL);
       gtk_box_pack_start (GTK_BOX (box2), button, TRUE, TRUE, 0);
 
       button = gtk_radio_button_new_with_label (
 	         gtk_radio_button_get_group (GTK_RADIO_BUTTON (button)),
 		 "button5");
-      gtk_radio_button_set_value (GTK_RADIO_BUTTON (button), RADIO_5);
       gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (button), TRUE);
       gtk_toggle_button_set_mode (GTK_TOGGLE_BUTTON (button), FALSE);
-      g_signal_connect (button, "toggled", G_CALLBACK (radio_toggled_cb), NULL);
       gtk_box_pack_start (GTK_BOX (box2), button, TRUE, TRUE, 0);
 
       button = gtk_radio_button_new_with_label (
                  gtk_radio_button_get_group (GTK_RADIO_BUTTON (button)),
 		 "button6");
-      gtk_radio_button_set_value (GTK_RADIO_BUTTON (button), RADIO_6);
       gtk_toggle_button_set_mode (GTK_TOGGLE_BUTTON (button), FALSE);
-      g_signal_connect (button, "toggled", G_CALLBACK (radio_toggled_cb), NULL);
       gtk_box_pack_start (GTK_BOX (box2), button, TRUE, TRUE, 0);
 
       separator = gtk_hseparator_new ();

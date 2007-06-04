@@ -1,5 +1,12 @@
 2007-06-04  Emmanuele Bassi  <ebassi@gnome.org>
 
+	* gtk/gtkradiobutton.[ch]:
+	* gtk/gtk.symbols:
+	* tests/testgtk.c: Revert previous commit; the API is not yet
+	finalized - see bug #166995.
+
+2007-06-04  Emmanuele Bassi  <ebassi@gnome.org>
+
 	* gtk/gtkradiobutton.h:
 	* gtk/gtkradiobutton.c:
 	* gtk/gtk.symbols: Add gtk_radio_button_set_value(),
