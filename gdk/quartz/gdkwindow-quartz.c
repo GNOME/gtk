@@ -1033,16 +1033,36 @@ void
 gdk_window_raise (GdkWindow *window)
 {
   g_return_if_fail (GDK_IS_WINDOW (window));
-  
-  /* FIXME: Implement */
+
+  if (GDK_WINDOW_DESTROYED (window))
+    return;
+
+  /* FIXME: Only supported for toplevels currently. */
+  if (WINDOW_IS_TOPLEVEL (window))
+    {
+      GdkWindowImplQuartz *impl;
+
+      impl = GDK_WINDOW_IMPL_QUARTZ (GDK_WINDOW_OBJECT (window)->impl);
+      [impl->toplevel orderFront:impl->toplevel];
+    }
 }
 
 void
 gdk_window_lower (GdkWindow *window)
 {
   g_return_if_fail (GDK_IS_WINDOW (window));
-  
-  /* FIXME: Implement */
+
+  if (GDK_WINDOW_DESTROYED (window))
+    return;
+
+  /* FIXME: Only supported for toplevels currently. */
+  if (WINDOW_IS_TOPLEVEL (window))
+    {
+      GdkWindowImplQuartz *impl;
+
+      impl = GDK_WINDOW_IMPL_QUARTZ (GDK_WINDOW_OBJECT (window)->impl);
+      [impl->toplevel orderBack:impl->toplevel];
+    }
 }
 
 void
