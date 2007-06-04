@@ -176,6 +176,9 @@
   GdkWindowObject *private = (GdkWindowObject *)window;
   GdkWindowImplQuartz *impl = GDK_WINDOW_IMPL_QUARTZ (private->impl);
 
+  if (!private->accept_focus)
+    return NO;
+
   /* FIXME: Is this right? If so, the switch shouldn't be needed. Need
    * this + some tweaking to the event/grab code to get menus
    * working...

@@ -526,6 +526,9 @@ gdk_window_new (GdkWindow     *parent,
 
   private->parent = (GdkWindowObject *)parent;
 
+  private->accept_focus = TRUE;
+  private->focus_on_map = TRUE;
+
   if (attributes_mask & GDK_WA_X)
     private->x = attributes->x;
   else
@@ -781,12 +784,16 @@ all_parents_shown (GdkWindowObject *private)
   return FALSE;
 }
 
+/* Note: the raise argument is not really used, it doesn't seem
+ * possible to show a window without raising it?
+ */
 static void
 show_window_internal (GdkWindow *window,
 		      gboolean   raise)
 {
   GdkWindowObject *private;
   GdkWindowImplQuartz *impl;
+  gboolean focus_on_map;
 
   if (GDK_WINDOW_DESTROYED (window))
     return;
@@ -796,9 +803,21 @@ show_window_internal (GdkWindow *window,
   private = (GdkWindowObject *)window;
   impl = GDK_WINDOW_IMPL_QUARTZ (private->impl);
 
+  if (!GDK_WINDOW_IS_MAPPED (window))
+    focus_on_map = private->focus_on_map;
+  else
+    focus_on_map = TRUE;
+
   if (impl->toplevel)
     {
-      [impl->toplevel orderFront:nil];
+      /* We should make the window not raise for !raise, but at least
+       * this will keep it from getting focused in that case.
+       */
+      if (private->accept_focus && focus_on_map && raise)
+        [impl->toplevel makeKeyAndOrderFront:nil];
+      else
+        [impl->toplevel orderFront:nil];
+
       [impl->view setNeedsDisplay:YES];
     }
   else
@@ -1617,7 +1636,13 @@ void
 gdk_window_set_accept_focus (GdkWindow *window,
 			     gboolean accept_focus)
 {
-  /* FIXME: Implement */
+  GdkWindowObject *private;
+
+  g_return_if_fail (GDK_IS_WINDOW (window));
+
+  private = (GdkWindowObject *)window;  
+
+  private->accept_focus = accept_focus != FALSE;
 }
 
 void
@@ -1654,7 +1679,13 @@ void
 gdk_window_set_focus_on_map (GdkWindow *window,
 			     gboolean focus_on_map)
 {
-  /* FIXME: Implement */
+  GdkWindowObject *private;
+
+  g_return_if_fail (GDK_IS_WINDOW (window));
+
+  private = (GdkWindowObject *)window;  
+  
+  private->focus_on_map = focus_on_map != FALSE;
 }
 
 void          

@@ -1,5 +1,11 @@
 2007-06-04  Richard Hult  <richard@imendio.com>
 
+	* gdk/quartz/GdkQuartzWindow.c: * gdk/quartz/gdkwindow-quartz.c:
+	Implement simple versions of gdk_window_set_accept_focus and
+	gdk_window_set_focus_on_map.
+
+2007-06-04  Richard Hult  <richard@imendio.com>
+
 	* gdk/quartz/gdkwindow-quartz.c: (gdk_window_raise),
 	(gdk_window_raise): Implement.
 
