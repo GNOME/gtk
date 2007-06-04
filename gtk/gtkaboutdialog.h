@@ -110,7 +110,7 @@ void                   gtk_about_dialog_set_logo_icon_name     (GtkAboutDialog  
 								const gchar     *icon_name);
 
 typedef void (* GtkAboutDialogActivateLinkFunc) (GtkAboutDialog *about,
-						 const gchar    *link,
+						 const gchar    *link_,
 						 gpointer        data);
 
 GtkAboutDialogActivateLinkFunc gtk_about_dialog_set_email_hook (GtkAboutDialogActivateLinkFunc func,
