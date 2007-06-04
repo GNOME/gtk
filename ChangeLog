@@ -7,7 +7,7 @@
 2007-06-04  Richard Hult  <richard@imendio.com>
 
 	* gdk/quartz/gdkwindow-quartz.c: (gdk_window_raise),
-	(gdk_window_raise): Implement.
+	(gdk_window_lower): Implement.
 
 2007-06-04  Richard Hult  <richard@imendio.com>
 
