@@ -195,11 +195,13 @@ struct _GtkTextViewClass
   /* overwrite */
   void (* toggle_overwrite) (GtkTextView *text_view);
 
-  /* propagates to GtkWindow move_focus */
+  /* as of GTK+ 2.12 the "move-focus" signal has been moved to GtkWidget,
+   * so this is merley a virtual function now. Overriding it in subclasses
+   * continues to work though.
+   */
   void (* move_focus)       (GtkTextView     *text_view,
-                             GtkDirectionType direction);  
-  
-  
+                             GtkDirectionType direction);
+
   /* Padding for future expansion */
   void (*_gtk_reserved1) (void);
   void (*_gtk_reserved2) (void);

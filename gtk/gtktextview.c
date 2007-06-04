@@ -133,7 +133,6 @@ enum
   COPY_CLIPBOARD,
   PASTE_CLIPBOARD,
   TOGGLE_OVERWRITE,
-  MOVE_FOCUS,
   MOVE_VIEWPORT,
   SELECT_ALL,
   TOGGLE_CURSOR_VISIBLE,
@@ -206,6 +205,8 @@ static gint gtk_text_view_expose_event         (GtkWidget        *widget,
 static void gtk_text_view_draw_focus           (GtkWidget        *widget);
 static gboolean gtk_text_view_focus            (GtkWidget        *widget,
                                                 GtkDirectionType  direction);
+static void gtk_text_view_move_focus           (GtkWidget        *widget,
+                                                GtkDirectionType  direction_type);
 static void gtk_text_view_select_all           (GtkWidget        *widget,
                                                 gboolean          select);
 
@@ -278,7 +279,7 @@ static void gtk_text_view_copy_clipboard   (GtkTextView           *text_view);
 static void gtk_text_view_paste_clipboard  (GtkTextView           *text_view);
 static void gtk_text_view_toggle_overwrite (GtkTextView           *text_view);
 static void gtk_text_view_toggle_cursor_visible (GtkTextView      *text_view);
-static void gtk_text_view_move_focus       (GtkTextView           *text_view,
+static void gtk_text_view_compat_move_focus(GtkTextView           *text_view,
                                             GtkDirectionType       direction_type);
 static void gtk_text_view_unselect         (GtkTextView           *text_view);
 
@@ -490,7 +491,16 @@ gtk_text_view_class_init (GtkTextViewClass *klass)
   widget_class->motion_notify_event = gtk_text_view_motion_event;
   widget_class->expose_event = gtk_text_view_expose_event;
   widget_class->focus = gtk_text_view_focus;
-  
+
+  /* need to override the base class function via override_class_closure,
+   * because the signal slot is not available in GtkWidgetCLass
+   */
+  g_signal_override_class_closure (g_signal_lookup ("move-focus",
+                                                    GTK_TYPE_WIDGET),
+                                   GTK_TYPE_TEXT_VIEW,
+                                   g_cclosure_new (G_CALLBACK (gtk_text_view_move_focus),
+                                                   NULL, NULL));
+
   widget_class->drag_begin = gtk_text_view_drag_begin;
   widget_class->drag_end = gtk_text_view_drag_end;
   widget_class->drag_data_get = gtk_text_view_drag_data_get;
@@ -517,7 +527,7 @@ gtk_text_view_class_init (GtkTextViewClass *klass)
   klass->copy_clipboard = gtk_text_view_copy_clipboard;
   klass->paste_clipboard = gtk_text_view_paste_clipboard;
   klass->toggle_overwrite = gtk_text_view_toggle_overwrite;
-  klass->move_focus = gtk_text_view_move_focus;
+  klass->move_focus = gtk_text_view_compat_move_focus;
   klass->set_scroll_adjustments = gtk_text_view_set_scroll_adjustments;
 
   /*
@@ -787,16 +797,6 @@ gtk_text_view_class_init (GtkTextViewClass *klass)
 		  _gtk_marshal_VOID__VOID,
 		  G_TYPE_NONE, 0);
 
-  signals[MOVE_FOCUS] =
-    g_signal_new (I_("move_focus"),
-		  G_OBJECT_CLASS_TYPE (gobject_class),
-		  G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
-		  G_STRUCT_OFFSET (GtkTextViewClass, move_focus),
-		  NULL, NULL,
-		  _gtk_marshal_VOID__ENUM,
-		  G_TYPE_NONE, 1,
-		  GTK_TYPE_DIRECTION_TYPE);
-  
   signals[SET_SCROLL_ADJUSTMENTS] =
     g_signal_new (I_("set_scroll_adjustments"),
 		  G_OBJECT_CLASS_TYPE (gobject_class),
@@ -3927,9 +3927,9 @@ gtk_text_view_key_press_event (GtkWidget *widget, GdkEventKey *event)
 	  obscure = TRUE;
 	}
       else
-	gtk_text_view_move_focus (text_view,
-				  (event->state & GDK_SHIFT_MASK) ?
-				  GTK_DIR_TAB_BACKWARD: GTK_DIR_TAB_FORWARD);
+	g_signal_emit_by_name (text_view, "move-focus",
+                               (event->state & GDK_SHIFT_MASK) ?
+                               GTK_DIR_TAB_BACKWARD : GTK_DIR_TAB_FORWARD);
 
       retval = TRUE;
     }
@@ -4382,6 +4382,17 @@ gtk_text_view_focus (GtkWidget        *widget,
 
       return result;
     }
+}
+
+static void
+gtk_text_view_move_focus (GtkWidget        *widget,
+                          GtkDirectionType  direction_type)
+{
+  GtkTextView *text_view = GTK_TEXT_VIEW (widget);
+
+  if (GTK_TEXT_VIEW_GET_CLASS (text_view)->move_focus)
+    GTK_TEXT_VIEW_GET_CLASS (text_view)->move_focus (text_view,
+                                                     direction_type);
 }
 
 /*
@@ -4894,7 +4905,7 @@ gtk_text_view_move_cursor_internal (GtkTextView     *text_view,
       if (!gtk_widget_keynav_failed (GTK_WIDGET (text_view),
                                      leave_direction))
         {
-          gtk_text_view_move_focus (text_view, leave_direction);
+          g_signal_emit_by_name (text_view, "move-focus", leave_direction);
         }
     }
   else
@@ -5508,16 +5519,43 @@ gtk_text_view_get_accepts_tab (GtkTextView *text_view)
 }
 
 static void
-gtk_text_view_move_focus (GtkTextView     *text_view,
-                          GtkDirectionType direction_type)
+gtk_text_view_compat_move_focus (GtkTextView     *text_view,
+                                 GtkDirectionType direction_type)
 {
-  GtkWidget *toplevel = gtk_widget_get_toplevel (GTK_WIDGET (text_view));
+  GSignalInvocationHint *hint = g_signal_get_invocation_hint (text_view);
 
-  if (!GTK_WIDGET_TOPLEVEL (toplevel))
-    return;
+  /*  as of GTK+ 2.12, the "move-focus" signal has been moved to GtkWidget,
+   *  the evil code below makes sure that both emitting the signal and
+   *  calling the virtual function directly continue to work as expetcted
+   */
 
-  /* Propagate to toplevel */
-  g_signal_emit_by_name (toplevel, "move_focus", direction_type);
+  if (hint->signal_id == g_signal_lookup ("move-focus", GTK_TYPE_WIDGET))
+    {
+      /*  if this is a signal emission, chain up  */
+
+      GValue instance_and_params[2] = { { 0, }, { 0, } };
+      GValue return_value = { 0, };
+
+      g_value_init (&instance_and_params[0], GTK_TYPE_WIDGET);
+      g_value_set_object (&instance_and_params[0], text_view);
+
+      g_value_init (&instance_and_params[1], GTK_TYPE_DIRECTION_TYPE);
+      g_value_set_enum (&instance_and_params[1], direction_type);
+
+      g_signal_chain_from_overridden (instance_and_params, &return_value);
+
+      g_value_unset (&instance_and_params[0]);
+      g_value_unset (&instance_and_params[1]);
+      g_value_unset (&return_value);
+    }
+  else
+    {
+      /*  otherwise emit the signal, since somebody called the virtual
+       *  function directly
+       */
+
+      g_signal_emit_by_name (text_view, "move-focus", direction_type);
+    }
 }
 
 /*

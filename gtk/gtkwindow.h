@@ -125,6 +125,11 @@ struct _GtkWindowClass
 
   void     (* activate_focus)          (GtkWindow       *window);
   void     (* activate_default)        (GtkWindow       *window);
+
+  /* as of GTK+ 2.12 the "move-focus" signal has been moved to GtkWidget,
+   * so this is merley a virtual function now. Overriding it in subclasses
+   * continues to work though.
+   */
   void     (* move_focus)              (GtkWindow       *window,
                                         GtkDirectionType direction);
   

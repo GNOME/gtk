@@ -1,3 +1,22 @@
+2007-06-04  Michael Natterer  <mitch@imendio.com>
+
+	Move "move-focus" signals from several widgets to GtkWidget to
+	enable more flexible costomization of keyboard navigation via
+	bindings. Fixes bug #414947.
+
+	* gtk/gtkwidget.c: add "move-focus" binding signal, default to
+	calling the toplevel GtkWindow's "move-focus" vfunc.
+
+	* gtk/gtktextview.[ch]
+	* gtk/gtkwindow.[ch]: remove "move-focus" signals and add compat
+	code that makes sure that both emitting the signal on the widget
+	and overriding the virtual functions keeps working as before.
+
+	* gtk/gtktoolbar.c: remove "move-focus" signal here too and use
+	GtkWidget's signal. This change slightly changes keyboard
+	navigation in toolbars. I'll fix the behavior if somebody can
+	explain me if and how exactly the new behavior is broken.
+
 2007-06-04  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtkmarshalers.list:

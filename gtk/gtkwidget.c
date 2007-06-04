@@ -77,6 +77,7 @@ enum {
   MNEMONIC_ACTIVATE,
   GRAB_FOCUS,
   FOCUS,
+  MOVE_FOCUS,
   EVENT,
   EVENT_AFTER,
   BUTTON_PRESS_EVENT,
@@ -214,6 +215,8 @@ static gboolean		gtk_widget_real_focus_out_event   	(GtkWidget        *widget,
 								 GdkEventFocus    *event);
 static gboolean		gtk_widget_real_focus			(GtkWidget        *widget,
 								 GtkDirectionType  direction);
+static void             gtk_widget_real_move_focus              (GtkWidget        *widget,
+                                                                 GtkDirectionType  direction);
 static gboolean		gtk_widget_real_keynav_failed		(GtkWidget        *widget,
 								 GtkDirectionType  direction);
 static PangoContext*	gtk_widget_peek_pango_context		(GtkWidget	  *widget);
@@ -830,6 +833,16 @@ gtk_widget_class_init (GtkWidgetClass *klass)
 		  _gtk_marshal_BOOLEAN__ENUM,
 		  G_TYPE_BOOLEAN, 1,
 		  GTK_TYPE_DIRECTION_TYPE);
+  widget_signals[MOVE_FOCUS] =
+    _gtk_binding_signal_new (I_("move_focus"),
+                             G_TYPE_FROM_CLASS (object_class),
+                             G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
+                             G_CALLBACK (gtk_widget_real_move_focus),
+                             NULL, NULL,
+                             _gtk_marshal_VOID__ENUM,
+                             G_TYPE_NONE,
+                             1,
+                             GTK_TYPE_DIRECTION_TYPE);
   widget_signals[EVENT] =
     g_signal_new (I_("event"),
 		  G_TYPE_FROM_CLASS (gobject_class),
@@ -4616,6 +4629,20 @@ gtk_widget_real_focus (GtkWidget         *widget,
     }
   else
     return FALSE;
+}
+
+static void
+gtk_widget_real_move_focus (GtkWidget         *widget,
+                            GtkDirectionType   direction)
+{
+  GtkWidget *toplevel = gtk_widget_get_toplevel (widget);
+
+  if (GTK_IS_WINDOW (toplevel) &&
+      GTK_WINDOW_GET_CLASS (toplevel)->move_focus)
+    {
+      GTK_WINDOW_GET_CLASS (toplevel)->move_focus (GTK_WINDOW (toplevel),
+                                                   direction);
+    }
 }
 
 static gboolean

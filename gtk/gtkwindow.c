@@ -57,7 +57,6 @@ enum {
   FRAME_EVENT,
   ACTIVATE_FOCUS,
   ACTIVATE_DEFAULT,
-  MOVE_FOCUS,
   KEYS_CHANGED,
   LAST_SIGNAL
 };
@@ -788,17 +787,6 @@ gtk_window_class_init (GtkWindowClass *klass)
                   _gtk_marshal_VOID__VOID,
                   G_TYPE_NONE,
                   0);
-
-  window_signals[MOVE_FOCUS] =
-    g_signal_new (I_("move_focus"),
-                  G_TYPE_FROM_CLASS (gobject_class),
-                  G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
-                  G_STRUCT_OFFSET (GtkWindowClass, move_focus),
-                  NULL, NULL,
-                  _gtk_marshal_VOID__ENUM,
-                  G_TYPE_NONE,
-                  1,
-                  GTK_TYPE_DIRECTION_TYPE);
 
   window_signals[KEYS_CHANGED] =
     g_signal_new (I_("keys_changed"),
