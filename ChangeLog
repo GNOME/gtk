@@ -1,5 +1,12 @@
 2007-06-04  Cody Russell  <bratsche@gnome.org>
 
+	* gtk/gtklinkbutton.h
+	* gtk/gtkaboutdialog.h: Change function argument "link"
+	to "link_" to fix warnings for applications compiling
+	with -Wshadow. (#379213)
+
+2007-06-04  Cody Russell  <bratsche@gnome.org>
+
 	* gtk/gtkpathbar.c (gtk_path_bar_scroll_down): Check
 	if down_button is NULL.  This happens when the pathbar button
 	for the current directory is too large to fit in the

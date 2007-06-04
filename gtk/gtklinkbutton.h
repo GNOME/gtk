@@ -42,7 +42,7 @@ typedef struct _GtkLinkButtonClass	GtkLinkButtonClass;
 typedef struct _GtkLinkButtonPrivate	GtkLinkButtonPrivate;
 
 typedef void (*GtkLinkButtonUriFunc) (GtkLinkButton *button,
-				      const gchar   *link,
+				      const gchar   *link_,
 				      gpointer       user_data);
 
 struct _GtkLinkButton
