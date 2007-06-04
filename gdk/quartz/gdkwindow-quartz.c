@@ -115,6 +115,9 @@ gdk_window_impl_quartz_finalize (GObject *object)
   if (impl->paint_clip_region)
     gdk_region_destroy (impl->paint_clip_region);
 
+  if (impl->transient_for)
+    g_object_unref (impl->transient_for);
+
   G_OBJECT_CLASS (parent_class)->finalize (object);
 }
 
@@ -815,6 +818,14 @@ show_window_internal (GdkWindow *window,
   if (private->state & GDK_WINDOW_STATE_ICONIFIED)
     gdk_window_iconify (window);
 
+  if (impl->transient_for && !GDK_WINDOW_DESTROYED (impl->transient_for))
+    {
+      GdkWindowImplQuartz *parent_impl;
+
+      parent_impl = GDK_WINDOW_IMPL_QUARTZ (GDK_WINDOW_OBJECT (impl->transient_for)->impl);
+      [parent_impl->toplevel addChildWindow:impl->toplevel ordered:NSWindowAbove];
+    }
+
   GDK_QUARTZ_RELEASE_POOL;
 }
 
@@ -856,6 +867,20 @@ gdk_window_hide (GdkWindow *window)
 
   if (impl->toplevel) 
     {
+      /* We must unset the transient while it is hidden, otherwise
+       * quartz won't hide the window.
+       */
+      if (impl->transient_for)
+        {
+          if (!GDK_WINDOW_DESTROYED (impl->transient_for))
+            {
+              GdkWindowImplQuartz *parent_impl;
+
+              parent_impl = GDK_WINDOW_IMPL_QUARTZ (GDK_WINDOW_OBJECT (impl->transient_for)->impl);
+              [parent_impl->toplevel removeChildWindow:impl->toplevel];
+            }
+        }
+
       [impl->toplevel orderOut:nil];
     }
   else if (impl->view)
@@ -1030,7 +1055,7 @@ gdk_window_set_background (GdkWindow      *window,
   g_return_if_fail (GDK_IS_WINDOW (window));
 
   if (GDK_WINDOW_DESTROYED (window))
-      return;
+    return;
 
   impl = GDK_WINDOW_IMPL_QUARTZ (private->impl);
 
@@ -1481,7 +1506,41 @@ void
 gdk_window_set_transient_for (GdkWindow *window, 
 			      GdkWindow *parent)
 {
-  /* FIXME: Implement */
+  GdkWindowImplQuartz *window_impl;
+  GdkWindowImplQuartz *parent_impl;
+
+  if (GDK_WINDOW_DESTROYED (window) || GDK_WINDOW_DESTROYED (parent))
+    return;
+
+  window_impl = GDK_WINDOW_IMPL_QUARTZ (GDK_WINDOW_OBJECT (window)->impl);
+  if (!window_impl->toplevel)
+    return;
+
+  GDK_QUARTZ_ALLOC_POOL;
+
+  if (window_impl->transient_for)
+    {
+      if (!GDK_WINDOW_DESTROYED (window_impl->transient_for))
+        {
+          parent_impl = GDK_WINDOW_IMPL_QUARTZ (GDK_WINDOW_OBJECT (window_impl->transient_for)->impl);
+          [parent_impl->toplevel removeChildWindow:window_impl->toplevel];
+        }
+
+      g_object_unref (window_impl->transient_for);
+      window_impl->transient_for = NULL;
+    }
+
+  parent_impl = GDK_WINDOW_IMPL_QUARTZ (GDK_WINDOW_OBJECT (parent)->impl);
+  if (parent_impl->toplevel)
+    {
+      /* We save the parent because it needs to be unset/reset when
+       * hiding and showing the window. 
+       */
+      window_impl->transient_for = g_object_ref (parent);
+      [parent_impl->toplevel addChildWindow:window_impl->toplevel ordered:NSWindowAbove];
+    }
+  
+  GDK_QUARTZ_RELEASE_POOL;
 }
 
 void
