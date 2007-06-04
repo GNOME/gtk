@@ -1,3 +1,13 @@
+2007-06-04  Cody Russell  <bratsche@gnome.org>
+
+	Merge from trunk:
+
+	* gtk/gtkpathbar.c (gtk_path_bar_scroll_down): Check
+	if down_button is NULL.  This happens when the pathbar button
+	for the current directory is too large to fit in the
+	space, e.g. on Windows for directories named something like
+	"My Documents and Settings".  (#389603)
+
 2007-06-01  Michael Natterer  <mitch@imendio.com>
 
 	Merge from trunk:
