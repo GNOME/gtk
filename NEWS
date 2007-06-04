@@ -36,10 +36,15 @@ Overview of Changes from GTK+ 2.11.0 to 2.11.1
  79585 	GtkTextView API to change cursor color
  132818 Allow GtkTextMark subclasses to be used in GtkTextBuffer
  348065 [PATCH] Remove automagic status of xinerama dependency
+ 441443 jpeg loader does not set error upon abortion
+ 386935 gtk_notebook_set_window_creation_hook only allows one...
+ 414947 Move "move-focus" signal to GtkWidget
+
 
 * Updated translations:
  Thai (th)
  Spanish (es)
+ Norwegian bokmål (nb)
 
 
 Overview of Changes from GTK+ 2.10.x to 2.11

@@ -1,5 +1,10 @@
 2007-06-04  Michael Natterer  <mitch@imendio.com>
 
+	* NEWS:
+	* README.in: Updates
+
+2007-06-04  Michael Natterer  <mitch@imendio.com>
+
 	Move "move-focus" signals from several widgets to GtkWidget to
 	enable more flexible costomization of keyboard navigation via
 	bindings. Fixes bug #414947.

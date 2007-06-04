@@ -58,6 +58,16 @@ Release notes for 2.12
   of another structure (in particular GnomeCanvas and its clones do not need
   recompiling).
 
+* Another new signal has been added to GtkNotebook. The new signal
+  is called create-window, so this name can no longer be used for signals
+  in objects derived from GtkNotebook.
+
+* The move-focus signal has been moved to GtkWidget, to unify the 
+  various implementations of this signal in specific widgets. Great care 
+  has been taken to make sure that all code using this signal continues
+  to work.
+
+
 Release notes for 2.10
 ======================
 
