@@ -813,8 +813,9 @@ show_window_internal (GdkWindow *window,
       /* We should make the window not raise for !raise, but at least
        * this will keep it from getting focused in that case.
        */
-      if (private->accept_focus && focus_on_map && raise)
-        [impl->toplevel makeKeyAndOrderFront:nil];
+      if (private->accept_focus && focus_on_map && raise &&
+          private->window_type != GDK_WINDOW_TEMP)
+        [impl->toplevel makeKeyAndOrderFront:impl->toplevel];
       else
         [impl->toplevel orderFront:nil];
 
