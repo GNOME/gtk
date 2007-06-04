@@ -87,6 +87,11 @@ void          gtk_list_store_set_value        (GtkListStore *list_store,
 void          gtk_list_store_set              (GtkListStore *list_store,
 					       GtkTreeIter  *iter,
 					       ...);
+void          gtk_list_store_set_valuesv      (GtkListStore *list_store,
+					       GtkTreeIter  *iter,
+					       gint         *columns, 
+					       GValue       *values,
+					       gint          n_values);
 void          gtk_list_store_set_valist       (GtkListStore *list_store,
 					       GtkTreeIter  *iter,
 					       va_list       var_args);

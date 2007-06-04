@@ -711,6 +711,36 @@ gtk_list_store_get_compare_func (GtkListStore *list_store)
 }
 
 static void
+gtk_list_store_set_vector_internal (GtkListStore *list_store,
+				    GtkTreeIter  *iter,
+				    gboolean     *emit_signal,
+				    gboolean     *maybe_need_sort,
+				    gint         *columns,
+				    GValue       *values,
+				    gint          n_values)
+{
+  gint i;
+  GtkTreeIterCompareFunc func = NULL;
+
+  func = gtk_list_store_get_compare_func (list_store);
+  if (func != _gtk_tree_data_list_compare_func)
+    *maybe_need_sort = TRUE;
+
+  for (i = 0; i < n_values; i++)
+    {
+      *emit_signal = gtk_list_store_real_set_value (list_store, 
+					       iter, 
+					       columns[i],
+					       &values[i],
+					       FALSE) || *emit_signal;
+
+      if (func == _gtk_tree_data_list_compare_func &&
+	  columns[i] == list_store->sort_column_id)
+	*maybe_need_sort = TRUE;
+    }
+}
+
+static void
 gtk_list_store_set_valist_internal (GtkListStore *list_store,
 				    GtkTreeIter  *iter,
 				    gboolean     *emit_signal,
@@ -764,6 +794,53 @@ gtk_list_store_set_valist_internal (GtkListStore *list_store,
       g_value_unset (&value);
 
       column = va_arg (var_args, gint);
+    }
+}
+
+/**
+ * gtk_list_store_set_valuesv:
+ * @list_store: A #GtkListStore
+ * @iter: A valid #GtkTreeIter for the row being modified
+ * @columns: an array of column numbers
+ * @values: an array of GValues 
+ * @n_values: the length of the @columns and @values arrays
+ * 
+ * A variant of gtk_list_store_set_valist() which
+ * takes the columns and values as two arrays, instead of
+ * varargs. This function is mainly intended for 
+ * language-bindings and in case the number of columns to
+ * change is not known until run-time.
+ *
+ * Since: 2.12
+ */
+void
+gtk_list_store_set_valuesv (GtkListStore *list_store,
+			    GtkTreeIter  *iter,
+			    gint         *columns,
+			    GValue       *values,
+			    gint          n_values)
+{
+  gboolean emit_signal = FALSE;
+  gboolean maybe_need_sort = FALSE;
+
+  g_return_if_fail (GTK_IS_LIST_STORE (list_store));
+  g_return_if_fail (VALID_ITER (iter, list_store));
+
+  gtk_list_store_set_vector_internal (list_store, iter,
+				      &emit_signal,
+				      &maybe_need_sort,
+				      columns, values, n_values);
+
+  if (maybe_need_sort && GTK_LIST_STORE_IS_SORTED (list_store))
+    gtk_list_store_sort_iter_changed (list_store, iter, list_store->sort_column_id);
+
+  if (emit_signal)
+    {
+      GtkTreePath *path;
+
+      path = gtk_list_store_get_path (GTK_TREE_MODEL (list_store), iter);
+      gtk_tree_model_row_changed (GTK_TREE_MODEL (list_store), path, iter);
+      gtk_tree_path_free (path);
     }
 }
 
@@ -1888,8 +1965,6 @@ gtk_list_store_insert_with_valuesv (GtkListStore *list_store,
   gint length;
   gboolean changed = FALSE;
   gboolean maybe_need_sort = FALSE;
-  GtkTreeIterCompareFunc func = NULL;
-  gint i;
 
   /* FIXME refactor to reduce overlap with 
    * gtk_list_store_insert_with_values() 
@@ -1917,22 +1992,9 @@ gtk_list_store_insert_with_valuesv (GtkListStore *list_store,
 
   list_store->length++;  
 
-  func = gtk_list_store_get_compare_func (list_store);
-  if (func != _gtk_tree_data_list_compare_func)
-    maybe_need_sort = TRUE;
-
-  for (i = 0; i < n_values; i++)
-    {
-      changed = gtk_list_store_real_set_value (list_store, 
-					       iter, 
-					       columns[i],
-					       &values[i],
-					       FALSE) || changed;
-
-      if (func == _gtk_tree_data_list_compare_func &&
-	  columns[i] == list_store->sort_column_id)
-	maybe_need_sort = TRUE;
-    }
+  gtk_list_store_set_vector_internal (list_store, iter,
+				      &changed, &maybe_need_sort,
+				      columns, values, n_values);
 
   /* Don't emit rows_reordered here */
   if (maybe_need_sort && GTK_LIST_STORE_IS_SORTED (list_store))

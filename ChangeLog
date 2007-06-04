@@ -1,3 +1,21 @@
+2007-06-05  Kristian Rietveld  <kris@gtk.org>
+
+	Fix #399071, suggestion from Benoit Dejean.
+
+	* gtk/gtkliststore.[ch] (gtk_list_store_set_vector_internal): new
+	function, factored out code iterating (columns, values) vectors from
+	gtk_list_store_new_with_valuesv to here,
+	(gtk_list_store_set_valuesv): new public function to set list store
+	values using (columns, values) vectors,
+	(gtk_list_store_new_with_valuesv): call new _set_vector_internal
+	instead.
+
+	* gtk/gtktreestore.[ch] (gtk_tree_store_set_vector_internal),
+	(gtk_tree_store_set_valuesv), (gtk_tree_store_new_with_valuesv):
+	likewise.
+
+	* gtk/gtk.symbols: updated.
+
 2007-06-04  Richard Hult  <richard@imendio.com>
 
 	* gdk/quartz/gdkwindow-quartz.c:
