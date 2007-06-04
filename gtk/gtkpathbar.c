@@ -722,7 +722,10 @@ gtk_path_bar_scroll_down (GtkWidget *button, GtkPathBar *path_bar)
 	}
     }
 
-  space_needed = BUTTON_DATA (down_button->data)->button->allocation.width + path_bar->spacing;
+  /* We check if down_button might be NULL in cases where the pathbar's horizontal size is smaller
+   * than the button and it doesn't get displayed. e.g., on Windows it might be "My Documents and Settings"
+   */
+  space_needed = down_button ? BUTTON_DATA (down_button->data)->button->allocation.width : 0 + path_bar->spacing;
   if (direction == GTK_TEXT_DIR_RTL)
     space_available = path_bar->down_slider_button->allocation.x - GTK_WIDGET (path_bar)->allocation.x;
   else
