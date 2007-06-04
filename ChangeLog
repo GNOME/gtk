@@ -4,7 +4,7 @@
 	if down_button is NULL.  This happens when the pathbar button
 	for the current directory is too large to fit in the
 	space, e.g. on Windows for directories named something like
-	"My Documents and Settings".
+	"My Documents and Settings".  (#389603)
 
 2007-06-04  Matthias Clasen  <mclasen@redhat.com>
 
