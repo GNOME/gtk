@@ -1,3 +1,8 @@
+2007-06-05  Matthias Clasen <mclasen@redhat.com>
+
+	* gdk/x11/gdkevents-x11.c (gdk_event_translate): Check that
+	window_private is not NULL before using it.  (#444351, David Ronis)
+
 2007-06-05  Jakub Steiner <jimmac@ximian.com>
 
 	* gtk/stock-icons/{16,24}/gtk-find*: drop the paper sheet.

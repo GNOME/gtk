@@ -2102,7 +2102,7 @@ gdk_event_translate (GdkDisplay *display,
       else
 #endif
 #if defined(HAVE_XCOMPOSITE) && defined (HAVE_XDAMAGE) && defined (HAVE_XFIXES)
-      if (display_x11->have_xdamage && window_private->composited &&
+      if (display_x11->have_xdamage && window_private && window_private->composited &&
 	  xevent->type == display_x11->xdamage_event_base + XDamageNotify)
 	{
 	  XDamageNotifyEvent *damage_event = (XDamageNotifyEvent *) xevent;
