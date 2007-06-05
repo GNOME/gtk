@@ -1,3 +1,9 @@
+2007-06-05  Jakub Steiner <jimmac@ximian.com>
+
+	* gtk/stock-icons/{16,24}/gtk-find*: drop the paper sheet.
+		gtk-find is used for search, rather than find within a document
+		(file dialog).
+
 2007-06-05  Kristian Rietveld  <kris@gtk.org>
 
 	Fix #399071, suggestion from Benoit Dejean.
