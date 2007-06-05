@@ -1,3 +1,8 @@
+2007-06-05  Yevgen Muntyan  <muntyan@tamu.edu>
+
+	* demos/gtk-demo/textview.c (insert_text): Drop the phrase
+	saying invisible text doesn't work (#444236).
+
 2007-06-05  Matthias Clasen <mclasen@redhat.com>
 
 	* gdk/x11/gdkevents-x11.c (gdk_event_translate): Check that
