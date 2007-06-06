@@ -1,3 +1,17 @@
+2007-06-06  Yevgen Muntyan  <muntyan@tamu.edu>
+
+	* gtk/gtkwidget.c:
+	* gtk/gtkwidget.h: new method, gtk_widget_modify_cursor() (#89314).
+	
+	* gtkrc.c:
+	* gtkrc.h: new functions _gtk_rc_style_set_rc_property() and 
+	_gtk_rc_style_unset_rc_property().
+	
+	* gtk/gtk.symbols: added gtk_widget_modify_cursor.
+	
+	* tests/testtext.c (do_cursor_visible_changed):
+	* tests/testgtk.c (create_styles): test it.
+
 2007-06-06  Richard Hult  <richard@imendio.com>
 
 	* gdk/quartz/gdkevents-quartz.c (find_mouse_window_for_ns_event)

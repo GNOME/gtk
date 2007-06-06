@@ -13366,6 +13366,15 @@ create_styles (GtkWidget *widget)
       gtk_widget_modify_base (entry, GTK_STATE_NORMAL, &yellow);
       gtk_box_pack_start (GTK_BOX (vbox), entry, FALSE, FALSE, 0);
 
+      label = gtk_label_new ("Cursor:");
+      gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
+      gtk_box_pack_start (GTK_BOX (vbox), label, FALSE, FALSE, 0);
+
+      entry = gtk_entry_new ();
+      gtk_entry_set_text (GTK_ENTRY (entry), "Some Text");
+      gtk_widget_modify_cursor (entry, &red, &red);
+      gtk_box_pack_start (GTK_BOX (vbox), entry, FALSE, FALSE, 0);
+
       label = gtk_label_new ("Multiple:");
       gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
       gtk_box_pack_start (GTK_BOX (vbox), label, FALSE, FALSE, 0);

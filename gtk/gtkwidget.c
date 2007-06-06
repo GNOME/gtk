@@ -5400,6 +5400,68 @@ gtk_widget_modify_base (GtkWidget      *widget,
   gtk_widget_modify_color_component (widget, GTK_RC_BASE, state, color);
 }
 
+static void
+modify_color_property (GtkWidget      *widget,
+		       GtkRcStyle     *rc_style,
+		       const char     *name,
+		       const GdkColor *color)
+{
+  GQuark type_name = g_type_qname (G_OBJECT_TYPE (widget));
+  GQuark property_name = g_quark_from_string (name);
+
+  if (color)
+    {
+      GtkRcProperty rc_property = {0};
+      char *color_name;
+
+      rc_property.type_name = type_name;
+      rc_property.property_name = property_name;
+      rc_property.origin = NULL;
+
+      color_name = gdk_color_to_string (color);
+      g_value_init (&rc_property.value, G_TYPE_STRING);
+      g_value_take_string (&rc_property.value, color_name);
+
+      _gtk_rc_style_set_rc_property (rc_style, &rc_property);
+
+      g_value_unset (&rc_property.value);
+    }
+  else
+    _gtk_rc_style_unset_rc_property (rc_style, type_name, property_name);
+}
+
+/**
+ * gtk_widget_modify_cursor:
+ * @widget: a #GtkWidget
+ * @primary: the color to use for primary cursor (does not need to be
+ *           allocated), or %NULL to undo the effect of previous calls to
+ *           of gtk_widget_modify_cursor().
+ * @secondary: the color to use for secondary cursor (does not need to be
+ *             allocated), or %NULL to undo the effect of previous calls to
+ *             of gtk_widget_modify_cursor().
+ *
+ * Sets the font to use for a widget.  All other style values are left
+ * untouched. See also gtk_widget_modify_style().
+ *
+ * Since: 2.12
+ **/
+void
+gtk_widget_modify_cursor (GtkWidget      *widget,
+			  const GdkColor *primary,
+			  const GdkColor *secondary)
+{
+  GtkRcStyle *rc_style;
+
+  g_return_if_fail (GTK_IS_WIDGET (widget));
+
+  rc_style = gtk_widget_get_modifier_style (widget);
+
+  modify_color_property (widget, rc_style, "cursor-color", primary);
+  modify_color_property (widget, rc_style, "secondary-cursor-color", secondary);
+
+  gtk_widget_modify_style (widget, rc_style);
+}
+
 /**
  * gtk_widget_modify_font:
  * @widget: a #GtkWidget

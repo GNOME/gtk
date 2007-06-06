@@ -240,6 +240,10 @@ static gint	   gtk_rc_properties_cmp	     (gconstpointer    bsearch_node1,
 						      gconstpointer    bsearch_node2);
 static void        gtk_rc_set_free                   (GtkRcSet        *rc_set);
 
+static void	   insert_rc_property		     (GtkRcStyle      *style,
+						      GtkRcProperty   *property,
+						      gboolean         replace);
+
 
 static const GScannerConfig gtk_rc_scanner_config =
 {
@@ -1263,6 +1267,36 @@ gtk_rc_style_copy (GtkRcStyle *orig)
   gtk_rc_style_copy_icons_and_colors (style, orig, NULL);
 
   return style;
+}
+
+void
+_gtk_rc_style_set_rc_property (GtkRcStyle *rc_style,
+			       GtkRcProperty *property)
+{
+  g_return_if_fail (GTK_IS_RC_STYLE (rc_style));
+  g_return_if_fail (property != NULL);
+
+  insert_rc_property (rc_style, property, TRUE);
+}
+
+void
+_gtk_rc_style_unset_rc_property (GtkRcStyle *rc_style,
+				 GQuark      type_name,
+				 GQuark      property_name)
+{
+  GtkRcProperty *node;
+
+  g_return_if_fail (GTK_IS_RC_STYLE (rc_style));
+
+  node = _gtk_rc_style_lookup_rc_property (rc_style, type_name, property_name);
+
+  if (node != NULL)
+    {
+      guint index = node - (GtkRcProperty *) rc_style->rc_properties->data;
+      g_value_unset (&node->value);
+      g_free (node->origin);
+      g_array_remove_index (rc_style->rc_properties, index);
+    }
 }
 
 void      

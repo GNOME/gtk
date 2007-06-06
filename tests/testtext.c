@@ -984,13 +984,39 @@ do_editable_changed (gpointer callback_data,
 }
 
 static void
+change_cursor_color (GtkWidget *widget,
+		     gboolean   set)
+{
+  if (set)
+    {
+      GdkColor red = {0, 65535, 0, 0};
+      gtk_widget_modify_cursor (widget, &red, &red);
+    }
+  else
+    gtk_widget_modify_cursor (widget, NULL, NULL);
+}
+
+static void
 do_cursor_visible_changed (gpointer callback_data,
                            guint callback_action,
                            GtkWidget *widget)
 {
   View *view = view_from_widget (widget);
 
-  gtk_text_view_set_cursor_visible (GTK_TEXT_VIEW (view->text_view), callback_action);
+  switch (callback_action)
+    {
+    case 0:
+      gtk_text_view_set_cursor_visible (GTK_TEXT_VIEW (view->text_view), FALSE);
+      break;
+    case 1:
+      gtk_text_view_set_cursor_visible (GTK_TEXT_VIEW (view->text_view), TRUE);
+      change_cursor_color (view->text_view, FALSE);
+      break;
+    case 2:
+      gtk_text_view_set_cursor_visible (GTK_TEXT_VIEW (view->text_view), TRUE);
+      change_cursor_color (view->text_view, TRUE);
+      break;
+    }
 }
 
 static void
@@ -1946,8 +1972,9 @@ static GtkItemFactoryEntry menu_items[] =
   { "/Settings/Not editable",    NULL,      do_editable_changed,  FALSE, "/Settings/Editable" },
   { "/Settings/sep1",        NULL,      NULL,             0, "<Separator>" },
 
-  { "/Settings/Cursor visible",    NULL,      do_cursor_visible_changed,  TRUE, "<RadioItem>" },
-  { "/Settings/Cursor not visible", NULL,      do_cursor_visible_changed,  FALSE, "/Settings/Cursor visible" },
+  { "/Settings/Cursor normal",    NULL,      do_cursor_visible_changed,  1, "<RadioItem>" },
+  { "/Settings/Cursor not visible", NULL,      do_cursor_visible_changed,  0, "/Settings/Cursor normal" },
+  { "/Settings/Cursor colored", NULL,      do_cursor_visible_changed,  2, "/Settings/Cursor normal" },
   { "/Settings/sep1",        NULL,      NULL,          0, "<Separator>" },
   
   { "/Settings/Left-to-Right", NULL,    do_direction_changed,  GTK_TEXT_DIR_LTR, "<RadioItem>" },

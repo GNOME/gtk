@@ -248,6 +248,11 @@ struct _GtkRcProperty
 const GtkRcProperty* _gtk_rc_style_lookup_rc_property (GtkRcStyle *rc_style,
 						       GQuark      type_name,
 						       GQuark      property_name);
+void	      _gtk_rc_style_set_rc_property	      (GtkRcStyle *rc_style,
+						       GtkRcProperty *property);
+void	      _gtk_rc_style_unset_rc_property	      (GtkRcStyle *rc_style,
+						       GQuark      type_name,
+						       GQuark      property_name);
 
 GSList     * _gtk_rc_style_get_color_hashes        (GtkRcStyle *rc_style);
 

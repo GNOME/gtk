@@ -671,6 +671,9 @@ void        gtk_widget_modify_text        (GtkWidget            *widget,
 void        gtk_widget_modify_base        (GtkWidget            *widget,
 					   GtkStateType          state,
 					   const GdkColor       *color);
+void        gtk_widget_modify_cursor      (GtkWidget            *widget,
+					   const GdkColor       *primary,
+					   const GdkColor       *secondary);
 void        gtk_widget_modify_font        (GtkWidget            *widget,
 					   PangoFontDescription *font_desc);
 
