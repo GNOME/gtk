@@ -1,3 +1,7 @@
+2007-06-06  Matthias Clasen  <mclasen@redhat.com>
+
+	* NEWS: Updates
+
 2007-06-06  Kristian Rietveld  <kris@imendio.com>
 
 	* gtk/gtktreeviewcolumn.c (gtk_tree_view_column_queue_resize): use

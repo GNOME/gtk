@@ -1,3 +1,23 @@
+Overview of Changes from GTK+ 2.11.1 to 2.11.2
+==============================================
+
+* The GtkListStore and GtkTreeStore have new API
+  to set values using vectors of columns and values
+
+* Bugs fixed:
+ 389603 GtkFileChooserWidget crashes when the window is too narrow
+ 444351 metacity cores on startup
+ 379213 gtkaboutdialog.h causes warnings with GCC and -Wshadow
+ 442888 problem with GTK+ medialib integration
+ 444236 gtk-demo says invisible text doesn't work
+ 444457 Segfault in gdk_window_set_opacity when opacity < 1.0
+ 399071 add gtk_tree_store_set_with_valuesv
+ 434021 crash on startup with jhbuild
+
+* Updated translations:
+ Spanish (es)
+
+
 Overview of Changes from GTK+ 2.11.0 to 2.11.1
 ==============================================
 
