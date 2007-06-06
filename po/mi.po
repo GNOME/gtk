@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.3.2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-06-04 12:18-0400\n"
+"POT-Creation-Date: 2007-06-06 09:04-0400\n"
 "PO-Revision-Date: 2004-01-27 07:36+1300\n"
 "Last-Translator: Wesley Parish <wes.parish@paradise.net.nz>\n"
 "Language-Team: GNOME Māori Team <maori@nzlinux.org.nz>\n"
@@ -2334,7 +2334,7 @@ msgstr ""
 msgid "Down Path"
 msgstr ""
 
-#: gtk/gtkpathbar.c:1374
+#: gtk/gtkpathbar.c:1377
 #, fuzzy
 msgid "File System Root"
 msgstr " puarahi"

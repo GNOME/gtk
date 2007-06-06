@@ -15,7 +15,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gl\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-06-04 12:18-0400\n"
+"POT-Creation-Date: 2007-06-06 09:04-0400\n"
 "PO-Revision-Date: 2006-06-15 22:13+0200\n"
 "Last-Translator: Ignacio Casal Quinteiro <nacho.resa@gmail.com>\n"
 "Language-Team: Galego <trasno@ceu.fi.udc.es>\n"
@@ -2375,7 +2375,7 @@ msgstr ""
 msgid "Down Path"
 msgstr ""
 
-#: gtk/gtkpathbar.c:1374
+#: gtk/gtkpathbar.c:1377
 #, fuzzy
 msgid "File System Root"
 msgstr "Sistema de ficheiros"

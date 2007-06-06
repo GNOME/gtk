@@ -13,7 +13,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ru2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-06-04 12:18-0400\n"
+"POT-Creation-Date: 2007-06-06 09:04-0400\n"
 "PO-Revision-Date: 2006-06-24 23:51+0400\n"
 "Last-Translator: Nickolay V. Shmyrev <nshmyrev@yandex.ru>\n"
 "Language-Team: Russian <gnome-cyr@gnome.org>\n"
@@ -2376,7 +2376,7 @@ msgstr ""
 msgid "Down Path"
 msgstr ""
 
-#: gtk/gtkpathbar.c:1374
+#: gtk/gtkpathbar.c:1377
 #, fuzzy
 msgid "File System Root"
 msgstr "Файловая система"

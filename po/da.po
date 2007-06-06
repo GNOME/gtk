@@ -36,7 +36,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-06-04 12:18-0400\n"
+"POT-Creation-Date: 2007-06-06 09:04-0400\n"
 "PO-Revision-Date: 2007-05-25 01:34+0200\n"
 "Last-Translator: Ask Hjorth Larsen <asklarsen@gmail.com>\n"
 "Language-Team: Danish <dansk@dansk-gruppen.dk>\n"
@@ -2380,7 +2380,7 @@ msgstr ""
 msgid "Down Path"
 msgstr ""
 
-#: gtk/gtkpathbar.c:1374
+#: gtk/gtkpathbar.c:1377
 #, fuzzy
 msgid "File System Root"
 msgstr "Filsystem"

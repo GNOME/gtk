@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ gtk-2-4\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-06-04 12:18-0400\n"
+"POT-Creation-Date: 2007-06-06 09:04-0400\n"
 "PO-Revision-Date: 2006-06-20 15:32-0500\n"
 "Last-Translator: Zack Ajmal <urdu@zackvision.com>\n"
 "Language-Team: UrduWeb Localization Team <l10n@urduweb.org>\n"
@@ -2272,7 +2272,7 @@ msgstr ""
 msgid "Down Path"
 msgstr ""
 
-#: gtk/gtkpathbar.c:1374
+#: gtk/gtkpathbar.c:1377
 msgid "File System Root"
 msgstr ""
 
