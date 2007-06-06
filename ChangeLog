@@ -1,3 +1,10 @@
+2007-06-06  Richard Hult  <richard@imendio.com>
+
+	* gdk/quartz/gdkevents-quartz.c (get_converted_window_coordinates):
+	Don't do anything if the two windows are the same.
+	(find_window_for_ns_event): Translate coordinates to be relative
+	the grab window when appropriate.
+
 2007-06-06  Emmanuele Bassi  <ebassi@gnome.org>
 
 	* gtk/gtkfilechooserdefault.c:

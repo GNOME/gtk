@@ -905,6 +905,13 @@ get_converted_window_coordinates (GdkWindow *in_window,
   int in_origin_x, in_origin_y;
   int out_origin_x, out_origin_y;
 
+  if (in_window == out_window)
+    {
+      *out_x = in_x;
+      *out_y = in_y;
+      return;
+    }
+
   /* First translate to "in" toplevel coordinates, then on to "out"
    * toplevel coordinates, and finally to "out" child (the passed in
    * window) coordinates.
@@ -1077,26 +1084,29 @@ find_window_for_ns_event (NSEvent *nsevent,
 		  return real_window;
 	      }
 
-	    /* FIXME: This part needs some fixing, it doesn't return
-	     * the right coordinates if the nsevent happens for a
-	     * different window than the grab window.
-	     */
+	    /* Finally check the grab window. */
 	    if (pointer_grab_event_mask & get_event_mask_from_ns_event (nsevent))
 	      {
+                GdkWindow *event_toplevel;
 		GdkWindow *grab_toplevel;
 		NSPoint point;
 		int x_tmp, y_tmp;
 
+                event_toplevel = [(GdkQuartzView *)[[nsevent window] contentView] gdkWindow];
 		grab_toplevel = gdk_window_get_toplevel (_gdk_quartz_pointer_grab_window);
 		point = [nsevent locationInWindow];
 
 		x_tmp = point.x;
 		y_tmp = GDK_WINDOW_IMPL_QUARTZ (GDK_WINDOW_OBJECT (grab_toplevel)->impl)->height - point.y;
 
-		get_child_coordinates_from_ancestor (grab_toplevel,
-						     x_tmp, y_tmp, 
-						     _gdk_quartz_pointer_grab_window,
-						     x, y);
+                /* Translate the coordinates so they are relative to
+                 * the grab window instead of the event toplevel for
+                 * the cases where they are not the same.
+                 */
+                get_converted_window_coordinates (event_toplevel,
+                                                  x_tmp, y_tmp,
+                                                  _gdk_quartz_pointer_grab_window,
+                                                  x, y);
 
 		return _gdk_quartz_pointer_grab_window;
 	      }
