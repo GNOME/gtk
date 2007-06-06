@@ -179,13 +179,11 @@
   if (!private->accept_focus)
     return NO;
 
-  /* FIXME: Is this right? If so, the switch shouldn't be needed. Need
-   * this + some tweaking to the event/grab code to get menus
-   * working...
+  /* Popup windows should not be able to get focused in the window
+   * manager sense, it's only handled through grabs.
    */
-  /*if (private->window_type == GDK_WINDOW_TEMP)
+  if (private->window_type == GDK_WINDOW_TEMP)
     return NO;
-  */
 
   switch (impl->type_hint)
     {
