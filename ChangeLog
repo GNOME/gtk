@@ -1,4 +1,14 @@
-2007-06-05  Richard Hult  <richard@imendio.com>
+2007-06-06  Richard Hult  <richard@imendio.com>
+
+	* gdk/quartz/gdkevents-quartz.c (synthesize_crossing_events):
+	Update comment to be more clear and print a warning if we try to
+	create a crossing event without knowing what the current mouse
+	window is, to help track down focus bugs.
+
+	* gdk/quartz/gdkevents-quartz.c
+	(_gdk_quartz_events_update_focus_window): Fix indentation.
+
+2007-06-06  Richard Hult  <richard@imendio.com>
 
 	* gdk/quartz/GdkQuartzWindow.c: Don't let temp windows become key
 	window.

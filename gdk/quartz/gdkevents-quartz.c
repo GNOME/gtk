@@ -495,10 +495,10 @@ _gdk_quartz_events_update_focus_window (GdkWindow *window,
   
   if (!got_focus && window == current_keyboard_window)
     {
-	  event = create_focus_event (current_keyboard_window, FALSE);
-	  append_event (event);
-	  g_object_unref (current_keyboard_window);
-	  current_keyboard_window = NULL;
+      event = create_focus_event (current_keyboard_window, FALSE);
+      append_event (event);
+      g_object_unref (current_keyboard_window);
+      current_keyboard_window = NULL;
     }
 
   if (got_focus)
@@ -755,15 +755,12 @@ synthesize_crossing_events (GdkWindow      *window,
     }
   else
     {
-      /* This means we have not current_mouse_window. FIXME: Should
-       * we make sure to always set the root window instead of NULL?
+      /* This means we have no current_mouse_window, which probably
+       * means that there is a bug somewhere, we should always have
+       * the root in we don't have another window. Does this ever
+       * happen?
        */
-
-      /* FIXME: Figure out why this is being called with window being
-       * NULL. The check works around a crash for now.
-       */ 
-      if (window)
-	synthesize_enter_event (window, nsevent, mode, GDK_NOTIFY_UNKNOWN);
+      g_warning ("Trying to create crossing event when current_mouse_window is NULL");
     }
   
   _gdk_quartz_events_update_mouse_window (window);
