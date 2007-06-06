@@ -802,6 +802,9 @@ _gdk_quartz_events_get_mouse_window (void)
 void 
 _gdk_quartz_events_update_mouse_window (GdkWindow *window)
 {
+  if (window == current_mouse_window)
+    return;
+
   if (window)
     g_object_ref (window);
   if (current_mouse_window)
