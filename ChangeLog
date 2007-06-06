@@ -1,3 +1,12 @@
+2007-06-06  Kristian Rietveld  <kris@imendio.com>
+
+	* gtk/gtkcellrendererprogress.c (gtk_cell_renderer_progress_init),
+	(gtk_cell_renderer_progress_class_init),
+	(gtk_cell_renderer_progress_[gs]et_property),
+	(gtk_cell_renderer_progress_render): add text-[xy]align properties
+	for aligning the text label of the progress bar.  (#334576,
+	suggestion from Steven Sheehy).
+
 2007-06-06  Yevgen Muntyan  <muntyan@tamu.edu>
 
 	* gtk/gtkwidget.c:

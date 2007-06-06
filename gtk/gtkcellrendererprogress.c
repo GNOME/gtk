@@ -42,7 +42,9 @@ enum
   PROP_0,
   PROP_VALUE,
   PROP_TEXT,
-  PROP_PULSE
+  PROP_PULSE,
+  PROP_TEXT_XALIGN,
+  PROP_TEXT_YALIGN
 }; 
 
 struct _GtkCellRendererProgressPrivate
@@ -54,6 +56,8 @@ struct _GtkCellRendererProgressPrivate
   gint min_w;
   gint pulse;
   gint offset;
+  gfloat text_xalign;
+  gfloat text_yalign;
 };
 
 static void gtk_cell_renderer_progress_finalize     (GObject                 *object);
@@ -165,6 +169,40 @@ gtk_cell_renderer_progress_class_init (GtkCellRendererProgressClass *klass)
                                                      -1, G_MAXINT, -1,
                                                      GTK_PARAM_READWRITE));
 
+  /**
+   * GtkCellRendererProgress:text-xalign:
+   *
+   * The "text-xalign" property controls the horizontal alignment of the
+   * text in the progress bar.  Valid values range from 0 (left) to 1
+   * (right).  Reserved for RTL layouts.
+   *
+   * Since: 2.12
+   */
+  g_object_class_install_property (object_class,
+                                   PROP_TEXT_XALIGN,
+                                   g_param_spec_float ("text-xalign",
+                                                       P_("Text x alignment"),
+                                                       P_("The horizontal text alignment, from 0 (left) to 1 (right). Reversed for RTL layouts."),
+                                                       0.0, 1.0, 0.5,
+                                                       GTK_PARAM_READWRITE));
+
+  /**
+   * GtkCellRendererProgress:text-yalign:
+   *
+   * The "text-yalign" property controls the vertical alignment of the
+   * text in the progress bar.  Valid values range from 0 (top) to 1
+   * (bottom).
+   *
+   * Since: 2.12
+   */
+  g_object_class_install_property (object_class,
+                                   PROP_TEXT_YALIGN,
+                                   g_param_spec_float ("text-yalign",
+                                                       P_("Text y alignment"),
+                                                       P_("The vertical text alignment, from 0 (top) to 1 (bottom)."),
+                                                       0.0, 1.0, 0.5,
+                                                       GTK_PARAM_READWRITE));
+
   g_type_class_add_private (object_class, 
 			    sizeof (GtkCellRendererProgressPrivate));
 }
@@ -181,6 +219,9 @@ gtk_cell_renderer_progress_init (GtkCellRendererProgress *cellprogress)
   priv->min_h = -1;
   priv->pulse = -1;
   priv->offset = 0;
+
+  priv->text_xalign = 0.5;
+  priv->text_yalign = 0.5;
 
   cellprogress->priv = priv;
 }
@@ -233,6 +274,12 @@ gtk_cell_renderer_progress_get_property (GObject *object,
     case PROP_PULSE:
       g_value_set_int (value, priv->pulse);
       break;
+    case PROP_TEXT_XALIGN:
+      g_value_set_float (value, priv->text_xalign);
+      break;
+    case PROP_TEXT_YALIGN:
+      g_value_set_float (value, priv->text_yalign);
+      break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, param_id, pspec);
     }
@@ -245,6 +292,7 @@ gtk_cell_renderer_progress_set_property (GObject *object,
 					 GParamSpec   *pspec)
 {
   GtkCellRendererProgress *cellprogress = GTK_CELL_RENDERER_PROGRESS (object);
+  GtkCellRendererProgressPrivate *priv = cellprogress->priv;
   
   switch (param_id)
     {
@@ -259,6 +307,12 @@ gtk_cell_renderer_progress_set_property (GObject *object,
     case PROP_PULSE:
       gtk_cell_renderer_progress_set_pulse (cellprogress, 
 					    g_value_get_int (value));
+      break;
+    case PROP_TEXT_XALIGN:
+      priv->text_xalign = g_value_get_float (value);
+      break;
+    case PROP_TEXT_YALIGN:
+      priv->text_yalign = g_value_get_float (value);
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, param_id, pspec);
@@ -463,11 +517,21 @@ gtk_cell_renderer_progress_render (GtkCellRenderer *cell,
 
   if (priv->label)
     {
+      gfloat text_xalign;
+
       layout = gtk_widget_create_pango_layout (widget, priv->label);
       pango_layout_get_pixel_extents (layout, NULL, &logical_rect);
-      
-      x_pos = x + (w - logical_rect.width) / 2;
-      y_pos = y + (h - logical_rect.height) / 2;
+
+      if (gtk_widget_get_direction (widget) != GTK_TEXT_DIR_LTR)
+	text_xalign = 1.0 - priv->text_xalign;
+      else
+	text_xalign = priv->text_xalign;
+
+      x_pos = x + widget->style->xthickness + text_xalign *
+	(w - 2 * widget->style->xthickness - logical_rect.width);
+
+      y_pos = y + widget->style->ythickness + priv->text_yalign *
+	(h - 2 * widget->style->ythickness - logical_rect.height);
   
       gtk_paint_layout (widget->style, window, 
 	  	        GTK_STATE_SELECTED,
