@@ -1,3 +1,9 @@
+2007-06-06  Kristian Rietveld  <kris@imendio.com>
+
+	* gtk/gtktooltip.c (gtk_tooltip_show_tooltip): bail out if
+	last_window is not a GdkWindow anymore. (Fixes #434021, several
+	reporters).
+
 2007-06-06  Brian Cameron  <brian.cameron@sun.com>
 
 	* gdk/Makefile.am: Add gdkmedialib.h to EXTRA_DIST so this header

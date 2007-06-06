@@ -634,12 +634,12 @@ gtk_tooltip_show_tooltip (GdkDisplay *display)
     {
       window = tooltip->last_window;
 
+      if (!GDK_IS_WINDOW (window))
+	return;
+
       gdk_window_get_origin (window, &x, &y);
       x = tooltip->last_x - x;
       y = tooltip->last_y - y;
-
-      if (!window)
-	return;
 
       pointer_widget = tooltip_widget = find_widget_under_pointer (window,
 								   &x, &y);
