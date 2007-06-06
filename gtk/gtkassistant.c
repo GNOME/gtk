@@ -457,6 +457,9 @@ set_assistant_buttons_state (GtkAssistant *assistant)
 {
   GtkAssistantPrivate *priv = assistant->priv;
 
+  if (!priv->current_page)
+    return;
+  
   switch (priv->current_page->type)
     {
     case GTK_ASSISTANT_PAGE_INTRO:
@@ -1727,8 +1730,7 @@ gtk_assistant_set_forward_page_func (GtkAssistant         *assistant,
 
   /* Page flow has possibly changed, so the
      buttons state might need to change too */
-  if (priv->current_page)
-    set_assistant_buttons_state (assistant);
+  set_assistant_buttons_state (assistant);
 }
 
 /**
@@ -1882,8 +1884,7 @@ gtk_assistant_set_page_type (GtkAssistant         *assistant,
 
       /* Always set buttons state, a change in a future page
 	 might change current page buttons */
-      if (priv->current_page)
-	set_assistant_buttons_state (assistant);
+      set_assistant_buttons_state (assistant);
 
       gtk_widget_child_notify (page, "page-type");
     }
@@ -2115,8 +2116,7 @@ gtk_assistant_set_page_complete (GtkAssistant *assistant,
 
       /* Always set buttons state, a change in a future page
 	 might change current page buttons */
-      if (priv->current_page)
-	set_assistant_buttons_state (assistant);
+      set_assistant_buttons_state (assistant);
 
       gtk_widget_child_notify (page, "complete");
     }

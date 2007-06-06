@@ -1,3 +1,9 @@
+Overview of Changes from GTK+ 2.11.2 to 2.11.3
+==============================================
+
+* Bugs fixed:
+ 444310 update_buttons_state on a bare assistant causes gtk+ to crash
+
 Overview of Changes from GTK+ 2.11.1 to 2.11.2
 ==============================================
 
