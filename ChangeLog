@@ -1,3 +1,15 @@
+2007-06-06  Emmanuele Bassi  <ebassi@gnome.org>
+
+	* gtk/gtkfilechooserdefault.c:
+	(get_file_info_finished), (shortcuts_insert_path),
+	(shortcuts_add_bookmarks), (shortcuts_add_current_folder): Factor
+	out the search shortcut, the recently used shortcut and the separator
+	from the shortcut selection combo. (#444734)
+
+	(recent_idle_load): Remove the idle source that lazily loads the
+	recently used files, if the GtkRecentManager returns an empty
+	list. (#443913)
+
 2007-06-06  Ross Burton  <ross@openedhand.com>
 
 	* gdk/x11/gdkspawn-x11.c:
