@@ -1,5 +1,12 @@
 2007-06-06  Kristian Rietveld  <kris@imendio.com>
 
+	* gtk/gtktreeviewcolumn.[ch] (gtk_tree_view_column_get_tree_view): new
+	function.  (#342471, Lorenzo Gil Sanchez).
+
+	* gtk/gtk.symbols: updated.
+
+2007-06-06  Kristian Rietveld  <kris@imendio.com>
+
 	* gtk/gtktooltip.c (gtk_tooltip_paint_window): remove unused
 	call to gtk_widget_size_request().  (Reported by Carlos
 	Garnacho).

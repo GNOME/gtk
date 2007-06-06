@@ -3711,5 +3711,26 @@ gtk_tree_view_column_queue_resize (GtkTreeViewColumn *tree_column)
     _gtk_tree_view_column_cell_set_dirty (tree_column, TRUE);
 }
 
+/**
+ * gtk_tree_view_column_get_tree_view:
+ * @tree_column: A #GtkTreeViewColumn
+ *
+ * Returns the #GtkTreeView wherein @tree_column has been inserted.  If
+ * @column is currently not inserted in any tree view, %NULL is
+ * returned.
+ *
+ * Return value: The tree view wherein @column has been inserted if any,
+ *               %NULL otherwise.
+ *
+ * Since: 2.12
+ */
+GtkWidget *
+gtk_tree_view_column_get_tree_view (GtkTreeViewColumn *tree_column)
+{
+  g_return_val_if_fail (GTK_IS_TREE_VIEW_COLUMN (tree_column), NULL);
+
+  return tree_column->tree_view;
+}
+
 #define __GTK_TREE_VIEW_COLUMN_C__
 #include "gtkaliasdef.c"
