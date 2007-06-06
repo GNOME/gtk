@@ -1809,6 +1809,12 @@ gtk_tree_view_unrealize (GtkWidget *widget)
       priv->scroll_timeout = 0;
     }
 
+  if (priv->auto_expand_timeout != 0)
+    {
+      g_source_remove (priv->auto_expand_timeout);
+      priv->auto_expand_timeout = 0;
+    }
+
   if (priv->open_dest_timeout != 0)
     {
       g_source_remove (priv->open_dest_timeout);

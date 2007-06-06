@@ -1,3 +1,8 @@
+2007-06-06  Kristian Rietveld  <kris@imendio.com>
+
+	* gtk/gtktreeview.c (gtk_tree_view_unrealize): also remove the
+	auto expand timeout if it exists.
+
 2007-06-06  Richard Hult  <richard@imendio.com>
 
 	* gdk/quartz/gdkevents-quartz.c (synthesize_crossing_events):
