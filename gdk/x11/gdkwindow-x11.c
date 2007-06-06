@@ -6476,7 +6476,7 @@ gdk_window_set_opacity (GdkWindow *window,
 		     gdk_x11_get_xatom_by_name_for_display (display, "_NET_WM_WINDOW_OPACITY"),
 		     XA_CARDINAL, 32,
 		     PropModeReplace,
-		     (guchar *) cardinal, 1);
+		     (guchar *) &cardinal, 1);
 }
 
 void

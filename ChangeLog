@@ -1,3 +1,8 @@
+2007-06-06  Tor Lillqvist  <tml@novell.com>
+
+	* gdk/x11/gdkwindow-x11.c (gdk_window_set_opacity): Fix
+	embarrassing crash. (#444457, Torsten Schoenfeld)
+
 2007-06-05  Yevgen Muntyan  <muntyan@tamu.edu>
 
 	* demos/gtk-demo/textview.c (insert_text): Drop the phrase
