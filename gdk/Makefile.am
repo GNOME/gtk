@@ -11,6 +11,7 @@ EXTRA_DIST =			\
 	gdkkeysyms-update.pl	\
 	gdk.def 		\
 	gdkmarshalers.list	\
+	gdkmedialib.h		\
 	makeenums.pl		\
 	makefile.msc		\
 	gdk.symbols		\
@@ -48,11 +49,8 @@ LDADD = \
 if USE_MEDIALIB
 medialib_sources =  \
     gdkmedialib.c
-medialib_h_sources =    \
-    gdkmedialib.h
 else
 medialib_sources =
-medialib_h_sources =
 endif
 
 #

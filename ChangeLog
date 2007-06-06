@@ -1,3 +1,9 @@
+2007-06-06  Brian Cameron  <brian.cameron@sun.com>
+
+	* gdk/Makefile.am: Add gdkmedialib.h to EXTRA_DIST so this header
+	  file gets included with the distribution, as needed.  Fixes bug
+	  #442888.  Reviewed by Matthias Clasen.
+
 2007-06-06  Richard Hult  <richard@imendio.com>
 
 	* gdk/quartz/gdkevents-quartz.c
