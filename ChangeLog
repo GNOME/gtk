@@ -1,5 +1,11 @@
 2007-06-06  Kristian Rietveld  <kris@imendio.com>
 
+	* gtk/gtktooltip.c (gtk_tooltip_paint_window): remove unused
+	call to gtk_widget_size_request().  (Reported by Carlos
+	Garnacho).
+
+2007-06-06  Kristian Rietveld  <kris@imendio.com>
+
 	* gtk/gtktooltip.c (gtk_tooltip_show_tooltip): bail out if
 	last_window is not a GdkWindow anymore. (Fixes #434021, several
 	reporters).

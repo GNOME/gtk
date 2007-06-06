@@ -350,9 +350,6 @@ gtk_tooltip_reset (GtkTooltip *tooltip)
 static gboolean
 gtk_tooltip_paint_window (GtkTooltip *tooltip)
 {
-  GtkRequisition req;
-
-  gtk_widget_size_request (tooltip->window, &req);
   gtk_paint_flat_box (tooltip->window->style,
 		      tooltip->window->window,
 		      GTK_STATE_NORMAL,
