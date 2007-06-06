@@ -1,7 +1,7 @@
 2007-06-06  Yevgen Muntyan  <muntyan@tamu.edu>
 
 	* gtk/gtkwidget.c:
-	* gtk/gtkwidget.h: new method, gtk_widget_modify_cursor() (#89314).
+	* gtk/gtkwidget.h: new method, gtk_widget_modify_cursor() (#79585).
 	
 	* gtkrc.c:
 	* gtkrc.h: new functions _gtk_rc_style_set_rc_property() and 
