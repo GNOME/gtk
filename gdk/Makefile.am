@@ -91,7 +91,6 @@ gdk_public_h_sources =				\
 
 gdk_headers =                     \
 	$(gdk_public_h_sources)   \
-	$(medialib_h_sources)     \
 	gdkenumtypes.h		  \
 	gdkprivate.h		  \
 	gdkalias.h
