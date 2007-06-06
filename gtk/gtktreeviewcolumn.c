@@ -3705,7 +3705,7 @@ gtk_tree_view_column_cell_get_position (GtkTreeViewColumn *tree_column,
 void
 gtk_tree_view_column_queue_resize (GtkTreeViewColumn *tree_column)
 {
-  g_return_if_fail (tree_column != NULL);
+  g_return_if_fail (GTK_IS_TREE_VIEW_COLUMN (tree_column));
 
   if (tree_column->tree_view)
     _gtk_tree_view_column_cell_set_dirty (tree_column, TRUE);
