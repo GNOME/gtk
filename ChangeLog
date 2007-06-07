@@ -1,3 +1,8 @@
+2007-06-06  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/Makefile.am: Add the 16x16 version of gtk-select-color.png
+	to the list of stock icons.  (#444786)
+
 2007-06-06  Kristian Rietveld  <kris@imendio.com>
 
 	* gtk/gtkcellrendererprogress.c (gtk_cell_renderer_progress_init),

@@ -959,6 +959,7 @@ STOCK_ICONS = \
 	stock-icons/16/gtk-revert-to-saved-rtl.png    	\
 	stock-icons/16/gtk-save-as.png        		\
 	stock-icons/16/gtk-select-all.png     		\
+	stock-icons/16/gtk-select-color.png     	\
 	stock-icons/16/gtk-select-font.png    		\
 	stock-icons/16/gtk-sort-ascending.png	 	\
 	stock-icons/16/gtk-sort-descending.png        	\
