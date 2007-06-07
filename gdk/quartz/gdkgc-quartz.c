@@ -410,13 +410,10 @@ _gdk_quartz_gc_update_cg_context (GdkGC                      *gc,
 	break;
 
       case GDK_INVERT:
+      case GDK_XOR:
 	blend_mode = kCGBlendModeExclusion;
 	fg_pixel = 0xffffffff;
 	bg_pixel = 0xffffffff;
-	break;
-
-      case GDK_XOR:
-	blend_mode = kCGBlendModeExclusion;
 	break;
 
       case GDK_CLEAR:

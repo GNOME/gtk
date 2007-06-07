@@ -1,3 +1,9 @@
+2007-06-07  Michael Natterer  <mitch@imendio.com>
+
+	* gdk/quartz/gdkgc-quartz.c (_gdk_quartz_gc_update_cg_context):
+	use the same code for GDK_XOR as for GDK_INVERT. Xor with an
+	arbitrary color is impossible to implement with quartz.
+
 2007-06-07  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtksettings.c: Fix a typo in the docs.
