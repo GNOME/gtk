@@ -690,6 +690,13 @@ gtk_tree_view_class_init (GtkTreeViewClass *class)
                                                            FALSE,
                                                            GTK_PARAM_READWRITE));
 
+    /**
+     * GtkTreeView:show-expanders:
+     *
+     * %TRUE if the view has expanders.
+     *
+     * Since: 2.12
+     */
     g_object_class_install_property (o_class,
 				     PROP_SHOW_EXPANDERS,
 				     g_param_spec_boolean ("show-expanders",
@@ -698,6 +705,13 @@ gtk_tree_view_class_init (GtkTreeViewClass *class)
 							   TRUE,
 							   GTK_PARAM_READWRITE));
 
+    /**
+     * GtkTreeView:level-indentation:
+     *
+     * Extra indentation for each level.
+     *
+     * Since: 2.12
+     */
     g_object_class_install_property (o_class,
 				     PROP_LEVEL_INDENTATION,
 				     g_param_spec_int ("level-indentation",

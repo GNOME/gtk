@@ -1,5 +1,7 @@
 2007-06-07  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtktreeview.c: Documentation additions.
+
 	* gtk/gtknotebook.c: Add a doc comment.
 
 2007-06-06  Matthias Clasen  <mclasen@redhat.com>
