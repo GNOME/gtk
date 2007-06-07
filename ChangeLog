@@ -1,3 +1,7 @@
+2007-06-07  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtksettings.c: Fix a typo in the docs.
+
 2007-06-07  Christian Neumair  <cneumair@gnome.org>
 
 	* gtk/gtkstock.[ch]: Add GTK_STOCK_DISCARD, #158008.
