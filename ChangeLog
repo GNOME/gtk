@@ -1,3 +1,11 @@
+2007-06-07  Yevgen Muntyan  <muntyan@tamu.edu>
+
+	Merge from trunk (#445196):
+
+	* gtk/gtkstyle.c (get_insertion_cursor_gc): use text colors from
+	widget style to draw cursor instead of hardcoded black and grey
+	(#79585, comment #30).
+
 2007-06-06  Johan Dahlin  <jdahlin@async.com.br>
 
 	Merge from trunk:
