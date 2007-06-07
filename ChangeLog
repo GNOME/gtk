@@ -1,5 +1,13 @@
 2007-06-07  Michael Natterer  <mitch@imendio.com>
 
+	* gdk/quartz/gdkgc-quartz.c: add gdk_gc_quartz_init() and set
+	some values to the defaults used by X11.
+
+	(gdk_quartz_gc_set_values): really set cap_style when
+	GDK_GC_CAP_STYLE is in the mask, not line_style.
+
+2007-06-07  Michael Natterer  <mitch@imendio.com>
+
 	* gdk/quartz/gdkgc-quartz.c (_gdk_quartz_gc_update_cg_context):
 	use the same code for GDK_XOR as for GDK_INVERT. Xor with an
 	arbitrary color is impossible to implement with quartz.
