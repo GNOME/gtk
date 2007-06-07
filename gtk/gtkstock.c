@@ -306,6 +306,7 @@ static const GtkStockItem builtin_items [] =
    { GTK_STOCK_COPY, N_("_Copy"), GDK_CONTROL_MASK, 'c', GETTEXT_PACKAGE },
   { GTK_STOCK_CUT, N_("Cu_t"), GDK_CONTROL_MASK, 'x', GETTEXT_PACKAGE },
   { GTK_STOCK_DELETE, N_("_Delete"), 0, 0, GETTEXT_PACKAGE },
+  { GTK_STOCK_DISCARD, N_("_Discard"), 0, 0, GETTEXT_PACKAGE },
   { GTK_STOCK_DISCONNECT, N_("_Disconnect"), 0, 0, GETTEXT_PACKAGE },
   { GTK_STOCK_EXECUTE, N_("_Execute"), 0, 0, GETTEXT_PACKAGE },
   { GTK_STOCK_EDIT, N_("_Edit"), 0, 0, GETTEXT_PACKAGE },
