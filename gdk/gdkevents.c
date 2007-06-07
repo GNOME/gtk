@@ -836,7 +836,7 @@ gdk_event_get_axis (GdkEvent   *event,
  * gdk_event_request_motions:
  * @event: a valid #GdkEvent
  *
- * Request more motion notifies if #event is a motion notify hint event.
+ * Request more motion notifies if @event is a motion notify hint event.
  * This function should be used instead of gdk_window_get_pointer() to
  * request further motion notifies, because it also works for extension
  * events where motion notifies are provided for devices other than the
