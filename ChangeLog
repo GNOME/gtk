@@ -1,3 +1,12 @@
+2007-06-08  Michael Natterer  <mitch@imendio.com>
+
+	* gdk/quartz/gdkdrawable-quartz.c: add utility function
+	gdk_quartz_fix_cap_not_last_line() which fixes the coordinates for
+	GDK_CAP_NOT_LAST lines at least for horizontal and vertical lines.
+
+	(gdk_quartz_draw_segments)
+	(gdk_quartz_draw_lines): use it here.
+
 2007-06-07  Michael Natterer  <mitch@imendio.com>
 
 	* gdk/quartz/gdkgc-quartz.c: add gdk_gc_quartz_init() and set
