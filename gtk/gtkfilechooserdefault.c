@@ -1961,22 +1961,8 @@ shortcuts_append_desktop (GtkFileChooserDefault *impl)
 
   profile_start ("start", NULL);
 
-#ifdef G_OS_WIN32
-  name = _gtk_file_system_win32_get_desktop ();
-#else
-  home = g_get_home_dir ();
-  if (home == NULL)
-    {
-      profile_end ("end - no home directory!?", NULL);
-      return;
-    }
-
-  name = g_build_filename (home, "Desktop", NULL);
-#endif
-
+  name = g_get_user_special_dir (G_USER_DIRECTORY_DESKTOP);
   path = gtk_file_system_filename_to_path (impl->file_system, name);
-  g_free (name);
-
   shortcuts_insert_path (impl, -1, SHORTCUT_TYPE_PATH, NULL, path, _("Desktop"), FALSE, SHORTCUTS_DESKTOP);
   impl->has_desktop = TRUE;
 

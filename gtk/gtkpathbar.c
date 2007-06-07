@@ -1675,13 +1675,17 @@ _gtk_path_bar_set_file_system (GtkPathBar    *path_bar,
   home = g_get_home_dir ();
   if (home != NULL)
     {
+      gchar *freeme = NULL;
+
       path_bar->home_path = gtk_file_system_filename_to_path (path_bar->file_system, home);
       /* FIXME: Need file system backend specific way of getting the
        * Desktop path.
        */
-      desktop = g_build_filename (home, "Desktop", NULL);
-      path_bar->desktop_path = gtk_file_system_filename_to_path (path_bar->file_system, desktop);
-      g_free (desktop);
+      desktop = g_get_user_special_dir (G_USER_DIRECTORY_DESKTOP);
+      if (desktop != NULL)
+        path_bar->desktop_path = gtk_file_system_filename_to_path (path_bar->file_system, desktop);
+      else 
+        path_bar->desktop_path = NULL;
     }
   else
     {

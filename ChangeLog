@@ -1,5 +1,14 @@
 2007-06-06  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkfilechooserbutton.c (model_add_special):
+	* gtk/gtkfilechooserdefault.c (shortcuts_append_desktop):
+	* gtk/gtkfilesystemunix.c (get_icon_name_for_directory):
+	* gtk/gtkpathbar.c (_gtk_path_bar_set_file_system):
+	Use g_get_user_special_dir() to obtain the path for the
+	DESKTOP directory.  
+
+2007-06-06  Matthias Clasen  <mclasen@redhat.com>
+
 	* gtk/Makefile.am: Add the 16x16 version of gtk-select-color.png
 	to the list of stock icons.  (#444786)
 

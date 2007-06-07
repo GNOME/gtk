@@ -1601,17 +1601,12 @@ gtk_file_system_unix_filename_to_path (GtkFileSystem *file_system,
 static const char *
 get_icon_name_for_directory (const char *path)
 {
-  static char *desktop_path = NULL;
-
   if (!g_get_home_dir ())
     return "gnome-fs-directory";
 
-  if (!desktop_path)
-      desktop_path = g_build_filename (g_get_home_dir (), "Desktop", NULL);
-
   if (strcmp (g_get_home_dir (), path) == 0)
     return "gnome-fs-home";
-  else if (strcmp (desktop_path, path) == 0)
+  else if (strcmp (g_get_user_special_dir (G_USER_DIRECTORY_DESKTOP), path) == 0)
     return "gnome-fs-desktop";
   else
     return "gnome-fs-directory";
