@@ -1,3 +1,10 @@
+2007-06-09  Matthias Clasen  <mclasen@redhat.com>
+
+	Merge from trunk:
+
+	* gtk/gtkcalendar.c (gtk_calendar_init): Handle return values
+	from nl_langinfo() more correctly.
+
 2007-06-07  Yevgen Muntyan  <muntyan@tamu.edu>
 
 	Merge from trunk (#445196):

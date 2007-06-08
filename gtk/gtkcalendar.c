@@ -569,7 +569,7 @@ gtk_calendar_init (GtkCalendar *calendar)
   GtkCalendarPrivate *priv;
   gchar *year_before;
 #ifdef HAVE__NL_TIME_FIRST_WEEKDAY
-  gchar *langinfo;
+  union { unsigned int word; char *string; } langinfo;
   gint week_1stday = 0;
   gint first_weekday = 1;
   guint week_origin;
@@ -723,10 +723,10 @@ gtk_calendar_init (GtkCalendar *calendar)
     }
 #else
 #ifdef HAVE__NL_TIME_FIRST_WEEKDAY
-  langinfo = nl_langinfo (_NL_TIME_FIRST_WEEKDAY);
-  first_weekday = langinfo[0];
-  langinfo = nl_langinfo (_NL_TIME_WEEK_1STDAY);
-  week_origin = GPOINTER_TO_INT (langinfo);
+  langinfo.string = nl_langinfo (_NL_TIME_FIRST_WEEKDAY);
+  first_weekday = langinfo.string[0];
+  langinfo.string = nl_langinfo (_NL_TIME_WEEK_1STDAY);
+  week_origin = langinfo.word;
   if (week_origin == 19971130) /* Sunday */
     week_1stday = 0;
   else if (week_origin == 19971201) /* Monday */
