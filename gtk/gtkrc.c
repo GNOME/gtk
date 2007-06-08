@@ -3658,6 +3658,7 @@ gtk_rc_parse_engine (GtkRcContext *context,
 	{
 	  GtkRcStyleClass *new_class;
 	  
+	  rc_priv = GTK_RC_STYLE_GET_PRIVATE (*rc_style);
 	  new_style = gtk_theme_engine_create_rc_style (engine);
 	  g_type_module_unuse (G_TYPE_MODULE (engine));
 	  
