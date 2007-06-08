@@ -102,7 +102,7 @@ struct _GtkRcStyleClass
 		       GtkSettings  *settings,
 		       GScanner     *scanner);
   
-  /* Combine RC style data from src into dest. If overriden, this
+  /* Combine RC style data from src into dest. If overridden, this
    * function should chain to the parent.
    */
   void      (*merge)  (GtkRcStyle *dest,
@@ -227,6 +227,9 @@ typedef enum {
 GScanner* gtk_rc_scanner_new	(void);
 guint	  gtk_rc_parse_color	(GScanner	     *scanner,
 				 GdkColor	     *color);
+guint	  gtk_rc_parse_color_full (GScanner	     *scanner,
+                                   GtkRcStyle        *style,
+				   GdkColor	     *color);
 guint	  gtk_rc_parse_state	(GScanner	     *scanner,
 				 GtkStateType	     *state);
 guint	  gtk_rc_parse_priority	(GScanner	     *scanner,

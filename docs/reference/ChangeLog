@@ -1,3 +1,7 @@
+2007-06-08  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtk-sections.txt: Add gtk_rc_parse_color_full
+
 2007-06-06  Matthias Clasen  <mclasen@redhat.com>
 
 	* === Released 2.11.2 ===

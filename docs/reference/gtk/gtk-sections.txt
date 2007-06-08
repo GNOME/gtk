@@ -5563,6 +5563,7 @@ gtk_rc_add_default_file
 gtk_rc_get_default_files
 gtk_rc_set_default_files
 gtk_rc_parse_color
+gtk_rc_parse_color_full
 gtk_rc_parse_state
 gtk_rc_parse_priority
 gtk_rc_find_module_in_path

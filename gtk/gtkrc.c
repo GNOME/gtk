@@ -218,9 +218,6 @@ static guint       gtk_rc_parse_stock                (GtkRcContext    *context,
 static guint       gtk_rc_parse_logical_color        (GScanner        *scanner,
                                                       GtkRcStyle      *rc_style,
                                                       GHashTable      *hash);
-static guint       gtk_rc_parse_color_full           (GScanner        *scanner,
-                                                      GtkRcStyle      *style,
-                                                      GdkColor        *color);
 
 static void        gtk_rc_clear_hash_node            (gpointer         key,
                                                       gpointer         data,
@@ -1550,9 +1547,8 @@ gtk_rc_style_copy_icons_and_colors (GtkRcStyle   *rc_style,
     {
       gtk_rc_style_prepend_empty_color_hash (rc_style);
 
-      priv->color_hashes =
-        g_slist_append (priv->color_hashes,
-                        g_hash_table_ref (context->color_hash));
+      priv->color_hashes = g_slist_append (priv->color_hashes,
+                                           g_hash_table_ref (context->color_hash));
     }
 }
 
@@ -3605,6 +3601,7 @@ gtk_rc_parse_engine (GtkRcContext *context,
   guint result = G_TOKEN_NONE;
   GtkRcStyle *new_style = NULL;
   gboolean parsed_curlies = FALSE;
+  GtkRcStylePrivate *rc_priv, *new_priv;
   
   token = g_scanner_get_next_token (scanner);
   if (token != GTK_RC_TOKEN_ENGINE)
@@ -3628,13 +3625,23 @@ gtk_rc_parse_engine (GtkRcContext *context,
 
       parsed_curlies = TRUE;
 
+      rc_priv = GTK_RC_STYLE_GET_PRIVATE (*rc_style);
+
       if (G_OBJECT_TYPE (*rc_style) != GTK_TYPE_RC_STYLE)
 	{
 	  new_style = gtk_rc_style_new ();
 	  gtk_rc_style_real_merge (new_style, *rc_style);
-	  
-	  if ((*rc_style)->name)
-	    new_style->name = g_strdup ((*rc_style)->name);
+
+          new_style->name = g_strdup ((*rc_style)->name);
+
+          /* take over icon factories and color hashes 
+           * from the to-be-deleted style
+           */
+          new_style->icon_factories = (*rc_style)->icon_factories;
+          (*rc_style)->icon_factories = NULL;
+          new_priv = GTK_RC_STYLE_GET_PRIVATE (new_style);
+          new_priv->color_hashes = rc_priv->color_hashes;
+          rc_priv->color_hashes = NULL;
 	}
       else
 	(*rc_style)->engine_specified = TRUE;
@@ -3655,10 +3662,19 @@ gtk_rc_parse_engine (GtkRcContext *context,
 	  g_type_module_unuse (G_TYPE_MODULE (engine));
 	  
 	  new_class = GTK_RC_STYLE_GET_CLASS (new_style);
-	  
+
 	  new_class->merge (new_style, *rc_style);
-	  if ((*rc_style)->name)
-	    new_style->name = g_strdup ((*rc_style)->name);
+
+          new_style->name = g_strdup ((*rc_style)->name);
+
+          /* take over icon factories and color hashes 
+           * from the to-be-deleted style
+           */
+          new_style->icon_factories = (*rc_style)->icon_factories;
+          (*rc_style)->icon_factories = NULL;
+          new_priv = GTK_RC_STYLE_GET_PRIVATE (new_style);
+          new_priv->color_hashes = rc_priv->color_hashes;
+          rc_priv->color_hashes = NULL;
 	  
 	  if (new_class->parse)
 	    {
@@ -3667,6 +3683,13 @@ gtk_rc_parse_engine (GtkRcContext *context,
 	      
 	      if (result != G_TOKEN_NONE)
 		{
+                  /* copy icon factories and color hashes back
+                   */
+                  (*rc_style)->icon_factories = new_style->icon_factories;
+                  new_style->icon_factories = NULL;
+                  rc_priv->color_hashes = new_priv->color_hashes;
+                  new_priv->color_hashes = NULL;
+
 		  g_object_unref (new_style);
 		  new_style = NULL;
 		}
@@ -3698,18 +3721,6 @@ gtk_rc_parse_engine (GtkRcContext *context,
 
   if (new_style)
     {
-      GtkRcStylePrivate *rc_priv = GTK_RC_STYLE_GET_PRIVATE (*rc_style);
-      GtkRcStylePrivate *new_priv = GTK_RC_STYLE_GET_PRIVATE (new_style);
-
-      /* take over icon factories and color hashes from the to-be-deleted style
-       */
-
-      new_style->icon_factories = (*rc_style)->icon_factories;
-      (*rc_style)->icon_factories = NULL;
-
-      new_priv->color_hashes = rc_priv->color_hashes;
-      rc_priv->color_hashes = NULL;
-
       new_style->engine_specified = TRUE;
 
       g_object_unref (*rc_style);
@@ -3820,6 +3831,20 @@ gtk_rc_parse_priority (GScanner	           *scanner,
   return G_TOKEN_NONE;
 }
 
+/**
+ * gtk_rc_parse_color:
+ * @scanner: a #GScanner
+ * @color: a pointer to a #GtkColor structure in which to store the result
+ *
+ * Parses a color in the <link linkend="color=format">format</link> expected
+ * in a RC file. 
+ *
+ * Note that theme engines should use gtk_rc_parse_color_full() in 
+ * order to support symbolic colors.
+ *
+ * Returns: %G_TOKEN_NONE if parsing succeeded, otherwise the token
+ *     that was expected but not found
+ */
 guint
 gtk_rc_parse_color (GScanner *scanner,
 		    GdkColor *color)
@@ -3827,7 +3852,22 @@ gtk_rc_parse_color (GScanner *scanner,
   return gtk_rc_parse_color_full (scanner, NULL, color);
 }
 
-static guint
+/**
+ * gtk_rc_parse_color_full:
+ * @scanner: a #GScanner
+ * @style: a #GtkRcStyle, or %NULL
+ * @color: a pointer to a #GtkColor structure in which to store the result
+ *
+ * Parses a color in the <link linkend="color=format">format</link> expected
+ * in a RC file. If @style is not %NULL, it will be consulted to resolve
+ * references to symbolic colors.
+ *
+ * Returns: %G_TOKEN_NONE if parsing succeeded, otherwise the token
+ *     that was expected but not found
+ *
+ * Since: 2.12
+ */
+guint
 gtk_rc_parse_color_full (GScanner   *scanner,
                          GtkRcStyle *style,
                          GdkColor   *color)

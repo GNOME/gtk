@@ -1,3 +1,15 @@
+2007-06-08  Matthias Clasen  <mclasen@redhat.com>
+
+	Make it possible for theme engines to support symbolic 
+	colors.  (#426192, Andrea Cimitan, patch by Olivier Samyn)
+
+	* gtk/gtk.symbols:
+	* gtk/gtkrc.h:
+	* gtk/gtkrc.c (gtk_rc_parse_color_full): Export this function
+
+	* gtk/gtkrc.c (gtk_rc_parse_engine): Copy color hashes
+	to new style before parsing engine section.
+
 2007-06-08  Michael Natterer  <mitch@imendio.com>
 
 	* gdk/quartz/gdkdrawable-quartz.c: add utility function
