@@ -1,3 +1,8 @@
+2007-06-09  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtkcalendar.c (gtk_calendar_init): Handle return values
+	from nl_langinfo() more correctly. 
+
 2007-06-09  Carlos Garnacho  <carlos@imendio.com>
 
 	* gtk/gtkrc.c (gtk_rc_parse_engine): initialize rc_priv in the else
