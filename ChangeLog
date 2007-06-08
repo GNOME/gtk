@@ -1,3 +1,9 @@
+2007-06-08  Benjamin Berg  <benjamin@sipsolutions.net>
+
+	* gtk/gtkscrolledwindow.c: (gtk_scrolled_window_paint):
+	Fix shadow painting if the scrollbars-within-bevel style property is
+	set and border_width is nozero. (#445054)
+
 2007-06-08  Matthias Clasen  <mclasen@redhat.com>
 
 	Make it possible for theme engines to support symbolic 
