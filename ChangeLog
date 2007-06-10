@@ -1,3 +1,17 @@
+2007-06-10  Emmanuele Bassi  <ebassi@gnome.org>
+
+	* gtk/gtkscalebutton.[ch]: Fix some coding style bits.
+
+	(gtk_scale_button_dispose), (gtk_scale_button_class_init),
+	(gtk_scale_button_init): Use the GObject private data API instead
+	of allocating the private structure ourselves.
+
+	(gtk_scale_button_dispose), (gtk_scale_button_finalize): Free
+	the icons string vector inside ::finalize and not in ::dispose.
+
+	(gtk_scale_button_update_icon): Use g_strv_length() instead
+	of an empty for loop.
+
 2007-06-09  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtkwidget.c:
