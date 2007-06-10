@@ -1,5 +1,11 @@
 2007-06-09  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkhscale.c (gtk_hscale_new):
+	* gtk/gtkvscale.c (gtk_vscale_new): Cosmetic change to make
+	it more obvious that this is a convenience function.
+
+2007-06-09  Matthias Clasen  <mclasen@redhat.com>
+
 	* gtk/gtkcalendar.c (gtk_calendar_init): Handle return values
 	from nl_langinfo() more correctly. 
 

@@ -106,10 +106,6 @@ gtk_hscale_new_with_range (gdouble min,
   g_return_val_if_fail (step != 0.0, NULL);
 
   adj = gtk_adjustment_new (min, min, max, step, 10 * step, 0);
-  
-  scale = g_object_new (GTK_TYPE_HSCALE,
-                        "adjustment", adj,
-                        NULL);
 
   if (fabs (step) >= 1.0 || step == 0.0)
     digits = 0;
@@ -118,8 +114,11 @@ gtk_hscale_new_with_range (gdouble min,
     if (digits > 5)
       digits = 5;
   }
-
-  gtk_scale_set_digits (scale, digits);
+  
+  scale = g_object_new (GTK_TYPE_HSCALE,
+                        "adjustment", adj,
+                        "digits", digits,
+                        NULL);
   
   return GTK_WIDGET (scale);
 }

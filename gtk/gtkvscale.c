@@ -109,10 +109,6 @@ gtk_vscale_new_with_range (gdouble min,
 
   adj = gtk_adjustment_new (min, min, max, step, 10 * step, 0);
   
-  scale = g_object_new (GTK_TYPE_VSCALE,
-                        "adjustment", adj,
-                        NULL);
-
   if (fabs (step) >= 1.0 || step == 0.0)
     digits = 0;
   else {
@@ -121,7 +117,10 @@ gtk_vscale_new_with_range (gdouble min,
       digits = 5;
   }
 
-  gtk_scale_set_digits (scale, digits);
+  scale = g_object_new (GTK_TYPE_VSCALE,
+                        "adjustment", adj,
+                        "digits", digits,
+                        NULL);
   
   return GTK_WIDGET (scale);
 }
