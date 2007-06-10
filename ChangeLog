@@ -1,3 +1,11 @@
+2007-06-10  Cody Russell  <bratsche@gnome.org>
+
+	Merge from trunk:
+
+	* gdk/win32/gdkevents-win32.c (gdk_pointer_grab):
+	Don't revert the mouse cursor to the built-in one when
+	the user holds the mouse button down. (#445284, Tor Lillqvist)
+
 2007-06-09  Matthias Clasen  <mclasen@redhat.com>
 
 	Merge from trunk:
