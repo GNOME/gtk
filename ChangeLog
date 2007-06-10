@@ -1,5 +1,11 @@
 2007-06-09  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkscalebutton.c: Add an icons property, make 
+	gtk_scale_button_new() a convenience function.  (#445855,
+	Murray Cumming)
+
+2007-06-09  Matthias Clasen  <mclasen@redhat.com>
+
 	* gtk/gtkhscale.c (gtk_hscale_new):
 	* gtk/gtkvscale.c (gtk_vscale_new): Cosmetic change to make
 	it more obvious that this is a convenience function.

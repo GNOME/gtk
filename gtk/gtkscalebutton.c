@@ -51,6 +51,7 @@
 #include "gtkwindow.h"
 #include "gtkmarshalers.h"
 #include "gtkstock.h"
+#include "gtkprivate.h"
 
 #include <gdk-pixbuf/gdk-pixbuf.h>
 #include <gdk/gdkkeysyms.h>
@@ -72,7 +73,8 @@ enum {
   PROP_0,
   PROP_VALUE,
   PROP_SIZE,
-  PROP_ADJUSTMENT
+  PROP_ADJUSTMENT,
+  PROP_ICONS
 };
 
 struct _GtkScaleButtonPrivate {
@@ -167,7 +169,7 @@ gtk_scale_button_class_init (GtkScaleButtonClass *klass)
 							-G_MAXDOUBLE,
 							G_MAXDOUBLE,
 							0,
-							G_PARAM_READWRITE));
+							GTK_PARAM_READWRITE));
 
   g_object_class_install_property (gobject_class,
 				   PROP_SIZE,
@@ -176,7 +178,7 @@ gtk_scale_button_class_init (GtkScaleButtonClass *klass)
 						      P_("The icon size"),
 						      GTK_TYPE_ICON_SIZE,
 						      GTK_ICON_SIZE_SMALL_TOOLBAR,
-						      G_PARAM_READWRITE));
+						      GTK_PARAM_READWRITE));
 
   g_object_class_install_property (gobject_class,
                                    PROP_ADJUSTMENT,
@@ -184,8 +186,36 @@ gtk_scale_button_class_init (GtkScaleButtonClass *klass)
 							P_("Adjustment"),
 							P_("The GtkAdjustment that contains the current value of this scale button object"),
                                                         GTK_TYPE_ADJUSTMENT,
-                                                        G_PARAM_READWRITE));
+                                                        GTK_PARAM_READWRITE));
 
+  /**
+   * GtkScaleButton:icons:
+   *
+   * The names of the icons to be used by the scale button. 
+   * The first item in the array will be used in the button 
+   * when the current value is the lowest value, the second 
+   * item for the highest value. All the subsequent icons will 
+   * be used for all the other values, spread evenly over the 
+   * range of values.
+   *
+   * If there's only one icon name in the @icons array, it will 
+   * be used for all the values. If only two icon names are in 
+   * the @icons array, the first one will be used for the bottom 
+   * 50% of the scale, and the second one for the top 50%.
+   *
+   * It is recommended to use at least 3 icons so that the 
+   * #GtkScaleButton reflects the current value of the scale 
+   * better for the users.
+   *
+   * Since: 2.12
+   */
+  g_object_class_install_property (gobject_class,
+                                   PROP_ICONS,
+                                   g_param_spec_boxed ("icons",
+                                                       P_("Icons"),
+                                                       P_("List of icon names"),
+                                                       G_TYPE_STRV,
+                                                       GTK_PARAM_READWRITE));
   /**
    * GtkScaleButton::value-changed:
    * @button: the object that received the signal
@@ -336,6 +366,10 @@ gtk_scale_button_set_property (GObject       *object,
     case PROP_ADJUSTMENT:
       gtk_scale_button_set_adjustment (button, g_value_get_object (value));
       break;
+    case PROP_ICONS:
+      gtk_scale_button_set_icons (button, 
+                                  (const gchar **)g_value_get_boxed (value));
+      break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
@@ -364,6 +398,9 @@ gtk_scale_button_get_property (GObject     *object,
       break;
     case PROP_ADJUSTMENT:
       g_value_set_object (value, gtk_scale_button_get_adjustment (button));
+      break;
+    case PROP_ICONS:
+      g_value_set_boxed (value, priv->icon_list);
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -430,22 +467,15 @@ gtk_scale_button_new (GtkIconSize   size,
 		      const gchar **icons)
 {
   GtkScaleButton *button;
-  GtkScaleButtonPrivate *priv;
+  GtkObject *adj;
 
-  button = g_object_new (GTK_TYPE_SCALE_BUTTON, NULL);
-  priv = button->priv;
-
-  if (icons != NULL)
-    gtk_scale_button_set_icons (button, icons);
-
-  gtk_range_set_range (GTK_RANGE (priv->scale), min, max);
-  gtk_range_set_increments (GTK_RANGE (priv->scale), step, 10 * step);
-
-  if (priv->size != size)
-    {
-      priv->size = size;
-      gtk_scale_button_update_icon (button);
-    }
+  adj = gtk_adjustment_new (min, min, max, step, 10 * step, 0);
+  
+  button = g_object_new (GTK_TYPE_SCALE_BUTTON, 
+                         "adjustment", adj,
+                         "icons", icons,
+                         "size", size,
+                         NULL);
 
   return GTK_WIDGET (button);
 }
@@ -477,9 +507,10 @@ gtk_scale_button_get_value (GtkScaleButton * button)
  * @button: a #GtkScaleButton
  * @value: new value of the scale button
  *
- * Sets the current value of the scale; if the value is outside the minimum or 
- * maximum range values, it will be clamped to fit inside them. The scale button 
- * emits the "value_changed" signal if the value changes.
+ * Sets the current value of the scale; if the value is outside 
+ * the minimum or maximum range values, it will be clamped to fit 
+ * inside them. The scale button emits the #GtkScaleButton::value-changed 
+ * signal if the value changes.
  *
  * Since: 2.12
  */
@@ -501,16 +532,8 @@ gtk_scale_button_set_value (GtkScaleButton *button,
  * @button: a #GtkScaleButton
  * @icons: a %NULL-terminated array of icon names
  *
- * Sets the icons to be used by the scale button. The first item in the array 
- * will be used in the button when the current value is the lowest value, the 
- * second item for the highest value. All the subsequent icons will be used for 
- * all the other values, spread evenly over the range of values.
- *
- * If there's only one icon in the @icons array, it will be used for all the
- * values. If only two icons are in the @icons array, the first one will be
- * used for the bottom 50% of the scale, and the second one for the top 50%.
- * So it is recommended to use at least 3 icons so that the #GtkScaleButton
- * reflects the current value of the scale better for the users.
+ * Sets the icons to be used by the scale button. 
+ * For details, see the #GtkScaleButton:icons property.
  *
  * Since 2.12
  */
@@ -519,20 +542,22 @@ gtk_scale_button_set_icons (GtkScaleButton  *button,
 			    const gchar    **icons)
 {
   GtkScaleButtonPrivate *priv;
+  gchar **tmp;
 
   g_return_if_fail (GTK_IS_SCALE_BUTTON (button));
-  g_return_if_fail (icons != NULL);
-  g_return_if_fail (icons[0] != NULL);
 
   priv = button->priv;
 
-  g_strfreev (priv->icon_list);
+  tmp = priv->icon_list;
   priv->icon_list = g_strdupv ((gchar **) icons);
+  g_strfreev (tmp);
   gtk_scale_button_update_icon (button);
+
+  g_object_notify (G_OBJECT (button), "icons");
 }
 
 /**
- * gtk_scale_button_get_adjustment
+ * gtk_scale_button_get_adjustment:
  * @button: a #GtkScaleButton
  *
  * Gets the #GtkAdjustment associated with the #GtkScaleButton's scale.
@@ -560,7 +585,8 @@ gtk_scale_button_get_adjustment	(GtkScaleButton *button)
  * @button: a #GtkScaleButton
  * @adjustment: a #GtkAdjustment
  *
- * Sets the #GtkAdjustment to be used as a model for the #GtkScaleButton's scale.
+ * Sets the #GtkAdjustment to be used as a model 
+ * for the #GtkScaleButton's scale.
  * See gtk_range_set_adjustment() for details.
  *
  * Since: 2.12
@@ -574,6 +600,8 @@ gtk_scale_button_set_adjustment	(GtkScaleButton *button,
 
   gtk_range_set_adjustment (GTK_RANGE (button->priv->scale),
 			    adjustment);
+
+  g_object_notify (G_OBJECT (button), "adjustment");
 }
 
 /*
