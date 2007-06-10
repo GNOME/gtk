@@ -1,5 +1,9 @@
 2007-06-09  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkwidget.c:
+	* gtk/gtkscrolledwindow.c: Update docs
+	* gtk/gtkwidget.h: Deprecate gtk_widget_{ref,unref}
+
 	* gtk/gtkbox.c: Move docs inline.
 
 	* gtk/gtkrange.c:

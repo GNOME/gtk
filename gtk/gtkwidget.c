@@ -714,8 +714,10 @@ gtk_widget_class_init (GtkWidgetClass *klass)
    *   if the widget was previously unanchored
    *
    * The ::hierarchy-changed signal is emitted when the
-   * anchored state of a widget changes. A widget is anchored,
-   * if it has an ancestor that is a toplevel window.
+   * anchored state of a widget changes. A widget is
+   * <firstterm>anchored</firstterm> when its toplevel
+   * ancestor is a #GtkWindow. This signal is emitted when
+   * a widget changes from un-anchored to anchored or vice-versa.
    */
   widget_signals[HIERARCHY_CHANGED] =
     g_signal_new (I_("hierarchy_changed"),
@@ -7837,7 +7839,7 @@ gtk_widget_reset_shapes (GtkWidget *widget)
  * 
  * Return value: the widget that was referenced
  *
- * Deprecated: Use g_object_ref() instead.
+ * Deprecated:2.12: Use g_object_ref() instead.
  **/
 GtkWidget*
 gtk_widget_ref (GtkWidget *widget)
@@ -7853,7 +7855,7 @@ gtk_widget_ref (GtkWidget *widget)
  *
  * Inverse of gtk_widget_ref(). Equivalent to g_object_unref().
  * 
- * Deprecated: Use g_object_unref() instead.
+ * Deprecated:2.12: Use g_object_unref() instead.
  **/
 void
 gtk_widget_unref (GtkWidget *widget)

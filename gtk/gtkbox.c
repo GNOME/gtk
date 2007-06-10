@@ -633,8 +633,8 @@ gtk_box_reorder_child (GtkBox    *box,
  * @fill: pointer to return location for #GtkBox:fill child property 
  * @padding: pointer to return location for #GtkBox:padding child property 
  * @pack_type: pointer to return location for #GtkBox:pack-type child property 
- *
- * Returns information about how @child is packed into @box.
+ * 
+ * Obtains information about how @child is packed into @box.
  */
 void
 gtk_box_query_child_packing (GtkBox      *box,

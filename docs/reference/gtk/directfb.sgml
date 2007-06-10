@@ -31,75 +31,10 @@ system.
 <refsect2><title>Build requirements</title>
 
 <para>
-Beyond the usual GTK+ build requirements, the DirectFB backend (obviously) needs 
-the DirectFB libraries (at least 0.9.21) and Cairo compiled with DirectFB support.
+Beyond the usual GTK+ build requirements, the DirectFB backend (obviously) 
+needs the DirectFB libraries (at least 0.9.21) and cairo compiled with 
+DirectFB support.
 </para>
-
 </refsect2>
-
-<!--
-  FIXME: it seems most of the options listed in _gdk_windowing_args
-  are ignored, and they need to be described by somebody who knows 
-  what they are supposed to do...
-
-<refsect2><title>DirectFB-specific commandline options</title>
-
-<para>
-The DirectFB GDB backend can be influenced with some additional 
-command line arguments.
-</para>
-
-<formalpara>
-  <title><systemitem>dfb-help</systemitem></title>
-  <para>
-    Display help for DirectFB-specific commandline options.
-  </para>
-</formalpara>
-
-<formalpara>
-  <title><systemitem>dfb=<replaceable>value</replaceable></systemitem></title>
-  <para>
-    Possible values: sdl, system. 
-  </para>
-</formalpara>
-
-<formalpara>
-  <title><systemitem>disable-aa-fonts=<replaceable>number</replaceable></systemitem></title>
-  <para>
-    If <replaceable>number</replaceable> is 1, disable antialising for fonts.
-  </para>
-</formalpara>
-
-<formalpara>
-  <title><systemitem>argb-font=<replaceable>number</replaceable></systemitem></title>
-  <para>
-    If <replaceable>number</replaceable> is 1, enable ARGB fonts.
-  </para>
-</formalpara>
-
-<formalpara>
-  <title><systemitem>transparent-unfocused=<replaceable>number</replaceable></systemitem></title>
-  <para>
-    If <replaceable>number</replaceable> is 1, make unfocused windows transparent.
-  </para>
-</formalpara>
-
-<formalpara>
-  <title><systemitem>glyph-surface-cache=<replaceable>number</replaceable></systemitem></title>
-  <para>
-    Set the size of the glyph surface cache. The default value is 8.
-  </para>
-</formalpara>
-
-<formalpara>
-  <title><systemitem>enable-color-keyring=<replaceable>number</replaceable></systemitem></title>
-  <para>
-    If <replaceable>number</replaceable> is 1, turn on the color keyring.
-  </para>
-</formalpara>
-
--->
-
 </refsect1>
-
 </refentry>

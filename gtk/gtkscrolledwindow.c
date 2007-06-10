@@ -664,9 +664,14 @@ gtk_scrolled_window_set_placement_set (GtkScrolledWindow *scrolled_window,
 /**
  * gtk_scrolled_window_set_placement:
  * @scrolled_window: a #GtkScrolledWindow
+ * @window_placement: position of the child window
  *
  * Sets the placement of the contents with respect to the scrollbars
  * for the scrolled window.
+ * The default is %GTK_CORNER_TOP_LEFT, meaning the child is
+ * in the top left, with the scrollbars underneath and to the right.
+ * Other values in #GtkCornerType are %GTK_CORNER_TOP_RIGHT,
+ * %GTK_CORNER_BOTTOM_LEFT, and %GTK_CORNER_BOTTOM_RIGHT.
  *
  * See also gtk_scrolled_window_get_placement() and
  * gtk_scrolled_window_unset_placement().

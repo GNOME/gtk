@@ -22,7 +22,7 @@
     </formalpara>
 
     <para>
-      The #GtkWidget::popup_menu signal instructs the widget for which 
+      The #GtkWidget::popup-menu signal instructs the widget for which 
       it is emitted to create a context-sensitive popup menu. By default, 
       the <link linkend="gtk-bindings">key binding mechanism</link> is set to
       emit this signal when the
@@ -75,7 +75,7 @@ do_popup_menu (GtkWidget *my_widget, GdkEventButton *event)
 
       <listitem>
 	<para>
-	  In your ::button-press handler, call this function 
+	  In your #GtkWidget::button-press-event handler, call this function 
           when you need to pop up a menu:
 	</para>
 
@@ -97,7 +97,7 @@ my_widget_button_press_event_handler (GtkWidget *widget, GdkEventButton *event)
 
       <listitem>
 	<para>
-	  Implement a handler for the ::popup-menu signal:
+	  Implement a handler for the #GtkWidget::popup-menu signal:
 	</para>
 
 	<programlisting>
@@ -124,10 +124,10 @@ my_widget_popup_menu_handler (GtkWidget *widget)
 	provide your own <link
 	linkend="GtkMenuPositionFunc">menu-positioning function</link>
 	in the case where the <parameter>event</parameter> is
-	<constant>NULL</constant>.  This function should compute the
-	desired position for a menu when it is invoked through the
-	keyboard.  For example, #GtkEntry aligns the
-	top edge of its popup menu with the bottom edge of the entry.
+	%NULL.  This function should compute the desired position for 
+        a menu when it is invoked through the keyboard.  For example, 
+        #GtkEntry aligns the top edge of its popup menu with the bottom 
+        edge of the entry.
       </para>
     </note>
 
@@ -137,8 +137,7 @@ my_widget_popup_menu_handler (GtkWidget *widget)
 	able to take the keyboard focus.  In general, widgets should
 	be fully usable through the keyboard and not just the mouse.
 	The very first step of this is to ensure that your widget
-	turns on the %GTK_CAN_FOCUS <link
-	linkend="gtkwidgetflags">flag</link>.
+	turns on the %GTK_CAN_FOCUS <link linkend="gtkwidgetflags">flag</link>.
       </para>
     </note>
   </section>
@@ -180,7 +179,7 @@ my_widget_popup_menu_handler (GtkWidget *widget)
 
     <para>
       Regions have an internal representation that is accessible as a
-      list of rectangles.  To turn the
+      list of rectangles.  To turn the 
       <structfield>GdkEventExpose.region</structfield> field into such
       a list, use gdk_region_get_rectangles():
     </para>
@@ -215,12 +214,10 @@ my_widget_expose_event_handler (GtkWidget *widget, GdkEventExpose *event)
     <formalpara>
       <title>Why</title>
       <para>
-	With
-	gtk_accelerator_get_default_mod_mask()
-	you can test for modifier keys reliably; this way your key
-	event handlers will work correctly even if
-	<keycap>NumLock</keycap> or <keycap>CapsLock</keycap> are
-	activated.
+	With gtk_accelerator_get_default_mod_mask() you can test for 
+        modifier keys reliably; this way your key event handlers will 
+        work correctly even if <keycap>NumLock</keycap> or 
+        <keycap>CapsLock</keycap> are activated.
       </para>
     </formalpara>
 
@@ -230,7 +227,7 @@ my_widget_expose_event_handler (GtkWidget *widget, GdkEventExpose *event)
       indicates the modifier state at the time the key was pressed.
       Modifiers are keys like <keycap>Control</keycap> and
       <keycap>NumLock</keycap>.  When implementing a 
-      #GtkWidget::key_press_event handler, you should use 
+      #GtkWidget::key-press-event handler, you should use 
       gtk_accelerator_get_default_mod_mask() to
       test against modifier keys.  This function returns a bit mask
       which encompasses all the modifiers which the user may be
@@ -298,7 +295,7 @@ my_widget_key_press_event_handler (GtkWidget *widget, GdkEventKey *event)
       gtk_window_set_icon_name()) and images (see gtk_image_set_icon_name()).
       In GTK+ 2.8, you can also use named icons for drag-and-drop (see 
       gtk_drag_source_set_icon_name()) and in treeview cells (see the
-      #GtkCellRendererPixbuf:icon_name property).
+      #GtkCellRendererPixbuf:icon-name property).
     </para>
   </section>
 </chapter>

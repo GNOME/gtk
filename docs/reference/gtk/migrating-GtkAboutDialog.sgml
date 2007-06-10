@@ -56,8 +56,8 @@
     g_object_unref (pixbuf);
     </programlisting></informalexample>
     If the g_object_new() construction scares you, you can also use 
-    gtk_about_dialog_new() to construct the dialog and then use the setters for 
-    the individual properties.
+    gtk_about_dialog_new() to construct the dialog and then use the 
+    setters for the individual properties.
   </para>
 
   <para>

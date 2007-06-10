@@ -444,12 +444,12 @@ GType	   gtk_widget_get_type		  (void) G_GNUC_CONST;
 GtkWidget* gtk_widget_new		  (GType		type,
 					   const gchar	       *first_property_name,
 					   ...);
-GtkWidget* gtk_widget_ref		  (GtkWidget	       *widget);
-void	   gtk_widget_unref		  (GtkWidget	       *widget);
 void	   gtk_widget_destroy		  (GtkWidget	       *widget);
 void	   gtk_widget_destroyed		  (GtkWidget	       *widget,
 					   GtkWidget	      **widget_pointer);
 #ifndef GTK_DISABLE_DEPRECATED
+GtkWidget* gtk_widget_ref		  (GtkWidget	       *widget);
+void	   gtk_widget_unref		  (GtkWidget	       *widget);
 void	   gtk_widget_set		  (GtkWidget	       *widget,
 					   const gchar         *first_property_name,
 					   ...) G_GNUC_NULL_TERMINATED;

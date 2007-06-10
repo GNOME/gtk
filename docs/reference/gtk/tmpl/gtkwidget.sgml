@@ -323,15 +323,11 @@ gtk_widget_style_get_valist() to obtain the value of a style property.
 
 <!-- ##### SIGNAL GtkWidget::hierarchy-changed ##### -->
 <para>
-Emitted when there is a change in the hierarchy to
-which a widget belongs. More precisely, a widget is
-<firstterm>anchored</firstterm> when its toplevel
-ancestor is a #GtkWindow. This signal is emitted when 
-a widget changes from un-anchored to anchored or vice-versa.
+
 </para>
 
-@widget: the object which received the signal.
-@widget2: the toplevel ancestor, or %NULL
+@widget: 
+@widget2:
 
 <!-- ##### SIGNAL GtkWidget::key-press-event ##### -->
 <para>
@@ -1977,6 +1973,16 @@ This function is not useful for applications.
 
 @widget: 
 @font_desc: 
+
+
+<!-- ##### FUNCTION gtk_widget_modify_cursor ##### -->
+<para>
+
+</para>
+
+@widget: 
+@primary: 
+@secondary: 
 
 
 <!-- ##### FUNCTION gtk_widget_create_pango_context ##### -->

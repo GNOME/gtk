@@ -181,17 +181,16 @@ application.)
   reference to the start (top/left) or end (bottom/right) of the GtkBox.
 @is_secondary: 
 
-
 <!-- ##### FUNCTION gtk_box_pack_start ##### -->
 <para>
 
 </para>
 
 @box: 
-@child:
-@expand:
-@box 
-@fill:
+@child: 
+@expand: 
+@box
+@fill: 
 @padding: 
 
 
@@ -222,7 +221,7 @@ application.)
 </para>
 
 @box: 
-@widget:
+@widget: 
 
 
 <!-- ##### FUNCTION gtk_box_get_homogeneous ##### -->
@@ -267,8 +266,8 @@ application.)
 </para>
 
 @box: 
-@child:
-@position:
+@child: 
+@position: 
 
 
 <!-- ##### FUNCTION gtk_box_query_child_packing ##### -->
@@ -276,11 +275,11 @@ application.)
 
 </para>
 
-@box:
-@child:
-@expand:
+@box: 
+@child: 
+@expand: 
 @fill: 
-@padding:
+@padding: 
 @pack_type: 
 
 
@@ -291,7 +290,9 @@ application.)
 
 @box: 
 @child: 
-@expand:
+@expand: 
 @fill: 
-@padding:
-@pack_type:
+@padding: 
+@pack_type: 
+
+

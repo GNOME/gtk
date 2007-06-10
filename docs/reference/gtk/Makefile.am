@@ -90,6 +90,7 @@ IGNORE_HFILES=				\
 	gtkxembed.h			\
 	gtkwin32embed.h			\
 	gtkwin32embedwidget.h		\
+	gtkwindow-decorate.h		\
 	xdgmime				\
 	xembed.h
 

@@ -1,5 +1,15 @@
 2007-06-09  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/tmpl/gtkbindings.sgml:
+	* gtk/tmpl/gtkrc.sgml:
+	* gtk/tmpl/gtkwidget.sgml:
+	* gtk/tmpl/gtkrecentmanager.sgml:
+	* gtk/*.sgml:
+	* gtk/tmpl/gtkstock.sgml:
+	* gtk/gtk-sections.txt: Updates
+
+	* gtk/Makefile.am: Exclude another private header
+
 	* gtk/tmpl/gtkbox.sgml: Move docs inline
 
 2007-06-08  Matthias Clasen  <mclasen@redhat.com>
