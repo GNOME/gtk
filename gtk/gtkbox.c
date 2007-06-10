@@ -329,6 +329,28 @@ gtk_box_get_child_property (GtkContainer *container,
     }
 }
 
+/**
+ * gtk_box_pack_start:
+ * @box: a #GtkBox
+ * @child: the #GtkWidget to be added to @box
+ * @expand: %TRUE if the new child is to be given extra space allocated to
+ * @box.  The extra space will be divided evenly between all children of
+ * @box that use this option
+ * @fill: %TRUE if space given to @child by the @expand option is
+ *   actually allocated to @child, rather than just padding it.  This
+ *   parameter has no effect if @expand is set to %FALSE.  A child is
+ *   always allocated the full height of a #GtkHBox and the full width 
+ *   of a #GtkVBox. This option affects the other dimension
+ * @padding: extra space in pixels to put between this child and its
+ *   neighbors, over and above the global amount specified by
+ *   #GtkBox:spacing property.  If @child is a widget at one of the 
+ *   reference ends of @box, then @padding pixels are also put between 
+ *   @child and the reference edge of @box
+ *
+ * Adds @child to @box, packed with reference to the start of @box.
+ * The @child is packed after any other child packed with reference 
+ * to the start of @box.
+ */
 void
 gtk_box_pack_start (GtkBox    *box,
 		    GtkWidget *child,
@@ -364,6 +386,28 @@ gtk_box_pack_start (GtkBox    *box,
   gtk_widget_thaw_child_notify (child);
 }
 
+/**
+ * gtk_box_pack_end:
+ * @box: a #GtkBox
+ * @child: the #GtkWidget to be added to @box
+ * @expand: %TRUE if the new child is to be given extra space allocated 
+ *   to @box. The extra space will be divided evenly between all children 
+ *   of @box that use this option
+ * @fill: %TRUE if space given to @child by the @expand option is
+ *   actually allocated to @child, rather than just padding it.  This
+ *   parameter has no effect if @expand is set to %FALSE.  A child is
+ *   always allocated the full height of a #GtkHBox and the full width 
+ *   of a #GtkVBox.  This option affects the other dimension
+ * @padding: extra space in pixels to put between this child and its
+ *   neighbors, over and above the global amount specified by
+ *   #GtkBox:spacing property.  If @child is a widget at one of the 
+ *   reference ends of @box, then @padding pixels are also put between 
+ *   @child and the reference edge of @box
+ *
+ * Adds @child to @box, packed with reference to the end of @box.  
+ * The @child is packed after (away from end of) any other child 
+ * packed with reference to the end of @box.
+ */
 void
 gtk_box_pack_end (GtkBox    *box,
 		  GtkWidget *child,
@@ -399,6 +443,19 @@ gtk_box_pack_end (GtkBox    *box,
   gtk_widget_thaw_child_notify (child);
 }
 
+/**
+ * gtk_box_pack_start_defaults:
+ * @box: a #GtkBox
+ * @widget: the #GtkWidget to be added to @box
+ *
+ * Adds @widget to @box, packed with reference to the start of @box.
+ * The child is packed after any other child packed with reference 
+ * to the start of @box. 
+ * 
+ * Parameters for how to pack the child @widget, #GtkBox:expand, 
+ * #GtkBox:fill and #GtkBox:padding, are given their default
+ * values, %TRUE, %TRUE, and 0, respectively.
+ */
 void
 gtk_box_pack_start_defaults (GtkBox    *box,
 			     GtkWidget *child)
@@ -406,6 +463,19 @@ gtk_box_pack_start_defaults (GtkBox    *box,
   gtk_box_pack_start (box, child, TRUE, TRUE, 0);
 }
 
+/**
+ * gtk_box_pack_end_defaults:
+ * @box: a #GtkBox
+ * @widget: the #GtkWidget to be added to @box
+ *
+ * Adds @widget to @box, packed with reference to the end of @box.
+ * The child is packed after any other child packed with reference 
+ * to the start of @box. 
+ * 
+ * Parameters for how to pack the child @widget, #GtkBox:expand, 
+ * #GtkBox:fill and #GtkBox:padding, are given their default
+ * values, %TRUE, %TRUE, and 0, respectively.
+ */
 void
 gtk_box_pack_end_defaults (GtkBox    *box,
 			   GtkWidget *child)
@@ -413,6 +483,16 @@ gtk_box_pack_end_defaults (GtkBox    *box,
   gtk_box_pack_end (box, child, TRUE, TRUE, 0);
 }
 
+/**
+ * gtk_box_set_homogeneous:
+ * @box: a #GtkBox
+ * @homogeneous: a boolean value, %TRUE to create equal allotments,
+ *   %FALSE for variable allotments
+ * 
+ * Sets the #GtkBox:homogeneous property of @box, controlling 
+ * whether or not all children of @box are given equal space 
+ * in the box.
+ */
 void
 gtk_box_set_homogeneous (GtkBox  *box,
 			 gboolean homogeneous)
@@ -444,6 +524,14 @@ gtk_box_get_homogeneous (GtkBox *box)
   return box->homogeneous;
 }
 
+/**
+ * gtk_box_set_spacing:
+ * @box: a #GtkBox
+ * @spacing: the number of pixels to put between children
+ *
+ * Sets the #GtkBox:spacing property of @box, which is the 
+ * number of pixels to place between children of @box.
+ */
 void
 gtk_box_set_spacing (GtkBox *box,
 		     gint    spacing)
@@ -474,6 +562,25 @@ gtk_box_get_spacing (GtkBox *box)
   return box->spacing;
 }
 
+/**
+ * gtk_box_reorder_child:
+ * @box: a #GtkBox
+ * @child: the #GtkWidget to move
+ * @position: the new position for @child in the list of children 
+ *   of @box, starting from 0. If negative, indicates the end of 
+ *   the list
+ *
+ * Moves @child to a new @position in the list of @box children.  
+ * The list is the <structfield>children</structfield> field of
+ * #GtkBox-struct, and contains both widgets packed #GTK_PACK_START 
+ * as well as widgets packed #GTK_PACK_END, in the order that these 
+ * widgets were added to @box.
+ * 
+ * A widget's position in the @box children list determines where 
+ * the widget is packed into @box.  A child widget at some position 
+ * in the list will be packed just after all other widgets of the 
+ * same packing type that appear earlier in the list.
+ */ 
 void
 gtk_box_reorder_child (GtkBox    *box,
 		       GtkWidget *child,
@@ -518,13 +625,24 @@ gtk_box_reorder_child (GtkBox    *box,
     gtk_widget_queue_resize (child);
 }
 
+/**
+ * gtk_box_query_child_packing:
+ * @box: a #GtkBox
+ * @child: the #GtkWidget of the child to query
+ * @expand: pointer to return location for #GtkBox:expand child property 
+ * @fill: pointer to return location for #GtkBox:fill child property 
+ * @padding: pointer to return location for #GtkBox:padding child property 
+ * @pack_type: pointer to return location for #GtkBox:pack-type child property 
+ *
+ * Returns information about how @child is packed into @box.
+ */
 void
-gtk_box_query_child_packing (GtkBox             *box,
-			     GtkWidget          *child,
-			     gboolean           *expand,
-			     gboolean           *fill,
-			     guint              *padding,
-			     GtkPackType        *pack_type)
+gtk_box_query_child_packing (GtkBox      *box,
+			     GtkWidget   *child,
+			     gboolean    *expand,
+			     gboolean    *fill,
+			     guint       *padding,
+			     GtkPackType *pack_type)
 {
   GList *list;
   GtkBoxChild *child_info = NULL;
@@ -555,13 +673,24 @@ gtk_box_query_child_packing (GtkBox             *box,
     }
 }
 
+/**
+ * gtk_box_set_child_packing:
+ * @box: a #GtkBox
+ * @child: the #GtkWidget of the child to set
+ * @expand: the new value of the #GtkBox:expand child property 
+ * @fill: the new value of the #GtkBox:fill child property
+ * @padding: the new value of the #GtkBox:padding child property
+ * @pack_type: the new value of the #GtkBox:pack-type child property
+ *
+ * Sets the way @child is packed into @box.
+ */
 void
-gtk_box_set_child_packing (GtkBox               *box,
-			   GtkWidget            *child,
-			   gboolean              expand,
-			   gboolean              fill,
-			   guint                 padding,
-			   GtkPackType           pack_type)
+gtk_box_set_child_packing (GtkBox      *box,
+			   GtkWidget   *child,
+			   gboolean     expand,
+			   gboolean     fill,
+			   guint        padding,
+			   GtkPackType  pack_type)
 {
   GList *list;
   GtkBoxChild *child_info = NULL;

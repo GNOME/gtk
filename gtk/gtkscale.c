@@ -595,8 +595,8 @@ gtk_scale_screen_changed (GtkWidget *widget,
  * @scale: a #GtkScale
  * @value: adjustment value
  * 
- * Emits "format_value" signal to format the value, if no user
- * signal handlers, falls back to a default format.
+ * Emits #GtkScale::format-value signal to format the value, 
+ * if no user signal handlers, falls back to a default format.
  * 
  * Return value: formatted value
  **/
@@ -637,11 +637,12 @@ gtk_scale_finalize (GObject *object)
  * gtk_scale_get_layout:
  * @scale: A #GtkScale
  *
- * Gets the #PangoLayout used to display the scale. The returned object
- * is owned by the scale so does not need to be freed by the caller. 
+ * Gets the #PangoLayout used to display the scale. 
+ * The returned object is owned by the scale so does 
+ * not need to be freed by the caller. 
  *
- * Return value: the #PangoLayout for this scale, or %NULL if the draw_value property
- *    is %FALSE.
+ * Return value: the #PangoLayout for this scale, or %NULL 
+ *    if the #GtkScale:draw-value property is %FALSE.
  *   
  * Since: 2.4
  **/
@@ -676,13 +677,13 @@ gtk_scale_get_layout (GtkScale *scale)
  * @x: location to store X offset of layout, or %NULL
  * @y: location to store Y offset of layout, or %NULL
  *
- * Obtains the coordinates where the scale will draw the #PangoLayout
- * representing the text in the scale. Remember
+ * Obtains the coordinates where the scale will draw the 
+ * #PangoLayout representing the text in the scale. Remember
  * when using the #PangoLayout function you need to convert to
  * and from pixels using PANGO_PIXELS() or #PANGO_SCALE. 
  *
- * If the draw_value property is %FALSE, the return values are 
- * undefined.
+ * If the #GtkScale:draw-value property is %FALSE, the return 
+ * values are undefined.
  *
  * Since: 2.4
  **/
