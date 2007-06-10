@@ -1,3 +1,10 @@
+2007-06-10  Michael Natterer  <mitch@imendio.com>
+
+	* gdk/quartz/gdkdrawable-quartz.c (gdk_quartz_draw_arc): fix
+	angles by flipping the coordinate system back to its original y
+	direction. The implementtion is still broken for ellipses, will
+	have to simulate them using bezier curves.
+
 2007-06-10  Cody Russell  <bratsche@gnome.org>
 
 	* gdk/win32/gdkevents-win32.c (gdk_pointer_grab):

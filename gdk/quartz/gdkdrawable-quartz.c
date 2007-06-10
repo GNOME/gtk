@@ -173,6 +173,7 @@ gdk_quartz_draw_arc (GdkDrawable *drawable,
 {
   CGContextRef context = gdk_quartz_drawable_get_context (drawable, FALSE);
   float start_angle, end_angle;
+  gboolean clockwise = FALSE;
 
   if (!context)
     return;
@@ -184,20 +185,38 @@ gdk_quartz_draw_arc (GdkDrawable *drawable,
 
   CGContextSaveGState (context);
 
-  start_angle = (2 - (angle1 / (180.0 * 64.0))) * G_PI;
-  end_angle = start_angle - (angle2 / (180.0 * 64.0)) * G_PI;
+  start_angle = angle1 * 2.0 * G_PI / 360.0 / 64.0;
+  end_angle = start_angle + angle2 * 2.0 * G_PI / 360.0 / 64.0;
+
+  /*  angle2 is relative to angle1 and can be negative, which switches
+   *  the drawing direction
+   */
+  if (angle2 < 0)
+    clockwise = TRUE;
+
+  /*  below, flip the coordinate system back to its original y-diretion
+   *  so the angles passed to CGContextAddArc() are interpreted as
+   *  expected
+   *
+   *  FIXME: the implementation below works only for perfect circles
+   *  (width == height). Any other aspect ratio either scales the
+   *  line width unevenly or scales away the path entirely for very
+   *  small line widths (esp. for line_width == 0, which is a hair
+   *  line on X11 but must be approximated with the thinnest possible
+   *  line on quartz).
+   */
 
   if (filled)
     {
       CGContextTranslateCTM (context,
                              x + width / 2.0,
                              y + height / 2.0);
-      CGContextScaleCTM (context, 1.0, (double)height / (double)width);
+      CGContextScaleCTM (context, 1.0, - (double)height / (double)width);
 
       CGContextMoveToPoint (context, 0, 0);
       CGContextAddArc (context, 0, 0, width / 2.0,
 		       start_angle, end_angle,
-		       TRUE);
+		       clockwise);
       CGContextClosePath (context);
       CGContextFillPath (context);
     }
@@ -206,11 +225,11 @@ gdk_quartz_draw_arc (GdkDrawable *drawable,
       CGContextTranslateCTM (context,
                              x + width / 2.0 + 0.5,
                              y + height / 2.0 + 0.5);
-      CGContextScaleCTM (context, 1.0, (double)height / (double)width);
+      CGContextScaleCTM (context, 1.0, - (double)height / (double)width);
 
       CGContextAddArc (context, 0, 0, width / 2.0,
 		       start_angle, end_angle,
-		       TRUE);
+		       clockwise);
       CGContextStrokePath (context);
     }
 
