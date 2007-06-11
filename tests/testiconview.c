@@ -34,6 +34,7 @@ fill_model (GtkTreeModel *model)
   char *str, *str2;
   GtkTreeIter iter;
   GtkListStore *store = GTK_LIST_STORE (model);
+  gint32 size;
   
   pixbuf = gdk_pixbuf_new_from_file ("gnome-textfile.png", NULL);
 
@@ -51,11 +52,15 @@ fill_model (GtkTreeModel *model)
 
   while (i < NUMBER_OF_ITEMS - 1)
     {
+      GdkPixbuf *pb;
+      size = g_random_int_range (20, 70);
+      pb = gdk_pixbuf_scale_simple (pixbuf, size, size, GDK_INTERP_NEAREST);
+
       str = g_strdup_printf ("Icon %d", i);
       str2 = g_strdup_printf ("Icon <b>%d</b>", i);	
       gtk_list_store_prepend (store, &iter);
       gtk_list_store_set (store, &iter,
-			  0, pixbuf,
+			  0, pb,
 			  1, str,
 			  2, i,
 			  3, str2,
