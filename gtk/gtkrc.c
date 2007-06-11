@@ -3145,9 +3145,7 @@ gtk_rc_parse_style (GtkRcContext *context,
           token = gtk_rc_parse_logical_color (scanner, rc_style, our_hash);
           break;
 	case G_TOKEN_IDENTIFIER:
-	  if (is_c_identifier (scanner->next_value.v_identifier) &&
-	      scanner->next_value.v_identifier[0] >= 'A' &&
-	      scanner->next_value.v_identifier[0] <= 'Z') /* match namespaced type names */
+	  if (is_c_identifier (scanner->next_value.v_identifier))
 	    {
 	      GtkRcProperty prop = { 0, 0, NULL, { 0, }, };
 	      gchar *name;

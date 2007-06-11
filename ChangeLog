@@ -1,5 +1,12 @@
 2007-06-10  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkrc.c (gtk_rc_parse_style): Accept class names starting
+	with lowercase letters for style property assignments, since 
+	GType accepts these too, and gtkmm uses such class names.  (#343012,
+	Murray Cumming, Johannes Schmid)
+
+2007-06-10  Matthias Clasen  <mclasen@redhat.com>
+
 	* gtk/gtkentry.c (gtk_entry_finalize): Don't leak cursor_hadjustment.
 	Store cursor_hadjustment as object data rather than in the private
 	struct.
