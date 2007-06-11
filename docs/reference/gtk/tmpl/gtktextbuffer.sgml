@@ -2,9 +2,7 @@
 GtkTextBuffer
 
 <!-- ##### SECTION Short_Description ##### -->
-
-Stores attributed text for display in a <link
-linkend="GtkTextView">GtkTextView</link>
+Stores attributed text for display in a GtkTextView
 
 <!-- ##### SECTION Long_Description ##### -->
 

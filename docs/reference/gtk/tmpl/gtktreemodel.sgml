@@ -2,7 +2,7 @@
 GtkTreeModel
 
 <!-- ##### SECTION Short_Description ##### -->
-The tree interface used by #GtkTreeView
+The tree interface used by GtkTreeView
 
 <!-- ##### SECTION Long_Description ##### -->
 <para>

@@ -2,7 +2,7 @@
 GtkMenuBar
 
 <!-- ##### SECTION Short_Description ##### -->
-A subclass widget for #GtkMenuShell which holds #GtkMenuItem widgets
+A subclass widget for GtkMenuShell which holds GtkMenuItem widgets
 
 <!-- ##### SECTION Long_Description ##### -->
 <para>

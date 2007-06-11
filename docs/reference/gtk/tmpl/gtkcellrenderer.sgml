@@ -2,7 +2,7 @@
 GtkCellRenderer
 
 <!-- ##### SECTION Short_Description ##### -->
-An object for rendering a single cell on a #GdkDrawable
+An object for rendering a single cell on a GdkDrawable
 
 <!-- ##### SECTION Long_Description ##### -->
 <para>

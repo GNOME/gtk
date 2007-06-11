@@ -2,7 +2,7 @@
 GtkScaleButton
 
 <!-- ##### SECTION Short_Description ##### -->
-
+A button which pops up a scale
 
 <!-- ##### SECTION Long_Description ##### -->
 <para>
@@ -46,6 +46,11 @@ GtkScaleButton
 @arg1: 
 
 <!-- ##### ARG GtkScaleButton:adjustment ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkScaleButton:icons ##### -->
 <para>
 
 </para>

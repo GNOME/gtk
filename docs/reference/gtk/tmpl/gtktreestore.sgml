@@ -2,7 +2,7 @@
 GtkTreeStore
 
 <!-- ##### SECTION Short_Description ##### -->
-A tree-like data structure that can be used with the #GtkTreeView
+A tree-like data structure that can be used with the GtkTreeView
 
 <!-- ##### SECTION Long_Description ##### -->
 <para>
@@ -88,6 +88,18 @@ drop</link> interfaces.
 @tree_store: 
 @iter: 
 @var_args: 
+
+
+<!-- ##### FUNCTION gtk_tree_store_set_valuesv ##### -->
+<para>
+
+</para>
+
+@tree_store: 
+@iter: 
+@columns: 
+@values: 
+@n_values: 
 
 
 <!-- ##### FUNCTION gtk_tree_store_remove ##### -->

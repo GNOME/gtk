@@ -1,5 +1,32 @@
 2007-06-09  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtk-update-icon-cache.xml: Document --validate
+
+2007-06-09  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/text_widget.sgml:
+	* gtk/tree_widget.sgml:
+	* gtk/tmpl/gtkscalebutton.sgml:
+	* gtk/tmpl/gtktextbuffer.sgml:
+	* gtk/tmpl/gtktexttag.sgml:
+	* gtk/tmpl/gtktextview.sgml:
+	* gtk/tmpl/gtktreemodel.sgml:
+	* gtk/tmpl/gtktreeselection.sgml:
+	* gtk/tmpl/gtktreeviewcolumn.sgml:
+	* gtk/tmpl/gtkcellrenderer.sgml:
+	* gtk/tmpl/gtkliststore.sgml:
+	* gtk/tmpl/gtktreestore.sgml:
+	* gtk/tmpl/gtkmenubar.sgml:
+	* gtk/tmpl/gtkbbox.sgml:
+	* gtk/tmpl/gtkseparator.sgml:
+	* gtk/tmpl/gtkgamma.sgml:
+	* gtk/tmpl/gtkhruler.sgml:
+	* gtk/tmpl/gtkvruler.sgml:
+	* gtk/tmpl/gtkrecentchooser.sgml:
+	* gtk/tmpl/gtkvolumebutton.sgml: Clean up short descriptions
+
+2007-06-09  Matthias Clasen  <mclasen@redhat.com>
+
 	* gtk/tmpl/gtkbindings.sgml:
 	* gtk/tmpl/gtkrc.sgml:
 	* gtk/tmpl/gtkwidget.sgml:

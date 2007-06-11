@@ -7,8 +7,7 @@
 
   <refnamediv>
     <refname>Tree and List Widget Overview</refname>
-    <refpurpose>Overview of #GtkTreeModel, #GtkTreeView, and other 
-    associated widgets</refpurpose>
+    <refpurpose>Overview of GtkTreeModel, GtkTreeView, and friends</refpurpose>
   </refnamediv>
 
   <refsect1>

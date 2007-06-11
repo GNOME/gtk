@@ -2,7 +2,7 @@
 GtkTextView
 
 <!-- ##### SECTION Short_Description ##### -->
-Widget that displays a <link linkend="GtkTextBuffer">GtkTextBuffer</link>
+Widget that displays a GtkTextBuffer
 
 <!-- ##### SECTION Long_Description ##### -->
 <para>

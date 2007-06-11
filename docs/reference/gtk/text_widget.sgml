@@ -7,7 +7,7 @@
 
 <refnamediv>
 <refname>Text Widget Overview</refname>
-<refpurpose>Overview of #GtkTextBuffer, #GtkTextView, and friends</refpurpose>
+<refpurpose>Overview of GtkTextBuffer, GtkTextView, and friends</refpurpose>
 </refnamediv>
 
 <refsect1>
