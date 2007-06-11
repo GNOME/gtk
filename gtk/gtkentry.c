@@ -73,6 +73,7 @@
 static const GtkBorder default_inner_border = { 2, 2, 2, 2 };
 static GQuark          quark_inner_border   = 0;
 static GQuark          quark_password_hint  = 0;
+static GQuark          quark_cursor_hadjustment = 0;
 
 typedef struct _GtkEntryPrivate GtkEntryPrivate;
 
@@ -83,14 +84,12 @@ struct _GtkEntryPrivate
   gfloat xalign;
   gint insert_pos;
   guint blink_time;  /* time in msec the cursor has blinked since last user event */
-  guint real_changed : 1;
-  guint change_count : 8;
+  guint interior_focus : 1;
+  guint real_changed   : 1;
+  guint change_count   : 8;
 
   gint focus_width;
-  gboolean interior_focus;
   GtkShadowType shadow_type;
-
-  GtkAdjustment *cursor_hadjustment;
 };
 
 typedef struct _GtkEntryPasswordHint GtkEntryPasswordHint;
@@ -470,6 +469,7 @@ gtk_entry_class_init (GtkEntryClass *class)
   
   quark_inner_border = g_quark_from_static_string ("gtk-entry-inner-border");
   quark_password_hint = g_quark_from_static_string ("gtk-entry-password-hint");
+  quark_cursor_hadjustment = g_quark_from_static_string ("gtk-hadjustment");
 
   g_object_class_install_property (gobject_class,
                                    PROP_CURSOR_POSITION,
@@ -1241,9 +1241,6 @@ gtk_entry_finalize (GObject *object)
       g_free (entry->text);
       entry->text = NULL;
     }
-
-  if (priv->cursor_hadjustment)
-    g_object_unref (priv->cursor_hadjustment);
 
   G_OBJECT_CLASS (gtk_entry_parent_class)->finalize (object);
 }
@@ -2357,11 +2354,16 @@ gtk_entry_style_set	(GtkWidget      *widget,
 {
   GtkEntry *entry = GTK_ENTRY (widget);
   GtkEntryPrivate *priv = GTK_ENTRY_GET_PRIVATE (entry);
+  gint focus_width;
+  gboolean interior_focus;
 
   gtk_widget_style_get (widget,
-			"focus-line-width", &priv->focus_width,
-			"interior-focus", &priv->interior_focus,
+			"focus-line-width", &focus_width,
+			"interior-focus", &interior_focus,
 			NULL);
+
+  priv->focus_width = focus_width;
+  priv->interior_focus = interior_focus;
   
   gtk_entry_recompute (entry);
 
@@ -3854,13 +3856,14 @@ gtk_entry_adjust_scroll (GtkEntry *entry)
 static void
 gtk_entry_move_adjustments (GtkEntry *entry)
 {
-  GtkEntryPrivate *priv = GTK_ENTRY_GET_PRIVATE (entry);
   PangoContext *context;
   PangoFontMetrics *metrics;
   gint x, layout_x, border_x, border_y;
   gint char_width;
+  GtkAdjustment *adjustment;
 
-  if (!priv->cursor_hadjustment)
+  adjustment = g_object_get_qdata (G_OBJECT (entry), quark_cursor_hadjustment);
+  if (!adjustment)
     return;
 
   /* Cursor position, layout offset, border width, and widget allocation */
@@ -3877,7 +3880,7 @@ gtk_entry_move_adjustments (GtkEntry *entry)
   char_width = pango_font_metrics_get_approximate_char_width (metrics) / PANGO_SCALE;
 
   /* Scroll it */
-  gtk_adjustment_clamp_page (priv->cursor_hadjustment, 
+  gtk_adjustment_clamp_page (adjustment, 
   			     x - (char_width + 1),   /* one char + one pixel before */
 			     x + (char_width + 2));  /* one char + cursor + one pixel after */
 }
@@ -6208,18 +6211,17 @@ void
 gtk_entry_set_cursor_hadjustment (GtkEntry      *entry,
                                   GtkAdjustment *adjustment)
 {
-  GtkEntryPrivate *priv;
-
   g_return_if_fail (GTK_IS_ENTRY (entry));
   if (adjustment)
     g_return_if_fail (GTK_IS_ADJUSTMENT (adjustment));
 
-  priv = GTK_ENTRY_GET_PRIVATE (entry);
-  if (priv->cursor_hadjustment)
-    g_object_unref (priv->cursor_hadjustment);
   if (adjustment)
     g_object_ref (adjustment);
-  priv->cursor_hadjustment = adjustment;
+
+  g_object_set_qdata_full (G_OBJECT (entry), 
+                           quark_cursor_hadjustment,
+                           adjustment, 
+                           g_object_unref);
 }
 
 /**
@@ -6237,13 +6239,9 @@ gtk_entry_set_cursor_hadjustment (GtkEntry      *entry,
 GtkAdjustment*
 gtk_entry_get_cursor_hadjustment (GtkEntry *entry)
 {
-  GtkEntryPrivate *priv;
-    
   g_return_val_if_fail (GTK_IS_ENTRY (entry), NULL);
 
-  priv = GTK_ENTRY_GET_PRIVATE (entry);
-
-  return priv->cursor_hadjustment;
+  return g_object_get_qdata (G_OBJECT (entry), quark_cursor_hadjustment);
 }
 
 #define __GTK_ENTRY_C__
