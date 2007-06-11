@@ -1,3 +1,8 @@
+2007-06-10  Matthias Clasen  <mclasen@redhat.com>
+
+	* gdk/x11/gdkspawn-x11.c (set_environment): Handle child_setup
+	being NULL.  (#445691, Christopher Taylor)
+
 2007-06-10  Emmanuele Bassi  <ebassi@gnome.org>
 
 	* gtk/gtksearchenginesimple.c: Unconditionally define _GNU_SOURCE

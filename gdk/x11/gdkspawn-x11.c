@@ -37,8 +37,8 @@ typedef struct {
 
 /*
  * Set the DISPLAY variable, and then call the user-specified child setup
- * function.  This is required so that applications can use gdk_spawn_* and call
- * putenv() in their child_setup functions.
+ * function.  This is required so that applications can use gdk_spawn_* and 
+ * call putenv() in their child_setup functions.
  */
 static void
 set_environment (gpointer user_data)
@@ -47,7 +47,8 @@ set_environment (gpointer user_data)
   
   g_setenv ("DISPLAY", setup->display, TRUE);
   
-  setup->child_setup (setup->user_data);
+  if (setup->child_setup)
+    setup->child_setup (setup->user_data);
 }
 
 /**
