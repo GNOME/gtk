@@ -116,10 +116,10 @@ struct _GtkNotebookClass
 				GtkWidget         *menu_label,
 				gint               position);
 
-  GtkNotebook (* create_window) (GtkNotebook       *notebook,
-                                 GtkWidget         *page,
-                                 gint               x,
-                                 gint               y);
+  GtkNotebook * (* create_window) (GtkNotebook       *notebook,
+                                   GtkWidget         *page,
+                                   gint               x,
+                                   gint               y);
 
   void (*_gtk_reserved1) (void);
 };
