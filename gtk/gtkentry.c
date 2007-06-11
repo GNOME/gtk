@@ -1242,6 +1242,9 @@ gtk_entry_finalize (GObject *object)
       entry->text = NULL;
     }
 
+  if (priv->cursor_hadjustment)
+    g_object_unref (priv->cursor_hadjustment);
+
   G_OBJECT_CLASS (gtk_entry_parent_class)->finalize (object);
 }
 
