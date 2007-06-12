@@ -1,3 +1,17 @@
+2007-06-12  Kristian Rietveld  <kris@imendio.com>
+
+	Fix #410815, reported by Lucas Rocha.
+
+	* gtk/gtkiconview.c (gtk_icon_view_layout): determine a suitable
+	wrap-width with the first icon, if it exists,
+	(adjust_wrap_width): try to use icon_view->priv->item_width
+	if available,
+	(gtk_icon_view_set_cell_data): don't call adjust_wrap_width here,
+	which caused changes in wrap-width during the layouting process and
+	resulted in layouting artefacts,
+	(update_text_cell): don't set the wrap-width property, this should
+	be handled by adjust_wrap_width.
+
 2007-06-12  Behdad Esfahbod  <behdad@gnome.org>
 
 	* gdk/gdkwindow.c (gdk_window_get_pointer): Improve docs.

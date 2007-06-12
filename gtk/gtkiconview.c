@@ -447,6 +447,8 @@ static void     remove_scroll_timeout            (GtkIconView *icon_view);
 static void     clear_dest_info                  (GtkIconView *icon_view);
 static void     clear_source_info                (GtkIconView *icon_view);
 
+static void     adjust_wrap_width                (GtkIconView     *icon_view,
+						  GtkIconViewItem *item);
 
 static guint icon_view_signals[LAST_SIGNAL] = { 0 };
 
@@ -2588,9 +2590,16 @@ gtk_icon_view_layout (GtkIconView *icon_view)
 	}
     }
 
+
   icons = icon_view->priv->items;
   y += icon_view->priv->margin;
   row = 0;
+
+  if (icons)
+    {
+      gtk_icon_view_set_cell_data (icon_view, icons->data);
+      adjust_wrap_width (icon_view, icons->data);
+    }
   
   do
     {
@@ -2687,6 +2696,8 @@ adjust_wrap_width (GtkIconView     *icon_view,
   if (icon_view->priv->text_cell != -1 &&
       icon_view->priv->pixbuf_cell != -1)
     {
+      gint item_width;
+
       text_info = g_list_nth_data (icon_view->priv->cell_list,
 				   icon_view->priv->text_cell);
       pixbuf_info = g_list_nth_data (icon_view->priv->cell_list,
@@ -2698,12 +2709,23 @@ adjust_wrap_width (GtkIconView     *icon_view,
 				  &pixbuf_width, 
 				  NULL);
 	  
-      if (item->width == -1)
-	wrap_width = MAX (2 * pixbuf_width, 50);
-      else if (icon_view->priv->orientation == GTK_ORIENTATION_VERTICAL)
-	wrap_width = item->width;
+
+      if (icon_view->priv->item_width > 0)
+	item_width = icon_view->priv->item_width;
       else
-	wrap_width = item->width - pixbuf_width - icon_view->priv->spacing;
+	item_width = item->width;
+
+      if (item->width == -1)
+        {
+	  if (item_width > 0)
+	    wrap_width = item_width - pixbuf_width - icon_view->priv->spacing;
+	  else
+	    wrap_width = MAX (2 * pixbuf_width, 50);
+	}
+      else if (icon_view->priv->orientation == GTK_ORIENTATION_VERTICAL)
+	wrap_width = item_width;
+      else
+	wrap_width = item_width - pixbuf_width - icon_view->priv->spacing;
 
       g_object_set (text_info->cell, "wrap-width", wrap_width, NULL);
       g_object_set (text_info->cell, "width", wrap_width, NULL);
@@ -4234,8 +4256,6 @@ gtk_icon_view_set_cell_data (GtkIconView     *icon_view,
       
       g_object_thaw_notify (G_OBJECT (info->cell));
     }  
-  
-  adjust_wrap_width (icon_view, item);
 }
 
 static void 
@@ -4893,7 +4913,6 @@ update_text_cell (GtkIconView *icon_view)
 	g_object_set (info->cell,
                       "alignment", PANGO_ALIGN_CENTER,
 		      "wrap-mode", PANGO_WRAP_WORD,
-		      "wrap-width", icon_view->priv->item_width,
 		      "xalign", 0.0,
 		      "yalign", 0.0,
 		      NULL);
@@ -4901,7 +4920,6 @@ update_text_cell (GtkIconView *icon_view)
 	g_object_set (info->cell,
                       "alignment", PANGO_ALIGN_LEFT,
 		      "wrap-mode", PANGO_WRAP_WORD,
-		      "wrap-width", icon_view->priv->item_width,
 		      "xalign", 0.0,
 		      "yalign", 0.0,
 		      NULL);
