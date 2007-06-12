@@ -93,6 +93,12 @@
 typedef struct _GtkTextRenderer      GtkTextRenderer;
 typedef struct _GtkTextRendererClass GtkTextRendererClass;
 
+enum {
+  NORMAL,
+  SELECTED,
+  CURSOR
+};
+
 struct _GtkTextRenderer
 {
   GdkPangoRenderer parent_instance;
@@ -106,7 +112,7 @@ struct _GtkTextRenderer
   GdkColor *error_color;	/* Error underline color for this widget */
   GList *widgets;		/* widgets encountered when drawing */
   
-  gboolean selected;
+  int state;
 };
 
 struct _GtkTextRendererClass
@@ -186,21 +192,23 @@ gtk_text_renderer_prepare_run (PangoRenderer  *renderer,
 
   appearance = get_item_appearance (run->item);
   g_assert (appearance != NULL);
-  
-  if (appearance->draw_bg && !text_renderer->selected)
+
+  if (appearance->draw_bg && text_renderer->state == NORMAL)
     bg_color = &appearance->bg_color;
   else
     bg_color = NULL;
   
   text_renderer_set_gdk_color (text_renderer, PANGO_RENDER_PART_BACKGROUND, bg_color);
 
-  if (text_renderer->selected)
+  if (text_renderer->state == SELECTED)
     {
       if (GTK_WIDGET_HAS_FOCUS (text_renderer->widget))
 	fg_color = &text_renderer->widget->style->text[GTK_STATE_SELECTED];
       else
 	fg_color = &text_renderer->widget->style->text[GTK_STATE_ACTIVE];
     }
+  else if (text_renderer->state == CURSOR && GTK_WIDGET_HAS_FOCUS (text_renderer->widget))
+    fg_color = &text_renderer->widget->style->base[GTK_STATE_NORMAL];
   else
     fg_color = &appearance->fg_color;
 
@@ -249,13 +257,15 @@ gtk_text_renderer_draw_shape (PangoRenderer   *renderer,
   GtkTextRenderer *text_renderer = GTK_TEXT_RENDERER (renderer);
   GdkGC *fg_gc;
 
-  if (text_renderer->selected)
+  if (text_renderer->state == SELECTED)
     {
       if (GTK_WIDGET_HAS_FOCUS (text_renderer->widget))
 	fg_gc = text_renderer->widget->style->text_gc[GTK_STATE_SELECTED];
       else
 	fg_gc = text_renderer->widget->style->text_gc[GTK_STATE_SELECTED];
     }
+  else if (text_renderer->state == CURSOR && GTK_WIDGET_HAS_FOCUS (text_renderer->widget))
+    fg_gc = text_renderer->widget->style->base_gc[GTK_STATE_NORMAL];
   else
     fg_gc = text_renderer->widget->style->text_gc[GTK_STATE_NORMAL];
   
@@ -358,10 +368,10 @@ _gtk_text_renderer_class_init (GtkTextRendererClass *klass)
 }
 
 static void
-text_renderer_set_selected (GtkTextRenderer *text_renderer,
-			    gboolean         selected)
+text_renderer_set_state (GtkTextRenderer *text_renderer,
+			 int              state)
 {
-  text_renderer->selected = selected;
+  text_renderer->state = state;
 }
 
 static void
@@ -486,6 +496,7 @@ render_para (GtkTextRenderer    *text_renderer,
       int first_y, last_y;
       PangoRectangle line_rect;
       int baseline;
+      gboolean at_last_line;
       
       pango_layout_iter_get_line_extents (iter, NULL, &line_rect);
       baseline = pango_layout_iter_get_baseline (iter);
@@ -508,8 +519,9 @@ render_para (GtkTextRenderer    *text_renderer,
           selection_y -= line_display->top_margin;
           selection_height += line_display->top_margin;
         }
-      
-      if (pango_layout_iter_at_last_line (iter))
+
+      at_last_line = pango_layout_iter_at_last_line (iter);
+      if (at_last_line)
         selection_height += line_display->bottom_margin;
       
       first = FALSE;
@@ -525,7 +537,7 @@ render_para (GtkTextRenderer    *text_renderer,
                               screen_width,
                               selection_height);
 
-	  text_renderer_set_selected (text_renderer, TRUE);
+	  text_renderer_set_state (text_renderer, SELECTED);
 	  pango_renderer_draw_layout_line (PANGO_RENDERER (text_renderer),
 					   line, 
 					   PANGO_SCALE * x + line_rect.x,
@@ -552,7 +564,7 @@ render_para (GtkTextRenderer    *text_renderer,
               g_object_unref (bg_gc);
             }
         
-	  text_renderer_set_selected (text_renderer, FALSE);
+	  text_renderer_set_state (text_renderer, NORMAL);
 	  pango_renderer_draw_layout_line (PANGO_RENDERER (text_renderer),
 					   line, 
 					   PANGO_SCALE * x + line_rect.x,
@@ -589,7 +601,7 @@ render_para (GtkTextRenderer    *text_renderer,
                                   PANGO_PIXELS (line_rect.width),
                                   selection_height);
 
-	      text_renderer_set_selected (text_renderer, TRUE);
+	      text_renderer_set_state (text_renderer, SELECTED);
 	      pango_renderer_draw_layout_line (PANGO_RENDERER (text_renderer),
 					       line, 
 					       PANGO_SCALE * x + line_rect.x,
@@ -636,6 +648,56 @@ render_para (GtkTextRenderer    *text_renderer,
                                       selection_height);
                 }
             }
+	  else if (line_display->has_block_cursor &&
+		   GTK_WIDGET_HAS_FOCUS (text_renderer->widget) &&
+		   byte_offset <= line_display->insert_index &&
+		   (line_display->insert_index < byte_offset + line->length ||
+		    (at_last_line && line_display->insert_index == byte_offset + line->length)))
+	    {
+	      GdkRectangle cursor_rect;
+	      GdkGC *cursor_gc;
+
+	      /* we draw text using base color on filled cursor rectangle of cursor color
+	       * (normally white on black) */
+	      cursor_gc = _gtk_widget_get_cursor_gc (text_renderer->widget);
+
+	      cursor_rect.x = x + line_display->x_offset + line_display->block_cursor.x;
+	      cursor_rect.y = selection_y;
+	      cursor_rect.width = line_display->block_cursor.width;
+	      cursor_rect.height = selection_height;
+
+	      gdk_pango_renderer_set_gc (GDK_PANGO_RENDERER (text_renderer), NULL);
+	      gdk_gc_set_clip_rectangle (cursor_gc, &cursor_rect);
+
+              gdk_draw_rectangle (text_renderer->drawable,
+                                  cursor_gc,
+                                  TRUE,
+                                  cursor_rect.x,
+                                  cursor_rect.y,
+                                  cursor_rect.width,
+                                  cursor_rect.height);
+
+	      /* draw text under the cursor if any */
+	      if (!line_display->cursor_at_line_end)
+		{
+		  GdkGC *cursor_text_gc;
+
+		  cursor_text_gc = text_renderer->widget->style->base_gc[text_renderer->widget->state];
+		  gdk_gc_set_clip_rectangle (cursor_text_gc, &cursor_rect);
+		  gdk_pango_renderer_set_gc (GDK_PANGO_RENDERER (text_renderer), cursor_text_gc);
+		  text_renderer_set_state (text_renderer, CURSOR);
+
+		  pango_renderer_draw_layout_line (PANGO_RENDERER (text_renderer),
+						   line,
+						   PANGO_SCALE * x + line_rect.x,
+						   PANGO_SCALE * y + baseline);
+
+		  gdk_pango_renderer_set_gc (GDK_PANGO_RENDERER (text_renderer), fg_gc);
+		  gdk_gc_set_clip_region (cursor_text_gc, NULL);
+		}
+
+              gdk_gc_set_clip_region (cursor_gc, NULL);
+	    }
         }
 
       byte_offset += line->length;

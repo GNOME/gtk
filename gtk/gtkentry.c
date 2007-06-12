@@ -1580,16 +1580,16 @@ gtk_entry_expose (GtkWidget      *widget,
 			  GTK_WIDGET_STATE(widget), GTK_SHADOW_NONE,
 			  &event->area, widget, "entry_bg",
 			  0, 0, area_width, area_height);
-      
-      if ((entry->visible || entry->invisible_char != 0) &&
-	  GTK_WIDGET_HAS_FOCUS (widget) &&
-	  entry->selection_bound == entry->current_pos && entry->cursor_visible)
-	gtk_entry_draw_cursor (GTK_ENTRY (widget), CURSOR_STANDARD);
 
       if (entry->dnd_position != -1)
 	gtk_entry_draw_cursor (GTK_ENTRY (widget), CURSOR_DND);
       
       gtk_entry_draw_text (GTK_ENTRY (widget));
+
+      if ((entry->visible || entry->invisible_char != 0) &&
+	  GTK_WIDGET_HAS_FOCUS (widget) &&
+	  entry->selection_bound == entry->current_pos && entry->cursor_visible)
+	gtk_entry_draw_cursor (GTK_ENTRY (widget), CURSOR_STANDARD);
     }
 
   return FALSE;
@@ -2977,6 +2977,8 @@ static void
 gtk_entry_toggle_overwrite (GtkEntry *entry)
 {
   entry->overwrite_mode = !entry->overwrite_mode;
+  gtk_entry_pend_cursor_blink (entry);
+  gtk_widget_queue_draw (GTK_WIDGET (entry));
 }
 
 static void
@@ -3593,64 +3595,111 @@ gtk_entry_draw_cursor (GtkEntry  *entry,
       GtkWidget *widget = GTK_WIDGET (entry);
       GdkRectangle cursor_location;
       gboolean split_cursor;
-
+      PangoRectangle cursor_rect;
       GtkBorder inner_border;
       gint xoffset;
-      gint strong_x, weak_x;
       gint text_area_height;
-      PangoDirection dir1 = PANGO_DIRECTION_NEUTRAL;
-      PangoDirection dir2 = PANGO_DIRECTION_NEUTRAL;
-      gint x1 = 0;
-      gint x2 = 0;
+      gint cursor_index;
+      gboolean block;
+      gboolean block_at_line_end;
 
       _gtk_entry_effective_inner_border (entry, &inner_border);
 
       xoffset = inner_border.left - entry->scroll_offset;
 
       gdk_drawable_get_size (entry->text_area, NULL, &text_area_height);
-      
-      gtk_entry_get_cursor_locations (entry, type, &strong_x, &weak_x);
 
-      g_object_get (gtk_widget_get_settings (widget),
-		    "gtk-split-cursor", &split_cursor,
-		    NULL);
-
-      dir1 = entry->resolved_dir;
-      
-      if (split_cursor)
-	{
-	  x1 = strong_x;
-
-	  if (weak_x != strong_x)
-	    {
-	      dir2 = (entry->resolved_dir == PANGO_DIRECTION_LTR) ? PANGO_DIRECTION_RTL : PANGO_DIRECTION_LTR;
-	      x2 = weak_x;
-	    }
-	}
+      cursor_index = g_utf8_offset_to_pointer (entry->text, entry->current_pos + entry->preedit_cursor) - entry->text;
+      if (!entry->overwrite_mode)
+        block = FALSE;
       else
-	{
-	  if (keymap_direction == entry->resolved_dir)
-	    x1 = strong_x;
-	  else
-	    x1 = weak_x;
-	}
+        block = _gtk_text_util_get_block_cursor_location (gtk_entry_ensure_layout (entry, TRUE),
+                                                          cursor_index, &cursor_rect, &block_at_line_end);
 
-      cursor_location.x = xoffset + x1;
-      cursor_location.y = inner_border.top;
-      cursor_location.width = 0;
-      cursor_location.height = text_area_height - inner_border.top - inner_border.bottom;
+      if (!block)
+        {
+          gint strong_x, weak_x;
+          PangoDirection dir1 = PANGO_DIRECTION_NEUTRAL;
+          PangoDirection dir2 = PANGO_DIRECTION_NEUTRAL;
+          gint x1 = 0;
+          gint x2 = 0;
 
-      draw_insertion_cursor (entry,
-			     &cursor_location, TRUE, dir1,
-			     dir2 != PANGO_DIRECTION_NEUTRAL);
+          gtk_entry_get_cursor_locations (entry, type, &strong_x, &weak_x);
+
+          g_object_get (gtk_widget_get_settings (widget),
+                        "gtk-split-cursor", &split_cursor,
+                        NULL);
+
+          dir1 = entry->resolved_dir;
       
-      if (dir2 != PANGO_DIRECTION_NEUTRAL)
-	{
-	  cursor_location.x = xoffset + x2;
-	  draw_insertion_cursor (entry,
-				 &cursor_location, FALSE, dir2,
-				 TRUE);
-	}
+          if (split_cursor)
+            {
+              x1 = strong_x;
+
+              if (weak_x != strong_x)
+                {
+                  dir2 = (entry->resolved_dir == PANGO_DIRECTION_LTR) ? PANGO_DIRECTION_RTL : PANGO_DIRECTION_LTR;
+                  x2 = weak_x;
+                }
+            }
+          else
+            {
+              if (keymap_direction == entry->resolved_dir)
+                x1 = strong_x;
+              else
+                x1 = weak_x;
+            }
+
+          cursor_location.x = xoffset + x1;
+          cursor_location.y = inner_border.top;
+          cursor_location.width = 0;
+          cursor_location.height = text_area_height - inner_border.top - inner_border.bottom;
+
+          draw_insertion_cursor (entry,
+                                 &cursor_location, TRUE, dir1,
+                                 dir2 != PANGO_DIRECTION_NEUTRAL);
+      
+          if (dir2 != PANGO_DIRECTION_NEUTRAL)
+            {
+              cursor_location.x = xoffset + x2;
+              draw_insertion_cursor (entry,
+                                     &cursor_location, FALSE, dir2,
+                                     TRUE);
+            }
+        }
+      else /* overwrite_mode */
+        {
+          PangoLayout *layout = gtk_entry_ensure_layout (entry, TRUE);
+          GdkColor cursor_color;
+          GdkRectangle rect;
+          cairo_t *cr;
+          gint x, y;
+
+          get_layout_position (entry, &x, &y);
+
+          rect.x = PANGO_PIXELS (cursor_rect.x) + x;
+          rect.y = PANGO_PIXELS (cursor_rect.y) + y;
+          rect.width = PANGO_PIXELS (cursor_rect.width);
+          rect.height = PANGO_PIXELS (cursor_rect.height);
+
+          cr = gdk_cairo_create (entry->text_area);
+
+          _gtk_widget_get_cursor_color (widget, &cursor_color);
+          gdk_cairo_set_source_color (cr, &cursor_color);
+          gdk_cairo_rectangle (cr, &rect);
+          cairo_fill (cr);
+
+          if (!block_at_line_end)
+            {
+              gdk_cairo_rectangle (cr, &rect);
+              cairo_clip (cr);
+              cairo_move_to (cr, x, y);
+              gdk_cairo_set_source_color (cr, &widget->style->base[widget->state]);
+              pango_cairo_show_layout (cr, layout);
+            }
+
+          cairo_destroy (cr);
+        }
     }
 }
 

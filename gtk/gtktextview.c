@@ -2054,6 +2054,8 @@ gtk_text_view_set_editable (GtkTextView *text_view,
 
       if (text_view->layout)
         {
+	  gtk_text_layout_set_overwrite_mode (text_view->layout,
+					      text_view->overwrite_mode && text_view->editable);
           text_view->layout->default_style->editable = text_view->editable;
           gtk_text_layout_default_style_changed (text_view->layout);
         }
@@ -5422,7 +5424,20 @@ gtk_text_view_paste_clipboard (GtkTextView *text_view)
 static void
 gtk_text_view_toggle_overwrite (GtkTextView *text_view)
 {
+  if (text_view->text_window)
+    text_window_invalidate_cursors (text_view->text_window);
+
   text_view->overwrite_mode = !text_view->overwrite_mode;
+
+  if (text_view->layout)
+    gtk_text_layout_set_overwrite_mode (text_view->layout,
+					text_view->overwrite_mode && text_view->editable);
+
+  if (text_view->text_window)
+    text_window_invalidate_cursors (text_view->text_window);
+
+  gtk_text_view_pend_cursor_blink (text_view);
+
   g_object_notify (G_OBJECT (text_view), "overwrite");
 }
 
@@ -5461,11 +5476,7 @@ gtk_text_view_set_overwrite (GtkTextView *text_view,
   overwrite = overwrite != FALSE;
 
   if (text_view->overwrite_mode != overwrite)
-    {
-      text_view->overwrite_mode = overwrite;
-
-      g_object_notify (G_OBJECT (text_view), "overwrite");
-    }
+    gtk_text_view_toggle_overwrite (text_view);
 }
 
 /**
@@ -6039,6 +6050,9 @@ gtk_text_view_ensure_layout (GtkTextView *text_view)
         gtk_text_view_pend_cursor_blink (text_view);
       else
         gtk_text_layout_set_cursor_visible (text_view->layout, FALSE);
+
+      gtk_text_layout_set_overwrite_mode (text_view->layout,
+					  text_view->overwrite_mode && text_view->editable);
 
       ltr_context = gtk_widget_create_pango_context (GTK_WIDGET (text_view));
       pango_context_set_base_dir (ltr_context, PANGO_DIRECTION_LTR);
@@ -7763,6 +7777,12 @@ text_window_invalidate_cursors (GtkTextWindow *win)
 
   gtk_text_buffer_get_iter_at_mark (text_view->buffer, &iter,
                                     gtk_text_buffer_get_insert (text_view->buffer));
+
+  if (_gtk_text_layout_get_block_cursor (text_view->layout, &strong))
+    {
+      text_window_invalidate_rect (win, &strong);
+      return;
+    }
 
   gtk_text_layout_get_cursor_locations (text_view->layout, &iter,
                                         &strong, &weak);

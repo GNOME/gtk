@@ -82,6 +82,7 @@
 #include "gtktextlayout.h"
 #include "gtktextbtree.h"
 #include "gtktextiterprivate.h"
+#include "gtktextutil.h"
 #include "gtkintl.h"
 #include "gtkalias.h"
 
@@ -395,6 +396,25 @@ gtk_text_layout_set_contexts (GtkTextLayout *layout,
 
   DV (g_print ("invalidating all due to new pango contexts (%s)\n", G_STRLOC));
   gtk_text_layout_invalidate_all (layout);
+}
+
+/**
+ * gtk_text_layout_set_overwrite_mode:
+ * @layout: a #GtkTextLayout
+ * @overwrite: overwrite mode
+ *
+ * Sets overwrite mode
+ **/
+void
+gtk_text_layout_set_overwrite_mode (GtkTextLayout *layout,
+				    gboolean       overwrite)
+{
+  overwrite = overwrite != 0;
+  if (overwrite != layout->overwrite_mode)
+    {
+      layout->overwrite_mode = overwrite;
+      gtk_text_layout_invalidate_cursor_line (layout, TRUE);
+    }
 }
 
 /**
@@ -795,6 +815,7 @@ gtk_text_layout_invalidate_cache (GtkTextLayout *layout,
 	  g_slist_free (display->cursors);
 	  display->cursors = NULL;
 	  display->cursors_invalid = TRUE;
+	  display->has_block_cursor = FALSE;
 	}
       else
 	{
@@ -1648,6 +1669,52 @@ add_child_attrs (GtkTextLayout      *layout,
   pango_attr_list_insert (attrs, attr);
 }
 
+/**
+ * get_block_cursor:
+ * @layout: a #GtkTextLayout
+ * @display: a #GtkTextLineDisplay
+ * @insert_iter: iter pointing to the cursor location
+ * @insert_index: cursor offset in the @display's layout, it may
+ * be different from @insert_iter's offset in case when preedit
+ * string is present.
+ * @pos: location to store cursor position
+ * @cursor_at_line_end: whether cursor is at the end of line
+ *
+ * Checks whether layout should display block cursor at given position.
+ * For this layout must be in overwrite mode and text at @insert_iter 
+ * must be editable.
+ **/
+static gboolean
+get_block_cursor (GtkTextLayout      *layout,
+		  GtkTextLineDisplay *display,
+		  const GtkTextIter  *insert_iter,
+		  gint                insert_index,
+		  GdkRectangle       *pos,
+		  gboolean           *cursor_at_line_end)
+{
+  PangoRectangle pango_pos;
+
+  if (layout->overwrite_mode &&
+      gtk_text_iter_editable (insert_iter, TRUE) &&
+      _gtk_text_util_get_block_cursor_location (display->layout,
+						insert_index,
+						&pango_pos,
+    					        cursor_at_line_end))
+    {
+      if (pos)
+	{
+	  pos->x = PANGO_PIXELS (pango_pos.x);
+	  pos->y = PANGO_PIXELS (pango_pos.y);
+	  pos->width = PANGO_PIXELS (pango_pos.width);
+	  pos->height = PANGO_PIXELS (pango_pos.height);
+	}
+
+      return TRUE;
+    }
+  else
+    return FALSE;
+}
+
 static void
 add_cursor (GtkTextLayout      *layout,
             GtkTextLineDisplay *display,
@@ -1667,6 +1734,26 @@ add_cursor (GtkTextLayout      *layout,
       (!layout->cursor_visible ||
        gtk_text_buffer_get_selection_bounds (layout->buffer, NULL, NULL)))
     return;
+
+  if (layout->overwrite_mode &&
+      _gtk_text_btree_mark_is_insert (_gtk_text_buffer_get_btree (layout->buffer),
+				      seg->body.mark.obj))
+    {
+      GtkTextIter iter;
+      gboolean cursor_at_line_end;
+
+      _gtk_text_btree_get_iter_at_mark (_gtk_text_buffer_get_btree (layout->buffer),
+					&iter, seg->body.mark.obj);
+
+      if (get_block_cursor (layout, display, &iter, start,
+			    &display->block_cursor,
+			    &cursor_at_line_end))
+	{
+	  display->has_block_cursor = TRUE;
+	  display->cursor_at_line_end = cursor_at_line_end;
+	  return;
+	}
+    }
 
   pango_layout_get_cursor_pos (display->layout, start, &strong_pos, &weak_pos);
 
@@ -2139,6 +2226,9 @@ gtk_text_layout_get_line_display (GtkTextLayout *layout,
  			    {
 			      cursor_byte_offsets = g_slist_prepend (cursor_byte_offsets, GINT_TO_POINTER (layout_byte_offset));
 			      cursor_segs = g_slist_prepend (cursor_segs, seg);
+			      if (_gtk_text_btree_mark_is_insert (_gtk_text_buffer_get_btree (layout->buffer),
+								  seg->body.mark.obj))
+				display->insert_index = layout_byte_offset;
 			    }
                         }
 		      else
@@ -2610,6 +2700,66 @@ gtk_text_layout_get_cursor_locations (GtkTextLayout  *layout,
     }
 
   gtk_text_layout_free_line_display (layout, display);
+}
+
+/**
+ * _gtk_text_layout_get_block_cursor:
+ * @layout: a #GtkTextLayout
+ * @pos: a #GdkRectangle to store block cursor position
+ *
+ * If layout is to display a block cursor, calculates its position
+ * and returns %TRUE. Otherwise it returns %FALSE. In case when
+ * cursor is visible, it simply returns the position stored in
+ * the line display, otherwise it has to compute the position
+ * (see get_block_cursor()).
+ **/
+gboolean
+_gtk_text_layout_get_block_cursor (GtkTextLayout *layout,
+				   GdkRectangle  *pos)
+{
+  GtkTextLine *line;
+  GtkTextLineDisplay *display;
+  GtkTextIter iter;
+  GdkRectangle rect;
+  gboolean block = FALSE;
+
+  g_return_val_if_fail (layout != NULL, FALSE);
+
+  gtk_text_buffer_get_iter_at_mark (layout->buffer, &iter,
+                                    gtk_text_buffer_get_insert (layout->buffer));
+  line = _gtk_text_iter_get_text_line (&iter);
+  display = gtk_text_layout_get_line_display (layout, line, FALSE);
+
+  if (display->has_block_cursor)
+    {
+      block = TRUE;
+      rect = display->block_cursor;
+    }
+  else
+    {
+      gint index = display->insert_index;
+
+      if (index < 0)
+        index = gtk_text_iter_get_line_index (&iter);
+
+      if (get_block_cursor (layout, display, &iter, index, &rect, NULL))
+	block = TRUE;
+    }
+
+  if (block && pos)
+    {
+      gint line_top;
+
+      line_top = _gtk_text_btree_find_line_top (_gtk_text_buffer_get_btree (layout->buffer),
+						line, layout);
+
+      *pos = rect;
+      pos->x += display->x_offset;
+      pos->y += line_top + display->top_margin;
+    }
+
+  gtk_text_layout_free_line_display (layout, display);
+  return block;
 }
 
 /**

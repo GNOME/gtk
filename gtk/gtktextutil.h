@@ -45,9 +45,6 @@ void _gtk_text_util_append_special_char_menuitems (GtkMenuShell              *me
                                                    GtkTextUtilCharChosenFunc  func,
                                                    gpointer                   data);
 
-
-G_END_DECLS
-
 GdkPixmap* _gtk_text_util_create_drag_icon      (GtkWidget     *widget,
                                                  gchar         *text,
                                                  gsize          len);
@@ -55,5 +52,12 @@ GdkPixmap* _gtk_text_util_create_rich_drag_icon (GtkWidget     *widget,
                                                  GtkTextBuffer *buffer,
                                                  GtkTextIter   *start,
                                                  GtkTextIter   *end);
+
+gboolean _gtk_text_util_get_block_cursor_location (PangoLayout    *layout,
+						   gint            index_,
+						   PangoRectangle *rectangle,
+						   gboolean       *at_line_end);
+
+G_END_DECLS
 
 #endif /* __GTK_TEXT_UTIL_H__ */

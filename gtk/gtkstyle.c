@@ -6665,6 +6665,34 @@ get_insertion_cursor_gc (GtkWidget *widget,
     }
 }
 
+GdkGC *
+_gtk_widget_get_cursor_gc (GtkWidget *widget)
+{
+  g_return_val_if_fail (GTK_IS_WIDGET (widget), NULL);
+  g_return_val_if_fail (GTK_WIDGET_REALIZED (widget), NULL);
+  return get_insertion_cursor_gc (widget, TRUE);
+}
+
+void
+_gtk_widget_get_cursor_color (GtkWidget *widget,
+			      GdkColor  *color)
+{
+  GdkColor *style_color;
+
+  g_return_if_fail (GTK_IS_WIDGET (widget));
+  g_return_if_fail (color != NULL);
+
+  gtk_widget_style_get (widget, "cursor-color", &style_color, NULL);
+
+  if (style_color)
+    {
+      *color = *style_color;
+      gdk_color_free (style_color);
+    }
+  else
+    *color = widget->style->text[GTK_STATE_NORMAL];
+}
+
 static void
 draw_insertion_cursor (GtkWidget        *widget,
 		       GdkDrawable      *drawable,

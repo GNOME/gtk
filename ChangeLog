@@ -1,3 +1,26 @@
+2007-06-12  Yevgen Muntyan  <muntyan@tamu.edu>
+
+	* gtk/gtkentry.c (gtk_entry_expose), (gtk_entry_toggle_overwrite),
+	(gtk_entry_draw_cursor):
+	* gtk/gtkstyle.c (_gtk_widget_get_cursor_gc),
+	(_gtk_widget_get_cursor_color):
+	* gtk/gtkstyle.h:
+	* gtk/gtktextdisplay.c (gtk_text_renderer_prepare_run),
+	(gtk_text_renderer_draw_shape), (text_renderer_set_state),
+	(render_para):
+	* gtk/gtktextlayout.c (gtk_text_layout_set_overwrite_mode),
+	(gtk_text_layout_invalidate_cache), (get_block_cursor),
+	(add_cursor), (gtk_text_layout_get_line_display),
+	(_gtk_text_layout_get_block_cursor):
+	* gtk/gtktextlayout.h:
+	* gtk/gtktextutil.c (layout_get_char_width),
+	(_gtk_text_util_get_block_cursor_location):
+	* gtk/gtktextutil.h:
+	* gtk/gtktextview.c (gtk_text_view_set_editable),
+	(gtk_text_view_toggle_overwrite), (gtk_text_view_set_overwrite),
+	(gtk_text_view_ensure_layout), (text_window_invalidate_cursors):
+	Implement block-cursor for overwrite mode.  (#80378)
+
 2007-06-11  Matthias Clasen  <mclasen@redhat.com>
 
 	* configure.in: Bump GLib requirement to 2.13.3 (#446616, Behdad

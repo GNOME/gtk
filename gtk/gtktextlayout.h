@@ -174,6 +174,8 @@ struct _GtkTextLayout
   PangoAttrList *preedit_attrs;
   gint preedit_len;
   gint preedit_cursor;
+
+  guint overwrite_mode : 1;
 };
 
 struct _GtkTextLayoutClass
@@ -258,7 +260,10 @@ struct _GtkTextLineDisplay
   
   GdkColor *pg_bg_color;
 
+  GdkRectangle block_cursor;
   guint cursors_invalid : 1;
+  guint has_block_cursor : 1;
+  guint cursor_at_line_end : 1;
 };
 
 extern PangoAttrType gtk_text_attr_appearance_type;
@@ -276,6 +281,8 @@ void               gtk_text_layout_set_contexts          (GtkTextLayout     *lay
 							  PangoContext      *rtl_context);
 void               gtk_text_layout_set_cursor_direction  (GtkTextLayout     *layout,
                                                           GtkTextDirection   direction);
+void		   gtk_text_layout_set_overwrite_mode	 (GtkTextLayout     *layout,
+							  gboolean           overwrite);
 void               gtk_text_layout_set_keyboard_direction (GtkTextLayout     *layout,
 							   GtkTextDirection keyboard_dir);
 void               gtk_text_layout_default_style_changed (GtkTextLayout     *layout);
@@ -380,6 +387,8 @@ void     gtk_text_layout_get_cursor_locations (GtkTextLayout     *layout,
                                                GtkTextIter       *iter,
                                                GdkRectangle      *strong_pos,
                                                GdkRectangle      *weak_pos);
+gboolean _gtk_text_layout_get_block_cursor    (GtkTextLayout     *layout,
+					       GdkRectangle      *pos);
 gboolean gtk_text_layout_clamp_iter_to_vrange (GtkTextLayout     *layout,
                                                GtkTextIter       *iter,
                                                gint               top,
