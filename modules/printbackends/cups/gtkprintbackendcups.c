@@ -341,6 +341,8 @@ cups_print_cb (GtkPrintBackendCups *print_backend,
   GError *error = NULL;
   CupsPrintStreamData *ps = user_data;
 
+  GDK_THREADS_ENTER ();
+
   GTK_NOTE (PRINTING,
             g_print ("CUPS Backend: %s\n", G_STRFUNC)); 
 
@@ -375,7 +377,8 @@ cups_print_cb (GtkPrintBackendCups *print_backend,
   
   if (error)
     g_error_free (error);
-  
+
+  GDK_THREADS_LEAVE ();  
 }
 
 static void
@@ -817,10 +820,12 @@ cups_request_job_info_cb (GtkPrintBackendCups *print_backend,
   int state;
   gboolean done;
 
+  GDK_THREADS_ENTER ();
+
   if (data->job == NULL)
     {
       cups_job_poll_data_free (data);
-      return;
+      goto done;
     }
 
   data->counter++;
@@ -879,6 +884,9 @@ cups_request_job_info_cb (GtkPrintBackendCups *print_backend,
     }
   else
     cups_job_poll_data_free (data);    
+
+done:
+  GDK_THREADS_LEAVE ();
 }
 
 static void
@@ -966,6 +974,8 @@ cups_request_printer_list_cb (GtkPrintBackendCups *cups_backend,
   ipp_t *response;
   gboolean list_has_changed;
   GList *removed_printer_checklist;
+
+  GDK_THREADS_ENTER ();
 
   list_has_changed = FALSE;
 
@@ -1183,6 +1193,8 @@ cups_request_printer_list_cb (GtkPrintBackendCups *cups_backend,
     g_signal_emit_by_name (backend, "printer-list-changed");
   
   gtk_print_backend_set_list_done (backend);
+
+  GDK_THREADS_LEAVE ();
 }
 
 static gboolean
@@ -1267,6 +1279,8 @@ cups_request_ppd_cb (GtkPrintBackendCups *print_backend,
   ipp_t *response;
   GtkPrinter *printer;
 
+  GDK_THREADS_ENTER ();
+
   GTK_NOTE (PRINTING,
             g_print ("CUPS Backend: %s\n", G_STRFUNC));
 
@@ -1287,7 +1301,7 @@ cups_request_ppd_cb (GtkPrintBackendCups *print_backend,
         } 
         
       g_signal_emit_by_name (printer, "details-acquired", success);
-      return;
+      goto done;
     }
 
   response = gtk_cups_result_get_response (result);
@@ -1298,6 +1312,9 @@ cups_request_ppd_cb (GtkPrintBackendCups *print_backend,
   
   gtk_printer_set_has_details (printer, TRUE);
   g_signal_emit_by_name (printer, "details-acquired", TRUE);
+
+done:
+  GDK_THREADS_LEAVE ();
 }
 
 static void

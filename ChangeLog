@@ -1,3 +1,11 @@
+2007-06-11  Matthias Clasen  <mclasen@redhat.com>
+
+	Merge from trunk:
+
+	* modules/printbackends/cups/gtkprintbackendfile.c:
+	* modules/printbackends/cups/gtkprintbackendcups.c: Fix some
+	locking issues.  (#420249, Christian Persch)
+
 2007-06-10  Cody Russell  <bratsche@gnome.org>
 
 	Merge from trunk:
