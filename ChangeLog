@@ -1,3 +1,8 @@
+2007-06-11  Matthias Clasen  <mclasen@redhat.com>
+
+	* configure.in: When debugging is turned on, use error-checking
+	mutexes.
+
 2007-06-11  Emmanuele Bassi  <ebassi@gnome.org>
 
 	* gtk/gtknotebook.h: Fix declaration of the create_window()
