@@ -326,6 +326,8 @@ file_print_cb (GtkPrintBackendFile *print_backend,
 {
   _PrintStreamData *ps = (_PrintStreamData *) user_data;
 
+  GDK_THREADS_ENTER ();
+
   if (ps->target_io != NULL)
     g_io_channel_unref (ps->target_io);
 
@@ -342,6 +344,8 @@ file_print_cb (GtkPrintBackendFile *print_backend,
     g_object_unref (ps->job);
  
   g_free (ps);
+
+  GDK_THREADS_LEAVE ();
 }
 
 static gboolean
