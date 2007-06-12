@@ -4912,14 +4912,14 @@ update_text_cell (GtkIconView *icon_view)
       if (icon_view->priv->orientation == GTK_ORIENTATION_VERTICAL)
 	g_object_set (info->cell,
                       "alignment", PANGO_ALIGN_CENTER,
-		      "wrap-mode", PANGO_WRAP_WORD,
+		      "wrap-mode", PANGO_WRAP_WORD_CHAR,
 		      "xalign", 0.0,
 		      "yalign", 0.0,
 		      NULL);
       else
 	g_object_set (info->cell,
                       "alignment", PANGO_ALIGN_LEFT,
-		      "wrap-mode", PANGO_WRAP_WORD,
+		      "wrap-mode", PANGO_WRAP_WORD_CHAR,
 		      "xalign", 0.0,
 		      "yalign", 0.0,
 		      NULL);

@@ -1,3 +1,10 @@
+2007-06-12  Michael Natterer  <mitch@imendio.com>
+
+	* gtk/gtkiconview.c (update_text_cell): use PANGO_BREAK_WORD_CHAR
+	instead of PANGO_BREAK_WORD so the text cell doesn't overflow the
+	wrap-width if there is no whitespace found to break at.
+	Fixes bug #446107.
+
 2007-06-12  Kristian Rietveld  <kris@imendio.com>
 
 	Fix #410815, reported by Lucas Rocha.
@@ -93,7 +100,7 @@
 
 	* gdk/quartz/gdkdrawable-quartz.c (gdk_quartz_draw_arc): fix
 	angles by flipping the coordinate system back to its original y
-	direction. The implementtion is still broken for ellipses, will
+	direction. The implementation is still broken for ellipses, will
 	have to simulate them using bezier curves.
 
 2007-06-10  Cody Russell  <bratsche@gnome.org>
