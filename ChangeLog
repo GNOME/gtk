@@ -1,5 +1,10 @@
 2007-06-11  Matthias Clasen  <mclasen@redhat.com>
 
+	* configure.in: Bump GLib requirement to 2.13.3 (#446616, Behdad
+	Esfahbod)
+
+2007-06-11  Matthias Clasen  <mclasen@redhat.com>
+
 	* modules/printbackends/cups/gtkprintbackendfile.c:
 	* modules/printbackends/cups/gtkprintbackendcups.c: Fix some
 	locking issues.  (#420249, Christian Persch)
