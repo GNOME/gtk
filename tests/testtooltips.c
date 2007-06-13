@@ -117,8 +117,14 @@ query_tooltip_tree_view_cb (GtkWidget  *widget,
     }
   else
     {
+      gint bin_x, bin_y;
+
+      gtk_tree_view_convert_widget_to_bin_window_coords (tree_view, x, y,
+							 &bin_x, &bin_y);
+
       /* Mouse mode */
-      if (!gtk_tree_view_get_path_at_pos (tree_view, x, y, &path, NULL, NULL, NULL))
+      if (!gtk_tree_view_get_path_at_pos (tree_view, bin_x, bin_y,
+					  &path, NULL, NULL, NULL))
         return FALSE;
     }
 

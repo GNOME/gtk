@@ -16,6 +16,26 @@ for an overview of all the objects and data types related to the tree widget and
 they work together.
 </para>
 
+<para>
+Several different coordinate systems are exposed in the GtkTreeView API.
+These are:
+
+<inlinegraphics fileref="tree-view-coordinates.png" format="PNG"></inlinegraphic>
+
+  <simplelist>
+    <member>Widget coordinates -- coordinates relative to the widget (usually <literal>widget-&gt;window</literal>.</member>
+    <member>Bin window coordinates -- coordinates relative to the window that GtkTreeView renders to.</member>
+    <member>Tree coordinates -- coordinates relative to the entire scrollable area of GtkTreeView.  These coordinates start at (0, 0) for row 0 of the tree.</member>
+  </simplelist>
+</para>
+
+<para>
+Several functions are available for converting between the different
+coordinate systems.  The most common translations are between widget and bin window coordinates and between bin window and tree coordinates.  For the former
+you can use <literal>gtk_tree_view_convert_widget_to_bin_window_coords (<!-- -->)</literal>
+(and vice versa), for the latter <literal>gtk_tree_view_convert_bin_window_to_tree_coords (<!-- -->)</literal> (and vice versa).
+</para>
+
 <!-- ##### SECTION See_Also ##### -->
 <para>
 #GtkTreeViewColumn, #GtkTreeSelection, #GtkTreeDnd, #GtkTreeMode, #GtkTreeSortable, #GtkTreeModelSort, #GtkListStore, #GtkTreeStore, #GtkCellRenderer, #GtkCellEditable, #GtkCellRendererPixbuf, #GtkCellRendererText, #GtkCellRendererToggle
@@ -35,21 +55,21 @@ they work together.
 
 </para>
 
-@treeview: the object which received the signal.
+@tree_view: the object which received the signal.
 
 <!-- ##### SIGNAL GtkTreeView::cursor-changed ##### -->
 <para>
 
 </para>
 
-@treeview: the object which received the signal.
+@tree_view: the object which received the signal.
 
 <!-- ##### SIGNAL GtkTreeView::expand-collapse-cursor-row ##### -->
 <para>
 
 </para>
 
-@treeview: the object which received the signal.
+@tree_view: the object which received the signal.
 @arg1: 
 @arg2: 
 @arg3: 
@@ -60,7 +80,7 @@ they work together.
 
 </para>
 
-@treeview: the object which received the signal.
+@tree_view: the object which received the signal.
 @arg1: 
 @arg2: 
 @Returns: 
@@ -70,7 +90,7 @@ they work together.
 
 </para>
 
-@treeview: the object which received the signal.
+@tree_view: the object which received the signal.
 @arg1: 
 @arg2: 
 
@@ -79,7 +99,7 @@ they work together.
 
 </para>
 
-@treeview: the object which received the signal.
+@tree_view: the object which received the signal.
 @arg1: 
 @arg2: 
 
@@ -88,7 +108,7 @@ they work together.
 
 </para>
 
-@treeview: the object which received the signal.
+@tree_view: the object which received the signal.
 @arg1: 
 @arg2: 
 
@@ -97,7 +117,7 @@ they work together.
 
 </para>
 
-@treeview: the object which received the signal.
+@tree_view: the object which received the signal.
 @Returns: 
 
 <!-- ##### SIGNAL GtkTreeView::select-cursor-parent ##### -->
@@ -105,7 +125,7 @@ they work together.
 
 </para>
 
-@treeview: the object which received the signal.
+@tree_view: the object which received the signal.
 @Returns: 
 
 <!-- ##### SIGNAL GtkTreeView::select-cursor-row ##### -->
@@ -113,7 +133,7 @@ they work together.
 
 </para>
 
-@treeview: the object which received the signal.
+@tree_view: the object which received the signal.
 @arg1: 
 @Returns: 
 
@@ -122,7 +142,7 @@ they work together.
 
 </para>
 
-@treeview: the object which received the signal.
+@tree_view: the object which received the signal.
 @arg1: 
 @arg2: 
 
@@ -131,7 +151,7 @@ they work together.
 
 </para>
 
-@treeview: the object which received the signal.
+@tree_view: the object which received the signal.
 @Returns: 
 
 <!-- ##### SIGNAL GtkTreeView::test-collapse-row ##### -->
@@ -139,7 +159,7 @@ they work together.
 
 </para>
 
-@treeview: the object which received the signal.
+@tree_view: the object which received the signal.
 @arg1: 
 @arg2: 
 @Returns: 
@@ -149,7 +169,7 @@ they work together.
 
 </para>
 
-@treeview: the object which received the signal.
+@tree_view: the object which received the signal.
 @arg1: 
 @arg2: 
 @Returns: 
@@ -159,7 +179,7 @@ they work together.
 
 </para>
 
-@treeview: the object which received the signal.
+@tree_view: the object which received the signal.
 @Returns: 
 
 <!-- ##### SIGNAL GtkTreeView::unselect-all ##### -->
@@ -167,7 +187,7 @@ they work together.
 
 </para>
 
-@treeview: the object which received the signal.
+@tree_view: the object which received the signal.
 @Returns: 
 
 <!-- ##### ARG GtkTreeView:enable-grid-lines ##### -->

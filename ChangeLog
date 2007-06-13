@@ -1,5 +1,28 @@
 2007-06-13  Kristian Rietveld  <kris@imendio.com>
 
+	Audit of GtkTreeView coordinate system usage. (#142494).
+
+	* gtk/gtktreeview.[ch]: general documentation updates,
+	(gtk_tree_view_scroll_to_cell), (gtk_tree_view_get_dest_row_at_pos):
+	update coordinate translations,
+	(gtk_tree_view_tree_to_widget_coords),
+	(gtk_tree_view_widget_to_tree_coords): Deprecated,
+	(gtk_tree_view_convert_.*_coords): 6 new functions for doing
+	transformations between coordinate systems.
+
+	* gtk/gtk.symbols: updated.
+
+	* tests/testtooltips.c (query_tooltip_tree_view_cb): fix testcase
+	with new gtk_tree_view_convert_widget_to_bin_window_coords().
+
+	* docs/reference/gtk/Makefile.am
+	* docs/reference/gtk/images/tree-view-coordinates.png: add new image.
+
+	* docs/reference/gtk/tmpl/gtktreeview.sgml: eloborate on the
+	different coordinate systems.
+
+2007-06-13  Kristian Rietveld  <kris@imendio.com>
+
 	* gtk/gtkcellrendererprogress.c
 	(gtk_cell_renderer_progress_class_init),
 	(gtk_cell_renderer_progress_init),

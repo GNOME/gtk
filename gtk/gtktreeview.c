@@ -61,10 +61,13 @@
 #define BACKGROUND_HEIGHT(node) (GTK_RBNODE_GET_HEIGHT (node))
 #define CELL_HEIGHT(node, separator) ((BACKGROUND_HEIGHT (node)) - (separator))
 
+/* Translate from bin_window coordinates to rbtree (tree coordinates) and
+ * vice versa.
+ */
 #define TREE_WINDOW_Y_TO_RBTREE_Y(tree_view,y) ((y) + tree_view->priv->dy)
 #define RBTREE_Y_TO_TREE_WINDOW_Y(tree_view,y) ((y) - tree_view->priv->dy)
 
-/* This is in Window coordinates */
+/* This is in bin_window coordinates */
 #define BACKGROUND_FIRST_PIXEL(tree_view,tree,node) (RBTREE_Y_TO_TREE_WINDOW_Y (tree_view, _gtk_rbtree_node_find_offset ((tree), (node))))
 #define CELL_FIRST_PIXEL(tree_view,tree,node,separator) (BACKGROUND_FIRST_PIXEL (tree_view,tree,node) + separator/2)
 
@@ -456,12 +459,6 @@ static gboolean gtk_tree_view_start_interactive_search      (GtkTreeView *tree_v
 static GtkTreeViewColumn *gtk_tree_view_get_drop_column (GtkTreeView       *tree_view,
 							 GtkTreeViewColumn *column,
 							 gint               drop_position);
-
-static void gtk_tree_view_tree_window_to_tree_coords (GtkTreeView *tree_view,
-						      gint         wx,
-						      gint         wy,
-						      gint        *tx,
-						      gint        *ty);
 
 static gboolean scroll_row_timeout                   (gpointer     data);
 static void     add_scroll_timeout                   (GtkTreeView *tree_view);
@@ -2973,7 +2970,7 @@ static gboolean
 coords_are_over_arrow (GtkTreeView *tree_view,
                        GtkRBTree   *tree,
                        GtkRBNode   *node,
-                       /* these are in window coords */
+                       /* these are in bin window coords */
                        gint         x,
                        gint         y)
 {
@@ -3039,7 +3036,7 @@ static void
 do_prelight (GtkTreeView *tree_view,
              GtkRBTree   *tree,
              GtkRBNode   *node,
-	     /* these are in tree_window coords */
+	     /* these are in bin_window coords */
              gint         x,
              gint         y)
 {
@@ -3135,7 +3132,7 @@ static void
 prelight_or_select (GtkTreeView *tree_view,
 		    GtkRBTree   *tree,
 		    GtkRBNode   *node,
-		    /* these are in tree_window coords */
+		    /* these are in bin_window coords */
 		    gint         x,
 		    gint         y)
 {
@@ -6697,6 +6694,7 @@ scroll_row_timeout (gpointer data)
 static gboolean
 set_destination_row (GtkTreeView    *tree_view,
                      GdkDragContext *context,
+                     /* coordinates relative to the widget */
                      gint            x,
                      gint            y,
                      GdkDragAction  *suggested_action,
@@ -7106,6 +7104,7 @@ gtk_tree_view_drag_leave (GtkWidget      *widget,
 static gboolean
 gtk_tree_view_drag_motion (GtkWidget        *widget,
                            GdkDragContext   *context,
+			   /* coordinates relative to the widget */
                            gint              x,
                            gint              y,
                            guint             time)
@@ -7171,6 +7170,7 @@ gtk_tree_view_drag_motion (GtkWidget        *widget,
 static gboolean
 gtk_tree_view_drag_drop (GtkWidget        *widget,
                          GdkDragContext   *context,
+			 /* coordinates relative to the widget */
                          gint              x,
                          gint              y,
                          guint             time)
@@ -7235,6 +7235,7 @@ gtk_tree_view_drag_drop (GtkWidget        *widget,
 static void
 gtk_tree_view_drag_data_received (GtkWidget        *widget,
                                   GdkDragContext   *context,
+				  /* coordinates relative to the widget */
                                   gint              x,
                                   gint              y,
                                   GtkSelectionData *selection_data,
@@ -7949,6 +7950,7 @@ gtk_tree_view_real_move_cursor (GtkTreeView       *tree_view,
 static void
 gtk_tree_view_put (GtkTreeView *tree_view,
 		   GtkWidget   *child_widget,
+		   /* in tree coordinates */
 		   gint         x,
 		   gint         y,
 		   gint         width,
@@ -7978,6 +7980,7 @@ gtk_tree_view_put (GtkTreeView *tree_view,
 void
 _gtk_tree_view_child_move_resize (GtkTreeView *tree_view,
 				  GtkWidget   *widget,
+				  /* in tree coordinates */
 				  gint         x,
 				  gint         y,
 				  gint         width,
@@ -9366,6 +9369,7 @@ static void
 gtk_tree_view_draw_arrow (GtkTreeView *tree_view,
                           GtkRBTree   *tree,
 			  GtkRBNode   *node,
+			  /* in bin_window coordinates */
 			  gint         x,
 			  gint         y)
 {
@@ -11375,7 +11379,7 @@ gtk_tree_view_set_column_drag_function (GtkTreeView               *tree_view,
  *
  * Scrolls the tree view such that the top-left corner of the visible
  * area is @tree_x, @tree_y, where @tree_x and @tree_y are specified
- * in tree window coordinates.  The @tree_view must be realized before
+ * in tree coordinates.  The @tree_view must be realized before
  * this function is called.  If it isn't, you probably want to be
  * using gtk_tree_view_scroll_to_cell().
  *
@@ -11482,8 +11486,9 @@ gtk_tree_view_scroll_to_cell (GtkTreeView       *tree_view,
       gint dest_x, dest_y;
 
       gtk_tree_view_get_background_area (tree_view, path, column, &cell_rect);
-      gtk_tree_view_tree_window_to_tree_coords (tree_view, cell_rect.x, cell_rect.y, &(cell_rect.x), &(cell_rect.y));
       gtk_tree_view_get_visible_rect (tree_view, &vis_rect);
+
+      cell_rect.y = TREE_WINDOW_Y_TO_RBTREE_Y (tree_view, cell_rect.y);
 
       dest_x = vis_rect.x;
       dest_y = vis_rect.y;
@@ -12490,23 +12495,29 @@ gtk_tree_view_get_bin_window (GtkTreeView *tree_view)
 /**
  * gtk_tree_view_get_path_at_pos:
  * @tree_view: A #GtkTreeView.
- * @x: The x position to be identified.
- * @y: The y position to be identified.
+ * @x: The x position to be identified (relative to bin_window).
+ * @y: The y position to be identified (relative to bin_window).
  * @path: A pointer to a #GtkTreePath pointer to be filled in, or %NULL
  * @column: A pointer to a #GtkTreeViewColumn pointer to be filled in, or %NULL
  * @cell_x: A pointer where the X coordinate relative to the cell can be placed, or %NULL
  * @cell_y: A pointer where the Y coordinate relative to the cell can be placed, or %NULL
  *
- * Finds the path at the point (@x, @y), relative to widget coordinates.  That
- * is, @x and @y are relative to an events coordinates. @x and @y must come
- * from an event on the @tree_view only where <literal>event->window ==
- * gtk_tree_view_get_bin (<!-- -->)</literal>. It is primarily for things 
- * like popup menus. If @path is non-%NULL, then it will be filled with the 
- * #GtkTreePath at that point.  This path should be freed with gtk_tree_path_free().  
- * If @column is non-%NULL, then it will be filled with the column at that point.
- * @cell_x and @cell_y return the coordinates relative to the cell background
- * (i.e. the @background_area passed to gtk_cell_renderer_render()).  This
- * function is only meaningful if @tree_view is realized.
+ * Finds the path at the point (@x, @y), relative to bin_window coordinates
+ * (please see <literal>gtk_tree_view_get_bin_window (<!-- -->)</literal>).
+ * That is, @x and @y are relative to an events coordinates. @x and @y must
+ * come from an event on the @tree_view only where <literal>event->window ==
+ * gtk_tree_view_get_bin_window (<!-- -->)</literal>. It is primarily for
+ * things like popup menus. If @path is non-%NULL, then it will be filled
+ * with the #GtkTreePath at that point.  This path should be freed with
+ * gtk_tree_path_free().  If @column is non-%NULL, then it will be filled
+ * with the column at that point.  @cell_x and @cell_y return the coordinates
+ * relative to the cell background (i.e. the @background_area passed to
+ * gtk_cell_renderer_render()).  This function is only meaningful if
+ * @tree_view is realized.
+ *
+ * For converting widget coordinates (eg. the ones you get from
+ * GtkWidget::query-tooltip), please see
+ * <literal>gtk_tree_view_convert_widget_to_bin_window_coords (<!-- -->)</literal>.
  *
  * Return value: %TRUE if a row exists at that coordinate.
  **/
@@ -12619,7 +12630,7 @@ gtk_tree_view_get_path_at_pos (GtkTreeView        *tree_view,
  * @column: a #GtkTreeViewColumn for the column, or %NULL to get only vertical coordinates
  * @rect: rectangle to fill with cell rect
  *
- * Fills the bounding rectangle in tree window coordinates for the cell at the
+ * Fills the bounding rectangle in bin_window coordinates for the cell at the
  * row specified by @path and the column specified by @column.  If @path is
  * %NULL, or points to a path not currently displayed, the @y and @height fields
  * of the rectangle will be filled with 0. If @column is %NULL, the @x and @width
@@ -12704,16 +12715,15 @@ gtk_tree_view_get_cell_area (GtkTreeView        *tree_view,
  * @column: a #GtkTreeViewColumn for the column, or %NULL to get only vertical coordiantes
  * @rect: rectangle to fill with cell background rect
  *
- * Fills the bounding rectangle in tree window coordinates for the cell at the
+ * Fills the bounding rectangle in bin_window coordinates for the cell at the
  * row specified by @path and the column specified by @column.  If @path is
  * %NULL, or points to a node not found in the tree, the @y and @height fields of
  * the rectangle will be filled with 0. If @column is %NULL, the @x and @width
  * fields will be filled with 0.  The returned rectangle is equivalent to the
  * @background_area passed to gtk_cell_renderer_render().  These background
- * areas tile to cover the entire tree window (except for the area used for
- * header buttons). Contrast with the @cell_area, returned by
- * gtk_tree_view_get_cell_area(), which returns only the cell itself, excluding
- * surrounding borders and the tree expander area.
+ * areas tile to cover the entire bin window.  Contrast with the @cell_area,
+ * returned by gtk_tree_view_get_cell_area(), which returns only the cell
+ * itself, excluding surrounding borders and the tree expander area.
  *
  **/
 void
@@ -12762,10 +12772,10 @@ gtk_tree_view_get_background_area (GtkTreeView        *tree_view,
  * @visible_rect: rectangle to fill
  *
  * Fills @visible_rect with the currently-visible region of the
- * buffer, in tree coordinates. Convert to widget coordinates with
- * gtk_tree_view_tree_to_widget_coords(). Tree coordinates start at
- * 0,0 for row 0 of the tree, and cover the entire scrollable area of
- * the tree.
+ * buffer, in tree coordinates. Convert to bin_window coordinates with
+ * <literal>gtk_tree_view_convert_tree_to_bin_window_coords (<!-- -->)</literal>.
+ * Tree coordinates start at 0,0 for row 0 of the tree, and cover the entire
+ * scrollable area of the tree.
  **/
 void
 gtk_tree_view_get_visible_rect (GtkTreeView  *tree_view,
@@ -12789,13 +12799,18 @@ gtk_tree_view_get_visible_rect (GtkTreeView  *tree_view,
 /**
  * gtk_tree_view_widget_to_tree_coords:
  * @tree_view: a #GtkTreeView
- * @wx: widget X coordinate
- * @wy: widget Y coordinate
+ * @wx: X coordinate relative to bin_window
+ * @wy: Y coordinate relative to bin_window
  * @tx: return location for tree X coordinate
  * @ty: return location for tree Y coordinate
  *
- * Converts widget coordinates to coordinates for the
- * tree window (the full scrollable area of the tree).
+ * Converts bin_window coordinates to coordinates for the
+ * tree (the full scrollable area of the tree).
+ *
+ * Deprecated: 2.12: Due to historial reasons the name of this function is
+ * incorrect.  For converting coordinates relative to the widget to
+ * bin_window coordinates, please see
+ * <literal>gtk_tree_view_convert_widget_to_bin_window_coords (<!-- -->)</literal>.
  *
  **/
 void
@@ -12813,31 +12828,21 @@ gtk_tree_view_widget_to_tree_coords (GtkTreeView *tree_view,
     *ty = wy + tree_view->priv->dy;
 }
 
-static void
-gtk_tree_view_tree_window_to_tree_coords (GtkTreeView *tree_view,
-					  gint         wx,
-					  gint         wy,
-					  gint        *tx,
-					  gint        *ty)
-{
-  g_return_if_fail (GTK_IS_TREE_VIEW (tree_view));
-
-  if (tx)
-    *tx = wx;
-  if (ty)
-    *ty = wy + tree_view->priv->dy;
-}
-
 /**
  * gtk_tree_view_tree_to_widget_coords:
  * @tree_view: a #GtkTreeView
  * @tx: tree X coordinate
  * @ty: tree Y coordinate
- * @wx: return location for widget X coordinate
- * @wy: return location for widget Y coordinate
+ * @wx: return location for X coordinate relative to bin_window
+ * @wy: return location for Y coordinate relative to bin_window
  *
  * Converts tree coordinates (coordinates in full scrollable area of the tree)
- * to widget coordinates.
+ * to bin_window coordinates.
+ *
+ * Deprecated: 2.12: Due to historial reasons the name of this function is
+ * incorrect.  For converting bin_window coordinates to coordinates relative
+ * to bin_window, please see
+ * <literal>gtk_tree_view_convert_bin_window_to_widget_coords (<!-- -->)</literal>.
  *
  **/
 void
@@ -12854,6 +12859,186 @@ gtk_tree_view_tree_to_widget_coords (GtkTreeView *tree_view,
   if (wy)
     *wy = ty - tree_view->priv->dy;
 }
+
+
+/**
+ * gtk_tree_view_convert_widget_to_tree_coords:
+ * @tree_view: a #GtkTreeView
+ * @wx: X coordinate relative to the widget
+ * @wy: Y coordinate relative to the widget
+ * @bx: return location for tree X coordinate
+ * @by: return location for tree Y coordinate
+ *
+ * Converts widget coordinates to coordinates for the
+ * tree (the full scrollable area of the tree).
+ *
+ * Since: 2.12
+ **/
+void
+gtk_tree_view_convert_widget_to_tree_coords (GtkTreeView *tree_view,
+                                             gint         wx,
+                                             gint         wy,
+                                             gint        *tx,
+                                             gint        *ty)
+{
+  gint x, y;
+
+  g_return_if_fail (GTK_IS_TREE_VIEW (tree_view));
+
+  gtk_tree_view_convert_widget_to_bin_window_coords (tree_view,
+						     wx, wy,
+						     &x, &y);
+  gtk_tree_view_convert_bin_window_to_tree_coords (tree_view,
+						   x, y,
+						   tx, ty);
+}
+
+/**
+ * gtk_tree_view_convert_tree_to_widget_coords:
+ * @tree_view: a #GtkTreeView
+ * @wx: X coordinate relative to the tree
+ * @wy: Y coordinate relative to the tree
+ * @bx: return location for widget X coordinate
+ * @by: return location for widget Y coordinate
+ *
+ * Converts tree coordinates (coordinates in full scrollable area of the tree)
+ * to widget coordinates.
+ *
+ * Since: 2.12
+ **/
+void
+gtk_tree_view_convert_tree_to_widget_coords (GtkTreeView *tree_view,
+                                             gint         tx,
+                                             gint         ty,
+                                             gint        *wx,
+                                             gint        *wy)
+{
+  gint x, y;
+
+  g_return_if_fail (GTK_IS_TREE_VIEW (tree_view));
+
+  gtk_tree_view_convert_tree_to_bin_window_coords (tree_view,
+						   tx, ty,
+						   &x, &y);
+  gtk_tree_view_convert_bin_window_to_widget_coords (tree_view,
+						     x, y,
+						     wx, wy);
+}
+
+/**
+ * gtk_tree_view_convert_widget_to_bin_window_coords:
+ * @tree_view: a #GtkTreeView
+ * @wx: X coordinate relative to the widget
+ * @wy: Y coordinate relative to the widget
+ * @bx: return location for bin_window X coordinate
+ * @by: return location for bin_window Y coordinate
+ *
+ * Converts widget coordinates to coordinates for the bin_window
+ * (see <literal>gtk_tree_view_get_bin_window (<!-- -->)</literal>).
+ *
+ * Since: 2.12
+ **/
+void
+gtk_tree_view_convert_widget_to_bin_window_coords (GtkTreeView *tree_view,
+                                                   gint         wx,
+                                                   gint         wy,
+                                                   gint        *bx,
+                                                   gint        *by)
+{
+  g_return_if_fail (GTK_IS_TREE_VIEW (tree_view));
+
+  if (bx)
+    *bx = wx;
+  if (by)
+    *by = wy - TREE_VIEW_HEADER_HEIGHT (tree_view);
+}
+
+/**
+ * gtk_tree_view_convert_bin_window_to_widget_coords:
+ * @tree_view: a #GtkTreeView
+ * @bx: bin_window X coordinate
+ * @by: bin_window Y coordinate
+ * @wx: return location for widget X coordinate
+ * @wy: return location for widget Y coordinate
+ *
+ * Converts bin_window coordinates (see
+ * <literal>gtk_tree_view_get_bin_window (<!-- -->)</literal).
+ * to widget relative coordinates.
+ *
+ * Since: 2.12
+ **/
+void
+gtk_tree_view_convert_bin_window_to_widget_coords (GtkTreeView *tree_view,
+                                                   gint         bx,
+                                                   gint         by,
+                                                   gint        *wx,
+                                                   gint        *wy)
+{
+  g_return_if_fail (GTK_IS_TREE_VIEW (tree_view));
+
+  if (wx)
+    *wx = bx;
+  if (wy)
+    *wy = by + TREE_VIEW_HEADER_HEIGHT (tree_view);
+}
+
+/**
+ * gtk_tree_view_convert_tree_to_bin_window_coords:
+ * @tree_view: a #GtkTreeView
+ * @tx: tree X coordinate
+ * @ty: tree Y coordinate
+ * @bx: return location for X coordinate relative to bin_window
+ * @by: return location for Y coordinate relative to bin_window
+ *
+ * Converts tree coordinates (coordinates in full scrollable area of the tree)
+ * to bin_window coordinates.
+ *
+ * Since: 2.12
+ **/
+void
+gtk_tree_view_convert_tree_to_bin_window_coords (GtkTreeView *tree_view,
+                                                 gint         tx,
+                                                 gint         ty,
+                                                 gint        *bx,
+                                                 gint        *by)
+{
+  g_return_if_fail (GTK_IS_TREE_VIEW (tree_view));
+
+  if (bx)
+    *bx = tx - tree_view->priv->hadjustment->value;
+  if (by)
+    *by = ty - tree_view->priv->dy;
+}
+
+/**
+ * gtk_tree_view_convert_bin_window_to_tree_coords:
+ * @tree_view: a #GtkTreeView
+ * @wx: X coordinate relative to bin_window
+ * @wy: Y coordinate relative to bin_window
+ * @bx: return location for tree X coordinate
+ * @by: return location for tree Y coordinate
+ *
+ * Converts bin_window coordinates to coordinates for the
+ * tree (the full scrollable area of the tree).
+ *
+ * Since: 2.12
+ **/
+void
+gtk_tree_view_convert_bin_window_to_tree_coords (GtkTreeView *tree_view,
+                                                 gint         bx,
+                                                 gint         by,
+                                                 gint        *tx,
+                                                 gint        *ty)
+{
+  g_return_if_fail (GTK_IS_TREE_VIEW (tree_view));
+
+  if (tx)
+    *tx = bx + tree_view->priv->hadjustment->value;
+  if (ty)
+    *ty = by + tree_view->priv->dy;
+}
+
+
 
 /**
  * gtk_tree_view_get_visible_range:
@@ -13174,7 +13359,8 @@ gtk_tree_view_get_drag_dest_row (GtkTreeView              *tree_view,
  * @path: Return location for the path of the highlighted row, or %NULL.
  * @pos: Return location for the drop position, or %NULL
  * 
- * Determines the destination row for a given position.
+ * Determines the destination row for a given position.  @drag_x and
+ * @drag_y are expected to be in widget coordinates.
  * 
  * Return value: whether there is a row at the given position.
  **/
@@ -13186,6 +13372,7 @@ gtk_tree_view_get_dest_row_at_pos (GtkTreeView             *tree_view,
                                    GtkTreeViewDropPosition *pos)
 {
   gint cell_y;
+  gint bin_x, bin_y;
   gdouble offset_into_row;
   gdouble third;
   GdkRectangle cell;
@@ -13212,10 +13399,12 @@ gtk_tree_view_get_dest_row_at_pos (GtkTreeView             *tree_view,
    * in the bottom third, drop after that row; if in the middle,
    * and the row has children, drop into the row.
    */
+  gtk_tree_view_convert_widget_to_bin_window_coords (tree_view, drag_x, drag_y,
+						     &bin_x, &bin_y);
 
   if (!gtk_tree_view_get_path_at_pos (tree_view,
-                                      drag_x,
-				      drag_y - TREE_VIEW_HEADER_HEIGHT (tree_view),
+				      bin_x,
+				      bin_y,
                                       &tmp_path,
                                       &column,
                                       NULL,
