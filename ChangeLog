@@ -1,3 +1,9 @@
+2007-06-13  Michael Natterer  <mitch@imendio.com>
+
+	* gtk/gtklabel.c (gtk_label_set_label): added calls to
+	g_object_freeze/thaw_notify() so gtk_label_get_text() doesn't
+	return the old text when called from a "notify::label" callback.
+
 2007-06-13  Kristian Rietveld  <kris@imendio.com>
 
 	Audit of GtkTreeView coordinate system usage. (#142494).
