@@ -7075,36 +7075,28 @@ static void
 gtk_widget_propagate_state (GtkWidget           *widget,
 			    GtkStateData        *data)
 {
-  guint8 old_state;
+  guint8 old_state = GTK_WIDGET_STATE (widget);
+  guint8 old_saved_state = GTK_WIDGET_SAVED_STATE (widget);
 
   /* don't call this function with state==GTK_STATE_INSENSITIVE,
    * parent_sensitive==TRUE on a sensitive widget
    */
 
-  old_state = GTK_WIDGET_STATE (widget);
 
   if (data->parent_sensitive)
-    {
-      GTK_WIDGET_SET_FLAGS (widget, GTK_PARENT_SENSITIVE);
+    GTK_WIDGET_SET_FLAGS (widget, GTK_PARENT_SENSITIVE);
+  else
+    GTK_WIDGET_UNSET_FLAGS (widget, GTK_PARENT_SENSITIVE);
 
-      if (GTK_WIDGET_IS_SENSITIVE (widget))
-	{
-	  if (data->state_restoration)
-	    GTK_WIDGET_STATE (widget) = GTK_WIDGET_SAVED_STATE (widget);
-	  else
-	    GTK_WIDGET_STATE (widget) = data->state;
-	}
+  if (GTK_WIDGET_IS_SENSITIVE (widget))
+    {
+      if (data->state_restoration)
+        GTK_WIDGET_STATE (widget) = GTK_WIDGET_SAVED_STATE (widget);
       else
-	{
-	  GTK_WIDGET_STATE (widget) = GTK_STATE_INSENSITIVE;
-	  if (!data->state_restoration &&
-	      data->state != GTK_STATE_INSENSITIVE)
-	    GTK_WIDGET_SAVED_STATE (widget) = data->state;
-	}
+        GTK_WIDGET_STATE (widget) = data->state;
     }
   else
     {
-      GTK_WIDGET_UNSET_FLAGS (widget, GTK_PARENT_SENSITIVE);
       if (!data->state_restoration)
 	{
 	  if (data->state != GTK_STATE_INSENSITIVE)
@@ -7124,19 +7116,19 @@ gtk_widget_propagate_state (GtkWidget           *widget,
 	gtk_window_set_focus (GTK_WINDOW (window), NULL);
     }
 
-  if (old_state != GTK_WIDGET_STATE (widget))
+  if (old_state != GTK_WIDGET_STATE (widget) ||
+      old_saved_state != GTK_WIDGET_SAVED_STATE (widget))
     {
       g_object_ref (widget);
-      
+
       if (!GTK_WIDGET_IS_SENSITIVE (widget) && GTK_WIDGET_HAS_GRAB (widget))
 	gtk_grab_remove (widget);
-      
+
       g_signal_emit (widget, widget_signals[STATE_CHANGED], 0, old_state);
-      
+
       if (GTK_IS_CONTAINER (widget))
 	{
 	  data->parent_sensitive = (GTK_WIDGET_IS_SENSITIVE (widget) != FALSE);
-	  data->state = GTK_WIDGET_STATE (widget);
 	  if (data->use_forall)
 	    gtk_container_forall (GTK_CONTAINER (widget),
 				  (GtkCallback) gtk_widget_propagate_state,
