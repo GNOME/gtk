@@ -1,3 +1,11 @@
+2007-06-12  Matthias Clasen  <mclasen@redhat.com>
+
+	* gdk/gdk-sections.txt: Remove GDK_WINDOWING_FB
+	* gtk/Makefile.am:
+	* gtk/gtk-docs.sgml:
+	* gtk/compiling.sgml:
+	* gtk/building.sgml: Remove linux-fb references
+
 2007-06-09  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtk-update-icon-cache.xml: Document --validate

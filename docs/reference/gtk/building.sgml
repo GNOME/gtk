@@ -344,11 +344,7 @@ How to compile GTK+ itself
             <arg>--with-xinput=[no|yes]</arg>
           </group>
 	  <group>
-	    <arg>--with-gdktarget=[x11|linux-fb|win32|quartz|directfb]</arg>
-	  </group>
-	  <group>
-	    <arg>--disable-shadowfb</arg>
-	    <arg>--enable-shadowfb</arg>
+	    <arg>--with-gdktarget=[x11|win32|quartz|directfb]</arg>
 	  </group>
 	</cmdsynopsis>
       </para>
@@ -539,16 +535,6 @@ How to compile GTK+ itself
 	  case the default is win32. Other supported backends are
           the quartz backend for OS X, and the DirectFB backend
           for the Linux framebuffer.
-	</para>
-      </formalpara>
-
-      <formalpara>
-	<title><systemitem>--disable-shadowfb</systemitem> and
-	  <systemitem>--enable-shadowfb</systemitem></title>
-
-	<para>
-         Toggles shadow framebuffer support for the linux-fb target, 
-         if selected.
 	</para>
       </formalpara>
 

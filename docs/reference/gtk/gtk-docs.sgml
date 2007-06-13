@@ -205,7 +205,6 @@
 <!ENTITY gtk-Running SYSTEM "running.sgml">
 <!ENTITY gtk-Resources SYSTEM "resources.sgml">
 <!ENTITY gtk-Windows SYSTEM "windows.sgml">
-<!ENTITY gtk-Framebuffer SYSTEM "framebuffer.sgml">
 <!ENTITY gtk-X11 SYSTEM "x11.sgml">
 <!ENTITY gtk-OSX SYSTEM "osx.sgml">
 <!ENTITY gtk-DirectFB SYSTEM "directfb.sgml">
@@ -317,7 +316,6 @@ that is, GUI components such as #GtkButton or #GtkTextView.
     &gtk-Windows;
     &gtk-OSX;
     &gtk-DirectFB;
-    &gtk-Framebuffer;
     &gtk-Resources;
     &gtk-Questions;
   </part>

@@ -122,7 +122,6 @@ content_files =					\
 	changes-2.0.sgml			\
 	compiling.sgml				\
 	directfb.sgml				\
-	framebuffer.sgml			\
 	glossary.xml				\
 	migrating-checklist.sgml		\
 	migrating-GtkAction.sgml		\

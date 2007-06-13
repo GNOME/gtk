@@ -1,3 +1,9 @@
+2007-06-12  Matthias Clasen  <mclasen@redhat.com>
+
+	* gdk/Makefile.am: Remove linux-fb from DIST_SUBDIRS
+
+	* configure.in: Remove linux-fb parts.
+
 2007-06-12  Michael Natterer  <mitch@imendio.com>
 
 	* gtk/gtkiconview.c (update_text_cell): use PANGO_BREAK_WORD_CHAR
