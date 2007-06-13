@@ -16,7 +16,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+_properties 2.10.7\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-05-02 13:20-0400\n"
+"POT-Creation-Date: 2007-06-12 23:38-0400\n"
 "PO-Revision-Date: 2007-01-23 20:53+0100\n"
 "Last-Translator: Robert-André Mauchin <zebob.m@gmail.com>\n"
 "Language-Team: GNOME French Team <gnomefr@traduc.org>\n"
@@ -810,7 +810,7 @@ msgstr ""
 "Si défini, l'étiquette est utilisée pour piocher un élément du stock au lieu "
 "d'être affichée"
 
-#: gtk/gtkbutton.c:223 gtk/gtkcombobox.c:647 gtk/gtkfilechooserbutton.c:372
+#: gtk/gtkbutton.c:223 gtk/gtkcombobox.c:649 gtk/gtkfilechooserbutton.c:372
 msgid "Focus on click"
 msgstr "Activation lors du clic"
 
@@ -1457,7 +1457,7 @@ msgstr ""
 "Méthode pour couper la chaîne en lignes multiples, si l'espace n'est pas "
 "suffisant pour afficher la chaîne complète"
 
-#: gtk/gtkcellrenderertext.c:467 gtk/gtkcombobox.c:537
+#: gtk/gtkcellrenderertext.c:467 gtk/gtkcombobox.c:539
 msgid "Wrap width"
 msgstr "Largeur de la coupure"
 
@@ -1791,69 +1791,69 @@ msgid "Whether entered values must already be present in the list"
 msgstr ""
 "Indique si les valeurs entrées doivent déjà être présentes dans la liste"
 
-#: gtk/gtkcombobox.c:520
+#: gtk/gtkcombobox.c:522
 msgid "ComboBox model"
 msgstr "Modèle de ComboBox"
 
-#: gtk/gtkcombobox.c:521
+#: gtk/gtkcombobox.c:523
 msgid "The model for the combo box"
 msgstr "Le modèle pour la boîte combo"
 
-#: gtk/gtkcombobox.c:538
+#: gtk/gtkcombobox.c:540
 msgid "Wrap width for laying out the items in a grid"
 msgstr "Largeur de la coupure pour l'agencement des éléments dans une grille"
 
-#: gtk/gtkcombobox.c:560
+#: gtk/gtkcombobox.c:562
 msgid "Row span column"
 msgstr "Espacement des colonnes "
 
-#: gtk/gtkcombobox.c:561
+#: gtk/gtkcombobox.c:563
 msgid "TreeModel column containing the row span values"
 msgstr "Colonne du TreeModel contenant les valeurs de fusion de la ligne"
 
-#: gtk/gtkcombobox.c:582
+#: gtk/gtkcombobox.c:584
 msgid "Column span column"
 msgstr "Espacement des colonnes"
 
-#: gtk/gtkcombobox.c:583
+#: gtk/gtkcombobox.c:585
 msgid "TreeModel column containing the column span values"
 msgstr "Colonne du TreeModel contenant les valeurs de fusion de la colonne"
 
-#: gtk/gtkcombobox.c:603
+#: gtk/gtkcombobox.c:605
 msgid "Active item"
 msgstr "Élément actif"
 
-#: gtk/gtkcombobox.c:604
+#: gtk/gtkcombobox.c:606
 msgid "The item which is currently active"
 msgstr "L'élément qui est actuellement actif"
 
-#: gtk/gtkcombobox.c:623 gtk/gtkuimanager.c:195
+#: gtk/gtkcombobox.c:625 gtk/gtkuimanager.c:195
 msgid "Add tearoffs to menus"
 msgstr "Ajouter des séparateurs aux menus"
 
-#: gtk/gtkcombobox.c:624
+#: gtk/gtkcombobox.c:626
 msgid "Whether dropdowns should have a tearoff menu item"
 msgstr "Indique si les menus sont détachables"
 
-#: gtk/gtkcombobox.c:639 gtk/gtkentry.c:511
+#: gtk/gtkcombobox.c:641 gtk/gtkentry.c:511
 msgid "Has Frame"
 msgstr "A une frame"
 
-#: gtk/gtkcombobox.c:640
+#: gtk/gtkcombobox.c:642
 msgid "Whether the combo box draws a frame around the child"
 msgstr "Indique si la liste déroulante doit dessiner un cadre autour du fils"
 
-#: gtk/gtkcombobox.c:648
+#: gtk/gtkcombobox.c:650
 msgid "Whether the combo box grabs focus when it is clicked with the mouse"
 msgstr ""
 "Indique si la liste déroulante est activée lorsqu'elle est cliquée avec la "
 "souris"
 
-#: gtk/gtkcombobox.c:663 gtk/gtkmenu.c:484
+#: gtk/gtkcombobox.c:665 gtk/gtkmenu.c:484
 msgid "Tearoff Title"
 msgstr "Titre du séparateur"
 
-#: gtk/gtkcombobox.c:664
+#: gtk/gtkcombobox.c:666
 msgid ""
 "A title that may be displayed by the window manager when the popup is torn-"
 "off"
@@ -1861,19 +1861,19 @@ msgstr ""
 "Un titre que le gestionnaire de fenêtres peut afficher lorsque le menu est "
 "détaché"
 
-#: gtk/gtkcombobox.c:681
+#: gtk/gtkcombobox.c:683
 msgid "Popup shown"
 msgstr "Popup affiché"
 
-#: gtk/gtkcombobox.c:682
+#: gtk/gtkcombobox.c:684
 msgid "Whether the combo's dropdown is shown"
 msgstr "Indique si la liste déroulante du combo être affichée"
 
-#: gtk/gtkcombobox.c:688
+#: gtk/gtkcombobox.c:690
 msgid "Appears as list"
 msgstr "Apparaît comme une liste"
 
-#: gtk/gtkcombobox.c:689
+#: gtk/gtkcombobox.c:691
 msgid "Whether dropdowns should look like lists rather than menus"
 msgstr ""
 "Indique si les listes déroulantes doivent ressembler à des listes plutôt "
@@ -2373,11 +2373,11 @@ msgstr "Le titre de la boîte de dialogue de sélection de fichier."
 msgid "The desired width of the button widget, in characters."
 msgstr "La largeur désirée du composant graphique bouton, en caractères."
 
-#: gtk/gtkfilechooserdefault.c:637
+#: gtk/gtkfilechooserdefault.c:638
 msgid "Default file chooser backend"
 msgstr "Moteur par défaut du sélecteur de fichiers"
 
-#: gtk/gtkfilechooserdefault.c:638
+#: gtk/gtkfilechooserdefault.c:639
 msgid "Name of the GtkFileChooser backend to use by default"
 msgstr "Nom du moteur de GtkFileChooser à utiliser par défaut"
 

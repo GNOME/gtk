@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+.-properties gtk-2-10\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-05-02 13:20-0400\n"
+"POT-Creation-Date: 2007-06-12 23:38-0400\n"
 "PO-Revision-Date: 2007-03-21 12:27+0100\n"
 "Last-Translator: Laurent Dhima <laurenti@alblinux.net>\n"
 "Language-Team: albanian <gnome-albanian-perkthyesit@lists.sourceforge.net>\n"
@@ -798,7 +798,7 @@ msgstr ""
 "Nëse vihet, etiketa përdoret për të marrë  një element rezervë në vend që të "
 "shfaqet"
 
-#: gtk/gtkbutton.c:223 gtk/gtkcombobox.c:647 gtk/gtkfilechooserbutton.c:372
+#: gtk/gtkbutton.c:223 gtk/gtkcombobox.c:649 gtk/gtkfilechooserbutton.c:372
 msgid "Focus on click"
 msgstr "Fokus në klikim"
 
@@ -1437,7 +1437,7 @@ msgstr ""
 "Si duhet pjesëzuar teksti në më shumë se një rresht, nëse kutia e krijuar "
 "nuk ka hapësirë të mjaftueshme për të shfaqur të gjithë tekstin"
 
-#: gtk/gtkcellrenderertext.c:467 gtk/gtkcombobox.c:537
+#: gtk/gtkcellrenderertext.c:467 gtk/gtkcombobox.c:539
 msgid "Wrap width"
 msgstr "Gjerësia e hapit"
 
@@ -1772,88 +1772,88 @@ msgstr "Vlerë në listë"
 msgid "Whether entered values must already be present in the list"
 msgstr "Nëse vlerat e dhëna duhet tashmë të jenë të pranishme në listë"
 
-#: gtk/gtkcombobox.c:520
+#: gtk/gtkcombobox.c:522
 msgid "ComboBox model"
 msgstr "Modeli i ComboBox"
 
-#: gtk/gtkcombobox.c:521
+#: gtk/gtkcombobox.c:523
 msgid "The model for the combo box"
 msgstr "Modeli për combo box"
 
-#: gtk/gtkcombobox.c:538
+#: gtk/gtkcombobox.c:540
 msgid "Wrap width for laying out the items in a grid"
 msgstr "Përshtat gjerësinë për shfaqjen e elementëve në një rrjetë"
 
-#: gtk/gtkcombobox.c:560
+#: gtk/gtkcombobox.c:562
 msgid "Row span column"
 msgstr "Hapësira e kollonave"
 
-#: gtk/gtkcombobox.c:561
+#: gtk/gtkcombobox.c:563
 msgid "TreeModel column containing the row span values"
 msgstr ""
 "Kollona e modelit të degëzimit që përmban vlerat e hapësirave të rreshtave"
 
-#: gtk/gtkcombobox.c:582
+#: gtk/gtkcombobox.c:584
 msgid "Column span column"
 msgstr "Kollona e hapësirës së kollonës"
 
-#: gtk/gtkcombobox.c:583
+#: gtk/gtkcombobox.c:585
 msgid "TreeModel column containing the column span values"
 msgstr ""
 "Kollona e modelit të degëzimit që përmban vlerat e hapësirave të kollonave"
 
-#: gtk/gtkcombobox.c:603
+#: gtk/gtkcombobox.c:605
 msgid "Active item"
 msgstr "Elementi aktiv"
 
-#: gtk/gtkcombobox.c:604
+#: gtk/gtkcombobox.c:606
 msgid "The item which is currently active"
 msgstr "Elementi aktualisht aktiv"
 
-#: gtk/gtkcombobox.c:623 gtk/gtkuimanager.c:195
+#: gtk/gtkcombobox.c:625 gtk/gtkuimanager.c:195
 msgid "Add tearoffs to menus"
 msgstr "Shto shkëputës në menutë"
 
-#: gtk/gtkcombobox.c:624
+#: gtk/gtkcombobox.c:626
 msgid "Whether dropdowns should have a tearoff menu item"
 msgstr "Nëse tendat duhen të kenë një element menuje \"mbyll sirtarin\""
 
-#: gtk/gtkcombobox.c:639 gtk/gtkentry.c:511
+#: gtk/gtkcombobox.c:641 gtk/gtkentry.c:511
 msgid "Has Frame"
 msgstr "Ka Frame"
 
-#: gtk/gtkcombobox.c:640
+#: gtk/gtkcombobox.c:642
 msgid "Whether the combo box draws a frame around the child"
 msgstr "Nëse kutia e kombinuar duhet të vizatojë një kornizë rreth birit"
 
-#: gtk/gtkcombobox.c:648
+#: gtk/gtkcombobox.c:650
 msgid "Whether the combo box grabs focus when it is clicked with the mouse"
 msgstr "Nëse kutia e kombinuar merr fokusin kur klikohet me miun"
 
-#: gtk/gtkcombobox.c:663 gtk/gtkmenu.c:484
+#: gtk/gtkcombobox.c:665 gtk/gtkmenu.c:484
 msgid "Tearoff Title"
 msgstr "Emri i menu të shkëputur"
 
-#: gtk/gtkcombobox.c:664
+#: gtk/gtkcombobox.c:666
 msgid ""
 "A title that may be displayed by the window manager when the popup is torn-"
 "off"
 msgstr ""
 "Titulli që mund të shfaqet nga manazhuesi i dritareve nëse menuja shkëputet"
 
-#: gtk/gtkcombobox.c:681
+#: gtk/gtkcombobox.c:683
 msgid "Popup shown"
 msgstr "Popup i shfaqur"
 
-#: gtk/gtkcombobox.c:682
+#: gtk/gtkcombobox.c:684
 msgid "Whether the combo's dropdown is shown"
 msgstr "Tregon nëse menu e shpalosëshme e combo do të shfaqet"
 
-#: gtk/gtkcombobox.c:688
+#: gtk/gtkcombobox.c:690
 msgid "Appears as list"
 msgstr "Shfaqet si listë"
 
-#: gtk/gtkcombobox.c:689
+#: gtk/gtkcombobox.c:691
 msgid "Whether dropdowns should look like lists rather than menus"
 msgstr "Nëse tenda duhet të paraqitet si listë në vend të paraqitjes si menu"
 
@@ -2331,11 +2331,11 @@ msgstr "Titulli i dritares së dialogut për zgjedhjen e file."
 msgid "The desired width of the button widget, in characters."
 msgstr "Gjerësia e dëshiruar e pulsantit, në gërma."
 
-#: gtk/gtkfilechooserdefault.c:637
+#: gtk/gtkfilechooserdefault.c:638
 msgid "Default file chooser backend"
 msgstr "Zgjedhësi backend i prezgjedhur i file"
 
-#: gtk/gtkfilechooserdefault.c:638
+#: gtk/gtkfilechooserdefault.c:639
 msgid "Name of the GtkFileChooser backend to use by default"
 msgstr "Emri i GtkFileChooser backend që duhet përdorur si i prezgjedhur"
 

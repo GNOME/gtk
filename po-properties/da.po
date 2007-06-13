@@ -35,7 +35,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-05-02 13:20-0400\n"
+"POT-Creation-Date: 2007-06-12 23:38-0400\n"
 "PO-Revision-Date: 2005-10-17 15:49+0200\n"
 "Last-Translator: Martin Willemoes Hansen <mwh@sysrq.dk>\n"
 "Language-Team: Danish <dansk@dansk-gruppen.dk>\n"
@@ -827,7 +827,7 @@ msgstr ""
 "Hvis sat bruges etiketten til at vælge et standardelement fra knaplageret i "
 "stedet for at blive vist"
 
-#: gtk/gtkbutton.c:223 gtk/gtkcombobox.c:647 gtk/gtkfilechooserbutton.c:372
+#: gtk/gtkbutton.c:223 gtk/gtkcombobox.c:649 gtk/gtkfilechooserbutton.c:372
 msgid "Focus on click"
 msgstr "Fokus ved klik"
 
@@ -1471,7 +1471,7 @@ msgstr ""
 "Måden hvorpå en streng skal opdeles i flere linjer, hvis celleoptegneren "
 "ikke har plads nok til at vise hele strengen"
 
-#: gtk/gtkcellrenderertext.c:467 gtk/gtkcombobox.c:537
+#: gtk/gtkcellrenderertext.c:467 gtk/gtkcombobox.c:539
 msgid "Wrap width"
 msgstr "Ombrydningsbredde"
 
@@ -1808,67 +1808,67 @@ msgstr "Værdi i liste"
 msgid "Whether entered values must already be present in the list"
 msgstr "Om indtastede værdier altid skal være til stede i listen"
 
-#: gtk/gtkcombobox.c:520
+#: gtk/gtkcombobox.c:522
 msgid "ComboBox model"
 msgstr "ComboBox-model"
 
-#: gtk/gtkcombobox.c:521
+#: gtk/gtkcombobox.c:523
 msgid "The model for the combo box"
 msgstr "Modellen for kombinationsfeltet"
 
-#: gtk/gtkcombobox.c:538
+#: gtk/gtkcombobox.c:540
 msgid "Wrap width for laying out the items in a grid"
 msgstr "Ombrydningsbredde for visning af elementerne i et gitter"
 
-#: gtk/gtkcombobox.c:560
+#: gtk/gtkcombobox.c:562
 msgid "Row span column"
 msgstr "Rækkespandkolonne"
 
-#: gtk/gtkcombobox.c:561
+#: gtk/gtkcombobox.c:563
 msgid "TreeModel column containing the row span values"
 msgstr "TreeModel-kolonne der indeholder rækkespandværdierne"
 
-#: gtk/gtkcombobox.c:582
+#: gtk/gtkcombobox.c:584
 msgid "Column span column"
 msgstr "Kolonnespandkolonne"
 
-#: gtk/gtkcombobox.c:583
+#: gtk/gtkcombobox.c:585
 msgid "TreeModel column containing the column span values"
 msgstr "TreeModel-kolonne der indeholder kolonnespandværdierne"
 
-#: gtk/gtkcombobox.c:603
+#: gtk/gtkcombobox.c:605
 msgid "Active item"
 msgstr "Aktivt element"
 
-#: gtk/gtkcombobox.c:604
+#: gtk/gtkcombobox.c:606
 msgid "The item which is currently active"
 msgstr "Det element som aktuelt er aktivt"
 
-#: gtk/gtkcombobox.c:623 gtk/gtkuimanager.c:195
+#: gtk/gtkcombobox.c:625 gtk/gtkuimanager.c:195
 msgid "Add tearoffs to menus"
 msgstr "Tilføj afrivningslinjer til menuer"
 
-#: gtk/gtkcombobox.c:624
+#: gtk/gtkcombobox.c:626
 msgid "Whether dropdowns should have a tearoff menu item"
 msgstr "Om kombinationsfelter skal have et rivaf-menuelement"
 
-#: gtk/gtkcombobox.c:639 gtk/gtkentry.c:511
+#: gtk/gtkcombobox.c:641 gtk/gtkentry.c:511
 msgid "Has Frame"
 msgstr "Med ramme"
 
-#: gtk/gtkcombobox.c:640
+#: gtk/gtkcombobox.c:642
 msgid "Whether the combo box draws a frame around the child"
 msgstr "Om kombinationsfeltet tegner en ramme om barnet"
 
-#: gtk/gtkcombobox.c:648
+#: gtk/gtkcombobox.c:650
 msgid "Whether the combo box grabs focus when it is clicked with the mouse"
 msgstr "Om kombinationsfeltet tager fokus når den klikkes på med musen"
 
-#: gtk/gtkcombobox.c:663 gtk/gtkmenu.c:484
+#: gtk/gtkcombobox.c:665 gtk/gtkmenu.c:484
 msgid "Tearoff Title"
 msgstr "Afrivningstitel"
 
-#: gtk/gtkcombobox.c:664
+#: gtk/gtkcombobox.c:666
 #, fuzzy
 msgid ""
 "A title that may be displayed by the window manager when the popup is torn-"
@@ -1876,21 +1876,21 @@ msgid ""
 msgstr ""
 "En titel som vindueshåndteringen kan vise når denne menu bliver revet af"
 
-#: gtk/gtkcombobox.c:681
+#: gtk/gtkcombobox.c:683
 #, fuzzy
 msgid "Popup shown"
 msgstr "Sæt pop op-bredde"
 
-#: gtk/gtkcombobox.c:682
+#: gtk/gtkcombobox.c:684
 #, fuzzy
 msgid "Whether the combo's dropdown is shown"
 msgstr "Om kanten skal vises eller ej"
 
-#: gtk/gtkcombobox.c:688
+#: gtk/gtkcombobox.c:690
 msgid "Appears as list"
 msgstr "Vises som liste"
 
-#: gtk/gtkcombobox.c:689
+#: gtk/gtkcombobox.c:691
 msgid "Whether dropdowns should look like lists rather than menus"
 msgstr "Om kombinationsfelter skal ligne lister fremfor menuer"
 
@@ -2364,11 +2364,11 @@ msgstr "Titlen på filvælgervinduet."
 msgid "The desired width of the button widget, in characters."
 msgstr "Den ønskede bredde på knapkontrollen i tegn."
 
-#: gtk/gtkfilechooserdefault.c:637
+#: gtk/gtkfilechooserdefault.c:638
 msgid "Default file chooser backend"
 msgstr "Standard-filvælgerbagende"
 
-#: gtk/gtkfilechooserdefault.c:638
+#: gtk/gtkfilechooserdefault.c:639
 msgid "Name of the GtkFileChooser backend to use by default"
 msgstr "Navn på den GtkFileChooser-bagende som skal anvendes som standard"
 

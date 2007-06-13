@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ properties\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-05-02 13:20-0400\n"
+"POT-Creation-Date: 2007-06-12 23:38-0400\n"
 "PO-Revision-Date: 2006-12-12 09:00+0100\n"
 "Last-Translator: Daniel Nylander <po@danielnylander.se>\n"
 "Language-Team: Swedish <tp-sv@listor.tp-sv.se>\n"
@@ -795,7 +795,7 @@ msgstr ""
 "Om detta är angivet kommer etiketten att användas för att plocka ett "
 "standardobjekt istället för att visas"
 
-#: gtk/gtkbutton.c:223 gtk/gtkcombobox.c:647 gtk/gtkfilechooserbutton.c:372
+#: gtk/gtkbutton.c:223 gtk/gtkcombobox.c:649 gtk/gtkfilechooserbutton.c:372
 msgid "Focus on click"
 msgstr "Fokusera vid klick"
 
@@ -1444,7 +1444,7 @@ msgstr ""
 "Hur strängen ska delas upp i flera rader, om cellrenderaren inte har "
 "tillräckligt med utrymme för att visa hela strängen"
 
-#: gtk/gtkcellrenderertext.c:467 gtk/gtkcombobox.c:537
+#: gtk/gtkcellrenderertext.c:467 gtk/gtkcombobox.c:539
 msgid "Wrap width"
 msgstr "Radbrytningsbredd"
 
@@ -1772,85 +1772,85 @@ msgstr "Värde i lista"
 msgid "Whether entered values must already be present in the list"
 msgstr "Huruvida angivna värden redan måste finnas i listan"
 
-#: gtk/gtkcombobox.c:520
+#: gtk/gtkcombobox.c:522
 msgid "ComboBox model"
 msgstr "ComboBox-modell"
 
-#: gtk/gtkcombobox.c:521
+#: gtk/gtkcombobox.c:523
 msgid "The model for the combo box"
 msgstr "Modellen för comboboxen"
 
-#: gtk/gtkcombobox.c:538
+#: gtk/gtkcombobox.c:540
 msgid "Wrap width for laying out the items in a grid"
 msgstr "Radbrytningsbredd för utläggning av objekten i ett rutnät"
 
-#: gtk/gtkcombobox.c:560
+#: gtk/gtkcombobox.c:562
 msgid "Row span column"
 msgstr "Radspannskolumn"
 
-#: gtk/gtkcombobox.c:561
+#: gtk/gtkcombobox.c:563
 msgid "TreeModel column containing the row span values"
 msgstr "TreeModel-kolumn som innehåller radspannsvärden"
 
-#: gtk/gtkcombobox.c:582
+#: gtk/gtkcombobox.c:584
 msgid "Column span column"
 msgstr "Kolumnspannskolumn"
 
-#: gtk/gtkcombobox.c:583
+#: gtk/gtkcombobox.c:585
 msgid "TreeModel column containing the column span values"
 msgstr "TreeModel-kolumn som innehåller kolumnspannsvärden"
 
-#: gtk/gtkcombobox.c:603
+#: gtk/gtkcombobox.c:605
 msgid "Active item"
 msgstr "Aktivt objekt"
 
-#: gtk/gtkcombobox.c:604
+#: gtk/gtkcombobox.c:606
 msgid "The item which is currently active"
 msgstr "Det objekt som är aktivt för tillfället"
 
-#: gtk/gtkcombobox.c:623 gtk/gtkuimanager.c:195
+#: gtk/gtkcombobox.c:625 gtk/gtkuimanager.c:195
 msgid "Add tearoffs to menus"
 msgstr "Lägg till löstagbara i menyer"
 
-#: gtk/gtkcombobox.c:624
+#: gtk/gtkcombobox.c:626
 msgid "Whether dropdowns should have a tearoff menu item"
 msgstr "Huruvida nedfällningar ska ha en löstagbar menypost"
 
-#: gtk/gtkcombobox.c:639 gtk/gtkentry.c:511
+#: gtk/gtkcombobox.c:641 gtk/gtkentry.c:511
 msgid "Has Frame"
 msgstr "Har ram"
 
-#: gtk/gtkcombobox.c:640
+#: gtk/gtkcombobox.c:642
 msgid "Whether the combo box draws a frame around the child"
 msgstr "Huruvida comboboxen ritar en ram runt barnet"
 
-#: gtk/gtkcombobox.c:648
+#: gtk/gtkcombobox.c:650
 msgid "Whether the combo box grabs focus when it is clicked with the mouse"
 msgstr "Huruvida comboboxen tar fokus när den klickas på med musen"
 
-#: gtk/gtkcombobox.c:663 gtk/gtkmenu.c:484
+#: gtk/gtkcombobox.c:665 gtk/gtkmenu.c:484
 msgid "Tearoff Title"
 msgstr "Löstagbar titel"
 
-#: gtk/gtkcombobox.c:664
+#: gtk/gtkcombobox.c:666
 msgid ""
 "A title that may be displayed by the window manager when the popup is torn-"
 "off"
 msgstr "En titel som kan visas av fönsterhanteraren då denna popupp tas loss"
 
-#: gtk/gtkcombobox.c:681
+#: gtk/gtkcombobox.c:683
 msgid "Popup shown"
 msgstr "Popup visas"
 
-#: gtk/gtkcombobox.c:682
+#: gtk/gtkcombobox.c:684
 msgid "Whether the combo's dropdown is shown"
 msgstr "Huruvida kombinationsrutans rullgardinsmeny ska visas eller inte"
 
-#: gtk/gtkcombobox.c:688
+#: gtk/gtkcombobox.c:690
 msgid "Appears as list"
 msgstr "Visas som lista"
 
-#: gtk/gtkcombobox.c:689
+#: gtk/gtkcombobox.c:691
 msgid "Whether dropdowns should look like lists rather than menus"
 msgstr "Huruvida nedfällningar ska se ut som listor istället för menyer"
 
@@ -2319,11 +2319,11 @@ msgstr "Titeln på filväljardialogen."
 msgid "The desired width of the button widget, in characters."
 msgstr "Den önskade bredden på knappwidgeten, i antal tecken."
 
-#: gtk/gtkfilechooserdefault.c:637
+#: gtk/gtkfilechooserdefault.c:638
 msgid "Default file chooser backend"
 msgstr "Standardbakände för filväljare"
 
-#: gtk/gtkfilechooserdefault.c:638
+#: gtk/gtkfilechooserdefault.c:639
 msgid "Name of the GtkFileChooser backend to use by default"
 msgstr "Namn på den GtkFileChooser-bakände som ska användas som standard"
 

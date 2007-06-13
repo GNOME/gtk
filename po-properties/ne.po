@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk-properties.gnome-2-14.ne\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-05-02 13:20-0400\n"
+"POT-Creation-Date: 2007-06-12 23:38-0400\n"
 "PO-Revision-Date: 2006-06-27 13:58+0545\n"
 "Last-Translator: Shiva Pokharel <pokharelshiva@hotmail.com>\n"
 "Language-Team: Nepali <info@mpp.org.np>\n"
@@ -787,7 +787,7 @@ msgid ""
 "If set, the label is used to pick a stock item instead of being displayed"
 msgstr "यदि सेट छ भने, प्रदर्शन हुनुको साटो लेबुलले मौज्दात वस्तु लिने गर्दछ"
 
-#: gtk/gtkbutton.c:223 gtk/gtkcombobox.c:647 gtk/gtkfilechooserbutton.c:372
+#: gtk/gtkbutton.c:223 gtk/gtkcombobox.c:649 gtk/gtkfilechooserbutton.c:372
 msgid "Focus on click"
 msgstr "क्लिकमा फोकस गर्नुहोस्"
 
@@ -1435,7 +1435,7 @@ msgstr ""
 "यदि कक्ष अनुवादकसँग पूरै स्ट्रिङ प्रदर्शन गर्न पर्योप्त कोठा छैन भने, बहुँविद पङ्क्तिहरूमा कसरी "
 "स्ट्रिङ खाली गर्ने"
 
-#: gtk/gtkcellrenderertext.c:467 gtk/gtkcombobox.c:537
+#: gtk/gtkcellrenderertext.c:467 gtk/gtkcombobox.c:539
 msgid "Wrap width"
 msgstr "चौडाइ बेर्नुहोस्"
 
@@ -1766,89 +1766,89 @@ msgstr "सूचीमा मान"
 msgid "Whether entered values must already be present in the list"
 msgstr "जहाँ सूचीमा प्रविष्टि मानहरू पहिल्यै उपस्थित छन"
 
-#: gtk/gtkcombobox.c:520
+#: gtk/gtkcombobox.c:522
 msgid "ComboBox model"
 msgstr "कम्बो बाकस नमूना"
 
-#: gtk/gtkcombobox.c:521
+#: gtk/gtkcombobox.c:523
 msgid "The model for the combo box"
 msgstr "कम्बो बाकसका लागि नमूना"
 
-#: gtk/gtkcombobox.c:538
+#: gtk/gtkcombobox.c:540
 #, fuzzy
 msgid "Wrap width for laying out the items in a grid"
 msgstr "एउटा ग्रिडमा वस्तुहरू सजावट गर्नका लागि चौडा बेराइ"
 
-#: gtk/gtkcombobox.c:560
+#: gtk/gtkcombobox.c:562
 msgid "Row span column"
 msgstr "पङ्क्ति स्प्यान स्तम्भ"
 
-#: gtk/gtkcombobox.c:561
+#: gtk/gtkcombobox.c:563
 msgid "TreeModel column containing the row span values"
 msgstr "ट्रि नमूनाले पङ्क्ति स्प्यान मानहरू समावेश गर्दै"
 
-#: gtk/gtkcombobox.c:582
+#: gtk/gtkcombobox.c:584
 msgid "Column span column"
 msgstr "स्तम्भ स्प्यान स्तम्भ"
 
-#: gtk/gtkcombobox.c:583
+#: gtk/gtkcombobox.c:585
 msgid "TreeModel column containing the column span values"
 msgstr "ट्रि नमूना स्तम्भले स्तम्भ स्प्यान मानहरू समावेश गर्दै"
 
-#: gtk/gtkcombobox.c:603
+#: gtk/gtkcombobox.c:605
 msgid "Active item"
 msgstr "सक्रिय वस्तु"
 
-#: gtk/gtkcombobox.c:604
+#: gtk/gtkcombobox.c:606
 msgid "The item which is currently active"
 msgstr "वस्तु जुन हालै सक्रिय भएको छ"
 
-#: gtk/gtkcombobox.c:623 gtk/gtkuimanager.c:195
+#: gtk/gtkcombobox.c:625 gtk/gtkuimanager.c:195
 msgid "Add tearoffs to menus"
 msgstr "मेनुहरूको टियरअफ्स थप्नुहोस्"
 
-#: gtk/gtkcombobox.c:624
+#: gtk/gtkcombobox.c:626
 msgid "Whether dropdowns should have a tearoff menu item"
 msgstr "या ड्रपडाउनहरूसँग एउटा टियरअफ मेनु वस्तु हुनुपर्दछ"
 
-#: gtk/gtkcombobox.c:639 gtk/gtkentry.c:511
+#: gtk/gtkcombobox.c:641 gtk/gtkentry.c:511
 msgid "Has Frame"
 msgstr "फ्रेम छ"
 
-#: gtk/gtkcombobox.c:640
+#: gtk/gtkcombobox.c:642
 msgid "Whether the combo box draws a frame around the child"
 msgstr "या कम्बो बाकसले शाखाको वरिपरिको फ्रेम तान्दछ"
 
-#: gtk/gtkcombobox.c:648
+#: gtk/gtkcombobox.c:650
 msgid "Whether the combo box grabs focus when it is clicked with the mouse"
 msgstr "या माउसले क्लिक गर्दा कम्बो बाकसले फोकस प्राप्त गर्दछ"
 
-#: gtk/gtkcombobox.c:663 gtk/gtkmenu.c:484
+#: gtk/gtkcombobox.c:665 gtk/gtkmenu.c:484
 msgid "Tearoff Title"
 msgstr "शीर्षक टियर अफ गर्नुहोस्"
 
-#: gtk/gtkcombobox.c:664
+#: gtk/gtkcombobox.c:666
 #, fuzzy
 msgid ""
 "A title that may be displayed by the window manager when the popup is torn-"
 "off"
 msgstr "यो मेनु बन्द हुँदा सञ्झ्याल प्रवन्धकले प्रदर्शन गर्न सक्ने एउटा शीर्षक"
 
-#: gtk/gtkcombobox.c:681
+#: gtk/gtkcombobox.c:683
 #, fuzzy
 msgid "Popup shown"
 msgstr "पपअप सेट चौडा"
 
-#: gtk/gtkcombobox.c:682
+#: gtk/gtkcombobox.c:684
 #, fuzzy
 msgid "Whether the combo's dropdown is shown"
 msgstr "या किनारा देखाउन सकिन्थ्यो वा सकिन्नथ्यो"
 
-#: gtk/gtkcombobox.c:688
+#: gtk/gtkcombobox.c:690
 msgid "Appears as list"
 msgstr "सूचीमा देखापर्दछ"
 
-#: gtk/gtkcombobox.c:689
+#: gtk/gtkcombobox.c:691
 msgid "Whether dropdowns should look like lists rather than menus"
 msgstr "या ड्रपडाउनहरूले मेनुहरू भन्दा सूचीहरू जस्तो देखिनु पर्दछ"
 
@@ -2307,11 +2307,11 @@ msgstr "फाइल रोज्ने संवादको शीर्षक
 msgid "The desired width of the button widget, in characters."
 msgstr "बटन विजेटको आवश्यक चौडाइ, क्यारेक्टरहरूमा"
 
-#: gtk/gtkfilechooserdefault.c:637
+#: gtk/gtkfilechooserdefault.c:638
 msgid "Default file chooser backend"
 msgstr "पूर्वनिर्धारित फाइल रोज्ने ब्याकेण्ड"
 
-#: gtk/gtkfilechooserdefault.c:638
+#: gtk/gtkfilechooserdefault.c:639
 msgid "Name of the GtkFileChooser backend to use by default"
 msgstr "पूर्वनिर्धारितद्वारा प्रयोग गरिएको जिटिके फाइल रोज्नेको नाम"
 

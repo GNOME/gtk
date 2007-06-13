@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-properties.gtk-2-4\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-05-02 13:20-0400\n"
+"POT-Creation-Date: 2007-06-12 23:38-0400\n"
 "PO-Revision-Date: 2004-07-19 00:47+0200\n"
 "Last-Translator: Kenan Hadžiavdić <kenan@bgnett.no>\n"
 "Language-Team: Bosnian <lokal@linux.org.ba>\n"
@@ -810,7 +810,7 @@ msgstr ""
 "Ukoliko je postavljeno, oznaka se ne prikazuje nego se koristi za biranje "
 "stocka"
 
-#: gtk/gtkbutton.c:223 gtk/gtkcombobox.c:647 gtk/gtkfilechooserbutton.c:372
+#: gtk/gtkbutton.c:223 gtk/gtkcombobox.c:649 gtk/gtkfilechooserbutton.c:372
 msgid "Focus on click"
 msgstr "Fokusiraj na klik"
 
@@ -1468,7 +1468,7 @@ msgid ""
 "have enough room to display the entire string"
 msgstr ""
 
-#: gtk/gtkcellrenderertext.c:467 gtk/gtkcombobox.c:537
+#: gtk/gtkcellrenderertext.c:467 gtk/gtkcombobox.c:539
 msgid "Wrap width"
 msgstr "Širina za prijelom"
 
@@ -1805,71 +1805,71 @@ msgstr "Vrijednost u listi"
 msgid "Whether entered values must already be present in the list"
 msgstr "Da li unesene vrijednosti moraju već biti u listi"
 
-#: gtk/gtkcombobox.c:520
+#: gtk/gtkcombobox.c:522
 msgid "ComboBox model"
 msgstr "ComboBox model"
 
-#: gtk/gtkcombobox.c:521
+#: gtk/gtkcombobox.c:523
 msgid "The model for the combo box"
 msgstr "Model za kombinovani okvir"
 
-#: gtk/gtkcombobox.c:538
+#: gtk/gtkcombobox.c:540
 #, fuzzy
 msgid "Wrap width for laying out the items in a grid"
 msgstr "Širina za prijelom pri raspoređivanju stavki u mreži"
 
-#: gtk/gtkcombobox.c:560
+#: gtk/gtkcombobox.c:562
 msgid "Row span column"
 msgstr "Kolona za proširenje reda"
 
-#: gtk/gtkcombobox.c:561
+#: gtk/gtkcombobox.c:563
 msgid "TreeModel column containing the row span values"
 msgstr "Kolona TreeModel koja sadrži vrijednosti za proširenje reda"
 
-#: gtk/gtkcombobox.c:582
+#: gtk/gtkcombobox.c:584
 msgid "Column span column"
 msgstr "Kolona za proširenje kolone"
 
-#: gtk/gtkcombobox.c:583
+#: gtk/gtkcombobox.c:585
 msgid "TreeModel column containing the column span values"
 msgstr "Kolona TreeModel koja sadrži vrijednosti za proširenje kolone"
 
-#: gtk/gtkcombobox.c:603
+#: gtk/gtkcombobox.c:605
 msgid "Active item"
 msgstr "Aktivna stavka"
 
-#: gtk/gtkcombobox.c:604
+#: gtk/gtkcombobox.c:606
 msgid "The item which is currently active"
 msgstr "Stavka koja je trenutno aktivna"
 
-#: gtk/gtkcombobox.c:623 gtk/gtkuimanager.c:195
+#: gtk/gtkcombobox.c:625 gtk/gtkuimanager.c:195
 msgid "Add tearoffs to menus"
 msgstr "Dodaj otcjepljivanje u menije"
 
-#: gtk/gtkcombobox.c:624
+#: gtk/gtkcombobox.c:626
 #, fuzzy
 msgid "Whether dropdowns should have a tearoff menu item"
 msgstr "Da li će kartice biti jednake veličine"
 
-#: gtk/gtkcombobox.c:639 gtk/gtkentry.c:511
+#: gtk/gtkcombobox.c:641 gtk/gtkentry.c:511
 msgid "Has Frame"
 msgstr "Im okvir"
 
-#: gtk/gtkcombobox.c:640
+#: gtk/gtkcombobox.c:642
 #, fuzzy
 msgid "Whether the combo box draws a frame around the child"
 msgstr "Može li se redoslijed kolona promijeniti prema naslovima"
 
-#: gtk/gtkcombobox.c:648
+#: gtk/gtkcombobox.c:650
 #, fuzzy
 msgid "Whether the combo box grabs focus when it is clicked with the mouse"
 msgstr "Da li dugme preuzima fokus kada je kliknuto pomoću miša"
 
-#: gtk/gtkcombobox.c:663 gtk/gtkmenu.c:484
+#: gtk/gtkcombobox.c:665 gtk/gtkmenu.c:484
 msgid "Tearoff Title"
 msgstr "Naslov otrgnutog"
 
-#: gtk/gtkcombobox.c:664
+#: gtk/gtkcombobox.c:666
 #, fuzzy
 msgid ""
 "A title that may be displayed by the window manager when the popup is torn-"
@@ -1877,21 +1877,21 @@ msgid ""
 msgstr ""
 "Naslov koji upravitelj prozorima može prikazati kada je ovaj meni otrgnut"
 
-#: gtk/gtkcombobox.c:681
+#: gtk/gtkcombobox.c:683
 #, fuzzy
 msgid "Popup shown"
 msgstr "Širina linije fokusa"
 
-#: gtk/gtkcombobox.c:682
+#: gtk/gtkcombobox.c:684
 #, fuzzy
 msgid "Whether the combo's dropdown is shown"
 msgstr "Da li će se rub prikazati ili ne"
 
-#: gtk/gtkcombobox.c:688
+#: gtk/gtkcombobox.c:690
 msgid "Appears as list"
 msgstr "Prikazuje se kao lista"
 
-#: gtk/gtkcombobox.c:689
+#: gtk/gtkcombobox.c:691
 #, fuzzy
 msgid "Whether dropdowns should look like lists rather than menus"
 msgstr ""
@@ -2369,11 +2369,11 @@ msgstr "Naslov dijaloga za odabir fonta"
 msgid "The desired width of the button widget, in characters."
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:637
+#: gtk/gtkfilechooserdefault.c:638
 msgid "Default file chooser backend"
 msgstr "Podrška za uobičajeni iybornik datoteka"
 
-#: gtk/gtkfilechooserdefault.c:638
+#: gtk/gtkfilechooserdefault.c:639
 msgid "Name of the GtkFileChooser backend to use by default"
 msgstr "Ime GtkFileChooser podrške koja će se koristiti uobičajeno"
 

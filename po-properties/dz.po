@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-properties.HEAD.dz\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-05-02 13:20-0400\n"
+"POT-Creation-Date: 2007-06-12 23:38-0400\n"
 "PO-Revision-Date: 2007-03-01 16:12+0530\n"
 "Last-Translator: norbu <nor_den@hotmail.com>\n"
 "Language-Team: DZONGKHA <pgeyleg@dit.gov.bt>\n"
@@ -784,7 +784,7 @@ msgstr ""
 "གཞི་སྒྲིག་འབད་བ་ཅིན་ ཁ་ཡིག་དེ་ བཀྲམ་སྟོན་འབད་ནིའི་ཚབ་ལུ་ ཅ་མཛོད་རྣམ་གྲངས་ཅིག་ འཐུ་ནི་ལུ་ལག་ལེན་"
 "འཐབ་ཨིན།"
 
-#: gtk/gtkbutton.c:223 gtk/gtkcombobox.c:647 gtk/gtkfilechooserbutton.c:372
+#: gtk/gtkbutton.c:223 gtk/gtkcombobox.c:649 gtk/gtkfilechooserbutton.c:372
 msgid "Focus on click"
 msgstr "ཨེབ་གཏང་ལུ་ ཆེད་དམིགས་འབད།"
 
@@ -1420,7 +1420,7 @@ msgstr ""
 "གལ་སྲིད་ ནང་ཐིག་ལྷག་སྟོན་པ་ལུ་ ཡིག་རྒྱུན་ཧྲིལ་བུ བཀྲམ་སྟོན་འབད་ནིའི་ས་སྟོང་མེད་པ་ཅིན་ ཡིག་རྒྱུན་དེ་ གྱལ་"
 "རིམ་མང་རབས་ནང་ ཁ་འཕྱལ་ཐངས།"
 
-#: gtk/gtkcellrenderertext.c:467 gtk/gtkcombobox.c:537
+#: gtk/gtkcellrenderertext.c:467 gtk/gtkcombobox.c:539
 msgid "Wrap width"
 msgstr "རྒྱ་ཚད་ལོག་མཚམས་བཟོ།"
 
@@ -1747,85 +1747,85 @@ msgstr "ཐོ་་ཡིག་ནང་གི་བེ་ལུ།"
 msgid "Whether entered values must already be present in the list"
 msgstr "ཐོ་བཀོད་འབད་མི་བེ་ལུསི་ཚུ་ ཧེ་མ་ལས་རང་ ཐོ་ཡིག་ནང་ཡོད་དགོཔ་ཨིན་ན་མེན།"
 
-#: gtk/gtkcombobox.c:520
+#: gtk/gtkcombobox.c:522
 msgid "ComboBox model"
 msgstr "བརྟག་སྒྲོམ་གྱི་དཔེ།"
 
-#: gtk/gtkcombobox.c:521
+#: gtk/gtkcombobox.c:523
 msgid "The model for the combo box"
 msgstr "བརྟག་སྒྲོམ་དེ་གི་དོན་ལས་ཀྱི་དཔེ་དེ།"
 
-#: gtk/gtkcombobox.c:538
+#: gtk/gtkcombobox.c:540
 msgid "Wrap width for laying out the items in a grid"
 msgstr "རྣམ་གྲངས་ཚུ་གིརིཌི་ནང་ སྒྲིག་བཀོད་འབད་ནིའི་དོན་ལུ་ རྒྱ་ཚད་ལོག་མཚམས་བཟོ།"
 
-#: gtk/gtkcombobox.c:560
+#: gtk/gtkcombobox.c:562
 msgid "Row span column"
 msgstr "གྲལ་ཐིག་འཕར་ནིའི་ ཀེར་ཐིག"
 
-#: gtk/gtkcombobox.c:561
+#: gtk/gtkcombobox.c:563
 msgid "TreeModel column containing the row span values"
 msgstr "གྲལ་ཐིག་འཕར་ནིའི་ བེ་ལུསི་ཡོད་མི་ རྩ་འབྲེལ་དཔེའི་ ཀེར་ཐིག"
 
-#: gtk/gtkcombobox.c:582
+#: gtk/gtkcombobox.c:584
 msgid "Column span column"
 msgstr "ཀེར་ཐིག་འཕར་ནིའི་ཀེར་ཐིག"
 
-#: gtk/gtkcombobox.c:583
+#: gtk/gtkcombobox.c:585
 msgid "TreeModel column containing the column span values"
 msgstr "ཀེར་ཐིག་འཕར་ནིའི་ བེ་ལུསི་ཡོད་མི་ རྩ་འབྲེལ་དཔེའི་ ཀེར་ཐིག"
 
-#: gtk/gtkcombobox.c:603
+#: gtk/gtkcombobox.c:605
 msgid "Active item"
 msgstr "ཤུགས་ལྡན་རྣམ་གྲངས།"
 
-#: gtk/gtkcombobox.c:604
+#: gtk/gtkcombobox.c:606
 msgid "The item which is currently active"
 msgstr "ད་ལྟོ་ཤུགས་ལྡན་ཡོད་མི་རྣམ་གྲངས་དེ།"
 
-#: gtk/gtkcombobox.c:623 gtk/gtkuimanager.c:195
+#: gtk/gtkcombobox.c:625 gtk/gtkuimanager.c:195
 msgid "Add tearoffs to menus"
 msgstr "དཀར་ཆག་ཚུ་ལུ་ ཊི་འར་ཨོཕ་ ཁ་སྐོང་རྐྱབས།"
 
-#: gtk/gtkcombobox.c:624
+#: gtk/gtkcombobox.c:626
 msgid "Whether dropdowns should have a tearoff menu item"
 msgstr "གདམ་ཐོ་ཚུ་ལུ་ ཊི་འར་ཨོཕ་དཀར་ཆག་གི་ རྣམ་གྲངས་ཅིག་ཡོད་དགོཔ་ཨིན་ན་མེན།"
 
-#: gtk/gtkcombobox.c:639 gtk/gtkentry.c:511
+#: gtk/gtkcombobox.c:641 gtk/gtkentry.c:511
 msgid "Has Frame"
 msgstr "གཞི་ཁྲམ་འདུག"
 
-#: gtk/gtkcombobox.c:640
+#: gtk/gtkcombobox.c:642
 msgid "Whether the combo box draws a frame around the child"
 msgstr "བརྟག་སྒྲོམ་དེ་གིས་ ཆ་ལག་གི་མཐའ་བསྐོར་ཏེ་ གཞི་ཁྲམ་ཅིག་ འབྲིཝ་ཨིན་ན་མེན།"
 
-#: gtk/gtkcombobox.c:648
+#: gtk/gtkcombobox.c:650
 msgid "Whether the combo box grabs focus when it is clicked with the mouse"
 msgstr "བརྟག་སྒྲོམ་དེ་ལུ་ མཱའུསི་གིས་ ཨེབ་གཏང་འབདཝ་ད་ ཆེད་དམིགས་་འཛིནམ་ཨིན་ན།"
 
-#: gtk/gtkcombobox.c:663 gtk/gtkmenu.c:484
+#: gtk/gtkcombobox.c:665 gtk/gtkmenu.c:484
 msgid "Tearoff Title"
 msgstr "ཊི་འར་ཨོཕ་གི་ མགོ་མིང༌།"
 
-#: gtk/gtkcombobox.c:664
+#: gtk/gtkcombobox.c:666
 msgid ""
 "A title that may be displayed by the window manager when the popup is torn-"
 "off"
 msgstr "པོཔ་ཨཔ་དེ་འཕྱལ་ཡོད་པའི་སྐབས་ སྒོ་སྒྲིག་འཛིན་སྐྱོང་པ་གིས་ བཀྲམ་སྟོན་འབད་ནིའི་མགོ་མིང༌།"
 
-#: gtk/gtkcombobox.c:681
+#: gtk/gtkcombobox.c:683
 msgid "Popup shown"
 msgstr "པོཔ་ཨཔ་སྟོན་ཡོདཔ།"
 
-#: gtk/gtkcombobox.c:682
+#: gtk/gtkcombobox.c:684
 msgid "Whether the combo's dropdown is shown"
 msgstr "ཀོབ་བོ་གི་གདམ་ཐོ་སྟོན་ཡོདཔ་ཨིན་ན་མེན།"
 
-#: gtk/gtkcombobox.c:688
+#: gtk/gtkcombobox.c:690
 msgid "Appears as list"
 msgstr "ཐོ་ཡིག་བཟུམ་ཅིག་སྦེ་ འབྱུངམ་ཨིན།"
 
-#: gtk/gtkcombobox.c:689
+#: gtk/gtkcombobox.c:691
 msgid "Whether dropdowns should look like lists rather than menus"
 msgstr "གདམ་ཐོ་ཚུ་ དཀར་ཆག་བཟུམ་སྦེ་མེན་པར་ ཐོ་ཡིག་བཟུམ་སྦེ་ མཐོངམ་ཨིན་ན་མེན།"
 
@@ -2290,11 +2290,11 @@ msgstr "ཡིག་སྣོད་འདེམས་བྱེད་ ཌའི�
 msgid "The desired width of the button widget, in characters."
 msgstr "རེ་འདུན་བསྐྱེད་མི་ ཨེབ་རྟའི་ཝི་གེཊི་གི་རྒྱ་ཚད་ ཡིག་འབྲུ་ནང་།"
 
-#: gtk/gtkfilechooserdefault.c:637
+#: gtk/gtkfilechooserdefault.c:638
 msgid "Default file chooser backend"
 msgstr "ཡིག་སྣོད་འདེམས་བྱེད་ཀྱི་རྒྱབ་མཐའ་ སྔོན་སྒྲིག་འབད།"
 
-#: gtk/gtkfilechooserdefault.c:638
+#: gtk/gtkfilechooserdefault.c:639
 msgid "Name of the GtkFileChooser backend to use by default"
 msgstr "སྔོན་སྒྲིག་གྱིས་ ལག་ལེན་འཐབ་ནིའི་ ཇི་ཊི་ཀེ་ཡིག་སྣོད་འདེམས་བྱེད་ཀྱི་ རྒྱབ་མཐའི་མིང༌།"
 

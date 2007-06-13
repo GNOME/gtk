@@ -1,3 +1,7 @@
+2007-06-12  Matthias Clasen  <mclasen@redhat.com>
+
+	* === Released 2.10.13 ===
+
 2007-05-30  Chris Wilson  <chris@chris-wilson.co.uk>
 
 	* io-jpeg.c (gdk_pixbuf__jpeg_image_stop_load):
