@@ -1,3 +1,9 @@
+2007-06-14  Carlos Garnacho  <carlos@imendio.com>
+
+	* gtk/gtkcombobox.c: removed unused and hardly visible GtkFrame from
+	the menu widget hierarchy when ::appears-as-list is TRUE. (#435471)
+	* NEWS: add a note about repercussions of this change to RC files.
+
 2007-06-13  Behdad Esfahbod  <behdad@gnome.org>
 
 	* gdk/directfb/gdkgc-directfb.c: #undef GDK_DISABLE_DEPRECATED to

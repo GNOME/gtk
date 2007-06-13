@@ -97,7 +97,6 @@ struct _GtkComboBoxPrivate
 
   GtkWidget *popup_widget;
   GtkWidget *popup_window;
-  GtkWidget *popup_frame;
   GtkWidget *scrolled_window;
 
   guint inserted_id;
@@ -142,7 +141,6 @@ struct _GtkComboBoxPrivate
  * separator -> GtkVSepator set_parent to button
  * popup_widget -> GtkMenu
  * popup_window -> NULL
- * popup_frame -> NULL
  * scrolled_window -> NULL
  *
  * 2) menu mode, child added
@@ -155,12 +153,11 @@ struct _GtkComboBoxPrivate
  * separator -> NULL
  * popup_widget -> GtkMenu
  * popup_window -> NULL
- * popup_frame -> NULL
  * scrolled_window -> NULL
  *
  * 3) list mode, no child added
  * 
- * tree_view -> GtkTreeView, child of popup_frame
+ * tree_view -> GtkTreeView, child of scrolled_window
  * cell_view -> GtkCellView, regular child
  * cell_view_frame -> GtkFrame, set parent to combo
  * button -> GtkToggleButton, set_parent to combo
@@ -168,12 +165,11 @@ struct _GtkComboBoxPrivate
  * separator -> NULL
  * popup_widget -> tree_view
  * popup_window -> GtkWindow
- * popup_frame -> GtkFrame, child of popup_window
- * scrolled_window -> GtkScrolledWindow, child of popup_frame
+ * scrolled_window -> GtkScrolledWindow, child of popup_window
  *
  * 4) list mode, child added
  *
- * tree_view -> GtkTreeView, child of popup_frame
+ * tree_view -> GtkTreeView, child of scrolled_window
  * cell_view -> NULL
  * cell_view_frame -> NULL
  * button -> GtkToggleButton, set_parent to combo
@@ -181,8 +177,7 @@ struct _GtkComboBoxPrivate
  * separator -> NULL
  * popup_widget -> tree_view
  * popup_window -> GtkWindow
- * popup_frame -> GtkFrame, child of popup_window
- * scrolled_window -> GtkScrolledWindow, child of popup_frame
+ * scrolled_window -> GtkScrolledWindow, child of popup_window
  * 
  */
 
@@ -1273,7 +1268,7 @@ gtk_combo_box_set_popup_widget (GtkComboBox *combo_box,
     }
   else if (combo_box->priv->popup_widget)
     {
-      gtk_container_remove (GTK_CONTAINER (combo_box->priv->popup_frame),
+      gtk_container_remove (GTK_CONTAINER (combo_box->priv->scrolled_window),
                             combo_box->priv->popup_widget);
       g_object_unref (combo_box->priv->popup_widget);
       combo_box->priv->popup_widget = NULL;
@@ -1285,7 +1280,6 @@ gtk_combo_box_set_popup_widget (GtkComboBox *combo_box,
         {
           gtk_widget_destroy (combo_box->priv->popup_window);
           combo_box->priv->popup_window = NULL;
-	  combo_box->priv->popup_frame = NULL;
         }
 
       combo_box->priv->popup_widget = popup;
@@ -1336,25 +1330,17 @@ gtk_combo_box_set_popup_widget (GtkComboBox *combo_box,
           gtk_window_set_screen (GTK_WINDOW (combo_box->priv->popup_window),
                                  gtk_widget_get_screen (GTK_WIDGET (combo_box)));
 
-          combo_box->priv->popup_frame = gtk_frame_new (NULL);
-          gtk_frame_set_shadow_type (GTK_FRAME (combo_box->priv->popup_frame),
-                                     GTK_SHADOW_NONE);
-          gtk_container_add (GTK_CONTAINER (combo_box->priv->popup_window),
-                             combo_box->priv->popup_frame);
-
-          gtk_widget_show (combo_box->priv->popup_frame);
-
 	  combo_box->priv->scrolled_window = gtk_scrolled_window_new (NULL, NULL);
 	  
 	  gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (combo_box->priv->scrolled_window),
 					  GTK_POLICY_NEVER,
 					  GTK_POLICY_NEVER);
 	  gtk_scrolled_window_set_shadow_type (GTK_SCROLLED_WINDOW (combo_box->priv->scrolled_window),
-					       GTK_SHADOW_NONE);
+					       GTK_SHADOW_IN);
 
           gtk_widget_show (combo_box->priv->scrolled_window);
 	  
-	  gtk_container_add (GTK_CONTAINER (combo_box->priv->popup_frame),
+	  gtk_container_add (GTK_CONTAINER (combo_box->priv->popup_window),
 			     combo_box->priv->scrolled_window);
         }
 
@@ -1551,26 +1537,18 @@ gtk_combo_box_list_position (GtkComboBox *combo_box,
     }
   
   *width = sample->allocation.width;
-  
-  if (combo_box->priv->cell_view_frame && combo_box->priv->has_frame)
-    {
-       *x -= GTK_CONTAINER (combo_box->priv->cell_view_frame)->border_width +
-	     GTK_WIDGET (combo_box->priv->cell_view_frame)->style->xthickness;
-       *width += 2 * (GTK_CONTAINER (combo_box->priv->cell_view_frame)->border_width +
-            GTK_WIDGET (combo_box->priv->cell_view_frame)->style->xthickness);
-    }
 
   hpolicy = vpolicy = GTK_POLICY_NEVER;
   gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (combo_box->priv->scrolled_window),
 				  hpolicy, vpolicy);
-  gtk_widget_size_request (combo_box->priv->popup_frame, &popup_req);
+  gtk_widget_size_request (combo_box->priv->scrolled_window, &popup_req);
 
   if (popup_req.width > *width)
     {
       hpolicy = GTK_POLICY_ALWAYS;
       gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (combo_box->priv->scrolled_window),
 				      hpolicy, vpolicy);
-      gtk_widget_size_request (combo_box->priv->popup_frame, &popup_req);
+      gtk_widget_size_request (combo_box->priv->scrolled_window, &popup_req);
     }
 
   *height = popup_req.height;
@@ -1828,7 +1806,7 @@ gtk_combo_box_real_popup (GtkComboBox *combo_box)
     gtk_window_group_add_window (gtk_window_get_group (GTK_WINDOW (toplevel)), 
 				 GTK_WINDOW (combo_box->priv->popup_window));
 
-  gtk_widget_show_all (combo_box->priv->popup_frame);
+  gtk_widget_show_all (combo_box->priv->scrolled_window);
   gtk_combo_box_list_position (combo_box, &x, &y, &width, &height);
   
   gtk_widget_set_size_request (combo_box->priv->popup_window, width, height);  

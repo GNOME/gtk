@@ -1,6 +1,13 @@
 Overview of Changes from GTK+ 2.11.2 to 2.11.3
 ==============================================
 
+* GtkComboBox:
+ - Removed an unused and hardly visible GtkFrame from the menu widget hierarchy
+   when GtkComboBox::appears-as-list style property is set. Any RC file
+   applying a different style to any widget below the widget path
+   "gtk-combobox-popup-window.GtkFrame" should take into account that the frame
+   no longer exists.
+
 * Bugs fixed:
  444310 update_buttons_state on a bare assistant causes gtk+ to crash
 
