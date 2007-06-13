@@ -29,6 +29,7 @@
 #include <stdlib.h>
 
 #include "gtkcellrendererprogress.h"
+#include "gtkprogressbar.h"
 #include "gtkprivate.h"
 #include "gtkintl.h"
 #include "gtkalias.h"
@@ -44,7 +45,8 @@ enum
   PROP_TEXT,
   PROP_PULSE,
   PROP_TEXT_XALIGN,
-  PROP_TEXT_YALIGN
+  PROP_TEXT_YALIGN,
+  PROP_ORIENTATION
 }; 
 
 struct _GtkCellRendererProgressPrivate
@@ -58,6 +60,7 @@ struct _GtkCellRendererProgressPrivate
   gint offset;
   gfloat text_xalign;
   gfloat text_yalign;
+  GtkProgressBarOrientation orientation;
 };
 
 static void gtk_cell_renderer_progress_finalize     (GObject                 *object);
@@ -203,6 +206,25 @@ gtk_cell_renderer_progress_class_init (GtkCellRendererProgressClass *klass)
                                                        0.0, 1.0, 0.5,
                                                        GTK_PARAM_READWRITE));
 
+  /**
+   * GtkCellRendererProgress:orientation:
+   *
+   * The "orientation" property controls the direction and growth
+   * direction of the progress bar (left-to-right, right-to-left,
+   * top-to-bottom or bottom-to-top).
+   *
+   * Since: 2.12
+   */
+  g_object_class_install_property (object_class,
+                                   PROP_ORIENTATION,
+                                   g_param_spec_enum ("orientation",
+                                                      P_("Orientation"),
+                                                      P_("Orientation and growth direction of the progress bar"),
+                                                      GTK_TYPE_PROGRESS_BAR_ORIENTATION,
+                                                      GTK_PROGRESS_LEFT_TO_RIGHT,
+                                                      GTK_PARAM_READWRITE));
+
+
   g_type_class_add_private (object_class, 
 			    sizeof (GtkCellRendererProgressPrivate));
 }
@@ -222,6 +244,8 @@ gtk_cell_renderer_progress_init (GtkCellRendererProgress *cellprogress)
 
   priv->text_xalign = 0.5;
   priv->text_yalign = 0.5;
+
+  priv->orientation = GTK_PROGRESS_LEFT_TO_RIGHT;
 
   cellprogress->priv = priv;
 }
@@ -280,6 +304,9 @@ gtk_cell_renderer_progress_get_property (GObject *object,
     case PROP_TEXT_YALIGN:
       g_value_set_float (value, priv->text_yalign);
       break;
+    case PROP_ORIENTATION:
+      g_value_set_enum (value, priv->orientation);
+      break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, param_id, pspec);
     }
@@ -313,6 +340,9 @@ gtk_cell_renderer_progress_set_property (GObject *object,
       break;
     case PROP_TEXT_YALIGN:
       priv->text_yalign = g_value_get_float (value);
+      break;
+    case PROP_ORIENTATION:
+      priv->orientation = g_value_get_enum (value);
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, param_id, pspec);
@@ -448,6 +478,50 @@ gtk_cell_renderer_progress_get_size (GtkCellRenderer *cell,
   if (y_offset) *y_offset = 0;
 }
 
+static inline gint
+get_bar_size (gint pulse,
+	      gint value,
+	      gint full_size)
+{
+  gint bar_size;
+
+  if (pulse < 0)
+    bar_size = full_size * MAX (0, value) / 100;
+  else if (pulse == 0)
+    bar_size = 0;
+  else if (pulse == G_MAXINT)
+    bar_size = full_size;
+  else
+    bar_size = MAX (2, full_size / 5);
+
+  return bar_size;
+}
+
+static inline gint
+get_bar_position (gint     start,
+		  gint     full_size,
+		  gint     bar_size,
+		  gint     pulse,
+		  gint     offset,
+		  gboolean is_rtl)
+{
+  gint position;
+
+  if (pulse < 0 || pulse == 0 || pulse == G_MAXINT)
+    {
+      position = is_rtl ? (start + full_size - bar_size) : start;
+    }
+  else
+    {
+      position = (is_rtl ? offset + 12 : offset) % 24;
+      if (position > 12)
+	position = 24 - position;
+      position = start + full_size * position / 15;
+    }
+
+  return position;
+}
+
 static void
 gtk_cell_renderer_progress_render (GtkCellRenderer *cell,
 				   GdkWindow       *window,
@@ -461,7 +535,7 @@ gtk_cell_renderer_progress_render (GtkCellRenderer *cell,
   GtkCellRendererProgressPrivate *priv= cellprogress->priv; 
   PangoLayout *layout;
   PangoRectangle logical_rect;
-  gint x, y, w, h, x_pos, y_pos, bar_x, bar_width;
+  gint x, y, w, h, x_pos, y_pos, bar_position, bar_size, start, full_size;
   GdkRectangle clip;
   gboolean is_rtl;
 
@@ -482,30 +556,46 @@ gtk_cell_renderer_progress_render (GtkCellRenderer *cell,
 		 NULL, widget, NULL,
 		 x, y, w, h);
 
-  clip.y = y;
-  clip.height = h;
-  if (priv->pulse < 0)
+  if (priv->orientation == GTK_PROGRESS_LEFT_TO_RIGHT
+      || priv->orientation == GTK_PROGRESS_RIGHT_TO_LEFT)
     {
-      clip.width = w * MAX (0, priv->value) / 100;
-      clip.x = is_rtl ? (x + w - clip.width) : x;
-    }
-  else if (priv->pulse == 0)
-    {
-      clip.x = x;
-      clip.width = 0;
-    }
-  else if (priv->pulse == G_MAXINT)
-    {
-      clip.x = x;
-      clip.width = w;
+      clip.y = y;
+      clip.height = h;
+
+      start = x;
+      full_size = w;
+
+      bar_size = get_bar_size (priv->pulse, priv->value, full_size);
+
+      if (priv->orientation == GTK_PROGRESS_LEFT_TO_RIGHT)
+	bar_position = get_bar_position (start, full_size, bar_size,
+					 priv->pulse, priv->offset, is_rtl);
+      else
+	bar_position = get_bar_position (start, full_size, bar_size,
+					 priv->pulse, priv->offset, !is_rtl);
+
+      clip.width = bar_size;
+      clip.x = bar_position;
     }
   else
     {
-      clip.width = MAX (2, w / 5);
-      x_pos = (is_rtl ? priv->offset + 12 : priv->offset) % 24;
-      if (x_pos > 12)
-        x_pos = 24 - x_pos;
-      clip.x = x + w * x_pos / 15; 
+      clip.x = x;
+      clip.width = w;
+
+      start = y;
+      full_size = h;
+
+      bar_size = get_bar_size (priv->pulse, priv->value, full_size);
+
+      if (priv->orientation == GTK_PROGRESS_BOTTOM_TO_TOP)
+	bar_position = get_bar_position (start, full_size, bar_size,
+					 priv->pulse, priv->offset, TRUE);
+      else
+	bar_position = get_bar_position (start, full_size, bar_size,
+					 priv->pulse, priv->offset, FALSE);
+
+      clip.height = bar_size;
+      clip.y = bar_position;
     }
 
   gtk_paint_box (widget->style,
@@ -539,12 +629,19 @@ gtk_cell_renderer_progress_render (GtkCellRenderer *cell,
 		        x_pos, y_pos, 
 		        layout);
 
-      bar_x = clip.x;
-      bar_width = clip.width;
-      if (bar_x > x)
+      if (bar_position > start)
         {
-          clip.x = x;
-          clip.width = bar_x - x;
+	  if (priv->orientation == GTK_PROGRESS_LEFT_TO_RIGHT
+	      || priv->orientation == GTK_PROGRESS_RIGHT_TO_LEFT)
+	    {
+	      clip.x = x;
+	      clip.width = bar_position - x;
+	    }
+	  else
+	    {
+	      clip.y = y;
+	      clip.height = bar_position - y;
+	    }
 
           gtk_paint_layout (widget->style, window, 
 	  	            GTK_STATE_NORMAL,
@@ -553,10 +650,19 @@ gtk_cell_renderer_progress_render (GtkCellRenderer *cell,
 		            layout);
         }
 
-      if (bar_x + bar_width < x + w)
+      if (bar_position + bar_size < start + full_size)
         {
-          clip.x = bar_x + bar_width;
-          clip.width = x + w - (bar_x + bar_width);  
+	  if (priv->orientation == GTK_PROGRESS_LEFT_TO_RIGHT
+	      || priv->orientation == GTK_PROGRESS_RIGHT_TO_LEFT)
+	    {
+	      clip.x = bar_position + bar_size;
+	      clip.width = x + w - (bar_position + bar_size);
+	    }
+	  else
+	    {
+	      clip.y = bar_position + bar_size;
+	      clip.height = y + h - (bar_position + bar_size);
+	    }
 
           gtk_paint_layout (widget->style, window, 
 		            GTK_STATE_NORMAL,

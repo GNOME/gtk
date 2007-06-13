@@ -1,3 +1,13 @@
+2007-06-13  Kristian Rietveld  <kris@imendio.com>
+
+	* gtk/gtkcellrendererprogress.c
+	(gtk_cell_renderer_progress_class_init),
+	(gtk_cell_renderer_progress_init),
+	(gtk_cell_renderer_progress_[gs]et_property),
+	(gtk_cell_renderer_progress_render): Add orientation property and some
+	slight refactoring here and there.  (Fixes #344836, reported by
+	Benjamin Montgomery).
+
 2007-06-12  Matthias Clasen  <mclasen@redhat.com>
 
 	* gdk/Makefile.am: Remove linux-fb from DIST_SUBDIRS
