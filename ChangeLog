@@ -1,3 +1,8 @@
+2007-06-13  Behdad Esfahbod  <behdad@gnome.org>
+
+	* gdk/directfb/gdkgc-directfb.c: #undef GDK_DISABLE_DEPRECATED to
+	get prototype for gdk_font_ref(). (#447163, Dann Frazier, Loïc Minier)
+
 2007-06-13  Michael Natterer  <mitch@imendio.com>
 
 	* gtk/gtkmenuitem.[ch]: add "submenu" property. Fix
