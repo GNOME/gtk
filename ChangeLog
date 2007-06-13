@@ -1,3 +1,8 @@
+2007-06-13  Cody Russell  <bratsche@gnome.org>
+
+	* gtk/gtkwidget.c: Fix inconsistency in GTK_WIDGET_SAVED_STATE
+	(#435840, Xan Lopez)
+
 2007-06-13  Kristian Rietveld  <kris@imendio.com>
 
 	* gtk/gtk.symbols
