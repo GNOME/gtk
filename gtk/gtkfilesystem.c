@@ -1357,7 +1357,7 @@ _gtk_file_system_module_create (GtkFileSystemModule *fs_module)
 
 
 GtkFileSystem *
-_gtk_file_system_create (const char *file_system_name)
+gtk_file_system_create (const char *file_system_name)
 {
   GSList *l;
   char *module_path;

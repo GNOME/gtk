@@ -1,3 +1,12 @@
+2007-06-13  Kristian Rietveld  <kris@imendio.com>
+
+	* gtk/gtk.symbols
+	* gtk/gtkfilesystem.[ch]: rename _gtk_file_system_create to
+	gtk_file_system_create to make it public and bring trunk back
+	in sync with gtk-2-10.
+
+	* gtk/gtkfilechooserdefault.c (set_file_system_backend): updated.
+
 2007-06-13  Michael Natterer  <mitch@imendio.com>
 
 	* gtk/gtklabel.c (gtk_label_set_label): added calls to
