@@ -1,3 +1,56 @@
+Overview of Changes from GTK+ 2.10.12 to 2.10.13
+================================================
+
+* The GtkFileChooserDialog sizing code has been 
+  refactored.
+
+* The DirectFB backend has seen various fixes.
+
+* Bugs fixed:
+ 347883 do-overwrite-confirmation does nothing in 2.10
+ 389603 GtkFileChooserWidget crashes when the window is too narrow
+ 418047 GtkIconView sizing is very broken
+ 420249 deadlock on print operation
+ 437081 gdk_draw_pixbuf() accepts zero width or height and crashes
+ 379213 gtkaboutdialog.h causes warnings with GCC and -Wshadow
+ 420285 GtkFileChooserDialog resizes indefinetely in matchbox
+ 424299 expand_folders=true shrinks dialog
+ 424309 expand_folders=true makes dialog sticking out of screen
+ 436721 Win32: gtk_window_resize does not redraw the child widget
+ 437281 gtk_button_set_image destroyes the old image
+ 437379 Please commit these patches in trunk and gtk-2-10
+ 437879 gdk_draw_trapezoids fill wrong cairo path
+ 438113 vertical separator requests wrong size
+ 438261 Thai input does not work when NumLock/CapsLock is on
+ 438750 gtk-cell-renderer-text doesn't wrap on font scale
+ 439565 Crash in GtkIconView a11y code
+ 440040 Reference counting in GtkPrintOperation goes awry
+ 440511 xcursors.h: illegal initializing
+ 440780 GtkAction set_short_label might be broken
+ 441443 jpeg loader does not set error upon abortion
+ 441863 Suboptimal submenu placement
+ 444310 update_buttons_state on a bare assistant causes gtk+ to c...
+ 445284 Custom (pixbuf etc.) cursor reverts to default cursor on ...
+ 430746 Combobox might emit a signal during finalize
+ 436269 GtkTreeView doesn't expand/collapse with Right/Left curso...
+ 442326 Overview navigator traps mouse on wrong screen in dual mo...
+ 445196 please backport cursor color patch to 2.10.x
+ 435053 MS-Windows Theme top tabs rendered upside down for non-XP...
+ 79585 	API to change cursor color
+
+* Translation updates:
+ Arabic (ar)
+ Assamese (as)
+ Brazilian Portugese (pt_BR)
+ British English (en_GB)
+ Bulgarian (bg)
+ French (fr)
+ Spanish (es)
+ Swedish (sv)
+ Thai (th)
+ Welsh (cy)
+
+
 Overview of Changes from GTK+ 2.10.11 to 2.10.12
 ================================================
 
