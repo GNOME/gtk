@@ -2290,13 +2290,15 @@ gtk_menu_item_get_type G_GNUC_CONST
 gtk_menu_item_new
 gtk_menu_item_new_with_label
 gtk_menu_item_new_with_mnemonic
-gtk_menu_item_remove_submenu
 gtk_menu_item_select
 gtk_menu_item_set_accel_path
 gtk_menu_item_set_right_justified
 gtk_menu_item_set_submenu
 gtk_menu_item_toggle_size_allocate
 gtk_menu_item_toggle_size_request
+#ifndef GTK_DISABLE_DEPRECATED
+gtk_menu_item_remove_submenu
+#endif
 #endif
 #endif
 

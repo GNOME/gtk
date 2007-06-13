@@ -50,9 +50,22 @@ enum {
   LAST_SIGNAL
 };
 
+enum {
+  PROP_0,
+  PROP_SUBMENU
+};
 
-static void gtk_menu_item_destroy        (GtkObject        *object);
+
+static void gtk_menu_item_set_property   (GObject          *object,
+					  guint             prop_id,
+					  const GValue     *value,
+					  GParamSpec       *pspec);
+static void gtk_menu_item_get_property   (GObject          *object,
+					  guint             prop_id,
+					  GValue           *value,
+					  GParamSpec       *pspec);
 static void gtk_menu_item_finalize       (GObject          *object);
+static void gtk_menu_item_destroy        (GtkObject        *object);
 static void gtk_menu_item_size_request   (GtkWidget        *widget,
 					  GtkRequisition   *requisition);
 static void gtk_menu_item_size_allocate  (GtkWidget        *widget,
@@ -108,6 +121,8 @@ gtk_menu_item_class_init (GtkMenuItemClass *klass)
   GtkContainerClass *container_class = GTK_CONTAINER_CLASS (klass);
   GtkItemClass *item_class = GTK_ITEM_CLASS (klass);
 
+  gobject_class->set_property = gtk_menu_item_set_property;
+  gobject_class->get_property = gtk_menu_item_get_property;
   gobject_class->finalize = gtk_menu_item_finalize;
 
   object_class->destroy = gtk_menu_item_destroy;
@@ -175,6 +190,21 @@ gtk_menu_item_class_init (GtkMenuItemClass *klass)
 		  _gtk_marshal_NONE__INT,
 		  G_TYPE_NONE, 1,
 		  G_TYPE_INT);
+
+  /**
+   * GtkMenuItem:submenu:
+   *
+   * The submenu attached to the menu item, or NULL if it has none.
+   *
+   * Since: 2.12
+   **/
+  g_object_class_install_property (gobject_class,
+                                   PROP_SUBMENU,
+                                   g_param_spec_object ("submenu",
+                                                        P_("Submenu"),
+                                                        P_("The submenu attached to the menu item, or NULL if it has none"),
+                                                        GTK_TYPE_MENU,
+                                                        GTK_PARAM_READWRITE));
 
   gtk_widget_class_install_style_property_parser (widget_class,
 						  g_param_spec_enum ("selected-shadow-type",
@@ -284,19 +314,44 @@ gtk_menu_item_new_with_mnemonic (const gchar *label)
   return menu_item;
 }
 
-static void
-gtk_menu_item_destroy (GtkObject *object)
+static void 
+gtk_menu_item_set_property (GObject      *object,
+			    guint         prop_id,
+			    const GValue *value,
+			    GParamSpec   *pspec)
 {
-  GtkMenuItem *menu_item;
+  GtkMenuItem *menu_item = GTK_MENU_ITEM (object);
+  
+  switch (prop_id)
+    {
+    case PROP_SUBMENU:
+      gtk_menu_item_set_submenu (menu_item, g_value_get_object (value));
+      break;
 
-  g_return_if_fail (GTK_IS_MENU_ITEM (object));
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+      break;
+    }
+}
 
-  menu_item = GTK_MENU_ITEM (object);
+static void 
+gtk_menu_item_get_property (GObject    *object,
+			    guint       prop_id,
+			    GValue     *value,
+			    GParamSpec *pspec)
+{
+  GtkMenuItem *menu_item = GTK_MENU_ITEM (object);
+  
+  switch (prop_id)
+    {
+    case PROP_SUBMENU:
+      g_value_set_object (value, gtk_menu_item_get_submenu (menu_item));
+      break;
 
-  if (menu_item->submenu)
-    gtk_widget_destroy (menu_item->submenu);
-
-  GTK_OBJECT_CLASS (gtk_menu_item_parent_class)->destroy (object);
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+      break;
+    }
 }
 
 static void
@@ -310,36 +365,59 @@ gtk_menu_item_finalize (GObject *object)
 }
 
 static void
-gtk_menu_item_detacher (GtkWidget     *widget,
-			GtkMenu       *menu)
+gtk_menu_item_destroy (GtkObject *object)
 {
-  GtkMenuItem *menu_item;
+  GtkMenuItem *menu_item = GTK_MENU_ITEM (object);
 
-  g_return_if_fail (GTK_IS_MENU_ITEM (widget));
+  if (menu_item->submenu)
+    gtk_widget_destroy (menu_item->submenu);
 
-  menu_item = GTK_MENU_ITEM (widget);
+  GTK_OBJECT_CLASS (gtk_menu_item_parent_class)->destroy (object);
+}
+
+static void
+gtk_menu_item_detacher (GtkWidget *widget,
+			GtkMenu   *menu)
+{
+  GtkMenuItem *menu_item = GTK_MENU_ITEM (widget);
+
   g_return_if_fail (menu_item->submenu == (GtkWidget*) menu);
 
   menu_item->submenu = NULL;
 }
 
+/**
+ * gtk_menu_item_set_submenu:
+ * @menu_item: a #GtkMenuItem
+ * @submenu: the submenu, or %NULL
+ *
+ * Sets or replaces the menu item's submenu, or removes it when a %NULL
+ * submenu is passed.
+ **/
 void
 gtk_menu_item_set_submenu (GtkMenuItem *menu_item,
 			   GtkWidget   *submenu)
 {
   g_return_if_fail (GTK_IS_MENU_ITEM (menu_item));
+  g_return_if_fail (submenu == NULL || GTK_IS_MENU (submenu));
   
   if (menu_item->submenu != submenu)
     {
-      gtk_menu_item_remove_submenu (menu_item);
-      
-      menu_item->submenu = submenu;
-      gtk_menu_attach_to_widget (GTK_MENU (submenu),
-				 GTK_WIDGET (menu_item),
-				 gtk_menu_item_detacher);
-      
+      if (menu_item->submenu)
+	gtk_menu_detach (GTK_MENU (menu_item->submenu));
+
+      if (submenu)
+	{
+	  menu_item->submenu = submenu;
+	  gtk_menu_attach_to_widget (GTK_MENU (submenu),
+				     GTK_WIDGET (menu_item),
+				     gtk_menu_item_detacher);
+	}
+
       if (GTK_WIDGET (menu_item)->parent)
 	gtk_widget_queue_resize (GTK_WIDGET (menu_item));
+
+      g_object_notify (G_OBJECT (menu_item), "submenu");
     }
 }
 
@@ -360,13 +438,22 @@ gtk_menu_item_get_submenu (GtkMenuItem *menu_item)
   return menu_item->submenu;
 }
 
+/**
+ * gtk_menu_item_remove_submenu:
+ * @menu_item: a #GtkMenuItem
+ *
+ * Removes the widget's submenu.
+ *
+ * Deprecated: 2.12: gtk_menu_item_remove_submenu() is deprecated and
+ *                   should not be used in newly written code. Use
+ *                   gtk_menu_item_set_submenu() instead.
+ **/
 void
-gtk_menu_item_remove_submenu (GtkMenuItem         *menu_item)
+gtk_menu_item_remove_submenu (GtkMenuItem *menu_item)
 {
   g_return_if_fail (GTK_IS_MENU_ITEM (menu_item));
-      
-  if (menu_item->submenu)
-    gtk_menu_detach (GTK_MENU (menu_item->submenu));
+
+  gtk_menu_item_set_submenu (menu_item, NULL);
 }
 
 void _gtk_menu_item_set_placement (GtkMenuItem         *menu_item,

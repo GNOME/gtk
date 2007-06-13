@@ -1,3 +1,7 @@
+2007-06-13  Michael Natterer  <mitch@imendio.com>
+
+	* gtk/tmpl/gtkmenuitem.sgml: remove stuff that has been moved inline.
+
 2007-06-12  Matthias Clasen  <mclasen@redhat.com>
 
 	* gdk/gdk-sections.txt: Remove GDK_WINDOWING_FB

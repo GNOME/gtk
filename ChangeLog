@@ -1,3 +1,15 @@
+2007-06-13  Michael Natterer  <mitch@imendio.com>
+
+	* gtk/gtkmenuitem.[ch]: add "submenu" property. Fix
+	gtk_menu_item_set_submenu() to accept NULL submenus and deprecate
+	gtk_menu_item_remove_submenu() because we have a properly working
+	setter now (bug #447065).
+
+	* gtk/gtk.symbols: deprecate gtk_menu_item_remove_submenu().
+
+	* gtk/gtkcombobox.c: use gtk_menu_item_set_submenu() instead of
+	gtk_menu_item_remove_submenu().
+
 2007-06-13  Cody Russell  <bratsche@gnome.org>
 
 	* gtk/gtkwidget.c: Fix inconsistency in GTK_WIDGET_SAVED_STATE

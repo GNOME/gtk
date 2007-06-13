@@ -130,11 +130,11 @@ Creates a new #GtkMenuItem whose child is a #GtkLabel.
 
 <!-- ##### FUNCTION gtk_menu_item_set_submenu ##### -->
 <para>
-Sets the widget submenu, or changes it.
+
 </para>
 
-@menu_item: the menu item widget
-@submenu: the submenu
+@menu_item:
+@submenu:
 
 
 <!-- ##### FUNCTION gtk_menu_item_set_accel_path ##### -->
@@ -148,10 +148,10 @@ Sets the widget submenu, or changes it.
 
 <!-- ##### FUNCTION gtk_menu_item_remove_submenu ##### -->
 <para>
-Removes the widget's submenu.
+
 </para>
 
-@menu_item: the menu item widget
+@menu_item:
 
 
 <!-- ##### FUNCTION gtk_menu_item_select ##### -->

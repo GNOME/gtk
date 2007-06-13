@@ -3382,7 +3382,7 @@ gtk_combo_box_menu_row_deleted (GtkTreeModel *model,
 	{
 	  parent = find_menu_by_path (combo_box->priv->popup_widget, 
 				      parent_path, FALSE);
-	  gtk_menu_item_remove_submenu (GTK_MENU_ITEM (parent));
+	  gtk_menu_item_set_submenu (GTK_MENU_ITEM (parent), NULL);
 	}
     }
 }
