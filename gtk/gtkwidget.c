@@ -5442,8 +5442,10 @@ modify_color_property (GtkWidget      *widget,
  *             allocated), or %NULL to undo the effect of previous calls to
  *             of gtk_widget_modify_cursor().
  *
- * Sets the font to use for a widget.  All other style values are left
- * untouched. See also gtk_widget_modify_style().
+ * Sets the cursor color to use in a widget, overriding the
+ * #GtkWidget:cursor-color and #GtkWidget:secondary-cursor-color
+ * style properties. All other style values are left untouched. 
+ * See also gtk_widget_modify_style().
  *
  * Since: 2.12
  **/
