@@ -20,7 +20,7 @@ they work together.
 Several different coordinate systems are exposed in the GtkTreeView API.
 These are:
 
-<inlinegraphics fileref="tree-view-coordinates.png" format="PNG"></inlinegraphic>
+<inlinegraphic fileref="tree-view-coordinates.png" format="PNG"></inlinegraphic>
 
   <simplelist>
     <member>Widget coordinates -- coordinates relative to the widget (usually <literal>widget-&gt;window</literal>.</member>

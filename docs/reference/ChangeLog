@@ -1,3 +1,8 @@
+2007-06-14  Johan Dahlin  <jdahlin@async.com.br>
+
+	* gtk/tmpl/gtktreeview.sgml (linkend): inlinegraphic instead of 
+	inlinegraphics.
+
 2007-06-13  Michael Natterer  <mitch@imendio.com>
 
 	* gtk/tmpl/gtkmenuitem.sgml: remove stuff that has been moved inline.
