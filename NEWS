@@ -1,8 +1,58 @@
 Overview of Changes from GTK+ 2.11.2 to 2.11.3
 ==============================================
 
+* GtkTextView, GtkEntry:
+ - gtk_widget_modify_cursor() is a new function in the gtk_widget_modify
+   family to override the style-provided cursor color
+ - Use a block cursor in overwrite mode
+
+* GtkFileChooser:
+ - Use xdg-user-dirs to find the Desktop directory
+ - gtk_file_system_create() is now public API
+
+* GtkMenu:
+ - GtkMenuItem gained a submenu property
+
+* OS X port:
+ - Many improvements
+
 * Bugs fixed:
- 444310 update_buttons_state on a bare assistant causes gtk+ to crash
+ 445691 Crash when spawning a new process
+ 447163 Implicit pointer conversion gdk_font_ref()
+ 420249 deadlock on print operation
+ 440918 out-of-bound access on loading pnm
+ 142494 treeview coordinate systems need documentation/auditing
+ 343012 RC parser rejects lower-case identifiers.
+ 350460 Popup windows (esp. menus) misbehave wrt focus
+ 410815 Icon view gets confused when scaling down the pixbuf column
+ 435471 small GtkComboBox cleanup
+ 435840 GTK_WIDGET_SAVED_STATE inconsistency
+ 442617 gdk_spawn overrides envp, breaking child setup funcs whic...
+ 443913 When .recently-used.xbel is empty, recently-used uses %10...
+ 444097 Cannot compile gtksearchenginesimple.c
+ 444310 update_buttons_state on a bare assistant causes gtk+ to c...
+ 444734 Compact file-chooser folder selection not working with gt...
+ 444786 Error loading 'gtk-select-color' in Stock icons and Items
+ 445054 GtkScrolledWindow::scrollbars-within-bevel is drawing wrong
+ 445284 Custom (pixbuf etc.) cursor reverts to default cursor on ...
+ 445539 Unititialized var in gtkrc.c trunk
+ 445855 gtk_scale_button_new() uses private API.
+ 446138 Tiny doc update for gdk_window_get_pointer()
+ 446513 gtknotebook.h: create_window is wrong declaration
+ 446616 glib requirement insufficient
+ 447065 GtkMenuItem: add "submenu" property and some cleanup
+ 426192 Symbolic colors are not working under "engine" sections o...
+ 446107 tiff load dialogue has unreadable text
+ 447396 Typo in documentation of gtk_widget_modify_cursor
+ 79585 	API to change cursor color
+ 80378 	Visible (Cursor-shape) indicator for Overtype mode
+ 158008 Stock button for Dont Save, Discard Changes, Do Not Save
+ 334576 GtkCellRendererProgress ignores xalign attribute
+ 344836 Add orientation property to CellRendererProgress
+
+* Updated translations
+ Spanish (es)
+ Swedish (sv)
 
 
 Overview of Changes from GTK+ 2.11.1 to 2.11.2

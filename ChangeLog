@@ -1,5 +1,7 @@
 2007-06-13  Matthias Clasen  <mclasen@redhat.com>
 
+	* NEWS: Updates
+
 	* NEWS, README.in: Move the combobox note to the README,
 	where it seems more appropriate.
 
