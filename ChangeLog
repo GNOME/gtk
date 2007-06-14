@@ -1,3 +1,11 @@
+2007-06-14  Tor Lillqvist  <tml@novell.com>
+
+	* gdk/win32/gdkwindow-win32.c (RegisterGdkClass): Use
+	g_win32_get_windows_version() instead of _winver so that this
+	compiles on Cygwin, too. Not that I know if it makes sense to
+	build GTK+ with the Win32 backend for Cygwin, but some people want
+	to.
+
 2007-06-13  Matthias Clasen  <mclasen@redhat.com>
 
 	* NEWS: Updates
