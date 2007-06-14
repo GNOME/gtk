@@ -1813,6 +1813,9 @@ pdf_end_run (GtkPrintOperation *op,
 
   cairo_surface_finish (surface);
   cairo_surface_destroy (surface);
+
+  priv->platform_data = NULL;
+  priv->free_platform_data = NULL;
 }
 
 static GtkPrintOperationResult

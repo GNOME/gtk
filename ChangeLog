@@ -1,3 +1,10 @@
+2007-06-14   Matthias Clasen  <mclasen@redhat.com>
+
+	Backport from trunk:
+
+	* gtk/gtkprintoperation.c (pdf_end_run): Fix a refcounting
+	problem with the EXPORT action.  (#440040, Chris Vine)
+
 2007-06-13  Michael Natterer  <mitch@imendio.com>
 
 	Merge from trunk:
