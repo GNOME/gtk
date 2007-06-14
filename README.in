@@ -67,6 +67,12 @@ Release notes for 2.12
   has been taken to make sure that all code using this signal continues
   to work.
 
+* Removed an unused and hardly visible GtkFrame from the menu widget hierarchy
+  when GtkComboBox::appears-as-list style property is set. Any RC file
+  applying a different style to any widget below the widget path
+  "gtk-combobox-popup-window.GtkFrame" should take into account that the 
+  frame no longer exists.
+
 
 Release notes for 2.10
 ======================

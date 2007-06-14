@@ -1,5 +1,10 @@
 2007-06-13  Matthias Clasen  <mclasen@redhat.com>
 
+	* NEWS, README.in: Move the combobox note to the README,
+	where it seems more appropriate.
+
+2007-06-13  Matthias Clasen  <mclasen@redhat.com>
+
 	* gtk/gtkwidget.c (gtk_widget_modify_cursor): Improve docs.
 	(#447396, Masatake YAMATO)
 
