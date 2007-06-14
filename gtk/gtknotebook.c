@@ -7344,7 +7344,7 @@ gtk_notebook_get_group_id (GtkNotebook *notebook)
   priv = GTK_NOTEBOOK_GET_PRIVATE (notebook);
 
   /* substract 1 to get rid of the -1/NULL difference */
-  return GPOINTER_TO_INT (priv->group - 1);
+  return GPOINTER_TO_INT (priv->group) - 1;
 }
 
 /**
