@@ -293,6 +293,18 @@ gtk_menu_shell_class_init (GtkMenuShellClass *klass)
 			     _gtk_marshal_VOID__ENUM,
 			     G_TYPE_NONE, 1,
 			     GTK_TYPE_DIRECTION_TYPE);
+  /**
+   * GtkMenuShell::move-selected:
+   * @menu_shell: the object on which the signal is emitted
+   * @distance: +1 to move to the next item, -1 to move to the previous
+   *
+   * The ::move-selected signal is emitted to move the selection to
+   * another item. 
+   * 
+   * Returns: %TRUE to stop the signal emission, %FALSE to continue
+   *
+   * Since: 2.12
+   */ 
   menu_shell_signals[MOVE_SELECTED] =
     g_signal_new (I_("move_selected"),
 		  G_OBJECT_CLASS_TYPE (object_class),
