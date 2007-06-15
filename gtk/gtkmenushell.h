@@ -84,11 +84,12 @@ struct _GtkMenuShellClass
 			    GtkWidget    *child,
 			    gint          position);
   gint (*get_popup_delay)  (GtkMenuShell *menu_shell);
+  gboolean (*move_selected) (GtkMenuShell *menu_shell,
+			     gint          distance);
 
   /* Padding for future expansion */
   void (*_gtk_reserved1) (void);
   void (*_gtk_reserved2) (void);
-  void (*_gtk_reserved3) (void);
 };
 
 
