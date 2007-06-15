@@ -41,22 +41,24 @@ all :	\
 #
 TESTAPPS = \
 	autotestfilechooser floatingtest \
-	testaccel testactions \
+	testaccel testactions testassistant \
+	testbbox \
 	testcairo testcalendar testcellrenderertext testcombo testcombochange \
 	testdnd \
 	testellipsise testentrycompletion \
 	testfilechooser testfilechooserbutton \
-	testgtk \
+	testgrouping testgtk \
 	testicontheme testiconview testimage testinput \
 	testmenus testmenubars testmerge testmultidisplay testmultiscreen \
-	testnotebookdnd \
-	testrecentchooser testrgb \
+	testnouiprint testnotebookdnd \
+	testprint \
+	testrecentchooser testrecentchoosermenu testrgb testrichtext \
 	testselection testspinbutton \
-	testtext testtextbuffer testtoolbar \
+	testtext testtextbuffer testtoolbar testtooltips \
 	testtreecolumns testtreeedit testtreeflow testtreefocus \
-	testtreesort testtreeview treestoretest \
+	testtreemodel testtreesort testtreeview treestoretest \
 	testsocket testsocket_child teststatusicon \
-	testthreads testxinerama \
+	testthreads testvolumebutton testxinerama \
 	simple 
 
 # syntax error : illegal character '-' in macro
@@ -71,25 +73,20 @@ one-test-app:
 
 !ELSE
 
-!IFDEF EXTRA_testcairo
-EXTRA_LIBS = $(CAIRO_LIBS)
+EXTRA_OBJETCS = prop-editor.obj
+
+
+!IFDEF EXTRA_testprint
+EXTRA_OBJETCS = testprintfileoperation.obj
+EXTRA_LIBS = $(PANGOCAIRO_LIBS)
 !ENDIF
 
-!IFDEF EXTRA_testentrycompletion
-EXTRA_OBJETCS = prop-editor.obj
+!IFDEF EXTRA_testnouiprint
+EXTRA_LIBS = $(PANGOCAIRO_LIBS)
 !ENDIF
 
-!IFDEF EXTRA_testfilechooserbutton
-EXTRA_OBJETCS = prop-editor.obj
-!ENDIF
-
-!IFDEF EXTRA_testgtk
-EXTRA_LIBS = $(CAIRO_LIBS)
-EXTRA_OBJETCS = prop-editor.obj
-!ENDIF
-
-!IFDEF EXTRA_testiconview
-EXTRA_OBJETCS = prop-editor.obj
+!IFDEF EXTRA_testfilechooser
+EXTRA_LIBS = gdi32.lib user32.lib shell32.lib
 !ENDIF
 
 !IFDEF EXTRA_testsocket
@@ -100,29 +97,9 @@ EXTRA_OBJETCS = testsocket_common.obj
 EXTRA_OBJETCS = testsocket_common.obj
 !ENDIF
 
-!IFDEF EXTRA_testrecentchooser
-EXTRA_OBJETCS = prop-editor.obj
-!ENDIF
-
-!IFDEF EXTRA_testtreeview
-EXTRA_OBJETCS = prop-editor.obj
-!ENDIF
-
-!IFDEF EXTRA_testtext
-EXTRA_OBJETCS = prop-editor.obj
-!ENDIF
-
-!IFDEF EXTRA_testtoolbar
-EXTRA_OBJETCS = prop-editor.obj
-!ENDIF
-
-!IFDEF EXTRA_testfilechooser
-EXTRA_OBJETCS = prop-editor.obj
-EXTRA_LIBS = gdi32.lib user32.lib shell32.lib
-!ENDIF
-
-$(TESTAPP).exe : ../gtk/gtk-win32-$(GTK_VER).lib $(TESTAPP).obj
-	$(CC) $(CFLAGS) $(TESTAPP).obj $(EXTRA_OBJETCS) $(GTK_LIBS) $(GDK_LIBS) $(GDK_PIXBUF_LIBS) $(PANGO_LIBS) $(GLIB_LIBS) $(EXTRA_LIBS) $(LDFLAGS)
+$(TESTAPP).exe : ../gtk/gtk-win32-$(GTK_VER).lib $(TESTAPP).obj $(EXTRA_OBJETCS)
+	$(CC) $(CFLAGS) $(TESTAPP).obj $(EXTRA_OBJETCS) $(GTK_LIBS) $(GDK_LIBS) $(GDK_PIXBUF_LIBS) \
+	$(PANGO_LIBS) $(GLIB_LIBS) $(CAIRO_LIBS) $(EXTRA_LIBS) $(LDFLAGS)
 
 $(TESTAPP).obj : $(TESTAPP).c
 	$(CC) $(CFLAGS) -c -DG_LOG_DOMAIN=\"$(TESTAPP)\" $(TESTAPP).c

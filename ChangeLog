@@ -1,3 +1,11 @@
+2007-06-15  Hans Breuer <hans@breuer.org>
+
+	* gtk/makefile.msc.in tests/makefile.msc : updated
+	* gdk/win32/gdkwindow-win32.c : explicit usage of RegisterClassExW
+	to match the WNDCLASSEXW. 
+	True dynamic linking of SetLayeredWindowAttributes
+	* tests/testprint.c tests/testnouiprint.c : use G_PI
+
 2007-06-14  Johan Dahlin  <jdahlin@async.com.br>
 
 	* gtk/gtk.symbols: Add missing symbol 

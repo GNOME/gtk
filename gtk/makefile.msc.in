@@ -39,7 +39,8 @@ DEFINES = \
 	-DGTK_HOST=\"win32\" \
 	-DGTK_FILE_SYSTEM_ENABLE_UNSUPPORTED \
 	-DGTK_PRINT_BACKENDS=\"file,lpr\"	\
-	-DGTK_PRINT_PREVIEW_COMMAND="\"evince --unlink-tempfile --preview %f\""
+	-DGTK_PRINT_PREVIEW_COMMAND="\"evince --unlink-tempfile --preview %f\"" \
+	-DGTK_LIBDIR=\"/magic/path/replaced/at/runtime\"
 
 TOUCH = copy makefile.msc+nul
 
@@ -161,6 +162,7 @@ gtk_OBJECTS = 					\
 	gtkhseparator.obj			\
 	gtkhsv.obj				\
 	gtkiconcache.obj			\
+	gtkiconcachevalidator.obj	\
 	gtkiconfactory.obj			\
 	gtkicontheme.obj			\
 	gtkiconview.obj			\
@@ -214,6 +216,7 @@ gtk_OBJECTS = 					\
 	gtkprintutils.obj	\
 	gtkprogress.obj				\
 	gtkprogressbar.obj			\
+	gtkquery.obj	\
 	gtkradioaction.obj			\
 	gtkradiobutton.obj			\
 	gtkradiotoolbutton.obj			\
@@ -221,6 +224,7 @@ gtk_OBJECTS = 					\
 	gtkrange.obj				\
 	gtkrbtree.obj	\
 	gtkrc.obj				\
+	gtkrecentaction.obj \
 	gtkrecentchooserdefault.obj \
 	gtkrecentchooserdialog.obj \
 	gtkrecentchoosermenu.obj 	\
@@ -231,13 +235,17 @@ gtk_OBJECTS = 					\
 	gtkrecentmanager.obj 	\
 	gtkruler.obj				\
 	gtkscale.obj				\
+	gtkscalebutton.obj	\
 	gtkscrollbar.obj			\
 	gtkscrolledwindow.obj			\
+	gtksearchengine.obj	\
+	gtksearchenginebeagle.obj	\
+	gtksearchenginesimple.obj	\
+	gtksearchenginetracker.obj	\
 	gtkselection.obj			\
 	gtkseparator.obj			\
 	gtkseparatormenuitem.obj \
 	gtkseparatortoolitem.obj \
-	gtksequence.obj	\
 	gtksettings.obj \
 	gtksignal.obj				\
 	gtksizegroup.obj \
@@ -274,6 +282,7 @@ gtk_OBJECTS = 					\
 	gtktoolbar.obj				\
 	gtktoolbutton.obj				\
 	gtktoolitem.obj				\
+	gtktooltip.obj				\
 	gtktooltips.obj				\
 	gtktrayicon-win32.obj	\
 	gtktree.obj				\
@@ -294,6 +303,7 @@ gtk_OBJECTS = 					\
 	gtkvbbox.obj				\
 	gtkvbox.obj				\
 	gtkviewport.obj				\
+	gtkvolumebutton.obj	\
 	gtkvpaned.obj				\
 	gtkvruler.obj				\
 	gtkvscale.obj				\
@@ -424,12 +434,14 @@ gtk_public_h_sources =		\
 	gtkprivate.h		\
 	gtkprogress.h		\
 	gtkprogressbar.h	\
+	gtkquery.h	\
 	gtkradioaction.h	\
 	gtkradiobutton.h	\
 	gtkradiomenuitem.h	\
 	gtkradiotoolbutton.h	\
 	gtkrange.h		\
 	gtkrc.h			\
+	gtkrecentaction.h	\
 	gtkrecentchooser.h 	\
 	gtkrecentchooserdialog.h \
 	gtkrecentchoosermenu.h 	\
@@ -438,8 +450,10 @@ gtk_public_h_sources =		\
 	gtkrecentmanager.h 	\
 	gtkruler.h		\
 	gtkscale.h		\
+	gtkscalebutton.h	\
 	gtkscrollbar.h		\
 	gtkscrolledwindow.h	\
+	gtksearchengine.h	\
 	gtkselection.h		\
 	gtkseparator.h		\
 	gtkseparatormenuitem.h	\
@@ -490,6 +504,7 @@ gtk_public_h_sources =		\
 	gtkvbbox.h		\
 	gtkvbox.h		\
 	gtkviewport.h		\
+	gtkvolumebutton.h	\
 	gtkvpaned.h		\
 	gtkvruler.h		\
 	gtkvscale.h		\
