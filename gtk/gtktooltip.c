@@ -215,6 +215,30 @@ gtk_tooltip_set_markup (GtkTooltip  *tooltip,
 }
 
 /**
+ * gtk_tooltip_set_text:
+ * @tooltip: a #GtkTooltip
+ * @text: a text string or %NULL
+ *
+ * Sets the text of the tooltip to be @text. If @text is %NULL, the label
+ * will be hidden. See also gtk_tooltip_set_markup().
+ *
+ * Since: 2.12
+ */
+void
+gtk_tooltip_set_text (GtkTooltip  *tooltip,
+                      const gchar *text)
+{
+  g_return_if_fail (GTK_IS_TOOLTIP (tooltip));
+
+  gtk_label_set_text (GTK_LABEL (tooltip->label), text);
+
+  if (text)
+    gtk_widget_show (tooltip->label);
+  else
+    gtk_widget_hide (tooltip->label);
+}
+
+/**
  * gtk_tooltip_set_icon:
  * @tooltip: a #GtkTooltip
  * @pixbuf: a #GdkPixbuf, or %NULL

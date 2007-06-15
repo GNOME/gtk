@@ -1,3 +1,15 @@
+2007-06-15  Mathias Hasselmann  <mathias.hasselmann@gmx.de>
+
+	* docs/reference/gtk/gtk-sections.txt, gtk/gtk.symbols,
+	gtk/gtkwidget.c, gtk/gtkwidget.h, tests/testtooltips.c: Introduce
+	convenience property "GtkWidget:tooltip-text" taking care of escaping
+	it for unwanted markup entities. Add functions to set tooltip text:
+	gtk_widget_set_tooltip_text(), gtk_widget_set_tooltip_markup(),
+	gtk_widget_get_tooltip_text(), gtk_widget_get_tooltip_markup().
+
+	* gtk/gtktooltip.c, gtk/gtktooltip.h: Add gtk_tooltip_set_text()
+	to set the tooltip text without using markup.
+
 2007-06-15  Johan Dahlin  <jdahlin@async.com.br>
 
 	reviewed by: Matthias Clasen

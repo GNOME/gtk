@@ -151,7 +151,8 @@ enum {
   PROP_EXTENSION_EVENTS,
   PROP_NO_SHOW_ALL,
   PROP_HAS_TOOLTIP,
-  PROP_TOOLTIP_MARKUP
+  PROP_TOOLTIP_MARKUP,
+  PROP_TOOLTIP_TEXT
 };
 
 typedef	struct	_GtkStateData	 GtkStateData;
@@ -620,21 +621,41 @@ gtk_widget_class_init (GtkWidgetClass *klass)
  							 P_("Whether this widget has a tooltip"),
  							 FALSE,
  							 GTK_PARAM_READWRITE));
-
-/**
- * GtkWidget:tooltip-markup:
- *
- * Sets the text of tooltip to be the given string, which is marked up
- * with the <link linkend="PangoMarkupFormat">Pango text markup language</link>.
- * Also see gtk_tooltip_set_markup().
- *
- * This is a convenience property which will take care of getting the
- * tooltip shown if the given string is not %NULL: #GtkWidget:has-tooltip
- * will automatically be set to %TRUE and there will be taken care of
- * #GtkWidget::query-tooltip in the default signal handler.
- *
- * Since: 2.12
- */
+  /**
+   * GtkWidget:tooltip-text:
+   *
+   * Sets the text of tooltip to be the given string.
+   *
+   * Also see gtk_tooltip_set_text().
+   *
+   * This is a convenience property which will take care of getting the
+   * tooltip shown if the given string is not %NULL: #GtkWidget:has-tooltip
+   * will automatically be set to %TRUE and there will be taken care of
+   * #GtkWidget::query-tooltip in the default signal handler.
+   *
+   * Since: 2.12
+   */
+  g_object_class_install_property (gobject_class,
+                                   PROP_TOOLTIP_TEXT,
+                                   g_param_spec_string ("tooltip-text",
+                                                        P_("Tooltip Text"),
+                                                        P_("The contents of the tooltip for this widget"),
+                                                        NULL,
+                                                        GTK_PARAM_READWRITE));
+  /**
+   * GtkWidget:tooltip-markup:
+   *
+   * Sets the text of tooltip to be the given string, which is marked up
+   * with the <link linkend="PangoMarkupFormat">Pango text markup language</link>.
+   * Also see gtk_tooltip_set_markup().
+   *
+   * This is a convenience property which will take care of getting the
+   * tooltip shown if the given string is not %NULL: #GtkWidget:has-tooltip
+   * will automatically be set to %TRUE and there will be taken care of
+   * #GtkWidget::query-tooltip in the default signal handler.
+   *
+   * Since: 2.12
+   */
   g_object_class_install_property (gobject_class,
 				   PROP_TOOLTIP_MARKUP,
 				   g_param_spec_string ("tooltip-markup",
@@ -2005,13 +2026,21 @@ gtk_widget_set_property (GObject         *object,
       gtk_widget_set_has_tooltip (widget, g_value_get_boolean (value), FALSE);
       break;
     case PROP_TOOLTIP_MARKUP:
-      tooltip_markup = g_object_get_qdata (object, quark_tooltip_markup);
       tooltip_window = g_object_get_qdata (object, quark_tooltip_window);
-
       tooltip_markup = g_value_dup_string (value);
 
       g_object_set_qdata_full (object, quark_tooltip_markup,
 			       tooltip_markup, g_free);
+
+      tmp = (tooltip_window != NULL || tooltip_markup != NULL);
+      gtk_widget_set_has_tooltip (widget, tmp, FALSE);
+      break;
+    case PROP_TOOLTIP_TEXT:
+      tooltip_window = g_object_get_qdata (object, quark_tooltip_window);
+      tooltip_markup = g_markup_escape_text (g_value_get_string (value), -1);
+
+      g_object_set_qdata_full (object, quark_tooltip_markup,
+                               tooltip_markup, g_free);
 
       tmp = (tooltip_window != NULL || tooltip_markup != NULL);
       gtk_widget_set_has_tooltip (widget, tmp, FALSE);
@@ -2112,6 +2141,25 @@ gtk_widget_get_property (GObject         *object,
       break;
     case PROP_HAS_TOOLTIP:
       g_value_set_boolean (value, GPOINTER_TO_UINT (g_object_get_qdata (object, quark_has_tooltip)));
+      break;
+    case PROP_TOOLTIP_TEXT:
+      {
+        gchar *escaped = g_object_get_qdata (object, quark_tooltip_markup);
+        if (!escaped)
+          g_value_set_string (value, NULL);
+        else
+          {
+            gchar *text;
+
+            if (pango_parse_markup (escaped, -1, 0, NULL, &text, NULL, NULL))
+              {
+                g_value_set_string (value, text);
+                g_free (text);
+              }
+            else
+              g_value_set_string (value, NULL);
+          }
+      }
       break;
     case PROP_TOOLTIP_MARKUP:
       g_value_set_string (value, g_object_get_qdata (object, quark_tooltip_markup));
@@ -8852,6 +8900,99 @@ void
 gtk_widget_trigger_tooltip_query (GtkWidget *widget)
 {
   gtk_tooltip_trigger_tooltip_query (gtk_widget_get_display (widget));
+}
+
+/**
+ * gtk_widget_set_tooltip_text:
+ * @widget: a #GtkWidget
+ * @text: the contents of the tooltip for @widget
+ *
+ * Sets @text as the contents of the tooltip. This function will take
+ * care of setting GtkWidget:has-tooltip to %TRUE and of the default
+ * handler for the GtkWidget::query-tooltip signal.
+ *
+ * See also the GtkWidget:tooltip-text property and gtk_tooltip_set_text().
+ *
+ * Since: 2.12
+ */
+void
+gtk_widget_set_tooltip_text (GtkWidget   *widget,
+                             const gchar *text)
+{
+  g_return_if_fail (GTK_IS_WIDGET (widget));
+
+  g_object_set (G_OBJECT (widget), "tooltip-text", text, NULL);
+}
+
+/**
+ * gtk_widget_get_tooltip_text:
+ * @widget: a #GtkWidget
+ *
+ * Gets the contents of the tooltip for @widget.
+ *
+ * Return value: the tooltip text, or %NULL. You should free the
+ *   returned string with g_free() when done.
+ *
+ * Since: 2.12
+ */
+gchar *
+gtk_widget_get_tooltip_text (GtkWidget *widget)
+{
+  gchar *text = NULL;
+
+  g_return_val_if_fail (GTK_IS_WIDGET (widget), NULL);
+
+  g_object_get (G_OBJECT (widget), "tooltip-text", &text, NULL);
+
+  return text;
+}
+
+/**
+ * gtk_widget_set_tooltip_markup:
+ * @widget: a #GtkWidget
+ * @markup: the contents of the tooltip for @widget, or %NULL
+ *
+ * Sets @markup as the contents of the tooltip, which is marked up with
+ *  the <link linkend="PangoMarkupFormat">Pango text markup language</link>.
+ *
+ * This function will take care of setting GtkWidget:has-tooltip to %TRUE
+ * and of the default handler for the GtkWidget::query-tooltip signal.
+ *
+ * See also the GtkWidget:tooltip-markup property and
+ * gtk_tooltip_set_markup().
+ *
+ * Since: 2.12
+ */
+void
+gtk_widget_set_tooltip_markup (GtkWidget   *widget,
+                               const gchar *markup)
+{
+  g_return_if_fail (GTK_IS_WIDGET (widget));
+
+  g_object_set (G_OBJECT (widget), "tooltip-markup", markup, NULL);
+}
+
+/**
+ * gtk_widget_get_tooltip_markup:
+ * @widget: a #GtkWidget
+ *
+ * Gets the contents of the tooltip for @widget.
+ *
+ * Return value: the tooltip text, or %NULL. You should free the
+ *   returned string with g_free() when done.
+ *
+ * Since: 2.12
+ */
+gchar *
+gtk_widget_get_tooltip_markup (GtkWidget *widget)
+{
+  gchar *text = NULL;
+
+  g_return_val_if_fail (GTK_IS_WIDGET (widget), NULL);
+
+  g_object_get (G_OBJECT (widget), "tooltip-markup", &text, NULL);
+
+  return text;
 }
 
 

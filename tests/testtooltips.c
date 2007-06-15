@@ -83,7 +83,7 @@ query_tooltip_text_view_cb (GtkWidget  *widget,
     }
 
   if (gtk_text_iter_has_tag (&iter, tag))
-    gtk_tooltip_set_markup (tooltip, "Tooltip on text tag");
+    gtk_tooltip_set_text (tooltip, "Tooltip on text tag");
   else
    return FALSE;
 
@@ -286,7 +286,7 @@ main (int argc, char *argv[])
 
   /* A check button using the tooltip-markup property */
   button = gtk_check_button_new_with_label ("This one uses the tooltip-markup property");
-  g_object_set (button, "tooltip-markup", "Hello, I am a static tooltip.", NULL);
+  gtk_widget_set_tooltip_text (button, "Hello, I am a static tooltip.");
   gtk_box_pack_start (GTK_BOX (box), button, FALSE, FALSE, 0);
 
   /* A check button using the query-tooltip signal */
@@ -299,13 +299,13 @@ main (int argc, char *argv[])
   /* A label */
   button = gtk_label_new ("I am just a label");
   gtk_label_set_selectable (GTK_LABEL (button), FALSE);
-  g_object_set (button, "tooltip-markup", "Label tooltip", NULL);
+  gtk_widget_set_tooltip_text (button, "Label & and tooltip");
   gtk_box_pack_start (GTK_BOX (box), button, FALSE, FALSE, 0);
 
   /* A selectable label */
   button = gtk_label_new ("I am a selectable label");
   gtk_label_set_selectable (GTK_LABEL (button), TRUE);
-  g_object_set (button, "tooltip-markup", "Another Label tooltip", NULL);
+  gtk_widget_set_tooltip_markup (button, "<b>Another</b> Label tooltip");
   gtk_box_pack_start (GTK_BOX (box), button, FALSE, FALSE, 0);
 
   /* Another one, with a custom tooltip window */
@@ -325,7 +325,7 @@ main (int argc, char *argv[])
   /* An insensitive button */
   button = gtk_button_new_with_label ("This one is insensitive");
   gtk_widget_set_sensitive (button, FALSE);
-  g_object_set (button, "tooltip-markup", "Insensitive!", NULL);
+  g_object_set (button, "tooltip-text", "Insensitive!", NULL);
   gtk_box_pack_start (GTK_BOX (box), button, FALSE, FALSE, 0);
 
   /* Testcases from Kris without a tree view don't exist. */
@@ -347,7 +347,7 @@ main (int argc, char *argv[])
   /* Set a tooltip on the column */
   column = gtk_tree_view_get_column (GTK_TREE_VIEW (tree_view), 0);
   gtk_tree_view_column_set_clickable (column, TRUE);
-  g_object_set (column->button, "tooltip-markup", "Header", NULL);
+  g_object_set (column->button, "tooltip-text", "Header", NULL);
 
   gtk_box_pack_start (GTK_BOX (box), tree_view, FALSE, FALSE, 2);
 

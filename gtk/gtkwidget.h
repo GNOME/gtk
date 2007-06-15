@@ -787,11 +787,16 @@ void   gtk_widget_add_mnemonic_label    (GtkWidget *widget,
 void   gtk_widget_remove_mnemonic_label (GtkWidget *widget,
 					 GtkWidget *label);
 
-void            gtk_widget_set_tooltip_window    (GtkWidget *widget,
-					          GtkWindow *custom_window);
-GtkWindow      *gtk_widget_get_tooltip_window    (GtkWidget *widget);
-void            gtk_widget_trigger_tooltip_query (GtkWidget *widget);
-
+void                  gtk_widget_set_tooltip_window    (GtkWidget   *widget,
+                                                        GtkWindow   *custom_window);
+GtkWindow *gtk_widget_get_tooltip_window    (GtkWidget   *widget);
+void       gtk_widget_trigger_tooltip_query (GtkWidget   *widget);
+void       gtk_widget_set_tooltip_text      (GtkWidget   *widget,
+                                             const gchar *text);
+gchar *    gtk_widget_get_tooltip_text      (GtkWidget   *widget);
+void       gtk_widget_set_tooltip_markup    (GtkWidget   *widget,
+                                             const gchar *markup);
+gchar *    gtk_widget_get_tooltip_markup    (GtkWidget   *widget);
 
 GType           gtk_requisition_get_type (void) G_GNUC_CONST;
 GtkRequisition *gtk_requisition_copy     (const GtkRequisition *requisition);

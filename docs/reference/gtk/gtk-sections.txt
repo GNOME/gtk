@@ -4163,6 +4163,7 @@ gtk_tooltips_get_type
 <FILE>gtktooltip</FILE>
 <TITLE>GtkTooltip</TITLE>
 gtk_tooltip_set_markup
+gtk_tooltip_set_text
 gtk_tooltip_set_icon
 gtk_tooltip_set_icon_from_stock
 gtk_tooltip_set_custom
@@ -5259,6 +5260,10 @@ gtk_widget_get_action
 gtk_widget_is_composited
 gtk_widget_error_bell
 gtk_widget_keynav_failed
+gtk_widget_get_tooltip_markup
+gtk_widget_set_tooltip_markup
+gtk_widget_get_tooltip_text
+gtk_widget_set_tooltip_text
 gtk_widget_get_tooltip_window
 gtk_widget_set_tooltip_window
 gtk_widget_trigger_tooltip_query
