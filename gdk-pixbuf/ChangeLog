@@ -1,3 +1,8 @@
+2007-06-15  Hans Breuer  <hans@breuer.org>
+
+	* makefile.msc : updated
+	* io-jpeg.c : use g_snprintf
+
 2007-06-12  Behdad Esfahbod  <behdad@gnome.org>
 
 	* io-pnm.c (explode_bitmap_into_buf): Fix out-of-bound access.
