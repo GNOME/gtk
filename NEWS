@@ -1,9 +1,17 @@
 Overview of Changes from GTK+ 2.11.2 to 2.11.3
 ==============================================
 
+* GtkBuilder: GTK+ supports constructing user interfaces 
+  from XML descriptions now, similar to libglade.
+
+* The new tooltip code now has convenience api to set
+  text tooltips: gtk_widget_set_tooltip_text(),
+  gtk_widget_set_tooltip_markup()
+ 
 * GtkTextView, GtkEntry:
- - gtk_widget_modify_cursor() is a new function in the gtk_widget_modify
-   family to override the style-provided cursor color
+ - gtk_widget_modify_cursor() is a new function in the 
+   gtk_widget_modify family to override the style-provided 
+   cursor colors
  - Use a block cursor in overwrite mode
 
 * GtkFileChooser:
@@ -12,6 +20,7 @@ Overview of Changes from GTK+ 2.11.2 to 2.11.3
 
 * GtkMenu:
  - GtkMenuItem gained a submenu property
+ - GtkMenuShell obtained a move-selected signal 
 
 * OS X port:
  - Many improvements
@@ -49,6 +58,9 @@ Overview of Changes from GTK+ 2.11.2 to 2.11.3
  158008 Stock button for Dont Save, Discard Changes, Do Not Save
  334576 GtkCellRendererProgress ignores xalign attribute
  344836 Add orientation property to CellRendererProgress
+ 172535 Add support for UI builders in gtk+
+ 446833 gtk_menu_shell_move_selected should be a vcall
+ 447586 gtknotebook.c: decreasing unknown size pointer
 
 * Updated translations
  Spanish (es)

@@ -145,7 +145,6 @@ gtk_public_h_sources =          \
 	gtkbox.h		\
 	gtkbuilder.h		\
 	gtkbuildable.h		\
-	gtkbuilderprivate.h 	\
 	gtkbutton.h		\
 	gtkcalendar.h		\
 	gtkcelleditable.h	\
@@ -347,6 +346,7 @@ gtk_private_h_sources =		\
 	gtksearchenginesimple.h	\
 	gtkdndcursors.h		\
 	gtkentryprivate.h	\
+	gtkbuilderprivate.h 	\
 	gtkfilechooserdefault.h	\
 	gtkfilechooserembed.h	\
 	gtkfilechooserentry.h	\

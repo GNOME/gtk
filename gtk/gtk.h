@@ -46,6 +46,7 @@
 #include <gtk/gtkbindings.h>
 #include <gtk/gtkbox.h>
 #include <gtk/gtkbuildable.h>
+#include <gtk/gtkbuilder.h>
 #include <gtk/gtkbutton.h>
 #include <gtk/gtkcalendar.h>
 #include <gtk/gtkcelllayout.h>
