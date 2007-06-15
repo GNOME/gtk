@@ -2042,8 +2042,7 @@ gtk_widget_set_property (GObject         *object,
       g_object_set_qdata_full (object, quark_tooltip_markup,
                                tooltip_markup, g_free);
 
-      tmp = (tooltip_window != NULL || tooltip_markup != NULL);
-      gtk_widget_set_has_tooltip (widget, tmp, FALSE);
+      gtk_widget_set_has_tooltip (widget, TRUE, FALSE);
       break;
     default:
       break;
@@ -2145,20 +2144,12 @@ gtk_widget_get_property (GObject         *object,
     case PROP_TOOLTIP_TEXT:
       {
         gchar *escaped = g_object_get_qdata (object, quark_tooltip_markup);
-        if (!escaped)
-          g_value_set_string (value, NULL);
-        else
-          {
-            gchar *text;
+	gchar *text = NULL;
 
-            if (pango_parse_markup (escaped, -1, 0, NULL, &text, NULL, NULL))
-              {
-                g_value_set_string (value, text);
-                g_free (text);
-              }
-            else
-              g_value_set_string (value, NULL);
-          }
+        if (escaped && !pango_parse_markup (escaped, -1, 0, NULL, &text, NULL, NULL))
+          g_assert (NULL == text); /* text should still be NULL in case of markup errors */
+
+	g_value_set_string (value, text);
       }
       break;
     case PROP_TOOLTIP_MARKUP:

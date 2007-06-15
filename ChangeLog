@@ -1,5 +1,10 @@
 2007-06-15  Mathias Hasselmann  <mathias.hasselmann@gmx.de>
 
+	* gtk/gtkwidget.c: Improving handling of tooltip-text property.
+	* tests/testtooltips.c: Also check result of tooltip getters.
+
+2007-06-15  Mathias Hasselmann  <mathias.hasselmann@gmx.de>
+
 	* docs/reference/gtk/gtk-sections.txt, gtk/gtk.symbols,
 	gtk/gtkwidget.c, gtk/gtkwidget.h, tests/testtooltips.c: Introduce
 	convenience property "GtkWidget:tooltip-text" taking care of escaping

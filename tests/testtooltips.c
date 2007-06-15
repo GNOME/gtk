@@ -273,6 +273,8 @@ main (int argc, char *argv[])
   GtkTextIter iter;
   GtkTextTag *tag;
 
+  gchar *text, *markup;
+
   gtk_init (&argc, &argv);
 
   window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
@@ -289,6 +291,12 @@ main (int argc, char *argv[])
   gtk_widget_set_tooltip_text (button, "Hello, I am a static tooltip.");
   gtk_box_pack_start (GTK_BOX (box), button, FALSE, FALSE, 0);
 
+  text = gtk_widget_get_tooltip_text (button);
+  markup = gtk_widget_get_tooltip_markup (button);
+  g_assert (g_str_equal ("Hello, I am a static tooltip.", text));
+  g_assert (g_str_equal ("Hello, I am a static tooltip.", markup));
+  g_free (text); g_free (markup);
+
   /* A check button using the query-tooltip signal */
   button = gtk_check_button_new_with_label ("I use the query-tooltip signal");
   g_object_set (button, "has-tooltip", TRUE, NULL);
@@ -302,11 +310,23 @@ main (int argc, char *argv[])
   gtk_widget_set_tooltip_text (button, "Label & and tooltip");
   gtk_box_pack_start (GTK_BOX (box), button, FALSE, FALSE, 0);
 
+  text = gtk_widget_get_tooltip_text (button);
+  markup = gtk_widget_get_tooltip_markup (button);
+  g_assert (g_str_equal ("Label & and tooltip", text));
+  g_assert (g_str_equal ("Label &amp; and tooltip", markup));
+  g_free (text); g_free (markup);
+
   /* A selectable label */
   button = gtk_label_new ("I am a selectable label");
   gtk_label_set_selectable (GTK_LABEL (button), TRUE);
   gtk_widget_set_tooltip_markup (button, "<b>Another</b> Label tooltip");
   gtk_box_pack_start (GTK_BOX (box), button, FALSE, FALSE, 0);
+
+  text = gtk_widget_get_tooltip_text (button);
+  markup = gtk_widget_get_tooltip_markup (button);
+  g_assert (g_str_equal ("Another Label tooltip", text));
+  g_assert (g_str_equal ("<b>Another</b> Label tooltip", markup));
+  g_free (text); g_free (markup);
 
   /* Another one, with a custom tooltip window */
   button = gtk_check_button_new_with_label ("This one has a custom tooltip window!");
