@@ -12529,7 +12529,7 @@ gtk_tree_view_get_bin_window (GtkTreeView *tree_view)
  * @cell_y: A pointer where the Y coordinate relative to the cell can be placed, or %NULL
  *
  * Finds the path at the point (@x, @y), relative to bin_window coordinates
- * (please see <literal>gtk_tree_view_get_bin_window (<!-- -->)</literal>).
+ * (please see gtk_tree_view_get_bin_window()).
  * That is, @x and @y are relative to an events coordinates. @x and @y must
  * come from an event on the @tree_view only where <literal>event->window ==
  * gtk_tree_view_get_bin_window (<!-- -->)</literal>. It is primarily for
@@ -12543,7 +12543,7 @@ gtk_tree_view_get_bin_window (GtkTreeView *tree_view)
  *
  * For converting widget coordinates (eg. the ones you get from
  * GtkWidget::query-tooltip), please see
- * <literal>gtk_tree_view_convert_widget_to_bin_window_coords (<!-- -->)</literal>.
+ * gtk_tree_view_convert_widget_to_bin_window_coords().
  *
  * Return value: %TRUE if a row exists at that coordinate.
  **/
@@ -12799,7 +12799,7 @@ gtk_tree_view_get_background_area (GtkTreeView        *tree_view,
  *
  * Fills @visible_rect with the currently-visible region of the
  * buffer, in tree coordinates. Convert to bin_window coordinates with
- * <literal>gtk_tree_view_convert_tree_to_bin_window_coords (<!-- -->)</literal>.
+ * gtk_tree_view_convert_tree_to_bin_window_coords().
  * Tree coordinates start at 0,0 for row 0 of the tree, and cover the entire
  * scrollable area of the tree.
  **/
@@ -12836,7 +12836,7 @@ gtk_tree_view_get_visible_rect (GtkTreeView  *tree_view,
  * Deprecated: 2.12: Due to historial reasons the name of this function is
  * incorrect.  For converting coordinates relative to the widget to
  * bin_window coordinates, please see
- * <literal>gtk_tree_view_convert_widget_to_bin_window_coords (<!-- -->)</literal>.
+ * gtk_tree_view_convert_widget_to_bin_window_coords().
  *
  **/
 void
@@ -12868,7 +12868,7 @@ gtk_tree_view_widget_to_tree_coords (GtkTreeView *tree_view,
  * Deprecated: 2.12: Due to historial reasons the name of this function is
  * incorrect.  For converting bin_window coordinates to coordinates relative
  * to bin_window, please see
- * <literal>gtk_tree_view_convert_bin_window_to_widget_coords (<!-- -->)</literal>.
+ * gtk_tree_view_convert_bin_window_to_widget_coords().
  *
  **/
 void
@@ -12960,7 +12960,7 @@ gtk_tree_view_convert_tree_to_widget_coords (GtkTreeView *tree_view,
  * @by: return location for bin_window Y coordinate
  *
  * Converts widget coordinates to coordinates for the bin_window
- * (see <literal>gtk_tree_view_get_bin_window (<!-- -->)</literal>).
+ * (see gtk_tree_view_get_bin_window()).
  *
  * Since: 2.12
  **/
@@ -12987,8 +12987,7 @@ gtk_tree_view_convert_widget_to_bin_window_coords (GtkTreeView *tree_view,
  * @wx: return location for widget X coordinate
  * @wy: return location for widget Y coordinate
  *
- * Converts bin_window coordinates (see
- * <literal>gtk_tree_view_get_bin_window (<!-- -->)</literal).
+ * Converts bin_window coordinates (see gtk_tree_view_get_bin_window()).
  * to widget relative coordinates.
  *
  * Since: 2.12

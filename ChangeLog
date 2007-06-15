@@ -1,4 +1,6 @@
 2007-06-15  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtktreeview.c: Fix up cross-references in docs.
 	
 	* gtk/Makefile.am: Don't install gtkbuilderprivate.h
 
