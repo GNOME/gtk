@@ -1,3 +1,10 @@
+2007-06-15  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/tmpl/gtktreeview.sgml: Fix up cross-references
+
+	* gtk/gtk-sections.txt: 
+	* gtk/Makefile.am: Updates
+
 2007-06-14  Johan Dahlin  <jdahlin@async.com.br>
 
 	* gtk/tmpl/gtktreeview.sgml (linkend): inlinegraphic instead of 

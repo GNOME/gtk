@@ -11,9 +11,9 @@ linkend="GtkTreeModel">GtkTreeModel</link> interface.
 </para>
 
 <para>
-Please refer to the <link linkend="TreeWidget">tree widget conceptual overview</link> 
-for an overview of all the objects and data types related to the tree widget and how 
-they work together.
+Please refer to the <link linkend="TreeWidget">tree widget conceptual 
+overview</link> for an overview of all the objects and data types related 
+to the tree widget and how they work together.
 </para>
 
 <para>
@@ -23,17 +23,23 @@ These are:
 <inlinegraphic fileref="tree-view-coordinates.png" format="PNG"></inlinegraphic>
 
   <simplelist>
-    <member>Widget coordinates -- coordinates relative to the widget (usually <literal>widget-&gt;window</literal>.</member>
-    <member>Bin window coordinates -- coordinates relative to the window that GtkTreeView renders to.</member>
-    <member>Tree coordinates -- coordinates relative to the entire scrollable area of GtkTreeView.  These coordinates start at (0, 0) for row 0 of the tree.</member>
+    <member>Widget coordinates -- coordinates relative to the widget 
+    (usually <literal>widget-&gt;window</literal>.</member>
+    <member>Bin window coordinates -- coordinates relative to the window 
+    that GtkTreeView renders to.</member>
+    <member>Tree coordinates -- coordinates relative to the entire scrollable 
+    area of GtkTreeView.  These coordinates start at (0, 0) for row 0 of the 
+    tree.</member>
   </simplelist>
 </para>
 
 <para>
 Several functions are available for converting between the different
-coordinate systems.  The most common translations are between widget and bin window coordinates and between bin window and tree coordinates.  For the former
-you can use <literal>gtk_tree_view_convert_widget_to_bin_window_coords (<!-- -->)</literal>
-(and vice versa), for the latter <literal>gtk_tree_view_convert_bin_window_to_tree_coords (<!-- -->)</literal> (and vice versa).
+coordinate systems.  The most common translations are between widget and bin 
+window coordinates and between bin window and tree coordinates.  For the 
+former you can use gtk_tree_view_convert_widget_to_bin_window_coords()
+(and vice versa), for the latter gtk_tree_view_convert_bin_window_to_tree_coords() 
+(and vice versa).
 </para>
 
 <!-- ##### SECTION See_Also ##### -->
@@ -937,6 +943,78 @@ has some similarity to strcmp() returning 0 for equal strings.
 @ty: 
 @wx: 
 @wy: 
+
+
+<!-- ##### FUNCTION gtk_tree_view_convert_bin_window_to_tree_coords ##### -->
+<para>
+
+</para>
+
+@tree_view: 
+@bx: 
+@by: 
+@tx: 
+@ty: 
+
+
+<!-- ##### FUNCTION gtk_tree_view_convert_bin_window_to_widget_coords ##### -->
+<para>
+
+</para>
+
+@tree_view: 
+@bx: 
+@by: 
+@wx: 
+@wy: 
+
+
+<!-- ##### FUNCTION gtk_tree_view_convert_tree_to_bin_window_coords ##### -->
+<para>
+
+</para>
+
+@tree_view: 
+@tx: 
+@ty: 
+@bx: 
+@by: 
+
+
+<!-- ##### FUNCTION gtk_tree_view_convert_tree_to_widget_coords ##### -->
+<para>
+
+</para>
+
+@tree_view: 
+@tx: 
+@ty: 
+@wx: 
+@wy: 
+
+
+<!-- ##### FUNCTION gtk_tree_view_convert_widget_to_bin_window_coords ##### -->
+<para>
+
+</para>
+
+@tree_view: 
+@wx: 
+@wy: 
+@bx: 
+@by: 
+
+
+<!-- ##### FUNCTION gtk_tree_view_convert_widget_to_tree_coords ##### -->
+<para>
+
+</para>
+
+@tree_view: 
+@wx: 
+@wy: 
+@tx: 
+@ty: 
 
 
 <!-- ##### FUNCTION gtk_tree_view_enable_model_drag_dest ##### -->
