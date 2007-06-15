@@ -18,6 +18,7 @@
  */
 
 #include <config.h>
+#include <string.h>
 #include "gtkcellview.h"
 #include "gtkcelllayout.h"
 #include "gtkintl.h"
@@ -26,6 +27,7 @@
 #include "gtkcellrendererpixbuf.h"
 #include "gtkprivate.h"
 #include <gobject/gmarshal.h>
+#include "gtkbuildable.h"
 #include "gtkalias.h"
 
 typedef struct _GtkCellViewCellInfo GtkCellViewCellInfo;
@@ -105,6 +107,22 @@ static void       gtk_cell_view_cell_layout_reorder            (GtkCellLayout   
                                                                 gint                   position);
 static GList *    gtk_cell_view_cell_layout_get_cells          (GtkCellLayout         *layout);
 
+/* buildable */
+static void       gtk_cell_view_buildable_init                 (GtkBuildableIface     *iface);
+static gboolean   gtk_cell_view_buildable_custom_tag_start     (GtkBuildable  	      *buildable,
+								GtkBuilder    	      *builder,
+								GObject       	      *child,
+								const gchar   	      *tagname,
+								GMarkupParser 	      *parser,
+								gpointer      	      *data);
+static void       gtk_cell_view_buildable_custom_tag_end       (GtkBuildable  	      *buildable,
+								GtkBuilder    	      *builder,
+								GObject       	      *child,
+								const gchar   	      *tagname,
+								gpointer      	      *data);
+
+static GtkBuildableIface *parent_buildable_iface;
+
 #define GTK_CELL_VIEW_GET_PRIVATE(obj)    (G_TYPE_INSTANCE_GET_PRIVATE ((obj), GTK_TYPE_CELL_VIEW, GtkCellViewPrivate))
 
 enum
@@ -118,7 +136,9 @@ enum
 
 G_DEFINE_TYPE_WITH_CODE (GtkCellView, gtk_cell_view, GTK_TYPE_WIDGET, 
 			 G_IMPLEMENT_INTERFACE (GTK_TYPE_CELL_LAYOUT,
-						gtk_cell_view_cell_layout_init))
+						gtk_cell_view_cell_layout_init)
+			 G_IMPLEMENT_INTERFACE (GTK_TYPE_BUILDABLE,
+						gtk_cell_view_buildable_init))
 
 static void
 gtk_cell_view_class_init (GtkCellViewClass *klass)
@@ -172,6 +192,15 @@ gtk_cell_view_class_init (GtkCellViewClass *klass)
                 P_("Whether this tag affects the background color"));
 
   g_type_class_add_private (gobject_class, sizeof (GtkCellViewPrivate));
+}
+
+static void
+gtk_cell_view_buildable_init (GtkBuildableIface *iface)
+{
+  parent_buildable_iface = g_type_interface_peek_parent (iface);
+  iface->add = _gtk_cell_layout_buildable_add;
+  iface->custom_tag_start = gtk_cell_view_buildable_custom_tag_start;
+  iface->custom_tag_end = gtk_cell_view_buildable_custom_tag_end;
 }
 
 static void
@@ -1065,6 +1094,38 @@ static GList *
 gtk_cell_view_cell_layout_get_cells (GtkCellLayout *layout)
 {
   return gtk_cell_view_get_cell_renderers (GTK_CELL_VIEW (layout));
+}
+
+
+static gboolean
+gtk_cell_view_buildable_custom_tag_start (GtkBuildable  *buildable,
+					  GtkBuilder    *builder,
+					  GObject       *child,
+					  const gchar   *tagname,
+					  GMarkupParser *parser,
+					  gpointer      *data)
+{
+  if (parent_buildable_iface->custom_tag_start (buildable, builder, child,
+						tagname, parser, data))
+    return TRUE;
+
+  return _gtk_cell_layout_buildable_custom_tag_start (buildable, builder, child,
+						      tagname, parser, data);
+}
+
+static void
+gtk_cell_view_buildable_custom_tag_end (GtkBuildable *buildable,
+					GtkBuilder   *builder,
+					GObject      *child,
+					const gchar  *tagname,
+					gpointer     *data)
+{
+  if (strcmp (tagname, "attributes") == 0)
+    _gtk_cell_layout_buildable_custom_tag_end (buildable, builder, child, tagname,
+					       data);
+  else
+    parent_buildable_iface->custom_tag_end (buildable, builder, child, tagname,
+					    data);
 }
 
 

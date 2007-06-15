@@ -52,6 +52,7 @@
 #include "gtktooltips.h"
 #include "gtktooltip.h"
 #include "gtkinvisible.h"
+#include "gtkbuildable.h"
 #include "gtkalias.h"
 
 #define WIDGET_CLASS(w)	 GTK_WIDGET_GET_CLASS (w)
@@ -245,6 +246,28 @@ static gboolean         gtk_widget_real_can_activate_accel      (GtkWidget *widg
 static void             gtk_widget_set_has_tooltip              (GtkWidget *widget,
 								 gboolean   has_tooltip,
 								 gboolean   force);
+static void             gtk_widget_buildable_interface_init     (GtkBuildableIface *iface);
+static void             gtk_widget_buildable_set_name           (GtkBuildable     *buildable,
+                                                                 const gchar      *name);
+static const gchar *    gtk_widget_buildable_get_name           (GtkBuildable     *buildable);
+static void             gtk_widget_buildable_set_property       (GtkBuildable     *buildable,
+                                                                 GtkBuilder       *builder,
+                                                                 const gchar      *name,
+                                                                 const GValue     *value);
+static gboolean         gtk_widget_buildable_custom_tag_start   (GtkBuildable     *buildable,
+                                                                 GtkBuilder       *builder,
+                                                                 GObject          *child,
+                                                                 const gchar      *tagname,
+                                                                 GMarkupParser    *parser,
+                                                                 gpointer         *data);
+static void             gtk_widget_buildable_custom_finshed     (GtkBuildable     *buildable,
+                                                                 GtkBuilder       *builder,
+                                                                 GObject          *child,
+                                                                 const gchar      *tagname,
+                                                                 gpointer          data);
+static void             gtk_widget_buildable_parser_finshed     (GtkBuildable     *buildable,
+                                                                 GtkBuilder       *builder);
+
      
 static void gtk_widget_set_usize_internal (GtkWidget *widget,
 					   gint       width,
@@ -311,11 +334,20 @@ gtk_widget_get_type (void)
 	NULL /* interface data */
       };
 
+      const GInterfaceInfo buildable_info =
+      {
+	(GInterfaceInitFunc) gtk_widget_buildable_interface_init,
+	(GInterfaceFinalizeFunc) NULL,
+	NULL /* interface data */
+      };
+
       widget_type = g_type_register_static (GTK_TYPE_OBJECT, "GtkWidget",
                                            &widget_info, G_TYPE_FLAG_ABSTRACT);
 
       g_type_add_interface_static (widget_type, ATK_TYPE_IMPLEMENTOR,
                                    &accessibility_info) ;
+      g_type_add_interface_static (widget_type, GTK_TYPE_BUILDABLE,
+                                   &buildable_info) ;
 
     }
 
@@ -8360,6 +8392,176 @@ gtk_widget_ref_accessible (AtkImplementor *implementor)
   return accessible;
 }
 
+/*
+ * GtkBuildable implementation
+ */
+static GQuark		quark_builder_has_default = 0;
+static GQuark		quark_builder_has_focus = 0;
+
+static void
+gtk_widget_buildable_interface_init (GtkBuildableIface *iface)
+{
+  quark_builder_has_default = g_quark_from_static_string ("gtk-builder-has-default");
+  quark_builder_has_focus = g_quark_from_static_string ("gtk-builder-has-focus");
+
+  iface->set_name = gtk_widget_buildable_set_name;
+  iface->get_name = gtk_widget_buildable_get_name;
+  iface->set_property = gtk_widget_buildable_set_property;
+  iface->parser_finished = gtk_widget_buildable_parser_finshed;
+  iface->custom_tag_start = gtk_widget_buildable_custom_tag_start;
+  iface->custom_finished = gtk_widget_buildable_custom_finshed;
+}
+
+static void
+gtk_widget_buildable_set_name (GtkBuildable *buildable,
+			       const gchar  *name)
+{
+  gtk_widget_set_name (GTK_WIDGET (buildable), name);
+}
+
+static const gchar *
+gtk_widget_buildable_get_name (GtkBuildable *buildable)
+{
+  return gtk_widget_get_name (GTK_WIDGET (buildable));
+}
+
+static void
+gtk_widget_buildable_set_property (GtkBuildable *buildable,
+				   GtkBuilder   *builder,
+				   const gchar  *name,
+				   const GValue *value)
+{
+  if (strcmp (name, "has-default") == 0 && g_value_get_boolean (value))
+      g_object_set_qdata (G_OBJECT (buildable), quark_builder_has_default,
+			  GINT_TO_POINTER (TRUE));
+  else if (strcmp (name, "has-focus") == 0 && g_value_get_boolean (value))
+      g_object_set_qdata (G_OBJECT (buildable), quark_builder_has_focus,
+			  GINT_TO_POINTER (TRUE));
+  else
+    g_object_set_property (G_OBJECT (buildable), name, value);
+}
+
+static void
+gtk_widget_buildable_parser_finshed (GtkBuildable *buildable,
+				     GtkBuilder   *builder)
+{
+  if (g_object_get_qdata (G_OBJECT (buildable), quark_builder_has_default))
+    gtk_widget_grab_default (GTK_WIDGET (buildable));
+  if (g_object_get_qdata (G_OBJECT (buildable), quark_builder_has_focus))
+    gtk_widget_grab_focus (GTK_WIDGET (buildable));
+}
+
+typedef struct {
+  GObject *object;
+  guint    key;
+  guint    modifiers;
+  gchar   *signal;
+} AccelGroupParserData;
+
+static void
+accel_group_start_element (GMarkupParseContext *context,
+			   const gchar         *element_name,
+			   const gchar        **names,
+			   const gchar        **values,
+			   gpointer             user_data,
+			   GError             **error)
+{
+  gint i;
+  guint key = 0;
+  guint modifiers = 0;
+  gchar *signal = NULL;
+  AccelGroupParserData *parser_data = (AccelGroupParserData*)user_data;
+
+  for (i = 0; names[i]; i++)
+    {
+      if (strcmp (names[i], "key") == 0)
+	key = gdk_keyval_from_name (values[i]);
+      else if (strcmp (names[i], "modifiers") == 0)
+	modifiers = _gtk_builder_flags_from_string (GDK_TYPE_MODIFIER_TYPE, values[i]);
+      else if (strcmp (names[i], "signal") == 0)
+	signal = g_strdup (values[i]);
+    }
+
+  if (key == 0 || signal == NULL)
+    {
+      g_warning ("<accelerator> requires a key or signal attribute");
+      return;
+    }
+  parser_data->key = key;
+  parser_data->modifiers = modifiers;
+  parser_data->signal = signal;
+}
+
+static const GMarkupParser accel_group_parser =
+  {
+    accel_group_start_element,
+  };
+
+static gboolean
+gtk_widget_buildable_custom_tag_start (GtkBuildable     *buildable,
+				       GtkBuilder       *builder,
+				       GObject          *child,
+				       const gchar      *tagname,
+				       GMarkupParser    *parser,
+				       gpointer         *data)
+{
+  AccelGroupParserData *parser_data;
+
+  g_assert (buildable);
+
+  if (strcmp (tagname, "accelerator") == 0)
+    {
+      parser_data = g_new0 (AccelGroupParserData, 1);
+      parser_data->object = g_object_ref (buildable);
+      *parser = accel_group_parser;
+      *data = parser_data;
+      return TRUE;
+    }
+  return FALSE;
+}
+
+static void
+gtk_widget_buildable_custom_finshed (GtkBuildable *buildable,
+				     GtkBuilder   *builder,
+				     GObject      *child,
+				     const gchar  *tagname,
+				     gpointer      user_data)
+{
+  AccelGroupParserData *data;
+  GtkWidget *toplevel;
+  GSList *accel_groups;
+  GtkAccelGroup *accel_group;
+
+  if (strcmp (tagname, "accelerator") == 0)
+    {
+      data = (AccelGroupParserData*)user_data;
+      g_assert (data->object);
+
+      toplevel = gtk_widget_get_toplevel (GTK_WIDGET (data->object));
+      accel_groups = gtk_accel_groups_from_object (G_OBJECT (toplevel));
+      if (g_slist_length (accel_groups) == 0)
+	{
+	  accel_group = gtk_accel_group_new ();
+	  gtk_window_add_accel_group (GTK_WINDOW (toplevel), accel_group);
+	}
+      else
+	{
+	  g_assert (g_slist_length (accel_groups) == 1);
+	  accel_group = g_slist_nth_data (accel_groups, 0);
+	}
+      gtk_widget_add_accelerator (GTK_WIDGET(data->object),
+				  data->signal,
+				  accel_group,
+				  data->key,
+				  data->modifiers,
+				  GTK_ACCEL_VISIBLE);
+      g_object_unref (data->object);
+      g_free (data->signal);
+      g_slice_free (AccelGroupParserData, data);
+    }
+}
+
+
 /**
  * gtk_widget_get_clipboard:
  * @widget: a #GtkWidget
@@ -8651,6 +8853,7 @@ gtk_widget_trigger_tooltip_query (GtkWidget *widget)
 {
   gtk_tooltip_trigger_tooltip_query (gtk_widget_get_display (widget));
 }
+
 
 #define __GTK_WIDGET_C__
 #include "gtkaliasdef.c"

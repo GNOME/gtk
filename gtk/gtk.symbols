@@ -254,6 +254,7 @@ gtk_arg_flags_get_type G_GNUC_CONST
 gtk_arrow_type_get_type G_GNUC_CONST
 gtk_assistant_page_type_get_type G_GNUC_CONST
 gtk_attach_options_get_type G_GNUC_CONST
+gtk_builder_error_get_type G_GNUC_CONST
 gtk_button_action_get_type G_GNUC_CONST
 gtk_buttons_type_get_type G_GNUC_CONST
 gtk_calendar_display_options_get_type G_GNUC_CONST
@@ -417,6 +418,41 @@ gtk_box_reorder_child
 gtk_box_set_child_packing
 gtk_box_set_homogeneous
 gtk_box_set_spacing
+#endif
+#endif
+
+#if IN_HEADER(__GTK_BUILDABLE_H__)
+#if IN_FILE(__GTK_BUILDABLE_C__)
+gtk_buildable_add
+gtk_buildable_construct_child
+gtk_buildable_custom_tag_start
+gtk_buildable_custom_tag_end
+gtk_buildable_custom_finished
+gtk_buildable_get_internal_child
+gtk_buildable_get_name
+gtk_buildable_get_type G_GNUC_CONST
+gtk_buildable_parser_finished
+gtk_buildable_set_name
+gtk_buildable_set_property
+#endif
+#endif
+
+#if IN_HEADER(__GTK_BUILDER_H__)
+#if IN_FILE(__GTK_BUILDER_C__)
+gtk_builder_add_from_file
+gtk_builder_add_from_string
+gtk_builder_error_quark
+gtk_builder_get_object
+gtk_builder_get_objects
+gtk_builder_get_translation_domain
+gtk_builder_get_type G_GNUC_CONST
+gtk_builder_get_type_from_name
+gtk_builder_new
+gtk_builder_set_translation_domain
+gtk_builder_connect_signals
+gtk_builder_connect_signals_full
+gtk_builder_value_from_string
+gtk_builder_value_from_string_type
 #endif
 #endif
 

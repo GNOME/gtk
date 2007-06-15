@@ -59,6 +59,7 @@
 #include "gtkintl.h"
 #include "gtkaccessible.h"
 #include "gtkprivate.h"
+#include "gtkbuildable.h"
 #include "gtkalias.h"
 
 /* We don't enable the font and style entries because they don't add
@@ -1291,7 +1292,17 @@ gtk_font_selection_set_preview_text  (GtkFontSelection *fontsel,
  * GtkFontSelectionDialog
  *****************************************************************************/
 
-G_DEFINE_TYPE (GtkFontSelectionDialog, gtk_font_selection_dialog, GTK_TYPE_DIALOG);
+static void gtk_font_selection_dialog_buildable_interface_init     (GtkBuildableIface *iface);
+static GObject * gtk_font_selection_dialog_buildable_get_internal_child (GtkBuildable *buildable,
+									  GtkBuilder   *builder,
+									  const gchar  *childname);
+
+G_DEFINE_TYPE_WITH_CODE (GtkFontSelectionDialog, gtk_font_selection_dialog,
+			 GTK_TYPE_DIALOG,
+			 G_IMPLEMENT_INTERFACE (GTK_TYPE_BUILDABLE,
+						gtk_font_selection_dialog_buildable_interface_init))
+
+static GtkBuildableIface *parent_buildable_iface;
 
 static void
 gtk_font_selection_dialog_class_init (GtkFontSelectionDialogClass *klass)
@@ -1363,6 +1374,30 @@ gtk_font_selection_dialog_new (const gchar *title)
     gtk_window_set_title (GTK_WINDOW (fontseldiag), title);
   
   return GTK_WIDGET (fontseldiag);
+}
+
+static void
+gtk_font_selection_dialog_buildable_interface_init (GtkBuildableIface *iface)
+{
+  parent_buildable_iface = g_type_interface_peek_parent (iface);
+  iface->get_internal_child = gtk_font_selection_dialog_buildable_get_internal_child;
+}
+
+static GObject *
+gtk_font_selection_dialog_buildable_get_internal_child (GtkBuildable *buildable,
+							GtkBuilder   *builder,
+							const gchar  *childname)
+{
+    if (strcmp(childname, "ok_button") == 0)
+	return G_OBJECT (GTK_FONT_SELECTION_DIALOG(buildable)->ok_button);
+    else if (strcmp(childname, "cancel_button") == 0)
+	return G_OBJECT (GTK_FONT_SELECTION_DIALOG (buildable)->cancel_button);
+    else if (strcmp(childname, "apply_button") == 0)
+	return G_OBJECT (GTK_FONT_SELECTION_DIALOG(buildable)->apply_button);
+    else if (strcmp(childname, "font_selection") == 0)
+	return G_OBJECT (GTK_FONT_SELECTION_DIALOG(buildable)->fontsel);
+
+    return parent_buildable_iface->get_internal_child (buildable, builder, childname);
 }
 
 /**

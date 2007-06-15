@@ -30,6 +30,7 @@
 #include <stdlib.h>
 
 #include "gtkcontainer.h"
+#include "gtkbuildable.h"
 #include "gtkprivate.h"
 #include "gtkmain.h"
 #include "gtkmarshalers.h"
@@ -99,6 +100,24 @@ static void     gtk_container_unmap                (GtkWidget         *widget);
 static gchar* gtk_container_child_default_composite_name (GtkContainer *container,
 							  GtkWidget    *child);
 
+/* GtkBuildable */
+static void gtk_container_buildable_init           (GtkBuildableIface *iface);
+static void gtk_container_buildable_add            (GtkBuildable *buildable,
+						    GtkBuilder   *builder,
+						    GObject      *child,
+						    const gchar  *type);
+static gboolean gtk_container_buildable_custom_tag_start (GtkBuildable  *buildable,
+							  GtkBuilder    *builder,
+							  GObject       *child,
+							  const gchar   *tagname,
+							  GMarkupParser *parser,
+							  gpointer      *data);
+static void    gtk_container_buildable_custom_tag_end (GtkBuildable *buildable,
+						       GtkBuilder   *builder,
+						       GObject      *child,
+						       const gchar  *tagname,
+						       gpointer     *data);
+
 
 /* --- variables --- */
 static const gchar           vadjustment_key[] = "gtk-vadjustment";
@@ -110,6 +129,7 @@ static guint                 container_signals[LAST_SIGNAL] = { 0 };
 static GtkWidgetClass       *parent_class = NULL;
 extern GParamSpecPool       *_gtk_widget_child_property_pool;
 extern GObjectNotifyContext *_gtk_widget_child_property_notify_context;
+static GtkBuildableIface    *parent_buildable_iface;
 
 
 /* --- functions --- */
@@ -134,9 +154,21 @@ gtk_container_get_type (void)
 	NULL,       /* value_table */
       };
 
+      static const GInterfaceInfo buildable_info =
+      {
+	(GInterfaceInitFunc) gtk_container_buildable_init,
+	NULL,
+	NULL
+      };
+
       container_type =
 	g_type_register_static (GTK_TYPE_WIDGET, I_("GtkContainer"), 
 				&container_info, G_TYPE_FLAG_ABSTRACT);
+
+      g_type_add_interface_static (container_type,
+				   GTK_TYPE_BUILDABLE,
+				   &buildable_info);
+
     }
 
   return container_type;
@@ -258,6 +290,164 @@ gtk_container_class_init (GtkContainerClass *class)
 		  _gtk_marshal_VOID__OBJECT,
 		  G_TYPE_NONE, 1,
 		  GTK_TYPE_WIDGET);
+}
+
+static void
+gtk_container_buildable_init (GtkBuildableIface *iface)
+{
+  parent_buildable_iface = g_type_interface_peek_parent (iface);
+  iface->add = gtk_container_buildable_add;
+  iface->custom_tag_start = gtk_container_buildable_custom_tag_start;
+  iface->custom_tag_end = gtk_container_buildable_custom_tag_end;
+}
+
+static void
+gtk_container_buildable_add (GtkBuildable  *buildable,
+			     GtkBuilder    *builder,
+			     GObject       *child,
+			     const gchar   *type)
+{
+  g_return_if_fail (GTK_IS_WIDGET (child));
+
+  gtk_container_add (GTK_CONTAINER (buildable), GTK_WIDGET (child));
+}
+
+static void
+gtk_container_buildable_set_child_property (GtkContainer *container,
+					    GtkWidget    *child,
+					    gchar        *name,
+					    const gchar  *value)
+{
+  GParamSpec *pspec;
+  GValue gvalue = { 0, };
+
+  pspec = gtk_container_class_find_child_property
+    (G_OBJECT_GET_CLASS (container), name);
+  if (!pspec)
+    {
+      g_warning ("%s does not have a property called %s",
+		 g_type_name (G_OBJECT_TYPE (container)), name);
+      return;
+    }
+
+  if (!gtk_builder_value_from_string (pspec, value, &gvalue))
+    {
+      g_warning ("Could not read property %s:%s with value %s of type %s",
+		 g_type_name (G_OBJECT_TYPE (container)),
+		 name,
+		 value,
+		 g_type_name (G_PARAM_SPEC_VALUE_TYPE (pspec)));
+      return;
+    }
+
+  gtk_container_child_set_property (container, child, name, &gvalue);
+  g_value_unset (&gvalue);
+}
+
+typedef struct {
+  GtkBuilder   *builder;
+  GtkContainer *container;
+  GtkWidget    *child;
+  gchar        *child_prop_name;
+} PackingPropertiesData;
+
+static void
+attributes_start_element (GMarkupParseContext *context,
+			  const gchar         *element_name,
+			  const gchar        **names,
+			  const gchar        **values,
+			  gpointer             user_data,
+			  GError             **error)
+{
+  PackingPropertiesData *parser_data = (PackingPropertiesData*)user_data;
+  guint i;
+
+  if (strcmp (element_name, "property") == 0)
+    for (i = 0; names[i]; i++)
+      if (strcmp (names[i], "name") == 0)
+	parser_data->child_prop_name = g_strdup (values[i]);
+  else if (strcmp (element_name, "packing") == 0)
+    return;
+  else
+    g_warning ("Unsupported tag for GtkContainer: %s\n", element_name);
+}
+
+static void
+attributes_text_element (GMarkupParseContext *context,
+			 const gchar         *text,
+			 gsize                text_len,
+			 gpointer             user_data,
+			 GError             **error)
+{
+  PackingPropertiesData *parser_data = (PackingPropertiesData*)user_data;
+
+  if (!parser_data->child_prop_name)
+    return;
+
+  gtk_container_buildable_set_child_property (parser_data->container,
+					      parser_data->child,
+					      parser_data->child_prop_name,
+					      text);
+
+  g_free (parser_data->child_prop_name);
+  parser_data->child_prop_name = NULL;
+}
+
+static const GMarkupParser attributes_parser =
+  {
+    attributes_start_element,
+    NULL,
+    attributes_text_element,
+  };
+
+static gboolean
+gtk_container_buildable_custom_tag_start (GtkBuildable  *buildable,
+					  GtkBuilder    *builder,
+					  GObject       *child,
+					  const gchar   *tagname,
+					  GMarkupParser *parser,
+					  gpointer      *data)
+{
+  PackingPropertiesData *parser_data;
+
+  if (parent_buildable_iface->custom_tag_start (buildable, builder, child,
+						tagname, parser, data))
+    return TRUE;
+
+  if (child && strcmp (tagname, "packing") == 0)
+    {
+      parser_data = g_slice_new0 (PackingPropertiesData);
+      parser_data->builder = builder;
+      parser_data->container = GTK_CONTAINER (buildable);
+      parser_data->child = GTK_WIDGET (child);
+      parser_data->child_prop_name = NULL;
+
+      *parser = attributes_parser;
+      *data = parser_data;
+      return TRUE;
+    }
+
+  return FALSE;
+}
+
+static void
+gtk_container_buildable_custom_tag_end (GtkBuildable *buildable,
+					GtkBuilder   *builder,
+					GObject      *child,
+					const gchar  *tagname,
+					gpointer     *data)
+{
+  if (strcmp (tagname, "packing") == 0)
+    {
+      g_slice_free (PackingPropertiesData, (gpointer)data);
+      return;
+
+    }
+
+  if (parent_buildable_iface->custom_tag_end)
+    parent_buildable_iface->custom_tag_end (buildable, builder,
+					    child, tagname, data);
+
 }
 
 /**

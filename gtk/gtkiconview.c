@@ -450,11 +450,28 @@ static void     clear_source_info                (GtkIconView *icon_view);
 static void     adjust_wrap_width                (GtkIconView     *icon_view,
 						  GtkIconViewItem *item);
 
+/* GtkBuildable */
+static GtkBuildableIface *parent_buildable_iface;
+static void     gtk_icon_view_buildable_init             (GtkBuildableIface *iface);
+static gboolean gtk_icon_view_buildable_custom_tag_start (GtkBuildable  *buildable,
+							  GtkBuilder    *builder,
+							  GObject       *child,
+							  const gchar   *tagname,
+							  GMarkupParser *parser,
+							  gpointer      *data);
+static void     gtk_icon_view_buildable_custom_tag_end   (GtkBuildable  *buildable,
+							  GtkBuilder    *builder,
+							  GObject       *child,
+							  const gchar   *tagname,
+							  gpointer      *data);
+
 static guint icon_view_signals[LAST_SIGNAL] = { 0 };
 
 G_DEFINE_TYPE_WITH_CODE (GtkIconView, gtk_icon_view, GTK_TYPE_CONTAINER,
 			 G_IMPLEMENT_INTERFACE (GTK_TYPE_CELL_LAYOUT,
-						gtk_icon_view_cell_layout_init))
+						gtk_icon_view_cell_layout_init)
+			 G_IMPLEMENT_INTERFACE (GTK_TYPE_BUILDABLE,
+						gtk_icon_view_buildable_init))
 
 static void
 gtk_icon_view_class_init (GtkIconViewClass *klass)
@@ -893,6 +910,15 @@ gtk_icon_view_class_init (GtkIconViewClass *klass)
 				  GTK_MOVEMENT_VISUAL_POSITIONS, 1);
   gtk_icon_view_add_move_binding (binding_set, GDK_KP_Left, 0, 
 				  GTK_MOVEMENT_VISUAL_POSITIONS, -1);
+}
+
+static void
+gtk_icon_view_buildable_init (GtkBuildableIface *iface)
+{
+  parent_buildable_iface = g_type_interface_peek_parent (iface);
+  iface->add = _gtk_cell_layout_buildable_add;
+  iface->custom_tag_start = gtk_icon_view_buildable_custom_tag_start;
+  iface->custom_tag_end = gtk_icon_view_buildable_custom_tag_end;
 }
 
 static void
@@ -9235,6 +9261,39 @@ gtk_icon_view_get_accessible (GtkWidget *widget)
     } 
   return (* GTK_WIDGET_CLASS (gtk_icon_view_parent_class)->get_accessible) (widget);
 }
+
+static gboolean
+gtk_icon_view_buildable_custom_tag_start (GtkBuildable  *buildable,
+					  GtkBuilder    *builder,
+					  GObject       *child,
+					  const gchar   *tagname,
+					  GMarkupParser *parser,
+					  gpointer      *data)
+{
+  if (parent_buildable_iface->custom_tag_start (buildable, builder, child,
+						tagname, parser, data))
+    return TRUE;
+
+  return _gtk_cell_layout_buildable_custom_tag_start (buildable, builder, child,
+						      tagname, parser, data);
+}
+
+static void
+gtk_icon_view_buildable_custom_tag_end (GtkBuildable *buildable,
+					GtkBuilder   *builder,
+					GObject      *child,
+					const gchar  *tagname,
+					gpointer     *data)
+{
+  if (strcmp (tagname, "attributes") == 0)
+    _gtk_cell_layout_buildable_custom_tag_end (buildable, builder, child, tagname,
+					       data);
+  else
+    parent_buildable_iface->custom_tag_end (buildable, builder, child, tagname,
+					    data);
+}
+
+
 
 #define __GTK_ICON_VIEW_C__
 #include "gtkaliasdef.c"

@@ -151,12 +151,17 @@ static GList *gtk_tree_view_column_cell_prev                   (GtkTreeViewColum
 								GList                  *current);
 static void gtk_tree_view_column_clear_attributes_by_info      (GtkTreeViewColumn      *tree_column,
 					                        GtkTreeViewColumnCellInfo *info);
+/* GtkBuildable implementation */
+static void gtk_tree_view_column_buildable_init                 (GtkBuildableIface     *iface);
 
 static guint tree_column_signals[LAST_SIGNAL] = { 0 };
 
 G_DEFINE_TYPE_WITH_CODE (GtkTreeViewColumn, gtk_tree_view_column, GTK_TYPE_OBJECT,
 			 G_IMPLEMENT_INTERFACE (GTK_TYPE_CELL_LAYOUT,
-						gtk_tree_view_column_cell_layout_init))
+						gtk_tree_view_column_cell_layout_init)
+			 G_IMPLEMENT_INTERFACE (GTK_TYPE_BUILDABLE,
+						gtk_tree_view_column_buildable_init))
+
 
 static void
 gtk_tree_view_column_class_init (GtkTreeViewColumnClass *class)
@@ -321,6 +326,14 @@ gtk_tree_view_column_class_init (GtkTreeViewColumnClass *class)
                                                       GTK_SORT_ASCENDING,
                                                       GTK_PARAM_READWRITE));
   
+}
+
+static void
+gtk_tree_view_column_buildable_init (GtkBuildableIface *iface)
+{
+  iface->add = _gtk_cell_layout_buildable_add;
+  iface->custom_tag_start = _gtk_cell_layout_buildable_custom_tag_start;
+  iface->custom_tag_end = _gtk_cell_layout_buildable_custom_tag_end;
 }
 
 static void

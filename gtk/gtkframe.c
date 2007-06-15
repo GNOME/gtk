@@ -30,6 +30,7 @@
 #include "gtklabel.h"
 #include "gtkprivate.h"
 #include "gtkintl.h"
+#include "gtkbuildable.h"
 #include "gtkalias.h"
 
 #define LABEL_PAD 1
@@ -73,7 +74,16 @@ static void gtk_frame_compute_child_allocation      (GtkFrame      *frame,
 static void gtk_frame_real_compute_child_allocation (GtkFrame      *frame,
 						     GtkAllocation *child_allocation);
 
-G_DEFINE_TYPE (GtkFrame, gtk_frame, GTK_TYPE_BIN)
+/* GtkBuildable */
+static void gtk_frame_buildable_init                (GtkBuildableIface *iface);
+static void gtk_frame_buildable_add                 (GtkBuildable *buildable,
+						     GtkBuilder   *builder,
+						     GObject      *child,
+						     const gchar  *type);
+
+G_DEFINE_TYPE_WITH_CODE (GtkFrame, gtk_frame, GTK_TYPE_BIN,
+			 G_IMPLEMENT_INTERFACE (GTK_TYPE_BUILDABLE,
+						gtk_frame_buildable_init))
 
 static void
 gtk_frame_class_init (GtkFrameClass *class)
@@ -147,6 +157,26 @@ gtk_frame_class_init (GtkFrameClass *class)
   container_class->forall = gtk_frame_forall;
 
   class->compute_child_allocation = gtk_frame_real_compute_child_allocation;
+}
+
+static void
+gtk_frame_buildable_init (GtkBuildableIface *iface)
+{
+  iface->add = gtk_frame_buildable_add;
+}
+
+static void
+gtk_frame_buildable_add (GtkBuildable *buildable,
+			 GtkBuilder   *builder,
+			 GObject      *child,
+			 const gchar  *type)
+{
+  if (type && strcmp (type, "label") == 0)
+    gtk_frame_set_label_widget (GTK_FRAME (buildable), GTK_WIDGET (child));
+  else if (!type)
+    gtk_container_add (GTK_CONTAINER (buildable), GTK_WIDGET (child));
+  else
+    GTK_BUILDER_WARN_INVALID_CHILD_TYPE (GTK_FRAME (buildable), type);
 }
 
 static void

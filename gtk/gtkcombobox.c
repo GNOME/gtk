@@ -438,6 +438,21 @@ static void     gtk_combo_box_child_show                     (GtkWidget       *w
 static void     gtk_combo_box_child_hide                     (GtkWidget       *widget,
 							      GtkComboBox     *combo_box);
 
+/* GtkBuildable method implementation */
+static GtkBuildableIface *parent_buildable_iface;
+
+static void     gtk_combo_box_buildable_init                 (GtkBuildableIface *iface);
+static gboolean gtk_combo_box_buildable_custom_tag_start     (GtkBuildable  *buildable,
+							      GtkBuilder    *builder,
+							      GObject       *child,
+							      const gchar   *tagname,
+							      GMarkupParser *parser,
+							      gpointer      *data);
+static void     gtk_combo_box_buildable_custom_tag_end       (GtkBuildable  *buildable,
+							      GtkBuilder    *builder,
+							      GObject       *child,
+							      const gchar   *tagname,
+							      gpointer      *data);
 
 /* GtkCellEditable method implementations */
 static void gtk_combo_box_start_editing (GtkCellEditable *cell_editable,
@@ -448,7 +463,10 @@ G_DEFINE_TYPE_WITH_CODE (GtkComboBox, gtk_combo_box, GTK_TYPE_BIN,
 			 G_IMPLEMENT_INTERFACE (GTK_TYPE_CELL_LAYOUT,
 						gtk_combo_box_cell_layout_init)
 			 G_IMPLEMENT_INTERFACE (GTK_TYPE_CELL_EDITABLE,
-						gtk_combo_box_cell_editable_init))
+						gtk_combo_box_cell_editable_init)
+			 G_IMPLEMENT_INTERFACE (GTK_TYPE_BUILDABLE,
+						gtk_combo_box_buildable_init))
+
 
 /* common */
 static void
@@ -811,6 +829,15 @@ gtk_combo_box_class_init (GtkComboBoxClass *klass)
                                                               GTK_PARAM_READABLE));
 
   g_type_class_add_private (object_class, sizeof (GtkComboBoxPrivate));
+}
+
+static void
+gtk_combo_box_buildable_init (GtkBuildableIface *iface)
+{
+  parent_buildable_iface = g_type_interface_peek_parent (iface);
+  iface->add = _gtk_cell_layout_buildable_add;
+  iface->custom_tag_start = gtk_combo_box_buildable_custom_tag_start;
+  iface->custom_tag_end = gtk_combo_box_buildable_custom_tag_end;
 }
 
 static void
@@ -5582,6 +5609,37 @@ gtk_combo_box_get_focus_on_click (GtkComboBox *combo_box)
   return combo_box->priv->focus_on_click;
 }
 
+
+static gboolean
+gtk_combo_box_buildable_custom_tag_start (GtkBuildable  *buildable,
+					  GtkBuilder    *builder,
+					  GObject       *child,
+					  const gchar   *tagname,
+					  GMarkupParser *parser,
+					  gpointer      *data)
+{
+  if (parent_buildable_iface->custom_tag_start (buildable, builder, child,
+						tagname, parser, data))
+    return TRUE;
+
+  return _gtk_cell_layout_buildable_custom_tag_start (buildable, builder, child,
+						      tagname, parser, data);
+}
+
+static void
+gtk_combo_box_buildable_custom_tag_end (GtkBuildable *buildable,
+					GtkBuilder   *builder,
+					GObject      *child,
+					const gchar  *tagname,
+					gpointer     *data)
+{
+  if (strcmp (tagname, "attributes") == 0)
+    _gtk_cell_layout_buildable_custom_tag_end (buildable, builder, child, tagname,
+					       data);
+  else
+    parent_buildable_iface->custom_tag_end (buildable, builder, child, tagname,
+					    data);
+}
 
 #define __GTK_COMBO_BOX_C__
 #include "gtkaliasdef.c"

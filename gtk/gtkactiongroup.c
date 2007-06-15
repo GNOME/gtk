@@ -31,6 +31,7 @@
 #include <config.h>
 
 #include "gtkactiongroup.h"
+#include "gtkbuildable.h"
 #include "gtkiconfactory.h"
 #include "gtkicontheme.h"
 #include "gtkstock.h"
@@ -87,6 +88,15 @@ static void       gtk_action_group_get_property    (GObject             *object,
 static GtkAction *gtk_action_group_real_get_action (GtkActionGroup      *self,
 						    const gchar         *name);
 
+/* GtkBuildable */
+static void gtk_action_group_buildable_init (GtkBuildableIface *iface);
+static void gtk_action_group_buildable_add (GtkBuildable  *buildable,
+					    GtkBuilder    *builder,
+					    GObject       *child,
+					    const gchar   *type);
+static void gtk_action_group_buildable_set_name (GtkBuildable *buildable,
+						 const gchar  *name);
+static const gchar* gtk_action_group_buildable_get_name (GtkBuildable *buildable);
 
 GType
 gtk_action_group_get_type (void)
@@ -108,10 +118,20 @@ gtk_action_group_get_type (void)
         (GInstanceInitFunc) gtk_action_group_init,
       };
 
+      static const GInterfaceInfo buildable_info =
+      {
+	(GInterfaceInitFunc) gtk_action_group_buildable_init,
+	NULL,
+	NULL
+      };
+
       type = g_type_register_static (G_TYPE_OBJECT, I_("GtkActionGroup"),
 				     &type_info, 0);
-    }
 
+      g_type_add_interface_static (type,
+				   GTK_TYPE_BUILDABLE,
+				   &buildable_info);
+    }
   return type;
 }
 
@@ -270,6 +290,39 @@ gtk_action_group_init (GtkActionGroup *self)
   self->private_data->translate_func = NULL;
   self->private_data->translate_data = NULL;
   self->private_data->translate_notify = NULL;
+}
+
+static void
+gtk_action_group_buildable_init (GtkBuildableIface *iface)
+{
+  iface->add = gtk_action_group_buildable_add;
+  iface->set_name = gtk_action_group_buildable_set_name;
+  iface->get_name = gtk_action_group_buildable_get_name;
+}
+
+static void
+gtk_action_group_buildable_add (GtkBuildable  *buildable,
+				GtkBuilder    *builder,
+				GObject       *child,
+				const gchar   *type)
+{
+  gtk_action_group_add_action (GTK_ACTION_GROUP (buildable),
+			       GTK_ACTION (child));
+}
+
+static void
+gtk_action_group_buildable_set_name (GtkBuildable *buildable,
+				     const gchar  *name)
+{
+  GtkActionGroup *self = GTK_ACTION_GROUP (buildable);
+  self->private_data->name = g_strdup (name);
+}
+
+static const gchar *
+gtk_action_group_buildable_get_name (GtkBuildable *buildable)
+{
+  GtkActionGroup *self = GTK_ACTION_GROUP (buildable);
+  return self->private_data->name;
 }
 
 /**

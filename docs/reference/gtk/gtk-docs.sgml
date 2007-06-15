@@ -14,6 +14,8 @@
 <!ENTITY GtkBin SYSTEM "xml/gtkbin.xml">
 <!ENTITY GtkBox SYSTEM "xml/gtkbox.xml">
 <!ENTITY GtkButton SYSTEM "xml/gtkbutton.xml">
+<!ENTITY GtkBuildable SYSTEM "xml/gtkbuildable.xml">
+<!ENTITY GtkBuilder SYSTEM "xml/gtkbuilder.xml">
 <!ENTITY GtkCalendar SYSTEM "xml/gtkcalendar.xml">
 <!ENTITY GtkCheckButton SYSTEM "xml/gtkcheckbutton.xml">
 <!ENTITY GtkCheckMenuItem SYSTEM "xml/gtkcheckmenuitem.xml">
@@ -586,6 +588,12 @@ that is, GUI components such as #GtkButton or #GtkTextView.
       &GtkRecentChooserMenu;
       &GtkRecentChooserWidget;
       &GtkRecentFilter;
+    </chapter>
+
+    <chapter id="Builder">
+      <title>Interface builder</title>
+      &GtkBuildable;
+      &GtkBuilder;
     </chapter>
 
     <chapter id="DeprecatedObjects">

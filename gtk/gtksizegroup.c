@@ -19,10 +19,12 @@
  */
 
 #include <config.h>
+#include <string.h>
 #include "gtkcontainer.h"
 #include "gtkintl.h"
 #include "gtkprivate.h"
 #include "gtksizegroup.h"
+#include "gtkbuildable.h"
 #include "gtkalias.h"
 
 enum {
@@ -48,6 +50,20 @@ static void add_widget_to_closure (GtkWidget         *widget,
 				   GtkSizeGroupMode   mode,
 				   GSList           **groups,
 				   GSList           **widgets);
+
+/* GtkBuildable */
+static void gtk_size_group_buildable_init (GtkBuildableIface *iface);
+static gboolean gtk_size_group_buildable_custom_tag_start (GtkBuildable  *buildable,
+							   GtkBuilder    *builder,
+							   GObject       *child,
+							   const gchar   *tagname,
+							   GMarkupParser *parser,
+							   gpointer      *data);
+static void gtk_size_group_buildable_custom_finished (GtkBuildable  *buildable,
+						      GtkBuilder    *builder,
+						      GObject       *child,
+						      const gchar   *tagname,
+						      gpointer       user_data);
 
 static GQuark size_groups_quark;
 static const gchar size_groups_tag[] = "gtk-size-groups";
@@ -310,7 +326,16 @@ gtk_size_group_init (GtkSizeGroup *size_group)
   size_group->ignore_hidden = 0;
 }
 
-G_DEFINE_TYPE (GtkSizeGroup, gtk_size_group, G_TYPE_OBJECT)
+static void
+gtk_size_group_buildable_init (GtkBuildableIface *iface)
+{
+  iface->custom_tag_start = gtk_size_group_buildable_custom_tag_start;
+  iface->custom_finished = gtk_size_group_buildable_custom_finished;
+}
+
+G_DEFINE_TYPE_WITH_CODE (GtkSizeGroup, gtk_size_group, G_TYPE_OBJECT,
+			 G_IMPLEMENT_INTERFACE (GTK_TYPE_BUILDABLE,
+						gtk_size_group_buildable_init))
 
 static void
 gtk_size_group_set_property (GObject      *object,
@@ -812,6 +837,102 @@ _gtk_size_group_queue_resize (GtkWidget *widget)
 
   queue_resize_on_widget (widget, TRUE);
 }
+
+typedef struct {
+  GObject *object;
+  GSList *items;
+} GSListSubParserData;
+
+static void
+size_group_start_element (GMarkupParseContext *context,
+			  const gchar         *element_name,
+			  const gchar        **names,
+			  const gchar        **values,
+			  gpointer            user_data,
+			  GError            **error)
+{
+  guint i;
+  GSListSubParserData *data = (GSListSubParserData*)user_data;
+
+  if (strcmp (element_name, "widget") == 0)
+    for (i = 0; names[i]; i++)
+      if (strcmp (names[i], "name") == 0)
+	data->items = g_slist_prepend (data->items, g_strdup (values[i]));
+  else if (strcmp (element_name, "widgets") == 0)
+    return;
+  else
+    g_warning ("Unsupported type tag for GtkSizeGroup: %s\n",
+	       element_name);
+
+}
+
+static const GMarkupParser size_group_parser =
+  {
+    size_group_start_element
+  };
+
+static gboolean
+gtk_size_group_buildable_custom_tag_start (GtkBuildable  *buildable,
+					   GtkBuilder    *builder,
+					   GObject       *child,
+					   const gchar   *tagname,
+					   GMarkupParser *parser,
+					   gpointer      *data)
+{
+  GSListSubParserData *parser_data;
+
+  if (child)
+    return FALSE;
+
+  if (strcmp (tagname, "widgets") == 0)
+    {
+      parser_data = g_slice_new0 (GSListSubParserData);
+      parser_data->items = NULL;
+      parser_data->object = G_OBJECT (buildable);
+
+      *parser = size_group_parser;
+      *data = parser_data;
+      return TRUE;
+    }
+
+  return FALSE;
+}
+
+static void
+gtk_size_group_buildable_custom_finished (GtkBuildable  *buildable,
+					  GtkBuilder    *builder,
+					  GObject       *child,
+					  const gchar   *tagname,
+					  gpointer       user_data)
+{
+  GSList *l;
+  GSListSubParserData *data;
+  GObject *object;
+
+  if (strcmp (tagname, "widgets"))
+    return;
+  
+  data = (GSListSubParserData*)user_data;
+  data->items = g_slist_reverse (data->items);
+
+  for (l = data->items; l; l = l->next)
+    {
+      object = gtk_builder_get_object (builder, l->data);
+      if (!object)
+	{
+	  g_warning ("Unknown object %s specified in sizegroup %s",
+		     (const gchar*)l->data,
+		     gtk_buildable_get_name (GTK_BUILDABLE (data->object)));
+	  continue;
+	}
+      gtk_size_group_add_widget (GTK_SIZE_GROUP (data->object),
+				 GTK_WIDGET (object));
+      g_free (l->data);
+    }
+  g_slist_free (data->items);
+  g_slice_free (GSListSubParserData, data);
+}
+
 
 #define __GTK_SIZE_GROUP_C__
 #include "gtkaliasdef.c"

@@ -143,6 +143,9 @@ gtk_public_h_sources =          \
 	gtkbin.h		\
 	gtkbindings.h		\
 	gtkbox.h		\
+	gtkbuilder.h		\
+	gtkbuildable.h		\
+	gtkbuilderprivate.h 	\
 	gtkbutton.h		\
 	gtkcalendar.h		\
 	gtkcelleditable.h	\
@@ -405,6 +408,9 @@ gtk_base_c_sources =            \
 	gtkbin.c		\
 	gtkbindings.c		\
 	gtkbox.c		\
+	gtkbuildable.c		\
+	gtkbuilder.c		\
+	gtkbuilderparser.c	\
 	gtkbutton.c		\
 	gtkcalendar.c		\
 	gtkcelleditable.c	\

@@ -26,6 +26,7 @@
  */
 
 #include <config.h>
+#include <string.h>
 #include "gtknotebook.h"
 #include "gtkmain.h"
 #include "gtkmenu.h"
@@ -38,6 +39,7 @@
 #include "gtkbindings.h"
 #include "gtkprivate.h"
 #include "gtkdnd.h"
+#include "gtkbuildable.h"
 #include "gtkalias.h"
 
 #define SCROLL_DELAY_FACTOR   5
@@ -421,6 +423,12 @@ static void do_detach_tab  (GtkNotebook *from,
 			    gint         x,
 			    gint         y);
 
+/* GtkBuildable */
+static void gtk_notebook_buildable_init           (GtkBuildableIface *iface);
+static void gtk_notebook_buildable_add            (GtkBuildable *buildable,
+						   GtkBuilder   *builder,
+						   GObject      *child,
+						   const gchar  *type);
 
 static GtkNotebookWindowCreationFunc window_creation_hook = NULL;
 static gpointer window_creation_hook_data;
@@ -428,7 +436,9 @@ static GDestroyNotify window_creation_hook_destroy = NULL;
 
 static guint notebook_signals[LAST_SIGNAL] = { 0 };
 
-G_DEFINE_TYPE (GtkNotebook, gtk_notebook, GTK_TYPE_CONTAINER)
+G_DEFINE_TYPE_WITH_CODE (GtkNotebook, gtk_notebook, GTK_TYPE_CONTAINER,
+			 G_IMPLEMENT_INTERFACE (GTK_TYPE_BUILDABLE,
+						gtk_notebook_buildable_init))
 
 static void
 add_tab_bindings (GtkBindingSet    *binding_set,
@@ -1093,6 +1103,36 @@ gtk_notebook_init (GtkNotebook *notebook)
 		    G_CALLBACK (gtk_notebook_drag_failed), NULL);
 
   gtk_drag_dest_set_track_motion (GTK_WIDGET (notebook), TRUE);
+}
+
+static void
+gtk_notebook_buildable_init (GtkBuildableIface *iface)
+{
+  iface->add = gtk_notebook_buildable_add;
+}
+
+static void
+gtk_notebook_buildable_add (GtkBuildable  *buildable,
+			    GtkBuilder    *builder,
+			    GObject       *child,
+			    const gchar   *type)
+{
+  GtkNotebook *notebook = GTK_NOTEBOOK (buildable);
+
+  if (type && strcmp (type, "tab") == 0)
+    {
+      GtkWidget * page;
+
+      page = gtk_notebook_get_nth_page (notebook, -1);
+      /* To set the tab label widget, we must have already a child
+       * inside the tab container. */
+      g_assert (page != NULL);
+      gtk_notebook_set_tab_label (notebook, page, GTK_WIDGET (child));
+    }
+  else if (!type)
+    gtk_notebook_append_page (notebook, GTK_WIDGET (child), NULL);
+  else
+    GTK_BUILDER_WARN_INVALID_CHILD_TYPE (notebook, type);
 }
 
 static gboolean

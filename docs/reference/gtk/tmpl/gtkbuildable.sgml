@@ -1,0 +1,151 @@
+<!-- ##### SECTION Title ##### -->
+GtkBuildable
+
+<!-- ##### SECTION Short_Description ##### -->
+SHORT
+
+<!-- ##### SECTION Long_Description ##### -->
+<para>
+LONG
+</para>
+
+<!-- ##### SECTION See_Also ##### -->
+<para>
+SEE ALSO
+</para>
+
+<!-- ##### SECTION Stability_Level ##### -->
+
+
+<!-- ##### STRUCT GtkBuildable ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### STRUCT GtkBuildableIface ##### -->
+<para>
+
+</para>
+
+@g_iface: 
+@set_name: 
+@get_name: 
+@add: 
+@set_property: 
+@construct_child: 
+@custom_tag_start: 
+@custom_tag_end: 
+@custom_finished: 
+@parser_finished: 
+@get_internal_child: 
+
+<!-- ##### FUNCTION gtk_buildable_set_name ##### -->
+<para>
+
+</para>
+
+@buildable: 
+@name: 
+
+
+<!-- ##### FUNCTION gtk_buildable_get_name ##### -->
+<para>
+
+</para>
+
+@buildable: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_buildable_add ##### -->
+<para>
+
+</para>
+
+@buildable: 
+@builder: 
+@child: 
+@type: 
+
+
+<!-- ##### FUNCTION gtk_buildable_set_property ##### -->
+<para>
+
+</para>
+
+@buildable: 
+@builder: 
+@name: 
+@value: 
+
+
+<!-- ##### FUNCTION gtk_buildable_construct_child ##### -->
+<para>
+
+</para>
+
+@buildable: 
+@builder: 
+@name: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_buildable_custom_tag_start ##### -->
+<para>
+
+</para>
+
+@buildable: 
+@builder: 
+@child: 
+@tagname: 
+@parser: 
+@data: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_buildable_custom_tag_end ##### -->
+<para>
+
+</para>
+
+@buildable: 
+@builder: 
+@child: 
+@tagname: 
+@data: 
+
+
+<!-- ##### FUNCTION gtk_buildable_custom_finished ##### -->
+<para>
+
+</para>
+
+@buildable: 
+@builder: 
+@child: 
+@tagname: 
+@data: 
+
+
+<!-- ##### FUNCTION gtk_buildable_parser_finished ##### -->
+<para>
+
+</para>
+
+@buildable: 
+@builder: 
+
+
+<!-- ##### FUNCTION gtk_buildable_get_internal_child ##### -->
+<para>
+
+</para>
+
+@buildable: 
+@builder: 
+@childname: 
+@Returns: 
+
+

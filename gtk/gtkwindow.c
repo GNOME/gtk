@@ -46,6 +46,7 @@
 #include "gtkicontheme.h"
 #include "gtkmarshalers.h"
 #include "gtkplug.h"
+#include "gtkbuildable.h"
 #include "gtkalias.h"
 
 #ifdef GDK_WINDOWING_X11
@@ -182,6 +183,7 @@ struct _GtkWindowPrivate
 
   guint reset_type_hint : 1;
   guint opacity_set : 1;
+  guint builder_visible : 1;
 
   GdkWindowTypeHint type_hint;
 
@@ -309,6 +311,8 @@ static GQuark       quark_gtk_window_key_hash = 0;
 static GQuark       quark_gtk_window_default_icon_pixmap = 0;
 static GQuark       quark_gtk_window_icon_info = 0;
 
+static GtkBuildableIface *parent_buildable_iface;
+
 static void gtk_window_set_property (GObject         *object,
 				     guint            prop_id,
 				     const GValue    *value,
@@ -318,8 +322,19 @@ static void gtk_window_get_property (GObject         *object,
 				     GValue          *value,
 				     GParamSpec      *pspec);
 
+/* GtkBuildable */
+static void gtk_window_buildable_interface_init  (GtkBuildableIface *iface);
+static void gtk_window_buildable_set_property    (GtkBuildable        *buildable,
+						  GtkBuilder          *builder,
+						  const gchar         *name,
+						  const GValue        *value);
+static void gtk_window_buildable_parser_finished (GtkBuildable     *buildable,
+						  GtkBuilder       *builder);
 
-G_DEFINE_TYPE (GtkWindow, gtk_window, GTK_TYPE_BIN)
+
+G_DEFINE_TYPE_WITH_CODE (GtkWindow, gtk_window, GTK_TYPE_BIN,
+                         G_IMPLEMENT_INTERFACE (GTK_TYPE_BUILDABLE,
+						gtk_window_buildable_interface_init))
 
 static void
 add_tab_bindings (GtkBindingSet    *binding_set,
@@ -1112,6 +1127,39 @@ gtk_window_get_property (GObject      *object,
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
     }
+}
+
+static void
+gtk_window_buildable_interface_init (GtkBuildableIface *iface)
+{
+  parent_buildable_iface = g_type_interface_peek_parent (iface);
+  iface->set_property = gtk_window_buildable_set_property;
+  iface->parser_finished = gtk_window_buildable_parser_finished;
+
+}
+
+static void
+gtk_window_buildable_set_property (GtkBuildable        *buildable,
+				   GtkBuilder          *builder,
+				   const gchar         *name,
+				   const GValue        *value)
+{
+  GtkWindowPrivate *priv = GTK_WINDOW_GET_PRIVATE (buildable);
+
+  if (strcmp (name, "visible") == 0 && g_value_get_boolean (value))
+    priv->builder_visible = TRUE;
+  else
+    parent_buildable_iface->set_property (buildable, builder, name, value);
+}
+
+static void
+gtk_window_buildable_parser_finished (GtkBuildable *buildable,
+				      GtkBuilder   *builder)
+{
+  GtkWindowPrivate *priv = GTK_WINDOW_GET_PRIVATE (buildable);
+
+  if (priv->builder_visible)
+    gtk_widget_show (GTK_WIDGET (buildable));
 }
 
 /**

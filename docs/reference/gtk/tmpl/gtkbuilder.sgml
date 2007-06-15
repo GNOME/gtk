@@ -1,0 +1,181 @@
+<!-- ##### SECTION Title ##### -->
+GtkBuilder
+
+<!-- ##### SECTION Short_Description ##### -->
+Build an interface from a UI definition description.
+
+<!-- ##### SECTION Long_Description ##### -->
+<para>
+This object represents an `instantiation' of an UI definition description. 
+When one of these objects is created, the XML file is read, and the 
+interface is created. The GtkBuilder object then provides an interface 
+for accessing the widgets in the interface by the names assigned to 
+them inside the UI description.
+
+The GtkBuilder object can also be used to connect handlers to the named 
+signals in the description. GtkBuilder also provides an interface by 
+which it can look up the signal handler names in the program's symbol 
+table and automatically connect as many handlers up as it can that way.
+</para>
+
+<!-- ##### SECTION See_Also ##### -->
+<para>
+SEE ALSO
+</para>
+
+<!-- ##### SECTION Stability_Level ##### -->
+
+
+<!-- ##### STRUCT GtkBuilder ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### ARG GtkBuilder:translation-domain ##### -->
+<para>
+
+</para>
+
+<!-- ##### USER_FUNCTION GtkBuilderConnectFunc ##### -->
+<para>
+
+</para>
+
+@builder: 
+@object: 
+@signal_name: 
+@handler_name: 
+@connect_object: 
+@flags: 
+@user_data: 
+
+
+<!-- ##### FUNCTION gtk_builder_new ##### -->
+<para>
+
+</para>
+
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_builder_add_from_file ##### -->
+<para>
+
+</para>
+
+@builder: 
+@filename: 
+@error: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_builder_add_from_string ##### -->
+<para>
+
+</para>
+
+@builder: 
+@buffer: 
+@length: 
+@error: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_builder_get_object ##### -->
+<para>
+
+</para>
+
+@builder: 
+@name: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_builder_get_objects ##### -->
+<para>
+
+</para>
+
+@builder: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_builder_connect_signals ##### -->
+<para>
+
+</para>
+
+@builder: 
+@user_data: 
+
+
+<!-- ##### FUNCTION gtk_builder_connect_signals_full ##### -->
+<para>
+
+</para>
+
+@builder: 
+@func: 
+@user_data: 
+
+
+<!-- ##### FUNCTION gtk_builder_set_translation_domain ##### -->
+<para>
+
+</para>
+
+@builder: 
+@domain: 
+
+
+<!-- ##### FUNCTION gtk_builder_get_translation_domain ##### -->
+<para>
+
+</para>
+
+@builder: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_builder_get_type_from_name ##### -->
+<para>
+
+</para>
+
+@builder: 
+@typename: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_builder_value_from_string ##### -->
+<para>
+
+</para>
+
+@pspec: 
+@string: 
+@value: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_builder_value_from_string_type ##### -->
+<para>
+
+</para>
+
+@type: 
+@string: 
+@value: 
+@Returns: 
+
+
+<!-- ##### MACRO GTK_BUILDER_WARN_INVALID_CHILD_TYPE ##### -->
+<para>
+
+</para>
+
+@object: 
+@type: 
+
+

@@ -1,3 +1,152 @@
+2007-06-15  Johan Dahlin  <jdahlin@async.com.br>
+
+	reviewed by: Matthias Clasen
+
+	* demos/gtk-demo/Makefile.am:
+	* demos/gtk-demo/builder.c: (quit_activate), (about_activate),
+	(do_builder):
+	* demos/gtk-demo/demo.ui:
+	* docs/reference/gtk/gtk-docs.sgml:
+	* docs/reference/gtk/gtk-sections.txt:
+	* docs/reference/gtk/gtk.types:
+	* docs/reference/gtk/tmpl/gtkbuildable.sgml:
+	* docs/reference/gtk/tmpl/gtkbuilder.sgml:
+	* gtk/Makefile.am:
+	* gtk/gtk.h:
+	* gtk/gtk.symbols:
+	* gtk/gtkaction.c: (gtk_action_buildable_init),
+	(gtk_action_buildable_set_name), (gtk_action_buildable_get_name):
+	* gtk/gtkactiongroup.c: (gtk_action_group_get_type),
+	(gtk_action_group_buildable_init),
+	(gtk_action_group_buildable_add),
+	(gtk_action_group_buildable_set_name),
+	(gtk_action_group_buildable_get_name):
+	* gtk/gtkbuildable.c: (gtk_buildable_get_type),
+	(gtk_buildable_set_name), (gtk_buildable_get_name),
+	(gtk_buildable_add), (gtk_buildable_set_property),
+	(gtk_buildable_parser_finished), (gtk_buildable_construct_child),
+	(gtk_buildable_custom_tag_start), (gtk_buildable_custom_tag_end),
+	(gtk_buildable_custom_finished),
+	(gtk_buildable_get_internal_child):
+	* gtk/gtkbuildable.h:
+	* gtk/gtkbuilder.c: (gtk_builder_class_init), (gtk_builder_init),
+	(gtk_builder_finalize), (gtk_builder_set_property),
+	(gtk_builder_get_property), (_gtk_builder_resolve_type_lazily),
+	(gtk_builder_real_get_type_from_name),
+	(gtk_builder_get_parameters), (gtk_builder_get_internal_child),
+	(_gtk_builder_construct), (_gtk_builder_add),
+	(apply_delayed_properties), (_gtk_builder_finish),
+	(gtk_builder_new), (gtk_builder_add_from_file),
+	(gtk_builder_add_from_string), (gtk_builder_get_object),
+	(object_add_to_list), (gtk_builder_get_objects),
+	(gtk_builder_set_translation_domain),
+	(gtk_builder_get_translation_domain),
+	(gtk_builder_connect_signals_default),
+	(gtk_builder_connect_signals), (gtk_builder_connect_signals_full),
+	(gtk_builder_value_from_string),
+	(gtk_builder_value_from_string_type),
+	(_gtk_builder_enum_from_string), (_gtk_builder_flags_from_string),
+	(gtk_builder_get_type_from_name), (gtk_builder_error_quark):
+	* gtk/gtkbuilder.h:
+	* gtk/gtkbuilderparser.c: (state_push), (state_peek), (state_pop),
+	(error_missing_attribute), (error_invalid_attribute),
+	(error_invalid_tag), (builder_construct), (parse_object),
+	(free_object_info), (_get_type_by_symbol), (parse_child),
+	(free_child_info), (parse_property), (free_property_info),
+	(parse_signal), (_free_signal_info), (parse_interface),
+	(create_subparser), (free_subparser), (subparser_start),
+	(subparser_end), (parse_custom), (start_element), (end_element),
+	(text), (_gtk_builder_parser_parse_buffer):
+	* gtk/gtkbuilderprivate.h:
+	* gtk/gtkcelllayout.c: (attributes_start_element),
+	(attributes_text_element),
+	(_gtk_cell_layout_buildable_custom_tag_start),
+	(_gtk_cell_layout_buildable_custom_tag_end),
+	(_gtk_cell_layout_buildable_add):
+	* gtk/gtkcelllayout.h:
+	* gtk/gtkcellview.c: (gtk_cell_view_buildable_init),
+	(gtk_cell_view_buildable_custom_tag_start),
+	(gtk_cell_view_buildable_custom_tag_end):
+	* gtk/gtkcolorseldialog.c:
+	(gtk_color_selection_dialog_buildable_interface_init),
+	(gtk_color_selection_dialog_buildable_get_internal_child):
+	* gtk/gtkcombobox.c: (gtk_combo_box_buildable_init),
+	(gtk_combo_box_buildable_custom_tag_start),
+	(gtk_combo_box_buildable_custom_tag_end):
+	* gtk/gtkcomboboxentry.c:
+	(gtk_combo_box_entry_buildable_interface_init),
+	(gtk_combo_box_entry_buildable_get_internal_child):
+	* gtk/gtkcontainer.c: (gtk_container_get_type),
+	(gtk_container_buildable_init), (gtk_container_buildable_add),
+	(gtk_container_buildable_set_child_property),
+	(attributes_start_element), (attributes_text_element),
+	(gtk_container_buildable_custom_tag_start),
+	(gtk_container_buildable_custom_tag_end):
+	* gtk/gtkdebug.h:
+	* gtk/gtkdialog.c: (gtk_dialog_buildable_interface_init),
+	(gtk_dialog_buildable_get_internal_child),
+	(attributes_start_element), (attributes_text_element),
+	(gtk_dialog_buildable_custom_tag_start),
+	(gtk_dialog_buildable_custom_finished):
+	* gtk/gtkentrycompletion.c: (gtk_entry_completion_buildable_init):
+	* gtk/gtkexpander.c: (gtk_expander_buildable_add),
+	(gtk_expander_buildable_init):
+	* gtk/gtkfontsel.c:
+	(gtk_font_selection_dialog_buildable_interface_init),
+	(gtk_font_selection_dialog_buildable_get_internal_child):
+	* gtk/gtkframe.c: (gtk_frame_buildable_init),
+	(gtk_frame_buildable_add):
+	* gtk/gtkiconview.c: (gtk_icon_view_buildable_init),
+	(gtk_icon_view_buildable_custom_tag_start),
+	(gtk_icon_view_buildable_custom_tag_end):
+	* gtk/gtkliststore.c: (gtk_list_store_buildable_init),
+	(list_store_start_element), (list_store_end_element),
+	(list_store_text), (gtk_list_store_buildable_custom_tag_start),
+	(gtk_list_store_buildable_custom_tag_end):
+	* gtk/gtkmain.c:
+	* gtk/gtknotebook.c: (gtk_notebook_buildable_init),
+	(gtk_notebook_buildable_add):
+	* gtk/gtksizegroup.c: (gtk_size_group_buildable_init),
+	(size_group_start_element),
+	(gtk_size_group_buildable_custom_tag_start),
+	(gtk_size_group_buildable_custom_finished):
+	* gtk/gtktreestore.c: (gtk_tree_store_buildable_init),
+	(tree_model_start_element),
+	(gtk_tree_store_buildable_custom_tag_start),
+	(gtk_tree_store_buildable_custom_finished):
+	* gtk/gtktreeview.c: (gtk_tree_view_buildable_init),
+	(gtk_tree_view_buildable_add):
+	* gtk/gtktreeviewcolumn.c: (gtk_tree_view_column_buildable_init):
+	* gtk/gtkuimanager.c: (gtk_ui_manager_buildable_init),
+	(gtk_ui_manager_buildable_add),
+	(gtk_ui_manager_buildable_construct_child),
+	(gtk_ui_manager_buildable_custom_tag_start),
+	(gtk_ui_manager_buildable_custom_tag_end):
+	* gtk/gtkwidget.c: (gtk_widget_get_type),
+	(gtk_widget_buildable_interface_init),
+	(gtk_widget_buildable_set_name), (gtk_widget_buildable_get_name),
+	(gtk_widget_buildable_set_property),
+	(gtk_widget_buildable_parser_finshed), (accel_group_start_element),
+	(gtk_widget_buildable_custom_tag_start),
+	(gtk_widget_buildable_custom_finshed):
+	* gtk/gtkwindow.c: (gtk_window_buildable_interface_init),
+	(gtk_window_buildable_set_property),
+	(gtk_window_buildable_parser_finished):
+	* tests/Makefile.am:
+	* tests/buildertest.c: (builder_new_from_string), (test_parser),
+	(signal_normal), (signal_after), (signal_object),
+	(signal_object_after), (signal_first), (signal_second),
+	(signal_extra), (signal_extra2), (test_connect_signals),
+	(test_uimanager_simple), (test_domain), (test_translation),
+	(test_sizegroup), (test_list_store), (test_tree_store),
+	(test_types), (test_spin_button), (test_notebook),
+	(test_construct_only_property), (test_children),
+	(test_child_properties), (test_treeview_column), (test_icon_view),
+	(test_combo_box), (test_combo_box_entry), (test_cell_view),
+	(test_dialog), (test_accelerators), (test_widget), (main):
+
+	Add GtkBuilder, fixes #172535
+	
 2007-06-15  Hans Breuer <hans@breuer.org>
 
 	* gtk/makefile.msc.in tests/makefile.msc : updated
