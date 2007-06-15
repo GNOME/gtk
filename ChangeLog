@@ -39,6 +39,8 @@
 	* gtk/gtktooltip.c, gtk/gtktooltip.h: Add gtk_tooltip_set_text()
 	to set the tooltip text without using markup.
 
+        Patches from Emmanuele Bassi (#447643).
+
 2007-06-15  Johan Dahlin  <jdahlin@async.com.br>
 
 	reviewed by: Matthias Clasen
