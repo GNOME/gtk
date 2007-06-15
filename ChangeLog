@@ -1,3 +1,7 @@
+2007-06-15  Johan Dahlin  <jdahlin@async.com.br>
+
+	* gtk/gtkuimanager.c: Base class should be GObject, not GtkObject.
+
 2007-06-15  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtkbuildable.c:

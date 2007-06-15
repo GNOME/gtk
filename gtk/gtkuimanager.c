@@ -186,7 +186,7 @@ enum
 
 static guint ui_manager_signals[LAST_SIGNAL] = { 0 };
 
-G_DEFINE_TYPE_WITH_CODE (GtkUIManager, gtk_ui_manager, GTK_TYPE_OBJECT,
+G_DEFINE_TYPE_WITH_CODE (GtkUIManager, gtk_ui_manager, G_TYPE_OBJECT,
 			 G_IMPLEMENT_INTERFACE (GTK_TYPE_BUILDABLE,
 						gtk_ui_manager_buildable_init))
 
