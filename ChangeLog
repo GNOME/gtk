@@ -1,5 +1,9 @@
 2007-06-15  Mathias Hasselmann  <mathias.hasselmann@gmx.de>
 
+	* gtk/gtkwidget.c: Forgot to free the unescaped tooltip text.
+
+2007-06-15  Mathias Hasselmann  <mathias.hasselmann@gmx.de>
+
 	* gtk/gtkwidget.c: Improving handling of tooltip-text property.
 	* tests/testtooltips.c: Also check result of tooltip getters.
 

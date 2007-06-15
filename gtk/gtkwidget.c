@@ -2144,12 +2144,13 @@ gtk_widget_get_property (GObject         *object,
     case PROP_TOOLTIP_TEXT:
       {
         gchar *escaped = g_object_get_qdata (object, quark_tooltip_markup);
-	gchar *text = NULL;
+        gchar *text = NULL;
 
         if (escaped && !pango_parse_markup (escaped, -1, 0, NULL, &text, NULL, NULL))
           g_assert (NULL == text); /* text should still be NULL in case of markup errors */
 
-	g_value_set_string (value, text);
+        g_value_set_string (value, text);
+        g_free (text);
       }
       break;
     case PROP_TOOLTIP_MARKUP:
