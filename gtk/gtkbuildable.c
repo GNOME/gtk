@@ -75,11 +75,14 @@ gtk_buildable_set_name (GtkBuildable *buildable,
  * gtk_buildable_get_name:
  * @buildable: a #GtkBuildable
  *
- * Returns: the buildable name, the name which was set in
- * the <link linkend="BUILDER-UI">GtkBuilder UI definition</link> used to
- * construct the @buildable.
+ *   
+ * Returns the buildable name. #GtkBuilder sets the name based on the 
+ * the <link linkend="BUILDER-UI">GtkBuilder UI definition</link> used 
+ * to construct the @buildable.
  *
  * #GtkWidget implements this to map the buildable name to the widget name
+ *
+ * Returns: the name set with gtk_buildable_set_name()
  *
  * Since: 2.12
  **/
@@ -206,9 +209,12 @@ gtk_buildable_parser_finished (GtkBuildable *buildable,
  *
  * Construct a child of @buildable with the name @name.
  *
- * #GtkUIManager implements this to reference to a widget created in a &lt;ui&gt; tag
- * which is outside of the normal <link linkend="BUILDER-UI">GtkBuilder UI definition</link>
- * object hierarchy.
+ * #GtkUIManager implements this to reference to a widget created in a 
+ * &lt;ui&gt; tag which is outside of the normal 
+ * <link linkend="BUILDER-UI">GtkBuilder UI definition</link>
+ * hierarchy.
+ *
+ * Returns: the child with name @name
  *
  * Since: 2.12
  **/
@@ -344,9 +350,9 @@ gtk_buildable_custom_finished (GtkBuildable  *buildable,
  * @builder: a #GtkBuilder
  * @childname: name of child
  *
- * Get the internal child called @child of the @buildable object.
+ * Get the internal child called @childname of the @buildable object.
  *
- * Return: the internal child of the buildable object
+ * Returns: the internal child of the buildable object 
  *
  * Since: 2.12
  **/

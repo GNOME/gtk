@@ -673,7 +673,10 @@ gtk_builder_add_from_string (GtkBuilder   *builder,
  * @builder: a #GtkBuilder
  * @name: name of object to get
  *
- * Return value: GObject or %NULL if it could not be found in the object tree.
+ * Gets the object named @name.
+ *
+ * Return value: the object named @name or %NULL if it could not be 
+ *    found in the object tree
  *
  * Since: 2.12
  **/
@@ -699,8 +702,10 @@ object_add_to_list (gchar *object_id,
  * gtk_builder_get_objects:
  * @builder: a #GtkBuilder
  *
+ * Gets all objects that have been constructed by @builder.
+ *
  * Return value: a newly-allocated #GSList containing all the objects
- *   constructed by GtkBuilder instance.
+ *   constructed by the #GtkBuilder instance
  *
  * Since: 2.12
  **/
@@ -747,7 +752,9 @@ gtk_builder_set_translation_domain (GtkBuilder  *builder,
  * gtk_builder_get_translation_domain:
  * @builder: a #GtkBuilder
  *
- * Return value : the translation domain. This string is owned
+ * Gets the translation domain.
+ *
+ * Return value: the translation domain. This string is owned
  * by the builder object and must not be modified or freed.
  *
  * Since: 2.12
@@ -1231,10 +1238,13 @@ _gtk_builder_flags_from_string (GType type, const char *string)
 /**
  * gtk_builder_get_type_from_name:
  * @builder: a #GtkBuilder
- * @typename: Type name to lookup.
+ * @typename: Type name to lookup
  *
- * This method is used to lookup a type. It can be implemented in a subclass to
- * override the #GType of an object created by the builder.
+ * This method is used to lookup a type. It can be implemented in a 
+ * subclass to override the #GType of an object created by the builder.
+ *
+ * Returns: the #GType found for @typename or #G_TYPE_INVALID if no
+ *   type was found
  *
  * Since 2.12
  */
