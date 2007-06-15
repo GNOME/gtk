@@ -1,3 +1,10 @@
+2007-06-15  Johan Dahlin  <jdahlin@async.com.br>
+
+	* gtk/gtkbuilder.c (gtk_builder_add_from_file): 
+	(gtk_builder_value_from_string_type): 
+	Use gsize instead of unsigned and gulong instead of long,
+	fixes complation on OSX, fixes #447987
+
 2007-06-15  Matthias Clasen  <mclasen@redhat.com>
 	
 	* gtk/gtkmenushell.[ch]: add move_selected signal to allow 

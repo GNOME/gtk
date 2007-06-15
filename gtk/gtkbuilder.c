@@ -600,7 +600,7 @@ gtk_builder_add_from_file (GtkBuilder   *builder,
                            GError      **error)
 {
   char *buffer;
-  unsigned length;
+  gsize length;
   GError *tmp_error;
 
   g_return_val_if_fail (GTK_IS_BUILDER (builder), 0);
@@ -1020,7 +1020,7 @@ gtk_builder_value_from_string_type (GType        type,
     case G_TYPE_UINT:
     case G_TYPE_ULONG:
       {
-        ulong ul;
+        gulong ul;
         errno = 0;
         ul = strtoul (string, NULL, 0);
         if (errno)
