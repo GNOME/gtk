@@ -1,5 +1,13 @@
 2007-06-16  Richard Hult  <richard@imendio.com>
 
+	* gdk/quartz/gdkevents-quartz.c (find_mouse_window_for_ns_event):
+	Move the checks for no window or a non-GDK window from here...
+	(gdk_event_translate): ...to here. Reorder the code so that we
+	detect the cases where we need to break grabs before bailing
+	out.
+
+2007-06-16  Richard Hult  <richard@imendio.com>
+
 	* gdk/quartz/gdkevents-quartz.c (gdk_event_translate) 
 	(break_all_grabs): Break out into a separate function.
 

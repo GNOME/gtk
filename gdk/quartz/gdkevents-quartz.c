@@ -1033,15 +1033,9 @@ find_window_for_ns_event (NSEvent *nsevent,
                           gint    *x, 
                           gint    *y)
 {
-  NSWindow *nswindow = [nsevent window];
-  NSEventType event_type = [nsevent type];
+  NSEventType event_type;
 
-  if (!nswindow)
-    return NULL;
-
-  /* Window was not created by GDK so the event should be handled by Quartz. */
-  if (![[nswindow contentView] isKindOfClass:[GdkQuartzView class]]) 
-    return NULL;
+  event_type = [nsevent type];
 
   /* Synthesize crossing events when moving between child
    * windows. Toplevels are handled with NSMouseEntered and
@@ -1188,7 +1182,7 @@ find_window_for_ns_event (NSEvent *nsevent,
         else
           {
             GdkWindowImplQuartz *impl;
-            
+
             impl = GDK_WINDOW_IMPL_QUARTZ (GDK_WINDOW_OBJECT (event_toplevel)->impl);
             y_tmp = impl->height - point.y;
           }
@@ -1241,7 +1235,7 @@ find_window_for_ns_event (NSEvent *nsevent,
         else
           {
             GdkWindowImplQuartz *impl;
-            
+
             impl = GDK_WINDOW_IMPL_QUARTZ (GDK_WINDOW_OBJECT (event_toplevel)->impl);
             y_tmp = impl->height - point.y;
           }
@@ -1483,16 +1477,36 @@ _gdk_quartz_events_get_current_event_mask (void)
 static gboolean
 gdk_event_translate (NSEvent *nsevent)
 {
+  NSWindow *nswindow;
   GdkWindow *window;
   GdkFilterReturn result;
   GdkEvent *event;
   int x, y;
 
+  /* There is no support for real desktop wide grabs, so we break
+   * grabs when the application loses focus (gets deactivated).
+   */
+  if ([nsevent type] == NSAppKitDefined)
+    {
+      if ([nsevent subtype] == NSApplicationDeactivatedEventType)
+        break_all_grabs ();
+
+      /* This could potentially be used to break grabs when clicking
+       * on the title. The subtype 20 is undocumented so it's probably
+       * not a good idea: else if (subtype == 20) break_all_grabs ();
+       */
+    }
+
+  nswindow = [nsevent window];
+
+  /* Ignore events for no window or ones not created by GDK. */
+  if (!nswindow || ![[nswindow contentView] isKindOfClass:[GdkQuartzView class]])
+    return FALSE;
+
+  /* Apply any global filters. */
   if (_gdk_default_filters)
     {
-      /* Apply global filters */
-
-      GdkFilterReturn result = apply_filters (NULL, nsevent, _gdk_default_filters);
+      result = apply_filters (NULL, nsevent, _gdk_default_filters);
 
       /* If result is GDK_FILTER_CONTINUE, we continue as if nothing
        * happened. If it is GDK_FILTER_REMOVE,
@@ -1502,20 +1516,15 @@ gdk_event_translate (NSEvent *nsevent)
 	return TRUE;
     }
 
-  /* Catch the case where the entire app loses focus, and break any grabs. */
-  if ([nsevent type] == NSAppKitDefined)
-    {
-      if ([nsevent subtype] == NSApplicationDeactivatedEventType)
-	  break_all_grabs ();
-    }
-
+  /* Find the right gdk window to send the event to, taking grabs and
+   * event masks into consideration.
+   */
   window = find_window_for_ns_event (nsevent, &x, &y);
-
   if (!window)
     return FALSE;
 
+  /* Apply any window filters. */
   result = apply_filters (window, nsevent, ((GdkWindowObject *) window)->filters);
-
   if (result == GDK_FILTER_REMOVE)
     return TRUE;
 
