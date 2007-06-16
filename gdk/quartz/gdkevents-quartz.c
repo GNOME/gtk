@@ -253,6 +253,31 @@ gdk_pointer_grab (GdkWindow    *window,
 				confine_to, cursor, FALSE);
 }
 
+/* This is used to break any grabs in the case where we have to due to
+ * the grab emulation. Instead of enforcing the desktop wide grab, we
+ * break it when the app loses focus for example.
+ */
+static void
+break_all_grabs (void)
+{
+  if (_gdk_quartz_keyboard_grab_window)
+    {
+      generate_grab_broken_event (_gdk_quartz_keyboard_grab_window,
+                                  TRUE, FALSE,
+                                  NULL);
+      g_object_unref (_gdk_quartz_keyboard_grab_window);
+      _gdk_quartz_keyboard_grab_window = NULL;
+    }
+
+  if (_gdk_quartz_pointer_grab_window)
+    {
+      generate_grab_broken_event (_gdk_quartz_pointer_grab_window,
+                                  FALSE, pointer_grab_implicit,
+                                  NULL);
+      pointer_ungrab_internal (FALSE);
+    }
+}
+
 static void
 fixup_event (GdkEvent *event)
 {
@@ -1481,24 +1506,7 @@ gdk_event_translate (NSEvent *nsevent)
   if ([nsevent type] == NSAppKitDefined)
     {
       if ([nsevent subtype] == NSApplicationDeactivatedEventType)
-	{
-	  if (_gdk_quartz_keyboard_grab_window)
-	    {
-	      generate_grab_broken_event (_gdk_quartz_keyboard_grab_window,
-					  TRUE, FALSE,
-					  NULL);
-	      g_object_unref (_gdk_quartz_keyboard_grab_window);
-	      _gdk_quartz_keyboard_grab_window = NULL;
-	    }
-
-	  if (_gdk_quartz_pointer_grab_window)
-	    {
-	      generate_grab_broken_event (_gdk_quartz_pointer_grab_window,
-					  FALSE, pointer_grab_implicit,
-					  NULL);
-	      pointer_ungrab_internal (FALSE);
-	    }
-	}
+	  break_all_grabs ();
     }
 
   window = find_window_for_ns_event (nsevent, &x, &y);

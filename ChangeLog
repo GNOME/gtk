@@ -1,5 +1,10 @@
 2007-06-16  Richard Hult  <richard@imendio.com>
 
+	* gdk/quartz/gdkevents-quartz.c (gdk_event_translate) 
+	(break_all_grabs): Break out into a separate function.
+
+2007-06-16  Richard Hult  <richard@imendio.com>
+
 	* gdk/quartz/GdkQuartzWindow.c: (isInMove): Implement, to be used
 	to detect if the window is currently being moved with the mouse.
 
