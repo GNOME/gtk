@@ -1,3 +1,8 @@
+2007-06-16  Yevgen Muntyan  <muntyan@tamu.edu>
+
+	* gtk/gtktextdisplay.c (render_para): fixed couple of drawing
+	problems with block cursor (#448321).
+
 2007-06-16  Richard Hult  <richard@imendio.com>
 
 	* gdk/quartz/gdkevents-quartz.c: (gdk_event_translate): Ignore

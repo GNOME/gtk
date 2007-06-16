@@ -662,11 +662,10 @@ render_para (GtkTextRenderer    *text_renderer,
 	      cursor_gc = _gtk_widget_get_cursor_gc (text_renderer->widget);
 
 	      cursor_rect.x = x + line_display->x_offset + line_display->block_cursor.x;
-	      cursor_rect.y = selection_y;
+	      cursor_rect.y = y + line_display->block_cursor.y + line_display->top_margin;
 	      cursor_rect.width = line_display->block_cursor.width;
-	      cursor_rect.height = selection_height;
+	      cursor_rect.height = line_display->block_cursor.height;
 
-	      gdk_pango_renderer_set_gc (GDK_PANGO_RENDERER (text_renderer), NULL);
 	      gdk_gc_set_clip_rectangle (cursor_gc, &cursor_rect);
 
               gdk_draw_rectangle (text_renderer->drawable,
@@ -677,6 +676,8 @@ render_para (GtkTextRenderer    *text_renderer,
                                   cursor_rect.width,
                                   cursor_rect.height);
 
+              gdk_gc_set_clip_region (cursor_gc, NULL);
+
 	      /* draw text under the cursor if any */
 	      if (!line_display->cursor_at_line_end)
 		{
@@ -684,6 +685,7 @@ render_para (GtkTextRenderer    *text_renderer,
 
 		  cursor_text_gc = text_renderer->widget->style->base_gc[text_renderer->widget->state];
 		  gdk_gc_set_clip_rectangle (cursor_text_gc, &cursor_rect);
+
 		  gdk_pango_renderer_set_gc (GDK_PANGO_RENDERER (text_renderer), cursor_text_gc);
 		  text_renderer_set_state (text_renderer, CURSOR);
 
@@ -695,8 +697,6 @@ render_para (GtkTextRenderer    *text_renderer,
 		  gdk_pango_renderer_set_gc (GDK_PANGO_RENDERER (text_renderer), fg_gc);
 		  gdk_gc_set_clip_region (cursor_text_gc, NULL);
 		}
-
-              gdk_gc_set_clip_region (cursor_gc, NULL);
 	    }
         }
 
