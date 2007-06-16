@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.10.2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-06-06 09:04-0400\n"
+"POT-Creation-Date: 2007-06-15 21:24-0400\n"
 "PO-Revision-Date: 2006-09-04 02:26+0800\n"
 "Last-Translator: Woodman Tuen <wmtuen@gmail.com>\n"
 "Language-Team: Chinese (Hong Kong) <community@linuxhall.org>\n"
@@ -76,7 +76,7 @@ msgstr "準備設定的 Gdk 偵錯旗標"
 #. Placeholder in --gdk-no-debug=FLAGS in --help output
 #. Placeholder in --gtk-debug=FLAGS in --help output
 #. Placeholder in --gtk-no-debug=FLAGS in --help output
-#: gdk/gdk.c:140 gdk/gdk.c:143 gtk/gtkmain.c:414 gtk/gtkmain.c:417
+#: gdk/gdk.c:140 gdk/gdk.c:143 gtk/gtkmain.c:415 gtk/gtkmain.c:418
 msgid "FLAGS"
 msgstr "旗標"
 
@@ -1331,7 +1331,7 @@ msgid "New accelerator..."
 msgstr "新增快捷鍵..."
 
 #. do not translate the part before the |
-#: gtk/gtkcellrendererprogress.c:278 gtk/gtkcellrendererprogress.c:365
+#: gtk/gtkcellrendererprogress.c:362 gtk/gtkcellrendererprogress.c:449
 #, c-format
 msgid "progress bar label|%d %%"
 msgstr "%d %%"
@@ -1461,15 +1461,15 @@ msgstr "調色盤(_P)："
 msgid "Color Wheel"
 msgstr "色彩圓盤"
 
-#: gtk/gtkcolorseldialog.c:89
+#: gtk/gtkcolorseldialog.c:101
 msgid "Color Selection"
 msgstr "色彩選擇"
 
-#: gtk/gtkentry.c:5198 gtk/gtktextview.c:7448
+#: gtk/gtkentry.c:5253 gtk/gtktextview.c:7462
 msgid "Input _Methods"
 msgstr "輸入法(_M)"
 
-#: gtk/gtkentry.c:5212 gtk/gtktextview.c:7462
+#: gtk/gtkentry.c:5267 gtk/gtktextview.c:7476
 msgid "_Insert Unicode Control Character"
 msgstr "插入統一碼控制字符(_I)"
 
@@ -1485,7 +1485,7 @@ msgstr "桌面"
 msgid "(None)"
 msgstr "（沒有）"
 
-#: gtk/gtkfilechooserbutton.c:2049
+#: gtk/gtkfilechooserbutton.c:2047
 msgid "Other..."
 msgstr "其它..."
 
@@ -1531,235 +1531,235 @@ msgstr "無法顯示資料夾內容"
 #. * is a hostname. Nautilus and the panel contain the same string
 #. * to translate.
 #.
-#: gtk/gtkfilechooserdefault.c:1707
+#: gtk/gtkfilechooserdefault.c:1714
 #, c-format
 msgid "%1$s on %2$s"
 msgstr "%1$s 於 %2$s"
 
-#: gtk/gtkfilechooserdefault.c:1878
+#: gtk/gtkfilechooserdefault.c:1892
 msgid "Search"
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:1902
+#: gtk/gtkfilechooserdefault.c:1916
 msgid "Recently Used"
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:2991
+#: gtk/gtkfilechooserdefault.c:3006
 #, c-format
 msgid "Add the folder '%s' to the bookmarks"
 msgstr "將資料夾‘%s’加入書籤"
 
-#: gtk/gtkfilechooserdefault.c:3032
+#: gtk/gtkfilechooserdefault.c:3047
 #, c-format
 msgid "Add the current folder to the bookmarks"
 msgstr "將目前的資料夾加入書籤"
 
-#: gtk/gtkfilechooserdefault.c:3034
+#: gtk/gtkfilechooserdefault.c:3049
 #, c-format
 msgid "Add the selected folders to the bookmarks"
 msgstr "將已選的資料夾加入書籤"
 
-#: gtk/gtkfilechooserdefault.c:3074
+#: gtk/gtkfilechooserdefault.c:3089
 #, c-format
 msgid "Remove the bookmark '%s'"
 msgstr "移除書籤‘%s’"
 
-#: gtk/gtkfilechooserdefault.c:3507
+#: gtk/gtkfilechooserdefault.c:3522
 #, c-format
 msgid "Could not add a bookmark for '%s' because it is an invalid path name."
 msgstr "無法加入‘%s’為書籤，因為它是無效的路徑名稱。"
 
-#: gtk/gtkfilechooserdefault.c:3732
+#: gtk/gtkfilechooserdefault.c:3747
 msgid "Remove"
 msgstr "移除"
 
-#: gtk/gtkfilechooserdefault.c:3741
+#: gtk/gtkfilechooserdefault.c:3756
 msgid "Rename..."
 msgstr "更改名稱..."
 
 #. Accessible object name for the file chooser's shortcuts pane
-#: gtk/gtkfilechooserdefault.c:3883
+#: gtk/gtkfilechooserdefault.c:3898
 msgid "Places"
 msgstr "位置"
 
 #. Column header for the file chooser's shortcuts pane
-#: gtk/gtkfilechooserdefault.c:3937
+#: gtk/gtkfilechooserdefault.c:3952
 msgid "_Places"
 msgstr "位置(_P)"
 
-#: gtk/gtkfilechooserdefault.c:3992 gtk/gtkstock.c:297
+#: gtk/gtkfilechooserdefault.c:4007 gtk/gtkstock.c:297
 msgid "_Add"
 msgstr "新增(_A)"
 
-#: gtk/gtkfilechooserdefault.c:3999
+#: gtk/gtkfilechooserdefault.c:4014
 msgid "Add the selected folder to the Bookmarks"
 msgstr "將已選的資料夾加入書籤"
 
-#: gtk/gtkfilechooserdefault.c:4004 gtk/gtkstock.c:384
+#: gtk/gtkfilechooserdefault.c:4019 gtk/gtkstock.c:385
 msgid "_Remove"
 msgstr "移除(_R)"
 
-#: gtk/gtkfilechooserdefault.c:4011
+#: gtk/gtkfilechooserdefault.c:4026
 msgid "Remove the selected bookmark"
 msgstr "移除已選的書籤"
 
-#: gtk/gtkfilechooserdefault.c:4107
+#: gtk/gtkfilechooserdefault.c:4122
 msgid "Could not select file"
 msgstr "無法選取檔案"
 
-#: gtk/gtkfilechooserdefault.c:4244
+#: gtk/gtkfilechooserdefault.c:4259
 #, c-format
 msgid "Could not select file '%s' because it is an invalid path name."
 msgstr "無法選取檔案‘%s’，因為它是無效的路徑名稱。"
 
-#: gtk/gtkfilechooserdefault.c:4301
+#: gtk/gtkfilechooserdefault.c:4316
 msgid "_Add to Bookmarks"
 msgstr "加入書籤(_A)"
 
-#: gtk/gtkfilechooserdefault.c:4315
+#: gtk/gtkfilechooserdefault.c:4330
 msgid "Show _Hidden Files"
 msgstr "顯示隱藏檔案(_H)"
 
-#: gtk/gtkfilechooserdefault.c:4483 gtk/gtkfilesel.c:729
+#: gtk/gtkfilechooserdefault.c:4498 gtk/gtkfilesel.c:729
 msgid "Files"
 msgstr "檔案"
 
-#: gtk/gtkfilechooserdefault.c:4528
+#: gtk/gtkfilechooserdefault.c:4543
 msgid "Name"
 msgstr "名稱"
 
-#: gtk/gtkfilechooserdefault.c:4553
+#: gtk/gtkfilechooserdefault.c:4568
 msgid "Size"
 msgstr "大小"
 
-#: gtk/gtkfilechooserdefault.c:4567
+#: gtk/gtkfilechooserdefault.c:4582
 msgid "Modified"
 msgstr "最後更改"
 
-#: gtk/gtkfilechooserdefault.c:4602
+#: gtk/gtkfilechooserdefault.c:4617
 msgid "Select which types of files are shown"
 msgstr "選擇顯示哪種類型的檔案"
 
 #. Label
-#: gtk/gtkfilechooserdefault.c:4813 gtk/gtkprinteroptionwidget.c:786
+#: gtk/gtkfilechooserdefault.c:4828 gtk/gtkprinteroptionwidget.c:786
 msgid "_Name:"
 msgstr "名稱(_N)："
 
-#: gtk/gtkfilechooserdefault.c:4855
+#: gtk/gtkfilechooserdefault.c:4870
 msgid "_Browse for other folders"
 msgstr "瀏覽其它資料夾(_B)"
 
-#: gtk/gtkfilechooserdefault.c:5110
+#: gtk/gtkfilechooserdefault.c:5125
 msgid "Type a file name"
 msgstr "輸入檔案名稱"
 
 #. Create Folder
-#: gtk/gtkfilechooserdefault.c:5147
+#: gtk/gtkfilechooserdefault.c:5162
 msgid "Create Fo_lder"
 msgstr "建立資料夾(_L)"
 
-#: gtk/gtkfilechooserdefault.c:5157
+#: gtk/gtkfilechooserdefault.c:5172
 msgid "_Location:"
 msgstr "位置(_L)："
 
-#: gtk/gtkfilechooserdefault.c:5395
+#: gtk/gtkfilechooserdefault.c:5410
 msgid "Save in _folder:"
 msgstr "儲存於資料夾(_F)："
 
-#: gtk/gtkfilechooserdefault.c:5397
+#: gtk/gtkfilechooserdefault.c:5412
 msgid "Create in _folder:"
 msgstr "新增於資料夾(_F)："
 
-#: gtk/gtkfilechooserdefault.c:7000
+#: gtk/gtkfilechooserdefault.c:7015
 #, c-format
 msgid "Cannot change to folder because it is not local"
 msgstr "無法進入資料夾，因為它不是本地資料夾"
 
-#: gtk/gtkfilechooserdefault.c:7616 gtk/gtkfilechooserdefault.c:7637
+#: gtk/gtkfilechooserdefault.c:7631 gtk/gtkfilechooserdefault.c:7652
 #, c-format
 msgid "Shortcut %s already exists"
 msgstr "捷徑 %s 已經存在"
 
-#: gtk/gtkfilechooserdefault.c:7727
+#: gtk/gtkfilechooserdefault.c:7742
 #, c-format
 msgid "Shortcut %s does not exist"
 msgstr "捷徑 %s 不存在"
 
-#: gtk/gtkfilechooserdefault.c:7982
+#: gtk/gtkfilechooserdefault.c:7997
 #, c-format
 msgid "A file named \"%s\" already exists.  Do you want to replace it?"
 msgstr "名為“%s”的檔案已經存在。要取代它嗎？"
 
-#: gtk/gtkfilechooserdefault.c:7985
+#: gtk/gtkfilechooserdefault.c:8000
 #, c-format
 msgid ""
 "The file already exists in \"%s\".  Replacing it will overwrite its contents."
 msgstr "檔案已經存在於“%s”。取代它的話會複寫其內容。"
 
-#: gtk/gtkfilechooserdefault.c:7990
+#: gtk/gtkfilechooserdefault.c:8005
 msgid "_Replace"
 msgstr "取代(_R)"
 
-#: gtk/gtkfilechooserdefault.c:8821
+#: gtk/gtkfilechooserdefault.c:8836
 #, fuzzy
 msgid "Could not start the search process"
 msgstr "無法儲存其它部份"
 
-#: gtk/gtkfilechooserdefault.c:8822
+#: gtk/gtkfilechooserdefault.c:8837
 msgid ""
 "The program was not able to create a connection to the indexer daemon.  "
 "Please make sure it is running."
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:8836
+#: gtk/gtkfilechooserdefault.c:8851
 #, fuzzy
 msgid "Could not send the search request"
 msgstr "無法儲存其它部份"
 
 #. Label
-#: gtk/gtkfilechooserdefault.c:9262
+#: gtk/gtkfilechooserdefault.c:9277
 msgid "_Search:"
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:10148
+#: gtk/gtkfilechooserdefault.c:10166
 #, c-format
 msgid "Could not mount %s"
 msgstr "無法掛載 %s"
 
-#: gtk/gtkfilechooserdefault.c:10788
+#: gtk/gtkfilechooserdefault.c:10806
 msgid "Type name of new folder"
 msgstr "請輸入新資料夾名稱"
 
-#: gtk/gtkfilechooserdefault.c:10836
+#: gtk/gtkfilechooserdefault.c:10854
 #, c-format
 msgid "%d byte"
 msgid_plural "%d bytes"
 msgstr[0] "%d 位元組"
 
-#: gtk/gtkfilechooserdefault.c:10838
+#: gtk/gtkfilechooserdefault.c:10856
 #, c-format
 msgid "%.1f KB"
 msgstr "%.1f KB"
 
-#: gtk/gtkfilechooserdefault.c:10840
+#: gtk/gtkfilechooserdefault.c:10858
 #, c-format
 msgid "%.1f MB"
 msgstr "%.1f MB"
 
-#: gtk/gtkfilechooserdefault.c:10842
+#: gtk/gtkfilechooserdefault.c:10860
 #, c-format
 msgid "%.1f GB"
 msgstr "%.1f GB"
 
-#: gtk/gtkfilechooserdefault.c:10940 gtk/gtkfilechooserdefault.c:10964
+#: gtk/gtkfilechooserdefault.c:10958 gtk/gtkfilechooserdefault.c:10982
 msgid "Unknown"
 msgstr "未知"
 
-#: gtk/gtkfilechooserdefault.c:10951
+#: gtk/gtkfilechooserdefault.c:10969
 msgid "Today"
 msgstr "今天"
 
-#: gtk/gtkfilechooserdefault.c:10953
+#: gtk/gtkfilechooserdefault.c:10971
 msgid "Yesterday"
 msgstr "昨天"
 
@@ -1913,7 +1913,7 @@ msgid "(Empty)"
 msgstr "（空的）"
 
 #: gtk/gtkfilesystemunix.c:960 gtk/gtkfilesystemunix.c:1208
-#: gtk/gtkfilesystemunix.c:2201 gtk/gtkfilesystemunix.c:2241
+#: gtk/gtkfilesystemunix.c:2196 gtk/gtkfilesystemunix.c:2236
 #: gtk/gtkfilesystemwin32.c:2245 gtk/gtkfilesystemwin32.c:2295
 #, c-format
 msgid "Error getting information for '%s': %s"
@@ -1935,17 +1935,17 @@ msgid ""
 "Please use a different name."
 msgstr "名稱“%s”是無效的，因為它包含了字符‘%s’。請選擇另一個名稱。"
 
-#: gtk/gtkfilesystemunix.c:1883 gtk/gtkfilesystemwin32.c:1925
+#: gtk/gtkfilesystemunix.c:1878 gtk/gtkfilesystemwin32.c:1925
 #, c-format
 msgid "Bookmark saving failed: %s"
 msgstr "儲存書籤失敗：%s"
 
-#: gtk/gtkfilesystemunix.c:1938 gtk/gtkfilesystemwin32.c:1980
+#: gtk/gtkfilesystemunix.c:1933 gtk/gtkfilesystemwin32.c:1980
 #, c-format
 msgid "'%s' already exists in the bookmarks list"
 msgstr "‘%s’已存在於書籤中"
 
-#: gtk/gtkfilesystemunix.c:2010 gtk/gtkfilesystemwin32.c:2052
+#: gtk/gtkfilesystemunix.c:2005 gtk/gtkfilesystemwin32.c:2052
 #, c-format
 msgid "'%s' does not exist in the bookmarks list"
 msgstr "‘%s’不存在於書籤中"
@@ -1980,28 +1980,28 @@ msgstr "字型"
 
 #. This is the default text shown in the preview entry, though the user
 #. can set it. Remember that some fonts only have capital letters.
-#: gtk/gtkfontsel.c:74
+#: gtk/gtkfontsel.c:75
 msgid "abcdefghijk ABCDEFGHIJK"
 msgstr "abcd ABCD 「中文測試」"
 
-#: gtk/gtkfontsel.c:325
+#: gtk/gtkfontsel.c:326
 msgid "_Family:"
 msgstr "字集(_F)："
 
-#: gtk/gtkfontsel.c:331
+#: gtk/gtkfontsel.c:332
 msgid "_Style:"
 msgstr "款式(_S)："
 
-#: gtk/gtkfontsel.c:337
+#: gtk/gtkfontsel.c:338
 msgid "Si_ze:"
 msgstr "大小(_Z)："
 
 #. create the text entry widget
-#: gtk/gtkfontsel.c:514
+#: gtk/gtkfontsel.c:515
 msgid "_Preview:"
 msgstr "預覽(_P)："
 
-#: gtk/gtkfontsel.c:1348
+#: gtk/gtkfontsel.c:1359
 msgid "Font Selection"
 msgstr "字型選擇"
 
@@ -2144,27 +2144,27 @@ msgid "Invalid URI"
 msgstr "無效的 URI"
 
 #. Description of --gtk-module=MODULES in --help output
-#: gtk/gtkmain.c:407
+#: gtk/gtkmain.c:408
 msgid "Load additional GTK+ modules"
 msgstr "載入額外的 GTK+ 模組"
 
 #. Placeholder in --gtk-module=MODULES in --help output
-#: gtk/gtkmain.c:408
+#: gtk/gtkmain.c:409
 msgid "MODULES"
 msgstr "模組"
 
 #. Description of --g-fatal-warnings in --help output
-#: gtk/gtkmain.c:410
+#: gtk/gtkmain.c:411
 msgid "Make all warnings fatal"
 msgstr "把所有的警告訊息都當成嚴重錯誤"
 
 #. Description of --gtk-debug=FLAGS in --help output
-#: gtk/gtkmain.c:413
+#: gtk/gtkmain.c:414
 msgid "GTK+ debugging flags to set"
 msgstr "準備設定的 GTK+ 偵錯旗標"
 
 #. Description of --gtk-no-debug=FLAGS in --help output
-#: gtk/gtkmain.c:416
+#: gtk/gtkmain.c:417
 msgid "GTK+ debugging flags to unset"
 msgstr "準備去除的 GTK+ 偵錯旗標"
 
@@ -2173,27 +2173,27 @@ msgstr "準備去除的 GTK+ 偵錯旗標"
 #. * Do *not* translate it to "predefinito:LTR", if it
 #. * it isn't default:LTR or default:RTL it will not work
 #.
-#: gtk/gtkmain.c:652
+#: gtk/gtkmain.c:653
 msgid "default:LTR"
 msgstr "default:LTR"
 
-#: gtk/gtkmain.c:749
+#: gtk/gtkmain.c:750
 msgid "GTK+ Options"
 msgstr "GTK+ 選項"
 
-#: gtk/gtkmain.c:749
+#: gtk/gtkmain.c:750
 msgid "Show GTK+ Options"
 msgstr "顯示 GTK+ 選項"
 
-#: gtk/gtknotebook.c:810
+#: gtk/gtknotebook.c:828
 msgid "Arrow spacing"
 msgstr "箭頭空間"
 
-#: gtk/gtknotebook.c:811
+#: gtk/gtknotebook.c:829
 msgid "Scroll arrow spacing"
 msgstr "捲動箭頭空間"
 
-#: gtk/gtknotebook.c:4344 gtk/gtknotebook.c:6850
+#: gtk/gtknotebook.c:4392 gtk/gtknotebook.c:6898
 #, c-format
 msgid "Page %u"
 msgstr "第 %u 頁"
@@ -2646,12 +2646,12 @@ msgstr "羣組"
 msgid "The radio tool button whose group this button belongs to."
 msgstr "此按鈕所屬的單選工具按鈕羣組。"
 
-#: gtk/gtkrc.c:2836
+#: gtk/gtkrc.c:2866
 #, c-format
 msgid "Unable to find include file: \"%s\""
 msgstr "找不到應包括的檔案：“%s”"
 
-#: gtk/gtkrc.c:3466 gtk/gtkrc.c:3469
+#: gtk/gtkrc.c:3494 gtk/gtkrc.c:3497
 #, c-format
 msgid "Unable to locate image file in pixmap_path: \"%s\""
 msgstr "無法在 pixmap_path 中找到圖片檔：“%s”"
@@ -2803,316 +2803,321 @@ msgid "_Delete"
 msgstr "刪除(_D)"
 
 #: gtk/gtkstock.c:309
+#, fuzzy
+msgid "_Discard"
+msgstr "已失效"
+
+#: gtk/gtkstock.c:310
 msgid "_Disconnect"
 msgstr "斷線(_D)"
 
-#: gtk/gtkstock.c:310
+#: gtk/gtkstock.c:311
 msgid "_Execute"
 msgstr "執行(_E)"
 
-#: gtk/gtkstock.c:311
+#: gtk/gtkstock.c:312
 msgid "_Edit"
 msgstr "編輯(_E)"
 
-#: gtk/gtkstock.c:312
+#: gtk/gtkstock.c:313
 msgid "_Find"
 msgstr "尋找(_F)"
 
-#: gtk/gtkstock.c:313
+#: gtk/gtkstock.c:314
 msgid "Find and _Replace"
 msgstr "尋找及取代(_R)"
 
-#: gtk/gtkstock.c:314
+#: gtk/gtkstock.c:315
 msgid "_Floppy"
 msgstr "軟碟(_F)"
 
 # (Abel) 「全螢幕模式」佔 gtktoolbar 按鈕的位置太闊了
-#: gtk/gtkstock.c:315
+#: gtk/gtkstock.c:316
 msgid "_Fullscreen"
 msgstr "全螢幕(_F)"
 
 # (Abel) 「離開全螢幕模式」佔 gtktoolbar 按鈕的位置太闊了
-#: gtk/gtkstock.c:316
+#: gtk/gtkstock.c:317
 msgid "_Leave Fullscreen"
 msgstr "取消全螢幕(_L)"
 
 #. translators, strip the prefix up to and including the first |
-#: gtk/gtkstock.c:318
+#: gtk/gtkstock.c:319
 msgid "Navigation|_Bottom"
 msgstr "底層(_B)"
 
 #. translators, strip the prefix up to and including the first |
-#: gtk/gtkstock.c:320
+#: gtk/gtkstock.c:321
 msgid "Navigation|_First"
 msgstr "第一頁(_F)"
 
 #. translators, strip the prefix up to and including the first |
-#: gtk/gtkstock.c:322
+#: gtk/gtkstock.c:323
 msgid "Navigation|_Last"
 msgstr "尾頁(_L)"
 
 #. translators, strip the prefix up to and including the first |
-#: gtk/gtkstock.c:324
+#: gtk/gtkstock.c:325
 msgid "Navigation|_Top"
 msgstr "頂層(_T)"
 
 #. translators, strip the prefix up to and including the first |
-#: gtk/gtkstock.c:326
+#: gtk/gtkstock.c:327
 msgid "Navigation|_Back"
 msgstr "上一頁(_B)"
 
 #. translators, strip the prefix up to and including the first |
-#: gtk/gtkstock.c:328
+#: gtk/gtkstock.c:329
 msgid "Navigation|_Down"
 msgstr "下層(_D)"
 
 #. translators, strip the prefix up to and including the first |
-#: gtk/gtkstock.c:330
+#: gtk/gtkstock.c:331
 msgid "Navigation|_Forward"
 msgstr "下一頁(_F)"
 
 #. translators, strip the prefix up to and including the first |
-#: gtk/gtkstock.c:332
+#: gtk/gtkstock.c:333
 msgid "Navigation|_Up"
 msgstr "上層(_U)"
 
-#: gtk/gtkstock.c:333
+#: gtk/gtkstock.c:334
 msgid "_Harddisk"
 msgstr "硬碟(_H)"
 
-#: gtk/gtkstock.c:334
+#: gtk/gtkstock.c:335
 msgid "_Help"
 msgstr "求助(_H)"
 
-#: gtk/gtkstock.c:335
+#: gtk/gtkstock.c:336
 msgid "_Home"
 msgstr "首頁(_H)"
 
-#: gtk/gtkstock.c:336
+#: gtk/gtkstock.c:337
 msgid "Increase Indent"
 msgstr "增加縮排"
 
-#: gtk/gtkstock.c:337
+#: gtk/gtkstock.c:338
 msgid "Decrease Indent"
 msgstr "減少縮排"
 
-#: gtk/gtkstock.c:338
+#: gtk/gtkstock.c:339
 msgid "_Index"
 msgstr "索引(_I)"
 
-#: gtk/gtkstock.c:339
+#: gtk/gtkstock.c:340
 msgid "_Information"
 msgstr "資訊(_I)"
 
-#: gtk/gtkstock.c:340
+#: gtk/gtkstock.c:341
 msgid "_Italic"
 msgstr "斜體(_I)"
 
-#: gtk/gtkstock.c:341
+#: gtk/gtkstock.c:342
 msgid "_Jump to"
 msgstr "移至(_J)"
 
 #. translators, strip the prefix up to and including the first |
-#: gtk/gtkstock.c:343
+#: gtk/gtkstock.c:344
 msgid "Justify|_Center"
 msgstr "置中(_C)"
 
 #. translators, strip the prefix up to and including the first |
-#: gtk/gtkstock.c:345
+#: gtk/gtkstock.c:346
 msgid "Justify|_Fill"
 msgstr "左右對齊(_F)"
 
 #. translators, strip the prefix up to and including the first |
-#: gtk/gtkstock.c:347
+#: gtk/gtkstock.c:348
 msgid "Justify|_Left"
 msgstr "靠左(_L)"
 
 #. translators, strip the prefix up to and including the first |
-#: gtk/gtkstock.c:349
+#: gtk/gtkstock.c:350
 msgid "Justify|_Right"
 msgstr "靠右(_R)"
 
 #. translators, strip the prefix up to and including the first |
-#: gtk/gtkstock.c:352
+#: gtk/gtkstock.c:353
 msgid "Media|_Forward"
 msgstr "快轉(_F)"
 
 #. translators, strip the prefix up to and including the first |
-#: gtk/gtkstock.c:354
+#: gtk/gtkstock.c:355
 msgid "Media|_Next"
 msgstr "下一首(_N)"
 
 #. translators, strip the prefix up to and including the first |
-#: gtk/gtkstock.c:356
+#: gtk/gtkstock.c:357
 msgid "Media|P_ause"
 msgstr "暫停(_A)"
 
 #. translators, strip the prefix up to and including the first |
-#: gtk/gtkstock.c:358
+#: gtk/gtkstock.c:359
 msgid "Media|_Play"
 msgstr "播放(_P)"
 
 #. translators, strip the prefix up to and including the first |
-#: gtk/gtkstock.c:360
+#: gtk/gtkstock.c:361
 msgid "Media|Pre_vious"
 msgstr "上一首(_V)"
 
 #. translators, strip the prefix up to and including the first |
-#: gtk/gtkstock.c:362
+#: gtk/gtkstock.c:363
 msgid "Media|_Record"
 msgstr "錄音(_R)"
 
 #. translators, strip the prefix up to and including the first |
-#: gtk/gtkstock.c:364
+#: gtk/gtkstock.c:365
 msgid "Media|R_ewind"
 msgstr "倒捲(_E)"
 
 #. translators, strip the prefix up to and including the first |
-#: gtk/gtkstock.c:366
+#: gtk/gtkstock.c:367
 msgid "Media|_Stop"
 msgstr "停止(_S)"
 
-#: gtk/gtkstock.c:367
+#: gtk/gtkstock.c:368
 msgid "_Network"
 msgstr "網絡(_N)"
 
-#: gtk/gtkstock.c:368
+#: gtk/gtkstock.c:369
 msgid "_New"
 msgstr "新增(_N)"
 
-#: gtk/gtkstock.c:369
+#: gtk/gtkstock.c:370
 msgid "_No"
 msgstr "否(_N)"
 
-#: gtk/gtkstock.c:370
+#: gtk/gtkstock.c:371
 msgid "_OK"
 msgstr "確定(_O)"
 
-#: gtk/gtkstock.c:371
+#: gtk/gtkstock.c:372
 msgid "_Open"
 msgstr "開啟(_O)"
 
-#: gtk/gtkstock.c:372
+#: gtk/gtkstock.c:373
 msgid "Landscape"
 msgstr "橫向"
 
-#: gtk/gtkstock.c:373
+#: gtk/gtkstock.c:374
 msgid "Portrait"
 msgstr "直向"
 
-#: gtk/gtkstock.c:374
+#: gtk/gtkstock.c:375
 msgid "Reverse landscape"
 msgstr "橫向倒置"
 
-#: gtk/gtkstock.c:375
+#: gtk/gtkstock.c:376
 msgid "Reverse portrait"
 msgstr "直向倒置"
 
-#: gtk/gtkstock.c:376
+#: gtk/gtkstock.c:377
 msgid "_Paste"
 msgstr "貼上(_P)"
 
-#: gtk/gtkstock.c:377
+#: gtk/gtkstock.c:378
 msgid "_Preferences"
 msgstr "偏好設定(_P)"
 
-#: gtk/gtkstock.c:378
+#: gtk/gtkstock.c:379
 msgid "_Print"
 msgstr "打印(_P)"
 
-#: gtk/gtkstock.c:379
+#: gtk/gtkstock.c:380
 msgid "Print Pre_view"
 msgstr "預覽打印(_V)"
 
-#: gtk/gtkstock.c:380
+#: gtk/gtkstock.c:381
 msgid "_Properties"
 msgstr "屬性(_P)"
 
-#: gtk/gtkstock.c:381
+#: gtk/gtkstock.c:382
 msgid "_Quit"
 msgstr "離開(_Q)"
 
-#: gtk/gtkstock.c:382
+#: gtk/gtkstock.c:383
 msgid "_Redo"
 msgstr "取消復原(_R)"
 
-#: gtk/gtkstock.c:383
+#: gtk/gtkstock.c:384
 msgid "_Refresh"
 msgstr "重新整理(_R)"
 
-#: gtk/gtkstock.c:385
+#: gtk/gtkstock.c:386
 msgid "_Revert"
 msgstr "回復(_R)"
 
-#: gtk/gtkstock.c:386
+#: gtk/gtkstock.c:387
 msgid "_Save"
 msgstr "儲存(_S)"
 
-#: gtk/gtkstock.c:387
+#: gtk/gtkstock.c:388
 msgid "Save _As"
 msgstr "另存新檔(_A)"
 
-#: gtk/gtkstock.c:388
+#: gtk/gtkstock.c:389
 msgid "Select _All"
 msgstr "全部選取(_A)"
 
-#: gtk/gtkstock.c:389
+#: gtk/gtkstock.c:390
 msgid "_Color"
 msgstr "色彩(_C)"
 
-#: gtk/gtkstock.c:390
+#: gtk/gtkstock.c:391
 msgid "_Font"
 msgstr "字型(_F)"
 
-#: gtk/gtkstock.c:391
+#: gtk/gtkstock.c:392
 msgid "_Ascending"
 msgstr "遞增(_A)"
 
-#: gtk/gtkstock.c:392
+#: gtk/gtkstock.c:393
 msgid "_Descending"
 msgstr "遞減(_D)"
 
-#: gtk/gtkstock.c:393
+#: gtk/gtkstock.c:394
 msgid "_Spell Check"
 msgstr "檢查拼字(_S)"
 
-#: gtk/gtkstock.c:394
+#: gtk/gtkstock.c:395
 msgid "_Stop"
 msgstr "停止(_S)"
 
-#: gtk/gtkstock.c:395
+#: gtk/gtkstock.c:396
 msgid "_Strikethrough"
 msgstr "刪除線(_S)"
 
-#: gtk/gtkstock.c:396
+#: gtk/gtkstock.c:397
 msgid "_Undelete"
 msgstr "取消刪除(_U)"
 
-#: gtk/gtkstock.c:397
+#: gtk/gtkstock.c:398
 msgid "_Underline"
 msgstr "底線(_U)"
 
-#: gtk/gtkstock.c:398
+#: gtk/gtkstock.c:399
 msgid "_Undo"
 msgstr "復原(_U)"
 
-#: gtk/gtkstock.c:399
+#: gtk/gtkstock.c:400
 msgid "_Yes"
 msgstr "是(_Y)"
 
-#: gtk/gtkstock.c:400
+#: gtk/gtkstock.c:401
 msgid "_Normal Size"
 msgstr "正常尺寸(_N)"
 
-#: gtk/gtkstock.c:401
+#: gtk/gtkstock.c:402
 msgid "Best _Fit"
 msgstr "符合視窗(_F)"
 
-#: gtk/gtkstock.c:402
+#: gtk/gtkstock.c:403
 msgid "Zoom _In"
 msgstr "拉近(_I)"
 
-#: gtk/gtkstock.c:403
+#: gtk/gtkstock.c:404
 msgid "Zoom _Out"
 msgstr "拉遠(_O)"
 
@@ -3281,22 +3286,22 @@ msgstr "無法在 module_path 中找出佈景主題引擎：‘%s’，"
 msgid "--- No Tip ---"
 msgstr "--- 無提示 ---"
 
-#: gtk/gtkuimanager.c:1126
+#: gtk/gtkuimanager.c:1197
 #, c-format
 msgid "Unknown attribute '%s' on line %d char %d"
 msgstr "第 %2$d 行第 %3$d 字有未知的屬性‘%1$s’"
 
-#: gtk/gtkuimanager.c:1343
+#: gtk/gtkuimanager.c:1414
 #, c-format
 msgid "Unexpected start tag '%s' on line %d char %d"
 msgstr "第 %2$d 行第 %3$d 字有非預設的開始標記‘%1$s’"
 
-#: gtk/gtkuimanager.c:1433
+#: gtk/gtkuimanager.c:1504
 #, c-format
 msgid "Unexpected character data on line %d char %d"
 msgstr "第 %d 行第 %d 字有非預設的字符資料"
 
-#: gtk/gtkuimanager.c:2254
+#: gtk/gtkuimanager.c:2325
 msgid "Empty"
 msgstr "空的"
 
@@ -4300,84 +4305,84 @@ msgstr "越南文 (VIQR)"
 msgid "X Input Method"
 msgstr "一般輸入法 (XIM)"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1524
+#: modules/printbackends/cups/gtkprintbackendcups.c:1533
 msgid "Two Sided"
 msgstr "雙面"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1525
+#: modules/printbackends/cups/gtkprintbackendcups.c:1534
 msgid "Paper Type"
 msgstr "紙張類型"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1526
+#: modules/printbackends/cups/gtkprintbackendcups.c:1535
 msgid "Paper Source"
 msgstr "紙張來源"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1527
+#: modules/printbackends/cups/gtkprintbackendcups.c:1536
 msgid "Output Tray"
 msgstr "出紙匣"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1536
+#: modules/printbackends/cups/gtkprintbackendcups.c:1545
 msgid "One Sided"
 msgstr "單面"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1537
-#: modules/printbackends/cups/gtkprintbackendcups.c:1538
-#: modules/printbackends/cups/gtkprintbackendcups.c:1542
+#: modules/printbackends/cups/gtkprintbackendcups.c:1546
+#: modules/printbackends/cups/gtkprintbackendcups.c:1547
+#: modules/printbackends/cups/gtkprintbackendcups.c:1551
 msgid "Auto Select"
 msgstr "自動選擇"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1539
-#: modules/printbackends/cups/gtkprintbackendcups.c:1540
-#: modules/printbackends/cups/gtkprintbackendcups.c:1541
-#: modules/printbackends/cups/gtkprintbackendcups.c:2011
+#: modules/printbackends/cups/gtkprintbackendcups.c:1548
+#: modules/printbackends/cups/gtkprintbackendcups.c:1549
+#: modules/printbackends/cups/gtkprintbackendcups.c:1550
+#: modules/printbackends/cups/gtkprintbackendcups.c:2020
 msgid "Printer Default"
 msgstr "打印機預設"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2205
+#: modules/printbackends/cups/gtkprintbackendcups.c:2214
 msgid "Urgent"
 msgstr "緊急"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2205
+#: modules/printbackends/cups/gtkprintbackendcups.c:2214
 msgid "High"
 msgstr "高"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2205
+#: modules/printbackends/cups/gtkprintbackendcups.c:2214
 msgid "Medium"
 msgstr "中"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2205
+#: modules/printbackends/cups/gtkprintbackendcups.c:2214
 msgid "Low"
 msgstr "低"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2207
+#: modules/printbackends/cups/gtkprintbackendcups.c:2216
 msgid "None"
 msgstr "沒有"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2207
+#: modules/printbackends/cups/gtkprintbackendcups.c:2216
 msgid "Classified"
 msgstr "已分類"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2207
+#: modules/printbackends/cups/gtkprintbackendcups.c:2216
 msgid "Confidential"
 msgstr "秘密"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2207
+#: modules/printbackends/cups/gtkprintbackendcups.c:2216
 msgid "Secret"
 msgstr "機密"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2207
+#: modules/printbackends/cups/gtkprintbackendcups.c:2216
 msgid "Standard"
 msgstr "標準"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2207
+#: modules/printbackends/cups/gtkprintbackendcups.c:2216
 msgid "Top Secret"
 msgstr "高度機密"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2207
+#: modules/printbackends/cups/gtkprintbackendcups.c:2216
 msgid "Unclassified"
 msgstr "未分類"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2293
+#: modules/printbackends/cups/gtkprintbackendcups.c:2302
 #, c-format
 msgid "Custom %.2fx%.2f"
 msgstr ""
@@ -4388,28 +4393,28 @@ msgstr ""
 msgid "output.%s"
 msgstr "output.%s"
 
-#: modules/printbackends/file/gtkprintbackendfile.c:460
+#: modules/printbackends/file/gtkprintbackendfile.c:464
 msgid "Print to File"
 msgstr "打印至檔案"
 
-#: modules/printbackends/file/gtkprintbackendfile.c:485
+#: modules/printbackends/file/gtkprintbackendfile.c:489
 msgid "PDF"
 msgstr "PDF"
 
-#: modules/printbackends/file/gtkprintbackendfile.c:485
+#: modules/printbackends/file/gtkprintbackendfile.c:489
 msgid "Postscript"
 msgstr "Postscript"
 
-#: modules/printbackends/file/gtkprintbackendfile.c:497
+#: modules/printbackends/file/gtkprintbackendfile.c:501
 #: modules/printbackends/test/gtkprintbackendtest.c:501
 msgid "Pages per _sheet:"
 msgstr "每張紙的頁數(_S)"
 
-#: modules/printbackends/file/gtkprintbackendfile.c:543
+#: modules/printbackends/file/gtkprintbackendfile.c:547
 msgid "File"
 msgstr "檔案"
 
-#: modules/printbackends/file/gtkprintbackendfile.c:552
+#: modules/printbackends/file/gtkprintbackendfile.c:556
 msgid "_Output format"
 msgstr "輸出格式(_O)"
 

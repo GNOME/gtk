@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: GTK+\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-06-06 09:04-0400\n"
+"POT-Creation-Date: 2007-06-15 21:24-0400\n"
 "PO-Revision-Date: 2006-07-31 20:27+0530\n"
 "Last-Translator: Runa Bhattacharjee <runabh@gmail.com>\n"
 "Language-Team: Bengali India <gnome-translation@bengalinux.org>\n"
@@ -76,7 +76,7 @@ msgstr "মান নির্ধারণের উদ্দেশ্যে চ
 #. Placeholder in --gdk-no-debug=FLAGS in --help output
 #. Placeholder in --gtk-debug=FLAGS in --help output
 #. Placeholder in --gtk-no-debug=FLAGS in --help output
-#: gdk/gdk.c:140 gdk/gdk.c:143 gtk/gtkmain.c:414 gtk/gtkmain.c:417
+#: gdk/gdk.c:140 gdk/gdk.c:143 gtk/gtkmain.c:415 gtk/gtkmain.c:418
 msgid "FLAGS"
 msgstr "FLAGS"
 
@@ -1343,7 +1343,7 @@ msgid "New accelerator..."
 msgstr "নতুন গতিবর্ধক..."
 
 #. do not translate the part before the |
-#: gtk/gtkcellrendererprogress.c:278 gtk/gtkcellrendererprogress.c:365
+#: gtk/gtkcellrendererprogress.c:362 gtk/gtkcellrendererprogress.c:449
 #, c-format
 msgid "progress bar label|%d %%"
 msgstr "%d %%"
@@ -1465,15 +1465,15 @@ msgstr "প্যালেট: (_P)"
 msgid "Color Wheel"
 msgstr "রং প্রদর্শনকারী চাকতি"
 
-#: gtk/gtkcolorseldialog.c:89
+#: gtk/gtkcolorseldialog.c:101
 msgid "Color Selection"
 msgstr "রং নির্বাচন"
 
-#: gtk/gtkentry.c:5198 gtk/gtktextview.c:7448
+#: gtk/gtkentry.c:5253 gtk/gtktextview.c:7462
 msgid "Input _Methods"
 msgstr "ইনপুট পদ্ধতি (_M)"
 
-#: gtk/gtkentry.c:5212 gtk/gtktextview.c:7462
+#: gtk/gtkentry.c:5267 gtk/gtktextview.c:7476
 msgid "_Insert Unicode Control Character"
 msgstr "ইউনিকোডের কন্ট্রোল অক্ষর সন্নিবেশ করুন (_I)"
 
@@ -1489,7 +1489,7 @@ msgstr "ডেস্কটপ"
 msgid "(None)"
 msgstr "(শূণ্য)"
 
-#: gtk/gtkfilechooserbutton.c:2049
+#: gtk/gtkfilechooserbutton.c:2047
 msgid "Other..."
 msgstr "অন্যান্য..."
 
@@ -1535,168 +1535,168 @@ msgstr "ফোল্ডারে বিষয়বস্তু প্রদর্�
 #. * is a hostname. Nautilus and the panel contain the same string
 #. * to translate.
 #.
-#: gtk/gtkfilechooserdefault.c:1707
+#: gtk/gtkfilechooserdefault.c:1714
 #, c-format
 msgid "%1$s on %2$s"
 msgstr "%1$s, %2$s'র উপর"
 
-#: gtk/gtkfilechooserdefault.c:1878
+#: gtk/gtkfilechooserdefault.c:1892
 msgid "Search"
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:1902
+#: gtk/gtkfilechooserdefault.c:1916
 msgid "Recently Used"
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:2991
+#: gtk/gtkfilechooserdefault.c:3006
 #, c-format
 msgid "Add the folder '%s' to the bookmarks"
 msgstr "'%s' নামক ফোল্ডারটি বুকমার্কের মধ্যে যোগ করুন"
 
-#: gtk/gtkfilechooserdefault.c:3032
+#: gtk/gtkfilechooserdefault.c:3047
 #, c-format
 msgid "Add the current folder to the bookmarks"
 msgstr "বর্তমান ফোল্ডারটি বুকমার্কে যোগ করুন"
 
-#: gtk/gtkfilechooserdefault.c:3034
+#: gtk/gtkfilechooserdefault.c:3049
 #, c-format
 msgid "Add the selected folders to the bookmarks"
 msgstr "নির্বাচিত ফোল্ডারগুলি বুকমার্কে যোগ করুন"
 
-#: gtk/gtkfilechooserdefault.c:3074
+#: gtk/gtkfilechooserdefault.c:3089
 #, c-format
 msgid "Remove the bookmark '%s'"
 msgstr "'%s' নামক বুকমার্কটি মুছে ফেলুন"
 
 # FIXME
-#: gtk/gtkfilechooserdefault.c:3507
+#: gtk/gtkfilechooserdefault.c:3522
 #, c-format
 msgid "Could not add a bookmark for '%s' because it is an invalid path name."
 msgstr "পাথের নাম বৈধ না হওয়া ফলে '%s'-র জন্য বুকমার্ক যোগ করতে ব্যর্থ।"
 
-#: gtk/gtkfilechooserdefault.c:3732
+#: gtk/gtkfilechooserdefault.c:3747
 msgid "Remove"
 msgstr "মুছে ফেলুন"
 
-#: gtk/gtkfilechooserdefault.c:3741
+#: gtk/gtkfilechooserdefault.c:3756
 msgid "Rename..."
 msgstr "নাম পরিবর্তন..."
 
 #. Accessible object name for the file chooser's shortcuts pane
-#: gtk/gtkfilechooserdefault.c:3883
+#: gtk/gtkfilechooserdefault.c:3898
 msgid "Places"
 msgstr "অবস্থান"
 
 #. Column header for the file chooser's shortcuts pane
-#: gtk/gtkfilechooserdefault.c:3937
+#: gtk/gtkfilechooserdefault.c:3952
 msgid "_Places"
 msgstr "অবস্থান (_P)"
 
-#: gtk/gtkfilechooserdefault.c:3992 gtk/gtkstock.c:297
+#: gtk/gtkfilechooserdefault.c:4007 gtk/gtkstock.c:297
 msgid "_Add"
 msgstr "যোগ করুন (_A)"
 
-#: gtk/gtkfilechooserdefault.c:3999
+#: gtk/gtkfilechooserdefault.c:4014
 msgid "Add the selected folder to the Bookmarks"
 msgstr "নির্বাচিত ফোল্ডারটি বুকমার্কে যোগ করুন"
 
-#: gtk/gtkfilechooserdefault.c:4004 gtk/gtkstock.c:384
+#: gtk/gtkfilechooserdefault.c:4019 gtk/gtkstock.c:385
 msgid "_Remove"
 msgstr "মুছে ফেলুন (_R)"
 
-#: gtk/gtkfilechooserdefault.c:4011
+#: gtk/gtkfilechooserdefault.c:4026
 msgid "Remove the selected bookmark"
 msgstr "নির্বাচিত বুকমার্ক মুছে ফেলুন"
 
-#: gtk/gtkfilechooserdefault.c:4107
+#: gtk/gtkfilechooserdefault.c:4122
 msgid "Could not select file"
 msgstr "ফাইল নির্বাচন করতে ব্যর্থ"
 
-#: gtk/gtkfilechooserdefault.c:4244
+#: gtk/gtkfilechooserdefault.c:4259
 #, c-format
 msgid "Could not select file '%s' because it is an invalid path name."
 msgstr "পাথের নাম বৈধ না হওয়া ফলে '%s' নামক ফাইল নির্বাচন করতে ব্যর্থ।"
 
-#: gtk/gtkfilechooserdefault.c:4301
+#: gtk/gtkfilechooserdefault.c:4316
 msgid "_Add to Bookmarks"
 msgstr "বুকমার্ক তালিকায় যোগ করুন(_A)"
 
-#: gtk/gtkfilechooserdefault.c:4315
+#: gtk/gtkfilechooserdefault.c:4330
 msgid "Show _Hidden Files"
 msgstr "লুকোনো ফাইল প্রদর্শন করা হবে (_H)"
 
-#: gtk/gtkfilechooserdefault.c:4483 gtk/gtkfilesel.c:729
+#: gtk/gtkfilechooserdefault.c:4498 gtk/gtkfilesel.c:729
 msgid "Files"
 msgstr "ফাইল"
 
-#: gtk/gtkfilechooserdefault.c:4528
+#: gtk/gtkfilechooserdefault.c:4543
 msgid "Name"
 msgstr "নাম"
 
-#: gtk/gtkfilechooserdefault.c:4553
+#: gtk/gtkfilechooserdefault.c:4568
 msgid "Size"
 msgstr "মাপ"
 
-#: gtk/gtkfilechooserdefault.c:4567
+#: gtk/gtkfilechooserdefault.c:4582
 msgid "Modified"
 msgstr "সর্বশেষ পরিবর্তন"
 
-#: gtk/gtkfilechooserdefault.c:4602
+#: gtk/gtkfilechooserdefault.c:4617
 msgid "Select which types of files are shown"
 msgstr "প্রদর্শনের উদ্দেশ্যে বিভিন্ন ফাইলের বিন্যাস নির্বাচন করুন"
 
 #. Label
-#: gtk/gtkfilechooserdefault.c:4813 gtk/gtkprinteroptionwidget.c:786
+#: gtk/gtkfilechooserdefault.c:4828 gtk/gtkprinteroptionwidget.c:786
 msgid "_Name:"
 msgstr "নাম:(_N)"
 
 # FIXME
-#: gtk/gtkfilechooserdefault.c:4855
+#: gtk/gtkfilechooserdefault.c:4870
 msgid "_Browse for other folders"
 msgstr "অন্যান্য ফোল্ডার অনুসন্ধানের জন্য ব্রাউজ করুন (_B)"
 
-#: gtk/gtkfilechooserdefault.c:5110
+#: gtk/gtkfilechooserdefault.c:5125
 msgid "Type a file name"
 msgstr "ফাইলের নাম টাইপ করুন"
 
 #. Create Folder
-#: gtk/gtkfilechooserdefault.c:5147
+#: gtk/gtkfilechooserdefault.c:5162
 msgid "Create Fo_lder"
 msgstr "ফোল্ডার নির্মাণ করুন (_l)"
 
-#: gtk/gtkfilechooserdefault.c:5157
+#: gtk/gtkfilechooserdefault.c:5172
 msgid "_Location:"
 msgstr "অবস্থান :(_L)"
 
-#: gtk/gtkfilechooserdefault.c:5395
+#: gtk/gtkfilechooserdefault.c:5410
 msgid "Save in _folder:"
 msgstr "চিহ্নিত ফোল্ডারে সংরক্ষণ করুন:(_f)"
 
-#: gtk/gtkfilechooserdefault.c:5397
+#: gtk/gtkfilechooserdefault.c:5412
 msgid "Create in _folder:"
 msgstr "চিহ্নিত ফোল্ডারে নির্মাণ করা করুন:(_f)"
 
-#: gtk/gtkfilechooserdefault.c:7000
+#: gtk/gtkfilechooserdefault.c:7015
 #, c-format
 msgid "Cannot change to folder because it is not local"
 msgstr "স্থানীয় অবস্থানে না হওয়ার ফলে ফোল্ডার পরিবর্তন করতে ব্যর্থ"
 
-#: gtk/gtkfilechooserdefault.c:7616 gtk/gtkfilechooserdefault.c:7637
+#: gtk/gtkfilechooserdefault.c:7631 gtk/gtkfilechooserdefault.c:7652
 #, c-format
 msgid "Shortcut %s already exists"
 msgstr "%s শর্টকাট বর্তমানে উপস্থিত রয়েছে"
 
-#: gtk/gtkfilechooserdefault.c:7727
+#: gtk/gtkfilechooserdefault.c:7742
 #, c-format
 msgid "Shortcut %s does not exist"
 msgstr "%s শর্টকাট বর্তমানে অনুপস্থিত"
 
-#: gtk/gtkfilechooserdefault.c:7982
+#: gtk/gtkfilechooserdefault.c:7997
 #, c-format
 msgid "A file named \"%s\" already exists.  Do you want to replace it?"
 msgstr "\"%s\" নামক ফাইল বর্তমানে উপস্থিত রয়েছে। প্রতিস্থাপন করা হবে কি?"
 
-#: gtk/gtkfilechooserdefault.c:7985
+#: gtk/gtkfilechooserdefault.c:8000
 #, c-format
 msgid ""
 "The file already exists in \"%s\".  Replacing it will overwrite its contents."
@@ -1704,71 +1704,71 @@ msgstr ""
 "ফাইল \"%s\"'র মধ্যে বর্তমানে উপস্থিত রয়েছে। নতুন ফাইল দ্বারা প্রতিস্থাপন করা হলে "
 "পূর্ববর্তী ফাইলের বিষয়বস্তু মুছে যাবে।"
 
-#: gtk/gtkfilechooserdefault.c:7990
+#: gtk/gtkfilechooserdefault.c:8005
 msgid "_Replace"
 msgstr "প্রতিস্থাপন (_R)"
 
-#: gtk/gtkfilechooserdefault.c:8821
+#: gtk/gtkfilechooserdefault.c:8836
 #, fuzzy
 msgid "Could not start the search process"
 msgstr "অবশিষ্ট অংশ সংরক্ষণ করতে ব্যর্থ"
 
-#: gtk/gtkfilechooserdefault.c:8822
+#: gtk/gtkfilechooserdefault.c:8837
 msgid ""
 "The program was not able to create a connection to the indexer daemon.  "
 "Please make sure it is running."
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:8836
+#: gtk/gtkfilechooserdefault.c:8851
 #, fuzzy
 msgid "Could not send the search request"
 msgstr "অবশিষ্ট অংশ সংরক্ষণ করতে ব্যর্থ"
 
 #. Label
-#: gtk/gtkfilechooserdefault.c:9262
+#: gtk/gtkfilechooserdefault.c:9277
 msgid "_Search:"
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:10148
+#: gtk/gtkfilechooserdefault.c:10166
 #, c-format
 msgid "Could not mount %s"
 msgstr "%s মাউন্ট করতে ব্যর্থ"
 
-#: gtk/gtkfilechooserdefault.c:10788
+#: gtk/gtkfilechooserdefault.c:10806
 msgid "Type name of new folder"
 msgstr "নতুন ফোল্ডারের নাম লিখুন"
 
-#: gtk/gtkfilechooserdefault.c:10836
+#: gtk/gtkfilechooserdefault.c:10854
 #, c-format
 msgid "%d byte"
 msgid_plural "%d bytes"
 msgstr[0] "%d বাইট"
 msgstr[1] "%d বাইট"
 
-#: gtk/gtkfilechooserdefault.c:10838
+#: gtk/gtkfilechooserdefault.c:10856
 #, c-format
 msgid "%.1f KB"
 msgstr "%.1f কিলোবাইট"
 
-#: gtk/gtkfilechooserdefault.c:10840
+#: gtk/gtkfilechooserdefault.c:10858
 #, c-format
 msgid "%.1f MB"
 msgstr "%.1f মেগাবাইট"
 
-#: gtk/gtkfilechooserdefault.c:10842
+#: gtk/gtkfilechooserdefault.c:10860
 #, c-format
 msgid "%.1f GB"
 msgstr "%.1f গিগাবাইট"
 
-#: gtk/gtkfilechooserdefault.c:10940 gtk/gtkfilechooserdefault.c:10964
+#: gtk/gtkfilechooserdefault.c:10958 gtk/gtkfilechooserdefault.c:10982
 msgid "Unknown"
 msgstr "অজানা"
 
-#: gtk/gtkfilechooserdefault.c:10951
+#: gtk/gtkfilechooserdefault.c:10969
 msgid "Today"
 msgstr "আজ"
 
-#: gtk/gtkfilechooserdefault.c:10953
+#: gtk/gtkfilechooserdefault.c:10971
 msgid "Yesterday"
 msgstr "গতকাল"
 
@@ -1921,7 +1921,7 @@ msgid "(Empty)"
 msgstr "(ফাঁকা)"
 
 #: gtk/gtkfilesystemunix.c:960 gtk/gtkfilesystemunix.c:1208
-#: gtk/gtkfilesystemunix.c:2201 gtk/gtkfilesystemunix.c:2241
+#: gtk/gtkfilesystemunix.c:2196 gtk/gtkfilesystemunix.c:2236
 #: gtk/gtkfilesystemwin32.c:2245 gtk/gtkfilesystemwin32.c:2295
 #, c-format
 msgid "Error getting information for '%s': %s"
@@ -1945,17 +1945,17 @@ msgstr ""
 "\"%s\" নামের মধ্যে \"%s\" অক্ষরের উপস্থিতির ফলে সেটি বৈধ নয়। অনুগ্রহ করে একটি পৃথক "
 "নাম ব্যবহার করুন।"
 
-#: gtk/gtkfilesystemunix.c:1883 gtk/gtkfilesystemwin32.c:1925
+#: gtk/gtkfilesystemunix.c:1878 gtk/gtkfilesystemwin32.c:1925
 #, c-format
 msgid "Bookmark saving failed: %s"
 msgstr "বুকমার্ক সংরক্ষণ করতে ব্যর্থ: %s"
 
-#: gtk/gtkfilesystemunix.c:1938 gtk/gtkfilesystemwin32.c:1980
+#: gtk/gtkfilesystemunix.c:1933 gtk/gtkfilesystemwin32.c:1980
 #, c-format
 msgid "'%s' already exists in the bookmarks list"
 msgstr "'%s' বর্তমানে বুকমার্কের তালিকায় উপস্থিত রয়েছে"
 
-#: gtk/gtkfilesystemunix.c:2010 gtk/gtkfilesystemwin32.c:2052
+#: gtk/gtkfilesystemunix.c:2005 gtk/gtkfilesystemwin32.c:2052
 #, c-format
 msgid "'%s' does not exist in the bookmarks list"
 msgstr "'%s' বর্তমানে বুকমার্ক তালিকায় উপস্থিত নেই"
@@ -1990,28 +1990,28 @@ msgstr "ফন্ট"
 
 #. This is the default text shown in the preview entry, though the user
 #. can set it. Remember that some fonts only have capital letters.
-#: gtk/gtkfontsel.c:74
+#: gtk/gtkfontsel.c:75
 msgid "abcdefghijk ABCDEFGHIJK"
 msgstr "অআইঈউঊঋঌএঐওঔ কখগঘঙচছজঝঞটঠডঢণতথদধনপফবভমযরলশষসহ"
 
-#: gtk/gtkfontsel.c:325
+#: gtk/gtkfontsel.c:326
 msgid "_Family:"
 msgstr "সংকলন: (_F)"
 
-#: gtk/gtkfontsel.c:331
+#: gtk/gtkfontsel.c:332
 msgid "_Style:"
 msgstr "বিন্যাস:(_S)"
 
-#: gtk/gtkfontsel.c:337
+#: gtk/gtkfontsel.c:338
 msgid "Si_ze:"
 msgstr "মাপ:(_z)"
 
 #. create the text entry widget
-#: gtk/gtkfontsel.c:514
+#: gtk/gtkfontsel.c:515
 msgid "_Preview:"
 msgstr "পূর্বপ্রদর্শন:(_P)"
 
-#: gtk/gtkfontsel.c:1348
+#: gtk/gtkfontsel.c:1359
 msgid "Font Selection"
 msgstr "ফন্ট নির্বাচন"
 
@@ -2152,27 +2152,27 @@ msgid "Invalid URI"
 msgstr "অবৈধ URI"
 
 #. Description of --gtk-module=MODULES in --help output
-#: gtk/gtkmain.c:407
+#: gtk/gtkmain.c:408
 msgid "Load additional GTK+ modules"
 msgstr "অতিরিক্ত GTK+ মডিউল লোড করুন"
 
 #. Placeholder in --gtk-module=MODULES in --help output
-#: gtk/gtkmain.c:408
+#: gtk/gtkmain.c:409
 msgid "MODULES"
 msgstr "MODULES"
 
 #. Description of --g-fatal-warnings in --help output
-#: gtk/gtkmain.c:410
+#: gtk/gtkmain.c:411
 msgid "Make all warnings fatal"
 msgstr "সকল সতর্কবার্তা গুরুতর হিসাবে চিহ্নিত হবে"
 
 #. Description of --gtk-debug=FLAGS in --help output
-#: gtk/gtkmain.c:413
+#: gtk/gtkmain.c:414
 msgid "GTK+ debugging flags to set"
 msgstr "মান নির্ধারণের উদ্দেশ্যে চিহ্নিত GTK+ ডিবাগিং ফ্ল্যাগ"
 
 #. Description of --gtk-no-debug=FLAGS in --help output
-#: gtk/gtkmain.c:416
+#: gtk/gtkmain.c:417
 msgid "GTK+ debugging flags to unset"
 msgstr "মান মুছে ফেলার উদ্দেশ্যে চিহ্নিত GTK+ ডিবাগিং ফ্ল্যাগ"
 
@@ -2181,27 +2181,27 @@ msgstr "মান মুছে ফেলার উদ্দেশ্যে চ�
 #. * Do *not* translate it to "predefinito:LTR", if it
 #. * it isn't default:LTR or default:RTL it will not work
 #.
-#: gtk/gtkmain.c:652
+#: gtk/gtkmain.c:653
 msgid "default:LTR"
 msgstr "default:LTR"
 
-#: gtk/gtkmain.c:749
+#: gtk/gtkmain.c:750
 msgid "GTK+ Options"
 msgstr "GTK+ সংক্রান্ত বিকল্প"
 
-#: gtk/gtkmain.c:749
+#: gtk/gtkmain.c:750
 msgid "Show GTK+ Options"
 msgstr "GTK+ সংক্রান্ত বিকল্প প্রদর্শন করা হবে"
 
-#: gtk/gtknotebook.c:810
+#: gtk/gtknotebook.c:828
 msgid "Arrow spacing"
 msgstr "তীরচিহ্নের মধ্যে অন্তর্বর্তী শূণ্যস্থান"
 
-#: gtk/gtknotebook.c:811
+#: gtk/gtknotebook.c:829
 msgid "Scroll arrow spacing"
 msgstr ""
 
-#: gtk/gtknotebook.c:4344 gtk/gtknotebook.c:6850
+#: gtk/gtknotebook.c:4392 gtk/gtknotebook.c:6898
 #, c-format
 msgid "Page %u"
 msgstr "পৃষ্ঠা %u"
@@ -2652,12 +2652,12 @@ msgstr "দল"
 msgid "The radio tool button whose group this button belongs to."
 msgstr "চিহ্নিত বাটনটি যে রেডিও টুল বাটন সংকলনের অংশ।"
 
-#: gtk/gtkrc.c:2836
+#: gtk/gtkrc.c:2866
 #, c-format
 msgid "Unable to find include file: \"%s\""
 msgstr "include ফাইল সনাক্ত করতে ব্যর্থ: \"%s\""
 
-#: gtk/gtkrc.c:3466 gtk/gtkrc.c:3469
+#: gtk/gtkrc.c:3494 gtk/gtkrc.c:3497
 #, c-format
 msgid "Unable to locate image file in pixmap_path: \"%s\""
 msgstr "pixmap_path'এ ছবির ফাইল সনাক্ত করতে ব্যর্থ: \"%s\""
@@ -2810,315 +2810,320 @@ msgid "_Delete"
 msgstr "মুছে ফেলুন (_D)"
 
 #: gtk/gtkstock.c:309
+#, fuzzy
+msgid "_Discard"
+msgstr "নিষ্ক্রিয়"
+
+#: gtk/gtkstock.c:310
 msgid "_Disconnect"
 msgstr "সংযোগ বিচ্ছিন্ন করুন (_D)"
 
-#: gtk/gtkstock.c:310
+#: gtk/gtkstock.c:311
 msgid "_Execute"
 msgstr "সঞ্চালন করুন (_E)"
 
-#: gtk/gtkstock.c:311
+#: gtk/gtkstock.c:312
 msgid "_Edit"
 msgstr "সম্পাদনা (_E)"
 
-#: gtk/gtkstock.c:312
+#: gtk/gtkstock.c:313
 msgid "_Find"
 msgstr "অনুসন্ধান (_F)"
 
-#: gtk/gtkstock.c:313
+#: gtk/gtkstock.c:314
 msgid "Find and _Replace"
 msgstr "অনুসন্ধান ও প্রতিস্থাপন (_R)"
 
-#: gtk/gtkstock.c:314
+#: gtk/gtkstock.c:315
 msgid "_Floppy"
 msgstr "ফ্লপি (_F)"
 
-#: gtk/gtkstock.c:315
+#: gtk/gtkstock.c:316
 msgid "_Fullscreen"
 msgstr "সম্পূর্ণ পর্দাজুড়ে প্রদর্শন (_F)"
 
-#: gtk/gtkstock.c:316
+#: gtk/gtkstock.c:317
 msgid "_Leave Fullscreen"
 msgstr "সম্পূর্ণ পর্দায় প্রদর্শন বন্ধ করা হবে (_L)"
 
 #. translators, strip the prefix up to and including the first |
-#: gtk/gtkstock.c:318
+#: gtk/gtkstock.c:319
 msgid "Navigation|_Bottom"
 msgstr "নীচে(_B)"
 
 #. translators, strip the prefix up to and including the first |
-#: gtk/gtkstock.c:320
+#: gtk/gtkstock.c:321
 msgid "Navigation|_First"
 msgstr "প্রথম(_F)"
 
 #. translators, strip the prefix up to and including the first |
-#: gtk/gtkstock.c:322
+#: gtk/gtkstock.c:323
 msgid "Navigation|_Last"
 msgstr "সর্বশেষ (_L)"
 
 #. translators, strip the prefix up to and including the first |
-#: gtk/gtkstock.c:324
+#: gtk/gtkstock.c:325
 msgid "Navigation|_Top"
 msgstr "উপরে(_T)"
 
 #. translators, strip the prefix up to and including the first |
-#: gtk/gtkstock.c:326
+#: gtk/gtkstock.c:327
 msgid "Navigation|_Back"
 msgstr "পূর্ববর্তী (_B)"
 
 #. translators, strip the prefix up to and including the first |
-#: gtk/gtkstock.c:328
+#: gtk/gtkstock.c:329
 msgid "Navigation|_Down"
 msgstr "নীচে (_D)"
 
 #. translators, strip the prefix up to and including the first |
-#: gtk/gtkstock.c:330
+#: gtk/gtkstock.c:331
 msgid "Navigation|_Forward"
 msgstr "পরবর্তী (_F)"
 
 #. translators, strip the prefix up to and including the first |
-#: gtk/gtkstock.c:332
+#: gtk/gtkstock.c:333
 msgid "Navigation|_Up"
 msgstr "উপরে (_U)"
 
-#: gtk/gtkstock.c:333
+#: gtk/gtkstock.c:334
 msgid "_Harddisk"
 msgstr "হার্ড-ডিস্ক (_H)"
 
-#: gtk/gtkstock.c:334
+#: gtk/gtkstock.c:335
 msgid "_Help"
 msgstr "সহায়তা (_H)"
 
-#: gtk/gtkstock.c:335
+#: gtk/gtkstock.c:336
 msgid "_Home"
 msgstr "ব্যক্তিগত ফোল্ডার (_H)"
 
-#: gtk/gtkstock.c:336
+#: gtk/gtkstock.c:337
 msgid "Increase Indent"
 msgstr "অবচ্ছেদের মাত্রা বৃদ্ধি করুন"
 
-#: gtk/gtkstock.c:337
+#: gtk/gtkstock.c:338
 msgid "Decrease Indent"
 msgstr "অবচ্ছেদের মাত্রা হ্রাস করুন"
 
-#: gtk/gtkstock.c:338
+#: gtk/gtkstock.c:339
 msgid "_Index"
 msgstr "সূচিপত্র (_I)"
 
-#: gtk/gtkstock.c:339
+#: gtk/gtkstock.c:340
 msgid "_Information"
 msgstr "তথ্য (_I)"
 
-#: gtk/gtkstock.c:340
+#: gtk/gtkstock.c:341
 msgid "_Italic"
 msgstr "তেরছা(_I)"
 
-#: gtk/gtkstock.c:341
+#: gtk/gtkstock.c:342
 msgid "_Jump to"
 msgstr "চিহ্নিত স্থানে চলুন (_J)"
 
 #. translators, strip the prefix up to and including the first |
-#: gtk/gtkstock.c:343
+#: gtk/gtkstock.c:344
 msgid "Justify|_Center"
 msgstr "কেন্দ্রস্থিত (_C)"
 
 #. translators, strip the prefix up to and including the first |
-#: gtk/gtkstock.c:345
+#: gtk/gtkstock.c:346
 msgid "Justify|_Fill"
 msgstr "সুষম (_F)"
 
 #. translators, strip the prefix up to and including the first |
-#: gtk/gtkstock.c:347
+#: gtk/gtkstock.c:348
 msgid "Justify|_Left"
 msgstr "বাঁদিকে (_L)"
 
 #. translators, strip the prefix up to and including the first |
-#: gtk/gtkstock.c:349
+#: gtk/gtkstock.c:350
 msgid "Justify|_Right"
 msgstr "ডানদিকে (_R)"
 
 #. translators, strip the prefix up to and including the first |
-#: gtk/gtkstock.c:352
+#: gtk/gtkstock.c:353
 msgid "Media|_Forward"
 msgstr "এগিয়ে চলুন (_F)"
 
 #. translators, strip the prefix up to and including the first |
-#: gtk/gtkstock.c:354
+#: gtk/gtkstock.c:355
 msgid "Media|_Next"
 msgstr "পরবর্তী (_N)"
 
 #. translators, strip the prefix up to and including the first |
-#: gtk/gtkstock.c:356
+#: gtk/gtkstock.c:357
 msgid "Media|P_ause"
 msgstr "বিরতী (_a)"
 
 #. translators, strip the prefix up to and including the first |
-#: gtk/gtkstock.c:358
+#: gtk/gtkstock.c:359
 msgid "Media|_Play"
 msgstr "চালানো হবে (_P)"
 
 #. translators, strip the prefix up to and including the first |
-#: gtk/gtkstock.c:360
+#: gtk/gtkstock.c:361
 msgid "Media|Pre_vious"
 msgstr "পূর্ববর্তী (_v)"
 
 # FIXME: Translating in the context of sound recording.
 #. translators, strip the prefix up to and including the first |
-#: gtk/gtkstock.c:362
+#: gtk/gtkstock.c:363
 msgid "Media|_Record"
 msgstr "রেকর্ড করা হবে (_R)"
 
 #. translators, strip the prefix up to and including the first |
-#: gtk/gtkstock.c:364
+#: gtk/gtkstock.c:365
 msgid "Media|R_ewind"
 msgstr "বিপরীত দিশায় (_e)"
 
 #. translators, strip the prefix up to and including the first |
-#: gtk/gtkstock.c:366
+#: gtk/gtkstock.c:367
 msgid "Media|_Stop"
 msgstr "বন্ধ করুন (_S)"
 
-#: gtk/gtkstock.c:367
+#: gtk/gtkstock.c:368
 msgid "_Network"
 msgstr "নেটওয়ার্ক (_N)"
 
-#: gtk/gtkstock.c:368
+#: gtk/gtkstock.c:369
 msgid "_New"
 msgstr "নতুন (_N)"
 
-#: gtk/gtkstock.c:369
+#: gtk/gtkstock.c:370
 msgid "_No"
 msgstr "না (_N)"
 
-#: gtk/gtkstock.c:370
+#: gtk/gtkstock.c:371
 msgid "_OK"
 msgstr "ঠিক আছে (_O)"
 
-#: gtk/gtkstock.c:371
+#: gtk/gtkstock.c:372
 msgid "_Open"
 msgstr "খুলুন (_O)"
 
-#: gtk/gtkstock.c:372
+#: gtk/gtkstock.c:373
 msgid "Landscape"
 msgstr "ভূদৃশ্য বিন্যাস"
 
-#: gtk/gtkstock.c:373
+#: gtk/gtkstock.c:374
 msgid "Portrait"
 msgstr "প্রতিকৃতি বিন্যাস"
 
-#: gtk/gtkstock.c:374
+#: gtk/gtkstock.c:375
 msgid "Reverse landscape"
 msgstr "বিপরীত ভূদৃশ্য বিন্যাস"
 
-#: gtk/gtkstock.c:375
+#: gtk/gtkstock.c:376
 msgid "Reverse portrait"
 msgstr "বিপরীত প্রতিকৃতি বিন্যাস"
 
-#: gtk/gtkstock.c:376
+#: gtk/gtkstock.c:377
 msgid "_Paste"
 msgstr "পেস্ট করুন (_P)"
 
-#: gtk/gtkstock.c:377
+#: gtk/gtkstock.c:378
 msgid "_Preferences"
 msgstr "পছন্দ (_P)"
 
-#: gtk/gtkstock.c:378
+#: gtk/gtkstock.c:379
 msgid "_Print"
 msgstr "প্রিন্ট করুন (_P)"
 
-#: gtk/gtkstock.c:379
+#: gtk/gtkstock.c:380
 msgid "Print Pre_view"
 msgstr "প্রিন্টের পূর্বরূপ (_v)"
 
-#: gtk/gtkstock.c:380
+#: gtk/gtkstock.c:381
 msgid "_Properties"
 msgstr "বৈশিষ্ট্যবলী (_P)"
 
-#: gtk/gtkstock.c:381
+#: gtk/gtkstock.c:382
 msgid "_Quit"
 msgstr "প্রস্থান (_Q)"
 
-#: gtk/gtkstock.c:382
+#: gtk/gtkstock.c:383
 msgid "_Redo"
 msgstr "পুনরাবৃত্তি (_R)"
 
-#: gtk/gtkstock.c:383
+#: gtk/gtkstock.c:384
 msgid "_Refresh"
 msgstr "নতুন করে প্রদর্শন (_R)"
 
-#: gtk/gtkstock.c:385
+#: gtk/gtkstock.c:386
 msgid "_Revert"
 msgstr "পূর্বাবস্থা (_R)"
 
-#: gtk/gtkstock.c:386
+#: gtk/gtkstock.c:387
 msgid "_Save"
 msgstr "সংরক্ষণ করুন (_S)"
 
-#: gtk/gtkstock.c:387
+#: gtk/gtkstock.c:388
 msgid "Save _As"
 msgstr "নতুন রূপে সংরক্ষণ(_A)"
 
-#: gtk/gtkstock.c:388
+#: gtk/gtkstock.c:389
 msgid "Select _All"
 msgstr "সমগ্র নির্বাচন করুন (_A)"
 
-#: gtk/gtkstock.c:389
+#: gtk/gtkstock.c:390
 msgid "_Color"
 msgstr "রং (_C)"
 
-#: gtk/gtkstock.c:390
+#: gtk/gtkstock.c:391
 msgid "_Font"
 msgstr "ফন্ট (_F)"
 
-#: gtk/gtkstock.c:391
+#: gtk/gtkstock.c:392
 msgid "_Ascending"
 msgstr "ঊর্ধ্ব ক্রমানুসারে (_A)"
 
-#: gtk/gtkstock.c:392
+#: gtk/gtkstock.c:393
 msgid "_Descending"
 msgstr "নিম্ন ক্রমানুসারে (_D)"
 
-#: gtk/gtkstock.c:393
+#: gtk/gtkstock.c:394
 msgid "_Spell Check"
 msgstr "বানান-পরীক্ষণ (_S)"
 
-#: gtk/gtkstock.c:394
+#: gtk/gtkstock.c:395
 msgid "_Stop"
 msgstr "বন্ধ করুন (_S)"
 
-#: gtk/gtkstock.c:395
+#: gtk/gtkstock.c:396
 msgid "_Strikethrough"
 msgstr "মধ্যরেখাঙ্কন (_S)"
 
-#: gtk/gtkstock.c:396
+#: gtk/gtkstock.c:397
 msgid "_Undelete"
 msgstr "পুনরুদ্ধার (_U)"
 
-#: gtk/gtkstock.c:397
+#: gtk/gtkstock.c:398
 msgid "_Underline"
 msgstr "নিম্নরেখাঙ্কন (_U)"
 
-#: gtk/gtkstock.c:398
+#: gtk/gtkstock.c:399
 msgid "_Undo"
 msgstr "পূর্বাবস্থা (_U)"
 
-#: gtk/gtkstock.c:399
+#: gtk/gtkstock.c:400
 msgid "_Yes"
 msgstr "হ্যাঁ (_Y)"
 
-#: gtk/gtkstock.c:400
+#: gtk/gtkstock.c:401
 msgid "_Normal Size"
 msgstr "স্বাভাবিক মাপ (_N)"
 
-#: gtk/gtkstock.c:401
+#: gtk/gtkstock.c:402
 msgid "Best _Fit"
 msgstr "সর্বোত্তম মাপ (_F)"
 
-#: gtk/gtkstock.c:402
+#: gtk/gtkstock.c:403
 msgid "Zoom _In"
 msgstr "বড় করে প্রদর্শন (_I)"
 
-#: gtk/gtkstock.c:403
+#: gtk/gtkstock.c:404
 msgid "Zoom _Out"
 msgstr "ছোট করে প্রদর্শন (_O)"
 
@@ -3287,23 +3292,23 @@ msgstr "module_path'র মধ্যে থিম ইঞ্জিন সনা�
 msgid "--- No Tip ---"
 msgstr "--- ইঙ্গিত অনুপস্থিত ---"
 
-#: gtk/gtkuimanager.c:1126
+#: gtk/gtkuimanager.c:1197
 #, c-format
 msgid "Unknown attribute '%s' on line %d char %d"
 msgstr "অজানা বৈশিষ্ট্য '%s', %d পংক্তির  %d অক্ষরে উপস্থিত"
 
-#: gtk/gtkuimanager.c:1343
+#: gtk/gtkuimanager.c:1414
 #, c-format
 msgid "Unexpected start tag '%s' on line %d char %d"
 msgstr "অপ্রত্যাশিত প্রারম্ভিক ট্যাগ '%s', %d পংক্তির  %d অক্ষরে উপস্থিত"
 
 # FIXME
-#: gtk/gtkuimanager.c:1433
+#: gtk/gtkuimanager.c:1504
 #, c-format
 msgid "Unexpected character data on line %d char %d"
 msgstr "%d পংক্তির  %d অক্ষরে অপ্রত্যাশিত অক্ষরবিশিষ্ট তথ্য"
 
-#: gtk/gtkuimanager.c:2254
+#: gtk/gtkuimanager.c:2325
 msgid "Empty"
 msgstr "ফাঁকা"
 
@@ -4306,84 +4311,84 @@ msgstr "ভিয়েতনামিস (VIQR)"
 msgid "X Input Method"
 msgstr "X ইনপুট পদ্ধতি"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1524
+#: modules/printbackends/cups/gtkprintbackendcups.c:1533
 msgid "Two Sided"
 msgstr "উভয়পৃষ্ঠ"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1525
+#: modules/printbackends/cups/gtkprintbackendcups.c:1534
 msgid "Paper Type"
 msgstr "কাগজের ধরন"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1526
+#: modules/printbackends/cups/gtkprintbackendcups.c:1535
 msgid "Paper Source"
 msgstr "কাগজের সংগ্রহস্থল"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1527
+#: modules/printbackends/cups/gtkprintbackendcups.c:1536
 msgid "Output Tray"
 msgstr ""
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1536
+#: modules/printbackends/cups/gtkprintbackendcups.c:1545
 msgid "One Sided"
 msgstr "এক পৃষ্ঠ"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1537
-#: modules/printbackends/cups/gtkprintbackendcups.c:1538
-#: modules/printbackends/cups/gtkprintbackendcups.c:1542
+#: modules/printbackends/cups/gtkprintbackendcups.c:1546
+#: modules/printbackends/cups/gtkprintbackendcups.c:1547
+#: modules/printbackends/cups/gtkprintbackendcups.c:1551
 msgid "Auto Select"
 msgstr "স্বয়ংক্রিয় নির্বাচন"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1539
-#: modules/printbackends/cups/gtkprintbackendcups.c:1540
-#: modules/printbackends/cups/gtkprintbackendcups.c:1541
-#: modules/printbackends/cups/gtkprintbackendcups.c:2011
+#: modules/printbackends/cups/gtkprintbackendcups.c:1548
+#: modules/printbackends/cups/gtkprintbackendcups.c:1549
+#: modules/printbackends/cups/gtkprintbackendcups.c:1550
+#: modules/printbackends/cups/gtkprintbackendcups.c:2020
 msgid "Printer Default"
 msgstr "প্রিন্টারের ডিফল্ট মান"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2205
+#: modules/printbackends/cups/gtkprintbackendcups.c:2214
 msgid "Urgent"
 msgstr "জরুরী"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2205
+#: modules/printbackends/cups/gtkprintbackendcups.c:2214
 msgid "High"
 msgstr "উচ্চ"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2205
+#: modules/printbackends/cups/gtkprintbackendcups.c:2214
 msgid "Medium"
 msgstr "মাঝারি"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2205
+#: modules/printbackends/cups/gtkprintbackendcups.c:2214
 msgid "Low"
 msgstr "নিম্ন"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2207
+#: modules/printbackends/cups/gtkprintbackendcups.c:2216
 msgid "None"
 msgstr "(শূণ্য)"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2207
+#: modules/printbackends/cups/gtkprintbackendcups.c:2216
 msgid "Classified"
 msgstr "শ্রেণীবদ্ধ"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2207
+#: modules/printbackends/cups/gtkprintbackendcups.c:2216
 msgid "Confidential"
 msgstr "গোপনীয়"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2207
+#: modules/printbackends/cups/gtkprintbackendcups.c:2216
 msgid "Secret"
 msgstr "গোপনীয়"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2207
+#: modules/printbackends/cups/gtkprintbackendcups.c:2216
 msgid "Standard"
 msgstr "প্রমিত মান"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2207
+#: modules/printbackends/cups/gtkprintbackendcups.c:2216
 msgid "Top Secret"
 msgstr "অতিমাত্রায় গোপনীয়"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2207
+#: modules/printbackends/cups/gtkprintbackendcups.c:2216
 msgid "Unclassified"
 msgstr "শ্রেণীবিহীন"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2293
+#: modules/printbackends/cups/gtkprintbackendcups.c:2302
 #, c-format
 msgid "Custom %.2fx%.2f"
 msgstr ""
@@ -4394,28 +4399,28 @@ msgstr ""
 msgid "output.%s"
 msgstr ""
 
-#: modules/printbackends/file/gtkprintbackendfile.c:460
+#: modules/printbackends/file/gtkprintbackendfile.c:464
 msgid "Print to File"
 msgstr "ফাইলে প্রিন্ট করুন"
 
-#: modules/printbackends/file/gtkprintbackendfile.c:485
+#: modules/printbackends/file/gtkprintbackendfile.c:489
 msgid "PDF"
 msgstr "PDF"
 
-#: modules/printbackends/file/gtkprintbackendfile.c:485
+#: modules/printbackends/file/gtkprintbackendfile.c:489
 msgid "Postscript"
 msgstr "Postscript"
 
-#: modules/printbackends/file/gtkprintbackendfile.c:497
+#: modules/printbackends/file/gtkprintbackendfile.c:501
 #: modules/printbackends/test/gtkprintbackendtest.c:501
 msgid "Pages per _sheet:"
 msgstr "প্রতি পাতায় পৃষ্ঠার সংখ্যা:(_s)"
 
-#: modules/printbackends/file/gtkprintbackendfile.c:543
+#: modules/printbackends/file/gtkprintbackendfile.c:547
 msgid "File"
 msgstr "ফাইল"
 
-#: modules/printbackends/file/gtkprintbackendfile.c:552
+#: modules/printbackends/file/gtkprintbackendfile.c:556
 msgid "_Output format"
 msgstr "আউটপুটের বিন্যাস (_O)"
 

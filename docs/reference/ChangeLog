@@ -1,5 +1,9 @@
 2007-06-15  Matthias Clasen  <mclasen@redhat.com>
 
+	* === Released 2.11.3 ===
+
+2007-06-15  Matthias Clasen  <mclasen@redhat.com>
+
 	* gtk/tmpl/gtktreeview.sgml: Fix up cross-references
 
 	* gtk/gtk-sections.txt: 

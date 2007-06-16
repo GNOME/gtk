@@ -73,6 +73,11 @@ submenu. For normal applications, the relevant signal is "activate".
 @menuitem: the object which received the signal.
 @arg1: 
 
+<!-- ##### ARG GtkMenuItem:submenu ##### -->
+<para>
+
+</para>
+
 <!-- ##### ARG GtkMenuItem:arrow-spacing ##### -->
 <para>
 
@@ -133,8 +138,8 @@ Creates a new #GtkMenuItem whose child is a #GtkLabel.
 
 </para>
 
-@menu_item:
-@submenu:
+@menu_item: 
+@submenu: 
 
 
 <!-- ##### FUNCTION gtk_menu_item_set_accel_path ##### -->
@@ -151,7 +156,7 @@ Creates a new #GtkMenuItem whose child is a #GtkLabel.
 
 </para>
 
-@menu_item:
+@menu_item: 
 
 
 <!-- ##### FUNCTION gtk_menu_item_select ##### -->

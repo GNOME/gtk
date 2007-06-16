@@ -487,6 +487,7 @@ gtk_builder_get_type_from_name
 gtk_builder_value_from_string
 gtk_builder_value_from_string_type
 GTK_BUILDER_WARN_INVALID_CHILD_TYPE
+GTK_BUILDER_ERROR
 <SUBSECTION Standard>
 GTK_BUILDER
 GTK_IS_BUILDER
@@ -496,6 +497,7 @@ GTK_IS_BUILDER_CLASS
 GTK_BUILDER_GET_CLASS
 <SUBSECTION Private>
 gtk_builder_get_type
+gtk_builder_error_quark
 </SECTION>
 
 <SECTION>
@@ -4162,6 +4164,7 @@ gtk_tooltips_get_type
 <SECTION>
 <FILE>gtktooltip</FILE>
 <TITLE>GtkTooltip</TITLE>
+GtkTooltip
 gtk_tooltip_set_markup
 gtk_tooltip_set_text
 gtk_tooltip_set_icon
@@ -4622,6 +4625,12 @@ gtk_tree_view_get_visible_range
 gtk_tree_view_get_bin_window
 gtk_tree_view_widget_to_tree_coords
 gtk_tree_view_tree_to_widget_coords
+gtk_tree_view_convert_bin_window_to_tree_coords
+gtk_tree_view_convert_bin_window_to_widget_coords
+gtk_tree_view_convert_tree_to_bin_window_coords
+gtk_tree_view_convert_tree_to_widget_coords
+gtk_tree_view_convert_widget_to_bin_window_coords
+gtk_tree_view_convert_widget_to_tree_coords
 gtk_tree_view_enable_model_drag_dest
 gtk_tree_view_enable_model_drag_source
 gtk_tree_view_unset_rows_drag_source

@@ -42,7 +42,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+.HEAD.ml\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-06-06 09:04-0400\n"
+"POT-Creation-Date: 2007-06-15 21:24-0400\n"
 "PO-Revision-Date: 2006-08-19 19:28+0530\n"
 "Last-Translator: Ani Peter <apeter@redhat.com>\n"
 "Language-Team: Malayalam\n"
@@ -111,7 +111,7 @@ msgstr "Gdk ഡീബഗ്ഗിങ് ഫയലുകള്‍ സെറ്റ
 #. Placeholder in --gdk-no-debug=FLAGS in --help output
 #. Placeholder in --gtk-debug=FLAGS in --help output
 #. Placeholder in --gtk-no-debug=FLAGS in --help output
-#: gdk/gdk.c:140 gdk/gdk.c:143 gtk/gtkmain.c:414 gtk/gtkmain.c:417
+#: gdk/gdk.c:140 gdk/gdk.c:143 gtk/gtkmain.c:415 gtk/gtkmain.c:418
 msgid "FLAGS"
 msgstr "ഫ്ളാഗുകള്‍"
 
@@ -1384,7 +1384,7 @@ msgid "New accelerator..."
 msgstr "പുതിയ ആക്സലറേറ്റര്‍..."
 
 #. do not translate the part before the |
-#: gtk/gtkcellrendererprogress.c:278 gtk/gtkcellrendererprogress.c:365
+#: gtk/gtkcellrendererprogress.c:362 gtk/gtkcellrendererprogress.c:449
 #, c-format
 msgid "progress bar label|%d %%"
 msgstr "%d %%"
@@ -1518,15 +1518,15 @@ msgstr "നിറത്തട്ട്(_P):"
 msgid "Color Wheel"
 msgstr "നിറങ്ങളുടെ ചക്രം"
 
-#: gtk/gtkcolorseldialog.c:89
+#: gtk/gtkcolorseldialog.c:101
 msgid "Color Selection"
 msgstr "നിറം തിരഞ്ഞെടുക്കല്‍"
 
-#: gtk/gtkentry.c:5198 gtk/gtktextview.c:7448
+#: gtk/gtkentry.c:5253 gtk/gtktextview.c:7462
 msgid "Input _Methods"
 msgstr "ഇന്‍പുട്ട് മെഥേഡുകള്‍ (_M)"
 
-#: gtk/gtkentry.c:5212 gtk/gtktextview.c:7462
+#: gtk/gtkentry.c:5267 gtk/gtktextview.c:7476
 msgid "_Insert Unicode Control Character"
 msgstr "Unicode കണ്ട്രോള്‍ ക്യാരക്റ്റര്‍ ചേര്‍ക്കുക (_I)"
 
@@ -1542,7 +1542,7 @@ msgstr "ഡസ്ക്ക്-ടോപ്പ്"
 msgid "(None)"
 msgstr "(ശൂന്യം)"
 
-#: gtk/gtkfilechooserbutton.c:2049
+#: gtk/gtkfilechooserbutton.c:2047
 msgid "Other..."
 msgstr "മറ്റുളളവ..."
 
@@ -1588,166 +1588,166 @@ msgstr "ഫോള്‍ഡറിന്‍റെ ഉളളടക്കം പ്�
 #. * is a hostname. Nautilus and the panel contain the same string
 #. * to translate.
 #.
-#: gtk/gtkfilechooserdefault.c:1707
+#: gtk/gtkfilechooserdefault.c:1714
 #, c-format
 msgid "%1$s on %2$s"
 msgstr "%2$s-ല്‍ %1$s"
 
-#: gtk/gtkfilechooserdefault.c:1878
+#: gtk/gtkfilechooserdefault.c:1892
 msgid "Search"
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:1902
+#: gtk/gtkfilechooserdefault.c:1916
 msgid "Recently Used"
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:2991
+#: gtk/gtkfilechooserdefault.c:3006
 #, c-format
 msgid "Add the folder '%s' to the bookmarks"
 msgstr "'%s' എന്ന ഫോള്‍ഡര്‍ ബുക്ക് മാര്‍ക്കിലേക്ക് ചേര്‍ക്കുക"
 
-#: gtk/gtkfilechooserdefault.c:3032
+#: gtk/gtkfilechooserdefault.c:3047
 #, c-format
 msgid "Add the current folder to the bookmarks"
 msgstr "ഈ ഫോള്‍ഡര്‍ ബുക്ക് മാര്‍ക്കിലേക്ക് ചേര്‍ക്കുക"
 
-#: gtk/gtkfilechooserdefault.c:3034
+#: gtk/gtkfilechooserdefault.c:3049
 #, c-format
 msgid "Add the selected folders to the bookmarks"
 msgstr "തിരഞ്ഞെടുത്ത ഫോള്‍ഡറുകള്‍ ബുക്ക് മാര്‍ക്കിലേക്ക് ചേര്‍ക്കുക"
 
-#: gtk/gtkfilechooserdefault.c:3074
+#: gtk/gtkfilechooserdefault.c:3089
 #, c-format
 msgid "Remove the bookmark '%s'"
 msgstr "'%s' എന്ന ബുക്ക് മാര്‍ക്ക് നീക്കം ചെയ്യുക"
 
-#: gtk/gtkfilechooserdefault.c:3507
+#: gtk/gtkfilechooserdefault.c:3522
 #, c-format
 msgid "Could not add a bookmark for '%s' because it is an invalid path name."
 msgstr "അസാധുവായ പാഥ് നാമം ആയതിനാല്‍ '%s'-ലേക്ക് ബുക്ക് മാര്‍ക്ക് ചേര്‍ക്കുവാന്‍ സാധ്യമാകുന്നില്ല."
 
-#: gtk/gtkfilechooserdefault.c:3732
+#: gtk/gtkfilechooserdefault.c:3747
 msgid "Remove"
 msgstr "നീക്കം ചെയ്യുക"
 
-#: gtk/gtkfilechooserdefault.c:3741
+#: gtk/gtkfilechooserdefault.c:3756
 msgid "Rename..."
 msgstr "പേര് മാറ്റുക..."
 
 #. Accessible object name for the file chooser's shortcuts pane
-#: gtk/gtkfilechooserdefault.c:3883
+#: gtk/gtkfilechooserdefault.c:3898
 msgid "Places"
 msgstr "സ്ഥലങ്ങള്‍"
 
 #. Column header for the file chooser's shortcuts pane
-#: gtk/gtkfilechooserdefault.c:3937
+#: gtk/gtkfilechooserdefault.c:3952
 msgid "_Places"
 msgstr "സ്ഥലങ്ങള്‍(_P)"
 
-#: gtk/gtkfilechooserdefault.c:3992 gtk/gtkstock.c:297
+#: gtk/gtkfilechooserdefault.c:4007 gtk/gtkstock.c:297
 msgid "_Add"
 msgstr "ചേര്‍ക്കുക (_A)"
 
-#: gtk/gtkfilechooserdefault.c:3999
+#: gtk/gtkfilechooserdefault.c:4014
 msgid "Add the selected folder to the Bookmarks"
 msgstr "തിരഞ്ഞെടുത്ത ഫോള്‍ഡര്‍ ബുക്ക് മാര്‍ക്കിലേക്ക് ചേര്‍ക്കുക"
 
-#: gtk/gtkfilechooserdefault.c:4004 gtk/gtkstock.c:384
+#: gtk/gtkfilechooserdefault.c:4019 gtk/gtkstock.c:385
 msgid "_Remove"
 msgstr "നീക്കം ചെയ്യുക (_R)"
 
-#: gtk/gtkfilechooserdefault.c:4011
+#: gtk/gtkfilechooserdefault.c:4026
 msgid "Remove the selected bookmark"
 msgstr "തിരഞ്ഞെടുത്ത ബുക്ക് മാര്‍ക്ക് നീക്കം ചെയ്യുക"
 
-#: gtk/gtkfilechooserdefault.c:4107
+#: gtk/gtkfilechooserdefault.c:4122
 msgid "Could not select file"
 msgstr "ഫയല്‍ തിരഞ്ഞെടുക്കുവാന്‍ സാധിച്ചില്ല"
 
-#: gtk/gtkfilechooserdefault.c:4244
+#: gtk/gtkfilechooserdefault.c:4259
 #, c-format
 msgid "Could not select file '%s' because it is an invalid path name."
 msgstr "അസാധുവായ പാഥ് നാമം ആയതിനാല്‍ '%s'എന്ന ഫയല്‍ തിരഞ്ഞെടുക്കുവാന്‍ സാധിച്ചില്ല."
 
-#: gtk/gtkfilechooserdefault.c:4301
+#: gtk/gtkfilechooserdefault.c:4316
 msgid "_Add to Bookmarks"
 msgstr "ബുക്ക് മാര്‍ക്കിലേക്ക് ചേര്‍ക്കുക (_A)"
 
-#: gtk/gtkfilechooserdefault.c:4315
+#: gtk/gtkfilechooserdefault.c:4330
 msgid "Show _Hidden Files"
 msgstr "മറഞ്ഞിരിക്കുന്ന ഫയലുകള്‍ കാണിക്കുക (_H)"
 
-#: gtk/gtkfilechooserdefault.c:4483 gtk/gtkfilesel.c:729
+#: gtk/gtkfilechooserdefault.c:4498 gtk/gtkfilesel.c:729
 msgid "Files"
 msgstr "ഫയലുകള്‍"
 
-#: gtk/gtkfilechooserdefault.c:4528
+#: gtk/gtkfilechooserdefault.c:4543
 msgid "Name"
 msgstr "പേര്"
 
-#: gtk/gtkfilechooserdefault.c:4553
+#: gtk/gtkfilechooserdefault.c:4568
 msgid "Size"
 msgstr "വലിപ്പം"
 
-#: gtk/gtkfilechooserdefault.c:4567
+#: gtk/gtkfilechooserdefault.c:4582
 msgid "Modified"
 msgstr "മാറ്റം വരുത്തിയിരിക്കുന്നു"
 
-#: gtk/gtkfilechooserdefault.c:4602
+#: gtk/gtkfilechooserdefault.c:4617
 msgid "Select which types of files are shown"
 msgstr "ഏതെല്ലാം തരത്തിലുളള ഫയലുകളാണ് കാണിക്കുന്നത് എന്ന് തിരഞ്ഞെടുക്കുക"
 
 #. Label
-#: gtk/gtkfilechooserdefault.c:4813 gtk/gtkprinteroptionwidget.c:786
+#: gtk/gtkfilechooserdefault.c:4828 gtk/gtkprinteroptionwidget.c:786
 msgid "_Name:"
 msgstr "പേര് (_N):"
 
-#: gtk/gtkfilechooserdefault.c:4855
+#: gtk/gtkfilechooserdefault.c:4870
 msgid "_Browse for other folders"
 msgstr "മറ്റ് ഫോള്‍ഡറുകള്‍ക്കായി തിരയുക (_B)"
 
-#: gtk/gtkfilechooserdefault.c:5110
+#: gtk/gtkfilechooserdefault.c:5125
 msgid "Type a file name"
 msgstr "ഒരു ഫയല്‍ നാമം ടൈപ്പ് ചെയ്യുക"
 
 #. Create Folder
-#: gtk/gtkfilechooserdefault.c:5147
+#: gtk/gtkfilechooserdefault.c:5162
 msgid "Create Fo_lder"
 msgstr "ഫോള്‍ഡര്‍ ഉണ്ടാക്കുക(_l)"
 
-#: gtk/gtkfilechooserdefault.c:5157
+#: gtk/gtkfilechooserdefault.c:5172
 msgid "_Location:"
 msgstr "ലൊക്കേഷന്‍: (_L)"
 
-#: gtk/gtkfilechooserdefault.c:5395
+#: gtk/gtkfilechooserdefault.c:5410
 msgid "Save in _folder:"
 msgstr "ഫോള്‍ഡറിലേക്ക് സംരക്ഷിക്കുക (_f):"
 
-#: gtk/gtkfilechooserdefault.c:5397
+#: gtk/gtkfilechooserdefault.c:5412
 msgid "Create in _folder:"
 msgstr "ഫോള്‍ഡറില്‍ ഉണ്ടാക്കുക (_f):"
 
-#: gtk/gtkfilechooserdefault.c:7000
+#: gtk/gtkfilechooserdefault.c:7015
 #, c-format
 msgid "Cannot change to folder because it is not local"
 msgstr "ലോക്കല്‍ അല്ലാത്തതിനാല്‍ ഫോള്‍ഡര്‍ സംരക്ഷിക്കുവാന്‍ കഴിയില്ല"
 
-#: gtk/gtkfilechooserdefault.c:7616 gtk/gtkfilechooserdefault.c:7637
+#: gtk/gtkfilechooserdefault.c:7631 gtk/gtkfilechooserdefault.c:7652
 #, c-format
 msgid "Shortcut %s already exists"
 msgstr "%s എന്ന ഷോര്‍ട്ട് കട്ട് നിലവിലുണ്ട്"
 
-#: gtk/gtkfilechooserdefault.c:7727
+#: gtk/gtkfilechooserdefault.c:7742
 #, c-format
 msgid "Shortcut %s does not exist"
 msgstr "%s എന്ന ഷോര്‍ട്ട് കട്ട് നിലവിലില്ല"
 
-#: gtk/gtkfilechooserdefault.c:7982
+#: gtk/gtkfilechooserdefault.c:7997
 #, c-format
 msgid "A file named \"%s\" already exists.  Do you want to replace it?"
 msgstr "\"%s\" എന്ന ഫയല്‍ നിലവിലുണ്ട്. അത് മാറ്റണമോ?"
 
-#: gtk/gtkfilechooserdefault.c:7985
+#: gtk/gtkfilechooserdefault.c:8000
 #, c-format
 msgid ""
 "The file already exists in \"%s\".  Replacing it will overwrite its contents."
@@ -1755,71 +1755,71 @@ msgstr ""
 "നിലവില്‍ \"%s\"-ല്‍ ഫയലുണ്ട്.  അത് മാറ്റിയാല്‍ അതിന്‍റെ ഉളളടക്കത്തിന് പകരമായി മറ്റ് പലത് "
 "എഴുതപ്പെടും."
 
-#: gtk/gtkfilechooserdefault.c:7990
+#: gtk/gtkfilechooserdefault.c:8005
 msgid "_Replace"
 msgstr "മാറ്റുക (_R)"
 
-#: gtk/gtkfilechooserdefault.c:8821
+#: gtk/gtkfilechooserdefault.c:8836
 #, fuzzy
 msgid "Could not start the search process"
 msgstr "ശേഷിച്ചവ സംരക്ഷിക്കാന്‍ കഴിയുന്നില്ല"
 
-#: gtk/gtkfilechooserdefault.c:8822
+#: gtk/gtkfilechooserdefault.c:8837
 msgid ""
 "The program was not able to create a connection to the indexer daemon.  "
 "Please make sure it is running."
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:8836
+#: gtk/gtkfilechooserdefault.c:8851
 #, fuzzy
 msgid "Could not send the search request"
 msgstr "ശേഷിച്ചവ സംരക്ഷിക്കാന്‍ കഴിയുന്നില്ല"
 
 #. Label
-#: gtk/gtkfilechooserdefault.c:9262
+#: gtk/gtkfilechooserdefault.c:9277
 msgid "_Search:"
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:10148
+#: gtk/gtkfilechooserdefault.c:10166
 #, c-format
 msgid "Could not mount %s"
 msgstr "%s മൌണ്ട് ചെയ്യുവാന്‍ സാധിച്ചില്ല"
 
-#: gtk/gtkfilechooserdefault.c:10788
+#: gtk/gtkfilechooserdefault.c:10806
 msgid "Type name of new folder"
 msgstr "പുതിയ ഫോള്‍ഡറിന്‍റെ നാമം ടൈപ്പ് ചെയ്യുക"
 
-#: gtk/gtkfilechooserdefault.c:10836
+#: gtk/gtkfilechooserdefault.c:10854
 #, c-format
 msgid "%d byte"
 msgid_plural "%d bytes"
 msgstr[0] "%d ബൈറ്റ്"
 msgstr[1] "%d ബൈറ്റ്"
 
-#: gtk/gtkfilechooserdefault.c:10838
+#: gtk/gtkfilechooserdefault.c:10856
 #, c-format
 msgid "%.1f KB"
 msgstr "%.1f KB"
 
-#: gtk/gtkfilechooserdefault.c:10840
+#: gtk/gtkfilechooserdefault.c:10858
 #, c-format
 msgid "%.1f MB"
 msgstr "%.1f MB"
 
-#: gtk/gtkfilechooserdefault.c:10842
+#: gtk/gtkfilechooserdefault.c:10860
 #, c-format
 msgid "%.1f GB"
 msgstr "%.1f GB"
 
-#: gtk/gtkfilechooserdefault.c:10940 gtk/gtkfilechooserdefault.c:10964
+#: gtk/gtkfilechooserdefault.c:10958 gtk/gtkfilechooserdefault.c:10982
 msgid "Unknown"
 msgstr "(അറിയാത്തത്)"
 
-#: gtk/gtkfilechooserdefault.c:10951
+#: gtk/gtkfilechooserdefault.c:10969
 msgid "Today"
 msgstr "ഇന്ന്"
 
-#: gtk/gtkfilechooserdefault.c:10953
+#: gtk/gtkfilechooserdefault.c:10971
 msgid "Yesterday"
 msgstr "ഇന്നലെ"
 
@@ -1976,7 +1976,7 @@ msgid "(Empty)"
 msgstr "(കാലി)"
 
 #: gtk/gtkfilesystemunix.c:960 gtk/gtkfilesystemunix.c:1208
-#: gtk/gtkfilesystemunix.c:2201 gtk/gtkfilesystemunix.c:2241
+#: gtk/gtkfilesystemunix.c:2196 gtk/gtkfilesystemunix.c:2236
 #: gtk/gtkfilesystemwin32.c:2245 gtk/gtkfilesystemwin32.c:2295
 #, c-format
 msgid "Error getting information for '%s': %s"
@@ -1999,17 +1999,17 @@ msgid ""
 msgstr ""
 "\"%s\" എന്ന അക്ഷരം ഉളളതിനാല്‍ \"%s\" എന്ന പേര് അസാധുവാണ്.ദയവായി മറ്റൊരു പേര് ഉപയോഗിക്കുക."
 
-#: gtk/gtkfilesystemunix.c:1883 gtk/gtkfilesystemwin32.c:1925
+#: gtk/gtkfilesystemunix.c:1878 gtk/gtkfilesystemwin32.c:1925
 #, c-format
 msgid "Bookmark saving failed: %s"
 msgstr "ബുക്ക് മാര്‍ക്ക് സംരക്ഷിക്കുന്നതില്‍ പിഴവ്: %s"
 
-#: gtk/gtkfilesystemunix.c:1938 gtk/gtkfilesystemwin32.c:1980
+#: gtk/gtkfilesystemunix.c:1933 gtk/gtkfilesystemwin32.c:1980
 #, c-format
 msgid "'%s' already exists in the bookmarks list"
 msgstr "നിലവില്‍ ബുക്ക് മാര്‍ക്ക് ലിസ്റ്റില്‍ '%s' ഉണ്ട്"
 
-#: gtk/gtkfilesystemunix.c:2010 gtk/gtkfilesystemwin32.c:2052
+#: gtk/gtkfilesystemunix.c:2005 gtk/gtkfilesystemwin32.c:2052
 #, c-format
 msgid "'%s' does not exist in the bookmarks list"
 msgstr "ബുക്ക് മാര്‍ക്ക് ലിസ്റ്റില്‍ '%s' ഇല്ല"
@@ -2044,28 +2044,28 @@ msgstr "ലിപി"
 
 #. This is the default text shown in the preview entry, though the user
 #. can set it. Remember that some fonts only have capital letters.
-#: gtk/gtkfontsel.c:74
+#: gtk/gtkfontsel.c:75
 msgid "abcdefghijk ABCDEFGHIJK"
 msgstr "abcdefghijk ABCDEFGHIJK"
 
-#: gtk/gtkfontsel.c:325
+#: gtk/gtkfontsel.c:326
 msgid "_Family:"
 msgstr "കുടുംബം (_F):"
 
-#: gtk/gtkfontsel.c:331
+#: gtk/gtkfontsel.c:332
 msgid "_Style:"
 msgstr "രീതി (_S):"
 
-#: gtk/gtkfontsel.c:337
+#: gtk/gtkfontsel.c:338
 msgid "Si_ze:"
 msgstr "വലിപ്പം (_z):"
 
 #. create the text entry widget
-#: gtk/gtkfontsel.c:514
+#: gtk/gtkfontsel.c:515
 msgid "_Preview:"
 msgstr "തിരനോട്ടം (_P):"
 
-#: gtk/gtkfontsel.c:1348
+#: gtk/gtkfontsel.c:1359
 msgid "Font Selection"
 msgstr "ലിപി തിരഞ്ഞെടുക്കല്‍"
 
@@ -2208,27 +2208,27 @@ msgid "Invalid URI"
 msgstr "അസാധുവായ URI"
 
 #. Description of --gtk-module=MODULES in --help output
-#: gtk/gtkmain.c:407
+#: gtk/gtkmain.c:408
 msgid "Load additional GTK+ modules"
 msgstr "അഡീഷണല്‍ GTK+ മൊഡ്യൂളുകള്‍ ലോഡ് ചെയ്യുക"
 
 #. Placeholder in --gtk-module=MODULES in --help output
-#: gtk/gtkmain.c:408
+#: gtk/gtkmain.c:409
 msgid "MODULES"
 msgstr "മൊഡ്യൂളുകള്‍"
 
 #. Description of --g-fatal-warnings in --help output
-#: gtk/gtkmain.c:410
+#: gtk/gtkmain.c:411
 msgid "Make all warnings fatal"
 msgstr "എല്ലാ മുന്നറിയിപ്പുകളും പ്രാധാന്യമുളളതാക്കുക"
 
 #. Description of --gtk-debug=FLAGS in --help output
-#: gtk/gtkmain.c:413
+#: gtk/gtkmain.c:414
 msgid "GTK+ debugging flags to set"
 msgstr "GTK+ ഡീബഗ്ഗിങ് ഫ്ളാഗുകള്‍ സെറ്റ് ചെയ്യുക"
 
 #. Description of --gtk-no-debug=FLAGS in --help output
-#: gtk/gtkmain.c:416
+#: gtk/gtkmain.c:417
 msgid "GTK+ debugging flags to unset"
 msgstr "GTK+ ഡീബഗ്ഗിങ് ഫ്ളാഗുകള്‍ അണ്‍സെറ്റ് ചെയ്യുക"
 
@@ -2237,27 +2237,27 @@ msgstr "GTK+ ഡീബഗ്ഗിങ് ഫ്ളാഗുകള്‍ അണ�
 #. * Do *not* translate it to "predefinito:LTR", if it
 #. * it isn't default:LTR or default:RTL it will not work
 #.
-#: gtk/gtkmain.c:652
+#: gtk/gtkmain.c:653
 msgid "default:LTR"
 msgstr "default:LTR"
 
-#: gtk/gtkmain.c:749
+#: gtk/gtkmain.c:750
 msgid "GTK+ Options"
 msgstr "GTK+ ഉപാധികള്‍"
 
-#: gtk/gtkmain.c:749
+#: gtk/gtkmain.c:750
 msgid "Show GTK+ Options"
 msgstr "GTK+ ഉപാധികള്‍ കാണിക്കുക"
 
-#: gtk/gtknotebook.c:810
+#: gtk/gtknotebook.c:828
 msgid "Arrow spacing"
 msgstr "ആരോ സ്പെയിസിങ്"
 
-#: gtk/gtknotebook.c:811
+#: gtk/gtknotebook.c:829
 msgid "Scroll arrow spacing"
 msgstr "സ്ക്രോള്‍ ആരോ സ്പെയിസിങ്"
 
-#: gtk/gtknotebook.c:4344 gtk/gtknotebook.c:6850
+#: gtk/gtknotebook.c:4392 gtk/gtknotebook.c:6898
 #, c-format
 msgid "Page %u"
 msgstr "താള് :%u"
@@ -2710,12 +2710,12 @@ msgstr "ഗ്രൂപ്പ്"
 msgid "The radio tool button whose group this button belongs to."
 msgstr "ഈ ബട്ടണ്‍ ഏത് ഗ്രൂപ്പിലെ ആണോ ആ ഗ്രൂപ്പിലുളള റേഡിയോ ബട്ടണ്‍ ടൂള്‍"
 
-#: gtk/gtkrc.c:2836
+#: gtk/gtkrc.c:2866
 #, c-format
 msgid "Unable to find include file: \"%s\""
 msgstr "ഫയല്‍ കണ്ടുകിട്ടിയില്ല: \"%s\""
 
-#: gtk/gtkrc.c:3466 gtk/gtkrc.c:3469
+#: gtk/gtkrc.c:3494 gtk/gtkrc.c:3497
 #, c-format
 msgid "Unable to locate image file in pixmap_path: \"%s\""
 msgstr "pixmap_path-ല്‍ ഇമേജ് ഫയല്‍ ലോക്കേറ്റ് ചെയ്യുവാന്‍ സാധിച്ചില്ല: \"%s\""
@@ -2867,314 +2867,319 @@ msgid "_Delete"
 msgstr "വെട്ടി നീക്കുക (_D)"
 
 #: gtk/gtkstock.c:309
+#, fuzzy
+msgid "_Discard"
+msgstr "പ്രവര്‍ത്തന രഹിതം"
+
+#: gtk/gtkstock.c:310
 msgid "_Disconnect"
 msgstr "ഡിസ്‍കണക്ട് ചെയ്യുക (_D)"
 
-#: gtk/gtkstock.c:310
+#: gtk/gtkstock.c:311
 msgid "_Execute"
 msgstr "നിര്‍വ്വഹിക്കുക (_E)"
 
-#: gtk/gtkstock.c:311
+#: gtk/gtkstock.c:312
 msgid "_Edit"
 msgstr "മാറ്റം വരുത്തുക (_E)"
 
-#: gtk/gtkstock.c:312
+#: gtk/gtkstock.c:313
 msgid "_Find"
 msgstr "അന്വേഷിക്കുക (_F)"
 
-#: gtk/gtkstock.c:313
+#: gtk/gtkstock.c:314
 msgid "Find and _Replace"
 msgstr "കണ്ടെത്തി മാറ്റം ചെയ്യുക (_R)"
 
-#: gtk/gtkstock.c:314
+#: gtk/gtkstock.c:315
 msgid "_Floppy"
 msgstr "ഫ്ളോപ്പി (_F)"
 
-#: gtk/gtkstock.c:315
+#: gtk/gtkstock.c:316
 msgid "_Fullscreen"
 msgstr "പരമാവധി വലുപ്പത്തിലുളള സ്ക്രീന്‍ (_F)"
 
-#: gtk/gtkstock.c:316
+#: gtk/gtkstock.c:317
 msgid "_Leave Fullscreen"
 msgstr "പരമാവധി വലുപ്പത്തിലുളള സ്ക്രീന്‍ ഉപേക്ഷിക്കുക (_L) "
 
 #. translators, strip the prefix up to and including the first |
-#: gtk/gtkstock.c:318
+#: gtk/gtkstock.c:319
 msgid "Navigation|_Bottom"
 msgstr "അടിഭാഗം (_B)"
 
 #. translators, strip the prefix up to and including the first |
-#: gtk/gtkstock.c:320
+#: gtk/gtkstock.c:321
 msgid "Navigation|_First"
 msgstr "ആദ്യത്തേത് (_F)"
 
 #. translators, strip the prefix up to and including the first |
-#: gtk/gtkstock.c:322
+#: gtk/gtkstock.c:323
 msgid "Navigation|_Last"
 msgstr "അവസാനത്തേത് (_L)"
 
 #. translators, strip the prefix up to and including the first |
-#: gtk/gtkstock.c:324
+#: gtk/gtkstock.c:325
 msgid "Navigation|_Top"
 msgstr "മുകള്‍ ഭാഗം (_T)"
 
 #. translators, strip the prefix up to and including the first |
-#: gtk/gtkstock.c:326
+#: gtk/gtkstock.c:327
 msgid "Navigation|_Back"
 msgstr "പുറകോട്ട് പോവുക (_B)"
 
 #. translators, strip the prefix up to and including the first |
-#: gtk/gtkstock.c:328
+#: gtk/gtkstock.c:329
 msgid "Navigation|_Down"
 msgstr "താഴോട്ട് പോവുക (_D)"
 
 #. translators, strip the prefix up to and including the first |
-#: gtk/gtkstock.c:330
+#: gtk/gtkstock.c:331
 msgid "Navigation|_Forward"
 msgstr "മുന്പോട്ട് പോവുക (_F)"
 
 #. translators, strip the prefix up to and including the first |
-#: gtk/gtkstock.c:332
+#: gtk/gtkstock.c:333
 msgid "Navigation|_Up"
 msgstr "മുകളിലേക്ക് പോവുക (_U)"
 
-#: gtk/gtkstock.c:333
+#: gtk/gtkstock.c:334
 msgid "_Harddisk"
 msgstr "ഹാര്‍ഡ് ഡിസ്ക്ക് (_H)"
 
-#: gtk/gtkstock.c:334
+#: gtk/gtkstock.c:335
 msgid "_Help"
 msgstr "സഹായം (_H)"
 
-#: gtk/gtkstock.c:335
+#: gtk/gtkstock.c:336
 msgid "_Home"
 msgstr "ആസ്ഥാനം (_H)"
 
-#: gtk/gtkstock.c:336
+#: gtk/gtkstock.c:337
 msgid "Increase Indent"
 msgstr "ഓരോ വരികളുടേയും മാര്‍ജിനില്‍ നിന്നുളള അകലം/സ്ഥാനം കൂട്ടുക"
 
-#: gtk/gtkstock.c:337
+#: gtk/gtkstock.c:338
 msgid "Decrease Indent"
 msgstr "ഓരോ വരികളുടേയും മാര്‍ജിനില്‍ നിന്നുളള അകലം/സ്ഥാനം കുറയ്ക്കുക"
 
-#: gtk/gtkstock.c:338
+#: gtk/gtkstock.c:339
 msgid "_Index"
 msgstr "സൂചകം (_I)"
 
-#: gtk/gtkstock.c:339
+#: gtk/gtkstock.c:340
 msgid "_Information"
 msgstr "വിവരം (_I)"
 
-#: gtk/gtkstock.c:340
+#: gtk/gtkstock.c:341
 msgid "_Italic"
 msgstr "അക്ഷരങ്ങള്‍ ചരിവുളളതാക്കുക (_I)"
 
-#: gtk/gtkstock.c:341
+#: gtk/gtkstock.c:342
 msgid "_Jump to"
 msgstr "ഇതിലേക്ക് ചാടുക (_J)"
 
 #. translators, strip the prefix up to and including the first |
-#: gtk/gtkstock.c:343
+#: gtk/gtkstock.c:344
 msgid "Justify|_Center"
 msgstr "ഖണ്ഡിക/വാചകം പേജിന്‍റെ മദ്ധ്യഭാഗത്തായി ക്രമീകരിക്കുക (_C)"
 
 #. translators, strip the prefix up to and including the first |
-#: gtk/gtkstock.c:345
+#: gtk/gtkstock.c:346
 msgid "Justify|_Fill"
 msgstr "ഖണ്ഡിക/വാചകം പേജ് മുഴുവന്‍ നിറയ്ക്കുക (_F)"
 
 #. translators, strip the prefix up to and including the first |
-#: gtk/gtkstock.c:347
+#: gtk/gtkstock.c:348
 msgid "Justify|_Left"
 msgstr "ഖണ്ഡിക/വാചകം പേജിന്‍റെ ഇടത്ത് വശത്ത് നിന്നും തുടങ്ങുക (_L)"
 
 #. translators, strip the prefix up to and including the first |
-#: gtk/gtkstock.c:349
+#: gtk/gtkstock.c:350
 msgid "Justify|_Right"
 msgstr "ഖണ്ഡിക/വാചകം പേജിന്‍റെ വലത്ത് വശത്ത് ഒരേ നിരയില്‍ ചിട്ടപ്പെടുത്തുക (_R)"
 
 #. translators, strip the prefix up to and including the first |
-#: gtk/gtkstock.c:352
+#: gtk/gtkstock.c:353
 msgid "Media|_Forward"
 msgstr "മുന്പോട്ട് പോവുക (_F)"
 
 #. translators, strip the prefix up to and including the first |
-#: gtk/gtkstock.c:354
+#: gtk/gtkstock.c:355
 msgid "Media|_Next"
 msgstr "അടുത്തതിലേക്ക് പോവുക (_N)"
 
 #. translators, strip the prefix up to and including the first |
-#: gtk/gtkstock.c:356
+#: gtk/gtkstock.c:357
 msgid "Media|P_ause"
 msgstr "താല്‍ക്കാലികമായി നിര്‍ത്തുക (_a)"
 
 #. translators, strip the prefix up to and including the first |
-#: gtk/gtkstock.c:358
+#: gtk/gtkstock.c:359
 msgid "Media|_Play"
 msgstr "പ്ളെ ചെയ്യുക (_P)"
 
 #. translators, strip the prefix up to and including the first |
-#: gtk/gtkstock.c:360
+#: gtk/gtkstock.c:361
 msgid "Media|Pre_vious"
 msgstr "ഇതിന് മുന്പുളളത് (_v)"
 
 #. translators, strip the prefix up to and including the first |
-#: gtk/gtkstock.c:362
+#: gtk/gtkstock.c:363
 msgid "Media|_Record"
 msgstr "റിക്കോര്‍ഡ് ചെയ്യുക (_R)"
 
 #. translators, strip the prefix up to and including the first |
-#: gtk/gtkstock.c:364
+#: gtk/gtkstock.c:365
 msgid "Media|R_ewind"
 msgstr "പുറകോട്ട് പോവുക (_e) "
 
 #. translators, strip the prefix up to and including the first |
-#: gtk/gtkstock.c:366
+#: gtk/gtkstock.c:367
 msgid "Media|_Stop"
 msgstr "നിര്‍ത്തുക (_S)"
 
-#: gtk/gtkstock.c:367
+#: gtk/gtkstock.c:368
 msgid "_Network"
 msgstr "നെറ്റ്‍വര്‍ക്ക് (_N)"
 
-#: gtk/gtkstock.c:368
+#: gtk/gtkstock.c:369
 msgid "_New"
 msgstr "പുതിയ(_N)"
 
-#: gtk/gtkstock.c:369
+#: gtk/gtkstock.c:370
 msgid "_No"
 msgstr "ഇല്ല (_N)"
 
-#: gtk/gtkstock.c:370
+#: gtk/gtkstock.c:371
 msgid "_OK"
 msgstr "ശരി (_O)"
 
-#: gtk/gtkstock.c:371
+#: gtk/gtkstock.c:372
 msgid "_Open"
 msgstr "തുറക്കുക (_O)"
 
-#: gtk/gtkstock.c:372
+#: gtk/gtkstock.c:373
 msgid "Landscape"
 msgstr "ഉയരം കുറഞ്ഞ് വീതി കൂടിയ ദീര്‍ഘ ചതുരാകൃതിയിലുളള പേജ്"
 
-#: gtk/gtkstock.c:373
+#: gtk/gtkstock.c:374
 msgid "Portrait"
 msgstr "ഉയരം കൂടിയ വീതി കുറഞ്ഞ് ദീര്‍ഘ ചതുരാകൃതിയിലുളള പേജ്"
 
-#: gtk/gtkstock.c:374
+#: gtk/gtkstock.c:375
 msgid "Reverse landscape"
 msgstr "ഉയരം കുറഞ്ഞ് വീതി കൂടിയ ദീര്‍ഘ ചതുരാകൃതിയിലുളള പേജ് തിരിയ്ക്കുക"
 
-#: gtk/gtkstock.c:375
+#: gtk/gtkstock.c:376
 msgid "Reverse portrait"
 msgstr "ഉയരം കൂടിയ വീതി കുറഞ്ഞ് ദീര്‍ഘ ചതുരാകൃതിയിലുളള പേജ് തിരിയ്ക്കുക"
 
-#: gtk/gtkstock.c:376
+#: gtk/gtkstock.c:377
 msgid "_Paste"
 msgstr "ഒട്ടിക്കുക (_P)"
 
-#: gtk/gtkstock.c:377
+#: gtk/gtkstock.c:378
 msgid "_Preferences"
 msgstr "മുന്‍ഗണനകള്‍ (_P)"
 
-#: gtk/gtkstock.c:378
+#: gtk/gtkstock.c:379
 msgid "_Print"
 msgstr "പ്രിന്‍റ് ചെയ്യുക (_P)"
 
-#: gtk/gtkstock.c:379
+#: gtk/gtkstock.c:380
 msgid "Print Pre_view"
 msgstr "പ്രിന്‍റ് ഏത് വിധത്തിലായിരിക്കും എന്ന് കംപ്യൂട്ടറില്‍ കാണുക (_v)"
 
-#: gtk/gtkstock.c:380
+#: gtk/gtkstock.c:381
 msgid "_Properties"
 msgstr "ഗുണഗണങ്ങള്‍ (_P)"
 
-#: gtk/gtkstock.c:381
+#: gtk/gtkstock.c:382
 msgid "_Quit"
 msgstr "പുറത്ത് കടക്കുക (_Q)"
 
-#: gtk/gtkstock.c:382
+#: gtk/gtkstock.c:383
 msgid "_Redo"
 msgstr "വേണ്ടന്ന് വച്ച മാറ്റങ്ങള്‍ പുനഃസ്ഥാപിക്കുക (_R)"
 
-#: gtk/gtkstock.c:383
+#: gtk/gtkstock.c:384
 msgid "_Refresh"
 msgstr "പുതുക്കുക (_R)"
 
-#: gtk/gtkstock.c:385
+#: gtk/gtkstock.c:386
 msgid "_Revert"
 msgstr "പൂര്‍വ്വസ്ഥിതി (_R)"
 
-#: gtk/gtkstock.c:386
+#: gtk/gtkstock.c:387
 msgid "_Save"
 msgstr "സംരംക്ഷിക്കുക (_S)"
 
-#: gtk/gtkstock.c:387
+#: gtk/gtkstock.c:388
 msgid "Save _As"
 msgstr "പേര് മാറ്റി സംരക്ഷിക്കുക (_A)"
 
-#: gtk/gtkstock.c:388
+#: gtk/gtkstock.c:389
 msgid "Select _All"
 msgstr "എല്ലാം തിരഞ്ഞെടുക്കുക (_A)"
 
-#: gtk/gtkstock.c:389
+#: gtk/gtkstock.c:390
 msgid "_Color"
 msgstr "നിറം (_C)"
 
-#: gtk/gtkstock.c:390
+#: gtk/gtkstock.c:391
 msgid "_Font"
 msgstr "ലിപി (_F)"
 
-#: gtk/gtkstock.c:391
+#: gtk/gtkstock.c:392
 msgid "_Ascending"
 msgstr "ആരോഹണം (_A)"
 
-#: gtk/gtkstock.c:392
+#: gtk/gtkstock.c:393
 msgid "_Descending"
 msgstr "അവരോഹണം (_D)"
 
-#: gtk/gtkstock.c:393
+#: gtk/gtkstock.c:394
 msgid "_Spell Check"
 msgstr "അക്ഷരത്തെറ്റുകള്‍ പരിശോധിക്കുക (_S)"
 
-#: gtk/gtkstock.c:394
+#: gtk/gtkstock.c:395
 msgid "_Stop"
 msgstr "നിര്‍ത്തുക (_S)"
 
-#: gtk/gtkstock.c:395
+#: gtk/gtkstock.c:396
 msgid "_Strikethrough"
 msgstr "അക്ഷരങ്ങളുടെ മദ്ധ്യേ വരയിടുക (_S)"
 
-#: gtk/gtkstock.c:396
+#: gtk/gtkstock.c:397
 msgid "_Undelete"
 msgstr "വെട്ടി നീക്കിയത് തിരികെ കൊണ്ടുവരിക (_U)"
 
-#: gtk/gtkstock.c:397
+#: gtk/gtkstock.c:398
 msgid "_Underline"
 msgstr "അടിവര ഇടുക (_U)"
 
-#: gtk/gtkstock.c:398
+#: gtk/gtkstock.c:399
 msgid "_Undo"
 msgstr "വരുത്തിയ മാറ്റങ്ങള്‍ വേണ്ടന്ന് വയ്ക്കുക (_U)"
 
-#: gtk/gtkstock.c:399
+#: gtk/gtkstock.c:400
 msgid "_Yes"
 msgstr "അതെ (_Y)"
 
-#: gtk/gtkstock.c:400
+#: gtk/gtkstock.c:401
 msgid "_Normal Size"
 msgstr "സാധാരണ വലുപ്പം (_N)"
 
-#: gtk/gtkstock.c:401
+#: gtk/gtkstock.c:402
 msgid "Best _Fit"
 msgstr "ഏറ്റവും അനുയോജ്യമായ വലുപ്പം (_F)"
 
-#: gtk/gtkstock.c:402
+#: gtk/gtkstock.c:403
 msgid "Zoom _In"
 msgstr "വലുതാക്കുക (_I)"
 
-#: gtk/gtkstock.c:403
+#: gtk/gtkstock.c:404
 msgid "Zoom _Out"
 msgstr "ചെറുതാക്കുക (_O)"
 
@@ -3345,22 +3350,22 @@ msgstr "മൊഡ്യൂള്‍ പാഥില്‍ ഥീം എന്‍
 msgid "--- No Tip ---"
 msgstr "--- സഹായമില്ല ---"
 
-#: gtk/gtkuimanager.c:1126
+#: gtk/gtkuimanager.c:1197
 #, c-format
 msgid "Unknown attribute '%s' on line %d char %d"
 msgstr "അപരിചിതമായ '%s' എന്ന ആട്ട്രിബ്യൂട്ട് %d-ആം വരി %d-ആം ക്യാരക്റ്ററില്‍ "
 
-#: gtk/gtkuimanager.c:1343
+#: gtk/gtkuimanager.c:1414
 #, c-format
 msgid "Unexpected start tag '%s' on line %d char %d"
 msgstr "അപ്രതീക്ഷിതമായ '%s' എന്ന സ്റ്റാര്‍ട്ട് റ്റാഗ് %d-ആം വരി %d-ആം ക്യാരക്റ്ററില്‍ "
 
-#: gtk/gtkuimanager.c:1433
+#: gtk/gtkuimanager.c:1504
 #, c-format
 msgid "Unexpected character data on line %d char %d"
 msgstr "അപ്രതീക്ഷിതമായ ക്യാരക്റ്റര്‍ %d-ആം വരി %d-ആം ക്യാരക്റ്ററില്‍ "
 
-#: gtk/gtkuimanager.c:2254
+#: gtk/gtkuimanager.c:2325
 msgid "Empty"
 msgstr "കാലി"
 
@@ -4364,84 +4369,84 @@ msgstr "വിയറ്റ്നാമീസ് (VIQR)"
 msgid "X Input Method"
 msgstr "X എന്ന എന്‍റര്‍ ചെയ്യുന്ന രീതി"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1524
+#: modules/printbackends/cups/gtkprintbackendcups.c:1533
 msgid "Two Sided"
 msgstr "ഒരു പേപ്പറിന്‍റെ രണ്ടു വശവും പ്രിന്‍റ് ചെയ്യുക"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1525
+#: modules/printbackends/cups/gtkprintbackendcups.c:1534
 msgid "Paper Type"
 msgstr "ഏത് തരത്തിലുളള പേപ്പര്‍ ആണ് ഉപയോഗിക്കുന്നത് "
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1526
+#: modules/printbackends/cups/gtkprintbackendcups.c:1535
 msgid "Paper Source"
 msgstr "പേപ്പറിന്‍റെ ഉറവിടം"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1527
+#: modules/printbackends/cups/gtkprintbackendcups.c:1536
 msgid "Output Tray"
 msgstr "ഔട്ട് പുട്ട് ട്രെ"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1536
+#: modules/printbackends/cups/gtkprintbackendcups.c:1545
 msgid "One Sided"
 msgstr "ഒരു വശത്ത് മാത്രം പ്രിന്‍റ് ചെയ്യുക"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1537
-#: modules/printbackends/cups/gtkprintbackendcups.c:1538
-#: modules/printbackends/cups/gtkprintbackendcups.c:1542
+#: modules/printbackends/cups/gtkprintbackendcups.c:1546
+#: modules/printbackends/cups/gtkprintbackendcups.c:1547
+#: modules/printbackends/cups/gtkprintbackendcups.c:1551
 msgid "Auto Select"
 msgstr "കംപ്യൂട്ടര്‍ തനിയെ തിരഞ്ഞെടുക്കുക"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1539
-#: modules/printbackends/cups/gtkprintbackendcups.c:1540
-#: modules/printbackends/cups/gtkprintbackendcups.c:1541
-#: modules/printbackends/cups/gtkprintbackendcups.c:2011
+#: modules/printbackends/cups/gtkprintbackendcups.c:1548
+#: modules/printbackends/cups/gtkprintbackendcups.c:1549
+#: modules/printbackends/cups/gtkprintbackendcups.c:1550
+#: modules/printbackends/cups/gtkprintbackendcups.c:2020
 msgid "Printer Default"
 msgstr "ഡീഫോള്‍ട്ടായ പ്രിന്‍റര്‍"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2205
+#: modules/printbackends/cups/gtkprintbackendcups.c:2214
 msgid "Urgent"
 msgstr "അത്യാവശ്യം"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2205
+#: modules/printbackends/cups/gtkprintbackendcups.c:2214
 msgid "High"
 msgstr "സാന്ദ്രത കൂടിയത് "
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2205
+#: modules/printbackends/cups/gtkprintbackendcups.c:2214
 msgid "Medium"
 msgstr "സാധാരണ സാന്ദ്രത"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2205
+#: modules/printbackends/cups/gtkprintbackendcups.c:2214
 msgid "Low"
 msgstr "സാന്ദ്രത കുറഞ്ഞത്"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2207
+#: modules/printbackends/cups/gtkprintbackendcups.c:2216
 msgid "None"
 msgstr "ശൂന്യം"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2207
+#: modules/printbackends/cups/gtkprintbackendcups.c:2216
 msgid "Classified"
 msgstr "പൊതുവായ അറിവിലേക്കുളളതല്ലാത്തത്"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2207
+#: modules/printbackends/cups/gtkprintbackendcups.c:2216
 msgid "Confidential"
 msgstr "രഹസ്യ സ്വഭാവമുളളത് "
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2207
+#: modules/printbackends/cups/gtkprintbackendcups.c:2216
 msgid "Secret"
 msgstr "രഹസ്യം"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2207
+#: modules/printbackends/cups/gtkprintbackendcups.c:2216
 msgid "Standard"
 msgstr "സര്‍വ്വ സാധാരണമായത് "
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2207
+#: modules/printbackends/cups/gtkprintbackendcups.c:2216
 msgid "Top Secret"
 msgstr "അതീവ രഹസ്യമായത് "
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2207
+#: modules/printbackends/cups/gtkprintbackendcups.c:2216
 msgid "Unclassified"
 msgstr "പൊതുവായ അറിവിലേക്കുളളത്"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2293
+#: modules/printbackends/cups/gtkprintbackendcups.c:2302
 #, c-format
 msgid "Custom %.2fx%.2f"
 msgstr ""
@@ -4452,28 +4457,28 @@ msgstr ""
 msgid "output.%s"
 msgstr "output.%s"
 
-#: modules/printbackends/file/gtkprintbackendfile.c:460
+#: modules/printbackends/file/gtkprintbackendfile.c:464
 msgid "Print to File"
 msgstr "ഫയലിലേക്ക് പ്രിന്‍റ് ചെയ്യുക"
 
-#: modules/printbackends/file/gtkprintbackendfile.c:485
+#: modules/printbackends/file/gtkprintbackendfile.c:489
 msgid "PDF"
 msgstr "PDF"
 
-#: modules/printbackends/file/gtkprintbackendfile.c:485
+#: modules/printbackends/file/gtkprintbackendfile.c:489
 msgid "Postscript"
 msgstr "അടിക്കുറിപ്പ്"
 
-#: modules/printbackends/file/gtkprintbackendfile.c:497
+#: modules/printbackends/file/gtkprintbackendfile.c:501
 #: modules/printbackends/test/gtkprintbackendtest.c:501
 msgid "Pages per _sheet:"
 msgstr "ഒരു ഷീറ്റിലുളള പേജുകളുടെ എണ്ണം (_s):"
 
-#: modules/printbackends/file/gtkprintbackendfile.c:543
+#: modules/printbackends/file/gtkprintbackendfile.c:547
 msgid "File"
 msgstr "ഫയല്‍"
 
-#: modules/printbackends/file/gtkprintbackendfile.c:552
+#: modules/printbackends/file/gtkprintbackendfile.c:556
 msgid "_Output format"
 msgstr "ഔട്ട് പുട്ട് ഫോര്‍മാറ്റ് (_O)"
 

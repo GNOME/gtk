@@ -85,6 +85,15 @@ specified by @direction.
 @menushell: the object which received the signal.
 @direction: the direction to move.
 
+<!-- ##### SIGNAL GtkMenuShell::move-selected ##### -->
+<para>
+
+</para>
+
+@menushell: the object which received the signal.
+@arg1: 
+@Returns: 
+
 <!-- ##### SIGNAL GtkMenuShell::selection-done ##### -->
 <para>
 This signal is emitted when a selection has been completed within a menu

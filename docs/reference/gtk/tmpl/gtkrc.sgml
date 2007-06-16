@@ -957,7 +957,7 @@ Parses resource information directly from a string.
 
 @scanner: 
 @color: 
-@Returns:
+@Returns: 
 
 
 <!-- ##### FUNCTION gtk_rc_parse_color_full ##### -->

@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ HEAD\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-06-06 09:04-0400\n"
+"POT-Creation-Date: 2007-06-15 21:24-0400\n"
 "PO-Revision-Date: 2006-08-17 22:07+0900\n"
 "Last-Translator: Satoru SATOH <ss@gnome.gr.jp>\n"
 "Language-Team: Japanese <gnome-translation@gnome.gr.jp>\n"
@@ -78,7 +78,7 @@ msgstr "有効にする Gdk デバッグ・フラグを指定する"
 #. Placeholder in --gdk-no-debug=FLAGS in --help output
 #. Placeholder in --gtk-debug=FLAGS in --help output
 #. Placeholder in --gtk-no-debug=FLAGS in --help output
-#: gdk/gdk.c:140 gdk/gdk.c:143 gtk/gtkmain.c:414 gtk/gtkmain.c:417
+#: gdk/gdk.c:140 gdk/gdk.c:143 gtk/gtkmain.c:415 gtk/gtkmain.c:418
 msgid "FLAGS"
 msgstr "FLAGS"
 
@@ -1349,7 +1349,7 @@ msgid "New accelerator..."
 msgstr "新しいアクセラレータ..."
 
 #. do not translate the part before the |
-#: gtk/gtkcellrendererprogress.c:278 gtk/gtkcellrendererprogress.c:365
+#: gtk/gtkcellrendererprogress.c:362 gtk/gtkcellrendererprogress.c:449
 #, c-format
 msgid "progress bar label|%d %%"
 msgstr "%d %%"
@@ -1484,15 +1484,15 @@ msgstr "パレット(_P):"
 msgid "Color Wheel"
 msgstr "色ホイール"
 
-#: gtk/gtkcolorseldialog.c:89
+#: gtk/gtkcolorseldialog.c:101
 msgid "Color Selection"
 msgstr "色の選択"
 
-#: gtk/gtkentry.c:5198 gtk/gtktextview.c:7448
+#: gtk/gtkentry.c:5253 gtk/gtktextview.c:7462
 msgid "Input _Methods"
 msgstr "入力メソッド(_M)"
 
-#: gtk/gtkentry.c:5212 gtk/gtktextview.c:7462
+#: gtk/gtkentry.c:5267 gtk/gtktextview.c:7476
 msgid "_Insert Unicode Control Character"
 msgstr "Unicode 制御文字の挿入(_I)"
 
@@ -1508,7 +1508,7 @@ msgstr "デスクトップ"
 msgid "(None)"
 msgstr "(なし)"
 
-#: gtk/gtkfilechooserbutton.c:2049
+#: gtk/gtkfilechooserbutton.c:2047
 msgid "Other..."
 msgstr "その他..."
 
@@ -1554,235 +1554,235 @@ msgstr "フォルダの内容を表示できませんでした"
 #. * is a hostname. Nautilus and the panel contain the same string
 #. * to translate.
 #.
-#: gtk/gtkfilechooserdefault.c:1707
+#: gtk/gtkfilechooserdefault.c:1714
 #, c-format
 msgid "%1$s on %2$s"
 msgstr "%2$s にある %1$s"
 
-#: gtk/gtkfilechooserdefault.c:1878
+#: gtk/gtkfilechooserdefault.c:1892
 msgid "Search"
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:1902
+#: gtk/gtkfilechooserdefault.c:1916
 msgid "Recently Used"
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:2991
+#: gtk/gtkfilechooserdefault.c:3006
 #, c-format
 msgid "Add the folder '%s' to the bookmarks"
 msgstr "'%s' というフォルダをブックマークへ追加します"
 
-#: gtk/gtkfilechooserdefault.c:3032
+#: gtk/gtkfilechooserdefault.c:3047
 #, c-format
 msgid "Add the current folder to the bookmarks"
 msgstr "このフォルダをブックマークへ追加します"
 
-#: gtk/gtkfilechooserdefault.c:3034
+#: gtk/gtkfilechooserdefault.c:3049
 #, c-format
 msgid "Add the selected folders to the bookmarks"
 msgstr "指定したフォルダをブックマークへ追加します"
 
-#: gtk/gtkfilechooserdefault.c:3074
+#: gtk/gtkfilechooserdefault.c:3089
 #, c-format
 msgid "Remove the bookmark '%s'"
 msgstr "'%s' というブックマークを削除します"
 
-#: gtk/gtkfilechooserdefault.c:3507
+#: gtk/gtkfilechooserdefault.c:3522
 #, c-format
 msgid "Could not add a bookmark for '%s' because it is an invalid path name."
 msgstr "パス名が正しくないので、'%s' のブックマークを追加できませんでした。"
 
-#: gtk/gtkfilechooserdefault.c:3732
+#: gtk/gtkfilechooserdefault.c:3747
 msgid "Remove"
 msgstr "削除"
 
-#: gtk/gtkfilechooserdefault.c:3741
+#: gtk/gtkfilechooserdefault.c:3756
 msgid "Rename..."
 msgstr "ファイル名の変更..."
 
 #. Accessible object name for the file chooser's shortcuts pane
-#: gtk/gtkfilechooserdefault.c:3883
+#: gtk/gtkfilechooserdefault.c:3898
 msgid "Places"
 msgstr "場所"
 
 #. Column header for the file chooser's shortcuts pane
-#: gtk/gtkfilechooserdefault.c:3937
+#: gtk/gtkfilechooserdefault.c:3952
 msgid "_Places"
 msgstr "場所(_P)"
 
-#: gtk/gtkfilechooserdefault.c:3992 gtk/gtkstock.c:297
+#: gtk/gtkfilechooserdefault.c:4007 gtk/gtkstock.c:297
 msgid "_Add"
 msgstr "追加(_A)"
 
-#: gtk/gtkfilechooserdefault.c:3999
+#: gtk/gtkfilechooserdefault.c:4014
 msgid "Add the selected folder to the Bookmarks"
 msgstr "指定したフォルダをブックマークへ追加します"
 
-#: gtk/gtkfilechooserdefault.c:4004 gtk/gtkstock.c:384
+#: gtk/gtkfilechooserdefault.c:4019 gtk/gtkstock.c:385
 msgid "_Remove"
 msgstr "削除(_R)"
 
-#: gtk/gtkfilechooserdefault.c:4011
+#: gtk/gtkfilechooserdefault.c:4026
 msgid "Remove the selected bookmark"
 msgstr "指定したブックマークを削除します"
 
-#: gtk/gtkfilechooserdefault.c:4107
+#: gtk/gtkfilechooserdefault.c:4122
 msgid "Could not select file"
 msgstr "ファイルを選択できませんでした"
 
-#: gtk/gtkfilechooserdefault.c:4244
+#: gtk/gtkfilechooserdefault.c:4259
 #, c-format
 msgid "Could not select file '%s' because it is an invalid path name."
 msgstr "パス名が正しくないので '%s' というファイルを選択できませんでした。"
 
-#: gtk/gtkfilechooserdefault.c:4301
+#: gtk/gtkfilechooserdefault.c:4316
 msgid "_Add to Bookmarks"
 msgstr "ブックマークへ追加(_A)"
 
-#: gtk/gtkfilechooserdefault.c:4315
+#: gtk/gtkfilechooserdefault.c:4330
 msgid "Show _Hidden Files"
 msgstr "隠しファイルを表示する(_H)"
 
-#: gtk/gtkfilechooserdefault.c:4483 gtk/gtkfilesel.c:729
+#: gtk/gtkfilechooserdefault.c:4498 gtk/gtkfilesel.c:729
 msgid "Files"
 msgstr "ファイル"
 
-#: gtk/gtkfilechooserdefault.c:4528
+#: gtk/gtkfilechooserdefault.c:4543
 msgid "Name"
 msgstr "名前"
 
-#: gtk/gtkfilechooserdefault.c:4553
+#: gtk/gtkfilechooserdefault.c:4568
 msgid "Size"
 msgstr "サイズ"
 
-#: gtk/gtkfilechooserdefault.c:4567
+#: gtk/gtkfilechooserdefault.c:4582
 msgid "Modified"
 msgstr "最終変更日"
 
-#: gtk/gtkfilechooserdefault.c:4602
+#: gtk/gtkfilechooserdefault.c:4617
 msgid "Select which types of files are shown"
 msgstr "表示するファイルの種類を選択して下さい"
 
 #. Label
-#: gtk/gtkfilechooserdefault.c:4813 gtk/gtkprinteroptionwidget.c:786
+#: gtk/gtkfilechooserdefault.c:4828 gtk/gtkprinteroptionwidget.c:786
 msgid "_Name:"
 msgstr "名前(_N):"
 
-#: gtk/gtkfilechooserdefault.c:4855
+#: gtk/gtkfilechooserdefault.c:4870
 msgid "_Browse for other folders"
 msgstr "他のフォルダ(_B)"
 
-#: gtk/gtkfilechooserdefault.c:5110
+#: gtk/gtkfilechooserdefault.c:5125
 msgid "Type a file name"
 msgstr "ファイル名を入力して下さい"
 
 #. Create Folder
-#: gtk/gtkfilechooserdefault.c:5147
+#: gtk/gtkfilechooserdefault.c:5162
 msgid "Create Fo_lder"
 msgstr "フォルダの作成(_L)"
 
-#: gtk/gtkfilechooserdefault.c:5157
+#: gtk/gtkfilechooserdefault.c:5172
 msgid "_Location:"
 msgstr "場所(_L):"
 
-#: gtk/gtkfilechooserdefault.c:5395
+#: gtk/gtkfilechooserdefault.c:5410
 msgid "Save in _folder:"
 msgstr "フォルダの中に保存(_F):"
 
-#: gtk/gtkfilechooserdefault.c:5397
+#: gtk/gtkfilechooserdefault.c:5412
 msgid "Create in _folder:"
 msgstr "フォルダの中に作成(_F):"
 
-#: gtk/gtkfilechooserdefault.c:7000
+#: gtk/gtkfilechooserdefault.c:7015
 #, c-format
 msgid "Cannot change to folder because it is not local"
 msgstr "ローカルではないので、フォルダを変更できません"
 
-#: gtk/gtkfilechooserdefault.c:7616 gtk/gtkfilechooserdefault.c:7637
+#: gtk/gtkfilechooserdefault.c:7631 gtk/gtkfilechooserdefault.c:7652
 #, c-format
 msgid "Shortcut %s already exists"
 msgstr "ショートカット %s は既にあります"
 
-#: gtk/gtkfilechooserdefault.c:7727
+#: gtk/gtkfilechooserdefault.c:7742
 #, c-format
 msgid "Shortcut %s does not exist"
 msgstr "ショートカット %s はありません"
 
-#: gtk/gtkfilechooserdefault.c:7982
+#: gtk/gtkfilechooserdefault.c:7997
 #, c-format
 msgid "A file named \"%s\" already exists.  Do you want to replace it?"
 msgstr "\"%s\" というファイルは既に存在します。上書きしてもよろしいですか？"
 
-#: gtk/gtkfilechooserdefault.c:7985
+#: gtk/gtkfilechooserdefault.c:8000
 #, c-format
 msgid ""
 "The file already exists in \"%s\".  Replacing it will overwrite its contents."
 msgstr "\"%s\" にファイルが既に存在しています。全ての内容を上書きします。"
 
-#: gtk/gtkfilechooserdefault.c:7990
+#: gtk/gtkfilechooserdefault.c:8005
 msgid "_Replace"
 msgstr "置き換える(_R)"
 
-#: gtk/gtkfilechooserdefault.c:8821
+#: gtk/gtkfilechooserdefault.c:8836
 #, fuzzy
 msgid "Could not start the search process"
 msgstr "残りのデータを保存できませんでした"
 
-#: gtk/gtkfilechooserdefault.c:8822
+#: gtk/gtkfilechooserdefault.c:8837
 msgid ""
 "The program was not able to create a connection to the indexer daemon.  "
 "Please make sure it is running."
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:8836
+#: gtk/gtkfilechooserdefault.c:8851
 #, fuzzy
 msgid "Could not send the search request"
 msgstr "残りのデータを保存できませんでした"
 
 #. Label
-#: gtk/gtkfilechooserdefault.c:9262
+#: gtk/gtkfilechooserdefault.c:9277
 msgid "_Search:"
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:10148
+#: gtk/gtkfilechooserdefault.c:10166
 #, c-format
 msgid "Could not mount %s"
 msgstr "%s をマウントできませんでした"
 
-#: gtk/gtkfilechooserdefault.c:10788
+#: gtk/gtkfilechooserdefault.c:10806
 msgid "Type name of new folder"
 msgstr "新しいフォルダの種類"
 
-#: gtk/gtkfilechooserdefault.c:10836
+#: gtk/gtkfilechooserdefault.c:10854
 #, c-format
 msgid "%d byte"
 msgid_plural "%d bytes"
 msgstr[0] "%dバイト"
 
-#: gtk/gtkfilechooserdefault.c:10838
+#: gtk/gtkfilechooserdefault.c:10856
 #, c-format
 msgid "%.1f KB"
 msgstr "%.1fKバイト"
 
-#: gtk/gtkfilechooserdefault.c:10840
+#: gtk/gtkfilechooserdefault.c:10858
 #, c-format
 msgid "%.1f MB"
 msgstr "%.1fMバイト"
 
-#: gtk/gtkfilechooserdefault.c:10842
+#: gtk/gtkfilechooserdefault.c:10860
 #, c-format
 msgid "%.1f GB"
 msgstr "%.1fGバイト"
 
-#: gtk/gtkfilechooserdefault.c:10940 gtk/gtkfilechooserdefault.c:10964
+#: gtk/gtkfilechooserdefault.c:10958 gtk/gtkfilechooserdefault.c:10982
 msgid "Unknown"
 msgstr "不明"
 
-#: gtk/gtkfilechooserdefault.c:10951
+#: gtk/gtkfilechooserdefault.c:10969
 msgid "Today"
 msgstr "今日"
 
-#: gtk/gtkfilechooserdefault.c:10953
+#: gtk/gtkfilechooserdefault.c:10971
 msgid "Yesterday"
 msgstr "昨日"
 
@@ -1938,7 +1938,7 @@ msgid "(Empty)"
 msgstr "(空です)"
 
 #: gtk/gtkfilesystemunix.c:960 gtk/gtkfilesystemunix.c:1208
-#: gtk/gtkfilesystemunix.c:2201 gtk/gtkfilesystemunix.c:2241
+#: gtk/gtkfilesystemunix.c:2196 gtk/gtkfilesystemunix.c:2236
 #: gtk/gtkfilesystemwin32.c:2245 gtk/gtkfilesystemwin32.c:2295
 #, c-format
 msgid "Error getting information for '%s': %s"
@@ -1962,17 +1962,17 @@ msgstr ""
 "\"%s\" という名前に \"%s\" という文字が含まれているため正しくありません (別の"
 "名前を使用して下さい)"
 
-#: gtk/gtkfilesystemunix.c:1883 gtk/gtkfilesystemwin32.c:1925
+#: gtk/gtkfilesystemunix.c:1878 gtk/gtkfilesystemwin32.c:1925
 #, c-format
 msgid "Bookmark saving failed: %s"
 msgstr "ブックマークの保存に失敗: %s"
 
-#: gtk/gtkfilesystemunix.c:1938 gtk/gtkfilesystemwin32.c:1980
+#: gtk/gtkfilesystemunix.c:1933 gtk/gtkfilesystemwin32.c:1980
 #, c-format
 msgid "'%s' already exists in the bookmarks list"
 msgstr "既に '%s' がブックマーク一覧にあります"
 
-#: gtk/gtkfilesystemunix.c:2010 gtk/gtkfilesystemwin32.c:2052
+#: gtk/gtkfilesystemunix.c:2005 gtk/gtkfilesystemwin32.c:2052
 #, c-format
 msgid "'%s' does not exist in the bookmarks list"
 msgstr "'%s' はブックマーク一覧にありません"
@@ -2007,28 +2007,28 @@ msgstr "フォント"
 
 #. This is the default text shown in the preview entry, though the user
 #. can set it. Remember that some fonts only have capital letters.
-#: gtk/gtkfontsel.c:74
+#: gtk/gtkfontsel.c:75
 msgid "abcdefghijk ABCDEFGHIJK"
 msgstr "abcdefghijk ABCDEFGHIJK これはテストです"
 
-#: gtk/gtkfontsel.c:325
+#: gtk/gtkfontsel.c:326
 msgid "_Family:"
 msgstr "ファミリ(_F):"
 
-#: gtk/gtkfontsel.c:331
+#: gtk/gtkfontsel.c:332
 msgid "_Style:"
 msgstr "スタイル(_S):"
 
-#: gtk/gtkfontsel.c:337
+#: gtk/gtkfontsel.c:338
 msgid "Si_ze:"
 msgstr "サイズ(_Z):"
 
 #. create the text entry widget
-#: gtk/gtkfontsel.c:514
+#: gtk/gtkfontsel.c:515
 msgid "_Preview:"
 msgstr "プレビュー(_P):"
 
-#: gtk/gtkfontsel.c:1348
+#: gtk/gtkfontsel.c:1359
 msgid "Font Selection"
 msgstr "フォントの選択"
 
@@ -2171,27 +2171,27 @@ msgid "Invalid URI"
 msgstr "URI が間違っています"
 
 #. Description of --gtk-module=MODULES in --help output
-#: gtk/gtkmain.c:407
+#: gtk/gtkmain.c:408
 msgid "Load additional GTK+ modules"
 msgstr "追加で読み込む GTK+ モジュールを指定する"
 
 #. Placeholder in --gtk-module=MODULES in --help output
-#: gtk/gtkmain.c:408
+#: gtk/gtkmain.c:409
 msgid "MODULES"
 msgstr "MODULES"
 
 #. Description of --g-fatal-warnings in --help output
-#: gtk/gtkmain.c:410
+#: gtk/gtkmain.c:411
 msgid "Make all warnings fatal"
 msgstr "警告を全て致命的と見なす"
 
 #. Description of --gtk-debug=FLAGS in --help output
-#: gtk/gtkmain.c:413
+#: gtk/gtkmain.c:414
 msgid "GTK+ debugging flags to set"
 msgstr "有効にする GTK+ のデバッグ・フラグを指定する"
 
 #. Description of --gtk-no-debug=FLAGS in --help output
-#: gtk/gtkmain.c:416
+#: gtk/gtkmain.c:417
 msgid "GTK+ debugging flags to unset"
 msgstr "無効にする GTK+ のデバッグ・フラグを指定する"
 
@@ -2200,27 +2200,27 @@ msgstr "無効にする GTK+ のデバッグ・フラグを指定する"
 #. * Do *not* translate it to "predefinito:LTR", if it
 #. * it isn't default:LTR or default:RTL it will not work
 #.
-#: gtk/gtkmain.c:652
+#: gtk/gtkmain.c:653
 msgid "default:LTR"
 msgstr "default:LTR"
 
-#: gtk/gtkmain.c:749
+#: gtk/gtkmain.c:750
 msgid "GTK+ Options"
 msgstr "GTK+ のオプション"
 
-#: gtk/gtkmain.c:749
+#: gtk/gtkmain.c:750
 msgid "Show GTK+ Options"
 msgstr "GTK+ のオプションを表示する"
 
-#: gtk/gtknotebook.c:810
+#: gtk/gtknotebook.c:828
 msgid "Arrow spacing"
 msgstr "矢印の間隔"
 
-#: gtk/gtknotebook.c:811
+#: gtk/gtknotebook.c:829
 msgid "Scroll arrow spacing"
 msgstr "スクロール用の矢印の間隔"
 
-#: gtk/gtknotebook.c:4344 gtk/gtknotebook.c:6850
+#: gtk/gtknotebook.c:4392 gtk/gtknotebook.c:6898
 #, c-format
 msgid "Page %u"
 msgstr "%u ページ"
@@ -2673,12 +2673,12 @@ msgstr "グループ"
 msgid "The radio tool button whose group this button belongs to."
 msgstr "このボタンに属するグループのラジオ・ツールボタンです"
 
-#: gtk/gtkrc.c:2836
+#: gtk/gtkrc.c:2866
 #, c-format
 msgid "Unable to find include file: \"%s\""
 msgstr "インクルードファイルが見つかりません: \"%s\""
 
-#: gtk/gtkrc.c:3466 gtk/gtkrc.c:3469
+#: gtk/gtkrc.c:3494 gtk/gtkrc.c:3497
 #, c-format
 msgid "Unable to locate image file in pixmap_path: \"%s\""
 msgstr "pixmap_path に画像ファイルがありません: \"%s\""
@@ -2830,314 +2830,319 @@ msgid "_Delete"
 msgstr "削除(_D)"
 
 #: gtk/gtkstock.c:309
+#, fuzzy
+msgid "_Discard"
+msgstr "無効"
+
+#: gtk/gtkstock.c:310
 msgid "_Disconnect"
 msgstr "切断(_D)"
 
-#: gtk/gtkstock.c:310
+#: gtk/gtkstock.c:311
 msgid "_Execute"
 msgstr "実行(_E)"
 
-#: gtk/gtkstock.c:311
+#: gtk/gtkstock.c:312
 msgid "_Edit"
 msgstr "編集(_E)"
 
-#: gtk/gtkstock.c:312
+#: gtk/gtkstock.c:313
 msgid "_Find"
 msgstr "検索(_F)"
 
-#: gtk/gtkstock.c:313
+#: gtk/gtkstock.c:314
 msgid "Find and _Replace"
 msgstr "検索して置換(_R)"
 
-#: gtk/gtkstock.c:314
+#: gtk/gtkstock.c:315
 msgid "_Floppy"
 msgstr "フロッピー(_F)"
 
-#: gtk/gtkstock.c:315
+#: gtk/gtkstock.c:316
 msgid "_Fullscreen"
 msgstr "フルスクリーン表示(_F)"
 
-#: gtk/gtkstock.c:316
+#: gtk/gtkstock.c:317
 msgid "_Leave Fullscreen"
 msgstr "フルスクリーン表示の解除(_L)"
 
 #. translators, strip the prefix up to and including the first |
-#: gtk/gtkstock.c:318
+#: gtk/gtkstock.c:319
 msgid "Navigation|_Bottom"
 msgstr "下端(_B)"
 
 #. translators, strip the prefix up to and including the first |
-#: gtk/gtkstock.c:320
+#: gtk/gtkstock.c:321
 msgid "Navigation|_First"
 msgstr "先頭(_F)"
 
 #. translators, strip the prefix up to and including the first |
-#: gtk/gtkstock.c:322
+#: gtk/gtkstock.c:323
 msgid "Navigation|_Last"
 msgstr "最後(_L)"
 
 #. translators, strip the prefix up to and including the first |
-#: gtk/gtkstock.c:324
+#: gtk/gtkstock.c:325
 msgid "Navigation|_Top"
 msgstr "上端(_T)"
 
 #. translators, strip the prefix up to and including the first |
-#: gtk/gtkstock.c:326
+#: gtk/gtkstock.c:327
 msgid "Navigation|_Back"
 msgstr "戻る(_B)"
 
 #. translators, strip the prefix up to and including the first |
-#: gtk/gtkstock.c:328
+#: gtk/gtkstock.c:329
 msgid "Navigation|_Down"
 msgstr "下へ(_D)"
 
 #. translators, strip the prefix up to and including the first |
-#: gtk/gtkstock.c:330
+#: gtk/gtkstock.c:331
 msgid "Navigation|_Forward"
 msgstr "進む(_F)"
 
 #. translators, strip the prefix up to and including the first |
-#: gtk/gtkstock.c:332
+#: gtk/gtkstock.c:333
 msgid "Navigation|_Up"
 msgstr "上へ(_U)"
 
-#: gtk/gtkstock.c:333
+#: gtk/gtkstock.c:334
 msgid "_Harddisk"
 msgstr "ハードディスク(_H)"
 
-#: gtk/gtkstock.c:334
+#: gtk/gtkstock.c:335
 msgid "_Help"
 msgstr "ヘルプ(_H)"
 
-#: gtk/gtkstock.c:335
+#: gtk/gtkstock.c:336
 msgid "_Home"
 msgstr "ホーム(_H)"
 
-#: gtk/gtkstock.c:336
+#: gtk/gtkstock.c:337
 msgid "Increase Indent"
 msgstr "インデントを増やす"
 
-#: gtk/gtkstock.c:337
+#: gtk/gtkstock.c:338
 msgid "Decrease Indent"
 msgstr "インデントを減らす"
 
-#: gtk/gtkstock.c:338
+#: gtk/gtkstock.c:339
 msgid "_Index"
 msgstr "インデックス(_I)"
 
-#: gtk/gtkstock.c:339
+#: gtk/gtkstock.c:340
 msgid "_Information"
 msgstr "情報(_I)"
 
-#: gtk/gtkstock.c:340
+#: gtk/gtkstock.c:341
 msgid "_Italic"
 msgstr "斜体(_I)"
 
-#: gtk/gtkstock.c:341
+#: gtk/gtkstock.c:342
 msgid "_Jump to"
 msgstr "移動(_J)"
 
 #. translators, strip the prefix up to and including the first |
-#: gtk/gtkstock.c:343
+#: gtk/gtkstock.c:344
 msgid "Justify|_Center"
 msgstr "中央寄せ(_C)"
 
 #. translators, strip the prefix up to and including the first |
-#: gtk/gtkstock.c:345
+#: gtk/gtkstock.c:346
 msgid "Justify|_Fill"
 msgstr "埋める(_F)"
 
 #. translators, strip the prefix up to and including the first |
-#: gtk/gtkstock.c:347
+#: gtk/gtkstock.c:348
 msgid "Justify|_Left"
 msgstr "左寄せ(_L)"
 
 #. translators, strip the prefix up to and including the first |
-#: gtk/gtkstock.c:349
+#: gtk/gtkstock.c:350
 msgid "Justify|_Right"
 msgstr "右寄せ(_R)"
 
 #. translators, strip the prefix up to and including the first |
-#: gtk/gtkstock.c:352
+#: gtk/gtkstock.c:353
 msgid "Media|_Forward"
 msgstr "進む(_F)"
 
 #. translators, strip the prefix up to and including the first |
-#: gtk/gtkstock.c:354
+#: gtk/gtkstock.c:355
 msgid "Media|_Next"
 msgstr "次の曲(_N)"
 
 #. translators, strip the prefix up to and including the first |
-#: gtk/gtkstock.c:356
+#: gtk/gtkstock.c:357
 msgid "Media|P_ause"
 msgstr "一時停止(_A)"
 
 #. translators, strip the prefix up to and including the first |
-#: gtk/gtkstock.c:358
+#: gtk/gtkstock.c:359
 msgid "Media|_Play"
 msgstr "演奏(_P)"
 
 #. translators, strip the prefix up to and including the first |
-#: gtk/gtkstock.c:360
+#: gtk/gtkstock.c:361
 msgid "Media|Pre_vious"
 msgstr "前の曲(_V)"
 
 #. translators, strip the prefix up to and including the first |
-#: gtk/gtkstock.c:362
+#: gtk/gtkstock.c:363
 msgid "Media|_Record"
 msgstr "録音(_R)"
 
 #. translators, strip the prefix up to and including the first |
-#: gtk/gtkstock.c:364
+#: gtk/gtkstock.c:365
 msgid "Media|R_ewind"
 msgstr "巻き戻す(_E)"
 
 #. translators, strip the prefix up to and including the first |
-#: gtk/gtkstock.c:366
+#: gtk/gtkstock.c:367
 msgid "Media|_Stop"
 msgstr "停止(_S)"
 
-#: gtk/gtkstock.c:367
+#: gtk/gtkstock.c:368
 msgid "_Network"
 msgstr "ネットワーク(_N)"
 
-#: gtk/gtkstock.c:368
+#: gtk/gtkstock.c:369
 msgid "_New"
 msgstr "新規(_N)"
 
-#: gtk/gtkstock.c:369
+#: gtk/gtkstock.c:370
 msgid "_No"
 msgstr "いいえ(_N)"
 
-#: gtk/gtkstock.c:370
+#: gtk/gtkstock.c:371
 msgid "_OK"
 msgstr "OK(_O)"
 
-#: gtk/gtkstock.c:371
+#: gtk/gtkstock.c:372
 msgid "_Open"
 msgstr "開く(_O)"
 
-#: gtk/gtkstock.c:372
+#: gtk/gtkstock.c:373
 msgid "Landscape"
 msgstr "横置き"
 
-#: gtk/gtkstock.c:373
+#: gtk/gtkstock.c:374
 msgid "Portrait"
 msgstr "縦置き"
 
-#: gtk/gtkstock.c:374
+#: gtk/gtkstock.c:375
 msgid "Reverse landscape"
 msgstr "横置きの逆"
 
-#: gtk/gtkstock.c:375
+#: gtk/gtkstock.c:376
 msgid "Reverse portrait"
 msgstr "縦置きの逆"
 
-#: gtk/gtkstock.c:376
+#: gtk/gtkstock.c:377
 msgid "_Paste"
 msgstr "貼り付け(_P)"
 
-#: gtk/gtkstock.c:377
+#: gtk/gtkstock.c:378
 msgid "_Preferences"
 msgstr "設定(_P)"
 
-#: gtk/gtkstock.c:378
+#: gtk/gtkstock.c:379
 msgid "_Print"
 msgstr "印刷(_P)"
 
-#: gtk/gtkstock.c:379
+#: gtk/gtkstock.c:380
 msgid "Print Pre_view"
 msgstr "印刷プレビュー(_V)"
 
-#: gtk/gtkstock.c:380
+#: gtk/gtkstock.c:381
 msgid "_Properties"
 msgstr "プロパティ(_P)"
 
-#: gtk/gtkstock.c:381
+#: gtk/gtkstock.c:382
 msgid "_Quit"
 msgstr "終了(_Q)"
 
-#: gtk/gtkstock.c:382
+#: gtk/gtkstock.c:383
 msgid "_Redo"
 msgstr "やり直し(_R)"
 
-#: gtk/gtkstock.c:383
+#: gtk/gtkstock.c:384
 msgid "_Refresh"
 msgstr "更新(_R)"
 
-#: gtk/gtkstock.c:385
+#: gtk/gtkstock.c:386
 msgid "_Revert"
 msgstr "元に戻す(_R)"
 
-#: gtk/gtkstock.c:386
+#: gtk/gtkstock.c:387
 msgid "_Save"
 msgstr "保存(_S)"
 
-#: gtk/gtkstock.c:387
+#: gtk/gtkstock.c:388
 msgid "Save _As"
 msgstr "別名で保存(_A)"
 
-#: gtk/gtkstock.c:388
+#: gtk/gtkstock.c:389
 msgid "Select _All"
 msgstr "全て選択(_A)"
 
-#: gtk/gtkstock.c:389
+#: gtk/gtkstock.c:390
 msgid "_Color"
 msgstr "色(_C)"
 
-#: gtk/gtkstock.c:390
+#: gtk/gtkstock.c:391
 msgid "_Font"
 msgstr "フォント(_F)"
 
-#: gtk/gtkstock.c:391
+#: gtk/gtkstock.c:392
 msgid "_Ascending"
 msgstr "昇順(_A)"
 
-#: gtk/gtkstock.c:392
+#: gtk/gtkstock.c:393
 msgid "_Descending"
 msgstr "降順(_D)"
 
-#: gtk/gtkstock.c:393
+#: gtk/gtkstock.c:394
 msgid "_Spell Check"
 msgstr "スペル・チェック(_S)"
 
-#: gtk/gtkstock.c:394
+#: gtk/gtkstock.c:395
 msgid "_Stop"
 msgstr "停止(_S)"
 
-#: gtk/gtkstock.c:395
+#: gtk/gtkstock.c:396
 msgid "_Strikethrough"
 msgstr "打ち消し線(_S)"
 
-#: gtk/gtkstock.c:396
+#: gtk/gtkstock.c:397
 msgid "_Undelete"
 msgstr "削除取り消し(_U)"
 
-#: gtk/gtkstock.c:397
+#: gtk/gtkstock.c:398
 msgid "_Underline"
 msgstr "下線(_U)"
 
-#: gtk/gtkstock.c:398
+#: gtk/gtkstock.c:399
 msgid "_Undo"
 msgstr "元に戻す(_U)"
 
-#: gtk/gtkstock.c:399
+#: gtk/gtkstock.c:400
 msgid "_Yes"
 msgstr "はい(_Y)"
 
-#: gtk/gtkstock.c:400
+#: gtk/gtkstock.c:401
 msgid "_Normal Size"
 msgstr "標準サイズ(_N)"
 
-#: gtk/gtkstock.c:401
+#: gtk/gtkstock.c:402
 msgid "Best _Fit"
 msgstr "フィットさせる(_F)"
 
-#: gtk/gtkstock.c:402
+#: gtk/gtkstock.c:403
 msgid "Zoom _In"
 msgstr "拡大(_I)"
 
-#: gtk/gtkstock.c:403
+#: gtk/gtkstock.c:404
 msgid "Zoom _Out"
 msgstr "縮小(_O)"
 
@@ -3310,22 +3315,22 @@ msgstr "module_path にはテーマ・エンジンがありません: \"%s\","
 msgid "--- No Tip ---"
 msgstr "--- Tip なし ---"
 
-#: gtk/gtkuimanager.c:1126
+#: gtk/gtkuimanager.c:1197
 #, c-format
 msgid "Unknown attribute '%s' on line %d char %d"
 msgstr "%2$d 行目 %3$d 文字目の不明な属性 '%1$s'"
 
-#: gtk/gtkuimanager.c:1343
+#: gtk/gtkuimanager.c:1414
 #, c-format
 msgid "Unexpected start tag '%s' on line %d char %d"
 msgstr "%2$d 行目 %3$d 文字目の予想外の開始タグ '%1$s'"
 
-#: gtk/gtkuimanager.c:1433
+#: gtk/gtkuimanager.c:1504
 #, c-format
 msgid "Unexpected character data on line %d char %d"
 msgstr "%d 行の %d 文字目の文字データは予想外です"
 
-#: gtk/gtkuimanager.c:2254
+#: gtk/gtkuimanager.c:2325
 msgid "Empty"
 msgstr "空"
 
@@ -4331,84 +4336,84 @@ msgstr "ベトナム語 (VIQR)"
 msgid "X Input Method"
 msgstr "X 入力メソッド"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1524
+#: modules/printbackends/cups/gtkprintbackendcups.c:1533
 msgid "Two Sided"
 msgstr "両面印刷"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1525
+#: modules/printbackends/cups/gtkprintbackendcups.c:1534
 msgid "Paper Type"
 msgstr "用紙の種類"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1526
+#: modules/printbackends/cups/gtkprintbackendcups.c:1535
 msgid "Paper Source"
 msgstr "用紙のソース"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1527
+#: modules/printbackends/cups/gtkprintbackendcups.c:1536
 msgid "Output Tray"
 msgstr "出力トレイ"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1536
+#: modules/printbackends/cups/gtkprintbackendcups.c:1545
 msgid "One Sided"
 msgstr "片面印刷"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1537
-#: modules/printbackends/cups/gtkprintbackendcups.c:1538
-#: modules/printbackends/cups/gtkprintbackendcups.c:1542
+#: modules/printbackends/cups/gtkprintbackendcups.c:1546
+#: modules/printbackends/cups/gtkprintbackendcups.c:1547
+#: modules/printbackends/cups/gtkprintbackendcups.c:1551
 msgid "Auto Select"
 msgstr "自動選択"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1539
-#: modules/printbackends/cups/gtkprintbackendcups.c:1540
-#: modules/printbackends/cups/gtkprintbackendcups.c:1541
-#: modules/printbackends/cups/gtkprintbackendcups.c:2011
+#: modules/printbackends/cups/gtkprintbackendcups.c:1548
+#: modules/printbackends/cups/gtkprintbackendcups.c:1549
+#: modules/printbackends/cups/gtkprintbackendcups.c:1550
+#: modules/printbackends/cups/gtkprintbackendcups.c:2020
 msgid "Printer Default"
 msgstr "プリンタのデフォルト"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2205
+#: modules/printbackends/cups/gtkprintbackendcups.c:2214
 msgid "Urgent"
 msgstr "緊急"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2205
+#: modules/printbackends/cups/gtkprintbackendcups.c:2214
 msgid "High"
 msgstr "高い"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2205
+#: modules/printbackends/cups/gtkprintbackendcups.c:2214
 msgid "Medium"
 msgstr "中くらい"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2205
+#: modules/printbackends/cups/gtkprintbackendcups.c:2214
 msgid "Low"
 msgstr "低い"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2207
+#: modules/printbackends/cups/gtkprintbackendcups.c:2216
 msgid "None"
 msgstr "なし"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2207
+#: modules/printbackends/cups/gtkprintbackendcups.c:2216
 msgid "Classified"
 msgstr "機密"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2207
+#: modules/printbackends/cups/gtkprintbackendcups.c:2216
 msgid "Confidential"
 msgstr "極秘"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2207
+#: modules/printbackends/cups/gtkprintbackendcups.c:2216
 msgid "Secret"
 msgstr "秘密"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2207
+#: modules/printbackends/cups/gtkprintbackendcups.c:2216
 msgid "Standard"
 msgstr "標準"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2207
+#: modules/printbackends/cups/gtkprintbackendcups.c:2216
 msgid "Top Secret"
 msgstr "トップ・シークレット"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2207
+#: modules/printbackends/cups/gtkprintbackendcups.c:2216
 msgid "Unclassified"
 msgstr "機密ではない"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2293
+#: modules/printbackends/cups/gtkprintbackendcups.c:2302
 #, c-format
 msgid "Custom %.2fx%.2f"
 msgstr ""
@@ -4419,28 +4424,28 @@ msgstr ""
 msgid "output.%s"
 msgstr "output.%s"
 
-#: modules/printbackends/file/gtkprintbackendfile.c:460
+#: modules/printbackends/file/gtkprintbackendfile.c:464
 msgid "Print to File"
 msgstr "ファイルへ出力する"
 
-#: modules/printbackends/file/gtkprintbackendfile.c:485
+#: modules/printbackends/file/gtkprintbackendfile.c:489
 msgid "PDF"
 msgstr "PDF"
 
-#: modules/printbackends/file/gtkprintbackendfile.c:485
+#: modules/printbackends/file/gtkprintbackendfile.c:489
 msgid "Postscript"
 msgstr "Postscript"
 
-#: modules/printbackends/file/gtkprintbackendfile.c:497
+#: modules/printbackends/file/gtkprintbackendfile.c:501
 #: modules/printbackends/test/gtkprintbackendtest.c:501
 msgid "Pages per _sheet:"
 msgstr "段組み印刷(_S):"
 
-#: modules/printbackends/file/gtkprintbackendfile.c:543
+#: modules/printbackends/file/gtkprintbackendfile.c:547
 msgid "File"
 msgstr "ファイル"
 
-#: modules/printbackends/file/gtkprintbackendfile.c:552
+#: modules/printbackends/file/gtkprintbackendfile.c:556
 msgid "_Output format"
 msgstr "出力形式(_O)"
 

@@ -114,13 +114,12 @@ recently used files list.
 </para>
 
 @display_name: 
-@description:
+@description: 
 @mime_type: 
 @app_name: 
-@app_exec:
+@app_exec: 
 @groups: 
 @is_private: 
-
 
 <!-- ##### MACRO GTK_RECENT_MANAGER_ERROR ##### -->
 <para>

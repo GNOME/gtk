@@ -1,7 +1,7 @@
 General Information
 ===================
 
-This is GTK+ version 2.11.2. GTK+ is a multi-platform toolkit for
+This is GTK+ version 2.11.3. GTK+ is a multi-platform toolkit for
 creating graphical user interfaces. Offering a complete set of widgets,
 GTK+ is suitable for projects ranging from small one-off projects to
 complete application suites.
@@ -66,6 +66,12 @@ Release notes for 2.12
   various implementations of this signal in specific widgets. Great care 
   has been taken to make sure that all code using this signal continues
   to work.
+
+* Removed an unused and hardly visible GtkFrame from the menu widget hierarchy
+  when GtkComboBox::appears-as-list style property is set. Any RC file
+  applying a different style to any widget below the widget path
+  "gtk-combobox-popup-window.GtkFrame" should take into account that the 
+  frame no longer exists.
 
 
 Release notes for 2.10

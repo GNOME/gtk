@@ -159,6 +159,12 @@ the device ID for the core pointer device.
 
 @obj: 
 
+<!-- ##### MACRO GDK_WINDOWING_FB ##### -->
+<para>
+This macro is defined if GDK is configured to use the Linux framebuffer backend.
+</para>
+
+
 <!-- ##### MACRO GDK_WINDOWING_NANOX ##### -->
 <para>
 

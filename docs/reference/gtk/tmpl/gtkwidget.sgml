@@ -327,7 +327,7 @@ gtk_widget_style_get_valist() to obtain the value of a style property.
 </para>
 
 @widget: 
-@widget2:
+@widget2: 
 
 <!-- ##### SIGNAL GtkWidget::key-press-event ##### -->
 <para>
@@ -716,6 +716,11 @@ gtk_widget_style_get_valist() to obtain the value of a style property.
 </para>
 
 <!-- ##### ARG GtkWidget:tooltip-markup ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkWidget:tooltip-text ##### -->
 <para>
 
 </para>
@@ -2482,6 +2487,42 @@ This function is deprecated; it does nothing.
 @widget: 
 @direction: 
 @Returns: 
+
+
+<!-- ##### FUNCTION gtk_widget_get_tooltip_markup ##### -->
+<para>
+
+</para>
+
+@widget: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_widget_set_tooltip_markup ##### -->
+<para>
+
+</para>
+
+@widget: 
+@markup: 
+
+
+<!-- ##### FUNCTION gtk_widget_get_tooltip_text ##### -->
+<para>
+
+</para>
+
+@widget: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_widget_set_tooltip_text ##### -->
+<para>
+
+</para>
+
+@widget: 
+@text: 
 
 
 <!-- ##### FUNCTION gtk_widget_get_tooltip_window ##### -->

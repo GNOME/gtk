@@ -27,6 +27,7 @@ IGNORE_HFILES=				\
 	fnmatch.h			\
 	gdk-pixbuf-loader.h		\
 	gtkdebug.h			\
+	gtkbuilderprivate.h		\
 	gtkdndcursors.h			\
 	gtkentryprivate.h		\
 	gtkfilechooserdefault.h		\
