@@ -139,6 +139,7 @@
 <!ENTITY GtkToolButton SYSTEM "xml/gtktoolbutton.xml">
 <!ENTITY GtkToolItem SYSTEM "xml/gtktoolitem.xml">
 <!ENTITY GtkTooltips SYSTEM "xml/gtktooltips.xml">
+<!ENTITY GtkTooltip SYSTEM "xml/gtktooltip.xml">
 <!ENTITY GtkTree SYSTEM "xml/gtktree.xml">
 <!ENTITY GtkTreeItem SYSTEM "xml/gtktreeitem.xml">
 <!ENTITY GtkTreeModel SYSTEM "xml/gtktreemodel.xml">
@@ -542,6 +543,7 @@ that is, GUI components such as #GtkButton or #GtkTextView.
         &GtkIMContextSimple;
         &GtkIMMulticontext;
         &GtkSizeGroup;
+        &GtkTooltip;
         &GtkTooltips;
         &GtkViewport;
         &GtkAccessible;
