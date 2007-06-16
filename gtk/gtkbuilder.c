@@ -47,7 +47,7 @@ static void gtk_builder_get_property   (GObject         *object,
                                         GValue          *value,
                                         GParamSpec      *pspec);
 static GType gtk_builder_real_get_type_from_name   (GtkBuilder      *builder,
-                                                    const char      *typename);
+                                                    const char      *type_name);
 static gint _gtk_builder_enum_from_string (GType type, const char *string);
 
 
@@ -214,15 +214,15 @@ _gtk_builder_resolve_type_lazily (const gchar *name)
  */
 
 static GType
-gtk_builder_real_get_type_from_name (GtkBuilder *builder, const char *typename)
+gtk_builder_real_get_type_from_name (GtkBuilder *builder, const char *type_name)
 {
   GType gtype;
 
-  gtype = g_type_from_name (typename);
+  gtype = g_type_from_name (type_name);
   if (gtype != G_TYPE_INVALID)
     return gtype;
 
-  return _gtk_builder_resolve_type_lazily (typename);
+  return _gtk_builder_resolve_type_lazily (type_name);
 }
 
 typedef struct
@@ -1238,23 +1238,23 @@ _gtk_builder_flags_from_string (GType type, const char *string)
 /**
  * gtk_builder_get_type_from_name:
  * @builder: a #GtkBuilder
- * @typename: Type name to lookup
+ * @type_name: Type name to lookup
  *
  * This method is used to lookup a type. It can be implemented in a 
  * subclass to override the #GType of an object created by the builder.
  *
- * Returns: the #GType found for @typename or #G_TYPE_INVALID if no
+ * Returns: the #GType found for @type_name or #G_TYPE_INVALID if no
  *   type was found
  *
  * Since 2.12
  */
 GType
-gtk_builder_get_type_from_name (GtkBuilder *builder, const gchar *typename)
+gtk_builder_get_type_from_name (GtkBuilder *builder, const gchar *type_name)
 {
   g_return_val_if_fail (GTK_IS_BUILDER (builder), G_TYPE_INVALID);
-  g_return_val_if_fail (typename != NULL, G_TYPE_INVALID);
+  g_return_val_if_fail (type_name != NULL, G_TYPE_INVALID);
 
-  return GTK_BUILDER_GET_CLASS (builder)->get_type_from_name (builder, typename);
+  return GTK_BUILDER_GET_CLASS (builder)->get_type_from_name (builder, type_name);
 }
 
 /**

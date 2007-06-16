@@ -60,7 +60,7 @@ struct _GtkBuilderClass
   GObjectClass parent_class;
   
   GType (* get_type_from_name) (GtkBuilder *builder,
-                                const char *typename);
+                                const char *type_name);
 
   /* Padding for future expansion */
   void (*_gtk_reserved1) (void);
@@ -103,7 +103,7 @@ void         gtk_builder_set_translation_domain  (GtkBuilder   	*builder,
                                                   const gchar  	*domain);
 const gchar* gtk_builder_get_translation_domain  (GtkBuilder   	*builder);
 GType        gtk_builder_get_type_from_name      (GtkBuilder   	*builder,
-                                                  const char   	*typename);
+                                                  const char   	*type_name);
 
 gboolean     gtk_builder_value_from_string       (GParamSpec   	*pspec,
                                                   const gchar  	*string,

@@ -1,3 +1,10 @@
+2007-06-16  Christian Persch  <chpe@gnome.org>
+
+	* gtk/gtkbuilder.c: (gtk_builder_real_get_type_from_name),
+	(gtk_builder_get_type_from_name):
+	* gtk/gtkbuilder.h: Don't use "typename" C++ keyword as parameter
+	name. Bug #448193.
+
 2007-06-15  Matthias Clasen  <mclasen@redhat.com>
 	
 	* configure.in: Bump version
