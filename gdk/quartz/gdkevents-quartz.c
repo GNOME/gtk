@@ -1503,6 +1503,16 @@ gdk_event_translate (NSEvent *nsevent)
   if (!nswindow || ![[nswindow contentView] isKindOfClass:[GdkQuartzView class]])
     return FALSE;
 
+  /* Ignore events and break grabs while the window is being
+   * dragged. This is a workaround for the window getting events for
+   * the window title.
+   */
+  if ([(GdkQuartzWindow *)nswindow isInMove])
+    {
+      break_all_grabs ();
+      return FALSE;
+    }
+
   /* Apply any global filters. */
   if (_gdk_default_filters)
     {

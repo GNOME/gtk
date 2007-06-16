@@ -1,5 +1,10 @@
 2007-06-16  Richard Hult  <richard@imendio.com>
 
+	* gdk/quartz/gdkevents-quartz.c: (gdk_event_translate): Ignore
+	events and break any grabs while the window is being dragged.
+
+2007-06-16  Richard Hult  <richard@imendio.com>
+
 	* gdk/quartz/gdkwindow-quartz.c: (gdk_window_set_transient_for):
 	Defer setting the parent until the window is shown, otherwise it
 	gets unconditionally shown here.
