@@ -1,5 +1,10 @@
 2007-06-16  Richard Hult  <richard@imendio.com>
 
+	* gdk/quartz/GdkQuartzWindow.c: (isInMove): Implement, to be used
+	to detect if the window is currently being moved with the mouse.
+
+2007-06-16  Richard Hult  <richard@imendio.com>
+
 	* gdk/quartz/gdkwindow-quartz.c (gdk_window_set_transient_for):
 	Don't set parent/child relationship for tooltip windows since that
 	moves the parent window to the front, due to the tooltip having a
