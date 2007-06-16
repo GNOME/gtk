@@ -1576,8 +1576,17 @@ gdk_window_set_transient_for (GdkWindow *window,
       /* We save the parent because it needs to be unset/reset when
        * hiding and showing the window. 
        */
-      window_impl->transient_for = g_object_ref (parent);
-      [parent_impl->toplevel addChildWindow:window_impl->toplevel ordered:NSWindowAbove];
+
+      /* We don't set transients for tooltips, they are already
+       * handled by the window level being the top one. If we do, then
+       * the parent window will be brought to the top just because the
+       * tooltip is, which is not what we want.
+       */
+      if (gdk_window_get_type_hint (window) != GDK_WINDOW_TYPE_HINT_TOOLTIP)
+        {
+          window_impl->transient_for = g_object_ref (parent);
+          [parent_impl->toplevel addChildWindow:window_impl->toplevel ordered:NSWindowAbove];
+        }
     }
   
   GDK_QUARTZ_RELEASE_POOL;
