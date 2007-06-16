@@ -1,3 +1,8 @@
+2007-06-16  Johan Dahlin  <jdahlin@async.com.br>
+
+	* gtk/gtkbuilderparser.c (text): Swap argument order to dgettext
+	(#448299, Jan Arne Petersen)
+
 2007-06-16  Richard Hult  <richard@imendio.com>
 
 	* gdk/quartz/gdkevents-quartz.c (find_mouse_window_for_ns_event):

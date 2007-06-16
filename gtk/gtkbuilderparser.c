@@ -778,7 +778,7 @@ text (GMarkupParseContext *context,
       if (prop_info->translatable && text_len)
         {
           if (data->domain)
-            text = dgettext (text, data->domain);
+            text = dgettext (data->domain, text);
           else
             text = gettext (text);
         }
