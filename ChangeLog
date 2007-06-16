@@ -1,3 +1,9 @@
+2007-06-16  Richard Hult  <richard@imendio.com>
+
+	* gdk/quartz/gdkwindow-quartz.c: (gdk_window_set_transient_for):
+	Defer setting the parent until the window is shown, otherwise it
+	gets unconditionally shown here.
+
 2007-06-16  Johan Dahlin  <jdahlin@async.com.br>
 
 	* gtk/gtkbuilderparser.c (text): Swap argument order to dgettext

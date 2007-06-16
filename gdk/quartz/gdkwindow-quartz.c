@@ -1585,7 +1585,13 @@ gdk_window_set_transient_for (GdkWindow *window,
       if (gdk_window_get_type_hint (window) != GDK_WINDOW_TYPE_HINT_TOOLTIP)
         {
           window_impl->transient_for = g_object_ref (parent);
-          [parent_impl->toplevel addChildWindow:window_impl->toplevel ordered:NSWindowAbove];
+
+          /* We only add the window if it is shown, otherwise it will
+           * be shown unconditionally here. If it is not shown, the
+           * window will be added in show() instead.
+           */
+          if (!(GDK_WINDOW_OBJECT (window)->state & GDK_WINDOW_STATE_WITHDRAWN))
+            [parent_impl->toplevel addChildWindow:window_impl->toplevel ordered:NSWindowAbove];
         }
     }
   
