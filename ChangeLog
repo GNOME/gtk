@@ -1,3 +1,8 @@
+2007-06-17  Behdad Esfahbod  <behdad@gnome.org>
+
+	* gtk/gtkfontsel.c: List font sizes 6 and 7pt too. (#440450,
+	Sebastien Bacher, Alex "weej" Jones)
+
 2007-06-16  Yevgen Muntyan  <muntyan@tamu.edu>
 
 	* gtk/gtktextdisplay.c (render_para): fixed couple of drawing
