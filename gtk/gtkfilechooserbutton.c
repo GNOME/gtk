@@ -2005,16 +2005,12 @@ model_update_current_folder (GtkFileChooserButton *button,
       
       icon_theme = gtk_icon_theme_get_for_screen (gtk_widget_get_screen (GTK_WIDGET (button)));
       if (gtk_file_system_path_is_local (button->priv->fs, path)) 
-	{
 	  pixbuf = gtk_icon_theme_load_icon (icon_theme, "gnome-fs-directory", 
 					     button->priv->icon_size, 0, NULL);
-	}
       else
-	{
 	  pixbuf = gtk_icon_theme_load_icon (icon_theme, "gnome-fs-share", 
 					     button->priv->icon_size, 0, NULL);
-	}
-      
+
       gtk_list_store_set (store, &iter,
 			  ICON_COLUMN, pixbuf,
 			  DISPLAY_NAME_COLUMN, label,
