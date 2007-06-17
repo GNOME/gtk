@@ -26,6 +26,7 @@
 #include <pthread.h>
 #include <unistd.h>
 
+#import <Cocoa/Cocoa.h>
 #include <Carbon/Carbon.h>
 
 #include "gdkscreen.h"
@@ -67,6 +68,18 @@ static void get_converted_window_coordinates    (GdkWindow *in_window,
                                                  gint      *out_x, 
                                                  gint      *out_y);
 static void append_event                        (GdkEvent  *event);
+
+/* A category that exposes the protected carbon event for an NSEvent. */
+@interface NSEvent (GdkQuartzNSEvent)
+- (void *)gdk_quartz_event_ref;
+@end 
+
+@implementation NSEvent (GdkQuartzNSEvent)
+- (void *)gdk_quartz_event_ref
+{
+  return _eventRef;
+}
+@end
 
 void 
 _gdk_events_init (void)
@@ -1515,6 +1528,44 @@ gdk_event_translate (NSEvent *nsevent)
        * on the title. The subtype 20 is undocumented so it's probably
        * not a good idea: else if (subtype == 20) break_all_grabs ();
        */
+    }
+
+  /* Special-case menu shortcut events. We create command events for
+   * those and forward to the corresponding menu.
+   */
+  if ([nsevent type] == NSKeyDown)
+    {
+      EventRef event_ref;
+      MenuRef menu_ref;
+      MenuItemIndex index;
+
+      event_ref = [nsevent gdk_quartz_event_ref];
+      if (IsMenuKeyEvent (NULL, event_ref,
+                          kMenuEventQueryOnly, 
+                          &menu_ref, &index))
+        {
+          MenuCommand menu_command;
+          HICommand hi_command;
+
+          if (GetMenuItemCommandID (menu_ref, index, &menu_command) != noErr)
+            return FALSE;
+   
+          hi_command.commandID = menu_command;
+          hi_command.menu.menuRef = menu_ref;
+          hi_command.menu.menuItemIndex = index;
+
+          CreateEvent (NULL, kEventClassCommand, kEventCommandProcess, 
+                       0, kEventAttributeUserEvent, &event_ref);
+          SetEventParameter (event_ref, kEventParamDirectObject, 
+                             typeHICommand, 
+                             sizeof (HICommand), &hi_command);
+
+          SendEventToEventTarget (event_ref, GetMenuEventTarget (menu_ref));
+
+          ReleaseEvent (event_ref);
+
+          return TRUE;
+        }
     }
 
   nswindow = [nsevent window];

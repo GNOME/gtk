@@ -1,5 +1,10 @@
 2007-06-17  Richard Hult  <richard@imendio.com>
 
+	* gdk/quartz/gdkevents-quartz.c (gdk_event_translate): Forward
+	Mac OS menu shortcut events to the right menu.
+
+2007-06-17  Richard Hult  <richard@imendio.com>
+
 	* gdk/quartz/gdkevents-quartz.c (gdk_event_translate)
 	(synthesize_crossing_events_for_ns_event)
 	(find_window_for_ns_event): More refactoring of the event
