@@ -1,3 +1,11 @@
+2007-06-17  Daniel Elstner  <danielk@openismus.com>
+
+	* modules/input/gtkimcontextmultipress.c (vfunc_filter_keypress):
+	Change input method behavior to act on key presses instead of
+	key releases, matching normal text input behavior.  This change
+	alleviates the need to take special action for control keys not
+	handled by the input module itself.
+
 2007-06-17  Behdad Esfahbod  <behdad@gnome.org>
 
 	* gtk/gtkfontsel.c: List font sizes 6 and 7pt too. (#440450,

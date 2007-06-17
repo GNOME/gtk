@@ -328,8 +328,7 @@ vfunc_filter_keypress (GtkIMContext *context, GdkEventKey *event)
 
   multipress_context = gtk_im_context_multipress (context);
 
-  /* We only care about key releases: */
-  if (event->type == GDK_KEY_RELEASE)
+  if (event->type == GDK_KEY_PRESS)
   {
     KeySequence* possible = NULL;
 
@@ -338,7 +337,7 @@ vfunc_filter_keypress (GtkIMContext *context, GdkEventKey *event)
     /* Check whether the current key is the same as previously entered,
      *  because if it is not then we should accept the previous one, and start a new character.
      */
-    if ((multipress_context->compose_count) && (multipress_context->key_last_entered != event->keyval) )
+    if (multipress_context->compose_count > 0 && multipress_context->key_last_entered != event->keyval)
     {
       /* Accept the previously chosen character: */
       if (multipress_context->tentative_match)
@@ -383,62 +382,35 @@ vfunc_filter_keypress (GtkIMContext *context, GdkEventKey *event)
        */
       /* g_timeout_add_seconds is only available since glib 2.14: multipress_context->timeout_id = g_timeout_add_seconds(AUTOMATIC_COMPOSE_TIMEOUT, on_timeout, multipress_context); */
       multipress_context->timeout_id = g_timeout_add (AUTOMATIC_COMPOSE_TIMEOUT * 1000, on_timeout, multipress_context);
+
+      return TRUE; /* TRUE means that the event was handled. */
     }
     else
     {
-      /*printf("debug: no possible characters for keyval=%d (char=%c), (GDK_a=%d)\n",
-        event->keyval, event->keyval, GDK_a);*/
+      guint32 keyval_uchar;
 
-      /*Just accept all other keypresses directly:*/
-      /* Convert to a string, because that's what accept_character() and the commit signal need: */
-      guint32 keyval_uchar = gdk_keyval_to_unicode (event->keyval);
+      /*
+       * Just accept all other keypresses directly, but commit the
+       * current preedit content first.
+       */
+      if (multipress_context->compose_count > 0 && multipress_context->tentative_match)
+        accept_character (multipress_context, multipress_context->tentative_match);
 
+      keyval_uchar = gdk_keyval_to_unicode (event->keyval);
+      /*
+       * Convert to a string, because that's what accept_character() needs.
+       */
       if (keyval_uchar)
       {
-        /* TODO: The delete key does not seem to be handled when we do this.
-         * danielk: Yes, that's normal and it's not the only one.  I'll get to that later. */
         gchar keyval_utf8[7]; /* max length of UTF-8 sequence + 1 for NUL termination */
-        gint length = g_unichar_to_utf8 (keyval_uchar, keyval_utf8);
-        keyval_utf8[length] = '\0'; /* g_unichar_to_utf8() does not add null termination. */
+        gint  length;
+
+        length = g_unichar_to_utf8 (keyval_uchar, keyval_utf8);
+        keyval_utf8[length] = '\0';
 
         accept_character (multipress_context, keyval_utf8);
-      }
-    }
 
-    return TRUE; /* TRUE means that the event was handled. */
-  }
-  else if (event->type == GDK_KEY_PRESS)
-  {
-    if ((multipress_context->compose_count > 0))
-    {
-      /* Handle backspace:
-       *  This should cause any preedit for a current composition to vanish.
-       *  Otherwise, the user sees both the preedit character and the previous character be deleted.
-       * If not composing, then the normal behaviour will be seen - the previous character is deleted.
-       */
-      switch (event->keyval)
-      {
-        case GDK_BackSpace:
-        {
-          /* Stop composing: */
-          clear_compose_buffer(multipress_context);
-          g_signal_emit_by_name (multipress_context, "preedit_changed");
-          return TRUE; /* TRUE means that we handled this keypress. */
-        }
-        /* Handle return and tab:
-         *  This should cause the currently-composed character to be accepted.
-         */
-        case GDK_Return:
-        case GDK_KP_Enter:
-        case GDK_ISO_Enter:
-        case GDK_Tab:
-        case GDK_KP_Tab:
-        case GDK_ISO_Left_Tab:
-        {
-          accept_character (multipress_context, multipress_context->tentative_match);
-
-          return TRUE; /* TRUE means that we handled this keypress. */
-        }
+        return TRUE; /* key handled */
       }
     }
   }
