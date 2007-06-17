@@ -1,5 +1,10 @@
-2007-06-17  Daniel Elstner  <danielk@openismus.com>
+2007-06-17  Xan Lopez  <xan@gnome.org>
 
+	* gdk/x11/gdkgeometry-x11.c: replace GDK_WINDOW calls by cast to
+	GdkWindow. Patch by Tilman Sauerbeck from #2063820.
+
+2007-06-17  Daniel Elstner  <danielk@openismus.com>
+	
 	* modules/input/gtkimcontextmultipress.c (vfunc_filter_keypress):
 	Change input method behavior to act on key presses instead of
 	key releases, matching normal text input behavior.  This change

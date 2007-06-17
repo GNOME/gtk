@@ -246,7 +246,7 @@ gdk_window_copy_area_scroll (GdkWindow    *window,
 
   for (l = obj->children; l; l = l->next)
     {
-      GdkWindow *child = GDK_WINDOW (l->data);
+      GdkWindow *child = (GdkWindow*) l->data;
       GdkWindowObject *child_obj = GDK_WINDOW_OBJECT (child);
 
       gdk_window_move (child, child_obj->x + dx, child_obj->y + dy);
@@ -371,7 +371,7 @@ gdk_window_guffaw_scroll (GdkWindow    *window,
   
   for (l = obj->children; l; l = l->next)
     {
-      GdkWindow *child = GDK_WINDOW (l->data);
+      GdkWindow *child = (GdkWindow*) l->data;
       GdkWindowObject *child_obj = GDK_WINDOW_OBJECT (child);
 
       child_obj->x -= d_xoffset;
