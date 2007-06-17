@@ -1,3 +1,8 @@
+2007-06-17  Christian Persch  <chpe@gnome.org>
+
+	* gtk/Makefile.am: Pass the print settings to the preview programme.
+	Bug #403717, patch by Carlos Garcia Campos.
+
 2007-06-17  Xan Lopez  <xan@gnome.org>
 
 	* gdk/x11/gdkgeometry-x11.c: replace GDK_WINDOW calls by cast to

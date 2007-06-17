@@ -4,7 +4,7 @@ SUBDIRS=theme-bits
 
 if OS_UNIX
 SUBDIRS += xdgmime
-GTK_PRINT_PREVIEW_COMMAND="evince --unlink-tempfile --preview %f"
+GTK_PRINT_PREVIEW_COMMAND="evince --unlink-tempfile --preview --print-settings %s %f"
 endif
 
 DIST_SUBDIRS=theme-bits xdgmime
