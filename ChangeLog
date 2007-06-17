@@ -1,3 +1,12 @@
+2007-06-17  Richard Hult  <richard@imendio.com>
+
+	* gdk/quartz/gdkevents-quartz.c (gdk_event_translate)
+	(synthesize_crossing_events_for_ns_event)
+	(find_window_for_ns_event): More refactoring of the event
+	handling: Extract synthesizing of crossing events from
+	find_window_for_ns_event so that it doesn't have any side effects,
+	and call the new function from gdk_event_translate instead.
+
 2007-06-16  Richard Hult  <richard@imendio.com>
 
 	* gdk/quartz/gdkevents-quartz.c: (find_window_for_ns_event),
