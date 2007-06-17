@@ -1410,7 +1410,7 @@ shortcuts_reload_icons (GtkFileChooserDefault *impl)
 	           * should use mime info to get a better icon.
 	           */
 	          icon_theme = gtk_icon_theme_get_for_screen (gtk_widget_get_screen (GTK_WIDGET (impl)));
-	          pixbuf = gtk_icon_theme_load_icon (icon_theme, "gnome-fs-directory", 
+	          pixbuf = gtk_icon_theme_load_icon (icon_theme, "gnome-fs-share", 
 						     impl->icon_size, 0, NULL);
 
 	          gtk_list_store_set (impl->shortcuts_model, &iter,
@@ -1811,7 +1811,7 @@ shortcuts_insert_path (GtkFileChooserDefault *impl,
            * should use mime info to get a better icon.
            */
           icon_theme = gtk_icon_theme_get_for_screen (gtk_widget_get_screen (GTK_WIDGET (impl)));
-          pixbuf = gtk_icon_theme_load_icon (icon_theme, "gnome-fs-directory", 
+          pixbuf = gtk_icon_theme_load_icon (icon_theme, "gnome-fs-share", 
 					     impl->icon_size, 0, NULL);
         }
     }

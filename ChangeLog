@@ -1,3 +1,13 @@
+2006-09-22  Dennis Cranston  <dennis_cranston@yahoo.com>
+
+	* gtk/gtkfilechooserbutton.c: (change_icon_theme),
+	(model_add_bookmarks), (model_update_current_folder):
+	* gtk/gtkfilechooserdefault.c: (shortcuts_reload_icons),
+	(shortcuts_insert_path):  Use the remote folder icon when
+	appropriate.
+
+	Follow up to #354887
+
 2007-06-17  Christian Persch  <chpe@gnome.org>
 
 	* gtk/Makefile.am: Pass the print settings to the preview programme.

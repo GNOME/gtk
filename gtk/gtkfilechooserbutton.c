@@ -1348,7 +1348,7 @@ change_icon_theme (GtkFileChooserButton *button)
 		 * If we switch to a better bookmarks file format (XBEL), we
 		 * should use mime info to get a better icon.
 		 */
-		pixbuf = gtk_icon_theme_load_icon (theme, "gnome-fs-regular",
+		pixbuf = gtk_icon_theme_load_icon (theme, "gnome-fs-share",
 						   priv->icon_size, 0, NULL);
 	    }
 	  else
@@ -1895,7 +1895,7 @@ model_add_bookmarks (GtkFileChooserButton *button,
 	    }
 
 	  icon_theme = gtk_icon_theme_get_for_screen (gtk_widget_get_screen (GTK_WIDGET (button)));
-	  pixbuf = gtk_icon_theme_load_icon (icon_theme, "gnome-fs-directory", 
+	  pixbuf = gtk_icon_theme_load_icon (icon_theme, "gnome-fs-share", 
 					     button->priv->icon_size, 0, NULL);
 
 	  gtk_list_store_insert (store, &iter, pos);
@@ -2004,8 +2004,16 @@ model_update_current_folder (GtkFileChooserButton *button,
 	}
       
       icon_theme = gtk_icon_theme_get_for_screen (gtk_widget_get_screen (GTK_WIDGET (button)));
-      pixbuf = gtk_icon_theme_load_icon (icon_theme, "gnome-fs-directory", 
-					 button->priv->icon_size, 0, NULL);
+      if (gtk_file_system_path_is_local (button->priv->fs, path)) 
+	{
+	  pixbuf = gtk_icon_theme_load_icon (icon_theme, "gnome-fs-directory", 
+					     button->priv->icon_size, 0, NULL);
+	}
+      else
+	{
+	  pixbuf = gtk_icon_theme_load_icon (icon_theme, "gnome-fs-share", 
+					     button->priv->icon_size, 0, NULL);
+	}
       
       gtk_list_store_set (store, &iter,
 			  ICON_COLUMN, pixbuf,
