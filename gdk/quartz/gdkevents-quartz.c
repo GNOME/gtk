@@ -1266,13 +1266,9 @@ find_window_for_ns_event (NSEvent *nsevent,
       }
       break;
 
-    case NSAppKitDefined:
-    case NSSystemDefined:
-      /* We ignore these events */
-      break;
-
     default:
-      NSLog(@"Unhandled event %@", nsevent);
+      /* Ignore everything else. */
+      break;
     }
 
   return NULL;
@@ -1538,6 +1534,17 @@ gdk_event_translate (NSEvent *nsevent)
   if (result == GDK_FILTER_REMOVE)
     return TRUE;
 
+  /* We need the appliction to be activated on clicks so that popups
+   * like context menus get events routed properly. This is handled
+   * automatically for left mouse button presses but not other
+   * buttons, so we do it here.
+   */
+  if ([nsevent type] == NSRightMouseDown || [nsevent type] == NSOtherMouseDown)
+    {
+      if (![NSApp isActive])
+        [NSApp activateIgnoringOtherApps:YES];
+    }
+
   current_mask = get_event_mask_from_ns_event (nsevent);
 
   switch ([nsevent type])
@@ -1628,8 +1635,9 @@ gdk_event_translate (NSEvent *nsevent)
 	    dx--;
 	  }
 
-	break;
       }
+      break;
+
     case NSKeyDown:
     case NSKeyUp:
     case NSFlagsChanged:
@@ -1645,8 +1653,10 @@ gdk_event_translate (NSEvent *nsevent)
         return TRUE;
       }
       break;
+
     default:
-      NSLog(@"Untranslated: %@", nsevent);
+      /* Ignore everything elsee. */
+      break;
     }
 
   return FALSE;
