@@ -1,7 +1,7 @@
 2007-06-17  Xan Lopez  <xan@gnome.org>
 
 	* gdk/x11/gdkgeometry-x11.c: replace GDK_WINDOW calls by cast to
-	GdkWindow. Patch by Tilman Sauerbeck from #2063820.
+	GdkWindow. Patch by Tilman Sauerbeck from #63820.
 
 2007-06-17  Daniel Elstner  <danielk@openismus.com>
 	
