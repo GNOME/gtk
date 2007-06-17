@@ -73,6 +73,12 @@ Release notes for 2.12
   "gtk-combobox-popup-window.GtkFrame" should take into account that the 
   frame no longer exists.
 
+* The external print preview application used by GtkPrintOperationPreview is
+  now passed the print settings on the command line with the --print-settings
+  parameter pointing to a temp file containing the settings. The preview
+  application assumes ownership of the file and should delete it once it does
+  not need it anymore. This feature requires Evince version 0.9.0 or above.
+
 
 Release notes for 2.10
 ======================
