@@ -1,3 +1,7 @@
+2007-06-17  Matthias Clasen <mclasen@redhat.com>
+
+	* gtk/gtkcontainer.c: Fix a doc typo.
+
 2007-06-17  Richard Hult  <richard@imendio.com>
 
 	* gdk/quartz/gdkevents-quartz.c (gdk_event_translate): Forward

@@ -2454,9 +2454,9 @@ gtk_container_get_focus_vadjustment (GtkContainer *container)
  * 
  * Hooks up an adjustment to focus handling in a container, so when a child 
  * of the container is focused, the adjustment is scrolled to show that 
- * widget. This function sets the horizontal alignment. See gt
- * k_scrolled_window_get_hadjustment() for a typical way of obtaining the 
- * adjustment and gtk_container_set_focus_vadjustment() for setting
+ * widget. This function sets the horizontal alignment. 
+ * See gtk_scrolled_window_get_hadjustment() for a typical way of obtaining 
+ * the adjustment and gtk_container_set_focus_vadjustment() for setting
  * the vertical adjustment.
  *
  * The adjustments have to be in pixel units and in the same coordinate 
