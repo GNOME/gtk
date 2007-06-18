@@ -446,7 +446,6 @@ that is, GUI components such as #GtkButton or #GtkTextView.
         &GtkMenu;
         &GtkMenuBar;
         &GtkMenuItem;
-        &GtkMenuShell;
 	&GtkImageMenuItem;
         &GtkRadioMenuItem;
         &GtkCheckMenuItem;      
@@ -556,6 +555,7 @@ that is, GUI components such as #GtkButton or #GtkTextView.
         &GtkButtonBox;
         &GtkContainer;
         &GtkItem;
+        &GtkMenuShell;
         &GtkMisc;
         &GtkObject;
         &GtkPaned;

@@ -1,5 +1,12 @@
 2007-06-17  Matthias Clasen <mclasen@redhat.com>
 
+	* README.in: Updates
+
+	* gtk/gtkmenushell.c: Make GtkMenuShell as an abstract type.
+	It was already documented as such.  (#412357, Vincent Geddes)
+
+2007-06-17  Matthias Clasen <mclasen@redhat.com>
+
 	* gtk/gtkcontainer.c: Fix a doc typo.
 
 2007-06-17  Richard Hult  <richard@imendio.com>
