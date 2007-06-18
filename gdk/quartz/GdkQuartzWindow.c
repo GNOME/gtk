@@ -1,6 +1,6 @@
 /* GdkQuartzWindow.m
  *
- * Copyright (C) 2005 Imendio AB
+ * Copyright (C) 2005-2007 Imendio AB
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -17,7 +17,6 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330,
  * Boston, MA 02111-1307, USA.
  */
-
 
 #import "GdkQuartzWindow.h"
 #include "gdkwindow-quartz.h"
@@ -67,6 +66,40 @@
   GdkWindow *window = [[self contentView] gdkWindow];
 
   _gdk_quartz_events_update_focus_window (window, FALSE);
+}
+
+/* Used in combination with NSLeftMouseUp in sendEvent to keep track
+ * of when the window is being moved with the mouse.
+ */
+-(void)windowWillMove:(NSNotification *)aNotification
+{
+  if (leftDown)
+    inMove = YES;
+}
+
+-(void)sendEvent:(NSEvent *)event
+{
+  switch ([event type])
+    {
+    case NSLeftMouseDown:
+      leftDown = YES;
+      break;
+
+    case NSLeftMouseUp:
+      leftDown = NO;
+      inMove = NO;
+      break;
+
+    default:
+      break;
+    }
+
+  [super sendEvent:event];
+}
+
+-(BOOL)isInMove
+{
+  return inMove;
 }
 
 -(void)windowDidMove:(NSNotification *)aNotification
@@ -176,13 +209,14 @@
   GdkWindowObject *private = (GdkWindowObject *)window;
   GdkWindowImplQuartz *impl = GDK_WINDOW_IMPL_QUARTZ (private->impl);
 
-  /* FIXME: Is this right? If so, the switch shouldn't be needed. Need
-   * this + some tweaking to the event/grab code to get menus
-   * working...
-   */
-  /*if (private->window_type == GDK_WINDOW_TEMP)
+  if (!private->accept_focus)
     return NO;
-  */
+
+  /* Popup windows should not be able to get focused in the window
+   * manager sense, it's only handled through grabs.
+   */
+  if (private->window_type == GDK_WINDOW_TEMP)
+    return NO;
 
   switch (impl->type_hint)
     {

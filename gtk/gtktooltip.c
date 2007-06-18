@@ -215,6 +215,30 @@ gtk_tooltip_set_markup (GtkTooltip  *tooltip,
 }
 
 /**
+ * gtk_tooltip_set_text:
+ * @tooltip: a #GtkTooltip
+ * @text: a text string or %NULL
+ *
+ * Sets the text of the tooltip to be @text. If @text is %NULL, the label
+ * will be hidden. See also gtk_tooltip_set_markup().
+ *
+ * Since: 2.12
+ */
+void
+gtk_tooltip_set_text (GtkTooltip  *tooltip,
+                      const gchar *text)
+{
+  g_return_if_fail (GTK_IS_TOOLTIP (tooltip));
+
+  gtk_label_set_text (GTK_LABEL (tooltip->label), text);
+
+  if (text)
+    gtk_widget_show (tooltip->label);
+  else
+    gtk_widget_hide (tooltip->label);
+}
+
+/**
  * gtk_tooltip_set_icon:
  * @tooltip: a #GtkTooltip
  * @pixbuf: a #GdkPixbuf, or %NULL
@@ -350,9 +374,6 @@ gtk_tooltip_reset (GtkTooltip *tooltip)
 static gboolean
 gtk_tooltip_paint_window (GtkTooltip *tooltip)
 {
-  GtkRequisition req;
-
-  gtk_widget_size_request (tooltip->window, &req);
   gtk_paint_flat_box (tooltip->window->style,
 		      tooltip->window->window,
 		      GTK_STATE_NORMAL,
@@ -634,12 +655,12 @@ gtk_tooltip_show_tooltip (GdkDisplay *display)
     {
       window = tooltip->last_window;
 
+      if (!GDK_IS_WINDOW (window))
+	return;
+
       gdk_window_get_origin (window, &x, &y);
       x = tooltip->last_x - x;
       y = tooltip->last_y - y;
-
-      if (!window)
-	return;
 
       pointer_widget = tooltip_widget = find_widget_under_pointer (window,
 								   &x, &y);

@@ -326,6 +326,8 @@ file_print_cb (GtkPrintBackendFile *print_backend,
 {
   _PrintStreamData *ps = (_PrintStreamData *) user_data;
 
+  GDK_THREADS_ENTER ();
+
   if (ps->target_io != NULL)
     g_io_channel_unref (ps->target_io);
 
@@ -342,6 +344,8 @@ file_print_cb (GtkPrintBackendFile *print_backend,
     g_object_unref (ps->job);
  
   g_free (ps);
+
+  GDK_THREADS_LEAVE ();
 }
 
 static gboolean
@@ -480,7 +484,8 @@ file_printer_get_options (GtkPrinter           *printer,
 {
   GtkPrinterOptionSet *set;
   GtkPrinterOption *option;
-  const gchar *n_up[] = { "1" };
+  const gchar *n_up[] = {"1", "2", "4", "6", "9", "16" };
+  const gchar *pages_per_sheet = NULL;
   const gchar *format_names[N_FORMATS] = { N_("PDF"), N_("Postscript") };
   const gchar *supported_formats[N_FORMATS];
   gchar *display_format_names[N_FORMATS];
@@ -496,7 +501,12 @@ file_printer_get_options (GtkPrinter           *printer,
   option = gtk_printer_option_new ("gtk-n-up", _("Pages per _sheet:"), GTK_PRINTER_OPTION_TYPE_PICKONE);
   gtk_printer_option_choices_from_array (option, G_N_ELEMENTS (n_up),
 					 (char **) n_up, (char **) n_up /* FIXME i18n (localised digits)! */);
-  gtk_printer_option_set (option, "1");
+  if (settings)
+    pages_per_sheet = gtk_print_settings_get (settings, GTK_PRINT_SETTINGS_NUMBER_UP);
+  if (pages_per_sheet)
+    gtk_printer_option_set (option, pages_per_sheet);
+  else
+    gtk_printer_option_set (option, "1");
   gtk_printer_option_set_add (set, option);
   g_object_unref (option);
 
@@ -572,7 +582,10 @@ file_printer_get_settings_from_options (GtkPrinter          *printer,
   option = gtk_printer_option_set_lookup (options, "output-file-format");
   if (option)
     gtk_print_settings_set (settings, GTK_PRINT_SETTINGS_OUTPUT_FILE_FORMAT, option->value);
-    
+
+  option = gtk_printer_option_set_lookup (options, "gtk-n-up");
+  if (option)
+    gtk_print_settings_set (settings, GTK_PRINT_SETTINGS_NUMBER_UP, option->value);
 }
 
 static void

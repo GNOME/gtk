@@ -18,6 +18,7 @@
 <arg choice="opt">--index-only</arg>
 <arg choice="opt">--source<arg>name</arg></arg>
 <arg choice="opt">--quiet</arg>
+<arg choice="opt">--validate</arg>
 <arg choice="req">iconpath</arg>
 </cmdsynopsis>
 </refsynopsisdiv>
@@ -78,6 +79,13 @@ multiple applications, the overall memory consumption is reduced as well.
     <term>--quiet</term>
     <term>-q</term>
     <listitem><para>Turn off verbose output. 
+    </para></listitem>
+  </varlistentry>
+
+  <varlistentry>
+    <term>--validate</term>
+    <term>-v</term>
+    <listitem><para>Validate existing icon cache.
     </para></listitem>
   </varlistentry>
 </variablelist>

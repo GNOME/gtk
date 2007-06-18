@@ -83,7 +83,7 @@ query_tooltip_text_view_cb (GtkWidget  *widget,
     }
 
   if (gtk_text_iter_has_tag (&iter, tag))
-    gtk_tooltip_set_markup (tooltip, "Tooltip on text tag");
+    gtk_tooltip_set_text (tooltip, "Tooltip on text tag");
   else
    return FALSE;
 
@@ -117,8 +117,14 @@ query_tooltip_tree_view_cb (GtkWidget  *widget,
     }
   else
     {
+      gint bin_x, bin_y;
+
+      gtk_tree_view_convert_widget_to_bin_window_coords (tree_view, x, y,
+							 &bin_x, &bin_y);
+
       /* Mouse mode */
-      if (!gtk_tree_view_get_path_at_pos (tree_view, x, y, &path, NULL, NULL, NULL))
+      if (!gtk_tree_view_get_path_at_pos (tree_view, bin_x, bin_y,
+					  &path, NULL, NULL, NULL))
         return FALSE;
     }
 
@@ -267,6 +273,8 @@ main (int argc, char *argv[])
   GtkTextIter iter;
   GtkTextTag *tag;
 
+  gchar *text, *markup;
+
   gtk_init (&argc, &argv);
 
   window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
@@ -280,8 +288,14 @@ main (int argc, char *argv[])
 
   /* A check button using the tooltip-markup property */
   button = gtk_check_button_new_with_label ("This one uses the tooltip-markup property");
-  g_object_set (button, "tooltip-markup", "Hello, I am a static tooltip.", NULL);
+  gtk_widget_set_tooltip_text (button, "Hello, I am a static tooltip.");
   gtk_box_pack_start (GTK_BOX (box), button, FALSE, FALSE, 0);
+
+  text = gtk_widget_get_tooltip_text (button);
+  markup = gtk_widget_get_tooltip_markup (button);
+  g_assert (g_str_equal ("Hello, I am a static tooltip.", text));
+  g_assert (g_str_equal ("Hello, I am a static tooltip.", markup));
+  g_free (text); g_free (markup);
 
   /* A check button using the query-tooltip signal */
   button = gtk_check_button_new_with_label ("I use the query-tooltip signal");
@@ -293,14 +307,26 @@ main (int argc, char *argv[])
   /* A label */
   button = gtk_label_new ("I am just a label");
   gtk_label_set_selectable (GTK_LABEL (button), FALSE);
-  g_object_set (button, "tooltip-markup", "Label tooltip", NULL);
+  gtk_widget_set_tooltip_text (button, "Label & and tooltip");
   gtk_box_pack_start (GTK_BOX (box), button, FALSE, FALSE, 0);
+
+  text = gtk_widget_get_tooltip_text (button);
+  markup = gtk_widget_get_tooltip_markup (button);
+  g_assert (g_str_equal ("Label & and tooltip", text));
+  g_assert (g_str_equal ("Label &amp; and tooltip", markup));
+  g_free (text); g_free (markup);
 
   /* A selectable label */
   button = gtk_label_new ("I am a selectable label");
   gtk_label_set_selectable (GTK_LABEL (button), TRUE);
-  g_object_set (button, "tooltip-markup", "Another Label tooltip", NULL);
+  gtk_widget_set_tooltip_markup (button, "<b>Another</b> Label tooltip");
   gtk_box_pack_start (GTK_BOX (box), button, FALSE, FALSE, 0);
+
+  text = gtk_widget_get_tooltip_text (button);
+  markup = gtk_widget_get_tooltip_markup (button);
+  g_assert (g_str_equal ("Another Label tooltip", text));
+  g_assert (g_str_equal ("<b>Another</b> Label tooltip", markup));
+  g_free (text); g_free (markup);
 
   /* Another one, with a custom tooltip window */
   button = gtk_check_button_new_with_label ("This one has a custom tooltip window!");
@@ -319,7 +345,7 @@ main (int argc, char *argv[])
   /* An insensitive button */
   button = gtk_button_new_with_label ("This one is insensitive");
   gtk_widget_set_sensitive (button, FALSE);
-  g_object_set (button, "tooltip-markup", "Insensitive!", NULL);
+  g_object_set (button, "tooltip-text", "Insensitive!", NULL);
   gtk_box_pack_start (GTK_BOX (box), button, FALSE, FALSE, 0);
 
   /* Testcases from Kris without a tree view don't exist. */
@@ -341,7 +367,7 @@ main (int argc, char *argv[])
   /* Set a tooltip on the column */
   column = gtk_tree_view_get_column (GTK_TREE_VIEW (tree_view), 0);
   gtk_tree_view_column_set_clickable (column, TRUE);
-  g_object_set (column->button, "tooltip-markup", "Header", NULL);
+  g_object_set (column->button, "tooltip-text", "Header", NULL);
 
   gtk_box_pack_start (GTK_BOX (box), tree_view, FALSE, FALSE, 2);
 

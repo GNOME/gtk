@@ -444,12 +444,12 @@ GType	   gtk_widget_get_type		  (void) G_GNUC_CONST;
 GtkWidget* gtk_widget_new		  (GType		type,
 					   const gchar	       *first_property_name,
 					   ...);
-GtkWidget* gtk_widget_ref		  (GtkWidget	       *widget);
-void	   gtk_widget_unref		  (GtkWidget	       *widget);
 void	   gtk_widget_destroy		  (GtkWidget	       *widget);
 void	   gtk_widget_destroyed		  (GtkWidget	       *widget,
 					   GtkWidget	      **widget_pointer);
 #ifndef GTK_DISABLE_DEPRECATED
+GtkWidget* gtk_widget_ref		  (GtkWidget	       *widget);
+void	   gtk_widget_unref		  (GtkWidget	       *widget);
 void	   gtk_widget_set		  (GtkWidget	       *widget,
 					   const gchar         *first_property_name,
 					   ...) G_GNUC_NULL_TERMINATED;
@@ -671,6 +671,9 @@ void        gtk_widget_modify_text        (GtkWidget            *widget,
 void        gtk_widget_modify_base        (GtkWidget            *widget,
 					   GtkStateType          state,
 					   const GdkColor       *color);
+void        gtk_widget_modify_cursor      (GtkWidget            *widget,
+					   const GdkColor       *primary,
+					   const GdkColor       *secondary);
 void        gtk_widget_modify_font        (GtkWidget            *widget,
 					   PangoFontDescription *font_desc);
 
@@ -784,11 +787,16 @@ void   gtk_widget_add_mnemonic_label    (GtkWidget *widget,
 void   gtk_widget_remove_mnemonic_label (GtkWidget *widget,
 					 GtkWidget *label);
 
-void            gtk_widget_set_tooltip_window    (GtkWidget *widget,
-					          GtkWindow *custom_window);
-GtkWindow      *gtk_widget_get_tooltip_window    (GtkWidget *widget);
-void            gtk_widget_trigger_tooltip_query (GtkWidget *widget);
-
+void                  gtk_widget_set_tooltip_window    (GtkWidget   *widget,
+                                                        GtkWindow   *custom_window);
+GtkWindow *gtk_widget_get_tooltip_window    (GtkWidget   *widget);
+void       gtk_widget_trigger_tooltip_query (GtkWidget   *widget);
+void       gtk_widget_set_tooltip_text      (GtkWidget   *widget,
+                                             const gchar *text);
+gchar *    gtk_widget_get_tooltip_text      (GtkWidget   *widget);
+void       gtk_widget_set_tooltip_markup    (GtkWidget   *widget,
+                                             const gchar *markup);
+gchar *    gtk_widget_get_tooltip_markup    (GtkWidget   *widget);
 
 GType           gtk_requisition_get_type (void) G_GNUC_CONST;
 GtkRequisition *gtk_requisition_copy     (const GtkRequisition *requisition);

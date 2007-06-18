@@ -40,7 +40,8 @@ typedef enum
   GTK_PRINT_CAPABILITY_SCALE        = 1 << 4,
   GTK_PRINT_CAPABILITY_GENERATE_PDF = 1 << 5,
   GTK_PRINT_CAPABILITY_GENERATE_PS  = 1 << 6,
-  GTK_PRINT_CAPABILITY_PREVIEW      = 1 << 7
+  GTK_PRINT_CAPABILITY_PREVIEW      = 1 << 7,
+  GTK_PRINT_CAPABILITY_NUMBER_UP    = 1 << 8
 } GtkPrintCapabilities;
 
 GType gtk_print_capabilities_get_type (void) G_GNUC_CONST;

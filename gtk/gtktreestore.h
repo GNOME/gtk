@@ -86,6 +86,11 @@ void          gtk_tree_store_set_value        (GtkTreeStore *tree_store,
 void          gtk_tree_store_set              (GtkTreeStore *tree_store,
 					       GtkTreeIter  *iter,
 					       ...);
+void          gtk_tree_store_set_valuesv      (GtkTreeStore *tree_store,
+					       GtkTreeIter  *iter,
+					       gint         *columns,
+					       GValue       *values,
+					       gint          n_values);
 void          gtk_tree_store_set_valist       (GtkTreeStore *tree_store,
 					       GtkTreeIter  *iter,
 					       va_list       var_args);

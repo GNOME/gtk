@@ -511,6 +511,13 @@ gdk_notify_startup_complete_with_id (const gchar* startup_id)
 {
 }
 
+
+gboolean
+gdk_display_supports_composite (GdkDisplay *display)
+{
+    return FALSE;
+}
+
 #define __GDK_DISPLAY_X11_C__
 #include "gdkaliasdef.c"
 

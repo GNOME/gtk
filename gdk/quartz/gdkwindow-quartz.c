@@ -43,8 +43,8 @@ gdk_quartz_window_get_nsview (GdkWindow *window)
 
 static void
 gdk_window_impl_quartz_get_size (GdkDrawable *drawable,
-				gint        *width,
-				gint        *height)
+				 gint        *width,
+				 gint        *height)
 {
   g_return_if_fail (GDK_IS_WINDOW_IMPL_QUARTZ (drawable));
 
@@ -114,6 +114,9 @@ gdk_window_impl_quartz_finalize (GObject *object)
 
   if (impl->paint_clip_region)
     gdk_region_destroy (impl->paint_clip_region);
+
+  if (impl->transient_for)
+    g_object_unref (impl->transient_for);
 
   G_OBJECT_CLASS (parent_class)->finalize (object);
 }
@@ -431,7 +434,9 @@ get_default_title (void)
   return title;
 }
 
-/* FIXME: Should probably be in screen instead. */
+/* FIXME: It would be nice to have one function that takes an NSPoint
+ * and flips the coords for any window.
+ */
 gint 
 _gdk_quartz_window_get_inverted_screen_y (gint y)
 {
@@ -441,19 +446,17 @@ _gdk_quartz_window_get_inverted_screen_y (gint y)
 }
 
 static GdkWindow *
-find_child_window_by_point_helper (GdkWindow *window,
-				   gint       x,
-				   gint       y,
-				   gint       x_offset,
-				   gint       y_offset,
-				   gint      *x_ret,
-				   gint      *y_ret)
+find_child_window_helper (GdkWindow *window,
+			  gint       x,
+			  gint       y,
+			  gint       x_offset,
+			  gint       y_offset)
 {
   GList *l;
 
   for (l = GDK_WINDOW_OBJECT (window)->children; l; l = l->next)
     {
-      GdkWindowObject *private = GDK_WINDOW_OBJECT (l->data);
+      GdkWindowObject *private = l->data;
       GdkWindowImplQuartz *impl = GDK_WINDOW_IMPL_QUARTZ (private->impl);
       int temp_x, temp_y;
 
@@ -467,43 +470,33 @@ find_child_window_by_point_helper (GdkWindow *window,
       if (x >= temp_x && y >= temp_y &&
 	  x < temp_x + impl->width && y < temp_y + impl->height) 
 	{
-	  *x_ret = x - x_offset - private->x;
-	  *y_ret = y - y_offset - private->y;
-	  
-	  /* Look for child windows */
-	  return find_child_window_by_point_helper (GDK_WINDOW (l->data),
-						    x, y,
-						    temp_x, temp_y,
-						    x_ret, y_ret);
+	  /* Look for child windows. */
+	  return find_child_window_helper (l->data,
+					   x, y,
+					   temp_x, temp_y);
 	}
     }
-
+  
   return window;
 }
 
-/* Given a toplevel window and coordinates, returns the window
- * in which the point is. Note that x and y should be non-flipped
- * (and relative the toplevel), while the returned positions are
- * flipped.
+/* Given a GdkWindow and coordinates relative to it, returns the
+ * window in which the point is. The returned window will be in the
+ * same subtree as the passed in window (including the passed in
+ * window), if no window is found, NULL is returned.
  */
 GdkWindow *
-_gdk_quartz_window_find_child_by_point (GdkWindow *toplevel,
-					gint       x,
-					gint       y,
-					gint      *x_ret,
-					gint      *y_ret)
+_gdk_quartz_window_find_child (GdkWindow *window,
+			       gint       x,
+			       gint       y)
 {
-  GdkWindowObject *private = (GdkWindowObject *)toplevel;
+  GdkWindowObject *private = GDK_WINDOW_OBJECT (window);
   GdkWindowImplQuartz *impl = GDK_WINDOW_IMPL_QUARTZ (private->impl);
 
-  /* If the point is in the title bar, ignore it */
-  if (y > impl->height)
-    return NULL;
+  if (x >= 0 && y >= 0 && x < impl->width && y < impl->height)
+    return find_child_window_helper (window, x, y, 0, 0);
 
-  /* First flip the y coordinate */
-  y = impl->height - y;
-
-  return find_child_window_by_point_helper (toplevel, x, y, 0, 0, x_ret, y_ret);
+  return NULL;
 }
 
 GdkWindow *
@@ -532,6 +525,9 @@ gdk_window_new (GdkWindow     *parent,
   draw_impl->wrapper = GDK_DRAWABLE (window);
 
   private->parent = (GdkWindowObject *)parent;
+
+  private->accept_focus = TRUE;
+  private->focus_on_map = TRUE;
 
   if (attributes_mask & GDK_WA_X)
     private->x = attributes->x;
@@ -721,10 +717,18 @@ void
 _gdk_windowing_window_init (void)
 {
   GdkWindowObject *private;
+  GdkWindowImplQuartz *impl;
+  NSRect rect;
 
   g_assert (_gdk_root == NULL);
 
   _gdk_root = g_object_new (GDK_TYPE_WINDOW, NULL);
+
+  /* Note: This needs to be reworked for multi-screen support. */
+  impl = GDK_WINDOW_IMPL_QUARTZ (GDK_WINDOW_OBJECT (_gdk_root)->impl);
+  rect = [[NSScreen mainScreen] frame];
+  impl->width = rect.size.width;
+  impl->height = rect.size.height;
 
   private = (GdkWindowObject *)_gdk_root;
 
@@ -780,12 +784,16 @@ all_parents_shown (GdkWindowObject *private)
   return FALSE;
 }
 
+/* Note: the raise argument is not really used, it doesn't seem
+ * possible to show a window without raising it?
+ */
 static void
 show_window_internal (GdkWindow *window,
 		      gboolean   raise)
 {
   GdkWindowObject *private;
   GdkWindowImplQuartz *impl;
+  gboolean focus_on_map;
 
   if (GDK_WINDOW_DESTROYED (window))
     return;
@@ -795,9 +803,22 @@ show_window_internal (GdkWindow *window,
   private = (GdkWindowObject *)window;
   impl = GDK_WINDOW_IMPL_QUARTZ (private->impl);
 
+  if (!GDK_WINDOW_IS_MAPPED (window))
+    focus_on_map = private->focus_on_map;
+  else
+    focus_on_map = TRUE;
+
   if (impl->toplevel)
     {
-      [impl->toplevel orderFront:nil];
+      /* We should make the window not raise for !raise, but at least
+       * this will keep it from getting focused in that case.
+       */
+      if (private->accept_focus && focus_on_map && raise &&
+          private->window_type != GDK_WINDOW_TEMP)
+        [impl->toplevel makeKeyAndOrderFront:impl->toplevel];
+      else
+        [impl->toplevel orderFront:nil];
+
       [impl->view setNeedsDisplay:YES];
     }
   else
@@ -816,6 +837,14 @@ show_window_internal (GdkWindow *window,
 
   if (private->state & GDK_WINDOW_STATE_ICONIFIED)
     gdk_window_iconify (window);
+
+  if (impl->transient_for && !GDK_WINDOW_DESTROYED (impl->transient_for))
+    {
+      GdkWindowImplQuartz *parent_impl;
+
+      parent_impl = GDK_WINDOW_IMPL_QUARTZ (GDK_WINDOW_OBJECT (impl->transient_for)->impl);
+      [parent_impl->toplevel addChildWindow:impl->toplevel ordered:NSWindowAbove];
+    }
 
   GDK_QUARTZ_RELEASE_POOL;
 }
@@ -858,6 +887,20 @@ gdk_window_hide (GdkWindow *window)
 
   if (impl->toplevel) 
     {
+      /* We must unset the transient while it is hidden, otherwise
+       * quartz won't hide the window.
+       */
+      if (impl->transient_for)
+        {
+          if (!GDK_WINDOW_DESTROYED (impl->transient_for))
+            {
+              GdkWindowImplQuartz *parent_impl;
+
+              parent_impl = GDK_WINDOW_IMPL_QUARTZ (GDK_WINDOW_OBJECT (impl->transient_for)->impl);
+              [parent_impl->toplevel removeChildWindow:impl->toplevel];
+            }
+        }
+
       [impl->toplevel orderOut:nil];
     }
   else if (impl->view)
@@ -911,7 +954,7 @@ move_resize_window_internal (GdkWindow *window,
     {
       NSRect content_rect = 
 	NSMakeRect (private->x, 
-		    _gdk_quartz_window_get_inverted_screen_y (private->y) ,
+		    _gdk_quartz_window_get_inverted_screen_y (private->y),
 		    impl->width, impl->height);
       NSRect frame_rect = [impl->toplevel frameRectForContentRect:content_rect];
       
@@ -1010,16 +1053,36 @@ void
 gdk_window_raise (GdkWindow *window)
 {
   g_return_if_fail (GDK_IS_WINDOW (window));
-  
-  /* FIXME: Implement */
+
+  if (GDK_WINDOW_DESTROYED (window))
+    return;
+
+  /* FIXME: Only supported for toplevels currently. */
+  if (WINDOW_IS_TOPLEVEL (window))
+    {
+      GdkWindowImplQuartz *impl;
+
+      impl = GDK_WINDOW_IMPL_QUARTZ (GDK_WINDOW_OBJECT (window)->impl);
+      [impl->toplevel orderFront:impl->toplevel];
+    }
 }
 
 void
 gdk_window_lower (GdkWindow *window)
 {
   g_return_if_fail (GDK_IS_WINDOW (window));
-  
-  /* FIXME: Implement */
+
+  if (GDK_WINDOW_DESTROYED (window))
+    return;
+
+  /* FIXME: Only supported for toplevels currently. */
+  if (WINDOW_IS_TOPLEVEL (window))
+    {
+      GdkWindowImplQuartz *impl;
+
+      impl = GDK_WINDOW_IMPL_QUARTZ (GDK_WINDOW_OBJECT (window)->impl);
+      [impl->toplevel orderBack:impl->toplevel];
+    }
 }
 
 void
@@ -1032,7 +1095,7 @@ gdk_window_set_background (GdkWindow      *window,
   g_return_if_fail (GDK_IS_WINDOW (window));
 
   if (GDK_WINDOW_DESTROYED (window))
-      return;
+    return;
 
   impl = GDK_WINDOW_IMPL_QUARTZ (private->impl);
 
@@ -1206,6 +1269,7 @@ gdk_window_get_root_origin (GdkWindow *window,
     *y = rect.y;
 }
 
+/* Returns coordinates relative to the root. */
 void
 _gdk_windowing_get_pointer (GdkDisplay       *display,
 			    GdkScreen       **screen,
@@ -1219,7 +1283,7 @@ _gdk_windowing_get_pointer (GdkDisplay       *display,
   _gdk_windowing_window_get_pointer (_gdk_display, _gdk_root, x, y, mask);
 }
 
-/* Returns coordinates relative to the upper left corner of window. */
+/* Returns coordinates relative to the passed in window. */
 GdkWindow *
 _gdk_windowing_window_get_pointer (GdkDisplay      *display,
 				   GdkWindow       *window,
@@ -1227,11 +1291,11 @@ _gdk_windowing_window_get_pointer (GdkDisplay      *display,
 				   gint            *y,
 				   GdkModifierType *mask)
 {
-  GdkWindow *toplevel;
-  GdkWindowImplQuartz *impl;
+  GdkWindowObject *toplevel;
   GdkWindowObject *private;
   NSPoint point;
   gint x_tmp, y_tmp;
+  GdkWindow *found_window;
 
   if (GDK_WINDOW_DESTROYED (window))
     {
@@ -1241,40 +1305,52 @@ _gdk_windowing_window_get_pointer (GdkDisplay      *display,
       return NULL;
     }
   
-  toplevel = gdk_window_get_toplevel (window);
-  impl = GDK_WINDOW_IMPL_QUARTZ (GDK_WINDOW_OBJECT (toplevel)->impl);
-  private = GDK_WINDOW_OBJECT (window);
+  toplevel = GDK_WINDOW_OBJECT (gdk_window_get_toplevel (window));
 
-  /* Must flip the y coordinate. */
+  *mask = _gdk_quartz_events_get_current_event_mask ();
+
+  /* Get the y coordinate, needs to be flipped. */
   if (window == _gdk_root)
     {
       point = [NSEvent mouseLocation];
+      x_tmp = point.x;
       y_tmp = _gdk_quartz_window_get_inverted_screen_y (point.y);
-      *mask = _gdk_quartz_events_get_current_event_mask ();
     }
   else
     {
-      NSWindow *nswindow = impl->toplevel;
-      point = [nswindow mouseLocationOutsideOfEventStream];
-      y_tmp = impl->height - point.y;
-      *mask = _gdk_quartz_events_get_current_event_mask ();
-    }
-  x_tmp = point.x;
+      GdkWindowImplQuartz *impl;
+      NSWindow *nswindow;
 
-  while (private != GDK_WINDOW_OBJECT (toplevel))
+      impl = GDK_WINDOW_IMPL_QUARTZ (toplevel->impl);
+      nswindow = impl->toplevel;
+
+      point = [nswindow mouseLocationOutsideOfEventStream];
+      x_tmp = point.x;
+      y_tmp = impl->height - point.y;
+    }
+
+  /* The coords are relative to the toplevel of the passed in window
+   * at this point, make them relative to the passed in window:
+   */
+  private = GDK_WINDOW_OBJECT (window);
+  while (private != toplevel)
     {
       x_tmp -= private->x;
       y_tmp -= private->y;
-    
+
       private = private->parent;
     }
+
+  found_window = _gdk_quartz_window_find_child (window, x_tmp, y_tmp);
+
+  /* We never return the root window. */
+  if (found_window == _gdk_root)
+    found_window = NULL;
 
   *x = x_tmp;
   *y = y_tmp;
 
-  return _gdk_quartz_window_find_child_by_point (window,
-						 point.x, point.y,
-						 &x_tmp, &y_tmp);
+  return found_window;
 }
 
 void
@@ -1286,17 +1362,47 @@ gdk_display_warp_pointer (GdkDisplay *display,
   CGDisplayMoveCursorToPoint (CGMainDisplayID (), CGPointMake (x, y));
 }
 
+/* Returns coordinates relative to the found window. */
 GdkWindow *
 _gdk_windowing_window_at_pointer (GdkDisplay *display,
 				  gint       *win_x,
 				  gint       *win_y)
 {
   GdkModifierType mask;
+  GdkWindow *found_window;
+  gint x, y;
 
-  return _gdk_windowing_window_get_pointer (display,
-					    _gdk_root,
-					    win_x, win_y,
-					    &mask);
+  found_window = _gdk_windowing_window_get_pointer (display,
+						    _gdk_root,
+						    &x, &y,
+						    &mask);
+  if (found_window)
+    {
+      GdkWindowObject *private;
+
+      /* The coordinates returned above are relative the root, we want
+       * coordinates relative the window here. 
+       */
+      private = GDK_WINDOW_OBJECT (found_window);
+      while (private != GDK_WINDOW_OBJECT (_gdk_root))
+	{
+	  x -= private->x;
+	  y -= private->y;
+	  
+	  private = private->parent;
+	}
+
+      *win_x = x;
+      *win_y = y;
+    }
+  else
+    {
+      /* Mimic the X backend here, -1,-1 for unknown windows. */
+      *win_x = -1;
+      *win_y = -1;
+    }
+
+  return found_window;
 }
 
 GdkEventMask  
@@ -1440,7 +1546,56 @@ void
 gdk_window_set_transient_for (GdkWindow *window, 
 			      GdkWindow *parent)
 {
-  /* FIXME: Implement */
+  GdkWindowImplQuartz *window_impl;
+  GdkWindowImplQuartz *parent_impl;
+
+  if (GDK_WINDOW_DESTROYED (window) || GDK_WINDOW_DESTROYED (parent))
+    return;
+
+  window_impl = GDK_WINDOW_IMPL_QUARTZ (GDK_WINDOW_OBJECT (window)->impl);
+  if (!window_impl->toplevel)
+    return;
+
+  GDK_QUARTZ_ALLOC_POOL;
+
+  if (window_impl->transient_for)
+    {
+      if (!GDK_WINDOW_DESTROYED (window_impl->transient_for))
+        {
+          parent_impl = GDK_WINDOW_IMPL_QUARTZ (GDK_WINDOW_OBJECT (window_impl->transient_for)->impl);
+          [parent_impl->toplevel removeChildWindow:window_impl->toplevel];
+        }
+
+      g_object_unref (window_impl->transient_for);
+      window_impl->transient_for = NULL;
+    }
+
+  parent_impl = GDK_WINDOW_IMPL_QUARTZ (GDK_WINDOW_OBJECT (parent)->impl);
+  if (parent_impl->toplevel)
+    {
+      /* We save the parent because it needs to be unset/reset when
+       * hiding and showing the window. 
+       */
+
+      /* We don't set transients for tooltips, they are already
+       * handled by the window level being the top one. If we do, then
+       * the parent window will be brought to the top just because the
+       * tooltip is, which is not what we want.
+       */
+      if (gdk_window_get_type_hint (window) != GDK_WINDOW_TYPE_HINT_TOOLTIP)
+        {
+          window_impl->transient_for = g_object_ref (parent);
+
+          /* We only add the window if it is shown, otherwise it will
+           * be shown unconditionally here. If it is not shown, the
+           * window will be added in show() instead.
+           */
+          if (!(GDK_WINDOW_OBJECT (window)->state & GDK_WINDOW_STATE_WITHDRAWN))
+            [parent_impl->toplevel addChildWindow:window_impl->toplevel ordered:NSWindowAbove];
+        }
+    }
+  
+  GDK_QUARTZ_RELEASE_POOL;
 }
 
 void
@@ -1497,7 +1652,13 @@ void
 gdk_window_set_accept_focus (GdkWindow *window,
 			     gboolean accept_focus)
 {
-  /* FIXME: Implement */
+  GdkWindowObject *private;
+
+  g_return_if_fail (GDK_IS_WINDOW (window));
+
+  private = (GdkWindowObject *)window;  
+
+  private->accept_focus = accept_focus != FALSE;
 }
 
 void
@@ -1534,7 +1695,13 @@ void
 gdk_window_set_focus_on_map (GdkWindow *window,
 			     gboolean focus_on_map)
 {
-  /* FIXME: Implement */
+  GdkWindowObject *private;
+
+  g_return_if_fail (GDK_IS_WINDOW (window));
+
+  private = (GdkWindowObject *)window;  
+  
+  private->focus_on_map = focus_on_map != FALSE;
 }
 
 void          
@@ -2047,4 +2214,9 @@ gdk_window_set_opacity (GdkWindow *window,
     opacity = 1;
 
   [impl->toplevel setAlphaValue: opacity];
+}
+
+void
+_gdk_windowing_window_set_composited (GdkWindow *window, gboolean composited)
+{
 }

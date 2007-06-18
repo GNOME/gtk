@@ -399,10 +399,3 @@ This macro is defined if GDK is configured to use the Win32 backend.
 
 
 
-<!-- ##### MACRO GDK_WINDOWING_FB ##### -->
-<para>
-This macro is defined if GDK is configured to use the Linux framebuffer backend.
-</para>
-
-
-

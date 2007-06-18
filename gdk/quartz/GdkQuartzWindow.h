@@ -1,6 +1,6 @@
 /* GdkQuartzWindow.h
  *
- * Copyright (C) 2005 Imendio AB
+ * Copyright (C) 2005-2007 Imendio AB
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -19,10 +19,14 @@
  */
 
 #import <AppKit/AppKit.h>
-#include "gdkwindow.h"
+#include <glib.h>
 
 @interface GdkQuartzWindow : NSWindow {
+  BOOL leftDown;
+  BOOL inMove;
 }
+
+-(BOOL)isInMove;
 
 @end
 

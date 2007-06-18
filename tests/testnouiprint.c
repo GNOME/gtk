@@ -42,7 +42,7 @@ draw_page (GtkPrintOperation *operation,
   /* Draw some lines */
   cairo_move_to (cr, 20, 10);
   cairo_line_to (cr, 40, 20);
-  cairo_arc (cr, 60, 60, 20, 0, M_PI);
+  cairo_arc (cr, 60, 60, 20, 0, G_PI);
   cairo_line_to (cr, 80, 20);
   
   cairo_set_source_rgb (cr, 0, 0, 0);

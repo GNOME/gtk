@@ -51,6 +51,7 @@
 #include "gtkwindow.h"
 #include "gtkmarshalers.h"
 #include "gtkstock.h"
+#include "gtkprivate.h"
 
 #include <gdk-pixbuf/gdk-pixbuf.h>
 #include <gdk/gdkkeysyms.h>
@@ -61,34 +62,48 @@
 #define SCALE_SIZE 100
 #define CLICK_TIMEOUT 250
 
-enum {
+enum
+{
   VALUE_CHANGED,
   POPUP,
   POPDOWN,
+
   LAST_SIGNAL
 };
 
-enum {
+enum
+{
   PROP_0,
+  
   PROP_VALUE,
   PROP_SIZE,
-  PROP_ADJUSTMENT
+  PROP_ADJUSTMENT,
+  PROP_ICONS
 };
 
-struct _GtkScaleButtonPrivate {
-  GtkWidget *dock, *scale, *image;
+#define GET_PRIVATE(obj)        (G_TYPE_INSTANCE_GET_PRIVATE ((obj), GTK_TYPE_SCALE_BUTTON, GtkScaleButtonPrivate))
+
+struct _GtkScaleButtonPrivate
+{
+  GtkWidget *dock;
+  GtkWidget *scale;
+  GtkWidget *image;
+
   GtkIconSize size;
+  
   guint click_id;
-  gdouble direction;
-  guint32 pop_time;
-  gchar **icon_list;
   gint click_timeout;
   guint timeout : 1;
-} _GtkScaleButtonPrivate;
+  gdouble direction;
+  guint32 pop_time;
+  
+  gchar **icon_list;
+};
 
 static void	gtk_scale_button_class_init	(GtkScaleButtonClass *klass);
 static void	gtk_scale_button_init		(GtkScaleButton      *button);
 static void	gtk_scale_button_dispose	(GObject             *object);
+static void     gtk_scale_button_finalize       (GObject             *object);
 static void	gtk_scale_button_set_property	(GObject             *object,
 						 guint                prop_id,
 						 const GValue        *value,
@@ -137,23 +152,24 @@ static GtkWidget *gtk_scale_button_scale_new	(GtkScaleButton      *button,
 						 gdouble              max,
 						 gdouble              step);
 
-static GtkButtonClass *parent_class = NULL;
-static guint signals[LAST_SIGNAL] = { 0 };
+static guint signals[LAST_SIGNAL] = { 0, };
 
 G_DEFINE_TYPE (GtkScaleButton, gtk_scale_button, GTK_TYPE_BUTTON)
 
 static void
 gtk_scale_button_class_init (GtkScaleButtonClass *klass)
 {
-  GtkBindingSet *binding_set;
   GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
+  GtkBindingSet *binding_set;
 
-  parent_class = g_type_class_peek_parent (klass);
+  g_type_class_add_private (klass, sizeof (GtkScaleButtonPrivate));
 
+  gobject_class->finalize = gtk_scale_button_finalize;
   gobject_class->dispose = gtk_scale_button_dispose;
   gobject_class->set_property = gtk_scale_button_set_property;
   gobject_class->get_property = gtk_scale_button_get_property;
+  
   widget_class->button_press_event = gtk_scale_button_press;
   widget_class->key_release_event = gtk_scale_button_key_release;
   widget_class->scroll_event = gtk_scale_button_scroll;
@@ -167,7 +183,7 @@ gtk_scale_button_class_init (GtkScaleButtonClass *klass)
 							-G_MAXDOUBLE,
 							G_MAXDOUBLE,
 							0,
-							G_PARAM_READWRITE));
+							GTK_PARAM_READWRITE));
 
   g_object_class_install_property (gobject_class,
 				   PROP_SIZE,
@@ -176,7 +192,7 @@ gtk_scale_button_class_init (GtkScaleButtonClass *klass)
 						      P_("The icon size"),
 						      GTK_TYPE_ICON_SIZE,
 						      GTK_ICON_SIZE_SMALL_TOOLBAR,
-						      G_PARAM_READWRITE));
+						      GTK_PARAM_READWRITE));
 
   g_object_class_install_property (gobject_class,
                                    PROP_ADJUSTMENT,
@@ -184,8 +200,36 @@ gtk_scale_button_class_init (GtkScaleButtonClass *klass)
 							P_("Adjustment"),
 							P_("The GtkAdjustment that contains the current value of this scale button object"),
                                                         GTK_TYPE_ADJUSTMENT,
-                                                        G_PARAM_READWRITE));
+                                                        GTK_PARAM_READWRITE));
 
+  /**
+   * GtkScaleButton:icons:
+   *
+   * The names of the icons to be used by the scale button. 
+   * The first item in the array will be used in the button 
+   * when the current value is the lowest value, the second 
+   * item for the highest value. All the subsequent icons will 
+   * be used for all the other values, spread evenly over the 
+   * range of values.
+   *
+   * If there's only one icon name in the @icons array, it will 
+   * be used for all the values. If only two icon names are in 
+   * the @icons array, the first one will be used for the bottom 
+   * 50% of the scale, and the second one for the top 50%.
+   *
+   * It is recommended to use at least 3 icons so that the 
+   * #GtkScaleButton reflects the current value of the scale 
+   * better for the users.
+   *
+   * Since: 2.12
+   */
+  g_object_class_install_property (gobject_class,
+                                   PROP_ICONS,
+                                   g_param_spec_boxed ("icons",
+                                                       P_("Icons"),
+                                                       P_("List of icon names"),
+                                                       G_TYPE_STRV,
+                                                       GTK_PARAM_READWRITE));
   /**
    * GtkScaleButton::value-changed:
    * @button: the object that received the signal
@@ -203,6 +247,7 @@ gtk_scale_button_class_init (GtkScaleButtonClass *klass)
 		  NULL, NULL,
 		  _gtk_marshal_VOID__DOUBLE,
 		  G_TYPE_NONE, 1, G_TYPE_DOUBLE);
+  
   signals[POPUP] =
     _gtk_binding_signal_new (I_("popup"),
 			     G_OBJECT_CLASS_TYPE (klass),
@@ -241,8 +286,7 @@ gtk_scale_button_init (GtkScaleButton *button)
   GtkWidget *frame, *box;
   GtkScaleButtonPrivate *priv;
 
-  button->priv = g_new0 (GtkScaleButtonPrivate, 1);
-  priv = button->priv;
+  button->priv = priv = GET_PRIVATE (button);
 
   priv->timeout = FALSE;
   priv->click_id = 0;
@@ -336,6 +380,10 @@ gtk_scale_button_set_property (GObject       *object,
     case PROP_ADJUSTMENT:
       gtk_scale_button_set_adjustment (button, g_value_get_object (value));
       break;
+    case PROP_ICONS:
+      gtk_scale_button_set_icons (button, 
+                                  (const gchar **)g_value_get_boxed (value));
+      break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
@@ -365,6 +413,9 @@ gtk_scale_button_get_property (GObject     *object,
     case PROP_ADJUSTMENT:
       g_value_set_object (value, gtk_scale_button_get_adjustment (button));
       break;
+    case PROP_ICONS:
+      g_value_set_boxed (value, priv->icon_list);
+      break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
@@ -372,37 +423,39 @@ gtk_scale_button_get_property (GObject     *object,
 }
 
 static void
+gtk_scale_button_finalize (GObject *object)
+{
+  GtkScaleButton *button = GTK_SCALE_BUTTON (object);
+  GtkScaleButtonPrivate *priv = button->priv;
+  
+  if (priv->icon_list)
+    {
+      g_strfreev (priv->icon_list);
+      priv->icon_list = NULL;
+    }
+  
+  G_OBJECT_CLASS (gtk_scale_button_parent_class)->finalize (object);
+}
+
+static void
 gtk_scale_button_dispose (GObject *object)
 {
-  GtkScaleButton *button;
-  GtkScaleButtonPrivate *priv;
+  GtkScaleButton *button = GTK_SCALE_BUTTON (object);
+  GtkScaleButtonPrivate *priv = button->priv;
 
-  button = GTK_SCALE_BUTTON (object);
-
-  priv = button->priv;
-
-  if (priv && priv->dock)
+  if (priv->dock)
     {
       gtk_widget_destroy (priv->dock);
       priv->dock = NULL;
     }
 
-  if (priv && priv->click_id != 0)
+  if (priv->click_id != 0)
     {
       g_source_remove (priv->click_id);
       priv->click_id = 0;
     }
 
-  if (priv && priv->icon_list)
-    {
-      g_strfreev (priv->icon_list);
-      priv->icon_list = NULL;
-    }
-
-  g_free (priv);
-  button->priv = NULL;
-
-  G_OBJECT_CLASS (parent_class)->dispose (object);
+  G_OBJECT_CLASS (gtk_scale_button_parent_class)->dispose (object);
 }
 
 /**
@@ -430,22 +483,15 @@ gtk_scale_button_new (GtkIconSize   size,
 		      const gchar **icons)
 {
   GtkScaleButton *button;
-  GtkScaleButtonPrivate *priv;
+  GtkObject *adj;
 
-  button = g_object_new (GTK_TYPE_SCALE_BUTTON, NULL);
-  priv = button->priv;
-
-  if (icons != NULL)
-    gtk_scale_button_set_icons (button, icons);
-
-  gtk_range_set_range (GTK_RANGE (priv->scale), min, max);
-  gtk_range_set_increments (GTK_RANGE (priv->scale), step, 10 * step);
-
-  if (priv->size != size)
-    {
-      priv->size = size;
-      gtk_scale_button_update_icon (button);
-    }
+  adj = gtk_adjustment_new (min, min, max, step, 10 * step, 0);
+  
+  button = g_object_new (GTK_TYPE_SCALE_BUTTON, 
+                         "adjustment", adj,
+                         "icons", icons,
+                         "size", size,
+                         NULL);
 
   return GTK_WIDGET (button);
 }
@@ -477,9 +523,10 @@ gtk_scale_button_get_value (GtkScaleButton * button)
  * @button: a #GtkScaleButton
  * @value: new value of the scale button
  *
- * Sets the current value of the scale; if the value is outside the minimum or 
- * maximum range values, it will be clamped to fit inside them. The scale button 
- * emits the "value_changed" signal if the value changes.
+ * Sets the current value of the scale; if the value is outside 
+ * the minimum or maximum range values, it will be clamped to fit 
+ * inside them. The scale button emits the #GtkScaleButton::value-changed 
+ * signal if the value changes.
  *
  * Since: 2.12
  */
@@ -501,16 +548,8 @@ gtk_scale_button_set_value (GtkScaleButton *button,
  * @button: a #GtkScaleButton
  * @icons: a %NULL-terminated array of icon names
  *
- * Sets the icons to be used by the scale button. The first item in the array 
- * will be used in the button when the current value is the lowest value, the 
- * second item for the highest value. All the subsequent icons will be used for 
- * all the other values, spread evenly over the range of values.
- *
- * If there's only one icon in the @icons array, it will be used for all the
- * values. If only two icons are in the @icons array, the first one will be
- * used for the bottom 50% of the scale, and the second one for the top 50%.
- * So it is recommended to use at least 3 icons so that the #GtkScaleButton
- * reflects the current value of the scale better for the users.
+ * Sets the icons to be used by the scale button. 
+ * For details, see the #GtkScaleButton:icons property.
  *
  * Since 2.12
  */
@@ -519,20 +558,22 @@ gtk_scale_button_set_icons (GtkScaleButton  *button,
 			    const gchar    **icons)
 {
   GtkScaleButtonPrivate *priv;
+  gchar **tmp;
 
   g_return_if_fail (GTK_IS_SCALE_BUTTON (button));
-  g_return_if_fail (icons != NULL);
-  g_return_if_fail (icons[0] != NULL);
 
   priv = button->priv;
 
-  g_strfreev (priv->icon_list);
+  tmp = priv->icon_list;
   priv->icon_list = g_strdupv ((gchar **) icons);
+  g_strfreev (tmp);
   gtk_scale_button_update_icon (button);
+
+  g_object_notify (G_OBJECT (button), "icons");
 }
 
 /**
- * gtk_scale_button_get_adjustment
+ * gtk_scale_button_get_adjustment:
  * @button: a #GtkScaleButton
  *
  * Gets the #GtkAdjustment associated with the #GtkScaleButton's scale.
@@ -560,7 +601,8 @@ gtk_scale_button_get_adjustment	(GtkScaleButton *button)
  * @button: a #GtkScaleButton
  * @adjustment: a #GtkAdjustment
  *
- * Sets the #GtkAdjustment to be used as a model for the #GtkScaleButton's scale.
+ * Sets the #GtkAdjustment to be used as a model 
+ * for the #GtkScaleButton's scale.
  * See gtk_range_set_adjustment() for details.
  *
  * Since: 2.12
@@ -574,6 +616,8 @@ gtk_scale_button_set_adjustment	(GtkScaleButton *button,
 
   gtk_range_set_adjustment (GTK_RANGE (button->priv->scale),
 			    adjustment);
+
+  g_object_notify (G_OBJECT (button), "adjustment");
 }
 
 /*
@@ -714,7 +758,7 @@ gtk_scale_popup (GtkWidget *widget,
   gtk_window_move (GTK_WINDOW (priv->dock), x, y);
 
   if (event->type == GDK_BUTTON_PRESS)
-    GTK_WIDGET_CLASS (parent_class)->button_press_event (widget, (GdkEventButton *) event);
+    GTK_WIDGET_CLASS (gtk_scale_button_parent_class)->button_press_event (widget, (GdkEventButton *) event);
 
   /* grab focus */
   gtk_grab_add (priv->dock);
@@ -884,8 +928,9 @@ cb_button_press (GtkWidget      *widget,
   else
     priv->direction = - fabs (adj->page_increment);
 
-  priv->click_id = g_timeout_add (priv->click_timeout,
-				  (GSourceFunc) cb_button_timeout, button);
+  priv->click_id = gdk_threads_add_timeout (priv->click_timeout,
+                                            cb_button_timeout,
+                                            button);
   cb_button_timeout (button);
 
   return TRUE;
@@ -1058,8 +1103,6 @@ static gboolean	gtk_scale_button_scale_press	  (GtkWidget                *widget
 static gboolean gtk_scale_button_scale_release	  (GtkWidget                *widget,
 						   GdkEventButton           *event);
 
-static GtkVScaleClass *scale_parent_class = NULL;
-
 G_DEFINE_TYPE (GtkScaleButtonScale, gtk_scale_button_scale, GTK_TYPE_VSCALE)
 
 static void
@@ -1067,8 +1110,6 @@ gtk_scale_button_scale_class_init (GtkScaleButtonScaleClass *klass)
 {
   GtkWidgetClass *gtkwidget_class = GTK_WIDGET_CLASS (klass);
   GtkRangeClass *gtkrange_class = GTK_RANGE_CLASS (klass);
-
-  scale_parent_class = g_type_class_peek_parent (klass);
 
   gtkwidget_class->button_press_event = gtk_scale_button_scale_press;
   gtkwidget_class->button_release_event = gtk_scale_button_scale_release;
@@ -1113,7 +1154,7 @@ gtk_scale_button_scale_press (GtkWidget      *widget,
    * horribly wrong, so let's not do that. */
   gtk_grab_remove (priv->dock);
 
-  return GTK_WIDGET_CLASS (scale_parent_class)->button_press_event (widget, event);
+  return GTK_WIDGET_CLASS (gtk_scale_button_scale_parent_class)->button_press_event (widget, event);
 }
 
 static gboolean
@@ -1122,24 +1163,30 @@ gtk_scale_button_scale_release (GtkWidget      *widget,
 {
   GtkScaleButtonScale *scale;
   GtkScaleButtonPrivate *priv;
+  GtkWidgetClass *widget_class;
   gboolean res;
 
   scale = GTK_SCALE_BUTTON_SCALE (widget);
   priv = scale->button->priv;
+
+  widget_class = GTK_WIDGET_CLASS (gtk_scale_button_scale_parent_class);
 
   if (priv->timeout)
     {
       /* if we did a quick click, leave the window open; else, hide it */
       if (event->time > priv->pop_time + priv->click_timeout)
         {
+
 	  gtk_scale_button_release_grab (scale->button, event);
-	  GTK_WIDGET_CLASS (scale_parent_class)->button_release_event (widget, event);
+	  widget_class->button_release_event (widget, event);
+
 	  return TRUE;
 	}
+
       priv->timeout = FALSE;
     }
 
-  res = GTK_WIDGET_CLASS (scale_parent_class)->button_release_event (widget, event);
+  res = widget_class->button_release_event (widget, event);
 
   /* the scale will release input; right after that, we *have to* grab
    * it back so we can catch out-of-scale clicks and hide the popup,
@@ -1163,15 +1210,15 @@ gtk_scale_button_update_icon (GtkScaleButton *button)
 
   priv = button->priv;
 
-  if (priv->icon_list == NULL || priv->icon_list[0] == NULL)
+  if (!priv->icon_list || priv->icon_list[0] == '\0')
     {
       gtk_image_set_from_stock (GTK_IMAGE (priv->image),
 				GTK_STOCK_MISSING_IMAGE,
 				priv->size);
       return;
     }
-
-  for (num_icons = 0; priv->icon_list[num_icons] != NULL; num_icons++) {}
+ 
+  num_icons = g_strv_length (priv->icon_list);
 
   /* The 1-icon special case */
   if (num_icons == 1)

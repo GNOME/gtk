@@ -1348,7 +1348,7 @@ change_icon_theme (GtkFileChooserButton *button)
 		 * If we switch to a better bookmarks file format (XBEL), we
 		 * should use mime info to get a better icon.
 		 */
-		pixbuf = gtk_icon_theme_load_icon (theme, "gnome-fs-regular",
+		pixbuf = gtk_icon_theme_load_icon (theme, "gnome-fs-share",
 						   priv->icon_size, 0, NULL);
 	    }
 	  else
@@ -1622,6 +1622,7 @@ model_add_special_get_info_cb (GtkFileSystemHandle *handle,
   GdkPixbuf *pixbuf;
   GtkFileSystemHandle *model_handle;
   struct ChangeIconThemeData *data = user_data;
+  const gchar *name;
 
   if (!data->button->priv->model)
     /* button got destroyed */
@@ -1659,9 +1660,13 @@ model_add_special_get_info_cb (GtkFileSystemHandle *handle,
       g_object_unref (pixbuf);
     }
 
-  gtk_list_store_set (GTK_LIST_STORE (data->button->priv->model), &iter,
-		      DISPLAY_NAME_COLUMN, gtk_file_info_get_display_name (info),
-		      -1);
+  gtk_tree_model_get (data->button->priv->model, &iter,
+                      DISPLAY_NAME_COLUMN, &name,
+                      -1);
+  if (!name)
+    gtk_list_store_set (GTK_LIST_STORE (data->button->priv->model), &iter,
+  		        DISPLAY_NAME_COLUMN, gtk_file_info_get_display_name (info),
+		        -1);
 
 out:
   g_object_unref (data->button);
@@ -1717,15 +1722,9 @@ model_add_special (GtkFileChooserButton *button)
 			  -1);
 
       button->priv->n_special++;
-
-#ifndef G_OS_WIN32
-      desktopdir = g_build_filename (homedir, DESKTOP_DISPLAY_NAME, NULL);
-#endif
     }
 
-#ifdef G_OS_WIN32
-  desktopdir = _gtk_file_system_win32_get_desktop ();
-#endif
+  desktopdir = g_get_user_special_dir (G_USER_DIRECTORY_DESKTOP);
 
   if (desktopdir)
     {
@@ -1734,7 +1733,6 @@ model_add_special (GtkFileChooserButton *button)
       struct ChangeIconThemeData *info;
 
       path = gtk_file_system_filename_to_path (button->priv->fs, desktopdir);
-      g_free (desktopdir);
       gtk_list_store_insert (store, &iter, pos);
       pos++;
 
@@ -1897,7 +1895,7 @@ model_add_bookmarks (GtkFileChooserButton *button,
 	    }
 
 	  icon_theme = gtk_icon_theme_get_for_screen (gtk_widget_get_screen (GTK_WIDGET (button)));
-	  pixbuf = gtk_icon_theme_load_icon (icon_theme, "gnome-fs-directory", 
+	  pixbuf = gtk_icon_theme_load_icon (icon_theme, "gnome-fs-share", 
 					     button->priv->icon_size, 0, NULL);
 
 	  gtk_list_store_insert (store, &iter, pos);
@@ -2006,9 +2004,13 @@ model_update_current_folder (GtkFileChooserButton *button,
 	}
       
       icon_theme = gtk_icon_theme_get_for_screen (gtk_widget_get_screen (GTK_WIDGET (button)));
-      pixbuf = gtk_icon_theme_load_icon (icon_theme, "gnome-fs-directory", 
-					 button->priv->icon_size, 0, NULL);
-      
+      if (gtk_file_system_path_is_local (button->priv->fs, path)) 
+	  pixbuf = gtk_icon_theme_load_icon (icon_theme, "gnome-fs-directory", 
+					     button->priv->icon_size, 0, NULL);
+      else
+	  pixbuf = gtk_icon_theme_load_icon (icon_theme, "gnome-fs-share", 
+					     button->priv->icon_size, 0, NULL);
+
       gtk_list_store_set (store, &iter,
 			  ICON_COLUMN, pixbuf,
 			  DISPLAY_NAME_COLUMN, label,

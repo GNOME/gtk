@@ -103,7 +103,6 @@ enum {
   ORIENTATION_CHANGED,
   STYLE_CHANGED,
   POPUP_CONTEXT_MENU,
-  MOVE_FOCUS,
   FOCUS_HOME_OR_END,
   LAST_SIGNAL
 };
@@ -173,6 +172,8 @@ static void       gtk_toolbar_style_set            (GtkWidget           *widget,
 						    GtkStyle            *prev_style);
 static gboolean   gtk_toolbar_focus                (GtkWidget           *widget,
 						    GtkDirectionType     dir);
+static void       gtk_toolbar_move_focus           (GtkWidget           *widget,
+						    GtkDirectionType     dir);
 static void       gtk_toolbar_screen_changed       (GtkWidget           *widget,
 						    GdkScreen           *previous_screen);
 static void       gtk_toolbar_map                  (GtkWidget           *widget);
@@ -203,8 +204,6 @@ static void       gtk_toolbar_orientation_changed  (GtkToolbar          *toolbar
 						    GtkOrientation       orientation);
 static void       gtk_toolbar_real_style_changed   (GtkToolbar          *toolbar,
 						    GtkToolbarStyle      style);
-static gboolean   gtk_toolbar_move_focus           (GtkToolbar          *toolbar,
-						    GtkDirectionType     dir);
 static gboolean   gtk_toolbar_focus_home_or_end    (GtkToolbar          *toolbar,
 						    gboolean             focus_home);
 static gboolean   gtk_toolbar_button_press         (GtkWidget           *toolbar,
@@ -359,6 +358,16 @@ gtk_toolbar_class_init (GtkToolbarClass *klass)
   widget_class->size_allocate = gtk_toolbar_size_allocate;
   widget_class->style_set = gtk_toolbar_style_set;
   widget_class->focus = gtk_toolbar_focus;
+
+  /* need to override the base class function via override_class_closure,
+   * because the signal slot is not available in GtkWidgetClass
+   */
+  g_signal_override_class_closure (g_signal_lookup ("move_focus",
+                                                    GTK_TYPE_WIDGET),
+                                   GTK_TYPE_TOOLBAR,
+                                   g_cclosure_new (G_CALLBACK (gtk_toolbar_move_focus),
+                                                   NULL, NULL));
+
   widget_class->screen_changed = gtk_toolbar_screen_changed;
   widget_class->realize = gtk_toolbar_realize;
   widget_class->unrealize = gtk_toolbar_unrealize;
@@ -438,25 +447,7 @@ gtk_toolbar_class_init (GtkToolbarClass *klass)
 		  G_TYPE_BOOLEAN, 3,
 		  G_TYPE_INT, G_TYPE_INT,
 		  G_TYPE_INT);
-  /**
-   * GtkToolbar::move-focus:
-   * @toolbar: the #GtkToolbar which emitted the signal
-   * @dir: a #GtkDirection
-   *
-   * A keybinding signal used internally by GTK+. This signal can't
-   * be used in application code.
-   *
-   * Return value: %TRUE if the signal was handled, %FALSE if not
-   */
-  toolbar_signals[MOVE_FOCUS] =
-    _gtk_binding_signal_new (I_("move_focus"),
-			     G_TYPE_FROM_CLASS (klass),
-			     G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
-			     G_CALLBACK (gtk_toolbar_move_focus),
-			     NULL, NULL,
-			     _gtk_marshal_BOOLEAN__ENUM,
-			     G_TYPE_BOOLEAN, 1,
-			     GTK_TYPE_DIRECTION_TYPE);
+
   /**
    * GtkToolbar::focus-home-or-end:
    * @toolbar: the #GtkToolbar which emitted the signal
@@ -1921,19 +1912,22 @@ gtk_toolbar_focus_home_or_end (GtkToolbar *toolbar,
 /* Keybinding handler. This function is called when the user presses
  * Ctrl TAB or an arrow key.
  */
-static gboolean
-gtk_toolbar_move_focus (GtkToolbar       *toolbar,
+static void
+gtk_toolbar_move_focus (GtkWidget        *widget,
 			GtkDirectionType  dir)
 {
+  GtkToolbar *toolbar = GTK_TOOLBAR (widget);
+  GtkContainer *container = GTK_CONTAINER (toolbar);
   GList *list;
   gboolean try_focus = FALSE;
   GList *children;
-  GtkContainer *container = GTK_CONTAINER (toolbar);
-  
+
+  g_printerr ("%s (dir = %d)\n", G_STRFUNC, dir);
+
   if (container->focus_child &&
       gtk_widget_child_focus (container->focus_child, dir))
     {
-      return TRUE;
+      return;
     }
   
   children = gtk_toolbar_list_children_in_focus_order (toolbar, dir);
@@ -1950,8 +1944,6 @@ gtk_toolbar_move_focus (GtkToolbar       *toolbar,
     }
   
   g_list_free (children);
-  
-  return FALSE;
 }
 
 /* The focus handler for the toolbar. It called when the user presses

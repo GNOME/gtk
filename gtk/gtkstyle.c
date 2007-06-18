@@ -6641,26 +6641,56 @@ get_insertion_cursor_gc (GtkWidget *widget,
 	}
     }
 
+  /* Cursors in text widgets are drawn only in NORMAL state,
+   * so we can use text[GTK_STATE_NORMAL] as text color here */
   if (is_primary)
     {
       if (!cursor_info->primary_gc)
 	cursor_info->primary_gc = make_cursor_gc (widget,
 						  "cursor-color",
-						  &widget->style->black);
-	
+						  &widget->style->text[GTK_STATE_NORMAL]);
+
       return cursor_info->primary_gc;
     }
   else
     {
-      static const GdkColor gray = { 0, 0x8888, 0x8888, 0x8888 };
-      
       if (!cursor_info->secondary_gc)
 	cursor_info->secondary_gc = make_cursor_gc (widget,
 						    "secondary-cursor-color",
-						    &gray);
-	
+						    /* text_aa is the average of text and base colors,
+						     * in usual black-on-white case it's grey. */
+						    &widget->style->text_aa[GTK_STATE_NORMAL]);
+
       return cursor_info->secondary_gc;
     }
+}
+
+GdkGC *
+_gtk_widget_get_cursor_gc (GtkWidget *widget)
+{
+  g_return_val_if_fail (GTK_IS_WIDGET (widget), NULL);
+  g_return_val_if_fail (GTK_WIDGET_REALIZED (widget), NULL);
+  return get_insertion_cursor_gc (widget, TRUE);
+}
+
+void
+_gtk_widget_get_cursor_color (GtkWidget *widget,
+			      GdkColor  *color)
+{
+  GdkColor *style_color;
+
+  g_return_if_fail (GTK_IS_WIDGET (widget));
+  g_return_if_fail (color != NULL);
+
+  gtk_widget_style_get (widget, "cursor-color", &style_color, NULL);
+
+  if (style_color)
+    {
+      *color = *style_color;
+      gdk_color_free (style_color);
+    }
+  else
+    *color = widget->style->text[GTK_STATE_NORMAL];
 }
 
 static void

@@ -14,6 +14,8 @@
 <!ENTITY GtkBin SYSTEM "xml/gtkbin.xml">
 <!ENTITY GtkBox SYSTEM "xml/gtkbox.xml">
 <!ENTITY GtkButton SYSTEM "xml/gtkbutton.xml">
+<!ENTITY GtkBuildable SYSTEM "xml/gtkbuildable.xml">
+<!ENTITY GtkBuilder SYSTEM "xml/gtkbuilder.xml">
 <!ENTITY GtkCalendar SYSTEM "xml/gtkcalendar.xml">
 <!ENTITY GtkCheckButton SYSTEM "xml/gtkcheckbutton.xml">
 <!ENTITY GtkCheckMenuItem SYSTEM "xml/gtkcheckmenuitem.xml">
@@ -137,6 +139,7 @@
 <!ENTITY GtkToolButton SYSTEM "xml/gtktoolbutton.xml">
 <!ENTITY GtkToolItem SYSTEM "xml/gtktoolitem.xml">
 <!ENTITY GtkTooltips SYSTEM "xml/gtktooltips.xml">
+<!ENTITY GtkTooltip SYSTEM "xml/gtktooltip.xml">
 <!ENTITY GtkTree SYSTEM "xml/gtktree.xml">
 <!ENTITY GtkTreeItem SYSTEM "xml/gtktreeitem.xml">
 <!ENTITY GtkTreeModel SYSTEM "xml/gtktreemodel.xml">
@@ -205,7 +208,6 @@
 <!ENTITY gtk-Running SYSTEM "running.sgml">
 <!ENTITY gtk-Resources SYSTEM "resources.sgml">
 <!ENTITY gtk-Windows SYSTEM "windows.sgml">
-<!ENTITY gtk-Framebuffer SYSTEM "framebuffer.sgml">
 <!ENTITY gtk-X11 SYSTEM "x11.sgml">
 <!ENTITY gtk-OSX SYSTEM "osx.sgml">
 <!ENTITY gtk-DirectFB SYSTEM "directfb.sgml">
@@ -263,38 +265,31 @@ string utilities, file utilities, a main loop abstraction, and so on.
 <varlistentry>
 <term>Pango</term>
 <listitem><para>
-
 Pango is a library for internationalized text handling. It centers
-around the <link linkend="PangoLayout">PangoLayout</link> object, representing
-a paragraph of text. 
-Pango provides the engine for <link linkend="GtkTextView">GtkTextView</link>, 
-<link linkend="GtkLabel">GtkLabel</link>, 
-<link linkend="GtkEntry">GtkEntry</link>, and
+around the #PangoLayout object, representing a paragraph of text. 
+Pango provides the engine for #GtkTextView, #GtkLabel, #GtkEntry, and
 other widgets that display text.
-
 </para></listitem>
 </varlistentry>
 
 <varlistentry>
 <term>ATK</term>
 <listitem><para>
-
 ATK is the Accessibility Toolkit. It provides a set of generic
 interfaces allowing accessibility technologies to interact with a
 graphical user interface. For example, a screen reader uses ATK to
 discover the text in an interface and read it to blind users.  GTK+
 widgets have built-in support for accessibility using the ATK
 framework.
-
 </para></listitem>
 </varlistentry>
 
 <varlistentry>
 <term>GdkPixbuf</term>
 <listitem><para>
-This is a small library which allows you to create <link linkend="GdkPixbuf">GdkPixbuf</link>
+This is a small library which allows you to create #GdkPixbuf
 ("pixel buffer") objects from image data or image files. 
-Use a <link linkend="GdkPixbuf">GdkPixbuf</link> in combination with <link linkend="GtkImage">GtkImage</link> to display images.
+Use a #GdkPixbuf in combination with #GtkImage to display images.
 </para></listitem>
 </varlistentry>
 
@@ -310,11 +305,8 @@ on X11, Windows, and the Linux framebuffer device.
 <varlistentry>
 <term>GTK+</term>
 <listitem><para>
-
 The GTK+ library itself contains <firstterm>widgets</firstterm>, 
-that is, GUI components such as <link linkend="GtkButton">GtkButton</link> or 
-<link linkend="GtkTextView">GtkTextView</link>.
-
+that is, GUI components such as #GtkButton or #GtkTextView.
 </para></listitem>
 </varlistentry>
 </variablelist>
@@ -327,7 +319,6 @@ that is, GUI components such as <link linkend="GtkButton">GtkButton</link> or
     &gtk-Windows;
     &gtk-OSX;
     &gtk-DirectFB;
-    &gtk-Framebuffer;
     &gtk-Resources;
     &gtk-Questions;
   </part>
@@ -455,7 +446,6 @@ that is, GUI components such as <link linkend="GtkButton">GtkButton</link> or
         &GtkMenu;
         &GtkMenuBar;
         &GtkMenuItem;
-        &GtkMenuShell;
 	&GtkImageMenuItem;
         &GtkRadioMenuItem;
         &GtkCheckMenuItem;      
@@ -552,6 +542,7 @@ that is, GUI components such as <link linkend="GtkButton">GtkButton</link> or
         &GtkIMContextSimple;
         &GtkIMMulticontext;
         &GtkSizeGroup;
+        &GtkTooltip;
         &GtkTooltips;
         &GtkViewport;
         &GtkAccessible;
@@ -564,6 +555,7 @@ that is, GUI components such as <link linkend="GtkButton">GtkButton</link> or
         &GtkButtonBox;
         &GtkContainer;
         &GtkItem;
+        &GtkMenuShell;
         &GtkMisc;
         &GtkObject;
         &GtkPaned;
@@ -598,6 +590,12 @@ that is, GUI components such as <link linkend="GtkButton">GtkButton</link> or
       &GtkRecentChooserMenu;
       &GtkRecentChooserWidget;
       &GtkRecentFilter;
+    </chapter>
+
+    <chapter id="Builder">
+      <title>Interface builder</title>
+      &GtkBuildable;
+      &GtkBuilder;
     </chapter>
 
     <chapter id="DeprecatedObjects">

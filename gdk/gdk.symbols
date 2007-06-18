@@ -466,6 +466,7 @@ gdk_display_supports_clipboard_persistence
 gdk_display_supports_selection_notification
 gdk_display_supports_shapes
 gdk_display_supports_input_shapes
+gdk_display_supports_composite
 #endif
 #endif
 
@@ -673,6 +674,7 @@ gdk_window_remove_filter
 gdk_window_set_debug_updates
 gdk_window_set_user_data
 gdk_window_thaw_updates
+gdk_window_set_composited
 #endif
 #endif
 

@@ -952,13 +952,23 @@ Parses resource information directly from a string.
 
 <!-- ##### FUNCTION gtk_rc_parse_color ##### -->
 <para>
-Parses a color in the <link linkend="color-format">format</link> expected in a RC file.
+
 </para>
 
-@scanner: a #GtkScanner
-@color: a pointer to a #GtkColor structure in which to store the result
-@Returns: %G_TOKEN_NONE if parsing succeeded, otherwise the token
-that was expected but not found.
+@scanner: 
+@color: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_rc_parse_color_full ##### -->
+<para>
+
+</para>
+
+@scanner: 
+@style: 
+@color: 
+@Returns: 
 
 
 <!-- ##### FUNCTION gtk_rc_parse_state ##### -->

@@ -1,3 +1,141 @@
+Overview of Changes from GTK+ 2.11.2 to 2.11.3
+==============================================
+
+* GtkBuilder: GTK+ supports constructing user interfaces 
+  from XML descriptions now, similar to libglade.
+
+* The new tooltip code now has convenience api to set
+  text tooltips: gtk_widget_set_tooltip_text(),
+  gtk_widget_set_tooltip_markup()
+ 
+* GtkTextView, GtkEntry:
+ - gtk_widget_modify_cursor() is a new function in the 
+   gtk_widget_modify family to override the style-provided 
+   cursor colors
+ - Use a block cursor in overwrite mode
+
+* GtkFileChooser:
+ - Use xdg-user-dirs to find the Desktop directory
+ - gtk_file_system_create() is now public API
+
+* GtkMenu:
+ - GtkMenuItem gained a submenu property
+ - GtkMenuShell obtained a move-selected signal 
+
+* OS X port:
+ - Many improvements
+
+* Bugs fixed:
+ 445691 Crash when spawning a new process
+ 447163 Implicit pointer conversion gdk_font_ref()
+ 420249 deadlock on print operation
+ 440918 out-of-bound access on loading pnm
+ 142494 treeview coordinate systems need documentation/auditing
+ 343012 RC parser rejects lower-case identifiers.
+ 350460 Popup windows (esp. menus) misbehave wrt focus
+ 410815 Icon view gets confused when scaling down the pixbuf column
+ 435471 small GtkComboBox cleanup
+ 435840 GTK_WIDGET_SAVED_STATE inconsistency
+ 442617 gdk_spawn overrides envp, breaking child setup funcs whic...
+ 443913 When .recently-used.xbel is empty, recently-used uses %10...
+ 444097 Cannot compile gtksearchenginesimple.c
+ 444310 update_buttons_state on a bare assistant causes gtk+ to c...
+ 444734 Compact file-chooser folder selection not working with gt...
+ 444786 Error loading 'gtk-select-color' in Stock icons and Items
+ 445054 GtkScrolledWindow::scrollbars-within-bevel is drawing wrong
+ 445284 Custom (pixbuf etc.) cursor reverts to default cursor on ...
+ 445539 Unititialized var in gtkrc.c trunk
+ 445855 gtk_scale_button_new() uses private API.
+ 446138 Tiny doc update for gdk_window_get_pointer()
+ 446513 gtknotebook.h: create_window is wrong declaration
+ 446616 glib requirement insufficient
+ 447065 GtkMenuItem: add "submenu" property and some cleanup
+ 426192 Symbolic colors are not working under "engine" sections o...
+ 446107 tiff load dialogue has unreadable text
+ 447396 Typo in documentation of gtk_widget_modify_cursor
+ 79585 	API to change cursor color
+ 80378 	Visible (Cursor-shape) indicator for Overtype mode
+ 158008 Stock button for Dont Save, Discard Changes, Do Not Save
+ 334576 GtkCellRendererProgress ignores xalign attribute
+ 344836 Add orientation property to CellRendererProgress
+ 172535 Add support for UI builders in gtk+
+ 446833 gtk_menu_shell_move_selected should be a vcall
+ 447586 gtknotebook.c: decreasing unknown size pointer
+
+* Updated translations
+ Spanish (es)
+ Swedish (sv)
+
+
+Overview of Changes from GTK+ 2.11.1 to 2.11.2
+==============================================
+
+* The GtkListStore and GtkTreeStore have new API
+  to set values using vectors of columns and values
+
+* Bugs fixed:
+ 389603 GtkFileChooserWidget crashes when the window is too narrow
+ 444351 metacity cores on startup
+ 379213 gtkaboutdialog.h causes warnings with GCC and -Wshadow
+ 442888 problem with GTK+ medialib integration
+ 444236 gtk-demo says invisible text doesn't work
+ 444457 Segfault in gdk_window_set_opacity when opacity < 1.0
+ 399071 add gtk_tree_store_set_with_valuesv
+ 434021 crash on startup with jhbuild
+
+* Updated translations:
+ Spanish (es)
+
+
+Overview of Changes from GTK+ 2.11.0 to 2.11.1
+==============================================
+
+* GtkTextView:
+ - Marks can be created independent from buffers
+ - Cursor color follows text color
+
+* OS X port:
+ - Many improvements
+
+* GDK:
+ - Add support for composited child windows
+
+* Bugs fixed:
+ 347883 do-overwrite-confirmation does nothing in 2.10
+ 440890 Crash in gtktooltip.c (GTK+ 2.11.0)
+ 440982 crash in gtk due to missing stock icon gtk-clear
+ 418047 GtkIconView sizing is very broken
+ 438440 All tests for Gtk2 failing when installing from CPAN
+ 314172 gtk_toolbar_set_icon_size() should be 'undeprecated'
+ 348493 _gdk_quartz_copy_to_image needs implementing for pixmaps
+ 398414 Printing to file with multiple pages per sheet
+ 412882 gdkwindow should support the concept of "composited"
+ 430218 Some file names are being cut unnecessarily with RTL Inte...
+ 435405 text view recreates pangolayouts all the time
+ 439565 Crash in GtkIconView a11y code
+ 440040 Reference counting in GtkPrintOperation goes awry
+ 440511 xcursors.h: illegal initializing
+ 440780 GtkAction set_short_label might be broken
+ 441443 jpeg loader does not set error upon abortion
+ 442172 Small cleanup in gtk_notebook_set_current_page and fix ty...
+ 442183 Updated gdk/gdkkeysyms-update.pl
+ 443247 Two GtkNotebook cleanups
+ 441767 Icon cache isn't validated properly
+ 442326 Overview navigator traps mouse on wrong screen in dual mo...
+ 79585 	GtkTextView API to change cursor color
+ 132818 Allow GtkTextMark subclasses to be used in GtkTextBuffer
+ 348065 [PATCH] Remove automagic status of xinerama dependency
+ 441443 jpeg loader does not set error upon abortion
+ 386935 gtk_notebook_set_window_creation_hook only allows one...
+ 414947 Move "move-focus" signal to GtkWidget
+
+
+* Updated translations:
+ Thai (th)
+ Spanish (es)
+ Norwegian bokmål (nb)
+
+
 Overview of Changes from GTK+ 2.10.x to 2.11
 ============================================
 

@@ -67,9 +67,12 @@ struct _GtkScaleButtonClass
 
 struct _GtkScaleButton
 {
-  GtkButton              parent;
-  GtkWidget             *plus_button;
-  GtkWidget             *minus_button;
+  GtkButton parent;
+  
+  GtkWidget *plus_button;
+  GtkWidget *minus_button;
+  
+  /*< private >*/
   GtkScaleButtonPrivate *priv;
 };
 
@@ -80,7 +83,7 @@ GtkWidget*	gtk_scale_button_new		(GtkIconSize     size,
 						 gdouble         step,
 						 const gchar   **icons);
 void		gtk_scale_button_set_icons	(GtkScaleButton *button,
-						 const gchar  **icons);
+						 const gchar   **icons);
 gdouble		gtk_scale_button_get_value	(GtkScaleButton *button);
 void		gtk_scale_button_set_value	(GtkScaleButton *button,
 						 gdouble         value);

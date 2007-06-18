@@ -101,7 +101,7 @@ gdk_quartz_gc_set_values (GdkGC           *gc,
     private->line_style = values->line_style;
 
   if (mask & GDK_GC_CAP_STYLE)
-    private->line_style = values->line_style;
+    private->cap_style = values->cap_style;
 
   if (mask & GDK_GC_JOIN_STYLE)
     private->join_style = values->join_style;
@@ -150,6 +150,18 @@ gdk_gc_quartz_class_init (GdkGCQuartzClass *klass)
   gc_class->set_dashes = gdk_quartz_gc_set_dashes;
 }
 
+static void
+gdk_gc_quartz_init (GdkGCQuartz *gc_quartz)
+{
+  gc_quartz->function = GDK_COPY;
+  gc_quartz->subwindow_mode = GDK_CLIP_BY_CHILDREN;
+  gc_quartz->graphics_exposures = TRUE;
+  gc_quartz->line_width = 0;
+  gc_quartz->line_style = GDK_LINE_SOLID;
+  gc_quartz->cap_style = GDK_CAP_BUTT;
+  gc_quartz->join_style = GDK_JOIN_MITER;
+}
+
 GType
 _gdk_gc_quartz_get_type (void)
 {
@@ -167,7 +179,7 @@ _gdk_gc_quartz_get_type (void)
         NULL,           /* class_data */
         sizeof (GdkGCQuartz),
         0,              /* n_preallocs */
-        (GInstanceInitFunc) NULL,
+        (GInstanceInitFunc) gdk_gc_quartz_init,
       };
       
       object_type = g_type_register_static (GDK_TYPE_GC,
@@ -410,13 +422,10 @@ _gdk_quartz_gc_update_cg_context (GdkGC                      *gc,
 	break;
 
       case GDK_INVERT:
+      case GDK_XOR:
 	blend_mode = kCGBlendModeExclusion;
 	fg_pixel = 0xffffffff;
 	bg_pixel = 0xffffffff;
-	break;
-
-      case GDK_XOR:
-	blend_mode = kCGBlendModeExclusion;
 	break;
 
       case GDK_CLEAR:

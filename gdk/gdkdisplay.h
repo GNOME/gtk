@@ -181,6 +181,7 @@ void     gdk_display_store_clipboard                (GdkDisplay *display,
 
 gboolean gdk_display_supports_shapes           (GdkDisplay    *display);
 gboolean gdk_display_supports_input_shapes     (GdkDisplay    *display);
+gboolean gdk_display_supports_composite        (GdkDisplay    *display);
 
 G_END_DECLS
 

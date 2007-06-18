@@ -1,6 +1,6 @@
 /* gdkwindow-quartz.c
  *
- * Copyright (C) 2005-2006 Imendio AB
+ * Copyright (C) 2005-2007 Imendio AB
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -134,12 +134,10 @@ void _gdk_quartz_colormap_get_rgba_from_pixel (GdkColormap *colormap,
 					       gfloat      *alpha);
 
 /* Window */
-GdkWindow *_gdk_quartz_window_find_child_by_point   (GdkWindow *toplevel,
-						     gint       x,
-						     gint       y,
-						     gint      *x_ret,
-						     gint      *y_ret);
 gint       _gdk_quartz_window_get_inverted_screen_y (gint       y);
+GdkWindow *_gdk_quartz_window_find_child            (GdkWindow *window,
+						     gint       x,
+						     gint       y);
 
 /* Events */
 void         _gdk_quartz_events_update_focus_window   (GdkWindow *new_window,

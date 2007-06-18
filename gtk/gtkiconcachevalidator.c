@@ -104,6 +104,32 @@ check_string (CacheInfo *info,
 }
 
 static gboolean 
+check_string_utf8 (CacheInfo *info, 
+                   guint32    offset)
+{
+  check ("string offset", offset < info->cache_size);
+
+  if (info->flags & CHECK_STRINGS) 
+    {
+      gint i;
+      gchar c;
+
+      /* assume no string is longer than 1k */
+      for (i = 0; i < 1024; i++) 
+        { 
+          check ("string offset", offset + i < info->cache_size)
+            c = *(info->cache + offset + i);
+          if (c == '\0')
+            break;
+        }
+      check ("string length", i < 1024);
+      check ("string utf8 data", g_utf8_validate((char *)(info->cache + offset), -1, NULL));
+    }
+
+  return TRUE;
+}
+
+static gboolean 
 check_directory_list (CacheInfo *info, 
                       guint32    offset)
 {
@@ -172,16 +198,18 @@ static gboolean
 check_display_name_list (CacheInfo *info, 
                          guint32    offset)
 {
-  guint32 n_display_names;
+  guint32 n_display_names, ofs;
   gint i;
 
   check ("offset, display name list", 
          get_uint32 (info, offset, &n_display_names));
   for (i = 0; i < n_display_names; i++) 
     {
-      if (!check_string (info, offset + 4 + 8 * i))
+      get_uint32(info, offset + 4 + 8 * i, &ofs);
+      if (!check_string (info, ofs))
         return FALSE;
-      if (!check_string (info, offset + 4 + 8 * i + 4))
+      get_uint32(info, offset + 4 + 8 * i + 4, &ofs);
+      if (!check_string_utf8 (info, ofs))
         return FALSE;
     }
 	

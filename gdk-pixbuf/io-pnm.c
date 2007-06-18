@@ -133,7 +133,7 @@ explode_bitmap_into_buf (PnmLoaderContext *context)
 		to -= 3;
 		bit++;
 		
-		if (bit > 7) {
+		if (bit > 7 && x > 0) {
 			from--;
 			data = from[0];
 			bit = 0;

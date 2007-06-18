@@ -64,6 +64,8 @@ struct _GdkWindowImplQuartz
   GdkRegion *paint_clip_region;
   gint begin_paint_count;
   gint in_paint_rect_count;
+
+  GdkWindow *transient_for;
 };
  
 struct _GdkWindowImplQuartzClass 

@@ -2,7 +2,7 @@
 GtkTextView
 
 <!-- ##### SECTION Short_Description ##### -->
-Widget that displays a <link linkend="GtkTextBuffer">GtkTextBuffer</link>
+Widget that displays a GtkTextBuffer
 
 <!-- ##### SECTION Long_Description ##### -->
 <para>
@@ -76,14 +76,6 @@ types related to the text widget and how they work together.
 @arg1: 
 @arg2: 
 @arg3: 
-
-<!-- ##### SIGNAL GtkTextView::move-focus ##### -->
-<para>
-
-</para>
-
-@textview: the object which received the signal.
-@arg1: 
 
 <!-- ##### SIGNAL GtkTextView::move-viewport ##### -->
 <para>

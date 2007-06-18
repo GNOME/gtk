@@ -2,8 +2,7 @@
 GtkTextTag
 
 <!-- ##### SECTION Short_Description ##### -->
-
-A tag that can be applied to text in a <link linkend="GtkTextBuffer">GtkTextBuffer</link>
+A tag that can be applied to text in a GtkTextBuffer
 
 <!-- ##### SECTION Long_Description ##### -->
 <para>

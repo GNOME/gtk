@@ -33,6 +33,8 @@ GType gtk_tooltip_get_type (void);
 
 void gtk_tooltip_set_markup            (GtkTooltip  *tooltip,
 			                const gchar *markup);
+void gtk_tooltip_set_text              (GtkTooltip  *tooltip,
+                                        const gchar *text);
 void gtk_tooltip_set_icon              (GtkTooltip  *tooltip,
 				        GdkPixbuf   *pixbuf);
 void gtk_tooltip_set_icon_from_stock   (GtkTooltip  *tooltip,

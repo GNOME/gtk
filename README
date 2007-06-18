@@ -1,7 +1,7 @@
 General Information
 ===================
 
-This is GTK+ version 2.11.0. GTK+ is a multi-platform toolkit for
+This is GTK+ version 2.11.3. GTK+ is a multi-platform toolkit for
 creating graphical user interfaces. Offering a complete set of widgets,
 GTK+ is suitable for projects ranging from small one-off projects to
 complete application suites.
@@ -47,6 +47,32 @@ Release notes for 2.12
   windows can cause deadlock problems with window managers that are using
   GDK for drawing decorations. In particular, metacity <= 2.18.0 is affected
   by this. The problem has been fixed in metacity 2.18.1.
+
+* Semi-private GtkTextLayout api has changed: new GtkTextLayout method
+  invalidate_cursors(), and new functions gtk_text_layout_invalidate_cursors()
+  and gtk_text_layout_cursors_changed(), which should be used in place of
+  gtk_text_layout_invalidate() and gtk_text_layout_changed() if invalidation
+  is due to marks moved or changed selection; new GtkTextLineDisplay structure
+  member. Source compatibility is preserved; binary compatibility may break
+  only if GtkTextLineDisplay structure was created on stack or as a part
+  of another structure (in particular GnomeCanvas and its clones do not need
+  recompiling).
+
+* Another new signal has been added to GtkNotebook. The new signal
+  is called create-window, so this name can no longer be used for signals
+  in objects derived from GtkNotebook.
+
+* The move-focus signal has been moved to GtkWidget, to unify the 
+  various implementations of this signal in specific widgets. Great care 
+  has been taken to make sure that all code using this signal continues
+  to work.
+
+* Removed an unused and hardly visible GtkFrame from the menu widget hierarchy
+  when GtkComboBox::appears-as-list style property is set. Any RC file
+  applying a different style to any widget below the widget path
+  "gtk-combobox-popup-window.GtkFrame" should take into account that the 
+  frame no longer exists.
+
 
 Release notes for 2.10
 ======================

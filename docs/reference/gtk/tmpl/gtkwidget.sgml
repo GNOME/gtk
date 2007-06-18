@@ -323,15 +323,11 @@ gtk_widget_style_get_valist() to obtain the value of a style property.
 
 <!-- ##### SIGNAL GtkWidget::hierarchy-changed ##### -->
 <para>
-Emitted when there is a change in the hierarchy to
-which a widget belongs. More precisely, a widget is
-<firstterm>anchored</firstterm> when its toplevel
-ancestor is a #GtkWindow. This signal is emitted when 
-a widget changes from un-anchored to anchored or vice-versa.
+
 </para>
 
-@widget: the object which received the signal.
-@widget2: the toplevel ancestor, or %NULL
+@widget: 
+@widget2: 
 
 <!-- ##### SIGNAL GtkWidget::key-press-event ##### -->
 <para>
@@ -402,6 +398,14 @@ a widget changes from un-anchored to anchored or vice-versa.
 @widget: the object which received the signal.
 @event: 
 @Returns: %TRUE to stop other handlers from being invoked for the event. %FALSE to propagate the event further.
+
+<!-- ##### SIGNAL GtkWidget::move-focus ##### -->
+<para>
+
+</para>
+
+@widget: the object which received the signal.
+@arg1: 
 
 <!-- ##### SIGNAL GtkWidget::no-expose-event ##### -->
 <para>
@@ -712,6 +716,11 @@ a widget changes from un-anchored to anchored or vice-versa.
 </para>
 
 <!-- ##### ARG GtkWidget:tooltip-markup ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkWidget:tooltip-text ##### -->
 <para>
 
 </para>
@@ -1971,6 +1980,16 @@ This function is not useful for applications.
 @font_desc: 
 
 
+<!-- ##### FUNCTION gtk_widget_modify_cursor ##### -->
+<para>
+
+</para>
+
+@widget: 
+@primary: 
+@secondary: 
+
+
 <!-- ##### FUNCTION gtk_widget_create_pango_context ##### -->
 <para>
 
@@ -2468,6 +2487,68 @@ This function is deprecated; it does nothing.
 @widget: 
 @direction: 
 @Returns: 
+
+
+<!-- ##### FUNCTION gtk_widget_get_tooltip_markup ##### -->
+<para>
+
+</para>
+
+@widget: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_widget_set_tooltip_markup ##### -->
+<para>
+
+</para>
+
+@widget: 
+@markup: 
+
+
+<!-- ##### FUNCTION gtk_widget_get_tooltip_text ##### -->
+<para>
+
+</para>
+
+@widget: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_widget_set_tooltip_text ##### -->
+<para>
+
+</para>
+
+@widget: 
+@text: 
+
+
+<!-- ##### FUNCTION gtk_widget_get_tooltip_window ##### -->
+<para>
+
+</para>
+
+@widget: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_widget_set_tooltip_window ##### -->
+<para>
+
+</para>
+
+@widget: 
+@custom_window: 
+
+
+<!-- ##### FUNCTION gtk_widget_trigger_tooltip_query ##### -->
+<para>
+
+</para>
+
+@widget: 
 
 
 <!-- ##### FUNCTION gtk_requisition_copy ##### -->

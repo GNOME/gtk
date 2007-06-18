@@ -110,23 +110,16 @@ recently used files list.
 
 <!-- ##### STRUCT GtkRecentData ##### -->
 <para>
-Meta-data passed to gtk_recent_manager_add_full().  You should
-use #GtkRecentData if you want to control the meta-data associated
-to an entry of the recently used files list when you are adding
-a new file to it.
+
 </para>
 
-@display_name: the string to be used when displaying the file
-  inside a #GtkRecentChooser
-@description: a user readable description of the file
-@mime_type: the mime type of the file
-@app_name: the name of the application that is registering
-  the file
-@app_exec: the command line that should be used when launching
-  the file
-@groups: the list of group names to which the file belongs to
-@is_private: whether the file should be displayed only by
-  the applications that have registered it
+@display_name: 
+@description: 
+@mime_type: 
+@app_name: 
+@app_exec: 
+@groups: 
+@is_private: 
 
 <!-- ##### MACRO GTK_RECENT_MANAGER_ERROR ##### -->
 <para>

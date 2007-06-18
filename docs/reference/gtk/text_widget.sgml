@@ -7,7 +7,7 @@
 
 <refnamediv>
 <refname>Text Widget Overview</refname>
-<refpurpose>Overview of #GtkTextBuffer, #GtkTextView, and friends</refpurpose>
+<refpurpose>Overview of GtkTextBuffer, GtkTextView, and friends</refpurpose>
 </refnamediv>
 
 <refsect1>
@@ -37,8 +37,8 @@ be called "bold" and make the text inside the tag bold. However, the tag
 concept is more general than that; tags don't have to affect appearance. They 
 can instead affect the behavior of mouse and key presses, "lock" a range of 
 text so the user can't edit it, or countless other things. A tag is 
-represented by a #GtkTextTag object. One #GtkTextTag can be applied to any number 
-of text ranges in any number of buffers.
+represented by a #GtkTextTag object. One #GtkTextTag can be applied to any 
+number of text ranges in any number of buffers.
 </para>
 
 <para>
@@ -57,35 +57,36 @@ is convenient if you're creating tags on-the-fly).
 <para>
 Most text manipulation is accomplished with <firstterm>iterators</firstterm>,
 represented by a #GtkTextIter. An iterator represents a position between two 
-characters in the text buffer. #GtkTextIter is a struct designed to be allocated 
-on the stack; it's guaranteed to be copiable by value and never contain any
-heap-allocated data. Iterators are not valid indefinitely; whenever the buffer
-is modified in a way that affects the number of characters in the buffer, all
-outstanding iterators become invalid. (Note that deleting 5 characters and then
-reinserting 5 still invalidates iterators, though you end up with the same
-number of characters you pass through a state with a different number).
+characters in the text buffer. #GtkTextIter is a struct designed to be 
+allocated on the stack; it's guaranteed to be copiable by value and never 
+contain any heap-allocated data. Iterators are not valid indefinitely; 
+whenever the buffer is modified in a way that affects the number of characters 
+in the buffer, all outstanding iterators become invalid. (Note that deleting 
+5 characters and then reinserting 5 still invalidates iterators, though you 
+end up with the same number of characters you pass through a state with a 
+different number).
 </para>
 
 <para>
 Because of this, iterators can't be used to preserve positions across buffer
-modifications. To preserve a position, the #GtkTextMark object is ideal. You can 
-think of a mark as an invisible cursor or insertion point; it floats in the buffer, 
-saving a position. If the text surrounding the mark is deleted, the mark remains 
-in the position the text once occupied; if text is inserted at the mark, the 
-mark ends up either to the left or to the right of the new text, depending on 
-its <firstterm>gravity</firstterm>. The standard text cursor in left-to-right
-languages is a mark with right gravity, because it stays to the right of
-inserted text.
+modifications. To preserve a position, the #GtkTextMark object is ideal. You
+can think of a mark as an invisible cursor or insertion point; it floats in 
+the buffer, saving a position. If the text surrounding the mark is deleted, 
+the mark remains in the position the text once occupied; if text is inserted 
+at the mark, the mark ends up either to the left or to the right of the new 
+text, depending on its <firstterm>gravity</firstterm>. The standard text 
+cursor in left-to-right languages is a mark with right gravity, because it 
+stays to the right of inserted text.
 </para>
 
 <para>
 Like tags, marks can be either named or anonymous. There are two marks built-in
 to #GtkTextBuffer; these are named <literal>"insert"</literal> and 
 <literal>"selection_bound"</literal> and refer to the insertion point and the 
-boundary of the selection which is not the insertion point, respectively. If no 
-text is selected, these two marks will be in the same position. You can manipulate 
-what is selected and where the cursor appears by moving these marks around.
-
+boundary of the selection which is not the insertion point, respectively. If 
+no text is selected, these two marks will be in the same position. You can 
+manipulate what is selected and where the cursor appears by moving these 
+marks around.
 <footnote>
 <para>
 If you want to place the cursor in response to a user action, be sure to use

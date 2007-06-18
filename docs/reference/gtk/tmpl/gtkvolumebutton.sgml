@@ -2,19 +2,17 @@
 GtkVolumeButton
 
 <!-- ##### SECTION Short_Description ##### -->
-
+A button which pops up a volume control
 
 <!-- ##### SECTION Long_Description ##### -->
 <para>
 
 </para>
 
-
 <!-- ##### SECTION See_Also ##### -->
 <para>
 
 </para>
-
 
 <!-- ##### SECTION Stability_Level ##### -->
 

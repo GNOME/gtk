@@ -2,7 +2,7 @@
 GtkTreeSelection
 
 <!-- ##### SECTION Short_Description ##### -->
-The selection object for #GtkTreeView
+The selection object for GtkTreeView
 
 <!-- ##### SECTION Long_Description ##### -->
 <para>

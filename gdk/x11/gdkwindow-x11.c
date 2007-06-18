@@ -59,6 +59,18 @@
 #include <X11/extensions/shape.h>
 #endif
 
+#ifdef HAVE_XCOMPOSITE
+#include <X11/extensions/Xcomposite.h>
+#endif
+
+#ifdef HAVE_XFIXES
+#include <X11/extensions/Xfixes.h>
+#endif
+
+#ifdef HAVE_XDAMAGE
+#include <X11/extensions/Xdamage.h>
+#endif
+
 const int _gdk_event_mask_table[21] =
 {
   ExposureMask,
@@ -184,6 +196,14 @@ gdk_window_impl_x11_finalize (GObject *object)
   wrapper = (GdkWindowObject*) draw_impl->wrapper;
 
   _gdk_xgrab_check_destroy (GDK_WINDOW (wrapper));
+
+#if defined(HAVE_XCOMPOSITE) && defined(HAVE_XDAMAGE) && defined (HAVE_XFIXES)
+  if (window_impl->damage != None)
+  {
+    XDamageDestroy (GDK_WINDOW_XDISPLAY (object), window_impl->damage);
+    window_impl->damage = None;
+  }
+#endif
 
   if (!GDK_WINDOW_DESTROYED (wrapper))
     {
@@ -6413,10 +6433,14 @@ gdk_window_beep (GdkWindow *window)
  *
  * Request the windowing system to make @window partially transparent,
  * with opacity 0 being fully transparent and 1 fully opaque. (Values
- * of the opacity parameter are clamped to the [0,1] range.) On X11
- * this works only on X screens with a compositing manager running.
+ * of the opacity parameter are clamped to the [0,1] range.) 
+ *
+ * On X11, this works only on X screens with a compositing manager 
+ * running.
  *
  * For setting up per-pixel alpha, see gdk_screen_get_rgba_colormap().
+ * For making non-toplevel windows translucent, see 
+ * gdk_window_set_composited().
  *
  * Since: 2.12
  */
@@ -6452,8 +6476,42 @@ gdk_window_set_opacity (GdkWindow *window,
 		     gdk_x11_get_xatom_by_name_for_display (display, "_NET_WM_WINDOW_OPACITY"),
 		     XA_CARDINAL, 32,
 		     PropModeReplace,
-		     (guchar *) cardinal, 1);
+		     (guchar *) &cardinal, 1);
 }
+
+void
+_gdk_windowing_window_set_composited (GdkWindow *window,
+                                      gboolean   composited)
+{
+#if defined(HAVE_XCOMPOSITE) && defined(HAVE_XDAMAGE) && defined (HAVE_XFIXES)
+  GdkWindowObject *private = (GdkWindowObject *) window;
+  GdkDisplayX11 *x11_display;
+  GdkWindowImplX11 *impl;
+  GdkDisplay *display;
+  Display *dpy;
+  Window xid;
+
+  impl = GDK_WINDOW_IMPL_X11 (private->impl);
+
+  display = gdk_screen_get_display (GDK_DRAWABLE_IMPL_X11 (impl)->screen);
+  x11_display = GDK_DISPLAY_X11 (display);
+  dpy = GDK_DISPLAY_XDISPLAY (display);
+  xid = GDK_WINDOW_XWINDOW (private);
+
+  if (composited)
+    {
+      XCompositeRedirectWindow (dpy, xid, CompositeRedirectManual);
+      impl->damage = XDamageCreate (dpy, xid, XDamageReportBoundingBox);
+    }
+  else
+    {
+      XCompositeUnredirectWindow (dpy, xid, CompositeRedirectManual);
+      XDamageDestroy (dpy, impl->damage);
+      impl->damage = None;
+    }
+#endif
+}
+
 
 #define __GDK_WINDOW_X11_C__
 #include "gdkaliasdef.c"

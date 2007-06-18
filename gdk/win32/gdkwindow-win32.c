@@ -420,12 +420,16 @@ RegisterGdkClass (GdkWindowType wtype, GdkWindowTypeHint wtype_hint)
         {
           if (klassTEMPSHADOW == 0)
             {
-              wcl.lpszClassName = "gdkWindowTempShadow";
+              wcl.lpszClassName = L"gdkWindowTempShadow";
               wcl.style |= CS_SAVEBITS;
-              if (_winver >= 0x0501) /* Windows XP (5.1) or above */
-                wcl.style |= 0x00020000; /* CS_DROPSHADOW */
+              if (LOBYTE (g_win32_get_windows_version()) > 0x05 ||
+		  LOWORD (g_win32_get_windows_version()) == 0x0105)
+		{
+		  /* Windows XP (5.1) or above */
+		  wcl.style |= 0x00020000; /* CS_DROPSHADOW */
+		}
               ONCE_PER_CLASS ();
-              klassTEMPSHADOW = RegisterClassEx (&wcl);
+              klassTEMPSHADOW = RegisterClassExW (&wcl);
             }
 
           klass = klassTEMPSHADOW;
@@ -434,10 +438,10 @@ RegisterGdkClass (GdkWindowType wtype, GdkWindowTypeHint wtype_hint)
         {
           if (klassTEMP == 0)
             {
-              wcl.lpszClassName = "gdkWindowTemp";
+              wcl.lpszClassName = L"gdkWindowTemp";
               wcl.style |= CS_SAVEBITS;
               ONCE_PER_CLASS ();
-              klassTEMP = RegisterClassEx (&wcl);
+              klassTEMP = RegisterClassExW (&wcl);
             }
 
           klass = klassTEMP;
@@ -3547,6 +3551,8 @@ gdk_window_set_opacity (GdkWindow *window,
 			gdouble    opacity)
 {
   LONG exstyle;
+  typedef BOOL (*PFN_SetLayeredWindowAttributes) (HWND, COLORREF, BYTE, DWORD);
+  PFN_SetLayeredWindowAttributes setLayeredWindowAttributes = NULL;
 
   g_return_if_fail (GDK_IS_WINDOW (window));
   g_return_if_fail (WINDOW_IS_TOPLEVEL (window));
@@ -3566,8 +3572,19 @@ gdk_window_set_opacity (GdkWindow *window,
 			      GWL_EXSTYLE,
 			      exstyle | WS_EX_LAYERED));
 
-  API_CALL (SetLayeredWindowAttributes, (GDK_WINDOW_HWND (window),
-					 0,
-					 opacity * 0xff,
-					 LWA_ALPHA));
+  setLayeredWindowAttributes = 
+    (PFN_SetLayeredWindowAttributes)GetProcAddress (GetModuleHandle ("user32.dll"), "SetLayeredWindowAttributes");
+
+  if (setLayeredWindowAttributes)
+    {
+      API_CALL (setLayeredWindowAttributes, (GDK_WINDOW_HWND (window),
+					     0,
+					     opacity * 0xff,
+					     LWA_ALPHA));
+    }
+}
+
+void
+_gdk_windowing_window_set_composited (GdkWindow *window, gboolean composited)
+{
 }

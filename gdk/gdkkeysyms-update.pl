@@ -1,17 +1,17 @@
 #!/usr/bin/env perl
 
-# Updates http://cvs.gnome.org/viewcvs/gtk%2B/gdk/gdkkeysyms.h from upstream (X.org 6.9/7.0),
-# OLD OLD -----from http://cvs.freedesktop.org/xorg/xc/include/keysymdef.h------  OLD OLD
-# from http://webcvs.freedesktop.org/*checkout*/xorg/proto/X11/keysymdef.h
+# Updates http://svn.gnome.org/viewcvs/gtk%2B/trunk/gdk/gdkkeysyms.h?view=log from upstream (X.org 7.x),
+# from http://gitweb.freedesktop.org/?p=xorg/proto/x11proto.git;a=blob_plain;f=keysymdef.h
 # 
 # Author  : Simos Xenitellis <simos at gnome dot org>.
-# Version : 1.0
+# Version : 1.2
 #
-# Input   : http://webcvs.freedesktop.org/xorg/proto/X11/keysymdef.h
-# Output  : http://cvs.gnome.org/viewcvs/gtk%2B/gdk/gdkkeysyms.h
+# Input   : http://gitweb.freedesktop.org/?p=xorg/proto/x11proto.git;a=blob_plain;f=keysymdef.h
+# Output  : http://svn.gnome.org/svn/gtk+/trunk/gdk/gdkkeysyms.h
 # 
-# Notes   : It downloads keysymdef.h from the Internet if not found locally
+# Notes   : It downloads keysymdef.h from the Internet, if not found locally,
 # Notes   : and creates an updated gdkkeysyms.h
+# Notes   : This version updates the source of gdkkeysyms.h from CVS to the GIT server.
 
 use strict;
 
@@ -21,23 +21,23 @@ my @keysymelements;
 if ( ! -f "keysymdef.h" )
 {
 	print "Trying to download keysymdef.h from\n";
-	print "http://webcvs.freedesktop.org/xorg/proto/X11/keysymdef.h: ";
-	die "Unable to download keysymdef.h from http://webcvs.freedesktop.org/xorg/proto/X11/keysymdef.h\n" 
-		unless system("wget -q \"http://webcvs.freedesktop.org/*checkout*/xorg/proto/X11/keysymdef.h\"") == 0;
+	print "http://gitweb.freedesktop.org/?p=xorg/proto/x11proto.git;a=blob_plain;f=keysymdef.h\n";
+	die "Unable to download keysymdef.h from http://gitweb.freedesktop.org/?p=xorg/proto/x11proto.git;a=blob_plain;f=keysymdef.h\n" 
+		unless system("wget -c -O keysymdef.h \"http://gitweb.freedesktop.org/?p=xorg/proto/x11proto.git;a=blob_plain;f=keysymdef.h\"") == 0;
 	print " done.\n\n";
 }
 else
 {
 	print "We are using existing keysymdef.h found in this directory.\n";
-	print "It is assume that you took care and it is a recent version\n";
-	print "as found at http://webcvs.freedesktop.org/*checkout*/xorg/proto/X11/keysymdef.h\n\n";
+	print "It is assumed that you took care and it is a recent version\n";
+	print "as found at http://gitweb.freedesktop.org/?p=xorg/proto/x11proto.git;a=blob;f=keysymdef.h\n\n";
 }
 
 
 if ( -f "gdkkeysyms.h" )
 {
 	print "There is already a gdkkeysyms.h file in this directory. We are not overwriting it.\n";
-	print "Please move it in order to run this script.\n";
+	print "Please move it somewhere else in order to run this script.\n";
 	die "Exiting...\n\n";
 }
 
@@ -50,7 +50,7 @@ die "Could not open file gdkkeysyms.h: $!\n" unless open(OUT_GDKKEYSYMS, ">:utf8
 print OUT_GDKKEYSYMS<<EOF;
 /* GDK - The GIMP Drawing Kit
  * Copyright (C) 1995-1997 Peter Mattis, Spencer Kimball and Josh MacDonald
- * Copyright (C) 2005 GNOME Foundation
+ * Copyright (C) 2005, 2006, 2007 GNOME Foundation
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -69,13 +69,13 @@ print OUT_GDKKEYSYMS<<EOF;
  */
 
 /*
- * File auto-generated from script gdkkeysyms-update.pl
+ * File auto-generated from script http://svn.gnome.org/viewcvs/gtk%2B/trunk/gdk/gdkkeysyms-update.pl
  * using the input file
- * http://cvs.freedesktop.org/xorg/xc/include/keysymdef.h
+ * http://gitweb.freedesktop.org/?p=xorg/proto/x11proto.git;a=blob_plain;f=keysymdef.h
  */
 
 /*
- * Modified by the GTK+ Team and others 1997-2001.  See the AUTHORS
+ * Modified by the GTK+ Team and others 1997-2007.  See the AUTHORS
  * file for a list of people on the GTK+ Team.  See the ChangeLog
  * files for a list of changes.  These files are distributed with
  * GTK+ at ftp://ftp.gtk.org/pub/gtk/.
@@ -116,4 +116,4 @@ print OUT_GDKKEYSYMS<<EOF;
 #endif /* __GDK_KEYSYMS_H__ */
 EOF
 
-printf "We just finished converting keysymdef.h to gdkkeysyms.h\n";
+printf "We just finished converting keysymdef.h to gdkkeysyms.h\nThank you\n";

@@ -169,3 +169,11 @@ gdk_display_store_clipboard (GdkDisplay *display,
 {
   /* FIXME: Implement */
 }
+
+
+gboolean
+gdk_display_supports_composite (GdkDisplay *display)
+{
+  /* FIXME: Implement */
+  return FALSE;
+}

@@ -58,8 +58,8 @@ gtk_combo_box_append_text (GTK_COMBO_BOX (combo_box), "First Item");
 gtk_combo_box_append_text (GTK_COMBO_BOX (combo_box), "Second Item");
 gtk_combo_box_append_text (GTK_COMBO_BOX (combo_box), "Third Item");
       </programlisting></informalexample>
-      In order to react to the user's selection, connect to the "changed"
-      signal on the combo box and use gtk_combo_box_get_active()
+      In order to react to the user's selection, connect to the 
+      #GtkComboBox::changed signal and use gtk_combo_box_get_active()
       to retrieve the index of the selected item.
     </para>
 

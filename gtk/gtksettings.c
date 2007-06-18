@@ -247,7 +247,7 @@ gtk_settings_class_init (GtkSettingsClass *class)
    * The timer is reset after each user interaction.
    *
    * Setting this to zero has the same effect as setting
-   * #GtkSettings:gtk-cursor-blinks to %FALSE. 
+   * #GtkSettings:gtk-cursor-blink to %FALSE. 
    *
    * Since: 2.12
    */

@@ -1,3 +1,8 @@
+2007-06-18  Mathias Hasselmann  <mathias.hasselmann@gmx.de>
+
+	* gdk/*, gtk/*: Resynching with trunk to avoid future
+	merge conflicts with the giant GtkBuilder patch.
+
 2007-05-29  Mathias Hasselmann  <mathias.hasselmann@gmx.de>
 
 	* testextendedlayout.c: Implement formal testing.

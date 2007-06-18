@@ -2,7 +2,7 @@
 GtkButtonBox
 
 <!-- ##### SECTION Short_Description ##### -->
-Base class for #GtkHButtonBox and #GtkVButtonBox
+Base class for GtkHButtonBox and GtkVButtonBox
 
 <!-- ##### SECTION Long_Description ##### -->
 <para>

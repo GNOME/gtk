@@ -427,17 +427,17 @@ response_cb (GtkDialog *dialog,
   priv = GTK_FILE_CHOOSER_DIALOG_GET_PRIVATE (dialog);
 
   /* Act only on response IDs we recognize */
-  if (!(response_id == GTK_RESPONSE_ACCEPT
-	|| response_id == GTK_RESPONSE_OK
-	|| response_id == GTK_RESPONSE_YES
-	|| response_id == GTK_RESPONSE_APPLY))
-    return;
-
-  if (!priv->response_requested && !_gtk_file_chooser_embed_should_respond (GTK_FILE_CHOOSER_EMBED (priv->widget)))
+  if ((response_id == GTK_RESPONSE_ACCEPT ||
+       response_id == GTK_RESPONSE_OK     ||
+       response_id == GTK_RESPONSE_YES    ||
+       response_id == GTK_RESPONSE_APPLY) &&
+      !priv->response_requested &&
+      !_gtk_file_chooser_embed_should_respond (GTK_FILE_CHOOSER_EMBED (priv->widget)))
     {
       g_signal_stop_emission_by_name (dialog, "response");
-      priv->response_requested = FALSE;
     }
+
+  priv->response_requested = FALSE;
 }
 
 static GtkWidget *

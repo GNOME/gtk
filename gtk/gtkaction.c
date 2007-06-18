@@ -46,6 +46,7 @@
 #include "gtktoolbutton.h"
 #include "gtktoolbar.h"
 #include "gtkprivate.h"
+#include "gtkbuildable.h"
 #include "gtkalias.h"
 
 
@@ -107,13 +108,21 @@ enum
   PROP_ACTION_GROUP
 };
 
+/* GtkBuildable */
+static void gtk_action_buildable_init             (GtkBuildableIface *iface);
+static void gtk_action_buildable_set_name         (GtkBuildable *buildable,
+						   const gchar  *name);
+static const gchar* gtk_action_buildable_get_name (GtkBuildable *buildable);
+
+G_DEFINE_TYPE_WITH_CODE (GtkAction, gtk_action, G_TYPE_OBJECT,
+			 G_IMPLEMENT_INTERFACE (GTK_TYPE_BUILDABLE,
+						gtk_action_buildable_init))
+
 
 static GQuark      accel_path_id  = 0;
 static GQuark      quark_gtk_action_proxy  = 0;
 static const gchar accel_path_key[] = "GtkAction::accel_path";
 static const gchar gtk_action_proxy_key[] = "gtk-action";
-
-G_DEFINE_TYPE (GtkAction, gtk_action, G_TYPE_OBJECT)
 
 static void gtk_action_finalize     (GObject *object);
 static void gtk_action_set_property (GObject         *object,
@@ -376,6 +385,33 @@ gtk_action_init (GtkAction *action)
   action->private_data->action_group = NULL;
 
   action->private_data->proxies = NULL;
+}
+
+static void
+gtk_action_buildable_init (GtkBuildableIface *iface)
+{
+  iface->set_name = gtk_action_buildable_set_name;
+  iface->get_name = gtk_action_buildable_get_name;
+}
+
+static void
+gtk_action_buildable_set_name (GtkBuildable *buildable,
+			       const gchar  *name)
+{
+  gchar *tmp;
+  GtkAction *action = GTK_ACTION (buildable);
+
+  tmp = action->private_data->name;
+  action->private_data->name = g_strdup (name);
+  g_free (tmp);
+}
+
+static const gchar *
+gtk_action_buildable_get_name (GtkBuildable *buildable)
+{
+  GtkAction *action = GTK_ACTION (buildable);
+
+  return action->private_data->name;
 }
 
 /**

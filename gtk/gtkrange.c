@@ -282,11 +282,11 @@ gtk_range_class_init (GtkRangeClass *class)
 
   /**
    * GtkRange::change-value:
-   * @range: the range that received the signal.
-   * @scroll: the type of scroll action that was performed.
-   * @value: the new value resulting from the scroll action.
+   * @range: the range that received the signal
+   * @scroll: the type of scroll action that was performed
+   * @value: the new value resulting from the scroll action
    * @returns: %TRUE to prevent other handlers from being invoked for the
-   * signal.  %FALSE to propagate the signal further.
+   * signal, %FALSE to propagate the signal further
    *
    * The ::change-value signal is emitted when a scroll action is
    * performed on a range.  It allows an application to determine the
@@ -363,7 +363,7 @@ gtk_range_class_init (GtkRangeClass *class)
   /**
    * GtkRange:show-fill-level:
    *
-   * The show-fill-level property controls wether fill level indicator
+   * The show-fill-level property controls whether fill level indicator
    * graphics are displayed on the trough. See
    * gtk_range_set_show_fill_level().
    *
@@ -380,9 +380,9 @@ gtk_range_class_init (GtkRangeClass *class)
   /**
    * GtkRange:restrict-to-fill-level:
    *
-   * The restrict-to-fill-level proeprty controls whether slider
+   * The restrict-to-fill-level property controls whether slider
    * movement is restricted to an upper boundary set by the
-   * fill-level. See gtk_range_set_restrict_to_fill_level().
+   * fill level. See gtk_range_set_restrict_to_fill_level().
    *
    * Since: 2.12
    **/
@@ -441,7 +441,7 @@ gtk_range_class_init (GtkRangeClass *class)
    *
    * The spacing between the stepper buttons and thumb. Note that
    * setting this value to anything > 0 will automatically set the
-   * trough-under-steppers style property to TRUE as well. Also,
+   * trough-under-steppers style property to %TRUE as well. Also,
    * stepper-spacing won't have any effect if there are no steppers.
    */
   gtk_widget_class_install_style_property (widget_class,
@@ -479,6 +479,9 @@ gtk_range_class_init (GtkRangeClass *class)
   /**
    * GtkRange:trough-side-details:
    *
+   * When %TRUE, the parts of the trough on the two sides of the 
+   * slider are drawn with different details.
+   *
    * Since: 2.10
    */
   gtk_widget_class_install_style_property (widget_class,
@@ -493,7 +496,7 @@ gtk_range_class_init (GtkRangeClass *class)
    *
    * Whether to draw the trough across the full length of the range or
    * to exclude the steppers and their spacing. Note that setting the
-   * stepper-spacing style property to any value > 0 will
+   * #GtkRange:stepper-spacing style property to any value > 0 will
    * automatically enable trough-under-steppers too.
    *
    * Since: 2.10
@@ -659,7 +662,6 @@ gtk_range_get_adjustment (GtkRange *range)
  * continuous. #GTK_UPDATE_DISCONTINUOUS means that the value will only
  * be updated when the user releases the button and ends the slider
  * drag operation.
- * 
  **/
 void
 gtk_range_set_update_policy (GtkRange      *range,
@@ -702,7 +704,6 @@ gtk_range_get_update_policy (GtkRange *range)
  * is normally 0 for #GtkScale and nonzero for #GtkScrollbar, and
  * indicates the size of the visible area of the widget being scrolled.
  * The page size affects the size of the scrollbar slider.
- * 
  **/
 void
 gtk_range_set_adjustment (GtkRange      *range,
@@ -752,7 +753,6 @@ gtk_range_set_adjustment (GtkRange      *range,
  * slider moves from top to bottom or left to right. Inverted
  * ranges have higher values at the top or on the right rather than
  * on the bottom or left.
- * 
  **/
 void
 gtk_range_set_inverted (GtkRange *range,
@@ -890,7 +890,6 @@ gtk_range_get_upper_stepper_sensitivity (GtkRange *range)
  * The step size is used when the user clicks the #GtkScrollbar
  * arrows or moves #GtkScale via arrow keys. The page size
  * is used for example when moving via Page Up or Page Down keys.
- * 
  **/
 void
 gtk_range_set_increments (GtkRange *range,
@@ -948,9 +947,8 @@ gtk_range_set_range (GtkRange *range,
  *
  * Sets the current value of the range; if the value is outside the
  * minimum or maximum range values, it will be clamped to fit inside
- * them. The range emits the "value_changed" signal if the value
- * changes.
- * 
+ * them. The range emits the #GtkRange::value-changed signal if the 
+ * value changes.
  **/
 void
 gtk_range_set_value (GtkRange *range,

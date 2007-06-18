@@ -18,6 +18,8 @@
  */
 
 #include <config.h>
+#include <errno.h>
+#include <stdlib.h>
 #include <string.h>
 #include <gobject/gvaluecollector.h>
 #include "gtktreemodel.h"
@@ -25,6 +27,7 @@
 #include "gtktreedatalist.h"
 #include "gtktreednd.h"
 #include "gtkintl.h"
+#include "gtkbuildable.h"
 #include "gtkalias.h"
 
 #define GTK_LIST_STORE_IS_SORTED(list) (((GtkListStore*)(list))->sort_column_id != GTK_TREE_SORTABLE_UNSORTED_SORT_COLUMN_ID)
@@ -34,6 +37,7 @@ static void         gtk_list_store_tree_model_init (GtkTreeModelIface *iface);
 static void         gtk_list_store_drag_source_init(GtkTreeDragSourceIface *iface);
 static void         gtk_list_store_drag_dest_init  (GtkTreeDragDestIface   *iface);
 static void         gtk_list_store_sortable_init   (GtkTreeSortableIface   *iface);
+static void         gtk_list_store_buildable_init  (GtkBuildableIface      *iface);
 static void         gtk_list_store_finalize        (GObject           *object);
 static GtkTreeModelFlags gtk_list_store_get_flags  (GtkTreeModel      *tree_model);
 static gint         gtk_list_store_get_n_columns   (GtkTreeModel      *tree_model);
@@ -114,6 +118,19 @@ static void     gtk_list_store_set_default_sort_func (GtkTreeSortable        *so
 static gboolean gtk_list_store_has_default_sort_func (GtkTreeSortable        *sortable);
 
 
+/* buildable */
+static gboolean gtk_list_store_buildable_custom_tag_start (GtkBuildable  *buildable,
+							   GtkBuilder    *builder,
+							   GObject       *child,
+							   const gchar   *tagname,
+							   GMarkupParser *parser,
+							   gpointer      *data);
+static void     gtk_list_store_buildable_custom_tag_end (GtkBuildable *buildable,
+							 GtkBuilder   *builder,
+							 GObject      *child,
+							 const gchar  *tagname,
+							 gpointer     *data);
+
 G_DEFINE_TYPE_WITH_CODE (GtkListStore, gtk_list_store, G_TYPE_OBJECT,
 			 G_IMPLEMENT_INTERFACE (GTK_TYPE_TREE_MODEL,
 						gtk_list_store_tree_model_init)
@@ -122,7 +139,10 @@ G_DEFINE_TYPE_WITH_CODE (GtkListStore, gtk_list_store, G_TYPE_OBJECT,
 			 G_IMPLEMENT_INTERFACE (GTK_TYPE_TREE_DRAG_DEST,
 						gtk_list_store_drag_dest_init)
 			 G_IMPLEMENT_INTERFACE (GTK_TYPE_TREE_SORTABLE,
-						gtk_list_store_sortable_init))
+						gtk_list_store_sortable_init)
+			 G_IMPLEMENT_INTERFACE (GTK_TYPE_BUILDABLE,
+						gtk_list_store_buildable_init))
+
 
 static void
 gtk_list_store_class_init (GtkListStoreClass *class)
@@ -174,6 +194,13 @@ gtk_list_store_sortable_init (GtkTreeSortableIface *iface)
   iface->set_sort_func = gtk_list_store_set_sort_func;
   iface->set_default_sort_func = gtk_list_store_set_default_sort_func;
   iface->has_default_sort_func = gtk_list_store_has_default_sort_func;
+}
+
+void
+gtk_list_store_buildable_init (GtkBuildableIface *iface)
+{
+  iface->custom_tag_start = gtk_list_store_buildable_custom_tag_start;
+  iface->custom_tag_end = gtk_list_store_buildable_custom_tag_end;
 }
 
 static void
@@ -711,6 +738,36 @@ gtk_list_store_get_compare_func (GtkListStore *list_store)
 }
 
 static void
+gtk_list_store_set_vector_internal (GtkListStore *list_store,
+				    GtkTreeIter  *iter,
+				    gboolean     *emit_signal,
+				    gboolean     *maybe_need_sort,
+				    gint         *columns,
+				    GValue       *values,
+				    gint          n_values)
+{
+  gint i;
+  GtkTreeIterCompareFunc func = NULL;
+
+  func = gtk_list_store_get_compare_func (list_store);
+  if (func != _gtk_tree_data_list_compare_func)
+    *maybe_need_sort = TRUE;
+
+  for (i = 0; i < n_values; i++)
+    {
+      *emit_signal = gtk_list_store_real_set_value (list_store, 
+					       iter, 
+					       columns[i],
+					       &values[i],
+					       FALSE) || *emit_signal;
+
+      if (func == _gtk_tree_data_list_compare_func &&
+	  columns[i] == list_store->sort_column_id)
+	*maybe_need_sort = TRUE;
+    }
+}
+
+static void
 gtk_list_store_set_valist_internal (GtkListStore *list_store,
 				    GtkTreeIter  *iter,
 				    gboolean     *emit_signal,
@@ -764,6 +821,53 @@ gtk_list_store_set_valist_internal (GtkListStore *list_store,
       g_value_unset (&value);
 
       column = va_arg (var_args, gint);
+    }
+}
+
+/**
+ * gtk_list_store_set_valuesv:
+ * @list_store: A #GtkListStore
+ * @iter: A valid #GtkTreeIter for the row being modified
+ * @columns: an array of column numbers
+ * @values: an array of GValues 
+ * @n_values: the length of the @columns and @values arrays
+ * 
+ * A variant of gtk_list_store_set_valist() which
+ * takes the columns and values as two arrays, instead of
+ * varargs. This function is mainly intended for 
+ * language-bindings and in case the number of columns to
+ * change is not known until run-time.
+ *
+ * Since: 2.12
+ */
+void
+gtk_list_store_set_valuesv (GtkListStore *list_store,
+			    GtkTreeIter  *iter,
+			    gint         *columns,
+			    GValue       *values,
+			    gint          n_values)
+{
+  gboolean emit_signal = FALSE;
+  gboolean maybe_need_sort = FALSE;
+
+  g_return_if_fail (GTK_IS_LIST_STORE (list_store));
+  g_return_if_fail (VALID_ITER (iter, list_store));
+
+  gtk_list_store_set_vector_internal (list_store, iter,
+				      &emit_signal,
+				      &maybe_need_sort,
+				      columns, values, n_values);
+
+  if (maybe_need_sort && GTK_LIST_STORE_IS_SORTED (list_store))
+    gtk_list_store_sort_iter_changed (list_store, iter, list_store->sort_column_id);
+
+  if (emit_signal)
+    {
+      GtkTreePath *path;
+
+      path = gtk_list_store_get_path (GTK_TREE_MODEL (list_store), iter);
+      gtk_tree_model_row_changed (GTK_TREE_MODEL (list_store), path, iter);
+      gtk_tree_path_free (path);
     }
 }
 
@@ -1888,8 +1992,6 @@ gtk_list_store_insert_with_valuesv (GtkListStore *list_store,
   gint length;
   gboolean changed = FALSE;
   gboolean maybe_need_sort = FALSE;
-  GtkTreeIterCompareFunc func = NULL;
-  gint i;
 
   /* FIXME refactor to reduce overlap with 
    * gtk_list_store_insert_with_values() 
@@ -1917,22 +2019,9 @@ gtk_list_store_insert_with_valuesv (GtkListStore *list_store,
 
   list_store->length++;  
 
-  func = gtk_list_store_get_compare_func (list_store);
-  if (func != _gtk_tree_data_list_compare_func)
-    maybe_need_sort = TRUE;
-
-  for (i = 0; i < n_values; i++)
-    {
-      changed = gtk_list_store_real_set_value (list_store, 
-					       iter, 
-					       columns[i],
-					       &values[i],
-					       FALSE) || changed;
-
-      if (func == _gtk_tree_data_list_compare_func &&
-	  columns[i] == list_store->sort_column_id)
-	maybe_need_sort = TRUE;
-    }
+  gtk_list_store_set_vector_internal (list_store, iter,
+				      &changed, &maybe_need_sort,
+				      columns, values, n_values);
 
   /* Don't emit rows_reordered here */
   if (maybe_need_sort && GTK_LIST_STORE_IS_SORTED (list_store))
@@ -1944,6 +2033,253 @@ gtk_list_store_insert_with_valuesv (GtkListStore *list_store,
   path = gtk_list_store_get_path (GTK_TREE_MODEL (list_store), iter);
   gtk_tree_model_row_inserted (GTK_TREE_MODEL (list_store), path, iter);
   gtk_tree_path_free (path);
+}
+
+/* GtkBuildable custom tag implementation
+ *
+ * <columns>
+ *   <column type="..."/>
+ *   <column type="..."/>
+ * </columns>
+ */
+typedef struct {
+  GtkBuilder *builder;
+  GObject *object;
+  GSList *column_type_names;
+  GType *column_types;
+  GValue *values;
+  gint *columns;
+  gint last_row;
+  gint n_columns;
+  gint row_column;
+  GQuark error_quark;
+  gboolean is_data;
+} SubParserData;
+
+static void
+list_store_start_element (GMarkupParseContext *context,
+			  const gchar         *element_name,
+			  const gchar        **names,
+			  const gchar        **values,
+			  gpointer             user_data,
+			  GError             **error)
+{
+  guint i;
+  SubParserData *data = (SubParserData*)user_data;
+
+  if (strcmp (element_name, "col") == 0)
+    {
+      int i, id = -1;
+
+      if (data->row_column >= data->n_columns)
+	g_set_error (error, data->error_quark, 0,
+		     "Too many columns, maximum is %d\n", data->n_columns - 1);
+
+      for (i = 0; names[i]; i++)
+	if (strcmp (names[i], "id") == 0)
+	  {
+	    errno = 0;
+	    id = atoi (values[i]);
+	    if (errno)
+	      g_set_error (error, data->error_quark, 0,
+			   "the id tag %s could not be converted to an integer", values[i]);
+	  }
+
+      if (id == -1)
+	g_set_error (error, data->error_quark, 0,
+		     "<col> needs an id attribute");
+
+      data->columns[data->row_column] = id;
+      data->row_column++;
+      data->is_data = TRUE;
+    }
+  else if (strcmp (element_name, "row") == 0)
+    ;
+  else if (strcmp (element_name, "column") == 0)
+    for (i = 0; names[i]; i++)
+      if (strcmp (names[i], "type") == 0)
+	data->column_type_names = g_slist_prepend (data->column_type_names,
+						   g_strdup (values[i]));
+  else if (strcmp (element_name, "columns") == 0)
+    ;
+  else if (strcmp (element_name, "data") == 0)
+    ;
+  else
+    g_set_error (error, data->error_quark, 0,
+		 "Unknown start tag: %s", element_name);
+}
+
+static void
+list_store_end_element (GMarkupParseContext *context,
+			const gchar         *element_name,
+			gpointer             user_data,
+			GError             **error)
+{
+  SubParserData *data = (SubParserData*)user_data;
+
+  g_assert (data->builder);
+  
+  if (strcmp (element_name, "row") == 0)
+    {
+      GtkTreeIter iter;
+      int i;
+
+      gtk_list_store_insert_with_valuesv (GTK_LIST_STORE (data->object),
+					  &iter,
+					  data->last_row,
+					  data->columns,
+					  data->values,
+					  data->row_column);
+      for (i = 0; i < data->row_column; i++)
+	g_value_unset (&data->values[i]);
+      g_free (data->values);
+      data->values = g_new0 (GValue, data->n_columns);
+      data->last_row++;
+      data->row_column = 0;
+    }
+  else if (strcmp (element_name, "columns") == 0)
+    {
+      GType *column_types;
+      GSList *l;
+      int i;
+      GType type;
+
+      data->column_type_names = g_slist_reverse (data->column_type_names);
+      column_types = g_new0 (GType, g_slist_length (data->column_type_names));
+
+      for (l = data->column_type_names, i = 0; l; l = l->next, i++)
+	{
+	  type = gtk_builder_get_type_from_name (data->builder, l->data);
+	  if (type == G_TYPE_INVALID)
+	    {
+	      g_warning ("Unknown type %s specified in treemodel %s",
+			 (const gchar*)l->data,
+			 gtk_buildable_get_name (GTK_BUILDABLE (data->object)));
+	      continue;
+	    }
+	  column_types[i] = type;
+
+	  g_free (l->data);
+	}
+
+      gtk_list_store_set_column_types (GTK_LIST_STORE (data->object), i,
+				       column_types);
+
+      g_free (column_types);
+    }
+  else if (strcmp (element_name, "col") == 0)
+    data->is_data = FALSE;
+  else if (strcmp (element_name, "data") == 0)
+    ;
+  else if (strcmp (element_name, "column") == 0)
+    ;
+  else
+    g_set_error (error, data->error_quark, 0,
+		 "Unknown end tag: %s", element_name);
+}
+
+static void
+list_store_text (GMarkupParseContext *context,
+		 const gchar         *text,
+		 gsize                text_len,
+		 gpointer             user_data,
+		 GError             **error)
+{
+  SubParserData *data = (SubParserData*)user_data;
+  gint i;
+
+  if (!data->is_data)
+    return;
+
+  i = data->row_column - 1;
+
+  if (!gtk_builder_value_from_string_type (data->column_types[i],
+					   text,
+					   &data->values[i]))
+    g_error ("Could not convert '%s' to type %s\n",
+	     text, g_type_name (data->column_types[i]));
+}
+
+static const GMarkupParser list_store_parser =
+  {
+    list_store_start_element,
+    list_store_end_element,
+    list_store_text
+  };
+
+static gboolean
+gtk_list_store_buildable_custom_tag_start (GtkBuildable  *buildable,
+					   GtkBuilder    *builder,
+					   GObject       *child,
+					   const gchar   *tagname,
+					   GMarkupParser *parser,
+					   gpointer      *data)
+{
+  SubParserData *parser_data;
+
+  if (child)
+    return FALSE;
+
+  if (strcmp (tagname, "columns") == 0)
+    {
+
+      parser_data = g_slice_new0 (SubParserData);
+      parser_data->builder = builder;
+      parser_data->object = G_OBJECT (buildable);
+      parser_data->column_type_names = NULL;
+
+      *parser = list_store_parser;
+      *data = parser_data;
+      return TRUE;
+    }
+  else if (strcmp (tagname, "data") == 0)
+    {
+      gint n_columns = gtk_list_store_get_n_columns (GTK_TREE_MODEL (buildable));
+      if (n_columns == 0)
+	g_error ("Cannot append data to an empty model");
+
+      parser_data = g_slice_new0 (SubParserData);
+      parser_data->builder = builder;
+      parser_data->object = G_OBJECT (buildable);
+      parser_data->values = g_new0 (GValue, n_columns);
+      parser_data->columns = g_new0 (gint, n_columns);
+      parser_data->column_types = GTK_LIST_STORE (buildable)->column_headers;
+      parser_data->n_columns = n_columns;
+      parser_data->last_row = 0;
+      parser_data->error_quark = g_quark_from_static_string ("GtkListStore");
+      
+      *parser = list_store_parser;
+      *data = parser_data;
+      return TRUE;
+    }
+  else
+    g_warning ("Unknown custom list store tag: %s", tagname);
+  
+  return FALSE;
+}
+
+static void
+gtk_list_store_buildable_custom_tag_end (GtkBuildable *buildable,
+					 GtkBuilder   *builder,
+					 GObject      *child,
+					 const gchar  *tagname,
+					 gpointer     *data)
+{
+  SubParserData *sub = (SubParserData*)data;
+  
+  if (strcmp (tagname, "columns") == 0)
+    {
+      g_slist_free (sub->column_type_names);
+      g_slice_free (SubParserData, sub);
+    }
+  else if (strcmp (tagname, "data") == 0)
+    {
+      g_free (sub->columns);
+      g_free (sub->values);
+      g_slice_free (SubParserData, sub);
+    }
+  else
+    g_warning ("Unknown custom list store tag: %s", tagname);
 }
 
 #define __GTK_LIST_STORE_C__

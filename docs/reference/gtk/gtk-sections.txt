@@ -432,6 +432,75 @@ gtk_box_get_type
 </SECTION>
 
 <SECTION>
+<FILE>gtkvscrollbar</FILE>
+<TITLE>GtkVScrollbar</TITLE>
+GtkVScrollbar
+gtk_vscrollbar_new
+<SUBSECTION Standard>
+GTK_VSCROLLBAR
+GTK_IS_VSCROLLBAR
+GTK_TYPE_VSCROLLBAR
+gtk_vscrollbar_get_type
+GTK_VSCROLLBAR_CLASS
+GTK_IS_VSCROLLBAR_CLASS
+GTK_VSCROLLBAR_GET_CLASS
+</SECTION>
+
+<SECTION>
+<FILE>gtkbuildable</FILE>
+GtkBuildable
+GtkBuildableIface
+gtk_buildable_set_name
+gtk_buildable_get_name
+gtk_buildable_add
+gtk_buildable_set_property
+gtk_buildable_construct_child
+gtk_buildable_custom_tag_start
+gtk_buildable_custom_tag_end
+gtk_buildable_custom_finished
+gtk_buildable_parser_finished
+gtk_buildable_get_internal_child
+<SUBSECTION Standard>
+GTK_BUILDABLE
+GTK_IS_BUILDABLE
+GTK_TYPE_BUILDABLE
+gtk_buildable_get_type
+GTK_BUILDABLE_CLASS
+GTK_BUILDABLE_GET_IFACE
+</SECTION>
+
+<SECTION>
+<FILE>gtkbuilder</FILE>
+<TITLE>GtkBuilder</TITLE>
+GtkBuilder
+GtkBuilderConnectFunc
+gtk_builder_new
+gtk_builder_add_from_file
+gtk_builder_add_from_string
+gtk_builder_get_object
+gtk_builder_get_objects
+gtk_builder_connect_signals
+gtk_builder_connect_signals_full
+gtk_builder_set_translation_domain
+gtk_builder_get_translation_domain
+gtk_builder_get_type_from_name
+gtk_builder_value_from_string
+gtk_builder_value_from_string_type
+GTK_BUILDER_WARN_INVALID_CHILD_TYPE
+GTK_BUILDER_ERROR
+<SUBSECTION Standard>
+GTK_BUILDER
+GTK_IS_BUILDER
+GTK_TYPE_BUILDER
+GTK_BUILDER_CLASS
+GTK_IS_BUILDER_CLASS
+GTK_BUILDER_GET_CLASS
+<SUBSECTION Private>
+gtk_builder_get_type
+gtk_builder_error_quark
+</SECTION>
+
+<SECTION>
 <FILE>gtkbutton</FILE>
 <TITLE>GtkButton</TITLE>
 GtkButton
@@ -4095,7 +4164,9 @@ gtk_tooltips_get_type
 <SECTION>
 <FILE>gtktooltip</FILE>
 <TITLE>GtkTooltip</TITLE>
+GtkTooltip
 gtk_tooltip_set_markup
+gtk_tooltip_set_text
 gtk_tooltip_set_icon
 gtk_tooltip_set_icon_from_stock
 gtk_tooltip_set_custom
@@ -4395,6 +4466,7 @@ gtk_tree_store_set_column_types
 gtk_tree_store_set_value
 gtk_tree_store_set
 gtk_tree_store_set_valist
+gtk_tree_store_set_valuesv
 gtk_tree_store_remove
 gtk_tree_store_insert
 gtk_tree_store_insert_before
@@ -4478,6 +4550,7 @@ gtk_tree_view_column_cell_get_position
 gtk_tree_view_column_cell_is_visible
 gtk_tree_view_column_focus_cell
 gtk_tree_view_column_queue_resize
+gtk_tree_view_column_get_tree_view
 <SUBSECTION Standard>
 GTK_TREE_VIEW_COLUMN
 GTK_IS_TREE_VIEW_COLUMN
@@ -4552,6 +4625,12 @@ gtk_tree_view_get_visible_range
 gtk_tree_view_get_bin_window
 gtk_tree_view_widget_to_tree_coords
 gtk_tree_view_tree_to_widget_coords
+gtk_tree_view_convert_bin_window_to_tree_coords
+gtk_tree_view_convert_bin_window_to_widget_coords
+gtk_tree_view_convert_tree_to_bin_window_coords
+gtk_tree_view_convert_tree_to_widget_coords
+gtk_tree_view_convert_widget_to_bin_window_coords
+gtk_tree_view_convert_widget_to_tree_coords
 gtk_tree_view_enable_model_drag_dest
 gtk_tree_view_enable_model_drag_source
 gtk_tree_view_unset_rows_drag_source
@@ -4828,6 +4907,7 @@ gtk_list_store_set_column_types
 gtk_list_store_set
 gtk_list_store_set_valist
 gtk_list_store_set_value
+gtk_list_store_set_valuesv
 gtk_list_store_remove
 gtk_list_store_insert
 gtk_list_store_insert_before
@@ -5134,6 +5214,7 @@ gtk_widget_modify_bg
 gtk_widget_modify_text
 gtk_widget_modify_base
 gtk_widget_modify_font
+gtk_widget_modify_cursor
 gtk_widget_create_pango_context
 gtk_widget_get_pango_context
 gtk_widget_create_pango_layout
@@ -5188,6 +5269,10 @@ gtk_widget_get_action
 gtk_widget_is_composited
 gtk_widget_error_bell
 gtk_widget_keynav_failed
+gtk_widget_get_tooltip_markup
+gtk_widget_set_tooltip_markup
+gtk_widget_get_tooltip_text
+gtk_widget_set_tooltip_text
 gtk_widget_get_tooltip_window
 gtk_widget_set_tooltip_window
 gtk_widget_trigger_tooltip_query
@@ -5563,6 +5648,7 @@ gtk_rc_add_default_file
 gtk_rc_get_default_files
 gtk_rc_set_default_files
 gtk_rc_parse_color
+gtk_rc_parse_color_full
 gtk_rc_parse_state
 gtk_rc_parse_priority
 gtk_rc_find_module_in_path
@@ -5972,6 +6058,7 @@ GTK_STOCK_DIALOG_INFO
 GTK_STOCK_DIALOG_QUESTION
 GTK_STOCK_DIALOG_WARNING
 GTK_STOCK_DIRECTORY
+GTK_STOCK_DISCARD
 GTK_STOCK_DISCONNECT
 GTK_STOCK_DND
 GTK_STOCK_DND_MULTIPLE

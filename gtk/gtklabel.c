@@ -1330,12 +1330,16 @@ gtk_label_set_label (GtkLabel    *label,
   g_return_if_fail (GTK_IS_LABEL (label));
   g_return_if_fail (str != NULL);
 
+  g_object_freeze_notify (G_OBJECT (label));
+
   last_keyval = label->mnemonic_keyval;
 
   gtk_label_set_label_internal (label, g_strdup (str));
   gtk_label_recalculate (label);
   if (last_keyval != label->mnemonic_keyval)
     gtk_label_setup_mnemonic (label, last_keyval);
+
+  g_object_thaw_notify (G_OBJECT (label));
 }
 
 /**

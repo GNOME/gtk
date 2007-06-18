@@ -90,6 +90,7 @@ void          gtk_stock_set_translate_func (const gchar      *domain,
 #define GTK_STOCK_CUT              "gtk-cut"
 #define GTK_STOCK_DELETE           "gtk-delete"
 #define GTK_STOCK_DIRECTORY        "gtk-directory"
+#define GTK_STOCK_DISCARD          "gtk-discard"
 #define GTK_STOCK_DISCONNECT       "gtk-disconnect"
 #define GTK_STOCK_EDIT             "gtk-edit"
 #define GTK_STOCK_EXECUTE          "gtk-execute"

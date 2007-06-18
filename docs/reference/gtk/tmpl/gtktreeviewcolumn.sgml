@@ -2,7 +2,7 @@
 GtkTreeViewColumn
 
 <!-- ##### SECTION Short_Description ##### -->
-A visible column in a #GtkTreeView widget
+A visible column in a GtkTreeView widget
 
 <!-- ##### SECTION Long_Description ##### -->
 <para>
@@ -611,5 +611,14 @@ calling gtk_tree_view_column_set_cell_data_func()
 </para>
 
 @tree_column: 
+
+
+<!-- ##### FUNCTION gtk_tree_view_column_get_tree_view ##### -->
+<para>
+
+</para>
+
+@tree_column: 
+@Returns: 
 
 

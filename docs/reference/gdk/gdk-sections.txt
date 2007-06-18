@@ -55,7 +55,6 @@ gdk_error_trap_pop
 <SUBSECTION>
 GDK_WINDOWING_X11
 GDK_WINDOWING_WIN32
-GDK_WINDOWING_FB
 
 <SUBSECTION Standard>
 GDK_TYPE_GRAB_STATUS
@@ -155,6 +154,7 @@ gdk_display_supports_clipboard_persistence
 gdk_display_store_clipboard
 gdk_display_supports_shapes
 gdk_display_supports_input_shapes
+gdk_display_supports_composite
 <SUBSECTION Standard>
 GDK_DISPLAY_OBJECT
 GDK_IS_DISPLAY
@@ -651,6 +651,7 @@ gdk_window_unfullscreen
 gdk_window_set_keep_above
 gdk_window_set_keep_below
 gdk_window_set_opacity
+gdk_window_set_composited
 gdk_window_move
 gdk_window_resize
 gdk_window_move_resize

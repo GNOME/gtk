@@ -7,8 +7,7 @@
 
   <refnamediv>
     <refname>Tree and List Widget Overview</refname>
-    <refpurpose>Overview of #GtkTreeModel, #GtkTreeView, and other 
-    associated widgets</refpurpose>
+    <refpurpose>Overview of GtkTreeModel, GtkTreeView, and friends</refpurpose>
   </refnamediv>
 
   <refsect1>
@@ -195,7 +194,8 @@ gtk_tree_view_append_column (GTK_TREE_VIEW (tree), column);
       <para>
         Most applications will need to not only deal with displaying data, but 
         also receiving input events from users.  To do this, simply get a 
-        reference to a selection object and connect to the "changed" signal.
+        reference to a selection object and connect to the 
+        #GtkTreeSelection::changed signal.
       </para>
       <informalexample><programlisting><![CDATA[
 /* Prototype for selection handler callback */

@@ -28,12 +28,27 @@ The #GtkCellRendererProgress cell renderer was added in GTK+ 2.6.
 </para>
 
 
+<!-- ##### ARG GtkCellRendererProgress:orientation ##### -->
+<para>
+
+</para>
+
 <!-- ##### ARG GtkCellRendererProgress:pulse ##### -->
 <para>
 
 </para>
 
 <!-- ##### ARG GtkCellRendererProgress:text ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkCellRendererProgress:text-xalign ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkCellRendererProgress:text-yalign ##### -->
 <para>
 
 </para>

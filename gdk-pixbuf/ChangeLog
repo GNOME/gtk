@@ -1,3 +1,30 @@
+2007-06-15  Matthias Clasen  <mclasen@redhat.com>
+
+	* === Released 2.11.3 ===
+
+2007-06-15  Hans Breuer  <hans@breuer.org>
+
+	* makefile.msc : updated
+	* io-jpeg.c : use g_snprintf
+
+2007-06-12  Behdad Esfahbod  <behdad@gnome.org>
+
+	* io-pnm.c (explode_bitmap_into_buf): Fix out-of-bound access.
+	(#440918, Matthias Kilian)
+
+2007-06-06  Matthias Clasen  <mclasen@redhat.com>
+
+	* === Released 2.11.2 ===
+
+2007-06-04  Matthias Clasen  <mclasen@redhat.com>
+
+	* === Released 2.11.1 ===
+
+2007-05-30  Chris Wilson  <chris@chris-wilson.co.uk>
+
+	* io-jpeg.c (gdk_pixbuf__jpeg_image_stop_load):
+	Supply the current GError for fatal_error_handler(). (#441443)
+
 2007-05-24   Matthias Clasen  <mclasen@redhat.com>
 
 	* === Released 2.11.0 ===

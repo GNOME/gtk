@@ -24,6 +24,8 @@
 
 #include <gtk/gtkcellrenderer.h>
 #include <gtk/gtktreeviewcolumn.h>
+#include <gtk/gtkbuildable.h>
+#include <gtk/gtkbuilder.h>
 
 G_BEGIN_DECLS
 
@@ -97,7 +99,21 @@ void  gtk_cell_layout_clear_attributes   (GtkCellLayout         *cell_layout,
 void  gtk_cell_layout_reorder            (GtkCellLayout         *cell_layout,
                                           GtkCellRenderer       *cell,
                                           gint                   position);
-
+gboolean _gtk_cell_layout_buildable_custom_tag_start (GtkBuildable  *buildable,
+						      GtkBuilder    *builder,
+						      GObject       *child,
+						      const gchar   *tagname,
+						      GMarkupParser *parser,
+						      gpointer      *data);
+void _gtk_cell_layout_buildable_custom_tag_end       (GtkBuildable  *buildable,
+						      GtkBuilder    *builder,
+						      GObject       *child,
+						      const gchar   *tagname,
+						      gpointer      *data);
+void _gtk_cell_layout_buildable_add                  (GtkBuildable  *buildable,
+						      GtkBuilder    *builder,
+						      GObject       *child,
+						      const gchar   *type);
 
 G_END_DECLS
 

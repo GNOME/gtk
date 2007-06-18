@@ -2,7 +2,7 @@
 GtkListStore
 
 <!-- ##### SECTION Short_Description ##### -->
-A list-like data structure that can be used with the #GtkTreeView
+A list-like data structure that can be used with the GtkTreeView
 
 <!-- ##### SECTION Long_Description ##### -->
 <para>
@@ -179,6 +179,18 @@ will cause the #GtkTreeModelFilterVisibleFunc to be visited with an empty row fi
 @iter: 
 @column: 
 @value: 
+
+
+<!-- ##### FUNCTION gtk_list_store_set_valuesv ##### -->
+<para>
+
+</para>
+
+@list_store: 
+@iter: 
+@columns: 
+@values: 
+@n_values: 
 
 
 <!-- ##### FUNCTION gtk_list_store_remove ##### -->

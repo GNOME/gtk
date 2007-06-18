@@ -162,7 +162,8 @@ static const GDebugKey gtk_debug_keys[] = {
   {"modules", GTK_DEBUG_MODULES},
   {"geometry", GTK_DEBUG_GEOMETRY},
   {"icontheme", GTK_DEBUG_ICONTHEME},
-  {"printing", GTK_DEBUG_PRINTING}
+  {"printing", GTK_DEBUG_PRINTING},
+  {"builder", GTK_DEBUG_BUILDER}
 };
 #endif /* G_ENABLE_DEBUG */
 
@@ -658,7 +659,7 @@ do_post_parse_initialization (int    *argc,
   }
 
   gtk_type_init (0);
-  _gtk_accel_map_init ();  
+ _gtk_accel_map_init ();  
   _gtk_rc_init ();
 
   /* Set the 'initialized' flag.

@@ -42,7 +42,8 @@ typedef enum {
   GTK_DEBUG_MODULES     = 1 << 7,
   GTK_DEBUG_GEOMETRY    = 1 << 8,
   GTK_DEBUG_ICONTHEME   = 1 << 9,
-  GTK_DEBUG_PRINTING	= 1 << 10
+  GTK_DEBUG_PRINTING	= 1 << 10,
+  GTK_DEBUG_BUILDER	= 1 << 11
 } GtkDebugFlag;
 
 #ifdef G_ENABLE_DEBUG

@@ -30,6 +30,8 @@
  *            Sven Neumann <sven@convergence.de>
  */
 
+#undef GDK_DISABLE_DEPRECATED
+
 #include <config.h>
 #include "gdk.h"
 

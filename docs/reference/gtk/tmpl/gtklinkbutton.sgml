@@ -95,9 +95,11 @@ clicked.
 </para>
 
 @button: the #GtkLinkButton which was clicked
-@link: the URI to which the clicked #GtkLinkButton points
+@link_: 
 @user_data: user data that was passed when the function was registered
   with gtk_link_button_set_uri_hook()
+<!-- # Unused Parameters # -->
+@link: the URI to which the clicked #GtkLinkButton points
 
 
 <!-- ##### FUNCTION gtk_link_button_set_uri_hook ##### -->

@@ -362,3 +362,146 @@ _gtk_text_util_create_rich_drag_icon (GtkWidget     *widget,
 
    return drawable;
 }
+
+
+static gint
+layout_get_char_width (PangoLayout *layout)
+{
+  gint width;
+  PangoFontMetrics *metrics;
+  const PangoFontDescription *font_desc;
+  PangoContext *context = pango_layout_get_context (layout);
+
+  font_desc = pango_layout_get_font_description (layout);
+  if (!font_desc)
+    font_desc = pango_context_get_font_description (context);
+
+  metrics = pango_context_get_metrics (context, font_desc, NULL);
+  width = pango_font_metrics_get_approximate_char_width (metrics);
+  pango_font_metrics_unref (metrics);
+
+  return width;
+}
+
+/**
+ * _gtk_text_util_get_block_cursor_location
+ * @layout: a #PangoLayout
+ * @index: index at which cursor is located
+ * @rect: cursor location
+ *
+ * Returns: whether cursor should actually be drawn as a rectangle.
+ * It may not be the case if character at index is invisible.
+ **/
+gboolean
+_gtk_text_util_get_block_cursor_location (PangoLayout    *layout,
+					  gint            index,
+					  PangoRectangle *pos,
+					  gboolean       *at_line_end)
+{
+  PangoRectangle strong_pos, weak_pos;
+  PangoLayoutLine *layout_line;
+  gboolean rtl;
+  gint line_no;
+
+  g_return_val_if_fail (layout != NULL, FALSE);
+  g_return_val_if_fail (index >= 0, FALSE);
+  g_return_val_if_fail (pos != NULL, FALSE);
+
+  pango_layout_index_to_pos (layout, index, pos);
+
+  if (pos->width != 0)
+    {
+      /* cursor is at some visible character, good */
+      if (at_line_end)
+	*at_line_end = FALSE;
+      if (pos->width < 0)
+	{
+	  pos->x += pos->width;
+	  pos->width = -pos->width;
+	}
+      return TRUE;
+    }
+
+  pango_layout_index_to_line_x (layout, index, FALSE, &line_no, NULL);
+  g_return_val_if_fail (line_no >= 0, FALSE);
+  layout_line = pango_layout_get_line_readonly (layout, line_no);
+
+  /* end of layout, get last line */
+  if (!layout_line)
+    {
+      line_no -= 1;
+      layout_line = pango_layout_get_line_readonly (layout, line_no);
+    }
+
+  g_return_val_if_fail (layout_line != NULL, FALSE);
+
+  if (index < layout_line->start_index + layout_line->length)
+    {
+      /* cursor points to some zero-width character, do not
+       * bother with block cursor */
+      return FALSE;
+    }
+
+  /* Cursor is at the line end. It may be an empty line, or it could
+   * be on the left or on the right depending on text direction, or it
+   * even could be in the middle of visual layout in bidi text. */
+
+  pango_layout_get_cursor_pos (layout, index, &strong_pos, &weak_pos);
+
+  if (strong_pos.x != weak_pos.x)
+    {
+      /* do not show block cursor in this case, since the character typed
+       * in may or may not appear at the cursor position */
+      return FALSE;
+    }
+
+  /* In case when index points to the end of line, pos->x is always most right
+   * pixel of the layout line, so we need to correct it for RTL text. */
+  if (layout_line->length)
+    {
+      gint left, right;
+      const gchar *text;
+      const gchar *p;
+
+      text = pango_layout_get_text (layout);
+      p = g_utf8_prev_char (text + index);
+
+      pango_layout_line_index_to_x (layout_line, p - text, FALSE, &left);
+      pango_layout_line_index_to_x (layout_line, p - text, TRUE, &right);
+
+      if (MIN (left, right) <= 0)
+	{
+          /* last character is on the left, RTL */
+
+	  PangoLayoutIter *iter;
+	  PangoRectangle line_rect;
+	  gint i;
+
+	  iter = pango_layout_get_iter (layout);
+	  for (i = 0; i < line_no; i++)
+	    pango_layout_iter_next_line (iter);
+	  pango_layout_iter_get_line_extents (iter, NULL, &line_rect);
+	  pango_layout_iter_free (iter);
+
+          rtl = TRUE;
+	  pos->x = MIN (left, right) + line_rect.x;
+	}
+      else
+	rtl = FALSE;
+    }
+  else
+    {
+      PangoContext *context = pango_layout_get_context (layout);
+      rtl = pango_context_get_base_dir (context) == PANGO_DIRECTION_RTL;
+    }
+
+  pos->width = layout_get_char_width (layout);
+
+  if (rtl)
+    pos->x -= pos->width - 1;
+
+  if (at_line_end)
+    *at_line_end = TRUE;
+
+  return pos->width != 0;
+}

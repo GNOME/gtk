@@ -9,14 +9,18 @@ GtkTooltip
 
 </para>
 
-
 <!-- ##### SECTION See_Also ##### -->
 <para>
 
 </para>
 
-
 <!-- ##### SECTION Stability_Level ##### -->
+
+
+<!-- ##### STRUCT GtkTooltip ##### -->
+<para>
+
+</para>
 
 
 <!-- ##### FUNCTION gtk_tooltip_set_markup ##### -->
@@ -26,6 +30,15 @@ GtkTooltip
 
 @tooltip: 
 @markup: 
+
+
+<!-- ##### FUNCTION gtk_tooltip_set_text ##### -->
+<para>
+
+</para>
+
+@tooltip: 
+@text: 
 
 
 <!-- ##### FUNCTION gtk_tooltip_set_icon ##### -->

@@ -22,10 +22,11 @@
  */
 
 #include <config.h>
-
+#include <string.h>
 #include "gtkexpander.h"
 
 #include "gtklabel.h"
+#include "gtkbuildable.h"
 #include "gtkcontainer.h"
 #include "gtkmarshalers.h"
 #include "gtkmain.h"
@@ -126,7 +127,16 @@ static void gtk_expander_activate (GtkExpander *expander);
 static void get_expander_bounds (GtkExpander  *expander,
 				 GdkRectangle *rect);
 
-G_DEFINE_TYPE (GtkExpander, gtk_expander, GTK_TYPE_BIN)
+/* GtkBuildable */
+static void gtk_expander_buildable_init           (GtkBuildableIface *iface);
+static void gtk_expander_buildable_add            (GtkBuildable *buildable,
+						   GtkBuilder   *builder,
+						   GObject      *child,
+						   const gchar  *type);
+
+G_DEFINE_TYPE_WITH_CODE (GtkExpander, gtk_expander, GTK_TYPE_BIN,
+			 G_IMPLEMENT_INTERFACE (GTK_TYPE_BUILDABLE,
+						gtk_expander_buildable_init))
 
 static void
 gtk_expander_class_init (GtkExpanderClass *klass)
@@ -275,6 +285,26 @@ gtk_expander_init (GtkExpander *expander)
 
   gtk_drag_dest_set (GTK_WIDGET (expander), 0, NULL, 0, 0);
   gtk_drag_dest_set_track_motion (GTK_WIDGET (expander), TRUE);
+}
+
+static void
+gtk_expander_buildable_add (GtkBuildable  *buildable,
+			    GtkBuilder    *builder,
+			    GObject       *child,
+			    const gchar   *type)
+{
+  if (!type)
+    gtk_container_add (GTK_CONTAINER (buildable), GTK_WIDGET (child));
+  else if (strcmp (type, "label") == 0)
+    gtk_expander_set_label_widget (GTK_EXPANDER (buildable), GTK_WIDGET (child));
+  else
+    GTK_BUILDER_WARN_INVALID_CHILD_TYPE (GTK_EXPANDER (buildable), type);
+}
+
+static void
+gtk_expander_buildable_init (GtkBuildableIface *iface)
+{
+  iface->add = gtk_expander_buildable_add;
 }
 
 static void

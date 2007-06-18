@@ -257,6 +257,8 @@ void                   gtk_tree_view_get_background_area           (GtkTreeView 
 								    GdkRectangle              *rect);
 void                   gtk_tree_view_get_visible_rect              (GtkTreeView               *tree_view,
 								    GdkRectangle              *visible_rect);
+
+#ifndef GTK_DISABLE_DEPRECATED
 void                   gtk_tree_view_widget_to_tree_coords         (GtkTreeView               *tree_view,
 								    gint                       wx,
 								    gint                       wy,
@@ -267,6 +269,7 @@ void                   gtk_tree_view_tree_to_widget_coords         (GtkTreeView 
 								    gint                       ty,
 								    gint                      *wx,
 								    gint                      *wy);
+#endif /* !GTK_DISABLE_DEPRECATED */
 gboolean               gtk_tree_view_get_visible_range             (GtkTreeView               *tree_view,
 								    GtkTreePath              **start_path,
 								    GtkTreePath              **end_path);
@@ -321,6 +324,38 @@ void                          gtk_tree_view_set_search_position_func (GtkTreeVie
 								      GtkTreeViewSearchPositionFunc  func,
 								      gpointer                       data,
 								      GDestroyNotify                 destroy);
+
+/* Convert between the different coordinate systems */
+void gtk_tree_view_convert_widget_to_tree_coords       (GtkTreeView *tree_view,
+							gint         wx,
+							gint         wy,
+							gint        *tx,
+							gint        *ty);
+void gtk_tree_view_convert_tree_to_widget_coords       (GtkTreeView *tree_view,
+							gint         tx,
+							gint         ty,
+							gint        *wx,
+							gint        *wy);
+void gtk_tree_view_convert_widget_to_bin_window_coords (GtkTreeView *tree_view,
+							gint         wx,
+							gint         wy,
+							gint        *bx,
+							gint        *by);
+void gtk_tree_view_convert_bin_window_to_widget_coords (GtkTreeView *tree_view,
+							gint         bx,
+							gint         by,
+							gint        *wx,
+							gint        *wy);
+void gtk_tree_view_convert_tree_to_bin_window_coords   (GtkTreeView *tree_view,
+							gint         tx,
+							gint         ty,
+							gint        *bx,
+							gint        *by);
+void gtk_tree_view_convert_bin_window_to_tree_coords   (GtkTreeView *tree_view,
+							gint         bx,
+							gint         by,
+							gint        *tx,
+							gint        *ty);
 
 /* This function should really never be used.  It is just for use by ATK.
  */

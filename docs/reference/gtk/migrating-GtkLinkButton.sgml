@@ -11,15 +11,15 @@
   <para>
     Porting an application from <structname>GnomeHRef</structname> to
     #GtkLinkButton is very simple. #GtkLinkButton does not have a
-    default action for "clicked" signal. So instead of simply creating
-    the widget
+    default action for #GtkButton::clicked signal. So instead of simply 
+    creating the widget
     <informalexample><programlisting>
       GtkWidget *button;
 
       button = gnome_href_new (url, "");
     </programlisting></informalexample>
     you will have to handle the activation of the #GtkLinkButton, using
-    the "clicked" signal for instance
+    the ::clicked signal for instance
     <informalexample><programlisting>
       static void
       link_button_clicked_cb (GtkWidget *widget,

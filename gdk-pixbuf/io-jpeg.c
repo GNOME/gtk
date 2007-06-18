@@ -514,7 +514,7 @@ gdk_pixbuf__jpeg_image_load (FILE *f, GError **error)
 
 	/* if orientation tag was found set an option to remember its value */
 	if (is_otag) {
-		snprintf (otag_str, sizeof (otag_str), "%d", is_otag);
+		g_snprintf (otag_str, sizeof (otag_str), "%d", is_otag);
 		gdk_pixbuf_set_option (pixbuf, "orientation", otag_str);
 	}
 
@@ -692,6 +692,7 @@ gdk_pixbuf__jpeg_image_stop_load (gpointer data, GError **error)
 		g_object_unref (context->pixbuf);
 	
 	/* if we have an error? */
+	context->jerr.error = error;
 	if (sigsetjmp (context->jerr.setjmp_buffer, 1)) {
                 retval = FALSE;
 	} else {
@@ -922,7 +923,7 @@ gdk_pixbuf__jpeg_image_load_increment (gpointer data,
 		
 		        /* if orientation tag was found set an option to remember its value */
 		        if (is_otag) {
-                		snprintf (otag_str, sizeof (otag_str), "%d", is_otag);
+                		g_snprintf (otag_str, sizeof (otag_str), "%d", is_otag);
 		                gdk_pixbuf_set_option (context->pixbuf, "orientation", otag_str);
 		        }
 

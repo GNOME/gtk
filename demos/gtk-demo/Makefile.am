@@ -7,6 +7,7 @@ democodedir=$(datadir)/gtk-2.0/demo
 demos =						\
 	appwindow.c				\
 	assistant.c				\
+	builder.c				\
 	button_box.c				\
 	changedisplay.c				\
 	clipboard.c				\
@@ -60,7 +61,8 @@ bin_PROGRAMS = gtk-demo
 BUILT_SOURCES = demos.h
 
 EXTRA_DIST = 		\
-	$(IMAGEFILES)
+	$(IMAGEFILES)	\
+	demo.ui
 
 demos.h: @REBUILD@ $(demos) geninclude.pl
 	(here=`pwd` ; cd $(srcdir) && $(PERL) $$here/geninclude.pl $(demos)) > demos.h
@@ -73,6 +75,7 @@ gtk_demo_SOURCES = 		\
 
 gtk_demo_DEPENDENCIES = $(DEPS)
 gtk_demo_LDADD = $(LDADDS)
+gtk_demo_LDFLAGS = -export-dynamic
 
 IMAGEFILES=	alphatest.png		\
 	        apple-red.png		\
@@ -89,6 +92,6 @@ IMAGEFILES=	alphatest.png		\
 		gnu-keys.png		\
 		gtk-logo-rgb.gif		
 
-democode_DATA = $(demos) $(IMAGEFILES)
+democode_DATA = $(demos) $(IMAGEFILES) demo.ui
 
 DISTCLEANFILES = demos.h

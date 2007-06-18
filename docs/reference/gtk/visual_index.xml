@@ -50,6 +50,9 @@
   <link linkend="GtkPaned">
     <inlinegraphic fileref="panes.png" format="PNG"></inlinegraphic>
   </link> 
+  <link linkend="GtkVolumeButton">
+    <inlinegraphic fileref="volumebutton.png" format="PNG"></inlinegraphic>
+  </link>
   <link linkend="GtkPageSetupUnixDialog">
     <inlinegraphic fileref="pagesetupdialog.png" format="PNG"></inlinegraphic>
   </link> 

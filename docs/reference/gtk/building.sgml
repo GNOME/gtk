@@ -45,11 +45,12 @@ How to compile GTK+ itself
       of the tools are already included in the source packages. But
       it's useful to know a bit about how packages that use these
       tools work. A source package is distributed as a
-      <literal>tar.gz</literal> file which you unpack into a 
-      directory full of the source files as follows:
+      <literal>tar.gz</literal> or <literal>tar.bz2</literal> file 
+      which you unpack into a directory full of the source files as follows:
     </para>
     <programlisting>
       tar xvfz gtk+-2.0.0.tar.gz
+      tar xvfj gtk+-2.0.0.tar.bz2
     </programlisting>
     <para>
       In the toplevel of the directory that is created, there will be
@@ -142,7 +143,7 @@ How to compile GTK+ itself
           needed for that library along with version number information.)  
           The version of <command>pkg-config</command> needed to build 
           GTK+ is mirrored in the <filename>dependencies</filename> directory
-	  on the <ulink url="ftp://ftp.gtk.org/pub/gtk/v2.6/">GTK+ FTP
+	  on the <ulink url="ftp://ftp.gtk.org/pub/gtk/">GTK+ FTP
 	  site.</ulink>
 	</para>
       </listitem>
@@ -331,6 +332,10 @@ How to compile GTK+ itself
 	    <arg>--disable-xkb</arg>
 	    <arg>--enable-xkb</arg>
 	  </group>
+          <group>
+	    <arg>--disable-xinerama</arg>
+	    <arg>--enable-xinerama</arg>
+	  </group>
 	  <group>
 	    <arg>--disable-gtk-doc</arg>
 	    <arg>--enable-gtk-doc</arg>
@@ -339,11 +344,7 @@ How to compile GTK+ itself
             <arg>--with-xinput=[no|yes]</arg>
           </group>
 	  <group>
-	    <arg>--with-gdktarget=[x11|linux-fb|win32]</arg>
-	  </group>
-	  <group>
-	    <arg>--disable-shadowfb</arg>
-	    <arg>--enable-shadowfb</arg>
+	    <arg>--with-gdktarget=[x11|win32|quartz|directfb]</arg>
 	  </group>
 	</cmdsynopsis>
       </para>
@@ -481,6 +482,18 @@ How to compile GTK+ itself
       </formalpara>
 
       <formalpara>
+        <title><systemitem>--disable-xinerama</systemitem> and
+          <systemitem>--enable-xinerama</systemitem></title>
+     
+        <para>
+          By default the <command>configure</command> script will try
+          to link against the Xinerama libraries if they are found.
+          These options can be used to explicitly control whether
+          Xinerama should be used.
+        </para>
+      </formalpara>
+
+      <formalpara>
 	<title><systemitem>--disable-gtk-doc</systemitem> and
 	  <systemitem>--enable-gtk-doc</systemitem></title>
 
@@ -519,17 +532,9 @@ How to compile GTK+ itself
 	<para>
           Toggles between the supported backends for GDK. 
           The default is x11, unless the platform is Windows, in which
-	  case the default is win32.
-	</para>
-      </formalpara>
-
-      <formalpara>
-	<title><systemitem>--disable-shadowfb</systemitem> and
-	  <systemitem>--enable-shadowfb</systemitem></title>
-
-	<para>
-         Toggles shadow framebuffer support for the linux-fb target, 
-         if selected.
+	  case the default is win32. Other supported backends are
+          the quartz backend for OS X, and the DirectFB backend
+          for the Linux framebuffer.
 	</para>
       </formalpara>
 

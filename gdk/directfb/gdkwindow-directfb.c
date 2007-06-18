@@ -3038,6 +3038,14 @@ gdk_window_set_opacity (GdkWindow *window,
   cardinal = opacity * 0xff;
   gdk_directfb_window_set_opacity(window,cardinal);
 }
+
+void
+_gdk_windowing_window_set_composited (GdkWindow *window,
+                                      gboolean   composited)
+{
+}
+
+
 #define __GDK_WINDOW_X11_C__
 #include "gdkaliasdef.c"
 

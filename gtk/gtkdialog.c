@@ -24,6 +24,8 @@
  * GTK+ at ftp://ftp.gtk.org/pub/gtk/. 
  */
 
+#include <stdlib.h>
+#include <string.h>
 #include <config.h>
 #include "gtkbutton.h"
 #include "gtkdialog.h"
@@ -37,6 +39,7 @@
 #include "gtkintl.h"
 #include "gtkbindings.h"
 #include "gtkprivate.h"
+#include "gtkbuildable.h"
 #include "gtkalias.h"
 
 #define GET_PRIVATE(obj) (G_TYPE_INSTANCE_GET_PRIVATE ((obj), GTK_TYPE_DIALOG, GtkDialogPrivate))
@@ -76,6 +79,22 @@ static void gtk_dialog_close             (GtkDialog        *dialog);
 
 static ResponseData* get_response_data   (GtkWidget        *widget,
 					  gboolean          create);
+static void gtk_dialog_buildable_interface_init     (GtkBuildableIface *iface);
+static GObject * gtk_dialog_buildable_get_internal_child (GtkBuildable *buildable,
+						     GtkBuilder   *builder,
+						     const gchar  *childname);
+static gboolean gtk_dialog_buildable_custom_tag_start (GtkBuildable  *buildable,
+						       GtkBuilder    *builder,
+						       GObject       *child,
+						       const gchar   *tagname,
+						       GMarkupParser *parser,
+						       gpointer      *data);
+static void gtk_dialog_buildable_custom_finished (GtkBuildable *buildable,
+						  GtkBuilder   *builder,
+						  GObject       *child,
+						  const gchar   *tagname,
+						  gpointer      user_data);
+
 
 enum {
   PROP_0,
@@ -90,7 +109,9 @@ enum {
 
 static guint dialog_signals[LAST_SIGNAL];
 
-G_DEFINE_TYPE (GtkDialog, gtk_dialog, GTK_TYPE_WINDOW)
+G_DEFINE_TYPE_WITH_CODE (GtkDialog, gtk_dialog, GTK_TYPE_WINDOW,
+			 G_IMPLEMENT_INTERFACE (GTK_TYPE_BUILDABLE,
+						gtk_dialog_buildable_interface_init))
 
 static void
 gtk_dialog_class_init (GtkDialogClass *class)
@@ -235,6 +256,26 @@ gtk_dialog_init (GtkDialog *dialog)
   gtk_window_set_position (GTK_WINDOW (dialog), GTK_WIN_POS_CENTER_ON_PARENT);
 }
 
+static void
+gtk_dialog_buildable_interface_init (GtkBuildableIface *iface)
+{
+  iface->get_internal_child = gtk_dialog_buildable_get_internal_child;
+  iface->custom_tag_start = gtk_dialog_buildable_custom_tag_start;
+  iface->custom_finished = gtk_dialog_buildable_custom_finished;
+}
+
+static GObject *
+gtk_dialog_buildable_get_internal_child (GtkBuildable *buildable,
+					 GtkBuilder   *builder,
+					 const gchar  *childname)
+{
+    if (strcmp (childname, "vbox") == 0)
+      return G_OBJECT (GTK_DIALOG (buildable)->vbox);
+    else if (strcmp (childname, "action_area") == 0)
+      return G_OBJECT (GTK_DIALOG (buildable)->action_area);
+
+    return NULL;
+}
 
 static void 
 gtk_dialog_set_property (GObject      *object,
@@ -1214,6 +1255,135 @@ gtk_dialog_set_alternative_button_order_from_array (GtkDialog *dialog,
       child = dialog_find_button (dialog, new_order[position]);
       gtk_box_reorder_child (GTK_BOX (dialog->action_area), child, position);
     }
+}
+
+typedef struct {
+  gchar *widget_name;
+  gchar *response_id;
+} ActionWidgetInfo;
+
+typedef struct {
+  GtkDialog *dialog;
+  GtkBuilder *builder;
+  GSList *items;
+  gchar *response;
+} ActionWidgetsSubParserData;
+
+static void
+attributes_start_element (GMarkupParseContext *context,
+			  const gchar         *element_name,
+			  const gchar        **names,
+			  const gchar        **values,
+			  gpointer             user_data,
+			  GError             **error)
+{
+  ActionWidgetsSubParserData *parser_data = (ActionWidgetsSubParserData*)user_data;
+  guint i;
+
+  if (strcmp (element_name, "action-widget") == 0)
+    for (i = 0; names[i]; i++)
+      if (strcmp (names[i], "response") == 0)
+	parser_data->response = g_strdup (values[i]);
+  else if (strcmp (element_name, "action-widgets") == 0)
+    return;
+  else
+    g_warning ("Unsupported tag for GtkDialog: %s\n", element_name);
+}
+
+static void
+attributes_text_element (GMarkupParseContext *context,
+			 const gchar         *text,
+			 gsize                text_len,
+			 gpointer             user_data,
+			 GError             **error)
+{
+  ActionWidgetsSubParserData *parser_data = (ActionWidgetsSubParserData*)user_data;
+  ActionWidgetInfo *item;
+
+  if (!parser_data->response)
+    return;
+
+  item = g_new (ActionWidgetInfo, 1);
+  item->widget_name = g_strndup (text, text_len);
+  item->response_id = parser_data->response;
+  parser_data->items = g_slist_prepend (parser_data->items, item);
+  parser_data->response = NULL;
+}
+
+static const GMarkupParser attributes_parser =
+  {
+    attributes_start_element,
+    NULL,
+    attributes_text_element,
+  };
+
+gboolean
+gtk_dialog_buildable_custom_tag_start (GtkBuildable  *buildable,
+				       GtkBuilder    *builder,
+				       GObject       *child,
+				       const gchar   *tagname,
+				       GMarkupParser *parser,
+				       gpointer      *data)
+{
+  ActionWidgetsSubParserData *parser_data;
+
+  if (child)
+    return FALSE;
+
+  if (strcmp (tagname, "action-widgets") == 0)
+    {
+      parser_data = g_slice_new0 (ActionWidgetsSubParserData);
+      parser_data->dialog = GTK_DIALOG (buildable);
+      parser_data->items = NULL;
+
+      *parser = attributes_parser;
+      *data = parser_data;
+      return TRUE;
+    }
+
+  return FALSE;
+}
+
+static void
+gtk_dialog_buildable_custom_finished (GtkBuildable *buildable,
+				      GtkBuilder   *builder,
+				      GObject      *child,
+				      const gchar  *tagname,
+				      gpointer      user_data)
+{
+  GSList *l;
+  ActionWidgetsSubParserData *parser_data;
+  GObject *object;
+  ResponseData* data;
+
+  if (strcmp (tagname, "action-widgets"))
+    return;
+
+  parser_data = (ActionWidgetsSubParserData*)user_data;
+  parser_data->items = g_slist_reverse (parser_data->items);
+
+  for (l = parser_data->items; l; l = l->next)
+    {
+      ActionWidgetInfo *item = l->data;
+
+      object = gtk_builder_get_object (builder, item->widget_name);
+      if (!object)
+	{
+	  g_warning ("Unknown object %s specified in action-widgets %s",
+		     item->widget_name,
+		     gtk_buildable_get_name (GTK_BUILDABLE (object)));
+	  continue;
+	}
+
+      data = get_response_data (GTK_WIDGET (object), TRUE);
+      data->response_id = atoi (item->response_id);
+
+      g_free (item->widget_name);
+      g_free (item->response_id);
+      g_free (item);
+    }
+  g_slist_free (parser_data->items);
+  g_slice_free (ActionWidgetsSubParserData, parser_data);
 }
 
 #define __GTK_DIALOG_C__

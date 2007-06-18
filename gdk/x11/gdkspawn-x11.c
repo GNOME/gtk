@@ -21,10 +21,7 @@
 
 #include <config.h>
 #include <string.h>
-
-#ifdef HAVE_CRT_EXTERNS_H 
-#include <crt_externs.h> /* for _NSGetEnviron */
-#endif
+#include <stdlib.h>
 
 #include "gdkspawn.h"
 
@@ -32,65 +29,26 @@
 #include <gdk/gdk.h>
 #include "gdkalias.h"
   
-#ifdef HAVE__NSGETENVIRON
-#define environ (*_NSGetEnviron())
-#else
+typedef struct {
+  char *display;
+  GSpawnChildSetupFunc child_setup;
+  gpointer user_data;
+} UserChildSetup;
 
-/* According to the Single Unix Specification, environ is not in 
- * any system header, although unistd.h often declares it.
+/*
+ * Set the DISPLAY variable, and then call the user-specified child setup
+ * function.  This is required so that applications can use gdk_spawn_* and 
+ * call putenv() in their child_setup functions.
  */
-extern char **environ;
-#endif
-
-/**
- * gdk_make_spawn_environment_for_screen:
- * @screen: A #GdkScreen
- * @envp: program environment to copy, or %NULL to use current environment.
- *
- * Returns a modified copy of the program environment @envp (or the current
- * environment if @envp is %NULL) with <envar>DISPLAY</envar> set such that 
- * a launched application (which calls gdk_display_open()) inheriting this 
- * environment would have @screen as its default screen..
- *
- * Returns: a newly-allocated %NULL-terminated array of strings.
- *          Use g_strfreev() to free it.
- *
- * Since: 2.4
- **/
-static gchar **
-gdk_spawn_make_environment_for_screen (GdkScreen  *screen,
-				       gchar     **envp)
+static void
+set_environment (gpointer user_data)
 {
-  gchar **retval = NULL;
-  gchar  *display_name;
-  gint    display_index = -1;
-  gint    i, env_len;
-
-  g_return_val_if_fail (GDK_IS_SCREEN (screen), NULL);
-
-  if (envp == NULL)
-    envp = environ;
-
-  for (env_len = 0; envp[env_len]; env_len++)
-    if (strncmp (envp[env_len], "DISPLAY", strlen ("DISPLAY")) == 0)
-      display_index = env_len;
-
-  retval = g_new (char *, env_len + 1);
-  retval[env_len] = NULL;
-
-  display_name = gdk_screen_make_display_name (screen);
-
-  for (i = 0; i < env_len; i++)
-    if (i == display_index)
-      retval[i] = g_strconcat ("DISPLAY=", display_name, NULL);
-    else
-      retval[i] = g_strdup (envp[i]);
-
-  g_assert (i == env_len);
-
-  g_free (display_name);
-
-  return retval;
+  UserChildSetup *setup = user_data;
+  
+  g_setenv ("DISPLAY", setup->display, TRUE);
+  
+  if (setup->child_setup)
+    setup->child_setup (setup->user_data);
 }
 
 /**
@@ -128,25 +86,22 @@ gdk_spawn_on_screen (GdkScreen             *screen,
 		     gint                  *child_pid,
 		     GError               **error)
 {
-  gchar    **new_envp;
-  gboolean   retval;
+  UserChildSetup setup_data;
 
   g_return_val_if_fail (GDK_IS_SCREEN (screen), FALSE);
 
-  new_envp = gdk_spawn_make_environment_for_screen (screen, envp);
+  setup_data.display = gdk_screen_make_display_name (screen);
+  setup_data.child_setup = child_setup;
+  setup_data.user_data = user_data;
 
-  retval = g_spawn_async (working_directory,
+  return g_spawn_async (working_directory,
 			  argv,
-			  new_envp,
+			  envp,
 			  flags,
-			  child_setup,
-			  user_data,
+			  set_environment,
+			  &setup_data,
 			  child_pid,
 			  error);
-
-  g_strfreev (new_envp);
-
-  return retval;
 }
 
 /**
@@ -194,28 +149,26 @@ gdk_spawn_on_screen_with_pipes (GdkScreen            *screen,
 				gint                 *standard_error,
 				GError              **error)
 {
-  gchar    **new_envp;
-  gboolean   retval;
+  UserChildSetup setup_data;
 
   g_return_val_if_fail (GDK_IS_SCREEN (screen), FALSE);
 
-  new_envp = gdk_spawn_make_environment_for_screen (screen, envp);
+  setup_data.display = gdk_screen_make_display_name (screen);
+  setup_data.child_setup = child_setup;
+  setup_data.user_data = user_data;
 
-  retval = g_spawn_async_with_pipes (working_directory,
+  return g_spawn_async_with_pipes (working_directory,
 				     argv,
-				     new_envp,
+				     envp,
 				     flags,
-				     child_setup,
-				     user_data,
+				     set_environment,
+				     &setup_data,
 				     child_pid,
 				     standard_input,
 				     standard_output,
 				     standard_error,
 				     error);
 
-  g_strfreev (new_envp);
-
-  return retval;
 }
 
 /**

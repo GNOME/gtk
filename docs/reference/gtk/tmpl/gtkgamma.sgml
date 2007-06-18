@@ -2,7 +2,7 @@
 GtkGammaCurve
 
 <!-- ##### SECTION Short_Description ##### -->
-a subclass of #GtkCurve for editing gamma curves.
+A subclass of GtkCurve for editing gamma curves
 
 <!-- ##### SECTION Long_Description ##### -->
 <note>

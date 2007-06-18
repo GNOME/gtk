@@ -173,6 +173,7 @@ gdk_quartz_draw_arc (GdkDrawable *drawable,
 {
   CGContextRef context = gdk_quartz_drawable_get_context (drawable, FALSE);
   float start_angle, end_angle;
+  gboolean clockwise = FALSE;
 
   if (!context)
     return;
@@ -184,20 +185,38 @@ gdk_quartz_draw_arc (GdkDrawable *drawable,
 
   CGContextSaveGState (context);
 
-  start_angle = (2 - (angle1 / (180.0 * 64.0))) * G_PI;
-  end_angle = start_angle - (angle2 / (180.0 * 64.0)) * G_PI;
+  start_angle = angle1 * 2.0 * G_PI / 360.0 / 64.0;
+  end_angle = start_angle + angle2 * 2.0 * G_PI / 360.0 / 64.0;
+
+  /*  angle2 is relative to angle1 and can be negative, which switches
+   *  the drawing direction
+   */
+  if (angle2 < 0)
+    clockwise = TRUE;
+
+  /*  below, flip the coordinate system back to its original y-diretion
+   *  so the angles passed to CGContextAddArc() are interpreted as
+   *  expected
+   *
+   *  FIXME: the implementation below works only for perfect circles
+   *  (width == height). Any other aspect ratio either scales the
+   *  line width unevenly or scales away the path entirely for very
+   *  small line widths (esp. for line_width == 0, which is a hair
+   *  line on X11 but must be approximated with the thinnest possible
+   *  line on quartz).
+   */
 
   if (filled)
     {
       CGContextTranslateCTM (context,
                              x + width / 2.0,
                              y + height / 2.0);
-      CGContextScaleCTM (context, 1.0, (double)height / (double)width);
+      CGContextScaleCTM (context, 1.0, - (double)height / (double)width);
 
       CGContextMoveToPoint (context, 0, 0);
       CGContextAddArc (context, 0, 0, width / 2.0,
 		       start_angle, end_angle,
-		       TRUE);
+		       clockwise);
       CGContextClosePath (context);
       CGContextFillPath (context);
     }
@@ -206,11 +225,11 @@ gdk_quartz_draw_arc (GdkDrawable *drawable,
       CGContextTranslateCTM (context,
                              x + width / 2.0 + 0.5,
                              y + height / 2.0 + 0.5);
-      CGContextScaleCTM (context, 1.0, (double)height / (double)width);
+      CGContextScaleCTM (context, 1.0, - (double)height / (double)width);
 
       CGContextAddArc (context, 0, 0, width / 2.0,
 		       start_angle, end_angle,
-		       TRUE);
+		       clockwise);
       CGContextStrokePath (context);
     }
 
@@ -366,6 +385,33 @@ gdk_quartz_draw_points (GdkDrawable *drawable,
   gdk_quartz_drawable_release_context (drawable, context);
 }
 
+static inline void
+gdk_quartz_fix_cap_not_last_line (GdkGCQuartz *private,
+				  gint         x1,
+				  gint         y1,
+				  gint         x2,
+				  gint         y2,
+				  gint        *xfix,
+				  gint        *yfix)
+{
+  *xfix = 0;
+  *yfix = 0;
+
+  if (private->cap_style == GDK_CAP_NOT_LAST && private->line_width == 0)
+    {
+      /* fix only vertical and horizontal lines for now */
+
+      if (y1 == y2 && x1 != x2)
+	{
+	  *xfix = (x1 < x2) ? -1 : 1;
+	}
+      else if (x1 == x2 && y1 != y2)
+	{
+	  *yfix = (y1 < y2) ? -1 : 1;
+	}
+    }
+}
+
 static void
 gdk_quartz_draw_segments (GdkDrawable    *drawable,
 			  GdkGC          *gc,
@@ -373,18 +419,28 @@ gdk_quartz_draw_segments (GdkDrawable    *drawable,
 			  gint            nsegs)
 {
   CGContextRef context = gdk_quartz_drawable_get_context (drawable, FALSE);
+  GdkGCQuartz *private;
   int i;
 
   if (!context)
     return;
+
+  private = GDK_GC_QUARTZ (gc);
 
   _gdk_quartz_gc_update_cg_context (gc, drawable, context,
 				    GDK_QUARTZ_CONTEXT_STROKE);
 
   for (i = 0; i < nsegs; i++)
     {
+      gint xfix, yfix;
+
+      gdk_quartz_fix_cap_not_last_line (private,
+					segs[i].x1, segs[i].y1,
+					segs[i].x2, segs[i].y2,
+					&xfix, &yfix);
+
       CGContextMoveToPoint (context, segs[i].x1 + 0.5, segs[i].y1 + 0.5);
-      CGContextAddLineToPoint (context, segs[i].x2 + 0.5, segs[i].y2 + 0.5);
+      CGContextAddLineToPoint (context, segs[i].x2 + 0.5 + xfix, segs[i].y2 + 0.5 + yfix);
     }
   
   CGContextStrokePath (context);
@@ -399,18 +455,31 @@ gdk_quartz_draw_lines (GdkDrawable *drawable,
 		       gint         npoints)
 {
   CGContextRef context = gdk_quartz_drawable_get_context (drawable, FALSE);
-  int i;
+  GdkGCQuartz *private;
+  gint xfix, yfix;
+  gint i;
 
   if (!context)
     return;
 
+  private = GDK_GC_QUARTZ (gc);
+
   _gdk_quartz_gc_update_cg_context (gc, drawable, context,
-				     GDK_QUARTZ_CONTEXT_STROKE);
+				    GDK_QUARTZ_CONTEXT_STROKE);
 
   CGContextMoveToPoint (context, points[0].x + 0.5, points[0].y + 0.5);
 
-  for (i = 1; i < npoints; i++)
+  for (i = 1; i < npoints - 1; i++)
     CGContextAddLineToPoint (context, points[i].x + 0.5, points[i].y + 0.5);
+
+  gdk_quartz_fix_cap_not_last_line (private,
+				    points[npoints - 2].x, points[npoints - 2].y,
+				    points[npoints - 1].x, points[npoints - 1].y,
+				    &xfix, &yfix);
+
+  CGContextAddLineToPoint (context,
+			   points[npoints - 1].x + 0.5 + xfix,
+			   points[npoints - 1].y + 0.5 + yfix);
 
   CGContextStrokePath (context);
 

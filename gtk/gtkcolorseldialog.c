@@ -24,6 +24,7 @@
  * GTK+ at ftp://ftp.gtk.org/pub/gtk/. 
  */
 #include <config.h>
+#include <string.h>
 #include <glib.h>
 #include "gtkcolorseldialog.h"
 #include "gtkframe.h"
@@ -31,6 +32,7 @@
 #include "gtkbutton.h"
 #include "gtkstock.h"
 #include "gtkintl.h"
+#include "gtkbuildable.h"
 #include "gtkalias.h"
 
 
@@ -38,7 +40,17 @@
 /* GtkColorSelectionDialog */
 /***************************/
 
-G_DEFINE_TYPE (GtkColorSelectionDialog, gtk_color_selection_dialog, GTK_TYPE_DIALOG)
+static void gtk_color_selection_dialog_buildable_interface_init     (GtkBuildableIface *iface);
+static GObject * gtk_color_selection_dialog_buildable_get_internal_child (GtkBuildable *buildable,
+									  GtkBuilder   *builder,
+									  const gchar  *childname);
+
+G_DEFINE_TYPE_WITH_CODE (GtkColorSelectionDialog, gtk_color_selection_dialog,
+           GTK_TYPE_DIALOG,
+           G_IMPLEMENT_INTERFACE (GTK_TYPE_BUILDABLE,
+                      gtk_color_selection_dialog_buildable_interface_init))
+
+static GtkBuildableIface *parent_buildable_iface;
 
 static void
 gtk_color_selection_dialog_class_init (GtkColorSelectionDialogClass *klass)
@@ -105,6 +117,31 @@ gtk_color_selection_dialog_new (const gchar *title)
   
   return GTK_WIDGET (colorseldiag);
 }
+
+static void
+gtk_color_selection_dialog_buildable_interface_init (GtkBuildableIface *iface)
+{
+  parent_buildable_iface = g_type_interface_peek_parent (iface);
+  iface->get_internal_child = gtk_color_selection_dialog_buildable_get_internal_child;
+}
+
+static GObject *
+gtk_color_selection_dialog_buildable_get_internal_child (GtkBuildable *buildable,
+							 GtkBuilder   *builder,
+							 const gchar  *childname)
+{
+    if (strcmp(childname, "ok_button") == 0)
+	return G_OBJECT (GTK_COLOR_SELECTION_DIALOG (buildable)->ok_button);
+    else if (strcmp(childname, "cancel_button") == 0)
+	return G_OBJECT (GTK_COLOR_SELECTION_DIALOG (buildable)->cancel_button);
+    else if (strcmp(childname, "help_button") == 0)
+	return G_OBJECT (GTK_COLOR_SELECTION_DIALOG(buildable)->help_button);
+    else if (strcmp(childname, "color_selection") == 0)
+	return G_OBJECT (GTK_COLOR_SELECTION_DIALOG(buildable)->colorsel);
+
+    return parent_buildable_iface->get_internal_child (buildable, builder, childname);
+}
+
 
 #define __GTK_COLOR_SELECTION_DIALOG_C__
 #include "gtkaliasdef.c"

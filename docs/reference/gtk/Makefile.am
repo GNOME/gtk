@@ -27,6 +27,7 @@ IGNORE_HFILES=				\
 	fnmatch.h			\
 	gdk-pixbuf-loader.h		\
 	gtkdebug.h			\
+	gtkbuilderprivate.h		\
 	gtkdndcursors.h			\
 	gtkentryprivate.h		\
 	gtkfilechooserdefault.h		\
@@ -90,6 +91,7 @@ IGNORE_HFILES=				\
 	gtkxembed.h			\
 	gtkwin32embed.h			\
 	gtkwin32embedwidget.h		\
+	gtkwindow-decorate.h		\
 	xdgmime				\
 	xembed.h
 
@@ -121,7 +123,6 @@ content_files =					\
 	changes-2.0.sgml			\
 	compiling.sgml				\
 	directfb.sgml				\
-	framebuffer.sgml			\
 	glossary.xml				\
 	migrating-checklist.sgml		\
 	migrating-GtkAction.sgml		\
@@ -313,6 +314,8 @@ HTML_IMAGES = \
 	$(srcdir)/images/statusbar.png					\
 	$(srcdir)/images/toggle-button.png				\
 	$(srcdir)/images/toolbar.png					\
+	$(srcdir)/images/tree-view-coordinates.png			\
+	$(srcdir)/images/volumebutton.png				\
 	$(srcdir)/images/window.png
 
 # Extra options to supply to gtkdoc-fixref

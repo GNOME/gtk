@@ -289,6 +289,7 @@ struct _GdkWindowObject
   guint guffaw_gravity : 1;
   guint input_only : 1;
   guint modal_hint : 1;
+  guint composited : 1;
   
   guint destroyed : 2;
 
@@ -393,6 +394,9 @@ void gdk_window_shape_combine_region (GdkWindow	    *window,
  * - Raster
  */
 void gdk_window_set_child_shapes (GdkWindow *window);
+
+void gdk_window_set_composited   (GdkWindow *window,
+                                  gboolean composited);
 
 /*
  * This routine allows you to merge (ie ADD) child shapes to your

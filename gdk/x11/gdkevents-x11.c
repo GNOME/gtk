@@ -2101,6 +2101,34 @@ gdk_event_translate (GdkDisplay *display,
 	}
       else
 #endif
+#if defined(HAVE_XCOMPOSITE) && defined (HAVE_XDAMAGE) && defined (HAVE_XFIXES)
+      if (display_x11->have_xdamage && window_private && window_private->composited &&
+	  xevent->type == display_x11->xdamage_event_base + XDamageNotify)
+	{
+	  XDamageNotifyEvent *damage_event = (XDamageNotifyEvent *) xevent;
+	  XserverRegion repair;
+	  GdkRectangle rect;
+
+	  rect.x = window_private->x + damage_event->area.x;
+	  rect.y = window_private->y + damage_event->area.y;
+	  rect.width = damage_event->area.width;
+	  rect.height = damage_event->area.height;
+
+	  repair = XFixesCreateRegion (display_x11->xdisplay,
+				      &damage_event->area, 1);
+	  XDamageSubtract (display_x11->xdisplay,
+			   window_impl->damage,
+			   repair, None);
+	  XFixesDestroyRegion (display_x11->xdisplay, repair);
+
+	  if (window_private->parent != NULL)
+	    _gdk_window_process_expose (GDK_WINDOW (window_private->parent),
+					damage_event->serial, &rect);
+
+	  return_val = TRUE;
+	}
+      else
+#endif
 	{
 	  /* something else - (e.g., a Xinput event) */
 	  

@@ -396,3 +396,12 @@ Applications should never have any reason to use this facility
 @Returns: 
 
 
+<!-- ##### FUNCTION gdk_display_supports_composite ##### -->
+<para>
+
+</para>
+
+@display: 
+@Returns: 
+
+

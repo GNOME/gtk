@@ -1058,6 +1058,8 @@ update_dialog_from_capabilities (GtkPrintUnixDialog *dialog)
 			    caps & GTK_PRINT_CAPABILITY_REVERSE);
   gtk_widget_set_sensitive (priv->scale_spin,
 			    caps & GTK_PRINT_CAPABILITY_SCALE);
+  gtk_widget_set_sensitive (GTK_WIDGET (priv->pages_per_sheet),
+			    caps & GTK_PRINT_CAPABILITY_NUMBER_UP);
 
   if (caps & GTK_PRINT_CAPABILITY_PREVIEW)
     gtk_widget_show (priv->preview_button);

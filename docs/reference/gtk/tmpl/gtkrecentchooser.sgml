@@ -2,7 +2,7 @@
 GtkRecentChooser
 
 <!-- ##### SECTION Short_Description ##### -->
-Interface implemented by GtkRecentChooserWidget, GtkRecentChooserMenu and GtkRecentChooserDialog
+Interface implemented by widgets displaying recently used files
 
 <!-- ##### SECTION Long_Description ##### -->
 <para>

@@ -2,9 +2,7 @@
 GtkTextBuffer
 
 <!-- ##### SECTION Short_Description ##### -->
-
-Stores attributed text for display in a <link
-linkend="GtkTextView">GtkTextView</link>
+Stores attributed text for display in a GtkTextView
 
 <!-- ##### SECTION Long_Description ##### -->
 
@@ -423,6 +421,16 @@ types related to the text widget and how they work together.
 
 @buffer: 
 @name: 
+@where: 
+
+
+<!-- ##### FUNCTION gtk_text_buffer_add_mark ##### -->
+<para>
+
+</para>
+
+@buffer: 
+@mark: 
 @where: 
 
 

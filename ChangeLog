@@ -1,3 +1,1225 @@
+2007-06-18  Gustavo J. A. M. Carneiro  <gjc@gnome.org>
+
+	reviewed by: Matthias Clasen
+
+	* gtk/gtkaccelgroup.c (gtk_accel_group_finalize): Remove closure
+	invalidate notifiers. (#448484)
+
+2007-06-17  Matthias Clasen <mclasen@redhat.com>
+
+	* README.in: Updates
+
+	* gtk/gtkmenushell.c: Make GtkMenuShell as an abstract type.
+	It was already documented as such.  (#412357, Vincent Geddes)
+
+2007-06-17  Matthias Clasen <mclasen@redhat.com>
+
+	* gtk/gtkcontainer.c: Fix a doc typo.
+
+2007-06-17  Richard Hult  <richard@imendio.com>
+
+	* gdk/quartz/gdkevents-quartz.c (gdk_event_translate): Forward
+	Mac OS menu shortcut events to the right menu.
+
+2007-06-17  Richard Hult  <richard@imendio.com>
+
+	* gdk/quartz/gdkevents-quartz.c (gdk_event_translate)
+	(synthesize_crossing_events_for_ns_event)
+	(find_window_for_ns_event): More refactoring of the event
+	handling: Extract synthesizing of crossing events from
+	find_window_for_ns_event so that it doesn't have any side effects,
+	and call the new function from gdk_event_translate instead.
+
+2007-06-16  Richard Hult  <richard@imendio.com>
+
+	* gdk/quartz/gdkevents-quartz.c: (find_window_for_ns_event),
+	(gdk_event_translate): Remove pointless logging for unhandled events.
+	Activate the application on non-left clicks, since that is only done
+	for left clicks and we depend on it to get events routed properly for
+	context menus and other popup windows.
+
+2006-09-22  Dennis Cranston  <dennis_cranston@yahoo.com>
+
+	* gtk/gtkfilechooserbutton.c: (change_icon_theme),
+	(model_add_bookmarks), (model_update_current_folder):
+	* gtk/gtkfilechooserdefault.c: (shortcuts_reload_icons),
+	(shortcuts_insert_path):  Use the remote folder icon when
+	appropriate.
+
+	Follow up to #354887
+
+2007-06-17  Christian Persch  <chpe@gnome.org>
+
+	* gtk/Makefile.am: Pass the print settings to the preview programme.
+	Bug #403717, patch by Carlos Garcia Campos.
+
+2007-06-17  Xan Lopez  <xan@gnome.org>
+
+	* gdk/x11/gdkgeometry-x11.c: replace GDK_WINDOW calls by cast to
+	GdkWindow. Patch by Tilman Sauerbeck from #63820.
+
+2007-06-17  Daniel Elstner  <danielk@openismus.com>
+	
+	* modules/input/gtkimcontextmultipress.c (vfunc_filter_keypress):
+	Change input method behavior to act on key presses instead of
+	key releases, matching normal text input behavior.  This change
+	alleviates the need to take special action for control keys not
+	handled by the input module itself.
+
+2007-06-17  Behdad Esfahbod  <behdad@gnome.org>
+
+	* gtk/gtkfontsel.c: List font sizes 6 and 7pt too. (#440450,
+	Sebastien Bacher, Alex "weej" Jones)
+
+2007-06-16  Yevgen Muntyan  <muntyan@tamu.edu>
+
+	* gtk/gtktextdisplay.c (render_para): fixed couple of drawing
+	problems with block cursor (#448321).
+
+2007-06-16  Richard Hult  <richard@imendio.com>
+
+	* gdk/quartz/gdkevents-quartz.c: (gdk_event_translate): Ignore
+	events and break any grabs while the window is being dragged.
+
+2007-06-16  Richard Hult  <richard@imendio.com>
+
+	* gdk/quartz/gdkwindow-quartz.c: (gdk_window_set_transient_for):
+	Defer setting the parent until the window is shown, otherwise it
+	gets unconditionally shown here.
+
+2007-06-16  Johan Dahlin  <jdahlin@async.com.br>
+
+	* gtk/gtkbuilderparser.c (text): Swap argument order to dgettext
+	(#448299, Jan Arne Petersen)
+
+2007-06-16  Richard Hult  <richard@imendio.com>
+
+	* gdk/quartz/gdkevents-quartz.c (find_mouse_window_for_ns_event):
+	Move the checks for no window or a non-GDK window from here...
+	(gdk_event_translate): ...to here. Reorder the code so that we
+	detect the cases where we need to break grabs before bailing
+	out.
+
+2007-06-16  Richard Hult  <richard@imendio.com>
+
+	* gdk/quartz/gdkevents-quartz.c (gdk_event_translate) 
+	(break_all_grabs): Break out into a separate function.
+
+2007-06-16  Richard Hult  <richard@imendio.com>
+
+	* gdk/quartz/GdkQuartzWindow.c: (isInMove): Implement, to be used
+	to detect if the window is currently being moved with the mouse.
+
+2007-06-16  Richard Hult  <richard@imendio.com>
+
+	* gdk/quartz/gdkwindow-quartz.c (gdk_window_set_transient_for):
+	Don't set parent/child relationship for tooltip windows since that
+	moves the parent window to the front, due to the tooltip having a
+	high window level.
+
+2007-06-16  Christian Persch  <chpe@gnome.org>
+
+	* gtk/gtkbuilder.c: (gtk_builder_real_get_type_from_name),
+	(gtk_builder_get_type_from_name):
+	* gtk/gtkbuilder.h: Don't use "typename" C++ keyword as parameter
+	name. Bug #448193.
+
+2007-06-15  Matthias Clasen  <mclasen@redhat.com>
+	
+	* configure.in: Bump version
+
+	* === Released 2.11.3 ===
+
+2007-06-15  Johan Dahlin  <jdahlin@async.com.br>
+
+	* gtk/gtkuimanager.c: Base class should be GObject, not GtkObject.
+
+2007-06-15  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtkbuildable.c:
+	* gtk/gtkbuilder.c: Documentation fixes
+
+	* gtk/gtktreeview.c: Fix up cross-references in docs.
+	
+	* gtk/Makefile.am: Don't install gtkbuilderprivate.h
+
+	* gtk/gtk.h: Include gtkbuilder.h
+
+	* NEWS: Updates
+
+2007-06-15  Johan Dahlin  <jdahlin@async.com.br>
+
+	* gtk/gtkbuilder.c (gtk_builder_add_from_file): 
+	(gtk_builder_value_from_string_type): 
+	Use gsize instead of unsigned and gulong instead of long,
+	fixes complation on OSX, fixes #447987
+
+2007-06-15  Matthias Clasen  <mclasen@redhat.com>
+	
+	* gtk/gtkmenushell.[ch]: add move_selected signal to allow 
+	overriding the default internal behaviour.  (#446833, Ryan Lortie)
+
+2007-06-15  Mathias Hasselmann  <mathias.hasselmann@gmx.de>
+
+	* gtk/gtkwidget.c: Forgot to free the unescaped tooltip text.
+
+2007-06-15  Mathias Hasselmann  <mathias.hasselmann@gmx.de>
+
+	* gtk/gtkwidget.c: Improving handling of tooltip-text property.
+	* tests/testtooltips.c: Also check result of tooltip getters.
+
+2007-06-15  Mathias Hasselmann  <mathias.hasselmann@gmx.de>
+
+	* docs/reference/gtk/gtk-sections.txt, gtk/gtk.symbols,
+	gtk/gtkwidget.c, gtk/gtkwidget.h, tests/testtooltips.c: Introduce
+	convenience property "GtkWidget:tooltip-text" taking care of escaping
+	it for unwanted markup entities. Add functions to set tooltip text:
+	gtk_widget_set_tooltip_text(), gtk_widget_set_tooltip_markup(),
+	gtk_widget_get_tooltip_text(), gtk_widget_get_tooltip_markup().
+
+	* gtk/gtktooltip.c, gtk/gtktooltip.h: Add gtk_tooltip_set_text()
+	to set the tooltip text without using markup.
+
+        Patches from Emmanuele Bassi (#447643).
+
+2007-06-15  Johan Dahlin  <jdahlin@async.com.br>
+
+	reviewed by: Matthias Clasen
+
+	* demos/gtk-demo/Makefile.am:
+	* demos/gtk-demo/builder.c: (quit_activate), (about_activate),
+	(do_builder):
+	* demos/gtk-demo/demo.ui:
+	* docs/reference/gtk/gtk-docs.sgml:
+	* docs/reference/gtk/gtk-sections.txt:
+	* docs/reference/gtk/gtk.types:
+	* docs/reference/gtk/tmpl/gtkbuildable.sgml:
+	* docs/reference/gtk/tmpl/gtkbuilder.sgml:
+	* gtk/Makefile.am:
+	* gtk/gtk.h:
+	* gtk/gtk.symbols:
+	* gtk/gtkaction.c: (gtk_action_buildable_init),
+	(gtk_action_buildable_set_name), (gtk_action_buildable_get_name):
+	* gtk/gtkactiongroup.c: (gtk_action_group_get_type),
+	(gtk_action_group_buildable_init),
+	(gtk_action_group_buildable_add),
+	(gtk_action_group_buildable_set_name),
+	(gtk_action_group_buildable_get_name):
+	* gtk/gtkbuildable.c: (gtk_buildable_get_type),
+	(gtk_buildable_set_name), (gtk_buildable_get_name),
+	(gtk_buildable_add), (gtk_buildable_set_property),
+	(gtk_buildable_parser_finished), (gtk_buildable_construct_child),
+	(gtk_buildable_custom_tag_start), (gtk_buildable_custom_tag_end),
+	(gtk_buildable_custom_finished),
+	(gtk_buildable_get_internal_child):
+	* gtk/gtkbuildable.h:
+	* gtk/gtkbuilder.c: (gtk_builder_class_init), (gtk_builder_init),
+	(gtk_builder_finalize), (gtk_builder_set_property),
+	(gtk_builder_get_property), (_gtk_builder_resolve_type_lazily),
+	(gtk_builder_real_get_type_from_name),
+	(gtk_builder_get_parameters), (gtk_builder_get_internal_child),
+	(_gtk_builder_construct), (_gtk_builder_add),
+	(apply_delayed_properties), (_gtk_builder_finish),
+	(gtk_builder_new), (gtk_builder_add_from_file),
+	(gtk_builder_add_from_string), (gtk_builder_get_object),
+	(object_add_to_list), (gtk_builder_get_objects),
+	(gtk_builder_set_translation_domain),
+	(gtk_builder_get_translation_domain),
+	(gtk_builder_connect_signals_default),
+	(gtk_builder_connect_signals), (gtk_builder_connect_signals_full),
+	(gtk_builder_value_from_string),
+	(gtk_builder_value_from_string_type),
+	(_gtk_builder_enum_from_string), (_gtk_builder_flags_from_string),
+	(gtk_builder_get_type_from_name), (gtk_builder_error_quark):
+	* gtk/gtkbuilder.h:
+	* gtk/gtkbuilderparser.c: (state_push), (state_peek), (state_pop),
+	(error_missing_attribute), (error_invalid_attribute),
+	(error_invalid_tag), (builder_construct), (parse_object),
+	(free_object_info), (_get_type_by_symbol), (parse_child),
+	(free_child_info), (parse_property), (free_property_info),
+	(parse_signal), (_free_signal_info), (parse_interface),
+	(create_subparser), (free_subparser), (subparser_start),
+	(subparser_end), (parse_custom), (start_element), (end_element),
+	(text), (_gtk_builder_parser_parse_buffer):
+	* gtk/gtkbuilderprivate.h:
+	* gtk/gtkcelllayout.c: (attributes_start_element),
+	(attributes_text_element),
+	(_gtk_cell_layout_buildable_custom_tag_start),
+	(_gtk_cell_layout_buildable_custom_tag_end),
+	(_gtk_cell_layout_buildable_add):
+	* gtk/gtkcelllayout.h:
+	* gtk/gtkcellview.c: (gtk_cell_view_buildable_init),
+	(gtk_cell_view_buildable_custom_tag_start),
+	(gtk_cell_view_buildable_custom_tag_end):
+	* gtk/gtkcolorseldialog.c:
+	(gtk_color_selection_dialog_buildable_interface_init),
+	(gtk_color_selection_dialog_buildable_get_internal_child):
+	* gtk/gtkcombobox.c: (gtk_combo_box_buildable_init),
+	(gtk_combo_box_buildable_custom_tag_start),
+	(gtk_combo_box_buildable_custom_tag_end):
+	* gtk/gtkcomboboxentry.c:
+	(gtk_combo_box_entry_buildable_interface_init),
+	(gtk_combo_box_entry_buildable_get_internal_child):
+	* gtk/gtkcontainer.c: (gtk_container_get_type),
+	(gtk_container_buildable_init), (gtk_container_buildable_add),
+	(gtk_container_buildable_set_child_property),
+	(attributes_start_element), (attributes_text_element),
+	(gtk_container_buildable_custom_tag_start),
+	(gtk_container_buildable_custom_tag_end):
+	* gtk/gtkdebug.h:
+	* gtk/gtkdialog.c: (gtk_dialog_buildable_interface_init),
+	(gtk_dialog_buildable_get_internal_child),
+	(attributes_start_element), (attributes_text_element),
+	(gtk_dialog_buildable_custom_tag_start),
+	(gtk_dialog_buildable_custom_finished):
+	* gtk/gtkentrycompletion.c: (gtk_entry_completion_buildable_init):
+	* gtk/gtkexpander.c: (gtk_expander_buildable_add),
+	(gtk_expander_buildable_init):
+	* gtk/gtkfontsel.c:
+	(gtk_font_selection_dialog_buildable_interface_init),
+	(gtk_font_selection_dialog_buildable_get_internal_child):
+	* gtk/gtkframe.c: (gtk_frame_buildable_init),
+	(gtk_frame_buildable_add):
+	* gtk/gtkiconview.c: (gtk_icon_view_buildable_init),
+	(gtk_icon_view_buildable_custom_tag_start),
+	(gtk_icon_view_buildable_custom_tag_end):
+	* gtk/gtkliststore.c: (gtk_list_store_buildable_init),
+	(list_store_start_element), (list_store_end_element),
+	(list_store_text), (gtk_list_store_buildable_custom_tag_start),
+	(gtk_list_store_buildable_custom_tag_end):
+	* gtk/gtkmain.c:
+	* gtk/gtknotebook.c: (gtk_notebook_buildable_init),
+	(gtk_notebook_buildable_add):
+	* gtk/gtksizegroup.c: (gtk_size_group_buildable_init),
+	(size_group_start_element),
+	(gtk_size_group_buildable_custom_tag_start),
+	(gtk_size_group_buildable_custom_finished):
+	* gtk/gtktreestore.c: (gtk_tree_store_buildable_init),
+	(tree_model_start_element),
+	(gtk_tree_store_buildable_custom_tag_start),
+	(gtk_tree_store_buildable_custom_finished):
+	* gtk/gtktreeview.c: (gtk_tree_view_buildable_init),
+	(gtk_tree_view_buildable_add):
+	* gtk/gtktreeviewcolumn.c: (gtk_tree_view_column_buildable_init):
+	* gtk/gtkuimanager.c: (gtk_ui_manager_buildable_init),
+	(gtk_ui_manager_buildable_add),
+	(gtk_ui_manager_buildable_construct_child),
+	(gtk_ui_manager_buildable_custom_tag_start),
+	(gtk_ui_manager_buildable_custom_tag_end):
+	* gtk/gtkwidget.c: (gtk_widget_get_type),
+	(gtk_widget_buildable_interface_init),
+	(gtk_widget_buildable_set_name), (gtk_widget_buildable_get_name),
+	(gtk_widget_buildable_set_property),
+	(gtk_widget_buildable_parser_finshed), (accel_group_start_element),
+	(gtk_widget_buildable_custom_tag_start),
+	(gtk_widget_buildable_custom_finshed):
+	* gtk/gtkwindow.c: (gtk_window_buildable_interface_init),
+	(gtk_window_buildable_set_property),
+	(gtk_window_buildable_parser_finished):
+	* tests/Makefile.am:
+	* tests/buildertest.c: (builder_new_from_string), (test_parser),
+	(signal_normal), (signal_after), (signal_object),
+	(signal_object_after), (signal_first), (signal_second),
+	(signal_extra), (signal_extra2), (test_connect_signals),
+	(test_uimanager_simple), (test_domain), (test_translation),
+	(test_sizegroup), (test_list_store), (test_tree_store),
+	(test_types), (test_spin_button), (test_notebook),
+	(test_construct_only_property), (test_children),
+	(test_child_properties), (test_treeview_column), (test_icon_view),
+	(test_combo_box), (test_combo_box_entry), (test_cell_view),
+	(test_dialog), (test_accelerators), (test_widget), (main):
+
+	Add GtkBuilder, fixes #172535
+	
+2007-06-15  Hans Breuer <hans@breuer.org>
+
+	* gtk/makefile.msc.in tests/makefile.msc : updated
+	* gdk/win32/gdkwindow-win32.c : explicit usage of RegisterClassExW
+	to match the WNDCLASSEXW. 
+	True dynamic linking of SetLayeredWindowAttributes
+	* tests/testprint.c tests/testnouiprint.c : use G_PI
+
+2007-06-14  Johan Dahlin  <jdahlin@async.com.br>
+
+	* gtk/gtk.symbols: Add missing symbol 
+	gtk_text_layout_set_overwrite_mode
+
+2007-06-14  Behdad Esfahbod  <behdad@gnome.org>
+
+	* gtk/gtknotebook.c (gtk_notebook_get_group_id): Fix compiler
+	warning. (#447586, Kazuki IWAMOTO)
+
+2007-06-14  Tor Lillqvist  <tml@novell.com>
+
+	* gdk/win32/gdkwindow-win32.c (RegisterGdkClass): Use
+	g_win32_get_windows_version() instead of _winver so that this
+	compiles on Cygwin, too. Not that I know if it makes sense to
+	build GTK+ with the Win32 backend for Cygwin, but some people want
+	to.
+
+2007-06-13  Matthias Clasen  <mclasen@redhat.com>
+
+	* NEWS: Updates
+
+	* NEWS, README.in: Move the combobox note to the README,
+	where it seems more appropriate.
+
+2007-06-13  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtkwidget.c (gtk_widget_modify_cursor): Improve docs.
+	(#447396, Masatake YAMATO)
+
+2007-06-14  Carlos Garnacho  <carlos@imendio.com>
+
+	* gtk/gtkcombobox.c: removed unused and hardly visible GtkFrame from
+	the menu widget hierarchy when ::appears-as-list is TRUE. (#435471)
+	* NEWS: add a note about repercussions of this change to RC files.
+
+2007-06-13  Behdad Esfahbod  <behdad@gnome.org>
+
+	* gdk/directfb/gdkgc-directfb.c: #undef GDK_DISABLE_DEPRECATED to
+	get prototype for gdk_font_ref(). (#447163, Dann Frazier, Loïc Minier)
+
+2007-06-13  Michael Natterer  <mitch@imendio.com>
+
+	* gtk/gtkmenuitem.[ch]: add "submenu" property. Fix
+	gtk_menu_item_set_submenu() to accept NULL submenus and deprecate
+	gtk_menu_item_remove_submenu() because we have a properly working
+	setter now (bug #447065).
+
+	* gtk/gtk.symbols: deprecate gtk_menu_item_remove_submenu().
+
+	* gtk/gtkcombobox.c: use gtk_menu_item_set_submenu() instead of
+	gtk_menu_item_remove_submenu().
+
+2007-06-13  Cody Russell  <bratsche@gnome.org>
+
+	* gtk/gtkwidget.c: Fix inconsistency in GTK_WIDGET_SAVED_STATE
+	(#435840, Xan Lopez)
+
+2007-06-13  Kristian Rietveld  <kris@imendio.com>
+
+	* gtk/gtk.symbols
+	* gtk/gtkfilesystem.[ch]: rename _gtk_file_system_create to
+	gtk_file_system_create to make it public and bring trunk back
+	in sync with gtk-2-10.
+
+	* gtk/gtkfilechooserdefault.c (set_file_system_backend): updated.
+
+2007-06-13  Michael Natterer  <mitch@imendio.com>
+
+	* gtk/gtklabel.c (gtk_label_set_label): added calls to
+	g_object_freeze/thaw_notify() so gtk_label_get_text() doesn't
+	return the old text when called from a "notify::label" callback.
+
+2007-06-13  Kristian Rietveld  <kris@imendio.com>
+
+	Audit of GtkTreeView coordinate system usage. (#142494).
+
+	* gtk/gtktreeview.[ch]: general documentation updates,
+	(gtk_tree_view_scroll_to_cell), (gtk_tree_view_get_dest_row_at_pos):
+	update coordinate translations,
+	(gtk_tree_view_tree_to_widget_coords),
+	(gtk_tree_view_widget_to_tree_coords): Deprecated,
+	(gtk_tree_view_convert_.*_coords): 6 new functions for doing
+	transformations between coordinate systems.
+
+	* gtk/gtk.symbols: updated.
+
+	* tests/testtooltips.c (query_tooltip_tree_view_cb): fix testcase
+	with new gtk_tree_view_convert_widget_to_bin_window_coords().
+
+	* docs/reference/gtk/Makefile.am
+	* docs/reference/gtk/images/tree-view-coordinates.png: add new image.
+
+	* docs/reference/gtk/tmpl/gtktreeview.sgml: eloborate on the
+	different coordinate systems.
+
+2007-06-13  Kristian Rietveld  <kris@imendio.com>
+
+	* gtk/gtkcellrendererprogress.c
+	(gtk_cell_renderer_progress_class_init),
+	(gtk_cell_renderer_progress_init),
+	(gtk_cell_renderer_progress_[gs]et_property),
+	(gtk_cell_renderer_progress_render): Add orientation property and some
+	slight refactoring here and there.  (Fixes #344836, reported by
+	Benjamin Montgomery).
+
+2007-06-12  Matthias Clasen  <mclasen@redhat.com>
+
+	* gdk/Makefile.am: Remove linux-fb from DIST_SUBDIRS
+
+	* configure.in: Remove linux-fb parts.
+
+2007-06-12  Michael Natterer  <mitch@imendio.com>
+
+	* gtk/gtkiconview.c (update_text_cell): use PANGO_BREAK_WORD_CHAR
+	instead of PANGO_BREAK_WORD so the text cell doesn't overflow the
+	wrap-width if there is no whitespace found to break at.
+	Fixes bug #446107.
+
+2007-06-12  Kristian Rietveld  <kris@imendio.com>
+
+	Fix #410815, reported by Lucas Rocha.
+
+	* gtk/gtkiconview.c (gtk_icon_view_layout): determine a suitable
+	wrap-width with the first icon, if it exists,
+	(adjust_wrap_width): try to use icon_view->priv->item_width
+	if available,
+	(gtk_icon_view_set_cell_data): don't call adjust_wrap_width here,
+	which caused changes in wrap-width during the layouting process and
+	resulted in layouting artefacts,
+	(update_text_cell): don't set the wrap-width property, this should
+	be handled by adjust_wrap_width.
+
+2007-06-12  Behdad Esfahbod  <behdad@gnome.org>
+
+	* gdk/gdkwindow.c (gdk_window_get_pointer): Improve docs.
+	(#446138, Björn Lindqvist)
+
+2007-06-12  Yevgen Muntyan  <muntyan@tamu.edu>
+
+	* gtk/gtkentry.c (gtk_entry_expose), (gtk_entry_toggle_overwrite),
+	(gtk_entry_draw_cursor):
+	* gtk/gtkstyle.c (_gtk_widget_get_cursor_gc),
+	(_gtk_widget_get_cursor_color):
+	* gtk/gtkstyle.h:
+	* gtk/gtktextdisplay.c (gtk_text_renderer_prepare_run),
+	(gtk_text_renderer_draw_shape), (text_renderer_set_state),
+	(render_para):
+	* gtk/gtktextlayout.c (gtk_text_layout_set_overwrite_mode),
+	(gtk_text_layout_invalidate_cache), (get_block_cursor),
+	(add_cursor), (gtk_text_layout_get_line_display),
+	(_gtk_text_layout_get_block_cursor):
+	* gtk/gtktextlayout.h:
+	* gtk/gtktextutil.c (layout_get_char_width),
+	(_gtk_text_util_get_block_cursor_location):
+	* gtk/gtktextutil.h:
+	* gtk/gtktextview.c (gtk_text_view_set_editable),
+	(gtk_text_view_toggle_overwrite), (gtk_text_view_set_overwrite),
+	(gtk_text_view_ensure_layout), (text_window_invalidate_cursors):
+	Implement block-cursor for overwrite mode.  (#80378)
+
+2007-06-11  Matthias Clasen  <mclasen@redhat.com>
+
+	* configure.in: Bump GLib requirement to 2.13.3 (#446616, Behdad
+	Esfahbod)
+
+2007-06-11  Matthias Clasen  <mclasen@redhat.com>
+
+	* modules/printbackends/cups/gtkprintbackendfile.c:
+	* modules/printbackends/cups/gtkprintbackendcups.c: Fix some
+	locking issues.  (#420249, Christian Persch)
+
+2007-06-11  Matthias Clasen  <mclasen@redhat.com>
+
+	* configure.in: When debugging is turned on, use error-checking
+	mutexes.
+
+2007-06-11  Emmanuele Bassi  <ebassi@gnome.org>
+
+	* gtk/gtknotebook.h: Fix declaration of the create_window()
+	vfunc inside GtkNotebookClass. (#446513, Kazuki Iwamoto)
+
+2007-06-11  Matthias Clasen  <mclasen@redhat.com>
+	
+	* tests/testiconview.c: Use icons of varying size.
+	
+2007-06-10  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtkrc.c (gtk_rc_parse_style): Accept class names starting
+	with lowercase letters for style property assignments, since 
+	GType accepts these too, and gtkmm uses such class names.  (#343012,
+	Murray Cumming, Johannes Schmid)
+
+2007-06-10  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtkentry.c (gtk_entry_finalize): Don't leak cursor_hadjustment.
+	Store cursor_hadjustment as object data rather than in the private
+	struct.
+
+2007-06-10  Matthias Clasen  <mclasen@redhat.com>
+
+	* gdk/x11/gdkspawn-x11.c (set_environment): Handle child_setup
+	being NULL.  (#445691, Christopher Taylor)
+
+2007-06-10  Emmanuele Bassi  <ebassi@gnome.org>
+
+	* gtk/gtksearchenginesimple.c: Unconditionally define _GNU_SOURCE
+	and XOPEN_SOURCE, in order to make the simple search engine backend
+	build on really ancient GNU libc. (#444097)
+
+2007-06-10  Michael Natterer  <mitch@imendio.com>
+
+	* gdk/quartz/gdkdrawable-quartz.c (gdk_quartz_draw_arc): fix
+	angles by flipping the coordinate system back to its original y
+	direction. The implementation is still broken for ellipses, will
+	have to simulate them using bezier curves.
+
+2007-06-10  Cody Russell  <bratsche@gnome.org>
+
+	* gdk/win32/gdkevents-win32.c (gdk_pointer_grab):
+	Don't revert the mouse cursor to the built-in one when
+	the user holds the mouse button down. (#445284, Tor Lillqvist)
+
+2007-06-10  Emmanuele Bassi  <ebassi@gnome.org>
+
+	* gtk/gtkscalebutton.[ch]: Fix some coding style bits.
+
+	(gtk_scale_button_dispose), (gtk_scale_button_class_init),
+	(gtk_scale_button_init): Use the GObject private data API instead
+	of allocating the private structure ourselves.
+
+	(gtk_scale_button_dispose), (gtk_scale_button_finalize): Free
+	the icons string vector inside ::finalize and not in ::dispose.
+
+	(gtk_scale_button_update_icon): Use g_strv_length() instead
+	of an empty for loop.
+
+2007-06-09  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtkwidget.c:
+	* gtk/gtkscrolledwindow.c: Update docs
+	* gtk/gtkwidget.h: Deprecate gtk_widget_{ref,unref}
+
+	* gtk/gtkbox.c: Move docs inline.
+
+	* gtk/gtkrange.c:
+	* gtk/gtkscale.c: Doc formatting improvements.
+
+2007-06-09  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtkscalebutton.c: Add an icons property, make 
+	gtk_scale_button_new() a convenience function.  (#445855,
+	Murray Cumming)
+
+2007-06-09  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtkhscale.c (gtk_hscale_new):
+	* gtk/gtkvscale.c (gtk_vscale_new): Cosmetic change to make
+	it more obvious that this is a convenience function.
+
+2007-06-09  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtkcalendar.c (gtk_calendar_init): Handle return values
+	from nl_langinfo() more correctly. 
+
+2007-06-09  Carlos Garnacho  <carlos@imendio.com>
+
+	* gtk/gtkrc.c (gtk_rc_parse_engine): initialize rc_priv in the else
+	branch too. (#445539)
+
+2007-06-08  Benjamin Berg  <benjamin@sipsolutions.net>
+
+	* gtk/gtkscrolledwindow.c: (gtk_scrolled_window_paint):
+	Fix shadow painting if the scrollbars-within-bevel style property is
+	set and border_width is nozero. (#445054)
+
+2007-06-08  Matthias Clasen  <mclasen@redhat.com>
+
+	Make it possible for theme engines to support symbolic 
+	colors.  (#426192, Andrea Cimitan, patch by Olivier Samyn)
+
+	* gtk/gtk.symbols:
+	* gtk/gtkrc.h:
+	* gtk/gtkrc.c (gtk_rc_parse_color_full): Export this function
+
+	* gtk/gtkrc.c (gtk_rc_parse_engine): Copy color hashes
+	to new style before parsing engine section.
+
+2007-06-08  Michael Natterer  <mitch@imendio.com>
+
+	* gdk/quartz/gdkdrawable-quartz.c: add utility function
+	gdk_quartz_fix_cap_not_last_line() which fixes the coordinates for
+	GDK_CAP_NOT_LAST lines at least for horizontal and vertical lines.
+
+	(gdk_quartz_draw_segments)
+	(gdk_quartz_draw_lines): use it here.
+
+2007-06-07  Michael Natterer  <mitch@imendio.com>
+
+	* gdk/quartz/gdkgc-quartz.c: add gdk_gc_quartz_init() and set
+	some values to the defaults used by X11.
+
+	(gdk_quartz_gc_set_values): really set cap_style when
+	GDK_GC_CAP_STYLE is in the mask, not line_style.
+
+2007-06-07  Michael Natterer  <mitch@imendio.com>
+
+	* gdk/quartz/gdkgc-quartz.c (_gdk_quartz_gc_update_cg_context):
+	use the same code for GDK_XOR as for GDK_INVERT. Xor with an
+	arbitrary color is impossible to implement with quartz.
+
+2007-06-07  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtksettings.c: Fix a typo in the docs.
+
+2007-06-07  Christian Neumair  <cneumair@gnome.org>
+
+	* gtk/gtkstock.[ch]: Add GTK_STOCK_DISCARD, #158008.
+
+2007-06-07  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtktreeview.c: Documentation additions.
+
+	* gtk/gtknotebook.c: Add a doc comment.
+
+2007-06-06  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtkfilechooserbutton.c (model_add_special):
+	* gtk/gtkfilechooserdefault.c (shortcuts_append_desktop):
+	* gtk/gtkfilesystemunix.c (get_icon_name_for_directory):
+	* gtk/gtkpathbar.c (_gtk_path_bar_set_file_system):
+	Use g_get_user_special_dir() to obtain the path for the
+	DESKTOP directory.  
+
+2007-06-06  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/Makefile.am: Add the 16x16 version of gtk-select-color.png
+	to the list of stock icons.  (#444786)
+
+2007-06-06  Kristian Rietveld  <kris@imendio.com>
+
+	* gtk/gtkcellrendererprogress.c (gtk_cell_renderer_progress_init),
+	(gtk_cell_renderer_progress_class_init),
+	(gtk_cell_renderer_progress_[gs]et_property),
+	(gtk_cell_renderer_progress_render): add text-[xy]align properties
+	for aligning the text label of the progress bar.  (#334576,
+	suggestion from Steven Sheehy).
+
+2007-06-06  Yevgen Muntyan  <muntyan@tamu.edu>
+
+	* gtk/gtkwidget.c:
+	* gtk/gtkwidget.h: new method, gtk_widget_modify_cursor() (#79585).
+	
+	* gtkrc.c:
+	* gtkrc.h: new functions _gtk_rc_style_set_rc_property() and 
+	_gtk_rc_style_unset_rc_property().
+	
+	* gtk/gtk.symbols: added gtk_widget_modify_cursor.
+	
+	* tests/testtext.c (do_cursor_visible_changed):
+	* tests/testgtk.c (create_styles): test it.
+
+2007-06-06  Richard Hult  <richard@imendio.com>
+
+	* gdk/quartz/gdkevents-quartz.c (find_mouse_window_for_ns_event)
+	(find_window_for_ns_event): Rework how we get the event window:
+	don't get the window from the NSEvent, always use the mouse window
+	instead. Fix mouse window tracking by only using MouseExited for
+	non-gdk windows, and to always use the NSEvent window to get the
+	right gdk window in MouseEntered. Add comments to the code. Fixes bug
+	#350460.
+
+2007-06-06  Richard Hult  <richard@imendio.com>
+
+	* gdk/quartz/gdkevents-quartz.c (get_converted_window_coordinates):
+	Don't do anything if the two windows are the same.
+	(find_window_for_ns_event): Translate coordinates to be relative
+	the grab window when appropriate.
+
+2007-06-06  Emmanuele Bassi  <ebassi@gnome.org>
+
+	* gtk/gtkfilechooserdefault.c:
+	(get_file_info_finished), (shortcuts_insert_path),
+	(shortcuts_add_bookmarks), (shortcuts_add_current_folder): Factor
+	out the search shortcut, the recently used shortcut and the separator
+	from the shortcut selection combo. (#444734)
+
+	(recent_idle_load): Remove the idle source that lazily loads the
+	recently used files, if the GtkRecentManager returns an empty
+	list. (#443913)
+
+2007-06-06  Ross Burton  <ross@openedhand.com>
+
+	* gdk/x11/gdkspawn-x11.c:
+	Set DISPLAY in the child process using g_setenv() instead of
+	constructing a new envp, which lets callers use child setup
+	functions which call putenv (#442617).
+
+2007-06-06  Johan Dahlin  <jdahlin@async.com.br>
+
+	reviewed by: Matthias Clasen <mclasen@redhat.com>
+	
+	* gtk/gtkassistant.c (gtk_assistant_update_buttons_state): 
+	Check if the wizard is empty before trying to access the first page.
+	(#444310, Johan Dahlin)
+
+2007-06-06  Matthias Clasen  <mclasen@redhat.com>
+
+	* configure.in: Bump version
+
+	* === Released 2.11.2 ===
+
+	* NEWS: Updates
+
+2007-06-06  Kristian Rietveld  <kris@imendio.com>
+
+	* gtk/gtktreeviewcolumn.c (gtk_tree_view_column_queue_resize): use
+	GTK_IS_TREE_VIEW_COLUMN() in g_return_if_fail here.
+
+2007-06-06  Kristian Rietveld  <kris@imendio.com>
+
+	* gtk/gtktreeviewcolumn.[ch] (gtk_tree_view_column_get_tree_view): new
+	function.  (#342471, Lorenzo Gil Sanchez).
+
+	* gtk/gtk.symbols: updated.
+
+2007-06-06  Kristian Rietveld  <kris@imendio.com>
+
+	* gtk/gtktooltip.c (gtk_tooltip_paint_window): remove unused
+	call to gtk_widget_size_request().  (Reported by Carlos
+	Garnacho).
+
+2007-06-06  Kristian Rietveld  <kris@imendio.com>
+
+	* gtk/gtktooltip.c (gtk_tooltip_show_tooltip): bail out if
+	last_window is not a GdkWindow anymore. (Fixes #434021, several
+	reporters).
+
+2007-06-06  Matthias Clasen <mclasen@redhat.com>
+
+	* gdk/Makefile.am: Remove leftover reference to medialib_h_sources.
+
+2007-06-06  Brian Cameron  <brian.cameron@sun.com>
+
+	* gdk/Makefile.am: Add gdkmedialib.h to EXTRA_DIST so this header
+	  file gets included with the distribution, as needed.  Fixes bug
+	  #442888.  Reviewed by Matthias Clasen.
+
+2007-06-06  Richard Hult  <richard@imendio.com>
+
+	* gdk/quartz/gdkevents-quartz.c
+	(_gdk_quartz_events_update_mouse_window): Ignore if the old and new
+	windows are the same.
+
+2007-06-06  Kristian Rietveld  <kris@imendio.com>
+
+	* gtk/gtktreeview.c (gtk_tree_view_unrealize): also remove the
+	auto expand timeout if it exists.
+
+2007-06-06  Richard Hult  <richard@imendio.com>
+
+	* gdk/quartz/gdkevents-quartz.c (synthesize_crossing_events):
+	Update comment to be more clear and print a warning if we try to
+	create a crossing event without knowing what the current mouse
+	window is, to help track down focus bugs.
+
+	* gdk/quartz/gdkevents-quartz.c
+	(_gdk_quartz_events_update_focus_window): Fix indentation.
+
+2007-06-06  Richard Hult  <richard@imendio.com>
+
+	* gdk/quartz/GdkQuartzWindow.c: Don't let temp windows become key
+	window.
+
+2007-06-06  Tor Lillqvist  <tml@novell.com>
+
+	* gdk/x11/gdkwindow-x11.c (gdk_window_set_opacity): Fix
+	embarrassing crash. (#444457, Torsten Schoenfeld)
+
+2007-06-05  Yevgen Muntyan  <muntyan@tamu.edu>
+
+	* demos/gtk-demo/textview.c (insert_text): Drop the phrase
+	saying invisible text doesn't work (#444236).
+
+2007-06-05  Matthias Clasen <mclasen@redhat.com>
+
+	* gdk/x11/gdkevents-x11.c (gdk_event_translate): Check that
+	window_private is not NULL before using it.  (#444351, David Ronis)
+
+2007-06-05  Jakub Steiner <jimmac@ximian.com>
+
+	* gtk/stock-icons/{16,24}/gtk-find*: drop the paper sheet.
+		gtk-find is used for search, rather than find within a document
+		(file dialog).
+
+2007-06-05  Kristian Rietveld  <kris@gtk.org>
+
+	Fix #399071, suggestion from Benoit Dejean.
+
+	* gtk/gtkliststore.[ch] (gtk_list_store_set_vector_internal): new
+	function, factored out code iterating (columns, values) vectors from
+	gtk_list_store_new_with_valuesv to here,
+	(gtk_list_store_set_valuesv): new public function to set list store
+	values using (columns, values) vectors,
+	(gtk_list_store_new_with_valuesv): call new _set_vector_internal
+	instead.
+
+	* gtk/gtktreestore.[ch] (gtk_tree_store_set_vector_internal),
+	(gtk_tree_store_set_valuesv), (gtk_tree_store_new_with_valuesv):
+	likewise.
+
+	* gtk/gtk.symbols: updated.
+
+2007-06-04  Richard Hult  <richard@imendio.com>
+
+	* gdk/quartz/gdkwindow-quartz.c:
+	(show_window_internal): Don't try to make temp windows key
+	windows, fixes problem introduced below.
+
+2007-06-04  Richard Hult  <richard@imendio.com>
+
+	* gdk/quartz/GdkQuartzWindow.c: 
+	* gdk/quartz/gdkwindow-quartz.c: Implement simple versions of
+	gdk_window_set_accept_focus and gdk_window_set_focus_on_map.
+
+2007-06-04  Richard Hult  <richard@imendio.com>
+
+	* gdk/quartz/gdkwindow-quartz.c: (gdk_window_raise),
+	(gdk_window_lower): Implement.
+
+2007-06-04  Richard Hult  <richard@imendio.com>
+
+	* gdk/quartz/gdkwindow-quartz.c:
+	* gdk/quartz/gdkwindow-quartz.h: Implement 
+	gdk_window_set_transient_for.
+
+2007-06-04  Cody Russell  <bratsche@gnome.org>
+
+	* gtk/gtklinkbutton.h
+	* gtk/gtkaboutdialog.h: Change function argument "link"
+	to "link_" to fix warnings for applications compiling
+	with -Wshadow. (#379213)
+
+2007-06-04  Cody Russell  <bratsche@gnome.org>
+
+	* gtk/gtkpathbar.c (gtk_path_bar_scroll_down): Check
+	if down_button is NULL.  This happens when the pathbar button
+	for the current directory is too large to fit in the
+	space, e.g. on Windows for directories named something like
+	"My Documents and Settings".  (#389603)
+
+2007-06-04  Matthias Clasen  <mclasen@redhat.com>
+
+	* configure.in: Bump version
+
+	* === Released 2.11.1 ===
+
+	* gdk/gdkwindow.c (gdk_window_set_composited): Improve docs.
+
+	* NEWS:
+	* README.in: Updates
+
+2007-06-04  Michael Natterer  <mitch@imendio.com>
+
+	Move "move-focus" signals from several widgets to GtkWidget to
+	enable more flexible costomization of keyboard navigation via
+	bindings. Fixes bug #414947.
+
+	* gtk/gtkwidget.c: add "move-focus" binding signal, default to
+	calling the toplevel GtkWindow's "move-focus" vfunc.
+
+	* gtk/gtktextview.[ch]
+	* gtk/gtkwindow.[ch]: remove "move-focus" signals and add compat
+	code that makes sure that both emitting the signal on the widget
+	and overriding the virtual functions keeps working as before.
+
+	* gtk/gtktoolbar.c: remove "move-focus" signal here too and use
+	GtkWidget's signal. This change slightly changes keyboard
+	navigation in toolbars. I'll fix the behavior if somebody can
+	explain me if and how exactly the new behavior is broken.
+
+2007-06-04  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtkmarshalers.list:
+	* gtk/gtknotebook.[hc]: Add a create-window signal that allows
+	to override the global create-window-hook on a per-notebook
+	basis. The default handler falls back to the global hook.
+	(#386935, Christian Hammond)
+	
+2007-06-04  Emmanuele Bassi  <ebassi@gnome.org>
+
+	* gtk/gtkradiobutton.[ch]:
+	* gtk/gtk.symbols:
+	* tests/testgtk.c: Revert previous commit; the API is not yet
+	finalized - see bug #166995.
+
+2007-06-04  Emmanuele Bassi  <ebassi@gnome.org>
+
+	* gtk/gtkradiobutton.h:
+	* gtk/gtkradiobutton.c:
+	* gtk/gtk.symbols: Add gtk_radio_button_set_value(),
+	gtk_radio_button_get_current_value() and gtk_radio_button_get_value().
+	Use these functions to set and get an arbitrary integer associated to
+	a GtkRadioButton in a group, like the value associated to a
+	GtkRadioAction.
+
+	* tests/testgtk.c:
+	(create_radio_buttons), (radio_toggled_cb): Exercise the new API.
+
+2007-06-03  Torsten Schoenfeld  <kaffeetisch@gmx.de>
+
+	* gtk/gtkicontheme.c (choose_icon): Initialize unthemed_icon to NULL
+	to avoid accessing uninitialized memory when
+	gtk_icon_theme_choose_icon() is called with an empty names list.
+
+2007-06-03  Richard Hult  <richard@imendio.com>
+
+	* gdk/quartz/gdkevents-quartz.c: (create_crossing_event): Set the key
+	modifier state.
+
+2007-06-03  Richard Hult  <richard@imendio.com>
+
+	* gdk/quartz/gdkevents-quartz.c: Make pointer grab emulation work a bit
+	better:
+	(gdk_display_pointer_is_grabbed): Do what the docs say and don't
+	consider implicit grabs here.
+	(gdk_pointer_grab): Overriding a grab by the same app should always be
+	succesful.
+	(gdk_event_translate): Implicit grabs should not be owner events.
+
+2007-06-03  Matthias Clasen  <mclasen@redhat.com>
+
+	* NEWS: Updates
+
+2007-06-03  Matthias Clasen  <mclasen@redhat.com>
+
+	* docs/tools/widgets.c: Add a volume button
+
+2007-06-03  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtkradiobutton.c:
+	* gtk/gtkradiomenuitem.c: Fix doc typos.  
+
+2007-06-03  Matthias Clasen  <mclasen@redhat.com>
+
+	* configure.in: Allow to disable Xinerama.  (#348065, Diego Pettenò)
+
+2007-06-03  Xan Lopez  <xan@gnome.org>
+
+	* gtk/gtknotebook.c: remove index parameter in gtk_notebook_switch_page
+	and remove g_return_if checks in private functions. (#443247)
+
+2007-06-01  Richard Hult  <richard@imendio.com>
+
+	* gdk/quartz/gdkevents-quartz.c:
+	(get_converted_window_coordinates), (create_crossing_event): Fix the
+	coordinates in crossing events so they are relative to the right
+	window.
+
+2007-06-01  Richard Hult  <richard@imendio.com>
+
+	* gdk/quartz/gdkevents-quartz.[ch]: Make function naming
+	consistent for the various functions that retrieve data from an
+	event.
+
+	* gdk/quartz/gdkprivate-quartz.h: 
+	* gdk/quartz/gdkwindow-quartz.[ch]: Remove the now unused
+	_gdk_quartz_window_find_child_by_point() function.
+
+2007-06-01  Matthias Clasen  <mclasen@redhat.com>
+
+	Add support for composited child windows.  (#412882, Ryan Lortie)
+
+	* gdk/gdk.symbols:
+	* gdk/gdkdisplay.h:
+	* gdk/gdkinternals.h:
+	* gdk/gdkwindow.[hc]: Add gdk_display_supports_composite() and
+	gdk_window_set_composited().
+
+	* gdk/x11/gdkevents-x11.c:
+	* gdk/x11/gdkdisplay-x11.[hc]:
+	* gdk/x11/gdkwindow-x11.[hc]: X11 implementation.
+
+	* gdk/win32/gdkdisplay-win32.c:
+	* gdk/win32/gdkwindow-win32.c: Dummy win32 implementration.
+
+	* gdk/quartz/gdkdisplay-quartz.c:
+	* gdk/quartz/gdkwindow-quartz.c: Dummy Quartz implementation.
+
+	* gdk/directfb/gdkdisplay-directfb.c:
+	* gdk/directfb/gdkwindow-directfb.c: Dummy DirectFB implementation.
+
+	* tests/testgtk.c: Add a "composited window" test.
+
+2007-06-01  Michael Natterer  <mitch@imendio.com>
+
+	* gtk/gtkmenuitem.c (gtk_menu_item_position_menu): don't switch
+	submenu opening direction for overlapping reasons if there is even
+	less space on the other side (bug #441863, Tommi Komulainen).
+
+2007-06-01  Michael Natterer  <mitch@imendio.com>
+
+	* gtk/gtkfilechooserdialog.c (response_cb): change fix for #347883
+	to not obfuscate the code.
+
+2007-06-01  Yevgen Muntyan  <muntyan@tamu.edu>
+
+	Avoid recreating pangolayouts in GtkTextView on cursor movement
+	(#435405, Behdad Esfahbod).
+
+	* gtk/gtktextlayout.c:
+	* gtk/gtktextlayout.h: new GtkTextLayout method invalidate_cursors(),
+	and functions gtk_text_layout_invalidate_cursors() and
+	gtk_text_layout_cursors_changed(), to use when invalidation is due
+	to moved marks or changed selection.
+
+	* gtk/gtktextbtree.c:
+	* gtk/gtktextbtree.h: use what's appropriate when invalidating layout.
+
+	* gtk/gtk.symbols: add new functions.
+
+	* README.in: added a note about changed GtkTextLayout API.
+
+2007-06-01  Alp Toker  <alp.toker@collabora.co.uk>
+
+	* gdk/gdkcairo.c (gdk_cairo_set_source_pixmap): Fix doc typos.
+
+2007-05-31  Yevgen Muntyan  <muntyan@tamu.edu>
+
+	* gtk/gtkstyle.c (get_insertion_cursor_gc): use text colors from
+	widget style to draw cursor instead of hardcoded black and grey
+	(#79585, comment #30).
+
+2007-06-01  Kristian Rietveld  <kris@gtk.org>
+
+	* gtk/gtkcellrenderertext.c (get_size): transform the ink_rect using
+	pango_extents_to_pixels to avoid rounding errors.  (Fixes #430218,
+	Shlomi Israel).
+
+2007-05-31  Mathias Hasselmann  <mathias.hasselmann@gmx.de>
+
+	* tests/autotestfilechooser.c: Reactivate the other file-chooser
+	tests. Forgot that before commiting revision 17994.
+
+2007-05-31  Mathias Hasselmann  <mathias.hasselmann@gmx.de>
+
+	* gtk/gtkfilechooserdialog.c, tests/autotestfilechooser.c: Reset
+	the internal response_requested flag, once the response triggered by
+	file_chooser_widget_response_requested has been processed (#347883).
+
+2007-05-30  Richard Hult  <richard@imendio.com>
+
+	* gdk/quartz/gdkselection-quartz.c (gdk_free_text_list): Add this
+	function, bug #438440.
+
+2007-05-30  Tor Lillqvist  <tml@novell.com>
+
+	* gdk/win32/gdkevents-win32.c (gdk_pointer_grab): Subtract the
+	multi-monitor offset from x and y before setting up the rectangle
+	for ClipCursor(). Fixes #442326.
+
+2007-05-30  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtkiconview.c (gtk_icon_view_layout): Queue a resize
+	if the size changed.  (#418047, Alex Graveley)
+
+2007-05-30  Simos Xenitellis  <simos@gnome.org>
+
+	* gdk/gdkkeysyms-update.pl: Updated script to new upstream 
+	location of keysymdef.h (#442183)
+
+2007-05-30  Emmanuele Bassi  <ebassi@gnome.org>
+
+	* gtk/gtkfilechooserdefault.c (update_chooser_entry): Return
+	after setting the file chooser entry with the current selection.
+
+2007-05-30  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtkiconcachevalidator.c: Correct the handling
+	of display names.  (#441767, Marcin Bachry)
+
+2007-05-30  Xan Lopez  <xan@gnome.org>
+
+	* gtk/gtknotebook.c (gtk_notebook_set_current_page): Small cleanup.
+	Fixes #442172.
+
+2007-05-28  Cody Russell  <bratsche@gnome.org>
+
+	* gdk/win32/xcursors.h: Fix initialization of last item. (#440511)
+
+2007-05-28  Richard Hult  <richard@imendio.com>
+
+	* gdk/quartz/gdkevents-quartz.c (get_child_coordinates_from_ancestor)
+	(get_ancestor_coordinates_from_child): Break out code that was
+	repeated into separate functions and call them instead.
+	(find_window_for_mouse_nsevent): Break out this from
+	find_window_for_nsevent to make the code clearer.
+	(find_window_for_nsevent): Use the above and fix the returned
+	coordinates in the process so that they are always relative the
+	found window, both for the normal case and during grabs. Still
+	needs fixing for the case where we get nsevents for a window other
+	than than grab window during grabs.
+
+2007-05-28  Richard Hult  <richard@imendio.com>
+
+	* gdk/quartz/gdkevents-quartz.c (gdk_event_translate): Fix typo,
+ 	we need both press and release in the mask to trigger implicit
+	grabs.
+
+2007-05-28  Richard Hult  <richard@imendio.com>
+
+	* gdk/quartz/gdkevents-quartz.c (pointer_ungrab_internal): Reset
+	all the grab state, to help debugging.
+	(gdk_event_translate): Use pointer_ungrab_internal instead of
+	duplicating the code here.
+
+2007-05-28  Richard Hult  <richard@imendio.com>
+
+	* gdk/quartz/gdkprivate-quartz.h:
+	* gdk/quartz/gdkwindow-quartz.c (find_child_window_helper)
+	(_gdk_quartz_window_find_child): Refactored version of
+	_gdk_quartz_window_find_child_by_point, that doesn't return any
+	coordinates as the users of this function already have the
+	coordinates and need to translate them differently.
+	(_gdk_windowing_window_get_pointer): Fixup coordinate translation.
+	(_gdk_windowing_window_at_pointer): Likewise.
+
+2007-05-28  Richard Hult  <richard@imendio.com>
+
+	* gdk/quartz/gdkevents-quartz.c
+	(find_window_interested_in_event_mask): Don't traverse beyond the
+	toplevel of the passed in window.
+
+2007-05-28  Richard Hult  <richard@imendio.com>
+
+	* gdk/quartz/gdkwindow-quartz.c: (_gdk_windowing_window_init): Set
+	a size for the root window.
+
+2007-05-28  Richard Hult  <richard@imendio.com>
+
+	* gdk/quartz/gdkwindow-quartz.c: Add comments about what various
+	coordinates are relative to.
+
+2007-05-28  Carlos Garnacho  <carlos@imendio.com>
+
+	* gtk/gtkwidget.c (gtk_widget_propagate_hierarchy_changed_recurse):
+	Add back variable declaration removed in r17958.
+
+2007-05-28  Carlos Garcia Campos  <carlosgc@gnome.org>
+
+	* gtk/gtkprinter.[ch]: Add new capability
+	GTK_PRINT_CAPABILITY_NUMBER_UP.
+	* docs/reference/gtk/tmpl/gtkprintunixdialog.sgml: 
+	* gtk/gtkprintunixdialog.c: (update_dialog_from_capabilities):
+	* modules/printbackends/file/gtkprintbackendfile.c:
+	(file_printer_get_options), (file_printer_get_settings_from_options):
+	* modules/printbackends/cups/gtkprintbackendcups.c:
+	(cups_printer_get_capabilities): Add a new print capability to specify
+	whether print dialog will offer printing multiple pages per sheet. (#398414)
+	
+2007-05-28  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtktoolbar.h: Actually undeprecate 
+	gtk_toolbar_[un]set_icon_size.  (#314172. Yevgen Muntyan)
+
+2007-05-28  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtkwidget.c: Document some more signals
+
+	* gtk/gtktextview.c: Improve docs
+
+2007-05-27  Tor Lillqvist  <tml@novell.com>
+
+	* configure.in (GDK_EXTRA_LISB): Drop bogus -user32 switch. Was
+	supposed to be -luser32, but he "l" was missing. But nobody has
+	noticed, so presumably unnecessary.
+
+2007-05-26  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtkprintoperationpreview.c: Improve docs
+
 2007-05-26  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtkentry.c: Move docs inline.

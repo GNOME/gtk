@@ -4,7 +4,7 @@ SUBDIRS=theme-bits
 
 if OS_UNIX
 SUBDIRS += xdgmime
-GTK_PRINT_PREVIEW_COMMAND="evince --unlink-tempfile --preview %f"
+GTK_PRINT_PREVIEW_COMMAND="evince --unlink-tempfile --preview --print-settings %s %f"
 endif
 
 DIST_SUBDIRS=theme-bits xdgmime
@@ -143,6 +143,8 @@ gtk_public_h_sources =          \
 	gtkbin.h		\
 	gtkbindings.h		\
 	gtkbox.h		\
+	gtkbuilder.h		\
+	gtkbuildable.h		\
 	gtkbutton.h		\
 	gtkcalendar.h		\
 	gtkcelleditable.h	\
@@ -344,6 +346,7 @@ gtk_private_h_sources =		\
 	gtksearchenginesimple.h	\
 	gtkdndcursors.h		\
 	gtkentryprivate.h	\
+	gtkbuilderprivate.h 	\
 	gtkfilechooserdefault.h	\
 	gtkfilechooserembed.h	\
 	gtkfilechooserentry.h	\
@@ -405,6 +408,9 @@ gtk_base_c_sources =            \
 	gtkbin.c		\
 	gtkbindings.c		\
 	gtkbox.c		\
+	gtkbuildable.c		\
+	gtkbuilder.c		\
+	gtkbuilderparser.c	\
 	gtkbutton.c		\
 	gtkcalendar.c		\
 	gtkcelleditable.c	\
@@ -959,6 +965,7 @@ STOCK_ICONS = \
 	stock-icons/16/gtk-revert-to-saved-rtl.png    	\
 	stock-icons/16/gtk-save-as.png        		\
 	stock-icons/16/gtk-select-all.png     		\
+	stock-icons/16/gtk-select-color.png     	\
 	stock-icons/16/gtk-select-font.png    		\
 	stock-icons/16/gtk-sort-ascending.png	 	\
 	stock-icons/16/gtk-sort-descending.png        	\

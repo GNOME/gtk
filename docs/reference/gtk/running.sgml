@@ -20,9 +20,9 @@ How to run and debug your GTK+ application
 
 <para>
 All GTK+ applications support a number of standard commandline
-options. These are removed from <literal>argv</literal> by <link
-linkend="gtk-init">gtk_init()</link>. Modules may parse and remove
-further options. The <link linkend="x11-cmdline">X11</link> and
+options. These are removed from <literal>argv</literal> by gtk_init(). 
+Modules may parse and remove further options. The 
+<link linkend="x11-cmdline">X11</link> and
 <link linkend="win32-cmdline">Windows</link> GDK backends parse
 some additional commandline options.
 </para>
@@ -80,7 +80,7 @@ list them here for completeness nevertheless.
 <title><systemitem>--class <replaceable>class</replaceable></systemitem></title>
 
 <para>
-Sets the program class; see <link linkend="gdk-set-program-class"><function>gdk_set_program_class</function>()</link>. 
+Sets the program class; see gdk_set_program_class(). 
 </para>
 </formalpara>
 
@@ -97,10 +97,9 @@ Sets the program name.
 
 <para>
 A list of <link linkend="GDK-Debug-Options">debug options</link> 
-to turn on in addition to those 
-specified in the <envar>GDK_DEBUG</envar> environment variable. 
-This option is only available if GTK+ has been configured with
-<option>--enable-debug=yes</option>.
+to turn on in addition to those specified in the <envar>GDK_DEBUG</envar> 
+environment variable. This option is only available if GTK+ has been 
+configured with <option>--enable-debug=yes</option>.
 </para>
 </formalpara>
 
@@ -109,8 +108,7 @@ This option is only available if GTK+ has been configured with
 
 <para>
 A list of <link linkend="GDK-Debug-Options">debug options</link> 
-to turn off.
-This option is only available if GTK+ has been configured with
+to turn off. This option is only available if GTK+ has been configured with
 <option>--enable-debug=yes</option>.
 </para>
 </formalpara>
@@ -184,7 +182,8 @@ additional environment variables.
     </varlistentry>
 
   </variablelist>
-  The special value <literal>all</literal> can be used to turn on all debug options.
+  The special value <literal>all</literal> can be used to turn on all 
+  debug options.
   </para>
 </formalpara>
 
@@ -202,12 +201,13 @@ additional environment variables.
   <para>
     Specifies a list of directories to search when GTK+ is looking for
     dynamically loaded objects such as the modules specified by
-    <envar>GTK_MODULES</envar>, theme engines, and input method
-    modules. If the path to the dynamically loaded object is given
-    as an absolute path name, then GTK+ loads it directly. Otherwise,
-    GTK+ goes in turn through the directories in GTK_PATH, followed
-    by the directory <filename>.gtk-2.0</filename> in the user's home
-    directory, followed by the system default directory, 
+    <envar>GTK_MODULES</envar>, theme engines, input method
+    modules, file system backends and print backends. If the path to 
+    the dynamically loaded object is given as an absolute path name, 
+    then GTK+ loads it directly. 
+    Otherwise, GTK+ goes in turn through the directories in GTK_PATH, 
+    followed by the directory <filename>.gtk-2.0</filename> in the user's 
+    home directory, followed by the system default directory, 
     which is <filename><replaceable>libdir</replaceable>/gtk-2.0/modules</filename>.
     (If <envar>GTK_EXE_PREFIX</envar> is defined, <replaceable>libdir</replaceable> is 
     <filename>$GTK_EXE_PREFIX/lib</filename>. Otherwise it is the libdir
@@ -225,9 +225,10 @@ additional environment variables.
     --variable=gtk_host gtk+-2.0</literal> to determine this from a
     script), and <replaceable>type</replaceable> is a directory
     specific to the type of modules; currently it can be
-    <literal>modules</literal>, <literal>engines</literal> or
-    <literal>immodules</literal> corresponding to the three types of
-    modules above. Either <replaceable>version</replaceable>,
+    <literal>modules</literal>, <literal>engines</literal>, 
+    <literal>immodules</literal>, <literal>filesystems</literal> or 
+    <literal>printbackends</literal>, corresponding to the types of
+    modules mentioned above. Either <replaceable>version</replaceable>,
     <replaceable>host</replaceable>, or both may be omitted. GTK+ looks
     first in the most specific directory, then in directories with
     fewer components.
@@ -328,7 +329,8 @@ nevertheless.
       <listitem><para>Information about XIM support</para></listitem>
     </varlistentry>
   </variablelist>
-  The special value <literal>all</literal> can be used to turn on all debug options.
+  The special value <literal>all</literal> can be used to turn on all 
+  debug options.
   </para>
 </formalpara>
 

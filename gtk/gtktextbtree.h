@@ -92,7 +92,8 @@ void         _gtk_text_btree_remove_view       (GtkTextBTree      *tree,
                                                 gpointer           view_id);
 void         _gtk_text_btree_invalidate_region (GtkTextBTree      *tree,
                                                 const GtkTextIter *start,
-                                                const GtkTextIter *end);
+                                                const GtkTextIter *end,
+                                                gboolean           cursors_only);
 void         _gtk_text_btree_get_view_size     (GtkTextBTree      *tree,
                                                 gpointer           view_id,
                                                 gint              *width,

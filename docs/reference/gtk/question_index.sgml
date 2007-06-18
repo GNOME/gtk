@@ -59,7 +59,7 @@ See the <link linkend="gtk-resources">documentation on this topic</link>.
 
 
 <qandaentry>
-<question><para>How do I port from one GTK+
+<question><para>How do I port from one GTK+ 
 version to another?</para></question>
 
 <answer>
@@ -96,17 +96,17 @@ from functions?
 <answer>
 
 <para>
-See the documentation for #GObject and #GtkObject. For #GObject note specifically
-g_object_ref() and g_object_unref(). #GtkObject is a subclass of #GObject so the 
-same points apply, except that it has a "floating" state (explained in its 
-documentation).
+See the documentation for #GObject and #GtkObject. For #GObject note 
+specifically g_object_ref() and g_object_unref(). #GtkObject is a subclass 
+of #GObject so the same points apply, except that it has a "floating" state 
+(explained in its documentation).
 </para>
 
 <para>
 For strings returned from functions, they will be declared "const" (using 
-#G_CONST_RETURN) if they should not be freed. Non-const strings should be freed 
-with g_free(). Arrays follow the same rule.  (If you find an exception to the rules, 
-please report a bug to <ulink 
+#G_CONST_RETURN) if they should not be freed. Non-const strings should be 
+freed with g_free(). Arrays follow the same rule.  (If you find an exception 
+to the rules, please report a bug to <ulink 
 url="http://bugzilla.gnome.org">http://bugzilla.gnome.org</ulink>.)
 </para>
 
@@ -135,8 +135,9 @@ reference counting, not floating reference counting.
 </para>
 
 <para>
-To to get this, you must acquire a reference to the widget and drop the floating 
-reference (<quote>ref and sink</quote> in GTK+ parlance) after creating it:
+To to get this, you must acquire a reference to the widget and drop the 
+floating reference (<quote>ref and sink</quote> in GTK+ parlance) after 
+creating it:
 <informalexample><programlisting>
  foo = gtk_foo_new (<!-- -->);
  g_object_ref (foo); 
@@ -165,10 +166,9 @@ How do I use GTK+ with threads?
 <answer>
 
 <para>
-This is covered in the 
-<link linkend="gdk-Threads">GDK threads documentation</link>. 
-See also the <link linkend="glib-Threads">GThread</link> documentation for portable
-threading primitives.
+This is covered in the <link linkend="gdk-Threads">GDK threads 
+documentation</link>. See also the <link linkend="glib-Threads">GThread</link> 
+documentation for portable threading primitives.
 </para>
 
 </answer>
@@ -184,8 +184,8 @@ How do I internationalize a GTK+ program?
 <para>
 Most people use <ulink url="http://www.gnu.org/software/gettext/">GNU
 gettext</ulink>, already required in order to install GLib. On a UNIX
-or Linux system with gettext installed, type <literal>info
-gettext</literal> to read the documentation.
+or Linux system with gettext installed, type <literal>info gettext</literal> 
+to read the documentation.
 </para>
 <para>
 The short checklist on how to use gettext is: call bindtextdomain() so gettext 
@@ -199,15 +199,17 @@ follows for convenience:
   #define N_(x)  x
 </programlisting>
 </informalexample>
-You use N_() (N stands for no-op) to mark a string for translation in a context 
-where a function call to gettext() is not allowed, such as in an array initializer. 
+You use N_() (N stands for no-op) to mark a string for translation in a 
+context where a function call to gettext() is not allowed, such as in an 
+array initializer. 
 You eventually have to call gettext() on the string to actually fetch the
-translation.  _() both marks the string for translation and actually translates it.
+translation.  _() both marks the string for translation and actually 
+translates it.
 </para>
 <para>
 Nowadays, GLib provides the common shorthand macros in the header file
-<filename>gi18n.h</filename>, so you don't have to define them yourself, just
-include that header.
+<filename>gi18n.h</filename>, so you don't have to define them yourself, 
+just include that header.
 </para>
 <para>
 Code using these macros ends up looking like this:
@@ -230,10 +232,11 @@ Code using these macros ends up looking like this:
 </informalexample>
 </para>
 <para>
-Libraries using gettext should use dgettext() instead of gettext(), which allows
-them to specify the translation domain each time they ask for a translation. Libraries
-should also avoid calling textdomain(), since they'll be specifying the domain instead
-of using the default.For dgettext() the _() macro can be defined as:
+Libraries using gettext should use dgettext() instead of gettext(), which 
+allows them to specify the translation domain each time they ask for a 
+translation. Libraries should also avoid calling textdomain(), since they
+will be specifying the domain instead of using the default. For dgettext() 
+the _() macro can be defined as:
 <informalexample>
 <programlisting>
   #define _(x) dgettext ("MyDomain", x)
@@ -241,9 +244,9 @@ of using the default.For dgettext() the _() macro can be defined as:
 </informalexample>
 </para>
 <para>
-Again, GLib comes with the <filename>gi18n-lib.h</filename>, saving you the trouble
-of defining the macros by hand. The macros in that header expect the translation
-domain to be specified by the %GETTEXT_PACKAGE macro. 
+Again, GLib comes with the <filename>gi18n-lib.h</filename>, saving you the 
+trouble of defining the macros by hand. The macros in that header expect the 
+translation domain to be specified by the %GETTEXT_PACKAGE macro. 
 </para>
 </answer>
 </qandaentry>
@@ -258,10 +261,9 @@ How do I use non-ASCII characters in GTK+ programs ?
 <answer>
 <para>
 GTK+ uses <ulink url="http://www.unicode.org">Unicode</ulink> (more exactly 
-UTF-8) for all text. UTF-8 encodes each Unicode codepoint as a
-	      sequence of one to six bytes and has a number of nice
-	      properties which make it a good choice for working with Unicode
-	      text in C programs:
+UTF-8) for all text. UTF-8 encodes each Unicode codepoint as a sequence of 
+one to six bytes and has a number of nice properties which make it a good 
+choice for working with Unicode text in C programs:
 <itemizedlist>
 <listitem><para>
 ASCII characters are encoded by their familiar ASCII codepoints.
@@ -270,21 +272,22 @@ ASCII characters are encoded by their familiar ASCII codepoints.
 ASCII characters never appear as part of any other character.
 </para></listitem>
 <listitem><para>
-The zero byte doesn't occur as part of a character, so that UTF-8 strings can
-		    be manipulated with the usual C library functions for
-		    handling zero-terminated strings.
+The zero byte doesn't occur as part of a character, so that UTF-8 strings 
+can be manipulated with the usual C library functions for handling 
+zero-terminated strings.
 </para></listitem>
 </itemizedlist>
 More information about Unicode and UTF-8 can be found in the 
-<ulink url="http://www.cl.cam.ac.uk/~mgk25/unicode.html">UTF-8 and Unicode FAQ for Unix/Linux</ulink>.
+<ulink url="http://www.cl.cam.ac.uk/~mgk25/unicode.html">UTF-8 and Unicode i
+FAQ for Unix/Linux</ulink>.
 GLib provides functions for converting strings between UTF-8 and other
-	      encodings, see g_locale_to_utf8() and g_convert().
+encodings, see g_locale_to_utf8() and g_convert().
 </para>
 <para>
 Text coming from external sources (e.g. files or user input), has to be
-	      converted to UTF-8 before being handed over to GTK+. The
-	      following example writes the content of a IS0-8859-1 encoded text
-	      file to <literal>stdout</literal>:
+converted to UTF-8 before being handed over to GTK+. The following example 
+writes the content of a IS0-8859-1 encoded text file to 
+<literal>stdout</literal>:
 <informalexample><programlisting>
 gchar *text, *utf8_text;
 gsize length;
@@ -308,7 +311,7 @@ else
 </para>
 <para>
 For string literals in the source code, there are several alternatives for
-	      handling non-ASCII content:
+handling non-ASCII content:
 <variablelist>
 <varlistentry><term>direct UTF-8</term>
 <listitem><para>
@@ -334,8 +337,9 @@ very convenient. Be careful when mixing hexadecimal escapes with ordinary text;
 <listitem><para>
 If the string literals can be represented in an encoding which your toolchain
 can handle (e.g. IS0-8859-1), you can write your source files in that encoding
-and use g_convert() to convert the strings to UTF-8 at runtime. Note that this has 
-some runtime overhead, so you may want to move the conversion out of inner loops.
+and use g_convert() to convert the strings to UTF-8 at runtime. Note that this 
+has some runtime overhead, so you may want to move the conversion out of inner 
+loops.
 </para></listitem>
 </varlistentry>
 </variablelist>
@@ -364,7 +368,7 @@ There are two ways to approach this. The GTK+ header files use the subset
 of C that's also valid C++, so you can simply use the normal GTK+ API 
 in a C++ program. Alternatively, you can use a "C++ binding" 
 such as <ulink url="http://gtkmm.sourceforge.net/">gtkmm</ulink>
-which provides a C++-native API.
+which provides a native C++ API.
 </para>
 <para>
 When using GTK+ directly, keep in mind that only functions can be
@@ -404,7 +408,7 @@ How do I use GTK+ with other non-C languages?
 <para>
 See the <ulink url="http://www.gtk.org/bindings.html">list of language
 bindings</ulink> on <ulink
-                           url="http://www.gtk.org">http://www.gtk.org</ulink>.
+url="http://www.gtk.org">http://www.gtk.org</ulink>.
 </para>
 
 </answer>
@@ -419,15 +423,16 @@ How do I load an image or animation from a file?
 <answer>
 
 <para>
-To load an image file straight into a display widget, use gtk_image_new_from_file()
-<footnote><para> If the file load fails, gtk_image_new_from_file() will display no
-image graphic &mdash; to detect a failed load yourself, use gdk_pixbuf_new_from_file()
-directly, then gtk_image_new_from_pixbuf().</para></footnote>. 
-To load an image for another purpose, use gdk_pixbuf_new_from_file(). To load an 
-animation, use gdk_pixbuf_animation_new_from_file().
-gdk_pixbuf_animation_new_from_file() can also load non-animated images, so use it 
-in combination with gdk_pixbuf_animation_is_static_image() to load a file of unknown 
-type. 
+To load an image file straight into a display widget, use 
+gtk_image_new_from_file() <footnote><para> If the file load fails, 
+gtk_image_new_from_file() will display no image graphic &mdash; to detect 
+a failed load yourself, use gdk_pixbuf_new_from_file() directly, then 
+gtk_image_new_from_pixbuf().</para></footnote>. 
+To load an image for another purpose, use gdk_pixbuf_new_from_file(). To i
+load an animation, use gdk_pixbuf_animation_new_from_file().
+gdk_pixbuf_animation_new_from_file() can also load non-animated images, so 
+use it in combination with gdk_pixbuf_animation_is_static_image() to load a 
+file of unknown type. 
 </para>
 <para>
 To load an image or animation file asynchronously (without blocking), use 
@@ -503,21 +508,22 @@ to the GNOME 2.0 platform</ulink>.
 <qandaentry>
 <question>
 <para>
-Why are types not registered if I use their <literal>GTK_TYPE_BLAH</literal> macro ?
+Why are types not registered if I use their <literal>GTK_TYPE_BLAH</literal> 
+macro ?
 </para>
 </question>
 
 <answer>
 <para>
 The <literal>GTK_TYPE_BLAH</literal> macros are defined as calls to 
-<literal>gtk_blah_get_type()</literal>, and the <literal>_get_type()</literal> functions
-are declared as <literal>G_GNUC_CONST</literal> which allows the compiler to optimize
+<literal>gtk_blah_get_type()</literal>, and the <literal>_get_type()</literal> i
+functions are declared as %G_GNUC_CONST which allows the compiler to optimize
 the call away if it appears that the value is not being used.
 </para>
 
 <para>
-A common workaround for this problem is to store the result in a volatile variable,
-which keeps the compiler from optimizing the call away.
+A common workaround for this problem is to store the result in a volatile 
+variable, which keeps the compiler from optimizing the call away.
 <informalexample><programlisting>
 volatile GType dummy = GTK_TYPE_BLAH;
 </programlisting></informalexample>
@@ -595,9 +601,9 @@ should use the #GtkTextView widget. Do not use the deprecated widget #GtkText
 in newly-written code, it has a number of problems that are best avoided.
 </para>
 <para>
-If you only have a small amount of text, #GtkLabel may also be appropriate of course.
-It can be made selectable with gtk_label_set_selectable(). For a single-line text 
-entry, see #GtkEntry.
+If you only have a small amount of text, #GtkLabel may also be appropriate 
+of course. It can be made selectable with gtk_label_set_selectable(). For a 
+single-line text entry, see #GtkEntry.
 </para>
 </answer>
 </qandaentry>
@@ -610,9 +616,9 @@ entry, see #GtkEntry.
 
 <answer>
 <para>
-#GtkImage can display images in just about any format GTK+ understands. You can also 
-use #GtkDrawingArea if you need to do something more complex, such as draw text or 
-graphics over the top of the image.
+#GtkImage can display images in just about any format GTK+ understands. 
+You can also use #GtkDrawingArea if you need to do something more complex, 
+such as draw text or graphics over the top of the image.
 </para>
 </answer>
 </qandaentry>
@@ -644,14 +650,15 @@ How do I change the color of a widget?
 <answer><para>
 See gtk_widget_modify_fg(), gtk_widget_modify_bg(), gtk_widget_modify_base(),
 and gtk_widget_modify_text().  See <link linkend="gtk-Resource-Files">GTK+ 
-resource files</link> for more discussion. You can also change widget color by 
-installing a resource file and parsing it with gtk_rc_add_default_file().
+resource files</link> for more discussion. You can also change widget color 
+by installing a resource file and parsing it with gtk_rc_add_default_file().
 The advantage of a resource file is that users can then override the
 color you've chosen.
 </para>
 
-<para>To change the background color for widgets such as #GtkLabel that have no 
-background, place them in a #GtkEventBox and set the background of the event box.  
+<para>To change the background color for widgets such as #GtkLabel that have 
+no background, place them in a #GtkEventBox and set the background of the 
+event box.  
 </para></answer>
 </qandaentry>
 
@@ -661,9 +668,9 @@ How do I change the font of a widget?
 </para></question>
 
 <answer><para>
-This has several possible answers, depending on what exactly you want to achieve. 
-One option is gtk_widget_modify_font(). Note that this function can be used to 
-change only the font size, as in the following example:
+This has several possible answers, depending on what exactly you want to 
+achieve. One option is gtk_widget_modify_font(). Note that this function 
+can be used to change only the font size, as in the following example:
 <programlisting>
  PangoFontDesc *font_desc = pango_font_description_new (<!-- -->);
  pango_font_description_set_size (font_desc, 40);
@@ -672,23 +679,24 @@ change only the font size, as in the following example:
 </programlisting>
 </para>
 <para>
-If you want to make the text of a label larger, you can use gtk_label_set_markup():
+If you want to make the text of a label larger, you can use 
+gtk_label_set_markup():
 <programlisting>
 gtk_label_set_markup (label, "&lt;big&gt;big text&lt;/big&gt;");
 </programlisting>
 This is preferred for many apps because it's a relative size to the 
-user's chosen font size. See g_markup_escape_text() if you are constructing such 
-strings on the fly.
+user's chosen font size. See g_markup_escape_text() if you are 
+constructing such strings on the fly.
 </para>
 <para>
 You can also change the font of a widget by putting
 <programlisting>
  gtk-font-name = "Sans 30"
 </programlisting>
-in a resource file and parsing it with gtk_rc_add_default_file(). The advantage of 
-a resource file is that users can then override the font you've chosen. See 
-<link linkend="gtk-Resource-Files">GTK+ resource files</link> for more
-discussion. 
+in a resource file and parsing it with gtk_rc_add_default_file(). 
+The advantage of a resource file is that users can then override the font you
+have chosen. See <link linkend="gtk-Resource-Files">GTK+ resource files</link> 
+for more discussion. 
 </para>
 </answer>
 </qandaentry>
@@ -738,9 +746,10 @@ How do I make a text widget display its complete contents in a specific font?
 </para></question>
 
 <answer><para>
-If you use gtk_text_buffer_insert_with_tags() with appropriate tags to select the 
-font, the inserted text will have the desired appearance, but text typed in by the 
-user before or after the tagged block will appear in the default style. 
+If you use gtk_text_buffer_insert_with_tags() with appropriate tags to select 
+the font, the inserted text will have the desired appearance, but text typed 
+in by the user before or after the tagged block will appear in the default 
+style. 
 </para>
 <para>
 To ensure that all text has the desired appearance, use gtk_widget_modify_font() 
@@ -789,8 +798,8 @@ How do I associate some data with a row in the tree?
 <answer>
 <para>
 Remember that the #GtkTreeModel columns don't necessarily have to be displayed. 
-So you can put non-user-visible data in your model just like any other data, and
-retrieve it with gtk_tree_model_get(). See the 
+So you can put non-user-visible data in your model just like any other data, 
+and retrieve it with gtk_tree_model_get(). See the 
 <link linkend="TreeWidget">tree widget overview</link>.
 </para>
 </answer>
@@ -818,9 +827,10 @@ How do I put an image and some text in the same column?
 
 <answer>
 <para>
-You can pack more than one #GtkCellRenderer into a single #GtkTreeViewColumn using
-gtk_tree_view_column_pack_start() or gtk_tree_view_column_pack_end(). So pack both 
-a #GtkCellRendererPixbuf and a #GtkCellRendererText into the column.
+You can pack more than one #GtkCellRenderer into a single #GtkTreeViewColumn 
+using gtk_tree_view_column_pack_start() or gtk_tree_view_column_pack_end(). 
+So pack both a #GtkCellRendererPixbuf and a #GtkCellRendererText into the 
+column.
 </para>
 </answer>
 </qandaentry>
@@ -834,8 +844,9 @@ gtk_list_store_set() and gtk_tree_store_set(), but can't read it back?
 <answer>
 <para>
 Both the #GtkTreeStore and the #GtkListStore implement the #GtkTreeModel
-interface.  Consequentially, the can use any function this interface implements.  
-The easiest way to read a set of data back is to use gtk_tree_model_get().
+interface.  Consequentially, the can use any function this interface 
+implements. The easiest way to read a set of data back is to use 
+gtk_tree_model_get().
 </para>
 </answer>
 </qandaentry>
@@ -846,8 +857,8 @@ How do I change the way that numbers are formatted by #GtkTreeView?
 </para></question>
 <answer><para>
 Use gtk_tree_view_insert_column_with_data_func()
-or gtk_tree_view_column_set_cell_data_func() and do the conversion from number to 
-string yourself (with, say, g_strdup_printf()).
+or gtk_tree_view_column_set_cell_data_func() and do the conversion from i
+number to string yourself (with, say, g_strdup_printf()).
 </para>
 
 <para>

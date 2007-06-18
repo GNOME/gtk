@@ -24,11 +24,12 @@ if USE_X11
 testsocket_programs = testsocket testsocket_child
 endif
 
-TESTS = floatingtest
+TESTS = floatingtest buildertest
 
 noinst_PROGRAMS =			\
 	autotestfilechooser		\
 	floatingtest			\
+	buildertest			\
 	simple				\
 	print-editor			\
 	testaccel			\
@@ -92,6 +93,7 @@ noinst_PROGRAMS =			\
 autotestfilechooser_DEPENDENCIES = $(TEST_DEPS)
 simple_DEPENDENCIES = $(TEST_DEPS)
 floatingtest_DEPENDENCIES = $(TEST_DEPS)
+buildertest_DEPENDENCIES = $(TEST_DEPS)
 print_editor_DEPENDENCIES = $(TEST_DEPS)
 testicontheme_DEPENDENCIES = $(TEST_DEPS)
 testiconview_DEPENDENCIES = $(TEST_DEPS)
@@ -148,6 +150,7 @@ testvolumebutton_DEPENDENCIES = $(TEST_DEPS)
 autotestfilechooser_LDADD = $(LDADDS)
 simple_LDADD = $(LDADDS)
 floatingtest_LDADD = $(LDADDS)
+buildertest_LDADD = $(LDADDS)
 print_editor_LDADD = $(LDADDS)
 testaccel_LDADD = $(LDADDS)
 testassistant_LDADD = $(LDADDS)
@@ -207,6 +210,8 @@ testactions_LDADD = $(LDADDS)
 testgrouping_LDADD = $(LDADDS)
 testtooltips_LDADD = $(LDADDS)
 testvolumebutton_LDADD = $(LDADDS)
+
+buildertest_LDFLAGS = -export-dynamic
 
 autotestfilechooser_SOURCES =	\
 	autotestfilechooser.c

@@ -722,7 +722,10 @@ gtk_path_bar_scroll_down (GtkWidget *button, GtkPathBar *path_bar)
 	}
     }
 
-  space_needed = BUTTON_DATA (down_button->data)->button->allocation.width + path_bar->spacing;
+  /* We check if down_button might be NULL in cases where the pathbar's horizontal size is smaller
+   * than the button and it doesn't get displayed. e.g., on Windows it might be "My Documents and Settings"
+   */
+  space_needed = down_button ? BUTTON_DATA (down_button->data)->button->allocation.width : 0 + path_bar->spacing;
   if (direction == GTK_TEXT_DIR_RTL)
     space_available = path_bar->down_slider_button->allocation.x - GTK_WIDGET (path_bar)->allocation.x;
   else
@@ -1672,13 +1675,17 @@ _gtk_path_bar_set_file_system (GtkPathBar    *path_bar,
   home = g_get_home_dir ();
   if (home != NULL)
     {
+      gchar *freeme = NULL;
+
       path_bar->home_path = gtk_file_system_filename_to_path (path_bar->file_system, home);
       /* FIXME: Need file system backend specific way of getting the
        * Desktop path.
        */
-      desktop = g_build_filename (home, "Desktop", NULL);
-      path_bar->desktop_path = gtk_file_system_filename_to_path (path_bar->file_system, desktop);
-      g_free (desktop);
+      desktop = g_get_user_special_dir (G_USER_DIRECTORY_DESKTOP);
+      if (desktop != NULL)
+        path_bar->desktop_path = gtk_file_system_filename_to_path (path_bar->file_system, desktop);
+      else 
+        path_bar->desktop_path = NULL;
     }
   else
     {

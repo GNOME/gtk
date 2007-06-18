@@ -42,6 +42,7 @@ OBJECTS = \
 	gdk-pixbuf-io.obj \
 	gdk-pixbuf-loader.obj \
 	gdk-pixbuf-scale.obj \
+	gdk-pixbuf-scaled-anim.obj \
 	gdk-pixbuf-util.obj \
 	gdk-pixbuf.obj \
 	gdk-pixbuf-simple-anim.obj \
@@ -76,7 +77,7 @@ gdk-pixbuf-alias.h: gdk-pixbuf.symbols
 gdk_pixbuf.def: gdk-pixbuf.symbols makefile.msc
 	echo EXPORTS > gdk_pixbuf.def
 	cl /EP -DINCLUDE_VARIABLES -DG_OS_WIN32 -DALL_FILES \
-#	-FI $(GLIB)\glib\gmacros.h \
+	-DG_GNUC_MALLOC= -DG_GNUC_CONST= -DG_GNUC_NULL_TERMINATED= -DG_GNUC_NORETURN= -DG_GNUC_PRINTF=;G_GNUC_PRINTF \
 	gdk-pixbuf.symbols >> gdk_pixbuf.def
 
 gdk-pixbuf-aliasdef.c: gdk-pixbuf.symbols

@@ -1,3 +1,103 @@
+2007-06-17  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtk-docs.sgml: Move GtkMenuShell to the abstract widgets.
+
+2007-06-17  Jan Arne Petersen  <jpetersen@jpetersen.org>
+
+	* gtk/gtk-docs.sgml: Add GtkTooltip. (#448341)
+
+2007-06-15  Matthias Clasen  <mclasen@redhat.com>
+
+	* === Released 2.11.3 ===
+
+2007-06-15  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/tmpl/gtktreeview.sgml: Fix up cross-references
+
+	* gtk/gtk-sections.txt: 
+	* gtk/Makefile.am: Updates
+
+2007-06-14  Johan Dahlin  <jdahlin@async.com.br>
+
+	* gtk/tmpl/gtktreeview.sgml (linkend): inlinegraphic instead of 
+	inlinegraphics.
+
+2007-06-13  Michael Natterer  <mitch@imendio.com>
+
+	* gtk/tmpl/gtkmenuitem.sgml: remove stuff that has been moved inline.
+
+2007-06-12  Matthias Clasen  <mclasen@redhat.com>
+
+	* gdk/gdk-sections.txt: Remove GDK_WINDOWING_FB
+	* gtk/Makefile.am:
+	* gtk/gtk-docs.sgml:
+	* gtk/compiling.sgml:
+	* gtk/building.sgml: Remove linux-fb references
+
+2007-06-09  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtk-update-icon-cache.xml: Document --validate
+
+2007-06-09  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/text_widget.sgml:
+	* gtk/tree_widget.sgml:
+	* gtk/tmpl/gtkscalebutton.sgml:
+	* gtk/tmpl/gtktextbuffer.sgml:
+	* gtk/tmpl/gtktexttag.sgml:
+	* gtk/tmpl/gtktextview.sgml:
+	* gtk/tmpl/gtktreemodel.sgml:
+	* gtk/tmpl/gtktreeselection.sgml:
+	* gtk/tmpl/gtktreeviewcolumn.sgml:
+	* gtk/tmpl/gtkcellrenderer.sgml:
+	* gtk/tmpl/gtkliststore.sgml:
+	* gtk/tmpl/gtktreestore.sgml:
+	* gtk/tmpl/gtkmenubar.sgml:
+	* gtk/tmpl/gtkbbox.sgml:
+	* gtk/tmpl/gtkseparator.sgml:
+	* gtk/tmpl/gtkgamma.sgml:
+	* gtk/tmpl/gtkhruler.sgml:
+	* gtk/tmpl/gtkvruler.sgml:
+	* gtk/tmpl/gtkrecentchooser.sgml:
+	* gtk/tmpl/gtkvolumebutton.sgml: Clean up short descriptions
+
+2007-06-09  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/tmpl/gtkbindings.sgml:
+	* gtk/tmpl/gtkrc.sgml:
+	* gtk/tmpl/gtkwidget.sgml:
+	* gtk/tmpl/gtkrecentmanager.sgml:
+	* gtk/*.sgml:
+	* gtk/tmpl/gtkstock.sgml:
+	* gtk/gtk-sections.txt: Updates
+
+	* gtk/Makefile.am: Exclude another private header
+
+	* gtk/tmpl/gtkbox.sgml: Move docs inline
+
+2007-06-08  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtk-sections.txt: Add gtk_rc_parse_color_full
+
+2007-06-06  Matthias Clasen  <mclasen@redhat.com>
+
+	* === Released 2.11.2 ===
+
+2007-06-04  Matthias Clasen  <mclasen@redhat.com>
+
+	* === Released 2.11.1 ===
+
+2007-06-03   Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/Makefile.am:
+	* gtk/visual_index.xml:
+	* gtk/images/volumebutton.png: Volume button image
+
+2007-06-01   Matthias Clasen  <mclasen@redhat.com>
+	
+	* gdk/gdk-sections.txt: Add new composited window api
+	* gdk/tmpl/windows.sgml: Add composited window example
+
 2007-05-26   Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/migrating*.sgml: Some cleanups

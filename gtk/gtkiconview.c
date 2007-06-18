@@ -447,12 +447,31 @@ static void     remove_scroll_timeout            (GtkIconView *icon_view);
 static void     clear_dest_info                  (GtkIconView *icon_view);
 static void     clear_source_info                (GtkIconView *icon_view);
 
+static void     adjust_wrap_width                (GtkIconView     *icon_view,
+						  GtkIconViewItem *item);
+
+/* GtkBuildable */
+static GtkBuildableIface *parent_buildable_iface;
+static void     gtk_icon_view_buildable_init             (GtkBuildableIface *iface);
+static gboolean gtk_icon_view_buildable_custom_tag_start (GtkBuildable  *buildable,
+							  GtkBuilder    *builder,
+							  GObject       *child,
+							  const gchar   *tagname,
+							  GMarkupParser *parser,
+							  gpointer      *data);
+static void     gtk_icon_view_buildable_custom_tag_end   (GtkBuildable  *buildable,
+							  GtkBuilder    *builder,
+							  GObject       *child,
+							  const gchar   *tagname,
+							  gpointer      *data);
 
 static guint icon_view_signals[LAST_SIGNAL] = { 0 };
 
 G_DEFINE_TYPE_WITH_CODE (GtkIconView, gtk_icon_view, GTK_TYPE_CONTAINER,
 			 G_IMPLEMENT_INTERFACE (GTK_TYPE_CELL_LAYOUT,
-						gtk_icon_view_cell_layout_init))
+						gtk_icon_view_cell_layout_init)
+			 G_IMPLEMENT_INTERFACE (GTK_TYPE_BUILDABLE,
+						gtk_icon_view_buildable_init))
 
 static void
 gtk_icon_view_class_init (GtkIconViewClass *klass)
@@ -891,6 +910,15 @@ gtk_icon_view_class_init (GtkIconViewClass *klass)
 				  GTK_MOVEMENT_VISUAL_POSITIONS, 1);
   gtk_icon_view_add_move_binding (binding_set, GDK_KP_Left, 0, 
 				  GTK_MOVEMENT_VISUAL_POSITIONS, -1);
+}
+
+static void
+gtk_icon_view_buildable_init (GtkBuildableIface *iface)
+{
+  parent_buildable_iface = g_type_interface_peek_parent (iface);
+  iface->add = _gtk_cell_layout_buildable_add;
+  iface->custom_tag_start = gtk_icon_view_buildable_custom_tag_start;
+  iface->custom_tag_end = gtk_icon_view_buildable_custom_tag_end;
 }
 
 static void
@@ -2588,9 +2616,16 @@ gtk_icon_view_layout (GtkIconView *icon_view)
 	}
     }
 
+
   icons = icon_view->priv->items;
   y += icon_view->priv->margin;
   row = 0;
+
+  if (icons)
+    {
+      gtk_icon_view_set_cell_data (icon_view, icons->data);
+      adjust_wrap_width (icon_view, icons->data);
+    }
   
   do
     {
@@ -2614,6 +2649,10 @@ gtk_icon_view_layout (GtkIconView *icon_view)
   gtk_icon_view_set_adjustment_upper (icon_view->priv->vadjustment, 
 				      icon_view->priv->height);
 
+  if (icon_view->priv->width != widget->requisition.width ||
+      icon_view->priv->height != widget->requisition.height)
+    gtk_widget_queue_resize_no_redraw (widget);
+
   if (GTK_WIDGET_REALIZED (icon_view))
     gdk_window_resize (icon_view->priv->bin_window,
 		       MAX (icon_view->priv->width, widget->allocation.width),
@@ -2634,7 +2673,7 @@ gtk_icon_view_layout (GtkIconView *icon_view)
       gtk_tree_path_free (path);
     }
   
-  gtk_widget_queue_draw (GTK_WIDGET (icon_view));
+  gtk_widget_queue_draw (widget);
 }
 
 static void 
@@ -2683,6 +2722,8 @@ adjust_wrap_width (GtkIconView     *icon_view,
   if (icon_view->priv->text_cell != -1 &&
       icon_view->priv->pixbuf_cell != -1)
     {
+      gint item_width;
+
       text_info = g_list_nth_data (icon_view->priv->cell_list,
 				   icon_view->priv->text_cell);
       pixbuf_info = g_list_nth_data (icon_view->priv->cell_list,
@@ -2694,12 +2735,23 @@ adjust_wrap_width (GtkIconView     *icon_view,
 				  &pixbuf_width, 
 				  NULL);
 	  
-      if (item->width == -1)
-	wrap_width = MAX (2 * pixbuf_width, 50);
-      else if (icon_view->priv->orientation == GTK_ORIENTATION_VERTICAL)
-	wrap_width = item->width;
+
+      if (icon_view->priv->item_width > 0)
+	item_width = icon_view->priv->item_width;
       else
-	wrap_width = item->width - pixbuf_width - icon_view->priv->spacing;
+	item_width = item->width;
+
+      if (item->width == -1)
+        {
+	  if (item_width > 0)
+	    wrap_width = item_width - pixbuf_width - icon_view->priv->spacing;
+	  else
+	    wrap_width = MAX (2 * pixbuf_width, 50);
+	}
+      else if (icon_view->priv->orientation == GTK_ORIENTATION_VERTICAL)
+	wrap_width = item_width;
+      else
+	wrap_width = item_width - pixbuf_width - icon_view->priv->spacing;
 
       g_object_set (text_info->cell, "wrap-width", wrap_width, NULL);
       g_object_set (text_info->cell, "width", wrap_width, NULL);
@@ -4230,8 +4282,6 @@ gtk_icon_view_set_cell_data (GtkIconView     *icon_view,
       
       g_object_thaw_notify (G_OBJECT (info->cell));
     }  
-  
-  adjust_wrap_width (icon_view, item);
 }
 
 static void 
@@ -4888,16 +4938,14 @@ update_text_cell (GtkIconView *icon_view)
       if (icon_view->priv->orientation == GTK_ORIENTATION_VERTICAL)
 	g_object_set (info->cell,
                       "alignment", PANGO_ALIGN_CENTER,
-		      "wrap-mode", PANGO_WRAP_WORD,
-		      "wrap-width", icon_view->priv->item_width,
+		      "wrap-mode", PANGO_WRAP_WORD_CHAR,
 		      "xalign", 0.0,
 		      "yalign", 0.0,
 		      NULL);
       else
 	g_object_set (info->cell,
                       "alignment", PANGO_ALIGN_LEFT,
-		      "wrap-mode", PANGO_WRAP_WORD,
-		      "wrap-width", icon_view->priv->item_width,
+		      "wrap-mode", PANGO_WRAP_WORD_CHAR,
 		      "xalign", 0.0,
 		      "yalign", 0.0,
 		      NULL);
@@ -9213,6 +9261,39 @@ gtk_icon_view_get_accessible (GtkWidget *widget)
     } 
   return (* GTK_WIDGET_CLASS (gtk_icon_view_parent_class)->get_accessible) (widget);
 }
+
+static gboolean
+gtk_icon_view_buildable_custom_tag_start (GtkBuildable  *buildable,
+					  GtkBuilder    *builder,
+					  GObject       *child,
+					  const gchar   *tagname,
+					  GMarkupParser *parser,
+					  gpointer      *data)
+{
+  if (parent_buildable_iface->custom_tag_start (buildable, builder, child,
+						tagname, parser, data))
+    return TRUE;
+
+  return _gtk_cell_layout_buildable_custom_tag_start (buildable, builder, child,
+						      tagname, parser, data);
+}
+
+static void
+gtk_icon_view_buildable_custom_tag_end (GtkBuildable *buildable,
+					GtkBuilder   *builder,
+					GObject      *child,
+					const gchar  *tagname,
+					gpointer     *data)
+{
+  if (strcmp (tagname, "attributes") == 0)
+    _gtk_cell_layout_buildable_custom_tag_end (buildable, builder, child, tagname,
+					       data);
+  else
+    parent_buildable_iface->custom_tag_end (buildable, builder, child, tagname,
+					    data);
+}
+
+
 
 #define __GTK_ICON_VIEW_C__
 #include "gtkaliasdef.c"

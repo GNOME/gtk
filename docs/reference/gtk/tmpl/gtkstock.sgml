@@ -275,6 +275,14 @@ The "Directory" icon.
 @Since: 2.6
 
 
+<!-- ##### MACRO GTK_STOCK_DISCARD ##### -->
+<para>
+The "Discard" item.
+</para>
+
+@Since: 2.12
+
+
 <!-- ##### MACRO GTK_STOCK_DISCONNECT ##### -->
 <para>
 The "Disconnect" icon.
