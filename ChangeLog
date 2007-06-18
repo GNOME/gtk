@@ -1,3 +1,10 @@
+2007-06-18  Gustavo J. A. M. Carneiro  <gjc@gnome.org>
+
+	reviewed by: Matthias Clasen
+
+	* gtk/gtkaccelgroup.c (gtk_accel_group_finalize): Remove closure
+	invalidate notifiers. (#448484)
+
 2007-06-17  Matthias Clasen <mclasen@redhat.com>
 
 	* README.in: Updates
