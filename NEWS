@@ -1,3 +1,27 @@
+Overview of Changes from GTK+ 2.11.3 to 2.11.4
+==============================================
+
+* The multipress input method correctly handles control keys
+
+* The memory management of GtkRecentManager has been
+  changed, deprecating the screen-related functions in favour
+  of gtk_recent_manager_get_default().
+
+* Bugs fixed: 
+ 448928 Some GtkBuildable methods named too generically
+ 448193 gtkbuilder.h causes compile error with C++
+ 354887 GtkFileChooserButton displays unnecessary authentication ...
+ 440450 GTK font selection minimum size is too large for 150dpi s...
+ 447214 gtk_tooltips_widget_remove() is slow
+ 448299 dgettext arguments interchanged
+ 448321 Drawing problems with block cursor
+ 448341 There is no GtkTooltip documentation in the gtk+ reference
+ 448484 GtkAccelGroup forgets to remove closure invalidate notifi...
+ 448544 Refcount issues in GtkCellRendererSpin
+ 412357 GtkMenuShell not defined as an abstract base type
+ 403717 print preview operation should pass settings to preview p...
+
+
 Overview of Changes from GTK+ 2.11.2 to 2.11.3
 ==============================================
 
