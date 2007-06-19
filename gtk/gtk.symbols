@@ -3203,8 +3203,10 @@ gtk_recent_manager_get_type G_GNUC_CONST
 gtk_recent_manager_new
 gtk_recent_manager_get_items
 gtk_recent_manager_get_default
+#ifndef GTK_DISABLE_DEPRECATED
 gtk_recent_manager_get_for_screen
 gtk_recent_manager_set_screen
+#endif
 gtk_recent_manager_add_item
 gtk_recent_manager_add_full
 gtk_recent_manager_remove_item

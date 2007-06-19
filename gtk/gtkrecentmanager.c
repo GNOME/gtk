@@ -96,7 +96,6 @@ struct _GtkRecentManagerPrivate
 {
   gchar *filename;
 
-  guint is_screen_singleton : 1;
   guint is_dirty : 1;
   guint write_in_progress : 1;
   guint read_in_progress : 1;
@@ -104,8 +103,6 @@ struct _GtkRecentManagerPrivate
   gint limit;
   gint size;
 
-  GdkScreen *screen;
-  
   GBookmarkFile *recent_items;
   
   time_t last_mtime;
@@ -149,6 +146,8 @@ static GtkRecentInfo *gtk_recent_info_new             (const gchar           *ur
 static void           gtk_recent_info_free            (GtkRecentInfo         *recent_info);
 
 static guint signal_changed = 0;
+
+static GtkRecentManager *recent_manager_singleton = NULL;
 
 G_DEFINE_TYPE (GtkRecentManager, gtk_recent_manager, G_TYPE_OBJECT)
 
@@ -286,12 +285,9 @@ gtk_recent_manager_init (GtkRecentManager *manager)
   priv->limit = DEFAULT_LIMIT;
   priv->size = 0;
   
-  priv->is_screen_singleton = FALSE;
   priv->is_dirty = FALSE;
   priv->write_in_progress = FALSE;
   priv->read_in_progress = FALSE;
-
-  priv->screen = NULL;
 
   priv->filename = g_build_filename (g_get_home_dir (),
 				     GTK_RECENTLY_USED_FILE,
@@ -364,7 +360,7 @@ gtk_recent_manager_finalize (GObject *object)
   
   if (priv->recent_items)
     g_bookmark_file_free (priv->recent_items);
-  
+
   /* chain up parent's finalize method */  
   G_OBJECT_CLASS (gtk_recent_manager_parent_class)->finalize (object);
 }
@@ -614,8 +610,7 @@ build_recent_items_list (GtkRecentManager *manager)
  * each time something inside the list changes.
  *
  * #GtkRecentManager objects are expensive: be sure to create them only when
- * needed. You should use the gtk_recent_manager_new_for_screen() or the
- * gtk_recent_manager_get_default() functions instead.
+ * needed. You should use gtk_recent_manager_get_default() instead.
  *
  * Return value: A newly created #GtkRecentManager object.
  *
@@ -630,20 +625,21 @@ gtk_recent_manager_new (void)
 /**
  * gtk_recent_manager_get_default:
  *
- * Gets the recent manager for the default screen. See
- * gtk_recent_manager_get_for_screen().
+ * Gets a unique instance of #GtkRecentManager, that you can share
+ * in your application without caring about memory management. The
+ * returned instance will be freed when you application terminates.
  *
- * Return value: A unique #GtkRecentManager associated with the
- *   default screen. This recent manager is associated with the
- *   screen and can be used as long as the screen is open.
- *   Do not ref or unref it.
+ * Return value: A unique #GtkRecentManager. Do not ref or unref it.
  *
  * Since: 2.10
  */
 GtkRecentManager *
 gtk_recent_manager_get_default (void)
 {
-  return gtk_recent_manager_get_for_screen (gdk_screen_get_default ());
+  if (G_UNLIKELY (!recent_manager_singleton))
+    recent_manager_singleton = gtk_recent_manager_new ();
+
+  return recent_manager_singleton;
 }
 
 /**
@@ -664,70 +660,16 @@ gtk_recent_manager_get_default (void)
  *   and can be used as long as the screen is open. Do not ref or
  *   unref it.
  *
+ * @Deprecated: 2.12: This function has been deprecated and should
+ *   not be used in newly written code. Calling this function is
+ *   equivalent to calling gtk_recent_manager_get_default().
+ *
  * Since: 2.10
  */
 GtkRecentManager *
 gtk_recent_manager_get_for_screen (GdkScreen *screen)
 {
-  GtkRecentManager *manager;
-
-  g_return_val_if_fail (GDK_IS_SCREEN (screen), NULL);
-  g_return_val_if_fail (!screen->closed, NULL);
-
-  manager = g_object_get_data (G_OBJECT (screen), "gtk-recent-manager-default");
-  if (!manager)
-    {
-      GtkRecentManagerPrivate *priv;
-      
-      manager = gtk_recent_manager_new ();
-      gtk_recent_manager_set_screen (manager, screen);
-
-      priv = manager->priv;
-      priv->is_screen_singleton = TRUE;
-
-      g_object_set_data (G_OBJECT (screen), I_("gtk-recent-manager-default"), manager);
-    }
-
-  return manager;
-}
-
-static void
-display_closed (GdkDisplay       *display,
-		gboolean          is_error,
-		GtkRecentManager *manager)
-{
-  GtkRecentManagerPrivate *priv = manager->priv;
-  GdkScreen *screen = priv->screen;
-  gboolean was_screen_singleton = priv->is_screen_singleton;
-
-  if (was_screen_singleton)
-    {
-      g_object_set_data (G_OBJECT (screen), I_("gtk-recent-manager-default"), NULL);
-      priv->is_screen_singleton = FALSE;
-    }
-
-  gtk_recent_manager_set_screen (manager, NULL);
-
-  if (was_screen_singleton)
-    g_object_unref (manager);
-}
-
-static void
-unset_screen (GtkRecentManager *manager)
-{
-  GtkRecentManagerPrivate *priv = manager->priv;
-  GdkDisplay *display;
-
-  if (priv->screen)
-    {
-      display = gdk_screen_get_display (priv->screen);
-
-      g_signal_handlers_disconnect_by_func (display,
-					    (gpointer) display_closed,
-					    manager);
-
-      priv->screen = NULL;
-    }
+  return gtk_recent_manager_get_default ();
 }
 
 /**
@@ -740,30 +682,16 @@ unset_screen (GtkRecentManager *manager)
  * storage.
  * 
  * Since: 2.10
+ *
+ * @Deprecated: 2.12: This function has been deprecated and should
+ *   not be used in newly written code. Calling this function has
+ *   no effect.
  */
 void
 gtk_recent_manager_set_screen (GtkRecentManager *manager,
 			       GdkScreen        *screen)
 {
-  GtkRecentManagerPrivate *priv;
-  GdkDisplay *display;
 
-  g_return_if_fail (GTK_IS_RECENT_MANAGER (manager));
-  g_return_if_fail (screen == NULL || GDK_IS_SCREEN (screen));
-
-  priv = manager->priv;
-
-  unset_screen (manager);
-
-  if (screen)
-    {
-      display = gdk_screen_get_display (screen);
-
-      priv->screen = screen;
-
-      g_signal_connect (display, "closed",
-		        G_CALLBACK (display_closed), manager);
-    }
 }
 
 /**
@@ -2446,6 +2374,22 @@ gtk_recent_info_has_group (GtkRecentInfo *info,
     }
 
   return FALSE;
+}
+
+/*
+ * _gtk_recent_manager_sync:
+ * 
+ * Private function for synchronising the recent manager singleton.
+ */
+void
+_gtk_recent_manager_sync (void)
+{
+  if (recent_manager_singleton)
+    {
+      /* force a dump of the contents of the recent manager singleton */
+      recent_manager_singleton->priv->is_dirty = TRUE;
+      gtk_recent_manager_real_changed (recent_manager_singleton);
+    }
 }
 
 #define __GTK_RECENT_MANAGER_C__

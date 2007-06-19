@@ -1,3 +1,28 @@
+2007-06-19  Emmanuele Bassi  <ebassi@gnome.org>
+
+	* gtk/gtkrecentmanager.c: Use a static variable to hold the
+	singleton and remove the code that binds a recent manager to
+	a GdkScreen.
+
+	(gtk_recent_manager_set_screen): Make it a NOOP.
+	(gtk_recent_manager_get_for_screen): Proxy for
+	gtk_recent_manager_get_default().
+
+	* gtk/gtk.symbols:
+	* gtk/gtkrecentmanager.h: Deprecate gtk_recent_manager_set_screen()
+	and gtk_recent_manager_get_for_screen().
+
+	* gtk/gtkmain.c: Force a synchronisation of the GtkRecentManager
+	singleton (if any) when reaching main loop depth of 0.
+
+	* gtk/gtkrecentchooserdefault.c:
+	(gtk_recent_chooser_default_dispose): Disconnect the changed
+	signal only if we have a manager and we are connected to it.
+
+	(set_recent_manager): Ditto.
+
+	* README.in: Document the deprecations.
+
 2007-06-18  Matthias Clasen <mclasen@redhat.com>
 
 	* gtk/gtkcellrendererspin.c: Fix some issues with refcounting

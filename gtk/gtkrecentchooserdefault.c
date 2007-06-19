@@ -601,7 +601,7 @@ gtk_recent_chooser_default_dispose (GObject *object)
       impl->recent_items = NULL;
     }
 
-  if (impl->manager_changed_id)
+  if (impl->manager && impl->manager_changed_id)
     {
       g_signal_handler_disconnect (impl->manager, impl->manager_changed_id);
       impl->manager_changed_id = 0;
@@ -1838,8 +1838,11 @@ set_recent_manager (GtkRecentChooserDefault *impl,
 {
   if (impl->manager)
     {
-      g_signal_handler_disconnect (impl, impl->manager_changed_id);
-      impl->manager_changed_id = 0;
+      if (impl->manager_changed_id)
+        {
+          g_signal_handler_disconnect (impl, impl->manager_changed_id);
+          impl->manager_changed_id = 0;
+        }
 
       impl->manager = NULL;
     }
@@ -1850,9 +1853,11 @@ set_recent_manager (GtkRecentChooserDefault *impl,
     impl->manager = gtk_recent_manager_get_default ();
   
   if (impl->manager)
-    impl->manager_changed_id = g_signal_connect (impl->manager, "changed",
-      						 G_CALLBACK (recent_manager_changed_cb),
-      						 impl);
+    {
+      impl->manager_changed_id = g_signal_connect (impl->manager, "changed",
+                                                   G_CALLBACK (recent_manager_changed_cb),
+                                                   impl);
+    }
 }
 
 GtkWidget *

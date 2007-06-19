@@ -136,10 +136,12 @@ GType 		  gtk_recent_manager_get_type       (void) G_GNUC_CONST;
 
 GtkRecentManager *gtk_recent_manager_new            (void);
 GtkRecentManager *gtk_recent_manager_get_default    (void);
-GtkRecentManager *gtk_recent_manager_get_for_screen (GdkScreen            *screen);
 
+#ifndef GTK_DISABLE_DEPRECATED
+GtkRecentManager *gtk_recent_manager_get_for_screen (GdkScreen            *screen);
 void              gtk_recent_manager_set_screen     (GtkRecentManager     *manager,
 						     GdkScreen            *screen);
+#endif
 
 gboolean          gtk_recent_manager_add_item       (GtkRecentManager     *manager,
 						     const gchar          *uri);
@@ -202,6 +204,9 @@ gboolean              gtk_recent_info_is_local             (GtkRecentInfo  *info
 gboolean              gtk_recent_info_exists               (GtkRecentInfo  *info);
 gboolean              gtk_recent_info_match                (GtkRecentInfo  *info_a,
 							    GtkRecentInfo  *info_b);
+
+/* private */
+void _gtk_recent_manager_sync (void);
 
 G_END_DECLS
 

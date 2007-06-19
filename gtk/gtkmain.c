@@ -61,6 +61,7 @@
 #include "gtkmain.h"
 #include "gtkmodules.h"
 #include "gtkrc.h"
+#include "gtkrecentmanager.h"
 #include "gtkselection.h"
 #include "gtksettings.h"
 #include "gtkwidget.h"
@@ -1188,9 +1189,14 @@ gtk_main (void)
 
   gtk_main_loop_level--;
 
-  /* Try storing all clipboard data we have */
   if (gtk_main_loop_level == 0)
-    _gtk_clipboard_store_all ();
+    {
+      /* Try storing all clipboard data we have */
+      _gtk_clipboard_store_all ();
+
+      /* Synchronize the recent manager singleton */
+      _gtk_recent_manager_sync ();
+    }
 }
 
 guint

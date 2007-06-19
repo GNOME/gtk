@@ -86,6 +86,12 @@ Release notes for 2.12
   documented as an abstract class, and there is little reason to 
   instantiate it.
   
+* The memory management of the GtkRecentManager object has been changed,
+  as using the screen didn't guarantee that the singleton instance was
+  correctly destroyed. The screen-related functions have been deprecated,
+  and should not be used anymore; the GtkRecentManager instance returned by
+  the gtk_recent_manager_get_default() function is guaranteed to be valid
+  for the entire lifetime of an application.
 
 Release notes for 2.10
 ======================
