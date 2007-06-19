@@ -110,7 +110,7 @@
   GDK_QUARTZ_RELEASE_POOL;
 }
 
-/* For information on seting up tracking rects properly, see here:
+/* For information on setting up tracking rects properly, see here:
  * http://developer.apple.com/documentation/Cocoa/Conceptual/EventOverview/EventOverview.pdf
  */
 -(void)updateTrackingRect
