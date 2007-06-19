@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: lv\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-06-15 21:24-0400\n"
+"POT-Creation-Date: 2007-06-19 12:19-0400\n"
 "PO-Revision-Date: 2007-04-11 11:34+0300\n"
 "Last-Translator: Raivis Dejus <orvils@gmail.com>\n"
 "Language-Team: Latvian <locale@laka.lv>\n"
@@ -74,7 +74,7 @@ msgstr "Uzstādāmie Gdk atkļūdošanas karodziņi"
 #. Placeholder in --gdk-no-debug=FLAGS in --help output
 #. Placeholder in --gtk-debug=FLAGS in --help output
 #. Placeholder in --gtk-no-debug=FLAGS in --help output
-#: gdk/gdk.c:140 gdk/gdk.c:143 gtk/gtkmain.c:415 gtk/gtkmain.c:418
+#: gdk/gdk.c:140 gdk/gdk.c:143 gtk/gtkmain.c:416 gtk/gtkmain.c:419
 msgid "FLAGS"
 msgstr "KARODZIŅI"
 
@@ -1500,7 +1500,7 @@ msgstr "Darbavirsma"
 msgid "(None)"
 msgstr "(Nekas)"
 
-#: gtk/gtkfilechooserbutton.c:2047
+#: gtk/gtkfilechooserbutton.c:2051
 msgid "Other..."
 msgstr "Cita vieta..."
 
@@ -2063,7 +2063,7 @@ msgstr ""
 msgid "Icon '%s' not present in theme"
 msgstr "Tēmā nav ikonas '%s'"
 
-#: gtk/gtkicontheme.c:2916
+#: gtk/gtkicontheme.c:2917
 #, fuzzy, c-format
 msgid "Failed to load icon"
 msgstr "Nevarēju ielādēt TIFF attēlu"
@@ -2168,27 +2168,27 @@ msgid "Invalid URI"
 msgstr "Nepareizs URI"
 
 #. Description of --gtk-module=MODULES in --help output
-#: gtk/gtkmain.c:408
+#: gtk/gtkmain.c:409
 msgid "Load additional GTK+ modules"
 msgstr "Ielādēt papildu GTK+ moduļus"
 
 #. Placeholder in --gtk-module=MODULES in --help output
-#: gtk/gtkmain.c:409
+#: gtk/gtkmain.c:410
 msgid "MODULES"
 msgstr "MODUĻI"
 
 #. Description of --g-fatal-warnings in --help output
-#: gtk/gtkmain.c:411
+#: gtk/gtkmain.c:412
 msgid "Make all warnings fatal"
 msgstr "Padarīt visus brīdinājumus fatālus"
 
 #. Description of --gtk-debug=FLAGS in --help output
-#: gtk/gtkmain.c:414
+#: gtk/gtkmain.c:415
 msgid "GTK+ debugging flags to set"
 msgstr "Uzstādāmie GTK+ atkļūdošanas karodziņi"
 
 #. Description of --gtk-no-debug=FLAGS in --help output
-#: gtk/gtkmain.c:417
+#: gtk/gtkmain.c:418
 msgid "GTK+ debugging flags to unset"
 msgstr "Noņemamie GTK+ atkļūdošanas karodziņi"
 
@@ -2197,15 +2197,15 @@ msgstr "Noņemamie GTK+ atkļūdošanas karodziņi"
 #. * Do *not* translate it to "predefinito:LTR", if it
 #. * it isn't default:LTR or default:RTL it will not work
 #.
-#: gtk/gtkmain.c:653
+#: gtk/gtkmain.c:654
 msgid "default:LTR"
 msgstr "default:LTR"
 
-#: gtk/gtkmain.c:750
+#: gtk/gtkmain.c:751
 msgid "GTK+ Options"
 msgstr "GTK+ opcijas"
 
-#: gtk/gtkmain.c:750
+#: gtk/gtkmain.c:751
 msgid "Show GTK+ Options"
 msgstr "Parādīt GRK+ opcijas"
 
@@ -2752,8 +2752,8 @@ msgstr "Atvērt '%s'"
 msgid "Unknown item"
 msgstr "Nezināma vienība"
 
-#: gtk/gtkrecentmanager.c:1055 gtk/gtkrecentmanager.c:1205
-#: gtk/gtkrecentmanager.c:1215 gtk/gtkrecentmanager.c:1274
+#: gtk/gtkrecentmanager.c:1032 gtk/gtkrecentmanager.c:1182
+#: gtk/gtkrecentmanager.c:1192 gtk/gtkrecentmanager.c:1251
 #, c-format
 msgid "Unable to find an item with URI '%s'"
 msgstr "Nevar atrast vienību ar URI '%s'"

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-06-15 21:24-0400\n"
+"POT-Creation-Date: 2007-06-19 12:19-0400\n"
 "PO-Revision-Date: 2007-02-15 14:52+0200\n"
 "Last-Translator: Maxim Dziumanenko <dziumanenko@gmail.com>\n"
 "Language-Team: Ukrainian <linux@linux.org.ua>\n"
@@ -74,7 +74,7 @@ msgstr "Встановити налагоджувальні ознаки Gdk"
 #. Placeholder in --gdk-no-debug=FLAGS in --help output
 #. Placeholder in --gtk-debug=FLAGS in --help output
 #. Placeholder in --gtk-no-debug=FLAGS in --help output
-#: gdk/gdk.c:140 gdk/gdk.c:143 gtk/gtkmain.c:415 gtk/gtkmain.c:418
+#: gdk/gdk.c:140 gdk/gdk.c:143 gtk/gtkmain.c:416 gtk/gtkmain.c:419
 msgid "FLAGS"
 msgstr "ОЗНАКИ"
 
@@ -1514,7 +1514,7 @@ msgstr "Робочий стіл"
 msgid "(None)"
 msgstr "(Немає)"
 
-#: gtk/gtkfilechooserbutton.c:2047
+#: gtk/gtkfilechooserbutton.c:2051
 msgid "Other..."
 msgstr "Інший..."
 
@@ -2077,7 +2077,7 @@ msgstr ""
 msgid "Icon '%s' not present in theme"
 msgstr "Значок \"%s\" відсутній у темі"
 
-#: gtk/gtkicontheme.c:2916
+#: gtk/gtkicontheme.c:2917
 #, fuzzy, c-format
 msgid "Failed to load icon"
 msgstr "Не вдається завантажити зображення TIFF"
@@ -2182,27 +2182,27 @@ msgid "Invalid URI"
 msgstr "Неправильний URI"
 
 #. Description of --gtk-module=MODULES in --help output
-#: gtk/gtkmain.c:408
+#: gtk/gtkmain.c:409
 msgid "Load additional GTK+ modules"
 msgstr "Завантажити додаткові модулі GTK+"
 
 #. Placeholder in --gtk-module=MODULES in --help output
-#: gtk/gtkmain.c:409
+#: gtk/gtkmain.c:410
 msgid "MODULES"
 msgstr "MODULES"
 
 #. Description of --g-fatal-warnings in --help output
-#: gtk/gtkmain.c:411
+#: gtk/gtkmain.c:412
 msgid "Make all warnings fatal"
 msgstr "Зробити усі попередження фатальними"
 
 #. Description of --gtk-debug=FLAGS in --help output
-#: gtk/gtkmain.c:414
+#: gtk/gtkmain.c:415
 msgid "GTK+ debugging flags to set"
 msgstr "Встановити вказані ознаки налагодження GTK+"
 
 #. Description of --gtk-no-debug=FLAGS in --help output
-#: gtk/gtkmain.c:417
+#: gtk/gtkmain.c:418
 msgid "GTK+ debugging flags to unset"
 msgstr "Скинути вказані налагоджувальні ознаки GTK+"
 
@@ -2211,15 +2211,15 @@ msgstr "Скинути вказані налагоджувальні ознак�
 #. * Do *not* translate it to "predefinito:LTR", if it
 #. * it isn't default:LTR or default:RTL it will not work
 #.
-#: gtk/gtkmain.c:653
+#: gtk/gtkmain.c:654
 msgid "default:LTR"
 msgstr "default:LTR"
 
-#: gtk/gtkmain.c:750
+#: gtk/gtkmain.c:751
 msgid "GTK+ Options"
 msgstr "Параметри GTK+"
 
-#: gtk/gtkmain.c:750
+#: gtk/gtkmain.c:751
 msgid "Show GTK+ Options"
 msgstr "Показати параметри GTK+"
 
@@ -2767,8 +2767,8 @@ msgstr "Відкрити '%s'"
 msgid "Unknown item"
 msgstr "Невідомий елемент"
 
-#: gtk/gtkrecentmanager.c:1055 gtk/gtkrecentmanager.c:1205
-#: gtk/gtkrecentmanager.c:1215 gtk/gtkrecentmanager.c:1274
+#: gtk/gtkrecentmanager.c:1032 gtk/gtkrecentmanager.c:1182
+#: gtk/gtkrecentmanager.c:1192 gtk/gtkrecentmanager.c:1251
 #, c-format
 msgid "Unable to find an item with URI '%s'"
 msgstr "Не вдається знайти елемент з URI '%s'"

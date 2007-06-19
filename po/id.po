@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ HEAD\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-06-15 21:24-0400\n"
+"POT-Creation-Date: 2007-06-19 12:19-0400\n"
 "PO-Revision-Date: 2006-09-05 15:56+0700\n"
 "Last-Translator: Mohammad DAMT <mdamt@bisnisweb.com>\n"
 "Language-Team: Indonesia <sukarelawan@gnome.linux.or.id>\n"
@@ -75,7 +75,7 @@ msgstr "Bendera debug Gdk yang hendak dipasang"
 #. Placeholder in --gdk-no-debug=FLAGS in --help output
 #. Placeholder in --gtk-debug=FLAGS in --help output
 #. Placeholder in --gtk-no-debug=FLAGS in --help output
-#: gdk/gdk.c:140 gdk/gdk.c:143 gtk/gtkmain.c:415 gtk/gtkmain.c:418
+#: gdk/gdk.c:140 gdk/gdk.c:143 gtk/gtkmain.c:416 gtk/gtkmain.c:419
 msgid "FLAGS"
 msgstr "BENDERA"
 
@@ -1506,7 +1506,7 @@ msgstr "Desktop"
 msgid "(None)"
 msgstr "(Tidak ada)"
 
-#: gtk/gtkfilechooserbutton.c:2047
+#: gtk/gtkfilechooserbutton.c:2051
 msgid "Other..."
 msgstr "Lainnya..."
 
@@ -2067,7 +2067,7 @@ msgstr ""
 msgid "Icon '%s' not present in theme"
 msgstr "Ikon '%s' tidak ada pada tema"
 
-#: gtk/gtkicontheme.c:2916
+#: gtk/gtkicontheme.c:2917
 #, fuzzy, c-format
 msgid "Failed to load icon"
 msgstr "Berkas TIFF tidak dapat dibuka"
@@ -2172,27 +2172,27 @@ msgid "Invalid URI"
 msgstr "URI Salah"
 
 #. Description of --gtk-module=MODULES in --help output
-#: gtk/gtkmain.c:408
+#: gtk/gtkmain.c:409
 msgid "Load additional GTK+ modules"
 msgstr "Panggil modul GTK+ lainnya"
 
 #. Placeholder in --gtk-module=MODULES in --help output
-#: gtk/gtkmain.c:409
+#: gtk/gtkmain.c:410
 msgid "MODULES"
 msgstr "MODUL"
 
 #. Description of --g-fatal-warnings in --help output
-#: gtk/gtkmain.c:411
+#: gtk/gtkmain.c:412
 msgid "Make all warnings fatal"
 msgstr "Buat semua peringatan menjadi pesan fatal"
 
 #. Description of --gtk-debug=FLAGS in --help output
-#: gtk/gtkmain.c:414
+#: gtk/gtkmain.c:415
 msgid "GTK+ debugging flags to set"
 msgstr "Bendera debug GTK+ yang hendak dipasang"
 
 #. Description of --gtk-no-debug=FLAGS in --help output
-#: gtk/gtkmain.c:417
+#: gtk/gtkmain.c:418
 msgid "GTK+ debugging flags to unset"
 msgstr "Bendera debug GTK+ yang hendak dilepas"
 
@@ -2201,15 +2201,15 @@ msgstr "Bendera debug GTK+ yang hendak dilepas"
 #. * Do *not* translate it to "predefinito:LTR", if it
 #. * it isn't default:LTR or default:RTL it will not work
 #.
-#: gtk/gtkmain.c:653
+#: gtk/gtkmain.c:654
 msgid "default:LTR"
 msgstr "default:LTR"
 
-#: gtk/gtkmain.c:750
+#: gtk/gtkmain.c:751
 msgid "GTK+ Options"
 msgstr "Pilihan GTK+"
 
-#: gtk/gtkmain.c:750
+#: gtk/gtkmain.c:751
 msgid "Show GTK+ Options"
 msgstr "Tampilkan Pilihan GTK+"
 
@@ -2756,8 +2756,8 @@ msgstr "Buka '%s'"
 msgid "Unknown item"
 msgstr "Objek tak dikenal"
 
-#: gtk/gtkrecentmanager.c:1055 gtk/gtkrecentmanager.c:1205
-#: gtk/gtkrecentmanager.c:1215 gtk/gtkrecentmanager.c:1274
+#: gtk/gtkrecentmanager.c:1032 gtk/gtkrecentmanager.c:1182
+#: gtk/gtkrecentmanager.c:1192 gtk/gtkrecentmanager.c:1251
 #, c-format
 msgid "Unable to find an item with URI '%s'"
 msgstr "Tidak dapat menemukan objek dengan URI '%s'"

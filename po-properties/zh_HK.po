@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-properties 2.8.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-06-15 21:24-0400\n"
+"POT-Creation-Date: 2007-06-19 12:20-0400\n"
 "PO-Revision-Date: 2006-04-17 19:14+0800\n"
 "Last-Translator: Chao-Hsiung Liao <j_h_liau@yahoo.com.tw>\n"
 "Language-Team: Chinese (Taiwan) <community@linuxhall.org>\n"
@@ -1157,7 +1157,7 @@ msgstr "內置圖示代碼"
 msgid "The stock ID of the stock icon to render"
 msgstr "準備顯示的內置圖示的代碼"
 
-#: gtk/gtkcellrendererpixbuf.c:144 gtk/gtkrecentmanager.c:247
+#: gtk/gtkcellrendererpixbuf.c:144 gtk/gtkrecentmanager.c:279
 #: gtk/gtkstatusicon.c:217
 msgid "Size"
 msgstr "大小"
@@ -2377,7 +2377,7 @@ msgstr "檔案選擇對話框的標題。"
 msgid "The desired width of the button widget, in characters."
 msgstr "按鈕元件所需的寬度，以字元計。"
 
-#: gtk/gtkfilesel.c:525 gtk/gtkimage.c:162 gtk/gtkrecentmanager.c:216
+#: gtk/gtkfilesel.c:525 gtk/gtkimage.c:162 gtk/gtkrecentmanager.c:248
 #: gtk/gtkstatusicon.c:184
 msgid "Filename"
 msgstr "檔案名稱"
@@ -4053,7 +4053,7 @@ msgstr "限定本地端"
 msgid "Whether the selected resource(s) should be limited to local file: URIs"
 msgstr "是否選擇的檔案應該限定於本地端 file: URLs"
 
-#: gtk/gtkrecentchooser.c:154 gtk/gtkrecentmanager.c:231
+#: gtk/gtkrecentchooser.c:154 gtk/gtkrecentmanager.c:263
 msgid "Limit"
 msgstr ""
 
@@ -4087,16 +4087,16 @@ msgstr "顯示週數"
 msgid "Whether the items should be displayed with a number"
 msgstr "是否在選單上加上可卸下標記的選單項目"
 
-#: gtk/gtkrecentmanager.c:217
+#: gtk/gtkrecentmanager.c:249
 msgid "The full path to the file to be used to store and read the list"
 msgstr ""
 
-#: gtk/gtkrecentmanager.c:232
+#: gtk/gtkrecentmanager.c:264
 msgid ""
 "The maximum number of items to be returned by gtk_recent_manager_get_items()"
 msgstr ""
 
-#: gtk/gtkrecentmanager.c:248
+#: gtk/gtkrecentmanager.c:280
 msgid "The size of the recently used resources list"
 msgstr ""
 

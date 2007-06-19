@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-menus\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-06-15 21:24-0400\n"
+"POT-Creation-Date: 2007-06-19 12:19-0400\n"
 "PO-Revision-Date: 2007-05-14 05:47+0300\n"
 "Last-Translator: Ihar Hrachyshka <ihar.hrachyshka@gmail.com>\n"
 "Language-Team: Belarusian Latin <i18n@mova.org>\n"
@@ -75,7 +75,7 @@ msgstr "Ściažki adsočki Gdk"
 #. Placeholder in --gdk-no-debug=FLAGS in --help output
 #. Placeholder in --gtk-debug=FLAGS in --help output
 #. Placeholder in --gtk-no-debug=FLAGS in --help output
-#: gdk/gdk.c:140 gdk/gdk.c:143 gtk/gtkmain.c:415 gtk/gtkmain.c:418
+#: gdk/gdk.c:140 gdk/gdk.c:143 gtk/gtkmain.c:416 gtk/gtkmain.c:419
 msgid "FLAGS"
 msgstr "ŚCIAŽKI"
 
@@ -1507,7 +1507,7 @@ msgstr "Stoł"
 msgid "(None)"
 msgstr "(niama)"
 
-#: gtk/gtkfilechooserbutton.c:2047
+#: gtk/gtkfilechooserbutton.c:2051
 msgid "Other..."
 msgstr "Inšaje..."
 
@@ -2071,7 +2071,7 @@ msgstr ""
 msgid "Icon '%s' not present in theme"
 msgstr "Ikona \"%s\" adsutnaja ŭ matyvie"
 
-#: gtk/gtkicontheme.c:2916
+#: gtk/gtkicontheme.c:2917
 #, fuzzy, c-format
 msgid "Failed to load icon"
 msgstr "Niemahčyma zahruzić vyjavu TIFF"
@@ -2176,27 +2176,27 @@ msgid "Invalid URI"
 msgstr "Niapravilny URI"
 
 #. Description of --gtk-module=MODULES in --help output
-#: gtk/gtkmain.c:408
+#: gtk/gtkmain.c:409
 msgid "Load additional GTK+ modules"
 msgstr "Zahružaje dadatkovyja moduli GTK+"
 
 #. Placeholder in --gtk-module=MODULES in --help output
-#: gtk/gtkmain.c:409
+#: gtk/gtkmain.c:410
 msgid "MODULES"
 msgstr "MODULI"
 
 #. Description of --g-fatal-warnings in --help output
-#: gtk/gtkmain.c:411
+#: gtk/gtkmain.c:412
 msgid "Make all warnings fatal"
 msgstr "Uspryjmańnie aściarohaŭ jak pamyłak"
 
 #. Description of --gtk-debug=FLAGS in --help output
-#: gtk/gtkmain.c:414
+#: gtk/gtkmain.c:415
 msgid "GTK+ debugging flags to set"
 msgstr "Ustalavanyja ściažki adsočki GTK+"
 
 #. Description of --gtk-no-debug=FLAGS in --help output
-#: gtk/gtkmain.c:417
+#: gtk/gtkmain.c:418
 msgid "GTK+ debugging flags to unset"
 msgstr "Vyčyščanyja ściažki adsočki GTK+"
 
@@ -2205,15 +2205,15 @@ msgstr "Vyčyščanyja ściažki adsočki GTK+"
 #. * Do *not* translate it to "predefinito:LTR", if it
 #. * it isn't default:LTR or default:RTL it will not work
 #.
-#: gtk/gtkmain.c:653
+#: gtk/gtkmain.c:654
 msgid "default:LTR"
 msgstr "default:LTR"
 
-#: gtk/gtkmain.c:750
+#: gtk/gtkmain.c:751
 msgid "GTK+ Options"
 msgstr "Opcyi GTK+"
 
-#: gtk/gtkmain.c:750
+#: gtk/gtkmain.c:751
 msgid "Show GTK+ Options"
 msgstr "Pakazvaje opcyi GTK+"
 
@@ -2760,8 +2760,8 @@ msgstr "Adčyni '%s'"
 msgid "Unknown item"
 msgstr "Nieviadomy element"
 
-#: gtk/gtkrecentmanager.c:1055 gtk/gtkrecentmanager.c:1205
-#: gtk/gtkrecentmanager.c:1215 gtk/gtkrecentmanager.c:1274
+#: gtk/gtkrecentmanager.c:1032 gtk/gtkrecentmanager.c:1182
+#: gtk/gtkrecentmanager.c:1192 gtk/gtkrecentmanager.c:1251
 #, c-format
 msgid "Unable to find an item with URI '%s'"
 msgstr "Niemahčyma znajści element z URI '%s'"

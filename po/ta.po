@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ta\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-06-15 21:24-0400\n"
+"POT-Creation-Date: 2007-06-19 12:19-0400\n"
 "PO-Revision-Date: 2006-09-12 21:04-0700\n"
 "Last-Translator: \n"
 "Language-Team:  <en@li.org>\n"
@@ -81,7 +81,7 @@ msgstr "அமைக்க Gdk பிழைதிருத்தம் கொட
 #. Placeholder in --gdk-no-debug=FLAGS in --help output
 #. Placeholder in --gtk-debug=FLAGS in --help output
 #. Placeholder in --gtk-no-debug=FLAGS in --help output
-#: gdk/gdk.c:140 gdk/gdk.c:143 gtk/gtkmain.c:415 gtk/gtkmain.c:418
+#: gdk/gdk.c:140 gdk/gdk.c:143 gtk/gtkmain.c:416 gtk/gtkmain.c:419
 msgid "FLAGS"
 msgstr "FLAGS"
 
@@ -1502,7 +1502,7 @@ msgstr "கணிமேசை"
 msgid "(None)"
 msgstr "(ஒன்றுமில்லை)"
 
-#: gtk/gtkfilechooserbutton.c:2047
+#: gtk/gtkfilechooserbutton.c:2051
 msgid "Other..."
 msgstr "பிற..."
 
@@ -2060,7 +2060,7 @@ msgstr ""
 msgid "Icon '%s' not present in theme"
 msgstr "திட்டத்தில் சின்னம் '%s' இல்லை"
 
-#: gtk/gtkicontheme.c:2916
+#: gtk/gtkicontheme.c:2917
 #, fuzzy, c-format
 msgid "Failed to load icon"
 msgstr "TIFF உருவத்தைத் ஏற்ற முடியவில்லை"
@@ -2165,27 +2165,27 @@ msgid "Invalid URI"
 msgstr "தவறான URI"
 
 #. Description of --gtk-module=MODULES in --help output
-#: gtk/gtkmain.c:408
+#: gtk/gtkmain.c:409
 msgid "Load additional GTK+ modules"
 msgstr "கூடுதல் GTK+தொகுதிகளை ஏற்று"
 
 #. Placeholder in --gtk-module=MODULES in --help output
-#: gtk/gtkmain.c:409
+#: gtk/gtkmain.c:410
 msgid "MODULES"
 msgstr "MODULES"
 
 #. Description of --g-fatal-warnings in --help output
-#: gtk/gtkmain.c:411
+#: gtk/gtkmain.c:412
 msgid "Make all warnings fatal"
 msgstr "அனைத்து எச்சரிக்கை செய்திகளையும் முடிவடைய செய்யவும்"
 
 #. Description of --gtk-debug=FLAGS in --help output
-#: gtk/gtkmain.c:414
+#: gtk/gtkmain.c:415
 msgid "GTK+ debugging flags to set"
 msgstr "GTK+ பிழைத்திருத்தும் கொடிகளை அமைகிறது"
 
 #. Description of --gtk-no-debug=FLAGS in --help output
-#: gtk/gtkmain.c:417
+#: gtk/gtkmain.c:418
 msgid "GTK+ debugging flags to unset"
 msgstr "GTK+ பிழைத்திருத்தும் கொடிகளை நீக்குகிறது"
 
@@ -2194,15 +2194,15 @@ msgstr "GTK+ பிழைத்திருத்தும் கொடிகள
 #. * Do *not* translate it to "predefinito:LTR", if it
 #. * it isn't default:LTR or default:RTL it will not work
 #.
-#: gtk/gtkmain.c:653
+#: gtk/gtkmain.c:654
 msgid "default:LTR"
 msgstr "default:LTR"
 
-#: gtk/gtkmain.c:750
+#: gtk/gtkmain.c:751
 msgid "GTK+ Options"
 msgstr "GTK+ விருப்பங்கள்"
 
-#: gtk/gtkmain.c:750
+#: gtk/gtkmain.c:751
 msgid "Show GTK+ Options"
 msgstr "GTK+ விருப்பங்களை காட்டு"
 
@@ -2749,8 +2749,8 @@ msgstr "'%s'ஐ திற"
 msgid "Unknown item"
 msgstr "தெரியாத உருப்படி"
 
-#: gtk/gtkrecentmanager.c:1055 gtk/gtkrecentmanager.c:1205
-#: gtk/gtkrecentmanager.c:1215 gtk/gtkrecentmanager.c:1274
+#: gtk/gtkrecentmanager.c:1032 gtk/gtkrecentmanager.c:1182
+#: gtk/gtkrecentmanager.c:1192 gtk/gtkrecentmanager.c:1251
 #, c-format
 msgid "Unable to find an item with URI '%s'"
 msgstr "URI '%s'உடன் உருப்படியை தேட முடியவில்லை"

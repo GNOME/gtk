@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-properties.HEAD\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-06-15 21:24-0400\n"
+"POT-Creation-Date: 2007-06-19 12:20-0400\n"
 "PO-Revision-Date: 2005-05-15 15:47+0545\n"
 "Last-Translator: Ganesh Ghimire <gghimire@gmail.com>\n"
 "Language-Team: Nepali <info@mpp.org.np>\n"
@@ -1169,7 +1169,7 @@ msgstr "संग्रहित आइडि"
 msgid "The stock ID of the stock icon to render"
 msgstr "रेन्डरलाई संग्रहित छविचित्रको संग्रहित आइडि"
 
-#: gtk/gtkcellrendererpixbuf.c:144 gtk/gtkrecentmanager.c:247
+#: gtk/gtkcellrendererpixbuf.c:144 gtk/gtkrecentmanager.c:279
 #: gtk/gtkstatusicon.c:217
 msgid "Size"
 msgstr "आकार"
@@ -2394,7 +2394,7 @@ msgstr "फाइल छनोटकर्ताको वार्ताला�
 msgid "The desired width of the button widget, in characters."
 msgstr "बटन विजेटको आबस्यक चौडाई, क्यारेक्टरहरूमा"
 
-#: gtk/gtkfilesel.c:525 gtk/gtkimage.c:162 gtk/gtkrecentmanager.c:216
+#: gtk/gtkfilesel.c:525 gtk/gtkimage.c:162 gtk/gtkrecentmanager.c:248
 #: gtk/gtkstatusicon.c:184
 msgid "Filename"
 msgstr "फाइलनाम"
@@ -4077,7 +4077,7 @@ msgstr "स्थानीय मात्र"
 msgid "Whether the selected resource(s) should be limited to local file: URIs"
 msgstr "जब स्थानीय फाइल युआरएल सीमित गर्नका लागि प्रयोग हुने चयनित फाइल "
 
-#: gtk/gtkrecentchooser.c:154 gtk/gtkrecentmanager.c:231
+#: gtk/gtkrecentchooser.c:154 gtk/gtkrecentmanager.c:263
 msgid "Limit"
 msgstr ""
 
@@ -4111,16 +4111,16 @@ msgstr "सप्ताहका संख्याहरु देखाऊ"
 msgid "Whether the items should be displayed with a number"
 msgstr "जब च्यात्ने क्षमता भएको मेनु आइटमहरू मेनुमा थप्न सकिन्छ "
 
-#: gtk/gtkrecentmanager.c:217
+#: gtk/gtkrecentmanager.c:249
 msgid "The full path to the file to be used to store and read the list"
 msgstr ""
 
-#: gtk/gtkrecentmanager.c:232
+#: gtk/gtkrecentmanager.c:264
 msgid ""
 "The maximum number of items to be returned by gtk_recent_manager_get_items()"
 msgstr ""
 
-#: gtk/gtkrecentmanager.c:248
+#: gtk/gtkrecentmanager.c:280
 msgid "The size of the recently used resources list"
 msgstr ""
 

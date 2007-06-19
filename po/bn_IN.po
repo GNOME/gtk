@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: GTK+\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-06-15 21:24-0400\n"
+"POT-Creation-Date: 2007-06-19 12:19-0400\n"
 "PO-Revision-Date: 2006-07-31 20:27+0530\n"
 "Last-Translator: Runa Bhattacharjee <runabh@gmail.com>\n"
 "Language-Team: Bengali India <gnome-translation@bengalinux.org>\n"
@@ -76,7 +76,7 @@ msgstr "মান নির্ধারণের উদ্দেশ্যে চ
 #. Placeholder in --gdk-no-debug=FLAGS in --help output
 #. Placeholder in --gtk-debug=FLAGS in --help output
 #. Placeholder in --gtk-no-debug=FLAGS in --help output
-#: gdk/gdk.c:140 gdk/gdk.c:143 gtk/gtkmain.c:415 gtk/gtkmain.c:418
+#: gdk/gdk.c:140 gdk/gdk.c:143 gtk/gtkmain.c:416 gtk/gtkmain.c:419
 msgid "FLAGS"
 msgstr "FLAGS"
 
@@ -1489,7 +1489,7 @@ msgstr "ডেস্কটপ"
 msgid "(None)"
 msgstr "(শূণ্য)"
 
-#: gtk/gtkfilechooserbutton.c:2047
+#: gtk/gtkfilechooserbutton.c:2051
 msgid "Other..."
 msgstr "অন্যান্য..."
 
@@ -2045,7 +2045,7 @@ msgstr ""
 msgid "Icon '%s' not present in theme"
 msgstr "থিমের মধ্যে আইকন '%s' অনুপস্থিত"
 
-#: gtk/gtkicontheme.c:2916
+#: gtk/gtkicontheme.c:2917
 #, fuzzy, c-format
 msgid "Failed to load icon"
 msgstr "TIFF ছবি লোড করতে ব্যর্থ"
@@ -2152,27 +2152,27 @@ msgid "Invalid URI"
 msgstr "অবৈধ URI"
 
 #. Description of --gtk-module=MODULES in --help output
-#: gtk/gtkmain.c:408
+#: gtk/gtkmain.c:409
 msgid "Load additional GTK+ modules"
 msgstr "অতিরিক্ত GTK+ মডিউল লোড করুন"
 
 #. Placeholder in --gtk-module=MODULES in --help output
-#: gtk/gtkmain.c:409
+#: gtk/gtkmain.c:410
 msgid "MODULES"
 msgstr "MODULES"
 
 #. Description of --g-fatal-warnings in --help output
-#: gtk/gtkmain.c:411
+#: gtk/gtkmain.c:412
 msgid "Make all warnings fatal"
 msgstr "সকল সতর্কবার্তা গুরুতর হিসাবে চিহ্নিত হবে"
 
 #. Description of --gtk-debug=FLAGS in --help output
-#: gtk/gtkmain.c:414
+#: gtk/gtkmain.c:415
 msgid "GTK+ debugging flags to set"
 msgstr "মান নির্ধারণের উদ্দেশ্যে চিহ্নিত GTK+ ডিবাগিং ফ্ল্যাগ"
 
 #. Description of --gtk-no-debug=FLAGS in --help output
-#: gtk/gtkmain.c:417
+#: gtk/gtkmain.c:418
 msgid "GTK+ debugging flags to unset"
 msgstr "মান মুছে ফেলার উদ্দেশ্যে চিহ্নিত GTK+ ডিবাগিং ফ্ল্যাগ"
 
@@ -2181,15 +2181,15 @@ msgstr "মান মুছে ফেলার উদ্দেশ্যে চ�
 #. * Do *not* translate it to "predefinito:LTR", if it
 #. * it isn't default:LTR or default:RTL it will not work
 #.
-#: gtk/gtkmain.c:653
+#: gtk/gtkmain.c:654
 msgid "default:LTR"
 msgstr "default:LTR"
 
-#: gtk/gtkmain.c:750
+#: gtk/gtkmain.c:751
 msgid "GTK+ Options"
 msgstr "GTK+ সংক্রান্ত বিকল্প"
 
-#: gtk/gtkmain.c:750
+#: gtk/gtkmain.c:751
 msgid "Show GTK+ Options"
 msgstr "GTK+ সংক্রান্ত বিকল্প প্রদর্শন করা হবে"
 
@@ -2735,8 +2735,8 @@ msgstr "'%s' খুলুন"
 msgid "Unknown item"
 msgstr "অজানা বস্তু"
 
-#: gtk/gtkrecentmanager.c:1055 gtk/gtkrecentmanager.c:1205
-#: gtk/gtkrecentmanager.c:1215 gtk/gtkrecentmanager.c:1274
+#: gtk/gtkrecentmanager.c:1032 gtk/gtkrecentmanager.c:1182
+#: gtk/gtkrecentmanager.c:1192 gtk/gtkrecentmanager.c:1251
 #, c-format
 msgid "Unable to find an item with URI '%s'"
 msgstr "URI '%s' সহ কোনো বস্তু অনুসন্ধানে ব্যর্থ"

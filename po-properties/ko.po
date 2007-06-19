@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-properrties 2.9.4\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-06-15 21:24-0400\n"
+"POT-Creation-Date: 2007-06-19 12:20-0400\n"
 "PO-Revision-Date: 2006-07-08 04:31+0900\n"
 "Last-Translator: Changwoo Ryu <cwryu@debian.org>\n"
 "Language-Team: GNOME Korea <gnome-kr-hackers@lists.kldp.net>\n"
@@ -1162,7 +1162,7 @@ msgstr "스톡 ID"
 msgid "The stock ID of the stock icon to render"
 msgstr "표시할 스톡 아이콘의 스톡 ID"
 
-#: gtk/gtkcellrendererpixbuf.c:144 gtk/gtkrecentmanager.c:247
+#: gtk/gtkcellrendererpixbuf.c:144 gtk/gtkrecentmanager.c:279
 #: gtk/gtkstatusicon.c:217
 msgid "Size"
 msgstr "크기"
@@ -2381,7 +2381,7 @@ msgstr "파일 선택 대화 상자의 제목."
 msgid "The desired width of the button widget, in characters."
 msgstr "단추 위젯의 폭, 문자 개수 단위."
 
-#: gtk/gtkfilesel.c:525 gtk/gtkimage.c:162 gtk/gtkrecentmanager.c:216
+#: gtk/gtkfilesel.c:525 gtk/gtkimage.c:162 gtk/gtkrecentmanager.c:248
 #: gtk/gtkstatusicon.c:184
 msgid "Filename"
 msgstr "파일 이름"
@@ -4025,7 +4025,7 @@ msgstr "로컬 전용"
 msgid "Whether the selected resource(s) should be limited to local file: URIs"
 msgstr "선택할 파일을 로컬 file: URL에만 한정하는 지 여부"
 
-#: gtk/gtkrecentchooser.c:154 gtk/gtkrecentmanager.c:231
+#: gtk/gtkrecentchooser.c:154 gtk/gtkrecentmanager.c:263
 msgid "Limit"
 msgstr "한계값"
 
@@ -4053,16 +4053,16 @@ msgstr "번호 표시"
 msgid "Whether the items should be displayed with a number"
 msgstr "항목에 번호를 함께 표시할 지 여부"
 
-#: gtk/gtkrecentmanager.c:217
+#: gtk/gtkrecentmanager.c:249
 msgid "The full path to the file to be used to store and read the list"
 msgstr "목록을 저장하고 읽을 때 사용할 파일의 완전한 경로"
 
-#: gtk/gtkrecentmanager.c:232
+#: gtk/gtkrecentmanager.c:264
 msgid ""
 "The maximum number of items to be returned by gtk_recent_manager_get_items()"
 msgstr "gtk_recent_manager_get_items()가 리턴할 항목의 최대 개수"
 
-#: gtk/gtkrecentmanager.c:248
+#: gtk/gtkrecentmanager.c:280
 msgid "The size of the recently used resources list"
 msgstr "최근에 사용한 리소스 목록의 크기"
 

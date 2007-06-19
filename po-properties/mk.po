@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: mk\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-06-15 21:24-0400\n"
+"POT-Creation-Date: 2007-06-19 12:20-0400\n"
 "PO-Revision-Date: 2006-08-02 00:47+0200\n"
 "Last-Translator: Arangel Angov <ufo@linux.net.mk>\n"
 "Language-Team: Macedonian <ossm-members@hedona.on.net.mk>\n"
@@ -1182,7 +1182,7 @@ msgstr "Stock ID"
 msgid "The stock ID of the stock icon to render"
 msgstr "The stock ID of the stock icon to render"
 
-#: gtk/gtkcellrendererpixbuf.c:144 gtk/gtkrecentmanager.c:247
+#: gtk/gtkcellrendererpixbuf.c:144 gtk/gtkrecentmanager.c:279
 #: gtk/gtkstatusicon.c:217
 msgid "Size"
 msgstr "Големина"
@@ -2416,7 +2416,7 @@ msgstr "The title of the file chooser dialog."
 msgid "The desired width of the button widget, in characters."
 msgstr "The desired width of the button widget, in characters."
 
-#: gtk/gtkfilesel.c:525 gtk/gtkimage.c:162 gtk/gtkrecentmanager.c:216
+#: gtk/gtkfilesel.c:525 gtk/gtkimage.c:162 gtk/gtkrecentmanager.c:248
 #: gtk/gtkstatusicon.c:184
 msgid "Filename"
 msgstr "Име на датотека"
@@ -4096,7 +4096,7 @@ msgid "Whether the selected resource(s) should be limited to local file: URIs"
 msgstr ""
 "Дали избраните ресурси да бидат ограничени само на локална датотека: URI"
 
-#: gtk/gtkrecentchooser.c:154 gtk/gtkrecentmanager.c:231
+#: gtk/gtkrecentchooser.c:154 gtk/gtkrecentmanager.c:263
 msgid "Limit"
 msgstr "Лимит"
 
@@ -4124,20 +4124,20 @@ msgstr "Прикажи бројки"
 msgid "Whether the items should be displayed with a number"
 msgstr "Дали предметите да бидат прикажани со бројка"
 
-#: gtk/gtkrecentmanager.c:217
+#: gtk/gtkrecentmanager.c:249
 msgid "The full path to the file to be used to store and read the list"
 msgstr ""
 "Целосната патека на датотеката која ќе биде употребена за зачувување и "
 "читање на листата"
 
-#: gtk/gtkrecentmanager.c:232
+#: gtk/gtkrecentmanager.c:264
 msgid ""
 "The maximum number of items to be returned by gtk_recent_manager_get_items()"
 msgstr ""
 "Максималниот број на предмети кои ќе бидат вратени од "
 "gtk_recent_manager_get_items()"
 
-#: gtk/gtkrecentmanager.c:248
+#: gtk/gtkrecentmanager.c:280
 msgid "The size of the recently used resources list"
 msgstr "Големината на скорашно употребуваната листа на ресурси"
 

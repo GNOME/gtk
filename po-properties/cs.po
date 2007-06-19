@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-06-15 21:24-0400\n"
+"POT-Creation-Date: 2007-06-19 12:20-0400\n"
 "PO-Revision-Date: 2005-07-23 18:29+0200\n"
 "Last-Translator: Miloslav Trmac <bukm@centrum.cz>\n"
 "Language-Team: Czech <cs@li.org>\n"
@@ -1194,7 +1194,7 @@ msgstr "Standardní ID"
 msgid "The stock ID of the stock icon to render"
 msgstr "Standardní ID zobrazované standardní ikony"
 
-#: gtk/gtkcellrendererpixbuf.c:144 gtk/gtkrecentmanager.c:247
+#: gtk/gtkcellrendererpixbuf.c:144 gtk/gtkrecentmanager.c:279
 #: gtk/gtkstatusicon.c:217
 msgid "Size"
 msgstr "Velikost"
@@ -2434,7 +2434,7 @@ msgstr "Titulek dialogu výběru souborů."
 msgid "The desired width of the button widget, in characters."
 msgstr "Požadovaná šířka widgetu tlačítka ve znacích."
 
-#: gtk/gtkfilesel.c:525 gtk/gtkimage.c:162 gtk/gtkrecentmanager.c:216
+#: gtk/gtkfilesel.c:525 gtk/gtkimage.c:162 gtk/gtkrecentmanager.c:248
 #: gtk/gtkstatusicon.c:184
 msgid "Filename"
 msgstr "Název souboru"
@@ -4134,7 +4134,7 @@ msgstr "Jen místní"
 msgid "Whether the selected resource(s) should be limited to local file: URIs"
 msgstr "Jestli mají být vybrané soubory omezeny na místní URL file:"
 
-#: gtk/gtkrecentchooser.c:154 gtk/gtkrecentmanager.c:231
+#: gtk/gtkrecentchooser.c:154 gtk/gtkrecentmanager.c:263
 msgid "Limit"
 msgstr ""
 
@@ -4168,16 +4168,16 @@ msgstr "Zobrazovat čísla týdnů"
 msgid "Whether the items should be displayed with a number"
 msgstr "Jestli mají být do menu přidávány položky pro odtržení"
 
-#: gtk/gtkrecentmanager.c:217
+#: gtk/gtkrecentmanager.c:249
 msgid "The full path to the file to be used to store and read the list"
 msgstr ""
 
-#: gtk/gtkrecentmanager.c:232
+#: gtk/gtkrecentmanager.c:264
 msgid ""
 "The maximum number of items to be returned by gtk_recent_manager_get_items()"
 msgstr ""
 
-#: gtk/gtkrecentmanager.c:248
+#: gtk/gtkrecentmanager.c:280
 msgid "The size of the recently used resources list"
 msgstr ""
 

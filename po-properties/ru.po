@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-properties.gtk-2-8\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-06-15 21:24-0400\n"
+"POT-Creation-Date: 2007-06-19 12:20-0400\n"
 "PO-Revision-Date: 2006-08-15 19:52+0200\n"
 "Last-Translator: Nickolay V. Shmyrev <nshmyrev@yandex.ru>\n"
 "Language-Team: Russian <gnome-cyr@gnome.org>\n"
@@ -1201,7 +1201,7 @@ msgstr "Идентификатор (ID) встроенного значка"
 msgid "The stock ID of the stock icon to render"
 msgstr "Идентификатор (ID) встроенного значка для отрисовки"
 
-#: gtk/gtkcellrendererpixbuf.c:144 gtk/gtkrecentmanager.c:247
+#: gtk/gtkcellrendererpixbuf.c:144 gtk/gtkrecentmanager.c:279
 #: gtk/gtkstatusicon.c:217
 msgid "Size"
 msgstr "Размер"
@@ -2444,7 +2444,7 @@ msgstr "Заголовок диалога выбора файлов."
 msgid "The desired width of the button widget, in characters."
 msgstr "Желаемая ширина виджета кнопки, в символах."
 
-#: gtk/gtkfilesel.c:525 gtk/gtkimage.c:162 gtk/gtkrecentmanager.c:216
+#: gtk/gtkfilesel.c:525 gtk/gtkimage.c:162 gtk/gtkrecentmanager.c:248
 #: gtk/gtkstatusicon.c:184
 msgid "Filename"
 msgstr "Имя файла"
@@ -4139,7 +4139,7 @@ msgstr ""
 "Ограничивать ли доступные для выделения ресурсы только локальными файлами со "
 "схемой file:"
 
-#: gtk/gtkrecentchooser.c:154 gtk/gtkrecentmanager.c:231
+#: gtk/gtkrecentchooser.c:154 gtk/gtkrecentmanager.c:263
 msgid "Limit"
 msgstr "Максимум"
 
@@ -4167,18 +4167,18 @@ msgstr "Показывать номера"
 msgid "Whether the items should be displayed with a number"
 msgstr "Показывать ли элементы вместе с номером"
 
-#: gtk/gtkrecentmanager.c:217
+#: gtk/gtkrecentmanager.c:249
 msgid "The full path to the file to be used to store and read the list"
 msgstr "Полный путь к файлу, используемому для загрузки и сохранения списка"
 
-#: gtk/gtkrecentmanager.c:232
+#: gtk/gtkrecentmanager.c:264
 msgid ""
 "The maximum number of items to be returned by gtk_recent_manager_get_items()"
 msgstr ""
 "Максимальное число элементов, возвращаемых функцией "
 "gtk_recent_manager_get_items()"
 
-#: gtk/gtkrecentmanager.c:248
+#: gtk/gtkrecentmanager.c:280
 msgid "The size of the recently used resources list"
 msgstr "Размер списка недавно использовавшихся ресурсов"
 

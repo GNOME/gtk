@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-properties\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-06-15 21:24-0400\n"
+"POT-Creation-Date: 2007-06-19 12:20-0400\n"
 "PO-Revision-Date: 2005-02-08 08:59+0200\n"
 "Last-Translator: Canonical Ltd <translations@canonical.com>\n"
 "Language-Team: Xhosa <xh-translate@ubuntu.com>\n"
@@ -1224,7 +1224,7 @@ msgstr "I-Stock ID"
 msgid "The stock ID of the stock icon to render"
 msgstr "I-stock ID somfanekiso we-stock ongumqondiso onikezelwayo"
 
-#: gtk/gtkcellrendererpixbuf.c:144 gtk/gtkrecentmanager.c:247
+#: gtk/gtkcellrendererpixbuf.c:144 gtk/gtkrecentmanager.c:279
 #: gtk/gtkstatusicon.c:217
 msgid "Size"
 msgstr "Ubungakanani"
@@ -2514,7 +2514,7 @@ msgstr "Isihloko sonxibelelwano lokukhetha ifayili."
 msgid "The desired width of the button widget, in characters."
 msgstr "Ububanzi obufunekayo beqhosha lesixhobo, ngokweempawu."
 
-#: gtk/gtkfilesel.c:525 gtk/gtkimage.c:162 gtk/gtkrecentmanager.c:216
+#: gtk/gtkfilesel.c:525 gtk/gtkimage.c:162 gtk/gtkrecentmanager.c:248
 #: gtk/gtkstatusicon.c:184
 msgid "Filename"
 msgstr "Igama lefayili"
@@ -4284,7 +4284,7 @@ msgstr ""
 "Nokuba ngaba i/iifayili zimele ziphelele kuphela kwifayili efikeleleka ngqo: "
 "ii-URL"
 
-#: gtk/gtkrecentchooser.c:154 gtk/gtkrecentmanager.c:231
+#: gtk/gtkrecentchooser.c:154 gtk/gtkrecentmanager.c:263
 msgid "Limit"
 msgstr ""
 
@@ -4318,16 +4318,16 @@ msgstr "Bonisa Amanani Eeveki"
 msgid "Whether the items should be displayed with a number"
 msgstr "Nokuba ngaba izinto ezisuswayo zemenyu zimelwe zongezwe na kwimenyu"
 
-#: gtk/gtkrecentmanager.c:217
+#: gtk/gtkrecentmanager.c:249
 msgid "The full path to the file to be used to store and read the list"
 msgstr ""
 
-#: gtk/gtkrecentmanager.c:232
+#: gtk/gtkrecentmanager.c:264
 msgid ""
 "The maximum number of items to be returned by gtk_recent_manager_get_items()"
 msgstr ""
 
-#: gtk/gtkrecentmanager.c:248
+#: gtk/gtkrecentmanager.c:280
 msgid "The size of the recently used resources list"
 msgstr ""
 

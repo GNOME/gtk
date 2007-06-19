@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-properties.HEAD.dz\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-06-15 21:24-0400\n"
+"POT-Creation-Date: 2007-06-19 12:20-0400\n"
 "PO-Revision-Date: 2006-07-18 17:40+0530\n"
 "Last-Translator: Mindu Dorji\n"
 "Language-Team: DZONGKHA <pgeyleg@dit.gov.bt>\n"
@@ -1175,7 +1175,7 @@ msgstr "ཅ་མཛོད་ཀྱི་ཨའི་ཌི།"
 msgid "The stock ID of the stock icon to render"
 msgstr "ལྷག་སྟོན་འབད་ནིའི་དོན་ལུ་ ཅ་མཛོད་ངོས་དཔར་གྱི་ ཅ་མཛོད་ཀྱི་ཨའི་ཌི།"
 
-#: gtk/gtkcellrendererpixbuf.c:144 gtk/gtkrecentmanager.c:247
+#: gtk/gtkcellrendererpixbuf.c:144 gtk/gtkrecentmanager.c:279
 #: gtk/gtkstatusicon.c:217
 msgid "Size"
 msgstr "ཚད། "
@@ -2400,7 +2400,7 @@ msgstr "ཡིག་སྣོད་འདེམས་བྱེད་ ཌའི�
 msgid "The desired width of the button widget, in characters."
 msgstr "རེ་འདུན་བསྐྱེད་མི་ ཨེབ་རྟའི་ཝི་གེཊི་གི་རྒྱ་ཚད་ ཡིག་འབྲུ་ནང་།"
 
-#: gtk/gtkfilesel.c:525 gtk/gtkimage.c:162 gtk/gtkrecentmanager.c:216
+#: gtk/gtkfilesel.c:525 gtk/gtkimage.c:162 gtk/gtkrecentmanager.c:248
 #: gtk/gtkstatusicon.c:184
 msgid "Filename"
 msgstr "ཡིག་སྣོད་མིང༌།"
@@ -4061,7 +4061,7 @@ msgstr ""
 "སེལ་འཐུ་འབད་དེ་ཡོད་མི་རྣམ་གྲངས་ (ཚུ) ཉེ་གནས་ཀྱི་ཡིག་སྣོད་ ཡུ་ཨར་ཨེལ་ཨེསི་ཚུ་ རྐྱངམ་གཅིག་ལུ་ཚད་བཟུང་"
 "དགོཔ་ཨིན་ན་མེད།"
 
-#: gtk/gtkrecentchooser.c:154 gtk/gtkrecentmanager.c:231
+#: gtk/gtkrecentchooser.c:154 gtk/gtkrecentmanager.c:263
 msgid "Limit"
 msgstr "བཅད་མཚམས།"
 
@@ -4089,17 +4089,17 @@ msgstr "ཨང་གྲངས་ཚུ་སྟོན།"
 msgid "Whether the items should be displayed with a number"
 msgstr "རྣམ་གྲངས་ཚུ་ཨང་གྲངས་དང་བཅསཔ་སྦེ་ བཀྲམ་སྟོན་འབད་དགོཔ་ཨིན་ན་མེན།"
 
-#: gtk/gtkrecentmanager.c:217
+#: gtk/gtkrecentmanager.c:249
 msgid "The full path to the file to be used to store and read the list"
 msgstr "ཐོ་ཡིག་གསོག་འཇོག་དང་ལྷག་ནིའི་དོན་ལུ་ ལག་ལེན་འཐབ་ནིའི་ཡིག་སྣོད་ཀྱི་འགྲུལ་ལམ་ཧྲིལ་བུ།"
 
-#: gtk/gtkrecentmanager.c:232
+#: gtk/gtkrecentmanager.c:264
 msgid ""
 "The maximum number of items to be returned by gtk_recent_manager_get_items()"
 msgstr ""
 "ཇི་ཊི་ཀེ་_འཕྲལ་ཁམས་_འཛིན་སྐྱོང་པ་_ལེན་_རྣམ་གྲངས་ཀྱིས་ ལོག་གཏང་ནིའི་རྣམ་གྲངས་ཀྱི་གྱངས་ཁ་མང་མཐའ།"
 
-#: gtk/gtkrecentmanager.c:248
+#: gtk/gtkrecentmanager.c:280
 msgid "The size of the recently used resources list"
 msgstr "འཕྲལ་ཁམས་ལག་ལེན་འཐབ་མི་ ཐོན་ཁུངས་ཐོ་ཡིག་གི་ཚད།"
 

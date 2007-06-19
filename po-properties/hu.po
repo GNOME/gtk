@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-properties.HEAD.hu\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-06-15 21:24-0400\n"
+"POT-Creation-Date: 2007-06-19 12:20-0400\n"
 "PO-Revision-Date: 2006-12-17 14:24+0100\n"
 "Last-Translator: Gabor Kelemen <kelemeng@gnome.hu>\n"
 "Language-Team: Hungarian <gnome@gnome.hu>\n"
@@ -1178,7 +1178,7 @@ msgstr "Gyári azonosító"
 msgid "The stock ID of the stock icon to render"
 msgstr "A megjelenítendő gyári ikon gyári azonosítója"
 
-#: gtk/gtkcellrendererpixbuf.c:144 gtk/gtkrecentmanager.c:247
+#: gtk/gtkcellrendererpixbuf.c:144 gtk/gtkrecentmanager.c:279
 #: gtk/gtkstatusicon.c:217
 msgid "Size"
 msgstr "Méret"
@@ -2425,7 +2425,7 @@ msgstr "A fájlválasztó párbeszédablak címe."
 msgid "The desired width of the button widget, in characters."
 msgstr "A gomb felületi elem kívánt szélessége, karakterekben megadva."
 
-#: gtk/gtkfilesel.c:525 gtk/gtkimage.c:162 gtk/gtkrecentmanager.c:216
+#: gtk/gtkfilesel.c:525 gtk/gtkimage.c:162 gtk/gtkrecentmanager.c:248
 #: gtk/gtkstatusicon.c:184
 msgid "Filename"
 msgstr "Fájlnév"
@@ -4108,7 +4108,7 @@ msgstr "Csak helyi"
 msgid "Whether the selected resource(s) should be limited to local file: URIs"
 msgstr "A kijelölt erőforrások csak helyi file: URI-címek lehetnek-e"
 
-#: gtk/gtkrecentchooser.c:154 gtk/gtkrecentmanager.c:231
+#: gtk/gtkrecentchooser.c:154 gtk/gtkrecentmanager.c:263
 msgid "Limit"
 msgstr "Korlátozás"
 
@@ -4136,17 +4136,17 @@ msgstr "Számok megjelenítése"
 msgid "Whether the items should be displayed with a number"
 msgstr "Az elemek egy számmal együtt kerüljenek-e megjelenítésre"
 
-#: gtk/gtkrecentmanager.c:217
+#: gtk/gtkrecentmanager.c:249
 msgid "The full path to the file to be used to store and read the list"
 msgstr "A lista tárolására és beolvasására használandó fájl teljes útvonala"
 
-#: gtk/gtkrecentmanager.c:232
+#: gtk/gtkrecentmanager.c:264
 msgid ""
 "The maximum number of items to be returned by gtk_recent_manager_get_items()"
 msgstr ""
 "A gtk_recent_manager_get_items() által visszaadandó elemek legnagyobb száma"
 
-#: gtk/gtkrecentmanager.c:248
+#: gtk/gtkrecentmanager.c:280
 msgid "The size of the recently used resources list"
 msgstr "A legutóbb használt erőforrások listájának mérete"
 

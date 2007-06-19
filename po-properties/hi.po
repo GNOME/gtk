@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-properties.HEAD.hi\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-06-15 21:24-0400\n"
+"POT-Creation-Date: 2007-06-19 12:20-0400\n"
 "PO-Revision-Date: 2006-06-22 12:28+0530\n"
 "Last-Translator: Rajesh Ranjan <rranjan@redhat.com>\n"
 "Language-Team: Hindi <fedora-trans-hi@redhat.com>\n"
@@ -1157,7 +1157,7 @@ msgstr "स्टॉक ID"
 msgid "The stock ID of the stock icon to render"
 msgstr "रेंडर करने के लिये स्टॉक प्रतीक का स्टॉक ID"
 
-#: gtk/gtkcellrendererpixbuf.c:144 gtk/gtkrecentmanager.c:247
+#: gtk/gtkcellrendererpixbuf.c:144 gtk/gtkrecentmanager.c:279
 #: gtk/gtkstatusicon.c:217
 msgid "Size"
 msgstr "आकार"
@@ -2377,7 +2377,7 @@ msgstr "फाइल चयनक संवाद का शीर्षक"
 msgid "The desired width of the button widget, in characters."
 msgstr "संप्रतीक में बटन विजेट की इच्छित चौडाई"
 
-#: gtk/gtkfilesel.c:525 gtk/gtkimage.c:162 gtk/gtkrecentmanager.c:216
+#: gtk/gtkfilesel.c:525 gtk/gtkimage.c:162 gtk/gtkrecentmanager.c:248
 #: gtk/gtkstatusicon.c:184
 msgid "Filename"
 msgstr "फ़ाइलनाम"
@@ -4012,7 +4012,7 @@ msgstr "सिर्फ स्थानीय"
 msgid "Whether the selected resource(s) should be limited to local file: URIs"
 msgstr "क्या चयनित फाइल को स्थानीय फाइल तक सीमित होना चाहिये: URL"
 
-#: gtk/gtkrecentchooser.c:154 gtk/gtkrecentmanager.c:231
+#: gtk/gtkrecentchooser.c:154 gtk/gtkrecentmanager.c:263
 msgid "Limit"
 msgstr "सीमा"
 
@@ -4040,16 +4040,16 @@ msgstr "संख्या दिखाएँ"
 msgid "Whether the items should be displayed with a number"
 msgstr "क्या मद को संख्या के साथ दिखाया जाना है"
 
-#: gtk/gtkrecentmanager.c:217
+#: gtk/gtkrecentmanager.c:249
 msgid "The full path to the file to be used to store and read the list"
 msgstr "फाइल का पूर्ण पथ जिसे भंडारित करने के लिये प्रयोग किया जाना है और सूची पढें"
 
-#: gtk/gtkrecentmanager.c:232
+#: gtk/gtkrecentmanager.c:264
 msgid ""
 "The maximum number of items to be returned by gtk_recent_manager_get_items()"
 msgstr "gtk_recent_manager_get_items() के द्वारा लौटाया मद की अधिकतम संख्या"
 
-#: gtk/gtkrecentmanager.c:248
+#: gtk/gtkrecentmanager.c:280
 msgid "The size of the recently used resources list"
 msgstr "हाल में प्रयुक्त संसाधन सूची का आकार"
 

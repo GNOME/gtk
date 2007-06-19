@@ -31,8 +31,8 @@ SEE ALSO
 @g_iface: 
 @set_name: 
 @get_name: 
-@add: 
-@set_property: 
+@add_child: 
+@set_buildable_property: 
 @construct_child: 
 @custom_tag_start: 
 @custom_tag_end: 

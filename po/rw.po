@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-06-15 21:24-0400\n"
+"POT-Creation-Date: 2007-06-19 12:19-0400\n"
 "PO-Revision-Date: 2004-11-16 14:57-0700\n"
 "Last-Translator: Steve Murphy <murf@e-tools.com>\n"
 "Language-Team: Kinyarwanda <translation-team-rw@lists.sourceforge.net>\n"
@@ -85,7 +85,7 @@ msgstr "Amabendera Kuri Gushyiraho"
 #. Placeholder in --gdk-no-debug=FLAGS in --help output
 #. Placeholder in --gtk-debug=FLAGS in --help output
 #. Placeholder in --gtk-no-debug=FLAGS in --help output
-#: gdk/gdk.c:140 gdk/gdk.c:143 gtk/gtkmain.c:415 gtk/gtkmain.c:418
+#: gdk/gdk.c:140 gdk/gdk.c:143 gtk/gtkmain.c:416 gtk/gtkmain.c:419
 #, fuzzy
 msgid "FLAGS"
 msgstr "Amabendera"
@@ -1551,7 +1551,7 @@ msgid "(None)"
 msgstr "(ntacyo)"
 
 # sw/source\ui\ribbar\workctrl.src:RID_INSERT_FIELD_CTRL.FN_INSERT_FIELD.text
-#: gtk/gtkfilechooserbutton.c:2047
+#: gtk/gtkfilechooserbutton.c:2051
 msgid "Other..."
 msgstr "Ikindi..."
 
@@ -2178,7 +2178,7 @@ msgstr ""
 msgid "Icon '%s' not present in theme"
 msgstr "OYA in"
 
-#: gtk/gtkicontheme.c:2916
+#: gtk/gtkicontheme.c:2917
 #, fuzzy, c-format
 msgid "Failed to load icon"
 msgstr "Kuri Ibirimo Ishusho"
@@ -2310,30 +2310,30 @@ msgid "Invalid URI"
 msgstr "8"
 
 #. Description of --gtk-module=MODULES in --help output
-#: gtk/gtkmain.c:408
+#: gtk/gtkmain.c:409
 #, fuzzy
 msgid "Load additional GTK+ modules"
 msgstr "Modire"
 
 #. Placeholder in --gtk-module=MODULES in --help output
-#: gtk/gtkmain.c:409
+#: gtk/gtkmain.c:410
 msgid "MODULES"
 msgstr "Modire"
 
 #. Description of --g-fatal-warnings in --help output
-#: gtk/gtkmain.c:411
+#: gtk/gtkmain.c:412
 #, fuzzy
 msgid "Make all warnings fatal"
 msgstr "Byose Iburira"
 
 #. Description of --gtk-debug=FLAGS in --help output
-#: gtk/gtkmain.c:414
+#: gtk/gtkmain.c:415
 #, fuzzy
 msgid "GTK+ debugging flags to set"
 msgstr "Amabendera Kuri Gushyiraho"
 
 #. Description of --gtk-no-debug=FLAGS in --help output
-#: gtk/gtkmain.c:417
+#: gtk/gtkmain.c:418
 #, fuzzy
 msgid "GTK+ debugging flags to unset"
 msgstr "Amabendera Kuri"
@@ -2343,15 +2343,15 @@ msgstr "Amabendera Kuri"
 #. * Do *not* translate it to "predefinito:LTR", if it
 #. * it isn't default:LTR or default:RTL it will not work
 #.
-#: gtk/gtkmain.c:653
+#: gtk/gtkmain.c:654
 msgid "default:LTR"
 msgstr "default:LTR"
 
-#: gtk/gtkmain.c:750
+#: gtk/gtkmain.c:751
 msgid "GTK+ Options"
 msgstr ""
 
-#: gtk/gtkmain.c:750
+#: gtk/gtkmain.c:751
 msgid "Show GTK+ Options"
 msgstr ""
 
@@ -2969,8 +2969,8 @@ msgstr ""
 msgid "Unknown item"
 msgstr "Itazwi"
 
-#: gtk/gtkrecentmanager.c:1055 gtk/gtkrecentmanager.c:1205
-#: gtk/gtkrecentmanager.c:1215 gtk/gtkrecentmanager.c:1274
+#: gtk/gtkrecentmanager.c:1032 gtk/gtkrecentmanager.c:1182
+#: gtk/gtkrecentmanager.c:1192 gtk/gtkrecentmanager.c:1251
 #, fuzzy, c-format
 msgid "Unable to find an item with URI '%s'"
 msgstr "Kuri Gushaka Gushyiramo IDOSIYE"

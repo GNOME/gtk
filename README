@@ -1,7 +1,7 @@
 General Information
 ===================
 
-This is GTK+ version 2.11.3. GTK+ is a multi-platform toolkit for
+This is GTK+ version 2.11.4. GTK+ is a multi-platform toolkit for
 creating graphical user interfaces. Offering a complete set of widgets,
 GTK+ is suitable for projects ranging from small one-off projects to
 complete application suites.
@@ -73,6 +73,29 @@ Release notes for 2.12
   "gtk-combobox-popup-window.GtkFrame" should take into account that the 
   frame no longer exists.
 
+* The external print preview application used by GtkPrintOperationPreview is
+  now passed the print settings on the command line with the --print-settings
+  parameter pointing to a temp file containing the settings. The preview
+  application assumes ownership of the file and should delete it once it does
+  not need it anymore. The --print-settings commandline option is understood
+  by Evince 0.9.0 and newer. To use a different print preview application,
+  change the gtk-print-preview-command setting in your gtkrc file, e.g.
+  gtk-print-preview-command = "ggv %f"
+
+* GtkMenuShell is now defined as an abstract type. It was already 
+  documented as an abstract class, and there is little reason to 
+  instantiate it.
+
+* The GtkTooltips struct (this is the old tooltips API) is now considered
+  private. Code that used to access this struct, in particular the
+  tips_data_list field, will need to change.
+  
+* The memory management of the GtkRecentManager object has been changed,
+  as using the screen didn't guarantee that the singleton instance was
+  correctly destroyed. The screen-related functions have been deprecated,
+  and should not be used anymore; the GtkRecentManager instance returned by
+  the gtk_recent_manager_get_default() function is guaranteed to be valid
+  for the entire lifetime of an application.
 
 Release notes for 2.10
 ======================

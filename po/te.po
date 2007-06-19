@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-06-15 21:24-0400\n"
+"POT-Creation-Date: 2007-06-19 12:19-0400\n"
 "PO-Revision-Date: 2004-10-17 12:50+0100\n"
 "Last-Translator: Prajasakti Localisation Team <localisation@prajasakti.com>\n"
 "Language-Team: Prajasakti Localisation Team <localisation@prajasakti.com>\n"
@@ -74,7 +74,7 @@ msgstr "అమర్చవలసిన Gdk లోప నిర్మూలన fl
 #. Placeholder in --gdk-no-debug=FLAGS in --help output
 #. Placeholder in --gtk-debug=FLAGS in --help output
 #. Placeholder in --gtk-no-debug=FLAGS in --help output
-#: gdk/gdk.c:140 gdk/gdk.c:143 gtk/gtkmain.c:415 gtk/gtkmain.c:418
+#: gdk/gdk.c:140 gdk/gdk.c:143 gtk/gtkmain.c:416 gtk/gtkmain.c:419
 msgid "FLAGS"
 msgstr "ఫ్లాగ్"
 
@@ -1489,7 +1489,7 @@ msgstr "రంగస్థలం"
 msgid "(None)"
 msgstr "(ఏమీలేదు)"
 
-#: gtk/gtkfilechooserbutton.c:2047
+#: gtk/gtkfilechooserbutton.c:2051
 msgid "Other..."
 msgstr "ఇతరములు"
 
@@ -2075,7 +2075,7 @@ msgstr ""
 msgid "Icon '%s' not present in theme"
 msgstr "ప్రతిమ '%s' వైద్యాంశంలో లేదు"
 
-#: gtk/gtkicontheme.c:2916
+#: gtk/gtkicontheme.c:2917
 #, fuzzy, c-format
 msgid "Failed to load icon"
 msgstr "TIFF ప్రతిబింబాన్ని నింపుకొనుటలో విఫలమైంది"
@@ -2190,27 +2190,27 @@ msgid "Invalid URI"
 msgstr "చెల్లని  UTF-8"
 
 #. Description of --gtk-module=MODULES in --help output
-#: gtk/gtkmain.c:408
+#: gtk/gtkmain.c:409
 msgid "Load additional GTK+ modules"
 msgstr "అదనపు  GTK+ ప్రమాణం నింపుకొనండి"
 
 #. Placeholder in --gtk-module=MODULES in --help output
-#: gtk/gtkmain.c:409
+#: gtk/gtkmain.c:410
 msgid "MODULES"
 msgstr "ప్రమాణాలు"
 
 #. Description of --g-fatal-warnings in --help output
-#: gtk/gtkmain.c:411
+#: gtk/gtkmain.c:412
 msgid "Make all warnings fatal"
 msgstr "అన్ని హెచ్చరికలను అనివార్యం చేయండి"
 
 #. Description of --gtk-debug=FLAGS in --help output
-#: gtk/gtkmain.c:414
+#: gtk/gtkmain.c:415
 msgid "GTK+ debugging flags to set"
 msgstr "GTK+ లోపనిర్మూలన  ఫ్లాగ్స్ను అమర్చుము"
 
 #. Description of --gtk-no-debug=FLAGS in --help output
-#: gtk/gtkmain.c:417
+#: gtk/gtkmain.c:418
 msgid "GTK+ debugging flags to unset"
 msgstr "GTK+ లోప నిర్మూలనా ఫ్లాగ్స్ను తిరిగి అమర్చుము"
 
@@ -2219,15 +2219,15 @@ msgstr "GTK+ లోప నిర్మూలనా ఫ్లాగ్స్న�
 #. * Do *not* translate it to "predefinito:LTR", if it
 #. * it isn't default:LTR or default:RTL it will not work
 #.
-#: gtk/gtkmain.c:653
+#: gtk/gtkmain.c:654
 msgid "default:LTR"
 msgstr "default:LTR"
 
-#: gtk/gtkmain.c:750
+#: gtk/gtkmain.c:751
 msgid "GTK+ Options"
 msgstr "GTK+ ఇచ్ఛాపూర్వకాలు"
 
-#: gtk/gtkmain.c:750
+#: gtk/gtkmain.c:751
 msgid "Show GTK+ Options"
 msgstr " GTK+ ఇచ్ఛాపూర్వకాలను చూపుము"
 
@@ -2803,8 +2803,8 @@ msgstr ""
 msgid "Unknown item"
 msgstr "అపరిచిత"
 
-#: gtk/gtkrecentmanager.c:1055 gtk/gtkrecentmanager.c:1205
-#: gtk/gtkrecentmanager.c:1215 gtk/gtkrecentmanager.c:1274
+#: gtk/gtkrecentmanager.c:1032 gtk/gtkrecentmanager.c:1182
+#: gtk/gtkrecentmanager.c:1192 gtk/gtkrecentmanager.c:1251
 #, fuzzy, c-format
 msgid "Unable to find an item with URI '%s'"
 msgstr "పొందుపర్చిన దస్త్రం : \"%s\"ను కనిపెట్టలేకపోయాము."
