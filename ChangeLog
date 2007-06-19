@@ -1,3 +1,8 @@
+2007-06-19  Mathias Hasselmann  <mathias.hasselmann@gmx.de>
+
+	* gdk/gdkinternals.h: Restore G_BEGIN_DECLS at the
+	top of this file to make C++ compilers happy.
+
 2007-06-19  Matthias Clasen <mclasen@redhat.com>
 
 	* configure.in: Bump version

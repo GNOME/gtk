@@ -33,6 +33,8 @@
 #ifndef __GDK_INTERNALS_H__
 #define __GDK_INTERNALS_H__
 
+G_BEGIN_DECLS
+
 /**********************
  * General Facilities * 
  **********************/
