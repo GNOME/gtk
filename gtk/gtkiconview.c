@@ -916,7 +916,7 @@ static void
 gtk_icon_view_buildable_init (GtkBuildableIface *iface)
 {
   parent_buildable_iface = g_type_interface_peek_parent (iface);
-  iface->add = _gtk_cell_layout_buildable_add;
+  iface->add_child = _gtk_cell_layout_buildable_add_child;
   iface->custom_tag_start = gtk_icon_view_buildable_custom_tag_start;
   iface->custom_tag_end = gtk_icon_view_buildable_custom_tag_end;
 }

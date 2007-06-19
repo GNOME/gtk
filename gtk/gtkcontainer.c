@@ -102,7 +102,7 @@ static gchar* gtk_container_child_default_composite_name (GtkContainer *containe
 
 /* GtkBuildable */
 static void gtk_container_buildable_init           (GtkBuildableIface *iface);
-static void gtk_container_buildable_add            (GtkBuildable *buildable,
+static void gtk_container_buildable_add_child      (GtkBuildable *buildable,
 						    GtkBuilder   *builder,
 						    GObject      *child,
 						    const gchar  *type);
@@ -296,16 +296,16 @@ static void
 gtk_container_buildable_init (GtkBuildableIface *iface)
 {
   parent_buildable_iface = g_type_interface_peek_parent (iface);
-  iface->add = gtk_container_buildable_add;
+  iface->add_child = gtk_container_buildable_add_child;
   iface->custom_tag_start = gtk_container_buildable_custom_tag_start;
   iface->custom_tag_end = gtk_container_buildable_custom_tag_end;
 }
 
 static void
-gtk_container_buildable_add (GtkBuildable  *buildable,
-			     GtkBuilder    *builder,
-			     GObject       *child,
-			     const gchar   *type)
+gtk_container_buildable_add_child (GtkBuildable  *buildable,
+				   GtkBuilder    *builder,
+				   GObject       *child,
+				   const gchar   *type)
 {
   g_return_if_fail (GTK_IS_WIDGET (child));
 

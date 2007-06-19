@@ -58,7 +58,7 @@ SEE ALSO
 @Returns: 
 
 
-<!-- ##### FUNCTION gtk_buildable_add ##### -->
+<!-- ##### FUNCTION gtk_buildable_add_child ##### -->
 <para>
 
 </para>
@@ -69,7 +69,7 @@ SEE ALSO
 @type: 
 
 
-<!-- ##### FUNCTION gtk_buildable_set_property ##### -->
+<!-- ##### FUNCTION gtk_buildable_set_buildable_property ##### -->
 <para>
 
 </para>

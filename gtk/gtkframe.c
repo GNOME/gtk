@@ -76,7 +76,7 @@ static void gtk_frame_real_compute_child_allocation (GtkFrame      *frame,
 
 /* GtkBuildable */
 static void gtk_frame_buildable_init                (GtkBuildableIface *iface);
-static void gtk_frame_buildable_add                 (GtkBuildable *buildable,
+static void gtk_frame_buildable_add_child           (GtkBuildable *buildable,
 						     GtkBuilder   *builder,
 						     GObject      *child,
 						     const gchar  *type);
@@ -162,14 +162,14 @@ gtk_frame_class_init (GtkFrameClass *class)
 static void
 gtk_frame_buildable_init (GtkBuildableIface *iface)
 {
-  iface->add = gtk_frame_buildable_add;
+  iface->add_child = gtk_frame_buildable_add_child;
 }
 
 static void
-gtk_frame_buildable_add (GtkBuildable *buildable,
-			 GtkBuilder   *builder,
-			 GObject      *child,
-			 const gchar  *type)
+gtk_frame_buildable_add_child (GtkBuildable *buildable,
+			       GtkBuilder   *builder,
+			       GObject      *child,
+			       const gchar  *type)
 {
   if (type && strcmp (type, "label") == 0)
     gtk_frame_set_label_widget (GTK_FRAME (buildable), GTK_WIDGET (child));

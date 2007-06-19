@@ -406,10 +406,10 @@ _gtk_cell_layout_buildable_custom_tag_end (GtkBuildable *buildable,
 }
 
 void
-_gtk_cell_layout_buildable_add (GtkBuildable      *buildable,
-				GtkBuilder        *builder,
-				GObject           *child,
-				const gchar       *type)
+_gtk_cell_layout_buildable_add_child (GtkBuildable      *buildable,
+				      GtkBuilder        *builder,
+				      GObject           *child,
+				      const gchar       *type)
 {
   GtkCellLayoutIface *iface;
   

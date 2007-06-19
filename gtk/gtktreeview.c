@@ -462,11 +462,11 @@ static GtkTreeViewColumn *gtk_tree_view_get_drop_column (GtkTreeView       *tree
 							 gint               drop_position);
 
 /* GtkBuildable */
-static void gtk_tree_view_buildable_add (GtkBuildable *tree_view,
-					 GtkBuilder  *builder,
-					 GObject     *child,
-					 const gchar *type);
-static void gtk_tree_view_buildable_init (GtkBuildableIface *iface);
+static void gtk_tree_view_buildable_add_child (GtkBuildable *tree_view,
+					       GtkBuilder  *builder,
+					       GObject     *child,
+					       const gchar *type);
+static void gtk_tree_view_buildable_init      (GtkBuildableIface *iface);
 
 
 static gboolean scroll_row_timeout                   (gpointer     data);
@@ -1295,7 +1295,7 @@ gtk_tree_view_class_init (GtkTreeViewClass *class)
 static void
 gtk_tree_view_buildable_init (GtkBuildableIface *iface)
 {
-  iface->add = gtk_tree_view_buildable_add;
+  iface->add_child = gtk_tree_view_buildable_add_child;
 }
 
 static void
@@ -1507,10 +1507,10 @@ gtk_tree_view_finalize (GObject *object)
 
 
 static void
-gtk_tree_view_buildable_add (GtkBuildable *tree_view,
-			     GtkBuilder  *builder,
-			     GObject     *child,
-			     const gchar *type)
+gtk_tree_view_buildable_add_child (GtkBuildable *tree_view,
+				   GtkBuilder  *builder,
+				   GObject     *child,
+				   const gchar *type)
 {
   gtk_tree_view_append_column (GTK_TREE_VIEW (tree_view), GTK_TREE_VIEW_COLUMN (child));
 }

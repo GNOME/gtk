@@ -129,7 +129,7 @@ static void get_expander_bounds (GtkExpander  *expander,
 
 /* GtkBuildable */
 static void gtk_expander_buildable_init           (GtkBuildableIface *iface);
-static void gtk_expander_buildable_add            (GtkBuildable *buildable,
+static void gtk_expander_buildable_add_child      (GtkBuildable *buildable,
 						   GtkBuilder   *builder,
 						   GObject      *child,
 						   const gchar  *type);
@@ -288,10 +288,10 @@ gtk_expander_init (GtkExpander *expander)
 }
 
 static void
-gtk_expander_buildable_add (GtkBuildable  *buildable,
-			    GtkBuilder    *builder,
-			    GObject       *child,
-			    const gchar   *type)
+gtk_expander_buildable_add_child (GtkBuildable  *buildable,
+				  GtkBuilder    *builder,
+				  GObject       *child,
+				  const gchar   *type)
 {
   if (!type)
     gtk_container_add (GTK_CONTAINER (buildable), GTK_WIDGET (child));
@@ -304,7 +304,7 @@ gtk_expander_buildable_add (GtkBuildable  *buildable,
 static void
 gtk_expander_buildable_init (GtkBuildableIface *iface)
 {
-  iface->add = gtk_expander_buildable_add;
+  iface->add_child = gtk_expander_buildable_add_child;
 }
 
 static void

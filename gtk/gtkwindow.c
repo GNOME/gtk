@@ -324,10 +324,10 @@ static void gtk_window_get_property (GObject         *object,
 
 /* GtkBuildable */
 static void gtk_window_buildable_interface_init  (GtkBuildableIface *iface);
-static void gtk_window_buildable_set_property    (GtkBuildable        *buildable,
-						  GtkBuilder          *builder,
-						  const gchar         *name,
-						  const GValue        *value);
+static void gtk_window_buildable_set_buildable_property (GtkBuildable        *buildable,
+							 GtkBuilder          *builder,
+							 const gchar         *name,
+							 const GValue        *value);
 static void gtk_window_buildable_parser_finished (GtkBuildable     *buildable,
 						  GtkBuilder       *builder);
 
@@ -1133,23 +1133,23 @@ static void
 gtk_window_buildable_interface_init (GtkBuildableIface *iface)
 {
   parent_buildable_iface = g_type_interface_peek_parent (iface);
-  iface->set_property = gtk_window_buildable_set_property;
+  iface->set_buildable_property = gtk_window_buildable_set_buildable_property;
   iface->parser_finished = gtk_window_buildable_parser_finished;
 
 }
 
 static void
-gtk_window_buildable_set_property (GtkBuildable        *buildable,
-				   GtkBuilder          *builder,
-				   const gchar         *name,
-				   const GValue        *value)
+gtk_window_buildable_set_buildable_property (GtkBuildable        *buildable,
+					     GtkBuilder          *builder,
+					     const gchar         *name,
+					     const GValue        *value)
 {
   GtkWindowPrivate *priv = GTK_WINDOW_GET_PRIVATE (buildable);
 
   if (strcmp (name, "visible") == 0 && g_value_get_boolean (value))
     priv->builder_visible = TRUE;
   else
-    parent_buildable_iface->set_property (buildable, builder, name, value);
+    parent_buildable_iface->set_buildable_property (buildable, builder, name, value);
 }
 
 static void

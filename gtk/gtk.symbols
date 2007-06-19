@@ -423,7 +423,7 @@ gtk_box_set_spacing
 
 #if IN_HEADER(__GTK_BUILDABLE_H__)
 #if IN_FILE(__GTK_BUILDABLE_C__)
-gtk_buildable_add
+gtk_buildable_add_child
 gtk_buildable_construct_child
 gtk_buildable_custom_tag_start
 gtk_buildable_custom_tag_end
@@ -433,7 +433,7 @@ gtk_buildable_get_name
 gtk_buildable_get_type G_GNUC_CONST
 gtk_buildable_parser_finished
 gtk_buildable_set_name
-gtk_buildable_set_property
+gtk_buildable_set_buildable_property
 #endif
 #endif
 

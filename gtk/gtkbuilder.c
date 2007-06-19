@@ -421,7 +421,7 @@ _gtk_builder_construct (GtkBuilder *builder,
     {
       buildable = GTK_BUILDABLE (obj);
       iface = GTK_BUILDABLE_GET_IFACE (obj);
-      if (iface->set_property)
+      if (iface->set_buildable_property)
         custom_set_property = TRUE;
     }
 
@@ -429,7 +429,7 @@ _gtk_builder_construct (GtkBuilder *builder,
     {
       GParameter *param = &g_array_index (parameters, GParameter, i);
       if (custom_set_property)
-        iface->set_property (buildable, builder, param->name, &param->value);
+        iface->set_buildable_property (buildable, builder, param->name, &param->value);
       else
         g_object_set_property (obj, param->name, &param->value);
 
@@ -502,8 +502,8 @@ _gtk_builder_add (GtkBuilder *builder,
                      gtk_buildable_get_name (GTK_BUILDABLE (object)),
                      gtk_buildable_get_name (GTK_BUILDABLE (parent))));
   
-  gtk_buildable_add (GTK_BUILDABLE (parent), builder, object,
-                     child_info->type);
+  gtk_buildable_add_child (GTK_BUILDABLE (parent), builder, object,
+			   child_info->type);
 
   child_info->added = TRUE;
 }

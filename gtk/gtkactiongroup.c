@@ -90,10 +90,10 @@ static GtkAction *gtk_action_group_real_get_action (GtkActionGroup      *self,
 
 /* GtkBuildable */
 static void gtk_action_group_buildable_init (GtkBuildableIface *iface);
-static void gtk_action_group_buildable_add (GtkBuildable  *buildable,
-					    GtkBuilder    *builder,
-					    GObject       *child,
-					    const gchar   *type);
+static void gtk_action_group_buildable_add_child (GtkBuildable  *buildable,
+						  GtkBuilder    *builder,
+						  GObject       *child,
+						  const gchar   *type);
 static void gtk_action_group_buildable_set_name (GtkBuildable *buildable,
 						 const gchar  *name);
 static const gchar* gtk_action_group_buildable_get_name (GtkBuildable *buildable);
@@ -295,16 +295,16 @@ gtk_action_group_init (GtkActionGroup *self)
 static void
 gtk_action_group_buildable_init (GtkBuildableIface *iface)
 {
-  iface->add = gtk_action_group_buildable_add;
+  iface->add_child = gtk_action_group_buildable_add_child;
   iface->set_name = gtk_action_group_buildable_set_name;
   iface->get_name = gtk_action_group_buildable_get_name;
 }
 
 static void
-gtk_action_group_buildable_add (GtkBuildable  *buildable,
-				GtkBuilder    *builder,
-				GObject       *child,
-				const gchar   *type)
+gtk_action_group_buildable_add_child (GtkBuildable  *buildable,
+				      GtkBuilder    *builder,
+				      GObject       *child,
+				      const gchar   *type)
 {
   gtk_action_group_add_action (GTK_ACTION_GROUP (buildable),
 			       GTK_ACTION (child));

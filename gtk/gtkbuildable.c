@@ -103,7 +103,7 @@ gtk_buildable_get_name (GtkBuildable *buildable)
 }
 
 /**
- * gtk_buildable_add:
+ * gtk_buildable_add_child:
  * @buildable: a #GtkBuildable
  * @builder: a #GtkBuilder
  * @child: child to add
@@ -119,10 +119,10 @@ gtk_buildable_get_name (GtkBuildable *buildable)
  * Since: 2.12
  **/
 void
-gtk_buildable_add (GtkBuildable *buildable,
-                   GtkBuilder   *builder,
-                   GObject      *child,
-                   const gchar  *type)
+gtk_buildable_add_child (GtkBuildable *buildable,
+			 GtkBuilder   *builder,
+			 GObject      *child,
+			 const gchar  *type)
 {
   GtkBuildableIface *iface;
 
@@ -130,13 +130,13 @@ gtk_buildable_add (GtkBuildable *buildable,
   g_return_if_fail (GTK_IS_BUILDER (builder));
 
   iface = GTK_BUILDABLE_GET_IFACE (buildable);
-  g_return_if_fail (iface->add != NULL);
+  g_return_if_fail (iface->add_child != NULL);
 
-  (* iface->add) (buildable, builder, child, type);
+  (* iface->add_child) (buildable, builder, child, type);
 }
 
 /**
- * gtk_buildable_set_property:
+ * gtk_buildable_set_buildable_property:
  * @buildable: a #GtkBuildable
  * @builder: a #GtkBuilder
  * @name: name of property
@@ -154,10 +154,10 @@ gtk_buildable_add (GtkBuildable *buildable,
  * Since: 2.12
  **/
 void
-gtk_buildable_set_property (GtkBuildable *buildable,
-                            GtkBuilder   *builder,
-                            const gchar  *name,
-                            const GValue *value)
+gtk_buildable_set_buildable_property (GtkBuildable *buildable,
+				      GtkBuilder   *builder,
+				      const gchar  *name,
+				      const GValue *value)
 {
   GtkBuildableIface *iface;
 
@@ -167,8 +167,8 @@ gtk_buildable_set_property (GtkBuildable *buildable,
   g_return_if_fail (value != NULL);
 
   iface = GTK_BUILDABLE_GET_IFACE (buildable);
-  if (iface->set_property)
-    (* iface->set_property) (buildable, builder, name, value);
+  if (iface->set_buildable_property)
+    (* iface->set_buildable_property) (buildable, builder, name, value);
   else
     g_object_set_property (G_OBJECT (buildable), name, value);
 }

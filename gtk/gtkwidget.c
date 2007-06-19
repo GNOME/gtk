@@ -251,10 +251,10 @@ static void             gtk_widget_buildable_interface_init     (GtkBuildableIfa
 static void             gtk_widget_buildable_set_name           (GtkBuildable     *buildable,
                                                                  const gchar      *name);
 static const gchar *    gtk_widget_buildable_get_name           (GtkBuildable     *buildable);
-static void             gtk_widget_buildable_set_property       (GtkBuildable     *buildable,
-                                                                 GtkBuilder       *builder,
-                                                                 const gchar      *name,
-                                                                 const GValue     *value);
+static void             gtk_widget_buildable_set_buildable_property (GtkBuildable     *buildable,
+								     GtkBuilder       *builder,
+								     const gchar      *name,
+								     const GValue     *value);
 static gboolean         gtk_widget_buildable_custom_tag_start   (GtkBuildable     *buildable,
                                                                  GtkBuilder       *builder,
                                                                  GObject          *child,
@@ -8446,7 +8446,7 @@ gtk_widget_buildable_interface_init (GtkBuildableIface *iface)
 
   iface->set_name = gtk_widget_buildable_set_name;
   iface->get_name = gtk_widget_buildable_get_name;
-  iface->set_property = gtk_widget_buildable_set_property;
+  iface->set_buildable_property = gtk_widget_buildable_set_buildable_property;
   iface->parser_finished = gtk_widget_buildable_parser_finshed;
   iface->custom_tag_start = gtk_widget_buildable_custom_tag_start;
   iface->custom_finished = gtk_widget_buildable_custom_finshed;
@@ -8466,10 +8466,10 @@ gtk_widget_buildable_get_name (GtkBuildable *buildable)
 }
 
 static void
-gtk_widget_buildable_set_property (GtkBuildable *buildable,
-				   GtkBuilder   *builder,
-				   const gchar  *name,
-				   const GValue *value)
+gtk_widget_buildable_set_buildable_property (GtkBuildable *buildable,
+					     GtkBuilder   *builder,
+					     const gchar  *name,
+					     const GValue *value)
 {
   if (strcmp (name, "has-default") == 0 && g_value_get_boolean (value))
       g_object_set_qdata (G_OBJECT (buildable), quark_builder_has_default,

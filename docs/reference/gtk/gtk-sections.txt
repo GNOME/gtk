@@ -452,8 +452,8 @@ GtkBuildable
 GtkBuildableIface
 gtk_buildable_set_name
 gtk_buildable_get_name
-gtk_buildable_add
-gtk_buildable_set_property
+gtk_buildable_add_child
+gtk_buildable_set_buildable_property
 gtk_buildable_construct_child
 gtk_buildable_custom_tag_start
 gtk_buildable_custom_tag_end

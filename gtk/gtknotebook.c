@@ -425,7 +425,7 @@ static void do_detach_tab  (GtkNotebook *from,
 
 /* GtkBuildable */
 static void gtk_notebook_buildable_init           (GtkBuildableIface *iface);
-static void gtk_notebook_buildable_add            (GtkBuildable *buildable,
+static void gtk_notebook_buildable_add_child      (GtkBuildable *buildable,
 						   GtkBuilder   *builder,
 						   GObject      *child,
 						   const gchar  *type);
@@ -1108,14 +1108,14 @@ gtk_notebook_init (GtkNotebook *notebook)
 static void
 gtk_notebook_buildable_init (GtkBuildableIface *iface)
 {
-  iface->add = gtk_notebook_buildable_add;
+  iface->add_child = gtk_notebook_buildable_add_child;
 }
 
 static void
-gtk_notebook_buildable_add (GtkBuildable  *buildable,
-			    GtkBuilder    *builder,
-			    GObject       *child,
-			    const gchar   *type)
+gtk_notebook_buildable_add_child (GtkBuildable  *buildable,
+				  GtkBuilder    *builder,
+				  GObject       *child,
+				  const gchar   *type)
 {
   GtkNotebook *notebook = GTK_NOTEBOOK (buildable);
 

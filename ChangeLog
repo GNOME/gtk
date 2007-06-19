@@ -1,3 +1,8 @@
+2007-06-19  Johan Dahlin  <jdahlin@async.com.br>
+
+	* gtk/*: Rename buildable methods to not clash with widget 
+	methods. (#448928, Torsten Schoenfeld)
+
 2007-06-19  Emmanuele Bassi  <ebassi@gnome.org>
 
 	* gtk/gtkrecentmanager.c: Use g_timeout_add_seconds_full() for

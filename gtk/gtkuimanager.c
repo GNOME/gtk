@@ -144,11 +144,11 @@ static void        node_remove_ui_reference       (GNode             *node,
                                                    guint              merge_id);
 
 /* GtkBuildable */
-static void gtk_ui_manager_buildable_init (GtkBuildableIface *iface);
-static void gtk_ui_manager_buildable_add (GtkBuildable  *buildable,
-					  GtkBuilder    *builder,
-					  GObject       *child,
-					  const gchar   *type);
+static void gtk_ui_manager_buildable_init      (GtkBuildableIface *iface);
+static void gtk_ui_manager_buildable_add_child (GtkBuildable  *buildable,
+						GtkBuilder    *builder,
+						GObject       *child,
+						const gchar   *type);
 static GObject* gtk_ui_manager_buildable_construct_child (GtkBuildable *buildable,
 							  GtkBuilder   *builder,
 							  const gchar  *name);
@@ -428,17 +428,17 @@ gtk_ui_manager_finalize (GObject *object)
 static void
 gtk_ui_manager_buildable_init (GtkBuildableIface *iface)
 {
-  iface->add = gtk_ui_manager_buildable_add;
+  iface->add_child = gtk_ui_manager_buildable_add_child;
   iface->construct_child = gtk_ui_manager_buildable_construct_child;
   iface->custom_tag_start = gtk_ui_manager_buildable_custom_tag_start;
   iface->custom_tag_end = gtk_ui_manager_buildable_custom_tag_end;
 }
 
 static void
-gtk_ui_manager_buildable_add (GtkBuildable  *buildable,
-			      GtkBuilder    *builder,
-			      GObject       *child,
-			      const gchar   *type)
+gtk_ui_manager_buildable_add_child (GtkBuildable  *buildable,
+				    GtkBuilder    *builder,
+				    GObject       *child,
+				    const gchar   *type)
 {
   GtkUIManager *self = GTK_UI_MANAGER (buildable);
   guint pos;
