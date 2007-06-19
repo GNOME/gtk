@@ -1,3 +1,8 @@
+2007-06-19  Carlos Garnacho  <carlos@imendio.com>
+
+	* gtk/gtkcellrendererspin.c: Fix some issues with refcounting
+	of the adjustment. (#448544)
+
 2007-06-14   Matthias Clasen  <mclasen@redhat.com>
 
 	Backport from trunk:
