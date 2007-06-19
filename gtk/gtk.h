@@ -81,6 +81,7 @@
 #include <gtk/gtkenums.h>
 #include <gtk/gtkeventbox.h>
 #include <gtk/gtkexpander.h>
+#include <gtk/gtkextendedlayout.h>
 #include <gtk/gtkfilesel.h>
 #include <gtk/gtkfixed.h>
 #include <gtk/gtkfilechooserbutton.h>

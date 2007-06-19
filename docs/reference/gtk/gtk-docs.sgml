@@ -37,6 +37,7 @@
 <!ENTITY GtkEntryCompletion SYSTEM "xml/gtkentrycompletion.xml">
 <!ENTITY GtkEventBox SYSTEM "xml/gtkeventbox.xml">
 <!ENTITY GtkExpander SYSTEM "xml/gtkexpander.xml">
+<!ENTITY GtkExtendedLayout SYSTEM "xml/gtkextendedlayout.xml">
 <!ENTITY GtkFileChooser SYSTEM "xml/gtkfilechooser.xml">
 <!ENTITY GtkFileChooserButton SYSTEM "xml/gtkfilechooserbutton.xml">
 <!ENTITY GtkFileChooserDialog SYSTEM "xml/gtkfilechooserdialog.xml">
@@ -554,6 +555,7 @@ that is, GUI components such as #GtkButton or #GtkTextView.
         &GtkBox;
         &GtkButtonBox;
         &GtkContainer;
+        &GtkExtendedLayout;
         &GtkItem;
         &GtkMenuShell;
         &GtkMisc;

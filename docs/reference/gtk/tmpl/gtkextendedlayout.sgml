@@ -1,0 +1,85 @@
+<!-- ##### SECTION Title ##### -->
+GtkExtendedLayout
+
+<!-- ##### SECTION Short_Description ##### -->
+
+
+<!-- ##### SECTION Long_Description ##### -->
+<para>
+
+</para>
+
+<!-- ##### SECTION See_Also ##### -->
+<para>
+
+</para>
+
+<!-- ##### SECTION Stability_Level ##### -->
+
+
+<!-- ##### STRUCT GtkExtendedLayout ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### STRUCT GtkExtendedLayoutIface ##### -->
+<para>
+
+</para>
+
+@g_iface: 
+@get_features: 
+@get_height_for_width: 
+@get_width_for_height: 
+@get_natural_size: 
+@get_baselines: 
+
+<!-- ##### FUNCTION gtk_extended_layout_get_baselines ##### -->
+<para>
+
+</para>
+
+@layout: 
+@baselines: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_extended_layout_get_features ##### -->
+<para>
+
+</para>
+
+@layout: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_extended_layout_get_height_for_width ##### -->
+<para>
+
+</para>
+
+@layout: 
+@width: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_extended_layout_get_natural_size ##### -->
+<para>
+
+</para>
+
+@layout: 
+@requisition: 
+
+
+<!-- ##### FUNCTION gtk_extended_layout_get_width_for_height ##### -->
+<para>
+
+</para>
+
+@layout: 
+@height: 
+@Returns: 
+
+

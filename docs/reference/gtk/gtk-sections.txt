@@ -1316,6 +1316,26 @@ GtkExpanderPrivate
 </SECTION>
 
 <SECTION>
+<FILE>gtkextendedlayout</FILE>
+<TITLE>GtkExtendedLayout</TITLE>
+GtkExtendedLayout
+GtkExtendedLayoutIface
+gtk_extended_layout_get_baselines
+gtk_extended_layout_get_features
+gtk_extended_layout_get_height_for_width
+gtk_extended_layout_get_natural_size
+gtk_extended_layout_get_width_for_height
+<SUBSECTION Standard>
+GTK_EXTENDED_LAYOUT
+GTK_EXTENDED_LAYOUT_CLASS
+GTK_EXTENDED_LAYOUT_GET_IFACE
+GTK_IS_EXTENDED_LAYOUT
+GTK_TYPE_EXTENDED_LAYOUT
+<SUBSECTION Private>
+gtk_extended_layout_get_type
+</SECTION>
+
+<SECTION>
 <FILE>gtkfilechooser</FILE>
 <TITLE>GtkFileChooser</TITLE>
 GtkFileChooser

@@ -1,0 +1,6 @@
+2007-06-19  Mathias Hasselmann  <mathias.hasselmann@gmx.de>
+
+	* docs/reference/gtk/tmpl/gtkextendedlayout.sgml,
+	docs/reference/gtk/gtk-docs.sgml, docs/reference/gtk/gtk-sections.txt,
+	docs/reference/gtk/gtk.types: Implement GtkExtendLayout interface.
+
