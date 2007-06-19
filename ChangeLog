@@ -1,3 +1,14 @@
+2007-06-20  Richard Hult  <richard@imendio.com>
+
+	* gdk/quartz/gdkwindow-quartz.c (gdk_window_new): 
+	* gdk/quartz/GdkQuartzWindow.c (windowDidResize): Don't create or
+	update the tracking rect in the window, move it to the view where
+	it belongs.
+
+	* gdk/quartz/GdkQuartzView.c (updateTrackingRect)
+	(viewDidMoveToWindow, viewWillMoveToWindow)
+	(setFrame, setBounds): Create and update the tracking rect here.
+
 2007-06-19  Mathias Hasselmann  <mathias.hasselmann@gmx.de>
 
 	* gdk/gdkinternals.h: Restore G_BEGIN_DECLS at the

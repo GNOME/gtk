@@ -23,6 +23,7 @@
 
 @interface GdkQuartzView : NSView {
   GdkWindow *gdk_window;
+  NSTrackingRectTag trackingRect;
 }
 
 -(void)setGdkWindow:(GdkWindow *)window;

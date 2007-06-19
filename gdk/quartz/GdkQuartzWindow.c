@@ -136,7 +136,6 @@
   impl->height = content_rect.size.height;
 
   /* Synthesize a configure event */
-
   event = gdk_event_new (GDK_CONFIGURE);
   event->configure.window = g_object_ref (window);
   event->configure.x = private->x;
@@ -145,13 +144,6 @@
   event->configure.height = impl->height;
 
   _gdk_event_queue_append (gdk_display_get_default (), event);
-
-  /* Update tracking rectangle */
-  [[self contentView] removeTrackingRect:impl->tracking_rect];
-  impl->tracking_rect = [impl->view addTrackingRect:NSMakeRect(0, 0, impl->width, impl->height) 
-			                      owner:impl->view
-			                   userData:nil
-			               assumeInside:NO];
 }
 
 -(id)initWithContentRect:(NSRect)contentRect styleMask:(unsigned int)styleMask backing:(NSBackingStoreType)backingType defer:(BOOL)flag
@@ -161,12 +153,7 @@
 	                    backing:backingType
 	                      defer:flag];
 
-
-  /* A possible modification here would be to only accept mouse moved events
-   * if any of the child GdkWindows are interested in mouse moved events.
-   */
   [self setAcceptsMouseMovedEvents:YES];
-
   [self setDelegate:self];
   [self setReleasedWhenClosed:YES];
 

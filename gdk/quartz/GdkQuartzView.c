@@ -110,4 +110,56 @@
   GDK_QUARTZ_RELEASE_POOL;
 }
 
+/* For information on seting up tracking rects properly, see here:
+ * http://developer.apple.com/documentation/Cocoa/Conceptual/EventOverview/EventOverview.pdf
+ */
+-(void)updateTrackingRect
+{
+  GdkWindowObject *private = GDK_WINDOW_OBJECT (gdk_window);
+  GdkWindowImplQuartz *impl = GDK_WINDOW_IMPL_QUARTZ (private->impl);
+
+  if (trackingRect)
+    {
+      [self removeTrackingRect:trackingRect];
+      trackingRect = nil;
+    }
+
+  if (!impl->toplevel)
+    return;
+
+  trackingRect = [self addTrackingRect:[self bounds]
+                                 owner:self
+                              userData:nil
+                          assumeInside:NO];
+}
+
+-(void)viewDidMoveToWindow
+{
+  if (![self window]) /* We are destroyed already */
+      return;
+
+  [self updateTrackingRect];
+}
+
+-(void)viewWillMoveToWindow:(NSWindow *)newWindow
+{
+  if ([self window] && trackingRect)
+    {
+      [self removeTrackingRect:trackingRect];
+      trackingRect = nil;
+    }
+}
+
+-(void)setFrame:(NSRect)frame
+{
+  [super setFrame:frame];
+  [self updateTrackingRect];
+}
+ 
+-(void)setBounds:(NSRect)bounds
+{
+  [super setBounds:bounds];
+  [self updateTrackingRect];
+}
+
 @end
