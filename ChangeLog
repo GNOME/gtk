@@ -1,5 +1,17 @@
 2007-06-19  Emmanuele Bassi  <ebassi@gnome.org>
 
+	* gtk/gtkrecentmanager.c: Use g_timeout_add_seconds_full() for
+	the timed poll of the storage file, since we are using multiple
+	seconds intervals and we don't actually care about millisecond
+	precision.
+
+	(threads_dispatch), (threads_free), (gtk_recent_manager_init),
+	(gtk_recent_manager_set_filename): Roll our own version of
+	gdk_threads_add_timeout() using g_timeout_add_seconds_full()
+	while holding the GDK main lock.
+
+2007-06-19  Emmanuele Bassi  <ebassi@gnome.org>
+
 	* gtk/gtkrecentmanager.c: Use a static variable to hold the
 	singleton and remove the code that binds a recent manager to
 	a GdkScreen.

@@ -48,14 +48,21 @@
 /* the file where we store the recently used items */
 #define GTK_RECENTLY_USED_FILE	".recently-used.xbel"
 
-/* a poll every two seconds should be enough */
-#define POLL_DELTA	2000
+/* a poll approximately every five seconds */
+#define POLL_DELTA      5
 
 /* return all items by default */
 #define DEFAULT_LIMIT	-1
 
 /* keep in sync with xdgmime */
 #define GTK_RECENT_DEFAULT_MIME	"application/octet-stream"
+
+typedef struct
+{
+  GSourceFunc func;
+  gpointer data;
+  GDestroyNotify notify;
+} ThreadsDispatch;
 
 typedef struct
 {
@@ -189,6 +196,32 @@ gtk_recent_manager_error_quark (void)
   return g_quark_from_static_string ("gtk-recent-manager-error-quark");
 }
 
+static gboolean
+threads_dispatch (gpointer data)
+{
+  ThreadsDispatch *dispatch = data;
+  gboolean res = FALSE;
+
+  GDK_THREADS_ENTER ();
+
+  if (!g_source_is_destroyed (g_main_current_source ()))
+    res = dispatch->func (dispatch->data);
+
+  GDK_THREADS_LEAVE ();
+
+  return res;
+}
+
+static void
+threads_free (gpointer data)
+{
+  ThreadsDispatch *dispatch = data;
+
+  if (dispatch->notify)
+    dispatch->notify (dispatch->data);
+
+  g_slice_free (ThreadsDispatch, dispatch);
+}
 
 static void
 gtk_recent_manager_class_init (GtkRecentManagerClass *klass)
@@ -277,6 +310,7 @@ static void
 gtk_recent_manager_init (GtkRecentManager *manager)
 {
   GtkRecentManagerPrivate *priv;
+  ThreadsDispatch *dispatch;
   
   priv = g_type_instance_get_private ((GTypeInstance *) manager,
   				      GTK_TYPE_RECENT_MANAGER);
@@ -292,9 +326,16 @@ gtk_recent_manager_init (GtkRecentManager *manager)
   priv->filename = g_build_filename (g_get_home_dir (),
 				     GTK_RECENTLY_USED_FILE,
 				     NULL);
-  priv->poll_timeout = gdk_threads_add_timeout (POLL_DELTA,
-		  		      gtk_recent_manager_poll_timeout,
-				      manager);
+  
+  dispatch = g_slice_new (ThreadsDispatch);
+  dispatch->func = gtk_recent_manager_poll_timeout;
+  dispatch->data = manager;
+  dispatch->notify = NULL;
+  priv->poll_timeout = g_timeout_add_seconds_full (G_PRIORITY_DEFAULT + 30,
+                                                   POLL_DELTA,
+                                                   threads_dispatch,
+                                                   dispatch,
+                                                   threads_free);
 
   build_recent_items_list (manager);
 }
@@ -487,6 +528,7 @@ gtk_recent_manager_set_filename (GtkRecentManager *manager,
 				 const gchar      *filename)
 {
   GtkRecentManagerPrivate *priv;
+  ThreadsDispatch *dispatch;
   
   g_assert (GTK_IS_RECENT_MANAGER (manager));
   priv = manager->priv;
@@ -503,9 +545,16 @@ gtk_recent_manager_set_filename (GtkRecentManager *manager,
     }
 
   priv->filename = g_strdup (filename);
-  priv->poll_timeout = gdk_threads_add_timeout (POLL_DELTA,
-		  		      gtk_recent_manager_poll_timeout,
-				      manager);
+
+  dispatch = g_slice_new (ThreadsDispatch);
+  dispatch->func = gtk_recent_manager_poll_timeout;
+  dispatch->data = manager;
+  dispatch->notify = NULL;
+  priv->poll_timeout = g_timeout_add_seconds_full (G_PRIORITY_DEFAULT + 30,
+                                                   POLL_DELTA,
+                                                   threads_dispatch,
+                                                   dispatch,
+                                                   threads_free);
 
   /* mark us clean, so that we can re-read the list
    * of recently used resources
