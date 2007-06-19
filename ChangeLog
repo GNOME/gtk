@@ -1,3 +1,11 @@
+2007-06-19  Sven Neumann  <sven@gimp.org>
+
+	* gtk/gtktooltips.[ch]: mark the GtkTooltips struct as private.
+	Keep the tooltips in a hash table instead of a linked list.
+	Improves performance when using large amounts of tooltips (#447214).
+
+	* README.in: document the GtkTooltips changes.
+
 2007-06-19  Johan Dahlin  <jdahlin@async.com.br>
 
 	* gtk/*: Rename buildable methods to not clash with widget 

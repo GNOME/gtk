@@ -48,24 +48,36 @@
 #define STICKY_REVERT_DELAY 1000    /* Delay before sticky tooltips revert
 				     * to normal
                                      */
+#define GTK_TOOLTIPS_GET_PRIVATE(obj) (G_TYPE_INSTANCE_GET_PRIVATE ((obj), GTK_TYPE_TOOLTIPS, GtkTooltipsPrivate))
 
-static void gtk_tooltips_destroy           (GtkObject        *object);
+typedef struct _GtkTooltipsPrivate GtkTooltipsPrivate;
 
-static void gtk_tooltips_event_handler     (GtkWidget   *widget,
-                                            GdkEvent    *event);
-static void gtk_tooltips_widget_unmap      (GtkWidget   *widget,
-                                            gpointer     data);
-static void gtk_tooltips_widget_remove     (GtkWidget   *widget,
-                                            gpointer     data);
-static void gtk_tooltips_set_active_widget (GtkTooltips *tooltips,
-                                            GtkWidget   *widget);
-static gint gtk_tooltips_timeout           (gpointer     data);
+struct _GtkTooltipsPrivate
+{
+  GHashTable *tips_data_table;
+};
 
-static gint gtk_tooltips_paint_window      (GtkTooltips *tooltips);
-static void gtk_tooltips_draw_tips         (GtkTooltips *tooltips);
-static void gtk_tooltips_unset_tip_window  (GtkTooltips *tooltips);
 
-static gboolean get_keyboard_mode          (GtkWidget   *widget);
+static void gtk_tooltips_finalize          (GObject         *object);
+static void gtk_tooltips_destroy           (GtkObject       *object);
+
+static void gtk_tooltips_destroy_data      (GtkTooltipsData *tooltipsdata);
+
+static void gtk_tooltips_event_handler     (GtkWidget       *widget,
+                                            GdkEvent        *event);
+static void gtk_tooltips_widget_unmap      (GtkWidget       *widget,
+                                            gpointer         data);
+static void gtk_tooltips_widget_remove     (GtkWidget       *widget,
+                                            gpointer         data);
+static void gtk_tooltips_set_active_widget (GtkTooltips     *tooltips,
+                                            GtkWidget       *widget);
+static gint gtk_tooltips_timeout           (gpointer         data);
+
+static gint gtk_tooltips_paint_window      (GtkTooltips     *tooltips);
+static void gtk_tooltips_draw_tips         (GtkTooltips     *tooltips);
+static void gtk_tooltips_unset_tip_window  (GtkTooltips     *tooltips);
+
+static gboolean get_keyboard_mode          (GtkWidget       *widget);
 
 static const gchar  tooltips_data_key[] = "_GtkTooltipsData";
 static const gchar  tooltips_info_key[] = "_GtkTooltipsInfo";
@@ -75,26 +87,45 @@ G_DEFINE_TYPE (GtkTooltips, gtk_tooltips, GTK_TYPE_OBJECT)
 static void
 gtk_tooltips_class_init (GtkTooltipsClass *class)
 {
-  GtkObjectClass *object_class;
+  GtkObjectClass *object_class = (GtkObjectClass *) class;
+  GObjectClass *gobject_class = (GObjectClass *) class;
 
-  object_class = (GtkObjectClass*) class;
+  gobject_class->finalize = gtk_tooltips_finalize;
 
   object_class->destroy = gtk_tooltips_destroy;
+
+  g_type_class_add_private (gobject_class, sizeof (GtkTooltipsPrivate));
 }
 
 static void
 gtk_tooltips_init (GtkTooltips *tooltips)
 {
+  GtkTooltipsPrivate *private = GTK_TOOLTIPS_GET_PRIVATE (tooltips);
+
   tooltips->tip_window = NULL;
   tooltips->active_tips_data = NULL;
-  tooltips->tips_data_list = NULL;
-  
+  tooltips->_tips_data_list = NULL;
+
   tooltips->delay = DEFAULT_DELAY;
   tooltips->enabled = TRUE;
   tooltips->timer_tag = 0;
   tooltips->use_sticky_delay = FALSE;
   tooltips->last_popdown.tv_sec = -1;
   tooltips->last_popdown.tv_usec = -1;
+
+  private->tips_data_table =
+    g_hash_table_new_full (NULL, NULL, NULL,
+                           (GDestroyNotify) gtk_tooltips_destroy_data);
+}
+
+static void
+gtk_tooltips_finalize (GObject *object)
+{
+  GtkTooltipsPrivate *private = GTK_TOOLTIPS_GET_PRIVATE (object);
+
+  g_hash_table_destroy (private->tips_data_table);
+
+  G_OBJECT_CLASS (gtk_tooltips_parent_class)->finalize (object);
 }
 
 GtkTooltips *
@@ -106,6 +137,8 @@ gtk_tooltips_new (void)
 static void
 gtk_tooltips_destroy_data (GtkTooltipsData *tooltipsdata)
 {
+  gtk_tooltips_widget_unmap (tooltipsdata->widget, tooltipsdata);
+
   g_free (tooltipsdata->tip_text);
   g_free (tooltipsdata->tip_private);
 
@@ -156,8 +189,7 @@ static void
 gtk_tooltips_destroy (GtkObject *object)
 {
   GtkTooltips *tooltips = GTK_TOOLTIPS (object);
-  GList *current;
-  GtkTooltipsData *tooltipsdata;
+  GtkTooltipsPrivate *private = GTK_TOOLTIPS_GET_PRIVATE (tooltips);
 
   g_return_if_fail (tooltips != NULL);
 
@@ -167,16 +199,7 @@ gtk_tooltips_destroy (GtkObject *object)
       tooltips->timer_tag = 0;
     }
 
-  if (tooltips->tips_data_list != NULL)
-    {
-      current = g_list_first (tooltips->tips_data_list);
-      while (current != NULL)
-	{
-	  tooltipsdata = (GtkTooltipsData*) current->data;
-	  current = current->next;
-	  gtk_tooltips_widget_remove (tooltipsdata->widget, tooltipsdata);
-	}
-    }
+  g_hash_table_remove_all (private->tips_data_table);
 
   gtk_tooltips_unset_tip_window (tooltips);
 
@@ -327,8 +350,9 @@ gtk_tooltips_set_tip (GtkTooltips *tooltips,
       tooltipsdata->tip_text = g_strdup (tip_text);
       tooltipsdata->tip_private = g_strdup (tip_private);
 
-      tooltips->tips_data_list = g_list_append (tooltips->tips_data_list,
-                                                tooltipsdata);
+      g_hash_table_insert (GTK_TOOLTIPS_GET_PRIVATE (tooltips)->tips_data_table,
+                           widget, tooltipsdata);
+
       g_signal_connect_after (widget, "event_after",
                               G_CALLBACK (gtk_tooltips_event_handler),
 			      tooltipsdata);
@@ -478,23 +502,15 @@ gtk_tooltips_set_active_widget (GtkTooltips *tooltips,
   
   tooltips->active_tips_data = NULL;
   
-  if (widget)
+  if (widget && GTK_WIDGET_DRAWABLE (widget))
     {
-      GList *list;
-      
-      for (list = tooltips->tips_data_list; list; list = list->next)
-	{
-	  GtkTooltipsData *tooltipsdata;
-	  
-	  tooltipsdata = list->data;
-	  
-	  if (tooltipsdata->widget == widget &&
-	      GTK_WIDGET_DRAWABLE (widget))
-	    {
-	      tooltips->active_tips_data = tooltipsdata;
-	      break;
-	    }
-	}
+      GtkTooltipsPrivate *private = GTK_TOOLTIPS_GET_PRIVATE (tooltips);
+      GtkTooltipsData    *tooltipsdata;
+
+      tooltipsdata = g_hash_table_lookup (private->tips_data_table, widget);
+
+      if (tooltipsdata)
+        tooltips->active_tips_data = tooltipsdata;
     }
   else
     {
@@ -728,11 +744,9 @@ gtk_tooltips_widget_remove (GtkWidget *widget,
 {
   GtkTooltipsData *tooltipsdata = (GtkTooltipsData*) data;
   GtkTooltips *tooltips = tooltipsdata->tooltips;
+  GtkTooltipsPrivate *private = GTK_TOOLTIPS_GET_PRIVATE (tooltips);
 
-  gtk_tooltips_widget_unmap (widget, data);
-  tooltips->tips_data_list = g_list_remove (tooltips->tips_data_list,
-					    tooltipsdata);
-  gtk_tooltips_destroy_data (tooltipsdata);
+  g_hash_table_remove (private->tips_data_table, tooltipsdata->widget);
 }
 
 void

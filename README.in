@@ -85,6 +85,10 @@ Release notes for 2.12
 * GtkMenuShell is now defined as an abstract type. It was already 
   documented as an abstract class, and there is little reason to 
   instantiate it.
+
+* The GtkTooltips struct (this is the old tooltips API) is now considered
+  private. Code that used to access this struct, in particular the
+  tips_data_list field, will need to change.
   
 * The memory management of the GtkRecentManager object has been changed,
   as using the screen didn't guarantee that the singleton instance was
