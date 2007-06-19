@@ -1,3 +1,8 @@
+2007-06-18  Matthias Clasen <mclasen@redhat.com>
+
+	* gtk/gtkcellrendererspin.c: Fix some issues with refcounting
+	of the adjustment.  (#448544, Carlos Garnacho)
+
 2007-06-18  Gustavo J. A. M. Carneiro  <gjc@gnome.org>
 
 	reviewed by: Matthias Clasen

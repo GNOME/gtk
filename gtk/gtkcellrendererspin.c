@@ -208,7 +208,7 @@ gtk_cell_renderer_spin_set_property (GObject      *object,
 	}
 
       if (obj)
-	priv->adjustment = g_object_ref (obj);
+	priv->adjustment = g_object_ref_sink (obj);
       break;
     case PROP_CLIMB_RATE:
       priv->climb_rate = g_value_get_double (value);
@@ -294,7 +294,7 @@ gtk_cell_renderer_spin_start_editing (GtkCellRenderer     *cell,
   if (!priv->adjustment)
     return NULL;
 
-  spin = gtk_spin_button_new (g_object_ref (priv->adjustment),
+  spin = gtk_spin_button_new (priv->adjustment,
 			      priv->climb_rate, priv->digits);
 
   if (cell_text->text)
