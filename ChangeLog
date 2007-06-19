@@ -1,5 +1,9 @@
 2007-06-19  Sven Neumann  <sven@gimp.org>
 
+	* gtk/gtkicontheme.c (gtk_icon_info_copy): use g_slice_dup().
+
+2007-06-19  Sven Neumann  <sven@gimp.org>
+
 	* gtk/gtktooltips.[ch]: mark the GtkTooltips struct as private.
 	Keep the tooltips in a hash table instead of a linked list.
 	Improves performance when using large amounts of tooltips (#447214).

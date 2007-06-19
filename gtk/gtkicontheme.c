@@ -2599,7 +2599,8 @@ gtk_icon_info_copy (GtkIconInfo *icon_info)
   
   g_return_val_if_fail (icon_info != NULL, NULL);
 
-  copy = memcpy (g_slice_new (GtkIconInfo), icon_info, sizeof (GtkIconInfo));
+  copy = g_slice_dup (GtkIconInfo, icon_info);
+
   if (copy->cache_pixbuf)
     g_object_ref (copy->cache_pixbuf);
   if (copy->pixbuf)
