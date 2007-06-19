@@ -10,6 +10,9 @@
 	gdk_threads_add_timeout() using g_timeout_add_seconds_full()
 	while holding the GDK main lock.
 
+	* configure.in: Bump up the required GLib version, in order
+	to use g_timeout_add_seconds_full().
+
 2007-06-19  Emmanuele Bassi  <ebassi@gnome.org>
 
 	* gtk/gtkrecentmanager.c: Use a static variable to hold the
