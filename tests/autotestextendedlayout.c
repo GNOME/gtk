@@ -14,12 +14,41 @@
                                       " (actual number %d)", j); \
         } G_STMT_END
 
+#define log_int_array(values, length) \
+        log_int_array_impl (G_STRFUNC, #values, (values), (length))
+
 static int num_failures = 0;
 static int num_warnings = 0;
 static int num_errors = 0;
 static int num_criticals = 0;
 
 static GLogFunc default_log_handler;
+
+static void
+log_int_array_impl (const gchar *function,
+                    const gchar *var_name,
+                    const gint  *values,
+                    gsize        length)
+{
+  GString *tmp = g_string_new ("");
+  
+  if (length--)
+    {
+      g_string_append_printf (tmp, "{ %d", *values++);
+
+      while (length--)
+        g_string_append_printf (tmp, ", %d", *values++);
+
+      g_string_append (tmp, " }");
+    }
+  else
+    {
+      g_string_append (tmp, "empty");
+    }
+
+  g_print ("INFO: %s: %s is %s\n", function, var_name, tmp->str);
+  g_string_free (tmp, TRUE);
+}
 
 static void
 log_test (gboolean     passed, 
@@ -96,20 +125,23 @@ test_label (void)
   baselines = NULL;
   gtk_label_set_text (label, NULL);
   num_baselines = gtk_extended_layout_get_baselines (layout, &baselines);
-  testi (0, num_baselines);
-  test (NULL == baselines); 
+  log_int_array (baselines, num_baselines);
+  testi (1, num_baselines);
+  test (NULL != baselines); 
   g_free (baselines);
 
   baselines = NULL;
   gtk_label_set_text (label, "");
   num_baselines = gtk_extended_layout_get_baselines (layout, &baselines);
-  testi (0, num_baselines);
-  test (NULL == baselines); 
+  log_int_array (baselines, num_baselines);
+  testi (1, num_baselines);
+  test (NULL != baselines); 
   g_free (baselines);
 
   baselines = NULL;
   gtk_label_set_text (label, "First Line");
   num_baselines = gtk_extended_layout_get_baselines (layout, &baselines);
+  log_int_array (baselines, num_baselines);
   testi (1, num_baselines);
   test (NULL != baselines); 
   g_free (baselines);
@@ -117,13 +149,15 @@ test_label (void)
   baselines = NULL;
   gtk_label_set_text (label, "First Line\n");
   num_baselines = gtk_extended_layout_get_baselines (layout, &baselines);
-  testi (1, num_baselines);
+  log_int_array (baselines, num_baselines);
+  testi (2, num_baselines);
   test (NULL != baselines); 
   g_free (baselines);
 
   baselines = NULL;
   gtk_label_set_text (label, "First Line\nSecond Line");
   num_baselines = gtk_extended_layout_get_baselines (layout, &baselines);
+  log_int_array (baselines, num_baselines);
   testi (2, num_baselines);
   test (NULL != baselines); 
   g_free (baselines);
@@ -131,6 +165,7 @@ test_label (void)
   baselines = NULL;
   gtk_label_set_markup (label, "First Line\n<big>Second Line</big>\nThird Line");
   num_baselines = gtk_extended_layout_get_baselines (layout, &baselines);
+  log_int_array (baselines, num_baselines);
   testi (3, num_baselines);
   test (NULL != baselines); 
   g_free (baselines);

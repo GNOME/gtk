@@ -1,5 +1,10 @@
 2007-06-20  Mathias Hasselmann  <mathias.hasselmann@gmx.de>
 
+	* tests/autotestextendedlayout.c: Correct some assumptions,
+	write baseline values to console.
+
+2007-06-20  Mathias Hasselmann  <mathias.hasselmann@gmx.de>
+
 	* gtk/gtklabel.c: Remove some late hacking crack.
 
 2007-06-20  Mathias Hasselmann  <mathias.hasselmann@gmx.de>
