@@ -92,6 +92,7 @@ struct _TestSuite
   gint n_test_cases;
   gint level;
 
+  GdkPixmap *tile;
   GtkWidget *current;
   gint timestamp;
 };
@@ -684,7 +685,6 @@ draw_guides (gpointer data)
 {
   TestCase *test = data;
   GdkDrawable *drawable;
-  GdkPixmap *tile;
 
   const GList *iter;
 
@@ -698,11 +698,7 @@ draw_guides (gpointer data)
   gc = gdk_gc_new_with_values (drawable, &values, 
                                GDK_GC_SUBWINDOW);
 
-  tile = gdk_pixmap_colormap_create_from_xpm_d (drawable, NULL, NULL, 
-                                                NULL, mask_xpm);
-  gdk_gc_set_tile (gc, tile);
-  g_object_unref (tile);
-
+  gdk_gc_set_tile (gc, test->suite->tile);
   gdk_gc_set_dashes (gc, 1, dashes, 2);
 
   for (iter = test->guides; iter; iter = iter->next)
@@ -821,6 +817,18 @@ test_suite_append (TestSuite *self,
                         attach_sub_windows, test);
 }
 
+static void 
+realize_notebook_cb (GtkWidget *widget,
+                     gpointer   data)
+{
+  TestSuite *suite = data;
+
+  suite->tile =
+    gdk_pixmap_colormap_create_from_xpm_d (
+    suite->notebook->window, NULL, NULL, NULL,
+    mask_xpm);
+}
+
 static TestSuite*
 test_suite_new ()
 {       
@@ -878,7 +886,17 @@ test_suite_new ()
   gtk_notebook_append_page (GTK_NOTEBOOK (self->notebook),
                             scroller, gtk_label_new ("Results"));
 
+  g_signal_connect (self->notebook, "realize",
+                    G_CALLBACK (realize_notebook_cb), self);
+
   return self;
+}
+
+static void
+test_suite_free (TestSuite* self)
+{       
+  g_object_unref (self->tile);
+  g_free (self);
 }
 
 static void
@@ -1231,7 +1249,6 @@ main (int argc, char *argv[])
   gtk_init (&argc, &argv);
 
   suite = test_suite_new ();
-
   actions = gtk_hbox_new (FALSE, 12);
 
   align = gtk_alignment_new (1.0, 0.5, 0.0, 0.0);
@@ -1265,6 +1282,8 @@ main (int argc, char *argv[])
   gtk_widget_show_all (window);
 
   gtk_main ();
+
+  test_suite_free (suite);
 
   return 0;
 }

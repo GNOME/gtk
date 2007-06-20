@@ -1,5 +1,10 @@
 2007-06-20  Mathias Hasselmann  <mathias.hasselmann@gmx.de>
 
+	* tests/testextendedlayout.c: Don't create
+	the tile pixmap with every expose event.
+
+2007-06-20  Mathias Hasselmann  <mathias.hasselmann@gmx.de>
+
 	* gtk/gtkextendedlayout.h, tests/testextendedlayout.c:
 	Dynamically highlight the currently hovered widget and its guides.
 
