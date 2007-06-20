@@ -4270,18 +4270,18 @@ gtk_label_extended_layout_get_baselines (GtkExtendedLayout  *layout,
 
   if (baselines)
     {
-      PangoRectangle ink, log;
-      gint offset, i;
+      PangoRectangle log;
       gint *baseptr;
+      gint offset;
 
       get_layout_location (label, NULL, &offset);
       offset -= GTK_WIDGET (label)->allocation.y;
 
       *baselines = baseptr = g_new (gint, num_lines);
 
-      for (i = 0; lines; ++i, lines = lines->next, ++baseptr, offset += log.height)
+      for (; lines; lines = lines->next, ++baseptr, offset += log.height)
         {
-          pango_layout_line_get_pixel_extents (lines->data, &ink, &log);
+          pango_layout_line_get_pixel_extents (lines->data, NULL, &log);
           *baseptr = offset + PANGO_ASCENT (log);
         }
     }
