@@ -1,5 +1,10 @@
 2007-06-20  Mathias Hasselmann  <mathias.hasselmann@gmx.de>
 
+	* gtk/gtklabel.c, tests/autotestextendedlayout.c: 
+	Implement height for width for GtkLabel.
+
+2007-06-20  Mathias Hasselmann  <mathias.hasselmann@gmx.de>
+
 	* tests/autotestextendedlayout.c: Correct some assumptions,
 	write baseline values to console.
 
@@ -29,7 +34,7 @@
 
 2007-05-29  Mathias Hasselmann  <mathias.hasselmann@gmx.de>
 
-	* testextendedlayout.c: Create initial heigth-for-width test.
+	* testextendedlayout.c: Create initial height-for-width test.
 
 2007-05-29  Mathias Hasselmann  <mathias.hasselmann@gmx.de>
 

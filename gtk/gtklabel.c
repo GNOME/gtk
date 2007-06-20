@@ -4234,17 +4234,40 @@ gtk_label_do_popup (GtkLabel       *label,
 static GtkExtendedLayoutFeatures
 gtk_label_extended_layout_get_features (GtkExtendedLayout *layout)
 {
-  return GTK_EXTENDED_LAYOUT_HEIGHT_FOR_WIDTH
-       | GTK_EXTENDED_LAYOUT_NATURAL_SIZE
-       | GTK_EXTENDED_LAYOUT_BASELINES;
+  GtkLabel *label;
+
+  label = GTK_LABEL (layout);
+
+  if (label->wrap)
+    return
+      GTK_EXTENDED_LAYOUT_HEIGHT_FOR_WIDTH |
+      GTK_EXTENDED_LAYOUT_NATURAL_SIZE |
+      GTK_EXTENDED_LAYOUT_BASELINES;
+
+  return 
+    GTK_EXTENDED_LAYOUT_NATURAL_SIZE |
+    GTK_EXTENDED_LAYOUT_BASELINES;
 }
 
 static gint
 gtk_label_extended_layout_get_height_for_width (GtkExtendedLayout *layout,
                                                 gint               width)
 {
-  g_return_val_if_fail (GTK_IS_LABEL (layout), -1);
-  return -1;
+  PangoLayout *tmp;
+  GtkLabel *label;
+  gint height;
+
+  label = GTK_LABEL (layout);
+
+  g_return_val_if_fail (label->wrap, -1);
+
+  gtk_label_ensure_layout (label);
+  tmp = pango_layout_copy (label->layout);
+  pango_layout_set_width (tmp, PANGO_SCALE * width);
+  pango_layout_get_pixel_size (tmp, NULL, &height);
+  g_object_unref (tmp);
+
+  return height;
 }
 
 static void
@@ -4252,6 +4275,7 @@ gtk_label_extended_layout_get_natural_size (GtkExtendedLayout *layout,
                                             GtkRequisition    *requisition)
 {
   g_return_if_fail (GTK_IS_LABEL (layout));
+  g_return_if_reached ();
 }
 
 static gint
@@ -4263,7 +4287,6 @@ gtk_label_extended_layout_get_baselines (GtkExtendedLayout  *layout,
   GSList *lines;
 
   label = GTK_LABEL (layout);
-
   gtk_label_ensure_layout (label);
   lines = pango_layout_get_lines_readonly (label->layout);
   num_lines = g_slist_length (lines);
