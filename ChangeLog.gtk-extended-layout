@@ -1,5 +1,10 @@
 2007-06-20  Mathias Hasselmann  <mathias.hasselmann@gmx.de>
 
+	* tests/testextendedlayout.c: Provide checkboxes 
+	to choose guide types at runtime.
+
+2007-06-20  Mathias Hasselmann  <mathias.hasselmann@gmx.de>
+
 	* tests/testextendedlayout.c: Don't create
 	the tile pixmap with every expose event.
 

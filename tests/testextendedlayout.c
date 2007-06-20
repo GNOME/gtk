@@ -86,6 +86,10 @@ struct _TestCase
 struct _TestSuite
 {
   GtkWidget *notebook;
+  GtkWidget *baselines;
+  GtkWidget *interiour;
+  GtkWidget *exteriour;
+
   GtkTreeStore *results;
   GtkWidget *results_view;
   GtkTreeIter parent;
@@ -501,11 +505,11 @@ get_baselines (GtkWidget *widget, gint **baselines)
 }
 
 static void
-draw_baseline (GdkDrawable  *drawable,
-               GdkGC        *gc,
-               GtkWidget    *toplevel,
-               GdkRectangle *extends,
-               gint          baseline)
+draw_baselines (GdkDrawable  *drawable,
+                GdkGC        *gc,
+                GtkWidget    *toplevel,
+                GdkRectangle *extends,
+                gint          baseline)
 {
   const gint x0 = toplevel->allocation.x;
   const gint y0 = toplevel->allocation.y;
@@ -692,6 +696,10 @@ draw_guides (gpointer data)
   GdkGCValues values;
   GdkGC *gc;
 
+  gboolean show_baselines;
+  gboolean show_interiour;
+  gboolean show_exteriour;
+
   values.subwindow_mode = GDK_INCLUDE_INFERIORS;
   drawable = test->widget->window;
 
@@ -700,6 +708,16 @@ draw_guides (gpointer data)
 
   gdk_gc_set_tile (gc, test->suite->tile);
   gdk_gc_set_dashes (gc, 1, dashes, 2);
+
+  show_baselines =
+    test->suite->baselines && gtk_toggle_button_get_active (
+    GTK_TOGGLE_BUTTON (test->suite->baselines));
+  show_interiour =
+    test->suite->interiour && gtk_toggle_button_get_active (
+    GTK_TOGGLE_BUTTON (test->suite->interiour));;
+  show_exteriour = 
+    test->suite->exteriour && gtk_toggle_button_get_active (
+    GTK_TOGGLE_BUTTON (test->suite->exteriour));;
 
   for (iter = test->guides; iter; iter = iter->next)
     {
@@ -742,12 +760,21 @@ draw_guides (gpointer data)
         {
           g_assert (NULL != baselines);
 
-          for (i = 0; i < num_baselines; ++i)
-            draw_baseline (drawable, gc, test->widget, &extends, baselines[i]);
+          if (show_baselines)
+            for (i = 0; i < num_baselines; ++i)
+              draw_baselines (drawable, gc, test->widget, &extends, baselines[i]);
         }
       else if (num_baselines > -1)
         {
-          draw_extends (drawable, gc, test->widget, &extends);
+          if ((show_interiour && (
+               guide->type == GUIDE_INTERIOUR_VERTICAL ||
+               guide->type == GUIDE_INTERIOUR_HORIZONTAL ||
+               guide->type == GUIDE_INTERIOUR_BOTH)) ||
+              (show_exteriour && (
+               guide->type == GUIDE_EXTERIOUR_VERTICAL ||
+               guide->type == GUIDE_EXTERIOUR_HORIZONTAL ||
+               guide->type == GUIDE_EXTERIOUR_BOTH)))
+            draw_extends (drawable, gc, test->widget, &extends);
         }
 
       g_free (baselines);
@@ -1267,10 +1294,41 @@ main (int argc, char *argv[])
   g_signal_connect (button, "clicked", G_CALLBACK (test_all_cb), suite);
   gtk_box_pack_start (GTK_BOX (actions), button, FALSE, TRUE, 0);
 
+  actions = gtk_hbox_new (FALSE, 12);
+  gtk_box_pack_end (GTK_BOX (actions), align, TRUE, TRUE, 0);
+
+  gtk_box_pack_start (GTK_BOX (actions),
+                      gtk_label_new ("Guides:"),
+                      FALSE, TRUE, 0);
+
+  suite->baselines = gtk_check_button_new_with_mnemonic ("_Baselines");
+  gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (suite->baselines), TRUE);
+  gtk_box_pack_start (GTK_BOX (actions), suite->baselines, FALSE, TRUE, 0);
+
+  g_signal_connect_swapped (suite->baselines, "toggled", 
+                            G_CALLBACK (gtk_widget_queue_draw),
+                            suite->notebook);
+
+  suite->interiour = gtk_check_button_new_with_mnemonic ("_Interiours");
+  gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (suite->interiour), TRUE);
+  gtk_box_pack_start (GTK_BOX (actions), suite->interiour, FALSE, TRUE, 0);
+
+  g_signal_connect_swapped (suite->interiour, "toggled", 
+                            G_CALLBACK (gtk_widget_queue_draw),
+                            suite->notebook);
+  
+  suite->exteriour = gtk_check_button_new_with_mnemonic ("_Exteriours");
+  gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (suite->exteriour), TRUE);
+  gtk_box_pack_start (GTK_BOX (actions), suite->exteriour, FALSE, TRUE, 0);
+  
+  g_signal_connect_swapped (suite->exteriour, "toggled", 
+                            G_CALLBACK (gtk_widget_queue_draw),
+                            suite->notebook);
+
   vbox = gtk_vbox_new (FALSE, 12);
   gtk_container_set_border_width (GTK_CONTAINER (vbox), 6);
   gtk_box_pack_start (GTK_BOX (vbox), suite->notebook, TRUE, TRUE, 0);
-  gtk_box_pack_start (GTK_BOX (vbox), align, FALSE, TRUE, 0);
+  gtk_box_pack_start (GTK_BOX (vbox), actions, FALSE, TRUE, 0);
 
   window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
 
