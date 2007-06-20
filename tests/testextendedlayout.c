@@ -298,6 +298,68 @@ create_baseline_test ()
   return test;
 }
 
+static TestCase*
+create_baseline_test_bin ()
+{
+  const GType types[] = 
+    { 
+      GTK_TYPE_ALIGNMENT, GTK_TYPE_BUTTON, 
+      GTK_TYPE_EVENT_BOX, GTK_TYPE_FRAME, 
+      G_TYPE_INVALID
+    };
+
+  const gchar *markup[] =
+    { 
+      "<span size='xx-small'>xx-Small</span>",
+      "<span weight='bold'>Bold</span>",
+      "<span size='large'>Large</span>",
+      "<span size='xx-large'>xx-Large</span>",
+      NULL
+    };
+
+  GtkWidget *bin;
+  GtkWidget *label;
+  GtkWidget *table;
+
+  int i, j;
+
+  TestCase *test = test_case_new ("Baseline Alignment for GtkBin",
+                                  gtk_alignment_new (0.5, 0.5, 0.0, 0.0));
+
+  table = gtk_table_new (G_N_ELEMENTS (types) - 1, 
+                         G_N_ELEMENTS (markup),
+                         FALSE);
+
+  gtk_container_set_border_width (GTK_CONTAINER (table), 12);
+  gtk_table_set_col_spacings (GTK_TABLE (table), 6);
+  gtk_table_set_row_spacings (GTK_TABLE (table), 6);
+  gtk_container_add (GTK_CONTAINER (test->widget), table);
+
+  for (i = 0; types[i]; ++i)
+    {
+      label = gtk_label_new (g_type_name (types[i]));
+      gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
+
+      gtk_table_attach (GTK_TABLE (table), label, 0, 1,
+                        i, i + 1, GTK_FILL, GTK_FILL, 0, 0);
+
+      for (j = 0; markup[j]; ++j)
+        {
+          bin = g_object_new (types[i], NULL);
+          label = gtk_label_new (NULL);
+
+          gtk_label_set_markup (GTK_LABEL (label), markup[j]);
+          gtk_container_add (GTK_CONTAINER (bin), label);
+
+          test_case_append_guide (test, bin, GUIDE_BASELINE, i);
+          gtk_table_attach (GTK_TABLE (table), bin, j + 1, j + 2,
+                            i, i + 1, GTK_FILL, GTK_FILL, 0, 0);
+        }
+    }
+
+  return test;
+}
+
 static gboolean
 get_extends (GtkWidget    *widget,
              GtkWidget    *toplevel,
@@ -414,9 +476,18 @@ draw_baseline (GdkDrawable  *drawable,
   const gint xe = xa + extends->width - 1;
   const gint ya = y0 + extends->y + baseline;
 
-  gdk_draw_line (drawable, gc, x0, ya, x0 + cx, ya);
   gdk_draw_line (drawable, gc, xa, ya - 5, xa, ya + 2);
+  gdk_draw_line (drawable, gc, xa + 2, ya, xe - 2, ya);
   gdk_draw_line (drawable, gc, xe, ya - 5, xe, ya + 2);
+
+  gdk_gc_set_line_attributes (gc, 1, GDK_LINE_ON_OFF_DASH,
+                              GDK_CAP_NOT_LAST, GDK_JOIN_MITER);
+
+  gdk_draw_line (drawable, gc, x0, ya, xa - 2, ya);
+  gdk_draw_line (drawable, gc, xe + 2, ya, x0 + cx, ya);
+
+  gdk_gc_set_line_attributes (gc, 1, GDK_LINE_SOLID,
+                              GDK_CAP_NOT_LAST, GDK_JOIN_MITER);
 }
 
 static void
@@ -577,6 +648,7 @@ draw_guides (gpointer data)
   GdkDrawable *drawable;
   const GList *iter;
 
+  gint8 dashes[] = { 3, 3 };
   GdkGCValues values;
   GdkGC *gc;
 
@@ -585,6 +657,8 @@ draw_guides (gpointer data)
 
   gc = gdk_gc_new_with_values (drawable, &values, 
                                GDK_GC_SUBWINDOW);
+
+  gdk_gc_set_dashes (gc, 1, dashes, 2);
 
   for (iter = test->guides; iter; iter = iter->next)
     {
@@ -693,6 +767,7 @@ test_suite_new ()
   test_suite_append (self, create_natural_size_test ());
   test_suite_append (self, create_height_for_width_test ());
   test_suite_append (self, create_baseline_test ());
+  test_suite_append (self, create_baseline_test_bin ());
 
   self->results = gtk_tree_store_new (COLUNN_COUNT,
                                       G_TYPE_STRING, PANGO_TYPE_WEIGHT,

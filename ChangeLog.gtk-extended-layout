@@ -1,5 +1,10 @@
 2007-06-20  Mathias Hasselmann  <mathias.hasselmann@gmx.de>
 
+	* gtk/gtkbin.c, tests/autotestextendedlayout.c,
+	tests/testextendedlayout.c: Implement GtkExtendedLayout for GtkBin.
+
+2007-06-20  Mathias Hasselmann  <mathias.hasselmann@gmx.de>
+
 	* gtk/gtklabel.c, tests/autotestextendedlayout.c:
 	Implement get_natural_size for GtkLabel.
 

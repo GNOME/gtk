@@ -26,6 +26,7 @@
 
 #include <config.h>
 #include "gtkbin.h"
+#include "gtkextendedlayout.h"
 #include "gtkintl.h"
 #include "gtkalias.h"
 
@@ -34,13 +35,16 @@ static void gtk_bin_add         (GtkContainer   *container,
 static void gtk_bin_remove      (GtkContainer   *container,
 			         GtkWidget      *widget);
 static void gtk_bin_forall      (GtkContainer   *container,
-				 gboolean	include_internals,
+				 gboolean        include_internals,
 				 GtkCallback     callback,
 				 gpointer        callback_data);
 static GType gtk_bin_child_type (GtkContainer   *container);
 
+static void  gtk_bin_extended_layout_interface_init (GtkExtendedLayoutIface *iface);
 
-G_DEFINE_ABSTRACT_TYPE (GtkBin, gtk_bin, GTK_TYPE_CONTAINER)
+G_DEFINE_ABSTRACT_TYPE_WITH_CODE (GtkBin, gtk_bin, GTK_TYPE_CONTAINER,
+                                  G_IMPLEMENT_INTERFACE (GTK_TYPE_EXTENDED_LAYOUT,
+						         gtk_bin_extended_layout_interface_init))
 
 static void
 gtk_bin_class_init (GtkBinClass *class)
@@ -149,6 +153,91 @@ gtk_bin_get_child (GtkBin *bin)
   g_return_val_if_fail (GTK_IS_BIN (bin), NULL);
 
   return bin->child;
+}
+
+static GtkExtendedLayoutFeatures
+gtk_bin_extended_layout_get_features (GtkExtendedLayout *layout)
+{
+  GtkBin *bin = GTK_BIN (layout);
+
+  if (GTK_IS_EXTENDED_LAYOUT (bin->child))
+    return gtk_extended_layout_get_features (GTK_EXTENDED_LAYOUT (bin->child));
+
+  return 0;
+}
+
+static gint
+gtk_bin_extended_layout_get_height_for_width (GtkExtendedLayout *layout,
+                                              gint               width)
+{
+  GtkBin *bin = GTK_BIN (layout);
+
+  g_return_val_if_fail (GTK_IS_EXTENDED_LAYOUT (bin->child), -1);
+
+  layout = GTK_EXTENDED_LAYOUT (bin->child);
+  return gtk_extended_layout_get_height_for_width (layout, width);
+}
+
+static gint
+gtk_bin_extended_layout_get_width_for_height (GtkExtendedLayout *layout,
+                                              gint               height)
+{
+  GtkBin *bin = GTK_BIN (layout);
+
+  g_return_val_if_fail (GTK_IS_EXTENDED_LAYOUT (bin->child), -1);
+
+  layout = GTK_EXTENDED_LAYOUT (bin->child);
+  return gtk_extended_layout_get_width_for_height (layout, height);
+}
+
+static void
+gtk_bin_extended_layout_get_natural_size (GtkExtendedLayout *layout,
+                                          GtkRequisition    *requisition)
+{
+  GtkBin *bin = GTK_BIN (layout);
+
+  g_return_if_fail (GTK_IS_EXTENDED_LAYOUT (bin->child));
+
+  layout = GTK_EXTENDED_LAYOUT (bin->child);
+  return gtk_extended_layout_get_natural_size (layout, requisition);
+}
+
+static gint
+gtk_bin_extended_layout_get_baselines (GtkExtendedLayout  *layout,
+                                       gint              **baselines)
+{
+  GtkBin *bin = GTK_BIN (layout);
+  gint *baseptr, *baseend;
+  gint num_lines, dy;
+
+  g_return_val_if_fail (GTK_IS_EXTENDED_LAYOUT (bin->child), -1);
+
+  layout = GTK_EXTENDED_LAYOUT (bin->child);
+  num_lines = gtk_extended_layout_get_baselines (layout, baselines);
+
+  if (baselines)
+    {
+      gtk_widget_translate_coordinates (bin->child, GTK_WIDGET (bin),
+                                        0, 0, NULL, &dy);
+
+      baseptr = *baselines;
+      baseend = baseptr + num_lines;
+
+      while (baseptr < baseend)
+        *baseptr++ += dy;
+    }
+
+  return num_lines;
+}
+
+static void
+gtk_bin_extended_layout_interface_init (GtkExtendedLayoutIface *iface)
+{
+  iface->get_features = gtk_bin_extended_layout_get_features;
+  iface->get_height_for_width = gtk_bin_extended_layout_get_height_for_width;
+  iface->get_width_for_height = gtk_bin_extended_layout_get_width_for_height;
+  iface->get_natural_size = gtk_bin_extended_layout_get_natural_size;
+  iface->get_baselines = gtk_bin_extended_layout_get_baselines;
 }
 
 #define __GTK_BIN_C__

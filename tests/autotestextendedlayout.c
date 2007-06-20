@@ -1,4 +1,5 @@
 #include <config.h>
+#include <string.h>
 #include <stdlib.h>
 #include <glib/gprintf.h>
 #include <gtk/gtk.h>
@@ -321,6 +322,66 @@ gtk_label_test_extended_layout (void)
   gtk_label_test_natural_size ();
 }
 
+static void
+gtk_bin_test_extended_layout (void)
+{
+  const GType types[] = 
+    { 
+      GTK_TYPE_ALIGNMENT, GTK_TYPE_BUTTON, 
+      GTK_TYPE_EVENT_BOX, GTK_TYPE_FRAME, 
+      G_TYPE_INVALID
+    };
+
+  GtkExtendedLayoutFeatures features;
+  GtkExtendedLayoutIface *iface;
+  GtkExtendedLayout *layout;
+  GtkWidget *label;
+  GtkBin *bin;
+
+  int i;
+
+  for (i = 0; types[i]; ++i)
+    {
+      bin = g_object_ref_sink (g_object_new (types[i], NULL));
+      layout = GTK_EXTENDED_LAYOUT (bin);
+
+      label = gtk_label_new (g_type_name (types[i]));
+      gtk_container_add (GTK_CONTAINER (bin), label);
+
+      /* vtable */
+
+      log_test (GTK_IS_EXTENDED_LAYOUT (bin));
+      iface = GTK_EXTENDED_LAYOUT_GET_IFACE (bin);
+
+      log_test (NULL != iface->get_features);
+      log_test (NULL != iface->get_height_for_width);
+      log_test (NULL != iface->get_width_for_height);
+      log_test (NULL != iface->get_natural_size);
+      log_test (NULL != iface->get_baselines);
+
+      /* feature set */
+
+      features = gtk_extended_layout_get_features (layout);
+
+      log_test (0 == (features & GTK_EXTENDED_LAYOUT_HEIGHT_FOR_WIDTH));
+      log_test (0 == (features & GTK_EXTENDED_LAYOUT_WIDTH_FOR_HEIGHT));
+      log_test (0 != (features & GTK_EXTENDED_LAYOUT_NATURAL_SIZE));
+      log_test (0 != (features & GTK_EXTENDED_LAYOUT_BASELINES));
+
+      gtk_label_set_line_wrap (GTK_LABEL (label), TRUE);
+      features = gtk_extended_layout_get_features (layout);
+
+      log_test (0 != (features & GTK_EXTENDED_LAYOUT_HEIGHT_FOR_WIDTH));
+      log_test (0 == (features & GTK_EXTENDED_LAYOUT_WIDTH_FOR_HEIGHT));
+      log_test (0 != (features & GTK_EXTENDED_LAYOUT_NATURAL_SIZE));
+      log_test (0 != (features & GTK_EXTENDED_LAYOUT_BASELINES));
+
+      g_object_unref (bin);
+    }
+
+  log_testf (FALSE, "%s", "TODO: Provide real tests for GtkBin");
+}
+
 /*****************************************************************************/
 
 int
@@ -331,6 +392,7 @@ main(int argc, char **argv)
   gtk_init (&argc, &argv);
 
   gtk_label_test_extended_layout ();
+  gtk_bin_test_extended_layout ();
 
   log_testi (0, num_warnings);
   log_testi (0, num_errors);
