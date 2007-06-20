@@ -93,16 +93,17 @@ struct _TestSuite
 };
 
 static const gchar lorem_ipsum[] =
-  "Lorem ipsum dolor sit amet, consectetuer "
+  "<span weight=\"bold\" size=\"xx-large\">"
+  "Lorem ipsum</span> dolor sit amet, consectetuer "
   "adipiscing elit. Aliquam sed erat. Proin lectus "
   "orci, venenatis pharetra, egestas id, tincidunt "
   "vel, eros. Integer fringilla. Aenean justo ipsum, "        
   "luctus ut, volutpat laoreet, vehicula in, libero.";
 
 static Guide*
-guide_new (GtkWidget *widget,
-           GuideType  type,
-           gint       group)
+guide_new (GtkWidget   *widget,
+           GuideType    type,
+           gint         group)
 {
   Guide* self = g_new0 (Guide, 1);
 
@@ -204,6 +205,7 @@ create_height_for_width_test ()
 
   child = gtk_label_new (lorem_ipsum);
   gtk_label_set_line_wrap (GTK_LABEL (child), TRUE);
+  gtk_label_set_use_markup (GTK_LABEL (child), TRUE);
   gtk_box_pack_start (GTK_BOX (test->widget), child, TRUE, TRUE, 0);
   layout = gtk_label_get_layout (GTK_LABEL (child));
 
@@ -212,6 +214,7 @@ create_height_for_width_test ()
 
   test_case_append_guide (test, child, GUIDE_INTERIOUR_BOTH, 0);
   test_case_append_guide (test, child, GUIDE_EXTERIOUR_BOTH, 0);
+  test_case_append_guide (test, child, GUIDE_BASELINE, 0);
 
   child = gtk_button_new ();
   gtk_container_add (GTK_CONTAINER (child),
@@ -346,21 +349,7 @@ get_baseline_of_layout (PangoLayout *layout)
 }
 
 static gint
-get_baseline_of_label (GtkLabel *label)
-{
-  PangoLayout *layout = gtk_label_get_layout (label);
-  gint base;
-
-  gtk_label_get_layout_offsets (label, NULL, &base);
-
-  base -= GTK_WIDGET (label)->allocation.y;
-  base += get_baseline_of_layout (layout);
-
-  return base;
-}
-
-static gint
-get_baseline_of_text_view (GtkTextView *view)
+get_baselines_of_text_view (GtkTextView *view, gint **baselines)
 {
   GtkTextBuffer *buffer = gtk_text_view_get_buffer (view);
   GtkTextAttributes *attrs = gtk_text_view_get_default_attributes (view);
@@ -393,16 +382,19 @@ get_baseline_of_text_view (GtkTextView *view)
   g_object_unref (layout);
   g_free (text);
 
-  return bounds.y;
+  *baselines = g_new(gint, 1);
+  *baselines[0] = bounds.y;
+
+  return 1;
 }
 
 static gint
-get_baseline (GtkWidget *widget)
+get_baselines (GtkWidget *widget, gint **baselines)
 {
-  if (GTK_IS_LABEL (widget))
-    return get_baseline_of_label (GTK_LABEL (widget));
+  if (GTK_IS_EXTENDED_LAYOUT (widget))
+    return gtk_extended_layout_get_baselines (GTK_EXTENDED_LAYOUT (widget), baselines);
   if (GTK_IS_TEXT_VIEW (widget))
-    return get_baseline_of_text_view (GTK_TEXT_VIEW (widget));
+    return get_baselines_of_text_view (GTK_TEXT_VIEW (widget), baselines);
 
   return -1;
 }
@@ -450,38 +442,40 @@ draw_extends (GdkDrawable  *drawable,
   gdk_draw_line (drawable, gc, x0, ye, x0 + cx, ye);
 }
 
-static gboolean
-test_case_eval_guide (const TestCase *self,
-                      const Guide    *guide,
-                      GdkRectangle   *extends,
-                      gint           *baseline)
+static gint
+test_case_eval_guide (const TestCase  *self,
+                      const Guide     *guide,
+                      GdkRectangle    *extends,
+                      gint           **baselines)
 {
+  gint num_baselines = -1;
+
   if (get_extends (guide->widget, self->widget, extends))
     {
-      *baseline = -1;
+      *baselines = NULL;
 
       switch (guide->type)
         {
           case GUIDE_BASELINE:
-            *baseline = get_baseline (guide->widget);
+            num_baselines = get_baselines (guide->widget, baselines);
             break;
 
           case GUIDE_INTERIOUR_BOTH:
           case GUIDE_INTERIOUR_VERTICAL:
           case GUIDE_INTERIOUR_HORIZONTAL:
             get_interiour (guide->widget, self->widget, extends);
+            num_baselines = 0;
             break;
 
           case GUIDE_EXTERIOUR_BOTH:
           case GUIDE_EXTERIOUR_VERTICAL:
           case GUIDE_EXTERIOUR_HORIZONTAL:
+            num_baselines = 0;
             break;
         }
-
-      return TRUE;
     }
 
-  return FALSE;
+  return num_baselines;
 }
 
 static gboolean
@@ -521,42 +515,59 @@ test_case_compare_guides (const TestCase *self,
                           const Guide    *guide1,
                           const Guide    *guide2)
 {
+  gint *baselines1 = NULL, *baselines2 = NULL;
   GdkRectangle extends1, extends2;
-  gint baseline1, baseline2;
+  gboolean equal = FALSE;
 
-
-  if (!guide_is_compatible (guide1, guide2) ||
-      !test_case_eval_guide (self, guide1, &extends1, &baseline1) ||
-      !test_case_eval_guide (self, guide2, &extends2, &baseline2))
-      return FALSE;
-
-  switch (guide1->type)
+  if (guide_is_compatible (guide1, guide2) &&
+      test_case_eval_guide (self, guide1, &extends1, &baselines1) >= 0 &&
+      test_case_eval_guide (self, guide2, &extends2, &baselines2) >= 0)
     {
-      case GUIDE_BASELINE:
-        return 
-          IS_VALID_BASELINE (baseline1) &&
-          IS_VALID_BASELINE (baseline2) &&
-          extends1.y + baseline1 == extends2.y + baseline2;
+      switch (guide1->type)
+        {
+          case GUIDE_BASELINE:
+            equal =
+              IS_VALID_BASELINE (*baselines1) &&
+              IS_VALID_BASELINE (*baselines2) &&
+              extends1.y + *baselines1 == extends2.y + *baselines2;
+            break;
 
-      case GUIDE_INTERIOUR_HORIZONTAL:
-      case GUIDE_EXTERIOUR_HORIZONTAL:
-        return
-          extends1.height == extends2.height &&
-          extends1.y == extends2.y;
+          case GUIDE_INTERIOUR_HORIZONTAL:
+          case GUIDE_EXTERIOUR_HORIZONTAL:
+            equal =
+              extends1.height == extends2.height &&
+              extends1.y == extends2.y;
+            break;
 
-      case GUIDE_INTERIOUR_VERTICAL:
-      case GUIDE_EXTERIOUR_VERTICAL:
-        return
-          extends1.width == extends2.width &&
-          extends1.x == extends2.x;
+          case GUIDE_INTERIOUR_VERTICAL:
+          case GUIDE_EXTERIOUR_VERTICAL:
+            equal =
+              extends1.width == extends2.width &&
+              extends1.x == extends2.x;
+            break;
 
-      case GUIDE_INTERIOUR_BOTH:
-      case GUIDE_EXTERIOUR_BOTH:
-        return !memcpy (&extends1, &extends2, sizeof extends1);
+          case GUIDE_INTERIOUR_BOTH:
+          case GUIDE_EXTERIOUR_BOTH:
+            equal = !memcpy (&extends1, &extends2, sizeof extends1);
+            break;
 
+        }
     }
 
-  g_return_val_if_reached (FALSE);
+  g_free (baselines1);
+  g_free (baselines2);
+
+  return equal;
+}
+
+static const gchar*
+guide_type_get_color (GuideType type)
+{
+  switch (type) 
+    {
+      case GUIDE_BASELINE: return "#f00";
+      default: return "#ff0";
+    }
 }
 
 static gboolean
@@ -569,28 +580,40 @@ draw_guides (gpointer data)
   GdkGCValues values;
   GdkGC *gc;
 
-  gdk_color_parse ("#f00", &values.foreground);
   values.subwindow_mode = GDK_INCLUDE_INFERIORS;
   drawable = test->widget->window;
 
   gc = gdk_gc_new_with_values (drawable, &values, 
                                GDK_GC_SUBWINDOW);
-  gdk_gc_set_rgb_fg_color (gc, &values.foreground);
-
 
   for (iter = test->guides; iter; iter = iter->next)
     {
       const Guide *guide = iter->data;
       GdkRectangle extends;
-      gint baseline;
+      gint num_baselines;
+      gint *baselines;
+      gint i;
 
-      if (test_case_eval_guide (test, guide, &extends, &baseline))
+      gdk_color_parse (guide_type_get_color (guide->type), 
+                       &values.foreground);
+
+      gdk_gc_set_rgb_fg_color (gc, &values.foreground);
+
+      num_baselines = test_case_eval_guide (test, guide, &extends, &baselines);
+
+      if (num_baselines > 0)
         {
-          if (IS_VALID_BASELINE (baseline))
-            draw_baseline (drawable, gc, test->widget, &extends, baseline);
-          else
-            draw_extends (drawable, gc, test->widget, &extends);
+          g_assert (NULL != baselines);
+
+          for (i = 0; i < num_baselines; ++i)
+            draw_baseline (drawable, gc, test->widget, &extends, baselines[i]);
         }
+      else if (num_baselines > -1)
+        {
+          draw_extends (drawable, gc, test->widget, &extends);
+        }
+
+      g_free (baselines);
     }
 
   g_object_unref (gc);

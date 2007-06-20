@@ -43,6 +43,7 @@
 #include "gtknotebook.h"
 #include "gtkstock.h"
 #include "gtkbindings.h"
+#include "gtkextendedlayout.h"
 #include "gtkprivate.h"
 #include "gtkalias.h"
 
@@ -195,9 +196,14 @@ static gint gtk_label_move_forward_word  (GtkLabel        *label,
 static gint gtk_label_move_backward_word (GtkLabel        *label,
 					  gint             start);
 
+static void gtk_label_extended_layout_interface_init (GtkExtendedLayoutIface *iface);
+
+
 static GQuark quark_angle = 0;
 
-G_DEFINE_TYPE (GtkLabel, gtk_label, GTK_TYPE_MISC)
+G_DEFINE_TYPE_WITH_CODE (GtkLabel, gtk_label, GTK_TYPE_MISC,
+                         G_IMPLEMENT_INTERFACE (GTK_TYPE_EXTENDED_LAYOUT,
+						gtk_label_extended_layout_interface_init))
 
 static void
 add_move_binding (GtkBindingSet  *binding_set,
@@ -4223,6 +4229,73 @@ gtk_label_do_popup (GtkLabel       *label,
     gtk_menu_popup (GTK_MENU (label->select_info->popup_menu), NULL, NULL,
                     popup_position_func, label,
                     0, gtk_get_current_event_time ());
+}
+
+static GtkExtendedLayoutFeatures
+gtk_label_extended_layout_get_features (GtkExtendedLayout *layout)
+{
+  return GTK_EXTENDED_LAYOUT_HEIGHT_FOR_WIDTH
+       | GTK_EXTENDED_LAYOUT_NATURAL_SIZE
+       | GTK_EXTENDED_LAYOUT_BASELINES;
+}
+
+static gint
+gtk_label_extended_layout_get_height_for_width (GtkExtendedLayout *layout,
+                                                gint               width)
+{
+  g_return_val_if_fail (GTK_IS_LABEL (layout), -1);
+  return -1;
+}
+
+static void
+gtk_label_extended_layout_get_natural_size (GtkExtendedLayout *layout,
+                                            GtkRequisition    *requisition)
+{
+  g_return_if_fail (GTK_IS_LABEL (layout));
+}
+
+static gint
+gtk_label_extended_layout_get_baselines (GtkExtendedLayout  *layout,
+                                         gint              **baselines)
+{
+  GtkLabel *label;
+  gint num_lines;
+  GSList *lines;
+
+  label = GTK_LABEL (layout);
+
+  gtk_label_ensure_layout (label);
+  lines = pango_layout_get_lines_readonly (label->layout);
+  num_lines = g_slist_length (lines);
+
+  if (baselines)
+    {
+      PangoRectangle ink, log;
+      gint offset, i;
+      gint *baseptr;
+
+      get_layout_location (label, NULL, &offset);
+      offset -= GTK_WIDGET (label)->allocation.y;
+
+      *baselines = baseptr = g_new (gint, num_lines);
+
+      for (i = 0; lines; ++i, lines = lines->next, ++baseptr, offset += log.height)
+        {
+          pango_layout_line_get_pixel_extents (lines->data, &ink, &log);
+          *baseptr = offset + PANGO_ASCENT (log);
+        }
+    }
+
+  return num_lines;
+}
+
+static void
+gtk_label_extended_layout_interface_init (GtkExtendedLayoutIface *iface)
+{
+  iface->get_features = gtk_label_extended_layout_get_features;
+  iface->get_height_for_width = gtk_label_extended_layout_get_height_for_width;
+  iface->get_natural_size = gtk_label_extended_layout_get_natural_size;
+  iface->get_baselines = gtk_label_extended_layout_get_baselines;
 }
 
 #define __GTK_LABEL_C__

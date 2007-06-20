@@ -24,10 +24,11 @@ if USE_X11
 testsocket_programs = testsocket testsocket_child
 endif
 
-TESTS = floatingtest buildertest
+TESTS = floatingtest buildertest autotestextendedlayout
 
 noinst_PROGRAMS =			\
 	autotestfilechooser		\
+	autotestextendedlayout		\
 	floatingtest			\
 	buildertest			\
 	simple				\
@@ -91,6 +92,7 @@ noinst_PROGRAMS =			\
 	testvolumebutton
 
 autotestfilechooser_DEPENDENCIES = $(TEST_DEPS)
+autotestextendedlayout_DEPENDENCIES = $(TEST_DEPS)
 simple_DEPENDENCIES = $(TEST_DEPS)
 floatingtest_DEPENDENCIES = $(TEST_DEPS)
 buildertest_DEPENDENCIES = $(TEST_DEPS)
@@ -148,6 +150,7 @@ testtooltips_DEPENDENCIES = $(TEST_DEPS)
 testvolumebutton_DEPENDENCIES = $(TEST_DEPS)
 
 autotestfilechooser_LDADD = $(LDADDS)
+autotestextendedlayout_LDADD = $(LDADDS)
 simple_LDADD = $(LDADDS)
 floatingtest_LDADD = $(LDADDS)
 buildertest_LDADD = $(LDADDS)
@@ -215,6 +218,9 @@ buildertest_LDFLAGS = -export-dynamic
 
 autotestfilechooser_SOURCES =	\
 	autotestfilechooser.c
+
+autotestextendedlayout_SOURCES =	\
+	autotestextendedlayout.c
 
 testentrycompletion_SOURCES = 	\
 	prop-editor.c		\

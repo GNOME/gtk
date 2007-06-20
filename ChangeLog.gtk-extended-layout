@@ -1,3 +1,9 @@
+2007-06-20  Mathias Hasselmann  <mathias.hasselmann@gmx.de>
+
+	* gtk/gtklabel.c, tests/autotestextendedlayout.c,
+	tests/testextendedlayout.c, tests/Makefile.am:
+	Implementing get_baselines for GtkLabel and testing it.
+
 2007-06-19  Mathias Hasselmann  <mathias.hasselmann@gmx.de>
 
 	* gtk/Makefile.am, gtk/gtk.h, gtk/gtkextendedlayout.c, 
