@@ -30,6 +30,19 @@ G_BEGIN_DECLS
 #define GTK_IS_EXTENDED_LAYOUT(obj)         (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GTK_TYPE_EXTENDED_LAYOUT))
 #define GTK_EXTENDED_LAYOUT_GET_IFACE(obj)  (G_TYPE_INSTANCE_GET_INTERFACE ((obj), GTK_TYPE_EXTENDED_LAYOUT, GtkExtendedLayoutIface))
 
+#define GTK_EXTENDED_LAYOUT_HAS_WIDTH_FOR_HEIGHT(obj) \
+  (gtk_extended_layout_get_features (GTK_EXTENDED_LAYOUT ((obj))) & \
+   GTK_EXTENDED_LAYOUT_WIDTH_FOR_HEIGHT)
+#define GTK_EXTENDED_LAYOUT_HAS_HEIGHT_FOR_WIDTH(obj) \
+  (gtk_extended_layout_get_features (GTK_EXTENDED_LAYOUT ((obj))) & \
+   GTK_EXTENDED_LAYOUT_HEIGHT_FOR_WIDTH)
+#define GTK_EXTENDED_LAYOUT_HAS_NATURAL_SIZE(obj) \
+  (gtk_extended_layout_get_features (GTK_EXTENDED_LAYOUT ((obj))) & \
+   GTK_EXTENDED_LAYOUT_NATURAL_SIZE)
+#define GTK_EXTENDED_LAYOUT_HAS_BASELINES(obj) \
+  (gtk_extended_layout_get_features (GTK_EXTENDED_LAYOUT ((obj))) & \
+   GTK_EXTENDED_LAYOUT_BASELINES)
+
 typedef struct _GtkExtendedLayout           GtkExtendedLayout;
 typedef struct _GtkExtendedLayoutIface      GtkExtendedLayoutIface;
 typedef enum   _GtkExtendedLayoutFeatures   GtkExtendedLayoutFeatures;

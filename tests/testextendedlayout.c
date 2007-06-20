@@ -76,6 +76,7 @@ struct _Guide
 
 struct _TestCase
 {
+  TestSuite *suite;
   const gchar *name;
   GtkWidget *widget;
   GList *guides;
@@ -90,6 +91,9 @@ struct _TestSuite
   GtkTreeIter parent;
   gint n_test_cases;
   gint level;
+
+  GtkWidget *current;
+  gint timestamp;
 };
 
 static const gchar lorem_ipsum[] =
@@ -99,6 +103,33 @@ static const gchar lorem_ipsum[] =
   "orci, venenatis pharetra, egestas id, tincidunt "
   "vel, eros. Integer fringilla. Aenean justo ipsum, "        
   "luctus ut, volutpat laoreet, vehicula in, libero.";
+
+static char * mask_xpm[] = 
+  {
+    "20 20 2 1",
+    " 	c #000000",
+    "#	c #FFFFFF",
+    " # # # # # # # # # #",
+    "# # # # # # # # # # ",
+    " # # # # # # # # # #",
+    "# # # # # # # # # # ",
+    " # # # # # # # # # #",
+    "# # # # # # # # # # ",
+    " # # # # # # # # # #",
+    "# # # # # # # # # # ",
+    " # # # # # # # # # #",
+    "# # # # # # # # # # ",
+    " # # # # # # # # # #",
+    "# # # # # # # # # # ",
+    " # # # # # # # # # #",
+    "# # # # # # # # # # ",
+    " # # # # # # # # # #",
+    "# # # # # # # # # # ",
+    " # # # # # # # # # #",
+    "# # # # # # # # # # ",
+    " # # # # # # # # # #",
+    "# # # # # # # # # # "
+  };
 
 static Guide*
 guide_new (GtkWidget   *widget,
@@ -115,11 +146,13 @@ guide_new (GtkWidget   *widget,
 }
 
 static TestCase*
-test_case_new (const gchar *name,
+test_case_new (TestSuite   *suite,
+               const gchar *name,
                GtkWidget   *widget)
 {
   TestCase* self = g_new0 (TestCase, 1);
 
+  self->suite = suite;
   self->name = name;
   self->widget = widget;
 
@@ -134,6 +167,7 @@ test_case_append_guide (TestCase  *self,
 {
   Guide *guide = guide_new (widget, type, group);
   self->guides = g_list_append (self->guides, guide);
+  g_object_set_data (G_OBJECT (widget), "test-case", self);
 }
 
 static void
@@ -153,11 +187,11 @@ append_natural_size_box (TestCase           *test,
   button = gtk_button_new ();
   gtk_container_add (GTK_CONTAINER (button), label);
   gtk_box_pack_start (GTK_BOX (hbox), button, FALSE, TRUE, 0);
-
   test_case_append_guide (test, button, GUIDE_EXTERIOUR_VERTICAL, 0);
 
   button = gtk_button_new_with_label ("The large Button");
   gtk_box_pack_start (GTK_BOX (hbox), button, TRUE, TRUE, 0);
+  test_case_append_guide (test, button, GUIDE_EXTERIOUR_VERTICAL, 1);
 
   label = gtk_label_new (NULL);
   gtk_label_set_markup (GTK_LABEL (label), caption); 
@@ -165,12 +199,13 @@ append_natural_size_box (TestCase           *test,
 
   gtk_box_pack_start (GTK_BOX (test->widget), label, FALSE, TRUE, 0);
   gtk_box_pack_start (GTK_BOX (test->widget), hbox, FALSE, TRUE, 0);
+
 }
 
 static TestCase*
-create_natural_size_test ()
+create_natural_size_test (TestSuite *suite)
 {
-  TestCase *test = test_case_new ("Natural Size",
+  TestCase *test = test_case_new (suite, "Natural Size",
                                   gtk_vbox_new (FALSE, 12));
 
   gtk_container_set_border_width (GTK_CONTAINER (test->widget), 12);
@@ -192,13 +227,13 @@ create_natural_size_test ()
 }
 
 static TestCase*
-create_height_for_width_test ()
+create_height_for_width_test (TestSuite *suite)
 {
   PangoLayout *layout;
   PangoRectangle log;
   GtkWidget *child;
 
-  TestCase *test = test_case_new ("Height for Width",
+  TestCase *test = test_case_new (suite, "Height for Width",
                                   gtk_hbox_new (FALSE, 12));
 
   gtk_container_set_border_width (GTK_CONTAINER (test->widget), 12);
@@ -226,13 +261,13 @@ create_height_for_width_test ()
 }
 
 static TestCase*
-create_baseline_test ()
+create_baseline_test (TestSuite *suite)
 {
   GtkWidget *child;
   GtkWidget *view;
   GtkWidget *label;
 
-  TestCase *test = test_case_new ("Baseline Alignment",
+  TestCase *test = test_case_new (suite, "Baseline Alignment",
                                   gtk_table_new (3, 3, FALSE));
 
   gtk_container_set_border_width (GTK_CONTAINER (test->widget), 12);
@@ -241,6 +276,7 @@ create_baseline_test ()
 
   child = gtk_entry_new ();
   gtk_entry_set_text (GTK_ENTRY (child), "Test...");
+  test_case_append_guide (test, child, GUIDE_BASELINE, 0);
   gtk_table_attach (GTK_TABLE (test->widget), child, 1, 2, 0, 1, 
                     GTK_FILL | GTK_EXPAND, GTK_FILL, 0, 0);
 
@@ -258,6 +294,7 @@ create_baseline_test ()
                     GTK_FILL, GTK_FILL, 0, 0);
 
   child = gtk_font_button_new ();
+  test_case_append_guide (test, child, GUIDE_BASELINE, 1);
   gtk_table_attach (GTK_TABLE (test->widget), child, 1, 2, 1, 2, 
                     GTK_FILL | GTK_EXPAND, GTK_FILL, 0, 0);
 
@@ -299,7 +336,7 @@ create_baseline_test ()
 }
 
 static TestCase*
-create_baseline_test_bin ()
+create_baseline_test_bin (TestSuite *suite)
 {
   const GType types[] = 
     { 
@@ -323,7 +360,7 @@ create_baseline_test_bin ()
 
   int i, j;
 
-  TestCase *test = test_case_new ("Baseline Alignment for GtkBin",
+  TestCase *test = test_case_new (suite, "Baseline Alignment for GtkBin",
                                   gtk_alignment_new (0.5, 0.5, 0.0, 0.0));
 
   table = gtk_table_new (G_N_ELEMENTS (types) - 1, 
@@ -453,7 +490,8 @@ get_baselines_of_text_view (GtkTextView *view, gint **baselines)
 static gint
 get_baselines (GtkWidget *widget, gint **baselines)
 {
-  if (GTK_IS_EXTENDED_LAYOUT (widget))
+  if (GTK_IS_EXTENDED_LAYOUT (widget) &&
+      GTK_EXTENDED_LAYOUT_HAS_BASELINES (widget))
     return gtk_extended_layout_get_baselines (GTK_EXTENDED_LAYOUT (widget), baselines);
   if (GTK_IS_TEXT_VIEW (widget))
     return get_baselines_of_text_view (GTK_TEXT_VIEW (widget), baselines);
@@ -484,7 +522,7 @@ draw_baseline (GdkDrawable  *drawable,
                               GDK_CAP_NOT_LAST, GDK_JOIN_MITER);
 
   gdk_draw_line (drawable, gc, x0, ya, xa - 2, ya);
-  gdk_draw_line (drawable, gc, xe + 2, ya, x0 + cx, ya);
+  gdk_draw_line (drawable, gc, xe + 2, ya, x0 + cx - 1, ya);
 
   gdk_gc_set_line_attributes (gc, 1, GDK_LINE_SOLID,
                               GDK_CAP_NOT_LAST, GDK_JOIN_MITER);
@@ -507,10 +545,10 @@ draw_extends (GdkDrawable  *drawable,
   const gint ya = y0 + extends->y;
   const gint ye = ya + extends->height - 1;
 
-  gdk_draw_line (drawable, gc, xa, y0, xa, y0 + cy);
-  gdk_draw_line (drawable, gc, xe, y0, xe, y0 + cy);
-  gdk_draw_line (drawable, gc, x0, ya, x0 + cx, ya);
-  gdk_draw_line (drawable, gc, x0, ye, x0 + cx, ye);
+  gdk_draw_line (drawable, gc, xa, y0, xa, y0 + cy - 1);
+  gdk_draw_line (drawable, gc, xe, y0, xe, y0 + cy - 1);
+  gdk_draw_line (drawable, gc, x0, ya, x0 + cx - 1, ya);
+  gdk_draw_line (drawable, gc, x0, ye, x0 + cx - 1, ye);
 }
 
 static gint
@@ -646,6 +684,8 @@ draw_guides (gpointer data)
 {
   TestCase *test = data;
   GdkDrawable *drawable;
+  GdkPixmap *tile;
+
   const GList *iter;
 
   gint8 dashes[] = { 3, 3 };
@@ -658,6 +698,11 @@ draw_guides (gpointer data)
   gc = gdk_gc_new_with_values (drawable, &values, 
                                GDK_GC_SUBWINDOW);
 
+  tile = gdk_pixmap_colormap_create_from_xpm_d (drawable, NULL, NULL, 
+                                                NULL, mask_xpm);
+  gdk_gc_set_tile (gc, tile);
+  g_object_unref (tile);
+
   gdk_gc_set_dashes (gc, 1, dashes, 2);
 
   for (iter = test->guides; iter; iter = iter->next)
@@ -667,6 +712,28 @@ draw_guides (gpointer data)
       gint num_baselines;
       gint *baselines;
       gint i;
+
+      if (guide->widget == test->suite->current)
+        {
+          if (test->suite->timestamp < 3)
+            {
+              gdk_gc_set_fill (gc, GDK_TILED);
+              gdk_gc_set_function (gc, GDK_OR);
+
+              gdk_draw_rectangle (drawable, gc, TRUE, 
+                                  guide->widget->allocation.x,
+                                  guide->widget->allocation.y,
+                                  guide->widget->allocation.width,
+                                  guide->widget->allocation.height);
+
+              gdk_gc_set_function (gc, GDK_COPY);
+              gdk_gc_set_fill (gc, GDK_SOLID);
+            }
+          else
+            {
+              continue;
+            }
+        }
 
       gdk_color_parse (guide_type_get_color (guide->type), 
                        &values.foreground);
@@ -697,7 +764,7 @@ draw_guides (gpointer data)
 }
 
 static gboolean           
-on_expose (GtkWidget      *widget,
+expose_cb (GtkWidget      *widget,
            GdkEventExpose *event,
            gpointer        data)
 {
@@ -715,21 +782,21 @@ on_expose (GtkWidget      *widget,
 }
 
 static void
-on_realize (GtkWidget *widget,
+realize_cb (GtkWidget *widget,
             gpointer   data)
 {
   TestCase *test = data;
 
   if (widget->window != test->widget->window)
     g_signal_connect_after (widget, "expose-event",
-                            G_CALLBACK (on_expose), test);
+                            G_CALLBACK (expose_cb), test);
 }
 
 static void
 attach_sub_windows (GtkWidget *widget,
                     gpointer   data)
 {
-  g_signal_connect_after (widget, "realize", G_CALLBACK (on_realize), data);
+  g_signal_connect_after (widget, "realize", G_CALLBACK (realize_cb), data);
 
   if (GTK_IS_CONTAINER (widget))
     gtk_container_forall (GTK_CONTAINER (widget), attach_sub_windows, data);
@@ -744,9 +811,9 @@ test_suite_append (TestSuite *self,
                             self->n_test_cases++);
 
   g_signal_connect_after (test->widget, "expose-event",
-                          G_CALLBACK (on_expose), test);
+                          G_CALLBACK (expose_cb), test);
   g_signal_connect_after (test->widget, "realize",
-                          G_CALLBACK (on_realize), test);
+                          G_CALLBACK (realize_cb), test);
   g_object_set_data_full (G_OBJECT(test->widget), 
                           "test-case", test, g_free);
 
@@ -764,10 +831,10 @@ test_suite_new ()
 
   self->notebook = gtk_notebook_new ();
 
-  test_suite_append (self, create_natural_size_test ());
-  test_suite_append (self, create_height_for_width_test ());
-  test_suite_append (self, create_baseline_test ());
-  test_suite_append (self, create_baseline_test_bin ());
+  test_suite_append (self, create_natural_size_test (self));
+  test_suite_append (self, create_height_for_width_test (self));
+  test_suite_append (self, create_baseline_test (self));
+  test_suite_append (self, create_baseline_test_bin (self));
 
   self->results = gtk_tree_store_new (COLUNN_COUNT,
                                       G_TYPE_STRING, PANGO_TYPE_WEIGHT,
@@ -963,16 +1030,16 @@ test_suite_run (TestSuite *self,
 }
 
 static void
-test_current (GtkWidget *widget,
-              gpointer  data)
+test_current_cb (GtkWidget *widget,
+                 gpointer  data)
 {
   TestSuite *suite = data;
   test_suite_run (suite, -1);
 }
 
 static void
-test_all (GtkWidget *widget,
-          gpointer  data)
+test_all_cb (GtkWidget *widget,
+             gpointer  data)
 {
   GTimer *timer = g_timer_new ();
   TestSuite *suite = data;
@@ -992,7 +1059,7 @@ test_all (GtkWidget *widget,
             g_usleep (500);
         }
 
-      test_current (widget, suite);
+      test_current_cb (widget, suite);
       g_timer_stop (timer);
     }
 
@@ -1001,10 +1068,10 @@ test_all (GtkWidget *widget,
 }
 
 static void
-switch_page (GtkNotebook     *notebook,
-             GtkNotebookPage *page,
-             gint             index,
-             gpointer         data)
+switch_page_cb (GtkNotebook     *notebook,
+                GtkNotebookPage *page,
+                gint             index,
+                gpointer         data)
 {
   gpointer *bag = data;
   TestSuite *suite = bag[0];
@@ -1046,6 +1113,111 @@ pointer_bag_free (gpointer self)
   g_free (self);
 }
 
+static GtkWidget*
+find_widget_at_position (GtkWidget *widget,
+                         gint       x,
+                         gint       y)
+{
+  if (x < 0 || x >= widget->allocation.width ||
+      y < 0 || y >= widget->allocation.height)
+    return NULL;
+
+  if (GTK_IS_CONTAINER (widget))
+    {
+      GtkWidget *child;
+      GList *children;
+      GList *iter;
+
+      gint rx, ry;
+
+      children = gtk_container_get_children (GTK_CONTAINER (widget));
+
+      for (iter = children; iter; iter = iter->next)
+        {
+          gtk_widget_translate_coordinates (widget, iter->data, x, y, &rx, &ry);
+          child = find_widget_at_position (iter->data, rx, ry);
+
+          if (child)
+            {
+              widget = child;
+              break;
+            }
+        }
+
+      g_list_free (children);
+    }
+
+  return widget;
+}
+
+static gboolean           
+watch_pointer_cb (gpointer data)
+{
+  TestSuite *suite = data;
+  TestCase *test = NULL;
+
+  gboolean dirty;
+  GtkWidget *page;
+  GtkWidget *child;
+  gint i, x, y;
+
+  i = gtk_notebook_get_current_page (GTK_NOTEBOOK (suite->notebook));
+  page = gtk_notebook_get_nth_page (GTK_NOTEBOOK (suite->notebook), i);
+
+  gtk_widget_get_pointer (page, &x, &y);
+  child = find_widget_at_position (page, x, y);
+
+  while (child)
+    {
+      test = g_object_get_data (G_OBJECT(child), "test-case");
+
+      if (test)
+        break;
+
+      child = gtk_widget_get_parent (child);
+    }
+
+  dirty = suite->current && !(suite->timestamp % 3);
+  suite->timestamp = (suite->timestamp + 1) % 6;
+
+  if (test)
+    {
+      g_assert (child);
+      suite->current = child;
+      dirty = TRUE;
+    }
+  else
+    {
+      dirty = (NULL != suite->current);
+      suite->current = NULL;
+    }
+
+  if (dirty)
+    {
+      if (suite->current)
+        {
+          gtk_widget_translate_coordinates (suite->current, page, 0, 0, &x, &y);
+
+          gtk_widget_queue_draw_area (page,
+                                      page->allocation.x,
+                                      page->allocation.y + y,
+                                      page->allocation.width,
+                                      suite->current->allocation.height);
+          gtk_widget_queue_draw_area (page,
+                                      page->allocation.x + x,
+                                      page->allocation.y,
+                                      suite->current->allocation.width,
+                                      page->allocation.height);
+        }
+      else
+        {
+          gtk_widget_queue_draw (page);
+        }
+    }
+
+  return TRUE;
+}
+        
 int
 main (int argc, char *argv[])
 {
@@ -1066,16 +1238,16 @@ main (int argc, char *argv[])
   gtk_container_add (GTK_CONTAINER (align), actions);
 
   button = gtk_button_new_with_mnemonic ("Test _Current Page");
-  g_signal_connect (button, "clicked", G_CALLBACK (test_current), suite);
+  g_signal_connect (button, "clicked", G_CALLBACK (test_current_cb), suite);
   gtk_box_pack_start (GTK_BOX (actions), button, FALSE, TRUE, 0);
 
   g_signal_connect_data (suite->notebook, "switch-page",
-                         G_CALLBACK (switch_page),
+                         G_CALLBACK (switch_page_cb),
                          pointer_bag_new (suite, button, NULL),
                          (GClosureNotify) pointer_bag_free, 0);
 
   button = gtk_button_new_with_mnemonic ("Test _All Pages");
-  g_signal_connect (button, "clicked", G_CALLBACK (test_all), suite);
+  g_signal_connect (button, "clicked", G_CALLBACK (test_all_cb), suite);
   gtk_box_pack_start (GTK_BOX (actions), button, FALSE, TRUE, 0);
 
   vbox = gtk_vbox_new (FALSE, 12);
@@ -1084,7 +1256,10 @@ main (int argc, char *argv[])
   gtk_box_pack_start (GTK_BOX (vbox), align, FALSE, TRUE, 0);
 
   window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+
   g_signal_connect (window, "destroy", G_CALLBACK (gtk_main_quit), NULL);
+  g_timeout_add (200, watch_pointer_cb, suite);
+
   gtk_window_set_title (GTK_WINDOW (window), "Testing GtkExtendedLayout");
   gtk_container_add (GTK_CONTAINER (window), vbox);
   gtk_widget_show_all (window);
