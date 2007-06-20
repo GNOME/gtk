@@ -1,7 +1,12 @@
 2007-06-20  Mathias Hasselmann  <mathias.hasselmann@gmx.de>
 
+	* gtk/gtklabel.c, tests/autotestextendedlayout.c:
+	Implement get_natural_size for GtkLabel.
+
+2007-06-20  Mathias Hasselmann  <mathias.hasselmann@gmx.de>
+
 	* gtk/gtklabel.c, tests/autotestextendedlayout.c: 
-	Implement height for width for GtkLabel.
+	Implement get_height_for_width for GtkLabel.
 
 2007-06-20  Mathias Hasselmann  <mathias.hasselmann@gmx.de>
 

@@ -4274,8 +4274,16 @@ static void
 gtk_label_extended_layout_get_natural_size (GtkExtendedLayout *layout,
                                             GtkRequisition    *requisition)
 {
-  g_return_if_fail (GTK_IS_LABEL (layout));
-  g_return_if_reached ();
+  GtkLabel *label;
+  gboolean ellipsize;
+
+  label = GTK_LABEL (layout);
+  ellipsize = label->ellipsize;
+  label->ellipsize = PANGO_ELLIPSIZE_NONE;
+
+  gtk_label_size_request (GTK_WIDGET (label), requisition);
+
+  label->ellipsize = ellipsize;
 }
 
 static gint

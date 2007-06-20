@@ -195,7 +195,7 @@ gtk_label_test_height_for_width (void)
   pango_layout_get_pixel_size (ref, &rcx, &rcy);
   g_object_unref (ref);
 
-  log_info ("preferred layout size: %d \303\227 %d", rcx, rcy);
+  log_info ("preferred layout size: %d\303\227%d", rcx, rcy);
 
   for (i = 5; i >= 1; --i)
     {
@@ -210,11 +210,67 @@ gtk_label_test_height_for_width (void)
   for (i = 2, cx = rcx / 2; cx >= rcy; ++i, cx = rcx / i, cy_min = cy, cy_max += rcy)
     {
       cy = gtk_extended_layout_get_height_for_width (layout, cx);
+
       log_info ("scale is 1/%d, so width is %d. results in height of %d.", i, cx, cy);
-      log_testf (cy_min <= cy && cy <= cy_max, "%f <= %d <= %f", cy_min, cy, cy_max);
+      log_testf (cy_min <= cy && cy <= cy_max, "%f \342\211\244 %d  \342\211\244 %f",
+                 cy_min, cy, cy_max);
     }
 
   g_object_unref (widget);
+}
+
+static void
+gtk_label_test_natural_size (void)
+{
+  GtkExtendedLayout *layout;
+  GtkWidget *widget;
+  GtkLabel *label;
+
+  const GEnumClass *ellipsize_class;
+  const GEnumClass *wrap_class;
+
+  GtkRequisition minimum;
+  GtkRequisition natural;
+
+  gint i, j;
+
+  widget = g_object_ref_sink (gtk_label_new (lorem_ipsum));
+  layout = GTK_EXTENDED_LAYOUT (widget);
+  label = GTK_LABEL (widget);
+
+  ellipsize_class = g_type_class_peek_static (PANGO_TYPE_ELLIPSIZE_MODE);
+  wrap_class = g_type_class_peek_static (PANGO_TYPE_WRAP_MODE);
+
+  for (i = -1; i < (gint)wrap_class->n_values; ++i)
+    { /*      ^^^^^^^^^^^^ deal with the unsigned integer (some really annyoing invention) */
+      const GEnumValue *const wrap = (i >= 0 ? &wrap_class->values[i] : NULL);
+      const gchar *wrap_mode = (wrap ? wrap->value_nick : "none");
+
+      gtk_label_set_line_wrap (label, NULL != wrap);
+
+      if (wrap)
+        gtk_label_set_line_wrap_mode (label, wrap->value);
+
+      gtk_label_set_ellipsize (label, PANGO_ELLIPSIZE_NONE);
+      gtk_widget_size_request (widget, &minimum);
+
+      log_test (minimum.width > 100);
+
+      log_info ("wrap mode `%s' leads to a minimum size of %d\303\227%d.", 
+                wrap_mode, minimum.width, minimum.height);
+
+      for (j = 0; j < ellipsize_class->n_values; ++j)
+        {
+          const GEnumValue *const ellipsize = &ellipsize_class->values[j];
+
+          gtk_label_set_ellipsize (label, ellipsize->value);
+          gtk_extended_layout_get_natural_size (layout, &natural);
+
+          log_info ("ellipsize mode `%s' leads to a natural size of %d\303\227%d.", 
+                    ellipsize->value_nick, natural.width, natural.height);
+          log_test (!memcmp (&natural, &minimum, sizeof natural)); 
+        }
+    }
 }
 
 static void
@@ -260,45 +316,9 @@ gtk_label_test_extended_layout (void)
 
   g_object_unref (widget);
 
-  /* baseline support */
-
   gtk_label_test_baselines ();
   gtk_label_test_height_for_width ();
-
-  /* height for width */
-/*
-  PangoLayout *tmp;
-
-  log_info ("requisition: %d, %d", req.width, req.height);
-
-  for (i = -5; i < 6; ++i)
-    {
-      const gint e = i < 4 ? 1 : 2;
-
-      const gdouble sy_lower =
-        i + 1 < 0 ? (abs(i + 1) + 1) : 
-        i + 1 > 0 ? 1.0 / (abs(i + 1) + 1) : 1;
-      const gdouble sy_upper = 
-        i - e < 0 ? (abs(i - e) + 1) :
-        i - e > 0 ? 1.0 / (abs(i - e) + 1) : 1;
-
-      double sy;
-
-      width =
-        i < 0 ? req.width / (abs(i) + 1) :
-        i > 0 ? req.width * (abs(i) + 1) :
-        req.width;
-
-      height = gtk_extended_layout_get_height_for_width (layout, width);
-      sy = (double)height / req.height;
-
-      log_info ("scale is %s%d, so width is %d, height is %d",
-                i < 0 ? "1/" : "", abs(i) + 1, width, height);
-
-      log_testf (sy_lower <= sy && sy <= sy_upper,
-             "%f <= %f <= %f", sy_lower, sy, sy_upper);
-    }
-*/
+  gtk_label_test_natural_size ();
 }
 
 /*****************************************************************************/
