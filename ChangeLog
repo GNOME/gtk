@@ -1,3 +1,8 @@
+2007-06-21  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtkmain.c (gtk_main_do_event): Remove faulty and irrelevant
+	enter-leave compression code.  (#449167, patch by Tim Janik)
+
 2007-06-19  Johan Dahlin  <jdahlin@async.com.br>
 
 	* gdk/quartz/GdkQuartzView.c ([GdkQuartzView -updateTrackingRect]): Fix a typo

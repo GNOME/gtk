@@ -1377,41 +1377,8 @@ gtk_main_do_event (GdkEvent *event)
   GtkWidget *event_widget;
   GtkWidget *grab_widget;
   GtkWindowGroup *window_group;
-  GdkEvent *next_event;
   GdkEvent *rewritten_event = NULL;
   GList *tmp_list;
-
-  /* If there are any events pending then get the next one.
-   */
-  next_event = gdk_event_peek ();
-  
-  /* Try to compress enter/leave notify events. These event
-   *  pairs occur when the mouse is dragged quickly across
-   *  a window with many buttons (or through a menu). Instead
-   *  of highlighting and de-highlighting each widget that
-   *  is crossed it is better to simply de-highlight the widget
-   *  which contained the mouse initially and highlight the
-   *  widget which ends up containing the mouse.
-   */
-  if (next_event)
-    if (((event->type == GDK_ENTER_NOTIFY) ||
-	 (event->type == GDK_LEAVE_NOTIFY)) &&
-	((next_event->type == GDK_ENTER_NOTIFY) ||
-	 (next_event->type == GDK_LEAVE_NOTIFY)) &&
-	(next_event->type != event->type) &&
-	(next_event->any.window == event->any.window))
-      {
-	/* Throw both the peeked copy and the queued copy away 
-	 */
-	gdk_event_free (next_event);
-	next_event = gdk_event_get ();
-	gdk_event_free (next_event);
-	
-	return;
-      }
-
-  if (next_event)
-    gdk_event_free (next_event);
 
   if (event->type == GDK_SETTING)
     {
