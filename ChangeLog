@@ -1,3 +1,8 @@
+Fri Jun 22 00:34:34 2007  Tim Janik  <timj@gtk.org>
+
+	* gdk/x11/gdkdisplay-x11.c (gdk_x11_display_get_xdisplay): applied
+	patch from Mark Tiefenbruck to add missing return_if_fail, #449862.
+
 2007-06-21  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtktoolbar.c: Remove debug spew.  (#449492, Christian Persch)

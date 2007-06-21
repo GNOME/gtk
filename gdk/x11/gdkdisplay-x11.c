@@ -896,6 +896,7 @@ _gdk_x11_display_screen_for_xrootwin (GdkDisplay *display,
 Display *
 gdk_x11_display_get_xdisplay (GdkDisplay *display)
 {
+  g_return_val_if_fail (GDK_IS_DISPLAY (display), NULL);
   return GDK_DISPLAY_X11 (display)->xdisplay;
 }
 
