@@ -1922,8 +1922,6 @@ gtk_toolbar_move_focus (GtkWidget        *widget,
   gboolean try_focus = FALSE;
   GList *children;
 
-  g_printerr ("%s (dir = %d)\n", G_STRFUNC, dir);
-
   if (container->focus_child &&
       gtk_widget_child_focus (container->focus_child, dir))
     {

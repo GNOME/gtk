@@ -1,5 +1,9 @@
 2007-06-21  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtktoolbar.c: Remove debug spew.  (#449492, Christian Persch)
+
+2007-06-21  Matthias Clasen  <mclasen@redhat.com>
+
 	* gtk/gtkmain.c (gtk_main_do_event): Remove faulty and irrelevant
 	enter-leave compression code.  (#449167, patch by Tim Janik)
 
