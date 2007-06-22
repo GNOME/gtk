@@ -1,3 +1,11 @@
+Fri Jun 22 12:13:39 2007  Tim Janik  <timj@imendio.com>
+
+	* gtk/gtkframe.c (gtk_frame_paint): applied patch from Xan Lopez
+	to eliminate gap in painted frame for yaling=0.0 or yalign=1.0.
+
+	* tests/testframe.c: added test application from Xan Lopez to
+	test xalign/yalign interactions with xthickness/ythickness.
+
 Fri Jun 22 00:34:34 2007  Tim Janik  <timj@gtk.org>
 
 	* gdk/x11/gdkdisplay-x11.c (gdk_x11_display_get_xdisplay): applied

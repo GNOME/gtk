@@ -45,6 +45,7 @@ noinst_PROGRAMS =			\
 	testentrycompletion 		\
 	testfilechooser			\
 	testfilechooserbutton		\
+	testframe			\
 	testgtk				\
 	testiconview			\
 	testicontheme			\
@@ -99,6 +100,7 @@ testiconview_DEPENDENCIES = $(TEST_DEPS)
 testaccel_DEPENDENCIES = $(TEST_DEPS)
 testassistant_DEPENDENCIES = $(TEST_DEPS)
 testbbox_DEPENDENCIES = $(TEST_DEPS)
+testframe_DEPENDENCIES = $(TEST_DEPS)
 testcairo_DEPENDENCIES = $(TEST_DEPS)
 testcalendar_DEPENDENCIES = $(TEST_DEPS)
 testcombo_DEPENDENCIES = $(TEST_DEPS)
@@ -153,6 +155,7 @@ print_editor_LDADD = $(LDADDS)
 testaccel_LDADD = $(LDADDS)
 testassistant_LDADD = $(LDADDS)
 testbbox_LDADD = $(LDADDS)
+testframe_LDADD = $(LDADDS)
 testcairo_LDADD = $(LDADDS)
 testcalendar_LDADD = $(LDADDS)
 testcombo_LDADD = $(LDADDS)
@@ -275,6 +278,9 @@ testactions_SOURCES = 		\
 
 testbbox_SOURCES = 		\
 	testbbox.c
+
+testframe_SOURCES = 		\
+	testframe.c
 
 testiconview_SOURCES = 		\
 	testiconview.c		\

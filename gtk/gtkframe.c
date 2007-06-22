@@ -425,7 +425,9 @@ gtk_frame_get_label_widget (GtkFrame *frame)
  *   of the widget. A value of 0.0 represents left alignment;
  *   1.0 represents right alignment.
  * @yalign: The y alignment of the label. A value of 0.0 aligns under 
- *   the frame; 1.0 aligns above the frame.
+ *   the frame; 1.0 aligns above the frame. If the values are exactly
+ *   0.0 or 1.0 the gap in the frame won't be painted because the label
+ *   will be completely above or below the frame.
  * 
  * Sets the alignment of the frame widget's label. The
  * default values for a newly created frame are 0.0 and 0.5.
@@ -553,20 +555,26 @@ gtk_frame_paint (GtkWidget    *widget,
 	  else
 	    xalign = 1 - frame->label_xalign;
 
-	  height_extra = MAX (0, child_requisition.height - widget->style->ythickness);
-	  height_extra *= (1 - frame->label_yalign);
+	  height_extra = MAX (0, child_requisition.height - widget->style->ythickness)
+	    - frame->label_yalign * child_requisition.height;
 	  y -= height_extra;
 	  height += height_extra;
 	  
 	  x2 = widget->style->xthickness + (frame->child_allocation.width - child_requisition.width - 2 * LABEL_PAD - 2 * LABEL_SIDE_PAD) * xalign + LABEL_SIDE_PAD;
-
 	  
-	  gtk_paint_shadow_gap (widget->style, widget->window,
-				widget->state, frame->shadow_type,
-				area, widget, "frame",
-				x, y, width, height,
-				GTK_POS_TOP, 
-				x2, child_requisition.width + 2 * LABEL_PAD);
+	  /* If the label is completely over or under the frame we can omit the gap */
+	  if (frame->label_yalign == 0.0 || frame->label_yalign == 1.0)
+	    gtk_paint_shadow (widget->style, widget->window,
+			      widget->state, frame->shadow_type,
+			      area, widget, "frame",
+			      x, y, width, height);
+	  else
+	    gtk_paint_shadow_gap (widget->style, widget->window,
+				  widget->state, frame->shadow_type,
+				  area, widget, "frame",
+				  x, y, width, height,
+				  GTK_POS_TOP,
+				  x2, child_requisition.width + 2 * LABEL_PAD);
 	}
        else
 	 gtk_paint_shadow (widget->style, widget->window,
@@ -604,7 +612,7 @@ gtk_frame_size_request (GtkWidget      *widget,
 
       requisition->width = child_requisition.width + 2 * LABEL_PAD + 2 * LABEL_SIDE_PAD;
       requisition->height =
-	MAX (0, child_requisition.height - GTK_WIDGET (widget)->style->ythickness);
+	MAX (0, child_requisition.height - widget->style->ythickness);
     }
   else
     {
