@@ -23,6 +23,7 @@
 #include <config.h>
 #include <gmodule.h>
 #include "gtksearchenginebeagle.h"
+
 #if 0
 #include <beagle/beagle.h>
 #endif
@@ -59,7 +60,7 @@ typedef enum
 } BeaglePropertyType;
 
 /* *static* wrapper function pointers */
-static gboolean (*beagle_client_send_request_async) (BeagleClient  *client,
+static gboolean (*beagle_client_send_request_async) (BeagleClient   *client,
 						     BeagleRequest  *request,
 						     GError        **err) = NULL;
 static G_CONST_RETURN char *(*beagle_hit_get_uri) (BeagleHit *hit) = NULL;
@@ -70,8 +71,6 @@ static void (*beagle_query_add_text) (BeagleQuery     *query,
 				      const char      *str) = NULL;
 static void (*beagle_query_add_hit_type) (BeagleQuery *query,
 					  const char  *hit_type) = NULL;
-static void (*beagle_query_add_mime_type) (BeagleQuery *query,
-					  const char  *mime_type) = NULL;
 static void (*beagle_query_set_max_hits) (BeagleQuery *query,
 					  gint         max_hits) = NULL;
 static BeagleQueryPartProperty *(*beagle_query_part_property_new) (void) = NULL;
@@ -104,7 +103,6 @@ static struct BeagleDlMapping
   MAP (beagle_query_new),
   MAP (beagle_query_add_text),
   MAP (beagle_query_add_hit_type),
-  MAP (beagle_query_add_mime_type),
   MAP (beagle_query_set_max_hits),
   MAP (beagle_query_part_property_new),
   MAP (beagle_query_part_set_logic),
@@ -275,8 +273,7 @@ gtk_search_engine_beagle_start (GtkSearchEngine *engine)
 {
   GtkSearchEngineBeagle *beagle;
   GError *error;
-  GList *mimetypes, *l;
-  gchar *text, *mimetype;
+  gchar *text;
 
   error = NULL;
   beagle = GTK_SEARCH_ENGINE_BEAGLE (engine);
@@ -298,22 +295,12 @@ gtk_search_engine_beagle_start (GtkSearchEngine *engine)
 		    "error", G_CALLBACK (beagle_error), engine);
   
   /* We only want files */
-  beagle_query_add_hit_type (beagle->priv->current_query,
-			     "File");
-  beagle_query_set_max_hits (beagle->priv->current_query,
-			     1000);
+  beagle_query_add_hit_type (beagle->priv->current_query, "File");
+  beagle_query_set_max_hits (beagle->priv->current_query, 1000);
   
   text = _gtk_query_get_text (beagle->priv->query);
-  beagle_query_add_text (beagle->priv->current_query,
-			 text);
+  beagle_query_add_text (beagle->priv->current_query, text);
   
-  mimetypes = _gtk_query_get_mime_types (beagle->priv->query);
-  for (l = mimetypes; l != NULL; l = l->next) 
-    {
-      mimetype = l->data;
-      beagle_query_add_mime_type (beagle->priv->current_query, mimetype);
-    }
-
   beagle->priv->current_query_uri_prefix = _gtk_query_get_location (beagle->priv->query);
   
   if (!beagle_client_send_request_async (beagle->priv->client,
@@ -325,8 +312,6 @@ gtk_search_engine_beagle_start (GtkSearchEngine *engine)
 
   /* These must live during the lifetime of the query */
   g_free (text);
-  g_list_foreach (mimetypes, (GFunc)g_free, NULL);
-  g_list_free (mimetypes);
 }
 
 static void
@@ -340,6 +325,7 @@ gtk_search_engine_beagle_stop (GtkSearchEngine *engine)
     {
       g_object_unref (beagle->priv->current_query);
       beagle->priv->current_query = NULL;
+
       g_free (beagle->priv->current_query_uri_prefix);
       beagle->priv->current_query_uri_prefix = NULL;
     }

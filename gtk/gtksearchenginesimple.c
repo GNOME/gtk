@@ -36,9 +36,6 @@
 
 #include "gtksearchenginesimple.h"
 
-#define XDG_PREFIX _gtk_xdg
-#include "xdgmime/xdgmime.h"
-
 #include <string.h>
 
 #include <glib/gstrfuncs.h>
@@ -50,7 +47,6 @@ typedef struct
   GtkSearchEngineSimple *engine;
   
   gchar *path;
-  GList *mime_types;
   gchar **words;
   GList *found_list;
   
@@ -115,8 +111,6 @@ search_thread_data_new (GtkSearchEngineSimple *engine,
   g_free (text);
   g_free (lower);
   
-  data->mime_types = _gtk_query_get_mime_types (query);
-  
   return data;
 }
 
@@ -125,8 +119,6 @@ search_thread_data_free (SearchThreadData *data)
 {
   g_free (data->path);
   g_strfreev (data->words);
-  g_list_foreach (data->mime_types, (GFunc)g_free, NULL);
-  g_list_free (data->mime_types);
   g_free (data);
 }
 
@@ -204,7 +196,7 @@ search_visit_func (const char        *fpath,
   SearchThreadData *data;
   gint i;
   const gchar *name; 
-  gchar *lower_name, *mime_type;
+  gchar *lower_name;
   gchar *uri;
   gboolean hit;
   GList *l;
@@ -243,22 +235,6 @@ search_visit_func (const char        *fpath,
 	    }
 	}
       g_free (lower_name);
-    }
-
-  if (hit && data->mime_types != NULL) 
-    {
-      hit = FALSE;
-      mime_type = xdg_mime_get_mime_type_for_file (fpath, (struct stat *)sb);
-      for (l = data->mime_types; l != NULL; l = l->next) 
-	{
-	  if (strcmp (mime_type, l->data) == 0) 
-	    {
-	      hit = TRUE;
-	      break;
-	    }
-	}
-
-      g_free (mime_type);
     }
 
   if (hit) 

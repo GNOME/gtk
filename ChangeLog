@@ -1,3 +1,13 @@
+2007-06-22  Emmanuele Bassi  <ebassi@gnome.org>
+
+	* gtk/gtksearchenginebeagle.c:
+	* gtk/gtksearchenginesimple.c:
+	* gtk/gtksearchenginetracker.c: Remove the MIME type calls and
+	queries from the search engine implementations, since we use our
+	own GtkFileSystem to filter out basing on MIME types and we cannot
+	query MIME types anyway. The GtkQuery private object still has
+	MIME type, as well as location, support for future expansion.
+
 Fri Jun 22 12:13:39 2007  Tim Janik  <timj@imendio.com>
 
 	* gtk/gtkframe.c (gtk_frame_paint): applied patch from Xan Lopez

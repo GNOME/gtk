@@ -27,6 +27,8 @@
 #include <tracker.h>
 #endif
 
+/* we dlopen() libtracker at runtime */
+
 typedef struct _TrackerClient TrackerClient;
 
 typedef void (*TrackerArrayReply) (char **result, GError *error, gpointer user_data);
@@ -39,22 +41,11 @@ static void (*tracker_search_metadata_by_text_async) (TrackerClient *client,
 						      const char *query, 
 						      TrackerArrayReply callback, 
 						      gpointer user_data) = NULL;
-static void (*tracker_search_metadata_by_text_and_mime_async) (TrackerClient *client, 
-							       const char *query, 
-							       const char **mimes, 
-							       TrackerArrayReply callback, 
-							       gpointer user_data) = NULL;
 static void (*tracker_search_metadata_by_text_and_location_async) (TrackerClient *client, 
 								   const char *query, 
 								   const char *location, 
 								   TrackerArrayReply callback, 
 								   gpointer user_data) = NULL;
-static void (*tracker_search_metadata_by_text_and_mime_and_location_async) (TrackerClient *client, 
-									    const char *query, 
-									    const char **mimes, 
-									    const char *location, 
-									    TrackerArrayReply callback, 
-									    gpointer user_data) = NULL;
 
 static struct TrackerDlMapping
 {
@@ -67,9 +58,7 @@ static struct TrackerDlMapping
   MAP (tracker_disconnect),
   MAP (tracker_cancel_last_call),
   MAP (tracker_search_metadata_by_text_async),
-  MAP (tracker_search_metadata_by_text_and_mime_async),
   MAP (tracker_search_metadata_by_text_and_location_async),
-  MAP (tracker_search_metadata_by_text_and_mime_and_location_async)
 #undef MAP
 };
 
@@ -164,9 +153,9 @@ search_callback (gchar  **results,
     {
       gchar *uri;
 
-      uri = g_filename_to_uri ((char *)*results_p, NULL, NULL);
+      uri = g_filename_to_uri (*results_p, NULL, NULL);
       if (uri)
-	hit_uris = g_list_prepend (hit_uris, (char *)uri);
+	hit_uris = g_list_prepend (hit_uris, uri);
     }
 
   _gtk_search_engine_hits_added (GTK_SEARCH_ENGINE (tracker), hit_uris);
@@ -182,10 +171,7 @@ static void
 gtk_search_engine_tracker_start (GtkSearchEngine *engine)
 {
   GtkSearchEngineTracker *tracker;
-  GList 	*mimetypes, *l;
-  gchar 	*search_text, *location, *location_uri;
-  gchar 	**mimes;
-  gint 	i, mime_count;
+  gchar	*search_text, *location, *location_uri;
 
   tracker = GTK_SEARCH_ENGINE_TRACKER (engine);
 
@@ -196,82 +182,34 @@ gtk_search_engine_tracker_start (GtkSearchEngine *engine)
     return;
 	
   search_text = _gtk_query_get_text (tracker->priv->query);
-  
-  mimetypes = _gtk_query_get_mime_types (tracker->priv->query);
-  
   location_uri = _gtk_query_get_location (tracker->priv->query);
-  
+
+  location = NULL;
   if (location_uri)
     {
       location = g_filename_from_uri (location_uri, NULL, NULL);
       g_free (location_uri);
     } 
-  else 
+
+  if (location) 
     {
-      location = NULL;
-    }
-
-  mime_count  = g_list_length (mimetypes);
-
-  i = 0;
-
-  /* convert list into array */
-  if (mime_count > 0) 
-    {
-      mimes = g_new (gchar *, (mime_count + 1));
-      
-      for (l = mimetypes; l != NULL; l = l->next) 
-	{
-	  mimes[i] = g_strdup (l->data);
-	  i++;
-	}
-
-      mimes[mime_count] = NULL;			
-      
-      if (location) 
-	{
-	  tracker_search_metadata_by_text_and_mime_and_location_async (tracker->priv->client,
-								       search_text, (const char **)mimes, location,
-								       search_callback, 
-								       tracker);
-	  g_free (location);
-	} 
-      else 
-	{
-	  tracker_search_metadata_by_text_and_mime_async (tracker->priv->client, 
-							  search_text, (const char**)mimes, 
-							  search_callback,
-							  tracker);
-	}
-      
-      g_strfreev (mimes);
-		
-      
+      tracker_search_metadata_by_text_and_location_async (tracker->priv->client,
+							  search_text, 
+                                                          location, 
+                                                          search_callback,
+                                                          tracker);
+      g_free (location);
     }
   else 
     {
-      if (location) 
-	{
-	  tracker_search_metadata_by_text_and_location_async (tracker->priv->client,
-							      search_text, 
-							      location, 
-							      search_callback,
-							      tracker);
-	  g_free (location);
-	} 
-      else 
-	{
-	  tracker_search_metadata_by_text_async (tracker->priv->client, 
-						 search_text, 
-						 search_callback,
-						 tracker);
-	}
+      tracker_search_metadata_by_text_async (tracker->priv->client,
+                                             search_text, 
+                                             search_callback,
+                                             tracker);
     }
 
   tracker->priv->query_pending = TRUE;
   g_free (search_text);
-  g_list_foreach (mimetypes, (GFunc)g_free, NULL);
-  g_list_free (mimetypes);
 }
 
 static void
@@ -355,7 +293,6 @@ _gtk_search_engine_tracker_new (void)
   engine = g_object_new (GTK_TYPE_SEARCH_ENGINE_TRACKER, NULL);
 
   engine->priv->client = tracker_client;
-
   engine->priv->query_pending = FALSE;
   
   return GTK_SEARCH_ENGINE (engine);
