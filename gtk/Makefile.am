@@ -660,10 +660,14 @@ gtk_use_win32_c_sources = \
 	gtksocket-win32.c \
 	gtkwin32embed.c   \
 	gtkwin32embedwidget.c
+gtk_use_quartz_c_sources =	\
+	gtksearchenginequartz.c	\
+	gtkplug-stub.c		\
+	gtksocket-stub.c
 gtk_use_stub_c_sources = \
 	gtkplug-stub.c   \
 	gtksocket-stub.c
-gtk_all_c_sources += $(gtk_use_x11_c_sources) $(gtk_use_win32_c_sources) $(gtk_use_stub_c_sources)
+gtk_all_c_sources += $(gtk_use_x11_c_sources) $(gtk_use_win32_c_sources) $(gtk_use_quartz_c_sources) $(gtk_use_stub_c_sources)
 if USE_X11
 gtk_private_h_sources += gtkxembed.h gtktrayicon.h xembed.h
 gtk_c_sources += $(gtk_use_x11_c_sources)
@@ -671,6 +675,11 @@ else
 if USE_WIN32
 gtk_private_h_sources += gtkwin32embed.h gtkwin32embedwidget.h
 gtk_c_sources += $(gtk_use_win32_c_sources)
+else
+if USE_QUARTZ
+gtk_private_h_sources += gtksearchenginequartz.h
+gtk_c_sources += $(gtk_use_quartz_c_sources)
+gtk_use_quartz_c_sources_CFLAGS = "-xobjective-c"
 else
 gtk_c_sources += $(gtk_use_stub_c_sources)
 endif

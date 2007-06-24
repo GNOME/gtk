@@ -25,6 +25,9 @@
 #include "gtksearchenginebeagle.h"
 #include "gtksearchenginesimple.h"
 #include "gtksearchenginetracker.h"
+#include "gtksearchenginequartz.h"
+
+#include <gdk/gdkconfig.h> /* for GDK_WINDOWING_QUARTZ */
 
 #define HAVE_BEAGLE  1 
 #define HAVE_TRACKER 1
@@ -114,6 +117,12 @@ _gtk_search_engine_new (void)
   
 #ifdef HAVE_BEAGLE
   engine = _gtk_search_engine_beagle_new ();
+  if (engine)
+    return engine;
+#endif
+
+#ifdef GDK_WINDOWING_QUARTZ
+  engine = _gtk_search_engine_quartz_new ();
   if (engine)
     return engine;
 #endif
