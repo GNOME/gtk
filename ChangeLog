@@ -1,5 +1,9 @@
 2007-06-24  Kristian Rietveld  <kris@gtk.org>
 
+	* Makefile.am: fix little mistake in my last commit ...
+
+2007-06-24  Kristian Rietveld  <kris@gtk.org>
+
 	* gtk/gtksearchenginequartz.[ch]: Add a search engine which queries
 	the Spotlight database on MacOS X (only available in 10.4 and
 	higher).

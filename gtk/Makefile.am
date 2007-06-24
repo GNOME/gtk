@@ -684,6 +684,7 @@ else
 gtk_c_sources += $(gtk_use_stub_c_sources)
 endif
 endif
+endif
 
 if USE_QUARTZ
 gtk_clipboard_dnd_c_sources = gtkclipboard-quartz.c gtkdnd-quartz.c gtkquartz.c gtkquartz.h
