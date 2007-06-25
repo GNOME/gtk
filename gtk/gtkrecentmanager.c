@@ -1077,7 +1077,7 @@ gtk_recent_manager_has_item (GtkRecentManager *manager,
   return g_bookmark_file_has_item (priv->recent_items, uri);
 }
 
-static gboolean
+static void
 build_recent_info (GBookmarkFile  *bookmarks,
 		   GtkRecentInfo  *info)
 {
@@ -1137,8 +1137,6 @@ build_recent_info (GBookmarkFile  *bookmarks,
     }
   
   g_strfreev (apps);
-  
-  return TRUE; 
 }
 
 /**
@@ -1165,7 +1163,6 @@ gtk_recent_manager_lookup_item (GtkRecentManager  *manager,
 {
   GtkRecentManagerPrivate *priv;
   GtkRecentInfo *info = NULL;
-  gboolean res;
   
   g_return_val_if_fail (GTK_IS_RECENT_MANAGER (manager), NULL);
   g_return_val_if_fail (uri != NULL, NULL);
@@ -1200,14 +1197,8 @@ gtk_recent_manager_lookup_item (GtkRecentManager  *manager,
   /* fill the RecentInfo structure with the data retrieved by our
    * parser object from the storage file 
    */
-  res = build_recent_info (priv->recent_items, info);
-  if (!res)
-    {
-      gtk_recent_info_free (info);
-      
-      return NULL;
-    }
- 
+  build_recent_info (priv->recent_items, info);
+
   return info;
 }
 
@@ -1303,42 +1294,17 @@ gtk_recent_manager_get_items (GtkRecentManager *manager)
   for (i = 0; i < uris_len; i++)
     {
       GtkRecentInfo *info;
-      gboolean res;
+      
+      if (priv->limit != -1 && i == priv->limit)
+        break;
       
       info = gtk_recent_info_new (uris[i]);
-      res = build_recent_info (priv->recent_items, info);
-      if (!res)
-        {
-          g_warning ("Unable to create a RecentInfo object for "
-                     "item with URI `%s'",
-                     uris[i]);
-          gtk_recent_info_free (info);
-	  
-          continue;
-        }
+      build_recent_info (priv->recent_items, info);
       
       retval = g_list_prepend (retval, info);
     }
   
   g_strfreev (uris);
-    
-  /* clamp the list, if a limit is present */
-  if ((priv->limit != -1) &&
-      (g_list_length (retval) > priv->limit))
-    {
-      GList *clamp, *l;
-      
-      clamp = g_list_nth (retval, priv->limit - 1);
-      
-      if (!clamp)
-        return retval;
-      
-      l = clamp->next;
-      clamp->next = NULL;
-      
-      g_list_foreach (l, (GFunc) gtk_recent_info_free, NULL);
-      g_list_free (l);
-    }
   
   return retval;
 }

@@ -1,3 +1,12 @@
+2007-06-25  Emmanuele Bassi  <ebassi@gnome.org>
+
+	* gtk/gtkrecentmanager.c:
+	(build_recent_info): building a GtkRecentInfo can never fail.
+
+	(gtk_recent_manager_get_items): Clamp the list while building
+	it so we don't need to traverse it more than once. (#446532,
+	Philip Withnall)
+
 2007-06-25  Tor Lillqvist  <tml@novell.com>
 
 	* gdk/win32/gdkevents-win32.c (gdk_pointer_grab): Revert my
