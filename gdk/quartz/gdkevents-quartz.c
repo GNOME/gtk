@@ -1533,7 +1533,9 @@ gdk_event_translate (NSEvent *nsevent)
   /* Special-case menu shortcut events. We create command events for
    * those and forward to the corresponding menu.
    */
-  if ([nsevent type] == NSKeyDown)
+  if ((!_gdk_quartz_keyboard_grab_window ||
+       (_gdk_quartz_keyboard_grab_window && keyboard_grab_owner_events)) &&
+      [nsevent type] == NSKeyDown)
     {
       EventRef event_ref;
       MenuRef menu_ref;

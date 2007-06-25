@@ -1,5 +1,10 @@
 2007-06-25  Richard Hult  <richard@imendio.com>
 
+	* gdk/quartz/gdkevents-quartz.c (gdk_event_translate): Don't steal
+	menu events while the keyboard is grabbed.
+
+2007-06-25  Richard Hult  <richard@imendio.com>
+
 	* gdk/quartz/Makefile.am:
 	* gdk/quartz/xcursors.h:
 	* gdk/quartz/gdkcursor-quartz.c: Fallback to X cursors for the
