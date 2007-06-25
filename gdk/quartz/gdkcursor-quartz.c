@@ -1,6 +1,6 @@
 /* gdkcursor-quartz.c
  *
- * Copyright (C) 2005 Imendio AB
+ * Copyright (C) 2005-2007 Imendio AB
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -24,17 +24,137 @@
 #include "gdkcursor.h"
 #include "gdkprivate-quartz.h"
 
+#include "xcursors.h"
+
+static GdkCursor *cached_xcursors[G_N_ELEMENTS (xcursors)];
+
 static GdkCursor *
-gdk_quartz_cursor_new_from_nscursor (NSCursor *nscursor, GdkCursorType cursor_type)
+gdk_quartz_cursor_new_from_nscursor (NSCursor      *nscursor,
+                                     GdkCursorType  cursor_type)
 {
   GdkCursorPrivate *private;
   GdkCursor *cursor;
 
   private = g_new (GdkCursorPrivate, 1);
   private->nscursor = nscursor;
+
   cursor = (GdkCursor *)private;
   cursor->type = cursor_type;
   cursor->ref_count = 1;
+
+  return cursor;
+}
+
+static gboolean
+get_bit (const guchar *data,
+         gint          width,
+         gint          height,
+         gint          x,
+         gint          y)
+{
+  gint bytes_per_line;
+  const guchar *src;
+
+  if (x < 0 || y < 0 || x >= width || y >= height)
+    return FALSE;
+
+  bytes_per_line = (width + 7) / 8;
+
+  src = &data[y * bytes_per_line];
+  return ((src[x / 8] >> x % 8) & 1);
+}
+
+static GdkCursor *
+create_builtin_cursor (GdkCursorType cursor_type)
+{
+  GdkCursor *cursor;
+  NSBitmapImageRep *bitmap_rep;
+  gint mask_width, mask_height;
+  gint src_width, src_height;
+  gint dst_stride;
+  const guchar *mask_start, *src_start;
+  gint dx, dy;
+  gint x, y;
+  NSPoint hotspot;
+  NSImage *image;
+  NSCursor *nscursor;
+
+  if (cursor_type >= G_N_ELEMENTS (xcursors))
+    return NULL;
+
+  cursor = cached_xcursors[cursor_type];
+  if (cursor)
+    return cursor;
+
+  GDK_QUARTZ_ALLOC_POOL;
+
+  src_width = xcursors[cursor_type].width;
+  src_height = xcursors[cursor_type].height;
+  mask_width = xcursors[cursor_type+1].width;
+  mask_height = xcursors[cursor_type+1].height;
+
+  bitmap_rep = [[NSBitmapImageRep alloc] initWithBitmapDataPlanes:NULL
+		pixelsWide:mask_width pixelsHigh:mask_height
+		bitsPerSample:8 samplesPerPixel:4
+		hasAlpha:YES isPlanar:NO colorSpaceName:NSDeviceRGBColorSpace
+		bytesPerRow:0 bitsPerPixel:0];
+
+  dst_stride = [bitmap_rep bytesPerRow];
+
+  src_start = xcursors[cursor_type].bits;
+  mask_start = xcursors[cursor_type+1].bits;
+
+  dx = xcursors[cursor_type+1].hotx - xcursors[cursor_type].hotx;
+  dy = xcursors[cursor_type+1].hoty - xcursors[cursor_type].hoty;
+
+  for (y = 0; y < mask_height; y++)
+    {
+      guchar *dst = [bitmap_rep bitmapData] + y * dst_stride;
+
+      for (x = 0; x < mask_width; x++)
+	{
+	  if (get_bit (mask_start, mask_width, mask_height, x, y))
+            {
+              if (get_bit (src_start, src_width, src_height, x - dx, y - dy))
+                {
+                  *dst++ = 0;
+                  *dst++ = 0;
+                  *dst++ = 0;
+                }
+              else
+                {
+                  *dst++ = 0xff;
+                  *dst++ = 0xff;
+                  *dst++ = 0xff;
+                }
+
+              *dst++ = 0xff;
+            }
+	  else
+            {
+              *dst++ = 0;
+              *dst++ = 0;
+              *dst++ = 0;
+              *dst++ = 0;
+            }
+        }
+    }
+
+  image = [[NSImage alloc] init];
+  [image addRepresentation:bitmap_rep];
+  [bitmap_rep release];
+
+  hotspot = NSMakePoint (xcursors[cursor_type+1].hotx,
+                         xcursors[cursor_type+1].hoty);
+
+  nscursor = [[NSCursor alloc] initWithImage:image hotSpot:hotspot];
+  [image release];
+
+  cursor = gdk_quartz_cursor_new_from_nscursor (nscursor, GDK_CURSOR_IS_PIXMAP);
+
+  cached_xcursors[cursor_type] = gdk_cursor_ref (cursor);
+
+  GDK_QUARTZ_RELEASE_POOL;
 
   return cursor;
 }
@@ -85,17 +205,16 @@ gdk_cursor_new_for_display (GdkDisplay    *display,
     case GDK_CROSSHAIR:
     case GDK_DIAMOND_CROSS:
       nscursor = [NSCursor crosshairCursor];
+      break;
     case GDK_HAND1:
     case GDK_HAND2:
       nscursor = [NSCursor pointingHandCursor];
       break;
     default:
-      g_warning ("Unsupported cursor type %d, using default", cursor_type);
-      nscursor = [NSCursor arrowCursor];
+      return create_builtin_cursor (cursor_type);
     }
-  
+
   [nscursor retain];
- 
   return gdk_quartz_cursor_new_from_nscursor (nscursor, cursor_type);
 }
 
@@ -107,7 +226,6 @@ gdk_cursor_new_from_pixmap (GdkPixmap      *source,
 			    gint            x,
 			    gint            y)
 {
-  NSAutoreleasePool *pool;
   NSBitmapImageRep *bitmap_rep;
   NSImage *image;
   NSCursor *nscursor;
@@ -118,14 +236,14 @@ gdk_cursor_new_from_pixmap (GdkPixmap      *source,
   guchar *mask_start, *src_start;
   int dst_stride;
 
-  gdk_drawable_get_size (source, &width, &height);
-
   g_return_val_if_fail (GDK_IS_PIXMAP (source), NULL);
   g_return_val_if_fail (GDK_IS_PIXMAP (mask), NULL);
   g_return_val_if_fail (fg != NULL, NULL);
   g_return_val_if_fail (bg != NULL, NULL);
 
-  pool = [[NSAutoreleasePool alloc] init];
+  GDK_QUARTZ_ALLOC_POOL;
+
+  gdk_drawable_get_size (source, &width, &height);
 
   bitmap_rep = [[NSBitmapImageRep alloc] initWithBitmapDataPlanes:NULL
 		pixelsWide:width pixelsHigh:height
@@ -179,7 +297,8 @@ gdk_cursor_new_from_pixmap (GdkPixmap      *source,
   [image release];
 
   cursor = gdk_quartz_cursor_new_from_nscursor (nscursor, GDK_CURSOR_IS_PIXMAP);
-  [pool release];
+
+  GDK_QUARTZ_RELEASE_POOL;
 
   return cursor;
 }
@@ -259,18 +378,21 @@ gdk_cursor_new_from_pixbuf (GdkDisplay *display,
   NSCursor *nscursor;
   GdkCursor *cursor;
   gboolean has_alpha;
+
   g_return_val_if_fail (GDK_IS_DISPLAY (display), NULL);
   g_return_val_if_fail (GDK_IS_PIXBUF (pixbuf), NULL);
   g_return_val_if_fail (0 <= x && x < gdk_pixbuf_get_width (pixbuf), NULL);
   g_return_val_if_fail (0 <= y && y < gdk_pixbuf_get_height (pixbuf), NULL);
 
   GDK_QUARTZ_ALLOC_POOL;
+
   has_alpha = gdk_pixbuf_get_has_alpha (pixbuf);
 
   image = _gdk_quartz_pixbuf_to_ns_image (pixbuf);
   nscursor = [[NSCursor alloc] initWithImage:image hotSpot:NSMakePoint(x, y)];
 
   cursor = gdk_quartz_cursor_new_from_nscursor (nscursor, GDK_CURSOR_IS_PIXMAP);
+
   GDK_QUARTZ_RELEASE_POOL;
 
   return cursor;

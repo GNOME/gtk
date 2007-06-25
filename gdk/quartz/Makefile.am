@@ -47,4 +47,5 @@ libgdk_quartz_la_SOURCES =    	\
 	gdkspawn-quartz.c	\
 	gdkvisual-quartz.c	\
 	gdkwindow-quartz.c	\
-	gdkwindow-quartz.h
+	gdkwindow-quartz.h	\
+	xcursors.h

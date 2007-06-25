@@ -1,3 +1,10 @@
+2007-06-25  Richard Hult  <richard@imendio.com>
+
+	* gdk/quartz/Makefile.am:
+	* gdk/quartz/xcursors.h:
+	* gdk/quartz/gdkcursor-quartz.c: Fallback to X cursors for the
+	ones that OS X doesn't provide. Fixes bug #327912.
+
 2007-06-25  Emmanuele Bassi  <ebassi@gnome.org>
 
 	* gtk/gtkrecentmanager.c:
