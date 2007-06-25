@@ -1,3 +1,11 @@
+2007-06-25  Tor Lillqvist  <tml@novell.com>
+
+	* gdk/win32/gdkevents-win32.c (gdk_pointer_grab): Revert my
+	attempted overly simple fix for #445284, as it causes a
+	regression. (For instance, in GIMP the tool cursor gets used also
+	for the right-click menu in image windows.) A more complex fix is
+	needed to more completely emulate X11 behaviour.
+
 2007-06-24  Kristian Rietveld  <kris@gtk.org>
 
 	* Makefile.am: fix little mistake in my last commit ...
