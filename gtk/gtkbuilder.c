@@ -993,18 +993,30 @@ gtk_builder_value_from_string_type (GType        type,
       {
         gboolean b;
 
-        if (g_ascii_tolower (string[0]) == 't')
-          b = TRUE;
-        else if (g_ascii_tolower (string[0]) == 'y')
-          b = FALSE;
-        else {
-          errno = 0;
-          b = strtol (string, NULL, 0);
-          if (errno) {
-            g_warning ("could not parse int `%s'", string);
+        switch (g_ascii_tolower (string[0]))
+          {
+          case 't':
+          case 'y':
+            b = TRUE;
+            break;
+          case 'f':
+          case 'n':
+            b = FALSE;
+            break;
+          default:
+            {
+              gchar *endptr;
+              errno = 0;
+              b = strtol (string, &endptr, 0);
+              if (errno || endptr == string)
+                {
+                  g_warning ("could not parse int `%s'", string);
+                  ret = FALSE;
+                  break;
+                }
+            }
             break;
           }
-        }
         g_value_set_boolean (value, b);
         break;
       }
@@ -1012,12 +1024,15 @@ gtk_builder_value_from_string_type (GType        type,
     case G_TYPE_LONG:
       {
         long l;
+        gchar *endptr;
         errno = 0;
-        l = strtol (string, NULL, 0);
-        if (errno) {
-          g_warning ("could not parse long `%s'", string);
-          break;
-        }
+        l = strtol (string, &endptr, 0);
+        if (errno || endptr == string)
+          {
+            g_warning ("could not parse long `%s'", string);
+            ret = FALSE;
+            break;
+          }
         if (G_VALUE_HOLDS_INT (value))
           g_value_set_int (value, l);
         else
@@ -1028,17 +1043,19 @@ gtk_builder_value_from_string_type (GType        type,
     case G_TYPE_ULONG:
       {
         gulong ul;
+        gchar *endptr;
         errno = 0;
-        ul = strtoul (string, NULL, 0);
-        if (errno)
+        ul = strtoul (string, &endptr, 0);
+        if (errno || endptr == string)
           {
             g_warning ("could not parse ulong `%s'", string);
+            ret = FALSE;
             break;
           }
         if (G_VALUE_HOLDS_UINT (value))
-          g_value_set_uint (value, strtoul (string, NULL, 0));
+          g_value_set_uint (value, ul);
         else 
-          g_value_set_ulong (value, strtoul (string, NULL, 0));
+          g_value_set_ulong (value, ul);
         break;
       }
     case G_TYPE_ENUM:
@@ -1051,11 +1068,13 @@ gtk_builder_value_from_string_type (GType        type,
     case G_TYPE_DOUBLE:
       {
         double d;
+        gchar *endptr;
         errno = 0;
-        d = g_ascii_strtod (string, NULL);
-        if (errno)
+        d = g_ascii_strtod (string, &endptr);
+        if (errno || endptr == string)
           {
             g_warning ("could not parse double `%s'", string);
+            ret = FALSE;
             break;
           }
         if (G_VALUE_HOLDS_FLOAT (value))
