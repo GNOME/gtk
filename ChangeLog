@@ -1,3 +1,11 @@
+2007-06-26  Cody Russell  <bratsche@gnome.org>
+
+	Merge from trunk:
+
+	* modules/engines/ms-windows/xp_theme.[ch]
+	* modules/engines/ms-windows/msw_style.c: Add support for 
+	drawing checkboxes with inconsistent states. (Tor, #164809)
+
 2007-06-25  Tor Lillqvist  <tml@novell.com>
 
 	* gdk/win32/gdkevents-win32.c (gdk_pointer_grab): Revert my
