@@ -6,7 +6,14 @@ Base class for widgets which visualize an adjustment
 
 <!-- ##### SECTION Long_Description ##### -->
 <para>
-
+#GtkRange is the common base class for widgets which visualize an
+adjustment, e.g scales or scrollbars. 
+</para>
+<para>
+Apart from signals for monitoring the parameters of the adjustment, 
+GtkRange provides properties and methods for influencing the sensitivity
+of the "steppers". It also provides properties and methods for setting a 
+"fill level" on range widgets. See gtk_range_set_fill_level().
 </para>
 
 <!-- ##### SECTION See_Also ##### -->

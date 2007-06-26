@@ -1,5 +1,6 @@
 2007-06-25  Matthias Clasen <mclasen@redhat.com>
 
+	* gtk/tmpl/gtkrange.sgml:
 	* gtk/tmpl/gtkrecentaction.sgml:
 	* gtk/tmpl/gtktooltip.sgml:
 	* gtk/tmpl/gtkvscrollbar.sgml: Additions

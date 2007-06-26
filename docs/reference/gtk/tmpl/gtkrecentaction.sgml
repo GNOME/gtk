@@ -6,7 +6,15 @@ An action of which represents a list of recently used files
 
 <!-- ##### SECTION Long_Description ##### -->
 <para>
-
+A GtkRecentAction represents a list of recently used files, which
+can be shown by widgets such as #GtkRecentChooserDialog or 
+#GtkRecentChooserMenu.
+</para>
+<para>
+To construct a submenu showing recently used files, use a GtkRecentAction 
+as the action for a &lt;menuitem&gt;. To construct a menu toolbutton showing 
+the recently used files in the popup menu, use a GtkRecentAction as the 
+action for a &lt;toolitem&gt; element.
 </para>
 
 <!-- ##### SECTION See_Also ##### -->
