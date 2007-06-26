@@ -1,5 +1,7 @@
 2007-06-25  Matthias Clasen <mclasen@redhat.com>
 
+	* gtk/tmpl/gtkscalebutton.sgml:
+	* gtk/tmpl/gtkvolumebutton.sgml:
 	* gtk/tmpl/gtkvscrollbar.sgml:
 	* gtk/tmpl/gtkrange.sgml:
 	* gtk/tmpl/gtkrecentaction.sgml:
