@@ -1,3 +1,8 @@
+2007-06-26  Johan Dahlin  <jdahlin@async.com.br>
+
+	* gtk/gtk-builder-convert (GtkBuilderConverter.to_xml): Encode 
+	the output in utf-8 as suggested by Bogdan Nicula
+
 2007-06-22  Mathias Hasselmann  <mathias.hasselmann@gmx.de>
  
 	* configure.in, tests/Makefile.am, tests/autotestkeywords.cc,

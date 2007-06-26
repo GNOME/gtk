@@ -76,7 +76,8 @@ class GtkBuilderConverter(object):
         self._parse()
 
     def to_xml(self):
-        return self._dom.toprettyxml("", "")
+        xml = self._dom.toprettyxml("", "")
+        return xml.encode('utf-8')
 
     #
     # Private
