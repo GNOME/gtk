@@ -10884,9 +10884,7 @@ list_mtime_data_func (GtkTreeViewColumn *tree_column,
 {
   GtkFileChooserDefault *impl;
   GtkFileTime time_mtime;
-  GDate mtime, now;
-  int days_diff;
-  char buf[256];
+  gchar *date_str = NULL;
   gboolean sensitive = TRUE;
 
   impl = data;
@@ -10954,39 +10952,65 @@ list_mtime_data_func (GtkTreeViewColumn *tree_column,
 	sensitive = gtk_file_info_get_is_folder (info);
     }
 
-  if (time_mtime == 0)
-    strcpy (buf, _("Unknown"));
+  if (G_UNLIKELY (time_mtime == 0))
+    date_str = g_strdup (_("Unknown"));
   else
     {
+      GDate mtime, now;
+      gint days_diff;
+      struct tm tm_mtime;
       time_t time_now;
+      const gchar *format;
+      gchar buf[256];
+
+#ifdef HAVE_LOCALTIME_R
+      localtime_r ((time_t *) &time_mtime, &tm_mtime);
+#else
+      {
+        struct tm *ptm = localtime ((time_t *) &time_mtime);
+
+        if (!ptm)
+          {
+            date_str = g_strdup (_("Unknown"));
+            g_warning ("ptm != NULL failed");
+            goto done;
+          }
+        else
+          memcpy ((void *) &tm, (void *) ptm, sizeof (struct tm));
+      }
+#endif /* HAVE_LOCALTIME_R */
+
       g_date_set_time_t (&mtime, time_mtime);
       time_now = time (NULL);
       g_date_set_time_t (&now, time_now);
 
       days_diff = g_date_get_julian (&now) - g_date_get_julian (&mtime);
 
+      /* Translators: %H means "hours" and %M means "minutes" */
       if (days_diff == 0)
-	strcpy (buf, _("Today"));
+        format = _("Today at %H:%M");
       else if (days_diff == 1)
-	strcpy (buf, _("Yesterday"));
+	format = _("Yesterday at %H:%M");
       else
 	{
-	  char *format;
-
 	  if (days_diff > 1 && days_diff < 7)
 	    format = "%A"; /* Days from last week */
 	  else
 	    format = "%x"; /* Any other date */
-
-	  if (g_date_strftime (buf, sizeof (buf), format, &mtime) == 0)
-	    strcpy (buf, _("Unknown"));
 	}
+
+      if (strftime (buf, sizeof (buf), format, &tm_mtime) != 0)
+        date_str = g_strdup (buf);
+      else
+	date_str = g_strdup (_("Unknown"));
     }
 
+done:
   g_object_set (cell,
-		"text", buf,
+		"text", date_str,
 		"sensitive", sensitive,
 		NULL);
+  g_free (date_str);
 }
 
 GtkWidget *
