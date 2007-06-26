@@ -6,7 +6,17 @@ Add tips to your widgets
 
 <!-- ##### SECTION Long_Description ##### -->
 <para>
-
+#GtkTooltip belongs to the new tooltips API that was
+introduced in GTK+ 2.12 and which deprecates the old
+#GtkTooltips API. 
+</para>
+<para>
+Basic tooltips can be realized simply by using
+gtk_widget_set_tooltip_text() or gtk_widget_set_tooltip_markup() without
+any explicit tooltip object. For fancy tooltips, you will likely
+connect to the #GtkWidget::query-tooltip signal, which is passed
+a #GtkTooltip object as the last parameter. You can use functions
+like gtk_tooltip_set_icon() to modify the tooltip.  
 </para>
 
 <!-- ##### SECTION See_Also ##### -->
