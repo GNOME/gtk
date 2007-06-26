@@ -4076,6 +4076,7 @@ gtk_tooltip_trigger_tooltip_query
 
 #if IN_HEADER(__GTK_TOOLTIPS_H__)
 #if IN_FILE(__GTK_TOOLTIPS_C__)
+#ifndef GTK_DISABLE_DEPRECATED
 gtk_tooltips_data_get
 gtk_tooltips_disable
 gtk_tooltips_enable
@@ -4083,10 +4084,9 @@ gtk_tooltips_force_window
 gtk_tooltips_get_info_from_tip_window
 gtk_tooltips_get_type G_GNUC_CONST
 gtk_tooltips_new
-#ifndef GTK_DISABLE_DEPRECATED
 gtk_tooltips_set_delay
-#endif
 gtk_tooltips_set_tip
+#endif
 #endif
 #endif
 

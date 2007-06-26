@@ -775,6 +775,8 @@ _gtk_tooltips_toggle_keyboard_mode (GtkWidget *widget)
  * Return value: %TRUE if @tip_window is displaying tooltips, otherwise %FALSE.
  *
  * Since: 2.4
+ *
+ * Deprecated: 2.12:
  **/
 gboolean
 gtk_tooltips_get_info_from_tip_window (GtkWindow    *tip_window,
