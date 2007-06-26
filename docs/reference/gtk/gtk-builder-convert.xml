@@ -36,6 +36,9 @@ GtkTextView text is not converted into a GtkTextBuffer.
 <para>
 Toolbars are not handled.
 </para>
+<para>
+The script requires a python interpreter to run.
+</para>
 </refsect1>
 
 </refentry>
