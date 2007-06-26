@@ -135,6 +135,17 @@ dnl Initialize libtool
 AC_PROG_CC
 AM_DISABLE_STATIC
 
+dnl 
+dnl Check for a working C++ compiler, but do not bail out, if none is found.
+dnl We use this for an automated test for C++ header correctness.
+dnl 
+AC_CHECK_PROGS(CXX, [$CCC c++ g++ gcc CC cxx cc++ cl], gcc)
+AC_LANG_SAVE
+AC_LANG_CPLUSPLUS
+AC_TRY_COMPILE(,[class a { int b; } c;], ,CXX=)
+AM_CONDITIONAL(HAVE_CXX, test "$CXX" != "")
+AC_LANG_RESTORE
+
 if test "$os_win32" = "yes"; then
   if test x$enable_static = xyes -o x$enable_static = x; then
     AC_MSG_WARN([Disabling static library build, must build as DLL on Windows.])

@@ -26,8 +26,13 @@ endif
 
 TESTS = floatingtest buildertest
 
+if HAVE_CXX
+TESTS += autotestkeywords
+endif
+
 noinst_PROGRAMS =			\
 	autotestfilechooser		\
+	autotestkeywords		\
 	floatingtest			\
 	buildertest			\
 	simple				\
@@ -89,6 +94,8 @@ noinst_PROGRAMS =			\
 	testgrouping			\
 	testtooltips			\
 	testvolumebutton
+
+autotestkeywords_SOURCES = autotestkeywords.cc
 
 autotestfilechooser_DEPENDENCIES = $(TEST_DEPS)
 simple_DEPENDENCIES = $(TEST_DEPS)

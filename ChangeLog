@@ -1,3 +1,9 @@
+2007-06-26  Mathias Hasselmann  <mathias.hasselmann@gmx.de>
+
+	* ChangeLog, configure.in, tests/Makefile.am, 
+	tests/autotestkeywords.cc: Create test for finding
+	C++ keywords in public header files (#449016).
+
 2007-06-26  Kristian Rietveld  <kris@imendio.com>
 
 	* gtk/gtktooltips.h: remove the deprecation macros for now to fix
