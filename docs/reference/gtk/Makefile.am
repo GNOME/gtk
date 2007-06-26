@@ -69,6 +69,7 @@ IGNORE_HFILES=				\
 	gtksearchenginebeagle.h		\
 	gtksearchenginetracker.h	\
 	gtksearchenginesimple.h		\
+	gtksearchenginequartz.h		\
 	gtksequence.h			\
 	gtksocketprivate.h		\
 	gtktextbtree.h			\
@@ -144,6 +145,7 @@ content_files =					\
 	x11.sgml				\
 	gtk-query-immodules-2.0.xml		\
 	gtk-update-icon-cache.xml		\
+	gtk-builder-convert.xml			\
 	visual_index.xml
 
 expand_content_files = 				\
@@ -333,7 +335,7 @@ EXTRA_DIST += version.xml.in
 
 ########################################################################
 
-man_MANS = gtk-query-immodules-2.0.1 gtk-update-icon-cache.1 
+man_MANS = gtk-query-immodules-2.0.1 gtk-update-icon-cache.1 gtk-builder-convert.1
 
 if ENABLE_MAN
 

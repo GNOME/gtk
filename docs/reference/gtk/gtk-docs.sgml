@@ -228,6 +228,7 @@
 <!ENTITY version SYSTEM "version.xml">
 <!ENTITY gtk-query-immodules SYSTEM "gtk-query-immodules-2.0.xml">
 <!ENTITY gtk-update-icon-cache SYSTEM "gtk-update-icon-cache.xml">
+<!ENTITY gtk-builder-convert SYSTEM "gtk-builder-convert.xml">
 <!ENTITY gtk-glossary SYSTEM "xml/glossary.xml">
 ]>
 <book id="index">
@@ -650,6 +651,7 @@ that is, GUI components such as #GtkButton or #GtkTextView.
 
      &gtk-query-immodules;
      &gtk-update-icon-cache;
+     &gtk-builder-convert;
   </part>
 
   &gtk-glossary;
@@ -678,5 +680,4 @@ that is, GUI components such as #GtkButton or #GtkTextView.
   <index role="2.12">
     <title>Index of new symbols in 2.12</title>
   </index>  
-
 </book>

@@ -1,5 +1,9 @@
 2007-06-25  Matthias Clasen <mclasen@redhat.com>
 
+	* gtk/Makefile.am:
+	* gtk/gtk-builder-convert.xml: Add a man page
+	* gtk/gtk-docs.sgml: And include it here
+
 	* gtk/tmpl/gtkscalebutton.sgml:
 	* gtk/tmpl/gtkvolumebutton.sgml:
 	* gtk/tmpl/gtkvscrollbar.sgml:
