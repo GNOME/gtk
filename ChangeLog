@@ -1,3 +1,15 @@
+2007-06-26  Kristian Rietveld  <kris@imendio.com>
+
+	* gtk/gtktooltips.h: remove the deprecation macros for now to fix
+	the build and give us a chance to fix widgets which use GtkTooltips
+	in their API.
+
+2007-06-26  Kristian Rietveld  <kris@imendio.com>
+
+	* gtk/gtk.symbols:
+	* gtk/gtktooltips.[ch]:
+	* docs/reference/gtk/tmpl/gtktooltips.sgml: deprecate GtkTooltips.
+
 2007-06-25  Johan Dahlin  <jdahlin@async.com.br>
 
 	* gtk/gtk-builder-convert: Add a script to convert libglade files

@@ -24,8 +24,6 @@
  * GTK+ at ftp://ftp.gtk.org/pub/gtk/. 
  */
 
-#ifndef GTK_DISABLE_DEPRECATED
-
 #ifndef __GTK_TOOLTIPS_H__
 #define __GTK_TOOLTIPS_H__
 
@@ -110,5 +108,3 @@ gboolean         gtk_tooltips_get_info_from_tip_window (GtkWindow    *tip_window
 G_END_DECLS
 
 #endif /* __GTK_TOOLTIPS_H__ */
-
-#endif /* GTK_DISABLE_DEPRECATED */
