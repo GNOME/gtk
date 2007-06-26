@@ -888,7 +888,10 @@ LDADDS =								\
 #
 # Installed tools
 #
-bin_PROGRAMS = gtk-query-immodules-2.0 gtk-update-icon-cache
+bin_PROGRAMS = \
+	gtk-query-immodules-2.0 \
+	gtk-update-icon-cache
+bin_SCRIPTS = gtk-builder-convert
 
 gtk_query_immodules_2_0_DEPENDENCIES = $(DEPS)
 gtk_query_immodules_2_0_LDADD = $(LDADDS)

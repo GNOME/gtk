@@ -1,3 +1,9 @@
+2007-06-25  Johan Dahlin  <jdahlin@async.com.br>
+
+	* gtk/gtk-builder-convert: Add a script to convert libglade files
+	to something gtkbuilder can parse.
+	Fixes #447995
+
 2007-06-25  Richard Hult  <richard@imendio.com>
 
 	* gdk/quartz/gdkevents-quartz.c (gdk_event_translate): Don't steal
