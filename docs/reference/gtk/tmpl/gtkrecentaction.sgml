@@ -2,7 +2,7 @@
 GtkRecentAction
 
 <!-- ##### SECTION Short_Description ##### -->
-
+An action of which represents a list of recently used files
 
 <!-- ##### SECTION Long_Description ##### -->
 <para>
