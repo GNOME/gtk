@@ -99,6 +99,7 @@ static const LPCWSTR class_descriptors[] = {
 static const short element_part_map[XP_THEME_ELEMENT__SIZEOF] = {
     BP_CHECKBOX,
     BP_CHECKBOX,
+    BP_CHECKBOX,
     BP_PUSHBUTTON,
     HP_HEADERITEM,
     CP_DROPDOWNBUTTON,
@@ -358,6 +359,7 @@ xp_theme_get_handle_by_element (XpThemeElement element)
 	    break;
 
 	case XP_THEME_ELEMENT_PRESSED_CHECKBOX:
+	case XP_THEME_ELEMENT_INCONSISTENT_CHECKBOX:
 	case XP_THEME_ELEMENT_CHECKBOX:
 	case XP_THEME_ELEMENT_BUTTON:
 	case XP_THEME_ELEMENT_DEFAULT_BUTTON:
@@ -643,6 +645,23 @@ xp_theme_map_gtk_state (XpThemeElement element, GtkStateType state)
 		    ret = CBS_UNCHECKEDNORMAL;
 		}
 	    break;
+
+	case XP_THEME_ELEMENT_INCONSISTENT_CHECKBOX:
+	  switch (state)
+	    {
+	    case GTK_STATE_SELECTED:
+	      ret = CBS_MIXEDPRESSED;
+	      break;
+	    case GTK_STATE_PRELIGHT:
+	      ret = CBS_MIXEDHOT;
+	      break;
+	    case GTK_STATE_INSENSITIVE:
+	      ret = CBS_MIXEDDISABLED;
+	      break;
+	    default:
+	      ret = CBS_MIXEDNORMAL;
+	    }
+	  break;
 
 	case XP_THEME_ELEMENT_PRESSED_CHECKBOX:
 	case XP_THEME_ELEMENT_PRESSED_RADIO_BUTTON:
