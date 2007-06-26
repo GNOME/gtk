@@ -1,3 +1,9 @@
+2007-06-22  Mathias Hasselmann  <mathias.hasselmann@gmx.de>
+ 
+	* configure.in, tests/Makefile.am, tests/autotestkeywords.cc,
+	tests/dummy-headers/*: Extend the C++ keyword test
+	to include internal GDK headers (#449016).
+
 2007-06-26  Mathias Hasselmann  <mathias.hasselmann@gmx.de>
 
 	* ChangeLog, configure.in, tests/Makefile.am, 

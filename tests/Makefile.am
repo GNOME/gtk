@@ -26,10 +26,6 @@ endif
 
 TESTS = floatingtest buildertest
 
-if HAVE_CXX
-TESTS += autotestkeywords
-endif
-
 noinst_PROGRAMS =			\
 	autotestfilechooser		\
 	autotestkeywords		\
@@ -95,7 +91,19 @@ noinst_PROGRAMS =			\
 	testtooltips			\
 	testvolumebutton
 
+if HAVE_CXX
+noinst_PROGRAMS += autotestkeywords
+TESTS += autotestkeywords
+
 autotestkeywords_SOURCES = autotestkeywords.cc
+autotestkeywords_CPPFLAGS = -I$(srcdir)/dummy-headers
+
+if HAVE_OBJC
+autotestkeywords_CPPFLAGS += -DHAVE_OBJC=1
+autotestkeywords_CXXFLAGS = -x objective-c++
+endif
+
+endif
 
 autotestfilechooser_DEPENDENCIES = $(TEST_DEPS)
 simple_DEPENDENCIES = $(TEST_DEPS)
