@@ -1,5 +1,13 @@
 2007-06-26  Emmanuele Bassi  <ebassi@gnome.org>
 
+	* gtk/gtkfilechooserdefault.c (list_mtime_data_func): Fix
+	a typo in the previous commit.
+
+	(shortcuts_append_desktop): Remove unused variable and
+	hush the compiler warning.
+
+2007-06-26  Emmanuele Bassi  <ebassi@gnome.org>
+
 	* gtk/gtkfilechooserdefault.c (list_mtime_data_func): Show
 	the time of last change in the file chooser, for files
 	modified today or yesterday. (#324543)

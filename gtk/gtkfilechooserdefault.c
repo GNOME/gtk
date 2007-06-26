@@ -1955,8 +1955,7 @@ shortcuts_append_home (GtkFileChooserDefault *impl)
 static void
 shortcuts_append_desktop (GtkFileChooserDefault *impl)
 {
-  char *name;
-  const char *home;
+  const char *name;
   GtkFilePath *path;
 
   profile_start ("start", NULL);
@@ -10971,12 +10970,16 @@ list_mtime_data_func (GtkTreeViewColumn *tree_column,
 
         if (!ptm)
           {
-            date_str = g_strdup (_("Unknown"));
             g_warning ("ptm != NULL failed");
-            goto done;
+            
+            g_object_set (cell,
+                          "text", _("Unknown"),
+                          "sensitive", sensitive,
+                          NULL);
+            return;
           }
         else
-          memcpy ((void *) &tm, (void *) ptm, sizeof (struct tm));
+          memcpy ((void *) &tm_mtime, (void *) ptm, sizeof (struct tm));
       }
 #endif /* HAVE_LOCALTIME_R */
 
@@ -11005,7 +11008,6 @@ list_mtime_data_func (GtkTreeViewColumn *tree_column,
 	date_str = g_strdup (_("Unknown"));
     }
 
-done:
   g_object_set (cell,
 		"text", date_str,
 		"sensitive", sensitive,
