@@ -1,3 +1,10 @@
+2007-06-27  Cody Russell  <bratsche@gnome.org>
+
+	* modules/engines/ms-windows/msw_style.c (draw_themed_tab_button):
+	Fixed, very hackishly, a one pixel error that occurs using the
+	XP theme engine only on the left-most tab, if it is active, when
+	the notebook is bottom-oriented. (#392283)
+
 2007-06-27  Johan Dahlin  <jdahlin@async.com.br>
 
 	* tests/buildertest.c: (test_value_from_string): 

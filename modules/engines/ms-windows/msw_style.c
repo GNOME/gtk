@@ -2552,6 +2552,25 @@ draw_themed_tab_button (GtkStyle *style,
       g_object_unref (pixbuf);
       pixbuf = rotated;
 
+      // XXX - This is really hacky and evil.  When we're drawing the left-most tab
+      //       while it is active on a bottom-oriented notebook, there is one white
+      //       pixel at the top.  There may be a better solution than this if someone
+      //       has time to discover it.
+      if (gap_side == GTK_POS_BOTTOM && state_type == GTK_STATE_NORMAL && x == widget->allocation.x)
+	{
+	  int rowstride = gdk_pixbuf_get_rowstride (pixbuf);
+	  int n_channels = gdk_pixbuf_get_n_channels (pixbuf);
+	  int psub = 0;
+
+	  guchar *pixels = gdk_pixbuf_get_pixels (pixbuf);
+	  guchar *p = pixels + rowstride;
+
+	  for (psub = 0; psub < n_channels; psub++)
+	    {
+	      pixels[psub] = p[psub];
+	    }
+	}
+
       gdk_draw_pixbuf (window, NULL, pixbuf, 0, 0, clip_rect.x, clip_rect.y,
                        clip_rect.width, clip_rect.height, GDK_RGB_DITHER_NONE, 0, 0);
       g_object_unref (pixbuf);
