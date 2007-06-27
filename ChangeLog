@@ -1,5 +1,11 @@
 2007-06-26  Johan Dahlin  <jdahlin@async.com.br>
 
+	* gtk/gtkbuilder.h (enum): 
+	* gtk/gtkbuilderparser.c (end_element): 
+	* tests/buildertest.c (test_parser): 
+	Set an error if we encounter properties without values set
+	(#451303, Philip Withnall)
+	
 	* demos/gtk-demo/builder.c (do_builder): Connect the
 	destroy signal in the example instead of the ui file.
 	Also set the screen and title of the window.

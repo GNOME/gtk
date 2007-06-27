@@ -72,6 +72,13 @@ gboolean test_parser (void)
   g_return_val_if_fail (strcmp (error->message, "<input>:1:74 'object' is not a valid tag here") == 0, FALSE);
   g_error_free (error);
 
+  error = NULL;
+  gtk_builder_add_from_string (builder, "<interface><object class=\"GtkWindow\" id=\"a\"><property name=\"type\"/></object></interface>", -1, &error);
+  g_assert (error != NULL);
+  g_return_val_if_fail (strcmp (error->message, "<input>:1:67 <property> must have a value set") == 0, FALSE);
+  g_error_free (error);
+
+  
   return TRUE;
 }
 
