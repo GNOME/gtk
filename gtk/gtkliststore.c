@@ -2187,17 +2187,27 @@ list_store_text (GMarkupParseContext *context,
 {
   SubParserData *data = (SubParserData*)user_data;
   gint i;
-
+  GError *tmp_error = NULL;
+  
   if (!data->is_data)
     return;
 
   i = data->row_column - 1;
 
-  if (!gtk_builder_value_from_string_type (data->column_types[i],
+  if (!gtk_builder_value_from_string_type (data->builder,
+					   data->column_types[i],
 					   text,
-					   &data->values[i]))
-    g_error ("Could not convert '%s' to type %s\n",
-	     text, g_type_name (data->column_types[i]));
+					   &data->values[i],
+					   &tmp_error))
+    {
+      g_set_error (error,
+		   tmp_error->domain,
+		   tmp_error->code,
+		   "Could not convert '%s' to type %s: %s\n",
+		   text, g_type_name (data->column_types[i]),
+		   tmp_error->message);
+      g_error_free (tmp_error);
+    }
 }
 
 static const GMarkupParser list_store_parser =

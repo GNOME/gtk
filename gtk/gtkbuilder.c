@@ -244,7 +244,8 @@ gtk_builder_get_parameters (GtkBuilder  *builder,
   GParamSpec *pspec;
   GObjectClass *oclass;
   DelayedProperty *property;
-
+  GError *error = NULL;
+  
   oclass = g_type_class_ref (object_type);
   g_assert (oclass != NULL);
 
@@ -300,10 +301,14 @@ gtk_builder_get_parameters (GtkBuilder  *builder,
               continue;
             }
         }
-      else if (!gtk_builder_value_from_string (pspec, prop->data, &parameter.value))
+      else if (!gtk_builder_value_from_string (builder, pspec,
+					       prop->data, &parameter.value, &error))
         {
-          g_warning ("failed to set property %s.%s to %s",
-                     g_type_name (object_type), prop->name, prop->data);
+          g_warning ("failed to set property %s.%s to %s: %s",
+                     g_type_name (object_type), prop->name, prop->data,
+		     error->message);
+	  g_error_free (error);
+	  error = NULL;
           continue;
         }
 
@@ -917,9 +922,11 @@ gtk_builder_connect_signals_full (GtkBuilder            *builder,
 
 /**
  * gtk_builder_value_from_string
+ * @builder: a #GtkBuilder
  * @pspec: the GParamSpec for the property
  * @string: the string representation of the value.
  * @value: the GValue to store the result in.
+ * @error: return location for an error
  *
  * This function demarshals a value from a string.  This function
  * calls g_value_init() on the @value argument, so it need not be
@@ -935,9 +942,11 @@ gtk_builder_connect_signals_full (GtkBuilder            *builder,
  * Since: 2.12
  */
 gboolean
-gtk_builder_value_from_string (GParamSpec  *pspec,
-                               const gchar *string,
-                               GValue      *value)
+gtk_builder_value_from_string (GtkBuilder   *builder,
+			       GParamSpec   *pspec,
+                               const gchar  *string,
+                               GValue       *value,
+			       GError      **error)
 {
   /*
    * GParamSpecUnichar has the internal type G_TYPE_UINT,
@@ -953,15 +962,18 @@ gtk_builder_value_from_string (GParamSpec  *pspec,
       return TRUE;
     }
 
-  return gtk_builder_value_from_string_type (G_PARAM_SPEC_VALUE_TYPE (pspec),
-                                             string, value);
+  return gtk_builder_value_from_string_type (builder,
+					     G_PARAM_SPEC_VALUE_TYPE (pspec),
+                                             string, value, error);
 }
 
 /**
  * gtk_builder_value_from_string_type
+ * @builder: a #GtkBuilder
  * @type: the GType of the value
  * @string: the string representation of the value.
  * @value: the GValue to store the result in.
+ * @error: return location for an error
  *
  * Like gtk_builder_value_from_string(), but takes a #GType instead of #GParamSpec.
  *
@@ -970,9 +982,11 @@ gtk_builder_value_from_string (GParamSpec  *pspec,
  * Since: 2.12
  */
 gboolean
-gtk_builder_value_from_string_type (GType        type,
-                                    const gchar *string,
-                                    GValue      *value)
+gtk_builder_value_from_string_type (GtkBuilder   *builder,
+				    GType         type,
+                                    const gchar  *string,
+                                    GValue       *value,
+				    GError      **error)
 {
   gboolean ret = TRUE;
 
@@ -1010,7 +1024,11 @@ gtk_builder_value_from_string_type (GType        type,
               b = strtol (string, &endptr, 0);
               if (errno || endptr == string)
                 {
-                  g_warning ("could not parse int `%s'", string);
+		  g_set_error (error,
+			       GTK_BUILDER_ERROR,
+			       GTK_BUILDER_ERROR_INVALID_VALUE,
+			       "could not parse int `%s'",
+			       string);
                   ret = FALSE;
                   break;
                 }
@@ -1029,7 +1047,11 @@ gtk_builder_value_from_string_type (GType        type,
         l = strtol (string, &endptr, 0);
         if (errno || endptr == string)
           {
-            g_warning ("could not parse long `%s'", string);
+	    g_set_error (error,
+			 GTK_BUILDER_ERROR,
+			 GTK_BUILDER_ERROR_INVALID_VALUE,
+			 "could not parse long `%s'",
+			 string);
             ret = FALSE;
             break;
           }
@@ -1048,7 +1070,11 @@ gtk_builder_value_from_string_type (GType        type,
         ul = strtoul (string, &endptr, 0);
         if (errno || endptr == string)
           {
-            g_warning ("could not parse ulong `%s'", string);
+	    g_set_error (error,
+			 GTK_BUILDER_ERROR,
+			 GTK_BUILDER_ERROR_INVALID_VALUE,
+			 "could not parse ulong `%s'",
+			 string);
             ret = FALSE;
             break;
           }
@@ -1073,7 +1099,11 @@ gtk_builder_value_from_string_type (GType        type,
         d = g_ascii_strtod (string, &endptr);
         if (errno || endptr == string)
           {
-            g_warning ("could not parse double `%s'", string);
+	    g_set_error (error,
+			 GTK_BUILDER_ERROR,
+			 GTK_BUILDER_ERROR_INVALID_VALUE,
+			 "could not parse double `%s'",
+			 string);
             ret = FALSE;
             break;
           }
@@ -1097,7 +1127,11 @@ gtk_builder_value_from_string_type (GType        type,
             g_value_set_boxed (value, &colour);
           else
             {
-              g_warning ("could not parse colour name `%s'", string);
+	      g_set_error (error,
+			   GTK_BUILDER_ERROR,
+			   GTK_BUILDER_ERROR_INVALID_VALUE,
+			   "could not parse color `%s'",
+			   string);
               ret = FALSE;
             }
         }
@@ -1114,11 +1148,11 @@ gtk_builder_value_from_string_type (GType        type,
         if (G_VALUE_HOLDS (value, GDK_TYPE_PIXBUF))
       {
         gchar *filename;
-        GError *error = NULL;
+        GError *tmp_error = NULL;
         GdkPixbuf *pixbuf;
 
         filename = gtk_xml_relative_file (xml, string);
-        pixbuf = gdk_pixbuf_new_from_file (filename, &error);
+        pixbuf = gdk_pixbuf_new_from_file (filename, &tmp_error);
         if (pixbuf)
           {
             g_value_set_object (value, pixbuf);
@@ -1126,8 +1160,12 @@ gtk_builder_value_from_string_type (GType        type,
           }
         else
           {
-            g_warning ("Error loading image: %s", error->message);
-            g_error_free (error);
+	    g_set_error (error,
+			 GTK_BUILDER_ERROR,
+			 GTK_BUILDER_ERROR_INVALID_VALUE,
+			 "could not load image `%s'",
+			 tmp_error->message);
+            g_error_free (tmp_error);
             ret = FALSE;
           }
         g_free (filename);
@@ -1137,6 +1175,11 @@ gtk_builder_value_from_string_type (GType        type,
           ret = FALSE;
       break;
     default:
+      g_set_error (error,
+		   GTK_BUILDER_ERROR,
+		   GTK_BUILDER_ERROR_INVALID_VALUE,
+		   "unsupported GType `%s'",
+		   g_type_name (type));
       ret = FALSE;
       break;
     }

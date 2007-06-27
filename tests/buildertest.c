@@ -1416,71 +1416,84 @@ static gboolean
 test_value_from_string (void)
 {
   GValue value = { 0 };
+  GError *error = NULL;
+  GtkBuilder *builder;
 
-  g_return_val_if_fail (gtk_builder_value_from_string_type (G_TYPE_STRING, "test", &value), FALSE);
+  builder = gtk_builder_new ();
+  
+  g_return_val_if_fail (gtk_builder_value_from_string_type (builder, G_TYPE_STRING, "test", &value, &error), FALSE);
   g_return_val_if_fail (G_VALUE_HOLDS_STRING (&value), FALSE);
   g_return_val_if_fail (strcmp (g_value_get_string (&value), "test") == 0, FALSE);
   g_value_unset (&value);
 
-  g_return_val_if_fail (gtk_builder_value_from_string_type (G_TYPE_BOOLEAN, "true", &value), FALSE);
+  g_return_val_if_fail (gtk_builder_value_from_string_type (builder, G_TYPE_BOOLEAN, "true", &value, &error), FALSE);
   g_return_val_if_fail (G_VALUE_HOLDS_BOOLEAN (&value), FALSE);
   g_return_val_if_fail (g_value_get_boolean (&value) == TRUE, FALSE);
   g_value_unset (&value);
 
-  g_return_val_if_fail (gtk_builder_value_from_string_type (G_TYPE_BOOLEAN, "false", &value), FALSE);
+  g_return_val_if_fail (gtk_builder_value_from_string_type (builder, G_TYPE_BOOLEAN, "false", &value, &error), FALSE);
   g_return_val_if_fail (G_VALUE_HOLDS_BOOLEAN (&value), FALSE);
   g_return_val_if_fail (g_value_get_boolean (&value) == FALSE, FALSE);
   g_value_unset (&value);
 
-  g_return_val_if_fail (gtk_builder_value_from_string_type (G_TYPE_BOOLEAN, "yes", &value), FALSE);
+  g_return_val_if_fail (gtk_builder_value_from_string_type (builder, G_TYPE_BOOLEAN, "yes", &value, &error), FALSE);
   g_return_val_if_fail (G_VALUE_HOLDS_BOOLEAN (&value), FALSE);
   g_return_val_if_fail (g_value_get_boolean (&value) == TRUE, FALSE);
   g_value_unset (&value);
 
-  g_return_val_if_fail (gtk_builder_value_from_string_type (G_TYPE_BOOLEAN, "no", &value), FALSE);
+  g_return_val_if_fail (gtk_builder_value_from_string_type (builder, G_TYPE_BOOLEAN, "no", &value, &error), FALSE);
   g_return_val_if_fail (G_VALUE_HOLDS_BOOLEAN (&value), FALSE);
   g_return_val_if_fail (g_value_get_boolean (&value) == FALSE, FALSE);
   g_value_unset (&value);
 
-  g_return_val_if_fail (gtk_builder_value_from_string_type (G_TYPE_BOOLEAN, "0", &value), FALSE);
+  g_return_val_if_fail (gtk_builder_value_from_string_type (builder, G_TYPE_BOOLEAN, "0", &value, &error), FALSE);
   g_return_val_if_fail (G_VALUE_HOLDS_BOOLEAN (&value), FALSE);
   g_return_val_if_fail (g_value_get_boolean (&value) == FALSE, FALSE);
   g_value_unset (&value);
 
-  g_return_val_if_fail (gtk_builder_value_from_string_type (G_TYPE_BOOLEAN, "1", &value), FALSE);
+  g_return_val_if_fail (gtk_builder_value_from_string_type (builder, G_TYPE_BOOLEAN, "1", &value, &error), FALSE);
   g_return_val_if_fail (G_VALUE_HOLDS_BOOLEAN (&value), FALSE);
   g_return_val_if_fail (g_value_get_boolean (&value) == TRUE, FALSE);
   g_value_unset (&value);
 
-  g_return_val_if_fail (gtk_builder_value_from_string_type (G_TYPE_BOOLEAN, "blaurgh", &value) == FALSE, FALSE);
+  g_return_val_if_fail (gtk_builder_value_from_string_type (builder, G_TYPE_BOOLEAN, "blaurgh", &value, &error) == FALSE, FALSE);
+  g_return_val_if_fail (error != NULL, FALSE);
   g_value_unset (&value);
+  g_error_free (error);
+  error = NULL;
 
-  g_return_val_if_fail (gtk_builder_value_from_string_type (G_TYPE_INT, "12345", &value), FALSE);
+  g_return_val_if_fail (gtk_builder_value_from_string_type (builder, G_TYPE_INT, "12345", &value, &error), FALSE);
   g_return_val_if_fail (G_VALUE_HOLDS_INT (&value), FALSE);
   g_return_val_if_fail (g_value_get_int (&value) == 12345, FALSE);
   g_value_unset (&value);
 
-  g_return_val_if_fail (gtk_builder_value_from_string_type (G_TYPE_LONG, "9912345", &value), FALSE);
+  g_return_val_if_fail (gtk_builder_value_from_string_type (builder, G_TYPE_LONG, "9912345", &value, &error), FALSE);
   g_return_val_if_fail (G_VALUE_HOLDS_LONG (&value), FALSE);
   g_return_val_if_fail (g_value_get_long (&value) == 9912345, FALSE);
   g_value_unset (&value);
 
-  g_return_val_if_fail (gtk_builder_value_from_string_type (G_TYPE_UINT, "2345", &value), FALSE);
+  g_return_val_if_fail (gtk_builder_value_from_string_type (builder, G_TYPE_UINT, "2345", &value, &error), FALSE);
   g_return_val_if_fail (G_VALUE_HOLDS_UINT (&value), FALSE);
   g_return_val_if_fail (g_value_get_uint (&value) == 2345, FALSE);
   g_value_unset (&value);
 
-  g_return_val_if_fail (gtk_builder_value_from_string_type (G_TYPE_FLOAT, "1.454", &value), FALSE);
+  g_return_val_if_fail (gtk_builder_value_from_string_type (builder, G_TYPE_FLOAT, "1.454", &value, &error), FALSE);
   g_return_val_if_fail (G_VALUE_HOLDS_FLOAT (&value), FALSE);
   g_return_val_if_fail (fabs (g_value_get_float (&value) - 1.454) < 0.00001, FALSE);
   g_value_unset (&value);
 
-  g_return_val_if_fail (gtk_builder_value_from_string_type (G_TYPE_FLOAT, "abc", &value) == FALSE, FALSE);
+  g_return_val_if_fail (gtk_builder_value_from_string_type (builder, G_TYPE_FLOAT, "abc", &value, &error) == FALSE, FALSE);
   g_value_unset (&value);
+  g_error_free (error);
+  error = NULL;
 
-  g_return_val_if_fail (gtk_builder_value_from_string_type (G_TYPE_INT, "/-+,abc", &value) == FALSE, FALSE);
+  g_return_val_if_fail (gtk_builder_value_from_string_type (builder, G_TYPE_INT, "/-+,abc", &value, &error) == FALSE, FALSE);
   g_value_unset (&value);
+  g_error_free (error);
+  error = NULL;
 
+  g_object_unref (builder);
+  
   return TRUE;
 }
 

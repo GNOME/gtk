@@ -1,3 +1,17 @@
+2007-06-27  Johan Dahlin  <jdahlin@async.com.br>
+
+	* gtk/gtkbuilder.c: (gtk_builder_get_parameters),
+	(gtk_builder_value_from_string),
+	(gtk_builder_value_from_string_type):
+	* gtk/gtkbuilder.h:
+	* gtk/gtkcontainer.c: (gtk_container_buildable_set_child_property),
+	(attributes_text_element):
+	* gtk/gtkliststore.c: (list_store_text):
+	* tests/buildertest.c: (test_value_from_string):
+
+	Add GtkBuilder and GError arguments to gtk_builder_value_from_string
+	and gtk_builder_value_from_string_type. (#451428)
+
 2007-06-27  Xan Lopez  <xan@gnome.org>
 
 	* gtk/gtkvbbox.c (gtk_vbutton_box_size_allocate):

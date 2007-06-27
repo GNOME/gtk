@@ -314,13 +314,15 @@ gtk_container_buildable_add_child (GtkBuildable  *buildable,
 
 static void
 gtk_container_buildable_set_child_property (GtkContainer *container,
+					    GtkBuilder   *builder,
 					    GtkWidget    *child,
 					    gchar        *name,
 					    const gchar  *value)
 {
   GParamSpec *pspec;
   GValue gvalue = { 0, };
-
+  GError *error = NULL;
+  
   pspec = gtk_container_class_find_child_property
     (G_OBJECT_GET_CLASS (container), name);
   if (!pspec)
@@ -330,13 +332,15 @@ gtk_container_buildable_set_child_property (GtkContainer *container,
       return;
     }
 
-  if (!gtk_builder_value_from_string (pspec, value, &gvalue))
+  if (!gtk_builder_value_from_string (builder, pspec, value, &gvalue, &error))
     {
-      g_warning ("Could not read property %s:%s with value %s of type %s",
+      g_warning ("Could not read property %s:%s with value %s of type %s: %s",
 		 g_type_name (G_OBJECT_TYPE (container)),
 		 name,
 		 value,
-		 g_type_name (G_PARAM_SPEC_VALUE_TYPE (pspec)));
+		 g_type_name (G_PARAM_SPEC_VALUE_TYPE (pspec)),
+		 error->message);
+      g_error_free (error);
       return;
     }
 
@@ -385,6 +389,7 @@ attributes_text_element (GMarkupParseContext *context,
     return;
 
   gtk_container_buildable_set_child_property (parser_data->container,
+					      parser_data->builder,
 					      parser_data->child,
 					      parser_data->child_prop_name,
 					      text);
