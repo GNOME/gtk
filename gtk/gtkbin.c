@@ -215,11 +215,10 @@ gtk_bin_extended_layout_get_baselines (GtkExtendedLayout  *layout,
   layout = GTK_EXTENDED_LAYOUT (bin->child);
   num_lines = gtk_extended_layout_get_baselines (layout, baselines);
 
-  if (baselines)
-    {
+  if (baselines &&
       gtk_widget_translate_coordinates (bin->child, GTK_WIDGET (bin),
-                                        0, 0, NULL, &dy);
-
+                                        0, 0, NULL, &dy))
+    {
       baseptr = *baselines;
       baseend = baseptr + num_lines;
 

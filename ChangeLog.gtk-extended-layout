@@ -1,3 +1,8 @@
+2007-06-28  Mathias Hasselmann  <mathias.hasselmann@gmx.de>
+
+	* gtk/gtkbin.c: Prevent undefined behaviour when
+	gtk_widget_translate_coordinates fails.
+	
 2007-06-20  Mathias Hasselmann  <mathias.hasselmann@gmx.de>
 
 	* tests/testextendedlayout.c: Provide checkboxes 
