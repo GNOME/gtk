@@ -83,8 +83,8 @@ class GtkBuilderConverter(object):
     # Private
     #
 
-    def _get_widget(self, doc, name):
-        result = self._get_widgets_by_attr(doc, "id", name)
+    def _get_widget(self, name):
+        result = self._get_widgets_by_attr("id", name)
         if len(result) > 1:
             raise ValueError(
                 "It is not possible to have more than one "
@@ -93,7 +93,7 @@ class GtkBuilderConverter(object):
             return result[0]
         return None
 
-    def _get_widgets_by_attr(self, doc, attribute, value):
+    def _get_widgets_by_attr(self, attribute, value):
         return [w for w in self._dom.getElementsByTagName("object")
                       if w.getAttribute(attribute) == value]
 
@@ -150,10 +150,13 @@ class GtkBuilderConverter(object):
             self._packing_prop_to_child_attr(
                 node, "type", "label_item", "label")
         elif klass == "GtkMenuBar":
-            uimgr = node.ownerDocument.createElement('object')
-            uimgr.setAttribute('class', 'GtkUIManager')
-            uimgr.setAttribute('id', 'uimanager1')
-            self._interface.childNodes.insert(0, uimgr)
+            if node.hasAttribute('constructor'):
+                uimgr = self._get_widget('uimanager')
+            else:
+                uimgr = node.ownerDocument.createElement('object')
+                uimgr.setAttribute('class', 'GtkUIManager')
+                uimgr.setAttribute('id', 'uimanager1')
+                self._interface.childNodes.insert(0, uimgr)
             self._convert_menubar(uimgr, node)
 
         self._default_widget_converter(node)
@@ -261,9 +264,9 @@ class GtkBuilderConverter(object):
     def _convert_sizegroup(self, node, prop):
         # This is Gazpacho only
         node.removeChild(prop)
-        obj = self._get_widget(doc, prop.childNodes[0].data)
+        obj = self._get_widget(prop.childNodes[0].data)
         if obj is None:
-            widgets = self._get_widgets_by_attr(doc, "class", "GtkSizeGroup")
+            widgets = self._get_widgets_by_attr("class", "GtkSizeGroup")
             if widgets:
                 obj = widgets[-1]
             else:
@@ -346,8 +349,7 @@ class GtkBuilderConverter(object):
 
         # Updating references made by widgets
         parent_id = node.parentNode.getAttribute("id")
-        for widget in self._get_widgets_by_attr(node.ownerDocument,
-                                                "constructor",
+        for widget in self._get_widgets_by_attr("constructor",
                                                 node.getAttribute("id")):
             widget.getAttributeNode("constructor").value = parent_id
         node.removeAttribute("id")

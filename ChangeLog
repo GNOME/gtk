@@ -2,6 +2,8 @@
 
 	* gtk/gtk-builder-convert (GtkBuilderConverter._parse): Remove
 	glade-interface doctype if found.
+	(GtkBuilderConverter._convert): 
+	Make sure that we can convert Gazpacho files too.
 
 2007-06-27  Cody Russell  <bratsche@gnome.org>
 
