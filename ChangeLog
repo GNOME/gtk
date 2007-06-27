@@ -1,5 +1,8 @@
 2007-06-27  Johan Dahlin  <jdahlin@async.com.br>
 
+	* tests/buildertest.c: (test_value_from_string): 
+	Check the code and domain of GErrors instead of the string values
+	
 	* gtk/gtkbuilder.c: (gtk_builder_get_parameters),
 	(gtk_builder_value_from_string),
 	(gtk_builder_value_from_string_type):

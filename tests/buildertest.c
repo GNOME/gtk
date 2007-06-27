@@ -51,31 +51,36 @@ gboolean test_parser (void)
   error = NULL;
   gtk_builder_add_from_string (builder, "<xxx/>", -1, &error);
   g_assert (error != NULL);
-  g_return_val_if_fail (strcmp (error->message, "Invalid root element: 'xxx'") == 0, FALSE);
-  g_error_free (error);
+  g_return_val_if_fail (error->domain == GTK_BUILDER_ERROR, FALSE);
+  g_return_val_if_fail (error->code == GTK_BUILDER_ERROR_UNHANDLED_TAG, FALSE);
+    g_error_free (error);
   
   error = NULL;
   gtk_builder_add_from_string (builder, "<interface invalid=\"X\"/>", -1, &error);
   g_assert (error != NULL);
-  g_return_val_if_fail (strcmp (error->message, "<input>:1:24 'X' is not a valid attribute of <interface>") == 0, FALSE);
+  g_return_val_if_fail (error->domain == GTK_BUILDER_ERROR, FALSE);
+  g_return_val_if_fail (error->code == GTK_BUILDER_ERROR_INVALID_ATTRIBUTE, FALSE);
   g_error_free (error);
 
   error = NULL;
   gtk_builder_add_from_string (builder, "<interface><child/></interface>", -1, &error);
   g_assert (error != NULL);
-  g_return_val_if_fail (strcmp (error->message, "<input>:1:19 'child' is not a valid tag here, expected a 'object' tag") == 0, FALSE);
+  g_return_val_if_fail (error->domain == GTK_BUILDER_ERROR, FALSE);
+  g_return_val_if_fail (error->code == GTK_BUILDER_ERROR_INVALID_TAG, FALSE);
   g_error_free (error);
 
   error = NULL;
   gtk_builder_add_from_string (builder, "<interface><object class=\"GtkVBox\" id=\"a\"><object class=\"GtkHBox\" id=\"b\"/></object></interface>", -1, &error);
   g_assert (error != NULL);
-  g_return_val_if_fail (strcmp (error->message, "<input>:1:74 'object' is not a valid tag here") == 0, FALSE);
+  g_return_val_if_fail (error->domain == GTK_BUILDER_ERROR, FALSE);
+  g_return_val_if_fail (error->code == GTK_BUILDER_ERROR_INVALID_TAG, FALSE);
   g_error_free (error);
 
   error = NULL;
   gtk_builder_add_from_string (builder, "<interface><object class=\"GtkWindow\" id=\"a\"><property name=\"type\"/></object></interface>", -1, &error);
   g_assert (error != NULL);
-  g_return_val_if_fail (strcmp (error->message, "<input>:1:67 <property> must have a value set") == 0, FALSE);
+  g_return_val_if_fail (error->domain == GTK_BUILDER_ERROR, FALSE);
+  g_return_val_if_fail (error->code == GTK_BUILDER_ERROR_MISSING_PROPERTY_VALUE, FALSE);
   g_error_free (error);
 
   
@@ -1459,6 +1464,8 @@ test_value_from_string (void)
   g_return_val_if_fail (gtk_builder_value_from_string_type (builder, G_TYPE_BOOLEAN, "blaurgh", &value, &error) == FALSE, FALSE);
   g_return_val_if_fail (error != NULL, FALSE);
   g_value_unset (&value);
+  g_return_val_if_fail (error->domain == GTK_BUILDER_ERROR, FALSE);
+  g_return_val_if_fail (error->code == GTK_BUILDER_ERROR_INVALID_VALUE, FALSE);
   g_error_free (error);
   error = NULL;
 
@@ -1484,11 +1491,15 @@ test_value_from_string (void)
 
   g_return_val_if_fail (gtk_builder_value_from_string_type (builder, G_TYPE_FLOAT, "abc", &value, &error) == FALSE, FALSE);
   g_value_unset (&value);
+  g_return_val_if_fail (error->domain == GTK_BUILDER_ERROR, FALSE);
+  g_return_val_if_fail (error->code == GTK_BUILDER_ERROR_INVALID_VALUE, FALSE);
   g_error_free (error);
   error = NULL;
 
   g_return_val_if_fail (gtk_builder_value_from_string_type (builder, G_TYPE_INT, "/-+,abc", &value, &error) == FALSE, FALSE);
   g_value_unset (&value);
+  g_return_val_if_fail (error->domain == GTK_BUILDER_ERROR, FALSE);
+  g_return_val_if_fail (error->code == GTK_BUILDER_ERROR_INVALID_VALUE, FALSE);
   g_error_free (error);
   error = NULL;
 
