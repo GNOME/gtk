@@ -84,6 +84,8 @@ void                      gtk_extended_layout_get_natural_size     (GtkExtendedL
                                                                     GtkRequisition     *requisition);
 gint                      gtk_extended_layout_get_baselines        (GtkExtendedLayout  *layout,
                                                                     gint              **baselines);
+gint                      gtk_extended_layout_get_single_baseline  (GtkExtendedLayout  *layout,
+                                                                    GtkBaselinePolicy   policy);
 
 G_END_DECLS
 

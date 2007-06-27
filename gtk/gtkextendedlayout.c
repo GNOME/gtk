@@ -164,3 +164,56 @@ gtk_extended_layout_get_baselines (GtkExtendedLayout  *layout,
   g_return_val_if_fail (iface->get_baselines, -1);
   return iface->get_baselines(layout, baselines);
 }
+
+/**
+ * gtk_extended_layout_get_single_baseline:
+ * @layout: a #GtkExtendedLayout
+ * @policy: specifies the policy for choosing a baseline
+ *
+ * Queries a single baseline of the layout item.
+ *
+ * Since: 2.14
+ **/
+gint
+gtk_extended_layout_get_single_baseline (GtkExtendedLayout *layout,
+                                         GtkBaselinePolicy  policy)
+{
+  gint *baselines = NULL;
+  gint offset = -1;
+  gint count, i;
+
+  g_return_val_if_fail (GTK_BASELINE_NONE != policy, -1);
+
+  count = gtk_extended_layout_get_baselines (layout, &baselines);
+
+  if (count > 0)
+    {
+      switch (policy)
+        {
+          case GTK_BASELINE_NONE:
+            break;
+
+          case GTK_BASELINE_FIRST:
+            offset = baselines [0];
+            break;
+
+          case GTK_BASELINE_LAST:
+            offset = baselines [count - 1];
+            break;
+
+          case GTK_BASELINE_AVERAGE:
+            for (i = 0, offset = 0; i < count; ++i)
+              offset += baselines[i];
+
+            offset = (offset + count - 1) / count;
+            break;
+        }
+
+      g_free (baselines);
+    }
+
+  return offset;
+}
+
+#define __GTK_EXTENDED_LAYOUT_C__
+#include "gtkaliasdef.c"

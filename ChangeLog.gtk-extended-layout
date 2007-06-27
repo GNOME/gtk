@@ -1,5 +1,12 @@
 2007-06-28  Mathias Hasselmann  <mathias.hasselmann@gmx.de>
 
+	* gtk/gtkenums.h: Introduce GtkBaselinePolicy.
+	* gtk/gtk.symbols: Add missing symbols.
+	* gtk/gtkextendedlayout.c, gtk/gtkextendedlayout.h:
+	  Introduce gtk_extended_layout_get_single_baseline.
+
+2007-06-28  Mathias Hasselmann  <mathias.hasselmann@gmx.de>
+
 	* gtk/gtkbin.c: Prevent undefined behaviour when
 	gtk_widget_translate_coordinates fails.
 	

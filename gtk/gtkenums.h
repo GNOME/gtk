@@ -82,6 +82,15 @@ typedef enum
   GTK_BUTTONBOX_CENTER
 } GtkButtonBoxStyle;
 
+/* Baseline alignment policy */
+typedef enum
+{
+  GTK_BASELINE_NONE,
+  GTK_BASELINE_FIRST,
+  GTK_BASELINE_AVERAGE,
+  GTK_BASELINE_LAST
+} GtkBaselinePolicy;
+
 /* Curve types */
 typedef enum
 {
