@@ -1,3 +1,8 @@
+2007-06-27  Johan Dahlin  <jdahlin@async.com.br>
+
+	* gtk/gtk-builder-convert (GtkBuilderConverter._parse): Remove
+	glade-interface doctype if found.
+
 2007-06-27  Cody Russell  <bratsche@gnome.org>
 
 	* modules/engines/ms-windows/msw_style.c (draw_themed_tab_button):

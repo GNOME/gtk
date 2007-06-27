@@ -119,6 +119,12 @@ class GtkBuilderConverter(object):
         glade_iface[0].tagName = 'interface'
         self._interface = glade_iface[0]
 
+        # Remove glade-interface doc type
+        for node in self._dom.childNodes:
+            if node.nodeType == Node.DOCUMENT_TYPE_NODE:
+                if node.name == 'glade-interface':
+                    self._dom.removeChild(node)
+
         # Strip requires
         requires = self._dom.getElementsByTagName("requires")
         for require in requires:
