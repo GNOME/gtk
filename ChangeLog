@@ -1,3 +1,10 @@
+2007-06-26  Johan Dahlin  <jdahlin@async.com.br>
+
+	* demos/gtk-demo/builder.c (do_builder): Connect the
+	destroy signal in the example instead of the ui file.
+	Also set the screen and title of the window.
+	(#451345, Thomas Rydzynski)
+
 2007-06-26  Richard Hult  <richard@imendio.com>
 
 	* gtk/gtkbuilder.c: (gtk_builder_value_from_string_type): Fix a

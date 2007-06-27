@@ -141,7 +141,7 @@
     <object class="GtkWindow" id="window1">
         <property name="default_height">250</property>
         <property name="default_width">440</property>
-        <signal name="destroy" handler="gtk_widget_destroyed"/>
+        <property name="title">builder</property>
         <child>
             <object class="GtkVBox" id="vbox1">
                 <property name="visible">True</property>
