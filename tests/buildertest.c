@@ -761,6 +761,41 @@ gboolean test_construct_only_property (void)
   return TRUE;
 }
 
+gboolean test_object_properties (void)
+{
+  GtkBuilder *builder;
+  const gchar buffer[] =
+    "<interface>"
+    "  <object class=\"GtkWindow\" id=\"window1\">"
+    "    <child>"
+    "      <object class=\"GtkVBox\" id=\"vbox\">"
+    "        <property name=\"border-width\">10</property>"
+    "        <child>"
+    "          <object class=\"GtkLabel\" id=\"label1\">"
+    "            <property name=\"mnemonic-widget\">spinbutton1</property>"
+    "          </object>"
+    "        </child>"
+    "        <child>"
+    "          <object class=\"GtkSpinButton\" id=\"spinbutton1\"/>"
+    "        </child>"
+    "      </object>"
+    "    </child>"
+    "  </object>"
+    "</interface>";
+  GObject *label, *spinbutton;
+  
+  builder = builder_new_from_string (buffer, -1, NULL);
+  label = gtk_builder_get_object (builder, "label1");
+  g_return_val_if_fail (label != NULL, FALSE);
+  spinbutton = gtk_builder_get_object (builder, "spinbutton1");
+  g_return_val_if_fail (spinbutton != NULL, FALSE);
+  g_return_val_if_fail (spinbutton == (GObject*)gtk_label_get_mnemonic_widget (GTK_LABEL (label)), FALSE);
+  
+  g_object_unref (builder);
+
+  return TRUE;
+}
+
 gboolean test_children (void)
 {
   GtkBuilder * builder;
@@ -1473,6 +1508,10 @@ main (int argc, char **argv)
   g_print ("Testing child properties\n");
   if (!test_child_properties ())
     g_error ("test_child_properties failed");
+
+  g_print ("Testing object properties\n");
+  if (!test_object_properties ())
+    g_error ("test_object_properties failed");
 
   g_print ("Testing notebook\n");
   if (!test_notebook ())
