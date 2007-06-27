@@ -38,8 +38,8 @@
 #include "gtktypeutils.h"
 #include "gtkalias.h"
 
-static void free_property_info (PropertyInfo *info,
-                                gpointer      user_data);
+static void free_property_info (PropertyInfo *info);
+static void free_object_info (ObjectInfo *info);
 
 static inline void
 state_push (ParserData *data, gpointer info)
@@ -196,6 +196,8 @@ parse_object (ParserData   *data,
   if (child_info && strcmp (child_info->tag.name, "object") == 0)
     {
       error_invalid_tag (data, element_name, NULL, error);
+      if (child_info)
+	free_object_info ((ObjectInfo*)child_info);
       return;
     }
 
@@ -288,6 +290,8 @@ parse_child (ParserData   *data,
   if (!object_info || strcmp (object_info->tag.name, "object") != 0)
     {
       error_invalid_tag (data, element_name, "object", error);
+      if (object_info)
+	free_object_info (object_info);
       return;
     }
   
@@ -372,8 +376,7 @@ parse_property (ParserData   *data,
 }
 
 static void
-free_property_info (PropertyInfo *info,
-                    gpointer user_data)
+free_property_info (PropertyInfo *info)
 {
   g_free (info->data);
   g_free (info->name);
@@ -728,6 +731,9 @@ end_element (GMarkupParseContext *context,
       if (!prop_info->data)
 	{
 	  error_missing_property_value (data, error);
+	  free_property_info (prop_info);
+	  if (strcmp (info->tag.name, "object") == 0)
+	    free_object_info((ObjectInfo*)info);
 	  return;
 	}
       

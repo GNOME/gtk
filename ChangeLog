@@ -1,3 +1,7 @@
+2007-06-27  Johan Dahlin  <jdahlin@async.com.br>
+
+	* gtk/gtkbuilderparser.c: Plug leaks in error code paths
+
 2007-06-26  Johan Dahlin  <jdahlin@async.com.br>
 
 	* tests/buildertest.c (test_object_properties): 
