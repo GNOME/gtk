@@ -343,6 +343,13 @@ create_baseline_test (TestSuite *suite)
 static TestCase*
 create_baseline_test_bin (TestSuite *suite)
 {
+  GtkWidget *bin;
+  GtkWidget *label;
+  GtkWidget *table;
+  GtkWidget *hbox;
+
+  int i, j;
+
   const GType types[] = 
     { 
       GTK_TYPE_ALIGNMENT, GTK_TYPE_BUTTON, 
@@ -359,16 +366,10 @@ create_baseline_test_bin (TestSuite *suite)
       NULL
     };
 
-  GtkWidget *bin;
-  GtkWidget *label;
-  GtkWidget *table;
-
-  int i, j;
-
-  TestCase *test = test_case_new (suite, "Baseline Alignment for GtkBin",
+  TestCase *test = test_case_new (suite, "Baseline Alignment II",
                                   gtk_alignment_new (0.5, 0.5, 0.0, 0.0));
 
-  table = gtk_table_new (G_N_ELEMENTS (types) - 1, 
+  table = gtk_table_new (G_N_ELEMENTS (types) + 6, 
                          G_N_ELEMENTS (markup),
                          FALSE);
 
@@ -396,6 +397,50 @@ create_baseline_test_bin (TestSuite *suite)
           test_case_append_guide (test, bin, GUIDE_BASELINE, i);
           gtk_table_attach (GTK_TABLE (table), bin, j + 1, j + 2,
                             i, i + 1, GTK_FILL, GTK_FILL, 0, 0);
+        }
+    }
+
+  gtk_table_attach (GTK_TABLE (table), gtk_hseparator_new (),
+                    0, G_N_ELEMENTS (markup),
+                    G_N_ELEMENTS (types), G_N_ELEMENTS (types) + 1,
+                    GTK_FILL, GTK_FILL, 0, 0);
+
+  for (i = 0; i < 6; i += 2)
+    {
+      hbox = gtk_hbox_new (FALSE, 6);
+      gtk_hbox_set_baseline_policy (GTK_HBOX (hbox), GTK_BASELINE_FIRST);
+
+      gtk_table_attach (GTK_TABLE (table), hbox,
+                        0, G_N_ELEMENTS (markup),
+                        G_N_ELEMENTS (types) + i + 1,
+                        G_N_ELEMENTS (types) + i + 2,
+                        GTK_FILL, GTK_FILL, 0, 0);
+      gtk_table_attach (GTK_TABLE (table), gtk_hseparator_new (),
+                        0, G_N_ELEMENTS (markup),
+                        G_N_ELEMENTS (types) + i + 2,
+                        G_N_ELEMENTS (types) + i + 3,
+                        GTK_FILL, GTK_FILL, 0, 0);
+
+      for (j = 0; markup[j]; ++j)
+        {
+          label = gtk_label_new (NULL);
+          gtk_label_set_markup (GTK_LABEL (label), markup[j]);
+
+          test_case_append_guide (test, label, GUIDE_BASELINE, G_N_ELEMENTS (types));
+
+          if (0 == j && i >= 2)
+            {
+              bin = gtk_alignment_new (0.5, 0.5, 0.0, 0.0);
+              gtk_alignment_set_padding (GTK_ALIGNMENT (bin), 0, 0, 0, 0);
+//                                         i < 3 ? 20 : 0, i > 3 ? 20 : 0, 0, 0);
+              gtk_container_add (GTK_CONTAINER (bin), label);
+
+              gtk_box_pack_start (GTK_BOX (hbox), bin, FALSE, TRUE, 0);
+            }
+          else
+            {
+              gtk_box_pack_start (GTK_BOX (hbox), label, FALSE, TRUE, 0);
+            }
         }
     }
 

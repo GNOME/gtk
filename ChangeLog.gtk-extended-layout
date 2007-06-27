@@ -1,5 +1,11 @@
 2007-06-28  Mathias Hasselmann  <mathias.hasselmann@gmx.de>
 
+	* gtk/gtkhbox.c, gtk/gtkhbox.h, gtk/gtk.symbols, 
+	tests/testextendedlayout.c: Initial, buggish implementation
+	of baseline alignment in GtkHBox.
+
+2007-06-28  Mathias Hasselmann  <mathias.hasselmann@gmx.de>
+
 	* gtk/gtkenums.h: Introduce GtkBaselinePolicy.
 	* gtk/gtk.symbols: Add missing symbols.
 	* gtk/gtkextendedlayout.c, gtk/gtkextendedlayout.h:

@@ -1671,6 +1671,8 @@ gtk_handle_box_set_snap_edge
 #if IN_FILE(__GTK_HBOX_C__)
 gtk_hbox_get_type G_GNUC_CONST
 gtk_hbox_new
+gtk_hbox_get_baseline_policy
+gtk_hbox_set_baseline_policy
 #endif
 #endif
 

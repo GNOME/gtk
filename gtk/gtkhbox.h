@@ -56,10 +56,13 @@ struct _GtkHBoxClass
 };
 
 
-GType	   gtk_hbox_get_type (void) G_GNUC_CONST;
-GtkWidget* gtk_hbox_new	     (gboolean homogeneous,
-			      gint spacing);
+GType	          gtk_hbox_get_type            (void) G_GNUC_CONST;
+GtkWidget*        gtk_hbox_new	               (gboolean           homogeneous,
+                                                gint               spacing);
 
+GtkBaselinePolicy gtk_hbox_get_baseline_policy (GtkHBox           *hbox);
+void              gtk_hbox_set_baseline_policy (GtkHBox           *hbox,
+                                                GtkBaselinePolicy  policy);
 
 G_END_DECLS
 

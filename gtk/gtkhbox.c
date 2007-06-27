@@ -26,27 +26,66 @@
 
 #include <config.h>
 #include "gtkhbox.h"
+#include "gtkextendedlayout.h"
 #include "gtkintl.h"
 #include "gtkalias.h"
 
+
+enum {
+  PROP_0,
+  PROP_BASELINE_POLICY
+};
+
+#define GTK_HBOX_GET_PRIVATE(obj) (G_TYPE_INSTANCE_GET_PRIVATE ((obj), GTK_TYPE_HBOX, GtkHBoxPrivate))
+
+typedef struct _GtkHBoxPrivate GtkHBoxPrivate;
+
+struct _GtkHBoxPrivate
+{
+  GtkBaselinePolicy baseline_policy;
+  gint effective_baseline;
+  gint *baselines;
+};
+
+static void gtk_hbox_dispose       (GObject        *object);
+static void gtk_hbox_set_property  (GObject        *object,
+		                    guint           prop_id,
+		                    const GValue   *value,
+		                    GParamSpec     *pspec);
+static void gtk_hbox_get_property  (GObject        *object,
+		                    guint           prop_id,
+		                    GValue         *value,
+		                    GParamSpec     *pspec);
 
 static void gtk_hbox_size_request  (GtkWidget      *widget,
 				    GtkRequisition *requisition);
 static void gtk_hbox_size_allocate (GtkWidget      *widget,
 				    GtkAllocation  *allocation);
 
-
 G_DEFINE_TYPE (GtkHBox, gtk_hbox, GTK_TYPE_BOX)
 
 static void
 gtk_hbox_class_init (GtkHBoxClass *class)
 {
-  GtkWidgetClass *widget_class;
+  GObjectClass *gobject_class = G_OBJECT_CLASS (class);
+  GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (class);
 
-  widget_class = (GtkWidgetClass*) class;
+  gobject_class->dispose = gtk_hbox_dispose;
+  gobject_class->set_property = gtk_hbox_set_property;
+  gobject_class->get_property = gtk_hbox_get_property;
 
   widget_class->size_request = gtk_hbox_size_request;
   widget_class->size_allocate = gtk_hbox_size_allocate;
+
+  g_type_class_add_private (gobject_class, sizeof (GtkHBoxPrivate));
+  
+  g_object_class_install_property (gobject_class,
+				   PROP_BASELINE_POLICY,
+				   g_param_spec_enum ("baseline-policy", 
+						      P_("Baseline policy"), 
+						      P_("Indicates which baseline of children to use for vertical alignment"),
+						      GTK_TYPE_BASELINE_POLICY, GTK_BASELINE_NONE,
+						      G_PARAM_READWRITE));
 }
 
 static void
@@ -69,21 +108,69 @@ gtk_hbox_new (gboolean homogeneous,
 }
 
 
+static void 
+gtk_hbox_set_property (GObject      *object,
+		       guint         prop_id,
+		       const GValue *value,
+		       GParamSpec   *pspec)
+{
+  GtkHBoxPrivate *priv = GTK_HBOX_GET_PRIVATE (object);
+
+  switch (prop_id)
+    {
+    case PROP_BASELINE_POLICY:
+      priv->baseline_policy = g_value_get_enum (value);
+      break;
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+      break;
+    }
+}
+
+static void 
+gtk_hbox_dispose (GObject    *object)
+{
+  GtkHBoxPrivate *priv = GTK_HBOX_GET_PRIVATE (object);
+
+  g_free (priv->baselines);
+  priv->baselines = NULL;
+
+  G_OBJECT_CLASS (gtk_hbox_parent_class)->dispose (object);
+}
+
+static void 
+gtk_hbox_get_property (GObject    *object,
+		       guint       prop_id,
+		       GValue     *value,
+		       GParamSpec *pspec)
+{
+  GtkHBoxPrivate *priv = GTK_HBOX_GET_PRIVATE (object);
+
+  switch (prop_id)
+    {
+    case PROP_BASELINE_POLICY:
+      g_value_set_enum (value, priv->baseline_policy);
+      break;
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+      break;
+    }
+}
+
 static void
 gtk_hbox_size_request (GtkWidget      *widget,
 		       GtkRequisition *requisition)
 {
-  GtkBox *box;
+  GtkBox *box = GTK_BOX (widget);
+
+  gint nvis_children;
   GtkBoxChild *child;
   GList *children;
-  gint nvis_children;
-  gint width;
 
-  box = GTK_BOX (widget);
   requisition->width = 0;
   requisition->height = 0;
-  nvis_children = 0;
 
+  nvis_children = 0;
   children = box->children;
   while (children)
     {
@@ -91,31 +178,76 @@ gtk_hbox_size_request (GtkWidget      *widget,
       children = children->next;
 
       if (GTK_WIDGET_VISIBLE (child->widget))
-	{
-	  GtkRequisition child_requisition;
-
-	  gtk_widget_size_request (child->widget, &child_requisition);
-
-	  if (box->homogeneous)
-	    {
-	      width = child_requisition.width + child->padding * 2;
-	      requisition->width = MAX (requisition->width, width);
-	    }
-	  else
-	    {
-	      requisition->width += child_requisition.width + child->padding * 2;
-	    }
-
-	  requisition->height = MAX (requisition->height, child_requisition.height);
-
-	  nvis_children += 1;
-	}
+        nvis_children += 1;
     }
 
   if (nvis_children > 0)
     {
+      GtkHBoxPrivate *priv = GTK_HBOX_GET_PRIVATE (widget);
+      gint i_child;
+
+      g_free (priv->baselines);
+      priv->baselines = g_new0 (gint, nvis_children);
+
+      priv->effective_baseline = 0;
+      if (priv->baseline_policy != GTK_BASELINE_NONE)
+        {
+          i_child = 0;
+          children = box->children;
+          while (children)
+            {
+              child = children->data;
+              children = children->next;
+
+              if (GTK_WIDGET_VISIBLE (child->widget))
+                {
+                  if (GTK_IS_EXTENDED_LAYOUT (child->widget))
+                    {
+                      priv->baselines[i_child] = gtk_extended_layout_get_single_baseline (
+                        GTK_EXTENDED_LAYOUT (child->widget), priv->baseline_policy);
+
+                      priv->effective_baseline = MAX (priv->effective_baseline, priv->baselines[i_child]);
+                    }
+
+                  ++i_child;
+                }
+            }
+        }
+
+      i_child = 0;
+      children = box->children;
+      while (children)
+        {
+          child = children->data;
+          children = children->next;
+
+          if (GTK_WIDGET_VISIBLE (child->widget))
+            {
+              GtkRequisition child_requisition;
+              gint width;
+
+              gtk_widget_size_request (child->widget, &child_requisition);
+
+              if (box->homogeneous)
+                {
+                  width = child_requisition.width + child->padding * 2;
+                  requisition->width = MAX (requisition->width, width);
+                }
+              else
+                {
+                  requisition->width += child_requisition.width + child->padding * 2;
+                }
+
+              child_requisition.height += MAX (0, (priv->effective_baseline - priv->baselines[i_child]));
+              requisition->height = MAX (requisition->height, child_requisition.height);
+
+              ++i_child;
+            }
+        }
+
       if (box->homogeneous)
 	requisition->width *= nvis_children;
+
       requisition->width += (nvis_children - 1) * box->spacing;
     }
 
@@ -128,15 +260,12 @@ gtk_hbox_size_allocate (GtkWidget     *widget,
 			GtkAllocation *allocation)
 {
   GtkBox *box;
-  GtkBoxChild *child;
-  GList *children;
-  GtkAllocation child_allocation;
+
   gint nvis_children;
   gint nexpand_children;
-  gint child_width;
-  gint width;
-  gint extra;
-  gint x;
+  GtkBoxChild *child;
+  GList *children;
+
   GtkTextDirection direction;
 
   box = GTK_BOX (widget);
@@ -163,6 +292,15 @@ gtk_hbox_size_allocate (GtkWidget     *widget,
 
   if (nvis_children > 0)
     {
+      GtkHBoxPrivate *priv = GTK_HBOX_GET_PRIVATE (widget);
+      GtkAllocation child_allocation;
+      gint child_width;
+      gint i_child;
+
+      gint width;
+      gint extra;
+      gint x;
+
       if (box->homogeneous)
 	{
 	  width = (allocation->width -
@@ -304,7 +442,59 @@ gtk_hbox_size_allocate (GtkWidget     *widget,
               x -= (child_width + box->spacing);
 	    }
 	}
+
+      i_child = 0;
+      children = box->children;
+      while (children)
+	{
+	  child = children->data;
+	  children = children->next;
+
+	  if (GTK_WIDGET_VISIBLE (child->widget))
+	    {
+              gint offset;
+
+              offset = MAX (0, (priv->effective_baseline - priv->baselines[i_child]));
+
+              child->widget->allocation.y += offset;
+              child->widget->allocation.height -= offset;
+
+              ++i_child;
+            }
+        }
     }
+}
+
+/**
+ * gtk_hbox_get_baseline_policy:
+ * @hbox: a #GtkHBox
+ *
+ * Returns which baseline of children is used 
+ * to vertically align them.
+ *
+ * Return value: the baseline alignment policy of the @hbox.
+ **/
+GtkBaselinePolicy
+gtk_hbox_get_baseline_policy (GtkHBox *hbox)
+{
+  g_return_val_if_fail (GTK_IS_HBOX (hbox), GTK_BASELINE_NONE);
+  return GTK_HBOX_GET_PRIVATE (hbox)->baseline_policy;
+}
+
+/**
+ * gtk_hbox_set_baseline_policy:
+ * @box: a #GtkBox
+ * @policy: the baseline alignment policy
+ *
+ * Sets the #GtkHBox:baseline-policy property of @vbox, 
+ * which is the policy to vertically align children.
+ */
+void
+gtk_hbox_set_baseline_policy (GtkHBox           *hbox,
+                              GtkBaselinePolicy  policy)
+{
+  g_return_if_fail (GTK_IS_HBOX (hbox));
+  g_object_set (hbox, "baseline-policy", policy, NULL);
 }
 
 #define __GTK_HBOX_C__
