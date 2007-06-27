@@ -246,8 +246,7 @@ gtk_vbutton_box_size_allocate (GtkWidget     *widget,
       (allocation->height
        - (child_height * (nvis_children - n_secondaries)
 	  + spacing * (nvis_children - n_secondaries - 1)))/2
-      + (n_secondaries * child_height + n_secondaries * spacing)/2
-      + GTK_CONTAINER (box)->border_width;
+      + (n_secondaries * child_height + n_secondaries * spacing)/2;
     secondary_y = allocation->y + GTK_CONTAINER (box)->border_width;
     break;
   default:

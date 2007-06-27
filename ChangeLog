@@ -1,3 +1,12 @@
+2007-06-27  Xan Lopez  <xan@gnome.org>
+
+	* gtk/gtkvbbox.c (gtk_vbutton_box_size_allocate):
+	* gtk/gtkhbbox.c (gtk_hbutton_box_size_allocate):
+
+	Do not add border_width to the first button initial
+	coordinate, since it's already taken into account in
+	the allocation value. (#451484)
+
 2007-06-27  Michael Natterer  <mitch@imendio.com>
 
 	Merged from maemo-gtk:
