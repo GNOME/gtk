@@ -1,5 +1,9 @@
 2007-06-27  Johan Dahlin  <jdahlin@async.com.br>
 
+	* gtk/gtkbuilder.c (apply_delayed_properties): 
+	Print out the name of the right object in the warning
+	(#451314, Philip Withnall)
+
 	* gtk/gtk-builder-convert (GtkBuilderConverter._parse): Remove
 	glade-interface doctype if found.
 	(GtkBuilderConverter._convert): 

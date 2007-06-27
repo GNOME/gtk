@@ -550,7 +550,7 @@ apply_delayed_properties (const gchar *window_name,
 
           obj = g_hash_table_lookup (builder->priv->objects, property->value);
           if (!obj)
-            g_warning ("No object called: %s\n", property->object);
+            g_warning ("No object called: %s\n", property->value);
           else
             g_object_set (object, property->name, obj, NULL);
         }
