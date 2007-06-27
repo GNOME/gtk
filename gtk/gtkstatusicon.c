@@ -1822,9 +1822,8 @@ gtk_status_icon_is_embedded (GtkStatusIcon *status_icon)
  * @menu: the #GtkMenu
  * @x: return location for the x position
  * @y: return location for the y position
- * @push_in: return location for whether the menu should be pushed in 
- *     to be completely inside the screen instead of just clamped to the 
- *     size to the screen.
+ * @push_in: whether the first menu item should be offset (pushed in) to be
+ *           aligned with the menu popup position (only useful for GtkOptionMenu).
  * @user_data: the status icon to position the menu on
  *
  * Menu positioning function to use with gtk_menu_popup()

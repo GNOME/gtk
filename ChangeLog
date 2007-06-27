@@ -1,3 +1,7 @@
+Wed Jun 27 11:57:41 2007  Tim Janik  <timj@imendio.com>
+
+	* gtk/gtkstatusicon.c (gtk_status_icon_position_menu): fixed push_in description.
+
 2007-06-27  Johan Dahlin  <jdahlin@async.com.br>
 
 	* gtk/gtkbuilderparser.c: Plug leaks in error code paths
