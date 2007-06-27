@@ -1,3 +1,12 @@
+2007-06-27  Michael Natterer  <mitch@imendio.com>
+
+	Merged from maemo-gtk:
+
+	* gtk/gtkmenu.c (gtk_menu_handle_scrolling): when updating the
+	scroll arrows' state, make sure we don't overwrite the insensitive
+	state that might have been set by the first scroll step hitting
+	the top/bottom border of the menu.
+
 Wed Jun 27 13:27:21 2007  Tim Janik  <timj@gtk.org>
 
 	* gtk/gtkradiobutton.[hc]: applied patch to improve variable names, 
@@ -5,7 +14,8 @@ Wed Jun 27 13:27:21 2007  Tim Janik  <timj@gtk.org>
 
 Wed Jun 27 11:57:41 2007  Tim Janik  <timj@imendio.com>
 
-	* gtk/gtkstatusicon.c (gtk_status_icon_position_menu): fixed push_in description.
+	* gtk/gtkstatusicon.c (gtk_status_icon_position_menu): fixed
+	push_in description.
 
 2007-06-27  Johan Dahlin  <jdahlin@async.com.br>
 
