@@ -1,3 +1,8 @@
+Wed Jun 27 13:27:21 2007  Tim Janik  <timj@gtk.org>
+
+	* gtk/gtkradiobutton.[hc]: applied patch to improve variable names, 
+	by Olivier Delhomme, #451527.
+
 Wed Jun 27 11:57:41 2007  Tim Janik  <timj@imendio.com>
 
 	* gtk/gtkstatusicon.c (gtk_status_icon_position_menu): fixed push_in description.

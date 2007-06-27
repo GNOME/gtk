@@ -301,28 +301,28 @@ gtk_radio_button_new_with_mnemonic (GSList      *group,
 }
 
 GtkWidget*
-gtk_radio_button_new_from_widget (GtkRadioButton *group)
+gtk_radio_button_new_from_widget (GtkRadioButton *radio_group_member)
 {
   GSList *l = NULL;
-  if (group)
-    l = gtk_radio_button_get_group (group);
+  if (radio_group_member)
+    l = gtk_radio_button_get_group (radio_group_member);
   return gtk_radio_button_new (l);
 }
 
 
 GtkWidget*
-gtk_radio_button_new_with_label_from_widget (GtkRadioButton *group,
+gtk_radio_button_new_with_label_from_widget (GtkRadioButton *radio_group_member,
 					     const gchar    *label)
 {
   GSList *l = NULL;
-  if (group)
-    l = gtk_radio_button_get_group (group);
+  if (radio_group_member)
+    l = gtk_radio_button_get_group (radio_group_member);
   return gtk_radio_button_new_with_label (l, label);
 }
 
 /**
  * gtk_radio_button_new_with_mnemonic_from_widget:
- * @group: widget to get radio group from
+ * @radio_group_member: widget to get radio group from or %NULL
  * @label: the text of the button, with an underscore in front of the
  *         mnemonic character
  * @returns: a new #GtkRadioButton
@@ -332,12 +332,12 @@ gtk_radio_button_new_with_label_from_widget (GtkRadioButton *group,
  * in @label indicate the mnemonic for the button.
  **/
 GtkWidget*
-gtk_radio_button_new_with_mnemonic_from_widget (GtkRadioButton *group,
+gtk_radio_button_new_with_mnemonic_from_widget (GtkRadioButton *radio_group_member,
 					        const gchar    *label)
 {
   GSList *l = NULL;
-  if (group)
-    l = gtk_radio_button_get_group (group);
+  if (radio_group_member)
+    l = gtk_radio_button_get_group (radio_group_member);
   return gtk_radio_button_new_with_mnemonic (l, label);
 }
 
