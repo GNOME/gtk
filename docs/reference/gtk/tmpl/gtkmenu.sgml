@@ -394,8 +394,8 @@ and @y parameters to the coordinates where the menu is to be drawn.
 menu shall be drawn.  This is an output parameter.
 @y: address of the #gint representing the vertical position where the
 menu shall be drawn.  This is an output parameter.
-@push_in: whether the menu should be pushed in to be completely inside the
-  screen instead of just clamped to the size to the screen.
+@push_in: whether the first menu item should be offset (pushed in) to be
+          aligned with the menu popup position (only useful for GtkOptionMenu).
 @user_data: the data supplied by the user in the gtk_menu_popup() @data
 parameter.
 
@@ -407,6 +407,7 @@ will be called when the menu is later detached from the widget.
 </para>
 
 @attach_widget: the #GtkWidget that the menu is being detached from.
+
 @menu: the #GtkMenu being detached.
 
 

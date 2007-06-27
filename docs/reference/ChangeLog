@@ -1,3 +1,7 @@
+Wed Jun 27 11:57:13 2007  Tim Janik  <timj@imendio.com>
+
+	* gtk/tmpl/gtkmenu.sgml: fixed push_in description.
+
 2007-06-25  Matthias Clasen <mclasen@redhat.com>
 
 	* gtk/Makefile.am:
