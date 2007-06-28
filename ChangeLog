@@ -1,5 +1,9 @@
 2007-06-27  Johan Dahlin  <jdahlin@async.com.br>
 
+	* gtk/gtkbuilderparser.c (parse_property): Use
+	the attribute name in the error message instead of
+	the value.
+	
 	* demos/gtk-demo/demo.ui: Set name of Help menu
 	to HelpMenu
 

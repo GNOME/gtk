@@ -211,7 +211,7 @@ parse_object (ParserData   *data,
         constructor = g_strdup (values[i]);
       else
 	{
-	  error_invalid_attribute (data, element_name, values[i], error);
+	  error_invalid_attribute (data, element_name, names[i], error);
 	  return;
 	}
     }
@@ -318,7 +318,7 @@ parse_child (ParserData   *data,
             }
         }
       else
-	error_invalid_attribute (data, element_name, values[i], error);
+	error_invalid_attribute (data, element_name, names[i], error);
     }
 
   child_info->parent = (CommonInfo*)object_info;
@@ -356,7 +356,7 @@ parse_property (ParserData   *data,
         translatable = strcmp (values[i], "yes") == 0;
       else
 	{
-	  error_invalid_attribute (data, element_name, values[i], error);
+	  error_invalid_attribute (data, element_name, names[i], error);
 	  return;
 	}
     }
@@ -418,7 +418,7 @@ parse_signal (ParserData   *data,
         object = g_strdup (values[i]);
       else
 	{
-	  error_invalid_attribute (data, element_name, values[i], error);
+	  error_invalid_attribute (data, element_name, names[i], error);
 	  return;
 	}
     }
@@ -480,7 +480,7 @@ parse_interface (ParserData   *data,
 	  break;
 	}
       else
-	error_invalid_attribute (data, "interface", values[i], error);
+	error_invalid_attribute (data, "interface", names[i], error);
     }
 }
 
