@@ -1,8 +1,19 @@
 2007-06-28  Mathias Hasselmann  <mathias.hasselmann@gmx.de>
 
-	* gtk/gtkhbox.c, gtk/gtkhbox.h, gtk/gtk.symbols, 
-	tests/testextendedlayout.c: Initial, buggish implementation
-	of baseline alignment in GtkHBox.
+	* gtk/gtkhbox.c: Merge separate, but nearly identical child allocation
+	code for start and end packing into one single loop. This should avoid
+	programming errors caused by extensive code duplication, as they happend 
+	to me with the previous commit. Maybe some advanced compiler is able
+	to do the trivial loop unrolling.
+	* tests/testextendedlayout.c: Use exteriour guides instead of
+	separators to identify GtkHBox allocation and extend the baseline
+	alignment tests for GtkHBox.
+
+2007-06-28  Mathias Hasselmann  <mathias.hasselmann@gmx.de>
+
+	* gtk/gtkhbox.c, gtk/gtkhbox.h, gtk/gtk.symbols:
+	Initial, buggish implementation of baseline alignment in GtkHBox.
+	* tests/testextendedlayout.c: Add baseline alignment tests.
 
 2007-06-28  Mathias Hasselmann  <mathias.hasselmann@gmx.de>
 

@@ -341,7 +341,7 @@ create_baseline_test (TestSuite *suite)
 }
 
 static TestCase*
-create_baseline_test_bin (TestSuite *suite)
+create_baseline_test2 (TestSuite *suite)
 {
   GtkWidget *bin;
   GtkWidget *label;
@@ -366,10 +366,16 @@ create_baseline_test_bin (TestSuite *suite)
       NULL
     };
 
+  const gchar *names[] = 
+    {
+      "default", "baseline", "baseline and bottom-padding", 
+      "baseline and top-padding", "baseline and border-width"
+    };
+
   TestCase *test = test_case_new (suite, "Baseline Alignment II",
                                   gtk_alignment_new (0.5, 0.5, 0.0, 0.0));
 
-  table = gtk_table_new (G_N_ELEMENTS (types) + 6, 
+  table = gtk_table_new (G_N_ELEMENTS (types) + 4, 
                          G_N_ELEMENTS (markup),
                          FALSE);
 
@@ -400,25 +406,24 @@ create_baseline_test_bin (TestSuite *suite)
         }
     }
 
-  gtk_table_attach (GTK_TABLE (table), gtk_hseparator_new (),
-                    0, G_N_ELEMENTS (markup),
-                    G_N_ELEMENTS (types), G_N_ELEMENTS (types) + 1,
-                    GTK_FILL, GTK_FILL, 0, 0);
-
-  for (i = 0; i < 6; i += 2)
+  for (i = 0; i < 5; ++i)
     {
+      label = gtk_label_new (names[i]);
+      gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
+  
       hbox = gtk_hbox_new (FALSE, 6);
-      gtk_hbox_set_baseline_policy (GTK_HBOX (hbox), GTK_BASELINE_FIRST);
+      test_case_append_guide (test, hbox, GUIDE_EXTERIOUR_BOTH, -1);
+      g_object_set_data (G_OBJECT (hbox), "debug-wanted", TRUE);
+      gtk_widget_set_name (hbox, names[i]);
 
-      gtk_table_attach (GTK_TABLE (table), hbox,
-                        0, G_N_ELEMENTS (markup),
-                        G_N_ELEMENTS (types) + i + 1,
-                        G_N_ELEMENTS (types) + i + 2,
+      if (i > 0)
+        gtk_hbox_set_baseline_policy (GTK_HBOX (hbox), GTK_BASELINE_FIRST);
+
+      gtk_table_attach (GTK_TABLE (table), label, 0, 1,
+                        G_N_ELEMENTS (types) + i, G_N_ELEMENTS (types) + i + 1,
                         GTK_FILL, GTK_FILL, 0, 0);
-      gtk_table_attach (GTK_TABLE (table), gtk_hseparator_new (),
-                        0, G_N_ELEMENTS (markup),
-                        G_N_ELEMENTS (types) + i + 2,
-                        G_N_ELEMENTS (types) + i + 3,
+      gtk_table_attach (GTK_TABLE (table), hbox, 1, G_N_ELEMENTS (markup),
+                        G_N_ELEMENTS (types) + i, G_N_ELEMENTS (types) + i + 1,
                         GTK_FILL, GTK_FILL, 0, 0);
 
       for (j = 0; markup[j]; ++j)
@@ -428,13 +433,26 @@ create_baseline_test_bin (TestSuite *suite)
 
           test_case_append_guide (test, label, GUIDE_BASELINE, G_N_ELEMENTS (types));
 
-          if (0 == j && i >= 2)
+          if (0 == j && i > 1)
             {
               bin = gtk_alignment_new (0.5, 0.5, 0.0, 0.0);
-              gtk_alignment_set_padding (GTK_ALIGNMENT (bin), 0, 0, 0, 0);
-//                                         i < 3 ? 20 : 0, i > 3 ? 20 : 0, 0, 0);
-              gtk_container_add (GTK_CONTAINER (bin), label);
 
+              switch (i) 
+                {
+                  case 2:
+                    gtk_alignment_set_padding (GTK_ALIGNMENT (bin), 0, 25, 0, 0);
+                    break;
+
+                  case 3:
+                    gtk_alignment_set_padding (GTK_ALIGNMENT (bin), 25, 0, 0, 0);
+                    break;
+
+                  case 4:
+                    gtk_container_set_border_width (GTK_CONTAINER (bin), 12);
+                    break;
+                }
+
+              gtk_container_add (GTK_CONTAINER (bin), label);
               gtk_box_pack_start (GTK_BOX (hbox), bin, FALSE, TRUE, 0);
             }
           else
@@ -914,7 +932,7 @@ test_suite_new ()
   test_suite_append (self, create_natural_size_test (self));
   test_suite_append (self, create_height_for_width_test (self));
   test_suite_append (self, create_baseline_test (self));
-  test_suite_append (self, create_baseline_test_bin (self));
+  test_suite_append (self, create_baseline_test2 (self));
 
   self->results = gtk_tree_store_new (COLUNN_COUNT,
                                       G_TYPE_STRING, PANGO_TYPE_WEIGHT,
