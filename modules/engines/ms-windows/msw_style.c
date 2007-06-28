@@ -2861,6 +2861,9 @@ draw_shadow (GtkStyle * style,
 
     if ( is_toolbar || is_handlebox )
 				{
+        if( shadow_type == GTK_SHADOW_NONE )
+	    return;
+
         if( widget ) {
             HDC dc;
             RECT rect;
