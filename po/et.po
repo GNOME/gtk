@@ -15,7 +15,7 @@ msgstr ""
 "Project-Id-Version: gtk+ 2.10\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2007-06-14 03:43+0100\n"
-"PO-Revision-Date: 2007-06-19 15:38+0300\n"
+"PO-Revision-Date: 2007-06-26 17:25+0300\n"
 "Last-Translator: Ivar Smolin <okul@linux.ee>\n"
 "Language-Team: Estonian <gnome-et@linux.ee>\n"
 "MIME-Version: 1.0\n"
@@ -2113,7 +2113,7 @@ msgstr "Kohandatud suuruste haldamine..."
 
 #: ../gtk/gtkpagesetupunixdialog.c:1034
 msgid "_Format for:"
-msgstr ""
+msgstr "Millele _vormindatakse:"
 
 #: ../gtk/gtkpagesetupunixdialog.c:1055
 msgid "_Paper size:"
@@ -2478,7 +2478,7 @@ msgstr "Grupp"
 
 #: ../gtk/gtkradiotoolbutton.c:66
 msgid "The radio tool button whose group this button belongs to."
-msgstr ""
+msgstr "Grupp, millesse raadionupp kuulub."
 
 #: ../gtk/gtkrc.c:2836
 #, c-format
@@ -2950,11 +2950,11 @@ msgstr "RLE Pa_remalt-vasakule põimimine"
 
 #: ../gtk/gtktextutil.c:64
 msgid "LRO Left-to-right _override"
-msgstr ""
+msgstr "LRO Vasakult-paremale ü_lekirjutamine"
 
 #: ../gtk/gtktextutil.c:65
 msgid "RLO Right-to-left o_verride"
-msgstr ""
+msgstr "RLO Paremalt-vasakule üle_kirjutamine"
 
 #: ../gtk/gtktextutil.c:66
 msgid "PDF _Pop directional formatting"
