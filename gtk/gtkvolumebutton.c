@@ -38,6 +38,7 @@
 
 #include "gtkalias.h"
 
+#define EPSILON (1e-10)
 
 struct _GtkVolumeButton
 {
@@ -53,8 +54,6 @@ static void	cb_value_changed		(GtkVolumeButton      *button,
 						 gdouble               value,
 						 gpointer              user_data);
 
-static GtkScaleButtonClass *parent_class = NULL;
-
 G_DEFINE_TYPE (GtkVolumeButton, gtk_volume_button, GTK_TYPE_SCALE_BUTTON)
 
 static void
@@ -62,7 +61,6 @@ gtk_volume_button_class_init (GtkVolumeButtonClass *klass)
 {
   GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
 
-  parent_class = g_type_class_peek_parent (klass);
   gobject_class->dispose = gtk_volume_button_dispose;
 }
 
@@ -88,7 +86,7 @@ gtk_volume_button_init (GtkVolumeButton *button)
 
   gtk_scale_button_set_icons (sbutton, icons);
 
-  adj = gtk_adjustment_new (0, 0, 100, 2, 10 * 2, 0);
+  adj = gtk_adjustment_new (0., 0., 1., 0.02, 0.2, 0.);
   g_object_set (G_OBJECT (button),
 		"adjustment", adj,
 		"size", GTK_ICON_SIZE_SMALL_TOOLBAR,
@@ -113,7 +111,7 @@ gtk_volume_button_dispose (GObject *object)
     g_object_unref (button->tooltips);
   button->tooltips = NULL;
 
-  G_OBJECT_CLASS (parent_class)->dispose (object);
+  G_OBJECT_CLASS (gtk_volume_button_parent_class)->dispose (object);
 }
 
 /**
@@ -138,16 +136,19 @@ gtk_volume_button_new (void)
 static void
 gtk_volume_button_update_tooltip (GtkVolumeButton *button)
 {
+  GtkScaleButton *scale_button = GTK_SCALE_BUTTON (button);
+  GtkAdjustment *adj;
   gdouble val;
   char *str;
 
-  val = gtk_scale_button_get_value (GTK_SCALE_BUTTON (button));
+  adj = gtk_scale_button_get_adjustment (scale_button);
+  val = gtk_scale_button_get_value (scale_button);
 
-  if (val == 0.0)
+  if (val < (adj->lower + EPSILON))
     {
       str = g_strdup (_("Muted"));
     }
-  else if (val == 100.0)
+  else if (val >= (adj->upper - EPSILON))
     {
       str = g_strdup (_("Full Volume"));
     }
@@ -155,10 +156,15 @@ gtk_volume_button_update_tooltip (GtkVolumeButton *button)
     {
       int percent;
 
-      percent = (int) val;
-      /* translators, this is the percentage of the current volume,
-       * as used in the tooltip, eg. "49 %"
-       * do not translate the part before the | */
+      percent = (int) (100. * val / (adj->upper - adj->lower) + .5);
+
+      /* Translators: this is the percentage of the current volume,
+       * as used in the tooltip, eg. "49 %".
+       * Translate the "%d" to "%Id" if you want to use localised digits,
+       * or otherwise translate the "%d" to "%d".
+       * Do not translate and do not include the "volume percentage|"
+       * part in the translation!
+       */
       str = g_strdup_printf (Q_("volume percentage|%d %%"), percent);
     }
 
