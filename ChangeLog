@@ -1,3 +1,10 @@
+2007-06-28  Johan Dahlin  <jdahlin@async.com.br>
+
+	* gtk/gtk-builder-convert (_indent): Prettify the output by
+	running it through xmllint --format if xmllint is available 
+	which also requires the subprocess module only available 
+	in python 2.4 or later
+
 2007-06-28  Christian Persch  <chpe@gnome.org>
 
 	* gtk/gtkvolumebutton.c: (gtk_volume_button_class_init),

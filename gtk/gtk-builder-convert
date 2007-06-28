@@ -25,9 +25,17 @@
 #  GtkTextView.text -> GtkTextBuffer
 #  Toolbars
 
+import os
 import sys
 
 from xml.dom import minidom, Node
+
+# The subprocess is only available in Python 2.4+
+try:
+    import subprocess
+    subprocess # pyflakes
+except ImportError:
+    subprocess = None
 
 def get_child_nodes(node):
     nodes = []
@@ -354,14 +362,34 @@ class GtkBuilderConverter(object):
             widget.getAttributeNode("constructor").value = parent_id
         node.removeAttribute("id")
 
+def _indent(output):
+    if not subprocess:
+        return output
+
+    for directory in os.environ['PATH'].split(os.pathsep):
+        filename = os.path.join(directory, 'xmllint')
+        if os.path.exists(filename):
+            break
+    else:
+        return output
+
+    s = subprocess.Popen([filename, '--format', '-'],
+                         stdin=subprocess.PIPE,
+                         stdout=subprocess.PIPE)
+    s.stdin.write(output)
+    s.stdin.close()
+    return s.stdout.read()
+
 
 def main():
     if len(sys.argv) < 2:
-        print "Usage: %s filename.glade" % (sys.argv[0],)
-        return
+        raise SystemExit("Usage: %s filename.glade" % (sys.argv[0],))
+
     conv = GtkBuilderConverter()
     conv.parse_file(sys.argv[1])
-    print conv.to_xml()
+
+    xml = conv.to_xml()
+    print _indent(xml)
 
 if __name__ == "__main__":
     main()
