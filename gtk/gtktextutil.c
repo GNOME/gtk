@@ -387,7 +387,9 @@ layout_get_char_width (PangoLayout *layout)
  * _gtk_text_util_get_block_cursor_location
  * @layout: a #PangoLayout
  * @index: index at which cursor is located
- * @rect: cursor location
+ * @pos: cursor location
+ * @at_line_end: whether cursor i sdrawn at line end, not over some
+ * character
  *
  * Returns: whether cursor should actually be drawn as a rectangle.
  * It may not be the case if character at index is invisible.
@@ -402,6 +404,7 @@ _gtk_text_util_get_block_cursor_location (PangoLayout    *layout,
   PangoLayoutLine *layout_line;
   gboolean rtl;
   gint line_no;
+  const gchar *text;
 
   g_return_val_if_fail (layout != NULL, FALSE);
   g_return_val_if_fail (index >= 0, FALSE);
@@ -423,23 +426,23 @@ _gtk_text_util_get_block_cursor_location (PangoLayout    *layout,
     }
 
   pango_layout_index_to_line_x (layout, index, FALSE, &line_no, NULL);
-  g_return_val_if_fail (line_no >= 0, FALSE);
   layout_line = pango_layout_get_line_readonly (layout, line_no);
-
-  /* end of layout, get last line */
-  if (!layout_line)
-    {
-      line_no -= 1;
-      layout_line = pango_layout_get_line_readonly (layout, line_no);
-    }
-
   g_return_val_if_fail (layout_line != NULL, FALSE);
+
+  text = pango_layout_get_text (layout);
 
   if (index < layout_line->start_index + layout_line->length)
     {
-      /* cursor points to some zero-width character, do not
-       * bother with block cursor */
-      return FALSE;
+      /* this may be a zero-width character in the middle of the line,
+       * or it could be a character where line is wrapped, we do want
+       * block cursor in latter case */
+      if (g_utf8_next_char (text + index) - text !=
+	  layout_line->start_index + layout_line->length)
+	{
+	  /* zero-width character in the middle of the line, do not
+	   * bother with block cursor */
+	  return FALSE;
+	}
     }
 
   /* Cursor is at the line end. It may be an empty line, or it could
@@ -459,23 +462,19 @@ _gtk_text_util_get_block_cursor_location (PangoLayout    *layout,
    * pixel of the layout line, so we need to correct it for RTL text. */
   if (layout_line->length)
     {
-      gint left, right;
-      const gchar *text;
-      const gchar *p;
-
-      text = pango_layout_get_text (layout);
-      p = g_utf8_prev_char (text + index);
-
-      pango_layout_line_index_to_x (layout_line, p - text, FALSE, &left);
-      pango_layout_line_index_to_x (layout_line, p - text, TRUE, &right);
-
-      if (MIN (left, right) <= 0)
+      if (layout_line->resolved_dir == PANGO_DIRECTION_RTL)
 	{
-          /* last character is on the left, RTL */
-
 	  PangoLayoutIter *iter;
 	  PangoRectangle line_rect;
 	  gint i;
+	  gint left, right;
+	  const gchar *p;
+
+	  p = g_utf8_prev_char (text + index);
+
+	  pango_layout_line_index_to_x (layout_line, p - text, FALSE, &left);
+	  pango_layout_line_index_to_x (layout_line, p - text, TRUE, &right);
+	  pos->x = MIN (left, right);
 
 	  iter = pango_layout_get_iter (layout);
 	  for (i = 0; i < line_no; i++)
@@ -484,7 +483,7 @@ _gtk_text_util_get_block_cursor_location (PangoLayout    *layout,
 	  pango_layout_iter_free (iter);
 
           rtl = TRUE;
-	  pos->x = MIN (left, right) + line_rect.x;
+	  pos->x += line_rect.x;
 	}
       else
 	rtl = FALSE;

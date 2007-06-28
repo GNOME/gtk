@@ -1,3 +1,11 @@
+2007-06-28  Yevgen Muntyan  <muntyan@tamu.edu>
+
+	* gtk/gtktextutil.c (_gtk_text_util_get_block_cursor_location):
+	do right thing in one-character lines and at paragraph end (#448313).
+
+	* configure.in: require pango-1.17.3 to get fixed pango_layout_index_to_line_x()
+	(pango #448342).
+
 2007-06-27  Johan Dahlin  <jdahlin@async.com.br>
 
 	* gtk/gtkbuilderparser.c (parse_property): Use
