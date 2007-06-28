@@ -4,7 +4,7 @@
 	(gtk_volume_button_init), (gtk_volume_button_dispose),
 	(gtk_volume_button_update_tooltip): Make the volume button use range
 	0.0 to 1.0 by default, and fix tooltips code to cope with different ranges.
-	Bug #354181.
+	Bug #451866.
 
 2007-06-28  Yevgen Muntyan  <muntyan@tamu.edu>
 
