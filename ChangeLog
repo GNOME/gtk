@@ -1,5 +1,8 @@
 2007-06-27  Johan Dahlin  <jdahlin@async.com.br>
 
+	* demos/gtk-demo/demo.ui: Set name of Help menu
+	to HelpMenu
+
 	* gtk/gtkbuilder.c (apply_delayed_properties): 
 	Print out the name of the right object in the warning
 	(#451314, Philip Withnall)

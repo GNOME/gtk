@@ -94,7 +94,7 @@
                 </child>
                 <child>
                     <object class="GtkAction" id="HelpMenu">
-                        <property name="name">Help</property>
+                        <property name="name">HelpMenu</property>
                         <property name="label" translatable="yes">_Help</property>
                     </object>
                 </child>
