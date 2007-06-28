@@ -26,7 +26,7 @@ G_BEGIN_DECLS
 
 #define GTK_TYPE_EXTENDED_LAYOUT            (gtk_extended_layout_get_type ())
 #define GTK_EXTENDED_LAYOUT(obj)            (G_TYPE_CHECK_INSTANCE_CAST ((obj), GTK_TYPE_EXTENDED_LAYOUT, GtkExtendedLayout))
-#define GTK_EXTENDED_LAYOUT_CLASS(obj)      (G_TYPE_CHECK_CLASS_CAST ((obj), GTK_TYPE_EXTENDED_LAYOUT, GtkExtendedLayoutIface))
+#define GTK_EXTENDED_LAYOUT_CLASS(klass)    ((GtkExtendedLayoutIface*)g_type_interface_peek ((klass), GTK_TYPE_EXTENDED_LAYOUT))
 #define GTK_IS_EXTENDED_LAYOUT(obj)         (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GTK_TYPE_EXTENDED_LAYOUT))
 #define GTK_EXTENDED_LAYOUT_GET_IFACE(obj)  (G_TYPE_INSTANCE_GET_INTERFACE ((obj), GTK_TYPE_EXTENDED_LAYOUT, GtkExtendedLayoutIface))
 
@@ -42,19 +42,22 @@ G_BEGIN_DECLS
 #define GTK_EXTENDED_LAYOUT_HAS_BASELINES(obj) \
   (gtk_extended_layout_get_features (GTK_EXTENDED_LAYOUT ((obj))) & \
    GTK_EXTENDED_LAYOUT_BASELINES)
+#define GTK_EXTENDED_LAYOUT_HAS_PADDING(obj) \
+  (gtk_extended_layout_get_features (GTK_EXTENDED_LAYOUT ((obj))) & \
+   GTK_EXTENDED_LAYOUT_PADDING)
 
 typedef struct _GtkExtendedLayout           GtkExtendedLayout;
 typedef struct _GtkExtendedLayoutIface      GtkExtendedLayoutIface;
-typedef enum   _GtkExtendedLayoutFeatures   GtkExtendedLayoutFeatures;
 
 /*< flags >*/
-enum _GtkExtendedLayoutFeatures 
-{
-  GTK_EXTENDED_LAYOUT_WIDTH_FOR_HEIGHT = (1 << 0), 
-  GTK_EXTENDED_LAYOUT_HEIGHT_FOR_WIDTH = (1 << 1),
-  GTK_EXTENDED_LAYOUT_NATURAL_SIZE  =    (1 << 2),
-  GTK_EXTENDED_LAYOUT_BASELINES =        (1 << 3)
-};
+typedef enum {
+  GTK_EXTENDED_LAYOUT_NONE             = 0,
+  GTK_EXTENDED_LAYOUT_WIDTH_FOR_HEIGHT = 1 << 0, 
+  GTK_EXTENDED_LAYOUT_HEIGHT_FOR_WIDTH = 1 << 1,
+  GTK_EXTENDED_LAYOUT_NATURAL_SIZE     = 1 << 2,
+  GTK_EXTENDED_LAYOUT_BASELINES        = 1 << 3,
+  GTK_EXTENDED_LAYOUT_PADDING          = 1 << 4
+} GtkExtendedLayoutFeatures;
 
 struct _GtkExtendedLayoutIface
 {
@@ -71,6 +74,8 @@ struct _GtkExtendedLayoutIface
                                                      GtkRequisition     *requisition);
   gint                      (*get_baselines)        (GtkExtendedLayout  *layout,
                                                      gint              **baselines);
+  void                      (*get_padding)          (GtkExtendedLayout  *layout,
+                                                     GtkBorder          *padding);
 };
 
 
@@ -86,6 +91,8 @@ gint                      gtk_extended_layout_get_baselines        (GtkExtendedL
                                                                     gint              **baselines);
 gint                      gtk_extended_layout_get_single_baseline  (GtkExtendedLayout  *layout,
                                                                     GtkBaselinePolicy   policy);
+void                      gtk_extended_layout_get_padding          (GtkExtendedLayout  *layout,
+                                                                    GtkBorder          *padding);
 
 G_END_DECLS
 

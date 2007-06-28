@@ -215,5 +215,29 @@ gtk_extended_layout_get_single_baseline (GtkExtendedLayout *layout,
   return offset;
 }
 
+/**
+ * gtk_extended_layout_get_padding:
+ * @layout: a #GtkExtendedLayout
+ * @padding: an #GtkBorder to be filled with the padding
+ *
+ * Query the padding this layout item puts arround its content.
+ *
+ * Since: 2.14
+ **/
+void
+gtk_extended_layout_get_padding (GtkExtendedLayout *layout,
+                                 GtkBorder         *padding)
+{
+  GtkExtendedLayoutIface *iface;
+
+  g_return_if_fail (GTK_IS_EXTENDED_LAYOUT (layout));
+  g_return_if_fail (NULL != padding);
+
+  iface = GTK_EXTENDED_LAYOUT_GET_IFACE (layout);
+
+  g_return_if_fail (iface->get_padding);
+  iface->get_padding(layout, padding);
+}
+
 #define __GTK_EXTENDED_LAYOUT_C__
 #include "gtkaliasdef.c"

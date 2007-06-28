@@ -1329,6 +1329,7 @@ gtk_extended_layout_get_width_for_height
 gtk_extended_layout_get_natural_size
 gtk_extended_layout_get_baselines
 gtk_extended_layout_get_single_baseline
+gtk_extended_layout_get_padding
 #endif
 #endif
 

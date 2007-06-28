@@ -26,8 +26,9 @@
 
 #include <config.h>
 #include <string.h>
-#include "gtkalignment.h"
 #include "gtkbutton.h"
+#include "gtkalignment.h"
+#include "gtkextendedlayout.h"
 #include "gtklabel.h"
 #include "gtkmain.h"
 #include "gtkmarshalers.h"
@@ -141,10 +142,13 @@ static void gtk_button_state_changed   (GtkWidget             *widget,
 static void gtk_button_grab_notify     (GtkWidget             *widget,
 					gboolean               was_grabbed);
 
+static void gtk_button_extended_layout_init (GtkExtendedLayoutIface *iface);
 
 static guint button_signals[LAST_SIGNAL] = { 0 };
 
-G_DEFINE_TYPE (GtkButton, gtk_button, GTK_TYPE_BIN)
+G_DEFINE_TYPE_WITH_CODE (GtkButton, gtk_button, GTK_TYPE_BIN,
+                         G_IMPLEMENT_INTERFACE (GTK_TYPE_EXTENDED_LAYOUT,
+						gtk_button_extended_layout_init))
 
 static void
 gtk_button_class_init (GtkButtonClass *klass)
@@ -1137,26 +1141,56 @@ gtk_button_size_request (GtkWidget      *widget,
 }
 
 static void
-gtk_button_size_allocate (GtkWidget     *widget,
-			  GtkAllocation *allocation)
+gtk_button_extended_layout_get_padding (GtkExtendedLayout *layout,
+                                        GtkBorder         *padding)
 {
-  GtkButton *button = GTK_BUTTON (widget);
-  GtkAllocation child_allocation;
+  GtkWidget *widget = GTK_WIDGET (layout);
 
   gint border_width = GTK_CONTAINER (widget)->border_width;
-  gint xthickness = GTK_WIDGET (widget)->style->xthickness;
-  gint ythickness = GTK_WIDGET (widget)->style->ythickness;
+  gint xthickness = widget->style->xthickness;
+  gint ythickness = widget->style->ythickness;
   GtkBorder default_border;
   GtkBorder inner_border;
   gint focus_width;
   gint focus_pad;
 
-  gtk_button_get_props (button, &default_border, NULL, &inner_border, NULL);
-  gtk_widget_style_get (GTK_WIDGET (widget),
+  gtk_button_get_props (GTK_BUTTON (layout), 
+                        &default_border, NULL,
+                        &inner_border, NULL);
+
+  gtk_widget_style_get (widget,
 			"focus-line-width", &focus_width,
 			"focus-padding", &focus_pad,
 			NULL);
- 
+
+  padding->left = border_width + inner_border.left + xthickness;
+  padding->right = border_width + inner_border.right + xthickness;
+  padding->bottom = border_width + inner_border.bottom + ythickness;
+  padding->top = border_width + inner_border.top + ythickness;
+      
+  if (GTK_WIDGET_CAN_DEFAULT (widget))
+    {
+      padding->left += default_border.left;
+      padding->right += default_border.right;
+      padding->bottom += default_border.bottom;
+      padding->top += default_border.top;
+    }
+
+  if (GTK_WIDGET_CAN_FOCUS (widget))
+    {
+      padding->left += focus_width + focus_pad;
+      padding->right += focus_width + focus_pad;
+      padding->bottom += focus_width + focus_pad;
+      padding->top += focus_width + focus_pad;
+    }
+}
+
+static void
+gtk_button_size_allocate (GtkWidget     *widget,
+			  GtkAllocation *allocation)
+{
+  GtkButton *button = GTK_BUTTON (widget);
+  gint border_width = GTK_CONTAINER (widget)->border_width;
 			    
   widget->allocation = *allocation;
 
@@ -1169,48 +1203,29 @@ gtk_button_size_allocate (GtkWidget     *widget,
 
   if (GTK_BIN (button)->child && GTK_WIDGET_VISIBLE (GTK_BIN (button)->child))
     {
-      child_allocation.x = widget->allocation.x + border_width + inner_border.left + xthickness;
-      child_allocation.y = widget->allocation.y + border_width + inner_border.top + ythickness;
-      
-      child_allocation.width = MAX (1, widget->allocation.width -
-                                    xthickness * 2 -
-                                    inner_border.left -
-                                    inner_border.right -
-				    border_width * 2);
-      child_allocation.height = MAX (1, widget->allocation.height -
-                                     ythickness * 2 -
-                                     inner_border.top -
-                                     inner_border.bottom -
-				     border_width * 2);
+      GtkAllocation child_allocation;
+      GtkBorder padding;
 
-      if (GTK_WIDGET_CAN_DEFAULT (button))
-	{
-	  child_allocation.x += default_border.left;
-	  child_allocation.y += default_border.top;
-	  child_allocation.width =  MAX (1, child_allocation.width - default_border.left - default_border.right);
-	  child_allocation.height = MAX (1, child_allocation.height - default_border.top - default_border.bottom);
-	}
+      gtk_button_extended_layout_get_padding (GTK_EXTENDED_LAYOUT (widget), &padding);
 
-      if (GTK_WIDGET_CAN_FOCUS (button))
-	{
-	  child_allocation.x += focus_width + focus_pad;
-	  child_allocation.y += focus_width + focus_pad;
-	  child_allocation.width =  MAX (1, child_allocation.width - (focus_width + focus_pad) * 2);
-	  child_allocation.height = MAX (1, child_allocation.height - (focus_width + focus_pad) * 2);
-	}
+      child_allocation.x = widget->allocation.x + padding.left;
+      child_allocation.y = widget->allocation.y + padding.top;
+      child_allocation.width = MAX (1, widget->allocation.width - padding.left - padding.right);
+      child_allocation.height = MAX (1, widget->allocation.height - padding.bottom - padding.top);
 
       if (button->depressed)
-	{
-	  gint child_displacement_x;
-	  gint child_displacement_y;
-	  
-	  gtk_widget_style_get (widget,
-				"child-displacement-x", &child_displacement_x, 
-				"child-displacement-y", &child_displacement_y,
-				NULL);
-	  child_allocation.x += child_displacement_x;
-	  child_allocation.y += child_displacement_y;
-	}
+        {
+          gint child_displacement_x;
+          gint child_displacement_y;
+          
+          gtk_widget_style_get (widget,
+                                "child-displacement-x", &child_displacement_x, 
+                                "child-displacement-y", &child_displacement_y,
+                                NULL);
+
+          child_allocation.x += child_displacement_x;
+          child_allocation.y += child_displacement_y;
+        }
 
       gtk_widget_size_allocate (GTK_BIN (button)->child, &child_allocation);
     }
@@ -2060,6 +2075,24 @@ gtk_button_get_image_position (GtkButton *button)
   return priv->image_position;
 }
 
+static GtkExtendedLayoutFeatures
+gtk_button_extended_layout_get_features (GtkExtendedLayout *layout)
+{
+  GtkExtendedLayoutFeatures features;
+
+  features = 
+    GTK_EXTENDED_LAYOUT_CLASS (gtk_button_parent_class)->
+    get_features (layout);
+
+  return features | GTK_EXTENDED_LAYOUT_PADDING;
+}
+
+static void
+gtk_button_extended_layout_init (GtkExtendedLayoutIface *iface)
+{
+  iface->get_features = gtk_button_extended_layout_get_features;
+  iface->get_padding = gtk_button_extended_layout_get_padding;
+}
 
 #define __GTK_BUTTON_C__
 #include "gtkaliasdef.c"  

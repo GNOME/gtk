@@ -26,6 +26,7 @@
 
 #include <config.h>
 #include "gtkalignment.h"
+#include "gtkextendedlayout.h"
 #include "gtkprivate.h"
 #include "gtkintl.h"
 #include "gtkalias.h"
@@ -50,10 +51,7 @@ enum {
 
 struct _GtkAlignmentPrivate
 {
-  guint padding_top;
-  guint padding_bottom;
-  guint padding_left;
-  guint padding_right;
+  GtkBorder padding;
 };
 
 static void gtk_alignment_size_request  (GtkWidget         *widget,
@@ -69,7 +67,11 @@ static void gtk_alignment_get_property (GObject         *object,
                                         GValue          *value,
                                         GParamSpec      *pspec);
 
-G_DEFINE_TYPE (GtkAlignment, gtk_alignment, GTK_TYPE_BIN)
+static void gtk_alignment_extended_layout_init (GtkExtendedLayoutIface *iface);
+
+G_DEFINE_TYPE_WITH_CODE (GtkAlignment, gtk_alignment, GTK_TYPE_BIN,
+                         G_IMPLEMENT_INTERFACE (GTK_TYPE_EXTENDED_LAYOUT,
+						gtk_alignment_extended_layout_init))
 
 static void
 gtk_alignment_class_init (GtkAlignmentClass *class)
@@ -211,10 +213,10 @@ gtk_alignment_init (GtkAlignment *alignment)
 
   /* Initialize padding with default values: */
   priv = GTK_ALIGNMENT_GET_PRIVATE (alignment);
-  priv->padding_top = 0;
-  priv->padding_bottom = 0;
-  priv->padding_left = 0;
-  priv->padding_right = 0;
+  priv->padding.top = 0;
+  priv->padding.bottom = 0;
+  priv->padding.left = 0;
+  priv->padding.right = 0;
 }
 
 GtkWidget*
@@ -282,29 +284,29 @@ gtk_alignment_set_property (GObject         *object,
     case PROP_TOP_PADDING:
       gtk_alignment_set_padding (alignment,
 			 g_value_get_uint (value),
-			 priv->padding_bottom,
-			 priv->padding_left,
-			 priv->padding_right);
+			 priv->padding.bottom,
+			 priv->padding.left,
+			 priv->padding.right);
       break;
     case PROP_BOTTOM_PADDING:
       gtk_alignment_set_padding (alignment,
-			 priv->padding_top,
+			 priv->padding.top,
 			 g_value_get_uint (value),
-			 priv->padding_left,
-			 priv->padding_right);
+			 priv->padding.left,
+			 priv->padding.right);
       break;
     case PROP_LEFT_PADDING:
       gtk_alignment_set_padding (alignment,
-			 priv->padding_top,
-			 priv->padding_bottom,
+			 priv->padding.top,
+			 priv->padding.bottom,
 			 g_value_get_uint (value),
-			 priv->padding_right);
+			 priv->padding.right);
       break;
     case PROP_RIGHT_PADDING:
       gtk_alignment_set_padding (alignment,
-			 priv->padding_top,
-			 priv->padding_bottom,
-			 priv->padding_left,
+			 priv->padding.top,
+			 priv->padding.bottom,
+			 priv->padding.left,
 			 g_value_get_uint (value));
       break;
     
@@ -343,16 +345,16 @@ gtk_alignment_get_property (GObject         *object,
 
     /* Padding: */
     case PROP_TOP_PADDING:
-      g_value_set_uint (value, priv->padding_top);
+      g_value_set_uint (value, priv->padding.top);
       break;
     case PROP_BOTTOM_PADDING:
-      g_value_set_uint (value, priv->padding_bottom);
+      g_value_set_uint (value, priv->padding.bottom);
       break;
     case PROP_LEFT_PADDING:
-      g_value_set_uint (value, priv->padding_left);
+      g_value_set_uint (value, priv->padding.left);
       break;
     case PROP_RIGHT_PADDING:
-      g_value_set_uint (value, priv->padding_right);
+      g_value_set_uint (value, priv->padding.right);
       break;
       
     default:
@@ -433,8 +435,8 @@ gtk_alignment_size_request (GtkWidget      *widget,
       requisition->height += child_requisition.height;
 
       /* Request extra space for the padding: */
-      requisition->width += (priv->padding_left + priv->padding_right);
-      requisition->height += (priv->padding_top + priv->padding_bottom);
+      requisition->width += (priv->padding.left + priv->padding.right);
+      requisition->height += (priv->padding.top + priv->padding.bottom);
     }
 }
 
@@ -465,8 +467,8 @@ gtk_alignment_size_allocate (GtkWidget     *widget,
       border_width = GTK_CONTAINER (alignment)->border_width;
 
       priv = GTK_ALIGNMENT_GET_PRIVATE (widget);
-      padding_horizontal = priv->padding_left + priv->padding_right;
-      padding_vertical = priv->padding_top + priv->padding_bottom;
+      padding_horizontal = priv->padding.left + priv->padding.right;
+      padding_vertical = priv->padding.top + priv->padding.bottom;
 
       width = allocation->width - padding_horizontal - 2 * border_width;
       height = allocation->height - padding_vertical - 2 * border_width;
@@ -486,11 +488,11 @@ gtk_alignment_size_allocate (GtkWidget     *widget,
 	child_allocation.height = height;
 
       if (gtk_widget_get_direction (widget) == GTK_TEXT_DIR_RTL)
-	child_allocation.x = (1.0 - alignment->xalign) * (width - child_allocation.width) + allocation->x + border_width + priv->padding_right;
+	child_allocation.x = (1.0 - alignment->xalign) * (width - child_allocation.width) + allocation->x + border_width + priv->padding.right;
       else 
-	child_allocation.x = alignment->xalign * (width - child_allocation.width) + allocation->x + border_width + priv->padding_left;
+	child_allocation.x = alignment->xalign * (width - child_allocation.width) + allocation->x + border_width + priv->padding.left;
 
-      child_allocation.y = alignment->yalign * (height - child_allocation.height) + allocation->y + border_width + priv->padding_top;
+      child_allocation.y = alignment->yalign * (height - child_allocation.height) + allocation->y + border_width + priv->padding.top;
 
       gtk_widget_size_allocate (bin->child, &child_allocation);
     }
@@ -526,24 +528,24 @@ gtk_alignment_set_padding (GtkAlignment    *alignment,
 
   g_object_freeze_notify (G_OBJECT (alignment));
 
-  if (priv->padding_top != padding_top)
+  if (priv->padding.top != padding_top)
     {
-      priv->padding_top = padding_top;
+      priv->padding.top = padding_top;
       g_object_notify (G_OBJECT (alignment), "top-padding");
     }
-  if (priv->padding_bottom != padding_bottom)
+  if (priv->padding.bottom != padding_bottom)
     {
-      priv->padding_bottom = padding_bottom;
+      priv->padding.bottom = padding_bottom;
       g_object_notify (G_OBJECT (alignment), "bottom-padding");
     }
-  if (priv->padding_left != padding_left)
+  if (priv->padding.left != padding_left)
     {
-      priv->padding_left = padding_left;
+      priv->padding.left = padding_left;
       g_object_notify (G_OBJECT (alignment), "left-padding");
     }
-  if (priv->padding_right != padding_right)
+  if (priv->padding.right != padding_right)
     {
-      priv->padding_right = padding_right;
+      priv->padding.right = padding_right;
       g_object_notify (G_OBJECT (alignment), "right-padding");
     }
 
@@ -579,16 +581,50 @@ gtk_alignment_get_padding (GtkAlignment    *alignment,
   GtkAlignmentPrivate *priv;
  
   g_return_if_fail (GTK_IS_ALIGNMENT (alignment));
-
   priv = GTK_ALIGNMENT_GET_PRIVATE (alignment);
+
   if(padding_top)
-    *padding_top = priv->padding_top;
+    *padding_top = priv->padding.top;
   if(padding_bottom)
-    *padding_bottom = priv->padding_bottom;
+    *padding_bottom = priv->padding.bottom;
   if(padding_left)
-    *padding_left = priv->padding_left;
+    *padding_left = priv->padding.left;
   if(padding_right)
-    *padding_right = priv->padding_right;
+    *padding_right = priv->padding.right;
+}
+
+static GtkExtendedLayoutFeatures
+gtk_alignment_extended_layout_get_features (GtkExtendedLayout *layout)
+{
+  GtkExtendedLayoutFeatures features;
+
+  features = 
+    GTK_EXTENDED_LAYOUT_CLASS (gtk_alignment_parent_class)->
+    get_features (layout);
+
+  return features | GTK_EXTENDED_LAYOUT_PADDING;
+}
+
+static void
+gtk_alignment_extended_layout_get_padding (GtkExtendedLayout *layout,
+                                           GtkBorder         *padding)
+{
+  GtkAlignmentPrivate *priv = GTK_ALIGNMENT_GET_PRIVATE (layout);
+  gint border_width = GTK_CONTAINER (layout)->border_width;
+
+  *padding = priv->padding;
+
+  padding->top += border_width;
+  padding->left += border_width;
+  padding->right += border_width;
+  padding->bottom += border_width;
+}
+
+static void
+gtk_alignment_extended_layout_init (GtkExtendedLayoutIface *iface)
+{
+  iface->get_features = gtk_alignment_extended_layout_get_features;
+  iface->get_padding = gtk_alignment_extended_layout_get_padding;
 }
 
 #define __GTK_ALIGNMENT_C__

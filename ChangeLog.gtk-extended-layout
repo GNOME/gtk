@@ -1,3 +1,12 @@
+2007-06-29  Mathias Hasselmann  <mathias.hasselmann@gmx.de>
+
+	* gtk/gtkextendedlayout.h, gtk/gtkextendedlayout.c,
+	gtk/gtk.symbols: Add gtk_extended_layout_get_padding.
+	* gtk/gtkalignment.c, gtk/gtkbin.c, gtk/gtkbutton.c, 
+	gtk/gtkframe.c: Implement gtk_extended_layout_get_padding.
+	* tests/autotestextendedlayout.c: Verify padding information 
+	provided via gtk_extended_layout_get_padding.
+
 2007-06-28  Mathias Hasselmann  <mathias.hasselmann@gmx.de>
 
 	* gtk/gtkhbox.c: Merge separate, but nearly identical child allocation

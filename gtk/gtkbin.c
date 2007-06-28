@@ -207,23 +207,29 @@ gtk_bin_extended_layout_get_baselines (GtkExtendedLayout  *layout,
                                        gint              **baselines)
 {
   GtkBin *bin = GTK_BIN (layout);
-  gint *baseptr, *baseend;
-  gint num_lines, dy;
+  gint num_lines;
 
   g_return_val_if_fail (GTK_IS_EXTENDED_LAYOUT (bin->child), -1);
 
-  layout = GTK_EXTENDED_LAYOUT (bin->child);
-  num_lines = gtk_extended_layout_get_baselines (layout, baselines);
+  num_lines = gtk_extended_layout_get_baselines (
+    GTK_EXTENDED_LAYOUT (bin->child), baselines);
 
-  if (baselines &&
-      gtk_widget_translate_coordinates (bin->child, GTK_WIDGET (bin),
-                                        0, 0, NULL, &dy))
+  if (baselines)
     {
-      baseptr = *baselines;
-      baseend = baseptr + num_lines;
+      gint *baseptr = *baselines;
+      gint *baseend = baseptr + num_lines;
+
+      GtkBorder padding;
+
+      if (GTK_EXTENDED_LAYOUT_HAS_PADDING (bin))
+        {
+          gtk_extended_layout_get_padding (layout, &padding);
+        }
+      else
+        padding.top = GTK_CONTAINER (bin)->border_width;
 
       while (baseptr < baseend)
-        *baseptr++ += dy;
+        *baseptr++ += padding.top;
     }
 
   return num_lines;

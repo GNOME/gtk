@@ -7,13 +7,13 @@
 /*****************************************************************************/
 
 #define log_test(condition) \
-  log_test_impl(G_STRFUNC, (condition), #condition)
+  log_test_impl(G_STRFUNC, __LINE__, (condition), #condition)
 #define log_testf(condition, format, ...) \
-  log_test_impl(G_STRFUNC, (condition), #condition " (" format ")", __VA_ARGS__)
+  log_test_impl(G_STRFUNC, __LINE__, (condition), #condition " (" format ")", __VA_ARGS__)
 #define log_testi(expected, number) G_STMT_START { \
     const gint i = (expected), j = (number); \
-    log_test_impl(G_STRFUNC, i == j, \
-                  #number " is " #expected " (actual number %d)", j); \
+    log_test_impl(G_STRFUNC, __LINE__, i == j, \
+                  #number " is " #expected " (actual number %d, expected: %d)", j, i); \
   } G_STMT_END
 
 #define log_info(format, ...) \
@@ -70,6 +70,7 @@ log_int_array_impl (const gchar *function,
 
 static void
 log_test_impl (const gchar *function,
+               gint         lineno,
                gboolean     passed, 
                const gchar *test_name, ...)
 {
@@ -83,7 +84,10 @@ log_test_impl (const gchar *function,
   str = g_strdup_vprintf (test_name, args);
   va_end (args);
 
-  g_printf ("%s: %s: %s\n", passed ? "PASS" : "FAIL", function, str);
+  g_printf ("%s: %s, line %d: %s\033[0m\n",
+            passed ? "PASS" : "\033[1;31mFAIL", 
+            function, lineno, str);
+
   g_free (str);
 }
 
@@ -327,26 +331,37 @@ gtk_bin_test_extended_layout (void)
 {
   const GType types[] = 
     { 
-      GTK_TYPE_ALIGNMENT, GTK_TYPE_BUTTON, 
-      GTK_TYPE_EVENT_BOX, GTK_TYPE_FRAME, 
+      GTK_TYPE_ALIGNMENT, GTK_TYPE_BUTTON,
+      GTK_TYPE_EVENT_BOX, GTK_TYPE_FRAME,
       G_TYPE_INVALID
     };
 
   GtkExtendedLayoutFeatures features;
   GtkExtendedLayoutIface *iface;
   GtkExtendedLayout *layout;
-  GtkWidget *label;
-  GtkBin *bin;
 
-  int i;
+  GtkWindow *window;
+  GtkWidget *label;
+  GtkWidget *bin;
+
+  gint baseline_label;
+  gint baseline_bin;
+
+  int i, y;
 
   for (i = 0; types[i]; ++i)
     {
-      bin = g_object_ref_sink (g_object_new (types[i], NULL));
-      layout = GTK_EXTENDED_LAYOUT (bin);
+      log_info ("Testing %s", g_type_name (types[i]));
 
       label = gtk_label_new (g_type_name (types[i]));
+
+      bin = g_object_new (types[i], NULL);
       gtk_container_add (GTK_CONTAINER (bin), label);
+      layout = GTK_EXTENDED_LAYOUT (bin);
+
+      window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+      gtk_container_add (GTK_CONTAINER (window), bin);
+      gtk_widget_show_all (window);
 
       /* vtable */
 
@@ -376,10 +391,46 @@ gtk_bin_test_extended_layout (void)
       log_test (0 != (features & GTK_EXTENDED_LAYOUT_NATURAL_SIZE));
       log_test (0 != (features & GTK_EXTENDED_LAYOUT_BASELINES));
 
-      g_object_unref (bin);
-    }
+      /* verify baseline propagation */
 
-  log_testf (FALSE, "%s", "TODO: Provide real tests for GtkBin");
+      baseline_label =
+        gtk_extended_layout_get_single_baseline (
+        GTK_EXTENDED_LAYOUT (label), GTK_BASELINE_FIRST);
+      baseline_bin =
+        gtk_extended_layout_get_single_baseline (
+        GTK_EXTENDED_LAYOUT (bin), GTK_BASELINE_FIRST);
+
+      if (!gtk_widget_translate_coordinates (label, bin, 0, 0, NULL, &y))
+        log_testf (FALSE, "failed to translate GtkLabel coordinates "
+                          "into %s coordinates", g_type_name (types[i]));
+
+      log_testi (baseline_label + y, baseline_bin);
+
+      gtk_container_set_border_width (GTK_CONTAINER (bin), 23);
+
+      baseline_bin =
+        gtk_extended_layout_get_single_baseline (
+        GTK_EXTENDED_LAYOUT (bin), GTK_BASELINE_FIRST);
+
+      log_testi (baseline_label + y + 23, baseline_bin);
+
+      /* verify padding injection */
+
+      if (GTK_TYPE_ALIGNMENT == types[i])
+        {
+          log_test (0 != (features & GTK_EXTENDED_LAYOUT_PADDING));
+
+          gtk_alignment_set_padding (GTK_ALIGNMENT (bin), 5, 7, 11, 13);
+
+          baseline_bin =
+            gtk_extended_layout_get_single_baseline (
+            GTK_EXTENDED_LAYOUT (bin), GTK_BASELINE_FIRST);
+
+          log_testi (baseline_label + y + 28, baseline_bin);
+        }
+
+      gtk_widget_destroy (window);
+    }
 }
 
 /*****************************************************************************/

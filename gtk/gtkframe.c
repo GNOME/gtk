@@ -27,6 +27,7 @@
 #include <config.h>
 #include <string.h>
 #include "gtkframe.h"
+#include "gtkextendedlayout.h"
 #include "gtklabel.h"
 #include "gtkprivate.h"
 #include "gtkintl.h"
@@ -81,9 +82,13 @@ static void gtk_frame_buildable_add                 (GtkBuildable *buildable,
 						     GObject      *child,
 						     const gchar  *type);
 
+static void gtk_frame_extended_layout_init (GtkExtendedLayoutIface *iface);
+
 G_DEFINE_TYPE_WITH_CODE (GtkFrame, gtk_frame, GTK_TYPE_BIN,
 			 G_IMPLEMENT_INTERFACE (GTK_TYPE_BUILDABLE,
-						gtk_frame_buildable_init))
+						gtk_frame_buildable_init);
+                         G_IMPLEMENT_INTERFACE (GTK_TYPE_EXTENDED_LAYOUT,
+						gtk_frame_extended_layout_init))
 
 static void
 gtk_frame_class_init (GtkFrameClass *class)
@@ -688,33 +693,65 @@ gtk_frame_compute_child_allocation (GtkFrame      *frame,
 }
 
 static void
-gtk_frame_real_compute_child_allocation (GtkFrame      *frame,
-					 GtkAllocation *child_allocation)
+gtk_frame_extended_layout_get_padding (GtkExtendedLayout *layout,
+                                       GtkBorder         *padding)
 {
-  GtkWidget *widget = GTK_WIDGET (frame);
-  GtkAllocation *allocation = &widget->allocation;
-  GtkRequisition child_requisition;
+  GtkFrame *frame = GTK_FRAME (layout);
+  GtkWidget *widget = GTK_WIDGET (layout);
+  gint border_width = GTK_CONTAINER (layout)->border_width;
+
   gint top_margin;
 
   if (frame->label_widget)
     {
+      GtkRequisition child_requisition;
       gtk_widget_get_child_requisition (frame->label_widget, &child_requisition);
       top_margin = MAX (child_requisition.height, widget->style->ythickness);
     }
   else
     top_margin = widget->style->ythickness;
+
+  padding->left = padding->right = border_width + widget->style->xthickness;
+  padding->bottom = border_width + widget->style->ythickness;
+  padding->top = border_width + top_margin;
+
+  g_debug ("%s: padding %d/%d/%d/%d", __FUNCTION__, padding->left, padding->top, padding->right, padding->bottom);
+  g_debug ("%s: border-width: %d, thickness: %d/%d", __FUNCTION__, border_width, widget->style->xthickness, widget->style->ythickness);
+}
+
+static void
+gtk_frame_real_compute_child_allocation (GtkFrame      *frame,
+					 GtkAllocation *child_allocation)
+{
+  GtkAllocation *allocation = &GTK_WIDGET (frame)->allocation;
+  GtkBorder padding;
+
+  gtk_frame_extended_layout_get_padding ((GtkExtendedLayout*)frame, &padding);
   
-  child_allocation->x = (GTK_CONTAINER (frame)->border_width +
-			 widget->style->xthickness);
-  child_allocation->width = MAX(1, (gint)allocation->width - child_allocation->x * 2);
-  
-  child_allocation->y = (GTK_CONTAINER (frame)->border_width + top_margin);
-  child_allocation->height = MAX (1, ((gint)allocation->height - child_allocation->y -
-				      (gint)GTK_CONTAINER (frame)->border_width -
-				      (gint)widget->style->ythickness));
-  
-  child_allocation->x += allocation->x;
-  child_allocation->y += allocation->y;
+  child_allocation->x = padding.left + allocation->x;
+  child_allocation->y = padding.top + allocation->y;
+
+  child_allocation->width = MAX(1, (gint)allocation->width - padding.left - padding.right);
+  child_allocation->height = MAX (1, (gint)allocation->height - padding.top - padding.bottom);
+}
+
+static GtkExtendedLayoutFeatures
+gtk_frame_extended_layout_get_features (GtkExtendedLayout *layout)
+{
+  GtkExtendedLayoutFeatures features;
+
+  features = 
+    GTK_EXTENDED_LAYOUT_CLASS (gtk_frame_parent_class)->
+    get_features (layout);
+
+  return features | GTK_EXTENDED_LAYOUT_PADDING;
+}
+
+static void
+gtk_frame_extended_layout_init (GtkExtendedLayoutIface *iface)
+{
+  iface->get_features = gtk_frame_extended_layout_get_features;
+  iface->get_padding = gtk_frame_extended_layout_get_padding;
 }
 
 #define __GTK_FRAME_C__
