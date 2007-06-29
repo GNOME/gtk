@@ -1,3 +1,11 @@
+2007-06-29  Johan Dahlin  <jdahlin@async.com.br>
+
+	* gtk/gtkbuilder.c: (gtk_builder_finalize),
+	(gtk_builder_get_parameters), (_gtk_builder_construct):
+	* tests/buildertest.c:
+
+	Improve reference counting, #447967
+
 2007-06-29  Ryan Lortie  <desrt@desrt.ca>
 
 	* tests/testgtk.c (create_composited_window): Connect the "destroy"

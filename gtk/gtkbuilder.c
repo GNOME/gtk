@@ -33,6 +33,7 @@
 #include "gtkintl.h"
 #include "gtkprivate.h"
 #include "gtktypebuiltins.h"
+#include "gtkwindow.h"
 #include "gtkalias.h"
 
 static void gtk_builder_class_init     (GtkBuilderClass *klass);
@@ -62,7 +63,8 @@ struct _GtkBuilderPrivate
   GHashTable *objects;
   GHashTable *delayed_properties;
   GSList *signals;
-  gchar *current_toplevel;
+  gchar *current_root;
+  GSList *root_objects;
 };
 
 G_DEFINE_TYPE (GtkBuilder, gtk_builder, G_TYPE_OBJECT)
@@ -116,12 +118,14 @@ gtk_builder_finalize (GObject *object)
   
   g_free (builder->priv->domain);
 
-  g_free (builder->priv->current_toplevel);
+  g_free (builder->priv->current_root);
   g_hash_table_destroy (builder->priv->delayed_properties);
   builder->priv->delayed_properties = NULL;
   g_slist_foreach (builder->priv->signals, (GFunc)_free_signal_info, NULL);
   g_slist_free (builder->priv->signals);
   g_hash_table_destroy (builder->priv->objects);
+  g_slist_foreach (builder->priv->root_objects, (GFunc)g_object_unref, NULL);
+  g_slist_free (builder->priv->root_objects);
 }
 
 static void
@@ -282,21 +286,21 @@ gtk_builder_get_parameters (GtkBuilder  *builder,
                   continue;
                 }
               g_value_init (&parameter.value, G_OBJECT_TYPE (object));
-              g_value_set_object (&parameter.value, g_object_ref (object));
+              g_value_set_object (&parameter.value, object);
             }
           else
             {
               GSList *delayed_properties;
               
               delayed_properties = g_hash_table_lookup (builder->priv->delayed_properties,
-                                                        builder->priv->current_toplevel);
+                                                        builder->priv->current_root);
               property = g_slice_new (DelayedProperty);
               property->object = g_strdup (object_name);
               property->name = g_strdup (prop->name);
               property->value = g_strdup (prop->data);
               delayed_properties = g_slist_prepend (delayed_properties, property);
               g_hash_table_insert (builder->priv->delayed_properties,
-                                   g_strdup (builder->priv->current_toplevel),
+                                   g_strdup (builder->priv->current_root),
                                    delayed_properties);
               continue;
             }
@@ -370,6 +374,12 @@ _gtk_builder_construct (GtkBuilder *builder,
   object_type = gtk_builder_get_type_from_name (builder, info->class_name);
   if (object_type == G_TYPE_INVALID)
     g_error ("Invalid type: %s", info->class_name);
+
+  if (!info->parent)
+    {
+      g_free (builder->priv->current_root);
+      builder->priv->current_root = g_strdup (info->id);
+    }
 
   gtk_builder_get_parameters (builder, object_type,
                               info->id,
@@ -458,10 +468,14 @@ _gtk_builder_construct (GtkBuilder *builder,
                             g_strdup (info->id),
                             g_free);
 
-  if (!info->parent)
+
+  if (!info->parent && !GTK_IS_WINDOW (obj))
     {
-      g_free (builder->priv->current_toplevel);
-      builder->priv->current_toplevel = g_strdup (info->id);
+      if (g_object_is_floating (obj))
+	  g_object_ref_sink (obj);
+      
+      builder->priv->root_objects =
+        g_slist_prepend (builder->priv->root_objects, obj);
     }
   g_hash_table_insert (builder->priv->objects, g_strdup (info->id), obj);
   
