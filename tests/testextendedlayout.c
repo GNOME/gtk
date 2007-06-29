@@ -461,7 +461,6 @@ create_baseline_test_hbox (TestSuite *suite)
         {
           label = gtk_label_new (NULL);
           gtk_label_set_markup (GTK_LABEL (label), captions[j]);
-
           test_case_append_guide (test, label, GUIDE_BASELINE, i);
 
           if (0 == j && i > 1)
@@ -485,6 +484,7 @@ create_baseline_test_hbox (TestSuite *suite)
 
               gtk_container_add (GTK_CONTAINER (bin), label);
               gtk_box_pack_start (GTK_BOX (hbox), bin, FALSE, TRUE, 0);
+              test_case_append_guide (test, bin, GUIDE_BASELINE, i);
             }
           else
             {
@@ -1243,6 +1243,64 @@ find_widget_at_position (GtkWidget *widget,
   return widget;
 }
 
+static void
+update_status (TestSuite *suite,
+               GtkWidget *child)
+{
+  const gchar *widget_name = gtk_widget_get_name (child);
+  const gchar *type_name = G_OBJECT_TYPE_NAME (child);
+  GString *status = g_string_new (widget_name);
+
+  if (strcmp (widget_name, type_name))
+    g_string_append_printf (status, " (%s)", type_name);
+
+  g_string_append_printf (status,
+                          ": pos=%dx%d; size=%dx%d",
+                          child->allocation.x,
+                          child->allocation.y,
+                          child->allocation.width,
+                          child->allocation.height);
+
+  if (GTK_IS_EXTENDED_LAYOUT (child))
+    {
+      if (GTK_EXTENDED_LAYOUT_HAS_BASELINES (child))
+        {
+          gint *baselines = NULL;
+          gint num_baselines = 0;
+          gint i;
+
+          num_baselines =
+            gtk_extended_layout_get_baselines (GTK_EXTENDED_LAYOUT (child), 
+                                               &baselines);
+
+          for (i = 0; i < num_baselines; ++i)
+            {
+              g_string_append_printf (status, "%s%d",
+                                      i ? ", " : num_baselines > 1 ?
+                                      "; baselines: " : "; baseline: ",
+                                      baselines[i]);
+            }
+
+          g_free (baselines);
+        }
+
+      if (GTK_EXTENDED_LAYOUT_HAS_PADDING (child))
+        {
+          GtkBorder padding;
+
+          gtk_extended_layout_get_padding (GTK_EXTENDED_LAYOUT (child),
+                                           &padding);
+
+          g_string_append_printf (status, "; padding: %d/%d/%d/%d",
+                                  padding.top, padding.left,
+                                  padding.right, padding.bottom);
+        }
+    }
+
+  gtk_label_set_text (GTK_LABEL (suite->statusbar), status->str);
+  g_string_free (status, TRUE);
+}
+
 static gboolean           
 watch_pointer_cb (gpointer data)
 {
@@ -1276,12 +1334,17 @@ watch_pointer_cb (gpointer data)
   if (test)
     {
       g_assert (child);
+
+      if (child != suite->current)
+        update_status (suite, child);
+
       suite->current = child;
       dirty = TRUE;
     }
   else
     {
       dirty = (NULL != suite->current);
+      gtk_label_set_text (GTK_LABEL (suite->statusbar), NULL);
       suite->current = NULL;
     }
 
@@ -1424,10 +1487,15 @@ test_suite_setup_ui (TestSuite *self)
                             G_CALLBACK (gtk_widget_queue_draw),
                             self->notebook);
 
+  self->statusbar = gtk_label_new (NULL);
+  gtk_label_set_ellipsize (GTK_LABEL (self->statusbar),
+                           PANGO_ELLIPSIZE_END);
+
   vbox = gtk_vbox_new (FALSE, 12);
   gtk_container_set_border_width (GTK_CONTAINER (vbox), 6);
-  gtk_box_pack_start (GTK_BOX (vbox), self->notebook, TRUE, TRUE, 0);
   gtk_box_pack_start (GTK_BOX (vbox), actions, FALSE, TRUE, 0);
+  gtk_box_pack_start (GTK_BOX (vbox), self->notebook, TRUE, TRUE, 0);
+  gtk_box_pack_start (GTK_BOX (vbox), self->statusbar, FALSE, TRUE, 0);
 
   self->window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
 
@@ -1436,6 +1504,7 @@ test_suite_setup_ui (TestSuite *self)
 
   gtk_window_set_title (GTK_WINDOW (self->window), "Testing GtkExtendedLayout");
   gtk_container_add (GTK_CONTAINER (self->window), vbox);
+  gtk_widget_grab_focus (self->notebook);
 }
 
 static TestSuite*

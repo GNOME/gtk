@@ -1,5 +1,10 @@
 2007-06-29  Mathias Hasselmann  <mathias.hasselmann@gmx.de>
 
+	* tests/testextendedlayout.c: Move buttons to top and
+	provide textual information about currently hovered widget.
+
+2007-06-29  Mathias Hasselmann  <mathias.hasselmann@gmx.de>
+
 	* tests/testextendedlayout.c: Move code to setup UI
 	from main to test_suite_new.
 
