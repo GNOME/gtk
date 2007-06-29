@@ -1907,106 +1907,56 @@ gtk_recent_info_last_application (GtkRecentInfo  *info)
   return g_strdup (name);
 }
 
-typedef struct
-{
-  gint size;
-  GdkPixbuf *pixbuf;
-} IconCacheElement;
-
-static void
-icon_cache_element_free (IconCacheElement *element)
-{
-  if (element->pixbuf)
-    g_object_unref (element->pixbuf);
-  g_free (element);
-}
-
-static void
-icon_theme_changed (GtkIconTheme     *icon_theme)
-{
-  GHashTable *cache;
-
-  /* Difference from the initial creation is that we don't
-   * reconnect the signal
-   */
-  cache = g_hash_table_new_full (g_str_hash, g_str_equal,
-				 (GDestroyNotify)g_free,
-				 (GDestroyNotify)icon_cache_element_free);
-  g_object_set_data_full (G_OBJECT (icon_theme), "gtk-recent-icon-cache",
-			  cache, (GDestroyNotify)g_hash_table_destroy);
-}
-
-/* TODO: use the GtkFileChooser's icon cache instead of our own to reduce
- * the memory footprint
- */
-static GdkPixbuf *
-get_cached_icon (const gchar *name,
-		 gint         pixel_size)
-{
-  GtkIconTheme *icon_theme;
-  GHashTable *cache;
-  IconCacheElement *element;
-
-  icon_theme = gtk_icon_theme_get_default ();
-  cache = g_object_get_data (G_OBJECT (icon_theme), "gtk-recent-icon-cache");
-
-  if (!cache)
-    {
-      cache = g_hash_table_new_full (g_str_hash, g_str_equal,
-				     (GDestroyNotify)g_free,
-				     (GDestroyNotify)icon_cache_element_free);
-
-      g_object_set_data_full (G_OBJECT (icon_theme), "gtk-recent-icon-cache",
-			      cache, (GDestroyNotify)g_hash_table_destroy);
-      g_signal_connect (icon_theme, "changed",
-			G_CALLBACK (icon_theme_changed), NULL);
-    }
-
-  element = g_hash_table_lookup (cache, name);
-  if (!element)
-    {
-      element = g_new0 (IconCacheElement, 1);
-      g_hash_table_insert (cache, g_strdup (name), element);
-    }
-
-  if (element->size != pixel_size)
-    {
-      if (element->pixbuf)
-	g_object_unref (element->pixbuf);
-
-      element->size = pixel_size;
-      element->pixbuf = gtk_icon_theme_load_icon (icon_theme, name,
-						  pixel_size, 0, NULL);
-    }
-
-  return element->pixbuf ? g_object_ref (element->pixbuf) : NULL;
-}
-
-
 static GdkPixbuf *
 get_icon_for_mime_type (const char *mime_type,
 			gint        pixel_size)
 {
+  GtkIconTheme *icon_theme;
   const char *separator;
   GString *icon_name;
   GdkPixbuf *pixbuf;
 
   separator = strchr (mime_type, '/');
   if (!separator)
-    return NULL; /* maybe we should return a GError with "invalid MIME-type" */
+    return NULL;
 
-  icon_name = g_string_new ("gnome-mime-");
+  icon_theme = gtk_icon_theme_get_default ();
+
+  /* try with the three icon name variants for MIME types */
+
+  /* canonicalize MIME type: foo/x-bar -> foo-x-bar */
+  icon_name = g_string_new (NULL);
   g_string_append_len (icon_name, mime_type, separator - mime_type);
   g_string_append_c (icon_name, '-');
   g_string_append (icon_name, separator + 1);
-  pixbuf = get_cached_icon (icon_name->str, pixel_size);
+  pixbuf = gtk_icon_theme_load_icon (icon_theme, icon_name->str,
+                                     pixel_size,
+                                     0,
+                                     NULL);
   g_string_free (icon_name, TRUE);
   if (pixbuf)
     return pixbuf;
 
+  /* canonicalize MIME type, and prepend "gnome-mime-" */
   icon_name = g_string_new ("gnome-mime-");
   g_string_append_len (icon_name, mime_type, separator - mime_type);
-  pixbuf = get_cached_icon (icon_name->str, pixel_size);
+  g_string_append_c (icon_name, '-');
+  g_string_append (icon_name, separator + 1);
+  pixbuf = gtk_icon_theme_load_icon (icon_theme, icon_name->str,
+                                     pixel_size,
+                                     0,
+                                     NULL);
+  g_string_free (icon_name, TRUE);
+  if (pixbuf)
+    return pixbuf;
+
+  /* try the MIME family icon */
+  icon_name = g_string_new ("gnome-mime-");
+  g_string_append_len (icon_name, mime_type, separator - mime_type);
+  pixbuf = gtk_icon_theme_load_icon (icon_theme, icon_name->str,
+                                     pixel_size,
+                                     0,
+                                     NULL);
   g_string_free (icon_name, TRUE);
 
   return pixbuf;
@@ -2052,10 +2002,16 @@ gtk_recent_info_get_icon (GtkRecentInfo *info,
   if (info->mime_type)
     retval = get_icon_for_mime_type (info->mime_type, size);
 
-  /* this should never fail */  
+  /* this should never fail */
   if (!retval)
-    retval = get_icon_fallback (GTK_STOCK_FILE, size);
-  
+    {
+      if (info->mime_type &&
+          strcmp (info->mime_type, "x-directory/normal") == 0)
+        retval = get_icon_fallback (GTK_STOCK_DIRECTORY, size);
+      else
+        retval = get_icon_fallback (GTK_STOCK_FILE, size);
+    }
+
   return retval;
 }
 
