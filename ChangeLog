@@ -1,3 +1,10 @@
+2007-06-29  Matthias Clasen  <mclasen@redhat.com>
+
+	Merge from trunk:
+
+	* modules/printbackend/cups/gtkcupsutils.c (_post_check):
+	(_get_check): Enable SSL support.  (#451070, Vince Busam)
+
 2007-06-29  Emmanuele Bassi  <ebassi@gnome.org>
 
 	Merge from trunk:
