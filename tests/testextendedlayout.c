@@ -86,10 +86,12 @@ struct _TestCase
 
 struct _TestSuite
 {
+  GtkWidget *window;
   GtkWidget *notebook;
   GtkWidget *baselines;
   GtkWidget *interiour;
   GtkWidget *exteriour;
+  GtkWidget *statusbar;
 
   GtkTreeStore *results;
   GtkWidget *results_view;
@@ -965,71 +967,6 @@ realize_notebook_cb (GtkWidget *widget,
     mask_xpm);
 }
 
-static TestSuite*
-test_suite_new ()
-{       
-  TestSuite* self = g_new0 (TestSuite, 1);
-  GtkTreeViewColumn *column;
-  GtkCellRenderer *cell;
-  GtkWidget *scroller;
-
-  self->notebook = gtk_notebook_new ();
-  gtk_notebook_set_tab_pos (GTK_NOTEBOOK (self->notebook), GTK_POS_RIGHT);
-
-  test_suite_append (self, create_natural_size_test (self));
-  test_suite_append (self, create_height_for_width_test (self));
-  test_suite_append (self, create_baseline_test (self));
-  test_suite_append (self, create_baseline_test_bin (self));
-  test_suite_append (self, create_baseline_test_hbox (self));
-
-  self->results = gtk_tree_store_new (COLUNN_COUNT,
-                                      G_TYPE_STRING, PANGO_TYPE_WEIGHT,
-                                      G_TYPE_STRING, G_TYPE_STRING);
-
-  self->results_view = gtk_tree_view_new_with_model (GTK_TREE_MODEL (self->results));
-  gtk_tree_view_set_headers_visible (GTK_TREE_VIEW (self->results_view), FALSE);
-
-  column = gtk_tree_view_column_new ();
-  gtk_tree_view_column_set_expand (column, TRUE);
-  gtk_tree_view_append_column (GTK_TREE_VIEW (self->results_view), column);
-
-  cell = gtk_cell_renderer_pixbuf_new ();
-  gtk_tree_view_column_pack_start (column, cell, FALSE);
-  gtk_tree_view_column_set_attributes (column, cell, 
-                                       "icon-name", COLUMN_ICON, NULL);
-
-  cell = gtk_cell_renderer_text_new ();
-  gtk_tree_view_column_pack_start (column, cell, TRUE);
-  gtk_tree_view_column_set_attributes (column, cell, 
-                                       "text", COLUMN_MESSAGE,
-                                       "weight", COLUMN_WEIGHT, NULL);
-
-  column = gtk_tree_view_column_new ();
-  gtk_tree_view_column_set_expand (column, FALSE);
-  gtk_tree_view_append_column (GTK_TREE_VIEW (self->results_view), column);
-
-  cell = gtk_cell_renderer_text_new ();
-  gtk_tree_view_column_pack_start (column, cell, TRUE);
-  gtk_tree_view_column_set_attributes (column, cell, 
-                                       "text", COLUMN_RESULT, NULL);
-
-  scroller = gtk_scrolled_window_new (NULL, NULL);
-  gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (scroller),
-                                  GTK_POLICY_NEVER, GTK_POLICY_AUTOMATIC);
-  gtk_scrolled_window_set_shadow_type (GTK_SCROLLED_WINDOW (scroller),
-                                       GTK_SHADOW_IN);
-  gtk_container_set_border_width (GTK_CONTAINER (scroller), 12);
-  gtk_container_add (GTK_CONTAINER (scroller), self->results_view);
-
-  gtk_notebook_append_page (GTK_NOTEBOOK (self->notebook),
-                            scroller, gtk_label_new ("Results"));
-
-  g_signal_connect (self->notebook, "realize",
-                    G_CALLBACK (realize_notebook_cb), self);
-
-  return self;
-}
-
 static void
 test_suite_free (TestSuite* self)
 {       
@@ -1373,36 +1310,87 @@ watch_pointer_cb (gpointer data)
 
   return TRUE;
 }
-        
-int
-main (int argc, char *argv[])
+
+static void
+test_suite_setup_results_page (TestSuite *self)
 {
-  TestSuite *suite;
-  GtkWidget *window;
+  GtkTreeViewColumn *column;
+  GtkCellRenderer *cell;
+  GtkWidget *scroller;
+
+  self->results = gtk_tree_store_new (COLUNN_COUNT,
+                                      G_TYPE_STRING, PANGO_TYPE_WEIGHT,
+                                      G_TYPE_STRING, G_TYPE_STRING);
+
+  self->results_view = gtk_tree_view_new_with_model (GTK_TREE_MODEL (self->results));
+  gtk_tree_view_set_headers_visible (GTK_TREE_VIEW (self->results_view), FALSE);
+
+  column = gtk_tree_view_column_new ();
+  gtk_tree_view_column_set_expand (column, TRUE);
+  gtk_tree_view_append_column (GTK_TREE_VIEW (self->results_view), column);
+
+  cell = gtk_cell_renderer_pixbuf_new ();
+  gtk_tree_view_column_pack_start (column, cell, FALSE);
+  gtk_tree_view_column_set_attributes (column, cell, 
+                                       "icon-name", COLUMN_ICON, NULL);
+
+  cell = gtk_cell_renderer_text_new ();
+  gtk_tree_view_column_pack_start (column, cell, TRUE);
+  gtk_tree_view_column_set_attributes (column, cell, 
+                                       "text", COLUMN_MESSAGE,
+                                       "weight", COLUMN_WEIGHT, NULL);
+
+  column = gtk_tree_view_column_new ();
+  gtk_tree_view_column_set_expand (column, FALSE);
+  gtk_tree_view_append_column (GTK_TREE_VIEW (self->results_view), column);
+
+  cell = gtk_cell_renderer_text_new ();
+  gtk_tree_view_column_pack_start (column, cell, TRUE);
+  gtk_tree_view_column_set_attributes (column, cell, 
+                                       "text", COLUMN_RESULT, NULL);
+
+  scroller = gtk_scrolled_window_new (NULL, NULL);
+  gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (scroller),
+                                  GTK_POLICY_NEVER, GTK_POLICY_AUTOMATIC);
+  gtk_scrolled_window_set_shadow_type (GTK_SCROLLED_WINDOW (scroller),
+                                       GTK_SHADOW_IN);
+  gtk_container_set_border_width (GTK_CONTAINER (scroller), 12);
+  gtk_container_add (GTK_CONTAINER (scroller), self->results_view);
+
+  gtk_notebook_append_page (GTK_NOTEBOOK (self->notebook),
+                            scroller, gtk_label_new ("Results"));
+
+  g_signal_connect (self->notebook, "realize",
+                    G_CALLBACK (realize_notebook_cb), self);
+}
+
+static void
+test_suite_setup_ui (TestSuite *self)
+{
   GtkWidget *actions;
   GtkWidget *button;
   GtkWidget *align;
   GtkWidget *vbox;
 
-  gtk_init (&argc, &argv);
+  self->notebook = gtk_notebook_new ();
+  gtk_notebook_set_tab_pos (GTK_NOTEBOOK (self->notebook), GTK_POS_RIGHT);
 
-  suite = test_suite_new ();
   actions = gtk_hbox_new (FALSE, 12);
 
   align = gtk_alignment_new (1.0, 0.5, 0.0, 0.0);
   gtk_container_add (GTK_CONTAINER (align), actions);
 
   button = gtk_button_new_with_mnemonic ("Test _Current Page");
-  g_signal_connect (button, "clicked", G_CALLBACK (test_current_cb), suite);
+  g_signal_connect (button, "clicked", G_CALLBACK (test_current_cb), self);
   gtk_box_pack_start (GTK_BOX (actions), button, FALSE, TRUE, 0);
 
-  g_signal_connect_data (suite->notebook, "switch-page",
+  g_signal_connect_data (self->notebook, "switch-page",
                          G_CALLBACK (switch_page_cb),
-                         pointer_bag_new (suite, button, NULL),
+                         pointer_bag_new (self, button, NULL),
                          (GClosureNotify) pointer_bag_free, 0);
 
   button = gtk_button_new_with_mnemonic ("Test _All Pages");
-  g_signal_connect (button, "clicked", G_CALLBACK (test_all_cb), suite);
+  g_signal_connect (button, "clicked", G_CALLBACK (test_all_cb), self);
   gtk_box_pack_start (GTK_BOX (actions), button, FALSE, TRUE, 0);
 
   actions = gtk_hbox_new (FALSE, 12);
@@ -1412,43 +1400,69 @@ main (int argc, char *argv[])
                       gtk_label_new ("Guides:"),
                       FALSE, TRUE, 0);
 
-  suite->baselines = gtk_check_button_new_with_mnemonic ("_Baselines");
-  gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (suite->baselines), TRUE);
-  gtk_box_pack_start (GTK_BOX (actions), suite->baselines, FALSE, TRUE, 0);
+  self->baselines = gtk_check_button_new_with_mnemonic ("_Baselines");
+  gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (self->baselines), TRUE);
+  gtk_box_pack_start (GTK_BOX (actions), self->baselines, FALSE, TRUE, 0);
 
-  g_signal_connect_swapped (suite->baselines, "toggled", 
+  g_signal_connect_swapped (self->baselines, "toggled", 
                             G_CALLBACK (gtk_widget_queue_draw),
-                            suite->notebook);
+                            self->notebook);
 
-  suite->interiour = gtk_check_button_new_with_mnemonic ("_Interiours");
-  gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (suite->interiour), TRUE);
-  gtk_box_pack_start (GTK_BOX (actions), suite->interiour, FALSE, TRUE, 0);
+  self->interiour = gtk_check_button_new_with_mnemonic ("_Interiours");
+  gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (self->interiour), TRUE);
+  gtk_box_pack_start (GTK_BOX (actions), self->interiour, FALSE, TRUE, 0);
 
-  g_signal_connect_swapped (suite->interiour, "toggled", 
+  g_signal_connect_swapped (self->interiour, "toggled", 
                             G_CALLBACK (gtk_widget_queue_draw),
-                            suite->notebook);
+                            self->notebook);
   
-  suite->exteriour = gtk_check_button_new_with_mnemonic ("_Exteriours");
-  gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (suite->exteriour), TRUE);
-  gtk_box_pack_start (GTK_BOX (actions), suite->exteriour, FALSE, TRUE, 0);
+  self->exteriour = gtk_check_button_new_with_mnemonic ("_Exteriours");
+  gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (self->exteriour), TRUE);
+  gtk_box_pack_start (GTK_BOX (actions), self->exteriour, FALSE, TRUE, 0);
   
-  g_signal_connect_swapped (suite->exteriour, "toggled", 
+  g_signal_connect_swapped (self->exteriour, "toggled", 
                             G_CALLBACK (gtk_widget_queue_draw),
-                            suite->notebook);
+                            self->notebook);
 
   vbox = gtk_vbox_new (FALSE, 12);
   gtk_container_set_border_width (GTK_CONTAINER (vbox), 6);
-  gtk_box_pack_start (GTK_BOX (vbox), suite->notebook, TRUE, TRUE, 0);
+  gtk_box_pack_start (GTK_BOX (vbox), self->notebook, TRUE, TRUE, 0);
   gtk_box_pack_start (GTK_BOX (vbox), actions, FALSE, TRUE, 0);
 
-  window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+  self->window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
 
-  g_signal_connect (window, "destroy", G_CALLBACK (gtk_main_quit), NULL);
-  g_timeout_add (200, watch_pointer_cb, suite);
+  g_signal_connect (self->window, "destroy", G_CALLBACK (gtk_main_quit), NULL);
+  g_timeout_add (200, watch_pointer_cb, self);
 
-  gtk_window_set_title (GTK_WINDOW (window), "Testing GtkExtendedLayout");
-  gtk_container_add (GTK_CONTAINER (window), vbox);
-  gtk_widget_show_all (window);
+  gtk_window_set_title (GTK_WINDOW (self->window), "Testing GtkExtendedLayout");
+  gtk_container_add (GTK_CONTAINER (self->window), vbox);
+}
+
+static TestSuite*
+test_suite_new ()
+{       
+  TestSuite* self = g_new0 (TestSuite, 1);
+
+  test_suite_setup_ui (self);
+  test_suite_append (self, create_natural_size_test (self));
+  test_suite_append (self, create_height_for_width_test (self));
+  test_suite_append (self, create_baseline_test (self));
+  test_suite_append (self, create_baseline_test_bin (self));
+  test_suite_append (self, create_baseline_test_hbox (self));
+  test_suite_setup_results_page (self);
+
+  return self;
+}
+
+int
+main (int argc, char *argv[])
+{
+  TestSuite *suite;
+
+  gtk_init (&argc, &argv);
+
+  suite = test_suite_new ();
+  gtk_widget_show_all (suite->window);
 
   gtk_main ();
 

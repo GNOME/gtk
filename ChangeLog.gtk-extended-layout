@@ -1,5 +1,10 @@
 2007-06-29  Mathias Hasselmann  <mathias.hasselmann@gmx.de>
 
+	* tests/testextendedlayout.c: Move code to setup UI
+	from main to test_suite_new.
+
+2007-06-29  Mathias Hasselmann  <mathias.hasselmann@gmx.de>
+
 	* tests/testextendedlayout.c: Split Baseline Alignment tests into
 	separate tests and move the notebook tabs to the right.
 	* gtk/gtkhbox.c: Properly decode "debug-wanted" object
