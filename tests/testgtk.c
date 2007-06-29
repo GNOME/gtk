@@ -514,6 +514,10 @@ create_composited_window (GtkWidget *widget)
       event = gtk_event_box_new ();
       window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
 
+      g_signal_connect (window, "destroy",
+                        G_CALLBACK (gtk_widget_destroyed),
+                        &window);
+
       /* put a red background on the window */
       gdk_color_parse ("red", &red);
       gtk_widget_modify_bg (window, GTK_STATE_NORMAL, &red);
@@ -1261,7 +1265,7 @@ create_button_box (GtkWidget *widget)
     g_signal_connect (window, "destroy",
 		      G_CALLBACK (gtk_widget_destroyed),
 		      &window);
-    
+
     gtk_container_set_border_width (GTK_CONTAINER (window), 10);
 
     main_vbox = gtk_vbox_new (FALSE, 0);

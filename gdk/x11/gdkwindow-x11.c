@@ -197,14 +197,6 @@ gdk_window_impl_x11_finalize (GObject *object)
 
   _gdk_xgrab_check_destroy (GDK_WINDOW (wrapper));
 
-#if defined(HAVE_XCOMPOSITE) && defined(HAVE_XDAMAGE) && defined (HAVE_XFIXES)
-  if (window_impl->damage != None)
-  {
-    XDamageDestroy (GDK_WINDOW_XDISPLAY (object), window_impl->damage);
-    window_impl->damage = None;
-  }
-#endif
-
   if (!GDK_WINDOW_DESTROYED (wrapper))
     {
       GdkDisplay *display = GDK_WINDOW_DISPLAY (wrapper);

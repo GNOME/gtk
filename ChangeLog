@@ -1,3 +1,15 @@
+2007-06-29  Ryan Lortie  <desrt@desrt.ca>
+
+	* tests/testgtk.c (create_composited_window): Connect the "destroy"
+	signal so that the 'window' pointer is set back to NULL (like for the
+	other examples).
+
+	* gdk/x11/gdkwindow-x11.c (gdk_window_impl_x11_finalize): Don't
+	destroy the Damage here.  By finalize() XDestroyWindow has already
+	been called (and took the Damage with it).
+
+	Bug #452046.
+
 2007-06-29  Emmanuele Bassi  <ebassi@gnome.org>
 
 	* gtk/gtkrecentchooserdefault.c (recent_meta_data_func): Escape
