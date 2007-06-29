@@ -1,3 +1,9 @@
+2007-06-29  Emmanuele Bassi  <ebassi@gnome.org>
+
+	* gtk/gtkrecentmanager.c (get_icon_for_mime_type): Do not
+	cache the icon pixbufs but rely on the GtkIconTheme not to
+	hit the disk cache too much (should tentatively fix #426987).
+
 2007-06-28  Mathias Hasselmann  <mathias.hasselmann@gmx.de>
 
 	* modules/engines/ms-windows/msw_style.c: Draw no bevel
