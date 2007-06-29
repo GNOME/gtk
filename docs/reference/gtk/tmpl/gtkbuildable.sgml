@@ -2,17 +2,17 @@
 GtkBuildable
 
 <!-- ##### SECTION Short_Description ##### -->
-SHORT
+Interface for objects that can be built by GtkBuilder
 
 <!-- ##### SECTION Long_Description ##### -->
 <para>
-LONG
+In order to allow construction from a XML UI description,
+an object class must implement the #GtkBuildable interface.
+The interface includes method for setting names and properties
+of objects, parsing custom tags, constructing child objects.
 </para>
 
 <!-- ##### SECTION See_Also ##### -->
-<para>
-SEE ALSO
-</para>
 
 <!-- ##### SECTION Stability_Level ##### -->
 
@@ -25,12 +25,20 @@ SEE ALSO
 
 <!-- ##### STRUCT GtkBuildableIface ##### -->
 <para>
-
+The #GtkBuildableIface interface contains method that are
+necessary to allow #GtkBuilder to construct an object from
+a XML UI description.
 </para>
 
-@g_iface: 
-@set_name: 
-@get_name: 
+@g_iface: the parent class
+@set_name: Stores the name attribute given in the XML UI description.
+  #GtkWidget maps this to the GtkWidget:name property, and 
+  gtk_buildable_set_name() has a fallback implementation that stores
+  the name as object data. Implement this method if your object
+  has some notion of "name" and it makes sense to map the XML name
+  attribute to it.
+@get_name: The getter corresponding to @set_name. Implement this
+  if you implement @set_name.
 @add_child: 
 @set_buildable_property: 
 @construct_child: 
