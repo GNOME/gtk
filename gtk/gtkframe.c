@@ -714,9 +714,6 @@ gtk_frame_extended_layout_get_padding (GtkExtendedLayout *layout,
   padding->left = padding->right = border_width + widget->style->xthickness;
   padding->bottom = border_width + widget->style->ythickness;
   padding->top = border_width + top_margin;
-
-  g_debug ("%s: padding %d/%d/%d/%d", __FUNCTION__, padding->left, padding->top, padding->right, padding->bottom);
-  g_debug ("%s: border-width: %d, thickness: %d/%d", __FUNCTION__, border_width, widget->style->xthickness, widget->style->ythickness);
 }
 
 static void

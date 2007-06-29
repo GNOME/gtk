@@ -1,5 +1,9 @@
 2007-06-29  Mathias Hasselmann  <mathias.hasselmann@gmx.de>
 
+	* gtk/gtkframe.c: Drop g_debug messages.
+
+2007-06-29  Mathias Hasselmann  <mathias.hasselmann@gmx.de>
+
 	* tests/testextendedlayout.c: Move buttons to top and
 	provide textual information about currently hovered widget.
 
