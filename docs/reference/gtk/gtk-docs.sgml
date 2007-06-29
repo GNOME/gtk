@@ -225,6 +225,7 @@
 <!ENTITY gtk-migrating-GtkAssistant SYSTEM "xml/migrating-GtkAssistant.sgml">
 <!ENTITY gtk-migrating-GtkRecentChooser SYSTEM "xml/migrating-GtkRecentChooser.sgml">
 <!ENTITY gtk-migrating-GtkLinkButton SYSTEM "xml/migrating-GtkLinkButton.sgml">
+<!ENTITY gtk-migrating-GtkBuilder SYSTEM "xml/migrating-GtkBuilder.sgml">
 <!ENTITY version SYSTEM "version.xml">
 <!ENTITY gtk-query-immodules SYSTEM "gtk-query-immodules-2.0.xml">
 <!ENTITY gtk-update-icon-cache SYSTEM "gtk-update-icon-cache.xml">
@@ -644,6 +645,7 @@ that is, GUI components such as #GtkButton or #GtkTextView.
     &gtk-migrating-GtkAssistant;
     &gtk-migrating-GtkRecentChooser;
     &gtk-migrating-GtkLinkButton;
+    &gtk-migrating-GtkBuilder;
   </part>
 
   <part>
