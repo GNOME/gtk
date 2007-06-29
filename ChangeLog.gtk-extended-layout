@@ -1,5 +1,12 @@
 2007-06-29  Mathias Hasselmann  <mathias.hasselmann@gmx.de>
 
+	* tests/testextendedlayout.c: Split Baseline Alignment tests into
+	separate tests and move the notebook tabs to the right.
+	* gtk/gtkhbox.c: Properly decode "debug-wanted" object
+	tag with GPOINTER_TO_INT.
+
+2007-06-29  Mathias Hasselmann  <mathias.hasselmann@gmx.de>
+
 	* gtk/gtkextendedlayout.h, gtk/gtkextendedlayout.c,
 	gtk/gtk.symbols: Add gtk_extended_layout_get_padding.
 	* gtk/gtkalignment.c, gtk/gtkbin.c, gtk/gtkbutton.c, 

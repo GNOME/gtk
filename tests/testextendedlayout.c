@@ -78,6 +78,7 @@ struct _TestCase
 {
   TestSuite *suite;
   const gchar *name;
+  const gchar *detail;
   GtkWidget *widget;
   GList *guides;
   guint idle;
@@ -108,6 +109,15 @@ static const gchar lorem_ipsum[] =
   "orci, venenatis pharetra, egestas id, tincidunt "
   "vel, eros. Integer fringilla. Aenean justo ipsum, "        
   "luctus ut, volutpat laoreet, vehicula in, libero.";
+
+const gchar *captions[] =
+  { 
+    "<span size='xx-small'>xx-Small</span>",
+    "<span weight='bold'>Bold</span>",
+    "<span size='large'>Large</span>",
+    "<span size='xx-large'>xx-Large</span>",
+    NULL
+  };
 
 static char * mask_xpm[] = 
   {
@@ -153,12 +163,14 @@ guide_new (GtkWidget   *widget,
 static TestCase*
 test_case_new (TestSuite   *suite,
                const gchar *name,
+               const gchar *detail,
                GtkWidget   *widget)
 {
   TestCase* self = g_new0 (TestCase, 1);
 
   self->suite = suite;
   self->name = name;
+  self->detail = detail;
   self->widget = widget;
 
   return self;
@@ -210,7 +222,7 @@ append_natural_size_box (TestCase           *test,
 static TestCase*
 create_natural_size_test (TestSuite *suite)
 {
-  TestCase *test = test_case_new (suite, "Natural Size",
+  TestCase *test = test_case_new (suite, "Natural Size", NULL,
                                   gtk_vbox_new (FALSE, 12));
 
   gtk_container_set_border_width (GTK_CONTAINER (test->widget), 12);
@@ -238,7 +250,7 @@ create_height_for_width_test (TestSuite *suite)
   PangoRectangle log;
   GtkWidget *child;
 
-  TestCase *test = test_case_new (suite, "Height for Width",
+  TestCase *test = test_case_new (suite, "Height for Width", NULL,
                                   gtk_hbox_new (FALSE, 12));
 
   gtk_container_set_border_width (GTK_CONTAINER (test->widget), 12);
@@ -272,7 +284,8 @@ create_baseline_test (TestSuite *suite)
   GtkWidget *view;
   GtkWidget *label;
 
-  TestCase *test = test_case_new (suite, "Baseline Alignment",
+  TestCase *test = test_case_new (suite, 
+                                  "Baseline Alignment", "Real-World Example",
                                   gtk_table_new (3, 3, FALSE));
 
   gtk_container_set_border_width (GTK_CONTAINER (test->widget), 12);
@@ -341,12 +354,11 @@ create_baseline_test (TestSuite *suite)
 }
 
 static TestCase*
-create_baseline_test2 (TestSuite *suite)
+create_baseline_test_bin (TestSuite *suite)
 {
   GtkWidget *bin;
   GtkWidget *label;
   GtkWidget *table;
-  GtkWidget *hbox;
 
   int i, j;
 
@@ -357,26 +369,11 @@ create_baseline_test2 (TestSuite *suite)
       G_TYPE_INVALID
     };
 
-  const gchar *markup[] =
-    { 
-      "<span size='xx-small'>xx-Small</span>",
-      "<span weight='bold'>Bold</span>",
-      "<span size='large'>Large</span>",
-      "<span size='xx-large'>xx-Large</span>",
-      NULL
-    };
-
-  const gchar *names[] = 
-    {
-      "default", "baseline", "baseline and bottom-padding", 
-      "baseline and top-padding", "baseline and border-width"
-    };
-
-  TestCase *test = test_case_new (suite, "Baseline Alignment II",
+  TestCase *test = test_case_new (suite, "Baseline Alignment", "GtkBin",
                                   gtk_alignment_new (0.5, 0.5, 0.0, 0.0));
 
-  table = gtk_table_new (G_N_ELEMENTS (types) + 4, 
-                         G_N_ELEMENTS (markup),
+  table = gtk_table_new (G_N_ELEMENTS (types) - 1, 
+                         G_N_ELEMENTS (captions),
                          FALSE);
 
   gtk_container_set_border_width (GTK_CONTAINER (table), 12);
@@ -392,12 +389,12 @@ create_baseline_test2 (TestSuite *suite)
       gtk_table_attach (GTK_TABLE (table), label, 0, 1,
                         i, i + 1, GTK_FILL, GTK_FILL, 0, 0);
 
-      for (j = 0; markup[j]; ++j)
+      for (j = 0; captions[j]; ++j)
         {
           bin = g_object_new (types[i], NULL);
           label = gtk_label_new (NULL);
 
-          gtk_label_set_markup (GTK_LABEL (label), markup[j]);
+          gtk_label_set_markup (GTK_LABEL (label), captions[j]);
           gtk_container_add (GTK_CONTAINER (bin), label);
 
           test_case_append_guide (test, bin, GUIDE_BASELINE, i);
@@ -406,32 +403,64 @@ create_baseline_test2 (TestSuite *suite)
         }
     }
 
-  for (i = 0; i < 5; ++i)
+  return test;
+}
+
+static TestCase*
+create_baseline_test_hbox (TestSuite *suite)
+{
+  GtkWidget *bin;
+  GtkWidget *label;
+  GtkWidget *table;
+  GtkWidget *hbox;
+
+  int i, j;
+
+  const gchar *names[] = 
+    {
+      "default", "baseline", "baseline and bottom-padding", 
+      "baseline and top-padding", "baseline and border-width",
+      NULL
+    };
+
+  TestCase *test = test_case_new (suite, "Baseline Alignment", "GtkHBox",
+                                  gtk_alignment_new (0.5, 0.5, 0.0, 0.0));
+
+  table = gtk_table_new (G_N_ELEMENTS (names) - 1, 
+                         G_N_ELEMENTS (captions),
+                         FALSE);
+
+  gtk_container_set_border_width (GTK_CONTAINER (table), 12);
+  gtk_table_set_col_spacings (GTK_TABLE (table), 6);
+  gtk_table_set_row_spacings (GTK_TABLE (table), 6);
+  gtk_container_add (GTK_CONTAINER (test->widget), table);
+
+  for (i = 0; names[i]; ++i)
     {
       label = gtk_label_new (names[i]);
       gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
   
       hbox = gtk_hbox_new (FALSE, 6);
       test_case_append_guide (test, hbox, GUIDE_EXTERIOUR_BOTH, -1);
-      g_object_set_data (G_OBJECT (hbox), "debug-wanted", TRUE);
+      g_object_set_data (G_OBJECT (hbox), "debug-wanted", GINT_TO_POINTER (TRUE));
       gtk_widget_set_name (hbox, names[i]);
 
       if (i > 0)
         gtk_hbox_set_baseline_policy (GTK_HBOX (hbox), GTK_BASELINE_FIRST);
 
-      gtk_table_attach (GTK_TABLE (table), label, 0, 1,
-                        G_N_ELEMENTS (types) + i, G_N_ELEMENTS (types) + i + 1,
+      gtk_table_attach (GTK_TABLE (table), label,
+                        0, 1, i, i + 1,
                         GTK_FILL, GTK_FILL, 0, 0);
-      gtk_table_attach (GTK_TABLE (table), hbox, 1, G_N_ELEMENTS (markup),
-                        G_N_ELEMENTS (types) + i, G_N_ELEMENTS (types) + i + 1,
+      gtk_table_attach (GTK_TABLE (table), hbox,
+                        1, G_N_ELEMENTS (captions), i, i + 1,
                         GTK_FILL, GTK_FILL, 0, 0);
 
-      for (j = 0; markup[j]; ++j)
+      for (j = 0; captions[j]; ++j)
         {
           label = gtk_label_new (NULL);
-          gtk_label_set_markup (GTK_LABEL (label), markup[j]);
+          gtk_label_set_markup (GTK_LABEL (label), captions[j]);
 
-          test_case_append_guide (test, label, GUIDE_BASELINE, G_N_ELEMENTS (types));
+          test_case_append_guide (test, label, GUIDE_BASELINE, i);
 
           if (0 == j && i > 1)
             {
@@ -892,9 +921,26 @@ static void
 test_suite_append (TestSuite *self,
                    TestCase  *test)
 {
+  GtkWidget *label;
+  GString *markup;
+
+  markup = g_string_new (test->name);
+
+  if (test->detail)
+    {
+      g_string_append (markup, "\n<small>(");
+      g_string_append (markup, test->detail);
+      g_string_append (markup, ")</small>");
+    }
+
+  label = gtk_label_new (markup->str);
+  g_string_free (markup, TRUE);
+
+  gtk_label_set_use_markup (GTK_LABEL (label), TRUE);
+  gtk_label_set_justify (GTK_LABEL (label), GTK_JUSTIFY_CENTER);
+
   gtk_notebook_insert_page (GTK_NOTEBOOK (self->notebook), test->widget,
-                            gtk_label_new (test->name),
-                            self->n_test_cases++);
+                            label, self->n_test_cases++);
 
   g_signal_connect_after (test->widget, "expose-event",
                           G_CALLBACK (expose_cb), test);
@@ -928,11 +974,13 @@ test_suite_new ()
   GtkWidget *scroller;
 
   self->notebook = gtk_notebook_new ();
+  gtk_notebook_set_tab_pos (GTK_NOTEBOOK (self->notebook), GTK_POS_RIGHT);
 
   test_suite_append (self, create_natural_size_test (self));
   test_suite_append (self, create_height_for_width_test (self));
   test_suite_append (self, create_baseline_test (self));
-  test_suite_append (self, create_baseline_test2 (self));
+  test_suite_append (self, create_baseline_test_bin (self));
+  test_suite_append (self, create_baseline_test_hbox (self));
 
   self->results = gtk_tree_store_new (COLUNN_COUNT,
                                       G_TYPE_STRING, PANGO_TYPE_WEIGHT,

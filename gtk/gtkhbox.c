@@ -160,9 +160,13 @@ gtk_hbox_get_property (GObject    *object,
 static gboolean
 debug_wanted (GtkWidget *widget)
 {
+  gpointer ptr;
+
   while (widget)
     {
-      if (g_object_get_data (G_OBJECT (widget), "debug-wanted"))
+      ptr = g_object_get_data (G_OBJECT (widget), "debug-wanted");
+
+      if (GPOINTER_TO_INT (ptr))
         return TRUE;
 
       widget = gtk_widget_get_parent (widget);
