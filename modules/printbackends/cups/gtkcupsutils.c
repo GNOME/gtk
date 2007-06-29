@@ -847,12 +847,13 @@ _post_check (GtkCupsRequest *request)
           return;
         }
     }
-/* TODO: detect ssl in configure.ac */
-#if HAVE_SSL
   else if (http_status == HTTP_UPGRADE_REQUIRED)
     {
       /* Flush any error message... */
       httpFlush (request->http);
+
+      cupsSetEncryption (HTTP_ENCRYPT_REQUIRED);
+      request->state = GTK_CUPS_POST_CONNECT;
 
       /* Reconnect... */
       httpReconnect (request->http);
@@ -863,7 +864,6 @@ _post_check (GtkCupsRequest *request)
       request->attempts++;
       goto again;
     }
-#endif 
   else if (http_status != HTTP_OK)
     {
       int http_errno;
@@ -1035,12 +1035,13 @@ _get_check (GtkCupsRequest *request)
                                  "Can't prompt for authorization");
       return;
     }
-/* TODO: detect ssl in configure.ac */
-#if HAVE_SSL
   else if (http_status == HTTP_UPGRADE_REQUIRED)
     {
       /* Flush any error message... */
       httpFlush (request->http);
+
+      cupsSetEncryption (HTTP_ENCRYPT_REQUIRED);
+      request->state = GTK_CUPS_POST_CONNECT;
 
       /* Reconnect... */
       httpReconnect (request->http);
@@ -1051,7 +1052,6 @@ _get_check (GtkCupsRequest *request)
       request->attempts++;
       goto again;
     }
-#endif
   else if (http_status != HTTP_OK)
     {
       int http_errno;

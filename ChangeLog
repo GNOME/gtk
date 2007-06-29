@@ -1,3 +1,8 @@
+2007-06-29  Matthias Clasen  <mclasen@redhat.com>
+
+	* modules/printbackend/cups/gtkcupsutils.c (_post_check):
+	(_get_check): Enable SSL support.  (#451070, Vince Busam)
+
 2007-06-29  Johan Dahlin  <jdahlin@async.com.br>
 
 	* gtk/gtkbuilder.c: (gtk_builder_finalize),
