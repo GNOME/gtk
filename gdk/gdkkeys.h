@@ -101,6 +101,7 @@ gboolean       gdk_keymap_get_entries_for_keycode  (GdkKeymap           *keymap,
 						    guint              **keyvals,
 						    gint                *n_entries);
 PangoDirection gdk_keymap_get_direction            (GdkKeymap           *keymap);
+gboolean       gdk_keymap_have_bidi_layouts        (GdkKeymap           *keymap);
 
 /* Key values
  */

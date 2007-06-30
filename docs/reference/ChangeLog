@@ -1,5 +1,9 @@
 2007-06-29  Matthias Clasen  <mclasen@redhat.com>
 
+	* gdk/gdk-sections.txt: Add gdk_keymap_have_bidi_layouts
+
+2007-06-29  Matthias Clasen  <mclasen@redhat.com>
+
 	* gtk/migrating-GtkBuilder.sgml: An empty shell
 	* gtk/Makefile.am:
 	* gtk/gtk-docs.sgml: Integrate it

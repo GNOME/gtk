@@ -980,6 +980,7 @@ gdk_keymap_translate_keyboard_state
 gdk_keymap_get_entries_for_keyval
 gdk_keymap_get_entries_for_keycode
 gdk_keymap_get_direction
+gdk_keymap_have_bidi_layouts
 
 <SUBSECTION>
 gdk_keyval_name

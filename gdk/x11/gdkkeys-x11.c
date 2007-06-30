@@ -584,11 +584,83 @@ get_direction (XkbDescRec *xkb,
     return PANGO_DIRECTION_LTR;
 }
 
+static PangoDirection
+get_direction_from_cache (GdkKeymapX11 *keymap_x11,
+			  XkbDescPtr xkb,
+			  gint group)
+{
+  Atom group_atom = xkb->names->groups[group];
+
+  gboolean cache_hit = FALSE;
+  DirectionCacheEntry *cache = keymap_x11->group_direction_cache;
+
+  PangoDirection direction = PANGO_DIRECTION_NEUTRAL;
+  gint i;
+
+  if (keymap_x11->have_direction)
+    {
+      /* lookup in cache */
+      for (i = 0; i < G_N_ELEMENTS (keymap_x11->group_direction_cache); i++)
+      {
+	if (cache[i].group_atom == group_atom)
+	  {
+	    cache_hit = TRUE;
+	    cache[i].serial = keymap_x11->current_cache_serial++; /* freshen */
+	    direction = cache[i].direction;
+	    group_atom = cache[i].group_atom;
+	    break;
+	  }
+      }
+    }
+  else
+    {
+      /* initialize cache */
+      for (i = 0; i < G_N_ELEMENTS (keymap_x11->group_direction_cache); i++)
+	{
+	  cache[i].group_atom = 0;
+	  cache[i].serial = keymap_x11->current_cache_serial;
+	}
+      keymap_x11->current_cache_serial++;
+    }
+
+  /* insert in cache */
+  if (!cache_hit)
+    {
+      gint oldest = 0;
+
+      direction = get_direction (xkb, group);
+
+      /* remove the oldest entry */
+      for (i = 0; i < G_N_ELEMENTS (keymap_x11->group_direction_cache); i++)
+	{
+	  if (cache[i].serial < cache[oldest].serial)
+	    oldest = i;
+	}
+      
+      cache[oldest].group_atom = group_atom;
+      cache[oldest].direction = direction;
+      cache[oldest].serial = keymap_x11->current_cache_serial++;
+    }
+
+  return direction;
+}
+
+static int
+get_num_groups (GdkKeymap *keymap,
+		XkbDescPtr xkb)
+{
+      Display *display = KEYMAP_XDISPLAY (keymap);
+      XkbGetControls(display, XkbSlowKeysMask, xkb);
+      XkbGetUpdatedMap (display, XkbKeySymsMask | XkbKeyTypesMask |
+			XkbModifierMapMask | XkbVirtualModsMask, xkb);
+      return xkb->ctrls->num_groups;
+}
+
 static void
 update_direction (GdkKeymapX11 *keymap_x11,
 		  gint          group)
 {
-  XkbDescRec *xkb = get_xkb (keymap_x11);
+  XkbDescPtr xkb = get_xkb (keymap_x11);
   Atom group_atom;
 
   group_atom = xkb->names->groups[group];
@@ -596,61 +668,9 @@ update_direction (GdkKeymapX11 *keymap_x11,
   /* a group change? */
   if (!keymap_x11->have_direction || keymap_x11->current_group_atom != group_atom)
     {
-      gboolean cache_hit = FALSE;
-      DirectionCacheEntry *cache = keymap_x11->group_direction_cache;
-
-      PangoDirection direction = PANGO_DIRECTION_NEUTRAL;
-      gint i;
-
-      if (keymap_x11->have_direction)
-	{
-          /* lookup in cache */
-	  for (i = 0; i < G_N_ELEMENTS (keymap_x11->group_direction_cache); i++)
-	  {
-	    if (cache[i].group_atom == group_atom)
-	      {
-		cache_hit = TRUE;
-		cache[i].serial = keymap_x11->current_cache_serial++; /* freshen */
-		direction = cache[i].direction;
-		group_atom = cache[i].group_atom;
-		break;
-	      }
-	  }
-	}
-      else
-	{
-          /* initialize cache */
-	  for (i = 0; i < G_N_ELEMENTS (keymap_x11->group_direction_cache); i++)
-	    {
-	      cache[i].group_atom = 0;
-	      cache[i].serial = keymap_x11->current_cache_serial;
-	    }
-	  keymap_x11->current_cache_serial++;
-	}
-
-      /* insert in cache */
-      if (!cache_hit)
-	{
-	  gint oldest = 0;
-
-	  direction = get_direction (xkb, group);
-
-	  /* remove the oldest entry */
-	  for (i = 0; i < G_N_ELEMENTS (keymap_x11->group_direction_cache); i++)
-	    {
-	      if (cache[i].serial < cache[oldest].serial)
-	        oldest = i;
-	    }
-	  
-	  cache[oldest].group_atom = group_atom;
-	  cache[oldest].direction = direction;
-	  cache[oldest].serial = keymap_x11->current_cache_serial++;
-	}
-
+      keymap_x11->current_direction = get_direction_from_cache (keymap_x11, xkb, group);
       keymap_x11->current_group_atom = group_atom;
-
       keymap_x11->have_direction = TRUE;
-      keymap_x11->current_direction = direction;
     }
 }
 
@@ -673,7 +693,7 @@ _gdk_keymap_state_changed (GdkDisplay *display,
       had_direction = keymap_x11->have_direction;
       direction = keymap_x11->current_direction;
       
-      update_direction (keymap_x11, xkb_event->state.locked_group);
+      update_direction (keymap_x11, XkbStateGroup (&xkb_event->state));
       
       if (!had_direction || direction != keymap_x11->current_direction)
 	g_signal_emit_by_name (keymap_x11, "direction_changed");      
@@ -693,6 +713,15 @@ _gdk_keymap_keys_changed (GdkDisplay *display)
     g_signal_emit_by_name (display_x11->keymap, "keys_changed", 0);
 }
 
+/** 
+ * gdk_keymap_get_direction:
+ * @keymap: a #GdkKeymap or %NULL to use the default keymap
+ *
+ * Returns the direction of effective layout of the keymap.
+ *
+ * @Returns: %PANGO_DIRECTION_LTR or %PANGO_DIRECTION_RTL if determines the
+ * direction.  %PANGO_DIRECTION_NEUTRAL otherwise.
+ **/
 PangoDirection
 gdk_keymap_get_direction (GdkKeymap *keymap)
 {
@@ -710,7 +739,7 @@ gdk_keymap_get_direction (GdkKeymap *keymap)
 
 	  XkbGetState (GDK_DISPLAY_XDISPLAY (display), XkbUseCoreKbd, 
 		       &state_rec);
-	  update_direction (keymap_x11, XkbGroupLock (&state_rec));
+	  update_direction (keymap_x11, XkbStateGroup (&state_rec));
 	}
   
       return keymap_x11->current_direction;
@@ -718,6 +747,48 @@ gdk_keymap_get_direction (GdkKeymap *keymap)
   else
 #endif /* HAVE_XKB */
     return PANGO_DIRECTION_NEUTRAL;
+}
+
+/** 
+ * gdk_keymap_have_bidi_layouts:
+ * @keymap: a #GdkKeymap or %NULL to use the default keymap
+ *
+ * Determines if keyboard layouts for both right-to-left and left-to-right
+ * languages are in use.
+ *
+ * @Returns: %TRUE if there are layouts in both directions, %FALSE otherwise
+ *
+ * Since: 2.12
+ **/
+gboolean
+gdk_keymap_have_bidi_layouts (GdkKeymap *keymap)
+{
+  keymap = GET_EFFECTIVE_KEYMAP (keymap);
+
+#if HAVE_XKB
+  if (KEYMAP_USE_XKB (keymap))
+    {
+      GdkKeymapX11 *keymap_x11 = GDK_KEYMAP_X11 (keymap);
+      XkbDescPtr xkb = get_xkb (keymap_x11);
+      int num_groups = get_num_groups (keymap, xkb);
+
+      int i;
+      gboolean have_ltr_keyboard = FALSE;
+      gboolean have_rtl_keyboard = FALSE;
+
+      for (i = 0; i < num_groups; i++)
+      {
+	if (get_direction_from_cache (keymap_x11, xkb, i) == PANGO_DIRECTION_RTL)
+	  have_rtl_keyboard = TRUE;
+	else
+	  have_ltr_keyboard = TRUE;
+      }
+
+      return have_ltr_keyboard && have_rtl_keyboard;
+    }
+  else
+#endif /* HAVE_XKB */
+    return FALSE;
 }
 
 /**
