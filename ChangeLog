@@ -1,5 +1,11 @@
 2007-06-30  Richard Hult  <richard@imendio.com>
 
+	* gdk/quartz/gdkevents-quartz.c:
+	(synthesize_crossing_events_for_ns_event): Simplify (get the
+	origin directly from the window).
+
+2007-06-30  Richard Hult  <richard@imendio.com>
+
 	* gdk/quartz/gdkevents-quartz.c: (create_crossing_event),
 	(synthesize_crossing_events), (find_mouse_window_for_ns_event),
 	(synthesize_crossing_events_for_ns_event): No need to special case

@@ -1124,7 +1124,7 @@ synthesize_crossing_events_for_ns_event (NSEvent *nsevent)
                                             mouse_window,
                                             &x, &y);
 
-	synthesize_crossing_events (mouse_window, GDK_CROSSING_NORMAL, nsevent, x, y);
+        synthesize_crossing_events (mouse_window, GDK_CROSSING_NORMAL, nsevent, x, y);
       }
       break;
 
@@ -1133,7 +1133,6 @@ synthesize_crossing_events_for_ns_event (NSEvent *nsevent)
 	GdkWindow *event_toplevel;
         GdkWindowImplQuartz *impl;
         NSPoint point;
-        gint x_orig, y_orig;
 
         /* We only use NSMouseExited when leaving to the root
          * window. The other cases are handled above by checking the
@@ -1150,11 +1149,8 @@ synthesize_crossing_events_for_ns_event (NSEvent *nsevent)
         x = point.x;
         y = impl->height - point.y;
 
-        if (gdk_window_get_origin (event_toplevel, &x_orig, &y_orig))
-          {
-            x += x_orig;
-            y += y_orig;
-          }
+        x += GDK_WINDOW_OBJECT (event_toplevel)->x;
+        y += GDK_WINDOW_OBJECT (event_toplevel)->y;
 
         /* Check if the root window has a child at this position, if
          * so ignore the event since it means we didn't exit to the
