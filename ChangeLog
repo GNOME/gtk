@@ -5,7 +5,7 @@
 	* gdk/x11/gdkkeys-x11.c (gdk_keymap_have_bidi_layouts): New
 	function to determine if keyboard layouts for both LTR and LTR 
 	languages are in use. Refactor the direction caching code to
-	make this information available.  (#451575, Behnam Esfahbod)
+	make this information available.  (#353805, Behnam Esfahbod)
 
 2007-06-29  Matthias Clasen  <mclasen@redhat.com>
 
