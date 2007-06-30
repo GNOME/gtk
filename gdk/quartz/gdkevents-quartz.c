@@ -755,6 +755,9 @@ synthesize_crossing_events (GdkWindow      *window,
 {
   GdkWindow *intermediate, *tem, *common_ancestor;
 
+  if (window == current_mouse_window)
+    return;
+
   if (gdk_window_is_ancestor (current_mouse_window, window))
     {
       /* Pointer has moved to an inferior window. */
@@ -1010,7 +1013,7 @@ get_converted_window_coordinates (GdkWindow *in_window,
 /* Given a mouse NSEvent (must be a mouse event for a GDK window),
  * finds the subwindow over which the pointer is located. Returns
  * coordinates relative to the found window. If no window is found,
- * returns NULL.
+ * returns the root window, and root window coordinates.
  */
 static GdkWindow *
 find_mouse_window_for_ns_event (NSEvent *nsevent,
@@ -1031,9 +1034,6 @@ find_mouse_window_for_ns_event (NSEvent *nsevent,
   x_tmp = point.x;
   y_tmp = impl->height - point.y;
 
-  if (!current_mouse_window)
-    return NULL;
-
   mouse_toplevel = gdk_window_get_toplevel (current_mouse_window);
 
   get_converted_window_coordinates (event_toplevel,
@@ -1042,19 +1042,24 @@ find_mouse_window_for_ns_event (NSEvent *nsevent,
                                     &x_tmp, &y_tmp);
 
   mouse_window = _gdk_quartz_window_find_child (mouse_toplevel, x_tmp, y_tmp);
-  if (!mouse_window)
+  if (mouse_window && mouse_window != mouse_toplevel)
     {
-      /* This happens for events on the window title and window
-       * buttons (and the desktop).
-       */
-      return NULL;
+      get_child_coordinates_from_ancestor (mouse_toplevel,
+                                           x_tmp, y_tmp,
+                                           mouse_window,
+                                           &x_tmp, &y_tmp);
     }
-
-  if (mouse_window != mouse_toplevel)
-    get_child_coordinates_from_ancestor (mouse_toplevel,
-					 x_tmp, y_tmp,
-					 mouse_window,
-					 &x_tmp, &y_tmp);
+  else if (!mouse_window)
+    {
+      /* This happens for events on the window title buttons and the
+       * desktop, treat those as being on the root window.
+       */
+      get_converted_window_coordinates (mouse_toplevel,
+                                        x_tmp, y_tmp,
+                                        _gdk_root,
+                                        &x_tmp, &y_tmp);
+      mouse_window = _gdk_root;
+    }
 
   *x_ret = x_tmp;
   *y_ret = y_tmp;
@@ -1088,7 +1093,7 @@ synthesize_crossing_events_for_ns_event (NSEvent *nsevent)
        * the desktop) is covered by NSMouseExited events.
        */
       mouse_window = find_mouse_window_for_ns_event (nsevent, &x, &y);
-      if (mouse_window && mouse_window != current_mouse_window)
+      if (mouse_window != _gdk_root)
         synthesize_crossing_events (mouse_window, GDK_CROSSING_NORMAL, nsevent, x, y);
 
       break;
@@ -1105,6 +1110,7 @@ synthesize_crossing_events_for_ns_event (NSEvent *nsevent)
          */
         event_toplevel = [(GdkQuartzView *)[[nsevent window] contentView] gdkWindow];
         impl = GDK_WINDOW_IMPL_QUARTZ (GDK_WINDOW_OBJECT (event_toplevel)->impl);
+
         point = [nsevent locationInWindow];
 
         x = point.x;
@@ -1152,11 +1158,20 @@ synthesize_crossing_events_for_ns_event (NSEvent *nsevent)
         x += GDK_WINDOW_OBJECT (event_toplevel)->x;
         y += GDK_WINDOW_OBJECT (event_toplevel)->y;
 
-        /* Check if the root window has a child at this position, if
-         * so ignore the event since it means we didn't exit to the
-         * root.
+        /* If there is a window other than the root window at this
+         * position, it means we didn't exit to the root window and we
+         * ignore the event.
+         *
+         * FIXME: This is not enough, it doesn't catch the case where
+         * we leave a GDK window to a non-GDK window that has GDK
+         * windows below it.
          */
         mouse_window = _gdk_quartz_window_find_child (_gdk_root, x, y);
+
+        if (gdk_window_get_toplevel (mouse_window) == 
+            gdk_window_get_toplevel (current_mouse_window))
+          mouse_window = _gdk_root;
+
         if (mouse_window == _gdk_root)
           synthesize_crossing_events (_gdk_root, GDK_CROSSING_NORMAL, nsevent, x, y);
       }

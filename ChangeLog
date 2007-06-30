@@ -1,5 +1,19 @@
 2007-06-30  Richard Hult  <richard@imendio.com>
 
+	Continue the event handling cleanup:
+
+	* gdk/quartz/gdkevents-quartz.c: (synthesize_crossing_events):
+	Don't do anything if the old and new windows are the same,
+	simplifies the callers.
+	(find_mouse_window_for_ns_event): Always return a window (root
+	instead of NULL). Remove unneccessary check for the current mouse
+	window being NULL, that was a workaround for a now fixed
+	bug. Convert to root coordinates if we don't find a window.
+	(synthesize_crossing_events_for_ns_event): Simplify and add
+	comment.
+
+2007-06-30  Richard Hult  <richard@imendio.com>
+
 	* gdk/quartz/gdkevents-quartz.c:
 	(synthesize_crossing_events_for_ns_event): Simplify (get the
 	origin directly from the window).
