@@ -104,6 +104,44 @@ void quick_message (gchar *message) {
 </example>
 </para>
 
+<refsect2><title>GtkDialog as a GtkBuildable</title>
+<para>
+GtkDialog exposes the @vbox and @action_area as internal children 
+with the names "vbox" and "action_area".
+</para>
+<para>
+GtkDialog supports a custom &lt;action-widgets&gt; element, which 
+can contain multiple &lt;action-widget&gt; elements. The "response"
+attribute specifies a numeric response, and the content of the element
+is the id of widget (which should be a child of the dialogs @action_area).
+</para>
+<example>
+<title>A <structname>GtkDialog</structname> UI definition fragment.</title>
+<programlisting><![CDATA[
+<object class="GtkDialog" id="dialog1">
+  <child internal-child="vbox">"
+    <object class="GtkVBox">
+      <child internal-child="action_area">
+        <object class="GtkHButtonBox">
+          <child>
+            <object class="GtkButton" id="button_cancel"/>
+          </child>
+          <child>
+            <object class="GtkButton" id="button_ok"/>
+          </child>
+        </object>
+      </child>
+    </object>
+  </child>
+  <action-widgets>
+    <action-widget response="3">button_ok</action-widget>
+    <action-widget response="-5">button_cancel</action-widget>
+  </action-widgets>
+</object>
+]]></programlisting>
+</example>
+</refsect2>
+
 <!-- ##### SECTION See_Also ##### -->
 
 <para>
