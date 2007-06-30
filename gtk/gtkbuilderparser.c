@@ -157,6 +157,55 @@ error_missing_property_value (ParserData *data,
 	       line_number, char_number);
 }
 
+gboolean
+_gtk_builder_parse_boolean (const gchar  *string,
+			    gboolean     *value,
+			    GError      **error)
+{
+  gboolean retval = TRUE;
+  int i;
+  int length;
+  
+  g_assert (string != NULL);
+  length = strlen (string);
+  
+  if (length == 0)
+    retval = FALSE;
+  else if (length == 1)
+    {
+      gchar c = g_ascii_tolower (string[0]);
+      if (c == 'y' || c == 't' || c == '1')
+	*value = TRUE;
+      else if (c == 'n' || c == 'f' || c == '0')
+	*value = FALSE;
+      else
+	retval = FALSE;
+    }
+  else
+    {
+      gchar *lower = g_strdup (string);
+      for (i = 0; i < strlen (string); i++)
+	lower[i] = g_ascii_tolower (string[i]);
+      
+      if (strcmp (lower, "yes") == 0 || strcmp (lower, "true") == 0)
+	*value = TRUE;
+      else if (strcmp (lower, "no") == 0 || strcmp (lower, "false") == 0)
+	*value = FALSE;
+      else
+	retval = FALSE;
+      g_free (lower);
+    }
+  
+  if (!retval)
+    g_set_error (error,
+		 GTK_BUILDER_ERROR,
+		 GTK_BUILDER_ERROR_INVALID_VALUE,
+		 "could not parse boolean `%s'",
+		 string);
+
+  return retval;
+}
+
 static GObject *
 builder_construct (ParserData *data,
                    ObjectInfo *object_info)
@@ -353,7 +402,10 @@ parse_property (ParserData   *data,
       if (strcmp (names[i], "name") == 0)
         name = g_strdelimit (g_strdup (values[i]), "_", '-');
       else if (strcmp (names[i], "translatable") == 0)
-        translatable = strcmp (values[i], "yes") == 0;
+	{
+	  if (!_gtk_builder_parse_boolean (values[i], &translatable, error))
+	    return;
+	}
       else
 	{
 	  error_invalid_attribute (data, element_name, names[i], error);
@@ -408,10 +460,14 @@ parse_signal (ParserData   *data,
       else if (strcmp (names[i], "handler") == 0)
         handler = g_strdup (values[i]);
       else if (strcmp (names[i], "after") == 0)
-        after = strcmp (values[i], "yes") == 0;
+	{
+	  if (!_gtk_builder_parse_boolean (values[i], &after, error))
+	    return;
+	}
       else if (strcmp (names[i], "swapped") == 0)
 	{
-	  swapped = strcmp (values[i], "yes") == 0;
+	  if (!_gtk_builder_parse_boolean (values[i], &swapped, error))
+	    return;
 	  swapped_set = TRUE;
 	}
       else if (strcmp (names[i], "object") == 0)

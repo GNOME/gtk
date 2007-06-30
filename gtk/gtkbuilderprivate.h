@@ -107,5 +107,8 @@ void      _gtk_builder_add (GtkBuilder *builder,
 void      _gtk_builder_finish (GtkBuilder *builder);
 void _free_signal_info (SignalInfo *info,
                         gpointer user_data);
+gboolean _gtk_builder_parse_boolean (const gchar  *string,
+				     gboolean     *value,
+				     GError      **error);
 
 #endif /* __GTK_BUILDER_PRIVATE_H__ */

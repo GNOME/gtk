@@ -1508,6 +1508,11 @@ test_value_from_string (void)
   g_return_val_if_fail (g_value_get_boolean (&value) == TRUE, FALSE);
   g_value_unset (&value);
 
+  g_return_val_if_fail (gtk_builder_value_from_string_type (builder, G_TYPE_BOOLEAN, "tRuE", &value, &error), FALSE);
+  g_return_val_if_fail (G_VALUE_HOLDS_BOOLEAN (&value), FALSE);
+  g_return_val_if_fail (g_value_get_boolean (&value) == TRUE, FALSE);
+  g_value_unset (&value);
+  
   g_return_val_if_fail (gtk_builder_value_from_string_type (builder, G_TYPE_BOOLEAN, "blaurgh", &value, &error) == FALSE, FALSE);
   g_return_val_if_fail (error != NULL, FALSE);
   g_value_unset (&value);
@@ -1516,6 +1521,27 @@ test_value_from_string (void)
   g_error_free (error);
   error = NULL;
 
+  g_return_val_if_fail (gtk_builder_value_from_string_type (builder, G_TYPE_BOOLEAN, "yess", &value, &error) == FALSE, FALSE);
+  g_value_unset (&value);
+  g_return_val_if_fail (error->domain == GTK_BUILDER_ERROR, FALSE);
+  g_return_val_if_fail (error->code == GTK_BUILDER_ERROR_INVALID_VALUE, FALSE);
+  g_error_free (error);
+  error = NULL;
+  
+  g_return_val_if_fail (gtk_builder_value_from_string_type (builder, G_TYPE_BOOLEAN, "trueee", &value, &error) == FALSE, FALSE);
+  g_value_unset (&value);
+  g_return_val_if_fail (error->domain == GTK_BUILDER_ERROR, FALSE);
+  g_return_val_if_fail (error->code == GTK_BUILDER_ERROR_INVALID_VALUE, FALSE);
+  g_error_free (error);
+  error = NULL;
+  
+  g_return_val_if_fail (gtk_builder_value_from_string_type (builder, G_TYPE_BOOLEAN, "", &value, &error) == FALSE, FALSE);
+  g_value_unset (&value);
+  g_return_val_if_fail (error->domain == GTK_BUILDER_ERROR, FALSE);
+  g_return_val_if_fail (error->code == GTK_BUILDER_ERROR_INVALID_VALUE, FALSE);
+  g_error_free (error);
+  error = NULL;
+  
   g_return_val_if_fail (gtk_builder_value_from_string_type (builder, G_TYPE_INT, "12345", &value, &error), FALSE);
   g_return_val_if_fail (G_VALUE_HOLDS_INT (&value), FALSE);
   g_return_val_if_fail (g_value_get_int (&value) == 12345, FALSE);

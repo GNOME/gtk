@@ -1038,33 +1038,10 @@ gtk_builder_value_from_string_type (GtkBuilder   *builder,
       {
         gboolean b;
 
-        switch (g_ascii_tolower (string[0]))
-          {
-          case 't':
-          case 'y':
-            b = TRUE;
-            break;
-          case 'f':
-          case 'n':
-            b = FALSE;
-            break;
-          default:
-            {
-              gchar *endptr;
-              errno = 0;
-              b = strtol (string, &endptr, 0);
-              if (errno || endptr == string)
-                {
-		  g_set_error (error,
-			       GTK_BUILDER_ERROR,
-			       GTK_BUILDER_ERROR_INVALID_VALUE,
-			       "Could not parse boolean `%s'",
-			       string);
-                  ret = FALSE;
-                  break;
-                }
-            }
-            break;
+	if (!_gtk_builder_parse_boolean (string, &b, error))
+	  {
+	    ret = FALSE;
+	    break;
           }
         g_value_set_boolean (value, b);
         break;

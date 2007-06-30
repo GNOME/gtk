@@ -1,3 +1,12 @@
+2007-06-30  Johan Dahlin  <jdahlin@async.com.br>
+
+	* gtk/gtkbuilder.c: (gtk_builder_value_from_string_type):
+	* gtk/gtkbuilderparser.c: (_gtk_builder_parse_boolean),
+	(parse_property), (parse_signal):
+	* gtk/gtkbuilderprivate.h:
+	* tests/buildertest.c: (test_value_from_string):
+	Make boolean string parsing consistent, #452464
+
 2007-06-30  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtkbuilder.c:
