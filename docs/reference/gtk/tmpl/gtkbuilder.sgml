@@ -45,6 +45,7 @@ which are more limited in scope.
 
 <!ATTLIST interface  domain         #IMPLIED >
 <!ATTLIST object     class          #REQUIRED
+                     type-func      #IMPLIED
                      id             #IMPLIED
                      constructor    #IMPLIED >
 <!ATTLIST property   name           #REQUIRED
@@ -54,14 +55,43 @@ which are more limited in scope.
                      after          #IMPLIED
                      object         #IMPLIED >
 <!ATTLIST child      type           #IMPLIED
-                     internal-child #IMPLIED
-                     type-func      #IMPLIED >
+                     internal-child #IMPLIED >
 ]]></programlisting>
 </para>
+<example>
+<title>A GtkBuilder UI Definition</title>
+<programlisting><![CDATA[
+<interface>
+  <object class="GtkDialog" id="dialog1">
+    <child internal-child="vbox">
+      <object class="GtkVBox">
+        <property name="border-width">10</property>
+        <child internal-child="action_area">
+          <object class="GtkHButtonBox">
+            <property name="border-width">20</property>
+            <child id="ok-button">
+              <object class="GtkButton"/>
+                <property name="label">OK</property>
+                <property name="use-stock">TRUE</property>
+                <signal name="clicked" handler="ok_button_clicked"/>
+              </object>
+            </child>
+          </object>
+        </child>
+      </object>
+    </child>
+  </object>
+</interface>
+]]></programlisting>
+</example>
 <para>
 Beyond this general structure, several object classes define
 their own XML DTD fragments for filling in the ANY placeholders.
+See
 </para>
+<simplelist>
+  <member><link linkend="GtkDialog-BUILDER-UI">GtkDialog as GtkBuildable</link></member>
+</simplelist>
 </refsect2>
 
 <!-- ##### SECTION See_Also ##### -->
