@@ -481,9 +481,8 @@ find_child_window_helper (GdkWindow *window,
 }
 
 /* Given a GdkWindow and coordinates relative to it, returns the
- * window in which the point is. The returned window will be in the
- * same subtree as the passed in window (including the passed in
- * window), if no window is found, NULL is returned.
+ * innermost subwindow that contains the point. If the coordinates are
+ * outside the passed in window, NULL is returned.
  */
 GdkWindow *
 _gdk_quartz_window_find_child (GdkWindow *window,

@@ -69,6 +69,38 @@ static void get_converted_window_coordinates    (GdkWindow *in_window,
                                                  gint      *out_y);
 static void append_event                        (GdkEvent  *event);
 
+static const gchar *
+which_window_is_this (GdkWindow *window)
+{
+  static gchar buf[256];
+  const gchar *name = NULL;
+  gpointer widget;
+
+  /* Get rid of compiler warning. */
+  if (0) which_window_is_this (window);
+
+  if (window == _gdk_root)
+    name = "root";
+  else if (window == NULL)
+    name = "null";
+
+  if (window)
+    {
+      gdk_window_get_user_data (window, &widget);
+      if (widget)
+        name = G_OBJECT_TYPE_NAME (widget);
+    }
+
+  if (!name)
+    name = "unknown";
+
+  snprintf (buf, 256, "<%s (%p)%s>", 
+            name, window, 
+            window == current_mouse_window ? ", is mouse" : "");
+
+  return buf;
+}
+
 /* A category that exposes the protected carbon event for an NSEvent. */
 @interface NSEvent (GdkQuartzNSEvent)
 - (void *)gdk_quartz_event_ref;
@@ -987,7 +1019,7 @@ get_converted_window_coordinates (GdkWindow *in_window,
  * finds the subwindow over which the pointer is located. Returns
  * coordinates relative to the found window. If no window is found,
  * returns NULL.
-*/
+ */
 static GdkWindow *
 find_mouse_window_for_ns_event (NSEvent *nsevent,
                                 gint    *x_ret,
@@ -1067,12 +1099,11 @@ synthesize_crossing_events_for_ns_event (NSEvent *nsevent)
     case NSLeftMouseDragged:
     case NSRightMouseDragged:
     case NSOtherMouseDragged:
-      mouse_window = find_mouse_window_for_ns_event (nsevent, &x, &y);
-
-      /* We don't need to handle the case where we don't find a mouse
-       * window (i.e. after leaving a GDK toplevel and not entering a
-       * new one) here, it's covered by NSMouseExited events.
+      /* We only handle moving the pointer to another GDK window.
+       * Leaving to a non-GDK toplevel window (or window title bar or
+       * the desktop) is covered by NSMouseExited events.
        */
+      mouse_window = find_mouse_window_for_ns_event (nsevent, &x, &y);
       if (mouse_window && mouse_window != current_mouse_window)
         synthesize_crossing_events (mouse_window, GDK_CROSSING_NORMAL, nsevent, x, y);
 
@@ -1083,6 +1114,10 @@ synthesize_crossing_events_for_ns_event (NSEvent *nsevent)
 	GdkWindow *event_toplevel;
         NSPoint point;
 
+        /* This is the only case where we actually use the window from
+         * the event since we need to know which toplevel we entered
+         * so it can be tracked properly.
+         */
         event_toplevel = [(GdkQuartzView *)[[nsevent window] contentView] gdkWindow];
         point = [nsevent locationInWindow];
 
@@ -1099,16 +1134,12 @@ synthesize_crossing_events_for_ns_event (NSEvent *nsevent)
             y = impl->height - point.y;
           }
 
-        /* This is the only case where we actually use the window from
-         * the event since we need to know which toplevel we entered
-         * so it can be tracked properly.
-         */
 	mouse_window = _gdk_quartz_window_find_child (event_toplevel, x, y);
 
-        /* Treat unknown windows (including title bar/buttons,
-         * desktop) as the root.
+        /* Treat unknown windows (like the title bar buttons or
+         * desktop) as the root window.
          */
-        if (!mouse_window) 
+        if (!mouse_window)
           mouse_window = _gdk_root;
 
         if (mouse_window != event_toplevel)
@@ -1127,16 +1158,14 @@ synthesize_crossing_events_for_ns_event (NSEvent *nsevent)
         NSPoint point;
         gint x_orig, y_orig;
 
-        /* We get mouse exited when leaving toplevels. We only use
-         * this when leaving from a window to the root window. The
-         * other case is handled above by checking the motion/button
-         * events, or getting a MouseEntered for another GDK window.
-         *
-         * The reason we don't use MouseExited for other windows is
-         * that quartz first delivers the entered event and then the
-         * exited which is the opposite from what we need.
+        /* We only use NSMouseExited when leaving to the root
+         * window. The other cases are handled above by checking the
+         * motion/button events, or getting a NSMouseEntered for
+         * another GDK window. The reason we don't use NSMouseExited
+         * for other windows is that quartz first delivers the entered
+         * event and then the exited which is the opposite from what
+         * we need.
          */
-
         event_toplevel = [(GdkQuartzView *)[[nsevent window] contentView] gdkWindow];
         point = [nsevent locationInWindow];
 
