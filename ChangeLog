@@ -1,5 +1,11 @@
 2007-06-30  Johan Dahlin  <jdahlin@async.com.br>
 
+	* gtk/gtkbuilderparser.c: (_get_type_by_symbol), (parse_object),
+	(parse_child):
+	* tests/buildertest.c: (test_types):
+	Move type-func to <object> instead of <child>, add a test to
+	make sure that it works as desired, #452463
+
 	* gtk/gtkbuilder.c: (gtk_builder_value_from_string_type):
 	* gtk/gtkbuilderparser.c: (_gtk_builder_parse_boolean),
 	(parse_property), (parse_signal):

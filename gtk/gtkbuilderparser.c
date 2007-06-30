@@ -227,6 +227,26 @@ builder_construct (ParserData *data,
   return object;
 }
 
+static gchar *
+_get_type_by_symbol (const gchar* symbol)
+{
+  static GModule *module = NULL;
+  GTypeGetFunc func;
+  GType type;
+  
+  if (!module)
+    module = g_module_open (NULL, 0);
+
+  if (!g_module_symbol (module, symbol, (gpointer)&func))
+    return NULL;
+  
+  type = func ();
+  if (type == G_TYPE_INVALID)
+    return NULL;
+
+  return g_strdup (g_type_name (type));
+}
+
 static void
 parse_object (ParserData   *data,
               const gchar  *element_name,
@@ -258,6 +278,22 @@ parse_object (ParserData   *data,
         object_id = g_strdup (values[i]);
       else if (strcmp (names[i], "constructor") == 0)
         constructor = g_strdup (values[i]);
+      else if (strcmp (names[i], "type-func") == 0)
+        {
+	  /* Call the GType function, and return the name of the GType,
+	   * it's guaranteed afterwards that g_type_from_name on the name
+	   * will return our GType
+	   */
+          object_class = _get_type_by_symbol (values[i]);
+          if (!object_class)
+            {
+              g_set_error (error, GTK_BUILDER_ERROR, 
+                           GTK_BUILDER_ERROR_INVALID_TYPE_FUNCTION,
+                           _("Invalid type function: `%s'"),
+                           values[i]);
+              return;
+            }
+        }
       else
 	{
 	  error_invalid_attribute (data, element_name, names[i], error);
@@ -303,26 +339,6 @@ free_object_info (ObjectInfo *info)
   g_slice_free (ObjectInfo, info);
 }
 
-static gchar *
-_get_type_by_symbol (const gchar* symbol)
-{
-  static GModule *module = NULL;
-  GTypeGetFunc func;
-  GType type;
-  
-  if (!module)
-    module = g_module_open (NULL, 0);
-
-  if (!g_module_symbol (module, symbol, (gpointer)&func))
-    return NULL;
-  
-  type = func ();
-  if (type == G_TYPE_INVALID)
-    return NULL;
-
-  return g_strdup (g_type_name (type));
-}
-
 static void
 parse_child (ParserData   *data,
              const gchar  *element_name,
@@ -354,18 +370,6 @@ parse_child (ParserData   *data,
         child_info->type = g_strdup (values[i]);
       else if (strcmp (names[i], "internal-child") == 0)
         child_info->internal_child = g_strdup (values[i]);
-      else if (strcmp (names[i], "type-func") == 0)
-        {
-          child_info->type = _get_type_by_symbol (values[i]);
-          if (!child_info->type)
-            {
-              g_set_error (error, GTK_BUILDER_ERROR, 
-                           GTK_BUILDER_ERROR_INVALID_TYPE_FUNCTION,
-                           _("Invalid type function: `%s'"),
-                           values[i]);
-              return;
-            }
-        }
       else
 	error_invalid_attribute (data, element_name, names[i], error);
     }

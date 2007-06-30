@@ -638,13 +638,39 @@ gboolean test_types (void)
     "  <object class=\"GtkWindow\" id=\"window\"/>"
     "  <object class=\"GtkUIManager\" id=\"uimanager\"/>"
     "</interface>";
+  const gchar buffer2[] = 
+    "<interface>"
+    "  <object type-func=\"gtk_window_get_type\" id=\"window\"/>"
+    "</interface>";
+  const gchar buffer3[] = 
+    "<interface>"
+    "  <object type-func=\"xxx_invalid_get_type_function\" id=\"window\"/>"
+    "</interface>";
   GtkBuilder *builder;
+  GObject *window;
+  GError *error;
 
   builder = builder_new_from_string (buffer, -1, NULL);
   gtk_widget_destroy (GTK_WIDGET (gtk_builder_get_object (builder, "dialog")));
   gtk_widget_destroy (GTK_WIDGET (gtk_builder_get_object (builder, "window")));
   g_object_unref (builder);
+
+  builder = builder_new_from_string (buffer2, -1, NULL);
+  window = gtk_builder_get_object (builder, "window");
+  g_assert (window != NULL);
+  g_assert (GTK_IS_WINDOW (window));
+  gtk_widget_destroy (GTK_WIDGET (window));
+  g_object_unref (builder);
   
+  error = NULL;
+  builder = gtk_builder_new ();
+  gtk_builder_add_from_string (builder, buffer3, -1, &error);
+  g_assert (error != NULL);
+  g_return_val_if_fail (error->domain == GTK_BUILDER_ERROR, FALSE);
+  g_return_val_if_fail (error->code == GTK_BUILDER_ERROR_INVALID_TYPE_FUNCTION, FALSE);
+  g_error_free (error);
+  g_object_unref (builder);
+
   return TRUE;
 }
 
