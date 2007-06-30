@@ -638,25 +638,17 @@ create_crossing_event (GdkWindow      *window,
   {
     NSWindow *nswindow;
     GdkWindow *toplevel;
+    GdkWindowImplQuartz *impl;
     NSPoint point;
 
     nswindow = [nsevent window];
     point = [nsevent locationInWindow];
 
     toplevel = [(GdkQuartzView *)[nswindow contentView] gdkWindow];
+    impl = GDK_WINDOW_IMPL_QUARTZ (GDK_WINDOW_OBJECT (toplevel)->impl);
 
     x_tmp = point.x;
-
-    /* Flip the y coordinate. */
-    if (toplevel == _gdk_root)
-      y_tmp = _gdk_quartz_window_get_inverted_screen_y (point.y);
-    else
-      {
-        GdkWindowImplQuartz *impl;
-
-        impl = GDK_WINDOW_IMPL_QUARTZ (GDK_WINDOW_OBJECT (toplevel)->impl);
-        y_tmp = impl->height - point.y;
-      }
+    y_tmp = impl->height - point.y;
 
     get_converted_window_coordinates (toplevel,
                                       x_tmp, y_tmp,
@@ -832,7 +824,7 @@ synthesize_crossing_events (GdkWindow      *window,
        */
       g_warning ("Trying to create crossing event when current_mouse_window is NULL");
     }
-  
+
   _gdk_quartz_events_update_mouse_window (window);
 
   /* FIXME: This does't work when someone calls gdk_window_set_cursor
@@ -1026,26 +1018,18 @@ find_mouse_window_for_ns_event (NSEvent *nsevent,
                                 gint    *y_ret)
 {
   GdkWindow *event_toplevel;
+  GdkWindowImplQuartz *impl;
   GdkWindow *mouse_toplevel;
   GdkWindow *mouse_window;
   NSPoint point;
   gint x_tmp, y_tmp;
 
   event_toplevel = [(GdkQuartzView *)[[nsevent window] contentView] gdkWindow];
+  impl = GDK_WINDOW_IMPL_QUARTZ (GDK_WINDOW_OBJECT (event_toplevel)->impl);
   point = [nsevent locationInWindow];
 
   x_tmp = point.x;
-
-  /* Flip the y coordinate. */
-  if (event_toplevel == _gdk_root)
-    y_tmp = _gdk_quartz_window_get_inverted_screen_y (point.y);
-  else
-    {
-      GdkWindowImplQuartz *impl;
-
-      impl = GDK_WINDOW_IMPL_QUARTZ (GDK_WINDOW_OBJECT (event_toplevel)->impl);
-      y_tmp = impl->height - point.y;
-    }
+  y_tmp = impl->height - point.y;
 
   if (!current_mouse_window)
     return NULL;
@@ -1112,6 +1096,7 @@ synthesize_crossing_events_for_ns_event (NSEvent *nsevent)
     case NSMouseEntered:
       {
 	GdkWindow *event_toplevel;
+        GdkWindowImplQuartz *impl;
         NSPoint point;
 
         /* This is the only case where we actually use the window from
@@ -1119,20 +1104,11 @@ synthesize_crossing_events_for_ns_event (NSEvent *nsevent)
          * so it can be tracked properly.
          */
         event_toplevel = [(GdkQuartzView *)[[nsevent window] contentView] gdkWindow];
+        impl = GDK_WINDOW_IMPL_QUARTZ (GDK_WINDOW_OBJECT (event_toplevel)->impl);
         point = [nsevent locationInWindow];
 
         x = point.x;
-
-        /* Flip the y coordinate. */
-        if (event_toplevel == _gdk_root)
-          y = _gdk_quartz_window_get_inverted_screen_y (point.y);
-        else
-          {
-            GdkWindowImplQuartz *impl;
-
-            impl = GDK_WINDOW_IMPL_QUARTZ (GDK_WINDOW_OBJECT (event_toplevel)->impl);
-            y = impl->height - point.y;
-          }
+        y = impl->height - point.y;
 
 	mouse_window = _gdk_quartz_window_find_child (event_toplevel, x, y);
 
@@ -1155,6 +1131,7 @@ synthesize_crossing_events_for_ns_event (NSEvent *nsevent)
     case NSMouseExited:
       {
 	GdkWindow *event_toplevel;
+        GdkWindowImplQuartz *impl;
         NSPoint point;
         gint x_orig, y_orig;
 
@@ -1167,20 +1144,11 @@ synthesize_crossing_events_for_ns_event (NSEvent *nsevent)
          * we need.
          */
         event_toplevel = [(GdkQuartzView *)[[nsevent window] contentView] gdkWindow];
+        impl = GDK_WINDOW_IMPL_QUARTZ (GDK_WINDOW_OBJECT (event_toplevel)->impl);
         point = [nsevent locationInWindow];
 
         x = point.x;
-
-        /* Flip the y coordinate. */
-        if (event_toplevel == _gdk_root)
-          y = _gdk_quartz_window_get_inverted_screen_y (point.y);
-        else
-          {
-            GdkWindowImplQuartz *impl;
-
-            impl = GDK_WINDOW_IMPL_QUARTZ (GDK_WINDOW_OBJECT (event_toplevel)->impl);
-            y = impl->height - point.y;
-          }
+        y = impl->height - point.y;
 
         if (gdk_window_get_origin (event_toplevel, &x_orig, &y_orig))
           {

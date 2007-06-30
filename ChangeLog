@@ -1,5 +1,12 @@
 2007-06-30  Richard Hult  <richard@imendio.com>
 
+	* gdk/quartz/gdkevents-quartz.c: (create_crossing_event),
+	(synthesize_crossing_events), (find_mouse_window_for_ns_event),
+	(synthesize_crossing_events_for_ns_event): No need to special case
+	the root window now that it has the right size.
+
+2007-06-30  Richard Hult  <richard@imendio.com>
+
 	* gdk/quartz/gdkwindow-quartz.c:
 	* gdk/quartz/gdkevents-quartz.c: Improve comments in those
 	files. Add a debugging helper to print out information about a
