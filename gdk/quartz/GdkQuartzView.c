@@ -1,6 +1,6 @@
 /* GdkQuartzView.m
  *
- * Copyright (C) 2005 Imendio AB
+ * Copyright (C) 2005-2007 Imendio AB
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -117,6 +117,7 @@
 {
   GdkWindowObject *private = GDK_WINDOW_OBJECT (gdk_window);
   GdkWindowImplQuartz *impl = GDK_WINDOW_IMPL_QUARTZ (private->impl);
+  NSRect rect;
 
   if (trackingRect)
     {
@@ -127,7 +128,12 @@
   if (!impl->toplevel)
     return;
 
-  trackingRect = [self addTrackingRect:[self bounds]
+  /* Note, if we want to set assumeInside we can use:
+   * NSPointInRect ([[self window] convertScreenToBase:[NSEvent mouseLocation]], rect)
+   */
+
+  rect = NSMakeRect (0, 0, impl->width, impl->height);
+  trackingRect = [self addTrackingRect:rect
                                  owner:self
                               userData:nil
                           assumeInside:NO];
@@ -143,19 +149,13 @@
 
 -(void)viewWillMoveToWindow:(NSWindow *)newWindow
 {
-  if ([self window] && trackingRect)
+  if (newWindow == nil && trackingRect)
     {
       [self removeTrackingRect:trackingRect];
       trackingRect = nil;
     }
 }
 
--(void)setFrame:(NSRect)frame
-{
-  [super setFrame:frame];
-  [self updateTrackingRect];
-}
- 
 -(void)setBounds:(NSRect)bounds
 {
   [super setBounds:bounds];
