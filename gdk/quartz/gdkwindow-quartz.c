@@ -1208,6 +1208,13 @@ gdk_window_get_origin (GdkWindow *window,
       
       return FALSE;
     }
+
+  if (window == _gdk_root)
+    {
+      *x = 0;
+      *y = 0;
+      return TRUE;
+    }
   
   private = GDK_WINDOW_OBJECT (window);
 

@@ -1,9 +1,14 @@
 2007-06-30  Richard Hult  <richard@imendio.com>
 
+	* gdk/quartz/gdkwindow-quartz.c: (gdk_window_get_origin): Make
+	this work properly for the root window.
+
+2007-06-30  Richard Hult  <richard@imendio.com>
+
 	* gdk/quartz/GdkQuartzView.c: Improve the tracking rect updating:
 	- No need to override setFrame.
-	- Use our own size instead of the bounds from for the view as it's
-	not always updated before the tracking rect.
+	- Use our own size instead of the bounds from the view as it's not
+	always updated before the tracking rect.
 	- Only reset the tracking rect if the new window is nil).
 	
 	* gdk/quartz/GdkQuartzWindow.c: Update the bounds of the content
