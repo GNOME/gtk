@@ -14,40 +14,47 @@ action groups.
 <para>
 The UI definitions are specified in an XML format which can be
 roughly described by the following DTD. 
-<programlisting>
-&lt;!ELEMENT ui          (menubar|toolbar|popup|accelerator)* &gt;
-&lt;!ELEMENT menubar     (menuitem|separator|placeholder|menu)* &gt;
-&lt;!ELEMENT menu        (menuitem|separator|placeholder|menu)* &gt;
-&lt;!ELEMENT popup       (menuitem|separator|placeholder|menu)* &gt;
-&lt;!ELEMENT toolbar     (toolitem|separator|placeholder)* &gt;
-&lt;!ELEMENT placeholder (menuitem|toolitem|separator|placeholder|menu)* &gt;
-&lt;!ELEMENT menuitem     EMPTY &gt;
-&lt;!ELEMENT toolitem     (menu?) &gt;
-&lt;!ELEMENT separator    EMPTY &gt;
-&lt;!ELEMENT accelerator  EMPTY &gt;
-&lt;!ATTLIST menubar      name                  &num;IMPLIED 
-                       action                &num;IMPLIED &gt;
-&lt;!ATTLIST toolbar      name                  &num;IMPLIED 
-                       action                &num;IMPLIED &gt;
-&lt;!ATTLIST popup        name                  &num;IMPLIED 
-                       action                &num;IMPLIED &gt;
-&lt;!ATTLIST placeholder  name                  &num;IMPLIED
-                       action                &num;IMPLIED &gt;
-&lt;!ATTLIST separator    name                  &num;IMPLIED
+</para>
+<para>
+Do not confuse the GtkUIManager UI Definitions described here with
+the similarly named <link linkend="BUILDER-UI">GtkBuilder UI 
+Definitions</link>. 
+</para>
+<para>
+<programlisting><![CDATA[
+<!ELEMENT ui          (menubar|toolbar|popup|accelerator)* >
+<!ELEMENT menubar     (menuitem|separator|placeholder|menu)* >
+<!ELEMENT menu        (menuitem|separator|placeholder|menu)* >
+<!ELEMENT popup       (menuitem|separator|placeholder|menu)* >
+<!ELEMENT toolbar     (toolitem|separator|placeholder)* >
+<!ELEMENT placeholder (menuitem|toolitem|separator|placeholder|menu)* >
+<!ELEMENT menuitem     EMPTY >
+<!ELEMENT toolitem     (menu?) >
+<!ELEMENT separator    EMPTY >
+<!ELEMENT accelerator  EMPTY >
+<!ATTLIST menubar      name                  &num;IMPLIED 
+                       action                &num;IMPLIED >
+<!ATTLIST toolbar      name                  &num;IMPLIED 
+                       action                &num;IMPLIED >
+<!ATTLIST popup        name                  &num;IMPLIED 
+                       action                &num;IMPLIED >
+<!ATTLIST placeholder  name                  &num;IMPLIED
+                       action                &num;IMPLIED >
+<!ATTLIST separator    name                  &num;IMPLIED
                        action                &num;IMPLIED
-                       expand   (true|false) &num;IMPLIED &gt;
-&lt;!ATTLIST menu         name                  &num;IMPLIED
+                       expand   (true|false) &num;IMPLIED >
+<!ATTLIST menu         name                  &num;IMPLIED
                        action                &num;REQUIRED
-                       position (top|bot)    &num;IMPLIED &gt;
-&lt;!ATTLIST menuitem     name                  &num;IMPLIED
+                       position (top|bot)    &num;IMPLIED >
+<!ATTLIST menuitem     name                  &num;IMPLIED
                        action                &num;REQUIRED
-                       position (top|bot)    &num;IMPLIED &gt;
-&lt;!ATTLIST toolitem     name                  &num;IMPLIED
+                       position (top|bot)    &num;IMPLIED >
+<!ATTLIST toolitem     name                  &num;IMPLIED
                        action                &num;REQUIRED
-                       position (top|bot)    &num;IMPLIED &gt;
-&lt;!ATTLIST accelerator  name                  &num;IMPLIED
-                       action                &num;REQUIRED &gt;
-</programlisting>
+                       position (top|bot)    &num;IMPLIED >
+<!ATTLIST accelerator  name                  &num;IMPLIED
+                       action                &num;REQUIRED >
+]]></programlisting>
 There are some additional restrictions beyond those specified in the
 DTD, e.g. every toolitem must have a toolbar in its anchestry and
 every menuitem must have a menubar or popup in its anchestry. Since
@@ -194,7 +201,7 @@ to which the submenu is associated.
 
 <!-- ##### SECTION See_Also ##### -->
 <para>
-
+#GtkBuilder
 </para>
 
 <!-- ##### SECTION Stability_Level ##### -->

@@ -2,26 +2,70 @@
 GtkBuilder
 
 <!-- ##### SECTION Short_Description ##### -->
-Build an interface from a UI definition description.
+Build an interface from an XML UI definition
 
 <!-- ##### SECTION Long_Description ##### -->
 <para>
-This object represents an `instantiation' of an UI definition description. 
-When one of these objects is created, the XML file is read, and the 
-interface is created. The GtkBuilder object then provides an interface 
-for accessing the widgets in the interface by the names assigned to 
-them inside the UI description.
-
-The GtkBuilder object can also be used to connect handlers to the named 
-signals in the description. GtkBuilder also provides an interface by 
-which it can look up the signal handler names in the program's symbol 
-table and automatically connect as many handlers up as it can that way.
+A GtkBuilder is an auxiliary object that reads textual descriptions
+of a user interface and instantiates the described objects. 
+The functions gtk_builder_get_object() and gtk_builder_get_objects()
+can be used to access the widgets in the interface by the names assigned 
+to them inside the UI description. The function gtk_builder_connect_signals() 
+and variants thereof can be used to connect handlers to the named signals 
+in the description. 
 </para>
+<para>
+A GtkBuilder holds a reference to all objects that it has constructed
+and drops these references when it is finalized. To keep objects beyond
+the lifespan of the builder, they must be fetched with gtk_builder_get_object()
+and reffed with g_object_ref(). It is the responsibility of the user
+to destroy all toplevel windows that have been constructed by a builder
+(these are not automatically cleaned up when the builder is finalized, 
+since GTK+ itself holds a reference to each toplevel window).
+</para>
+
+<refsect2 id="BUILDER-UI"><title>GtkBuilder UI Definitions</title>
+<para>
+GtkBuilder parses textual descriptions of user interfaces which 
+are specified in an XML format which can be roughly described 
+by the following DTD.
+</para>
+<para>
+Do not confuse GtkBuilder UI Definitions with 
+<link linkend="XML-UI">GtkUIManager UI Definitions</link>, 
+which are more limited in scope. 
+</para>
+<para>
+<programlisting><![CDATA[
+<!ELEMENT interface object* >
+<!ELEMENT object    (property|signal|child|ANY)* >
+<!ELEMENT property  PCDATA >
+<!ELEMENT signal    EMPTY >
+<!ELEMENT child     (object|ANY*) >
+
+<!ATTLIST interface  domain         #IMPLIED >
+<!ATTLIST object     class          #REQUIRED
+                     id             #IMPLIED
+                     constructor    #IMPLIED >
+<!ATTLIST property   name           #REQUIRED
+                     translatable   #IMPLIED >
+<!ATTLIST signal     name           #REQUIRED
+                     handler        #REQUIRED
+                     after          #IMPLIED
+                     object         #IMPLIED >
+<!ATTLIST child      type           #IMPLIED
+                     internal-child #IMPLIED
+                     type-func      #IMPLIED >
+]]></programlisting>
+</para>
+<para>
+Beyond this general structure, several object classes define
+their own XML DTD fragments for filling in the ANY placeholders.
+</para>
+</refsect2>
 
 <!-- ##### SECTION See_Also ##### -->
-<para>
-SEE ALSO
-</para>
+
 
 <!-- ##### SECTION Stability_Level ##### -->
 
@@ -36,6 +80,19 @@ SEE ALSO
 <para>
 
 </para>
+
+<!-- ##### STRUCT GtkBuilderClass ##### -->
+<para>
+
+</para>
+
+@get_type_from_name: Looks up a type by name. The default
+  implementation applies heuristics to map type names to
+  <function>_get_type</function> function names, e.g. 
+  GtkHBox to gtk_hbox_get_type(). This virtual function
+  is provided to allow language bindings to intercept the
+  type resolution process.
+
 
 <!-- ##### USER_FUNCTION GtkBuilderConnectFunc ##### -->
 <para>
@@ -153,9 +210,11 @@ SEE ALSO
 
 </para>
 
+@builder: 
 @pspec: 
 @string: 
 @value: 
+@error: 
 @Returns: 
 
 
@@ -164,9 +223,11 @@ SEE ALSO
 
 </para>
 
+@builder: 
 @type: 
 @string: 
 @value: 
+@error: 
 @Returns: 
 
 

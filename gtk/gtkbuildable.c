@@ -44,10 +44,7 @@ gtk_buildable_get_type (void)
  * @buildable: a #GtkBuildable
  * @name: name to set
  *
- * Sets the name of the buildable object, it's used to synchronize the name
- * if the object already has it's own concept of name.
- *
- * #GtkWidget implements this to map the buildable name to the widget name
+ * Sets the name of the @buildable object.
  *
  * Since: 2.12
  **/
@@ -75,12 +72,11 @@ gtk_buildable_set_name (GtkBuildable *buildable,
  * gtk_buildable_get_name:
  * @buildable: a #GtkBuildable
  *
- *   
- * Returns the buildable name. #GtkBuilder sets the name based on the 
- * the <link linkend="BUILDER-UI">GtkBuilder UI definition</link> used 
- * to construct the @buildable.
- *
- * #GtkWidget implements this to map the buildable name to the widget name
+ * Gets the name of the @buildable object. 
+ * 
+ * #GtkBuilder sets the name based on the the 
+ * <link linkend="BUILDER-UI">GtkBuilder UI definition</link> 
+ * used to construct the @buildable.
  *
  * Returns: the name set with gtk_buildable_set_name()
  *
@@ -109,12 +105,8 @@ gtk_buildable_get_name (GtkBuildable *buildable)
  * @child: child to add
  * @type: kind of child or %NULL
  *
- * Add a child to a buildable. type is an optional string
+ * Adds a child to @buildable. @type is an optional string
  * describing how the child should be added.
- *
- * #GtkContainer implements this to be able to add a child widget
- * to the container. #GtkNotebook uses the @type to distinguish between
- * page labels (@type = "page-label") and normal children.
  *
  * Since: 2.12
  **/
@@ -142,14 +134,7 @@ gtk_buildable_add_child (GtkBuildable *buildable,
  * @name: name of property
  * @value: value of property
  *
- * Sets the property name @name to @value on the buildable object @buildable
- * which is created by the @builder.
- *
- * This is optional to implement and is normally not needed.
- * g_object_set_property() is used as a fallback.
- *
- * #GtkWindow implements this to delay showing (::visible) itself until
- * the whole interface is fully created.
+ * Sets the property name @name to @value on the @buildable object.
  *
  * Since: 2.12
  **/
@@ -178,12 +163,11 @@ gtk_buildable_set_buildable_property (GtkBuildable *buildable,
  * @buildable: a #GtkBuildable
  * @builder: a #GtkBuilder
  *
- * Finish the parsing of a <link linkend="BUILDER-UI">GtkBuilder UI definition</link>
- * snippet. Note that this will be called once for each time gtk_builder_add_from_file or
- * gtk_builder_add_from_string is called on a builder.
- *
- * #GtkWindow implements this to delay showing (::visible) itself until
- * the whole interface is fully created.
+ * Called when the builder finishes the parsing of a 
+ * <link linkend="BUILDER-UI">GtkBuilder UI definition</link>. 
+ * Note that this will be called once for each time 
+ * gtk_builder_add_from_file() or gtk_builder_add_from_string() 
+ * is called on a builder.
  *
  * Since: 2.12
  **/
@@ -202,19 +186,17 @@ gtk_buildable_parser_finished (GtkBuildable *buildable,
 }
 
 /**
- * gtk_buildable_construct_child
+ * gtk_buildable_construct_child:
  * @buildable: A #GtkBuildable
  * @builder: #GtkBuilder used to construct this object
  * @name: name of child to construct
  *
- * Construct a child of @buildable with the name @name.
+ * Constructs a child of @buildable with the name @name. 
  *
- * #GtkUIManager implements this to reference to a widget created in a 
- * &lt;ui&gt; tag which is outside of the normal 
- * <link linkend="BUILDER-UI">GtkBuilder UI definition</link>
- * hierarchy.
+ * #GtkBuilder calls this function if a "constructor" has been
+ * specified in the UI definition.
  *
- * Returns: the child with name @name
+ * Returns: the constructed child
  *
  * Since: 2.12
  **/
@@ -236,27 +218,17 @@ gtk_buildable_construct_child (GtkBuildable *buildable,
 }
 
 /**
- * gtk_buildable_custom_tag_start
+ * gtk_buildable_custom_tag_start:
  * @buildable: a #GtkBuildable
  * @builder: a #GtkBuilder used to construct this object
  * @child: child object or %NULL for non-child tags
  * @tagname: name of tag
- * @parser: a #GMarkupParser structure
- * @data: user data that will be passed in to parser functions
+ * @parser: a #GMarkupParser structure to fill in
+ * @data: return location for user data that will be passed in 
+ *   to parser functions
  *
- * This is called when an unknown tag under &lt;child&gt; tag is found.
+ * This is called for each unknown element under &lt;child&gt;.
  * 
- * Called when an unknown tag is present under a &lt;child&gt; tag.
- * If the buildable implementation wishes to handle the tag it should
- * return %TRUE and fill in the @parser structure. Remember to either
- * implement custom_tag_end or custom_tag_finish to free
- * the user data allocated here.
- *
- * #GtkWidget implements this and parsers all &lt;accelerator&gt; tags to
- * keyboard accelerators.
- * #GtkContainer implements this to map properties defined under
- * &lt;packing&gt; tag to child properties.
- *
  * Returns: %TRUE if a object has a custom implementation, %FALSE
  *          if it doesn't.
  *
@@ -284,15 +256,15 @@ gtk_buildable_custom_tag_start (GtkBuildable  *buildable,
 }
 
 /**
- * gtk_buildable_custom_tag_end
+ * gtk_buildable_custom_tag_end:
  * @buildable: A #GtkBuildable
  * @builder: #GtkBuilder used to construct this object
  * @child: child object or %NULL for non-child tags
  * @tagname: name of tag
  * @data: user data that will be passed in to parser functions
  *
- * This is called for each custom tag handled by the buildable.
- * It will be called when the end of the tag is reached.
+ * This is called at the end of each custom element handled by 
+ * the buildable.
  *
  * Since: 2.12
  **/
@@ -345,7 +317,7 @@ gtk_buildable_custom_finished (GtkBuildable  *buildable,
 }
 
 /**
- * gtk_buildable_get_internal_child
+ * gtk_buildable_get_internal_child:
  * @buildable: a #GtkBuildable
  * @builder: a #GtkBuilder
  * @childname: name of child
