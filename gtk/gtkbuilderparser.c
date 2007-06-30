@@ -158,12 +158,11 @@ error_missing_property_value (ParserData *data,
 }
 
 gboolean
-_gtk_builder_parse_boolean (const gchar  *string,
-			    gboolean     *value,
-			    GError      **error)
+_gtk_builder_boolean_from_string (const gchar  *string,
+				  gboolean     *value,
+				  GError      **error)
 {
   gboolean retval = TRUE;
-  int i;
   int length;
   
   g_assert (string != NULL);
@@ -405,7 +404,8 @@ parse_property (ParserData   *data,
         name = g_strdelimit (g_strdup (values[i]), "_", '-');
       else if (strcmp (names[i], "translatable") == 0)
 	{
-	  if (!_gtk_builder_parse_boolean (values[i], &translatable, error))
+	  if (!_gtk_builder_boolean_from_string (values[i], &translatable,
+						 error))
 	    return;
 	}
       else
@@ -463,12 +463,12 @@ parse_signal (ParserData   *data,
         handler = g_strdup (values[i]);
       else if (strcmp (names[i], "after") == 0)
 	{
-	  if (!_gtk_builder_parse_boolean (values[i], &after, error))
+	  if (!_gtk_builder_boolean_from_string (values[i], &after, error))
 	    return;
 	}
       else if (strcmp (names[i], "swapped") == 0)
 	{
-	  if (!_gtk_builder_parse_boolean (values[i], &swapped, error))
+	  if (!_gtk_builder_boolean_from_string (values[i], &swapped, error))
 	    return;
 	  swapped_set = TRUE;
 	}

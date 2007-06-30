@@ -1602,6 +1602,35 @@ test_value_from_string (void)
   g_error_free (error);
   error = NULL;
 
+  g_return_val_if_fail (gtk_builder_value_from_string_type (builder, GTK_TYPE_WINDOW_TYPE, "toplevel", &value, &error) == TRUE, FALSE);
+  g_return_val_if_fail (G_VALUE_HOLDS_ENUM (&value), FALSE);
+  g_return_val_if_fail (g_value_get_enum (&value) == GTK_WINDOW_TOPLEVEL, FALSE);
+  g_value_unset (&value);
+
+  g_return_val_if_fail (gtk_builder_value_from_string_type (builder, GTK_TYPE_WINDOW_TYPE, "sliff", &value, &error) == FALSE, FALSE);
+  g_value_unset (&value);
+  g_return_val_if_fail (error->domain == GTK_BUILDER_ERROR, FALSE);
+  g_return_val_if_fail (error->code == GTK_BUILDER_ERROR_INVALID_VALUE, FALSE);
+  g_error_free (error);
+  error = NULL;
+  
+  g_return_val_if_fail (gtk_builder_value_from_string_type (builder, GTK_TYPE_WIDGET_FLAGS, "mapped", &value, &error) == TRUE, FALSE);
+  g_return_val_if_fail (G_VALUE_HOLDS_FLAGS (&value), FALSE);
+  g_return_val_if_fail (g_value_get_flags (&value) == GTK_MAPPED, FALSE);
+  g_value_unset (&value);
+
+  g_return_val_if_fail (gtk_builder_value_from_string_type (builder, GTK_TYPE_WIDGET_FLAGS, "GTK_VISIBLE | GTK_REALIZED", &value, &error) == TRUE, FALSE);
+  g_return_val_if_fail (G_VALUE_HOLDS_FLAGS (&value), FALSE);
+  g_return_val_if_fail (g_value_get_flags (&value) == (GTK_VISIBLE | GTK_REALIZED), FALSE);
+  g_value_unset (&value);
+  
+  g_return_val_if_fail (gtk_builder_value_from_string_type (builder, GTK_TYPE_WINDOW_TYPE, "foobar", &value, &error) == FALSE, FALSE);
+  g_value_unset (&value);
+  g_return_val_if_fail (error->domain == GTK_BUILDER_ERROR, FALSE);
+  g_return_val_if_fail (error->code == GTK_BUILDER_ERROR_INVALID_VALUE, FALSE);
+  g_error_free (error);
+  error = NULL;
+  
   g_object_unref (builder);
   
   return TRUE;

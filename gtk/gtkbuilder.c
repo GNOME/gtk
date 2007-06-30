@@ -49,8 +49,10 @@ static void gtk_builder_get_property   (GObject         *object,
                                         GParamSpec      *pspec);
 static GType gtk_builder_real_get_type_from_name (GtkBuilder  *builder,
                                                   const gchar *type_name);
-static gint _gtk_builder_enum_from_string        (GType        type, 
-                                                  const gchar *string);
+static gboolean _gtk_builder_enum_from_string (GType         type, 
+					       const gchar  *string,
+					       gint         *enum_value,
+					       GError      **error);
 
 
 enum {
@@ -1038,7 +1040,7 @@ gtk_builder_value_from_string_type (GtkBuilder   *builder,
       {
         gboolean b;
 
-	if (!_gtk_builder_parse_boolean (string, &b, error))
+	if (!_gtk_builder_boolean_from_string (string, &b, error))
 	  {
 	    ret = FALSE;
 	    break;
@@ -1093,11 +1095,27 @@ gtk_builder_value_from_string_type (GtkBuilder   *builder,
         break;
       }
     case G_TYPE_ENUM:
-      g_value_set_enum (value, _gtk_builder_enum_from_string (type, string));
-      break;
+      {
+	gint enum_value;
+	if (!_gtk_builder_enum_from_string (type, string, &enum_value, error))
+	  {
+	    ret = FALSE;
+	    break;
+          }
+	g_value_set_enum (value, enum_value);
+	break;
+      }
     case G_TYPE_FLAGS:
-      g_value_set_flags (value, _gtk_builder_flags_from_string (type, string));
-      break;
+      {
+	gint flags_value;
+	if (!_gtk_builder_flags_from_string (type, string, &flags_value, error))
+	  {
+	    ret = FALSE;
+	    break;
+          }
+	g_value_set_flags (value, flags_value);
+	break;
+      }
     case G_TYPE_FLOAT:
     case G_TYPE_DOUBLE:
       {
@@ -1195,42 +1213,57 @@ gtk_builder_value_from_string_type (GtkBuilder   *builder,
   return ret;
 }
 
-static gint
-_gtk_builder_enum_from_string (GType        type, 
-                               const gchar *string)
+static gboolean
+_gtk_builder_enum_from_string (GType         type, 
+                               const gchar  *string,
+			       gint         *enum_value,
+			       GError      **error)
 {
   GEnumClass *eclass;
   GEnumValue *ev;
   gchar *endptr;
-  gint ret = 0;
-
+  gint value;
+  
   g_return_val_if_fail (G_TYPE_IS_ENUM (type), 0);
   g_return_val_if_fail (string != NULL, 0);
   
-  ret = strtoul (string, &endptr, 0);
+  value = strtoul (string, &endptr, 0);
   if (endptr != string) /* parsed a number */
-    return ret;
+    *enum_value = value;
+  else
+    {
+      eclass = g_type_class_ref (type);
+      ev = g_enum_get_value_by_name (eclass, string);
+      if (!ev)
+	ev = g_enum_get_value_by_nick (eclass, string);
 
-  eclass = g_type_class_ref (type);
-  ev = g_enum_get_value_by_name (eclass, string);
-  if (!ev)
-    ev = g_enum_get_value_by_nick (eclass, string);
-
-  if (ev)
-    ret = ev->value;
-
-  g_type_class_unref (eclass);
-
-  return ret;
+      if (ev)
+	*enum_value = ev->value;
+      else
+	{
+	  g_set_error (error,
+		       GTK_BUILDER_ERROR,
+		       GTK_BUILDER_ERROR_INVALID_VALUE,
+		       "Could not parse enum: `%s'",
+		       string);
+	  return FALSE;
+	}
+      
+      g_type_class_unref (eclass);
+    }
+  
+  return TRUE;
 }
 
-guint
-_gtk_builder_flags_from_string (GType        type, 
-                                const gchar *string)
+gboolean
+_gtk_builder_flags_from_string (GType         type, 
+                                const gchar  *string,
+				gint         *flags_value,
+				GError      **error)
 {
   GFlagsClass *fclass;
   gchar *endptr, *prevptr;
-  guint i, j, ret;
+  guint i, j, ret, value;
   gchar *flagstr;
   GFlagsValue *fv;
   const gchar *flag;
@@ -1240,69 +1273,84 @@ _gtk_builder_flags_from_string (GType        type,
   g_return_val_if_fail (G_TYPE_IS_FLAGS (type), 0);
   g_return_val_if_fail (string != 0, 0);
 
-  ret = strtoul (string, &endptr, 0);
+  ret = TRUE;
+  
+  value = strtoul (string, &endptr, 0);
   if (endptr != string) /* parsed a number */
-    return ret;
-
-  fclass = g_type_class_ref (type);
-
-  flagstr = g_strdup (string);
-  for (ret = i = j = 0; ; i++)
+    *flags_value = value;
+  else
     {
+      fclass = g_type_class_ref (type);
 
-      eos = flagstr[i] == '\0';
-
-      if (!eos && flagstr[i] != '|')
-        continue;
-
-      flag = &flagstr[j];
-      endptr = &flagstr[i];
-
-      if (!eos)
-        {
-          flagstr[i++] = '\0';
-          j = i;
-        }
-
-      /* trim spaces */
-      for (;;)
-        {
-          ch = g_utf8_get_char (flag);
-          if (!g_unichar_isspace (ch))
-            break;
-          flag = g_utf8_next_char (flag);
-        }
-
-      while (endptr > flag)
-        {
-          prevptr = g_utf8_prev_char (endptr);
-          ch = g_utf8_get_char (prevptr);
-          if (!g_unichar_isspace (ch))
-            break;
-          endptr = prevptr;
-        }
-
-      if (endptr > flag)
-        {
-          *endptr = '\0';
-          fv = g_flags_get_value_by_name (fclass, flag);
-
-          if (!fv)
-            fv = g_flags_get_value_by_nick (fclass, flag);
-
-          if (fv)
-            ret |= fv->value;
-          else
-            g_warning ("Unknown flag: '%s'", flag);
-        }
-
-      if (eos)
-        break;
+      flagstr = g_strdup (string);
+      for (value = i = j = 0; ; i++)
+	{
+	  
+	  eos = flagstr[i] == '\0';
+	  
+	  if (!eos && flagstr[i] != '|')
+	    continue;
+	  
+	  flag = &flagstr[j];
+	  endptr = &flagstr[i];
+	  
+	  if (!eos)
+	    {
+	      flagstr[i++] = '\0';
+	      j = i;
+	    }
+	  
+	  /* trim spaces */
+	  for (;;)
+	    {
+	      ch = g_utf8_get_char (flag);
+	      if (!g_unichar_isspace (ch))
+		break;
+	      flag = g_utf8_next_char (flag);
+	    }
+	  
+	  while (endptr > flag)
+	    {
+	      prevptr = g_utf8_prev_char (endptr);
+	      ch = g_utf8_get_char (prevptr);
+	      if (!g_unichar_isspace (ch))
+		break;
+	      endptr = prevptr;
+	    }
+	  
+	  if (endptr > flag)
+	    {
+	      *endptr = '\0';
+	      fv = g_flags_get_value_by_name (fclass, flag);
+	      
+	      if (!fv)
+		fv = g_flags_get_value_by_nick (fclass, flag);
+	      
+	      if (fv)
+		value |= fv->value;
+	      else
+		{
+		  g_set_error (error,
+			       GTK_BUILDER_ERROR,
+			       GTK_BUILDER_ERROR_INVALID_VALUE,
+			       "Unknown flag: `%s'",
+			       flag);
+		  ret = FALSE;
+		  break;
+		}
+	    }
+	  
+	  if (eos)
+	    {
+	      *flags_value = value;
+	      break;
+	    }
+	}
+      
+      g_free (flagstr);
+      
+      g_type_class_unref (fclass);
     }
-
-  g_free (flagstr);
-
-  g_type_class_unref (fclass);
 
   return ret;
 }

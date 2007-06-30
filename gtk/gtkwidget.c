@@ -53,6 +53,7 @@
 #include "gtktooltip.h"
 #include "gtkinvisible.h"
 #include "gtkbuildable.h"
+#include "gtkbuilderprivate.h"
 #include "gtkalias.h"
 
 #define WIDGET_CLASS(w)	 GTK_WIDGET_GET_CLASS (w)
@@ -8517,7 +8518,13 @@ accel_group_start_element (GMarkupParseContext *context,
       if (strcmp (names[i], "key") == 0)
 	key = gdk_keyval_from_name (values[i]);
       else if (strcmp (names[i], "modifiers") == 0)
-	modifiers = _gtk_builder_flags_from_string (GDK_TYPE_MODIFIER_TYPE, values[i]);
+	{
+	  if (!_gtk_builder_flags_from_string (GDK_TYPE_MODIFIER_TYPE,
+					       values[i],
+					       &modifiers,
+					       error))
+	      return;
+	}
       else if (strcmp (names[i], "signal") == 0)
 	signal = g_strdup (values[i]);
     }
