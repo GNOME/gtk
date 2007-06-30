@@ -1,3 +1,8 @@
+2007-06-30  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtkbuilderparser.c (_gtk_builder_parse_boolean): 
+	Use g_ascii_strdown() instead of a rolling our own.
+
 2007-06-30  Johan Dahlin  <jdahlin@async.com.br>
 
 	* gtk/gtkbuilderparser.c: (_get_type_by_symbol), (parse_object),

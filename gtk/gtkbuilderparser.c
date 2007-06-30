@@ -183,9 +183,7 @@ _gtk_builder_parse_boolean (const gchar  *string,
     }
   else
     {
-      gchar *lower = g_strdup (string);
-      for (i = 0; i < strlen (string); i++)
-	lower[i] = g_ascii_tolower (string[i]);
+      gchar *lower = g_ascii_strdown (string, length);
       
       if (strcmp (lower, "yes") == 0 || strcmp (lower, "true") == 0)
 	*value = TRUE;
