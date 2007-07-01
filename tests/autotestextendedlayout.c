@@ -340,7 +340,7 @@ gtk_bin_test_extended_layout (void)
   GtkExtendedLayoutIface *iface;
   GtkExtendedLayout *layout;
 
-  GtkWindow *window;
+  GtkWidget *window;
   GtkWidget *label;
   GtkWidget *bin;
 
