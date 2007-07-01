@@ -62,7 +62,11 @@ static void gtk_hbox_size_request  (GtkWidget      *widget,
 static void gtk_hbox_size_allocate (GtkWidget      *widget,
 				    GtkAllocation  *allocation);
 
-G_DEFINE_TYPE (GtkHBox, gtk_hbox, GTK_TYPE_BOX)
+static void gtk_hbox_extended_layout_interface_init (GtkExtendedLayoutIface *iface);
+
+G_DEFINE_TYPE_WITH_CODE (GtkHBox, gtk_hbox, GTK_TYPE_BOX,
+                         G_IMPLEMENT_INTERFACE (GTK_TYPE_EXTENDED_LAYOUT,
+						gtk_hbox_extended_layout_interface_init))
 
 static void
 gtk_hbox_class_init (GtkHBoxClass *class)
@@ -470,6 +474,91 @@ gtk_hbox_set_baseline_policy (GtkHBox           *hbox,
 {
   g_return_if_fail (GTK_IS_HBOX (hbox));
   g_object_set (hbox, "baseline-policy", policy, NULL);
+}
+
+static GtkExtendedLayoutFeatures
+gtk_hbox_extended_layout_get_features (GtkExtendedLayout *layout)
+{
+  return 
+    GTK_EXTENDED_LAYOUT_NATURAL_SIZE |
+    GTK_EXTENDED_LAYOUT_BASELINES;
+}
+
+static void
+gtk_hbox_extended_layout_get_natural_size (GtkExtendedLayout *layout,
+                                           GtkRequisition    *requisition)
+{
+  GtkBox *box = GTK_BOX (layout);
+
+  GtkRequisition child_requisition;
+  GtkBoxChild *child;
+  GList *children;
+
+  requisition->width = 0;
+  requisition->height = 0;
+
+  children = box->children;
+  while (children)
+    {
+      child = children->data;
+      children = children->next;
+
+      if (GTK_WIDGET_VISIBLE (child->widget))
+	{
+          if (GTK_IS_EXTENDED_LAYOUT (child->widget) &&
+              GTK_EXTENDED_LAYOUT_HAS_NATURAL_SIZE (child->widget))
+            gtk_extended_layout_get_natural_size (GTK_EXTENDED_LAYOUT (child->widget),
+                                                  &child_requisition);
+          else
+            gtk_widget_size_request (child->widget, &child_requisition);
+
+          requisition->width += child_requisition.width;
+          requisition->height = MAX (child_requisition.height, requisition->height);
+	}
+    }
+}
+
+static gint
+gtk_hbox_extended_layout_get_baselines (GtkExtendedLayout  *layout,
+                                        gint              **baselines)
+{
+  GtkBox *box = GTK_BOX (layout);
+
+  gint hbox_baseline = 0;
+  gint child_baseline;
+
+  GtkBoxChild *child;
+  GList *children;
+
+  children = box->children;
+
+  while (children)
+    {
+      child = children->data;
+      children = children->next;
+
+      if (GTK_WIDGET_VISIBLE (child->widget) &&
+          GTK_IS_EXTENDED_LAYOUT (child->widget) &&
+          GTK_EXTENDED_LAYOUT_HAS_BASELINES (child->widget))
+        {
+          child_baseline = gtk_extended_layout_get_single_baseline (
+            GTK_EXTENDED_LAYOUT (child->widget), GTK_BASELINE_FIRST);
+          hbox_baseline = MAX (hbox_baseline, child_baseline);
+        }
+    }
+
+  *baselines = g_new (gint, 1);
+  *baselines[0] = hbox_baseline;
+
+  return 1;
+}
+
+static void
+gtk_hbox_extended_layout_interface_init (GtkExtendedLayoutIface *iface)
+{
+  iface->get_features = gtk_hbox_extended_layout_get_features;
+  iface->get_natural_size = gtk_hbox_extended_layout_get_natural_size;
+  iface->get_baselines = gtk_hbox_extended_layout_get_baselines;
 }
 
 #define __GTK_HBOX_C__

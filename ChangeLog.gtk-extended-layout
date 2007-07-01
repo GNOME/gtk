@@ -1,3 +1,7 @@
+2007-07-01  Mathias Hasselmann  <mathias.hasselmann@gmx.de>
+
+	* gtk/gtkhbox.c: Rudimentary implementation of GtkExtendLayout.
+
 2007-06-30  Mathias Hasselmann  <mathias.hasselmann@gmx.de>
 
 	* tests/testextendedlayout.c: Provide button variant of the 
