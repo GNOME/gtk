@@ -1264,7 +1264,7 @@ gtk_scale_button_update_icon (GtkScaleButton *button)
       guint i;
 
       step = (adj->upper - adj->lower) / (num_icons - 2);
-      i = (guint) (value - adj->lower) / step + 2;
+      i = (guint) ((value - adj->lower) / step) + 2;
       g_assert (i < num_icons);
       name = priv->icon_list[i];
     }

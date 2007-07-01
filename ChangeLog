@@ -1,3 +1,8 @@
+2007-07-02  Jan Arne Petersen  <jpetersen@jpetersen.org>
+
+	* gtk/gtkscalebutton.c: (gtk_scale_button_update_icon): Add
+	parentheses to fix the operator order in the icon selection.
+
 2007-07-01  Johan Dahlin  <jdahlin@async.com.br>
 
 	* gtk/gtk-builder-convert (GtkBuilderConverter): 
