@@ -12,8 +12,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ trunk\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-07-01 21:16+0900\n"
-"PO-Revision-Date: 2007-07-01 14:54+0900\n"
+"POT-Creation-Date: 2007-07-01 22:41+0900\n"
+"PO-Revision-Date: 2007-07-01 22:40+0900\n"
 "Last-Translator: Takeshi AIHANA <takeshi.aihana@gmail.com>\n"
 "Language-Team: Japanese <gnome-translation@gnome.gr.jp>\n"
 "MIME-Version: 1.0\n"
@@ -52,7 +52,7 @@ msgstr "NAME"
 #. Description of --display=DISPLAY in --help output
 #: ../gdk/gdk.c:132
 msgid "X display to use"
-msgstr "使用するＸのディスプレイ"
+msgstr "使用するＸのディスプレイを指定する"
 
 #. Placeholder in --display=DISPLAY in --help output
 #: ../gdk/gdk.c:133
@@ -62,7 +62,7 @@ msgstr "DISPLAY"
 #. Description of --screen=SCREEN in --help output
 #: ../gdk/gdk.c:135
 msgid "X screen to use"
-msgstr "使用するＸのスクリーン"
+msgstr "使用するＸのスクリーンを指定する"
 
 #. Placeholder in --screen=SCREEN in --help output
 #: ../gdk/gdk.c:136
