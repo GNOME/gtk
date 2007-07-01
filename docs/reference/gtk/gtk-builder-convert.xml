@@ -12,7 +12,7 @@
 
 <refsynopsisdiv>
 <cmdsynopsis>
-<command>gtk-builder-convert <arg choice="req">file</arg></command>
+<command>gtk-builder-convert <arg choice="req">input</arg><arg choice="req">output</arg></command>
 </cmdsynopsis>
 </refsynopsisdiv>
 
@@ -21,8 +21,8 @@
 into XML files which can be loaded with GtkBuilder.
 </para>
 <para>
-It expects the name of a glade file as sole argument, and writes
-its output to stdout.
+It expects the name of a glade file as the first argument, and writes
+its output the file specified as the second argument.
 </para>
 </refsect1>
 
