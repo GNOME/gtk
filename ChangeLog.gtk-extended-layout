@@ -1,5 +1,10 @@
 2007-07-01  Mathias Hasselmann  <mathias.hasselmann@gmx.de>
 
+	* gtk/gtkhbox.c: Make baseline alignment work, by ignoring the uniform
+	height constraint a GtkHBox implies. TODO: Obey that constraint.
+
+2007-07-01  Mathias Hasselmann  <mathias.hasselmann@gmx.de>
+
 	* gtk/gtkhbox.c: Rudimentary implementation of GtkExtendLayout.
 
 2007-06-30  Mathias Hasselmann  <mathias.hasselmann@gmx.de>

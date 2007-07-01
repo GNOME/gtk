@@ -350,7 +350,7 @@ gtk_hbox_size_allocate (GtkWidget     *widget,
 
       for (packing = GTK_PACK_START; packing <= GTK_PACK_END; ++packing)
         {
-          gint x, dy;
+          gint x;
 
           if (GTK_PACK_START == packing)
             x = allocation->x + GTK_CONTAINER (box)->border_width;
@@ -369,7 +369,7 @@ gtk_hbox_size_allocate (GtkWidget     *widget,
                   if ((child->pack == packing))
                     {
                       GtkRequisition child_requisition;
-                      gint child_width;
+                      gint child_width, dy;
 
                       gtk_widget_get_child_requisition (child->widget, &child_requisition);
 
@@ -416,20 +416,22 @@ gtk_hbox_size_allocate (GtkWidget     *widget,
                       if (GTK_TEXT_DIR_RTL == direction)
                         child_allocation.x = allocation->x + allocation->width - (child_allocation.x - allocation->x) - child_allocation.width;
 
-                      dy = MAX (0, (priv->effective_baseline - priv->baselines[i_child]));
 
-if (debug_wanted (child->widget))
-  g_debug("%s[%d:%s]: dy=%d, y=%d, height:%d", 
-    gtk_widget_get_name (widget), i_child, G_OBJECT_TYPE_NAME (child->widget), 
-    dy, child_allocation.y, child_allocation.height);
+                      if (GTK_BASELINE_NONE != priv->baseline_policy)
+                        {
+                          GtkRequisition child_requisition;
 
-                      child_allocation.y += dy;
-                      child_allocation.height -= dy;
+                          dy = MAX (0, (priv->effective_baseline - priv->baselines[i_child]));
+                          gtk_widget_size_request (child->widget, &child_requisition);
+
+                          child_allocation.y += dy;
+                          child_allocation.height = child_requisition.height;
+                        }
 
                       gtk_widget_size_allocate (child->widget, &child_allocation);
 
-                      child_allocation.height += dy;
-                      child_allocation.y -= dy;
+                      if (GTK_BASELINE_NONE != priv->baseline_policy)
+                        child_allocation.y -= dy;
 
                       if (GTK_PACK_START == packing)
                         x += child_width + box->spacing;
