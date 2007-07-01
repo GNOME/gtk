@@ -148,6 +148,8 @@ static char * mask_xpm[] =
     "# # # # # # # # # # "
   };
 
+static gint8 dashes[] = { 1, 5 };
+
 static Guide*
 guide_new (GtkWidget   *widget,
            GuideType    type,
@@ -624,14 +626,17 @@ draw_baselines (GdkDrawable  *drawable,
   const gint ya = y0 + extends->y + baseline;
 
   gdk_draw_line (drawable, gc, xa, ya - 5, xa, ya + 2);
-  gdk_draw_line (drawable, gc, xa + 2, ya, xe - 2, ya);
+  gdk_draw_line (drawable, gc, xa - 5, ya, xe + 5, ya);
   gdk_draw_line (drawable, gc, xe, ya - 5, xe, ya + 2);
 
   gdk_gc_set_line_attributes (gc, 1, GDK_LINE_ON_OFF_DASH,
                               GDK_CAP_NOT_LAST, GDK_JOIN_MITER);
 
-  gdk_draw_line (drawable, gc, x0, ya, xa - 2, ya);
-  gdk_draw_line (drawable, gc, xe + 2, ya, x0 + cx - 1, ya);
+  gdk_gc_set_dashes (gc, x0 % (dashes[0] + dashes[1]), dashes, 2);
+  gdk_draw_line (drawable, gc, x0, ya, xa - 5, ya);
+
+  gdk_gc_set_dashes (gc, (xe + 2) % (dashes[0] + dashes[1]), dashes, 2);
+  gdk_draw_line (drawable, gc, xe + 5, ya, x0 + cx - 1, ya);
 
   gdk_gc_set_line_attributes (gc, 1, GDK_LINE_SOLID,
                               GDK_CAP_NOT_LAST, GDK_JOIN_MITER);
@@ -796,7 +801,6 @@ draw_guides (gpointer data)
 
   const GList *iter;
 
-  gint8 dashes[] = { 3, 3 };
   GdkGCValues values;
   GdkGC *gc;
 
@@ -811,7 +815,6 @@ draw_guides (gpointer data)
                                GDK_GC_SUBWINDOW);
 
   gdk_gc_set_tile (gc, test->suite->tile);
-  gdk_gc_set_dashes (gc, 1, dashes, 2);
 
   show_baselines =
     test->suite->baselines && gtk_toggle_button_get_active (

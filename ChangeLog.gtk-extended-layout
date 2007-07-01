@@ -1,5 +1,9 @@
 2007-07-01  Mathias Hasselmann  <mathias.hasselmann@gmx.de>
 
+	* tests/testextendedlayout.c: Improve drawing of baseline guides.
+
+2007-07-01  Mathias Hasselmann  <mathias.hasselmann@gmx.de>
+
 	* gtk/gtkhbox.c: Properly report feature set and consider
 	baseline_policy when evaluating the baseline of the box.
 	* gtk/gtklabel.c: Adjust the coding style of get_features
