@@ -1314,10 +1314,31 @@ update_status (TestSuite *suite,
   g_string_free (status, TRUE);
 }
 
+static void
+queue_redraw (GtkWidget *page, 
+              GtkWidget *child)
+{
+  gint x, y;
+
+  gtk_widget_translate_coordinates (child, page, 0, 0, &x, &y);
+
+  gtk_widget_queue_draw_area (page,
+                              page->allocation.x,
+                              page->allocation.y + y,
+                              page->allocation.width,
+                              child->allocation.height);
+  gtk_widget_queue_draw_area (page,
+                              page->allocation.x + x,
+                              page->allocation.y,
+                              child->allocation.width,
+                              page->allocation.height);
+}
+
 static gboolean           
 watch_pointer_cb (gpointer data)
 {
   TestSuite *suite = data;
+  GtkWidget *prev = suite->current;
   TestCase *test = NULL;
 
   gboolean dirty;
@@ -1369,18 +1390,10 @@ watch_pointer_cb (gpointer data)
     {
       if (suite->current)
         {
-          gtk_widget_translate_coordinates (suite->current, page, 0, 0, &x, &y);
+          if (prev && prev != suite->current)
+            queue_redraw (page, prev);
 
-          gtk_widget_queue_draw_area (page,
-                                      page->allocation.x,
-                                      page->allocation.y + y,
-                                      page->allocation.width,
-                                      suite->current->allocation.height);
-          gtk_widget_queue_draw_area (page,
-                                      page->allocation.x + x,
-                                      page->allocation.y,
-                                      suite->current->allocation.width,
-                                      page->allocation.height);
+          queue_redraw (page, suite->current);
         }
       else
         {
