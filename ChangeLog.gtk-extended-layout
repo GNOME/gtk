@@ -1,5 +1,16 @@
 2007-07-01  Mathias Hasselmann  <mathias.hasselmann@gmx.de>
 
+	* gtk/gtk.symbols, gtk/gtkextendedlayout.c, gtk/gtkextendedlayout.h:
+	Add gtk_extended_layout_set_baseline_offset to allow widget to adjust
+	their baselines to the findings of their parent container.
+	* gtk/gtkhbox.c: Use gtk_extended_layout_set_baseline_offset to obey
+	the uniform height constraint of the horizontal box. Do not cache
+	baselines found during requisition evaluation, as baselines can
+	change, when assigning a widget more space than requested.
+	* gtk/gtklabel.c: Implement gtk_extended_layout_set_baseline_offset.
+
+2007-07-01  Mathias Hasselmann  <mathias.hasselmann@gmx.de>
+
 	* tests/testextendedlayout.c: Invalidate previously selected
 	widget when choosing another one, to avoid drawing artifacts.
 

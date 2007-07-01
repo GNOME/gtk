@@ -54,6 +54,7 @@ typedef struct
   gint wrap_width;
   gint width_chars;
   gint max_width_chars;
+  gint baseline_offset;
 }
 GtkLabelPrivate;
 
@@ -2322,6 +2323,7 @@ get_layout_location (GtkLabel  *label,
   GtkLabelPrivate *priv;
   gfloat xalign;
   gint req_width, x, y;
+  gfloat dy;
   
   misc = GTK_MISC (label);
   widget = GTK_WIDGET (label);
@@ -2356,9 +2358,8 @@ get_layout_location (GtkLabel  *label,
   else
     x = MIN (x, widget->allocation.x + widget->allocation.width - misc->xpad);
 
-  y = floor (widget->allocation.y + (gint)misc->ypad 
-             + MAX (((widget->allocation.height - widget->requisition.height) * misc->yalign),
-	     0));
+  dy = (widget->allocation.height - widget->requisition.height) * misc->yalign;
+  y = floor (widget->allocation.y + (gint)misc->ypad + priv->baseline_offset + MAX (dy, 0));
 
   if (xp)
     *xp = x;
@@ -4320,12 +4321,20 @@ gtk_label_extended_layout_get_baselines (GtkExtendedLayout  *layout,
 }
 
 static void
+gtk_label_extended_layout_set_baseline_offset (GtkExtendedLayout *layout,
+                                               gint               offset)
+{
+  GTK_LABEL_GET_PRIVATE (layout)->baseline_offset = offset;
+}
+
+static void
 gtk_label_extended_layout_interface_init (GtkExtendedLayoutIface *iface)
 {
   iface->get_features = gtk_label_extended_layout_get_features;
   iface->get_height_for_width = gtk_label_extended_layout_get_height_for_width;
   iface->get_natural_size = gtk_label_extended_layout_get_natural_size;
   iface->get_baselines = gtk_label_extended_layout_get_baselines;
+  iface->set_baseline_offset = gtk_label_extended_layout_set_baseline_offset;
 }
 
 #define __GTK_LABEL_C__

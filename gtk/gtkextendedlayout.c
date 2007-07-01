@@ -135,7 +135,7 @@ gtk_extended_layout_get_natural_size (GtkExtendedLayout *layout,
   iface = GTK_EXTENDED_LAYOUT_GET_IFACE (layout);
 
   g_return_if_fail (iface->get_natural_size);
-  return iface->get_natural_size(layout, requisition);
+  iface->get_natural_size(layout, requisition);
 }
 
 /**
@@ -163,6 +163,30 @@ gtk_extended_layout_get_baselines (GtkExtendedLayout  *layout,
 
   g_return_val_if_fail (iface->get_baselines, -1);
   return iface->get_baselines(layout, baselines);
+}
+
+/**
+ * gtk_extended_layout_set_baseline_offset:
+ * @layout: a #GtkExtendedLayout
+ * @offset: the offset to consider
+ *
+ * Informs the layout item about the offset it should apply to its baselines,
+ * to properly align them with all other baseline aware children of its parent.
+ *
+ * Since: 2.14
+ **/
+void
+gtk_extended_layout_set_baseline_offset (GtkExtendedLayout *layout,
+                                         gint               offset)
+{
+  GtkExtendedLayoutIface *iface;
+
+  g_return_if_fail (GTK_IS_EXTENDED_LAYOUT (layout));
+
+  iface = GTK_EXTENDED_LAYOUT_GET_IFACE (layout);
+
+  g_return_if_fail (iface->set_baseline_offset);
+  iface->set_baseline_offset (layout, offset);
 }
 
 /**

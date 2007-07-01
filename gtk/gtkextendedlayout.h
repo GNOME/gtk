@@ -74,6 +74,8 @@ struct _GtkExtendedLayoutIface
                                                      GtkRequisition     *requisition);
   gint                      (*get_baselines)        (GtkExtendedLayout  *layout,
                                                      gint              **baselines);
+  void                      (*set_baseline_offset)  (GtkExtendedLayout  *layout,
+                                                     gint                offset);
   void                      (*get_padding)          (GtkExtendedLayout  *layout,
                                                      GtkBorder          *padding);
 };
@@ -89,6 +91,8 @@ void                      gtk_extended_layout_get_natural_size     (GtkExtendedL
                                                                     GtkRequisition     *requisition);
 gint                      gtk_extended_layout_get_baselines        (GtkExtendedLayout  *layout,
                                                                     gint              **baselines);
+void                      gtk_extended_layout_set_baseline_offset  (GtkExtendedLayout  *layout,
+                                                                    gint                offset);
 gint                      gtk_extended_layout_get_single_baseline  (GtkExtendedLayout  *layout,
                                                                     GtkBaselinePolicy   policy);
 void                      gtk_extended_layout_get_padding          (GtkExtendedLayout  *layout,
