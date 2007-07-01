@@ -1,3 +1,8 @@
+2007-06-30  Mathias Hasselmann  <mathias.hasselmann@gmx.de>
+
+	* tests/testextendedlayout.c:
+	Provide status text, when no widget is selected.
+
 2007-06-29  Mathias Hasselmann  <mathias.hasselmann@gmx.de>
 
 	* gtk/gtkframe.c: Drop g_debug messages.

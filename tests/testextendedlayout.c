@@ -1344,7 +1344,11 @@ watch_pointer_cb (gpointer data)
   else
     {
       dirty = (NULL != suite->current);
-      gtk_label_set_text (GTK_LABEL (suite->statusbar), NULL);
+
+      if (suite->current)
+        gtk_label_set_text (GTK_LABEL (suite->statusbar),
+                            "No widget selected.");
+
       suite->current = NULL;
     }
 
@@ -1487,7 +1491,7 @@ test_suite_setup_ui (TestSuite *self)
                             G_CALLBACK (gtk_widget_queue_draw),
                             self->notebook);
 
-  self->statusbar = gtk_label_new (NULL);
+  self->statusbar = gtk_label_new ("No widget selected.");
   gtk_label_set_ellipsize (GTK_LABEL (self->statusbar),
                            PANGO_ELLIPSIZE_END);
 
