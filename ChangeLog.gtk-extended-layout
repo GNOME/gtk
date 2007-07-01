@@ -1,5 +1,11 @@
 2007-06-30  Mathias Hasselmann  <mathias.hasselmann@gmx.de>
 
+	* tests/testextendedlayout.c: Provide button variant of the 
+	GtkHBox baseline alignment test, as those buttons show some
+	shortcomings of my current baseline concept.
+
+2007-06-30  Mathias Hasselmann  <mathias.hasselmann@gmx.de>
+
 	* tests/testextendedlayout.c:
 	Provide status text, when no widget is selected.
 

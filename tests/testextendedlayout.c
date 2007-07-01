@@ -371,7 +371,8 @@ create_baseline_test_bin (TestSuite *suite)
       G_TYPE_INVALID
     };
 
-  TestCase *test = test_case_new (suite, "Baseline Alignment", "GtkBin",
+  TestCase *test = test_case_new (suite, 
+                                  "Baseline Alignment", "Various GtkBins",
                                   gtk_alignment_new (0.5, 0.5, 0.0, 0.0));
 
   table = gtk_table_new (G_N_ELEMENTS (types) - 1, 
@@ -409,10 +410,11 @@ create_baseline_test_bin (TestSuite *suite)
 }
 
 static TestCase*
-create_baseline_test_hbox (TestSuite *suite)
+create_baseline_test_hbox (TestSuite *suite,
+                           gboolean   buttons)
 {
   GtkWidget *bin;
-  GtkWidget *label;
+  GtkWidget *child;
   GtkWidget *table;
   GtkWidget *hbox;
 
@@ -425,7 +427,9 @@ create_baseline_test_hbox (TestSuite *suite)
       NULL
     };
 
-  TestCase *test = test_case_new (suite, "Baseline Alignment", "GtkHBox",
+  TestCase *test = test_case_new (suite, "Baseline Alignment",
+                                  buttons ? "GtkHBox and Buttons" 
+                                          : "GtkHBox and Labels",
                                   gtk_alignment_new (0.5, 0.5, 0.0, 0.0));
 
   table = gtk_table_new (G_N_ELEMENTS (names) - 1, 
@@ -439,8 +443,8 @@ create_baseline_test_hbox (TestSuite *suite)
 
   for (i = 0; names[i]; ++i)
     {
-      label = gtk_label_new (names[i]);
-      gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
+      child = gtk_label_new (names[i]);
+      gtk_misc_set_alignment (GTK_MISC (child), 0.0, 0.5);
   
       hbox = gtk_hbox_new (FALSE, 6);
       test_case_append_guide (test, hbox, GUIDE_EXTERIOUR_BOTH, -1);
@@ -450,7 +454,7 @@ create_baseline_test_hbox (TestSuite *suite)
       if (i > 0)
         gtk_hbox_set_baseline_policy (GTK_HBOX (hbox), GTK_BASELINE_FIRST);
 
-      gtk_table_attach (GTK_TABLE (table), label,
+      gtk_table_attach (GTK_TABLE (table), child,
                         0, 1, i, i + 1,
                         GTK_FILL, GTK_FILL, 0, 0);
       gtk_table_attach (GTK_TABLE (table), hbox,
@@ -459,9 +463,17 @@ create_baseline_test_hbox (TestSuite *suite)
 
       for (j = 0; captions[j]; ++j)
         {
-          label = gtk_label_new (NULL);
-          gtk_label_set_markup (GTK_LABEL (label), captions[j]);
-          test_case_append_guide (test, label, GUIDE_BASELINE, i);
+          child = gtk_label_new (NULL);
+          gtk_label_set_markup (GTK_LABEL (child), captions[j]);
+
+          if (buttons)
+            {
+              bin = gtk_button_new ();
+              gtk_container_add (GTK_CONTAINER (bin), child);
+              child = bin;
+            }
+
+          test_case_append_guide (test, child, GUIDE_BASELINE, i);
 
           if (0 == j && i > 1)
             {
@@ -482,14 +494,12 @@ create_baseline_test_hbox (TestSuite *suite)
                     break;
                 }
 
-              gtk_container_add (GTK_CONTAINER (bin), label);
-              gtk_box_pack_start (GTK_BOX (hbox), bin, FALSE, TRUE, 0);
+              gtk_container_add (GTK_CONTAINER (bin), child);
               test_case_append_guide (test, bin, GUIDE_BASELINE, i);
+              child = bin;
             }
-          else
-            {
-              gtk_box_pack_start (GTK_BOX (hbox), label, FALSE, TRUE, 0);
-            }
+
+          gtk_box_pack_start (GTK_BOX (hbox), child, FALSE, TRUE, 0);
         }
     }
 
@@ -1424,8 +1434,8 @@ test_suite_setup_results_page (TestSuite *self)
   gtk_container_set_border_width (GTK_CONTAINER (scroller), 12);
   gtk_container_add (GTK_CONTAINER (scroller), self->results_view);
 
-  gtk_notebook_append_page (GTK_NOTEBOOK (self->notebook),
-                            scroller, gtk_label_new ("Results"));
+  gtk_notebook_append_page (GTK_NOTEBOOK (self->notebook), scroller,
+                            gtk_label_new_with_mnemonic ("Test _Results"));
 
   g_signal_connect (self->notebook, "realize",
                     G_CALLBACK (realize_notebook_cb), self);
@@ -1521,7 +1531,8 @@ test_suite_new ()
   test_suite_append (self, create_height_for_width_test (self));
   test_suite_append (self, create_baseline_test (self));
   test_suite_append (self, create_baseline_test_bin (self));
-  test_suite_append (self, create_baseline_test_hbox (self));
+  test_suite_append (self, create_baseline_test_hbox (self, FALSE));
+  test_suite_append (self, create_baseline_test_hbox (self, TRUE));
   test_suite_setup_results_page (self);
 
   return self;
