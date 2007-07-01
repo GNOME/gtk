@@ -12,7 +12,6 @@ applications, and GTK+ provides a #GtkVolumeButton subclass that
 is tailored for this use case.
 </para>
 
-
 <!-- ##### SECTION See_Also ##### -->
 <para>
 

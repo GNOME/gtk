@@ -22,6 +22,23 @@ style properties and gtk_widget_style_get_property(), gtk_widget_style_get() or
 gtk_widget_style_get_valist() to obtain the value of a style property.
 </para>
 
+<refsect2 id="GtkWidget-BUILDER-UI">
+<title>GtkWidget as GtkBuildable</title>
+<para>
+The GtkWidget implementation of the GtkBuildable interface supports a 
+custom &lt;accelerator&gt; element, which has attributes named key, 
+modifiers and signal and allows to specify accelerators.
+</para>
+<example>
+<title>A UI definition fragment specifying an accelerator</title>
+<programlisting><![CDATA[
+<object class="GtkButton">
+  <accelerator key="q" modifiers="GDK_CONTROL_MASK" signal="clicked"/>
+</object>
+]]></programlisting>
+</example>
+</refsect2>
+
 <!-- ##### SECTION See_Also ##### -->
 <para>
 

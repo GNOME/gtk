@@ -42,6 +42,33 @@ former you can use gtk_tree_view_convert_widget_to_bin_window_coords()
 (and vice versa).
 </para>
 
+<refsect2 id="GtkTreeView-BUILDER-UI">
+<title>GtkTreeView as GtkBuildable</title>
+<para>
+The GtkTreeView implementation of the GtkBuildable interface accepts
+GtkTreeViewColumn objects as &lt;child&gt; elements in UI definitions.
+</para>
+<example>
+<title>A UI definition fragment with GtkTreeView</title>
+<programlisting><![CDATA[
+<object class="GtkTreeView">
+  <property name="model">liststore1</property>
+  <child>
+    <object class="GtkTreeViewColumn">
+      <property name="title">Test</property>
+      <child>
+        <object class="GtkCellRendererText"/>
+        <attributes>"
+          <attribute name="text">1</attribute>
+        </attributes>
+      </child>
+    </object>
+  </child>
+</object>
+]]></programlisting>
+</example>
+</refsect2>
+
 <!-- ##### SECTION See_Also ##### -->
 <para>
 #GtkTreeViewColumn, #GtkTreeSelection, #GtkTreeDnd, #GtkTreeMode, #GtkTreeSortable, #GtkTreeModelSort, #GtkListStore, #GtkTreeStore, #GtkCellRenderer, #GtkCellEditable, #GtkCellRendererPixbuf, #GtkCellRendererText, #GtkCellRendererToggle

@@ -28,6 +28,18 @@ toolitems take on this accelerator path. The GTK+ accelerator map code makes
 sure that the correct shortcut is displayed next to the menu item.
 </para>
 
+<refsect2 id="GtkActionGroup-BUILDER-UI">
+<title>GtkActionGroup as GtkBuildable</title>
+<para>
+The GtkActionGroup implementation of the GtkBuildable interface accepts
+GtkAction objects as &lt;child&gt; elements in UI definitions.
+</para>
+<para>
+Note that it is probably more common to define actions and action groups
+in the code, since they are directly related to what the code can do.
+</para>
+</refsect2>
+
 <!-- ##### SECTION See_Also ##### -->
 <para>
 

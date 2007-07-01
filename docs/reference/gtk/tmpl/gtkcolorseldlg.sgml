@@ -11,6 +11,16 @@ allows the user to select a color much like the #GtkFileSelection
 provides a standard dialog for file selection.
 </para>
 
+<refsect2 id="GtkColorSelectionDialog-BUILDER-UI">
+<title>GtkColorSelectionDialog as GtkBuildable</title>
+<para>
+The GtkColorSelectionDialog implementation of the GtkBuildable interface
+exposes the embedded #GtkColorSelection as internal child with the
+name "color_selection". It also exposes the buttons with the names
+"ok_button", "cancel_button" and "help_button".
+</para>
+</refsect2>
+
 <!-- ##### SECTION See_Also ##### -->
 <para>
 

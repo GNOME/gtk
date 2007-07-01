@@ -12,8 +12,30 @@ can use all of the methods available there.  It also implements the
 #GtkTreeSortable interface so it can be sorted by the view.  Finally,
 it also implements the tree <link linkend="gtktreednd">drag and
 drop</link> interfaces.
-
 </para>
+
+<refsect2 id="GtkTreeStore-BUILDER-UI">
+<title>GtkTreeStore as GtkBuildable</title>
+<para>
+The GtkTreeStore implementation of the GtkBuildable interface allows
+to specify the model columns with a &lt;columns&gt; element that may
+contain multiple &lt;column&gt; elements, each specifying one model
+column. The "type" attribute specifies the data type for the column.
+</para>
+<example>
+<title>A UI Definition fragment for a tree store</title>
+<programlisting><![CDATA[
+<object class="GtkTreeStore">
+  <columns>
+    <column type="gchararray"/>
+    <column type="gchararray"/>
+    <column type="gint"/>
+  </columns>
+</object>
+]]></programlisting>
+</example>
+</refsect2>
+
 
 <!-- ##### SECTION See_Also ##### -->
 <para>

@@ -87,11 +87,24 @@ which are more limited in scope.
 <para>
 Beyond this general structure, several object classes define
 their own XML DTD fragments for filling in the ANY placeholders.
-See
+These are explained in their own sections, see 
+<link linkend="GtkWidget-BUILDER-UI">GtkWidget</link>,
+<link linkend="GtkContainer-BUILDER-UI">GtkContainer</link>,
+<link linkend="GtkDialog-BUILDER-UI">GtkDialog</link>,
+<link linkend="GtkCellLayout-BUILDER-UI">GtkCellLayout</link>,
+<link linkend="GtkColorSelectionDialog-BUILDER-UI">GtkColorSelectionDialog</link>,
+<link linkend="GtkFontSelectionDialog-BUILDER-UI">GtkFontSelectionDialog</link>,
+<link linkend="GtkComboBoxEntry-BUILDER-UI">GtkComboBoxEntry</link>,
+<link linkend="GtkExpander-BUILDER-UI">GtkExpander</link>,
+<link linkend="GtkFrame-BUILDER-UI">GtkFrame</link>,
+<link linkend="GtkListStore-BUILDER-UI">GtkListStore</link>,
+<link linkend="GtkTreeStore-BUILDER-UI">GtkTreeStore</link>,
+<link linkend="GtkNotebook-BUILDER-UI">GtkNotebook</link>,
+<link linkend="GtkSizeGroup-BUILDER-UI">GtkSizeGroup</link>,
+<link linkend="GtkTreeView-BUILDER-UI">GtkTreeView</link>,
+<link linkend="GtkUIManager-BUILDER-UI">GtkUIManager</link>,
+<link linkend="GtkActionGroup-BUILDER-UI">GtkActionGroup</link>.
 </para>
-<simplelist>
-  <member><link linkend="GtkDialog-BUILDER-UI">GtkDialog as GtkBuildable</link></member>
-</simplelist>
 </refsect2>
 
 <!-- ##### SECTION See_Also ##### -->

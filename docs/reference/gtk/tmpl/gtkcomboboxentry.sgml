@@ -43,6 +43,16 @@ it is possible to replace the child entry by a different widget using
 gtk_container_remove() and gtk_container_add().
 </para>
 
+<refsect2 id="GtkComboBoxEntry-BUILDER-UI">
+<title>GtkComboBoxEntry as GtkBuildable</title>
+<para>
+Beyond the &lt;attributes&gt; support that is shared by all
+<link linkend="GtkCellLayout-BUILDER-UI">GtkCellLayout</link> implementation,
+GtkComboBoxEntry makes the entry available in UI definitions as an internal 
+child with name "entry". 
+</para>
+</refsect2>
+
 <!-- ##### SECTION See_Also ##### -->
 <para>
 #GtkComboBox

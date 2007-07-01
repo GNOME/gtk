@@ -44,6 +44,29 @@ vertical size from the vertical requisition of all widgets that can be
 reached from the widget by a chain of size groups of type
 %GTK_SIZE_GROUP_VERTICAL or %GTK_SIZE_GROUP_BOTH.
 </para>
+<refsect2 id="GtkSizeGroup-BUILDER-UI">
+<title>GtkSizeGroup as GtkBuildable</title>
+<para>
+Size groups can be specified in a UI definition by placing an
+&lt;object&gt; element with <literal>class="GtkSizeGroup"</literal>
+somewhere in the UI definition. The widgets that belong to the
+size group are specified by a &lt;widgets&gt; element that may
+contain multiple &lt;widget&gt; elements, one for each member
+of the size group. The name attribute gives the id of the widget.
+</para>
+<example>
+<title>A UI definition fragment with GtkSizeGroup</title>
+<programlisting><![CDATA[
+<object class="GtkSizeGroup">
+  <property name="mode">GTK_SIZE_GROUP_HORIZONTAL</property>
+  <widgets>
+    <widget name="radio1"/>
+    <widget name="radio2"/>
+  </widgets>
+</object>
+]]></programlisting>
+</example>
+</refsect2>
 
 <!-- ##### SECTION See_Also ##### -->
 <para>

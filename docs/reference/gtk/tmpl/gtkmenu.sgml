@@ -407,7 +407,6 @@ will be called when the menu is later detached from the widget.
 </para>
 
 @attach_widget: the #GtkWidget that the menu is being detached from.
-
 @menu: the #GtkMenu being detached.
 
 

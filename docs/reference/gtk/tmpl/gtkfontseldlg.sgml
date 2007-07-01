@@ -20,6 +20,16 @@ To change the text which is shown in the preview area, use
 gtk_font_selection_dialog_set_preview_text().
 </para>
 
+<refsect2 id="GtkFontSelectionDialog-BUILDER-UI">
+<title>GtkFontSelectionDialog as GtkBuildable</title>
+<para>
+The GtkFontSelectionDialog implementation of the GtkBuildable interface
+exposes the embedded #GtkFontSelection as internal child with the
+name "font_selection". It also exposes the buttons with the names
+"ok_button", "cancel_button" and "apply_button".
+</para>
+</refsect2>
+
 <!-- ##### SECTION See_Also ##### -->
 <para>
 <variablelist>

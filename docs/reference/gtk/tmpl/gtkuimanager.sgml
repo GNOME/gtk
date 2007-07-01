@@ -199,6 +199,50 @@ to which the submenu is associated.
 </para>
 </refsect2>
 
+<refsect2 id="GtkUIManager-BUILDER-UI">
+<title>GtkUIManager as GtkBuildable</title>
+<para>
+The GtkUIManager implementation of the GtkBuildable interface accepts
+GtkActionGroup objects as &lt;child&gt; elements in UI definitions.
+</para>
+<para>
+A GtkUIManager UI definition as described above can be embedded in
+an GtkUIManager &lt;object&gt; element in a GtkBuilder UI definition.
+</para>
+<para>
+The widgets that are constructed by a GtkUIManager can be embedded in
+other parts of the constructed user interface with the help of the
+"constructor" attribute. See the example below.
+</para>
+<example>
+<title>An embedded GtkUIManager UI definition</title>
+<programlisting><![CDATA[
+<object class="GtkUIManager" id="uiman">
+  <child>
+    <object class="GtkActionGroup">
+      <child>
+        <object class="GtkAction" id="file">
+          <property name="label">_File</property>
+        </object>
+      </child>
+    </object>
+  </child>
+  <ui>
+    <menubar name="menubar1">
+      <menu action="file">
+      </menu>
+    </menubar>
+  </ui>
+</object>
+<object class="GtkWindow" id="main-window">
+  <child>
+    <object class="GtkMenuBar" id="menubar1" constructor="uiman"/>
+  </child>
+</object>
+]]></programlisting>
+</example>
+</refsect2>
+
 <!-- ##### SECTION See_Also ##### -->
 <para>
 #GtkBuilder

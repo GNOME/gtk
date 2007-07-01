@@ -104,10 +104,11 @@ void quick_message (gchar *message) {
 </example>
 </para>
 
-<refsect2><title>GtkDialog as a GtkBuildable</title>
+<refsect2 id="GtkDialog-BUILDER-UI"><title>GtkDialog as GtkBuildable</title>
 <para>
-GtkDialog exposes the @vbox and @action_area as internal children 
-with the names "vbox" and "action_area".
+The GtkDialog implementation of the GtkBuildable interface exposes the 
+@vbox and @action_area as internal children with the names "vbox" and 
+"action_area".
 </para>
 <para>
 GtkDialog supports a custom &lt;action-widgets&gt; element, which 

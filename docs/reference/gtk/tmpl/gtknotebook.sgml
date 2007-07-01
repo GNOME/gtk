@@ -19,13 +19,39 @@ will be a popup menu allowing the users to switch pages.
 (see gtk_notebook_enable_popup(), gtk_noteobook_disable_popup())
 </para>
 
+<refsect2 id="GtkNotebook-BUILDER-UI">
+<title>GtkNotebook as GtkBuildable</title>
+<para>
+The GtkNoteboopk implementation of the GtkBuildable interface
+supports placing children into tabs by specifying "tab" as the
+"type" attribbute of a &lt;child&gt; element. Note that the content
+of the tab must be created before the tab can be filled.
+</para>
+<example>
+<title>A UI definition fragment with GtkNotebook</title>
+<programlisting><![CDATA[
+<object class="GtkNotebook">
+  <child>
+    <object class="GtkLabel" id="notebook-content">
+      <property name="label">Content</property>
+    </object>
+  </child>
+  <child type="tab">
+    <object class="GtkLabel" id="notebook-tab">
+      <property name="label">Tab</property>
+    </object>
+  </child>
+</object>
+]]></programlisting>
+</example>
+</refsect2>
+
 <!-- ##### SECTION See_Also ##### -->
 <para>
 <variablelist>
 <varlistentry>
 <term>#GtkContainer</term>
-<listitem><para>For functions that apply to every #GtkContainer
-(like #GtkList).</para></listitem>
+<listitem><para>For functions that apply to every #GtkContainer</para></listitem>
 </varlistentry>
 </variablelist>
 </para>
