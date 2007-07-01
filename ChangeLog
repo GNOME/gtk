@@ -1,3 +1,9 @@
+2007-07-01  Johan Dahlin  <jdahlin@async.com.br>
+
+	* gtk/gtk-builder-convert (GtkBuilderConverter): 
+	Convert to getopt, improved documentation, change
+	the script to require two arguments
+
 2007-06-30  Richard Hult  <richard@imendio.com>
 
 	Continue the event handling cleanup:
