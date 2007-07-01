@@ -4234,19 +4234,18 @@ gtk_label_do_popup (GtkLabel       *label,
 static GtkExtendedLayoutFeatures
 gtk_label_extended_layout_get_features (GtkExtendedLayout *layout)
 {
+  GtkExtendedLayoutFeatures features;
   GtkLabel *label;
 
+  features =
+    GTK_EXTENDED_LAYOUT_NATURAL_SIZE |
+    GTK_EXTENDED_LAYOUT_BASELINES;
   label = GTK_LABEL (layout);
 
   if (label->wrap)
-    return
-      GTK_EXTENDED_LAYOUT_HEIGHT_FOR_WIDTH |
-      GTK_EXTENDED_LAYOUT_NATURAL_SIZE |
-      GTK_EXTENDED_LAYOUT_BASELINES;
+    features |= GTK_EXTENDED_LAYOUT_HEIGHT_FOR_WIDTH;
 
-  return 
-    GTK_EXTENDED_LAYOUT_NATURAL_SIZE |
-    GTK_EXTENDED_LAYOUT_BASELINES;
+  return features;
 }
 
 static gint

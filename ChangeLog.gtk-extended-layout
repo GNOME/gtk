@@ -1,5 +1,12 @@
 2007-07-01  Mathias Hasselmann  <mathias.hasselmann@gmx.de>
 
+	* gtk/gtkhbox.c: Properly report feature set and consider
+	baseline_policy when evaluating the baseline of the box.
+	* gtk/gtklabel.c: Adjust the coding style of get_features
+	to match the style of GtkHBox.
+
+2007-07-01  Mathias Hasselmann  <mathias.hasselmann@gmx.de>
+
 	* gtk/gtkhbox.c: Make baseline alignment work, by ignoring the uniform
 	height constraint a GtkHBox implies. TODO: Obey that constraint.
 
