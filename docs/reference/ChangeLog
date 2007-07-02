@@ -1,3 +1,7 @@
+2007-07-02  Johan Dahlin  <jdahlin@async.com.br>
+
+	* gtk/tmpl/gtkbuilder.sgml: Updates
+
 2007-07-01  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/tmpl/gtkbuilder.sgml: Add more details

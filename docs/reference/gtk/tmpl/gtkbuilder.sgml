@@ -64,6 +64,10 @@ which are more limited in scope.
 </para>
 <para>
 The toplevel element is &lt;interface&gt;.
+It optionally takes a "domain" attribute, which will make
+the builder look for translated strings using dgettext() in the
+domain specified. This can also be done by calling
+gtk_builder_set_translation_domain() on the builder.
 Objects are described by &lt;object&gt; elements, which can
 contain &lt;property&gt; elements to set properties, &lt;signal&gt;
 elements which connect signals to handlers, and &lt;child&gt;
@@ -86,7 +90,7 @@ specifying the id of the #GtkUIManager in the "constructor"
 attribute and the name of the object in the "id" attribute.
 </para>
 <para>
-Objects can be given a name with the "id" attribute, which 
+Objects must be given a name with the "id" attribute, which 
 allows the application to retrieve them from the builder with 
 gtk_builder_get_object(). An id is also necessary to use the 
 object as property value in other parts of the UI definition.
@@ -97,7 +101,7 @@ the &lt;property&gt; element: the "name" attribute specifies
 the name of the property, and the content of the element 
 specifies the value. If the "translatable" attribute is 
 set to a true value, GTK+ uses gettext() (or dgettext() if
-the builder has a translation domain) to find a translation 
+the builder has a translation domain set) to find a translation 
 for the value. This happens before the value is parsed, so
 it can be used for properties of any type, but it is probably
 most useful for string properties.
@@ -108,12 +112,12 @@ common property types: characters, strings, integers, floating-point
 numbers, booleans (strings like "TRUE", "t", "yes", "y", "1" are
 interpreted as %TRUE, strings like "FALSE, "f", "no", "n", "0" are
 interpreted as %FALSE), enumerations (can be specified by their 
-name or nick), flags (can be specified by their name or nick, combined
-with "|", e.g. "GTK_VISIBLE|GTK_REALIZED") and colors (in a format
-understood by gdk_color_parse()). Objects can be referred to
-by their name. GtkBuilder currently does not allow forward references
-to objects &mdash; an object must be constructed before it can be used
-as a property value. 
+name, nick or integer value), flags (can be specified by their name, 
+nick, integer value, optionally combined with "|", e.g. 
+"GTK_VISIBLE|GTK_REALIZED")  and colors (in a format understood by 
+gdk_color_parse()). Objects can be referred to by their name. 
+GtkBuilder allows forward references to objects &mdash; an object 
+doesn't have to constructed before it can be used as a property value. 
 </para>
 <para>
 Signal handlers are set up with the &lt;signal&gt; element.
@@ -148,14 +152,14 @@ the sections describing the widget-specific portions of UI definitions.
 <interface>
   <object class="GtkDialog" id="dialog1">
     <child internal-child="vbox">
-      <object class="GtkVBox">
+      <object class="GtkVBox" id="vbox1">
         <property name="border-width">10</property>
         <child internal-child="action_area">
-          <object class="GtkHButtonBox">
+          <object class="GtkHButtonBox" id="hbuttonbox1">
             <property name="border-width">20</property>
-            <child id="ok-button">
-              <object class="GtkButton"/>
-                <property name="label">OK</property>
+            <child>
+              <object class="GtkButton" id="ok_button">
+                <property name="label">gtk-ok</property>
                 <property name="use-stock">TRUE</property>
                 <signal name="clicked" handler="ok_button_clicked"/>
               </object>
