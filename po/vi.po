@@ -2889,7 +2889,7 @@ msgstr "Khô_ng"
 
 #: ../gtk/gtkstock.c:371
 msgid "_OK"
-msgstr "Đượ_c"
+msgstr "_OK"
 
 #: ../gtk/gtkstock.c:372
 msgid "_Open"
