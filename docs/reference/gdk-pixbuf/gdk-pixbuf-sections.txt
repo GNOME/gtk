@@ -108,6 +108,7 @@ gdk_pixdata_to_csource
 gdk_pixbuf_add_alpha
 gdk_pixbuf_copy_area
 gdk_pixbuf_saturate_and_pixelate
+gdk_pixbuf_apply_embedded_orientation
 gdk_pixbuf_fill
 </SECTION>
 

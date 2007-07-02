@@ -231,6 +231,8 @@ void gdk_pixbuf_saturate_and_pixelate (const GdkPixbuf *src,
                                        gfloat           saturation,
                                        gboolean         pixelate);
 
+/* Transform an image to agree with its embedded orientation option / tag */
+GdkPixbuf *gdk_pixbuf_apply_embedded_orientation (GdkPixbuf *src);
 
 G_CONST_RETURN gchar * gdk_pixbuf_get_option (GdkPixbuf   *pixbuf,
                                               const gchar *key);

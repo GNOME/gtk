@@ -245,6 +245,88 @@ gdk_pixbuf_saturate_and_pixelate(const GdkPixbuf *src,
         }
 }
 
+
+/**
+ * gdk_pixbuf_apply_embedded_orientation:
+ * @src: A #GdkPixbuf.
+ *
+ * Takes an existing pixbuf and checks for the presence of an
+ * associated "orientation" option, which may be provided by the 
+ * jpeg loader (which reads the exif orientation tag) or the 
+ * tiff loader (which reads the tiff orientation tag, and
+ * compensates it for the partial transforms performed by 
+ * libtiff). If an orientation option/tag is present, the
+ * appropriate transform will be performed so that the pixbuf
+ * is oriented correctly.
+ *
+ * Return value: A newly-created pixbuf, or a reference to the
+ * input pixbuf (with an increased reference count).
+ *
+ * Since 2.12
+ **/
+GdkPixbuf *
+gdk_pixbuf_apply_embedded_orientation (GdkPixbuf *src)
+{
+  	const gchar *orientation_string;
+	int          transform = 0;
+	GdkPixbuf   *temp;
+	GdkPixbuf   *dest;
+
+	g_return_val_if_fail (src != NULL, NULL);
+
+	/* Read the orientation option associated with the pixbuf */
+	orientation_string = gdk_pixbuf_get_option (src, "orientation");	
+
+	if (orientation_string) {
+		/* If an orientation option was found, convert the 
+		   orientation string into an integer. */
+		transform = (int) g_ascii_strtoll (orientation_string, NULL, 10);
+	}
+
+	/* Apply the actual transforms, which involve rotations and flips. 
+	   The meaning of orientation values 1-8 and the required transforms
+	   are defined by the TIFF and EXIF (for JPEGs) standards. */
+        switch (transform) {
+        case 1:
+                dest = src;
+                g_object_ref (dest);
+                break;
+        case 2:
+                dest = gdk_pixbuf_flip (src, TRUE);
+                break;
+        case 3:
+                dest = gdk_pixbuf_rotate_simple (src, GDK_PIXBUF_ROTATE_UPSIDEDOWN);
+                break;
+        case 4:
+                dest = gdk_pixbuf_flip (src, FALSE);
+                break;
+        case 5:
+                temp = gdk_pixbuf_rotate_simple (src, GDK_PIXBUF_ROTATE_CLOCKWISE);
+                dest = gdk_pixbuf_flip (temp, TRUE);
+                g_object_unref (temp);
+                break;
+        case 6:
+                dest = gdk_pixbuf_rotate_simple (src, GDK_PIXBUF_ROTATE_CLOCKWISE);
+                break;
+        case 7:
+                temp = gdk_pixbuf_rotate_simple (src, GDK_PIXBUF_ROTATE_CLOCKWISE);
+                dest = gdk_pixbuf_flip (temp, FALSE);
+                g_object_unref (temp);
+                break;
+        case 8:
+                dest = gdk_pixbuf_rotate_simple (src, GDK_PIXBUF_ROTATE_COUNTERCLOCKWISE);
+                break;
+        default:
+		/* if no orientation tag was present */
+                dest = src;
+                g_object_ref (dest);
+                break;
+        }
+
+        return dest;
+}
+
+
 #define __GDK_PIXBUF_UTIL_C__
 #include "gdk-pixbuf-aliasdef.c"
 

@@ -1,3 +1,14 @@
+2007-07-02  Matthias Clasen <mclasen@redhat.com>
+
+	* gdk-pixbuf.c (gdk_pixbuf_get_option): Document the
+	"orientation" option.
+
+	* gdk-pixbuf.symbols:
+	* gdk-pixbuf-core.h:
+	* gdk-pixbuf-util.c (gdk_pixbuf_apply_embedded_orientation):
+	New function to handle Exif orientation information in 
+	tiff and jpeg images.  (#439567, Michael Chudobiak)
+
 2007-06-19  Matthias Clasen <mclasen@redhat.com>
 
 	* === Released 2.11.4 ===

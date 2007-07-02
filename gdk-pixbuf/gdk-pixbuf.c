@@ -593,7 +593,15 @@ gdk_pixbuf_fill (GdkPixbuf *pixbuf,
  * @key: a nul-terminated string.
  * 
  * Looks up @key in the list of options that may have been attached to the
- * @pixbuf when it was loaded. 
+ * @pixbuf when it was loaded, or that may have been attached by another
+ * function using gdk_pixbuf_set_option().
+ *
+ * For instance, the ANI loader provides "Title" and "Artist" options. 
+ * The ICO, XBM, and XPM loaders provide "x_hot" and "y_hot" hot-spot 
+ * options for cursor definitions. The PNG loader provides the tEXt ancillary
+ * chunk key/value pairs as options. Since 2.12, the TIFF and JPEG loaders
+ * return an "orientation" option string that corresponds to the embedded 
+ * TIFF/Exif orientation tag (if present).
  * 
  * Return value: the value associated with @key. This is a nul-terminated 
  * string that should not be freed or %NULL if @key was not found.
