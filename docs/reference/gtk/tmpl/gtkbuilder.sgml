@@ -135,6 +135,13 @@ propery of the &lt;child&gt; element to a true value. Note that
 GtkBuilder still requires an &lt;object&gt; element for the internal
 child, even if it has already been constructed.
 </para>
+<para>
+A number of widgets have different places where a child can be 
+added (e.g. tabs vs. page content in notebooks). This can be reflected
+in a UI definition by specifying the "type" attribute on a &lt;child&gt;
+The possible values for the "type" attribute are described in 
+the sections describing the widget-specific portions of UI definitions.
+</para>
 <example>
 <title>A GtkBuilder UI Definition</title>
 <programlisting><![CDATA[
