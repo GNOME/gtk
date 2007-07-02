@@ -1,3 +1,10 @@
+2007-07-02  Kristian Rietveld  <kris@gtk.org>
+
+	* gtk/gtk.symbols:
+	* gtk/gtktreeview.[ch] (gtk_tree_view_is_rubber_banding_active): new
+	function to check whether a rubber banding operation is currently
+	active.  (#393579, Christian Neumair).
+
 2007-07-02  Matthias Clasen  <mclasen@redhat.com>
 
 	* NEWS: Updates

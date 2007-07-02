@@ -381,6 +381,8 @@ void     gtk_tree_view_set_rubber_banding    (GtkTreeView          *tree_view,
 					      gboolean              enable);
 gboolean gtk_tree_view_get_rubber_banding    (GtkTreeView          *tree_view);
 
+gboolean gtk_tree_view_is_rubber_banding_active (GtkTreeView       *tree_view);
+
 GtkTreeViewRowSeparatorFunc gtk_tree_view_get_row_separator_func (GtkTreeView               *tree_view);
 void                        gtk_tree_view_set_row_separator_func (GtkTreeView                *tree_view,
 								  GtkTreeViewRowSeparatorFunc func,

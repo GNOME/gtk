@@ -14801,6 +14801,30 @@ gtk_tree_view_get_rubber_banding (GtkTreeView *tree_view)
 }
 
 /**
+ * gtk_tree_view_is_rubber_banding_active:
+ * @tree_view: a #GtkTreeView
+ * 
+ * Returns whether a rubber banding operation is currently being done
+ * in @tree_view.
+ *
+ * Return value: %TRUE if a rubber banding operation is currently being
+ * done in @tree_view.
+ *
+ * Since: 2.12
+ **/
+gboolean
+gtk_tree_view_is_rubber_banding_active (GtkTreeView *tree_view)
+{
+  g_return_val_if_fail (GTK_IS_TREE_VIEW (tree_view), FALSE);
+
+  if (tree_view->priv->rubber_banding_enable
+      && tree_view->priv->rubber_band_status == RUBBER_BAND_ACTIVE)
+    return TRUE;
+
+  return FALSE;
+}
+
+/**
  * gtk_tree_view_get_row_separator_func:
  * @tree_view: a #GtkTreeView
  * 
