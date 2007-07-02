@@ -173,13 +173,12 @@ gtk_hbox_size_request (GtkWidget      *widget,
   if (nvis_children > 0)
     {
       GtkHBoxPrivate *priv = GTK_HBOX_GET_PRIVATE (widget);
-      gint effective_baseline, i;
+      gint effective_baseline = 0, i;
       gint *baselines = NULL;
 
       if (priv->baseline_policy != GTK_BASELINE_NONE)
         {
           baselines = g_newa (gint, nvis_children);
-          effective_baseline = 0;
 
           i = 0;
           children = box->children;
@@ -265,13 +264,9 @@ gtk_hbox_size_allocate (GtkWidget     *widget,
   GtkBoxChild *child;
   GList *children;
 
-  GtkTextDirection direction;
-
   box = GTK_BOX (widget);
   widget->allocation = *allocation;
 
-  direction = gtk_widget_get_direction (widget);
-  
   nvis_children = 0;
   nexpand_children = 0;
   children = box->children;
@@ -292,46 +287,103 @@ gtk_hbox_size_allocate (GtkWidget     *widget,
   if (nvis_children > 0)
     {
       GtkHBoxPrivate *priv = GTK_HBOX_GET_PRIVATE (widget);
-      GtkAllocation child_allocation;
-      gint effective_baseline, i;
+
+      gint effective_baseline;
       GtkPackType packing;
       gint *baselines;
 
-      gint width;
-      gint extra;
+      GtkTextDirection direction;
+      gint border_width;
 
-      baselines = g_newa (gint, nvis_children);
-      effective_baseline = 0;
+      GtkAllocation child_allocation;
+
+      gint *natural_requisitions;
+      gint *minimum_requisitions;
+
+      gint natural_width;
+      gint minimum_width;
+
+      gint available, natural, extra;
+      gint i;
+
+      direction = gtk_widget_get_direction (widget);
+      border_width = GTK_CONTAINER (box)->border_width;
+
+      natural_width = 0;
+      natural_requisitions = g_newa (gint, nvis_children);
+      minimum_requisitions = g_newa (gint, nvis_children);
+
+      children = box->children;
+      i = 0;
+
+      while (children)
+        {
+          child = children->data;
+          children = children->next;
+
+          if (GTK_WIDGET_VISIBLE (child->widget))
+            {
+              GtkRequisition child_requisition;
+
+              gtk_widget_size_request (child->widget, &child_requisition);
+              minimum_requisitions[i] = child_requisition.width;
+
+              if (GTK_IS_EXTENDED_LAYOUT (child->widget) &&
+                  GTK_EXTENDED_LAYOUT_HAS_NATURAL_SIZE (child->widget))
+                {
+                  gtk_extended_layout_get_natural_size (
+                    GTK_EXTENDED_LAYOUT (child->widget), 
+                    &child_requisition);
+                  natural_requisitions[i] =
+                    child_requisition.width - 
+                    minimum_requisitions[i];
+                }
+              else
+                natural_requisitions[i] = 0;
+
+              natural_width += natural_requisitions[i++];
+            }
+        }
+
+      minimum_width = widget->requisition.width - border_width * 2 - 
+                      (nvis_children - 1) * box->spacing;
 
       if (box->homogeneous)
 	{
-	  width = (allocation->width -
-		   GTK_CONTAINER (box)->border_width * 2 -
-		   (nvis_children - 1) * box->spacing);
-	  extra = width / nvis_children;
+	  available = (allocation->width - border_width * 2 -
+		       (nvis_children - 1) * box->spacing);
+	  extra = available / nvis_children;
+          natural = 0;
 	}
       else if (nexpand_children > 0)
 	{
-	  width = (gint) allocation->width - (gint) widget->requisition.width;
-	  extra = width / nexpand_children;
+	  available = (gint)allocation->width - widget->requisition.width;
+          natural = MAX (0, MIN (available, natural_width));
+          available -= natural;
+
+	  extra = MAX (0, available / nexpand_children);
 	}
       else
 	{
-	  width = 0;
+	  available = 0;
+          natural = 0;
 	  extra = 0;
 	}
 
-      child_allocation.y = allocation->y + GTK_CONTAINER (box)->border_width;
-      child_allocation.height = MAX (1, (gint) allocation->height - (gint) GTK_CONTAINER (box)->border_width * 2);
+      effective_baseline = 0;
+      baselines = g_newa (gint, nvis_children);
+
+      child_allocation.y = allocation->y + border_width;
+      child_allocation.height = MAX (1, (gint) allocation->height - (gint) border_width * 2);
 
       for (packing = GTK_PACK_START; packing <= GTK_PACK_END; ++packing)
         {
           gint x;
 
           if (GTK_PACK_START == packing)
-            x = allocation->x + GTK_CONTAINER (box)->border_width;
+            x = allocation->x + border_width;
           else
-            x = allocation->x + allocation->width - GTK_CONTAINER (box)->border_width;
+            x = allocation->x + allocation->width - border_width;
 
           i = 0;
           children = box->children;
@@ -344,36 +396,36 @@ gtk_hbox_size_allocate (GtkWidget     *widget,
                 {
                   if ((child->pack == packing))
                     {
-                      GtkRequisition child_requisition;
                       gint child_width;
-
-                      gtk_widget_get_child_requisition (child->widget, &child_requisition);
 
                       if (box->homogeneous)
                         {
                           if (nvis_children == 1)
-                            child_width = width;
+                            child_width = available;
                           else
                             child_width = extra;
 
                           nvis_children -= 1;
-                          width -= extra;
+                          available -= extra;
                         }
                       else
                         {
-                          child_width = child_requisition.width + child->padding * 2;
+                          child_width = minimum_requisitions[i] + child->padding * 2;
 
                           if (child->expand)
                             {
                               if (nexpand_children == 1)
-                                child_width += width;
+                                child_width += available;
                               else
                                 child_width += extra;
 
                               nexpand_children -= 1;
-                              width -= extra;
+                              available -= extra;
                             }
                         }
+
+		      if (natural_width > 0)
+                        child_width += natural * natural_requisitions[i] / natural_width;
 
                       if (child->fill)
                         {
@@ -382,7 +434,7 @@ gtk_hbox_size_allocate (GtkWidget     *widget,
                         }
                       else
                         {
-                          child_allocation.width = child_requisition.width;
+                          child_allocation.width = minimum_requisitions[i];
                           child_allocation.x = x + (child_width - child_allocation.width) / 2;
                         }
 
@@ -498,8 +550,8 @@ gtk_hbox_extended_layout_get_natural_size (GtkExtendedLayout *layout,
   GtkBoxChild *child;
   GList *children;
 
-  requisition->width = 0;
-  requisition->height = 0;
+  requisition->width = GTK_CONTAINER (box)->border_width * 2;
+  requisition->height = GTK_CONTAINER (box)->border_width * 2;
 
   children = box->children;
   while (children)

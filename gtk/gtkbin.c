@@ -73,8 +73,8 @@ gtk_bin_child_type (GtkContainer *container)
 {
   if (!GTK_BIN (container)->child)
     return GTK_TYPE_WIDGET;
-  else
-    return G_TYPE_NONE;
+
+  return G_TYPE_NONE;
 }
 
 static void
@@ -195,11 +195,22 @@ gtk_bin_extended_layout_get_natural_size (GtkExtendedLayout *layout,
                                           GtkRequisition    *requisition)
 {
   GtkBin *bin = GTK_BIN (layout);
+  GtkExtendedLayout *child_layout;
 
   g_return_if_fail (GTK_IS_EXTENDED_LAYOUT (bin->child));
 
-  layout = GTK_EXTENDED_LAYOUT (bin->child);
-  return gtk_extended_layout_get_natural_size (layout, requisition);
+  child_layout = GTK_EXTENDED_LAYOUT (bin->child);
+  gtk_extended_layout_get_natural_size (child_layout, requisition);
+
+  if (GTK_EXTENDED_LAYOUT_HAS_PADDING (layout))
+    {
+      GtkBorder padding;
+
+      gtk_extended_layout_get_padding (layout, &padding);
+
+      requisition->width += padding.left + padding.right;
+      requisition->height += padding.top + padding.bottom;
+    }
 }
 
 static gint
@@ -222,9 +233,7 @@ gtk_bin_extended_layout_get_baselines (GtkExtendedLayout  *layout,
       GtkBorder padding;
 
       if (GTK_EXTENDED_LAYOUT_HAS_PADDING (bin))
-        {
-          gtk_extended_layout_get_padding (layout, &padding);
-        }
+        gtk_extended_layout_get_padding (layout, &padding);
       else
         padding.top = GTK_CONTAINER (bin)->border_width;
 

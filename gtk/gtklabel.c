@@ -4276,14 +4276,21 @@ gtk_label_extended_layout_get_natural_size (GtkExtendedLayout *layout,
 {
   GtkLabel *label;
   gboolean ellipsize;
+  PangoLayout *tmp;
 
   label = GTK_LABEL (layout);
   ellipsize = label->ellipsize;
   label->ellipsize = PANGO_ELLIPSIZE_NONE;
 
+  tmp = label->layout;
+  label->layout = pango_layout_copy (tmp);
+
+  pango_layout_set_width (label->layout, -1);
   gtk_label_size_request (GTK_WIDGET (label), requisition);
 
+  g_object_unref (label->layout);
   label->ellipsize = ellipsize;
+  label->layout = tmp;
 }
 
 static gint

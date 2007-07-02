@@ -1,3 +1,14 @@
+2007-07-02  Mathias Hasselmann  <mathias.hasselmann@gmx.de>
+
+	* gtk/gtkbin.c: Properly evaluate natural size.
+	* gtk/gtkhbox.c: Consider natural size for child placement.
+	* gtk/gtklabel.c: Drop any PangoLayout width assigned during the
+	size allocation process to get proper natural size readings.
+	* tests/testextendedlayout.c: Add some GtkHPaned to the natural
+	size test for dynamic evaluation of the algorithm. Create guides for
+	the button of the height-for-width test for debugging, as it is
+	affected by natural sizing of GtkHBox.
+
 2007-07-01  Mathias Hasselmann  <mathias.hasselmann@gmx.de>
 
 	* gtk/gtk.symbols, gtk/gtkextendedlayout.c, gtk/gtkextendedlayout.h:

@@ -193,6 +193,7 @@ test_case_append_guide (TestCase  *self,
 
 static void
 append_natural_size_box (TestCase           *test,
+                         GtkWidget          *vbox,
                          const gchar        *caption,
                          PangoEllipsizeMode  ellipsize)
 {
@@ -218,31 +219,97 @@ append_natural_size_box (TestCase           *test,
   gtk_label_set_markup (GTK_LABEL (label), caption); 
   gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
 
-  gtk_box_pack_start (GTK_BOX (test->widget), label, FALSE, TRUE, 0);
-  gtk_box_pack_start (GTK_BOX (test->widget), hbox, FALSE, TRUE, 0);
+  gtk_box_pack_start (GTK_BOX (vbox), label, FALSE, TRUE, 0);
+  gtk_box_pack_start (GTK_BOX (vbox), hbox, FALSE, TRUE, 0);
+}
 
+static gboolean
+restore_paned (gpointer data)
+{
+  GtkPaned *paned;
+  GtkWidget *hint;
+  gint pos;
+
+
+  paned = GTK_PANED (data);
+  hint = gtk_paned_get_child2 (paned);
+  gtk_widget_set_sensitive (hint, TRUE);
+
+  pos = GPOINTER_TO_INT (g_object_get_data (G_OBJECT (paned), "initial-position"));
+  gtk_paned_set_position (paned, pos);
+
+  return FALSE;
+}
+
+static gboolean
+shrink_paned_timeout (gpointer data)
+{
+  GtkPaned *paned;
+  gint pos;
+
+  paned = GTK_PANED (data);
+  pos = gtk_paned_get_position (paned);
+
+  if (pos < 20)
+    {
+      g_timeout_add (1000, restore_paned, paned);
+      return FALSE;
+    }
+
+  gtk_paned_set_position (paned, pos - 5);
+  return TRUE;
+}
+
+static void
+shrink_paned (GtkWidget *button,
+              gpointer   data)
+{
+  GtkPaned *paned;
+  GtkWidget *hint;
+
+  paned = GTK_PANED (data);
+  hint = gtk_paned_get_child2 (paned);
+  gtk_widget_set_sensitive (hint, FALSE);
+
+  g_object_set_data (G_OBJECT (paned), "initial-position",
+                     GINT_TO_POINTER (gtk_paned_get_position (paned)));
+  g_timeout_add (50, shrink_paned_timeout, paned);
 }
 
 static TestCase*
 create_natural_size_test (TestSuite *suite)
 {
+  GtkWidget *vbox, *hint, *button;
+
   TestCase *test = test_case_new (suite, "Natural Size", NULL,
-                                  gtk_vbox_new (FALSE, 12));
+                                  gtk_hpaned_new ());
+  gtk_container_set_border_width (GTK_CONTAINER (test->widget), 6);
 
-  gtk_container_set_border_width (GTK_CONTAINER (test->widget), 12);
+  vbox = gtk_vbox_new (FALSE, 12);
+  gtk_container_set_border_width (GTK_CONTAINER (vbox), 6);
+  gtk_paned_pack1 (GTK_PANED (test->widget), vbox, TRUE, TRUE);
 
-  append_natural_size_box (test,
+  append_natural_size_box (test, vbox,
                            "<b>No ellipsizing</b>",
                            PANGO_ELLIPSIZE_NONE);
-  append_natural_size_box (test,
+  append_natural_size_box (test, vbox,
                            "<b>Ellipsizing at start</b>",
                            PANGO_ELLIPSIZE_START);
-  append_natural_size_box (test,
+  append_natural_size_box (test, vbox,
                            "<b>Ellipsizing in the middle</b>",
                            PANGO_ELLIPSIZE_MIDDLE);
-  append_natural_size_box (test,
+  append_natural_size_box (test, vbox,
                            "<b>Ellipsizing at end</b>",
                            PANGO_ELLIPSIZE_END);
+
+  button = gtk_button_new_with_label ("Shrink to check ellipsing");
+  gtk_label_set_angle (GTK_LABEL (GTK_BIN (button)->child), -90);
+  g_signal_connect (button, "clicked", G_CALLBACK (shrink_paned), test->widget);
+
+  hint = gtk_alignment_new (1.0, 0.5, 0.0, 1.0);
+  gtk_container_set_border_width (GTK_CONTAINER (hint), 6);
+  gtk_container_add (GTK_CONTAINER (hint), button);
+  gtk_paned_pack2 (GTK_PANED (test->widget), hint, FALSE, FALSE);
 
   return test;
 }
@@ -277,6 +344,8 @@ create_height_for_width_test (TestSuite *suite)
                      gtk_image_new_from_stock (GTK_STOCK_DIALOG_INFO,
                                                GTK_ICON_SIZE_DIALOG));
   gtk_box_pack_start (GTK_BOX (test->widget), child, FALSE, TRUE, 0);
+
+  test_case_append_guide (test, child, GUIDE_EXTERIOUR_BOTH, 1);
 
   return test;
 }
