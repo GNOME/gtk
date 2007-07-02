@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-properties\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-06-19 12:20-0400\n"
+"POT-Creation-Date: 2007-07-02 15:21-0400\n"
 "PO-Revision-Date: 2005-02-08 08:59+0200\n"
 "Last-Translator: Canonical Ltd <translations@canonical.com>\n"
 "Language-Team: Xhosa <xh-translate@ubuntu.com>\n"
@@ -372,7 +372,7 @@ msgid "When TRUE, empty menu proxies for this action are hidden."
 msgstr "Ukuba TRUE, ii-proxies zemenyu engenanto zesi senzo ziyafihlakala."
 
 #: gtk/gtkaction.c:313 gtk/gtkactiongroup.c:164 gtk/gtkcellrenderer.c:193
-#: gtk/gtkwidget.c:516
+#: gtk/gtkwidget.c:517
 msgid "Sensitive"
 msgstr "Inovakalelo"
 
@@ -381,7 +381,7 @@ msgid "Whether the action is enabled."
 msgstr "Nokuba ngaba isenzo senziwe ukuba sisebenze na."
 
 #: gtk/gtkaction.c:320 gtk/gtkactiongroup.c:171 gtk/gtkstatusicon.c:243
-#: gtk/gtktreeviewcolumn.c:191 gtk/gtkwidget.c:509
+#: gtk/gtktreeviewcolumn.c:191 gtk/gtkwidget.c:510
 msgid "Visible"
 msgstr "Iyabonakala"
 
@@ -6274,28 +6274,28 @@ msgid "Determines how the shadowed box around the viewport is drawn"
 msgstr ""
 "Imisela indlela yokuzoba ibhokisi enesithunzi ijikeleze imbonakalo ye-port"
 
-#: gtk/gtkwidget.c:476
+#: gtk/gtkwidget.c:477
 msgid "Widget name"
 msgstr "Igama lesixhobo"
 
-#: gtk/gtkwidget.c:477
+#: gtk/gtkwidget.c:478
 msgid "The name of the widget"
 msgstr "Igama lesixhobo"
 
-#: gtk/gtkwidget.c:483
+#: gtk/gtkwidget.c:484
 msgid "Parent widget"
 msgstr "Isixhobo esingunozala"
 
-#: gtk/gtkwidget.c:484
+#: gtk/gtkwidget.c:485
 msgid "The parent widget of this widget. Must be a Container widget"
 msgstr ""
 "Isixhobo esingunozala wesi sixhobo. Kumele ibe sisixhobo esiSikhongozeli"
 
-#: gtk/gtkwidget.c:491
+#: gtk/gtkwidget.c:492
 msgid "Width request"
 msgstr "Isicelo sobubanzi"
 
-#: gtk/gtkwidget.c:492
+#: gtk/gtkwidget.c:493
 msgid ""
 "Override for width request of the widget, or -1 if natural request should be "
 "used"
@@ -6303,11 +6303,11 @@ msgstr ""
 "Engasinanziyo isicelo sobubanzi besixhobo, okanye -1 ukuba kumele "
 "kusetyenziswe isicelo esiqhelekileyo"
 
-#: gtk/gtkwidget.c:500
+#: gtk/gtkwidget.c:501
 msgid "Height request"
 msgstr "Isicelo somphakamo"
 
-#: gtk/gtkwidget.c:501
+#: gtk/gtkwidget.c:502
 msgid ""
 "Override for height request of the widget, or -1 if natural request should "
 "be used"
@@ -6315,85 +6315,85 @@ msgstr ""
 "Engasinanziyo isicelo somphakamo wesixhobo, okanye -1 ukuba kumele "
 "kusetyenziswe isicelo esiqhelekileyo"
 
-#: gtk/gtkwidget.c:510
+#: gtk/gtkwidget.c:511
 msgid "Whether the widget is visible"
 msgstr "Nokuba ngaba isixhobo siyabonakala na"
 
-#: gtk/gtkwidget.c:517
+#: gtk/gtkwidget.c:518
 msgid "Whether the widget responds to input"
 msgstr "Nokuba ngaba isixhobo sinovakalelo na kwisingeniso"
 
-#: gtk/gtkwidget.c:523
+#: gtk/gtkwidget.c:524
 msgid "Application paintable"
 msgstr "Inkqubo enokupeyinteka"
 
-#: gtk/gtkwidget.c:524
+#: gtk/gtkwidget.c:525
 msgid "Whether the application will paint directly on the widget"
 msgstr "Nokuba ngaba inkqubo iza kupeyinta ngqo kwisixhobo na"
 
-#: gtk/gtkwidget.c:530
+#: gtk/gtkwidget.c:531
 msgid "Can focus"
 msgstr "Inokugxila"
 
-#: gtk/gtkwidget.c:531
+#: gtk/gtkwidget.c:532
 msgid "Whether the widget can accept the input focus"
 msgstr "Nokuba ngaba isixhobo singalwamkela na ungeniso olugxilileyo"
 
-#: gtk/gtkwidget.c:537
+#: gtk/gtkwidget.c:538
 msgid "Has focus"
 msgstr "Inogxilo"
 
-#: gtk/gtkwidget.c:538
+#: gtk/gtkwidget.c:539
 msgid "Whether the widget has the input focus"
 msgstr "Nokuba ngaba isixhobo sinalo na ungeniso olugxilileyo"
 
-#: gtk/gtkwidget.c:544
+#: gtk/gtkwidget.c:545
 msgid "Is focus"
 msgstr "Igxilile"
 
-#: gtk/gtkwidget.c:545
+#: gtk/gtkwidget.c:546
 msgid "Whether the widget is the focus widget within the toplevel"
 msgstr ""
 "Nokuba ngaba isixhobo sisixhobo esigxilileyo ngaphakathi kwinqanaba "
 "elingentla"
 
-#: gtk/gtkwidget.c:551
+#: gtk/gtkwidget.c:552
 msgid "Can default"
 msgstr "Inokumiliselwa"
 
-#: gtk/gtkwidget.c:552
+#: gtk/gtkwidget.c:553
 msgid "Whether the widget can be the default widget"
 msgstr "Nokuba ngaba isixhobo singasiso na isixhobo esimiliselweyo"
 
-#: gtk/gtkwidget.c:558
+#: gtk/gtkwidget.c:559
 msgid "Has default"
 msgstr "Inokumiliselweyo"
 
-#: gtk/gtkwidget.c:559
+#: gtk/gtkwidget.c:560
 msgid "Whether the widget is the default widget"
 msgstr "Nokuba ngaba isixhobo sisixhobo esimiselweyo na"
 
-#: gtk/gtkwidget.c:565
+#: gtk/gtkwidget.c:566
 msgid "Receives default"
 msgstr "Iyakuvumela ukumiselwa"
 
-#: gtk/gtkwidget.c:566
+#: gtk/gtkwidget.c:567
 msgid "If TRUE, the widget will receive the default action when it is focused"
 msgstr "Ukuba TRUE, isixhobo siya kufumana isenzo esimiselweyo xa sigxilile"
 
-#: gtk/gtkwidget.c:572
+#: gtk/gtkwidget.c:573
 msgid "Composite child"
 msgstr "Inkqubo engumntwana edityanisiweyo"
 
-#: gtk/gtkwidget.c:573
+#: gtk/gtkwidget.c:574
 msgid "Whether the widget is part of a composite widget"
 msgstr "Nokuba ngaba isixhobo siyinxalenye yesixhobo esidityanisiweyo na"
 
-#: gtk/gtkwidget.c:579
+#: gtk/gtkwidget.c:580
 msgid "Style"
 msgstr "Isimbo"
 
-#: gtk/gtkwidget.c:580
+#: gtk/gtkwidget.c:581
 msgid ""
 "The style of the widget, which contains information about how it will look "
 "(colors etc)"
@@ -6401,105 +6401,105 @@ msgstr ""
 "Isimbo sesixhobo, esiqulethe ulwazi malunga nendlela esiza kusebenza ngayo "
 "(imibala njl.njl)"
 
-#: gtk/gtkwidget.c:586
+#: gtk/gtkwidget.c:587
 msgid "Events"
 msgstr "Izehlo"
 
-#: gtk/gtkwidget.c:587
+#: gtk/gtkwidget.c:588
 msgid "The event mask that decides what kind of GdkEvents this widget gets"
 msgstr ""
 "Isigqubuthelo sesehlo esikhetha uhlobo lwe-GdkEvents olufunyanwa sesi sixhobo"
 
-#: gtk/gtkwidget.c:594
+#: gtk/gtkwidget.c:595
 msgid "Extension events"
 msgstr "Izehlo ezongeziweyo"
 
-#: gtk/gtkwidget.c:595
+#: gtk/gtkwidget.c:596
 msgid "The mask that decides what kind of extension events this widget gets"
 msgstr ""
 "Isigqubuthelo esikhetha uhlobo lwesandiso sezehlo olufunyanwa sesi sixhobo"
 
-#: gtk/gtkwidget.c:602
+#: gtk/gtkwidget.c:603
 msgid "No show all"
 msgstr "Ayibonakalisi konke"
 
-#: gtk/gtkwidget.c:603
+#: gtk/gtkwidget.c:604
 msgid "Whether gtk_widget_show_all() should not affect this widget"
 msgstr ""
 "Nokuba ngaba i-gtk_widget_show_all() imele ingasiphazamisi na esi sixhobo"
 
-#: gtk/gtkwidget.c:620
+#: gtk/gtkwidget.c:621
 #, fuzzy
 msgid "Has tooltip"
 msgstr "Inkcazelo yesixhobo"
 
-#: gtk/gtkwidget.c:621
+#: gtk/gtkwidget.c:622
 #, fuzzy
 msgid "Whether this widget has a tooltip"
 msgstr "Nokuba ngaba isixhobo sinalo na ungeniso olugxilileyo"
 
-#: gtk/gtkwidget.c:641
+#: gtk/gtkwidget.c:642
 #, fuzzy
 msgid "Tooltip Text"
 msgstr "Inkcazelo yesixhobo"
 
-#: gtk/gtkwidget.c:642 gtk/gtkwidget.c:663
+#: gtk/gtkwidget.c:643 gtk/gtkwidget.c:664
 #, fuzzy
 msgid "The contents of the tooltip for this widget"
 msgstr "Isiqulatho sesingeniso"
 
-#: gtk/gtkwidget.c:662
+#: gtk/gtkwidget.c:663
 #, fuzzy
 msgid "Tooltip markup"
 msgstr "Inkcazelo yesixhobo"
 
-#: gtk/gtkwidget.c:1759
+#: gtk/gtkwidget.c:1760
 msgid "Interior Focus"
 msgstr "Ukugxila ngaphakathi"
 
-#: gtk/gtkwidget.c:1760
+#: gtk/gtkwidget.c:1761
 msgid "Whether to draw the focus indicator inside widgets"
 msgstr "Nokuba ngaba isibonisi esigxilayo sizotywe ngaphakathi kwezixhobo na"
 
-#: gtk/gtkwidget.c:1766
+#: gtk/gtkwidget.c:1767
 msgid "Focus linewidth"
 msgstr "Gxila kububanzi bomgca"
 
-#: gtk/gtkwidget.c:1767
+#: gtk/gtkwidget.c:1768
 msgid "Width, in pixels, of the focus indicator line"
 msgstr "Ububanzi, bomgca osisibonisi ogxilayo, ngokwee-pixels"
 
-#: gtk/gtkwidget.c:1773
+#: gtk/gtkwidget.c:1774
 msgid "Focus line dash pattern"
 msgstr "Ipateni yomgca oqhawu-qhawukayo yogxilo"
 
-#: gtk/gtkwidget.c:1774
+#: gtk/gtkwidget.c:1775
 msgid "Dash pattern used to draw the focus indicator"
 msgstr "Ipateni eqhawu-qhawukayo esetyenziswa ukuzoba isibonisi esigxilayo"
 
-#: gtk/gtkwidget.c:1779
+#: gtk/gtkwidget.c:1780
 msgid "Focus padding"
 msgstr "Isongezo seenkcukacha esigxininisiweyo"
 
-#: gtk/gtkwidget.c:1780
+#: gtk/gtkwidget.c:1781
 msgid "Width, in pixels, between focus indicator and the widget 'box'"
 msgstr ""
 "Ububanzi, ngokwee-pixel, phakathi kwesibonisi sogxininiso kunye 'nebhokisi' "
 "yesixhobo"
 
-#: gtk/gtkwidget.c:1785
+#: gtk/gtkwidget.c:1786
 msgid "Cursor color"
 msgstr "Umbala wekhesa"
 
-#: gtk/gtkwidget.c:1786
+#: gtk/gtkwidget.c:1787
 msgid "Color with which to draw insertion cursor"
 msgstr "Umbala ekungazotywa ngawo ikhesa yokufakela"
 
-#: gtk/gtkwidget.c:1791
+#: gtk/gtkwidget.c:1792
 msgid "Secondary cursor color"
 msgstr "Umbala wekhesa okudidi lwesibini"
 
-#: gtk/gtkwidget.c:1792
+#: gtk/gtkwidget.c:1793
 msgid ""
 "Color with which to draw the secondary insertion cursor when editing mixed "
 "right-to-left and left-to-right text"
@@ -6507,88 +6507,88 @@ msgstr ""
 "Umbala ekungazotywa ngawo ikhesa yokufakela ekudidi lwesibini xa kuhlelwa "
 "umbhalo oyingxubevange yokunene-ukuya-ekhohlo nekhohlo-ukuya ekunene"
 
-#: gtk/gtkwidget.c:1797
+#: gtk/gtkwidget.c:1798
 msgid "Cursor line aspect ratio"
 msgstr "Umba wolalwamano lomgca wekhesa"
 
-#: gtk/gtkwidget.c:1798
+#: gtk/gtkwidget.c:1799
 msgid "Aspect ratio with which to draw insertion cursor"
 msgstr "Umba wolalwamano ezotywa ngawo ikhesa yokufakela"
 
-#: gtk/gtkwidget.c:1812
+#: gtk/gtkwidget.c:1813
 #, fuzzy
 msgid "Draw Border"
 msgstr "Umda Ka-Tab"
 
-#: gtk/gtkwidget.c:1813
+#: gtk/gtkwidget.c:1814
 msgid "Size of areas outside the widget's allocation to draw"
 msgstr ""
 
-#: gtk/gtkwidget.c:1826
+#: gtk/gtkwidget.c:1827
 #, fuzzy
 msgid "Unvisited Link Color"
 msgstr "Umbala Wesinxulumanisi"
 
-#: gtk/gtkwidget.c:1827
+#: gtk/gtkwidget.c:1828
 #, fuzzy
 msgid "Color of unvisited links"
 msgstr "Umbala wezinxulumanisi ezisuka kwezinye"
 
-#: gtk/gtkwidget.c:1840
+#: gtk/gtkwidget.c:1841
 #, fuzzy
 msgid "Visited Link Color"
 msgstr "Umbala Wesinxulumanisi"
 
-#: gtk/gtkwidget.c:1841
+#: gtk/gtkwidget.c:1842
 #, fuzzy
 msgid "Color of visited links"
 msgstr "Umbala wezinxulumanisi ezisuka kwezinye"
 
-#: gtk/gtkwidget.c:1855
+#: gtk/gtkwidget.c:1856
 #, fuzzy
 msgid "Wide Separators"
 msgstr "Sebenzisa isahluli"
 
-#: gtk/gtkwidget.c:1856
+#: gtk/gtkwidget.c:1857
 msgid ""
 "Whether separators have configurable width and should be drawn using a box "
 "instead of a line"
 msgstr ""
 
-#: gtk/gtkwidget.c:1870
+#: gtk/gtkwidget.c:1871
 #, fuzzy
 msgid "Separator Width"
 msgstr "Ububanzi Besahluli Ngokuthe Nkqo"
 
-#: gtk/gtkwidget.c:1871
+#: gtk/gtkwidget.c:1872
 msgid "The width of separators if wide-separators is TRUE"
 msgstr ""
 
-#: gtk/gtkwidget.c:1885
+#: gtk/gtkwidget.c:1886
 #, fuzzy
 msgid "Separator Height"
 msgstr "Umphakamo Omiselweyo"
 
-#: gtk/gtkwidget.c:1886
+#: gtk/gtkwidget.c:1887
 msgid "The height of separators if \"wide-separators\" is TRUE"
 msgstr ""
 
-#: gtk/gtkwidget.c:1900
+#: gtk/gtkwidget.c:1901
 #, fuzzy
 msgid "Horizontal Scroll Arrow Length"
 msgstr "Umgaqo-nkqubo Womgca Wokwehlisa Usenyusa Othe Tyaba"
 
-#: gtk/gtkwidget.c:1901
+#: gtk/gtkwidget.c:1902
 #, fuzzy
 msgid "The length of horizontal scroll arrows"
 msgstr "Xa umgca wokwehlisa usenyusa othe tyaba ubonakalisiwe"
 
-#: gtk/gtkwidget.c:1915
+#: gtk/gtkwidget.c:1916
 #, fuzzy
 msgid "Vertical Scroll Arrow Length"
 msgstr "Umgaqo-nkqubo Womgca Wokwehlisa Usenyusa Othe Nkqo"
 
-#: gtk/gtkwidget.c:1916
+#: gtk/gtkwidget.c:1917
 #, fuzzy
 msgid "The length of vertical scroll arrows"
 msgstr "Xa umgca wokwehlisa usenyusa othe nkqo ubonakalisiwe"

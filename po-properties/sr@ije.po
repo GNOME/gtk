@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.4\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-06-19 12:20-0400\n"
+"POT-Creation-Date: 2007-07-02 15:21-0400\n"
 "PO-Revision-Date: 2004-03-09 05:28+0100\n"
 "Last-Translator: Bojan Suzic <bojans@teol.net>\n"
 "Language-Team: Serbian (sr) <serbiangnome-lista@nongnu.org>\n"
@@ -369,7 +369,7 @@ msgstr ""
 "Ако је постављено, празни посредници менија за ову акцију се сакривају."
 
 #: gtk/gtkaction.c:313 gtk/gtkactiongroup.c:164 gtk/gtkcellrenderer.c:193
-#: gtk/gtkwidget.c:516
+#: gtk/gtkwidget.c:517
 msgid "Sensitive"
 msgstr "Осјетљиво"
 
@@ -378,7 +378,7 @@ msgid "Whether the action is enabled."
 msgstr "Да ли је акција укључена."
 
 #: gtk/gtkaction.c:320 gtk/gtkactiongroup.c:171 gtk/gtkstatusicon.c:243
-#: gtk/gtktreeviewcolumn.c:191 gtk/gtkwidget.c:509
+#: gtk/gtktreeviewcolumn.c:191 gtk/gtkwidget.c:510
 msgid "Visible"
 msgstr "Видљиво"
 
@@ -6120,27 +6120,27 @@ msgstr "GtkAdjustment који одређује вриједност успра�
 msgid "Determines how the shadowed box around the viewport is drawn"
 msgstr "Одређује како треба исцртати сјенку око погледа"
 
-#: gtk/gtkwidget.c:476
+#: gtk/gtkwidget.c:477
 msgid "Widget name"
 msgstr "Име елемента"
 
-#: gtk/gtkwidget.c:477
+#: gtk/gtkwidget.c:478
 msgid "The name of the widget"
 msgstr "Име елемента"
 
-#: gtk/gtkwidget.c:483
+#: gtk/gtkwidget.c:484
 msgid "Parent widget"
 msgstr "Садржи га елемент"
 
-#: gtk/gtkwidget.c:484
+#: gtk/gtkwidget.c:485
 msgid "The parent widget of this widget. Must be a Container widget"
 msgstr "Елемент који садржи овај елемент. Мора бити садржаоц"
 
-#: gtk/gtkwidget.c:491
+#: gtk/gtkwidget.c:492
 msgid "Width request"
 msgstr "Захтјев за ширину"
 
-#: gtk/gtkwidget.c:492
+#: gtk/gtkwidget.c:493
 msgid ""
 "Override for width request of the widget, or -1 if natural request should be "
 "used"
@@ -6148,11 +6148,11 @@ msgstr ""
 "Поставити за захтјев за ширину елемента, или -1 уколико треба користити "
 "природни захтјев"
 
-#: gtk/gtkwidget.c:500
+#: gtk/gtkwidget.c:501
 msgid "Height request"
 msgstr "Захтјев за висину"
 
-#: gtk/gtkwidget.c:501
+#: gtk/gtkwidget.c:502
 msgid ""
 "Override for height request of the widget, or -1 if natural request should "
 "be used"
@@ -6160,188 +6160,188 @@ msgstr ""
 "Поставити за захтјев за висину елемента, или -1 уколико треба користити "
 "природни захтјев"
 
-#: gtk/gtkwidget.c:510
+#: gtk/gtkwidget.c:511
 msgid "Whether the widget is visible"
 msgstr "Да ли је елемент видљив"
 
-#: gtk/gtkwidget.c:517
+#: gtk/gtkwidget.c:518
 msgid "Whether the widget responds to input"
 msgstr "Да ли елемент одговара на унос"
 
-#: gtk/gtkwidget.c:523
+#: gtk/gtkwidget.c:524
 msgid "Application paintable"
 msgstr "Програм ће исцртавати"
 
-#: gtk/gtkwidget.c:524
+#: gtk/gtkwidget.c:525
 msgid "Whether the application will paint directly on the widget"
 msgstr "Да ли ће програм непосредно исцртавати на елементу"
 
-#: gtk/gtkwidget.c:530
+#: gtk/gtkwidget.c:531
 msgid "Can focus"
 msgstr "Може бити у жижи"
 
-#: gtk/gtkwidget.c:531
+#: gtk/gtkwidget.c:532
 msgid "Whether the widget can accept the input focus"
 msgstr "Да ли елемент може бити у жижи за унос"
 
-#: gtk/gtkwidget.c:537
+#: gtk/gtkwidget.c:538
 msgid "Has focus"
 msgstr "У жижи је"
 
-#: gtk/gtkwidget.c:538
+#: gtk/gtkwidget.c:539
 msgid "Whether the widget has the input focus"
 msgstr "Да ли је елемент у жижи за унос"
 
-#: gtk/gtkwidget.c:544
+#: gtk/gtkwidget.c:545
 msgid "Is focus"
 msgstr "Јесте жижа"
 
-#: gtk/gtkwidget.c:545
+#: gtk/gtkwidget.c:546
 msgid "Whether the widget is the focus widget within the toplevel"
 msgstr "Да ли је елемент заправо жижни елемент унутар првог нивоа"
 
-#: gtk/gtkwidget.c:551
+#: gtk/gtkwidget.c:552
 msgid "Can default"
 msgstr "Може бити подразумјевани"
 
-#: gtk/gtkwidget.c:552
+#: gtk/gtkwidget.c:553
 msgid "Whether the widget can be the default widget"
 msgstr "Да ли елемент може бити подразумјевани елемент"
 
-#: gtk/gtkwidget.c:558
+#: gtk/gtkwidget.c:559
 msgid "Has default"
 msgstr "Јесте подразумјевани"
 
-#: gtk/gtkwidget.c:559
+#: gtk/gtkwidget.c:560
 msgid "Whether the widget is the default widget"
 msgstr "Да ли је елемент подразумјевани елемент"
 
-#: gtk/gtkwidget.c:565
+#: gtk/gtkwidget.c:566
 msgid "Receives default"
 msgstr "Прима подразумјевано"
 
-#: gtk/gtkwidget.c:566
+#: gtk/gtkwidget.c:567
 msgid "If TRUE, the widget will receive the default action when it is focused"
 msgstr ""
 "Уколико је постављено, елемент ће примити подразумјевано дејство када уђе у "
 "жижу"
 
-#: gtk/gtkwidget.c:572
+#: gtk/gtkwidget.c:573
 msgid "Composite child"
 msgstr "Сложени елемент"
 
-#: gtk/gtkwidget.c:573
+#: gtk/gtkwidget.c:574
 msgid "Whether the widget is part of a composite widget"
 msgstr "Да ли је елемент дио сложеног елемента"
 
-#: gtk/gtkwidget.c:579
+#: gtk/gtkwidget.c:580
 msgid "Style"
 msgstr "Стил"
 
-#: gtk/gtkwidget.c:580
+#: gtk/gtkwidget.c:581
 msgid ""
 "The style of the widget, which contains information about how it will look "
 "(colors etc)"
 msgstr ""
 "Стил елемента, који садржи податке о томе како ће изгледати (боја итд.)"
 
-#: gtk/gtkwidget.c:586
+#: gtk/gtkwidget.c:587
 msgid "Events"
 msgstr "Догађаји"
 
-#: gtk/gtkwidget.c:587
+#: gtk/gtkwidget.c:588
 msgid "The event mask that decides what kind of GdkEvents this widget gets"
 msgstr ""
 "Маска за догађаје која одређује које врсте GdkEvents-а овај елемент прима"
 
-#: gtk/gtkwidget.c:594
+#: gtk/gtkwidget.c:595
 msgid "Extension events"
 msgstr "Додатни догађаји"
 
-#: gtk/gtkwidget.c:595
+#: gtk/gtkwidget.c:596
 msgid "The mask that decides what kind of extension events this widget gets"
 msgstr ""
 "Маска за догађаје која одређује које врсте додатних догађаја овај елемент "
 "прима"
 
-#: gtk/gtkwidget.c:602
+#: gtk/gtkwidget.c:603
 msgid "No show all"
 msgstr "Без приказивања свега"
 
-#: gtk/gtkwidget.c:603
+#: gtk/gtkwidget.c:604
 msgid "Whether gtk_widget_show_all() should not affect this widget"
 msgstr "Да ли gtk_widget_show_all() не треба да утиче на овај елемент"
 
-#: gtk/gtkwidget.c:620
+#: gtk/gtkwidget.c:621
 #, fuzzy
 msgid "Has tooltip"
 msgstr "Облачић"
 
-#: gtk/gtkwidget.c:621
+#: gtk/gtkwidget.c:622
 #, fuzzy
 msgid "Whether this widget has a tooltip"
 msgstr "Да ли је елемент у жижи за унос"
 
-#: gtk/gtkwidget.c:641
+#: gtk/gtkwidget.c:642
 #, fuzzy
 msgid "Tooltip Text"
 msgstr "Облачић"
 
-#: gtk/gtkwidget.c:642 gtk/gtkwidget.c:663
+#: gtk/gtkwidget.c:643 gtk/gtkwidget.c:664
 #, fuzzy
 msgid "The contents of the tooltip for this widget"
 msgstr "Садржај поља"
 
-#: gtk/gtkwidget.c:662
+#: gtk/gtkwidget.c:663
 #, fuzzy
 msgid "Tooltip markup"
 msgstr "Облачић"
 
-#: gtk/gtkwidget.c:1759
+#: gtk/gtkwidget.c:1760
 msgid "Interior Focus"
 msgstr "Унутрашња жижа"
 
-#: gtk/gtkwidget.c:1760
+#: gtk/gtkwidget.c:1761
 msgid "Whether to draw the focus indicator inside widgets"
 msgstr "Да ли исцртати показатељ жиже унутар елемената"
 
-#: gtk/gtkwidget.c:1766
+#: gtk/gtkwidget.c:1767
 msgid "Focus linewidth"
 msgstr "Дебљина жижне линије"
 
-#: gtk/gtkwidget.c:1767
+#: gtk/gtkwidget.c:1768
 msgid "Width, in pixels, of the focus indicator line"
 msgstr "Дебљина у тачкама линије коју показује елемент у жижи"
 
-#: gtk/gtkwidget.c:1773
+#: gtk/gtkwidget.c:1774
 msgid "Focus line dash pattern"
 msgstr "Образац црткања жижне линије"
 
-#: gtk/gtkwidget.c:1774
+#: gtk/gtkwidget.c:1775
 msgid "Dash pattern used to draw the focus indicator"
 msgstr "Образац по којем се цртка показатељ елемента у жижи"
 
-#: gtk/gtkwidget.c:1779
+#: gtk/gtkwidget.c:1780
 msgid "Focus padding"
 msgstr "Жижна попуна"
 
-#: gtk/gtkwidget.c:1780
+#: gtk/gtkwidget.c:1781
 msgid "Width, in pixels, between focus indicator and the widget 'box'"
 msgstr "Ширина у тачкама између показатеља елемента у жижи и оквира елемента"
 
-#: gtk/gtkwidget.c:1785
+#: gtk/gtkwidget.c:1786
 msgid "Cursor color"
 msgstr "Боја курсора"
 
-#: gtk/gtkwidget.c:1786
+#: gtk/gtkwidget.c:1787
 msgid "Color with which to draw insertion cursor"
 msgstr "Боја којом се исцртава курсор за унос"
 
-#: gtk/gtkwidget.c:1791
+#: gtk/gtkwidget.c:1792
 msgid "Secondary cursor color"
 msgstr "Друга боја курсора"
 
-#: gtk/gtkwidget.c:1792
+#: gtk/gtkwidget.c:1793
 msgid ""
 "Color with which to draw the secondary insertion cursor when editing mixed "
 "right-to-left and left-to-right text"
@@ -6349,88 +6349,88 @@ msgstr ""
 "Боја којом се исцртава други курсор за унос при уносу мјешаног текста са "
 "десна на лијево, и текста са лијева на десно"
 
-#: gtk/gtkwidget.c:1797
+#: gtk/gtkwidget.c:1798
 msgid "Cursor line aspect ratio"
 msgstr "Размјера курсорне линије"
 
-#: gtk/gtkwidget.c:1798
+#: gtk/gtkwidget.c:1799
 msgid "Aspect ratio with which to draw insertion cursor"
 msgstr "Размјера у којој се црта курсор за унос"
 
-#: gtk/gtkwidget.c:1812
+#: gtk/gtkwidget.c:1813
 #, fuzzy
 msgid "Draw Border"
 msgstr "Ивица језичака"
 
-#: gtk/gtkwidget.c:1813
+#: gtk/gtkwidget.c:1814
 msgid "Size of areas outside the widget's allocation to draw"
 msgstr ""
 
-#: gtk/gtkwidget.c:1826
+#: gtk/gtkwidget.c:1827
 #, fuzzy
 msgid "Unvisited Link Color"
 msgstr "Текућа боја"
 
-#: gtk/gtkwidget.c:1827
+#: gtk/gtkwidget.c:1828
 #, fuzzy
 msgid "Color of unvisited links"
 msgstr "Наслов прозорчета за избор писма"
 
-#: gtk/gtkwidget.c:1840
+#: gtk/gtkwidget.c:1841
 #, fuzzy
 msgid "Visited Link Color"
 msgstr "Текућа боја"
 
-#: gtk/gtkwidget.c:1841
+#: gtk/gtkwidget.c:1842
 #, fuzzy
 msgid "Color of visited links"
 msgstr "Наслов прозорчета за избор писма"
 
-#: gtk/gtkwidget.c:1855
+#: gtk/gtkwidget.c:1856
 #, fuzzy
 msgid "Wide Separators"
 msgstr "Користи раздвојник"
 
-#: gtk/gtkwidget.c:1856
+#: gtk/gtkwidget.c:1857
 msgid ""
 "Whether separators have configurable width and should be drawn using a box "
 "instead of a line"
 msgstr ""
 
-#: gtk/gtkwidget.c:1870
+#: gtk/gtkwidget.c:1871
 #, fuzzy
 msgid "Separator Width"
 msgstr "Ширина усправних раздвојника"
 
-#: gtk/gtkwidget.c:1871
+#: gtk/gtkwidget.c:1872
 msgid "The width of separators if wide-separators is TRUE"
 msgstr ""
 
-#: gtk/gtkwidget.c:1885
+#: gtk/gtkwidget.c:1886
 #, fuzzy
 msgid "Separator Height"
 msgstr "Уобичајена висина"
 
-#: gtk/gtkwidget.c:1886
+#: gtk/gtkwidget.c:1887
 msgid "The height of separators if \"wide-separators\" is TRUE"
 msgstr ""
 
-#: gtk/gtkwidget.c:1900
+#: gtk/gtkwidget.c:1901
 #, fuzzy
 msgid "Horizontal Scroll Arrow Length"
 msgstr "Приказивање стрелица за водоравно помјерање"
 
-#: gtk/gtkwidget.c:1901
+#: gtk/gtkwidget.c:1902
 #, fuzzy
 msgid "The length of horizontal scroll arrows"
 msgstr "Када се приказују стрелице за водоравно помјерање садржаја"
 
-#: gtk/gtkwidget.c:1915
+#: gtk/gtkwidget.c:1916
 #, fuzzy
 msgid "Vertical Scroll Arrow Length"
 msgstr "Приказивање стрелица за усправно помјерање"
 
-#: gtk/gtkwidget.c:1916
+#: gtk/gtkwidget.c:1917
 #, fuzzy
 msgid "The length of vertical scroll arrows"
 msgstr "Када се приказују стрелице за усправно помјерање садржаја"

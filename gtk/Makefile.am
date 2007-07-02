@@ -1186,6 +1186,7 @@ EXTRA_DIST +=                   \
 	tree_minus.xpm		\
 	tree_plus.xpm		\
 	gtk.def			\
+	gtk-builder-convert	\
 	gtk-win32.rc		\
 	gtk-win32.rc.in		\
 	gtkwin32embed.h		\
@@ -1195,6 +1196,7 @@ EXTRA_DIST +=                   \
 	gtkfilesystemwin32.c	\
 	gtkprint-win32.h	\
 	gtkprint-win32.c	\
+	gtksearchenginequartz.h \
 	gtkrc.default		\
 	gtkrc.key.default	\
 	gtkrc.key.emacs		\

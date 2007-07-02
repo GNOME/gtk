@@ -221,19 +221,6 @@ respective objects, see
 
 </para>
 
-<!-- ##### STRUCT GtkBuilderClass ##### -->
-<para>
-
-</para>
-
-@get_type_from_name: Looks up a type by name. The default
-  implementation applies heuristics to map type names to
-  <function>_get_type</function> function names, e.g. 
-  GtkHBox to gtk_hbox_get_type(). This virtual function
-  is provided to allow language bindings to intercept the
-  type resolution process.
-
-
 <!-- ##### USER_FUNCTION GtkBuilderConnectFunc ##### -->
 <para>
 

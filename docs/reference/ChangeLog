@@ -1,5 +1,9 @@
 2007-07-02  Matthias Clasen  <mclasen@redhat.com>
 
+	* === Released 2.11.5 ===
+
+2007-07-02  Matthias Clasen  <mclasen@redhat.com>
+
 	* gtk/tmpl/gtkbuilder.sgml: Add detail about
 	ordering constraints of construct-only object properties
 

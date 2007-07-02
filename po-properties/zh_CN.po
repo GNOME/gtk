@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-06-19 12:20-0400\n"
+"POT-Creation-Date: 2007-07-02 15:21-0400\n"
 "PO-Revision-Date: 2006-08-20 17:59+0800\n"
 "Last-Translator: Funda Wang <fundawang@linux.net.cn>\n"
 "Language-Team: zh_CN <i18n-translation@lists.linux.net.cn>\n"
@@ -348,7 +348,7 @@ msgid "When TRUE, empty menu proxies for this action are hidden."
 msgstr "为 TRUE 时，此动作对应的空菜单将被隐藏。"
 
 #: gtk/gtkaction.c:313 gtk/gtkactiongroup.c:164 gtk/gtkcellrenderer.c:193
-#: gtk/gtkwidget.c:516
+#: gtk/gtkwidget.c:517
 msgid "Sensitive"
 msgstr "敏感"
 
@@ -357,7 +357,7 @@ msgid "Whether the action is enabled."
 msgstr "动作是否启用。"
 
 #: gtk/gtkaction.c:320 gtk/gtkactiongroup.c:171 gtk/gtkstatusicon.c:243
-#: gtk/gtktreeviewcolumn.c:191 gtk/gtkwidget.c:509
+#: gtk/gtktreeviewcolumn.c:191 gtk/gtkwidget.c:510
 msgid "Visible"
 msgstr "可见"
 
@@ -5813,304 +5813,304 @@ msgstr "决定此时区垂直位置值的 GtkAdjustment"
 msgid "Determines how the shadowed box around the viewport is drawn"
 msgstr "决定怎样绘制视区周围的阴影框"
 
-#: gtk/gtkwidget.c:476
+#: gtk/gtkwidget.c:477
 msgid "Widget name"
 msgstr "部件名称"
 
-#: gtk/gtkwidget.c:477
+#: gtk/gtkwidget.c:478
 msgid "The name of the widget"
 msgstr "部件的名称"
 
-#: gtk/gtkwidget.c:483
+#: gtk/gtkwidget.c:484
 msgid "Parent widget"
 msgstr "父部件"
 
-#: gtk/gtkwidget.c:484
+#: gtk/gtkwidget.c:485
 msgid "The parent widget of this widget. Must be a Container widget"
 msgstr "该部件的父部件。必须是一个容器部件"
 
-#: gtk/gtkwidget.c:491
+#: gtk/gtkwidget.c:492
 msgid "Width request"
 msgstr "宽度请求"
 
-#: gtk/gtkwidget.c:492
+#: gtk/gtkwidget.c:493
 msgid ""
 "Override for width request of the widget, or -1 if natural request should be "
 "used"
 msgstr "覆盖部件的宽度请求，设为 -1 代表应使用正常请求"
 
-#: gtk/gtkwidget.c:500
+#: gtk/gtkwidget.c:501
 msgid "Height request"
 msgstr "高度请求"
 
-#: gtk/gtkwidget.c:501
+#: gtk/gtkwidget.c:502
 msgid ""
 "Override for height request of the widget, or -1 if natural request should "
 "be used"
 msgstr "覆盖部件的高度请求，设为 -1 代表应使用正常请求"
 
-#: gtk/gtkwidget.c:510
+#: gtk/gtkwidget.c:511
 msgid "Whether the widget is visible"
 msgstr "部件是否可见"
 
-#: gtk/gtkwidget.c:517
+#: gtk/gtkwidget.c:518
 msgid "Whether the widget responds to input"
 msgstr "部件是否响应用户输入"
 
-#: gtk/gtkwidget.c:523
+#: gtk/gtkwidget.c:524
 msgid "Application paintable"
 msgstr "可绘图"
 
-#: gtk/gtkwidget.c:524
+#: gtk/gtkwidget.c:525
 msgid "Whether the application will paint directly on the widget"
 msgstr "应用程序是否可以直接在此部件上绘图"
 
-#: gtk/gtkwidget.c:530
+#: gtk/gtkwidget.c:531
 msgid "Can focus"
 msgstr "接受焦点"
 
-#: gtk/gtkwidget.c:531
+#: gtk/gtkwidget.c:532
 msgid "Whether the widget can accept the input focus"
 msgstr "部件是否可以接受输入焦点"
 
-#: gtk/gtkwidget.c:537
+#: gtk/gtkwidget.c:538
 msgid "Has focus"
 msgstr "有焦点"
 
-#: gtk/gtkwidget.c:538
+#: gtk/gtkwidget.c:539
 msgid "Whether the widget has the input focus"
 msgstr "部件是否已经拥有输入焦点"
 
-#: gtk/gtkwidget.c:544
+#: gtk/gtkwidget.c:545
 msgid "Is focus"
 msgstr "为焦点"
 
-#: gtk/gtkwidget.c:545
+#: gtk/gtkwidget.c:546
 msgid "Whether the widget is the focus widget within the toplevel"
 msgstr "部件是否是顶级部件内的聚焦部件"
 
-#: gtk/gtkwidget.c:551
+#: gtk/gtkwidget.c:552
 msgid "Can default"
 msgstr "可成为默认"
 
-#: gtk/gtkwidget.c:552
+#: gtk/gtkwidget.c:553
 msgid "Whether the widget can be the default widget"
 msgstr "部件是否可以成为默认的部件"
 
-#: gtk/gtkwidget.c:558
+#: gtk/gtkwidget.c:559
 msgid "Has default"
 msgstr "默认"
 
-#: gtk/gtkwidget.c:559
+#: gtk/gtkwidget.c:560
 msgid "Whether the widget is the default widget"
 msgstr "部件是否是默认部件"
 
-#: gtk/gtkwidget.c:565
+#: gtk/gtkwidget.c:566
 msgid "Receives default"
 msgstr "接受默认动作"
 
-#: gtk/gtkwidget.c:566
+#: gtk/gtkwidget.c:567
 msgid "If TRUE, the widget will receive the default action when it is focused"
 msgstr "若为 TRUE，则部件在成为焦点后接受默认动作"
 
-#: gtk/gtkwidget.c:572
+#: gtk/gtkwidget.c:573
 msgid "Composite child"
 msgstr "复合部件成员"
 
-#: gtk/gtkwidget.c:573
+#: gtk/gtkwidget.c:574
 msgid "Whether the widget is part of a composite widget"
 msgstr "此部件是否是复合部件的一部分"
 
-#: gtk/gtkwidget.c:579
+#: gtk/gtkwidget.c:580
 msgid "Style"
 msgstr "样式"
 
-#: gtk/gtkwidget.c:580
+#: gtk/gtkwidget.c:581
 msgid ""
 "The style of the widget, which contains information about how it will look "
 "(colors etc)"
 msgstr "部件的样式，包含与外观有关的信息(颜色等)"
 
-#: gtk/gtkwidget.c:586
+#: gtk/gtkwidget.c:587
 msgid "Events"
 msgstr "事件"
 
-#: gtk/gtkwidget.c:587
+#: gtk/gtkwidget.c:588
 msgid "The event mask that decides what kind of GdkEvents this widget gets"
 msgstr "用于决定此部件可以接受哪些 GdkEvents 事件的事件掩码"
 
-#: gtk/gtkwidget.c:594
+#: gtk/gtkwidget.c:595
 msgid "Extension events"
 msgstr "扩展事件"
 
-#: gtk/gtkwidget.c:595
+#: gtk/gtkwidget.c:596
 msgid "The mask that decides what kind of extension events this widget gets"
 msgstr "此掩码决定部件可以接受哪些扩展事件"
 
-#: gtk/gtkwidget.c:602
+#: gtk/gtkwidget.c:603
 msgid "No show all"
 msgstr "不全部显示"
 
-#: gtk/gtkwidget.c:603
+#: gtk/gtkwidget.c:604
 msgid "Whether gtk_widget_show_all() should not affect this widget"
 msgstr "gtk_widget_show_all() 是否不影响此部件"
 
-#: gtk/gtkwidget.c:620
+#: gtk/gtkwidget.c:621
 #, fuzzy
 msgid "Has tooltip"
 msgstr "工具提示"
 
-#: gtk/gtkwidget.c:621
+#: gtk/gtkwidget.c:622
 #, fuzzy
 msgid "Whether this widget has a tooltip"
 msgstr "部件是否已经拥有输入焦点"
 
-#: gtk/gtkwidget.c:641
+#: gtk/gtkwidget.c:642
 #, fuzzy
 msgid "Tooltip Text"
 msgstr "启动超时"
 
-#: gtk/gtkwidget.c:642 gtk/gtkwidget.c:663
+#: gtk/gtkwidget.c:643 gtk/gtkwidget.c:664
 #, fuzzy
 msgid "The contents of the tooltip for this widget"
 msgstr "项内容"
 
-#: gtk/gtkwidget.c:662
+#: gtk/gtkwidget.c:663
 #, fuzzy
 msgid "Tooltip markup"
 msgstr "工具提示"
 
-#: gtk/gtkwidget.c:1759
+#: gtk/gtkwidget.c:1760
 msgid "Interior Focus"
 msgstr "内部焦点"
 
-#: gtk/gtkwidget.c:1760
+#: gtk/gtkwidget.c:1761
 msgid "Whether to draw the focus indicator inside widgets"
 msgstr "是否在窗口部件内绘制焦点指示器"
 
-#: gtk/gtkwidget.c:1766
+#: gtk/gtkwidget.c:1767
 msgid "Focus linewidth"
 msgstr "焦点线宽"
 
-#: gtk/gtkwidget.c:1767
+#: gtk/gtkwidget.c:1768
 msgid "Width, in pixels, of the focus indicator line"
 msgstr "以像素计算的焦点指示线的宽度"
 
-#: gtk/gtkwidget.c:1773
+#: gtk/gtkwidget.c:1774
 msgid "Focus line dash pattern"
 msgstr "焦点虚线样式"
 
-#: gtk/gtkwidget.c:1774
+#: gtk/gtkwidget.c:1775
 msgid "Dash pattern used to draw the focus indicator"
 msgstr "焦点指示虚线的样式"
 
-#: gtk/gtkwidget.c:1779
+#: gtk/gtkwidget.c:1780
 msgid "Focus padding"
 msgstr "焦点留空"
 
-#: gtk/gtkwidget.c:1780
+#: gtk/gtkwidget.c:1781
 msgid "Width, in pixels, between focus indicator and the widget 'box'"
 msgstr "以像素计算的焦点指示线与部件“框”的宽度"
 
-#: gtk/gtkwidget.c:1785
+#: gtk/gtkwidget.c:1786
 msgid "Cursor color"
 msgstr "光标颜色"
 
-#: gtk/gtkwidget.c:1786
+#: gtk/gtkwidget.c:1787
 msgid "Color with which to draw insertion cursor"
 msgstr "绘制插入光标时使用的颜色"
 
-#: gtk/gtkwidget.c:1791
+#: gtk/gtkwidget.c:1792
 msgid "Secondary cursor color"
 msgstr "次光标颜色"
 
-#: gtk/gtkwidget.c:1792
+#: gtk/gtkwidget.c:1793
 msgid ""
 "Color with which to draw the secondary insertion cursor when editing mixed "
 "right-to-left and left-to-right text"
 msgstr "混合编辑从左至右和从右至左文字时用于绘制次要插入光标的颜色"
 
-#: gtk/gtkwidget.c:1797
+#: gtk/gtkwidget.c:1798
 msgid "Cursor line aspect ratio"
 msgstr "光标线高宽比"
 
-#: gtk/gtkwidget.c:1798
+#: gtk/gtkwidget.c:1799
 msgid "Aspect ratio with which to draw insertion cursor"
 msgstr "绘制插入光标的高宽比"
 
-#: gtk/gtkwidget.c:1812
+#: gtk/gtkwidget.c:1813
 msgid "Draw Border"
 msgstr "绘制边框"
 
-#: gtk/gtkwidget.c:1813
+#: gtk/gtkwidget.c:1814
 msgid "Size of areas outside the widget's allocation to draw"
 msgstr "部件外要绘制的区域大小"
 
-#: gtk/gtkwidget.c:1826
+#: gtk/gtkwidget.c:1827
 #, fuzzy
 msgid "Unvisited Link Color"
 msgstr "链接颜色"
 
-#: gtk/gtkwidget.c:1827
+#: gtk/gtkwidget.c:1828
 #, fuzzy
 msgid "Color of unvisited links"
 msgstr "超级链接颜色"
 
-#: gtk/gtkwidget.c:1840
+#: gtk/gtkwidget.c:1841
 #, fuzzy
 msgid "Visited Link Color"
 msgstr "链接颜色"
 
-#: gtk/gtkwidget.c:1841
+#: gtk/gtkwidget.c:1842
 #, fuzzy
 msgid "Color of visited links"
 msgstr "超级链接颜色"
 
-#: gtk/gtkwidget.c:1855
+#: gtk/gtkwidget.c:1856
 #, fuzzy
 msgid "Wide Separators"
 msgstr "有分隔线"
 
-#: gtk/gtkwidget.c:1856
+#: gtk/gtkwidget.c:1857
 msgid ""
 "Whether separators have configurable width and should be drawn using a box "
 "instead of a line"
 msgstr ""
 
-#: gtk/gtkwidget.c:1870
+#: gtk/gtkwidget.c:1871
 #, fuzzy
 msgid "Separator Width"
 msgstr "垂直分隔符宽度"
 
-#: gtk/gtkwidget.c:1871
+#: gtk/gtkwidget.c:1872
 msgid "The width of separators if wide-separators is TRUE"
 msgstr ""
 
-#: gtk/gtkwidget.c:1885
+#: gtk/gtkwidget.c:1886
 #, fuzzy
 msgid "Separator Height"
 msgstr "默认高度"
 
-#: gtk/gtkwidget.c:1886
+#: gtk/gtkwidget.c:1887
 msgid "The height of separators if \"wide-separators\" is TRUE"
 msgstr ""
 
-#: gtk/gtkwidget.c:1900
+#: gtk/gtkwidget.c:1901
 #, fuzzy
 msgid "Horizontal Scroll Arrow Length"
 msgstr "水平滚动条政策"
 
-#: gtk/gtkwidget.c:1901
+#: gtk/gtkwidget.c:1902
 #, fuzzy
 msgid "The length of horizontal scroll arrows"
 msgstr "何时显示水平滚动条"
 
-#: gtk/gtkwidget.c:1915
+#: gtk/gtkwidget.c:1916
 #, fuzzy
 msgid "Vertical Scroll Arrow Length"
 msgstr "垂直滚动条政策"
 
-#: gtk/gtkwidget.c:1916
+#: gtk/gtkwidget.c:1917
 #, fuzzy
 msgid "The length of vertical scroll arrows"
 msgstr "何时显示垂直滚动条"

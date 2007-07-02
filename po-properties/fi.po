@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.6\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-06-19 12:20-0400\n"
+"POT-Creation-Date: 2007-07-02 15:21-0400\n"
 "PO-Revision-Date: 2007-02-13 08:20+0300\n"
 "Last-Translator: Ilkka Tuohela <hile@iki.fi>\n"
 "Language-Team: Finnish <gnome-fi-laatu@lists.sourceforge.net>\n"
@@ -354,7 +354,7 @@ msgid "When TRUE, empty menu proxies for this action are hidden."
 msgstr "Kun TRUE, tyhjät valikkokohdat tälle toiminnolle piilotetaan."
 
 #: gtk/gtkaction.c:313 gtk/gtkactiongroup.c:164 gtk/gtkcellrenderer.c:193
-#: gtk/gtkwidget.c:516
+#: gtk/gtkwidget.c:517
 msgid "Sensitive"
 msgstr "Herkkä"
 
@@ -363,7 +363,7 @@ msgid "Whether the action is enabled."
 msgstr "Onko tämä toiminto käytössä."
 
 #: gtk/gtkaction.c:320 gtk/gtkactiongroup.c:171 gtk/gtkstatusicon.c:243
-#: gtk/gtktreeviewcolumn.c:191 gtk/gtkwidget.c:509
+#: gtk/gtktreeviewcolumn.c:191 gtk/gtkwidget.c:510
 msgid "Visible"
 msgstr "Näkyvä"
 
@@ -5889,27 +5889,27 @@ msgstr "GtkAdjustment, joka määrää tämän näköaukon pystysijainnin arvot"
 msgid "Determines how the shadowed box around the viewport is drawn"
 msgstr "Määrää miten varjostettu laatikko näköaukon ympärille piirtyy"
 
-#: gtk/gtkwidget.c:476
+#: gtk/gtkwidget.c:477
 msgid "Widget name"
 msgstr "Säätimen nimi"
 
-#: gtk/gtkwidget.c:477
+#: gtk/gtkwidget.c:478
 msgid "The name of the widget"
 msgstr "Säätimen nimi"
 
-#: gtk/gtkwidget.c:483
+#: gtk/gtkwidget.c:484
 msgid "Parent widget"
 msgstr "Emosäädin"
 
-#: gtk/gtkwidget.c:484
+#: gtk/gtkwidget.c:485
 msgid "The parent widget of this widget. Must be a Container widget"
 msgstr "Tämän säätimen emosäädin. Sen täytyy olla säilö."
 
-#: gtk/gtkwidget.c:491
+#: gtk/gtkwidget.c:492
 msgid "Width request"
 msgstr "Leveysvaatimus"
 
-#: gtk/gtkwidget.c:492
+#: gtk/gtkwidget.c:493
 msgid ""
 "Override for width request of the widget, or -1 if natural request should be "
 "used"
@@ -5917,11 +5917,11 @@ msgstr ""
 "Säätimen vaatiman koon sivuuttava koko tai -1 jos halutaan luonnollinen "
 "vaatimus"
 
-#: gtk/gtkwidget.c:500
+#: gtk/gtkwidget.c:501
 msgid "Height request"
 msgstr "Korkeusvaatimus"
 
-#: gtk/gtkwidget.c:501
+#: gtk/gtkwidget.c:502
 msgid ""
 "Override for height request of the widget, or -1 if natural request should "
 "be used"
@@ -5929,183 +5929,183 @@ msgstr ""
 "Säätimen vaatiman koon sivuuttava koko tai -1 jos halutaan luonnollinen "
 "vaatimus"
 
-#: gtk/gtkwidget.c:510
+#: gtk/gtkwidget.c:511
 msgid "Whether the widget is visible"
 msgstr "Onko tämä säädin näkyvä"
 
-#: gtk/gtkwidget.c:517
+#: gtk/gtkwidget.c:518
 msgid "Whether the widget responds to input"
 msgstr "Reagoiko säädin syötteeseen"
 
-#: gtk/gtkwidget.c:523
+#: gtk/gtkwidget.c:524
 msgid "Application paintable"
 msgstr "Sovellus voi piirtää"
 
-#: gtk/gtkwidget.c:524
+#: gtk/gtkwidget.c:525
 msgid "Whether the application will paint directly on the widget"
 msgstr "Voiko sovellus piirtää itse tälle säätimelle"
 
-#: gtk/gtkwidget.c:530
+#: gtk/gtkwidget.c:531
 msgid "Can focus"
 msgstr "Voi kohdistua"
 
-#: gtk/gtkwidget.c:531
+#: gtk/gtkwidget.c:532
 msgid "Whether the widget can accept the input focus"
 msgstr "Voiko tällä säätimellä olla syöttökohdistus"
 
-#: gtk/gtkwidget.c:537
+#: gtk/gtkwidget.c:538
 msgid "Has focus"
 msgstr "Kohdistus on"
 
-#: gtk/gtkwidget.c:538
+#: gtk/gtkwidget.c:539
 msgid "Whether the widget has the input focus"
 msgstr "Onko tällä ikkunalla syöttökohdistus"
 
-#: gtk/gtkwidget.c:544
+#: gtk/gtkwidget.c:545
 msgid "Is focus"
 msgstr "Kohdistus on"
 
-#: gtk/gtkwidget.c:545
+#: gtk/gtkwidget.c:546
 msgid "Whether the widget is the focus widget within the toplevel"
 msgstr "Onko tämä säädin ylätasolla kohdistuva"
 
-#: gtk/gtkwidget.c:551
+#: gtk/gtkwidget.c:552
 msgid "Can default"
 msgstr "Voi olla oletus"
 
-#: gtk/gtkwidget.c:552
+#: gtk/gtkwidget.c:553
 msgid "Whether the widget can be the default widget"
 msgstr "Voiko säädin olla oletussäädin"
 
-#: gtk/gtkwidget.c:558
+#: gtk/gtkwidget.c:559
 msgid "Has default"
 msgstr "On oletus"
 
-#: gtk/gtkwidget.c:559
+#: gtk/gtkwidget.c:560
 msgid "Whether the widget is the default widget"
 msgstr "Onko tämä säädin oletussäädin"
 
-#: gtk/gtkwidget.c:565
+#: gtk/gtkwidget.c:566
 msgid "Receives default"
 msgstr "Vastaanottaa oletuksen"
 
-#: gtk/gtkwidget.c:566
+#: gtk/gtkwidget.c:567
 msgid "If TRUE, the widget will receive the default action when it is focused"
 msgstr ""
 "Jos TRUE, tämä säädin vastaanottaa oletustapahtuman, kun se kohdistetaan"
 
-#: gtk/gtkwidget.c:572
+#: gtk/gtkwidget.c:573
 msgid "Composite child"
 msgstr "Säädinyhdistelmän osa"
 
-#: gtk/gtkwidget.c:573
+#: gtk/gtkwidget.c:574
 msgid "Whether the widget is part of a composite widget"
 msgstr "Onko tämä säädin osa säädinyhdistelmää"
 
-#: gtk/gtkwidget.c:579
+#: gtk/gtkwidget.c:580
 msgid "Style"
 msgstr "Tyyli"
 
-#: gtk/gtkwidget.c:580
+#: gtk/gtkwidget.c:581
 msgid ""
 "The style of the widget, which contains information about how it will look "
 "(colors etc)"
 msgstr "Säätimen tyyli, joka sisältää tietoa sen ulkonäöstä (värit yms.)"
 
-#: gtk/gtkwidget.c:586
+#: gtk/gtkwidget.c:587
 msgid "Events"
 msgstr "Tapahtumat"
 
-#: gtk/gtkwidget.c:587
+#: gtk/gtkwidget.c:588
 msgid "The event mask that decides what kind of GdkEvents this widget gets"
 msgstr ""
 "Tapahtumapeite, joka määrittää, mitä GdkEventtejä tämä säädin vastaanottaa"
 
-#: gtk/gtkwidget.c:594
+#: gtk/gtkwidget.c:595
 msgid "Extension events"
 msgstr "Laajennostapahtumat"
 
-#: gtk/gtkwidget.c:595
+#: gtk/gtkwidget.c:596
 msgid "The mask that decides what kind of extension events this widget gets"
 msgstr ""
 "Tapahtumapeite, joka määrittää, mitä laajennostapahtumia tämä säädin "
 "vastaanottaa"
 
-#: gtk/gtkwidget.c:602
+#: gtk/gtkwidget.c:603
 msgid "No show all"
 msgstr "Ei näytä-kaikki"
 
-#: gtk/gtkwidget.c:603
+#: gtk/gtkwidget.c:604
 msgid "Whether gtk_widget_show_all() should not affect this widget"
 msgstr "Onko gtk_widget_show_all() vaikuttamatta tähän säätimeen"
 
-#: gtk/gtkwidget.c:620
+#: gtk/gtkwidget.c:621
 msgid "Has tooltip"
 msgstr "Sisältää vinkin"
 
-#: gtk/gtkwidget.c:621
+#: gtk/gtkwidget.c:622
 msgid "Whether this widget has a tooltip"
 msgstr "Onko ikkunaelementillä vinkki"
 
-#: gtk/gtkwidget.c:641
+#: gtk/gtkwidget.c:642
 #, fuzzy
 msgid "Tooltip Text"
 msgstr "Vinkin aikaviive"
 
-#: gtk/gtkwidget.c:642 gtk/gtkwidget.c:663
+#: gtk/gtkwidget.c:643 gtk/gtkwidget.c:664
 msgid "The contents of the tooltip for this widget"
 msgstr "Tämän ikkunaelementin vinkin sisältö"
 
-#: gtk/gtkwidget.c:662
+#: gtk/gtkwidget.c:663
 msgid "Tooltip markup"
 msgstr "Vinkin sisältö"
 
-#: gtk/gtkwidget.c:1759
+#: gtk/gtkwidget.c:1760
 msgid "Interior Focus"
 msgstr "Kohdistus sisällä"
 
-#: gtk/gtkwidget.c:1760
+#: gtk/gtkwidget.c:1761
 msgid "Whether to draw the focus indicator inside widgets"
 msgstr "Piirtyykö kohdistusilmaisin säätimien sisälle"
 
-#: gtk/gtkwidget.c:1766
+#: gtk/gtkwidget.c:1767
 msgid "Focus linewidth"
 msgstr "Kohdistusviivan leveys"
 
-#: gtk/gtkwidget.c:1767
+#: gtk/gtkwidget.c:1768
 msgid "Width, in pixels, of the focus indicator line"
 msgstr "Kohdistusilmaisimen viivan leveys kuvapisteinä"
 
-#: gtk/gtkwidget.c:1773
+#: gtk/gtkwidget.c:1774
 msgid "Focus line dash pattern"
 msgstr "Kohdistusviivan kuvio"
 
-#: gtk/gtkwidget.c:1774
+#: gtk/gtkwidget.c:1775
 msgid "Dash pattern used to draw the focus indicator"
 msgstr "Kohdistusilmaisimen viivakuvio"
 
-#: gtk/gtkwidget.c:1779
+#: gtk/gtkwidget.c:1780
 msgid "Focus padding"
 msgstr "Kohdistusväli"
 
-#: gtk/gtkwidget.c:1780
+#: gtk/gtkwidget.c:1781
 msgid "Width, in pixels, between focus indicator and the widget 'box'"
 msgstr ""
 "Säätimen \"laatikon\" ja kohdistusilmaisimen välinen leveys kuvapisteinä"
 
-#: gtk/gtkwidget.c:1785
+#: gtk/gtkwidget.c:1786
 msgid "Cursor color"
 msgstr "Kohdistimen väri"
 
-#: gtk/gtkwidget.c:1786
+#: gtk/gtkwidget.c:1787
 msgid "Color with which to draw insertion cursor"
 msgstr "Minkä värisenä syöttökohdistin piirtyy"
 
-#: gtk/gtkwidget.c:1791
+#: gtk/gtkwidget.c:1792
 msgid "Secondary cursor color"
 msgstr "Toissijaisen kohdistimen väri"
 
-#: gtk/gtkwidget.c:1792
+#: gtk/gtkwidget.c:1793
 msgid ""
 "Color with which to draw the secondary insertion cursor when editing mixed "
 "right-to-left and left-to-right text"
@@ -6113,43 +6113,43 @@ msgstr ""
 "Väri, jolla toissijainen lisäyskohdistin piirtyy, kun muokataan sekaisin "
 "vasemmalta oikealle ja oikealta vasemmalle kulkevaa tekstiä"
 
-#: gtk/gtkwidget.c:1797
+#: gtk/gtkwidget.c:1798
 msgid "Cursor line aspect ratio"
 msgstr "Kohdistinviivan sivusuhde"
 
-#: gtk/gtkwidget.c:1798
+#: gtk/gtkwidget.c:1799
 msgid "Aspect ratio with which to draw insertion cursor"
 msgstr "Lisäyskohdistimen piirrettävien sivujen suhde"
 
-#: gtk/gtkwidget.c:1812
+#: gtk/gtkwidget.c:1813
 msgid "Draw Border"
 msgstr "Piirrä reunus"
 
-#: gtk/gtkwidget.c:1813
+#: gtk/gtkwidget.c:1814
 msgid "Size of areas outside the widget's allocation to draw"
 msgstr "Ikkkunaelementin piirtoon varatun alueen ulkopuolisten alueiden koko"
 
-#: gtk/gtkwidget.c:1826
+#: gtk/gtkwidget.c:1827
 msgid "Unvisited Link Color"
 msgstr "Seuraamattoman linkin väri"
 
-#: gtk/gtkwidget.c:1827
+#: gtk/gtkwidget.c:1828
 msgid "Color of unvisited links"
 msgstr "Seuraamattoman linkin väri"
 
-#: gtk/gtkwidget.c:1840
+#: gtk/gtkwidget.c:1841
 msgid "Visited Link Color"
 msgstr "Seuratun linkin väri"
 
-#: gtk/gtkwidget.c:1841
+#: gtk/gtkwidget.c:1842
 msgid "Color of visited links"
 msgstr "Seuratun linkin väri"
 
-#: gtk/gtkwidget.c:1855
+#: gtk/gtkwidget.c:1856
 msgid "Wide Separators"
 msgstr "Leveät erottimet"
 
-#: gtk/gtkwidget.c:1856
+#: gtk/gtkwidget.c:1857
 msgid ""
 "Whether separators have configurable width and should be drawn using a box "
 "instead of a line"
@@ -6157,35 +6157,35 @@ msgstr ""
 "Voiko erottimilla olla asettavissa oleva leveys ja voidaanko ne piirtää "
 "laatikkona viivan sijasta"
 
-#: gtk/gtkwidget.c:1870
+#: gtk/gtkwidget.c:1871
 msgid "Separator Width"
 msgstr "Erottimen leveys"
 
-#: gtk/gtkwidget.c:1871
+#: gtk/gtkwidget.c:1872
 msgid "The width of separators if wide-separators is TRUE"
 msgstr "Erottimen leveys, jos \"wide-separators\" on TRUE"
 
-#: gtk/gtkwidget.c:1885
+#: gtk/gtkwidget.c:1886
 msgid "Separator Height"
 msgstr "Erottimen korkeus"
 
-#: gtk/gtkwidget.c:1886
+#: gtk/gtkwidget.c:1887
 msgid "The height of separators if \"wide-separators\" is TRUE"
 msgstr "Erottimen korkeus, jos \"wide-separators\" on TRUE"
 
-#: gtk/gtkwidget.c:1900
+#: gtk/gtkwidget.c:1901
 msgid "Horizontal Scroll Arrow Length"
 msgstr "Vaakasuuntaisen vieritysnuolen pituus"
 
-#: gtk/gtkwidget.c:1901
+#: gtk/gtkwidget.c:1902
 msgid "The length of horizontal scroll arrows"
 msgstr "Vaakasuuntaisten vieritysnuolten pituus"
 
-#: gtk/gtkwidget.c:1915
+#: gtk/gtkwidget.c:1916
 msgid "Vertical Scroll Arrow Length"
 msgstr "Pystysuuntaisten vieritysnuolten pituus"
 
-#: gtk/gtkwidget.c:1916
+#: gtk/gtkwidget.c:1917
 msgid "The length of vertical scroll arrows"
 msgstr "Pystysuuntaisten vieritysnuolten pituus"
 

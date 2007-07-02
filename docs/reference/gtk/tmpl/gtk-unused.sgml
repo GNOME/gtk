@@ -649,6 +649,18 @@ Define a function pointer.  Deprecated.
 @arg: 
 @arg_id: 
 
+<!-- ##### STRUCT GtkBuilderClass ##### -->
+<para>
+
+</para>
+
+@get_type_from_name: Looks up a type by name. The default
+  implementation applies heuristics to map type names to
+  <function>_get_type</function> function names, e.g. 
+  GtkHBox to gtk_hbox_get_type(). This virtual function
+  is provided to allow language bindings to intercept the
+  type resolution process.
+
 <!-- ##### STRUCT GtkCellRendererTextPixbuf ##### -->
 <para>
 
@@ -913,7 +925,73 @@ You may not attach these to signals created with the
 </para>
 
 
+<!-- ##### ARG GtkFileChooser:action ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### ARG GtkFileChooser:do-overwrite-confirmation ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### ARG GtkFileChooser:extra-widget ##### -->
+<para>
+
+</para>
+
+
 <!-- ##### ARG GtkFileChooser:file-system ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### ARG GtkFileChooser:file-system-backend ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### ARG GtkFileChooser:filter ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### ARG GtkFileChooser:local-only ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### ARG GtkFileChooser:preview-widget ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### ARG GtkFileChooser:preview-widget-active ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### ARG GtkFileChooser:select-multiple ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### ARG GtkFileChooser:show-hidden ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### ARG GtkFileChooser:use-preview-label ##### -->
 <para>
 
 </para>
@@ -1195,6 +1273,66 @@ after other user handlers and the default handler.
 @PRIVATE_GTK_DIRECTION_LTR: 
 
 <!-- ##### STRUCT GtkRcStyleClass ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### ARG GtkRecentChooser:filter ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### ARG GtkRecentChooser:limit ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### ARG GtkRecentChooser:local-only ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### ARG GtkRecentChooser:recent-manager ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### ARG GtkRecentChooser:select-multiple ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### ARG GtkRecentChooser:show-icons ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### ARG GtkRecentChooser:show-not-found ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### ARG GtkRecentChooser:show-private ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### ARG GtkRecentChooser:show-tips ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### ARG GtkRecentChooser:sort-type ##### -->
 <para>
 
 </para>

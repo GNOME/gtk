@@ -204,6 +204,15 @@ Returns: %PANGO_DIRECTION_LTR or %PANGO_DIRECTION_RTL.
 @Returns: the direction of the keymap.
 
 
+<!-- ##### FUNCTION gdk_keymap_have_bidi_layouts ##### -->
+<para>
+
+</para>
+
+@keymap: 
+@Returns: 
+
+
 <!-- ##### FUNCTION gdk_keyval_name ##### -->
 <para>
 Converts a key value into a symbolic name.

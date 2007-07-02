@@ -15,6 +15,10 @@ Overview of Changes from GTK+ 2.11.4 to 2.11.5
  - Improved display of the time column
  - Support search on OS X, using Spotlight
 
+* GtkTreeView:
+ - New function gtk_tree_view_is_rubber_banding_active() to
+   check whether rubber banding is active
+
 * GtkVolumeButton uses the range 0.0 to 1.0, and
   correctly adapts tooltips to display percentages
 
@@ -49,6 +53,7 @@ Overview of Changes from GTK+ 2.11.4 to 2.11.5
  327912 Many mouse cursors are not supported
  353805 Detecting Bidi Keyboard Layouts
  451527 Confusing GtkRadioButton variable names in some functions
+ 393579 Need tree view API for querying whether rubberbanding is ...
 
 * Updated translations
  Spanish (es)

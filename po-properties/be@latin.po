@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-properties\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-06-19 12:20-0400\n"
+"POT-Creation-Date: 2007-07-02 15:21-0400\n"
 "PO-Revision-Date: 2007-03-13 12:04+0100\n"
 "Last-Translator: Alaksandar Navicki <zolak@lacinka.org>\n"
 "Language-Team: i18n@mova.org <i18n@mova.org>\n"
@@ -366,7 +366,7 @@ msgstr ""
 "buduć schavanyja."
 
 #: gtk/gtkaction.c:313 gtk/gtkactiongroup.c:164 gtk/gtkcellrenderer.c:193
-#: gtk/gtkwidget.c:516
+#: gtk/gtkwidget.c:517
 msgid "Sensitive"
 msgstr "Adčuvalny"
 
@@ -375,7 +375,7 @@ msgid "Whether the action is enabled."
 msgstr "Akreślivaje, ci aperacyja dastupnaja."
 
 #: gtk/gtkaction.c:320 gtk/gtkactiongroup.c:171 gtk/gtkstatusicon.c:243
-#: gtk/gtktreeviewcolumn.c:191 gtk/gtkwidget.c:509
+#: gtk/gtktreeviewcolumn.c:191 gtk/gtkwidget.c:510
 msgid "Visible"
 msgstr "Bačnaja"
 
@@ -6038,27 +6038,27 @@ msgid "Determines how the shadowed box around the viewport is drawn"
 msgstr ""
 "Akreślivaje, jak rysujecca pramavuholnik ź cieniem vakoł abšaru vyśviatleńnia"
 
-#: gtk/gtkwidget.c:476
+#: gtk/gtkwidget.c:477
 msgid "Widget name"
 msgstr "Nazva widgetu"
 
-#: gtk/gtkwidget.c:477
+#: gtk/gtkwidget.c:478
 msgid "The name of the widget"
 msgstr "Nazva widgetu"
 
-#: gtk/gtkwidget.c:483
+#: gtk/gtkwidget.c:484
 msgid "Parent widget"
 msgstr "Widget vyšejšaha ŭzroŭniu"
 
-#: gtk/gtkwidget.c:484
+#: gtk/gtkwidget.c:485
 msgid "The parent widget of this widget. Must be a Container widget"
 msgstr "Widget vyšejšaha ŭzroŭniu hetaha widgetu. Jon musić być kantejneram"
 
-#: gtk/gtkwidget.c:491
+#: gtk/gtkwidget.c:492
 msgid "Width request"
 msgstr "Patrabavańnie ŭstalić šyryniu"
 
-#: gtk/gtkwidget.c:492
+#: gtk/gtkwidget.c:493
 msgid ""
 "Override for width request of the widget, or -1 if natural request should be "
 "used"
@@ -6066,11 +6066,11 @@ msgstr ""
 "Patrabavańnie ŭstalić šyryniu widgetu, vartaść -1 aznačaje ŭžyćcio "
 "naturalnaha parametru"
 
-#: gtk/gtkwidget.c:500
+#: gtk/gtkwidget.c:501
 msgid "Height request"
 msgstr "Patrabavańnie ŭstalić vyšyniu"
 
-#: gtk/gtkwidget.c:501
+#: gtk/gtkwidget.c:502
 msgid ""
 "Override for height request of the widget, or -1 if natural request should "
 "be used"
@@ -6078,191 +6078,191 @@ msgstr ""
 "Patrabavańnie ŭstalić vyšyniu widgetu, vartaść -1 aznačaje ŭžyćcio "
 "naturalnaha parametru"
 
-#: gtk/gtkwidget.c:510
+#: gtk/gtkwidget.c:511
 msgid "Whether the widget is visible"
 msgstr "Akreślivaje, ci widget bačny"
 
-#: gtk/gtkwidget.c:517
+#: gtk/gtkwidget.c:518
 msgid "Whether the widget responds to input"
 msgstr "Akreślivaje, ci widget adkazvaje na zdareńni ŭvodu"
 
-#: gtk/gtkwidget.c:523
+#: gtk/gtkwidget.c:524
 msgid "Application paintable"
 msgstr "Rysavanaje prahramaj"
 
-#: gtk/gtkwidget.c:524
+#: gtk/gtkwidget.c:525
 msgid "Whether the application will paint directly on the widget"
 msgstr "Akreślivaje, ci aplikacyja budzie rysavać niepasredna pa widgecie."
 
-#: gtk/gtkwidget.c:530
+#: gtk/gtkwidget.c:531
 msgid "Can focus"
 msgstr "Pryjmaje fokus"
 
-#: gtk/gtkwidget.c:531
+#: gtk/gtkwidget.c:532
 msgid "Whether the widget can accept the input focus"
 msgstr "Akreślivaje, ci widget pryjmaje fokus uvodu"
 
-#: gtk/gtkwidget.c:537
+#: gtk/gtkwidget.c:538
 msgid "Has focus"
 msgstr "Z fokusam"
 
-#: gtk/gtkwidget.c:538
+#: gtk/gtkwidget.c:539
 msgid "Whether the widget has the input focus"
 msgstr "Akreślivaje, ci na widgecie sfakusavany ŭvod"
 
-#: gtk/gtkwidget.c:544
+#: gtk/gtkwidget.c:545
 msgid "Is focus"
 msgstr "Fakusavańnie"
 
-#: gtk/gtkwidget.c:545
+#: gtk/gtkwidget.c:546
 msgid "Whether the widget is the focus widget within the toplevel"
 msgstr "Akreślivaje, ci widget u vaknie vyšejšaha ŭzroŭniu zmoŭčany"
 
-#: gtk/gtkwidget.c:551
+#: gtk/gtkwidget.c:552
 msgid "Can default"
 msgstr "Moža być zmoŭčany"
 
-#: gtk/gtkwidget.c:552
+#: gtk/gtkwidget.c:553
 msgid "Whether the widget can be the default widget"
 msgstr "Akreślivaje, ci widget moža być zmoŭčany"
 
-#: gtk/gtkwidget.c:558
+#: gtk/gtkwidget.c:559
 msgid "Has default"
 msgstr "Zmoŭčany"
 
-#: gtk/gtkwidget.c:559
+#: gtk/gtkwidget.c:560
 msgid "Whether the widget is the default widget"
 msgstr "Akreślivaje, ci widget zmoŭčany"
 
-#: gtk/gtkwidget.c:565
+#: gtk/gtkwidget.c:566
 msgid "Receives default"
 msgstr "Pryjmaje zmoŭčanaje"
 
-#: gtk/gtkwidget.c:566
+#: gtk/gtkwidget.c:567
 msgid "If TRUE, the widget will receive the default action when it is focused"
 msgstr ""
 "Akreślivaje, ci widget pryjmaje zmoŭčanaje dziejańnie, kali fokus na im"
 
-#: gtk/gtkwidget.c:572
+#: gtk/gtkwidget.c:573
 msgid "Composite child"
 msgstr "Naščadak składanaha"
 
-#: gtk/gtkwidget.c:573
+#: gtk/gtkwidget.c:574
 msgid "Whether the widget is part of a composite widget"
 msgstr "Akreślivaje, ci widget źjaŭlajecca častkaj składanaha widgetu"
 
-#: gtk/gtkwidget.c:579
+#: gtk/gtkwidget.c:580
 msgid "Style"
 msgstr "Styl"
 
-#: gtk/gtkwidget.c:580
+#: gtk/gtkwidget.c:581
 msgid ""
 "The style of the widget, which contains information about how it will look "
 "(colors etc)"
 msgstr "Styl widgetu, z infarmacyjaj ab jahonym vyhladzie (kolery i inšaje)"
 
-#: gtk/gtkwidget.c:586
+#: gtk/gtkwidget.c:587
 msgid "Events"
 msgstr "Zdareńni"
 
-#: gtk/gtkwidget.c:587
+#: gtk/gtkwidget.c:588
 msgid "The event mask that decides what kind of GdkEvents this widget gets"
 msgstr ""
 "Maska zdareńniaŭ, jakaja akreślivaje, jakija typy zdareńniaŭ GdkEvents "
 "atrymvaje hety widget"
 
-#: gtk/gtkwidget.c:594
+#: gtk/gtkwidget.c:595
 msgid "Extension events"
 msgstr "Zdareńni pašyreńnia"
 
-#: gtk/gtkwidget.c:595
+#: gtk/gtkwidget.c:596
 msgid "The mask that decides what kind of extension events this widget gets"
 msgstr ""
 "Maska zdareńniaŭ, jakaja akreślivaje, jakija typy zdareńniaŭ atrymvaje hety "
 "widget"
 
-#: gtk/gtkwidget.c:602
+#: gtk/gtkwidget.c:603
 msgid "No show all"
 msgstr "Nie pakazvaj usich"
 
-#: gtk/gtkwidget.c:603
+#: gtk/gtkwidget.c:604
 msgid "Whether gtk_widget_show_all() should not affect this widget"
 msgstr ""
 "Akreślivaje, ci funkcyja gtk_widget_show_all() pavinna mieć upłyŭ na hety "
 "widget"
 
-#: gtk/gtkwidget.c:620
+#: gtk/gtkwidget.c:621
 #, fuzzy
 msgid "Has tooltip"
 msgstr "Padkazka"
 
-#: gtk/gtkwidget.c:621
+#: gtk/gtkwidget.c:622
 #, fuzzy
 msgid "Whether this widget has a tooltip"
 msgstr "Akreślivaje, ci na widgecie sfakusavany ŭvod"
 
-#: gtk/gtkwidget.c:641
+#: gtk/gtkwidget.c:642
 #, fuzzy
 msgid "Tooltip Text"
 msgstr "Pačatak terminu čakańnia"
 
-#: gtk/gtkwidget.c:642 gtk/gtkwidget.c:663
+#: gtk/gtkwidget.c:643 gtk/gtkwidget.c:664
 #, fuzzy
 msgid "The contents of the tooltip for this widget"
 msgstr "Źmieściva elementu"
 
-#: gtk/gtkwidget.c:662
+#: gtk/gtkwidget.c:663
 #, fuzzy
 msgid "Tooltip markup"
 msgstr "Padkazka"
 
-#: gtk/gtkwidget.c:1759
+#: gtk/gtkwidget.c:1760
 msgid "Interior Focus"
 msgstr "Unutrany fokus"
 
-#: gtk/gtkwidget.c:1760
+#: gtk/gtkwidget.c:1761
 msgid "Whether to draw the focus indicator inside widgets"
 msgstr "Akreślivaje, treba rysavać pakaźnik fokusu ŭnutry widgetaŭ"
 
-#: gtk/gtkwidget.c:1766
+#: gtk/gtkwidget.c:1767
 msgid "Focus linewidth"
 msgstr "Šyrynia linii fokusu"
 
-#: gtk/gtkwidget.c:1767
+#: gtk/gtkwidget.c:1768
 msgid "Width, in pixels, of the focus indicator line"
 msgstr "Šyrynia linii, jakaja pakazvaje fokus, u pikselach"
 
-#: gtk/gtkwidget.c:1773
+#: gtk/gtkwidget.c:1774
 msgid "Focus line dash pattern"
 msgstr "Uzor linii fokusu"
 
-#: gtk/gtkwidget.c:1774
+#: gtk/gtkwidget.c:1775
 msgid "Dash pattern used to draw the focus indicator"
 msgstr "Uzor linii, užyvanaj pry rysavańni fokusu"
 
-#: gtk/gtkwidget.c:1779
+#: gtk/gtkwidget.c:1780
 msgid "Focus padding"
 msgstr "Zapaŭnieńnie fokusu"
 
-#: gtk/gtkwidget.c:1780
+#: gtk/gtkwidget.c:1781
 msgid "Width, in pixels, between focus indicator and the widget 'box'"
 msgstr ""
 "Šyrynia vodstupu pamiž pakaźnikam fokusu i pramavuholnikam, jaki aznačaje "
 "fokus, u pikselach"
 
-#: gtk/gtkwidget.c:1785
+#: gtk/gtkwidget.c:1786
 msgid "Cursor color"
 msgstr "Koler kursora"
 
-#: gtk/gtkwidget.c:1786
+#: gtk/gtkwidget.c:1787
 msgid "Color with which to draw insertion cursor"
 msgstr "Koler, pry vykarystańni jakoha pavinien być rysavany kursor ustaŭki"
 
-#: gtk/gtkwidget.c:1791
+#: gtk/gtkwidget.c:1792
 msgid "Secondary cursor color"
 msgstr "Druhi koler kursora"
 
-#: gtk/gtkwidget.c:1792
+#: gtk/gtkwidget.c:1793
 msgid ""
 "Color with which to draw the secondary insertion cursor when editing mixed "
 "right-to-left and left-to-right text"
@@ -6270,43 +6270,43 @@ msgstr ""
 "Koler dapamožnaha kursora ŭstaŭki, užyvanaha pry redahavańni tekstu ź "
 "pieramiašanymi frahmentami, pisanymi źleva naprava i sprava naleva."
 
-#: gtk/gtkwidget.c:1797
+#: gtk/gtkwidget.c:1798
 msgid "Cursor line aspect ratio"
 msgstr "Praporcyi pramavuholnika kursora"
 
-#: gtk/gtkwidget.c:1798
+#: gtk/gtkwidget.c:1799
 msgid "Aspect ratio with which to draw insertion cursor"
 msgstr "Kaeficyjent praporcyjaŭ kursora ŭstaŭki"
 
-#: gtk/gtkwidget.c:1812
+#: gtk/gtkwidget.c:1813
 msgid "Draw Border"
 msgstr "Rysavańnie krajoŭ"
 
-#: gtk/gtkwidget.c:1813
+#: gtk/gtkwidget.c:1814
 msgid "Size of areas outside the widget's allocation to draw"
 msgstr "Pamier abšaraŭ rysavać pa-za abšaram, zaniatym widgetam"
 
-#: gtk/gtkwidget.c:1826
+#: gtk/gtkwidget.c:1827
 msgid "Unvisited Link Color"
 msgstr "Koler nienaviedanaj spasyłki"
 
-#: gtk/gtkwidget.c:1827
+#: gtk/gtkwidget.c:1828
 msgid "Color of unvisited links"
 msgstr "Koler nienaviedanych spasyłak"
 
-#: gtk/gtkwidget.c:1840
+#: gtk/gtkwidget.c:1841
 msgid "Visited Link Color"
 msgstr "Koler naviedanaj spasyłki"
 
-#: gtk/gtkwidget.c:1841
+#: gtk/gtkwidget.c:1842
 msgid "Color of visited links"
 msgstr "Koler naviedanych spasyłak"
 
-#: gtk/gtkwidget.c:1855
+#: gtk/gtkwidget.c:1856
 msgid "Wide Separators"
 msgstr "Šyrynia separatara"
 
-#: gtk/gtkwidget.c:1856
+#: gtk/gtkwidget.c:1857
 msgid ""
 "Whether separators have configurable width and should be drawn using a box "
 "instead of a line"
@@ -6314,35 +6314,35 @@ msgstr ""
 "Ci separatary majuć kanfihuravalnuju šyryniu, i ci pavinny jany być "
 "rysavanyja pry dapamozie pramavuholnikaŭ, a nia linijaŭ"
 
-#: gtk/gtkwidget.c:1870
+#: gtk/gtkwidget.c:1871
 msgid "Separator Width"
 msgstr "Šyrynia separatara"
 
-#: gtk/gtkwidget.c:1871
+#: gtk/gtkwidget.c:1872
 msgid "The width of separators if wide-separators is TRUE"
 msgstr "Šyrynia separataraŭ, kali hetaja vartaść PRAŬDZIVAJA"
 
-#: gtk/gtkwidget.c:1885
+#: gtk/gtkwidget.c:1886
 msgid "Separator Height"
 msgstr "Separatar vyšyni"
 
-#: gtk/gtkwidget.c:1886
+#: gtk/gtkwidget.c:1887
 msgid "The height of separators if \"wide-separators\" is TRUE"
 msgstr "Vyšynia separataraŭ, kali vartaść \"wide-separators\" PRAŬDZIVAJA"
 
-#: gtk/gtkwidget.c:1900
+#: gtk/gtkwidget.c:1901
 msgid "Horizontal Scroll Arrow Length"
 msgstr "Daŭžynia haryzantalnaj strełki prakrutki"
 
-#: gtk/gtkwidget.c:1901
+#: gtk/gtkwidget.c:1902
 msgid "The length of horizontal scroll arrows"
 msgstr "Daŭžynia haryzantalnych strełak prakrutki"
 
-#: gtk/gtkwidget.c:1915
+#: gtk/gtkwidget.c:1916
 msgid "Vertical Scroll Arrow Length"
 msgstr "Daŭžynia vertykalnaj strełki prakrutki"
 
-#: gtk/gtkwidget.c:1916
+#: gtk/gtkwidget.c:1917
 msgid "The length of vertical scroll arrows"
 msgstr "Daŭžynia vertykalnaj strełki prakrutki"
 

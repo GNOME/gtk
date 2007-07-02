@@ -64,6 +64,15 @@ End:
 @pixelate: 
 
 
+<!-- ##### FUNCTION gdk_pixbuf_apply_embedded_orientation ##### -->
+<para>
+
+</para>
+
+@src: 
+@Returns: 
+
+
 <!-- ##### FUNCTION gdk_pixbuf_fill ##### -->
 <para>
 

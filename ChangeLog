@@ -1,3 +1,14 @@
+2007-07-02  Matthias Clasen  <mclasen@redhat.com>
+
+	* === Released 2.11.5 ===
+
+	* tests/autotestkeywords.cc: Make platform includes
+	conditional.
+
+	* gtk/Makefile.am: File list fixes
+
+	* NEWS: Updates
+
 2007-07-02  Kristian Rietveld  <kris@gtk.org>
 
 	* gtk/gtk.symbols:

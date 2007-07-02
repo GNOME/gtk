@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-06-19 12:19-0400\n"
+"POT-Creation-Date: 2007-07-02 15:21-0400\n"
 "PO-Revision-Date: 2004-03-21 09:20+CET\n"
 "Last-Translator: auto\n"
 "Language-Team: Croatian <lokalizacija@linux.hr>\n"
@@ -1502,7 +1502,7 @@ msgstr "_Ubaciti Unicode kontrolni znak"
 msgid "Select A File"
 msgstr "Obriši datoteku"
 
-#: gtk/gtkfilechooserbutton.c:69 gtk/gtkfilechooserdefault.c:1966
+#: gtk/gtkfilechooserbutton.c:69 gtk/gtkfilechooserdefault.c:1965
 msgid "Desktop"
 msgstr "Radna površina"
 
@@ -1578,207 +1578,207 @@ msgstr ""
 msgid "Recently Used"
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:3006
+#: gtk/gtkfilechooserdefault.c:3005
 #, c-format
 msgid "Add the folder '%s' to the bookmarks"
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:3047
+#: gtk/gtkfilechooserdefault.c:3046
 #, c-format
 msgid "Add the current folder to the bookmarks"
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:3049
+#: gtk/gtkfilechooserdefault.c:3048
 #, c-format
 msgid "Add the selected folders to the bookmarks"
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:3089
+#: gtk/gtkfilechooserdefault.c:3088
 #, c-format
 msgid "Remove the bookmark '%s'"
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:3522
+#: gtk/gtkfilechooserdefault.c:3521
 #, fuzzy, c-format
 msgid "Could not add a bookmark for '%s' because it is an invalid path name."
 msgstr ""
 "Nisam mogao dodati knjižnu oznaku za %s, jer je to neispravno ime putanje."
 
-#: gtk/gtkfilechooserdefault.c:3747
+#: gtk/gtkfilechooserdefault.c:3746
 #, fuzzy
 msgid "Remove"
 msgstr "_Ukloni"
 
-#: gtk/gtkfilechooserdefault.c:3756
+#: gtk/gtkfilechooserdefault.c:3755
 #, fuzzy
 msgid "Rename..."
 msgstr "_Promijeni ime"
 
 #. Accessible object name for the file chooser's shortcuts pane
-#: gtk/gtkfilechooserdefault.c:3898
+#: gtk/gtkfilechooserdefault.c:3897
 msgid "Places"
 msgstr ""
 
 #. Column header for the file chooser's shortcuts pane
-#: gtk/gtkfilechooserdefault.c:3952
+#: gtk/gtkfilechooserdefault.c:3951
 #, fuzzy
 msgid "_Places"
 msgstr "_Promijeni ime"
 
-#: gtk/gtkfilechooserdefault.c:4007 gtk/gtkstock.c:297
+#: gtk/gtkfilechooserdefault.c:4006 gtk/gtkstock.c:297
 msgid "_Add"
 msgstr "_Dodaj"
 
-#: gtk/gtkfilechooserdefault.c:4014
+#: gtk/gtkfilechooserdefault.c:4013
 msgid "Add the selected folder to the Bookmarks"
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:4019 gtk/gtkstock.c:385
+#: gtk/gtkfilechooserdefault.c:4018 gtk/gtkstock.c:385
 msgid "_Remove"
 msgstr "_Ukloni"
 
-#: gtk/gtkfilechooserdefault.c:4026
+#: gtk/gtkfilechooserdefault.c:4025
 msgid "Remove the selected bookmark"
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:4122
+#: gtk/gtkfilechooserdefault.c:4121
 #, fuzzy
 msgid "Could not select file"
 msgstr ""
 "Nisam mogao označiti %s:\n"
 "%s"
 
-#: gtk/gtkfilechooserdefault.c:4259
+#: gtk/gtkfilechooserdefault.c:4258
 #, fuzzy, c-format
 msgid "Could not select file '%s' because it is an invalid path name."
 msgstr ""
 "Nisam mogao dodati knjižnu oznaku za %s, jer je to neispravno ime putanje."
 
-#: gtk/gtkfilechooserdefault.c:4316
+#: gtk/gtkfilechooserdefault.c:4315
 msgid "_Add to Bookmarks"
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:4330
+#: gtk/gtkfilechooserdefault.c:4329
 msgid "Show _Hidden Files"
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:4498 gtk/gtkfilesel.c:729
+#: gtk/gtkfilechooserdefault.c:4497 gtk/gtkfilesel.c:729
 msgid "Files"
 msgstr "Datoteke"
 
-#: gtk/gtkfilechooserdefault.c:4543
+#: gtk/gtkfilechooserdefault.c:4542
 msgid "Name"
 msgstr "Ime"
 
-#: gtk/gtkfilechooserdefault.c:4568
+#: gtk/gtkfilechooserdefault.c:4567
 msgid "Size"
 msgstr "Veličina"
 
-#: gtk/gtkfilechooserdefault.c:4582
+#: gtk/gtkfilechooserdefault.c:4581
 msgid "Modified"
 msgstr "Mijenjano"
 
-#: gtk/gtkfilechooserdefault.c:4617
+#: gtk/gtkfilechooserdefault.c:4616
 msgid "Select which types of files are shown"
 msgstr ""
 
 #. Label
-#: gtk/gtkfilechooserdefault.c:4828 gtk/gtkprinteroptionwidget.c:786
+#: gtk/gtkfilechooserdefault.c:4827 gtk/gtkprinteroptionwidget.c:786
 msgid "_Name:"
 msgstr "_Ime:"
 
-#: gtk/gtkfilechooserdefault.c:4870
+#: gtk/gtkfilechooserdefault.c:4869
 msgid "_Browse for other folders"
 msgstr "_Pregledaj druge mape"
 
-#: gtk/gtkfilechooserdefault.c:5125
+#: gtk/gtkfilechooserdefault.c:5124
 #, fuzzy
 msgid "Type a file name"
 msgstr "Neispravno ime datoteke: %s"
 
 #. Create Folder
-#: gtk/gtkfilechooserdefault.c:5162
+#: gtk/gtkfilechooserdefault.c:5161
 #, fuzzy
 msgid "Create Fo_lder"
 msgstr "Stvori _mapu"
 
-#: gtk/gtkfilechooserdefault.c:5172
+#: gtk/gtkfilechooserdefault.c:5171
 #, fuzzy
 msgid "_Location:"
 msgstr "_Mjesto:"
 
-#: gtk/gtkfilechooserdefault.c:5410
+#: gtk/gtkfilechooserdefault.c:5409
 msgid "Save in _folder:"
 msgstr "Spremi u _mapu:"
 
-#: gtk/gtkfilechooserdefault.c:5412
+#: gtk/gtkfilechooserdefault.c:5411
 msgid "Create in _folder:"
 msgstr "Stvori u _mapi:"
 
-#: gtk/gtkfilechooserdefault.c:7015
+#: gtk/gtkfilechooserdefault.c:7014
 #, fuzzy, c-format
 msgid "Cannot change to folder because it is not local"
 msgstr "Nisam se mogao postaviti u mapu, jer je nije na računalu."
 
-#: gtk/gtkfilechooserdefault.c:7631 gtk/gtkfilechooserdefault.c:7652
+#: gtk/gtkfilechooserdefault.c:7630 gtk/gtkfilechooserdefault.c:7651
 #, fuzzy, c-format
 msgid "Shortcut %s already exists"
 msgstr "Ne postoji kratica %s"
 
-#: gtk/gtkfilechooserdefault.c:7742
+#: gtk/gtkfilechooserdefault.c:7741
 #, fuzzy, c-format
 msgid "Shortcut %s does not exist"
 msgstr "Ne postoji kratica %s"
 
-#: gtk/gtkfilechooserdefault.c:7997
+#: gtk/gtkfilechooserdefault.c:7996
 #, c-format
 msgid "A file named \"%s\" already exists.  Do you want to replace it?"
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:8000
+#: gtk/gtkfilechooserdefault.c:7999
 #, c-format
 msgid ""
 "The file already exists in \"%s\".  Replacing it will overwrite its contents."
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:8005
+#: gtk/gtkfilechooserdefault.c:8004
 #, fuzzy
 msgid "_Replace"
 msgstr "_Promijeni ime"
 
-#: gtk/gtkfilechooserdefault.c:8836
+#: gtk/gtkfilechooserdefault.c:8835
 #, fuzzy
 msgid "Could not start the search process"
 msgstr "Ne mogu spremiti ostatak"
 
-#: gtk/gtkfilechooserdefault.c:8837
+#: gtk/gtkfilechooserdefault.c:8836
 msgid ""
 "The program was not able to create a connection to the indexer daemon.  "
 "Please make sure it is running."
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:8851
+#: gtk/gtkfilechooserdefault.c:8850
 #, fuzzy
 msgid "Could not send the search request"
 msgstr "Ne mogu spremiti ostatak"
 
 #. Label
-#: gtk/gtkfilechooserdefault.c:9277
+#: gtk/gtkfilechooserdefault.c:9276
 msgid "_Search:"
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:10166
+#: gtk/gtkfilechooserdefault.c:10165
 #, fuzzy, c-format
 msgid "Could not mount %s"
 msgstr ""
 "Nisam mogao označiti %s:\n"
 "%s"
 
-#: gtk/gtkfilechooserdefault.c:10806
+#: gtk/gtkfilechooserdefault.c:10805
 msgid "Type name of new folder"
 msgstr "Upišite ime nove mape"
 
-#: gtk/gtkfilechooserdefault.c:10854
+#: gtk/gtkfilechooserdefault.c:10853
 #, c-format
 msgid "%d byte"
 msgid_plural "%d bytes"
@@ -1786,31 +1786,33 @@ msgstr[0] "%d bajt"
 msgstr[1] "%d bajta"
 msgstr[2] "%d bajtova"
 
-#: gtk/gtkfilechooserdefault.c:10856
+#: gtk/gtkfilechooserdefault.c:10855
 #, fuzzy, c-format
 msgid "%.1f KB"
 msgstr "%.1f K"
 
-#: gtk/gtkfilechooserdefault.c:10858
+#: gtk/gtkfilechooserdefault.c:10857
 #, fuzzy, c-format
 msgid "%.1f MB"
 msgstr "%.1f M"
 
-#: gtk/gtkfilechooserdefault.c:10860
+#: gtk/gtkfilechooserdefault.c:10859
 #, fuzzy, c-format
 msgid "%.1f GB"
 msgstr "%.1f G"
 
-#: gtk/gtkfilechooserdefault.c:10958 gtk/gtkfilechooserdefault.c:10982
+#: gtk/gtkfilechooserdefault.c:10955 gtk/gtkfilechooserdefault.c:10976
+#: gtk/gtkfilechooserdefault.c:11008
 msgid "Unknown"
 msgstr "Nepoznato"
 
-#: gtk/gtkfilechooserdefault.c:10969
-msgid "Today"
-msgstr "Danas"
+#: gtk/gtkfilechooserdefault.c:10994
+msgid "Today at %H:%M"
+msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:10971
-msgid "Yesterday"
+#: gtk/gtkfilechooserdefault.c:10996
+#, fuzzy
+msgid "Yesterday at %H:%M"
 msgstr "Jučer"
 
 #: gtk/gtkfilechoosersettings.c:262 gtk/gtkfilesel.c:1408
@@ -2544,7 +2546,7 @@ msgstr ""
 msgid "Printer"
 msgstr "_Ispis"
 
-#: gtk/gtkprintunixdialog.c:1493
+#: gtk/gtkprintunixdialog.c:1493 gtk/gtkrecentchooserdefault.c:992
 #, fuzzy
 msgid "Location"
 msgstr "_Mjesto:"
@@ -2755,45 +2757,40 @@ msgstr ""
 msgid "Select which type of documents are shown"
 msgstr ""
 
-#: gtk/gtkrecentchooserdefault.c:991
-#, fuzzy
-msgid "Location:"
-msgstr "_Mjesto:"
-
-#: gtk/gtkrecentchooserdefault.c:1106 gtk/gtkrecentchooserdefault.c:1143
+#: gtk/gtkrecentchooserdefault.c:1111 gtk/gtkrecentchooserdefault.c:1148
 #, c-format
 msgid "No item for URI '%s' found"
 msgstr ""
 
-#: gtk/gtkrecentchooserdefault.c:1563
+#: gtk/gtkrecentchooserdefault.c:1568
 #, fuzzy
 msgid "Could not remove item"
 msgstr ""
 "Nisam mogao označiti %s:\n"
 "%s"
 
-#: gtk/gtkrecentchooserdefault.c:1606
+#: gtk/gtkrecentchooserdefault.c:1611
 #, fuzzy
 msgid "Could not clear list"
 msgstr ""
 "Nisam mogao označiti %s:\n"
 "%s"
 
-#: gtk/gtkrecentchooserdefault.c:1690
+#: gtk/gtkrecentchooserdefault.c:1695
 #, fuzzy
 msgid "Copy _Location"
 msgstr "Otvori mjesto"
 
-#: gtk/gtkrecentchooserdefault.c:1703
+#: gtk/gtkrecentchooserdefault.c:1708
 msgid "_Remove From List"
 msgstr ""
 
-#: gtk/gtkrecentchooserdefault.c:1712
+#: gtk/gtkrecentchooserdefault.c:1717
 #, fuzzy
 msgid "_Clear List"
 msgstr "_Očisti"
 
-#: gtk/gtkrecentchooserdefault.c:1726
+#: gtk/gtkrecentchooserdefault.c:1731
 msgid "Show _Private Resources"
 msgstr ""
 
@@ -2827,8 +2824,8 @@ msgstr ""
 msgid "Unknown item"
 msgstr "Nepoznato"
 
-#: gtk/gtkrecentmanager.c:1032 gtk/gtkrecentmanager.c:1182
-#: gtk/gtkrecentmanager.c:1192 gtk/gtkrecentmanager.c:1251
+#: gtk/gtkrecentmanager.c:1032 gtk/gtkrecentmanager.c:1179
+#: gtk/gtkrecentmanager.c:1189 gtk/gtkrecentmanager.c:1242
 #, fuzzy, c-format
 msgid "Unable to find an item with URI '%s'"
 msgstr "Ne mogu uključiti datoteku: \"%s\""
@@ -3413,31 +3410,35 @@ msgstr "Neočekivani znakovni podaci u %d. redu, %d. znak"
 msgid "Empty"
 msgstr "Prazno"
 
-#: gtk/gtkvolumebutton.c:83
+#: gtk/gtkvolumebutton.c:81
 #, fuzzy
 msgid "Volume"
 msgstr "_Vrijednost:"
 
-#: gtk/gtkvolumebutton.c:85
+#: gtk/gtkvolumebutton.c:83
 msgid "Volume Down"
 msgstr ""
 
-#: gtk/gtkvolumebutton.c:87
+#: gtk/gtkvolumebutton.c:85
 msgid "Volume Up"
 msgstr ""
 
-#: gtk/gtkvolumebutton.c:148
+#: gtk/gtkvolumebutton.c:149
 msgid "Muted"
 msgstr ""
 
-#: gtk/gtkvolumebutton.c:152
+#: gtk/gtkvolumebutton.c:153
 msgid "Full Volume"
 msgstr ""
 
-#. translators, this is the percentage of the current volume,
-#. * as used in the tooltip, eg. "49 %"
-#. * do not translate the part before the |
-#: gtk/gtkvolumebutton.c:162
+#. Translators: this is the percentage of the current volume,
+#. * as used in the tooltip, eg. "49 %".
+#. * Translate the "%d" to "%Id" if you want to use localised digits,
+#. * or otherwise translate the "%d" to "%d".
+#. * Do not translate and do not include the "volume percentage|"
+#. * part in the translation!
+#.
+#: gtk/gtkvolumebutton.c:168
 #, c-format
 msgid "volume percentage|%d %%"
 msgstr ""
@@ -4559,6 +4560,13 @@ msgstr "_Ispis"
 #, c-format
 msgid "Could not get information for file '%s': %s"
 msgstr "Nisam mogao dohvatiti podatak za datoteku '%s': %s"
+
+#~ msgid "Today"
+#~ msgstr "Danas"
+
+#, fuzzy
+#~ msgid "Location:"
+#~ msgstr "_Mjesto:"
 
 #~ msgid "PNM image format is invalid"
 #~ msgstr "Neispravan je PNM zapis slike"

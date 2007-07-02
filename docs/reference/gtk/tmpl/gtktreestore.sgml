@@ -36,7 +36,6 @@ column. The "type" attribute specifies the data type for the column.
 </example>
 </refsect2>
 
-
 <!-- ##### SECTION See_Also ##### -->
 <para>
 #GtkTreeModel, #GtkTreeStore
