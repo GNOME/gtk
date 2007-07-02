@@ -29,7 +29,7 @@ of the attribute for each cell that is rendered.
 Implementations of GtkCellLayout which also implement the GtkBuildable 
 interface (#GtkCellView, #GtkIconView, #GtkComboBox, #GtkComboBoxEntry, 
 #GtkEntryCompletion, #GtkTreeViewColumn) accept GtkCellRenderer objects
-as &lt;child&gt; elements in UI definitons. They support a custom 
+as &lt;child&gt; elements in UI definitions. They support a custom 
 &lt;attributes&gt; element for their children, which can contain 
 multiple &lt;attribute&gt; elements. Each &lt;attribute&gt; element has 
 a name attribute which specifies a property of the cell renderer; the 
