@@ -1,3 +1,67 @@
+Overview of Changes from GTK+ 2.11.4 to 2.11.5
+==============================================
+
+* OS X port:
+ - Many improvements
+
+* Win32 port:
+ - Inconsistent checkboxes are drawn correctly now
+
+* GtkBuilder:
+ - Ship a Python script, gtk-builder-convert, to 
+   convert glade files to GtkBuilder syntax
+
+* GtkFileChooser:
+ - Improved display of the time column
+ - Support search on OS X, using Spotlight
+
+* GtkVolumeButton uses the range 0.0 to 1.0, and
+  correctly adapts tooltips to display percentages
+
+* Bugs fixed:
+ 447967 Improve reference counting
+ 447995 Add a script that converts libglade files
+ 451428 GtkBuilder API changes
+ 449862 gdk_x11_display_get_xdisplay doesn't check pointers befor...
+ 451303 Crashes on empty property
+ 164809 Checkboxes with inconsistent status are not drawn properl...
+ 426987 Panel freezes after upgrading gtk icon cache
+ 439567 Add functions to transform pixbufs based on orientation tags
+ 448313 Block cursor problem on one-character line
+ 449016 Prevent C++ keyword clashes
+ 449167 faulty enter-leave compression
+ 450469 Draw no bevel when "GtkToolbar::shadow-type" is "none"
+ 451070 Broken CUPS SSL printing in gtk 2.10.13
+ 451345 gtk-demo does not open GtkBuilder example twice
+ 451353 Parsing properties broken
+ 451484 Miscalculation in GtkButtonBox CENTER_MODE
+ 451866 GtkVolumeButton range
+ 452046 some fixes for gdk composited window support
+ 452463 type-func attribute on wrong element ?
+ 452464 inconsistent handling of booleans
+ 452465 error handling in gtk_builder_value_from_string_type()
+ 452954 GtkBuilder documentation fixes/improvements
+ 446532 [patch] Improve performance of gtk_recent_manager_get_items
+ 451314 Warning message is wrong for delayed property assigning
+ 392283 GtkNotebook tabs drawn incorrectly with the Wimp theme
+ 449492 debug spew on toolbar focus move
+ 324543 GtkFileChooser: show file 'modified' TIMES, not just DATES
+ 327912 Many mouse cursors are not supported
+ 353805 Detecting Bidi Keyboard Layouts
+ 451527 Confusing GtkRadioButton variable names in some functions
+
+* Updated translations
+ Spanish (es)
+ Estonian (et)
+ Hungarian (hu)
+ Japanese (ja)
+ Korean (ko)
+ Norwegian bokmål (nb)
+ Russian (ru)
+ Sinhala (si)
+ Vietnamese (vi)
+
+
 Overview of Changes from GTK+ 2.11.3 to 2.11.4
 ==============================================
 

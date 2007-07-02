@@ -1,3 +1,7 @@
+2007-07-02  Matthias Clasen  <mclasen@redhat.com>
+
+	* NEWS: Updates
+
 2007-07-02  Jan Arne Petersen  <jpetersen@jpetersen.org>
 
 	* gtk/gtkscalebutton.c: (gtk_scale_button_update_icon): Add
