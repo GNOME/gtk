@@ -188,27 +188,6 @@ enum
 </example>
 </para>
 
-<refsect2 id="GtkTreeModel-BUILDER-UI">
-<title>GtkTreeModel as GtkBuildable</title>
-<para>
-The GtkTreeStore implementation of the GtkBuildable interface allows
-to specify the model columns with a &lt;columns&gt; element that may
-contain multiple &lt;column&gt; elements, each specifying one model
-column. The "type" attribute specifies the data type for the column.
-</para>
-<example>
-<title>A UI definition fragment with GtkTreeStore</title>
-<programlisting><![CDATA[
-<object class="GtkTreeStore">
-  <columns>
-    <column type="gchararray"/>
-    <column type="guint"/>
-  </columns>
-</object>
-]]></programlisting>
-</example>
-</refsect2>
-
 <!-- ##### SECTION See_Also ##### -->
 <para>
 #GtkTreeView, #GtkTreeStore, #GtkListStore, <link linkend="gtk-GtkTreeView-drag-and-drop">GtkTreeDnd</link>, #GtkTreeSortable

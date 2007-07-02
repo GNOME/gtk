@@ -44,15 +44,16 @@ which are more limited in scope.
 <!ELEMENT child     (object|ANY*) >
 
 <!ATTLIST interface  domain         #IMPLIED >
-<!ATTLIST object     class          #REQUIRED
+<!ATTLIST object     id             #REQUIRED
+                     class          #IMPLIED
                      type-func      #IMPLIED
-                     id             #IMPLIED
                      constructor    #IMPLIED >
 <!ATTLIST property   name           #REQUIRED
                      translatable   #IMPLIED >
 <!ATTLIST signal     name           #REQUIRED
                      handler        #REQUIRED
                      after          #IMPLIED
+                     swapped        #IMPLIED
                      object         #IMPLIED >
 <!ATTLIST child      type           #IMPLIED
                      internal-child #IMPLIED >

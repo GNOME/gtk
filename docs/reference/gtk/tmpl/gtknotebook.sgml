@@ -24,8 +24,10 @@ will be a popup menu allowing the users to switch pages.
 <para>
 The GtkNoteboopk implementation of the GtkBuildable interface
 supports placing children into tabs by specifying "tab" as the
-"type" attribbute of a &lt;child&gt; element. Note that the content
+"type" attribute of a &lt;child&gt; element. Note that the content
 of the tab must be created before the tab can be filled.
+A tab child can be specified without specifying a &lt;child&gt; 
+type attribute.
 </para>
 <example>
 <title>A UI definition fragment with GtkNotebook</title>

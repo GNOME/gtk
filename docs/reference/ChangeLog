@@ -1,3 +1,13 @@
+2007-07-01  Johan Dahlin  <jdahlin@async.com.br>
+
+	* gtk/tmpl/gtkbuilder.sgml:
+	* gtk/tmpl/gtkexpander.sgml:
+	* gtk/tmpl/gtkframe.sgml:
+	* gtk/tmpl/gtknotebook.sgml:
+	* gtk/tmpl/gtktreemodel.sgml: Improve GtkBuilder DTD,
+	remove treemodel section, add more information about
+	container subclasses child attributes. #452954
+
 2007-07-01  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/tmpl/*.sgml: Document GtkBuilder ui definitions.
