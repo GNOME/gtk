@@ -620,7 +620,7 @@ gtk_builder_new (void)
  * @filename: the name of the file to parse
  * @error: return location for an error, or %NULL
  *
- * Parses a string containing a <link linkend="BUILDER-UI">GtkBuilder 
+ * Parses a file containing a <link linkend="BUILDER-UI">GtkBuilder 
  * UI definition</link> and merges it with the current contents of @builder. 
  * 
  * Returns: A positive value on success, 0 if an error occurred

@@ -1,3 +1,8 @@
+2007-07-03  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtkbuilder.c: Fix some typos in docs.  (#452278,
+	Adam Schreiber)
+
 2007-07-03  Richard Hult  <richard@imendio.com>
 
 	* gdk/quartz/gdkevents-quartz.c (create_key_event): Include
