@@ -527,6 +527,16 @@ gdk_keymap_get_direction (GdkKeymap *keymap)
 }
 
 gboolean
+gdk_keymap_have_bidi_layouts (GdkKeymap *keymap)
+{
+  /* Should we check if the kayboard layouts switchable at the moment
+   * cover both directionalities? What does the doc comment in
+   * ../x11/gdkkeys-x11.c exactly mean?
+   */
+  return FALSE;
+}
+
+gboolean
 gdk_keymap_get_entries_for_keyval (GdkKeymap     *keymap,
                                    guint          keyval,
                                    GdkKeymapKey **keys,
