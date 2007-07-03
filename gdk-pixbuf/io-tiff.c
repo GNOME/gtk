@@ -199,8 +199,13 @@ tiff_image_parse (TIFF *tiff, TiffContext *context, GError **error)
                 gint h = height;
 		(* context->size_func) (&w, &h, context->user_data);
                 
-                if (w == 0 || h == 0)
+                if (w == 0 || h == 0) {
+                    g_set_error (error,
+                                 GDK_PIXBUF_ERROR,
+                                 GDK_PIXBUF_ERROR_CORRUPT_IMAGE,
+                                 _("Width or height of TIFF image is zero"));
                     return NULL;
+                }
         }
 
         pixels = g_try_malloc (bytes);
