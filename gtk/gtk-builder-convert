@@ -28,6 +28,7 @@ Converts Glade files into XML files which can be loaded with GtkBuilder.
 The [INPUT] file is
 
   -w, --skip-windows     Convert everything bug GtkWindow subclasses.
+  -r, --root             Convert only widget named root and its children
   -h, --help             display this help and exit
 
 When OUTPUT is -, write to standard input.
@@ -89,8 +90,9 @@ def get_object_node(child_node):
 
 class GtkBuilderConverter(object):
 
-    def __init__(self, skip_windows):
+    def __init__(self, skip_windows, root):
         self.skip_windows = skip_windows
+        self.root = root
 
     #
     # Public API
@@ -165,8 +167,15 @@ class GtkBuilderConverter(object):
         for node in self._dom.getElementsByTagName("widget"):
             node.tagName = "object"
 
+        if self.root:
+            self._strip_root(self.root)
+
         for node in self._dom.getElementsByTagName("object"):
             self._convert(node.getAttribute("class"), node)
+
+        for node in self._dom.getElementsByTagName('property'):
+            if not node.childNodes:
+                node.parentNode.removeChild(node)
 
         # Convert Gazpachos UI tag
         for node in self._dom.getElementsByTagName("ui"):
@@ -211,6 +220,8 @@ class GtkBuilderConverter(object):
                 response = prop.childNodes[0].data
                 self._convert_dialog_response(node, object_id, response)
                 prop.parentNode.removeChild(prop)
+            elif prop_name == "adjustment":
+                self._convert_adjustment(prop)
 
     def _remove_window(self, node):
         object_node = get_object_node(get_child_nodes(node)[0])
@@ -356,6 +367,20 @@ class GtkBuilderConverter(object):
         action.appendChild(self._dom.createTextNode(object_name))
         actions.appendChild(action)
 
+    def _convert_adjustment(self, prop):
+        name = "adjustment1"
+        data = prop.childNodes[0].data
+        value, lower, upper, step, page, page_size = data.split(' ')
+        prop.childNodes[0].data = name
+        adj = self._create_object("GtkAdjustment", name,
+                                  value=value,
+                                  lower=lower,
+                                  upper=upper,
+                                  step_increment=step,
+                                  page_increment=page,
+                                  page_size=page_size)
+        self._interface.childNodes.insert(0, adj)
+
     def _packing_prop_to_child_attr(self, node, prop_name, prop_val,
                                    attr_val=None):
         for child in node.getElementsByTagName("child"):
@@ -395,6 +420,25 @@ class GtkBuilderConverter(object):
             widget.getAttributeNode("constructor").value = parent_id
         node.removeAttribute("id")
 
+    def _strip_root(self, root_name):
+        widget = self._get_widget(root_name)
+        if widget is None:
+            raise SystemExit("Could not find an object called `%s'" % (
+                root_name))
+
+        # If it's already a root object, don't do anything
+        if widget.parentNode is self._interface:
+            return
+
+        for child in self._interface.childNodes[:]:
+            if child.nodeType != Node.ELEMENT_NODE:
+                continue
+            child.parentNode.removeChild(child)
+
+        widget.parentNode.removeChild(widget)
+        self._interface.appendChild(widget)
+
+
 def _indent(output):
     if not subprocess:
         return output
@@ -418,8 +462,8 @@ def usage():
 
 def main(args):
     try:
-        opts, args = getopt.getopt(args[1:], "hw",
-                                   ["help", "skip-windows"])
+        opts, args = getopt.getopt(args[1:], "hwr:",
+                                   ["help", "skip-windows", "root="])
     except getopt.GetoptError:
         usage()
         return 2
@@ -432,14 +476,18 @@ def main(args):
 
     skip_windows = False
     split = False
+    root = None
     for o, a in opts:
         if o in ("-h", "--help"):
             usage()
             sys.exit()
+        elif o in ("-r", "--root"):
+            root = a
         elif o in ("-w", "--skip-windows"):
             skip_windows = True
 
-    conv = GtkBuilderConverter(skip_windows=skip_windows)
+    conv = GtkBuilderConverter(skip_windows=skip_windows,
+                               root=root)
     conv.parse_file(input_filename)
 
     xml = _indent(conv.to_xml())
