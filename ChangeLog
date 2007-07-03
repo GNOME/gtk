@@ -1,3 +1,9 @@
+2007-07-03  Richard Hult  <richard@imendio.com>
+
+	* gdk/quartz/gdkevents-quartz.c: Keep track of button state and
+	include it in key events. Needed for gimp's selection tools and
+	fixes bug #453411.
+
 2007-07-03  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtkbuilder.c: Fix some typos in docs.  (#452278,
