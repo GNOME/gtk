@@ -1038,6 +1038,7 @@ gboolean test_treeview_column (void)
   g_return_val_if_fail (treeview, FALSE);
   g_return_val_if_fail (GTK_IS_TREE_VIEW (treeview), FALSE);
   column = gtk_tree_view_get_column (GTK_TREE_VIEW (treeview), 0);
+  g_return_val_if_fail (GTK_IS_TREE_VIEW_COLUMN (column), FALSE);
   g_return_val_if_fail (strcmp (gtk_tree_view_column_get_title (column),
 				"Test") == 0, FALSE);
 

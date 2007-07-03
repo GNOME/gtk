@@ -1,5 +1,12 @@
 2007-07-03  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkcelllayout.c (attributes_text_element): Report
+	errors about integer parsing back up.  (#452988)
+
+	* tests/buildertest.c: Add an extra check.
+
+2007-07-03  Matthias Clasen  <mclasen@redhat.com>
+
 	* gtk/gtkbutton.c (gtk_button_construct_child): Don't leave
 	priv->image dangling when use-stock is set to FALSE.  (#437281,
 	Jochen Baier)

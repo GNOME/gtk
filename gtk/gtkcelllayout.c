@@ -17,9 +17,10 @@
  * Boston, MA 02111-1307, USA.
  */
 
+#include <config.h>
 #include <string.h>
 #include <stdlib.h>
-#include <config.h>
+#include <errno.h>
 #include "gtkcelllayout.h"
 #include "gtkintl.h"
 #include "gtkalias.h"
@@ -346,12 +347,27 @@ attributes_text_element (GMarkupParseContext *context,
 			 GError             **error)
 {
   AttributesSubParserData *parser_data = (AttributesSubParserData*)user_data;
+  glong l;
+  gchar *endptr;
 
   if (!parser_data->attr_name)
     return;
+
+  errno = 0;
+  l = strtol (text, &endptr, 0);
+  if (errno || endptr == text)
+    {
+      g_set_error (error, 
+                   GTK_BUILDER_ERROR,
+                   GTK_BUILDER_ERROR_INVALID_VALUE,
+                   "Could not parse integer `%s'",
+                   text);
+      return;
+    }
+
   gtk_cell_layout_add_attribute (parser_data->cell_layout,
 				 parser_data->renderer,
-				 parser_data->attr_name, atoi (text));
+				 parser_data->attr_name, l);
   g_free (parser_data->attr_name);
   parser_data->attr_name = NULL;
 }
