@@ -1354,11 +1354,14 @@ gtk_dialog_buildable_custom_finished (GtkBuildable *buildable,
   GSList *l;
   ActionWidgetsSubParserData *parser_data;
   GObject *object;
-  ResponseData* data;
-
+  GtkDialog *dialog;
+  ResponseData *ad;
+  guint signal_id;
+  
   if (strcmp (tagname, "action-widgets"))
     return;
 
+  dialog = GTK_DIALOG (buildable);
   parser_data = (ActionWidgetsSubParserData*)user_data;
   parser_data->items = g_slist_reverse (parser_data->items);
 
@@ -1369,14 +1372,36 @@ gtk_dialog_buildable_custom_finished (GtkBuildable *buildable,
       object = gtk_builder_get_object (builder, item->widget_name);
       if (!object)
 	{
-	  g_warning ("Unknown object %s specified in action-widgets %s",
+	  g_warning ("Unknown object %s specified in action-widgets of %s",
 		     item->widget_name,
-		     gtk_buildable_get_name (GTK_BUILDABLE (object)));
+		     gtk_buildable_get_name (GTK_BUILDABLE (buildable)));
 	  continue;
 	}
 
-      data = get_response_data (GTK_WIDGET (object), TRUE);
-      data->response_id = atoi (item->response_id);
+      ad = get_response_data (GTK_WIDGET (object), TRUE);
+      ad->response_id = atoi (item->response_id);
+
+      if (GTK_IS_BUTTON (object))
+	signal_id = g_signal_lookup ("clicked", GTK_TYPE_BUTTON);
+      else
+	signal_id = GTK_WIDGET_GET_CLASS (object)->activate_signal;
+      
+      if (signal_id)
+	{
+	  GClosure *closure;
+	  
+	  closure = g_cclosure_new_object (G_CALLBACK (action_widget_activated),
+					   G_OBJECT (dialog));
+	  g_signal_connect_closure_by_id (object,
+					  signal_id,
+					  0,
+					  closure,
+					  FALSE);
+	}
+
+      if (ad->response_id == GTK_RESPONSE_HELP)
+	gtk_button_box_set_child_secondary (GTK_BUTTON_BOX (dialog->action_area),
+					    GTK_WIDGET (object), TRUE);
 
       g_free (item->widget_name);
       g_free (item->response_id);

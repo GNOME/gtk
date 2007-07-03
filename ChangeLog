@@ -1,3 +1,9 @@
+2007-07-03  Johan Dahlin  <jdahlin@async.com.br>
+
+	* gtk/gtkdialog.c (gtk_dialog_buildable_custom_finished): Mimic the behavior
+	of gtk_dialog_add_action_widget closer, to make clicking on the buttons
+	actually work.
+
 2007-07-02  Matthias Clasen  <mclasen@redhat.com>
 
 	* configure.in: Bump version
