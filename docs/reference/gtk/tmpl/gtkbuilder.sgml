@@ -11,20 +11,29 @@ of a user interface and instantiates the described objects. To pass a
 description to a GtkBuilder, call gtk_builder_add_from_file() or 
 gtk_builder_add_from_string(). These functions can be called multiple
 times; the builder merges the content of all descriptions. 
-The functions gtk_builder_get_object() and gtk_builder_get_objects()
-can be used to access the widgets in the interface by the names assigned 
-to them inside the UI description. The function gtk_builder_connect_signals() 
-and variants thereof can be used to connect handlers to the named signals 
-in the description. 
 </para>
 <para>
 A GtkBuilder holds a reference to all objects that it has constructed
-and drops these references when it is finalized. To keep objects beyond
-the lifespan of the builder, they must be fetched with gtk_builder_get_object()
-and reffed with g_object_ref(). It is the responsibility of the user
-to destroy all toplevel windows that have been constructed by a builder
-(these are not automatically cleaned up when the builder is finalized, 
-since GTK+ itself holds a reference to each toplevel window).
+and drops these references when it is finalized. This finalization can 
+cause the destruction of non-widget objects or widgets which are not 
+contained in a toplevel window. For toplevel windows constructed by a 
+builder, it is the responsibility of the user to call gtk_widget_destroy() 
+to get rid of them and all the widgets they contain.
+</para>
+<para>
+The functions gtk_builder_get_object() and gtk_builder_get_objects()
+can be used to access the widgets in the interface by the names assigned 
+to them inside the UI description. Toplevel windows returned by these
+functions will stay around until the user explicitly destroys them
+with gtk_widget_destroy(). Other widgets will either be part of a 
+larger hierarchy constructed by the builder (in which case you should
+not have to worry about their lifecycle), or without a parent, in which 
+case they have to be added to some container to make use of them.  
+Non-widget objects need to be reffed with g_object_ref() to keep them
+beyond the lifespan of the builder.
+</para>
+The function gtk_builder_connect_signals() and variants thereof can be 
+used to connect handlers to the named signals in the description. 
 </para>
 
 <refsect2 id="BUILDER-UI"><title>GtkBuilder UI Definitions</title>

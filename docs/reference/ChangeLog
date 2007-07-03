@@ -1,3 +1,9 @@
+2007-07-03  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/tmpl/gtkbuilder.sgml: Some wordsmithing
+	on the memory management explanation, asked for
+	by Murray Cumming.
+
 2007-07-02  Matthias Clasen  <mclasen@redhat.com>
 
 	* === Released 2.11.5 ===
