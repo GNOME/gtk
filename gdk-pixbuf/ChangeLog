@@ -1,3 +1,11 @@
+2007-07-03  Matthias Clasen  <mclasen@redhat.com>
+
+	Merge from trunk: 
+
+	* gdk-pixbuf-loader.c (gdk_pixbuf_loader_close): Be
+	more careful when calling g_propagate_error().  (#453365,
+	Michael Chudobiak)
+
 2007-06-12  Matthias Clasen  <mclasen@redhat.com>
 
 	* === Released 2.10.13 ===
