@@ -3,8 +3,8 @@
 	* gdk/win32/gdkkeys-win32.c (gdk_keymap_have_bidi_layouts):
 	Implement. Just return FALSE for now. What should this function
 	actually do? Does keyboards layouts being "in use" mean that such
-	layouts can be switched to on the fly? If so we need to actually
-	check that.
+	layouts can be switched to on the fly using some extra-GTK+
+	mechanism? If so we need to actually check that.
 
 2007-07-03  Tristan Van Berkom  <tvb@gnome.org>
 
