@@ -1,5 +1,10 @@
 2007-07-03  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/tmpl/gtkdrawingarea.sgml: Fix a reference 
+	to a deprecated function.  (#453316, Guillaume Cottenceau)
+
+2007-07-03  Matthias Clasen  <mclasen@redhat.com>
+
 	* gtk/tmpl/gtkbuilder.sgml: Some wordsmithing
 	on the memory management explanation, asked for
 	by Murray Cumming.

@@ -83,7 +83,7 @@ then get an expose event for the invalid region.
 <para>
 The available routines for drawing are documented on the <link
 linkend="gdk-Drawing-Primitives">GDK Drawing Primitives</link> page.
-See also gdk_pixbuf_render_to_drawable() for drawing a #GdkPixbuf.
+See also gdk_draw_pixbuf() for drawing a #GdkPixbuf.
 </para>
 
 <para>
