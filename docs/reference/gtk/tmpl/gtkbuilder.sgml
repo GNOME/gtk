@@ -32,6 +32,7 @@ case they have to be added to some container to make use of them.
 Non-widget objects need to be reffed with g_object_ref() to keep them
 beyond the lifespan of the builder.
 </para>
+<para>
 The function gtk_builder_connect_signals() and variants thereof can be 
 used to connect handlers to the named signals in the description. 
 </para>
