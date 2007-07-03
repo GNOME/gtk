@@ -1,5 +1,12 @@
 2007-07-03  Tor Lillqvist  <tml@novell.com>
 
+	* configure.in: Handle GDK_PIXBUF_EXTRA_LIBS like GDK_EXTRA_LIBS,
+	i.e. clear it if enable_explicit_deps isn't on. If we build with
+	--with-included-loaders and --enable-explicit-deps=no we don't
+	want -ltiff -ljpeg etc in the gdk-pixbuf-2.0.pc file.
+
+2007-07-03  Tor Lillqvist  <tml@novell.com>
+
 	* gdk/win32/gdkkeys-win32.c (gdk_keymap_have_bidi_layouts):
 	Implement. Just return FALSE for now. What should this function
 	actually do? Does keyboards layouts being "in use" mean that such
