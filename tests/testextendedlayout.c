@@ -19,8 +19,9 @@
 
 #include <config.h>
 #include <gtk/gtk.h>
-#include <string.h>
 #include <stdarg.h>
+#include <stdlib.h>
+#include <string.h>
 
 #define IS_VALID_BASELINE(Baseline) ((Baseline) >= 0)
 
@@ -149,6 +150,25 @@ static char * mask_xpm[] =
   };
 
 static gint8 dashes[] = { 1, 5 };
+
+static void
+set_widget_name (GtkWidget   *widget,
+                 const gchar *format,
+                 ...)
+{
+  gchar *name, *dash;
+  va_list args;
+
+  va_start (args, format);
+  name = g_strdup_vprintf (format, args);
+  va_end (args);
+
+  for(dash = name; NULL != (dash = strchr (dash, ' ')); )
+    *dash = '-';
+
+  gtk_widget_set_name (widget, name);
+  g_free (name);
+}
 
 static Guide*
 guide_new (GtkWidget   *widget,
@@ -519,8 +539,7 @@ create_baseline_test_hbox (TestSuite *suite,
   
       hbox = gtk_hbox_new (FALSE, 6);
       test_case_append_guide (test, hbox, GUIDE_EXTERIOUR_BOTH, -1);
-      g_object_set_data (G_OBJECT (hbox), "debug-wanted", GINT_TO_POINTER (TRUE));
-      gtk_widget_set_name (hbox, names[i]);
+      set_widget_name (hbox, "debug-hbox-%s", names[i]);
 
       if (i > 0)
         gtk_hbox_set_baseline_policy (GTK_HBOX (hbox), GTK_BASELINE_FIRST);
@@ -549,6 +568,7 @@ create_baseline_test_hbox (TestSuite *suite,
           if (0 == j && i > 1)
             {
               bin = gtk_alignment_new (0.5, 0.5, 0.0, 0.0);
+              set_widget_name (hbox, "debug-align-%s-%s", buttons ? "button" : "label", names[i]);
 
               switch (i) 
                 {
@@ -1632,6 +1652,10 @@ main (int argc, char *argv[])
 
   suite = test_suite_new ();
   gtk_widget_show_all (suite->window);
+
+  if (argc > 1)
+    gtk_notebook_set_current_page (GTK_NOTEBOOK (suite->notebook),
+                                   atoi (argv[1]));
 
   gtk_main ();
 

@@ -1,3 +1,9 @@
+2007-07-03  Mathias Hasselmann  <mathias.hasselmann@gmx.de>
+
+	* tests/testextendedlayout.c: Allow choosing initially active 
+	notebook page from command line and create more sane widget names
+	for the sake of g_print-debugging.
+
 2007-07-02  Mathias Hasselmann  <mathias.hasselmann@gmx.de>
 
 	* gtk/gtkbin.c: Properly evaluate natural size.
