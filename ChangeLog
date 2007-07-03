@@ -1,3 +1,9 @@
+2007-07-03  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtkbutton.c (gtk_button_construct_child): Don't leave
+	priv->image dangling when use-stock is set to FALSE.  (#437281,
+	Jochen Baier)
+
 2007-07-03  Tor Lillqvist  <tml@novell.com>
 
 	* configure.in: Handle GDK_PIXBUF_EXTRA_LIBS like GDK_EXTRA_LIBS,
