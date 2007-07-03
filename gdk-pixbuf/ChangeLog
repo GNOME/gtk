@@ -2,6 +2,13 @@
 
 	Merge from trunk: 
 
+	* io-tiff.c (tiff_image_parse): Always set an error
+	when returning NULL.  (453365, Michael Chudobiak)
+
+2007-07-03  Matthias Clasen  <mclasen@redhat.com>
+
+	Merge from trunk: 
+
 	* gdk-pixbuf-loader.c (gdk_pixbuf_loader_close): Be
 	more careful when calling g_propagate_error().  (#453365,
 	Michael Chudobiak)
