@@ -1,3 +1,8 @@
+2007-07-03  Richard Hult  <richard@imendio.com>
+
+	* gdk/quartz/gdkevents-quartz.c (create_key_event): Include
+	modifier state in key release events. Fixes bug #453413.
+
 2007-07-03  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtkcelllayout.c (attributes_text_element): Report

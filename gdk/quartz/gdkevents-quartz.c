@@ -1461,6 +1461,45 @@ create_key_event (GdkWindow    *window,
 
   event->key.is_modifier = _gdk_quartz_keys_is_modifier (event->key.hardware_keycode);
 
+  /* If the key press is a modifier, the state should include the mask
+   * for that modifier but only for releases, not presses. This
+   * matches the X11 backend behavior.
+   */
+  if (event->key.is_modifier)
+    {
+      int mask = 0;
+
+      switch (event->key.keyval)
+        {
+        case GDK_Meta_R:
+        case GDK_Meta_L:
+          mask = GDK_MOD1_MASK;
+          break;
+        case GDK_Shift_R:
+        case GDK_Shift_L:
+          mask = GDK_SHIFT_MASK;
+          break;
+        case GDK_Caps_Lock:
+          mask = GDK_LOCK_MASK;
+          break;
+        case GDK_Alt_R:
+        case GDK_Alt_L:
+          mask = GDK_MOD5_MASK;
+          break;
+        case GDK_Control_R:
+        case GDK_Control_L:
+          mask = GDK_CONTROL_MASK;
+          break;
+        default:
+          mask = 0;
+        }
+
+      if (type == GDK_KEY_PRESS)
+        event->key.state &= ~mask;
+      else if (type == GDK_KEY_RELEASE)
+        event->key.state |= mask;
+    }
+
   event->key.string = NULL;
 
   /* Fill in ->string since apps depend on it, taken from the x11 backend. */
