@@ -1948,6 +1948,7 @@ gtk_widget_set_property (GObject         *object,
       gboolean tmp;
       guint32 saved_flags;
       gchar *tooltip_markup;
+      const gchar *tooltip_text;
       GtkWindow *tooltip_window;
       
     case PROP_NAME:
@@ -2038,12 +2039,14 @@ gtk_widget_set_property (GObject         *object,
       break;
     case PROP_TOOLTIP_TEXT:
       tooltip_window = g_object_get_qdata (object, quark_tooltip_window);
-      tooltip_markup = g_markup_escape_text (g_value_get_string (value), -1);
+      tooltip_text = g_value_get_string (value);
+      tooltip_markup = tooltip_text ? g_markup_escape_text (tooltip_text, -1) : NULL;
 
       g_object_set_qdata_full (object, quark_tooltip_markup,
                                tooltip_markup, g_free);
 
-      gtk_widget_set_has_tooltip (widget, TRUE, FALSE);
+      tmp = (tooltip_window != NULL || tooltip_markup != NULL);
+      gtk_widget_set_has_tooltip (widget, tmp, FALSE);
       break;
     default:
       break;

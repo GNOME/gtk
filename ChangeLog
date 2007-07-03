@@ -1,3 +1,8 @@
+2007-07-03  Tristan Van Berkom  <tvb@gnome.org>
+
+	* gtk/gtkwidget.c: Fixed assertions from setting "tooltip-text" to NULL
+	(bug 452425)
+
 2007-07-03  Johan Dahlin  <jdahlin@async.com.br>
 
 	* gtk/gtk-builder-convert (GtkBuilderConverter._strip_root): Add a
