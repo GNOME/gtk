@@ -1,3 +1,8 @@
+2007-07-04  Tor Lillqvist  <tml@novell.com>
+
+	* pixops/Makefile.am (timescale_LDADD): Use GDK_PIXBUF_DEP_LIBS
+	instead of GDK_PIXBUF_EXTRA_LIBS here, too. 
+
 2007-07-03  Matthias Clasen  <mclasen@redhat.com>
 
 	* io-tiff.c (tiff_image_parse): Always set an error
