@@ -1,3 +1,8 @@
+2007-07-04  Johan Dahlin  <jdahlin@async.com.br>
+
+	* gtk/gtk-builder-convert.xml: We support GtkComboBox.items 
+	properties now
+
 Wed Jul  4 00:58:24 2007  Tim Janik  <timj@gtk.org>
 
 	* gdk/tmpl/events.sgml: fixed up motion hint description.

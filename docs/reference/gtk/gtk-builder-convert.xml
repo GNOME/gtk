@@ -28,9 +28,6 @@ its output the file specified as the second argument.
 
 <refsect1><title>Bugs</title>
 <para>
-GtkComboBox items are not converted into GtkListStore data.
-</para>
-<para>
 GtkTextView text is not converted into a GtkTextBuffer.
 </para>
 <para>
