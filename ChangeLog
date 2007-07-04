@@ -1,3 +1,11 @@
+2007-07-04  Tor Lillqvist  <tml@novell.com>
+
+	* gtk/gtkstatusicon.c: On Win32 call
+	gtk_status_icon_button_press() in an idle callback and not
+	directly from the window procedure to avoid "g_main_loop_run():
+	called recursively from within a source's check() or prepare()
+	member, iteration not possible" warnings.
+
 2007-07-03  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtkbutton.c (gtk_button_construct_child): Don't leave
