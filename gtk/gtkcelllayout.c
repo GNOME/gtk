@@ -433,8 +433,8 @@ _gtk_cell_layout_buildable_add_child (GtkBuildable      *buildable,
   g_return_if_fail (GTK_IS_CELL_RENDERER (child));
 
   iface = GTK_CELL_LAYOUT_GET_IFACE (buildable);
-  g_return_if_fail (iface->pack_end != NULL);
-  iface->pack_end (GTK_CELL_LAYOUT (buildable), GTK_CELL_RENDERER (child), FALSE);
+  g_return_if_fail (iface->pack_start != NULL);
+  iface->pack_start (GTK_CELL_LAYOUT (buildable), GTK_CELL_RENDERER (child), FALSE);
 }
 
 #define __GTK_CELL_LAYOUT_C__

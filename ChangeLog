@@ -1,5 +1,9 @@
 2007-07-04  Johan Dahlin  <jdahlin@async.com.br>
 
+	* gtk/gtkcelllayout.c (_gtk_cell_layout_buildable_add_child): 
+	pack children from the start instead of the end, this should
+	probably be made configurable at some point.
+
 	* gtk/gtk-builder-convert:
 	Add support for converting GtkComboBox items, also make sure
 	that we support more than one GtkAdjustment in a file
