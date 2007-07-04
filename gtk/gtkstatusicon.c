@@ -362,7 +362,6 @@ gtk_status_icon_class_init (GtkStatusIconClass *class)
 static void
 build_button_event (GtkStatusIconPrivate *priv,
 		    GdkEventButton       *e,
-		    GdkEventType          type,
 		    guint                 button)
 {
   POINT pos;
@@ -370,8 +369,7 @@ build_button_event (GtkStatusIconPrivate *priv,
 
   /* We know that gdk/win32 puts the primary monitor at index 0 */
   gdk_screen_get_monitor_geometry (gdk_screen_get_default (), 0, &monitor0);
-  e->type = type;
-  e->window = gdk_get_default_root_window ();
+  e->window = g_object_ref (gdk_get_default_root_window ());
   e->send_event = TRUE;
   e->time = GetTickCount ();
   GetCursorPos (&pos);
@@ -385,6 +383,25 @@ build_button_event (GtkStatusIconPrivate *priv,
   e->y_root = e->y;
 }
 
+typedef struct
+{
+  GtkStatusIcon *status_icon;
+  GdkEventButton *event;
+} ButtonCallbackData;
+
+static gboolean
+button_callback (gpointer data)
+{
+  ButtonCallbackData *bc = (ButtonCallbackData *) data;
+
+  gtk_status_icon_button_press (bc->status_icon, bc->event);
+
+  gdk_event_free ((GdkEvent *) bc->event);
+  g_free (data);
+
+  return FALSE;
+}
+
 static LRESULT CALLBACK
 wndproc (HWND   hwnd,
 	 UINT   message,
@@ -393,16 +410,17 @@ wndproc (HWND   hwnd,
 {
   if (message == WM_GTK_TRAY_NOTIFICATION)
     {
-      GdkEventButton e;
-      GtkStatusIcon *status_icon = GTK_STATUS_ICON (wparam);
+      ButtonCallbackData *bc;
       
       switch (lparam)
 	{
 	case WM_LBUTTONDOWN:
 	case WM_RBUTTONDOWN:
-	  build_button_event (status_icon->priv, &e, GDK_BUTTON_PRESS,
-			      (lparam == WM_LBUTTONDOWN) ? 1 : 3);
-	  gtk_status_icon_button_press (status_icon, &e);
+	  bc = g_new (ButtonCallbackData, 1);
+	  bc->event = (GdkEventButton *) gdk_event_new (GDK_BUTTON_PRESS);
+	  bc->status_icon = GTK_STATUS_ICON (wparam);
+	  build_button_event (bc->status_icon->priv, bc->event, (lparam == WM_LBUTTONDOWN) ? 1 : 3);
+	  g_idle_add (button_callback, bc);
 	  break;
 	default :
 	  break;

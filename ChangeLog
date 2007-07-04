@@ -1,3 +1,11 @@
+2007-07-04  Tor Lillqvist  <tml@novell.com>
+
+	* gtk/gtkstatusicon.c: On Win32 call
+	gtk_status_icon_button_press() in an idle callback and not
+	directly from the window procedure to avoid "g_main_loop_run():
+	called recursively from within a source's check() or prepare()
+	member, iteration not possible" warnings.
+
 2007-07-04  Chris Wilson  <chris@chris-wilson.co.uk>
 
 	* gtk/gtkrecentchoosermenu.c (idle_populate_func),
