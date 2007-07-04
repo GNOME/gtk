@@ -1,3 +1,9 @@
+2007-07-04  Johan Dahlin  <jdahlin@async.com.br>
+
+	* gtk/gtk-builder-convert:
+	Add support for converting GtkComboBox items, also make sure
+	that we support more than one GtkAdjustment in a file
+
 2007-07-03  Richard Hult  <richard@imendio.com>
 
 	* gdk/quartz/gdkevents-quartz.c: Keep track of button state and

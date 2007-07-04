@@ -19,7 +19,6 @@
 # Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 #
 # TODO:
-#  GtkComboBox.items -> GtkListStore
 #  GtkTextView.text -> GtkTextBuffer
 #  Toolbars
 
@@ -128,7 +127,17 @@ class GtkBuilderConverter(object):
         return [w for w in self._dom.getElementsByTagName("object")
                       if w.getAttribute(attribute) == value]
 
-    def _create_object(self, obj_class, obj_id, **properties):
+    def _create_object(self, obj_class, obj_id, template=None, **properties):
+        if template is not None:
+            count = 1
+            while True:
+                obj_id = template + str(count)
+                widget = self._get_widget(obj_id)
+                if widget is None:
+                    break
+
+                count += 1
+
         obj = self._dom.createElement('object')
         obj.setAttribute('class', obj_class)
         obj.setAttribute('id', obj_id)
@@ -198,7 +207,6 @@ class GtkBuilderConverter(object):
             self._convert_menubar(uimgr, node)
         elif klass in WINDOWS and self.skip_windows:
             self._remove_window(node)
-
         self._default_widget_converter(node)
 
     def _default_widget_converter(self, node):
@@ -222,6 +230,9 @@ class GtkBuilderConverter(object):
                 prop.parentNode.removeChild(prop)
             elif prop_name == "adjustment":
                 self._convert_adjustment(prop)
+            elif prop_name == "items" and klass in ['GtkComboBox',
+                                                    'GtkComboBoxEntry']:
+                self._convert_combobox_items(node, prop)
 
     def _remove_window(self, node):
         object_node = get_object_node(get_child_nodes(node)[0])
@@ -368,18 +379,68 @@ class GtkBuilderConverter(object):
         actions.appendChild(action)
 
     def _convert_adjustment(self, prop):
-        name = "adjustment1"
         data = prop.childNodes[0].data
         value, lower, upper, step, page, page_size = data.split(' ')
-        prop.childNodes[0].data = name
-        adj = self._create_object("GtkAdjustment", name,
+        adj = self._create_object("GtkAdjustment", None,
+                                  template='adjustment',
                                   value=value,
                                   lower=lower,
                                   upper=upper,
                                   step_increment=step,
                                   page_increment=page,
                                   page_size=page_size)
+        prop.childNodes[0].data = adj.getAttribute('id')
         self._interface.childNodes.insert(0, adj)
+
+    def _convert_combobox_items(self, node, prop):
+        if not prop.childNodes:
+            return
+        value = prop.childNodes[0].data
+        model = self._create_object("GtkListStore", None, template="model")
+
+        columns = self._dom.createElement('columns')
+        model.appendChild(columns)
+
+        column = self._dom.createElement('column')
+        column.setAttribute('type', 'gchararray')
+        columns.appendChild(column)
+
+        data = self._dom.createElement('data')
+        model.appendChild(data)
+
+        for item in value.split('\n'):
+            row = self._dom.createElement('row')
+            data.appendChild(row)
+
+            col = self._dom.createElement('col')
+            col.setAttribute('id', '0')
+            col.appendChild(self._dom.createTextNode(item))
+            row.appendChild(col)
+
+        self._interface.childNodes.insert(0, model)
+
+        parent = prop.parentNode
+        model_prop = self._dom.createElement('property')
+        model_prop.setAttribute('name', 'model')
+        model_prop.appendChild(
+            self._dom.createTextNode(model.getAttribute('id')))
+        parent.appendChild(model_prop)
+
+        parent.removeChild(prop)
+
+        child = self._dom.createElement('child')
+        node.appendChild(child)
+        cell_renderer = self._create_object('GtkCellRendererText', None,
+                                            template='renderer')
+        child.appendChild(cell_renderer)
+
+        attributes = self._dom.createElement('attributes')
+        child.appendChild(attributes)
+
+        attribute = self._dom.createElement('attribute')
+        attributes.appendChild(attribute)
+        attribute.setAttribute('name', 'text')
+        attribute.appendChild(self._dom.createTextNode('0'))
 
     def _packing_prop_to_child_attr(self, node, prop_name, prop_val,
                                    attr_val=None):
