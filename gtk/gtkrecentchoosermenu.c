@@ -921,6 +921,7 @@ typedef struct
   gint loaded_items;
   gint displayed_items;
   GtkRecentChooserMenu *menu;
+  GtkWidget *placeholder;
 } MenuPopulateData;
 
 static gboolean
@@ -943,10 +944,8 @@ idle_populate_func (gpointer data)
       if (!pdata->items)
         {
           /* show the placeholder here */
-          gtk_widget_show (priv->placeholder);
+          gtk_widget_show (pdata->placeholder);
           pdata->displayed_items = 1;
-
-          GDK_THREADS_LEAVE ();
 
 	  return FALSE;
 	}
@@ -1001,13 +1000,13 @@ static void
 idle_populate_clean_up (gpointer data)
 {
   MenuPopulateData *pdata = data;
-  GtkRecentChooserMenuPrivate *priv = pdata->menu->priv;
 
   /* show the placeholder in case no item survived
    * the filtering process in the idle loop
    */
   if (!pdata->displayed_items)
-    gtk_widget_show (priv->placeholder);
+    gtk_widget_show (pdata->placeholder);
+  g_object_unref (pdata->placeholder);
 
   g_slice_free (MenuPopulateData, data);
 }
@@ -1027,6 +1026,7 @@ gtk_recent_chooser_menu_populate (GtkRecentChooserMenu *menu)
   pdata->loaded_items = 0;
   pdata->displayed_items = 0;
   pdata->menu = menu;
+  pdata->placeholder = g_object_ref (priv->placeholder);
 
   priv->icon_size = get_icon_size_for_widget (GTK_WIDGET (menu));
   

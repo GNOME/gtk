@@ -1,3 +1,10 @@
+2007-07-04  Chris Wilson  <chris@chris-wilson.co.uk>
+
+	* gtk/gtkrecentchoosermenu.c (idle_populate_func),
+	(idle_populate_clean_up), (gtk_recent_chooser_menu_populate):
+	Remove a surplus GDK_THREADS_LEAVE() and avoid a potential use after
+	free in the source destroy notify. (#453033)
+
 2007-07-04  Johan Dahlin  <jdahlin@async.com.br>
 
 	* gtk/gtkcelllayout.c (_gtk_cell_layout_buildable_add_child): 
