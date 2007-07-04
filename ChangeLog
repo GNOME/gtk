@@ -1,3 +1,8 @@
+Wed Jul  4 12:20:23 2007  Tim Janik  <timj@imendio.com>
+
+	* gdk/gdkevents.c (gdk_event_request_motions): added usage example
+	to gdk_event_request_motions() docs.
+
 2007-07-04  Tor Lillqvist  <tml@novell.com>
 
 	* gtk/gtkstatusicon.c: On Win32 call

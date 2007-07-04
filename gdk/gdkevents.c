@@ -840,7 +840,17 @@ gdk_event_get_axis (GdkEvent   *event,
  * This function should be used instead of gdk_window_get_pointer() to
  * request further motion notifies, because it also works for extension
  * events where motion notifies are provided for devices other than the
- * core pointer.
+ * core pointer. Coordinate extraction, processing and requesting more
+ * motion events from a %GDK_MOTION_NOTIFY event usually works like this:
+ *
+ * <informalexample><programlisting>
+ * {  // motion_event handler
+ *   x = motion_event->x;
+ *   y = motion_event->y;
+ *   ; // handle (x,y) motion
+ *   gdk_event_request_motions (motion_event); // handles is_hint events
+ * }
+ * </programlisting></informalexample>
  *
  * Since: 2.12
  **/
