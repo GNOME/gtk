@@ -1,3 +1,9 @@
+2007-07-05  Matthias Clasen  <mclasen@redhat.com>
+
+	* io-tiff.c: Revert the last change, it was wrong
+	* gdk-pixbuf-loader.c (gdk_pixbuf_loader_close): Redo the last
+	change in a different way.
+
 2007-07-04  Tor Lillqvist  <tml@novell.com>
 
 	* pixops/Makefile.am (timescale_LDADD): Use GDK_PIXBUF_DEP_LIBS
