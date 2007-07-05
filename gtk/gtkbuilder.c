@@ -34,6 +34,8 @@
 #include "gtkprivate.h"
 #include "gtktypebuiltins.h"
 #include "gtkwindow.h"
+#include "gtkicontheme.h"
+#include "gtkstock.h"
 #include "gtkalias.h"
 
 static void gtk_builder_class_init     (GtkBuilderClass *klass);
@@ -68,6 +70,7 @@ struct _GtkBuilderPrivate
   GSList *signals;
   gchar *current_root;
   GSList *root_objects;
+  const gchar *filename;
 };
 
 G_DEFINE_TYPE (GtkBuilder, gtk_builder, G_TYPE_OBJECT)
@@ -286,7 +289,8 @@ gtk_builder_get_parameters (GtkBuilder  *builder,
 
       parameter.name = prop->name;
 
-      if (G_IS_PARAM_SPEC_OBJECT (pspec))
+      if (G_IS_PARAM_SPEC_OBJECT (pspec) &&
+          (G_PARAM_SPEC_VALUE_TYPE (pspec) != GDK_TYPE_PIXBUF))
         {
           if (pspec->flags & G_PARAM_CONSTRUCT_ONLY)
             {
@@ -647,6 +651,8 @@ gtk_builder_add_from_file (GtkBuilder   *builder,
       return 0;
     }
   
+  builder->priv->filename = filename;
+
   _gtk_builder_parser_parse_buffer (builder, filename,
                                     buffer, length,
                                     &tmp_error);
@@ -688,6 +694,8 @@ gtk_builder_add_from_string (GtkBuilder   *builder,
   g_return_val_if_fail (buffer != NULL, 0);
 
   tmp_error = NULL;
+
+  builder->priv->filename = ".";
 
   _gtk_builder_parser_parse_buffer (builder, "<input>",
                                     buffer, length,
@@ -1170,34 +1178,65 @@ gtk_builder_value_from_string_type (GtkBuilder   *builder,
         ret = FALSE;
       break;
     case G_TYPE_OBJECT:
-#if 0
-        if (G_VALUE_HOLDS (value, GDK_TYPE_PIXBUF))
-      {
-        gchar *filename;
-        GError *tmp_error = NULL;
-        GdkPixbuf *pixbuf;
+      if (G_VALUE_HOLDS (value, GDK_TYPE_PIXBUF))
+        {
+          gchar *filename;
+          GError *tmp_error = NULL;
+          GdkPixbuf *pixbuf;
+       
+          if (gtk_builder_get_object (builder, string))
+            {
+              g_set_error (error,
+                           GTK_BUILDER_ERROR,
+                           GTK_BUILDER_ERROR_INVALID_VALUE,
+                           "Could not load image '%s': "
+                           " '%s' is already used as object id",
+                           string, string);
+              return FALSE;
+            }
 
-        filename = gtk_xml_relative_file (xml, string);
-        pixbuf = gdk_pixbuf_new_from_file (filename, &tmp_error);
-        if (pixbuf)
-          {
-            g_value_set_object (value, pixbuf);
-            g_object_unref (G_OBJECT (pixbuf));
-          }
-        else
-          {
-	    g_set_error (error,
-			 GTK_BUILDER_ERROR,
-			 GTK_BUILDER_ERROR_INVALID_VALUE,
-			 "could not load image `%s'",
-			 tmp_error->message);
-            g_error_free (tmp_error);
-            ret = FALSE;
-          }
-        g_free (filename);
-      }
-        else
-#endif
+          if (g_path_is_absolute (string))
+            filename = g_strdup (string);
+          else
+            {
+              gchar *dirname;
+
+              dirname = g_path_get_dirname (builder->priv->filename);
+              filename = g_build_filename (dirname, string, NULL);
+
+              g_free (dirname);
+            }
+
+          pixbuf = gdk_pixbuf_new_from_file (filename, &tmp_error);
+
+          if (pixbuf == NULL)
+            {
+              GtkIconTheme *theme;
+
+              g_warning ("Could not load image '%s': %s", 
+                         string, tmp_error->message);
+              g_error_free (tmp_error);
+
+              /* fall back to a missing image */
+              theme = gtk_icon_theme_get_default ();
+              pixbuf = gtk_icon_theme_load_icon (theme, 
+                                                 GTK_STOCK_MISSING_IMAGE,
+                                                 16,
+                                                 GTK_ICON_LOOKUP_USE_BUILTIN,
+                                                 NULL);
+            }
+ 
+          if (pixbuf)
+            {
+              g_value_set_object (value, pixbuf);
+              g_object_unref (G_OBJECT (pixbuf));
+            }
+
+          g_free (filename);
+
+          ret = TRUE;
+        }
+      else
         ret = FALSE;
       break;
     default:

@@ -1,3 +1,8 @@
+2007-07-05  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtkbuilder.c: Support pixbuf properties by specifying
+	a filename as the property value.  (#447966)
+
 Wed Jul  4 12:20:23 2007  Tim Janik  <timj@imendio.com>
 
 	* gdk/gdkevents.c (gdk_event_request_motions): added usage example

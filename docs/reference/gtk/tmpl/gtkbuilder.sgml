@@ -126,6 +126,7 @@ name, nick or integer value), flags (can be specified by their name,
 nick, integer value, optionally combined with "|", e.g. 
 "GTK_VISIBLE|GTK_REALIZED")  and colors (in a format understood by 
 gdk_color_parse()). Objects can be referred to by their name. 
+Pixbufs can be specified as a filename of an image file to load.
 In general, GtkBuilder allows forward references to objects &mdash; 
 an object doesn't have to constructed before it can be referred to.
 The exception to this rule is that an object has to be constructed
