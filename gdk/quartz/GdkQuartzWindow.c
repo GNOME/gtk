@@ -39,6 +39,13 @@
   return NO;
 }
 
+-(void)windowWillMiniaturize:(NSNotification *)aNotification
+{
+  GdkWindow *window = [[self contentView] gdkWindow];
+
+  _gdk_quartz_window_detach_from_parent (window);
+}
+
 -(void)windowDidMiniaturize:(NSNotification *)aNotification
 {
   GdkWindow *window = [[self contentView] gdkWindow];
@@ -50,6 +57,8 @@
 -(void)windowDidDeminiaturize:(NSNotification *)aNotification
 {
   GdkWindow *window = [[self contentView] gdkWindow];
+
+  _gdk_quartz_window_attach_to_parent (window);
 
   gdk_synthesize_window_state (window, GDK_WINDOW_STATE_ICONIFIED, 0);
 }

@@ -835,14 +835,53 @@ show_window_internal (GdkWindow *window,
     gdk_window_iconify (window);
 
   if (impl->transient_for && !GDK_WINDOW_DESTROYED (impl->transient_for))
+    _gdk_quartz_window_attach_to_parent (window);
+
+  GDK_QUARTZ_RELEASE_POOL;
+}
+
+/* Temporarily unsets the parent window, if the window is a
+ * transient. 
+ */
+void
+_gdk_quartz_window_detach_from_parent (GdkWindow *window)
+{
+  GdkWindowImplQuartz *impl;
+
+  g_return_if_fail (GDK_IS_WINDOW (window));
+
+  impl = GDK_WINDOW_IMPL_QUARTZ (GDK_WINDOW_OBJECT (window)->impl);
+  
+  g_return_if_fail (impl->toplevel != NULL);
+
+  if (impl->transient_for && !GDK_WINDOW_DESTROYED (impl->transient_for))
+    {
+      GdkWindowImplQuartz *parent_impl;
+
+      parent_impl = GDK_WINDOW_IMPL_QUARTZ (GDK_WINDOW_OBJECT (impl->transient_for)->impl);
+      [parent_impl->toplevel removeChildWindow:impl->toplevel];
+    }
+}
+
+/* Re-sets the parent window, if the window is a transient. */
+void
+_gdk_quartz_window_attach_to_parent (GdkWindow *window)
+{
+  GdkWindowImplQuartz *impl;
+
+  g_return_if_fail (GDK_IS_WINDOW (window));
+
+  impl = GDK_WINDOW_IMPL_QUARTZ (GDK_WINDOW_OBJECT (window)->impl);
+  
+  g_return_if_fail (impl->toplevel != NULL);
+
+  if (impl->transient_for && !GDK_WINDOW_DESTROYED (impl->transient_for))
     {
       GdkWindowImplQuartz *parent_impl;
 
       parent_impl = GDK_WINDOW_IMPL_QUARTZ (GDK_WINDOW_OBJECT (impl->transient_for)->impl);
       [parent_impl->toplevel addChildWindow:impl->toplevel ordered:NSWindowAbove];
     }
-
-  GDK_QUARTZ_RELEASE_POOL;
 }
 
 void
@@ -883,19 +922,8 @@ gdk_window_hide (GdkWindow *window)
 
   if (impl->toplevel) 
     {
-      /* We must unset the transient while it is hidden, otherwise
-       * quartz won't hide the window.
-       */
       if (impl->transient_for)
-        {
-          if (!GDK_WINDOW_DESTROYED (impl->transient_for))
-            {
-              GdkWindowImplQuartz *parent_impl;
-
-              parent_impl = GDK_WINDOW_IMPL_QUARTZ (GDK_WINDOW_OBJECT (impl->transient_for)->impl);
-              [parent_impl->toplevel removeChildWindow:impl->toplevel];
-            }
-        }
+        _gdk_quartz_window_detach_from_parent (window);
 
       [impl->toplevel orderOut:nil];
     }
@@ -955,7 +983,6 @@ move_resize_window_internal (GdkWindow *window,
       NSRect frame_rect = [impl->toplevel frameRectForContentRect:content_rect];
       
       frame_rect.origin.y -= frame_rect.size.height;
-
       [impl->toplevel setFrame:frame_rect display:YES];
     }
   else 
@@ -1563,11 +1590,7 @@ gdk_window_set_transient_for (GdkWindow *window,
 
   if (window_impl->transient_for)
     {
-      if (!GDK_WINDOW_DESTROYED (window_impl->transient_for))
-        {
-          parent_impl = GDK_WINDOW_IMPL_QUARTZ (GDK_WINDOW_OBJECT (window_impl->transient_for)->impl);
-          [parent_impl->toplevel removeChildWindow:window_impl->toplevel];
-        }
+      _gdk_quartz_window_detach_from_parent (window);
 
       g_object_unref (window_impl->transient_for);
       window_impl->transient_for = NULL;
@@ -1594,7 +1617,7 @@ gdk_window_set_transient_for (GdkWindow *window,
            * window will be added in show() instead.
            */
           if (!(GDK_WINDOW_OBJECT (window)->state & GDK_WINDOW_STATE_WITHDRAWN))
-            [parent_impl->toplevel addChildWindow:window_impl->toplevel ordered:NSWindowAbove];
+            _gdk_quartz_window_attach_to_parent (window);
         }
     }
   

@@ -1,5 +1,12 @@
 2007-07-06  Richard Hult  <richard@imendio.com>
 
+	* gdk/quartz/gdkprivate-quartz.h:
+	* gdk/quartz/gdkwindow-quartz.c:
+	* gdk/quartz/GdkQuartzWindow.c: Fix (de)miniaturizing transient
+	windows, by (un)setting the parent before and after miniaturizing.
+
+2007-07-06  Richard Hult  <richard@imendio.com>
+
 	* gdk/quartz/gdkkeys-quartz.c (gdk_keymap_have_bidi_layouts): Add
 	stub.
 

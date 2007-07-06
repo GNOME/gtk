@@ -138,6 +138,9 @@ gint       _gdk_quartz_window_get_inverted_screen_y (gint       y);
 GdkWindow *_gdk_quartz_window_find_child            (GdkWindow *window,
 						     gint       x,
 						     gint       y);
+void       _gdk_quartz_window_attach_to_parent      (GdkWindow *window);
+void       _gdk_quartz_window_detach_from_parent    (GdkWindow *window);
+
 
 /* Events */
 void         _gdk_quartz_events_update_focus_window   (GdkWindow *new_window,
