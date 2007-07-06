@@ -1,3 +1,8 @@
+2007-07-06  Johan Dahlin  <jdahlin@async.com.br>
+
+	* gtk/gtkbuilder.c (gtk_builder_get_type_from_name): Add a missing
+	semi-colon in the doc string, spotted by Johannes Sasonko
+
 2007-07-05  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtkbuilder.c: Support pixbuf properties by specifying

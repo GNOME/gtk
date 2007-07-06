@@ -1405,7 +1405,7 @@ _gtk_builder_flags_from_string (GType         type,
  * Returns: the #GType found for @type_name or #G_TYPE_INVALID 
  *   if no type was found
  *
- * Since 2.12
+ * Since: 2.12
  */
 GType
 gtk_builder_get_type_from_name (GtkBuilder  *builder, 
