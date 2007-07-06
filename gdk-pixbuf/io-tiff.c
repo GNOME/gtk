@@ -199,6 +199,11 @@ tiff_image_parse (TIFF *tiff, TiffContext *context, GError **error)
                 gint h = height;
 		(* context->size_func) (&w, &h, context->user_data);
                 
+		/* This is a signal that this function is being called
+		   to support gdk_pixbuf_get_file_info, so we can stop
+		   parsing the tiff file at this point. It is not an
+		   error condition. */
+
                 if (w == 0 || h == 0)
                     return NULL;
         }

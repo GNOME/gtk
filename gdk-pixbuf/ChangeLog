@@ -1,3 +1,8 @@
+2007-07-06  Michael J. Chudobiak  <mjc@cvs.gnome.org>
+
+	* io-tiff.c: (tiff_image_parse): Added a comment to explain
+	the signal used to stop parsing early.
+
 2007-07-05  Matthias Clasen  <mclasen@redhat.com>
 
 	* io-tiff.c: Revert the last change, it was wrong
