@@ -26,8 +26,10 @@
 
 static gpointer parent_class;
 
-static GSList *update_windows = NULL;
-static guint update_idle = 0;
+static GSList *update_windows;
+static guint   update_idle;
+
+static GSList *main_window_stack;
 
 #define WINDOW_IS_TOPLEVEL(window)		   \
   (GDK_WINDOW_TYPE (window) != GDK_WINDOW_CHILD && \
@@ -498,6 +500,44 @@ _gdk_quartz_window_find_child (GdkWindow *window,
   return NULL;
 }
 
+void
+_gdk_quartz_window_did_become_main (GdkWindow *window)
+{
+  main_window_stack = g_slist_remove (main_window_stack, window);
+
+  if (GDK_WINDOW_OBJECT (window)->window_type != GDK_WINDOW_TEMP)
+    main_window_stack = g_slist_prepend (main_window_stack, window);
+}
+
+void
+_gdk_quartz_window_did_resign_main (GdkWindow *window)
+{
+  GdkWindow *new_window = NULL;
+
+  if (main_window_stack)
+    new_window = main_window_stack->data;
+  else
+    {
+      GList *toplevels;
+
+      toplevels = gdk_window_get_toplevels ();
+      if (toplevels)
+        new_window = toplevels->data;
+      g_list_free (toplevels);
+    }
+
+  if (new_window &&
+      new_window != window &&
+      GDK_WINDOW_IS_MAPPED (new_window) &&
+      GDK_WINDOW_OBJECT (new_window)->window_type != GDK_WINDOW_TEMP)
+    {
+      GdkWindowObject *private = (GdkWindowObject *) new_window;
+      GdkWindowImplQuartz *impl = GDK_WINDOW_IMPL_QUARTZ (private->impl);
+
+      [impl->toplevel makeKeyAndOrderFront:impl->toplevel];
+    }
+}
+
 GdkWindow *
 gdk_window_new (GdkWindow     *parent,
 		GdkWindowAttr *attributes,
@@ -739,6 +779,7 @@ _gdk_windowing_window_destroy (GdkWindow *window,
 			       gboolean   foreign_destroy)
 {
   update_windows = g_slist_remove (update_windows, window);
+  main_window_stack = g_slist_remove (main_window_stack, window);
 
   if (!recursing && !foreign_destroy)
     {
@@ -814,14 +855,13 @@ show_window_internal (GdkWindow *window,
         [impl->toplevel makeKeyAndOrderFront:impl->toplevel];
       else
         [impl->toplevel orderFront:nil];
-
-      [impl->view setNeedsDisplay:YES];
     }
   else
     {
       [impl->view setHidden:NO];
-      [impl->view setNeedsDisplay:YES];
     }
+
+  [impl->view setNeedsDisplay:YES];
 
   if (all_parents_shown (private->parent))
     _gdk_quartz_events_send_map_events (window);
@@ -922,6 +962,11 @@ gdk_window_hide (GdkWindow *window)
 
   if (impl->toplevel) 
     {
+      /* Update main window. */
+      main_window_stack = g_slist_remove (main_window_stack, window);
+      if ([NSApp mainWindow] == impl->toplevel)
+        _gdk_quartz_window_did_resign_main (window);
+
       if (impl->transient_for)
         _gdk_quartz_window_detach_from_parent (window);
 

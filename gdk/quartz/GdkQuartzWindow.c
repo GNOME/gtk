@@ -77,6 +77,22 @@
   _gdk_quartz_events_update_focus_window (window, FALSE);
 }
 
+-(void)windowDidBecomeMain:(NSNotification *)aNotification
+{
+  GdkWindow *window;
+
+  window = [[self contentView] gdkWindow];
+  _gdk_quartz_window_did_become_main (window);
+}
+
+-(void)windowDidResignMain:(NSNotification *)aNotification
+{
+  GdkWindow *window;
+
+  window = [[self contentView] gdkWindow];
+  _gdk_quartz_window_did_resign_main (window);
+}
+
 /* Used in combination with NSLeftMouseUp in sendEvent to keep track
  * of when the window is being moved with the mouse.
  */

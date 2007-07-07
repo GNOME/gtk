@@ -1,3 +1,12 @@
+2007-07-07  Richard Hult  <richard@imendio.com>
+
+	* gdk/quartz/GdkQuartzWindow.c ([GdkQuartzWindow -windowDidResignMain:]) 
+	([GdkQuartzWindow -windowDidBecomeMain:]): 
+	* gdk/quartz/gdkwindow-quartz.c (_gdk_quartz_window_did_resign_main)
+	(_gdk_quartz_window_did_become_main, gdk_window_hide)
+	(_gdk_windowing_window_destroy): Keep a stack of main windows and
+	select the most recent one when hiding/closing the current one.
+
 2007-07-07  Johan Dahlin  <jdahlin@async.com.br>
 
 	* gtk/gtk-builder-convert (GtkBuilderConverter._convert_textview_text): 
