@@ -12,6 +12,8 @@
 	tags
 	(GtkBuilderConverter._convert_menuitem): Add support for CheckMenuItems
 	and do not set name and action on separators
+	(GtkBuilderConverter._add_action_from_menuitem): Only set stock_id
+	on the action if the menuitem had a stock or label property set
 
 2007-07-06  Richard Hult  <richard@imendio.com>
 

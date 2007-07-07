@@ -313,7 +313,9 @@ class GtkBuilderConverter(object):
             if (children and
                 children[0].getAttribute('internal-child') == 'image'):
                 image = get_object_node(children[0])
-                properties['stock_id'] = get_property(image, 'stock')
+                stock_id = get_property(node, 'stock')
+                if stock_id is not None:
+                    properties['stock_id'] = stock_id
         elif object_class == 'GtkMenuItem':
             name = 'GtkAction'
             label = get_property(node, 'label')
@@ -333,7 +335,10 @@ class GtkBuilderConverter(object):
             raise NotImplementedError(object_class)
 
         if get_property(node, 'use_stock') == 'True':
-            properties['stock_id'] = get_property(node, 'label')
+            stock_id = get_property(node, 'label')
+            if stock_id is not None:
+                properties['stock_id'] = stock_id
+
         properties['name'] = object_id
         action = self._create_object(name,
                                      object_id,
