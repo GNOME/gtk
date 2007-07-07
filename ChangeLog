@@ -1,3 +1,8 @@
+2007-07-07  Johan Dahlin  <jdahlin@async.com.br>
+
+	* gtk/gtk-builder-convert (GtkBuilderConverter._convert_textview_text): 
+	Convert GtkTextView::text properties
+
 2007-07-06  Richard Hult  <richard@imendio.com>
 
 	* gdk/quartz/gdkprivate-quartz.h:

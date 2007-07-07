@@ -1,3 +1,7 @@
+2007-07-07  Johan Dahlin  <jdahlin@async.com.br>
+
+	* gtk/gtk-builder-convert.xml: Update
+
 2007-04-05  Matthias clasen  <mclasen@redhat.com>
 
 	* gtk/tmpl/gtkbuilder.sgml: Pixbuf properties
