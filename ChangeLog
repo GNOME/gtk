@@ -2,6 +2,12 @@
 
 	* gtk/gtk-builder-convert (GtkBuilderConverter._convert_textview_text): 
 	Convert GtkTextView::text properties
+	(GtkBuilderConverter): Refactor; Optimize widget lookups by not
+	traversing the whole tree.
+	Use a common api to create sizegroups, actiongroups and uimanagers
+	to avoid name conflicts.
+	Output newly created objects sorted by id before the old roots under
+	<interface>
 
 2007-07-06  Richard Hult  <richard@imendio.com>
 
