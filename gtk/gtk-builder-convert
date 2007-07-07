@@ -55,6 +55,7 @@ except ImportError:
     subprocess = None
 
 def get_child_nodes(node):
+    assert node.tagName == 'object'
     nodes = []
     for child in node.childNodes:
         if child.nodeType == Node.TEXT_NODE:
@@ -65,6 +66,7 @@ def get_child_nodes(node):
     return nodes
 
 def get_object_properties(node):
+    assert node.tagName == 'object'
     properties = {}
     for child in node.childNodes:
         if child.nodeType == Node.TEXT_NODE:
@@ -74,6 +76,11 @@ def get_object_properties(node):
         value = child.childNodes[0].data
         properties[child.getAttribute('name')] = value
     return properties
+
+def get_property(node, property_name):
+    assert node.tagName == 'object'
+    properties = get_object_properties(node)
+    return properties.get(property_name)
 
 def get_object_node(child_node):
     assert child_node.tagName == 'child'
@@ -85,6 +92,7 @@ def get_object_node(child_node):
             nodes.append(node)
     assert len(nodes) == 1, nodes
     return nodes[0]
+
 
 class GtkBuilderConverter(object):
 
@@ -147,10 +155,6 @@ class GtkBuilderConverter(object):
         obj = self._create_object(obj_class, None, template, **properties)
         self.root_objects.append(obj)
         return obj
-
-    def _get_property(self, node, property_name):
-        properties = get_object_properties(node)
-        return properties.get(property_name)
 
     def _parse(self):
         glade_iface = self._dom.getElementsByTagName("glade-interface")
@@ -304,10 +308,10 @@ class GtkBuilderConverter(object):
             if (children and
                 children[0].getAttribute('internal-child') == 'image'):
                 image = get_object_node(children[0])
-                properties['stock_id'] = self._get_property(image, 'stock')
+                properties['stock_id'] = get_property(image, 'stock')
         elif object_class == 'GtkMenuItem':
             name = 'GtkAction'
-            label = self._get_property(node, 'label')
+            label = get_property(node, 'label')
             if label is not None:
                 properties['label'] = label
         elif object_class == 'GtkSeparatorMenuItem':
@@ -315,8 +319,8 @@ class GtkBuilderConverter(object):
         else:
             raise NotImplementedError(object_class)
 
-        if self._get_property(node, 'use_stock') == 'True':
-            properties['stock_id'] = self._get_property(node, 'label')
+        if get_property(node, 'use_stock') == 'True':
+            properties['stock_id'] = get_property(node, 'label')
         properties['name'] = object_id
         action = self._create_object(name,
                                      object_id,
