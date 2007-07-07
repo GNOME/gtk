@@ -10,6 +10,8 @@
 	<interface>
 	(GtkBuilderConverter._parse): Remove unsupported atkrelation and atkproperty
 	tags
+	(GtkBuilderConverter._convert_menuitem): Add support for CheckMenuItems
+	and do not set name and action on separators
 
 2007-07-06  Richard Hult  <richard@imendio.com>
 

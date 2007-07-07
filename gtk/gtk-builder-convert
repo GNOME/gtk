@@ -281,15 +281,20 @@ class GtkBuilderConverter(object):
                 name = 'menu'
 
         object_class = obj_node.getAttribute('class')
-        if object_class in ['GtkMenuItem', 'GtkImageMenuItem']:
+        if object_class in ['GtkMenuItem',
+                            'GtkImageMenuItem',
+                            'GtkCheckMenuItem']:
             menu = self._dom.createElement(name)
+            menubar.appendChild(menu)
         elif object_class == 'GtkSeparatorMenuItem':
-            menu = self._dom.createElement('sep')
+            sep = self._dom.createElement('separator')
+            menubar.appendChild(sep)
+            return
         else:
             raise NotImplementedError(object_class)
+
         menu.setAttribute('name', obj_node.getAttribute('id'))
         menu.setAttribute('action', obj_node.getAttribute('id'))
-        menubar.appendChild(menu)
         self._add_action_from_menuitem(uimgr, obj_node)
         if children:
             for child in get_child_nodes(menu_node):
@@ -316,6 +321,14 @@ class GtkBuilderConverter(object):
                 properties['label'] = label
         elif object_class == 'GtkSeparatorMenuItem':
             return
+        elif object_class == 'GtkCheckMenuItem':
+            name = 'GtkToggleAction'
+            label = get_property(node, 'label')
+            if label is not None:
+                properties['label'] = label
+            active = get_property(node, 'active')
+            if active is not None:
+                properties['active'] = active
         else:
             raise NotImplementedError(object_class)
 
