@@ -8,6 +8,8 @@
 	to avoid name conflicts.
 	Output newly created objects sorted by id before the old roots under
 	<interface>
+	(GtkBuilderConverter._parse): Remove unsupported atkrelation and atkproperty
+	tags
 
 2007-07-06  Richard Hult  <richard@imendio.com>
 

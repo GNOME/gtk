@@ -156,6 +156,7 @@ class GtkBuilderConverter(object):
         glade_iface = self._dom.getElementsByTagName("glade-interface")
         assert glade_iface, ("Badly formed XML, there is "
                              "no <glade-interface> tag.")
+        # Rename glade-interface to interface
         glade_iface[0].tagName = 'interface'
         self._interface = glade_iface[0]
 
@@ -165,17 +166,16 @@ class GtkBuilderConverter(object):
                 if node.name == 'glade-interface':
                     self._dom.removeChild(node)
 
-        # Strip requires
-        requires = self._dom.getElementsByTagName("requires")
-        for require in requires:
-            require.parentNode.childNodes.remove(require)
-
-        for child in self._dom.getElementsByTagName("accessibility"):
-            child.parentNode.removeChild(child)
+        # Strip unsupported tags
+        for tag in ['requires', 'accessibility', 'atkproperty',
+                    'atkrelation']:
+            for child in self._dom.getElementsByTagName(tag):
+                child.parentNode.removeChild(child)
 
         if self.root:
             self._strip_root(self.root)
 
+        # Rename widget to object
         objects = self._dom.getElementsByTagName("widget")
         for node in objects:
             node.tagName = "object"
@@ -184,6 +184,7 @@ class GtkBuilderConverter(object):
             self._convert(node.getAttribute("class"), node)
             self.objects[node.getAttribute('id')] = node
 
+        # Remove empty properties
         for node in self._dom.getElementsByTagName('property'):
             if not node.childNodes:
                 node.parentNode.removeChild(node)
