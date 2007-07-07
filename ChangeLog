@@ -1,3 +1,7 @@
+Sun Jul  8 01:33:45 2007  Tim Janik  <timj@gtk.org>
+
+        * gdk/gdkwindow.c: docu fixup by Bjoern Lindqvist, #454703.
+
 2007-07-07  Richard Hult  <richard@imendio.com>
 
 	* gdk/quartz/GdkQuartzWindow.c ([GdkQuartzWindow -windowDidResignMain:]) 

@@ -2490,13 +2490,13 @@ gdk_window_process_updates (GdkWindow *window,
 /**
  * gdk_window_invalidate_rect:
  * @window: a #GdkWindow
- * @rect: rectangle to invalidate
+ * @rect: rectangle to invalidate or %NULL to invalidate the whole
+ *      window
  * @invalidate_children: whether to also invalidate child windows
  *
  * A convenience wrapper around gdk_window_invalidate_region() which
  * invalidates a rectangular region. See
  * gdk_window_invalidate_region() for details.
- * 
  **/
 void
 gdk_window_invalidate_rect   (GdkWindow    *window,
