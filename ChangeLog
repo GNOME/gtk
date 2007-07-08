@@ -1,5 +1,10 @@
 2007-07-08  Johan Dahlin  <jdahlin@async.com.br>
 
+	* gtk/gtk-builder-convert: Improve the way properties
+	are copied over from a menuitem to an action.
+	
+2007-07-08  Johan Dahlin  <jdahlin@async.com.br>
+
 	* gtk/gtk-builder-convert (GtkBuilderConverter._convert_menuitem): Convert
 	GtkMenus which are not part of a GtkMenuBar. Also move over activate signals
 	when converting a GtkMenuItem subclass to an action. 

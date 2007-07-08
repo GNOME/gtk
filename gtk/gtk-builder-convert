@@ -103,6 +103,12 @@ def get_object_node(child_node):
     assert len(nodes) == 1, nodes
     return nodes[0]
 
+def copy_properties(node, props, prop_dict):
+    assert node.tagName == 'object'
+    for prop_name in props:
+        value = get_property(node, prop_name)
+        if value is not None:
+            prop_dict[prop_name] = value
 
 class GtkBuilderConverter(object):
 
@@ -287,6 +293,9 @@ class GtkBuilderConverter(object):
         if node.hasAttribute('constructor'):
             return
 
+        # Only convert toplevel menu objects
+        if node.parentNode != self._interface:
+            return
         uimgr = self._create_root_object('GtkUIManager',
                                          template='uimanager')
 
@@ -320,14 +329,14 @@ class GtkBuilderConverter(object):
         object_class = obj_node.getAttribute('class')
         if object_class in ['GtkMenuItem',
                             'GtkImageMenuItem',
-                            'GtkCheckMenuItem']:
+                            'GtkCheckMenuItem',
+                            'GtkRadioMenuItem']:
             menu = self._dom.createElement(name)
         elif object_class == 'GtkSeparatorMenuItem':
             return self._dom.createElement('separator')
         else:
             raise NotImplementedError(object_class)
 
-        menu.setAttribute('name', obj_node.getAttribute('id'))
         menu.setAttribute('action', obj_node.getAttribute('id'))
         self._add_action_from_menuitem(uimgr, obj_node)
         if children:
@@ -339,11 +348,31 @@ class GtkBuilderConverter(object):
                 child.parentNode.removeChild(child)
         return menu
 
+    def _menuitem_to_action(self, node, properties):
+        copy_properties(node, ['label'], properties)
+
+    def _togglemenuitem_to_action(self, node, properties):
+        self._menuitem_to_action(node, properties)
+        copy_properties(node, ['active'], properties)
+
+    def _radiomenuitem_to_action(self, node, properties):
+        self._togglemenuitem_to_action(node, properties)
+        copy_properties(node, ['group'], properties)
+
     def _add_action_from_menuitem(self, uimgr, node):
         properties = {}
         object_class = node.getAttribute('class')
         object_id = node.getAttribute('id')
-        if object_class == 'GtkImageMenuItem':
+        if object_class == 'GtkMenuItem':
+            name = 'GtkAction'
+            self._menuitem_to_action(node, properties)
+        elif object_class == 'GtkCheckMenuItem':
+            name = 'GtkToggleAction'
+            self._togglemenuitem_to_action(node, properties)
+        elif object_class == 'GtkRadioMenuItem':
+            name = 'GtkRadioAction'
+            self._radiomenuitem_to_action(node, properties)
+        elif object_class == 'GtkImageMenuItem':
             name = 'GtkAction'
             children = get_child_nodes(node)
             if (children and
@@ -352,21 +381,8 @@ class GtkBuilderConverter(object):
                 stock_id = get_property(image, 'stock')
                 if stock_id is not None:
                     properties['stock_id'] = stock_id
-        elif object_class == 'GtkMenuItem':
-            name = 'GtkAction'
-            label = get_property(node, 'label')
-            if label is not None:
-                properties['label'] = label
         elif object_class == 'GtkSeparatorMenuItem':
             return
-        elif object_class == 'GtkCheckMenuItem':
-            name = 'GtkToggleAction'
-            label = get_property(node, 'label')
-            if label is not None:
-                properties['label'] = label
-            active = get_property(node, 'active')
-            if active is not None:
-                properties['active'] = active
         else:
             raise NotImplementedError(object_class)
 
