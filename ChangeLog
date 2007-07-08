@@ -1,3 +1,8 @@
+2007-07-08  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtkbuilderparser.c (pgettext): Support old-style
+	message contexts, too. 
+
 2007-07-08  Johan Dahlin  <jdahlin@async.com.br>
 
 	* gtk/gtk-builder-convert: Improve the way properties

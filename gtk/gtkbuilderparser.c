@@ -865,10 +865,17 @@ dpgettext (const char *domain,
 
   translation = dgettext (domain, msg_ctxt_id);
 
-  if (translation != msg_ctxt_id) 
-    return translation;
+  if (translation == msg_ctxt_id) 
+    {
+      /* try the old way of doing message contexts, too */
+      msg_ctxt_id[msgctxt_len - 1] = '|';
+      translation = dgettext (domain, msg_ctxt_id);
+  
+      if (translation == msg_ctxt_id)
+        return msgid;
+    }
  
-  return msgid;
+  return translation;
 }
 
 /* Called for character data */
