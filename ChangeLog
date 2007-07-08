@@ -1,3 +1,8 @@
+2007-07-08  Johan Dahlin  <jdahlin@async.com.br>
+
+	* gtk/gtkbuilderparser.c (parse_signal): Parse last_modification_time
+	attribute in <signal> tag
+
 2007-07-07  Matthias Clasen <mclasen@redhat.com>
 
 	* gtk/gtkbuilderprivate.h:

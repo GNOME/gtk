@@ -484,6 +484,9 @@ parse_signal (ParserData   *data,
 	}
       else if (strcmp (names[i], "object") == 0)
         object = g_strdup (values[i]);
+      else if (strcmp (names[i], "last_modification_time") == 0)
+	/* parse but ignore */
+	;
       else
 	{
 	  error_invalid_attribute (data, element_name, names[i], error);
