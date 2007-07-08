@@ -62,7 +62,9 @@ which are more limited in scope.
                      type-func      #IMPLIED
                      constructor    #IMPLIED >
 <!ATTLIST property   name           #REQUIRED
-                     translatable   #IMPLIED >
+                     translatable   #IMPLIED 
+                     comments       #IMPLIED
+                     context        #IMPLIED >
 <!ATTLIST signal     name           #REQUIRED
                      handler        #REQUIRED
                      after          #IMPLIED
@@ -114,7 +116,9 @@ set to a true value, GTK+ uses gettext() (or dgettext() if
 the builder has a translation domain set) to find a translation 
 for the value. This happens before the value is parsed, so
 it can be used for properties of any type, but it is probably
-most useful for string properties.
+most useful for string properties. It is also possible to
+specify a context to disambiguate short strings, and comments
+which may help the translators.
 </para>
 <para>
 GtkBuilder can parse textual representations for the most

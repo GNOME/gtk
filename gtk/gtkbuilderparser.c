@@ -393,6 +393,7 @@ parse_property (ParserData   *data,
 {
   PropertyInfo *info;
   gchar *name = NULL;
+  gchar *context = NULL;
   gboolean translatable = FALSE;
   int i;
 
@@ -408,6 +409,14 @@ parse_property (ParserData   *data,
 						 error))
 	    return;
 	}
+      else if (strcmp (names[i], "comments") == 0)
+        {
+          /* do nothing, comments are for translators */
+        }
+      else if (strcmp (names[i], "context") == 0) 
+        {
+          context = g_strdup (values[i]);
+        }
       else
 	{
 	  error_invalid_attribute (data, element_name, names[i], error);
@@ -424,6 +433,7 @@ parse_property (ParserData   *data,
   info = g_slice_new0 (PropertyInfo);
   info->name = name;
   info->translatable = translatable;
+  info->context = context;
   state_push (data, info);
 
   info->tag.name = element_name;
@@ -833,6 +843,31 @@ end_element (GMarkupParseContext *context,
     }
 }
 
+/* This function is taken from gettext.h 
+ * GNU gettext uses '\004' to separate context and msgid in .mo files.
+ */
+static const char *
+dpgettext (const char *domain,
+           const char *msgctxt,
+           const char *msgid)
+{
+  size_t msgctxt_len = strlen (msgctxt) + 1;
+  size_t msgid_len = strlen (msgid) + 1;
+  const char *translation;
+  char msg_ctxt_id[msgctxt_len + msgid_len];
+
+  memcpy (msg_ctxt_id, msgctxt, msgctxt_len - 1);
+  msg_ctxt_id[msgctxt_len - 1] = '\004';
+  memcpy (msg_ctxt_id + msgctxt_len, msgid, msgid_len);
+
+  translation = dgettext (domain, msg_ctxt_id);
+
+  if (translation != msg_ctxt_id) 
+    return translation;
+ 
+  return msgid;
+}
+
 /* Called for character data */
 /* text is not nul-terminated */
 static void
@@ -865,10 +900,10 @@ text (GMarkupParseContext *context,
 
       if (prop_info->translatable && text_len)
         {
-          if (data->domain)
-            text = dgettext (data->domain, text);
+          if (prop_info->context)
+            text = dpgettext (data->domain, prop_info->context, text);
           else
-            text = gettext (text);
+            text = dgettext (data->domain, text);
         }
       prop_info->data = g_strndup (text, text_len);
     }

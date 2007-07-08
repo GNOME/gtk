@@ -1,5 +1,11 @@
 2007-07-07  Matthias Clasen <mclasen@redhat.com>
 
+	* gtk/gtkbuilderprivate.h:
+	* gtk/gtkbuilderparser.c: Support context and comments
+	for properties.
+
+2007-07-07  Matthias Clasen <mclasen@redhat.com>
+
 	* gtk/gtkwidget.c: Fix some typos, and a memory management bug.  
 
 2007-07-08  Johan Dahlin  <jdahlin@async.com.br>

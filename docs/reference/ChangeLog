@@ -1,3 +1,8 @@
+2007-07-07  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/tmpl/gtkbuilder.sgml: Document context and
+	comments for properties.
+
 2007-07-07  Johan Dahlin  <jdahlin@async.com.br>
 
 	* gtk/gtk-builder-convert.xml: Update

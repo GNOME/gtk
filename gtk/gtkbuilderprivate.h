@@ -61,6 +61,7 @@ typedef struct {
   gchar *name;
   gchar *data;
   gboolean translatable;
+  gchar *context;
 } PropertyInfo;
 
 typedef struct {
