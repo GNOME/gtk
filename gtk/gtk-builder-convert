@@ -65,7 +65,7 @@ def get_child_nodes(node):
         nodes.append(child)
     return nodes
 
-def get_object_properties(node):
+def get_properties(node):
     assert node.tagName == 'object'
     properties = {}
     for child in node.childNodes:
@@ -79,8 +79,18 @@ def get_object_properties(node):
 
 def get_property(node, property_name):
     assert node.tagName == 'object'
-    properties = get_object_properties(node)
+    properties = get_properties(node)
     return properties.get(property_name)
+
+def get_signal_nodes(node):
+    assert node.tagName == 'object'
+    signals = []
+    for child in node.childNodes:
+        if child.nodeType == Node.TEXT_NODE:
+            continue
+        if child.tagName == 'signal':
+            signals.append(child)
+    return signals
 
 def get_object_node(child_node):
     assert child_node.tagName == 'child'
@@ -210,12 +220,9 @@ class GtkBuilderConverter(object):
             self._packing_prop_to_child_attr(
                 node, "type", "label_item", "label")
         elif klass == "GtkMenuBar":
-            if node.hasAttribute('constructor'):
-                uimgr = self._get_object('uimanager')
-            else:
-                uimgr = self._create_root_object('GtkUIManager',
-                                                 template='uimanager')
-            self._convert_menubar(uimgr, node)
+            self._convert_menubar(node)
+        elif klass == "GtkMenu":
+            self._convert_menu(node)
         elif klass in WINDOWS and self.skip_windows:
             self._remove_window(node)
         self._default_widget_converter(node)
@@ -253,14 +260,21 @@ class GtkBuilderConverter(object):
         parent.removeChild(node)
         parent.appendChild(object_node)
 
-    def _convert_menubar(self, uimgr, node):
+    def _convert_menubar(self, node):
+        if node.hasAttribute('constructor'):
+            return
+
+        uimgr = self._create_root_object('GtkUIManager',
+                                         template='uimanager')
+
         menubar = self._dom.createElement('menubar')
         menubar.setAttribute('name', node.getAttribute('id'))
         node.setAttribute('constructor', uimgr.getAttribute('id'))
 
         for child in get_child_nodes(node):
             obj_node = get_object_node(child)
-            self._convert_menuitem(uimgr, menubar, obj_node)
+            item = self._convert_menuitem(uimgr, obj_node)
+            menubar.appendChild(item)
             child.removeChild(obj_node)
             child.parentNode.removeChild(child)
 
@@ -269,7 +283,31 @@ class GtkBuilderConverter(object):
 
         ui.appendChild(menubar)
 
-    def _convert_menuitem(self, uimgr, menubar, obj_node):
+    def _convert_menu(self, node):
+        if node.hasAttribute('constructor'):
+            return
+
+        uimgr = self._create_root_object('GtkUIManager',
+                                         template='uimanager')
+
+        menu = self._dom.createElement('menubar')
+        menu.setAttribute('name', node.getAttribute('id'))
+
+        node.setAttribute('constructor', uimgr.getAttribute('id'))
+
+        for child in get_child_nodes(node):
+            obj_node = get_object_node(child)
+            item = self._convert_menuitem(uimgr, obj_node)
+            menu.appendChild(item)
+            child.removeChild(obj_node)
+            child.parentNode.removeChild(child)
+
+        ui = self._dom.createElement('ui')
+        uimgr.appendChild(ui)
+
+        ui.appendChild(menu)
+
+    def _convert_menuitem(self, uimgr, obj_node):
         children = get_child_nodes(obj_node)
         name = 'menuitem'
         if children:
@@ -284,11 +322,8 @@ class GtkBuilderConverter(object):
                             'GtkImageMenuItem',
                             'GtkCheckMenuItem']:
             menu = self._dom.createElement(name)
-            menubar.appendChild(menu)
         elif object_class == 'GtkSeparatorMenuItem':
-            sep = self._dom.createElement('separator')
-            menubar.appendChild(sep)
-            return
+            return self._dom.createElement('separator')
         else:
             raise NotImplementedError(object_class)
 
@@ -298,9 +333,11 @@ class GtkBuilderConverter(object):
         if children:
             for child in get_child_nodes(menu_node):
                 obj_node = get_object_node(child)
-                self._convert_menuitem(uimgr, menu, obj_node)
+                item = self._convert_menuitem(uimgr, obj_node)
+                menu.appendChild(item)
                 child.removeChild(obj_node)
                 child.parentNode.removeChild(child)
+        return menu
 
     def _add_action_from_menuitem(self, uimgr, node):
         properties = {}
@@ -312,7 +349,7 @@ class GtkBuilderConverter(object):
             if (children and
                 children[0].getAttribute('internal-child') == 'image'):
                 image = get_object_node(children[0])
-                stock_id = get_property(node, 'stock')
+                stock_id = get_property(image, 'stock')
                 if stock_id is not None:
                     properties['stock_id'] = stock_id
         elif object_class == 'GtkMenuItem':
@@ -342,6 +379,15 @@ class GtkBuilderConverter(object):
         action = self._create_object(name,
                                      object_id,
                                      **properties)
+
+        for signal in get_signal_nodes(node):
+            signal_name = signal.getAttribute('name')
+            if signal_name == 'activate':
+                action.appendChild(signal)
+            else:
+                print 'Unhandled signal %s::%s' % (node.getAttribute('class'),
+                                                   signal_name)
+
         if not uimgr.childNodes:
             child = self._dom.createElement('child')
             uimgr.appendChild(child)
@@ -410,7 +456,7 @@ class GtkBuilderConverter(object):
     def _convert_adjustment(self, prop):
         data = prop.childNodes[0].data
         value, lower, upper, step, page, page_size = data.split(' ')
-        adj = self._create_root_object("GtkAdjustment", 
+        adj = self._create_root_object("GtkAdjustment",
                                        template='adjustment',
                                        value=value,
                                        lower=lower,
