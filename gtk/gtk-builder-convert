@@ -171,8 +171,7 @@ class GtkBuilderConverter(object):
                     self._dom.removeChild(node)
 
         # Strip unsupported tags
-        for tag in ['requires', 'accessibility', 'atkproperty',
-                    'atkrelation']:
+        for tag in ['requires']:
             for child in self._dom.getElementsByTagName(tag):
                 child.parentNode.removeChild(child)
 

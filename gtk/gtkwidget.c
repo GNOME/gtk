@@ -8547,6 +8547,12 @@ static const GMarkupParser accel_group_parser =
     accel_group_start_element,
   };
 
+static const GMarkupParser accessibility_parser =
+  {
+    NULL,
+  };
+
+
 static gboolean
 gtk_widget_buildable_custom_tag_start (GtkBuildable     *buildable,
 				       GtkBuilder       *builder,
@@ -8565,6 +8571,21 @@ gtk_widget_buildable_custom_tag_start (GtkBuildable     *buildable,
       parser_data->object = g_object_ref (buildable);
       *parser = accel_group_parser;
       *data = parser_data;
+      return TRUE;
+    }
+  else if (strcmp (tagname, "accessibility") == 0)
+    {
+      static gboolean warning_showed = FALSE;
+
+      if (!warning_showed)
+	{
+	  g_warning ("<accessibility> is being ignored,\n"
+		     "see http://bugzilla.gnome.org/show_bug.cgi?id=454653\n");
+	  warning_showed = TRUE;
+	}
+
+      *parser = accessibility_parser;
+      *data = NULL;
       return TRUE;
     }
   return FALSE;

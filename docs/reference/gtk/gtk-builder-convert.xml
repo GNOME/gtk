@@ -31,6 +31,9 @@ its output the file specified as the second argument.
 Toolbars are not handled.
 </para>
 <para>
+Support for accessibility is not yet implemented.
+</para>
+<para>
 The script requires a python interpreter to run.
 </para>
 </refsect1>

@@ -1466,6 +1466,15 @@ gboolean test_widget (void)
     "    </child>"
     "  </object>"
    "</interface>";
+  gchar *buffer3 =
+    "<interface>"
+    "  <object class=\"GtkWindow\" id=\"window1\">"
+    "     <accessibility>"
+    "       <atkproperty name=\"AtkObject::accessible_name\" translatable=\"yes\">Contacts</atkproperty>"
+    "       <atkrelation target=\"button1\" type=\"labelled-by\"/>"
+    "     </accessibility>"
+    "  </object>"
+   "</interface>";
   GtkBuilder *builder;
   GObject *window1, *button1;
   
@@ -1488,6 +1497,12 @@ gboolean test_widget (void)
   window1 = gtk_builder_get_object (builder, "window1");
   gtk_widget_destroy (GTK_WIDGET (window1));
   g_object_unref (builder);
+
+  builder = builder_new_from_string (buffer3, -1, NULL);
+  window1 = gtk_builder_get_object (builder, "window1");
+  gtk_widget_destroy (GTK_WIDGET (window1));
+  g_object_unref (builder);
+
   return TRUE;
 }
 

@@ -1,3 +1,12 @@
+2007-07-08  Johan Dahlin  <jdahlin@async.com.br>
+
+	* gtk/gtkwidget.c (gtk_widget_buildable_custom_tag_start): 
+	Parse <accessibility> but don't do anything yet.
+	* gtk/gtk-builder-convert (GtkBuilderConverter._parse): 
+	Do not strip atk/accessibility tags
+	* tests/buildertest.c (test_widget): 
+	Test this
+	
 Sun Jul  8 01:33:45 2007  Tim Janik  <timj@gtk.org>
 
         * gdk/gdkwindow.c: docu fixup by Bjoern Lindqvist, #454703.
