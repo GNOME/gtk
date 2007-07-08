@@ -262,12 +262,12 @@ static gboolean         gtk_widget_buildable_custom_tag_start   (GtkBuildable   
                                                                  const gchar      *tagname,
                                                                  GMarkupParser    *parser,
                                                                  gpointer         *data);
-static void             gtk_widget_buildable_custom_finshed     (GtkBuildable     *buildable,
+static void             gtk_widget_buildable_custom_finished    (GtkBuildable     *buildable,
                                                                  GtkBuilder       *builder,
                                                                  GObject          *child,
                                                                  const gchar      *tagname,
                                                                  gpointer          data);
-static void             gtk_widget_buildable_parser_finshed     (GtkBuildable     *buildable,
+static void             gtk_widget_buildable_parser_finished    (GtkBuildable     *buildable,
                                                                  GtkBuilder       *builder);
 
      
@@ -8451,9 +8451,9 @@ gtk_widget_buildable_interface_init (GtkBuildableIface *iface)
   iface->set_name = gtk_widget_buildable_set_name;
   iface->get_name = gtk_widget_buildable_get_name;
   iface->set_buildable_property = gtk_widget_buildable_set_buildable_property;
-  iface->parser_finished = gtk_widget_buildable_parser_finshed;
+  iface->parser_finished = gtk_widget_buildable_parser_finished;
   iface->custom_tag_start = gtk_widget_buildable_custom_tag_start;
-  iface->custom_finished = gtk_widget_buildable_custom_finshed;
+  iface->custom_finished = gtk_widget_buildable_custom_finished;
 }
 
 static void
@@ -8486,8 +8486,8 @@ gtk_widget_buildable_set_buildable_property (GtkBuildable *buildable,
 }
 
 static void
-gtk_widget_buildable_parser_finshed (GtkBuildable *buildable,
-				     GtkBuilder   *builder)
+gtk_widget_buildable_parser_finished (GtkBuildable *buildable,
+				      GtkBuilder   *builder)
 {
   if (g_object_get_qdata (G_OBJECT (buildable), quark_builder_has_default))
     gtk_widget_grab_default (GTK_WIDGET (buildable));
@@ -8567,7 +8567,7 @@ gtk_widget_buildable_custom_tag_start (GtkBuildable     *buildable,
 
   if (strcmp (tagname, "accelerator") == 0)
     {
-      parser_data = g_new0 (AccelGroupParserData, 1);
+      parser_data = g_slice_new0 (AccelGroupParserData);
       parser_data->object = g_object_ref (buildable);
       *parser = accel_group_parser;
       *data = parser_data;
@@ -8592,11 +8592,11 @@ gtk_widget_buildable_custom_tag_start (GtkBuildable     *buildable,
 }
 
 static void
-gtk_widget_buildable_custom_finshed (GtkBuildable *buildable,
-				     GtkBuilder   *builder,
-				     GObject      *child,
-				     const gchar  *tagname,
-				     gpointer      user_data)
+gtk_widget_buildable_custom_finished (GtkBuildable *buildable,
+				      GtkBuilder   *builder,
+				      GObject      *child,
+				      const gchar  *tagname,
+				      gpointer      user_data)
 {
   AccelGroupParserData *data;
   GtkWidget *toplevel;

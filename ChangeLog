@@ -1,3 +1,7 @@
+2007-07-07  Matthias Clasen <mclasen@redhat.com>
+
+	* gtk/gtkwidget.c: Fix some typos, and a memory management bug.  
+
 2007-07-08  Johan Dahlin  <jdahlin@async.com.br>
 
 	* gtk/gtkwidget.c (gtk_widget_buildable_custom_tag_start): 
