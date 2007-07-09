@@ -1,4 +1,4 @@
-if OS_WIN32
+if PLATFORM_WIN32
 no_undefined = -no-undefined
 endif
 
@@ -14,8 +14,9 @@ INCLUDES = \
 	$(GTK_DEBUG_FLAGS)
 
 LDADDS = \
-	$(GTK_DEP_LIBS)					\
-	$(top_builddir)/gtk/$(gtktargetlib)		
+	$(top_builddir)/gtk/$(gtktargetlib)		\
+	$(top_builddir)/gdk/$(gdktargetlib)		\
+	$(GTK_DEP_LIBS)
 
 backenddir = $(libdir)/gtk-2.0/$(GTK_BINARY_VERSION)/printbackends
 

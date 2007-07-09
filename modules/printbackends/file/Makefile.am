@@ -1,4 +1,4 @@
-if OS_WIN32
+if PLATFORM_WIN32
 no_undefined = -no-undefined
 endif
 
@@ -27,6 +27,7 @@ libprintbackend_file_la_LDFLAGS =  \
 
 libprintbackend_file_la_LIBADD = \
 	$(top_builddir)/gtk/$(gtktargetlib)		\
+	$(top_builddir)/gdk/$(gdktargetlib)		\
 	$(GTK_DEP_LIBS)
 
 noinst_HEADERS =			\

@@ -1,3 +1,8 @@
+2007-07-09  Matthias Clasen  <mclasen@redhat.com>
+
+	* modules/printbackends/*/Makefile.am: Fix build problems
+	on Cygwin.  (#448604)
+
 2007-07-09  Jaap Haitsma  <jaap@haitsma.org>
 
 	* gtk/gtkstatusicon.c: Remove usage of deprecated GtkTooltips API. Use
