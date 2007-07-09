@@ -1,5 +1,10 @@
 2007-07-09  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkvolumebutton.c: Remove deprecated tooltips,
+	use new tooltips API.  (#449311, Jan Arne Petersen)
+
+2007-07-09  Matthias Clasen  <mclasen@redhat.com>
+
 	* gtk/gtkselection.c (normalize_to_crlf): Don't ignore
 	the passed-in len parameter.  (#430049, Yevgen Muntyan)
 

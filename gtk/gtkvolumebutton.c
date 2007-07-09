@@ -33,8 +33,8 @@
 #include <atk/atk.h>
 
 #include "gtkvolumebutton.h"
-#include "gtktooltips.h"
 #include "gtkstock.h"
+#include "gtktooltip.h"
 
 #include "gtkalias.h"
 
@@ -43,13 +43,16 @@
 struct _GtkVolumeButton
 {
   GtkScaleButton  parent;
-  GtkTooltips    *tooltips;
 };
 
 static void	gtk_volume_button_class_init	(GtkVolumeButtonClass *klass);
 static void	gtk_volume_button_init		(GtkVolumeButton      *button);
-static void	gtk_volume_button_dispose	(GObject *object);
-static void	gtk_volume_button_update_tooltip(GtkVolumeButton *button);
+static gboolean	cb_query_tooltip                (GtkWidget            *button,
+						 gint                  x,
+						 gint                  y,
+						 gboolean              keyboard_mode,
+						 GtkTooltip           *tooltip,
+						 gpointer              user_data);
 static void	cb_value_changed		(GtkVolumeButton      *button,
 						 gdouble               value,
 						 gpointer              user_data);
@@ -59,9 +62,6 @@ G_DEFINE_TYPE (GtkVolumeButton, gtk_volume_button, GTK_TYPE_SCALE_BUTTON)
 static void
 gtk_volume_button_class_init (GtkVolumeButtonClass *klass)
 {
-  GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
-
-  gobject_class->dispose = gtk_volume_button_dispose;
 }
 
 static void
@@ -90,28 +90,13 @@ gtk_volume_button_init (GtkVolumeButton *button)
   g_object_set (G_OBJECT (button),
 		"adjustment", adj,
 		"size", GTK_ICON_SIZE_SMALL_TOOLBAR,
+		"has-tooltip", TRUE,
 	       	NULL);
 
-  button->tooltips = gtk_tooltips_new ();
-  g_object_ref_sink (button->tooltips);
-  gtk_volume_button_update_tooltip (button);
-
+  g_signal_connect (G_OBJECT (button), "query-tooltip",
+		    G_CALLBACK (cb_query_tooltip), NULL);
   g_signal_connect (G_OBJECT (button), "value-changed",
 		    G_CALLBACK (cb_value_changed), NULL);
-}
-
-static void
-gtk_volume_button_dispose (GObject *object)
-{
-  GtkVolumeButton *button;
-
-  button = GTK_VOLUME_BUTTON (object);
-
-  if (button->tooltips)
-    g_object_unref (button->tooltips);
-  button->tooltips = NULL;
-
-  G_OBJECT_CLASS (gtk_volume_button_parent_class)->dispose (object);
 }
 
 /**
@@ -133,8 +118,13 @@ gtk_volume_button_new (void)
   return GTK_WIDGET (button);
 }
 
-static void
-gtk_volume_button_update_tooltip (GtkVolumeButton *button)
+static gboolean
+cb_query_tooltip (GtkWidget  *button,
+		  gint        x,
+		  gint        y,
+		  gboolean    keyboard_mode,
+		  GtkTooltip *tooltip,
+		  gpointer    user_data)
 {
   GtkScaleButton *scale_button = GTK_SCALE_BUTTON (button);
   GtkAdjustment *adj;
@@ -168,16 +158,16 @@ gtk_volume_button_update_tooltip (GtkVolumeButton *button)
       str = g_strdup_printf (Q_("volume percentage|%d %%"), percent);
     }
 
-  gtk_tooltips_set_tip (button->tooltips,
-		       	GTK_WIDGET (button),
-			str, NULL);
+  gtk_tooltip_set_text (tooltip, str);
   g_free (str);
+
+  return TRUE;
 }
 
 static void
 cb_value_changed (GtkVolumeButton *button, gdouble value, gpointer user_data)
 {
-  gtk_volume_button_update_tooltip (button);
+  gtk_widget_trigger_tooltip_query (GTK_WIDGET (button));
 }
 
 
