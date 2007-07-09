@@ -104,6 +104,7 @@
                         <property name="stock_id">gtk-about</property>
                         <signal handler="about_activate" name="activate"/>
                     </object>
+                    <accelerator key="F1"/>
                 </child>
             </object>
         </child>

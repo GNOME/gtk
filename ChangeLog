@@ -1,3 +1,18 @@
+2007-07-09  Johan Dahlin,,,  <jdahlin@lozenge>
+
+	* demos/gtk-demo/demo.ui:
+	* gtk/gtk-builder-convert:
+	* gtk/gtkactiongroup.c: (gtk_action_group_buildable_init),
+	(gtk_action_group_buildable_add_child),
+	(accelerator_start_element),
+	(gtk_action_group_buildable_custom_tag_start),
+	(gtk_action_group_buildable_custom_tag_end):
+	* gtk/gtkuimanager.c: (child_hierarchy_changed_cb),
+	(gtk_ui_manager_buildable_construct_child):
+	* tests/buildertest.c: (test_uimanager_simple):
+
+	Add actiongroup/action accelerator support for builder. #454654
+
 2007-07-08  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtkbuilderparser.c (pgettext): Support old-style

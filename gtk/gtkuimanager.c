@@ -453,6 +453,29 @@ gtk_ui_manager_buildable_add_child (GtkBuildable  *buildable,
 				      pos);
 }
 
+static void
+child_hierarchy_changed_cb (GtkWidget *widget,
+			    GtkWidget *unused,
+			    GtkUIManager *uimgr)
+{
+  GtkWidget *toplevel;
+  GtkAccelGroup *group;
+  GSList *groups;
+
+  toplevel = gtk_widget_get_toplevel (widget);
+  if (!toplevel || !GTK_IS_WINDOW (toplevel))
+    return;
+  
+  group = gtk_ui_manager_get_accel_group (uimgr);
+  groups = gtk_accel_groups_from_object (toplevel);
+  if (g_slist_find (groups, group) == NULL)
+    gtk_window_add_accel_group (GTK_WINDOW (toplevel), group);
+
+  g_signal_handlers_disconnect_by_func (widget,
+					child_hierarchy_changed_cb,
+					uimgr);
+}
+
 static GObject *
 gtk_ui_manager_buildable_construct_child (GtkBuildable *buildable,
 					  GtkBuilder   *builder,
@@ -464,10 +487,16 @@ gtk_ui_manager_buildable_construct_child (GtkBuildable *buildable,
   name = g_strdup_printf ("ui/%s", id);
   widget = gtk_ui_manager_get_widget (GTK_UI_MANAGER (buildable), name);
   if (!widget)
-    g_error ("Unknown ui manager child: %s\n", name);
-
+    {
+      g_error ("Unknown ui manager child: %s\n", name);
+      g_free (name);
+      return NULL;
+    }
   g_free (name);
 
+  g_signal_connect (widget, "hierarchy-changed",
+		    G_CALLBACK (child_hierarchy_changed_cb),
+		    GTK_UI_MANAGER (buildable));
   return G_OBJECT (widget);
 }
 

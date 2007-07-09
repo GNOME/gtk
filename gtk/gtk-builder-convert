@@ -92,6 +92,16 @@ def get_signal_nodes(node):
             signals.append(child)
     return signals
 
+def get_accelerator_nodes(node):
+    assert node.tagName == 'object'
+    accelerators = []
+    for child in node.childNodes:
+        if child.nodeType == Node.TEXT_NODE:
+            continue
+        if child.tagName == 'accelerator':
+            accelerators.append(child)
+    return accelerators
+
 def get_object_node(child_node):
     assert child_node.tagName == 'child'
     nodes = []
@@ -417,6 +427,15 @@ class GtkBuilderConverter(object):
         child = self._dom.createElement('child')
         group.appendChild(child)
         child.appendChild(action)
+
+        for accelerator in get_accelerator_nodes(node):
+            signal = accelerator.getAttribute('signal')
+            if signal_name != 'activate':
+                print 'Unhandled accelerator signal for %s::%s' % (
+                    node.getAttribute('class'), signal_name)
+                continue
+            accelerator.removeAttribute('signal')
+            child.appendChild(accelerator)
 
     def _convert_sizegroup(self, node, prop):
         # This is Gazpacho only

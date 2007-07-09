@@ -29,6 +29,7 @@
  */
 
 #include <config.h>
+#include <string.h>
 
 #include "gtkactiongroup.h"
 #include "gtkbuildable.h"
@@ -39,6 +40,7 @@
 #include "gtkradioaction.h"
 #include "gtkaccelmap.h"
 #include "gtkmarshalers.h"
+#include "gtkbuilderprivate.h"
 #include "gtkprivate.h"
 #include "gtkintl.h"
 #include "gtkalias.h"
@@ -97,6 +99,17 @@ static void gtk_action_group_buildable_add_child (GtkBuildable  *buildable,
 static void gtk_action_group_buildable_set_name (GtkBuildable *buildable,
 						 const gchar  *name);
 static const gchar* gtk_action_group_buildable_get_name (GtkBuildable *buildable);
+static gboolean gtk_action_group_buildable_custom_tag_start (GtkBuildable     *buildable,
+							     GtkBuilder       *builder,
+							     GObject          *child,
+							     const gchar      *tagname,
+							     GMarkupParser    *parser,
+							     gpointer         *data);
+static void gtk_action_group_buildable_custom_tag_end (GtkBuildable *buildable,
+						       GtkBuilder   *builder,
+						       GObject      *child,
+						       const gchar  *tagname,
+						       gpointer     *user_data);
 
 GType
 gtk_action_group_get_type (void)
@@ -298,6 +311,8 @@ gtk_action_group_buildable_init (GtkBuildableIface *iface)
   iface->add_child = gtk_action_group_buildable_add_child;
   iface->set_name = gtk_action_group_buildable_set_name;
   iface->get_name = gtk_action_group_buildable_get_name;
+  iface->custom_tag_start = gtk_action_group_buildable_custom_tag_start;
+  iface->custom_tag_end = gtk_action_group_buildable_custom_tag_end;
 }
 
 static void
@@ -306,8 +321,8 @@ gtk_action_group_buildable_add_child (GtkBuildable  *buildable,
 				      GObject       *child,
 				      const gchar   *type)
 {
-  gtk_action_group_add_action (GTK_ACTION_GROUP (buildable),
-			       GTK_ACTION (child));
+  gtk_action_group_add_action_with_accel (GTK_ACTION_GROUP (buildable),
+					  GTK_ACTION (child), NULL);
 }
 
 static void
@@ -323,6 +338,113 @@ gtk_action_group_buildable_get_name (GtkBuildable *buildable)
 {
   GtkActionGroup *self = GTK_ACTION_GROUP (buildable);
   return self->private_data->name;
+}
+
+typedef struct {
+  GObject *child;
+  guint    key;
+  guint    modifiers;
+} AcceleratorParserData;
+
+static void
+accelerator_start_element (GMarkupParseContext *context,
+			   const gchar         *element_name,
+			   const gchar        **names,
+			   const gchar        **values,
+			   gpointer             user_data,
+			   GError             **error)
+{
+  gint i;
+  guint key = 0;
+  gint modifiers = 0;
+  AcceleratorParserData *parser_data = (AcceleratorParserData*)user_data;
+
+  if (strcmp (element_name, "accelerator") != 0)
+    g_warning ("Unknown <accelerator> tag: %s", element_name);
+
+  for (i = 0; names[i]; i++)
+    {
+      if (strcmp (names[i], "key") == 0)
+	key = gdk_keyval_from_name (values[i]);
+      else if (strcmp (names[i], "modifiers") == 0)
+	{
+	  if (!_gtk_builder_flags_from_string (GDK_TYPE_MODIFIER_TYPE,
+					       values[i],
+					       &modifiers,
+					       error))
+	      return;
+	}
+    }
+
+  if (key == 0)
+    {
+      g_warning ("<accelerator> requires a key attribute");
+      return;
+    }
+  parser_data->key = key;
+  parser_data->modifiers = (guint)modifiers;
+}
+
+static const GMarkupParser accelerator_parser =
+  {
+    accelerator_start_element
+  };
+
+static gboolean
+gtk_action_group_buildable_custom_tag_start (GtkBuildable     *buildable,
+					     GtkBuilder       *builder,
+					     GObject          *child,
+					     const gchar      *tagname,
+					     GMarkupParser    *parser,
+					     gpointer         *user_data)
+{
+  AcceleratorParserData *parser_data;
+
+  if (child && strcmp (tagname, "accelerator") == 0)
+    {
+      parser_data = g_slice_new0 (AcceleratorParserData);
+      parser_data->child = child;
+      *user_data = parser_data;
+      *parser = accelerator_parser;
+
+      return TRUE;
+    }
+  return FALSE;
+}
+
+static void
+gtk_action_group_buildable_custom_tag_end (GtkBuildable *buildable,
+					   GtkBuilder   *builder,
+					   GObject      *child,
+					   const gchar  *tagname,
+					   gpointer     *user_data)
+{
+  AcceleratorParserData *data;
+  
+  if (strcmp (tagname, "accelerator") == 0)
+    {
+      GtkActionGroup *action_group;
+      GtkAction *action;
+      gchar *accel_path;
+      
+      data = (AcceleratorParserData*)user_data;
+      action_group = GTK_ACTION_GROUP (buildable);
+      action = GTK_ACTION (child);
+	
+      accel_path = g_strconcat ("<Actions>/",
+				action_group->private_data->name, "/",
+				gtk_action_get_name (action), NULL);
+
+      if (gtk_accel_map_lookup_entry (accel_path, NULL))
+	gtk_accel_map_change_entry (accel_path, data->key, data->modifiers, TRUE);
+      else
+	gtk_accel_map_add_entry (accel_path, data->key, data->modifiers);
+
+      gtk_action_set_accel_path (action, accel_path);
+      
+      g_free (accel_path);
+      g_slice_free (AcceleratorParserData, data);
+    }
 }
 
 /**

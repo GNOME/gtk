@@ -259,6 +259,7 @@ gboolean test_uimanager_simple (void)
     "          <object class=\"GtkAction\" id=\"file\">"
     "            <property name=\"label\">_File</property>"
     "          </object>"
+    "          <accelerator key=\"n\" modifiers=\"GDK_CONTROL_MASK\"/>"
     "        </child>"
     "      </object>"
     "    </child>"
