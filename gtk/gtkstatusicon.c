@@ -35,7 +35,6 @@
 #include "gtkintl.h"
 #include "gtkiconfactory.h"
 #include "gtkmarshalers.h"
-#include "gtktooltips.h"
 #include "gtktrayicon.h"
 
 #include "gtkprivate.h"
@@ -93,7 +92,6 @@ struct _GtkStatusIconPrivate
 #ifdef GDK_WINDOWING_X11
   GtkWidget    *tray_icon;
   GtkWidget    *image;
-  GtkTooltips  *tooltips;
 #endif
 
 #ifdef GDK_WINDOWING_WIN32
@@ -505,8 +503,6 @@ gtk_status_icon_init (GtkStatusIcon *status_icon)
   g_signal_connect_swapped (priv->image, "size-allocate",
 			    G_CALLBACK (gtk_status_icon_size_allocate), status_icon);
 
-  status_icon->priv->tooltips = gtk_tooltips_new ();
-  g_object_ref_sink (priv->tooltips);
 #endif
 
 #ifdef GDK_WINDOWING_WIN32
@@ -600,10 +596,6 @@ gtk_status_icon_finalize (GObject *object)
   priv->blank_icon = NULL;
 
 #ifdef GDK_WINDOWING_X11
-  if (priv->tooltips)
-    g_object_unref (priv->tooltips);
-  priv->tooltips = NULL;
-
   gtk_widget_destroy (priv->tray_icon);
 #endif
 
@@ -1601,8 +1593,9 @@ gtk_status_icon_set_tooltip (GtkStatusIcon *status_icon,
   priv = status_icon->priv;
 
 #ifdef GDK_WINDOWING_X11
-  gtk_tooltips_set_tip (priv->tooltips, priv->tray_icon,
-			tooltip_text, NULL);
+
+  gtk_widget_set_tooltip_text (priv->tray_icon, tooltip_text);
+
 #endif
 #ifdef GDK_WINDOWING_WIN32
   if (tooltip_text == NULL)

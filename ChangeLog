@@ -1,3 +1,8 @@
+2007-07-09  Jaap Haitsma  <jaap@haitsma.org>
+
+	* gtk/gtkstatusicon.c: Remove usage of deprecated GtkTooltips API. Use
+	gtk_widget_set_tooltip_text instead
+
 2007-07-09  Johan Dahlin  <jdahlin@async.com.br>
 
 	* gtk/gtktooltip.c:
