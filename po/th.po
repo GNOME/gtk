@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: gtk+\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2007-07-02 15:21-0400\n"
-"PO-Revision-Date: 2007-05-31 16:04+0700\n"
+"PO-Revision-Date: 2007-07-09 19:00+0700\n"
 "Last-Translator: Theppitak Karoonboonyanan <thep@linux.thai.net>\n"
 "Language-Team: Thai <L10n@opentle.net>\n"
 "MIME-Version: 1.0\n"
@@ -1740,12 +1740,11 @@ msgstr "ไม่รู้จัก"
 
 #: gtk/gtkfilechooserdefault.c:10994
 msgid "Today at %H:%M"
-msgstr ""
+msgstr "วันนี้ %H:%M น."
 
 #: gtk/gtkfilechooserdefault.c:10996
-#, fuzzy
 msgid "Yesterday at %H:%M"
-msgstr "เมื่อวาน"
+msgstr "เมื่อวาน %H:%M น."
 
 #: gtk/gtkfilechoosersettings.c:262 gtk/gtkfilesel.c:1408
 #: gtk/gtkfilesel.c:1417 gtk/gtkfilesystemunix.c:1047
@@ -2781,9 +2780,8 @@ msgid "_Delete"
 msgstr "_ลบ"
 
 #: gtk/gtkstock.c:309
-#, fuzzy
 msgid "_Discard"
-msgstr "ไม่ใช้"
+msgstr "_ละทิ้ง"
 
 #: gtk/gtkstock.c:310
 msgid "_Disconnect"
