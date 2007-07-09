@@ -1,5 +1,11 @@
 2007-07-09  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtktreeview.c
+	(gtk_tree_view_convert_bin_window_to_widget_coords:
+	Fix a typo in the docs.  (#453673, Guillaume Cottenceau)
+
+2007-07-09  Matthias Clasen  <mclasen@redhat.com>
+
 	* gtk/gtkcombobox.c (gtk_combo_box_model_row_deleted): Emit 
 	::changed when removing the active row.  (#452056, Paul Pogonyshev)
 

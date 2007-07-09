@@ -12987,7 +12987,7 @@ gtk_tree_view_convert_widget_to_bin_window_coords (GtkTreeView *tree_view,
  * @wx: return location for widget X coordinate
  * @wy: return location for widget Y coordinate
  *
- * Converts bin_window coordinates (see gtk_tree_view_get_bin_window()).
+ * Converts bin_window coordinates (see gtk_tree_view_get_bin_window())
  * to widget relative coordinates.
  *
  * Since: 2.12
