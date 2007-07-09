@@ -676,7 +676,7 @@ gtk_frame_size_allocate (GtkWidget     *widget,
       
       child_allocation.x = frame->child_allocation.x + LABEL_SIDE_PAD +
 	(frame->child_allocation.width - child_requisition.width - 2 * LABEL_PAD - 2 * LABEL_SIDE_PAD) * xalign + LABEL_PAD;
-      child_allocation.width = child_requisition.width;
+      child_allocation.width = MIN (child_requisition.width, new_allocation.width - 2 * LABEL_PAD - 2 * LABEL_SIDE_PAD);
 
       child_allocation.y = frame->child_allocation.y - MAX (child_requisition.height, widget->style->ythickness);
       child_allocation.height = child_requisition.height;
