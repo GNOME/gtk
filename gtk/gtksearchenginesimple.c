@@ -95,13 +95,13 @@ search_thread_data_new (GtkSearchEngineSimple *engine,
   
   data = g_new0 (SearchThreadData, 1);
   
-  data->engine = engine;
+  data->engine = g_object_ref (engine);
   uri = _gtk_query_get_location (query);
   if (uri != NULL) 
     {
       data->path = g_filename_from_uri (uri, NULL, NULL);
       g_free (uri);
-    }
+    }`
   if (data->path == NULL)
     data->path = g_strdup (g_get_home_dir ());
 	
@@ -117,6 +117,7 @@ search_thread_data_new (GtkSearchEngineSimple *engine,
 static void 
 search_thread_data_free (SearchThreadData *data)
 {
+  g_object_unref (data->engine);
   g_free (data->path);
   g_strfreev (data->words);
   g_free (data);
@@ -179,7 +180,7 @@ send_batch (SearchThreadData *data)
       hits = g_new (SearchHits, 1);
       hits->uris = data->uri_hits;
       hits->thread_data = data;
-      g_idle_add (search_thread_add_hits_idle, hits);
+      gdk_threads_add_idle (search_thread_add_hits_idle, hits);
     }
   data->uri_hits = NULL;
 }
@@ -277,7 +278,7 @@ search_thread_func (gpointer user_data)
 
   send_batch (data);
   
-  g_idle_add (search_thread_done_idle, data);
+  gdk_threads_add_idle (search_thread_done_idle, data);
 #endif /* HAVE_FTW_H */
   
   return NULL;

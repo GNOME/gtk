@@ -1,5 +1,10 @@
 2007-07-09  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtksearchenginesimple.c: Address some thread-safety
+	issues.  (#452598)
+
+2007-07-09  Matthias Clasen  <mclasen@redhat.com>
+
 	* modules/printbackends/*/Makefile.am: Fix build problems
 	on Cygwin.  (#448604)
 
