@@ -35,6 +35,7 @@
 #endif
 
 #include "gtksearchenginesimple.h"
+#include "gtkprivate.h"
 
 #include <string.h>
 
@@ -101,7 +102,7 @@ search_thread_data_new (GtkSearchEngineSimple *engine,
     {
       data->path = g_filename_from_uri (uri, NULL, NULL);
       g_free (uri);
-    }`
+    }
   if (data->path == NULL)
     data->path = g_strdup (g_get_home_dir ());
 	
@@ -200,7 +201,6 @@ search_visit_func (const char        *fpath,
   gchar *lower_name;
   gchar *uri;
   gboolean hit;
-  GList *l;
   gboolean is_hidden;
   
   data = (SearchThreadData*)g_static_private_get (&search_thread_data);
