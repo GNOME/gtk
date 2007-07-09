@@ -1,5 +1,10 @@
 2007-07-09  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkcombobox.c (gtk_combo_box_model_row_deleted): Emit 
+	::changed when removing the active row.  (#452056, Paul Pogonyshev)
+
+2007-07-09  Matthias Clasen  <mclasen@redhat.com>
+
 	* gtk/gtksearchenginesimple.c: Address some thread-safety
 	issues.  (#452598)
 

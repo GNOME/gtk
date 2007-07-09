@@ -3077,10 +3077,11 @@ gtk_combo_box_model_row_deleted (GtkTreeModel     *model,
 {
   GtkComboBox *combo_box = GTK_COMBO_BOX (user_data);
 
-  if (combo_box->priv->cell_view)
+  if (!gtk_tree_row_reference_valid (combo_box->priv->active_row))
     {
-      if (!gtk_tree_row_reference_valid (combo_box->priv->active_row))
+      if (combo_box->priv->cell_view)
 	gtk_cell_view_set_displayed_row (GTK_CELL_VIEW (combo_box->priv->cell_view), NULL);
+      g_signal_emit (combo_box, combo_box_signals[CHANGED], 0);
     }
   
   if (combo_box->priv->tree_view)
