@@ -1,3 +1,8 @@
+2007-07-09  Matthias Clasen  <mclasen@redhat.com>
+
+	* gdk-pixbuf/tmpl/scaling.sgml: Remove uses of deprecated api 
+	in example.  (#454835, Guillaume Cottenceau)
+
 2007-07-09  Johan Dahlin,,,  <jdahlin@lozenge>
 
 	* gtk/tmpl/gtkactiongroup.sgml: Document <accelerator> element
