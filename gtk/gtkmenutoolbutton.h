@@ -68,10 +68,17 @@ void          gtk_menu_tool_button_set_menu       (GtkMenuToolButton *button,
                                                    GtkWidget         *menu);
 GtkWidget    *gtk_menu_tool_button_get_menu       (GtkMenuToolButton *button);
 
+#ifndef GTK_DISABLE_DEPRECATED
 void          gtk_menu_tool_button_set_arrow_tooltip (GtkMenuToolButton *button,
                                                       GtkTooltips       *tooltips,
                                                       const gchar       *tip_text,
                                                       const gchar       *tip_private);
+#endif /* GTK_DISABLE_DEPRECATED */
+
+void          gtk_menu_tool_button_set_arrow_tooltip_text   (GtkMenuToolButton *button,
+							     const gchar       *text);
+void          gtk_menu_tool_button_set_arrow_tooltip_markup (GtkMenuToolButton *button,
+							     const gchar       *markup);
 
 G_END_DECLS
 

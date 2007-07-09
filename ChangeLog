@@ -1,3 +1,37 @@
+2007-07-09  Kristian Rietveld  <kris@imendio.com>
+
+	Replace non-deprecated API using old tooltips API, deprecate
+	old tooltips API for real. (#451575).
+
+	* gtk/gtk.symbols: updated.
+
+	* gtk/gtkwidget.c (gtk_widget_real_show_help): don't call
+	_gtk_tooltips_toggle_keyboard_mode() anymore.
+
+	* gtk/gtkmenutoolbutton.[ch] (gtk_menu_tool_button_set_arrow_tooltip):
+	deprecated,
+	(gtk_menu_tool_button_set_arrow_tooltip_{text,markup}): replacements.
+
+	* gtk/gtktoolitem.[ch] (gtk_tool_item_real_set_tooltip): use
+	new API,
+	(gtk_tool_item_set_tooltip): deprecated,
+	(gtk_tool_item_set_tooltip_{text,markup): replacements.
+	(GtkToolItemClass:set_tooltip): deprecated.
+
+	* gtk/gtktooltips.[ch]: strip out all unused parts, made
+	gtk_tooltips_set_tip() call gtk_widget_set_tooltip_text(),
+	deprecate all of gtk_tooltips_*.
+
+	* gtk/gtktoolbar.[ch] (gtk_toolbar_get_tooltips): always return
+	TRUE,
+	(GtkToolbar:tooltips): deprecated, renamed.
+
+	* gtk/gtkaction.c (gtk_action_sync_tooltip): use new API to
+	set the tooltip text.
+
+	* tests/autotestfilechooser.c: #undef GTK_DISABLE_DEPRECATED for now,
+	will be removed GtkFileChooserDefault has been converted.
+
 2007-07-09  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtktreeview.c

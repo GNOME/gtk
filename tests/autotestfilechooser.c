@@ -30,6 +30,7 @@
  */
 
 #define GTK_FILE_SYSTEM_ENABLE_UNSUPPORTED
+#undef GTK_DISABLE_DEPRECATED
 
 #include <config.h>
 #include <string.h>

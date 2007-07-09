@@ -1456,10 +1456,8 @@ gtk_action_sync_tooltip (GtkAction *action,
   parent = gtk_widget_get_parent (proxy);
   
   if (GTK_IS_TOOL_ITEM (proxy) && GTK_IS_TOOLBAR (parent))
-    gtk_tool_item_set_tooltip (GTK_TOOL_ITEM (proxy), 
-			       GTK_TOOLBAR (parent)->tooltips,
-			       action->private_data->tooltip,
-			       NULL);
+    gtk_tool_item_set_tooltip_text (GTK_TOOL_ITEM (proxy),
+				    action->private_data->tooltip);
 }
 
 static void 

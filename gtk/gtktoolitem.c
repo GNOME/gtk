@@ -773,7 +773,7 @@ gtk_tool_item_real_set_tooltip (GtkToolItem *tool_item,
   if (!child)
     return FALSE;
 
-  gtk_tooltips_set_tip (tooltips, child, tip_text, tip_private);
+  gtk_widget_set_tooltip_text (child, tip_text);
 
   return TRUE;
 }
@@ -790,6 +790,8 @@ gtk_tool_item_real_set_tooltip (GtkToolItem *tool_item,
  * to be used. See gtk_tooltips_set_tip().
  * 
  * Since: 2.4
+ *
+ * Deprecated: 2.12: Use gtk_tool_item_set_tooltip_text() instead.
  **/
 void
 gtk_tool_item_set_tooltip (GtkToolItem *tool_item,
@@ -803,6 +805,54 @@ gtk_tool_item_set_tooltip (GtkToolItem *tool_item,
 
   g_signal_emit (tool_item, toolitem_signals[SET_TOOLTIP], 0,
 		 tooltips, tip_text, tip_private, &retval);
+}
+
+/**
+ * gtk_tool_item_set_tooltip_text:
+ * @tool_item: a #GtkToolItem: 
+ * @text: text to be used as tooltip for @tool_item
+ *
+ * Sets the text to be displayed as tooltip on the item.
+ * See gtk_widget_set_tooltip_text().
+ *
+ * Since: 2.12
+ **/
+void
+gtk_tool_item_set_tooltip_text (GtkToolItem *tool_item,
+			        const gchar *text)
+{
+  GtkWidget *child;
+
+  g_return_if_fail (GTK_IS_TOOL_ITEM (tool_item));
+
+  child = GTK_BIN (tool_item)->child;
+
+  if (child)
+    gtk_widget_set_tooltip_text (child, text);
+}
+
+/**
+ * gtk_tool_item_set_tooltip_markup:
+ * @tool_item: a #GtkToolItem: 
+ * @markup: markup text to be used as tooltip for @tool_item
+ *
+ * Sets the markup text to be displayed as tooltip on the item.
+ * See gtk_widget_set_tooltip_markup().
+ *
+ * Since: 2.12
+ **/
+void
+gtk_tool_item_set_tooltip_markup (GtkToolItem *tool_item,
+				  const gchar *markup)
+{
+  GtkWidget *child;
+
+  g_return_if_fail (GTK_IS_TOOL_ITEM (tool_item));
+
+  child = GTK_BIN (tool_item)->child;
+
+  if (child)
+    gtk_widget_set_tooltip_markup (child, markup);
 }
 
 /**

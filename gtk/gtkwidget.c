@@ -4684,7 +4684,6 @@ gtk_widget_real_show_help (GtkWidget        *widget,
 {
   if (help_type == GTK_WIDGET_HELP_TOOLTIP)
     {
-      _gtk_tooltips_toggle_keyboard_mode (widget);
       _gtk_tooltip_toggle_keyboard_mode (widget);
 
       return TRUE;

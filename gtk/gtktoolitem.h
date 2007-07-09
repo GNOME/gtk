@@ -55,10 +55,14 @@ struct _GtkToolItemClass
   /* signals */
   gboolean   (* create_menu_proxy)    (GtkToolItem *tool_item);
   void       (* toolbar_reconfigured) (GtkToolItem *tool_item);
+#ifndef GTK_DISABLE_DEPRECATED
   gboolean   (* set_tooltip)	      (GtkToolItem *tool_item,
 				       GtkTooltips *tooltips,
 				       const gchar *tip_text,
 				       const gchar *tip_private);
+#else
+  gpointer _set_tooltip;
+#endif
 
   /* Padding for future expansion */
   void (* _gtk_reserved1) (void);
@@ -78,10 +82,16 @@ void            gtk_tool_item_set_expand               (GtkToolItem *tool_item,
 							gboolean     expand);
 gboolean        gtk_tool_item_get_expand               (GtkToolItem *tool_item);
 
+#ifndef GTK_DISABLE_DEPRECATED
 void            gtk_tool_item_set_tooltip              (GtkToolItem *tool_item,
 							GtkTooltips *tooltips,
 							const gchar *tip_text,
 							const gchar *tip_private);
+#endif /* GTK_DISABLE_DEPRECATED */
+void            gtk_tool_item_set_tooltip_text         (GtkToolItem *toolitem,
+							const gchar *text);
+void            gtk_tool_item_set_tooltip_markup       (GtkToolItem *toolitem,
+							const gchar *markup);
 
 void            gtk_tool_item_set_use_drag_window      (GtkToolItem *toolitem,
 							gboolean     use_drag_window);

@@ -2955,7 +2955,7 @@ gtk_toolbar_get_tooltips (GtkToolbar *toolbar)
 {
   g_return_val_if_fail (GTK_IS_TOOLBAR (toolbar), FALSE);
   
-  return toolbar->tooltips->enabled;
+  return TRUE;
 }
 
 /**

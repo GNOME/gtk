@@ -99,7 +99,11 @@ struct _GtkToolbar
   GtkToolbarStyle  style;
   GtkIconSize      icon_size;
   
+#ifndef GTK_DISABLE_DEPRECATED
   GtkTooltips     *tooltips;
+#else
+  gpointer         _tooltips;
+#endif
   
   /*< private >*/
   gint             button_maxw;		/* maximum width of homogeneous children */

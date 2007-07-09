@@ -2361,7 +2361,11 @@ gtk_menu_tool_button_get_menu
 gtk_menu_tool_button_get_type G_GNUC_CONST
 gtk_menu_tool_button_new
 gtk_menu_tool_button_new_from_stock
+#ifndef GTK_DISABLE_DEPRECATED
 gtk_menu_tool_button_set_arrow_tooltip
+#endif
+gtk_menu_tool_button_set_arrow_tooltip_markup
+gtk_menu_tool_button_set_arrow_tooltip_text
 gtk_menu_tool_button_set_menu
 #endif
 #endif
@@ -4055,7 +4059,11 @@ gtk_tool_item_set_expand
 gtk_tool_item_set_homogeneous
 gtk_tool_item_set_is_important
 gtk_tool_item_set_proxy_menu_item
+#ifndef GTK_DISABLE_DEPRECATED
 gtk_tool_item_set_tooltip
+#endif
+gtk_tool_item_set_tooltip_markup
+gtk_tool_item_set_tooltip_text
 gtk_tool_item_set_use_drag_window
 gtk_tool_item_set_visible_horizontal
 gtk_tool_item_set_visible_vertical
