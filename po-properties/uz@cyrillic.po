@@ -1,16 +1,15 @@
-# translation of gtk20.po to Uzbek
-# Copyright (C) 1998-2003 Free Software Foundation, Inc.
-# Mashrab Kuvatov <kmashrab@uni-bremen.de>
-# Mashrab Kuvatov <kmashrab@uni-bremen.de>, 2003.
+# translation of gtk+.gtk-2-4.po to Uzbek
+# Copyright (C) 1998-2003, 2004 Free Software Foundation, Inc.
+# Mashrab Kuvatov <kmashrab@uni-bremen.de>, 2003, 2004.
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: gtk20\n"
+"Project-Id-Version: gtk+.gtk-2-4\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2007-07-02 15:21-0400\n"
-"PO-Revision-Date: 2003-09-06 00:29+0200\n"
+"PO-Revision-Date: 2004-07-19 18:54+0200\n"
 "Last-Translator: Mashrab Kuvatov <kmashrab@uni-bremen.de>\n"
-"Language-Team: Uzbek <uz-li@yahoogroups.com>\n"
+"Language-Team: Uzbek <kmashrab@uni-bremen.de>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -27,7 +26,7 @@ msgstr ""
 #: gdk-pixbuf/gdk-pixbuf.c:99
 #, fuzzy
 msgid "Colorspace"
-msgstr "_Yopish"
+msgstr "_Ёпиш"
 
 #: gdk-pixbuf/gdk-pixbuf.c:100
 msgid "The colorspace in which the samples are interpreted"
@@ -58,8 +57,9 @@ msgid "The number of columns of the pixbuf"
 msgstr ""
 
 #: gdk-pixbuf/gdk-pixbuf.c:142 gtk/gtklayout.c:627
+#, fuzzy
 msgid "Height"
-msgstr ""
+msgstr "Ў_нг"
 
 #: gdk-pixbuf/gdk-pixbuf.c:143
 msgid "The number of rows of the pixbuf"
@@ -211,8 +211,9 @@ msgid ""
 msgstr ""
 
 #: gtk/gtkaboutdialog.c:398
+#, fuzzy
 msgid "Logo Icon Name"
-msgstr ""
+msgstr "Номи"
 
 #: gtk/gtkaboutdialog.c:399
 msgid "A named icon to use as the logo for the about box."
@@ -245,7 +246,7 @@ msgstr ""
 #: gtk/gtkaction.c:202 gtk/gtkactiongroup.c:157 gtk/gtkprinter.c:119
 #: gtk/gtktextmark.c:89
 msgid "Name"
-msgstr ""
+msgstr "Номи"
 
 #: gtk/gtkaction.c:203
 msgid "A unique name for the action."
@@ -286,8 +287,9 @@ msgstr ""
 
 #: gtk/gtkaction.c:258 gtk/gtkcellrendererpixbuf.c:172 gtk/gtkimage.c:229
 #: gtk/gtkprinter.c:168 gtk/gtkstatusicon.c:200 gtk/gtkwindow.c:592
+#, fuzzy
 msgid "Icon Name"
-msgstr ""
+msgstr "Номи"
 
 #: gtk/gtkaction.c:259 gtk/gtkcellrendererpixbuf.c:173 gtk/gtkimage.c:230
 #: gtk/gtkstatusicon.c:201
@@ -576,8 +578,9 @@ msgid "Number of pixels around the content pages."
 msgstr ""
 
 #: gtk/gtkassistant.c:286
+#, fuzzy
 msgid "Page type"
-msgstr ""
+msgstr "Қўй_иш"
 
 #: gtk/gtkassistant.c:287
 msgid "The type of the assistant page"
@@ -697,7 +700,7 @@ msgstr ""
 #: gtk/gtkbox.c:123
 #, fuzzy
 msgid "Fill"
-msgstr "Fayllar"
+msgstr "Файллар"
 
 #: gtk/gtkbox.c:124
 msgid ""
@@ -725,8 +728,9 @@ msgstr ""
 
 #: gtk/gtkbox.c:144 gtk/gtknotebook.c:683 gtk/gtkpaned.c:219
 #: gtk/gtkruler.c:110
+#, fuzzy
 msgid "Position"
-msgstr ""
+msgstr "Сўроқ"
 
 #: gtk/gtkbox.c:145 gtk/gtknotebook.c:684
 msgid "The index of the child in the parent"
@@ -791,8 +795,9 @@ msgid "Child widget to appear next to the button text"
 msgstr ""
 
 #: gtk/gtkbutton.c:300
+#, fuzzy
 msgid "Image position"
-msgstr ""
+msgstr "Сўроқ"
 
 #: gtk/gtkbutton.c:301
 msgid "The position of the image relative to the text"
@@ -871,15 +876,16 @@ msgstr ""
 #: gtk/gtkcalendar.c:417
 #, fuzzy
 msgid "Year"
-msgstr "_Tozalash"
+msgstr "тозалаш"
 
 #: gtk/gtkcalendar.c:418
 msgid "The selected year"
 msgstr ""
 
 #: gtk/gtkcalendar.c:424
+#, fuzzy
 msgid "Month"
-msgstr ""
+msgstr "_Шрифт"
 
 #: gtk/gtkcalendar.c:425
 msgid "The selected month (as a number between 0 and 11)"
@@ -928,8 +934,9 @@ msgid "If TRUE, week numbers are displayed"
 msgstr ""
 
 #: gtk/gtkcellrenderer.c:177
+#, fuzzy
 msgid "mode"
-msgstr ""
+msgstr "Olib _tashlash"
 
 #: gtk/gtkcellrenderer.c:178
 msgid "Editable mode of the CellRenderer"
@@ -988,8 +995,9 @@ msgid "The fixed width"
 msgstr ""
 
 #: gtk/gtkcellrenderer.c:251
+#, fuzzy
 msgid "height"
-msgstr ""
+msgstr "Ў_нг"
 
 #: gtk/gtkcellrenderer.c:252
 msgid "The fixed height"
@@ -1062,24 +1070,24 @@ msgstr ""
 #: gtk/gtkcellrendereraccel.c:159
 #, fuzzy
 msgid "Accelerator Mode"
-msgstr "Fayllni o'chirish"
+msgstr "Файллни ўчириш"
 
 #: gtk/gtkcellrendereraccel.c:160
 msgid "The type of accelerators"
 msgstr ""
 
 #: gtk/gtkcellrenderercombo.c:89
+#, fuzzy
 msgid "Model"
-msgstr ""
+msgstr "Жилд"
 
 #: gtk/gtkcellrenderercombo.c:90
 msgid "The model containing the possible values for the combo box"
 msgstr ""
 
 #: gtk/gtkcellrenderercombo.c:110 gtk/gtkcomboboxentry.c:106
-#, fuzzy
 msgid "Text Column"
-msgstr "Ustunlar"
+msgstr ""
 
 #: gtk/gtkcellrenderercombo.c:111 gtk/gtkcomboboxentry.c:107
 msgid "A column in the data source model to get the strings from"
@@ -1385,7 +1393,7 @@ msgstr ""
 
 #: gtk/gtkcellrenderertext.c:388 gtk/gtktexttag.c:378
 msgid "Language"
-msgstr "Til"
+msgstr ""
 
 #: gtk/gtkcellrenderertext.c:389
 msgid ""
@@ -1665,7 +1673,7 @@ msgstr ""
 #: gtk/gtkfontbutton.c:143 gtk/gtkprintjob.c:116 gtk/gtktreeviewcolumn.c:264
 #, fuzzy
 msgid "Title"
-msgstr "Fayllar"
+msgstr "Файллар"
 
 #: gtk/gtkcolorbutton.c:188
 msgid "The title of the color selection dialog"
@@ -2054,7 +2062,7 @@ msgstr ""
 #: gtk/gtkentry.c:606
 #, fuzzy
 msgid "Truncate multiline"
-msgstr "Fayllni o'chirish"
+msgstr "Файллни ўчириш"
 
 #: gtk/gtkentry.c:607
 msgid "Whether to truncate multiline pastes to one line."
@@ -2101,9 +2109,8 @@ msgid "Minimum length of the search key in order to look up matches"
 msgstr ""
 
 #: gtk/gtkentrycompletion.c:302 gtk/gtkiconview.c:583
-#, fuzzy
 msgid "Text column"
-msgstr "Ustunlar"
+msgstr ""
 
 #: gtk/gtkentrycompletion.c:303
 msgid "The column of the model containing the strings."
@@ -2224,7 +2231,7 @@ msgstr ""
 #: gtk/gtkfilechooser.c:204
 #, fuzzy
 msgid "File System Backend"
-msgstr "Fayllar"
+msgstr "Файл тизими"
 
 #: gtk/gtkfilechooser.c:205
 msgid "Name of file system backend to use"
@@ -2233,7 +2240,7 @@ msgstr ""
 #: gtk/gtkfilechooser.c:210 gtk/gtkrecentchooser.c:169
 #, fuzzy
 msgid "Filter"
-msgstr "Fayllar"
+msgstr "Файллар"
 
 #: gtk/gtkfilechooser.c:211
 msgid "The current filter for selecting which files are displayed"
@@ -2283,7 +2290,7 @@ msgstr ""
 #: gtk/gtkfilechooser.c:246 gtk/gtkfilesel.c:539 gtk/gtkrecentchooser.c:142
 #, fuzzy
 msgid "Select Multiple"
-msgstr "Fayllni o'chirish"
+msgstr "Файллни ўчириш"
 
 #: gtk/gtkfilechooser.c:247 gtk/gtkfilesel.c:540
 msgid "Whether to allow multiple files to be selected"
@@ -2325,6 +2332,7 @@ msgstr ""
 
 #: gtk/gtkfilesel.c:525 gtk/gtkimage.c:162 gtk/gtkrecentmanager.c:248
 #: gtk/gtkstatusicon.c:184
+#, fuzzy
 msgid "Filename"
 msgstr "Fayl nomi"
 
@@ -2341,8 +2349,9 @@ msgid "Whether buttons for creating/manipulating files should be displayed"
 msgstr ""
 
 #: gtk/gtkfilesystem.c:382
+#, fuzzy
 msgid "Cancelled"
-msgstr ""
+msgstr "_Бекор қилиш"
 
 #: gtk/gtkfilesystem.c:383
 msgid "Whether or not the operation has been successfully cancelled"
@@ -2369,8 +2378,9 @@ msgid "The title of the font selection dialog"
 msgstr ""
 
 #: gtk/gtkfontbutton.c:159 gtk/gtkfontsel.c:179
+#, fuzzy
 msgid "Font name"
-msgstr ""
+msgstr "Fayl nomi"
 
 #: gtk/gtkfontbutton.c:160
 msgid "The name of the selected font"
@@ -2499,16 +2509,15 @@ msgstr ""
 #: gtk/gtkiconview.c:546
 #, fuzzy
 msgid "Selection mode"
-msgstr "Fayllni o'chirish"
+msgstr "Файллни ўчириш"
 
 #: gtk/gtkiconview.c:547
 msgid "The selection mode"
 msgstr ""
 
 #: gtk/gtkiconview.c:565
-#, fuzzy
 msgid "Pixbuf column"
-msgstr "Ustunlar"
+msgstr ""
 
 #: gtk/gtkiconview.c:566
 msgid "Model column used to retrieve the icon pixbuf from"
@@ -2535,9 +2544,8 @@ msgid "The model for the icon view"
 msgstr ""
 
 #: gtk/gtkiconview.c:628
-#, fuzzy
 msgid "Number of columns"
-msgstr "Ustunlar"
+msgstr ""
 
 #: gtk/gtkiconview.c:629
 msgid "Number of columns to display"
@@ -2572,8 +2580,9 @@ msgid "Space which is inserted between grid columns"
 msgstr ""
 
 #: gtk/gtkiconview.c:710
+#, fuzzy
 msgid "Margin"
-msgstr ""
+msgstr "Диққат"
 
 #: gtk/gtkiconview.c:711
 msgid "Space which is inserted at the edges of the icon view"
@@ -2673,8 +2682,9 @@ msgid "Pixel size to use for named icon"
 msgstr ""
 
 #: gtk/gtkimage.c:213
+#, fuzzy
 msgid "Animation"
-msgstr ""
+msgstr "Маълумот"
 
 #: gtk/gtkimage.c:214
 msgid "GdkPixbufAnimation to display"
@@ -2724,8 +2734,9 @@ msgid ""
 msgstr ""
 
 #: gtk/gtklabel.c:335
+#, fuzzy
 msgid "Pattern"
-msgstr ""
+msgstr "Қўй_иш"
 
 #: gtk/gtklabel.c:336
 msgid ""
@@ -2782,7 +2793,7 @@ msgstr ""
 #: gtk/gtklabel.c:470
 #, fuzzy
 msgid "Single Line Mode"
-msgstr "Fayllni o'chirish"
+msgstr "Файллни ўчириш"
 
 #: gtk/gtklabel.c:471
 msgid "Whether the label is in single line mode"
@@ -3102,8 +3113,9 @@ msgid ""
 msgstr ""
 
 #: gtk/gtknotebook.c:566
+#, fuzzy
 msgid "Page"
-msgstr ""
+msgstr "Қўй_иш"
 
 #: gtk/gtknotebook.c:567
 msgid "The index of the current page"
@@ -3275,8 +3287,9 @@ msgid "Display the standard backward arrow button"
 msgstr ""
 
 #: gtk/gtknotebook.c:780 gtk/gtkscrollbar.c:75
+#, fuzzy
 msgid "Forward stepper"
-msgstr ""
+msgstr "_Олдинга"
 
 #: gtk/gtknotebook.c:781 gtk/gtkscrollbar.c:76
 msgid "Display the standard forward arrow button"
@@ -3389,8 +3402,9 @@ msgid "Name of the printer"
 msgstr ""
 
 #: gtk/gtkprinter.c:126
+#, fuzzy
 msgid "Backend"
-msgstr ""
+msgstr "_Орқага"
 
 #: gtk/gtkprinter.c:127
 msgid "Backend for the printer"
@@ -3429,8 +3443,9 @@ msgid "String giving the current state of the printer"
 msgstr ""
 
 #: gtk/gtkprinter.c:161
+#, fuzzy
 msgid "Location"
-msgstr ""
+msgstr "Сўроқ"
 
 #: gtk/gtkprinter.c:162
 msgid "The location of the printer"
@@ -3463,7 +3478,7 @@ msgstr ""
 #: gtk/gtkprintjob.c:125
 #, fuzzy
 msgid "Printer"
-msgstr "Fayllar"
+msgstr "_Босиб чиқариш"
 
 #: gtk/gtkprintjob.c:126
 msgid "Printer to print the job to"
@@ -3508,17 +3523,17 @@ msgid "The GtkPrintSettings used for initializing the dialog"
 msgstr ""
 
 #: gtk/gtkprintoperation.c:915
+#, fuzzy
 msgid "Job Name"
-msgstr ""
+msgstr "Номи"
 
 #: gtk/gtkprintoperation.c:916
 msgid "A string used for identifying the print job."
 msgstr ""
 
 #: gtk/gtkprintoperation.c:940
-#, fuzzy
 msgid "Number of Pages"
-msgstr "Ustunlar"
+msgstr ""
 
 #: gtk/gtkprintoperation.c:941
 msgid "The number of pages in the document."
@@ -3608,7 +3623,7 @@ msgstr ""
 #: gtk/gtkprintunixdialog.c:257
 #, fuzzy
 msgid "Selected Printer"
-msgstr "Fayllni o'chirish"
+msgstr "Файллни ўчириш"
 
 #: gtk/gtkprintunixdialog.c:258
 msgid "The GtkPrinter which is selected"
@@ -3674,8 +3689,9 @@ msgid ""
 msgstr ""
 
 #: gtk/gtkprogressbar.c:172
+#, fuzzy
 msgid "Fraction"
-msgstr ""
+msgstr "Маълумот"
 
 #: gtk/gtkprogressbar.c:173
 msgid "The fraction of total work that has been completed"
@@ -3752,8 +3768,9 @@ msgid "The GtkAdjustment that contains the current value of this range object"
 msgstr ""
 
 #: gtk/gtkrange.c:340
+#, fuzzy
 msgid "Inverted"
-msgstr ""
+msgstr "Ай_лантириш"
 
 #: gtk/gtkrange.c:341
 msgid "Invert direction slider moves to increase range value"
@@ -4025,8 +4042,9 @@ msgid "Whether the current value is displayed as a string next to the slider"
 msgstr ""
 
 #: gtk/gtkscale.c:160
+#, fuzzy
 msgid "Value Position"
-msgstr ""
+msgstr "Сўроқ"
 
 #: gtk/gtkscale.c:161
 msgid "The position in which the current value is displayed"
@@ -4263,8 +4281,9 @@ msgid "Number of pixels the cursor can move before dragging"
 msgstr ""
 
 #: gtk/gtksettings.c:326
+#, fuzzy
 msgid "Font Name"
-msgstr ""
+msgstr "Номи"
 
 #: gtk/gtksettings.c:327
 msgid "Name of default font to use"
@@ -4408,15 +4427,16 @@ msgstr ""
 #: gtk/gtksettings.c:525
 #, fuzzy
 msgid "Color scheme"
-msgstr "_Yopish"
+msgstr "_Ёпиш"
 
 #: gtk/gtksettings.c:526
 msgid "A palette of named colors for use in themes"
 msgstr ""
 
 #: gtk/gtksettings.c:535
+#, fuzzy
 msgid "Enable Animations"
-msgstr ""
+msgstr "Маълумот"
 
 #: gtk/gtksettings.c:536
 msgid "Whether to enable toolkit-wide animations."
@@ -4471,8 +4491,9 @@ msgid "Whether to wrap around when keyboard-navigating widgets"
 msgstr ""
 
 #: gtk/gtksettings.c:679
+#, fuzzy
 msgid "Error Bell"
-msgstr ""
+msgstr "Хато"
 
 #: gtk/gtksettings.c:680
 msgid "When TRUE, keyboard navigation and other errors will cause a beep"
@@ -4481,7 +4502,7 @@ msgstr ""
 #: gtk/gtksettings.c:697
 #, fuzzy
 msgid "Color Hash"
-msgstr "_Yopish"
+msgstr "_Ёпиш"
 
 #: gtk/gtksettings.c:698
 msgid "A hash table representation of the color scheme."
@@ -4512,8 +4533,9 @@ msgid "Command to run when displaying a print preview"
 msgstr ""
 
 #: gtk/gtksettings.c:765
+#, fuzzy
 msgid "Enable Mnemonics"
-msgstr ""
+msgstr "Маълумот"
 
 #: gtk/gtksettings.c:766
 msgid "Whether labels should have mnemonics"
@@ -4522,15 +4544,16 @@ msgstr ""
 #: gtk/gtksettings.c:782
 #, fuzzy
 msgid "Enable Accelerators"
-msgstr "Fayllni o'chirish"
+msgstr "Маълумот"
 
 #: gtk/gtksettings.c:783
 msgid "Whether menu items should have accelerators"
 msgstr ""
 
 #: gtk/gtksizegroup.c:293
+#, fuzzy
 msgid "Mode"
-msgstr ""
+msgstr "Жилд"
 
 #: gtk/gtksizegroup.c:294
 msgid ""
@@ -4648,7 +4671,7 @@ msgstr ""
 
 #: gtk/gtktable.c:138
 msgid "Columns"
-msgstr "Ustunlar"
+msgstr ""
 
 #: gtk/gtktable.c:139
 msgid "The number of columns in the table"
@@ -4779,8 +4802,9 @@ msgid "Whether the buffer has some text currently selected"
 msgstr ""
 
 #: gtk/gtktextbuffer.c:229
+#, fuzzy
 msgid "Cursor position"
-msgstr ""
+msgstr "Сўроқ"
 
 #: gtk/gtktextbuffer.c:230
 msgid ""
@@ -4924,8 +4948,9 @@ msgid "Width of the right margin in pixels"
 msgstr ""
 
 #: gtk/gtktexttag.c:407 gtk/gtktextview.c:616
+#, fuzzy
 msgid "Indent"
-msgstr ""
+msgstr "_Индекс"
 
 #: gtk/gtktexttag.c:408 gtk/gtktextview.c:617
 msgid "Amount to indent the paragraph, in pixels"
@@ -5334,8 +5359,9 @@ msgid "The stock icon displayed on the item"
 msgstr ""
 
 #: gtk/gtktoolbutton.c:218
+#, fuzzy
 msgid "Icon name"
-msgstr ""
+msgstr "Номи"
 
 #: gtk/gtktoolbutton.c:219
 msgid "The name of the themed icon displayed on the item"
@@ -5486,8 +5512,9 @@ msgid ""
 msgstr ""
 
 #: gtk/gtktreeview.c:744
+#, fuzzy
 msgid "Enable Grid Lines"
-msgstr ""
+msgstr "Маълумот"
 
 #: gtk/gtktreeview.c:745
 msgid "Whether grid lines should be drawn in the tree view"
@@ -5718,8 +5745,9 @@ msgid "Determines how the shadowed box around the viewport is drawn"
 msgstr ""
 
 #: gtk/gtkwidget.c:477
+#, fuzzy
 msgid "Widget name"
-msgstr ""
+msgstr "Fayl nomi"
 
 #: gtk/gtkwidget.c:478
 msgid "The name of the widget"
@@ -5794,16 +5822,18 @@ msgid "Whether the widget is the focus widget within the toplevel"
 msgstr ""
 
 #: gtk/gtkwidget.c:552
+#, fuzzy
 msgid "Can default"
-msgstr ""
+msgstr "default:LTR"
 
 #: gtk/gtkwidget.c:553
 msgid "Whether the widget can be the default widget"
 msgstr ""
 
 #: gtk/gtkwidget.c:559
+#, fuzzy
 msgid "Has default"
-msgstr ""
+msgstr "default:LTR"
 
 #: gtk/gtkwidget.c:560
 msgid "Whether the widget is the default widget"
@@ -5946,16 +5976,18 @@ msgid "Size of areas outside the widget's allocation to draw"
 msgstr ""
 
 #: gtk/gtkwidget.c:1827
+#, fuzzy
 msgid "Unvisited Link Color"
-msgstr ""
+msgstr "_Ранг"
 
 #: gtk/gtkwidget.c:1828
 msgid "Color of unvisited links"
 msgstr ""
 
 #: gtk/gtkwidget.c:1841
+#, fuzzy
 msgid "Visited Link Color"
-msgstr ""
+msgstr "_Ранг"
 
 #: gtk/gtkwidget.c:1842
 msgid "Color of visited links"
@@ -6188,8 +6220,9 @@ msgid "Whether the window should be decorated by the window manager"
 msgstr ""
 
 #: gtk/gtkwindow.c:709
+#, fuzzy
 msgid "Deletable"
-msgstr ""
+msgstr "Ў_чириш"
 
 #: gtk/gtkwindow.c:710
 msgid "Whether the window frame should have a close button"
@@ -6235,6 +6268,172 @@ msgstr ""
 msgid "How to draw the input method statusbar"
 msgstr ""
 
+#~ msgid "Home"
+#~ msgstr "Уй"
+
+#~ msgid "_Add"
+#~ msgstr "Қў_шиш"
+
+#~ msgid "_Remove"
+#~ msgstr "Олиб _ташлаш"
+
+#~ msgid "Create Fo_lder"
+#~ msgstr "_Жилд яратиш"
+
+#~ msgid "_Name:"
+#~ msgstr "_Номи:"
+
+#~ msgid "Save in _folder:"
+#~ msgstr "Ж_илдга сақлаш:"
+
+#~ msgid "Create in _folder:"
+#~ msgstr "Ж_илдда яратиш:"
+
+#~ msgid "Folders"
+#~ msgstr "Жилдлар"
+
+#~ msgid "Fol_ders"
+#~ msgstr "Жи_лдлар"
+
+#~ msgid "_Files"
+#~ msgstr "_Файллар"
+
+#~ msgid "De_lete File"
+#~ msgstr "Файллни _ўчириш"
+
+#~ msgid "_Rename File"
+#~ msgstr "Файлнинг но_мини ўзгартириш"
+
+#~ msgid "_Folder name:"
+#~ msgstr "_Жилднинг номи:"
+
+#~ msgid "Rename File"
+#~ msgstr "Файлнинг номини ўзгартириш"
+
+#~ msgid "_Rename"
+#~ msgstr "_Номини ўзгартириш"
+
+#~ msgid "_Apply"
+#~ msgstr "Қў_ллаш"
+
+#~ msgid "_Bold"
+#~ msgstr "Қал_ин"
+
+#~ msgid "_CD-Rom"
+#~ msgstr "К_омпакт-диск"
+
+#~ msgid "_Clear"
+#~ msgstr "_Тозалаш"
+
+#~ msgid "_Copy"
+#~ msgstr "_Нусха кўчириш"
+
+#~ msgid "Cu_t"
+#~ msgstr "_Кесиш"
+
+#~ msgid "_Execute"
+#~ msgstr "Ба_жариш"
+
+#~ msgid "_Find"
+#~ msgstr "Қ_идириш"
+
+#~ msgid "Find and _Replace"
+#~ msgstr "Қидириш ва а_лмаштириш"
+
+#~ msgid "_Floppy"
+#~ msgstr "_Дискет"
+
+#~ msgid "_First"
+#~ msgstr "_Биринчи"
+
+#~ msgid "_Last"
+#~ msgstr "_Охирги"
+
+#~ msgid "_Top"
+#~ msgstr "_Юқорига"
+
+#~ msgid "_Down"
+#~ msgstr "_Пастга"
+
+#~ msgid "_Up"
+#~ msgstr "_Юқорига"
+
+#~ msgid "_Help"
+#~ msgstr "_Ёрдам"
+
+#~ msgid "_Home"
+#~ msgstr "_Уй"
+
+#~ msgid "_Italic"
+#~ msgstr "Қ_ия"
+
+#~ msgid "_Jump to"
+#~ msgstr "Ў_тиш"
+
+#~ msgid "_Center"
+#~ msgstr "_Марказ"
+
+#~ msgid "_Left"
+#~ msgstr "_Чап"
+
+#~ msgid "_Network"
+#~ msgstr "_Тармоқ"
+
+#~ msgid "_New"
+#~ msgstr "_Янги"
+
+#~ msgid "_No"
+#~ msgstr "_Йўқ"
+
+#~ msgid "_OK"
+#~ msgstr "_Ок"
+
+#~ msgid "_Open"
+#~ msgstr "_Очиш"
+
+#~ msgid "_Preferences"
+#~ msgstr "_Мослаш"
+
+#~ msgid "_Properties"
+#~ msgstr "Хо_ссалари"
+
+#~ msgid "_Quit"
+#~ msgstr "_Чиқиш"
+
+#~ msgid "_Redo"
+#~ msgstr "Қ_айтариш"
+
+#~ msgid "_Refresh"
+#~ msgstr "_Янгилаш"
+
+#~ msgid "_Save"
+#~ msgstr "_Сақлаш"
+
+#~ msgid "Save _As"
+#~ msgstr "...сиф_атида сақлаш"
+
+#~ msgid "_Spell Check"
+#~ msgstr "Имлони _текшириш"
+
+#~ msgid "_Stop"
+#~ msgstr "_Тўхтатиш"
+
+#~ msgid "_Undo"
+#~ msgstr "_Бекор қилиш"
+
+#~ msgid "_Yes"
+#~ msgstr "Ҳ_а"
+
+#~ msgid "Zoom _In"
+#~ msgstr "К_атталаштириш"
+
+#~ msgid "Zoom _Out"
+#~ msgstr "К_ичиклаштириш"
+
 #, fuzzy
-#~ msgid "Folder Mode"
-#~ msgstr "_Nomini o'zgartirish"
+#~ msgid "Add"
+#~ msgstr "_Qo'shish"
+
+#, fuzzy
+#~ msgid "Up"
+#~ msgstr "_Yuqoriga"

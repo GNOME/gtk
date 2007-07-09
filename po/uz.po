@@ -1,15 +1,16 @@
-# translation of gtk+.gtk-2-4.po to Uzbek
-# Copyright (C) 1998-2003, 2004 Free Software Foundation, Inc.
-# Mashrab Kuvatov <kmashrab@uni-bremen.de>, 2003, 2004.
+# translation of gtk20.po to Uzbek
+# Copyright (C) 1998-2003 Free Software Foundation, Inc.
+# Mashrab Kuvatov <kmashrab@uni-bremen.de>
+# Mashrab Kuvatov <kmashrab@uni-bremen.de>, 2003.
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: gtk+.gtk-2-4\n"
+"Project-Id-Version: gtk20\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2007-07-02 15:21-0400\n"
-"PO-Revision-Date: 2004-07-19 18:54+0200\n"
+"PO-Revision-Date: 2003-09-06 00:29+0200\n"
 "Last-Translator: Mashrab Kuvatov <kmashrab@uni-bremen.de>\n"
-"Language-Team: Uzbek <kmashrab@uni-bremen.de>\n"
+"Language-Team: Uzbek <uz-li@yahoogroups.com>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -1110,9 +1111,8 @@ msgstr ""
 
 #. Add the credits button
 #: gtk/gtkaboutdialog.c:500
-#, fuzzy
 msgid "C_redits"
-msgstr "_Чиқиш"
+msgstr ""
 
 #. Add the license button
 #: gtk/gtkaboutdialog.c:513
@@ -1363,8 +1363,9 @@ msgid ""
 msgstr ""
 
 #: gtk/gtkcolorsel.c:1971
+#, fuzzy
 msgid "_Hue:"
-msgstr ""
+msgstr "_Yordam"
 
 #: gtk/gtkcolorsel.c:1972
 msgid "Position on the color wheel."
@@ -1421,7 +1422,7 @@ msgstr ""
 #: gtk/gtkcolorsel.c:2012
 #, fuzzy
 msgid "Color _name:"
-msgstr "_Жилднинг номи:"
+msgstr "_Nomini o'zgartirish"
 
 #: gtk/gtkcolorsel.c:2027
 msgid ""
@@ -1432,7 +1433,7 @@ msgstr ""
 #: gtk/gtkcolorsel.c:2057
 #, fuzzy
 msgid "_Palette:"
-msgstr "Қўй_иш"
+msgstr "_O'chirish"
 
 #: gtk/gtkcolorsel.c:2086
 msgid "Color Wheel"
@@ -1453,7 +1454,7 @@ msgstr ""
 #: gtk/gtkfilechooserbutton.c:68
 #, fuzzy
 msgid "Select A File"
-msgstr "Файллни ўчириш"
+msgstr "Fayllni o'chirish"
 
 #: gtk/gtkfilechooserbutton.c:69 gtk/gtkfilechooserdefault.c:1965
 msgid "Desktop"
@@ -1554,7 +1555,7 @@ msgstr "Olib _tashlash"
 #: gtk/gtkfilechooserdefault.c:3755
 #, fuzzy
 msgid "Rename..."
-msgstr "_Номини ўзгартириш"
+msgstr "_Nomini o'zgartirish"
 
 #. Accessible object name for the file chooser's shortcuts pane
 #: gtk/gtkfilechooserdefault.c:3897
@@ -1565,11 +1566,11 @@ msgstr ""
 #: gtk/gtkfilechooserdefault.c:3951
 #, fuzzy
 msgid "_Places"
-msgstr "_Номини ўзгартириш"
+msgstr "_Nomini o'zgartirish"
 
 #: gtk/gtkfilechooserdefault.c:4006 gtk/gtkstock.c:297
 msgid "_Add"
-msgstr "Қў_шиш"
+msgstr "_Qo'shish"
 
 #: gtk/gtkfilechooserdefault.c:4013
 msgid "Add the selected folder to the Bookmarks"
@@ -1577,7 +1578,7 @@ msgstr ""
 
 #: gtk/gtkfilechooserdefault.c:4018 gtk/gtkstock.c:385
 msgid "_Remove"
-msgstr "Олиб _ташлаш"
+msgstr "Olib _tashlash"
 
 #: gtk/gtkfilechooserdefault.c:4025
 msgid "Remove the selected bookmark"
@@ -1602,11 +1603,12 @@ msgstr ""
 
 #: gtk/gtkfilechooserdefault.c:4497 gtk/gtkfilesel.c:729
 msgid "Files"
-msgstr "Файллар"
+msgstr "Fayllar"
 
 #: gtk/gtkfilechooserdefault.c:4542
+#, fuzzy
 msgid "Name"
-msgstr "Номи"
+msgstr "Fayl nomi"
 
 #: gtk/gtkfilechooserdefault.c:4567
 msgid "Size"
@@ -1622,8 +1624,9 @@ msgstr ""
 
 #. Label
 #: gtk/gtkfilechooserdefault.c:4827 gtk/gtkprinteroptionwidget.c:786
+#, fuzzy
 msgid "_Name:"
-msgstr "_Номи:"
+msgstr "Fayl nomi"
 
 #: gtk/gtkfilechooserdefault.c:4869
 msgid "_Browse for other folders"
@@ -1636,21 +1639,24 @@ msgstr "Fayl nomi"
 
 #. Create Folder
 #: gtk/gtkfilechooserdefault.c:5161
+#, fuzzy
 msgid "Create Fo_lder"
-msgstr "_Жилд яратиш"
+msgstr "Fayllar"
 
 #: gtk/gtkfilechooserdefault.c:5171
 #, fuzzy
 msgid "_Location:"
-msgstr "Маълумот"
+msgstr "Ma'lumot"
 
 #: gtk/gtkfilechooserdefault.c:5409
+#, fuzzy
 msgid "Save in _folder:"
-msgstr "Ж_илдга сақлаш:"
+msgstr "Fayllar"
 
 #: gtk/gtkfilechooserdefault.c:5411
+#, fuzzy
 msgid "Create in _folder:"
-msgstr "Ж_илдда яратиш:"
+msgstr "Fayllar"
 
 #: gtk/gtkfilechooserdefault.c:7014
 #, c-format
@@ -1681,7 +1687,7 @@ msgstr ""
 #: gtk/gtkfilechooserdefault.c:8004
 #, fuzzy
 msgid "_Replace"
-msgstr "_Номини ўзгартириш"
+msgstr "_Nomini o'zgartirish"
 
 #: gtk/gtkfilechooserdefault.c:8835
 msgid "Could not start the search process"
@@ -1754,16 +1760,18 @@ msgid "Error creating folder '%s': %s"
 msgstr ""
 
 #: gtk/gtkfilesel.c:693
+#, fuzzy
 msgid "Folders"
-msgstr "Жилдлар"
+msgstr "Fayllar"
 
 #: gtk/gtkfilesel.c:697
+#, fuzzy
 msgid "Fol_ders"
-msgstr "Жи_лдлар"
+msgstr "Fayllar"
 
 #: gtk/gtkfilesel.c:733
 msgid "_Files"
-msgstr "_Файллар"
+msgstr "_Fayllar"
 
 #: gtk/gtkfilesel.c:820 gtk/gtkfilesel.c:2207
 #, c-format
@@ -1784,11 +1792,11 @@ msgstr ""
 
 #: gtk/gtkfilesel.c:1090
 msgid "De_lete File"
-msgstr "Файллни _ўчириш"
+msgstr "Fayllni _o'chirish"
 
 #: gtk/gtkfilesel.c:1101
 msgid "_Rename File"
-msgstr "Файлнинг но_мини ўзгартириш"
+msgstr "Faylning no_mini o'zgartirish"
 
 #: gtk/gtkfilesel.c:1406
 #, c-format
@@ -1801,8 +1809,9 @@ msgid "New Folder"
 msgstr ""
 
 #: gtk/gtkfilesel.c:1466
+#, fuzzy
 msgid "_Folder name:"
-msgstr "_Жилднинг номи:"
+msgstr "_Nomini o'zgartirish"
 
 #: gtk/gtkfilesel.c:1490
 msgid "C_reate"
@@ -1825,7 +1834,7 @@ msgstr ""
 
 #: gtk/gtkfilesel.c:1594
 msgid "Delete File"
-msgstr "Файллни ўчириш"
+msgstr "Fayllni o'chirish"
 
 #: gtk/gtkfilesel.c:1642
 #, c-format
@@ -1844,7 +1853,7 @@ msgstr ""
 
 #: gtk/gtkfilesel.c:1711
 msgid "Rename File"
-msgstr "Файлнинг номини ўзгартириш"
+msgstr "Faylning nomini o'zgartirish"
 
 #: gtk/gtkfilesel.c:1726
 #, c-format
@@ -1853,7 +1862,7 @@ msgstr ""
 
 #: gtk/gtkfilesel.c:1755
 msgid "_Rename"
-msgstr "_Номини ўзгартириш"
+msgstr "_Nomini o'zgartirish"
 
 #: gtk/gtkfilesel.c:2187
 msgid "_Selection: "
@@ -1907,7 +1916,7 @@ msgstr ""
 #: gtk/gtkfilesystemunix.c:1165
 #, fuzzy
 msgid "File System"
-msgstr "Файл тизими"
+msgstr "Fayllar"
 
 #: gtk/gtkfilesystemunix.c:1329 gtk/gtkfilesystemwin32.c:1584
 #, c-format
@@ -2055,13 +2064,15 @@ msgstr ""
 
 #. The axis listbox
 #: gtk/gtkinputdialog.c:277
+#, fuzzy
 msgid "Axes"
-msgstr ""
+msgstr "H_a"
 
 #. Keys listbox
 #: gtk/gtkinputdialog.c:295
+#, fuzzy
 msgid "Keys"
-msgstr ""
+msgstr "H_a"
 
 #: gtk/gtkinputdialog.c:522
 msgid "_X:"
@@ -2103,7 +2114,7 @@ msgstr ""
 #: gtk/gtkinputdialog.c:749
 #, fuzzy
 msgid "Cl_ear"
-msgstr "_Тозалаш"
+msgstr "_Tozalash"
 
 #: gtk/gtklinkbutton.c:141
 msgid "URI"
@@ -2116,7 +2127,7 @@ msgstr ""
 #: gtk/gtklinkbutton.c:396
 #, fuzzy
 msgid "Copy URL"
-msgstr "_Нусха кўчириш"
+msgstr "_Nusxa ko'chirish"
 
 #: gtk/gtklinkbutton.c:536
 msgid "Invalid URI"
@@ -2228,7 +2239,7 @@ msgstr ""
 #: gtk/gtkpagesetupunixdialog.c:1026
 #, fuzzy
 msgid "_Paper size:"
-msgstr "Хо_ссалари"
+msgstr "Ho_ssalari"
 
 #: gtk/gtkpagesetupunixdialog.c:1062
 msgid "_Orientation:"
@@ -2256,8 +2267,9 @@ msgid "_Width:"
 msgstr ""
 
 #: gtk/gtkpagesetupunixdialog.c:1943
+#, fuzzy
 msgid "_Height:"
-msgstr ""
+msgstr "_Yordam"
 
 #: gtk/gtkpagesetupunixdialog.c:1955
 msgid "Paper Size"
@@ -2266,7 +2278,7 @@ msgstr ""
 #: gtk/gtkpagesetupunixdialog.c:1965
 #, fuzzy
 msgid "_Top:"
-msgstr "_Юқорига"
+msgstr "_Yuqoriga"
 
 #: gtk/gtkpagesetupunixdialog.c:1977
 msgid "_Bottom:"
@@ -2275,7 +2287,7 @@ msgstr ""
 #: gtk/gtkpagesetupunixdialog.c:1989
 #, fuzzy
 msgid "_Left:"
-msgstr "_Чап"
+msgstr "_Chap"
 
 #: gtk/gtkpagesetupunixdialog.c:2001
 msgid "_Right:"
@@ -2296,7 +2308,7 @@ msgstr ""
 #: gtk/gtkpathbar.c:1377
 #, fuzzy
 msgid "File System Root"
-msgstr "Файл тизими"
+msgstr "Fayllar"
 
 #: gtk/gtkprinteroptionwidget.c:685
 msgid "Not available"
@@ -2305,7 +2317,7 @@ msgstr ""
 #: gtk/gtkprinteroptionwidget.c:798
 #, fuzzy
 msgid "_Save in folder:"
-msgstr "Ж_илдга сақлаш:"
+msgstr "Fayllar"
 
 #. translators: this string is the default job title for print
 #. * jobs. %s gets replaced by the application name, %d gets replaced
@@ -2369,12 +2381,12 @@ msgstr ""
 #: gtk/gtkprintoperation.c:1988 gtk/gtkprintoperation.c:2240
 #, fuzzy, c-format
 msgid "Preparing"
-msgstr "Диққат"
+msgstr "Diqqat"
 
 #: gtk/gtkprintoperation.c:1991
 #, fuzzy, c-format
 msgid "Printing %d"
-msgstr "_Босиб чиқариш"
+msgstr "_Bosib chiqarish"
 
 #: gtk/gtkprintoperation-unix.c:243
 #, c-format
@@ -2389,7 +2401,7 @@ msgstr ""
 #: gtk/gtkprintoperation-unix.c:388 gtk/gtkprintoperation-win32.c:1394
 #, fuzzy
 msgid "Application"
-msgstr "Маълумот"
+msgstr "Ma'lumot"
 
 #: gtk/gtkprintoperation-win32.c:564
 msgid "Printer offline"
@@ -2402,7 +2414,7 @@ msgstr ""
 #: gtk/gtkprintoperation-win32.c:568
 #, fuzzy
 msgid "Paused"
-msgstr "Қўй_иш"
+msgstr "Qo'y_ish"
 
 #: gtk/gtkprintoperation-win32.c:570
 msgid "Need user intervention"
@@ -2446,12 +2458,12 @@ msgstr ""
 #: gtk/gtkprintunixdialog.c:1485
 #, fuzzy
 msgid "Printer"
-msgstr "_Босиб чиқариш"
+msgstr "_Bosib chiqarish"
 
 #: gtk/gtkprintunixdialog.c:1493 gtk/gtkrecentchooserdefault.c:992
 #, fuzzy
 msgid "Location"
-msgstr "Маълумот"
+msgstr "Ma'lumot"
 
 #: gtk/gtkprintunixdialog.c:1502
 msgid "Status"
@@ -2464,12 +2476,11 @@ msgstr ""
 #: gtk/gtkprintunixdialog.c:1528
 #, fuzzy
 msgid "_All"
-msgstr "Қў_ллаш"
+msgstr "Qo'_llash"
 
 #: gtk/gtkprintunixdialog.c:1535
-#, fuzzy
 msgid "C_urrent"
-msgstr "_Чиқиш"
+msgstr ""
 
 #: gtk/gtkprintunixdialog.c:1544
 msgid "Ra_nge"
@@ -2497,7 +2508,7 @@ msgstr ""
 #: gtk/gtkprintunixdialog.c:1595
 #, fuzzy
 msgid "_Reverse"
-msgstr "Олиб _ташлаш"
+msgstr "Olib _tashlash"
 
 #: gtk/gtkprintunixdialog.c:1612
 msgid "General"
@@ -2510,7 +2521,7 @@ msgstr ""
 #: gtk/gtkprintunixdialog.c:2016
 #, fuzzy
 msgid "Pages per _side:"
-msgstr "Хо_ссалари"
+msgstr "Ho_ssalari"
 
 #: gtk/gtkprintunixdialog.c:2032
 msgid "T_wo-sided:"
@@ -2519,7 +2530,7 @@ msgstr ""
 #: gtk/gtkprintunixdialog.c:2047
 #, fuzzy
 msgid "_Only print:"
-msgstr "_Босиб чиқариш"
+msgstr "_Bosib chiqarish"
 
 #. In enum order
 #: gtk/gtkprintunixdialog.c:2062
@@ -2537,7 +2548,7 @@ msgstr ""
 #: gtk/gtkprintunixdialog.c:2067
 #, fuzzy
 msgid "Sc_ale:"
-msgstr "_Номи:"
+msgstr "Fayl nomi"
 
 #: gtk/gtkprintunixdialog.c:2094
 msgid "Paper"
@@ -2546,12 +2557,12 @@ msgstr ""
 #: gtk/gtkprintunixdialog.c:2098
 #, fuzzy
 msgid "Paper _type:"
-msgstr "Хо_ссалари"
+msgstr "Ho_ssalari"
 
 #: gtk/gtkprintunixdialog.c:2113
 #, fuzzy
 msgid "Paper _source:"
-msgstr "Хо_ссалари"
+msgstr "Ho_ssalari"
 
 #: gtk/gtkprintunixdialog.c:2128
 msgid "Output t_ray:"
@@ -2576,7 +2587,7 @@ msgstr ""
 #: gtk/gtkprintunixdialog.c:2224
 #, fuzzy
 msgid "_Now"
-msgstr "_Йўқ"
+msgstr "_Yo'q"
 
 #: gtk/gtkprintunixdialog.c:2231
 msgid "A_t:"
@@ -2585,7 +2596,7 @@ msgstr ""
 #: gtk/gtkprintunixdialog.c:2246
 #, fuzzy
 msgid "On _hold"
-msgstr "Қал_ин"
+msgstr "Qal_in"
 
 #: gtk/gtkprintunixdialog.c:2265
 msgid "Add Cover Page"
@@ -2614,7 +2625,7 @@ msgstr ""
 #: gtk/gtkprintunixdialog.c:2405
 #, fuzzy
 msgid "Color"
-msgstr "_Ранг"
+msgstr "_Rang"
 
 #: gtk/gtkprintunixdialog.c:2408
 msgid "Finishing"
@@ -2627,7 +2638,7 @@ msgstr ""
 #: gtk/gtkprintunixdialog.c:2441
 #, fuzzy
 msgid "Print"
-msgstr "_Босиб чиқариш"
+msgstr "_Bosib chiqarish"
 
 #: gtk/gtkradiotoolbutton.c:65
 msgid "Group"
@@ -2681,7 +2692,7 @@ msgstr ""
 #: gtk/gtkrecentchooserdefault.c:1717
 #, fuzzy
 msgid "_Clear List"
-msgstr "_Тозалаш"
+msgstr "_Tozalash"
 
 #: gtk/gtkrecentchooserdefault.c:1731
 msgid "Show _Private Resources"
@@ -2724,19 +2735,19 @@ msgstr ""
 #. KEEP IN SYNC with gtkiconfactory.c stock icons, when appropriate
 #: gtk/gtkstock.c:288
 msgid "Information"
-msgstr "Маълумот"
+msgstr "Ma'lumot"
 
 #: gtk/gtkstock.c:289
 msgid "Warning"
-msgstr "Диққат"
+msgstr "Diqqat"
 
 #: gtk/gtkstock.c:290
 msgid "Error"
-msgstr "Хато"
+msgstr "Xato"
 
 #: gtk/gtkstock.c:291
 msgid "Question"
-msgstr "Сўроқ"
+msgstr "So'roq"
 
 #. FIXME these need accelerators when appropriate, and
 #. * need the mnemonics to be rationalized
@@ -2747,48 +2758,48 @@ msgstr ""
 
 #: gtk/gtkstock.c:298
 msgid "_Apply"
-msgstr "Қў_ллаш"
+msgstr "Qo'_llash"
 
 #: gtk/gtkstock.c:299
 msgid "_Bold"
-msgstr "Қал_ин"
+msgstr "Qal_in"
 
 #: gtk/gtkstock.c:300
 msgid "_Cancel"
-msgstr "_Бекор қилиш"
+msgstr "_Bekor qilish"
 
 #: gtk/gtkstock.c:301
 msgid "_CD-Rom"
-msgstr "К_омпакт-диск"
+msgstr "K_ompakt-disk"
 
 #: gtk/gtkstock.c:302
 msgid "_Clear"
-msgstr "_Тозалаш"
+msgstr "_Tozalash"
 
 #: gtk/gtkstock.c:303
 msgid "_Close"
-msgstr "_Ёпиш"
+msgstr "_Yopish"
 
 #: gtk/gtkstock.c:304
 #, fuzzy
 msgid "C_onnect"
-msgstr "Ай_лантириш"
+msgstr "Ay_lantirish"
 
 #: gtk/gtkstock.c:305
 msgid "_Convert"
-msgstr "Ай_лантириш"
+msgstr "Ay_lantirish"
 
 #: gtk/gtkstock.c:306
 msgid "_Copy"
-msgstr "_Нусха кўчириш"
+msgstr "_Nusxa ko'chirish"
 
 #: gtk/gtkstock.c:307
 msgid "Cu_t"
-msgstr "_Кесиш"
+msgstr "_Kesish"
 
 #: gtk/gtkstock.c:308
 msgid "_Delete"
-msgstr "Ў_чириш"
+msgstr "_O'chirish"
 
 #: gtk/gtkstock.c:309
 msgid "_Discard"
@@ -2800,24 +2811,23 @@ msgstr ""
 
 #: gtk/gtkstock.c:311
 msgid "_Execute"
-msgstr "Ба_жариш"
+msgstr "Ba_jarish"
 
 #: gtk/gtkstock.c:312
-#, fuzzy
 msgid "_Edit"
-msgstr "_Чиқиш"
+msgstr ""
 
 #: gtk/gtkstock.c:313
 msgid "_Find"
-msgstr "Қ_идириш"
+msgstr "Q_idirish"
 
 #: gtk/gtkstock.c:314
 msgid "Find and _Replace"
-msgstr "Қидириш ва а_лмаштириш"
+msgstr "Qidirish va a_lmashtirish"
 
 #: gtk/gtkstock.c:315
 msgid "_Floppy"
-msgstr "_Дискет"
+msgstr "_Disket"
 
 #: gtk/gtkstock.c:316
 msgid "_Fullscreen"
@@ -2873,11 +2883,11 @@ msgstr ""
 
 #: gtk/gtkstock.c:335
 msgid "_Help"
-msgstr "_Ёрдам"
+msgstr "_Yordam"
 
 #: gtk/gtkstock.c:336
 msgid "_Home"
-msgstr "_Уй"
+msgstr "_Uy"
 
 #: gtk/gtkstock.c:337
 msgid "Increase Indent"
@@ -2889,26 +2899,26 @@ msgstr ""
 
 #: gtk/gtkstock.c:339
 msgid "_Index"
-msgstr "_Индекс"
+msgstr "_Indeks"
 
 #: gtk/gtkstock.c:340
 #, fuzzy
 msgid "_Information"
-msgstr "Маълумот"
+msgstr "Ma'lumot"
 
 #: gtk/gtkstock.c:341
 msgid "_Italic"
-msgstr "Қ_ия"
+msgstr "Q_iya"
 
 #: gtk/gtkstock.c:342
 msgid "_Jump to"
-msgstr "Ў_тиш"
+msgstr "O'_tish"
 
 #. translators, strip the prefix up to and including the first |
 #: gtk/gtkstock.c:344
 #, fuzzy
 msgid "Justify|_Center"
-msgstr "_Марказ"
+msgstr "_Markaz"
 
 #. translators, strip the prefix up to and including the first |
 #: gtk/gtkstock.c:346
@@ -2924,25 +2934,25 @@ msgstr ""
 #: gtk/gtkstock.c:350
 #, fuzzy
 msgid "Justify|_Right"
-msgstr "Ў_нг"
+msgstr "O'_ng"
 
 #. translators, strip the prefix up to and including the first |
 #: gtk/gtkstock.c:353
 #, fuzzy
 msgid "Media|_Forward"
-msgstr "_Олдинга"
+msgstr "_Oldinga"
 
 #. translators, strip the prefix up to and including the first |
 #: gtk/gtkstock.c:355
 #, fuzzy
 msgid "Media|_Next"
-msgstr "_Янги"
+msgstr "_Yangi"
 
 #. translators, strip the prefix up to and including the first |
 #: gtk/gtkstock.c:357
 #, fuzzy
 msgid "Media|P_ause"
-msgstr "Қўй_иш"
+msgstr "Qo'y_ish"
 
 #. translators, strip the prefix up to and including the first |
 #: gtk/gtkstock.c:359
@@ -2958,39 +2968,40 @@ msgstr ""
 #: gtk/gtkstock.c:363
 #, fuzzy
 msgid "Media|_Record"
-msgstr "Қ_айтариш"
+msgstr "Olib _tashlash"
 
 #. translators, strip the prefix up to and including the first |
 #: gtk/gtkstock.c:365
 #, fuzzy
 msgid "Media|R_ewind"
-msgstr "Қ_идириш"
+msgstr "Q_idirish"
 
 #. translators, strip the prefix up to and including the first |
 #: gtk/gtkstock.c:367
 #, fuzzy
 msgid "Media|_Stop"
-msgstr "_Тўхтатиш"
+msgstr "_To'xtatish"
 
 #: gtk/gtkstock.c:368
+#, fuzzy
 msgid "_Network"
-msgstr "_Тармоқ"
+msgstr "_Yangi"
 
 #: gtk/gtkstock.c:369
 msgid "_New"
-msgstr "_Янги"
+msgstr "_Yangi"
 
 #: gtk/gtkstock.c:370
 msgid "_No"
-msgstr "_Йўқ"
+msgstr "_Yo'q"
 
 #: gtk/gtkstock.c:371
 msgid "_OK"
-msgstr "_Ок"
+msgstr "_Ok"
 
 #: gtk/gtkstock.c:372
 msgid "_Open"
-msgstr "_Очиш"
+msgstr "_Ochish"
 
 #: gtk/gtkstock.c:373
 msgid "Landscape"
@@ -2999,7 +3010,7 @@ msgstr ""
 #: gtk/gtkstock.c:374
 #, fuzzy
 msgid "Portrait"
-msgstr "_Босиб чиқариш"
+msgstr "_Bosib chiqarish"
 
 #: gtk/gtkstock.c:375
 msgid "Reverse landscape"
@@ -3011,15 +3022,16 @@ msgstr ""
 
 #: gtk/gtkstock.c:377
 msgid "_Paste"
-msgstr "Қўй_иш"
+msgstr "Qo'y_ish"
 
 #: gtk/gtkstock.c:378
+#, fuzzy
 msgid "_Preferences"
-msgstr "_Мослаш"
+msgstr "_Yangilash"
 
 #: gtk/gtkstock.c:379
 msgid "_Print"
-msgstr "_Босиб чиқариш"
+msgstr "_Bosib chiqarish"
 
 #: gtk/gtkstock.c:380
 msgid "Print Pre_view"
@@ -3027,31 +3039,33 @@ msgstr ""
 
 #: gtk/gtkstock.c:381
 msgid "_Properties"
-msgstr "Хо_ссалари"
+msgstr "Ho_ssalari"
 
 #: gtk/gtkstock.c:382
 msgid "_Quit"
-msgstr "_Чиқиш"
+msgstr "_Chiqish"
 
 #: gtk/gtkstock.c:383
+#, fuzzy
 msgid "_Redo"
-msgstr "Қ_айтариш"
+msgstr "Olib _tashlash"
 
 #: gtk/gtkstock.c:384
 msgid "_Refresh"
-msgstr "_Янгилаш"
+msgstr "_Yangilash"
 
 #: gtk/gtkstock.c:386
+#, fuzzy
 msgid "_Revert"
-msgstr ""
+msgstr "Olib _tashlash"
 
 #: gtk/gtkstock.c:387
 msgid "_Save"
-msgstr "_Сақлаш"
+msgstr "_Saqlash"
 
 #: gtk/gtkstock.c:388
 msgid "Save _As"
-msgstr "...сиф_атида сақлаш"
+msgstr "...sif_atida saqlash"
 
 #: gtk/gtkstock.c:389
 msgid "Select _All"
@@ -3059,11 +3073,11 @@ msgstr ""
 
 #: gtk/gtkstock.c:390
 msgid "_Color"
-msgstr "_Ранг"
+msgstr "_Rang"
 
 #: gtk/gtkstock.c:391
 msgid "_Font"
-msgstr "_Шрифт"
+msgstr "_Shrift"
 
 #: gtk/gtkstock.c:392
 msgid "_Ascending"
@@ -3075,31 +3089,33 @@ msgstr ""
 
 #: gtk/gtkstock.c:394
 msgid "_Spell Check"
-msgstr "Имлони _текшириш"
+msgstr "Imloni _tekshirish"
 
 #: gtk/gtkstock.c:395
 msgid "_Stop"
-msgstr "_Тўхтатиш"
+msgstr "_To'xtatish"
 
 #: gtk/gtkstock.c:396
 msgid "_Strikethrough"
 msgstr ""
 
 #: gtk/gtkstock.c:397
+#, fuzzy
 msgid "_Undelete"
-msgstr ""
+msgstr "_O'chirish"
 
 #: gtk/gtkstock.c:398
 msgid "_Underline"
 msgstr ""
 
 #: gtk/gtkstock.c:399
+#, fuzzy
 msgid "_Undo"
-msgstr "_Бекор қилиш"
+msgstr "Q_idirish"
 
 #: gtk/gtkstock.c:400
 msgid "_Yes"
-msgstr "Ҳ_а"
+msgstr "H_a"
 
 #: gtk/gtkstock.c:401
 msgid "_Normal Size"
@@ -3111,11 +3127,11 @@ msgstr ""
 
 #: gtk/gtkstock.c:403
 msgid "Zoom _In"
-msgstr "К_атталаштириш"
+msgstr "K_attalashtirish"
 
 #: gtk/gtkstock.c:404
 msgid "Zoom _Out"
-msgstr "К_ичиклаштириш"
+msgstr "K_ichiklashtirish"
 
 #: gtk/gtktextbufferrichtext.c:651
 #, c-format
@@ -3304,7 +3320,7 @@ msgstr ""
 #: gtk/gtkvolumebutton.c:81
 #, fuzzy
 msgid "Volume"
-msgstr "Уй"
+msgstr "_Uy"
 
 #: gtk/gtkvolumebutton.c:83
 msgid "Volume Down"
@@ -4391,7 +4407,7 @@ msgstr ""
 #: modules/printbackends/file/gtkprintbackendfile.c:464
 #, fuzzy
 msgid "Print to File"
-msgstr "_Босиб чиқариш"
+msgstr "_Bosib chiqarish"
 
 #: modules/printbackends/file/gtkprintbackendfile.c:489
 msgid "PDF"
@@ -4400,7 +4416,7 @@ msgstr ""
 #: modules/printbackends/file/gtkprintbackendfile.c:489
 #, fuzzy
 msgid "Postscript"
-msgstr "_Босиб чиқариш"
+msgstr "_Bosib chiqarish"
 
 #: modules/printbackends/file/gtkprintbackendfile.c:501
 #: modules/printbackends/test/gtkprintbackendtest.c:501
@@ -4410,7 +4426,7 @@ msgstr ""
 #: modules/printbackends/file/gtkprintbackendfile.c:547
 #, fuzzy
 msgid "File"
-msgstr "Файллар"
+msgstr "Fayllar"
 
 #: modules/printbackends/file/gtkprintbackendfile.c:556
 msgid "_Output format"
@@ -4437,7 +4453,7 @@ msgstr ""
 #: modules/printbackends/test/gtkprintbackendtest.c:465
 #, fuzzy
 msgid "Print to Test Printer"
-msgstr "_Босиб чиқариш"
+msgstr "_Bosib chiqarish"
 
 #: tests/testfilechooser.c:205
 #, c-format
@@ -4446,48 +4462,50 @@ msgstr ""
 
 #, fuzzy
 #~ msgid "Location:"
-#~ msgstr "Маълумот"
+#~ msgstr "Ma'lumot"
 
 #, fuzzy
 #~ msgid "asme_f"
-#~ msgstr "Номи"
+#~ msgstr "Fayl nomi"
 
 #, fuzzy
 #~ msgid "Executive"
-#~ msgstr "Ба_жариш"
+#~ msgstr "Ba_jarish"
 
 #, fuzzy
 #~ msgid "Index 3x5"
-#~ msgstr "_Индекс"
+#~ msgstr "_Indeks"
 
 #, fuzzy
 #~ msgid "Index 5x8"
-#~ msgstr "_Индекс"
+#~ msgstr "_Indeks"
 
+#, fuzzy
 #~ msgid "Folder"
-#~ msgstr "Жилд"
+#~ msgstr "Fayllar"
 
 #, fuzzy
 #~ msgid "Cannot change folder"
-#~ msgstr "Ж_илдда яратиш:"
+#~ msgstr "Fayllar"
 
+#, fuzzy
 #~ msgid "clear"
-#~ msgstr "тозалаш"
+#~ msgstr "_Tozalash"
 
 #~ msgid "_First"
-#~ msgstr "_Биринчи"
+#~ msgstr "_Birinchi"
 
 #~ msgid "_Last"
-#~ msgstr "_Охирги"
+#~ msgstr "_Oxirgi"
 
 #~ msgid "_Back"
-#~ msgstr "_Орқага"
+#~ msgstr "_Orqaga"
 
 #~ msgid "_Down"
-#~ msgstr "_Пастга"
+#~ msgstr "_Pastga"
 
 #~ msgid "_Up"
-#~ msgstr "_Юқорига"
+#~ msgstr "_Yuqoriga"
 
 #, fuzzy
 #~ msgid "Add"
