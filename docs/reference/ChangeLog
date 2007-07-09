@@ -1,3 +1,8 @@
+Mon Jul  9 10:32:39 2007  Tim Janik  <timj@imendio.com>
+
+	* gdk/tmpl/threads.sgml: applied docu clarification patch from Bjoern
+	Lindqvist, #454700.
+
 2007-07-08  Johan Dahlin  <jdahlin@async.com.br>
 
 	* gtk/tmpl/gtkbuilder.sgml: Mention last_modification_time

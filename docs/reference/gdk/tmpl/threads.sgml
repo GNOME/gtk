@@ -251,11 +251,12 @@ int main (int argc, char *argv[])
 
 <!-- ##### MACRO GDK_THREADS_ENTER ##### -->
 <para>
-This macro marks the beginning of a critical section in which GDK and GTK+
-functions can be called.  Only one thread at a time can be in such a
-critial section. The macro expands to a no-op if #G_THREADS_ENABLED
-has not been defined. Typically gdk_threads_enter() should be used 
-instead of this macro.
+This macro marks the beginning of a critical section in which GDK and
+GTK+ functions can be called safely and without causing race
+conditions.  Only one thread at a time can be in such a critial
+section. The macro expands to a no-op if #G_THREADS_ENABLED has not
+been defined. Typically gdk_threads_enter() should be used instead of
+this macro.
 </para>
 
 
@@ -277,9 +278,9 @@ begun with #GDK_THREADS_ENTER.
 
 <!-- ##### FUNCTION gdk_threads_enter ##### -->
 <para>
-This macro marks the beginning of a critical section
-in which GDK and GTK+ functions can be called.
-Only one thread at a time can be in such a critial 
+This macro marks the beginning of a critical section in which GDK and
+GTK+ functions can be called safely and without causing race
+conditions.  Only one thread at a time can be in such a critial
 section.
 </para>
 
