@@ -329,7 +329,7 @@ gtk_tooltip_set_custom (GtkTooltip *tooltip,
 
 /**
  * gtk_tooltip_trigger_tooltip_query:
- * @display: a #GtkDisplay
+ * @display: a #GdkDisplay
  *
  * Triggers a new tooltip query on @display, in order to update the current
  * visible tooltip, or to show/hide the current tooltip.  This function is
