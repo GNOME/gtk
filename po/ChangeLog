@@ -1,3 +1,8 @@
+2007-07-09  Matthias Clasen  <mclasen@redhat.com>
+
+	* POTFILES.in: Additions, sort alphabetically. (#436965,
+	Philip Withnall)
+
 2007-07-09  Theppitak Karoonboonyanan  <thep@linux.thai.net>
 
 	* th.po: Updated Thai translation.
