@@ -1,5 +1,11 @@
 2007-07-09  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkviewport.c (gtk_viewport_size_request): Changed size 
+	requisition so the viewport does not add the border thickness 
+	if it has GTK_SHADOW_NONE selected.  (#361781, Miguel Gomez)
+
+2007-07-09  Matthias Clasen  <mclasen@redhat.com>
+
 	* gtk/gtktooltip.c (gtk_tooltip_trigger_tooltip_query): 
 	Fix a typo in the docs.  (#453930, Guillaume Cottenceau)
 

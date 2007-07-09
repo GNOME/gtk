@@ -712,11 +712,15 @@ gtk_viewport_size_request (GtkWidget      *widget,
 
   bin = GTK_BIN (widget);
 
-  requisition->width = (GTK_CONTAINER (widget)->border_width +
-			GTK_WIDGET (widget)->style->xthickness) * 2;
+  requisition->width = GTK_CONTAINER (widget)->border_width;
 
-  requisition->height = (GTK_CONTAINER (widget)->border_width * 2 +
-			 GTK_WIDGET (widget)->style->ythickness) * 2;
+  requisition->height = GTK_CONTAINER (widget)->border_width;
+
+  if (GTK_VIEWPORT (widget)->shadow_type != GTK_SHADOW_NONE)
+    {
+      requisition->width += 2 * widget->style->xthickness;
+      requisition->height += 2 * widget->style->ythickness;
+    }
 
   if (bin->child && GTK_WIDGET_VISIBLE (bin->child))
     {
