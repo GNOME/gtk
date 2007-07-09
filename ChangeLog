@@ -1,5 +1,10 @@
 2007-07-09  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkselection.c (normalize_to_crlf): Don't ignore
+	the passed-in len parameter.  (#430049, Yevgen Muntyan)
+
+2007-07-09  Matthias Clasen  <mclasen@redhat.com>
+
 	* gtk/gtkframe.c (gtk_frame_size_allocate): Improve the
 	handling of broken situations.  (#427899, Francesco Montorsi)
 

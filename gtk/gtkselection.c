@@ -1197,8 +1197,9 @@ normalize_to_crlf (const gchar *str,
 {
   GString *result = g_string_sized_new (len);
   const gchar *p = str;
+  const gchar *end = str + len;
 
-  while (1)
+  while (p < end)
     {
       if (*p == '\n')
 	g_string_append_c (result, '\r');
@@ -1207,12 +1208,11 @@ normalize_to_crlf (const gchar *str,
 	{
 	  g_string_append_c (result, *p);
 	  p++;
-	  if (*p != '\n')
+	  if (p == end || *p != '\n')
 	    g_string_append_c (result, '\n');
+	  if (p == end)
+	    break;
 	}
-
-      if (*p == '\0')
-	break;
 
       g_string_append_c (result, *p);
       p++;
