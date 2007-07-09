@@ -1,3 +1,14 @@
+2007-07-09  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtklabel.[ch]: Use a bit of the GtkLabel structure to
+	remember that a pattern has been set.
+	(gtk_label_set_pattern_internal): Don't do anything if 
+	a specific pattern has been set.
+	(gtk_label_set_pattern): set the new bit to TRUE when 
+	setting a pattern, and recalculate everything if the 
+	pattern is unset. Fix gtk_label_set_pattern() not working 
+	anymore.  (#452861, Vincent Untz)
+
 2007-07-09  Claude Paroz  <claude@2xlibre.net>
 
 	* configure.in: Changed uz to uz@cyrillic and uz@Latn to uz.

@@ -798,6 +798,7 @@ gtk_label_init (GtkLabel *label)
 
   label->use_underline = FALSE;
   label->use_markup = FALSE;
+  label->pattern_set = FALSE;
   
   label->mnemonic_keyval = GDK_VoidSymbol;
   label->layout = NULL;
@@ -1537,6 +1538,9 @@ gtk_label_set_pattern_internal (GtkLabel    *label,
 
   g_return_if_fail (GTK_IS_LABEL (label));
 
+  if (label->pattern_set)
+    return;
+
   g_object_get (gtk_widget_get_settings (GTK_WIDGET (label)),
 		"gtk-enable-mnemonics", &enable_mnemonics,
 		NULL);
@@ -1557,7 +1561,15 @@ gtk_label_set_pattern (GtkLabel	   *label,
 {
   g_return_if_fail (GTK_IS_LABEL (label));
   
-  gtk_label_set_pattern_internal (label, pattern);
+  label->pattern_set = FALSE;
+
+  if (pattern)
+    {
+      gtk_label_set_pattern_internal (label, pattern);
+      label->pattern_set = TRUE;
+    }
+  else
+    gtk_label_recalculate (label);
 
   gtk_label_clear_layout (label);  
   gtk_widget_queue_resize (GTK_WIDGET (label));

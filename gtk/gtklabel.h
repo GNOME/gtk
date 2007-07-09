@@ -62,6 +62,7 @@ struct _GtkLabel
   guint   have_transform   : 1;
   guint   in_click         : 1;
   guint   wrap_mode        : 3;
+  guint   pattern_set      : 1;
 
   guint   mnemonic_keyval;
   
