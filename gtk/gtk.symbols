@@ -4637,6 +4637,7 @@ gtk_widget_get_direction
 gtk_widget_get_display
 gtk_widget_get_events
 gtk_widget_get_extension_events
+gtk_widget_get_has_tooltip
 gtk_widget_get_modifier_style
 gtk_widget_get_name
 gtk_widget_get_no_show_all
@@ -4715,6 +4716,7 @@ gtk_widget_set_direction
 gtk_widget_set_double_buffered
 gtk_widget_set_events
 gtk_widget_set_extension_events
+gtk_widget_set_has_tooltip
 gtk_widget_set_name
 gtk_widget_set_no_show_all
 gtk_widget_set_parent

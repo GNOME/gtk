@@ -1,3 +1,11 @@
+2007-07-10  Kristian Rietveld  <kris@imendio.com>
+
+	* gtk/gtk.symbols:
+	* gtk/gtkwidget.[ch] (gtk_widget_{get,set}_has_tooltip): add
+	getter/setter pair, slight addition to has-tooltip property
+	documentation,
+	(gtk_widget_real_set_has_tooltip): renamed internal function.
+
 2007-07-10  Christian Persch  <chpe@gnome.org>
 
 	* gtk/gtkaction.c: (gtk_action_sync_tooltip),

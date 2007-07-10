@@ -797,6 +797,9 @@ gchar *    gtk_widget_get_tooltip_text      (GtkWidget   *widget);
 void       gtk_widget_set_tooltip_markup    (GtkWidget   *widget,
                                              const gchar *markup);
 gchar *    gtk_widget_get_tooltip_markup    (GtkWidget   *widget);
+void       gtk_widget_set_has_tooltip       (GtkWidget   *widget,
+					     gboolean     has_tooltip);
+gboolean   gtk_widget_get_has_tooltip       (GtkWidget   *widget);
 
 GType           gtk_requisition_get_type (void) G_GNUC_CONST;
 GtkRequisition *gtk_requisition_copy     (const GtkRequisition *requisition);

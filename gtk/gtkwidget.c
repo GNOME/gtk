@@ -245,7 +245,7 @@ static void		gtk_widget_queue_shallow_draw		(GtkWidget        *widget);
 static gboolean         gtk_widget_real_can_activate_accel      (GtkWidget *widget,
                                                                  guint      signal_id);
 
-static void             gtk_widget_set_has_tooltip              (GtkWidget *widget,
+static void             gtk_widget_real_set_has_tooltip         (GtkWidget *widget,
 								 gboolean   has_tooltip,
 								 gboolean   force);
 static void             gtk_widget_buildable_interface_init     (GtkBuildableIface *iface);
@@ -612,6 +612,11 @@ gtk_widget_class_init (GtkWidgetClass *klass)
  * A value of %TRUE indicates that @widget can have a tooltip, in this case
  * the widget will be queried using #GtkWidget::query-tooltip to determine
  * whether it will provide a tooltip or not.
+ *
+ * Note that setting this property to %TRUE for the first time will change
+ * the event masks of the GdkWindows of this widget to include leave-notify
+ * and motion-notify events.  This cannot and will not be undone when the
+ * property is set to %FALSE again.
  *
  * Since: 2.12
  */
@@ -2025,7 +2030,8 @@ gtk_widget_set_property (GObject         *object,
       gtk_widget_set_no_show_all (widget, g_value_get_boolean (value));
       break;
     case PROP_HAS_TOOLTIP:
-      gtk_widget_set_has_tooltip (widget, g_value_get_boolean (value), FALSE);
+      gtk_widget_real_set_has_tooltip (widget,
+				       g_value_get_boolean (value), FALSE);
       break;
     case PROP_TOOLTIP_MARKUP:
       tooltip_window = g_object_get_qdata (object, quark_tooltip_window);
@@ -2035,7 +2041,7 @@ gtk_widget_set_property (GObject         *object,
 			       tooltip_markup, g_free);
 
       tmp = (tooltip_window != NULL || tooltip_markup != NULL);
-      gtk_widget_set_has_tooltip (widget, tmp, FALSE);
+      gtk_widget_real_set_has_tooltip (widget, tmp, FALSE);
       break;
     case PROP_TOOLTIP_TEXT:
       tooltip_window = g_object_get_qdata (object, quark_tooltip_window);
@@ -2046,7 +2052,7 @@ gtk_widget_set_property (GObject         *object,
                                tooltip_markup, g_free);
 
       tmp = (tooltip_window != NULL || tooltip_markup != NULL);
-      gtk_widget_set_has_tooltip (widget, tmp, FALSE);
+      gtk_widget_real_set_has_tooltip (widget, tmp, FALSE);
       break;
     default:
       break;
@@ -2854,7 +2860,9 @@ gtk_widget_realize (GtkWidget *widget)
       
       g_signal_emit (widget, widget_signals[REALIZE], 0);
 
-      gtk_widget_set_has_tooltip (widget, GPOINTER_TO_UINT (g_object_get_qdata (G_OBJECT (widget), quark_has_tooltip)), TRUE);
+      gtk_widget_real_set_has_tooltip (widget,
+				       GPOINTER_TO_UINT (g_object_get_qdata (G_OBJECT (widget), quark_has_tooltip)),
+				       TRUE);
 
       if (GTK_WIDGET_HAS_SHAPE_MASK (widget))
 	{
@@ -8812,9 +8820,9 @@ gtk_widget_set_no_show_all (GtkWidget *widget,
 
 
 static void
-gtk_widget_set_has_tooltip (GtkWidget *widget,
-			    gboolean   has_tooltip,
-			    gboolean   force)
+gtk_widget_real_set_has_tooltip (GtkWidget *widget,
+			         gboolean   has_tooltip,
+			         gboolean   force)
 {
   gboolean priv_has_tooltip;
 
@@ -8882,7 +8890,7 @@ gtk_widget_set_tooltip_window (GtkWidget *widget,
 			   tooltip_window, g_object_unref);
 
   tmp = (tooltip_window != NULL || tooltip_markup != NULL);
-  gtk_widget_set_has_tooltip (widget, tmp, FALSE);
+  gtk_widget_real_set_has_tooltip (widget, tmp, FALSE);
 
   if (tmp)
     gtk_widget_trigger_tooltip_query (widget);
@@ -9017,6 +9025,47 @@ gtk_widget_get_tooltip_markup (GtkWidget *widget)
   return text;
 }
 
+/**
+ * gtk_widget_set_has_tooltip:
+ * @widget: a #GtkWidget
+ * @has_tooltip: whether or not @widget has a tooltip.
+ *
+ * Sets the has-tooltip property on @widget to @has_tooltip.  See
+ * GtkWidget:has-tooltip for more information.
+ *
+ * Since: 2.12
+ */
+void
+gtk_widget_set_has_tooltip (GtkWidget *widget,
+			    gboolean   has_tooltip)
+{
+  g_return_if_fail (GTK_IS_WIDGET (widget));
+
+  g_object_set (G_OBJECT (widget), "has-tooltip", has_tooltip, NULL);
+}
+
+/**
+ * gtk_widget_get_has_tooltip:
+ * @widget: a #GtkWidget
+ *
+ * Returns the current value of the has-tooltip property.  See
+ * GtkWidget:has-tooltip for more information.
+ *
+ * Return value: current value of has-tooltip on @widget.
+ *
+ * Since: 2.12
+ */
+gboolean
+gtk_widget_get_has_tooltip (GtkWidget *widget)
+{
+  gboolean has_tooltip = FALSE;
+
+  g_return_val_if_fail (GTK_IS_WIDGET (widget), FALSE);
+
+  g_object_get (G_OBJECT (widget), "has-tooltip", &has_tooltip, NULL);
+
+  return has_tooltip;
+}
 
 #define __GTK_WIDGET_C__
 #include "gtkaliasdef.c"
