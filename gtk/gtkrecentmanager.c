@@ -709,7 +709,7 @@ gtk_recent_manager_get_default (void)
  *   and can be used as long as the screen is open. Do not ref or
  *   unref it.
  *
- * @Deprecated: 2.12: This function has been deprecated and should
+ * Deprecated: 2.12: This function has been deprecated and should
  *   not be used in newly written code. Calling this function is
  *   equivalent to calling gtk_recent_manager_get_default().
  *
@@ -732,7 +732,7 @@ gtk_recent_manager_get_for_screen (GdkScreen *screen)
  * 
  * Since: 2.10
  *
- * @Deprecated: 2.12: This function has been deprecated and should
+ * Deprecated: 2.12: This function has been deprecated and should
  *   not be used in newly written code. Calling this function has
  *   no effect.
  */
