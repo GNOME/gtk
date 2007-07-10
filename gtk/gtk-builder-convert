@@ -25,7 +25,7 @@
 Converts Glade files into XML files which can be loaded with GtkBuilder.
 The [INPUT] file is
 
-  -w, --skip-windows     Convert everything bug GtkWindow subclasses.
+  -w, --skip-windows     Convert everything but GtkWindow subclasses.
   -r, --root             Convert only widget named root and its children
   -h, --help             display this help and exit
 
