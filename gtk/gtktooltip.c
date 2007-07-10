@@ -434,8 +434,8 @@ child_location_foreach (GtkWidget *child,
 	      tmp.y = y;
 	      tmp.container = child;
 
-	      gtk_container_foreach (GTK_CONTAINER (child),
-				     child_location_foreach, &tmp);
+	      gtk_container_forall (GTK_CONTAINER (child),
+				    child_location_foreach, &tmp);
 
 	      if (tmp.child)
 		child_loc->child = tmp.child;
@@ -526,8 +526,8 @@ find_widget_under_pointer (GdkWindow *window,
       child_loc.container = event_widget;
       child_loc.child = NULL;
 
-      gtk_container_foreach (GTK_CONTAINER (event_widget),
-			     child_location_foreach, &child_loc);
+      gtk_container_forall (GTK_CONTAINER (event_widget),
+			    child_location_foreach, &child_loc);
 
       if (child_loc.child)
 	event_widget = child_loc.child;
