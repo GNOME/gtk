@@ -1,3 +1,8 @@
+2007-07-10  Kristian Rietveld  <kris@imendio.com>
+
+	* gtk/gtktooltip.c (child_location_foreach): ignore invisible
+	(!drawable) widgets.  (Fixes bug reported by Paolo Borelli).
+
 2007-07-10  Matthias Clasen  <mclasen@redhat.com>
 
 	* README.in: Make sure all deprecations are mentioned.

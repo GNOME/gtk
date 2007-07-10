@@ -414,6 +414,10 @@ child_location_foreach (GtkWidget *child,
   gint x, y;
   struct ChildLocation *child_loc = data;
 
+  /* Ignore invisible widgets */
+  if (!GTK_WIDGET_DRAWABLE (child))
+    return;
+
   if (!child_loc->child &&
       gtk_widget_translate_coordinates (child_loc->container, child,
 					child_loc->x, child_loc->y,
