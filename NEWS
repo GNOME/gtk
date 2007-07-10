@@ -1,3 +1,56 @@
+Overview of Changes from GTK+ 2.11.5 to 2.11.6
+==============================================
+
+ * GtkBuilder:
+ - The gtk-builder-convert script is more versatile
+ - GtkBuilder suppports GdkPixbuf properties
+ - GtkBuilder parses, but doesn't yet implement <accessibility> 
+ - Support for accelerators in actions has been added
+
+* GtkTooltips:
+ - The old tooltips API has been deprecated, and GTK+
+   use the new API internally 
+
+* Bug fixes:
+ 452598 crash in Evolution: Added an Evolution attac...
+ 447966 Add builder support for GdkPixbuf properties
+ 453033 gnome-panel crashed with SIGSEGV in idle_populate_func()
+ 453365 gdk_pixbuf_get_file_info crashes on tif files
+ 361781 GtkViewport size request includes xthickness/ythickness f...
+ 427899 GtkFrame's label may exceed the frame area
+ 430049 gtk_selection_data_set_text() ignores length argument
+ 436965 Add files to /po[-properties]/POTFILES.in
+ 437281 gtk_button_set_image destroyes the old image
+ 448604 gtk+ printbackends build fix
+ 449311 GtkVolumeButton should use new tooltip API
+ 451164 I translate gnome-desktop. But i have no svn account and ...
+ 451575 (API) Changes needed for GtkTooltips deprecation
+ 452425 Setting "tooltip-text" property to NULL has bad effects
+ 452861 gtk_label_set_pattern() is not working anymore
+ 452988 error handling in GtkCellLayout custom parser
+ 453411 Button state not included in key events
+ 453413 Key event state is not right for modifier keys
+ 454654 Accelerator support for actions
+ 454700 Minor update for gdk_threads_enter
+ 454703 gdk_window_invalidate_rect accepts NULL
+ 454830 gtk-builder-convert not converting menus
+ 452056 GtkComboBox doesn't emit 'changed' signal when active row...
+ 452278 GtkBuilder API Documentation
+ 453316 small documentation fix in GtkDrawingArea API documentation
+ 453673 small doc quirk in gtk/gtktreeview.c
+ 453930 small doc quirk in gtk/gtktooltip.c
+ 454596 [patch] gdkpixbuf-scale slight api doc improvement
+ 454835 [patch] example in gdk-pixbuf-scaling using deprecated gd...
+
+* Updated translations:
+ Greek (el)
+ Finnish (fi)
+ Galician (gl)
+ Gujarati (gu)
+ Thai (th)
+ Vietnamese (vi)
+ 
+
 Overview of Changes from GTK+ 2.11.4 to 2.11.5
 ==============================================
 

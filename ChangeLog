@@ -1,3 +1,7 @@
+2007-07-10  Matthias Clasen  <mclasen@redhat.com>
+
+	* NEWS: Updates
+
 2007-07-09  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtklabel.[ch]: Use a bit of the GtkLabel structure to
