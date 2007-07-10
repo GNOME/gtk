@@ -1,3 +1,14 @@
+2007-07-11  Christian Persch  <chpe@gnome.org>
+
+	* gtk/gtkaction.c: (gtk_action_buildable_set_name),
+	(gtk_action_finalize), (gtk_action_set_property),
+	(gtk_action_get_property):
+	* gtk/gtkactiongroup.c: (gtk_action_group_init),
+	(gtk_action_group_add_action),
+	(gtk_action_group_add_action_with_accel),
+	(gtk_action_group_remove_action): Intern the action's name. Saves two
+	string duplicates of it per action; bug #455645.
+
 2007-07-10  Richard Hult  <richard@imendio.com>
 
 	* gdk/quartz/gdkwindow-quartz.c: (gdk_window_new),

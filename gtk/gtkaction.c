@@ -54,7 +54,7 @@
 
 struct _GtkActionPrivate 
 {
-  gchar *name;
+  const gchar *name; /* interned */
   gchar *label;
   gchar *short_label;
   gchar *tooltip;
@@ -398,12 +398,9 @@ static void
 gtk_action_buildable_set_name (GtkBuildable *buildable,
 			       const gchar  *name)
 {
-  gchar *tmp;
   GtkAction *action = GTK_ACTION (buildable);
 
-  tmp = action->private_data->name;
-  action->private_data->name = g_strdup (name);
-  g_free (tmp);
+  action->private_data->name = g_intern_string (name);
 }
 
 static const gchar *
@@ -455,7 +452,6 @@ gtk_action_finalize (GObject *object)
   GtkAction *action;
   action = GTK_ACTION (object);
 
-  g_free (action->private_data->name);
   g_free (action->private_data->label);
   g_free (action->private_data->short_label);
   g_free (action->private_data->tooltip);
@@ -476,16 +472,13 @@ gtk_action_set_property (GObject         *object,
 			 GParamSpec      *pspec)
 {
   GtkAction *action;
-  gchar *tmp;
   
   action = GTK_ACTION (object);
 
   switch (prop_id)
     {
     case PROP_NAME:
-      tmp = action->private_data->name;
-      action->private_data->name = g_value_dup_string (value);
-      g_free (tmp);
+      action->private_data->name = g_intern_string (g_value_get_string (value));
       break;
     case PROP_LABEL:
       gtk_action_set_label (action, g_value_get_string (value));
@@ -545,7 +538,7 @@ gtk_action_get_property (GObject    *object,
   switch (prop_id)
     {
     case PROP_NAME:
-      g_value_set_string (value, action->private_data->name);
+      g_value_set_static_string (value, action->private_data->name);
       break;
     case PROP_LABEL:
       g_value_set_string (value, action->private_data->label);
