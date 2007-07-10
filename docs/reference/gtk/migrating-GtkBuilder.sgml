@@ -9,7 +9,48 @@
   </para>
 
   <para>
-    More details about migrating from libglade to GtkBiulder will 
+    While GtkBuilder strives to be a complete replacement for
+    libglade, there are a number of areas where it is currently
+    still behind libglade:
+    <itemizedlist>
+
+      <listitem><para>
+        GtkBuilder can not construct partial trees, it lacks
+        the equivalent of the @root parameter of glade_xml_new().
+        Due to the way GtkBuilder parses its input, this is difficult 
+        to implement, see 
+        <ulink url="http://bugzilla.gnome.org/show_bug.cgi?id=447998">bug 
+        447998</ulink>. As a workaround, you can split your glade file 
+        into multiple GtkBuilder input files. The 
+        <application>gtk-builder-convert</application> conversion script 
+        has a <option>--root</option> option that can help with this.
+      </para></listitem>
+
+      <listitem><para>
+        GtkBuilder does not yet implement support for accessibility 
+        properties. It parses the same &lt;accessibility&gt; elements 
+        as libglade, but ignores them. See 
+        <ulink url="http://bugzilla.gnome.org/show_bug.cgi?id=454653">bug 
+        454983</ulink> for the current status of accessibility support 
+        in GtkBuilder.
+      </para></listitem>
+ 
+      <listitem><para>
+        GtkBuilder supports context information in translatable
+        properties in a slightly different way than libglade. 
+        Intltool does not yet support this; see 
+        <ulink url="http://bugzilla.gnome.org/show_bug.cgi?id=454894">bug 
+        454894</ulink> for the current status of intltool support for 
+        GtkBuilder files. Thankfully, context in translations is a 
+        rarely used feature, and if you are not using it, intltools 
+        glade format support works just fine for GtkBuilder files.
+      </para></listitem>
+
+  </itemizedlist>
+  </para>
+
+  <para>
+    More details about migrating from libglade to GtkBuilder will 
     appear here over time...
   </para>
 
