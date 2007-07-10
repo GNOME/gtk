@@ -23,7 +23,7 @@ with gdk_colormap_get_system()) is the default
 colormap of the system. If you are using GdkRGB,
 there is another colormap that is important - the
 colormap in which GdkRGB works, retrieved with
-gdk_rgb_get_cmap(). However, when using GdkRGB, 
+gdk_rgb_get_colormap(). However, when using GdkRGB, 
 it is not generally necessary to allocate colors
 directly.
 </para>

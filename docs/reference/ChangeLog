@@ -1,4 +1,9 @@
 2007-07-10  Matthias Clasen  <mclasen@redhat.com>
+	
+	* gdk/tmpl/colors.sgml: Remov references to deprecated
+	api.  (#455666, Guillaume Cottenceau)
+
+2007-07-10  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/migrating-GtkBuilder.sgml: Add some stuff
 	* gtk/gtk-builder-convert.xml: Updates
