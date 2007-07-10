@@ -675,12 +675,17 @@ gdk_window_new (GdkWindow     *parent,
     case GDK_WINDOW_DIALOG:
     case GDK_WINDOW_TEMP:
       {
-	NSRect content_rect = 
-	  NSMakeRect (private->x, 
-		      _gdk_quartz_window_get_inverted_screen_y (private->y) - impl->height,
-		      impl->width, impl->height);
-	const char *title;
-	int style_mask;
+        NSRect content_rect;
+        int style_mask;
+        const char *title;
+
+        /* Big hack: We start out outside the screen and move the
+         * window in before showing it. This makes the initial
+         * MouseEntered event work if the window ends up right under
+         * the mouse pointer, bad quartz.
+         */
+        content_rect = NSMakeRect (-500 - impl->width, -500 - impl->height,
+                                   impl->width, impl->height);
 
 	switch (attributes->window_type) 
           {
@@ -847,6 +852,22 @@ show_window_internal (GdkWindow *window,
 
   if (impl->toplevel)
     {
+      /* Move the window into place, to guarantee that we get the
+       * initial MouseEntered event.
+       */
+      if (!GDK_WINDOW_IS_MAPPED (window))
+        {
+          NSRect content_rect;
+          NSRect frame_rect;
+
+          content_rect =
+            NSMakeRect (private->x,
+                        _gdk_quartz_window_get_inverted_screen_y (private->y) - impl->height,
+                        impl->width, impl->height);
+          frame_rect = [impl->toplevel frameRectForContentRect:content_rect];
+          [impl->toplevel setFrame:frame_rect display:NO];
+        }
+
       /* We should make the window not raise for !raise, but at least
        * this will keep it from getting focused in that case.
        */
@@ -955,20 +976,32 @@ gdk_window_hide (GdkWindow *window)
     gdk_synthesize_window_state (window,
 				 0,
 				 GDK_WINDOW_STATE_WITHDRAWN);
-  
+
   _gdk_window_clear_update_area (window);
 
   impl = GDK_WINDOW_IMPL_QUARTZ (private->impl);
 
   if (impl->toplevel) 
     {
-      /* Update main window. */
+      NSRect content_rect;
+      NSRect frame_rect;
+
+     /* Update main window. */
       main_window_stack = g_slist_remove (main_window_stack, window);
       if ([NSApp mainWindow] == impl->toplevel)
         _gdk_quartz_window_did_resign_main (window);
 
       if (impl->transient_for)
         _gdk_quartz_window_detach_from_parent (window);
+
+      /* Big hack in gdk_window_new() and show_window_internal()
+       * continued. Move the window away when hidden so that we can
+       * move it back before showing it.
+       */
+      content_rect = NSMakeRect (-500 - impl->width, -500 - impl->height,
+                                 impl->width, impl->height);
+      frame_rect = [impl->toplevel frameRectForContentRect:content_rect];
+      [impl->toplevel setFrame:frame_rect display:NO];
 
       [impl->toplevel orderOut:nil];
     }

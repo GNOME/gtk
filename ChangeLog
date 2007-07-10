@@ -1,3 +1,11 @@
+2007-07-10  Richard Hult  <richard@imendio.com>
+
+	* gdk/quartz/gdkwindow-quartz.c: (gdk_window_new),
+	(show_window_internal), (gdk_window_show), (gdk_window_hide): Add
+	hack to workaround the broken tracking rect implementation in
+	quartz, that doesn't seem to produce events if the window shows up
+	under the mouse.
+
 2007-07-10  Kristian Rietveld  <kris@imendio.com>
 
 	* gtk/gtk.symbols:
