@@ -30,11 +30,11 @@ See the file 'INSTALL'
 Release notes for 2.12
 ======================
 
-* Functions: gtk_about_dialog_get/set_name() were deprecated in favour of
+* gtk_about_dialog_get/set_name() were deprecated in favour of
   gtk_about_dialog_get/set_program_name(), the GtkAboutDialog now uses the
   "program-name" property instead of the conflicting "name" property.
 
-* The tiff loader now requires libtiff 3.6.0 or later.
+* The gdk-pixbuf tiff loader now requires libtiff 3.6.0 or later.
 
 * Support for Windows 9x/ME has officially been removed. It hasn't worked
   since 2.6 anyway.
@@ -62,25 +62,28 @@ Release notes for 2.12
   is called create-window, so this name can no longer be used for signals
   in objects derived from GtkNotebook.
 
+* The gtk_notebook_set/get_group_id() functions were found to be insufficient
+  and have been deprecated in favour of gtk_notebook_set/get_group().
+
 * The move-focus signal has been moved to GtkWidget, to unify the 
   various implementations of this signal in specific widgets. Great care 
   has been taken to make sure that all code using this signal continues
   to work.
 
-* Removed an unused and hardly visible GtkFrame from the menu widget hierarchy
-  when GtkComboBox::appears-as-list style property is set. Any RC file
-  applying a different style to any widget below the widget path
-  "gtk-combobox-popup-window.GtkFrame" should take into account that the 
-  frame no longer exists.
+* An unused and hardly visible GtkFrame has been removed from the menu 
+  widget hierarchy when GtkComboBox::appears-as-list style property is 
+  set. Any RC file applying a different style to any widget below the 
+  widget path "gtk-combobox-popup-window.GtkFrame" should take into 
+  account that the frame no longer exists.
 
-* The external print preview application used by GtkPrintOperationPreview is
-  now passed the print settings on the command line with the --print-settings
-  parameter pointing to a temp file containing the settings. The preview
-  application assumes ownership of the file and should delete it once it does
-  not need it anymore. The --print-settings commandline option is understood
-  by Evince 0.9.0 and newer. To use a different print preview application,
-  change the gtk-print-preview-command setting in your gtkrc file, e.g.
-  gtk-print-preview-command = "ggv %f"
+* The external print preview application used by GtkPrintOperationPreview 
+  is now passed the print settings on the command line with the 
+  --print-settings parameter pointing to a temp file containing the 
+  settings. The preview application assumes ownership of the file and 
+  should delete it once it does not need it anymore. The --print-settings 
+  commandline option is understood by Evince 0.9.0 and newer. To use a 
+  different print preview application, change the gtk-print-preview-command 
+  setting in your gtkrc file, e.g. gtk-print-preview-command = "ggv %f"
 
 * GtkMenuShell is now defined as an abstract type. It was already 
   documented as an abstract class, and there is little reason to 
@@ -88,7 +91,11 @@ Release notes for 2.12
 
 * The GtkTooltips struct (this is the old tooltips API) is now considered
   private. Code that used to access this struct, in particular the
-  tips_data_list field, will need to change.
+  tips_data_list field, will need to change. All of the old tooltips
+  API has been deprecated in favour of a new implementation and
+  API. This affects all of the gtk_tooltips_ functions, and functions 
+  which take a GtkTooltips argument, such as gtk_tool_item_set_tooltip()
+  and gtk_menu_tool_button_set_arrow_tooltip().
   
 * The memory management of the GtkRecentManager object has been changed,
   as using the screen didn't guarantee that the singleton instance was
@@ -96,6 +103,20 @@ Release notes for 2.12
   and should not be used anymore; the GtkRecentManager instance returned by
   the gtk_recent_manager_get_default() function is guaranteed to be valid
   for the entire lifetime of an application.
+
+* A number of interfaces that have been superseded by newer interfaces for 
+  a long time have finally been deprecated. This includes 
+  gtk_widget_ref/unref(), gtk_rc_style_ref/unref() and the old file selector.
+
+* The various coordinate systems in use in GtkTreeView widgets have
+  been clarified in the documentation, and in the cause of doing so, 
+  the functions gtk_tree_view_widget_to_tree_coords() and
+  gtk_tree_view_tree_to_widget_coords() have been deprecated in 
+  favour of a new family of gtk_tree_view_convert_ functions.
+
+* gtk_menu_item_remove_submenu() has been deprecated in favour of
+  gtk_menu_item_set_submenu (..., NULL).
+
 
 Release notes for 2.10
 ======================

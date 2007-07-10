@@ -1,5 +1,9 @@
 2007-07-10  Matthias Clasen  <mclasen@redhat.com>
 
+	* README.in: Make sure all deprecations are mentioned.
+
+2007-07-10  Matthias Clasen  <mclasen@redhat.com>
+
 	* gtk/gtkrecentmanager.c: Fix some doc formatting
 
 2007-07-10  Matthias Clasen  <mclasen@redhat.com>
