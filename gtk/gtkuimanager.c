@@ -2613,16 +2613,6 @@ update_node (GtkUIManager *self,
 
       if (info->proxy)
         {
-          /* FIXME: we must re-set the tooltip, since tooltips on 
-           * toolitems can't be set before the toolitem is added 
-           * to the toolbar.
-           */
-	  gchar *tooltip;
-
-	  g_object_get (G_OBJECT (action), "tooltip", &tooltip, NULL);
-	  g_object_set (G_OBJECT (action), "tooltip", tooltip, NULL);
-	  g_free (tooltip);
-     
           g_signal_connect (info->proxy, "notify::visible",
 			    G_CALLBACK (update_smart_separators), NULL);
         }

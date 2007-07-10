@@ -1451,13 +1451,8 @@ static void
 gtk_action_sync_tooltip (GtkAction *action,
 			 GtkWidget *proxy)
 {
-  GtkWidget *parent;
-
-  parent = gtk_widget_get_parent (proxy);
-  
-  if (GTK_IS_TOOL_ITEM (proxy) && GTK_IS_TOOLBAR (parent))
-    gtk_tool_item_set_tooltip_text (GTK_TOOL_ITEM (proxy),
-				    action->private_data->tooltip);
+  gtk_tool_item_set_tooltip_text (GTK_TOOL_ITEM (proxy),
+				  action->private_data->tooltip);
 }
 
 static void 
@@ -1475,8 +1470,9 @@ gtk_action_set_tooltip (GtkAction   *action,
   for (p = action->private_data->proxies; p; p = p->next)
     {
       proxy = (GtkWidget *)p->data;
-      
-      gtk_action_sync_tooltip (action, proxy);
+
+      if (GTK_IS_TOOL_ITEM (proxy))
+        gtk_action_sync_tooltip (action, proxy);
     }
 
   g_object_notify (G_OBJECT (action), "tooltip");

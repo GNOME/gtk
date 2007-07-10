@@ -1,3 +1,11 @@
+2007-07-10  Christian Persch  <chpe@gnome.org>
+
+	* gtk/gtkaction.c: (gtk_action_sync_tooltip),
+	(gtk_action_set_tooltip):
+	* gtk/gtkuimanager.c: (update_node): Remove work-around for the old
+	tooltips code, and just set the action tooltip immediately on the
+	proxy widget. Bug #455482.
+
 2007-07-10  Kristian Rietveld  <kris@imendio.com>
 
 	* gtk/gtktooltip.c (find_widget_under_pointer),
