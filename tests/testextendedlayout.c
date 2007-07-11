@@ -539,7 +539,7 @@ create_baseline_test_hbox (TestSuite *suite,
   
       hbox = gtk_hbox_new (FALSE, 6);
       test_case_append_guide (test, hbox, GUIDE_EXTERIOUR_BOTH, -1);
-      set_widget_name (hbox, "debug-hbox-%s", names[i]);
+      set_widget_name (hbox, "hbox-%s", names[i]);
 
       if (i > 0)
         gtk_hbox_set_baseline_policy (GTK_HBOX (hbox), GTK_BASELINE_FIRST);
@@ -551,10 +551,10 @@ create_baseline_test_hbox (TestSuite *suite,
                         1, G_N_ELEMENTS (captions), i, i + 1,
                         GTK_FILL, GTK_FILL, 0, 0);
 
-      for (j = 0; captions[j]; ++j)
+      for (j = i ? -3 : 0; captions[MAX (0, j)]; ++j)
         {
           child = gtk_label_new (NULL);
-          gtk_label_set_markup (GTK_LABEL (child), captions[j]);
+          gtk_label_set_markup (GTK_LABEL (child), captions[MAX (0, j)]);
 
           if (buttons)
             {
@@ -565,10 +565,13 @@ create_baseline_test_hbox (TestSuite *suite,
 
           test_case_append_guide (test, child, GUIDE_BASELINE, i);
 
-          if (0 == j && i > 1)
+          if (j < 0 && i > 1)
             {
-              bin = gtk_alignment_new (0.5, 0.5, 0.0, 0.0);
-              set_widget_name (hbox, "debug-align-%s-%s", buttons ? "button" : "label", names[i]);
+              bin = gtk_alignment_new (0.5, 0.5, 0.0, (j + 3) * 0.5);
+
+              set_widget_name (bin, "align-%s-%s-%d",
+                               buttons ? "button" : "label",
+                               names[i], (j + 3) * 50);
 
               switch (i) 
                 {
@@ -1351,13 +1354,13 @@ update_status (TestSuite *suite,
 {
   const gchar *widget_name = gtk_widget_get_name (child);
   const gchar *type_name = G_OBJECT_TYPE_NAME (child);
-  GString *status = g_string_new (widget_name);
+  GString *status = g_string_new (type_name);
 
   if (strcmp (widget_name, type_name))
-    g_string_append_printf (status, " (%s)", type_name);
+    g_string_append_printf (status, " (%s)", widget_name);
 
   g_string_append_printf (status,
-                          ": pos=%dx%d; size=%dx%d",
+                          ":\npos=%dx%d; size=%dx%d",
                           child->allocation.x,
                           child->allocation.y,
                           child->allocation.width,
@@ -1470,7 +1473,7 @@ watch_pointer_cb (gpointer data)
 
       if (suite->current)
         gtk_label_set_text (GTK_LABEL (suite->statusbar),
-                            "No widget selected.");
+                            "No widget selected.\n");
 
       suite->current = NULL;
     }
@@ -1606,7 +1609,8 @@ test_suite_setup_ui (TestSuite *self)
                             G_CALLBACK (gtk_widget_queue_draw),
                             self->notebook);
 
-  self->statusbar = gtk_label_new ("No widget selected.");
+  self->statusbar = gtk_label_new ("No widget selected.\n");
+  gtk_misc_set_alignment (GTK_MISC (self->statusbar), 0.0, 0.5);
   gtk_label_set_ellipsize (GTK_LABEL (self->statusbar),
                            PANGO_ELLIPSIZE_END);
 

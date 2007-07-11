@@ -1,3 +1,12 @@
+2007-07-04  Mathias Hasselmann  <mathias.hasselmann@gmx.de>
+
+	* gtk/gtkbin.c: Propagate baseline offset to the child widget.
+	* gtk/gtkhbox.c: Properly apply baseline alignment by using the
+	baseline found during requisition calculation for size allocation.
+	* tests/testextendedlayout.c: Add yscale variantes of GtkAlignment
+	to the baseline tests. Improve widget names. Split status message
+	into two lines.
+
 2007-07-03  Mathias Hasselmann  <mathias.hasselmann@gmx.de>
 
 	* tests/testextendedlayout.c: Allow choosing initially active 

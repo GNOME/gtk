@@ -245,6 +245,25 @@ gtk_bin_extended_layout_get_baselines (GtkExtendedLayout  *layout,
 }
 
 static void
+gtk_bin_extended_layout_set_baseline_offset (GtkExtendedLayout *layout,
+                                             gint               offset)
+{
+  GtkBin *bin = GTK_BIN (layout);
+
+  g_return_if_fail (GTK_IS_EXTENDED_LAYOUT (bin->child));
+
+  if (GTK_EXTENDED_LAYOUT_HAS_PADDING (layout))
+    {
+      GtkBorder padding;
+
+      gtk_extended_layout_get_padding (layout, &padding);
+      offset -= padding.top;
+    }
+
+  gtk_extended_layout_set_baseline_offset (GTK_EXTENDED_LAYOUT (bin->child), offset);
+}
+
+static void
 gtk_bin_extended_layout_interface_init (GtkExtendedLayoutIface *iface)
 {
   iface->get_features = gtk_bin_extended_layout_get_features;
@@ -252,6 +271,7 @@ gtk_bin_extended_layout_interface_init (GtkExtendedLayoutIface *iface)
   iface->get_width_for_height = gtk_bin_extended_layout_get_width_for_height;
   iface->get_natural_size = gtk_bin_extended_layout_get_natural_size;
   iface->get_baselines = gtk_bin_extended_layout_get_baselines;
+  iface->set_baseline_offset = gtk_bin_extended_layout_set_baseline_offset;
 }
 
 #define __GTK_BIN_C__

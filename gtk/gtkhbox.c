@@ -43,6 +43,7 @@ typedef struct _GtkHBoxPrivate GtkHBoxPrivate;
 struct _GtkHBoxPrivate
 {
   GtkBaselinePolicy baseline_policy;
+  gint baseline;
 };
 
 static void gtk_hbox_set_property  (GObject        *object,
@@ -173,12 +174,13 @@ gtk_hbox_size_request (GtkWidget      *widget,
   if (nvis_children > 0)
     {
       GtkHBoxPrivate *priv = GTK_HBOX_GET_PRIVATE (widget);
-      gint effective_baseline = 0, i;
       gint *baselines = NULL;
+      gint i;
 
       if (priv->baseline_policy != GTK_BASELINE_NONE)
         {
           baselines = g_newa (gint, nvis_children);
+          priv->baseline = 0;
 
           i = 0;
           children = box->children;
@@ -196,8 +198,7 @@ gtk_hbox_size_request (GtkWidget      *widget,
 
                       gtk_extended_layout_set_baseline_offset (layout, 0);
                       baselines[i] = gtk_extended_layout_get_single_baseline (layout, priv->baseline_policy);
-
-                      effective_baseline = MAX (effective_baseline, baselines[i]);
+                      priv->baseline = MAX (priv->baseline, baselines[i]);
                     }
                   else
                     baselines[i] = 0;
@@ -233,7 +234,7 @@ gtk_hbox_size_request (GtkWidget      *widget,
 
               if (baselines)
                 {
-                  gint padding = MAX (effective_baseline - baselines[i], 0);
+                  gint padding = MAX (priv->baseline - baselines[i], 0);
                   child_requisition.height += padding;
                 }
 
@@ -288,9 +289,7 @@ gtk_hbox_size_allocate (GtkWidget     *widget,
     {
       GtkHBoxPrivate *priv = GTK_HBOX_GET_PRIVATE (widget);
 
-      gint effective_baseline;
       GtkPackType packing;
-      gint *baselines;
 
       GtkTextDirection direction;
       gint border_width;
@@ -370,9 +369,6 @@ gtk_hbox_size_allocate (GtkWidget     *widget,
 	  extra = 0;
 	}
 
-      effective_baseline = 0;
-      baselines = g_newa (gint, nvis_children);
-
       child_allocation.y = allocation->y + border_width;
       child_allocation.height = MAX (1, (gint) allocation->height - (gint) border_width * 2);
 
@@ -446,20 +442,6 @@ gtk_hbox_size_allocate (GtkWidget     *widget,
 
                       gtk_widget_size_allocate (child->widget, &child_allocation);
 
-                      if (GTK_BASELINE_NONE != priv->baseline_policy &&
-                          GTK_IS_EXTENDED_LAYOUT (child->widget) &&
-                          GTK_EXTENDED_LAYOUT_HAS_BASELINES (child->widget))
-                        {
-                          GtkExtendedLayout *layout = GTK_EXTENDED_LAYOUT (child->widget);
-
-                          gtk_extended_layout_set_baseline_offset (layout, 0);
-                          baselines[i] = gtk_extended_layout_get_single_baseline (layout, priv->baseline_policy);
-
-                          effective_baseline = MAX (effective_baseline, baselines[i]);
-                        }
-                      else
-                        baselines[i] = 0;
-
                       if (GTK_PACK_START == packing)
                         x += child_width + box->spacing;
                       else
@@ -480,14 +462,23 @@ gtk_hbox_size_allocate (GtkWidget     *widget,
               child = children->data;
               children = children->next;
 
-              if (GTK_IS_EXTENDED_LAYOUT (child->widget) &&
-                  GTK_EXTENDED_LAYOUT_HAS_BASELINES (child->widget))
+              if (GTK_WIDGET_VISIBLE (child->widget))
                 {
-                  gint dy = MAX (0, effective_baseline - baselines[i]);
-                  gtk_extended_layout_set_baseline_offset (GTK_EXTENDED_LAYOUT (child->widget), dy);
-                }
+                  if (GTK_IS_EXTENDED_LAYOUT (child->widget) &&
+                      GTK_EXTENDED_LAYOUT_HAS_BASELINES (child->widget))
+                    {
+                      GtkExtendedLayout *layout = GTK_EXTENDED_LAYOUT (child->widget);
+                      gint baseline, dy;
 
-              ++i;
+                      gtk_extended_layout_set_baseline_offset (layout, 0);
+                      baseline = gtk_extended_layout_get_single_baseline (layout, priv->baseline_policy);
+                      dy = priv->baseline - baseline;
+
+                      gtk_extended_layout_set_baseline_offset (layout, dy);
+                    }
+
+                  ++i;
+                }
             }
         } /* baseline_policy */
     } /* nvis_children */
