@@ -136,6 +136,7 @@ content_files =					\
 	migrating-GtkRecentChooser.sgml 	\
 	migrating-GtkLinkButton.sgml		\
 	migrating-GtkBuilder.sgml		\
+        migrating-GtkTooltip.sgml		\
 	objects_grouped.sgml			\
 	osx.sgml				\
 	question_index.sgml			\
@@ -162,6 +163,7 @@ expand_content_files = 				\
 	migrating-GtkRecentChooser.sgml 	\
 	migrating-GtkLinkButton.sgml		\
 	migrating-GtkBuilder.sgml		\
+	migrating-GtkTooltip.sgml		\
 	tree_widget.sgml			\
 	text_widget.sgml			\
 	question_index.sgml

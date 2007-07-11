@@ -226,6 +226,7 @@
 <!ENTITY gtk-migrating-GtkRecentChooser SYSTEM "xml/migrating-GtkRecentChooser.sgml">
 <!ENTITY gtk-migrating-GtkLinkButton SYSTEM "xml/migrating-GtkLinkButton.sgml">
 <!ENTITY gtk-migrating-GtkBuilder SYSTEM "xml/migrating-GtkBuilder.sgml">
+<!ENTITY gtk-migrating-GtkTooltip SYSTEM "xml/migrating-GtkTooltip.sgml">
 <!ENTITY version SYSTEM "version.xml">
 <!ENTITY gtk-query-immodules SYSTEM "gtk-query-immodules-2.0.xml">
 <!ENTITY gtk-update-icon-cache SYSTEM "gtk-update-icon-cache.xml">
@@ -545,7 +546,6 @@ that is, GUI components such as #GtkButton or #GtkTextView.
         &GtkIMMulticontext;
         &GtkSizeGroup;
         &GtkTooltip;
-        &GtkTooltips;
         &GtkViewport;
         &GtkAccessible;
     </chapter>
@@ -614,6 +614,7 @@ that is, GUI components such as #GtkButton or #GtkTextView.
         &GtkPreview;
         &GtkProgress;
         &GtkText;
+        &GtkTooltips;
         &GtkTipsQuery;
         &GtkTree;
         &GtkTreeItem;
@@ -646,6 +647,7 @@ that is, GUI components such as #GtkButton or #GtkTextView.
     &gtk-migrating-GtkRecentChooser;
     &gtk-migrating-GtkLinkButton;
     &gtk-migrating-GtkBuilder;
+    &gtk-migrating-GtkTooltip;
   </part>
 
   <part>
@@ -682,4 +684,5 @@ that is, GUI components such as #GtkButton or #GtkTextView.
   <index role="2.12">
     <title>Index of new symbols in 2.12</title>
   </index>  
+
 </book>
