@@ -1,3 +1,9 @@
+2007-07-11  Kristian Rietveld  <kris@imendio.com>
+
+	* gtk/gtktreeview.c (gtk_tree_view_*_to_*_coords): x should be
+	changed when converting widget <=> bin_window coordinates, not
+	when bin_window <=> tree_window.
+
 2007-07-11  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtk.symbols:

@@ -12974,7 +12974,7 @@ gtk_tree_view_convert_widget_to_bin_window_coords (GtkTreeView *tree_view,
   g_return_if_fail (GTK_IS_TREE_VIEW (tree_view));
 
   if (bx)
-    *bx = wx;
+    *bx = wx + tree_view->priv->hadjustment->value;
   if (by)
     *by = wy - TREE_VIEW_HEADER_HEIGHT (tree_view);
 }
@@ -13002,7 +13002,7 @@ gtk_tree_view_convert_bin_window_to_widget_coords (GtkTreeView *tree_view,
   g_return_if_fail (GTK_IS_TREE_VIEW (tree_view));
 
   if (wx)
-    *wx = bx;
+    *wx = bx - tree_view->priv->hadjustment->value;
   if (wy)
     *wy = by + TREE_VIEW_HEADER_HEIGHT (tree_view);
 }
@@ -13030,7 +13030,7 @@ gtk_tree_view_convert_tree_to_bin_window_coords (GtkTreeView *tree_view,
   g_return_if_fail (GTK_IS_TREE_VIEW (tree_view));
 
   if (bx)
-    *bx = tx - tree_view->priv->hadjustment->value;
+    *bx = tx;
   if (by)
     *by = ty - tree_view->priv->dy;
 }
@@ -13058,7 +13058,7 @@ gtk_tree_view_convert_bin_window_to_tree_coords (GtkTreeView *tree_view,
   g_return_if_fail (GTK_IS_TREE_VIEW (tree_view));
 
   if (tx)
-    *tx = bx + tree_view->priv->hadjustment->value;
+    *tx = bx;
   if (ty)
     *ty = by + tree_view->priv->dy;
 }
