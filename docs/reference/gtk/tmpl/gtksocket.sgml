@@ -59,7 +59,8 @@ When GTK+ is notified that the embedded window has been
 destroyed, then it will destroy the socket as well. You
 should always, therefore, be prepared for your sockets
 to be destroyed at any time when the main event loop
-is running.
+is running. To prevent this from happening, you can
+connect to the #GtkSocket::plug-removed signal.
 </para>
 
 <para>
@@ -112,25 +113,17 @@ never be set by an application.)
 
 <!-- ##### SIGNAL GtkSocket::plug-added ##### -->
 <para>
-This signal is emitted when a client is successfully
-added to the socket.
+
 </para>
 
-@socket: the object which received the signal.
-<!-- # Unused Parameters # -->
-@socket_: the object which received the signal.
+@socket_: 
 
 <!-- ##### SIGNAL GtkSocket::plug-removed ##### -->
 <para>
-This signal is emitted when a client is removed from the socket. The
-default action is to destroy the #GtkSocket widget, so if you want to
-reuse it you must add a signal handler that returns %TRUE.
+
 </para>
 
-@socket: the object which received the signal.
-@Returns: 
-<!-- # Unused Parameters # -->
-@socket_: the object which received the signal.
+@socket_: 
 
 <!-- ##### FUNCTION gtk_socket_new ##### -->
 <para>

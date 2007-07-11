@@ -144,6 +144,13 @@ gtk_socket_class_init (GtkSocketClass *class)
   container_class->remove = gtk_socket_remove;
   container_class->forall = gtk_socket_forall;
 
+  /**
+   * GtkSocket::plug-added:
+   * @socket_: the object which received the signal
+   *
+   * This signal is emitted when a client is successfully
+   * added to the socket. 
+   */
   socket_signals[PLUG_ADDED] =
     g_signal_new (I_("plug_added"),
 		  G_OBJECT_CLASS_TYPE (class),
@@ -152,6 +159,17 @@ gtk_socket_class_init (GtkSocketClass *class)
 		  NULL, NULL,
 		  _gtk_marshal_VOID__VOID,
 		  G_TYPE_NONE, 0);
+
+  /**
+   * GtkSocket::plug-removed:
+   * @socket_: the object which received the signal
+   *
+   * This signal is emitted when a client is removed from the socket. 
+   * The default action is to destroy the #GtkSocket widget, so if you 
+   * want to reuse it you must add a signal handler that returns %TRUE. 
+   *
+   * Return value: %TRUE to stop other handlers from being invoked.
+   */
   socket_signals[PLUG_REMOVED] =
     g_signal_new (I_("plug_removed"),
 		  G_OBJECT_CLASS_TYPE (class),

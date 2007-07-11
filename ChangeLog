@@ -1,3 +1,9 @@
+2007-07-11  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtkplug.c:
+	* gtk/gtksocket.c: Move docs inline, and add some missing
+	docs.  
+
 2007-07-11  Kristian Rietveld  <kris@imendio.com>
 
 	* gtk/gtktreeview.c (gtk_tree_view_*_to_*_coords): x should be
