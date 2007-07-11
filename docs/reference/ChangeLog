@@ -1,5 +1,7 @@
 2007-07-11  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtk-sections.txt: Additions
+
 	* gtk/tmpl/gtkplug.sgml:
 	* gtk/tmpl/gtksocket.sgml: Move docs inline
 

@@ -3984,6 +3984,8 @@ gtk_tool_item_get_homogeneous
 gtk_tool_item_set_expand
 gtk_tool_item_get_expand
 gtk_tool_item_set_tooltip
+gtk_tool_item_set_tooltip_text
+gtk_tool_item_set_tooltip_markup
 gtk_tool_item_set_use_drag_window
 gtk_tool_item_get_use_drag_window
 gtk_tool_item_set_visible_horizontal
@@ -4076,6 +4078,8 @@ gtk_menu_tool_button_new_from_stock
 gtk_menu_tool_button_set_menu
 gtk_menu_tool_button_get_menu
 gtk_menu_tool_button_set_arrow_tooltip
+gtk_menu_tool_button_set_arrow_tooltip_text
+gtk_menu_tool_button_set_arrow_tooltip_markup
 
 <SUBSECTION Standard>
 GtkMenuToolButtonClass
@@ -4174,6 +4178,8 @@ gtk_tooltip_set_custom
 gtk_tooltip_trigger_tooltip_query
 <SUBSECTION Standard>
 GTK_TYPE_TOOLTIP
+GTK_IS_TOOLTIP
+GTK_TOOLTIP
 <SUBSECTION Private>
 gtk_tooltip_get_type
 </SECTION>
@@ -4664,6 +4670,7 @@ gtk_tree_view_get_row_separator_func
 gtk_tree_view_set_row_separator_func
 gtk_tree_view_get_rubber_banding
 gtk_tree_view_set_rubber_banding
+gtk_tree_view_is_rubber_banding_active
 gtk_tree_view_get_enable_tree_lines
 gtk_tree_view_set_enable_tree_lines
 GtkTreeViewGridLines
@@ -5276,6 +5283,8 @@ gtk_widget_get_tooltip_text
 gtk_widget_set_tooltip_text
 gtk_widget_get_tooltip_window
 gtk_widget_set_tooltip_window
+gtk_widget_get_has_tooltip
+gtk_widget_set_has_tooltip
 gtk_widget_trigger_tooltip_query
 <SUBSECTION>
 gtk_requisition_copy
