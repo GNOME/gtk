@@ -1,5 +1,9 @@
 2007-07-11  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtk-sections.txt: Updates
+
+2007-07-11  Matthias Clasen  <mclasen@redhat.com>
+
 	* gtk/migrating-GtkTooltip.sgml: Migration chapter
 	for tooltips.
 

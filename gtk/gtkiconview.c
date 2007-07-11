@@ -4518,6 +4518,39 @@ gtk_icon_view_new_with_model (GtkTreeModel *model)
   return g_object_new (GTK_TYPE_ICON_VIEW, "model", model, NULL);
 }
 
+/**
+ * gtk_icon_view_convert_widget_to_bin_window_coords:
+ * @wx: X coordinate relative to the widget
+ * @wy: Y coordinate relative to the widget
+ * @bx: return location for bin_window X coordinate
+ * @by: return location for bin_window Y coordinate
+ * 
+ * Converts widget coordinates to coordinates for the bin_window,
+ * as expected by e.g. gtk_icon_view_get_path_at_pos(). 
+ *
+ * Since: 2.12
+ */
+void
+gtk_icon_view_convert_widget_to_bin_window_coords (GtkIconView *icon_view,
+                                                   gint         wx,
+                                                   gint         wy, 
+                                                   gint        *bx,
+                                                   gint        *by)
+{
+  gint x, y;
+
+  g_return_if_fail (GTK_IS_ICON_VIEW (icon_view));
+
+  if (icon_view->priv->bin_window) 
+    gdk_window_get_position (icon_view->priv->bin_window, &x, &y);
+  else
+    x = y = 0;
+ 
+  if (bx)
+    *bx = wx - x;
+  if (by)
+    *by = wy - y;
+}
 
 /**
  * gtk_icon_view_get_path_at_pos:
@@ -4525,9 +4558,11 @@ gtk_icon_view_new_with_model (GtkTreeModel *model)
  * @x: The x position to be identified
  * @y: The y position to be identified
  * 
- * Finds the path at the point (@x, @y), relative to widget coordinates.
+ * Finds the path at the point (@x, @y), relative to bin_window coordinates.
  * See gtk_icon_view_get_item_at_pos(), if you are also interested in
- * the cell at the specified position.
+ * the cell at the specified position. 
+ * See gtk_icon_view_convert_widget_to_bin_window_coords() for converting
+ * widget coordinates to bin_window coordinates.
  * 
  * Return value: The #GtkTreePath corresponding to the icon or %NULL
  * if no icon exists at that position.
@@ -4541,6 +4576,7 @@ gtk_icon_view_get_path_at_pos (GtkIconView *icon_view,
 {
   GtkIconViewItem *item;
   GtkTreePath *path;
+  gint px, py;
   
   g_return_val_if_fail (GTK_IS_ICON_VIEW (icon_view), NULL);
 
@@ -4563,10 +4599,12 @@ gtk_icon_view_get_path_at_pos (GtkIconView *icon_view,
  * @cell: Return location for the renderer responsible for the cell
  *   at (@x, @y), or %NULL
  * 
- * Finds the path at the point (@x, @y), relative to widget coordinates.
+ * Finds the path at the point (@x, @y), relative to bin_window coordinates.
  * In contrast to gtk_icon_view_get_path_at_pos(), this function also 
  * obtains the cell at the specified position. The returned path should
  * be freed with gtk_tree_path_free().
+ * See gtk_icon_view_convert_widget_to_bin_window_coords() for converting
+ * widget coordinates to bin_window coordinates.
  * 
  * Return value: %TRUE if an item exists at the specified position
  *

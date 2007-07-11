@@ -195,6 +195,12 @@ gboolean               gtk_icon_view_get_dest_item_at_pos     (GtkIconView      
 GdkPixmap             *gtk_icon_view_create_drag_icon         (GtkIconView              *icon_view,
 							       GtkTreePath              *path);
 
+void    gtk_icon_view_convert_widget_to_bin_window_coords     (GtkIconView *icon_view,
+                                                               gint         wx,
+                                                               gint         wy,
+                                                               gint        *bx,
+                                                               gint        *by);
+
 
 G_END_DECLS
 

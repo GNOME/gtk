@@ -1,3 +1,16 @@
+2007-07-11  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtk.symbols:
+	* gtk/gtkiconview.[hc]
+	(gtk_icon_view_convert_widget_to_bin_window_coords): New
+	function to convert widget coords to what is expected by
+	the at_pos functions.  (#455984)
+
+2007-07-11  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtkwiget.c: Don't include gtktooltips.h, it is
+	not needed anymore.
+
 2007-07-11  Christian Persch  <chpe@gnome.org>
 
 	* gtk/gtkaction.c: (gtk_action_buildable_set_name),
