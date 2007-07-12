@@ -676,17 +676,32 @@ gtk_text_view_class_init (GtkTextViewClass *klass)
 
   /**
    * GtkTextView::move-cursor: 
-   * @widget: the object which received the signal
+   * @text_view: the object which received the signal
    * @step: the granularity of the move, as a #GtkMovementStep
    * @count: the number of @step units to move
    * @extend_selection: %TRUE if the move should extend the selection
    *  
-   * The ::move-cursor signal is a keybinding signal which gets emitted
-   * when the user initiates a cursor movement. 
+   * The ::move-cursor signal is a 
+   * <link linkend="keybinding-signals">keybinding signal</link> 
+   * which gets emitted when the user initiates a cursor movement. 
+   * If the cursor is not visible in @text_view, this signal causes
+   * the viewport to be moved instead.
    *
    * Applications should not connect to it, but may emit it with 
    * g_signal_emit_by_name() if they need to control scrolling 
    * programmatically.
+   *
+   * The default bindings for this signal come in two variants,
+   * the variant with the Shift modifier extends the selection,
+   * the variant without the Shift modifer does not.
+   * There are too many key combinations to list them all here.
+   * <itemizedlist>
+   * <listitem>Arrow keys move by individual characters/lines</listitem>
+   * <listitem>Ctrl-arrow key combinations move by words/paragraphs</listitem>
+   * <listitem>Home/End keys move to the ends of the buffer</listitem>
+   * <listitem>PageUp/PageDown keys move vertically by pages</listitem>
+   * <listitem>Ctrl-PageUp/PageDown keys move horizontally by pages</listitem>
+   * </itemizedlist>
    */
   signals[MOVE_CURSOR] = 
     g_signal_new (I_("move_cursor"),
@@ -700,6 +715,21 @@ gtk_text_view_class_init (GtkTextViewClass *klass)
 		  G_TYPE_INT, 
 		  G_TYPE_BOOLEAN);
 
+  /**
+   * GtkTextView::page-horizontally:
+   * @text_view: the object which received the signal
+   * @count: the number of @step units to move
+   * @extend_selection: %TRUE if the move should extend the selection
+   *
+   * The ::page-horizontally signal is a 
+   * <link linkend="keybinding-signals">keybinding signal</link> 
+   * which can be bound to key combinations to allow the user
+   * to initiate horizontal cursor movement by pages.  
+   * 
+   * This signal should not be used anymore, instead use the
+   * #GtkTextview::move-cursor signal with the #GTK_MOVEMENT_HORIZONTAL_PAGES
+   * granularity.
+   */
   signals[PAGE_HORIZONTALLY] =
     g_signal_new (I_("page_horizontally"),
 		  G_OBJECT_CLASS_TYPE (gobject_class),
@@ -711,6 +741,20 @@ gtk_text_view_class_init (GtkTextViewClass *klass)
 		  G_TYPE_INT,
 		  G_TYPE_BOOLEAN);
   
+  /**
+   * GtkTextView::move-viewport:
+   * @text_view: the object which received the signal
+   * @step: the granularity of the move, as a #GtkMovementStep
+   * @count: the number of @step units to move
+   *
+   * The ::move-viewport signal is a 
+   * <link linkend="keybinding-signals">keybinding signal</link> 
+   * which can be bound to key combinations to allow the user
+   * to move the viewport, i.e. change what part of the text view
+   * is visible in a containing scrolled window.
+   *
+   * There are no default bindings for this signal.
+   */
   signals[MOVE_VIEWPORT] =
     _gtk_binding_signal_new (I_("move_viewport"),
 			     G_OBJECT_CLASS_TYPE (gobject_class),
@@ -741,6 +785,25 @@ gtk_text_view_class_init (GtkTextViewClass *klass)
 		  G_TYPE_NONE, 1,
 		  G_TYPE_STRING);
 
+  /**
+   * GtkTextView::delete-from-cursor:
+   * @text_view: the object which received the signal
+   * @type: the granularity of the deletion, as a #GtkDeleteType
+   * @count: the number of @type units to delete
+   *
+   * The ::delete-from-cursor signal is a 
+   * <link linkend="keybinding-signals">keybinding signal</link> 
+   * which gets emitted when the user initiates a text deletion.
+   *
+   * If the @type is %GTK_DELETE_CHARS, GTK+ deletes the selection
+   * if there is one, otherwise it deletes the requested number
+   * of characters.
+   *
+   * The default bindings for this signal are
+   * Delete for deleting a character, Ctrl-Delete for 
+   * deleting a word and Ctrl-Backspace for deleting a word 
+   * backwords.
+   */
   signals[DELETE_FROM_CURSOR] =
     g_signal_new (I_("delete_from_cursor"),
 		  G_OBJECT_CLASS_TYPE (gobject_class),
@@ -752,6 +815,17 @@ gtk_text_view_class_init (GtkTextViewClass *klass)
 		  GTK_TYPE_DELETE_TYPE,
 		  G_TYPE_INT);
 
+  /**
+   * GtkTextView::backspace:
+   * @text_view: the object which received the signal
+   *
+   * The ::backspace signal is a 
+   * <link linkend="keybinding-signals">keybinding signal</link> 
+   * which gets emitted when the user asks for it.
+   * 
+   * The default bindings for this signal are
+   * Backspace and Shift-Backspace.
+   */
   signals[BACKSPACE] =
     g_signal_new (I_("backspace"),
 		  G_OBJECT_CLASS_TYPE (gobject_class),
@@ -761,6 +835,17 @@ gtk_text_view_class_init (GtkTextViewClass *klass)
 		  _gtk_marshal_VOID__VOID,
 		  G_TYPE_NONE, 0);
 
+  /**
+   * GtkTextView::cut-clipboard:
+   * @text_view: the object which received the signal
+   *
+   * The ::cut-clipboard signal is a 
+   * <link linkend="keybinding-signals">keybinding signal</link> 
+   * which gets emitted to cut the selection to the clipboard.
+   * 
+   * The default bindings for this signal are
+   * Ctrl-x and Shift-Delete.
+   */
   signals[CUT_CLIPBOARD] =
     g_signal_new (I_("cut_clipboard"),
 		  G_OBJECT_CLASS_TYPE (gobject_class),
@@ -770,6 +855,17 @@ gtk_text_view_class_init (GtkTextViewClass *klass)
 		  _gtk_marshal_VOID__VOID,
 		  G_TYPE_NONE, 0);
 
+  /**
+   * GtkTextView::copy-clipboard:
+   * @text_view: the object which received the signal
+   *
+   * The ::copy-clipboard signal is a 
+   * <link linkend="keybinding-signals">keybinding signal</link> 
+   * which gets emitted to copy the selection to the clipboard.
+   * 
+   * The default bindings for this signal are
+   * Ctrl-c and Ctrl-Insert.
+   */
   signals[COPY_CLIPBOARD] =
     g_signal_new (I_("copy_clipboard"),
 		  G_OBJECT_CLASS_TYPE (gobject_class),
@@ -779,6 +875,18 @@ gtk_text_view_class_init (GtkTextViewClass *klass)
 		  _gtk_marshal_VOID__VOID,
 		  G_TYPE_NONE, 0);
 
+  /**
+   * GtkTextView::paste-clipboard:
+   * @text_view: the object which received the signal
+   *
+   * The ::paste-clipboard signal is a 
+   * <link linkend="keybinding-signals">keybinding signal</link> 
+   * which gets emitted to paste the contents of the clipboard 
+   * into the text view.
+   * 
+   * The default bindings for this signal are
+   * Ctrl-v and Shift-Insert.
+   */
   signals[PASTE_CLIPBOARD] =
     g_signal_new (I_("paste_clipboard"),
 		  G_OBJECT_CLASS_TYPE (gobject_class),
@@ -788,6 +896,16 @@ gtk_text_view_class_init (GtkTextViewClass *klass)
 		  _gtk_marshal_VOID__VOID,
 		  G_TYPE_NONE, 0);
 
+  /**
+   * GtkTextView::toggle-overwrite:
+   * @text_view: the object which received the signal
+   *
+   * The ::toggle-overwrite signal is a 
+   * <link linkend="keybinding-signals">keybinding signal</link> 
+   * which gets emitted to change the editability of the text view.
+   * 
+   * The default bindings for this signal is Insert.
+   */ 
   signals[TOGGLE_OVERWRITE] =
     g_signal_new (I_("toggle_overwrite"),
 		  G_OBJECT_CLASS_TYPE (gobject_class),
@@ -819,6 +937,19 @@ gtk_text_view_class_init (GtkTextViewClass *klass)
 		  G_TYPE_NONE, 1,
 		  GTK_TYPE_MENU);
   
+  /**
+   * GtkTextView::select-all:
+   * @text_view: the object which received the signal
+   * @select: %TRUE to select, %FALSE to unselect
+   *
+   * The ::select-all signal is a 
+   * <link linkend="keybinding-signals">keybinding signal</link> 
+   * which gets emitted to select or unselect the complete
+   * contents of the text view.
+   *
+   * The default bindings for this signal are Ctrl-a and Ctrl-/ 
+   * for selecting and Shift-Ctrl-a and Ctrl-\ for unselecting.
+   */
   signals[SELECT_ALL] =
     _gtk_binding_signal_new (I_("select_all"),
 			     G_OBJECT_CLASS_TYPE (object_class),
@@ -828,6 +959,16 @@ gtk_text_view_class_init (GtkTextViewClass *klass)
 			     _gtk_marshal_VOID__BOOLEAN,
 			     G_TYPE_NONE, 1, G_TYPE_BOOLEAN);
 
+  /**
+   * GtkTextView::toggle-cursor-visible:
+   * @text_view: the object which received the signal
+   *
+   * The ::toggle-cursor-visible signal is a 
+   * <link linkend="keybinding-signals">keybinding signal</link> 
+   * which gets emitted to toggle the visibility of the cursor.
+   *
+   * The default binding for this signal is F7.
+   */ 
   signals[TOGGLE_CURSOR_VISIBLE] =
     _gtk_binding_signal_new (I_("toggle_cursor_visible"),
 			     G_OBJECT_CLASS_TYPE (object_class),

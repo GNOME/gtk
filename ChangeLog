@@ -1,5 +1,6 @@
-2007-07-11  Matthias Clasen  <mclasen@redhat.com>
+2007-07-12  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtktextivew.c: 
 	* gtk/gtkclipboard.c: Add documentation.
 
 2007-07-11  Matthias Clasen  <mclasen@redhat.com>
