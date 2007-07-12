@@ -505,33 +505,37 @@ gdk_threads_dispatch_free (gpointer data)
  * in thread B:
  *
  * <informalexample><programlisting>
- * static gboolean idle_callback (gpointer data)
+ * static gboolean
+ * idle_callback (gpointer data)
  * {
+ *    // gdk_threads_enter(); would be needed for g_idle_add()
+ *
  *    SomeWidget *self = data;
- *     
  *    /<!-- -->* do stuff with self *<!-- -->/
- *     
+ *
  *    self->idle_id = 0;
- *    
+ *
+ *    // gdk_threads_leave(); would be needed for g_idle_add()
  *    return FALSE;
  * }
- *  
- * static void some_widget_do_stuff_later (SomeWidget *self)
+ *
+ * static void
+ * some_widget_do_stuff_later (SomeWidget *self)
  * {
- *    self->idle_id = g_idle_add (idle_callback, self)
+ *    self->idle_id = gdk_threads_add_idle (idle_callback, self)
+ *    // using g_idle_add() here would require thread protection in the callback
  * }
- *   
- * static void some_widget_finalize (GObject *object)
+ *
+ * static void
+ * some_widget_finalize (GObject *object)
  * {
- *    SomeWidget *self = SOME_WIDGET(object);
- *    
+ *    SomeWidget *self = SOME_WIDGET (object);
  *    if (self->idle_id)
  *      g_source_remove (self->idle_id);
- *    
  *    G_OBJECT_CLASS (parent_class)->finalize (object);
  * }
  * </programlisting></informalexample>
- * 
+ *
  * Return value: the ID (greater than 0) of the event source.
  *
  * Since: 2.12
@@ -552,8 +556,8 @@ gdk_threads_add_idle_full (gint           priority,
   dispatch->destroy = notify;
 
   return g_idle_add_full (priority,
-                          gdk_threads_dispatch, 
-                          dispatch, 
+                          gdk_threads_dispatch,
+                          dispatch,
                           gdk_threads_dispatch_free);
 }
 
