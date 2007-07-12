@@ -1,3 +1,9 @@
+Thu Jul 12 18:12:04 2007  Tim Janik  <timj@imendio.com>
+
+	* gdk/tmpl/threads.sgml: clarify section about gdk_threads_enter/
+	gdk_threads_leave to be reworded in terms of events and to mention
+	availability of gdk_threads_add_idle_full().
+
 2007-07-11  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/tmpl/gtkrange.sgml:
