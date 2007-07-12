@@ -1,3 +1,10 @@
+2007-07-12  Attilio Fiandrotti  <attilio.fiandrotti@gmail.com>
+
+	* gdk/directfb/gdkevents-directfb.c:
+	* gdk/directfb/gdkwindow-directfb.c:
+	* gdk/directfb/gdkprivate-directfb.h: Fixed memory leak at window closing,
+	patch provided by Simon Lanzmich
+
 Thu Jul 12 18:03:02 2007  Tim Janik  <timj@gtk.org>
 
 	* gdk/gdk.c (gdk_threads_add_idle_full): clarified documentation example.

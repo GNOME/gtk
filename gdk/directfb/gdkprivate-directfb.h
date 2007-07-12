@@ -231,6 +231,9 @@ GdkImage* _gdk_directfb_copy_to_image (GdkDrawable  *drawable,
                                        gint          height);
 
 void       gdk_directfb_event_windows_add (GdkWindow *window);
+#if (DIRECTFB_MAJOR_VERSION >= 1)
+void       gdk_directfb_event_windows_remove (GdkWindow *window);
+#endif
 
 GdkGrabStatus gdk_directfb_pointer_grab   (GdkWindow           *window,
                                            gint                 owner_events,
