@@ -2,6 +2,7 @@
  * Copyright (C) 1995-1997 Peter Mattis, Spencer Kimball and Josh MacDonald
  * Copyright (C) 1998-2004 Tor Lillqvist
  * Copyright (C) 2001-2004 Hans Breuer
+ * Copyright (C) 2007 Cody Russell
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -155,6 +156,7 @@ gdk_window_impl_win32_init (GdkWindowImplWin32 *impl)
   impl->hint_flags = 0;
   impl->type_hint = GDK_WINDOW_TYPE_HINT_NORMAL;
   impl->extension_events_selected = FALSE;
+  impl->transient_owner = NULL;
 }
 
 static void
@@ -868,6 +870,7 @@ _gdk_windowing_window_destroy (GdkWindow *window,
 			       gboolean   foreign_destroy)
 {
   GdkWindowObject *private = (GdkWindowObject *)window;
+  GdkWindowImplWin32 *window_impl = GDK_WINDOW_IMPL_WIN32 (private->impl);
 
   g_return_if_fail (GDK_IS_WINDOW (window));
   
@@ -877,6 +880,11 @@ _gdk_windowing_window_destroy (GdkWindow *window,
   if (private->extension_events != 0)
     _gdk_input_window_destroy (window);
 
+  /* Remove ourself from our transient owner */
+  if (window_impl->transient_owner != NULL)
+    {
+      gdk_window_set_transient_for (window, NULL);
+    }
 
   if (!recursing && !foreign_destroy)
     {
@@ -885,6 +893,7 @@ _gdk_windowing_window_destroy (GdkWindow *window,
       private->destroyed = TRUE;
       DestroyWindow (GDK_WINDOW_HWND (window));
     }
+
   gdk_win32_handle_table_remove (GDK_WINDOW_HWND (window));
 }
 
@@ -1221,7 +1230,9 @@ gdk_window_move (GdkWindow *window,
    * windows! Especially in the case of gtkplug/socket.
    */ 
   if (GetAncestor (GDK_WINDOW_HWND (window), GA_PARENT) != GetDesktopWindow ())
-    _gdk_window_move_resize_child (window, x, y, impl->width, impl->height);
+    {
+      _gdk_window_move_resize_child (window, x, y, impl->width, impl->height);
+    }
   else
     {
       RECT outer_rect;
@@ -1268,7 +1279,9 @@ gdk_window_resize (GdkWindow *window,
     return;
 
   if (GetAncestor (GDK_WINDOW_HWND (window), GA_PARENT) != GetDesktopWindow ())
-    _gdk_window_move_resize_child (window, private->x, private->y, width, height);
+    {
+      _gdk_window_move_resize_child (window, private->x, private->y, width, height);
+    }
   else
     {
       RECT outer_rect;
@@ -1320,7 +1333,9 @@ gdk_window_move_resize (GdkWindow *window,
 			   width, height, x, y));
   
   if (GetAncestor (GDK_WINDOW_HWND (window), GA_PARENT) != GetDesktopWindow ())
-    _gdk_window_move_resize_child (window, x, y, width, height);
+    {
+      _gdk_window_move_resize_child (window, x, y, width, height);
+    }
   else
     {
       RECT outer_rect;
@@ -1956,29 +1971,35 @@ gdk_window_set_role (GdkWindow   *window,
   /* XXX */
 }
 
-void          
+void
 gdk_window_set_transient_for (GdkWindow *window, 
 			      GdkWindow *parent)
 {
   HWND window_id, parent_id;
+  GdkWindowImplWin32 *window_impl = GDK_WINDOW_IMPL_WIN32 (GDK_WINDOW_OBJECT (window)->impl);
 
   g_return_if_fail (GDK_IS_WINDOW (window));
-  
-  GDK_NOTE (MISC, g_print ("gdk_window_set_transient_for: %p: %p\n",
-			   GDK_WINDOW_HWND (window),
-			   GDK_WINDOW_HWND (parent)));
 
-  if (GDK_WINDOW_DESTROYED (window) || GDK_WINDOW_DESTROYED (parent))
-    return;
+  window_id = GDK_WINDOW_HWND (window);
+  parent_id = parent != NULL ? GDK_WINDOW_HWND (parent) : NULL;
+
+  if (GDK_WINDOW_DESTROYED (window) || (parent && GDK_WINDOW_DESTROYED (parent)))
+    {
+      if (GDK_WINDOW_DESTROYED (window))
+	GDK_NOTE (MISC, g_print ("... destroyed!\n"));
+      else
+	GDK_NOTE (MISC, g_print ("... owner destroyed!\n"));
+
+      return;
+    }
 
   if (((GdkWindowObject *) window)->window_type == GDK_WINDOW_CHILD)
     {
       GDK_NOTE (MISC, g_print ("... a child window!\n"));
       return;
     }
-  
-  window_id = GDK_WINDOW_HWND (window);
-  parent_id = GDK_WINDOW_HWND (parent);
+
+  window_impl->transient_owner = parent;
 
   /* This changes the *owner* of the window, despite the misleading
    * name. (Owner and parent are unrelated concepts.) At least that's
@@ -3427,11 +3448,14 @@ gdk_window_set_modal_hint (GdkWindow *window,
 
   private->modal_hint = modal;
 
+#if 0
+  /* Not sure about this one.. -- Cody */
   if (GDK_WINDOW_IS_MAPPED (window))
     API_CALL (SetWindowPos, (GDK_WINDOW_HWND (window), 
 			     modal ? HWND_TOPMOST : HWND_NOTOPMOST,
 			     0, 0, 0, 0,
 			     SWP_NOMOVE | SWP_NOSIZE));
+#endif
 }
 
 void

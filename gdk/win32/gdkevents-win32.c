@@ -1,6 +1,7 @@
 /* GDK - The GIMP Drawing Kit
  * Copyright (C) 1995-1997 Peter Mattis, Spencer Kimball and Josh MacDonald
  * Copyright (C) 1998-2002 Tor Lillqvist
+ * Copyright (C) 2007 Cody Russell
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -2886,7 +2887,17 @@ gdk_event_translate (MSG  *msg,
       event->any.window = window;
 
       append_event (event);
-      
+
+      if (event->any.type == GDK_UNMAP)
+	{
+	  impl = GDK_WINDOW_IMPL_WIN32 (GDK_WINDOW_OBJECT (window)->impl);
+
+	  if (impl->transient_owner && GetForegroundWindow () == GDK_WINDOW_HWND (window))
+	    {
+	      SetForegroundWindow (GDK_WINDOW_HWND (impl->transient_owner));
+	    }
+	}
+
       if (event->any.type == GDK_UNMAP &&
 	  p_grab_window == window)
 	gdk_pointer_ungrab (msg->time);
@@ -3282,6 +3293,13 @@ gdk_event_translate (MSG  *msg,
       event->any.window = window;
 
       append_event (event);
+
+      impl = GDK_WINDOW_IMPL_WIN32 (GDK_WINDOW_OBJECT (window)->impl);
+
+      if (impl->transient_owner && GetForegroundWindow() == GDK_WINDOW_HWND (window))
+	{
+	  SetForegroundWindow (GDK_WINDOW_HWND (impl->transient_owner));
+	}
 
       return_val = TRUE;
       break;

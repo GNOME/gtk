@@ -1,3 +1,13 @@
+2007-07-12  Cody Russell  <bratsche@gnome.org>
+
+	Merge from trunk:
+
+	* gdk/win32/gdkevents-win32.c
+	* gdk/win32/gdkwindow-win32.[ch]: Fix transient windows on Win32 
+	so that when a transient child window is closed (particularly when 
+	there are 3 or more levels of transient windows), the correct window
+	receives focus rather than a seemingly random window. (#112404) 
+
 2007-07-12 Attilio Fiandrotti  <attilio.fiandrotti@gmail.com>
 
 	Merge from trunk:
