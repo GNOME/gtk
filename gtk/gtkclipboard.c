@@ -167,6 +167,17 @@ gtk_clipboard_class_init (GtkClipboardClass *class)
 
   class->owner_change = gtk_clipboard_owner_change;
 
+  /**
+   * GtkClipboard::owner-change:
+   * @clipboard: the #GtkClipboard on which the signal is emitted
+   * @event: the @GdkEventOwnerChange event 
+   *
+   * The ::owner-change signal is emitted when GTK+ receives an
+   * event that indicates that the ownership of the selection 
+   * associated with @clipboard has changed.
+   *
+   * Since: 2.6
+   */ 
   clipboard_signals[OWNER_CHANGE] =
     g_signal_new (I_("owner_change"),
 		  G_TYPE_FROM_CLASS (gobject_class),
@@ -1726,7 +1737,7 @@ gtk_clipboard_wait_is_target_available (GtkClipboard *clipboard,
  * _gtk_clipboard_handle_event:
  * @event: a owner change event
  * 
- * Emits the ::owner_change signal on the appropriate @clipboard.
+ * Emits the #GtkClipboard::owner-change signal on the appropriate @clipboard.
  *
  * Since: 2.6
  **/

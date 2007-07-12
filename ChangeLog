@@ -1,5 +1,16 @@
 2007-07-11  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkclipboard.c: Add documentation.
+
+2007-07-11  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtkcelleditable.c:
+	* gtk/gtkcellrenderer.c:
+	* gtk/gtkcellrenderercombo.c:
+	* gtk/gtkcellrenderertext.c: Add more documentation.
+
+2007-07-11  Matthias Clasen  <mclasen@redhat.com>
+
 	* gtk/gtktreeview.c:
 	* gtk/gtktoolitem.[hc]: Make parameter naming consistent.
 
