@@ -251,6 +251,12 @@ gtk_range_class_init (GtkRangeClass *class)
   class->slider_detail = "slider";
   class->stepper_detail = "stepper";
 
+  /**
+   * GtkRange::value-changed:
+   * @range: the #GtkRange
+   *
+   * Emitted when the range value changes.
+   */
   signals[VALUE_CHANGED] =
     g_signal_new (I_("value_changed"),
                   G_TYPE_FROM_CLASS (gobject_class),
@@ -270,6 +276,13 @@ gtk_range_class_init (GtkRangeClass *class)
                   G_TYPE_NONE, 1,
                   G_TYPE_DOUBLE);
   
+  /**
+   * GtkRange::move-slider:
+   * @range: the #GtkRange
+   * @step: how to move the slider
+   *
+   * Virtual function that moves the slider. Used for keybindings.
+   */
   signals[MOVE_SLIDER] =
     g_signal_new (I_("move_slider"),
                   G_TYPE_FROM_CLASS (gobject_class),

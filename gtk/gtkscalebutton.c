@@ -233,6 +233,7 @@ gtk_scale_button_class_init (GtkScaleButtonClass *klass)
   /**
    * GtkScaleButton::value-changed:
    * @button: the object that received the signal
+   * @value: The new value
    *
    * Emitted when the value field has changed.
    *

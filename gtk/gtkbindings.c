@@ -565,7 +565,7 @@ gtk_binding_entry_activate (GtkBindingEntry *entry,
  * gtk_binding_set_new:
  * @set_name: unique name of this binding set
  *
- * Gtk+ maintains a global list of binding sets. Each binding set has
+ * GTK+ maintains a global list of binding sets. Each binding set has
  * a unique name which needs to be specified upon creation.
  *
  * Return value: new binding set

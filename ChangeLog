@@ -1,5 +1,11 @@
 2007-07-11  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkrange.c:
+	* gtk/gtkbindings.c: 
+	* gtk/gtkscalebutton.c: Small doc fixes.
+
+2007-07-11  Matthias Clasen  <mclasen@redhat.com>
+
 	* gtk/gtkplug.c:
 	* gtk/gtksocket.c: Move docs inline, and add some missing
 	docs.  
