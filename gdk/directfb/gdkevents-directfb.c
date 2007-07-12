@@ -315,6 +315,25 @@ gdk_directfb_event_windows_add (GdkWindow *window)
     impl->window->CreateEventBuffer (impl->window, &EventBuffer);
 }
 
+#if (DIRECTFB_MAJOR_VERSION >= 1)
+void
+gdk_directfb_event_windows_remove (GdkWindow *window)
+{
+  GdkWindowImplDirectFB *impl;
+
+  g_return_if_fail (GDK_IS_WINDOW (window));
+
+  impl = GDK_WINDOW_IMPL_DIRECTFB (GDK_WINDOW_OBJECT (window)->impl);
+
+  if (!impl->window)
+    return;
+
+  if (EventBuffer)
+    impl->window->DetachEventBuffer (impl->window, EventBuffer);
+/* FIXME: should we warn if (! EventBuffer) ? */
+}
+#endif
+
 GdkWindow *
 gdk_directfb_child_at (GdkWindow *window,
                        gint      *winx,
