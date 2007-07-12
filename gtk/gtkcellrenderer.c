@@ -111,7 +111,7 @@ gtk_cell_renderer_class_init (GtkCellRendererClass *class)
    * cell.  For example, an editable cell renderer could be written to cancel
    * editing when the user presses Escape. 
    *
-   * See also: gtk_cell_renderer_editing_canceled()
+   * See also: gtk_cell_renderer_stop_editing().
    *
    * Since: 2.4
    */
@@ -471,12 +471,13 @@ set_cell_bg_color (GtkCellRenderer *cell,
  * @width: location to return width needed to render a cell, or %NULL
  * @height: location to return height needed to render a cell, or %NULL
  *
- * Obtains the width and height needed to render the cell. Used by view widgets
- * to determine the appropriate size for the cell_area passed to
- * gtk_cell_renderer_render().  If @cell_area is not %NULL, fills in the x and y
- * offsets (if set) of the cell relative to this location.  Please note that the
- * values set in @width and @height, as well as those in @x_offset and @y_offset
- * are inclusive of the xpad and ypad properties.
+ * Obtains the width and height needed to render the cell. Used by view 
+ * widgets to determine the appropriate size for the cell_area passed to
+ * gtk_cell_renderer_render().  If @cell_area is not %NULL, fills in the
+ * x and y offsets (if set) of the cell relative to this location. 
+ *
+ * Please note that the values set in @width and @height, as well as those 
+ * in @x_offset and @y_offset are inclusive of the xpad and ypad properties.
  **/
 void
 gtk_cell_renderer_get_size (GtkCellRenderer *cell,
@@ -518,7 +519,8 @@ gtk_cell_renderer_get_size (GtkCellRenderer *cell,
  * @cell: a #GtkCellRenderer
  * @window: a #GdkDrawable to draw to
  * @widget: the widget owning @window
- * @background_area: entire cell area (including tree expanders and maybe padding on the sides)
+ * @background_area: entire cell area (including tree expanders and maybe 
+ *    padding on the sides)
  * @cell_area: area normally rendered by a cell renderer
  * @expose_area: area that actually needs updating
  * @flags: flags that affect rendering
@@ -530,7 +532,6 @@ gtk_cell_renderer_get_size (GtkCellRenderer *cell,
  * blank space around the cell, and also the area containing the tree expander;
  * so the @background_area rectangles for all cells tile to cover the entire
  * @window.  @expose_area is a clip rectangle.
- *
  **/
 void
 gtk_cell_renderer_render (GtkCellRenderer     *cell,
@@ -574,14 +575,15 @@ gtk_cell_renderer_render (GtkCellRenderer     *cell,
  * @cell: a #GtkCellRenderer
  * @event: a #GdkEvent
  * @widget: widget that received the event
- * @path: widget-dependent string representation of the event location; e.g. for #GtkTreeView, a string representation of #GtkTreePath
- * @background_area: background area as passed to @gtk_cell_renderer_render
- * @cell_area: cell area as passed to @gtk_cell_renderer_render
+ * @path: widget-dependent string representation of the event location; 
+ *    e.g. for #GtkTreeView, a string representation of #GtkTreePath
+ * @background_area: background area as passed to gtk_cell_renderer_render()
+ * @cell_area: cell area as passed to gtk_cell_renderer_render()
  * @flags: render flags
  *
- * Passes an activate event to the cell renderer for possible processing.  Some
- * cell renderers may use events; for example, #GtkCellRendererToggle toggles
- * when it gets a mouse click.
+ * Passes an activate event to the cell renderer for possible processing.  
+ * Some cell renderers may use events; for example, #GtkCellRendererToggle 
+ * toggles when it gets a mouse click.
  *
  * Return value: %TRUE if the event was consumed/handled
  **/
@@ -616,9 +618,10 @@ gtk_cell_renderer_activate (GtkCellRenderer      *cell,
  * @cell: a #GtkCellRenderer
  * @event: a #GdkEvent
  * @widget: widget that received the event
- * @path: widget-dependent string representation of the event location; e.g. for #GtkTreeView, a string representation of #GtkTreePath
- * @background_area: background area as passed to @gtk_cell_renderer_render
- * @cell_area: cell area as passed to @gtk_cell_renderer_render
+ * @path: widget-dependent string representation of the event location; 
+ *    e.g. for #GtkTreeView, a string representation of #GtkTreePath
+ * @background_area: background area as passed to gtk_cell_renderer_render()
+ * @cell_area: cell area as passed to gtk_cell_renderer_render()
  * @flags: render flags
  * 
  * Passes an activate event to the cell renderer for possible processing.
@@ -723,10 +726,12 @@ gtk_cell_renderer_get_fixed_size (GtkCellRenderer *cell,
  * gtk_cell_renderer_editing_canceled:
  * @cell: A #GtkCellRenderer
  * 
- * Causes the cell renderer to emit the "editing-canceled" signal.  This
- * function is for use only by implementations of cell renderers that need to
- * notify the client program that an editing process was canceled and the
- * changes were not committed.
+ * Causes the cell renderer to emit the #GtkCellRenderer::editing-canceled 
+ * signal.  
+ *
+ * This function is for use only by implementations of cell renderers that 
+ * need to notify the client program that an editing process was canceled 
+ * and the changes were not committed.
  *
  * Since: 2.4
  * Deprecated: 2.6: Use gtk_cell_renderer_stop_editing() instead
@@ -745,9 +750,12 @@ gtk_cell_renderer_editing_canceled (GtkCellRenderer *cell)
  * @canceled: %TRUE if the editing has been canceled
  * 
  * Informs the cell renderer that the editing is stopped.
- * If @canceled is %TRUE, the cell renderer will emit the "editing-canceled" 
- * signal. This function should be called by cell renderer implementations 
- * in response to the "editing-done" signal of #GtkCellEditable.
+ * If @canceled is %TRUE, the cell renderer will emit the 
+ * #GtkCellRenderer::editing-canceled signal. 
+ *
+ * This function should be called by cell renderer implementations 
+ * in response to the #GtkCellEditable::editing-done signal of 
+ * #GtkCellEditable.
  *
  * Since: 2.6
  **/

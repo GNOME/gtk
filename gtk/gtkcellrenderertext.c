@@ -562,11 +562,14 @@ gtk_cell_renderer_text_class_init (GtkCellRendererTextClass *class)
 
   /**
    * GtkCellRendererText::edited
-   * @renderer: the object which received the signal.
-   * @path: the path identifying the edited cell.
-   * @new_text: the new text.
+   * @renderer: the object which received the signal
+   * @path: the path identifying the edited cell
+   * @new_text: the new text
    *
    * This signal is emitted after @renderer has been edited.
+   *
+   * It is the responsibility of the application to update the model
+   * and store @new_text at the position indicated by @path.
    */
   text_cell_renderer_signals [EDITED] =
     g_signal_new (I_("edited"),

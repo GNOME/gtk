@@ -94,13 +94,15 @@ gtk_cell_renderer_combo_class_init (GtkCellRendererComboClass *klass)
   /**
    * GtkCellRendererCombo:text-column:
    *
-   * Specifies the model column which holds the possible values for the combo box. 
+   * Specifies the model column which holds the possible values for the 
+   * combo box. 
+   *
    * Note that this refers to the model specified in the model property, 
-   * <emphasis>not</emphasis> the model backing the tree view to which this cell 
-   * renderer is attached.
+   * <emphasis>not</emphasis> the model backing the tree view to which 
+   * this cell renderer is attached.
    * 
-   * #GtkCellRendererCombo automatically adds a text cell renderer for this column
-   * to its combo box.
+   * #GtkCellRendererCombo automatically adds a text cell renderer for 
+   * this column to its combo box.
    *
    * Since: 2.6
    */
@@ -117,8 +119,8 @@ gtk_cell_renderer_combo_class_init (GtkCellRendererComboClass *klass)
   /** 
    * GtkCellRendererCombo:has-entry:
    *
-   * If  %TRUE, the cell renderer will include an entry and allow to enter values 
-   * other than the ones in the popup list. 
+   * If %TRUE, the cell renderer will include an entry and allow to enter 
+   * values other than the ones in the popup list. 
    *
    * Since: 2.6
    */
