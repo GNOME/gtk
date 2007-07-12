@@ -50,20 +50,18 @@ of the "steppers". It also provides properties and methods for setting a
 
 <!-- ##### SIGNAL GtkRange::move-slider ##### -->
 <para>
-Virtual function that moves the slider. Used for keybindings.
+
 </para>
 
-@range: the #GtkRange
-@arg1: 
-<!-- # Unused Parameters # -->
-@step: how to move the slider
+@range: 
+@step: 
 
 <!-- ##### SIGNAL GtkRange::value-changed ##### -->
 <para>
-Emitted when the range value changes.
+
 </para>
 
-@range: the #GtkRange
+@range: 
 
 <!-- ##### ARG GtkRange:adjustment ##### -->
 <para>
