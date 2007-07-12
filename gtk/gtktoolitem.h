@@ -88,22 +88,22 @@ void            gtk_tool_item_set_tooltip              (GtkToolItem *tool_item,
 							const gchar *tip_text,
 							const gchar *tip_private);
 #endif /* GTK_DISABLE_DEPRECATED */
-void            gtk_tool_item_set_tooltip_text         (GtkToolItem *toolitem,
+void            gtk_tool_item_set_tooltip_text         (GtkToolItem *tool_item,
 							const gchar *text);
-void            gtk_tool_item_set_tooltip_markup       (GtkToolItem *toolitem,
+void            gtk_tool_item_set_tooltip_markup       (GtkToolItem *tool_item,
 							const gchar *markup);
 
-void            gtk_tool_item_set_use_drag_window      (GtkToolItem *toolitem,
+void            gtk_tool_item_set_use_drag_window      (GtkToolItem *tool_item,
 							gboolean     use_drag_window);
-gboolean        gtk_tool_item_get_use_drag_window      (GtkToolItem *toolitem);
+gboolean        gtk_tool_item_get_use_drag_window      (GtkToolItem *tool_item);
 
-void            gtk_tool_item_set_visible_horizontal   (GtkToolItem *toolitem,
+void            gtk_tool_item_set_visible_horizontal   (GtkToolItem *tool_item,
 							gboolean     visible_horizontal);
-gboolean        gtk_tool_item_get_visible_horizontal   (GtkToolItem *toolitem);
+gboolean        gtk_tool_item_get_visible_horizontal   (GtkToolItem *tool_item);
 
-void            gtk_tool_item_set_visible_vertical     (GtkToolItem *toolitem,
+void            gtk_tool_item_set_visible_vertical     (GtkToolItem *tool_item,
 							gboolean     visible_vertical);
-gboolean        gtk_tool_item_get_visible_vertical     (GtkToolItem *toolitem);
+gboolean        gtk_tool_item_get_visible_vertical     (GtkToolItem *tool_item);
 
 gboolean        gtk_tool_item_get_is_important         (GtkToolItem *tool_item);
 void            gtk_tool_item_set_is_important         (GtkToolItem *tool_item,

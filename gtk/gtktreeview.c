@@ -12892,8 +12892,8 @@ gtk_tree_view_tree_to_widget_coords (GtkTreeView *tree_view,
  * @tree_view: a #GtkTreeView
  * @wx: X coordinate relative to the widget
  * @wy: Y coordinate relative to the widget
- * @bx: return location for tree X coordinate
- * @by: return location for tree Y coordinate
+ * @tx: return location for tree X coordinate
+ * @ty: return location for tree Y coordinate
  *
  * Converts widget coordinates to coordinates for the
  * tree (the full scrollable area of the tree).
@@ -12922,10 +12922,10 @@ gtk_tree_view_convert_widget_to_tree_coords (GtkTreeView *tree_view,
 /**
  * gtk_tree_view_convert_tree_to_widget_coords:
  * @tree_view: a #GtkTreeView
- * @wx: X coordinate relative to the tree
- * @wy: Y coordinate relative to the tree
- * @bx: return location for widget X coordinate
- * @by: return location for widget Y coordinate
+ * @tx: X coordinate relative to the tree
+ * @ty: Y coordinate relative to the tree
+ * @wx: return location for widget X coordinate
+ * @wy: return location for widget Y coordinate
  *
  * Converts tree coordinates (coordinates in full scrollable area of the tree)
  * to widget coordinates.
@@ -13038,10 +13038,10 @@ gtk_tree_view_convert_tree_to_bin_window_coords (GtkTreeView *tree_view,
 /**
  * gtk_tree_view_convert_bin_window_to_tree_coords:
  * @tree_view: a #GtkTreeView
- * @wx: X coordinate relative to bin_window
- * @wy: Y coordinate relative to bin_window
- * @bx: return location for tree X coordinate
- * @by: return location for tree Y coordinate
+ * @bx: X coordinate relative to bin_window
+ * @by: Y coordinate relative to bin_window
+ * @tx: return location for tree X coordinate
+ * @ty: return location for tree Y coordinate
  *
  * Converts bin_window coordinates to coordinates for the
  * tree (the full scrollable area of the tree).
