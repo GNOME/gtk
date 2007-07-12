@@ -15,7 +15,7 @@ It may also have a resize grip (a triangular area in the lower right corner)
 which can be clicked on to resize the window containing the statusbar.
 </para>
 <para>
-Status bars in Gtk+ maintain a stack of messages. The message at
+Status bars in GTK+ maintain a stack of messages. The message at
 the top of the each bar's stack is the one that will currently be displayed.
 </para>
 <para>

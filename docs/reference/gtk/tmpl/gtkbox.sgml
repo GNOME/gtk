@@ -179,7 +179,7 @@ application.)
   %TRUE by default.
 @pack: one of #GtkPackType indicating whether the child is packed with 
   reference to the start (top/left) or end (bottom/right) of the GtkBox.
-@is_secondary: 
+@is_secondary: %TRUE if the child is secondary
 
 <!-- ##### FUNCTION gtk_box_pack_start ##### -->
 <para>

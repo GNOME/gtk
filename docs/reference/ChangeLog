@@ -1,5 +1,14 @@
 2007-07-11  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/tmpl/gtkbox.sgml:
+	* gtk/tmpl/gtksignal.sgml:
+	* gtk/tmpl/gtkaboutdialog.sgml:
+	* gtk/tmpl/gtkbindings.sgml:
+	* gtk/tmpl/gtklabel.sgml:
+	* gtk/tmpl/gtkstatusbar.sgml: Small additions and corrections.
+
+2007-07-11  Matthias Clasen  <mclasen@redhat.com>
+
 	* gtk/gtk-sections.txt: Additions
 
 	* gtk/tmpl/gtkplug.sgml:

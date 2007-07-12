@@ -373,7 +373,7 @@ Parses the given string for underscores and converts the next
 character to an underlined character.  The last character that
 was underlined will have its lower-cased accelerator keyval returned  (i.e.
 &quot;_File&quot; would return the keyval for &quot;f&quot;.  This is
-probably only used within the Gtk+ library itself for menu items and such.
+probably only used within the GTK+ library itself for menu items and such.
 </para>
 
 @label: The #GtkLabel you want to affect.
@@ -402,7 +402,7 @@ probably only used within the Gtk+ library itself for menu items and such.
 <!-- ##### MACRO gtk_label_set ##### -->
 <para>
 Aliases gtk_label_set_text().  Probably used for backward compatibility with
-Gtk+ 1.0.x.
+GTK+ 1.0.x.
 </para>
 
 
