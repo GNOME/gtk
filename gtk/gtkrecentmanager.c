@@ -2136,7 +2136,7 @@ get_uri_shortname_for_display (const gchar *uri)
       rest = get_method_string (uri, &method);
       local_file = g_filename_display_basename (rest);
       
-      name = g_strdup_printf ("%s: %s", method, local_file);
+      name = g_strconcat (method, ": ", local_file, NULL);
       
       g_free (local_file);
       g_free (method);

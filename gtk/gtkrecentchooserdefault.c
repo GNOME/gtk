@@ -1272,7 +1272,7 @@ gtk_recent_chooser_default_add_filter (GtkRecentChooser *chooser,
   /* display new filter */
   name = gtk_recent_filter_get_name (filter);
   if (!name)
-    name = "Untitled filter";
+    name = _("Untitled filter");
     
   gtk_combo_box_append_text (GTK_COMBO_BOX (impl->filter_combo), name);
   
