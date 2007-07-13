@@ -1,3 +1,8 @@
+2007-07-13  Richard Hult  <richard@imendio.com>
+
+	* gdk/quartz/gdkcolor-quartz.c: (gdk_colors_alloc),
+	(gdk_colors_free): Add stubs.
+
 2007-07-13  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtkrecentmanager.c (get_uri_shortname_for_display): Avoid

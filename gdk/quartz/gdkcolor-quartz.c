@@ -113,6 +113,25 @@ gdk_colormap_change (GdkColormap *colormap,
   /* FIXME: Implement */
 }
 
+gboolean
+gdk_colors_alloc (GdkColormap   *colormap,
+		  gboolean       contiguous,
+		  gulong        *planes,
+		  gint           nplanes,
+		  gulong        *pixels,
+		  gint           npixels)
+{
+  return TRUE;
+}
+
+void
+gdk_colors_free (GdkColormap *colormap,
+		 gulong      *pixels,
+		 gint         npixels,
+		 gulong       planes)
+{
+}
+
 void
 gdk_colormap_free_colors (GdkColormap *colormap,
 			  GdkColor    *colors,
