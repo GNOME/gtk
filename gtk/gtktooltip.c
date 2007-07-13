@@ -64,8 +64,11 @@ struct _GtkTooltip
   guint timeout_id;
   guint browse_mode_timeout_id;
 
+  GdkRectangle tip_area;
+
   guint browse_mode_enabled : 1;
   guint keyboard_mode_enabled : 1;
+  guint tip_area_set : 1;
 };
 
 struct _GtkTooltipClass
@@ -328,6 +331,37 @@ gtk_tooltip_set_custom (GtkTooltip *tooltip,
 }
 
 /**
+ * gtk_tooltip_set_tip_area:
+ * @tooltip: a #GtkTooltip
+ * @rect: a #GdkRectangle
+ *
+ * Sets the area of the widget, where the contents of this tooltip apply,
+ * to be @rect (in widget coordinates).  This is especially useful for
+ * properly setting tooltips on #GtkTreeView rows and cells, #GtkIconViews,
+ * etc.
+ *
+ * For setting tooltips on #GtkTreeView, please refer to the convenience
+ * functions for this: gtk_tree_view_set_tooltip_row() and
+ * gtk_tree_view_set_tooltip_cell().
+ *
+ * Since: 2.12
+ */
+void
+gtk_tooltip_set_tip_area (GtkTooltip   *tooltip,
+			  GdkRectangle *rect)
+{
+  g_return_if_fail (GTK_IS_TOOLTIP (tooltip));
+
+  if (!rect)
+    tooltip->tip_area_set = FALSE;
+  else
+    {
+      tooltip->tip_area_set = TRUE;
+      tooltip->tip_area = *rect;
+    }
+}
+
+/**
  * gtk_tooltip_trigger_tooltip_query:
  * @display: a #GdkDisplay
  *
@@ -367,6 +401,7 @@ gtk_tooltip_reset (GtkTooltip *tooltip)
   gtk_tooltip_set_markup (tooltip, NULL);
   gtk_tooltip_set_icon (tooltip, NULL);
   gtk_tooltip_set_custom (tooltip, NULL);
+  gtk_tooltip_set_tip_area (tooltip, NULL);
 }
 
 static gboolean
@@ -634,6 +669,76 @@ gtk_tooltip_run_requery (GtkWidget  **widget,
 }
 
 static void
+gtk_tooltip_position (GtkTooltip *tooltip,
+		      GdkDisplay *display,
+		      GtkWidget  *new_tooltip_widget)
+{
+  gint x, y;
+  GdkScreen *screen;
+
+  tooltip->tooltip_widget = new_tooltip_widget;
+
+  /* Position the tooltip */
+  /* FIXME: should we swap this when RTL is enabled? */
+  if (tooltip->keyboard_mode_enabled)
+    {
+      gdk_window_get_origin (new_tooltip_widget->window, &x, &y);
+      if (GTK_WIDGET_NO_WINDOW (new_tooltip_widget))
+        {
+	  x += new_tooltip_widget->allocation.x;
+	  y += new_tooltip_widget->allocation.y;
+	}
+
+      /* For keyboard mode we position the tooltip below the widget,
+       * right of the center of the widget.
+       */
+      x += new_tooltip_widget->allocation.width / 2;
+      y += new_tooltip_widget->allocation.height + 4;
+    }
+  else
+    {
+      guint cursor_size;
+
+      x = tooltip->last_x;
+      y = tooltip->last_y;
+
+      /* For mouse mode, we position the tooltip right of the cursor,
+       * a little below the cursor's center.
+       */
+      cursor_size = gdk_display_get_default_cursor_size (display);
+      x += cursor_size / 2;
+      y += cursor_size / 2;
+    }
+
+  screen = gtk_widget_get_screen (new_tooltip_widget);
+
+  /* Show it */
+  if (tooltip->current_window)
+    {
+      gint monitor_num;
+      GdkRectangle monitor;
+      GtkRequisition requisition;
+
+      gtk_widget_size_request (GTK_WIDGET (tooltip->current_window),
+                               &requisition);
+
+      monitor_num = gdk_screen_get_monitor_at_point (screen, x, y);
+      gdk_screen_get_monitor_geometry (screen, monitor_num, &monitor);
+
+      if (x + requisition.width > monitor.x + monitor.width)
+        x -= x - (monitor.x + monitor.width) + requisition.width;
+      else if (x < monitor.x)
+        x = monitor.x;
+
+      if (y + requisition.height > monitor.y + monitor.height)
+        y -= y - (monitor.y + monitor.height) + requisition.height;
+
+      gtk_window_move (GTK_WINDOW (tooltip->current_window), x, y);
+      gtk_widget_show (GTK_WIDGET (tooltip->current_window));
+    }
+}
+
+static void
 gtk_tooltip_show_tooltip (GdkDisplay *display)
 {
   gint x, y;
@@ -687,40 +792,9 @@ gtk_tooltip_show_tooltip (GdkDisplay *display)
 	tooltip->current_window = GTK_WINDOW (GTK_TOOLTIP (tooltip)->window);
     }
 
-  /* Position the tooltip */
-  /* FIXME: should we swap this when RTL is enabled? */
-  if (tooltip->keyboard_mode_enabled)
-    {
-      gdk_window_get_origin (tooltip_widget->window, &x, &y);
-      if (GTK_WIDGET_NO_WINDOW (tooltip_widget))
-        {
-	  x += tooltip_widget->allocation.x;
-	  y += tooltip_widget->allocation.y;
-	}
-
-      /* For keyboard mode we position the tooltip below the widget,
-       * right of the center of the widget.
-       */
-      x += tooltip_widget->allocation.width / 2;
-      y += tooltip_widget->allocation.height + 4;
-    }
-  else
-    {
-      guint cursor_size;
-
-      x = tooltip->last_x;
-      y = tooltip->last_y;
-
-      /* For mouse mode, we position the tooltip right of the cursor,
-       * a little below the cursor's center.
-       */
-      cursor_size = gdk_display_get_default_cursor_size (display);
-      x += cursor_size / 2;
-      y += cursor_size / 2;
-    }
-
   screen = gtk_widget_get_screen (tooltip_widget);
 
+  /* FIXME: should use tooltip->current_window iso tooltip->window */
   if (screen != gtk_widget_get_screen (tooltip->window))
     {
       g_signal_handlers_disconnect_by_func (display,
@@ -733,32 +807,7 @@ gtk_tooltip_show_tooltip (GdkDisplay *display)
 			G_CALLBACK (gtk_tooltip_display_closed), tooltip);
     }
 
-  tooltip->tooltip_widget = tooltip_widget;
-
-  /* Show it */
-  if (tooltip->current_window)
-    {
-      gint monitor_num;
-      GdkRectangle monitor;
-      GtkRequisition requisition;
-
-      gtk_widget_size_request (GTK_WIDGET (tooltip->current_window),
-                               &requisition);
-
-      monitor_num = gdk_screen_get_monitor_at_point (screen, x, y);
-      gdk_screen_get_monitor_geometry (screen, monitor_num, &monitor);
-
-      if (x + requisition.width > monitor.x + monitor.width)
-        x -= x - (monitor.x + monitor.width) + requisition.width;
-      else if (x < monitor.x)
-        x = monitor.x;
-
-      if (y + requisition.height > monitor.y + monitor.height)
-        y -= y - (monitor.y + monitor.height) + requisition.height;
-
-      gtk_window_move (GTK_WINDOW (tooltip->current_window), x, y);
-      gtk_widget_show (GTK_WIDGET (tooltip->current_window));
-    }
+  gtk_tooltip_position (tooltip, display, tooltip_widget);
 
   /* Now a tooltip is visible again on the display, make sure browse
    * mode is enabled.
@@ -1063,11 +1112,32 @@ _gtk_tooltip_handle_event (GdkEvent *event)
       case GDK_SCROLL:
 	if (current_tooltip)
 	  {
+	    gboolean tip_area_set;
+	    GdkRectangle tip_area;
+	    gboolean hide_tooltip;
+
+	    tip_area_set = current_tooltip->tip_area_set;
+	    tip_area = current_tooltip->tip_area;
+
 	    return_value = gtk_tooltip_run_requery (&has_tooltip_widget,
 						    current_tooltip,
 						    &x, &y);
 
-	    if (!return_value)
+	    /* Requested to be hidden? */
+	    hide_tooltip = !return_value;
+
+	    /* Is the pointer above another widget now? */
+	    if (GTK_TOOLTIP_VISIBLE (current_tooltip))
+	      hide_tooltip |= has_tooltip_widget != current_tooltip->tooltip_widget;
+
+	    /* Did the pointer move out of the previous "context area"? */
+	    if (tip_area_set)
+	      hide_tooltip |= (x <= tip_area.x
+			       || x >= tip_area.x + tip_area.width
+			       || y <= tip_area.y
+			       || y >= tip_area.y + tip_area.height);
+
+	    if (hide_tooltip)
 	      gtk_tooltip_hide_tooltip (current_tooltip);
 	    else
 	      gtk_tooltip_start_delay (display);

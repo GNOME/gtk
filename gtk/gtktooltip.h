@@ -45,6 +45,9 @@ void gtk_tooltip_set_icon_from_stock   (GtkTooltip  *tooltip,
 void gtk_tooltip_set_custom	       (GtkTooltip  *tooltip,
 				        GtkWidget   *custom_widget);
 
+void gtk_tooltip_set_tip_area          (GtkTooltip   *tooltip,
+					GdkRectangle *rect);
+
 void gtk_tooltip_trigger_tooltip_query (GdkDisplay  *display);
 
 

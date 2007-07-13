@@ -1,3 +1,23 @@
+2007-07-13  Kristian Rietveld  <kris@imendio.com>
+
+	#408327, improve tooltip positioning.
+
+	* gtk/gtk.symbols: updated.
+
+	* gtk/gtktooltip.[ch] (gtk_tooltip_position): factor out
+	positioning code in here,
+	(gtk_tooltip_set_tip_area): new function to set the tooltip
+	area,
+	(gtk_tooltip_reset), (_gtk_tooltip_handle_event): hide tooltip
+	once the pointer leaves the tip area.
+
+	* gtk/gtktreeview.[ch] (gtk_tree_view_set_tooltip_row),
+	(gtk_tree_view_set_tooltip_cell): convenience functions to set
+	tip area for row/column/cell.
+
+	* tests/testtooltips.c (query_tooltip_tree_view_cb): use
+	gtk_tree_view_set_tooltip_row.
+
 2007-07-12  Cody Russell  <bratsche@gnome.org>
 
 	* gdk/win32/gdkevents-win32.c

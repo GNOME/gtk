@@ -4079,6 +4079,7 @@ gtk_tooltip_set_icon
 gtk_tooltip_set_icon_from_stock
 gtk_tooltip_set_markup
 gtk_tooltip_set_text
+gtk_tooltip_set_tip_area
 gtk_tooltip_trigger_tooltip_query
 #endif
 #endif
@@ -4466,6 +4467,8 @@ gtk_tree_view_set_search_entry
 gtk_tree_view_set_search_equal_func
 gtk_tree_view_set_search_position_func
 gtk_tree_view_set_show_expanders
+gtk_tree_view_set_tooltip_row
+gtk_tree_view_set_tooltip_cell
 gtk_tree_view_set_vadjustment
 #ifndef GTK_DISABLE_DEPRECATED
 gtk_tree_view_tree_to_widget_coords

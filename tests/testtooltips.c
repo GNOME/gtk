@@ -135,6 +135,8 @@ query_tooltip_tree_view_cb (GtkWidget  *widget,
   g_snprintf (buffer, 511, "<b>Path %s:</b> %s", pathstring, tmp);
   gtk_tooltip_set_markup (tooltip, buffer);
 
+  gtk_tree_view_set_tooltip_row (tree_view, tooltip, path);
+
   gtk_tree_path_free (path);
   g_free (pathstring);
   g_free (tmp);

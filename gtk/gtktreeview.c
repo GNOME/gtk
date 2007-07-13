@@ -42,6 +42,7 @@
 #include "gtkentry.h"
 #include "gtkframe.h"
 #include "gtktreemodelsort.h"
+#include "gtktooltip.h"
 #include "gtkprivate.h"
 #include "gtkalias.h"
 
@@ -15169,6 +15170,113 @@ gtk_tree_view_get_level_indentation (GtkTreeView *tree_view)
   g_return_val_if_fail (GTK_IS_TREE_VIEW (tree_view), 0);
 
   return tree_view->priv->level_indentation;
+}
+
+/**
+ * gtk_tree_view_set_tooltip_row:
+ * @tree_view: a #GtkTreeView
+ * @tooltip: a #GtkTooltip
+ * @path: a #GtkTreePath
+ *
+ * Sets the tip area of @tooltip to be the area covered by the row at @path.
+ * See also gtk_tooltip_set_tip_area().
+ *
+ * Since: 2.12
+ */
+void
+gtk_tree_view_set_tooltip_row (GtkTreeView *tree_view,
+			       GtkTooltip  *tooltip,
+			       GtkTreePath *path)
+{
+  g_return_if_fail (GTK_IS_TREE_VIEW (tree_view));
+  g_return_if_fail (GTK_IS_TOOLTIP (tooltip));
+
+  gtk_tree_view_set_tooltip_cell (tree_view, tooltip, path, NULL, NULL);
+}
+
+/**
+ * gtk_tree_view_set_tooltip_cell:
+ * @tree_view: a #GtkTreeView
+ * @tooltip: a #GtkTooltip
+ * @path: a #GtkTreePath or %NULL
+ * @column: a #GtkTreeViewColumn or %NULL
+ * @cell: a #GtkCellRendererText or %NULL
+ *
+ * Sets the tip area of @tooltip to the area @path, @column and @cell have
+ * in common.  For example if @path is %NULL and @column is set, the tip
+ * area will be set to the full area covered by @column.  See also
+ * gtk_tooltip_set_tip_area().
+ *
+ * Since: 2.12
+ */
+void
+gtk_tree_view_set_tooltip_cell (GtkTreeView       *tree_view,
+				GtkTooltip        *tooltip,
+				GtkTreePath       *path,
+				GtkTreeViewColumn *column,
+				GtkCellRenderer   *cell)
+{
+  GdkRectangle rect;
+
+  g_return_if_fail (GTK_IS_TREE_VIEW (tree_view));
+  g_return_if_fail (GTK_IS_TOOLTIP (tooltip));
+
+  if (column)
+    g_return_if_fail (GTK_IS_TREE_VIEW_COLUMN (column));
+
+  if (cell)
+    g_return_if_fail (GTK_IS_CELL_RENDERER (cell));
+
+  /* Determine x values. */
+  if (column && cell)
+    {
+      GdkRectangle tmp;
+      gint start, width;
+
+      gtk_tree_view_get_cell_area (tree_view, NULL, column, &tmp);
+      gtk_tree_view_column_cell_get_position (column, cell, &start, &width);
+
+      /* FIXME: a need a path here to correctly correct for indent */
+
+      gtk_tree_view_convert_bin_window_to_widget_coords (tree_view,
+							 tmp.x + start, 0,
+							 &rect.x, NULL);
+      rect.width = width;
+    }
+  else if (column)
+    {
+      GdkRectangle tmp;
+
+      gtk_tree_view_get_background_area (tree_view, NULL, column, &tmp);
+      gtk_tree_view_convert_bin_window_to_widget_coords (tree_view,
+							 tmp.x, 0,
+							 &rect.x, NULL);
+      rect.width = tmp.width;
+    }
+  else
+    {
+      rect.x = GTK_WIDGET (tree_view)->allocation.x;
+      rect.width = GTK_WIDGET (tree_view)->allocation.width;
+    }
+
+  /* Determine y values. */
+  if (path)
+    {
+      GdkRectangle tmp;
+
+      gtk_tree_view_get_background_area (tree_view, path, NULL, &tmp);
+      gtk_tree_view_convert_bin_window_to_widget_coords (tree_view,
+							 0, tmp.y,
+							 NULL, &rect.y);
+      rect.height = tmp.height;
+    }
+  else
+    {
+      rect.y = 0;
+      rect.height = tree_view->priv->vadjustment->page_size;
+    }
+
+  gtk_tooltip_set_tip_area (tooltip, &rect);
 }
 
 #define __GTK_TREE_VIEW_C__
