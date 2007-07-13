@@ -1,5 +1,17 @@
 2007-07-13  Richard Hult  <richard@imendio.com>
 
+	* gdk/quartz/gdkprivate-quartz.h:
+	* gdk/quartz/gdkevents-quartz.c: (gdk_window_is_ancestor): Move
+	from here...
+	* gdk/quartz/gdkwindow-quartz.c: (_gdk_quartz_window_is_ancestor):
+	...to here.
+	(_gdk_windowing_window_destroy): Update the mouse window if the
+	destroyed window is an ancestor of the current one, not only if
+	they are the same.
+	(gdk_window_hide): Update the mouse window here too.
+
+2007-07-13  Richard Hult  <richard@imendio.com>
+
 	* gdk/quartz/gdkcolor-quartz.c: (gdk_colors_alloc),
 	(gdk_colors_free): Add stubs.
 

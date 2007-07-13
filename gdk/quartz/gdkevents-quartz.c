@@ -603,17 +603,6 @@ _gdk_quartz_events_update_focus_window (GdkWindow *window,
     }
 }
 
-static gboolean
-gdk_window_is_ancestor (GdkWindow *ancestor,
-			GdkWindow *window)
-{
-  if (ancestor == NULL || window == NULL)
-    return FALSE;
-
-  return (gdk_window_get_parent (window) == ancestor ||
-	  gdk_window_is_ancestor (ancestor, gdk_window_get_parent (window)));
-}
-
 static void
 convert_window_coordinates_to_root (GdkWindow *window,
 				    gdouble    x,
@@ -774,7 +763,7 @@ synthesize_crossing_events (GdkWindow      *window,
   if (window == current_mouse_window)
     return;
 
-  if (gdk_window_is_ancestor (current_mouse_window, window))
+  if (_gdk_quartz_window_is_ancestor (current_mouse_window, window))
     {
       /* Pointer has moved to an inferior window. */
       synthesize_leave_event (current_mouse_window, nsevent, mode, GDK_NOTIFY_INFERIOR);
@@ -791,7 +780,7 @@ synthesize_crossing_events (GdkWindow      *window,
 
       synthesize_enter_event (window, nsevent, mode, GDK_NOTIFY_ANCESTOR);
     }
-  else if (gdk_window_is_ancestor (window, current_mouse_window))
+  else if (_gdk_quartz_window_is_ancestor (window, current_mouse_window))
     {
       /* Pointer has moved to an ancestor window. */
       synthesize_leave_event (current_mouse_window, nsevent, mode, GDK_NOTIFY_ANCESTOR);
@@ -815,7 +804,7 @@ synthesize_crossing_events (GdkWindow      *window,
 	common_ancestor = gdk_window_get_parent (tem);
 	tem = common_ancestor;
       } while (common_ancestor &&
-	       !gdk_window_is_ancestor (common_ancestor, window));
+	       !_gdk_quartz_window_is_ancestor (common_ancestor, window));
       if (common_ancestor)
 	{
 	  synthesize_leave_event (current_mouse_window, nsevent, mode, GDK_NOTIFY_NONLINEAR);
@@ -878,8 +867,11 @@ _gdk_quartz_events_send_map_events (GdkWindow *window)
 
 /* Get current mouse window */
 GdkWindow *
-_gdk_quartz_events_get_mouse_window (void)
+_gdk_quartz_events_get_mouse_window (gboolean consider_grabs)
 {
+  if (!consider_grabs)
+    return current_mouse_window;
+
   if (_gdk_quartz_pointer_grab_window && !pointer_grab_owner_events)
     return _gdk_quartz_pointer_grab_window;
   

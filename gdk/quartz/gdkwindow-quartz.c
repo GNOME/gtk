@@ -436,6 +436,18 @@ get_default_title (void)
   return title;
 }
 
+gboolean
+_gdk_quartz_window_is_ancestor (GdkWindow *ancestor,
+                                GdkWindow *window)
+{
+  if (ancestor == NULL || window == NULL)
+    return FALSE;
+
+  return (gdk_window_get_parent (window) == ancestor ||
+          _gdk_quartz_window_is_ancestor (ancestor, 
+                                          gdk_window_get_parent (window)));
+}
+
 /* FIXME: It would be nice to have one function that takes an NSPoint
  * and flips the coords for any window.
  */
@@ -789,9 +801,12 @@ _gdk_windowing_window_destroy (GdkWindow *window,
   if (!recursing && !foreign_destroy)
     {
       GdkWindowImplQuartz *impl = GDK_WINDOW_IMPL_QUARTZ (GDK_WINDOW_OBJECT (window)->impl);
+      GdkWindow *mouse_window;
 
-      if (window == _gdk_quartz_events_get_mouse_window ()) 
-	_gdk_quartz_events_update_mouse_window (_gdk_root);
+      mouse_window = _gdk_quartz_events_get_mouse_window (FALSE);
+      if (window == mouse_window ||
+          _gdk_quartz_window_is_ancestor (window, mouse_window))
+        _gdk_quartz_events_update_mouse_window (_gdk_root);
 
       GDK_QUARTZ_ALLOC_POOL;
 
@@ -966,11 +981,17 @@ gdk_window_hide (GdkWindow *window)
 {
   GdkWindowObject *private = (GdkWindowObject *)window;
   GdkWindowImplQuartz *impl;
+  GdkWindow *mouse_window;
 
   g_return_if_fail (GDK_IS_WINDOW (window));
 
   if (GDK_WINDOW_DESTROYED (window))
     return;
+
+  mouse_window = _gdk_quartz_events_get_mouse_window (FALSE);
+  if (window == mouse_window || 
+      _gdk_quartz_window_is_ancestor (window, mouse_window))
+    _gdk_quartz_events_update_mouse_window (_gdk_root);
 
   if (GDK_WINDOW_IS_MAPPED (window))
     gdk_synthesize_window_state (window,
@@ -1264,6 +1285,8 @@ gdk_window_set_cursor (GdkWindow *window,
   if (GDK_WINDOW_DESTROYED (window))
     return;
 
+  GDK_QUARTZ_ALLOC_POOL;
+
   if (!cursor)
     nscursor = NULL;
   else 
@@ -1274,7 +1297,9 @@ gdk_window_set_cursor (GdkWindow *window,
 
   impl->nscursor = nscursor;
 
-  _gdk_quartz_events_update_cursor (_gdk_quartz_events_get_mouse_window ());
+  GDK_QUARTZ_RELEASE_POOL;
+
+  _gdk_quartz_events_update_cursor (_gdk_quartz_events_get_mouse_window (TRUE));
 }
 
 void

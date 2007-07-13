@@ -134,6 +134,8 @@ void _gdk_quartz_colormap_get_rgba_from_pixel (GdkColormap *colormap,
 					       gfloat      *alpha);
 
 /* Window */
+gboolean    _gdk_quartz_window_is_ancestor          (GdkWindow *ancestor,
+                                                     GdkWindow *window);
 gint       _gdk_quartz_window_get_inverted_screen_y (gint       y);
 GdkWindow *_gdk_quartz_window_find_child            (GdkWindow *window,
 						     gint       x,
@@ -144,9 +146,9 @@ void       _gdk_quartz_window_did_become_main       (GdkWindow *window);
 void       _gdk_quartz_window_did_resign_main       (GdkWindow *window);
 
 /* Events */
-void         _gdk_quartz_events_update_focus_window   (GdkWindow *new_window,
-						       gboolean   got_focus);
-GdkWindow *  _gdk_quartz_events_get_mouse_window       (void);
+void         _gdk_quartz_events_update_focus_window    (GdkWindow *new_window,
+                                                        gboolean   got_focus);
+GdkWindow *  _gdk_quartz_events_get_mouse_window       (gboolean   consider_grabs);
 void         _gdk_quartz_events_update_mouse_window    (GdkWindow *window);
 void         _gdk_quartz_events_update_cursor          (GdkWindow *window);
 void         _gdk_quartz_events_send_map_events        (GdkWindow *window);
