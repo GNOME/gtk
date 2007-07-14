@@ -1,3 +1,8 @@
+2007-07-14  Richard Hult  <richard@imendio.com>
+
+	* gdk/quartz/gdkevents-quartz.c:
+	(_gdk_quartz_events_update_cursor): Plug leak.
+
 2007-07-13  Richard Hult  <richard@imendio.com>
 
 	* gdk/quartz/gdkprivate-quartz.h:

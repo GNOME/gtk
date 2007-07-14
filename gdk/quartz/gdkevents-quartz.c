@@ -911,11 +911,15 @@ _gdk_quartz_events_update_cursor (GdkWindow *window)
       private = private->parent;
     }
 
+  GDK_QUARTZ_ALLOC_POOL;
+
   if (!nscursor)
     nscursor = [NSCursor arrowCursor];
 
   if ([NSCursor currentCursor] != nscursor)
     [nscursor set];
+
+  GDK_QUARTZ_RELEASE_POOL;
 }
 
 /* Translates coordinates from an ancestor window + coords, to
