@@ -23,6 +23,7 @@
 #include <gtk/gtktreemodel.h>
 #include <gtk/gtkcellrenderer.h>
 #include <gtk/gtkselection.h>
+#include <gtk/gtktooltip.h>
 
 G_BEGIN_DECLS
 
@@ -200,6 +201,15 @@ void    gtk_icon_view_convert_widget_to_bin_window_coords     (GtkIconView *icon
                                                                gint         wy,
                                                                gint        *bx,
                                                                gint        *by);
+
+
+void    gtk_icon_view_set_tooltip_item                        (GtkIconView     *icon_view,
+                                                               GtkTooltip      *tooltip,
+                                                               GtkTreePath     *path);
+void    gtk_icon_view_set_tooltip_cell                        (GtkIconView     *icon_view,
+                                                               GtkTooltip      *tooltip,
+                                                               GtkTreePath     *path,
+                                                               GtkCellRenderer *cell);
 
 
 G_END_DECLS

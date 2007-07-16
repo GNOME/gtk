@@ -4576,7 +4576,6 @@ gtk_icon_view_get_path_at_pos (GtkIconView *icon_view,
 {
   GtkIconViewItem *item;
   GtkTreePath *path;
-  gint px, py;
   
   g_return_val_if_fail (GTK_IS_ICON_VIEW (icon_view), NULL);
 
@@ -4643,6 +4642,85 @@ gtk_icon_view_get_item_at_pos (GtkIconView      *icon_view,
   return (item != NULL);
 }
 
+/**
+ * gtk_icon_view_set_tooltip_item:
+ * @icon_view: a #GtkIconView
+ * @tooltip: a #GtkTooltip
+ * @path: a #GtkTreePath
+ * 
+ * Sets the tip area of @tooltip to be the area covered by the item at @path.
+ * See also gtk_tooltip_set_tip_area().
+ * 
+ * Since: 2.12
+ */
+void 
+gtk_icon_view_set_tooltip_item (GtkIconView     *icon_view,
+                                GtkTooltip      *tooltip,
+                                GtkTreePath     *path)
+{
+  g_return_if_fail (GTK_IS_ICON_VIEW (icon_view));
+  g_return_if_fail (GTK_IS_TOOLTIP (tooltip));
+
+  gtk_icon_view_set_tooltip_cell (icon_view, tooltip, path, NULL);
+}
+
+/**
+ * gtk_icon_view_set_tooltip_cell:
+ * @icon_view: a #GtkIconView
+ * @tooltip: a #GtkTooltip
+ * @path: a #GtkTreePath
+ * @cell: a #GtkCellRenderer or %NULL
+ *
+ * Sets the tip area of @tooltip to the area which @cell occupies in
+ * the item pointed to by @path. See also gtk_tooltip_set_tip_area().
+ *
+ * Since: 2.12
+ */
+void
+gtk_icon_view_set_tooltip_cell (GtkIconView     *icon_view,
+                                GtkTooltip      *tooltip,
+                                GtkTreePath     *path,
+                                GtkCellRenderer *cell)
+{
+  GdkRectangle rect;
+  GtkIconViewItem *item = NULL;
+  GtkIconViewCellInfo *info = NULL;
+ 
+  g_return_if_fail (GTK_IS_ICON_VIEW (icon_view));
+  g_return_if_fail (GTK_IS_TOOLTIP (tooltip));
+  g_return_if_fail (cell == NULL || GTK_IS_CELL_RENDERER (cell));
+
+  if (gtk_tree_path_get_depth (path) > 0)
+    item = g_list_nth_data (icon_view->priv->items,
+                            gtk_tree_path_get_indices(path)[0]);
+ 
+  if (!item)
+    return;
+
+  if (cell)
+    {
+      info = gtk_icon_view_get_cell_info (icon_view, cell);
+      gtk_icon_view_get_cell_area (icon_view, item, info, &rect);
+    }
+  else
+    {
+      rect.x = item->x;
+      rect.y = item->y;
+      rect.width = item->width;
+      rect.height = item->height;
+    }
+  
+  if (icon_view->priv->bin_window)
+    {
+      gint x, y;
+
+      gdk_window_get_position (icon_view->priv->bin_window, &x, &y);
+      rect.x += x;
+      rect.y += y; 
+    }
+
+  gtk_tooltip_set_tip_area (tooltip, &rect); 
+}
 
 /**
  * gtk_icon_view_get_visible_range:

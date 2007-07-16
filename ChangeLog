@@ -1,3 +1,11 @@
+2007-07-16  Matthias Clasen <mclasen@redhat.com>
+
+	* gtk/gtk.symbols:
+	* gtk/gtkiconview.h:
+	* gtk/gtkiconview.c (gtk_icon_view_set_tooltip_item):
+	(gtk_icon_view_set_tooltip_cell): Convenience functions to
+	position tooltips on icon view items or cells.
+
 2007-07-14  Richard Hult  <richard@imendio.com>
 
 	* gdk/quartz/gdkevents-quartz.c:

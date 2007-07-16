@@ -4746,6 +4746,7 @@ gtk_cell_layout_get_type
 GtkCellRendererState
 GtkCellRendererMode
 GtkCellRenderer
+GtkCellRendererClass
 gtk_cell_renderer_get_size
 gtk_cell_renderer_render
 gtk_cell_renderer_activate
