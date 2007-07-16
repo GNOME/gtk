@@ -1,3 +1,11 @@
+2007-07-16  Matthias Clasen  <mclasen@redhat.com>
+
+	Merge from trunk:
+
+	* io-tiff.c: Revert the last change, it was wrong
+	* gdk-pixbuf-loader.c (gdk_pixbuf_loader_close): Redo the last
+	change in a different way.
+
 2007-07-03  Matthias Clasen  <mclasen@redhat.com>
 
 	Merge from trunk: 

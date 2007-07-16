@@ -211,12 +211,12 @@ tiff_image_parse (TIFF *tiff, TiffContext *context, GError **error)
                 gint w = width;
                 gint h = height;
 		(* context->size_func) (&w, &h, context->user_data);
-                
-                if (w == 0 || h == 0) {
-                    g_set_error (error,
-                                 GDK_PIXBUF_ERROR,
-                                 GDK_PIXBUF_ERROR_CORRUPT_IMAGE,
-                                 _("Width or height of TIFF image is zero"));
+                /* This is a signal that this function is being called
+                   to support gdk_pixbuf_get_file_info, so we can stop
+                   parsing the tiff file at this point. It is not an
+                   error condition. */
+ 
+                 if (w == 0 || h == 0)
                     return NULL;
                 }
         }
