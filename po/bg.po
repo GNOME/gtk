@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ gtk-2-10\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-06-12 23:37-0400\n"
+"POT-Creation-Date: 2007-07-16 16:30-0400\n"
 "PO-Revision-Date: 2007-05-05 09:49+0300\n"
 "Last-Translator: Alexander Shopov <ash@contact.bg>\n"
 "Language-Team: Bulgarian <dict@fsa-bg.org>\n"
@@ -767,42 +767,42 @@ msgstr "Височината или ширината на изображение
 msgid "Dimensions of TIFF image too large"
 msgstr "Размерите на изображението във формат TIFF са твърде големи"
 
-#: gdk-pixbuf/io-tiff.c:225 gdk-pixbuf/io-tiff.c:237 gdk-pixbuf/io-tiff.c:286
-#: gdk-pixbuf/io-tiff.c:572
+#: gdk-pixbuf/io-tiff.c:229 gdk-pixbuf/io-tiff.c:241 gdk-pixbuf/io-tiff.c:290
+#: gdk-pixbuf/io-tiff.c:576
 #, c-format
 msgid "Insufficient memory to open TIFF file"
 msgstr "Няма достатъчно памет за отваряне на файл във формат TIFF"
 
-#: gdk-pixbuf/io-tiff.c:251 gdk-pixbuf/io-tiff.c:294
+#: gdk-pixbuf/io-tiff.c:255 gdk-pixbuf/io-tiff.c:298
 msgid "Failed to load RGB data from TIFF file"
 msgstr "Неуспех при зареждане на данни за каналите RGB от файл във формат TIFF"
 
-#: gdk-pixbuf/io-tiff.c:361
+#: gdk-pixbuf/io-tiff.c:365
 msgid "Failed to open TIFF image"
 msgstr "Неуспех при отваряне на изображение във формат TIFF"
 
-#: gdk-pixbuf/io-tiff.c:373 gdk-pixbuf/io-tiff.c:756
+#: gdk-pixbuf/io-tiff.c:377 gdk-pixbuf/io-tiff.c:760
 msgid "TIFFClose operation failed"
 msgstr "Неуспех при изпълнението на TIFFClose"
 
-#: gdk-pixbuf/io-tiff.c:504 gdk-pixbuf/io-tiff.c:517
+#: gdk-pixbuf/io-tiff.c:508 gdk-pixbuf/io-tiff.c:521
 msgid "Failed to load TIFF image"
 msgstr "Неуспех при зареждане на изображение във формат TIFF"
 
-#: gdk-pixbuf/io-tiff.c:704
+#: gdk-pixbuf/io-tiff.c:708
 msgid "Failed to save TIFF image"
 msgstr "Неуспех при запазване на изображение във формат TIFF"
 
-#: gdk-pixbuf/io-tiff.c:742
+#: gdk-pixbuf/io-tiff.c:746
 msgid "Failed to write TIFF data"
 msgstr "Неуспех при запазване на данните в TIFF"
 
-#: gdk-pixbuf/io-tiff.c:794
+#: gdk-pixbuf/io-tiff.c:798
 #, c-format
 msgid "Couldn't write to TIFF file"
 msgstr "Неуспех при запазване на файл във формат TIFF"
 
-#: gdk-pixbuf/io-tiff.c:844
+#: gdk-pixbuf/io-tiff.c:848
 msgid "The TIFF image format"
 msgstr "Форматът за изображения TIFF"
 
@@ -2376,17 +2376,17 @@ msgstr "Завършено"
 msgid "print operation status|Finished with error"
 msgstr "Завършено с грешка"
 
-#: gtk/gtkprintoperation.c:1989
+#: gtk/gtkprintoperation.c:1992
 #, c-format
 msgid "Preparing %d"
 msgstr "Подготвяне на %d"
 
-#: gtk/gtkprintoperation.c:1991 gtk/gtkprintoperation.c:2246
+#: gtk/gtkprintoperation.c:1994 gtk/gtkprintoperation.c:2249
 #, c-format
 msgid "Preparing"
 msgstr "Подготвяне"
 
-#: gtk/gtkprintoperation.c:1994
+#: gtk/gtkprintoperation.c:1997
 #, c-format
 msgid "Printing %d"
 msgstr "Печат на %d"

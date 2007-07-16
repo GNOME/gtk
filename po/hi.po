@@ -15,7 +15,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+.gtk-2-10.hi\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-06-12 23:37-0400\n"
+"POT-Creation-Date: 2007-07-16 16:30-0400\n"
 "PO-Revision-Date: 2006-12-11 17:28+0530\n"
 "Last-Translator: Rajesh Ranjan <rranjan@redhat.com>\n"
 "Language-Team: Hindi <fedora-trans-hi@redhat.com>\n"
@@ -742,42 +742,42 @@ msgstr "TIFF बिंब की चौड़ाई या ऊंचाई श�
 msgid "Dimensions of TIFF image too large"
 msgstr "TIFF बिंब के आयाम अत्यधिक बड़े हैं"
 
-#: gdk-pixbuf/io-tiff.c:225 gdk-pixbuf/io-tiff.c:237 gdk-pixbuf/io-tiff.c:286
-#: gdk-pixbuf/io-tiff.c:572
+#: gdk-pixbuf/io-tiff.c:229 gdk-pixbuf/io-tiff.c:241 gdk-pixbuf/io-tiff.c:290
+#: gdk-pixbuf/io-tiff.c:576
 #, c-format
 msgid "Insufficient memory to open TIFF file"
 msgstr "TIFF फ़ाइल को खोलने हेतु अपर्याप्त स्मृति"
 
-#: gdk-pixbuf/io-tiff.c:251 gdk-pixbuf/io-tiff.c:294
+#: gdk-pixbuf/io-tiff.c:255 gdk-pixbuf/io-tiff.c:298
 msgid "Failed to load RGB data from TIFF file"
 msgstr "TIFF फ़ाइल से RGB आंकड़ा लोड करने में असफल"
 
-#: gdk-pixbuf/io-tiff.c:361
+#: gdk-pixbuf/io-tiff.c:365
 msgid "Failed to open TIFF image"
 msgstr "TIFF बिंब को खोलने में असफल"
 
-#: gdk-pixbuf/io-tiff.c:373 gdk-pixbuf/io-tiff.c:756
+#: gdk-pixbuf/io-tiff.c:377 gdk-pixbuf/io-tiff.c:760
 msgid "TIFFClose operation failed"
 msgstr "TIFFClose प्रक्रिया असफल"
 
-#: gdk-pixbuf/io-tiff.c:504 gdk-pixbuf/io-tiff.c:517
+#: gdk-pixbuf/io-tiff.c:508 gdk-pixbuf/io-tiff.c:521
 msgid "Failed to load TIFF image"
 msgstr "TIFF बिंब को लोड करने में असफल"
 
-#: gdk-pixbuf/io-tiff.c:704
+#: gdk-pixbuf/io-tiff.c:708
 msgid "Failed to save TIFF image"
 msgstr "TIFF बिंब सहेजने में असफल"
 
-#: gdk-pixbuf/io-tiff.c:742
+#: gdk-pixbuf/io-tiff.c:746
 msgid "Failed to write TIFF data"
 msgstr "TIFF आंकड़ा लिखने में असफल"
 
-#: gdk-pixbuf/io-tiff.c:794
+#: gdk-pixbuf/io-tiff.c:798
 #, c-format
 msgid "Couldn't write to TIFF file"
 msgstr "TIFF फाइल में नहीं लिखा जा सका"
 
-#: gdk-pixbuf/io-tiff.c:844
+#: gdk-pixbuf/io-tiff.c:848
 msgid "The TIFF image format"
 msgstr "TIFF बिंब प्रारूप"
 
@@ -2366,17 +2366,17 @@ msgstr "समाप्त"
 msgid "print operation status|Finished with error"
 msgstr "त्रुटि के साथ समाप्त"
 
-#: gtk/gtkprintoperation.c:1989
+#: gtk/gtkprintoperation.c:1992
 #, c-format
 msgid "Preparing %d"
 msgstr "%d तैयार कर रहा है"
 
-#: gtk/gtkprintoperation.c:1991 gtk/gtkprintoperation.c:2246
+#: gtk/gtkprintoperation.c:1994 gtk/gtkprintoperation.c:2249
 #, c-format
 msgid "Preparing"
 msgstr "तैयारी"
 
-#: gtk/gtkprintoperation.c:1994
+#: gtk/gtkprintoperation.c:1997
 #, c-format
 msgid "Printing %d"
 msgstr "%d छपाई कर रहा है"

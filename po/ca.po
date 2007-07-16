@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.8.2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-06-12 23:37-0400\n"
+"POT-Creation-Date: 2007-07-16 16:30-0400\n"
 "PO-Revision-Date: 2007-05-02 21:44+0200\n"
 "Last-Translator: Jordi Mallach <jordi@sindominio.net>\n"
 "Language-Team: Catalan <tradgnome@softcatala.org>\n"
@@ -759,42 +759,42 @@ msgstr "L'amplada o l'alçària de la imatge TIFF és zero"
 msgid "Dimensions of TIFF image too large"
 msgstr "Les dimensions de la imatge TIFF són massa grans"
 
-#: gdk-pixbuf/io-tiff.c:225 gdk-pixbuf/io-tiff.c:237 gdk-pixbuf/io-tiff.c:286
-#: gdk-pixbuf/io-tiff.c:572
+#: gdk-pixbuf/io-tiff.c:229 gdk-pixbuf/io-tiff.c:241 gdk-pixbuf/io-tiff.c:290
+#: gdk-pixbuf/io-tiff.c:576
 #, c-format
 msgid "Insufficient memory to open TIFF file"
 msgstr "No hi ha memòria suficient per obrir el fitxer TIFF"
 
-#: gdk-pixbuf/io-tiff.c:251 gdk-pixbuf/io-tiff.c:294
+#: gdk-pixbuf/io-tiff.c:255 gdk-pixbuf/io-tiff.c:298
 msgid "Failed to load RGB data from TIFF file"
 msgstr "No s'han pogut carregar les dades RGB des del fitxer TIFF"
 
-#: gdk-pixbuf/io-tiff.c:361
+#: gdk-pixbuf/io-tiff.c:365
 msgid "Failed to open TIFF image"
 msgstr "No s'ha pogut obrir la imatge TIFF"
 
-#: gdk-pixbuf/io-tiff.c:373 gdk-pixbuf/io-tiff.c:756
+#: gdk-pixbuf/io-tiff.c:377 gdk-pixbuf/io-tiff.c:760
 msgid "TIFFClose operation failed"
 msgstr "L'operació TIFFClose ha fallat"
 
-#: gdk-pixbuf/io-tiff.c:504 gdk-pixbuf/io-tiff.c:517
+#: gdk-pixbuf/io-tiff.c:508 gdk-pixbuf/io-tiff.c:521
 msgid "Failed to load TIFF image"
 msgstr "No s'ha pogut carregar la imatge TIFF"
 
-#: gdk-pixbuf/io-tiff.c:704
+#: gdk-pixbuf/io-tiff.c:708
 msgid "Failed to save TIFF image"
 msgstr "No s'ha pogut desar la imatge TIFF"
 
-#: gdk-pixbuf/io-tiff.c:742
+#: gdk-pixbuf/io-tiff.c:746
 msgid "Failed to write TIFF data"
 msgstr "No s'han pogut escriure dades TIFF"
 
-#: gdk-pixbuf/io-tiff.c:794
+#: gdk-pixbuf/io-tiff.c:798
 #, c-format
 msgid "Couldn't write to TIFF file"
 msgstr "No s'ha pogut escriure al fitxer TIFF"
 
-#: gdk-pixbuf/io-tiff.c:844
+#: gdk-pixbuf/io-tiff.c:848
 msgid "The TIFF image format"
 msgstr "El format d'imatge TIFF"
 
@@ -2373,17 +2373,17 @@ msgstr "Finalitzat"
 msgid "print operation status|Finished with error"
 msgstr "Finalitzat amb error"
 
-#: gtk/gtkprintoperation.c:1989
+#: gtk/gtkprintoperation.c:1992
 #, c-format
 msgid "Preparing %d"
 msgstr "S'està preparant %d"
 
-#: gtk/gtkprintoperation.c:1991 gtk/gtkprintoperation.c:2246
+#: gtk/gtkprintoperation.c:1994 gtk/gtkprintoperation.c:2249
 #, c-format
 msgid "Preparing"
 msgstr "S'està preparant"
 
-#: gtk/gtkprintoperation.c:1994
+#: gtk/gtkprintoperation.c:1997
 #, c-format
 msgid "Printing %d"
 msgstr "S'està imprimint %d"
