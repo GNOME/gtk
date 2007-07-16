@@ -1,3 +1,22 @@
+Overview of Changes from GTK+ 2.10.13 to 2.10.14
+================================================
+
+* Bugs fixed:
+ 453365 gdk_pixbuf_get_file_info crashes on tif files
+ 164809 Checkboxes with inconsistent status are not drawn properl...
+ 426987 Panel freezes after upgrading gtk icon cache
+ 435840 GTK_WIDGET_SAVED_STATE inconsistency
+ 437281 gtk_button_set_image destroyes the old image
+ 440040 Reference counting in GtkPrintOperation goes awry
+ 448544 Refcount issues in GtkCellRendererSpin
+ 451070 Broken CUPS SSL printing in gtk 2.10.13
+ 112404 Problem with focus when closing transient window
+
+* Updated translations:
+ Estonian (et)
+ Russian (ru)
+
+
 Overview of Changes from GTK+ 2.10.12 to 2.10.13
 ================================================
 
