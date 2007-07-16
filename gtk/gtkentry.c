@@ -5870,11 +5870,6 @@ gtk_entry_completion_key_press (GtkWidget   *widget,
               if (!gtk_tree_selection_get_selected (sel, &model, &iter))
                 return FALSE;
               
-              if (completion->priv->completion_prefix == NULL)
-                {
-                  completion->priv->completion_prefix = g_strdup (gtk_entry_get_text (GTK_ENTRY (completion->priv->entry)));
-                }
-              
               g_signal_emit_by_name (completion, "cursor_on_match", model,
                                      &iter, &entry_set);
             }
@@ -5906,7 +5901,11 @@ gtk_entry_completion_key_press (GtkWidget   *widget,
           /* Escape rejects the tentative completion */
           if (event->keyval == GDK_Escape)
             {
-              gtk_entry_set_text (GTK_ENTRY (completion->priv->entry), completion->priv->completion_prefix);
+              if (completion->priv->completion_prefix)
+                gtk_entry_set_text (GTK_ENTRY (completion->priv->entry), 
+                                    completion->priv->completion_prefix);
+              else 
+                gtk_entry_set_text (GTK_ENTRY (completion->priv->entry), "");
             }
 
           /* Move the cursor to the end for Right/Esc, to the

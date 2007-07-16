@@ -650,6 +650,7 @@ gtk_entry_completion_finalize (GObject *object)
     g_object_unref (priv->action_view);
 
   g_free (priv->case_normalized_key);
+  g_free (priv->completion_prefix);
 
   if (priv->popup_window)
     gtk_widget_destroy (priv->popup_window);
@@ -1634,6 +1635,9 @@ gtk_entry_completion_real_insert_prefix (GtkEntryCompletion *completion,
       key = gtk_entry_get_text (GTK_ENTRY (completion->priv->entry));
       key_len = g_utf8_strlen (key, -1);
 
+      if (completion->priv->completion_prefix == NULL)
+        completion->priv->completion_prefix = g_strdup (key);
+
       if (prefix_len > key_len)
 	{
 	  gint pos = prefix_len;
@@ -1674,44 +1678,28 @@ gtk_entry_completion_insert_completion_text (GtkEntryCompletion *completion,
 					     const gchar *text)
 {
   GtkEntryCompletionPrivate *priv = completion->priv;
-  gchar *needle;
   gint len;
 
   priv = completion->priv;
 
   if (priv->changed_id > 0)
-    {
-      g_signal_handler_block (priv->entry,
-			      priv->changed_id);
-    }
+    g_signal_handler_block (priv->entry, priv->changed_id);
 
   if (priv->insert_text_id > 0)
-    {
-      g_signal_handler_block (completion->priv->entry,
-			      completion->priv->insert_text_id);
-    }
+    g_signal_handler_block (priv->entry, priv->insert_text_id);
 
-  gtk_entry_set_text (GTK_ENTRY (priv->entry), text);
-  needle = strstr (text, completion->priv->completion_prefix);
-  if (needle)
-    {
-      len = g_utf8_strlen (text, -1) - g_utf8_strlen (needle, -1)
-        + g_utf8_strlen (priv->completion_prefix, -1);
-      gtk_editable_select_region (GTK_EDITABLE (priv->entry),
-                                  len, -1);
-    }
+  if (completion->priv->completion_prefix == NULL)
+    completion->priv->completion_prefix = g_strdup (gtk_entry_get_text (GTK_ENTRY (priv->entry)));
+    gtk_entry_set_text (GTK_ENTRY (priv->entry), text);
+
+  len = strlen (priv->completion_prefix);
+  gtk_editable_select_region (GTK_EDITABLE (priv->entry), len, -1);
 
   if (priv->changed_id > 0)
-    {
-      g_signal_handler_unblock (priv->entry,
-				priv->changed_id);
-    }
+    g_signal_handler_unblock (priv->entry, priv->changed_id);
 
   if (priv->insert_text_id > 0)
-    {
-      g_signal_handler_unblock (priv->entry,
-				priv->insert_text_id);
-    }
+    g_signal_handler_unblock (priv->entry, priv->insert_text_id);
 }
 
 static gboolean
