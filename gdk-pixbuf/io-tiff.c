@@ -218,8 +218,7 @@ tiff_image_parse (TIFF *tiff, TiffContext *context, GError **error)
  
                  if (w == 0 || h == 0)
                     return NULL;
-                }
-        }
+	}
 
         pixels = g_try_malloc (bytes);
 
