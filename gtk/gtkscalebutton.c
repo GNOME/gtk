@@ -230,15 +230,16 @@ gtk_scale_button_class_init (GtkScaleButtonClass *klass)
                                                        P_("List of icon names"),
                                                        G_TYPE_STRV,
                                                        GTK_PARAM_READWRITE));
+
   /**
    * GtkScaleButton::value-changed:
-   * @button: the object that received the signal
-   * @value: The new value
+   * @button: the object which received the signal
+   * @value: the new value
    *
-   * Emitted when the value field has changed.
+   * The ::value-changed signal is emitted when the value field has
+   * changed.
    *
    * Since: 2.12
-   *
    */
   signals[VALUE_CHANGED] =
     g_signal_new (I_("value-changed"),
@@ -249,6 +250,18 @@ gtk_scale_button_class_init (GtkScaleButtonClass *klass)
 		  _gtk_marshal_VOID__DOUBLE,
 		  G_TYPE_NONE, 1, G_TYPE_DOUBLE);
   
+  /**
+   * GtkScaleButton::popup:
+   * @button: the object which received the signal
+   *
+   * The ::popup signal is a 
+   * <link linkend="keybinding-signals">keybinding signal</link> 
+   * which gets emitted to popup the scale widget.
+   *
+   * The default bindings for this signal are Space, Enter and Return.
+   *
+   * Since: 2.12
+   */
   signals[POPUP] =
     _gtk_binding_signal_new (I_("popup"),
 			     G_OBJECT_CLASS_TYPE (klass),
@@ -257,6 +270,19 @@ gtk_scale_button_class_init (GtkScaleButtonClass *klass)
 			     NULL, NULL,
 			     g_cclosure_marshal_VOID__VOID,
 			     G_TYPE_NONE, 0);
+
+  /**
+   * GtkScaleButton::popdown:
+   * @button: the object which received the signal
+   *
+   * The ::popdown signal is a 
+   * <link linkend="keybinding-signals">keybinding signal</link> 
+   * which gets emitted to popdown the scale widget.
+   *
+   * The default binding for this signal is Escape.
+   *
+   * Since: 2.12
+   */
   signals[POPDOWN] =
     _gtk_binding_signal_new (I_("popdown"),
 			     G_OBJECT_CLASS_TYPE (klass),

@@ -1,5 +1,10 @@
 2007-07-16  Matthias Clasen <mclasen@redhat.com>
 
+	* gtk/gtkscalebutton.c: Apply a patch by Guillaume Cottenceau
+	to improve the signal docs.  (#456258)
+
+2007-07-16  Matthias Clasen <mclasen@redhat.com>
+
 	* gtk/gtkwidget.c: Apply a patch by Xan Lopez to document
 	a lot of GtkWidget signals.  (#172424)
 
