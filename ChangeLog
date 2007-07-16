@@ -1,5 +1,10 @@
 2007-07-16  Matthias Clasen <mclasen@redhat.com>
 
+	* gtk/gtkfilechooserbutton.c (model_add_special_get_info_cb):
+	Plug a memleak. (#455721, Christian Persch)
+
+2007-07-16  Matthias Clasen <mclasen@redhat.com>
+
 	* gtk/gtkscalebutton.c: Apply a patch by Guillaume Cottenceau
 	to improve the signal docs.  (#456258)
 

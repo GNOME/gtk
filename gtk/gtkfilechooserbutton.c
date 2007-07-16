@@ -1667,7 +1667,8 @@ model_add_special_get_info_cb (GtkFileSystemHandle *handle,
     gtk_list_store_set (GTK_LIST_STORE (data->button->priv->model), &iter,
   		        DISPLAY_NAME_COLUMN, gtk_file_info_get_display_name (info),
 		        -1);
-
+  g_free (name);
+   
 out:
   g_object_unref (data->button);
   gtk_tree_row_reference_free (data->row_ref);
