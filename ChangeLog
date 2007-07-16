@@ -1,3 +1,9 @@
+2007-07-16  Kristian Rietveld  <kris@imendio.com>
+
+	* gtk/gtktooltip.c (find_topmost_widget_coords_from_event): check
+	if the pointer is really over the returned widget, since the
+	coordinate check may not always be hit in find_widget_under_pointer().
+
 2007-07-16  Matthias Clasen <mclasen@redhat.com>
 
 	* gtk/gtkfilechooserbutton.c (model_add_special_get_info_cb):
