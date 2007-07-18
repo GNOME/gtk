@@ -1493,8 +1493,8 @@ gtk_icon_theme_load_icon (GtkIconTheme         *icon_theme,
 			(flags & GTK_ICON_LOOKUP_FORCE_SVG) == 0, NULL);
   g_return_val_if_fail (error == NULL || *error == NULL, NULL);
   
-  icon_info  = gtk_icon_theme_lookup_icon (icon_theme, icon_name, size,
-					   flags | GTK_ICON_LOOKUP_USE_BUILTIN);
+  icon_info = gtk_icon_theme_lookup_icon (icon_theme, icon_name, size,
+				          flags | GTK_ICON_LOOKUP_USE_BUILTIN);
   if (!icon_info)
     {
       g_set_error (error, GTK_ICON_THEME_ERROR,  GTK_ICON_THEME_NOT_FOUND,
@@ -2902,8 +2902,6 @@ gtk_icon_info_load_icon (GtkIconInfo *icon_info,
 			 GError     **error)
 {
   g_return_val_if_fail (icon_info != NULL, NULL);
-
-  g_return_val_if_fail (icon_info != NULL, NULL);
   g_return_val_if_fail (error == NULL || *error == NULL, NULL);
 
   if (!icon_info_ensure_scale_and_pixbuf (icon_info, FALSE))
@@ -2916,7 +2914,7 @@ gtk_icon_info_load_icon (GtkIconInfo *icon_info,
                      GTK_ICON_THEME_NOT_FOUND,
                      _("Failed to load icon"));
  
-     return NULL;
+      return NULL;
     }
 
   return g_object_ref (icon_info->pixbuf);

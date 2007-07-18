@@ -1,3 +1,7 @@
+2007-07-18  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtkicontheme.c: Small cleanups
+
 2007-07-17  Kristian Rietveld  <kris@imendio.com>
 
 	* gtk/gtktooltip.c (find_widget_under_pointer): only do the
