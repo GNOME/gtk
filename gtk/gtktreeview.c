@@ -898,7 +898,7 @@ gtk_tree_view_class_init (GtkTreeViewClass *class)
    * The given row is about to be expanded (show its children nodes). Use this
    * signal if you need to control the expandability of individual rows.
    *
-   * Returns: %TRUE to allow expansion, %FALSE to reject
+   * Returns: %FALSE to allow expansion, %TRUE to reject
    */
   tree_view_signals[TEST_EXPAND_ROW] =
     g_signal_new (I_("test-expand-row"),
@@ -920,7 +920,7 @@ gtk_tree_view_class_init (GtkTreeViewClass *class)
    * The given row is about to be collapsed (hide its children nodes). Use this
    * signal if you need to control the collapsibility of individual rows.
    *
-   * Returns: %TRUE to allow expansion, %FALSE to reject
+   * Returns: %FALSE to allow collapsing, %TRUE to reject
    */
   tree_view_signals[TEST_COLLAPSE_ROW] =
     g_signal_new (I_("test-collapse-row"),

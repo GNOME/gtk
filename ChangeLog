@@ -1,5 +1,11 @@
 2007-07-18  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtktreeview.c: Correct some mistakes in the 
+	documentation of the test-expand/collapse-row signals.  
+	(#457774, Olivier Andrieu)
+
+2007-07-18  Matthias Clasen  <mclasen@redhat.com>
+
 	* gtk/gtkicontheme.c: Small cleanups
 
 2007-07-17  Kristian Rietveld  <kris@imendio.com>
