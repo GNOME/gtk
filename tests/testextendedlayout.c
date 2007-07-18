@@ -96,13 +96,14 @@ struct _TestSuite
 
   GtkTreeStore *results;
   GtkWidget *results_view;
-  GtkTreeIter parent;
   gint n_test_cases;
   gint level;
 
   GdkPixmap *tile;
   GtkWidget *current;
   gint timestamp;
+
+  GtkTreeIter parent;
 };
 
 static const gchar lorem_ipsum[] =
@@ -1129,39 +1130,68 @@ test_result_to_icon (TestResult result)
 static void
 test_suite_report (TestSuite   *self,
                    const gchar *message,
+                   gint         group,
                    TestResult   result)
 {
   const gchar *text = test_result_to_string (result);
   const gchar *icon = test_result_to_icon (result);
 
-  PangoWeight weight;
-  GtkTreePath *path;
   GtkTreeIter iter;
 
-  if (TEST_RESULT_NONE == result)
+  if (message)
     {
-      g_print ("\033[1mTesting: %s\033[0m\n", message);
-      gtk_tree_store_append (self->results, &self->parent, NULL);
-      weight = PANGO_WEIGHT_BOLD;
-      iter = self->parent;
+      PangoWeight weight = PANGO_WEIGHT_NORMAL;
+      GtkTreePath *path;
+
+      if (TEST_RESULT_NONE != result)
+        {
+          g_print ("   - %s: %s\n", message, text);
+          gtk_tree_store_append (self->results, &iter, &self->parent);
+        }
+      else if (group < 0)
+        {
+          g_print ("\033[1mTesting: %s\033[0m\n", message);
+          gtk_tree_store_append (self->results, &self->parent, NULL);
+          weight = PANGO_WEIGHT_BOLD;
+          iter = self->parent;
+
+        }
+      else
+        {
+          if (gtk_tree_store_iter_depth (self->results, &self->parent) < 1 ||
+              !gtk_tree_model_iter_parent (GTK_TREE_MODEL (self->results), &iter, &self->parent))
+              iter = self->parent;
+
+          g_print (" * %s\n", message);
+          gtk_tree_store_append (self->results, &self->parent, &iter);
+          iter = self->parent;
+        }
+
+      gtk_tree_store_set (self->results, &iter, 
+                          COLUMN_MESSAGE, message, 
+                          COLUMN_WEIGHT, weight, 
+                          COLUMN_RESULT, text, 
+                          COLUMN_ICON, icon,
+                          -1);
+
+      if (TEST_RESULT_SUCCESS != result)
+        {
+          path = gtk_tree_model_get_path (GTK_TREE_MODEL (self->results), &iter);
+          gtk_tree_view_expand_to_path (GTK_TREE_VIEW (self->results_view), path);
+          gtk_tree_path_free (path);
+        }
     }
   else
     {
-      g_print (" * %s: %s\n", message, text);
-      gtk_tree_store_append (self->results, &iter, &self->parent);
-      weight = PANGO_WEIGHT_NORMAL;
+      if (-1 == group && gtk_tree_model_iter_parent (
+          GTK_TREE_MODEL (self->results), &iter, &self->parent))
+        self->parent = iter;
+
+      gtk_tree_store_set (self->results, &self->parent,
+                          COLUMN_RESULT, text, 
+                          COLUMN_ICON, icon,
+                          -1);
     }
-
-  gtk_tree_store_set (self->results, &iter, 
-                      COLUMN_MESSAGE, message, 
-                      COLUMN_WEIGHT, weight, 
-                      COLUMN_RESULT, text, 
-                      COLUMN_ICON, icon,
-                      -1);
-
-  path = gtk_tree_model_get_path (GTK_TREE_MODEL (self->results), &iter);
-  gtk_tree_view_expand_to_path (GTK_TREE_VIEW (self->results_view), path);
-  gtk_tree_path_free (path);
 }
 
 static void
@@ -1182,12 +1212,13 @@ test_suite_run (TestSuite *self,
 
   if (NULL != test)
     {
+      TestResult test_result = TEST_RESULT_SUCCESS;
       gint last_group = -1;
       GList *oiter;
       gint o;
 
       test_suite_start (self);
-      test_suite_report (self, test->name, TEST_RESULT_NONE);
+      test_suite_report (self, test->name, -1, TEST_RESULT_NONE);
 
       for(o = 0, oiter = test->guides; oiter; ++o, oiter = oiter->next)
         {
@@ -1195,8 +1226,25 @@ test_suite_run (TestSuite *self,
         
           if (oguide->group > last_group)
             {
+              TestResult group_result = TEST_RESULT_SUCCESS;
+              const gchar *widget_name;
+              const gchar *type_name;
+
+              gchar *message;
               GList *iiter;
               gint i;
+
+              widget_name = gtk_widget_get_name (oguide->widget);
+              type_name = G_OBJECT_TYPE_NAME (oguide->widget);
+
+              message = g_strdup_printf (
+                "Group %d, Guide %d (%s%s%s)",
+                oguide->group, o, type_name,
+                strcmp (type_name, widget_name) ? ": " : "",
+                strcmp (type_name, widget_name) ? widget_name : "");
+
+              test_suite_report (self, message, oguide->group, TEST_RESULT_NONE);
+              g_free (message);
 
               for(i = 0, iiter = test->guides; iiter; ++i, iiter = iiter->next)
                 {
@@ -1204,25 +1252,35 @@ test_suite_run (TestSuite *self,
 
                   if (iguide->group == oguide->group)
                     {
-                      gchar *message = g_strdup_printf (
-                        "Group %d: Guide %d (%s) vs %d (%s)", oguide->group, 
-                        o, G_OBJECT_TYPE_NAME (oguide->widget),
-                        i, G_OBJECT_TYPE_NAME (iguide->widget));
+                      widget_name = gtk_widget_get_name (iguide->widget);
+                      type_name = G_OBJECT_TYPE_NAME (iguide->widget);
+
+                      message = g_strdup_printf (
+                        "Guide %d (%s%s%s)", i, type_name,
+                        strcmp (type_name, widget_name) ? ": " : "",
+                        strcmp (type_name, widget_name) ? widget_name : "");
 
                       if (test_case_compare_guides (test, oguide, iguide))
-                        test_suite_report (self, message, TEST_RESULT_SUCCESS);
+                        {
+                          test_suite_report (self, message, oguide->group, TEST_RESULT_SUCCESS);
+                        }
                       else
-                        test_suite_report (self, message, TEST_RESULT_FAILURE);
+                        {
+                          test_suite_report (self, message, oguide->group, TEST_RESULT_FAILURE);
+                          group_result = TEST_RESULT_FAILURE;
+                          test_result = TEST_RESULT_FAILURE;
+                        }
 
                       g_free (message);
                     }
                 } 
 
+              test_suite_report (self, NULL, oguide->group, group_result);
               last_group = oguide->group;
             }
-
         }
 
+      test_suite_report (self, NULL, -1, test_result);
       test_suite_stop (self);
     }
 }
