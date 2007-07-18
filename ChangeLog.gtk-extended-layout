@@ -1,5 +1,11 @@
 2007-07-16  Mathias Hasselmann  <mathias.hasselmann@gmx.de>
 
+	* tests/testellipsise.c: Extend the test to support rotations.
+	* gtk/gtklabel.c: Support ellipsizing and wrapping on labels
+	rotated by multiples of 90°.
+
+2007-07-16  Mathias Hasselmann  <mathias.hasselmann@gmx.de>
+
 	* gtk/gtkvbox.c, tests/testextendedlayout.c:
 	Implement and test natural size support for GtkVBox.
 	* gtk/gtkhbox.c: Cleanup issues found when implementing
