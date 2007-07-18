@@ -1,3 +1,8 @@
+2007-07-18  Richard Hult  <richard@imendio.com>
+
+	* gdk/quartz/gdkcursor-quartz.c (gdk_cursor_new_for_display): Ref
+	the cursor in the cached case.
+
 2007-07-18  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtktreeview.c: Correct some mistakes in the 

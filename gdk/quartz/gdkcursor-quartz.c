@@ -211,7 +211,7 @@ gdk_cursor_new_for_display (GdkDisplay    *display,
       nscursor = [NSCursor pointingHandCursor];
       break;
     default:
-      return create_builtin_cursor (cursor_type);
+      return gdk_cursor_ref (create_builtin_cursor (cursor_type));
     }
 
   [nscursor retain];
