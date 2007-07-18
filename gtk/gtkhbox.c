@@ -290,19 +290,15 @@ gtk_hbox_size_allocate (GtkWidget     *widget,
       GtkHBoxPrivate *priv = GTK_HBOX_GET_PRIVATE (widget);
 
       GtkPackType packing;
-
       GtkTextDirection direction;
       gint border_width;
 
       GtkAllocation child_allocation;
-
       gint *natural_requisitions;
       gint *minimum_requisitions;
 
-      gint natural_width;
-      gint minimum_width;
-
       gint available, natural, extra;
+      gint natural_width;
       gint i;
 
       direction = gtk_widget_get_direction (widget);
@@ -312,8 +308,8 @@ gtk_hbox_size_allocate (GtkWidget     *widget,
       natural_requisitions = g_newa (gint, nvis_children);
       minimum_requisitions = g_newa (gint, nvis_children);
 
-      children = box->children;
       i = 0;
+      children = box->children;
 
       while (children)
         {
@@ -344,13 +340,10 @@ gtk_hbox_size_allocate (GtkWidget     *widget,
             }
         }
 
-      minimum_width = widget->requisition.width - border_width * 2 - 
-                      (nvis_children - 1) * box->spacing;
-
       if (box->homogeneous)
 	{
 	  available = (allocation->width - border_width * 2 -
-		       (nvis_children - 1) * box->spacing);
+		      (nvis_children - 1) * box->spacing);
 	  extra = available / nvis_children;
           natural = 0;
 	}
@@ -390,7 +383,7 @@ gtk_hbox_size_allocate (GtkWidget     *widget,
 
               if (GTK_WIDGET_VISIBLE (child->widget))
                 {
-                  if ((child->pack == packing))
+                  if (child->pack == packing)
                     {
                       gint child_width;
 
@@ -425,7 +418,7 @@ gtk_hbox_size_allocate (GtkWidget     *widget,
 
                       if (child->fill)
                         {
-                          child_allocation.width = MAX (1, (gint) child_width - (gint) child->padding * 2);
+                          child_allocation.width = MAX (1, child_width - (gint)child->padding * 2);
                           child_allocation.x = x + child->padding;
                         }
                       else

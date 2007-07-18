@@ -26,6 +26,7 @@
 
 #include <config.h>
 #include "gtkvbox.h"
+#include "gtkextendedlayout.h"
 #include "gtkintl.h"
 #include "gtkalias.h"
 
@@ -35,7 +36,11 @@ static void gtk_vbox_size_request  (GtkWidget      *widget,
 static void gtk_vbox_size_allocate (GtkWidget      *widget,
 				    GtkAllocation  *allocation);
 
-G_DEFINE_TYPE (GtkVBox, gtk_vbox, GTK_TYPE_BOX)
+static void gtk_vbox_extended_layout_interface_init (GtkExtendedLayoutIface *iface);
+
+G_DEFINE_TYPE_WITH_CODE (GtkVBox, gtk_vbox, GTK_TYPE_BOX,
+                         G_IMPLEMENT_INTERFACE (GTK_TYPE_EXTENDED_LAYOUT,
+						gtk_vbox_extended_layout_interface_init))
 
 static void
 gtk_vbox_class_init (GtkVBoxClass *class)
@@ -126,15 +131,11 @@ gtk_vbox_size_allocate (GtkWidget     *widget,
 			GtkAllocation *allocation)
 {
   GtkBox *box;
-  GtkBoxChild *child;
-  GList *children;
-  GtkAllocation child_allocation;
+
   gint nvis_children;
   gint nexpand_children;
-  gint child_height;
-  gint height;
-  gint extra;
-  gint y;
+  GtkBoxChild *child;
+  GList *children;
 
   box = GTK_BOX (widget);
   widget->allocation = *allocation;
@@ -158,141 +159,205 @@ gtk_vbox_size_allocate (GtkWidget     *widget,
 
   if (nvis_children > 0)
     {
+      GtkPackType packing;
+      gint border_width;
+
+      GtkAllocation child_allocation;
+      gint *natural_requisitions;
+      gint *minimum_requisitions;
+
+      gint available, natural, extra;
+      gint natural_height;
+      gint i;
+
+      border_width = GTK_CONTAINER (box)->border_width;
+
+      natural_height = 0;
+      natural_requisitions = g_newa (gint, nvis_children);
+      minimum_requisitions = g_newa (gint, nvis_children);
+
+      i = 0;
+      children = box->children;
+
+      while (children)
+        {
+          child = children->data;
+          children = children->next;
+
+          if (GTK_WIDGET_VISIBLE (child->widget))
+            {
+              GtkRequisition child_requisition;
+
+              gtk_widget_size_request (child->widget, &child_requisition);
+              minimum_requisitions[i] = child_requisition.height;
+
+              if (GTK_IS_EXTENDED_LAYOUT (child->widget) &&
+                  GTK_EXTENDED_LAYOUT_HAS_NATURAL_SIZE (child->widget))
+                {
+                  gtk_extended_layout_get_natural_size (
+                    GTK_EXTENDED_LAYOUT (child->widget), 
+                    &child_requisition);
+                  natural_requisitions[i] =
+                    child_requisition.height - 
+                    minimum_requisitions[i];
+                }
+              else
+                natural_requisitions[i] = 0;
+
+              natural_height += natural_requisitions[i++];
+            }
+        }
+
       if (box->homogeneous)
 	{
-	  height = (allocation->height -
-		   GTK_CONTAINER (box)->border_width * 2 -
-		   (nvis_children - 1) * box->spacing);
-	  extra = height / nvis_children;
+	  available = (allocation->height - border_width * 2 -
+		      (nvis_children - 1) * box->spacing);
+	  extra = available / nvis_children;
+          natural = 0;
 	}
       else if (nexpand_children > 0)
 	{
-	  height = (gint) allocation->height - (gint) widget->requisition.height;
-	  extra = height / nexpand_children;
+	  available = (gint)allocation->height - widget->requisition.height;
+          natural = MAX (0, MIN (available, natural_height));
+          available -= natural;
+
+	  extra = MAX (0, available / nexpand_children);
 	}
       else
 	{
-	  height = 0;
+	  available = 0;
+          natural = 0;
 	  extra = 0;
 	}
 
-      y = allocation->y + GTK_CONTAINER (box)->border_width;
-      child_allocation.x = allocation->x + GTK_CONTAINER (box)->border_width;
-      child_allocation.width = MAX (1, (gint) allocation->width - (gint) GTK_CONTAINER (box)->border_width * 2);
+      child_allocation.x = allocation->x + border_width;
+      child_allocation.width = MAX (1, (gint) allocation->width - (gint) border_width * 2);
 
-      children = box->children;
-      while (children)
-	{
-	  child = children->data;
-	  children = children->next;
+      for (packing = GTK_PACK_START; packing <= GTK_PACK_END; ++packing)
+        {
+          gint y;
 
-	  if ((child->pack == GTK_PACK_START) && GTK_WIDGET_VISIBLE (child->widget))
-	    {
-	      if (box->homogeneous)
-		{
-		  if (nvis_children == 1)
-		    child_height = height;
-		  else
-		    child_height = extra;
+          if (GTK_PACK_START == packing)
+            y = allocation->y + border_width;
+          else
+            y = allocation->y + allocation->height - border_width;
 
-		  nvis_children -= 1;
-		  height -= extra;
-		}
-	      else
-		{
-		  GtkRequisition child_requisition;
+          i = 0;
+          children = box->children;
+          while (children)
+            {
+              child = children->data;
+              children = children->next;
 
-		  gtk_widget_get_child_requisition (child->widget, &child_requisition);
-		  child_height = child_requisition.height + child->padding * 2;
-
-		  if (child->expand)
-		    {
-		      if (nexpand_children == 1)
-			child_height += height;
-		      else
-			child_height += extra;
-
-		      nexpand_children -= 1;
-		      height -= extra;
-		    }
-		}
-
-	      if (child->fill)
-		{
-		  child_allocation.height = MAX (1, child_height - (gint)child->padding * 2);
-		  child_allocation.y = y + child->padding;
-		}
-	      else
-		{
-		  GtkRequisition child_requisition;
-
-		  gtk_widget_get_child_requisition (child->widget, &child_requisition);
-		  child_allocation.height = child_requisition.height;
-		  child_allocation.y = y + (child_height - child_allocation.height) / 2;
-		}
-
-	      gtk_widget_size_allocate (child->widget, &child_allocation);
-
-	      y += child_height + box->spacing;
-	    }
-	}
-
-      y = allocation->y + allocation->height - GTK_CONTAINER (box)->border_width;
-
-      children = box->children;
-      while (children)
-	{
-	  child = children->data;
-	  children = children->next;
-
-	  if ((child->pack == GTK_PACK_END) && GTK_WIDGET_VISIBLE (child->widget))
-	    {
-	      GtkRequisition child_requisition;
-	      gtk_widget_get_child_requisition (child->widget, &child_requisition);
-
-              if (box->homogeneous)
+              if (GTK_WIDGET_VISIBLE (child->widget))
                 {
-                  if (nvis_children == 1)
-                    child_height = height;
-                  else
-                    child_height = extra;
-
-                  nvis_children -= 1;
-                  height -= extra;
-                }
-              else
-                {
-		  child_height = child_requisition.height + child->padding * 2;
-
-                  if (child->expand)
+                  if (child->pack == packing)
                     {
-                      if (nexpand_children == 1)
-                        child_height += height;
+                      gint child_height;
+
+                      if (box->homogeneous)
+                        {
+                          if (nvis_children == 1)
+                            child_height = available;
+                          else
+                            child_height = extra;
+
+                          nvis_children -= 1;
+                          available -= extra;
+                        }
                       else
-                        child_height += extra;
+                        {
+                          child_height = minimum_requisitions[i] + child->padding * 2;
 
-                      nexpand_children -= 1;
-                      height -= extra;
-                    }
-                }
+                          if (child->expand)
+                            {
+                              if (nexpand_children == 1)
+                                child_height += available;
+                              else
+                                child_height += extra;
 
-              if (child->fill)
-                {
-                  child_allocation.height = MAX (1, child_height - (gint)child->padding * 2);
-                  child_allocation.y = y + child->padding - child_height;
-                }
-              else
-                {
-		  child_allocation.height = child_requisition.height;
-                  child_allocation.y = y + (child_height - child_allocation.height) / 2 - child_height;
-                }
+                              nexpand_children -= 1;
+                              available -= extra;
+                            }
+                        }
 
-              gtk_widget_size_allocate (child->widget, &child_allocation);
+		      if (natural_height > 0)
+                        child_height += natural * natural_requisitions[i] / natural_height;
 
-              y -= (child_height + box->spacing);
-	    }
+                      if (child->fill)
+                        {
+                          child_allocation.height = MAX (1, child_height - (gint)child->padding * 2);
+                          child_allocation.y = y + child->padding;
+                        }
+                      else
+                        {
+                          child_allocation.height = minimum_requisitions[i];
+                          child_allocation.y = y + (child_height - child_allocation.height) / 2;
+                        }
+
+                      if (GTK_PACK_END == packing)
+                        child_allocation.y -= child_height;
+
+                      gtk_widget_size_allocate (child->widget, &child_allocation);
+
+                      if (GTK_PACK_START == packing)
+	                y += child_height + box->spacing;
+                      else
+                        y -= child_height + box->spacing;
+                    } /* packing */
+
+                  ++i;
+                } /* visible */
+            } /* while children */
+        } /* for packing */
+    } /* nvis_children */
+}
+
+static GtkExtendedLayoutFeatures
+gtk_vbox_extended_layout_get_features (GtkExtendedLayout *layout)
+{
+  return GTK_EXTENDED_LAYOUT_NATURAL_SIZE;
+}
+
+static void
+gtk_vbox_extended_layout_get_natural_size (GtkExtendedLayout *layout,
+                                           GtkRequisition    *requisition)
+{
+  GtkBox *box = GTK_BOX (layout);
+
+  GtkRequisition child_requisition;
+  GtkBoxChild *child;
+  GList *children;
+
+  requisition->width = GTK_CONTAINER (box)->border_width * 2;
+  requisition->height = GTK_CONTAINER (box)->border_width * 2;
+
+  children = box->children;
+  while (children)
+    {
+      child = children->data;
+      children = children->next;
+
+      if (GTK_WIDGET_VISIBLE (child->widget))
+	{
+          if (GTK_IS_EXTENDED_LAYOUT (child->widget) &&
+              GTK_EXTENDED_LAYOUT_HAS_NATURAL_SIZE (child->widget))
+            gtk_extended_layout_get_natural_size (GTK_EXTENDED_LAYOUT (child->widget),
+                                                  &child_requisition);
+          else
+            gtk_widget_size_request (child->widget, &child_requisition);
+
+          requisition->width += MAX (child_requisition.width, requisition->width);
+          requisition->height = child_requisition.height;
 	}
     }
+}
+
+static void
+gtk_vbox_extended_layout_interface_init (GtkExtendedLayoutIface *iface)
+{
+  iface->get_features = gtk_vbox_extended_layout_get_features;
+  iface->get_natural_size = gtk_vbox_extended_layout_get_natural_size;
 }
 
 #define __GTK_VBOX_C__

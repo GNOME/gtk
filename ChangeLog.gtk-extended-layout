@@ -1,3 +1,10 @@
+2007-07-16  Mathias Hasselmann  <mathias.hasselmann@gmx.de>
+
+	* gtk/gtkvbox.c, tests/testextendedlayout.c:
+	Implement and test natural size support for GtkVBox.
+	* gtk/gtkhbox.c: Cleanup issues found when implementing
+	natural size for GtkVBox.
+
 2007-07-15  Mathias Hasselmann  <mathias.hasselmann@gmx.de>
 
 	* tests/testextendedlayout.c: Improve test result grouping.
