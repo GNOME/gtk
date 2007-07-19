@@ -210,6 +210,16 @@ void    gtk_icon_view_set_tooltip_cell                        (GtkIconView     *
                                                                GtkTooltip      *tooltip,
                                                                GtkTreePath     *path,
                                                                GtkCellRenderer *cell);
+gboolean gtk_icon_view_get_tooltip_context                    (GtkIconView       *icon_view,
+                                                               gint              *x,
+                                                               gint              *y,
+                                                               gboolean           keyboard_tip,
+                                                               GtkTreeModel     **model,
+                                                               GtkTreePath      **path,
+                                                               GtkTreeIter       *iter);
+void     gtk_icon_view_set_tooltip_column                     (GtkIconView       *icon_view,
+                                                               gint               column);
+gint     gtk_icon_view_get_tooltip_column                     (GtkIconView       *icon_view);
 
 
 G_END_DECLS

@@ -1,5 +1,13 @@
 2007-07-19  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtk.symbols:
+	* gtk/gtkiconview.h:
+	* gtk/gtkiconview.c (gtk_icon_view_get_tooltip_context):
+	(gtk_icon_view_[sg]et_tooltip_column: Add more convenience
+	API parallel to the treeview convenience API.
+
+2007-07-19  Matthias Clasen  <mclasen@redhat.com>
+
 	* gtk/gtktextview.c (gtk_text_view_compat_move_focus): 
 	Initialized GValues before unsetting them.  (#457720)
 

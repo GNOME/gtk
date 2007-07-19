@@ -1888,6 +1888,9 @@ gtk_icon_view_get_dest_item_at_pos
 gtk_icon_view_create_drag_icon
 gtk_icon_view_set_tooltip_item
 gtk_icon_view_set_tooltip_cell
+gtk_icon_view_get_tooltip_context
+gtk_icon_view_set_tooltip_column
+gtk_icon_view_get_tooltip_column
 #endif
 #endif
 
