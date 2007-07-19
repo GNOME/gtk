@@ -1690,7 +1690,8 @@ gtk_entry_completion_insert_completion_text (GtkEntryCompletion *completion,
 
   if (completion->priv->completion_prefix == NULL)
     completion->priv->completion_prefix = g_strdup (gtk_entry_get_text (GTK_ENTRY (priv->entry)));
-    gtk_entry_set_text (GTK_ENTRY (priv->entry), text);
+
+  gtk_entry_set_text (GTK_ENTRY (priv->entry), text);
 
   len = strlen (priv->completion_prefix);
   gtk_editable_select_region (GTK_EDITABLE (priv->entry), len, -1);

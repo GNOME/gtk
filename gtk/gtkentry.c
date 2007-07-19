@@ -5893,8 +5893,16 @@ gtk_entry_completion_key_press (GtkWidget   *widget,
            event->keyval == GDK_Right ||
            event->keyval == GDK_KP_Right) 
     {
+      GtkTreeSelection *sel;
+      GtkTreeIter iter;
+      GtkTreeModel *model = NULL;
+
       _gtk_entry_reset_im_context (GTK_ENTRY (widget));
       _gtk_entry_completion_popdown (completion);
+
+      sel = gtk_tree_view_get_selection (GTK_TREE_VIEW (completion->priv->tree_view));
+      if (!gtk_tree_selection_get_selected (sel, &model, &iter))
+        return FALSE;
 
       if (completion->priv->inline_selection)
         {

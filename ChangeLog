@@ -1,5 +1,14 @@
 2007-07-19  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkentry.c (gtk_entry_completion_key_press): Handle
+	keypresses better when there is no completion.  (#458298,
+	Christian Persch, patch by Xan Lopez)
+
+	* gtk/gtkentrycompletion.c
+	(gtk_entry_completion_insert_completion_text): Small cleanup.
+
+2007-07-19  Matthias Clasen  <mclasen@redhat.com>
+
 	* gtk/gtksettings.c (apply_queued_setting): Merge color
 	scheme before sending notification.  
 
