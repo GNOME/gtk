@@ -15415,11 +15415,11 @@ gtk_tree_view_set_tooltip_query_cb (GtkWidget  *widget,
  *
  * If you only plan to have simple (text-only) tooltips on full rows, you
  * can use this function to have #GtkTreeView handle these automatically
- * for you.  @column should be set to the column in @tree_view's model
- * containing the tooltip texts, or %-1 to disable this feature.
+ * for you. @column should be set to the column in @tree_view's model
+ * containing the tooltip texts, or -1 to disable this feature.
  *
- * When enabled, GtkWidget::has-tooltip will be set to %TRUE and
- * @tree_view will connect a query-tooltip signal handler.
+ * When enabled, #GtkWidget::has-tooltip will be set to %TRUE and
+ * @tree_view will connect a #GtkWidget::query-tooltip signal handler.
  *
  * Since: 2.12
  */
@@ -15453,8 +15453,8 @@ gtk_tree_view_set_tooltip_column (GtkTreeView *tree_view,
  * Returns the column of @tree_view's model which is being used for
  * displaying tooltips on @tree_view's rows.
  *
- * Return value: a #gint with the tooltip column that is currently being
- * used, or %-1 if this is disabled.
+ * Return value: the index of the tooltip column that is currently being
+ * used, or -1 if this is disabled.
  *
  * Since 2.12
  */
