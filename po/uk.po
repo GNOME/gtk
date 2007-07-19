@@ -2593,7 +2593,7 @@ msgstr "Непарні сторінки"
 
 #: gtk/gtkprintunixdialog.c:2067
 msgid "Sc_ale:"
-msgstr "_Масштіб:"
+msgstr "_Масштаб:"
 
 #: gtk/gtkprintunixdialog.c:2094
 msgid "Paper"
