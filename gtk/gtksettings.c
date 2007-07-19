@@ -1085,6 +1085,9 @@ apply_queued_setting (GtkSettings             *data,
   if (_gtk_settings_parse_convert (parser, &qvalue->public.value,
 				   pspec, &tmp_value))
     {
+      if (pspec->param_id == PROP_COLOR_SCHEME) 
+        merge_color_scheme (data, &tmp_value, qvalue->source);
+
       if (data->property_values[pspec->param_id - 1].source <= qvalue->source)
 	{
           g_value_copy (&tmp_value, &data->property_values[pspec->param_id - 1].value);
@@ -1092,8 +1095,6 @@ apply_queued_setting (GtkSettings             *data,
           g_object_notify (G_OBJECT (data), g_param_spec_get_name (pspec));
 	}
 
-      if (pspec->param_id == PROP_COLOR_SCHEME) 
-        merge_color_scheme (data, &tmp_value, qvalue->source);
     }
   else
     {

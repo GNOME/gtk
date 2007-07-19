@@ -1,5 +1,10 @@
 2007-07-19  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtksettings.c (apply_queued_setting): Merge color
+	scheme before sending notification.  
+
+2007-07-19  Matthias Clasen  <mclasen@redhat.com>
+
 	* gtk/gtktreeview.c (gtk_tree_view_set_tooltip_column):
 	Only connect/disconnect signals when necessary, emit
 	change notification.
