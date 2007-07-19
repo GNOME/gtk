@@ -1,3 +1,12 @@
+2007-07-20  Ryan Lortie  <desrt@desrt.ca>
+
+	* gtk/gtkwidget.c (gtk_widget_is_composited): add note that the
+	semantics of this call, when mixed with the new
+	gdk_window_set_composited(), will change in the future.
+
+	* gdk/x11/gdkevents-x11.c (gdk_event_translate): only grab Damage
+	events that belong to us.
+
 2007-07-19  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtkentry.c (gtk_entry_completion_key_press): Handle

@@ -1,5 +1,6 @@
 /* GDK - The GIMP Drawing Kit
- * Copyright (C) 1995-1997 Peter Mattis, Spencer Kimball and Josh MacDonald
+ * Copyright (C) 1995-2007 Peter Mattis, Spencer Kimball,
+ * Josh MacDonald, Ryan Lortie
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -2103,7 +2104,8 @@ gdk_event_translate (GdkDisplay *display,
 #endif
 #if defined(HAVE_XCOMPOSITE) && defined (HAVE_XDAMAGE) && defined (HAVE_XFIXES)
       if (display_x11->have_xdamage && window_private && window_private->composited &&
-	  xevent->type == display_x11->xdamage_event_base + XDamageNotify)
+	  xevent->type == display_x11->xdamage_event_base + XDamageNotify &&
+	  ((XDamageNotifyEvent *) xevent)->damage == window_impl->damage)
 	{
 	  XDamageNotifyEvent *damage_event = (XDamageNotifyEvent *) xevent;
 	  XserverRegion repair;
@@ -2115,7 +2117,7 @@ gdk_event_translate (GdkDisplay *display,
 	  rect.height = damage_event->area.height;
 
 	  repair = XFixesCreateRegion (display_x11->xdisplay,
-				      &damage_event->area, 1);
+				       &damage_event->area, 1);
 	  XDamageSubtract (display_x11->xdisplay,
 			   window_impl->damage,
 			   repair, None);
