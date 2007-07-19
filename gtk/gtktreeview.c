@@ -15299,7 +15299,7 @@ gtk_tree_view_set_tooltip_cell (GtkTreeView       *tree_view,
 }
 
 /**
- * gtk_tree_view_get_tooltip_contenxt:
+ * gtk_tree_view_get_tooltip_context:
  * @tree_view: a #GtkTreeView
  * @x: the x coordinate (relative to widget coordinates)
  * @y: the y coordinate (relative to widget coordinates)
