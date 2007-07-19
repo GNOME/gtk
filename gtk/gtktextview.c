@@ -5694,6 +5694,8 @@ gtk_text_view_compat_move_focus (GtkTextView     *text_view,
       g_value_init (&instance_and_params[1], GTK_TYPE_DIRECTION_TYPE);
       g_value_set_enum (&instance_and_params[1], direction_type);
 
+      g_value_init (&return_value, G_TYPE_BOOLEAN);
+
       g_signal_chain_from_overridden (instance_and_params, &return_value);
 
       g_value_unset (&instance_and_params[0]);
