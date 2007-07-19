@@ -593,11 +593,24 @@ find_topmost_widget_coords_from_event (GdkEvent *event,
 
   tmp = find_widget_under_pointer (event->any.window, &tx, &ty);
 
-  /* Make sure the pointer can actually be on the widget returned */
-  if (!tmp ||
-      tx < 0 || tx >= tmp->allocation.width ||
-      ty < 0 || ty >= tmp->allocation.height)
+  if (!tmp)
     return NULL;
+
+  /* Make sure the pointer can actually be on the widget returned */
+  if (GTK_WIDGET_NO_WINDOW (tmp))
+    {
+      if (tx < tmp->allocation.x ||
+	  tx >= tmp->allocation.x + tmp->allocation.width ||
+	  ty < tmp->allocation.y ||
+	  ty >= tmp->allocation.y + tmp->allocation.height)
+	return NULL;
+    }
+  else
+    {
+      if (tx < 0 || tx >= tmp->allocation.width ||
+	  ty < 0 || ty >= tmp->allocation.height)
+	return NULL;
+    }
 
   if (x)
     *x = tx;

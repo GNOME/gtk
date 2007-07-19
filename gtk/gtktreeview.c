@@ -15274,7 +15274,7 @@ gtk_tree_view_set_tooltip_cell (GtkTreeView       *tree_view,
     }
   else
     {
-      rect.x = GTK_WIDGET (tree_view)->allocation.x;
+      rect.x = 0;
       rect.width = GTK_WIDGET (tree_view)->allocation.width;
     }
 
