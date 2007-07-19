@@ -264,6 +264,8 @@ struct _GtkTreeViewPrivate
 
   gboolean tree_lines_enabled;
   GdkGC *tree_line_gc;
+
+  gint tooltip_column;
 };
 
 #ifdef __GNUC__

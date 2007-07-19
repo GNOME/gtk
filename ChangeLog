@@ -1,3 +1,16 @@
+2007-07-19  Kristian Rietveld  <kris@imendio.com>
+
+	* gtk/gtk.symbols:
+	* gtk/gtktreeprivate.h:
+	* gtk/gtktreeview.[ch] (gtk_tree_view_get_tooltip_context),
+	(gtk_tree_view_[sg]et_tooltip_column): add more convenience API.
+
+	* tests/testtooltip.c (query_tooltip_tree_view_cb): use
+	gtk_tree_view_get_tooltip_context().
+
+	* demos/gtk-demo/demo.ui: add a tooltip column to the list store,
+	set tooltip-column on the tree view.
+
 2007-07-18  Richard Hult  <richard@imendio.com>
 
 	* gdk/quartz/gdkcursor-quartz.c (gdk_cursor_new_for_display): Ref

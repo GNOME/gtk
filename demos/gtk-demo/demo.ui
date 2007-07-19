@@ -5,17 +5,20 @@
         <column type="gchararray"/>
         <column type="gchararray"/>
         <column type="gint"/>
+        <column type="gchararray"/>
       </columns>
       <data>
         <row>
           <col id="0">John</col>
           <col id="1">Doe</col>
           <col id="2">25</col>
+          <col id="3">This is the John Doe row</col>
         </row>
         <row>
           <col id="0">Mary</col>
           <col id="1">Dole</col>
           <col id="2">50</col>
+          <col id="3">This is the Mary Dole row</col>
         </row>
       </data>
     </object>
@@ -173,6 +176,7 @@
                         <object class="GtkTreeView" id="treeview1">
                           <property name="visible">True</property>
                           <property name="model">liststore1</property>
+                          <property name="tooltip-column">3</property>
                           <child>
                             <object class="GtkTreeViewColumn" id="column1">
                               <property name="title">Name</property>
