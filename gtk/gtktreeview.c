@@ -15429,21 +15429,28 @@ gtk_tree_view_set_tooltip_column (GtkTreeView *tree_view,
 {
   g_return_if_fail (GTK_IS_TREE_VIEW (tree_view));
 
+  if (column == tree_view->priv->tooltip_column)
+    return;
+
   if (column == -1)
     {
       g_signal_handlers_disconnect_by_func (tree_view,
-					    gtk_tree_view_set_tooltip_query_cb,
+	  				    gtk_tree_view_set_tooltip_query_cb,
 					    NULL);
       gtk_widget_set_has_tooltip (GTK_WIDGET (tree_view), FALSE);
     }
   else
     {
-      g_signal_connect (tree_view, "query-tooltip",
-		        G_CALLBACK (gtk_tree_view_set_tooltip_query_cb), NULL);
-      gtk_widget_set_has_tooltip (GTK_WIDGET (tree_view), TRUE);
+      if (tree_view->priv->tooltip_column == -1)
+        {
+          g_signal_connect (tree_view, "query-tooltip",
+		            G_CALLBACK (gtk_tree_view_set_tooltip_query_cb), NULL);
+          gtk_widget_set_has_tooltip (GTK_WIDGET (tree_view), TRUE);
+        }
     }
 
   tree_view->priv->tooltip_column = column;
+  g_object_notify (G_OBJECT (tree_view), "tooltip-column");
 }
 
 /**
