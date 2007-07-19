@@ -15308,8 +15308,8 @@ gtk_tree_view_set_tooltip_cell (GtkTreeView       *tree_view,
  * @path: a pointer to receive a #GtkTreePath or %NULL
  * @iter: a pointer to receive a #GtkTreeIter or %NULL
  *
- * This function is supposed to be used in a GtkWidget::query-tooltip
- * signal handler for #GtkTreeViews.  The @x, @y and @keyboard_tip values
+ * This function is supposed to be used in a #GtkWidget::query-tooltip
+ * signal handler for #GtkTreeView.  The @x, @y and @keyboard_tip values
  * which are received in the signal handler, should be passed to this
  * function without modification.
  *
