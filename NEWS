@@ -8,8 +8,18 @@ Overview of Changes from GTK+ 2.11.5 to 2.11.6
  - Support for accelerators in actions has been added
 
 * GtkTooltips:
- - The old tooltips API has been deprecated, and GTK+
-   use the new API internally 
+ - The old tooltips API has been deprecated
+ - The has-tooltip property has getter and setter
+
+* GtkTreeView: 
+ - Convenience API to set tooltips: gtk_tree_view_set_tooltip_row(),
+   gtk_tree_view_set_tooltip_cell(), gtk_tree_view_get_tooltip_context(),
+   gtk_tree_view_set_tooltip_column()
+
+* GtkIconView:
+ - Convenience API to set tooltips: gtk_icon_view_set_tooltip_item(),
+   gtk_icon_view_set_tooltip_cell(), gtk_icon_view_get_tooltip_context(),
+   gtk_icon_view_set_tooltip_column()
 
 * Bug fixes:
  452598 crash in Evolution: Added an Evolution attac...
@@ -41,12 +51,36 @@ Overview of Changes from GTK+ 2.11.5 to 2.11.6
  453930 small doc quirk in gtk/gtktooltip.c
  454596 [patch] gdkpixbuf-scale slight api doc improvement
  454835 [patch] example in gdk-pixbuf-scaling using deprecated gd...
+ 457384 critical warning from entrycompletion
+ 112404 Problem with focus when closing transient window
+ 172424 Most GtkWidget events have no documentation
+ 408327 Improving tooltip positioning
+ 439480 translations
+ 439715 GtkFileChooser - recent files option takes up 100% CPU.
+ 455482 remove old tooltips work-around from uimanager
+ 455721 mem leak when adding shortcut
+ 455901 mem leak in path bar
+ 455984 need a way to convert to bin_window coordinates
+ 457720 assertion `G_IS_VALUE (value)' failed progmatically "tabb...
+ 458298 broken cursor movement with inline selection
+ 456258 GtkScaleButton: value parameter of signal "value-changed"...
+ 457774 GtkTreeView::test_expand_row and test_collapse_row
+ 455645 intern action names 
 
 * Updated translations:
+ Bengali (bn_IN)
  Greek (el)
+ Spanish (es)
+ Estonian (et)
  Finnish (fi)
  Galician (gl)
  Gujarati (gu)
+ Hungarian (hu)
+ Japanese (ja)
+ Lithuanian (lt)
+ Norwegian bokmål (nb)
+ Dutch (nl)
+ Swedish (sv) 
  Thai (th)
  Vietnamese (vi)
  

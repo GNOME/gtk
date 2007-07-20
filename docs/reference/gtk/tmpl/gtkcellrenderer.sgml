@@ -167,6 +167,21 @@ it cannot be individually modified.
 
 </para>
 
+<!-- ##### STRUCT GtkCellRendererClass ##### -->
+<para>
+
+</para>
+
+@parent_class: 
+@get_size: 
+@render: 
+@activate: 
+@start_editing: 
+@editing_canceled: 
+@editing_started: 
+@_gtk_reserved1: 
+@_gtk_reserved2: 
+
 <!-- ##### FUNCTION gtk_cell_renderer_get_size ##### -->
 <para>
 

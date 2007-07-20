@@ -71,7 +71,6 @@ return %TRUE to show the window, %FALSE to not show it.
 </itemizedlist>
 </para>
 
-
 <!-- ##### SECTION See_Also ##### -->
 <para>
 
@@ -138,5 +137,14 @@ return %TRUE to show the window, %FALSE to not show it.
 </para>
 
 @display: 
+
+
+<!-- ##### FUNCTION gtk_tooltip_set_tip_area ##### -->
+<para>
+
+</para>
+
+@tooltip: 
+@rect: 
 
 

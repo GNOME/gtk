@@ -164,6 +164,11 @@ private fields and should not be directly accessed.
 
 </para>
 
+<!-- ##### ARG GtkIconView:tooltip-column ##### -->
+<para>
+
+</para>
+
 <!-- ##### ARG GtkIconView:selection-box-alpha ##### -->
 <para>
 
@@ -296,6 +301,18 @@ selected rows.  It will be called on every selected row in the view.
 @path: 
 @cell: 
 @Returns: 
+
+
+<!-- ##### FUNCTION gtk_icon_view_convert_widget_to_bin_window_coords ##### -->
+<para>
+
+</para>
+
+@icon_view: 
+@wx: 
+@wy: 
+@bx: 
+@by: 
 
 
 <!-- ##### FUNCTION gtk_icon_view_set_cursor ##### -->
@@ -556,6 +573,60 @@ selected rows.  It will be called on every selected row in the view.
 @icon_view: 
 @start_path: 
 @end_path: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_icon_view_set_tooltip_item ##### -->
+<para>
+
+</para>
+
+@icon_view: 
+@tooltip: 
+@path: 
+
+
+<!-- ##### FUNCTION gtk_icon_view_set_tooltip_cell ##### -->
+<para>
+
+</para>
+
+@icon_view: 
+@tooltip: 
+@path: 
+@cell: 
+
+
+<!-- ##### FUNCTION gtk_icon_view_get_tooltip_context ##### -->
+<para>
+
+</para>
+
+@icon_view: 
+@x: 
+@y: 
+@keyboard_tip: 
+@model: 
+@path: 
+@iter: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_icon_view_set_tooltip_column ##### -->
+<para>
+
+</para>
+
+@icon_view: 
+@column: 
+
+
+<!-- ##### FUNCTION gtk_icon_view_get_tooltip_column ##### -->
+<para>
+
+</para>
+
+@icon_view: 
 @Returns: 
 
 

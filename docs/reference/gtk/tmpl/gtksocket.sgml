@@ -124,6 +124,7 @@ never be set by an application.)
 </para>
 
 @socket_: 
+@Returns: 
 
 <!-- ##### FUNCTION gtk_socket_new ##### -->
 <para>

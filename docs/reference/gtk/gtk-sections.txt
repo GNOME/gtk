@@ -474,6 +474,7 @@ GTK_BUILDABLE_GET_IFACE
 <TITLE>GtkBuilder</TITLE>
 GtkBuilder
 GtkBuilderConnectFunc
+GtkBuilderError
 gtk_builder_new
 gtk_builder_add_from_file
 gtk_builder_add_from_string
@@ -498,6 +499,7 @@ GTK_BUILDER_GET_CLASS
 <SUBSECTION Private>
 gtk_builder_get_type
 gtk_builder_error_quark
+GtkBuilderPrivate
 </SECTION>
 
 <SECTION>
@@ -4181,6 +4183,7 @@ gtk_tooltip_set_icon
 gtk_tooltip_set_icon_from_stock
 gtk_tooltip_set_custom
 gtk_tooltip_trigger_tooltip_query
+gtk_tooltip_set_tip_area
 <SUBSECTION Standard>
 GTK_TYPE_TOOLTIP
 GTK_IS_TOOLTIP

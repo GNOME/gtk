@@ -308,6 +308,11 @@ GtkTreeViewColumn objects as &lt;child&gt; elements in UI definitions.
 
 </para>
 
+<!-- ##### ARG GtkTreeView:tooltip-column ##### -->
+<para>
+
+</para>
+
 <!-- ##### ARG GtkTreeView:vadjustment ##### -->
 <para>
 
@@ -1358,6 +1363,15 @@ returns.
 @enable: 
 
 
+<!-- ##### FUNCTION gtk_tree_view_is_rubber_banding_active ##### -->
+<para>
+
+</para>
+
+@tree_view: 
+@Returns: 
+
+
 <!-- ##### FUNCTION gtk_tree_view_get_enable_tree_lines ##### -->
 <para>
 
@@ -1402,5 +1416,60 @@ returns.
 
 @tree_view: 
 @grid_lines: 
+
+
+<!-- ##### FUNCTION gtk_tree_view_set_tooltip_row ##### -->
+<para>
+
+</para>
+
+@tree_view: 
+@tooltip: 
+@path: 
+
+
+<!-- ##### FUNCTION gtk_tree_view_set_tooltip_cell ##### -->
+<para>
+
+</para>
+
+@tree_view: 
+@tooltip: 
+@path: 
+@column: 
+@cell: 
+
+
+<!-- ##### FUNCTION gtk_tree_view_get_tooltip_context ##### -->
+<para>
+
+</para>
+
+@tree_view: 
+@x: 
+@y: 
+@keyboard_tip: 
+@model: 
+@path: 
+@iter: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_tree_view_get_tooltip_column ##### -->
+<para>
+
+</para>
+
+@tree_view: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_tree_view_set_tooltip_column ##### -->
+<para>
+
+</para>
+
+@tree_view: 
+@column: 
 
 

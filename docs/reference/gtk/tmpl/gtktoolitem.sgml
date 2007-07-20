@@ -147,12 +147,30 @@ accessed through the functions described below.
 @tip_private: 
 
 
+<!-- ##### FUNCTION gtk_tool_item_set_tooltip_text ##### -->
+<para>
+
+</para>
+
+@tool_item: 
+@text: 
+
+
+<!-- ##### FUNCTION gtk_tool_item_set_tooltip_markup ##### -->
+<para>
+
+</para>
+
+@tool_item: 
+@markup: 
+
+
 <!-- ##### FUNCTION gtk_tool_item_set_use_drag_window ##### -->
 <para>
 
 </para>
 
-@toolitem: 
+@tool_item: 
 @use_drag_window: 
 
 
@@ -161,7 +179,7 @@ accessed through the functions described below.
 
 </para>
 
-@toolitem: 
+@tool_item: 
 @Returns: 
 
 
@@ -170,7 +188,7 @@ accessed through the functions described below.
 
 </para>
 
-@toolitem: 
+@tool_item: 
 @visible_horizontal: 
 
 
@@ -179,7 +197,7 @@ accessed through the functions described below.
 
 </para>
 
-@toolitem: 
+@tool_item: 
 @Returns: 
 
 
@@ -188,7 +206,7 @@ accessed through the functions described below.
 
 </para>
 
-@toolitem: 
+@tool_item: 
 @visible_vertical: 
 
 
@@ -197,7 +215,7 @@ accessed through the functions described below.
 
 </para>
 
-@toolitem: 
+@tool_item: 
 @Returns: 
 
 

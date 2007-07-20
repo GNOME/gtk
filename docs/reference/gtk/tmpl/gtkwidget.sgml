@@ -2560,6 +2560,24 @@ This function is deprecated; it does nothing.
 @custom_window: 
 
 
+<!-- ##### FUNCTION gtk_widget_get_has_tooltip ##### -->
+<para>
+
+</para>
+
+@widget: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_widget_set_has_tooltip ##### -->
+<para>
+
+</para>
+
+@widget: 
+@has_tooltip: 
+
+
 <!-- ##### FUNCTION gtk_widget_trigger_tooltip_query ##### -->
 <para>
 
