@@ -53,7 +53,7 @@ item_activated_cb (GtkRecentChooser *chooser,
 }
 
 static GtkWidget *
-create_recent_chooser_menu (void)
+create_recent_chooser_menu (gint limit)
 {
   GtkWidget *menu;
   GtkRecentFilter *filter;
@@ -61,7 +61,8 @@ create_recent_chooser_menu (void)
   
   menu = gtk_recent_chooser_menu_new_for_manager (manager);
 
-  gtk_recent_chooser_set_limit (GTK_RECENT_CHOOSER (menu), 4);
+  if (limit > 0)
+    gtk_recent_chooser_set_limit (GTK_RECENT_CHOOSER (menu), limit);
   gtk_recent_chooser_set_local_only (GTK_RECENT_CHOOSER (menu), TRUE);
   gtk_recent_chooser_set_show_icons (GTK_RECENT_CHOOSER (menu), TRUE);
   gtk_recent_chooser_set_sort_type (GTK_RECENT_CHOOSER (menu),
@@ -122,7 +123,7 @@ create_file_menu (GtkAccelGroup *accelgroup)
   gtk_widget_show (menuitem);
 
   menuitem = gtk_menu_item_new_with_mnemonic ("_Open Recent");
-  recentmenu = create_recent_chooser_menu ();
+  recentmenu = create_recent_chooser_menu (-1);
   gtk_menu_item_set_submenu (GTK_MENU_ITEM (menuitem), recentmenu);
   gtk_menu_shell_append (GTK_MENU_SHELL (menu), menuitem);
   gtk_widget_show (menuitem);
@@ -176,7 +177,7 @@ main (int argc, char *argv[])
   gtk_menu_shell_append (GTK_MENU_SHELL (menubar), menuitem);
   gtk_widget_show (menuitem);
 
-  menu = create_recent_chooser_menu ();
+  menu = create_recent_chooser_menu (4);
   menuitem = gtk_menu_item_new_with_mnemonic ("_Recently Used");
   gtk_menu_item_set_submenu (GTK_MENU_ITEM (menuitem), menu);
   gtk_menu_shell_append (GTK_MENU_SHELL (menubar), menuitem);

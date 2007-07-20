@@ -234,11 +234,8 @@ gtk_recent_chooser_menu_init (GtkRecentChooserMenu *menu)
   priv->local_only = TRUE;
   
   priv->limit = FALLBACK_ITEM_LIMIT;
-
   priv->sort_type = GTK_RECENT_SORT_NONE;
-  
   priv->icon_size = FALLBACK_ICON_SIZE;
-  
   priv->label_width = DEFAULT_LABEL_WIDTH;
   
   priv->first_recent_item_pos = -1;

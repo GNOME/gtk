@@ -99,6 +99,8 @@ struct _GtkRecentChooserDefault
   guint show_tips : 1;
   guint show_icons : 1;
   guint local_only : 1;
+
+  guint limit_set : 1;
   
   GSList *filters;
   GtkRecentFilter *current_filter;
@@ -223,6 +225,7 @@ static void set_current_filter        (GtkRecentChooserDefault *impl,
 static GtkIconTheme *get_icon_theme_for_widget (GtkWidget   *widget);
 static gint          get_icon_size_for_widget  (GtkWidget   *widget,
 						GtkIconSize  icon_size);
+static gint          get_recent_files_limit    (GtkWidget   *widget);
 
 static void reload_recent_items (GtkRecentChooserDefault *impl);
 static void chooser_set_model   (GtkRecentChooserDefault *impl);
@@ -373,6 +376,8 @@ gtk_recent_chooser_default_constructor (GType                  type,
   g_assert (impl->manager);
   
   gtk_widget_push_composite_child ();
+
+  impl->limit = get_recent_files_limit (GTK_WIDGET (impl));
   
   scrollw = gtk_scrolled_window_new (NULL, NULL);
   gtk_scrolled_window_set_shadow_type (GTK_SCROLLED_WINDOW (scrollw),
@@ -525,6 +530,7 @@ gtk_recent_chooser_default_set_property (GObject      *object,
       break;
     case GTK_RECENT_CHOOSER_PROP_LIMIT:
       impl->limit = g_value_get_int (value);
+      impl->limit_set = TRUE;
       reload_recent_items (impl);
       break;
     case GTK_RECENT_CHOOSER_PROP_SORT_TYPE:
@@ -864,18 +870,25 @@ cleanup_after_load (gpointer user_data)
 static void
 reload_recent_items (GtkRecentChooserDefault *impl)
 {
+  GtkWidget *widget;
+
   /* reload is already in progress - do not disturb */
   if (impl->load_id)
     return;
   
+  widget = GTK_WIDGET (impl);
+
   gtk_tree_view_set_model (GTK_TREE_VIEW (impl->recent_view), NULL);
   gtk_list_store_clear (impl->recent_store);
   
   if (!impl->icon_theme)
-    impl->icon_theme = get_icon_theme_for_widget (GTK_WIDGET (impl));
+    impl->icon_theme = get_icon_theme_for_widget (widget);
 
-  impl->icon_size = get_icon_size_for_widget (GTK_WIDGET (impl),
+  impl->icon_size = get_icon_size_for_widget (widget,
 		  			      GTK_ICON_SIZE_BUTTON);
+
+  if (!impl->limit_set)
+    impl->limit = get_recent_files_limit (widget);
 
   set_busy_cursor (impl, TRUE);
 
@@ -1402,6 +1415,21 @@ get_icon_size_for_widget (GtkWidget   *widget,
   return FALLBACK_ICON_SIZE;
 }
 
+static gint
+get_recent_files_limit (GtkWidget *widget)
+{
+  GtkSettings *settings;
+  gint limit;
+
+  if (gtk_widget_has_screen (widget))
+    settings = gtk_settings_get_for_screen (gtk_widget_get_screen (widget));
+  else
+    settings = gtk_settings_get_default ();
+  
+  g_object_get (G_OBJECT (settings), "gtk-recent-files-limit", &limit, NULL);
+
+  return limit;
+}
 
 static void
 recent_manager_changed_cb (GtkRecentManager *manager,

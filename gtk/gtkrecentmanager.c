@@ -125,6 +125,7 @@ enum
   PROP_SIZE
 };
 
+static void           gtk_recent_manager_dispose      (GObject               *object);
 static void           gtk_recent_manager_finalize     (GObject               *object);
 
 static void           gtk_recent_manager_set_property (GObject               *object,
@@ -232,6 +233,7 @@ gtk_recent_manager_class_init (GtkRecentManagerClass *klass)
   
   gobject_class->set_property = gtk_recent_manager_set_property;
   gobject_class->get_property = gtk_recent_manager_get_property;
+  gobject_class->dispose = gtk_recent_manager_dispose;
   gobject_class->finalize = gtk_recent_manager_finalize;
   
   /**
@@ -388,21 +390,31 @@ gtk_recent_manager_get_property (GObject               *object,
 } 
 
 static void
+gtk_recent_manager_dispose (GObject *object)
+{
+  GtkRecentManager *manager = GTK_RECENT_MANAGER (object);
+  GtkRecentManagerPrivate *priv = manager->priv;
+
+  if (priv->poll_timeout)
+    {
+      g_source_remove (priv->poll_timeout);
+      priv->poll_timeout = 0;
+    }
+
+  G_OBJECT_CLASS (gtk_recent_manager_parent_class)->dispose (object);
+}
+
+static void
 gtk_recent_manager_finalize (GObject *object)
 {
   GtkRecentManager *manager = GTK_RECENT_MANAGER (object);
   GtkRecentManagerPrivate *priv = manager->priv;
 
-  /* remove the poll timeout */
-  if (priv->poll_timeout)
-    g_source_remove (priv->poll_timeout);
-  
   g_free (priv->filename);
   
   if (priv->recent_items)
     g_bookmark_file_free (priv->recent_items);
 
-  /* chain up parent's finalize method */  
   G_OBJECT_CLASS (gtk_recent_manager_parent_class)->finalize (object);
 }
 
@@ -435,10 +447,7 @@ gtk_recent_manager_real_changed (GtkRecentManager *manager)
 	}
 
       write_error = NULL;
-      g_bookmark_file_to_file (priv->recent_items,
-		               priv->filename,
-			       &write_error);
-
+      g_bookmark_file_to_file (priv->recent_items, priv->filename, &write_error);
       if (write_error)
         {
           filename_warning ("Attempting to store changes into `%s', "
@@ -491,11 +500,17 @@ gtk_recent_manager_poll_timeout (gpointer data)
 {
   GtkRecentManager *manager = GTK_RECENT_MANAGER (data);
   GtkRecentManagerPrivate *priv = manager->priv;
+  time_t now;
   struct stat stat_buf;
   int stat_res;
 
   /* wait for the next timeout if we have a read/write in progress */
   if (priv->write_in_progress || priv->read_in_progress)
+    return TRUE;
+
+  /* do not stat the file if we're within 5 seconds from the last stat() */
+  now = time (NULL);
+  if (now < priv->last_mtime + 5);
     return TRUE;
 
   stat_res = g_stat (priv->filename, &stat_buf);
@@ -513,7 +528,7 @@ gtk_recent_manager_poll_timeout (gpointer data)
       return TRUE;
     }
 
-  /* the file didn't change from the last poll(), so we bail out */
+  /* the file didn't change from the last poll, so we bail out */
   if (stat_buf.st_mtime == priv->last_mtime)
     return TRUE;
 
@@ -796,11 +811,11 @@ gtk_recent_manager_get_limit (GtkRecentManager *manager)
  * Adds a new resource, pointed by @uri, into the recently used
  * resources list.
  *
- * This function automatically retrieving some of the needed
+ * This function automatically retrieves some of the needed
  * metadata and setting other metadata to common default values; it
  * then feeds the data to gtk_recent_manager_add_full().
  *
- * See gtk_recent_manager_add_full() if you want to explicitely
+ * See gtk_recent_manager_add_full() if you want to explicitly
  * define the metadata for the resource pointed by @uri.
  *
  * Return value: %TRUE if the new item was successfully added

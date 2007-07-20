@@ -9765,6 +9765,7 @@ typedef struct
   GList *items;
   gint n_items;
   gint n_loaded_items;
+  guint needs_sorting : 1;
 } RecentLoadData;
 
 static void
@@ -9848,6 +9849,32 @@ out:
   g_object_unref (handle);
 }
 
+static gint
+recent_sort_mru (gconstpointer a,
+                 gconstpointer b)
+{
+  GtkRecentInfo *info_a = (GtkRecentInfo *) a;
+  GtkRecentInfo *info_b = (GtkRecentInfo *) b;
+
+  return (gtk_recent_info_get_modified (info_a) < gtk_recent_info_get_modified (info_b));
+}
+
+static gint
+get_recent_files_limit (GtkWidget *widget)
+{
+  GtkSettings *settings;
+  gint limit;
+
+  if (gtk_widget_has_screen (widget))
+    settings = gtk_settings_get_for_screen (gtk_widget_get_screen (widget));
+  else
+    settings = gtk_settings_get_default ();
+
+  g_object_get (G_OBJECT (settings), "gtk-recent-files-limit", &limit, NULL);
+
+  return limit;
+}
+
 static gboolean
 recent_idle_load (gpointer data)
 {
@@ -9864,14 +9891,47 @@ recent_idle_load (gpointer data)
   if (!impl->recent_manager)
     return FALSE;
 
+  /* first iteration: load all the items */
   if (!load_data->items)
     {
       load_data->items = gtk_recent_manager_get_items (impl->recent_manager);
       if (!load_data->items)
         return FALSE;
 
+      load_data->needs_sorting = TRUE;
+
+      return TRUE;
+    }
+  
+  /* second iteration: preliminary MRU sorting and clamping */
+  if (load_data->needs_sorting)
+    {
+      gint limit;
+
+      load_data->items = g_list_sort (load_data->items, recent_sort_mru);
       load_data->n_items = g_list_length (load_data->items);
+
+      limit = get_recent_files_limit (GTK_WIDGET (impl));
+      
+      if (limit != -1 && (load_data->n_items > limit))
+        {
+          GList *clamp, *l;
+
+          clamp = g_list_nth (load_data->items, limit - 1);
+          if (G_LIKELY (clamp))
+            {
+              l = clamp->next;
+              clamp->next = NULL;
+
+              g_list_foreach (l, (GFunc) gtk_recent_info_unref, NULL);
+              g_list_free (l);
+
+              load_data->n_items = limit;
+            }
+         }
+
       load_data->n_loaded_items = 0;
+      load_data->needs_sorting = FALSE;
 
       return TRUE;
     }
@@ -9943,6 +10003,7 @@ recent_start_loading (GtkFileChooserDefault *impl)
   load_data->items = NULL;
   load_data->n_items = 0;
   load_data->n_loaded_items = 0;
+  load_data->needs_sorting = TRUE;
 
   /* begin lazy loading the recent files into the model */
   impl->load_recent_id = gdk_threads_add_idle_full (G_PRIORITY_HIGH_IDLE + 30,
