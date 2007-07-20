@@ -1,5 +1,11 @@
 2007-07-20  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtktooltip.c (gtk_tooltip_position): Don't pop up
+	under the cursor.  This fixes tooltip-induced flickering 
+	in the tasklist in a bottom panel.
+
+2007-07-20  Matthias Clasen  <mclasen@redhat.com>
+
 	* gtk/gtkpathbar.c (make_directory_button): Don't leak
 	a label.  (#455901, Christian Persch, Vincent Geddes)
 

@@ -751,7 +751,15 @@ gtk_tooltip_position (GtkTooltip *tooltip,
 
       if (y + requisition.height > monitor.y + monitor.height)
         y -= y - (monitor.y + monitor.height) + requisition.height;
-
+  
+      if (!tooltip->keyboard_mode_enabled)
+        {
+          /* don't pop up under the pointer */
+          if (x <= tooltip->last_x && tooltip->last_x < x + requisition.width &&
+              y <= tooltip->last_y && tooltip->last_y < y + requisition.height)
+            y = tooltip->last_y - requisition.height - 2;
+        }
+  
       gtk_window_move (GTK_WINDOW (tooltip->current_window), x, y);
       gtk_widget_show (GTK_WIDGET (tooltip->current_window));
     }
