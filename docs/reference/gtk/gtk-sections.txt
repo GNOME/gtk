@@ -1809,6 +1809,11 @@ gtk_icon_view_unselect_all
 gtk_icon_view_item_activated
 gtk_icon_view_scroll_to_path
 gtk_icon_view_get_visible_range
+gtk_icon_view_set_tooltip_item
+gtk_icon_view_set_tooltip_cell
+gtk_icon_view_get_tooltip_context
+gtk_icon_view_set_tooltip_column
+gtk_icon_view_get_tooltip_column
 <SUBSECTION Dnd>
 GtkIconViewDropPosition
 gtk_icon_view_enable_model_drag_source
@@ -4676,6 +4681,11 @@ gtk_tree_view_set_enable_tree_lines
 GtkTreeViewGridLines
 gtk_tree_view_get_grid_lines
 gtk_tree_view_set_grid_lines
+gtk_tree_view_set_tooltip_row
+gtk_tree_view_set_tooltip_cell
+gtk_tree_view_get_tooltip_context
+gtk_tree_view_get_tooltip_column
+gtk_tree_view_set_tooltip_column
 
 <SUBSECTION Standard>
 GtkTreeSelectionClass
