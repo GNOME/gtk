@@ -4835,15 +4835,12 @@ gtk_icon_view_set_tooltip_query_cb (GtkWidget  *widget,
                                           &x, &y,
                                           keyboard_tip,
                                           &model, &path, &iter))
-    {
-      g_print ("no tooltip context\n");
     return FALSE;
-    }
+
   gtk_tree_model_get (model, &iter, icon_view->priv->tooltip_column, &str, -1);
 
   if (!str)
     {
-      g_print ("no data in column %d\n", icon_view->priv->tooltip_column);
       gtk_tree_path_free (path);
       return FALSE;
     }
