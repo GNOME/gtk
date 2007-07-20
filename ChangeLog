@@ -1,3 +1,9 @@
+2007-07-20  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtkfilechooserdefault.c: Apply a patch by Emmanuele
+	Bassi to add tooltips to the file lists in recent files and
+	search modes.
+
 2007-07-20  Ryan Lortie  <desrt@desrt.ca>
 
 	* gtk/gtkwidget.c (gtk_widget_is_composited): add note that the
