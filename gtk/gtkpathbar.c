@@ -1373,7 +1373,7 @@ make_directory_button (GtkPathBar  *path_bar,
     case ROOT_BUTTON:
       button_data->image = gtk_image_new ();
       child = button_data->image;
-      button_data->label = gtk_label_new (NULL);
+      button_data->label = NULL;
       atk_object_set_name (atk_obj, _("File System Root"));
       break;
     case HOME_BUTTON:

@@ -1,5 +1,29 @@
 2007-07-20  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkpathbar.c (make_directory_button): Don't leak
+	a label.  (#455901, Christian Persch, Vincent Geddes)
+
+2007-07-20  Matthias Clasen  <mclasen@redhat.com>
+
+	Apply a patch by Emmanuele Bassi to limit the number
+	of shown recent files.  (#439715)
+
+	* gtk/gtksettings.c: Add a setting for the number
+	of recent files to display by default.
+
+	* gtk/gtkrecentchooserdefault.c: 
+	* gtk/gtkfilechooserdefault.c: Respect the limit.
+
+	* gtk/gtkrecentmanager.c: Remove the poll timeout in 
+	dispose, and do not stat more often than every 5 seconds.
+
+	* gtk/gtkrecentchooserutils.c:
+	* gtk/gtkrecentchoosermenu.c: Cleanups
+
+	* tests/testrecentchoosermenu.c: Test limits.
+
+2007-07-20  Matthias Clasen  <mclasen@redhat.com>
+
 	* gtk/gtkfilechooserdefault.c: Apply a patch by Emmanuele
 	Bassi to add tooltips to the file lists in recent files and
 	search modes.
