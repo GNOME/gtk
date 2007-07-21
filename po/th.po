@@ -9,9 +9,9 @@ msgstr ""
 "Project-Id-Version: gtk+\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2007-07-20 18:13-0400\n"
-"PO-Revision-Date: 2007-07-09 19:00+0700\n"
+"PO-Revision-Date: 2007-07-21 16:45+0700\n"
 "Last-Translator: Theppitak Karoonboonyanan <thep@linux.thai.net>\n"
-"Language-Team: Thai <L10n@opentle.net>\n"
+"Language-Team: Thai <thai-l10n@googlegroups.com>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -2655,7 +2655,7 @@ msgstr "ไม่พบรายการสำหรับ URI '%s'"
 
 #: gtk/gtkrecentchooserdefault.c:1288
 msgid "Untitled filter"
-msgstr ""
+msgstr "ตัวกรองไม่มีชื่อ"
 
 #: gtk/gtkrecentchooserdefault.c:1596
 msgid "Could not remove item"
@@ -2719,7 +2719,7 @@ msgstr "รายการไม่รู้จัก"
 #: gtk/gtkrecentchoosermenu.c:802
 #, c-format
 msgid "recent menu label|_%d. %s"
-msgstr ""
+msgstr "_%d. %s"
 
 #. This is the format that is used for items in a recent files menu.
 #. * The %d is the number of the item, the %s is the name of the item.
@@ -2729,7 +2729,7 @@ msgstr ""
 #: gtk/gtkrecentchoosermenu.c:809
 #, c-format
 msgid "recent menu label|%d. %s"
-msgstr ""
+msgstr "%d. %s"
 
 #: gtk/gtkrecentmanager.c:1047 gtk/gtkrecentmanager.c:1194
 #: gtk/gtkrecentmanager.c:1204 gtk/gtkrecentmanager.c:1257
