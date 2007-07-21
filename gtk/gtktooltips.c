@@ -91,7 +91,7 @@ gtk_tooltips_init (GtkTooltips *tooltips)
 
   tooltips->tip_window = NULL;
   tooltips->active_tips_data = NULL;
-  tooltips->_tips_data_list = NULL;
+  tooltips->tips_data_list = NULL;
 
   tooltips->delay = DEFAULT_DELAY;
   tooltips->enabled = TRUE;

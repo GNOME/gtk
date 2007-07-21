@@ -63,7 +63,7 @@ struct _GtkTooltips
   GtkWidget *tip_window;
   GtkWidget *tip_label;
   GtkTooltipsData *active_tips_data;
-  GList *_tips_data_list; /* unused */
+  GList *tips_data_list; /* unused */
 
   guint   delay : 30;
   guint	  enabled : 1;

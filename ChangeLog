@@ -1,5 +1,10 @@
 2007-07-21  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtktooltips.[hc]: Rename the tips_data_list field
+	back.  (#447214)
+
+2007-07-21  Matthias Clasen  <mclasen@redhat.com>
+
 	* configure.in: Bump version
 
 	* === Released 2.11.6 ===
