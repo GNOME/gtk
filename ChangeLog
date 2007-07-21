@@ -1,3 +1,9 @@
+2007-07-21  Matthias Clasen  <mclasen@redhat.com>
+
+	* configure.in: Bump version
+
+	* === Released 2.11.6 ===
+
 2007-07-20  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtktooltip.c (gtk_tooltip_position): Don't pop up

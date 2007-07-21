@@ -1,3 +1,7 @@
+2007-07-21  Matthias Clasen  <mclasen@redhat.com>
+
+	* === Released 2.11.6 ===
+
 Sat Jul  7 17:34:33 2007  Tim Janik  <timj@gtk.org>
 
 	* gdk-pixbuf-scale.c: docu fixes from Guillaume Cottenceau, #454596.
