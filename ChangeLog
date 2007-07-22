@@ -1,3 +1,7 @@
+2007-07-22  Matthias Clasen  <mclasen@redhat.com>
+
+	* gdk/x11/gdkkeys-x11.c: Some documentation fixes.
+
 2007-07-21  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtktooltips.[hc]: Rename the tips_data_list field

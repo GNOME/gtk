@@ -719,8 +719,9 @@ _gdk_keymap_keys_changed (GdkDisplay *display)
  *
  * Returns the direction of effective layout of the keymap.
  *
- * @Returns: %PANGO_DIRECTION_LTR or %PANGO_DIRECTION_RTL if determines the
- * direction.  %PANGO_DIRECTION_NEUTRAL otherwise.
+ * @Returns: %PANGO_DIRECTION_LTR or %PANGO_DIRECTION_RTL 
+ *   if it can determine the direction. %PANGO_DIRECTION_NEUTRAL 
+ *   otherwise.
  **/
 PangoDirection
 gdk_keymap_get_direction (GdkKeymap *keymap)
@@ -756,7 +757,7 @@ gdk_keymap_get_direction (GdkKeymap *keymap)
  * Determines if keyboard layouts for both right-to-left and left-to-right
  * languages are in use.
  *
- * @Returns: %TRUE if there are layouts in both directions, %FALSE otherwise
+ * Returns: %TRUE if there are layouts in both directions, %FALSE otherwise
  *
  * Since: 2.12
  **/
