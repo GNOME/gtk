@@ -1,3 +1,9 @@
+2007-07-22  Ross Burton  <ross@openedhand.com>
+
+	* gtk/gtkscrolledwindow.c:
+	Correctly redraw when gtk-scrolled-window-placement is changed
+	after the widget is realised (#458102)
+
 2007-07-22  Matthias Clasen  <mclasen@redhat.com>
 
 	* gdk/x11/gdkkeys-x11.c: Some documentation fixes.
