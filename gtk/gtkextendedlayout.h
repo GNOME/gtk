@@ -31,20 +31,20 @@ G_BEGIN_DECLS
 #define GTK_EXTENDED_LAYOUT_GET_IFACE(obj)  (G_TYPE_INSTANCE_GET_INTERFACE ((obj), GTK_TYPE_EXTENDED_LAYOUT, GtkExtendedLayoutIface))
 
 #define GTK_EXTENDED_LAYOUT_HAS_WIDTH_FOR_HEIGHT(obj) \
-  (gtk_extended_layout_get_features (GTK_EXTENDED_LAYOUT ((obj))) & \
-   GTK_EXTENDED_LAYOUT_WIDTH_FOR_HEIGHT)
+  (GTK_IS_EXTENDED_LAYOUT((obj)) && (GTK_EXTENDED_LAYOUT_WIDTH_FOR_HEIGHT & \
+   gtk_extended_layout_get_features ((GtkExtendedLayout*)(obj))))
 #define GTK_EXTENDED_LAYOUT_HAS_HEIGHT_FOR_WIDTH(obj) \
-  (gtk_extended_layout_get_features (GTK_EXTENDED_LAYOUT ((obj))) & \
-   GTK_EXTENDED_LAYOUT_HEIGHT_FOR_WIDTH)
+  (GTK_IS_EXTENDED_LAYOUT((obj)) && (GTK_EXTENDED_LAYOUT_HEIGHT_FOR_WIDTH & \
+   gtk_extended_layout_get_features ((GtkExtendedLayout*)(obj))))
 #define GTK_EXTENDED_LAYOUT_HAS_NATURAL_SIZE(obj) \
-  (gtk_extended_layout_get_features (GTK_EXTENDED_LAYOUT ((obj))) & \
-   GTK_EXTENDED_LAYOUT_NATURAL_SIZE)
+  (GTK_IS_EXTENDED_LAYOUT((obj)) && (GTK_EXTENDED_LAYOUT_NATURAL_SIZE & \
+   gtk_extended_layout_get_features ((GtkExtendedLayout*)(obj))))
 #define GTK_EXTENDED_LAYOUT_HAS_BASELINES(obj) \
-  (gtk_extended_layout_get_features (GTK_EXTENDED_LAYOUT ((obj))) & \
-   GTK_EXTENDED_LAYOUT_BASELINES)
+  (GTK_IS_EXTENDED_LAYOUT((obj)) && (GTK_EXTENDED_LAYOUT_BASELINES & \
+   gtk_extended_layout_get_features ((GtkExtendedLayout*)(obj))))
 #define GTK_EXTENDED_LAYOUT_HAS_PADDING(obj) \
-  (gtk_extended_layout_get_features (GTK_EXTENDED_LAYOUT ((obj))) & \
-   GTK_EXTENDED_LAYOUT_PADDING)
+  (GTK_IS_EXTENDED_LAYOUT((obj)) && (GTK_EXTENDED_LAYOUT_PADDING & \
+   gtk_extended_layout_get_features ((GtkExtendedLayout*)(obj))))
 
 typedef struct _GtkExtendedLayout           GtkExtendedLayout;
 typedef struct _GtkExtendedLayoutIface      GtkExtendedLayoutIface;

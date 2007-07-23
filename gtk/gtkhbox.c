@@ -191,8 +191,7 @@ gtk_hbox_size_request (GtkWidget      *widget,
 
               if (GTK_WIDGET_VISIBLE (child->widget))
                 {
-                  if (GTK_IS_EXTENDED_LAYOUT (child->widget) &&
-                      GTK_EXTENDED_LAYOUT_HAS_BASELINES (child->widget))
+                  if (GTK_EXTENDED_LAYOUT_HAS_BASELINES (child->widget))
                     {
                       GtkExtendedLayout *layout = GTK_EXTENDED_LAYOUT (child->widget);
 
@@ -323,8 +322,7 @@ gtk_hbox_size_allocate (GtkWidget     *widget,
               gtk_widget_size_request (child->widget, &child_requisition);
               minimum_requisitions[i] = child_requisition.width;
 
-              if (GTK_IS_EXTENDED_LAYOUT (child->widget) &&
-                  GTK_EXTENDED_LAYOUT_HAS_NATURAL_SIZE (child->widget))
+              if (GTK_EXTENDED_LAYOUT_HAS_NATURAL_SIZE (child->widget))
                 {
                   gtk_extended_layout_get_natural_size (
                     GTK_EXTENDED_LAYOUT (child->widget), 
@@ -457,8 +455,7 @@ gtk_hbox_size_allocate (GtkWidget     *widget,
 
               if (GTK_WIDGET_VISIBLE (child->widget))
                 {
-                  if (GTK_IS_EXTENDED_LAYOUT (child->widget) &&
-                      GTK_EXTENDED_LAYOUT_HAS_BASELINES (child->widget))
+                  if (GTK_EXTENDED_LAYOUT_HAS_BASELINES (child->widget))
                     {
                       GtkExtendedLayout *layout = GTK_EXTENDED_LAYOUT (child->widget);
                       gint baseline, dy;
@@ -545,8 +542,7 @@ gtk_hbox_extended_layout_get_natural_size (GtkExtendedLayout *layout,
 
       if (GTK_WIDGET_VISIBLE (child->widget))
 	{
-          if (GTK_IS_EXTENDED_LAYOUT (child->widget) &&
-              GTK_EXTENDED_LAYOUT_HAS_NATURAL_SIZE (child->widget))
+          if (GTK_EXTENDED_LAYOUT_HAS_NATURAL_SIZE (child->widget))
             gtk_extended_layout_get_natural_size (GTK_EXTENDED_LAYOUT (child->widget),
                                                   &child_requisition);
           else
@@ -584,7 +580,6 @@ gtk_hbox_extended_layout_get_baselines (GtkExtendedLayout  *layout,
       children = children->next;
 
       if (GTK_WIDGET_VISIBLE (child->widget) &&
-          GTK_IS_EXTENDED_LAYOUT (child->widget) &&
           GTK_EXTENDED_LAYOUT_HAS_BASELINES (child->widget))
         {
           child_baseline = gtk_extended_layout_get_single_baseline (

@@ -1,3 +1,8 @@
+2007-07-18  Mathias Hasselmann  <mathias.hasselmann@gmx.de>
+
+	* gtk/gtkextendedlayout.h, gtk/gtkhbox.c, gtk/gtkvbox.c:
+	Make the type check part of the extended layout feature check macros.
+
 2007-07-16  Mathias Hasselmann  <mathias.hasselmann@gmx.de>
 
 	* tests/testellipsise.c: Extend the test to support rotations.

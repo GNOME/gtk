@@ -191,8 +191,7 @@ gtk_vbox_size_allocate (GtkWidget     *widget,
               gtk_widget_size_request (child->widget, &child_requisition);
               minimum_requisitions[i] = child_requisition.height;
 
-              if (GTK_IS_EXTENDED_LAYOUT (child->widget) &&
-                  GTK_EXTENDED_LAYOUT_HAS_NATURAL_SIZE (child->widget))
+              if (GTK_EXTENDED_LAYOUT_HAS_NATURAL_SIZE (child->widget))
                 {
                   gtk_extended_layout_get_natural_size (
                     GTK_EXTENDED_LAYOUT (child->widget), 
@@ -340,8 +339,7 @@ gtk_vbox_extended_layout_get_natural_size (GtkExtendedLayout *layout,
 
       if (GTK_WIDGET_VISIBLE (child->widget))
 	{
-          if (GTK_IS_EXTENDED_LAYOUT (child->widget) &&
-              GTK_EXTENDED_LAYOUT_HAS_NATURAL_SIZE (child->widget))
+          if (GTK_EXTENDED_LAYOUT_HAS_NATURAL_SIZE (child->widget))
             gtk_extended_layout_get_natural_size (GTK_EXTENDED_LAYOUT (child->widget),
                                                   &child_requisition);
           else
