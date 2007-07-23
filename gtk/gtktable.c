@@ -947,13 +947,13 @@ gtk_table_size_request_init (GtkTable *table)
   for (row = 0; row < table->nrows; row++)
     {
       table->rows[row].requisition = 0;
-      table->rows[row].natural_size = 0;
+      table->rows[row].natural = 0;
       table->rows[row].expand = FALSE;
     }
   for (col = 0; col < table->ncols; col++)
     {
       table->cols[col].requisition = 0;
-      table->cols[col].natural_size = 0;
+      table->cols[col].natural = 0;
       table->cols[col].expand = FALSE;
     }
   
@@ -1007,8 +1007,7 @@ gtk_table_size_request_pass1 (GtkTable *table)
 	      table->cols[child->left_attach].requisition = MAX (table->cols[child->left_attach].requisition, width);
 
 	      width = child_natural_size.width + child->xpadding * 2;
-if (GTK_IS_LABEL (child->widget))
-              table->cols[child->left_attach].natural_size = MAX (table->cols[child->left_attach].natural_size, width);
+              table->cols[child->left_attach].natural = MAX (table->cols[child->left_attach].natural, width);
 	    }
 	  
 	  /* Child spans a single row.
@@ -1019,7 +1018,7 @@ if (GTK_IS_LABEL (child->widget))
 	      table->rows[child->top_attach].requisition = MAX (table->rows[child->top_attach].requisition, height);
 
 	      height = child_natural_size.height + child->ypadding * 2;
-              table->rows[child->top_attach].natural_size = MAX (table->rows[child->top_attach].natural_size, height);
+              table->rows[child->top_attach].natural = MAX (table->rows[child->top_attach].natural, height);
 	    }
 	}
     }
@@ -1066,14 +1065,25 @@ gtk_table_size_request_pass3 (GtkTable *table)
       
       if (GTK_WIDGET_VISIBLE (child->widget))
 	{
+          GtkRequisition child_natural_size;
+          GtkRequisition child_requisition;
+
+	  if (child->left_attach != (child->right_attach - 1) ||
+	      child->top_attach != (child->bottom_attach - 1))
+            {
+	      gtk_widget_get_child_requisition (child->widget, &child_requisition);
+	      
+              if (GTK_EXTENDED_LAYOUT_HAS_NATURAL_SIZE (child->widget))
+                gtk_extended_layout_get_natural_size (GTK_EXTENDED_LAYOUT (child->widget), 
+                                                      &child_natural_size);
+              else
+                child_natural_size = child_requisition;
+            }
+
 	  /* Child spans multiple columns.
 	   */
 	  if (child->left_attach != (child->right_attach - 1))
 	    {
-	      GtkRequisition child_requisition;
-
-	      gtk_widget_get_child_requisition (child->widget, &child_requisition);
-	      
 	      /* Check and see if there is already enough space
 	       *  for the child.
 	       */
@@ -1115,16 +1125,14 @@ gtk_table_size_request_pass3 (GtkTable *table)
 			n_expand--;
 		      }
 		}
+
+                g_debug ("%s: TODO: consider natural size", G_STRFUNC);
 	    }
 	  
 	  /* Child spans multiple rows.
 	   */
 	  if (child->top_attach != (child->bottom_attach - 1))
 	    {
-	      GtkRequisition child_requisition;
-
-	      gtk_widget_get_child_requisition (child->widget, &child_requisition);
-
 	      /* Check and see if there is already enough space
 	       *  for the child.
 	       */
@@ -1168,6 +1176,8 @@ gtk_table_size_request_pass3 (GtkTable *table)
 			n_expand--;
 		      }
 		}
+
+                g_debug ("%s: TODO: consider natural size", G_STRFUNC);
 	    }
 	}
     }
@@ -1373,10 +1383,13 @@ gtk_table_size_allocate_pass1 (GtkTable *table)
   gint real_width;
   gint real_height;
   gint width, height;
+  gint natural_delta;
+  gint natural_size;
   gint row, col;
   gint nexpand;
   gint nshrink;
   gint extra;
+  gint delta;
   
   /* If we were allocated more space than we requested
    *  then we have to expand any expandable rows and columns
@@ -1419,14 +1432,20 @@ gtk_table_size_allocate_pass1 (GtkTable *table)
       width = 0;
       nexpand = 0;
       nshrink = 0;
+      natural_delta = 0;
       
       for (col = 0; col < table->ncols; col++)
 	{
 	  width += table->cols[col].requisition;
+          delta = table->cols[col].natural - table->cols[col].requisition;
+
 	  if (table->cols[col].expand)
 	    nexpand += 1;
 	  if (table->cols[col].shrink)
 	    nshrink += 1;
+
+	  if (delta > 0)
+            natural_delta += delta;
 	}
       for (col = 0; col + 1 < table->ncols; col++)
 	width += table->cols[col].spacing;
@@ -1436,16 +1455,27 @@ gtk_table_size_allocate_pass1 (GtkTable *table)
       if ((width < real_width) && (nexpand >= 1))
 	{
 	  width = real_width - width;
-	  
+          natural_size = MIN (natural_delta, width);
+          width = MAX (0, width - natural_size);
+
 	  for (col = 0; col < table->ncols; col++)
-	    if (table->cols[col].expand)
-	      {
-		extra = width / nexpand;
-		table->cols[col].allocation += extra;
-		
-		width -= extra;
-		nexpand -= 1;
-	      }
+            {
+              if (natural_size)
+                {
+                  delta = table->cols[col].natural - table->cols[col].requisition;
+                  delta = natural_size * delta / natural_delta;
+                  table->cols[col].allocation += delta;
+                }
+
+              if (table->cols[col].expand)
+                {
+                  extra = width / nexpand;
+                  table->cols[col].allocation += extra;
+                  
+                  width -= extra;
+                  nexpand -= 1;
+                }
+            }
 	}
       
       /* Check to see if we were allocated less width than we requested,
@@ -1516,10 +1546,14 @@ gtk_table_size_allocate_pass1 (GtkTable *table)
       for (row = 0; row < table->nrows; row++)
 	{
 	  height += table->rows[row].requisition;
+          delta = table->rows[row].natural - table->rows[row].requisition;
+
 	  if (table->rows[row].expand)
 	    nexpand += 1;
 	  if (table->rows[row].shrink)
 	    nshrink += 1;
+	  if (table->rows[row].natural > table->rows[row].requisition)
+            natural_delta += delta;
 	}
       for (row = 0; row + 1 < table->nrows; row++)
 	height += table->rows[row].spacing;
@@ -1529,16 +1563,27 @@ gtk_table_size_allocate_pass1 (GtkTable *table)
       if ((height < real_height) && (nexpand >= 1))
 	{
 	  height = real_height - height;
-	  
+          natural_size = MIN (natural_delta, height);
+          height = MAX (0, height - natural_size);
+
 	  for (row = 0; row < table->nrows; row++)
-	    if (table->rows[row].expand)
-	      {
-		extra = height / nexpand;
-		table->rows[row].allocation += extra;
-		
-		height -= extra;
-		nexpand -= 1;
-	      }
+            {
+              if (natural_size)
+                {
+                  delta = table->rows[row].natural - table->rows[row].requisition;
+                  delta = natural_size * delta / natural_delta;
+                  table->rows[row].allocation += delta;
+                }
+
+              if (table->rows[row].expand)
+                {
+                  extra = height / nexpand;
+                  table->rows[row].allocation += extra;
+                  
+                  height -= extra;
+                  nexpand -= 1;
+                }
+            }
 	}
       
       /* Check to see if we were allocated less height than we requested.
@@ -1678,15 +1723,9 @@ gtk_table_extended_layout_get_natural_size (GtkExtendedLayout *layout,
   height = 0;
 
   for (i = 0; i < table->ncols; i++)
-    {
-    width += table->cols[i].natural_size;
-    g_print ("%s: cols[%d].natural_size: %d\n", G_STRFUNC, i, table->cols[i].natural_size);
-    }
+    width += table->cols[i].natural;
   for (i = 0; i < table->nrows; i++)
-    {
-    height += table->rows[i].natural_size;
-    g_print ("%s: rows[%d].natural_size: %d\n", G_STRFUNC, i, table->rows[i].natural_size);
-    }
+    height += table->rows[i].natural;
 
   requisition->width = width;
   requisition->height = height;

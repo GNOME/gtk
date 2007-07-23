@@ -216,16 +216,24 @@ static void
 append_natural_size_box (TestCase           *test,
                          GtkWidget          *parent,
                          gboolean            vertical,
+                         gboolean            table,
                          const gchar        *caption,
                          PangoEllipsizeMode  ellipsize)
 {
-  GtkWidget *box;
+  GtkWidget *container;
   GtkWidget *button;
   GtkWidget *label;
 
-  box = vertical ?
-    gtk_vbox_new (FALSE, 12):
-    gtk_hbox_new (FALSE, 12);
+  if (table)
+    {
+      container = gtk_table_new (vertical ? 2 : 1, vertical ? 1 : 2, FALSE);
+      gtk_table_set_col_spacings (GTK_TABLE (container), 12);
+      gtk_table_set_row_spacings (GTK_TABLE (container), 12);
+    }
+  else if (vertical)
+    container = gtk_vbox_new (FALSE, 12);
+  else
+    container = gtk_hbox_new (FALSE, 12);
 
   label = gtk_label_new ("The small Button");
   gtk_label_set_angle (GTK_LABEL (label), vertical ? 90 : 0);
@@ -233,7 +241,12 @@ append_natural_size_box (TestCase           *test,
 
   button = gtk_button_new ();
   gtk_container_add (GTK_CONTAINER (button), label);
-  gtk_box_pack_start (GTK_BOX (box), button, FALSE, TRUE, 0);
+
+  if (table)
+    gtk_table_attach (GTK_TABLE (container), button, 0, 1, 0, 1, GTK_FILL, GTK_FILL, 0, 0);
+  else
+    gtk_box_pack_start (GTK_BOX (container), button, FALSE, TRUE, 0);
+
   test_case_append_guide (test, button, GUIDE_EXTERIOUR_VERTICAL, 0);
   test_case_append_guide (test, label, GUIDE_EXTERIOUR_VERTICAL, -1);
 
@@ -242,7 +255,17 @@ append_natural_size_box (TestCase           *test,
 
   button = gtk_button_new ();
   gtk_container_add (GTK_CONTAINER (button), label);
-  gtk_box_pack_start (GTK_BOX (box), button, TRUE, TRUE, 0);
+
+  if (table)
+    gtk_table_attach (GTK_TABLE (container), button,
+                      vertical ? 0 : 1, vertical ? 1 : 2,
+                      vertical ? 1 : 0, vertical ? 2 : 1,
+                      vertical ? GTK_FILL : GTK_FILL | GTK_EXPAND,
+                      vertical ? GTK_FILL | GTK_EXPAND : GTK_FILL,
+                      0, 0);
+  else
+    gtk_box_pack_start (GTK_BOX (container), button, TRUE, TRUE, 0);
+
   test_case_append_guide (test, button, GUIDE_EXTERIOUR_VERTICAL, 1);
 
   label = gtk_label_new (NULL);
@@ -260,7 +283,7 @@ append_natural_size_box (TestCase           *test,
     }
 
   gtk_box_pack_start (GTK_BOX (parent), label, FALSE, TRUE, 0);
-  gtk_box_pack_start (GTK_BOX (parent), box, FALSE, TRUE, 0);
+  gtk_box_pack_start (GTK_BOX (parent), container, FALSE, TRUE, 0);
 }
 
 static gboolean
@@ -318,47 +341,52 @@ shrink_paned (GtkWidget *button,
 
 static TestCase*
 create_natural_size_test (TestSuite *suite,
-                          gboolean   vertical)
+                          gboolean   vertical,
+                          gboolean   table)
 {
-  GtkWidget *box, *hint, *button;
+  GtkWidget *box, *paned, *hint, *button;
+  const gchar *detail;
+  TestCase *test;
 
-  TestCase *test = test_case_new (suite, "Natural Size",
-                                  vertical ? "GtkVBox" : "GtkHBox",
-                                  vertical ? gtk_vpaned_new () : gtk_hpaned_new ());
+  if (vertical)
+    {
+      detail = table ? "GtkTable, vertical" : "GtkVBox";
+      hint = gtk_alignment_new (0.5, 1.0, 1.0, 0.0);
+      box = gtk_hbox_new (FALSE, 12);
+      paned = gtk_vpaned_new ();
+    }
+  else
+    {
+      detail = table ? "GtkTable, horizontal" : "GtkHBox";
+      hint = gtk_alignment_new (1.0, 0.5, 0.0, 1.0);
+      box = gtk_vbox_new (FALSE, 12);
+      paned = gtk_hpaned_new ();
+    }
+
+  test = test_case_new (suite, "Natural Size", detail, paned);
   gtk_container_set_border_width (GTK_CONTAINER (test->widget), 6);
-
-  box = vertical ?
-    gtk_hbox_new (FALSE, 12): 
-    gtk_vbox_new (FALSE, 12);
 
   gtk_container_set_border_width (GTK_CONTAINER (box), 6);
   gtk_paned_pack1 (GTK_PANED (test->widget), box, TRUE, TRUE);
 
-  append_natural_size_box (test, box, vertical,
+  append_natural_size_box (test, box, vertical, table,
                            "<b>No ellipsizing</b>",
                            PANGO_ELLIPSIZE_NONE);
-  append_natural_size_box (test, box, vertical,
+  append_natural_size_box (test, box, vertical, table,
                            "<b>Ellipsizing at start</b>",
                            PANGO_ELLIPSIZE_START);
-  append_natural_size_box (test, box, vertical,
+  append_natural_size_box (test, box, vertical, table,
                            "<b>Ellipsizing in the middle</b>",
                            PANGO_ELLIPSIZE_MIDDLE);
-  append_natural_size_box (test, box, vertical,
+  append_natural_size_box (test, box, vertical, table,
                            "<b>Ellipsizing at end</b>",
                            PANGO_ELLIPSIZE_END);
 
   button = gtk_button_new_with_label ("Shrink to check ellipsing");
   g_signal_connect (button, "clicked", G_CALLBACK (shrink_paned), test->widget);
 
-  if (vertical) 
-    {
-      hint = gtk_alignment_new (0.5, 1.0, 1.0, 0.0);
-    }
-  else
-    {
-      hint = gtk_alignment_new (1.0, 0.5, 0.0, 1.0);
-      gtk_label_set_angle (GTK_LABEL (GTK_BIN (button)->child), -90);
-    }
+  if (!vertical) 
+    gtk_label_set_angle (GTK_LABEL (GTK_BIN (button)->child), -90);
 
   gtk_container_set_border_width (GTK_CONTAINER (hint), 6);
   gtk_container_add (GTK_CONTAINER (hint), button);
@@ -1728,8 +1756,10 @@ test_suite_new ()
   TestSuite* self = g_new0 (TestSuite, 1);
 
   test_suite_setup_ui (self);
-  test_suite_append (self, create_natural_size_test (self, FALSE));
-  test_suite_append (self, create_natural_size_test (self, TRUE));
+  test_suite_append (self, create_natural_size_test (self, FALSE, FALSE));
+  test_suite_append (self, create_natural_size_test (self, TRUE, FALSE));
+  test_suite_append (self, create_natural_size_test (self, FALSE, TRUE));
+  test_suite_append (self, create_natural_size_test (self, TRUE, TRUE));
   test_suite_append (self, create_height_for_width_test (self));
   test_suite_append (self, create_baseline_test (self));
   test_suite_append (self, create_baseline_test_bin (self));

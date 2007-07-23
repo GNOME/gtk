@@ -1,3 +1,11 @@
+2007-07-24  Mathias Hasselmann  <mathias.hasselmann@gmx.de>
+
+	* gtk/gtktable.c, gtk/gtktable.h: Consider natural size to allocate 
+	widgets spanning a single, rename GtkTableRowCol::natural_size.
+	Remove some lost g_print statements.
+	* tests/testextendedlayout.c: Test natural size allocation in
+	GtkTable for simple cases.
+
 2007-07-23  Mathias Hasselmann  <mathias.hasselmann@gmx.de>
 
 	* gtk/gtktable.c, gtk/gtktable.h: Provide natural size information.
