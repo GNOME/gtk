@@ -1,3 +1,9 @@
+2007-07-23  Ross Burton  <ross@openedhand.com>
+
+	* gtk/gtkscrolledwindow.c:
+	Correctly redraw when gtk-scrolled-window-placement is changed
+	after the widget is realised (#458102)
+
 2007-07-16  Matthias Clasen  <mclasen@redhat.com>
 	
 	* configure.in: Bump version

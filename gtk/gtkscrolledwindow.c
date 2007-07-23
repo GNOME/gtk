@@ -885,7 +885,7 @@ traverse_container (GtkWidget *widget,
   if (GTK_IS_SCROLLED_WINDOW (widget))
     {
       gtk_scrolled_window_update_real_placement (GTK_SCROLLED_WINDOW (widget));
-      gtk_widget_queue_draw (widget);
+      gtk_widget_queue_resize (widget);
     }
   else if (GTK_IS_CONTAINER (widget))
     gtk_container_forall (GTK_CONTAINER (widget), traverse_container, NULL);
