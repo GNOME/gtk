@@ -1,8 +1,9 @@
 # Telugu translation of gtk+
-# Copyright (C) 2005 Free Software Foundation, Andhra Pradesh.
+# Copyright (C) 2005,2007 Free Software Foundation, Andhra Pradesh.
 # This file is distributed under the same license as the gtk+ package.
 #
 # Prajasakti Localisation Team <localisation@prajasakti.com>, 2005.
+# Sunil Mohan Adapa <sunilmohan@gnu.org.in>, 2007.
 # 
 msgid ""
 msgstr ""
@@ -10,8 +11,8 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2007-07-20 18:13-0400\n"
 "PO-Revision-Date: 2004-10-17 12:50+0100\n"
-"Last-Translator: Prajasakti Localisation Team <localisation@prajasakti.com>\n"
-"Language-Team: Prajasakti Localisation Team <localisation@prajasakti.com>\n"
+"Last-Translator: Sunil Mohan Adapa <sunilmohan@gnu.org.in>\n"
+"Language-Team: Swecha Telugu Localisation Team <localisation@swecha.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -1252,7 +1253,7 @@ msgstr "calender:MY"
 #.
 #: gtk/gtkcalendar.c:708
 msgid "calendar:week_start:0"
-msgstr "కాలసూచి:వారారంభం:0"
+msgstr "calendar:week_start:0"
 
 #. Translators:  This is a text measurement template.
 #. * Translate it to the widest year text.
@@ -1264,7 +1265,7 @@ msgstr "కాలసూచి:వారారంభం:0"
 #.
 #: gtk/gtkcalendar.c:1595
 msgid "year measurement template|2000"
-msgstr ""
+msgstr "2000"
 
 #. Translators: this defines whether the day numbers should use
 #. * localized digits or the ones used in English (0123...).
@@ -1280,7 +1281,7 @@ msgstr ""
 #: gtk/gtkcalendar.c:1626 gtk/gtkcalendar.c:2204
 #, c-format
 msgid "calendar:day:digits|%d"
-msgstr ""
+msgstr "%d"
 
 #. Translators: this defines whether the week numbers should use
 #. * localized digits or the ones used in English (0123...).
@@ -1294,9 +1295,9 @@ msgstr ""
 #. * too.
 #.
 #: gtk/gtkcalendar.c:1660 gtk/gtkcalendar.c:2078
-#, fuzzy, c-format
+#, c-format
 msgid "calendar:week:digits|%d"
-msgstr "కాలసూచి:వారారంభం:0"
+msgstr "%d"
 
 #. Translators: This dictates how the year is displayed in
 #. * gtkcalendar widget.  See strftime() manual for the format.
@@ -1311,7 +1312,7 @@ msgstr "కాలసూచి:వారారంభం:0"
 #.
 #: gtk/gtkcalendar.c:1869
 msgid "calendar year format|%Y"
-msgstr ""
+msgstr "%Y"
 
 #. This label is displayed in a treeview cell displaying
 #. * a disabled accelerator key combination. Only include

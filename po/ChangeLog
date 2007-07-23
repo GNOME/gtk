@@ -1,3 +1,7 @@
+2007-07-23  Sunil Mohan Adapa  <sunilmohan@gnu.org.in>
+
+	* te.po: Updated Telugu translation, fixes Bug #355842.
+
 2007-07-21 Gabor Kelemen  <kelemeng@gnome.hu>
 
 	* hu.po: Translation updated.
