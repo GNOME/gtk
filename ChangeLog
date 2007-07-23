@@ -1,3 +1,11 @@
+2007-07-23  Matthias Clasen  <mclasen@redhat.com>
+
+	* configure.in: Dectect if cups allows access to the http_t
+	authstring field.  
+
+	* modules/printbackends/cups/gtkcupsutils.c: Rely on the
+	HAVE_HTTP_AUTHSTRING define done by configure.
+
 2007-07-23  Emmanuele Bassi  <ebassi@gnome.org>
 
 	* gtk/gtkrecentchooserdefault.c: Port the GtkRecentChooser default

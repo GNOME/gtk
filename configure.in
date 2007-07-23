@@ -1572,6 +1572,15 @@ if test "x$CUPS_CONFIG" != "xno"; then
 fi
 AM_CONDITIONAL(HAVE_CUPS, test "x$CUPS_CONFIG" != "xno")
 
+gtk_save_cflags="$CFLAGS"
+CFLAGS="$CUPS_CFLAGS"
+AC_TRY_COMPILE([#include <cups/http.h>],
+               [http_t http; char *s = http.authstring;],
+               [AC_DEFINE(HAVE_HTTP_AUTHSTRING,[],[Define if cups http_t authstring field is accessible])],)
+CFLAGS="$gtk_save_cflags"
+
+AC_SUBST(HAVE_HTTP_AUTHSTRING)
+
 gtk_save_cppflags="$CPPFLAGS"
 CPPFLAGS="$CPPFLAGS $GTK_DEP_CFLAGS"
 			  

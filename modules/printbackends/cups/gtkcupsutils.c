@@ -30,10 +30,6 @@
 #include <stdlib.h>
 #include <time.h>
 
-#if CUPS_VERSION_MAJOR > 1 || (CUPS_VERSION_MAJOR == 1 && CUPS_VERSION_MINOR > 1) || (CUPS_VERSION_MAJOR == 1 && CUPS_VERSION_MINOR == 1 && CUPS_VERSION_PATCH >= 20)
-#define HAVE_HTTP_AUTHSTRING 1
-#endif
-
 typedef void (*GtkCupsRequestStateFunc) (GtkCupsRequest *request);
 
 static void _connect            (GtkCupsRequest *request);
