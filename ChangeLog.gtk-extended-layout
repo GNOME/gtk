@@ -1,3 +1,9 @@
+2007-07-23  Mathias Hasselmann  <mathias.hasselmann@gmx.de>
+
+	* gtk/gtktable.c, gtk/gtktable.h: Provide natural size information.
+	* tests/autotestextendedlayout.c: Implemented some initial natural 
+	size tests for GtkTable.
+
 2007-07-18  Mathias Hasselmann  <mathias.hasselmann@gmx.de>
 
 	* gtk/gtkextendedlayout.h, gtk/gtkhbox.c, gtk/gtkvbox.c:

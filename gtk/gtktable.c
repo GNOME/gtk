@@ -26,6 +26,8 @@
 
 #include <config.h>
 #include "gtktable.h"
+#include "gtkextendedlayout.h"
+#include "gtksizegroup.h"
 #include "gtkprivate.h"
 #include "gtkintl.h"
 #include "gtkalias.h"
@@ -97,8 +99,11 @@ static void gtk_table_size_allocate_init  (GtkTable *table);
 static void gtk_table_size_allocate_pass1 (GtkTable *table);
 static void gtk_table_size_allocate_pass2 (GtkTable *table);
 
+static void gtk_table_extended_layout_interface_init (GtkExtendedLayoutIface *iface);
 
-G_DEFINE_TYPE (GtkTable, gtk_table, GTK_TYPE_CONTAINER)
+G_DEFINE_TYPE_WITH_CODE (GtkTable, gtk_table, GTK_TYPE_CONTAINER,
+                         G_IMPLEMENT_INTERFACE (GTK_TYPE_EXTENDED_LAYOUT,
+                                                gtk_table_extended_layout_interface_init))
 
 static void
 gtk_table_class_init (GtkTableClass *class)
@@ -942,11 +947,13 @@ gtk_table_size_request_init (GtkTable *table)
   for (row = 0; row < table->nrows; row++)
     {
       table->rows[row].requisition = 0;
+      table->rows[row].natural_size = 0;
       table->rows[row].expand = FALSE;
     }
   for (col = 0; col < table->ncols; col++)
     {
       table->cols[col].requisition = 0;
+      table->cols[col].natural_size = 0;
       table->cols[col].expand = FALSE;
     }
   
@@ -966,7 +973,7 @@ gtk_table_size_request_init (GtkTable *table)
 	table->rows[child->top_attach].expand = TRUE;
     }
 }
-
+#include "gtklabel.h"
 static void
 gtk_table_size_request_pass1 (GtkTable *table)
 {
@@ -983,8 +990,14 @@ gtk_table_size_request_pass1 (GtkTable *table)
       
       if (GTK_WIDGET_VISIBLE (child->widget))
 	{
-	  GtkRequisition child_requisition;
+	  GtkRequisition child_requisition, child_natural_size;
 	  gtk_widget_get_child_requisition (child->widget, &child_requisition);
+
+          if (GTK_EXTENDED_LAYOUT_HAS_NATURAL_SIZE (child->widget))
+            gtk_extended_layout_get_natural_size (GTK_EXTENDED_LAYOUT (child->widget), 
+                                                  &child_natural_size);
+          else
+            child_natural_size = child_requisition;
 
 	  /* Child spans a single column.
 	   */
@@ -992,6 +1005,10 @@ gtk_table_size_request_pass1 (GtkTable *table)
 	    {
 	      width = child_requisition.width + child->xpadding * 2;
 	      table->cols[child->left_attach].requisition = MAX (table->cols[child->left_attach].requisition, width);
+
+	      width = child_natural_size.width + child->xpadding * 2;
+if (GTK_IS_LABEL (child->widget))
+              table->cols[child->left_attach].natural_size = MAX (table->cols[child->left_attach].natural_size, width);
 	    }
 	  
 	  /* Child spans a single row.
@@ -1000,6 +1017,9 @@ gtk_table_size_request_pass1 (GtkTable *table)
 	    {
 	      height = child_requisition.height + child->ypadding * 2;
 	      table->rows[child->top_attach].requisition = MAX (table->rows[child->top_attach].requisition, height);
+
+	      height = child_natural_size.height + child->ypadding * 2;
+              table->rows[child->top_attach].natural_size = MAX (table->rows[child->top_attach].natural_size, height);
 	    }
 	}
     }
@@ -1634,6 +1654,49 @@ gtk_table_size_allocate_pass2 (GtkTable *table)
 	  gtk_widget_size_allocate (child->widget, &allocation);
 	}
     }
+}
+
+static GtkExtendedLayoutFeatures
+gtk_table_extended_layout_get_features (GtkExtendedLayout *layout)
+{
+  return GTK_EXTENDED_LAYOUT_NATURAL_SIZE;
+}
+
+static void
+gtk_table_extended_layout_get_natural_size (GtkExtendedLayout *layout,
+                                            GtkRequisition    *requisition)
+{
+  int width, height, i;
+  GtkTable *table;
+
+  /* update size requisition when needed */
+  _gtk_size_group_compute_requisition (GTK_WIDGET (layout), NULL);
+
+  table = GTK_TABLE (layout);
+
+  width = 0;
+  height = 0;
+
+  for (i = 0; i < table->ncols; i++)
+    {
+    width += table->cols[i].natural_size;
+    g_print ("%s: cols[%d].natural_size: %d\n", G_STRFUNC, i, table->cols[i].natural_size);
+    }
+  for (i = 0; i < table->nrows; i++)
+    {
+    height += table->rows[i].natural_size;
+    g_print ("%s: rows[%d].natural_size: %d\n", G_STRFUNC, i, table->rows[i].natural_size);
+    }
+
+  requisition->width = width;
+  requisition->height = height;
+}
+
+static void
+gtk_table_extended_layout_interface_init (GtkExtendedLayoutIface *iface)
+{
+  iface->get_features = gtk_table_extended_layout_get_features;
+  iface->get_natural_size = gtk_table_extended_layout_get_natural_size;
 }
 
 #define __GTK_TABLE_C__

@@ -433,6 +433,70 @@ gtk_bin_test_extended_layout (void)
     }
 }
 
+static void
+gtk_table_test_extended_layout (void)
+{
+  const gchar *numbers[] =
+    {
+      "One", "Two", "Three", "Four", "Five", "Six", "Seven", "Eight", "Nine",
+      "Ten", "Eleven", "Twelve", "Thirteen", "Fourteen", "Fifteen", "Sixteen",
+      NULL
+    };
+
+  GtkExtendedLayoutFeatures features;
+  GtkRequisition natural_sizes[4];
+
+  GtkWidget *labels[G_N_ELEMENTS(numbers) - 1];
+  GtkWidget *table;
+  GtkWidget *window;
+
+  int i, row, col;
+
+  table = gtk_table_new (4, 4, FALSE);
+
+  for (i = 0, row; numbers[i]; ++i)
+    {
+      col = i % 4;
+      row = i / 4;
+
+      labels[i] = gtk_label_new (numbers[i]);
+      gtk_table_attach (GTK_TABLE (table), labels[i], col, col + 1, row, row + 1,
+                        (col > 0 ? GTK_FILL : 0) | (2 == col ? GTK_EXPAND : 0),
+                        (row > 0 ? GTK_FILL : 0) | (2 == row ? GTK_EXPAND : 0),
+                        6, 6);
+    }
+
+  window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+  gtk_container_add (GTK_CONTAINER (window), table);
+  gtk_widget_show_all (window);
+
+  /* feature set */
+
+  features = gtk_extended_layout_get_features (GTK_EXTENDED_LAYOUT (table));
+
+  log_test (0 == (features & GTK_EXTENDED_LAYOUT_HEIGHT_FOR_WIDTH));
+  log_test (0 == (features & GTK_EXTENDED_LAYOUT_WIDTH_FOR_HEIGHT));
+  log_test (0 != (features & GTK_EXTENDED_LAYOUT_NATURAL_SIZE));
+  log_test (0 == (features & GTK_EXTENDED_LAYOUT_BASELINES));
+
+  /* natural size changes are propagated */ 
+
+  gtk_extended_layout_get_natural_size (GTK_EXTENDED_LAYOUT (labels[7]), &natural_sizes[0]);
+  gtk_extended_layout_get_natural_size (GTK_EXTENDED_LAYOUT (table), &natural_sizes[1]);
+
+  gtk_label_set_text (GTK_LABEL (labels[7]), "This text is much longer than the number");
+
+  gtk_extended_layout_get_natural_size (GTK_EXTENDED_LAYOUT (labels[7]), &natural_sizes[2]);
+  gtk_extended_layout_get_natural_size (GTK_EXTENDED_LAYOUT (table), &natural_sizes[3]);
+
+  log_testf (natural_sizes[0].width < natural_sizes[2].width,
+             "Natural size of the label grows: %d < %d",
+             natural_sizes[0].width, natural_sizes[2].width);
+  log_testf (natural_sizes[1].width < natural_sizes[3].width,
+             "Natural size of the table grows: %d < %d",
+	     natural_sizes[1].width, natural_sizes[3].width);
+}
+
 /*****************************************************************************/
 
 int
@@ -444,6 +508,7 @@ main(int argc, char **argv)
 
   gtk_label_test_extended_layout ();
   gtk_bin_test_extended_layout ();
+  gtk_table_test_extended_layout ();
 
   log_testi (0, num_warnings);
   log_testi (0, num_errors);
