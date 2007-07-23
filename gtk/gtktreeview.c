@@ -15463,7 +15463,7 @@ gtk_tree_view_set_tooltip_column (GtkTreeView *tree_view,
  * Return value: the index of the tooltip column that is currently being
  * used, or -1 if this is disabled.
  *
- * Since 2.12
+ * Since: 2.12
  */
 gint
 gtk_tree_view_get_tooltip_column (GtkTreeView *tree_view)

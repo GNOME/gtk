@@ -1,5 +1,12 @@
 2007-07-23  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtktreeview.c:
+	* gtk/gtkiconview.c:
+	* gtk/gtkscalebutton.c: Fix some doc formatting errors.
+	(#459313, Gian Mario Tagliaretti)
+
+2007-07-23  Matthias Clasen  <mclasen@redhat.com>
+
 	* configure.in: Dectect if cups allows access to the http_t
 	authstring field.  
 

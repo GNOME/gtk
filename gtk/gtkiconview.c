@@ -4911,7 +4911,7 @@ gtk_icon_view_set_tooltip_column (GtkIconView *icon_view,
  * Return value: the index of the tooltip column that is currently being
  * used, or -1 if this is disabled.
  *
- * Since 2.12
+ * Since: 2.12
  */
 gint
 gtk_icon_view_get_tooltip_column (GtkIconView *icon_view)

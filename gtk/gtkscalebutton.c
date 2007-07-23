@@ -578,7 +578,7 @@ gtk_scale_button_set_value (GtkScaleButton *button,
  * Sets the icons to be used by the scale button. 
  * For details, see the #GtkScaleButton:icons property.
  *
- * Since 2.12
+ * Since: 2.12
  */
 void
 gtk_scale_button_set_icons (GtkScaleButton  *button,
