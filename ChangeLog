@@ -1,3 +1,17 @@
+2007-07-23  Emmanuele Bassi  <ebassi@gnome.org>
+
+	* gtk/gtkrecentchooserdefault.c: Port the GtkRecentChooser default
+	implementation widget to the new tooltips API, and make it look
+	like the GtkFileChooser widget in recent files mode (move the
+	full path from the widget to a tooltip on the row) to improve
+	consistency.
+
+	* gtk/gtkrecentchoosermenu.c: Port the GtkRecentChooserMenu widget
+	to the new tooltips API.
+
+	* tests/testrecentchooser.c:
+	* tests/testrecentchoosermenu.c: Exercise the tooltips code paths.
+
 2007-07-22  Ross Burton  <ross@openedhand.com>
 
 	* gtk/gtkscrolledwindow.c:

@@ -44,7 +44,7 @@
 #include "gtkimage.h"
 #include "gtklabel.h"
 #include "gtkobject.h"
-#include "gtktooltips.h"
+#include "gtktooltip.h"
 #include "gtktypebuiltins.h"
 #include "gtkprivate.h"
 #include "gtkalias.h"
@@ -85,9 +85,6 @@ struct _GtkRecentChooserMenuPrivate
   gulong manager_changed_id;
 
   gulong populate_id;
-
-  /* tooltips for our bookmark items*/
-  GtkTooltips *tooltips;
 };
 
 enum {
@@ -242,9 +239,6 @@ gtk_recent_chooser_menu_init (GtkRecentChooserMenu *menu)
   priv->placeholder = NULL;
 
   priv->current_filter = NULL;
-    
-  priv->tooltips = gtk_tooltips_new ();
-  g_object_ref_sink (priv->tooltips);
 }
 
 static void
@@ -287,12 +281,6 @@ gtk_recent_chooser_menu_dispose (GObject *object)
       priv->populate_id = 0;
     }
 
-  if (priv->tooltips)
-    {
-      g_object_unref (priv->tooltips);
-      priv->tooltips = NULL;
-    }
- 
   if (priv->current_filter)
     {
       g_object_unref (priv->current_filter);
@@ -741,25 +729,20 @@ gtk_recent_chooser_menu_add_tip (GtkRecentChooserMenu *menu,
 				 GtkWidget            *item)
 {
   GtkRecentChooserMenuPrivate *priv;
-  gchar *path, *tip_text;
+  gchar *path;
 
   g_assert (info != NULL);
   g_assert (item != NULL);
 
   priv = menu->priv;
   
-  if (!priv->tooltips)
-    return;
-  
   path = gtk_recent_info_get_uri_display (info);
   if (path)
     {
-      tip_text = g_strdup_printf (_("Open '%s'"), path);
+      gchar *tip_text = g_strdup_printf (_("Open '%s'"), path);
 
-      gtk_tooltips_set_tip (priv->tooltips,
-                            item,
-                            tip_text,
-                            NULL);
+      gtk_widget_set_tooltip_text (item, tip_text);
+      gtk_widget_set_has_tooltip (item, priv->show_tips);
 
       g_free (path);
       g_free (tip_text);
@@ -1124,20 +1107,32 @@ get_icon_size_for_widget (GtkWidget *widget)
 }
 
 static void
+foreach_set_shot_tips (GtkWidget *widget,
+                       gpointer   user_data)
+{
+  GtkRecentChooserMenu *menu = user_data;
+  GtkRecentChooserMenuPrivate *priv = menu->priv;
+  gboolean has_mark;
+
+  /* toggle the tooltip only on the items we create */
+  has_mark =
+    GPOINTER_TO_INT (g_object_get_data (G_OBJECT (widget), "gtk-recent-menu-mark"));
+
+  if (has_mark)
+    gtk_widget_set_has_tooltip (widget, priv->show_tips);
+}
+
+static void
 gtk_recent_chooser_menu_set_show_tips (GtkRecentChooserMenu *menu,
 				       gboolean              show_tips)
 {
-  if (menu->priv->show_tips == show_tips)
+  GtkRecentChooserMenuPrivate *priv = menu->priv;
+
+  if (priv->show_tips == show_tips)
     return;
   
-  g_assert (menu->priv->tooltips != NULL);
-  
-  if (show_tips)
-    gtk_tooltips_enable (menu->priv->tooltips);
-  else
-    gtk_tooltips_disable (menu->priv->tooltips);
-  
-  menu->priv->show_tips = show_tips;
+  priv->show_tips = show_tips;
+  gtk_container_foreach (GTK_CONTAINER (menu), foreach_set_shot_tips, menu);
 }
 
 /*

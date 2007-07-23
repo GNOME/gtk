@@ -65,6 +65,7 @@ create_recent_chooser_menu (gint limit)
     gtk_recent_chooser_set_limit (GTK_RECENT_CHOOSER (menu), limit);
   gtk_recent_chooser_set_local_only (GTK_RECENT_CHOOSER (menu), TRUE);
   gtk_recent_chooser_set_show_icons (GTK_RECENT_CHOOSER (menu), TRUE);
+  gtk_recent_chooser_set_show_tips (GTK_RECENT_CHOOSER (menu), TRUE);
   gtk_recent_chooser_set_sort_type (GTK_RECENT_CHOOSER (menu),
                                     GTK_RECENT_SORT_MRU);
   gtk_recent_chooser_menu_set_show_numbers (GTK_RECENT_CHOOSER_MENU (menu),

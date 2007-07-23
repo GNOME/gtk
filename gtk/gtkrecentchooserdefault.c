@@ -64,7 +64,7 @@
 #include "gtktreemodelfilter.h"
 #include "gtktreeselection.h"
 #include "gtktreestore.h"
-#include "gtktooltips.h"
+#include "gtktooltip.h"
 #include "gtktypebuiltins.h"
 #include "gtkvbox.h"
 
@@ -110,8 +110,6 @@ struct _GtkRecentChooserDefault
   GtkRecentSortFunc sort_func;
   gpointer sort_data;
   GDestroyNotify sort_data_destroy;
-
-  GtkTooltips *tooltips;
 
   GtkIconTheme *icon_theme;
   
@@ -280,6 +278,14 @@ static void     recent_view_drag_data_get_cb      (GtkWidget        *widget,
 						   guint             info,
 						   guint32           time_,
 						   gpointer          data);
+static gboolean recent_view_query_tooltip_cb      (GtkWidget        *widget,
+                                                   gint              x,
+                                                   gint              y,
+                                                   gboolean          keyboard_tip,
+                                                   GtkTooltip       *tooltip,
+                                                   gpointer          user_data);
+
+
 
 G_DEFINE_TYPE_WITH_CODE (GtkRecentChooserDefault,
 			 _gtk_recent_chooser_default,
@@ -348,9 +354,6 @@ _gtk_recent_chooser_default_init (GtkRecentChooserDefault *impl)
   
   impl->current_filter = NULL;
 
-  impl->tooltips = gtk_tooltips_new ();
-  g_object_ref_sink (impl->tooltips);
-  
   impl->recent_items = NULL;
   impl->n_recent_items = 0;
   impl->loaded_items = 0;
@@ -399,6 +402,10 @@ gtk_recent_chooser_default_constructor (GType                  type,
 		    G_CALLBACK (recent_view_drag_begin_cb), impl);
   g_signal_connect (impl->recent_view, "drag_data_get",
 		    G_CALLBACK (recent_view_drag_data_get_cb), impl);
+
+  g_object_set (impl->recent_view, "has-tooltip", TRUE, NULL);
+  g_signal_connect (impl->recent_view, "query-tooltip",
+                    G_CALLBACK (recent_view_query_tooltip_cb), impl);
 
   g_object_set_data (G_OBJECT (impl->recent_view),
                      "GtkRecentChooserDefault", impl);
@@ -454,10 +461,8 @@ gtk_recent_chooser_default_constructor (GType                  type,
   gtk_combo_box_set_focus_on_click (GTK_COMBO_BOX (impl->filter_combo), FALSE);
   g_signal_connect (impl->filter_combo, "changed",
                     G_CALLBACK (filter_combo_changed_cb), impl);
-  gtk_tooltips_set_tip (impl->tooltips,
-			impl->filter_combo,
-		        _("Select which type of documents are shown"),
-			NULL);
+  gtk_widget_set_tooltip_text (impl->filter_combo,
+		               _("Select which type of documents are shown"));
   
   gtk_box_pack_end (GTK_BOX (impl->filter_combo_hbox),
                     impl->filter_combo,
@@ -506,11 +511,6 @@ gtk_recent_chooser_default_set_property (GObject      *object,
       break;
     case GTK_RECENT_CHOOSER_PROP_SHOW_TIPS:
       impl->show_tips = g_value_get_boolean (value);
-
-      if (impl->show_tips)
-        gtk_tooltips_enable (impl->tooltips);
-      else
-        gtk_tooltips_disable (impl->tooltips);
       break;
     case GTK_RECENT_CHOOSER_PROP_SHOW_ICONS:
       impl->show_icons = g_value_get_boolean (value);
@@ -630,12 +630,6 @@ gtk_recent_chooser_default_dispose (GObject *object)
     {
       g_object_unref (impl->recent_store);
       impl->recent_store = NULL;
-    }
-
-  if (impl->tooltips)
-    {
-      g_object_unref (impl->tooltips);
-      impl->tooltips = NULL;
     }
 
   G_OBJECT_CLASS (_gtk_recent_chooser_default_parent_class)->dispose (object);
@@ -976,6 +970,8 @@ recent_icon_data_func (GtkTreeViewColumn *tree_column,
   
   if (pixbuf)  
     g_object_unref (pixbuf);
+
+  gtk_recent_info_unref (info);
 }
 
 static void
@@ -986,8 +982,7 @@ recent_meta_data_func (GtkTreeViewColumn *tree_column,
 		       gpointer           user_data)
 {
   GtkRecentInfo *info = NULL;
-  gchar *uri, *name, *str;
-  gchar *escaped_name, *escaped_location;
+  gchar *name;
   
   gtk_tree_model_get (model, iter,
                       RECENT_DISPLAY_NAME_COLUMN, &name,
@@ -995,23 +990,11 @@ recent_meta_data_func (GtkTreeViewColumn *tree_column,
                       -1);
   g_assert (info != NULL);
   
-  uri = gtk_recent_info_get_uri_display (info);
-  
   if (!name)
     name = gtk_recent_info_get_short_name (info);
 
-  escaped_name = g_markup_printf_escaped ("<b>%s</b>", name);
-  escaped_location = g_markup_printf_escaped ("<small>%s: %s</small>",
-                                              _("Location"),
-                                              uri);
-  str = g_strjoin ("\n", escaped_name, escaped_location, NULL);
-  g_free (escaped_name);
-  g_free (escaped_location);
+  g_object_set (cell, "text", name, NULL);
   
-  g_object_set (cell, "markup", str, NULL);
-  
-  g_free (str);
-  g_free (uri);
   g_free (name);
   gtk_recent_info_unref (info);
 }
@@ -1573,7 +1556,54 @@ recent_view_drag_data_get_cb (GtkWidget        *widget,
   g_free (drag_data);
 }
 
+static gboolean
+recent_view_query_tooltip_cb (GtkWidget  *widget,
+                              gint        x,
+                              gint        y,
+                              gboolean    keyboard_tip,
+                              GtkTooltip *tooltip,
+                              gpointer    user_data)
+{
+  GtkRecentChooserDefault *impl = user_data;
+  GtkTreeView *tree_view;
+  GtkTreeIter iter;
+  GtkTreePath *path = NULL;
+  GtkRecentInfo *info = NULL;
+  gchar *uri_display;
 
+  if (!impl->show_tips)
+    return FALSE;
+
+  tree_view = GTK_TREE_VIEW (impl->recent_view);
+
+  gtk_tree_view_get_tooltip_context (tree_view,
+                                     &x, &y,
+                                     keyboard_tip,
+                                     NULL, &path, NULL);
+  if (!path)
+    return FALSE;
+
+  if (!gtk_tree_model_get_iter (GTK_TREE_MODEL (impl->recent_store), &iter, path))
+    {
+      gtk_tree_path_free (path);
+      return FALSE;
+    }
+
+  gtk_tree_model_get (GTK_TREE_MODEL (impl->recent_store), &iter,
+                      RECENT_INFO_COLUMN, &info,
+                      -1);
+
+  uri_display = gtk_recent_info_get_uri_display (info);
+  
+  gtk_tooltip_set_text (tooltip, uri_display);
+  gtk_tree_view_set_tooltip_row (tree_view, tooltip, path);
+
+  g_free (uri_display);
+  gtk_tree_path_free (path);
+  gtk_recent_info_unref (info);
+
+  return TRUE;
+}
 
 static void
 remove_selected_from_list (GtkRecentChooserDefault *impl)
