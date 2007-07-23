@@ -107,27 +107,6 @@ query_tooltip_tree_view_cb (GtkWidget  *widget,
 
   char buffer[512];
 
-  if (keyboard_tip)
-    {
-      /* Keyboard mode */
-      gtk_tree_view_get_cursor (tree_view, &path, NULL);
-
-      if (!path)
-	return FALSE;
-    }
-  else
-    {
-      gint bin_x, bin_y;
-
-      gtk_tree_view_convert_widget_to_bin_window_coords (tree_view, x, y,
-							 &bin_x, &bin_y);
-
-      /* Mouse mode */
-      if (!gtk_tree_view_get_path_at_pos (tree_view, bin_x, bin_y,
-					  &path, NULL, NULL, NULL))
-        return FALSE;
-    }
-
   if (!gtk_tree_view_get_tooltip_context (tree_view, &x, &y,
 					  keyboard_tip,
 					  &model, &path, &iter))

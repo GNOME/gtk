@@ -1,3 +1,8 @@
+2007-07-23  Christian Persch  <chpe@gnome.org>
+
+	* tests/testtooltips.c: (query_tooltip_tree_view_cb): Remove obsolete
+	code. Bug #459566.
+
 2007-07-23  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtktreeview.c:
