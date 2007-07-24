@@ -1,5 +1,9 @@
 2007-07-23  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtktooltip.c (gtk_tooltip_set_custom): Protect against
+	recursion via gtk_container_remove().  (#459561, Christian Persch)
+	(gtk_tooltip_window_hide): Simplify.
+
 	* tests/testtooltips.c: Add code to test gtk_tooltip_set_custom()
 
 2007-07-23  Christian Persch  <chpe@gnome.org>

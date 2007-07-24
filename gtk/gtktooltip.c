@@ -314,9 +314,14 @@ gtk_tooltip_set_custom (GtkTooltip *tooltip,
 
   if (tooltip->custom_widget)
     {
-      gtk_container_remove (GTK_CONTAINER (tooltip->box),
-			    tooltip->custom_widget);
-      g_object_unref (tooltip->custom_widget);
+      GtkWidget *custom = tooltip->custom_widget;
+      /* Note: We must reset tooltip->custom_widget first, 
+       * since gtk_container_remove() will recurse into 
+       * gtk_tooltip_set_custom()
+       */
+      tooltip->custom_widget = NULL;
+      gtk_container_remove (GTK_CONTAINER (tooltip->box), custom);
+      g_object_unref (custom);
     }
 
   if (custom_widget)
@@ -326,8 +331,6 @@ gtk_tooltip_set_custom (GtkTooltip *tooltip,
       gtk_container_add (GTK_CONTAINER (tooltip->box), custom_widget);
       gtk_widget_show (custom_widget);
     }
-  else
-    tooltip->custom_widget = NULL;
 }
 
 /**
@@ -427,8 +430,7 @@ gtk_tooltip_window_hide (GtkWidget *widget,
 {
   GtkTooltip *tooltip = GTK_TOOLTIP (user_data);
 
-  if (tooltip->custom_widget)
-    gtk_tooltip_set_custom (tooltip, NULL);
+  gtk_tooltip_set_custom (tooltip, NULL);
 }
 
 /* event handling, etc */
