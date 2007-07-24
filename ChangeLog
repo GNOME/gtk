@@ -1,9 +1,14 @@
 2007-07-24  Matthias Clasen  <mclasen@redhat.com>
 
-	* gtkcolorsel.c:
-	* gtkfilechooserdefault.c:
-	* gtkpagesetupunixdialog.c:
-	* gtkprintunixdialog.c: Port to use new tooltips API.  
+	* gtk/gtkmenutoolbutton.c: Remove obsolete set-tooltip 
+	handler.  (#458280, Christian Persch)
+
+2007-07-24  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtkcolorsel.c:
+	* gtk/gtkfilechooserdefault.c:
+	* gtk/gtkpagesetupunixdialog.c:
+	* gtk/gtkprintunixdialog.c: Port to use new tooltips API.  
 	(#451397, Jan Arne Petersen)
 
 2007-07-24  Tor Lillqvist  <tml@novell.com>

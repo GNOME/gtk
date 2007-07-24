@@ -65,22 +65,6 @@ static gint signals[LAST_SIGNAL];
 
 G_DEFINE_TYPE (GtkMenuToolButton, gtk_menu_tool_button, GTK_TYPE_TOOL_BUTTON)
 
-static gboolean
-gtk_menu_tool_button_set_tooltip (GtkToolItem *tool_item,
-                                  GtkTooltips *tooltips,
-                                  const char  *tip_text,
-                                  const char  *tip_private)
-{
-  GtkMenuToolButton *button;
-
-  g_return_val_if_fail (GTK_IS_MENU_TOOL_BUTTON (tool_item), FALSE);
-
-  button = GTK_MENU_TOOL_BUTTON (tool_item);
-  gtk_tooltips_set_tip (tooltips, button->priv->button, tip_text, tip_private);
-
-  return TRUE;
-}
-
 static void
 gtk_menu_tool_button_construct_contents (GtkMenuToolButton *button)
 {
@@ -218,7 +202,6 @@ gtk_menu_tool_button_class_init (GtkMenuToolButtonClass *klass)
   object_class->get_property = gtk_menu_tool_button_get_property;
   gtk_object_class->destroy = gtk_menu_tool_button_destroy;
   widget_class->state_changed = gtk_menu_tool_button_state_changed;
-  toolitem_class->set_tooltip = gtk_menu_tool_button_set_tooltip;
   toolitem_class->toolbar_reconfigured = gtk_menu_tool_button_toolbar_reconfigured;
 
   signals[SHOW_MENU] =
