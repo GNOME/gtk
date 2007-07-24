@@ -239,6 +239,21 @@ drawing_area_expose (GtkWidget      *drawing_area,
   return FALSE;
 }
 
+static gboolean
+query_tooltip_label_cb (GtkWidget  *widget,
+			gint        x,
+			gint        y,
+			gboolean    keyboard_tip,
+			GtkTooltip *tooltip,
+			gpointer    data)
+{
+  GtkWidget *custom = data;
+
+  gtk_tooltip_set_custom (tooltip, custom);
+
+  return TRUE;
+}
+
 int
 main (int argc, char *argv[])
 {
@@ -246,6 +261,7 @@ main (int argc, char *argv[])
   GtkWidget *box;
   GtkWidget *drawing_area;
   GtkWidget *button;
+  GtkWidget *label;
 
   GtkWidget *tooltip_window;
   GtkWidget *tooltip_button;
@@ -389,6 +405,22 @@ main (int argc, char *argv[])
   g_signal_connect (drawing_area, "query-tooltip",
 		    G_CALLBACK (query_tooltip_drawing_area_cb), NULL);
   gtk_box_pack_start (GTK_BOX (box), drawing_area, FALSE, FALSE, 2);
+
+  button = gtk_label_new ("Custom tooltip I");
+  label = gtk_label_new ("See, custom");
+  g_object_ref_sink (label);
+  g_object_set (button, "has-tooltip", TRUE, NULL);
+  g_signal_connect (button, "query-tooltip",
+		    G_CALLBACK (query_tooltip_label_cb), label);
+  gtk_box_pack_start (GTK_BOX (box), button, FALSE, FALSE, 2);
+
+  button = gtk_label_new ("Custom tooltip II");
+  label = gtk_label_new ("See, custom, too");
+  g_object_ref_sink (label);
+  g_object_set (button, "has-tooltip", TRUE, NULL);
+  gtk_box_pack_start (GTK_BOX (box), button, FALSE, FALSE, 2);
+  g_signal_connect (button, "query-tooltip",
+		    G_CALLBACK (query_tooltip_label_cb), label);
 
   /* Done! */
   gtk_widget_show_all (window);

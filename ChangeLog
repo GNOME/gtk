@@ -1,3 +1,7 @@
+2007-07-23  Matthias Clasen  <mclasen@redhat.com>
+
+	* tests/testtooltips.c: Add code to test gtk_tooltip_set_custom()
+
 2007-07-23  Christian Persch  <chpe@gnome.org>
 
 	* tests/testtooltips.c: (query_tooltip_tree_view_cb): Remove obsolete
