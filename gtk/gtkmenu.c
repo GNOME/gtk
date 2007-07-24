@@ -2786,7 +2786,6 @@ gtk_menu_key_press (GtkWidget	*widget,
     {
       guint keyval = 0;
       GdkModifierType mods = 0;
-      gboolean handled = FALSE;
       
       gtk_accelerator_parse (accel, &keyval, &mods);
 
@@ -2797,15 +2796,15 @@ gtk_menu_key_press (GtkWidget	*widget,
        * thing, to properly consider i18n etc., but that probably requires
        * AccelGroup changes etc.
        */
-      if (event->keyval == keyval &&
-          (mods & event->state) == mods)
-	gtk_menu_shell_cancel (menu_shell);
-
-      g_free (accel);
-
-      if (handled)
-        return TRUE;
+      if (event->keyval == keyval && (mods & event->state) == mods)
+        {
+	  gtk_menu_shell_cancel (menu_shell);
+          g_free (accel);
+          return TRUE;
+        }
     }
+
+  g_free (accel);
   
   switch (event->keyval)
     {

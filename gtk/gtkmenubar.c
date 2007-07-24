@@ -634,9 +634,9 @@ window_key_press_handler (GtkWidget   *widget,
 	      retval = TRUE;	      
 	    }
         }
-
-      g_free (accel);
     }
+
+  g_free (accel);
 
   return retval;
 }

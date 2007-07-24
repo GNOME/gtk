@@ -1,3 +1,9 @@
+2007-07-24  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtkmenubar.c (window_key_press_handler):
+	* gtk/gtkmenu.c (gtk_menu_key_press): Restructure the code
+	to make sense, and don't leak an empty accel.  (#459515, Owen Taylor)
+
 2007-07-23  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtktooltip.c (gtk_tooltip_set_custom): Protect against
