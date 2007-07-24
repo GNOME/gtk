@@ -45,7 +45,6 @@
 #include "gtkradiobutton.h"
 #include "gtklabel.h"
 #include "gtktable.h"
-#include "gtktooltips.h"
 #include "gtkcelllayout.h"
 #include "gtkcellrenderertext.h"
 #include "gtkalignment.h"
@@ -75,7 +74,6 @@ struct GtkPageSetupUnixDialogPrivate
   GtkWidget *paper_size_combo;
   GtkWidget *paper_size_label;
   GtkWidget *paper_size_eventbox;
-  GtkTooltips *tooltips;
 
   GtkWidget *portrait_radio;
   GtkWidget *reverse_portrait_radio;
@@ -918,8 +916,7 @@ paper_size_changed (GtkComboBox            *combo_box,
       g_free (left);
       g_free (right);
       
-      gtk_tooltips_set_tip (GTK_TOOLTIPS (priv->tooltips),
-			    priv->paper_size_eventbox, str, NULL);
+      gtk_widget_set_tooltip_text (priv->paper_size_eventbox, str);
       g_free (str);
       
       g_object_unref (page_setup);
@@ -927,8 +924,7 @@ paper_size_changed (GtkComboBox            *combo_box,
   else
     {
       gtk_label_set_text (label, "");
-      gtk_tooltips_set_tip (GTK_TOOLTIPS (priv->tooltips),
-			    priv->paper_size_eventbox, NULL, NULL);
+      gtk_widget_set_tooltip_text (priv->paper_size_eventbox, NULL);
       if (priv->last_setup)
 	g_object_unref (priv->last_setup);
       priv->last_setup = NULL;
@@ -1096,8 +1092,6 @@ populate_dialog (GtkPageSetupUnixDialog *ps_dialog)
 		    2, 3, 4, 5,
 		    GTK_EXPAND|GTK_FILL, 0, 0, 0);
 
-
-  priv->tooltips = gtk_tooltips_new ();
 
   g_signal_connect (priv->paper_size_combo, "changed", G_CALLBACK (paper_size_changed), ps_dialog);
   g_signal_connect (priv->printer_combo, "changed", G_CALLBACK (printer_changed_callback), ps_dialog);

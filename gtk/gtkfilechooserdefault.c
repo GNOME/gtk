@@ -2577,6 +2577,9 @@ filter_create (GtkFileChooserDefault *impl)
   g_signal_connect (impl->filter_combo, "changed",
 		    G_CALLBACK (filter_combo_changed), impl);
 
+  gtk_widget_set_tooltip_text (impl->filter_combo,
+			  _("Select which types of files are shown"));
+
   return impl->filter_combo;
 }
 
@@ -3059,7 +3062,7 @@ bookmarks_check_add_sensitivity (GtkFileChooserDefault *impl)
           tip = data.tip;
         }
 
-      gtk_tooltips_set_tip (impl->tooltips, impl->browse_shortcuts_add_button, tip, NULL);
+      gtk_widget_set_tooltip_text (impl->browse_shortcuts_add_button, tip);
       g_free (tip);
     }
 }
@@ -3087,8 +3090,7 @@ bookmarks_check_remove_sensitivity (GtkFileChooserDefault *impl)
       gchar *tip;
 
       tip = g_strdup_printf (_("Remove the bookmark '%s'"), name);
-      gtk_tooltips_set_tip (impl->tooltips, impl->browse_shortcuts_remove_button,
-			    tip, NULL);
+      gtk_widget_set_tooltip_text (impl->browse_shortcuts_remove_button, tip);
       g_free (tip);
     }
 
@@ -4010,8 +4012,8 @@ shortcuts_pane_create (GtkFileChooserDefault *impl,
 						  TRUE,
 						  G_CALLBACK (add_bookmark_button_clicked_cb));
   gtk_box_pack_start (GTK_BOX (hbox), impl->browse_shortcuts_add_button, TRUE, TRUE, 0);
-  gtk_tooltips_set_tip (impl->tooltips, impl->browse_shortcuts_add_button,
-                        _("Add the selected folder to the Bookmarks"), NULL);
+  gtk_widget_set_tooltip_text (impl->browse_shortcuts_add_button,
+                        _("Add the selected folder to the Bookmarks"));
 
   /* Remove bookmark button */
 
@@ -4022,8 +4024,8 @@ shortcuts_pane_create (GtkFileChooserDefault *impl,
 						     TRUE,
 						     G_CALLBACK (remove_bookmark_button_clicked_cb));
   gtk_box_pack_start (GTK_BOX (hbox), impl->browse_shortcuts_remove_button, TRUE, TRUE, 0);
-  gtk_tooltips_set_tip (impl->tooltips, impl->browse_shortcuts_remove_button,
-                        _("Remove the selected bookmark"), NULL);
+  gtk_widget_set_tooltip_text (impl->browse_shortcuts_remove_button,
+                        _("Remove the selected bookmark"));
 
   return vbox;
 }
@@ -4686,29 +4688,6 @@ create_path_bar (GtkFileChooserDefault *impl)
   return path_bar;
 }
 
-static void
-set_filter_tooltip (GtkWidget *widget, 
-		    gpointer   data)
-{
-  GtkTooltips *tooltips = (GtkTooltips *)data;
-
-  if (GTK_IS_BUTTON (widget))
-    gtk_tooltips_set_tip (tooltips, widget,
-			  _("Select which types of files are shown"), 
-			  NULL);
-}
-
-static void
-realize_filter_combo (GtkWidget *combo,
-		      gpointer   data)
-{
-  GtkFileChooserDefault *impl = (GtkFileChooserDefault *)data;
-
-  gtk_container_forall (GTK_CONTAINER (combo),
-			set_filter_tooltip,
-			impl->tooltips);
-}
-
 /* Creates the widgets for the files/folders pane */
 static GtkWidget *
 file_pane_create (GtkFileChooserDefault *impl,
@@ -4743,9 +4722,6 @@ file_pane_create (GtkFileChooserDefault *impl,
   impl->filter_combo_hbox = gtk_hbox_new (FALSE, 12);
 
   widget = filter_create (impl);
-
-  g_signal_connect (widget, "realize",
-		    G_CALLBACK (realize_filter_combo), impl);
 
   gtk_widget_show (widget);
   gtk_box_pack_end (GTK_BOX (impl->filter_combo_hbox), widget, FALSE, FALSE, 0);
@@ -5204,7 +5180,7 @@ location_button_create (GtkFileChooserDefault *impl)
 
   str = _("Type a file name");
 
-  gtk_tooltips_set_tip (impl->tooltips, impl->location_button, str, NULL);
+  gtk_widget_set_tooltip_text (impl->location_button, str);
   atk_object_set_name (gtk_widget_get_accessible (impl->location_button), str);
 }
 

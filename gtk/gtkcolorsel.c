@@ -50,7 +50,6 @@
 #include "gtkentry.h"
 #include "gtkbutton.h"
 #include "gtkhseparator.h"
-#include "gtktooltips.h"
 #include "gtkinvisible.h"
 #include "gtkmenuitem.h"
 #include "gtkmain.h"
@@ -133,9 +132,6 @@ struct _ColorSelectionPrivate
   GtkWidget *old_sample;
   GtkWidget *cur_sample;
   GtkWidget *colorsel;
-
-  /* Tooltips group */
-  GtkTooltips *tooltips;
 
   /* Window for grabbing on */
   GtkWidget *dropper_grab_widget;
@@ -535,12 +531,6 @@ color_sample_new (GtkColorSelection *colorsel)
   priv->old_sample = gtk_drawing_area_new ();
   priv->cur_sample = gtk_drawing_area_new ();
 
-  /* We need enter/leave to do tooltips */
-  gtk_widget_add_events (priv->old_sample,
-                         GDK_ENTER_NOTIFY_MASK | GDK_LEAVE_NOTIFY_MASK);
-  gtk_widget_add_events (priv->cur_sample,
-                         GDK_ENTER_NOTIFY_MASK | GDK_LEAVE_NOTIFY_MASK);
-  
   gtk_box_pack_start (GTK_BOX (priv->sample_area), priv->old_sample,
 		      TRUE, TRUE, 0);
   gtk_box_pack_start (GTK_BOX (priv->sample_area), priv->cur_sample,
@@ -556,14 +546,12 @@ color_sample_new (GtkColorSelection *colorsel)
   color_sample_setup_dnd (colorsel, priv->old_sample);
   color_sample_setup_dnd (colorsel, priv->cur_sample);
 
-  gtk_tooltips_set_tip (priv->tooltips,
-                        priv->old_sample,
-                        _("The previously-selected color, for comparison to the color you're selecting now. You can drag this color to a palette entry, or select this color as current by dragging it to the other color swatch alongside."), NULL);
+  gtk_widget_set_tooltip_text (priv->old_sample,
+                        _("The previously-selected color, for comparison to the color you're selecting now. You can drag this color to a palette entry, or select this color as current by dragging it to the other color swatch alongside."));
 
 
-  gtk_tooltips_set_tip (priv->tooltips,
-                        priv->cur_sample,
-                        _("The color you've chosen. You can drag this color to a palette entry to save it for use in the future."), NULL);
+  gtk_widget_set_tooltip_text (priv->cur_sample,
+                        _("The color you've chosen. You can drag this color to a palette entry to save it for use in the future."));
   
   gtk_widget_show_all (priv->sample_area);
 }
@@ -1154,10 +1142,8 @@ palette_new (GtkColorSelection *colorsel)
   g_signal_connect (retval, "drag_data_received",
                     G_CALLBACK (palette_drop_handle), colorsel);
 
-  gtk_tooltips_set_tip (priv->tooltips,
-                        retval,
-                        _("Click this palette entry to make it the current color. To change this entry, drag a color swatch here or right-click it and select \"Save color here.\""),
-                        NULL);
+  gtk_widget_set_tooltip_text (retval,
+                        _("Click this palette entry to make it the current color. To change this entry, drag a color swatch here or right-click it and select \"Save color here.\""));
   return retval;
 }
 
@@ -1658,7 +1644,7 @@ make_label_spinbutton (GtkColorSelection *colorsel,
   g_object_set_data (G_OBJECT (adjust), I_("COLORSEL"), colorsel);
   *spinbutton = gtk_spin_button_new (adjust, 10.0, 0);
 
-  gtk_tooltips_set_tip (priv->tooltips, *spinbutton, tooltip, NULL);  
+  gtk_widget_set_tooltip_text (*spinbutton, tooltip);  
 
   g_signal_connect (adjust, "value_changed",
                     G_CALLBACK (adjustment_changed),
@@ -1920,9 +1906,6 @@ gtk_color_selection_init (GtkColorSelection *colorsel)
   priv->default_set = FALSE;
   priv->default_alpha_set = FALSE;
   
-  priv->tooltips = gtk_tooltips_new ();
-  g_object_ref_sink (priv->tooltips);
-  
   top_hbox = gtk_hbox_new (FALSE, 12);
   gtk_box_pack_start (GTK_BOX (colorsel), top_hbox, FALSE, FALSE, 0);
   
@@ -1933,8 +1916,8 @@ gtk_color_selection_init (GtkColorSelection *colorsel)
   gtk_hsv_set_metrics (GTK_HSV (priv->triangle_colorsel), 174, 15);
   gtk_box_pack_start (GTK_BOX (top_hbox), vbox, FALSE, FALSE, 0);
   gtk_box_pack_start (GTK_BOX (vbox), priv->triangle_colorsel, FALSE, FALSE, 0);
-  gtk_tooltips_set_tip (priv->tooltips, priv->triangle_colorsel,
-                        _("Select the color you want from the outer ring. Select the darkness or lightness of that color using the inner triangle."), NULL);
+  gtk_widget_set_tooltip_text (priv->triangle_colorsel,
+                        _("Select the color you want from the outer ring. Select the darkness or lightness of that color using the inner triangle."));
   
   hbox = gtk_hbox_new (FALSE, 6);
   gtk_box_pack_end (GTK_BOX (vbox), hbox, FALSE, FALSE, 0);
@@ -1957,9 +1940,8 @@ gtk_color_selection_init (GtkColorSelection *colorsel)
   gtk_widget_show (GTK_WIDGET (picker_image));
   gtk_box_pack_end (GTK_BOX (hbox), button, FALSE, FALSE, 0);
 
-  gtk_tooltips_set_tip (priv->tooltips,
-                        button,
-                        _("Click the eyedropper, then click a color anywhere on your screen to select that color."), NULL);
+  gtk_widget_set_tooltip_text (button,
+                        _("Click the eyedropper, then click a color anywhere on your screen to select that color."));
   
   top_right_vbox = gtk_vbox_new (FALSE, 6);
   gtk_box_pack_start (GTK_BOX (top_hbox), top_right_vbox, FALSE, FALSE, 0);
@@ -1989,9 +1971,8 @@ gtk_color_selection_init (GtkColorSelection *colorsel)
   adjust = GTK_ADJUSTMENT (gtk_adjustment_new (0.0, 0.0, 255.0, 1.0, 1.0, 0.0)); 
   g_object_set_data (G_OBJECT (adjust), I_("COLORSEL"), colorsel); 
   priv->opacity_slider = gtk_hscale_new (adjust);
-  gtk_tooltips_set_tip (priv->tooltips,
-                        priv->opacity_slider,
-                        _("Transparency of the color."), NULL);
+  gtk_widget_set_tooltip_text (priv->opacity_slider,
+                        _("Transparency of the color."));
   gtk_label_set_mnemonic_widget (GTK_LABEL (priv->opacity_label),
                                  priv->opacity_slider);
   gtk_scale_set_draw_value (GTK_SCALE (priv->opacity_slider), FALSE);
@@ -2000,9 +1981,8 @@ gtk_color_selection_init (GtkColorSelection *colorsel)
                     GINT_TO_POINTER (COLORSEL_OPACITY));
   gtk_table_attach_defaults (GTK_TABLE (table), priv->opacity_slider, 1, 7, 4, 5); 
   priv->opacity_entry = gtk_entry_new (); 
-  gtk_tooltips_set_tip (priv->tooltips,
-                        priv->opacity_entry,
-                        _("Transparency of the color."), NULL);
+  gtk_widget_set_tooltip_text (priv->opacity_entry,
+                        _("Transparency of the color."));
   gtk_widget_set_size_request (priv->opacity_entry, 40, -1); 
 
   g_signal_connect (priv->opacity_entry, "activate",
@@ -2022,9 +2002,8 @@ gtk_color_selection_init (GtkColorSelection *colorsel)
   g_signal_connect (priv->hex_entry, "focus_out_event",
                     G_CALLBACK (hex_focus_out), colorsel);
 
-  gtk_tooltips_set_tip (priv->tooltips,
-                        priv->hex_entry,
-                        _("You can enter an HTML-style hexadecimal color value, or simply a color name such as 'orange' in this entry."), NULL);
+  gtk_widget_set_tooltip_text (priv->hex_entry,
+                        _("You can enter an HTML-style hexadecimal color value, or simply a color name such as 'orange' in this entry."));
   
   gtk_entry_set_width_chars (GTK_ENTRY (priv->hex_entry), 7);
   gtk_table_attach_defaults (GTK_TABLE (table), priv->hex_entry, 1, 5, 5, 6);
@@ -2103,12 +2082,6 @@ gtk_color_selection_destroy (GtkObject *object)
       priv->dropper_grab_widget = NULL;
     }
 
-  if (priv->tooltips)
-    {
-      g_object_unref (priv->tooltips);
-      priv->tooltips = NULL;
-    }
-  
   GTK_OBJECT_CLASS (gtk_color_selection_parent_class)->destroy (object);
 }
 

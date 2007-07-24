@@ -46,7 +46,6 @@
 #include "gtkframe.h"
 #include "gtkalignment.h"
 #include "gtklabel.h"
-#include "gtktooltips.h"
 #include "gtkeventbox.h"
 
 #include "gtkprintbackend.h"
@@ -124,7 +123,6 @@ struct GtkPrintUnixDialogPrivate
 
   GtkPageSetup *page_setup;
 
-  GtkTooltips *tooltips;
   GtkWidget *all_pages_radio;
   GtkWidget *current_page_radio;
   GtkWidget *page_range_radio;
@@ -272,9 +270,6 @@ gtk_print_unix_dialog_init (GtkPrintUnixDialog *dialog)
   priv->print_backends = NULL;
   priv->current_page = -1;
 
-  priv->tooltips = gtk_tooltips_new ();
-  g_object_ref_sink (priv->tooltips);
-
   priv->page_setup = gtk_page_setup_new ();
 
   g_signal_connect (dialog, 
@@ -315,12 +310,6 @@ gtk_print_unix_dialog_finalize (GObject *object)
   GList *node;
 
   unschedule_idle_mark_conflicts (dialog);
-
-  if (priv->tooltips)
-    {
-      g_object_unref (priv->tooltips);
-      priv->tooltips = NULL;
-    }
 
   if (priv->request_details_tag)
     {
@@ -1542,7 +1531,7 @@ create_main_page (GtkPrintUnixDialog *dialog)
 		    0, 0);
  
   radio = gtk_radio_button_new_with_mnemonic (gtk_radio_button_get_group (GTK_RADIO_BUTTON (radio)), _("Ra_nge"));
-  gtk_tooltips_set_tip (priv->tooltips, radio, _("Specify one or more page ranges,\n e.g. 1-3,7,11"), NULL);
+  gtk_widget_set_tooltip_text (radio, _("Specify one or more page ranges,\n e.g. 1-3,7,11"));
  
   priv->page_range_radio = radio;
   gtk_widget_show (radio);
