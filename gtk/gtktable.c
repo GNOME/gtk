@@ -1452,11 +1452,11 @@ gtk_table_size_allocate_pass1 (GtkTable *table)
       
       /* Check to see if we were allocated more width than we requested.
        */
-      if ((width < real_width) && (nexpand >= 1))
+      if ((width < real_width) && (nexpand >= 1 || natural_delta > 0))
 	{
 	  width = real_width - width;
-          natural_size = MIN (natural_delta, width);
-          width = MAX (0, width - natural_size);
+          natural_size = MAX (0, MIN (width, natural_delta));
+          width = width - natural_size;
 
 	  for (col = 0; col < table->ncols; col++)
             {
@@ -1560,11 +1560,11 @@ gtk_table_size_allocate_pass1 (GtkTable *table)
       
       /* Check to see if we were allocated more height than we requested.
        */
-      if ((height < real_height) && (nexpand >= 1))
+      if ((height < real_height) && (nexpand >= 1 || natural_delta > 0))
 	{
 	  height = real_height - height;
-          natural_size = MIN (natural_delta, height);
-          height = MAX (0, height - natural_size);
+          natural_size = MAX (0, MIN (height, natural_delta));
+          height = height - natural_size;
 
 	  for (row = 0; row < table->nrows; row++)
             {

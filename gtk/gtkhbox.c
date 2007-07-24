@@ -345,19 +345,24 @@ gtk_hbox_size_allocate (GtkWidget     *widget,
 	  extra = available / nvis_children;
           natural = 0;
 	}
-      else if (nexpand_children > 0)
-	{
-	  available = (gint)allocation->width - widget->requisition.width;
-          natural = MAX (0, MIN (available, natural_width));
-          available -= natural;
-
-	  extra = MAX (0, available / nexpand_children);
-	}
       else
 	{
-	  available = 0;
-          natural = 0;
-	  extra = 0;
+          if (nexpand_children > 0 || natural_width > 0)
+            {
+              available = (gint)allocation->width - widget->requisition.width;
+              natural = MAX (0, MIN (available, natural_width));
+              available -= natural;
+            }
+          else
+            {
+              available = 0;
+              natural = 0;
+            }
+
+          if (nexpand_children > 0)
+	    extra = MAX (0, available / nexpand_children);
+          else
+            extra = 0;
 	}
 
       child_allocation.y = allocation->y + border_width;

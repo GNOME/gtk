@@ -217,73 +217,120 @@ append_natural_size_box (TestCase           *test,
                          GtkWidget          *parent,
                          gboolean            vertical,
                          gboolean            table,
-                         const gchar        *caption,
-                         PangoEllipsizeMode  ellipsize)
+                         gboolean            ellipses)
 {
-  GtkWidget *container;
-  GtkWidget *button;
-  GtkWidget *label;
+  GtkWidget *container, *button, *label;
+  PangoEllipsizeMode ellipsize_mode;
+  gint i, j, k;
 
-  if (table)
+  for (i = 0; i < 6; ++i)
     {
-      container = gtk_table_new (vertical ? 2 : 1, vertical ? 1 : 2, FALSE);
-      gtk_table_set_col_spacings (GTK_TABLE (container), 12);
-      gtk_table_set_row_spacings (GTK_TABLE (container), 12);
+      ellipsize_mode = ellipses ?
+        PANGO_ELLIPSIZE_START + i/2 : 
+        PANGO_ELLIPSIZE_NONE;
+
+      if (!i || (ellipses && 0 == i % 2))
+        {
+          label = gtk_label_new (NULL);
+
+          switch(ellipsize_mode)
+            {
+              case PANGO_ELLIPSIZE_NONE:
+                gtk_label_set_markup (GTK_LABEL (label), "<b>No ellipses</b>");
+                break;
+              case PANGO_ELLIPSIZE_START:
+                gtk_label_set_markup (GTK_LABEL (label), "<b>Ellipses at start</b>");
+                break;
+              case PANGO_ELLIPSIZE_MIDDLE:
+                gtk_label_set_markup (GTK_LABEL (label), "<b>Ellipses in the middle</b>");
+                break;
+              case PANGO_ELLIPSIZE_END:
+                gtk_label_set_markup (GTK_LABEL (label), "<b>Ellipses at end</b>");
+                break;
+            }
+
+          if (vertical)
+            {
+              gtk_misc_set_alignment (GTK_MISC (label), 0.0, 1.0);
+              gtk_label_set_angle (GTK_LABEL (label), 90);
+            }
+          else
+            {
+              gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
+              gtk_label_set_angle (GTK_LABEL (label), 0);
+            }
+
+          gtk_box_pack_start (GTK_BOX (parent), label, FALSE, TRUE, 0);
+        }
+
+      if (table)
+        {
+          k = 1 + i / 3 + i % 3;
+
+          container = gtk_table_new (vertical ? k : 1,
+                                     vertical ? 1 : k, FALSE);
+
+          gtk_table_set_col_spacings (GTK_TABLE (container), 6);
+          gtk_table_set_row_spacings (GTK_TABLE (container), 6);
+        }
+      else if (vertical)
+        container = gtk_vbox_new (FALSE, 6);
+      else
+        container = gtk_hbox_new (FALSE, 6);
+
+      gtk_box_pack_start (GTK_BOX (parent), container, FALSE, TRUE, 0);
+
+      for (j = 0; j <= i / 3; ++j)
+        {
+          label = gtk_label_new ("Small Button");
+          gtk_label_set_angle (GTK_LABEL (label), vertical ? 90 : 0);
+          gtk_label_set_ellipsize (GTK_LABEL (label), ellipsize_mode);
+
+          button = gtk_button_new ();
+          set_widget_name (button, "small-%d-%d-%d", ellipses, i, j);
+          gtk_container_add (GTK_CONTAINER (button), label);
+
+          if (table)
+            gtk_table_attach (GTK_TABLE (container), button,
+                              vertical ? 0 : j, vertical ? 1 : j + 1,
+                              vertical ? j : 0, vertical ? j + 1 : 1,
+                              GTK_FILL, GTK_FILL, 0, 0);
+          else
+            gtk_box_pack_start (GTK_BOX (container), button, FALSE, TRUE, 0);
+
+          test_case_append_guide (test, button,
+                                  vertical ? GUIDE_EXTERIOUR_HORIZONTAL 
+                                           : GUIDE_EXTERIOUR_VERTICAL,
+                                  j);
+        }
+
+      for (j = 0; j < i % 3; ++j)
+        {
+          label = gtk_label_new ("Large Button");
+          gtk_label_set_angle (GTK_LABEL (label), vertical ? 90 : 0);
+
+          button = gtk_button_new ();
+          set_widget_name (button, "large-%d-%d-%d", ellipses, i, j);
+          gtk_container_add (GTK_CONTAINER (button), label);
+
+          if (table)
+            gtk_table_attach (GTK_TABLE (container), button,
+                              vertical ? 0 : i/3 + j + 1, 
+                              vertical ? 1 : i/3 + j + 2,
+                              vertical ? i/3 + j + 1 : 0, 
+                              vertical ? i/3 + j + 2 : 1,
+                              vertical ? GTK_FILL : GTK_FILL | GTK_EXPAND,
+                              vertical ? GTK_FILL | GTK_EXPAND : GTK_FILL,
+                              0, 0);
+          else
+            gtk_box_pack_start (GTK_BOX (container), button, TRUE, TRUE, 0);
+
+          test_case_append_guide (test, button, 
+                                  vertical ? GUIDE_EXTERIOUR_HORIZONTAL 
+                                           : GUIDE_EXTERIOUR_VERTICAL,
+                                  1 + i + j);
+        }
     }
-  else if (vertical)
-    container = gtk_vbox_new (FALSE, 12);
-  else
-    container = gtk_hbox_new (FALSE, 12);
-
-  label = gtk_label_new ("The small Button");
-  gtk_label_set_angle (GTK_LABEL (label), vertical ? 90 : 0);
-  gtk_label_set_ellipsize (GTK_LABEL (label), ellipsize);
-
-  button = gtk_button_new ();
-  gtk_container_add (GTK_CONTAINER (button), label);
-
-  if (table)
-    gtk_table_attach (GTK_TABLE (container), button, 0, 1, 0, 1, GTK_FILL, GTK_FILL, 0, 0);
-  else
-    gtk_box_pack_start (GTK_BOX (container), button, FALSE, TRUE, 0);
-
-  test_case_append_guide (test, button, GUIDE_EXTERIOUR_VERTICAL, 0);
-  test_case_append_guide (test, label, GUIDE_EXTERIOUR_VERTICAL, -1);
-
-  label = gtk_label_new ("The large Button");
-  gtk_label_set_angle (GTK_LABEL (label), vertical ? 90 : 0);
-
-  button = gtk_button_new ();
-  gtk_container_add (GTK_CONTAINER (button), label);
-
-  if (table)
-    gtk_table_attach (GTK_TABLE (container), button,
-                      vertical ? 0 : 1, vertical ? 1 : 2,
-                      vertical ? 1 : 0, vertical ? 2 : 1,
-                      vertical ? GTK_FILL : GTK_FILL | GTK_EXPAND,
-                      vertical ? GTK_FILL | GTK_EXPAND : GTK_FILL,
-                      0, 0);
-  else
-    gtk_box_pack_start (GTK_BOX (container), button, TRUE, TRUE, 0);
-
-  test_case_append_guide (test, button, GUIDE_EXTERIOUR_VERTICAL, 1);
-
-  label = gtk_label_new (NULL);
-  gtk_label_set_markup (GTK_LABEL (label), caption); 
-
-  if (vertical)
-    {
-      gtk_misc_set_alignment (GTK_MISC (label), 0.0, 1.0);
-      gtk_label_set_angle (GTK_LABEL (label), 90);
-    }
-  else
-    {
-      gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
-      gtk_label_set_angle (GTK_LABEL (label), 0);
-    }
-
-  gtk_box_pack_start (GTK_BOX (parent), label, FALSE, TRUE, 0);
-  gtk_box_pack_start (GTK_BOX (parent), container, FALSE, TRUE, 0);
 }
 
 static gboolean
@@ -352,14 +399,14 @@ create_natural_size_test (TestSuite *suite,
     {
       detail = table ? "GtkTable, vertical" : "GtkVBox";
       hint = gtk_alignment_new (0.5, 1.0, 1.0, 0.0);
-      box = gtk_hbox_new (FALSE, 12);
+      box = gtk_hbox_new (FALSE, 6);
       paned = gtk_vpaned_new ();
     }
   else
     {
       detail = table ? "GtkTable, horizontal" : "GtkHBox";
       hint = gtk_alignment_new (1.0, 0.5, 0.0, 1.0);
-      box = gtk_vbox_new (FALSE, 12);
+      box = gtk_vbox_new (FALSE, 6);
       paned = gtk_hpaned_new ();
     }
 
@@ -369,18 +416,8 @@ create_natural_size_test (TestSuite *suite,
   gtk_container_set_border_width (GTK_CONTAINER (box), 6);
   gtk_paned_pack1 (GTK_PANED (test->widget), box, TRUE, TRUE);
 
-  append_natural_size_box (test, box, vertical, table,
-                           "<b>No ellipsizing</b>",
-                           PANGO_ELLIPSIZE_NONE);
-  append_natural_size_box (test, box, vertical, table,
-                           "<b>Ellipsizing at start</b>",
-                           PANGO_ELLIPSIZE_START);
-  append_natural_size_box (test, box, vertical, table,
-                           "<b>Ellipsizing in the middle</b>",
-                           PANGO_ELLIPSIZE_MIDDLE);
-  append_natural_size_box (test, box, vertical, table,
-                           "<b>Ellipsizing at end</b>",
-                           PANGO_ELLIPSIZE_END);
+  append_natural_size_box (test, box, vertical, table, FALSE);
+  append_natural_size_box (test, box, vertical, table, TRUE);
 
   button = gtk_button_new_with_label ("Shrink to check ellipsing");
   g_signal_connect (button, "clicked", G_CALLBACK (shrink_paned), test->widget);
@@ -1274,23 +1311,40 @@ test_suite_run (TestSuite *self,
     {
       TestResult test_result = TEST_RESULT_SUCCESS;
       gint last_group = -1;
+      gchar *message;
       GList *oiter;
-      gint o;
+      gint o, group;
+
+      message = test->detail ?
+        g_strdup_printf ("%s (%s)", test->name, test->detail) :
+        g_strdup (test->name);
 
       test_suite_start (self);
-      test_suite_report (self, test->name, -1, TEST_RESULT_NONE);
+      test_suite_report (self, message, -1, TEST_RESULT_NONE);
 
-      for(o = 0, oiter = test->guides; oiter; ++o, oiter = oiter->next)
+      g_free (message);
+
+      for (oiter = test->guides; oiter; oiter = oiter->next)
+        last_group = MAX (last_group, ((const Guide*)oiter->data)->group);
+
+      for (group = 0; group <= last_group; ++group)
         {
-          const Guide *oguide = oiter->data;
-        
-          if (oguide->group > last_group)
+          const Guide *oguide;
+
+          for (o = 0, oiter = test->guides; oiter; ++o, oiter = oiter->next)
+            {
+              oguide = oiter->data;
+
+              if (oguide->group == group)
+                break;
+            }
+
+          if (oiter)
             {
               TestResult group_result = TEST_RESULT_SUCCESS;
               const gchar *widget_name;
               const gchar *type_name;
 
-              gchar *message;
               GList *iiter;
               gint i;
 
@@ -1336,7 +1390,6 @@ test_suite_run (TestSuite *self,
                 } 
 
               test_suite_report (self, NULL, oguide->group, group_result);
-              last_group = oguide->group;
             }
         }
 

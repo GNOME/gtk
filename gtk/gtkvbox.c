@@ -214,19 +214,24 @@ gtk_vbox_size_allocate (GtkWidget     *widget,
 	  extra = available / nvis_children;
           natural = 0;
 	}
-      else if (nexpand_children > 0)
-	{
-	  available = (gint)allocation->height - widget->requisition.height;
-          natural = MAX (0, MIN (available, natural_height));
-          available -= natural;
-
-	  extra = MAX (0, available / nexpand_children);
-	}
       else
 	{
-	  available = 0;
-          natural = 0;
-	  extra = 0;
+          if (nexpand_children > 0 || natural_height > 0)
+            {
+	      available = (gint)allocation->height - widget->requisition.height;
+              natural = MAX (0, MIN (available, natural_height));
+              available -= natural;
+            }
+          else
+            {
+              available = 0;
+              natural = 0;
+            }
+
+          if (nexpand_children > 0)
+	    extra = MAX (0, available / nexpand_children);
+          else
+            extra = 0;
 	}
 
       child_allocation.x = allocation->x + border_width;
@@ -345,8 +350,8 @@ gtk_vbox_extended_layout_get_natural_size (GtkExtendedLayout *layout,
           else
             gtk_widget_size_request (child->widget, &child_requisition);
 
-          requisition->width += MAX (child_requisition.width, requisition->width);
-          requisition->height = child_requisition.height;
+          requisition->width = MAX (child_requisition.width, requisition->width);
+          requisition->height += child_requisition.height;
 	}
     }
 }

@@ -1,5 +1,14 @@
 2007-07-24  Mathias Hasselmann  <mathias.hasselmann@gmx.de>
 
+	* gtk/gtkhbox.c, gtk/gtktable.c, gtk/gtkvbox.c: Also apply natural
+	size, when there are no expandable children. Fix natural size 
+	calculation for GtkVBox.
+	* tests/testextendedlayout.c: More extensive natural size testing.
+	Make sure that really all guide groups are tested. Add detail
+	to test case label in results page.
+
+2007-07-24  Mathias Hasselmann  <mathias.hasselmann@gmx.de>
+
 	* gtk/gtktable.c, gtk/gtktable.h: Consider natural size to allocate 
 	widgets spanning a single, rename GtkTableRowCol::natural_size.
 	Remove some lost g_print statements.
