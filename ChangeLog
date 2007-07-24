@@ -1,3 +1,7 @@
+2007-07-24  Tor Lillqvist  <tml@novell.com>
+
+	* gdk/win32/gdkkeys-win32.c (update_keymap): Cosmetic changes.
+
 2007-07-24  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtkmenubar.c (window_key_press_handler):

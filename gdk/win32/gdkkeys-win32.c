@@ -384,22 +384,17 @@ update_keymap (void)
 		  wchar_t wcs[10];
 		  gint k;
 
+		  wcs[0] = wcs[1] = 0;
 		  k = ToUnicodeEx (vk, scancode, key_state,
 				   wcs, G_N_ELEMENTS (wcs),
 				   0, _gdk_input_locale);
 #if 0
-		  g_print ("ToUnicodeEx(%02x, %d: %d): %d, %04x %04x\n",
+		  g_print ("ToUnicodeEx(%#02x, %d: %d): %d, %04x %04x\n",
 			   vk, scancode, shift, k,
-			   (k != 0 ? wcs[0] : 0),
-			   (k >= 2 ? wcs[1] : 0));
+			   wcs[0], wcs[1]);
 #endif
 		  if (k == 1)
 		    *ksymp = gdk_unicode_to_keyval (wcs[0]);
-
-		  if (k == 1)
-		    {
-		      /* Keysym already stored above */
-		    }
 		  else if (k == -1)
 		    {
 		      guint keysym = gdk_unicode_to_keyval (wcs[0]);
