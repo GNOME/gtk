@@ -23,7 +23,7 @@
 #include <gdk-pixbuf/gdk-pixdata.h>
 
 
-#define VERBOSE(x) x
+#define VERBOSE(x) 
 
 #define check(name,condition) \
   if (!(condition)) \

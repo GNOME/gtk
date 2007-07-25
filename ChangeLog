@@ -1,3 +1,9 @@
+2007-07-24  Matthias Clasen  <mclasen@redhat.com>
+
+	Merge from trunk:
+
+	* gtk/gtkiconcachevalidator.c: Silence the validator.
+
 2007-07-23  Ross Burton  <ross@openedhand.com>
 
 	* gtk/gtkscrolledwindow.c:
