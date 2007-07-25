@@ -1,3 +1,10 @@
+2007-07-25  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtktooltip.c (_gtk_tooltip_handle_event): Call
+	gtk_tooltip_hide_tooltip() even if the tooltip is not
+	visible yet. This fixes annoying dangling tooltips
+	on systray icons.  
+
 2007-07-24  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtkiconcachevalidator.c: Silence the validator.

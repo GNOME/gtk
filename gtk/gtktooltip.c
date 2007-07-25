@@ -1118,7 +1118,7 @@ _gtk_tooltip_handle_event (GdkEvent *event)
   /* Hide the tooltip when there's no new tooltip widget */
   if (!has_tooltip_widget)
     {
-      if (current_tooltip && GTK_TOOLTIP_VISIBLE (current_tooltip))
+      if (current_tooltip)
 	gtk_tooltip_hide_tooltip (current_tooltip);
 
       return;
