@@ -1,5 +1,9 @@
 2007-07-24  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkiconcachevalidator.c: Silence the validator.
+
+2007-07-24  Matthias Clasen  <mclasen@redhat.com>
+
 	* gtk/gtkmenutoolbutton.c: Remove obsolete set-tooltip 
 	handler.  (#458280, Christian Persch)
 
