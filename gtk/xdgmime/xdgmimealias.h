@@ -37,6 +37,7 @@ typedef struct XdgAliasList XdgAliasList;
 #define _xdg_mime_alias_list_new              XDG_ENTRY(alias_list_new)
 #define _xdg_mime_alias_list_free             XDG_ENTRY(alias_list_free)
 #define _xdg_mime_alias_list_lookup           XDG_ENTRY(alias_list_lookup)
+#define _xdg_mime_alias_list_dump             XDG_ENTRY(alias_list_dump)
 #endif
 
 void          _xdg_mime_alias_read_from_file (XdgAliasList *list,

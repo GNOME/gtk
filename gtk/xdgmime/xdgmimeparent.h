@@ -37,6 +37,7 @@ typedef struct XdgParentList XdgParentList;
 #define _xdg_mime_parent_list_new              XDG_ENTRY(parent_list_new)
 #define _xdg_mime_parent_list_free             XDG_ENTRY(parent_list_free)
 #define _xdg_mime_parent_list_lookup           XDG_ENTRY(parent_list_lookup)
+#define _xdg_mime_parent_list_dump             XDG_ENTRY(parent_list_dump)
 #endif
 
 void          _xdg_mime_parent_read_from_file (XdgParentList *list,
