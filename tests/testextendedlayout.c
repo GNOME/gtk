@@ -219,17 +219,19 @@ append_natural_size_box (TestCase           *test,
                          gboolean            table,
                          gboolean            ellipses)
 {
-  GtkWidget *container, *button, *label;
-  PangoEllipsizeMode ellipsize_mode;
-  gint i, j, k;
+  GtkWidget *container = NULL;
+  GtkWidget *button, *label;
 
-  for (i = 0; i < 6; ++i)
+  PangoEllipsizeMode ellipsize_mode;
+  gint i, j, k, l;
+
+  for (i = 0; i < (table ? 9 : 6); ++i)
     {
       ellipsize_mode = ellipses ?
-        PANGO_ELLIPSIZE_START + i/2 : 
+        PANGO_ELLIPSIZE_START + i/(table ? 3 : 2) : 
         PANGO_ELLIPSIZE_NONE;
 
-      if (!i || (ellipses && 0 == i % 2))
+      if (!i || (ellipses && 0 == i % (table ? 3 : 2)))
         {
           label = gtk_label_new (NULL);
 
@@ -267,22 +269,31 @@ append_natural_size_box (TestCase           *test,
         {
           k = 1 + i / 3 + i % 3;
 
-          container = gtk_table_new (vertical ? k : 1,
-                                     vertical ? 1 : k, FALSE);
+          if (i < 7)
+            {
+              if (i < 6)
+                container = gtk_table_new (vertical ? k : 1,
+                                           vertical ? 1 : k, FALSE);
+              else
+                container = gtk_table_new (vertical ? k : 3,
+                                           vertical ? 3 : k, FALSE);
 
-          gtk_table_set_col_spacings (GTK_TABLE (container), 6);
-          gtk_table_set_row_spacings (GTK_TABLE (container), 6);
+              gtk_table_set_col_spacings (GTK_TABLE (container), 4);
+              gtk_table_set_row_spacings (GTK_TABLE (container), 4);
+            }
         }
       else if (vertical)
-        container = gtk_vbox_new (FALSE, 6);
+        container = gtk_vbox_new (FALSE, 4);
       else
-        container = gtk_hbox_new (FALSE, 6);
+        container = gtk_hbox_new (FALSE, 4);
 
-      gtk_box_pack_start (GTK_BOX (parent), container, FALSE, TRUE, 0);
+      if (!gtk_widget_get_parent (container))
+        gtk_box_pack_start (GTK_BOX (parent), container, FALSE, TRUE, 0);
 
-      for (j = 0; j <= i / 3; ++j)
+      for (j = 0, l = i < 6 ? i / 3 : i - 6; j <= l; ++j)
         {
-          label = gtk_label_new ("Small Button");
+          label = gtk_label_new (NULL);
+          gtk_label_set_markup (GTK_LABEL (label), "<small>Small Button</small>");
           gtk_label_set_angle (GTK_LABEL (label), vertical ? 90 : 0);
           gtk_label_set_ellipsize (GTK_LABEL (label), ellipsize_mode);
 
@@ -290,23 +301,31 @@ append_natural_size_box (TestCase           *test,
           set_widget_name (button, "small-%d-%d-%d", ellipses, i, j);
           gtk_container_add (GTK_CONTAINER (button), label);
 
-          if (table)
+          if (!table)
+            gtk_box_pack_start (GTK_BOX (container), button, FALSE, TRUE, 0);
+          else if (i < 6)
             gtk_table_attach (GTK_TABLE (container), button,
                               vertical ? 0 : j, vertical ? 1 : j + 1,
                               vertical ? j : 0, vertical ? j + 1 : 1,
                               GTK_FILL, GTK_FILL, 0, 0);
           else
-            gtk_box_pack_start (GTK_BOX (container), button, FALSE, TRUE, 0);
+            gtk_table_attach (GTK_TABLE (container), button,
+                              vertical ? i - 6 : j,
+                              vertical ? i - 5 : j < l ? j + 1 : 3,
+                              vertical ? j : i - 6, 
+                              vertical ? (j < l ? j + 1 : 3) : i - 5,
+                              GTK_FILL, GTK_FILL, 0, 0);
 
           test_case_append_guide (test, button,
                                   vertical ? GUIDE_EXTERIOUR_HORIZONTAL 
                                            : GUIDE_EXTERIOUR_VERTICAL,
-                                  j);
+                                  6 == i ? 3 : 7 == i && j ? 4 : j);
         }
 
-      for (j = 0; j < i % 3; ++j)
+      for (j = 0, l = (i < 6 ? i % 3 : 1); j < l; ++j)
         {
-          label = gtk_label_new ("Large Button");
+          label = gtk_label_new (NULL);
+          gtk_label_set_markup (GTK_LABEL (label), "<small>Large Button</small>");
           gtk_label_set_angle (GTK_LABEL (label), vertical ? 90 : 0);
 
           button = gtk_button_new ();
@@ -315,10 +334,10 @@ append_natural_size_box (TestCase           *test,
 
           if (table)
             gtk_table_attach (GTK_TABLE (container), button,
-                              vertical ? 0 : i/3 + j + 1, 
-                              vertical ? 1 : i/3 + j + 2,
-                              vertical ? i/3 + j + 1 : 0, 
-                              vertical ? i/3 + j + 2 : 1,
+                              vertical ? MAX (0, i - 6) : i/3 + j + 1, 
+                              vertical ? MAX (1, i - 5) : i/3 + j + 2,
+                              vertical ? i/3 + j + 1 : MAX (0, i - 6), 
+                              vertical ? i/3 + j + 2 : MAX (1, i - 5),
                               vertical ? GTK_FILL : GTK_FILL | GTK_EXPAND,
                               vertical ? GTK_FILL | GTK_EXPAND : GTK_FILL,
                               0, 0);
@@ -328,7 +347,7 @@ append_natural_size_box (TestCase           *test,
           test_case_append_guide (test, button, 
                                   vertical ? GUIDE_EXTERIOUR_HORIZONTAL 
                                            : GUIDE_EXTERIOUR_VERTICAL,
-                                  1 + i + j);
+                                  i < 6 ? 5 + i + j : 12);
         }
     }
 }
@@ -1271,7 +1290,7 @@ test_suite_report (TestSuite   *self,
                           COLUMN_ICON, icon,
                           -1);
 
-      if (TEST_RESULT_SUCCESS != result)
+      if (TEST_RESULT_FAILURE == result)
         {
           path = gtk_tree_model_get_path (GTK_TREE_MODEL (self->results), &iter);
           gtk_tree_view_expand_to_path (GTK_TREE_VIEW (self->results_view), path);

@@ -1,3 +1,9 @@
+2007-07-26  Mathias Hasselmann  <mathias.hasselmann@gmx.de>
+
+	* gtk/gtktable.c: Seems natural size for spanning cells worked already.
+	* tests/testextendedlayout.c: Test spanning cells. Do not expand
+	succeeded root nodes.
+
 2007-07-24  Mathias Hasselmann  <mathias.hasselmann@gmx.de>
 
 	* gtk/gtkhbox.c, gtk/gtktable.c, gtk/gtkvbox.c: Also apply natural

@@ -1125,8 +1125,6 @@ gtk_table_size_request_pass3 (GtkTable *table)
 			n_expand--;
 		      }
 		}
-
-                g_debug ("%s: TODO: consider natural size", G_STRFUNC);
 	    }
 	  
 	  /* Child spans multiple rows.
@@ -1176,8 +1174,6 @@ gtk_table_size_request_pass3 (GtkTable *table)
 			n_expand--;
 		      }
 		}
-
-                g_debug ("%s: TODO: consider natural size", G_STRFUNC);
 	    }
 	}
     }
