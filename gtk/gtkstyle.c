@@ -3645,7 +3645,7 @@ gtk_default_draw_check (GtkStyle      *style,
   
   exterior_size = MIN (width, height);
   if (exterior_size % 2 == 0) /* Ensure odd */
-    exterior_size -= -1;
+    exterior_size -= 1;
 
   pad = style->xthickness + MAX (1, (exterior_size - 2 * style->xthickness) / 9);
   interior_size = MAX (1, exterior_size - 2 * pad);
@@ -3768,7 +3768,7 @@ gtk_default_draw_option (GtkStyle      *style,
   
   exterior_size = MIN (width, height);
   if (exterior_size % 2 == 0) /* Ensure odd */
-    exterior_size -= -1;
+    exterior_size -= 1;
   
   x -= (1 + exterior_size - width) / 2;
   y -= (1 + exterior_size - height) / 2;

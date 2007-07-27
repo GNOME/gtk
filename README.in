@@ -117,6 +117,19 @@ Release notes for 2.12
 * gtk_menu_item_remove_submenu() has been deprecated in favour of
   gtk_menu_item_set_submenu (..., NULL).
 
+* gtk_default_draw_check() has been fixed to really decrease the
+  indicator size by one pixel to ensure an odd size instead of
+  accidentially increasing it.
+  Consequently, gtk_cell_renderer_toggle_render() could be fixed to
+  not subtract 1 from the size passed to gtk_paint_option(), which
+  was just a workaround for above off-by-two for even sizes (theme
+  engines now get the real indicator size passed).
+  The default toggle size of GtkCheckMenuItem and GtkCellRendererToggle
+  has been changed to 13 to be consistent with GtkCheckButton.
+  The only visible change with default settings is that the indicator in
+  GtkCellRendererToggle has changed its size from 11 to 13 and is now
+  consistent with menus and toggle buttons.
+
 
 Release notes for 2.10
 ======================

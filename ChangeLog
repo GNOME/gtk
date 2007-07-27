@@ -1,3 +1,23 @@
+2007-07-27  Michael Natterer  <mitch@imendio.com>
+
+	Fix check/radio indicator drawing mess (bug #452225):
+
+	* gtk/gtkstyle.c (gtk_default_draw_check): really decrease the
+	indicator size by one to ensure odd size (don't say -= -1).
+
+	* gtk/gtkcellrenderertoggle.c (gtk_cell_renderer_toggle_render):
+	removed -1 adjustment from calls to gtk_paint_option(). Theme
+	engines now get the actually configured size passed, not one pixel
+	less.
+
+	* gtk/gtkcellrenderertoggle.c
+	* gtk/gtkcheckmenuitem.c: changed default indicator size from 12
+	to 13 so all widgets which draw check/option indicators have the
+	same default size now (and render the same size after above
+	changes).
+
+	* README.in: mention above changes in the release notes.
+
 2007-07-27  Wouter Bolsterlee  <wbolster@svn.gnome.org>
 
 	* Makefile.am: Include ChangeLog.pre-2-10 in tarballs as

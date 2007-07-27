@@ -112,7 +112,7 @@ gtk_check_menu_item_class_init (GtkCheckMenuItemClass *klass)
                                                              P_("Size of check or radio indicator"),
                                                              0,
                                                              G_MAXINT,
-                                                             12,
+                                                             13,
                                                              GTK_PARAM_READABLE));
 
   widget_class->expose_event = gtk_check_menu_item_expose;
