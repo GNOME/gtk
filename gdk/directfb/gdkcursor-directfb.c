@@ -444,6 +444,9 @@ gdk_cursor_new_from_name (GdkDisplay  *display,
 
  g_return_val_if_fail (GDK_IS_DISPLAY (display), NULL);
  pixbuf = gdk_pixbuf_new_from_file(name, NULL);
+ /* Prevents attempts to load stock X cursors from generating error messages */
+ if (pixbuf == NULL)
+   return NULL;
  g_return_val_if_fail (GDK_IS_PIXBUF (pixbuf), NULL);
  cursor = gdk_cursor_new_from_pixbuf (display, pixbuf, 1, 1);
  g_object_unref (pixbuf);

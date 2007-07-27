@@ -1,3 +1,11 @@
+2007-07-27  Attilio Fiandrotti  <attilio.fiandrotti@gmail.com>
+
+	Merge from trunk:
+
+	* gdk/directfb/gdkcursor-directfb.c: Attempts to load
+	stock X cursors no longer results in annoying error
+	messages under DirectFB
+
 2007-07-24  Matthias Clasen  <mclasen@redhat.com>
 
 	Merge from trunk:
