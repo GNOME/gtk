@@ -1,5 +1,11 @@
 2007-07-27  Mathias Hasselmann  <mathias.hasselmann@gmx.de>
 
+	* tests/testextendedlayout.c: Add paned widgets to
+	the natural size test for GtkAlignment and GtkSocket.
+	* gtk/gtksocket-x11.c: Fix some cast.
+
+2007-07-27  Mathias Hasselmann  <mathias.hasselmann@gmx.de>
+
 	* gtk/gtkalignment.c, gtk/gtksocket.c, gtk/gtksocket-x11.c,
 	gtk/gtksocketprivate.h: Consider natural size of the child.
 	* gtk/gtkplug.c, gtk/gtkplug-x11.c, gtk/gtkplugprivate.h:

@@ -164,7 +164,7 @@ _gtk_socket_windowing_get_natural_size (GtkSocket *socket)
           return;
         }
 
-      data_long = (long*) data;
+      data_long = (gint32*) data;
       priv->natural_width = MAX (1, data_long[0]);
       priv->natural_height = MAX (1, data_long[1]);
 

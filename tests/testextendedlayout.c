@@ -468,7 +468,7 @@ static TestCase*
 create_natural_socket_size_test (TestSuite *suite,
                                  gchar     *arg0)
 {
-  GtkWidget *box, *label, *align, *child, *plug;
+  GtkWidget *box, *paned, *label, *align, *child, *plug;
   GdkNativeWindow plug_id;
   TestCase *test;
 
@@ -481,22 +481,37 @@ create_natural_socket_size_test (TestSuite *suite,
   gint i, j;
 
   test = test_case_new (suite,  "Natural Size", "GtkAlignment, GtkSocket", 
-                        gtk_alignment_new (0.5, 0.5, 0.6, 0.0));
-
-  box = gtk_vbox_new (FALSE, 12);
+                        gtk_vbox_new (FALSE, 12));
 
   gtk_container_set_border_width (GTK_CONTAINER (test->widget), 6);
-  gtk_container_add (GTK_CONTAINER (test->widget), box);
 
   for (orientation = 0; orientation < 2; ++orientation)
     {
+      label = gtk_label_new ("Move the handle to test\n"
+                             "natural size allocation");
+      gtk_misc_set_padding (GTK_MISC (label), 6, 6);
+
       if (orientation)
         {
-          child = gtk_hbox_new (FALSE, 12);
-          gtk_box_pack_end (GTK_BOX (box), child, FALSE, TRUE, 0);
-          gtk_box_pack_end (GTK_BOX (box), gtk_hseparator_new (), FALSE, TRUE, 0);
-          box = child;
+          gtk_box_pack_start (GTK_BOX (test->widget), 
+                              gtk_hseparator_new (), 
+                              FALSE, TRUE, 0);
+
+          paned = gtk_vpaned_new ();
+          box = gtk_hbox_new (FALSE, 12);
+          gtk_misc_set_alignment (GTK_MISC (label), 0.5, 1.0);
         }
+      else
+        {
+          paned = gtk_hpaned_new ();
+          box = gtk_vbox_new (FALSE, 12);
+          gtk_label_set_angle (GTK_LABEL (label), -90);
+          gtk_misc_set_alignment (GTK_MISC (label), 1.0, 0.5);
+        }
+
+      gtk_paned_pack1 (GTK_PANED (paned), box, TRUE, TRUE);
+      gtk_paned_pack2 (GTK_PANED (paned), label, FALSE, FALSE);
+      gtk_box_pack_start (GTK_BOX (test->widget), paned, TRUE, TRUE, 0);
 
       for (type = 0; type < 3; ++type)
         {
@@ -506,6 +521,7 @@ create_natural_socket_size_test (TestSuite *suite,
                                 type > 0 ? "<b>GtkSocket with GtkPlug</b>" :
                                         "<b>GtkAligment</b>");
           gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
+          gtk_label_set_ellipsize (GTK_LABEL (label), PANGO_ELLIPSIZE_END);
           gtk_box_pack_start (GTK_BOX (box), label, FALSE, TRUE, 0);
 
           if (orientation)
