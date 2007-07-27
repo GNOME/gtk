@@ -411,9 +411,9 @@ shrink_paned (GtkWidget *button,
 }
 
 static TestCase*
-create_natural_size_test (TestSuite *suite,
-                          gboolean   vertical,
-                          gboolean   table)
+natural_size_test_new (TestSuite *suite,
+                       gboolean   vertical,
+                       gboolean   table)
 {
   GtkWidget *box, *paned, *hint, *button;
   const gchar *detail;
@@ -464,24 +464,205 @@ on_socket_realized (GtkWidget *widget,
                      GPOINTER_TO_INT (data)); 
 }
 
-static TestCase*
-create_natural_socket_size_test (TestSuite *suite,
-                                 gchar     *arg0)
+static void
+natural_size_test_misc_create_child (TestCase  *test,
+                                     GtkWidget *box,
+                                     gchar     *arg0,
+                                     gint       orientation,
+                                     gint       type)
 {
-  GtkWidget *box, *paned, *label, *align, *child, *plug;
+  const gchar *type_names[] =
+  {
+    "align", "socket-gtkplug", "socket-xembed",
+    "cell-view", "tree-view"
+  };
+
+  GtkWidget *label, *child, *align, *plug;
   GdkNativeWindow plug_id;
-  TestCase *test;
+
+  GtkListStore *store = NULL;
+  GtkTreeViewColumn *column;
+  GtkCellRenderer *cell;
+  GtkTreePath *path;
+  GtkTreeIter iter;
+
+  gint i, j;
 
   gchar *argv[] = { arg0, "--action=create-plug", NULL, NULL, NULL };
   GError *error = NULL;
   gint child_stdout;
   char buffer[32];
 
-  gint orientation, type;
-  gint i, j;
+  if (type >= 3)
+    {
+      store = gtk_list_store_new (3, G_TYPE_STRING, G_TYPE_STRING, G_TYPE_STRING);
 
-  test = test_case_new (suite,  "Natural Size", "GtkAlignment, GtkSocket", 
-                        gtk_vbox_new (FALSE, 12));
+      gtk_list_store_append (store, &iter);
+      gtk_list_store_set (store, &iter, 0, GTK_STOCK_ABOUT,
+                                        1, "Small Cell",
+                                        2, "Large Cell", -1);
+    }
+
+  for (i = 0; i < 2; ++i)
+    {
+      label = gtk_label_new ("Hello World");
+
+      gtk_label_set_ellipsize (GTK_LABEL (label),
+                               i ? PANGO_ELLIPSIZE_END : 
+                                   PANGO_ELLIPSIZE_NONE);
+
+      if (orientation)
+        gtk_label_set_angle (GTK_LABEL (label), 90);
+
+      switch (type)
+        {
+          case 0:
+            child = label;
+            break;
+
+          case 1:
+            plug = gtk_plug_new (0);
+            plug_id = gtk_plug_get_id (GTK_PLUG (plug));
+            gtk_container_add (GTK_CONTAINER (plug), label);
+            gtk_widget_show_all (plug);
+
+            child = gtk_socket_new ();
+            g_signal_connect (child, "realize",
+                              G_CALLBACK (on_socket_realized),
+                              GINT_TO_POINTER (plug_id));
+            break;
+
+          case 2:
+            plug_id = 0; 
+
+            j = 2;
+
+            if (orientation)
+              argv[j++] = "--vertical";
+            if (i)
+              argv[j++] = "--ellipsize";
+
+            argv[j] = NULL;
+
+            if (g_spawn_async_with_pipes (NULL, argv, NULL, 0,
+                                          NULL, NULL, NULL,
+                                          NULL, &child_stdout, NULL,
+                                          &error))
+              {
+                j = read (child_stdout, buffer, sizeof (buffer) - 1);
+                close (child_stdout);
+
+                if (j > 0)
+                  {
+                    buffer[j] = '\0';
+                    plug_id = atoi (buffer);
+                  }
+
+                g_print ("plug-id: %d\n", plug_id);
+
+                child = gtk_socket_new ();
+                g_signal_connect (child, "realize",
+                                  G_CALLBACK (on_socket_realized),
+                                  GINT_TO_POINTER (plug_id));
+              }
+            else
+              {
+                child = gtk_label_new (error ? error->message :
+                                       "Failed to create external plug");
+                g_clear_error (&error);
+              }
+
+            break;
+
+          case 3:
+            child = gtk_cell_view_new ();
+
+            cell = gtk_cell_renderer_pixbuf_new ();
+            gtk_cell_layout_pack_start (GTK_CELL_LAYOUT (child), cell, FALSE);
+            gtk_cell_layout_set_attributes (GTK_CELL_LAYOUT (child), cell,
+                                            "stock-id", 0, NULL);
+
+            cell = gtk_cell_renderer_text_new ();
+            gtk_cell_layout_pack_start (GTK_CELL_LAYOUT (child), cell, FALSE);
+            gtk_cell_layout_set_attributes (GTK_CELL_LAYOUT (child), cell,
+                                            "text", 1, NULL);
+
+            if (i)
+              g_object_set (cell, "ellipsize", PANGO_ELLIPSIZE_END, NULL);
+
+            cell = gtk_cell_renderer_text_new ();
+            gtk_cell_layout_pack_start (GTK_CELL_LAYOUT (child), cell, TRUE);
+            gtk_cell_layout_set_attributes (GTK_CELL_LAYOUT (child), cell,
+                                            "text", 2, NULL);
+
+            gtk_cell_view_set_model (GTK_CELL_VIEW (child),
+                                     GTK_TREE_MODEL (store));
+
+            path = gtk_tree_path_new_from_indices (0, -1);
+            gtk_cell_view_set_displayed_row (GTK_CELL_VIEW (child), path);
+            gtk_tree_path_free (path);
+
+            break;
+
+          case 4:
+            child = gtk_tree_view_new_with_model (GTK_TREE_MODEL (store));
+            gtk_tree_view_set_headers_visible (GTK_TREE_VIEW (child), FALSE);
+
+            cell = gtk_cell_renderer_pixbuf_new ();
+            column = gtk_tree_view_column_new_with_attributes (NULL, cell, "stock-id", 0, NULL);
+            gtk_tree_view_append_column (GTK_TREE_VIEW (child), column);
+
+            cell = gtk_cell_renderer_text_new ();
+            column = gtk_tree_view_column_new_with_attributes ("Bar", cell, "text", 1, NULL);
+            gtk_tree_view_append_column (GTK_TREE_VIEW (child), column);
+
+            if (i)
+              g_object_set (cell, "ellipsize", PANGO_ELLIPSIZE_END, NULL);
+
+            cell = gtk_cell_renderer_text_new ();
+            column = gtk_tree_view_column_new_with_attributes ("Foo", cell, "text", 2, NULL);
+            gtk_tree_view_append_column (GTK_TREE_VIEW (child), column);
+
+            break;
+
+          default:
+            continue;
+        }
+
+      align = gtk_alignment_new (0.5, 0.5, 0.0, 0.0);
+      gtk_box_pack_start (GTK_BOX (box), align, FALSE, TRUE, 0);
+      gtk_container_add (GTK_CONTAINER (align), child);
+
+      set_widget_name (child, "%s-%s-ellipsize-%s",
+                       orientation ? "vertical" : "horizontal",
+                       type_names[type], i ? "end" : "none");
+
+      test_case_append_guide (test, child, 
+                              orientation ? GUIDE_EXTERIOUR_HORIZONTAL 
+                                          : GUIDE_EXTERIOUR_VERTICAL, 
+                              type < 3 ? orientation : type - 1);
+    }
+}
+
+static TestCase*
+natural_size_test_misc_new (TestSuite *suite,
+                            gchar     *arg0)
+{
+  const gchar *captions[] = 
+  {
+    "<b>GtkAligment</b>",
+    "<b>GtkSocket with GtkPlug</b>",
+    "<b>GtkSocket with XEMBED</b>",
+    "<b>GtkCellView</b>",
+    "<b>GtkTreeView</b>"
+  };
+
+  GtkWidget *box, *paned, *label;
+  gint orientation, type;
+  TestCase *test;
+
+  test = test_case_new (suite,  "Natural Size", "Various Widgets", 
+                        gtk_vbox_new (FALSE, 6));
 
   gtk_container_set_border_width (GTK_CONTAINER (test->widget), 6);
 
@@ -498,13 +679,13 @@ create_natural_socket_size_test (TestSuite *suite,
                               FALSE, TRUE, 0);
 
           paned = gtk_vpaned_new ();
-          box = gtk_hbox_new (FALSE, 12);
+          box = gtk_hbox_new (FALSE, 6);
           gtk_misc_set_alignment (GTK_MISC (label), 0.5, 1.0);
         }
       else
         {
           paned = gtk_hpaned_new ();
-          box = gtk_vbox_new (FALSE, 12);
+          box = gtk_vbox_new (FALSE, 6);
           gtk_label_set_angle (GTK_LABEL (label), -90);
           gtk_misc_set_alignment (GTK_MISC (label), 1.0, 0.5);
         }
@@ -513,107 +694,18 @@ create_natural_socket_size_test (TestSuite *suite,
       gtk_paned_pack2 (GTK_PANED (paned), label, FALSE, FALSE);
       gtk_box_pack_start (GTK_BOX (test->widget), paned, TRUE, TRUE, 0);
 
-      for (type = 0; type < 3; ++type)
+      for (type = 0; type < (orientation ? 3 : 5); ++type)
         {
           label = gtk_label_new (NULL);
-          gtk_label_set_markup (GTK_LABEL (label),
-                                type > 1 ? "<b>GtkSocket with XEMBED</b>" :
-                                type > 0 ? "<b>GtkSocket with GtkPlug</b>" :
-                                        "<b>GtkAligment</b>");
           gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
+          gtk_label_set_markup (GTK_LABEL (label), captions[type]);
           gtk_label_set_ellipsize (GTK_LABEL (label), PANGO_ELLIPSIZE_END);
           gtk_box_pack_start (GTK_BOX (box), label, FALSE, TRUE, 0);
 
           if (orientation)
             gtk_label_set_angle (GTK_LABEL (label), 90);
 
-          for (i = 0; i < 2; ++i)
-            {
-              label = gtk_label_new ("Hello World");
-
-              gtk_label_set_ellipsize (GTK_LABEL (label),
-                                       i ? PANGO_ELLIPSIZE_END : 
-                                           PANGO_ELLIPSIZE_NONE);
-
-              if (orientation)
-                gtk_label_set_angle (GTK_LABEL (label), 90);
-
-              switch (type)
-                {
-                  case 0:
-                    child = label;
-                    break;
-
-                  case 1:
-                    plug = gtk_plug_new (0);
-                    plug_id = gtk_plug_get_id (GTK_PLUG (plug));
-                    gtk_container_add (GTK_CONTAINER (plug), label);
-                    gtk_widget_show_all (plug);
-
-                    child = gtk_socket_new ();
-                    g_signal_connect (child, "realize",
-                                      G_CALLBACK (on_socket_realized),
-                                      GINT_TO_POINTER (plug_id));
-                    break;
-
-                  case 2:
-                    plug_id = 0; 
-                    j = 2;
-
-                    if (i)
-                      argv[j++] = "--ellipsize";
-                    if (orientation)
-                      argv[j++] = "--vertical";
-
-                    if (g_spawn_async_with_pipes (NULL, argv, NULL, 0,
-                                                  NULL, NULL, NULL,
-                                                  NULL, &child_stdout, NULL,
-                                                  &error))
-                      {
-                        j = read (child_stdout, buffer, sizeof (buffer) - 1);
-                        close (child_stdout);
-
-                        if (j > 0)
-                          {
-                            buffer[j] = '\0';
-                            plug_id = atoi (buffer);
-                          }
-
-                        g_print ("plug-id: %d\n", plug_id);
-
-                        child = gtk_socket_new ();
-                        g_signal_connect (child, "realize",
-                                          G_CALLBACK (on_socket_realized),
-                                          GINT_TO_POINTER (plug_id));
-                      }
-                    else
-                      {
-                        child = gtk_label_new (error ? error->message :
-                                               "Failed to create external plug");
-                        g_clear_error (&error);
-                      }
-
-                      break;
-
-                  default:
-                    continue;
-                }
-
-              align = gtk_alignment_new (0.5, 0.5, 0.0, 0.0);
-              gtk_box_pack_start (GTK_BOX (box), align, FALSE, TRUE, 0);
-              gtk_container_add (GTK_CONTAINER (align), child);
-
-              set_widget_name (child, "%s-%s-ellipsize-%s",
-                               orientation ? "vertical" : "horizontal",
-                               type > 1 ? "socket-xembed" :
-                               type > 0 ? "socket-gtkplug" : "align",
-                               i ? "end" : "none");
-
-              test_case_append_guide (test, child, 
-                                      orientation ? GUIDE_EXTERIOUR_HORIZONTAL 
-                                                  : GUIDE_EXTERIOUR_VERTICAL, 
-                                      orientation);
-            }
+          natural_size_test_misc_create_child (test, box, arg0, orientation, type);
         }
     }
 
@@ -621,7 +713,7 @@ create_natural_socket_size_test (TestSuite *suite,
 }
 
 static TestCase*
-create_height_for_width_test (TestSuite *suite)
+height_for_width_test_new (TestSuite *suite)
 {
   PangoLayout *layout;
   PangoRectangle log;
@@ -657,7 +749,7 @@ create_height_for_width_test (TestSuite *suite)
 }
 
 static TestCase*
-create_baseline_test (TestSuite *suite)
+baseline_test_new (TestSuite *suite)
 {
   GtkWidget *child;
   GtkWidget *view;
@@ -733,7 +825,7 @@ create_baseline_test (TestSuite *suite)
 }
 
 static TestCase*
-create_baseline_test_bin (TestSuite *suite)
+baseline_test_bin_new (TestSuite *suite)
 {
   GtkWidget *bin;
   GtkWidget *label;
@@ -787,8 +879,8 @@ create_baseline_test_bin (TestSuite *suite)
 }
 
 static TestCase*
-create_baseline_test_hbox (TestSuite *suite,
-                           gboolean   buttons)
+baseline_test_hbox_new (TestSuite *suite,
+                        gboolean   buttons)
 {
   GtkWidget *bin;
   GtkWidget *child;
@@ -1997,16 +2089,16 @@ test_suite_new (gchar *arg0)
   TestSuite* self = g_new0 (TestSuite, 1);
 
   test_suite_setup_ui (self);
-  test_suite_append (self, create_natural_size_test (self, FALSE, FALSE));
-  test_suite_append (self, create_natural_size_test (self, TRUE, FALSE));
-  test_suite_append (self, create_natural_size_test (self, FALSE, TRUE));
-  test_suite_append (self, create_natural_size_test (self, TRUE, TRUE));
-  test_suite_append (self, create_natural_socket_size_test (self, arg0));
-  test_suite_append (self, create_height_for_width_test (self));
-  test_suite_append (self, create_baseline_test (self));
-  test_suite_append (self, create_baseline_test_bin (self));
-  test_suite_append (self, create_baseline_test_hbox (self, FALSE));
-  test_suite_append (self, create_baseline_test_hbox (self, TRUE));
+  test_suite_append (self, natural_size_test_new (self, FALSE, FALSE));
+  test_suite_append (self, natural_size_test_new (self, TRUE, FALSE));
+  test_suite_append (self, natural_size_test_new (self, FALSE, TRUE));
+  test_suite_append (self, natural_size_test_new (self, TRUE, TRUE));
+  test_suite_append (self, natural_size_test_misc_new (self, arg0));
+  test_suite_append (self, height_for_width_test_new (self));
+  test_suite_append (self, baseline_test_new (self));
+  test_suite_append (self, baseline_test_bin_new (self));
+  test_suite_append (self, baseline_test_hbox_new (self, FALSE));
+  test_suite_append (self, baseline_test_hbox_new (self, TRUE));
   test_suite_setup_results_page (self);
 
   return self;

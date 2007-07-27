@@ -1,3 +1,8 @@
+2007-07-28  Mathias Hasselmann  <mathias.hasselmann@gmx.de>
+
+	* tests/testextendedlayout.c: Preparing natural 
+	size tests for GtkCellView and GtkTreeView.
+
 2007-07-27  Mathias Hasselmann  <mathias.hasselmann@gmx.de>
 
 	* tests/testextendedlayout.c: Add paned widgets to
