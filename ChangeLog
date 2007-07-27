@@ -1,3 +1,8 @@
+2007-07-27  Wouter Bolsterlee  <wbolster@svn.gnome.org>
+
+	* Makefile.am: Include ChangeLog.pre-2-10 in tarballs as
+	well (seems to be forgotten).
+
 2007-07-25  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtktooltip.c (_gtk_tooltip_handle_event): Call
@@ -601,7 +606,7 @@ Thu Jul 12 18:03:02 2007  Tim Janik  <timj@gtk.org>
 	
 Sun Jul  8 01:33:45 2007  Tim Janik  <timj@gtk.org>
 
-        * gdk/gdkwindow.c: docu fixup by Bjoern Lindqvist, #454703.
+	* gdk/gdkwindow.c: docu fixup by Bjoern Lindqvist, #454703.
 
 2007-07-07  Richard Hult  <richard@imendio.com>
 
@@ -1439,7 +1444,7 @@ Fri Jun 22 00:34:34 2007  Tim Janik  <timj@gtk.org>
 	* gtk/gtktooltip.c, gtk/gtktooltip.h: Add gtk_tooltip_set_text()
 	to set the tooltip text without using markup.
 
-        Patches from Emmanuele Bassi (#447643).
+	Patches from Emmanuele Bassi (#447643).
 
 2007-06-15  Johan Dahlin  <jdahlin@async.com.br>
 
@@ -2605,7 +2610,7 @@ Fri Jun 22 00:34:34 2007  Tim Janik  <timj@gtk.org>
 	Bogdan Nicula which fixes a crash on GdkWindows which have no
 	GtkWidget as user_data (bug #440890).
 
-2007-05-24   Matthias Clasen  <mclasen@redhat.com>
+2007-05-24  Matthias Clasen  <mclasen@redhat.com>
 
 	* configure.in: Bump version
 
@@ -2613,7 +2618,7 @@ Fri Jun 22 00:34:34 2007  Tim Janik  <timj@gtk.org>
 
 	* NEWS: Updates
 
-2007-05-23   Matthias Clasen  <mclasen@redhat.com>
+2007-05-23  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtk.symbols: 
 	* gdk/x11/xsettings-common.h: 
@@ -2684,10 +2689,10 @@ Mon May 21 13:58:32 2007  Tim Janik  <timj@imendio.com>
 
 2007-05-20  Attilio Fiandrotti  <attilio.fiandrotti@gmail.com>
 
-        * gdk/directfb/gdkwindow-directfb.c:
-        * gdk/directfb/gdkdirectfb.h: Updated minimum DirectFB version
-        required to enable gdk_directfb_create_child_window.
-        (Closes: #437379)
+	* gdk/directfb/gdkwindow-directfb.c:
+	* gdk/directfb/gdkdirectfb.h: Updated minimum DirectFB version
+	required to enable gdk_directfb_create_child_window.
+	(Closes: #437379)
 
 2007-05-20  Bastien Nocera  <hadess@hadess.net>
 
@@ -2771,17 +2776,17 @@ Mon May 21 13:58:32 2007  Tim Janik  <timj@imendio.com>
 	* configure.in: Bump libtiff requirement to 3.6.0, by requiring
 	  presence of TIFFReadRGBAImageOriented.
 
-        * gdk-pixbuf-scaled-anim.c: (get_scaled_pixbuf):
-        Preserve pixbuf options when generating a new scaled pixbuf.
+	* gdk-pixbuf-scaled-anim.c: (get_scaled_pixbuf):
+	Preserve pixbuf options when generating a new scaled pixbuf.
 
-        * io-jpeg.c: (get_orientation), (gdk_pixbuf__jpeg_image_load),
-        (gdk_pixbuf__jpeg_image_load_increment): Read the exif
-        orientation tag and associate it with the "orientation" pixbuf
-        option. Renders libexif unnecessary in some applications.
+	* io-jpeg.c: (get_orientation), (gdk_pixbuf__jpeg_image_load),
+	(gdk_pixbuf__jpeg_image_load_increment): Read the exif
+	orientation tag and associate it with the "orientation" pixbuf
+	option. Renders libexif unnecessary in some applications.
 
-        * io-tiff.c: (tiff_image_parse): Read the tiff orientation tag,
-        compensate for the partial rotations performed by libtiff,
-        and generate an "orientation" option for the pixbuf.
+	* io-tiff.c: (tiff_image_parse): Read the tiff orientation tag,
+	compensate for the partial rotations performed by libtiff,
+	and generate an "orientation" option for the pixbuf.
 
 2007-05-18  Carlos Garnacho  <carlos@imendio.com>
 
@@ -3949,8 +3954,8 @@ Wed May  2 11:35:45 2007  Tim Janik  <timj@imendio.com>
 
 	* gtk/gtkiconfactory.c (_gtk_icon_factory_list_ids):
 	* gtk/gtkstock.c (gtk_stock_list_ids):
-	    Switch over to use glib's new g_hash_table_get_keys() rather
-	    than our own static implementation.
+	Switch over to use glib's new g_hash_table_get_keys() rather
+	than our own static implementation.
 
 	* gtk/gtkiconfactory.h: Update to return a GList.
 
@@ -7106,8 +7111,8 @@ Tue Oct 10 16:38:23 2006  Tim Janik  <timj@imendio.com>
 	
 2006-09-21  Michael Natterer  <mitch@imendio.com>
 
-       Implement lots of value setters for GdkGC, based on a heavily
-       modified patch from Thomas Broyer (bug #328853):
+	Implement lots of value setters for GdkGC, based on a heavily
+	modified patch from Thomas Broyer (bug #328853):
 
 	* gdk/quartz/gdkcolor-quartz.c: removed functions which set colors
 	on the CGContext. Instead, added gdk_quartz_get_rgba_from_pixel()
@@ -7546,7 +7551,7 @@ Tue Aug 29 11:57:40 2006  Tim Janik  <timj@imendio.com>
 	* tests/testgtk.c: allow (most) windows to be resizable.
 	added ellipsization settings to progress bars. 
 
-2006-08-28  Matthias Clasen   <mclasen@redhat.com>
+2006-08-28  Matthias Clasen  <mclasen@redhat.com>
 
 	* modules/printbackend/cups/gtkprintbackendcups.c: Use a
 	resonable timeout of 3 seconds when polling for printer
