@@ -1,3 +1,12 @@
+2007-07-27  Mathias Hasselmann  <mathias.hasselmann@gmx.de>
+
+	* gtk/gtkalignment.c, gtk/gtksocket.c, gtk/gtksocket-x11.c,
+	gtk/gtksocketprivate.h: Consider natural size of the child.
+	* gtk/gtkplug.c, gtk/gtkplug-x11.c, gtk/gtkplugprivate.h:
+	Expose natural size via _GTK_NATURAL_SIZE window property.
+	* tests/testextendedlayout.c: Test natural size handling
+	of GtkAlignment, GtkPlug and GtkSocket.
+
 2007-07-26  Mathias Hasselmann  <mathias.hasselmann@gmx.de>
 
 	* gtk/gtktable.c: Seems natural size for spanning cells worked already.

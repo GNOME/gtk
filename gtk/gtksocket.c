@@ -36,6 +36,7 @@
 #include "gtkprivate.h"
 #include "gtksocket.h"
 #include "gtksocketprivate.h"
+#include "gtkextendedlayout.h"
 #include "gtkdnd.h"
 #include "gtkintl.h"
 
@@ -67,6 +68,7 @@ static void     gtk_socket_forall               (GtkContainer     *container,
 						 GtkCallback       callback,
 						 gpointer          callback_data);
 
+static void gtk_socket_extended_layout_interface_init (GtkExtendedLayoutIface *iface);
 
 /* Local data */
 
@@ -98,7 +100,9 @@ _gtk_socket_get_private (GtkSocket *socket)
   return G_TYPE_INSTANCE_GET_PRIVATE (socket, GTK_TYPE_SOCKET, GtkSocketPrivate);
 }
 
-G_DEFINE_TYPE (GtkSocket, gtk_socket, GTK_TYPE_CONTAINER)
+G_DEFINE_TYPE_WITH_CODE (GtkSocket, gtk_socket, GTK_TYPE_CONTAINER,
+                         G_IMPLEMENT_INTERFACE (GTK_TYPE_EXTENDED_LAYOUT,
+                                                gtk_socket_extended_layout_interface_init))
 
 static void
 gtk_socket_finalize (GObject *object)
@@ -167,6 +171,8 @@ gtk_socket_class_init (GtkSocketClass *class)
 static void
 gtk_socket_init (GtkSocket *socket)
 {
+  GtkSocketPrivate *priv;
+
   socket->request_width = 0;
   socket->request_height = 0;
   socket->current_width = 0;
@@ -181,6 +187,9 @@ gtk_socket_init (GtkSocket *socket)
 
   socket->accel_group = gtk_accel_group_new ();
   g_object_set_data (G_OBJECT (socket->accel_group), I_("gtk-socket"), socket);
+
+  priv = _gtk_socket_get_private (socket);
+  priv->have_natural_size = FALSE;
 }
 
 /**
@@ -392,7 +401,7 @@ gtk_socket_size_request (GtkWidget      *widget,
   else
     {
       if (socket->is_mapped && !socket->have_size && socket->plug_window)
-	_gtk_socket_windowing_size_request (socket);
+	_gtk_socket_windowing_get_natural_size (socket);
 
       if (socket->is_mapped && socket->have_size)
 	{
@@ -995,6 +1004,52 @@ _gtk_socket_advance_toplevel_focus (GtkSocket        *socket,
       if (gtk_widget_child_focus (bin->child, direction))
         return;
     }
+}
+
+static GtkExtendedLayoutFeatures
+gtk_socket_extended_layout_get_features (GtkExtendedLayout *layout)
+{
+  return GTK_EXTENDED_LAYOUT_NATURAL_SIZE;
+}
+
+static void
+gtk_socket_extended_layout_get_natural_size (GtkExtendedLayout *layout,
+                                             GtkRequisition    *requisition)
+{
+  GtkSocket *socket = GTK_SOCKET (layout);
+  GtkSocketPrivate *priv;
+
+  if (socket->plug_widget)
+    {
+      gtk_extended_layout_get_natural_size (
+        GTK_EXTENDED_LAYOUT (socket->plug_widget),
+        requisition);
+    }
+  else
+    {
+      priv = _gtk_socket_get_private (socket);
+
+      if (socket->is_mapped && !priv->have_natural_size && socket->plug_window)
+	_gtk_socket_windowing_size_request (socket);
+
+      if (socket->is_mapped && priv->have_natural_size)
+	{
+	  requisition->width = MAX (priv->natural_width, 1);
+	  requisition->height = MAX (priv->natural_height, 1);
+	}
+      else
+	{
+	  requisition->width = 1;
+	  requisition->height = 1;
+	}
+    }
+}
+
+static void
+gtk_socket_extended_layout_interface_init (GtkExtendedLayoutIface *iface)
+{
+  iface->get_features = gtk_socket_extended_layout_get_features;
+  iface->get_natural_size = gtk_socket_extended_layout_get_natural_size;
 }
 
 #define __GTK_SOCKET_C__

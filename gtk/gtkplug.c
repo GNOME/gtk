@@ -33,6 +33,7 @@
 #include "gtkintl.h"
 #include "gtkprivate.h"
 #include "gtkplugprivate.h"
+#include "gtkextendedlayout.h"
 
 #include "gtkalias.h"
 
@@ -668,11 +669,13 @@ static void
 gtk_plug_size_allocate (GtkWidget     *widget,
 			GtkAllocation *allocation)
 {
+  GtkBin *bin = GTK_BIN (widget);
+  GtkRequisition natural_size;
+
   if (GTK_WIDGET_TOPLEVEL (widget))
     GTK_WIDGET_CLASS (gtk_plug_parent_class)->size_allocate (widget, allocation);
   else
     {
-      GtkBin *bin = GTK_BIN (widget);
 
       widget->allocation = *allocation;
 
@@ -693,8 +696,18 @@ gtk_plug_size_allocate (GtkWidget     *widget,
 	  
 	  gtk_widget_size_allocate (bin->child, &child_allocation);
 	}
-      
     }
+
+  if (GTK_EXTENDED_LAYOUT_HAS_NATURAL_SIZE (bin->child))
+    {
+      gtk_extended_layout_get_natural_size (
+        GTK_EXTENDED_LAYOUT (bin->child),
+        &natural_size);
+
+      _gtk_plug_windowing_publish_natural_size (GTK_PLUG (widget), &natural_size);
+    }
+  else
+    _gtk_plug_windowing_publish_natural_size (GTK_PLUG (widget), &widget->requisition);
 }
 
 static gboolean

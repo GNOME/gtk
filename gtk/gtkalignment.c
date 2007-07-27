@@ -448,6 +448,7 @@ gtk_alignment_size_allocate (GtkWidget     *widget,
   GtkBin *bin;
   GtkAllocation child_allocation;
   GtkRequisition child_requisition;
+  GtkRequisition child_natural_size;
   gint width, height;
   gint border_width;
   gint padding_horizontal, padding_vertical;
@@ -473,6 +474,18 @@ gtk_alignment_size_allocate (GtkWidget     *widget,
       width = allocation->width - padding_horizontal - 2 * border_width;
       height = allocation->height - padding_vertical - 2 * border_width;
     
+      if (GTK_EXTENDED_LAYOUT_HAS_NATURAL_SIZE (bin->child))
+        {
+          gtk_extended_layout_get_natural_size (GTK_EXTENDED_LAYOUT (bin->child), 
+                                                &child_natural_size);
+
+          child_requisition.width = MAX (child_requisition.width, child_natural_size.width);
+          child_requisition.width = MIN (child_requisition.width, width);
+
+          child_requisition.height = MAX (child_requisition.height, child_natural_size.height);
+          child_requisition.height = MIN (child_requisition.height, height);
+        }
+
       if (width > child_requisition.width)
 	child_allocation.width = (child_requisition.width *
 				  (1.0 - alignment->xscale) +

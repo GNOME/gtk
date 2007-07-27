@@ -22,6 +22,11 @@
 #include <stdarg.h>
 #include <stdlib.h>
 #include <string.h>
+#include <unistd.h>
+
+#ifdef GDK_WINDOWING_X11
+#include "x11/gdkx.h"
+#endif
 
 #define IS_VALID_BASELINE(Baseline) ((Baseline) >= 0)
 
@@ -447,6 +452,154 @@ create_natural_size_test (TestSuite *suite,
   gtk_container_set_border_width (GTK_CONTAINER (hint), 6);
   gtk_container_add (GTK_CONTAINER (hint), button);
   gtk_paned_pack2 (GTK_PANED (test->widget), hint, FALSE, FALSE);
+
+  return test;
+}
+
+static void
+on_socket_realized (GtkWidget *widget,
+                    gpointer   data)
+{
+  gtk_socket_add_id (GTK_SOCKET (widget),
+                     GPOINTER_TO_INT (data)); 
+}
+
+static TestCase*
+create_natural_socket_size_test (TestSuite *suite,
+                                 gchar     *arg0)
+{
+  GtkWidget *box, *label, *align, *child, *plug;
+  GdkNativeWindow plug_id;
+  TestCase *test;
+
+  gchar *argv[] = { arg0, "--action=create-plug", NULL, NULL, NULL };
+  GError *error = NULL;
+  gint child_stdout;
+  char buffer[32];
+
+  gint orientation, type;
+  gint i, j;
+
+  test = test_case_new (suite,  "Natural Size", "GtkAlignment, GtkSocket", 
+                        gtk_alignment_new (0.5, 0.5, 0.6, 0.0));
+
+  box = gtk_vbox_new (FALSE, 12);
+
+  gtk_container_set_border_width (GTK_CONTAINER (test->widget), 6);
+  gtk_container_add (GTK_CONTAINER (test->widget), box);
+
+  for (orientation = 0; orientation < 2; ++orientation)
+    {
+      if (orientation)
+        {
+          child = gtk_hbox_new (FALSE, 12);
+          gtk_box_pack_end (GTK_BOX (box), child, FALSE, TRUE, 0);
+          gtk_box_pack_end (GTK_BOX (box), gtk_hseparator_new (), FALSE, TRUE, 0);
+          box = child;
+        }
+
+      for (type = 0; type < 3; ++type)
+        {
+          label = gtk_label_new (NULL);
+          gtk_label_set_markup (GTK_LABEL (label),
+                                type > 1 ? "<b>GtkSocket with XEMBED</b>" :
+                                type > 0 ? "<b>GtkSocket with GtkPlug</b>" :
+                                        "<b>GtkAligment</b>");
+          gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
+          gtk_box_pack_start (GTK_BOX (box), label, FALSE, TRUE, 0);
+
+          if (orientation)
+            gtk_label_set_angle (GTK_LABEL (label), 90);
+
+          for (i = 0; i < 2; ++i)
+            {
+              label = gtk_label_new ("Hello World");
+
+              gtk_label_set_ellipsize (GTK_LABEL (label),
+                                       i ? PANGO_ELLIPSIZE_END : 
+                                           PANGO_ELLIPSIZE_NONE);
+
+              if (orientation)
+                gtk_label_set_angle (GTK_LABEL (label), 90);
+
+              switch (type)
+                {
+                  case 0:
+                    child = label;
+                    break;
+
+                  case 1:
+                    plug = gtk_plug_new (0);
+                    plug_id = gtk_plug_get_id (GTK_PLUG (plug));
+                    gtk_container_add (GTK_CONTAINER (plug), label);
+                    gtk_widget_show_all (plug);
+
+                    child = gtk_socket_new ();
+                    g_signal_connect (child, "realize",
+                                      G_CALLBACK (on_socket_realized),
+                                      GINT_TO_POINTER (plug_id));
+                    break;
+
+                  case 2:
+                    plug_id = 0; 
+                    j = 2;
+
+                    if (i)
+                      argv[j++] = "--ellipsize";
+                    if (orientation)
+                      argv[j++] = "--vertical";
+
+                    if (g_spawn_async_with_pipes (NULL, argv, NULL, 0,
+                                                  NULL, NULL, NULL,
+                                                  NULL, &child_stdout, NULL,
+                                                  &error))
+                      {
+                        j = read (child_stdout, buffer, sizeof (buffer) - 1);
+                        close (child_stdout);
+
+                        if (j > 0)
+                          {
+                            buffer[j] = '\0';
+                            plug_id = atoi (buffer);
+                          }
+
+                        g_print ("plug-id: %d\n", plug_id);
+
+                        child = gtk_socket_new ();
+                        g_signal_connect (child, "realize",
+                                          G_CALLBACK (on_socket_realized),
+                                          GINT_TO_POINTER (plug_id));
+                      }
+                    else
+                      {
+                        child = gtk_label_new (error ? error->message :
+                                               "Failed to create external plug");
+                        g_clear_error (&error);
+                      }
+
+                      break;
+
+                  default:
+                    continue;
+                }
+
+              align = gtk_alignment_new (0.5, 0.5, 0.0, 0.0);
+              gtk_box_pack_start (GTK_BOX (box), align, FALSE, TRUE, 0);
+              gtk_container_add (GTK_CONTAINER (align), child);
+
+              set_widget_name (child, "%s-%s-ellipsize-%s",
+                               orientation ? "vertical" : "horizontal",
+                               type > 1 ? "socket-xembed" :
+                               type > 0 ? "socket-gtkplug" : "align",
+                               i ? "end" : "none");
+
+              test_case_append_guide (test, child, 
+                                      orientation ? GUIDE_EXTERIOUR_HORIZONTAL 
+                                                  : GUIDE_EXTERIOUR_VERTICAL, 
+                                      orientation);
+            }
+        }
+    }
 
   return test;
 }
@@ -1823,7 +1976,7 @@ test_suite_setup_ui (TestSuite *self)
 }
 
 static TestSuite*
-test_suite_new ()
+test_suite_new (gchar *arg0)
 {       
   TestSuite* self = g_new0 (TestSuite, 1);
 
@@ -1832,6 +1985,7 @@ test_suite_new ()
   test_suite_append (self, create_natural_size_test (self, TRUE, FALSE));
   test_suite_append (self, create_natural_size_test (self, FALSE, TRUE));
   test_suite_append (self, create_natural_size_test (self, TRUE, TRUE));
+  test_suite_append (self, create_natural_socket_size_test (self, arg0));
   test_suite_append (self, create_height_for_width_test (self));
   test_suite_append (self, create_baseline_test (self));
   test_suite_append (self, create_baseline_test_bin (self));
@@ -1842,23 +1996,102 @@ test_suite_new ()
   return self;
 }
 
+static gboolean
+on_embedding_timeout (gpointer data)
+{
+  g_print ("Embedding timeout expired. Aborting.\n");
+  gtk_main_quit ();
+  return FALSE;
+}
+
+static void
+on_embedded (GtkWidget *widget, 
+             gpointer   data)
+{
+  g_source_remove (GPOINTER_TO_INT (data));
+}
+
+static void
+create_plug (gboolean ellipsize, 
+             gboolean vertical)
+{
+  GtkWidget *plug, *label;
+  guint timeout;
+
+  label = gtk_label_new ("Hello World");
+  
+  if (ellipsize)
+    gtk_label_set_ellipsize (GTK_LABEL (label), PANGO_ELLIPSIZE_END);
+  if (vertical)
+    gtk_label_set_angle (GTK_LABEL (label), 90);
+
+  plug = gtk_plug_new (0);
+  gtk_container_add (GTK_CONTAINER (plug), label);
+  gtk_widget_show_all (plug);
+
+  timeout = g_timeout_add (5 * 1000, on_embedding_timeout, NULL);
+
+  g_signal_connect (plug, "embedded", 
+                    G_CALLBACK (on_embedded),
+                    GINT_TO_POINTER (timeout));
+  g_signal_connect (plug, "delete-event",
+                    G_CALLBACK (gtk_main_quit),
+                    NULL);
+
+  g_print ("%d\n", gtk_plug_get_id (GTK_PLUG (plug)));
+}
+
 int
 main (int argc, char *argv[])
 {
-  TestSuite *suite;
+  GOptionContext *options;
+  TestSuite *suite = NULL;
+  GError *error = NULL;
+
+  gboolean ellipsize = FALSE;
+  gboolean vertical = FALSE;
+  gint initial_page = 0;
+  gchar *action = NULL;
+  
+  GOptionEntry entries[] = 
+  {
+    { "action", 'a', 0, G_OPTION_ARG_STRING, &action, "Action to perform", NULL },
+    { "initial-page", 'p', 0, G_OPTION_ARG_INT, &initial_page, "Initial page of the test suite", NULL },
+    { "ellipsize", 0, 0, G_OPTION_ARG_NONE, &ellipsize, "Add ellipses to labels", NULL },
+    { "vertical", 0, 0, G_OPTION_ARG_NONE, &vertical, "Render vertical layout", NULL },
+    { NULL }
+  };
 
   gtk_init (&argc, &argv);
 
-  suite = test_suite_new ();
-  gtk_widget_show_all (suite->window);
+  options = g_option_context_new (NULL);
+  g_option_context_add_main_entries (options, entries, NULL);
+  g_option_context_add_group (options, gtk_get_option_group (TRUE));
+  g_option_context_parse (options, &argc, &argv, &error);
 
-  if (argc > 1)
-    gtk_notebook_set_current_page (GTK_NOTEBOOK (suite->notebook),
-                                   atoi (argv[1]));
+  if (error)
+    {
+      g_print ("Usage Error: %s\n", error->message);
+      return 2;
+    }
+
+  if (action && g_str_equal (action, "create-plug"))
+    {
+      create_plug (ellipsize, vertical);
+    }
+  else
+    {
+      suite = test_suite_new (argv[0]);
+      gtk_widget_show_all (suite->window);
+
+      gtk_notebook_set_current_page (GTK_NOTEBOOK (suite->notebook),
+                                     initial_page);
+    }
 
   gtk_main ();
 
-  test_suite_free (suite);
+  if (suite)
+    test_suite_free (suite);
 
   return 0;
 }

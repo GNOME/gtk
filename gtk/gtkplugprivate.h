@@ -138,4 +138,13 @@ GdkFilterReturn _gtk_plug_windowing_filter_func (GdkXEvent *gdk_xevent,
 						 GdkEvent  *event,
 						 gpointer   data);
 
+/**
+ * _gtk_plug_windowing_publish_natural_size:
+ *
+ * @plug: a #GtkPlug
+ * @requisition: a requisition with the natural size
+ */
+void _gtk_plug_windowing_publish_natural_size (GtkPlug        *plug,
+					       GtkRequisition *requisition);
+
 #endif /* __GTK_PLUG_PRIVATE_H__ */
