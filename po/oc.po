@@ -21,7 +21,7 @@ msgstr ""
 #: ../gdk-pixbuf/gdk-pixbuf-io.c:1102 ../tests/testfilechooser.c:218
 #, c-format
 msgid "Failed to open file '%s': %s"
-msgstr "Impossible de dubrir le fichièr '%s' : %s"
+msgstr "Impossible de dobrir le fichièr '%s' : %s"
 
 #: ../gdk-pixbuf/gdk-pixbuf-animation.c:167 ../gdk-pixbuf/gdk-pixbuf-io.c:859
 #, c-format
@@ -95,7 +95,7 @@ msgstr ""
 
 #: ../gdk-pixbuf/gdk-pixbuf-io.c:1474
 msgid "Failed to open temporary file"
-msgstr "Impossible de dubrir lo fichièr temporari"
+msgstr "Impossible de dobrir lo fichièr temporari"
 
 #: ../gdk-pixbuf/gdk-pixbuf-io.c:1500
 msgid "Failed to read from temporary file"
@@ -652,7 +652,7 @@ msgstr "Dimensions de l'imatge TIFF tròp grandas"
 #: ../gdk-pixbuf/io-tiff.c:225 ../gdk-pixbuf/io-tiff.c:237
 #: ../gdk-pixbuf/io-tiff.c:286 ../gdk-pixbuf/io-tiff.c:571
 msgid "Insufficient memory to open TIFF file"
-msgstr "Memòria insufisenta per dubrir lo fichièr TIFF"
+msgstr "Memòria insufisenta per dobrir lo fichièr TIFF"
 
 #: ../gdk-pixbuf/io-tiff.c:251 ../gdk-pixbuf/io-tiff.c:294
 msgid "Failed to load RGB data from TIFF file"
@@ -660,7 +660,7 @@ msgstr "Impossible de cargar donadas RGB a partir del fichièr TIFF"
 
 #: ../gdk-pixbuf/io-tiff.c:361
 msgid "Failed to open TIFF image"
-msgstr "Impossible de dubrir l'imatge TIFF"
+msgstr "Impossible de dobrir l'imatge TIFF"
 
 #: ../gdk-pixbuf/io-tiff.c:373 ../gdk-pixbuf/io-tiff.c:752
 msgid "TIFFClose operation failed"
@@ -1407,7 +1407,7 @@ msgstr "Nom de fichièr invalid"
 
 #: ../gtk/gtkfilechooserdefault.c:980
 msgid "The folder contents could not be displayed"
-msgstr "Impossible mostrar lo contengut del repertòri"
+msgstr "Impossible visualizar lo contengut del repertòri"
 
 #. Translators: the first string is a path and the second string
 #. * is a hostname. Nautilus and the panel contain the same string
@@ -1490,7 +1490,7 @@ msgstr "_Apondre als favorits"
 
 #: ../gtk/gtkfilechooserdefault.c:3915
 msgid "Show _Hidden Files"
-msgstr "Mostrar los fichièrs _aganits"
+msgstr "Visualizar los fichièrs _aganits"
 
 #: ../gtk/gtkfilechooserdefault.c:4052 ../gtk/gtkfilesel.c:729
 msgid "Files"
@@ -1510,7 +1510,7 @@ msgstr "Modificat"
 
 #: ../gtk/gtkfilechooserdefault.c:4167
 msgid "Select which types of files are shown"
-msgstr "Seleccionatz los tipes de fichièrs que volètz mostrar"
+msgstr "Seleccionatz los tipes de fichièrs que volètz visualizar"
 
 #. Label
 #: ../gtk/gtkfilechooserdefault.c:4316 ../gtk/gtkprinteroptionwidget.c:786
@@ -2004,7 +2004,7 @@ msgstr "Opcions GTK+"
 
 #: ../gtk/gtkmain.c:743
 msgid "Show GTK+ Options"
-msgstr "Mostrar las opcions GTK+"
+msgstr "Visualizar las opcions GTK+"
 
 #: ../gtk/gtknotebook.c:777
 msgid "Arrow spacing"
@@ -2493,7 +2493,7 @@ msgstr ""
 #: ../gtk/gtkrecentchoosermenu.c:914
 #, c-format
 msgid "Open '%s'"
-msgstr "Dubrir '%s'"
+msgstr "Dobrir '%s'"
 
 #: ../gtk/gtkrecentchoosermenu.c:946
 msgid "Unknown item"
@@ -2551,7 +2551,7 @@ msgstr "_Netejar"
 
 #: ../gtk/gtkstock.c:323
 msgid "_Close"
-msgstr "_Barrar"
+msgstr "_Tampar"
 
 #: ../gtk/gtkstock.c:324
 msgid "C_onnect"
