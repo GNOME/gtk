@@ -15219,7 +15219,7 @@ gtk_tree_view_set_tooltip_row (GtkTreeView *tree_view,
  * @tooltip: a #GtkTooltip
  * @path: a #GtkTreePath or %NULL
  * @column: a #GtkTreeViewColumn or %NULL
- * @cell: a #GtkCellRendererText or %NULL
+ * @cell: a #GtkCellRenderer or %NULL
  *
  * Sets the tip area of @tooltip to the area @path, @column and @cell have
  * in common.  For example if @path is %NULL and @column is set, the tip
