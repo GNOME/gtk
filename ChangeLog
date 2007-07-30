@@ -1,3 +1,14 @@
+2007-07-29  Emmanuele Bassi  <ebassi@gnome.org>
+
+	* gtk/gtkrecentchooser.c: Add documentation for properties
+	and fix the deprecation marker for the show-numbers
+	accessor functions (Murray Cumming).
+
+	* gtk/gtkrecentchooser.h: Add deprecation guards around
+	gtk_recent_chooser_set_show_numbers() and
+	gtk_recent_chooser_get_show_numbers(), as promised during
+	last development cycle.
+
 2007-07-27  Attilio Fiandrotti  <attilio.fiandrotti@gmail.com>
 
         * gdk/directfb/gdkcursor-directfb.c: Attempts to load

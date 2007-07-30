@@ -106,49 +106,117 @@ gtk_recent_chooser_class_init (gpointer g_iface)
 		  NULL, NULL,
 		  g_cclosure_marshal_VOID__VOID,
 		  G_TYPE_NONE, 0);
- 
+
+  /**
+   * GtkRecentChooser:recent-manager:
+   *
+   * The #GtkRecentManager instance used by the #GtkRecentChooser to
+   * display the list of recently used resources.
+   *
+   * Since: 2.10
+   */
   g_object_interface_install_property (g_iface,
   				       g_param_spec_object ("recent-manager",
   				       			    P_("Recent Manager"),
   				       			    P_("The RecentManager object to use"),
   				       			    GTK_TYPE_RECENT_MANAGER,
   				       			    GTK_PARAM_WRITABLE | G_PARAM_CONSTRUCT_ONLY));
+  /**
+   * GtkRecentManager:show-private:
+   *
+   * Whether this #GtkRecentChooser should display recently used resources
+   * marked with the "private" flag. Such resources should be considered
+   * private to the applications and groups that have added them.
+   *
+   * Since: 2.10
+   */
   g_object_interface_install_property (g_iface,
    				       g_param_spec_boolean ("show-private",
    							     P_("Show Private"),
    							     P_("Whether the private items should be displayed"),
    							     FALSE,
    							     GTK_PARAM_READWRITE));
+  /**
+   * GtkRecentChooser:show-tips:
+   *
+   * Whether this #GtkRecentChooser should display a tooltip containing the
+   * full path of the recently used resources.
+   *
+   * Since: 2.10
+   */
   g_object_interface_install_property (g_iface,
   				       g_param_spec_boolean ("show-tips",
   				       			     P_("Show Tooltips"),
   				       			     P_("Whether there should be a tooltip on the item"),
   				       			     FALSE,
   				       			     GTK_PARAM_READWRITE));
+  /**
+   * GtkRecentChooser:show-icons:
+   *
+   * Whether this #GtkRecentChooser should display an icon near the item.
+   *
+   * Since: 2.10
+   */
   g_object_interface_install_property (g_iface,
   				       g_param_spec_boolean ("show-icons",
   				       			     P_("Show Icons"),
   				       			     P_("Whether there should be an icon near the item"),
   				       			     TRUE,
   				       			     GTK_PARAM_READWRITE));
+  /**
+   * GtkRecentChooser:show-not-found:
+   *
+   * Whether this #GtkRecentChooser should display the recently used resources
+   * even if not present anymore. Setting this to %FALSE will perform a
+   * potentially expensive check on every local resource (every remote
+   * resource will always be displayed).
+   *
+   * Since: 2.10
+   */
   g_object_interface_install_property (g_iface,
   				       g_param_spec_boolean ("show-not-found",
   				       			     P_("Show Not Found"),
   				       			     P_("Whether the items pointing to unavailable resources should be displayed"),
   				       			     FALSE,
   				       			     GTK_PARAM_READWRITE));
+  /**
+   * GtkRecentChooser:select-multiple:
+   *
+   * Allow the user to select multiple resources.
+   *
+   * Since: 2.10
+   */
   g_object_interface_install_property (g_iface,
    				       g_param_spec_boolean ("select-multiple",
    							     P_("Select Multiple"),
    							     P_("Whether to allow multiple items to be selected"),
    							     FALSE,
    							     GTK_PARAM_READWRITE));
+  /**
+   * GtkRecentChooser:local-only:
+   *
+   * Whether this #GtkRecentChooser should display only local (file:)
+   * resources.
+   *
+   * Since: 2.10
+   */
   g_object_interface_install_property (g_iface,
 		  		       g_param_spec_boolean ("local-only",
 					       		     P_("Local only"),
 							     P_("Whether the selected resource(s) should be limited to local file: URIs"),
 							     TRUE,
 							     GTK_PARAM_READWRITE));
+  /**
+   * GtkRecentChooser:limit:
+   *
+   * The maximum number of recently used resources to be displayed,
+   * or -1 to display all items. By default, the
+   * GtkSetting:gtk-recent-files-limit setting is respected: you can
+   * override that limit on a particular instance of #GtkRecentChooser
+   * by setting this property.
+   *
+   * Since: 2.10
+   */
   g_object_interface_install_property (g_iface,
    				       g_param_spec_int ("limit",
    							 P_("Limit"),
@@ -157,6 +225,13 @@ gtk_recent_chooser_class_init (gpointer g_iface)
    							 G_MAXINT,
    							 -1,
    							 GTK_PARAM_READWRITE));
+  /**
+   * GtkRecentChooser:sort-type:
+   *
+   * Sorting order to be used when displaying the recently used resources.
+   *
+   * Since: 2.10
+   */
   g_object_interface_install_property (g_iface,
 		  		       g_param_spec_enum ("sort-type",
 					       		  P_("Sort Type"),
@@ -164,6 +239,14 @@ gtk_recent_chooser_class_init (gpointer g_iface)
 							  GTK_TYPE_RECENT_SORT_TYPE,
 							  GTK_RECENT_SORT_NONE,
 							  GTK_PARAM_READWRITE));
+  /**
+   * GtkRecentChooser:filter:
+   *
+   * The #GtkRecentFilter object to be used when displaying
+   * the recently used resources.
+   *
+   * Since: 2.10
+   */
   g_object_interface_install_property (g_iface,
   				       g_param_spec_object ("filter",
   				       			    P_("Filter"),
@@ -454,7 +537,8 @@ gtk_recent_chooser_get_limit (GtkRecentChooser *chooser)
  * @chooser: a #GtkRecentChooser
  * @show_tips: %TRUE if tooltips should be shown
  *
- * Sets whether to show a tooltips on the widget.
+ * Sets whether to show a tooltips containing the full path of each
+ * recently used resource in a #GtkRecentChooser widget.
  *
  * Since: 2.10
  */
@@ -471,7 +555,8 @@ gtk_recent_chooser_set_show_tips (GtkRecentChooser *chooser,
  * gtk_recent_chooser_get_show_tips:
  * @chooser: a #GtkRecentChooser
  *
- * Gets whether @chooser should display tooltips.
+ * Gets whether @chooser should display tooltips containing the full path
+ * of a recently user resource.
  *
  * Return value: %TRUE if the recent chooser should show tooltips,
  *   %FALSE otherwise.
@@ -497,8 +582,7 @@ gtk_recent_chooser_get_show_tips (GtkRecentChooser *chooser)
  *
  * Whether to show recently used resources prepended by a unique number.
  *
- * Do not use this function: use gtk_recent_chooser_menu_set_show_numbers()
- * instead.
+ * Deprecated: 2.12: Use gtk_recent_chooser_menu_set_show_numbers() instead.
  *
  * Since: 2.10
  */
@@ -538,8 +622,7 @@ gtk_recent_chooser_set_show_numbers (GtkRecentChooser *chooser,
  * Returns whether @chooser should display recently used resources
  * prepended by a unique number.
  *
- * Do not use this function: use gtk_recent_chooser_menu_get_show_numbers()
- * instead.
+ * Deprecated: 2.12: use gtk_recent_chooser_menu_get_show_numbers() instead.
  *
  * Return value: %TRUE if the recent chooser should show display numbers,
  *   %FALSE otherwise.

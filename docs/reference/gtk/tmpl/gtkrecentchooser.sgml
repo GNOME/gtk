@@ -45,6 +45,56 @@ Recently used files are supported since GTK+ 2.10.
 
 @recentchooser: the object which received the signal.
 
+<!-- ##### ARG GtkRecentChooser:filter ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkRecentChooser:limit ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkRecentChooser:local-only ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkRecentChooser:recent-manager ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkRecentChooser:select-multiple ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkRecentChooser:show-icons ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkRecentChooser:show-not-found ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkRecentChooser:show-private ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkRecentChooser:show-tips ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkRecentChooser:sort-type ##### -->
+<para>
+
+</para>
+
 <!-- ##### STRUCT GtkRecentChooserIface ##### -->
 <para>
 
