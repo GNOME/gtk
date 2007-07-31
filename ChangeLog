@@ -1,3 +1,9 @@
+2007-07-31  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtktooltip.c (gtk_tooltip_init): Make the label
+	wrap, for compatibility with the old tooltips code. This
+	fixes absurdly long tooltips in the color selector.
+
 2007-07-30  Kristian Rietveld  <kris@imendio.com>
 
 	* gtk/gtktreeview.c (gtk_tree_view_set_tooltip_cell): Fix

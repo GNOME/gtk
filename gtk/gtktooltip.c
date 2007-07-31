@@ -150,6 +150,7 @@ gtk_tooltip_init (GtkTooltip *tooltip)
 		      FALSE, FALSE, 0);
 
   tooltip->label = gtk_label_new ("");
+  gtk_label_set_line_wrap (GTK_LABEL (tooltip->label), TRUE);
   gtk_box_pack_start (GTK_BOX (tooltip->box), tooltip->label,
 		      FALSE, FALSE, 0);
 
