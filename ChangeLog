@@ -1,3 +1,9 @@
+2007-07-31  Xan Lopez  <xan@gnome.org>
+
+	* gtk/gtkentry.c (gtk_entry_completion_key_press): reset the
+	completion prefix on Enter too, plug potential leak.
+	Follow-up to #458298
+
 2007-07-31  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtktooltip.c (gtk_tooltip_init): Make the label

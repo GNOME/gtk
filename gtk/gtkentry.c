@@ -5896,15 +5896,18 @@ gtk_entry_completion_key_press (GtkWidget   *widget,
       GtkTreeSelection *sel;
       GtkTreeIter iter;
       GtkTreeModel *model = NULL;
+      gboolean retval = TRUE;
 
       _gtk_entry_reset_im_context (GTK_ENTRY (widget));
       _gtk_entry_completion_popdown (completion);
 
       sel = gtk_tree_view_get_selection (GTK_TREE_VIEW (completion->priv->tree_view));
       if (!gtk_tree_selection_get_selected (sel, &model, &iter))
-        return FALSE;
-
-      if (completion->priv->inline_selection)
+        {
+          retval = FALSE;
+          goto keypress_completion_out;
+        }
+      else if (completion->priv->inline_selection)
         {
           /* Escape rejects the tentative completion */
           if (event->keyval == GDK_Escape)
@@ -5924,12 +5927,16 @@ gtk_entry_completion_key_press (GtkWidget   *widget,
             gtk_editable_set_position (GTK_EDITABLE (widget), -1);
           else
             gtk_editable_set_position (GTK_EDITABLE (widget), 0);
+        }
 
+keypress_completion_out:
+      if (completion->priv->inline_selection)
+        {
           g_free (completion->priv->completion_prefix);
           completion->priv->completion_prefix = NULL;
         }
 
-      return TRUE;
+      return retval;
     }
   else if (event->keyval == GDK_Tab || 
 	   event->keyval == GDK_KP_Tab ||
@@ -5937,15 +5944,12 @@ gtk_entry_completion_key_press (GtkWidget   *widget,
     {
       GtkDirectionType dir = event->keyval == GDK_ISO_Left_Tab ? 
 	GTK_DIR_TAB_BACKWARD : GTK_DIR_TAB_FORWARD;
-
+      
       _gtk_entry_reset_im_context (GTK_ENTRY (widget));
       _gtk_entry_completion_popdown (completion);
 
-      if (completion->priv->completion_prefix)
-        {
-           g_free (completion->priv->completion_prefix);
-           completion->priv->completion_prefix = NULL;
-        }
+      g_free (completion->priv->completion_prefix);
+      completion->priv->completion_prefix = NULL;
 
       gtk_widget_child_focus (gtk_widget_get_toplevel (widget), dir);
 
@@ -5969,10 +5973,10 @@ gtk_entry_completion_key_press (GtkWidget   *widget,
           if (!gtk_tree_selection_get_selected (sel, &model, &iter))
             return FALSE;
 
-	  g_signal_handler_block (widget, completion->priv->changed_id);
+          g_signal_handler_block (widget, completion->priv->changed_id);
           g_signal_emit_by_name (completion, "match_selected",
                                  model, &iter, &entry_set);
-	  g_signal_handler_unblock (widget, completion->priv->changed_id);
+          g_signal_handler_unblock (widget, completion->priv->changed_id);
 
           if (!entry_set)
             {
@@ -5990,6 +5994,9 @@ gtk_entry_completion_key_press (GtkWidget   *widget,
               g_free (str);
             }
 
+          g_free (completion->priv->completion_prefix);
+          completion->priv->completion_prefix = NULL;
+          
           return TRUE;
         }
       else if (completion->priv->current_selected - matches >= 0)
