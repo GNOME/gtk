@@ -1310,9 +1310,78 @@ gdk_window_get_geometry (GdkWindow *window,
 			 gint      *height,
 			 gint      *depth)
 {
-  g_return_if_fail (GDK_IS_WINDOW (window));
+  GdkWindowImplQuartz *impl;
+  NSRect ns_rect;
 
-  /* FIXME: Implement */
+  g_return_if_fail (window == NULL || GDK_IS_WINDOW (window));
+
+  if (!window)
+    window = _gdk_root;
+  
+  if (GDK_WINDOW_DESTROYED (window))
+    return;
+
+  impl = GDK_WINDOW_IMPL_QUARTZ (GDK_WINDOW_OBJECT (window)->impl);
+  if (window == _gdk_root)
+    {
+      if (x) 
+        *x = 0;
+      if (y) 
+        *y = 0;
+
+      if (width) 
+        *width = impl->width;
+      if (height)
+        *height = impl->height;
+    }
+  else if (WINDOW_IS_TOPLEVEL (window))
+    {
+      ns_rect = [impl->toplevel contentRectForFrameRect:[impl->toplevel frame]];
+
+      /* This doesn't work exactly as in X. There doesn't seem to be a
+       * way to get the coords relative to the parent window (usually
+       * the window frame), but that seems useless except for
+       * borderless windows where it's relative to the root window. So
+       * we return (0, 0) (should be something like (0, 22)) for
+       * windows with borders and the root relative coordinates
+       * otherwise.
+       */
+      if ([impl->toplevel styleMask] == NSBorderlessWindowMask)
+        {
+          if (x)
+            *x = ns_rect.origin.x;
+          if (y)
+            *y = _gdk_quartz_window_get_inverted_screen_y (ns_rect.origin.y + ns_rect.size.height);
+        }
+      else 
+        {
+          if (x)
+            *x = 0;
+          if (y)
+            *y = 0;
+        }
+
+      if (width)
+        *width = ns_rect.size.width;
+      if (height)
+        *height = ns_rect.size.height;
+    }
+  else
+    {
+      ns_rect = [impl->view frame];
+      
+      if (x)
+        *x = ns_rect.origin.x;
+      if (y)
+        *y = ns_rect.origin.y;
+      if (width)
+        *width  = ns_rect.size.width;
+      if (height)
+        *height = ns_rect.size.height;
+    }
+    
+  if (depth)
+      *depth = gdk_drawable_get_depth (window);
 }
 
 gboolean
