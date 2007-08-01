@@ -20,6 +20,7 @@
 #include <config.h>
 #include <stdlib.h>
 #include "gtkcellrenderertext.h"
+#include "gtkextendedlayout.h"
 #include "gtkeditable.h"
 #include "gtkentry.h"
 #include "gtkmarshalers.h"
@@ -60,6 +61,8 @@ static GtkCellEditable *gtk_cell_renderer_text_start_editing (GtkCellRenderer   
 							      GdkRectangle         *background_area,
 							      GdkRectangle         *cell_area,
 							      GtkCellRendererState  flags);
+
+static void       gtk_cell_renderer_text_extended_layout_init (GtkExtendedLayoutIface *iface);
 
 enum {
   EDITED,
@@ -148,9 +151,12 @@ struct _GtkCellRendererTextPrivate
   gint wrap_width;
   
   GtkWidget *entry;
+  GtkWidget *owner;
 };
 
-G_DEFINE_TYPE (GtkCellRendererText, gtk_cell_renderer_text, GTK_TYPE_CELL_RENDERER)
+G_DEFINE_TYPE_WITH_CODE (GtkCellRendererText, gtk_cell_renderer_text, GTK_TYPE_CELL_RENDERER,
+                         G_IMPLEMENT_INTERFACE (GTK_TYPE_EXTENDED_LAYOUT,
+						gtk_cell_renderer_text_extended_layout_init))
 
 static void
 gtk_cell_renderer_text_init (GtkCellRendererText *celltext)
@@ -1489,6 +1495,7 @@ get_size (GtkCellRenderer *cell,
   GtkCellRendererTextPrivate *priv;
 
   priv = GTK_CELL_RENDERER_TEXT_GET_PRIVATE (cell);
+  priv->owner = widget;
 
   if (celltext->calc_fixed_height)
     {
@@ -1918,6 +1925,38 @@ gtk_cell_renderer_text_set_fixed_height_from_font (GtkCellRendererText *renderer
       renderer->fixed_height_rows = number_of_rows;
       renderer->calc_fixed_height = TRUE;
     }
+}
+
+static GtkExtendedLayoutFeatures
+gtk_cell_renderer_text_extended_layout_get_features (GtkExtendedLayout *layout)
+{
+  return GTK_EXTENDED_LAYOUT_NATURAL_SIZE;
+}
+
+static void
+gtk_cell_renderer_text_extended_layout_get_natural_size (GtkExtendedLayout *layout,
+                                                         GtkRequisition    *requisition)
+{
+  GtkCellRendererTextPrivate *priv;
+  PangoEllipsizeMode ellipsize;
+
+  priv = GTK_CELL_RENDERER_TEXT_GET_PRIVATE (layout);
+
+  ellipsize = priv->ellipsize;
+  priv->ellipsize = PANGO_ELLIPSIZE_NONE;
+
+  get_size (GTK_CELL_RENDERER (layout),
+            priv->owner, NULL, NULL, NULL, NULL,
+            &requisition->width, &requisition->height);
+
+  priv->ellipsize = ellipsize;
+}
+
+static void
+gtk_cell_renderer_text_extended_layout_init (GtkExtendedLayoutIface *iface)
+{
+  iface->get_features = gtk_cell_renderer_text_extended_layout_get_features;
+  iface->get_natural_size = gtk_cell_renderer_text_extended_layout_get_natural_size;
 }
 
 #define __GTK_CELL_RENDERER_TEXT_C__

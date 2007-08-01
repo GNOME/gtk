@@ -1,5 +1,11 @@
 2007-08-01  Mathias Hasselmann  <mathias.hasselmann@gmx.de>
 
+	* gtk/gtkcellrenderertext.c: Provide natural size information.
+	* gtk/gtkcellview.c: Consider and provide natural size information.
+	* tests/testextendedlayout.c: Change background of testing cell view.
+
+2007-08-01  Mathias Hasselmann  <mathias.hasselmann@gmx.de>
+
 	* gtk/gtkcellview.c: Seems there is no point in distinguishing between
 	GTK_PACK_START and GTK_PACK_END during size allocation. The loops only
 	differ in the packing check.

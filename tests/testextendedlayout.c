@@ -492,6 +492,7 @@ natural_size_test_misc_create_child (TestCase  *test,
   GError *error = NULL;
   gint child_stdout;
   char buffer[32];
+  GdkColor color;
 
   if (type >= 3)
     {
@@ -576,6 +577,9 @@ natural_size_test_misc_create_child (TestCase  *test,
 
           case 3:
             child = gtk_cell_view_new ();
+
+            if (gdk_color_parse ("#ffc", &color))
+              gtk_cell_view_set_background_color (GTK_CELL_VIEW (child), &color);
 
             cell = gtk_cell_renderer_pixbuf_new ();
             gtk_cell_layout_pack_start (GTK_CELL_LAYOUT (child), cell, FALSE);
