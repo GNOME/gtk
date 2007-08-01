@@ -384,38 +384,9 @@ gtk_cell_view_size_allocate (GtkWidget     *widget,
   else
     extra = 0;
 
-  /* iterate list for PACK_START cells */
   for (i = cellview->priv->cell_list; i; i = i->next)
     {
       GtkCellViewCellInfo *info = (GtkCellViewCellInfo *)i->data;
-
-      if (info->pack == GTK_PACK_END)
-        continue;
-
-      if (!info->cell->visible)
-        continue;
-
-      info->real_width = info->requested_width;
-
-      if (info->expand)
-        {
-          if (1 == nexpand_cells)
-            info->real_width += available;
-          else
-            info->real_width += extra;
-
-          nexpand_cells -= 1;
-          available -= extra;
-        }
-    }
-
-  /* iterate list for PACK_END cells */
-  for (i = cellview->priv->cell_list; i; i = i->next)
-    {
-      GtkCellViewCellInfo *info = (GtkCellViewCellInfo *)i->data;
-
-      if (info->pack == GTK_PACK_START)
-        continue;
 
       if (!info->cell->visible)
         continue;
