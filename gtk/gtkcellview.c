@@ -352,11 +352,12 @@ static void
 gtk_cell_view_size_allocate (GtkWidget     *widget,
                              GtkAllocation *allocation)
 {
-  GList *i;
-  gint expand_cell_count = 0;
-  gint full_requested_width = 0;
-  gint extra_space;
   GtkCellView *cellview;
+  GList *i;
+
+  gint nexpand_cells = 0;
+  gint full_requested_width = 0;
+  gint available, extra;
 
   widget->allocation = *allocation;
 
@@ -371,16 +372,17 @@ gtk_cell_view_size_allocate (GtkWidget     *widget,
         continue;
 
       if (info->expand)
-        expand_cell_count++;
+        nexpand_cells++;
 
       full_requested_width += info->requested_width;
     }
 
-  extra_space = widget->allocation.width - full_requested_width;
-  if (extra_space < 0)
-    extra_space = 0;
-  else if (extra_space > 0 && expand_cell_count > 0)
-    extra_space /= expand_cell_count;
+  available = MAX (0, widget->allocation.width - full_requested_width);
+
+  if (nexpand_cells > 0)
+    extra = available / nexpand_cells;
+  else
+    extra = 0;
 
   /* iterate list for PACK_START cells */
   for (i = cellview->priv->cell_list; i; i = i->next)
@@ -407,7 +409,16 @@ gtk_cell_view_size_allocate (GtkWidget     *widget,
       if (!info->cell->visible)
         continue;
 
-      info->real_width = info->requested_width + (info->expand?extra_space:0);
+      if (info->expand)
+        {
+          if (1 == nexpand_cells)
+            info->real_width += available;
+          else
+            info->real_width += extra;
+
+          nexpand_cells -= 1;
+          available -= extra;
+        }
     }
 }
 

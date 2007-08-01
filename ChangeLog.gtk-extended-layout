@@ -1,3 +1,8 @@
+2007-07-29  Mathias Hasselmann  <mathias.hasselmann@gmx.de>
+
+	* gtk/gtkcellview.c: Avoid rounding errors in size
+	allocation by adopting the algorithm used by GtkHBox.
+
 2007-07-28  Mathias Hasselmann  <mathias.hasselmann@gmx.de>
 
 	* tests/testextendedlayout.c: Preparing natural 
