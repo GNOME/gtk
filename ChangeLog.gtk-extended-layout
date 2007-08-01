@@ -1,3 +1,8 @@
+2007-08-01  Mathias Hasselmann  <mathias.hasselmann@gmx.de>
+
+	* gtk/gtkcellview.c: Fix up the mess I commited before.
+	Rule of the thumb: Never write code when tired or in hurry.
+
 2007-07-29  Mathias Hasselmann  <mathias.hasselmann@gmx.de>
 
 	* gtk/gtkcellview.c: Avoid rounding errors in size

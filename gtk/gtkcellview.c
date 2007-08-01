@@ -395,7 +395,18 @@ gtk_cell_view_size_allocate (GtkWidget     *widget,
       if (!info->cell->visible)
         continue;
 
-      info->real_width = info->requested_width + (info->expand?extra_space:0);
+      info->real_width = info->requested_width;
+
+      if (info->expand)
+        {
+          if (1 == nexpand_cells)
+            info->real_width += available;
+          else
+            info->real_width += extra;
+
+          nexpand_cells -= 1;
+          available -= extra;
+        }
     }
 
   /* iterate list for PACK_END cells */
@@ -408,6 +419,8 @@ gtk_cell_view_size_allocate (GtkWidget     *widget,
 
       if (!info->cell->visible)
         continue;
+
+      info->real_width = info->requested_width;
 
       if (info->expand)
         {
