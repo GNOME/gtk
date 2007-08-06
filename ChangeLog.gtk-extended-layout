@@ -1,10 +1,16 @@
 2007-08-06  Mathias Hasselmann  <mathias.hasselmann@gmx.de>
 
+	* gtk/gtklabel.c: Practice consistent pixel rounding to avoid GtkLabel
+	showing ellipses when PANGO_PIXELS and PANGO_PIXELS_FLOOR differ by
+	less then 0.5 pixels.
+
+2007-08-06  Mathias Hasselmann  <mathias.hasselmann@gmx.de>
+
 	* gtk/gtktreeviewcolumn.c:
 	Rename gtk_tree_view_column_cell_get_size_impl
 	to gtk_tree_view_column_cell_get_real_size to
 	fit naming conventions.
-	* gtk/gtkscrolledwindow.c: 
+	* gtk/gtkscrolledwindow.c:
 	Provide and consider natural size information.
 	* tests/testextendedlayout.c:
 	Show natural size of the hovered widget in statusbar.

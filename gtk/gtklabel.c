@@ -2236,7 +2236,7 @@ gtk_label_size_allocate (GtkWidget     *widget,
           bounds.height = allocation->height - label->misc.ypad * 2;
 
 	  pango_layout_set_width (label->layout, -1);
-	  pango_layout_get_extents (label->layout, NULL, &logical);
+	  pango_layout_get_pixel_extents (label->layout, NULL, &logical);
 
           if (label->have_transform)
             {
