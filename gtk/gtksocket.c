@@ -401,7 +401,7 @@ gtk_socket_size_request (GtkWidget      *widget,
   else
     {
       if (socket->is_mapped && !socket->have_size && socket->plug_window)
-	_gtk_socket_windowing_get_natural_size (socket);
+	_gtk_socket_windowing_size_request (socket);
 
       if (socket->is_mapped && socket->have_size)
 	{
@@ -1030,7 +1030,7 @@ gtk_socket_extended_layout_get_natural_size (GtkExtendedLayout *layout,
       priv = _gtk_socket_get_private (socket);
 
       if (socket->is_mapped && !priv->have_natural_size && socket->plug_window)
-	_gtk_socket_windowing_size_request (socket);
+	_gtk_socket_windowing_get_natural_size (socket);
 
       if (socket->is_mapped && priv->have_natural_size)
 	{

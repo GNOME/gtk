@@ -1,3 +1,10 @@
+2007-08-06  Mathias Hasselmann  <mathias.hasselmann@gmx.de>
+
+	* gtk/gtksocket.c: Repair sizing algorithm - gtk_socket_size_request
+	and gtk_socket_extended_layout_get_natural_size were calling each
+	other's windowing backend function. Was I drunk when commiting the
+	previous revision?
+
 2007-08-01  Mathias Hasselmann  <mathias.hasselmann@gmx.de>
 
 	* gtk/gtkcellrenderertext.c: Provide natural size information.
