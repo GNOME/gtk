@@ -1919,9 +1919,8 @@ msgid "Shadow type"
 msgstr "Varjotyyppi"
 
 #: ../gtk/gtkcombobox.c:826
-#, fuzzy
 msgid "Which kind of shadow to draw around the combo box"
-msgstr "Välilehden nimiötä ympäröivän reunuksen leveys"
+msgstr "Minkätyyppinen varjo piirretään monivalintalaatikon ympärille"
 
 #: ../gtk/gtkcontainer.c:237
 msgid "Resize mode"
@@ -6235,10 +6234,8 @@ msgid "Startup ID"
 msgstr "Käynnistystunniste"
 
 #: ../gtk/gtkwindow.c:499
-#, fuzzy
 msgid "Unique startup identifier for the window used by startup-notification"
-msgstr ""
-"Ikkunan ainutkertainen tunniste, jota käytetään istuntoa palautettaessa"
+msgstr "Käynnistysilmaisimen käyttämä ikkunan yksilöllinen käynnistystunniste"
 
 #: ../gtk/gtkwindow.c:506
 msgid "Allow Shrink"
