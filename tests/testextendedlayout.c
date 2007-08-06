@@ -474,17 +474,22 @@ natural_size_test_misc_create_child (TestCase  *test,
   const gchar *type_names[] =
   {
     "align", "socket-gtkplug", "socket-xembed",
-    "cell-view", "tree-view"
+    "cell-view", "tree-view", "tree-view-scrolled",
   };
 
-  GtkWidget *label, *child, *align, *plug;
+  const gchar *numbers[] = 
+  { 
+    "First", "Second", "Third", "Fourth", "Fifth",
+    "Sixth", "Seventh", "Eighth", "Nineth", NULL
+  };
+
+  GtkWidget *label, *child, *view, *align, *plug;
   GdkNativeWindow plug_id;
 
   GtkListStore *store = NULL;
   GtkTreeViewColumn *column;
   GtkCellRenderer *cell;
   GtkTreePath *path;
-  GtkTreeIter iter;
 
   gint i, j;
 
@@ -498,10 +503,20 @@ natural_size_test_misc_create_child (TestCase  *test,
     {
       store = gtk_list_store_new (3, G_TYPE_STRING, G_TYPE_STRING, G_TYPE_STRING);
 
-      gtk_list_store_append (store, &iter);
-      gtk_list_store_set (store, &iter, 0, GTK_STOCK_ABOUT,
-                                        1, "Small Cell",
-                                        2, "Large Cell", -1);
+      for (i = 0; numbers[i] && (type > 4 || i < 2); ++i)
+        {
+          gchar *small = g_strdup_printf ("%s Small Cell", numbers[i]);
+          gchar *large = g_strdup_printf ("%s Large Cell", numbers[i]);
+
+          GtkTreeIter iter;
+
+          gtk_list_store_append (store, &iter);
+          gtk_list_store_set (store, &iter, 0, GTK_STOCK_ABOUT,
+                                            1, small, 2, large, -1);
+
+          g_free (large);
+          g_free (small);
+        }
     }
 
   for (i = 0; i < 2; ++i)
@@ -512,7 +527,7 @@ natural_size_test_misc_create_child (TestCase  *test,
                                i ? PANGO_ELLIPSIZE_END : 
                                    PANGO_ELLIPSIZE_NONE);
 
-      if (orientation)
+      if (!orientation)
         gtk_label_set_angle (GTK_LABEL (label), 90);
 
       switch (type)
@@ -538,7 +553,7 @@ natural_size_test_misc_create_child (TestCase  *test,
 
             j = 2;
 
-            if (orientation)
+            if (!orientation)
               argv[j++] = "--vertical";
             if (i)
               argv[j++] = "--ellipsize";
@@ -609,23 +624,37 @@ natural_size_test_misc_create_child (TestCase  *test,
             break;
 
           case 4:
-            child = gtk_tree_view_new_with_model (GTK_TREE_MODEL (store));
-            gtk_tree_view_set_headers_visible (GTK_TREE_VIEW (child), FALSE);
+          case 5:
+            view = gtk_tree_view_new_with_model (GTK_TREE_MODEL (store));
+            gtk_tree_view_set_headers_visible (GTK_TREE_VIEW (view), FALSE);
 
             cell = gtk_cell_renderer_pixbuf_new ();
             column = gtk_tree_view_column_new_with_attributes (NULL, cell, "stock-id", 0, NULL);
-            gtk_tree_view_append_column (GTK_TREE_VIEW (child), column);
+            gtk_tree_view_append_column (GTK_TREE_VIEW (view), column);
 
             cell = gtk_cell_renderer_text_new ();
             column = gtk_tree_view_column_new_with_attributes ("Bar", cell, "text", 1, NULL);
-            gtk_tree_view_append_column (GTK_TREE_VIEW (child), column);
+            gtk_tree_view_append_column (GTK_TREE_VIEW (view), column);
 
             if (i)
               g_object_set (cell, "ellipsize", PANGO_ELLIPSIZE_END, NULL);
 
             cell = gtk_cell_renderer_text_new ();
             column = gtk_tree_view_column_new_with_attributes ("Foo", cell, "text", 2, NULL);
-            gtk_tree_view_append_column (GTK_TREE_VIEW (child), column);
+            gtk_tree_view_append_column (GTK_TREE_VIEW (view), column);
+
+            if (type > 4)
+              {
+                child = gtk_scrolled_window_new (NULL, NULL);
+                gtk_scrolled_window_set_shadow_type (GTK_SCROLLED_WINDOW (child),
+                                                     GTK_SHADOW_IN);
+                gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (child),
+                                                GTK_POLICY_NEVER,
+                                                GTK_POLICY_ALWAYS);
+                gtk_container_add (GTK_CONTAINER (child), view);
+              }
+            else
+              child = view;
 
             break;
 
@@ -638,12 +667,12 @@ natural_size_test_misc_create_child (TestCase  *test,
       gtk_container_add (GTK_CONTAINER (align), child);
 
       set_widget_name (child, "%s-%s-ellipsize-%s",
-                       orientation ? "vertical" : "horizontal",
+                       orientation ? "horizontal" : "vertical",
                        type_names[type], i ? "end" : "none");
 
       test_case_append_guide (test, child, 
-                              orientation ? GUIDE_EXTERIOUR_HORIZONTAL 
-                                          : GUIDE_EXTERIOUR_VERTICAL, 
+                              orientation ? GUIDE_EXTERIOUR_VERTICAL
+                                          : GUIDE_EXTERIOUR_HORIZONTAL,
                               type < 3 ? orientation : type - 1);
     }
 }
@@ -658,10 +687,11 @@ natural_size_test_misc_new (TestSuite *suite,
     "<b>GtkSocket with GtkPlug</b>",
     "<b>GtkSocket with XEMBED</b>",
     "<b>GtkCellView</b>",
-    "<b>GtkTreeView</b>"
+    "<b>GtkTreeView</b>",
+    "<b>GtkTreeView within GtkScrolledWindow</b>"
   };
 
-  GtkWidget *box, *paned, *label;
+  GtkWidget *box, *hpaned, *vpaned, *label;
   gint orientation, type;
   TestCase *test;
 
@@ -669,6 +699,8 @@ natural_size_test_misc_new (TestSuite *suite,
                         gtk_vbox_new (FALSE, 6));
 
   gtk_container_set_border_width (GTK_CONTAINER (test->widget), 6);
+
+  vpaned = NULL; /* silence the gcc */
 
   for (orientation = 0; orientation < 2; ++orientation)
     {
@@ -678,27 +710,35 @@ natural_size_test_misc_new (TestSuite *suite,
 
       if (orientation)
         {
-          gtk_box_pack_start (GTK_BOX (test->widget), 
-                              gtk_hseparator_new (), 
-                              FALSE, TRUE, 0);
+          gtk_label_set_angle (GTK_LABEL (label), 90);
+          gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
 
-          paned = gtk_vpaned_new ();
+          hpaned = gtk_hpaned_new ();
           box = gtk_hbox_new (FALSE, 6);
-          gtk_misc_set_alignment (GTK_MISC (label), 0.5, 1.0);
+
+          gtk_box_pack_start (GTK_BOX (box), label, FALSE, TRUE, 0);
+          gtk_box_pack_start (GTK_BOX (box), gtk_vseparator_new (), FALSE, TRUE, 0);
+          gtk_box_pack_start (GTK_BOX (box), vpaned, TRUE, TRUE, 0);
+
+          gtk_paned_pack2 (GTK_PANED (hpaned), box, TRUE, FALSE);
+
+          box = gtk_vbox_new (FALSE, 6);
+
+          gtk_paned_pack1 (GTK_PANED (hpaned), box, TRUE, TRUE);
+          gtk_box_pack_start (GTK_BOX (test->widget), hpaned, TRUE, TRUE, 0);
         }
       else
         {
-          paned = gtk_hpaned_new ();
-          box = gtk_vbox_new (FALSE, 6);
-          gtk_label_set_angle (GTK_LABEL (label), -90);
-          gtk_misc_set_alignment (GTK_MISC (label), 1.0, 0.5);
+          gtk_misc_set_alignment (GTK_MISC (label), 0.5, 1.0);
+
+          vpaned = gtk_vpaned_new ();
+          box = gtk_hbox_new (FALSE, 6);
+
+          gtk_paned_pack1 (GTK_PANED (vpaned), box, TRUE, TRUE);
+          gtk_paned_pack2 (GTK_PANED (vpaned), label, FALSE, FALSE);
         }
 
-      gtk_paned_pack1 (GTK_PANED (paned), box, TRUE, TRUE);
-      gtk_paned_pack2 (GTK_PANED (paned), label, FALSE, FALSE);
-      gtk_box_pack_start (GTK_BOX (test->widget), paned, TRUE, TRUE, 0);
-
-      for (type = 0; type < (orientation ? 3 : 5); ++type)
+      for (type = 0; type < (orientation ? 6 : 3); ++type)
         {
           label = gtk_label_new (NULL);
           gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
@@ -706,7 +746,7 @@ natural_size_test_misc_new (TestSuite *suite,
           gtk_label_set_ellipsize (GTK_LABEL (label), PANGO_ELLIPSIZE_END);
           gtk_box_pack_start (GTK_BOX (box), label, FALSE, TRUE, 0);
 
-          if (orientation)
+          if (!orientation)
             gtk_label_set_angle (GTK_LABEL (label), 90);
 
           natural_size_test_misc_create_child (test, box, arg0, orientation, type);
