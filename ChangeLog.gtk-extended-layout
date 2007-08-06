@@ -1,5 +1,11 @@
 2007-08-06  Mathias Hasselmann  <mathias.hasselmann@gmx.de>
 
+	* tests/testextendedlayout.c: Use tree-view instead of notebook
+	tabs for test case navigation. Support running a sub-set of tests.
+	Display plug-id of sockets as tooltip.
+	
+2007-08-06  Mathias Hasselmann  <mathias.hasselmann@gmx.de>
+
 	* tests/testextendedlayout.c: Improve layout of natural size for
 	various widgets test and add a test for GtkTreeViews within
 	GtkScrolledWindows to it.

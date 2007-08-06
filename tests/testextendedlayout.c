@@ -66,11 +66,21 @@ enum _TestResult
 
 enum
 {
-  COLUMN_MESSAGE,
-  COLUMN_WEIGHT,
-  COLUMN_ICON,
-  COLUMN_RESULT,
-  COLUNN_COUNT
+  RESULT_COLUMN_MESSAGE,
+  RESULT_COLUMN_WEIGHT,
+  RESULT_COLUMN_ICON,
+  RESULT_COLUMN_RESULT,
+  RESULT_COLUNN_COUNT
+};
+
+enum
+{
+  TEST_COLUMN_LABEL,
+  TEST_COLUMN_SELECTED,
+  TEST_COLUMN_TEST_CASE,
+  TEST_COLUMN_HAS_TEST_CASE,
+  TEST_COLUMN_PAGE_INDEX,
+  TEST_COLUMN_COUNT
 };
 
 struct _Guide
@@ -92,6 +102,10 @@ struct _TestCase
 
 struct _TestSuite
 {
+  GtkTreeSelection *selection;
+  GtkWidget *test_current_button;
+  GtkListStore *tests;
+
   GtkWidget *window;
   GtkWidget *notebook;
   GtkWidget *baselines;
@@ -485,6 +499,7 @@ natural_size_test_misc_create_child (TestCase  *test,
 
   GtkWidget *label, *child, *view, *align, *plug;
   GdkNativeWindow plug_id;
+  gchar *plug_str;
 
   GtkListStore *store = NULL;
   GtkTreeViewColumn *column;
@@ -574,12 +589,14 @@ natural_size_test_misc_create_child (TestCase  *test,
                     plug_id = atoi (buffer);
                   }
 
-                g_print ("plug-id: %d\n", plug_id);
-
                 child = gtk_socket_new ();
                 g_signal_connect (child, "realize",
                                   G_CALLBACK (on_socket_realized),
                                   GINT_TO_POINTER (plug_id));
+
+                plug_str = g_strdup_printf ("plug-id: %d", plug_id);
+                gtk_widget_set_tooltip_text (child, plug_str);
+                g_free (plug_str);
               }
             else
               {
@@ -1447,29 +1464,69 @@ attach_sub_windows (GtkWidget *widget,
 }
 
 static void
+test_suite_insert_page (TestSuite   *self, 
+                        TestCase    *test,
+                        GtkWidget   *widget,
+                        const gchar *label)
+{
+  GtkTreeModel *model = GTK_TREE_MODEL (self->tests);
+  TestCase *prev = NULL;
+  GtkTreeIter iter;
+  gint i, n_rows;
+
+  if (!widget && test)
+    widget = test->widget;
+
+  g_return_if_fail (GTK_IS_WIDGET (widget));
+
+  n_rows = gtk_tree_model_iter_n_children (model, NULL);
+
+  gtk_notebook_insert_page (GTK_NOTEBOOK (self->notebook), 
+                            widget, NULL, self->n_test_cases);
+
+  gtk_list_store_insert (self->tests, &iter, n_rows);
+
+  gtk_list_store_set (self->tests, &iter,
+                      TEST_COLUMN_LABEL, label, 
+                      TEST_COLUMN_SELECTED, NULL != test, 
+                      TEST_COLUMN_HAS_TEST_CASE, NULL != test, 
+                      TEST_COLUMN_PAGE_INDEX, self->n_test_cases,
+                      TEST_COLUMN_TEST_CASE, test,
+                      -1);
+
+  for (i = n_rows - 1; i >= 0 && NULL == prev &&
+       gtk_tree_model_iter_nth_child (model, &iter, NULL, i);
+       --i)
+    gtk_tree_model_get (GTK_TREE_MODEL (self->tests), &iter,
+                        TEST_COLUMN_TEST_CASE, &prev, 
+                        -1);
+
+  if (NULL == test || (prev && strcmp (test->name, prev->name)))
+    {
+      gtk_list_store_insert (self->tests, &iter, n_rows);
+      gtk_list_store_set (self->tests, &iter,
+                          TEST_COLUMN_HAS_TEST_CASE, FALSE,
+                          TEST_COLUMN_PAGE_INDEX, -1,
+                          -1);
+    }
+
+  if (test)
+    ++self->n_test_cases;
+}
+
+static void
 test_suite_append (TestSuite *self,
                    TestCase  *test)
 {
-  GtkWidget *label;
-  GString *markup;
+  GString *markup = g_string_new (test->name);
 
-  markup = g_string_new (test->name);
+  g_string_printf (markup, "<b>%s</b>", test->name);
 
   if (test->detail)
-    {
-      g_string_append (markup, "\n<small>(");
-      g_string_append (markup, test->detail);
-      g_string_append (markup, ")</small>");
-    }
+    g_string_append_printf (markup, "\n<small>%s</small>", test->detail);
 
-  label = gtk_label_new (markup->str);
+  test_suite_insert_page (self, test, NULL, markup->str);
   g_string_free (markup, TRUE);
-
-  gtk_label_set_use_markup (GTK_LABEL (label), TRUE);
-  gtk_label_set_justify (GTK_LABEL (label), GTK_JUSTIFY_CENTER);
-
-  gtk_notebook_insert_page (GTK_NOTEBOOK (self->notebook), test->widget,
-                            label, self->n_test_cases++);
 
   g_signal_connect_after (test->widget, "expose-event",
                           G_CALLBACK (expose_cb), test);
@@ -1589,10 +1646,10 @@ test_suite_report (TestSuite   *self,
         }
 
       gtk_tree_store_set (self->results, &iter, 
-                          COLUMN_MESSAGE, message, 
-                          COLUMN_WEIGHT, weight, 
-                          COLUMN_RESULT, text, 
-                          COLUMN_ICON, icon,
+                          RESULT_COLUMN_MESSAGE, message, 
+                          RESULT_COLUMN_WEIGHT, weight, 
+                          RESULT_COLUMN_RESULT, text, 
+                          RESULT_COLUMN_ICON, icon,
                           -1);
 
       if (TEST_RESULT_FAILURE == result)
@@ -1609,8 +1666,8 @@ test_suite_report (TestSuite   *self,
         self->parent = iter;
 
       gtk_tree_store_set (self->results, &self->parent,
-                          COLUMN_RESULT, text, 
-                          COLUMN_ICON, icon,
+                          RESULT_COLUMN_RESULT, text, 
+                          RESULT_COLUMN_ICON, icon,
                           -1);
     }
 }
@@ -1731,33 +1788,70 @@ test_current_cb (GtkWidget *widget,
 }
 
 static void
+test_suite_show_and_run_test (TestSuite *self,
+                              gint       page)
+{
+  GTimer *timer = g_timer_new ();
+
+  gtk_notebook_set_current_page (GTK_NOTEBOOK (self->notebook), page);
+  g_timer_start (timer);
+
+  while (g_timer_elapsed (timer, NULL) < 0.3 &&
+         !gtk_main_iteration_do (FALSE))
+    {
+      if (!gtk_events_pending ())
+        g_usleep (500);
+    }
+
+  test_suite_run (self, -1);
+  g_timer_destroy (timer);
+}
+
+static void
+test_selected_cb (GtkWidget *widget,
+                  gpointer   data)
+{
+  TestSuite *suite = data;
+  GtkTreeModel *model;
+  GtkTreeIter iter;
+
+  model = GTK_TREE_MODEL (suite->tests);
+  test_suite_start (suite);
+
+  if (gtk_tree_model_get_iter_first (model, &iter))
+    {
+      do
+        {
+          gboolean selected = FALSE;
+          gint page_index = -1;
+
+          gtk_tree_model_get (model, &iter, 
+                              TEST_COLUMN_SELECTED, &selected,
+                              TEST_COLUMN_PAGE_INDEX, &page_index,
+                              -1);
+
+          if (page_index >= 0 && selected)
+            test_suite_show_and_run_test (suite, page_index);
+        }
+      while (gtk_tree_model_iter_next (model, &iter));
+    }
+
+  test_suite_stop (suite);
+}
+
+static void
 test_all_cb (GtkWidget *widget,
              gpointer  data)
 {
-  GTimer *timer = g_timer_new ();
   TestSuite *suite = data;
   gint i;
 
   test_suite_start (suite);
 
   for (i = 0; i < suite->n_test_cases; ++i)
-    {
-      gtk_notebook_set_current_page (GTK_NOTEBOOK (suite->notebook), i);
-      g_timer_start (timer);
-
-      while (g_timer_elapsed (timer, NULL) < 0.3 &&
-             !gtk_main_iteration_do (FALSE))
-        {
-          if (!gtk_events_pending ())
-            g_usleep (500);
-        }
-
-      test_current_cb (widget, suite);
-      g_timer_stop (timer);
-    }
+    test_suite_show_and_run_test (suite, i);
 
   test_suite_stop (suite);
-  g_timer_destroy (timer);
 }
 
 static void
@@ -1766,44 +1860,32 @@ switch_page_cb (GtkNotebook     *notebook,
                 gint             index,
                 gpointer         data)
 {
-  gpointer *bag = data;
-  TestSuite *suite = bag[0];
-  GtkWidget *button = bag[1];
+  TestSuite *suite = data;
+  GtkTreeModel *model;
+  GtkTreeIter iter;
+  gint page_index;
 
-  gtk_widget_set_sensitive (button, index < suite->n_test_cases);
-}
+  gtk_widget_set_sensitive (suite->test_current_button,
+                            index < suite->n_test_cases);
 
-static gpointer
-pointer_bag_new (gpointer first, ...)
-{
-  gpointer *self;
-  gint count = 0;
-  gpointer ptr;
-  va_list args;
+  model = GTK_TREE_MODEL (suite->tests);
 
-  va_start (args, first);
+  if (gtk_tree_model_get_iter_first (model, &iter))
+    {
+      do
+        {
+          gtk_tree_model_get (model, &iter, 
+                              TEST_COLUMN_PAGE_INDEX, &page_index,
+                              -1);
 
-  for (ptr = first, count = 0; ptr; ptr = va_arg (args, gpointer))
-    ++count;
-
-  va_end (args);
-
-  self = g_new0 (gpointer, count + 1);
-
-  va_start (args, first);
-
-  for (ptr = first, count = 0; ptr; ptr = va_arg (args, gpointer))
-    self[count++] = ptr;
-
-  va_end (args);
-
-  return self;
-}
-
-static void 
-pointer_bag_free (gpointer self)
-{
-  g_free (self);
+          if (page_index == index)
+            {
+              gtk_tree_selection_select_iter (suite->selection, &iter);
+              break;
+            }
+        }
+      while (gtk_tree_model_iter_next (model, &iter));
+    }
 }
 
 static GtkWidget*
@@ -2000,7 +2082,7 @@ test_suite_setup_results_page (TestSuite *self)
   GtkCellRenderer *cell;
   GtkWidget *scroller;
 
-  self->results = gtk_tree_store_new (COLUNN_COUNT,
+  self->results = gtk_tree_store_new (RESULT_COLUNN_COUNT,
                                       G_TYPE_STRING, PANGO_TYPE_WEIGHT,
                                       G_TYPE_STRING, G_TYPE_STRING);
 
@@ -2014,13 +2096,13 @@ test_suite_setup_results_page (TestSuite *self)
   cell = gtk_cell_renderer_pixbuf_new ();
   gtk_tree_view_column_pack_start (column, cell, FALSE);
   gtk_tree_view_column_set_attributes (column, cell, 
-                                       "icon-name", COLUMN_ICON, NULL);
+                                       "icon-name", RESULT_COLUMN_ICON, NULL);
 
   cell = gtk_cell_renderer_text_new ();
   gtk_tree_view_column_pack_start (column, cell, TRUE);
   gtk_tree_view_column_set_attributes (column, cell, 
-                                       "text", COLUMN_MESSAGE,
-                                       "weight", COLUMN_WEIGHT, NULL);
+                                       "text", RESULT_COLUMN_MESSAGE,
+                                       "weight", RESULT_COLUMN_WEIGHT, NULL);
 
   column = gtk_tree_view_column_new ();
   gtk_tree_view_column_set_expand (column, FALSE);
@@ -2029,7 +2111,7 @@ test_suite_setup_results_page (TestSuite *self)
   cell = gtk_cell_renderer_text_new ();
   gtk_tree_view_column_pack_start (column, cell, TRUE);
   gtk_tree_view_column_set_attributes (column, cell, 
-                                       "text", COLUMN_RESULT, NULL);
+                                       "text", RESULT_COLUMN_RESULT, NULL);
 
   scroller = gtk_scrolled_window_new (NULL, NULL);
   gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (scroller),
@@ -2039,25 +2121,112 @@ test_suite_setup_results_page (TestSuite *self)
   gtk_container_set_border_width (GTK_CONTAINER (scroller), 12);
   gtk_container_add (GTK_CONTAINER (scroller), self->results_view);
 
-  gtk_notebook_append_page (GTK_NOTEBOOK (self->notebook), scroller,
-                            gtk_label_new_with_mnemonic ("Test _Results"));
+  test_suite_insert_page (self, NULL, scroller, "<b>Test Results</b>");
 
   g_signal_connect (self->notebook, "realize",
                     G_CALLBACK (realize_notebook_cb), self);
 }
 
+static gboolean
+tests_is_separator (GtkTreeModel *model,
+                    GtkTreeIter  *iter,
+                    gpointer      data)
+{
+  gchar *label;
+
+  gtk_tree_model_get (model, iter, TEST_COLUMN_LABEL, &label, -1);
+  g_free (label);
+
+  return (NULL == label);
+}
+
+static void
+test_case_toggled (GtkCellRendererToggle *cell,
+                   gchar                 *path,
+                   gpointer               data)
+{
+  GtkTreeIter iter;
+
+  if (gtk_tree_model_get_iter_from_string (GTK_TREE_MODEL (data), &iter, path))
+    gtk_list_store_set (GTK_LIST_STORE (data), &iter, TEST_COLUMN_SELECTED,
+                        !gtk_cell_renderer_toggle_get_active (cell),
+                        -1);
+}
+
+static void
+selection_changed (GtkTreeSelection *selection,
+                   gpointer          data)
+{
+  TestSuite *suite = data;
+  GtkTreeModel *model;
+  GtkTreeIter iter;
+  gint page_index;
+
+  if (gtk_tree_selection_get_selected (selection, &model, &iter))
+    {
+      gtk_tree_model_get (model, &iter, 
+                          TEST_COLUMN_PAGE_INDEX, &page_index, 
+                          -1);
+
+      if (page_index >= 0)
+        gtk_notebook_set_current_page (GTK_NOTEBOOK (suite->notebook),
+                                       page_index);
+    }
+}
+
 static void
 test_suite_setup_ui (TestSuite *self)
 {
-  GtkWidget *actions;
-  GtkWidget *button;
-  GtkWidget *align;
-  GtkWidget *vbox;
+  GtkWidget *table, *actions, *button, *align;
+  GtkWidget *view, *scrolled;
+
+  GtkTreeViewColumn *column;
+  GtkCellRenderer *cell;
+
+  self->tests = gtk_list_store_new (TEST_COLUMN_COUNT, 
+                                    G_TYPE_STRING, G_TYPE_BOOLEAN,
+                                    G_TYPE_POINTER, G_TYPE_BOOLEAN, 
+                                    G_TYPE_INT);
+
+  view = gtk_tree_view_new_with_model (GTK_TREE_MODEL (self->tests));
+  gtk_tree_view_set_headers_visible (GTK_TREE_VIEW (view), FALSE);
+  gtk_tree_view_set_row_separator_func (GTK_TREE_VIEW (view), tests_is_separator, NULL, NULL);
+
+  self->selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (view));
+  gtk_tree_selection_set_mode (self->selection, GTK_SELECTION_BROWSE);
+
+  g_signal_connect (self->selection, "changed", G_CALLBACK (selection_changed), self);
+
+  column = gtk_tree_view_column_new ();
+  cell = gtk_cell_renderer_toggle_new ();
+  gtk_tree_view_append_column (GTK_TREE_VIEW (view), column);
+  gtk_cell_layout_pack_start (GTK_CELL_LAYOUT (column), cell, FALSE);
+  gtk_cell_layout_set_attributes (GTK_CELL_LAYOUT (column), cell,
+                                  "active", TEST_COLUMN_SELECTED, 
+                                  "activatable", TEST_COLUMN_HAS_TEST_CASE,
+                                  "visible", TEST_COLUMN_HAS_TEST_CASE,
+                                  NULL);
+
+  g_signal_connect (cell, "toggled", G_CALLBACK (test_case_toggled), self->tests);
+
+  column = gtk_tree_view_column_new ();
+  cell = gtk_cell_renderer_text_new ();
+  gtk_tree_view_append_column (GTK_TREE_VIEW (view), column);
+  gtk_cell_layout_pack_start (GTK_CELL_LAYOUT (column), cell, TRUE);
+  gtk_cell_layout_set_attributes (GTK_CELL_LAYOUT (column), cell,
+                                  "markup", TEST_COLUMN_LABEL, NULL);
+
+  scrolled = gtk_scrolled_window_new (NULL, NULL);
+  gtk_scrolled_window_set_shadow_type (GTK_SCROLLED_WINDOW (scrolled),
+                                       GTK_SHADOW_IN);
+  gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (scrolled),
+                                  GTK_POLICY_NEVER, GTK_POLICY_AUTOMATIC);
+  gtk_container_add (GTK_CONTAINER (scrolled), view);
 
   self->notebook = gtk_notebook_new ();
-  gtk_notebook_set_tab_pos (GTK_NOTEBOOK (self->notebook), GTK_POS_RIGHT);
+  gtk_notebook_set_show_tabs (GTK_NOTEBOOK (self->notebook), FALSE);
 
-  actions = gtk_hbox_new (FALSE, 12);
+  actions = gtk_hbox_new (TRUE, 12);
 
   align = gtk_alignment_new (1.0, 0.5, 0.0, 0.0);
   gtk_container_add (GTK_CONTAINER (align), actions);
@@ -2066,10 +2235,12 @@ test_suite_setup_ui (TestSuite *self)
   g_signal_connect (button, "clicked", G_CALLBACK (test_current_cb), self);
   gtk_box_pack_start (GTK_BOX (actions), button, FALSE, TRUE, 0);
 
-  g_signal_connect_data (self->notebook, "switch-page",
-                         G_CALLBACK (switch_page_cb),
-                         pointer_bag_new (self, button, NULL),
-                         (GClosureNotify) pointer_bag_free, 0);
+  self->test_current_button = button;
+  g_signal_connect (self->notebook, "switch-page", G_CALLBACK (switch_page_cb), self);
+
+  button = gtk_button_new_with_mnemonic ("Test _Selected Pages");
+  g_signal_connect (button, "clicked", G_CALLBACK (test_selected_cb), self);
+  gtk_box_pack_start (GTK_BOX (actions), button, FALSE, TRUE, 0);
 
   button = gtk_button_new_with_mnemonic ("Test _All Pages");
   g_signal_connect (button, "clicked", G_CALLBACK (test_all_cb), self);
@@ -2111,11 +2282,16 @@ test_suite_setup_ui (TestSuite *self)
   gtk_label_set_ellipsize (GTK_LABEL (self->statusbar),
                            PANGO_ELLIPSIZE_END);
 
-  vbox = gtk_vbox_new (FALSE, 12);
-  gtk_container_set_border_width (GTK_CONTAINER (vbox), 6);
-  gtk_box_pack_start (GTK_BOX (vbox), actions, FALSE, TRUE, 0);
-  gtk_box_pack_start (GTK_BOX (vbox), self->notebook, TRUE, TRUE, 0);
-  gtk_box_pack_start (GTK_BOX (vbox), self->statusbar, FALSE, TRUE, 0);
+  table = gtk_table_new (3, 2, FALSE);
+
+  gtk_table_set_col_spacings (GTK_TABLE (table), 6);
+  gtk_table_set_row_spacings (GTK_TABLE (table), 6);
+  gtk_container_set_border_width (GTK_CONTAINER (table), 6);
+
+  gtk_table_attach (GTK_TABLE (table), actions, 0, 2, 0, 1, GTK_FILL | GTK_EXPAND, GTK_FILL, 0, 0);
+  gtk_table_attach (GTK_TABLE (table), scrolled, 0, 1, 1, 2, GTK_FILL, GTK_FILL | GTK_EXPAND, 0, 0);
+  gtk_table_attach (GTK_TABLE (table), self->notebook, 1, 2, 1, 2, GTK_FILL | GTK_EXPAND, GTK_FILL | GTK_EXPAND, 0, 0);
+  gtk_table_attach (GTK_TABLE (table), self->statusbar, 0, 2, 2, 3, GTK_FILL | GTK_EXPAND, GTK_FILL, 0, 0);
 
   self->window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
 
@@ -2123,8 +2299,8 @@ test_suite_setup_ui (TestSuite *self)
   g_timeout_add (200, watch_pointer_cb, self);
 
   gtk_window_set_title (GTK_WINDOW (self->window), "Testing GtkExtendedLayout");
-  gtk_container_add (GTK_CONTAINER (self->window), vbox);
-  gtk_widget_grab_focus (self->notebook);
+  gtk_container_add (GTK_CONTAINER (self->window), table);
+  gtk_widget_grab_focus (view);
 }
 
 static TestSuite*
@@ -2133,6 +2309,7 @@ test_suite_new (gchar *arg0)
   TestSuite* self = g_new0 (TestSuite, 1);
 
   test_suite_setup_ui (self);
+
   test_suite_append (self, natural_size_test_new (self, FALSE, FALSE));
   test_suite_append (self, natural_size_test_new (self, TRUE, FALSE));
   test_suite_append (self, natural_size_test_new (self, FALSE, TRUE));
@@ -2143,6 +2320,7 @@ test_suite_new (gchar *arg0)
   test_suite_append (self, baseline_test_bin_new (self));
   test_suite_append (self, baseline_test_hbox_new (self, FALSE));
   test_suite_append (self, baseline_test_hbox_new (self, TRUE));
+
   test_suite_setup_results_page (self);
 
   return self;
