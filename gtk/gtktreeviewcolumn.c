@@ -2565,7 +2565,7 @@ gtk_tree_view_column_cell_set_cell_data (GtkTreeViewColumn *tree_column,
 }
 
 void
-gtk_tree_view_column_cell_get_size_impl (GtkTreeViewColumn *tree_column,
+gtk_tree_view_column_cell_get_real_size (GtkTreeViewColumn *tree_column,
                                          GdkRectangle      *cell_area,
                                          gint              *x_offset,
                                          gint              *y_offset,
@@ -2648,7 +2648,7 @@ gtk_tree_view_column_cell_get_size (GtkTreeViewColumn *tree_column,
 				    gint              *width,
 				    gint              *height)
 {
-  gtk_tree_view_column_cell_get_size_impl (tree_column, cell_area,
+  gtk_tree_view_column_cell_get_real_size (tree_column, cell_area,
                                            x_offset, y_offset, width, height, FALSE);
 }
 
@@ -3787,7 +3787,7 @@ static void
 gtk_tree_view_column_extended_layout_get_natural_size (GtkExtendedLayout *layout,
                                                        GtkRequisition    *requisition)
 {
-  gtk_tree_view_column_cell_get_size_impl (GTK_TREE_VIEW_COLUMN (layout),
+  gtk_tree_view_column_cell_get_real_size (GTK_TREE_VIEW_COLUMN (layout),
                                            NULL, NULL, NULL,
                                            &requisition->width,
                                            &requisition->height,

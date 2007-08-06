@@ -31,6 +31,7 @@
 #include "gtkmarshalers.h"
 #include "gtkscrolledwindow.h"
 #include "gtkwindow.h"
+#include "gtkextendedlayout.h"
 #include "gtkprivate.h"
 #include "gtkintl.h"
 #include "gtkalias.h"
@@ -144,9 +145,13 @@ static void gtk_scrolled_window_adjustment_changed (GtkAdjustment          *adju
 
 static void gtk_scrolled_window_update_real_placement (GtkScrolledWindow   *scrolled_window);
 
+static void gtk_scrolled_window_extended_layout_init (GtkExtendedLayoutIface *iface);
+
 static guint signals[LAST_SIGNAL] = {0};
 
-G_DEFINE_TYPE (GtkScrolledWindow, gtk_scrolled_window, GTK_TYPE_BIN)
+G_DEFINE_TYPE_WITH_CODE (GtkScrolledWindow, gtk_scrolled_window, GTK_TYPE_BIN,
+			 G_IMPLEMENT_INTERFACE (GTK_TYPE_EXTENDED_LAYOUT,
+						gtk_scrolled_window_extended_layout_init))
 
 static void
 add_scroll_binding (GtkBindingSet  *binding_set,
@@ -1165,8 +1170,9 @@ gtk_scrolled_window_move_focus_out (GtkScrolledWindow *scrolled_window,
 }
 
 static void
-gtk_scrolled_window_size_request (GtkWidget      *widget,
-				  GtkRequisition *requisition)
+gtk_scrolled_window_real_size_request (GtkWidget      *widget,
+				       GtkRequisition *requisition,
+				       gboolean        consider_natural_size)
 {
   GtkScrolledWindow *scrolled_window;
   GtkBin *bin;
@@ -1197,7 +1203,12 @@ gtk_scrolled_window_size_request (GtkWidget      *widget,
   
   if (bin->child && GTK_WIDGET_VISIBLE (bin->child))
     {
-      gtk_widget_size_request (bin->child, &child_requisition);
+      if (consider_natural_size &&
+          GTK_EXTENDED_LAYOUT_HAS_NATURAL_SIZE (bin->child))
+        gtk_extended_layout_get_natural_size (GTK_EXTENDED_LAYOUT (bin->child),
+                                              &child_requisition);
+      else
+        gtk_widget_size_request (bin->child, &child_requisition);
 
       if (scrolled_window->hscrollbar_policy == GTK_POLICY_NEVER)
 	requisition->width += child_requisition.width;
@@ -1254,6 +1265,13 @@ gtk_scrolled_window_size_request (GtkWidget      *widget,
       requisition->width += 2 * widget->style->xthickness;
       requisition->height += 2 * widget->style->ythickness;
     }
+}
+
+static void
+gtk_scrolled_window_size_request (GtkWidget      *widget,
+				  GtkRequisition *requisition)
+{
+  gtk_scrolled_window_real_size_request (widget, requisition, FALSE);
 }
 
 static void
@@ -1705,6 +1723,26 @@ _gtk_scrolled_window_get_scrollbar_spacing (GtkScrolledWindow *scrolled_window)
 
       return scrollbar_spacing;
     }
+}
+
+static GtkExtendedLayoutFeatures
+gtk_scrolled_window_extended_layout_get_features (GtkExtendedLayout *layout)
+{
+  return GTK_EXTENDED_LAYOUT_NATURAL_SIZE;
+}
+
+static void
+gtk_scrolled_window_extended_layout_get_natural_size (GtkExtendedLayout *layout,
+                                                       GtkRequisition    *requisition)
+{
+  gtk_scrolled_window_real_size_request (GTK_WIDGET (layout), requisition, TRUE);
+}
+
+static void 
+gtk_scrolled_window_extended_layout_init (GtkExtendedLayoutIface *iface)
+{
+  iface->get_features = gtk_scrolled_window_extended_layout_get_features;
+  iface->get_natural_size = gtk_scrolled_window_extended_layout_get_natural_size;
 }
 
 #define __GTK_SCROLLED_WINDOW_C__

@@ -1937,7 +1937,7 @@ update_status (TestSuite *suite,
     g_string_append_printf (status, " (%s)", widget_name);
 
   g_string_append_printf (status,
-                          ":\npos=%dx%d; size=%dx%d req=%dx%d",
+                          ":\nposition=%dx%d; size=%dx%d; requisition=%dx%d",
                           child->allocation.x,
                           child->allocation.y,
                           child->allocation.width,
@@ -1947,6 +1947,17 @@ update_status (TestSuite *suite,
 
   if (GTK_IS_EXTENDED_LAYOUT (child))
     {
+      if (GTK_EXTENDED_LAYOUT_HAS_NATURAL_SIZE (child))
+        {
+          GtkRequisition requisition;
+
+          gtk_extended_layout_get_natural_size (GTK_EXTENDED_LAYOUT (child),
+                                                &requisition);
+
+          g_string_append_printf (status, "; natural-size: %dx%d",
+                                  requisition.width, requisition.height);
+        }
+
       if (GTK_EXTENDED_LAYOUT_HAS_BASELINES (child))
         {
           gint *baselines = NULL;
