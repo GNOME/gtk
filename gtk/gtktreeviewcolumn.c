@@ -29,6 +29,7 @@
 #include "gtkhbox.h"
 #include "gtkmarshalers.h"
 #include "gtkarrow.h"
+#include "gtkextendedlayout.h"
 #include "gtkprivate.h"
 #include "gtkintl.h"
 #include "gtkalias.h"
@@ -152,7 +153,10 @@ static GList *gtk_tree_view_column_cell_prev                   (GtkTreeViewColum
 static void gtk_tree_view_column_clear_attributes_by_info      (GtkTreeViewColumn      *tree_column,
 					                        GtkTreeViewColumnCellInfo *info);
 /* GtkBuildable implementation */
-static void gtk_tree_view_column_buildable_init                 (GtkBuildableIface     *iface);
+static void gtk_tree_view_column_buildable_init                (GtkBuildableIface      *iface);
+
+/* GtkExtendedLayout implementation */
+static void gtk_tree_view_column_extended_layout_init          (GtkExtendedLayoutIface *iface);
 
 static guint tree_column_signals[LAST_SIGNAL] = { 0 };
 
@@ -160,7 +164,9 @@ G_DEFINE_TYPE_WITH_CODE (GtkTreeViewColumn, gtk_tree_view_column, GTK_TYPE_OBJEC
 			 G_IMPLEMENT_INTERFACE (GTK_TYPE_CELL_LAYOUT,
 						gtk_tree_view_column_cell_layout_init)
 			 G_IMPLEMENT_INTERFACE (GTK_TYPE_BUILDABLE,
-						gtk_tree_view_column_buildable_init))
+						gtk_tree_view_column_buildable_init)
+			 G_IMPLEMENT_INTERFACE (GTK_TYPE_EXTENDED_LAYOUT,
+						gtk_tree_view_column_extended_layout_init))
 
 
 static void
@@ -175,6 +181,8 @@ gtk_tree_view_column_class_init (GtkTreeViewColumnClass *class)
   object_class->finalize = gtk_tree_view_column_finalize;
   object_class->set_property = gtk_tree_view_column_set_property;
   object_class->get_property = gtk_tree_view_column_get_property;
+
+  g_type_class_add_private (class, sizeof (GtkTreeViewColumnPrivate));
   
   tree_column_signals[CLICKED] =
     g_signal_new (I_("clicked"),
@@ -2556,6 +2564,70 @@ gtk_tree_view_column_cell_set_cell_data (GtkTreeViewColumn *tree_column,
 
 }
 
+void
+gtk_tree_view_column_cell_get_size_impl (GtkTreeViewColumn *tree_column,
+                                         GdkRectangle      *cell_area,
+                                         gint              *x_offset,
+                                         gint              *y_offset,
+                                         gint              *width,
+                                         gint              *height,
+                                         gboolean           consider_natural_size)
+{
+
+  GList *list;
+  gboolean first_cell = TRUE;
+  gint focus_line_width;
+
+  g_return_if_fail (GTK_IS_TREE_VIEW_COLUMN (tree_column));
+
+  if (height)
+    *height = 0;
+  if (width)
+    *width = 0;
+
+  gtk_widget_style_get (tree_column->tree_view, "focus-line-width", &focus_line_width, NULL);
+  
+  for (list = tree_column->cell_list; list; list = list->next)
+    {
+      GtkTreeViewColumnCellInfo *info = (GtkTreeViewColumnCellInfo *) list->data;
+      GtkRequisition req = { 0, 0 };
+      gboolean visible;
+
+      g_object_get (info->cell, "visible", &visible, NULL);
+
+      if (visible == FALSE)
+        continue;
+
+      if (first_cell == FALSE && width)
+        *width += tree_column->spacing;
+
+      if (consider_natural_size && GTK_EXTENDED_LAYOUT_HAS_NATURAL_SIZE (info->cell))
+        gtk_extended_layout_get_natural_size (GTK_EXTENDED_LAYOUT (info->cell), &req);
+      else
+        gtk_cell_renderer_get_size (info->cell, tree_column->tree_view,
+                                    cell_area, x_offset, y_offset,
+                                    &req.width, &req.height);
+
+      req.width += focus_line_width * 2;
+      req.height += focus_line_width * 2;
+
+      if (!consider_natural_size) 
+        {
+          req.width = MAX (info->requested_width, req.width);
+          req.height = MAX (0, req.height);
+
+          info->requested_width = req.width;
+        }
+
+      if (width)
+        *width = req.width;
+      if (height)
+        *height = req.height;
+
+      first_cell = FALSE;
+    }
+}
+
 /**
  * gtk_tree_view_column_cell_get_size:
  * @tree_column: A #GtkTreeViewColumn.
@@ -2576,48 +2648,8 @@ gtk_tree_view_column_cell_get_size (GtkTreeViewColumn *tree_column,
 				    gint              *width,
 				    gint              *height)
 {
-  GList *list;
-  gboolean first_cell = TRUE;
-  gint focus_line_width;
-
-  g_return_if_fail (GTK_IS_TREE_VIEW_COLUMN (tree_column));
-
-  if (height)
-    * height = 0;
-  if (width)
-    * width = 0;
-
-  gtk_widget_style_get (tree_column->tree_view, "focus-line-width", &focus_line_width, NULL);
-  
-  for (list = tree_column->cell_list; list; list = list->next)
-    {
-      GtkTreeViewColumnCellInfo *info = (GtkTreeViewColumnCellInfo *) list->data;
-      gboolean visible;
-      gint new_height = 0;
-      gint new_width = 0;
-      g_object_get (info->cell, "visible", &visible, NULL);
-
-      if (visible == FALSE)
-	continue;
-
-      if (first_cell == FALSE && width)
-	*width += tree_column->spacing;
-
-      gtk_cell_renderer_get_size (info->cell,
-				  tree_column->tree_view,
-				  cell_area,
-				  x_offset,
-				  y_offset,
-				  &new_width,
-				  &new_height);
-
-      if (height)
-	* height = MAX (*height, new_height + focus_line_width * 2);
-      info->requested_width = MAX (info->requested_width, new_width + focus_line_width * 2);
-      if (width)
-	* width += info->requested_width;
-      first_cell = FALSE;
-    }
+  gtk_tree_view_column_cell_get_size_impl (tree_column, cell_area,
+                                           x_offset, y_offset, width, height, FALSE);
 }
 
 /* rendering, event handling and rendering focus are somewhat complicated, and
@@ -3743,6 +3775,30 @@ gtk_tree_view_column_get_tree_view (GtkTreeViewColumn *tree_column)
   g_return_val_if_fail (GTK_IS_TREE_VIEW_COLUMN (tree_column), NULL);
 
   return tree_column->tree_view;
+}
+
+static GtkExtendedLayoutFeatures
+gtk_tree_view_column_extended_layout_get_features (GtkExtendedLayout *layout)
+{
+  return GTK_EXTENDED_LAYOUT_NATURAL_SIZE;
+}
+
+static void
+gtk_tree_view_column_extended_layout_get_natural_size (GtkExtendedLayout *layout,
+                                                       GtkRequisition    *requisition)
+{
+  gtk_tree_view_column_cell_get_size_impl (GTK_TREE_VIEW_COLUMN (layout),
+                                           NULL, NULL, NULL,
+                                           &requisition->width,
+                                           &requisition->height,
+                                           TRUE);
+}
+
+static void 
+gtk_tree_view_column_extended_layout_init (GtkExtendedLayoutIface *iface)
+{
+  iface->get_features = gtk_tree_view_column_extended_layout_get_features;
+  iface->get_natural_size = gtk_tree_view_column_extended_layout_get_natural_size;
 }
 
 #define __GTK_TREE_VIEW_COLUMN_C__
