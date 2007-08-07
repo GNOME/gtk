@@ -915,7 +915,7 @@ text (GMarkupParseContext *context,
           else
             text = dgettext (data->domain, text);
         }
-      prop_info->data = g_strndup (text, text_len);
+      prop_info->data = g_strdup (text);
     }
 }
 

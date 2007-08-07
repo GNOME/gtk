@@ -1,3 +1,9 @@
+2007-08-07  Johan Dahlin  <jdahlin@async.com.br>
+
+	* gtk/gtkbuilderparser.c (text): Use g_strdup on the translated
+	string instead of g_strndup() + the length of the untranslated
+	string. (#461945, Claude Paroz)
+
 2007-08-07  Kristian Rietveld  <kris@imendio.com>
 
 	* gtk/gtktooltips.c (gtk_tooltips_init),
