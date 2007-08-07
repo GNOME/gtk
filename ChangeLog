@@ -1,3 +1,8 @@
+2007-08-07  Kristian Rietveld  <kris@imendio.com>
+
+	* gtk/gtktooltip.c (_gtk_tooltip_handle_event): Disable tooltips
+	in touchscreen mode.
+
 2007-07-31  Richard Hult  <richard@imendio.com>
 
 	* gdk/quartz/gdkwindow-quartz.c: (gdk_window_get_geometry):

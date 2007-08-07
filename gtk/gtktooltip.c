@@ -1078,9 +1078,20 @@ _gtk_tooltip_handle_event (GdkEvent *event)
 {
   gint x, y;
   gboolean return_value = FALSE;
+  gboolean touchscreen;
   GtkWidget *has_tooltip_widget = NULL;
+  GdkScreen *screen;
   GdkDisplay *display;
   GtkTooltip *current_tooltip;
+  GtkSettings *settings;
+
+  /* Disable tooltips in touchscreen mode */
+  screen = gdk_drawable_get_screen (event->any.window);
+  settings = gtk_settings_get_for_screen (screen);
+  g_object_get (settings, "gtk-touchscreen-mode", &touchscreen, NULL);
+
+  if (touchscreen)
+    return;
 
   has_tooltip_widget = find_topmost_widget_coords_from_event (event, &x, &y);
   display = gdk_drawable_get_display (event->any.window);
