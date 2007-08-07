@@ -908,14 +908,20 @@ text (GMarkupParseContext *context,
     {
       PropertyInfo *prop_info = (PropertyInfo*)info;
 
+      /* text is not guaranteed to be null-terminated */
+      char *string = g_strndup (text, text_len);
+
       if (prop_info->translatable && text_len)
         {
-          if (prop_info->context)
-            text = dpgettext (data->domain, prop_info->context, text);
+	  if (prop_info->context)
+            text = dpgettext (data->domain, prop_info->context, string);
           else
-            text = dgettext (data->domain, text);
+            text = dgettext (data->domain, string);
+
+	  g_free (string);
+	  string = g_strdup (text);
         }
-      prop_info->data = g_strdup (text);
+      prop_info->data = string;
     }
 }
 

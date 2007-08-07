@@ -1,5 +1,11 @@
 2007-08-07  Johan Dahlin  <jdahlin@async.com.br>
 
+	* gtk/gtkbuilderparser.c (text): 
+	* gtk/gtkcelllayout.c (attributes_text_element): 
+	* gtk/gtkliststore.c (list_store_text): 
+	Do not assume that text is null-terminated as pointed out by
+	Christopher Fergeau
+	
 	* gtk/gtkbuilderparser.c (text): Use g_strdup on the translated
 	string instead of g_strndup() + the length of the untranslated
 	string. (#461945, Claude Paroz)

@@ -2188,15 +2188,17 @@ list_store_text (GMarkupParseContext *context,
   SubParserData *data = (SubParserData*)user_data;
   gint i;
   GError *tmp_error = NULL;
+  gchar *string;
   
   if (!data->is_data)
     return;
 
   i = data->row_column - 1;
 
+  string = g_strndup (text, text_len);
   if (!gtk_builder_value_from_string_type (data->builder,
 					   data->column_types[i],
-					   text,
+					   string,
 					   &data->values[i],
 					   &tmp_error))
     {
@@ -2208,6 +2210,7 @@ list_store_text (GMarkupParseContext *context,
 		   tmp_error->message);
       g_error_free (tmp_error);
     }
+  g_free (string);
 }
 
 static const GMarkupParser list_store_parser =

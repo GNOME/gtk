@@ -349,21 +349,25 @@ attributes_text_element (GMarkupParseContext *context,
   AttributesSubParserData *parser_data = (AttributesSubParserData*)user_data;
   glong l;
   gchar *endptr;
-
+  gchar *string;
+  
   if (!parser_data->attr_name)
     return;
 
   errno = 0;
-  l = strtol (text, &endptr, 0);
-  if (errno || endptr == text)
+  string = g_strndup (text, text_len);
+  l = strtol (string, &endptr, 0);
+  if (errno || endptr == string)
     {
       g_set_error (error, 
                    GTK_BUILDER_ERROR,
                    GTK_BUILDER_ERROR_INVALID_VALUE,
                    "Could not parse integer `%s'",
-                   text);
+                   string);
+      g_free (string);
       return;
     }
+  g_free (string);
 
   gtk_cell_layout_add_attribute (parser_data->cell_layout,
 				 parser_data->renderer,
