@@ -103,6 +103,8 @@ gtk_tooltips_init (GtkTooltips *tooltips)
   private->tips_data_table =
     g_hash_table_new_full (NULL, NULL, NULL,
                            (GDestroyNotify) gtk_tooltips_destroy_data);
+
+  gtk_tooltips_force_window (tooltips);
 }
 
 static void
@@ -144,6 +146,12 @@ gtk_tooltips_destroy (GtkObject *object)
 
   g_return_if_fail (tooltips != NULL);
 
+  if (tooltips->tip_window)
+    {
+      gtk_widget_destroy (tooltips->tip_window);
+      tooltips->tip_window = NULL;
+    }
+
   g_hash_table_remove_all (private->tips_data_table);
 
   GTK_OBJECT_CLASS (gtk_tooltips_parent_class)->destroy (object);
@@ -154,7 +162,18 @@ gtk_tooltips_force_window (GtkTooltips *tooltips)
 {
   g_return_if_fail (GTK_IS_TOOLTIPS (tooltips));
 
-  /* nop */
+  if (!tooltips->tip_window)
+    {
+      tooltips->tip_window = gtk_window_new (GTK_WINDOW_POPUP);
+      g_signal_connect (tooltips->tip_window,
+			"destroy",
+			G_CALLBACK (gtk_widget_destroyed),
+			&tooltips->tip_window);
+
+      tooltips->tip_label = gtk_label_new (NULL);
+      gtk_container_add (GTK_CONTAINER (tooltips->tip_window),
+			 tooltips->tip_label);
+    }
 }
 
 void

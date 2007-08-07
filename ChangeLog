@@ -1,5 +1,12 @@
 2007-08-07  Kristian Rietveld  <kris@imendio.com>
 
+	* gtk/gtktooltips.c (gtk_tooltips_init),
+	(gtk_tooltips_destroy), (gtk_tooltips_force_window): create a dummy
+	tip_window and tip_label, so old applications with code accessing
+	those fields won't crash.
+
+2007-08-07  Kristian Rietveld  <kris@imendio.com>
+
 	* gtk/gtktooltip.c (_gtk_tooltip_handle_event): Disable tooltips
 	in touchscreen mode.
 
