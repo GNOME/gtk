@@ -1,3 +1,7 @@
+2007-08-07  Matthias Clasen  <mclasen@redhat.com>
+	
+	* MAINTAINERS: Follow new format regulations.
+
 2007-08-07  Johan Dahlin  <jdahlin@async.com.br>
 
 	* gtk/gtkbuilderparser.c (text): 
