@@ -526,7 +526,17 @@ gtk_combo_box_class_init (GtkComboBoxClass *klass)
                   NULL, NULL,
                   g_cclosure_marshal_VOID__VOID,
                   G_TYPE_NONE, 0);
-
+  /**
+   * GtkComboBox::move-active:
+   * @widget: the object that received the signal
+   * @scroll_type: a #GtkScrollType
+   *
+   * The ::move-active signal is a 
+   * <link linkend="keybinding-signals">keybinding signal</link>
+   * which gets emitted to move the active selection.
+   *
+   * Since: 2.12
+   */
   combo_box_signals[MOVE_ACTIVE] =
     _gtk_binding_signal_new (I_("move-active"),
                              G_OBJECT_CLASS_TYPE (klass),
@@ -537,6 +547,18 @@ gtk_combo_box_class_init (GtkComboBoxClass *klass)
                              G_TYPE_NONE, 1,
                              GTK_TYPE_SCROLL_TYPE);
 
+  /**
+   * GtkComboBox::popup:
+   * @widget: the object that received the signal
+   *
+   * The ::popup signal is a 
+   * <link linkend="keybinding-signals">keybinding signal</link>
+   * which gets emitted to popup the combo box list.
+   *
+   * The default binding for this signal is Alt+Down.
+   *
+   * Since: 2.12
+   */
   combo_box_signals[POPUP] =
     _gtk_binding_signal_new (I_("popup"),
                              G_OBJECT_CLASS_TYPE (klass),
@@ -545,7 +567,18 @@ gtk_combo_box_class_init (GtkComboBoxClass *klass)
                              NULL, NULL,
                              g_cclosure_marshal_VOID__VOID,
                              G_TYPE_NONE, 0);
-
+  /**
+   * GtkComboBox::popdown:
+   * @button: the object which received the signal
+   *
+   * The ::popdown signal is a 
+   * <link linkend="keybinding-signals">keybinding signal</link> 
+   * which gets emitted to popdown the combo box list.
+   *
+   * The default bindings for this signal are Alt+Up and Escape.
+   *
+   * Since: 2.12
+   */
   combo_box_signals[POPDOWN] =
     _gtk_binding_signal_new (I_("popdown"),
                              G_OBJECT_CLASS_TYPE (klass),
