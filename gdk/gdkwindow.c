@@ -2674,6 +2674,13 @@ gdk_window_invalidate_maybe_recurse (GdkWindow *window,
   gdk_region_destroy (visible_region);
 }
 
+static gboolean
+true_predicate (GdkWindow *window,
+		gpointer   user_data)
+{
+  return TRUE;
+}
+
 /**
  * gdk_window_invalidate_region:
  * @window: a #GdkWindow
@@ -2705,7 +2712,7 @@ gdk_window_invalidate_region (GdkWindow *window,
 {
   gdk_window_invalidate_maybe_recurse (window, region,
 				       invalidate_children ?
-				         gtk_true : (gboolean (*) (GdkWindow *, gpointer))NULL,
+				         true_predicate : (gboolean (*) (GdkWindow *, gpointer))NULL,
 				       NULL);
 }
 

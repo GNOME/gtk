@@ -1,8 +1,3 @@
-2007-08-08  Behdad Esfahbod  <behdad@gnome.org>
-
-	* gdk/gdkwindow.c (gdk_window_invalidate_region): Use gtk_true
-	instead of rolling a new one.  Patch from Xan Lopez.
-
 2007-08-08  Mikael Hallendal  <micke@imendio.com>
 
 	* gtk/gtkcombobox.c (gtk_combo_box_class_init): 
