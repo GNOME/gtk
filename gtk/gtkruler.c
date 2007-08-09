@@ -259,6 +259,17 @@ gtk_ruler_get_metric (GtkRuler *ruler)
   return 0;
 }
 
+/**
+ * gtk_ruler_set_range:
+ * @ruler: the gtkruler
+ * @lower: the lower limit of the ruler
+ * @upper: the upper limit of the ruler
+ * @position: the mark on the ruler
+ * @max_size: the maximum size of the ruler used when calculating the space to
+ * leave for the text
+ *
+ * This sets the range of the ruler. 
+ */
 void
 gtk_ruler_set_range (GtkRuler *ruler,
 		     gdouble   lower,

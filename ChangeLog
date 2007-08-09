@@ -1,3 +1,9 @@
+2007-08-09  Stefan Kost  <ensonic@users.sf.net>
+
+	* docs/reference/gtk/tmpl/gtkruler.sgml:
+	* gtk/gtkruler.c:
+	Move documentation of gtk_ruler_set_range() to source and fix nonsense.
+
 2007-08-08  Mikael Hallendal  <micke@imendio.com>
 
 	* gtk/gtkcombobox.c (gtk_combo_box_class_init): 

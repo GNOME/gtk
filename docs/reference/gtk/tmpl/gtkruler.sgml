@@ -89,14 +89,13 @@ is GTK_PIXELS.
 
 <!-- ##### FUNCTION gtk_ruler_set_range ##### -->
 <para>
-This sets the range of the ruler using gfloat lower, gfloat upper, gfloat position, and gfloat max_size. 
-</para>
 
-@ruler: the gtkruler
-@lower: the lower limit of the ruler
-@upper: the upper limit of the ruler
-@position: the mark on the ruler
-@max_size: the maximum size of the ruler
+</para>
+@ruler:
+@lower:
+@upper:
+@position:
+@max_size:
 
 
 <!-- ##### FUNCTION gtk_ruler_get_metric ##### -->
