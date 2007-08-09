@@ -191,7 +191,8 @@ format_from_settings (GtkPrintSettings *settings)
   if (settings == NULL)
     return N_FORMATS;
 
-  value = gtk_print_settings_get (settings, GTK_PRINT_SETTINGS_OUTPUT_FILE_FORMAT);
+  value = gtk_print_settings_get (settings,
+                                  GTK_PRINT_SETTINGS_OUTPUT_FILE_FORMAT);
   if (value == NULL)
     return N_FORMATS;
 
@@ -473,6 +474,58 @@ gtk_print_backend_file_init (GtkPrintBackendFile *backend)
   gtk_print_backend_set_list_done (GTK_PRINT_BACKEND (backend));
 }
 
+static void
+file_printer_output_file_format_changed (GtkPrinterOption    *format_option,
+                                         GtkPrinterOptionSet *set)
+{
+  GtkPrinterOption *uri_option;
+  gchar            *base = NULL;
+
+  if (! format_option->value)
+    return;
+
+  uri_option = gtk_printer_option_set_lookup (set,
+                                              "gtk-main-page-custom-input");
+
+  if (uri_option && uri_option->value)
+    {
+      const gchar *uri = uri_option->value;
+      const gchar *dot = strrchr (uri, '.');
+
+      if (dot)
+        {
+          gint i;
+
+          /*  check if the file extension matches one of the known ones  */
+          for (i = 0; i < N_FORMATS; i++)
+            if (strcmp (dot + 1, formats[i]) == 0)
+              break;
+
+          if (i < N_FORMATS && strcmp (formats[i], format_option->value))
+            {
+              /*  the file extension is known but doesn't match the
+               *  selected one, strip it away
+               */
+              base = g_strndup (uri, dot - uri);
+            }
+        }
+      else
+        {
+          /*  there's no file extension  */
+          base = g_strdup (uri);
+        }
+    }
+
+  if (base)
+    {
+      gchar *tmp = g_strdup_printf ("%s.%s", base, format_option->value);
+
+      gtk_printer_option_set (uri_option, tmp);
+      g_free (tmp);
+      g_free (base);
+    }
+}
+
 static GtkPrinterOptionSet *
 file_printer_get_options (GtkPrinter           *printer,
 			  GtkPrintSettings     *settings,
@@ -553,7 +606,11 @@ file_printer_get_options (GtkPrinter           *printer,
 					     display_format_names);
       gtk_printer_option_set (option, supported_formats[current_format]);
       gtk_printer_option_set_add (set, option);
-      
+
+      g_signal_connect (option, "changed",
+                        G_CALLBACK (file_printer_output_file_format_changed),
+                        set);
+
       g_object_unref (option);
     }
 

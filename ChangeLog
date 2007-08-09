@@ -1,3 +1,9 @@
+2007-08-09  Sven Neumann  <sven@gimp.org>
+
+	* modules/printbackends/file/gtkprintbackendfile.c: change the
+	file extension when the file format is changed in the Print dialog
+	(#356630).
+
 2007-07-27  Attilio Fiandrotti  <attilio.fiandrotti@gmail.com>
 
 	Merge from trunk:
