@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.6\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-07-19 11:30+0100\n"
+"POT-Creation-Date: 2007-08-09 07:54+0300\n"
 "PO-Revision-Date: 2007-02-13 08:20+0300\n"
 "Last-Translator: Ilkka Tuohela <hile@iki.fi>\n"
 "Language-Team: Finnish <gnome-fi-laatu@lists.sourceforge.net>\n"
@@ -696,7 +696,7 @@ msgstr ""
 "Jos TRUE, niin lapsi on toissijaisten joukossa. Tämä sopii esim. "
 "ohjepainikkeille."
 
-#: ../gtk/gtkbox.c:98 ../gtk/gtkexpander.c:219 ../gtk/gtkiconview.c:662
+#: ../gtk/gtkbox.c:98 ../gtk/gtkexpander.c:219 ../gtk/gtkiconview.c:665
 #: ../gtk/gtktreeviewcolumn.c:216
 msgid "Spacing"
 msgstr "Välit"
@@ -794,7 +794,7 @@ msgstr ""
 "Jos asetettu, niin nimiötä käytetään vakiovalikoiman kohteen valitsemiseen, "
 "sen sijaan että se näkyisi"
 
-#: ../gtk/gtkbutton.c:223 ../gtk/gtkcombobox.c:751
+#: ../gtk/gtkbutton.c:223 ../gtk/gtkcombobox.c:784
 #: ../gtk/gtkfilechooserbutton.c:401
 msgid "Focus on click"
 msgstr "Kohdista napsautettaessa"
@@ -1162,7 +1162,7 @@ msgstr "Vakiovalikoima-ID"
 msgid "The stock ID of the stock icon to render"
 msgstr "Piirtyvän vakiokuvakkeen vakiovalikoima-ID"
 
-#: ../gtk/gtkcellrendererpixbuf.c:144 ../gtk/gtkrecentmanager.c:279
+#: ../gtk/gtkcellrendererpixbuf.c:144 ../gtk/gtkrecentmanager.c:281
 #: ../gtk/gtkstatusicon.c:215
 msgid "Size"
 msgstr "Koko"
@@ -1233,7 +1233,7 @@ msgstr "Tekstin y-kohdistus"
 msgid "The vertical text alignment, from 0 (top) to 1 (bottom)."
 msgstr "Pystykohdistus, arvosta 0 (ylhäällä) arvoon 1 (alhaalla)"
 
-#: ../gtk/gtkcellrendererprogress.c:221 ../gtk/gtkiconview.c:727
+#: ../gtk/gtkcellrendererprogress.c:221 ../gtk/gtkiconview.c:730
 #: ../gtk/gtkprogressbar.c:130 ../gtk/gtkstatusicon.c:273
 #: ../gtk/gtktoolbar.c:475 ../gtk/gtktrayicon-x11.c:96
 msgid "Orientation"
@@ -1479,7 +1479,7 @@ msgstr ""
 "Kuinka teksti pilkotaan useammaksi riviksi mikäli solupiirtimellä ei ole "
 "riittävästi tilaa näyttää koko tekstiä"
 
-#: ../gtk/gtkcellrenderertext.c:468 ../gtk/gtkcombobox.c:640
+#: ../gtk/gtkcellrenderertext.c:468 ../gtk/gtkcombobox.c:673
 msgid "Wrap width"
 msgstr "Rivitysleveys"
 
@@ -1731,7 +1731,7 @@ msgstr "Otsikko"
 msgid "The title of the color selection dialog"
 msgstr "Värivalintaikkunan otsikko"
 
-#: ../gtk/gtkcolorbutton.c:202 ../gtk/gtkcolorsel.c:1871
+#: ../gtk/gtkcolorbutton.c:202 ../gtk/gtkcolorsel.c:1857
 msgid "Current Color"
 msgstr "Nykyinen väri"
 
@@ -1739,7 +1739,7 @@ msgstr "Nykyinen väri"
 msgid "The selected color"
 msgstr "Valittu väri"
 
-#: ../gtk/gtkcolorbutton.c:217 ../gtk/gtkcolorsel.c:1878
+#: ../gtk/gtkcolorbutton.c:217 ../gtk/gtkcolorsel.c:1864
 msgid "Current Alpha"
 msgstr "Nykyinen alfa-arvo"
 
@@ -1747,35 +1747,35 @@ msgstr "Nykyinen alfa-arvo"
 msgid "The selected opacity value (0 fully transparent, 65535 fully opaque)"
 msgstr "Valittu peittoarvo (0=kokonaan läpinäkyvä, 65535=täysin peittävä)"
 
-#: ../gtk/gtkcolorsel.c:1857
+#: ../gtk/gtkcolorsel.c:1843
 msgid "Has Opacity Control"
 msgstr "Peittävyyssäädin on"
 
-#: ../gtk/gtkcolorsel.c:1858
+#: ../gtk/gtkcolorsel.c:1844
 msgid "Whether the color selector should allow setting opacity"
 msgstr "Salliiko värivalitsin peittävyyden asettamisen"
 
-#: ../gtk/gtkcolorsel.c:1864
+#: ../gtk/gtkcolorsel.c:1850
 msgid "Has palette"
 msgstr "Paletti on"
 
-#: ../gtk/gtkcolorsel.c:1865
+#: ../gtk/gtkcolorsel.c:1851
 msgid "Whether a palette should be used"
 msgstr "Käytetäänkö palettia"
 
-#: ../gtk/gtkcolorsel.c:1872
+#: ../gtk/gtkcolorsel.c:1858
 msgid "The current color"
 msgstr "Nykyinen väri"
 
-#: ../gtk/gtkcolorsel.c:1879
+#: ../gtk/gtkcolorsel.c:1865
 msgid "The current opacity value (0 fully transparent, 65535 fully opaque)"
 msgstr "Nykyinen peittoarvo (0=kokonaan läpinäkyvä, 65535=täysin peittävä)"
 
-#: ../gtk/gtkcolorsel.c:1893
+#: ../gtk/gtkcolorsel.c:1879
 msgid "Custom palette"
 msgstr "Oma paletti"
 
-#: ../gtk/gtkcolorsel.c:1894
+#: ../gtk/gtkcolorsel.c:1880
 msgid "Palette to use in the color selector"
 msgstr "Värivalitsimessa käytettävä paletti"
 
@@ -1819,68 +1819,68 @@ msgstr "Arvo listassa"
 msgid "Whether entered values must already be present in the list"
 msgstr "Täytyykö syötettyjen arvojen olla jo luettelossa"
 
-#: ../gtk/gtkcombobox.c:623
+#: ../gtk/gtkcombobox.c:656
 msgid "ComboBox model"
 msgstr "Monivalintalaatikkomalli"
 
-#: ../gtk/gtkcombobox.c:624
+#: ../gtk/gtkcombobox.c:657
 msgid "The model for the combo box"
 msgstr "Malli monivalintalaatikolle"
 
-#: ../gtk/gtkcombobox.c:641
+#: ../gtk/gtkcombobox.c:674
 msgid "Wrap width for laying out the items in a grid"
 msgstr "Rivitysleveys kohtien asetteluun ruudukossa"
 
-#: ../gtk/gtkcombobox.c:663
+#: ../gtk/gtkcombobox.c:696
 msgid "Row span column"
 msgstr "Rivivälisarake"
 
-#: ../gtk/gtkcombobox.c:664
+#: ../gtk/gtkcombobox.c:697
 msgid "TreeModel column containing the row span values"
 msgstr "TreeModel-sarake sisältäen riviväliarvot"
 
-#: ../gtk/gtkcombobox.c:685
+#: ../gtk/gtkcombobox.c:718
 msgid "Column span column"
 msgstr "Sarakevälisarake"
 
-#: ../gtk/gtkcombobox.c:686
+#: ../gtk/gtkcombobox.c:719
 msgid "TreeModel column containing the column span values"
 msgstr "TreeModel-sarake sisältäen sarakeväliarvot"
 
-#: ../gtk/gtkcombobox.c:707
+#: ../gtk/gtkcombobox.c:740
 msgid "Active item"
 msgstr "Aktiivinen kohta"
 
-#: ../gtk/gtkcombobox.c:708
+#: ../gtk/gtkcombobox.c:741
 msgid "The item which is currently active"
 msgstr "Nyt valittu aktiivinen kohta"
 
-#: ../gtk/gtkcombobox.c:727 ../gtk/gtkuimanager.c:220
+#: ../gtk/gtkcombobox.c:760 ../gtk/gtkuimanager.c:220
 msgid "Add tearoffs to menus"
 msgstr "Lisää irrottimet valikkoihin"
 
-#: ../gtk/gtkcombobox.c:728
+#: ../gtk/gtkcombobox.c:761
 msgid "Whether dropdowns should have a tearoff menu item"
 msgstr "Onko alasvetovalikoissa irrotuskohdat"
 
-#: ../gtk/gtkcombobox.c:743 ../gtk/gtkentry.c:522
+#: ../gtk/gtkcombobox.c:776 ../gtk/gtkentry.c:522
 msgid "Has Frame"
 msgstr "Kehys on"
 
-#: ../gtk/gtkcombobox.c:744
+#: ../gtk/gtkcombobox.c:777
 msgid "Whether the combo box draws a frame around the child"
 msgstr "Piirtääkö monivalintalaatikko kehyksen lapsen ympärille"
 
-#: ../gtk/gtkcombobox.c:752
+#: ../gtk/gtkcombobox.c:785
 msgid "Whether the combo box grabs focus when it is clicked with the mouse"
 msgstr ""
 "Kaappaako monivalintalaatikko kohdistuken kun sitä napsautetaan hiirellä"
 
-#: ../gtk/gtkcombobox.c:767 ../gtk/gtkmenu.c:484
+#: ../gtk/gtkcombobox.c:800 ../gtk/gtkmenu.c:484
 msgid "Tearoff Title"
 msgstr "Irrotettava otsikko"
 
-#: ../gtk/gtkcombobox.c:768
+#: ../gtk/gtkcombobox.c:801
 msgid ""
 "A title that may be displayed by the window manager when the popup is torn-"
 "off"
@@ -1888,37 +1888,37 @@ msgstr ""
 "Otsikko, jonka ikkunointiohjelma voi näyttää, kun ponnahdusikkuna on "
 "irrotettu"
 
-#: ../gtk/gtkcombobox.c:785
+#: ../gtk/gtkcombobox.c:818
 msgid "Popup shown"
 msgstr "Ponnahdusikkuna näytetään"
 
-#: ../gtk/gtkcombobox.c:786
+#: ../gtk/gtkcombobox.c:819
 msgid "Whether the combo's dropdown is shown"
 msgstr "Näkyykö yhdistelmäikkunan pudotusvalikko"
 
-#: ../gtk/gtkcombobox.c:792
+#: ../gtk/gtkcombobox.c:825
 msgid "Appears as list"
 msgstr "Näkyy luettelona"
 
-#: ../gtk/gtkcombobox.c:793
+#: ../gtk/gtkcombobox.c:826
 msgid "Whether dropdowns should look like lists rather than menus"
 msgstr "Näkyykö alasvedot luettelona valikon sijaan"
 
-#: ../gtk/gtkcombobox.c:809
+#: ../gtk/gtkcombobox.c:842
 msgid "Arrow Size"
 msgstr "Nuolen koko"
 
-#: ../gtk/gtkcombobox.c:810
+#: ../gtk/gtkcombobox.c:843
 msgid "The minimum size of the arrow in the combo box"
 msgstr "Monivalintalaatikon nuolen pienin mahdollinen koko"
 
-#: ../gtk/gtkcombobox.c:825 ../gtk/gtkentry.c:622 ../gtk/gtkhandlebox.c:176
+#: ../gtk/gtkcombobox.c:858 ../gtk/gtkentry.c:622 ../gtk/gtkhandlebox.c:176
 #: ../gtk/gtkmenubar.c:201 ../gtk/gtkstatusbar.c:186 ../gtk/gtktoolbar.c:613
 #: ../gtk/gtkviewport.c:122
 msgid "Shadow type"
 msgstr "Varjotyyppi"
 
-#: ../gtk/gtkcombobox.c:826
+#: ../gtk/gtkcombobox.c:859
 msgid "Which kind of shadow to draw around the combo box"
 msgstr "Minkätyyppinen varjo piirretään monivalintalaatikon ympärille"
 
@@ -2131,8 +2131,8 @@ msgstr "Yhdistetäänkö moniriviset valinnat yhdelle riville."
 
 #: ../gtk/gtkentry.c:623
 msgid "Which kind of shadow to draw around the entry when has-frame is set"
-msgstr "Minkä tyyppinen varjo piirretään kentän ympärille, kun "
-"has-frame on asetettu"
+msgstr ""
+"Minkä tyyppinen varjo piirretään kentän ympärille, kun has-frame on asetettu"
 
 #: ../gtk/gtkentry.c:891
 msgid "Border between text and frame."
@@ -2171,7 +2171,7 @@ msgstr "Hakusanan pienin pituus"
 msgid "Minimum length of the search key in order to look up matches"
 msgstr "Hakusanan pienin pituus mitä käytetään vastaavuuksien etsintään"
 
-#: ../gtk/gtkentrycompletion.c:302 ../gtk/gtkiconview.c:583
+#: ../gtk/gtkentrycompletion.c:302 ../gtk/gtkiconview.c:586
 msgid "Text column"
 msgstr "Tekstisarake"
 
@@ -2212,9 +2212,8 @@ msgid "If TRUE, the popup window will appear for a single match."
 msgstr "Jos tosi, näytetään ponnahdusikkuna kun on vain yksi osuma."
 
 #: ../gtk/gtkentrycompletion.c:387
-#, fuzzy
 msgid "Inline selection"
-msgstr "Välitön täydennys"
+msgstr "Sisäkkäinen valinta"
 
 #: ../gtk/gtkentrycompletion.c:388
 msgid "Your description here"
@@ -2276,11 +2275,11 @@ msgstr "Nimiösäädin"
 msgid "A widget to display in place of the usual expander label"
 msgstr "Laajentimen tavallisen nimiön tilalla näytettävä säädin"
 
-#: ../gtk/gtkexpander.c:236 ../gtk/gtktreeview.c:766
+#: ../gtk/gtkexpander.c:236 ../gtk/gtktreeview.c:777
 msgid "Expander Size"
 msgstr "Laajentimen koko"
 
-#: ../gtk/gtkexpander.c:237 ../gtk/gtktreeview.c:767
+#: ../gtk/gtkexpander.c:237 ../gtk/gtktreeview.c:778
 msgid "Size of the expander arrow"
 msgstr "Laajenninnuolen koko"
 
@@ -2304,7 +2303,7 @@ msgstr "Tiedostojärjestelmä-taustaosa"
 msgid "Name of file system backend to use"
 msgstr "Käytettävän tiedostojärjestelmä-taustaosan nimi"
 
-#: ../gtk/gtkfilechooser.c:210 ../gtk/gtkrecentchooser.c:169
+#: ../gtk/gtkfilechooser.c:210 ../gtk/gtkrecentchooser.c:252
 msgid "Filter"
 msgstr "Suodatin"
 
@@ -2354,7 +2353,7 @@ msgid "Application supplied widget for extra options."
 msgstr "Sovelluksen säädin muita toimintoja varten."
 
 #: ../gtk/gtkfilechooser.c:246 ../gtk/gtkfilesel.c:539
-#: ../gtk/gtkrecentchooser.c:142
+#: ../gtk/gtkrecentchooser.c:191
 msgid "Select Multiple"
 msgstr "Valitse useita"
 
@@ -2398,7 +2397,7 @@ msgstr "Tiedostonvalintaikkunan otsikko."
 msgid "The desired width of the button widget, in characters."
 msgstr "Haluttu painikesäätimen leveys merkkeinä."
 
-#: ../gtk/gtkfilesel.c:525 ../gtk/gtkimage.c:162 ../gtk/gtkrecentmanager.c:248
+#: ../gtk/gtkfilesel.c:525 ../gtk/gtkimage.c:162 ../gtk/gtkrecentmanager.c:250
 #: ../gtk/gtkstatusicon.c:182
 msgid "Filename"
 msgstr "Tiedostonimi"
@@ -2573,113 +2572,121 @@ msgstr ""
 "Määräytyykö voimassa oleva arvo telakointireunan (snap_edge) vai kahvan "
 "sijainnin (handle_position) perusteella"
 
-#: ../gtk/gtkiconview.c:546
+#: ../gtk/gtkiconview.c:549
 msgid "Selection mode"
 msgstr "Valintatapa"
 
-#: ../gtk/gtkiconview.c:547
+#: ../gtk/gtkiconview.c:550
 msgid "The selection mode"
 msgstr "Valintatapa"
 
-#: ../gtk/gtkiconview.c:565
+#: ../gtk/gtkiconview.c:568
 msgid "Pixbuf column"
 msgstr "Kuvapistepuskurisarake"
 
-#: ../gtk/gtkiconview.c:566
+#: ../gtk/gtkiconview.c:569
 msgid "Model column used to retrieve the icon pixbuf from"
 msgstr "Mallisarake, josta noudetaan kuvakkeen kuvapistepuskuri"
 
-#: ../gtk/gtkiconview.c:584
+#: ../gtk/gtkiconview.c:587
 msgid "Model column used to retrieve the text from"
 msgstr "Mallisarake, josta noudetaan teksti"
 
-#: ../gtk/gtkiconview.c:603
+#: ../gtk/gtkiconview.c:606
 msgid "Markup column"
 msgstr "Merkintäsarake"
 
-#: ../gtk/gtkiconview.c:604
+#: ../gtk/gtkiconview.c:607
 msgid "Model column used to retrieve the text if using Pango markup"
 msgstr "Mallisarake, josta noudetaan teksti Pango-merkintöjä käytettäessä"
 
-#: ../gtk/gtkiconview.c:611
+#: ../gtk/gtkiconview.c:614
 msgid "Icon View Model"
 msgstr "Kuvakenäkymämalli"
 
-#: ../gtk/gtkiconview.c:612
+#: ../gtk/gtkiconview.c:615
 msgid "The model for the icon view"
 msgstr "Malli kuvakenäkymälle"
 
-#: ../gtk/gtkiconview.c:628
+#: ../gtk/gtkiconview.c:631
 msgid "Number of columns"
 msgstr "Sarakkeiden määrä"
 
-#: ../gtk/gtkiconview.c:629
+#: ../gtk/gtkiconview.c:632
 msgid "Number of columns to display"
 msgstr "Näkyvien sarakkeiden määrä"
 
-#: ../gtk/gtkiconview.c:646
+#: ../gtk/gtkiconview.c:649
 msgid "Width for each item"
 msgstr "Jokaisen esineen leveys"
 
-#: ../gtk/gtkiconview.c:647
+#: ../gtk/gtkiconview.c:650
 msgid "The width used for each item"
 msgstr "Jokaiselle esineelle käytettävä leveys"
 
-#: ../gtk/gtkiconview.c:663
+#: ../gtk/gtkiconview.c:666
 msgid "Space which is inserted between cells of an item"
 msgstr "Tila, joka lisätään esineiden solujen väliin"
 
-#: ../gtk/gtkiconview.c:678
+#: ../gtk/gtkiconview.c:681
 msgid "Row Spacing"
 msgstr "Riviväli"
 
-#: ../gtk/gtkiconview.c:679
+#: ../gtk/gtkiconview.c:682
 msgid "Space which is inserted between grid rows"
 msgstr "Tila, joka lisätään ruudukon rivien väliin"
 
-#: ../gtk/gtkiconview.c:694
+#: ../gtk/gtkiconview.c:697
 msgid "Column Spacing"
 msgstr "Sarakeväli"
 
-#: ../gtk/gtkiconview.c:695
+#: ../gtk/gtkiconview.c:698
 msgid "Space which is inserted between grid columns"
 msgstr "Ristikon sarakkeiden väliin jätettävä tila"
 
-#: ../gtk/gtkiconview.c:710
+#: ../gtk/gtkiconview.c:713
 msgid "Margin"
 msgstr "Reunus"
 
-#: ../gtk/gtkiconview.c:711
+#: ../gtk/gtkiconview.c:714
 msgid "Space which is inserted at the edges of the icon view"
 msgstr "Tila, joka lisätään kuvakenäkymän reunoihin"
 
-#: ../gtk/gtkiconview.c:728
+#: ../gtk/gtkiconview.c:731
 msgid ""
 "How the text and icon of each item are positioned relative to each other"
 msgstr "Kuinka esineiden teksti ja kuvake sijoittuvat toisiinsa nähden"
 
-#: ../gtk/gtkiconview.c:744 ../gtk/gtktreeview.c:611
+#: ../gtk/gtkiconview.c:747 ../gtk/gtktreeview.c:612
 #: ../gtk/gtktreeviewcolumn.c:307
 msgid "Reorderable"
 msgstr "Uudelleenjärjesteltävä"
 
-#: ../gtk/gtkiconview.c:745 ../gtk/gtktreeview.c:612
+#: ../gtk/gtkiconview.c:748 ../gtk/gtktreeview.c:613
 msgid "View is reorderable"
 msgstr "Näkymä on uudelleenjärjesteltävä"
 
-#: ../gtk/gtkiconview.c:752
+#: ../gtk/gtkiconview.c:755 ../gtk/gtktreeview.c:763
+msgid "Tooltip Column"
+msgstr "Vinkkisarake"
+
+#: ../gtk/gtkiconview.c:756
+msgid "The column in the model containing the tooltip texts for the items"
+msgstr "Mallin sarake, joka sisältää kohtien vinkkitekstit"
+
+#: ../gtk/gtkiconview.c:767
 msgid "Selection Box Color"
 msgstr "Valintalaatikon väri"
 
-#: ../gtk/gtkiconview.c:753
+#: ../gtk/gtkiconview.c:768
 msgid "Color of the selection box"
 msgstr "Valintalaatikon väri"
 
-#: ../gtk/gtkiconview.c:759
+#: ../gtk/gtkiconview.c:774
 msgid "Selection Box Alpha"
 msgstr "Valintalaatikon alfa"
 
-#: ../gtk/gtkiconview.c:760
+#: ../gtk/gtkiconview.c:775
 msgid "Opacity of the selection box"
 msgstr "Valintalaatikon läpinäkyvyys"
 
@@ -3093,11 +3100,11 @@ msgstr "Ota kohdistus"
 msgid "A boolean that determines whether the menu grabs the keyboard focus"
 msgstr "Totuusarvo, joka ilmaisee ottaako valikko näppäimistökohdistuksen"
 
-#: ../gtk/gtkmenutoolbutton.c:236 ../gtk/gtkoptionmenu.c:161
+#: ../gtk/gtkmenutoolbutton.c:219 ../gtk/gtkoptionmenu.c:161
 msgid "Menu"
 msgstr "Valikko"
 
-#: ../gtk/gtkmenutoolbutton.c:237
+#: ../gtk/gtkmenutoolbutton.c:220
 msgid "The dropdown menu"
 msgstr "Alasvetovalikko"
 
@@ -3577,7 +3584,7 @@ msgid "Printer settings"
 msgstr "Tulostimen asetukset"
 
 #: ../gtk/gtkprintjob.c:143 ../gtk/gtkprintjob.c:144
-#: ../gtk/gtkprintunixdialog.c:231
+#: ../gtk/gtkprintunixdialog.c:229
 msgid "Page Setup"
 msgstr "Sivun asetukset"
 
@@ -3601,11 +3608,11 @@ msgstr "Sivun oletusasetukset"
 msgid "The GtkPageSetup used by default"
 msgstr "Oletuksena käytetty GtkPageSetup"
 
-#: ../gtk/gtkprintoperation.c:896 ../gtk/gtkprintunixdialog.c:249
+#: ../gtk/gtkprintoperation.c:896 ../gtk/gtkprintunixdialog.c:247
 msgid "Print Settings"
 msgstr "Tulostusasetukset"
 
-#: ../gtk/gtkprintoperation.c:897 ../gtk/gtkprintunixdialog.c:250
+#: ../gtk/gtkprintoperation.c:897 ../gtk/gtkprintunixdialog.c:248
 msgid "The GtkPrintSettings used for initializing the dialog"
 msgstr "Ikkunan alustuksesta käytetty GtkPrintSettings-osa"
 
@@ -3625,11 +3632,11 @@ msgstr "Sivujen lukumäärä"
 msgid "The number of pages in the document."
 msgstr "Sivujen lukumäärä asiakirjassa."
 
-#: ../gtk/gtkprintoperation.c:962 ../gtk/gtkprintunixdialog.c:239
+#: ../gtk/gtkprintoperation.c:962 ../gtk/gtkprintunixdialog.c:237
 msgid "Current Page"
 msgstr "Nykyinen sivu"
 
-#: ../gtk/gtkprintoperation.c:963 ../gtk/gtkprintunixdialog.c:240
+#: ../gtk/gtkprintoperation.c:963 ../gtk/gtkprintunixdialog.c:238
 msgid "The current page in the document"
 msgstr "Nykyinen sivu asiakirjassa"
 
@@ -3705,15 +3712,15 @@ msgstr "Oman välilehden otsikko"
 msgid "Label for the tab containing custom widgets."
 msgstr "Otsake välilehdelle, joka sisältää omia ikkunaelementtejä."
 
-#: ../gtk/gtkprintunixdialog.c:232
+#: ../gtk/gtkprintunixdialog.c:230
 msgid "The GtkPageSetup to use"
 msgstr "Käytettävä GtkPageSetup"
 
-#: ../gtk/gtkprintunixdialog.c:257
+#: ../gtk/gtkprintunixdialog.c:255
 msgid "Selected Printer"
 msgstr "Valittu tulostin"
 
-#: ../gtk/gtkprintunixdialog.c:258
+#: ../gtk/gtkprintunixdialog.c:256
 msgid "The GtkPrinter which is selected"
 msgstr "Nyt valittu GtkPrinter"
 
@@ -4004,98 +4011,98 @@ msgstr ""
 "Piirretäänkö allas koko alueen pituudelle, vai jätetäänkö askeltimet ja "
 "välistys piirtämättä"
 
-#: ../gtk/gtkrecentaction.c:654 ../gtk/gtkrecentchoosermenu.c:212
+#: ../gtk/gtkrecentaction.c:654 ../gtk/gtkrecentchoosermenu.c:209
 msgid "Show Numbers"
 msgstr "Näytä numerot"
 
-#: ../gtk/gtkrecentaction.c:655 ../gtk/gtkrecentchoosermenu.c:213
+#: ../gtk/gtkrecentaction.c:655 ../gtk/gtkrecentchoosermenu.c:210
 msgid "Whether the items should be displayed with a number"
 msgstr "Näytetäänkö kohteet numeron kanssa"
 
-#: ../gtk/gtkrecentchooser.c:112
+#: ../gtk/gtkrecentchooser.c:120
 msgid "Recent Manager"
 msgstr "Äskettäisten hallinta"
 
-#: ../gtk/gtkrecentchooser.c:113
+#: ../gtk/gtkrecentchooser.c:121
 msgid "The RecentManager object to use"
 msgstr "Käytettävä RecentManager-olio"
 
-#: ../gtk/gtkrecentchooser.c:118
+#: ../gtk/gtkrecentchooser.c:135
 msgid "Show Private"
 msgstr "Näytä yksityinen"
 
-#: ../gtk/gtkrecentchooser.c:119
+#: ../gtk/gtkrecentchooser.c:136
 msgid "Whether the private items should be displayed"
 msgstr "Näytetäänkö yksityiset kohdat"
 
-#: ../gtk/gtkrecentchooser.c:124
+#: ../gtk/gtkrecentchooser.c:149
 msgid "Show Tooltips"
 msgstr "Näytä vinkit"
 
-#: ../gtk/gtkrecentchooser.c:125
+#: ../gtk/gtkrecentchooser.c:150
 msgid "Whether there should be a tooltip on the item"
 msgstr "Näytetäänkö kohdassa vinkki vai ei"
 
-#: ../gtk/gtkrecentchooser.c:130
+#: ../gtk/gtkrecentchooser.c:162
 msgid "Show Icons"
 msgstr "Näytä kuvakkeet"
 
-#: ../gtk/gtkrecentchooser.c:131
+#: ../gtk/gtkrecentchooser.c:163
 msgid "Whether there should be an icon near the item"
 msgstr "Näkyykö kohdan vieressä kuvake"
 
-#: ../gtk/gtkrecentchooser.c:136
+#: ../gtk/gtkrecentchooser.c:178
 msgid "Show Not Found"
 msgstr "Näytä ei löytyneet"
 
-#: ../gtk/gtkrecentchooser.c:137
+#: ../gtk/gtkrecentchooser.c:179
 msgid "Whether the items pointing to unavailable resources should be displayed"
 msgstr ""
 "Näytetäänkö kohdat, jotka osoittavat ei saatavilla oleviin resursseihin"
 
-#: ../gtk/gtkrecentchooser.c:143
+#: ../gtk/gtkrecentchooser.c:192
 msgid "Whether to allow multiple items to be selected"
 msgstr "Voiko useita kohteita valita"
 
-#: ../gtk/gtkrecentchooser.c:148
+#: ../gtk/gtkrecentchooser.c:205
 msgid "Local only"
 msgstr "Vain paikalliset"
 
-#: ../gtk/gtkrecentchooser.c:149
+#: ../gtk/gtkrecentchooser.c:206
 msgid "Whether the selected resource(s) should be limited to local file: URIs"
 msgstr "Rajataanko valittavat resurssit paikallisiin file:-URIhin"
 
-#: ../gtk/gtkrecentchooser.c:154 ../gtk/gtkrecentmanager.c:263
+#: ../gtk/gtkrecentchooser.c:222 ../gtk/gtkrecentmanager.c:265
 msgid "Limit"
 msgstr "Raja"
 
-#: ../gtk/gtkrecentchooser.c:155
+#: ../gtk/gtkrecentchooser.c:223
 msgid "The maximum number of items to be displayed"
 msgstr "Näkyvien kohtien enimmäismäärä"
 
-#: ../gtk/gtkrecentchooser.c:162
+#: ../gtk/gtkrecentchooser.c:237
 msgid "Sort Type"
 msgstr "Järjestystapa"
 
-#: ../gtk/gtkrecentchooser.c:163
+#: ../gtk/gtkrecentchooser.c:238
 msgid "The sorting order of the items displayed"
 msgstr "Näytettävien kohteiden järjestystapa"
 
-#: ../gtk/gtkrecentchooser.c:170
+#: ../gtk/gtkrecentchooser.c:253
 msgid "The current filter for selecting which resources are displayed"
 msgstr "Nykyinen suodatin, jolla valitaan näytettävät resurssit"
 
-#: ../gtk/gtkrecentmanager.c:249
+#: ../gtk/gtkrecentmanager.c:251
 msgid "The full path to the file to be used to store and read the list"
 msgstr "Koko polku tiedostoon, jota käytetään lista tallennukseen ja lukuun"
 
-#: ../gtk/gtkrecentmanager.c:264
+#: ../gtk/gtkrecentmanager.c:266
 msgid ""
 "The maximum number of items to be returned by gtk_recent_manager_get_items()"
 msgstr ""
 "Enimmäismäärä kohteita, jonka gtk_recent_manager_get_items() voi palauttaa"
 
-#: ../gtk/gtkrecentmanager.c:280
+#: ../gtk/gtkrecentmanager.c:282
 msgid "The size of the recently used resources list"
 msgstr "Äskettäin käytettyjen resurssien listan koko"
 
@@ -4200,12 +4207,12 @@ msgstr ""
 "Näytä toinen eteenpäin-nuolipainike vierityspalkin vastakkaisessa päässä"
 
 #: ../gtk/gtkscrolledwindow.c:221 ../gtk/gtktext.c:541
-#: ../gtk/gtktreeview.c:571
+#: ../gtk/gtktreeview.c:572
 msgid "Horizontal Adjustment"
 msgstr "Vaakakoonmuutos"
 
 #: ../gtk/gtkscrolledwindow.c:228 ../gtk/gtktext.c:549
-#: ../gtk/gtktreeview.c:579
+#: ../gtk/gtktreeview.c:580
 msgid "Vertical Adjustment"
 msgstr "Pystykoonmuutos"
 
@@ -4258,14 +4265,12 @@ msgid "Style of bevel around the contents"
 msgstr "Sisältöä ympäröivän reunuksen tyyli"
 
 #: ../gtk/gtkscrolledwindow.c:292
-#, fuzzy
 msgid "Scrollbars within bevel"
-msgstr "Vieritinpalkin välit"
+msgstr "Vieritinpalkit ikkunan reunuksen sisällä"
 
 #: ../gtk/gtkscrolledwindow.c:293
-#, fuzzy
 msgid "Place scrollbars within the scrolled window's bevel"
-msgstr "Vieritinpalkin ja vieritysikkunan välisten kuvapisteiden määrä"
+msgstr "Sijoita vieritinpalkit ikkunan reunuksen sisäpuolelle"
 
 #: ../gtk/gtkscrolledwindow.c:299
 msgid "Scrollbar spacing"
@@ -4295,11 +4300,11 @@ msgstr "Piirrä"
 msgid "Whether the separator is drawn, or just blank"
 msgstr "Piirretäänkö erottimet vai pelkkää tyhjää"
 
-#: ../gtk/gtksettings.c:203
+#: ../gtk/gtksettings.c:204
 msgid "Double Click Time"
 msgstr "Kaksoisnapsautuksen aika"
 
-#: ../gtk/gtksettings.c:204
+#: ../gtk/gtksettings.c:205
 msgid ""
 "Maximum time allowed between two clicks for them to be considered a double "
 "click (in milliseconds)"
@@ -4307,11 +4312,11 @@ msgstr ""
 "Suurin aika (millisekunteina), joka voi olla kahden napsautuksen välillä, "
 "jotta niitä pidettäisiin kaksoisnapsautuksena"
 
-#: ../gtk/gtksettings.c:211
+#: ../gtk/gtksettings.c:212
 msgid "Double Click Distance"
 msgstr "Kaksoisnapsautuksen etäisyys"
 
-#: ../gtk/gtksettings.c:212
+#: ../gtk/gtksettings.c:213
 msgid ""
 "Maximum distance allowed between two clicks for them to be considered a "
 "double click (in pixels)"
@@ -4319,35 +4324,35 @@ msgstr ""
 "Suurin etäisyys (kuvapisteinä), joka voi olla kahden napsautuksen välillä, "
 "jotta niitä pidettäisiin kaksoisnapsautuksena"
 
-#: ../gtk/gtksettings.c:228
+#: ../gtk/gtksettings.c:229
 msgid "Cursor Blink"
 msgstr "Vilkkuva kohdistin"
 
-#: ../gtk/gtksettings.c:229
+#: ../gtk/gtksettings.c:230
 msgid "Whether the cursor should blink"
 msgstr "Vilkkuuko kohdistin"
 
-#: ../gtk/gtksettings.c:236
+#: ../gtk/gtksettings.c:237
 msgid "Cursor Blink Time"
 msgstr "Kohdistimen vilkkumisaika"
 
-#: ../gtk/gtksettings.c:237
+#: ../gtk/gtksettings.c:238
 msgid "Length of the cursor blink cycle, in milliseconds"
 msgstr "Kohdistimen vilkkumisjakson pituus millisekunteina"
 
-#: ../gtk/gtksettings.c:256
+#: ../gtk/gtksettings.c:257
 msgid "Cursor Blink Timeout"
 msgstr "Kohdistimen vilkkumisen aikakatkaisu"
 
-#: ../gtk/gtksettings.c:257
+#: ../gtk/gtksettings.c:258
 msgid "Time after which the cursor stops blinking, in seconds"
 msgstr "Aika sekunteina, jonka jälkeen kohdistin lakkaa vilkkumasta"
 
-#: ../gtk/gtksettings.c:264
+#: ../gtk/gtksettings.c:265
 msgid "Split Cursor"
 msgstr "Jakautunut kohdistin"
 
-#: ../gtk/gtksettings.c:265
+#: ../gtk/gtksettings.c:266
 msgid ""
 "Whether two cursors should be displayed for mixed left-to-right and right-to-"
 "left text"
@@ -4355,152 +4360,152 @@ msgstr ""
 "Näytetäänkö kaksi kohdistinta, kun tekstissä on sekaisin oikealta vasemmalle "
 "ja vasemmalta oikealle kulkevaa tekstiä."
 
-#: ../gtk/gtksettings.c:272
+#: ../gtk/gtksettings.c:273
 msgid "Theme Name"
 msgstr "Teeman nimi"
 
-#: ../gtk/gtksettings.c:273
+#: ../gtk/gtksettings.c:274
 msgid "Name of theme RC file to load"
 msgstr "Ladattavan RC-tiedoston nimi"
 
-#: ../gtk/gtksettings.c:281
+#: ../gtk/gtksettings.c:282
 msgid "Icon Theme Name"
 msgstr "Kuvaketeeman nimi"
 
-#: ../gtk/gtksettings.c:282
+#: ../gtk/gtksettings.c:283
 msgid "Name of icon theme to use"
 msgstr "Käytettävän kuvaketeeman nimi"
 
-#: ../gtk/gtksettings.c:290
+#: ../gtk/gtksettings.c:291
 msgid "Fallback Icon Theme Name"
 msgstr "Varakuvaketeeman nimi"
 
-#: ../gtk/gtksettings.c:291
+#: ../gtk/gtksettings.c:292
 msgid "Name of a icon theme to fall back to"
 msgstr "Varalla käytettävän kuvaketeeman nimi"
 
-#: ../gtk/gtksettings.c:299
+#: ../gtk/gtksettings.c:300
 msgid "Key Theme Name"
 msgstr "Avainteeman nimi"
 
-#: ../gtk/gtksettings.c:300
+#: ../gtk/gtksettings.c:301
 msgid "Name of key theme RC file to load"
 msgstr "Avainteeman RC-tiedoston nimi"
 
-#: ../gtk/gtksettings.c:308
+#: ../gtk/gtksettings.c:309
 msgid "Menu bar accelerator"
 msgstr "Valikko-oikotie"
 
-#: ../gtk/gtksettings.c:309
+#: ../gtk/gtksettings.c:310
 msgid "Keybinding to activate the menu bar"
 msgstr "Valikon aktivoiva pikanäppäin"
 
-#: ../gtk/gtksettings.c:317
+#: ../gtk/gtksettings.c:318
 msgid "Drag threshold"
 msgstr "Vetokynnys"
 
-#: ../gtk/gtksettings.c:318
+#: ../gtk/gtksettings.c:319
 msgid "Number of pixels the cursor can move before dragging"
 msgstr ""
 "Kuinka monta kuvapistettä osoitin voi liikkua ennen vetämisen alkamista."
 
-#: ../gtk/gtksettings.c:326
+#: ../gtk/gtksettings.c:327
 msgid "Font Name"
 msgstr "Kirjasimen nimi"
 
-#: ../gtk/gtksettings.c:327
+#: ../gtk/gtksettings.c:328
 msgid "Name of default font to use"
 msgstr "Oletuskirjasimen nimi"
 
-#: ../gtk/gtksettings.c:335
+#: ../gtk/gtksettings.c:336
 msgid "Icon Sizes"
 msgstr "Kuvakekoot"
 
-#: ../gtk/gtksettings.c:336
+#: ../gtk/gtksettings.c:337
 msgid "List of icon sizes (gtk-menu=16,16:gtk-button=20,20..."
 msgstr "Luettelo kuvakeko'oista (gtk-menu=16,16;gtk-button=20,20..."
 
-#: ../gtk/gtksettings.c:344
+#: ../gtk/gtksettings.c:345
 msgid "GTK Modules"
 msgstr "GTK-moduulit"
 
-#: ../gtk/gtksettings.c:345
+#: ../gtk/gtksettings.c:346
 msgid "List of currently active GTK modules"
 msgstr "Luettelo tällä hetkellä aktiivisista GTK-moduuleista"
 
-#: ../gtk/gtksettings.c:354
+#: ../gtk/gtksettings.c:355
 msgid "Xft Antialias"
 msgstr "Xft-pehmennys"
 
-#: ../gtk/gtksettings.c:355
+#: ../gtk/gtksettings.c:356
 msgid "Whether to antialias Xft fonts; 0=no, 1=yes, -1=default"
 msgstr "Pehmennetäänkö Xft-kirjasimet; 0=ei, 1=kyllä, -1=oletus"
 
-#: ../gtk/gtksettings.c:364
+#: ../gtk/gtksettings.c:365
 msgid "Xft Hinting"
 msgstr "Xft-vihjeistys"
 
-#: ../gtk/gtksettings.c:365
+#: ../gtk/gtksettings.c:366
 msgid "Whether to hint Xft fonts; 0=no, 1=yes, -1=default"
 msgstr "Vihjeistetäänkö Xft-kirjasimet; 0=ei, 1=kyllä, -1=oletus"
 
-#: ../gtk/gtksettings.c:374
+#: ../gtk/gtksettings.c:375
 msgid "Xft Hint Style"
 msgstr "Xft-vihjeistystyyli"
 
-#: ../gtk/gtksettings.c:375
+#: ../gtk/gtksettings.c:376
 msgid ""
 "What degree of hinting to use; hintnone, hintslight, hintmedium, or hintfull"
 msgstr ""
 "Miten paljon vihjeistetään; hintnone (ei lainkaan), hintslight (kevyesti), "
 "hintmedium (keskiverto) tai hintfull (täysin)"
 
-#: ../gtk/gtksettings.c:384
+#: ../gtk/gtksettings.c:385
 msgid "Xft RGBA"
 msgstr "Xft-RGBA"
 
-#: ../gtk/gtksettings.c:385
+#: ../gtk/gtksettings.c:386
 msgid "Type of subpixel antialiasing; none, rgb, bgr, vrgb, vbgr"
 msgstr "Alikuvapisteen pehmennystapa; ei mitään, rgb, bgr, vrgb, vbgr"
 
-#: ../gtk/gtksettings.c:394
+#: ../gtk/gtksettings.c:395
 msgid "Xft DPI"
 msgstr "Xft-DPI (pistettä tuumalle)"
 
-#: ../gtk/gtksettings.c:395
+#: ../gtk/gtksettings.c:396
 msgid "Resolution for Xft, in 1024 * dots/inch. -1 to use default value"
 msgstr ""
 "Xft-resoluutio yksikkönä 1024 * pistettä/tuuma. Oletusvalinta arvolla -1"
 
-#: ../gtk/gtksettings.c:404
+#: ../gtk/gtksettings.c:405
 msgid "Cursor theme name"
 msgstr "Osoitinteeman nimi"
 
-#: ../gtk/gtksettings.c:405
+#: ../gtk/gtksettings.c:406
 msgid "Name of the cursor theme to use, or NULL to use the default theme"
 msgstr "Käytettävän osoitinteeman nimi, tai NULL jos halutaan käyttää oletusta"
 
-#: ../gtk/gtksettings.c:413
+#: ../gtk/gtksettings.c:414
 msgid "Cursor theme size"
 msgstr "Osiotinteeman koko"
 
-#: ../gtk/gtksettings.c:414
+#: ../gtk/gtksettings.c:415
 msgid "Size to use for cursors, or 0 to use the default size"
 msgstr "Käytettyjen osoittimien koko, tai 0 jos halutaan käyttää oletusta"
 
-#: ../gtk/gtksettings.c:424
+#: ../gtk/gtksettings.c:425
 msgid "Alternative button order"
 msgstr "Vaihtoehtoinen painikejärjestys"
 
-#: ../gtk/gtksettings.c:425
+#: ../gtk/gtksettings.c:426
 msgid "Whether buttons in dialogs should use the alternative button order"
 msgstr "Käyttävätkö ikkunan painikkeet vaihtoehtoista painikejärjestystä"
 
-#: ../gtk/gtksettings.c:442
+#: ../gtk/gtksettings.c:443
 msgid "Alternative sort indicator direction"
 msgstr "Vaihtoehtoinen järjestyspainikkeiden suunta"
 
-#: ../gtk/gtksettings.c:443
+#: ../gtk/gtksettings.c:444
 msgid ""
 "Whether the direction of the sort indicators in list and tree views is "
 "inverted compared to the default (where down means ascending)"
@@ -4508,11 +4513,11 @@ msgstr ""
 "Käännetäänkö järjestyspainikkeiden suunta lista- ja puunäkymissä verrattuna "
 "oletusarvoon."
 
-#: ../gtk/gtksettings.c:451
+#: ../gtk/gtksettings.c:452
 msgid "Show the 'Input Methods' menu"
 msgstr "Näytä \"Syöttötavat\"-valikko"
 
-#: ../gtk/gtksettings.c:452
+#: ../gtk/gtksettings.c:453
 msgid ""
 "Whether the context menus of entries and text views should offer to change "
 "the input method"
@@ -4520,11 +4525,11 @@ msgstr ""
 "Näytetäänkö syötteiden ja tekstinäkymien kontekstivalikossa kohta, josta voi "
 "vaihtaa syöttötapaa"
 
-#: ../gtk/gtksettings.c:460
+#: ../gtk/gtksettings.c:461
 msgid "Show the 'Insert Unicode Control Character' menu"
 msgstr "Näytä valikko \"Lisää Unicode-kontrollimerkki\""
 
-#: ../gtk/gtksettings.c:461
+#: ../gtk/gtksettings.c:462
 msgid ""
 "Whether the context menus of entries and text views should offer to insert "
 "control characters"
@@ -4532,150 +4537,159 @@ msgstr ""
 "Näytetäänkö syötteiden ja tekstinäkymien kontekstivalikossa kohta, josta voi "
 "lisätä kontrollimerkkejä"
 
-#: ../gtk/gtksettings.c:469
+#: ../gtk/gtksettings.c:470
 msgid "Start timeout"
 msgstr "Aloituksen aikaviive"
 
-#: ../gtk/gtksettings.c:470
+#: ../gtk/gtksettings.c:471
 msgid "Starting value for timeouts, when button is pressed"
 msgstr "Aloituksen aikaviive, kun painiketta painetaan"
 
-#: ../gtk/gtksettings.c:479
+#: ../gtk/gtksettings.c:480
 msgid "Repeat timeout"
 msgstr "Toiston aikaviive"
 
-#: ../gtk/gtksettings.c:480
+#: ../gtk/gtksettings.c:481
 msgid "Repeat value for timeouts, when button is pressed"
 msgstr "Toiston aikaviivee, kun painiketta painetaan"
 
-#: ../gtk/gtksettings.c:489
+#: ../gtk/gtksettings.c:490
 msgid "Expand timeout"
 msgstr "Laajentimen aikaviive"
 
-#: ../gtk/gtksettings.c:490
+#: ../gtk/gtksettings.c:491
 msgid "Expand value for timeouts, when a widget is expanding a new region"
 msgstr "Laajentimen aikaviive, kun ikkunaelementin uutta aluetta laajennetaan"
 
-#: ../gtk/gtksettings.c:525
+#: ../gtk/gtksettings.c:526
 msgid "Color scheme"
 msgstr "Värivalikoima"
 
-#: ../gtk/gtksettings.c:526
+#: ../gtk/gtksettings.c:527
 msgid "A palette of named colors for use in themes"
 msgstr "Teemoissa käytettävien värien paletti"
 
-#: ../gtk/gtksettings.c:535
+#: ../gtk/gtksettings.c:536
 msgid "Enable Animations"
 msgstr "Käytä animaatioita"
 
-#: ../gtk/gtksettings.c:536
+#: ../gtk/gtksettings.c:537
 msgid "Whether to enable toolkit-wide animations."
 msgstr "Käytetäänkö piirtokirjaston laajuisesti animaatioita."
 
-#: ../gtk/gtksettings.c:554
+#: ../gtk/gtksettings.c:555
 msgid "Enable Touchscreen Mode"
 msgstr "Käytä kosketusnäyttöä"
 
-#: ../gtk/gtksettings.c:555
+#: ../gtk/gtksettings.c:556
 msgid "When TRUE, there are no motion notify events delivered on this screen"
 msgstr "Jos TRUE, ei siirron huomatustapahtumia raportoida tälle näytölle"
 
-#: ../gtk/gtksettings.c:572
+#: ../gtk/gtksettings.c:573
 msgid "Tooltip timeout"
 msgstr "Vinkin aikaviive"
 
-#: ../gtk/gtksettings.c:573
+#: ../gtk/gtksettings.c:574
 msgid "Timeout before tooltip is shown"
 msgstr "Viive ennen kuin vinkki näytetään"
 
-#: ../gtk/gtksettings.c:598
+#: ../gtk/gtksettings.c:599
 msgid "Tooltip browse timeout"
 msgstr "Vinkin selauksen aikakatkaisu"
 
-#: ../gtk/gtksettings.c:599
+#: ../gtk/gtksettings.c:600
 msgid "Timeout before tooltip is shown when browse mode is enabled"
 msgstr "Aika, jonka vinkki näytetään, kun kun selaustila on käytössä"
 
-#: ../gtk/gtksettings.c:620
+#: ../gtk/gtksettings.c:621
 msgid "Tooltip browse mode timeout"
 msgstr "Vinkin selaustilan aikakatkaisu"
 
-#: ../gtk/gtksettings.c:621
+#: ../gtk/gtksettings.c:622
 msgid "Timeout after which browse mode is disabled"
 msgstr "Aika, jonka jälkeen selaustila ei ole käytössä"
 
-#: ../gtk/gtksettings.c:640
+#: ../gtk/gtksettings.c:641
 msgid "Keynav Cursor Only"
 msgstr "Näppäin-nagigointi nuolinäppäimillä"
 
-#: ../gtk/gtksettings.c:641
+#: ../gtk/gtksettings.c:642
 msgid "When TRUE, there are only cursor keys available to navigate widgets"
 msgstr "Jos tosi, vain nuolinäppäimillä voidaan liikkua ikkunaelementeissä"
 
-#: ../gtk/gtksettings.c:658
+#: ../gtk/gtksettings.c:659
 msgid "Keynav Wrap Around"
 msgstr "Näppäin-navigointi kiertyy ympäri"
 
-#: ../gtk/gtksettings.c:659
+#: ../gtk/gtksettings.c:660
 msgid "Whether to wrap around when keyboard-navigating widgets"
-msgstr "Kiertyykö navigointi ikkunaelementeissä ympäri näppäimillä navigoitaessa"
+msgstr ""
+"Kiertyykö navigointi ikkunaelementeissä ympäri näppäimillä navigoitaessa"
 
-#: ../gtk/gtksettings.c:679
+#: ../gtk/gtksettings.c:680
 msgid "Error Bell"
 msgstr "Virheääni"
 
-#: ../gtk/gtksettings.c:680
+#: ../gtk/gtksettings.c:681
 msgid "When TRUE, keyboard navigation and other errors will cause a beep"
 msgstr ""
 "Jos TRUE, navigoinnin ja muiden osien virheistä kerrotaan piippauksella"
 
-#: ../gtk/gtksettings.c:697
+#: ../gtk/gtksettings.c:698
 msgid "Color Hash"
 msgstr "Värien hajautustaulu"
 
-#: ../gtk/gtksettings.c:698
+#: ../gtk/gtksettings.c:699
 msgid "A hash table representation of the color scheme."
 msgstr "Hajautustaulu värivalikoimasta."
 
-#: ../gtk/gtksettings.c:706
+#: ../gtk/gtksettings.c:707
 msgid "Default file chooser backend"
 msgstr "Tiedostovalitsimen oletustaustaosa"
 
-#: ../gtk/gtksettings.c:707
+#: ../gtk/gtksettings.c:708
 msgid "Name of the GtkFileChooser backend to use by default"
 msgstr "Oletuksena käytettävän GtkFileChooser-taustaosan nimi"
 
-#: ../gtk/gtksettings.c:724
+#: ../gtk/gtksettings.c:725
 msgid "Default print backend"
 msgstr "Tulostuksen taustaosan oletus"
 
-#: ../gtk/gtksettings.c:725
+#: ../gtk/gtksettings.c:726
 msgid "List of the GtkPrintBackend backends to use by default"
 msgstr "Oletuksena käytettävän GtkPrintBackend-taustaosan nimi"
 
-#: ../gtk/gtksettings.c:748
+#: ../gtk/gtksettings.c:749
 msgid "Default command to run when displaying a print preview"
 msgstr "Suoritettava oletuskomento näytettäessä tulostuksen esikatselua"
 
-#: ../gtk/gtksettings.c:749
+#: ../gtk/gtksettings.c:750
 msgid "Command to run when displaying a print preview"
 msgstr "Tulostuksen esikatselua näytettäessä suoritettava komento"
 
-#: ../gtk/gtksettings.c:765
-msgid "Enable Mnemonics"
-msgstr ""
-
 #: ../gtk/gtksettings.c:766
-msgid "Whether labels should have mnemonics"
-msgstr ""
+msgid "Enable Mnemonics"
+msgstr "Käytä pikanäppäimiä"
 
-#: ../gtk/gtksettings.c:782
+#: ../gtk/gtksettings.c:767
+msgid "Whether labels should have mnemonics"
+msgstr "Tulisiko otsakkeilla olla pikanäppäimet"
+
+#: ../gtk/gtksettings.c:783
 msgid "Enable Accelerators"
 msgstr "Käytä pikavalintoja"
 
-#: ../gtk/gtksettings.c:783
+#: ../gtk/gtksettings.c:784
 msgid "Whether menu items should have accelerators"
 msgstr "Lisätäänkö valikon kohtiin pikavalinnat"
+
+#: ../gtk/gtksettings.c:801
+msgid "Recent Files Limit"
+msgstr "Viimeisimmät asiakirjat-rajoitus"
+
+#: ../gtk/gtksettings.c:802
+msgid "Number of recently used files"
+msgstr "Viimeisimmät asiakirjat-luettelon enimmäispituus"
 
 #: ../gtk/gtksizegroup.c:293
 msgid "Mode"
@@ -5177,11 +5191,11 @@ msgstr "Kappaleen taustaväri (mahdollisesti varaamattomana) GdkColor:na"
 
 #: ../gtk/gtktexttag.c:554
 msgid "Margin Accumulates"
-msgstr ""
+msgstr "Marginaali kasautuu"
 
 #: ../gtk/gtktexttag.c:555
 msgid "Whether left and right margins accumulate."
-msgstr ""
+msgstr "Kasautuvatko vasen ja oikea marginaali."
 
 #: ../gtk/gtktexttag.c:568
 msgid "Background full height set"
@@ -5556,224 +5570,228 @@ msgstr "TreeModelSort-malli"
 msgid "The model for the TreeModelSort to sort"
 msgstr "Malli, jonka TreeModelSort järjestää"
 
-#: ../gtk/gtktreeview.c:563
+#: ../gtk/gtktreeview.c:564
 msgid "TreeView Model"
 msgstr "TreeView-malli"
 
-#: ../gtk/gtktreeview.c:564
+#: ../gtk/gtktreeview.c:565
 msgid "The model for the tree view"
 msgstr "Puunäkymän malli"
 
-#: ../gtk/gtktreeview.c:572
+#: ../gtk/gtktreeview.c:573
 msgid "Horizontal Adjustment for the widget"
 msgstr "Säätimen vaakakoonmuutos"
 
-#: ../gtk/gtktreeview.c:580
+#: ../gtk/gtktreeview.c:581
 msgid "Vertical Adjustment for the widget"
 msgstr "Säätimen pystykoonmuutos"
 
-#: ../gtk/gtktreeview.c:587
+#: ../gtk/gtktreeview.c:588
 msgid "Headers Visible"
 msgstr "Otsakkeet näkyvissä"
 
-#: ../gtk/gtktreeview.c:588
+#: ../gtk/gtktreeview.c:589
 msgid "Show the column header buttons"
 msgstr "Näytä sarakkeiden otsakepainikkeet"
 
-#: ../gtk/gtktreeview.c:595
+#: ../gtk/gtktreeview.c:596
 msgid "Headers Clickable"
 msgstr "Napsautettavat otsakkeet"
 
-#: ../gtk/gtktreeview.c:596
+#: ../gtk/gtktreeview.c:597
 msgid "Column headers respond to click events"
 msgstr "Sarakkeiden otsakkeet vastaavat napsautustapahtumiin"
 
-#: ../gtk/gtktreeview.c:603
+#: ../gtk/gtktreeview.c:604
 msgid "Expander Column"
 msgstr "Laajenninsarake"
 
-#: ../gtk/gtktreeview.c:604
+#: ../gtk/gtktreeview.c:605
 msgid "Set the column for the expander column"
 msgstr "Aseta sarake laajenninsaraketta varten"
 
-#: ../gtk/gtktreeview.c:619
+#: ../gtk/gtktreeview.c:620
 msgid "Rules Hint"
 msgstr "Viivavihje"
 
-#: ../gtk/gtktreeview.c:620
+#: ../gtk/gtktreeview.c:621
 msgid "Set a hint to the theme engine to draw rows in alternating colors"
 msgstr ""
 "Aseta vihje teemamoottorille rivien vuorottelevilla väreillä piirtämistä "
 "varten"
 
-#: ../gtk/gtktreeview.c:627
+#: ../gtk/gtktreeview.c:628
 msgid "Enable Search"
 msgstr "Salli etsintä"
 
-#: ../gtk/gtktreeview.c:628
+#: ../gtk/gtktreeview.c:629
 msgid "View allows user to search through columns interactively"
 msgstr "Näkymä mahdollistaa käyttäjän etsiä sarakkeista interaktiivisesti"
 
-#: ../gtk/gtktreeview.c:635
+#: ../gtk/gtktreeview.c:636
 msgid "Search Column"
 msgstr "Etsintäsarake"
 
-#: ../gtk/gtktreeview.c:636
+#: ../gtk/gtktreeview.c:637
 msgid "Model column to search through when searching through code"
 msgstr "Mallisarake, josta etsitään, kun etsitään koodista"
 
-#: ../gtk/gtktreeview.c:656
+#: ../gtk/gtktreeview.c:657
 msgid "Fixed Height Mode"
 msgstr "Vakiokorkeustila"
 
-#: ../gtk/gtktreeview.c:657
+#: ../gtk/gtktreeview.c:658
 msgid "Speeds up GtkTreeView by assuming that all rows have the same height"
 msgstr ""
 "Nopeuttaa GtkTreeView:iä olettamalla, että kaikki rivit ovat yhtä korkeita"
 
-#: ../gtk/gtktreeview.c:677
+#: ../gtk/gtktreeview.c:678
 msgid "Hover Selection"
 msgstr "Leijailuvalinta"
 
-#: ../gtk/gtktreeview.c:678
+#: ../gtk/gtktreeview.c:679
 msgid "Whether the selection should follow the pointer"
 msgstr "Seuraako valinta osoitinta"
 
-#: ../gtk/gtktreeview.c:697
+#: ../gtk/gtktreeview.c:698
 msgid "Hover Expand"
 msgstr "Leijailulaajennus"
 
-#: ../gtk/gtktreeview.c:698
+#: ../gtk/gtktreeview.c:699
 msgid ""
 "Whether rows should be expanded/collapsed when the pointer moves over them"
 msgstr "Laajennetaanko/supistetaanko rivit kun osoitin liikkuu niiden yli"
 
-#: ../gtk/gtktreeview.c:712
+#: ../gtk/gtktreeview.c:713
 msgid "Show Expanders"
 msgstr "Näytä laajentimet"
 
-#: ../gtk/gtktreeview.c:713
+#: ../gtk/gtktreeview.c:714
 msgid "View has expanders"
 msgstr "Näkymässä on laajentimia"
 
-#: ../gtk/gtktreeview.c:727
+#: ../gtk/gtktreeview.c:728
 msgid "Level Indentation"
 msgstr "Tason sisennys"
 
-#: ../gtk/gtktreeview.c:728
+#: ../gtk/gtktreeview.c:729
 msgid "Extra indentation for each level"
 msgstr "Ylimääräinen sisennys kullekin tasolle"
 
-#: ../gtk/gtktreeview.c:737
+#: ../gtk/gtktreeview.c:738
 msgid "Rubber Banding"
 msgstr "Kuminauhavenytys"
 
-#: ../gtk/gtktreeview.c:738
+#: ../gtk/gtktreeview.c:739
 msgid ""
 "Whether to enable selection of multiple items by dragging the mouse pointer"
 msgstr "Voiko useita tiedostoja valita raahaamalla hiiren kohdistinta"
 
-#: ../gtk/gtktreeview.c:745
+#: ../gtk/gtktreeview.c:746
 msgid "Enable Grid Lines"
 msgstr "Käytä ristikkoviivoja"
 
-#: ../gtk/gtktreeview.c:746
+#: ../gtk/gtktreeview.c:747
 msgid "Whether grid lines should be drawn in the tree view"
 msgstr "Piirretäänkö ristikkoviivat puunäkymässä"
 
-#: ../gtk/gtktreeview.c:754
+#: ../gtk/gtktreeview.c:755
 msgid "Enable Tree Lines"
 msgstr "Käytä puun viivat"
 
-#: ../gtk/gtktreeview.c:755
+#: ../gtk/gtktreeview.c:756
 msgid "Whether tree lines should be drawn in the tree view"
 msgstr "Piirretäänkö puun viivat puunäkymässä"
 
-#: ../gtk/gtktreeview.c:775
+#: ../gtk/gtktreeview.c:764
+msgid "The column in the model containing the tooltip texts for the rows"
+msgstr "Mallin sarake, joka sisältää rivien vinkkitekstit"
+
+#: ../gtk/gtktreeview.c:786
 msgid "Vertical Separator Width"
 msgstr "Vaakaerottimen leveys"
 
-#: ../gtk/gtktreeview.c:776
+#: ../gtk/gtktreeview.c:787
 msgid "Vertical space between cells.  Must be an even number"
 msgstr "Solujen pystyväli. Täytyy olla parillinen luku"
 
-#: ../gtk/gtktreeview.c:784
+#: ../gtk/gtktreeview.c:795
 msgid "Horizontal Separator Width"
 msgstr "Pystyerottimen leveys"
 
-#: ../gtk/gtktreeview.c:785
+#: ../gtk/gtktreeview.c:796
 msgid "Horizontal space between cells.  Must be an even number"
 msgstr "Solujen vaakaväli. Täytyy olla parillinen luku."
 
-#: ../gtk/gtktreeview.c:793
+#: ../gtk/gtktreeview.c:804
 msgid "Allow Rules"
 msgstr "Salli viivat"
 
-#: ../gtk/gtktreeview.c:794
+#: ../gtk/gtktreeview.c:805
 msgid "Allow drawing of alternating color rows"
 msgstr "Salli rivien värien vaihtelu"
 
-#: ../gtk/gtktreeview.c:800
+#: ../gtk/gtktreeview.c:811
 msgid "Indent Expanders"
 msgstr "Sisennä laajentimet"
 
-#: ../gtk/gtktreeview.c:801
+#: ../gtk/gtktreeview.c:812
 msgid "Make the expanders indented"
 msgstr "Sisennä laajentimet"
 
-#: ../gtk/gtktreeview.c:807
+#: ../gtk/gtktreeview.c:818
 msgid "Even Row Color"
 msgstr "Parillisen rivin väri"
 
-#: ../gtk/gtktreeview.c:808
+#: ../gtk/gtktreeview.c:819
 msgid "Color to use for even rows"
 msgstr "Parillisten rivien väri"
 
-#: ../gtk/gtktreeview.c:814
+#: ../gtk/gtktreeview.c:825
 msgid "Odd Row Color"
 msgstr "Parittoman rivin väri"
 
-#: ../gtk/gtktreeview.c:815
+#: ../gtk/gtktreeview.c:826
 msgid "Color to use for odd rows"
 msgstr "Parittomien rivien väri"
 
-#: ../gtk/gtktreeview.c:821
+#: ../gtk/gtktreeview.c:832
 msgid "Row Ending details"
 msgstr "Rivin päättymisen yksityiskohdat"
 
-#: ../gtk/gtktreeview.c:822
+#: ../gtk/gtktreeview.c:833
 msgid "Enable extended row background theming"
 msgstr "Ota käyttöön laajennettu rivin taustan teemoitus"
 
-#: ../gtk/gtktreeview.c:828
+#: ../gtk/gtktreeview.c:839
 msgid "Grid line width"
 msgstr "ristikkoviivan leveys"
 
-#: ../gtk/gtktreeview.c:829
+#: ../gtk/gtktreeview.c:840
 msgid "Width, in pixels, of the tree view grid lines"
 msgstr "Puunäkymän ristikkoviivojen leveys pikseleinä"
 
-#: ../gtk/gtktreeview.c:835
+#: ../gtk/gtktreeview.c:846
 msgid "Tree line width"
 msgstr "Puuviivojen leveys"
 
-#: ../gtk/gtktreeview.c:836
+#: ../gtk/gtktreeview.c:847
 msgid "Width, in pixels, of the tree view lines"
 msgstr "Puunäkymän viivojen leveys pikseleinä"
 
-#: ../gtk/gtktreeview.c:842
+#: ../gtk/gtktreeview.c:853
 msgid "Grid line pattern"
 msgstr "Ristikkoviivojen kuvio"
 
-#: ../gtk/gtktreeview.c:843
+#: ../gtk/gtktreeview.c:854
 msgid "Dash pattern used to draw the tree view grid lines"
 msgstr "Puunäkymän ristikkoviivojen piirrossa käytetty kuvio"
 
-#: ../gtk/gtktreeview.c:849
+#: ../gtk/gtktreeview.c:860
 msgid "Tree line pattern"
 msgstr "Puuviivojen kuvio"
 
-#: ../gtk/gtktreeview.c:850
+#: ../gtk/gtktreeview.c:861
 msgid "Dash pattern used to draw the tree view lines"
 msgstr "Puunäkymän viivojen piirrossa käytetty kuvio"
 
