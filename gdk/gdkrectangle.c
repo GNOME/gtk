@@ -64,8 +64,10 @@ gdk_rectangle_union (GdkRectangle *src1,
  * @src2: a #GdkRectangle
  * @dest: return location for the intersection of @src1 and @src2
  *
- * Calculates the intersection of two rectangles.
- * It is allowed for @dest to be the same as either @src1 or @src2.
+ * Calculates the intersection of two rectangles. It is allowed for
+ * @dest to be the same as either @src1 or @src2. If the rectangles
+ * doesn't intersect, @dest's width and height is set to 0 and its x
+ * and y values are undefined.
  *
  * Returns: %TRUE if the rectangles intersect.
  */
