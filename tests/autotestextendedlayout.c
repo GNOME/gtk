@@ -9,15 +9,19 @@
 #define log_test(condition) \
   log_test_impl(G_STRFUNC, __LINE__, (condition), #condition)
 #define log_testf(condition, format, ...) \
-  log_test_impl(G_STRFUNC, __LINE__, (condition), #condition " (" format ")", __VA_ARGS__)
+  log_test_impl(G_STRFUNC, __LINE__, (condition), \
+                #condition "\n      " format, __VA_ARGS__)
 #define log_testi(expected, number) G_STMT_START { \
     const gint i = (expected), j = (number); \
-    log_test_impl(G_STRFUNC, __LINE__, i == j, \
-                  #number " is " #expected " (actual number %d, expected: %d)", j, i); \
+    log_test_impl(G_STRFUNC, __LINE__, i == j, #number " is " #expected \
+                  "\n      actual number %d, expected: %d", j, i); \
   } G_STMT_END
 
-#define log_info(format, ...) \
-  g_print ("INFO: %s: " format "\n", G_STRFUNC, __VA_ARGS__);
+#define log_info(format, ...) G_STMT_START { \
+  if (debug) \
+    g_print ("INFO: %s: " format "\n", G_STRFUNC, __VA_ARGS__); \
+  } G_STMT_END
+
 #define log_int_array(values, length) \
   log_int_array_impl (G_STRFUNC, #values, (values), (length))
 #define log_int(value) \
@@ -37,6 +41,7 @@ static int num_failures = 0;
 static int num_warnings = 0;
 static int num_errors = 0;
 static int num_criticals = 0;
+static gboolean debug = FALSE;
 
 static GLogFunc default_log_handler;
 
@@ -48,7 +53,12 @@ log_int_array_impl (const gchar *function,
                     const gint  *values,
                     gsize        length)
 {
-  GString *tmp = g_string_new ("");
+  GString *tmp;
+
+  if (!debug)
+    return;
+
+  tmp = g_string_new ("");
   
   if (length--)
     {
@@ -68,7 +78,7 @@ log_int_array_impl (const gchar *function,
   g_string_free (tmp, TRUE);
 }
 
-static void
+static gboolean
 log_test_impl (const gchar *function,
                gint         lineno,
                gboolean     passed, 
@@ -84,11 +94,13 @@ log_test_impl (const gchar *function,
   str = g_strdup_vprintf (test_name, args);
   va_end (args);
 
-  g_printf ("%s: %s, line %d: %s\033[0m\n",
-            passed ? "PASS" : "\033[1;31mFAIL", 
-            function, lineno, str);
+  if (!passed || debug)
+    g_printf ("%s: %s, line %d: %s\033[0m\n",
+              passed ? "PASS" : "\033[1;31mFAIL", 
+              function, lineno, str);
 
   g_free (str);
+  return passed;
 }
 
 static void
@@ -204,7 +216,8 @@ gtk_label_test_height_for_width (void)
 
   for (i = 5; i >= 1; --i)
     {
-      cy = gtk_extended_layout_get_height_for_width (layout, cx = rcx * i);
+      cx = rcx * i;
+      cy = gtk_extended_layout_get_height_for_width (layout, cx);
       log_info ("scale is %d, so width is %d. results in height of %d.", i, cx, cy);
       log_testi (rcy, cy);
     }
@@ -499,6 +512,173 @@ gtk_table_test_extended_layout (void)
 
 /*****************************************************************************/
 
+static void
+extended_layout_check_child (GtkWidget *child,
+                             gpointer   data);
+
+static void
+extended_layout_natural_size_test (GtkExtendedLayout *layout)
+{
+  GtkRequisition natural_size;
+  GtkRequisition requisition;
+  GtkWidget *parent = NULL;
+  gboolean passed = TRUE;
+
+  g_return_if_fail (GTK_EXTENDED_LAYOUT_HAS_NATURAL_SIZE (layout));
+
+  if (GTK_IS_WIDGET (layout))
+    {
+      parent = gtk_widget_get_parent (GTK_WIDGET (layout));
+      gtk_widget_size_request (GTK_WIDGET (layout), &requisition);
+    }
+  else if (GTK_IS_CELL_RENDERER (layout))
+    {
+      parent = gtk_cell_view_new ();
+      gtk_cell_layout_pack_start (GTK_CELL_LAYOUT (parent),
+                                  GTK_CELL_RENDERER (layout),
+                                  FALSE);
+      gtk_cell_renderer_get_size (GTK_CELL_RENDERER (layout),
+                                  parent, NULL, NULL, NULL,
+                                  &requisition.width,
+                                  &requisition.height);
+    }
+  else if (GTK_IS_TREE_VIEW_COLUMN (layout))
+    {
+      parent = gtk_tree_view_new ();
+      gtk_tree_view_append_column (GTK_TREE_VIEW (parent),
+                                   GTK_TREE_VIEW_COLUMN (layout));
+
+      requisition.width =
+        gtk_tree_view_column_get_width (
+        GTK_TREE_VIEW_COLUMN (layout));
+      requisition.height = 0;
+    }
+  else
+    {
+      g_warning ("%s: Unsupported object category: %s",
+                 G_STRFUNC, G_OBJECT_TYPE_NAME (layout));
+      return;
+    }
+
+  gtk_extended_layout_get_natural_size (layout, &natural_size);
+
+  passed &= log_testf (
+    natural_size.width >= requisition.width,
+    "parent=%s, item=%s(%p), natural-width=%d, requisition=%d",
+    parent ? G_OBJECT_TYPE_NAME (parent) : "(none)",
+    G_OBJECT_TYPE_NAME (layout), layout,
+    natural_size.width, requisition.width);
+  passed &= log_testf (
+    natural_size.height >= requisition.height,
+    "parent=%s, item=%s(%p), natural-height=%d, requisition=%d",
+    parent ? G_OBJECT_TYPE_NAME (parent) : "(none)",
+    G_OBJECT_TYPE_NAME (layout), layout,
+    natural_size.height, requisition.height);
+
+  if (!passed && GTK_IS_CONTAINER (layout))
+    gtk_container_foreach (GTK_CONTAINER (layout),
+                           extended_layout_check_child,
+                           NULL); 
+}
+
+static void
+extended_layout_check_child (GtkWidget *child,
+                             gpointer   data)
+{
+  if (GTK_EXTENDED_LAYOUT_HAS_NATURAL_SIZE (child))
+    extended_layout_natural_size_test (GTK_EXTENDED_LAYOUT (child));
+}
+
+static void
+introspective_test (const gchar *argv0)
+{
+  gint n_extended_layout_types = 0;
+  gint n_extended_layout_roots = 0;
+  GModule *module = NULL;
+  GError *error = NULL;
+  GIOChannel *file;
+
+  gchar *filename;
+  gchar *dirname;
+  gchar *line;
+
+  dirname = g_path_get_dirname (argv0);
+  filename = g_build_filename (dirname,
+                               "..", "..", "docs", "reference",
+                               "gtk", "gtk.types", NULL);
+  file = g_io_channel_new_file (filename, "r", &error);
+
+  g_free (dirname);
+
+  if (error)
+    goto cleanup;
+
+  module = g_module_open (NULL, G_MODULE_BIND_LOCAL);
+
+  while (G_IO_STATUS_NORMAL ==
+         g_io_channel_read_line (file, &line, NULL, NULL, &error))
+    {
+      gpointer get_type_function;
+
+      line = g_strstrip (line);
+
+      if (g_str_has_suffix (line, "_get_type") &&
+          g_module_symbol (module, line, &get_type_function))
+        {
+          GType type = ((GType(*)()) get_type_function) ();
+
+          if (g_type_is_a (type, GTK_TYPE_EXTENDED_LAYOUT) &&
+              G_TYPE_IS_INSTANTIATABLE (type))
+            {
+              GtkExtendedLayoutIface *iface;
+              GtkExtendedLayout *object;
+              gpointer type_class;
+
+              type_class = g_type_class_ref (type);
+              iface = GTK_EXTENDED_LAYOUT_CLASS (type_class);
+
+              log_testf (NULL != iface->get_features, "%s", g_type_name (type));
+
+              if (!g_type_is_a (g_type_parent (type), GTK_TYPE_EXTENDED_LAYOUT))
+                ++n_extended_layout_roots;
+
+              if (!G_TYPE_IS_ABSTRACT (type))
+                {
+                  object = g_object_new (type, NULL);
+                  log_testf (NULL != object, "%s", g_type_name (type));
+
+                  if (GTK_EXTENDED_LAYOUT_HAS_NATURAL_SIZE (object))
+                    extended_layout_natural_size_test (GTK_EXTENDED_LAYOUT (object));
+                }
+
+              g_type_class_unref (type_class);
+              ++n_extended_layout_types;
+            }
+        }
+
+      g_free (line);
+    }
+
+  log_testi (72, n_extended_layout_types);
+  log_testi (10, n_extended_layout_roots);
+
+cleanup:
+  if (error)
+    {
+      g_warning ("%s: %s", filename, error->message);
+      g_error_free (error);
+    }
+
+  if (module)
+    g_module_close (module);
+  if (file)
+    g_io_channel_unref (file);
+
+  g_free (filename);
+}
+
+/*****************************************************************************/
+
 int
 main(int argc, char **argv)
 {
@@ -506,9 +686,12 @@ main(int argc, char **argv)
 
   gtk_init (&argc, &argv);
 
+  debug = (NULL != g_getenv ("DEBUG"));
+
   gtk_label_test_extended_layout ();
   gtk_bin_test_extended_layout ();
   gtk_table_test_extended_layout ();
+  introspective_test (argv[0]);
 
   log_testi (0, num_warnings);
   log_testi (0, num_errors);

@@ -1,3 +1,18 @@
+2007-08-12  Mathias Hasselmann  <mathias.hasselmann@gmx.de>
+
+	* gtk/gtkbin.c: Filter feature set returned by the child to match
+	the subset supported by bins. Ensure natural size matches at least
+	the requested size.
+	* gtk/gtkextendedlayout.c: Ensure natural size matches at least
+	the requested size by considering explicit size requests.
+	* gtk/gtkhbox.c, gtk/gtkvbox.c, gtk/gtktable.c, gtk/gtktable.h: 
+	Delegate natural size calculation to the (modified) size_request
+	method for more accurate resutls. This trick was developed already
+	for GtkLabel, but not recognized before working on GtkScrolledWindow.
+	* gtk/gtktreeview.c: Skip invisible columns for natural size.
+	* tests/autotestextendedlayout.c: Test natural size properties
+	for all classes implementing GtkExtendLayout.
+
 2007-08-06  Mathias Hasselmann  <mathias.hasselmann@gmx.de>
 
 	* gtk/gtklabel.c: Practice consistent pixel rounding to avoid GtkLabel

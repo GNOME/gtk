@@ -74,8 +74,9 @@ gtk_vbox_new (gboolean homogeneous,
 
 
 static void
-gtk_vbox_size_request (GtkWidget      *widget,
-		       GtkRequisition *requisition)
+gtk_vbox_real_size_request (GtkWidget      *widget,
+		            GtkRequisition *requisition,
+		            gboolean        consider_natural_size)
 {
   GtkBox *box;
   GtkBoxChild *child;
@@ -97,7 +98,11 @@ gtk_vbox_size_request (GtkWidget      *widget,
 
       if (GTK_WIDGET_VISIBLE (child->widget))
 	{
-	  gtk_widget_size_request (child->widget, &child_requisition);
+          if (consider_natural_size && GTK_EXTENDED_LAYOUT_HAS_NATURAL_SIZE (child->widget))
+            gtk_extended_layout_get_natural_size (GTK_EXTENDED_LAYOUT (child->widget), 
+                                                  &child_requisition);
+          else
+	    gtk_widget_size_request (child->widget, &child_requisition);
 
 	  if (box->homogeneous)
 	    {
@@ -124,6 +129,13 @@ gtk_vbox_size_request (GtkWidget      *widget,
 
   requisition->width += GTK_CONTAINER (box)->border_width * 2;
   requisition->height += GTK_CONTAINER (box)->border_width * 2;
+}
+
+static void
+gtk_vbox_size_request (GtkWidget      *widget,
+		       GtkRequisition *requisition)
+{
+  gtk_vbox_real_size_request (widget, requisition, FALSE);
 }
 
 static void
@@ -327,33 +339,7 @@ static void
 gtk_vbox_extended_layout_get_natural_size (GtkExtendedLayout *layout,
                                            GtkRequisition    *requisition)
 {
-  GtkBox *box = GTK_BOX (layout);
-
-  GtkRequisition child_requisition;
-  GtkBoxChild *child;
-  GList *children;
-
-  requisition->width = GTK_CONTAINER (box)->border_width * 2;
-  requisition->height = GTK_CONTAINER (box)->border_width * 2;
-
-  children = box->children;
-  while (children)
-    {
-      child = children->data;
-      children = children->next;
-
-      if (GTK_WIDGET_VISIBLE (child->widget))
-	{
-          if (GTK_EXTENDED_LAYOUT_HAS_NATURAL_SIZE (child->widget))
-            gtk_extended_layout_get_natural_size (GTK_EXTENDED_LAYOUT (child->widget),
-                                                  &child_requisition);
-          else
-            gtk_widget_size_request (child->widget, &child_requisition);
-
-          requisition->width = MAX (child_requisition.width, requisition->width);
-          requisition->height += child_requisition.height;
-	}
-    }
+  gtk_vbox_real_size_request (GTK_WIDGET (layout), requisition, TRUE);
 }
 
 static void

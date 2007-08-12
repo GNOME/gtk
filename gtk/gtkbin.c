@@ -161,7 +161,12 @@ gtk_bin_extended_layout_get_features (GtkExtendedLayout *layout)
   GtkBin *bin = GTK_BIN (layout);
 
   if (GTK_IS_EXTENDED_LAYOUT (bin->child))
-    return gtk_extended_layout_get_features (GTK_EXTENDED_LAYOUT (bin->child));
+      return
+        gtk_extended_layout_get_features (GTK_EXTENDED_LAYOUT (bin->child)) &
+        (GTK_EXTENDED_LAYOUT_HEIGHT_FOR_WIDTH |
+         GTK_EXTENDED_LAYOUT_WIDTH_FOR_HEIGHT |
+         GTK_EXTENDED_LAYOUT_NATURAL_SIZE |
+         GTK_EXTENDED_LAYOUT_BASELINES);
 
   return 0;
 }
@@ -195,12 +200,13 @@ gtk_bin_extended_layout_get_natural_size (GtkExtendedLayout *layout,
                                           GtkRequisition    *requisition)
 {
   GtkBin *bin = GTK_BIN (layout);
-  GtkExtendedLayout *child_layout;
+  GtkRequisition minimum_size;
 
   g_return_if_fail (GTK_IS_EXTENDED_LAYOUT (bin->child));
 
-  child_layout = GTK_EXTENDED_LAYOUT (bin->child);
-  gtk_extended_layout_get_natural_size (child_layout, requisition);
+  gtk_widget_size_request (GTK_WIDGET (layout), &minimum_size);
+  gtk_extended_layout_get_natural_size (GTK_EXTENDED_LAYOUT (bin->child),
+                                        requisition);
 
   if (GTK_EXTENDED_LAYOUT_HAS_PADDING (layout))
     {
@@ -211,6 +217,9 @@ gtk_bin_extended_layout_get_natural_size (GtkExtendedLayout *layout,
       requisition->width += padding.left + padding.right;
       requisition->height += padding.top + padding.bottom;
     }
+
+  requisition->width = MAX (requisition->width, minimum_size.width);
+  requisition->height = MAX (requisition->height, minimum_size.height);
 }
 
 static gint

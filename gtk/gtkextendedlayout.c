@@ -127,6 +127,7 @@ void
 gtk_extended_layout_get_natural_size (GtkExtendedLayout *layout,
                                       GtkRequisition    *requisition)
 {
+  GtkWidgetAuxInfo *aux_info = NULL;
   GtkExtendedLayoutIface *iface;
 
   g_return_if_fail (GTK_IS_EXTENDED_LAYOUT (layout));
@@ -136,6 +137,22 @@ gtk_extended_layout_get_natural_size (GtkExtendedLayout *layout,
 
   g_return_if_fail (iface->get_natural_size);
   iface->get_natural_size(layout, requisition);
+
+/* XXX The following hack is needed to ensure natural_size >= requested_size
+ *     even if GtkWidget and GtkSizeGroup tweak a widget's size requisition. */
+/* FIXME Should I just use gtk_widget_size_request? This would be more reliable
+ *       but also would hide bugs in natural_size implementations. */
+
+  if (GTK_IS_WIDGET (layout))
+    aux_info = _gtk_widget_get_aux_info (GTK_WIDGET (layout), FALSE);
+
+  if (aux_info)
+    {
+      if (aux_info->width > 0)
+	requisition->width = MAX (requisition->width, aux_info->width);
+      if (aux_info && aux_info->height > 0)
+	requisition->height = MAX (requisition->height, aux_info->height);
+    }
 }
 
 /**

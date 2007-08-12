@@ -15224,6 +15224,10 @@ gtk_tree_view_extended_layout_get_natural_size (GtkExtendedLayout *layout,
   for (column_iter = tree_view->priv->columns; column_iter; column_iter = column_iter->next)
     {
       GtkTreeViewColumn *column = column_iter->data;
+
+      if (!column->visible)
+	continue;
+
       natural_width += gtk_tree_view_get_real_natural_width_from_column (tree_view, column);
     }
 

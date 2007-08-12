@@ -148,8 +148,9 @@ gtk_hbox_get_property (GObject    *object,
 }
 
 static void
-gtk_hbox_size_request (GtkWidget      *widget,
-		       GtkRequisition *requisition)
+gtk_hbox_real_size_request (GtkWidget      *widget,
+		            GtkRequisition *requisition,
+                            gboolean        consider_natural_size)
 {
   GtkBox *box = GTK_BOX (widget);
 
@@ -219,7 +220,11 @@ gtk_hbox_size_request (GtkWidget      *widget,
               GtkRequisition child_requisition;
               gint width;
 
-              gtk_widget_size_request (child->widget, &child_requisition);
+              if (consider_natural_size && GTK_EXTENDED_LAYOUT_HAS_NATURAL_SIZE (child->widget))
+                gtk_extended_layout_get_natural_size (GTK_EXTENDED_LAYOUT (child->widget), 
+                                                      &child_requisition);
+              else
+                gtk_widget_size_request (child->widget, &child_requisition);
 
               if (box->homogeneous)
                 {
@@ -251,6 +256,13 @@ gtk_hbox_size_request (GtkWidget      *widget,
 
   requisition->width += GTK_CONTAINER (box)->border_width * 2;
   requisition->height += GTK_CONTAINER (box)->border_width * 2;
+}
+
+static void
+gtk_hbox_size_request (GtkWidget      *widget,
+		       GtkRequisition *requisition)
+{
+  gtk_hbox_real_size_request (widget, requisition, FALSE);
 }
 
 static void
@@ -530,33 +542,7 @@ static void
 gtk_hbox_extended_layout_get_natural_size (GtkExtendedLayout *layout,
                                            GtkRequisition    *requisition)
 {
-  GtkBox *box = GTK_BOX (layout);
-
-  GtkRequisition child_requisition;
-  GtkBoxChild *child;
-  GList *children;
-
-  requisition->width = GTK_CONTAINER (box)->border_width * 2;
-  requisition->height = GTK_CONTAINER (box)->border_width * 2;
-
-  children = box->children;
-  while (children)
-    {
-      child = children->data;
-      children = children->next;
-
-      if (GTK_WIDGET_VISIBLE (child->widget))
-	{
-          if (GTK_EXTENDED_LAYOUT_HAS_NATURAL_SIZE (child->widget))
-            gtk_extended_layout_get_natural_size (GTK_EXTENDED_LAYOUT (child->widget),
-                                                  &child_requisition);
-          else
-            gtk_widget_size_request (child->widget, &child_requisition);
-
-          requisition->width += child_requisition.width;
-          requisition->height = MAX (child_requisition.height, requisition->height);
-	}
-    }
+  gtk_hbox_real_size_request (GTK_WIDGET (layout), requisition, TRUE);
 }
 
 static gint
