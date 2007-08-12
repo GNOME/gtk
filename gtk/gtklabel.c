@@ -50,6 +50,10 @@
 
 #define GTK_LABEL_GET_PRIVATE(obj) (G_TYPE_INSTANCE_GET_PRIVATE ((obj), GTK_TYPE_LABEL, GtkLabelPrivate))
 
+#ifndef INFINITY /* Why don't we use C99 again? */
+#define INFINITY HUGE_VAL
+#endif
+
 typedef struct
 {
   gint wrap_width;
@@ -2201,12 +2205,6 @@ gtk_label_size_request (GtkWidget      *widget,
     {
       PangoContext *context = pango_layout_get_context (label->layout);
       const PangoMatrix *matrix = pango_context_get_matrix (context);
-      PangoRectangle rect;
-
-      pango_layout_get_extents (label->layout, NULL, &rect);
-      pango_matrix_transform_rectangle (matrix, &rect);
-      pango_extents_to_pixels (&rect, NULL);
-
       pango_matrix_transform_pixel_rectangle (matrix, &required_rect);
     }
 
@@ -2242,10 +2240,59 @@ gtk_label_size_allocate (GtkWidget     *widget,
             {
               PangoContext *context = gtk_widget_get_pango_context (widget);
               const PangoMatrix *matrix = pango_context_get_matrix (context);
-              pango_matrix_transform_pixel_rectangle (matrix, &bounds);
-            }
 
-	  if (logical.width > bounds.width)
+              const gdouble dx = matrix->xx; /* cos (M_PI * angle / 180) */
+              const gdouble dy = matrix->xy; /* sin (M_PI * angle / 180) */
+
+              if (fabs (dy) < 0.01)
+                {
+                  if (logical.width > bounds.width)
+	            pango_layout_set_width (label->layout, bounds.width * PANGO_SCALE);
+                }
+              else if (fabs (dx) < 0.01)
+                {
+                  if (logical.width > bounds.height)
+	            pango_layout_set_width (label->layout, bounds.height * PANGO_SCALE);
+                }
+              else
+                {
+                  gdouble x0, y0, x1, y1, length;
+                  gboolean vertical;
+                  gint cy;
+
+                  x0 = bounds.width / 2;
+                  y0 = dx ? x0 * dy / dx : dy * INFINITY;
+                  vertical = fabs (y0) > bounds.height / 2;
+
+                  if (vertical)
+                    {
+                      y0 = bounds.height/2;
+                      x0 = dy ? y0 * dx / dy : dx * INFINITY;
+                    }
+
+                  length = 2 * sqrt (x0 * x0 + y0 * y0);
+                  pango_layout_set_width (label->layout, rint (length * PANGO_SCALE));
+                  pango_layout_get_pixel_size (label->layout, NULL, &cy);
+
+                  x1 = +dy * cy/2;
+                  y1 = -dx * cy/2;
+
+                  if (vertical)
+                    {
+                      y0 = bounds.height/2 + y1 - y0;
+                      x0 = -y0 * dx/dy;
+                    }
+                  else
+                    {
+                      x0 = bounds.width/2 + x1 - x0;
+                      y0 = -x0 * dy/dx;
+                    }
+                  
+                  length = length - sqrt (x0 * x0 + y0 * y0) * 2;
+                  pango_layout_set_width (label->layout, rint (length * PANGO_SCALE));
+                }
+            }
+	  else if (logical.width > bounds.width)
 	    pango_layout_set_width (label->layout, bounds.width * PANGO_SCALE);
 	}
     }

@@ -1,3 +1,9 @@
+2007-08-13  Mathias Hasselmann  <mathias.hasselmann@gmx.de>
+
+	* tests/testellipsise.c: Pimped the test for better demonstration. 
+	* gtk/gtklabel.c: Correctly calulate layout width for rotated
+	text when ellipses are used.
+
 2007-08-12  Mathias Hasselmann  <mathias.hasselmann@gmx.de>
 
 	* gtk/gtkbin.c: Filter feature set returned by the child to match
