@@ -1,3 +1,8 @@
+2007-08-13  Claude Paroz  <claude@2xlibre.net>
+
+	* ga.po: Updated Irish translation on behalf of Sean Burke
+	<leftmostcat@gmail.com>. Fixes #456124.
+
 2007-08-09  Ilkka Tuohela  <hile@iki.fi>
 
 	* fi.po: Updated Finnish translation.
