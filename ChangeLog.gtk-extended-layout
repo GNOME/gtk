@@ -1,5 +1,12 @@
 2007-08-13  Mathias Hasselmann  <mathias.hasselmann@gmx.de>
 
+	* tests/testextendedlayout.c: Provide context menu to directly select
+	testable widgets. Defer self invokation for socket testing until
+	sockets are realized: Plugs cannot receive the "embedded" signal
+	before their socket is realized.
+
+2007-08-13  Mathias Hasselmann  <mathias.hasselmann@gmx.de>
+
 	* tests/testellipsise.c: Pimped the test for better demonstration. 
 	* gtk/gtklabel.c: Correctly calulate layout width for rotated
 	text when ellipses are used.

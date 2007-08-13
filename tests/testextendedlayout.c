@@ -120,6 +120,7 @@ struct _TestSuite
 
   GdkPixmap *tile;
   GtkWidget *current;
+  GtkWidget *hover;
   gint timestamp;
 
   GtkTreeIter parent;
@@ -221,14 +222,128 @@ test_case_new (TestSuite   *suite,
 }
 
 static void
+update_status (TestSuite *suite,
+               GtkWidget *child)
+{
+  const gchar *widget_name = gtk_widget_get_name (child);
+  const gchar *type_name = G_OBJECT_TYPE_NAME (child);
+  GString *status = g_string_new (type_name);
+
+  if (strcmp (widget_name, type_name))
+    g_string_append_printf (status, " (%s)", widget_name);
+
+  g_string_append_printf (status,
+                          ":\nposition=%dx%d; size=%dx%d; requisition=%dx%d",
+                          child->allocation.x,
+                          child->allocation.y,
+                          child->allocation.width,
+                          child->allocation.height,
+                          child->requisition.width,
+                          child->requisition.height);
+
+  if (GTK_IS_EXTENDED_LAYOUT (child))
+    {
+      if (GTK_EXTENDED_LAYOUT_HAS_NATURAL_SIZE (child))
+        {
+          GtkRequisition requisition;
+
+          gtk_extended_layout_get_natural_size (GTK_EXTENDED_LAYOUT (child),
+                                                &requisition);
+
+          g_string_append_printf (status, "; natural-size: %dx%d",
+                                  requisition.width, requisition.height);
+        }
+
+      if (GTK_EXTENDED_LAYOUT_HAS_BASELINES (child))
+        {
+          gint *baselines = NULL;
+          gint num_baselines = 0;
+          gint i;
+
+          num_baselines =
+            gtk_extended_layout_get_baselines (GTK_EXTENDED_LAYOUT (child), 
+                                               &baselines);
+
+          for (i = 0; i < num_baselines; ++i)
+            {
+              g_string_append_printf (status, "%s%d",
+                                      i ? ", " : num_baselines > 1 ?
+                                      "; baselines: " : "; baseline: ",
+                                      baselines[i]);
+            }
+
+          g_free (baselines);
+        }
+
+      if (GTK_EXTENDED_LAYOUT_HAS_PADDING (child))
+        {
+          GtkBorder padding;
+
+          gtk_extended_layout_get_padding (GTK_EXTENDED_LAYOUT (child),
+                                           &padding);
+
+          g_string_append_printf (status, "; padding: %d/%d/%d/%d",
+                                  padding.top, padding.left,
+                                  padding.right, padding.bottom);
+        }
+    }
+
+  gtk_label_set_text (GTK_LABEL (suite->statusbar), status->str);
+  g_string_free (status, TRUE);
+}
+
+static void
+item_activate_cb (GtkWidget *item,
+                  gpointer   data)
+{
+  GtkWidget *widget = data;
+  TestCase *test;
+
+  test = g_object_get_data (G_OBJECT (widget), "test-case");
+  update_status (test->suite, widget);
+  test->suite->current = widget;
+
+  gtk_widget_queue_draw (test->widget);
+}
+
+static void
 test_case_append_guide (TestCase  *self,
                         GtkWidget *widget,
                         GuideType  type,
                         gint       group)
 {
-  Guide *guide = guide_new (widget, type, group);
+  const gchar *widget_name;
+  const gchar *type_name;
+  gchar *item_label;
+  GtkWidget *popup;
+  GtkWidget *item;
+  Guide *guide;
+
+  guide = guide_new (widget, type, group);
   self->guides = g_list_append (self->guides, guide);
   g_object_set_data (G_OBJECT (widget), "test-case", self);
+
+  widget_name = gtk_widget_get_name (widget);
+  type_name = G_OBJECT_TYPE_NAME (widget);
+
+  item_label = g_strconcat (type_name,
+                            strcmp (widget_name, type_name) ? " (" : NULL,
+                            widget_name, ")", NULL);
+
+  item = gtk_menu_item_new_with_label (item_label);
+  popup = g_object_get_data (G_OBJECT (self->widget), "popup");
+
+  if (!popup)
+    {
+      popup = gtk_menu_new ();
+      g_object_set_data (G_OBJECT (self->widget), "popup", popup);
+    }
+
+  g_signal_connect (item, "activate", G_CALLBACK (item_activate_cb), widget);
+  gtk_menu_shell_append (GTK_MENU_SHELL (popup), item);
+  gtk_widget_show (item);
+
+  g_free (item_label);
 }
 
 static void
@@ -474,8 +589,67 @@ static void
 on_socket_realized (GtkWidget *widget,
                     gpointer   data)
 {
-  gtk_socket_add_id (GTK_SOCKET (widget),
-                     GPOINTER_TO_INT (data)); 
+  gtk_socket_add_id (GTK_SOCKET (widget), GPOINTER_TO_INT (data)); 
+}
+
+static void
+on_xembed_socket_realized (GtkWidget *widget,
+                           gpointer   data)
+{
+  GdkNativeWindow plug_id = 0;
+  GError *error = NULL;
+  gchar **argv = data;
+  gint child_stdout;
+
+  if (g_spawn_async_with_pipes (NULL, argv, NULL, 0,
+                                NULL, NULL, NULL,
+                                NULL, &child_stdout, NULL,
+                                &error))
+    {
+      gchar *plug_str;
+      char buffer[32];
+      gint len;
+
+      len = read (child_stdout, buffer, sizeof (buffer) - 1);
+      close (child_stdout);
+
+      if (len > 0)
+        {
+          buffer[len] = '\0';
+          plug_id = atoi (buffer);
+        }
+
+      plug_str = g_strdup_printf ("plug-id=%d", plug_id);
+      g_print ("%s: %s\n", gtk_widget_get_name (widget), plug_str);
+      gtk_widget_set_tooltip_text (widget, plug_str);
+      g_free (plug_str);
+    }
+  else
+    {
+      GtkWidget *plug, *label;
+      gchar *error_message;
+
+      error_message = g_strdup_printf (
+        "Failed to create external plug:\n%s",
+        error ? error->message : "No details available.");
+
+      label = gtk_label_new (error_message);
+      g_warning (error_message);
+
+      g_free (error_message);
+      g_clear_error (&error);
+
+      if (argv[2] && g_str_equal (argv[2], "--vertical"))
+        gtk_label_set_angle (GTK_LABEL (label), 90);
+
+      plug = gtk_plug_new (0);
+      gtk_container_add (GTK_CONTAINER (plug), label);
+      gtk_widget_show_all (plug);
+
+      plug_id = gtk_plug_get_id (GTK_PLUG (plug));
+    }
+
+  gtk_socket_add_id (GTK_SOCKET (widget), plug_id); 
 }
 
 static void
@@ -499,19 +673,15 @@ natural_size_test_misc_create_child (TestCase  *test,
 
   GtkWidget *label, *child, *view, *align, *plug;
   GdkNativeWindow plug_id;
-  gchar *plug_str;
 
   GtkListStore *store = NULL;
   GtkTreeViewColumn *column;
   GtkCellRenderer *cell;
   GtkTreePath *path;
 
-  gint i, j;
+  gchar **argv = NULL;
+  gint i, argc;
 
-  gchar *argv[] = { arg0, "--action=create-plug", NULL, NULL, NULL };
-  GError *error = NULL;
-  gint child_stdout;
-  char buffer[32];
   GdkColor color;
 
   if (type >= 3)
@@ -558,53 +728,29 @@ natural_size_test_misc_create_child (TestCase  *test,
             gtk_widget_show_all (plug);
 
             child = gtk_socket_new ();
+
             g_signal_connect (child, "realize",
                               G_CALLBACK (on_socket_realized),
                               GINT_TO_POINTER (plug_id));
             break;
 
           case 2:
-            plug_id = 0; 
+            child = gtk_socket_new ();
 
-            j = 2;
+            argv = g_new0 (gchar*, 5);
+            argc = 0;
+
+            argv[argc++] = arg0;
+            argv[argc++] = "--action=create-plug";
 
             if (!orientation)
-              argv[j++] = "--vertical";
+              argv[argc++] = "--vertical";
             if (i)
-              argv[j++] = "--ellipsize";
+              argv[argc++] = "--ellipsize";
 
-            argv[j] = NULL;
-
-            if (g_spawn_async_with_pipes (NULL, argv, NULL, 0,
-                                          NULL, NULL, NULL,
-                                          NULL, &child_stdout, NULL,
-                                          &error))
-              {
-                j = read (child_stdout, buffer, sizeof (buffer) - 1);
-                close (child_stdout);
-
-                if (j > 0)
-                  {
-                    buffer[j] = '\0';
-                    plug_id = atoi (buffer);
-                  }
-
-                child = gtk_socket_new ();
-                g_signal_connect (child, "realize",
-                                  G_CALLBACK (on_socket_realized),
-                                  GINT_TO_POINTER (plug_id));
-
-                plug_str = g_strdup_printf ("plug-id: %d", plug_id);
-                gtk_widget_set_tooltip_text (child, plug_str);
-                g_free (plug_str);
-              }
-            else
-              {
-                child = gtk_label_new (error ? error->message :
-                                       "Failed to create external plug");
-                g_clear_error (&error);
-              }
-
+            g_signal_connect_data (child, "realize",
+                                   G_CALLBACK (on_xembed_socket_realized),
+                                   argv, (GClosureNotify) g_free, 0);
             break;
 
           case 3:
@@ -1926,77 +2072,6 @@ find_widget_at_position (GtkWidget *widget,
 }
 
 static void
-update_status (TestSuite *suite,
-               GtkWidget *child)
-{
-  const gchar *widget_name = gtk_widget_get_name (child);
-  const gchar *type_name = G_OBJECT_TYPE_NAME (child);
-  GString *status = g_string_new (type_name);
-
-  if (strcmp (widget_name, type_name))
-    g_string_append_printf (status, " (%s)", widget_name);
-
-  g_string_append_printf (status,
-                          ":\nposition=%dx%d; size=%dx%d; requisition=%dx%d",
-                          child->allocation.x,
-                          child->allocation.y,
-                          child->allocation.width,
-                          child->allocation.height,
-                          child->requisition.width,
-                          child->requisition.height);
-
-  if (GTK_IS_EXTENDED_LAYOUT (child))
-    {
-      if (GTK_EXTENDED_LAYOUT_HAS_NATURAL_SIZE (child))
-        {
-          GtkRequisition requisition;
-
-          gtk_extended_layout_get_natural_size (GTK_EXTENDED_LAYOUT (child),
-                                                &requisition);
-
-          g_string_append_printf (status, "; natural-size: %dx%d",
-                                  requisition.width, requisition.height);
-        }
-
-      if (GTK_EXTENDED_LAYOUT_HAS_BASELINES (child))
-        {
-          gint *baselines = NULL;
-          gint num_baselines = 0;
-          gint i;
-
-          num_baselines =
-            gtk_extended_layout_get_baselines (GTK_EXTENDED_LAYOUT (child), 
-                                               &baselines);
-
-          for (i = 0; i < num_baselines; ++i)
-            {
-              g_string_append_printf (status, "%s%d",
-                                      i ? ", " : num_baselines > 1 ?
-                                      "; baselines: " : "; baseline: ",
-                                      baselines[i]);
-            }
-
-          g_free (baselines);
-        }
-
-      if (GTK_EXTENDED_LAYOUT_HAS_PADDING (child))
-        {
-          GtkBorder padding;
-
-          gtk_extended_layout_get_padding (GTK_EXTENDED_LAYOUT (child),
-                                           &padding);
-
-          g_string_append_printf (status, "; padding: %d/%d/%d/%d",
-                                  padding.top, padding.left,
-                                  padding.right, padding.bottom);
-        }
-    }
-
-  gtk_label_set_text (GTK_LABEL (suite->statusbar), status->str);
-  g_string_free (status, TRUE);
-}
-
-static void
 queue_redraw (GtkWidget *page, 
               GtkWidget *child)
 {
@@ -2047,17 +2122,7 @@ watch_pointer_cb (gpointer data)
   dirty = suite->current && !(suite->timestamp % 3);
   suite->timestamp = (suite->timestamp + 1) % 6;
 
-  if (test)
-    {
-      g_assert (child);
-
-      if (child != suite->current)
-        update_status (suite, child);
-
-      suite->current = child;
-      dirty = TRUE;
-    }
-  else
+  if (!test)
     {
       dirty = (NULL != suite->current);
 
@@ -2066,6 +2131,15 @@ watch_pointer_cb (gpointer data)
                             "No widget selected.\n");
 
       suite->current = NULL;
+    }
+  else if (child != suite->hover)
+    {
+      if (child != suite->current)
+        update_status (suite, child);
+
+      suite->current = child;
+      suite->hover = child;
+      dirty = TRUE;
     }
 
   if (dirty)
@@ -2082,6 +2156,30 @@ watch_pointer_cb (gpointer data)
           gtk_widget_queue_draw (page);
         }
     }
+
+  return TRUE;
+}
+
+static gboolean
+button_press_event_cb (GtkWidget      *widget,
+                       GdkEventButton *event,
+                       gpointer        data)
+{
+  TestSuite *suite = data;
+  GtkWidget *popup = NULL;
+  GtkWidget *page;
+  gint i;
+
+  if (3 != event->button)
+    return FALSE;
+
+  i = gtk_notebook_get_current_page (GTK_NOTEBOOK (suite->notebook));
+  page = gtk_notebook_get_nth_page (GTK_NOTEBOOK (suite->notebook), i);
+  popup = g_object_get_data (G_OBJECT (page), "popup");
+
+  gtk_menu_popup (GTK_MENU (popup),
+                  NULL, NULL, NULL, NULL,
+                  event->button, event->time);
 
   return TRUE;
 }
@@ -2306,10 +2404,15 @@ test_suite_setup_ui (TestSuite *self)
 
   self->window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
 
-  g_signal_connect (self->window, "destroy", G_CALLBACK (gtk_main_quit), NULL);
+  g_object_connect (self->window, 
+    "signal::button-press-event", button_press_event_cb, self,
+    "signal::destroy", gtk_main_quit, NULL,
+    NULL);
+
   g_timeout_add (200, watch_pointer_cb, self);
 
   gtk_window_set_title (GTK_WINDOW (self->window), "Testing GtkExtendedLayout");
+  gtk_widget_add_events (self->window, GDK_BUTTON_PRESS_MASK);
   gtk_container_add (GTK_CONTAINER (self->window), table);
   gtk_widget_grab_focus (view);
 }
@@ -2340,7 +2443,8 @@ test_suite_new (gchar *arg0)
 static gboolean
 on_embedding_timeout (gpointer data)
 {
-  g_print ("Embedding timeout expired. Aborting.\n");
+  GdkNativeWindow plug_id = GPOINTER_TO_INT (data);
+  g_printerr ("Embedding timeout expired for plug %d. Aborting.\n", plug_id);
   gtk_main_quit ();
   return FALSE;
 }
@@ -2357,7 +2461,9 @@ create_plug (gboolean ellipsize,
              gboolean vertical)
 {
   GtkWidget *plug, *label;
+  GdkNativeWindow plug_id;
   guint timeout;
+
 
   label = gtk_label_new ("Hello World");
   
@@ -2370,7 +2476,9 @@ create_plug (gboolean ellipsize,
   gtk_container_add (GTK_CONTAINER (plug), label);
   gtk_widget_show_all (plug);
 
-  timeout = g_timeout_add (5 * 1000, on_embedding_timeout, NULL);
+  plug_id = gtk_plug_get_id (GTK_PLUG (plug));
+  timeout = g_timeout_add (5 * 1000, on_embedding_timeout,
+                           GINT_TO_POINTER (plug_id));
 
   g_signal_connect (plug, "embedded", 
                     G_CALLBACK (on_embedded),
@@ -2379,7 +2487,7 @@ create_plug (gboolean ellipsize,
                     G_CALLBACK (gtk_main_quit),
                     NULL);
 
-  g_print ("%d\n", gtk_plug_get_id (GTK_PLUG (plug)));
+  g_print ("%d\n", plug_id);
 }
 
 int
