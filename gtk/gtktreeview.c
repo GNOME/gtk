@@ -9596,7 +9596,7 @@ gtk_tree_view_move_cursor_up_down (GtkTreeView *tree_view,
 
   /*
    * If the list has only one item and multi-selection is set then select
-   * the row.
+   * the row (if not yet selected).
    */
   if (tree_view->priv->selection->type == GTK_SELECTION_MULTIPLE &&
       new_cursor_node == NULL)
@@ -9608,7 +9608,8 @@ gtk_tree_view_move_cursor_up_down (GtkTreeView *tree_view,
         _gtk_rbtree_prev_full (cursor_tree, cursor_node,
 			       &new_cursor_tree, &new_cursor_node);
 
-      if (new_cursor_node == NULL)
+      if (new_cursor_node == NULL
+	  && !GTK_RBNODE_FLAG_SET (cursor_node, GTK_RBNODE_IS_SELECTED))
         {
           new_cursor_node = cursor_node;
           new_cursor_tree = cursor_tree;

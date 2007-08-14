@@ -1,3 +1,9 @@
+2007-08-14  Kristian Rietveld  <kris@imendio.com>
+
+	* gtk/gtktreeview.c (gtk_tree_view_move_cursor_up_down): make
+	sure we fail keynav if the only item in the list is already selected.
+	(Fixes #465039, reported by Fernando Herrera).
+
 2007-08-09  Sven Neumann  <sven@gimp.org>
 
 	* modules/printbackends/file/gtkprintbackendfile.c: change the
