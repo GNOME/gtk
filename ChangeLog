@@ -1,3 +1,11 @@
+2007-08-14  Cody Russell  <bratsche@gnome.org>
+
+	* gtk/gtkwidget.c
+	* gtk/gtkscrolledwindow.c
+	* gtk/gtklabel.c: Correct documentation that refers to the
+	deprecated gtk_widget_set_usize() API.  Refer instead to
+	gtk_widget_set_size_request().  (#459340, Guillaume Cottenceau)
+
 2007-08-14  Kristian Rietveld  <kris@imendio.com>
 
 	* gtk/gtktreeview.c (gtk_tree_view_move_cursor_up_down): make

@@ -3639,8 +3639,9 @@ gtk_widget_size_request (GtkWidget	*widget,
  * 
  * This function is only for use in widget implementations. Obtains
  * @widget->requisition, unless someone has forced a particular
- * geometry on the widget (e.g. with gtk_widget_set_usize()), in which
- * case it returns that geometry instead of the widget's requisition.
+ * geometry on the widget (e.g. with gtk_widget_set_size_request()),
+ * in which case it returns that geometry instead of the widget's
+ * requisition.
  *
  * This function differs from gtk_widget_size_request() in that
  * it retrieves the last size request value from @widget->requisition,

@@ -2152,7 +2152,7 @@ gtk_label_size_request (GtkWidget      *widget,
    * If word wrapping is on, then the height requisition can depend
    * on:
    *
-   *   - Any width set on the widget via gtk_widget_set_usize().
+   *   - Any width set on the widget via gtk_widget_set_size_request().
    *   - The padding of the widget (xpad, set by gtk_misc_set_padding)
    *
    * Instead of trying to detect changes to these quantities, if we
