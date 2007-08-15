@@ -43,6 +43,9 @@ gtk/gtkassistant.c
 gtk/gtkbbox.c
 gtk/gtkbin.c
 gtk/gtkbox.c
+gtk/gtkbuildable.c
+gtk/gtkbuilder.c
+gtk/gtkbuilderparser.c
 gtk/gtkbutton.c
 gtk/gtkcalendar.c
 gtk/gtkcelleditable.c
