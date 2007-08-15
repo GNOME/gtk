@@ -1,3 +1,20 @@
+2007-08-15  Cody Russell  <bratsche@gnome.org>
+
+	Merge from trunk:
+
+	* gtk/gtkcontainer.c: Another documentation fix that I forgot to
+	commit yesterday.  (#459340, Guillaume Cottenceau)
+
+2007-08-14  Cody Russell  <bratsche@gnome.org>
+
+	Merge from trunk:
+
+	* gtk/gtkwidget.c
+	* gtk/gtkscrolledwindow.c
+	* gtk/gtklabel.c: Correct documentation that refers to the
+	deprecated gtk_widget_set_usize() API.  Refer instead to
+	gtk_widget_set_size_request().  (#459340, Guillaume Cottenceau)
+
 2007-08-09  Sven Neumann  <sven@gimp.org>
 
 	* modules/printbackends/file/gtkprintbackendfile.c: change the
