@@ -12,7 +12,7 @@ msgstr ""
 "Project-Id-Version: gtk+\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2007-07-20 18:13-0400\n"
-"PO-Revision-Date: 2007-05-04 10:52+0700\n"
+"PO-Revision-Date: 2007-08-15 15:59+0700\n"
 "Last-Translator: Yang Zhang <zyangmath@gmail.com>\n"
 "Language-Team: zh_CN <i18n-translation@lists.linux.net.cn>\n"
 "MIME-Version: 1.0\n"
@@ -77,7 +77,10 @@ msgstr "要设置的 Gdk 调试标志"
 #. Placeholder in --gdk-no-debug=FLAGS in --help output
 #. Placeholder in --gtk-debug=FLAGS in --help output
 #. Placeholder in --gtk-no-debug=FLAGS in --help output
-#: gdk/gdk.c:140 gdk/gdk.c:143 gtk/gtkmain.c:416 gtk/gtkmain.c:419
+#: gdk/gdk.c:140
+#: gdk/gdk.c:143
+#: gtk/gtkmain.c:416
+#: gtk/gtkmain.c:419
 msgid "FLAGS"
 msgstr "标志"
 
@@ -123,24 +126,20 @@ msgid "keyboard label|Home"
 msgstr "Home"
 
 #: gdk/keyname-table.h:3949
-#, fuzzy
 msgid "keyboard label|Left"
-msgstr "KP_Left"
+msgstr "Left"
 
 #: gdk/keyname-table.h:3950
-#, fuzzy
 msgid "keyboard label|Up"
-msgstr "KP_Left"
+msgstr "Up"
 
 #: gdk/keyname-table.h:3951
-#, fuzzy
 msgid "keyboard label|Right"
-msgstr "KP_Right"
+msgstr "Right"
 
 #: gdk/keyname-table.h:3952
-#, fuzzy
 msgid "keyboard label|Down"
-msgstr "KP_Down"
+msgstr "Down"
 
 #: gdk/keyname-table.h:3953
 msgid "keyboard label|Page_Up"
@@ -238,29 +237,31 @@ msgstr "KP_Delete"
 msgid "keyboard label|Delete"
 msgstr "Delete"
 
-#: gdk-pixbuf/gdk-pixbuf-animation.c:154 gdk-pixbuf/gdk-pixbuf-io.c:847
-#: gdk-pixbuf/gdk-pixbuf-io.c:1102 tests/testfilechooser.c:218
+#: gdk-pixbuf/gdk-pixbuf-animation.c:154
+#: gdk-pixbuf/gdk-pixbuf-io.c:847
+#: gdk-pixbuf/gdk-pixbuf-io.c:1102
+#: tests/testfilechooser.c:218
 #, c-format
 msgid "Failed to open file '%s': %s"
 msgstr "打开文件“%s”失败：%s"
 
-#: gdk-pixbuf/gdk-pixbuf-animation.c:167 gdk-pixbuf/gdk-pixbuf-io.c:859
+#: gdk-pixbuf/gdk-pixbuf-animation.c:167
+#: gdk-pixbuf/gdk-pixbuf-io.c:859
 #, c-format
 msgid "Image file '%s' contains no data"
 msgstr "图像文件“%s”没有内容"
 
-#: gdk-pixbuf/gdk-pixbuf-animation.c:209 gdk-pixbuf/gdk-pixbuf-io.c:896
-#: gdk-pixbuf/gdk-pixbuf-io.c:1153 tests/testfilechooser.c:263
+#: gdk-pixbuf/gdk-pixbuf-animation.c:209
+#: gdk-pixbuf/gdk-pixbuf-io.c:896
+#: gdk-pixbuf/gdk-pixbuf-io.c:1153
+#: tests/testfilechooser.c:263
 #, c-format
-msgid ""
-"Failed to load image '%s': reason not known, probably a corrupt image file"
+msgid "Failed to load image '%s': reason not known, probably a corrupt image file"
 msgstr "载入图像“%s”失败：原因未知，可能是图像文件已损坏"
 
 #: gdk-pixbuf/gdk-pixbuf-animation.c:242
 #, c-format
-msgid ""
-"Failed to load animation '%s': reason not known, probably a corrupt "
-"animation file"
+msgid "Failed to load animation '%s': reason not known, probably a corrupt animation file"
 msgstr "载入动画“%s”失败：原因未知，可能是动画文件已损坏"
 
 #: gdk-pixbuf/gdk-pixbuf-io.c:527
@@ -270,12 +271,11 @@ msgstr "加载用来载入图像的模块失败：%s：%s"
 
 #: gdk-pixbuf/gdk-pixbuf-io.c:542
 #, c-format
-msgid ""
-"Image-loading module %s does not export the proper interface; perhaps it's "
-"from a different GTK version?"
+msgid "Image-loading module %s does not export the proper interface; perhaps it's from a different GTK version?"
 msgstr "图像载入模块 %s 没有导出正确的接口；它是否属于另一个 GTK 版本？"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:659 gdk-pixbuf/gdk-pixbuf-io.c:688
+#: gdk-pixbuf/gdk-pixbuf-io.c:659
+#: gdk-pixbuf/gdk-pixbuf-io.c:688
 #, c-format
 msgid "Image type '%s' is not supported"
 msgstr "不支持图像类型“%s”"
@@ -300,7 +300,8 @@ msgstr "载入图像“%s”失败：%s"
 msgid "Error writing to image file: %s"
 msgstr "写入图像文件时出错：%s"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:1427 gdk-pixbuf/gdk-pixbuf-io.c:1558
+#: gdk-pixbuf/gdk-pixbuf-io.c:1427
+#: gdk-pixbuf/gdk-pixbuf-io.c:1558
 #, c-format
 msgid "This build of gdk-pixbuf does not support saving the image format: %s"
 msgstr "此 gdk-pixbuf 不支持要保存的图像格式：%s"
@@ -327,21 +328,18 @@ msgstr "打开“%s”进行写入失败：%s"
 
 #: gdk-pixbuf/gdk-pixbuf-io.c:1760
 #, c-format
-msgid ""
-"Failed to close '%s' while writing image, all data may not have been saved: %"
-"s"
+msgid "Failed to close '%s' while writing image, all data may not have been saved: %s"
 msgstr "写入图像时无法关闭“%s”，可能没有保存数据：%s"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:1980 gdk-pixbuf/gdk-pixbuf-io.c:2030
+#: gdk-pixbuf/gdk-pixbuf-io.c:1980
+#: gdk-pixbuf/gdk-pixbuf-io.c:2030
 #, c-format
 msgid "Insufficient memory to save image into a buffer"
 msgstr "内存不足以将图像保存至缓冲区"
 
 #: gdk-pixbuf/gdk-pixbuf-loader.c:330
 #, c-format
-msgid ""
-"Internal error: Image loader module '%s' failed to complete an operation, "
-"but didn't give a reason for the failure"
+msgid "Internal error: Image loader module '%s' failed to complete an operation, but didn't give a reason for the failure"
 msgstr "内部错误：图像载入模块“%s”完成某操作失败，但没有给出任何原因"
 
 #: gdk-pixbuf/gdk-pixbuf-loader.c:373
@@ -359,7 +357,8 @@ msgstr "图像头损坏"
 msgid "Image format unknown"
 msgstr "图像格式未知"
 
-#: gdk-pixbuf/gdk-pixdata.c:157 gdk-pixbuf/gdk-pixdata.c:487
+#: gdk-pixbuf/gdk-pixdata.c:157
+#: gdk-pixbuf/gdk-pixdata.c:487
 #, c-format
 msgid "Image pixel data corrupt"
 msgstr "图像像素数据损坏"
@@ -380,18 +379,25 @@ msgstr "动画中有未预期的图标块"
 msgid "Unsupported animation type"
 msgstr "不支持的动画类型"
 
-#: gdk-pixbuf/io-ani.c:348 gdk-pixbuf/io-ani.c:536
+#: gdk-pixbuf/io-ani.c:348
+#: gdk-pixbuf/io-ani.c:536
 #, c-format
 msgid "Invalid header in animation"
 msgstr "动画头无效"
 
-#: gdk-pixbuf/io-ani.c:358 gdk-pixbuf/io-ani.c:380 gdk-pixbuf/io-ani.c:439
-#: gdk-pixbuf/io-ani.c:458 gdk-pixbuf/io-ani.c:509 gdk-pixbuf/io-ani.c:581
+#: gdk-pixbuf/io-ani.c:358
+#: gdk-pixbuf/io-ani.c:380
+#: gdk-pixbuf/io-ani.c:439
+#: gdk-pixbuf/io-ani.c:458
+#: gdk-pixbuf/io-ani.c:509
+#: gdk-pixbuf/io-ani.c:581
 #, c-format
 msgid "Not enough memory to load animation"
 msgstr "内存不足以载入动画"
 
-#: gdk-pixbuf/io-ani.c:398 gdk-pixbuf/io-ani.c:415 gdk-pixbuf/io-ani.c:426
+#: gdk-pixbuf/io-ani.c:398
+#: gdk-pixbuf/io-ani.c:415
+#: gdk-pixbuf/io-ani.c:426
 #, c-format
 msgid "Malformed chunk in animation"
 msgstr "动画中的块格式错误"
@@ -400,13 +406,17 @@ msgstr "动画中的块格式错误"
 msgid "The ANI image format"
 msgstr "ANI 图像格式"
 
-#: gdk-pixbuf/io-bmp.c:230 gdk-pixbuf/io-bmp.c:327 gdk-pixbuf/io-bmp.c:359
-#: gdk-pixbuf/io-bmp.c:382 gdk-pixbuf/io-bmp.c:485
+#: gdk-pixbuf/io-bmp.c:230
+#: gdk-pixbuf/io-bmp.c:327
+#: gdk-pixbuf/io-bmp.c:359
+#: gdk-pixbuf/io-bmp.c:382
+#: gdk-pixbuf/io-bmp.c:485
 #, c-format
 msgid "BMP image has bogus header data"
 msgstr "BMP 图像有伪造的头数据"
 
-#: gdk-pixbuf/io-bmp.c:241 gdk-pixbuf/io-bmp.c:422
+#: gdk-pixbuf/io-bmp.c:241
+#: gdk-pixbuf/io-bmp.c:422
 #, c-format
 msgid "Not enough memory to load bitmap image"
 msgstr "内存不足以载入位图图像"
@@ -440,7 +450,9 @@ msgstr "BMP 图像格式"
 msgid "Failure reading GIF: %s"
 msgstr "读入 GIF 失败：%s"
 
-#: gdk-pixbuf/io-gif.c:496 gdk-pixbuf/io-gif.c:1477 gdk-pixbuf/io-gif.c:1638
+#: gdk-pixbuf/io-gif.c:496
+#: gdk-pixbuf/io-gif.c:1477
+#: gdk-pixbuf/io-gif.c:1638
 #, c-format
 msgid "GIF file was missing some data (perhaps it was truncated somehow?)"
 msgstr "GIF 文件缺少了某些数据(可能文件被截短了？)"
@@ -470,7 +482,9 @@ msgstr "遇到了错误的代码"
 msgid "Circular table entry in GIF file"
 msgstr "GIF 文件中的表项循环"
 
-#: gdk-pixbuf/io-gif.c:866 gdk-pixbuf/io-gif.c:1464 gdk-pixbuf/io-gif.c:1511
+#: gdk-pixbuf/io-gif.c:866
+#: gdk-pixbuf/io-gif.c:1464
+#: gdk-pixbuf/io-gif.c:1511
 #: gdk-pixbuf/io-gif.c:1626
 #, c-format
 msgid "Not enough memory to load GIF file"
@@ -498,9 +512,7 @@ msgstr "不支持 %s 版本的 GIF 文件格式"
 
 #: gdk-pixbuf/io-gif.c:1299
 #, c-format
-msgid ""
-"GIF image has no global colormap, and a frame inside it has no local "
-"colormap."
+msgid "GIF image has no global colormap, and a frame inside it has no local colormap."
 msgstr "GIF 图像没有全局色彩表表，它其中的一帧也没有局部色彩表表。"
 
 #: gdk-pixbuf/io-gif.c:1533
@@ -512,13 +524,18 @@ msgstr "GIF 文件被截断或是不完整。"
 msgid "The GIF image format"
 msgstr "GIF 图像格式"
 
-#: gdk-pixbuf/io-ico.c:217 gdk-pixbuf/io-ico.c:277 gdk-pixbuf/io-ico.c:346
-#: gdk-pixbuf/io-ico.c:409 gdk-pixbuf/io-ico.c:439
+#: gdk-pixbuf/io-ico.c:217
+#: gdk-pixbuf/io-ico.c:277
+#: gdk-pixbuf/io-ico.c:346
+#: gdk-pixbuf/io-ico.c:409
+#: gdk-pixbuf/io-ico.c:439
 #, c-format
 msgid "Not enough memory to load icon"
 msgstr "内存不足以载入图标"
 
-#: gdk-pixbuf/io-ico.c:254 gdk-pixbuf/io-ico.c:267 gdk-pixbuf/io-ico.c:336
+#: gdk-pixbuf/io-ico.c:254
+#: gdk-pixbuf/io-ico.c:267
+#: gdk-pixbuf/io-ico.c:336
 #, c-format
 msgid "Invalid header in icon"
 msgstr "图标头无效"
@@ -574,17 +591,18 @@ msgstr "分析 JPEG 图像文件时出错(%s)"
 
 #: gdk-pixbuf/io-jpeg.c:509
 #, c-format
-msgid ""
-"Insufficient memory to load image, try exiting some applications to free "
-"memory"
+msgid "Insufficient memory to load image, try exiting some applications to free memory"
 msgstr "内存不足以载入图像，试试关闭其它应用程序来释放内存"
 
-#: gdk-pixbuf/io-jpeg.c:550 gdk-pixbuf/io-jpeg.c:756
+#: gdk-pixbuf/io-jpeg.c:550
+#: gdk-pixbuf/io-jpeg.c:756
 #, c-format
 msgid "Unsupported JPEG color space (%s)"
 msgstr "不支持的 JPEG 颜色空间(%s)"
 
-#: gdk-pixbuf/io-jpeg.c:648 gdk-pixbuf/io-jpeg.c:920 gdk-pixbuf/io-jpeg.c:1153
+#: gdk-pixbuf/io-jpeg.c:648
+#: gdk-pixbuf/io-jpeg.c:920
+#: gdk-pixbuf/io-jpeg.c:1153
 #: gdk-pixbuf/io-jpeg.c:1162
 #, c-format
 msgid "Couldn't allocate memory for loading JPEG file"
@@ -597,15 +615,12 @@ msgstr "变形 JPEG 宽度或高度为零。"
 
 #: gdk-pixbuf/io-jpeg.c:1109
 #, c-format
-msgid ""
-"JPEG quality must be a value between 0 and 100; value '%s' could not be "
-"parsed."
+msgid "JPEG quality must be a value between 0 and 100; value '%s' could not be parsed."
 msgstr "JPEG 质量一定要在 0 至 100 之间；无法解析数值“%s”。"
 
 #: gdk-pixbuf/io-jpeg.c:1124
 #, c-format
-msgid ""
-"JPEG quality must be a value between 0 and 100; value '%d' is not allowed."
+msgid "JPEG quality must be a value between 0 and 100; value '%d' is not allowed."
 msgstr "JPEG 质量一定要在 0 至 100 之间；不允许使用数值“%d”。"
 
 #: gdk-pixbuf/io-jpeg.c:1287
@@ -617,7 +632,8 @@ msgstr "JPEG 图像格式"
 msgid "Couldn't allocate memory for header"
 msgstr "无法为头分配内存"
 
-#: gdk-pixbuf/io-pcx.c:202 gdk-pixbuf/io-pcx.c:560
+#: gdk-pixbuf/io-pcx.c:202
+#: gdk-pixbuf/io-pcx.c:560
 #, c-format
 msgid "Couldn't allocate memory for context buffer"
 msgstr "无法为上下文缓冲区分配内存"
@@ -627,12 +643,14 @@ msgstr "无法为上下文缓冲区分配内存"
 msgid "Image has invalid width and/or height"
 msgstr "图像的宽度和/或高度无效"
 
-#: gdk-pixbuf/io-pcx.c:613 gdk-pixbuf/io-pcx.c:674
+#: gdk-pixbuf/io-pcx.c:613
+#: gdk-pixbuf/io-pcx.c:674
 #, c-format
 msgid "Image has unsupported bpp"
 msgstr "图像有不支持的 bpp"
 
-#: gdk-pixbuf/io-pcx.c:618 gdk-pixbuf/io-pcx.c:626
+#: gdk-pixbuf/io-pcx.c:618
+#: gdk-pixbuf/io-pcx.c:626
 #, c-format
 msgid "Image has unsupported number of %d-bit planes"
 msgstr "图像有不支持的 %d 位色盘"
@@ -671,7 +689,8 @@ msgstr "PCX 图像格式"
 msgid "Bits per channel of PNG image is invalid."
 msgstr "PNG 图像的每通道位数无效。"
 
-#: gdk-pixbuf/io-png.c:136 gdk-pixbuf/io-png.c:618
+#: gdk-pixbuf/io-png.c:136
+#: gdk-pixbuf/io-png.c:618
 #, c-format
 msgid "Transformed PNG has zero width or height."
 msgstr "变形 PNG 宽度或高度为零。"
@@ -703,11 +722,8 @@ msgstr "内存不足以载入 PNG 文件"
 
 #: gdk-pixbuf/io-png.c:633
 #, c-format
-msgid ""
-"Insufficient memory to store a %ld by %ld image; try exiting some "
-"applications to reduce memory usage"
-msgstr ""
-"内存不足以载入大小为 %ld x %ld 的图像；试试关闭其它应用程序以减少内存使用量"
+msgid "Insufficient memory to store a %ld by %ld image; try exiting some applications to reduce memory usage"
+msgstr "内存不足以载入大小为 %ld x %ld 的图像；试试关闭其它应用程序以减少内存使用量"
 
 #: gdk-pixbuf/io-png.c:684
 #, c-format
@@ -721,8 +737,7 @@ msgstr "读入 PNG 图像文件时发生严重错误：%s"
 
 #: gdk-pixbuf/io-png.c:825
 #, c-format
-msgid ""
-"Keys for PNG text chunks must have at least 1 and at most 79 characters."
+msgid "Keys for PNG text chunks must have at least 1 and at most 79 characters."
 msgstr "PNG 文本块的关键字必须至少有 1 个字符，最多有 79 个字符。"
 
 #: gdk-pixbuf/io-png.c:833
@@ -732,16 +747,12 @@ msgstr "PNG 文本块的关键字必须是 ASCII 字符。"
 
 #: gdk-pixbuf/io-png.c:846
 #, c-format
-msgid ""
-"PNG compression level must be a value between 0 and 9; value '%s' could not "
-"be parsed."
+msgid "PNG compression level must be a value between 0 and 9; value '%s' could not be parsed."
 msgstr "PNG 压缩级别一定要在 0 至 9 之间；无法解析数值“%s”。"
 
 #: gdk-pixbuf/io-png.c:858
 #, c-format
-msgid ""
-"PNG compression level must be a value between 0 and 9; value '%d' is not "
-"allowed."
+msgid "PNG compression level must be a value between 0 and 9; value '%d' is not allowed."
 msgstr "PNG 压缩级别一定要在 0 至 9 之间；不允许使用数值“%d”。"
 
 #: gdk-pixbuf/io-png.c:896
@@ -788,7 +799,9 @@ msgstr "PNM 文件中最大可用颜色数为 0"
 msgid "Maximum color value in PNM file is too large"
 msgstr "PNM 文件中最大可用颜色数过大"
 
-#: gdk-pixbuf/io-pnm.c:429 gdk-pixbuf/io-pnm.c:459 gdk-pixbuf/io-pnm.c:504
+#: gdk-pixbuf/io-pnm.c:429
+#: gdk-pixbuf/io-pnm.c:459
+#: gdk-pixbuf/io-pnm.c:504
 #, c-format
 msgid "Raw PNM image type is invalid"
 msgstr "原始 PNM 图像类型无效"
@@ -803,7 +816,8 @@ msgstr "PNM 载入程序不支持这种 PNM 副格式"
 msgid "Premature end-of-file encountered"
 msgstr "文件过早结束"
 
-#: gdk-pixbuf/io-pnm.c:741 gdk-pixbuf/io-pnm.c:968
+#: gdk-pixbuf/io-pnm.c:741
+#: gdk-pixbuf/io-pnm.c:968
 #, c-format
 msgid "Raw PNM formats require exactly one whitespace before sample data"
 msgstr "原始 PNM 格式在样本数据前精确需要一个空格"
@@ -847,7 +861,8 @@ msgstr "RAS 图像类型未知"
 msgid "unsupported RAS image variation"
 msgstr "不支持的 RAS 图像变种"
 
-#: gdk-pixbuf/io-ras.c:171 gdk-pixbuf/io-ras.c:200
+#: gdk-pixbuf/io-ras.c:171
+#: gdk-pixbuf/io-ras.c:200
 #, c-format
 msgid "Not enough memory to load RAS image"
 msgstr "内存不足以载入 RAS 图像"
@@ -906,8 +921,11 @@ msgstr "无法分配 TGA 头内存"
 msgid "TGA image has invalid dimensions"
 msgstr "TGA 图像尺寸无效"
 
-#: gdk-pixbuf/io-tga.c:773 gdk-pixbuf/io-tga.c:782 gdk-pixbuf/io-tga.c:792
-#: gdk-pixbuf/io-tga.c:802 gdk-pixbuf/io-tga.c:809
+#: gdk-pixbuf/io-tga.c:773
+#: gdk-pixbuf/io-tga.c:782
+#: gdk-pixbuf/io-tga.c:792
+#: gdk-pixbuf/io-tga.c:802
+#: gdk-pixbuf/io-tga.c:809
 #, c-format
 msgid "TGA image type not supported"
 msgstr "不支持 TGA 图像类型"
@@ -939,12 +957,15 @@ msgstr "无法取得图像高度(TIFF 文件损坏)"
 msgid "Width or height of TIFF image is zero"
 msgstr "TIFF 图像的宽度或高度为零"
 
-#: gdk-pixbuf/io-tiff.c:184 gdk-pixbuf/io-tiff.c:193
+#: gdk-pixbuf/io-tiff.c:184
+#: gdk-pixbuf/io-tiff.c:193
 #, c-format
 msgid "Dimensions of TIFF image too large"
 msgstr "TIFF 图像的尺寸太大"
 
-#: gdk-pixbuf/io-tiff.c:217 gdk-pixbuf/io-tiff.c:229 gdk-pixbuf/io-tiff.c:541
+#: gdk-pixbuf/io-tiff.c:217
+#: gdk-pixbuf/io-tiff.c:229
+#: gdk-pixbuf/io-tiff.c:541
 #, c-format
 msgid "Insufficient memory to open TIFF file"
 msgstr "内存不足以打开 TIFF 文件"
@@ -957,11 +978,13 @@ msgstr "载入 TIFF 文件里的 RGB 数据失败"
 msgid "Failed to open TIFF image"
 msgstr "打开 TIFF 图像失败"
 
-#: gdk-pixbuf/io-tiff.c:343 gdk-pixbuf/io-tiff.c:722
+#: gdk-pixbuf/io-tiff.c:343
+#: gdk-pixbuf/io-tiff.c:722
 msgid "TIFFClose operation failed"
 msgstr "TIFFClose 操作失败"
 
-#: gdk-pixbuf/io-tiff.c:473 gdk-pixbuf/io-tiff.c:486
+#: gdk-pixbuf/io-tiff.c:473
+#: gdk-pixbuf/io-tiff.c:486
 msgid "Failed to load TIFF image"
 msgstr "载入 TIFF 图像失败"
 
@@ -1055,7 +1078,9 @@ msgstr "XPM 每个像素占用的字节数目无效"
 msgid "XPM file has invalid number of colors"
 msgstr "XPM 文件图像颜色数目不正确"
 
-#: gdk-pixbuf/io-xpm.c:522 gdk-pixbuf/io-xpm.c:531 gdk-pixbuf/io-xpm.c:583
+#: gdk-pixbuf/io-xpm.c:522
+#: gdk-pixbuf/io-xpm.c:531
+#: gdk-pixbuf/io-xpm.c:583
 #, c-format
 msgid "Cannot allocate memory for loading XPM image"
 msgstr "无法分配内存来载入 XPM 图像"
@@ -1109,7 +1134,8 @@ msgstr "颜色"
 msgid "Make X calls synchronous"
 msgstr "同步调用 X"
 
-#: gtk/gtkaboutdialog.c:264 gtk/gtkaboutdialog.c:2100
+#: gtk/gtkaboutdialog.c:264
+#: gtk/gtkaboutdialog.c:2100
 msgid "License"
 msgstr "许可"
 
@@ -1269,7 +1295,8 @@ msgstr "2000"
 #. * digits.  That needs support from your system and locale definition
 #. * too.
 #.
-#: gtk/gtkcalendar.c:1626 gtk/gtkcalendar.c:2204
+#: gtk/gtkcalendar.c:1626
+#: gtk/gtkcalendar.c:2204
 #, c-format
 msgid "calendar:day:digits|%d"
 msgstr "%d"
@@ -1285,7 +1312,8 @@ msgstr "%d"
 #. * digits.  That needs support from your system and locale definition
 #. * too.
 #.
-#: gtk/gtkcalendar.c:1660 gtk/gtkcalendar.c:2078
+#: gtk/gtkcalendar.c:1660
+#: gtk/gtkcalendar.c:2078
 #, c-format
 msgid "calendar:week:digits|%d"
 msgstr "%d"
@@ -1317,17 +1345,20 @@ msgstr "禁用"
 #. * an accelerator when the cell is clicked to change the
 #. * acelerator.
 #.
-#: gtk/gtkcellrendereraccel.c:364 gtk/gtkcellrendereraccel.c:576
+#: gtk/gtkcellrendereraccel.c:364
+#: gtk/gtkcellrendereraccel.c:576
 msgid "New accelerator..."
 msgstr "新建加速键..."
 
 #. do not translate the part before the |
-#: gtk/gtkcellrendererprogress.c:362 gtk/gtkcellrendererprogress.c:449
+#: gtk/gtkcellrendererprogress.c:362
+#: gtk/gtkcellrendererprogress.c:449
 #, c-format
 msgid "progress bar label|%d %%"
 msgstr "%d %%"
 
-#: gtk/gtkcolorbutton.c:189 gtk/gtkcolorbutton.c:560
+#: gtk/gtkcolorbutton.c:189
+#: gtk/gtkcolorbutton.c:560
 msgid "Pick a Color"
 msgstr "拾取颜色"
 
@@ -1336,18 +1367,11 @@ msgid "Received invalid color data\n"
 msgstr "收到了无效的颜色数据\n"
 
 #: gtk/gtkcolorsel.c:561
-msgid ""
-"The previously-selected color, for comparison to the color you're selecting "
-"now. You can drag this color to a palette entry, or select this color as "
-"current by dragging it to the other color swatch alongside."
-msgstr ""
-"先前选中的颜色，相对于您正选中的颜色。您可以拖动此颜色到调色板，或拖动此颜色"
-"到下一个颜色样品格内以作为当前选中颜色。"
+msgid "The previously-selected color, for comparison to the color you're selecting now. You can drag this color to a palette entry, or select this color as current by dragging it to the other color swatch alongside."
+msgstr "先前选中的颜色，相对于您正选中的颜色。您可以拖动此颜色到调色板，或拖动此颜色到下一个颜色样品格内以作为当前选中颜色。"
 
 #: gtk/gtkcolorsel.c:566
-msgid ""
-"The color you've chosen. You can drag this color to a palette entry to save "
-"it for use in the future."
+msgid "The color you've chosen. You can drag this color to a palette entry to save it for use in the future."
 msgstr "您选择的颜色。您可以拖动此颜色到调色板并将之保存供以后使用。"
 
 #: gtk/gtkcolorsel.c:954
@@ -1355,23 +1379,15 @@ msgid "_Save color here"
 msgstr "在此保存颜色(_S)"
 
 #: gtk/gtkcolorsel.c:1159
-msgid ""
-"Click this palette entry to make it the current color. To change this entry, "
-"drag a color swatch here or right-click it and select \"Save color here.\""
-msgstr ""
-"单击此调色板项可以将其变为当前颜色。要更改此项，请将颜色拖曳到此处，或者用鼠"
-"标右键单击之，然后选择“在此保存颜色”。"
+msgid "Click this palette entry to make it the current color. To change this entry, drag a color swatch here or right-click it and select \"Save color here.\""
+msgstr "单击此调色板项可以将其变为当前颜色。要更改此项，请将颜色拖曳到此处，或者用鼠标右键单击之，然后选择“在此保存颜色”。"
 
 #: gtk/gtkcolorsel.c:1937
-msgid ""
-"Select the color you want from the outer ring. Select the darkness or "
-"lightness of that color using the inner triangle."
+msgid "Select the color you want from the outer ring. Select the darkness or lightness of that color using the inner triangle."
 msgstr "在外围环中选择您要的颜色。在内部三角形中选择该颜色的明暗度。"
 
 #: gtk/gtkcolorsel.c:1962
-msgid ""
-"Click the eyedropper, then click a color anywhere on your screen to select "
-"that color."
+msgid "Click the eyedropper, then click a color anywhere on your screen to select that color."
 msgstr "单击滴管，然后点屏幕任何一处来选取该位置的颜色。"
 
 #: gtk/gtkcolorsel.c:1971
@@ -1426,7 +1442,8 @@ msgstr "颜色中的蓝色分量。"
 msgid "Op_acity:"
 msgstr "不透明度(_A)："
 
-#: gtk/gtkcolorsel.c:1994 gtk/gtkcolorsel.c:2005
+#: gtk/gtkcolorsel.c:1994
+#: gtk/gtkcolorsel.c:2005
 msgid "Transparency of the color."
 msgstr "颜色的透明度。"
 
@@ -1435,11 +1452,8 @@ msgid "Color _name:"
 msgstr "颜色名称(_N)："
 
 #: gtk/gtkcolorsel.c:2027
-msgid ""
-"You can enter an HTML-style hexadecimal color value, or simply a color name "
-"such as 'orange' in this entry."
-msgstr ""
-"您可以在此栏输入 HTML 方式的十六进制颜色值，或是像“orange”这样的颜色名称。"
+msgid "You can enter an HTML-style hexadecimal color value, or simply a color name such as 'orange' in this entry."
+msgstr "您可以在此栏输入 HTML 方式的十六进制颜色值，或是像“orange”这样的颜色名称。"
 
 #: gtk/gtkcolorsel.c:2057
 msgid "_Palette:"
@@ -1453,11 +1467,13 @@ msgstr "着色轮"
 msgid "Color Selection"
 msgstr "颜色选择"
 
-#: gtk/gtkentry.c:5253 gtk/gtktextview.c:7605
+#: gtk/gtkentry.c:5253
+#: gtk/gtktextview.c:7605
 msgid "Input _Methods"
 msgstr "输入法(_M)"
 
-#: gtk/gtkentry.c:5267 gtk/gtktextview.c:7619
+#: gtk/gtkentry.c:5267
+#: gtk/gtktextview.c:7619
 msgid "_Insert Unicode Control Character"
 msgstr "插入 Unicode 控制字符(_I)"
 
@@ -1465,7 +1481,8 @@ msgstr "插入 Unicode 控制字符(_I)"
 msgid "Select A File"
 msgstr "选择文件"
 
-#: gtk/gtkfilechooserbutton.c:69 gtk/gtkfilechooserdefault.c:1966
+#: gtk/gtkfilechooserbutton.c:69
+#: gtk/gtkfilechooserdefault.c:1966
 msgid "Desktop"
 msgstr "桌面"
 
@@ -1477,8 +1494,10 @@ msgstr "(无)"
 msgid "Other..."
 msgstr "其它..."
 
-#: gtk/gtkfilechooser.c:1694 gtk/gtkfilechooser.c:1738
-#: gtk/gtkfilechooser.c:1813 gtk/gtkfilechooser.c:1857
+#: gtk/gtkfilechooser.c:1694
+#: gtk/gtkfilechooser.c:1738
+#: gtk/gtkfilechooser.c:1813
+#: gtk/gtkfilechooser.c:1857
 #, c-format
 msgid "Invalid filename: %s"
 msgstr "无效的文件名：%s"
@@ -1500,12 +1519,8 @@ msgid "The folder could not be created"
 msgstr "无法创建文件夹"
 
 #: gtk/gtkfilechooserdefault.c:1149
-msgid ""
-"The folder could not be created, as a file with the same name already "
-"exists.  Try using a different name for the folder, or rename the file first."
-msgstr ""
-"无法创建文件夹，因为已经存在同名文件。请试着为文件夹使用不同的名称，或者先重"
-"命名文件。"
+msgid "The folder could not be created, as a file with the same name already exists.  Try using a different name for the folder, or rename the file first."
+msgstr "无法创建文件夹，因为已经存在同名文件。请试着为文件夹使用不同的名称，或者先重命名文件。"
 
 #: gtk/gtkfilechooserdefault.c:1162
 msgid "Invalid file name"
@@ -1526,11 +1541,11 @@ msgstr "%2$s 上的 %1$s"
 
 #: gtk/gtkfilechooserdefault.c:1893
 msgid "Search"
-msgstr ""
+msgstr "搜索"
 
 #: gtk/gtkfilechooserdefault.c:1917
 msgid "Recently Used"
-msgstr ""
+msgstr "最近使用的"
 
 #: gtk/gtkfilechooserdefault.c:3006
 #, c-format
@@ -1575,7 +1590,8 @@ msgstr "位置"
 msgid "_Places"
 msgstr "位置(_R)"
 
-#: gtk/gtkfilechooserdefault.c:4007 gtk/gtkstock.c:297
+#: gtk/gtkfilechooserdefault.c:4007
+#: gtk/gtkstock.c:297
 msgid "_Add"
 msgstr "添加(_A)"
 
@@ -1583,7 +1599,8 @@ msgstr "添加(_A)"
 msgid "Add the selected folder to the Bookmarks"
 msgstr "将选中的文件夹添加到书签"
 
-#: gtk/gtkfilechooserdefault.c:4019 gtk/gtkstock.c:385
+#: gtk/gtkfilechooserdefault.c:4019
+#: gtk/gtkstock.c:385
 msgid "_Remove"
 msgstr "删除(_R)"
 
@@ -1608,7 +1625,8 @@ msgstr "添加到书签(_A)"
 msgid "Show _Hidden Files"
 msgstr "显示隐藏文件(_H)"
 
-#: gtk/gtkfilechooserdefault.c:4574 gtk/gtkfilesel.c:729
+#: gtk/gtkfilechooserdefault.c:4574
+#: gtk/gtkfilesel.c:729
 msgid "Files"
 msgstr "文件"
 
@@ -1629,7 +1647,8 @@ msgid "Select which types of files are shown"
 msgstr "选择要显示的文件类型"
 
 #. Label
-#: gtk/gtkfilechooserdefault.c:4908 gtk/gtkprinteroptionwidget.c:786
+#: gtk/gtkfilechooserdefault.c:4908
+#: gtk/gtkprinteroptionwidget.c:786
 msgid "_Name:"
 msgstr "名称(_N)："
 
@@ -1663,7 +1682,8 @@ msgstr "创建于文件夹(_F)："
 msgid "Cannot change to folder because it is not local"
 msgstr "无法更改为文件夹，因为该文件夹并非本地"
 
-#: gtk/gtkfilechooserdefault.c:7711 gtk/gtkfilechooserdefault.c:7732
+#: gtk/gtkfilechooserdefault.c:7711
+#: gtk/gtkfilechooserdefault.c:7732
 #, c-format
 msgid "Shortcut %s already exists"
 msgstr "快捷方式 %s 已经存在"
@@ -1680,8 +1700,7 @@ msgstr "已经存在名为“%s”的文件。您是否想要替换？"
 
 #: gtk/gtkfilechooserdefault.c:8080
 #, c-format
-msgid ""
-"The file already exists in \"%s\".  Replacing it will overwrite its contents."
+msgid "The file already exists in \"%s\".  Replacing it will overwrite its contents."
 msgstr "文件已经在“%s”中存在了。替换该文件将覆盖其中的内容。"
 
 #: gtk/gtkfilechooserdefault.c:8085
@@ -1689,25 +1708,21 @@ msgid "_Replace"
 msgstr "替换(_R)"
 
 #: gtk/gtkfilechooserdefault.c:8916
-#, fuzzy
 msgid "Could not start the search process"
-msgstr "无法保存剩余部分"
+msgstr "无法开启搜索进程"
 
 #: gtk/gtkfilechooserdefault.c:8917
-msgid ""
-"The program was not able to create a connection to the indexer daemon.  "
-"Please make sure it is running."
-msgstr ""
+msgid "The program was not able to create a connection to the indexer daemon.  Please make sure it is running."
+msgstr "程序无法连接到索引守护进程。请确保它在运行。"
 
 #: gtk/gtkfilechooserdefault.c:8931
-#, fuzzy
 msgid "Could not send the search request"
-msgstr "无法保存剩余部分"
+msgstr "无法发送搜索请求"
 
 #. Label
 #: gtk/gtkfilechooserdefault.c:9357
 msgid "_Search:"
-msgstr ""
+msgstr "搜索(_S)："
 
 #: gtk/gtkfilechooserdefault.c:10307
 #, c-format
@@ -1739,24 +1754,26 @@ msgstr "%.1f MB"
 msgid "%.1f GB"
 msgstr "%.1f GB"
 
-#: gtk/gtkfilechooserdefault.c:11085 gtk/gtkfilechooserdefault.c:11106
+#: gtk/gtkfilechooserdefault.c:11085
+#: gtk/gtkfilechooserdefault.c:11106
 #: gtk/gtkfilechooserdefault.c:11138
 msgid "Unknown"
 msgstr "未知"
 
 #: gtk/gtkfilechooserdefault.c:11124
 msgid "Today at %H:%M"
-msgstr ""
+msgstr "今天于 %H:%M"
 
 #: gtk/gtkfilechooserdefault.c:11126
-#, fuzzy
 msgid "Yesterday at %H:%M"
-msgstr "昨天"
+msgstr "昨天于 %H:%M"
 
-#: gtk/gtkfilechoosersettings.c:262 gtk/gtkfilesel.c:1408
-#: gtk/gtkfilesel.c:1417 gtk/gtkfilesystemunix.c:1047
+#: gtk/gtkfilechoosersettings.c:262
+#: gtk/gtkfilesel.c:1408
+#: gtk/gtkfilesel.c:1417
+#: gtk/gtkfilesystemunix.c:1047
 #: gtk/gtkfilesystemwin32.c:1167
-#, fuzzy, c-format
+#, c-format
 msgid "Error creating folder '%s': %s"
 msgstr "创建目录“%s”时出错：%s"
 
@@ -1772,7 +1789,8 @@ msgstr "文件夹(_D)"
 msgid "_Files"
 msgstr "文件(_F)"
 
-#: gtk/gtkfilesel.c:820 gtk/gtkfilesel.c:2207
+#: gtk/gtkfilesel.c:820
+#: gtk/gtkfilesel.c:2207
 #, c-format
 msgid "Folder unreadable: %s"
 msgstr "文件夹不可读：%s"
@@ -1780,8 +1798,7 @@ msgstr "文件夹不可读：%s"
 #: gtk/gtkfilesel.c:949
 #, c-format
 msgid ""
-"The file \"%s\" resides on another machine (called %s) and may not be "
-"available to this program.\n"
+"The file \"%s\" resides on another machine (called %s) and may not be available to this program.\n"
 "Are you sure that you want to select it?"
 msgstr ""
 "文件“%s”位于另一台(名为 %s)机器上，可能无法被本程序访问。\n"
@@ -1801,8 +1818,7 @@ msgstr "重命名文件(_R)"
 
 #: gtk/gtkfilesel.c:1406
 #, c-format
-msgid ""
-"The folder name \"%s\" contains symbols that are not allowed in filenames"
+msgid "The folder name \"%s\" contains symbols that are not allowed in filenames"
 msgstr "文件夹名称“%s”含有不允许存在于文件名中的符号"
 
 #: gtk/gtkfilesel.c:1451
@@ -1817,12 +1833,15 @@ msgstr "文件夹名称(_F)："
 msgid "C_reate"
 msgstr "创建(_R)"
 
-#: gtk/gtkfilesel.c:1533 gtk/gtkfilesel.c:1640 gtk/gtkfilesel.c:1653
+#: gtk/gtkfilesel.c:1533
+#: gtk/gtkfilesel.c:1640
+#: gtk/gtkfilesel.c:1653
 #, c-format
 msgid "The filename \"%s\" contains symbols that are not allowed in filenames"
 msgstr "文件名“%s”中含有不允许存在于文件名中的符号"
 
-#: gtk/gtkfilesel.c:1536 gtk/gtkfilesel.c:1546
+#: gtk/gtkfilesel.c:1536
+#: gtk/gtkfilesel.c:1546
 #, c-format
 msgid "Error deleting file '%s': %s"
 msgstr "删除文件“%s”时出错：%s"
@@ -1870,11 +1889,8 @@ msgstr "选择(_S)："
 
 #: gtk/gtkfilesel.c:3107
 #, c-format
-msgid ""
-"The filename \"%s\" couldn't be converted to UTF-8. (try setting the "
-"environment variable G_FILENAME_ENCODING): %s"
-msgstr ""
-"文件名“%s”无法转换为 UTF-8。(请尝试设置环境变量 G_BROKEN_FILENAMES)：%s"
+msgid "The filename \"%s\" couldn't be converted to UTF-8. (try setting the environment variable G_FILENAME_ENCODING): %s"
+msgstr "文件名“%s”无法转换为 UTF-8。(请尝试设置环境变量 G_BROKEN_FILENAMES)：%s"
 
 #: gtk/gtkfilesel.c:3110
 msgid "Invalid UTF-8"
@@ -1902,14 +1918,18 @@ msgstr "无法获得根文件夹"
 msgid "(Empty)"
 msgstr "(空)"
 
-#: gtk/gtkfilesystemunix.c:960 gtk/gtkfilesystemunix.c:1208
-#: gtk/gtkfilesystemunix.c:2196 gtk/gtkfilesystemunix.c:2236
-#: gtk/gtkfilesystemwin32.c:2245 gtk/gtkfilesystemwin32.c:2295
+#: gtk/gtkfilesystemunix.c:960
+#: gtk/gtkfilesystemunix.c:1208
+#: gtk/gtkfilesystemunix.c:2196
+#: gtk/gtkfilesystemunix.c:2236
+#: gtk/gtkfilesystemwin32.c:2245
+#: gtk/gtkfilesystemwin32.c:2295
 #, c-format
 msgid "Error getting information for '%s': %s"
 msgstr "获取“%s”的信息时出错：%s"
 
-#: gtk/gtkfilesystemunix.c:1153 gtk/gtkfilesystemwin32.c:1274
+#: gtk/gtkfilesystemunix.c:1153
+#: gtk/gtkfilesystemwin32.c:1274
 #, c-format
 msgid "This file system does not support mounting"
 msgstr "文件系统不支持挂载"
@@ -1918,24 +1938,26 @@ msgstr "文件系统不支持挂载"
 msgid "File System"
 msgstr "文件系统"
 
-#: gtk/gtkfilesystemunix.c:1329 gtk/gtkfilesystemwin32.c:1584
+#: gtk/gtkfilesystemunix.c:1329
+#: gtk/gtkfilesystemwin32.c:1584
 #, c-format
-msgid ""
-"The name \"%s\" is not valid because it contains the character \"%s\". "
-"Please use a different name."
+msgid "The name \"%s\" is not valid because it contains the character \"%s\". Please use a different name."
 msgstr "名称“%s”无效，因为其中包含字符“%s”。请使用不同的名称。"
 
-#: gtk/gtkfilesystemunix.c:1878 gtk/gtkfilesystemwin32.c:1925
+#: gtk/gtkfilesystemunix.c:1878
+#: gtk/gtkfilesystemwin32.c:1925
 #, c-format
 msgid "Bookmark saving failed: %s"
 msgstr "书签保存失败：%s"
 
-#: gtk/gtkfilesystemunix.c:1933 gtk/gtkfilesystemwin32.c:1980
+#: gtk/gtkfilesystemunix.c:1933
+#: gtk/gtkfilesystemwin32.c:1980
 #, c-format
 msgid "'%s' already exists in the bookmarks list"
 msgstr "“%s”已经存在于书签列表中"
 
-#: gtk/gtkfilesystemunix.c:2005 gtk/gtkfilesystemwin32.c:2052
+#: gtk/gtkfilesystemunix.c:2005
+#: gtk/gtkfilesystemwin32.c:2052
 #, c-format
 msgid "'%s' does not exist in the bookmarks list"
 msgstr "“%s”不在书签列表中存在"
@@ -1955,7 +1977,8 @@ msgstr "网络驱动器(%s)"
 msgid "%s (%s)"
 msgstr "%s (%s)"
 
-#: gtk/gtkfontbutton.c:145 gtk/gtkfontbutton.c:267
+#: gtk/gtkfontbutton.c:145
+#: gtk/gtkfontbutton.c:267
 msgid "Pick a Font"
 msgstr "拾取字体"
 
@@ -2029,9 +2052,9 @@ msgid "Icon '%s' not present in theme"
 msgstr "图标“%s”未出现在主题中"
 
 #: gtk/gtkicontheme.c:2915
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to load icon"
-msgstr "载入 TIFF 图像失败"
+msgstr "载入图标失败"
 
 #: gtk/gtkimmodule.c:421
 msgid "Default"
@@ -2103,7 +2126,8 @@ msgstr "滚轮(_W)："
 msgid "none"
 msgstr "无"
 
-#: gtk/gtkinputdialog.c:616 gtk/gtkinputdialog.c:652
+#: gtk/gtkinputdialog.c:616
+#: gtk/gtkinputdialog.c:652
 msgid "(disabled)"
 msgstr "(禁用)"
 
@@ -2182,15 +2206,18 @@ msgstr "箭头间距"
 msgid "Scroll arrow spacing"
 msgstr "滚动箭头间距"
 
-#: gtk/gtknotebook.c:4392 gtk/gtknotebook.c:6898
+#: gtk/gtknotebook.c:4392
+#: gtk/gtknotebook.c:6898
 #, c-format
 msgid "Page %u"
 msgstr "第 %u 页"
 
-#: gtk/gtkpagesetup.c:570 gtk/gtkpapersize.c:825 gtk/gtkpapersize.c:865
+#: gtk/gtkpagesetup.c:570
+#: gtk/gtkpapersize.c:825
+#: gtk/gtkpapersize.c:865
 #, c-format
 msgid "Not a valid page setup file"
-msgstr ""
+msgstr "非法的页面设置文件"
 
 #. Translate to the default units to use for presenting
 #. * lengths to the user. Translate to default:inch if you
@@ -2210,11 +2237,13 @@ msgstr ""
 "<b>任意打印机</b>\n"
 "对于便携文档"
 
-#: gtk/gtkpagesetupunixdialog.c:885 gtk/gtkpagesetupunixdialog.c:1401
+#: gtk/gtkpagesetupunixdialog.c:885
+#: gtk/gtkpagesetupunixdialog.c:1401
 msgid "mm"
 msgstr "mm"
 
-#: gtk/gtkpagesetupunixdialog.c:887 gtk/gtkpagesetupunixdialog.c:1399
+#: gtk/gtkpagesetupunixdialog.c:887
+#: gtk/gtkpagesetupunixdialog.c:1399
 msgid "inch"
 msgstr "英寸"
 
@@ -2249,7 +2278,8 @@ msgstr "纸张大小(_P)："
 msgid "_Orientation:"
 msgstr "方向(_O)："
 
-#: gtk/gtkpagesetupunixdialog.c:1127 gtk/gtkprintunixdialog.c:2156
+#: gtk/gtkpagesetupunixdialog.c:1127
+#: gtk/gtkprintunixdialog.c:2156
 msgid "Page Setup"
 msgstr "页面设置"
 
@@ -2309,7 +2339,7 @@ msgstr ""
 #: gtk/gtkpathbar.c:1377
 #, fuzzy
 msgid "File System Root"
-msgstr "文件系统"
+msgstr "根文件系统"
 
 #: gtk/gtkprinteroptionwidget.c:685
 msgid "Not available"
@@ -2378,7 +2408,8 @@ msgstr "有错误完成"
 msgid "Preparing %d"
 msgstr "正在准备 %d"
 
-#: gtk/gtkprintoperation.c:1988 gtk/gtkprintoperation.c:2240
+#: gtk/gtkprintoperation.c:1988
+#: gtk/gtkprintoperation.c:2240
 #, c-format
 msgid "Preparing"
 msgstr "正在准备"
@@ -2398,7 +2429,8 @@ msgstr "调用预览出错"
 msgid "Error printing"
 msgstr "打印出错"
 
-#: gtk/gtkprintoperation-unix.c:388 gtk/gtkprintoperation-win32.c:1394
+#: gtk/gtkprintoperation-unix.c:388
+#: gtk/gtkprintoperation-win32.c:1394
 msgid "Application"
 msgstr "应用程序"
 
@@ -2422,7 +2454,8 @@ msgstr "需要用户干预"
 msgid "Custom size"
 msgstr "自定义大小"
 
-#: gtk/gtkprintoperation-win32.c:1484 gtk/gtkprintoperation-win32.c:1507
+#: gtk/gtkprintoperation-win32.c:1484
+#: gtk/gtkprintoperation-win32.c:1507
 #: gtk/gtkprintoperation-win32.c:1555
 #, c-format
 msgid "Not enough free memory"
@@ -2457,7 +2490,8 @@ msgstr "从 StartDoc 出错"
 msgid "Printer"
 msgstr "打印机"
 
-#: gtk/gtkprintunixdialog.c:1493 gtk/gtkrecentchooserdefault.c:1005
+#: gtk/gtkprintunixdialog.c:1493
+#: gtk/gtkrecentchooserdefault.c:1005
 msgid "Location"
 msgstr "位置"
 
@@ -2478,15 +2512,16 @@ msgid "C_urrent"
 msgstr "当前页(_U)"
 
 #: gtk/gtkprintunixdialog.c:1544
-#, fuzzy
 msgid "Ra_nge"
-msgstr "范围(_N)："
+msgstr "范围(_N)"
 
 #: gtk/gtkprintunixdialog.c:1545
 msgid ""
 "Specify one or more page ranges,\n"
 " e.g. 1-3,7,11"
 msgstr ""
+"指定一个或多个页面范围，\n"
+"如：1-3,7,11"
 
 #: gtk/gtkprintunixdialog.c:1564
 msgid "Copies"
@@ -2516,7 +2551,7 @@ msgstr "布局"
 #: gtk/gtkprintunixdialog.c:2016
 #, fuzzy
 msgid "Pages per _side:"
-msgstr "每页张数(_S)："
+msgstr "每面页数(_S)："
 
 #: gtk/gtkprintunixdialog.c:2032
 msgid "T_wo-sided:"
@@ -2640,13 +2675,16 @@ msgstr "此按钮所属的单选钮组。"
 msgid "Unable to find include file: \"%s\""
 msgstr "找不到包含文件：“%s”"
 
-#: gtk/gtkrc.c:3494 gtk/gtkrc.c:3497
+#: gtk/gtkrc.c:3494
+#: gtk/gtkrc.c:3497
 #, c-format
 msgid "Unable to locate image file in pixmap_path: \"%s\""
 msgstr "无法在像素图路径中找到图像文件：“%s”"
 
-#: gtk/gtkrecentaction.c:155 gtk/gtkrecentaction.c:163
-#: gtk/gtkrecentchoosermenu.c:567 gtk/gtkrecentchoosermenu.c:575
+#: gtk/gtkrecentaction.c:155
+#: gtk/gtkrecentaction.c:163
+#: gtk/gtkrecentchoosermenu.c:567
+#: gtk/gtkrecentchoosermenu.c:575
 #, c-format
 msgid "This function is not implemented for widgets of class '%s'"
 msgstr "此函数尚未在“%s”类的部件上实现"
@@ -2655,14 +2693,15 @@ msgstr "此函数尚未在“%s”类的部件上实现"
 msgid "Select which type of documents are shown"
 msgstr "选择要显示的文档类型"
 
-#: gtk/gtkrecentchooserdefault.c:1124 gtk/gtkrecentchooserdefault.c:1161
+#: gtk/gtkrecentchooserdefault.c:1124
+#: gtk/gtkrecentchooserdefault.c:1161
 #, c-format
 msgid "No item for URI '%s' found"
 msgstr "URI“%s”未找到项目"
 
 #: gtk/gtkrecentchooserdefault.c:1288
 msgid "Untitled filter"
-msgstr ""
+msgstr "无标题过滤器"
 
 #: gtk/gtkrecentchooserdefault.c:1596
 msgid "Could not remove item"
@@ -2702,7 +2741,8 @@ msgstr "显示私有资源(_P)"
 msgid "No items found"
 msgstr "未找到项目"
 
-#: gtk/gtkrecentchoosermenu.c:487 gtk/gtkrecentchoosermenu.c:543
+#: gtk/gtkrecentchoosermenu.c:487
+#: gtk/gtkrecentchoosermenu.c:543
 #, c-format
 msgid "No recently used resource found with URI `%s'"
 msgstr "最近使用过的资源中没有找到 URI“%s”"
@@ -2726,7 +2766,7 @@ msgstr "未知项"
 #: gtk/gtkrecentchoosermenu.c:802
 #, c-format
 msgid "recent menu label|_%d. %s"
-msgstr ""
+msgstr "_%d. %s"
 
 #. This is the format that is used for items in a recent files menu.
 #. * The %d is the number of the item, the %s is the name of the item.
@@ -2736,10 +2776,12 @@ msgstr ""
 #: gtk/gtkrecentchoosermenu.c:809
 #, c-format
 msgid "recent menu label|%d. %s"
-msgstr ""
+msgstr "%d. %s"
 
-#: gtk/gtkrecentmanager.c:1047 gtk/gtkrecentmanager.c:1194
-#: gtk/gtkrecentmanager.c:1204 gtk/gtkrecentmanager.c:1257
+#: gtk/gtkrecentmanager.c:1047
+#: gtk/gtkrecentmanager.c:1194
+#: gtk/gtkrecentmanager.c:1204
+#: gtk/gtkrecentmanager.c:1257
 #, c-format
 msgid "Unable to find an item with URI '%s'"
 msgstr "找不到 URI 为“%s”的一项"
@@ -2813,9 +2855,8 @@ msgid "_Delete"
 msgstr "删除(_D)"
 
 #: gtk/gtkstock.c:309
-#, fuzzy
 msgid "_Discard"
-msgstr "禁用"
+msgstr "放弃(_D)"
 
 #: gtk/gtkstock.c:310
 msgid "_Disconnect"
@@ -3139,12 +3180,14 @@ msgstr "试图反序列化 %s 时发生未知错误"
 msgid "No deserialize function found for format %s"
 msgstr "格式 %s 未找到反序列化函数"
 
-#: gtk/gtktextbufferserialize.c:796 gtk/gtktextbufferserialize.c:822
+#: gtk/gtktextbufferserialize.c:796
+#: gtk/gtktextbufferserialize.c:822
 #, c-format
 msgid "Both \"id\" and \"name\" were found on the <%s> element"
 msgstr "<%s> 元素同时找到了“id”和“name”"
 
-#: gtk/gtktextbufferserialize.c:806 gtk/gtktextbufferserialize.c:832
+#: gtk/gtktextbufferserialize.c:806
+#: gtk/gtktextbufferserialize.c:832
 #, c-format
 msgid "The attribute \"%s\" was found twice on the <%s> element"
 msgstr "<%s> 元素找到了两次“%s”属性"
@@ -3164,7 +3207,8 @@ msgstr "<%s> 元素既没有“name”也没有“id”属性"
 msgid "Attribute \"%s\" repeated twice on the same <%s> element"
 msgstr "在同一个 <%2$s> 元素中重复了两次“%1$s”属性"
 
-#: gtk/gtktextbufferserialize.c:961 gtk/gtktextbufferserialize.c:986
+#: gtk/gtktextbufferserialize.c:961
+#: gtk/gtktextbufferserialize.c:986
 #, c-format
 msgid "Attribute \"%s\" is invalid on <%s> element in this context"
 msgstr "此上下文中 <%2$s>的属性“%1$s”非法"
@@ -3183,8 +3227,10 @@ msgstr "发现匿名标签，不能创建标签。"
 msgid "Tag \"%s\" does not exist in buffer and tags can not be created."
 msgstr "标签“%s”不存在于缓存中，不能创建标签。"
 
-#: gtk/gtktextbufferserialize.c:1144 gtk/gtktextbufferserialize.c:1219
-#: gtk/gtktextbufferserialize.c:1320 gtk/gtktextbufferserialize.c:1394
+#: gtk/gtktextbufferserialize.c:1144
+#: gtk/gtktextbufferserialize.c:1219
+#: gtk/gtktextbufferserialize.c:1320
+#: gtk/gtktextbufferserialize.c:1394
 #, c-format
 msgid "Element <%s> is not allowed below <%s>"
 msgstr "元素 <%s> 不允许位于 <%s> 下方"
@@ -3201,8 +3247,7 @@ msgstr "“%s”不是合法的属性名称"
 
 #: gtk/gtktextbufferserialize.c:1193
 #, c-format
-msgid ""
-"\"%s\" could not be converted to a value of type \"%s\" for attribute \"%s\""
+msgid "\"%s\" could not be converted to a value of type \"%s\" for attribute \"%s\""
 msgstr "“%s”不能被转换为“%s”类型的值，此值用于属性“%s”"
 
 #: gtk/gtktextbufferserialize.c:1202
@@ -3225,7 +3270,8 @@ msgstr "标签“%s”的优先级“%s”非法"
 msgid "Outermost element in text must be <text_view_markup> not <%s>"
 msgstr "文本最外层元素应当为 <text_view_markup> 而不是 <%s>"
 
-#: gtk/gtktextbufferserialize.c:1358 gtk/gtktextbufferserialize.c:1374
+#: gtk/gtktextbufferserialize.c:1358
+#: gtk/gtktextbufferserialize.c:1374
 #, c-format
 msgid "A <%s> element has already been specified"
 msgstr "已经指定了 <%s> 元素"
@@ -3241,8 +3287,7 @@ msgstr "序列化数据格式不对"
 
 #: gtk/gtktextbufferserialize.c:1866
 #, c-format
-msgid ""
-"Serialized data is malformed. First section isn't GTKTEXTBUFFERCONTENTS-0001"
+msgid "Serialized data is malformed. First section isn't GTKTEXTBUFFERCONTENTS-0001"
 msgstr "序列化数据格式不对。第一节应该是 GTKTEXTBUFFERCONTENTS-0001"
 
 #: gtk/gtktextutil.c:60
@@ -3314,25 +3359,24 @@ msgid "Empty"
 msgstr "空"
 
 #: gtk/gtkvolumebutton.c:81
-#, fuzzy
 msgid "Volume"
-msgstr "值(_V)："
+msgstr "卷"
 
 #: gtk/gtkvolumebutton.c:83
 msgid "Volume Down"
-msgstr ""
+msgstr "降低音量"
 
 #: gtk/gtkvolumebutton.c:85
 msgid "Volume Up"
-msgstr ""
+msgstr "提高音量"
 
 #: gtk/gtkvolumebutton.c:139
 msgid "Muted"
-msgstr ""
+msgstr "静音"
 
 #: gtk/gtkvolumebutton.c:143
 msgid "Full Volume"
-msgstr ""
+msgstr "最大音量"
 
 #. Translators: this is the percentage of the current volume,
 #. * as used in the tooltip, eg. "49 %".
@@ -3344,7 +3388,7 @@ msgstr ""
 #: gtk/gtkvolumebutton.c:158
 #, c-format
 msgid "volume percentage|%d %%"
-msgstr ""
+msgstr "%d %%"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:5
@@ -3802,7 +3846,8 @@ msgid "paper size|10x14"
 msgstr "10x14"
 
 #. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:187 gtk/paper_names_offsets.c:189
+#: gtk/paper_names_offsets.c:187
+#: gtk/paper_names_offsets.c:189
 msgid "paper size|10x15"
 msgstr "10x15"
 
@@ -4008,7 +4053,6 @@ msgstr "10 号信封"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:271
-#, fuzzy
 msgid "paper size|#11 Envelope"
 msgstr "11 号信封"
 
@@ -4162,7 +4206,8 @@ msgstr "十六开"
 msgid "paper size|ROC 8k"
 msgstr "八开"
 
-#: gtk/updateiconcache.c:498 gtk/updateiconcache.c:558
+#: gtk/updateiconcache.c:498
+#: gtk/updateiconcache.c:558
 #, c-format
 msgid "different idatas found for symlinked '%s' and '%s'\n"
 msgstr "符号链接“%s”和“%s”所用的 idatas 不同\n"
@@ -4178,7 +4223,7 @@ msgid "Failed to write hash table\n"
 msgstr "写入头哈希表失败\n"
 
 #: gtk/updateiconcache.c:1391
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to write folder index\n"
 msgstr "写入目录索引失败\n"
 
@@ -4195,7 +4240,7 @@ msgstr "写入缓存文件失败：%s\n"
 #: gtk/updateiconcache.c:1486
 #, c-format
 msgid "The generated cache was invalid.\n"
-msgstr ""
+msgstr "生成的缓存非法。\n"
 
 #: gtk/updateiconcache.c:1500
 #, c-format
@@ -4218,9 +4263,8 @@ msgid "Cache file created successfully.\n"
 msgstr "缓存文件创建成功。\n"
 
 #: gtk/updateiconcache.c:1580
-#, fuzzy
 msgid "Overwrite an existing cache, even if up to date"
-msgstr "覆盖已有缓存，即便已是最新"
+msgstr "覆盖已有缓存，即使它已是最新"
 
 #: gtk/updateiconcache.c:1581
 msgid "Don't check for the existence of index.theme"
@@ -4240,17 +4284,17 @@ msgstr "关闭详细输出"
 
 #: gtk/updateiconcache.c:1585
 msgid "Validate existing icon cache"
-msgstr ""
+msgstr "验证已有的图标缓存"
 
 #: gtk/updateiconcache.c:1620
-#, fuzzy, c-format
+#, c-format
 msgid "File not found: %s\n"
-msgstr "无法挂载 %s"
+msgstr "文件未找到： %s\n"
 
 #: gtk/updateiconcache.c:1626
 #, c-format
 msgid "Not a valid icon cache: %s\n"
-msgstr ""
+msgstr "非法图标缓存：%s\n"
 
 #: gtk/updateiconcache.c:1637
 #, c-format
@@ -4396,7 +4440,7 @@ msgstr "未分类"
 #: modules/printbackends/cups/gtkprintbackendcups.c:2302
 #, c-format
 msgid "Custom %.2fx%.2f"
-msgstr ""
+msgstr "自定义 %.2fx%.2f"
 
 #. default filename used for print-to-file
 #: modules/printbackends/file/gtkprintbackendfile.c:235
@@ -4419,7 +4463,7 @@ msgstr "Postscript"
 #: modules/printbackends/file/gtkprintbackendfile.c:501
 #: modules/printbackends/test/gtkprintbackendtest.c:501
 msgid "Pages per _sheet:"
-msgstr "每页张数(_S)："
+msgstr "每张页数(_S)："
 
 #: modules/printbackends/file/gtkprintbackendfile.c:547
 msgid "File"
@@ -4435,7 +4479,7 @@ msgstr "打印到 LPR"
 
 #: modules/printbackends/lpr/gtkprintbackendlpr.c:425
 msgid "Pages Per Sheet"
-msgstr "每页张数"
+msgstr "每张页数"
 
 #: modules/printbackends/lpr/gtkprintbackendlpr.c:432
 msgid "Command Line"
@@ -4443,14 +4487,13 @@ msgstr "命令行"
 
 #. default filename used for print-to-test
 #: modules/printbackends/test/gtkprintbackendtest.c:235
-#, fuzzy, c-format
+#, c-format
 msgid "test-output.%s"
-msgstr "output.%s"
+msgstr "test-output.%s"
 
 #: modules/printbackends/test/gtkprintbackendtest.c:465
-#, fuzzy
 msgid "Print to Test Printer"
-msgstr "打印到文件"
+msgstr "打印到测试打印机"
 
 #: tests/testfilechooser.c:205
 #, c-format
@@ -4463,32 +4506,25 @@ msgstr "无法获得文件“%s”的信息：%s"
 #, fuzzy
 #~ msgid "Location:"
 #~ msgstr "位置(_L)："
-
 #~ msgid "PNM image format is invalid"
 #~ msgstr "PNM 图像格式非法"
-
 #~ msgid "Line %d, column %d: missing attribute \"%s\""
 #~ msgstr "第%d行，第%d列：缺少属性“%s”"
-
 #~ msgid "Line %d, column %d: unexpected element \"%s\""
 #~ msgstr "第%d行，第%d列：意外元素“%s”"
-
 #~ msgid ""
 #~ "Line %d, column %d: expected end of element \"%s\", but got element for "
 #~ "\"%s\" instead"
 #~ msgstr "第%d行，第%d列：元素“%s”意外结束，却得到了“%s”元素"
-
 #~ msgid ""
 #~ "Line %d, column %d: expected \"%s\" at the toplevel, but found \"%s\" "
 #~ "instead"
 #~ msgstr "第%d行，第%d列：顶级应为“%s”，但却是“%s”"
-
 #~ msgid ""
 #~ "Line %d, column %d: expected \"%s\" or \"%s\", but found \"%s\" instead"
 #~ msgstr "第%d行，第%d列：应该是“%s”或“%s”，但却是“%s”"
-
 #~ msgid "Could not create directory: %s"
 #~ msgstr "无法创建目录：%s"
-
 #~ msgid "Thai (Broken)"
 #~ msgstr "泰语(不可用)"
+
