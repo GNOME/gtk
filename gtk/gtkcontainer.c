@@ -1083,8 +1083,9 @@ gtk_container_get_property (GObject         *object,
  * #GtkWindow; because toplevel windows can't leave space outside,
  * they leave the space inside. The border is added on all sides of
  * the container. To add space to only one side, one approach is to
- * create a #GtkAlignment widget, call gtk_widget_set_usize() to give
- * it a size, and place it on the side of the container as a spacer.
+ * create a #GtkAlignment widget, call gtk_widget_set_size_request()
+ * to give it a size, and place it on the side of the container as
+ * a spacer.
  **/
 void
 gtk_container_set_border_width (GtkContainer *container,
