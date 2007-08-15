@@ -1,5 +1,14 @@
 2007-08-15  Cody Russell  <bratsche@gnome.org>
 
+	* gdk/win32/xcursors.h: Modified the sb_h_double_arrow and
+	sb_v_double_arrow mouse cursors to match the ones that Windows
+	uses for split container controls.  This allows our paned
+	widgets to be more easily identified as paned widgets on
+	Windows, since we don't have any prelighting on the draggable
+	pane part.  (#458088)
+
+2007-08-15  Cody Russell  <bratsche@gnome.org>
+
 	* gtk/gtkcontainer.c: Another documentation fix that I forgot to
 	commit yesterday.  (#459340, Guillaume Cottenceau)
 
