@@ -13,14 +13,14 @@ msgid ""
 msgstr ""
 "Project-Id-Version: GTK+ HEAD\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-08-14 12:29+0200\n"
-"PO-Revision-Date: 2007-08-14 13:43+0200\n"
+"POT-Creation-Date: 2007-08-15 15:44+0200\n"
+"PO-Revision-Date: 2007-08-15 15:44+0200\n"
 "Last-Translator: Hendrik Richter <hendrikr@gnome.org>\n"
 "Language-Team: German <gnome-de@gnome.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=(n != 1);"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 #: ../gdk-pixbuf/gdk-pixbuf.c:89
 msgid "Number of Channels"
@@ -566,13 +566,12 @@ msgid "Appearance of the shadow surrounding the arrow"
 msgstr "Das Aussehen des Schattens um den Pfeil"
 
 #: ../gtk/gtkarrow.c:91
-#, fuzzy
 msgid "Arrow Scaling"
-msgstr "Zeilenabstand"
+msgstr "Pfeilskalierung"
 
 #: ../gtk/gtkarrow.c:92
 msgid "Amount of space used up by arrow"
-msgstr ""
+msgstr "Der vom Pfeil belegte Platz"
 
 #: ../gtk/gtkaspectframe.c:79
 msgid "Horizontal Alignment"
@@ -1243,13 +1242,15 @@ msgstr "Im Fortschrittsbalken anzuzeigender Text"
 
 #: ../gtk/gtkcellrendererprogress.c:170
 msgid "Pulse"
-msgstr ""
+msgstr "Puls"
 
 #: ../gtk/gtkcellrendererprogress.c:171
 msgid ""
 "Set this to positive values to indicate that some progress is made, but you "
 "don't know how much."
 msgstr ""
+"Ein positiver Wert bedeutet, dass ein Fortschritt gemacht wurde, dessen "
+"Größe unbekannt ist."
 
 #: ../gtk/gtkcellrendererprogress.c:187 ../gtk/gtkprogress.c:115
 msgid "Text x alignment"
@@ -2191,6 +2192,8 @@ msgstr ""
 #: ../gtk/gtkentry.c:623
 msgid "Which kind of shadow to draw around the entry when has-frame is set"
 msgstr ""
+"Legt fest, welcher Schattentyp um den Eintrag gezeichnet wird, wenn has-"
+"frame gesetzt ist"
 
 #: ../gtk/gtkentry.c:891
 msgid "Border between text and frame."
@@ -2278,7 +2281,7 @@ msgstr "Wenn WAHR, wird das Popup-Fenster für eine einfache Aktion erscheinen."
 # CHECK
 #: ../gtk/gtkentrycompletion.c:387
 msgid "Inline selection"
-msgstr ""
+msgstr "Innere Auswahl"
 
 #: ../gtk/gtkentrycompletion.c:388
 msgid "Your description here"
@@ -2757,9 +2760,8 @@ msgstr "Minihilfe-Spalte"
 
 # CHECK - Spalte oder Modell, wer »enthält«?
 #: ../gtk/gtkiconview.c:756
-#, fuzzy
 msgid "The column in the model containing the tooltip texts for the items"
-msgstr "Die Spalte des Modells, das die Zeichenketten enthält."
+msgstr "Die Spalte des Modells, das die Minihilfentexte der Objekte enthält."
 
 #: ../gtk/gtkiconview.c:767
 msgid "Selection Box Color"
@@ -3401,9 +3403,8 @@ msgid "Group"
 msgstr "Gruppe"
 
 #: ../gtk/gtknotebook.c:663
-#, fuzzy
 msgid "Group for tabs drag and drop"
-msgstr "Gruppen-ID für Reiter beim Drag&Drop"
+msgstr "Gruppen für Reiter beim Drag&Drop"
 
 #: ../gtk/gtknotebook.c:669
 msgid "Tab label"
@@ -3591,9 +3592,8 @@ msgid "Embedded"
 msgstr "Eingebettet"
 
 #: ../gtk/gtkplug.c:147
-#, fuzzy
 msgid "Whether or not the plug is embedded"
-msgstr "Soll das Statussymbol sichtbar sein?"
+msgstr "Legt fest, ob der Plug eingebettet ist"
 
 #: ../gtk/gtkpreview.c:106
 msgid ""
@@ -3754,7 +3754,6 @@ msgid "Use full page"
 msgstr "Gesamte Seite verwenden"
 
 #: ../gtk/gtkprintoperation.c:985
-#, fuzzy
 msgid ""
 "TRUE if the origin of the context should be at the corner of the page and "
 "not the corner of the imageable area"
@@ -3842,7 +3841,6 @@ msgid "Activity mode"
 msgstr "Aktivitätsmodus"
 
 #: ../gtk/gtkprogress.c:100
-#, fuzzy
 msgid ""
 "If TRUE, the GtkProgress is in activity mode, meaning that it signals "
 "something is happening, but not how much of the activity is finished. This "
@@ -3851,7 +3849,7 @@ msgstr ""
 "Falls WAHR, ist GtkProgress im Aktivitätsmodus, was bedeutet, dass eine "
 "Aktivität zwar dargestellt wird, nicht aber ihr Fortschritt. Dies wird "
 "verwendet, wenn die Anwendung etwas durchführt, von dem Sie nicht wissen, "
-"wie lang es dauert"
+"wie lang es dauert."
 
 #: ../gtk/gtkprogress.c:108
 msgid "Show text"
@@ -3941,7 +3939,7 @@ msgstr "X-Abstand"
 
 #: ../gtk/gtkprogressbar.c:219
 msgid "Extra spacing applied to the width of a progress bar."
-msgstr ""
+msgstr "Extra Platz, der zur Breite der Fortschrittsanzeige hinzugefügt wird."
 
 #: ../gtk/gtkradioaction.c:111
 msgid "The value"
@@ -4027,27 +4025,27 @@ msgstr ""
 
 #: ../gtk/gtkrange.c:388
 msgid "Show Fill Level"
-msgstr ""
+msgstr "Füllstand anzeigen"
 
 #: ../gtk/gtkrange.c:389
 msgid "Whether to display a fill level indicator graphics on trough."
-msgstr ""
+msgstr "Legt fest, ob der Füllstand im Trog angezeigt wird."
 
 #: ../gtk/gtkrange.c:405
 msgid "Restrict to Fill Level"
-msgstr ""
+msgstr "Auf Füllstand beschränken"
 
 #: ../gtk/gtkrange.c:406
 msgid "Whether to restrict the upper boundary to the fill level."
-msgstr ""
+msgstr "Legt fest, ob der obere Rand auf den Füllstand beschränkt ist."
 
 #: ../gtk/gtkrange.c:421
 msgid "Fill Level"
-msgstr ""
+msgstr "Füllstand"
 
 #: ../gtk/gtkrange.c:422
 msgid "The fill level."
-msgstr ""
+msgstr "Der Füllstand."
 
 #: ../gtk/gtkrange.c:430
 msgid "Slider Width"
@@ -4406,14 +4404,12 @@ msgid "Style of bevel around the contents"
 msgstr "Der Stil der Fase um den Inhalt"
 
 #: ../gtk/gtkscrolledwindow.c:292
-#, fuzzy
 msgid "Scrollbars within bevel"
-msgstr "Abstand der Rollbalken"
+msgstr "Rollbalken innerhalb der Fase"
 
 #: ../gtk/gtkscrolledwindow.c:293
-#, fuzzy
 msgid "Place scrollbars within the scrolled window's bevel"
-msgstr "Die Anzahl der Pixel zwischen den Rollbalken und dem gerollten Fenster"
+msgstr "Rollbalken innerhalb der Fase des Fensters platzieren"
 
 #: ../gtk/gtkscrolledwindow.c:299
 msgid "Scrollbar spacing"
@@ -4651,15 +4647,16 @@ msgid "Whether buttons in dialogs should use the alternative button order"
 msgstr "Sollen Knöpfe in Dialogen die alternative Reihenfolge verwenden?"
 
 #: ../gtk/gtksettings.c:443
-#, fuzzy
 msgid "Alternative sort indicator direction"
-msgstr "Alternative Reihenfolge für Knöpfe"
+msgstr "Vertauschte Sortierknöpfe"
 
 #: ../gtk/gtksettings.c:444
 msgid ""
 "Whether the direction of the sort indicators in list and tree views is "
 "inverted compared to the default (where down means ascending)"
 msgstr ""
+"Legt fest, ob die Aktion der Sortierknöpfe gegenüber der Vorgabe, bei der "
+"runter »aufsteigend« bedeutet, vertauscht sein soll. "
 
 #: ../gtk/gtksettings.c:452
 msgid "Show the 'Input Methods' menu"
@@ -4742,48 +4739,50 @@ msgstr "Minihilfe-Timeout"
 
 #: ../gtk/gtksettings.c:574
 msgid "Timeout before tooltip is shown"
-msgstr ""
+msgstr "Timeout, bis eine Minihilfe angezeigt wird"
 
 #: ../gtk/gtksettings.c:599
 msgid "Tooltip browse timeout"
-msgstr ""
+msgstr "Minihilfe-Auswahl-Timeout"
 
 #: ../gtk/gtksettings.c:600
 msgid "Timeout before tooltip is shown when browse mode is enabled"
-msgstr ""
+msgstr "Timeout, bevor eine Minihilfe im Auswahlmodus angezeigt wird"
 
 #: ../gtk/gtksettings.c:621
 msgid "Tooltip browse mode timeout"
-msgstr ""
+msgstr "Minihilfe-Auswahlmodus-Timeout"
 
 #: ../gtk/gtksettings.c:622
 msgid "Timeout after which browse mode is disabled"
-msgstr ""
+msgstr "Timeout, nach dem der Auswahlmodus deaktiviert wird"
 
 #: ../gtk/gtksettings.c:641
 msgid "Keynav Cursor Only"
-msgstr ""
+msgstr "Nur Cursor-Tasten-Navigation"
 
 #: ../gtk/gtksettings.c:642
 msgid "When TRUE, there are only cursor keys available to navigate widgets"
 msgstr ""
+"Falls WAHR, kann nur mit den Cursor-Tasten durch Widgets navigiert werden."
 
 #: ../gtk/gtksettings.c:659
 msgid "Keynav Wrap Around"
-msgstr ""
+msgstr "Umbruch bei Tastaturnavigation"
 
 #: ../gtk/gtksettings.c:660
-#, fuzzy
 msgid "Whether to wrap around when keyboard-navigating widgets"
-msgstr "Soll der Fokusanzeiger in Widgets dargestellt werden?"
+msgstr ""
+"Legt fest, ob bei Navigation mit der Tastatur unten umgebrochen werden soll."
 
 #: ../gtk/gtksettings.c:680
 msgid "Error Bell"
-msgstr ""
+msgstr "Fehler-Signal"
 
 #: ../gtk/gtksettings.c:681
 msgid "When TRUE, keyboard navigation and other errors will cause a beep"
 msgstr ""
+"Falls WAHR, erzeugen Tastaturnavigations- und andere Fehler einen Klang."
 
 #: ../gtk/gtksettings.c:698
 msgid "Color Hash"
@@ -4837,7 +4836,7 @@ msgstr "Legt fest, ob Menüeinträge Kürzel haben sollen"
 
 #: ../gtk/gtksettings.c:801
 msgid "Recent Files Limit"
-msgstr ""
+msgstr "Limit der zuletzt verwendeten Dateien"
 
 #: ../gtk/gtksettings.c:802
 msgid "Number of recently used files"
@@ -5142,20 +5141,17 @@ msgstr ""
 "Zwischenablage und durch Drag&Drop-Zielen unterstützt."
 
 #: ../gtk/gtktextmark.c:90
-#, fuzzy
 msgid "Mark name"
-msgstr "Tagname"
+msgstr "Markierungsname"
 
 # CHECK
 #: ../gtk/gtktextmark.c:97
-#, fuzzy
 msgid "Left gravity"
-msgstr "Schwere"
+msgstr "Linke Schwere"
 
 #: ../gtk/gtktextmark.c:98
-#, fuzzy
 msgid "Whether the mark has left gravity"
-msgstr "Soll dieses Tag die Schriftfamilie beeinflussen?"
+msgstr "Legt fest, ob die Markierung linke Schwere besitzt."
 
 #: ../gtk/gtktexttag.c:173
 msgid "Tag name"
@@ -5359,11 +5355,11 @@ msgstr "Absatzhintergrundfarbe als (möglicherweise nicht zugewiesene) GdkColor"
 
 #: ../gtk/gtktexttag.c:554
 msgid "Margin Accumulates"
-msgstr ""
+msgstr "Ränder auflaufen"
 
 #: ../gtk/gtktexttag.c:555
 msgid "Whether left and right margins accumulate."
-msgstr ""
+msgstr "Legt fest, ob linke und rechte Ränder aufeinander auflaufen."
 
 #: ../gtk/gtktexttag.c:568
 msgid "Background full height set"
@@ -5890,9 +5886,8 @@ msgstr "Sollen Baumlinien in der Baumansicht angezeigt werden?"
 
 # CHECK - Spalte oder Modell, wer »enthält«?
 #: ../gtk/gtktreeview.c:764
-#, fuzzy
 msgid "The column in the model containing the tooltip texts for the rows"
-msgstr "Die Spalte des Modells, das die Zeichenketten enthält."
+msgstr "Die Spalte des Modells, das die Minihilfentexte der Zeilen enthält."
 
 #: ../gtk/gtktreeview.c:786
 msgid "Vertical Separator Width"
@@ -6446,16 +6441,14 @@ msgstr ""
 "identifiziert"
 
 #: ../gtk/gtkwindow.c:498
-#, fuzzy
 msgid "Startup ID"
-msgstr "Gruppen-ID"
+msgstr "Start-ID"
 
 #: ../gtk/gtkwindow.c:499
-#, fuzzy
 msgid "Unique startup identifier for the window used by startup-notification"
 msgstr ""
-"Eindeutige Zeichenkette, die das Fenster beim Wiederherstellen einer Sitzung "
-"identifiziert"
+"Eindeutige Zeichenkette, die das Fenster beim Starten mittels startup-"
+"notification identifiziert."
 
 #: ../gtk/gtkwindow.c:506
 msgid "Allow Shrink"
@@ -6658,14 +6651,12 @@ msgstr "Das vorrübergehende Eltern-Widget des Dialogs"
 
 # CHECK
 #: ../gtk/gtkwindow.c:759
-#, fuzzy
 msgid "Opacity for Window"
-msgstr "Flüchtig für Fenster"
+msgstr "Transparenz des Fensters"
 
 #: ../gtk/gtkwindow.c:760
-#, fuzzy
 msgid "The opacity of the window, from 0 to 1"
-msgstr "Der Typ des Fensters"
+msgstr "Die Transparenz des Fensters, von 0 bis 1"
 
 # CHECK
 #: ../modules/input/gtkimcontextxim.c:330
