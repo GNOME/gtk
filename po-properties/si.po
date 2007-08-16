@@ -1,14 +1,14 @@
-# translation of gtk+-properties.si.po to Sinhala
+# translation of si.po to Sinhala
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
 #
 # Danishka Navin <snavin@redhat.com>, 2007.
 msgid ""
 msgstr ""
-"Project-Id-Version: gtk+-properties.si\n"
+"Project-Id-Version: si\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2007-05-31 03:35+0100\n"
-"PO-Revision-Date: 2007-06-15 14:52+0530\n"
+"PO-Revision-Date: 2007-08-16 16:02+0530\n"
 "Last-Translator: Danishka Navin <snavin@redhat.com>\n"
 "Language-Team: Sinhala <en@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -1272,7 +1272,6 @@ msgstr "සැකසිය හැකි"
 
 #: ../gtk/gtkcellrenderertext.c:260 ../gtk/gtktexttag.c:252
 #: ../gtk/gtktextview.c:561
-#, fuzzy
 msgid "Whether the text can be modified by the user"
 msgstr "පරිශීලකයාට පෙළ සැකසිය හැකි බව"
 
@@ -2286,7 +2285,7 @@ msgstr ""
 
 #: ../gtk/gtkfilechooserbutton.c:384
 msgid "Dialog"
-msgstr ""
+msgstr "සංවාද"
 
 #: ../gtk/gtkfilechooserbutton.c:385
 msgid "The file chooser dialog to use."
@@ -2303,7 +2302,7 @@ msgstr ""
 #: ../gtk/gtkfilesel.c:525 ../gtk/gtkimage.c:162 ../gtk/gtkrecentmanager.c:216
 #: ../gtk/gtkstatusicon.c:184
 msgid "Filename"
-msgstr ""
+msgstr "ගොනු නම"
 
 #: ../gtk/gtkfilesel.c:526
 msgid "The currently selected filename"
@@ -2705,7 +2704,7 @@ msgstr ""
 
 #: ../gtk/gtklabel.c:335
 msgid "Pattern"
-msgstr ""
+msgstr "රටාව"
 
 #: ../gtk/gtklabel.c:336
 msgid ""
@@ -3069,7 +3068,7 @@ msgstr ""
 
 #: ../gtk/gtknotebook.c:530
 msgid "Page"
-msgstr ""
+msgstr "පිටුව"
 
 #: ../gtk/gtknotebook.c:531
 msgid "The index of the current page"
@@ -3336,7 +3335,7 @@ msgstr ""
 
 #: ../gtk/gtkplug.c:146 ../gtk/gtkstatusicon.c:259
 msgid "Embedded"
-msgstr ""
+msgstr "කාවැද්දු"
 
 #: ../gtk/gtkplug.c:147
 msgid "Whether or not the plug is embedded"
@@ -4242,7 +4241,7 @@ msgstr ""
 
 #: ../gtk/gtksettings.c:326
 msgid "Font Name"
-msgstr ""
+msgstr "අක්‍ෂර නම"
 
 #: ../gtk/gtksettings.c:327
 msgid "Name of default font to use"
@@ -4504,7 +4503,7 @@ msgstr ""
 
 #: ../gtk/gtksizegroup.c:277
 msgid "Mode"
-msgstr ""
+msgstr "ආකාරය"
 
 #: ../gtk/gtksizegroup.c:278
 msgid ""
@@ -4612,7 +4611,7 @@ msgstr ""
 
 #: ../gtk/gtktable.c:129
 msgid "Rows"
-msgstr ""
+msgstr "පේළි"
 
 #: ../gtk/gtktable.c:130
 msgid "The number of rows in the table"
@@ -4620,7 +4619,7 @@ msgstr ""
 
 #: ../gtk/gtktable.c:138
 msgid "Columns"
-msgstr ""
+msgstr "තීරු"
 
 #: ../gtk/gtktable.c:139
 msgid "The number of columns in the table"
@@ -4752,7 +4751,7 @@ msgstr ""
 
 #: ../gtk/gtktextbuffer.c:229
 msgid "Cursor position"
-msgstr ""
+msgstr "කර්සරයේ පිහිටුම"
 
 #: ../gtk/gtktextbuffer.c:230
 msgid "The position of the insert mark (as offset from the beginning of the buffer)"
@@ -5593,7 +5592,7 @@ msgstr ""
 
 #: ../gtk/gtktreeviewcolumn.c:239
 msgid "Minimum Width"
-msgstr ""
+msgstr "අවම පළල"
 
 #: ../gtk/gtktreeviewcolumn.c:240
 msgid "Minimum allowed width of the column"
@@ -5793,7 +5792,7 @@ msgstr ""
 
 #: ../gtk/gtkwidget.c:543
 msgid "Style"
-msgstr "විලාශය"
+msgstr "රටාව"
 
 #: ../gtk/gtkwidget.c:544
 msgid ""
@@ -5803,7 +5802,7 @@ msgstr ""
 
 #: ../gtk/gtkwidget.c:550
 msgid "Events"
-msgstr ""
+msgstr "සිදුවීම්"
 
 #: ../gtk/gtkwidget.c:551
 msgid "The event mask that decides what kind of GdkEvents this widget gets"
@@ -5875,7 +5874,7 @@ msgstr ""
 
 #: ../gtk/gtkwidget.c:1717
 msgid "Cursor color"
-msgstr ""
+msgstr "කර්සරයේ වර්‍ණය"
 
 #: ../gtk/gtkwidget.c:1718
 msgid "Color with which to draw insertion cursor"
@@ -5883,7 +5882,7 @@ msgstr ""
 
 #: ../gtk/gtkwidget.c:1723
 msgid "Secondary cursor color"
-msgstr ""
+msgstr "ද්විතීය කර්සරයේ වර්‍ණය"
 
 #: ../gtk/gtkwidget.c:1724
 msgid ""
@@ -5909,15 +5908,15 @@ msgstr ""
 
 #: ../gtk/gtkwidget.c:1758
 msgid "Unvisited Link Color"
-msgstr ""
+msgstr "භාවිතා නොකළ පුරුක් වර්‍ණය"
 
 #: ../gtk/gtkwidget.c:1759
 msgid "Color of unvisited links"
-msgstr ""
+msgstr "භාවිතා නොකළ පුරුක් වර්‍ණය"
 
 #: ../gtk/gtkwidget.c:1772
 msgid "Visited Link Color"
-msgstr ""
+msgstr "භාවිතා කළ පුරුක් වර්‍ණය"
 
 #: ../gtk/gtkwidget.c:1773
 msgid "Color of visited links"
