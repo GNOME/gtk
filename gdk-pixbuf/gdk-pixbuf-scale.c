@@ -52,6 +52,10 @@
  * Try to use gdk_pixbuf_scale_simple() first, this function is
  * the industrial-strength power tool you can fall back to if
  * gdk_pixbuf_scale_simple() isn't powerful enough.
+ *
+ * If the source rectangle overlaps the destination rectangle on the
+ * same pixbuf, it will be overwritten during the scaling which
+ * results in rendering artifacts.
  **/
 void
 gdk_pixbuf_scale (const GdkPixbuf *src,

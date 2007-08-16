@@ -119,6 +119,10 @@ gdk_pixbuf_add_alpha (const GdkPixbuf *pixbuf,
  *
  * Copies a rectangular area from @src_pixbuf to @dest_pixbuf.  Conversion of
  * pixbuf formats is done automatically.
+ *
+ * If the source rectangle overlaps the destination rectangle on the
+ * same pixbuf, it will be overwritten during the copy operation.
+ * Therefore, you can not use this function to scroll a pixbuf.
  **/
 void
 gdk_pixbuf_copy_area (const GdkPixbuf *src_pixbuf,
