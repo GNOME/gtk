@@ -43,6 +43,9 @@ gtk/gtkassistant.c
 gtk/gtkbbox.c
 gtk/gtkbin.c
 gtk/gtkbox.c
+gtk/gtkbuildable.c
+gtk/gtkbuilder.c
+gtk/gtkbuilderparser.c
 gtk/gtkbutton.c
 gtk/gtkcalendar.c
 gtk/gtkcelleditable.c
@@ -141,8 +144,10 @@ gtk/gtknotebook.c
 gtk/gtkobject.c
 gtk/gtkoldeditable.c
 gtk/gtkoptionmenu.c
+gtk/gtkpagesetup.c
 gtk/gtkpagesetupunixdialog.c
 gtk/gtkpaned.c
+gtk/gtkpapersize.c
 gtk/gtkpathbar.c
 gtk/gtkpixmap.c
 gtk/gtkplug.c
@@ -171,6 +176,7 @@ gtk/gtkrecentchoosermenu.c
 gtk/gtkrecentmanager.c
 gtk/gtkruler.c
 gtk/gtkscale.c
+gtk/gtkscalebutton.c
 gtk/gtkscrollbar.c
 gtk/gtkscrolledwindow.c
 gtk/gtkselection.c
@@ -192,6 +198,7 @@ gtk/gtktextbufferrichtext.c
 gtk/gtktextbufferserialize.c
 gtk/gtktextchild.c
 gtk/gtktextdisplay.c
+gtk/gtktextiter.c
 gtk/gtktextlayout.c
 gtk/gtktextmark.c
 gtk/gtktexttag.c
@@ -224,6 +231,7 @@ gtk/gtkuimanager.c
 gtk/gtkvbbox.c
 gtk/gtkvbox.c
 gtk/gtkviewport.c
+gtk/gtkvolumebutton.c
 gtk/gtkvpaned.c
 gtk/gtkvruler.c
 gtk/gtkvscale.c
@@ -241,6 +249,7 @@ modules/input/imcedilla.c
 modules/input/imcyrillic-translit.c
 modules/input/iminuktitut.c
 modules/input/imipa.c
+modules/input/immultipress.c
 modules/input/imthai.c
 modules/input/imti-er.c
 modules/input/imti-et.c
@@ -249,4 +258,5 @@ modules/input/imxim.c
 modules/printbackends/cups/gtkprintbackendcups.c
 modules/printbackends/file/gtkprintbackendfile.c
 modules/printbackends/lpr/gtkprintbackendlpr.c
+modules/printbackends/test/gtkprintbackendtest.c
 tests/testfilechooser.c

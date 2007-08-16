@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-properties\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-08-15 14:41-0400\n"
+"POT-Creation-Date: 2007-08-15 21:13-0400\n"
 "PO-Revision-Date: 2005-07-22 22:53-0400\n"
 "Last-Translator: Adam Weinberger <adamw@gnome.org>\n"
 "Language-Team: Canadian English <adamw@gnome.org>\n"
@@ -403,7 +403,7 @@ msgid "Whether the action group is visible."
 msgstr "Whether the action group is visible."
 
 #: ../gtk/gtkadjustment.c:86 ../gtk/gtkcellrendererprogress.c:128
-#: ../gtk/gtkspinbutton.c:268
+#: ../gtk/gtkscalebutton.c:181 ../gtk/gtkspinbutton.c:268
 msgid "Value"
 msgstr "Value"
 
@@ -766,6 +766,14 @@ msgstr "Position"
 #: ../gtk/gtkbox.c:145 ../gtk/gtknotebook.c:684
 msgid "The index of the child in the parent"
 msgstr "The index of the child in the parent"
+
+#: ../gtk/gtkbuilder.c:104
+msgid "Translation Domain"
+msgstr "Translation Domain"
+
+#: ../gtk/gtkbuilder.c:105
+msgid "The translation domain used by gettext"
+msgstr "The translation domain used by gettext"
 
 #: ../gtk/gtkbutton.c:200
 msgid ""
@@ -1255,7 +1263,8 @@ msgid "Orientation and growth direction of the progress bar"
 msgstr "Orientation and growth direction of the progress bar"
 
 #: ../gtk/gtkcellrendererspin.c:93 ../gtk/gtkprogressbar.c:122
-#: ../gtk/gtkrange.c:345 ../gtk/gtkspinbutton.c:207
+#: ../gtk/gtkrange.c:345 ../gtk/gtkscalebutton.c:200
+#: ../gtk/gtkspinbutton.c:207
 msgid "Adjustment"
 msgstr "Adjustment"
 
@@ -2751,7 +2760,7 @@ msgstr "Icon set"
 msgid "Icon set to display"
 msgstr "Icon set to display"
 
-#: ../gtk/gtkimage.c:187 ../gtk/gtktoolbar.c:530
+#: ../gtk/gtkimage.c:187 ../gtk/gtkscalebutton.c:191 ../gtk/gtktoolbar.c:530
 msgid "Icon size"
 msgstr "Icon size"
 
@@ -4199,6 +4208,28 @@ msgstr "Value spacing"
 #: ../gtk/gtkscale.c:178
 msgid "Space between value text and the slider/trough area"
 msgstr "Space between value text and the slider/trough area"
+
+#: ../gtk/gtkscalebutton.c:182
+msgid "The value of the scale"
+msgstr "The value of the scale"
+
+#: ../gtk/gtkscalebutton.c:192
+msgid "The icon size"
+msgstr "The icon size"
+
+#: ../gtk/gtkscalebutton.c:201
+msgid ""
+"The GtkAdjustment that contains the current value of this scale button object"
+msgstr ""
+"The GtkAdjustment that contains the current value of this scale button object"
+
+#: ../gtk/gtkscalebutton.c:229
+msgid "Icons"
+msgstr "Icons"
+
+#: ../gtk/gtkscalebutton.c:230
+msgid "List of icon names"
+msgstr "List of icon names"
 
 #: ../gtk/gtkscrollbar.c:50
 msgid "Minimum Slider Length"
