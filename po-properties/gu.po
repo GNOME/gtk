@@ -5,8 +5,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-properties.HEAD.gu\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-07-21 04:10+0100\n"
-"PO-Revision-Date: 2007-08-01 17:15+0530\n"
+"POT-Creation-Date: 2007-08-16 03:57+0100\n"
+"PO-Revision-Date: 2007-08-16 13:27+0530\n"
 "Last-Translator: Ankit Patel <ankit@redhat.com>\n"
 "Language-Team: Gujarati <fedora-trans-gu@redhat.com>\n"
 "MIME-Version: 1.0\n"
@@ -14,6 +14,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: KBabel 1.11.4\n"
 "Plural-Forms:  nplurals=2; plural=(n!=1);\n\n"
+"\n"
 "\n"
 "\n"
 "\n"
@@ -415,7 +416,7 @@ msgid "Whether the action group is visible."
 msgstr "શું ક્રિયા જૂથ દૃશ્યમાન છે."
 
 #: ../gtk/gtkadjustment.c:86 ../gtk/gtkcellrendererprogress.c:128
-#: ../gtk/gtkspinbutton.c:268
+#: ../gtk/gtkscalebutton.c:181 ../gtk/gtkspinbutton.c:268
 msgid "Value"
 msgstr "કિંમત"
 
@@ -771,6 +772,14 @@ msgstr "સ્થિતિ"
 msgid "The index of the child in the parent"
 msgstr "પિતૃમાં બાળનો અનુક્રમાંક "
 
+#: ../gtk/gtkbuilder.c:104
+msgid "Translation Domain"
+msgstr "અનુવાદ ડોમેઈન"
+
+#: ../gtk/gtkbuilder.c:105
+msgid "The translation domain used by gettext"
+msgstr "gettext દ્વારા વપરાતું અનુવાદ ડોમેઈન"
+
 #: ../gtk/gtkbutton.c:200
 msgid ""
 "Text of the label widget inside the button, if the button contains a label "
@@ -798,7 +807,7 @@ msgstr "જથ્થાનો ઉપયોગ કરવો"
 msgid "If set, the label is used to pick a stock item instead of being displayed"
 msgstr "જો સુયોજિત હોય તો, દર્શાવવાની જગ્યાએ લેબલનો ઉપયોગ જથ્થાની વસ્તુને પસંદ કરવા માટે થાય છે"
 
-#: ../gtk/gtkbutton.c:223 ../gtk/gtkcombobox.c:751
+#: ../gtk/gtkbutton.c:223 ../gtk/gtkcombobox.c:784
 #: ../gtk/gtkfilechooserbutton.c:401
 msgid "Focus on click"
 msgstr "ક્લિક પર ફોકસ"
@@ -1244,7 +1253,8 @@ msgid "Orientation and growth direction of the progress bar"
 msgstr "પ્રગતિ દર્શક પટ્ટીની દિશા અને વિકાસ"
 
 #: ../gtk/gtkcellrendererspin.c:93 ../gtk/gtkprogressbar.c:122
-#: ../gtk/gtkrange.c:345 ../gtk/gtkspinbutton.c:207
+#: ../gtk/gtkrange.c:345 ../gtk/gtkscalebutton.c:200
+#: ../gtk/gtkspinbutton.c:207
 msgid "Adjustment"
 msgstr "બંધ બેસતુ કરો"
 
@@ -1475,7 +1485,7 @@ msgstr ""
 "કેવી રીતે શબ્દમાળાને ઘણી લીટીઓમાં તોડવી, જો કોષ રેન્ડર કરનાર પાસે વર્તમાન શબ્દમાળા "
 "દર્શાવવા માટે પૂરતી જગ્યા નહિં હોય"
 
-#: ../gtk/gtkcellrenderertext.c:468 ../gtk/gtkcombobox.c:640
+#: ../gtk/gtkcellrenderertext.c:468 ../gtk/gtkcombobox.c:673
 msgid "Wrap width"
 msgstr "પહોળાઈ લપેટો"
 
@@ -1727,7 +1737,7 @@ msgstr "શીર્ષક"
 msgid "The title of the color selection dialog"
 msgstr "રંગ પસંદગી સંવાદનું શીર્ષક"
 
-#: ../gtk/gtkcolorbutton.c:202 ../gtk/gtkcolorsel.c:1871
+#: ../gtk/gtkcolorbutton.c:202 ../gtk/gtkcolorsel.c:1857
 msgid "Current Color"
 msgstr "વર્તમાન રંગ"
 
@@ -1735,7 +1745,7 @@ msgstr "વર્તમાન રંગ"
 msgid "The selected color"
 msgstr "પસંદિત રંગ"
 
-#: ../gtk/gtkcolorbutton.c:217 ../gtk/gtkcolorsel.c:1878
+#: ../gtk/gtkcolorbutton.c:217 ../gtk/gtkcolorsel.c:1864
 msgid "Current Alpha"
 msgstr "વર્તમાન આલ્ફા"
 
@@ -1743,35 +1753,35 @@ msgstr "વર્તમાન આલ્ફા"
 msgid "The selected opacity value (0 fully transparent, 65535 fully opaque)"
 msgstr "વર્તમાન અપારદર્શકતાનું કિંમત (૦ આખું પારદર્શક, ૬૫૫૩૫ આખું અપારદર્શક)"
 
-#: ../gtk/gtkcolorsel.c:1857
+#: ../gtk/gtkcolorsel.c:1843
 msgid "Has Opacity Control"
 msgstr "અપારદર્શકતા માટેનુ નિયંત્રણ ધરાવે છે"
 
-#: ../gtk/gtkcolorsel.c:1858
+#: ../gtk/gtkcolorsel.c:1844
 msgid "Whether the color selector should allow setting opacity"
 msgstr "શું પસંદ કરનારે રંગ અપારદર્શકતાની ગોઠવણી માટે પરવાનગી આપવી જોઇએ છે"
 
-#: ../gtk/gtkcolorsel.c:1864
+#: ../gtk/gtkcolorsel.c:1850
 msgid "Has palette"
 msgstr "પેલેટ છે"
 
-#: ../gtk/gtkcolorsel.c:1865
+#: ../gtk/gtkcolorsel.c:1851
 msgid "Whether a palette should be used"
 msgstr "શું પેલેટનો ઉપયોગ કરવો જોઈએ"
 
-#: ../gtk/gtkcolorsel.c:1872
+#: ../gtk/gtkcolorsel.c:1858
 msgid "The current color"
 msgstr "વર્તમાન રંગ"
 
-#: ../gtk/gtkcolorsel.c:1879
+#: ../gtk/gtkcolorsel.c:1865
 msgid "The current opacity value (0 fully transparent, 65535 fully opaque)"
 msgstr "વર્તમાન અપારદર્શકતાનું કિંમત (૦ આખું પારદર્શક, ૬૫૫૩૫ આખું અપારદર્શક)"
 
-#: ../gtk/gtkcolorsel.c:1893
+#: ../gtk/gtkcolorsel.c:1879
 msgid "Custom palette"
 msgstr "વૈવિધ્યપૂર્ણ પેલેટ"
 
-#: ../gtk/gtkcolorsel.c:1894
+#: ../gtk/gtkcolorsel.c:1880
 msgid "Palette to use in the color selector"
 msgstr "રંગની પસંદગીમાં પેલેટનો ઉપયોગ કરવો"
 
@@ -1815,103 +1825,103 @@ msgstr "યાદીમાં કિંમત"
 msgid "Whether entered values must already be present in the list"
 msgstr "શું પ્રવેશ કરાતી કિંમતો મેનુમાં પહેલેથી જ હોવી જોઇએ"
 
-#: ../gtk/gtkcombobox.c:623
+#: ../gtk/gtkcombobox.c:656
 msgid "ComboBox model"
 msgstr "ComboBox મોડેલ"
 
-#: ../gtk/gtkcombobox.c:624
+#: ../gtk/gtkcombobox.c:657
 msgid "The model for the combo box"
 msgstr "કમ્બો બોક્સ માટે મોડેલ"
 
-#: ../gtk/gtkcombobox.c:641
+#: ../gtk/gtkcombobox.c:674
 msgid "Wrap width for laying out the items in a grid"
 msgstr "જાળીમાં વસ્તુઓ ગોઠવવા માટે લપેટવાની પહોળાઈ"
 
-#: ../gtk/gtkcombobox.c:663
+#: ../gtk/gtkcombobox.c:696
 msgid "Row span column"
 msgstr "હરોળ વચ્ચેની જગ્યા"
 
-#: ../gtk/gtkcombobox.c:664
+#: ../gtk/gtkcombobox.c:697
 msgid "TreeModel column containing the row span values"
 msgstr "હરોળ વિસ્તારક કિંમતો સમાવતો TreeModel સ્તંભ"
 
-#: ../gtk/gtkcombobox.c:685
+#: ../gtk/gtkcombobox.c:718
 msgid "Column span column"
 msgstr "સ્તંભ વચ્ચેની જગ્યા"
 
-#: ../gtk/gtkcombobox.c:686
+#: ../gtk/gtkcombobox.c:719
 msgid "TreeModel column containing the column span values"
 msgstr "સ્તંભ વિસ્તારતી કિંમતો સમાવતી TreeModel સ્તંભ"
 
-#: ../gtk/gtkcombobox.c:707
+#: ../gtk/gtkcombobox.c:740
 msgid "Active item"
 msgstr "ક્રિયાશીલ વસ્તુ"
 
-#: ../gtk/gtkcombobox.c:708
+#: ../gtk/gtkcombobox.c:741
 msgid "The item which is currently active"
 msgstr "વસ્તુ કે જે વર્તમાનમાં ક્રિયાશીલ છે"
 
-#: ../gtk/gtkcombobox.c:727 ../gtk/gtkuimanager.c:220
+#: ../gtk/gtkcombobox.c:760 ../gtk/gtkuimanager.c:220
 msgid "Add tearoffs to menus"
 msgstr "મેનુઓમાં ટ્રેડઓફ ઉમેરો"
 
-#: ../gtk/gtkcombobox.c:728
+#: ../gtk/gtkcombobox.c:761
 msgid "Whether dropdowns should have a tearoff menu item"
 msgstr "શું ડ્રોપડાઉન પાસે ટીયરઓફ મેનુ વસ્તુઓ હોવી જોઈએ"
 
-#: ../gtk/gtkcombobox.c:743 ../gtk/gtkentry.c:522
+#: ../gtk/gtkcombobox.c:776 ../gtk/gtkentry.c:522
 msgid "Has Frame"
 msgstr "ચોકઠુ ધરાવે છે"
 
-#: ../gtk/gtkcombobox.c:744
+#: ../gtk/gtkcombobox.c:777
 msgid "Whether the combo box draws a frame around the child"
 msgstr "શું હેડરોની આસપાસ સ્તંભને ફરીથી ક્રમબધ કરી શકાય છે"
 
-#: ../gtk/gtkcombobox.c:752
+#: ../gtk/gtkcombobox.c:785
 msgid "Whether the combo box grabs focus when it is clicked with the mouse"
 msgstr "શું કમ્બો બોક્સ ફોકસ મેળવે છે જ્યારે તે માઉસ સાથે ક્લિક થાય છે"
 
-#: ../gtk/gtkcombobox.c:767 ../gtk/gtkmenu.c:484
+#: ../gtk/gtkcombobox.c:800 ../gtk/gtkmenu.c:484
 msgid "Tearoff Title"
 msgstr "Tearoff શીર્ષક"
 
-#: ../gtk/gtkcombobox.c:768
+#: ../gtk/gtkcombobox.c:801
 msgid ""
 "A title that may be displayed by the window manager when the popup is torn-"
 "off"
 msgstr "શીર્ષક કે જે વિન્ડો વ્યવસ્થાપક દ્રારા દર્શાવવામાં આવશે જ્યારે પોપઅપ એ બંધ હોય"
 
-#: ../gtk/gtkcombobox.c:785
+#: ../gtk/gtkcombobox.c:818
 msgid "Popup shown"
 msgstr "પોપઅપ બતાવાયેલ"
 
-#: ../gtk/gtkcombobox.c:786
+#: ../gtk/gtkcombobox.c:819
 msgid "Whether the combo's dropdown is shown"
 msgstr "શું કમ્બોનું ડ્રોપડાઉન બતાવાયેલ છે"
 
-#: ../gtk/gtkcombobox.c:792
+#: ../gtk/gtkcombobox.c:825
 msgid "Appears as list"
 msgstr "યાદી તરીકે દેખાય છે"
 
-#: ../gtk/gtkcombobox.c:793
+#: ../gtk/gtkcombobox.c:826
 msgid "Whether dropdowns should look like lists rather than menus"
 msgstr "શું ડ્રોપડાઉનો મેનુઓની જગ્યાએ યાદીઓ તરીકે દેખાવા જોઈએ"
 
-#: ../gtk/gtkcombobox.c:809
+#: ../gtk/gtkcombobox.c:842
 msgid "Arrow Size"
 msgstr "તીર માપ"
 
-#: ../gtk/gtkcombobox.c:810
+#: ../gtk/gtkcombobox.c:843
 msgid "The minimum size of the arrow in the combo box"
 msgstr "કમ્બો બોક્સમાં તીરનું ન્યૂનતમ માપ"
 
-#: ../gtk/gtkcombobox.c:825 ../gtk/gtkentry.c:622 ../gtk/gtkhandlebox.c:176
+#: ../gtk/gtkcombobox.c:858 ../gtk/gtkentry.c:622 ../gtk/gtkhandlebox.c:176
 #: ../gtk/gtkmenubar.c:201 ../gtk/gtkstatusbar.c:186 ../gtk/gtktoolbar.c:613
 #: ../gtk/gtkviewport.c:122
 msgid "Shadow type"
 msgstr "પડછાયાનો પ્રકાર"
 
-#: ../gtk/gtkcombobox.c:826
+#: ../gtk/gtkcombobox.c:859
 msgid "Which kind of shadow to draw around the combo box"
 msgstr "કમ્બો બોક્સની ફરતે કયા પ્રકારનો પડછાયો દોરવો"
 
@@ -2283,7 +2293,7 @@ msgstr "ફાઈલસિસ્ટમ બેકેન્ડ"
 msgid "Name of file system backend to use"
 msgstr "વાપરવા માટે ફાઈલ સિસ્ટમ બેકેન્ડનું નામ"
 
-#: ../gtk/gtkfilechooser.c:210 ../gtk/gtkrecentchooser.c:169
+#: ../gtk/gtkfilechooser.c:210 ../gtk/gtkrecentchooser.c:252
 msgid "Filter"
 msgstr "ગાળક"
 
@@ -2332,7 +2342,7 @@ msgid "Application supplied widget for extra options."
 msgstr "વધારાના વિકલ્પો માટે કાર્યક્રમને વિજેટ પૂરું પાડવામાં આવેલ છે."
 
 #: ../gtk/gtkfilechooser.c:246 ../gtk/gtkfilesel.c:539
-#: ../gtk/gtkrecentchooser.c:142
+#: ../gtk/gtkrecentchooser.c:191
 msgid "Select Multiple"
 msgstr "એક કરતાં વધારે પસંદ કરો"
 
@@ -2714,7 +2724,7 @@ msgstr "ચિહ્ન સમૂહ"
 msgid "Icon set to display"
 msgstr "દર્શાવવા માટેનો ચિહ્ન સમૂહ"
 
-#: ../gtk/gtkimage.c:187 ../gtk/gtktoolbar.c:530
+#: ../gtk/gtkimage.c:187 ../gtk/gtkscalebutton.c:191 ../gtk/gtktoolbar.c:530
 msgid "Icon size"
 msgstr "ચિહ્નનું માપ"
 
@@ -3061,11 +3071,11 @@ msgstr "ફોકસ કરો"
 msgid "A boolean that determines whether the menu grabs the keyboard focus"
 msgstr "બુલિયન કે જે નક્કી કરે છે કે શું મેનુ કીબોર્ડ ટુંકાણો મેળવે છે"
 
-#: ../gtk/gtkmenutoolbutton.c:236 ../gtk/gtkoptionmenu.c:161
+#: ../gtk/gtkmenutoolbutton.c:219 ../gtk/gtkoptionmenu.c:161
 msgid "Menu"
 msgstr "મેનુ"
 
-#: ../gtk/gtkmenutoolbutton.c:237
+#: ../gtk/gtkmenutoolbutton.c:220
 msgid "The dropdown menu"
 msgstr "નીચે આવતુ મેનુ"
 
@@ -3531,7 +3541,7 @@ msgid "Printer settings"
 msgstr "પ્રિન્ટર સુયોજનો"
 
 #: ../gtk/gtkprintjob.c:143 ../gtk/gtkprintjob.c:144
-#: ../gtk/gtkprintunixdialog.c:231
+#: ../gtk/gtkprintunixdialog.c:229
 msgid "Page Setup"
 msgstr "પાનાં સુયોજન"
 
@@ -3555,11 +3565,11 @@ msgstr "મૂળભૂત પાનાં સુયોજન"
 msgid "The GtkPageSetup used by default"
 msgstr "GtkPageSetup મૂળભૂત રીતે વપરાય છે"
 
-#: ../gtk/gtkprintoperation.c:896 ../gtk/gtkprintunixdialog.c:249
+#: ../gtk/gtkprintoperation.c:896 ../gtk/gtkprintunixdialog.c:247
 msgid "Print Settings"
 msgstr "છાપન સુયોજનો"
 
-#: ../gtk/gtkprintoperation.c:897 ../gtk/gtkprintunixdialog.c:250
+#: ../gtk/gtkprintoperation.c:897 ../gtk/gtkprintunixdialog.c:248
 msgid "The GtkPrintSettings used for initializing the dialog"
 msgstr "GtkPrintSettings એ સંવાદનો આરંભ કરવા માટે વપરાય છે"
 
@@ -3579,11 +3589,11 @@ msgstr "પાનાંઓની સંખ્યા"
 msgid "The number of pages in the document."
 msgstr "દસ્તાવેજમાં પાનાંઓની સંખ્યા."
 
-#: ../gtk/gtkprintoperation.c:962 ../gtk/gtkprintunixdialog.c:239
+#: ../gtk/gtkprintoperation.c:962 ../gtk/gtkprintunixdialog.c:237
 msgid "Current Page"
 msgstr "વર્તમાન પાનું"
 
-#: ../gtk/gtkprintoperation.c:963 ../gtk/gtkprintunixdialog.c:240
+#: ../gtk/gtkprintoperation.c:963 ../gtk/gtkprintunixdialog.c:238
 msgid "The current page in the document"
 msgstr "દસ્તાવેજમાં વર્તમાન પાનું"
 
@@ -3657,15 +3667,15 @@ msgstr "વૈવિધ્યપૂર્ણ ટેબ લેબલ"
 msgid "Label for the tab containing custom widgets."
 msgstr "વૈવિધ્યપૂર્ણ વિજેટોને સમાવતી ટેબ માટેનું લેબલ."
 
-#: ../gtk/gtkprintunixdialog.c:232
+#: ../gtk/gtkprintunixdialog.c:230
 msgid "The GtkPageSetup to use"
 msgstr "વાપરવા માટેનું GtkPageSetup"
 
-#: ../gtk/gtkprintunixdialog.c:257
+#: ../gtk/gtkprintunixdialog.c:255
 msgid "Selected Printer"
 msgstr "પસંદ કરેલ પ્રિન્ટર"
 
-#: ../gtk/gtkprintunixdialog.c:258
+#: ../gtk/gtkprintunixdialog.c:256
 msgid "The GtkPrinter which is selected"
 msgstr "GtkPrinter કે જે પસંદ થયેલ છે"
 
@@ -3949,83 +3959,83 @@ msgid ""
 "spacing"
 msgstr "શું વિસ્તારની સંપૂર્ણ લંબાઈ માટે દોરવું કે આગળ આવનારાઓને અને જગ્યા છોડવા માટે દોરવું"
 
-#: ../gtk/gtkrecentaction.c:654 ../gtk/gtkrecentchoosermenu.c:212
+#: ../gtk/gtkrecentaction.c:654 ../gtk/gtkrecentchoosermenu.c:209
 msgid "Show Numbers"
 msgstr "નંબરો બતાવો"
 
-#: ../gtk/gtkrecentaction.c:655 ../gtk/gtkrecentchoosermenu.c:213
+#: ../gtk/gtkrecentaction.c:655 ../gtk/gtkrecentchoosermenu.c:210
 msgid "Whether the items should be displayed with a number"
 msgstr "શું વસ્તુઓ સંખ્યા સાથે દર્શાવવી જોઈએ"
 
-#: ../gtk/gtkrecentchooser.c:112
+#: ../gtk/gtkrecentchooser.c:120
 msgid "Recent Manager"
 msgstr "છેલ્લો વ્યવસ્થાપક"
 
-#: ../gtk/gtkrecentchooser.c:113
+#: ../gtk/gtkrecentchooser.c:121
 msgid "The RecentManager object to use"
 msgstr "વાપરવા માટેનો RecentManager ઓબ્જેક્ટ"
 
-#: ../gtk/gtkrecentchooser.c:118
+#: ../gtk/gtkrecentchooser.c:135
 msgid "Show Private"
 msgstr "ખાનગી બતાવો"
 
-#: ../gtk/gtkrecentchooser.c:119
+#: ../gtk/gtkrecentchooser.c:136
 msgid "Whether the private items should be displayed"
 msgstr "શું ખાનગી વસ્તુઓ દર્શાવવી જોઈએ"
 
-#: ../gtk/gtkrecentchooser.c:124
+#: ../gtk/gtkrecentchooser.c:149
 msgid "Show Tooltips"
 msgstr "સાધનમદદો બતાવો"
 
-#: ../gtk/gtkrecentchooser.c:125
+#: ../gtk/gtkrecentchooser.c:150
 msgid "Whether there should be a tooltip on the item"
 msgstr "શું ત્યાં વસ્તુ પર સાધનમદદ હોવી જોઈએ"
 
-#: ../gtk/gtkrecentchooser.c:130
+#: ../gtk/gtkrecentchooser.c:162
 msgid "Show Icons"
 msgstr "ચિહ્નો બતાવો"
 
-#: ../gtk/gtkrecentchooser.c:131
+#: ../gtk/gtkrecentchooser.c:163
 msgid "Whether there should be an icon near the item"
 msgstr "શું ત્યાં વસ્તુની નજીક ચિહ્ન હોવું જોઈએ"
 
-#: ../gtk/gtkrecentchooser.c:136
+#: ../gtk/gtkrecentchooser.c:178
 msgid "Show Not Found"
 msgstr "મળ્યનું નહિં બતાવો"
 
-#: ../gtk/gtkrecentchooser.c:137
+#: ../gtk/gtkrecentchooser.c:179
 msgid "Whether the items pointing to unavailable resources should be displayed"
 msgstr "શું ઉપલબ્ધ નહિં એવા સ્રોતોનો નિર્દેશ કરતી વસ્તુઓ દર્શાવવી જોઈએ"
 
-#: ../gtk/gtkrecentchooser.c:143
+#: ../gtk/gtkrecentchooser.c:192
 msgid "Whether to allow multiple items to be selected"
 msgstr "શું ઘણી વસ્તુઓને પસંદ થયેલ પરવાનગી આપવી જોઈએ"
 
-#: ../gtk/gtkrecentchooser.c:148
+#: ../gtk/gtkrecentchooser.c:205
 msgid "Local only"
 msgstr "માત્ર સ્થાનિક"
 
-#: ../gtk/gtkrecentchooser.c:149
+#: ../gtk/gtkrecentchooser.c:206
 msgid "Whether the selected resource(s) should be limited to local file: URIs"
 msgstr "શું પસંદ કરેલ સ્રોતો માત્ર સ્થાનિક ફાઈલ પૂરતા જ મર્યાદિત હોવા જોઈએ: URIs"
 
-#: ../gtk/gtkrecentchooser.c:154 ../gtk/gtkrecentmanager.c:265
+#: ../gtk/gtkrecentchooser.c:222 ../gtk/gtkrecentmanager.c:265
 msgid "Limit"
 msgstr "મર્યાદા"
 
-#: ../gtk/gtkrecentchooser.c:155
+#: ../gtk/gtkrecentchooser.c:223
 msgid "The maximum number of items to be displayed"
 msgstr "દર્શાવવા માટેની મહત્તમ સંખ્યાની વસ્તુઓ"
 
-#: ../gtk/gtkrecentchooser.c:162
+#: ../gtk/gtkrecentchooser.c:237
 msgid "Sort Type"
 msgstr "ક્રમમાં ગોઠવવાનો પ્રકાર"
 
-#: ../gtk/gtkrecentchooser.c:163
+#: ../gtk/gtkrecentchooser.c:238
 msgid "The sorting order of the items displayed"
 msgstr "દર્શાવાયેલ વસ્તુઓને ક્રમમાં ગોઠવવાનો પ્રકાર"
 
-#: ../gtk/gtkrecentchooser.c:170
+#: ../gtk/gtkrecentchooser.c:253
 msgid "The current filter for selecting which resources are displayed"
 msgstr "કયા સ્રોતો દર્શાવાયેલ છે તે પસંદ કરવા માટેનું વર્તમાન ગાળક"
 
@@ -4112,6 +4122,26 @@ msgstr "કિંમતની વચ્ચેની જગ્યા"
 #: ../gtk/gtkscale.c:178
 msgid "Space between value text and the slider/trough area"
 msgstr "લખાણની કિંમત અને સરકપટ્ટી/ગર્તના વિસ્તાર વચ્ચેની જગ્યા"
+
+#: ../gtk/gtkscalebutton.c:182
+msgid "The value of the scale"
+msgstr "માપદંડની કિંમત"
+
+#: ../gtk/gtkscalebutton.c:192
+msgid "The icon size"
+msgstr "ચિહ્ન માપ"
+
+#: ../gtk/gtkscalebutton.c:201
+msgid "The GtkAdjustment that contains the current value of this scale button object"
+msgstr "GtkAdjustment કે જે આ માપદંડ બટન ઓબ્જેક્ટની વર્તમાન કિંમત સમાવે છે"
+
+#: ../gtk/gtkscalebutton.c:229
+msgid "Icons"
+msgstr "ચિહ્નો"
+
+#: ../gtk/gtkscalebutton.c:230
+msgid "List of icon names"
+msgstr "ચિહ્ન નામોની યાદી"
 
 #: ../gtk/gtkscrollbar.c:50
 msgid "Minimum Slider Length"
