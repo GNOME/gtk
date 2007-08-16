@@ -2733,7 +2733,7 @@ msgstr "Kohteen poistaminen ei onnistunut"
 
 #: ../gtk/gtkrecentchooserdefault.c:1669
 msgid "Could not clear list"
-msgstr "Listaa ei voitu tyhjentää"
+msgstr "Luetteloa ei voitu tyhjentää"
 
 #: ../gtk/gtkrecentchooserdefault.c:1753
 msgid "Copy _Location"
@@ -2741,11 +2741,11 @@ msgstr "Kopioi si_jainti"
 
 #: ../gtk/gtkrecentchooserdefault.c:1766
 msgid "_Remove From List"
-msgstr "_Poista listalta"
+msgstr "_Poista luettelosta"
 
 #: ../gtk/gtkrecentchooserdefault.c:1775
 msgid "_Clear List"
-msgstr "_Tyhjennä lista"
+msgstr "_Tyhjennä luettelo"
 
 #: ../gtk/gtkrecentchooserdefault.c:1789
 msgid "Show _Private Resources"
