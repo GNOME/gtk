@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.2.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-08-09 07:54+0300\n"
+"POT-Creation-Date: 2007-08-16 11:02+0300\n"
 "PO-Revision-Date: 2007-02-25 19:14+0300\n"
 "Last-Translator: Ilkka Tuohela <hile@iki.fi>\n"
 "Language-Team: Finnish <gnome-fi-laatu@lists.sourceforge.net>\n"
@@ -288,6 +288,7 @@ msgid "Couldn't recognize the image file format for file '%s'"
 msgstr "Ei voitu tunnistaa tiedoston \"%s\" kuvatyyppiä"
 
 #: ../gdk-pixbuf/gdk-pixbuf-io.c:736
+#, c-format
 msgid "Unrecognized image file format"
 msgstr "Tuntematon kuvatiedostomuoto"
 
@@ -307,14 +308,17 @@ msgid "This build of gdk-pixbuf does not support saving the image format: %s"
 msgstr "Tämä käännetty versio gdk-pixbufista ei voi tallentaa muodossa: %s"
 
 #: ../gdk-pixbuf/gdk-pixbuf-io.c:1461
+#, c-format
 msgid "Insufficient memory to save image to callback"
 msgstr "Liian vähän muistia kuvan tallentamiseksi paluukutsuun"
 
 #: ../gdk-pixbuf/gdk-pixbuf-io.c:1474
+#, c-format
 msgid "Failed to open temporary file"
 msgstr "Väliaikaistiedoston avaaminen epäonnistui"
 
 #: ../gdk-pixbuf/gdk-pixbuf-io.c:1500
+#, c-format
 msgid "Failed to read from temporary file"
 msgstr "Väliaikaistiedostosta lukeminen epäonnistui"
 
@@ -333,6 +337,7 @@ msgstr ""
 "data ei ole välttämättä tallentunut: %s"
 
 #: ../gdk-pixbuf/gdk-pixbuf-io.c:1980 ../gdk-pixbuf/gdk-pixbuf-io.c:2030
+#, c-format
 msgid "Insufficient memory to save image into a buffer"
 msgstr "Liian vähän muistia kuvan tallentamiseksi puskuriin"
 
@@ -351,14 +356,17 @@ msgid "Incremental loading of image type '%s' is not supported"
 msgstr "Kuvatyypin \"%s\" kasvavaa latausta ei tueta."
 
 #: ../gdk-pixbuf/gdk-pixdata.c:147
+#, c-format
 msgid "Image header corrupt"
 msgstr "Kuvan otsikko vioittunut"
 
 #: ../gdk-pixbuf/gdk-pixdata.c:152
+#, c-format
 msgid "Image format unknown"
 msgstr "Tuntematon kuvamuoto"
 
 #: ../gdk-pixbuf/gdk-pixdata.c:157 ../gdk-pixbuf/gdk-pixdata.c:487
+#, c-format
 msgid "Image pixel data corrupt"
 msgstr "Kuvapistetiedot viallisia"
 
@@ -370,25 +378,30 @@ msgstr[0] "yhden tavun kokoisen kuvapuskurin varaaminen epäonnistui"
 msgstr[1] "%u tavun kokoisen kuvapuskurin varaaminen epäonnistui"
 
 #: ../gdk-pixbuf/io-ani.c:244
+#, c-format
 msgid "Unexpected icon chunk in animation"
 msgstr "Odottamaton kuvakelohko animaatiossa"
 
 #: ../gdk-pixbuf/io-ani.c:337
+#, c-format
 msgid "Unsupported animation type"
 msgstr "Tukematon animaatiotyyppi"
 
 #: ../gdk-pixbuf/io-ani.c:348 ../gdk-pixbuf/io-ani.c:536
+#, c-format
 msgid "Invalid header in animation"
 msgstr "Virheellinen otsake animaatiossa"
 
 #: ../gdk-pixbuf/io-ani.c:358 ../gdk-pixbuf/io-ani.c:380
 #: ../gdk-pixbuf/io-ani.c:439 ../gdk-pixbuf/io-ani.c:458
 #: ../gdk-pixbuf/io-ani.c:509 ../gdk-pixbuf/io-ani.c:581
+#, c-format
 msgid "Not enough memory to load animation"
 msgstr "Ei tarpeeksi muistia animaation lataamiseksi"
 
 #: ../gdk-pixbuf/io-ani.c:398 ../gdk-pixbuf/io-ani.c:415
 #: ../gdk-pixbuf/io-ani.c:426
+#, c-format
 msgid "Malformed chunk in animation"
 msgstr "Viallinen lohko animaatiossa"
 
@@ -399,26 +412,32 @@ msgstr "ANI-kuvamuoto"
 #: ../gdk-pixbuf/io-bmp.c:230 ../gdk-pixbuf/io-bmp.c:327
 #: ../gdk-pixbuf/io-bmp.c:359 ../gdk-pixbuf/io-bmp.c:382
 #: ../gdk-pixbuf/io-bmp.c:485
+#, c-format
 msgid "BMP image has bogus header data"
 msgstr "BMP-kuvan otsake on viallinen"
 
 #: ../gdk-pixbuf/io-bmp.c:241 ../gdk-pixbuf/io-bmp.c:422
+#, c-format
 msgid "Not enough memory to load bitmap image"
 msgstr "Ei tarpeeksi muistia bittikarttakuvan lataamiseen"
 
 #: ../gdk-pixbuf/io-bmp.c:308
+#, c-format
 msgid "BMP image has unsupported header size"
 msgstr "BMP-kuvan otsakkeen tätä kokoa ei tueta"
 
 #: ../gdk-pixbuf/io-bmp.c:346
+#, c-format
 msgid "Topdown BMP images cannot be compressed"
 msgstr "Ylhäältä-alas-muotoisia BMP-kuvia ei voi pakata"
 
 #: ../gdk-pixbuf/io-bmp.c:1306
+#, c-format
 msgid "Couldn't allocate memory for saving BMP file"
 msgstr "Muistia ei voitu varata BMP-kuvan tallentamiseksi"
 
 #: ../gdk-pixbuf/io-bmp.c:1347
+#, c-format
 msgid "Couldn't write to BMP file"
 msgstr "BMP-tiedostoon ei voitu kirjoittaa"
 
@@ -433,6 +452,7 @@ msgstr "GIF:n luku epäonnistui: %s"
 
 #: ../gdk-pixbuf/io-gif.c:496 ../gdk-pixbuf/io-gif.c:1477
 #: ../gdk-pixbuf/io-gif.c:1638
+#, c-format
 msgid "GIF file was missing some data (perhaps it was truncated somehow?)"
 msgstr ""
 "GIF-tiedostosta puuttuu joitakin osia (ehkä se on typistynyt jotenkin?)"
@@ -443,35 +463,43 @@ msgid "Internal error in the GIF loader (%s)"
 msgstr "Sisäinen virhe GIF-lataimessa (%s)"
 
 #: ../gdk-pixbuf/io-gif.c:579
+#, c-format
 msgid "Stack overflow"
 msgstr "Pinon ylivuoto"
 
 #: ../gdk-pixbuf/io-gif.c:639
+#, c-format
 msgid "GIF image loader cannot understand this image."
 msgstr "GIF-kuvanlukija ei ymmärrä tätä kuvaa."
 
 #: ../gdk-pixbuf/io-gif.c:668
+#, c-format
 msgid "Bad code encountered"
 msgstr "Havaitsi virheellisen koodin"
 
 #: ../gdk-pixbuf/io-gif.c:678
+#, c-format
 msgid "Circular table entry in GIF file"
 msgstr "GIF-tiedostossa on taulukkokehämerkintä"
 
 #: ../gdk-pixbuf/io-gif.c:866 ../gdk-pixbuf/io-gif.c:1464
 #: ../gdk-pixbuf/io-gif.c:1511 ../gdk-pixbuf/io-gif.c:1626
+#, c-format
 msgid "Not enough memory to load GIF file"
 msgstr "Ei tarpeeksi muistia GIF-kuvan lataamiseksi"
 
 #: ../gdk-pixbuf/io-gif.c:956
+#, c-format
 msgid "Not enough memory to composite a frame in GIF file"
 msgstr "Muisti ei riitä GIF-kuvassa olevan kehyksen muodostamiseksi"
 
 #: ../gdk-pixbuf/io-gif.c:1128
+#, c-format
 msgid "GIF image is corrupt (incorrect LZW compression)"
 msgstr "GIF-kuva on vioittunut (viallinen LZW-pakkaus)"
 
 #: ../gdk-pixbuf/io-gif.c:1178
+#, c-format
 msgid "File does not appear to be a GIF file"
 msgstr "Tiedosto ei vaikuta olevan GIF-tiedosto"
 
@@ -481,6 +509,7 @@ msgid "Version %s of the GIF file format is not supported"
 msgstr "GIF-tiedostomuodon versiota %s ei tueta"
 
 #: ../gdk-pixbuf/io-gif.c:1299
+#, c-format
 msgid ""
 "GIF image has no global colormap, and a frame inside it has no local "
 "colormap."
@@ -489,6 +518,7 @@ msgstr ""
 "värikarttaa."
 
 #: ../gdk-pixbuf/io-gif.c:1533
+#, c-format
 msgid "GIF image was truncated or incomplete."
 msgstr "GIF-kuva oli typistynyt tai vaillinainen."
 
@@ -499,39 +529,48 @@ msgstr "GIF-kuvamuoto"
 #: ../gdk-pixbuf/io-ico.c:217 ../gdk-pixbuf/io-ico.c:277
 #: ../gdk-pixbuf/io-ico.c:346 ../gdk-pixbuf/io-ico.c:409
 #: ../gdk-pixbuf/io-ico.c:439
+#, c-format
 msgid "Not enough memory to load icon"
 msgstr "Ei tarpeeksi muistia kuvakkeen lataamiseksi"
 
 #: ../gdk-pixbuf/io-ico.c:254 ../gdk-pixbuf/io-ico.c:267
 #: ../gdk-pixbuf/io-ico.c:336
+#, c-format
 msgid "Invalid header in icon"
 msgstr "Virheellinen otsake kuvakkeessa"
 
 #: ../gdk-pixbuf/io-ico.c:299
+#, c-format
 msgid "Icon has zero width"
 msgstr "Kuvakkeen leveys on nolla"
 
 #: ../gdk-pixbuf/io-ico.c:309
+#, c-format
 msgid "Icon has zero height"
 msgstr "Kuvakkeen korkeus on nolla"
 
 #: ../gdk-pixbuf/io-ico.c:361
+#, c-format
 msgid "Compressed icons are not supported"
 msgstr "Pakattuja kuvakkeita ei tueta"
 
 #: ../gdk-pixbuf/io-ico.c:394
+#, c-format
 msgid "Unsupported icon type"
 msgstr "Tukematon kuvaketyyppi"
 
 #: ../gdk-pixbuf/io-ico.c:488
+#, c-format
 msgid "Not enough memory to load ICO file"
 msgstr "Ei tarpeeksi muistia ICO-tiedoston lataamiseksi"
 
 #: ../gdk-pixbuf/io-ico.c:953
+#, c-format
 msgid "Image too large to be saved as ICO"
 msgstr "Kuva on liian suuri ICO-muodossa tallentamiseksi"
 
 #: ../gdk-pixbuf/io-ico.c:964
+#, c-format
 msgid "Cursor hotspot outside image"
 msgstr "Kohdistimen kohdistuspaikka kuvan ulkopuolella"
 
@@ -550,6 +589,7 @@ msgid "Error interpreting JPEG image file (%s)"
 msgstr "Virhe tulkatessa JPEG-kuvaa (%s)"
 
 #: ../gdk-pixbuf/io-jpeg.c:509
+#, c-format
 msgid ""
 "Insufficient memory to load image, try exiting some applications to free "
 "memory"
@@ -564,10 +604,12 @@ msgstr "Tukematon JPEG-väriavaruus (%s)"
 
 #: ../gdk-pixbuf/io-jpeg.c:648 ../gdk-pixbuf/io-jpeg.c:920
 #: ../gdk-pixbuf/io-jpeg.c:1153 ../gdk-pixbuf/io-jpeg.c:1162
+#, c-format
 msgid "Couldn't allocate memory for loading JPEG file"
 msgstr "Muistia ei voitu varata JPEG-kuvan lataamiseksi"
 
 #: ../gdk-pixbuf/io-jpeg.c:896
+#, c-format
 msgid "Transformed JPEG has zero width or height."
 msgstr "Muunnetun JPEG-kuvan leveys tai korkeus on nolla."
 
@@ -589,18 +631,22 @@ msgid "The JPEG image format"
 msgstr "JPEG-kuvamuoto"
 
 #: ../gdk-pixbuf/io-pcx.c:187
+#, c-format
 msgid "Couldn't allocate memory for header"
 msgstr "Muistin varaus otsikkoa varten epäonnistui"
 
 #: ../gdk-pixbuf/io-pcx.c:202 ../gdk-pixbuf/io-pcx.c:560
+#, c-format
 msgid "Couldn't allocate memory for context buffer"
 msgstr "Muistin varaus kontekstipuskuria varten epäonnistui"
 
 #: ../gdk-pixbuf/io-pcx.c:601
+#, c-format
 msgid "Image has invalid width and/or height"
 msgstr "Kuvan leveys tai korkeus on virheellinen"
 
 #: ../gdk-pixbuf/io-pcx.c:613 ../gdk-pixbuf/io-pcx.c:674
+#, c-format
 msgid "Image has unsupported bpp"
 msgstr "Kuvan bpp ei ole tuettu"
 
@@ -610,22 +656,27 @@ msgid "Image has unsupported number of %d-bit planes"
 msgstr "Kuvan %d-bittisten tasojen määrä ei ole tuettu"
 
 #: ../gdk-pixbuf/io-pcx.c:642
+#, c-format
 msgid "Couldn't create new pixbuf"
 msgstr "Uuden pixbufin luonti epäonnistui"
 
 #: ../gdk-pixbuf/io-pcx.c:650
+#, c-format
 msgid "Couldn't allocate memory for line data"
 msgstr "Muistin varaus rividataa varten epäonnistui"
 
 #: ../gdk-pixbuf/io-pcx.c:657
+#, c-format
 msgid "Couldn't allocate memory for paletted data"
 msgstr "Muistin varaus palettidataa varten epäonnistui"
 
 #: ../gdk-pixbuf/io-pcx.c:704
+#, c-format
 msgid "Didn't get all lines of PCX image"
 msgstr "Kaikkia PCX-kuvan rivejä ei saatu"
 
 #: ../gdk-pixbuf/io-pcx.c:711
+#, c-format
 msgid "No palette found at end of PCX data"
 msgstr "Palettia ei löytynyt PCX-datan lopusta."
 
@@ -634,22 +685,27 @@ msgid "The PCX image format"
 msgstr "PCX-kuvamuoto"
 
 #: ../gdk-pixbuf/io-png.c:55
+#, c-format
 msgid "Bits per channel of PNG image is invalid."
 msgstr "PNG-kuvassa on väärä määrä bittejä kanavaa kohden."
 
 #: ../gdk-pixbuf/io-png.c:136 ../gdk-pixbuf/io-png.c:618
+#, c-format
 msgid "Transformed PNG has zero width or height."
 msgstr "Muunnetun PNG-kuvan leveys tai korkeus on nolla."
 
 #: ../gdk-pixbuf/io-png.c:144
+#, c-format
 msgid "Bits per channel of transformed PNG is not 8."
 msgstr "Muunnetussa PNG-kuvassa ei ole 8 bittiä kanavaa kohden."
 
 #: ../gdk-pixbuf/io-png.c:153
+#, c-format
 msgid "Transformed PNG not RGB or RGBA."
 msgstr "Muunnettu PNG ei ole RGB tai RGBA."
 
 #: ../gdk-pixbuf/io-png.c:162
+#, c-format
 msgid "Transformed PNG has unsupported number of channels, must be 3 or 4."
 msgstr ""
 "Muunettussa PNG-kuvassa on tukematon määrä kanavia; täytyy olla 3 tai 4."
@@ -660,6 +716,7 @@ msgid "Fatal error in PNG image file: %s"
 msgstr "Vakava virhe ladatessa PNG-kuvatiedostoa: %s"
 
 #: ../gdk-pixbuf/io-png.c:310
+#, c-format
 msgid "Insufficient memory to load PNG file"
 msgstr "Liian vähän muistia PNG-tiedoston lataamiseksi"
 
@@ -673,6 +730,7 @@ msgstr ""
 "sovelluksia vähentääksesi muistin käyttöä."
 
 #: ../gdk-pixbuf/io-png.c:684
+#, c-format
 msgid "Fatal error reading PNG image file"
 msgstr "Vakava virhe lukiessa PNG-kuvatiedostoa"
 
@@ -682,6 +740,7 @@ msgid "Fatal error reading PNG image file: %s"
 msgstr "Vakava virhe ladatessa PNG-kuvatiedostoa: %s"
 
 #: ../gdk-pixbuf/io-png.c:825
+#, c-format
 msgid ""
 "Keys for PNG text chunks must have at least 1 and at most 79 characters."
 msgstr ""
@@ -689,6 +748,7 @@ msgstr ""
 "merkkiä."
 
 #: ../gdk-pixbuf/io-png.c:833
+#, c-format
 msgid "Keys for PNG text chunks must be ASCII characters."
 msgstr "PNG text -lohkojen avainten täytyy olla ASCII-merkkejä."
 
@@ -720,63 +780,78 @@ msgid "The PNG image format"
 msgstr "PNG-kuvamuoto"
 
 #: ../gdk-pixbuf/io-pnm.c:250
+#, c-format
 msgid "PNM loader expected to find an integer, but didn't"
 msgstr "PNM-latain oletti saavansa kokonaisluvun, muttei saanut"
 
 #: ../gdk-pixbuf/io-pnm.c:282
+#, c-format
 msgid "PNM file has an incorrect initial byte"
 msgstr "PNM-tiedoston alkutavu on väärä"
 
 #: ../gdk-pixbuf/io-pnm.c:312
+#, c-format
 msgid "PNM file is not in a recognized PNM subformat"
 msgstr "PNM-tiedosto ei ole tunnettua PNM-alimuotoa"
 
 #: ../gdk-pixbuf/io-pnm.c:337
+#, c-format
 msgid "PNM file has an image width of 0"
 msgstr "PNM-tiedoston kuvan leveys on 0"
 
 #: ../gdk-pixbuf/io-pnm.c:358
+#, c-format
 msgid "PNM file has an image height of 0"
 msgstr "PNM-tiedoston kuvan korkeus on 0"
 
 #: ../gdk-pixbuf/io-pnm.c:381
+#, c-format
 msgid "Maximum color value in PNM file is 0"
 msgstr "Suurin väriarvo PNM-tiedostossa on 0"
 
 #: ../gdk-pixbuf/io-pnm.c:389
+#, c-format
 msgid "Maximum color value in PNM file is too large"
 msgstr "Suurin väriarvo PNM-tiedostossa on liian suuri"
 
 #: ../gdk-pixbuf/io-pnm.c:429 ../gdk-pixbuf/io-pnm.c:459
 #: ../gdk-pixbuf/io-pnm.c:504
+#, c-format
 msgid "Raw PNM image type is invalid"
 msgstr "Raaka PNM -kuvatyyppi on väärä"
 
 #: ../gdk-pixbuf/io-pnm.c:654
+#, c-format
 msgid "PNM image loader does not support this PNM subformat"
 msgstr "PNM-kuvanlatain ei tue tätä PNM-alimuotoa"
 
 #: ../gdk-pixbuf/io-pnm.c:709
+#, c-format
 msgid "Premature end-of-file encountered"
 msgstr "Havaitsi ennenaikaisen tiedoston lopun"
 
 #: ../gdk-pixbuf/io-pnm.c:741 ../gdk-pixbuf/io-pnm.c:968
+#, c-format
 msgid "Raw PNM formats require exactly one whitespace before sample data"
 msgstr "Raa'at PNM-muodot vaativat täsmälleen yhden välin ennen otosdataa"
 
 #: ../gdk-pixbuf/io-pnm.c:768
+#, c-format
 msgid "Cannot allocate memory for loading PNM image"
 msgstr "Ei voi varata muistia PNM-kuvan lataamiseksi"
 
 #: ../gdk-pixbuf/io-pnm.c:818
+#, c-format
 msgid "Insufficient memory to load PNM context struct"
 msgstr "Liian vähän muistia PNM-kontekstirakenteen lataamiseksi"
 
 #: ../gdk-pixbuf/io-pnm.c:869
+#, c-format
 msgid "Unexpected end of PNM image data"
 msgstr "Odottamaton PNM-kuvadatan loppu"
 
 #: ../gdk-pixbuf/io-pnm.c:997
+#, c-format
 msgid "Insufficient memory to load PNM file"
 msgstr "Liian vähän muistia PNM-tiedoston lataamiseksi"
 
@@ -785,18 +860,22 @@ msgid "The PNM/PBM/PGM/PPM image format family"
 msgstr "PNM/PBM/PGM/PPM-kuvamuotoperhe"
 
 #: ../gdk-pixbuf/io-ras.c:126
+#, c-format
 msgid "RAS image has bogus header data"
 msgstr "RAS-kuvan otsakedata on viallista"
 
 #: ../gdk-pixbuf/io-ras.c:148
+#, c-format
 msgid "RAS image has unknown type"
 msgstr "RAS-kuvan tyyppi on tuntematon"
 
 #: ../gdk-pixbuf/io-ras.c:156
+#, c-format
 msgid "unsupported RAS image variation"
 msgstr "tukematon RAS-kuvan muunnelma"
 
 #: ../gdk-pixbuf/io-ras.c:171 ../gdk-pixbuf/io-ras.c:200
+#, c-format
 msgid "Not enough memory to load RAS image"
 msgstr "Ei tarpeeksi muistia RAS-kuvan lataamiseen"
 
@@ -805,56 +884,69 @@ msgid "The Sun raster image format"
 msgstr "Sun-rasterikuvamuoto"
 
 #: ../gdk-pixbuf/io-tga.c:154
+#, c-format
 msgid "Cannot allocate memory for IOBuffer struct"
 msgstr "Ei voi varata muistia IOBuffer-tietorakenteelle"
 
 #: ../gdk-pixbuf/io-tga.c:173
+#, c-format
 msgid "Cannot allocate memory for IOBuffer data"
 msgstr "Ei voi varata muistia IOBuffer-datalle"
 
 #: ../gdk-pixbuf/io-tga.c:184
+#, c-format
 msgid "Cannot realloc IOBuffer data"
 msgstr "Ei voi varata uudelleen IOBuffer-dataa"
 
 #: ../gdk-pixbuf/io-tga.c:214
+#, c-format
 msgid "Cannot allocate temporary IOBuffer data"
 msgstr "Ei voi varata tilapäistä IOBuffer-dataa"
 
 #: ../gdk-pixbuf/io-tga.c:347
+#, c-format
 msgid "Cannot allocate new pixbuf"
 msgstr "Ei voi varata uutta kuvapuskuria"
 
 #: ../gdk-pixbuf/io-tga.c:687
+#, c-format
 msgid "Cannot allocate colormap structure"
 msgstr "Ei voi varata värikarttarakennetta"
 
 #: ../gdk-pixbuf/io-tga.c:694
+#, c-format
 msgid "Cannot allocate colormap entries"
 msgstr "Ei voi varata värikartan kohtia"
 
 #: ../gdk-pixbuf/io-tga.c:716
+#, c-format
 msgid "Unexpected bitdepth for colormap entries"
 msgstr "Odottamaton värikartan kohtien bittisyvyys"
 
 #: ../gdk-pixbuf/io-tga.c:734
+#, c-format
 msgid "Cannot allocate TGA header memory"
 msgstr "Ei voi varata TGA-otsakkeen muistia"
 
 #: ../gdk-pixbuf/io-tga.c:767
+#, c-format
 msgid "TGA image has invalid dimensions"
 msgstr "TGA-kuvan mitat ovat virheelliset"
 
 #: ../gdk-pixbuf/io-tga.c:773 ../gdk-pixbuf/io-tga.c:782
 #: ../gdk-pixbuf/io-tga.c:792 ../gdk-pixbuf/io-tga.c:802
 #: ../gdk-pixbuf/io-tga.c:809
+#, c-format
 msgid "TGA image type not supported"
 msgstr "TGA-kuvatyyppi ei tuettu"
 
 #: ../gdk-pixbuf/io-tga.c:856
+#, c-format
 msgid "Cannot allocate memory for TGA context struct"
 msgstr "Ei voi varata muistia TGA-kontekstirakenteelle"
 
 #: ../gdk-pixbuf/io-tga.c:921
+#, c-format
 msgid "Excess data in file"
 msgstr "Ylimääräistä dataa tiedostossa"
 
@@ -871,15 +963,18 @@ msgid "Could not get image height (bad TIFF file)"
 msgstr "Ei voitu hakea kuvan korkeutta (viallinen TIFF-tiedosto)"
 
 #: ../gdk-pixbuf/io-tiff.c:175
+#, c-format
 msgid "Width or height of TIFF image is zero"
 msgstr "TIFF-kuvan korkeus tai leveys on nolla"
 
 #: ../gdk-pixbuf/io-tiff.c:184 ../gdk-pixbuf/io-tiff.c:193
+#, c-format
 msgid "Dimensions of TIFF image too large"
 msgstr "TIFF-kuvan mitat ovat liian suuret"
 
 #: ../gdk-pixbuf/io-tiff.c:217 ../gdk-pixbuf/io-tiff.c:229
 #: ../gdk-pixbuf/io-tiff.c:541
+#, c-format
 msgid "Insufficient memory to open TIFF file"
 msgstr "Liian vähän muistia TIFF-tiedoston avaamiseksi"
 
@@ -908,6 +1003,7 @@ msgid "Failed to write TIFF data"
 msgstr "TIFF-tietojen kirjoitus epäonnistui"
 
 #: ../gdk-pixbuf/io-tiff.c:760
+#, c-format
 msgid "Couldn't write to TIFF file"
 msgstr "TIFF-tiedostoa ei voitu kirjoittaa"
 
@@ -916,18 +1012,22 @@ msgid "The TIFF image format"
 msgstr "TIFF-kuvamuoto"
 
 #: ../gdk-pixbuf/io-wbmp.c:246
+#, c-format
 msgid "Image has zero width"
 msgstr "Kuvan leveys on nolla"
 
 #: ../gdk-pixbuf/io-wbmp.c:264
+#, c-format
 msgid "Image has zero height"
 msgstr "Kuvan korkeus on nolla"
 
 #: ../gdk-pixbuf/io-wbmp.c:275
+#, c-format
 msgid "Not enough memory to load image"
 msgstr "Ei tarpeeksi muistia kuvan lataamiseen"
 
 #: ../gdk-pixbuf/io-wbmp.c:334
+#, c-format
 msgid "Couldn't save the rest"
 msgstr "Ei voitu tallentaa loppua"
 
@@ -936,14 +1036,17 @@ msgid "The WBMP image format"
 msgstr "WBMP-kuvamuoto"
 
 #: ../gdk-pixbuf/io-xbm.c:295
+#, c-format
 msgid "Invalid XBM file"
 msgstr "Virheellinen XBM-tiedosto"
 
 #: ../gdk-pixbuf/io-xbm.c:305
+#, c-format
 msgid "Insufficient memory to load XBM image file"
 msgstr "Liian vähän muistia XBM-tiedoston lataamiseksi"
 
 #: ../gdk-pixbuf/io-xbm.c:453
+#, c-format
 msgid "Failed to write to temporary file when loading XBM image"
 msgstr "Väliaikaistiedoston kirjoittaminen epäonnistui XBM-kuvaa ladatessa"
 
@@ -952,39 +1055,48 @@ msgid "The XBM image format"
 msgstr "XBM-kuvamuoto"
 
 #: ../gdk-pixbuf/io-xpm.c:468
+#, c-format
 msgid "No XPM header found"
 msgstr "XPM-otsikkoa ei löytynyt"
 
 #: ../gdk-pixbuf/io-xpm.c:477
+#, c-format
 msgid "Invalid XPM header"
 msgstr "Virheellinen XPM-otsikko"
 
 #: ../gdk-pixbuf/io-xpm.c:485
+#, c-format
 msgid "XPM file has image width <= 0"
 msgstr "XPM-tiedoston kuvan leveys on <= 0"
 
 #: ../gdk-pixbuf/io-xpm.c:493
+#, c-format
 msgid "XPM file has image height <= 0"
 msgstr "XPM-tiedoston kuvan korkeus on <= 0"
 
 #: ../gdk-pixbuf/io-xpm.c:501
+#, c-format
 msgid "XPM has invalid number of chars per pixel"
 msgstr "XPM-tiedostossa on väärä määrä merkkejä kuvapistettä kohden"
 
 #: ../gdk-pixbuf/io-xpm.c:510
+#, c-format
 msgid "XPM file has invalid number of colors"
 msgstr "XPM-tiedostossa on väärä määrä värejä"
 
 #: ../gdk-pixbuf/io-xpm.c:522 ../gdk-pixbuf/io-xpm.c:531
 #: ../gdk-pixbuf/io-xpm.c:583
+#, c-format
 msgid "Cannot allocate memory for loading XPM image"
 msgstr "Muistia ei voi varata XPM-kuvan lataamiseksi"
 
 #: ../gdk-pixbuf/io-xpm.c:545
+#, c-format
 msgid "Cannot read XPM colormap"
 msgstr "XPM-värikarttaa ei voi lukea"
 
 #: ../gdk-pixbuf/io-xpm.c:777
+#, c-format
 msgid "Failed to write to temporary file when loading XPM image"
 msgstr "Väliaikaistiedoston kirjoittaminen epäonnistui XPM-kuvaa ladatessa"
 
@@ -1142,6 +1254,21 @@ msgstr "Välilyönti"
 #: ../gtk/gtkaccellabel.c:626
 msgid "keyboard label|Backslash"
 msgstr "Takakeno"
+
+#: ../gtk/gtkbuilderparser.c:289
+#, c-format
+msgid "Invalid type function: `%s'"
+msgstr "Virheellinen tyyppifunktio: \"%s\""
+
+#: ../gtk/gtkbuilderparser.c:729
+#, c-format
+msgid "Invalid root element: '%s'"
+msgstr "Virheellinen juurielementti: \"%s\""
+
+#: ../gtk/gtkbuilderparser.c:761
+#, c-format
+msgid "Unhandled tag: '%s'"
+msgstr "Käsittelemätön tagi: \"%s\""
 
 #. Translate to calendar:YM if you want years to be displayed
 #. * before months; otherwise translate to calendar:MY.
@@ -1469,10 +1596,12 @@ msgid "Add the folder '%s' to the bookmarks"
 msgstr "Lisää kansio \"%s\" kirjanmerkkeihin"
 
 #: ../gtk/gtkfilechooserdefault.c:3050
+#, c-format
 msgid "Add the current folder to the bookmarks"
 msgstr "Lisää nykyinen kansio kirjanmerkkeihin"
 
 #: ../gtk/gtkfilechooserdefault.c:3052
+#, c-format
 msgid "Add the selected folders to the bookmarks"
 msgstr "Lisää valitut kansiot kirjanmerkkeihin"
 
@@ -1586,6 +1715,7 @@ msgid "Create in _folder:"
 msgstr "Luo _kansioon:"
 
 #: ../gtk/gtkfilechooserdefault.c:7071
+#, c-format
 msgid "Cannot change to folder because it is not local"
 msgstr "Kansioon ei voi siirtyä, koska se ei ole paikallinen"
 
@@ -1825,6 +1955,7 @@ msgid "Could not get a stock icon for %s\n"
 msgstr "Vakiokuvaketta \"%s\" ei löytynyt\n"
 
 #: ../gtk/gtkfilesystemmodel.c:745
+#, c-format
 msgid "Could not obtain root folder"
 msgstr "Juurikansiota ei voitu selvittää"
 
@@ -1840,6 +1971,7 @@ msgid "Error getting information for '%s': %s"
 msgstr "Virhe haettaessa kohteen \"%s\" tietoja: %s"
 
 #: ../gtk/gtkfilesystemunix.c:1153 ../gtk/gtkfilesystemwin32.c:1274
+#, c-format
 msgid "This file system does not support mounting"
 msgstr "Tämä tiedostojärjestelmä ei tue liittämistä"
 
@@ -1960,6 +2092,7 @@ msgid "Icon '%s' not present in theme"
 msgstr "Kuvaketta \"%s\" ei ole teemassa"
 
 #: ../gtk/gtkicontheme.c:2915
+#, c-format
 msgid "Failed to load icon"
 msgstr "Kuvaketta ei voitu ladata"
 
@@ -2120,6 +2253,7 @@ msgstr "Sivu %u"
 
 #: ../gtk/gtkpagesetup.c:570 ../gtk/gtkpapersize.c:825
 #: ../gtk/gtkpapersize.c:865
+#, c-format
 msgid "Not a valid page setup file"
 msgstr "Ei kelvollinen sivunasettelutiedosto"
 
@@ -2352,26 +2486,32 @@ msgstr "Oma koko"
 
 #: ../gtk/gtkprintoperation-win32.c:1484 ../gtk/gtkprintoperation-win32.c:1507
 #: ../gtk/gtkprintoperation-win32.c:1555
+#, c-format
 msgid "Not enough free memory"
 msgstr "Ei tarpeeksi muistia"
 
 #: ../gtk/gtkprintoperation-win32.c:1560
+#, c-format
 msgid "Invalid argument to PrintDlgEx"
 msgstr "Virheellinen argumentti komennolle PrintDlgEx"
 
 #: ../gtk/gtkprintoperation-win32.c:1565
+#, c-format
 msgid "Invalid pointer to PrintDlgEx"
 msgstr "Virheellinen osoitin komennolle PrintDlgEx"
 
 #: ../gtk/gtkprintoperation-win32.c:1570
+#, c-format
 msgid "Invalid handle to PrintDlgEx"
 msgstr "Virheellinen kahva toiminnolle PrintDlgEx"
 
 #: ../gtk/gtkprintoperation-win32.c:1575
+#, c-format
 msgid "Unspecified error"
 msgstr "Määrittelemätön virhe"
 
 #: ../gtk/gtkprintoperation-win32.c:1626
+#, c-format
 msgid "Error from StartDoc"
 msgstr "Virhe lähteestä StartDoc"
 
@@ -3158,10 +3298,12 @@ msgid "A <text> element can't occur before a <tags> element"
 msgstr "Alkio <text> ei voi esiintyä ennen alkoita <tags>"
 
 #: ../gtk/gtktextbufferserialize.c:1788
+#, c-format
 msgid "Serialized data is malformed"
 msgstr "Sarjallistettu tieto on virheellisesti muotoiltu"
 
 #: ../gtk/gtktextbufferserialize.c:1866
+#, c-format
 msgid ""
 "Serialized data is malformed. First section isn't GTKTEXTBUFFERCONTENTS-0001"
 msgstr ""
@@ -4090,18 +4232,22 @@ msgid "different idatas found for symlinked '%s' and '%s'\n"
 msgstr "Eri idataa löytyi symbolisesti linkatuille \"%s\" ja \"%s\"\n"
 
 #: ../gtk/updateiconcache.c:1379
+#, c-format
 msgid "Failed to write header\n"
 msgstr "Otsakkeen kirjoitus epäonnistui\n"
 
 #: ../gtk/updateiconcache.c:1385
+#, c-format
 msgid "Failed to write hash table\n"
 msgstr "Hajautustaulun kirjoitus epäonnistui\n"
 
 #: ../gtk/updateiconcache.c:1391
+#, c-format
 msgid "Failed to write folder index\n"
 msgstr "Kansioindeksin kirjoitus epäonnistui\n"
 
 #: ../gtk/updateiconcache.c:1399
+#, c-format
 msgid "Failed to rewrite header\n"
 msgstr "Otsakkeen uudelleenkirjoitus epäonnistui\n"
 
@@ -4111,6 +4257,7 @@ msgid "Failed to write cache file: %s\n"
 msgstr "Välimuistitiedoston kirjoitus epäonnistui: %s\n"
 
 #: ../gtk/updateiconcache.c:1486
+#, c-format
 msgid "The generated cache was invalid.\n"
 msgstr "Luoto välimuisti oli virheellinen.\n"
 
@@ -4130,6 +4277,7 @@ msgid "Could not rename %s back to %s: %s.\n"
 msgstr "Tiedoston %s nimeäminen takaisin nimelle %s epäonnistui: %s\n"
 
 #: ../gtk/updateiconcache.c:1541
+#, c-format
 msgid "Cache file created successfully.\n"
 msgstr "Välimuistitiedosto luotu onnistuneesti.\n"
 
@@ -4315,33 +4463,33 @@ msgid "Custom %.2fx%.2f"
 msgstr "Oma %.2fx%.2f"
 
 #. default filename used for print-to-file
-#: ../modules/printbackends/file/gtkprintbackendfile.c:235
+#: ../modules/printbackends/file/gtkprintbackendfile.c:236
 #, c-format
 msgid "output.%s"
 msgstr "tuloste.%s"
 
-#: ../modules/printbackends/file/gtkprintbackendfile.c:464
+#: ../modules/printbackends/file/gtkprintbackendfile.c:465
 msgid "Print to File"
 msgstr "Tulosta tiedostoon"
 
-#: ../modules/printbackends/file/gtkprintbackendfile.c:489
+#: ../modules/printbackends/file/gtkprintbackendfile.c:542
 msgid "PDF"
 msgstr "PDF"
 
-#: ../modules/printbackends/file/gtkprintbackendfile.c:489
+#: ../modules/printbackends/file/gtkprintbackendfile.c:542
 msgid "Postscript"
 msgstr "Postscript"
 
-#: ../modules/printbackends/file/gtkprintbackendfile.c:501
+#: ../modules/printbackends/file/gtkprintbackendfile.c:554
 #: ../modules/printbackends/test/gtkprintbackendtest.c:501
 msgid "Pages per _sheet:"
 msgstr "Sivuja a_rkille:"
 
-#: ../modules/printbackends/file/gtkprintbackendfile.c:547
+#: ../modules/printbackends/file/gtkprintbackendfile.c:600
 msgid "File"
 msgstr "Tiedosto"
 
-#: ../modules/printbackends/file/gtkprintbackendfile.c:556
+#: ../modules/printbackends/file/gtkprintbackendfile.c:609
 msgid "_Output format"
 msgstr "_Tulostusformaatti"
 
