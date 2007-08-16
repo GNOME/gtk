@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-07-20 18:13-0400\n"
-"PO-Revision-Date: 2007-07-21 16:45+0700\n"
+"POT-Creation-Date: 2007-08-16 16:36+0700\n"
+"PO-Revision-Date: 2007-08-16 16:42+0700\n"
 "Last-Translator: Theppitak Karoonboonyanan <thep@linux.thai.net>\n"
 "Language-Team: Thai <thai-l10n@googlegroups.com>\n"
 "MIME-Version: 1.0\n"
@@ -380,13 +380,15 @@ msgstr "ไม่รู้จักชนิดของภาพเคลื่
 msgid "Invalid header in animation"
 msgstr "ข้อมูลส่วนหัวของภาพเคลื่อนไหวเสีย"
 
-#: gdk-pixbuf/io-ani.c:358 gdk-pixbuf/io-ani.c:380 gdk-pixbuf/io-ani.c:439
-#: gdk-pixbuf/io-ani.c:458 gdk-pixbuf/io-ani.c:509 gdk-pixbuf/io-ani.c:581
+#: gdk-pixbuf/io-ani.c:358 gdk-pixbuf/io-ani.c:380
+#: gdk-pixbuf/io-ani.c:439 gdk-pixbuf/io-ani.c:458
+#: gdk-pixbuf/io-ani.c:509 gdk-pixbuf/io-ani.c:581
 #, c-format
 msgid "Not enough memory to load animation"
 msgstr "หน่วยความจำไม่พอที่จะอ่านภาพเคลื่อนไหว"
 
-#: gdk-pixbuf/io-ani.c:398 gdk-pixbuf/io-ani.c:415 gdk-pixbuf/io-ani.c:426
+#: gdk-pixbuf/io-ani.c:398 gdk-pixbuf/io-ani.c:415
+#: gdk-pixbuf/io-ani.c:426
 #, c-format
 msgid "Malformed chunk in animation"
 msgstr "ส่วนของภาพเคลื่อนไหวเสีย"
@@ -395,8 +397,9 @@ msgstr "ส่วนของภาพเคลื่อนไหวเสีย
 msgid "The ANI image format"
 msgstr "แฟ้มรูปชนิด ANI"
 
-#: gdk-pixbuf/io-bmp.c:230 gdk-pixbuf/io-bmp.c:327 gdk-pixbuf/io-bmp.c:359
-#: gdk-pixbuf/io-bmp.c:382 gdk-pixbuf/io-bmp.c:485
+#: gdk-pixbuf/io-bmp.c:230 gdk-pixbuf/io-bmp.c:327
+#: gdk-pixbuf/io-bmp.c:359 gdk-pixbuf/io-bmp.c:382
+#: gdk-pixbuf/io-bmp.c:485
 #, c-format
 msgid "BMP image has bogus header data"
 msgstr "รูป BMP นี้มีข้อมูลส่วนหัวที่ใช้ไม่ได้"
@@ -435,7 +438,8 @@ msgstr "แฟ้มรูปชนิด BMP"
 msgid "Failure reading GIF: %s"
 msgstr "อ่านรูป GIF ไม่สำเร็จ: %s"
 
-#: gdk-pixbuf/io-gif.c:496 gdk-pixbuf/io-gif.c:1477 gdk-pixbuf/io-gif.c:1638
+#: gdk-pixbuf/io-gif.c:496 gdk-pixbuf/io-gif.c:1477
+#: gdk-pixbuf/io-gif.c:1638
 #, c-format
 msgid "GIF file was missing some data (perhaps it was truncated somehow?)"
 msgstr "แฟ้ม GIF นี้ขาดข้อมูลบางส่วน (อาจจะคัดลอกแฟ้มมาไม่ครบแฟ้ม)"
@@ -465,8 +469,8 @@ msgstr "พบโค้ดเสีย"
 msgid "Circular table entry in GIF file"
 msgstr "ตารางในแฟ้ม GIF มีรายการที่อ้างวกหลับมาถึงตัวเอง"
 
-#: gdk-pixbuf/io-gif.c:866 gdk-pixbuf/io-gif.c:1464 gdk-pixbuf/io-gif.c:1511
-#: gdk-pixbuf/io-gif.c:1626
+#: gdk-pixbuf/io-gif.c:866 gdk-pixbuf/io-gif.c:1464
+#: gdk-pixbuf/io-gif.c:1511 gdk-pixbuf/io-gif.c:1626
 #, c-format
 msgid "Not enough memory to load GIF file"
 msgstr "หน่วยความจำไม่พอที่จะอ่านรูป GIF"
@@ -507,13 +511,15 @@ msgstr "แฟ้ม GIF ไม่สมบูรณ์"
 msgid "The GIF image format"
 msgstr "แฟ้มรูปชนิด GIF"
 
-#: gdk-pixbuf/io-ico.c:217 gdk-pixbuf/io-ico.c:277 gdk-pixbuf/io-ico.c:346
-#: gdk-pixbuf/io-ico.c:409 gdk-pixbuf/io-ico.c:439
+#: gdk-pixbuf/io-ico.c:217 gdk-pixbuf/io-ico.c:277
+#: gdk-pixbuf/io-ico.c:346 gdk-pixbuf/io-ico.c:409
+#: gdk-pixbuf/io-ico.c:439
 #, c-format
 msgid "Not enough memory to load icon"
 msgstr "หน่วยความจำไม่พอที่จะอ่านรูปไอคอน"
 
-#: gdk-pixbuf/io-ico.c:254 gdk-pixbuf/io-ico.c:267 gdk-pixbuf/io-ico.c:336
+#: gdk-pixbuf/io-ico.c:254 gdk-pixbuf/io-ico.c:267
+#: gdk-pixbuf/io-ico.c:336
 #, c-format
 msgid "Invalid header in icon"
 msgstr "ข้อมูลส่วนหัวของไอคอนเสีย"
@@ -579,8 +585,8 @@ msgstr "หน่วยความจำไม่พอสำหรับอ่
 msgid "Unsupported JPEG color space (%s)"
 msgstr "ไม่รองรับห้วงสีนี้สำหรับ JPEG (%s)"
 
-#: gdk-pixbuf/io-jpeg.c:648 gdk-pixbuf/io-jpeg.c:920 gdk-pixbuf/io-jpeg.c:1153
-#: gdk-pixbuf/io-jpeg.c:1162
+#: gdk-pixbuf/io-jpeg.c:648 gdk-pixbuf/io-jpeg.c:920
+#: gdk-pixbuf/io-jpeg.c:1153 gdk-pixbuf/io-jpeg.c:1162
 #, c-format
 msgid "Couldn't allocate memory for loading JPEG file"
 msgstr "หน่วยความจำไม่พอสำหรับอ่านรูป JPEG นี้"
@@ -784,7 +790,8 @@ msgstr "แฟ้ม PNM มีค่าจำนวนสีมากสุด�
 msgid "Maximum color value in PNM file is too large"
 msgstr "แฟ้ม PNM มีค่าจำนวนสีมากสุดที่ใหญ่เกินไป"
 
-#: gdk-pixbuf/io-pnm.c:429 gdk-pixbuf/io-pnm.c:459 gdk-pixbuf/io-pnm.c:504
+#: gdk-pixbuf/io-pnm.c:429 gdk-pixbuf/io-pnm.c:459
+#: gdk-pixbuf/io-pnm.c:504
 #, c-format
 msgid "Raw PNM image type is invalid"
 msgstr "รูป Raw PNM เสีย"
@@ -903,8 +910,9 @@ msgstr "หน่วยความจำไม่พอสำหรับข้
 msgid "TGA image has invalid dimensions"
 msgstr "รูป TGA มีขนาดกว้างยาวที่ไม่ถูกต้อง"
 
-#: gdk-pixbuf/io-tga.c:773 gdk-pixbuf/io-tga.c:782 gdk-pixbuf/io-tga.c:792
-#: gdk-pixbuf/io-tga.c:802 gdk-pixbuf/io-tga.c:809
+#: gdk-pixbuf/io-tga.c:773 gdk-pixbuf/io-tga.c:782
+#: gdk-pixbuf/io-tga.c:792 gdk-pixbuf/io-tga.c:802
+#: gdk-pixbuf/io-tga.c:809
 #, c-format
 msgid "TGA image type not supported"
 msgstr "ไม่รองรับรูปชนิด TGA"
@@ -941,7 +949,8 @@ msgstr "ความกว้างหรือสูงของรูปชน
 msgid "Dimensions of TIFF image too large"
 msgstr "รูป TIFF มีขนาดกว้างยาวที่ใหญ่เกินไป"
 
-#: gdk-pixbuf/io-tiff.c:217 gdk-pixbuf/io-tiff.c:229 gdk-pixbuf/io-tiff.c:541
+#: gdk-pixbuf/io-tiff.c:217 gdk-pixbuf/io-tiff.c:229
+#: gdk-pixbuf/io-tiff.c:541
 #, c-format
 msgid "Insufficient memory to open TIFF file"
 msgstr "หน่วยความจำไม่พอจะเปิดแฟ้ม TIFF"
@@ -1052,7 +1061,8 @@ msgstr "แฟ้ม XPM ตั้งค่าไบต์ต่อพิกเ�
 msgid "XPM file has invalid number of colors"
 msgstr "แฟ้ม XPM ตั้งค่าจำนวนสีที่ใช้ไม่ได้"
 
-#: gdk-pixbuf/io-xpm.c:522 gdk-pixbuf/io-xpm.c:531 gdk-pixbuf/io-xpm.c:583
+#: gdk-pixbuf/io-xpm.c:522 gdk-pixbuf/io-xpm.c:531
+#: gdk-pixbuf/io-xpm.c:583
 #, c-format
 msgid "Cannot allocate memory for loading XPM image"
 msgstr "หน่วยความจำไม่พอสำหรับอ่านรูป XPM"
@@ -1222,6 +1232,21 @@ msgstr "Space"
 msgid "keyboard label|Backslash"
 msgstr "Backslash"
 
+#: gtk/gtkbuilderparser.c:289
+#, c-format
+msgid "Invalid type function: `%s'"
+msgstr "ฟังก์ชันถามชนิดใช้ไม่ได้: `%s'"
+
+#: gtk/gtkbuilderparser.c:729
+#, c-format
+msgid "Invalid root element: '%s'"
+msgstr "อิลิเมนต์รากใช้ไม่ได้: '%s'"
+
+#: gtk/gtkbuilderparser.c:761
+#, c-format
+msgid "Unhandled tag: '%s'"
+msgstr "แท็กไม่ถูกดำเนินการ: '%s'"
+
 #. Translate to calendar:YM if you want years to be displayed
 #. * before months; otherwise translate to calendar:MY.
 #. * Do *not* translate it to anything else, if it
@@ -1332,7 +1357,7 @@ msgstr "เลือกสี"
 msgid "Received invalid color data\n"
 msgstr "ข้อมูลสีที่ได้รับใช้ไม่ได้\n"
 
-#: gtk/gtkcolorsel.c:561
+#: gtk/gtkcolorsel.c:550
 msgid ""
 "The previously-selected color, for comparison to the color you're selecting "
 "now. You can drag this color to a palette entry, or select this color as "
@@ -1341,17 +1366,17 @@ msgstr ""
 "สีเก่าที่เลือกไว้ แสดงไว้เพื่อเทียบกับสีที่จะเลือกใหม่  คุณสามารถลากสีนี้ไปใช้ในจานสีได้ "
 "หรือเลือกสีนี้เป็นสีปัจจุบันโดยลากไปยังแถบสีข้างๆ นี้ก็ได้"
 
-#: gtk/gtkcolorsel.c:566
+#: gtk/gtkcolorsel.c:554
 msgid ""
 "The color you've chosen. You can drag this color to a palette entry to save "
 "it for use in the future."
 msgstr "สีที่เลือกอยู่ คุณสามารถลากสีนี้ไปเก็บใว้ในจานสีเพื่อใช้ในอนาคต"
 
-#: gtk/gtkcolorsel.c:954
+#: gtk/gtkcolorsel.c:942
 msgid "_Save color here"
 msgstr "_บันทึกสีลงที่นี่"
 
-#: gtk/gtkcolorsel.c:1159
+#: gtk/gtkcolorsel.c:1146
 msgid ""
 "Click this palette entry to make it the current color. To change this entry, "
 "drag a color swatch here or right-click it and select \"Save color here.\""
@@ -1359,89 +1384,89 @@ msgstr ""
 "คลิกถ้าจะใช้สีนี้  คุณสามารถบันทึกสีปัจจุบันลงในจานนี้โดยคลิกขวาแล้วเลือก \"บันทึกสีลงที่นี่\" "
 "หรือลากสีจากกรอบสีปัจจุบันทางด้านซ้ายมาลงที่นี่"
 
-#: gtk/gtkcolorsel.c:1937
+#: gtk/gtkcolorsel.c:1920
 msgid ""
 "Select the color you want from the outer ring. Select the darkness or "
 "lightness of that color using the inner triangle."
 msgstr "เลือกสี่ที่ต้องการจากวงแหวน แล้วเลือกความมืดหรือสว่างจากสามเหลี่ยม"
 
-#: gtk/gtkcolorsel.c:1962
+#: gtk/gtkcolorsel.c:1944
 msgid ""
 "Click the eyedropper, then click a color anywhere on your screen to select "
 "that color."
 msgstr "คลิกที่หลอดดูดสี แล้วคลิกสีที่ใหนก็ได้บนจอเพื่อคัดลอกมาเป็นสีปัจจุบัน"
 
-#: gtk/gtkcolorsel.c:1971
+#: gtk/gtkcolorsel.c:1953
 msgid "_Hue:"
 msgstr "ธาตุ_สี:"
 
-#: gtk/gtkcolorsel.c:1972
+#: gtk/gtkcolorsel.c:1954
 msgid "Position on the color wheel."
 msgstr "ตำแหน่งบนวงสี"
 
-#: gtk/gtkcolorsel.c:1974
+#: gtk/gtkcolorsel.c:1956
 msgid "_Saturation:"
 msgstr "ความส_ด:"
 
-#: gtk/gtkcolorsel.c:1975
+#: gtk/gtkcolorsel.c:1957
 msgid "\"Deepness\" of the color."
 msgstr "สีสดหรือจาง"
 
-#: gtk/gtkcolorsel.c:1976
+#: gtk/gtkcolorsel.c:1958
 msgid "_Value:"
 msgstr "ความสว่า_ง:"
 
-#: gtk/gtkcolorsel.c:1977
+#: gtk/gtkcolorsel.c:1959
 msgid "Brightness of the color."
 msgstr "สีสว่างหรือมืด"
 
-#: gtk/gtkcolorsel.c:1978
+#: gtk/gtkcolorsel.c:1960
 msgid "_Red:"
 msgstr "_แดง:"
 
-#: gtk/gtkcolorsel.c:1979
+#: gtk/gtkcolorsel.c:1961
 msgid "Amount of red light in the color."
 msgstr "ความสว่างของแม่สีแดง"
 
-#: gtk/gtkcolorsel.c:1980
+#: gtk/gtkcolorsel.c:1962
 msgid "_Green:"
 msgstr "เ_ขียว:"
 
-#: gtk/gtkcolorsel.c:1981
+#: gtk/gtkcolorsel.c:1963
 msgid "Amount of green light in the color."
 msgstr "ความสว่างของแม่สีเขียว"
 
-#: gtk/gtkcolorsel.c:1982
+#: gtk/gtkcolorsel.c:1964
 msgid "_Blue:"
 msgstr "_น้ำเงิน:"
 
-#: gtk/gtkcolorsel.c:1983
+#: gtk/gtkcolorsel.c:1965
 msgid "Amount of blue light in the color."
 msgstr "ความสว่างของแม่สีน้ำเงิน"
 
-#: gtk/gtkcolorsel.c:1986
+#: gtk/gtkcolorsel.c:1968
 msgid "Op_acity:"
 msgstr "ความ_ทึบแสง:"
 
-#: gtk/gtkcolorsel.c:1994 gtk/gtkcolorsel.c:2005
+#: gtk/gtkcolorsel.c:1975 gtk/gtkcolorsel.c:1985
 msgid "Transparency of the color."
 msgstr "ความโปร่งแสงของสี"
 
-#: gtk/gtkcolorsel.c:2012
+#: gtk/gtkcolorsel.c:1992
 msgid "Color _name:"
 msgstr "_ชื่อสี:"
 
-#: gtk/gtkcolorsel.c:2027
+#: gtk/gtkcolorsel.c:2006
 msgid ""
 "You can enter an HTML-style hexadecimal color value, or simply a color name "
 "such as 'orange' in this entry."
 msgstr "คุณสามารถป้อนค่าสีฐานสิบหกแบบ HTML (เช่น #FFA500) หรือชื่อสี (เช่น orange) ได้"
 
-#: gtk/gtkcolorsel.c:2057
+#: gtk/gtkcolorsel.c:2036
 msgid "_Palette:"
 msgstr "_จานสี:"
 
-#: gtk/gtkcolorsel.c:2086
+#: gtk/gtkcolorsel.c:2065
 msgid "Color Wheel"
 msgstr "วงสี"
 
@@ -1528,221 +1553,221 @@ msgstr "ค้นหา"
 msgid "Recently Used"
 msgstr "ที่ใช้ล่าสุด"
 
-#: gtk/gtkfilechooserdefault.c:3006
+#: gtk/gtkfilechooserdefault.c:2581
+msgid "Select which types of files are shown"
+msgstr "เลือกชนิดของแฟ้มที่จะแสดง"
+
+#: gtk/gtkfilechooserdefault.c:3009
 #, c-format
 msgid "Add the folder '%s' to the bookmarks"
 msgstr "เพิ่มโฟลเดอร์ '%s' ลงในที่คั่นหน้า"
 
-#: gtk/gtkfilechooserdefault.c:3047
+#: gtk/gtkfilechooserdefault.c:3050
 #, c-format
 msgid "Add the current folder to the bookmarks"
 msgstr "เพิ่มโฟลเดอร์ปัจจุบันลงในที่คั่นหน้า"
 
-#: gtk/gtkfilechooserdefault.c:3049
+#: gtk/gtkfilechooserdefault.c:3052
 #, c-format
 msgid "Add the selected folders to the bookmarks"
 msgstr "เพิ่มโฟลเดอร์ที่เลือกอยู่ลงในที่คั่นหน้า"
 
-#: gtk/gtkfilechooserdefault.c:3089
+#: gtk/gtkfilechooserdefault.c:3092
 #, c-format
 msgid "Remove the bookmark '%s'"
 msgstr "ลบที่คั่นหน้า '%s'"
 
-#: gtk/gtkfilechooserdefault.c:3522
+#: gtk/gtkfilechooserdefault.c:3524
 #, c-format
 msgid "Could not add a bookmark for '%s' because it is an invalid path name."
 msgstr "ไม่สามารถเพิ่มที่คั่นหน้าให้กับ '%s' ได้ เพราะไม่ใช่ตำแหน่งที่ใช้ได้"
 
-#: gtk/gtkfilechooserdefault.c:3747
+#: gtk/gtkfilechooserdefault.c:3749
 msgid "Remove"
 msgstr "เอา_ออก"
 
-#: gtk/gtkfilechooserdefault.c:3756
+#: gtk/gtkfilechooserdefault.c:3758
 msgid "Rename..."
 msgstr "เปลี่ยนชื่อ..."
 
 #. Accessible object name for the file chooser's shortcuts pane
-#: gtk/gtkfilechooserdefault.c:3898
+#: gtk/gtkfilechooserdefault.c:3900
 msgid "Places"
 msgstr "ที่หลักๆ"
 
 #. Column header for the file chooser's shortcuts pane
-#: gtk/gtkfilechooserdefault.c:3952
+#: gtk/gtkfilechooserdefault.c:3954
 msgid "_Places"
 msgstr "_ที่หลักๆ"
 
-#: gtk/gtkfilechooserdefault.c:4007 gtk/gtkstock.c:297
+#: gtk/gtkfilechooserdefault.c:4009 gtk/gtkstock.c:297
 msgid "_Add"
 msgstr "เ_พิ่ม"
 
-#: gtk/gtkfilechooserdefault.c:4014
+#: gtk/gtkfilechooserdefault.c:4016
 msgid "Add the selected folder to the Bookmarks"
 msgstr "เพิ่มโฟลเดอร์ที่เลือกอยู่ลงในที่คั่นหน้า"
 
-#: gtk/gtkfilechooserdefault.c:4019 gtk/gtkstock.c:385
+#: gtk/gtkfilechooserdefault.c:4021 gtk/gtkstock.c:385
 msgid "_Remove"
 msgstr "เ_อาออก"
 
-#: gtk/gtkfilechooserdefault.c:4026
+#: gtk/gtkfilechooserdefault.c:4028
 msgid "Remove the selected bookmark"
 msgstr "ลบที่คั่นหน้าที่เลือกอยู่"
 
-#: gtk/gtkfilechooserdefault.c:4122
+#: gtk/gtkfilechooserdefault.c:4124
 msgid "Could not select file"
 msgstr "เลือกแฟ้มไม่สำเร็จ"
 
-#: gtk/gtkfilechooserdefault.c:4259
+#: gtk/gtkfilechooserdefault.c:4261
 #, c-format
 msgid "Could not select file '%s' because it is an invalid path name."
 msgstr "ไม่สามารถเลือกแฟ้ม '%s' ได้ เพราะไม่ใช่ชื่อพาธที่ใช้ได้"
 
-#: gtk/gtkfilechooserdefault.c:4316
+#: gtk/gtkfilechooserdefault.c:4318
 msgid "_Add to Bookmarks"
 msgstr "เ_พิ่มลงในที่คั่นหน้า"
 
-#: gtk/gtkfilechooserdefault.c:4330
+#: gtk/gtkfilechooserdefault.c:4332
 msgid "Show _Hidden Files"
 msgstr "แสดงแฟ้ม_ซ่อน"
 
-#: gtk/gtkfilechooserdefault.c:4574 gtk/gtkfilesel.c:729
+#: gtk/gtkfilechooserdefault.c:4576 gtk/gtkfilesel.c:729
 msgid "Files"
 msgstr "แฟ้ม"
 
-#: gtk/gtkfilechooserdefault.c:4623
+#: gtk/gtkfilechooserdefault.c:4625
 msgid "Name"
 msgstr "ชื่อ"
 
-#: gtk/gtkfilechooserdefault.c:4648
+#: gtk/gtkfilechooserdefault.c:4650
 msgid "Size"
 msgstr "ขนาด"
 
-#: gtk/gtkfilechooserdefault.c:4662
+#: gtk/gtkfilechooserdefault.c:4664
 msgid "Modified"
 msgstr "แก้ไขเมื่อ"
 
-#: gtk/gtkfilechooserdefault.c:4697
-msgid "Select which types of files are shown"
-msgstr "เลือกชนิดของแฟ้มที่จะแสดง"
-
 #. Label
-#: gtk/gtkfilechooserdefault.c:4908 gtk/gtkprinteroptionwidget.c:786
+#: gtk/gtkfilechooserdefault.c:4884 gtk/gtkprinteroptionwidget.c:786
 msgid "_Name:"
 msgstr "_ชื่อ:"
 
-#: gtk/gtkfilechooserdefault.c:4950
+#: gtk/gtkfilechooserdefault.c:4926
 msgid "_Browse for other folders"
 msgstr "เ_รียกดูโฟลเดอร์อื่น"
 
-#: gtk/gtkfilechooserdefault.c:5205
+#: gtk/gtkfilechooserdefault.c:5181
 msgid "Type a file name"
 msgstr "ป้อนชื่อแฟ้ม"
 
 #. Create Folder
-#: gtk/gtkfilechooserdefault.c:5242
+#: gtk/gtkfilechooserdefault.c:5218
 msgid "Create Fo_lder"
 msgstr "สร้างโฟ_ลเดอร์"
 
-#: gtk/gtkfilechooserdefault.c:5252
+#: gtk/gtkfilechooserdefault.c:5228
 msgid "_Location:"
 msgstr "_ตำแหน่ง:"
 
-#: gtk/gtkfilechooserdefault.c:5490
+#: gtk/gtkfilechooserdefault.c:5466
 msgid "Save in _folder:"
 msgstr "บันทึกในโ_ฟลเดอร์:"
 
-#: gtk/gtkfilechooserdefault.c:5492
+#: gtk/gtkfilechooserdefault.c:5468
 msgid "Create in _folder:"
 msgstr "สร้างในโ_ฟลเดอร์:"
 
-#: gtk/gtkfilechooserdefault.c:7095
+#: gtk/gtkfilechooserdefault.c:7071
 #, c-format
 msgid "Cannot change to folder because it is not local"
 msgstr "ไปโฟลเดอร์ที่กำหนดไม่สำเร็จ เพราะไม่ใช่โฟลเดอร์ในเครื่องนี้"
 
-#: gtk/gtkfilechooserdefault.c:7711 gtk/gtkfilechooserdefault.c:7732
+#: gtk/gtkfilechooserdefault.c:7687 gtk/gtkfilechooserdefault.c:7708
 #, c-format
 msgid "Shortcut %s already exists"
 msgstr "จุดเชื่อม %s มีอยู่ก่อนแล้ว"
 
-#: gtk/gtkfilechooserdefault.c:7822
+#: gtk/gtkfilechooserdefault.c:7798
 #, c-format
 msgid "Shortcut %s does not exist"
 msgstr "จุดเชื่อม %s ไม่มีอยู่จริง"
 
-#: gtk/gtkfilechooserdefault.c:8077
+#: gtk/gtkfilechooserdefault.c:8053
 #, c-format
 msgid "A file named \"%s\" already exists.  Do you want to replace it?"
 msgstr "มีแฟ้มชื่อ \"%s\" อยู่ก่อนแล้ว คุณต้องการจะแทนที่แฟ้มหรือไม่?"
 
-#: gtk/gtkfilechooserdefault.c:8080
+#: gtk/gtkfilechooserdefault.c:8056
 #, c-format
 msgid ""
 "The file already exists in \"%s\".  Replacing it will overwrite its contents."
 msgstr "มีแฟ้มดังกล่าวอยู่แล้วใน \"%s\" หากสั่งแทนที่ก็จะเขียนทับเนื้อหาแฟ้มเดิม"
 
-#: gtk/gtkfilechooserdefault.c:8085
+#: gtk/gtkfilechooserdefault.c:8061
 msgid "_Replace"
 msgstr "แ_ทนที่"
 
-#: gtk/gtkfilechooserdefault.c:8916
+#: gtk/gtkfilechooserdefault.c:8892
 msgid "Could not start the search process"
 msgstr "เรียกโพรเซสค้นหาไม่สำเร็จ"
 
-#: gtk/gtkfilechooserdefault.c:8917
+#: gtk/gtkfilechooserdefault.c:8893
 msgid ""
 "The program was not able to create a connection to the indexer daemon.  "
 "Please make sure it is running."
 msgstr "โปรแกรมไม่สามารถเชื่อมต่อไปยังดีมอนผู้ทำดัชนีได้ กรุณาตรวจสอบให้แน่ใจว่าดีมอนทำงานอยู่"
 
-#: gtk/gtkfilechooserdefault.c:8931
+#: gtk/gtkfilechooserdefault.c:8907
 msgid "Could not send the search request"
 msgstr "ส่งคำขอค้นหาไม่สำเร็จ"
 
 #. Label
-#: gtk/gtkfilechooserdefault.c:9357
+#: gtk/gtkfilechooserdefault.c:9333
 msgid "_Search:"
 msgstr "_ค้นหา:"
 
-#: gtk/gtkfilechooserdefault.c:10307
+#: gtk/gtkfilechooserdefault.c:10283
 #, c-format
 msgid "Could not mount %s"
 msgstr "เมานท์ %s ไม่สำเร็จ"
 
-#: gtk/gtkfilechooserdefault.c:10935
+#: gtk/gtkfilechooserdefault.c:10911
 msgid "Type name of new folder"
 msgstr "พิมพ์ชื่อของโฟลเดอร์ใหม่"
 
-#: gtk/gtkfilechooserdefault.c:10983
+#: gtk/gtkfilechooserdefault.c:10959
 #, c-format
 msgid "%d byte"
 msgid_plural "%d bytes"
 msgstr[0] "%d ไบต์"
 
-#: gtk/gtkfilechooserdefault.c:10985
+#: gtk/gtkfilechooserdefault.c:10961
 #, c-format
 msgid "%.1f KB"
 msgstr "%.1f KB"
 
-#: gtk/gtkfilechooserdefault.c:10987
+#: gtk/gtkfilechooserdefault.c:10963
 #, c-format
 msgid "%.1f MB"
 msgstr "%.1f MB"
 
-#: gtk/gtkfilechooserdefault.c:10989
+#: gtk/gtkfilechooserdefault.c:10965
 #, c-format
 msgid "%.1f GB"
 msgstr "%.1f GB"
 
-#: gtk/gtkfilechooserdefault.c:11085 gtk/gtkfilechooserdefault.c:11106
-#: gtk/gtkfilechooserdefault.c:11138
+#: gtk/gtkfilechooserdefault.c:11061 gtk/gtkfilechooserdefault.c:11082
+#: gtk/gtkfilechooserdefault.c:11114
 msgid "Unknown"
 msgstr "ไม่รู้จัก"
 
-#: gtk/gtkfilechooserdefault.c:11124
+#: gtk/gtkfilechooserdefault.c:11100
 msgid "Today at %H:%M"
 msgstr "วันนี้ %H:%M น."
 
-#: gtk/gtkfilechooserdefault.c:11126
+#: gtk/gtkfilechooserdefault.c:11102
 msgid "Yesterday at %H:%M"
 msgstr "เมื่อวาน %H:%M น."
 
@@ -2181,7 +2206,8 @@ msgstr "ช่องไฟของลูกศรสำหรับเลื่
 msgid "Page %u"
 msgstr "หน้า %u"
 
-#: gtk/gtkpagesetup.c:570 gtk/gtkpapersize.c:825 gtk/gtkpapersize.c:865
+#: gtk/gtkpagesetup.c:570 gtk/gtkpapersize.c:825
+#: gtk/gtkpapersize.c:865
 #, c-format
 msgid "Not a valid page setup file"
 msgstr "ไม่ใช่แฟ้มค่าตั้งหน้ากระดาษที่ใช้การได้"
@@ -2192,11 +2218,11 @@ msgstr "ไม่ใช่แฟ้มค่าตั้งหน้ากระ
 #. * Do *not* translate it to "predefinito:mm", if it
 #. * it isn't default:mm or default:inch it will not work
 #.
-#: gtk/gtkpagesetupunixdialog.c:154
+#: gtk/gtkpagesetupunixdialog.c:152
 msgid "default:mm"
 msgstr "default:mm"
 
-#: gtk/gtkpagesetupunixdialog.c:310
+#: gtk/gtkpagesetupunixdialog.c:308
 msgid ""
 "<b>Any Printer</b>\n"
 "For portable documents"
@@ -2204,15 +2230,15 @@ msgstr ""
 "<b>เครื่องพิมพ์ใดๆ</b>\n"
 "สำหรับ PDF"
 
-#: gtk/gtkpagesetupunixdialog.c:885 gtk/gtkpagesetupunixdialog.c:1401
+#: gtk/gtkpagesetupunixdialog.c:883 gtk/gtkpagesetupunixdialog.c:1395
 msgid "mm"
 msgstr "มม."
 
-#: gtk/gtkpagesetupunixdialog.c:887 gtk/gtkpagesetupunixdialog.c:1399
+#: gtk/gtkpagesetupunixdialog.c:885 gtk/gtkpagesetupunixdialog.c:1393
 msgid "inch"
 msgstr "นิ้ว"
 
-#: gtk/gtkpagesetupunixdialog.c:906
+#: gtk/gtkpagesetupunixdialog.c:904
 #, c-format
 msgid ""
 "Margins:\n"
@@ -2227,68 +2253,68 @@ msgstr ""
 " บน: %s %s\n"
 " ล่าง: %s %s"
 
-#: gtk/gtkpagesetupunixdialog.c:957
+#: gtk/gtkpagesetupunixdialog.c:953
 msgid "Manage Custom Sizes..."
 msgstr "จัดการขนาดกระดาษที่กำหนดเอง..."
 
-#: gtk/gtkpagesetupunixdialog.c:1005
+#: gtk/gtkpagesetupunixdialog.c:1001
 msgid "_Format for:"
 msgstr "_จัดรูปแบบสำหรับ:"
 
-#: gtk/gtkpagesetupunixdialog.c:1026
+#: gtk/gtkpagesetupunixdialog.c:1022
 msgid "_Paper size:"
 msgstr "_ขนาดกระดาษ:"
 
-#: gtk/gtkpagesetupunixdialog.c:1062
+#: gtk/gtkpagesetupunixdialog.c:1058
 msgid "_Orientation:"
 msgstr "แ_นววาง:"
 
-#: gtk/gtkpagesetupunixdialog.c:1127 gtk/gtkprintunixdialog.c:2156
+#: gtk/gtkpagesetupunixdialog.c:1121 gtk/gtkprintunixdialog.c:2145
 msgid "Page Setup"
 msgstr "ตั้งหน้ากระดาษ"
 
-#: gtk/gtkpagesetupunixdialog.c:1446
+#: gtk/gtkpagesetupunixdialog.c:1440
 msgid "Margins from Printer..."
 msgstr "ขอบกระดาษตามเครื่องพิมพ์..."
 
-#: gtk/gtkpagesetupunixdialog.c:1606
+#: gtk/gtkpagesetupunixdialog.c:1600
 #, c-format
 msgid "Custom Size %d"
 msgstr "ขนาดกำหนดเองชุดที่ %d"
 
-#: gtk/gtkpagesetupunixdialog.c:1835
+#: gtk/gtkpagesetupunixdialog.c:1829
 msgid "Manage Custom Sizes"
 msgstr "จัดการขนาดกระดาษที่กำหนดเอง"
 
-#: gtk/gtkpagesetupunixdialog.c:1931
+#: gtk/gtkpagesetupunixdialog.c:1925
 msgid "_Width:"
 msgstr "_กว้าง:"
 
-#: gtk/gtkpagesetupunixdialog.c:1943
+#: gtk/gtkpagesetupunixdialog.c:1937
 msgid "_Height:"
 msgstr "_สูง:"
 
-#: gtk/gtkpagesetupunixdialog.c:1955
+#: gtk/gtkpagesetupunixdialog.c:1949
 msgid "Paper Size"
 msgstr "ขนาดกระดาษ"
 
-#: gtk/gtkpagesetupunixdialog.c:1965
+#: gtk/gtkpagesetupunixdialog.c:1959
 msgid "_Top:"
 msgstr "_บน:"
 
-#: gtk/gtkpagesetupunixdialog.c:1977
+#: gtk/gtkpagesetupunixdialog.c:1971
 msgid "_Bottom:"
 msgstr "ล่า_ง:"
 
-#: gtk/gtkpagesetupunixdialog.c:1989
+#: gtk/gtkpagesetupunixdialog.c:1983
 msgid "_Left:"
 msgstr "ซ้า_ย:"
 
-#: gtk/gtkpagesetupunixdialog.c:2001
+#: gtk/gtkpagesetupunixdialog.c:1995
 msgid "_Right:"
 msgstr "_ขวา:"
 
-#: gtk/gtkpagesetupunixdialog.c:2042
+#: gtk/gtkpagesetupunixdialog.c:2036
 msgid "Paper Margins"
 msgstr "ขอบกระดาษ"
 
@@ -2372,7 +2398,6 @@ msgid "Preparing %d"
 msgstr "กำลังเตรียมพิมพ์ %d"
 
 #: gtk/gtkprintoperation.c:1988 gtk/gtkprintoperation.c:2240
-#, c-format
 msgid "Preparing"
 msgstr "กำลังเตรียมพิมพ์"
 
@@ -2382,12 +2407,10 @@ msgid "Printing %d"
 msgstr "กำลังพิมพ์ %d"
 
 #: gtk/gtkprintoperation-unix.c:243
-#, c-format
 msgid "Error launching preview"
 msgstr "เกิดข้อผิดพลาดขณะเรียกแสดงตัวอย่างก่อนพิมพ์"
 
 #: gtk/gtkprintoperation-unix.c:281
-#, c-format
 msgid "Error printing"
 msgstr "เกิดข้อผิดพลาดขณะพิมพ์"
 
@@ -2446,35 +2469,35 @@ msgstr "ข้อผิดพลาดไม่ปรากฏสาเหตุ
 msgid "Error from StartDoc"
 msgstr "ข้อผิดพลาดจาก StartDoc"
 
-#: gtk/gtkprintunixdialog.c:1485
+#: gtk/gtkprintunixdialog.c:1474
 msgid "Printer"
 msgstr "เครื่องพิมพ์"
 
-#: gtk/gtkprintunixdialog.c:1493 gtk/gtkrecentchooserdefault.c:1005
+#: gtk/gtkprintunixdialog.c:1482
 msgid "Location"
 msgstr "ตำแหน่ง"
 
-#: gtk/gtkprintunixdialog.c:1502
+#: gtk/gtkprintunixdialog.c:1491
 msgid "Status"
 msgstr "สถานะ"
 
-#: gtk/gtkprintunixdialog.c:1524
+#: gtk/gtkprintunixdialog.c:1513
 msgid "Print Pages"
 msgstr "หน้าที่พิมพ์"
 
-#: gtk/gtkprintunixdialog.c:1528
+#: gtk/gtkprintunixdialog.c:1517
 msgid "_All"
 msgstr "ทั้งห_มด"
 
-#: gtk/gtkprintunixdialog.c:1535
+#: gtk/gtkprintunixdialog.c:1524
 msgid "C_urrent"
 msgstr "_ปัจจุบัน"
 
-#: gtk/gtkprintunixdialog.c:1544
+#: gtk/gtkprintunixdialog.c:1533
 msgid "Ra_nge"
 msgstr "_ช่วง"
 
-#: gtk/gtkprintunixdialog.c:1545
+#: gtk/gtkprintunixdialog.c:1534
 msgid ""
 "Specify one or more page ranges,\n"
 " e.g. 1-3,7,11"
@@ -2482,141 +2505,141 @@ msgstr ""
 "ระบุช่วงของหน้าตั้งแต่หนึ่งช่วงขึ้นไป\n"
 " เช่น 1-3,7,11"
 
-#: gtk/gtkprintunixdialog.c:1564
+#: gtk/gtkprintunixdialog.c:1553
 msgid "Copies"
 msgstr "สำเนา"
 
 #. FIXME chpe: too much space between Copies and spinbutton, put those 2 in a hbox and make it span 2 columns
-#: gtk/gtkprintunixdialog.c:1569
+#: gtk/gtkprintunixdialog.c:1558
 msgid "Copie_s:"
 msgstr "จำ_นวนสำเนา:"
 
-#: gtk/gtkprintunixdialog.c:1587
+#: gtk/gtkprintunixdialog.c:1576
 msgid "C_ollate"
 msgstr "_ทีละชุด"
 
-#: gtk/gtkprintunixdialog.c:1595
+#: gtk/gtkprintunixdialog.c:1584
 msgid "_Reverse"
 msgstr "_จากหลังมาหน้า"
 
-#: gtk/gtkprintunixdialog.c:1612
+#: gtk/gtkprintunixdialog.c:1601
 msgid "General"
 msgstr "ทั่วไป"
 
-#: gtk/gtkprintunixdialog.c:2012
+#: gtk/gtkprintunixdialog.c:2001
 msgid "Layout"
 msgstr "การจัดเรียง"
 
-#: gtk/gtkprintunixdialog.c:2016
+#: gtk/gtkprintunixdialog.c:2005
 msgid "Pages per _side:"
 msgstr "จำนวนหน้าต่อห_น้ากระดาษ:"
 
-#: gtk/gtkprintunixdialog.c:2032
+#: gtk/gtkprintunixdialog.c:2021
 msgid "T_wo-sided:"
 msgstr "พิมพ์_สองหน้า:"
 
-#: gtk/gtkprintunixdialog.c:2047
+#: gtk/gtkprintunixdialog.c:2036
 msgid "_Only print:"
 msgstr "พิ_มพ์เฉพาะ:"
 
 #. In enum order
-#: gtk/gtkprintunixdialog.c:2062
+#: gtk/gtkprintunixdialog.c:2051
 msgid "All sheets"
 msgstr "ทุกหน้า"
 
-#: gtk/gtkprintunixdialog.c:2063
+#: gtk/gtkprintunixdialog.c:2052
 msgid "Even sheets"
 msgstr "หน้าคู่"
 
-#: gtk/gtkprintunixdialog.c:2064
+#: gtk/gtkprintunixdialog.c:2053
 msgid "Odd sheets"
 msgstr "หน้าคี่"
 
-#: gtk/gtkprintunixdialog.c:2067
+#: gtk/gtkprintunixdialog.c:2056
 msgid "Sc_ale:"
 msgstr "อัตรา_ขยาย:"
 
-#: gtk/gtkprintunixdialog.c:2094
+#: gtk/gtkprintunixdialog.c:2083
 msgid "Paper"
 msgstr "กระดาษ"
 
-#: gtk/gtkprintunixdialog.c:2098
+#: gtk/gtkprintunixdialog.c:2087
 msgid "Paper _type:"
 msgstr "_ชนิดกระดาษ:"
 
-#: gtk/gtkprintunixdialog.c:2113
+#: gtk/gtkprintunixdialog.c:2102
 msgid "Paper _source:"
 msgstr "แหล่ง_ป้อนกระดาษ:"
 
-#: gtk/gtkprintunixdialog.c:2128
+#: gtk/gtkprintunixdialog.c:2117
 msgid "Output t_ray:"
 msgstr "ถาดกระดาษ_ออก:"
 
-#: gtk/gtkprintunixdialog.c:2179
+#: gtk/gtkprintunixdialog.c:2168
 msgid "Job Details"
 msgstr "รายละเอียดงานพิมพ์"
 
-#: gtk/gtkprintunixdialog.c:2185
+#: gtk/gtkprintunixdialog.c:2174
 msgid "Pri_ority:"
 msgstr "_ลำดับความสำคัญ:"
 
-#: gtk/gtkprintunixdialog.c:2200
+#: gtk/gtkprintunixdialog.c:2189
 msgid "_Billing info:"
 msgstr "ข้อมูล_สรุป:"
 
-#: gtk/gtkprintunixdialog.c:2218
+#: gtk/gtkprintunixdialog.c:2207
 msgid "Print Document"
 msgstr "พิมพ์เอกสาร"
 
-#: gtk/gtkprintunixdialog.c:2224
+#: gtk/gtkprintunixdialog.c:2213
 msgid "_Now"
 msgstr "เ_ดี๋ยวนี้"
 
-#: gtk/gtkprintunixdialog.c:2231
+#: gtk/gtkprintunixdialog.c:2220
 msgid "A_t:"
 msgstr "เ_มื่อ:"
 
-#: gtk/gtkprintunixdialog.c:2246
+#: gtk/gtkprintunixdialog.c:2235
 msgid "On _hold"
 msgstr "_รอไว้"
 
-#: gtk/gtkprintunixdialog.c:2265
+#: gtk/gtkprintunixdialog.c:2254
 msgid "Add Cover Page"
 msgstr "เพิ่มหน้าปก"
 
-#: gtk/gtkprintunixdialog.c:2271
+#: gtk/gtkprintunixdialog.c:2260
 msgid "Be_fore:"
 msgstr "ปก_หน้า:"
 
-#: gtk/gtkprintunixdialog.c:2286
+#: gtk/gtkprintunixdialog.c:2275
 msgid "_After:"
 msgstr "ปกหลั_ง:"
 
-#: gtk/gtkprintunixdialog.c:2301
+#: gtk/gtkprintunixdialog.c:2290
 msgid "Job"
 msgstr "งานพิมพ์"
 
-#: gtk/gtkprintunixdialog.c:2367
+#: gtk/gtkprintunixdialog.c:2356
 msgid "Advanced"
 msgstr "ขั้นสูง"
 
-#: gtk/gtkprintunixdialog.c:2402
+#: gtk/gtkprintunixdialog.c:2391
 msgid "Image Quality"
 msgstr "คุณภาพของรูป"
 
-#: gtk/gtkprintunixdialog.c:2405
+#: gtk/gtkprintunixdialog.c:2394
 msgid "Color"
 msgstr "สี"
 
-#: gtk/gtkprintunixdialog.c:2408
+#: gtk/gtkprintunixdialog.c:2397
 msgid "Finishing"
 msgstr "กำลังเสร็จสิ้น"
 
-#: gtk/gtkprintunixdialog.c:2418
+#: gtk/gtkprintunixdialog.c:2407
 msgid "Some of the settings in the dialog conflict"
 msgstr "ค่าตั้งบางค่าในกล่องโต้ตอบขัดแย้งกัน"
 
-#: gtk/gtkprintunixdialog.c:2441
+#: gtk/gtkprintunixdialog.c:2430
 msgid "Print"
 msgstr "พิมพ์"
 
@@ -2639,45 +2662,45 @@ msgid "Unable to locate image file in pixmap_path: \"%s\""
 msgstr "ไม่พบแฟ้มรูปใน pixmap_path: \"%s\""
 
 #: gtk/gtkrecentaction.c:155 gtk/gtkrecentaction.c:163
-#: gtk/gtkrecentchoosermenu.c:567 gtk/gtkrecentchoosermenu.c:575
+#: gtk/gtkrecentchoosermenu.c:555 gtk/gtkrecentchoosermenu.c:563
 #, c-format
 msgid "This function is not implemented for widgets of class '%s'"
 msgstr "ฟังก์ชันนี้ยังไม่มีสำหรับวิดเจ็ตในคลาส '%s'"
 
-#: gtk/gtkrecentchooserdefault.c:459
+#: gtk/gtkrecentchooserdefault.c:465
 msgid "Select which type of documents are shown"
 msgstr "เลือกชนิดของแฟ้มที่จะแสดง"
 
-#: gtk/gtkrecentchooserdefault.c:1124 gtk/gtkrecentchooserdefault.c:1161
+#: gtk/gtkrecentchooserdefault.c:1107 gtk/gtkrecentchooserdefault.c:1144
 #, c-format
 msgid "No item for URI '%s' found"
 msgstr "ไม่พบรายการสำหรับ URI '%s'"
 
-#: gtk/gtkrecentchooserdefault.c:1288
+#: gtk/gtkrecentchooserdefault.c:1271
 msgid "Untitled filter"
 msgstr "ตัวกรองไม่มีชื่อ"
 
-#: gtk/gtkrecentchooserdefault.c:1596
+#: gtk/gtkrecentchooserdefault.c:1626
 msgid "Could not remove item"
 msgstr "ลบรายการไม่สำเร็จ"
 
-#: gtk/gtkrecentchooserdefault.c:1639
+#: gtk/gtkrecentchooserdefault.c:1669
 msgid "Could not clear list"
 msgstr "ล้างรายการไม่สำเร็จ"
 
-#: gtk/gtkrecentchooserdefault.c:1723
+#: gtk/gtkrecentchooserdefault.c:1753
 msgid "Copy _Location"
 msgstr "คัดลอก_ตำแหน่ง"
 
-#: gtk/gtkrecentchooserdefault.c:1736
+#: gtk/gtkrecentchooserdefault.c:1766
 msgid "_Remove From List"
 msgstr "_ลบออกจากรายการ"
 
-#: gtk/gtkrecentchooserdefault.c:1745
+#: gtk/gtkrecentchooserdefault.c:1775
 msgid "_Clear List"
 msgstr "_ล้างรายการ"
 
-#: gtk/gtkrecentchooserdefault.c:1759
+#: gtk/gtkrecentchooserdefault.c:1789
 msgid "Show _Private Resources"
 msgstr "แสดงทรัพยากร_ส่วนบุคคล"
 
@@ -2691,21 +2714,21 @@ msgstr "แสดงทรัพยากร_ส่วนบุคคล"
 #. * user appended or prepended custom menu items to the
 #. * recent chooser menu widget.
 #.
-#: gtk/gtkrecentchoosermenu.c:332
+#: gtk/gtkrecentchoosermenu.c:320
 msgid "No items found"
 msgstr "ไม่พบรายการ"
 
-#: gtk/gtkrecentchoosermenu.c:487 gtk/gtkrecentchoosermenu.c:543
+#: gtk/gtkrecentchoosermenu.c:475 gtk/gtkrecentchoosermenu.c:531
 #, c-format
 msgid "No recently used resource found with URI `%s'"
 msgstr "ไม่พบทรัพยากรที่ใช้ล่าสุดที่มี URI เป็น `%s'"
 
-#: gtk/gtkrecentchoosermenu.c:757
+#: gtk/gtkrecentchoosermenu.c:742
 #, c-format
 msgid "Open '%s'"
 msgstr "เปิด '%s'"
 
-#: gtk/gtkrecentchoosermenu.c:789
+#: gtk/gtkrecentchoosermenu.c:772
 msgid "Unknown item"
 msgstr "รายการไม่รู้จัก"
 
@@ -2716,7 +2739,7 @@ msgstr "รายการไม่รู้จัก"
 #. *
 #. * Don't include the prefix "recent menu label|" in the translation.
 #.
-#: gtk/gtkrecentchoosermenu.c:802
+#: gtk/gtkrecentchoosermenu.c:785
 #, c-format
 msgid "recent menu label|_%d. %s"
 msgstr "_%d. %s"
@@ -2726,7 +2749,7 @@ msgstr "_%d. %s"
 #. *
 #. * Don't include the prefix "recent menu label|" in the translation.
 #.
-#: gtk/gtkrecentchoosermenu.c:809
+#: gtk/gtkrecentchoosermenu.c:792
 #, c-format
 msgid "recent menu label|%d. %s"
 msgstr "%d. %s"
@@ -4391,33 +4414,33 @@ msgid "Custom %.2fx%.2f"
 msgstr "กำหนดเอง %2fx%.2f"
 
 #. default filename used for print-to-file
-#: modules/printbackends/file/gtkprintbackendfile.c:235
+#: modules/printbackends/file/gtkprintbackendfile.c:236
 #, c-format
 msgid "output.%s"
 msgstr "output.%s"
 
-#: modules/printbackends/file/gtkprintbackendfile.c:464
+#: modules/printbackends/file/gtkprintbackendfile.c:465
 msgid "Print to File"
 msgstr "พิมพ์ลงแฟ้ม"
 
-#: modules/printbackends/file/gtkprintbackendfile.c:489
+#: modules/printbackends/file/gtkprintbackendfile.c:542
 msgid "PDF"
 msgstr "PDF"
 
-#: modules/printbackends/file/gtkprintbackendfile.c:489
+#: modules/printbackends/file/gtkprintbackendfile.c:542
 msgid "Postscript"
 msgstr "โพสต์สคริปต์"
 
-#: modules/printbackends/file/gtkprintbackendfile.c:501
+#: modules/printbackends/file/gtkprintbackendfile.c:554
 #: modules/printbackends/test/gtkprintbackendtest.c:501
 msgid "Pages per _sheet:"
 msgstr "จำนวนหน้าต่อแ_ผ่น:"
 
-#: modules/printbackends/file/gtkprintbackendfile.c:547
+#: modules/printbackends/file/gtkprintbackendfile.c:600
 msgid "File"
 msgstr "แฟ้ม"
 
-#: modules/printbackends/file/gtkprintbackendfile.c:556
+#: modules/printbackends/file/gtkprintbackendfile.c:609
 msgid "_Output format"
 msgstr "รูปแ_บบผลลัพธ์"
 
