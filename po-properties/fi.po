@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.6\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-08-09 07:54+0300\n"
+"POT-Creation-Date: 2007-08-16 11:11+0300\n"
 "PO-Revision-Date: 2007-02-13 08:20+0300\n"
 "Last-Translator: Ilkka Tuohela <hile@iki.fi>\n"
 "Language-Team: Finnish <gnome-fi-laatu@lists.sourceforge.net>\n"
@@ -399,7 +399,7 @@ msgid "Whether the action group is visible."
 msgstr "Onko tämä toimintoryhmä näkyvissä."
 
 #: ../gtk/gtkadjustment.c:86 ../gtk/gtkcellrendererprogress.c:128
-#: ../gtk/gtkspinbutton.c:268
+#: ../gtk/gtkscalebutton.c:181 ../gtk/gtkspinbutton.c:268
 msgid "Value"
 msgstr "Arvo"
 
@@ -763,6 +763,14 @@ msgstr "Sijainti"
 #: ../gtk/gtkbox.c:145 ../gtk/gtknotebook.c:684
 msgid "The index of the child in the parent"
 msgstr "Nykyisen lapsen indeksi emon sisällä"
+
+#: ../gtk/gtkbuilder.c:104
+msgid "Translation Domain"
+msgstr "Käännösalue"
+
+#: ../gtk/gtkbuilder.c:105
+msgid "The translation domain used by gettext"
+msgstr "Gettextin käyttämä käännösalue "
 
 #: ../gtk/gtkbutton.c:200
 msgid ""
@@ -1244,7 +1252,8 @@ msgid "Orientation and growth direction of the progress bar"
 msgstr "Edistymispalkin asento ja kasvusuunta"
 
 #: ../gtk/gtkcellrendererspin.c:93 ../gtk/gtkprogressbar.c:122
-#: ../gtk/gtkrange.c:345 ../gtk/gtkspinbutton.c:207
+#: ../gtk/gtkrange.c:345 ../gtk/gtkscalebutton.c:200
+#: ../gtk/gtkspinbutton.c:207
 msgid "Adjustment"
 msgstr "Koonmuutos"
 
@@ -1813,7 +1822,7 @@ msgstr "Voiko tähän kenttään kirjoittaa tyhjän arvon"
 
 #: ../gtk/gtkcombo.c:173
 msgid "Value in list"
-msgstr "Arvo listassa"
+msgstr "Arvo luettelossa"
 
 #: ../gtk/gtkcombo.c:174
 msgid "Whether entered values must already be present in the list"
@@ -2739,7 +2748,7 @@ msgstr "Kuvakejoukko"
 msgid "Icon set to display"
 msgstr "Näkyvä kuvakejoukko"
 
-#: ../gtk/gtkimage.c:187 ../gtk/gtktoolbar.c:530
+#: ../gtk/gtkimage.c:187 ../gtk/gtkscalebutton.c:191 ../gtk/gtktoolbar.c:530
 msgid "Icon size"
 msgstr "Kuvakekoko"
 
@@ -4094,7 +4103,7 @@ msgstr "Nykyinen suodatin, jolla valitaan näytettävät resurssit"
 
 #: ../gtk/gtkrecentmanager.c:251
 msgid "The full path to the file to be used to store and read the list"
-msgstr "Koko polku tiedostoon, jota käytetään lista tallennukseen ja lukuun"
+msgstr "Koko polku tiedostoon, jota käytetään luettelon tallennukseen ja lukuun"
 
 #: ../gtk/gtkrecentmanager.c:266
 msgid ""
@@ -4104,7 +4113,7 @@ msgstr ""
 
 #: ../gtk/gtkrecentmanager.c:282
 msgid "The size of the recently used resources list"
-msgstr "Äskettäin käytettyjen resurssien listan koko"
+msgstr "Äskettäin käytettyjen resurssien luettelon koko"
 
 #: ../gtk/gtkruler.c:90
 msgid "Lower"
@@ -4177,6 +4186,27 @@ msgstr "Arvon välit"
 #: ../gtk/gtkscale.c:178
 msgid "Space between value text and the slider/trough area"
 msgstr "Väli arvotekstin ja liu'uttimen sekä uran alueen välissä"
+
+#: ../gtk/gtkscalebutton.c:182
+msgid "The value of the scale"
+msgstr "Asteikon arvo"
+
+#: ../gtk/gtkscalebutton.c:192
+msgid "The icon size"
+msgstr "Kuvakkeen koko"
+
+#: ../gtk/gtkscalebutton.c:201
+msgid ""
+"The GtkAdjustment that contains the current value of this scale button object"
+msgstr "GtkAdjustment, joka sisältää tämän asteikkonapin nykyisen arvon"
+
+#: ../gtk/gtkscalebutton.c:229
+msgid "Icons"
+msgstr "Kuvakkeet"
+
+#: ../gtk/gtkscalebutton.c:230
+msgid "List of icon names"
+msgstr "Luettelo kuvakkeiden nimistä"
 
 #: ../gtk/gtkscrollbar.c:50
 msgid "Minimum Slider Length"
@@ -4510,8 +4540,8 @@ msgid ""
 "Whether the direction of the sort indicators in list and tree views is "
 "inverted compared to the default (where down means ascending)"
 msgstr ""
-"Käännetäänkö järjestyspainikkeiden suunta lista- ja puunäkymissä verrattuna "
-"oletusarvoon."
+"Käännetäänkö järjestyspainikkeiden suunta luettelo- ja puunäkymissä "
+"verrattuna oletusarvoon."
 
 #: ../gtk/gtksettings.c:452
 msgid "Show the 'Input Methods' menu"
@@ -4962,25 +4992,25 @@ msgstr "Lisäysmerkin sijainti (siirtymänä puskurin alusta)"
 
 #: ../gtk/gtktextbuffer.c:245
 msgid "Copy target list"
-msgstr "Kopioinnin kohdelista"
+msgstr "Kopioinnin kohdeluettelo"
 
 #: ../gtk/gtktextbuffer.c:246
 msgid ""
 "The list of targets this buffer supports for clipboard copying and DND source"
 msgstr ""
-"Lista kohteista, joita tämä puskuri tukee leikepöydälle kopiointiin ja "
+"Luettelo kohteista, joita tämä puskuri tukee leikepöydälle kopiointiin ja "
 "raahauksen lähdeeksi"
 
 #: ../gtk/gtktextbuffer.c:261
 msgid "Paste target list"
-msgstr "Liittämisen kohdelista"
+msgstr "Liittämisen kohdeluettelo"
 
 #: ../gtk/gtktextbuffer.c:262
 msgid ""
 "The list of targets this buffer supports for clipboard pasting and DND "
 "destination"
 msgstr ""
-"Lista kohteista, joita tämä puskuri tukee leikepöydältä liittämiseen ja "
+"Luettelo kohteista, joita tämä puskuri tukee leikepöydältä liittämiseen ja "
 "raahauksen kohteena"
 
 #: ../gtk/gtktextmark.c:90
