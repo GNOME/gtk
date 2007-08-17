@@ -1,3 +1,8 @@
+2007-08-16  Cody Russell  <bratsche@gnome.org>
+
+	* gdk/win32/cursor.bdf: Committing changes to the source
+	bdf font file that I forgot to commit yesterday for #458088.
+
 2007-08-15  Cody Russell  <bratsche@gnome.org>
 
 	* gdk/win32/xcursors.h: Modified the sb_h_double_arrow and
