@@ -4,7 +4,7 @@
 # Karsten Weiss <karsten@addx.au.s.shuttle.de>, 1999.
 # Matthias Warkus <mawarkus@gnome.org>, 2001, 2002.
 # Christian Neumair <chris@gnome-de.org>, 2002-2004.
-# Hendrik Richter <hendrikr@gnome.org>, 2004, 2005, 2006.
+# Hendrik Richter <hendrikr@gnome.org>, 2004, 2005, 2006, 2007.
 # Hendrik Brandt <heb@gnome-de.org>, 2005.
 #
 # IM = Input method => Eingabemethode
@@ -13,8 +13,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: GTK+ HEAD\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-08-15 15:44+0200\n"
-"PO-Revision-Date: 2007-08-15 15:44+0200\n"
+"POT-Creation-Date: 2007-08-17 09:45+0200\n"
+"PO-Revision-Date: 2007-08-17 09:47+0200\n"
 "Last-Translator: Hendrik Richter <hendrikr@gnome.org>\n"
 "Language-Team: German <gnome-de@gnome.org>\n"
 "MIME-Version: 1.0\n"
@@ -419,7 +419,7 @@ msgid "Whether the action group is visible."
 msgstr "Ist die Aktion sichtbar?"
 
 #: ../gtk/gtkadjustment.c:86 ../gtk/gtkcellrendererprogress.c:128
-#: ../gtk/gtkspinbutton.c:268
+#: ../gtk/gtkscalebutton.c:181 ../gtk/gtkspinbutton.c:268
 msgid "Value"
 msgstr "Wert"
 
@@ -788,6 +788,14 @@ msgstr "Position"
 #: ../gtk/gtkbox.c:145 ../gtk/gtknotebook.c:684
 msgid "The index of the child in the parent"
 msgstr "Der Index des Kinds im Eltern-Widget"
+
+#: ../gtk/gtkbuilder.c:104
+msgid "Translation Domain"
+msgstr "Übersetzungsdomäne"
+
+#: ../gtk/gtkbuilder.c:105
+msgid "The translation domain used by gettext"
+msgstr "Die von gettext zu verwendende Übersetzungsdomäne"
 
 #: ../gtk/gtkbutton.c:200
 msgid ""
@@ -1283,7 +1291,8 @@ msgid "Orientation and growth direction of the progress bar"
 msgstr "Die Ausrichtung und Wachstumsrichtung des Fortschrittsbalkens"
 
 #: ../gtk/gtkcellrendererspin.c:93 ../gtk/gtkprogressbar.c:122
-#: ../gtk/gtkrange.c:345 ../gtk/gtkspinbutton.c:207
+#: ../gtk/gtkrange.c:345 ../gtk/gtkscalebutton.c:200
+#: ../gtk/gtkspinbutton.c:207
 msgid "Adjustment"
 msgstr "Stellgröße"
 
@@ -2827,7 +2836,7 @@ msgstr "Symbolsatz"
 msgid "Icon set to display"
 msgstr "Anzuzeigender Symbolsatz"
 
-#: ../gtk/gtkimage.c:187 ../gtk/gtktoolbar.c:530
+#: ../gtk/gtkimage.c:187 ../gtk/gtkscalebutton.c:191 ../gtk/gtktoolbar.c:530
 msgid "Icon size"
 msgstr "Symbolgröße"
 
@@ -4312,6 +4321,28 @@ msgstr "Wertabstand"
 #: ../gtk/gtkscale.c:178
 msgid "Space between value text and the slider/trough area"
 msgstr "Der Abstand zwischen der Wertangabe und dem Schieber-/Trogbereich"
+
+#: ../gtk/gtkscalebutton.c:182
+msgid "The value of the scale"
+msgstr "Der eingestellte Skalenwert"
+
+#: ../gtk/gtkscalebutton.c:192
+msgid "The icon size"
+msgstr "Die Symbolgröße"
+
+#: ../gtk/gtkscalebutton.c:201
+msgid ""
+"The GtkAdjustment that contains the current value of this scale button object"
+msgstr ""
+"Das GtkAdjustment, das den aktuellen Wert dieses Skalenobjekts enthält"
+
+#: ../gtk/gtkscalebutton.c:229
+msgid "Icons"
+msgstr "Symbole"
+
+#: ../gtk/gtkscalebutton.c:230
+msgid "List of icon names"
+msgstr "Liste der Symbolnamen"
 
 #: ../gtk/gtkscrollbar.c:50
 msgid "Minimum Slider Length"
