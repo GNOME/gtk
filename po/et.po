@@ -14,8 +14,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ HEAD\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-07-21 04:11+0100\n"
-"PO-Revision-Date: 2007-07-31 23:09+0300\n"
+"POT-Creation-Date: 2007-08-16 03:58+0100\n"
+"PO-Revision-Date: 2007-08-17 22:36+0300\n"
 "Last-Translator: Ivar Smolin <okul@linux.ee>\n"
 "Language-Team: Estonian <gnome-et@linux.ee>\n"
 "MIME-Version: 1.0\n"
@@ -1146,6 +1146,21 @@ msgstr "Tühik"
 msgid "keyboard label|Backslash"
 msgstr "Backslash"
 
+#: ../gtk/gtkbuilderparser.c:289
+#, c-format
+msgid "Invalid type function: `%s'"
+msgstr ""
+
+#: ../gtk/gtkbuilderparser.c:729
+#, c-format
+msgid "Invalid root element: '%s'"
+msgstr "Vigane juurkirje: %s"
+
+#: ../gtk/gtkbuilderparser.c:761
+#, c-format
+msgid "Unhandled tag: '%s'"
+msgstr "Käsitlematu silt: '%s'"
+
 #. Translate to calendar:YM if you want years to be displayed
 #. * before months; otherwise translate to calendar:MY.
 #. * Do *not* translate it to anything else, if it
@@ -1256,7 +1271,7 @@ msgstr "Värvuse valimine"
 msgid "Received invalid color data\n"
 msgstr "Võesti vastu vigased värviandmed\n"
 
-#: ../gtk/gtkcolorsel.c:561
+#: ../gtk/gtkcolorsel.c:550
 msgid ""
 "The previously-selected color, for comparison to the color you're selecting "
 "now. You can drag this color to a palette entry, or select this color as "
@@ -1266,7 +1281,7 @@ msgstr ""
 "värvi lohistada paletikirjetesse või määrata värvi käesolevaks värviks "
 "lohistades selle kõrvalasuvale värviproovile."
 
-#: ../gtk/gtkcolorsel.c:566
+#: ../gtk/gtkcolorsel.c:554
 msgid ""
 "The color you've chosen. You can drag this color to a palette entry to save "
 "it for use in the future."
@@ -1274,11 +1289,11 @@ msgstr ""
 "Sinu poolt valitud värv. Sa saad selle värvi lohistada paletikirjetesse, et "
 "kasutada seda hõlpsasti ka tulevikus."
 
-#: ../gtk/gtkcolorsel.c:954
+#: ../gtk/gtkcolorsel.c:942
 msgid "_Save color here"
 msgstr "_Salvesta värv siia"
 
-#: ../gtk/gtkcolorsel.c:1159
+#: ../gtk/gtkcolorsel.c:1146
 msgid ""
 "Click this palette entry to make it the current color. To change this entry, "
 "drag a color swatch here or right-click it and select \"Save color here.\""
@@ -1287,7 +1302,7 @@ msgstr ""
 "kirje salvestamiseks lohista värviproov siia või vali parema hiireklõpsu alt "
 "\"Salvesta värv siia\"."
 
-#: ../gtk/gtkcolorsel.c:1937
+#: ../gtk/gtkcolorsel.c:1920
 msgid ""
 "Select the color you want from the outer ring. Select the darkness or "
 "lightness of that color using the inner triangle."
@@ -1295,7 +1310,7 @@ msgstr ""
 "Vali oma soovitud värv välimiselt ringilt. Kasutades sisemist kolmnurka, "
 "vali värvi heledus või tumedus."
 
-#: ../gtk/gtkcolorsel.c:1962
+#: ../gtk/gtkcolorsel.c:1944
 msgid ""
 "Click the eyedropper, then click a color anywhere on your screen to select "
 "that color."
@@ -1303,67 +1318,67 @@ msgstr ""
 "Pipeti abil on võimalik valida värvi ekraani suvalisest punktist. Klõpsa "
 "pipetil ja siis klõpsa soovitud värvil."
 
-#: ../gtk/gtkcolorsel.c:1971
+#: ../gtk/gtkcolorsel.c:1953
 msgid "_Hue:"
 msgstr "_Toon:"
 
-#: ../gtk/gtkcolorsel.c:1972
+#: ../gtk/gtkcolorsel.c:1954
 msgid "Position on the color wheel."
 msgstr "Asukoht värviringil."
 
-#: ../gtk/gtkcolorsel.c:1974
+#: ../gtk/gtkcolorsel.c:1956
 msgid "_Saturation:"
 msgstr "_Küllastus:"
 
-#: ../gtk/gtkcolorsel.c:1975
+#: ../gtk/gtkcolorsel.c:1957
 msgid "\"Deepness\" of the color."
 msgstr "Värvi \"sügavus\"."
 
-#: ../gtk/gtkcolorsel.c:1976
+#: ../gtk/gtkcolorsel.c:1958
 msgid "_Value:"
 msgstr "_Heledus:"
 
-#: ../gtk/gtkcolorsel.c:1977
+#: ../gtk/gtkcolorsel.c:1959
 msgid "Brightness of the color."
 msgstr "Värvi heledus."
 
-#: ../gtk/gtkcolorsel.c:1978
+#: ../gtk/gtkcolorsel.c:1960
 msgid "_Red:"
 msgstr "_Punane:"
 
-#: ../gtk/gtkcolorsel.c:1979
+#: ../gtk/gtkcolorsel.c:1961
 msgid "Amount of red light in the color."
 msgstr "Punase valguse kogus värvis."
 
-#: ../gtk/gtkcolorsel.c:1980
+#: ../gtk/gtkcolorsel.c:1962
 msgid "_Green:"
 msgstr "_Roheline:"
 
-#: ../gtk/gtkcolorsel.c:1981
+#: ../gtk/gtkcolorsel.c:1963
 msgid "Amount of green light in the color."
 msgstr "Rohelise valguse kogus värvis."
 
-#: ../gtk/gtkcolorsel.c:1982
+#: ../gtk/gtkcolorsel.c:1964
 msgid "_Blue:"
 msgstr "_Sinine:"
 
-#: ../gtk/gtkcolorsel.c:1983
+#: ../gtk/gtkcolorsel.c:1965
 msgid "Amount of blue light in the color."
 msgstr "Sinise valguse kogus värvis."
 
-#: ../gtk/gtkcolorsel.c:1986
+#: ../gtk/gtkcolorsel.c:1968
 msgid "Op_acity:"
 msgstr "Kat_vus:"
 
-#: ../gtk/gtkcolorsel.c:1994 ../gtk/gtkcolorsel.c:2005
+#: ../gtk/gtkcolorsel.c:1975 ../gtk/gtkcolorsel.c:1985
 msgid "Transparency of the color."
 msgstr "Värvi läbipaistvus."
 
-#: ../gtk/gtkcolorsel.c:2012
+#: ../gtk/gtkcolorsel.c:1992
 msgid "Color _name:"
 msgstr "Värvi _nimi:"
 
-#: ../gtk/gtkcolorsel.c:2027
+#: ../gtk/gtkcolorsel.c:2006
 msgid ""
 "You can enter an HTML-style hexadecimal color value, or simply a color name "
 "such as 'orange' in this entry."
@@ -1371,11 +1386,11 @@ msgstr ""
 "Siia võid sisestada HTML-stiilis kuueteistkümnendarvuna värvi väärtuse, või "
 "värvi inglisekeelse nimetuse (näiteks 'orange')."
 
-#: ../gtk/gtkcolorsel.c:2057
+#: ../gtk/gtkcolorsel.c:2036
 msgid "_Palette:"
 msgstr "Pal_ett:"
 
-#: ../gtk/gtkcolorsel.c:2086
+#: ../gtk/gtkcolorsel.c:2065
 msgid "Color Wheel"
 msgstr "Värviratas"
 
@@ -1463,165 +1478,165 @@ msgstr "Otsing"
 msgid "Recently Used"
 msgstr "Viimati kasutatud"
 
-#: ../gtk/gtkfilechooserdefault.c:3006
+#: ../gtk/gtkfilechooserdefault.c:2581
+msgid "Select which types of files are shown"
+msgstr "Vali, milliseid failitüüpe näidata"
+
+#: ../gtk/gtkfilechooserdefault.c:3009
 #, c-format
 msgid "Add the folder '%s' to the bookmarks"
 msgstr "Kataloogi '%s' lisamine järjehoidjatesse"
 
-#: ../gtk/gtkfilechooserdefault.c:3047
+#: ../gtk/gtkfilechooserdefault.c:3050
 msgid "Add the current folder to the bookmarks"
 msgstr "Käesoleva kataloogi lisamine järjehoidjatesse"
 
-#: ../gtk/gtkfilechooserdefault.c:3049
+#: ../gtk/gtkfilechooserdefault.c:3052
 msgid "Add the selected folders to the bookmarks"
 msgstr "Valitud kataloogide lisamine järjehoidjatesse"
 
-#: ../gtk/gtkfilechooserdefault.c:3089
+#: ../gtk/gtkfilechooserdefault.c:3092
 #, c-format
 msgid "Remove the bookmark '%s'"
 msgstr "Järjehoidja '%s' eemaldamine"
 
-#: ../gtk/gtkfilechooserdefault.c:3522
+#: ../gtk/gtkfilechooserdefault.c:3524
 #, c-format
 msgid "Could not add a bookmark for '%s' because it is an invalid path name."
 msgstr "Järjehoidjat '%s' pole võimalik lisada kuna selle rajanimi on vigane."
 
-#: ../gtk/gtkfilechooserdefault.c:3747
+#: ../gtk/gtkfilechooserdefault.c:3749
 msgid "Remove"
 msgstr "Eemalda"
 
-#: ../gtk/gtkfilechooserdefault.c:3756
+#: ../gtk/gtkfilechooserdefault.c:3758
 msgid "Rename..."
 msgstr "Muuda nime..."
 
 #. Accessible object name for the file chooser's shortcuts pane
-#: ../gtk/gtkfilechooserdefault.c:3898
+#: ../gtk/gtkfilechooserdefault.c:3900
 msgid "Places"
 msgstr "Asukohad"
 
 #. Column header for the file chooser's shortcuts pane
-#: ../gtk/gtkfilechooserdefault.c:3952
+#: ../gtk/gtkfilechooserdefault.c:3954
 msgid "_Places"
 msgstr "As_ukohad"
 
-#: ../gtk/gtkfilechooserdefault.c:4007 ../gtk/gtkstock.c:297
+#: ../gtk/gtkfilechooserdefault.c:4009 ../gtk/gtkstock.c:297
 msgid "_Add"
 msgstr "L_isa"
 
-#: ../gtk/gtkfilechooserdefault.c:4014
+#: ../gtk/gtkfilechooserdefault.c:4016
 msgid "Add the selected folder to the Bookmarks"
 msgstr "Valitud kataloogi lisamine järjehoidjate hulka"
 
-#: ../gtk/gtkfilechooserdefault.c:4019 ../gtk/gtkstock.c:385
+#: ../gtk/gtkfilechooserdefault.c:4021 ../gtk/gtkstock.c:385
 msgid "_Remove"
 msgstr "_Eemalda"
 
-#: ../gtk/gtkfilechooserdefault.c:4026
+#: ../gtk/gtkfilechooserdefault.c:4028
 msgid "Remove the selected bookmark"
 msgstr "Eemalda valitud järjehoidja"
 
-#: ../gtk/gtkfilechooserdefault.c:4122
+#: ../gtk/gtkfilechooserdefault.c:4124
 msgid "Could not select file"
 msgstr "Faili pole võimalik valida"
 
-#: ../gtk/gtkfilechooserdefault.c:4259
+#: ../gtk/gtkfilechooserdefault.c:4261
 #, c-format
 msgid "Could not select file '%s' because it is an invalid path name."
 msgstr "Faili '%s' pole võimalik lisada kuna selle rajanimi on vigane."
 
-#: ../gtk/gtkfilechooserdefault.c:4316
+#: ../gtk/gtkfilechooserdefault.c:4318
 msgid "_Add to Bookmarks"
 msgstr "_Lisa järjehoidjatesse"
 
-#: ../gtk/gtkfilechooserdefault.c:4330
+#: ../gtk/gtkfilechooserdefault.c:4332
 msgid "Show _Hidden Files"
 msgstr "Näita _peidetud faile"
 
-#: ../gtk/gtkfilechooserdefault.c:4574 ../gtk/gtkfilesel.c:729
+#: ../gtk/gtkfilechooserdefault.c:4576 ../gtk/gtkfilesel.c:729
 msgid "Files"
 msgstr "Failid"
 
-#: ../gtk/gtkfilechooserdefault.c:4623
+#: ../gtk/gtkfilechooserdefault.c:4625
 msgid "Name"
 msgstr "Nimi"
 
-#: ../gtk/gtkfilechooserdefault.c:4648
+#: ../gtk/gtkfilechooserdefault.c:4650
 msgid "Size"
 msgstr "Suurus"
 
-#: ../gtk/gtkfilechooserdefault.c:4662
+#: ../gtk/gtkfilechooserdefault.c:4664
 msgid "Modified"
 msgstr "Muudetud"
 
-#: ../gtk/gtkfilechooserdefault.c:4697
-msgid "Select which types of files are shown"
-msgstr "Vali, milliseid failitüüpe näidata"
-
 #. Label
-#: ../gtk/gtkfilechooserdefault.c:4908 ../gtk/gtkprinteroptionwidget.c:786
+#: ../gtk/gtkfilechooserdefault.c:4884 ../gtk/gtkprinteroptionwidget.c:786
 msgid "_Name:"
 msgstr "_Nimi:"
 
-#: ../gtk/gtkfilechooserdefault.c:4950
+#: ../gtk/gtkfilechooserdefault.c:4926
 msgid "_Browse for other folders"
 msgstr "Si_rvi teisi katalooge"
 
-#: ../gtk/gtkfilechooserdefault.c:5205
+#: ../gtk/gtkfilechooserdefault.c:5181
 msgid "Type a file name"
 msgstr "Sisesta failinimi"
 
 #. Create Folder
-#: ../gtk/gtkfilechooserdefault.c:5242
+#: ../gtk/gtkfilechooserdefault.c:5218
 msgid "Create Fo_lder"
 msgstr "Loo _kataloog"
 
-#: ../gtk/gtkfilechooserdefault.c:5252
+#: ../gtk/gtkfilechooserdefault.c:5228
 msgid "_Location:"
 msgstr "Asuk_oht:"
 
-#: ../gtk/gtkfilechooserdefault.c:5490
+#: ../gtk/gtkfilechooserdefault.c:5466
 msgid "Save in _folder:"
 msgstr "Salvestada _kataloogi:"
 
-#: ../gtk/gtkfilechooserdefault.c:5492
+#: ../gtk/gtkfilechooserdefault.c:5468
 msgid "Create in _folder:"
 msgstr "Loo _kataloogi:"
 
-#: ../gtk/gtkfilechooserdefault.c:7095
+#: ../gtk/gtkfilechooserdefault.c:7071
 msgid "Cannot change to folder because it is not local"
 msgstr "Kataloogi pole võimalik muuta kuna see pole kohalik kataloog"
 
-#: ../gtk/gtkfilechooserdefault.c:7711 ../gtk/gtkfilechooserdefault.c:7732
+#: ../gtk/gtkfilechooserdefault.c:7687 ../gtk/gtkfilechooserdefault.c:7708
 #, c-format
 msgid "Shortcut %s already exists"
 msgstr "Kiirklahv %s on juba olemas"
 
-#: ../gtk/gtkfilechooserdefault.c:7822
+#: ../gtk/gtkfilechooserdefault.c:7798
 #, c-format
 msgid "Shortcut %s does not exist"
 msgstr "Kiirklahvi %s pole olemas"
 
-#: ../gtk/gtkfilechooserdefault.c:8077
+#: ../gtk/gtkfilechooserdefault.c:8053
 #, c-format
 msgid "A file named \"%s\" already exists.  Do you want to replace it?"
 msgstr "Fail nimega \"%s\" on juba olemas.  Kas sa soovid seda asendada?"
 
-#: ../gtk/gtkfilechooserdefault.c:8080
+#: ../gtk/gtkfilechooserdefault.c:8056
 #, c-format
 msgid ""
 "The file already exists in \"%s\".  Replacing it will overwrite its contents."
 msgstr ""
 "Fail on juba \"%s\" all olemas.  Asendamine kirjutab selle faili sisu üle."
 
-#: ../gtk/gtkfilechooserdefault.c:8085
+#: ../gtk/gtkfilechooserdefault.c:8061
 msgid "_Replace"
 msgstr "_Asenda"
 
-#: ../gtk/gtkfilechooserdefault.c:8916
+#: ../gtk/gtkfilechooserdefault.c:8892
 msgid "Could not start the search process"
 msgstr "Otsinguprotsessi pole võimalik alustada"
 
-#: ../gtk/gtkfilechooserdefault.c:8917
+#: ../gtk/gtkfilechooserdefault.c:8893
 msgid ""
 "The program was not able to create a connection to the indexer daemon.  "
 "Please make sure it is running."
@@ -1629,56 +1644,56 @@ msgstr ""
 "Programmil pole võimalik indekseerimisdeemoniga ühendust luua. Palun veendu, "
 "et see deemon töötaks."
 
-#: ../gtk/gtkfilechooserdefault.c:8931
+#: ../gtk/gtkfilechooserdefault.c:8907
 msgid "Could not send the search request"
 msgstr "Otsingupäringut pole võimalik saata"
 
 #. Label
-#: ../gtk/gtkfilechooserdefault.c:9357
+#: ../gtk/gtkfilechooserdefault.c:9333
 msgid "_Search:"
 msgstr "_Otsing:"
 
-#: ../gtk/gtkfilechooserdefault.c:10307
+#: ../gtk/gtkfilechooserdefault.c:10283
 #, c-format
 msgid "Could not mount %s"
 msgstr "%s pole võimalik ühendada"
 
-#: ../gtk/gtkfilechooserdefault.c:10935
+#: ../gtk/gtkfilechooserdefault.c:10911
 msgid "Type name of new folder"
 msgstr "Sisesta uue kataloogi nimi"
 
-#: ../gtk/gtkfilechooserdefault.c:10983
+#: ../gtk/gtkfilechooserdefault.c:10959
 #, c-format
 msgid "%d byte"
 msgid_plural "%d bytes"
 msgstr[0] "%d bait"
 msgstr[1] "%d baiti"
 
-#: ../gtk/gtkfilechooserdefault.c:10985
+#: ../gtk/gtkfilechooserdefault.c:10961
 #, c-format
 msgid "%.1f KB"
 msgstr "%.1f KB"
 
-#: ../gtk/gtkfilechooserdefault.c:10987
+#: ../gtk/gtkfilechooserdefault.c:10963
 #, c-format
 msgid "%.1f MB"
 msgstr "%.1f MB"
 
-#: ../gtk/gtkfilechooserdefault.c:10989
+#: ../gtk/gtkfilechooserdefault.c:10965
 #, c-format
 msgid "%.1f GB"
 msgstr "%.1f GB"
 
-#: ../gtk/gtkfilechooserdefault.c:11085 ../gtk/gtkfilechooserdefault.c:11106
-#: ../gtk/gtkfilechooserdefault.c:11138
+#: ../gtk/gtkfilechooserdefault.c:11061 ../gtk/gtkfilechooserdefault.c:11082
+#: ../gtk/gtkfilechooserdefault.c:11114
 msgid "Unknown"
 msgstr "tundmatu"
 
-#: ../gtk/gtkfilechooserdefault.c:11124
+#: ../gtk/gtkfilechooserdefault.c:11100
 msgid "Today at %H:%M"
 msgstr "Täna kell %H:%M"
 
-#: ../gtk/gtkfilechooserdefault.c:11126
+#: ../gtk/gtkfilechooserdefault.c:11102
 msgid "Yesterday at %H:%M"
 msgstr "Eile kell %H:%M"
 
@@ -2125,11 +2140,11 @@ msgstr ""
 #. * Do *not* translate it to "predefinito:mm", if it
 #. * it isn't default:mm or default:inch it will not work
 #.
-#: ../gtk/gtkpagesetupunixdialog.c:154
+#: ../gtk/gtkpagesetupunixdialog.c:152
 msgid "default:mm"
 msgstr "default:mm"
 
-#: ../gtk/gtkpagesetupunixdialog.c:310
+#: ../gtk/gtkpagesetupunixdialog.c:308
 msgid ""
 "<b>Any Printer</b>\n"
 "For portable documents"
@@ -2137,15 +2152,15 @@ msgstr ""
 "<b>Iga printer</b>\n"
 "Portaablitele dokumentidele"
 
-#: ../gtk/gtkpagesetupunixdialog.c:885 ../gtk/gtkpagesetupunixdialog.c:1401
+#: ../gtk/gtkpagesetupunixdialog.c:883 ../gtk/gtkpagesetupunixdialog.c:1395
 msgid "mm"
 msgstr "mm"
 
-#: ../gtk/gtkpagesetupunixdialog.c:887 ../gtk/gtkpagesetupunixdialog.c:1399
+#: ../gtk/gtkpagesetupunixdialog.c:885 ../gtk/gtkpagesetupunixdialog.c:1393
 msgid "inch"
 msgstr "tolli"
 
-#: ../gtk/gtkpagesetupunixdialog.c:906
+#: ../gtk/gtkpagesetupunixdialog.c:904
 #, c-format
 msgid ""
 "Margins:\n"
@@ -2160,68 +2175,68 @@ msgstr ""
 " Ülemine: %s %s\n"
 " Alumine: %s %s"
 
-#: ../gtk/gtkpagesetupunixdialog.c:957
+#: ../gtk/gtkpagesetupunixdialog.c:953
 msgid "Manage Custom Sizes..."
 msgstr "Kohandatud suuruste haldamine..."
 
-#: ../gtk/gtkpagesetupunixdialog.c:1005
+#: ../gtk/gtkpagesetupunixdialog.c:1001
 msgid "_Format for:"
 msgstr "Millele _vormindatakse:"
 
-#: ../gtk/gtkpagesetupunixdialog.c:1026
+#: ../gtk/gtkpagesetupunixdialog.c:1022
 msgid "_Paper size:"
 msgstr "_Paberi suurus:"
 
-#: ../gtk/gtkpagesetupunixdialog.c:1062
+#: ../gtk/gtkpagesetupunixdialog.c:1058
 msgid "_Orientation:"
 msgstr "_Suund:"
 
-#: ../gtk/gtkpagesetupunixdialog.c:1127 ../gtk/gtkprintunixdialog.c:2156
+#: ../gtk/gtkpagesetupunixdialog.c:1121 ../gtk/gtkprintunixdialog.c:2145
 msgid "Page Setup"
 msgstr "Lehekülje sätted"
 
-#: ../gtk/gtkpagesetupunixdialog.c:1446
+#: ../gtk/gtkpagesetupunixdialog.c:1440
 msgid "Margins from Printer..."
 msgstr "Veerised printerist..."
 
-#: ../gtk/gtkpagesetupunixdialog.c:1606
+#: ../gtk/gtkpagesetupunixdialog.c:1600
 #, c-format
 msgid "Custom Size %d"
 msgstr "Kohandatud suurus %d"
 
-#: ../gtk/gtkpagesetupunixdialog.c:1835
+#: ../gtk/gtkpagesetupunixdialog.c:1829
 msgid "Manage Custom Sizes"
 msgstr "Kohandatud suuruste haldamine"
 
-#: ../gtk/gtkpagesetupunixdialog.c:1931
+#: ../gtk/gtkpagesetupunixdialog.c:1925
 msgid "_Width:"
 msgstr "La_ius:"
 
-#: ../gtk/gtkpagesetupunixdialog.c:1943
+#: ../gtk/gtkpagesetupunixdialog.c:1937
 msgid "_Height:"
 msgstr "Kõr_gus:"
 
-#: ../gtk/gtkpagesetupunixdialog.c:1955
+#: ../gtk/gtkpagesetupunixdialog.c:1949
 msgid "Paper Size"
 msgstr "Paberi suurus"
 
-#: ../gtk/gtkpagesetupunixdialog.c:1965
+#: ../gtk/gtkpagesetupunixdialog.c:1959
 msgid "_Top:"
 msgstr "_Ülemine:"
 
-#: ../gtk/gtkpagesetupunixdialog.c:1977
+#: ../gtk/gtkpagesetupunixdialog.c:1971
 msgid "_Bottom:"
 msgstr "_Alumine:"
 
-#: ../gtk/gtkpagesetupunixdialog.c:1989
+#: ../gtk/gtkpagesetupunixdialog.c:1983
 msgid "_Left:"
 msgstr "_Vasak:"
 
-#: ../gtk/gtkpagesetupunixdialog.c:2001
+#: ../gtk/gtkpagesetupunixdialog.c:1995
 msgid "_Right:"
 msgstr "_Parem:"
 
-#: ../gtk/gtkpagesetupunixdialog.c:2042
+#: ../gtk/gtkpagesetupunixdialog.c:2036
 msgid "Paper Margins"
 msgstr "Paberi veerised"
 
@@ -2370,176 +2385,176 @@ msgstr "Kirjeldamata viga"
 msgid "Error from StartDoc"
 msgstr "Viga StartDoc'ist"
 
-#: ../gtk/gtkprintunixdialog.c:1485
+#: ../gtk/gtkprintunixdialog.c:1474
 msgid "Printer"
 msgstr "Printer"
 
-#: ../gtk/gtkprintunixdialog.c:1493 ../gtk/gtkrecentchooserdefault.c:1005
+#: ../gtk/gtkprintunixdialog.c:1482
 msgid "Location"
 msgstr "Asukoht"
 
-#: ../gtk/gtkprintunixdialog.c:1502
+#: ../gtk/gtkprintunixdialog.c:1491
 msgid "Status"
 msgstr "Olek"
 
-#: ../gtk/gtkprintunixdialog.c:1524
+#: ../gtk/gtkprintunixdialog.c:1513
 msgid "Print Pages"
 msgstr "Prinditakse leheküljed"
 
-#: ../gtk/gtkprintunixdialog.c:1528
+#: ../gtk/gtkprintunixdialog.c:1517
 msgid "_All"
 msgstr "_Kõik"
 
-#: ../gtk/gtkprintunixdialog.c:1535
+#: ../gtk/gtkprintunixdialog.c:1524
 msgid "C_urrent"
 msgstr "Kä_esolev"
 
-#: ../gtk/gtkprintunixdialog.c:1544
+#: ../gtk/gtkprintunixdialog.c:1533
 msgid "Ra_nge"
 msgstr "Va_hemik"
 
-#: ../gtk/gtkprintunixdialog.c:1545
+#: ../gtk/gtkprintunixdialog.c:1534
 msgid ""
 "Specify one or more page ranges,\n"
 " e.g. 1-3,7,11"
 msgstr ""
 
-#: ../gtk/gtkprintunixdialog.c:1564
+#: ../gtk/gtkprintunixdialog.c:1553
 msgid "Copies"
 msgstr "Koopiad"
 
 #. FIXME chpe: too much space between Copies and spinbutton, put those 2 in a hbox and make it span 2 columns
-#: ../gtk/gtkprintunixdialog.c:1569
+#: ../gtk/gtkprintunixdialog.c:1558
 msgid "Copie_s:"
 msgstr "Koop_iaid:"
 
-#: ../gtk/gtkprintunixdialog.c:1587
+#: ../gtk/gtkprintunixdialog.c:1576
 msgid "C_ollate"
 msgstr "_Eksemplarhaaval"
 
-#: ../gtk/gtkprintunixdialog.c:1595
+#: ../gtk/gtkprintunixdialog.c:1584
 msgid "_Reverse"
 msgstr "Pöö_ratud järjestuses"
 
-#: ../gtk/gtkprintunixdialog.c:1612
+#: ../gtk/gtkprintunixdialog.c:1601
 msgid "General"
 msgstr "Üldine"
 
-#: ../gtk/gtkprintunixdialog.c:2012
+#: ../gtk/gtkprintunixdialog.c:2001
 msgid "Layout"
 msgstr "Paigutus"
 
-#: ../gtk/gtkprintunixdialog.c:2016
+#: ../gtk/gtkprintunixdialog.c:2005
 msgid "Pages per _side:"
 msgstr "Le_hekülgi slaidil:"
 
 # msgstr "Le_hekülgi lehel:"
-#: ../gtk/gtkprintunixdialog.c:2032
+#: ../gtk/gtkprintunixdialog.c:2021
 msgid "T_wo-sided:"
 msgstr "Kahe_poolne:"
 
-#: ../gtk/gtkprintunixdialog.c:2047
+#: ../gtk/gtkprintunixdialog.c:2036
 msgid "_Only print:"
 msgstr "Prindita_kse ainult:"
 
 #. In enum order
-#: ../gtk/gtkprintunixdialog.c:2062
+#: ../gtk/gtkprintunixdialog.c:2051
 msgid "All sheets"
 msgstr "Kõik leheküljed"
 
-#: ../gtk/gtkprintunixdialog.c:2063
+#: ../gtk/gtkprintunixdialog.c:2052
 msgid "Even sheets"
 msgstr "Paarisnumbriga leheküljed"
 
-#: ../gtk/gtkprintunixdialog.c:2064
+#: ../gtk/gtkprintunixdialog.c:2053
 msgid "Odd sheets"
 msgstr "Paaritu numbriga leheküljed"
 
-#: ../gtk/gtkprintunixdialog.c:2067
+#: ../gtk/gtkprintunixdialog.c:2056
 msgid "Sc_ale:"
 msgstr "_Skaleerimine:"
 
-#: ../gtk/gtkprintunixdialog.c:2094
+#: ../gtk/gtkprintunixdialog.c:2083
 msgid "Paper"
 msgstr "Paber"
 
-#: ../gtk/gtkprintunixdialog.c:2098
+#: ../gtk/gtkprintunixdialog.c:2087
 msgid "Paper _type:"
 msgstr "Pa_beri liik:"
 
-#: ../gtk/gtkprintunixdialog.c:2113
+#: ../gtk/gtkprintunixdialog.c:2102
 msgid "Paper _source:"
 msgstr "Paberi _allikas:"
 
-#: ../gtk/gtkprintunixdialog.c:2128
+#: ../gtk/gtkprintunixdialog.c:2117
 msgid "Output t_ray:"
 msgstr "_Väljundsalv:"
 
-#: ../gtk/gtkprintunixdialog.c:2179
+#: ../gtk/gtkprintunixdialog.c:2168
 msgid "Job Details"
 msgstr "Töö üksikasjad"
 
-#: ../gtk/gtkprintunixdialog.c:2185
+#: ../gtk/gtkprintunixdialog.c:2174
 msgid "Pri_ority:"
 msgstr "Tä_htsus:"
 
-#: ../gtk/gtkprintunixdialog.c:2200
+#: ../gtk/gtkprintunixdialog.c:2189
 msgid "_Billing info:"
 msgstr "_Maksmise andmed:"
 
-#: ../gtk/gtkprintunixdialog.c:2218
+#: ../gtk/gtkprintunixdialog.c:2207
 msgid "Print Document"
 msgstr "Dokumenti printimine"
 
-#: ../gtk/gtkprintunixdialog.c:2224
+#: ../gtk/gtkprintunixdialog.c:2213
 msgid "_Now"
 msgstr "_Nüüd"
 
-#: ../gtk/gtkprintunixdialog.c:2231
+#: ../gtk/gtkprintunixdialog.c:2220
 msgid "A_t:"
 msgstr "A_jal:"
 
-#: ../gtk/gtkprintunixdialog.c:2246
+#: ../gtk/gtkprintunixdialog.c:2235
 msgid "On _hold"
 msgstr ""
 
-#: ../gtk/gtkprintunixdialog.c:2265
+#: ../gtk/gtkprintunixdialog.c:2254
 msgid "Add Cover Page"
 msgstr "Esilehe lisamine"
 
-#: ../gtk/gtkprintunixdialog.c:2271
+#: ../gtk/gtkprintunixdialog.c:2260
 msgid "Be_fore:"
 msgstr "_Enne:"
 
-#: ../gtk/gtkprintunixdialog.c:2286
+#: ../gtk/gtkprintunixdialog.c:2275
 msgid "_After:"
 msgstr "_Pärast:"
 
-#: ../gtk/gtkprintunixdialog.c:2301
+#: ../gtk/gtkprintunixdialog.c:2290
 msgid "Job"
 msgstr "Töö"
 
-#: ../gtk/gtkprintunixdialog.c:2367
+#: ../gtk/gtkprintunixdialog.c:2356
 msgid "Advanced"
 msgstr "Laiendatud"
 
-#: ../gtk/gtkprintunixdialog.c:2402
+#: ../gtk/gtkprintunixdialog.c:2391
 msgid "Image Quality"
 msgstr "Pildikvaliteet"
 
-#: ../gtk/gtkprintunixdialog.c:2405
+#: ../gtk/gtkprintunixdialog.c:2394
 msgid "Color"
 msgstr "Värv"
 
-#: ../gtk/gtkprintunixdialog.c:2408
+#: ../gtk/gtkprintunixdialog.c:2397
 msgid "Finishing"
 msgstr "Lõpetamine"
 
-#: ../gtk/gtkprintunixdialog.c:2418
+#: ../gtk/gtkprintunixdialog.c:2407
 msgid "Some of the settings in the dialog conflict"
 msgstr "Selle dialoogi mõned sätted on omavahel vastuolus"
 
-#: ../gtk/gtkprintunixdialog.c:2441
+#: ../gtk/gtkprintunixdialog.c:2430
 msgid "Print"
 msgstr "Prindi"
 
@@ -2562,45 +2577,45 @@ msgid "Unable to locate image file in pixmap_path: \"%s\""
 msgstr "Ei leia pildifaili otsingurajalt 'pixmap_path': \"%s\""
 
 #: ../gtk/gtkrecentaction.c:155 ../gtk/gtkrecentaction.c:163
-#: ../gtk/gtkrecentchoosermenu.c:567 ../gtk/gtkrecentchoosermenu.c:575
+#: ../gtk/gtkrecentchoosermenu.c:555 ../gtk/gtkrecentchoosermenu.c:563
 #, c-format
 msgid "This function is not implemented for widgets of class '%s'"
 msgstr "See funktsioon pole vidinate klassis '%s' teostatud"
 
-#: ../gtk/gtkrecentchooserdefault.c:459
+#: ../gtk/gtkrecentchooserdefault.c:465
 msgid "Select which type of documents are shown"
 msgstr "Vali, milliseid dokumendiliike näidata"
 
-#: ../gtk/gtkrecentchooserdefault.c:1124 ../gtk/gtkrecentchooserdefault.c:1161
+#: ../gtk/gtkrecentchooserdefault.c:1107 ../gtk/gtkrecentchooserdefault.c:1144
 #, c-format
 msgid "No item for URI '%s' found"
 msgstr "'%s' URI jaoks ei leitud kirjet"
 
-#: ../gtk/gtkrecentchooserdefault.c:1288
+#: ../gtk/gtkrecentchooserdefault.c:1271
 msgid "Untitled filter"
 msgstr "Pealkirjata filter"
 
-#: ../gtk/gtkrecentchooserdefault.c:1596
+#: ../gtk/gtkrecentchooserdefault.c:1626
 msgid "Could not remove item"
 msgstr "Kirjet pole võimalik eemaldada"
 
-#: ../gtk/gtkrecentchooserdefault.c:1639
+#: ../gtk/gtkrecentchooserdefault.c:1669
 msgid "Could not clear list"
 msgstr "Loendit pole võimalik tühjendada"
 
-#: ../gtk/gtkrecentchooserdefault.c:1723
+#: ../gtk/gtkrecentchooserdefault.c:1753
 msgid "Copy _Location"
 msgstr "Kopeeri _asukoht"
 
-#: ../gtk/gtkrecentchooserdefault.c:1736
+#: ../gtk/gtkrecentchooserdefault.c:1766
 msgid "_Remove From List"
 msgstr "_Eemalda loetelust"
 
-#: ../gtk/gtkrecentchooserdefault.c:1745
+#: ../gtk/gtkrecentchooserdefault.c:1775
 msgid "_Clear List"
 msgstr "_Tühjenda loend"
 
-#: ../gtk/gtkrecentchooserdefault.c:1759
+#: ../gtk/gtkrecentchooserdefault.c:1789
 msgid "Show _Private Resources"
 msgstr "Näita _privaatressursse"
 
@@ -2614,21 +2629,21 @@ msgstr "Näita _privaatressursse"
 #. * user appended or prepended custom menu items to the
 #. * recent chooser menu widget.
 #.
-#: ../gtk/gtkrecentchoosermenu.c:332
+#: ../gtk/gtkrecentchoosermenu.c:320
 msgid "No items found"
 msgstr "Kirjeid ei leitud"
 
-#: ../gtk/gtkrecentchoosermenu.c:487 ../gtk/gtkrecentchoosermenu.c:543
+#: ../gtk/gtkrecentchoosermenu.c:475 ../gtk/gtkrecentchoosermenu.c:531
 #, c-format
 msgid "No recently used resource found with URI `%s'"
 msgstr "URI-ga `%s' ei leitud viimati kasutatud ressurssi"
 
-#: ../gtk/gtkrecentchoosermenu.c:757
+#: ../gtk/gtkrecentchoosermenu.c:742
 #, c-format
 msgid "Open '%s'"
 msgstr "'%s' avamine"
 
-#: ../gtk/gtkrecentchoosermenu.c:789
+#: ../gtk/gtkrecentchoosermenu.c:772
 msgid "Unknown item"
 msgstr "Tundmatu kirje"
 
@@ -2639,7 +2654,7 @@ msgstr "Tundmatu kirje"
 #. *
 #. * Don't include the prefix "recent menu label|" in the translation.
 #.
-#: ../gtk/gtkrecentchoosermenu.c:802
+#: ../gtk/gtkrecentchoosermenu.c:785
 #, c-format
 msgid "recent menu label|_%d. %s"
 msgstr "_%d. %s"
@@ -2649,7 +2664,7 @@ msgstr "_%d. %s"
 #. *
 #. * Don't include the prefix "recent menu label|" in the translation.
 #.
-#: ../gtk/gtkrecentchoosermenu.c:809
+#: ../gtk/gtkrecentchoosermenu.c:792
 #, c-format
 msgid "recent menu label|%d. %s"
 msgstr "%d. %s"
@@ -3062,7 +3077,7 @@ msgstr "<%s> kirjes leidub nii \"id\" kui ka \"name\""
 #: ../gtk/gtktextbufferserialize.c:806 ../gtk/gtktextbufferserialize.c:832
 #, c-format
 msgid "The attribute \"%s\" was found twice on the <%s> element"
-msgstr "\"%s\" atribuuti on <%s> kirjes kaks korda"
+msgstr "\"%s\" rekvisiiti on <%s> kirjes kaks korda"
 
 #: ../gtk/gtktextbufferserialize.c:846
 #, c-format
@@ -3072,17 +3087,17 @@ msgstr "<%s> kirjel on vigane id \"%s\""
 #: ../gtk/gtktextbufferserialize.c:856
 #, c-format
 msgid "<%s> element has neither a \"name\" nor an \"id\" attribute"
-msgstr ""
+msgstr "<%s> kirjel puuduvad nii \"name\" kui ka \"id\" rekvisiidid"
 
 #: ../gtk/gtktextbufferserialize.c:943
 #, c-format
 msgid "Attribute \"%s\" repeated twice on the same <%s> element"
-msgstr ""
+msgstr "Rekvisiiti \"%s\" korratakse kaks korda samas <%s> kirjes"
 
 #: ../gtk/gtktextbufferserialize.c:961 ../gtk/gtktextbufferserialize.c:986
 #, c-format
 msgid "Attribute \"%s\" is invalid on <%s> element in this context"
-msgstr ""
+msgstr "Rekvisiit \"%s\" on selle konteksti korral <%s> kirjes vigane"
 
 #: ../gtk/gtktextbufferserialize.c:1022
 #, c-format
@@ -3138,7 +3153,7 @@ msgstr "Sildil \"%s\" on vigane tähtsus \"%s\""
 #: ../gtk/gtktextbufferserialize.c:1349
 #, c-format
 msgid "Outermost element in text must be <text_view_markup> not <%s>"
-msgstr ""
+msgstr "Teksti kõige välisem kirje peab olema <text_view_markup>, mitte <%s>"
 
 #: ../gtk/gtktextbufferserialize.c:1358 ../gtk/gtktextbufferserialize.c:1374
 #, c-format
@@ -3960,10 +3975,10 @@ msgstr ""
 msgid "paper size|Super B"
 msgstr ""
 
-#. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:287
-msgid "paper size|Wide Format"
-msgstr "Laiformaat"
+##. translators, strip everything up to the first |
+##: ../gtk/paper_names_offsets.c:287
+#msgid "paper size|Wide Format"
+#msgstr "Laiformaat"
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:289
@@ -4023,7 +4038,7 @@ msgstr "prc10-ümbrik"
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:311
 msgid "paper size|prc 16k"
-msgstr ""
+msgstr "prc 16k"
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:313
@@ -4038,7 +4053,7 @@ msgstr "prc3-ümbrik"
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:317
 msgid "paper size|prc 32k"
-msgstr ""
+msgstr "prc 32k"
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:319
@@ -4068,12 +4083,12 @@ msgstr "prc8-ümbrik"
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:329
 msgid "paper size|ROC 16k"
-msgstr ""
+msgstr "ROC 16k"
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:331
 msgid "paper size|ROC 8k"
-msgstr ""
+msgstr "ROC 8k"
 
 #: ../gtk/updateiconcache.c:498 ../gtk/updateiconcache.c:558
 #, c-format
@@ -4201,7 +4216,7 @@ msgstr ""
 #. ID
 #: ../modules/input/imthai.c:35
 msgid "Thai-Lao"
-msgstr ""
+msgstr "Tai-Laose"
 
 #. ID
 #: ../modules/input/imti-er.c:453
@@ -4306,33 +4321,33 @@ msgid "Custom %.2fx%.2f"
 msgstr "Kohandatud %.2fx%.2f"
 
 #. default filename used for print-to-file
-#: ../modules/printbackends/file/gtkprintbackendfile.c:235
+#: ../modules/printbackends/file/gtkprintbackendfile.c:236
 #, c-format
 msgid "output.%s"
 msgstr "väljund.%s"
 
-#: ../modules/printbackends/file/gtkprintbackendfile.c:464
+#: ../modules/printbackends/file/gtkprintbackendfile.c:465
 msgid "Print to File"
 msgstr "Printimine faili"
 
-#: ../modules/printbackends/file/gtkprintbackendfile.c:489
+#: ../modules/printbackends/file/gtkprintbackendfile.c:542
 msgid "PDF"
 msgstr "PDF"
 
-#: ../modules/printbackends/file/gtkprintbackendfile.c:489
+#: ../modules/printbackends/file/gtkprintbackendfile.c:542
 msgid "Postscript"
 msgstr "Postscript"
 
-#: ../modules/printbackends/file/gtkprintbackendfile.c:501
+#: ../modules/printbackends/file/gtkprintbackendfile.c:554
 #: ../modules/printbackends/test/gtkprintbackendtest.c:501
 msgid "Pages per _sheet:"
 msgstr "Le_hekülgi lehel:"
 
-#: ../modules/printbackends/file/gtkprintbackendfile.c:547
+#: ../modules/printbackends/file/gtkprintbackendfile.c:600
 msgid "File"
 msgstr "Fail"
 
-#: ../modules/printbackends/file/gtkprintbackendfile.c:556
+#: ../modules/printbackends/file/gtkprintbackendfile.c:609
 msgid "_Output format"
 msgstr "_Väljundvorming"
 
