@@ -1,5 +1,9 @@
 2007-08-17  Cody Russell  <bratsche@gnome.org>
 
+	* Renamed README.cvs-commits to README.commits
+
+2007-08-17  Cody Russell  <bratsche@gnome.org>
+
 	* HACKING
 	* README.cvs-commits: Updated documentation about SVN, and
 	updated dependency information.  (#447883, Yesudeep Mangalapilly)
