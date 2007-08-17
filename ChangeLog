@@ -1,3 +1,14 @@
+2007-08-16  Cody Russell  <bratsche@gnome.org>
+
+	Merge from trunk:
+
+	* gdk/win32/xcursors.h: Modified the sb_h_double_arrow and
+	sb_v_double_arrow mouse cursors to match the ones that Windows
+	uses for split container controls.  This allows our paned
+	widgets to be more easily identified as paned widgets on
+	Windows, since we don't have any prelighting on the draggable
+	pane part.  (#458088)
+
 2007-08-15  Cody Russell  <bratsche@gnome.org>
 
 	Merge from trunk:
