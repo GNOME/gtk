@@ -1,3 +1,7 @@
+Fri Aug 17 11:36:29 2007  Tim Janik  <timj@imendio.com>
+
+	* gtk/gtkmenu.c (gtk_menu_popup): Clarified activate_time docs.
+
 2007-08-16  Cody Russell  <bratsche@gnome.org>
 
 	* gdk/win32/cursor.bdf: Committing changes to the source
