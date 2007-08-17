@@ -1,3 +1,9 @@
+2007-08-17  Cody Russell  <bratsche@gnome.org>
+
+	* HACKING
+	* README.cvs-commits: Updated documentation about SVN, and
+	updated dependency information.  (#447883, Yesudeep Mangalapilly)
+
 Fri Aug 17 11:36:29 2007  Tim Janik  <timj@imendio.com>
 
 	* gtk/gtkmenu.c (gtk_menu_popup): Clarified activate_time docs.
