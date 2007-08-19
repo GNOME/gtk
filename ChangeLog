@@ -1,3 +1,8 @@
+2007-08-18  Cody Russell  <bratsche@gnome.org>
+
+	* gtk/gtkimcontextsimple.c: Fixed incorrect compose mapping
+	for capital U with macron. (#468055, Aaron Crane)
+
 2007-08-17  Cody Russell  <bratsche@gnome.org>
 
 	* Renamed README.cvs-commits to README.commits

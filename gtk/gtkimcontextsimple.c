@@ -634,11 +634,11 @@ static const guint16 gtk_compose_seqs[] = {
   GDK_Multi_key,	GDK_U,	GDK_apostrophe,	0,	0,	0x00DA,	/* LATIN_CAPITAL_LETTER_U_WITH_ACUTE */
   GDK_Multi_key,	GDK_U,	GDK_asterisk,	0,	0,	0x016E,	/* LATIN_CAPITAL_LETTER_U_WITH_RING_ABOVE */
   GDK_Multi_key,	GDK_U,	GDK_comma,	0,	0,	0x0172,	/* LATIN_CAPITAL_LETTER_U_WITH_OGONEK */
-  GDK_Multi_key,	GDK_U,	GDK_minus,	0,	0,	0x016B,	/* LATIN_CAPITAL_LETTER_U_WITH_MACRON */
+  GDK_Multi_key,	GDK_U,	GDK_minus,	0,	0,	0x016A,	/* LATIN_CAPITAL_LETTER_U_WITH_MACRON */
   GDK_Multi_key,	GDK_U,	GDK_slash,	0,	0,	0x00B5,	/* MICRO_SIGN */
   GDK_Multi_key,	GDK_U,	GDK_greater,	0,	0,	0x00DB,	/* LATIN_CAPITAL_LETTER_U_WITH_CIRCUMFLEX */
   GDK_Multi_key,	GDK_U,	GDK_asciicircum,	0,	0,	0x00DB,	/* LATIN_CAPITAL_LETTER_U_WITH_CIRCUMFLEX */
-  GDK_Multi_key,	GDK_U,	GDK_underscore,	0,	0,	0x016B,	/* LATIN_CAPITAL_LETTER_U_WITH_MACRON */
+  GDK_Multi_key,	GDK_U,	GDK_underscore,	0,	0,	0x016A,	/* LATIN_CAPITAL_LETTER_U_WITH_MACRON */
   GDK_Multi_key,	GDK_U,	GDK_grave,	0,	0,	0x00D9,	/* LATIN_CAPITAL_LETTER_U_WITH_GRAVE */
   GDK_Multi_key,	GDK_U,	GDK_asciitilde,	0,	0,	0x0168,	/* LATIN_CAPITAL_LETTER_U_WITH_TILDE */
   GDK_Multi_key,	GDK_U,	GDK_diaeresis,	0,	0,	0x00DC,	/* LATIN_CAPITAL_LETTER_U_WITH_DIAERESIS */
