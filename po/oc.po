@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: gtk+ 2.10.7\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2007-02-09 18:54+0100\n"
-"PO-Revision-Date: 2007-08-07 14:20+0200\n"
+"PO-Revision-Date: 2007-08-19 21:34+0200\n"
 "Last-Translator: Yannig MARCHEGAY (Kokoyaya) <yannig@marchegay.org>\n"
 "Language-Team: Occitan (post 1500) <ubuntu-l10n-oci@lists.ubuntu.com>\n"
 "MIME-Version: 1.0\n"
@@ -2027,7 +2027,7 @@ msgstr "Pagina %u"
 #.
 #: ../gtk/gtkpagesetupunixdialog.c:154
 msgid "default:mm"
-msgstr ""
+msgstr "Defau"
 
 #: ../gtk/gtkpagesetupunixdialog.c:339
 msgid ""
@@ -2599,7 +2599,7 @@ msgstr "_Disqueta"
 
 #: ../gtk/gtkstock.c:335
 msgid "_Fullscreen"
-msgstr ""
+msgstr "Ecran _complet"
 
 #: ../gtk/gtkstock.c:336
 msgid "_Leave Fullscreen"
@@ -2819,7 +2819,7 @@ msgstr "_Enregistrar"
 
 #: ../gtk/gtkstock.c:407
 msgid "Save _As"
-msgstr ""
+msgstr "Enregistrar _coma"
 
 #: ../gtk/gtkstock.c:408
 msgid "Select _All"
@@ -2847,7 +2847,7 @@ msgstr ""
 
 #: ../gtk/gtkstock.c:414
 msgid "_Stop"
-msgstr ""
+msgstr "_Arrêter"
 
 #: ../gtk/gtkstock.c:415
 msgid "_Strikethrough"
