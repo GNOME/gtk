@@ -244,15 +244,32 @@ update_status (TestSuite *suite,
 
   if (GTK_IS_EXTENDED_LAYOUT (child))
     {
+      GtkExtendedLayout *layout = (GtkExtendedLayout*) child;
+
       if (GTK_EXTENDED_LAYOUT_HAS_NATURAL_SIZE (child))
         {
           GtkRequisition requisition;
 
-          gtk_extended_layout_get_natural_size (GTK_EXTENDED_LAYOUT (child),
-                                                &requisition);
+          gtk_extended_layout_get_natural_size (layout, &requisition);
 
           g_string_append_printf (status, "; natural-size: %dx%d",
                                   requisition.width, requisition.height);
+        }
+
+      if (GTK_EXTENDED_LAYOUT_HAS_HEIGHT_FOR_WIDTH (child))
+        {
+          gint height = gtk_extended_layout_get_height_for_width (layout, child->allocation.width);
+
+          g_string_append_printf (status, "; height-for-%d: %d",
+                                  child->allocation.width, height);
+        }
+
+      if (GTK_EXTENDED_LAYOUT_HAS_WIDTH_FOR_HEIGHT (child))
+        {
+          gint width = gtk_extended_layout_get_width_for_height (layout, child->allocation.height);
+
+          g_string_append_printf (status, "; width-for-%d: %d",
+                                  child->allocation.height, width);
         }
 
       if (GTK_EXTENDED_LAYOUT_HAS_BASELINES (child))

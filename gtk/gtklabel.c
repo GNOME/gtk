@@ -4355,13 +4355,14 @@ static GtkExtendedLayoutFeatures
 gtk_label_extended_layout_get_features (GtkExtendedLayout *layout)
 {
   GtkLabel *label = GTK_LABEL (layout);
+  GtkLabelPrivate *priv = GTK_LABEL_GET_PRIVATE (label);
   GtkExtendedLayoutFeatures features;
 
   features =
     GTK_EXTENDED_LAYOUT_NATURAL_SIZE |
     GTK_EXTENDED_LAYOUT_BASELINES;
 
-  if (label->wrap)
+  if (label->ellipsize || (label->wrap && priv->full_size))
     {
       gdouble angle = gtk_label_get_angle (label);
 
@@ -4375,8 +4376,8 @@ gtk_label_extended_layout_get_features (GtkExtendedLayout *layout)
 }
 
 static gint
-gtk_label_extended_layout_get_size_for_other (GtkExtendedLayout *layout,
-                                              gint               size)
+gtk_label_extended_layout_get_size_for_allocation (GtkExtendedLayout *layout,
+                                                   gint               size)
 {
   GtkLabel *label = GTK_LABEL (layout);
   gdouble angle = gtk_label_get_angle (label);
@@ -4464,8 +4465,8 @@ static void
 gtk_label_extended_layout_interface_init (GtkExtendedLayoutIface *iface)
 {
   iface->get_features = gtk_label_extended_layout_get_features;
-  iface->get_height_for_width = gtk_label_extended_layout_get_size_for_other;
-  iface->get_width_for_height = gtk_label_extended_layout_get_size_for_other;
+  iface->get_height_for_width = gtk_label_extended_layout_get_size_for_allocation;
+  iface->get_width_for_height = gtk_label_extended_layout_get_size_for_allocation;
   iface->get_natural_size = gtk_label_extended_layout_get_natural_size;
   iface->get_baselines = gtk_label_extended_layout_get_baselines;
   iface->set_baseline_offset = gtk_label_extended_layout_set_baseline_offset;
