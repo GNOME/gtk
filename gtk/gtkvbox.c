@@ -96,8 +96,6 @@ gtk_vbox_natural_size_request (GtkWidget      *child,
     gtk_extended_layout_get_natural_size ((GtkExtendedLayout*) child, requisition);
   else 
     gtk_widget_size_request (child, requisition);
-
-g_print ("%s: %dx%d (%dx%d)\n", G_OBJECT_TYPE_NAME (child), requisition->width, requisition->height, child->allocation.width, child->allocation.height);
 }
 
 static void
@@ -207,7 +205,7 @@ gtk_vbox_size_allocate (GtkWidget     *widget,
 
       border_width = GTK_CONTAINER (box)->border_width;
 
-      minimum_height = 0;
+      minimum_height = widget->requisition.height;
       natural_height = 0;
 
       natural_requisitions = g_newa (gint, nvis_children);
@@ -237,7 +235,13 @@ gtk_vbox_size_allocate (GtkWidget     *widget,
                   if (features & GTK_EXTENDED_LAYOUT_HEIGHT_FOR_WIDTH)
                     {
                       gint height = gtk_extended_layout_get_height_for_width (layout, allocation->width);
-                      minimum_requisitions[i] = MIN (minimum_requisitions[i], height);
+                      gint dy = minimum_requisitions[i] - height;
+
+                      if (dy > 0)
+                        {
+                          minimum_requisitions[i] = height;
+                          minimum_height -= dy;
+                        }
                     }
                   else if (features & GTK_EXTENDED_LAYOUT_NATURAL_SIZE)
                     {
@@ -247,7 +251,6 @@ gtk_vbox_size_allocate (GtkWidget     *widget,
 
                 }
 
-              minimum_height += minimum_requisitions[i];
               natural_height += natural_requisitions[i++];
             }
         }

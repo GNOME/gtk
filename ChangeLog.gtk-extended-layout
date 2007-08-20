@@ -1,5 +1,10 @@
 2007-08-20  Mathias Hasselmann  <mathias.hasselmann@gmx.de>
 
+	* gtk/gtkvbox.c: Properly calculate minimum_height in size-allocate.
+	So I yell it into the night: Height-for-width is shiny and bright!
+
+2007-08-20  Mathias Hasselmann  <mathias.hasselmann@gmx.de>
+
 	* gtk/gtklabel.c: Announce size-for-allocation features only when
 	ellipsis or wrapping with full size allocation are active.
 	* tests/testextendedlayout.c: Display size-for-allocation information
