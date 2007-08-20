@@ -920,37 +920,67 @@ natural_size_test_misc_new (TestSuite *suite,
 }
 
 static TestCase*
-height_for_width_test_new (TestSuite *suite)
+height_for_width_test_new (TestSuite *suite,
+                           gboolean   vertical)
 {
-  PangoLayout *layout;
-  PangoRectangle log;
-  GtkWidget *child;
+  GtkWidget *box, *child;
+  TestCase *test;
+  int i;
 
-  TestCase *test = test_case_new (suite, "Height for Width", NULL,
-                                  gtk_hbox_new (FALSE, 12));
+  if (vertical)
+    {
+      test = test_case_new (suite, "Height for Width", NULL, gtk_hpaned_new ());
+      box = gtk_vbox_new (FALSE, 6);
 
-  gtk_container_set_border_width (GTK_CONTAINER (test->widget), 12);
+      child = gtk_label_new ("Move the handle to test\n"
+                             "height-for-width requests");
 
-  child = gtk_label_new (lorem_ipsum);
-  gtk_label_set_line_wrap (GTK_LABEL (child), TRUE);
-  gtk_label_set_use_markup (GTK_LABEL (child), TRUE);
-  gtk_box_pack_start (GTK_BOX (test->widget), child, TRUE, TRUE, 0);
-  layout = gtk_label_get_layout (GTK_LABEL (child));
+      gtk_label_set_angle (GTK_LABEL (child), 90);
+    }
+  else
+    {
+      test = test_case_new (suite, "Width for Height", NULL, gtk_vpaned_new ());
+      box = gtk_hbox_new (FALSE, 6);
 
-  pango_layout_get_pixel_extents (layout, NULL, &log);
-  gtk_widget_set_size_request (test->widget, log.width * 3 / 2, -1);
+      child = gtk_label_new ("Move the handle to test\n"
+                             "width-for-height requests");
+    }
 
-  test_case_append_guide (test, child, GUIDE_INTERIOUR_BOTH, 0);
-  test_case_append_guide (test, child, GUIDE_EXTERIOUR_BOTH, 0);
-  test_case_append_guide (test, child, GUIDE_BASELINE, 0);
+  gtk_container_set_border_width (GTK_CONTAINER (test->widget), 6);
+  gtk_container_set_border_width (GTK_CONTAINER (box), 6);
+  gtk_misc_set_padding (GTK_MISC (child), 6, 6);
 
-  child = gtk_button_new ();
-  gtk_container_add (GTK_CONTAINER (child),
-                     gtk_image_new_from_stock (GTK_STOCK_DIALOG_INFO,
-                                               GTK_ICON_SIZE_DIALOG));
-  gtk_box_pack_start (GTK_BOX (test->widget), child, FALSE, TRUE, 0);
+  gtk_paned_pack1 (GTK_PANED (test->widget), box, TRUE, FALSE);
+  gtk_paned_pack2 (GTK_PANED (test->widget), child, FALSE, FALSE);
 
-  test_case_append_guide (test, child, GUIDE_EXTERIOUR_BOTH, 1);
+  for (i = 0; i < 4; ++i)
+    {
+      if (2 != i)
+        {       
+          child = gtk_label_new (lorem_ipsum);
+          gtk_label_set_line_wrap (GTK_LABEL (child), TRUE);
+          gtk_label_set_use_markup (GTK_LABEL (child), TRUE);
+          test_case_append_guide (test, child, GUIDE_EXTERIOUR_BOTH, -1);
+          test_case_append_guide (test, child, GUIDE_INTERIOUR_BOTH, -1);
+          gtk_box_pack_start (GTK_BOX (box), child, FALSE, TRUE, 0);
+
+          if (i > 0)
+            gtk_label_set_full_size (GTK_LABEL (child), TRUE);
+
+          if (i > 2)
+            gtk_label_set_angle (GTK_LABEL (child), vertical ? 180 : 270);
+          else if (!vertical)
+            gtk_label_set_angle (GTK_LABEL (child), 90);
+        }
+      else
+        {       
+          child = gtk_button_new ();
+          gtk_container_add (GTK_CONTAINER (child),
+                             gtk_image_new_from_stock (GTK_STOCK_DIALOG_INFO,
+                                                       GTK_ICON_SIZE_DIALOG));
+          gtk_box_pack_start (GTK_BOX (box), child, TRUE, TRUE, 0);
+        }
+    }
 
   return test;
 }
@@ -2429,7 +2459,8 @@ test_suite_new (gchar *arg0)
   test_suite_append (self, natural_size_test_new (self, FALSE, TRUE));
   test_suite_append (self, natural_size_test_new (self, TRUE, TRUE));
   test_suite_append (self, natural_size_test_misc_new (self, arg0));
-  test_suite_append (self, height_for_width_test_new (self));
+  test_suite_append (self, height_for_width_test_new (self, TRUE));
+  test_suite_append (self, height_for_width_test_new (self, FALSE));
   test_suite_append (self, baseline_test_new (self));
   test_suite_append (self, baseline_test_bin_new (self));
   test_suite_append (self, baseline_test_hbox_new (self, FALSE));

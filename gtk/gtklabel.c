@@ -50,7 +50,7 @@
 
 #define GTK_LABEL_GET_PRIVATE(obj) (G_TYPE_INSTANCE_GET_PRIVATE ((obj), GTK_TYPE_LABEL, GtkLabelPrivate))
 
-#ifndef INFINITY /* Why don't we use C99 again? */
+#ifndef INFINITY /* Why again don't we use C99? */
 #define INFINITY HUGE_VAL
 #endif
 
@@ -60,6 +60,7 @@ typedef struct
   gint width_chars;
   gint max_width_chars;
   gint baseline_offset;
+  gboolean full_size;
 }
 GtkLabelPrivate;
 
@@ -102,7 +103,8 @@ enum {
   PROP_WIDTH_CHARS,
   PROP_SINGLE_LINE_MODE,
   PROP_ANGLE,
-  PROP_MAX_WIDTH_CHARS
+  PROP_MAX_WIDTH_CHARS,
+  PROP_FULL_SIZE
 };
 
 static guint signals[LAST_SIGNAL] = { 0 };
@@ -524,6 +526,23 @@ gtk_label_class_init (GtkLabelClass *class)
                                                      G_MAXINT,
                                                      -1,
                                                      GTK_PARAM_READWRITE));
+
+  /**
+   * GtkLabel:full-size:
+   *
+   * Use the entire space the widget got assigned for text wrapping. Overrides
+   * any #GtkLabel:width-chars, #GtkLabel:max-width-chars and screen size based
+   * constraints. Requires #GtkLabel:angle to be 0°, 90°, 180° or 270°.
+   *
+   * Since: 2.14
+   **/
+  g_object_class_install_property (gobject_class,
+                                   PROP_FULL_SIZE,
+                                   g_param_spec_boolean ("full-size",
+							 P_("Full size"),
+							 P_("Use the entire size of the widget to wrap text"),
+                                                        FALSE,
+                                                        GTK_PARAM_READWRITE));
   /*
    * Key bindings
    */
@@ -700,6 +719,9 @@ gtk_label_set_property (GObject      *object,
     case PROP_MAX_WIDTH_CHARS:
       gtk_label_set_max_width_chars (label, g_value_get_int (value));
       break;
+    case PROP_FULL_SIZE:
+      gtk_label_set_full_size (label, g_value_get_boolean (value));
+      break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
@@ -782,6 +804,9 @@ gtk_label_get_property (GObject     *object,
       break;
     case PROP_MAX_WIDTH_CHARS:
       g_value_set_int (value, gtk_label_get_max_width_chars (label));
+      break;
+    case PROP_FULL_SIZE:
+      g_value_set_int (value, gtk_label_get_full_size (label));
       break;
 
     default:
@@ -1970,7 +1995,7 @@ get_label_wrap_width (GtkLabel *label)
   GtkLabelPrivate *priv;
 
   priv = GTK_LABEL_GET_PRIVATE (label);
-  
+
   if (priv->wrap_width < 0)
     {
       if (priv->width_chars > 0 || priv->max_width_chars > 0)
@@ -2084,14 +2109,14 @@ gtk_label_ensure_layout (GtkLabel *label)
 
 	      wrap_width = get_label_wrap_width (label);
 	      width = MIN (width, wrap_width);
-	      width = MIN (width,
+ 	      width = MIN (width,
 			   PANGO_SCALE * (gdk_screen_get_width (screen) + 1) / 2);
-	      
+
 	      pango_layout_set_width (label->layout, width);
 	      pango_layout_get_extents (label->layout, NULL, &logical_rect);
 	      width = logical_rect.width;
 	      height = logical_rect.height;
-	      
+
 	      /* Unfortunately, the above may leave us with a very unbalanced looking paragraph,
 	       * so we try short search for a narrower width that leaves us with the same height
 	       */
@@ -2216,13 +2241,11 @@ static void
 gtk_label_size_allocate (GtkWidget     *widget,
                          GtkAllocation *allocation)
 {
-  GtkLabel *label;
-
-  label = GTK_LABEL (widget);
+  GtkLabel *label = GTK_LABEL (widget);
 
   (* GTK_WIDGET_CLASS (gtk_label_parent_class)->size_allocate) (widget, allocation);
 
-  if (label->ellipsize)
+  if (label->ellipsize || GTK_LABEL_GET_PRIVATE (label)->full_size)
     {
       if (label->layout)
 	{
@@ -2387,7 +2410,7 @@ get_layout_location (GtkLabel  *label,
   else
     xalign = 1.0 - misc->xalign;
 
-  if (label->ellipsize || priv->width_chars > 0)
+  if (label->ellipsize || priv->width_chars > 0 || GTK_LABEL_GET_PRIVATE (label)->full_size)
     {
       int width;
       PangoRectangle logical;
@@ -3741,6 +3764,32 @@ gtk_label_set_use_underline (GtkLabel *label,
     gtk_label_setup_mnemonic (label, label->mnemonic_keyval);
 }
 
+gboolean
+gtk_label_get_full_size (GtkLabel *label)
+{
+  g_return_val_if_fail (GTK_IS_LABEL (label), FALSE);
+  return GTK_LABEL_GET_PRIVATE (label)->full_size;
+}
+
+void
+gtk_label_set_full_size (GtkLabel *label,
+			 gboolean  setting)
+{
+  GtkLabelPrivate *priv;
+
+  g_return_if_fail (GTK_IS_LABEL (label));
+  priv = GTK_LABEL_GET_PRIVATE (label);
+
+  if (priv->full_size != setting)
+    {
+      priv->full_size = setting;
+
+      g_object_notify (G_OBJECT (label), "full-size");
+      gtk_label_invalidate_wrap_width (label);
+      gtk_widget_queue_resize (GTK_WIDGET (label));
+    }
+}
+
 /**
  * gtk_label_get_use_underline:
  * @label: a #GtkLabel
@@ -4305,39 +4354,44 @@ gtk_label_do_popup (GtkLabel       *label,
 static GtkExtendedLayoutFeatures
 gtk_label_extended_layout_get_features (GtkExtendedLayout *layout)
 {
+  GtkLabel *label = GTK_LABEL (layout);
   GtkExtendedLayoutFeatures features;
-  GtkLabel *label;
 
   features =
     GTK_EXTENDED_LAYOUT_NATURAL_SIZE |
     GTK_EXTENDED_LAYOUT_BASELINES;
-  label = GTK_LABEL (layout);
 
   if (label->wrap)
-    features |= GTK_EXTENDED_LAYOUT_HEIGHT_FOR_WIDTH;
+    {
+      gdouble angle = gtk_label_get_angle (label);
+
+      if (0 == angle || 180 == angle)
+        features |= GTK_EXTENDED_LAYOUT_HEIGHT_FOR_WIDTH;
+      else if (90 == angle || 270 == angle)
+        features |= GTK_EXTENDED_LAYOUT_WIDTH_FOR_HEIGHT;
+    }
 
   return features;
 }
 
 static gint
-gtk_label_extended_layout_get_height_for_width (GtkExtendedLayout *layout,
-                                                gint               width)
+gtk_label_extended_layout_get_size_for_other (GtkExtendedLayout *layout,
+                                              gint               size)
 {
+  GtkLabel *label = GTK_LABEL (layout);
+  gdouble angle = gtk_label_get_angle (label);
   PangoLayout *tmp;
-  GtkLabel *label;
-  gint height;
 
-  label = GTK_LABEL (layout);
-
-  g_return_val_if_fail (label->wrap, -1);
+  // this test is slightly more tolerant than the get_features test
+  g_assert (0 == (((gint)angle) % 90));
 
   gtk_label_ensure_layout (label);
   tmp = pango_layout_copy (label->layout);
-  pango_layout_set_width (tmp, PANGO_SCALE * width);
-  pango_layout_get_pixel_size (tmp, NULL, &height);
+  pango_layout_set_width (tmp, PANGO_SCALE * size);
+  pango_layout_get_pixel_size (tmp, NULL, &size);
   g_object_unref (tmp);
 
-  return height;
+  return size;
 }
 
 static void
@@ -4410,7 +4464,8 @@ static void
 gtk_label_extended_layout_interface_init (GtkExtendedLayoutIface *iface)
 {
   iface->get_features = gtk_label_extended_layout_get_features;
-  iface->get_height_for_width = gtk_label_extended_layout_get_height_for_width;
+  iface->get_height_for_width = gtk_label_extended_layout_get_size_for_other;
+  iface->get_width_for_height = gtk_label_extended_layout_get_size_for_other;
   iface->get_natural_size = gtk_label_extended_layout_get_natural_size;
   iface->get_baselines = gtk_label_extended_layout_get_baselines;
   iface->set_baseline_offset = gtk_label_extended_layout_set_baseline_offset;
