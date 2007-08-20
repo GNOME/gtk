@@ -1,5 +1,11 @@
 2007-08-20  Mathias Hasselmann  <mathias.hasselmann@gmx.de>
 
+	* tests/testextendedlayout.c: Improve contrast for currently
+	selected widget, show pointer address of widget in status bar.
+	Provider names in size-for-allocation test.
+
+2007-08-20  Mathias Hasselmann  <mathias.hasselmann@gmx.de>
+
 	* tests/testextendedlayout.c: Start real testing of height-for-width
 	and width-for-height.
 	* gtk/gtklabel.c, gtk/gtklabel.h, gtk/gtk.symbols: Add "full-size"

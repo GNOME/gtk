@@ -233,7 +233,8 @@ update_status (TestSuite *suite,
     g_string_append_printf (status, " (%s)", widget_name);
 
   g_string_append_printf (status,
-                          ":\nposition=%dx%d; size=%dx%d; requisition=%dx%d",
+                          "@%p:\nposition=%dx%d; size=%dx%d; requisition=%dx%d",
+                          child,
                           child->allocation.x,
                           child->allocation.y,
                           child->allocation.width,
@@ -920,8 +921,8 @@ natural_size_test_misc_new (TestSuite *suite,
 }
 
 static TestCase*
-height_for_width_test_new (TestSuite *suite,
-                           gboolean   vertical)
+size_for_allocation_test_new (TestSuite *suite,
+                              gboolean   vertical)
 {
   GtkWidget *box, *child;
   TestCase *test;
@@ -929,9 +930,12 @@ height_for_width_test_new (TestSuite *suite,
 
   if (vertical)
     {
-      test = test_case_new (suite, "Height for Width", NULL, gtk_hpaned_new ());
-      box = gtk_vbox_new (FALSE, 6);
+      test = test_case_new (suite,
+                            "Size for Allocation", 
+                            "Height for Width", 
+                            gtk_hpaned_new ());
 
+      box = gtk_vbox_new (FALSE, 6);
       child = gtk_label_new ("Move the handle to test\n"
                              "height-for-width requests");
 
@@ -939,9 +943,12 @@ height_for_width_test_new (TestSuite *suite,
     }
   else
     {
-      test = test_case_new (suite, "Width for Height", NULL, gtk_vpaned_new ());
-      box = gtk_hbox_new (FALSE, 6);
+      test = test_case_new (suite,
+                            "Size for Allocation", 
+                            "Width for Height",
+                            gtk_vpaned_new ());
 
+      box = gtk_hbox_new (FALSE, 6);
       child = gtk_label_new ("Move the handle to test\n"
                              "width-for-height requests");
     }
@@ -971,14 +978,20 @@ height_for_width_test_new (TestSuite *suite,
             gtk_label_set_angle (GTK_LABEL (child), vertical ? 180 : 270);
           else if (!vertical)
             gtk_label_set_angle (GTK_LABEL (child), 90);
+
+          set_widget_name (child, "%s-label-and-%g-degree",
+                           i > 0 ? "full-size" : "regular",
+                           gtk_label_get_angle (GTK_LABEL (child)));
         }
       else
         {       
           child = gtk_button_new ();
+          set_widget_name (child, "the-button");
           gtk_container_add (GTK_CONTAINER (child),
                              gtk_image_new_from_stock (GTK_STOCK_DIALOG_INFO,
                                                        GTK_ICON_SIZE_DIALOG));
           gtk_box_pack_start (GTK_BOX (box), child, TRUE, TRUE, 0);
+
         }
     }
 
@@ -1491,12 +1504,13 @@ test_case_compare_guides (const TestCase *self,
 }
 
 static const gchar*
-guide_type_get_color (GuideType type)
+guide_type_get_color (GuideType type,
+                      gboolean  is_current)
 {
   switch (type) 
     {
-      case GUIDE_BASELINE: return "#f00";
-      default: return "#ff0";
+      case GUIDE_BASELINE: return is_current ? "#f00" : "#00f";
+      default: return is_current ? "#000" : "#fff";
     }
 }
 
@@ -1505,8 +1519,8 @@ draw_guides (gpointer data)
 {
   TestCase *test = data;
   GdkDrawable *drawable;
-
   const GList *iter;
+  gint iteration;
 
   GdkGCValues values;
   GdkGC *gc;
@@ -1533,65 +1547,73 @@ draw_guides (gpointer data)
     test->suite->exteriour && gtk_toggle_button_get_active (
     GTK_TOGGLE_BUTTON (test->suite->exteriour));;
 
-  for (iter = test->guides; iter; iter = iter->next)
+  for (iteration = 0; iteration < 3; ++iteration)
     {
-      const Guide *guide = iter->data;
-      GdkRectangle extends;
-      gint num_baselines;
-      gint *baselines;
-      gint i;
-
-      if (guide->widget == test->suite->current)
+      for (iter = test->guides; iter; iter = iter->next)
         {
-          if (test->suite->timestamp < 3)
+          const Guide *guide = iter->data;
+          gboolean is_current = (guide->widget == test->suite->current);
+          GdkRectangle extends;
+          gint num_baselines;
+          gint *baselines;
+          gint i;
+
+          if (!is_current != !iteration)
+            continue;
+
+          if (is_current)
             {
-              gdk_gc_set_fill (gc, GDK_TILED);
-              gdk_gc_set_function (gc, GDK_OR);
+              if (test->suite->timestamp >= 3)
+                continue;
 
-              gdk_draw_rectangle (drawable, gc, TRUE, 
-                                  guide->widget->allocation.x,
-                                  guide->widget->allocation.y,
-                                  guide->widget->allocation.width,
-                                  guide->widget->allocation.height);
+              if (1 == iteration)
+                {
+                  gdk_gc_set_fill (gc, GDK_TILED);
+                  gdk_gc_set_function (gc, GDK_OR);
 
-              gdk_gc_set_function (gc, GDK_COPY);
-              gdk_gc_set_fill (gc, GDK_SOLID);
+                  gdk_draw_rectangle (drawable, gc, TRUE, 
+                                      guide->widget->allocation.x,
+                                      guide->widget->allocation.y,
+                                      guide->widget->allocation.width,
+                                      guide->widget->allocation.height);
+
+                  gdk_gc_set_function (gc, GDK_COPY);
+                  gdk_gc_set_fill (gc, GDK_SOLID);
+
+                  continue;
+                }
             }
-          else
+
+          gdk_color_parse (guide_type_get_color (guide->type, is_current),
+                           &values.foreground);
+
+          gdk_gc_set_rgb_fg_color (gc, &values.foreground);
+
+          num_baselines = test_case_eval_guide (test, guide, &extends, &baselines);
+
+          if (num_baselines > 0)
             {
-              continue;
+              g_assert (NULL != baselines);
+
+              if (show_baselines)
+                for (i = 0; i < num_baselines; ++i)
+                  draw_baselines (drawable, gc, test->widget, &extends, baselines[i]);
             }
+          else if (num_baselines > -1)
+            {
+              if ((show_interiour && (
+                   guide->type == GUIDE_INTERIOUR_VERTICAL ||
+                   guide->type == GUIDE_INTERIOUR_HORIZONTAL ||
+                   guide->type == GUIDE_INTERIOUR_BOTH)) ||
+                  (show_exteriour && (
+                   guide->type == GUIDE_EXTERIOUR_VERTICAL ||
+                   guide->type == GUIDE_EXTERIOUR_HORIZONTAL ||
+                   guide->type == GUIDE_EXTERIOUR_BOTH)))
+                draw_extends (drawable, gc, test->widget, &extends);
+            }
+
+          g_free (baselines);
         }
-
-      gdk_color_parse (guide_type_get_color (guide->type), 
-                       &values.foreground);
-
-      gdk_gc_set_rgb_fg_color (gc, &values.foreground);
-
-      num_baselines = test_case_eval_guide (test, guide, &extends, &baselines);
-
-      if (num_baselines > 0)
-        {
-          g_assert (NULL != baselines);
-
-          if (show_baselines)
-            for (i = 0; i < num_baselines; ++i)
-              draw_baselines (drawable, gc, test->widget, &extends, baselines[i]);
-        }
-      else if (num_baselines > -1)
-        {
-          if ((show_interiour && (
-               guide->type == GUIDE_INTERIOUR_VERTICAL ||
-               guide->type == GUIDE_INTERIOUR_HORIZONTAL ||
-               guide->type == GUIDE_INTERIOUR_BOTH)) ||
-              (show_exteriour && (
-               guide->type == GUIDE_EXTERIOUR_VERTICAL ||
-               guide->type == GUIDE_EXTERIOUR_HORIZONTAL ||
-               guide->type == GUIDE_EXTERIOUR_BOTH)))
-            draw_extends (drawable, gc, test->widget, &extends);
-        }
-
-      g_free (baselines);
     }
 
   g_object_unref (gc);
@@ -2459,8 +2481,8 @@ test_suite_new (gchar *arg0)
   test_suite_append (self, natural_size_test_new (self, FALSE, TRUE));
   test_suite_append (self, natural_size_test_new (self, TRUE, TRUE));
   test_suite_append (self, natural_size_test_misc_new (self, arg0));
-  test_suite_append (self, height_for_width_test_new (self, TRUE));
-  test_suite_append (self, height_for_width_test_new (self, FALSE));
+  test_suite_append (self, size_for_allocation_test_new (self, TRUE));
+  test_suite_append (self, size_for_allocation_test_new (self, FALSE));
   test_suite_append (self, baseline_test_new (self));
   test_suite_append (self, baseline_test_bin_new (self));
   test_suite_append (self, baseline_test_hbox_new (self, FALSE));
