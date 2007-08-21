@@ -1,3 +1,9 @@
+2007-08-21  Kristian Rietveld  <kris@imendio.com>
+
+	* gtk/gtktooltip.c (_gtk_tooltip_handle_event): always set
+	hide_tooltip to TRUE if we are handling a leave notify event. (Fixes
+	#468245, reported by Dennis Jacobfeuerborn).
+
 2007-08-21  Michael Natterer  <mitch@imendio.com>
 
 	* gtk/gtkpaned.c (gtk_paned_class_init): applied patch from Mikael

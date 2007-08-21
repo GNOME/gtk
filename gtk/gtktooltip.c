@@ -1223,6 +1223,9 @@ _gtk_tooltip_handle_event (GdkEvent *event)
 	    /* Requested to be hidden? */
 	    hide_tooltip = !return_value;
 
+	    /* Leave notify should override the query function */
+	    hide_tooltip = (event->type == GDK_LEAVE_NOTIFY);
+
 	    /* Is the pointer above another widget now? */
 	    if (GTK_TOOLTIP_VISIBLE (current_tooltip))
 	      hide_tooltip |= has_tooltip_widget != current_tooltip->tooltip_widget;
