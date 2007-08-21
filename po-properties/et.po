@@ -15,7 +15,7 @@ msgstr ""
 "Project-Id-Version: gtk+-properties HEAD\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2007-07-21 04:10+0100\n"
-"PO-Revision-Date: 2007-07-22 11:55+0300\n"
+"PO-Revision-Date: 2007-08-21 00:42+0300\n"
 "Last-Translator: Ivar Smolin <okul@linux.ee>\n"
 "Language-Team: Estonian <gnome-et@linux.ee>\n"
 "MIME-Version: 1.0\n"
@@ -675,6 +675,8 @@ msgid ""
 "How to layout the buttons in the box. Possible values are default, spread, "
 "edge, start and end"
 msgstr ""
+"Kuidas nupud kastis asetsevad. Võimalikud väärtused on vaikimisi, kõrvuti, "
+"serval, alguses ja lõpus"
 
 #: ../gtk/gtkbbox.c:137
 msgid "Secondary"
@@ -689,16 +691,16 @@ msgstr ""
 #: ../gtk/gtkbox.c:98 ../gtk/gtkexpander.c:219 ../gtk/gtkiconview.c:665
 #: ../gtk/gtktreeviewcolumn.c:216
 msgid "Spacing"
-msgstr ""
+msgstr "Vaheruum"
 
 #: ../gtk/gtkbox.c:99
 msgid "The amount of space between children"
-msgstr ""
+msgstr "Lapskirjete vahel olev ruum"
 
 #: ../gtk/gtkbox.c:108 ../gtk/gtknotebook.c:638 ../gtk/gtktable.c:165
 #: ../gtk/gtktoolbar.c:563
 msgid "Homogeneous"
-msgstr "Homogeensus"
+msgstr "Homogeenne"
 
 #: ../gtk/gtkbox.c:109
 msgid "Whether the children should all be the same size"
@@ -715,7 +717,7 @@ msgstr "Kas laps saab rohkem ruumi, kui tema vanema suurus kasvab"
 
 #: ../gtk/gtkbox.c:123
 msgid "Fill"
-msgstr "Täida"
+msgstr "Täitmine"
 
 #: ../gtk/gtkbox.c:124
 msgid ""
@@ -759,7 +761,7 @@ msgstr ""
 #: ../gtk/gtkbutton.c:207 ../gtk/gtkexpander.c:203 ../gtk/gtklabel.c:318
 #: ../gtk/gtktoolbutton.c:187
 msgid "Use underline"
-msgstr ""
+msgstr "Alakriipsu kasutamine"
 
 #: ../gtk/gtkbutton.c:208 ../gtk/gtkexpander.c:204 ../gtk/gtklabel.c:319
 msgid ""
@@ -781,11 +783,11 @@ msgstr ""
 #: ../gtk/gtkbutton.c:223 ../gtk/gtkcombobox.c:751
 #: ../gtk/gtkfilechooserbutton.c:401
 msgid "Focus on click"
-msgstr ""
+msgstr "Fookus klõpsamisel"
 
 #: ../gtk/gtkbutton.c:224 ../gtk/gtkfilechooserbutton.c:402
 msgid "Whether the button grabs focus when it is clicked with the mouse"
-msgstr "Kas nupp saab fookuse, kui teda hiirega klõpsatakse, või mitte"
+msgstr "Kas nupp saab selle hiirega klõpsamisel fookuse või mitte"
 
 #: ../gtk/gtkbutton.c:231
 msgid "Border relief"
@@ -867,7 +869,7 @@ msgstr ""
 
 #: ../gtk/gtkbutton.c:462 ../gtk/gtkentry.c:530 ../gtk/gtkentry.c:890
 msgid "Inner Border"
-msgstr "Sisemine raam"
+msgstr "Sisemine ääris"
 
 #: ../gtk/gtkbutton.c:463
 msgid "Border between button edges and child."
@@ -937,7 +939,7 @@ msgstr "Kuud ei saa muuta"
 
 #: ../gtk/gtkcalendar.c:476
 msgid "If TRUE, the selected month cannot be changed"
-msgstr "Kui märgitud, siis kuud pole võimalik muuta"
+msgstr "Kui märgitud, siis pole kuud võimalik muuta"
 
 #: ../gtk/gtkcalendar.c:490
 msgid "Show Week Numbers"
@@ -1243,11 +1245,11 @@ msgstr ""
 #: ../gtk/gtkcellrendererspin.c:123 ../gtk/gtkscale.c:142
 #: ../gtk/gtkspinbutton.c:225
 msgid "Digits"
-msgstr ""
+msgstr "Komakohti"
 
 #: ../gtk/gtkcellrendererspin.c:124 ../gtk/gtkspinbutton.c:226
 msgid "The number of decimal places to display"
-msgstr ""
+msgstr "Kuvatavate komakohtade arv"
 
 #: ../gtk/gtkcellrenderertext.c:194
 msgid "Text to render"
@@ -1826,7 +1828,7 @@ msgstr "Aktiivne element"
 
 #: ../gtk/gtkcombobox.c:708
 msgid "The item which is currently active"
-msgstr "Element, mis on hetkel aktiivne"
+msgstr "Hetkel aktiivne element"
 
 #: ../gtk/gtkcombobox.c:727 ../gtk/gtkuimanager.c:220
 msgid "Add tearoffs to menus"
@@ -1838,25 +1840,26 @@ msgstr ""
 
 #: ../gtk/gtkcombobox.c:743 ../gtk/gtkentry.c:522
 msgid "Has Frame"
-msgstr ""
+msgstr "Raamiga"
 
 #: ../gtk/gtkcombobox.c:744
 msgid "Whether the combo box draws a frame around the child"
-msgstr ""
+msgstr "Kas valikukast joonistab lapskirje ümber raami või mitte"
 
 #: ../gtk/gtkcombobox.c:752
 msgid "Whether the combo box grabs focus when it is clicked with the mouse"
 msgstr ""
+"Kas valikukast fokuseeritakse sellel hiirega klõpsamise korral või mitte"
 
 #: ../gtk/gtkcombobox.c:767 ../gtk/gtkmenu.c:484
 msgid "Tearoff Title"
-msgstr ""
+msgstr "Lahtirebimise pealkiri"
 
 #: ../gtk/gtkcombobox.c:768
 msgid ""
 "A title that may be displayed by the window manager when the popup is torn-"
 "off"
-msgstr ""
+msgstr "Hüpikakna lahtirebimise korral aknahalduri poolt kuvatav pealkiri"
 
 #: ../gtk/gtkcombobox.c:785
 msgid "Popup shown"
@@ -1902,7 +1905,7 @@ msgstr "Kuidas suuruse muutumise sündmusi käsitletakse"
 
 #: ../gtk/gtkcontainer.c:245
 msgid "Border width"
-msgstr "Raami laius"
+msgstr "Äärise laius"
 
 #: ../gtk/gtkcontainer.c:246
 msgid "The width of the empty border outside the containers children"
@@ -1958,19 +1961,19 @@ msgstr "Y-i suurim võimalik väärtus"
 
 #: ../gtk/gtkdialog.c:139
 msgid "Has separator"
-msgstr ""
+msgstr "Omab eraldajat"
 
 #: ../gtk/gtkdialog.c:140
 msgid "The dialog has a separator bar above its buttons"
-msgstr ""
+msgstr "Kas dialoogil on nuppude kohal eraldaja"
 
 #: ../gtk/gtkdialog.c:165
 msgid "Content area border"
-msgstr "Sisupiirkonna raam"
+msgstr "Sisupiirkonna ääris"
 
 #: ../gtk/gtkdialog.c:166
 msgid "Width of border around the main dialog area"
-msgstr "Ümber peadialoogi piirkonna oleva raami laius"
+msgstr "Ümber peadialoogi piirkonna oleva äärise laius"
 
 #: ../gtk/gtkdialog.c:173
 msgid "Button spacing"
@@ -2300,11 +2303,12 @@ msgstr "Kas kohandatud vaadete eelvaatevidinat näidatakse või mitte."
 
 #: ../gtk/gtkfilechooser.c:234
 msgid "Use Preview Label"
-msgstr ""
+msgstr "Eelvaate silt"
 
 #: ../gtk/gtkfilechooser.c:235
 msgid "Whether to display a stock label with the name of the previewed file."
 msgstr ""
+"Kas eelvaate silti koos eelvaadeldava faili nimega kuvatakse või mitte."
 
 #: ../gtk/gtkfilechooser.c:240
 msgid "Extra widget"
@@ -2325,11 +2329,11 @@ msgstr "Kas mitme faili valimine on lubatud või mitte"
 
 #: ../gtk/gtkfilechooser.c:253
 msgid "Show Hidden"
-msgstr "Näita peidetuid"
+msgstr "Peidetute näitamine"
 
 #: ../gtk/gtkfilechooser.c:254
 msgid "Whether the hidden files and folders should be displayed"
-msgstr "Kas näidata peidetud faile ja katalooge või mitte"
+msgstr "Kas peidetud faile ja katalooge näidatakse või mitte"
 
 #: ../gtk/gtkfilechooser.c:269
 msgid "Do overwrite confirmation"
@@ -2390,7 +2394,7 @@ msgstr "X-asukoht"
 
 #: ../gtk/gtkfixed.c:91 ../gtk/gtklayout.c:583
 msgid "X position of child widget"
-msgstr "Asukoht lapsvidina X-teljel"
+msgstr "Lapsvidina asukoht X-teljel"
 
 #: ../gtk/gtkfixed.c:100 ../gtk/gtklayout.c:592
 msgid "Y position"
@@ -2398,7 +2402,7 @@ msgstr "Y-asukoht"
 
 #: ../gtk/gtkfixed.c:101 ../gtk/gtklayout.c:593
 msgid "Y position of child widget"
-msgstr "Asukoht lapsvidina Y-teljel"
+msgstr "Lapsvidina asukoht Y-teljel"
 
 #: ../gtk/gtkfontbutton.c:144
 msgid "The title of the font selection dialog"
@@ -2506,11 +2510,11 @@ msgstr ""
 
 #: ../gtk/gtkhandlebox.c:185
 msgid "Handle position"
-msgstr ""
+msgstr "Sanga asukoht"
 
 #: ../gtk/gtkhandlebox.c:186
 msgid "Position of the handle relative to the child widget"
-msgstr ""
+msgstr "Sanga asukoht lapsvidina suhtes"
 
 #: ../gtk/gtkhandlebox.c:194
 msgid "Snap edge"
@@ -2881,11 +2885,11 @@ msgstr ""
 
 #: ../gtk/gtkmenu.c:499
 msgid "Tearoff State"
-msgstr ""
+msgstr "Lahtirebimise olek"
 
 #: ../gtk/gtkmenu.c:500
 msgid "A boolean that indicates whether the menu is torn-off"
-msgstr ""
+msgstr "Tõeväärtus, mis määrab, kas menüü on lahti rebitud või mitte"
 
 #: ../gtk/gtkmenu.c:506
 msgid "Vertical Padding"
@@ -3019,7 +3023,7 @@ msgstr "Sisemine polsterdus"
 
 #: ../gtk/gtkmenubar.c:210
 msgid "Amount of border space between the menubar shadow and the menu items"
-msgstr "Lisaruum menüüriba varju ja menüükirjete vahel"
+msgstr "Äärise ruum menüüriba varju ja menüükirjete vahel"
 
 #: ../gtk/gtkmenubar.c:217
 msgid "Delay before drop down menus appear"
@@ -3055,11 +3059,11 @@ msgstr "Rippmenüü"
 
 #: ../gtk/gtkmessagedialog.c:98
 msgid "Image/label border"
-msgstr "Pildi/sildi raam"
+msgstr "Pildi/sildi ääris"
 
 #: ../gtk/gtkmessagedialog.c:99
 msgid "Width of border around the label and image in the message dialog"
-msgstr "Sõnumidialoogis oleva pildi või sildi raami laius"
+msgstr "Sõnumidialoogis oleva pildi või sildi äärise laius"
 
 #: ../gtk/gtkmessagedialog.c:114
 msgid "Use separator"
@@ -3154,73 +3158,77 @@ msgstr "Käesoleva lehe indeks"
 
 #: ../gtk/gtknotebook.c:575
 msgid "Tab Position"
-msgstr ""
+msgstr "Sakkide asukoht"
 
 #: ../gtk/gtknotebook.c:576
 msgid "Which side of the notebook holds the tabs"
-msgstr ""
+msgstr "Millisel märkmiku küljel sakke hoitakse"
 
 #: ../gtk/gtknotebook.c:583
 msgid "Tab Border"
-msgstr ""
+msgstr "Saki ääris"
 
 #: ../gtk/gtknotebook.c:584
 msgid "Width of the border around the tab labels"
-msgstr ""
+msgstr "Saki sildi ümber oleva äärise laius"
 
 #: ../gtk/gtknotebook.c:592
 msgid "Horizontal Tab Border"
-msgstr ""
+msgstr "Saki rõhtne ääris"
 
 #: ../gtk/gtknotebook.c:593
 msgid "Width of the horizontal border of tab labels"
-msgstr ""
+msgstr "Sakisildi rõhtsa äärise laius"
 
 #: ../gtk/gtknotebook.c:601
 msgid "Vertical Tab Border"
-msgstr ""
+msgstr "Saki püstine ääris"
 
 #: ../gtk/gtknotebook.c:602
 msgid "Width of the vertical border of tab labels"
-msgstr ""
+msgstr "Sakisildi püstise äärise laius"
 
 #: ../gtk/gtknotebook.c:610
 msgid "Show Tabs"
-msgstr ""
+msgstr "Sakkide näitamine"
 
 #: ../gtk/gtknotebook.c:611
 msgid "Whether tabs should be shown or not"
-msgstr ""
+msgstr "Kas sakke näidatakse või mitte"
 
 #: ../gtk/gtknotebook.c:617
 msgid "Show Border"
-msgstr ""
+msgstr "Äärise näitamine"
 
 #: ../gtk/gtknotebook.c:618
 msgid "Whether the border should be shown or not"
-msgstr ""
+msgstr "Kas äärist näidatakse või mitte"
 
 #: ../gtk/gtknotebook.c:624
 msgid "Scrollable"
-msgstr ""
+msgstr "Keritav"
 
 #: ../gtk/gtknotebook.c:625
 msgid "If TRUE, scroll arrows are added if there are too many tabs to fit"
 msgstr ""
+"Kui TÕENE, siis liiga paljude sakkide korral lisatakse sakiribale "
+"kerimisnooled"
 
 #: ../gtk/gtknotebook.c:631
 msgid "Enable Popup"
-msgstr ""
+msgstr "Hüpikakna lubamine"
 
 #: ../gtk/gtknotebook.c:632
 msgid ""
 "If TRUE, pressing the right mouse button on the notebook pops up a menu that "
 "you can use to go to a page"
 msgstr ""
+"Kui TÕENE, siis märkmikul parema hiirenupuga klõpsamine avab lehekülje "
+"vahetamise hüpikmenuu"
 
 #: ../gtk/gtknotebook.c:639
 msgid "Whether tabs should have homogeneous sizes"
-msgstr ""
+msgstr "Kas sakis peavad olema ühesuurused või mitte"
 
 #: ../gtk/gtknotebook.c:645
 msgid "Group ID"
@@ -3228,7 +3236,7 @@ msgstr "Grupi ID"
 
 #: ../gtk/gtknotebook.c:646
 msgid "Group ID for tabs drag and drop"
-msgstr ""
+msgstr "Grupi ID sakkide lohistamiseks"
 
 #: ../gtk/gtknotebook.c:662 ../gtk/gtkradioaction.c:128
 #: ../gtk/gtkradiobutton.c:82 ../gtk/gtkradiomenuitem.c:342
@@ -3249,11 +3257,11 @@ msgstr ""
 
 #: ../gtk/gtknotebook.c:676
 msgid "Menu label"
-msgstr ""
+msgstr "Menüüsilt"
 
 #: ../gtk/gtknotebook.c:677
 msgid "The string displayed in the child's menu entry"
-msgstr ""
+msgstr "Lapsmenüü kirjes näidatav silt"
 
 #: ../gtk/gtknotebook.c:690
 msgid "Tab expand"
@@ -3667,7 +3675,7 @@ msgstr ""
 
 #: ../gtk/gtkprogress.c:108
 msgid "Show text"
-msgstr ""
+msgstr "Näidata tekstina"
 
 #: ../gtk/gtkprogress.c:109
 msgid "Whether the progress is shown as text."
@@ -3933,15 +3941,15 @@ msgstr "Kas kirjeid näidatakse koos numbritega või mitte"
 
 #: ../gtk/gtkrecentchooser.c:112
 msgid "Recent Manager"
-msgstr ""
+msgstr "Hiljutiste kirjete haldur"
 
 #: ../gtk/gtkrecentchooser.c:113
 msgid "The RecentManager object to use"
-msgstr ""
+msgstr "Kasutatav RecentManager objekt"
 
 #: ../gtk/gtkrecentchooser.c:118
 msgid "Show Private"
-msgstr "Näita privaatseid"
+msgstr "Privaatsete näitamine"
 
 #: ../gtk/gtkrecentchooser.c:119
 msgid "Whether the private items should be displayed"
@@ -3965,23 +3973,25 @@ msgstr "Kas kirje ligidal peaks olema ikoon või mitte"
 
 #: ../gtk/gtkrecentchooser.c:136
 msgid "Show Not Found"
-msgstr ""
+msgstr "Puuduvate näitamine"
 
 #: ../gtk/gtkrecentchooser.c:137
 msgid "Whether the items pointing to unavailable resources should be displayed"
-msgstr ""
+msgstr "Kas puuduvatele ressurssidele viitavaid kirjeid kuvatakse või mitte"
 
 #: ../gtk/gtkrecentchooser.c:143
 msgid "Whether to allow multiple items to be selected"
-msgstr ""
+msgstr "Kas mitme kirje valimine on lubatud või mitte"
 
 #: ../gtk/gtkrecentchooser.c:148
 msgid "Local only"
-msgstr ""
+msgstr "Ainult kohalik"
 
 #: ../gtk/gtkrecentchooser.c:149
 msgid "Whether the selected resource(s) should be limited to local file: URIs"
 msgstr ""
+"Kas valitud ressurss/ressursid peaks olema piiratud kohalike file: "
+"URI-dega või mitte"
 
 #: ../gtk/gtkrecentchooser.c:154 ../gtk/gtkrecentmanager.c:265
 msgid "Limit"
@@ -4058,7 +4068,7 @@ msgstr ""
 
 #: ../gtk/gtkscale.c:152
 msgid "Draw Value"
-msgstr ""
+msgstr "Väärtuse kuvamine"
 
 #: ../gtk/gtkscale.c:153
 msgid "Whether the current value is displayed as a string next to the slider"
@@ -4948,7 +4958,7 @@ msgstr ""
 
 #: ../gtk/gtktexttag.c:360 ../gtk/gtktextview.c:588
 msgid "Left, right, or center justification"
-msgstr ""
+msgstr "Joondamine vasakule, paremale või keskele"
 
 #: ../gtk/gtktexttag.c:379
 msgid ""
@@ -4974,11 +4984,11 @@ msgstr "Parema veerise laius pikslites"
 
 #: ../gtk/gtktexttag.c:407 ../gtk/gtktextview.c:616
 msgid "Indent"
-msgstr ""
+msgstr "Taane"
 
 #: ../gtk/gtktexttag.c:408 ../gtk/gtktextview.c:617
 msgid "Amount to indent the paragraph, in pixels"
-msgstr ""
+msgstr "Lõigu taane pikslites"
 
 #: ../gtk/gtktexttag.c:419
 msgid ""
@@ -5013,7 +5023,7 @@ msgstr ""
 #: ../gtk/gtktexttag.c:476 ../gtk/gtktextview.c:579
 msgid ""
 "Whether to wrap lines never, at word boundaries, or at character boundaries"
-msgstr ""
+msgstr "Kas ridu murtakse sõnade või märkide vahelt või ei murta üldse"
 
 #: ../gtk/gtktexttag.c:485 ../gtk/gtktextview.c:626
 msgid "Tabs"
@@ -5177,7 +5187,7 @@ msgstr ""
 
 #: ../gtk/gtktextview.c:578
 msgid "Wrap Mode"
-msgstr ""
+msgstr "Murdmine"
 
 #: ../gtk/gtktextview.c:596
 msgid "Left Margin"
@@ -5189,11 +5199,11 @@ msgstr "Paremveeris"
 
 #: ../gtk/gtktextview.c:634
 msgid "Cursor Visible"
-msgstr ""
+msgstr "Kursor nähtav"
 
 #: ../gtk/gtktextview.c:635
 msgid "If the insertion cursor is shown"
-msgstr ""
+msgstr "Kas sisestuskursor on nähtav"
 
 #: ../gtk/gtktextview.c:642
 msgid "Buffer"
@@ -5205,11 +5215,11 @@ msgstr ""
 
 #: ../gtk/gtktextview.c:650
 msgid "Overwrite mode"
-msgstr ""
+msgstr "Ülekirjutamine"
 
 #: ../gtk/gtktextview.c:651
 msgid "Whether entered text overwrites existing contents"
-msgstr ""
+msgstr "Kas sisestatud tekst kirjutab olemasoleva teksti üle või mitte"
 
 #: ../gtk/gtktextview.c:658
 msgid "Accepts tab"
@@ -5257,7 +5267,7 @@ msgstr ""
 
 #: ../gtk/gtktoolbar.c:476
 msgid "The orientation of the toolbar"
-msgstr ""
+msgstr "Tööriistariba suund"
 
 #: ../gtk/gtktoolbar.c:484
 msgid "Toolbar Style"
@@ -5265,23 +5275,23 @@ msgstr "Tööriistarea laad"
 
 #: ../gtk/gtktoolbar.c:485
 msgid "How to draw the toolbar"
-msgstr ""
+msgstr "Kuidas tööriistariba joonistatakse"
 
 #: ../gtk/gtktoolbar.c:492
 msgid "Show Arrow"
-msgstr ""
+msgstr "Noole näitamine"
 
 #: ../gtk/gtktoolbar.c:493
 msgid "If an arrow should be shown if the toolbar doesn't fit"
-msgstr ""
+msgstr "Kui tööriistariba ei mahu aknasse, kas siis näidatakse noolt või mitte"
 
 #: ../gtk/gtktoolbar.c:508
 msgid "Tooltips"
-msgstr ""
+msgstr "Vihjed"
 
 #: ../gtk/gtktoolbar.c:509
 msgid "If the tooltips of the toolbar should be active or not"
-msgstr ""
+msgstr "Kas tööriistariba vihjed peaks olema aktiveeritud või mitte"
 
 #: ../gtk/gtktoolbar.c:531
 msgid "Size of icons in this toolbar"
@@ -5652,7 +5662,7 @@ msgstr ""
 
 #: ../gtk/gtktreeviewcolumn.c:199 ../gtk/gtkwindow.c:523
 msgid "Resizable"
-msgstr ""
+msgstr "Suurus muudetav"
 
 #: ../gtk/gtktreeviewcolumn.c:200
 msgid "Column is user-resizable"
@@ -5812,11 +5822,11 @@ msgstr ""
 
 #: ../gtk/gtkwidget.c:510
 msgid "Whether the widget is visible"
-msgstr ""
+msgstr "Kas vidin on nähtav või mitte"
 
 #: ../gtk/gtkwidget.c:517
 msgid "Whether the widget responds to input"
-msgstr ""
+msgstr "Kas vidin reageerib sisendile või mitte"
 
 #: ../gtk/gtkwidget.c:523
 msgid "Application paintable"
@@ -5828,11 +5838,11 @@ msgstr ""
 
 #: ../gtk/gtkwidget.c:530
 msgid "Can focus"
-msgstr ""
+msgstr "Fookus lubatud"
 
 #: ../gtk/gtkwidget.c:531
 msgid "Whether the widget can accept the input focus"
-msgstr ""
+msgstr "Kas vidin aktsepteerib sisendi fookust või mitte"
 
 #: ../gtk/gtkwidget.c:537
 msgid "Has focus"
@@ -6159,7 +6169,7 @@ msgstr "Akna vaikimisi kõrgus, kasutatakse akna esmakordsel näitamisel"
 
 #: ../gtk/gtkwindow.c:568
 msgid "Destroy with Parent"
-msgstr "Hävita koos vanemaga"
+msgstr "Hävib koos vanemaga"
 
 #: ../gtk/gtkwindow.c:569
 msgid "If this window should be destroyed when the parent is destroyed"
@@ -6205,11 +6215,11 @@ msgstr ""
 
 #: ../gtk/gtkwindow.c:633
 msgid "Skip taskbar"
-msgstr ""
+msgstr "Tegumiriba puudub"
 
 #: ../gtk/gtkwindow.c:634
 msgid "TRUE if the window should not be in the task bar."
-msgstr ""
+msgstr "Kui TÕENE, siis aknal ei peaks tegumiriba olema."
 
 #: ../gtk/gtkwindow.c:641
 msgid "Skip pager"
@@ -6229,11 +6239,11 @@ msgstr ""
 
 #: ../gtk/gtkwindow.c:664
 msgid "Accept focus"
-msgstr ""
+msgstr "Fookus lubatud"
 
 #: ../gtk/gtkwindow.c:665
 msgid "TRUE if the window should receive the input focus."
-msgstr ""
+msgstr "Kui TÕENE, siis võib aken sisestusfookusesse sattuda."
 
 #: ../gtk/gtkwindow.c:679
 msgid "Focus on map"
