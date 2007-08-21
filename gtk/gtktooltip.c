@@ -85,6 +85,7 @@ static void       gtk_tooltip_class_init           (GtkTooltipClass *klass);
 static void       gtk_tooltip_init                 (GtkTooltip      *tooltip);
 static void       gtk_tooltip_finalize             (GObject         *object);
 
+static void       gtk_tooltip_window_style_set     (GtkTooltip      *tooltip);
 static gboolean   gtk_tooltip_paint_window         (GtkTooltip      *tooltip);
 static void       gtk_tooltip_window_hide          (GtkWidget       *widget,
 						    gpointer         user_data);
@@ -140,6 +141,8 @@ gtk_tooltip_init (GtkTooltip *tooltip)
   gtk_container_add (GTK_CONTAINER (tooltip->window), tooltip->alignment);
   gtk_widget_show (tooltip->alignment);
 
+  g_signal_connect_swapped (tooltip->window, "style_set",
+			    G_CALLBACK (gtk_tooltip_window_style_set), tooltip);
   g_signal_connect_swapped (tooltip->window, "expose_event",
 			    G_CALLBACK (gtk_tooltip_paint_window), tooltip);
 
@@ -408,6 +411,18 @@ gtk_tooltip_reset (GtkTooltip *tooltip)
   gtk_tooltip_set_icon (tooltip, NULL);
   gtk_tooltip_set_custom (tooltip, NULL);
   gtk_tooltip_set_tip_area (tooltip, NULL);
+}
+
+static void
+gtk_tooltip_window_style_set (GtkTooltip *tooltip)
+{
+  gtk_alignment_set_padding (GTK_ALIGNMENT (tooltip->alignment),
+			     tooltip->window->style->ythickness,
+			     tooltip->window->style->ythickness,
+			     tooltip->window->style->xthickness,
+			     tooltip->window->style->xthickness);
+
+  gtk_widget_queue_draw (tooltip->window);
 }
 
 static gboolean

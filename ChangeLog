@@ -1,5 +1,11 @@
 2007-08-21  Kristian Rietveld  <kris@imendio.com>
 
+	* gtk/gtktooltip.c (gtk_tooltip_init),
+	(gtk_tooltip_window_style_set): update alignment padding after
+	theme changes. (Fixes #467003, patch by Benjamin Berg).
+
+2007-08-21  Kristian Rietveld  <kris@imendio.com>
+
 	* gtk/gtktooltip.c (_gtk_tooltip_handle_event): always set
 	hide_tooltip to TRUE if we are handling a leave notify event. (Fixes
 	#468245, reported by Dennis Jacobfeuerborn).
