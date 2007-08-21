@@ -1,3 +1,19 @@
+2007-08-21  Kristian Rietveld  <kris@imendio.com>
+
+	Fix #457642, reported by Christian Persch.
+
+	* gtk/gtktooltip.c: added debugging output which can be compiled
+	in with a #define, annotated all coordinate translations in the
+	source code,
+	(find_widget_under_pointer): remove the "no-window correction";
+	always convert the coordinates from window relative to allocation
+	relative; after recursing through a container, translate the
+	coordinates from container allocation relative to child widget
+	allocation relative;
+	(find_topmost_widget_from_event): now we get allocation relative
+	coordinates here we do not have to distinguish no-window and window
+	widgets.
+
 2007-08-18  Cody Russell  <bratsche@gnome.org>
 
 	* gtk/gtkimcontextsimple.c: Fixed incorrect compose mapping
