@@ -15,7 +15,7 @@ msgstr ""
 "Project-Id-Version: gtk+ HEAD\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2007-08-16 03:58+0100\n"
-"PO-Revision-Date: 2007-08-17 22:36+0300\n"
+"PO-Revision-Date: 2007-08-20 19:41+0300\n"
 "Last-Translator: Ivar Smolin <okul@linux.ee>\n"
 "Language-Team: Estonian <gnome-et@linux.ee>\n"
 "MIME-Version: 1.0\n"
@@ -1583,7 +1583,7 @@ msgstr "Si_rvi teisi katalooge"
 
 #: ../gtk/gtkfilechooserdefault.c:5181
 msgid "Type a file name"
-msgstr "Sisesta failinimi"
+msgstr "Faili nime sisestamine"
 
 #. Create Folder
 #: ../gtk/gtkfilechooserdefault.c:5218
@@ -2749,7 +2749,7 @@ msgstr ""
 
 #: ../gtk/gtkstock.c:310
 msgid "_Disconnect"
-msgstr "Ühen_du lahti"
+msgstr "Katkesta ühen_dus"
 
 #: ../gtk/gtkstock.c:311
 msgid "_Execute"
