@@ -1,3 +1,8 @@
+2007-08-21  Michael Natterer  <mitch@imendio.com>
+
+	* gtk/gtkpaned.c (gtk_paned_class_init): applied patch from Mikael
+	Hallendal which documents GtkPaned's keybinding signals (#467117).
+
 2007-08-21  Kristian Rietveld  <kris@imendio.com>
 
 	Fix #457642, reported by Christian Persch.

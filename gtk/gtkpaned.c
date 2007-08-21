@@ -306,6 +306,19 @@ gtk_paned_class_init (GtkPanedClass *class)
 								    TRUE,
 								    GTK_PARAM_READWRITE));
 
+  /**
+   * GtkPaned::cycle-child-focus:
+   * @widget: the object that received the signal
+   * @reversed: whether cycling backward or forward
+   *
+   * The ::cycle-child-focus signal is a 
+   * <link linkend="keybinding-signals">keybinding signal</link>
+   * which gets emitted to cycle the focus between the children of the paned.
+   *
+   * The default binding is f6.
+   *
+   * Since: 2.0
+   */
   signals [CYCLE_CHILD_FOCUS] =
     g_signal_new (I_("cycle_child_focus"),
 		  G_TYPE_FROM_CLASS (object_class),
@@ -316,6 +329,19 @@ gtk_paned_class_init (GtkPanedClass *class)
 		  G_TYPE_BOOLEAN, 1,
 		  G_TYPE_BOOLEAN);
 
+  /**
+   * GtkPaned::toggle-handle-focus:
+   * @widget: the object that received the signal
+   *
+   * The ::toggle-handle-focus is a 
+   * <link linkend="keybinding-signals">keybinding signal</link>
+   * which gets emitted to accept the current position of the handle and then 
+   * move focus to the next widget in the focus chain.
+   *
+   * The default binding is Tab.
+   *
+   * Since: 2.0
+   */
   signals [TOGGLE_HANDLE_FOCUS] =
     g_signal_new (I_("toggle_handle_focus"),
 		  G_TYPE_FROM_CLASS (object_class),
@@ -325,6 +351,18 @@ gtk_paned_class_init (GtkPanedClass *class)
 		  _gtk_marshal_BOOLEAN__VOID,
 		  G_TYPE_BOOLEAN, 0);
 
+  /**
+   * GtkPaned::move-handle:
+   * @widget: the object that received the signal
+   * @scroll_type: a #GtkScrollType
+   *
+   * The ::move-handle signal is a 
+   * <link linkend="keybinding-signals">keybinding signal</link>
+   * which gets emitted to move the handle when the user is using key bindings 
+   * to move it.
+   *
+   * Since: 2.0
+   */
   signals[MOVE_HANDLE] =
     g_signal_new (I_("move_handle"),
 		  G_TYPE_FROM_CLASS (object_class),
@@ -335,6 +373,20 @@ gtk_paned_class_init (GtkPanedClass *class)
                   G_TYPE_BOOLEAN, 1,
                   GTK_TYPE_SCROLL_TYPE);
 
+  /**
+   * GtkPaned::cycle-handle-focus:
+   * @widget: the object that received the signal
+   * @reversed: whether cycling backward or forward
+   *
+   * The ::cycle-handle-focus signal is a 
+   * <link linkend="keybinding-signals">keybinding signal</link>
+   * which gets emitted to cycle whether the paned should grab focus to allow
+   * the user to change position of the handle by using key bindings.
+   *
+   * The default binding for this signal is f8.
+   *
+   * Since: 2.0
+   */
   signals [CYCLE_HANDLE_FOCUS] =
     g_signal_new (I_("cycle_handle_focus"),
 		  G_TYPE_FROM_CLASS (object_class),
@@ -345,6 +397,19 @@ gtk_paned_class_init (GtkPanedClass *class)
 		  G_TYPE_BOOLEAN, 1,
 		  G_TYPE_BOOLEAN);
 
+  /**
+   * GtkPaned::accept-position:
+   * @widget: the object that received the signal
+   *
+   * The ::accept-position signal is a 
+   * <link linkend="keybinding-signals">keybinding signal</link>
+   * which gets emitted to accept the current position of the handle when 
+   * moving it using key bindings.
+   *
+   * The default binding for this signal is Return or Space.
+   *
+   * Since: 2.0
+   */
   signals [ACCEPT_POSITION] =
     g_signal_new (I_("accept_position"),
 		  G_TYPE_FROM_CLASS (object_class),
@@ -354,6 +419,20 @@ gtk_paned_class_init (GtkPanedClass *class)
 		  _gtk_marshal_BOOLEAN__VOID,
 		  G_TYPE_BOOLEAN, 0);
 
+  /**
+   * GtkPaned::cancel-position:
+   * @widget: the object that received the signal
+   *
+   * The ::cancel-position signal is a 
+   * <link linkend="keybinding-signals">keybinding signal</link>
+   * which gets emitted to cancel moving the position of the handle using key 
+   * bindings. The position of the handle will be reset to the value prior to 
+   * moving it.
+   *
+   * The default binding for this signal is Escape.
+   *
+   * Since: 2.0
+   */
   signals [CANCEL_POSITION] =
     g_signal_new (I_("cancel_position"),
 		  G_TYPE_FROM_CLASS (object_class),
