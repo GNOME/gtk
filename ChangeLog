@@ -1,3 +1,8 @@
+2007-08-22  Tristan Van Berkom  <tvb@gnome.org>
+
+	* gtk/gtkframe.c: Corrected the published default value of
+	GtkFrame::label-xalign (bug 460272).
+
 2007-08-21  Kristian Rietveld  <kris@imendio.com>
 
 	* gtk/gtktooltip.c (gtk_tooltip_init),

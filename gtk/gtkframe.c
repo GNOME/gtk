@@ -114,7 +114,7 @@ gtk_frame_class_init (GtkFrameClass *class)
 						       P_("The horizontal alignment of the label"),
 						       0.0,
 						       1.0,
-						       0.5,
+						       0.0,
 						       GTK_PARAM_READWRITE));
   g_object_class_install_property (gobject_class,
 				   PROP_LABEL_YALIGN,
