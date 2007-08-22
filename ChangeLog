@@ -1,3 +1,8 @@
+2007-08-22  Emmanuele Bassi  <ebassi@gnome.org>
+
+	* configure.in: Remove oc (Occitane) from LINGUAS and unbreak
+	the build.
+
 2007-08-22  Kristian Rietveld  <kris@imendio.com>
 
 	Do not allow the cursor to go to a separator row.  Fixes #441219,
