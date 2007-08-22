@@ -15,7 +15,7 @@ msgstr ""
 "Project-Id-Version: gtk+-properties HEAD\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2007-07-21 04:10+0100\n"
-"PO-Revision-Date: 2007-08-21 00:42+0300\n"
+"PO-Revision-Date: 2007-08-21 14:28+0300\n"
 "Last-Translator: Ivar Smolin <okul@linux.ee>\n"
 "Language-Team: Estonian <gnome-et@linux.ee>\n"
 "MIME-Version: 1.0\n"
@@ -756,7 +756,7 @@ msgstr ""
 msgid ""
 "Text of the label widget inside the button, if the button contains a label "
 "widget"
-msgstr ""
+msgstr "Nupul oleva sildividina tekst juhuks, kui nupp sisaldab tekstividinat"
 
 #: ../gtk/gtkbutton.c:207 ../gtk/gtkexpander.c:203 ../gtk/gtklabel.c:318
 #: ../gtk/gtktoolbutton.c:187
@@ -791,11 +791,11 @@ msgstr "Kas nupp saab selle hiirega klõpsamisel fookuse või mitte"
 
 #: ../gtk/gtkbutton.c:231
 msgid "Border relief"
-msgstr ""
+msgstr "Äärise reljeef"
 
 #: ../gtk/gtkbutton.c:232
 msgid "The border relief style"
-msgstr ""
+msgstr "Äärise reljeefi laad"
 
 #: ../gtk/gtkbutton.c:249
 msgid "Horizontal alignment for child"
@@ -1690,11 +1690,11 @@ msgstr ""
 
 #: ../gtk/gtkcolorbutton.c:172
 msgid "Use alpha"
-msgstr ""
+msgstr "Läbipaistvuse kasutamine"
 
 #: ../gtk/gtkcolorbutton.c:173
 msgid "Whether or not to give the color an alpha value"
-msgstr ""
+msgstr "Kas värvus on läbipaistev või mitte"
 
 #: ../gtk/gtkcolorbutton.c:187 ../gtk/gtkfilechooserbutton.c:415
 #: ../gtk/gtkfontbutton.c:143 ../gtk/gtkprintjob.c:116
@@ -1716,11 +1716,12 @@ msgstr "Valitud värv"
 
 #: ../gtk/gtkcolorbutton.c:217 ../gtk/gtkcolorsel.c:1878
 msgid "Current Alpha"
-msgstr ""
+msgstr "Praegune läbipaistvus"
 
 #: ../gtk/gtkcolorbutton.c:218
 msgid "The selected opacity value (0 fully transparent, 65535 fully opaque)"
 msgstr ""
+"Läbipaistvuse tase (0 - täiesti läbipaistev, 65535 - täiesti läbipaistmatu)"
 
 #: ../gtk/gtkcolorsel.c:1857
 msgid "Has Opacity Control"
@@ -2210,11 +2211,11 @@ msgstr ""
 
 #: ../gtk/gtkexpander.c:187
 msgid "Expanded"
-msgstr ""
+msgstr "Laiendatud"
 
 #: ../gtk/gtkexpander.c:188
 msgid "Whether the expander has been opened to reveal the child widget"
-msgstr ""
+msgstr "Las laiendaja on lapsvidina näitamiseks avatud või mitte"
 
 #: ../gtk/gtkexpander.c:196
 msgid "Text of the expander's label"
@@ -2262,11 +2263,11 @@ msgstr "Failivalija poolt teostatava operatsiooni tüüp."
 
 #: ../gtk/gtkfilechooser.c:204
 msgid "File System Backend"
-msgstr ""
+msgstr "Failisüsteemi taustaprogramm"
 
 #: ../gtk/gtkfilechooser.c:205
 msgid "Name of file system backend to use"
-msgstr ""
+msgstr "Kasutatava failisüsteemi taustaprogrammi nimi"
 
 #: ../gtk/gtkfilechooser.c:210 ../gtk/gtkrecentchooser.c:169
 msgid "Filter"
@@ -2274,15 +2275,16 @@ msgstr "Filter"
 
 #: ../gtk/gtkfilechooser.c:211
 msgid "The current filter for selecting which files are displayed"
-msgstr ""
+msgstr "Hetkel aktiivne filter failivaliku kuva filtreerimiseks"
 
 #: ../gtk/gtkfilechooser.c:216
 msgid "Local Only"
-msgstr ""
+msgstr "Ainult kohalikud"
 
 #: ../gtk/gtkfilechooser.c:217
 msgid "Whether the selected file(s) should be limited to local file: URLs"
 msgstr ""
+"Kas valitavaid faile peab piiritlema kohalike file: URL-idega või mitte"
 
 #: ../gtk/gtkfilechooser.c:222
 msgid "Preview widget"
@@ -2361,7 +2363,7 @@ msgstr "Failivalimise dialoogi pealkiri"
 
 #: ../gtk/gtkfilechooserbutton.c:430
 msgid "The desired width of the button widget, in characters."
-msgstr ""
+msgstr "Nupuvidina soovitud laius märkides"
 
 #: ../gtk/gtkfilesel.c:525 ../gtk/gtkimage.c:162 ../gtk/gtkrecentmanager.c:250
 #: ../gtk/gtkstatusicon.c:182
@@ -2422,19 +2424,19 @@ msgstr ""
 
 #: ../gtk/gtkfontbutton.c:176
 msgid "Use font in label"
-msgstr ""
+msgstr "Kirjatüüp sildil"
 
 #: ../gtk/gtkfontbutton.c:177
 msgid "Whether the label is drawn in the selected font"
-msgstr ""
+msgstr "Kas silt joonistatakse valitud kirjatüübiga või mitte"
 
 #: ../gtk/gtkfontbutton.c:192
 msgid "Use size in label"
-msgstr ""
+msgstr "Suurus sildil"
 
 #: ../gtk/gtkfontbutton.c:193
 msgid "Whether the label is drawn with the selected font size"
-msgstr ""
+msgstr "Kas silt joonistatakse valitud suurusega või mitte"
 
 #: ../gtk/gtkfontbutton.c:209
 msgid "Show style"
@@ -2582,31 +2584,31 @@ msgstr "Kuvatavate tulpade arv"
 
 #: ../gtk/gtkiconview.c:649
 msgid "Width for each item"
-msgstr ""
+msgstr "Iga kirje laius"
 
 #: ../gtk/gtkiconview.c:650
 msgid "The width used for each item"
-msgstr ""
+msgstr "Iga kirje puhul kasutatav laius"
 
 #: ../gtk/gtkiconview.c:666
 msgid "Space which is inserted between cells of an item"
-msgstr ""
+msgstr "Kirje lahtrite vahele jäetav ruum"
 
 #: ../gtk/gtkiconview.c:681
 msgid "Row Spacing"
-msgstr ""
+msgstr "Ridadevaheline ruum"
 
 #: ../gtk/gtkiconview.c:682
 msgid "Space which is inserted between grid rows"
-msgstr ""
+msgstr "Tabeli ridade vahele jäetav ruum"
 
 #: ../gtk/gtkiconview.c:697
 msgid "Column Spacing"
-msgstr ""
+msgstr "Veergudevaheline ruum"
 
 #: ../gtk/gtkiconview.c:698
 msgid "Space which is inserted between grid columns"
-msgstr ""
+msgstr "Tabeli veergude vahele jäetav ruum"
 
 #: ../gtk/gtkiconview.c:713
 msgid "Margin"
@@ -2614,7 +2616,7 @@ msgstr "Ääris"
 
 #: ../gtk/gtkiconview.c:714
 msgid "Space which is inserted at the edges of the icon view"
-msgstr "Ikoonivaates servadele lisatav ruum"
+msgstr "Ikoonivaate servadele lisatav ruum"
 
 #: ../gtk/gtkiconview.c:731
 msgid ""
@@ -2847,7 +2849,7 @@ msgstr "Maksimaalne laius märkides"
 
 #: ../gtk/gtklabel.c:510
 msgid "The desired maximum width of the label, in characters"
-msgstr ""
+msgstr "Sildi suurim soovitud laius märkides"
 
 #: ../gtk/gtklabel.c:626
 msgid "Whether to select the contents of a selectable label when it is focused"
@@ -2871,11 +2873,11 @@ msgstr ""
 
 #: ../gtk/gtklayout.c:619
 msgid "The width of the layout"
-msgstr ""
+msgstr "Paigutuse laius"
 
 #: ../gtk/gtklayout.c:628
 msgid "The height of the layout"
-msgstr ""
+msgstr "Paigutuse kõrgus"
 
 #: ../gtk/gtkmenu.c:485
 msgid ""
@@ -3801,11 +3803,11 @@ msgstr ""
 
 #: ../gtk/gtkrange.c:353
 msgid "Inverted"
-msgstr ""
+msgstr "Pööratud"
 
 #: ../gtk/gtkrange.c:354
 msgid "Invert direction slider moves to increase range value"
-msgstr ""
+msgstr "Kas liuguri suund on pööratud või mitte"
 
 #: ../gtk/gtkrange.c:361
 msgid "Lower stepper sensitivity"
@@ -5259,11 +5261,11 @@ msgstr ""
 
 #: ../gtk/gtktogglebutton.c:118
 msgid "Draw Indicator"
-msgstr ""
+msgstr "Näidiku joonistamine"
 
 #: ../gtk/gtktogglebutton.c:119
 msgid "If the toggle part of the button is displayed"
-msgstr ""
+msgstr "Kas nupu sisse/väljalülitamise osa kuvatakse või mitte"
 
 #: ../gtk/gtktoolbar.c:476
 msgid "The orientation of the toolbar"
@@ -5366,7 +5368,7 @@ msgstr ""
 
 #: ../gtk/gtktoolbar.c:627
 msgid "Toolbar icon size"
-msgstr "Tööriistarea ikoonisuurus"
+msgstr "Tööriistarea ikooni suurus"
 
 #: ../gtk/gtktoolbar.c:628
 msgid "Size of icons in default toolbars"
@@ -6308,3 +6310,23 @@ msgstr ""
 #: ../modules/input/gtkimcontextxim.c:340
 msgid "How to draw the input method statusbar"
 msgstr "Kuidas peab sisendmeetodi olekuriba joonistama"
+
+#: ../gtk/gtkbuilder.c:104
+msgid "Translation Domain"
+msgstr "Tõlkedomeen"
+
+#: ../gtk/gtkscalebutton.c:182
+msgid "The value of the scale"
+msgstr ""
+
+#: ../gtk/gtkscalebutton.c:192
+msgid "The icon size"
+msgstr "Ikooni suurus"
+
+#: ../gtk/gtkscalebutton.c:229
+msgid "Icons"
+msgstr "Ikoonid"
+
+#: ../gtk/gtkscalebutton.c:230
+msgid "List of icon names"
+msgstr "Ikooninimede loetelu"
