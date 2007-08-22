@@ -1,3 +1,23 @@
+2007-08-22  Kristian Rietveld  <kris@imendio.com>
+
+	Do not allow the cursor to go to a separator row.  Fixes #441219,
+	modified patch by Carlos Garnacho.
+
+	* gtk/gtktreeview.c (row_is_separator): new inline function
+	for calling the row-separator-func, made all of gtktreeview.c use
+	this function instead of calling the func themselves,
+	(gtk_tree_view_button_press): treat a click on a separator like
+	a click on empty space,
+	(gtk_tree_view_update_rubber_band_selection_rage): skip
+	non-selectable rows,
+	(search_first_focusable_path),
+	(gtk_tree_view_focus_to_cursor),
+	(gtk_tree_view_move_cursor_up_down),
+	(gtk_tree_view_move_cursor_page_up_down),
+	(gtk_tree_view_move_cursor_start_end): skip separators,
+	(gtk_tree_view_real_set_cursor): do not allow setting the cursor
+	on a separator.
+
 2007-08-22  Tristan Van Berkom  <tvb@gnome.org>
 
 	* gtk/gtkframe.c: Corrected the published default value of
