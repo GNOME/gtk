@@ -1,3 +1,8 @@
+2007-08-23  Cody Russell  <bratsche@gnome.org>
+
+	* HACKING: Change references to README.cvs-commits so they say
+	README.commits.
+
 2007-08-23  Jan Arne Petersen  <jpetersen@jpetersen.org>
 
 	* gtk/gtkbuilderparser.c: (text): Duplicate the string returned by

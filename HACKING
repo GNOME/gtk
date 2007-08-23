@@ -54,6 +54,6 @@ options like `--prefix=/usr' to `configure' you can give those options
 to `autogen.sh' and they will be passed on to `configure'.
 
 For information about submitting patches and committing changes
-to SVN, see the `README' and `README.cvs-commits' files. In particular, 
+to SVN, see the `README' and `README.commits' files. In particular, 
 don't, under any circumstances, commit anything to SVN before
-reading and understanding `README.cvs-commmits'.
+reading and understanding `README.commmits'.
