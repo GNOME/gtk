@@ -15,7 +15,7 @@ msgstr ""
 "Project-Id-Version: gtk+ HEAD\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2007-08-16 03:58+0100\n"
-"PO-Revision-Date: 2007-08-20 19:41+0300\n"
+"PO-Revision-Date: 2007-08-22 09:23+0300\n"
 "Last-Translator: Ivar Smolin <okul@linux.ee>\n"
 "Language-Team: Estonian <gnome-et@linux.ee>\n"
 "MIME-Version: 1.0\n"
@@ -2242,11 +2242,11 @@ msgstr "Paberi veerised"
 
 #: ../gtk/gtkpathbar.c:148
 msgid "Up Path"
-msgstr ""
+msgstr "Ülemine rada"
 
 #: ../gtk/gtkpathbar.c:150
 msgid "Down Path"
-msgstr ""
+msgstr "Alumine rada"
 
 #: ../gtk/gtkpathbar.c:1377
 msgid "File System Root"
@@ -3975,10 +3975,10 @@ msgstr ""
 msgid "paper size|Super B"
 msgstr ""
 
-##. translators, strip everything up to the first |
-##: ../gtk/paper_names_offsets.c:287
-#msgid "paper size|Wide Format"
-#msgstr "Laiformaat"
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:287
+msgid "paper size|Wide Format"
+msgstr "Laiformaat"
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:289
