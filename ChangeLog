@@ -1,3 +1,8 @@
+2007-08-23  Jan Arne Petersen  <jpetersen@jpetersen.org>
+
+	* gtk/gtkbuilderparser.c: (text): Duplicate the string returned by
+	d[n]gettext before it is potentially freed. (#461945)
+
 2007-08-23  Emmanuele Bassi  <ebassi@gnome.org>
 
 	* gtkfilechooserdefault.c:

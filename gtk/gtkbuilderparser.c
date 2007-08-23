@@ -918,10 +918,11 @@ text (GMarkupParseContext *context,
           else
             text = dgettext (data->domain, string);
 
+	  prop_info->data = g_strdup (text);
 	  g_free (string);
-	  string = g_strdup (text);
         }
-      prop_info->data = string;
+      else
+	prop_info->data = string;
     }
 }
 
