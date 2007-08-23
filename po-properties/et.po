@@ -15,7 +15,7 @@ msgstr ""
 "Project-Id-Version: gtk+-properties HEAD\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2007-07-21 04:10+0100\n"
-"PO-Revision-Date: 2007-08-21 14:28+0300\n"
+"PO-Revision-Date: 2007-08-22 09:20+0300\n"
 "Last-Translator: Ivar Smolin <okul@linux.ee>\n"
 "Language-Team: Estonian <gnome-et@linux.ee>\n"
 "MIME-Version: 1.0\n"
@@ -3037,11 +3037,11 @@ msgstr ""
 
 #: ../gtk/gtkmenuitem.c:204
 msgid "Submenu"
-msgstr ""
+msgstr "Alammenüü"
 
 #: ../gtk/gtkmenuitem.c:205
 msgid "The submenu attached to the menu item, or NULL if it has none"
-msgstr ""
+msgstr "Menüükirje külge ühendatud alammenüü, selle puudumisel aga NULL"
 
 #: ../gtk/gtkmenushell.c:363
 msgid "Take Focus"
