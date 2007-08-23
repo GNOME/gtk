@@ -8728,6 +8728,9 @@ search_hit_get_info_cb (GtkFileSystemHandle *handle,
   char *display_name;
   struct SearchHitInsertRequest *request = data;
 
+  if (!request->impl->search_model)
+    goto out;
+
   path = gtk_tree_row_reference_get_path (request->row_ref);
   if (!path)
     goto out;
@@ -9440,6 +9443,9 @@ recent_clear_model (GtkFileChooserDefault *impl,
     return;
 
   model = GTK_TREE_MODEL (impl->recent_model);
+  
+  if (remove_from_treeview)
+    gtk_tree_view_set_model (GTK_TREE_VIEW (impl->browse_files_tree_view), NULL);
 
   if (gtk_tree_model_get_iter_first (model, &iter))
     {
@@ -9475,9 +9481,6 @@ recent_clear_model (GtkFileChooserDefault *impl,
 
   g_object_unref (impl->recent_model_sort);
   impl->recent_model_sort = NULL;
-
-  if (remove_from_treeview)
-    gtk_tree_view_set_model (GTK_TREE_VIEW (impl->browse_files_tree_view), NULL);
 }
 
 /* Stops any ongoing loading of the recent files list; does
@@ -9730,9 +9733,6 @@ recent_setup_model (GtkFileChooserDefault *impl)
   gtk_tree_sortable_set_sort_column_id (GTK_TREE_SORTABLE (impl->recent_model_sort),
                                         RECENT_MODEL_COL_INFO,
                                         GTK_SORT_DESCENDING);
-
-  gtk_tree_view_set_model (GTK_TREE_VIEW (impl->browse_files_tree_view),
-                           GTK_TREE_MODEL (impl->recent_model_sort));
 }
 
 typedef struct
@@ -9749,6 +9749,9 @@ recent_idle_cleanup (gpointer data)
 {
   RecentLoadData *load_data = data;
   GtkFileChooserDefault *impl = load_data->impl;
+
+  gtk_tree_view_set_model (GTK_TREE_VIEW (impl->browse_files_tree_view),
+                           GTK_TREE_MODEL (impl->recent_model_sort));
 
   set_busy_cursor (impl, FALSE);
   
@@ -9782,6 +9785,9 @@ recent_item_get_info_cb (GtkFileSystemHandle *handle,
   GtkFileSystemHandle *model_handle;
   gboolean is_folder = FALSE;
   struct RecentItemInsertRequest *request = data;
+
+  if (!request->impl->recent_model)
+    goto out;
 
   path = gtk_tree_row_reference_get_path (request->row_ref);
   if (!path)

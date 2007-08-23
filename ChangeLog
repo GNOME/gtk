@@ -1,3 +1,18 @@
+2007-08-23  Emmanuele Bassi  <ebassi@gnome.org>
+
+	* gtkfilechooserdefault.c:
+	(search_hit_get_info_cb), (recent_item_get_info_cb): Check if
+	we are still holding the model before updating it; removes a
+	set of critical warnings when switching to the browse mode from
+	a loading search or recent files list.
+
+	(recent_clear_model), (recent_sort_model),
+	(recent_idle_cleanup): When in recent files mode, set the
+	model for the files list view when we have completed the loading
+	of the recently used files list. This makes switching between
+	modes fast again and reduces the amount of redraws needed
+	to display the list. (#469214)
+
 2007-08-22  Emmanuele Bassi  <ebassi@gnome.org>
 
 	* configure.in: Remove oc (Occitane) from LINGUAS and unbreak
