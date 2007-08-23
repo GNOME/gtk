@@ -11,8 +11,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-08-15 03:53+0100\n"
-"PO-Revision-Date: 2007-08-15 20:42+0800\n"
+"POT-Creation-Date: 2007-08-16 03:58+0100\n"
+"PO-Revision-Date: 2007-08-23 16:37+0800\n"
 "Last-Translator: Yang Zhang <zyangmath@gmail.com>\n"
 "Language-Team: zh_CN <i18n-translation@lists.linux.net.cn>\n"
 "MIME-Version: 1.0\n"
@@ -1118,6 +1118,21 @@ msgstr "Space"
 #: ../gtk/gtkaccellabel.c:626
 msgid "keyboard label|Backslash"
 msgstr "\\"
+
+#: ../gtk/gtkbuilderparser.c:289
+#, c-format
+msgid "Invalid type function: `%s'"
+msgstr "无效的类型函数：%s"
+
+#: ../gtk/gtkbuilderparser.c:729
+#, c-format
+msgid "Invalid root element: '%s'"
+msgstr "无效的根元素：%s"
+
+#: ../gtk/gtkbuilderparser.c:761
+#, c-format
+msgid "Unhandled tag: '%s'"
+msgstr "未处理的标记：%s"
 
 #. Translate to calendar:YM if you want years to be displayed
 #. * before months; otherwise translate to calendar:MY.
@@ -2400,7 +2415,7 @@ msgstr "双面(_W)："
 
 #: ../gtk/gtkprintunixdialog.c:2036
 msgid "_Only print:"
-msgstr "只打印(_O)："
+msgstr "打印(_O)："
 
 #. In enum order
 #: ../gtk/gtkprintunixdialog.c:2051
@@ -2469,11 +2484,11 @@ msgstr "添加封面页"
 
 #: ../gtk/gtkprintunixdialog.c:2260
 msgid "Be_fore:"
-msgstr "先于(_F)："
+msgstr "前(_F)："
 
 #: ../gtk/gtkprintunixdialog.c:2275
 msgid "_After:"
-msgstr "后于(_A)："
+msgstr "后(_A)："
 
 #: ../gtk/gtkprintunixdialog.c:2290
 msgid "Job"
@@ -4153,7 +4168,7 @@ msgstr "IPA"
 #. ID
 #: ../modules/input/immultipress.c:31
 msgid "Multipress"
-msgstr ""
+msgstr "Multipress"
 
 #. ID
 #: ../modules/input/imthai.c:35
