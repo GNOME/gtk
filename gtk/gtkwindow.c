@@ -7382,7 +7382,7 @@ gtk_window_group_remove_window (GtkWindowGroup *window_group,
 				GtkWindow      *window)
 {
   g_return_if_fail (GTK_IS_WINDOW_GROUP (window_group));
-  g_return_if_fail (GTK_IS_WIDGET (window));
+  g_return_if_fail (GTK_IS_WINDOW (window));
   g_return_if_fail (window->group == window_group);
 
   g_object_ref (window);
