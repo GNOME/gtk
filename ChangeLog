@@ -1,5 +1,10 @@
 2007-08-23  Cody Russell  <bratsche@gnome.org>
 
+	* Makefile.am: Fix make dist failure by changing 
+	README.cvs-commits to README.commits. (#469395, Frederic Peters)
+
+2007-08-23  Cody Russell  <bratsche@gnome.org>
+
 	* HACKING: Change references to README.cvs-commits so they say
 	README.commits.
 

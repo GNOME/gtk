@@ -20,7 +20,7 @@ EXTRA_DIST =			\
 	ChangeLog.pre-2-10	\
 	ChangeLog.gtk-async-file-chooser	\
 	ChangeLog.gtk-printing	\
-	README.cvs-commits	\
+	README.commits	\
 	README.win32		\
 	config.h.win32		\
 	makefile.msc	\
