@@ -1,4 +1,5 @@
 2007-08-23  Cody Russell  <bratsche@gnome.org>
+
 	* gtk/gtkwindow.c (gtk_window_group_remove_window: Use the
 	correct type check on `window'.  We now check GTK_IS_WINDOW
 	rather than GTK_IS_WIDGET. (#461483, Josselin Mouette)
