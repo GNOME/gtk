@@ -1,5 +1,5 @@
 # Brazilian Portuguese translation of the Gimp Toolkit
-# Copyright (C) 1999, 2004, 2005 Free Software Foundation, Inc.
+# Copyright (C) 1999-2007 Free Software Foundation, Inc.
 # Alex Sandro Queiroz e Silva <asandro@lcg.dc.ufc.br>, 1999.
 # Afonso Celso Medina <medina@maua.br>, 2004, 2005.
 # Leonardo Ferreira Fontenelle <leo.fontenelle@gmail.com>, 2006.
@@ -10,9 +10,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-08-11 23:42-0300\n"
-"PO-Revision-Date: 2007-08-12 01:26-0300\n"
-"Last-Translator: Pedro V M de Medeiros <pedrovmm@gmail.com>\n"
+"POT-Creation-Date: 2007-08-27 03:50+0100\n"
+"PO-Revision-Date: 2007-08-27 08:50-0300\n"
+"Last-Translator: Og Maciel <ogmaciel@gnome.org>\n"
 "Language-Team: Brazilian Portuguese <gnome-l10n-br@listas.cipsga.org.br>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -407,7 +407,7 @@ msgid "Whether the action group is visible."
 msgstr "Se o grupo de ações está visível."
 
 #: ../gtk/gtkadjustment.c:86 ../gtk/gtkcellrendererprogress.c:128
-#: ../gtk/gtkspinbutton.c:268
+#: ../gtk/gtkscalebutton.c:181 ../gtk/gtkspinbutton.c:268
 msgid "Value"
 msgstr "Valor"
 
@@ -773,6 +773,14 @@ msgstr "Posição"
 #: ../gtk/gtkbox.c:145 ../gtk/gtknotebook.c:684
 msgid "The index of the child in the parent"
 msgstr "O índice do filho dentro do pai"
+
+#: ../gtk/gtkbuilder.c:104
+msgid "Translation Domain"
+msgstr "Domínio de Tradução"
+
+#: ../gtk/gtkbuilder.c:105
+msgid "The translation domain used by gettext"
+msgstr "O domínio de tradução usado pelo gettext"
 
 #: ../gtk/gtkbutton.c:200
 msgid ""
@@ -1261,7 +1269,8 @@ msgid "Orientation and growth direction of the progress bar"
 msgstr "Orientação e direção de crescimento da barra de progresso"
 
 #: ../gtk/gtkcellrendererspin.c:93 ../gtk/gtkprogressbar.c:122
-#: ../gtk/gtkrange.c:345 ../gtk/gtkspinbutton.c:207
+#: ../gtk/gtkrange.c:345 ../gtk/gtkscalebutton.c:200
+#: ../gtk/gtkspinbutton.c:207
 msgid "Adjustment"
 msgstr "Ajustamento"
 
@@ -2773,7 +2782,7 @@ msgstr "Conjunto de ícones"
 msgid "Icon set to display"
 msgstr "Conjunto de ícones a ser exibido"
 
-#: ../gtk/gtkimage.c:187 ../gtk/gtktoolbar.c:530
+#: ../gtk/gtkimage.c:187 ../gtk/gtkscalebutton.c:191 ../gtk/gtktoolbar.c:530
 msgid "Icon size"
 msgstr "Tamanho do ícone"
 
@@ -4237,6 +4246,27 @@ msgstr "Valor de espaçamento"
 msgid "Space between value text and the slider/trough area"
 msgstr "Espaço entre o texto do valor e a área da barra de deslizar/calha"
 
+#: ../gtk/gtkscalebutton.c:182
+msgid "The value of the scale"
+msgstr "O valor da escala"
+
+#: ../gtk/gtkscalebutton.c:192
+msgid "The icon size"
+msgstr "O tamanho do ícone"
+
+#: ../gtk/gtkscalebutton.c:201
+msgid ""
+"The GtkAdjustment that contains the current value of this scale button object"
+msgstr "O GtkAdjustment que contém o valor atual deste objeto botão de escala"
+
+#: ../gtk/gtkscalebutton.c:229
+msgid "Icons"
+msgstr "Ícones"
+
+#: ../gtk/gtkscalebutton.c:230
+msgid "List of icon names"
+msgstr "Lista de nomes de ícones"
+
 #: ../gtk/gtkscrollbar.c:50
 msgid "Minimum Slider Length"
 msgstr "Comprimento Mínimo da Barra de Deslizar"
@@ -4625,8 +4655,8 @@ msgstr "Tempo limite de expansão"
 #: ../gtk/gtksettings.c:491
 msgid "Expand value for timeouts, when a widget is expanding a new region"
 msgstr ""
-"Valor da expansão para tempos limite, quando um widget estiver expandindo para "
-"uma região nova"
+"Valor da expansão para tempos limite, quando um widget estiver expandindo "
+"para uma região nova"
 
 #: ../gtk/gtksettings.c:526
 msgid "Color scheme"
@@ -6560,16 +6590,8 @@ msgstr "Como desenhar a barra de status do método de entrada"
 #~ "Um número entre 0.0 e 1.0 especificando o alinhamento vertical do texto "
 #~ "no widget de progresso"
 
-#, fuzzy
-#~ msgid "The current page in the document."
-#~ msgstr "O tamanho da página do ajuste"
-
 #~ msgid "Homogenous"
 #~ msgstr "Homogéneo"
-
-#, fuzzy
-#~ msgid "Show Preview"
-#~ msgstr "Mostrar texto"
 
 #~ msgid "Whether this text is hidden. Not implemented in GTK 2.0"
 #~ msgstr "Se este texto está escondido. Não implementado no GTK 2.0"
