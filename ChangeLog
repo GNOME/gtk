@@ -1,3 +1,8 @@
+2007-08-27  Stefan Kost  <ensonic@users.sf.net>
+
+	* gtk/gtkwindow.c: Update menu accelerators, when adding/removing
+	AccelGroups dynamically. (#469374)
+
 2007-08-27  Cody Russell  <bratsche@gnome.org>
 
 	* modules/engines/ms-windows/msw_style.c: Correct draw_box()
