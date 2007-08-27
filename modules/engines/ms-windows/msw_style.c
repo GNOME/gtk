@@ -2155,6 +2155,17 @@ draw_box (GtkStyle * style,
                 return;
             }
 	}
+    else if (detail && !strcmp (detail, "notebook") && GTK_IS_NOTEBOOK (widget))
+	{
+	    GtkNotebook *notebook = GTK_NOTEBOOK (widget);
+
+	    if (xp_theme_draw (window, XP_THEME_ELEMENT_TAB_PANE, style,
+			       x, y, width, height, state_type, area))
+		{
+		    return;
+		}
+	}
+
     else
 	{
 	    const gchar *name = gtk_widget_get_name (widget);
