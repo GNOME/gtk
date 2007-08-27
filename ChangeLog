@@ -1,3 +1,12 @@
+2007-08-27  Cody Russell  <bratsche@gnome.org>
+
+	Merge from trunk:
+
+        * modules/engines/ms-windows/msw_style.c: Correct draw_box()
+        function to check detail for "notebook".  This fixes a problem
+        where notebooks without visible headers were not styling
+        correctly. (#470033, Daniel Atallah and Cody Russell)
+
 2007-08-16  Cody Russell  <bratsche@gnome.org>
 
 	Merge from trunk:
