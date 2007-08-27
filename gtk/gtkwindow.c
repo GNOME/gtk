@@ -1402,6 +1402,7 @@ gtk_window_add_accel_group (GtkWindow     *window,
   g_signal_connect_object (accel_group, "accel_changed",
 			   G_CALLBACK (gtk_window_notify_keys_changed),
 			   window, G_CONNECT_SWAPPED);
+  gtk_window_notify_keys_changed (window);
 }
 
 /**
@@ -1422,6 +1423,7 @@ gtk_window_remove_accel_group (GtkWindow     *window,
 					gtk_window_notify_keys_changed,
 					window);
   _gtk_accel_group_detach (accel_group, G_OBJECT (window));
+  gtk_window_notify_keys_changed (window);
 }
 
 static GtkMnemonicHash *

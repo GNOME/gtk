@@ -1,3 +1,10 @@
+2007-08-27  Stefan Kost  <ensonic@users.sf.net>
+
+	Merge from trunk:
+
+	* gtk/gtkwindow.c: Update menu accelerators, when adding/removing
+	AccelGroups dynamically. (#469374)
+
 2007-08-27  Cody Russell  <bratsche@gnome.org>
 
 	Merge from trunk:
