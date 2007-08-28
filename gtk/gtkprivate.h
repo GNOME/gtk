@@ -104,6 +104,10 @@ gboolean _gtk_fnmatch (const char *pattern,
 #define GTK_PARAM_WRITABLE G_PARAM_WRITABLE|G_PARAM_STATIC_NAME|G_PARAM_STATIC_NICK|G_PARAM_STATIC_BLURB
 #define GTK_PARAM_READWRITE G_PARAM_READWRITE|G_PARAM_STATIC_NAME|G_PARAM_STATIC_NICK|G_PARAM_STATIC_BLURB
 
+typedef void (*GtkChildSizeRequest) (GtkWidget      *child,
+			             GtkRequisition *requisition,
+                                     GtkWidget      *widget);
+
 G_END_DECLS
 
 #endif /* __GTK_PRIVATE_H__ */

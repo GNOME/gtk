@@ -29,6 +29,7 @@
 #include "gtkextendedlayout.h"
 #include "gtkintl.h"
 #include "gtkalias.h"
+#include "gtkprivate.h"
 
 
 enum {
@@ -148,9 +149,31 @@ gtk_hbox_get_property (GObject    *object,
 }
 
 static void
+gtk_hbox_natural_size_request (GtkWidget      *child,
+                               GtkRequisition *requisition,
+                               GtkWidget      *widget)
+{
+  GtkExtendedLayoutFeatures features = 0;
+
+  if (GTK_IS_EXTENDED_LAYOUT (child))
+    features = gtk_extended_layout_get_features ((GtkExtendedLayout*) child);
+
+  if (features & GTK_EXTENDED_LAYOUT_WIDTH_FOR_HEIGHT)
+    {
+      requisition->width = gtk_extended_layout_get_width_for_height (
+        (GtkExtendedLayout*) child, widget->allocation.height);
+      requisition->height = widget->allocation.height;
+    }
+  else if (features & GTK_EXTENDED_LAYOUT_NATURAL_SIZE)
+    gtk_extended_layout_get_natural_size ((GtkExtendedLayout*) child, requisition);
+  else 
+    gtk_widget_size_request (child, requisition);
+}
+
+static void
 gtk_hbox_real_size_request (GtkWidget      *widget,
 		            GtkRequisition *requisition,
-                            gboolean        consider_natural_size)
+                            GtkChildSizeRequest  size_request_func)
 {
   GtkBox *box = GTK_BOX (widget);
 
@@ -218,17 +241,11 @@ gtk_hbox_real_size_request (GtkWidget      *widget,
           if (GTK_WIDGET_VISIBLE (child->widget))
             {
               GtkRequisition child_requisition;
-              gint width;
-
-              if (consider_natural_size && GTK_EXTENDED_LAYOUT_HAS_NATURAL_SIZE (child->widget))
-                gtk_extended_layout_get_natural_size (GTK_EXTENDED_LAYOUT (child->widget), 
-                                                      &child_requisition);
-              else
-                gtk_widget_size_request (child->widget, &child_requisition);
+              size_request_func (child->widget, &child_requisition, widget);
 
               if (box->homogeneous)
                 {
-                  width = child_requisition.width + child->padding * 2;
+                  gint width = child_requisition.width + child->padding * 2;
                   requisition->width = MAX (requisition->width, width);
                 }
               else
@@ -262,7 +279,7 @@ static void
 gtk_hbox_size_request (GtkWidget      *widget,
 		       GtkRequisition *requisition)
 {
-  gtk_hbox_real_size_request (widget, requisition, FALSE);
+  gtk_hbox_real_size_request (widget, requisition, (GtkChildSizeRequest)gtk_widget_size_request);
 }
 
 static void
@@ -309,13 +326,15 @@ gtk_hbox_size_allocate (GtkWidget     *widget,
       gint *minimum_requisitions;
 
       gint available, natural, extra;
-      gint natural_width;
+      gint minimum_width, natural_width;
       gint i;
 
       direction = gtk_widget_get_direction (widget);
       border_width = GTK_CONTAINER (box)->border_width;
 
+      minimum_width = widget->requisition.width;
       natural_width = 0;
+
       natural_requisitions = g_newa (gint, nvis_children);
       minimum_requisitions = g_newa (gint, nvis_children);
 
@@ -333,18 +352,30 @@ gtk_hbox_size_allocate (GtkWidget     *widget,
 
               gtk_widget_size_request (child->widget, &child_requisition);
               minimum_requisitions[i] = child_requisition.width;
+              natural_requisitions[i] = 0;
 
-              if (GTK_EXTENDED_LAYOUT_HAS_NATURAL_SIZE (child->widget))
+              if (GTK_IS_EXTENDED_LAYOUT (child->widget))
                 {
-                  gtk_extended_layout_get_natural_size (
-                    GTK_EXTENDED_LAYOUT (child->widget), 
-                    &child_requisition);
-                  natural_requisitions[i] =
-                    child_requisition.width - 
-                    minimum_requisitions[i];
+                  GtkExtendedLayout *layout = (GtkExtendedLayout*)child->widget;
+                  GtkExtendedLayoutFeatures features = gtk_extended_layout_get_features (layout);
+
+                  if (features & GTK_EXTENDED_LAYOUT_WIDTH_FOR_HEIGHT)
+                    {
+                      gint width = gtk_extended_layout_get_width_for_height (layout, allocation->height);
+                      gint dx = minimum_requisitions[i] - width;
+
+                      if (dx > 0)
+                {
+                          minimum_requisitions[i] = width;
+                          minimum_width -= dx;
+                        }
+                    }
+                  else if (features & GTK_EXTENDED_LAYOUT_NATURAL_SIZE)
+                    {
+                      gtk_extended_layout_get_natural_size (layout, &child_requisition);
+                      natural_requisitions[i] = child_requisition.width - minimum_requisitions[i];
+                    }
                 }
-              else
-                natural_requisitions[i] = 0;
 
               natural_width += natural_requisitions[i++];
             }
@@ -361,7 +392,7 @@ gtk_hbox_size_allocate (GtkWidget     *widget,
 	{
           if (nexpand_children > 0 || natural_width > 0)
             {
-              available = (gint)allocation->width - widget->requisition.width;
+              available = (gint)allocation->width - minimum_width;
               natural = MAX (0, MIN (available, natural_width));
               available -= natural;
             }
@@ -542,7 +573,7 @@ static void
 gtk_hbox_extended_layout_get_natural_size (GtkExtendedLayout *layout,
                                            GtkRequisition    *requisition)
 {
-  gtk_hbox_real_size_request (GTK_WIDGET (layout), requisition, TRUE);
+  gtk_hbox_real_size_request (GTK_WIDGET (layout), requisition, gtk_hbox_natural_size_request);
 }
 
 static gint

@@ -29,6 +29,7 @@
 #include "gtkextendedlayout.h"
 #include "gtkintl.h"
 #include "gtkalias.h"
+#include "gtkprivate.h"
 
 
 static void gtk_vbox_size_request  (GtkWidget      *widget,
@@ -72,10 +73,6 @@ gtk_vbox_new (gboolean homogeneous,
   return GTK_WIDGET (vbox);
 }
 
-typedef void (*GtkChildSizeRequest) (GtkWidget      *child,
-			             GtkRequisition *requisition,
-                                     GtkWidget      *widget);
-
 static void
 gtk_vbox_natural_size_request (GtkWidget      *child,
 			       GtkRequisition *requisition,
@@ -105,10 +102,8 @@ gtk_vbox_real_size_request (GtkWidget           *widget,
 {
   GtkBox *box;
   GtkBoxChild *child;
-  GtkRequisition child_requisition;
   GList *children;
   gint nvis_children;
-  gint height;
 
   box = GTK_BOX (widget);
   requisition->width = 0;
@@ -123,11 +118,12 @@ gtk_vbox_real_size_request (GtkWidget           *widget,
 
       if (GTK_WIDGET_VISIBLE (child->widget))
 	{
+          GtkRequisition child_requisition;
           size_request_func (child->widget, &child_requisition, widget);
 
 	  if (box->homogeneous)
 	    {
-	      height = child_requisition.height + child->padding * 2;
+              gint height = child_requisition.height + child->padding * 2;
 	      requisition->height = MAX (requisition->height, height);
 	    }
 	  else
@@ -248,7 +244,6 @@ gtk_vbox_size_allocate (GtkWidget     *widget,
                       gtk_extended_layout_get_natural_size (layout, &child_requisition);
                       natural_requisitions[i] = child_requisition.height - minimum_requisitions[i];
                     }
-
                 }
 
               natural_height += natural_requisitions[i++];
