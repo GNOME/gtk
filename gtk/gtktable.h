@@ -140,6 +140,9 @@ void	   gtk_table_set_homogeneous  (GtkTable	       *table,
 				       gboolean		homogeneous);
 gboolean   gtk_table_get_homogeneous  (GtkTable        *table);
 
+void           gtk_table_set_orientation  (GtkTable       *table,
+					   GtkOrientation  orientation);
+GtkOrientation gtk_table_get_orientation  (GtkTable       *table);
 
 G_END_DECLS
 

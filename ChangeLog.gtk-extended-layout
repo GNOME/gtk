@@ -1,5 +1,11 @@
 2007-08-28  Mathias Hasselmann  <mathias.hasselmann@gmx.de>
 
+	* tests/testextendedlayout.c: Test size-for-allocation for GtkTable.
+	* gtk/gtk.symbols, gtk/gtktable.c, gtk/gtktable.h: Add orientation
+	property needed for choosing a size-for-allocation strategy.
+
+2007-08-28  Mathias Hasselmann  <mathias.hasselmann@gmx.de>
+
 	* gtk/gtkhbox.c: Consider width-for-height information.
 	* gtk/gtkvbox.c, gtk/gtkprivate.h: Move GtkChildSizeRequest
 	to gtkprivate.h.

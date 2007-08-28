@@ -939,9 +939,10 @@ natural_size_test_misc_new (TestSuite *suite,
 
 static TestCase*
 size_for_allocation_test_new (TestSuite *suite,
-                              gboolean   vertical)
+                              gboolean   vertical,
+                              gboolean   table)
 {
-  GtkWidget *box, *child;
+  GtkWidget *container, *child;
   TestCase *test;
   int i;
 
@@ -949,10 +950,19 @@ size_for_allocation_test_new (TestSuite *suite,
     {
       test = test_case_new (suite,
                             "Size for Allocation", 
-                            "Height for Width", 
+                            table ? "Height for Width, GtkTable"
+                                  : "Height for Width, GtkVBox",
                             gtk_hpaned_new ());
 
-      box = gtk_vbox_new (FALSE, 6);
+      if (table)
+        {
+          container = gtk_table_new (4, 1, FALSE);
+          gtk_table_set_orientation (GTK_TABLE (container), 
+                                     GTK_ORIENTATION_VERTICAL);
+        }
+      else
+        container = gtk_vbox_new (FALSE, 6);
+
       child = gtk_label_new ("Move the handle to test\n"
                              "height-for-width requests");
 
@@ -962,19 +972,28 @@ size_for_allocation_test_new (TestSuite *suite,
     {
       test = test_case_new (suite,
                             "Size for Allocation", 
-                            "Width for Height",
+                            table ? "Width for Height, GtkTable"
+                                  : "Width for Height, GtkHBox",
                             gtk_vpaned_new ());
 
-      box = gtk_hbox_new (FALSE, 6);
+      if (table)
+        {
+          container = gtk_table_new (1, 4, FALSE);
+          gtk_table_set_orientation (GTK_TABLE (container), 
+                                     GTK_ORIENTATION_HORIZONTAL);
+        }
+      else
+        container = gtk_hbox_new (FALSE, 6);
+
       child = gtk_label_new ("Move the handle to test\n"
                              "width-for-height requests");
     }
 
   gtk_container_set_border_width (GTK_CONTAINER (test->widget), 6);
-  gtk_container_set_border_width (GTK_CONTAINER (box), 6);
+  gtk_container_set_border_width (GTK_CONTAINER (container), 6);
   gtk_misc_set_padding (GTK_MISC (child), 6, 6);
 
-  gtk_paned_pack1 (GTK_PANED (test->widget), box, TRUE, FALSE);
+  gtk_paned_pack1 (GTK_PANED (test->widget), container, TRUE, FALSE);
   gtk_paned_pack2 (GTK_PANED (test->widget), child, FALSE, FALSE);
 
   for (i = 0; i < 4; ++i)
@@ -986,7 +1005,15 @@ size_for_allocation_test_new (TestSuite *suite,
           gtk_label_set_use_markup (GTK_LABEL (child), TRUE);
           test_case_append_guide (test, child, GUIDE_EXTERIOUR_BOTH, -1);
           test_case_append_guide (test, child, GUIDE_INTERIOUR_BOTH, -1);
-          gtk_box_pack_start (GTK_BOX (box), child, FALSE, TRUE, 0);
+
+          if (!table)
+            gtk_box_pack_start (GTK_BOX (container), child, FALSE, TRUE, 0);
+          else if (vertical)
+            gtk_table_attach (GTK_TABLE (container), child, 0, 1, i, i + 1,
+                              GTK_EXPAND|GTK_FILL, GTK_FILL, 0, 0);
+          else
+            gtk_table_attach (GTK_TABLE (container), child, i, i + 1, 0, 1, 
+                              GTK_FILL, GTK_EXPAND|GTK_FILL, 0, 0);
 
           if (i > 0)
             gtk_label_set_full_size (GTK_LABEL (child), TRUE);
@@ -1007,8 +1034,15 @@ size_for_allocation_test_new (TestSuite *suite,
           gtk_container_add (GTK_CONTAINER (child),
                              gtk_image_new_from_stock (GTK_STOCK_DIALOG_INFO,
                                                        GTK_ICON_SIZE_DIALOG));
-          gtk_box_pack_start (GTK_BOX (box), child, TRUE, TRUE, 0);
 
+          if (!table)
+            gtk_box_pack_start (GTK_BOX (container), child, TRUE, TRUE, 0);
+          else if (vertical)
+            gtk_table_attach (GTK_TABLE (container), child, 0, 1, i, i + 1,
+                              GTK_EXPAND|GTK_FILL, GTK_EXPAND|GTK_FILL, 0, 0);
+          else
+            gtk_table_attach (GTK_TABLE (container), child, i, i + 1, 0, 1,
+                              GTK_EXPAND|GTK_FILL, GTK_EXPAND|GTK_FILL, 0, 0);
         }
     }
 
@@ -2498,8 +2532,10 @@ test_suite_new (gchar *arg0)
   test_suite_append (self, natural_size_test_new (self, FALSE, TRUE));
   test_suite_append (self, natural_size_test_new (self, TRUE, TRUE));
   test_suite_append (self, natural_size_test_misc_new (self, arg0));
-  test_suite_append (self, size_for_allocation_test_new (self, TRUE));
-  test_suite_append (self, size_for_allocation_test_new (self, FALSE));
+  test_suite_append (self, size_for_allocation_test_new (self, TRUE, FALSE));
+  test_suite_append (self, size_for_allocation_test_new (self, FALSE, FALSE));
+  test_suite_append (self, size_for_allocation_test_new (self, TRUE, TRUE));
+  test_suite_append (self, size_for_allocation_test_new (self, FALSE, TRUE));
   test_suite_append (self, baseline_test_new (self));
   test_suite_append (self, baseline_test_bin_new (self));
   test_suite_append (self, baseline_test_hbox_new (self, FALSE));

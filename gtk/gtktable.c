@@ -32,6 +32,10 @@
 #include "gtkintl.h"
 #include "gtkalias.h"
 
+#define GTK_TABLE_GET_PRIVATE(o) (G_TYPE_INSTANCE_GET_PRIVATE ((o), GTK_TYPE_TABLE, GtkTablePrivate))
+
+typedef struct _GtkTablePrivate GtkTablePrivate;
+
 enum
 {
   PROP_0,
@@ -39,7 +43,8 @@ enum
   PROP_N_COLUMNS,
   PROP_COLUMN_SPACING,
   PROP_ROW_SPACING,
-  PROP_HOMOGENEOUS
+  PROP_HOMOGENEOUS,
+  PROP_ORIENTATION
 };
 
 enum
@@ -55,6 +60,10 @@ enum
   CHILD_PROP_Y_PADDING
 };
   
+struct _GtkTablePrivate
+{
+  GtkOrientation orientation;
+};
 
 static void gtk_table_finalize	    (GObject	    *object);
 static void gtk_table_size_request  (GtkWidget	    *widget,
@@ -126,7 +135,8 @@ gtk_table_class_init (GtkTableClass *class)
   container_class->child_type = gtk_table_child_type;
   container_class->set_child_property = gtk_table_set_child_property;
   container_class->get_child_property = gtk_table_get_child_property;
-  
+
+  g_type_class_add_private (class, sizeof (GtkTablePrivate));
 
   g_object_class_install_property (gobject_class,
                                    PROP_N_ROWS,
@@ -171,6 +181,14 @@ gtk_table_class_init (GtkTableClass *class)
 							 P_("If TRUE, the table cells are all the same width/height"),
 							 FALSE,
 							 GTK_PARAM_READWRITE));
+  g_object_class_install_property (gobject_class,
+                                   PROP_ORIENTATION,
+                                   g_param_spec_enum ("orientation",
+						      P_("Orientation"),
+						      P_("The orientation used for child allocation"),
+						      GTK_TYPE_ORIENTATION,
+						      GTK_ORIENTATION_VERTICAL,
+						      GTK_PARAM_READWRITE));
 
   gtk_container_class_install_child_property (container_class,
 					      CHILD_PROP_LEFT_ATTACH,
@@ -263,6 +281,9 @@ gtk_table_get_property (GObject      *object,
     case PROP_HOMOGENEOUS:
       g_value_set_boolean (value, table->homogeneous);
       break;
+    case PROP_ORIENTATION:
+      g_value_set_enum (value, GTK_TABLE_GET_PRIVATE (table)->orientation);
+      break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
@@ -295,6 +316,9 @@ gtk_table_set_property (GObject      *object,
       break;
     case PROP_HOMOGENEOUS:
       gtk_table_set_homogeneous (table, g_value_get_boolean (value));
+      break;
+    case PROP_ORIENTATION:
+      gtk_table_set_orientation (table, g_value_get_enum (value));
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -445,6 +469,8 @@ gtk_table_get_child_property (GtkContainer    *container,
 static void
 gtk_table_init (GtkTable *table)
 {
+  GtkTablePrivate *priv;
+
   GTK_WIDGET_SET_FLAGS (table, GTK_NO_WINDOW);
   gtk_widget_set_redraw_on_allocate (GTK_WIDGET (table), FALSE);
   
@@ -456,6 +482,9 @@ gtk_table_init (GtkTable *table)
   table->column_spacing = 0;
   table->row_spacing = 0;
   table->homogeneous = FALSE;
+
+  priv = GTK_TABLE_GET_PRIVATE (table);
+  priv->orientation = GTK_ORIENTATION_VERTICAL;
 
   gtk_table_resize (table, 1, 1);
 }
@@ -798,6 +827,52 @@ gtk_table_get_homogeneous (GtkTable *table)
   g_return_val_if_fail (GTK_IS_TABLE (table), FALSE);
 
   return table->homogeneous;
+}
+
+/**
+ * gtk_table_set_orientation:
+ * @table: a #GtkTable
+ * @orientation: the orientation to use
+ *
+ * Changes the orientation of the table. The orientation specifies if
+ * height-for-width or width-for-height is used for child allocation.
+ * With an orientation of #GTK_ORIENTATION_VERTICAL heigth-for-width
+ * and for #GTK_ORIENTATION_HORIZONTAL width-for-heigth is used.
+ **/
+void
+gtk_table_set_orientation (GtkTable       *table,
+			   GtkOrientation  orientation)
+{
+  GtkTablePrivate *priv;
+
+  g_return_if_fail (GTK_IS_TABLE (table));
+  priv = GTK_TABLE_GET_PRIVATE (table);
+
+  if (orientation != priv->orientation)
+    {
+      priv->orientation = orientation;
+      
+      if (GTK_WIDGET_VISIBLE (table))
+	gtk_widget_queue_resize (GTK_WIDGET (table));
+
+      g_object_notify (G_OBJECT (table), "orientation");
+    }
+}
+
+/**
+ * gtk_table_get_orientation:
+ * @table: a #GtkTable
+ *
+ * Returns whether the table prefers height-for-width or width-for-height
+ * for child allocation. (See gtk_table_set_orientation ())
+ *
+ * Return value: the orientation used
+ **/
+GtkOrientation
+gtk_table_get_orientation (GtkTable *table)
+{
+  g_return_val_if_fail (GTK_IS_TABLE (table), GTK_ORIENTATION_VERTICAL);
+  return GTK_TABLE_GET_PRIVATE (table)->orientation;
 }
 
 static void
