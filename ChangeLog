@@ -1,3 +1,10 @@
+Thu Aug 23 15:32:09 2007  Tim Janik  <timj@imendio.com>
+
+	* gdk/x11/gdkgeometry-x11.c (_gdk_window_process_expose): fix
+	X serial handling to cope with wraparounds and maintain referential
+	integrity when removing list nodes. based on a patch by Hui Wang,
+	fixes #461648.
+
 2007-08-27  Stefan Kost  <ensonic@users.sf.net>
 
 	* gtk/gtkwindow.c: Update menu accelerators, when adding/removing
