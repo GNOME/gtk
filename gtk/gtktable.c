@@ -1487,6 +1487,7 @@ gtk_table_size_allocate_pass1 (GtkTable *table)
   
   real_width = GTK_WIDGET (table)->allocation.width - GTK_CONTAINER (table)->border_width * 2;
   real_height = GTK_WIDGET (table)->allocation.height - GTK_CONTAINER (table)->border_width * 2;
+  natural_delta = 0;
   
   if (table->homogeneous)
     {
@@ -1521,7 +1522,6 @@ gtk_table_size_allocate_pass1 (GtkTable *table)
       width = 0;
       nexpand = 0;
       nshrink = 0;
-      natural_delta = 0;
       
       for (col = 0; col < table->ncols; col++)
 	{

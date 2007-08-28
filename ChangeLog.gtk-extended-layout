@@ -1,5 +1,9 @@
 2007-08-28  Mathias Hasselmann  <mathias.hasselmann@gmx.de>
 
+	* gtk/gtktable.c: Make sure natural_delta is initialized.
+
+2007-08-28  Mathias Hasselmann  <mathias.hasselmann@gmx.de>
+
 	* tests/testextendedlayout.c: Test size-for-allocation for GtkTable.
 	* gtk/gtk.symbols, gtk/gtktable.c, gtk/gtktable.h: Add orientation
 	property needed for choosing a size-for-allocation strategy.
