@@ -1,3 +1,9 @@
+2007-08-29  Kristian Rietveld  <kris@imendio.com>
+
+	* gtk/gtksettings.c: lower the default timeout values for
+	gtk-tooltip-timeout and gtk-tooltip-browse-timeout. (#451202,
+	Richard Hult).
+
 Thu Aug 23 15:32:09 2007  Tim Janik  <timj@imendio.com>
 
 	* gdk/x11/gdkgeometry-x11.c (_gdk_window_process_expose): fix

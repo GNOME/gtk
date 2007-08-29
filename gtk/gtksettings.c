@@ -570,11 +570,11 @@ gtk_settings_class_init (GtkSettingsClass *class)
    */
   result = settings_install_property_parser (class,
 					     g_param_spec_int ("gtk-tooltip-timeout",
- 							       P_("Tooltip timeout"),
- 							       P_("Timeout before tooltip is shown"),
- 							       0, G_MAXINT,
-							       1500,
- 							       GTK_PARAM_READWRITE),
+							       P_("Tooltip timeout"),
+							       P_("Timeout before tooltip is shown"),
+							       0, G_MAXINT,
+							       500,
+							       GTK_PARAM_READWRITE),
 					     NULL);
 
   g_assert (result == PROP_TOOLTIP_TIMEOUT);
@@ -596,11 +596,11 @@ gtk_settings_class_init (GtkSettingsClass *class)
    */
   result = settings_install_property_parser (class,
 					     g_param_spec_int ("gtk-tooltip-browse-timeout",
- 							       P_("Tooltip browse timeout"),
- 							       P_("Timeout before tooltip is shown when browse mode is enabled"),
- 							       0, G_MAXINT,
-							       100,
- 							       GTK_PARAM_READWRITE),
+							       P_("Tooltip browse timeout"),
+							       P_("Timeout before tooltip is shown when browse mode is enabled"),
+							       0, G_MAXINT,
+							       60,
+							       GTK_PARAM_READWRITE),
 					     NULL);
 
   g_assert (result == PROP_TOOLTIP_BROWSE_TIMEOUT);
