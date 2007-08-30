@@ -1,3 +1,9 @@
+2007-08-30  Richard Hult  <richard@imendio.com>
+
+	* gdk/quartz/gdkimage-quartz.c: (_gdk_quartz_image_copy_to_image):
+	Patch from Stefan Gehn to implement copying from a pixmap, bug
+	#348493.
+
 2007-08-29  Kristian Rietveld  <kris@imendio.com>
 
 	* gtk/gtksettings.c: lower the default timeout values for

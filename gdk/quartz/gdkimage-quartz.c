@@ -49,7 +49,83 @@ _gdk_quartz_image_copy_to_image (GdkDrawable *drawable,
   
   if (GDK_IS_PIXMAP_IMPL_QUARTZ (drawable))
     {
-      g_warning ("Copying a pixmap to an image is not implemented yet.");
+      GdkPixmapImplQuartz *pix_impl;
+      gint bytes_per_row;
+      guchar *data;
+      int x, y;
+
+      pix_impl = GDK_PIXMAP_IMPL_QUARTZ (drawable);
+      data = (guchar *)(pix_impl->data);
+
+      if (src_x + width > pix_impl->width || src_y + height > pix_impl->height)
+      	{
+          g_warning ("Out of bounds copy-area for pixmap -> image conversion\n");
+          return image;
+        }
+
+      switch (gdk_drawable_get_depth (drawable))
+        {
+        case 24:
+          bytes_per_row = pix_impl->width * 4;
+          for (y = 0; y < height; y++)
+            {
+              guchar *src = data + ((y + src_y) * bytes_per_row) + (src_x * 4);
+
+              for (x = 0; x < width; x++)
+                {
+                  gint32 pixel;
+	  
+                  /* RGB24, 4 bytes per pixel, skip first. */
+                  pixel = src[0] << 16 | src[1] << 8 | src[2];
+                  src += 4;
+
+                  gdk_image_put_pixel (image, dest_x + x, dest_y + y, pixel);
+                }
+            }
+          break;
+
+        case 32:
+          bytes_per_row = pix_impl->width * 4;
+          for (y = 0; y < height; y++)
+            {
+              guchar *src = data + ((y + src_y) * bytes_per_row) + (src_x * 4);
+
+              for (x = 0; x < width; x++)
+                {
+                  gint32 pixel;
+	  
+                  /* ARGB32, 4 bytes per pixel. */
+                  pixel = src[0] << 24 | src[1] << 16 | src[2] << 8 | src[3];
+                  src += 4;
+
+                  gdk_image_put_pixel (image, dest_x + x, dest_y + y, pixel);
+                }
+            }
+          break;
+
+        case 1: /* TODO: optimize */
+          bytes_per_row = pix_impl->width;
+          for (y = 0; y < height; y++)
+            {
+              guchar *src = data + ((y + src_y) * bytes_per_row) + src_x;
+
+              for (x = 0; x < width; x++)
+                {
+                  gint32 pixel;
+	  
+                  /* 8 bits */
+                  pixel = src[0];
+                  src++;
+
+                  gdk_image_put_pixel (image, dest_x + x, dest_y + y, pixel);
+                }
+            }
+          break;
+
+        default:
+          g_warning ("Unsupported bit depth %d\n", gdk_drawable_get_depth (drawable));
+          return image;
+        }
     }
   else if (GDK_IS_WINDOW_IMPL_QUARTZ (drawable))
     {
