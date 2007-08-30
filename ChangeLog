@@ -1,5 +1,11 @@
 2007-08-30  Richard Hult  <richard@imendio.com>
 
+	* gdk/quartz/gdkwindow-quartz.c: (gdk_window_set_keep_above,
+	gdk_window_set_keep_below): Patch from Stefan Gehn to implement
+	those, bug #459667.
+
+2007-08-30  Richard Hult  <richard@imendio.com>
+
 	* gdk/quartz/gdkimage-quartz.c: (_gdk_quartz_image_copy_to_image):
 	Patch from Stefan Gehn to implement copying from a pixmap, bug
 	#348493.

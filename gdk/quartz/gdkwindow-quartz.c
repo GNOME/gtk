@@ -1944,13 +1944,78 @@ gdk_window_set_hints (GdkWindow *window,
   /* FIXME: Implement */
 }
 
+static
+gint window_type_hint_to_level (GdkWindowTypeHint hint)
+{
+  switch (hint)
+    {
+    case GDK_WINDOW_TYPE_HINT_DOCK:
+    case GDK_WINDOW_TYPE_HINT_UTILITY:
+      return NSFloatingWindowLevel;
+
+    case GDK_WINDOW_TYPE_HINT_MENU: /* Torn-off menu */
+    case GDK_WINDOW_TYPE_HINT_DROPDOWN_MENU: /* Menu from menubar */
+      return NSTornOffMenuWindowLevel;
+
+    case GDK_WINDOW_TYPE_HINT_NOTIFICATION:
+    case GDK_WINDOW_TYPE_HINT_TOOLTIP:
+      return NSStatusWindowLevel;
+
+    case GDK_WINDOW_TYPE_HINT_SPLASHSCREEN:
+    case GDK_WINDOW_TYPE_HINT_POPUP_MENU:
+    case GDK_WINDOW_TYPE_HINT_COMBO:
+    case GDK_WINDOW_TYPE_HINT_DND:
+      return NSPopUpMenuWindowLevel;
+
+    case GDK_WINDOW_TYPE_HINT_NORMAL:  /* Normal toplevel window */
+    case GDK_WINDOW_TYPE_HINT_DIALOG:  /* Dialog window */
+    case GDK_WINDOW_TYPE_HINT_TOOLBAR: /* Window used to implement toolbars */
+    case GDK_WINDOW_TYPE_HINT_DESKTOP: /* N/A */
+      break;
+
+    default:
+      break;
+    }
+
+  return NSNormalWindowLevel;
+}
+
+static gboolean 
+window_type_hint_to_shadow (GdkWindowTypeHint hint)
+{
+  switch (hint)
+    {
+    case GDK_WINDOW_TYPE_HINT_NORMAL:  /* Normal toplevel window */
+    case GDK_WINDOW_TYPE_HINT_DIALOG:  /* Dialog window */
+    case GDK_WINDOW_TYPE_HINT_DOCK:
+    case GDK_WINDOW_TYPE_HINT_UTILITY:
+    case GDK_WINDOW_TYPE_HINT_MENU: /* Torn-off menu */
+    case GDK_WINDOW_TYPE_HINT_DROPDOWN_MENU: /* Menu from menubar */
+    case GDK_WINDOW_TYPE_HINT_SPLASHSCREEN:
+    case GDK_WINDOW_TYPE_HINT_POPUP_MENU:
+    case GDK_WINDOW_TYPE_HINT_COMBO:
+    case GDK_WINDOW_TYPE_HINT_NOTIFICATION:
+    case GDK_WINDOW_TYPE_HINT_TOOLTIP:
+      return TRUE;
+
+    case GDK_WINDOW_TYPE_HINT_TOOLBAR: /* Window used to implement toolbars */
+    case GDK_WINDOW_TYPE_HINT_DESKTOP: /* N/A */
+    case GDK_WINDOW_TYPE_HINT_DND:
+      break;
+
+    default:
+      break;
+    }
+
+  return FALSE;
+}
+
+
 void
 gdk_window_set_type_hint (GdkWindow        *window,
 			  GdkWindowTypeHint hint)
 {
   GdkWindowImplQuartz *impl;
-  gint                 level;
-  gboolean             shadow;
   
   g_return_if_fail (GDK_IS_WINDOW (window));
 
@@ -1965,66 +2030,8 @@ gdk_window_set_type_hint (GdkWindow        *window,
   if (GDK_WINDOW_IS_MAPPED (window))
     return;
 
-  switch (hint)
-    {
-    case GDK_WINDOW_TYPE_HINT_NORMAL:  /* Normal toplevel window */
-    case GDK_WINDOW_TYPE_HINT_DIALOG:  /* Dialog window */
-      level = NSNormalWindowLevel;
-      shadow = TRUE;
-      break;
-
-    case GDK_WINDOW_TYPE_HINT_TOOLBAR: /* Window used to implement toolbars */
-    case GDK_WINDOW_TYPE_HINT_DESKTOP: /* N/A */
-      level = NSNormalWindowLevel;
-      shadow = FALSE;
-      break;
-
-    case GDK_WINDOW_TYPE_HINT_DOCK:
-    case GDK_WINDOW_TYPE_HINT_UTILITY:
-      level = NSFloatingWindowLevel;
-      shadow = TRUE;
-      break;
-
-    case GDK_WINDOW_TYPE_HINT_MENU: /* Torn-off menu */
-      level = NSTornOffMenuWindowLevel;
-      shadow = TRUE;
-      break;
-      
-    case GDK_WINDOW_TYPE_HINT_DROPDOWN_MENU: /* Menu from menubar */
-      level = NSTornOffMenuWindowLevel;
-      shadow = TRUE;
-      break;
-
-    case GDK_WINDOW_TYPE_HINT_SPLASHSCREEN:
-      level = NSPopUpMenuWindowLevel;
-      shadow = TRUE;
-      break;
-
-    case GDK_WINDOW_TYPE_HINT_POPUP_MENU:
-    case GDK_WINDOW_TYPE_HINT_COMBO:
-      level = NSPopUpMenuWindowLevel;
-      shadow = TRUE;
-      break;
-      
-    case GDK_WINDOW_TYPE_HINT_NOTIFICATION:
-    case GDK_WINDOW_TYPE_HINT_TOOLTIP:
-      level = NSStatusWindowLevel;
-      shadow = TRUE;
-      break;
-
-    case GDK_WINDOW_TYPE_HINT_DND:
-      level = NSPopUpMenuWindowLevel;
-      shadow = FALSE;
-      break;
-
-    default:
-      level = NSNormalWindowLevel;
-      shadow = FALSE;
-      break;
-    }
-
-  [impl->toplevel setHasShadow:shadow];
-  [impl->toplevel setLevel:level];
+  [impl->toplevel setHasShadow: window_type_hint_to_shadow (hint)];
+  [impl->toplevel setLevel: window_type_hint_to_level (hint)];
 }
 
 GdkWindowTypeHint
@@ -2316,17 +2323,39 @@ gdk_window_unfullscreen (GdkWindow *window)
 void
 gdk_window_set_keep_above (GdkWindow *window, gboolean setting)
 {
-  g_return_if_fail (GDK_IS_WINDOW (window));
+  GdkWindowObject *private = (GdkWindowObject *) window;
+  GdkWindowImplQuartz *impl = GDK_WINDOW_IMPL_QUARTZ (private->impl);
+  gint level;
 
-  /* FIXME: Implement */
+  g_return_if_fail (GDK_IS_WINDOW (window));
+  g_return_if_fail (WINDOW_IS_TOPLEVEL (window));
+
+  if (GDK_WINDOW_DESTROYED (window))
+    return;
+
+  level = window_type_hint_to_level (gdk_window_get_type_hint (window));
+  
+  /* Adjust normal window level by one if necessary. */
+  [impl->toplevel setLevel: level + (setting ? 1 : 0)];
 }
 
 void
 gdk_window_set_keep_below (GdkWindow *window, gboolean setting)
 {
-  g_return_if_fail (GDK_IS_WINDOW (window));
+  GdkWindowObject *private = (GdkWindowObject *) window;
+  GdkWindowImplQuartz *impl = GDK_WINDOW_IMPL_QUARTZ (private->impl);
+  gint level;
 
-  /* FIXME: Implement */
+  g_return_if_fail (GDK_IS_WINDOW (window));
+  g_return_if_fail (WINDOW_IS_TOPLEVEL (window));
+
+  if (GDK_WINDOW_DESTROYED (window))
+    return;
+  
+  level = window_type_hint_to_level (gdk_window_get_type_hint (window));
+  
+  /* Adjust normal window level by one if necessary. */
+  [impl->toplevel setLevel: level - (setting ? 1 : 0)];
 }
 
 GdkWindow *
