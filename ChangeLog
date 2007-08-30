@@ -1,5 +1,11 @@
 2007-08-30  Richard Hult  <richard@imendio.com>
 
+	* gdk/quartz/gdkwindow-quartz.c: (gdk_window_set_decorations,
+	gdk_window_get_decorations): Implement those. Based on patch from
+	Stefan Gehn, bug #459459.
+
+2007-08-30  Richard Hult  <richard@imendio.com>
+
 	* gdk/quartz/gdkwindow-quartz.c: (gdk_window_set_keep_above,
 	gdk_window_set_keep_below): Patch from Stefan Gehn to implement
 	those, bug #459667.

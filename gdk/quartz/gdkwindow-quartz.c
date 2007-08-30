@@ -2136,20 +2136,81 @@ gdk_window_get_frame_extents (GdkWindow    *window,
 }
 
 void
-gdk_window_set_decorations (GdkWindow      *window,
-			    GdkWMDecoration decorations)
+gdk_window_set_decorations (GdkWindow       *window,
+			    GdkWMDecoration  decorations)
 {
-  g_return_if_fail (GDK_IS_WINDOW (window));
+  GdkWindowImplQuartz *impl;
+  int style_mask;
+  NSView *old_view;
 
-  /* FIXME: Implement */
+  g_return_if_fail (GDK_IS_WINDOW (window));
+  g_return_if_fail (WINDOW_IS_TOPLEVEL (window));
+
+  if (GDK_WINDOW_DESTROYED (window))
+    return;
+
+  impl = GDK_WINDOW_IMPL_QUARTZ (GDK_WINDOW_OBJECT (window)->impl);
+
+  if (decorations == 0 || GDK_WINDOW_TYPE (window) == GDK_WINDOW_TEMP)
+    {
+      style_mask = NSBorderlessWindowMask;
+    }
+  else
+    {
+      /* FIXME: Honor other GTK_DECOR_* flags. */
+      style_mask = (NSTitledWindowMask | NSClosableWindowMask |
+                    NSMiniaturizableWindowMask | NSResizableWindowMask);
+    }
+
+  GDK_QUARTZ_ALLOC_POOL;
+
+  /* Note, there doesn't seem to be a way to change this without
+   * recreating the toplevel. There might be bad side-effects of doing
+   * that, but it seems alright.
+   */
+  if ([impl->toplevel styleMask] != style_mask)
+    {
+      old_view = [impl->toplevel contentView];
+
+      impl->toplevel = [impl->toplevel initWithContentRect:[impl->toplevel frame]
+                                                 styleMask:style_mask
+                                                   backing:NSBackingStoreBuffered
+                                                     defer:NO];
+
+      [impl->toplevel setContentView:old_view];
+    }
+
+  GDK_QUARTZ_RELEASE_POOL;
 }
 
 gboolean
 gdk_window_get_decorations (GdkWindow       *window,
 			    GdkWMDecoration *decorations)
 {
-  /* FIXME: Implement */
-  return FALSE;
+  GdkWindowImplQuartz *impl;
+
+  g_return_val_if_fail (GDK_IS_WINDOW (window), FALSE);
+  g_return_val_if_fail (WINDOW_IS_TOPLEVEL (window), FALSE);
+
+  if (GDK_WINDOW_DESTROYED (window))
+    return FALSE;
+
+  impl = GDK_WINDOW_IMPL_QUARTZ (GDK_WINDOW_OBJECT (window)->impl);
+
+  if (decorations)
+    {
+      if ([impl->toplevel styleMask] & NSBorderlessWindowMask)
+        {
+          *decorations = 0;
+        }
+      else
+        {
+          /* FIXME: Honor the other GTK_DECOR_* flags. */
+          *decorations = GDK_DECOR_ALL;
+        }
+    }
+
+  return TRUE;
 }
 
 void
