@@ -1,3 +1,8 @@
+2007-08-31  Richard Hult  <richard@imendio.com>
+
+	* configure.in: Revert the previous change as it broke the build
+	(missing po file in po-properties).
+
 2007-08-31  Pramod Raghavendra <pramodleo@yahoo.co.uk>
 
 	* configure.in: Added kn to ALL_LINGUAS
