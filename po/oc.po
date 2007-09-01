@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.10.7\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-08-20 03:46+0100\n"
-"PO-Revision-Date: 2007-08-21 00:35+0200\n"
+"POT-Creation-Date: 2007-08-29 03:53+0100\n"
+"PO-Revision-Date: 2007-09-01 19:38+0200\n"
 "Last-Translator: Yannig MARCHEGAY (Kokoyaya) <yannig@marchegay.org>\n"
 "Language-Team: Occitan (post 1500) <ubuntu-l10n-oci@lists.ubuntu.com>\n"
 "MIME-Version: 1.0\n"
@@ -1296,7 +1296,7 @@ msgstr ""
 
 #: ../gtk/gtkcolorsel.c:1953
 msgid "_Hue:"
-msgstr ""
+msgstr "_Blau :"
 
 #: ../gtk/gtkcolorsel.c:1954
 msgid "Position on the color wheel."
@@ -1602,66 +1602,66 @@ msgstr ""
 msgid "_Replace"
 msgstr "_Remplaçar"
 
-#: ../gtk/gtkfilechooserdefault.c:8892
+#: ../gtk/gtkfilechooserdefault.c:8895
 msgid "Could not start the search process"
 msgstr ""
 
-#: ../gtk/gtkfilechooserdefault.c:8893
+#: ../gtk/gtkfilechooserdefault.c:8896
 msgid ""
 "The program was not able to create a connection to the indexer daemon.  "
 "Please make sure it is running."
 msgstr ""
 
-#: ../gtk/gtkfilechooserdefault.c:8907
+#: ../gtk/gtkfilechooserdefault.c:8910
 msgid "Could not send the search request"
 msgstr ""
 
 #. Label
-#: ../gtk/gtkfilechooserdefault.c:9333
+#: ../gtk/gtkfilechooserdefault.c:9336
 msgid "_Search:"
 msgstr "_Recercar :"
 
-#: ../gtk/gtkfilechooserdefault.c:10283
+#: ../gtk/gtkfilechooserdefault.c:10289
 #, c-format
 msgid "Could not mount %s"
 msgstr "Impossible de montar %s"
 
-#: ../gtk/gtkfilechooserdefault.c:10911
+#: ../gtk/gtkfilechooserdefault.c:10917
 msgid "Type name of new folder"
 msgstr "Picatz lo nom del repertòri novèl"
 
-#: ../gtk/gtkfilechooserdefault.c:10959
+#: ../gtk/gtkfilechooserdefault.c:10965
 #, c-format
 msgid "%d byte"
 msgid_plural "%d bytes"
 msgstr[0] "%d octet"
 msgstr[1] "%d octets"
 
-#: ../gtk/gtkfilechooserdefault.c:10961
+#: ../gtk/gtkfilechooserdefault.c:10967
 #, c-format
 msgid "%.1f KB"
 msgstr "%.1f ko"
 
-#: ../gtk/gtkfilechooserdefault.c:10963
+#: ../gtk/gtkfilechooserdefault.c:10969
 #, c-format
 msgid "%.1f MB"
 msgstr "%.1f Mo"
 
-#: ../gtk/gtkfilechooserdefault.c:10965
+#: ../gtk/gtkfilechooserdefault.c:10971
 #, c-format
 msgid "%.1f GB"
 msgstr "%.1f Go"
 
-#: ../gtk/gtkfilechooserdefault.c:11061 ../gtk/gtkfilechooserdefault.c:11082
-#: ../gtk/gtkfilechooserdefault.c:11114
+#: ../gtk/gtkfilechooserdefault.c:11067 ../gtk/gtkfilechooserdefault.c:11088
+#: ../gtk/gtkfilechooserdefault.c:11120
 msgid "Unknown"
 msgstr "Desconegut"
 
-#: ../gtk/gtkfilechooserdefault.c:11100
+#: ../gtk/gtkfilechooserdefault.c:11106
 msgid "Today at %H:%M"
 msgstr ""
 
-#: ../gtk/gtkfilechooserdefault.c:11102
+#: ../gtk/gtkfilechooserdefault.c:11108
 msgid "Yesterday at %H:%M"
 msgstr ""
 
@@ -2304,7 +2304,7 @@ msgstr ""
 
 #: ../gtk/gtkprintoperation-win32.c:568
 msgid "Paused"
-msgstr ""
+msgstr "En pausa"
 
 #: ../gtk/gtkprintoperation-win32.c:570
 msgid "Need user intervention"
@@ -2550,7 +2550,7 @@ msgstr ""
 
 #: ../gtk/gtkrecentchooserdefault.c:1626
 msgid "Could not remove item"
-msgstr ""
+msgstr "Impossible de suprimir l'element"
 
 #: ../gtk/gtkrecentchooserdefault.c:1669
 msgid "Could not clear list"
@@ -4249,7 +4249,7 @@ msgstr "Confidencial"
 
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:2216
 msgid "Secret"
-msgstr ""
+msgstr "Secret"
 
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:2216
 msgid "Standard"
