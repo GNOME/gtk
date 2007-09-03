@@ -16,8 +16,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.10.7\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-08-22 11:15+0200\n"
-"PO-Revision-Date: 2007-08-19 22:02+0200\n"
+"POT-Creation-Date: 2007-09-03 12:09+0200\n"
+"PO-Revision-Date: 2007-09-03 12:08+0200\n"
 "Last-Translator: Claude Paroz <claude@2xlibre.net>\n"
 "Language-Team: GNOME French Team <gnomefr@traduc.org>\n"
 "MIME-Version: 1.0\n"
@@ -1660,11 +1660,11 @@ msgstr "Le fichier existe déjà dans « %s ». Le remplacer écrasera son con
 msgid "_Replace"
 msgstr "_Remplacer"
 
-#: ../gtk/gtkfilechooserdefault.c:8892
+#: ../gtk/gtkfilechooserdefault.c:8895
 msgid "Could not start the search process"
 msgstr "Impossible de lancer le processus de recherche"
 
-#: ../gtk/gtkfilechooserdefault.c:8893
+#: ../gtk/gtkfilechooserdefault.c:8896
 msgid ""
 "The program was not able to create a connection to the indexer daemon.  "
 "Please make sure it is running."
@@ -1672,56 +1672,56 @@ msgstr ""
 "Le programme n'a pas pu créer une connexion au démon d'indexation. Vérifiez "
 "que celui-ci fonctionne."
 
-#: ../gtk/gtkfilechooserdefault.c:8907
+#: ../gtk/gtkfilechooserdefault.c:8910
 msgid "Could not send the search request"
 msgstr "Impossible d'envoyer la requête de recherche"
 
 #. Label
-#: ../gtk/gtkfilechooserdefault.c:9333
+#: ../gtk/gtkfilechooserdefault.c:9336
 msgid "_Search:"
 msgstr "_Rechercher :"
 
-#: ../gtk/gtkfilechooserdefault.c:10283
+#: ../gtk/gtkfilechooserdefault.c:10289
 #, c-format
 msgid "Could not mount %s"
 msgstr "Impossible de monter %s"
 
-#: ../gtk/gtkfilechooserdefault.c:10911
+#: ../gtk/gtkfilechooserdefault.c:10917
 msgid "Type name of new folder"
 msgstr "Saisissez le nom du nouveau dossier"
 
-#: ../gtk/gtkfilechooserdefault.c:10959
+#: ../gtk/gtkfilechooserdefault.c:10965
 #, c-format
 msgid "%d byte"
 msgid_plural "%d bytes"
 msgstr[0] "%d octet"
 msgstr[1] "%d octets"
 
-#: ../gtk/gtkfilechooserdefault.c:10961
+#: ../gtk/gtkfilechooserdefault.c:10967
 #, c-format
 msgid "%.1f KB"
 msgstr "%.1f Kio"
 
-#: ../gtk/gtkfilechooserdefault.c:10963
+#: ../gtk/gtkfilechooserdefault.c:10969
 #, c-format
 msgid "%.1f MB"
 msgstr "%.1f Mio"
 
-#: ../gtk/gtkfilechooserdefault.c:10965
+#: ../gtk/gtkfilechooserdefault.c:10971
 #, c-format
 msgid "%.1f GB"
 msgstr "%.1f Gio"
 
-#: ../gtk/gtkfilechooserdefault.c:11061 ../gtk/gtkfilechooserdefault.c:11082
-#: ../gtk/gtkfilechooserdefault.c:11114
+#: ../gtk/gtkfilechooserdefault.c:11067 ../gtk/gtkfilechooserdefault.c:11088
+#: ../gtk/gtkfilechooserdefault.c:11120
 msgid "Unknown"
 msgstr "Inconnu"
 
-#: ../gtk/gtkfilechooserdefault.c:11100
+#: ../gtk/gtkfilechooserdefault.c:11106
 msgid "Today at %H:%M"
 msgstr "Aujourd'hui à %H:%M"
 
-#: ../gtk/gtkfilechooserdefault.c:11102
+#: ../gtk/gtkfilechooserdefault.c:11108
 msgid "Yesterday at %H:%M"
 msgstr "Hier à %H:%M"
 
@@ -2152,7 +2152,7 @@ msgstr "Options GTK+"
 
 #: ../gtk/gtkmain.c:751
 msgid "Show GTK+ Options"
-msgstr "Afficher les options GTK+"
+msgstr "Affiche les options GTK+"
 
 #: ../gtk/gtknotebook.c:828
 msgid "Arrow spacing"
@@ -2710,8 +2710,8 @@ msgstr "_%d. %s"
 msgid "recent menu label|%d. %s"
 msgstr "%d. %s"
 
-#: ../gtk/gtkrecentmanager.c:1047 ../gtk/gtkrecentmanager.c:1194
-#: ../gtk/gtkrecentmanager.c:1204 ../gtk/gtkrecentmanager.c:1257
+#: ../gtk/gtkrecentmanager.c:1041 ../gtk/gtkrecentmanager.c:1188
+#: ../gtk/gtkrecentmanager.c:1198 ../gtk/gtkrecentmanager.c:1251
 #, c-format
 msgid "Unable to find an item with URI '%s'"
 msgstr "Impossible de trouver un élément dont l'URI est « %s »"
