@@ -500,17 +500,11 @@ gtk_recent_manager_poll_timeout (gpointer data)
 {
   GtkRecentManager *manager = GTK_RECENT_MANAGER (data);
   GtkRecentManagerPrivate *priv = manager->priv;
-  time_t now;
   struct stat stat_buf;
   int stat_res;
 
   /* wait for the next timeout if we have a read/write in progress */
   if (priv->write_in_progress || priv->read_in_progress)
-    return TRUE;
-
-  /* do not stat the file if we're within 5 seconds from the last stat() */
-  now = time (NULL);
-  if (now < priv->last_mtime + 5);
     return TRUE;
 
   stat_res = g_stat (priv->filename, &stat_buf);
