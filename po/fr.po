@@ -16,8 +16,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.10.7\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-09-03 12:09+0200\n"
-"PO-Revision-Date: 2007-09-03 12:08+0200\n"
+"POT-Creation-Date: 2007-09-03 12:21+0200\n"
+"PO-Revision-Date: 2007-09-03 12:21+0200\n"
 "Last-Translator: Claude Paroz <claude@2xlibre.net>\n"
 "Language-Team: GNOME French Team <gnomefr@traduc.org>\n"
 "MIME-Version: 1.0\n"
@@ -1051,7 +1051,7 @@ msgstr "COULEURS"
 #. Description of --sync in --help output
 #: ../gdk/x11/gdkmain-x11.c:92
 msgid "Make X calls synchronous"
-msgstr "Faire des appels X synchrone"
+msgstr "Effectue des appels X synchrones"
 
 #: ../gtk/gtkaboutdialog.c:264 ../gtk/gtkaboutdialog.c:2100
 msgid "License"
@@ -2115,7 +2115,7 @@ msgstr "URI non valide"
 #. Description of --gtk-module=MODULES in --help output
 #: ../gtk/gtkmain.c:409
 msgid "Load additional GTK+ modules"
-msgstr "Charger des modules GTK+ additionnels"
+msgstr "Charge des modules GTK+ additionnels"
 
 #. Placeholder in --gtk-module=MODULES in --help output
 #: ../gtk/gtkmain.c:410
