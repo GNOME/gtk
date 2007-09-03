@@ -14,8 +14,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-properties HEAD\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-07-21 04:10+0100\n"
-"PO-Revision-Date: 2007-08-22 09:20+0300\n"
+"POT-Creation-Date: 2007-08-24 03:51+0100\n"
+"PO-Revision-Date: 2007-09-03 08:06+0300\n"
 "Last-Translator: Ivar Smolin <okul@linux.ee>\n"
 "Language-Team: Estonian <gnome-et@linux.ee>\n"
 "MIME-Version: 1.0\n"
@@ -402,7 +402,7 @@ msgid "Whether the action group is visible."
 msgstr "Kas tegevuste grupp on nähtav või mitte."
 
 #: ../gtk/gtkadjustment.c:86 ../gtk/gtkcellrendererprogress.c:128
-#: ../gtk/gtkspinbutton.c:268
+#: ../gtk/gtkscalebutton.c:181 ../gtk/gtkspinbutton.c:268
 msgid "Value"
 msgstr "Väärtus"
 
@@ -752,6 +752,14 @@ msgstr "Asukoht"
 msgid "The index of the child in the parent"
 msgstr ""
 
+#: ../gtk/gtkbuilder.c:104
+msgid "Translation Domain"
+msgstr "Tõlkedomeen"
+
+#: ../gtk/gtkbuilder.c:105
+msgid "The translation domain used by gettext"
+msgstr "Gettext'i poolt kasutatav tõlkedomeen"
+
 #: ../gtk/gtkbutton.c:200
 msgid ""
 "Text of the label widget inside the button, if the button contains a label "
@@ -780,7 +788,7 @@ msgid ""
 "If set, the label is used to pick a stock item instead of being displayed"
 msgstr ""
 
-#: ../gtk/gtkbutton.c:223 ../gtk/gtkcombobox.c:751
+#: ../gtk/gtkbutton.c:223 ../gtk/gtkcombobox.c:784
 #: ../gtk/gtkfilechooserbutton.c:401
 msgid "Focus on click"
 msgstr "Fookus klõpsamisel"
@@ -1226,7 +1234,8 @@ msgid "Orientation and growth direction of the progress bar"
 msgstr "Edenemisriba ja selle kasvamise suund"
 
 #: ../gtk/gtkcellrendererspin.c:93 ../gtk/gtkprogressbar.c:122
-#: ../gtk/gtkrange.c:345 ../gtk/gtkspinbutton.c:207
+#: ../gtk/gtkrange.c:345 ../gtk/gtkscalebutton.c:200
+#: ../gtk/gtkspinbutton.c:207
 msgid "Adjustment"
 msgstr "Joondus"
 
@@ -1454,7 +1463,7 @@ msgstr ""
 "Kuidas murda teksti mitmele reale juhul, kui tekstiväli pole terve stringi "
 "kuvamiseks piisavalt lai."
 
-#: ../gtk/gtkcellrenderertext.c:468 ../gtk/gtkcombobox.c:640
+#: ../gtk/gtkcellrenderertext.c:468 ../gtk/gtkcombobox.c:673
 msgid "Wrap width"
 msgstr "Murdmise laius"
 
@@ -1706,7 +1715,7 @@ msgstr "Pealkiri"
 msgid "The title of the color selection dialog"
 msgstr "Värvivaliku dialoogiakna pealkiri"
 
-#: ../gtk/gtkcolorbutton.c:202 ../gtk/gtkcolorsel.c:1871
+#: ../gtk/gtkcolorbutton.c:202 ../gtk/gtkcolorsel.c:1857
 msgid "Current Color"
 msgstr "Praegune värv"
 
@@ -1714,7 +1723,7 @@ msgstr "Praegune värv"
 msgid "The selected color"
 msgstr "Valitud värv"
 
-#: ../gtk/gtkcolorbutton.c:217 ../gtk/gtkcolorsel.c:1878
+#: ../gtk/gtkcolorbutton.c:217 ../gtk/gtkcolorsel.c:1864
 msgid "Current Alpha"
 msgstr "Praegune läbipaistvus"
 
@@ -1723,35 +1732,35 @@ msgid "The selected opacity value (0 fully transparent, 65535 fully opaque)"
 msgstr ""
 "Läbipaistvuse tase (0 - täiesti läbipaistev, 65535 - täiesti läbipaistmatu)"
 
-#: ../gtk/gtkcolorsel.c:1857
+#: ../gtk/gtkcolorsel.c:1843
 msgid "Has Opacity Control"
 msgstr ""
 
-#: ../gtk/gtkcolorsel.c:1858
+#: ../gtk/gtkcolorsel.c:1844
 msgid "Whether the color selector should allow setting opacity"
 msgstr ""
 
-#: ../gtk/gtkcolorsel.c:1864
+#: ../gtk/gtkcolorsel.c:1850
 msgid "Has palette"
 msgstr ""
 
-#: ../gtk/gtkcolorsel.c:1865
+#: ../gtk/gtkcolorsel.c:1851
 msgid "Whether a palette should be used"
 msgstr ""
 
-#: ../gtk/gtkcolorsel.c:1872
+#: ../gtk/gtkcolorsel.c:1858
 msgid "The current color"
 msgstr "Käesolev värvus"
 
-#: ../gtk/gtkcolorsel.c:1879
+#: ../gtk/gtkcolorsel.c:1865
 msgid "The current opacity value (0 fully transparent, 65535 fully opaque)"
 msgstr ""
 
-#: ../gtk/gtkcolorsel.c:1893
+#: ../gtk/gtkcolorsel.c:1879
 msgid "Custom palette"
 msgstr "Kohandatud palett"
 
-#: ../gtk/gtkcolorsel.c:1894
+#: ../gtk/gtkcolorsel.c:1880
 msgid "Palette to use in the color selector"
 msgstr ""
 
@@ -1795,104 +1804,104 @@ msgstr ""
 msgid "Whether entered values must already be present in the list"
 msgstr ""
 
-#: ../gtk/gtkcombobox.c:623
+#: ../gtk/gtkcombobox.c:656
 msgid "ComboBox model"
 msgstr ""
 
-#: ../gtk/gtkcombobox.c:624
+#: ../gtk/gtkcombobox.c:657
 msgid "The model for the combo box"
 msgstr ""
 
-#: ../gtk/gtkcombobox.c:641
+#: ../gtk/gtkcombobox.c:674
 msgid "Wrap width for laying out the items in a grid"
 msgstr ""
 
-#: ../gtk/gtkcombobox.c:663
+#: ../gtk/gtkcombobox.c:696
 msgid "Row span column"
 msgstr ""
 
-#: ../gtk/gtkcombobox.c:664
+#: ../gtk/gtkcombobox.c:697
 msgid "TreeModel column containing the row span values"
 msgstr ""
 
-#: ../gtk/gtkcombobox.c:685
+#: ../gtk/gtkcombobox.c:718
 msgid "Column span column"
 msgstr ""
 
-#: ../gtk/gtkcombobox.c:686
+#: ../gtk/gtkcombobox.c:719
 msgid "TreeModel column containing the column span values"
 msgstr ""
 
-#: ../gtk/gtkcombobox.c:707
+#: ../gtk/gtkcombobox.c:740
 msgid "Active item"
 msgstr "Aktiivne element"
 
-#: ../gtk/gtkcombobox.c:708
+#: ../gtk/gtkcombobox.c:741
 msgid "The item which is currently active"
 msgstr "Hetkel aktiivne element"
 
-#: ../gtk/gtkcombobox.c:727 ../gtk/gtkuimanager.c:220
+#: ../gtk/gtkcombobox.c:760 ../gtk/gtkuimanager.c:220
 msgid "Add tearoffs to menus"
 msgstr ""
 
-#: ../gtk/gtkcombobox.c:728
+#: ../gtk/gtkcombobox.c:761
 msgid "Whether dropdowns should have a tearoff menu item"
 msgstr ""
 
-#: ../gtk/gtkcombobox.c:743 ../gtk/gtkentry.c:522
+#: ../gtk/gtkcombobox.c:776 ../gtk/gtkentry.c:522
 msgid "Has Frame"
 msgstr "Raamiga"
 
-#: ../gtk/gtkcombobox.c:744
+#: ../gtk/gtkcombobox.c:777
 msgid "Whether the combo box draws a frame around the child"
 msgstr "Kas valikukast joonistab lapskirje ümber raami või mitte"
 
-#: ../gtk/gtkcombobox.c:752
+#: ../gtk/gtkcombobox.c:785
 msgid "Whether the combo box grabs focus when it is clicked with the mouse"
 msgstr ""
 "Kas valikukast fokuseeritakse sellel hiirega klõpsamise korral või mitte"
 
-#: ../gtk/gtkcombobox.c:767 ../gtk/gtkmenu.c:484
+#: ../gtk/gtkcombobox.c:800 ../gtk/gtkmenu.c:484
 msgid "Tearoff Title"
 msgstr "Lahtirebimise pealkiri"
 
-#: ../gtk/gtkcombobox.c:768
+#: ../gtk/gtkcombobox.c:801
 msgid ""
 "A title that may be displayed by the window manager when the popup is torn-"
 "off"
 msgstr "Hüpikakna lahtirebimise korral aknahalduri poolt kuvatav pealkiri"
 
-#: ../gtk/gtkcombobox.c:785
+#: ../gtk/gtkcombobox.c:818
 msgid "Popup shown"
 msgstr ""
 
-#: ../gtk/gtkcombobox.c:786
+#: ../gtk/gtkcombobox.c:819
 msgid "Whether the combo's dropdown is shown"
 msgstr ""
 
-#: ../gtk/gtkcombobox.c:792
+#: ../gtk/gtkcombobox.c:825
 msgid "Appears as list"
 msgstr ""
 
-#: ../gtk/gtkcombobox.c:793
+#: ../gtk/gtkcombobox.c:826
 msgid "Whether dropdowns should look like lists rather than menus"
 msgstr ""
 
-#: ../gtk/gtkcombobox.c:809
+#: ../gtk/gtkcombobox.c:842
 msgid "Arrow Size"
 msgstr "Noole suurus"
 
-#: ../gtk/gtkcombobox.c:810
+#: ../gtk/gtkcombobox.c:843
 msgid "The minimum size of the arrow in the combo box"
 msgstr "Ripploendis oleva noole väikseim võimalik suurus"
 
-#: ../gtk/gtkcombobox.c:825 ../gtk/gtkentry.c:622 ../gtk/gtkhandlebox.c:176
+#: ../gtk/gtkcombobox.c:858 ../gtk/gtkentry.c:622 ../gtk/gtkhandlebox.c:176
 #: ../gtk/gtkmenubar.c:201 ../gtk/gtkstatusbar.c:186 ../gtk/gtktoolbar.c:613
 #: ../gtk/gtkviewport.c:122
 msgid "Shadow type"
 msgstr "Varju liik"
 
-#: ../gtk/gtkcombobox.c:826
+#: ../gtk/gtkcombobox.c:859
 msgid "Which kind of shadow to draw around the combo box"
 msgstr "Mis liiku vari joonistatakse ripploendi ümber"
 
@@ -2269,7 +2278,7 @@ msgstr "Failisüsteemi taustaprogramm"
 msgid "Name of file system backend to use"
 msgstr "Kasutatava failisüsteemi taustaprogrammi nimi"
 
-#: ../gtk/gtkfilechooser.c:210 ../gtk/gtkrecentchooser.c:169
+#: ../gtk/gtkfilechooser.c:210 ../gtk/gtkrecentchooser.c:252
 msgid "Filter"
 msgstr "Filter"
 
@@ -2321,7 +2330,7 @@ msgid "Application supplied widget for extra options."
 msgstr ""
 
 #: ../gtk/gtkfilechooser.c:246 ../gtk/gtkfilesel.c:539
-#: ../gtk/gtkrecentchooser.c:142
+#: ../gtk/gtkrecentchooser.c:191
 msgid "Select Multiple"
 msgstr "Mitmikvalik"
 
@@ -2704,7 +2713,7 @@ msgstr ""
 msgid "Icon set to display"
 msgstr ""
 
-#: ../gtk/gtkimage.c:187 ../gtk/gtktoolbar.c:530
+#: ../gtk/gtkimage.c:187 ../gtk/gtkscalebutton.c:191 ../gtk/gtktoolbar.c:530
 msgid "Icon size"
 msgstr "Ikooni suurus"
 
@@ -3051,11 +3060,11 @@ msgstr ""
 msgid "A boolean that determines whether the menu grabs the keyboard focus"
 msgstr ""
 
-#: ../gtk/gtkmenutoolbutton.c:236 ../gtk/gtkoptionmenu.c:161
+#: ../gtk/gtkmenutoolbutton.c:219 ../gtk/gtkoptionmenu.c:161
 msgid "Menu"
 msgstr "Menüü"
 
-#: ../gtk/gtkmenutoolbutton.c:237
+#: ../gtk/gtkmenutoolbutton.c:220
 msgid "The dropdown menu"
 msgstr "Rippmenüü"
 
@@ -3530,7 +3539,7 @@ msgid "Printer settings"
 msgstr "Printeri sätted"
 
 #: ../gtk/gtkprintjob.c:143 ../gtk/gtkprintjob.c:144
-#: ../gtk/gtkprintunixdialog.c:231
+#: ../gtk/gtkprintunixdialog.c:229
 msgid "Page Setup"
 msgstr "Lehekülje sätted"
 
@@ -3552,11 +3561,11 @@ msgstr "Vaikimisi lehe sätted"
 msgid "The GtkPageSetup used by default"
 msgstr ""
 
-#: ../gtk/gtkprintoperation.c:896 ../gtk/gtkprintunixdialog.c:249
+#: ../gtk/gtkprintoperation.c:896 ../gtk/gtkprintunixdialog.c:247
 msgid "Print Settings"
 msgstr "Printimissätted"
 
-#: ../gtk/gtkprintoperation.c:897 ../gtk/gtkprintunixdialog.c:250
+#: ../gtk/gtkprintoperation.c:897 ../gtk/gtkprintunixdialog.c:248
 msgid "The GtkPrintSettings used for initializing the dialog"
 msgstr ""
 
@@ -3576,11 +3585,11 @@ msgstr "Lehekülgede arv"
 msgid "The number of pages in the document."
 msgstr "Dokumendis olevate lehekülgede arv."
 
-#: ../gtk/gtkprintoperation.c:962 ../gtk/gtkprintunixdialog.c:239
+#: ../gtk/gtkprintoperation.c:962 ../gtk/gtkprintunixdialog.c:237
 msgid "Current Page"
 msgstr "Käesolev lehekülg"
 
-#: ../gtk/gtkprintoperation.c:963 ../gtk/gtkprintunixdialog.c:240
+#: ../gtk/gtkprintoperation.c:963 ../gtk/gtkprintunixdialog.c:238
 msgid "The current page in the document"
 msgstr "Dokumendi käesolev lehekülg"
 
@@ -3652,15 +3661,15 @@ msgstr "Kohandatud saki silt"
 msgid "Label for the tab containing custom widgets."
 msgstr "Kohandatud vidinaid sisaldava saki silt."
 
-#: ../gtk/gtkprintunixdialog.c:232
+#: ../gtk/gtkprintunixdialog.c:230
 msgid "The GtkPageSetup to use"
 msgstr ""
 
-#: ../gtk/gtkprintunixdialog.c:257
+#: ../gtk/gtkprintunixdialog.c:255
 msgid "Selected Printer"
 msgstr "Valitud printer"
 
-#: ../gtk/gtkprintunixdialog.c:258
+#: ../gtk/gtkprintunixdialog.c:256
 msgid "The GtkPrinter which is selected"
 msgstr "Valitud GtkPrinter"
 
@@ -3933,85 +3942,85 @@ msgid ""
 "spacing"
 msgstr ""
 
-#: ../gtk/gtkrecentaction.c:654 ../gtk/gtkrecentchoosermenu.c:212
+#: ../gtk/gtkrecentaction.c:654 ../gtk/gtkrecentchoosermenu.c:209
 msgid "Show Numbers"
 msgstr "Numbrite näitamine"
 
-#: ../gtk/gtkrecentaction.c:655 ../gtk/gtkrecentchoosermenu.c:213
+#: ../gtk/gtkrecentaction.c:655 ../gtk/gtkrecentchoosermenu.c:210
 msgid "Whether the items should be displayed with a number"
 msgstr "Kas kirjeid näidatakse koos numbritega või mitte"
 
-#: ../gtk/gtkrecentchooser.c:112
+#: ../gtk/gtkrecentchooser.c:120
 msgid "Recent Manager"
 msgstr "Hiljutiste kirjete haldur"
 
-#: ../gtk/gtkrecentchooser.c:113
+#: ../gtk/gtkrecentchooser.c:121
 msgid "The RecentManager object to use"
 msgstr "Kasutatav RecentManager objekt"
 
-#: ../gtk/gtkrecentchooser.c:118
+#: ../gtk/gtkrecentchooser.c:135
 msgid "Show Private"
 msgstr "Privaatsete näitamine"
 
-#: ../gtk/gtkrecentchooser.c:119
+#: ../gtk/gtkrecentchooser.c:136
 msgid "Whether the private items should be displayed"
 msgstr "Kas privaatkirjeid näidatakse või mitte"
 
-#: ../gtk/gtkrecentchooser.c:124
+#: ../gtk/gtkrecentchooser.c:149
 msgid "Show Tooltips"
 msgstr "Vihjete näitamine"
 
-#: ../gtk/gtkrecentchooser.c:125
+#: ../gtk/gtkrecentchooser.c:150
 msgid "Whether there should be a tooltip on the item"
 msgstr "Kas kirjele peaks kuvama vihjeid või mitte"
 
-#: ../gtk/gtkrecentchooser.c:130
+#: ../gtk/gtkrecentchooser.c:162
 msgid "Show Icons"
 msgstr "Ikoonide näitamine"
 
-#: ../gtk/gtkrecentchooser.c:131
+#: ../gtk/gtkrecentchooser.c:163
 msgid "Whether there should be an icon near the item"
 msgstr "Kas kirje ligidal peaks olema ikoon või mitte"
 
-#: ../gtk/gtkrecentchooser.c:136
+#: ../gtk/gtkrecentchooser.c:178
 msgid "Show Not Found"
 msgstr "Puuduvate näitamine"
 
-#: ../gtk/gtkrecentchooser.c:137
+#: ../gtk/gtkrecentchooser.c:179
 msgid "Whether the items pointing to unavailable resources should be displayed"
 msgstr "Kas puuduvatele ressurssidele viitavaid kirjeid kuvatakse või mitte"
 
-#: ../gtk/gtkrecentchooser.c:143
+#: ../gtk/gtkrecentchooser.c:192
 msgid "Whether to allow multiple items to be selected"
 msgstr "Kas mitme kirje valimine on lubatud või mitte"
 
-#: ../gtk/gtkrecentchooser.c:148
+#: ../gtk/gtkrecentchooser.c:205
 msgid "Local only"
 msgstr "Ainult kohalik"
 
-#: ../gtk/gtkrecentchooser.c:149
+#: ../gtk/gtkrecentchooser.c:206
 msgid "Whether the selected resource(s) should be limited to local file: URIs"
 msgstr ""
-"Kas valitud ressurss/ressursid peaks olema piiratud kohalike file: "
-"URI-dega või mitte"
+"Kas valitud ressurss/ressursid peaks olema piiratud kohalike file: URI-dega "
+"või mitte"
 
-#: ../gtk/gtkrecentchooser.c:154 ../gtk/gtkrecentmanager.c:265
+#: ../gtk/gtkrecentchooser.c:222 ../gtk/gtkrecentmanager.c:265
 msgid "Limit"
 msgstr "Piirang"
 
-#: ../gtk/gtkrecentchooser.c:155
+#: ../gtk/gtkrecentchooser.c:223
 msgid "The maximum number of items to be displayed"
 msgstr "Suurim kuvatavate kirjete arv"
 
-#: ../gtk/gtkrecentchooser.c:162
+#: ../gtk/gtkrecentchooser.c:237
 msgid "Sort Type"
 msgstr "Sortimise liik"
 
-#: ../gtk/gtkrecentchooser.c:163
+#: ../gtk/gtkrecentchooser.c:238
 msgid "The sorting order of the items displayed"
 msgstr "Kuvatavate kirjete sortimisjärjestus"
 
-#: ../gtk/gtkrecentchooser.c:170
+#: ../gtk/gtkrecentchooser.c:253
 msgid "The current filter for selecting which resources are displayed"
 msgstr ""
 
@@ -4099,6 +4108,27 @@ msgstr ""
 #: ../gtk/gtkscale.c:178
 msgid "Space between value text and the slider/trough area"
 msgstr ""
+
+#: ../gtk/gtkscalebutton.c:182
+msgid "The value of the scale"
+msgstr ""
+
+#: ../gtk/gtkscalebutton.c:192
+msgid "The icon size"
+msgstr "Ikooni suurus"
+
+#: ../gtk/gtkscalebutton.c:201
+msgid ""
+"The GtkAdjustment that contains the current value of this scale button object"
+msgstr ""
+
+#: ../gtk/gtkscalebutton.c:229
+msgid "Icons"
+msgstr "Ikoonid"
+
+#: ../gtk/gtkscalebutton.c:230
+msgid "List of icon names"
+msgstr "Ikooninimede loetelu"
 
 #: ../gtk/gtkscrollbar.c:50
 msgid "Minimum Slider Length"
@@ -4923,11 +4953,11 @@ msgstr ""
 
 #: ../gtk/gtktexttag.c:242
 msgid "Text direction"
-msgstr ""
+msgstr "Teksti suund"
 
 #: ../gtk/gtktexttag.c:243
 msgid "Text direction, e.g. right-to-left or left-to-right"
-msgstr ""
+msgstr "Teksti suund, kas vasakult-paremale või paremalt vasakule"
 
 #: ../gtk/gtktexttag.c:292
 msgid "Font style as a PangoStyle, e.g. PANGO_STYLE_ITALIC"
@@ -5604,19 +5634,19 @@ msgstr ""
 
 #: ../gtk/gtktreeview.c:818
 msgid "Even Row Color"
-msgstr ""
+msgstr "Paarisarvulise rea värvus"
 
 #: ../gtk/gtktreeview.c:819
 msgid "Color to use for even rows"
-msgstr ""
+msgstr "Paarisarvuliste ridade joonistamiseks kasutatav värvus"
 
 #: ../gtk/gtktreeview.c:825
 msgid "Odd Row Color"
-msgstr ""
+msgstr "Paarituarvulise rea värvus"
 
 #: ../gtk/gtktreeview.c:826
 msgid "Color to use for odd rows"
-msgstr ""
+msgstr "Paarituarvuliste ridade joonistamiseks kasutatav värvus"
 
 #: ../gtk/gtktreeview.c:832
 msgid "Row Ending details"
@@ -5744,11 +5774,11 @@ msgstr ""
 
 #: ../gtk/gtktreeviewcolumn.c:315
 msgid "Sort indicator"
-msgstr ""
+msgstr "Sortimisnäidik"
 
 #: ../gtk/gtktreeviewcolumn.c:316
 msgid "Whether to show a sort indicator"
-msgstr ""
+msgstr "Kas sortimisnäidikut tuleb näidata või mitte"
 
 #: ../gtk/gtktreeviewcolumn.c:323
 msgid "Sort order"
@@ -5896,13 +5926,14 @@ msgstr ""
 
 #: ../gtk/gtkwidget.c:579
 msgid "Style"
-msgstr ""
+msgstr "Laad"
 
 #: ../gtk/gtkwidget.c:580
 msgid ""
 "The style of the widget, which contains information about how it will look "
 "(colors etc)"
 msgstr ""
+"Vidina laad, mis sisaldab andmeid vidina välimuse kohta (värvused jms)"
 
 #: ../gtk/gtkwidget.c:586
 msgid "Events"
@@ -5982,21 +6013,23 @@ msgstr ""
 
 #: ../gtk/gtkwidget.c:2186
 msgid "Cursor color"
-msgstr ""
+msgstr "Kursori värvus"
 
 #: ../gtk/gtkwidget.c:2187
 msgid "Color with which to draw insertion cursor"
-msgstr ""
+msgstr "Lisamiskursori joonistamise värvus"
 
 #: ../gtk/gtkwidget.c:2192
 msgid "Secondary cursor color"
-msgstr ""
+msgstr "Sekundaarse kursori värvus"
 
 #: ../gtk/gtkwidget.c:2193
 msgid ""
 "Color with which to draw the secondary insertion cursor when editing mixed "
 "right-to-left and left-to-right text"
 msgstr ""
+"Sekundaarse kursori joonistamise värvus juhuks, kui peaks rööbiti "
+"redigeeritama nii vasakult-paremale kui paremalt-vasakule teksti"
 
 #: ../gtk/gtkwidget.c:2198
 msgid "Cursor line aspect ratio"
@@ -6310,23 +6343,3 @@ msgstr ""
 #: ../modules/input/gtkimcontextxim.c:340
 msgid "How to draw the input method statusbar"
 msgstr "Kuidas peab sisendmeetodi olekuriba joonistama"
-
-#: ../gtk/gtkbuilder.c:104
-msgid "Translation Domain"
-msgstr "Tõlkedomeen"
-
-#: ../gtk/gtkscalebutton.c:182
-msgid "The value of the scale"
-msgstr ""
-
-#: ../gtk/gtkscalebutton.c:192
-msgid "The icon size"
-msgstr "Ikooni suurus"
-
-#: ../gtk/gtkscalebutton.c:229
-msgid "Icons"
-msgstr "Ikoonid"
-
-#: ../gtk/gtkscalebutton.c:230
-msgid "List of icon names"
-msgstr "Ikooninimede loetelu"
