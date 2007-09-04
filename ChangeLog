@@ -8,6 +8,12 @@
 	empty properties, since we do not know the default GParamSpec values.
 	#472981 (Carlos Garnacho)
 
+	* gtk/gtk-builder-convert (GtkBuilder._packing_prop_to_child_attr):
+	Do not iterate recursively over all child nodes.
+	(GtkBuilderConverter._default_widget_converter): Use a more efficient
+	way of iterating over all property nodes
+	#472974 (Carlos Garnacho)
+
 2007-09-03  Emmanuele Bassi  <ebassi@gnome.org>
 
 	* gtk/gtkrecentmanager.c

@@ -92,6 +92,16 @@ def get_signal_nodes(node):
             signals.append(child)
     return signals
 
+def get_property_nodes(node):
+    assert node.tagName == 'object'
+    properties = []
+    for child in node.childNodes:
+        if child.nodeType == Node.TEXT_NODE:
+            continue
+        if child.tagName == 'property':
+            properties.append(child)
+    return properties
+
 def get_accelerator_nodes(node):
     assert node.tagName == 'object'
     accelerators = []
@@ -240,9 +250,7 @@ class GtkBuilderConverter(object):
 
     def _default_widget_converter(self, node):
         klass = node.getAttribute("class")
-        for prop in node.getElementsByTagName("property"):
-            if prop.parentNode is not node:
-                continue
+        for prop in get_property_nodes(node):
             prop_name = prop.getAttribute("name")
             if prop_name == "sizegroup":
                 self._convert_sizegroup(node, prop)
@@ -560,7 +568,7 @@ class GtkBuilderConverter(object):
 
     def _packing_prop_to_child_attr(self, node, prop_name, prop_val,
                                    attr_val=None):
-        for child in node.getElementsByTagName("child"):
+        for child in get_child_nodes(node):
             packing_props = [p for p in child.childNodes if p.nodeName == "packing"]
             if not packing_props:
                 continue
