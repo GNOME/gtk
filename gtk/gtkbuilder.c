@@ -70,7 +70,7 @@ struct _GtkBuilderPrivate
   GSList *signals;
   gchar *current_root;
   GSList *root_objects;
-  const gchar *filename;
+  gchar *filename;
 };
 
 G_DEFINE_TYPE (GtkBuilder, gtk_builder, G_TYPE_OBJECT)
@@ -142,6 +142,7 @@ gtk_builder_finalize (GObject *object)
   g_hash_table_destroy (builder->priv->objects);
   g_slist_foreach (builder->priv->root_objects, (GFunc)g_object_unref, NULL);
   g_slist_free (builder->priv->root_objects);
+  g_free (builder->priv->filename);
 }
 
 static void
@@ -651,7 +652,7 @@ gtk_builder_add_from_file (GtkBuilder   *builder,
       return 0;
     }
   
-  builder->priv->filename = filename;
+  builder->priv->filename = g_strdup (filename);
 
   _gtk_builder_parser_parse_buffer (builder, filename,
                                     buffer, length,
