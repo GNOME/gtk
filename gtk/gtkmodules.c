@@ -359,7 +359,7 @@ gtk_module_info_unref (GtkModuleInfo *info)
   if (info->ref_count == 0) 
     {
       GTK_NOTE (MODULES, 
-		g_print ("Unloading module: %s", g_module_name (info->module)));
+		g_print ("Unloading module: %s\n", g_module_name (info->module)));
 
       gtk_modules = g_slist_remove (gtk_modules, info);
       g_module_close (info->module);
@@ -377,7 +377,7 @@ load_modules (const char *module_str)
   GSList *module_list = NULL;
   gint i;
 
-  GTK_NOTE (MODULES, g_print ("Loading module list: %s", module_str));
+  GTK_NOTE (MODULES, g_print ("Loading module list: %s\n", module_str));
 
   module_names = pango_split_file_list (module_str);
   for (i = 0; module_names[i]; i++) 

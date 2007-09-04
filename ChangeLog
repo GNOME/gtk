@@ -1,3 +1,7 @@
+2007-09-04  Michael Natterer  <mitch@imendio.com>
+
+	* gtk/gtkmodules.c: added missing \n to g_print() in GTK_NOTE().
+
 2007-09-04  Johan Dahlin  <jdahlin@async.com.br>
 
 	* gtk/gtk-builder-convert (GtkBuilderConverter._parse): Do not remove 
