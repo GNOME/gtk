@@ -213,11 +213,6 @@ class GtkBuilderConverter(object):
             self._convert(node.getAttribute("class"), node)
             self.objects[node.getAttribute('id')] = node
 
-        # Remove empty properties
-        for node in self._dom.getElementsByTagName('property'):
-            if not node.childNodes:
-                node.parentNode.removeChild(node)
-
         # Convert Gazpachos UI tag
         for node in self._dom.getElementsByTagName("ui"):
             self._convert_ui(node)

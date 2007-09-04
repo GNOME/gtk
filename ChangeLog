@@ -1,3 +1,9 @@
+2007-09-04  Johan Dahlin  <jdahlin@async.com.br>
+
+	* gtk/gtk-builder-convert (GtkBuilderConverter._parse): Do not remove 
+	empty properties, since we do not know the default GParamSpec values.
+	#472981 (Carlos Garnacho)
+
 2007-09-03  Emmanuele Bassi  <ebassi@gnome.org>
 
 	* gtk/gtkrecentmanager.c
