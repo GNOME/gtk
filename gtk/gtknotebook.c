@@ -689,7 +689,7 @@ gtk_notebook_class_init (GtkNotebookClass *class)
 					      g_param_spec_boolean ("tab-expand", 
 								    P_("Tab expand"), 
 								    P_("Whether to expand the child's tab or not"),
-								    TRUE,
+								    FALSE,
 								    GTK_PARAM_READWRITE));
   gtk_container_class_install_child_property (container_class,
 					      CHILD_PROP_TAB_FILL,

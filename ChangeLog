@@ -1,3 +1,8 @@
+Wed Sep  5 14:15:17 2007  Tim Janik  <timj@imendio.com>
+
+	* gtk/gtknotebook.c (gtk_notebook_class_init): fix wrong default value
+	in ::tab-expand param spec constructor.
+
 2007-09-04  Fernando Herrera  <fherrera@onirica.com>
 
 	* gtk/gtkbuilder.c: (gtk_builder_finalize),
