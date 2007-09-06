@@ -3516,7 +3516,7 @@ shortcuts_drop_uris (GtkFileChooserDefault *impl,
 	}
       else
 	{
-	  GError *error;
+	  GError *error = NULL;
 
 	  g_set_error (&error,
 		       GTK_FILE_CHOOSER_ERROR,
