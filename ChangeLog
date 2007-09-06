@@ -1,3 +1,9 @@
+2007-09-06  Richard Hult  <richard@imendio.com>
+
+	* gdk/quartz/gdkwindow-quartz.c (_gdk_windowing_window_destroy):
+	Patch from William Pitcock: Ungrab windows if necessary when they
+	are destroyed, fixes bug #473441.
+
 Wed Sep  5 14:15:17 2007  Tim Janik  <timj@imendio.com>
 
 	* gtk/gtknotebook.c (gtk_notebook_class_init): fix wrong default value

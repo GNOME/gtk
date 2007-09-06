@@ -798,6 +798,15 @@ _gdk_windowing_window_destroy (GdkWindow *window,
   update_windows = g_slist_remove (update_windows, window);
   main_window_stack = g_slist_remove (main_window_stack, window);
 
+  /* If the destroyed window was targeted for a pointer or keyboard
+   * grab, release the grab.
+   */
+  if (window == _gdk_quartz_pointer_grab_window)
+    gdk_pointer_ungrab (0);
+
+  if (window == _gdk_quartz_keyboard_grab_window)
+    gdk_keyboard_ungrab (0);
+
   if (!recursing && !foreign_destroy)
     {
       GdkWindowImplQuartz *impl = GDK_WINDOW_IMPL_QUARTZ (GDK_WINDOW_OBJECT (window)->impl);
