@@ -1,3 +1,7 @@
+2007-09-06  Michael Natterer  <mitch@imendio.com>
+
+	* demos/gtk-demo/panes.c: s/gtk_widget_[un]ref/g_object_[un]ref/g
+
 2007-09-06  Richard Hult  <richard@imendio.com>
 
 	* gdk/quartz/gdkwindow-quartz.c (_gdk_windowing_window_destroy):
