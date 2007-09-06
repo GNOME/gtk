@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-08-16 16:36+0700\n"
-"PO-Revision-Date: 2007-08-16 16:42+0700\n"
+"POT-Creation-Date: 2007-09-06 15:17+0700\n"
+"PO-Revision-Date: 2007-09-06 15:17+0700\n"
 "Last-Translator: Theppitak Karoonboonyanan <thep@linux.thai.net>\n"
 "Language-Team: Thai <thai-l10n@googlegroups.com>\n"
 "MIME-Version: 1.0\n"
@@ -1551,7 +1551,7 @@ msgstr "ค้นหา"
 
 #: gtk/gtkfilechooserdefault.c:1917
 msgid "Recently Used"
-msgstr "ที่ใช้ล่าสุด"
+msgstr "เอกสารล่าสุด"
 
 #: gtk/gtkfilechooserdefault.c:2581
 msgid "Select which types of files are shown"
@@ -1709,65 +1709,65 @@ msgstr "มีแฟ้มดังกล่าวอยู่แล้วใน
 msgid "_Replace"
 msgstr "แ_ทนที่"
 
-#: gtk/gtkfilechooserdefault.c:8892
+#: gtk/gtkfilechooserdefault.c:8895
 msgid "Could not start the search process"
 msgstr "เรียกโพรเซสค้นหาไม่สำเร็จ"
 
-#: gtk/gtkfilechooserdefault.c:8893
+#: gtk/gtkfilechooserdefault.c:8896
 msgid ""
 "The program was not able to create a connection to the indexer daemon.  "
 "Please make sure it is running."
 msgstr "โปรแกรมไม่สามารถเชื่อมต่อไปยังดีมอนผู้ทำดัชนีได้ กรุณาตรวจสอบให้แน่ใจว่าดีมอนทำงานอยู่"
 
-#: gtk/gtkfilechooserdefault.c:8907
+#: gtk/gtkfilechooserdefault.c:8910
 msgid "Could not send the search request"
 msgstr "ส่งคำขอค้นหาไม่สำเร็จ"
 
 #. Label
-#: gtk/gtkfilechooserdefault.c:9333
+#: gtk/gtkfilechooserdefault.c:9336
 msgid "_Search:"
 msgstr "_ค้นหา:"
 
-#: gtk/gtkfilechooserdefault.c:10283
+#: gtk/gtkfilechooserdefault.c:10289
 #, c-format
 msgid "Could not mount %s"
 msgstr "เมานท์ %s ไม่สำเร็จ"
 
-#: gtk/gtkfilechooserdefault.c:10911
+#: gtk/gtkfilechooserdefault.c:10917
 msgid "Type name of new folder"
 msgstr "พิมพ์ชื่อของโฟลเดอร์ใหม่"
 
-#: gtk/gtkfilechooserdefault.c:10959
+#: gtk/gtkfilechooserdefault.c:10965
 #, c-format
 msgid "%d byte"
 msgid_plural "%d bytes"
 msgstr[0] "%d ไบต์"
 
-#: gtk/gtkfilechooserdefault.c:10961
+#: gtk/gtkfilechooserdefault.c:10967
 #, c-format
 msgid "%.1f KB"
 msgstr "%.1f KB"
 
-#: gtk/gtkfilechooserdefault.c:10963
+#: gtk/gtkfilechooserdefault.c:10969
 #, c-format
 msgid "%.1f MB"
 msgstr "%.1f MB"
 
-#: gtk/gtkfilechooserdefault.c:10965
+#: gtk/gtkfilechooserdefault.c:10971
 #, c-format
 msgid "%.1f GB"
 msgstr "%.1f GB"
 
-#: gtk/gtkfilechooserdefault.c:11061 gtk/gtkfilechooserdefault.c:11082
-#: gtk/gtkfilechooserdefault.c:11114
+#: gtk/gtkfilechooserdefault.c:11067 gtk/gtkfilechooserdefault.c:11088
+#: gtk/gtkfilechooserdefault.c:11120
 msgid "Unknown"
 msgstr "ไม่รู้จัก"
 
-#: gtk/gtkfilechooserdefault.c:11100
+#: gtk/gtkfilechooserdefault.c:11106
 msgid "Today at %H:%M"
 msgstr "วันนี้ %H:%M น."
 
-#: gtk/gtkfilechooserdefault.c:11102
+#: gtk/gtkfilechooserdefault.c:11108
 msgid "Yesterday at %H:%M"
 msgstr "เมื่อวาน %H:%M น."
 
@@ -2754,8 +2754,8 @@ msgstr "_%d. %s"
 msgid "recent menu label|%d. %s"
 msgstr "%d. %s"
 
-#: gtk/gtkrecentmanager.c:1047 gtk/gtkrecentmanager.c:1194
-#: gtk/gtkrecentmanager.c:1204 gtk/gtkrecentmanager.c:1257
+#: gtk/gtkrecentmanager.c:1041 gtk/gtkrecentmanager.c:1188
+#: gtk/gtkrecentmanager.c:1198 gtk/gtkrecentmanager.c:1251
 #, c-format
 msgid "Unable to find an item with URI '%s'"
 msgstr "ไม่พบรายการที่ URI '%s'"
