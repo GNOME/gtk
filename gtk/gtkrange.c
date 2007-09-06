@@ -107,6 +107,7 @@ struct _GtkRangeLayout
 
   GtkSensitivityType lower_sensitivity;
   GtkSensitivityType upper_sensitivity;
+  guint repaint_id;
 
   gdouble fill_level;
 };
@@ -1167,7 +1168,11 @@ gtk_range_destroy (GtkObject *object)
 
   gtk_range_remove_step_timer (range);
   gtk_range_remove_update_timer (range);
-  
+
+  if (range->layout->repaint_id)
+    g_source_remove (range->layout->repaint_id);
+  range->layout->repaint_id = 0;
+
   if (range->adjustment)
     {
       g_signal_handlers_disconnect_by_func (range->adjustment,
@@ -1402,7 +1407,7 @@ static gboolean
 gtk_range_expose (GtkWidget      *widget,
 		  GdkEventExpose *event)
 {
-  GtkRange *range;
+  GtkRange *range = GTK_RANGE (widget);
   gboolean sensitive;
   GtkStateType state;
   GtkShadowType shadow_type;
@@ -1415,17 +1420,17 @@ gtk_range_expose (GtkWidget      *widget,
   g_object_get (gtk_widget_get_settings (widget),
                 "gtk-touchscreen-mode", &touchscreen,
                 NULL);
-
-  range = GTK_RANGE (widget);
-
   if (GTK_WIDGET_CAN_FOCUS (range))
-    {
-      gtk_widget_style_get (GTK_WIDGET (range),
-			    "focus-line-width", &focus_line_width,
-			    "focus-padding", &focus_padding,
-			    NULL);
-    }
-  
+    gtk_widget_style_get (GTK_WIDGET (range),
+                          "focus-line-width", &focus_line_width,
+                          "focus-padding", &focus_padding,
+                          NULL);
+
+  /* we're now exposing, so there's no need to force early repaints */
+  if (range->layout->repaint_id)
+    g_source_remove (range->layout->repaint_id);
+  range->layout->repaint_id = 0;
+
   expose_area = event->area;
   expose_area.x -= widget->allocation.x;
   expose_area.y -= widget->allocation.y;
@@ -2266,6 +2271,16 @@ gtk_range_adjustment_changed (GtkAdjustment *adjustment,
    */
 }
 
+static gboolean
+force_repaint (gpointer data)
+{
+  GtkRange *range = GTK_RANGE (data);
+  range->layout->repaint_id = 0;
+  if (GTK_WIDGET_DRAWABLE (range))
+    gdk_window_process_updates (GTK_WIDGET (range)->window, FALSE);
+  return FALSE;
+}
+
 static void
 gtk_range_adjustment_value_changed (GtkAdjustment *adjustment,
 				    gpointer       data)
@@ -2281,10 +2296,9 @@ gtk_range_adjustment_value_changed (GtkAdjustment *adjustment,
   if (layout_changed (range->layout, &layout))
     {
       gtk_widget_queue_draw (GTK_WIDGET (range));
-      
-      /* This is so we don't lag the widget being scrolled. */
-      if (GTK_WIDGET_REALIZED (range))
-        gdk_window_process_updates (GTK_WIDGET (range)->window, FALSE);
+      /* setup a timer to ensure the range isn't lagging too much behind the scroll position */
+      if (!range->layout->repaint_id)
+        range->layout->repaint_id = gdk_threads_add_timeout_full (GDK_PRIORITY_EVENTS, 181, force_repaint, range, NULL);
     }
   
   /* Note that we don't round off to range->round_digits here.

@@ -1,3 +1,12 @@
+2007-09-06 13:37:28  Tim Janik  <timj@imendio.com>
+
+	* gtk/gtkrange.c (gtk_range_adjustment_value_changed): removed code
+	that forced range repaints upon every motion event, because these tend
+	to stall other repaints on busy CPUs.
+	added a timer to still force repaints every once in a while (roughly
+	5Hz atm) to avoid leaving the user without feedback on the range.
+	fixes bug #460534.
+
 2007-09-06  Michael Natterer  <mitch@imendio.com>
 
 	* demos/gtk-demo/panes.c: s/gtk_widget_[un]ref/g_object_[un]ref/g
