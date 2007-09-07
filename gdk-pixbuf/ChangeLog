@@ -1,3 +1,8 @@
+2007-09-07  Matthias Clasen  <mclasen@redhat.com>
+
+	* io-tga.c (gdk_pixbuf__tga_stop_load): Handle pbuf 
+	being NULL.  (#468801, Sebastien Bacher)
+
 2007-07-21  Matthias Clasen  <mclasen@redhat.com>
 
 	* === Released 2.11.6 ===

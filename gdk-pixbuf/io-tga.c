@@ -935,7 +935,8 @@ static gboolean gdk_pixbuf__tga_stop_load(gpointer data, GError **err)
 	TGAContext *ctx = (TGAContext *) data;
 	g_return_val_if_fail(ctx != NULL, FALSE);
 
-	if (!(ctx->hdr->flags & TGA_ORIGIN_UPPER) && ctx->run_length_encoded) {
+	if (!(ctx->hdr->flags & TGA_ORIGIN_UPPER) && 
+            ctx->run_length_encoded && ctx->pbuf) {
 		pixbuf_flip_vertically (ctx->pbuf);
 		if (ctx->ufunc)
 			(*ctx->ufunc) (ctx->pbuf, 0, 0,
