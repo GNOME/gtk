@@ -1,3 +1,9 @@
+2007-09-07  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/updateiconcache.c (get_image_meta_data_size): Don't
+	use image->attach_points where image->n_attach_points was meant.
+	Pointed out by Albert Chin.
+
 2007-09-07  Wouter Bolsterlee  <wbolster@svn.gnome.org>
 
 	* modules/printbackends/cups/gtkcupsutils.c:

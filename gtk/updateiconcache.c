@@ -971,7 +971,7 @@ get_image_meta_data_size (Image *image)
           data->size = 0;
 
           if (data->has_embedded_rect ||
-              data->attach_points > 0 ||
+              data->n_attach_points > 0 ||
               data->n_display_names > 0)
             data->size += 12;
 
@@ -997,11 +997,8 @@ get_image_meta_data_size (Image *image)
                        * pool in case the same string occurs twice
                        * during a get_single_node_size() calculation.
                        */
-                      //g_print ("adding non-written out string %s\n", data->display_names[i]);
                       add_string (data->display_names[i], -1);
                     }
-                  //else
-                    //g_print ("found string %s in pool: %d\n", data->display_names[i], poolv);
                 }
            } 
 
