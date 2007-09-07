@@ -1,3 +1,8 @@
+2007-09-07  Wouter Bolsterlee  <wbolster@svn.gnome.org>
+
+	* modules/printbackends/cups/gtkcupsutils.c:
+	(_post_send): Fix typo that broke the build.
+
 2007-09-07  Matthias Clasen  <mclasen@redhat.com>
 
 	* configure.in: Check for the cups function httpGetAuthString().
