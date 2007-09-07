@@ -1,10 +1,15 @@
+2007-09-07  Raphael Higino  <raphaelh@svn.gnome.org>
+
+	* pt_BR.po: Updated Brazilian Portuguese translation
+	by Og Maciel <ogmaciel@gnome.org>.
+
 2007-09-07  Ani Peter  <peter.ani@gmail.com>
 
 	* ml.po: Updated Malayalam Translation
 
 2007-09-07 Maxim Dziumanenko <dziumanenko@gmail.com>
 
-        * uk.po: Update Ukrainian translation.
+	* uk.po: Update Ukrainian translation.
 
 2007-09-06  Goran Rakić  <grakic@devbase.net>
 
@@ -36,7 +41,7 @@
 
 2007-08-31  Pramod Raghavendra <pramodleo@yahoo.co.uk>
 
-        * kn.po: Added Kannada translation by Shankar Prasad.
+	* kn.po: Added Kannada translation by Shankar Prasad.
 
 2007-08-27  Alexander Shopov  <ash@contact.bg>
 
