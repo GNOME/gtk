@@ -47,6 +47,7 @@
 #include "gtkalignment.h"
 #include "gtklabel.h"
 #include "gtkeventbox.h"
+#include "gtkbuildable.h"
 
 #include "gtkprintbackend.h"
 #include "gtkprinter-private.h"
@@ -90,6 +91,12 @@ static void     update_collate_icon                (GtkToggleButton    *toggle_b
 static gboolean dialog_get_collate                 (GtkPrintUnixDialog *dialog);
 static gboolean dialog_get_reverse                 (GtkPrintUnixDialog *dialog);
 static gint     dialog_get_n_copies                (GtkPrintUnixDialog *dialog);
+
+/* GtkBuildable */
+static void gtk_print_unix_dialog_buildable_init                    (GtkBuildableIface *iface);
+static GObject *gtk_print_unix_dialog_buildable_get_internal_child  (GtkBuildable *buildable,
+                                                                     GtkBuilder   *builder,
+                                                                     const gchar  *childname);
 
 enum {
   PROP_0,
@@ -193,7 +200,11 @@ struct GtkPrintUnixDialogPrivate
   gint current_page;
 };
 
-G_DEFINE_TYPE (GtkPrintUnixDialog, gtk_print_unix_dialog, GTK_TYPE_DIALOG)
+G_DEFINE_TYPE_WITH_CODE (GtkPrintUnixDialog, gtk_print_unix_dialog, GTK_TYPE_DIALOG,
+                         G_IMPLEMENT_INTERFACE (GTK_TYPE_BUILDABLE,
+                                                gtk_print_unix_dialog_buildable_init))
+
+static GtkBuildableIface *parent_buildable_iface;
 
 static gboolean
 is_default_printer (GtkPrintUnixDialog *dialog,
@@ -388,6 +399,25 @@ printer_removed_cb (GtkPrintBackend    *backend,
 
   iter = g_object_get_data (G_OBJECT (printer), "gtk-print-tree-iter");
   gtk_list_store_remove (GTK_LIST_STORE (priv->printer_list), iter);
+}
+
+static void
+gtk_print_unix_dialog_buildable_init (GtkBuildableIface *iface)
+{
+  parent_buildable_iface = g_type_interface_peek_parent (iface);
+
+  iface->get_internal_child = gtk_print_unix_dialog_buildable_get_internal_child;
+}
+
+static GObject *
+gtk_print_unix_dialog_buildable_get_internal_child (GtkBuildable *buildable,
+                                                    GtkBuilder   *builder,
+                                                    const gchar  *childname)
+{
+  if (strcmp (childname, "notebook") == 0)
+    return G_OBJECT (GTK_PRINT_UNIX_DIALOG (buildable)->priv->notebook);
+
+  return parent_buildable_iface->get_internal_child (buildable, builder, childname);
 }
 
 static void

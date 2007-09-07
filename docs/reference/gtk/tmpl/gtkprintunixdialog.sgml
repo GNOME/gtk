@@ -39,6 +39,38 @@ gtk_print_job_new().
 Printing support was added in GTK+ 2.10.
 </para>
 
+<refsect2 id="GtkPrintUnixDialog-BUILDER-UI"><title>GtkPrintUnixDialog as GtkBuildable</title>
+<para>
+The GtkPrintUnixDialog implementation of the GtkBuildable interface exposes its
+@notebook internal children with the name "notebook".
+</para>
+<example>
+<title>A <structname>GtkPrintUnixDialog</structname> UI definition fragment.</title>
+<programlisting><![CDATA[
+<object class="GtkPrintUnixDialog" id="dialog1">
+  <child internal-child="notebook">
+    <object class="GtkNotebook" id="notebook">
+      <child>
+        <object class="GtkLabel" id="tabcontent">
+        <property name="label">Content on notebook tab</property>
+        </object>
+      </child>
+      <child type="tab">
+        <object class="GtkLabel" id="tablabel">
+          <property name="label">Tab label</property>
+        </object>
+        <packing>
+          <property name="tab_expand">False</property>
+          <property name="tab_fill">False</property>
+        </packing>
+      </child>
+    </object>
+  </child>
+</object>
+]]></programlisting>
+</example>
+</refsect2>
+
 <!-- ##### SECTION See_Also ##### -->
 <para>
 #GtkPageSetupUnixDialog, #GtkPrinter, #GtkPrintJob

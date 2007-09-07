@@ -1,5 +1,11 @@
 2007-09-07  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkprintunixdialog.c: Add an internal child name for
+	the notebook, so that GtkBuilder can be used to add custom tabs.
+	(#472951, Christian Persch)
+
+2007-09-07  Matthias Clasen  <mclasen@redhat.com>
+
 	* gtk/updateiconcache.c (get_image_meta_data_size): Don't
 	use image->attach_points where image->n_attach_points was meant.
 	Pointed out by Albert Chin.

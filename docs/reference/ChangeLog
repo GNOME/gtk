@@ -1,3 +1,7 @@
+2007-09-07  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/tmpl/gtkprintunixdialog.sgml: Additions
+
 2007-09-06  Matthias Clasen  <mclasen@redhat.com>
 
 	* gdk-pixbuf/porting-from-imlib.sgml:
