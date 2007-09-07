@@ -250,12 +250,10 @@
 	  In contrast, &gdk-pixbuf; provides convenience functions to
 	  render arbitrary rectangular regions of an image onto a
 	  drawable that your application provides.  You can use
-	  <function>gdk_pixbuf_render_to_drawable()</function> or
-	  <function>gdk_pixbuf_render_to_drawable_alpha()</function>
-	  to do this; having your application provide the destination
-	  drawable and specify an arbitrary region means your
-	  application has complete control over the way images are
-	  rendered.
+	  <function>gdk_draw_pixbuf()</function> to do this; having
+          your application provide the destination drawable and
+	  specify an arbitrary region means your application has
+          complete control over the way images are rendered.
 	</para>
 
 	<para>

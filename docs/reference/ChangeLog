@@ -1,4 +1,10 @@
 2007-09-06  Matthias Clasen  <mclasen@redhat.com>
+
+	* gdk-pixbuf/porting-from-imlib.sgml:
+	* gdk/tmpl/rgb.sgml: Remove references to deprecated
+	functions.  (#460207, Guillaume Cottenceau)
+
+2007-09-06  Matthias Clasen  <mclasen@redhat.com>
 	
 	* gdk/tmpl/windows.sgml: Correct the example widget for
 	child windows.  (#473463, Andrew Cowie)
