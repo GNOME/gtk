@@ -1,5 +1,9 @@
 2007-09-06  Matthias Clasen  <mclasen@redhat.com>
 
+	* configure.in: Check for cups.h.  (#459732, Guillaume Cottenceau)
+
+2007-09-06  Matthias Clasen  <mclasen@redhat.com>
+
 	* gdk/gdkrectangle.c (gdk_rectangle_intersect): Allow
 	dest to be NULL.  (#464528, Xan Lopez)
 

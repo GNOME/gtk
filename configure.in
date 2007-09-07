@@ -1569,6 +1569,8 @@ if test "x$CUPS_CONFIG" != "xno"; then
   AC_SUBST(CUPS_API_MINOR)
   AC_SUBST(CUPS_CFLAGS)
   AC_SUBST(CUPS_LIBS)
+
+  AC_CHECK_HEADER(cups/cups.h,,AC_MSG_ERROR([[*** Sorry, cups-config present but cups/cups.h missing.]]))
 fi
 AM_CONDITIONAL(HAVE_CUPS, test "x$CUPS_CONFIG" != "xno")
 
