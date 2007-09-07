@@ -62,12 +62,14 @@ gdk_rectangle_union (GdkRectangle *src1,
  * gdk_rectangle_intersect:
  * @src1: a #GdkRectangle
  * @src2: a #GdkRectangle
- * @dest: return location for the intersection of @src1 and @src2
+ * @dest: return location for the intersection of @src1 and @src2, or %NULL
  *
  * Calculates the intersection of two rectangles. It is allowed for
- * @dest to be the same as either @src1 or @src2. If the rectangles
- * doesn't intersect, @dest's width and height is set to 0 and its x
- * and y values are undefined.
+ * @dest to be the same as either @src1 or @src2. If the rectangles 
+ * do not intersect, @dest's width and height is set to 0 and its x 
+ * and y values are undefined. If you are only interested in whether
+ * the rectangles intersect, but not in the intersecting area itself,
+ * pass %NULL for @dest.
  *
  * Returns: %TRUE if the rectangles intersect.
  */
@@ -82,7 +84,6 @@ gdk_rectangle_intersect (GdkRectangle *src1,
 
   g_return_val_if_fail (src1 != NULL, FALSE);
   g_return_val_if_fail (src2 != NULL, FALSE);
-  g_return_val_if_fail (dest != NULL, FALSE);
 
   return_val = FALSE;
 
@@ -93,13 +94,16 @@ gdk_rectangle_intersect (GdkRectangle *src1,
 
   if (dest_w > 0 && dest_h > 0)
     {
-      dest->x = dest_x;
-      dest->y = dest_y;
-      dest->width = dest_w;
-      dest->height = dest_h;
+      if (dest)
+        {
+          dest->x = dest_x;
+          dest->y = dest_y;
+          dest->width = dest_w;
+          dest->height = dest_h;
+        }
       return_val = TRUE;
     }
-  else
+  else if (dest)
     {
       dest->width = 0;
       dest->height = 0;

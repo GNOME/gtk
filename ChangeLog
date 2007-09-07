@@ -1,4 +1,14 @@
-2007-09-06 Matthias Clasen  <mclasen@redhat.com>
+2007-09-06  Matthias Clasen  <mclasen@redhat.com>
+
+	* gdk/gdkrectangle.c (gdk_rectangle_intersect): Allow
+	dest to be NULL.  (#464528, Xan Lopez)
+
+2007-09-06  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtkmisc.c (gtk_misc_set_alignment, gtk_misc_set_padding): 
+	Actually emit change notification here.  (#474282, Thomas Rydzynski)
+
+2007-09-06  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtkfilechooserdefault.c (shortcuts_drop_uris): Initialize
 	error to NULL before calling g_set_error(). Should fix #473954, 
