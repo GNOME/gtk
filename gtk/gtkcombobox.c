@@ -408,6 +408,7 @@ static void     gtk_combo_box_cell_layout_pack_start         (GtkCellLayout     
 static void     gtk_combo_box_cell_layout_pack_end           (GtkCellLayout         *layout,
                                                               GtkCellRenderer       *cell,
                                                               gboolean               expand);
+static GList   *gtk_combo_box_cell_layout_get_cells          (GtkCellLayout         *layout);
 static void     gtk_combo_box_cell_layout_clear              (GtkCellLayout         *layout);
 static void     gtk_combo_box_cell_layout_add_attribute      (GtkCellLayout         *layout,
                                                               GtkCellRenderer       *cell,
@@ -878,6 +879,7 @@ gtk_combo_box_cell_layout_init (GtkCellLayoutIface *iface)
 {
   iface->pack_start = gtk_combo_box_cell_layout_pack_start;
   iface->pack_end = gtk_combo_box_cell_layout_pack_end;
+  iface->get_cells = gtk_combo_box_cell_layout_get_cells;
   iface->clear = gtk_combo_box_cell_layout_clear;
   iface->add_attribute = gtk_combo_box_cell_layout_add_attribute;
   iface->set_cell_data_func = gtk_combo_box_cell_layout_set_cell_data_func;
@@ -4127,6 +4129,27 @@ gtk_combo_box_cell_layout_pack_end (GtkCellLayout   *layout,
 
   if (GTK_IS_MENU (combo_box->priv->popup_widget))
     pack_end_recurse (combo_box->priv->popup_widget, cell, expand);
+}
+
+static GList *
+gtk_combo_box_cell_layout_get_cells (GtkCellLayout *layout)
+{
+  GSList *list;
+  GList *retval = NULL;
+  GtkComboBox *combo_box;
+
+  g_return_val_if_fail (GTK_IS_COMBO_BOX (layout), NULL);
+
+  combo_box = GTK_COMBO_BOX (layout);
+
+  for (list = combo_box->priv->cells; list; list = list->next)
+    {
+      ComboCellInfo *info = (ComboCellInfo *)list->data;
+
+      retval = g_list_prepend (retval, info->cell);
+    }
+
+  return g_list_reverse (retval);
 }
 
 static void

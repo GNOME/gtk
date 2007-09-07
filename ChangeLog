@@ -1,3 +1,9 @@
+2007-09-07  Kristian Rietveld  <kris@gtk.org>
+
+	* gtk/gtkcombobox.c (gtk_combo_box_cell_layout_init),
+	(gtk_combo_box_cell_layout_get_cells): implement missing get_cells
+	method.  (Spotted by Paolo Borelli).
+
 2007-09-06  Matthias Clasen  <mclasen@redhat.com>
 
 	* configure.in: Check for cups.h.  (#459732, Guillaume Cottenceau)
