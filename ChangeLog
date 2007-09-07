@@ -1,3 +1,10 @@
+2007-09-07  Matthias Clasen  <mclasen@redhat.com>
+
+	* configure.in: Check for the cups function httpGetAuthString().
+
+	* modules/printbackends/cups/gtkcupsutils.c: Use httpGetAuthString()
+	if available.  (#467414, Claudio Saavedra)
+
 2007-09-07  Kristian Rietveld  <kris@gtk.org>
 
 	* gtk/gtkcombobox.c (gtk_combo_box_cell_layout_init),

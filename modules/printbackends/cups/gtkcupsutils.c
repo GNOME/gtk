@@ -629,9 +629,13 @@ _post_send (GtkCupsRequest *request)
 	
   httpClearFields (request->http);
   httpSetField (request->http, HTTP_FIELD_CONTENT_LENGTH, length);
-  httpSetField (request->http, HTTP_FIELD_CONTENT_TYPE, "application/ipp");
+  httpSetField (request->http, HTTP_FIELD_CONTENT_TYPE, "application/ipp");`
+#ifdef HAVE_HTTPGETAUTHSTRING
+  httpSetField (request->http, HTTP_FIELD_AUTHORIZATION, httpGetAuthString (request->http));
+#else
 #ifdef HAVE_HTTP_AUTHSTRING
   httpSetField (request->http, HTTP_FIELD_AUTHORIZATION, request->http->authstring);
+#endif
 #endif
 
   if (httpPost (request->http, request->resource))

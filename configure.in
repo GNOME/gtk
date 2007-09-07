@@ -1583,6 +1583,11 @@ CFLAGS="$gtk_save_cflags"
 
 AC_SUBST(HAVE_HTTP_AUTHSTRING)
 
+gtk_save_libs="$LIBS"
+LIBS="$CUPS_LIBS"
+AC_CHECK_FUNCS(httpGetAuthString)
+LIBS="$gtk_save_libs"
+
 gtk_save_cppflags="$CPPFLAGS"
 CPPFLAGS="$CPPFLAGS $GTK_DEP_CFLAGS"
 			  
