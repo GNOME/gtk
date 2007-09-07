@@ -1,3 +1,8 @@
+2007-09-06  Matthias Clasen  <mclasen@redhat.com>
+	
+	* gdk/tmpl/windows.sgml: Correct the example widget for
+	child windows.  (#473463, Andrew Cowie)
+
 2007-09-03  Behdad Esfahbod  <behdad@gnome.org>
 
 	* gtk/gtk-sections.txt: Remove duplicate
