@@ -8,10 +8,10 @@ msgid ""
 msgstr ""
 "Project-Id-Version: eu\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-07-26 22:59+0200\n"
-"PO-Revision-Date: 2007-07-27 18:29+0200\n"
+"POT-Creation-Date: 2007-09-08 19:05+0200\n"
+"PO-Revision-Date: 2007-09-08 19:07+0200\n"
 "Last-Translator: Iñaki Larrañaga Murgoitio <dooteo@zundan.com>\n"
-"Language-Team: Basque <eu@li.org>\n"
+"Language-Team: Basque <itzulpena@euskalgnu.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -374,22 +374,24 @@ msgstr "Ustekabeko ikono-zatia animazioan"
 msgid "Unsupported animation type"
 msgstr "Onartzen ez den animazio-mota"
 
-#: ../gdk-pixbuf/io-ani.c:348 ../gdk-pixbuf/io-ani.c:536
+#: ../gdk-pixbuf/io-ani.c:348 ../gdk-pixbuf/io-ani.c:406
+#: ../gdk-pixbuf/io-ani.c:432 ../gdk-pixbuf/io-ani.c:455
+#: ../gdk-pixbuf/io-ani.c:482 ../gdk-pixbuf/io-ani.c:569
 msgid "Invalid header in animation"
 msgstr "Goiburu baliogabea animazioan"
 
 #: ../gdk-pixbuf/io-ani.c:358 ../gdk-pixbuf/io-ani.c:380
-#: ../gdk-pixbuf/io-ani.c:439 ../gdk-pixbuf/io-ani.c:458
-#: ../gdk-pixbuf/io-ani.c:509 ../gdk-pixbuf/io-ani.c:581
+#: ../gdk-pixbuf/io-ani.c:464 ../gdk-pixbuf/io-ani.c:491
+#: ../gdk-pixbuf/io-ani.c:542 ../gdk-pixbuf/io-ani.c:614
 msgid "Not enough memory to load animation"
 msgstr "Ez dago animazioa kargatzeko adina memoria"
 
-#: ../gdk-pixbuf/io-ani.c:398 ../gdk-pixbuf/io-ani.c:415
-#: ../gdk-pixbuf/io-ani.c:426
+#: ../gdk-pixbuf/io-ani.c:398 ../gdk-pixbuf/io-ani.c:424
+#: ../gdk-pixbuf/io-ani.c:443
 msgid "Malformed chunk in animation"
 msgstr "Gaizki osatutako zatia animazioan"
 
-#: ../gdk-pixbuf/io-ani.c:680
+#: ../gdk-pixbuf/io-ani.c:713
 msgid "The ANI image format"
 msgstr "ANI irudi-formatua"
 
@@ -855,7 +857,7 @@ msgstr "Ezin da TGAren testuinguru-egiturarako memoria esleitu"
 msgid "Excess data in file"
 msgstr "Fitxategian datu gehiegi daude"
 
-#: ../gdk-pixbuf/io-tga.c:1001
+#: ../gdk-pixbuf/io-tga.c:1002
 msgid "The Targa image format"
 msgstr "Targa irudi-formatua"
 
@@ -1139,6 +1141,21 @@ msgstr "Zuriunea"
 #: ../gtk/gtkaccellabel.c:626
 msgid "keyboard label|Backslash"
 msgstr "Alderantzizko barra"
+
+#: ../gtk/gtkbuilderparser.c:289
+#, c-format
+msgid "Invalid type function: `%s'"
+msgstr "Funtzio mota baliogabea: %s"
+
+#: ../gtk/gtkbuilderparser.c:729
+#, c-format
+msgid "Invalid root element: '%s'"
+msgstr "Erroko elementu baliogabea: %s"
+
+#: ../gtk/gtkbuilderparser.c:761
+#, c-format
+msgid "Unhandled tag: '%s'"
+msgstr "Kudeatu gabeko etiketa: '%s'"
 
 #. Translate to calendar:YM if you want years to be displayed
 #. * before months; otherwise translate to calendar:MY.
@@ -1611,68 +1628,68 @@ msgstr ""
 msgid "_Replace"
 msgstr "_Ordeztu"
 
-#: ../gtk/gtkfilechooserdefault.c:8892
+#: ../gtk/gtkfilechooserdefault.c:8895
 msgid "Could not start the search process"
 msgstr "Ezin izan da bilaketako prozesua abiarazi"
 
-#: ../gtk/gtkfilechooserdefault.c:8893
+#: ../gtk/gtkfilechooserdefault.c:8896
 msgid ""
 "The program was not able to create a connection to the indexer daemon.  "
 "Please make sure it is running."
 msgstr ""
-"Programak ezin izan du indexatzaile daemonarekin konexiorik sortu. "
-"Ziurtatu exekutatzen ari dela."
+"Programak ezin izan du indexatzaile daemonarekin konexiorik sortu. Ziurtatu "
+"exekutatzen ari dela."
 
-#: ../gtk/gtkfilechooserdefault.c:8907
+#: ../gtk/gtkfilechooserdefault.c:8910
 msgid "Could not send the search request"
 msgstr "Ezin izan da bilaketako eskaera bidali"
 
 #. Label
-#: ../gtk/gtkfilechooserdefault.c:9333
+#: ../gtk/gtkfilechooserdefault.c:9336
 msgid "_Search:"
 msgstr "_Bilaketa:"
 
-#: ../gtk/gtkfilechooserdefault.c:10283
+#: ../gtk/gtkfilechooserdefault.c:10289
 #, c-format
 msgid "Could not mount %s"
 msgstr "Ezin da %s muntatu"
 
-#: ../gtk/gtkfilechooserdefault.c:10911
+#: ../gtk/gtkfilechooserdefault.c:10917
 msgid "Type name of new folder"
 msgstr "Idatzi karpeta berriaren izena"
 
-#: ../gtk/gtkfilechooserdefault.c:10959
+#: ../gtk/gtkfilechooserdefault.c:10965
 #, c-format
 msgid "%d byte"
 msgid_plural "%d bytes"
 msgstr[0] "byte %d"
 msgstr[1] "%d byte"
 
-#: ../gtk/gtkfilechooserdefault.c:10961
+#: ../gtk/gtkfilechooserdefault.c:10967
 #, c-format
 msgid "%.1f KB"
 msgstr "%.1f KB"
 
-#: ../gtk/gtkfilechooserdefault.c:10963
+#: ../gtk/gtkfilechooserdefault.c:10969
 #, c-format
 msgid "%.1f MB"
 msgstr "%.1f MB"
 
-#: ../gtk/gtkfilechooserdefault.c:10965
+#: ../gtk/gtkfilechooserdefault.c:10971
 #, c-format
 msgid "%.1f GB"
 msgstr "%.1f GB"
 
-#: ../gtk/gtkfilechooserdefault.c:11061 ../gtk/gtkfilechooserdefault.c:11082
-#: ../gtk/gtkfilechooserdefault.c:11114
+#: ../gtk/gtkfilechooserdefault.c:11067 ../gtk/gtkfilechooserdefault.c:11088
+#: ../gtk/gtkfilechooserdefault.c:11120
 msgid "Unknown"
 msgstr "Ezezaguna"
 
-#: ../gtk/gtkfilechooserdefault.c:11100
+#: ../gtk/gtkfilechooserdefault.c:11106
 msgid "Today at %H:%M"
 msgstr "Gaur %H:%M orduan"
 
-#: ../gtk/gtkfilechooserdefault.c:11102
+#: ../gtk/gtkfilechooserdefault.c:11108
 msgid "Yesterday at %H:%M"
 msgstr "Atzo %H:%M orduan"
 
@@ -2173,7 +2190,7 @@ msgstr "_Paper-tamaina:"
 msgid "_Orientation:"
 msgstr "_Orientazioa:"
 
-#: ../gtk/gtkpagesetupunixdialog.c:1121 ../gtk/gtkprintunixdialog.c:2145
+#: ../gtk/gtkpagesetupunixdialog.c:1121 ../gtk/gtkprintunixdialog.c:2175
 msgid "Page Setup"
 msgstr "Prestatu orrialdea"
 
@@ -2367,35 +2384,35 @@ msgstr "Zehaztugabeko errorea"
 msgid "Error from StartDoc"
 msgstr "Errorea StartDoc-etik"
 
-#: ../gtk/gtkprintunixdialog.c:1474
+#: ../gtk/gtkprintunixdialog.c:1504
 msgid "Printer"
 msgstr "Inprimagailua"
 
-#: ../gtk/gtkprintunixdialog.c:1482
+#: ../gtk/gtkprintunixdialog.c:1512
 msgid "Location"
 msgstr "Kokalekua"
 
-#: ../gtk/gtkprintunixdialog.c:1491
+#: ../gtk/gtkprintunixdialog.c:1521
 msgid "Status"
 msgstr "Egoera"
 
-#: ../gtk/gtkprintunixdialog.c:1513
+#: ../gtk/gtkprintunixdialog.c:1543
 msgid "Print Pages"
 msgstr "Inprimatu orrialdeak"
 
-#: ../gtk/gtkprintunixdialog.c:1517
+#: ../gtk/gtkprintunixdialog.c:1547
 msgid "_All"
 msgstr "_Denak"
 
-#: ../gtk/gtkprintunixdialog.c:1524
+#: ../gtk/gtkprintunixdialog.c:1554
 msgid "C_urrent"
 msgstr "_Unekoa"
 
-#: ../gtk/gtkprintunixdialog.c:1533
+#: ../gtk/gtkprintunixdialog.c:1563
 msgid "Ra_nge"
 msgstr "_Barrutia"
 
-#: ../gtk/gtkprintunixdialog.c:1534
+#: ../gtk/gtkprintunixdialog.c:1564
 msgid ""
 "Specify one or more page ranges,\n"
 " e.g. 1-3,7,11"
@@ -2403,141 +2420,141 @@ msgstr ""
 "Zehaztu orrialdeen barruti bat edo gehiago,\n"
 "adib. 1-3,7,11"
 
-#: ../gtk/gtkprintunixdialog.c:1553
+#: ../gtk/gtkprintunixdialog.c:1583
 msgid "Copies"
 msgstr "Kopiak"
 
 #. FIXME chpe: too much space between Copies and spinbutton, put those 2 in a hbox and make it span 2 columns
-#: ../gtk/gtkprintunixdialog.c:1558
+#: ../gtk/gtkprintunixdialog.c:1588
 msgid "Copie_s:"
 msgstr "_Kopiak:"
 
-#: ../gtk/gtkprintunixdialog.c:1576
+#: ../gtk/gtkprintunixdialog.c:1606
 msgid "C_ollate"
 msgstr "_Alderatu"
 
-#: ../gtk/gtkprintunixdialog.c:1584
+#: ../gtk/gtkprintunixdialog.c:1614
 msgid "_Reverse"
 msgstr "_Alderantzikatu"
 
-#: ../gtk/gtkprintunixdialog.c:1601
+#: ../gtk/gtkprintunixdialog.c:1631
 msgid "General"
 msgstr "Orokorra"
 
-#: ../gtk/gtkprintunixdialog.c:2001
+#: ../gtk/gtkprintunixdialog.c:2031
 msgid "Layout"
 msgstr "Diseinua"
 
-#: ../gtk/gtkprintunixdialog.c:2005
+#: ../gtk/gtkprintunixdialog.c:2035
 msgid "Pages per _side:"
 msgstr "Orrialdeak _aldeko:"
 
-#: ../gtk/gtkprintunixdialog.c:2021
+#: ../gtk/gtkprintunixdialog.c:2051
 msgid "T_wo-sided:"
 msgstr "_Bi aldetatik:"
 
-#: ../gtk/gtkprintunixdialog.c:2036
+#: ../gtk/gtkprintunixdialog.c:2066
 msgid "_Only print:"
 msgstr "Inprimatu _soilik:"
 
 #. In enum order
-#: ../gtk/gtkprintunixdialog.c:2051
+#: ../gtk/gtkprintunixdialog.c:2081
 msgid "All sheets"
 msgstr "Orri guztiak"
 
-#: ../gtk/gtkprintunixdialog.c:2052
+#: ../gtk/gtkprintunixdialog.c:2082
 msgid "Even sheets"
 msgstr "Orri bikoitiak"
 
-#: ../gtk/gtkprintunixdialog.c:2053
+#: ../gtk/gtkprintunixdialog.c:2083
 msgid "Odd sheets"
 msgstr "Orri bakoitiak"
 
-#: ../gtk/gtkprintunixdialog.c:2056
+#: ../gtk/gtkprintunixdialog.c:2086
 msgid "Sc_ale:"
 msgstr "E_skala:"
 
-#: ../gtk/gtkprintunixdialog.c:2083
+#: ../gtk/gtkprintunixdialog.c:2113
 msgid "Paper"
 msgstr "Papera"
 
-#: ../gtk/gtkprintunixdialog.c:2087
+#: ../gtk/gtkprintunixdialog.c:2117
 msgid "Paper _type:"
 msgstr "Paper-_mota:"
 
-#: ../gtk/gtkprintunixdialog.c:2102
+#: ../gtk/gtkprintunixdialog.c:2132
 msgid "Paper _source:"
 msgstr "Paper-iturria:"
 
-#: ../gtk/gtkprintunixdialog.c:2117
+#: ../gtk/gtkprintunixdialog.c:2147
 msgid "Output t_ray:"
 msgstr "Irteerako _erretilua:"
 
-#: ../gtk/gtkprintunixdialog.c:2168
+#: ../gtk/gtkprintunixdialog.c:2198
 msgid "Job Details"
 msgstr "Lanaren xehetasunak"
 
-#: ../gtk/gtkprintunixdialog.c:2174
+#: ../gtk/gtkprintunixdialog.c:2204
 msgid "Pri_ority:"
 msgstr "_Lehentasuna:"
 
-#: ../gtk/gtkprintunixdialog.c:2189
+#: ../gtk/gtkprintunixdialog.c:2219
 msgid "_Billing info:"
 msgstr "_Fakturaren datuak:"
 
-#: ../gtk/gtkprintunixdialog.c:2207
+#: ../gtk/gtkprintunixdialog.c:2237
 msgid "Print Document"
 msgstr "Inprimatu dokumentua"
 
-#: ../gtk/gtkprintunixdialog.c:2213
+#: ../gtk/gtkprintunixdialog.c:2243
 msgid "_Now"
 msgstr "_Orain"
 
-#: ../gtk/gtkprintunixdialog.c:2220
+#: ../gtk/gtkprintunixdialog.c:2250
 msgid "A_t:"
 msgstr "_Noiz:"
 
-#: ../gtk/gtkprintunixdialog.c:2235
+#: ../gtk/gtkprintunixdialog.c:2265
 msgid "On _hold"
 msgstr "_Itxaron"
 
-#: ../gtk/gtkprintunixdialog.c:2254
+#: ../gtk/gtkprintunixdialog.c:2284
 msgid "Add Cover Page"
 msgstr "Gehitu gainazaleko orria"
 
-#: ../gtk/gtkprintunixdialog.c:2260
+#: ../gtk/gtkprintunixdialog.c:2290
 msgid "Be_fore:"
 msgstr "_Aurretik:"
 
-#: ../gtk/gtkprintunixdialog.c:2275
+#: ../gtk/gtkprintunixdialog.c:2305
 msgid "_After:"
 msgstr "_Ondoren:"
 
-#: ../gtk/gtkprintunixdialog.c:2290
+#: ../gtk/gtkprintunixdialog.c:2320
 msgid "Job"
 msgstr "Lana"
 
-#: ../gtk/gtkprintunixdialog.c:2356
+#: ../gtk/gtkprintunixdialog.c:2386
 msgid "Advanced"
 msgstr "Aurreratua"
 
-#: ../gtk/gtkprintunixdialog.c:2391
+#: ../gtk/gtkprintunixdialog.c:2421
 msgid "Image Quality"
 msgstr "Irudiaren kalitatea"
 
-#: ../gtk/gtkprintunixdialog.c:2394
+#: ../gtk/gtkprintunixdialog.c:2424
 msgid "Color"
 msgstr "Kolorea"
 
-#: ../gtk/gtkprintunixdialog.c:2397
+#: ../gtk/gtkprintunixdialog.c:2427
 msgid "Finishing"
 msgstr "Amaitzen"
 
-#: ../gtk/gtkprintunixdialog.c:2407
+#: ../gtk/gtkprintunixdialog.c:2437
 msgid "Some of the settings in the dialog conflict"
 msgstr "Elkarrizketa-koadroko ezarpetn batzuk gatazkan daude"
 
-#: ../gtk/gtkprintunixdialog.c:2430
+#: ../gtk/gtkprintunixdialog.c:2460
 msgid "Print"
 msgstr "Inprimatu"
 
@@ -2652,8 +2669,8 @@ msgstr "_%d. %s"
 msgid "recent menu label|%d. %s"
 msgstr "%d. %s"
 
-#: ../gtk/gtkrecentmanager.c:1047 ../gtk/gtkrecentmanager.c:1194
-#: ../gtk/gtkrecentmanager.c:1204 ../gtk/gtkrecentmanager.c:1257
+#: ../gtk/gtkrecentmanager.c:1041 ../gtk/gtkrecentmanager.c:1188
+#: ../gtk/gtkrecentmanager.c:1198 ../gtk/gtkrecentmanager.c:1251
 #, c-format
 msgid "Unable to find an item with URI '%s'"
 msgstr "Ezin izan da '%s' URIa duen elementua aurkitu"
@@ -4076,85 +4093,85 @@ msgstr "ROC 8k"
 msgid "different idatas found for symlinked '%s' and '%s'\n"
 msgstr "'%s' eta '%s' esteken 'idata' ezberdinak aurkitu dira\n"
 
-#: ../gtk/updateiconcache.c:1379
+#: ../gtk/updateiconcache.c:1376
 msgid "Failed to write header\n"
 msgstr "Huts egin du goiburukoa idaztean\n"
 
-#: ../gtk/updateiconcache.c:1385
+#: ../gtk/updateiconcache.c:1382
 msgid "Failed to write hash table\n"
 msgstr "Huts egin du 'hash' taula idaztean\n"
 
-#: ../gtk/updateiconcache.c:1391
+#: ../gtk/updateiconcache.c:1388
 msgid "Failed to write folder index\n"
 msgstr "Huts egin du karpetaren indizea idaztean\n"
 
-#: ../gtk/updateiconcache.c:1399
+#: ../gtk/updateiconcache.c:1396
 msgid "Failed to rewrite header\n"
 msgstr "Huts egin du goiburukoa berridaztean\n"
 
-#: ../gtk/updateiconcache.c:1451
+#: ../gtk/updateiconcache.c:1448
 #, c-format
 msgid "Failed to write cache file: %s\n"
 msgstr "Ezin izan da cache fitxategian idatzi: %s\n"
 
-#: ../gtk/updateiconcache.c:1486
+#: ../gtk/updateiconcache.c:1483
 msgid "The generated cache was invalid.\n"
 msgstr "Sortutako cache-a baliogabea da.\n"
 
-#: ../gtk/updateiconcache.c:1500
+#: ../gtk/updateiconcache.c:1497
 #, c-format
 msgid "Could not rename %s to %s: %s, removing %s then.\n"
 msgstr "%s ezin izan da %s izenagatik aldatu: %s, %s kentzen orduan.\n"
 
-#: ../gtk/updateiconcache.c:1512
+#: ../gtk/updateiconcache.c:1509
 #, c-format
 msgid "Could not rename %s to %s: %s\n"
 msgstr "%s ezin izan da %s izenagatik aldatu: %s\n"
 
-#: ../gtk/updateiconcache.c:1519
+#: ../gtk/updateiconcache.c:1516
 #, c-format
 msgid "Could not rename %s back to %s: %s.\n"
 msgstr "%s ezin izan da jatorriko %s izenera aldatu: %s\n"
 
-#: ../gtk/updateiconcache.c:1541
+#: ../gtk/updateiconcache.c:1538
 msgid "Cache file created successfully.\n"
 msgstr "Cache fitxategia ongi sortu da.\n"
 
-#: ../gtk/updateiconcache.c:1580
+#: ../gtk/updateiconcache.c:1577
 msgid "Overwrite an existing cache, even if up to date"
 msgstr "Gainidatzi existitzen den cache-a, nahiz eta eguneratuta egon"
 
-#: ../gtk/updateiconcache.c:1581
+#: ../gtk/updateiconcache.c:1578
 msgid "Don't check for the existence of index.theme"
 msgstr "Ez egiaztatu index.theme dagoen edo ez"
 
-#: ../gtk/updateiconcache.c:1582
+#: ../gtk/updateiconcache.c:1579
 msgid "Don't include image data in the cache"
 msgstr "Ez txertatu irudiaren daturik cache-an"
 
-#: ../gtk/updateiconcache.c:1583
+#: ../gtk/updateiconcache.c:1580
 msgid "Output a C header file"
 msgstr "Kanporatu C goiburuko fitxategia"
 
-#: ../gtk/updateiconcache.c:1584
+#: ../gtk/updateiconcache.c:1581
 msgid "Turn off verbose output"
 msgstr "Desaktibatu hitzez hitzeko irteera"
 
-#: ../gtk/updateiconcache.c:1585
+#: ../gtk/updateiconcache.c:1582
 msgid "Validate existing icon cache"
 msgstr "Balidatu ikonoen cache-a"
 
-#: ../gtk/updateiconcache.c:1620
+#: ../gtk/updateiconcache.c:1617
 #, c-format
 msgid "File not found: %s\n"
 msgstr "Ezin da fitxategia aurkitu: %s\n"
 
-#: ../gtk/updateiconcache.c:1626
+#: ../gtk/updateiconcache.c:1623
 #, c-format
 msgid "Not a valid icon cache: %s\n"
 msgstr "Ez da baliozko inonoen cache-a: %s\n"
 
-#: ../gtk/updateiconcache.c:1637
+#: ../gtk/updateiconcache.c:1634
 #, c-format
 msgid ""
 "No theme index file in '%s'.\n"
@@ -4301,33 +4318,33 @@ msgid "Custom %.2fx%.2f"
 msgstr "Pertsonalizatua: %.2fx%.2f"
 
 #. default filename used for print-to-file
-#: ../modules/printbackends/file/gtkprintbackendfile.c:235
+#: ../modules/printbackends/file/gtkprintbackendfile.c:236
 #, c-format
 msgid "output.%s"
 msgstr "irteera.%s"
 
-#: ../modules/printbackends/file/gtkprintbackendfile.c:464
+#: ../modules/printbackends/file/gtkprintbackendfile.c:465
 msgid "Print to File"
 msgstr "Inprimatu fitxategian"
 
-#: ../modules/printbackends/file/gtkprintbackendfile.c:489
+#: ../modules/printbackends/file/gtkprintbackendfile.c:542
 msgid "PDF"
 msgstr "PDF"
 
-#: ../modules/printbackends/file/gtkprintbackendfile.c:489
+#: ../modules/printbackends/file/gtkprintbackendfile.c:542
 msgid "Postscript"
 msgstr "Postscript"
 
-#: ../modules/printbackends/file/gtkprintbackendfile.c:501
+#: ../modules/printbackends/file/gtkprintbackendfile.c:554
 #: ../modules/printbackends/test/gtkprintbackendtest.c:501
 msgid "Pages per _sheet:"
 msgstr "Orrialdeak _orriko:"
 
-#: ../modules/printbackends/file/gtkprintbackendfile.c:547
+#: ../modules/printbackends/file/gtkprintbackendfile.c:600
 msgid "File"
 msgstr "Fitxategia"
 
-#: ../modules/printbackends/file/gtkprintbackendfile.c:556
+#: ../modules/printbackends/file/gtkprintbackendfile.c:609
 msgid "_Output format"
 msgstr "_Irteerako formatua"
 
@@ -4356,5 +4373,5 @@ msgstr "Inprimatu probako inprimagailuan"
 #: ../tests/testfilechooser.c:205
 #, c-format
 msgid "Could not get information for file '%s': %s"
-msgstr "Ezin izan da %s fitxaegirako informaziorik lortu: %s"
+msgstr "Ezin izan da %s fitxategirako informaziorik lortu: %s"
 
