@@ -1,8 +1,15 @@
+2007-09-08  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtkentrycompletion.c:
+	* gtk/gtkentry.c: Apply a number of patches by Xan Lopez 
+	to improve the interaction between actions and inline
+	selection.  (#471132)
+
 2007-09-07  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtktoolbar.c: Use g_slice for ToolbarContent.  
 	(#474696, Christian Persch)
-	
+
 2007-09-07  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtkprintunixdialog.c: Add an internal child name for
