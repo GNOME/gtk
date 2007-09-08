@@ -1,4 +1,4 @@
-# translation of gtk+.HEAD.mk.po to Macedonian
+# translation of gtk+.HEAD.po to Macedonian
 # This file is distributed under the same license as the PACKAGE package.
 # Copyright (C) 2005 THE PACKAGE'S COPYRIGHT HOLDER.
 #
@@ -10,11 +10,11 @@
 # Arangel Angov <arangel@linux.net.mk>, 2007.
 msgid ""
 msgstr ""
-"Project-Id-Version: gtk+.HEAD.mk\n"
+"Project-Id-Version: gtk+.HEAD\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-08-16 03:58+0100\n"
-"PO-Revision-Date: 2007-08-17 14:18+0200\n"
-"Last-Translator: Jovan Naumovski <jovan@lugola.net>\n"
+"POT-Creation-Date: 2007-08-19 03:48+0100\n"
+"PO-Revision-Date: 2007-09-08 18:16+0200\n"
+"Last-Translator: Arangel Angov <arangel@linux.net.mk>\n"
 "Language-Team: Macedonian <ossm-members@hedona.on.net.mk>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -1637,8 +1637,8 @@ msgid ""
 "The program was not able to create a connection to the indexer daemon.  "
 "Please make sure it is running."
 msgstr ""
-"Програмата не можеше да креира врска со демонот за индексирање.  "
-"Ве молам, осигурајте се дека се извршува."
+"Програмата не можеше да креира врска со демонот за индексирање.  Ве молам, "
+"осигурајте се дека се извршува."
 
 #: ../gtk/gtkfilechooserdefault.c:8907
 msgid "Could not send the search request"
@@ -1731,7 +1731,7 @@ msgstr ""
 
 #: ../gtk/gtkfilesel.c:1079
 msgid "_New Folder"
-msgstr "_Нова Папка"
+msgstr "_Нова папка"
 
 #: ../gtk/gtkfilesel.c:1090
 msgid "De_lete File"
@@ -1750,7 +1750,7 @@ msgstr ""
 
 #: ../gtk/gtkfilesel.c:1451
 msgid "New Folder"
-msgstr "Нова Папки"
+msgstr "Нова папка"
 
 #: ../gtk/gtkfilesel.c:1466
 msgid "_Folder name:"
@@ -1758,7 +1758,7 @@ msgstr "_Име на папка:"
 
 #: ../gtk/gtkfilesel.c:1490
 msgid "C_reate"
-msgstr "С_оздади"
+msgstr "К_реирај"
 
 #: ../gtk/gtkfilesel.c:1533 ../gtk/gtkfilesel.c:1640 ../gtk/gtkfilesel.c:1653
 #, c-format
@@ -1937,7 +1937,7 @@ msgstr "_Преглед:"
 
 #: ../gtk/gtkfontsel.c:1359
 msgid "Font Selection"
-msgstr "Селекција на Фонт"
+msgstr "Избор на фонт"
 
 #: ../gtk/gtkgamma.c:408
 msgid "Gamma"
@@ -2960,7 +2960,7 @@ msgstr "_Вметни"
 
 #: ../gtk/gtkstock.c:378
 msgid "_Preferences"
-msgstr "_Својства"
+msgstr "_Преференци"
 
 #: ../gtk/gtkstock.c:379
 msgid "_Print"
@@ -2972,7 +2972,7 @@ msgstr "Преглед за пе_чатење"
 
 #: ../gtk/gtkstock.c:381
 msgid "_Properties"
-msgstr "Параме_три"
+msgstr "_Својства"
 
 #: ../gtk/gtkstock.c:382
 msgid "_Quit"
@@ -4265,7 +4265,7 @@ msgstr "Еднострани"
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:1547
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:1551
 msgid "Auto Select"
-msgstr "Автоматска селекција"
+msgstr "Автоматски избор"
 
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:1548
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:1549
