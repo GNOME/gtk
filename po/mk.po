@@ -13,7 +13,7 @@ msgstr ""
 "Project-Id-Version: gtk+.HEAD\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2007-08-19 03:48+0100\n"
-"PO-Revision-Date: 2007-09-08 18:16+0200\n"
+"PO-Revision-Date: 2007-09-08 18:58+0200\n"
 "Last-Translator: Arangel Angov <arangel@linux.net.mk>\n"
 "Language-Team: Macedonian <ossm-members@hedona.on.net.mk>\n"
 "MIME-Version: 1.0\n"
@@ -1401,7 +1401,7 @@ msgstr "Методи за запис"
 
 #: ../gtk/gtkentry.c:5267 ../gtk/gtktextview.c:7619
 msgid "_Insert Unicode Control Character"
-msgstr "_Внесете Јуникод знаци за контрола"
+msgstr "_Внесете уникод знаци за контрола"
 
 #: ../gtk/gtkfilechooserbutton.c:68
 msgid "Select A File"
