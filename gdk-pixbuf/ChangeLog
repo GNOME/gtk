@@ -1,3 +1,7 @@
+2007-09-08  Matthias Clasen  <mclasen@redhat.com>
+
+	* io-ani.c: Fix some possible crashes.  (#468832, Michal Luczaj)
+
 2007-09-07  Matthias Clasen  <mclasen@redhat.com>
 
 	* io-tga.c (gdk_pixbuf__tga_stop_load): Handle pbuf 

@@ -398,6 +398,15 @@ ani_load_chunk (AniLoaderContext *context, GError **error)
 				     _("Malformed chunk in animation"));
 			return FALSE; 
 		}
+		if (!context->animation) 
+		{
+			g_set_error (error,
+				     GDK_PIXBUF_ERROR,
+				     GDK_PIXBUF_ERROR_CORRUPT_IMAGE,
+				     _("Invalid header in animation"));
+			return FALSE;
+		}
+
 		context->animation->total_time = 0;
 		for (i = 0; i < context->NumSteps; i++) 
 		{
@@ -415,6 +424,14 @@ ani_load_chunk (AniLoaderContext *context, GError **error)
 				     _("Malformed chunk in animation"));
 			return FALSE; 
 		}
+		if (!context->animation) 
+		{
+			g_set_error (error,
+				     GDK_PIXBUF_ERROR,
+				     GDK_PIXBUF_ERROR_CORRUPT_IMAGE,
+				     _("Invalid header in animation"));
+			return FALSE;
+		}
 		for (i = 0; i < context->NumSteps; i++) 
 		{
 			context->animation->sequence[i] = read_int32 (context);
@@ -430,6 +447,14 @@ ani_load_chunk (AniLoaderContext *context, GError **error)
 	}
         else if (context->chunk_id == TAG_INAM) 
 	{
+		if (!context->animation) 
+		{
+			g_set_error (error,
+				     GDK_PIXBUF_ERROR,
+				     GDK_PIXBUF_ERROR_CORRUPT_IMAGE,
+				     _("Invalid header in animation"));
+			return FALSE;
+		}
 		context->title = g_try_malloc (context->chunk_size + 1);
 		if (!context->title) 
 		{
@@ -449,6 +474,14 @@ ani_load_chunk (AniLoaderContext *context, GError **error)
 	}
         else if (context->chunk_id == TAG_IART) 
 	{
+		if (!context->animation) 
+		{
+			g_set_error (error,
+				     GDK_PIXBUF_ERROR,
+				     GDK_PIXBUF_ERROR_CORRUPT_IMAGE,
+				     _("Invalid header in animation"));
+			return FALSE;
+		}
 		context->author = g_try_malloc (context->chunk_size + 1);
 		if (!context->author) 
 		{
