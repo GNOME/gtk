@@ -1,5 +1,10 @@
 2007-09-07  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtktoolbar.c: Use g_slice for ToolbarContent.  
+	(#474696, Christian Persch)
+	
+2007-09-07  Matthias Clasen  <mclasen@redhat.com>
+
 	* gtk/gtkprintunixdialog.c: Add an internal child name for
 	the notebook, so that GtkBuilder can be used to add custom tabs.
 	(#472951, Christian Persch)

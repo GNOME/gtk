@@ -3898,7 +3898,7 @@ toolbar_content_new_tool_item (GtkToolbar  *toolbar,
   ToolbarContent *content;
   GtkToolbarPrivate *priv = GTK_TOOLBAR_GET_PRIVATE (toolbar);
   
-  content = g_new0 (ToolbarContent, 1);
+  content = g_slice_new0 (ToolbarContent);
   
   content->type = TOOL_ITEM;
   content->state = NOT_ALLOCATED;
@@ -3934,7 +3934,7 @@ toolbar_content_new_compatibility (GtkToolbar          *toolbar,
   GtkToolbarChild *child;
   GtkToolbarPrivate *priv = GTK_TOOLBAR_GET_PRIVATE (toolbar);
   
-  content = g_new0 (ToolbarContent, 1);
+  content = g_slice_new0 (ToolbarContent);
 
   child = &(content->u.compatibility.child);
   
@@ -4012,7 +4012,7 @@ toolbar_content_remove (ToolbarContent *content,
 static void
 toolbar_content_free (ToolbarContent *content)
 {
-  g_free (content);
+  g_slice_free (ToolbarContent, content);
 }
 
 static gint
