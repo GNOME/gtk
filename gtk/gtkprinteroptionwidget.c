@@ -73,7 +73,7 @@ enum {
 
 enum {
   PROP_0,
-  PROP_SOURCE,
+  PROP_SOURCE
 };
 
 static guint signals[LAST_SIGNAL] = { 0 };

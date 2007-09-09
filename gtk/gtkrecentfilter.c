@@ -44,7 +44,7 @@ typedef enum {
   FILTER_RULE_APPLICATION,
   FILTER_RULE_AGE,
   FILTER_RULE_GROUP,
-  FILTER_RULE_CUSTOM,
+  FILTER_RULE_CUSTOM
 } FilterRuleType;
 
 struct _GtkRecentFilter

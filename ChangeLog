@@ -1,5 +1,12 @@
 2007-09-09  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtklinkbutton.c:
+	* gtk/gtkrecentfilter.c:
+	* gtk/gtkprinteroptionwidget.c: Remove trailing commas from
+	enumerations, since some compilers don't like them.  (#467717)
+
+2007-09-09  Matthias Clasen  <mclasen@redhat.com>
+
 	* gtk/gtktreemodelfilter.c (gtk_tree_model_filter_rows_reordered):
 	* gtk/gtktreemodelsort.c (gtk_tree_model_sort_rows_reordered): Don't
 	assume that a path of depth 0 has no indices.  (#467324, Szilard

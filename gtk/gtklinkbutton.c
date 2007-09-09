@@ -58,7 +58,7 @@ enum
 {
   PROP_0,
   
-  PROP_URI,
+  PROP_URI
 };
 
 #define GTK_LINK_BUTTON_GET_PRIVATE(obj)	(G_TYPE_INSTANCE_GET_PRIVATE ((obj), GTK_TYPE_LINK_BUTTON, GtkLinkButtonPrivate))
