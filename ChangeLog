@@ -1,5 +1,12 @@
 2007-09-09  Matthias Clasen  <mclasen@redhat.com>
 
+	* modules/printbackends/lpr/gtkprintbackendlpr.c:
+	* modules/printbackends/cups/gtkcupsutils.c:
+	* modules/printbackends/cups/gtkprintbackendcups.c: Include
+	config.h first.  (#467719)
+
+2007-09-09  Matthias Clasen  <mclasen@redhat.com>
+
 	* gtk/gtklinkbutton.c:
 	* gtk/gtkrecentfilter.c:
 	* gtk/gtkprinteroptionwidget.c: Remove trailing commas from

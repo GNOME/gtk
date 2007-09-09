@@ -19,8 +19,8 @@
  * Boston, MA 02111-1307, USA.
  */
 
-#include "gtkcupsutils.h"
 #include "config.h"
+#include "gtkcupsutils.h"
 #include "gtkdebug.h"
 
 #include <errno.h>

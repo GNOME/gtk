@@ -19,6 +19,7 @@
  * Boston, MA 02111-1307, USA.
  */
 
+#include <config.h>
 #include <unistd.h>
 #include <sys/types.h>
 #include <sys/stat.h>
@@ -26,7 +27,6 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include <config.h>
 #include <errno.h>
 #include <cairo.h>
 #include <cairo-ps.h>
