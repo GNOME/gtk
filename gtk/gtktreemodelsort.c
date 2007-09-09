@@ -807,7 +807,7 @@ gtk_tree_model_sort_rows_reordered (GtkTreeModel *s_model,
 
   g_return_if_fail (new_order != NULL);
 
-  if (s_path == NULL || gtk_tree_path_get_indices (s_path) == NULL)
+  if (s_path == NULL || gtk_tree_path_get_depth (s_path) = 0)
     {
       if (tree_model_sort->root == NULL)
 	return;

@@ -1,3 +1,10 @@
+2007-09-09  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtktreemodelfilter.c (gtk_tree_model_filter_rows_reordered):
+	* gtk/gtktreemodelsort.c (gtk_tree_model_sort_rows_reordered): Don't
+	assume that a path of depth 0 has no indices.  (#467324, Szilard
+	Pfeiffer)
+
 2007-09-09 18:22:28  Tim Janik  <timj@gtk.org>
 
 	* gdk/x11/gdkgeometry-x11.c (_gdk_window_process_expose): fix invalid

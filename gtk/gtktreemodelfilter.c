@@ -1864,7 +1864,7 @@ gtk_tree_model_filter_rows_reordered (GtkTreeModel *c_model,
 
   g_return_if_fail (new_order != NULL);
 
-  if (c_path == NULL || gtk_tree_path_get_indices (c_path) == NULL)
+  if (c_path == NULL || gtk_tree_path_get_depth (c_path) == 0)
     {
       length = gtk_tree_model_iter_n_children (c_model, NULL);
 
