@@ -181,11 +181,12 @@ gtk_radio_action_init (GtkRadioAction *action)
 /**
  * gtk_radio_action_new:
  * @name: A unique name for the action
- * @label: The label displayed in menu items and on buttons
- * @tooltip: A tooltip for this action
- * @stock_id: The stock icon to display in widgets representing this action
- * @value: The value which gtk_radio_action_get_current_value() should return
- *    if this action is selected.
+ * @label: The label displayed in menu items and on buttons, or %NULL
+ * @tooltip: A tooltip for this action, or %NULL
+ * @stock_id: The stock icon to display in widgets representing this
+ *   action, or %NULL
+ * @value: The value which gtk_radio_action_get_current_value() should
+ *   return if this action is selected.
  *
  * Creates a new #GtkRadioAction object. To add the action to
  * a #GtkActionGroup and set the accelerator for the action,
@@ -202,17 +203,15 @@ gtk_radio_action_new (const gchar *name,
 		      const gchar *stock_id,
 		      gint value)
 {
-  GtkRadioAction *action;
+  g_return_val_if_fail (name != NULL, NULL);
 
-  action = g_object_new (GTK_TYPE_RADIO_ACTION,
-			 "name", name,
-			 "label", label,
-			 "tooltip", tooltip,
-			 "stock-id", stock_id,
-			 "value", value,
-			 NULL);
-
-  return action;
+  return g_object_new (GTK_TYPE_RADIO_ACTION,
+		       "name", name,
+		       "label", label,
+		       "tooltip", tooltip,
+		       "stock-id", stock_id,
+		       "value", value,
+		       NULL);
 }
 
 static void

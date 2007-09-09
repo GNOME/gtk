@@ -414,9 +414,10 @@ gtk_action_buildable_get_name (GtkBuildable *buildable)
 /**
  * gtk_action_new:
  * @name: A unique name for the action
- * @label: the label displayed in menu items and on buttons
- * @tooltip: a tooltip for the action
- * @stock_id: the stock icon to display in widgets representing the action
+ * @label: the label displayed in menu items and on buttons, or %NULL
+ * @tooltip: a tooltip for the action, or %NULL
+ * @stock_id: the stock icon to display in widgets representing the
+ *   action, or %NULL
  *
  * Creates a new #GtkAction object. To add the action to a
  * #GtkActionGroup and set the accelerator for the action,
@@ -434,16 +435,14 @@ gtk_action_new (const gchar *name,
 		const gchar *tooltip,
 		const gchar *stock_id)
 {
-  GtkAction *action;
+  g_return_val_if_fail (name != NULL, NULL);
 
-  action = g_object_new (GTK_TYPE_ACTION,
-			 "name", name,
-			 "label", label,
-			 "tooltip", tooltip,
-			 "stock-id", stock_id,
-			 NULL);
-
-  return action;
+  return g_object_new (GTK_TYPE_ACTION,
+                       "name", name,
+		       "label", label,
+		       "tooltip", tooltip,
+		       "stock-id", stock_id,
+		       NULL);
 }
 
 static void

@@ -143,9 +143,10 @@ gtk_toggle_action_init (GtkToggleAction *action)
 /**
  * gtk_toggle_action_new:
  * @name: A unique name for the action
- * @label: The label displayed in menu items and on buttons
- * @tooltip: A tooltip for the action
- * @stock_id: The stock icon to display in widgets representing the action
+ * @label: The label displayed in menu items and on buttons, or %NULL
+ * @tooltip: A tooltip for the action, or %NULL
+ * @stock_id: The stock icon to display in widgets representing the
+ *   action, or %NULL
  *
  * Creates a new #GtkToggleAction object. To add the action to
  * a #GtkActionGroup and set the accelerator for the action,
@@ -161,16 +162,14 @@ gtk_toggle_action_new (const gchar *name,
 		       const gchar *tooltip,
 		       const gchar *stock_id)
 {
-  GtkToggleAction *action;
+  g_return_val_if_fail (name != NULL, NULL);
 
-  action = g_object_new (GTK_TYPE_TOGGLE_ACTION,
-			 "name", name,
-			 "label", label,
-			 "tooltip", tooltip,
-			 "stock-id", stock_id,
-			 NULL);
-
-  return action;
+  return g_object_new (GTK_TYPE_TOGGLE_ACTION,
+		       "name", name,
+		       "label", label,
+		       "tooltip", tooltip,
+		       "stock-id", stock_id,
+		       NULL);
 }
 
 static void

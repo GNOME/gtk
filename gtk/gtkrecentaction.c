@@ -688,9 +688,10 @@ gtk_recent_action_init (GtkRecentAction *action)
 /**
  * gtk_recent_action_new:
  * @name: a unique name for the action
- * @label: the label displayed in menu items and on buttons
- * @tooltip: a tooltip for the action
- * @stock_id: the stock icon to display in widgets representing the action
+ * @label: the label displayed in menu items and on buttons, or %NULL
+ * @tooltip: a tooltip for the action, or %NULL
+ * @stock_id: the stock icon to display in widgets representing the
+ *   action, or %NULL
  *
  * Creates a new #GtkRecentAction object. To add the action to
  * a #GtkActionGroup and set the accelerator for the action,
@@ -706,6 +707,8 @@ gtk_recent_action_new (const gchar *name,
                        const gchar *tooltip,
                        const gchar *stock_id)
 {
+  g_return_val_if_fail (name != NULL, NULL);
+
   return g_object_new (GTK_TYPE_RECENT_ACTION,
                        "name", name,
                        "label", label,
@@ -717,10 +720,12 @@ gtk_recent_action_new (const gchar *name,
 /**
  * gtk_recent_action_new_for_manager:
  * @name: a unique name for the action
- * @label: the label displayed in menu items and on buttons
- * @tooltip: a tooltip for the action
- * @stock_id: the stock icon to display in widgets representing the action
- * @manager: a #GtkRecentManager or %NULL
+ * @label: the label displayed in menu items and on buttons, or %NULL
+ * @tooltip: a tooltip for the action, or %NULL
+ * @stock_id: the stock icon to display in widgets representing the
+ *   action, or %NULL
+ * @manager: a #GtkRecentManager, or %NULL for using the default
+ *   #GtkRecentManager
  *
  * Creates a new #GtkRecentAction object. To add the action to
  * a #GtkActionGroup and set the accelerator for the action,
@@ -737,6 +742,9 @@ gtk_recent_action_new_for_manager (const gchar      *name,
                                    const gchar      *stock_id,
                                    GtkRecentManager *manager)
 {
+  g_return_val_if_fail (name != NULL, NULL);
+  g_return_val_if_fail (manager == NULL || GTK_IS_RECENT_MANAGER (manager), NULL);
+
   return g_object_new (GTK_TYPE_RECENT_ACTION,
                        "name", name,
                        "label", label,
