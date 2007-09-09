@@ -1,3 +1,7 @@
+2007-09-09  Matthias Clasen  <mclasen@redhat.com>
+
+	* README.in: Add a note about bug 463773.
+
 2007-09-08  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtkstyle.c (draw_insertion_cursor): Revert the clamping

@@ -130,6 +130,13 @@ Release notes for 2.12
   GtkCellRendererToggle has changed its size from 11 to 13 and is now
   consistent with menus and toggle buttons.
 
+* GTK+ has always required that gtk_init() (or a variant thereof) is
+  called before any other GTK+ function. Some applications call functions
+  like gtk_clipboard_get() to check if they need to call gtk_init(),
+  anyway. A change in GLib 2.14 has recently broken this unsupported
+  practise. It is worth pointing out that calling gtk_init() twice
+  does no harm.
+
 
 Release notes for 2.10
 ======================
