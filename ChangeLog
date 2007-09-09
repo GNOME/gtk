@@ -1,3 +1,13 @@
+2007-09-09  Kristian Rietveld  <kris@gtk.org>
+
+	Reverted r16699:
+
+	2006-10-30  Kristian Rietveld  <kris@gtk.org>
+
+	* gtk/gtktreeview.c (gtk_tree_view_class_init): change left/right
+	keybindings to collapse/expand rows instead of moving the focus
+	cursor. (#105895, Brian Bober and others).
+
 2007-09-09  Matthias Clasen  <mclasen@redhat.com>
 
 	* NEWS: Updates
