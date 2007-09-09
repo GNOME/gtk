@@ -1,3 +1,8 @@
+2007-09-09 18:22:28  Tim Janik  <timj@gtk.org>
+
+	* gdk/x11/gdkgeometry-x11.c (_gdk_window_process_expose): fix invalid
+	list node accesses, spotted by Benjamin Berg, bug #475158.
+
 2007-09-09  Kristian Rietveld  <kris@gtk.org>
 
 	Reverted r16699:

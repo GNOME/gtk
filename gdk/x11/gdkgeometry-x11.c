@@ -1142,6 +1142,7 @@ _gdk_window_process_expose (GdkWindow    *window,
       while (tmp_list)
 	{
 	  GdkWindowQueueItem *item = tmp_list->data;
+          GList *next = tmp_list->next;
           if (item->serial - serial < 0x7FFFFFFF)
 	    {
 	      if (item->window == window)
@@ -1173,7 +1174,7 @@ _gdk_window_process_expose (GdkWindow    *window,
 	      queue_delete_link (display_x11->translate_queue, tmp_list);
 	      queue_item_free (item);
 	    }
-	  tmp_list = tmp_list->next;
+	  tmp_list = next;
 	}
     }
 
