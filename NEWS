@@ -1,3 +1,104 @@
+Overview of Changes from GTK+ 2.11.6 to 2.12.0
+==============================================
+
+ * GtkTooltips
+ - All widgets have been ported to the new tooltips code
+ - Tooltips are disabled in touchscreen mode 
+
+ * GtkBuilder
+ - Support custom tabs in GtkPrintUnixDialog
+
+ * Bugs fixed:
+ 459561 critical warnings with custom tooltips
+ 461648 GdkWindowQueueItem::serial overflow
+ 463773 Openoffice and flash run into a deadlock when used with KDE
+ 468801 thunar segfaults when selecting targa image
+ 473441 [patch] Ungrab windows when gdk_window_destroy() is calle...
+ 473954 gnome-background-properties: crash on drag-n-drop to "Add...
+ 461945 totem outputs errors in terminal
+ 348493 _gdk_quartz_copy_to_image needs implementing for pixmaps
+ 405868 Missing implementation of gdk_window_get_geometry()
+ 441219 Do not allow moving cursor to separators
+ 447214 rename the tips_data_list field back
+ 451202 New tooltips API has too long default timeout
+ 451397 Use new tooltip API in gtk+
+ 452225 check and option mark drawing is a mess of inconsistency
+ 457642 tooltips on notebook's tab labels
+ 458088 Improve mouse cursor for paned widgets
+ 458102 GtkScrolledWindow doesn't redraw when gtk-scrolled-window...
+ 458280 remove set-toolip handler from menutoolbutton
+ 458298 broken cursor movement with inline selection
+ 459459 Missing implementation of gdk_window_set_decorations() an...
+ 459515 gtk_menu_key_press() buglets
+ 459566 update testtooltips
+ 459667 Missing implementation of gdk_window_set_keep_above and g...
+ 460272 GtkFrame publishes incorrect defaults for "label-xalign"
+ 460534 No expose events if input swamps main loop with scrolled ...
+ 461225 gtk_tree_view_set_tooltip_cell() documentation: cell
+ 463907 'Recent Documents' is broken in gnome-panel 2.19.5
+ 464528 gdk_rectangle_union() and gdk_rectangle_intersect() shoul...
+ 465039 "keynav-failed" signal not emitted when treeview has just...
+ 467003 tooltips do not pick up theme changes
+ 467117 Documentation for the GtkPaned key binding signals
+ 467414 gtkcupsutil.c won't build with cups 1.3
+ 468055 Incorrect compose mapping for capital U with macron
+ 468245 Tooltip timer doesn't get reset when mouse leaves into ot...
+ 469214 Recently used blocks side-panel browsing until loaded
+ 469374 menu accelerators don't work
+ 469395 make dist failure
+ 471132 Highlighting a suggestion with the keyboard changes the U...
+ 471215 Cursor drawing broken
+ 472974 gtk-builder-convert doesn't set correctly the tab label f...
+ 472981 make gtk-builder-convert not remove some empty properties
+ 356630 Print to file dialog suggests "output.pdf" even for ps ou...
+ 447883 PATCH Documentation about SVN in HACKING and README.cvs-c...
+ 459340 GtkContainer API documentation refers deprecated gtk_widg...
+ 459732 build system: cups detection with only cups-config might ...
+ 460207 there are still references to deprecated gdk_pixbuf_rende...
+ 461483 Wrong check in gtk_window_group_remove_window
+ 472643 gtk_builder_add_from_file: *filename marked as constant b...
+ 474696 ToolbarContent should use GSlice
+ 459313 A few functions that don't appear in 2.12 new symbols
+ 468832 crash while reading ANI file
+ 470033 MS-Windows Theme doesn't apply styling to gtknotebooks wh...
+ 473340 gtk_print_operation_get_error() is listed twice
+ 473463 GtkButton doesn't have a GdkWindow like the docs say it does
+ 474282 Dead code in gtkmisc.c
+ 472951 gtkprintunixdialog should support custom tabs as buildable
+
+ * Updated translations
+ - Bulgarian (bg)
+ - Bengali (bn_IN)
+ - Danish (da)
+ - German (de)
+ - Canadian English (en_CA)
+ - Spanish (es)
+ - Estonian (et)
+ - Basque (eu)
+ - Finnish (fi)
+ - French (fr)
+ - Irish (ga)
+ - Gujarati (gu)
+ - Hungarian (hu)
+ - Japanese (jp)
+ - Kannada (kn)
+ - Macedonian (mk)
+ - Malayalam (ml)
+ - Norwegian bokmål (nb)
+ - Dutch (nl)
+ - Oriya (or)
+ - Polish (pl)
+ - Portugese (pt)
+ - Brazilian Portugese (pt_BR)
+ - Russian (ru)
+ - Serbian (sr, sr@Latn)
+ - Swedish (sv)
+ - Telugu (te)
+ - Thai (th)
+ - Ukrainian (uk)
+ - Vietnamese (vi) 
+
+
 Overview of Changes from GTK+ 2.11.5 to 2.11.6
 ==============================================
 
