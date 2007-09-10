@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: gtk+.HEAD.ml\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2007-09-07 03:54+0100\n"
-"PO-Revision-Date: 2007-09-07 16:42+0530\n"
+"PO-Revision-Date: 2007-09-10 15:09+0530\n"
 "Last-Translator: Ani Peter <apeter@redhat.com>\n"
 "Language-Team: Malayalam\n"
 "MIME-Version: 1.0\n"
@@ -32,7 +32,7 @@ msgstr "sdl|system"
 #. Description of --class=CLASS in --help output
 #: ../gdk/gdk.c:126
 msgid "Program class as used by the window manager"
-msgstr ""
+msgstr "ജാലകത്തിന്റെ മാനേജറിനിനുള്ള പ്റോഗ്റാം ക്ളാസ്സ്"
 
 #. Placeholder in --class=CLASS in --help output
 #: ../gdk/gdk.c:127
@@ -42,7 +42,7 @@ msgstr "CLASS"
 #. Description of --name=NAME in --help output
 #: ../gdk/gdk.c:129
 msgid "Program name as used by the window manager"
-msgstr ""
+msgstr "ജാലകത്തിന്റെ മാനേജറിനിനുള്ള പ്റോഗ്റാമിന്റെ പേര്"
 
 #. Placeholder in --name=NAME in --help output
 #: ../gdk/gdk.c:130
@@ -51,9 +51,8 @@ msgstr "NAME"
 
 #. Description of --display=DISPLAY in --help output
 #: ../gdk/gdk.c:132
-#, fuzzy
 msgid "X display to use"
-msgstr "സെല്‍ കാണിക്കുക"
+msgstr "ഉപയോഗിക്കുവാനുള്ള X ഡിസ്പ്ളെ"
 
 #. Placeholder in --display=DISPLAY in --help output
 #: ../gdk/gdk.c:133
@@ -63,7 +62,7 @@ msgstr "DISPLAY"
 #. Description of --screen=SCREEN in --help output
 #: ../gdk/gdk.c:135
 msgid "X screen to use"
-msgstr ""
+msgstr "ഉപയോഗിക്കുവാനുള്ള X സ്ക്രീന്‍"
 
 #. Placeholder in --screen=SCREEN in --help output
 #: ../gdk/gdk.c:136
@@ -73,7 +72,7 @@ msgstr "SCREEN"
 #. Description of --gdk-debug=FLAGS in --help output
 #: ../gdk/gdk.c:139
 msgid "Gdk debugging flags to set"
-msgstr ""
+msgstr "ക്റമികരിക്കാനുള്ള Gdk ഡീബഗ്ഗിങ് ഫ്ളാഗുകള്‍"
 
 #. Placeholder in --gdk-debug=FLAGS in --help output
 #. Placeholder in --gdk-no-debug=FLAGS in --help output
@@ -86,7 +85,7 @@ msgstr "FLAGS"
 #. Description of --gdk-no-debug=FLAGS in --help output
 #: ../gdk/gdk.c:142
 msgid "Gdk debugging flags to unset"
-msgstr ""
+msgstr "നിറ്‍ജ്ജീവമാക്കുവാനുള്ള Gdk ഡീബഗ്ഗിങ് ഫ്ളാഗുകള്‍ "
 
 #: ../gdk/keyname-table.h:3940
 msgid "keyboard label|BackSpace"
@@ -134,124 +133,126 @@ msgstr "Up"
 
 #: ../gdk/keyname-table.h:3951
 msgid "keyboard label|Right"
-msgstr ""
+msgstr "Right"
 
 #: ../gdk/keyname-table.h:3952
 msgid "keyboard label|Down"
-msgstr ""
+msgstr "Down"
 
 #: ../gdk/keyname-table.h:3953
 msgid "keyboard label|Page_Up"
-msgstr ""
+msgstr "Page_Up"
 
 #: ../gdk/keyname-table.h:3954
 msgid "keyboard label|Page_Down"
-msgstr ""
+msgstr "Page_Down"
 
 #: ../gdk/keyname-table.h:3955
 msgid "keyboard label|End"
-msgstr ""
+msgstr "End"
 
 #: ../gdk/keyname-table.h:3956
 msgid "keyboard label|Begin"
-msgstr ""
+msgstr "Begin"
 
 #: ../gdk/keyname-table.h:3957
 msgid "keyboard label|Print"
-msgstr ""
+msgstr "Print"
 
 #: ../gdk/keyname-table.h:3958
 msgid "keyboard label|Insert"
-msgstr ""
+msgstr "Insert"
 
 #: ../gdk/keyname-table.h:3959
 msgid "keyboard label|Num_Lock"
-msgstr ""
+msgstr "Num_Lock"
 
 #: ../gdk/keyname-table.h:3960
 msgid "keyboard label|KP_Space"
-msgstr ""
+msgstr "KP_Space"
 
 #: ../gdk/keyname-table.h:3961
 msgid "keyboard label|KP_Tab"
-msgstr ""
+msgstr "KP_Tab"
 
 #: ../gdk/keyname-table.h:3962
 msgid "keyboard label|KP_Enter"
-msgstr ""
+msgstr "KP_Enter"
 
 #: ../gdk/keyname-table.h:3963
 msgid "keyboard label|KP_Home"
-msgstr ""
+msgstr "KP_Home"
 
 #: ../gdk/keyname-table.h:3964
 msgid "keyboard label|KP_Left"
-msgstr ""
+msgstr "KP_Left"
 
 #: ../gdk/keyname-table.h:3965
 msgid "keyboard label|KP_Up"
-msgstr ""
+msgstr "KP_Up"
 
 #: ../gdk/keyname-table.h:3966
 msgid "keyboard label|KP_Right"
-msgstr ""
+msgstr "KP_Right"
 
 #: ../gdk/keyname-table.h:3967
 msgid "keyboard label|KP_Down"
-msgstr ""
+msgstr "KP_Down"
 
 #: ../gdk/keyname-table.h:3968
 msgid "keyboard label|KP_Page_Up"
-msgstr ""
+msgstr "KP_Page_Up"
 
 #: ../gdk/keyname-table.h:3969
 msgid "keyboard label|KP_Prior"
-msgstr ""
+msgstr "KP_Prior"
 
 #: ../gdk/keyname-table.h:3970
 msgid "keyboard label|KP_Page_Down"
-msgstr ""
+msgstr "KP_Page_Down"
 
 #: ../gdk/keyname-table.h:3971
 msgid "keyboard label|KP_Next"
-msgstr ""
+msgstr "KP_Next"
 
 #: ../gdk/keyname-table.h:3972
 msgid "keyboard label|KP_End"
-msgstr ""
+msgstr "KP_End"
 
 #: ../gdk/keyname-table.h:3973
 msgid "keyboard label|KP_Begin"
-msgstr ""
+msgstr "KP_Begin"
 
 #: ../gdk/keyname-table.h:3974
 msgid "keyboard label|KP_Insert"
-msgstr ""
+msgstr "KP_Insert"
 
 #: ../gdk/keyname-table.h:3975
 msgid "keyboard label|KP_Delete"
-msgstr ""
+msgstr "KP_Delete"
 
 #: ../gdk/keyname-table.h:3976
 msgid "keyboard label|Delete"
-msgstr ""
+msgstr "Delete"
 
 #: ../gdk-pixbuf/gdk-pixbuf-animation.c:154 ../gdk-pixbuf/gdk-pixbuf-io.c:847
 #: ../gdk-pixbuf/gdk-pixbuf-io.c:1102 ../tests/testfilechooser.c:218
 #, c-format
 msgid "Failed to open file '%s': %s"
-msgstr ""
+msgstr "'%s' എന്ന ഫയല്‍ തുറക്കുന്നില്‍ പരാജയം: %s"
 
 #: ../gdk-pixbuf/gdk-pixbuf-animation.c:167 ../gdk-pixbuf/gdk-pixbuf-io.c:859
 #, c-format
 msgid "Image file '%s' contains no data"
-msgstr ""
+msgstr "'%s' എന്ന ഇമേജ് ഫയലില്‍ ഡേറ്റാ ലഭ്യമല്ല"
 
 #: ../gdk-pixbuf/gdk-pixbuf-animation.c:209 ../gdk-pixbuf/gdk-pixbuf-io.c:896
 #: ../gdk-pixbuf/gdk-pixbuf-io.c:1153 ../tests/testfilechooser.c:263
 #, c-format
 msgid "Failed to load image '%s': reason not known, probably a corrupt image file"
 msgstr ""
+"'%s' എന്ന ഇമേജ് ലഭ്യമാക്കുന്നതില്‍ പരാജയം: ഒരു പക്ഷേ തകരാറുള്ള ഇമേജ് ഫയല്‍"
+"ആവാം കാരണം "
 
 #: ../gdk-pixbuf/gdk-pixbuf-animation.c:242
 #, c-format
@@ -259,11 +260,13 @@ msgid ""
 "Failed to load animation '%s': reason not known, probably a corrupt "
 "animation file"
 msgstr ""
+"'%s' എന്ന ആനിമേഷന്‍ ലഭ്യമാക്കുന്നതില്‍ പരാജയം: ഒരു പക്ഷേ തകരാറുള്ള "
+"ആനിമേഷന്‍ ഫയല്‍ ആവാം കാരണം "
 
 #: ../gdk-pixbuf/gdk-pixbuf-io.c:527
 #, c-format
 msgid "Unable to load image-loading module: %s: %s"
-msgstr ""
+msgstr "ഇമേജ് ലഭ്യമാക്കുന്ന ഘടകം ലഭ്യമാക്കുവാന്‍ സാധ്യമായില്ല: %s: %s"
 
 #: ../gdk-pixbuf/gdk-pixbuf-io.c:542
 #, c-format
@@ -271,52 +274,54 @@ msgid ""
 "Image-loading module %s does not export the proper interface; perhaps it's "
 "from a different GTK version?"
 msgstr ""
+"ഇമേജ് ലഭ്യമാക്കുന്ന ഘടകമായ %s ശരിയായ സംയോജക ഘടകം എക്സ്പോറ്‍ട്ട് ചെയ്യുന്നില്ല; "
+"മറ്റൊരു GTK ലക്കത്തില്‍ നിന്നുമാവാം?"
 
 #: ../gdk-pixbuf/gdk-pixbuf-io.c:659 ../gdk-pixbuf/gdk-pixbuf-io.c:688
 #, c-format
 msgid "Image type '%s' is not supported"
-msgstr ""
+msgstr "'%s' തരത്തിലുള്ള ഇമേജിന് പിന്തുണ ലഭ്യമല്ല"
 
 #: ../gdk-pixbuf/gdk-pixbuf-io.c:728
 #, c-format
 msgid "Couldn't recognize the image file format for file '%s'"
-msgstr ""
+msgstr "'%s' ഫയലിനുള്ള ഇമേജിന്റെ ഫയലിന്റെ രീതി തിരിച്ചറിയുവാന്‍ സാധ്യമായില്ല"
 
 #: ../gdk-pixbuf/gdk-pixbuf-io.c:736
 msgid "Unrecognized image file format"
-msgstr ""
+msgstr "ഇമേജ് ഫയലിന്റെ അപരിചിതമായ രീതി"
 
 #: ../gdk-pixbuf/gdk-pixbuf-io.c:905
 #, c-format
 msgid "Failed to load image '%s': %s"
-msgstr ""
+msgstr "'%s' എന്ന ഇമേജ് ലഭ്യമാക്കുവാന്‍ സാധ്യമായില്ല: %s"
 
 #: ../gdk-pixbuf/gdk-pixbuf-io.c:1381
 #, c-format
 msgid "Error writing to image file: %s"
-msgstr ""
+msgstr "ഇമേജ് ഫയലിലേക്ക് സൂക്ഷിക്കുന്നതില്‍ പരാജയം: %s"
 
 #: ../gdk-pixbuf/gdk-pixbuf-io.c:1427 ../gdk-pixbuf/gdk-pixbuf-io.c:1558
 #, c-format
 msgid "This build of gdk-pixbuf does not support saving the image format: %s"
-msgstr ""
+msgstr "ഇമേജിന്റെ രീതി സൂക്ഷിക്കുന്നതിനുള്ള പിന്തുണ gdk-pixbuf -ന്റെ ഈ ബിള്‍ഡില്‍ ലഭ്യമല്ല: %s"
 
 #: ../gdk-pixbuf/gdk-pixbuf-io.c:1461
 msgid "Insufficient memory to save image to callback"
-msgstr ""
+msgstr "കോള്‍ബാക്കിലേക്ക് ഇമേജ് സൂക്ഷിക്കുന്നതിന് ആവശ്യമായ മെമ്മറി ലഭ്യമല്ല"
 
 #: ../gdk-pixbuf/gdk-pixbuf-io.c:1474
 msgid "Failed to open temporary file"
-msgstr ""
+msgstr "താല്‍ക്കാലിക ഫയല്‍ തുറക്കുന്നതില്‍ പരാജയം"
 
 #: ../gdk-pixbuf/gdk-pixbuf-io.c:1500
 msgid "Failed to read from temporary file"
-msgstr ""
+msgstr "താല്‍ക്കാലിക ഫയലില്‍ നിന്നും വായിക്കുന്നതില്‍ പരാജയം"
 
 #: ../gdk-pixbuf/gdk-pixbuf-io.c:1735
 #, c-format
 msgid "Failed to open '%s' for writing: %s"
-msgstr ""
+msgstr "'%s'-ലേക്ക് സൂക്കഷിക്കുവാന്‍ സാധ്യമല്ല: %s"
 
 #: ../gdk-pixbuf/gdk-pixbuf-io.c:1760
 #, c-format
@@ -324,10 +329,12 @@ msgid ""
 "Failed to close '%s' while writing image, all data may not have been saved: %"
 "s"
 msgstr ""
+"ഇമേജ് സൂക്ഷിക്കുമ്പോള്‍ '%s' അടയ്ക്കുന്നതില്‍ പരാജയം, ഡേറ്റാ പൂറ്‍ണ്ണമായി സൂക്ഷിക്കുവാന്‍ "
+"സാധ്യമായി കാണില്ല: %s"
 
 #: ../gdk-pixbuf/gdk-pixbuf-io.c:1980 ../gdk-pixbuf/gdk-pixbuf-io.c:2030
 msgid "Insufficient memory to save image into a buffer"
-msgstr ""
+msgstr "ബഫറിലേക്ക് ഇമേജ് സൂക്ഷിക്കുന്നതിനാവശ്യമായ മെമ്മറി ലഭ്യമല്ല"
 
 #: ../gdk-pixbuf/gdk-pixbuf-loader.c:330
 #, c-format
@@ -335,6 +342,8 @@ msgid ""
 "Internal error: Image loader module '%s' failed to complete an operation, "
 "but didn't give a reason for the failure"
 msgstr ""
+"ആന്തരിക പിശക്: ഇമേജ് ലഭ്യമാക്കുന്ന ഘടകമായ '%s' ഒരു പ്റക്റിയ പൂറ്‍ണ്ണമാക്കുന്നതില്‍ "
+"പരാജയപ്പെട്ടു, കാരണമെന്തെന്ന് വ്യക്തമല്ല"
 
 #: ../gdk-pixbuf/gdk-pixbuf-loader.c:373
 #, c-format
@@ -343,22 +352,22 @@ msgstr ""
 
 #: ../gdk-pixbuf/gdk-pixdata.c:147
 msgid "Image header corrupt"
-msgstr ""
+msgstr "ഇമേജ് ഹെഡറിന് തകരാറു സംഭവിച്ചു"
 
 #: ../gdk-pixbuf/gdk-pixdata.c:152
 msgid "Image format unknown"
-msgstr ""
+msgstr "ഇമേജ് ഏത് രീതിയിലുള്ളതെന്ന് അവ്യക്തം"
 
 #: ../gdk-pixbuf/gdk-pixdata.c:157 ../gdk-pixbuf/gdk-pixdata.c:487
 msgid "Image pixel data corrupt"
-msgstr ""
+msgstr "ഇമേജ് പിക്സല്‍ ഡേറ്റായില്‍ തകരാറ്"
 
 #: ../gdk-pixbuf/gdk-pixdata.c:431
 #, c-format
 msgid "failed to allocate image buffer of %u byte"
 msgid_plural "failed to allocate image buffer of %u bytes"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%u ബൈറ്റുള്ള ഇമേജ് ബഫറ്‍ അനുവദിക്കുന്നതില്‍ പരാജയം"
+msgstr[1] "%u ബൈറ്റുകളുള്ള ഇമേജ് ബഫറ്‍ അനുവദിക്കുന്നതില്‍ പരാജയം"
 
 #: ../gdk-pixbuf/io-ani.c:244
 msgid "Unexpected icon chunk in animation"
@@ -366,17 +375,17 @@ msgstr ""
 
 #: ../gdk-pixbuf/io-ani.c:337
 msgid "Unsupported animation type"
-msgstr ""
+msgstr "പിന്തുണ ലഭ്യമല്ലാത്ത ആനിമേഷന്‍ രീതി"
 
 #: ../gdk-pixbuf/io-ani.c:348 ../gdk-pixbuf/io-ani.c:536
 msgid "Invalid header in animation"
-msgstr ""
+msgstr "ആനിമേഷനില്‍ തെറ്റായ ഹെഡറ്‍"
 
 #: ../gdk-pixbuf/io-ani.c:358 ../gdk-pixbuf/io-ani.c:380
 #: ../gdk-pixbuf/io-ani.c:439 ../gdk-pixbuf/io-ani.c:458
 #: ../gdk-pixbuf/io-ani.c:509 ../gdk-pixbuf/io-ani.c:581
 msgid "Not enough memory to load animation"
-msgstr ""
+msgstr "ആനിമേഷന്‍ ലഭ്യമാക്കുന്നതിന് ആവശ്യമുള്ള മെമ്മറി ലഭ്യമല്ല"
 
 #: ../gdk-pixbuf/io-ani.c:398 ../gdk-pixbuf/io-ani.c:415
 #: ../gdk-pixbuf/io-ani.c:426
@@ -384,145 +393,142 @@ msgid "Malformed chunk in animation"
 msgstr ""
 
 #: ../gdk-pixbuf/io-ani.c:680
-#, fuzzy
 msgid "The ANI image format"
-msgstr "ഇമേജ്"
+msgstr "ANI ഇമേജ് രീതി"
 
 #: ../gdk-pixbuf/io-bmp.c:230 ../gdk-pixbuf/io-bmp.c:327
 #: ../gdk-pixbuf/io-bmp.c:359 ../gdk-pixbuf/io-bmp.c:382
 #: ../gdk-pixbuf/io-bmp.c:485
 msgid "BMP image has bogus header data"
-msgstr ""
+msgstr "BMP ഇമേജില്‍ തെറ്റായ ഹെജറ്‍ ഡേറ്റാ"
 
 #: ../gdk-pixbuf/io-bmp.c:241 ../gdk-pixbuf/io-bmp.c:422
 msgid "Not enough memory to load bitmap image"
-msgstr ""
+msgstr "ബിറ്റ്മാപ്പ് ഇമേജ് ലഭ്യമാക്കുന്നതിന് ആവശ്യമായ മെമ്മറി ലഭ്യമല്ല"
 
 #: ../gdk-pixbuf/io-bmp.c:308
 msgid "BMP image has unsupported header size"
-msgstr ""
+msgstr "പിന്തുണ ലഭ്യമല്ലാത്ത BMP ഇമേജ് ഹെഡറിന്റെ വ്യാപ്തി"
 
 #: ../gdk-pixbuf/io-bmp.c:346
 msgid "Topdown BMP images cannot be compressed"
-msgstr ""
+msgstr "ടോപ്പ് ഡൌണ്‍ BMP ഇമേജുകള്‍ കംപ്റസ്സ് ചെയ്യുവാന്‍ സാധ്യമല്ല"
 
 #: ../gdk-pixbuf/io-bmp.c:1306
 msgid "Couldn't allocate memory for saving BMP file"
-msgstr ""
+msgstr "BMP ഫയല്‍ സൂക്ഷിക്കുന്നതിനുള്ള മെമ്മറി അനുവദിക്കുവാന്‍ സാധ്യമായില്ല"
 
 #: ../gdk-pixbuf/io-bmp.c:1347
 msgid "Couldn't write to BMP file"
-msgstr ""
+msgstr "BMP ഫയലിലേക്ക് സൂക്ഷിക്കുവാന്‍ സാധ്യമായില്ല"
 
 #: ../gdk-pixbuf/io-bmp.c:1402
-#, fuzzy
 msgid "The BMP image format"
-msgstr "ഇമേജ്"
+msgstr "BMP ഇമേജ് രീതി"
 
 #: ../gdk-pixbuf/io-gif.c:222
 #, c-format
 msgid "Failure reading GIF: %s"
-msgstr ""
+msgstr "GIF ലഭ്യമാക്കുന്നതില്‍ പിശക്: %s"
 
 #: ../gdk-pixbuf/io-gif.c:496 ../gdk-pixbuf/io-gif.c:1477
 #: ../gdk-pixbuf/io-gif.c:1638
 msgid "GIF file was missing some data (perhaps it was truncated somehow?)"
-msgstr ""
+msgstr "GIF ഫയലില്‍ പൂറ്‍ണ്ണ ഡേറ്റാ ലഭ്യമല്ല "
 
 #: ../gdk-pixbuf/io-gif.c:505
 #, c-format
 msgid "Internal error in the GIF loader (%s)"
-msgstr ""
+msgstr "GIF ലോഡറില്‍ (%s) ആന്തരിക പിശക്"
 
 #: ../gdk-pixbuf/io-gif.c:579
 msgid "Stack overflow"
-msgstr ""
+msgstr "സ്റ്റാക്ക് ഓവറ്‍ഫ്ളോ"
 
 #: ../gdk-pixbuf/io-gif.c:639
 msgid "GIF image loader cannot understand this image."
-msgstr ""
+msgstr "GIF ഇമേജ് ലോഡറിന് ഈ ഇമേജ് തിരിച്ചറിയുവാന്‍ സാധ്യമായില്ല."
 
 #: ../gdk-pixbuf/io-gif.c:668
 msgid "Bad code encountered"
-msgstr ""
+msgstr "തെറ്റായ കോഡ് ലഭിച്ചു"
 
 #: ../gdk-pixbuf/io-gif.c:678
 msgid "Circular table entry in GIF file"
-msgstr ""
+msgstr "GIF ഫയലില്‍ സിറ്‍ക്കുലാറ്‍ ടേബിള്‍ എന്‍ട്രി"
 
 #: ../gdk-pixbuf/io-gif.c:866 ../gdk-pixbuf/io-gif.c:1464
 #: ../gdk-pixbuf/io-gif.c:1511 ../gdk-pixbuf/io-gif.c:1626
 msgid "Not enough memory to load GIF file"
-msgstr ""
+msgstr "GIF ഫയല്‍ ലഭ്യമാക്കുന്നതിന് ആവശ്യമുള്ള മെമ്മറി ലഭ്യമല്ല"
 
 #: ../gdk-pixbuf/io-gif.c:956
 msgid "Not enough memory to composite a frame in GIF file"
-msgstr ""
+msgstr "GIF ഫയലില്‍ ഒരു ഫ്റെയിം തയ്യാറാക്കുന്നതിന് ആവശ്യമായ മെമ്മറി ലഭ്യമല്ല"
 
 #: ../gdk-pixbuf/io-gif.c:1128
 msgid "GIF image is corrupt (incorrect LZW compression)"
-msgstr ""
+msgstr "GIF ഇമേജില്‍ തകരാറ് (തെറ്റായ LZW കംപ്റഷന്‍)"
 
 #: ../gdk-pixbuf/io-gif.c:1178
 msgid "File does not appear to be a GIF file"
-msgstr ""
+msgstr "ഫയല്‍ ഒരു GIF ഫയല്‍ അല്ല"
 
 #: ../gdk-pixbuf/io-gif.c:1190
 #, c-format
 msgid "Version %s of the GIF file format is not supported"
-msgstr ""
+msgstr "GIF ഫയലിന്റെ %s ലക്കത്തിനുള്ള പിന്തുണ ലഭ്യമല്ല"
 
 #: ../gdk-pixbuf/io-gif.c:1299
 msgid ""
 "GIF image has no global colormap, and a frame inside it has no local "
 "colormap."
 msgstr ""
+"GIF ഇമേജില്‍ ഗ്ളോബല്‍ കളറ്‍മാപ്പ് ലഭ്യമല്ല, അതിലുള്ള ഒരു ഫ്റെയിമില്‍ ലോക്കല്‍ "
+"കളറ്‍മാപ്പും ലഭ്യമല്ല."
 
 #: ../gdk-pixbuf/io-gif.c:1533
 msgid "GIF image was truncated or incomplete."
-msgstr ""
+msgstr "GIF ഇമേജ് പൂറ്‍ണ്ണമല്ല."
 
 #: ../gdk-pixbuf/io-gif.c:1691
-#, fuzzy
 msgid "The GIF image format"
-msgstr "ഇമേജ്"
+msgstr "GIF ഇമേജ് രീതി"
 
 #: ../gdk-pixbuf/io-ico.c:217 ../gdk-pixbuf/io-ico.c:277
 #: ../gdk-pixbuf/io-ico.c:346 ../gdk-pixbuf/io-ico.c:409
 #: ../gdk-pixbuf/io-ico.c:439
 msgid "Not enough memory to load icon"
-msgstr ""
+msgstr "പ്റതിരൂപം ലഭ്യമാക്കുന്നതിന് ആവശ്യമുള്ള മെമ്മറി ലഭ്യമല്ല"
 
 #: ../gdk-pixbuf/io-ico.c:254 ../gdk-pixbuf/io-ico.c:267
 #: ../gdk-pixbuf/io-ico.c:336
 msgid "Invalid header in icon"
-msgstr ""
+msgstr "പ്റതിരൂപത്തില്‍ തെറ്റായ ഹേഡറ്‍"
 
 #: ../gdk-pixbuf/io-ico.c:299
-#, fuzzy
 msgid "Icon has zero width"
-msgstr "വേണ്ടിയുള്ള അക്ഷരവലിപ്പം"
+msgstr "പ്റതിരൂപത്തിന്റെ വീതി പൂജ്യം"
 
 #: ../gdk-pixbuf/io-ico.c:309
-#, fuzzy
 msgid "Icon has zero height"
-msgstr "വേണ്ടിയുള്ള അക്ഷരവലിപ്പം"
+msgstr "പ്റതിരൂപത്തിന്റെ ഉയരം പൂജ്യം"
 
 #: ../gdk-pixbuf/io-ico.c:361
 msgid "Compressed icons are not supported"
-msgstr ""
+msgstr "കംപ്റസ് ചെയ്ത പ്റതിരൂപങ്ങള്‍ക്ക് പിന്തുണ ലഭ്യമല്ല"
 
 #: ../gdk-pixbuf/io-ico.c:394
 msgid "Unsupported icon type"
-msgstr ""
+msgstr "പ്റതിരൂപത്തിന്റെ രീതിയ്ക്കുള്ള പിന്തുണ ലഭ്യമല്ല"
 
 #: ../gdk-pixbuf/io-ico.c:488
 msgid "Not enough memory to load ICO file"
-msgstr ""
+msgstr "ICO ഫയല്‍ ലഭ്യമാക്കുന്നതിന് ആവശ്യമുള്ള മെമ്മറി ലഭ്യമല്ല"
 
 #: ../gdk-pixbuf/io-ico.c:953
 msgid "Image too large to be saved as ICO"
-msgstr ""
+msgstr "ICO ആയി സൂക്ഷിക്കുവാന്‍ സാധ്യമല്ല; ഇമേജ് വളരെ വലുതാണ്"
 
 #: ../gdk-pixbuf/io-ico.c:964
 msgid "Cursor hotspot outside image"
@@ -534,34 +540,35 @@ msgid "Unsupported depth for ICO file: %d"
 msgstr ""
 
 #: ../gdk-pixbuf/io-ico.c:1223
-#, fuzzy
 msgid "The ICO image format"
-msgstr "ഇമേജ്"
+msgstr "ICO ഇമേജ് രീതി"
 
 #: ../gdk-pixbuf/io-jpeg.c:117
 #, c-format
 msgid "Error interpreting JPEG image file (%s)"
-msgstr ""
+msgstr "JPEG ഇമേജ് ഫയല്‍ (%s) തിരിച്ചറിയുന്നതില്‍ പിശക്"
 
 #: ../gdk-pixbuf/io-jpeg.c:509
 msgid ""
 "Insufficient memory to load image, try exiting some applications to free "
 "memory"
 msgstr ""
+"ഇമേജ് തുറക്കുന്നതിനുള്ള മെമ്മറി ലഭ്യമല്ല, ഫ്റീ മെമ്മറിയ്ക്കായി ചില പ്റയോഗങ്ങളില്‍ "
+"നിന്നും പുറത്ത് കടക്കുക"
 
 #: ../gdk-pixbuf/io-jpeg.c:550 ../gdk-pixbuf/io-jpeg.c:756
 #, c-format
 msgid "Unsupported JPEG color space (%s)"
-msgstr ""
+msgstr "പിന്തുണ ഇല്ലാത്ത JPEG കളറ്‍ സ്പെയിസ് (%s)"
 
 #: ../gdk-pixbuf/io-jpeg.c:648 ../gdk-pixbuf/io-jpeg.c:920
 #: ../gdk-pixbuf/io-jpeg.c:1153 ../gdk-pixbuf/io-jpeg.c:1162
 msgid "Couldn't allocate memory for loading JPEG file"
-msgstr ""
+msgstr "JPEG ഫയല്‍ ലഭ്യമാക്കുന്നതിനുള്ള മെമ്മറി അനുവദിക്കുവാന്‍ സാധ്യമായില്ല"
 
 #: ../gdk-pixbuf/io-jpeg.c:896
 msgid "Transformed JPEG has zero width or height."
-msgstr ""
+msgstr "മാറ്റം വരുത്തിയ JPEG-യുടെ വീതിയും ഉയരവും പൂജ്യം."
 
 #: ../gdk-pixbuf/io-jpeg.c:1109
 #, c-format
@@ -577,32 +584,32 @@ msgstr ""
 
 #: ../gdk-pixbuf/io-jpeg.c:1287
 msgid "The JPEG image format"
-msgstr ""
+msgstr "JPEG ഇമേജ് രീതി"
 
 #: ../gdk-pixbuf/io-pcx.c:187
 msgid "Couldn't allocate memory for header"
-msgstr ""
+msgstr "ഹെഡറിനുള്ള മെമ്മറി അനുവദിക്കുവാന്‍ സാധ്യമായില്ല"
 
 #: ../gdk-pixbuf/io-pcx.c:202 ../gdk-pixbuf/io-pcx.c:560
 msgid "Couldn't allocate memory for context buffer"
-msgstr ""
+msgstr "കോണ്‍ടെക്സ്റ്റിനുള്ള മെമ്മറി അനുവദിക്കുവാന്‍ സാധ്യമായില്ല"
 
 #: ../gdk-pixbuf/io-pcx.c:601
 msgid "Image has invalid width and/or height"
-msgstr ""
+msgstr "ഇമേജിന്റെ വീതി അല്ലെങ്കില്‍ ഉയരം തെറ്റാണ്"
 
 #: ../gdk-pixbuf/io-pcx.c:613 ../gdk-pixbuf/io-pcx.c:674
 msgid "Image has unsupported bpp"
-msgstr ""
+msgstr "ഇമേജിന്റെ bpp-യ്ക്ക് പിന്തുണ ലഭ്യമല്ല"
 
 #: ../gdk-pixbuf/io-pcx.c:618 ../gdk-pixbuf/io-pcx.c:626
 #, c-format
 msgid "Image has unsupported number of %d-bit planes"
-msgstr ""
+msgstr "ഇമേജിന് പിന്തുണ ലഭ്യമല്ലാത്ത %d-ബിറ്റ് പ്ളെയിനുകള്‍"
 
 #: ../gdk-pixbuf/io-pcx.c:642
 msgid "Couldn't create new pixbuf"
-msgstr ""
+msgstr "പുതിയ pixbuf ഉണ്ടാക്കുവാന്‍ സാധ്യമായില്ല"
 
 #: ../gdk-pixbuf/io-pcx.c:650
 msgid "Couldn't allocate memory for line data"
@@ -614,45 +621,44 @@ msgstr ""
 
 #: ../gdk-pixbuf/io-pcx.c:704
 msgid "Didn't get all lines of PCX image"
-msgstr ""
+msgstr "PCX ഇമേജിന്റെ വരികളെല്ലാം ലഭ്യമായില്ല"
 
 #: ../gdk-pixbuf/io-pcx.c:711
 msgid "No palette found at end of PCX data"
 msgstr ""
 
 #: ../gdk-pixbuf/io-pcx.c:758
-#, fuzzy
 msgid "The PCX image format"
-msgstr "ഇമേജ്"
+msgstr "PCX ഇമേജ് രീതി"
 
 #: ../gdk-pixbuf/io-png.c:55
 msgid "Bits per channel of PNG image is invalid."
-msgstr ""
+msgstr "PNG ഇമേജിന്റെ ഒരോ ചാനലിലും ഉള്ള ബിറ്റുകള്‍ തെറ്റാണ്."
 
 #: ../gdk-pixbuf/io-png.c:136 ../gdk-pixbuf/io-png.c:618
 msgid "Transformed PNG has zero width or height."
-msgstr ""
+msgstr "മാറ്റം വരുത്തിയ PNG-യുടെ വീതിയും ഉയരവും പൂജ്യമാണ്."
 
 #: ../gdk-pixbuf/io-png.c:144
 msgid "Bits per channel of transformed PNG is not 8."
-msgstr ""
+msgstr "മാറ്റം വരുത്തിയ PNG-യുടെ ഓരോ ചാനലിലും ഉള്ള ബിറ്റുകളുടെ എണ്ണം 8 അല്ല."
 
 #: ../gdk-pixbuf/io-png.c:153
 msgid "Transformed PNG not RGB or RGBA."
-msgstr ""
+msgstr "മാറ്റം വരുത്തിയ PNG, RGB അല്ലെങ്കില്‍ RGBA അല്ല."
 
 #: ../gdk-pixbuf/io-png.c:162
 msgid "Transformed PNG has unsupported number of channels, must be 3 or 4."
-msgstr ""
+msgstr "മാറ്റം വരുത്തിയ PNG-ല്‍ പിന്തുണ ലഭ്യമല്ലാത്ത ചാനലുകള്‍ ഉണ്ട്, 3 അല്ലെങ്കില്‍ 4 എണ്ണം ആവശ്യമുണ്ട്."
 
 #: ../gdk-pixbuf/io-png.c:183
 #, c-format
 msgid "Fatal error in PNG image file: %s"
-msgstr ""
+msgstr "PNG ഇമേജ് ഫയലില്‍ സാരമായ പിശക്: %s"
 
 #: ../gdk-pixbuf/io-png.c:310
 msgid "Insufficient memory to load PNG file"
-msgstr ""
+msgstr "PNG ഫയല്‍ തുറക്കുന്നതിന് ആവശ്യമുള്ള മെമ്മറി ലഭ്യമല്ല"
 
 #: ../gdk-pixbuf/io-png.c:633
 #, c-format
@@ -660,23 +666,27 @@ msgid ""
 "Insufficient memory to store a %ld by %ld image; try exiting some "
 "applications to reduce memory usage"
 msgstr ""
+"%ld ഇമേജ് ഉപയോഗിച്ച് ഒരു %ld സൂക്ഷിക്കുന്നതിനുള്ള മെമ്മറി ലഭ്യമല്ല; ചില "
+"പ്റയോഗങ്ങള്‍ നിറ്‍ത്തി മെമ്മറിയുടെ ഉപയോഗം കുറയ്ക്കുക"
 
 #: ../gdk-pixbuf/io-png.c:684
 msgid "Fatal error reading PNG image file"
-msgstr ""
+msgstr "PNG ഇമേജ് ഫയല്‍ തുറക്കുന്നതില്‍ സാരമായ പിശക്"
 
 #: ../gdk-pixbuf/io-png.c:733
 #, c-format
 msgid "Fatal error reading PNG image file: %s"
-msgstr ""
+msgstr "PNG ഇമേജ് ഫയല്‍ തുറക്കുന്നതില്‍ സാരമായ പിശക്: %s"
 
 #: ../gdk-pixbuf/io-png.c:825
 msgid "Keys for PNG text chunks must have at least 1 and at most 79 characters."
 msgstr ""
+"PNG ടെക്സ്റ്റുകളുടെ കീകളില്‍ കുറഞ്ഞത് 1 അക്ഷരം ഉണ്ടായിരിക്കണം, 79-ല്‍ "
+"കൂടുതല്‍ പാടില്ല."
 
 #: ../gdk-pixbuf/io-png.c:833
 msgid "Keys for PNG text chunks must be ASCII characters."
-msgstr ""
+msgstr "PNG ടെക്സ്റ്റുകളുടെ കീകള്‍ ASCII അക്ഷരങ്ങളായിരിക്കണം"
 
 #: ../gdk-pixbuf/io-png.c:846
 #, c-format
@@ -698,13 +708,12 @@ msgid "Value for PNG text chunk %s cannot be converted to ISO-8859-1 encoding."
 msgstr ""
 
 #: ../gdk-pixbuf/io-png.c:1047
-#, fuzzy
 msgid "The PNG image format"
-msgstr "ഇമേജ്"
+msgstr "PNG ഇമേജ് രീതി"
 
 #: ../gdk-pixbuf/io-pnm.c:250
 msgid "PNM loader expected to find an integer, but didn't"
-msgstr ""
+msgstr "PNM ലോഡറിന് ഒരു ഇന്റിജറ്‍ ലഭിക്കും എന്ന് പ്റതീക്ഷിച്ചു, പക്ഷേ ലഭ്യമായില്ല"
 
 #: ../gdk-pixbuf/io-pnm.c:282
 msgid "PNM file has an incorrect initial byte"
@@ -712,32 +721,32 @@ msgstr ""
 
 #: ../gdk-pixbuf/io-pnm.c:312
 msgid "PNM file is not in a recognized PNM subformat"
-msgstr ""
+msgstr "PNM ഫയലിന്റെ PNM സബ്ഫോറ്‍മാറ്റ് അപരിചിതമാണ്"
 
 #: ../gdk-pixbuf/io-pnm.c:337
 msgid "PNM file has an image width of 0"
-msgstr ""
+msgstr "PNM ഫയലിനുള്ള ഇമേജിന്റെ വീതി 0 ആണ്"
 
 #: ../gdk-pixbuf/io-pnm.c:358
 msgid "PNM file has an image height of 0"
-msgstr ""
+msgstr "PNM ഫയലിനുള്ള ഇമേജിന്റെ ഉയരം 0 ആണ്"
 
 #: ../gdk-pixbuf/io-pnm.c:381
 msgid "Maximum color value in PNM file is 0"
-msgstr ""
+msgstr "PNM ഫയലിന്റെ ഏറ്റവും കൂടിയ കളറ്‍ മൂല്ല്യം 0 ആണ്."
 
 #: ../gdk-pixbuf/io-pnm.c:389
 msgid "Maximum color value in PNM file is too large"
-msgstr ""
+msgstr "PNM ഫയലിന്റെ ഏറ്റവും കൂടിയ കളറ്‍ മൂല്ല്യം വളരെ വലുതാണ്"
 
 #: ../gdk-pixbuf/io-pnm.c:429 ../gdk-pixbuf/io-pnm.c:459
 #: ../gdk-pixbuf/io-pnm.c:504
 msgid "Raw PNM image type is invalid"
-msgstr ""
+msgstr "റോ PNM ഇമേജ് തരം തെറ്റാണ്"
 
 #: ../gdk-pixbuf/io-pnm.c:654
 msgid "PNM image loader does not support this PNM subformat"
-msgstr ""
+msgstr "PNM ഇമേജ് ലോഡറ്‍ PNM സബ്ഫോറ്‍മാറ്റ് പിന്തുണയ്ക്കുന്നില്ല"
 
 #: ../gdk-pixbuf/io-pnm.c:709
 msgid "Premature end-of-file encountered"
@@ -749,31 +758,31 @@ msgstr ""
 
 #: ../gdk-pixbuf/io-pnm.c:768
 msgid "Cannot allocate memory for loading PNM image"
-msgstr ""
+msgstr "PNM ഇമേജ് ലഭ്യമാക്കുന്നതിനുള്ള മെമ്മറി അനുവദിക്കുവാന്‍ സാധ്യമായില്ല"
 
 #: ../gdk-pixbuf/io-pnm.c:818
 msgid "Insufficient memory to load PNM context struct"
-msgstr ""
+msgstr "PNM context struct ലഭ്യമാക്കുന്നതിന് ആവശ്യമുള്ള മെമ്മറി"
 
 #: ../gdk-pixbuf/io-pnm.c:869
 msgid "Unexpected end of PNM image data"
-msgstr ""
+msgstr "PNM ഇമേഡ് ഡേറ്റാ അപ്റതീക്ഷിതമായി അവസാനിച്ചിരിക്കുന്നു"
 
 #: ../gdk-pixbuf/io-pnm.c:997
 msgid "Insufficient memory to load PNM file"
-msgstr ""
+msgstr "PNM ഫയല്‍ ലഭ്യമാക്കുന്നതിന് ആവശ്യമുള്ള മെമ്മറിയില്ല"
 
 #: ../gdk-pixbuf/io-pnm.c:1083
 msgid "The PNM/PBM/PGM/PPM image format family"
-msgstr ""
+msgstr "PNM/PBM/PGM/PPM ഇമേജ് രീതി"
 
 #: ../gdk-pixbuf/io-ras.c:126
 msgid "RAS image has bogus header data"
-msgstr ""
+msgstr "RAS ഇമേജില്‍ തെറ്റായ ഹെഡറ്‍ ഡേറ്റാ"
 
 #: ../gdk-pixbuf/io-ras.c:148
 msgid "RAS image has unknown type"
-msgstr ""
+msgstr "RAS ഇമേജില്‍ അപരിചിമായ തരത്തിലുള്ളത്"
 
 #: ../gdk-pixbuf/io-ras.c:156
 msgid "unsupported RAS image variation"
@@ -781,39 +790,39 @@ msgstr ""
 
 #: ../gdk-pixbuf/io-ras.c:171 ../gdk-pixbuf/io-ras.c:200
 msgid "Not enough memory to load RAS image"
-msgstr ""
+msgstr "RAS ഇമേജ് ലഭ്യമാക്കുന്നതിന് ആവശ്യമുള്ള മെമ്മറിയില്ല"
 
 #: ../gdk-pixbuf/io-ras.c:547
 msgid "The Sun raster image format"
-msgstr ""
+msgstr "Sun raster ഇമേജ് രീതി"
 
 #: ../gdk-pixbuf/io-tga.c:154
 msgid "Cannot allocate memory for IOBuffer struct"
-msgstr ""
+msgstr "IOBuffer struct-ന് ആവശ്യമുള്ള മെമ്മറി അനുവദിക്കുവാന്‍ സാധ്യമായില്ല"
 
 #: ../gdk-pixbuf/io-tga.c:173
 msgid "Cannot allocate memory for IOBuffer data"
-msgstr ""
+msgstr "IOBuffer ഡേറ്റായ്ക്ക് ആവശ്യമുള്ള മെമ്മറി അനുവദിക്കുവാന്‍ സാധ്യമായില്ല"
 
 #: ../gdk-pixbuf/io-tga.c:184
 msgid "Cannot realloc IOBuffer data"
-msgstr ""
+msgstr "IOBuffer data realloc ചെയ്യുവാന്‍ സാധ്യമായില്ല"
 
 #: ../gdk-pixbuf/io-tga.c:214
 msgid "Cannot allocate temporary IOBuffer data"
-msgstr ""
+msgstr "താല്‍ക്കാലികമായ IOBuffer ഡേറ്റാ  അനുവദിക്കുവാന്‍ സാധ്യമായില്ല"
 
 #: ../gdk-pixbuf/io-tga.c:347
 msgid "Cannot allocate new pixbuf"
-msgstr ""
+msgstr "പുതിയ pixbuf അനുവദിക്കുവാന്‍ സാധ്യമായില്ല"
 
 #: ../gdk-pixbuf/io-tga.c:687
 msgid "Cannot allocate colormap structure"
-msgstr ""
+msgstr "കളറ്‍മാപ്പ് രൂപം അനുവദിക്കുവാന്‍ സാധ്യമായില്ല"
 
 #: ../gdk-pixbuf/io-tga.c:694
 msgid "Cannot allocate colormap entries"
-msgstr ""
+msgstr "കളറ്‍മാപ്പ് എന്‍ട്രികള്‍ അനുവദിക്കുവാന്‍ സാധ്യമായില്ല"
 
 #: ../gdk-pixbuf/io-tga.c:716
 msgid "Unexpected bitdepth for colormap entries"
@@ -821,164 +830,159 @@ msgstr ""
 
 #: ../gdk-pixbuf/io-tga.c:734
 msgid "Cannot allocate TGA header memory"
-msgstr ""
+msgstr "TGA ഹെഡറ്‍ മെമ്മറി അനുവദിക്കുവാന്‍ സാധ്യമായില്ല"
 
 #: ../gdk-pixbuf/io-tga.c:767
 msgid "TGA image has invalid dimensions"
-msgstr ""
+msgstr "TGA ഇമേജില്‍ തെറ്റായ അളവുകള്‍"
 
 #: ../gdk-pixbuf/io-tga.c:773 ../gdk-pixbuf/io-tga.c:782
 #: ../gdk-pixbuf/io-tga.c:792 ../gdk-pixbuf/io-tga.c:802
 #: ../gdk-pixbuf/io-tga.c:809
 msgid "TGA image type not supported"
-msgstr ""
+msgstr "TGA തരത്തിലുള്ള ഇമേജിന് പിന്തുണ ലഭ്യമല്ല"
 
 #: ../gdk-pixbuf/io-tga.c:856
 msgid "Cannot allocate memory for TGA context struct"
-msgstr ""
+msgstr "TGA context struct-നുള്ള മെമ്മറി അനുവദിക്കുവാന്‍ സാധ്യമായില്ല"
 
 #: ../gdk-pixbuf/io-tga.c:921
 msgid "Excess data in file"
-msgstr ""
+msgstr "ഫയലില്‍ കൂടുതല്‍ ഡേറ്റാ"
 
 #: ../gdk-pixbuf/io-tga.c:1001
 msgid "The Targa image format"
-msgstr ""
+msgstr "Targa ഇമേജ് രീതി"
 
 #: ../gdk-pixbuf/io-tiff.c:160
 msgid "Could not get image width (bad TIFF file)"
-msgstr ""
+msgstr "ഇമേജിന്റെ വീതി ലഭ്യമാക്കുവാന്‍ സാധ്യമായില്ല (തെറ്റായ TIFF ഫയല്‍)"
 
 #: ../gdk-pixbuf/io-tiff.c:167
 msgid "Could not get image height (bad TIFF file)"
-msgstr ""
+msgstr "ഇമേജിന്റെ ഉയരം ലഭ്യമാക്കുവാന്‍ സാധ്യമായില്ല (തെറ്റായ TIFF ഫയല്‍)"
 
 #: ../gdk-pixbuf/io-tiff.c:175
 msgid "Width or height of TIFF image is zero"
-msgstr ""
+msgstr "TIFF ഇമേജിന്റെ വീതി അല്ലെങ്കില്‍ ഉയരം പൂജ്യമാണ്"
 
 #: ../gdk-pixbuf/io-tiff.c:184 ../gdk-pixbuf/io-tiff.c:193
 msgid "Dimensions of TIFF image too large"
-msgstr ""
+msgstr "TIFF ഇമേജിന്റെ അളവുകള്‍ വളരെ കൂടുതലാണ്"
 
 #: ../gdk-pixbuf/io-tiff.c:217 ../gdk-pixbuf/io-tiff.c:229
 #: ../gdk-pixbuf/io-tiff.c:541
 msgid "Insufficient memory to open TIFF file"
-msgstr ""
+msgstr "TIFF ഫയല്‍ തുറക്കുന്നതിന് ആവശ്യമായ മെമ്മറി ലഭ്യമല്ല"
 
 #: ../gdk-pixbuf/io-tiff.c:275
 msgid "Failed to load RGB data from TIFF file"
-msgstr ""
+msgstr "TIFF ഫയലില്‍ നിന്നും RGB ഡേറ്റാ ലഭ്യമാക്കുന്നതില്‍ പരാജയം"
 
 #: ../gdk-pixbuf/io-tiff.c:331
 msgid "Failed to open TIFF image"
-msgstr ""
+msgstr "TIFF ഇമേജ് തുറക്കുവാന്‍ സാധ്യമല്ല"
 
 #: ../gdk-pixbuf/io-tiff.c:343 ../gdk-pixbuf/io-tiff.c:722
 msgid "TIFFClose operation failed"
-msgstr ""
+msgstr "TIFFClose പ്റക്റിയ പരാജയപ്പെട്ടു"
 
 #: ../gdk-pixbuf/io-tiff.c:473 ../gdk-pixbuf/io-tiff.c:486
-#, fuzzy
 msgid "Failed to load TIFF image"
-msgstr "ലോഡ് ചെയ്ത് പ്രദര്‍ശിപ്പിക്കുന്നതിനുളള ഫയലിന്‍റെ പേര്"
+msgstr "TIFF ഇമേജ് ലഭ്യമാക്കുന്നതില്‍ പരാജയം"
 
 #: ../gdk-pixbuf/io-tiff.c:670
 msgid "Failed to save TIFF image"
-msgstr ""
+msgstr "TIFF ഇമേജ് സൂക്ഷിക്കുന്നതില്‍ പരാജയം"
 
 #: ../gdk-pixbuf/io-tiff.c:708
 msgid "Failed to write TIFF data"
-msgstr ""
+msgstr "TIFF ഇമേജ് എഴുതുന്നതില്‍ പരാജയം"
 
 #: ../gdk-pixbuf/io-tiff.c:760
 msgid "Couldn't write to TIFF file"
-msgstr ""
+msgstr "TIFF ഫയലിലേക്ക് എഴുതുവാന്‍ സാധ്യമായില്ല"
 
 #: ../gdk-pixbuf/io-tiff.c:816
 msgid "The TIFF image format"
-msgstr ""
+msgstr "TIFF ഇമേഡ് രീതി"
 
 #: ../gdk-pixbuf/io-wbmp.c:246
-#, fuzzy
 msgid "Image has zero width"
-msgstr "ഇമേജ് വിഡ്ജറ്റ്"
+msgstr "ഇമേജിന്റെ വീതി പൂജ്യമാണ്"
 
 #: ../gdk-pixbuf/io-wbmp.c:264
 msgid "Image has zero height"
-msgstr ""
+msgstr "ഇമേജിന്റെ ഉയരം പൂജ്യമാണ്"
 
 #: ../gdk-pixbuf/io-wbmp.c:275
 msgid "Not enough memory to load image"
-msgstr ""
+msgstr "ഇമേജ് ലഭ്യമാക്കുന്നതിന് ആവശ്യമുള്ള മെമ്മറിയില്ല"
 
 #: ../gdk-pixbuf/io-wbmp.c:334
 msgid "Couldn't save the rest"
-msgstr ""
+msgstr "ബാക്കിയുള്ളവ സൂക്ഷിക്കുവാന്‍ സാധ്യമായില്ല"
 
 #: ../gdk-pixbuf/io-wbmp.c:374
 msgid "The WBMP image format"
-msgstr ""
+msgstr "WBMP ഇമേജ് രീതി"
 
 #: ../gdk-pixbuf/io-xbm.c:295
 msgid "Invalid XBM file"
-msgstr ""
+msgstr "തെറ്റായ XBM ഫയല്‍"
 
 #: ../gdk-pixbuf/io-xbm.c:305
 msgid "Insufficient memory to load XBM image file"
-msgstr ""
+msgstr "XBM ഇമേജ് ഫയല്‍ ലഭ്യമാക്കുന്നതിന് ആവശ്യമുള്ള മെമ്മറിയില്ല"
 
 #: ../gdk-pixbuf/io-xbm.c:453
 msgid "Failed to write to temporary file when loading XBM image"
-msgstr ""
+msgstr "XBM ഇമേജ് ലഭ്യമാക്കുമ്പോള്‍ താല്‍ക്കാലിക ഫയലിലേക്ക് എഴുതുന്നതില്‍ പരാജയം"
 
 #: ../gdk-pixbuf/io-xbm.c:494
-#, fuzzy
 msgid "The XBM image format"
-msgstr "ഇമേജ്"
+msgstr "XBM ഇമേജ് രീതി"
 
 #: ../gdk-pixbuf/io-xpm.c:468
 msgid "No XPM header found"
-msgstr ""
+msgstr "XPM ഹെഡറ്‍ ലഭ്യമല്ല"
 
 #: ../gdk-pixbuf/io-xpm.c:477
 msgid "Invalid XPM header"
-msgstr ""
+msgstr "തെറ്റായ XPM ഹെഡറ്‍"
 
 #: ../gdk-pixbuf/io-xpm.c:485
 msgid "XPM file has image width <= 0"
-msgstr ""
+msgstr "XPM ഫയലിന്റെ ഇമേജ് വീതി <= 0"
 
 #: ../gdk-pixbuf/io-xpm.c:493
 msgid "XPM file has image height <= 0"
-msgstr ""
+msgstr "XPM ഫയലിന്റെ ഇമേജ് ഉയരം <= 0"
 
 #: ../gdk-pixbuf/io-xpm.c:501
-#, fuzzy
 msgid "XPM has invalid number of chars per pixel"
-msgstr "ഓരോ പിക്സലിലും ഉളള സാപിളുകളുടെ എണ്ണം"
+msgstr "XPM-ലുള്ള ഓരോ പിക്സലുകളിലേയും അക്ഷരങ്ങളുടെ എണ്ണം തെറ്റാണ്"
 
 #: ../gdk-pixbuf/io-xpm.c:510
 msgid "XPM file has invalid number of colors"
-msgstr ""
+msgstr "XPM ഫയലിലുള്ള നിറങ്ങളുടെ എണ്ണം തെറ്റാണ്"
 
 #: ../gdk-pixbuf/io-xpm.c:522 ../gdk-pixbuf/io-xpm.c:531
 #: ../gdk-pixbuf/io-xpm.c:583
 msgid "Cannot allocate memory for loading XPM image"
-msgstr ""
+msgstr "XPM ഇമേജ് ലഭ്യമാക്കുന്നതിന് ആവശ്യമുള്ള മെമ്മറി അനുവദിക്കുവാന്‍ സാധ്യമല്ല"
 
 #: ../gdk-pixbuf/io-xpm.c:545
 msgid "Cannot read XPM colormap"
-msgstr ""
+msgstr "XPM കളറ്‍മാപ്പ് വായിക്കുവാന്‍ സാധ്യമല്ല"
 
 #: ../gdk-pixbuf/io-xpm.c:777
 msgid "Failed to write to temporary file when loading XPM image"
-msgstr ""
+msgstr "XPM ഇമേജ് ലഭ്യമാക്കുമ്പോള്‍ താല്‍ക്കാലിക ഫയലിലേക്ക് എഴുതുന്നതില്‍ പരാജയം"
 
 #: ../gdk-pixbuf/io-xpm.c:818
-#, fuzzy
 msgid "The XPM image format"
-msgstr "ഇമേജ്"
+msgstr "XPM ഇമേജ് രീതി"
 
 #. Description of --sync in --help output
 #: ../gdk/win32/gdkmain-win32.c:54
@@ -988,75 +992,71 @@ msgstr ""
 #. Description of --no-wintab in --help output
 #: ../gdk/win32/gdkmain-win32.c:56
 msgid "Don't use the Wintab API for tablet support"
-msgstr ""
+msgstr "ടാബ്ലറ്റ് പിന്തുണയ്ക്കായി Wintab API ഉപയോഗിക്കേണ്ട"
 
 #. Description of --ignore-wintab in --help output
 #: ../gdk/win32/gdkmain-win32.c:58
 msgid "Same as --no-wintab"
-msgstr ""
+msgstr "--no-wintab പോലെ തന്നെ"
 
 #. Description of --use-wintab in --help output
 #: ../gdk/win32/gdkmain-win32.c:60
 msgid "Do use the Wintab API [default]"
-msgstr ""
+msgstr "Wintab API ഉപയോഗിക്കുക [സ്വതവേയുള്ള]"
 
 #. Description of --max-colors=COLORS in --help output
 #: ../gdk/win32/gdkmain-win32.c:62
 msgid "Size of the palette in 8 bit mode"
-msgstr ""
+msgstr "8 ബിറ്റ് മോഡില്‍ പാലറ്റിന്റെ വ്യാപ്തി"
 
 #. Placeholder in --max-colors=COLORS in --help output
 #: ../gdk/win32/gdkmain-win32.c:63
 msgid "COLORS"
-msgstr ""
+msgstr "നിറങ്ങള്‍"
 
 #. Description of --sync in --help output
 #: ../gdk/x11/gdkmain-x11.c:92
 msgid "Make X calls synchronous"
-msgstr ""
+msgstr "X കോളുകള്‍ ഒരേപോലെയാക്കുക"
 
 #: ../gtk/gtkaboutdialog.c:264 ../gtk/gtkaboutdialog.c:2100
-#, fuzzy
 msgid "License"
-msgstr "ലൈസന്‍സ് ആവരണം ചെയ്യുക"
+msgstr "ലൈസന്‍സ് "
 
 #: ../gtk/gtkaboutdialog.c:265
-#, fuzzy
 msgid "The license of the program"
-msgstr "പ്രോഗ്രാമിന്‍റെ വേര്‍ഷന്‍"
+msgstr "പ്റോഗ്റാമിനുള്ള ലൈസന്‍സ്"
 
 #. Add the credits button
 #: ../gtk/gtkaboutdialog.c:500
 msgid "C_redits"
-msgstr ""
+msgstr "ക്റെഡിറ്റുകള്‍ _r"
 
 #. Add the license button
 #: ../gtk/gtkaboutdialog.c:513
 msgid "_License"
-msgstr ""
+msgstr "ലൈസന്‍സ് (_L)"
 
 #: ../gtk/gtkaboutdialog.c:742
 #, c-format
 msgid "About %s"
-msgstr ""
+msgstr "%s സംബന്ധിച്ച്"
 
 #: ../gtk/gtkaboutdialog.c:2024
 msgid "Credits"
-msgstr ""
+msgstr "ക്റെഡിറ്റുകള്‍"
 
 #: ../gtk/gtkaboutdialog.c:2053
 msgid "Written by"
-msgstr ""
+msgstr "രചിച്ചത്"
 
 #: ../gtk/gtkaboutdialog.c:2056
-#, fuzzy
 msgid "Documented by"
-msgstr "എഴുത്തുകാര്‍"
+msgstr "എഴുതിയത്"
 
 #: ../gtk/gtkaboutdialog.c:2068
-#, fuzzy
 msgid "Translated by"
-msgstr "അനി പീറ്റര്‍ <peter.ani@gmail.com>"
+msgstr "തറ്‍ജ്ജമ ചെയ്തത്"
 
 #: ../gtk/gtkaboutdialog.c:2072
 msgid "Artwork by"
@@ -1138,17 +1138,17 @@ msgstr "Backslash"
 #: ../gtk/gtkbuilderparser.c:289
 #, c-format
 msgid "Invalid type function: `%s'"
-msgstr ""
+msgstr "തെറ്റായ തരത്തിലുള്ള ഫംഗ്ഷന്‍: `%s'"
 
 #: ../gtk/gtkbuilderparser.c:729
 #, c-format
 msgid "Invalid root element: '%s'"
-msgstr ""
+msgstr "തെറ്റായ റൂട്ട് എലമെന്റ്: `%s'"
 
 #: ../gtk/gtkbuilderparser.c:761
 #, c-format
 msgid "Unhandled tag: '%s'"
-msgstr ""
+msgstr "അണ്‍ഹാന്‍ഡില്‍ട് ടാഗ്: '%s'"
 
 #. Translate to calendar:YM if you want years to be displayed
 #. * before months; otherwise translate to calendar:MY.
@@ -1161,7 +1161,7 @@ msgstr ""
 #.
 #: ../gtk/gtkcalendar.c:670
 msgid "calendar:MY"
-msgstr ""
+msgstr "calendar:MY"
 
 #. Translate to calendar:week_start:0 if you want Sunday to be the
 #. * first day of the week to calendar:week_start:1 if you want Monday
@@ -1169,7 +1169,7 @@ msgstr ""
 #.
 #: ../gtk/gtkcalendar.c:708
 msgid "calendar:week_start:0"
-msgstr ""
+msgstr "calendar:week_start:0"
 
 #. Translators:  This is a text measurement template.
 #. * Translate it to the widest year text.
@@ -1235,18 +1235,16 @@ msgstr "%Y"
 #. * the text after the | in the translation.
 #.
 #: ../gtk/gtkcellrendereraccel.c:235
-#, fuzzy
 msgid "Accelerator|Disabled"
-msgstr "ആക്സലറേറ്റര്‍ കീ"
+msgstr "പ്റവറ്‍ത്തന രഹിതം"
 
 #. This label is displayed in a treeview cell displaying
 #. * an accelerator when the cell is clicked to change the
 #. * acelerator.
 #.
 #: ../gtk/gtkcellrendereraccel.c:364 ../gtk/gtkcellrendereraccel.c:576
-#, fuzzy
 msgid "New accelerator..."
-msgstr "മെനു ബാര്‍ ആക്സലറേറ്റര്‍"
+msgstr "പുതിയ ആക്സലറേറ്റര്‍..."
 
 #. do not translate the part before the |
 #: ../gtk/gtkcellrendererprogress.c:362 ../gtk/gtkcellrendererprogress.c:449
@@ -1256,11 +1254,11 @@ msgstr "%d %%"
 
 #: ../gtk/gtkcolorbutton.c:189 ../gtk/gtkcolorbutton.c:560
 msgid "Pick a Color"
-msgstr ""
+msgstr "ഒരു നിറം തിരഞ്ഞെടുക്കുക"
 
 #: ../gtk/gtkcolorbutton.c:449
 msgid "Received invalid color data\n"
-msgstr ""
+msgstr "തെറ്റായ നിറം ലഭിച്ചിരിക്കുന്നു\n"
 
 #: ../gtk/gtkcolorsel.c:550
 msgid ""
@@ -1277,7 +1275,7 @@ msgstr ""
 
 #: ../gtk/gtkcolorsel.c:942
 msgid "_Save color here"
-msgstr ""
+msgstr "നിറം ഇവിടെ സൂക്ഷിക്കുക (_S)"
 
 #: ../gtk/gtkcolorsel.c:1146
 msgid ""
@@ -1299,7 +1297,7 @@ msgstr ""
 
 #: ../gtk/gtkcolorsel.c:1953
 msgid "_Hue:"
-msgstr ""
+msgstr "നിറക്കൂട്ട് (_H):"
 
 #: ../gtk/gtkcolorsel.c:1954
 msgid "Position on the color wheel."
@@ -1307,16 +1305,15 @@ msgstr ""
 
 #: ../gtk/gtkcolorsel.c:1956
 msgid "_Saturation:"
-msgstr ""
+msgstr "സാച്ചുറേഷന്‍ (_S):"
 
 #: ../gtk/gtkcolorsel.c:1957
 msgid "\"Deepness\" of the color."
 msgstr ""
 
 #: ../gtk/gtkcolorsel.c:1958
-#, fuzzy
 msgid "_Value:"
-msgstr "മൂല്യം"
+msgstr "മൂല്യം (_V):"
 
 #: ../gtk/gtkcolorsel.c:1959
 msgid "Brightness of the color."
@@ -1324,16 +1321,15 @@ msgstr ""
 
 #: ../gtk/gtkcolorsel.c:1960
 msgid "_Red:"
-msgstr ""
+msgstr "ചുവപ്പ് (_R):"
 
 #: ../gtk/gtkcolorsel.c:1961
 msgid "Amount of red light in the color."
 msgstr ""
 
 #: ../gtk/gtkcolorsel.c:1962
-#, fuzzy
 msgid "_Green:"
-msgstr "സ്ക്രീന്‍"
+msgstr "പച്ച് (_G):"
 
 #: ../gtk/gtkcolorsel.c:1963
 msgid "Amount of green light in the color."
@@ -1341,7 +1337,7 @@ msgstr ""
 
 #: ../gtk/gtkcolorsel.c:1964
 msgid "_Blue:"
-msgstr ""
+msgstr "നീല (_B):"
 
 #: ../gtk/gtkcolorsel.c:1965
 msgid "Amount of blue light in the color."
@@ -1352,14 +1348,12 @@ msgid "Op_acity:"
 msgstr ""
 
 #: ../gtk/gtkcolorsel.c:1975 ../gtk/gtkcolorsel.c:1985
-#, fuzzy
 msgid "Transparency of the color."
-msgstr "ഡയലോഗ് ബോക്സിനുളള താല്‍കാലിക നിയന്ത്രണ സംവിധാനം"
+msgstr ""
 
 #: ../gtk/gtkcolorsel.c:1992
-#, fuzzy
 msgid "Color _name:"
-msgstr "നിറങ്ങളുടെ സ്കീം"
+msgstr "ഏത് നിറം (_n):"
 
 #: ../gtk/gtkcolorsel.c:2006
 msgid ""
@@ -1368,84 +1362,78 @@ msgid ""
 msgstr ""
 
 #: ../gtk/gtkcolorsel.c:2036
-#, fuzzy
 msgid "_Palette:"
-msgstr "പേജിന്റെ തലക്കെട്ട്"
+msgstr "നിറക്കൂട്ട് (_P):"
 
 #: ../gtk/gtkcolorsel.c:2065
-#, fuzzy
 msgid "Color Wheel"
-msgstr "നിറങ്ങളുടെ സ്കീം"
+msgstr "നിറങ്ങളുടെ ചക്റം"
 
 #: ../gtk/gtkcolorseldialog.c:101
-#, fuzzy
 msgid "Color Selection"
-msgstr "തിരഞ്ഞെടുക്കല്‍ ബോക്സിന്‍റെ നിറം"
+msgstr "നിറം തിരഞ്ഞെടുക്കല്‍"
 
 #: ../gtk/gtkentry.c:5253 ../gtk/gtktextview.c:7605
-#, fuzzy
 msgid "Input _Methods"
-msgstr "'ഇന്‍പുട്ട് രീതികളുടെ' മെനു കാണിക്കുക"
+msgstr "ഇന്‍പുട്ട് രീതികള്‍ (_M) "
 
 #: ../gtk/gtkentry.c:5267 ../gtk/gtktextview.c:7619
-#, fuzzy
 msgid "_Insert Unicode Control Character"
-msgstr "'Insert Unicode Control Character' മെനു കാണിക്കുക"
+msgstr "_Insert Unicode Control Character"
 
 #: ../gtk/gtkfilechooserbutton.c:68
-#, fuzzy
 msgid "Select A File"
-msgstr "അനവധി തിരഞ്ഞടുക്കുക"
+msgstr "ഒരു ഫയല്‍ തിരഞ്ഞെടുക്കുക"
 
 #: ../gtk/gtkfilechooserbutton.c:69 ../gtk/gtkfilechooserdefault.c:1966
 msgid "Desktop"
-msgstr ""
+msgstr "ഡസ്ക്ടോപ്പ്"
 
 #: ../gtk/gtkfilechooserbutton.c:70
 msgid "(None)"
-msgstr ""
+msgstr "(ഒന്നുമില്ല)"
 
 #: ../gtk/gtkfilechooserbutton.c:2052
 msgid "Other..."
-msgstr ""
+msgstr "മറ്റുള്ളവ..."
 
 #: ../gtk/gtkfilechooser.c:1694 ../gtk/gtkfilechooser.c:1738
 #: ../gtk/gtkfilechooser.c:1813 ../gtk/gtkfilechooser.c:1857
 #, c-format
 msgid "Invalid filename: %s"
-msgstr ""
+msgstr "തെറ്റായ ഫയല്‍നാമം: %s"
 
 #: ../gtk/gtkfilechooserdefault.c:1103
 msgid "Could not retrieve information about the file"
-msgstr ""
+msgstr "ഫയല്‍ സംബന്ധിച്ചുള്ള വിവരം ലഭ്യമാക്കുവാന്‍ സാധ്യമായില്ല"
 
 #: ../gtk/gtkfilechooserdefault.c:1114
 msgid "Could not add a bookmark"
-msgstr ""
+msgstr "ഒരു ബുക്ക്മാറ്‍ക്ക് ചേറ്‍ക്കുവാന്‍ സാധ്യമായില്ല"
 
 #: ../gtk/gtkfilechooserdefault.c:1125
 msgid "Could not remove bookmark"
-msgstr ""
+msgstr "ബുക്ക്മാറ്‍ക്ക് നീക്കം ചെയ്യുവാന്‍ സാധ്യമായില്ല"
 
 #: ../gtk/gtkfilechooserdefault.c:1136
-#, fuzzy
 msgid "The folder could not be created"
-msgstr "ടൊഗിള്‍ ബട്ടണ്‍ സജ്ജീവമാക്കുവാന്‍ സാധ്യമാകുന്നു"
+msgstr "ഫോള്‍ഡറ്‍ ഉണ്ടാക്കുവാന്‍ സാധ്യമായില്ല"
 
 #: ../gtk/gtkfilechooserdefault.c:1149
 msgid ""
 "The folder could not be created, as a file with the same name already "
 "exists.  Try using a different name for the folder, or rename the file first."
 msgstr ""
+"ഫോള്‍ഡറ്‍ ഉണ്ടാക്കുവാന്‍ സാധ്യമായില്ല, കാരണം ആ പേരില്‍ മറ്റൊരു ഫയല്‍ നിലവിലുണ്ട്. "
+"വേറൊരു പേര് ഉപയോഗിക്കുക, അല്ലെങ്കില്‍ ആദ്യം ഫയലിന്റെ പേര് മാറ്റുക."
 
 #: ../gtk/gtkfilechooserdefault.c:1162
 msgid "Invalid file name"
-msgstr ""
+msgstr "തെറ്റായ ഫയല്‍ നാമം"
 
 #: ../gtk/gtkfilechooserdefault.c:1172
-#, fuzzy
 msgid "The folder contents could not be displayed"
-msgstr "പ്രദര്‍ശിപ്പിക്കുന്ന വസ്തുക്കളുടെ ക്രമം"
+msgstr "ഫോള്‍ഡറിലുള്ളവ പ്റദറ്‍ശിപ്പിക്കുവാന്‍ സാധ്യമായില്ല"
 
 #. Translators: the first string is a path and the second string
 #. * is a hostname. Nautilus and the panel contain the same string
@@ -1454,38 +1442,37 @@ msgstr "പ്രദര്‍ശിപ്പിക്കുന്ന വസ്�
 #: ../gtk/gtkfilechooserdefault.c:1715
 #, c-format
 msgid "%1$s on %2$s"
-msgstr ""
+msgstr "%1$s, %2$s-ല്‍"
 
 #: ../gtk/gtkfilechooserdefault.c:1893
-#, fuzzy
 msgid "Search"
-msgstr "തെരച്ചില്‌ സജീവമാക്കുക"
+msgstr "തിരയുക"
 
 #: ../gtk/gtkfilechooserdefault.c:1917
 msgid "Recently Used"
-msgstr ""
+msgstr "ഏറ്റവും ഒടുവില്‍ ഉപയോഗിച്ച"
 
 #: ../gtk/gtkfilechooserdefault.c:2581
 msgid "Select which types of files are shown"
-msgstr ""
+msgstr "ഏത് തരം ഫയലുകളാണ് കാണിച്ചിട്ടുള്ളത് എന്ന് തിരഞ്ഞെടുക്കുക"
 
 #: ../gtk/gtkfilechooserdefault.c:3009
 #, c-format
 msgid "Add the folder '%s' to the bookmarks"
-msgstr ""
+msgstr "ബുക്ക്മാറ്‍ക്കിലേക്ക് '%s' ഫോള്‍ഡറ്‍ ചേറ്‍ക്കുക"
 
 #: ../gtk/gtkfilechooserdefault.c:3050
 msgid "Add the current folder to the bookmarks"
-msgstr ""
+msgstr "ഈ ഫോള്‍ഡറ്‍ ബുക്ക്മാറ്‍ക്കിലേക്ക് ചേറ്‍ക്കുക"
 
 #: ../gtk/gtkfilechooserdefault.c:3052
 msgid "Add the selected folders to the bookmarks"
-msgstr ""
+msgstr "തിരഞ്ഞെടുത്ത ഫോള്‍ഡറുകള്‍ ബുക്ക്മാറ്‍ക്കിലേക്ക് ചേറ്‍ക്കുക"
 
 #: ../gtk/gtkfilechooserdefault.c:3092
 #, c-format
 msgid "Remove the bookmark '%s'"
-msgstr ""
+msgstr "'%s' എന്ന ബുക്ക്മാറ്‍ക്ക് നീക്കം ചെയ്യുക"
 
 #: ../gtk/gtkfilechooserdefault.c:3524
 #, c-format
@@ -1494,61 +1481,58 @@ msgstr ""
 
 #: ../gtk/gtkfilechooserdefault.c:3749
 msgid "Remove"
-msgstr ""
+msgstr "നീക്കം ചെയ്യുക"
 
 #: ../gtk/gtkfilechooserdefault.c:3758
 msgid "Rename..."
-msgstr ""
+msgstr "പേര് മാറ്റുക..."
 
 #. Accessible object name for the file chooser's shortcuts pane
 #: ../gtk/gtkfilechooserdefault.c:3900
 msgid "Places"
-msgstr ""
+msgstr "സ്ഥലങ്ങള്‍"
 
 #. Column header for the file chooser's shortcuts pane
 #: ../gtk/gtkfilechooserdefault.c:3954
 msgid "_Places"
-msgstr ""
+msgstr "സ്ഥലങ്ങള്‍ (_P)"
 
 #: ../gtk/gtkfilechooserdefault.c:4009 ../gtk/gtkstock.c:297
 msgid "_Add"
-msgstr ""
+msgstr "ചേറ്‍ക്കുക (_A)"
 
 #: ../gtk/gtkfilechooserdefault.c:4016
 msgid "Add the selected folder to the Bookmarks"
-msgstr ""
+msgstr "തിരഞ്ഞെടുത്ത ഫോള്‍ഡറ്‍ ബുക്ക്മാറ്‍ക്കിലേക്ക് ചേറ്‍ക്കുക"
 
 #: ../gtk/gtkfilechooserdefault.c:4021 ../gtk/gtkstock.c:385
 msgid "_Remove"
-msgstr ""
+msgstr "നീക്കം ചെയ്യുക (_R)"
 
 #: ../gtk/gtkfilechooserdefault.c:4028
-#, fuzzy
 msgid "Remove the selected bookmark"
-msgstr "തിരഞ്ഞെടുത്ത നിറം"
+msgstr "തിരഞ്ഞെടുത്ത ബുക്ക്മാറ്‍ക്ക് നീക്കം ചെയ്യുക"
 
 #: ../gtk/gtkfilechooserdefault.c:4124
 msgid "Could not select file"
-msgstr ""
+msgstr "ഫയല്‍ തിരഞ്ഞെടുക്കുവാന്‍ സാധ്യമായില്ല"
 
 #: ../gtk/gtkfilechooserdefault.c:4261
 #, c-format
 msgid "Could not select file '%s' because it is an invalid path name."
-msgstr ""
+msgstr "തെറ്റായ ഒരു പാഥിന്റെ നാമം ആയതിനാല്‍ '%s' എന്ന ഫയല്‍ തിരഞ്ഞെടുക്കുവാന്‍ സാധ്യമായില്ല."
 
 #: ../gtk/gtkfilechooserdefault.c:4318
 msgid "_Add to Bookmarks"
-msgstr ""
+msgstr "ബുക്ക്മാറ്‍ക്കിലേക്ക് ചേറ്‍ക്കുക (_A)"
 
 #: ../gtk/gtkfilechooserdefault.c:4332
-#, fuzzy
 msgid "Show _Hidden Files"
-msgstr "അദൃശ്യമായവ കാണിക്കുക"
+msgstr "അദൃശ്യമായ ഫയലുകള്‍ കാണിക്കുക (_H)"
 
 #: ../gtk/gtkfilechooserdefault.c:4576 ../gtk/gtkfilesel.c:729
-#, fuzzy
 msgid "Files"
-msgstr "ഫില്‍റ്റര്‍"
+msgstr "ഫയലുകള്‍"
 
 #: ../gtk/gtkfilechooserdefault.c:4625
 msgid "Name"
@@ -1559,106 +1543,103 @@ msgid "Size"
 msgstr "വലിപ്പം"
 
 #: ../gtk/gtkfilechooserdefault.c:4664
-#, fuzzy
 msgid "Modified"
-msgstr "രീതി"
+msgstr "മാറ്റം വരുത്തിയവ"
 
 #. Label
 #: ../gtk/gtkfilechooserdefault.c:4884 ../gtk/gtkprinteroptionwidget.c:786
-#, fuzzy
 msgid "_Name:"
-msgstr "പേര്"
+msgstr "പേര് (_N):"
 
 #: ../gtk/gtkfilechooserdefault.c:4926
 msgid "_Browse for other folders"
-msgstr ""
+msgstr "മറ്റ് ഫോള്‍ഡറുകള്‍ക്കായി തിരയുക (_B)"
 
 #: ../gtk/gtkfilechooserdefault.c:5181
-#, fuzzy
 msgid "Type a file name"
-msgstr "ഫയലിന്‍റെ പേര് എക്സ്പോര്‍ട്ട് ചെയ്യുക"
+msgstr "ഒരു ഫയലിന്റെ പേര് ടൈപ്പ് ചെയ്യുക"
 
 #. Create Folder
 #: ../gtk/gtkfilechooserdefault.c:5218
 msgid "Create Fo_lder"
-msgstr ""
+msgstr "ഫോള്‍ഡറ്‍ ഉണ്ടാക്കുക (_l)"
 
 #: ../gtk/gtkfilechooserdefault.c:5228
-#, fuzzy
 msgid "_Location:"
-msgstr "സ്ഥാനം"
+msgstr "സ്ഥാനം (_L):"
 
 #: ../gtk/gtkfilechooserdefault.c:5466
 msgid "Save in _folder:"
-msgstr ""
+msgstr "ഫോള്‍ഡറില്‍ സൂക്ഷിക്കുക (_f):"
 
 #: ../gtk/gtkfilechooserdefault.c:5468
 msgid "Create in _folder:"
-msgstr ""
+msgstr "ഫോള്‍ഡറില്‍ ഉണ്ടാക്കുക (_f):"
 
 #: ../gtk/gtkfilechooserdefault.c:7071
 msgid "Cannot change to folder because it is not local"
-msgstr ""
+msgstr "ലോക്കല്‍ ആയതിനാല്‍ ഫോള്‍ഡറിലേക്ക് മാറ്റുവാന്‍ സാധ്യമായില്ല"
 
 #: ../gtk/gtkfilechooserdefault.c:7687 ../gtk/gtkfilechooserdefault.c:7708
 #, c-format
 msgid "Shortcut %s already exists"
-msgstr ""
+msgstr "%s എന്ന കുറുക്ക് വഴി നിലവിലുണ്ട്"
 
 #: ../gtk/gtkfilechooserdefault.c:7798
 #, c-format
 msgid "Shortcut %s does not exist"
-msgstr ""
+msgstr "%s എന്ന കുറുക്ക് വഴി നിലവിലില്ല"
 
 #: ../gtk/gtkfilechooserdefault.c:8053
 #, c-format
 msgid "A file named \"%s\" already exists.  Do you want to replace it?"
-msgstr ""
+msgstr "\"%s\" എന്ന പേരില്‍ ഒരു ഫയല്‍ നിലവിലുണ്ട്.  നിങ്ങള്‍ക്ക് അത് മാറ്റി എഴുതണമോ?"
 
 #: ../gtk/gtkfilechooserdefault.c:8056
 #, c-format
 msgid "The file already exists in \"%s\".  Replacing it will overwrite its contents."
-msgstr ""
+msgstr "\"%s\"-ല്‍ ഒരു ഫയല്‍ ഉണ്ട്.  അതിന്റെ സ്ഥാനത്ത് ഇത് സൂക്ഷിച്ചാല്‍ ഉള്ളടക്കം മാറ്റി എഴുതപ്പെടുന്നു."
 
 #: ../gtk/gtkfilechooserdefault.c:8061
 msgid "_Replace"
-msgstr ""
+msgstr "മാറ്റി വേറെ സൂക്ഷിക്കുക (_R)"
 
 #: ../gtk/gtkfilechooserdefault.c:8895
 msgid "Could not start the search process"
-msgstr ""
+msgstr "തിരച്ചില്‍ പ്റക്റിയ ആരംഭിക്കുവാനായില്ല"
 
 #: ../gtk/gtkfilechooserdefault.c:8896
 msgid ""
 "The program was not able to create a connection to the indexer daemon.  "
 "Please make sure it is running."
 msgstr ""
+"indexer ഡെമണിലേക്ക് ഒരു കണക്ഷന്‍ ഉണ്ടാക്കുവാന്‍ പ്റോഗ്റാമിന് സാധ്യമായില്ല.  "
+"അത് പ്റവറ്‍ത്തിക്കുന്നു എന്നുറപ്പാക്കുക."
 
 #: ../gtk/gtkfilechooserdefault.c:8910
 msgid "Could not send the search request"
-msgstr ""
+msgstr "തിരച്ചിലിനുള്ള ആവശ്യം അയയ്ക്കുവാന്‍ സാധ്യമായില്ല"
 
 #. Label
 #: ../gtk/gtkfilechooserdefault.c:9336
 msgid "_Search:"
-msgstr ""
+msgstr "തിരയുക (_S):"
 
 #: ../gtk/gtkfilechooserdefault.c:10289
 #, c-format
 msgid "Could not mount %s"
-msgstr ""
+msgstr "%s മൌണ്ട് ചെയ്യുവാന്‍ സാധ്യമായില്ല"
 
 #: ../gtk/gtkfilechooserdefault.c:10917
-#, fuzzy
 msgid "Type name of new folder"
-msgstr "പ്രക്രമത്തിന്റെ പേര‍്"
+msgstr "പുതിയ ഫോള്‍ഡറിന്റെ പേര് ടൈപ്പ് ചെയ്യുക"
 
 #: ../gtk/gtkfilechooserdefault.c:10965
 #, c-format
 msgid "%d byte"
 msgid_plural "%d bytes"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%d ബൈറ്റ്"
+msgstr[1] "%d ബൈറ്റുകള്‍"
 
 #: ../gtk/gtkfilechooserdefault.c:10967
 #, c-format
@@ -1678,41 +1659,39 @@ msgstr "%.1f GB"
 #: ../gtk/gtkfilechooserdefault.c:11067 ../gtk/gtkfilechooserdefault.c:11088
 #: ../gtk/gtkfilechooserdefault.c:11120
 msgid "Unknown"
-msgstr ""
+msgstr "അപരിചിതം"
 
 #: ../gtk/gtkfilechooserdefault.c:11106
 msgid "Today at %H:%M"
-msgstr ""
+msgstr "ഇന്ന് %H:%M"
 
 #: ../gtk/gtkfilechooserdefault.c:11108
 msgid "Yesterday at %H:%M"
-msgstr ""
+msgstr "ഇന്നലെ %H:%M"
 
 #: ../gtk/gtkfilechoosersettings.c:262 ../gtk/gtkfilesel.c:1408
 #: ../gtk/gtkfilesel.c:1417 ../gtk/gtkfilesystemunix.c:1047
 #: ../gtk/gtkfilesystemwin32.c:1167
 #, c-format
 msgid "Error creating folder '%s': %s"
-msgstr ""
+msgstr "'%s' ഫോള്‍ഡറ്‍ ഉണ്ടാക്കുന്നതില്‍ പിശക്: %s"
 
 #: ../gtk/gtkfilesel.c:693
-#, fuzzy
 msgid "Folders"
-msgstr "ഫില്‍റ്റര്‍"
+msgstr "ഫോള്‍ഡറുകള്‍"
 
 #: ../gtk/gtkfilesel.c:697
 msgid "Fol_ders"
-msgstr ""
+msgstr "ഫോള്‍ഡറുകള്‍ (_d)"
 
 #: ../gtk/gtkfilesel.c:733
-#, fuzzy
 msgid "_Files"
-msgstr "ഫില്‍റ്റര്‍"
+msgstr "ഫയലുകള്‍ (_F)"
 
 #: ../gtk/gtkfilesel.c:820 ../gtk/gtkfilesel.c:2207
 #, c-format
 msgid "Folder unreadable: %s"
-msgstr ""
+msgstr "ഫോള്‍ഡറ്‍ വായിക്കുവാനായില്ല: %s"
 
 #: ../gtk/gtkfilesel.c:949
 #, c-format
@@ -1724,88 +1703,87 @@ msgstr ""
 
 #: ../gtk/gtkfilesel.c:1079
 msgid "_New Folder"
-msgstr ""
+msgstr "പുതിയ ഫോള്‍ഡറ്‍ (_N)"
 
 #: ../gtk/gtkfilesel.c:1090
-#, fuzzy
 msgid "De_lete File"
-msgstr "മായിക്കുവാന്‍ സാധ്യമാകുന്ന"
+msgstr "ഫയല്‍ വെട്ടി നീക്കുക (_l)"
 
 #: ../gtk/gtkfilesel.c:1101
 msgid "_Rename File"
-msgstr ""
+msgstr "ഫയലിന്റെ പേര് മാറ്റുക (_R)"
 
 #: ../gtk/gtkfilesel.c:1406
 #, c-format
 msgid "The folder name \"%s\" contains symbols that are not allowed in filenames"
 msgstr ""
+"ഫയലിന്റെ പേരില്‍ ഉപയോഗിക്കുവാന്‍ പാടില്ലാത്ത ചില ചിഹ്നങ്ങള്‍ \"%s\" എന്ന "
+"ഫോള്‍ഡറിന്റെ പേരിലുണ്ട്"
 
 #: ../gtk/gtkfilesel.c:1451
 msgid "New Folder"
-msgstr ""
+msgstr "പുതിയ ഫോള്‍ഡറ്‍"
 
 #: ../gtk/gtkfilesel.c:1466
-#, fuzzy
 msgid "_Folder name:"
-msgstr "ഫയലിന്‍റെ പേര്"
+msgstr "ഫോള്‍ഡറിന്റെ പേര് (_F):"
 
 #: ../gtk/gtkfilesel.c:1490
 msgid "C_reate"
-msgstr ""
+msgstr "ഉണ്ടാക്കുക (_r)"
 
 #: ../gtk/gtkfilesel.c:1533 ../gtk/gtkfilesel.c:1640 ../gtk/gtkfilesel.c:1653
 #, c-format
 msgid "The filename \"%s\" contains symbols that are not allowed in filenames"
 msgstr ""
+"ഫയലിന്റെ പേരില്‍ ഉപയോഗിക്കുവാന്‍ പാടില്ലാത്ത ചില ചിഹ്നങ്ങള്‍ \"%s\" എന്ന "
+"ഫയല്‍നാമത്തിലുണ്ട്"
 
 #: ../gtk/gtkfilesel.c:1536 ../gtk/gtkfilesel.c:1546
 #, c-format
 msgid "Error deleting file '%s': %s"
-msgstr ""
+msgstr "'%s' ഫയല്‍ വെട്ടി നീക്കുന്നതില്‍ പിശക്: %s"
 
 #: ../gtk/gtkfilesel.c:1589
 #, c-format
 msgid "Really delete file \"%s\"?"
-msgstr ""
+msgstr "\"%s\" എന്ന ഫയല്‍ വെട്ടി നീക്കണമോ?"
 
 #: ../gtk/gtkfilesel.c:1594
-#, fuzzy
 msgid "Delete File"
-msgstr "മായിക്കുവാന്‍ സാധ്യമാകുന്ന"
+msgstr "ഫയല്‍ വെട്ടി നീക്കുക"
 
 #: ../gtk/gtkfilesel.c:1642
 #, c-format
 msgid "Error renaming file to \"%s\": %s"
-msgstr ""
+msgstr "ഫയലിന്റെ പേര് \"%s\" ആക്കി മാറ്റുന്നതില്‍ പിശക്: %s"
 
 #: ../gtk/gtkfilesel.c:1655
 #, c-format
 msgid "Error renaming file \"%s\": %s"
-msgstr ""
+msgstr "\"%s\" എന്ന ഫയലിന്റെ പേര് മാറ്റുന്നതില്‍ പിശക്: %s"
 
 #: ../gtk/gtkfilesel.c:1664
 #, c-format
 msgid "Error renaming file \"%s\" to \"%s\": %s"
-msgstr ""
+msgstr "\"%s\" എന്ന ഫയലിന്റെ പേര് \"%s\" ആക്കി മാറ്റുന്നതില്‍ പിശക്: %s"
 
 #: ../gtk/gtkfilesel.c:1711
 msgid "Rename File"
-msgstr ""
+msgstr "ഫയലിന്റെ പേര് മാറ്റുക"
 
 #: ../gtk/gtkfilesel.c:1726
 #, c-format
 msgid "Rename file \"%s\" to:"
-msgstr ""
+msgstr "\"%s\" എന്ന ഫയല്‍ മാറ്റേണ്ട പേര്:"
 
 #: ../gtk/gtkfilesel.c:1755
-#, fuzzy
 msgid "_Rename"
-msgstr "ഫയലിന്‍റെ പേര്"
+msgstr "പേര് മാറ്റുക (_R)"
 
 #: ../gtk/gtkfilesel.c:2187
-#, fuzzy
 msgid "_Selection: "
-msgstr "തിരഞ്ഞെടുക്കല്‍ രീതി"
+msgstr "തിരഞ്ഞെടുക്കല്‍ (_S):"
 
 #: ../gtk/gtkfilesel.c:3107
 #, c-format
@@ -1816,44 +1794,43 @@ msgstr ""
 
 #: ../gtk/gtkfilesel.c:3110
 msgid "Invalid UTF-8"
-msgstr ""
+msgstr "തെറ്റായ UTF-8"
 
 #: ../gtk/gtkfilesel.c:3984
 msgid "Name too long"
-msgstr ""
+msgstr "പേര് വളരെ വലുതാണ്"
 
 #: ../gtk/gtkfilesel.c:3986
 msgid "Couldn't convert filename"
-msgstr ""
+msgstr "ഫയലിന്റെ പേര് വേര്‍തിരിക്കുവാന്‍ സാധ്യമായില്ല"
 
 #: ../gtk/gtkfilesystem.c:315
 #, c-format
 msgid "Could not get a stock icon for %s\n"
-msgstr ""
+msgstr "%s-നുള്ള സ്റ്റോക്ക് ഐക്കണ്‍ ലഭ്യമായില്ല\n"
 
 #: ../gtk/gtkfilesystemmodel.c:745
 msgid "Could not obtain root folder"
-msgstr ""
+msgstr "റൂട്ട് ഫോള്‍ഡറ്‍ ലഭ്യമായില്ല"
 
 #: ../gtk/gtkfilesystemmodel.c:1338
 msgid "(Empty)"
-msgstr ""
+msgstr "(ശൂന്യം)"
 
 #: ../gtk/gtkfilesystemunix.c:960 ../gtk/gtkfilesystemunix.c:1208
 #: ../gtk/gtkfilesystemunix.c:2196 ../gtk/gtkfilesystemunix.c:2236
 #: ../gtk/gtkfilesystemwin32.c:2245 ../gtk/gtkfilesystemwin32.c:2295
 #, c-format
 msgid "Error getting information for '%s': %s"
-msgstr ""
+msgstr "'%s'-നുള്ള വിവരം ലഭ്യമാകുന്നതില്‍ പിശക്: %s"
 
 #: ../gtk/gtkfilesystemunix.c:1153 ../gtk/gtkfilesystemwin32.c:1274
 msgid "This file system does not support mounting"
-msgstr ""
+msgstr "ഫയല്‍ സിസ്റ്റം മൌണ്ടിങ് പിന്തുണയ്ക്കുന്നില്ല"
 
 #: ../gtk/gtkfilesystemunix.c:1165
-#, fuzzy
 msgid "File System"
-msgstr "ഫയല്‍ സിസ്റ്റത്തിന്‍റെ ബാക്കെന്‍ഡ്"
+msgstr "ഫയല്‍ സിസ്റ്റം"
 
 #: ../gtk/gtkfilesystemunix.c:1329 ../gtk/gtkfilesystemwin32.c:1584
 #, c-format
@@ -1861,6 +1838,8 @@ msgid ""
 "The name \"%s\" is not valid because it contains the character \"%s\". "
 "Please use a different name."
 msgstr ""
+"\"%s\" എന്ന പേരില്‍ \"%s\" എന്ന അക്ഷരം ഉള്ളതിനാല്‍ അത് തെറ്റാണ്. "
+"ദയവായി മറ്റൊരു പേര് ഉപയോഗിക്കുക."
 
 #: ../gtk/gtkfilesystemunix.c:1878 ../gtk/gtkfilesystemwin32.c:1925
 #, c-format
@@ -1870,22 +1849,22 @@ msgstr ""
 #: ../gtk/gtkfilesystemunix.c:1933 ../gtk/gtkfilesystemwin32.c:1980
 #, c-format
 msgid "'%s' already exists in the bookmarks list"
-msgstr ""
+msgstr "'%s' ബുക്ക് മാറ്‍ക്കിന്റെ ലിസ്റ്റില്‍ ഉണ്ട്"
 
 #: ../gtk/gtkfilesystemunix.c:2005 ../gtk/gtkfilesystemwin32.c:2052
 #, c-format
 msgid "'%s' does not exist in the bookmarks list"
-msgstr ""
+msgstr "'%s' ബുക്ക് മാറ്‍ക്കിന്റെ ലിസ്റ്റില്‍ ഇല്ല"
 
 #: ../gtk/gtkfilesystemwin32.c:1090
 #, c-format
 msgid "Path is not a folder: '%s'"
-msgstr ""
+msgstr "പാഥ് ഒരു ഫോള്‍ഡറ്‍ അല്ല: '%s'"
 
 #: ../gtk/gtkfilesystemwin32.c:1292
 #, c-format
 msgid "Network Drive (%s)"
-msgstr ""
+msgstr "നെറ്റ്‌വറ്‍ക്ക് ഡ്റൈവ് (%s)"
 
 #: ../gtk/gtkfilesystemwin32.c:1314
 #, c-format
@@ -1894,7 +1873,7 @@ msgstr "%s (%s)"
 
 #: ../gtk/gtkfontbutton.c:145 ../gtk/gtkfontbutton.c:267
 msgid "Pick a Font"
-msgstr ""
+msgstr "ഒരു ലിപി തിരഞ്ഞെടുക്കുക"
 
 #. Initialize fields
 #: ../gtk/gtkfontbutton.c:261
@@ -1912,39 +1891,33 @@ msgid "abcdefghijk ABCDEFGHIJK"
 msgstr "abcdefghijk ABCDEFGHIJK"
 
 #: ../gtk/gtkfontsel.c:326
-#, fuzzy
 msgid "_Family:"
-msgstr "ലിപി കുടുംബം"
+msgstr "കുടുംബം (_F):"
 
 #: ../gtk/gtkfontsel.c:332
-#, fuzzy
 msgid "_Style:"
-msgstr "രീതി"
+msgstr "രീതി (_S):"
 
 #: ../gtk/gtkfontsel.c:338
-#, fuzzy
 msgid "Si_ze:"
-msgstr "വലിപ്പം"
+msgstr "വ്യാപ്തി (_z):"
 
 #. create the text entry widget
 #: ../gtk/gtkfontsel.c:515
-#, fuzzy
 msgid "_Preview:"
-msgstr "ടെക്സ്റ്റ് സ്ക്രീനില്‍ കാണുക"
+msgstr "സ്ക്രീനില്‍ കാണുക (_P):"
 
 #: ../gtk/gtkfontsel.c:1359
-#, fuzzy
 msgid "Font Selection"
-msgstr "ലിപിയുടെ സാന്ദ്രത"
+msgstr "ലിപി തിരഞ്ഞെടുക്കല്‍"
 
 #: ../gtk/gtkgamma.c:408
 msgid "Gamma"
-msgstr ""
+msgstr "ഗാമാ"
 
 #: ../gtk/gtkgamma.c:418
-#, fuzzy
 msgid "_Gamma value"
-msgstr "ഏറ്റവും കൂടിയ മൂല്ല്യം"
+msgstr "ഗാമായുടെ മൂല്ല്യം (_G)"
 
 #. Remove this icon source so we don't keep trying to
 #. * load it.
@@ -1952,7 +1925,7 @@ msgstr "ഏറ്റവും കൂടിയ മൂല്ല്യം"
 #: ../gtk/gtkiconfactory.c:1371
 #, c-format
 msgid "Error loading icon: %s"
-msgstr ""
+msgstr "പ്റതിരൂപം ലഭ്യമാക്കുന്നതില്‍ പിശക്: %s"
 
 #: ../gtk/gtkicontheme.c:1321
 #, c-format
@@ -1962,61 +1935,61 @@ msgid ""
 "You can get a copy from:\n"
 "\t%s"
 msgstr ""
+"'%s' എന്ന പ്റതിരൂപം ലഭ്യമാക്കുവാനായില്ല. '%s' എന്ന പ്റമേയവും\n"
+"ലഭ്യമായില്ല. ഒരു പക്ഷേ അവ ഇന്‍സ്റ്റോള്‍ ചെയ്യണമായിരിക്കാം.\n"
+"നിങ്ങള്‍ക്ക് ഇവിടെ നിന്നും ഒരു പകറ്‍പ്പ് ലഭ്യമാകുന്നു:\n"
+"\t%s"
 
 #: ../gtk/gtkicontheme.c:1501
 #, c-format
 msgid "Icon '%s' not present in theme"
-msgstr ""
+msgstr "പ്റമേയത്തില്‍ '%s' എന്ന പ്റതിരൂപം ലഭ്യമല്ല"
 
 #: ../gtk/gtkicontheme.c:2915
 msgid "Failed to load icon"
-msgstr ""
+msgstr "പ്റതിരൂപം ലഭ്യമാക്കുന്നതില്‍ പരാജയം"
 
 #: ../gtk/gtkimmodule.c:421
-#, fuzzy
 msgid "Default"
-msgstr "സ്വതേയുള്ള വീതി"
+msgstr "സ്വതേയുള്ള "
 
 #: ../gtk/gtkinputdialog.c:190
 msgid "Input"
-msgstr ""
+msgstr "ഇന്‍പുട്ട്"
 
 #: ../gtk/gtkinputdialog.c:205
 msgid "No extended input devices"
-msgstr ""
+msgstr "എക്സ്റ്റെന്‍ഡഡ് ഇന്‍പുട്ട് ഡിവൈസുകള്‍ ലഭ്യമല്ല"
 
 #: ../gtk/gtkinputdialog.c:218
 msgid "_Device:"
-msgstr ""
+msgstr "ഡിവൈസ് (_D):"
 
 #: ../gtk/gtkinputdialog.c:235
-#, fuzzy
 msgid "Disabled"
-msgstr "ദൃശ്യമായ"
+msgstr "പ്റവറ്‍ത്തന രഹിതം"
 
 #: ../gtk/gtkinputdialog.c:242
 msgid "Screen"
 msgstr "സ്ക്രീന്‍"
 
 #: ../gtk/gtkinputdialog.c:249
-#, fuzzy
 msgid "Window"
-msgstr "ജാലക തരം‌"
+msgstr "ജാലകം"
 
 #: ../gtk/gtkinputdialog.c:256
-#, fuzzy
 msgid "_Mode:"
-msgstr "രീതി"
+msgstr "മോഡ് (_M):"
 
 #. The axis listbox
 #: ../gtk/gtkinputdialog.c:277
 msgid "Axes"
-msgstr ""
+msgstr "ആക്സെസ്"
 
 #. Keys listbox
 #: ../gtk/gtkinputdialog.c:295
 msgid "Keys"
-msgstr ""
+msgstr "കീകള്‍"
 
 #: ../gtk/gtkinputdialog.c:522
 msgid "_X:"
@@ -2028,79 +2001,77 @@ msgstr "_Y:"
 
 #: ../gtk/gtkinputdialog.c:524
 msgid "_Pressure:"
-msgstr ""
+msgstr "പ്റഷറ്‍ (_P): "
 
 #: ../gtk/gtkinputdialog.c:525
 msgid "X _tilt:"
-msgstr ""
+msgstr "X _tilt:"
 
 #: ../gtk/gtkinputdialog.c:526
 msgid "Y t_ilt:"
-msgstr ""
+msgstr "Y t_ilt:"
 
 #: ../gtk/gtkinputdialog.c:527
 msgid "_Wheel:"
-msgstr ""
+msgstr "ചക്റം (_W):"
 
 #: ../gtk/gtkinputdialog.c:579
 msgid "none"
-msgstr ""
+msgstr "ഒന്നുമില്ല"
 
 #: ../gtk/gtkinputdialog.c:616 ../gtk/gtkinputdialog.c:652
-#, fuzzy
 msgid "(disabled)"
-msgstr "ചിട്ടപ്പെടുത്തിയ"
+msgstr "(പ്റവറ്‍ത്തന രഹിതം)"
 
 #: ../gtk/gtkinputdialog.c:645
 msgid "(unknown)"
-msgstr ""
+msgstr "(അപരിചിതം)"
 
 #. and clear button
 #: ../gtk/gtkinputdialog.c:749
 msgid "Cl_ear"
-msgstr ""
+msgstr "വെടിപ്പാക്കുക (_e)"
 
 #: ../gtk/gtklinkbutton.c:141
 msgid "URI"
 msgstr "URI"
 
 #: ../gtk/gtklinkbutton.c:142
-#, fuzzy
 msgid "The URI bound to this button"
-msgstr "ബട്ടണ്‍ മറ്റൊന്നിലേക്ക് മാറിയ അവസ്ഥ"
+msgstr "ഈ ബട്ടണിലേക്കുള്ള URI ബൌണ്ട്"
 
 #: ../gtk/gtklinkbutton.c:396
 msgid "Copy URL"
-msgstr ""
+msgstr "URL പകറ്‍ത്തുക"
 
 #: ../gtk/gtklinkbutton.c:536
 msgid "Invalid URI"
-msgstr ""
+msgstr "തെറ്റായ URI"
 
 #. Description of --gtk-module=MODULES in --help output
 #: ../gtk/gtkmain.c:409
 msgid "Load additional GTK+ modules"
-msgstr ""
+msgstr "കൂടുതല്‍ GTK+ ഘടകങ്ങള്‍ ലഭ്യമാക്കുക"
 
 #. Placeholder in --gtk-module=MODULES in --help output
 #: ../gtk/gtkmain.c:410
 msgid "MODULES"
-msgstr ""
+msgstr "ഘടകങ്ങള്‍"
 
 #. Description of --g-fatal-warnings in --help output
 #: ../gtk/gtkmain.c:412
 msgid "Make all warnings fatal"
-msgstr ""
+msgstr "എല്ലാ മുന്നറിയിപ്പുകളും പ്റധാനമാക്കുക"
 
 #. Description of --gtk-debug=FLAGS in --help output
 #: ../gtk/gtkmain.c:415
 msgid "GTK+ debugging flags to set"
-msgstr ""
+msgstr "ക്റമികരിക്കാനുള്ള GTK+ ഡീബഗ്ഗിങ് ഫ്ളാഗുകള്‍"
 
 #. Description of --gtk-no-debug=FLAGS in --help output
 #: ../gtk/gtkmain.c:418
 msgid "GTK+ debugging flags to unset"
-msgstr ""
+msgstr "നിറ്‍ജ്ജീവമാക്കുവാനുള്ള GTK+ ഡീബഗ്ഗിങ് ഫ്ളാഗുകള്‍ "
 
 #. Translate to default:RTL if you want your widgets
 #. * to be RTL, otherwise translate to default:LTR.
@@ -2113,32 +2084,29 @@ msgstr "default:LTR"
 
 #: ../gtk/gtkmain.c:751
 msgid "GTK+ Options"
-msgstr ""
+msgstr "GTK+ ഉപാധികള്‍"
 
 #: ../gtk/gtkmain.c:751
-#, fuzzy
 msgid "Show GTK+ Options"
-msgstr "ഫയലിന്‍റെ പ്രവര്‍ത്തനങ്ങള്‍ കാണിക്കുക"
+msgstr "GTK+ ഉപാധികള്‍ കാണിക്കുക"
 
 #: ../gtk/gtknotebook.c:828
-#, fuzzy
 msgid "Arrow spacing"
-msgstr "വരി വിടവ്"
+msgstr "ആരോ വിടവ്"
 
 #: ../gtk/gtknotebook.c:829
-#, fuzzy
 msgid "Scroll arrow spacing"
-msgstr "നിരക്കുപട്ട വിടവ്"
+msgstr "ആരോ വിടവ് സ്ക്രോള്‍ ചെയ്യുക"
 
 #: ../gtk/gtknotebook.c:4392 ../gtk/gtknotebook.c:6898
-#, fuzzy, c-format
+#, c-format
 msgid "Page %u"
-msgstr "പേജ്"
+msgstr "പേജ് %u"
 
 #: ../gtk/gtkpagesetup.c:570 ../gtk/gtkpapersize.c:825
 #: ../gtk/gtkpapersize.c:865
 msgid "Not a valid page setup file"
-msgstr ""
+msgstr "ശരിയായ പേജ് ക്റമികരണ ഫയല്‍ അല്ല"
 
 #. Translate to the default units to use for presenting
 #. * lengths to the user. Translate to default:inch if you
@@ -2155,6 +2123,8 @@ msgid ""
 "<b>Any Printer</b>\n"
 "For portable documents"
 msgstr ""
+"<b>ഏതെങ്കിലും പ്റിന്ററ്‍</b>\n"
+"മാറ്റുവാന്‍ സാധ്യമാകുന്ന രേഖകള്‍"
 
 #: ../gtk/gtkpagesetupunixdialog.c:883 ../gtk/gtkpagesetupunixdialog.c:1395
 msgid "mm"
@@ -2162,7 +2132,7 @@ msgstr "mm"
 
 #: ../gtk/gtkpagesetupunixdialog.c:885 ../gtk/gtkpagesetupunixdialog.c:1393
 msgid "inch"
-msgstr ""
+msgstr "ഇഞ്ച്"
 
 #: ../gtk/gtkpagesetupunixdialog.c:904
 #, c-format
@@ -2173,24 +2143,27 @@ msgid ""
 " Top: %s %s\n"
 " Bottom: %s %s"
 msgstr ""
+"മാറ്‍ജിന്‍:\n"
+" ഇടത്: %s %s\n"
+" വലത്: %s %s\n"
+" മുകളില്‍: %s %s\n"
+" താഴെ: %s %s"
 
 #: ../gtk/gtkpagesetupunixdialog.c:953
 msgid "Manage Custom Sizes..."
-msgstr ""
+msgstr "നിങ്ങള്‍ സജ്ജമാക്കിയ വ്യാപ്തികള്‍ കൈകാര്യം ചെയ്യുക..."
 
 #: ../gtk/gtkpagesetupunixdialog.c:1001
 msgid "_Format for:"
 msgstr ""
 
 #: ../gtk/gtkpagesetupunixdialog.c:1022
-#, fuzzy
 msgid "_Paper size:"
-msgstr "സ്ഥലശൈലി"
+msgstr "പേപ്പറിന്റെ വ്യാപ്തി (_P):"
 
 #: ../gtk/gtkpagesetupunixdialog.c:1058
-#, fuzzy
 msgid "_Orientation:"
-msgstr "സംവേദനം"
+msgstr "സംവേദനം (_O):"
 
 #: ../gtk/gtkpagesetupunixdialog.c:1121 ../gtk/gtkprintunixdialog.c:2145
 msgid "Page Setup"
@@ -2198,74 +2171,68 @@ msgstr "പേജിന്‍റെ ക്രമീകരണം"
 
 #: ../gtk/gtkpagesetupunixdialog.c:1440
 msgid "Margins from Printer..."
-msgstr ""
+msgstr "പ്റിന്ററില്‍ നിന്നുള്ള മാറ്‍ജിനുകള്‍"
 
 #: ../gtk/gtkpagesetupunixdialog.c:1600
 #, c-format
 msgid "Custom Size %d"
-msgstr ""
+msgstr "നിങ്ങള്‍ സജ്ജമാക്കിയ വ്യാപ്തി %d"
 
 #: ../gtk/gtkpagesetupunixdialog.c:1829
 msgid "Manage Custom Sizes"
-msgstr ""
+msgstr "നിങ്ങള്‍ സജ്ജമാക്കിയ വ്യാപ്തികള്‍ കൈകാര്യം ചെയ്യുക"
 
 #: ../gtk/gtkpagesetupunixdialog.c:1925
-#, fuzzy
 msgid "_Width:"
-msgstr "വീതി"
+msgstr "വീതി (_W):"
 
 #: ../gtk/gtkpagesetupunixdialog.c:1937
-#, fuzzy
 msgid "_Height:"
-msgstr "ഉയരം"
+msgstr "ഉയരം (_H):"
 
 #: ../gtk/gtkpagesetupunixdialog.c:1949
-#, fuzzy
 msgid "Paper Size"
-msgstr "പേജിന്‍റെ വലിപ്പം"
+msgstr "പേപ്പറിന്റെ വലിപ്പം"
 
 #: ../gtk/gtkpagesetupunixdialog.c:1959
 msgid "_Top:"
-msgstr ""
+msgstr "മുകളില്‍ (_T):"
 
 #: ../gtk/gtkpagesetupunixdialog.c:1971
 msgid "_Bottom:"
-msgstr ""
+msgstr "താഴെ (_B):"
 
 #: ../gtk/gtkpagesetupunixdialog.c:1983
 msgid "_Left:"
-msgstr ""
+msgstr "ഇടത്ത് (_L):"
 
 #: ../gtk/gtkpagesetupunixdialog.c:1995
-#, fuzzy
 msgid "_Right:"
-msgstr "ഉയരം"
+msgstr "വലത്ത് (_R):"
 
 #: ../gtk/gtkpagesetupunixdialog.c:2036
-#, fuzzy
 msgid "Paper Margins"
-msgstr "ഇടത് ക്രമീകരണം"
+msgstr "പേപ്പറിനുള്ള മാറ്‍ജിനുകള്‍"
 
 #: ../gtk/gtkpathbar.c:148
 msgid "Up Path"
-msgstr ""
+msgstr "മുകളിലേക്കുള്ള പാഥ്"
 
 #: ../gtk/gtkpathbar.c:150
 msgid "Down Path"
-msgstr ""
+msgstr "താഴേക്കുള്ള പാഥ്"
 
 #: ../gtk/gtkpathbar.c:1377
-#, fuzzy
 msgid "File System Root"
-msgstr "ഫയല്‍ സിസ്റ്റത്തിന്‍റെ ബാക്കെന്‍ഡ്"
+msgstr "ഫയല്‍ സിസ്റ്റം റൂട്ട്"
 
 #: ../gtk/gtkprinteroptionwidget.c:685
 msgid "Not available"
-msgstr ""
+msgstr "ലഭ്യമല്ല"
 
 #: ../gtk/gtkprinteroptionwidget.c:798
 msgid "_Save in folder:"
-msgstr ""
+msgstr "ഫോള്‍ഡറില്‍ സൂക്ഷിക്കുക (_S):"
 
 #. translators: this string is the default job title for print
 #. * jobs. %s gets replaced by the application name, %d gets replaced
@@ -2274,32 +2241,32 @@ msgstr ""
 #: ../gtk/gtkprintoperation.c:171
 #, c-format
 msgid "%s job #%d"
-msgstr ""
+msgstr "%s ജോലി #%d"
 
 #. translators, strip the prefix up to and including the first |
 #: ../gtk/gtkprintoperation.c:1497
 msgid "print operation status|Initial state"
-msgstr ""
+msgstr "ആദ്യത്തെ അവസ്ഥ"
 
 #. translators, strip the prefix up to and including the first |
 #: ../gtk/gtkprintoperation.c:1499
 msgid "print operation status|Preparing to print"
-msgstr ""
+msgstr "പ്റിന്റ് ചെയ്യുന്നതിനുള്ള തയ്യാറെടുപ്പ്"
 
 #. translators, strip the prefix up to and including the first |
 #: ../gtk/gtkprintoperation.c:1501
 msgid "print operation status|Generating data"
-msgstr ""
+msgstr "ഡേറ്റാ ഉണ്ടാക്കുന്നു"
 
 #. translators, strip the prefix up to and including the first |
 #: ../gtk/gtkprintoperation.c:1503
 msgid "print operation status|Sending data"
-msgstr ""
+msgstr "ഡേറ്റാ അയയ്ക്കുന്നു"
 
 #. translators, strip the prefix up to and including the first |
 #: ../gtk/gtkprintoperation.c:1505
 msgid "print operation status|Waiting"
-msgstr ""
+msgstr "കാത്തിരിക്കുന്നു"
 
 #. translators, strip the prefix up to and including the first |
 #: ../gtk/gtkprintoperation.c:1507
@@ -2309,32 +2276,31 @@ msgstr ""
 #. translators, strip the prefix up to and including the first |
 #: ../gtk/gtkprintoperation.c:1509
 msgid "print operation status|Printing"
-msgstr ""
+msgstr "പ്റിന്റ് ചെയ്യുന്നു"
 
 #. translators, strip the prefix up to and including the first |
 #: ../gtk/gtkprintoperation.c:1511
 msgid "print operation status|Finished"
-msgstr ""
+msgstr "പൂറ്‍ത്തിയായിരിക്കുന്നു"
 
 #. translators, strip the prefix up to and including the first |
 #: ../gtk/gtkprintoperation.c:1513
 msgid "print operation status|Finished with error"
-msgstr ""
+msgstr "പിശകോടെ പൂറ്‍ത്തിയാക്കിയിരിക്കുന്നു"
 
 #: ../gtk/gtkprintoperation.c:1986
 #, c-format
 msgid "Preparing %d"
-msgstr ""
+msgstr "%d തയ്യാറാക്കുന്നു"
 
 #: ../gtk/gtkprintoperation.c:1988 ../gtk/gtkprintoperation.c:2240
-#, fuzzy
 msgid "Preparing"
-msgstr "സ്പെയിസിങ്"
+msgstr "തയ്യാറാക്കുന്നു"
 
 #: ../gtk/gtkprintoperation.c:1991
-#, fuzzy, c-format
+#, c-format
 msgid "Printing %d"
-msgstr "പ്രിന്‍റ് ചെയ്യുന്നതിനുളള സജ്ജീകരണങ്ങള്‍"
+msgstr "%d പ്റിന്റ് ചെയ്യുന്നു"
 
 #: ../gtk/gtkprintoperation-unix.c:243
 msgid "Error launching preview"
@@ -2342,60 +2308,56 @@ msgstr ""
 
 #: ../gtk/gtkprintoperation-unix.c:281
 msgid "Error printing"
-msgstr ""
+msgstr "പ്റിന്റ് ചെയ്യുന്നതില്‍ പിശക്"
 
 #: ../gtk/gtkprintoperation-unix.c:388 ../gtk/gtkprintoperation-win32.c:1394
-#, fuzzy
 msgid "Application"
-msgstr "പ്രവര്‍ത്തനം"
+msgstr "പ്റയോഗം"
 
 #: ../gtk/gtkprintoperation-win32.c:564
-#, fuzzy
 msgid "Printer offline"
-msgstr "പ്രിന്‍ററിന്‍റെ ക്രമീകരണങ്ങള്‍"
+msgstr "പ്രിന്ററ്‍ നെറ്റ്‌വറ്‍ക്കിലില്ല"
 
 #: ../gtk/gtkprintoperation-win32.c:566
 msgid "Out of paper"
-msgstr ""
+msgstr "പേപ്പറ്‍ തീറ്‍ന്നിരിക്കുന്നു"
 
 #: ../gtk/gtkprintoperation-win32.c:568
-#, fuzzy
 msgid "Paused"
-msgstr "പള്‍സ്"
+msgstr "തല്‍ക്കാലികമായി നിറ്‍ത്തിയിരിക്കുന്നു"
 
 #: ../gtk/gtkprintoperation-win32.c:570
 msgid "Need user intervention"
-msgstr ""
+msgstr "ഉപയോക്താവ് ഇടപടേണ്ടതുണ്ട്"
 
 #: ../gtk/gtkprintoperation-win32.c:670
-#, fuzzy
 msgid "Custom size"
-msgstr "കര്‍സര്‍ ഥീമിന്‍റെ വലിപ്പം"
+msgstr "നിങ്ങള്‍ വ്യാപ്തി സജ്ജമാക്കുക"
 
 #: ../gtk/gtkprintoperation-win32.c:1484 ../gtk/gtkprintoperation-win32.c:1507
 #: ../gtk/gtkprintoperation-win32.c:1555
 msgid "Not enough free memory"
-msgstr ""
+msgstr "ഉപയോഗിത്തിലില്ലാത്ത മെമ്മറി ലഭ്യമല്ല"
 
 #: ../gtk/gtkprintoperation-win32.c:1560
 msgid "Invalid argument to PrintDlgEx"
-msgstr ""
+msgstr "PrintDlgEx-നുള്ള തെറ്റായ ആറ്‍ഗ്യുമെന്റ്"
 
 #: ../gtk/gtkprintoperation-win32.c:1565
 msgid "Invalid pointer to PrintDlgEx"
-msgstr ""
+msgstr "PrintDlgEx-നുള്ള തെറ്റായ പോയിന്ററ്‍"
 
 #: ../gtk/gtkprintoperation-win32.c:1570
 msgid "Invalid handle to PrintDlgEx"
-msgstr ""
+msgstr "PrintDlgEx-നുള്ള തെറ്റായ ഹാന്‍ഡില്‍"
 
 #: ../gtk/gtkprintoperation-win32.c:1575
 msgid "Unspecified error"
-msgstr ""
+msgstr "വ്യക്തമാക്കാത്ത പിശക്"
 
 #: ../gtk/gtkprintoperation-win32.c:1626
 msgid "Error from StartDoc"
-msgstr ""
+msgstr "StartDoc-ല്‍ നിന്നും പിശക്"
 
 #: ../gtk/gtkprintunixdialog.c:1474
 msgid "Printer"
@@ -2410,37 +2372,37 @@ msgid "Status"
 msgstr "അവസ്ഥ"
 
 #: ../gtk/gtkprintunixdialog.c:1513
-#, fuzzy
 msgid "Print Pages"
-msgstr "നിലവിലുളള പേജ്"
+msgstr "പേജുകള്‍ പ്റിന്റ് ചെയ്യുക"
 
 #: ../gtk/gtkprintunixdialog.c:1517
 msgid "_All"
-msgstr ""
+msgstr "എല്ലാം (_A)"
 
 #: ../gtk/gtkprintunixdialog.c:1524
-#, fuzzy
 msgid "C_urrent"
-msgstr "നിലവിലുളള പേജ്"
+msgstr "നിലവിലുളള (_u)"
 
 #: ../gtk/gtkprintunixdialog.c:1533
 msgid "Ra_nge"
-msgstr ""
+msgstr "പരിധി (_n)"
 
 #: ../gtk/gtkprintunixdialog.c:1534
 msgid ""
 "Specify one or more page ranges,\n"
 " e.g. 1-3,7,11"
 msgstr ""
+"ഒന്നോ അതിലധികമോ പേജ് പരിധികള്‍ നല്‍കുക,\n"
+" ഉദാ. 1-3,7,11"
 
 #: ../gtk/gtkprintunixdialog.c:1553
 msgid "Copies"
-msgstr ""
+msgstr "പകറ്‍പ്പുകള്‍"
 
 #. FIXME chpe: too much space between Copies and spinbutton, put those 2 in a hbox and make it span 2 columns
 #: ../gtk/gtkprintunixdialog.c:1558
 msgid "Copie_s:"
-msgstr ""
+msgstr "പകറ്‍പ്പുകള്‍ (_s):"
 
 #: ../gtk/gtkprintunixdialog.c:1576
 msgid "C_ollate"
@@ -2448,57 +2410,52 @@ msgstr ""
 
 #: ../gtk/gtkprintunixdialog.c:1584
 msgid "_Reverse"
-msgstr ""
+msgstr "തിരിക്കുക (_R)"
 
 #: ../gtk/gtkprintunixdialog.c:1601
 msgid "General"
-msgstr ""
+msgstr "സാധാരണ"
 
 #: ../gtk/gtkprintunixdialog.c:2001
-#, fuzzy
 msgid "Layout"
-msgstr "ലേയൌട്ട് സ്റ്റൈല്‍"
+msgstr "ലേയൌട്ട് "
 
 #: ../gtk/gtkprintunixdialog.c:2005
 msgid "Pages per _side:"
-msgstr ""
+msgstr "ഒരു വശത്ത് എത്റ പേജ് (_s):"
 
 #: ../gtk/gtkprintunixdialog.c:2021
 msgid "T_wo-sided:"
-msgstr ""
+msgstr "ഇരു വശമുള്ള (_w):"
 
 #: ../gtk/gtkprintunixdialog.c:2036
 msgid "_Only print:"
-msgstr ""
+msgstr "പ്റിന്റ് മാത്റം ചെയ്യുക (_O):"
 
 #. In enum order
 #: ../gtk/gtkprintunixdialog.c:2051
-#, fuzzy
 msgid "All sheets"
-msgstr "Align set"
+msgstr "എല്ലാ ഷീറ്റുകളും"
 
 #: ../gtk/gtkprintunixdialog.c:2052
-#, fuzzy
 msgid "Even sheets"
-msgstr "സംഭവങ്ങള്‌"
+msgstr "ഇവന്‍ ഷീറ്റുകള്‍"
 
 #: ../gtk/gtkprintunixdialog.c:2053
 msgid "Odd sheets"
-msgstr ""
+msgstr "ഓഡ് ഷീറ്റുകള്‍"
 
 #: ../gtk/gtkprintunixdialog.c:2056
 msgid "Sc_ale:"
-msgstr ""
+msgstr "അളവ് (_a):"
 
 #: ../gtk/gtkprintunixdialog.c:2083
-#, fuzzy
 msgid "Paper"
-msgstr "മാതൃക"
+msgstr "പേപ്പറ്‍"
 
 #: ../gtk/gtkprintunixdialog.c:2087
-#, fuzzy
 msgid "Paper _type:"
-msgstr "ഏത് തരം പേജ്"
+msgstr "ഏത് തരം പേപ്പറ്‍ (_t):"
 
 #: ../gtk/gtkprintunixdialog.c:2102
 msgid "Paper _source:"
@@ -2506,33 +2463,31 @@ msgstr ""
 
 #: ../gtk/gtkprintunixdialog.c:2117
 msgid "Output t_ray:"
-msgstr ""
+msgstr "ഔട്ട്പുട്ട് ട്റേ (_r):"
 
 #: ../gtk/gtkprintunixdialog.c:2168
-#, fuzzy
 msgid "Job Details"
-msgstr "വിശദവിവരങ്ങള്‍"
+msgstr "ജോലിയുടെ വിശദവിവരങ്ങള്‍"
 
 #: ../gtk/gtkprintunixdialog.c:2174
 msgid "Pri_ority:"
-msgstr ""
+msgstr "മുന്‍ഗണന (_o):"
 
 #: ../gtk/gtkprintunixdialog.c:2189
 msgid "_Billing info:"
-msgstr ""
+msgstr "ബില്ലിങ് വിവരം (_B): "
 
 #: ../gtk/gtkprintunixdialog.c:2207
-#, fuzzy
 msgid "Print Document"
-msgstr "എഴുത്തുകാര്‍"
+msgstr "രേഖ പ്റിന്റ് ചെയ്യുക"
 
 #: ../gtk/gtkprintunixdialog.c:2213
 msgid "_Now"
-msgstr ""
+msgstr "ഉടന്‍ (_N)"
 
 #: ../gtk/gtkprintunixdialog.c:2220
 msgid "A_t:"
-msgstr ""
+msgstr "എപ്പോള്‍ (_t):"
 
 #: ../gtk/gtkprintunixdialog.c:2235
 msgid "On _hold"
@@ -2540,46 +2495,43 @@ msgstr ""
 
 #: ../gtk/gtkprintunixdialog.c:2254
 msgid "Add Cover Page"
-msgstr ""
+msgstr "കവറ്‍ പേജ് ചേറ്‍ക്കുക"
 
 #: ../gtk/gtkprintunixdialog.c:2260
 msgid "Be_fore:"
-msgstr ""
+msgstr "മുമ്പ് (_f):"
 
 #: ../gtk/gtkprintunixdialog.c:2275
 msgid "_After:"
-msgstr ""
+msgstr "ശേഷം (_A):"
 
 #: ../gtk/gtkprintunixdialog.c:2290
 msgid "Job"
-msgstr ""
+msgstr "ജോലി"
 
 #: ../gtk/gtkprintunixdialog.c:2356
 msgid "Advanced"
-msgstr ""
+msgstr "പുരോഗമിച്ച"
 
 #: ../gtk/gtkprintunixdialog.c:2391
-#, fuzzy
 msgid "Image Quality"
-msgstr "ഇമേജ് വിഡ്ജറ്റ്"
+msgstr "ഇമേജിന്റെ നിലവാരം"
 
 #: ../gtk/gtkprintunixdialog.c:2394
-#, fuzzy
 msgid "Color"
-msgstr "കളര്‍ സ്പെയിസ്"
+msgstr "നിറം"
 
 #: ../gtk/gtkprintunixdialog.c:2397
 msgid "Finishing"
-msgstr ""
+msgstr "പൂറ്‍ത്തിയാക്കുന്നു"
 
 #: ../gtk/gtkprintunixdialog.c:2407
 msgid "Some of the settings in the dialog conflict"
 msgstr ""
 
 #: ../gtk/gtkprintunixdialog.c:2430
-#, fuzzy
 msgid "Print"
-msgstr "പ്രിന്‍റര്‍"
+msgstr "പ്രിന്റ് ചെയ്യുക"
 
 #: ../gtk/gtkradiotoolbutton.c:65
 msgid "Group"
@@ -2592,12 +2544,12 @@ msgstr ""
 #: ../gtk/gtkrc.c:2866
 #, c-format
 msgid "Unable to find include file: \"%s\""
-msgstr ""
+msgstr "include ഫയല്‍ ലഭ്യമാക്കുവാന്‍ സാധ്യമായില്ല: \"%s\""
 
 #: ../gtk/gtkrc.c:3494 ../gtk/gtkrc.c:3497
 #, c-format
 msgid "Unable to locate image file in pixmap_path: \"%s\""
-msgstr ""
+msgstr "pixmap_path-ല്‍ ഇമേജ് ഫയല്‍ ലഭ്യമാക്കുവാന്‍ സാധ്യമായില്ല: \"%s\""
 
 #: ../gtk/gtkrecentaction.c:155 ../gtk/gtkrecentaction.c:163
 #: ../gtk/gtkrecentchoosermenu.c:555 ../gtk/gtkrecentchoosermenu.c:563
@@ -2607,42 +2559,40 @@ msgstr ""
 
 #: ../gtk/gtkrecentchooserdefault.c:465
 msgid "Select which type of documents are shown"
-msgstr ""
+msgstr "ഏത് തരം രേഖകളാണ് പ്റദറ്‍ശിപ്പിച്ചിരിക്കുന്നത് എന്ന് തിരഞ്ഞെടുക്കുക"
 
 #: ../gtk/gtkrecentchooserdefault.c:1107 ../gtk/gtkrecentchooserdefault.c:1144
 #, c-format
 msgid "No item for URI '%s' found"
-msgstr ""
+msgstr "URI '%s'-നുള്ള വസ്തു ലഭ്യമല്ല"
 
 #: ../gtk/gtkrecentchooserdefault.c:1271
 msgid "Untitled filter"
-msgstr ""
+msgstr "തലക്കെട്ടില്ലാത്ത ഫില്‍‌റ്ററ്‍"
 
 #: ../gtk/gtkrecentchooserdefault.c:1626
 msgid "Could not remove item"
-msgstr ""
+msgstr "വസ്തു നീക്കം ചെയ്യുവാന്‍ സാധ്യമായില്ല"
 
 #: ../gtk/gtkrecentchooserdefault.c:1669
 msgid "Could not clear list"
-msgstr ""
+msgstr "പട്ടിക വെടിപ്പാക്കുവാന്‍ സാധ്യമായില്ല"
 
 #: ../gtk/gtkrecentchooserdefault.c:1753
-#, fuzzy
 msgid "Copy _Location"
-msgstr "സ്ഥാനം"
+msgstr "സ്ഥാനം പകറ്‍ത്തുക (_L)"
 
 #: ../gtk/gtkrecentchooserdefault.c:1766
 msgid "_Remove From List"
-msgstr ""
+msgstr "പട്ടികയില്‍ നിന്നും നീക്കം ചെയ്യുക (_R)"
 
 #: ../gtk/gtkrecentchooserdefault.c:1775
 msgid "_Clear List"
-msgstr ""
+msgstr "പട്ടിക വെടിപ്പാക്കുക (_C)"
 
 #: ../gtk/gtkrecentchooserdefault.c:1789
-#, fuzzy
 msgid "Show _Private Resources"
-msgstr "സ്വകാര്യമായി കാണിക്കുക"
+msgstr "സ്വകാര്യ ഉറവിടങ്ങള്‍ കാണിക്കുക (_P)"
 
 #. we create a placeholder menuitem, to be used in case
 #. * the menu is empty. this placeholder will stay around
@@ -2656,7 +2606,7 @@ msgstr "സ്വകാര്യമായി കാണിക്കുക"
 #.
 #: ../gtk/gtkrecentchoosermenu.c:320
 msgid "No items found"
-msgstr ""
+msgstr "വസ്തുക്കള്‍ ലഭ്യമായില്ല"
 
 #: ../gtk/gtkrecentchoosermenu.c:475 ../gtk/gtkrecentchoosermenu.c:531
 #, c-format
@@ -2666,11 +2616,11 @@ msgstr ""
 #: ../gtk/gtkrecentchoosermenu.c:742
 #, c-format
 msgid "Open '%s'"
-msgstr ""
+msgstr "'%s' തുറക്കുക"
 
 #: ../gtk/gtkrecentchoosermenu.c:772
 msgid "Unknown item"
-msgstr ""
+msgstr "അപരിചിതമായ വസ്തു"
 
 #. This is the label format that is used for the first 10 items
 #. * in a recent files menu. The %d is the number of the item,
@@ -2698,42 +2648,39 @@ msgstr "%d. %s"
 #: ../gtk/gtkrecentmanager.c:1198 ../gtk/gtkrecentmanager.c:1251
 #, c-format
 msgid "Unable to find an item with URI '%s'"
-msgstr ""
+msgstr "'%s' എന്ന URI ഉള്ള ഒരു വസ്തു ലഭ്യമായില്ല"
 
 #. KEEP IN SYNC with gtkiconfactory.c stock icons, when appropriate
 #: ../gtk/gtkstock.c:288
-#, fuzzy
 msgid "Information"
-msgstr "ആനിമേഷന്‍"
+msgstr "വിവരം"
 
 #: ../gtk/gtkstock.c:289
-#, fuzzy
 msgid "Warning"
-msgstr "മാര്‍ജിന്‍"
+msgstr "മുന്നറിയിപ്പ്"
 
 #: ../gtk/gtkstock.c:290
 msgid "Error"
-msgstr ""
+msgstr "പിശക്"
 
 #: ../gtk/gtkstock.c:291
-#, fuzzy
 msgid "Question"
-msgstr "മൂല്യ സ്ഥാനം"
+msgstr "ചോദ്യം"
 
 #. FIXME these need accelerators when appropriate, and
 #. * need the mnemonics to be rationalized
 #.
 #: ../gtk/gtkstock.c:296
 msgid "_About"
-msgstr ""
+msgstr "സംബന്ധിച്ച് (_A)"
 
 #: ../gtk/gtkstock.c:298
 msgid "_Apply"
-msgstr ""
+msgstr "കംപ്യൂട്ടറില്‍ സൂക്ഷിക്കുക (_A)"
 
 #: ../gtk/gtkstock.c:299
 msgid "_Bold"
-msgstr "അക്ഷരം "
+msgstr "ബോള്‍ഡ് (_B)"
 
 #: ../gtk/gtkstock.c:300
 msgid "_Cancel"
