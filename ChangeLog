@@ -1,3 +1,8 @@
+2007-09-10  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtksearchenginesimple.h: Replace a duplicate G_END_DECLS by
+	G_BEGIN_DECLS.  (#475439, Nigel Tao)
+
 2007-09-10  Kristian Rietveld  <kris@imendio.com>
 
 	* gtk/gtkmenutoolbutton.c (gtk_menu_tool_button_construct_contents):
