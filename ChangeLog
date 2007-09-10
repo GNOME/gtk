@@ -1,3 +1,8 @@
+2007-09-10  Richard Hult  <richard@imendio.com>
+
+	* gtk/gtksearchenginesimple.h: Build fix, correct a typo in the
+	G_BEGIN_DECLS fix below.
+
 2007-09-10  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtksearchenginesimple.h: Replace a duplicate G_END_DECLS by

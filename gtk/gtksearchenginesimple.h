@@ -25,7 +25,7 @@
 
 #include "gtksearchengine.h"
 
-G_BEGINE_DECLS
+G_BEGIN_DECLS
 
 #define GTK_TYPE_SEARCH_ENGINE_SIMPLE		(_gtk_search_engine_simple_get_type ())
 #define GTK_SEARCH_ENGINE_SIMPLE(obj)		(G_TYPE_CHECK_INSTANCE_CAST ((obj), GTK_TYPE_SEARCH_ENGINE_SIMPLE, GtkSearchEngineSimple))
