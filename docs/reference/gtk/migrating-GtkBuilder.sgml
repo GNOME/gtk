@@ -9,6 +9,16 @@
   </para>
 
   <para>
+    A good way to start a migration from libglade to GtkBuilder is
+    to run the <link linkend="gtk-builder-convert">gtk-builder-convert</link>
+    utility on your glade file, and inspect the resulting output.
+    If your code uses the @root parameter of glade_xml_new(), you 
+    may want to split your glade file into multiple GtkBuilder files
+    by using the <option>--root</option> option of 
+    <application>gtk-builder-convert</application>.
+  </para>
+
+  <para>
     While GtkBuilder strives to be a complete replacement for
     libglade, there are a number of areas where it is currently
     still behind libglade:
@@ -21,9 +31,8 @@
         to implement, see 
         <ulink url="http://bugzilla.gnome.org/show_bug.cgi?id=447998">bug 
         447998</ulink>. As a workaround, you can split your glade file 
-        into multiple GtkBuilder input files. The 
-        <application>gtk-builder-convert</application> conversion script 
-        has a <option>--root</option> option that can help with this.
+        into multiple GtkBuilder input files using the <option>--root</option>
+        that was mentioned above.
       </para></listitem>
 
       <listitem><para>
