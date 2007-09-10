@@ -1,5 +1,11 @@
 2007-09-10  Kristian Rietveld  <kris@imendio.com>
 
+	* gtk/gtkmenutoolbutton.c (gtk_menu_tool_button_construct_contents):
+	when creating a new box, be sure to transfer a possible tooltip from
+	the old to the new box. (Fixes #458283, reported by Christian Persch).
+
+2007-09-10  Kristian Rietveld  <kris@imendio.com>
+
 	* gtk/gtktreeview.c (gtk_tree_view_key_press): only start
 	typeahead search if tree_view has focus (and not one of the column
 	buttons).

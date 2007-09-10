@@ -106,6 +106,17 @@ gtk_menu_tool_button_construct_contents (GtkMenuToolButton *button)
 
   if (priv->box)
     {
+      gchar *tmp;
+
+      /* Transfer a possible tooltip to the new box */
+      g_object_get (priv->box, "tooltip-markup", &tmp, NULL);
+
+      if (tmp)
+        {
+	  g_object_set (box, "tooltip-markup", tmp, NULL);
+	  g_free (tmp);
+	}
+
       /* Note: we are not destroying the button and the arrow_button
        * here because they were removed from their container above
        */
