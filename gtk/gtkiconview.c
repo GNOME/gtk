@@ -2284,6 +2284,10 @@ gtk_icon_view_item_hit_test (GtkIconView      *icon_view,
   GList *l;
   GdkRectangle box;
  
+  if (MIN (x + width, item->x + item->width) - MAX (x, item->x) <= 0 ||
+      MIN (y + height, item->y + item->height) - MAX (y, item->y) <= 0)
+    return FALSE;
+
   for (l = icon_view->priv->cell_list; l; l = l->next)
     {
       GtkIconViewCellInfo *info = (GtkIconViewCellInfo *)l->data;
@@ -2705,6 +2709,8 @@ gtk_icon_view_get_cell_area (GtkIconView         *icon_view,
 			     GtkIconViewCellInfo *info,
 			     GdkRectangle        *cell_area)
 {
+  g_return_if_fail (info->position < item->n_cells);
+
   if (icon_view->priv->orientation == GTK_ORIENTATION_HORIZONTAL)
     {
       cell_area->x = item->box[info->position].x - item->before[info->position];
@@ -2729,6 +2735,8 @@ gtk_icon_view_get_cell_box (GtkIconView         *icon_view,
 			    GtkIconViewCellInfo *info,
 			    GdkRectangle        *box)
 {
+  g_return_if_fail (info->position < item->n_cells);
+
   *box = item->box[info->position];
 }
 

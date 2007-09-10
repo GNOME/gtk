@@ -1,5 +1,11 @@
 2007-09-09  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkiconview.c (gtk_icon_view_item_hit_test): Add a 
+	bounding box test that will avoid getting the individual cell
+	boxes if they haven't been calculated yet.  (#404541)
+
+2007-09-09  Matthias Clasen  <mclasen@redhat.com>
+
 	* gtk/gtkaction.c:
 	* gtk/gtkradioaction.c:
 	* gtk/gtkrecentaction.c:
