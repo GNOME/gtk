@@ -5340,7 +5340,8 @@ gtk_tree_view_key_press (GtkWidget   *widget,
 
   /* We pass the event to the search_entry.  If its text changes, then we start
    * the typeahead find capabilities. */
-  if (tree_view->priv->enable_search
+  if (GTK_WIDGET_HAS_FOCUS (tree_view)
+      && tree_view->priv->enable_search
       && !tree_view->priv->search_custom_entry_set)
     {
       GdkEvent *new_event;

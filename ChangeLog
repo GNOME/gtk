@@ -1,3 +1,9 @@
+2007-09-10  Kristian Rietveld  <kris@imendio.com>
+
+	* gtk/gtktreeview.c (gtk_tree_view_key_press): only start
+	typeahead search if tree_view has focus (and not one of the column
+	buttons).
+
 2007-09-09  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtkdnd.c (gtk_drag_source_info_destroy): Remove
