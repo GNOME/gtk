@@ -1,3 +1,9 @@
+2007-09-10  Behdad Esfahbod  <behdad@gnome.org>
+
+	* gdk/x11/gdkgeometry-x11.c (gdk_window_queue),
+	(_gdk_window_process_expose): Fix serial number comparison regression
+	introduced recently. (#474897)
+
 2007-09-10  Richard Hult  <richard@imendio.com>
 
 	* gtk/gtksearchenginesimple.h: Build fix, correct a typo in the
