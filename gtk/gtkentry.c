@@ -901,7 +901,7 @@ gtk_entry_class_init (GtkEntryClass *class)
   /**
    * GtkSettings:gtk-entry-password-hint-timeout:
    *
-   * How long to show the last inputted character in hidden
+   * How long to show the last input character in hidden
    * entries. This value is in milliseconds. 0 disables showing the
    * last char. 600 is a good value for enabling it.
    *
@@ -909,7 +909,7 @@ gtk_entry_class_init (GtkEntryClass *class)
    */
   gtk_settings_install_property (g_param_spec_uint ("gtk-entry-password-hint-timeout",
                                                     P_("Password Hint Timeout"),
-                                                    P_("How long to show the last inputted character in hidden entries"),
+                                                    P_("How long to show the last input character in hidden entries"),
                                                     0, G_MAXUINT, 0,
                                                     GTK_PARAM_READWRITE));
 
@@ -3403,7 +3403,7 @@ gtk_entry_create_layout (GtkEntry *entry,
                              entry->text_length -
                              password_hint->password_hint_position);
 
-              /* Now remove this last inputted character, don't need
+              /* Now remove this last input character, don't need
                * it anymore
                */
               memset (password_hint->password_hint, 0, PASSWORD_HINT_MAX);
