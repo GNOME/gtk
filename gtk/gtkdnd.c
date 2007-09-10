@@ -3803,6 +3803,9 @@ gtk_drag_source_info_destroy (GtkDragSourceInfo *info)
   if (info->drop_timeout)
     g_source_remove (info->drop_timeout);
 
+  if (info->update_idle)
+    g_source_remove (info->update_idle);
+
   g_free (info);
 }
 
@@ -3857,7 +3860,7 @@ gtk_drag_update_idle (gpointer data)
 static void
 gtk_drag_add_update_idle (GtkDragSourceInfo *info)
 {
-  /* We use an idle lowerthan GDK_PRIORITY_REDRAW so that exposes
+  /* We use an idle lower than GDK_PRIORITY_REDRAW so that exposes
    * from the last move can catch up before we move again.
    */
   if (!info->update_idle)
