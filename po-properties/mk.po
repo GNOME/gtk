@@ -1,4 +1,4 @@
-# translation of gtk+-properties.HEAD.mk.po to Macedonian
+# translation of gtk+-properties.HEAD.po to Macedonian
 # This file is distributed under the same license as the PACKAGE package.
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER.
 #
@@ -6,13 +6,14 @@
 # Арангел Ангов <ufo@linux.net.mk>, 2005.
 # Arangel Angov <ufo@linux.net.mk>, 2005, 2006.
 # Jovan Naumovski <jovan@lugola.net>, 2006, 2007.
+# Arangel Angov <arangel@linux.net.mk>, 2007.
 msgid ""
 msgstr ""
-"Project-Id-Version: gtk+-properties.HEAD.mk\n"
+"Project-Id-Version: gtk+-properties.HEAD\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-08-16 03:57+0100\n"
-"PO-Revision-Date: 2007-09-04 17:00+0200\n"
-"Last-Translator: Jovan Naumovski <jovan@lugola.net>\n"
+"POT-Creation-Date: 2007-09-11 03:59+0100\n"
+"PO-Revision-Date: 2007-09-11 09:40+0200\n"
+"Last-Translator: Arangel Angov <arangel@linux.net.mk>\n"
 "Language-Team: Macedonian <ossm-members@hedona.on.net.mk>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -803,7 +804,7 @@ msgstr "Use stock"
 msgid "If set, the label is used to pick a stock item instead of being displayed"
 msgstr "If set, the label is used to pick a stock item instead of being displayed"
 
-#: ../gtk/gtkbutton.c:223 ../gtk/gtkcombobox.c:784
+#: ../gtk/gtkbutton.c:223 ../gtk/gtkcombobox.c:785
 #: ../gtk/gtkfilechooserbutton.c:401
 msgid "Focus on click"
 msgstr "Focus on click"
@@ -1253,7 +1254,7 @@ msgid "Orientation and growth direction of the progress bar"
 msgstr "Orientation and growth direction of the progress bar"
 
 #: ../gtk/gtkcellrendererspin.c:93 ../gtk/gtkprogressbar.c:122
-#: ../gtk/gtkrange.c:345 ../gtk/gtkscalebutton.c:200
+#: ../gtk/gtkrange.c:346 ../gtk/gtkscalebutton.c:200
 #: ../gtk/gtkspinbutton.c:207
 msgid "Adjustment"
 msgstr "Adjustment"
@@ -1486,7 +1487,7 @@ msgstr ""
 "How to break the string into multiple lines, if the cell renderer does not "
 "have enough room to display the entire string"
 
-#: ../gtk/gtkcellrenderertext.c:468 ../gtk/gtkcombobox.c:673
+#: ../gtk/gtkcellrenderertext.c:468 ../gtk/gtkcombobox.c:674
 msgid "Wrap width"
 msgstr "Завиткај широчина"
 
@@ -1826,67 +1827,67 @@ msgstr "Вредност во листата"
 msgid "Whether entered values must already be present in the list"
 msgstr "Дали внесената вредност мора да биде присутна на листата"
 
-#: ../gtk/gtkcombobox.c:656
+#: ../gtk/gtkcombobox.c:657
 msgid "ComboBox model"
 msgstr "ComboBox model"
 
-#: ../gtk/gtkcombobox.c:657
+#: ../gtk/gtkcombobox.c:658
 msgid "The model for the combo box"
 msgstr "The model for the combo box"
 
-#: ../gtk/gtkcombobox.c:674
+#: ../gtk/gtkcombobox.c:675
 msgid "Wrap width for laying out the items in a grid"
 msgstr "Зголеми ја ширината за поставување на предметите на мрежата"
 
-#: ../gtk/gtkcombobox.c:696
+#: ../gtk/gtkcombobox.c:697
 msgid "Row span column"
 msgstr "Row span column"
 
-#: ../gtk/gtkcombobox.c:697
+#: ../gtk/gtkcombobox.c:698
 msgid "TreeModel column containing the row span values"
 msgstr "TreeModel column containing the row span values"
 
-#: ../gtk/gtkcombobox.c:718
+#: ../gtk/gtkcombobox.c:719
 msgid "Column span column"
 msgstr "Column span column"
 
-#: ../gtk/gtkcombobox.c:719
+#: ../gtk/gtkcombobox.c:720
 msgid "TreeModel column containing the column span values"
 msgstr "TreeModel column containing the column span values"
 
-#: ../gtk/gtkcombobox.c:740
+#: ../gtk/gtkcombobox.c:741
 msgid "Active item"
 msgstr "Активен предмет"
 
-#: ../gtk/gtkcombobox.c:741
+#: ../gtk/gtkcombobox.c:742
 msgid "The item which is currently active"
 msgstr "Предметот кој што е моментално активен"
 
-#: ../gtk/gtkcombobox.c:760 ../gtk/gtkuimanager.c:220
+#: ../gtk/gtkcombobox.c:761 ../gtk/gtkuimanager.c:220
 msgid "Add tearoffs to menus"
 msgstr "Add tearoffs to menus"
 
-#: ../gtk/gtkcombobox.c:761
+#: ../gtk/gtkcombobox.c:762
 msgid "Whether dropdowns should have a tearoff menu item"
 msgstr "Whether dropdowns should have a tearoff menu item"
 
-#: ../gtk/gtkcombobox.c:776 ../gtk/gtkentry.c:522
+#: ../gtk/gtkcombobox.c:777 ../gtk/gtkentry.c:522
 msgid "Has Frame"
 msgstr "Има рамка"
 
-#: ../gtk/gtkcombobox.c:777
+#: ../gtk/gtkcombobox.c:778
 msgid "Whether the combo box draws a frame around the child"
 msgstr "Whether the combo box draws a frame around the child"
 
-#: ../gtk/gtkcombobox.c:785
+#: ../gtk/gtkcombobox.c:786
 msgid "Whether the combo box grabs focus when it is clicked with the mouse"
 msgstr "Whether the combo box grabs focus when it is clicked with the mouse"
 
-#: ../gtk/gtkcombobox.c:800 ../gtk/gtkmenu.c:484
+#: ../gtk/gtkcombobox.c:801 ../gtk/gtkmenu.c:484
 msgid "Tearoff Title"
 msgstr "Tearoff Title"
 
-#: ../gtk/gtkcombobox.c:801
+#: ../gtk/gtkcombobox.c:802
 msgid ""
 "A title that may be displayed by the window manager when the popup is torn-"
 "off"
@@ -1894,37 +1895,37 @@ msgstr ""
 "Ознака која може да биде прикажан од менаџерот на прозорци кога скокачкиот "
 "прозорец се одделува"
 
-#: ../gtk/gtkcombobox.c:818
+#: ../gtk/gtkcombobox.c:819
 msgid "Popup shown"
 msgstr "Прикажан е скокачки прозорец"
 
-#: ../gtk/gtkcombobox.c:819
+#: ../gtk/gtkcombobox.c:820
 msgid "Whether the combo's dropdown is shown"
 msgstr "Дали отпуштањето на комбинираните полиња е прикажано"
 
-#: ../gtk/gtkcombobox.c:825
+#: ../gtk/gtkcombobox.c:826
 msgid "Appears as list"
 msgstr "Се појавува на листата"
 
-#: ../gtk/gtkcombobox.c:826
+#: ../gtk/gtkcombobox.c:827
 msgid "Whether dropdowns should look like lists rather than menus"
 msgstr "Whether dropdowns should look like lists rather than menus"
 
-#: ../gtk/gtkcombobox.c:842
+#: ../gtk/gtkcombobox.c:843
 msgid "Arrow Size"
 msgstr "Големина на стрелка"
 
-#: ../gtk/gtkcombobox.c:843
+#: ../gtk/gtkcombobox.c:844
 msgid "The minimum size of the arrow in the combo box"
 msgstr "Минималната големина на стрелката во комбинираното поле"
 
-#: ../gtk/gtkcombobox.c:858 ../gtk/gtkentry.c:622 ../gtk/gtkhandlebox.c:176
+#: ../gtk/gtkcombobox.c:859 ../gtk/gtkentry.c:622 ../gtk/gtkhandlebox.c:176
 #: ../gtk/gtkmenubar.c:201 ../gtk/gtkstatusbar.c:186 ../gtk/gtktoolbar.c:613
 #: ../gtk/gtkviewport.c:122
 msgid "Shadow type"
 msgstr "Shadow type"
 
-#: ../gtk/gtkcombobox.c:859
+#: ../gtk/gtkcombobox.c:860
 msgid "Which kind of shadow to draw around the combo box"
 msgstr "Кој тип на сенка ќе се исцртува околу комбинираното поле"
 
@@ -2155,10 +2156,10 @@ msgid "Password Hint Timeout"
 msgstr "Временски лимит за прикажување совет за лозинка"
 
 #: ../gtk/gtkentry.c:912
-msgid "How long to show the last inputted character in hidden entries"
+msgid "How long to show the last input character in hidden entries"
 msgstr ""
 "Колку долго да го прикажува последно внесениот знак во скриените полиња за "
-"венсување"
+"внeсување"
 
 #: ../gtk/gtkentrycompletion.c:279
 msgid "Completion Model"
@@ -3103,11 +3104,11 @@ msgstr "Take Focus"
 msgid "A boolean that determines whether the menu grabs the keyboard focus"
 msgstr "A boolean that determines whether the menu grabs the keyboard focus"
 
-#: ../gtk/gtkmenutoolbutton.c:219 ../gtk/gtkoptionmenu.c:161
+#: ../gtk/gtkmenutoolbutton.c:230 ../gtk/gtkoptionmenu.c:161
 msgid "Menu"
 msgstr "Мени"
 
-#: ../gtk/gtkmenutoolbutton.c:220
+#: ../gtk/gtkmenutoolbutton.c:231
 msgid "The dropdown menu"
 msgstr "The dropdown menu"
 
@@ -3573,7 +3574,7 @@ msgid "Printer settings"
 msgstr "Поставувања на печатачот"
 
 #: ../gtk/gtkprintjob.c:143 ../gtk/gtkprintjob.c:144
-#: ../gtk/gtkprintunixdialog.c:229
+#: ../gtk/gtkprintunixdialog.c:240
 msgid "Page Setup"
 msgstr "Поставување на страница"
 
@@ -3597,11 +3598,11 @@ msgstr "Стандардно поставување на страница"
 msgid "The GtkPageSetup used by default"
 msgstr "GtkPageSetup поставувањето кое стандардно се користи"
 
-#: ../gtk/gtkprintoperation.c:896 ../gtk/gtkprintunixdialog.c:247
+#: ../gtk/gtkprintoperation.c:896 ../gtk/gtkprintunixdialog.c:258
 msgid "Print Settings"
 msgstr "Поставувања за печатење"
 
-#: ../gtk/gtkprintoperation.c:897 ../gtk/gtkprintunixdialog.c:248
+#: ../gtk/gtkprintoperation.c:897 ../gtk/gtkprintunixdialog.c:259
 msgid "The GtkPrintSettings used for initializing the dialog"
 msgstr ""
 "GtkPrintSettings поставувањата кои се користат за иницијализирање на "
@@ -3623,11 +3624,11 @@ msgstr "Број на страници"
 msgid "The number of pages in the document."
 msgstr "Бројот на страници во документот."
 
-#: ../gtk/gtkprintoperation.c:962 ../gtk/gtkprintunixdialog.c:237
+#: ../gtk/gtkprintoperation.c:962 ../gtk/gtkprintunixdialog.c:248
 msgid "Current Page"
 msgstr "Тековна страница"
 
-#: ../gtk/gtkprintoperation.c:963 ../gtk/gtkprintunixdialog.c:238
+#: ../gtk/gtkprintoperation.c:963 ../gtk/gtkprintunixdialog.c:249
 msgid "The current page in the document"
 msgstr "Тековната страница во документот"
 
@@ -3704,15 +3705,15 @@ msgstr "Сопствена ознака на јазичето"
 msgid "Label for the tab containing custom widgets."
 msgstr "Ознака на јазичето кое содржи прилагодени графички контроли."
 
-#: ../gtk/gtkprintunixdialog.c:230
+#: ../gtk/gtkprintunixdialog.c:241
 msgid "The GtkPageSetup to use"
 msgstr "GtkPageSetup поставувањето кое ќе се употребува"
 
-#: ../gtk/gtkprintunixdialog.c:255
+#: ../gtk/gtkprintunixdialog.c:266
 msgid "Selected Printer"
 msgstr "Избран печатач"
 
-#: ../gtk/gtkprintunixdialog.c:256
+#: ../gtk/gtkprintunixdialog.c:267
 msgid "The GtkPrinter which is selected"
 msgstr "GtkPrinter печатачот кој е избран"
 
@@ -3808,8 +3809,8 @@ msgid ""
 "The preferred place to ellipsize the string, if the progress bar does not "
 "have enough room to display the entire string, if at all."
 msgstr ""
-"Преферираното место за кратење на низата ако лентата за напредок "
-"нема доволно место за прикажување на целата низа."
+"Преферираното место за кратење на низата ако лентата за напредок нема "
+"доволно место за прикажување на целата низа."
 
 #: ../gtk/gtkprogressbar.c:218
 msgid "XSpacing"
@@ -3855,41 +3856,41 @@ msgstr "The radio button whose group this widget belongs to."
 msgid "The radio menu item whose group this widget belongs to."
 msgstr "Предмет од радио менито на чија група припаѓа оваа графичка контрола."
 
-#: ../gtk/gtkrange.c:336
+#: ../gtk/gtkrange.c:337
 msgid "Update policy"
 msgstr "Update policy"
 
-#: ../gtk/gtkrange.c:337
+#: ../gtk/gtkrange.c:338
 msgid "How the range should be updated on the screen"
 msgstr "How the range should be updated on the screen"
 
-#: ../gtk/gtkrange.c:346
+#: ../gtk/gtkrange.c:347
 msgid "The GtkAdjustment that contains the current value of this range object"
 msgstr "The GtkAdjustment that contains the current value of this range object"
 
-#: ../gtk/gtkrange.c:353
+#: ../gtk/gtkrange.c:354
 msgid "Inverted"
 msgstr "Inverted"
 
-#: ../gtk/gtkrange.c:354
+#: ../gtk/gtkrange.c:355
 msgid "Invert direction slider moves to increase range value"
 msgstr "Invert direction slider moves to increase range value"
 
-#: ../gtk/gtkrange.c:361
+#: ../gtk/gtkrange.c:362
 msgid "Lower stepper sensitivity"
 msgstr "Низок степен на чувствителност"
 
-#: ../gtk/gtkrange.c:362
+#: ../gtk/gtkrange.c:363
 msgid ""
 "The sensitivity policy for the stepper that points to the adjustment's lower "
 "side"
 msgstr "Правила за чувствителност кои покажуваат на ниската страна на прилагодувањата"
 
-#: ../gtk/gtkrange.c:370
+#: ../gtk/gtkrange.c:371
 msgid "Upper stepper sensitivity"
 msgstr "Високо ниво на чувствителност"
 
-#: ../gtk/gtkrange.c:371
+#: ../gtk/gtkrange.c:372
 msgid ""
 "The sensitivity policy for the stepper that points to the adjustment's upper "
 "side"
@@ -3897,83 +3898,83 @@ msgstr ""
 "Правила за чувствителност кои покажуваат на високата страна на "
 "прилагодувањата"
 
-#: ../gtk/gtkrange.c:388
+#: ../gtk/gtkrange.c:389
 msgid "Show Fill Level"
 msgstr "Покажи го нивото на пополнување"
 
-#: ../gtk/gtkrange.c:389
+#: ../gtk/gtkrange.c:390
 msgid "Whether to display a fill level indicator graphics on trough."
 msgstr "Дали да се прикажи ниво на пополнување."
 
-#: ../gtk/gtkrange.c:405
+#: ../gtk/gtkrange.c:406
 msgid "Restrict to Fill Level"
 msgstr "Ограничи на нивото на пополнување"
 
-#: ../gtk/gtkrange.c:406
+#: ../gtk/gtkrange.c:407
 msgid "Whether to restrict the upper boundary to the fill level."
 msgstr "Дали да се ограничи горната граница на нивото на ограничување."
 
-#: ../gtk/gtkrange.c:421
+#: ../gtk/gtkrange.c:422
 msgid "Fill Level"
 msgstr "Ниво на пополнување"
 
-#: ../gtk/gtkrange.c:422
+#: ../gtk/gtkrange.c:423
 msgid "The fill level."
 msgstr "Нивото на пополнување."
 
-#: ../gtk/gtkrange.c:430
+#: ../gtk/gtkrange.c:431
 msgid "Slider Width"
 msgstr "Slider Width"
 
-#: ../gtk/gtkrange.c:431
+#: ../gtk/gtkrange.c:432
 msgid "Width of scrollbar or scale thumb"
 msgstr "Width of scrollbar or scale thumb"
 
-#: ../gtk/gtkrange.c:438
+#: ../gtk/gtkrange.c:439
 msgid "Trough Border"
 msgstr "Trough Border"
 
-#: ../gtk/gtkrange.c:439
+#: ../gtk/gtkrange.c:440
 msgid "Spacing between thumb/steppers and outer trough bevel"
 msgstr "Spacing between thumb/steppers and outer trough bevel"
 
-#: ../gtk/gtkrange.c:446
+#: ../gtk/gtkrange.c:447
 msgid "Stepper Size"
 msgstr "Stepper Size"
 
-#: ../gtk/gtkrange.c:447
+#: ../gtk/gtkrange.c:448
 msgid "Length of step buttons at ends"
 msgstr "Length of step buttons at ends"
 
-#: ../gtk/gtkrange.c:462
+#: ../gtk/gtkrange.c:463
 msgid "Stepper Spacing"
 msgstr "Stepper Spacing"
 
-#: ../gtk/gtkrange.c:463
+#: ../gtk/gtkrange.c:464
 msgid "Spacing between step buttons and thumb"
 msgstr "Spacing between step buttons and thumb"
 
-#: ../gtk/gtkrange.c:470
+#: ../gtk/gtkrange.c:471
 msgid "Arrow X Displacement"
 msgstr "Arrow X Displacement"
 
-#: ../gtk/gtkrange.c:471
+#: ../gtk/gtkrange.c:472
 msgid "How far in the x direction to move the arrow when the button is depressed"
 msgstr "How far in the x direction to move the arrow when the button is depressed"
 
-#: ../gtk/gtkrange.c:478
+#: ../gtk/gtkrange.c:479
 msgid "Arrow Y Displacement"
 msgstr "Arrow Y Displacement"
 
-#: ../gtk/gtkrange.c:479
+#: ../gtk/gtkrange.c:480
 msgid "How far in the y direction to move the arrow when the button is depressed"
 msgstr "How far in the y direction to move the arrow when the button is depressed"
 
-#: ../gtk/gtkrange.c:487
+#: ../gtk/gtkrange.c:488
 msgid "Draw slider ACTIVE during drag"
 msgstr "Исцртај го лизгачот ACTIVE при влечење"
 
-#: ../gtk/gtkrange.c:488
+#: ../gtk/gtkrange.c:489
 msgid ""
 "With this option set to TRUE, sliders will be drawn ACTIVE and with shadow "
 "IN while they are dragged"
@@ -3981,11 +3982,11 @@ msgstr ""
 "Со поставување на оваа опција на TRUE, лизгачите ќе бидат исцртани ACTIVE и "
 "со сенката IN додека се влечени"
 
-#: ../gtk/gtkrange.c:502
+#: ../gtk/gtkrange.c:503
 msgid "Trough Side Details"
 msgstr "Детали за страната на полето"
 
-#: ../gtk/gtkrange.c:503
+#: ../gtk/gtkrange.c:504
 msgid ""
 "When TRUE, the parts of the trough on the two sides of the slider are drawn "
 "with different details"
@@ -3993,11 +3994,11 @@ msgstr ""
 "Кога е поставено на TRUE, деловите од полето на двете страни од лизгачот се "
 "исцртани со различни детали"
 
-#: ../gtk/gtkrange.c:519
+#: ../gtk/gtkrange.c:520
 msgid "Trough Under Steppers"
 msgstr "Поле под копчето на лентата за движење"
 
-#: ../gtk/gtkrange.c:520
+#: ../gtk/gtkrange.c:521
 msgid ""
 "Whether to draw trough for full length of range or exclude the steppers and "
 "spacing"
@@ -4183,7 +4184,9 @@ msgstr "Големина на иконата"
 
 #: ../gtk/gtkscalebutton.c:201
 msgid "The GtkAdjustment that contains the current value of this scale button object"
-msgstr "GtkAdjustment што ја содржи тековната вредност на овој објект за скалирање на копче"
+msgstr ""
+"GtkAdjustment што ја содржи тековната вредност на овој објект за скалирање "
+"на копче"
 
 #: ../gtk/gtkscalebutton.c:229
 msgid "Icons"
@@ -4520,8 +4523,8 @@ msgid ""
 "Whether the direction of the sort indicators in list and tree views is "
 "inverted compared to the default (where down means ascending)"
 msgstr ""
-"Дали насоката на индикаторите на вид во листата и дрвата "
-"е превртена за разлика од стандардната (каде надолу значи покачување)"
+"Дали насоката на индикаторите на вид во листата и дрвата е превртена за "
+"разлика од стандардната (каде надолу значи покачување)"
 
 #: ../gtk/gtksettings.c:452
 msgid "Show the 'Input Methods' menu"
@@ -4612,8 +4615,8 @@ msgstr "Време за истекување на прелистувањето �
 #: ../gtk/gtksettings.c:600
 msgid "Timeout before tooltip is shown when browse mode is enabled"
 msgstr ""
-"Време за истекување на прелистувањето на балончето за кое се прикажува "
-"кога е овозможен режимот за прелистување"
+"Време за истекување на прелистувањето на балончето за кое се прикажува кога "
+"е овозможен режимот за прелистување"
 
 #: ../gtk/gtksettings.c:621
 msgid "Tooltip browse mode timeout"
@@ -4629,7 +4632,9 @@ msgstr "Keynav само со стрелки"
 
 #: ../gtk/gtksettings.c:642
 msgid "When TRUE, there are only cursor keys available to navigate widgets"
-msgstr "Кога е TRUE, достапни се само копчињата со стрелки за навигација во графичките контроли"
+msgstr ""
+"Кога е TRUE, достапни се само копчињата со стрелки за навигација во "
+"графичките контроли"
 
 #: ../gtk/gtksettings.c:659
 msgid "Keynav Wrap Around"
@@ -4645,7 +4650,9 @@ msgstr "Ѕвонче за грешки"
 
 #: ../gtk/gtksettings.c:681
 msgid "When TRUE, keyboard navigation and other errors will cause a beep"
-msgstr "Кога е TRUE, навигацијата со тастатура и другите грешки ќе предизвикуваат бипкање"
+msgstr ""
+"Кога е TRUE, навигацијата со тастатура и другите грешки ќе предизвикуваат "
+"бипкање"
 
 #: ../gtk/gtksettings.c:698
 msgid "Color Hash"
