@@ -1,3 +1,10 @@
+2007-09-11  Michael Natterer  <mitch@imendio.com>
+
+	* gtk/gtkmenu.c (gtk_menu_button_release): Make sure
+	menu_shell->button gets reset to 0 when we bail out early here
+	instead of chaining up, so it is in a consistent state for the
+	next press/release in GtkMenuShell. Fixes bug #449371.
+
 2007-09-10  Kjartan Maraas  <kmaraas@gnome.org>
 
 	* gtk/gtkentry.c: Fix some typos. Closes bug #475400.

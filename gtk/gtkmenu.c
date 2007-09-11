@@ -2710,7 +2710,17 @@ gtk_menu_button_release (GtkWidget      *widget,
    */
   if (GTK_IS_MENU_SHELL (gtk_get_event_widget ((GdkEvent *) event)) &&
       pointer_in_menu_window (widget, event->x_root, event->y_root))
-    return TRUE;
+    {
+      /*  Ugly: make sure menu_shell->button gets reset to 0 when we
+       *  bail out early here so it is in a consistent state for the
+       *  next button_press/button_release in GtkMenuShell.
+       *  See bug #449371.
+       */
+      if (GTK_MENU_SHELL (widget)->active)
+        GTK_MENU_SHELL (widget)->button = 0;
+
+      return TRUE;
+    }
 
   return GTK_WIDGET_CLASS (gtk_menu_parent_class)->button_release_event (widget, event);
 }
