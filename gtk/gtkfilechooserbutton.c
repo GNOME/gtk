@@ -170,9 +170,6 @@ struct _GtkFileChooserButtonPrivate
   /* Used for hiding/showing the dialog when the button is hidden */
   guint8 active                       : 1;
 
-  /* Used to remember whether a title has been set yet, so we can use the default if it has not been set. */
-  guint8 has_title                    : 1;
-
   /* Used to track whether we need to set a default current folder on ::map() */
   guint8 folder_has_been_set          : 1;
 
@@ -678,11 +675,13 @@ gtk_file_chooser_button_constructor (GType                  type,
 					       GTK_RESPONSE_ACCEPT,
 					       GTK_RESPONSE_CANCEL,
 					       -1);
-    }
 
-  /* Set the default title if necessary. We must wait until the dialog has been created to do this. */
-  if (!priv->has_title)
-    gtk_file_chooser_button_set_title (button, _(DEFAULT_TITLE));
+      gtk_file_chooser_button_set_title (button, _(DEFAULT_TITLE));
+    }
+  else if (!GTK_WINDOW (priv->dialog)->title)
+    {
+      gtk_file_chooser_button_set_title (button, _(DEFAULT_TITLE));
+    }
 
   current_folder = gtk_file_chooser_get_current_folder_uri (GTK_FILE_CHOOSER (priv->dialog));
   if (current_folder != NULL)
@@ -716,7 +715,7 @@ gtk_file_chooser_button_constructor (GType                  type,
   g_signal_connect (priv->dialog, "notify",
 		    G_CALLBACK (dialog_notify_cb), object);
   g_object_add_weak_pointer (G_OBJECT (priv->dialog),
-			     (gpointer *) (&priv->dialog));
+			     (gpointer) (&priv->dialog));
 
   priv->fs =
     g_object_ref (_gtk_file_chooser_get_file_system (GTK_FILE_CHOOSER (priv->dialog)));
@@ -822,9 +821,6 @@ gtk_file_chooser_button_set_property (GObject      *object,
       break;
 
     case PROP_TITLE:
-      /* Remember that a title has been set, so we do no try to set it to the default in _init(). */
-      priv->has_title = TRUE;
-      /* Intentionally fall through instead of breaking here, to actually set the property. */
     case GTK_FILE_CHOOSER_PROP_FILTER:
     case GTK_FILE_CHOOSER_PROP_PREVIEW_WIDGET:
     case GTK_FILE_CHOOSER_PROP_PREVIEW_WIDGET_ACTIVE:
@@ -1622,7 +1618,7 @@ model_add_special_get_info_cb (GtkFileSystemHandle *handle,
   GdkPixbuf *pixbuf;
   GtkFileSystemHandle *model_handle;
   struct ChangeIconThemeData *data = user_data;
-  const gchar *name;
+  gchar *name;
 
   if (!data->button->priv->model)
     /* button got destroyed */
@@ -1681,7 +1677,7 @@ static inline void
 model_add_special (GtkFileChooserButton *button)
 {
   const gchar *homedir;
-  gchar *desktopdir = NULL;
+  const gchar *desktopdir;
   GtkListStore *store;
   GtkTreeIter iter;
   GtkFilePath *path;
@@ -2683,7 +2679,8 @@ dialog_response_cb (GtkDialog *dialog,
   GtkFileChooserButton *button = GTK_FILE_CHOOSER_BUTTON (user_data);
   GtkFileChooserButtonPrivate *priv = button->priv;
 
-  if (response == GTK_RESPONSE_ACCEPT)
+  if (response == GTK_RESPONSE_ACCEPT ||
+      response == GTK_RESPONSE_OK)
     {
       g_signal_emit_by_name (user_data, "current-folder-changed");
       g_signal_emit_by_name (user_data, "selection-changed");
@@ -2793,14 +2790,20 @@ gtk_file_chooser_button_new_with_backend (const gchar          *title,
 /**
  * gtk_file_chooser_button_new_with_dialog:
  * @dialog: the widget to use as dialog
- * 
- * Creates a #GtkFileChooserButton widget which uses @dialog as it's
- * file-picking window. Note that @dialog must be a #GtkDialog (or
- * subclass) which implements the #GtkFileChooser interface and must 
- * not have %GTK_DIALOG_DESTROY_WITH_PARENT set.
- * 
+ *
+ * Creates a #GtkFileChooserButton widget which uses @dialog as its
+ * file-picking window.
+ *
+ * Note that @dialog must be a #GtkDialog (or subclass) which
+ * implements the #GtkFileChooser interface and must not have
+ * %GTK_DIALOG_DESTROY_WITH_PARENT set.
+ *
+ * Also note that the dialog needs to have its confirmative button
+ * added with response %GTK_RESPONSE_ACCEPT or %GTK_RESPONSE_OK in
+ * order for the button to take over the file selected in the dialog.
+ *
  * Returns: a new button widget.
- * 
+ *
  * Since: 2.6
  **/
 GtkWidget *

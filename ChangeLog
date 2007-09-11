@@ -1,5 +1,14 @@
 2007-09-11  Michael Natterer  <mitch@imendio.com>
 
+	* gtk/gtkfilechooserbutton.c: remove useless member "has_title"
+	from the private struct and simply set the default title in
+	constructor() whenever we create a dialog or the supplied one has
+	no title. Also accept RESPONSE_ACCEPT *and* RESPONSE_OK as
+	affirmative responses and document that accordingly. Fixes bug
+	#436576. Fixed all compiler warnings in the file.
+
+2007-09-11  Michael Natterer  <mitch@imendio.com>
+
 	* gtk/gtkmenu.c (gtk_menu_button_release): Make sure
 	menu_shell->button gets reset to 0 when we bail out early here
 	instead of chaining up, so it is in a consistent state for the
