@@ -65,6 +65,20 @@ Overview of Changes from GTK+ 2.11.6 to 2.12.0
  473463 GtkButton doesn't have a GdkWindow like the docs say it does
  474282 Dead code in gtkmisc.c
  472951 gtkprintunixdialog should support custom tabs as buildable
+ 383003 Dragging text including non-ascii chars from epiphany to ...
+ 449371 Open with menu has no effect
+ 404541 GtkIconView crashes when I select icons with rubberband w...
+ 467324 Iter swapping causes segmentation fault
+ 475158 Random crash while scrolling trough notebook tabs
+ 450032 GtkRecentAction should have defaults
+ 458283 wrong tooltip on menutoolbutton
+ 467717 Extra trailing comma after last enum definition
+ 467719 config.h should always be included first if using AC_SYS_...
+ 474897 rendering problem with latest gtk+
+ 475400 Fix a typo in gtkentry.c
+ 436576 GtkFileChooserButton title from supplied dialog
+ 475439 gtk/gtksearchenginesimple.h is missing a G_BEGIN_DECLS
+ 105895 Please add common keybindings for the TreeView
 
  * Updated translations
  - Bulgarian (bg)
@@ -80,6 +94,7 @@ Overview of Changes from GTK+ 2.11.6 to 2.12.0
  - Irish (ga)
  - Gujarati (gu)
  - Hungarian (hu)
+ - Italian (it)
  - Japanese (jp)
  - Kannada (kn)
  - Macedonian (mk)
