@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.4.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-09-07 14:39+0300\n"
+"POT-Creation-Date: 2007-09-12 21:37+0300\n"
 "PO-Revision-Date: 2007-09-07 14:55+0200\n"
 "Last-Translator: dziumanenko@gmail.com\n"
 "Language-Team: Ukrainian <uk@li.org>\n"
@@ -818,11 +818,11 @@ msgstr ""
 "елементів замість відображення"
 
 #: ../gtk/gtkbutton.c:223 ../gtk/gtkcombobox.c:785
-#: ../gtk/gtkfilechooserbutton.c:401
+#: ../gtk/gtkfilechooserbutton.c:398
 msgid "Focus on click"
 msgstr "Фокус при клацанні"
 
-#: ../gtk/gtkbutton.c:224 ../gtk/gtkfilechooserbutton.c:402
+#: ../gtk/gtkbutton.c:224 ../gtk/gtkfilechooserbutton.c:399
 msgid "Whether the button grabs focus when it is clicked with the mouse"
 msgstr "Чи повинна кнопка захоплювати фокус вводу при клацанні на ній мишею"
 
@@ -1486,7 +1486,7 @@ msgstr ""
 "Бажане місце еліптизації рядка, якщо механізму відображення рядка не "
 "вистачає місця для відображення усього рядка"
 
-#: ../gtk/gtkcellrenderertext.c:429 ../gtk/gtkfilechooserbutton.c:429
+#: ../gtk/gtkcellrenderertext.c:429 ../gtk/gtkfilechooserbutton.c:426
 #: ../gtk/gtklabel.c:449
 msgid "Width In Characters"
 msgstr "Ширина у символах"
@@ -1749,7 +1749,7 @@ msgstr "Використовувати прозорість"
 msgid "Whether or not to give the color an alpha value"
 msgstr "Чи має колір прозорість"
 
-#: ../gtk/gtkcolorbutton.c:187 ../gtk/gtkfilechooserbutton.c:415
+#: ../gtk/gtkcolorbutton.c:187 ../gtk/gtkfilechooserbutton.c:412
 #: ../gtk/gtkfontbutton.c:143 ../gtk/gtkprintjob.c:116
 #: ../gtk/gtktreeviewcolumn.c:264
 msgid "Title"
@@ -2189,8 +2189,8 @@ msgid "Password Hint Timeout"
 msgstr "Інтервал очікування підказки паролю"
 
 #: ../gtk/gtkentry.c:912
-msgid "How long to show the last inputted character in hidden entries"
-msgstr "Як довго Pangoпоказувати останній введений символ у прихованих полях"
+msgid "How long to show the last input character in hidden entries"
+msgstr "Як довго показувати останній введений символ у прихованих полях"
 
 #: ../gtk/gtkentrycompletion.c:279
 msgid "Completion Model"
@@ -2422,19 +2422,19 @@ msgstr ""
 "Чи селектор файлів у режимі збереження буде виводити діалогове вікно з "
 "попередженням про перезапис, якщо користувач обрав існуючий файл."
 
-#: ../gtk/gtkfilechooserbutton.c:384
+#: ../gtk/gtkfilechooserbutton.c:381
 msgid "Dialog"
 msgstr "Діалог"
 
-#: ../gtk/gtkfilechooserbutton.c:385
+#: ../gtk/gtkfilechooserbutton.c:382
 msgid "The file chooser dialog to use."
 msgstr "Діалог вибору файлів, що використовується."
 
-#: ../gtk/gtkfilechooserbutton.c:416
+#: ../gtk/gtkfilechooserbutton.c:413
 msgid "The title of the file chooser dialog."
 msgstr "Заголовок діалогового вікна вибору файла."
 
-#: ../gtk/gtkfilechooserbutton.c:430
+#: ../gtk/gtkfilechooserbutton.c:427
 msgid "The desired width of the button widget, in characters."
 msgstr "Бажана ширина віджета кнопки, у символах."
 
@@ -3150,11 +3150,11 @@ msgstr "Має фокус"
 msgid "A boolean that determines whether the menu grabs the keyboard focus"
 msgstr "Логічне значення, яке вказує чи меню отримує фокус вводу"
 
-#: ../gtk/gtkmenutoolbutton.c:219 ../gtk/gtkoptionmenu.c:161
+#: ../gtk/gtkmenutoolbutton.c:230 ../gtk/gtkoptionmenu.c:161
 msgid "Menu"
 msgstr "Меню"
 
-#: ../gtk/gtkmenutoolbutton.c:220
+#: ../gtk/gtkmenutoolbutton.c:231
 msgid "The dropdown menu"
 msgstr "Випадаюче меню"
 
@@ -3641,7 +3641,7 @@ msgid "Printer settings"
 msgstr "Параметри принтера"
 
 #: ../gtk/gtkprintjob.c:143 ../gtk/gtkprintjob.c:144
-#: ../gtk/gtkprintunixdialog.c:229
+#: ../gtk/gtkprintunixdialog.c:240
 msgid "Page Setup"
 msgstr "Параметри сторінки"
 
@@ -3665,11 +3665,11 @@ msgstr "Типові параметри сторінки"
 msgid "The GtkPageSetup used by default"
 msgstr "Типово використовується GtkPageSetup"
 
-#: ../gtk/gtkprintoperation.c:896 ../gtk/gtkprintunixdialog.c:247
+#: ../gtk/gtkprintoperation.c:896 ../gtk/gtkprintunixdialog.c:258
 msgid "Print Settings"
 msgstr "Параметри сторінки"
 
-#: ../gtk/gtkprintoperation.c:897 ../gtk/gtkprintunixdialog.c:248
+#: ../gtk/gtkprintoperation.c:897 ../gtk/gtkprintunixdialog.c:259
 msgid "The GtkPrintSettings used for initializing the dialog"
 msgstr "Для ініціалізації діалогу використовується GtkPrintSettings"
 
@@ -3689,11 +3689,11 @@ msgstr "Кількість каналів"
 msgid "The number of pages in the document."
 msgstr "Кількість сторінок у документі."
 
-#: ../gtk/gtkprintoperation.c:962 ../gtk/gtkprintunixdialog.c:237
+#: ../gtk/gtkprintoperation.c:962 ../gtk/gtkprintunixdialog.c:248
 msgid "Current Page"
 msgstr "Поточна сторінка"
 
-#: ../gtk/gtkprintoperation.c:963 ../gtk/gtkprintunixdialog.c:238
+#: ../gtk/gtkprintoperation.c:963 ../gtk/gtkprintunixdialog.c:249
 msgid "The current page in the document"
 msgstr "Поточна сторінка у документі"
 
@@ -3769,15 +3769,15 @@ msgstr "Інша позначка вкладки"
 msgid "Label for the tab containing custom widgets."
 msgstr "Позначка для вкладки, що містить інший віджет."
 
-#: ../gtk/gtkprintunixdialog.c:230
+#: ../gtk/gtkprintunixdialog.c:241
 msgid "The GtkPageSetup to use"
 msgstr "GtkPageSetup, що використовується"
 
-#: ../gtk/gtkprintunixdialog.c:255
+#: ../gtk/gtkprintunixdialog.c:266
 msgid "Selected Printer"
 msgstr "Вибраний принтер"
 
-#: ../gtk/gtkprintunixdialog.c:256
+#: ../gtk/gtkprintunixdialog.c:267
 msgid "The GtkPrinter which is selected"
 msgstr "GtkPrinter, що виділений"
 
