@@ -4819,7 +4819,10 @@ gtk_window_configure_event (GtkWidget         *widget,
    */
 
   if (window->configure_request_count > 0)
-    window->configure_request_count -= 1;
+    {
+      window->configure_request_count -= 1;
+      gdk_window_thaw_toplevel_updates_libgtk_only (widget->window);
+    }
   
   /* As an optimization, we avoid a resize when possible.
    *
@@ -6053,28 +6056,47 @@ gtk_window_move_resize (GtkWindow *window)
 			     new_request.width, new_request.height);
 	}
       
-      /* Increment the number of have-not-yet-received-notify requests */
-      window->configure_request_count += 1;
+      if (window->type == GTK_WINDOW_POPUP)
+        {
+	  GtkAllocation allocation;
 
-      /* for GTK_RESIZE_QUEUE toplevels, we are now awaiting a new
-       * configure event in response to our resizing request.
-       * the configure event will cause a new resize with
-       * ->configure_notify_received=TRUE.
-       * until then, we want to
-       * - discard expose events
-       * - coalesce resizes for our children
-       * - defer any window resizes until the configure event arrived
-       * to achieve this, we queue a resize for the window, but remove its
-       * resizing handler, so resizing will not be handled from the next
-       * idle handler but when the configure event arrives.
-       *
-       * FIXME: we should also dequeue the pending redraws here, since
-       * we handle those ourselves upon ->configure_notify_received==TRUE.
-       */
-      if (container->resize_mode == GTK_RESIZE_QUEUE)
-	{
-	  gtk_widget_queue_resize (widget);
-	  _gtk_container_dequeue_resize_handler (container);
+	  /* Directly size allocate for override redirect (popup) windows. */
+	  allocation.width = new_request.width;
+	  allocation.height = new_request.height;
+
+	  gtk_widget_size_allocate (widget, &allocation);
+
+	  gdk_window_process_updates (widget->window, TRUE);
+
+	  if (container->resize_mode == GTK_RESIZE_QUEUE)
+	    gtk_widget_queue_draw (widget);
+	}
+      else
+        {
+	  /* Increment the number of have-not-yet-received-notify requests */
+	  window->configure_request_count += 1;
+	  gdk_window_freeze_toplevel_updates_libgtk_only (widget->window);
+
+	  /* for GTK_RESIZE_QUEUE toplevels, we are now awaiting a new
+	   * configure event in response to our resizing request.
+	   * the configure event will cause a new resize with
+	   * ->configure_notify_received=TRUE.
+	   * until then, we want to
+	   * - discard expose events
+	   * - coalesce resizes for our children
+	   * - defer any window resizes until the configure event arrived
+	   * to achieve this, we queue a resize for the window, but remove its
+	   * resizing handler, so resizing will not be handled from the next
+	   * idle handler but when the configure event arrives.
+	   *
+	   * FIXME: we should also dequeue the pending redraws here, since
+	   * we handle those ourselves upon ->configure_notify_received==TRUE.
+	   */
+	  if (container->resize_mode == GTK_RESIZE_QUEUE)
+	    {
+	      gtk_widget_queue_resize (widget);
+	      _gtk_container_dequeue_resize_handler (container);
+	    }
 	}
     }
   else

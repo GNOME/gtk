@@ -2290,10 +2290,22 @@ gdk_window_update_idle (gpointer data)
   return FALSE;
 }
 
+static gboolean
+gdk_window_is_toplevel_frozen (GdkWindow *window)
+{
+  GdkWindowObject *toplevel;
+
+  toplevel = (GdkWindowObject *)gdk_window_get_toplevel (window);
+
+  return toplevel->update_and_descendants_freeze_count > 0;
+}
+
 static void
 gdk_window_schedule_update (GdkWindow *window)
 {
-  if (window && GDK_WINDOW_OBJECT (window)->update_freeze_count)
+  if (window &&
+      (GDK_WINDOW_OBJECT (window)->update_freeze_count ||
+       gdk_window_is_toplevel_frozen (window)))
     return;
 
   if (!update_idle)
@@ -2423,7 +2435,8 @@ gdk_window_process_all_updates (void)
     {
       GdkWindowObject *private = (GdkWindowObject *)tmp_list->data;
       
-      if (private->update_freeze_count)
+      if (private->update_freeze_count ||
+	  gdk_window_is_toplevel_frozen (tmp_list->data))
 	update_windows = g_slist_prepend (update_windows, private);
       else
 	gdk_window_process_updates_internal (tmp_list->data);
@@ -2471,7 +2484,9 @@ gdk_window_process_updates (GdkWindow *window,
       return;
     }
   
-  if (private->update_area && !private->update_freeze_count)
+  if (private->update_area &&
+      !private->update_freeze_count &&
+      !gdk_window_is_toplevel_frozen (window))
     {      
       gdk_window_process_updates_internal (window);
       update_windows = g_slist_remove (update_windows, window);
@@ -2813,6 +2828,58 @@ gdk_window_thaw_updates (GdkWindow *window)
 
   if (--private->update_freeze_count == 0)
     gdk_window_schedule_update (window);
+}
+
+/**
+ * gdk_window_freeze_toplevel_updates_libgtk_only:
+ * @window: a #GdkWindow
+ *
+ * Temporarily freezes a window and all its descendants such that it won't
+ * receive expose events.  The window will begin receiving expose events
+ * again when gdk_window_thaw_toplevel_updates_libgtk_only() is called. If
+ * gdk_window_freeze_toplevel_updates_libgtk_only()
+ * has been called more than once,
+ * gdk_window_thaw_toplevel_updates_libgtk_only() must be called
+ * an equal number of times to begin processing exposes.
+ *
+ * This function is not part of the GDK public API and is only
+ * for use by GTK+.
+ **/
+void
+gdk_window_freeze_toplevel_updates_libgtk_only (GdkWindow *window)
+{
+  GdkWindowObject *private = (GdkWindowObject *)window;
+
+  g_return_if_fail (window != NULL);
+  g_return_if_fail (GDK_IS_WINDOW (window));
+  g_return_if_fail (private->window_type != GDK_WINDOW_CHILD);
+
+  private->update_and_descendants_freeze_count++;
+}
+
+/**
+ * gdk_window_thaw_toplevel_updates_libgtk_only:
+ * @window: a #GdkWindow
+ * 
+ * Thaws a window frozen with
+ * gdk_window_freeze_toplevel_updates_libgtk_only().
+ *
+ * This function is not part of the GDK public API and is only
+ * for use by GTK+.
+ **/
+void
+gdk_window_thaw_toplevel_updates_libgtk_only (GdkWindow *window)
+{
+  GdkWindowObject *private = (GdkWindowObject *)window;
+
+  g_return_if_fail (window != NULL);
+  g_return_if_fail (GDK_IS_WINDOW (window));
+  g_return_if_fail (private->window_type != GDK_WINDOW_CHILD);
+  g_return_if_fail (private->update_and_descendants_freeze_count > 0);
+
+  private->update_and_descendants_freeze_count--;
+
+  gdk_window_schedule_update (window);
 }
 
 /**

@@ -649,6 +649,7 @@ gdk_window_constrain_size
 gdk_window_destroy
 gdk_window_end_paint
 gdk_window_foreign_new
+gdk_window_freeze_toplevel_updates_libgtk_only
 gdk_window_freeze_updates
 gdk_window_get_children
 gdk_window_get_internal_paint_info
@@ -673,6 +674,7 @@ gdk_window_process_updates
 gdk_window_remove_filter
 gdk_window_set_debug_updates
 gdk_window_set_user_data
+gdk_window_thaw_toplevel_updates_libgtk_only
 gdk_window_thaw_updates
 gdk_window_set_composited
 #endif

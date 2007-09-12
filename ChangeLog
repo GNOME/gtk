@@ -1,3 +1,21 @@
+2007-09-12  Kristian Rietveld  <kris@imendio.com>
+
+	Fixes #426246.
+
+	* gdk/gdk.symbols:
+	* gdk/gdkwindow.[ch]
+	(gdk_window_freeze_toplevel_updates_libgtk_only),
+	(gdk_window_thaw_toplevel_updates_libgtk_only): new functions
+	to freeze a toplevel window and all its descendants.  To be made
+	public in 2.14,
+	(gdk_window_schedule_update): return if toplevel is frozen,
+	(gdk_window_process_all_updates): defer processing updates if toplevel
+	is frozen.
+
+	* gtk/gtkwindow.c (gtk_window_configure_event): directly size
+	allocate for override redirect windows, freeze toplevel and
+	descendants otherwise and wait until resizing is done.
+
 2007-09-11  Michael Natterer  <mitch@imendio.com>
 
 	* gtk/gtkfilechooserbutton.c: remove useless member "has_title"

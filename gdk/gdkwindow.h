@@ -298,6 +298,8 @@ struct _GdkWindowObject
   guint shaped : 1;
   
   GdkEventMask event_mask;
+
+  guint update_and_descendants_freeze_count;
 };
 
 struct _GdkWindowObjectClass
@@ -604,6 +606,9 @@ GdkRegion *gdk_window_get_update_area     (GdkWindow    *window);
 
 void       gdk_window_freeze_updates      (GdkWindow    *window);
 void       gdk_window_thaw_updates        (GdkWindow    *window);
+
+void       gdk_window_freeze_toplevel_updates_libgtk_only (GdkWindow *window);
+void       gdk_window_thaw_toplevel_updates_libgtk_only   (GdkWindow *window);
 
 void       gdk_window_process_all_updates (void);
 void       gdk_window_process_updates     (GdkWindow    *window,
