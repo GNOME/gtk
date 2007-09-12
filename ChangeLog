@@ -1,3 +1,17 @@
+2007-09-12  Emmanuele Bassi  <ebassi@gnome.org>
+
+	* gtk/gtkfilechooserdefault.c (render_recent_icon): Use the
+	"document-open-recent" icon for the the Recently Used shortcut
+	in the file chooser. (#306445)
+
+	* gtk/Makefile.am:
+	* gtk/stock-icons/16/document-open-recent.png:
+	* gtk/stock-icons/16/document-open-recent.svg:
+	* gtk/stock-icons/24/document-open-recent.png:
+	* gtk/stock-icons/24/document-open-recent.svg: Add the
+	"document-open-recent" icon to the builtin theme we provide
+	as a fallback.
+
 2007-09-12  Kristian Rietveld  <kris@imendio.com>
 
 	Fixes #426246.

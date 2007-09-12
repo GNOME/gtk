@@ -1276,7 +1276,23 @@ render_search_icon (GtkFileChooserDefault *impl)
 static GdkPixbuf *
 render_recent_icon (GtkFileChooserDefault *impl)
 {
-  return gtk_widget_render_icon (GTK_WIDGET (impl), GTK_STOCK_FILE, GTK_ICON_SIZE_MENU, NULL);
+  GtkIconTheme *theme;
+  GdkPixbuf *retval;
+
+  if (gtk_widget_has_screen (GTK_WIDGET (impl)))
+    theme = gtk_icon_theme_get_for_screen (gtk_widget_get_screen (GTK_WIDGET (impl)));
+  else
+    theme = gtk_icon_theme_get_default ();
+
+  retval = gtk_icon_theme_load_icon (theme, "document-open-recent",
+                                     impl->icon_size, 0,
+                                     NULL);
+
+  /* fallback */
+  if (!retval)
+    retval = gtk_widget_render_icon (GTK_WIDGET (impl), GTK_STOCK_FILE, GTK_ICON_SIZE_MENU, NULL);
+
+  return retval;
 }
 
 

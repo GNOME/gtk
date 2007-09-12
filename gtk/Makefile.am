@@ -911,6 +911,7 @@ files:
 	done
 
 STOCK_ICONS = \
+	stock-icons/16/document-open-recent.png		\
 	stock-icons/16/gtk-about.png  			\
 	stock-icons/16/gtk-add.png    			\
 	stock-icons/16/gtk-cdrom.png  			\
@@ -1005,6 +1006,7 @@ STOCK_ICONS = \
 	stock-icons/20/gtk-no.png     			\
 	stock-icons/20/gtk-ok.png     			\
 	stock-icons/20/gtk-yes.png    			\
+	stock-icons/24/document-open-recent.png		\
 	stock-icons/24/gtk-about.png  			\
 	stock-icons/24/gtk-add.png    			\
 	stock-icons/24/gtk-bold.png   			\
