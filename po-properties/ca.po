@@ -2183,7 +2183,7 @@ msgid "Password Hint Timeout"
 msgstr "Temps d'espera de l'ajuda emergent per a contrasenyes"
 
 #: gtk/gtkentry.c:912
-msgid "How long to show the last inputted character in hidden entries"
+msgid "How long to show the last input character in hidden entries"
 msgstr ""
 "Quant s'ha de trigar a mostrar el darrer caràcter entrat en entrades ocultes"
 

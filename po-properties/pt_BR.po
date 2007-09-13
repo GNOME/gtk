@@ -2189,7 +2189,7 @@ msgid "Password Hint Timeout"
 msgstr "Tempo Limite da Dica de Senha"
 
 #: ../gtk/gtkentry.c:912
-msgid "How long to show the last inputted character in hidden entries"
+msgid "How long to show the last input character in hidden entries"
 msgstr "Por quanto tempo mostrar o último caractere digitado em entradas ocultas"
 
 #: ../gtk/gtkentrycompletion.c:279

@@ -2159,7 +2159,7 @@ msgid "Password Hint Timeout"
 msgstr "Terfyn Amser Awgrym Cyfrinair"
 
 #: gtk/gtkentry.c:912
-msgid "How long to show the last inputted character in hidden entries"
+msgid "How long to show the last input character in hidden entries"
 msgstr "Am ba hyd i ddangos y nod a fewnbynnwyd diwethaf o fewn cofnodion cudd"
 
 #: gtk/gtkentrycompletion.c:279

@@ -2173,7 +2173,7 @@ msgid "Password Hint Timeout"
 msgstr "Thời hạn gợi ý mật khẩu"
 
 #: ../gtk/gtkentry.c:912
-msgid "How long to show the last inputted character in hidden entries"
+msgid "How long to show the last input character in hidden entries"
 msgstr "Thời gian cần hiển thị ký tự mới gõ trong mục nhập đã ẩn"
 
 #: ../gtk/gtkentrycompletion.c:279

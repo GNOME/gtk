@@ -2172,7 +2172,7 @@ msgid "Password Hint Timeout"
 msgstr "Tidsavbrudd for passordhint"
 
 #: ../gtk/gtkentry.c:912
-msgid "How long to show the last inputted character in hidden entries"
+msgid "How long to show the last input character in hidden entries"
 msgstr "Hvor lenge skal siste tegn vises i skjulte oppføringer"
 
 #: ../gtk/gtkentrycompletion.c:279

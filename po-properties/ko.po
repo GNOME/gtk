@@ -2117,7 +2117,7 @@ msgid "Password Hint Timeout"
 msgstr "암호 힌트 제한 시간"
 
 #: gtk/gtkentry.c:912
-msgid "How long to show the last inputted character in hidden entries"
+msgid "How long to show the last input character in hidden entries"
 msgstr "숨김 입력창에 마지막으로 입력한 문자를 얼마나 오래 표시할 지 지정"
 
 #: gtk/gtkentrycompletion.c:279

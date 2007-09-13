@@ -2112,7 +2112,7 @@ msgid "Password Hint Timeout"
 msgstr "密码提示超时"
 
 #: gtk/gtkentry.c:912
-msgid "How long to show the last inputted character in hidden entries"
+msgid "How long to show the last input character in hidden entries"
 msgstr "在隐藏输入框中输入的上个字符要显示多久"
 
 #: gtk/gtkentrycompletion.c:279

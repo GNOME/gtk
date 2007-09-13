@@ -2224,7 +2224,7 @@ msgid "Password Hint Timeout"
 msgstr "Délai de l'indice de mot de passe"
 
 #: ../gtk/gtkentry.c:912
-msgid "How long to show the last inputted character in hidden entries"
+msgid "How long to show the last input character in hidden entries"
 msgstr ""
 "Durée pendant laquelle afficher le dernier caractère saisi dans les entrées "
 "masquées"

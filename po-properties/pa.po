@@ -2113,7 +2113,7 @@ msgid "Password Hint Timeout"
 msgstr "ਗੁਪਤ-ਕੋਡ ਇਸ਼ਾਰਾ ਸਮਾਂ-ਅੰਤਰਾਲ"
 
 #: ../gtk/gtkentry.c:912
-msgid "How long to show the last inputted character in hidden entries"
+msgid "How long to show the last input character in hidden entries"
 msgstr "ਲੁਕਵੇਂ ਇੰਦਰਾਜ਼ਾਂ ਵਿੱਚ ਆਖਰੀ ਦਿੱਤੇ ਅੱਖਰ ਨੂੰ ਵੇਖਾਉਣ ਨੂੰ ਕਿੰਨਾ ਸਮਾਂ ਲੱਗੇ"
 
 #: ../gtk/gtkentrycompletion.c:279

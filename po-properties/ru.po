@@ -2204,7 +2204,7 @@ msgid "Password Hint Timeout"
 msgstr "Задержка подсказки в пароле"
 
 #: ../gtk/gtkentry.c:912
-msgid "How long to show the last inputted character in hidden entries"
+msgid "How long to show the last input character in hidden entries"
 msgstr ""
 "Как долго показывать последний введённый символ в элементах ввода пароля"
 

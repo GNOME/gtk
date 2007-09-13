@@ -2134,7 +2134,7 @@ msgid "Password Hint Timeout"
 msgstr "പാസ്‍വേര്‍ഡിനുളള സമയം കഴിഞ്ഞിരിക്കുന്നു"
 
 #: ../gtk/gtkentry.c:912
-msgid "How long to show the last inputted character in hidden entries"
+msgid "How long to show the last input character in hidden entries"
 msgstr "അദൃശ്യമായ എന്‍ട്രികളില്‍ അവസാനം നല്‍കിയ അക്ഷരം എത്ര നേരം കാണിക്കണം"
 
 #: ../gtk/gtkentrycompletion.c:279

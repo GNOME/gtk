@@ -2136,7 +2136,7 @@ msgid "Password Hint Timeout"
 msgstr "शब्दकूट संकेत समय समाप्ति"
 
 #: gtk/gtkentry.c:912
-msgid "How long to show the last inputted character in hidden entries"
+msgid "How long to show the last input character in hidden entries"
 msgstr "छिपे प्रविष्टि में आगत संप्रतीक दिखाना कितना समय लेगा"
 
 #: gtk/gtkentrycompletion.c:279
