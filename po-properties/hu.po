@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-properties.HEAD.hu\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-08-16 03:57+0100\n"
-"PO-Revision-Date: 2007-08-25 12:09+0200\n"
+"POT-Creation-Date: 2007-09-11 03:59+0100\n"
+"PO-Revision-Date: 2007-09-13 14:22+0200\n"
 "Last-Translator: Gabor Kelemen <kelemeng@gnome.hu>\n"
 "Language-Team: Hungarian <gnome@gnome.hu>\n"
 "MIME-Version: 1.0\n"
@@ -809,7 +809,7 @@ msgstr ""
 "Ha be van állítva, akkor a címke egy gyári elemet választ ki megjelenítés "
 "helyett"
 
-#: ../gtk/gtkbutton.c:223 ../gtk/gtkcombobox.c:784
+#: ../gtk/gtkbutton.c:223 ../gtk/gtkcombobox.c:785
 #: ../gtk/gtkfilechooserbutton.c:401
 msgid "Focus on click"
 msgstr "Fókusz kattintásra"
@@ -1259,7 +1259,7 @@ msgid "Orientation and growth direction of the progress bar"
 msgstr "A folyamatjelző tájolása és a növekedés iránya"
 
 #: ../gtk/gtkcellrendererspin.c:93 ../gtk/gtkprogressbar.c:122
-#: ../gtk/gtkrange.c:345 ../gtk/gtkscalebutton.c:200
+#: ../gtk/gtkrange.c:346 ../gtk/gtkscalebutton.c:200
 #: ../gtk/gtkspinbutton.c:207
 msgid "Adjustment"
 msgstr "Igazítás"
@@ -1492,7 +1492,7 @@ msgstr ""
 "A karakterlánc több sorba törésének módja, ha a cellamegjelenítőnek nincs "
 "elég helye a karakterlánc teljes megjelenítésére"
 
-#: ../gtk/gtkcellrenderertext.c:468 ../gtk/gtkcombobox.c:673
+#: ../gtk/gtkcellrenderertext.c:468 ../gtk/gtkcombobox.c:674
 msgid "Wrap width"
 msgstr "Tördelés szélessége"
 
@@ -1840,103 +1840,103 @@ msgstr "Érték a listában"
 msgid "Whether entered values must already be present in the list"
 msgstr "A beírt értékeknek kell-e már szerepelniük a listában"
 
-#: ../gtk/gtkcombobox.c:656
+#: ../gtk/gtkcombobox.c:657
 msgid "ComboBox model"
 msgstr "ComboBox modell"
 
-#: ../gtk/gtkcombobox.c:657
+#: ../gtk/gtkcombobox.c:658
 msgid "The model for the combo box"
 msgstr "A kombinált mező modellje"
 
-#: ../gtk/gtkcombobox.c:674
+#: ../gtk/gtkcombobox.c:675
 msgid "Wrap width for laying out the items in a grid"
 msgstr "Az elemek rácsra rendezésekor az áttördelés szélessége"
 
-#: ../gtk/gtkcombobox.c:696
+#: ../gtk/gtkcombobox.c:697
 msgid "Row span column"
 msgstr "Sorösszevonás oszlop"
 
-#: ../gtk/gtkcombobox.c:697
+#: ../gtk/gtkcombobox.c:698
 msgid "TreeModel column containing the row span values"
 msgstr "A sorösszevonási értékeket tartalmazó TreeModel oszlop"
 
-#: ../gtk/gtkcombobox.c:718
+#: ../gtk/gtkcombobox.c:719
 msgid "Column span column"
 msgstr "Oszlopösszevonás oszlop"
 
-#: ../gtk/gtkcombobox.c:719
+#: ../gtk/gtkcombobox.c:720
 msgid "TreeModel column containing the column span values"
 msgstr "Az oszlop-összevonási értékeket tartalmazó TreeModel oszlop"
 
-#: ../gtk/gtkcombobox.c:740
+#: ../gtk/gtkcombobox.c:741
 msgid "Active item"
 msgstr "Aktív elem"
 
-#: ../gtk/gtkcombobox.c:741
+#: ../gtk/gtkcombobox.c:742
 msgid "The item which is currently active"
 msgstr "A jelenleg aktív elem"
 
-#: ../gtk/gtkcombobox.c:760 ../gtk/gtkuimanager.c:220
+#: ../gtk/gtkcombobox.c:761 ../gtk/gtkuimanager.c:220
 msgid "Add tearoffs to menus"
 msgstr "Leválasztók hozzáadása menükhöz"
 
-#: ../gtk/gtkcombobox.c:761
+#: ../gtk/gtkcombobox.c:762
 msgid "Whether dropdowns should have a tearoff menu item"
 msgstr "Legyen-e leválasztó elem a legördülő menükben"
 
-#: ../gtk/gtkcombobox.c:776 ../gtk/gtkentry.c:522
+#: ../gtk/gtkcombobox.c:777 ../gtk/gtkentry.c:522
 msgid "Has Frame"
 msgstr "Van kerete"
 
-#: ../gtk/gtkcombobox.c:777
+#: ../gtk/gtkcombobox.c:778
 msgid "Whether the combo box draws a frame around the child"
 msgstr "A kombinált mező rajzol-e keretet a gyermek körül"
 
-#: ../gtk/gtkcombobox.c:785
+#: ../gtk/gtkcombobox.c:786
 msgid "Whether the combo box grabs focus when it is clicked with the mouse"
 msgstr "A kombinált mező megkapja-e a fókuszt, ha az egérrel rákattintanak"
 
-#: ../gtk/gtkcombobox.c:800 ../gtk/gtkmenu.c:484
+#: ../gtk/gtkcombobox.c:801 ../gtk/gtkmenu.c:484
 msgid "Tearoff Title"
 msgstr "Leválasztó címe"
 
-#: ../gtk/gtkcombobox.c:801
+#: ../gtk/gtkcombobox.c:802
 msgid ""
 "A title that may be displayed by the window manager when the popup is torn-"
 "off"
 msgstr "Az ablakkezelő által megjeleníthető cím, ha a felugró menü le van választva"
 
-#: ../gtk/gtkcombobox.c:818
+#: ../gtk/gtkcombobox.c:819
 msgid "Popup shown"
 msgstr "Felbukkanók megjelenítése"
 
-#: ../gtk/gtkcombobox.c:819
+#: ../gtk/gtkcombobox.c:820
 msgid "Whether the combo's dropdown is shown"
 msgstr "A legördülő lista legördítője meg legyen-e jelenítve vagy sem"
 
-#: ../gtk/gtkcombobox.c:825
+#: ../gtk/gtkcombobox.c:826
 msgid "Appears as list"
 msgstr "Listaként megjelenés"
 
-#: ../gtk/gtkcombobox.c:826
+#: ../gtk/gtkcombobox.c:827
 msgid "Whether dropdowns should look like lists rather than menus"
 msgstr "A legördülő menük inkább listaként jelenjenek-e meg, mintsem menükként"
 
-#: ../gtk/gtkcombobox.c:842
+#: ../gtk/gtkcombobox.c:843
 msgid "Arrow Size"
 msgstr "Nyíl mérete"
 
-#: ../gtk/gtkcombobox.c:843
+#: ../gtk/gtkcombobox.c:844
 msgid "The minimum size of the arrow in the combo box"
 msgstr "A nyíl minimális mérete a kombinált mezőben"
 
-#: ../gtk/gtkcombobox.c:858 ../gtk/gtkentry.c:622 ../gtk/gtkhandlebox.c:176
+#: ../gtk/gtkcombobox.c:859 ../gtk/gtkentry.c:622 ../gtk/gtkhandlebox.c:176
 #: ../gtk/gtkmenubar.c:201 ../gtk/gtkstatusbar.c:186 ../gtk/gtktoolbar.c:613
 #: ../gtk/gtkviewport.c:122
 msgid "Shadow type"
 msgstr "Árnyék típusa"
 
-#: ../gtk/gtkcombobox.c:859
+#: ../gtk/gtkcombobox.c:860
 msgid "Which kind of shadow to draw around the combo box"
 msgstr "A kombinált mező körül rajzolandó árnyék típusa"
 
@@ -2169,7 +2169,7 @@ msgid "Password Hint Timeout"
 msgstr "Jelszótipp időtúllépése"
 
 #: ../gtk/gtkentry.c:912
-msgid "How long to show the last inputted character in hidden entries"
+msgid "How long to show the last input character in hidden entries"
 msgstr "Meddig jelenjen meg az utoljára bevitt karakter a rejtett bejegyzésekben"
 
 #: ../gtk/gtkentrycompletion.c:279
@@ -3126,11 +3126,11 @@ msgstr "Fókusz megszerzése"
 msgid "A boolean that determines whether the menu grabs the keyboard focus"
 msgstr "Egy logikai érték, azt jelzi, a menü lefoglalja-e a billentyűzetfókuszt"
 
-#: ../gtk/gtkmenutoolbutton.c:219 ../gtk/gtkoptionmenu.c:161
+#: ../gtk/gtkmenutoolbutton.c:230 ../gtk/gtkoptionmenu.c:161
 msgid "Menu"
 msgstr "Menü"
 
-#: ../gtk/gtkmenutoolbutton.c:220
+#: ../gtk/gtkmenutoolbutton.c:231
 msgid "The dropdown menu"
 msgstr "A legördülő menü."
 
@@ -3598,7 +3598,7 @@ msgid "Printer settings"
 msgstr "Nyomtató beállításai"
 
 #: ../gtk/gtkprintjob.c:143 ../gtk/gtkprintjob.c:144
-#: ../gtk/gtkprintunixdialog.c:229
+#: ../gtk/gtkprintunixdialog.c:240
 msgid "Page Setup"
 msgstr "Oldalbeállítás"
 
@@ -3623,11 +3623,11 @@ msgstr "Alapértelmezett oldalbeállítás"
 msgid "The GtkPageSetup used by default"
 msgstr "Az alapértelmezetten használandó GtkPageSetup"
 
-#: ../gtk/gtkprintoperation.c:896 ../gtk/gtkprintunixdialog.c:247
+#: ../gtk/gtkprintoperation.c:896 ../gtk/gtkprintunixdialog.c:258
 msgid "Print Settings"
 msgstr "Nyomtatási beállítások"
 
-#: ../gtk/gtkprintoperation.c:897 ../gtk/gtkprintunixdialog.c:248
+#: ../gtk/gtkprintoperation.c:897 ../gtk/gtkprintunixdialog.c:259
 msgid "The GtkPrintSettings used for initializing the dialog"
 msgstr "A párbeszédablak inicializálására használt GtkPrintSettings"
 
@@ -3647,11 +3647,11 @@ msgstr "Oldalak száma"
 msgid "The number of pages in the document."
 msgstr "A dokumentum oldalainak száma"
 
-#: ../gtk/gtkprintoperation.c:962 ../gtk/gtkprintunixdialog.c:237
+#: ../gtk/gtkprintoperation.c:962 ../gtk/gtkprintunixdialog.c:248
 msgid "Current Page"
 msgstr "Jelenlegi oldal"
 
-#: ../gtk/gtkprintoperation.c:963 ../gtk/gtkprintunixdialog.c:238
+#: ../gtk/gtkprintoperation.c:963 ../gtk/gtkprintunixdialog.c:249
 msgid "The current page in the document"
 msgstr "A dokumentum jelenlegi oldala"
 
@@ -3728,15 +3728,15 @@ msgstr "Egyéni lapcímke"
 msgid "Label for the tab containing custom widgets."
 msgstr "Az egyéni felületi elemeket tartalmazó lap címkéje"
 
-#: ../gtk/gtkprintunixdialog.c:230
+#: ../gtk/gtkprintunixdialog.c:241
 msgid "The GtkPageSetup to use"
 msgstr "A használandó GtkPageSetup"
 
-#: ../gtk/gtkprintunixdialog.c:255
+#: ../gtk/gtkprintunixdialog.c:266
 msgid "Selected Printer"
 msgstr "Kiválasztott nyomtató"
 
-#: ../gtk/gtkprintunixdialog.c:256
+#: ../gtk/gtkprintunixdialog.c:267
 msgid "The GtkPrinter which is selected"
 msgstr "A kijelölt GtkPrinter"
 
@@ -3879,123 +3879,123 @@ msgstr "A választógomb, amelynek a csoportjához ez a felületi elem tartozik.
 msgid "The radio menu item whose group this widget belongs to."
 msgstr "A választómenü-elem, amelynek a csoportjához ez a felületi elem tartozik"
 
-#: ../gtk/gtkrange.c:336
+#: ../gtk/gtkrange.c:337
 msgid "Update policy"
 msgstr "Frissítési irányelv"
 
-#: ../gtk/gtkrange.c:337
+#: ../gtk/gtkrange.c:338
 msgid "How the range should be updated on the screen"
 msgstr "Hogyan kerüljön frissítésre a tartomány a képernyőn"
 
-#: ../gtk/gtkrange.c:346
+#: ../gtk/gtkrange.c:347
 msgid "The GtkAdjustment that contains the current value of this range object"
 msgstr "A tartományobjektum aktuális értékét tartalmazó GtkAdjustment"
 
-#: ../gtk/gtkrange.c:353
+#: ../gtk/gtkrange.c:354
 msgid "Inverted"
 msgstr "Fordított"
 
-#: ../gtk/gtkrange.c:354
+#: ../gtk/gtkrange.c:355
 msgid "Invert direction slider moves to increase range value"
 msgstr "Csúszka irányának megfordítása a tartományérték növeléséhez"
 
-#: ../gtk/gtkrange.c:361
+#: ../gtk/gtkrange.c:362
 msgid "Lower stepper sensitivity"
 msgstr "Alsó léptető érzékenysége"
 
-#: ../gtk/gtkrange.c:362
+#: ../gtk/gtkrange.c:363
 msgid ""
 "The sensitivity policy for the stepper that points to the adjustment's lower "
 "side"
 msgstr "A beállítások alsó oldalára mutató léptető érzékenységi irányelve"
 
-#: ../gtk/gtkrange.c:370
+#: ../gtk/gtkrange.c:371
 msgid "Upper stepper sensitivity"
 msgstr "Felső léptető érzékenysége"
 
-#: ../gtk/gtkrange.c:371
+#: ../gtk/gtkrange.c:372
 msgid ""
 "The sensitivity policy for the stepper that points to the adjustment's upper "
 "side"
 msgstr "A beállítások felső oldalára mutató léptető érzékenységi irányelve"
 
-#: ../gtk/gtkrange.c:388
+#: ../gtk/gtkrange.c:389
 msgid "Show Fill Level"
 msgstr "Kitöltési szint megjelenítése"
 
-#: ../gtk/gtkrange.c:389
+#: ../gtk/gtkrange.c:390
 msgid "Whether to display a fill level indicator graphics on trough."
 msgstr "A vályúban megjelenítendő-e kitöltésszint-jelző."
 
-#: ../gtk/gtkrange.c:405
+#: ../gtk/gtkrange.c:406
 msgid "Restrict to Fill Level"
 msgstr "Korlátozás a kitöltési szintre"
 
-#: ../gtk/gtkrange.c:406
+#: ../gtk/gtkrange.c:407
 msgid "Whether to restrict the upper boundary to the fill level."
 msgstr "A felső szegély korlátozása a kitöltési szintre."
 
-#: ../gtk/gtkrange.c:421
+#: ../gtk/gtkrange.c:422
 msgid "Fill Level"
 msgstr "Kitöltési szint"
 
-#: ../gtk/gtkrange.c:422
+#: ../gtk/gtkrange.c:423
 msgid "The fill level."
 msgstr "A kitöltés szintje."
 
-#: ../gtk/gtkrange.c:430
+#: ../gtk/gtkrange.c:431
 msgid "Slider Width"
 msgstr "Csúszka szélessége"
 
-#: ../gtk/gtkrange.c:431
+#: ../gtk/gtkrange.c:432
 msgid "Width of scrollbar or scale thumb"
 msgstr "A görgetősáv vagy átméretező szélessége"
 
-#: ../gtk/gtkrange.c:438
+#: ../gtk/gtkrange.c:439
 msgid "Trough Border"
 msgstr "Vályúszegély"
 
-#: ../gtk/gtkrange.c:439
+#: ../gtk/gtkrange.c:440
 msgid "Spacing between thumb/steppers and outer trough bevel"
 msgstr "A léptetők és a külső vályú élkidolgozás közötti távolság"
 
-#: ../gtk/gtkrange.c:446
+#: ../gtk/gtkrange.c:447
 msgid "Stepper Size"
 msgstr "Léptető mérete"
 
-#: ../gtk/gtkrange.c:447
+#: ../gtk/gtkrange.c:448
 msgid "Length of step buttons at ends"
 msgstr "A végeken látható léptetőgombok hossza"
 
-#: ../gtk/gtkrange.c:462
+#: ../gtk/gtkrange.c:463
 msgid "Stepper Spacing"
 msgstr "Léptető távolság"
 
-#: ../gtk/gtkrange.c:463
+#: ../gtk/gtkrange.c:464
 msgid "Spacing between step buttons and thumb"
 msgstr "A léptetőgombok és a csúszka közötti távolság"
 
-#: ../gtk/gtkrange.c:470
+#: ../gtk/gtkrange.c:471
 msgid "Arrow X Displacement"
 msgstr "Nyíl X elcsúsztatás"
 
-#: ../gtk/gtkrange.c:471
+#: ../gtk/gtkrange.c:472
 msgid "How far in the x direction to move the arrow when the button is depressed"
 msgstr "Milyen messzire mozduljon el X irányba a nyíl a gomb lenyomására"
 
-#: ../gtk/gtkrange.c:478
+#: ../gtk/gtkrange.c:479
 msgid "Arrow Y Displacement"
 msgstr "Nyíl Y elcsúsztatás"
 
-#: ../gtk/gtkrange.c:479
+#: ../gtk/gtkrange.c:480
 msgid "How far in the y direction to move the arrow when the button is depressed"
 msgstr "Milyen messzire mozduljon el Y irányba a nyíl a gomb lenyomására"
 
-#: ../gtk/gtkrange.c:487
+#: ../gtk/gtkrange.c:488
 msgid "Draw slider ACTIVE during drag"
 msgstr "Csúszka megrajzolása húzáskor AKTÍVKÉNT"
 
-#: ../gtk/gtkrange.c:488
+#: ../gtk/gtkrange.c:489
 msgid ""
 "With this option set to TRUE, sliders will be drawn ACTIVE and with shadow "
 "IN while they are dragged"
@@ -4003,11 +4003,11 @@ msgstr ""
 "Ha TRUE, akkor a csúszkák AKTÍVKÉNT, bekapcsolt árnyékokkal kerülnek "
 "megrajzolásra húzáskor"
 
-#: ../gtk/gtkrange.c:502
+#: ../gtk/gtkrange.c:503
 msgid "Trough Side Details"
 msgstr "Vályú oldalrészletei"
 
-#: ../gtk/gtkrange.c:503
+#: ../gtk/gtkrange.c:504
 msgid ""
 "When TRUE, the parts of the trough on the two sides of the slider are drawn "
 "with different details"
@@ -4015,11 +4015,11 @@ msgstr ""
 "Ha TRUE, akkor a vályú részei a csúszka két oldalán eltérő részletességgel "
 "kerülnek kirajzolásra"
 
-#: ../gtk/gtkrange.c:519
+#: ../gtk/gtkrange.c:520
 msgid "Trough Under Steppers"
 msgstr "Vályú a léptetők alatt"
 
-#: ../gtk/gtkrange.c:520
+#: ../gtk/gtkrange.c:521
 msgid ""
 "Whether to draw trough for full length of range or exclude the steppers and "
 "spacing"
