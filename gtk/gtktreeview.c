@@ -1507,7 +1507,7 @@ gtk_tree_view_get_property (GObject    *object,
       g_value_set_boolean (value, tree_view->priv->tree_lines_enabled);
       break;
     case PROP_TOOLTIP_COLUMN:
-      g_value_set_boolean (value, tree_view->priv->tooltip_column);
+      g_value_set_int (value, tree_view->priv->tooltip_column);
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);

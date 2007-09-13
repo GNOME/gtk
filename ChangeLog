@@ -1,5 +1,11 @@
 2007-09-14  Kristian Rietveld  <kris@gtk.org>
 
+	* gtk/gtktreeview.c (gtk_tree_view_get_property): the tooltip-column
+	property getter needs to set an integer, not a boolean. (#476689,
+	spotted and patch by Christian Persch).
+
+2007-09-14  Kristian Rietveld  <kris@gtk.org>
+
 	* gtk/gtkcellrendereraccel.c (gtk_cell_renderer_accel_get_property):
 	implement getter for keycode property.  (#476665, patch by
 	Christian Persch).
