@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 2.20\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-08-19 22:51+0100\n"
-"PO-Revision-Date: 2007-08-19 23:10+0000\n"
+"POT-Creation-Date: 2007-09-13 09:01+0100\n"
+"PO-Revision-Date: 2007-09-13 09:05+0000\n"
 "Last-Translator: Duarte Loreto <happyguy_pt@hotmail.com>\n"
 "Language-Team: Portuguese <gnome_pt@yahoogroups.com>\n"
 "MIME-Version: 1.0\n"
@@ -814,12 +814,12 @@ msgstr ""
 "Se definido, a etiqueta é utilizada para seleccionar um item base em vez de "
 "ser apresentada"
 
-#: ../gtk/gtkbutton.c:223 ../gtk/gtkcombobox.c:784
-#: ../gtk/gtkfilechooserbutton.c:401
+#: ../gtk/gtkbutton.c:223 ../gtk/gtkcombobox.c:785
+#: ../gtk/gtkfilechooserbutton.c:398
 msgid "Focus on click"
 msgstr "Focar ao premir"
 
-#: ../gtk/gtkbutton.c:224 ../gtk/gtkfilechooserbutton.c:402
+#: ../gtk/gtkbutton.c:224 ../gtk/gtkfilechooserbutton.c:399
 msgid "Whether the button grabs focus when it is clicked with the mouse"
 msgstr "Se o botão fica ou não com o foco ao ser premido com o rato"
 
@@ -1270,7 +1270,7 @@ msgid "Orientation and growth direction of the progress bar"
 msgstr "Orientação e direção de crescimento da barra de progresso"
 
 #: ../gtk/gtkcellrendererspin.c:93 ../gtk/gtkprogressbar.c:122
-#: ../gtk/gtkrange.c:345 ../gtk/gtkscalebutton.c:200
+#: ../gtk/gtkrange.c:346 ../gtk/gtkscalebutton.c:200
 #: ../gtk/gtkspinbutton.c:207
 msgid "Adjustment"
 msgstr "Ajustamento"
@@ -1485,7 +1485,7 @@ msgstr ""
 "O local preferido para eliptizar a expressão, se o renderizador de célula "
 "não possuir espaço suficiente para apresentar a expressão completa"
 
-#: ../gtk/gtkcellrenderertext.c:429 ../gtk/gtkfilechooserbutton.c:429
+#: ../gtk/gtkcellrenderertext.c:429 ../gtk/gtkfilechooserbutton.c:426
 #: ../gtk/gtklabel.c:449
 msgid "Width In Characters"
 msgstr "Largura Em Caracteres"
@@ -1506,7 +1506,7 @@ msgstr ""
 "Como quebrar o texto em múltiplas linhas, se o renderizador de célula não "
 "possuir espaço suficiente para apresentar o texto completo"
 
-#: ../gtk/gtkcellrenderertext.c:468 ../gtk/gtkcombobox.c:673
+#: ../gtk/gtkcellrenderertext.c:468 ../gtk/gtkcombobox.c:674
 msgid "Wrap width"
 msgstr "Largura de quebra"
 
@@ -1748,7 +1748,7 @@ msgstr "Utilizar alfa"
 msgid "Whether or not to give the color an alpha value"
 msgstr "Se atribuir ou não à cor um valor alfa"
 
-#: ../gtk/gtkcolorbutton.c:187 ../gtk/gtkfilechooserbutton.c:415
+#: ../gtk/gtkcolorbutton.c:187 ../gtk/gtkfilechooserbutton.c:412
 #: ../gtk/gtkfontbutton.c:143 ../gtk/gtkprintjob.c:116
 #: ../gtk/gtktreeviewcolumn.c:264
 msgid "Title"
@@ -1850,69 +1850,69 @@ msgstr "Valor na lista"
 msgid "Whether entered values must already be present in the list"
 msgstr "Se valores inseridos têm ou não de já existir na lista"
 
-#: ../gtk/gtkcombobox.c:656
+#: ../gtk/gtkcombobox.c:657
 msgid "ComboBox model"
 msgstr "Modelo de ComboBox"
 
-#: ../gtk/gtkcombobox.c:657
+#: ../gtk/gtkcombobox.c:658
 msgid "The model for the combo box"
 msgstr "O modelo para a caixa de selecção única"
 
-#: ../gtk/gtkcombobox.c:674
+#: ../gtk/gtkcombobox.c:675
 msgid "Wrap width for laying out the items in a grid"
 msgstr "Largura de quebra para dispôr os itens numa grelha"
 
-#: ../gtk/gtkcombobox.c:696
+#: ../gtk/gtkcombobox.c:697
 msgid "Row span column"
 msgstr "Coluna de abrangência de linha"
 
-#: ../gtk/gtkcombobox.c:697
+#: ../gtk/gtkcombobox.c:698
 msgid "TreeModel column containing the row span values"
 msgstr "Coluna de TreeModel que contém os valores de abrangência de linha"
 
-#: ../gtk/gtkcombobox.c:718
+#: ../gtk/gtkcombobox.c:719
 msgid "Column span column"
 msgstr "Coluna de abrangência de coluna"
 
-#: ../gtk/gtkcombobox.c:719
+#: ../gtk/gtkcombobox.c:720
 msgid "TreeModel column containing the column span values"
 msgstr "Coluna de TreeModel que contém os valores de abrangência de coluna"
 
-#: ../gtk/gtkcombobox.c:740
+#: ../gtk/gtkcombobox.c:741
 msgid "Active item"
 msgstr "Item activo"
 
-#: ../gtk/gtkcombobox.c:741
+#: ../gtk/gtkcombobox.c:742
 msgid "The item which is currently active"
 msgstr "O item actualmente activo"
 
-#: ../gtk/gtkcombobox.c:760 ../gtk/gtkuimanager.c:220
+#: ../gtk/gtkcombobox.c:761 ../gtk/gtkuimanager.c:220
 msgid "Add tearoffs to menus"
 msgstr "Adicionar destacáveis aos menus"
 
-#: ../gtk/gtkcombobox.c:761
+#: ../gtk/gtkcombobox.c:762
 msgid "Whether dropdowns should have a tearoff menu item"
 msgstr "Se os menus deverão ou não ter um item de menu destacável"
 
-#: ../gtk/gtkcombobox.c:776 ../gtk/gtkentry.c:522
+#: ../gtk/gtkcombobox.c:777 ../gtk/gtkentry.c:522
 msgid "Has Frame"
 msgstr "Possui Moldura"
 
-#: ../gtk/gtkcombobox.c:777
+#: ../gtk/gtkcombobox.c:778
 msgid "Whether the combo box draws a frame around the child"
 msgstr ""
 "Se a caixa de selecção única desenha ou não uma moldura em torno do filho"
 
-#: ../gtk/gtkcombobox.c:785
+#: ../gtk/gtkcombobox.c:786
 msgid "Whether the combo box grabs focus when it is clicked with the mouse"
 msgstr ""
 "Se a caixa de selecção única obtem ou não o foco ao ser clicada com o rato"
 
-#: ../gtk/gtkcombobox.c:800 ../gtk/gtkmenu.c:484
+#: ../gtk/gtkcombobox.c:801 ../gtk/gtkmenu.c:484
 msgid "Tearoff Title"
 msgstr "Título Destacado"
 
-#: ../gtk/gtkcombobox.c:801
+#: ../gtk/gtkcombobox.c:802
 msgid ""
 "A title that may be displayed by the window manager when the popup is torn-"
 "off"
@@ -1920,38 +1920,38 @@ msgstr ""
 "Um título que pode ser apresentado pelo gestor de janelas quando o popup é "
 "destacado"
 
-#: ../gtk/gtkcombobox.c:818
+#: ../gtk/gtkcombobox.c:819
 msgid "Popup shown"
 msgstr "Popup apresentado"
 
-#: ../gtk/gtkcombobox.c:819
+#: ../gtk/gtkcombobox.c:820
 msgid "Whether the combo's dropdown is shown"
 msgstr "Se a lista da caixa de selecção única é ou não apresentada"
 
-#: ../gtk/gtkcombobox.c:825
+#: ../gtk/gtkcombobox.c:826
 msgid "Appears as list"
 msgstr "Apresentar como lista"
 
-#: ../gtk/gtkcombobox.c:826
+#: ../gtk/gtkcombobox.c:827
 msgid "Whether dropdowns should look like lists rather than menus"
 msgstr ""
 "Se caixas de selecção única deverão ter a aparência de listas em vez de menus"
 
-#: ../gtk/gtkcombobox.c:842
+#: ../gtk/gtkcombobox.c:843
 msgid "Arrow Size"
 msgstr "Tamanho da Seta"
 
-#: ../gtk/gtkcombobox.c:843
+#: ../gtk/gtkcombobox.c:844
 msgid "The minimum size of the arrow in the combo box"
 msgstr "O tamanho mínimo da seta na caixa de selecção única"
 
-#: ../gtk/gtkcombobox.c:858 ../gtk/gtkentry.c:622 ../gtk/gtkhandlebox.c:176
+#: ../gtk/gtkcombobox.c:859 ../gtk/gtkentry.c:622 ../gtk/gtkhandlebox.c:176
 #: ../gtk/gtkmenubar.c:201 ../gtk/gtkstatusbar.c:186 ../gtk/gtktoolbar.c:613
 #: ../gtk/gtkviewport.c:122
 msgid "Shadow type"
 msgstr "Tipo de sombra"
 
-#: ../gtk/gtkcombobox.c:859
+#: ../gtk/gtkcombobox.c:860
 msgid "Which kind of shadow to draw around the combo box"
 msgstr "Que tipo de sombra desenhar em torno da caixa de selecção única"
 
@@ -2165,7 +2165,9 @@ msgstr "Se cortar ou não o colar de múltiplas linhas para apenas uma."
 
 #: ../gtk/gtkentry.c:623
 msgid "Which kind of shadow to draw around the entry when has-frame is set"
-msgstr "Que tipo de sombra desenhar em torno da entrada quando tem-moldura está definido"
+msgstr ""
+"Que tipo de sombra desenhar em torno da entrada quando tem-moldura está "
+"definido"
 
 #: ../gtk/gtkentry.c:891
 msgid "Border between text and frame."
@@ -2184,7 +2186,7 @@ msgid "Password Hint Timeout"
 msgstr "Expiração Temporal da Dica de Senha"
 
 #: ../gtk/gtkentry.c:912
-msgid "How long to show the last inputted character in hidden entries"
+msgid "How long to show the last input character in hidden entries"
 msgstr ""
 "Durante quanto tempo apresentar o último caracter introduzido em entradas "
 "escondidas"
@@ -2249,7 +2251,7 @@ msgstr "Se TRUE, a janela de popup irá surgir para uma única coincidência."
 
 #: ../gtk/gtkentrycompletion.c:387
 msgid "Inline selection"
-msgstr "Selecção imbutida"
+msgstr "Selecção embutida"
 
 #: ../gtk/gtkentrycompletion.c:388
 msgid "Your description here"
@@ -2421,19 +2423,19 @@ msgstr ""
 "Se um selector de ficheiros em modo de gravação irá apresentar uma janela de "
 "confirmação de sobreposição se necessário."
 
-#: ../gtk/gtkfilechooserbutton.c:384
+#: ../gtk/gtkfilechooserbutton.c:381
 msgid "Dialog"
 msgstr "Diálogo"
 
-#: ../gtk/gtkfilechooserbutton.c:385
+#: ../gtk/gtkfilechooserbutton.c:382
 msgid "The file chooser dialog to use."
 msgstr "O diálogo de selecção de ficheiro a utilizar."
 
-#: ../gtk/gtkfilechooserbutton.c:416
+#: ../gtk/gtkfilechooserbutton.c:413
 msgid "The title of the file chooser dialog."
 msgstr "O título do diálogo de selecção de ficheiro."
 
-#: ../gtk/gtkfilechooserbutton.c:430
+#: ../gtk/gtkfilechooserbutton.c:427
 msgid "The desired width of the button widget, in characters."
 msgstr "A largura desejada do widget de botão, em caracteres."
 
@@ -3150,11 +3152,11 @@ msgstr "Obtém o Foco"
 msgid "A boolean that determines whether the menu grabs the keyboard focus"
 msgstr "Uma boleana que determina se este menu obtém ou não o foco de teclado"
 
-#: ../gtk/gtkmenutoolbutton.c:219 ../gtk/gtkoptionmenu.c:161
+#: ../gtk/gtkmenutoolbutton.c:230 ../gtk/gtkoptionmenu.c:161
 msgid "Menu"
 msgstr "Menu"
 
-#: ../gtk/gtkmenutoolbutton.c:220
+#: ../gtk/gtkmenutoolbutton.c:231
 msgid "The dropdown menu"
 msgstr "O menu de selecção"
 
@@ -3537,11 +3539,11 @@ msgstr ""
 
 #: ../gtk/gtkplug.c:146 ../gtk/gtkstatusicon.c:257
 msgid "Embedded"
-msgstr "Imbutido"
+msgstr "Embutido"
 
 #: ../gtk/gtkplug.c:147
 msgid "Whether or not the plug is embedded"
-msgstr "Se o encaixe está ou não imbutido"
+msgstr "Se o encaixe está ou não embutido"
 
 #: ../gtk/gtkpreview.c:106
 msgid ""
@@ -3643,7 +3645,7 @@ msgid "Printer settings"
 msgstr "Definições da impressora"
 
 #: ../gtk/gtkprintjob.c:143 ../gtk/gtkprintjob.c:144
-#: ../gtk/gtkprintunixdialog.c:229
+#: ../gtk/gtkprintunixdialog.c:240
 msgid "Page Setup"
 msgstr "Configuração da Página"
 
@@ -3668,11 +3670,11 @@ msgstr "Configuração por Omissão da Página"
 msgid "The GtkPageSetup used by default"
 msgstr "O GtkPageSetup utilizado por omissão"
 
-#: ../gtk/gtkprintoperation.c:896 ../gtk/gtkprintunixdialog.c:247
+#: ../gtk/gtkprintoperation.c:896 ../gtk/gtkprintunixdialog.c:258
 msgid "Print Settings"
 msgstr "Definições de Impressão"
 
-#: ../gtk/gtkprintoperation.c:897 ../gtk/gtkprintunixdialog.c:248
+#: ../gtk/gtkprintoperation.c:897 ../gtk/gtkprintunixdialog.c:259
 msgid "The GtkPrintSettings used for initializing the dialog"
 msgstr "As GtkPrintSettings utilizadas para inicializar este diálogo"
 
@@ -3692,11 +3694,11 @@ msgstr "Número de Páginas"
 msgid "The number of pages in the document."
 msgstr "O número de páginas no documento."
 
-#: ../gtk/gtkprintoperation.c:962 ../gtk/gtkprintunixdialog.c:237
+#: ../gtk/gtkprintoperation.c:962 ../gtk/gtkprintunixdialog.c:248
 msgid "Current Page"
 msgstr "Página Actual"
 
-#: ../gtk/gtkprintoperation.c:963 ../gtk/gtkprintunixdialog.c:238
+#: ../gtk/gtkprintoperation.c:963 ../gtk/gtkprintunixdialog.c:249
 msgid "The current page in the document"
 msgstr "A página actual no documento"
 
@@ -3773,15 +3775,15 @@ msgstr "Etiqueta do separador personalizado"
 msgid "Label for the tab containing custom widgets."
 msgstr "Etiqueta do separador que contém widgets personalizados."
 
-#: ../gtk/gtkprintunixdialog.c:230
+#: ../gtk/gtkprintunixdialog.c:241
 msgid "The GtkPageSetup to use"
 msgstr "O GtkPageSetup a utilizar"
 
-#: ../gtk/gtkprintunixdialog.c:255
+#: ../gtk/gtkprintunixdialog.c:266
 msgid "Selected Printer"
 msgstr "Impressora Seleccionada"
 
-#: ../gtk/gtkprintunixdialog.c:256
+#: ../gtk/gtkprintunixdialog.c:267
 msgid "The GtkPrinter which is selected"
 msgstr "A GtkPrinter seleccionada"
 
@@ -3927,33 +3929,33 @@ msgstr "O botão exclusivo a cujo grupo este widget pertence."
 msgid "The radio menu item whose group this widget belongs to."
 msgstr "O botão exclusivo a cujo grupo este widget pertence."
 
-#: ../gtk/gtkrange.c:336
+#: ../gtk/gtkrange.c:337
 msgid "Update policy"
 msgstr "Política de actualização"
 
-#: ../gtk/gtkrange.c:337
+#: ../gtk/gtkrange.c:338
 msgid "How the range should be updated on the screen"
 msgstr "Como deverá ser a área actualizada no ecrã"
 
-#: ../gtk/gtkrange.c:346
+#: ../gtk/gtkrange.c:347
 msgid "The GtkAdjustment that contains the current value of this range object"
 msgstr "O GtkAdjustment que contém o valor actual da área deste objecto"
 
-#: ../gtk/gtkrange.c:353
+#: ../gtk/gtkrange.c:354
 msgid "Inverted"
 msgstr "Inverter"
 
-#: ../gtk/gtkrange.c:354
+#: ../gtk/gtkrange.c:355
 msgid "Invert direction slider moves to increase range value"
 msgstr ""
 "Barra de rolamento na direcção oposta move-se para aumentar o valor do "
 "intervalo"
 
-#: ../gtk/gtkrange.c:361
+#: ../gtk/gtkrange.c:362
 msgid "Lower stepper sensitivity"
 msgstr "Sensibilidade do incrementador inferior"
 
-#: ../gtk/gtkrange.c:362
+#: ../gtk/gtkrange.c:363
 msgid ""
 "The sensitivity policy for the stepper that points to the adjustment's lower "
 "side"
@@ -3961,11 +3963,11 @@ msgstr ""
 "A política de sensibilidade do incrementador que aponta para o lado inferior "
 "do ajustamento"
 
-#: ../gtk/gtkrange.c:370
+#: ../gtk/gtkrange.c:371
 msgid "Upper stepper sensitivity"
 msgstr "Sensibilidade do incrementador superior"
 
-#: ../gtk/gtkrange.c:371
+#: ../gtk/gtkrange.c:372
 msgid ""
 "The sensitivity policy for the stepper that points to the adjustment's upper "
 "side"
@@ -3973,85 +3975,85 @@ msgstr ""
 "A política de sensibilidade do incrementador que aponta para o lado superior "
 "do ajustamento"
 
-#: ../gtk/gtkrange.c:388
+#: ../gtk/gtkrange.c:389
 msgid "Show Fill Level"
 msgstr "Apresentar Nível de Enchimento"
 
-#: ../gtk/gtkrange.c:389
+#: ../gtk/gtkrange.c:390
 msgid "Whether to display a fill level indicator graphics on trough."
 msgstr "Se apresentar ou não um gráfico de indicação de nível de enchimento."
 
-#: ../gtk/gtkrange.c:405
+#: ../gtk/gtkrange.c:406
 msgid "Restrict to Fill Level"
 msgstr "Restringir ao Nível de Enchimento"
 
-#: ../gtk/gtkrange.c:406
+#: ../gtk/gtkrange.c:407
 msgid "Whether to restrict the upper boundary to the fill level."
 msgstr "Se restringir ou não o limite superior do nível de enchimento."
 
-#: ../gtk/gtkrange.c:421
+#: ../gtk/gtkrange.c:422
 msgid "Fill Level"
 msgstr "Nível de Enchimento"
 
-#: ../gtk/gtkrange.c:422
+#: ../gtk/gtkrange.c:423
 msgid "The fill level."
 msgstr "O nível de enchimento."
 
-#: ../gtk/gtkrange.c:430
+#: ../gtk/gtkrange.c:431
 msgid "Slider Width"
 msgstr "Largura da Barra de Rolamento"
 
-#: ../gtk/gtkrange.c:431
+#: ../gtk/gtkrange.c:432
 msgid "Width of scrollbar or scale thumb"
 msgstr "Largura da barra de rolamento ou indicador de escala"
 
-#: ../gtk/gtkrange.c:438
+#: ../gtk/gtkrange.c:439
 msgid "Trough Border"
 msgstr "Margem Externa"
 
-#: ../gtk/gtkrange.c:439
+#: ../gtk/gtkrange.c:440
 msgid "Spacing between thumb/steppers and outer trough bevel"
 msgstr "Espaçamento entre indicadores de escala e relevo externo"
 
-#: ../gtk/gtkrange.c:446
+#: ../gtk/gtkrange.c:447
 msgid "Stepper Size"
 msgstr "Tamanho de Indicador"
 
-#: ../gtk/gtkrange.c:447
+#: ../gtk/gtkrange.c:448
 msgid "Length of step buttons at ends"
 msgstr "Tamanho dos botões indicadores nas extremidades"
 
-#: ../gtk/gtkrange.c:462
+#: ../gtk/gtkrange.c:463
 msgid "Stepper Spacing"
 msgstr "Espaçamento de Indicador"
 
-#: ../gtk/gtkrange.c:463
+#: ../gtk/gtkrange.c:464
 msgid "Spacing between step buttons and thumb"
 msgstr "Espaçamento entre os botões indicadores e a marca"
 
-#: ../gtk/gtkrange.c:470
+#: ../gtk/gtkrange.c:471
 msgid "Arrow X Displacement"
 msgstr "Deslocamento X da Seta"
 
-#: ../gtk/gtkrange.c:471
+#: ../gtk/gtkrange.c:472
 msgid ""
 "How far in the x direction to move the arrow when the button is depressed"
 msgstr "Quão longe na direcção x mover a seta quando o botão é solto"
 
-#: ../gtk/gtkrange.c:478
+#: ../gtk/gtkrange.c:479
 msgid "Arrow Y Displacement"
 msgstr "Deslocamento Y da Seta"
 
-#: ../gtk/gtkrange.c:479
+#: ../gtk/gtkrange.c:480
 msgid ""
 "How far in the y direction to move the arrow when the button is depressed"
 msgstr "Quão longe na direcção y mover a seta quando o botão é solto"
 
-#: ../gtk/gtkrange.c:487
+#: ../gtk/gtkrange.c:488
 msgid "Draw slider ACTIVE during drag"
 msgstr "Desenhar barra deslizante ACTIVE durante o arrastar"
 
-#: ../gtk/gtkrange.c:488
+#: ../gtk/gtkrange.c:489
 msgid ""
 "With this option set to TRUE, sliders will be drawn ACTIVE and with shadow "
 "IN while they are dragged"
@@ -4059,11 +4061,11 @@ msgstr ""
 "Com esta opção definida como TRUE, barras deslizantes serão desenhadas "
 "ACTIVE e com sombra IN durante o seu arrastamento"
 
-#: ../gtk/gtkrange.c:502
+#: ../gtk/gtkrange.c:503
 msgid "Trough Side Details"
 msgstr "Detalhes da Calha"
 
-#: ../gtk/gtkrange.c:503
+#: ../gtk/gtkrange.c:504
 msgid ""
 "When TRUE, the parts of the trough on the two sides of the slider are drawn "
 "with different details"
@@ -4071,11 +4073,11 @@ msgstr ""
 "Quando TRUE, os limites da calha dos dois lados da barra deslizante são "
 "desenhados com diferentes detalhes"
 
-#: ../gtk/gtkrange.c:519
+#: ../gtk/gtkrange.c:520
 msgid "Trough Under Steppers"
 msgstr "Incrementadores Sob a Calha"
 
-#: ../gtk/gtkrange.c:520
+#: ../gtk/gtkrange.c:521
 msgid ""
 "Whether to draw trough for full length of range or exclude the steppers and "
 "spacing"
@@ -4743,7 +4745,8 @@ msgstr "Som de Erro"
 
 #: ../gtk/gtksettings.c:681
 msgid "When TRUE, keyboard navigation and other errors will cause a beep"
-msgstr "Quando TRUE, a navegação com as teclas e outros erros causarão um \"beep\""
+msgstr ""
+"Quando TRUE, a navegação com as teclas e outros erros causarão um \"beep\""
 
 #: ../gtk/gtksettings.c:698
 msgid "Color Hash"
@@ -4771,7 +4774,8 @@ msgstr "Lista dos motores GtkPrintBackend a utilizar por omissão"
 
 #: ../gtk/gtksettings.c:749
 msgid "Default command to run when displaying a print preview"
-msgstr "Comando a executar por omissão ao apresentar uma antevisão de impressão"
+msgstr ""
+"Comando a executar por omissão ao apresentar uma antevisão de impressão"
 
 #: ../gtk/gtksettings.c:750
 msgid "Command to run when displaying a print preview"
@@ -4916,7 +4920,7 @@ msgstr "Se o ícone de estado está ou não visível"
 
 #: ../gtk/gtkstatusicon.c:258
 msgid "Whether or not the status icon is embedded"
-msgstr "Se o ícone de estado é ou não imbutido"
+msgstr "Se o ícone de estado é ou não embutido"
 
 #: ../gtk/gtkstatusicon.c:274 ../gtk/gtktrayicon-x11.c:97
 msgid "The orientation of the tray"
@@ -6389,7 +6393,9 @@ msgstr "ID de Início"
 
 #: ../gtk/gtkwindow.c:499
 msgid "Unique startup identifier for the window used by startup-notification"
-msgstr "Identificador único de início para a janela utilizado pelo startup-notification"
+msgstr ""
+"Identificador único de início para a janela utilizado pelo startup-"
+"notification"
 
 #: ../gtk/gtkwindow.c:506
 msgid "Allow Shrink"
