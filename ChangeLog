@@ -1,5 +1,8 @@
 2007-09-13  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkscalebutton.c: Use the right value type when setting
+	the value.  (#476688, Christian Persch)
+
 	* configure.in: Bump version to 2.12.0
 
 	* NEWS: Updates

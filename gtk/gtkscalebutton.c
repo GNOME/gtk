@@ -432,7 +432,7 @@ gtk_scale_button_get_property (GObject     *object,
   switch (prop_id)
     {
     case PROP_VALUE:
-      g_value_set_float (value, gtk_scale_button_get_value (button));
+      g_value_set_double (value, gtk_scale_button_get_value (button));
       break;
     case PROP_SIZE:
       g_value_set_enum (value, priv->size);
