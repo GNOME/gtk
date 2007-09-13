@@ -79,6 +79,12 @@ Overview of Changes from GTK+ 2.11.6 to 2.12.0
  436576 GtkFileChooserButton title from supplied dialog
  475439 gtk/gtksearchenginesimple.h is missing a G_BEGIN_DECLS
  105895 Please add common keybindings for the TreeView
+ 306445 stock icon for the "open recent" menu
+ 449371 Open with menu has no effect
+ 426246 "Spurious" expose events during asynchronous GtkWindow re...
+ 436576 GtkFileChooserButton title from supplied dialog
+ 474897 rendering problem with latest gtk+
+ 475400 Fix a typo in gtkentry.c
 
  * Updated translations
  - Bulgarian (bg)
@@ -106,6 +112,7 @@ Overview of Changes from GTK+ 2.11.6 to 2.12.0
  - Portugese (pt)
  - Brazilian Portugese (pt_BR)
  - Russian (ru)
+ - Albanian (sq)
  - Serbian (sr, sr@Latn)
  - Swedish (sv)
  - Telugu (te)
