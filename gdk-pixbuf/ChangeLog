@@ -1,3 +1,8 @@
+2007-09-13  Matthias Clasen  <mclasen@redhat.com>
+
+	* gdk-pixbuf-scaled-anim.c (get_scaled_pixbuf): Don't leak 
+	options.  
+
 2007-09-08  Matthias Clasen  <mclasen@redhat.com>
 
 	* io-ani.c: Fix some possible crashes.  (#468832, Michal Luczaj)

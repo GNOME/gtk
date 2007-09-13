@@ -145,7 +145,8 @@ get_scaled_pixbuf (GdkPixbufScaledAnim *scaled,
 
 	/* Copy the original pixbuf options to the scaled pixbuf */
         if (options && scaled->current)
-	          g_object_set_qdata (G_OBJECT (scaled->current), quark, g_strdupv (options));
+	          g_object_set_qdata_full (G_OBJECT (scaled->current), quark, 
+                                           g_strdupv (options), (GDestroyNotify) g_strfreev);
 
 	return scaled->current;
 }
