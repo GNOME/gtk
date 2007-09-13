@@ -1,3 +1,10 @@
+2007-09-13  Kristian Rietveld  <kris@imendio.com>
+
+	* gtk/gtktreeview.c (gtk_tree_view_set_toooltip_cell): if cell
+	is set, always pass in path to gtk_tree_view_get_cell_area() whether
+	it is NULL or set.  Added explanatory comment and added this
+	side case to the API documentation.
+
 2007-09-12  Emmanuele Bassi  <ebassi@gnome.org>
 
 	* gtk/gtkfilechooserdefault.c (render_recent_icon): Use the

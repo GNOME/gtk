@@ -15383,6 +15383,11 @@ gtk_tree_view_set_tooltip_row (GtkTreeView *tree_view,
  * area will be set to the full area covered by @column.  See also
  * gtk_tooltip_set_tip_area().
  *
+ * Note that if @path is not specified and @cell is set and part of a column
+ * containing the expander, the tooltip might not show and hide at the correct
+ * position.  In such cases @path must be set to the current node under the
+ * mouse cursor for this function to operate correctly.
+ *
  * Since: 2.12
  */
 void
@@ -15409,10 +15414,15 @@ gtk_tree_view_set_tooltip_cell (GtkTreeView       *tree_view,
       GdkRectangle tmp;
       gint start, width;
 
-      gtk_tree_view_get_cell_area (tree_view, NULL, column, &tmp);
+      /* We always pass in path here, whether it is NULL or not.
+       * For cells in expander columns path must be specified so that
+       * we can correctly account for the indentation.  This also means
+       * that the tooltip is constrained vertically by the "Determine y
+       * values" code below; this is not a real problem since cells actually
+       * don't stretch vertically in constrast to columns.
+       */
+      gtk_tree_view_get_cell_area (tree_view, path, column, &tmp);
       gtk_tree_view_column_cell_get_position (column, cell, &start, &width);
-
-      /* FIXME: a need a path here to correctly correct for indent */
 
       gtk_tree_view_convert_bin_window_to_widget_coords (tree_view,
 							 tmp.x + start, 0,
