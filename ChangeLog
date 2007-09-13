@@ -1,3 +1,9 @@
+2007-09-14  Kristian Rietveld  <kris@gtk.org>
+
+	* gtk/gtkcellrendereraccel.c (gtk_cell_renderer_accel_get_property):
+	implement getter for keycode property.  (#476665, patch by
+	Christian Persch).
+
 2007-09-13  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtkscalebutton.c: Use the right value type when setting

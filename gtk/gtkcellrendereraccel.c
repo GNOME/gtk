@@ -274,6 +274,10 @@ gtk_cell_renderer_accel_get_property  (GObject    *object,
       g_value_set_flags (value, accel->accel_mods);
       break;
 
+    case PROP_KEYCODE:
+      g_value_set_uint (value, accel->keycode);
+      break;
+
     case PROP_ACCEL_MODE:
       g_value_set_enum (value, accel->accel_mode);
       break;
