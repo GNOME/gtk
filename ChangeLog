@@ -1,4 +1,6 @@
 2007-09-13  Matthias Clasen  <mclasen@redhat.com>
+	
+	* configure.in: Bump version to 2.12.1
 
 	* === Released 2.12.0 ===
 
