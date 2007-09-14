@@ -1,4 +1,9 @@
 2007-09-13  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtkiconcache.c: Turn off icon cache validation unless
+	icon theme debugging is turned on.
+
+2007-09-13  Matthias Clasen  <mclasen@redhat.com>
 	
 	* configure.in: Bump version to 2.12.1
 

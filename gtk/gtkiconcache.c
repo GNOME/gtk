@@ -127,14 +127,19 @@ _gtk_icon_cache_new_for_path (const gchar *path)
   info.n_directories = 0;
   info.flags = CHECK_OFFSETS|CHECK_STRINGS;
 
-  if (!_gtk_icon_cache_validate (&info))
+#ifdef G_ENABLE_DEBUG
+  if (gtk_debug_flags & GTK_DEBUG_ICONTHEME)
     {
-      g_mapped_file_free (map);
-      g_warning ("Icon cache '%s' is invalid\n", cache_filename);
+      if (!_gtk_icon_cache_validate (&info))
+        {
+          g_mapped_file_free (map);
+          g_warning ("Icon cache '%s' is invalid\n", cache_filename);
 
-      goto done;
+          goto done;
+        }
     }
-  
+#endif 
+
   GTK_NOTE (ICONTHEME, g_print ("found cache for %s\n", path));
 
   cache = g_new0 (GtkIconCache, 1);
