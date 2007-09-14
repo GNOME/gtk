@@ -1,3 +1,10 @@
+2007-09-14  Michael Natterer  <mitch@imendio.com>
+
+	* gtk/gtkmenubar.c (remove_from_window): no need to get the list
+	of menubars twice.
+
+	Some minor stylistic and indentation fixes.
+
 2007-09-13  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtkiconcache.c: Turn off icon cache validation unless

@@ -61,7 +61,6 @@ struct _GtkMenuBarPrivate
   (G_TYPE_INSTANCE_GET_PRIVATE ((o), GTK_TYPE_MENU_BAR, GtkMenuBarPrivate))
 
 
-static void gtk_menu_bar_class_init        (GtkMenuBarClass *klass);
 static void gtk_menu_bar_set_property      (GObject             *object,
 					    guint                prop_id,
 					    const GValue        *value,
@@ -83,16 +82,10 @@ static void gtk_menu_bar_hierarchy_changed (GtkWidget       *widget,
 static gint gtk_menu_bar_get_popup_delay   (GtkMenuShell    *menu_shell);
 static void gtk_menu_bar_move_current      (GtkMenuShell     *menu_shell,
                                             GtkMenuDirectionType direction);
-					    
 
 static GtkShadowType get_shadow_type   (GtkMenuBar      *menubar);
 
 G_DEFINE_TYPE (GtkMenuBar, gtk_menu_bar, GTK_TYPE_MENU_SHELL)
-
-static void
-gtk_menu_bar_init (GtkMenuBar *object)
-{
-}
 
 static void
 gtk_menu_bar_class_init (GtkMenuBarClass *class)
@@ -223,7 +216,12 @@ gtk_menu_bar_class_init (GtkMenuBarClass *class)
 
   g_type_class_add_private (gobject_class, sizeof (GtkMenuBarPrivate));  
 }
- 
+
+static void
+gtk_menu_bar_init (GtkMenuBar *object)
+{
+}
+
 GtkWidget*
 gtk_menu_bar_new (void)
 {
@@ -506,7 +504,8 @@ gtk_menu_bar_size_allocate (GtkWidget     *widget,
 }
 
 static void
-gtk_menu_bar_paint (GtkWidget *widget, GdkRectangle *area)
+gtk_menu_bar_paint (GtkWidget    *widget,
+                    GdkRectangle *area)
 {
   g_return_if_fail (GTK_IS_MENU_BAR (widget));
 
@@ -664,9 +663,6 @@ remove_from_window (GtkWindow  *window,
 {
   GList *menubars = get_menu_bars (window);
 
-  menubars = g_object_get_data (G_OBJECT (window),
-				    "gtk-menu-bar-list");
-
   menubars = g_list_remove (menubars, menubar);
 
   if (!menubars)
@@ -768,7 +764,7 @@ gtk_menu_bar_get_popup_delay (GtkMenuShell *menu_shell)
 
 static void
 gtk_menu_bar_move_current (GtkMenuShell         *menu_shell,
-			   GtkMenuDirectionType direction)
+			   GtkMenuDirectionType  direction)
 {
   GtkMenuBar *menubar = GTK_MENU_BAR (menu_shell);
   GtkTextDirection text_dir;
@@ -861,8 +857,9 @@ gtk_menu_bar_get_pack_direction (GtkMenuBar *menubar)
  * 
  * Since: 2.8
  **/
-void gtk_menu_bar_set_pack_direction (GtkMenuBar       *menubar,
-				      GtkPackDirection  pack_dir)
+void
+gtk_menu_bar_set_pack_direction (GtkMenuBar       *menubar,
+                                 GtkPackDirection  pack_dir)
 {
   GtkMenuBarPrivate *priv;
   GList *l;
@@ -917,8 +914,9 @@ gtk_menu_bar_get_child_pack_direction (GtkMenuBar *menubar)
  * 
  * Since: 2.8
  **/
-void gtk_menu_bar_set_child_pack_direction (GtkMenuBar       *menubar,
-					    GtkPackDirection  child_pack_dir)
+void
+gtk_menu_bar_set_child_pack_direction (GtkMenuBar       *menubar,
+                                       GtkPackDirection  child_pack_dir)
 {
   GtkMenuBarPrivate *priv;
   GList *l;
