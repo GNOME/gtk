@@ -1,7 +1,7 @@
 2007-09-13  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtkiconcache.c: Turn off icon cache validation unless
-	icon theme debugging is turned on.
+	icon theme debugging is turned on.  (#476342, Federico Mena Quintero)
 
 2007-09-13  Matthias Clasen  <mclasen@redhat.com>
 	
