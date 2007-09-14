@@ -91,11 +91,12 @@ is GTK_PIXELS.
 <para>
 
 </para>
-@ruler:
-@lower:
-@upper:
-@position:
-@max_size:
+
+@ruler: 
+@lower: 
+@upper: 
+@position: 
+@max_size: 
 
 
 <!-- ##### FUNCTION gtk_ruler_get_metric ##### -->

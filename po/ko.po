@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-07-20 18:13-0400\n"
+"POT-Creation-Date: 2007-09-13 19:20-0400\n"
 "PO-Revision-Date: 2007-06-29 12:23+0900\n"
 "Last-Translator: Changwoo Ryu <cwryu@debian.org>\n"
 "Language-Team: Gnome Korea <gnome-kr-hackers@lists.kldp.net>\n"
@@ -379,23 +379,24 @@ msgstr "움직이는 그림안에 뜻밖의 아이콘 부분이 있습니다"
 msgid "Unsupported animation type"
 msgstr "지원하지 않는 움직이는 그림 형식"
 
-#: gdk-pixbuf/io-ani.c:348 gdk-pixbuf/io-ani.c:536
+#: gdk-pixbuf/io-ani.c:348 gdk-pixbuf/io-ani.c:406 gdk-pixbuf/io-ani.c:432
+#: gdk-pixbuf/io-ani.c:455 gdk-pixbuf/io-ani.c:482 gdk-pixbuf/io-ani.c:569
 #, c-format
 msgid "Invalid header in animation"
 msgstr "움직이는 그림의 헤더가 잘못되었습니다"
 
-#: gdk-pixbuf/io-ani.c:358 gdk-pixbuf/io-ani.c:380 gdk-pixbuf/io-ani.c:439
-#: gdk-pixbuf/io-ani.c:458 gdk-pixbuf/io-ani.c:509 gdk-pixbuf/io-ani.c:581
+#: gdk-pixbuf/io-ani.c:358 gdk-pixbuf/io-ani.c:380 gdk-pixbuf/io-ani.c:464
+#: gdk-pixbuf/io-ani.c:491 gdk-pixbuf/io-ani.c:542 gdk-pixbuf/io-ani.c:614
 #, c-format
 msgid "Not enough memory to load animation"
 msgstr "움직이는 그림을 읽어 들이는 데 메모리가 부족합니다"
 
-#: gdk-pixbuf/io-ani.c:398 gdk-pixbuf/io-ani.c:415 gdk-pixbuf/io-ani.c:426
+#: gdk-pixbuf/io-ani.c:398 gdk-pixbuf/io-ani.c:424 gdk-pixbuf/io-ani.c:443
 #, c-format
 msgid "Malformed chunk in animation"
 msgstr "움직이는 그림에 잘못된 부분이 있습니다"
 
-#: gdk-pixbuf/io-ani.c:680
+#: gdk-pixbuf/io-ani.c:713
 msgid "The ANI image format"
 msgstr "ANI 그림 형식"
 
@@ -929,7 +930,7 @@ msgstr "TGA 컨텍스트 구조에 필요한 메모리를 할당할 수 없습�
 msgid "Excess data in file"
 msgstr "파일에 너무 많은 데이타"
 
-#: gdk-pixbuf/io-tga.c:1001
+#: gdk-pixbuf/io-tga.c:1002
 msgid "The Targa image format"
 msgstr "Targa 그림 형식"
 
@@ -1234,6 +1235,21 @@ msgstr "스페이스"
 msgid "keyboard label|Backslash"
 msgstr "백슬래시"
 
+#: gtk/gtkbuilderparser.c:289
+#, fuzzy, c-format
+msgid "Invalid type function: `%s'"
+msgstr "잘못된 파일 이름: %s"
+
+#: gtk/gtkbuilderparser.c:729
+#, fuzzy, c-format
+msgid "Invalid root element: '%s'"
+msgstr "잘못된 파일 이름: %s"
+
+#: gtk/gtkbuilderparser.c:761
+#, c-format
+msgid "Unhandled tag: '%s'"
+msgstr ""
+
 #. Translate to calendar:YM if you want years to be displayed
 #. * before months; otherwise translate to calendar:MY.
 #. * Do *not* translate it to anything else, if it
@@ -1326,7 +1342,7 @@ msgstr "없음"
 #. * an accelerator when the cell is clicked to change the
 #. * acelerator.
 #.
-#: gtk/gtkcellrendereraccel.c:364 gtk/gtkcellrendereraccel.c:576
+#: gtk/gtkcellrendereraccel.c:368 gtk/gtkcellrendereraccel.c:580
 msgid "New accelerator..."
 msgstr "새 단축키..."
 
@@ -1346,7 +1362,7 @@ msgstr "잘못된 컬러 데이터를 받았습니다\n"
 
 # palette => 색상표 
 # swatch => 견본
-#: gtk/gtkcolorsel.c:561
+#: gtk/gtkcolorsel.c:550
 msgid ""
 "The previously-selected color, for comparison to the color you're selecting "
 "now. You can drag this color to a palette entry, or select this color as "
@@ -1355,7 +1371,7 @@ msgstr ""
 "이전에 선택한 색. 현재 선택하려는 색과 비교하는 데 쓰입니다. 이 색을 색상표 "
 "항목에 드래그하거나, 다른 색 견본에 드래그해서 이 색을 선택할 수 있습니다."
 
-#: gtk/gtkcolorsel.c:566
+#: gtk/gtkcolorsel.c:554
 msgid ""
 "The color you've chosen. You can drag this color to a palette entry to save "
 "it for use in the future."
@@ -1363,11 +1379,11 @@ msgstr ""
 "선택한 색. 이 색을 색상표 항목으로 드래그해서 저장한 다음 나중에 사용할 수 있"
 "습니다."
 
-#: gtk/gtkcolorsel.c:954
+#: gtk/gtkcolorsel.c:942
 msgid "_Save color here"
 msgstr "색 여기에 저장(_S)"
 
-#: gtk/gtkcolorsel.c:1159
+#: gtk/gtkcolorsel.c:1146
 msgid ""
 "Click this palette entry to make it the current color. To change this entry, "
 "drag a color swatch here or right-click it and select \"Save color here.\""
@@ -1375,7 +1391,7 @@ msgstr ""
 "이 색상표 항목을 클릭해 현재 색을 선택하십시오. 이 항목을 바꾸려면, 색 견본"
 "를 여기로 드래그하거나 오른쪽 클릭을 해 \"색 여기에 저장\"을 선택하십시오."
 
-#: gtk/gtkcolorsel.c:1937
+#: gtk/gtkcolorsel.c:1920
 msgid ""
 "Select the color you want from the outer ring. Select the darkness or "
 "lightness of that color using the inner triangle."
@@ -1383,74 +1399,74 @@ msgstr ""
 "외부 고리에서 원하는 색을 선택하십시오. 내부 삼각형에서 그 색의 어둡기나 밝기"
 "를 선택하십시오."
 
-#: gtk/gtkcolorsel.c:1962
+#: gtk/gtkcolorsel.c:1944
 msgid ""
 "Click the eyedropper, then click a color anywhere on your screen to select "
 "that color."
 msgstr ""
 "점안기를 클릭하고, 화면의 어디든 선택하고 싶은 색을 골라서 클릭하십시오."
 
-#: gtk/gtkcolorsel.c:1971
+#: gtk/gtkcolorsel.c:1953
 msgid "_Hue:"
 msgstr "색상(_H):"
 
-#: gtk/gtkcolorsel.c:1972
+#: gtk/gtkcolorsel.c:1954
 msgid "Position on the color wheel."
 msgstr "색 동그라미의 위치."
 
-#: gtk/gtkcolorsel.c:1974
+#: gtk/gtkcolorsel.c:1956
 msgid "_Saturation:"
 msgstr "채도(_S):"
 
-#: gtk/gtkcolorsel.c:1975
+#: gtk/gtkcolorsel.c:1957
 msgid "\"Deepness\" of the color."
 msgstr "색의 \"깊이\"."
 
-#: gtk/gtkcolorsel.c:1976
+#: gtk/gtkcolorsel.c:1958
 msgid "_Value:"
 msgstr "값(_V):"
 
-#: gtk/gtkcolorsel.c:1977
+#: gtk/gtkcolorsel.c:1959
 msgid "Brightness of the color."
 msgstr "색의 밝기."
 
-#: gtk/gtkcolorsel.c:1978
+#: gtk/gtkcolorsel.c:1960
 msgid "_Red:"
 msgstr "빨강(_R):"
 
-#: gtk/gtkcolorsel.c:1979
+#: gtk/gtkcolorsel.c:1961
 msgid "Amount of red light in the color."
 msgstr "색에서 빨강 빛의 양."
 
-#: gtk/gtkcolorsel.c:1980
+#: gtk/gtkcolorsel.c:1962
 msgid "_Green:"
 msgstr "초록(_G):"
 
-#: gtk/gtkcolorsel.c:1981
+#: gtk/gtkcolorsel.c:1963
 msgid "Amount of green light in the color."
 msgstr "색에서 초록 빛의 양."
 
-#: gtk/gtkcolorsel.c:1982
+#: gtk/gtkcolorsel.c:1964
 msgid "_Blue:"
 msgstr "파랑(_B):"
 
-#: gtk/gtkcolorsel.c:1983
+#: gtk/gtkcolorsel.c:1965
 msgid "Amount of blue light in the color."
 msgstr "색에서 파랑 빛의 양."
 
-#: gtk/gtkcolorsel.c:1986
+#: gtk/gtkcolorsel.c:1968
 msgid "Op_acity:"
 msgstr "투명도(_A):"
 
-#: gtk/gtkcolorsel.c:1994 gtk/gtkcolorsel.c:2005
+#: gtk/gtkcolorsel.c:1975 gtk/gtkcolorsel.c:1985
 msgid "Transparency of the color."
 msgstr "색의 투명한 정도."
 
-#: gtk/gtkcolorsel.c:2012
+#: gtk/gtkcolorsel.c:1992
 msgid "Color _name:"
 msgstr "색 이름(_N):"
 
-#: gtk/gtkcolorsel.c:2027
+#: gtk/gtkcolorsel.c:2006
 msgid ""
 "You can enter an HTML-style hexadecimal color value, or simply a color name "
 "such as 'orange' in this entry."
@@ -1458,11 +1474,11 @@ msgstr ""
 "이 항목에 HTML 방식의 16진수 색 값을 입력하거나, 간단히 'orange'처럼 색 이름"
 "을 입력할 수 있습니다."
 
-#: gtk/gtkcolorsel.c:2057
+#: gtk/gtkcolorsel.c:2036
 msgid "_Palette:"
 msgstr "색상표(_P):"
 
-#: gtk/gtkcolorsel.c:2086
+#: gtk/gtkcolorsel.c:2065
 msgid "Color Wheel"
 msgstr "색상환"
 
@@ -1482,7 +1498,7 @@ msgstr "유니코드 제어 문자 넣기(_I)"
 msgid "Select A File"
 msgstr "파일을 선택하십시오"
 
-#: gtk/gtkfilechooserbutton.c:69 gtk/gtkfilechooserdefault.c:1966
+#: gtk/gtkfilechooserbutton.c:69 gtk/gtkfilechooserdefault.c:1982
 msgid "Desktop"
 msgstr "바탕 화면"
 
@@ -1490,7 +1506,7 @@ msgstr "바탕 화면"
 msgid "(None)"
 msgstr "(없음)"
 
-#: gtk/gtkfilechooserbutton.c:2052
+#: gtk/gtkfilechooserbutton.c:2048
 msgid "Other..."
 msgstr "기타..."
 
@@ -1536,236 +1552,236 @@ msgstr "폴더 내용을 표시할 수 없습니다"
 #. * is a hostname. Nautilus and the panel contain the same string
 #. * to translate.
 #.
-#: gtk/gtkfilechooserdefault.c:1715
+#: gtk/gtkfilechooserdefault.c:1731
 #, c-format
 msgid "%1$s on %2$s"
 msgstr "%s %s"
 
-#: gtk/gtkfilechooserdefault.c:1893
+#: gtk/gtkfilechooserdefault.c:1909
 msgid "Search"
 msgstr "찾기"
 
-#: gtk/gtkfilechooserdefault.c:1917
+#: gtk/gtkfilechooserdefault.c:1933
 msgid "Recently Used"
 msgstr "최근 사용"
 
-#: gtk/gtkfilechooserdefault.c:3006
+#: gtk/gtkfilechooserdefault.c:2597
+msgid "Select which types of files are shown"
+msgstr "어떤 종류의 파일을 표시할 지 선택합니다"
+
+#: gtk/gtkfilechooserdefault.c:3025
 #, c-format
 msgid "Add the folder '%s' to the bookmarks"
 msgstr "'%s' 폴더를 책갈피에 더합니다"
 
-#: gtk/gtkfilechooserdefault.c:3047
+#: gtk/gtkfilechooserdefault.c:3066
 #, c-format
 msgid "Add the current folder to the bookmarks"
 msgstr "현재 폴더를 책갈피에 더합니다"
 
-#: gtk/gtkfilechooserdefault.c:3049
+#: gtk/gtkfilechooserdefault.c:3068
 #, c-format
 msgid "Add the selected folders to the bookmarks"
 msgstr "선택한 폴더를 책갈피에 더합니다"
 
-#: gtk/gtkfilechooserdefault.c:3089
+#: gtk/gtkfilechooserdefault.c:3108
 #, c-format
 msgid "Remove the bookmark '%s'"
 msgstr "'%s' 책갈피를 지웁니다"
 
-#: gtk/gtkfilechooserdefault.c:3522
+#: gtk/gtkfilechooserdefault.c:3540
 #, c-format
 msgid "Could not add a bookmark for '%s' because it is an invalid path name."
 msgstr "%s에 대한 책갈피를 더할 수 없습니다.  경로 이름이 잘못되었습니다."
 
-#: gtk/gtkfilechooserdefault.c:3747
+#: gtk/gtkfilechooserdefault.c:3765
 msgid "Remove"
 msgstr "지우기"
 
-#: gtk/gtkfilechooserdefault.c:3756
+#: gtk/gtkfilechooserdefault.c:3774
 msgid "Rename..."
 msgstr "이름 바꾸기..."
 
 #. Accessible object name for the file chooser's shortcuts pane
-#: gtk/gtkfilechooserdefault.c:3898
+#: gtk/gtkfilechooserdefault.c:3916
 msgid "Places"
 msgstr "위치"
 
 #. Column header for the file chooser's shortcuts pane
-#: gtk/gtkfilechooserdefault.c:3952
+#: gtk/gtkfilechooserdefault.c:3970
 msgid "_Places"
 msgstr "위치(_P)"
 
-#: gtk/gtkfilechooserdefault.c:4007 gtk/gtkstock.c:297
+#: gtk/gtkfilechooserdefault.c:4025 gtk/gtkstock.c:297
 msgid "_Add"
 msgstr "추가(_A)"
 
-#: gtk/gtkfilechooserdefault.c:4014
+#: gtk/gtkfilechooserdefault.c:4032
 msgid "Add the selected folder to the Bookmarks"
 msgstr "선택한 폴더를 책갈피에 더합니다"
 
-#: gtk/gtkfilechooserdefault.c:4019 gtk/gtkstock.c:385
+#: gtk/gtkfilechooserdefault.c:4037 gtk/gtkstock.c:385
 msgid "_Remove"
 msgstr "지우기(_R)"
 
-#: gtk/gtkfilechooserdefault.c:4026
+#: gtk/gtkfilechooserdefault.c:4044
 msgid "Remove the selected bookmark"
 msgstr "선택한 북마크를 지웁니다"
 
-#: gtk/gtkfilechooserdefault.c:4122
+#: gtk/gtkfilechooserdefault.c:4140
 msgid "Could not select file"
 msgstr "파일을 선택할 수 없습니다"
 
-#: gtk/gtkfilechooserdefault.c:4259
+#: gtk/gtkfilechooserdefault.c:4277
 #, c-format
 msgid "Could not select file '%s' because it is an invalid path name."
 msgstr "'%s' 파일을 선택할 수 없습니다.  경로 이름이 잘못되었습니다."
 
-#: gtk/gtkfilechooserdefault.c:4316
+#: gtk/gtkfilechooserdefault.c:4334
 msgid "_Add to Bookmarks"
 msgstr "책갈피에 추가(_A)"
 
-#: gtk/gtkfilechooserdefault.c:4330
+#: gtk/gtkfilechooserdefault.c:4348
 msgid "Show _Hidden Files"
 msgstr "숨긴 파일 표시(_H)"
 
-#: gtk/gtkfilechooserdefault.c:4574 gtk/gtkfilesel.c:729
+#: gtk/gtkfilechooserdefault.c:4592 gtk/gtkfilesel.c:729
 msgid "Files"
 msgstr "파일"
 
-#: gtk/gtkfilechooserdefault.c:4623
+#: gtk/gtkfilechooserdefault.c:4641
 msgid "Name"
 msgstr "이름"
 
-#: gtk/gtkfilechooserdefault.c:4648
+#: gtk/gtkfilechooserdefault.c:4666
 msgid "Size"
 msgstr "크기"
 
-#: gtk/gtkfilechooserdefault.c:4662
+#: gtk/gtkfilechooserdefault.c:4680
 msgid "Modified"
 msgstr "고쳐짐"
 
-#: gtk/gtkfilechooserdefault.c:4697
-msgid "Select which types of files are shown"
-msgstr "어떤 종류의 파일을 표시할 지 선택합니다"
-
 #. Label
-#: gtk/gtkfilechooserdefault.c:4908 gtk/gtkprinteroptionwidget.c:786
+#: gtk/gtkfilechooserdefault.c:4900 gtk/gtkprinteroptionwidget.c:786
 msgid "_Name:"
 msgstr "이름(_N):"
 
-#: gtk/gtkfilechooserdefault.c:4950
+#: gtk/gtkfilechooserdefault.c:4942
 msgid "_Browse for other folders"
 msgstr "다른 폴더 찾아보기(_B)"
 
-#: gtk/gtkfilechooserdefault.c:5205
+#: gtk/gtkfilechooserdefault.c:5197
 msgid "Type a file name"
 msgstr "파일 이름을 입력하십시오"
 
 #. Create Folder
-#: gtk/gtkfilechooserdefault.c:5242
+#: gtk/gtkfilechooserdefault.c:5234
 msgid "Create Fo_lder"
 msgstr "폴더 만들기(_L)"
 
-#: gtk/gtkfilechooserdefault.c:5252
+#: gtk/gtkfilechooserdefault.c:5244
 msgid "_Location:"
 msgstr "위치(_L):"
 
-#: gtk/gtkfilechooserdefault.c:5490
+#: gtk/gtkfilechooserdefault.c:5482
 msgid "Save in _folder:"
 msgstr "폴더에 저장(_F):"
 
-#: gtk/gtkfilechooserdefault.c:5492
+#: gtk/gtkfilechooserdefault.c:5484
 msgid "Create in _folder:"
 msgstr "폴더에 만들기(_F):"
 
-#: gtk/gtkfilechooserdefault.c:7095
+#: gtk/gtkfilechooserdefault.c:7087
 #, c-format
 msgid "Cannot change to folder because it is not local"
 msgstr "로컬 폴더가 아니므로 폴더로 이동할 수 없습니다"
 
-#: gtk/gtkfilechooserdefault.c:7711 gtk/gtkfilechooserdefault.c:7732
+#: gtk/gtkfilechooserdefault.c:7703 gtk/gtkfilechooserdefault.c:7724
 #, c-format
 msgid "Shortcut %s already exists"
 msgstr "%s 바로 가기가 이미 있습니다"
 
-#: gtk/gtkfilechooserdefault.c:7822
+#: gtk/gtkfilechooserdefault.c:7814
 #, c-format
 msgid "Shortcut %s does not exist"
 msgstr "%s 바로 가기가 없습니다"
 
-#: gtk/gtkfilechooserdefault.c:8077
+#: gtk/gtkfilechooserdefault.c:8069
 #, c-format
 msgid "A file named \"%s\" already exists.  Do you want to replace it?"
 msgstr "이름이 \"%s\"인 파일이 이미 있습니다.  이 파일을 바꾸시겠습니까?"
 
-#: gtk/gtkfilechooserdefault.c:8080
+#: gtk/gtkfilechooserdefault.c:8072
 #, c-format
 msgid ""
 "The file already exists in \"%s\".  Replacing it will overwrite its contents."
 msgstr ""
 "\"%s\" 안에 파일이 이미 있습니다.  파일을 바꾸면 그 내용을 덮어 쓰게 됩니다."
 
-#: gtk/gtkfilechooserdefault.c:8085
+#: gtk/gtkfilechooserdefault.c:8077
 msgid "_Replace"
 msgstr "바꾸기(_R)"
 
-#: gtk/gtkfilechooserdefault.c:8916
+#: gtk/gtkfilechooserdefault.c:8911
 msgid "Could not start the search process"
 msgstr "찾기 작업을 시작할 수 없습니다"
 
-#: gtk/gtkfilechooserdefault.c:8917
+#: gtk/gtkfilechooserdefault.c:8912
 msgid ""
 "The program was not able to create a connection to the indexer daemon.  "
 "Please make sure it is running."
 msgstr ""
 "프로그램이 인덱스 데몬에 연결할 수 없습니다. 데몬이 실행 중인지 확인하십시오."
 
-#: gtk/gtkfilechooserdefault.c:8931
+#: gtk/gtkfilechooserdefault.c:8926
 msgid "Could not send the search request"
 msgstr "찾기 요청을 보낼 수 없습니다"
 
 #. Label
-#: gtk/gtkfilechooserdefault.c:9357
+#: gtk/gtkfilechooserdefault.c:9352
 msgid "_Search:"
 msgstr "찾기(_S):"
 
-#: gtk/gtkfilechooserdefault.c:10307
+#: gtk/gtkfilechooserdefault.c:10305
 #, c-format
 msgid "Could not mount %s"
 msgstr "%s을(를) 마운트할 수 없습니다"
 
-#: gtk/gtkfilechooserdefault.c:10935
+#: gtk/gtkfilechooserdefault.c:10933
 msgid "Type name of new folder"
 msgstr "새 폴더의 이름을 넣으십시오"
 
-#: gtk/gtkfilechooserdefault.c:10983
+#: gtk/gtkfilechooserdefault.c:10981
 #, c-format
 msgid "%d byte"
 msgid_plural "%d bytes"
 msgstr[0] "%d바이트"
 
-#: gtk/gtkfilechooserdefault.c:10985
+#: gtk/gtkfilechooserdefault.c:10983
 #, c-format
 msgid "%.1f KB"
 msgstr "%.1f KB"
 
-#: gtk/gtkfilechooserdefault.c:10987
+#: gtk/gtkfilechooserdefault.c:10985
 #, c-format
 msgid "%.1f MB"
 msgstr "%.1f MB"
 
-#: gtk/gtkfilechooserdefault.c:10989
+#: gtk/gtkfilechooserdefault.c:10987
 #, c-format
 msgid "%.1f GB"
 msgstr "%.1f GB"
 
-#: gtk/gtkfilechooserdefault.c:11085 gtk/gtkfilechooserdefault.c:11106
-#: gtk/gtkfilechooserdefault.c:11138
+#: gtk/gtkfilechooserdefault.c:11083 gtk/gtkfilechooserdefault.c:11104
+#: gtk/gtkfilechooserdefault.c:11136
 msgid "Unknown"
 msgstr "모름"
 
-#: gtk/gtkfilechooserdefault.c:11124
+#: gtk/gtkfilechooserdefault.c:11122
 msgid "Today at %H:%M"
 msgstr "오늘 %H:%M"
 
-#: gtk/gtkfilechooserdefault.c:11126
+#: gtk/gtkfilechooserdefault.c:11124
 msgid "Yesterday at %H:%M"
 msgstr "어제 %H:%M"
 
@@ -2222,11 +2238,11 @@ msgstr "올바른 페이지 설정 파일이 아닙니다"
 #. * Do *not* translate it to "predefinito:mm", if it
 #. * it isn't default:mm or default:inch it will not work
 #.
-#: gtk/gtkpagesetupunixdialog.c:154
+#: gtk/gtkpagesetupunixdialog.c:152
 msgid "default:mm"
 msgstr "default:mm"
 
-#: gtk/gtkpagesetupunixdialog.c:310
+#: gtk/gtkpagesetupunixdialog.c:308
 msgid ""
 "<b>Any Printer</b>\n"
 "For portable documents"
@@ -2234,15 +2250,15 @@ msgstr ""
 "<b>모든 프린터</b>\n"
 "문서 인쇄용"
 
-#: gtk/gtkpagesetupunixdialog.c:885 gtk/gtkpagesetupunixdialog.c:1401
+#: gtk/gtkpagesetupunixdialog.c:883 gtk/gtkpagesetupunixdialog.c:1395
 msgid "mm"
 msgstr "mm"
 
-#: gtk/gtkpagesetupunixdialog.c:887 gtk/gtkpagesetupunixdialog.c:1399
+#: gtk/gtkpagesetupunixdialog.c:885 gtk/gtkpagesetupunixdialog.c:1393
 msgid "inch"
 msgstr "인치"
 
-#: gtk/gtkpagesetupunixdialog.c:906
+#: gtk/gtkpagesetupunixdialog.c:904
 #, c-format
 msgid ""
 "Margins:\n"
@@ -2257,68 +2273,68 @@ msgstr ""
 " 위: %s %s\n"
 " 아래: %s %s"
 
-#: gtk/gtkpagesetupunixdialog.c:957
+#: gtk/gtkpagesetupunixdialog.c:953
 msgid "Manage Custom Sizes..."
 msgstr "사용자 설정 크기 관리..."
 
-#: gtk/gtkpagesetupunixdialog.c:1005
+#: gtk/gtkpagesetupunixdialog.c:1001
 msgid "_Format for:"
 msgstr "다음 프린터에 대한 형식(_F):"
 
-#: gtk/gtkpagesetupunixdialog.c:1026
+#: gtk/gtkpagesetupunixdialog.c:1022
 msgid "_Paper size:"
 msgstr "용지 크기(_P):"
 
-#: gtk/gtkpagesetupunixdialog.c:1062
+#: gtk/gtkpagesetupunixdialog.c:1058
 msgid "_Orientation:"
 msgstr "방향(_O):"
 
-#: gtk/gtkpagesetupunixdialog.c:1127 gtk/gtkprintunixdialog.c:2156
+#: gtk/gtkpagesetupunixdialog.c:1121 gtk/gtkprintunixdialog.c:2175
 msgid "Page Setup"
 msgstr "페이지 설정"
 
-#: gtk/gtkpagesetupunixdialog.c:1446
+#: gtk/gtkpagesetupunixdialog.c:1440
 msgid "Margins from Printer..."
 msgstr "프린터의 여백..."
 
-#: gtk/gtkpagesetupunixdialog.c:1606
+#: gtk/gtkpagesetupunixdialog.c:1600
 #, c-format
 msgid "Custom Size %d"
 msgstr "사용자 설정 크기 %d"
 
-#: gtk/gtkpagesetupunixdialog.c:1835
+#: gtk/gtkpagesetupunixdialog.c:1829
 msgid "Manage Custom Sizes"
 msgstr "사용자 설정 크기 관리"
 
-#: gtk/gtkpagesetupunixdialog.c:1931
+#: gtk/gtkpagesetupunixdialog.c:1925
 msgid "_Width:"
 msgstr "너비(_W):"
 
-#: gtk/gtkpagesetupunixdialog.c:1943
+#: gtk/gtkpagesetupunixdialog.c:1937
 msgid "_Height:"
 msgstr "높이(_H):"
 
-#: gtk/gtkpagesetupunixdialog.c:1955
+#: gtk/gtkpagesetupunixdialog.c:1949
 msgid "Paper Size"
 msgstr "용지 크기"
 
-#: gtk/gtkpagesetupunixdialog.c:1965
+#: gtk/gtkpagesetupunixdialog.c:1959
 msgid "_Top:"
 msgstr "위(_T):"
 
-#: gtk/gtkpagesetupunixdialog.c:1977
+#: gtk/gtkpagesetupunixdialog.c:1971
 msgid "_Bottom:"
 msgstr "아래(_B):"
 
-#: gtk/gtkpagesetupunixdialog.c:1989
+#: gtk/gtkpagesetupunixdialog.c:1983
 msgid "_Left:"
 msgstr "왼쪽(_L):"
 
-#: gtk/gtkpagesetupunixdialog.c:2001
+#: gtk/gtkpagesetupunixdialog.c:1995
 msgid "_Right:"
 msgstr "오른쪽(_R):"
 
-#: gtk/gtkpagesetupunixdialog.c:2042
+#: gtk/gtkpagesetupunixdialog.c:2036
 msgid "Paper Margins"
 msgstr "용지 여백"
 
@@ -2476,35 +2492,35 @@ msgstr "알 수 없는 오류가 있습니다"
 msgid "Error from StartDoc"
 msgstr "StartDoc에 오류가 있습니다"
 
-#: gtk/gtkprintunixdialog.c:1485
+#: gtk/gtkprintunixdialog.c:1504
 msgid "Printer"
 msgstr "프린터"
 
-#: gtk/gtkprintunixdialog.c:1493 gtk/gtkrecentchooserdefault.c:1005
+#: gtk/gtkprintunixdialog.c:1512
 msgid "Location"
 msgstr "위치"
 
-#: gtk/gtkprintunixdialog.c:1502
+#: gtk/gtkprintunixdialog.c:1521
 msgid "Status"
 msgstr "상태"
 
-#: gtk/gtkprintunixdialog.c:1524
+#: gtk/gtkprintunixdialog.c:1543
 msgid "Print Pages"
 msgstr "인쇄 페이지"
 
-#: gtk/gtkprintunixdialog.c:1528
+#: gtk/gtkprintunixdialog.c:1547
 msgid "_All"
 msgstr "모두(_A)"
 
-#: gtk/gtkprintunixdialog.c:1535
+#: gtk/gtkprintunixdialog.c:1554
 msgid "C_urrent"
 msgstr "현재(_U)"
 
-#: gtk/gtkprintunixdialog.c:1544
+#: gtk/gtkprintunixdialog.c:1563
 msgid "Ra_nge"
 msgstr "범위(_N)"
 
-#: gtk/gtkprintunixdialog.c:1545
+#: gtk/gtkprintunixdialog.c:1564
 msgid ""
 "Specify one or more page ranges,\n"
 " e.g. 1-3,7,11"
@@ -2512,141 +2528,141 @@ msgstr ""
 "페이지 범위를 지정하십시오.\n"
 " 예) 1-3,7,11"
 
-#: gtk/gtkprintunixdialog.c:1564
+#: gtk/gtkprintunixdialog.c:1583
 msgid "Copies"
 msgstr "인쇄 매수"
 
 #. FIXME chpe: too much space between Copies and spinbutton, put those 2 in a hbox and make it span 2 columns
-#: gtk/gtkprintunixdialog.c:1569
+#: gtk/gtkprintunixdialog.c:1588
 msgid "Copie_s:"
 msgstr "인쇄 매수(_S):"
 
-#: gtk/gtkprintunixdialog.c:1587
+#: gtk/gtkprintunixdialog.c:1606
 msgid "C_ollate"
 msgstr "한 부씩 인쇄(_O)"
 
-#: gtk/gtkprintunixdialog.c:1595
+#: gtk/gtkprintunixdialog.c:1614
 msgid "_Reverse"
 msgstr "마지막 페이지부터(_R)"
 
-#: gtk/gtkprintunixdialog.c:1612
+#: gtk/gtkprintunixdialog.c:1631
 msgid "General"
 msgstr "일반"
 
-#: gtk/gtkprintunixdialog.c:2012
+#: gtk/gtkprintunixdialog.c:2031
 msgid "Layout"
 msgstr "배치"
 
-#: gtk/gtkprintunixdialog.c:2016
+#: gtk/gtkprintunixdialog.c:2035
 msgid "Pages per _side:"
 msgstr "한 장당 페이지 수(_S):"
 
-#: gtk/gtkprintunixdialog.c:2032
+#: gtk/gtkprintunixdialog.c:2051
 msgid "T_wo-sided:"
 msgstr "양면(_W):"
 
-#: gtk/gtkprintunixdialog.c:2047
+#: gtk/gtkprintunixdialog.c:2066
 msgid "_Only print:"
 msgstr "다음만 인쇄(_O):"
 
 #. In enum order
-#: gtk/gtkprintunixdialog.c:2062
+#: gtk/gtkprintunixdialog.c:2081
 msgid "All sheets"
 msgstr "모든 페이지"
 
-#: gtk/gtkprintunixdialog.c:2063
+#: gtk/gtkprintunixdialog.c:2082
 msgid "Even sheets"
 msgstr "짝수 페이지"
 
-#: gtk/gtkprintunixdialog.c:2064
+#: gtk/gtkprintunixdialog.c:2083
 msgid "Odd sheets"
 msgstr "홀수 페이지"
 
-#: gtk/gtkprintunixdialog.c:2067
+#: gtk/gtkprintunixdialog.c:2086
 msgid "Sc_ale:"
 msgstr "크기 조정(_A):"
 
-#: gtk/gtkprintunixdialog.c:2094
+#: gtk/gtkprintunixdialog.c:2113
 msgid "Paper"
 msgstr "용지"
 
-#: gtk/gtkprintunixdialog.c:2098
+#: gtk/gtkprintunixdialog.c:2117
 msgid "Paper _type:"
 msgstr "용지 종류(_T):"
 
-#: gtk/gtkprintunixdialog.c:2113
+#: gtk/gtkprintunixdialog.c:2132
 msgid "Paper _source:"
 msgstr "용지 공급(_S):"
 
-#: gtk/gtkprintunixdialog.c:2128
+#: gtk/gtkprintunixdialog.c:2147
 msgid "Output t_ray:"
 msgstr "출력 트레이(_R):"
 
-#: gtk/gtkprintunixdialog.c:2179
+#: gtk/gtkprintunixdialog.c:2198
 msgid "Job Details"
 msgstr "작업 상세 정보"
 
-#: gtk/gtkprintunixdialog.c:2185
+#: gtk/gtkprintunixdialog.c:2204
 msgid "Pri_ority:"
 msgstr "우선순위(_O):"
 
-#: gtk/gtkprintunixdialog.c:2200
+#: gtk/gtkprintunixdialog.c:2219
 msgid "_Billing info:"
 msgstr "요금 정보(_B):"
 
-#: gtk/gtkprintunixdialog.c:2218
+#: gtk/gtkprintunixdialog.c:2237
 msgid "Print Document"
 msgstr "문서 인쇄"
 
-#: gtk/gtkprintunixdialog.c:2224
+#: gtk/gtkprintunixdialog.c:2243
 msgid "_Now"
 msgstr "지금(_N)"
 
-#: gtk/gtkprintunixdialog.c:2231
+#: gtk/gtkprintunixdialog.c:2250
 msgid "A_t:"
 msgstr "시각(_T):"
 
-#: gtk/gtkprintunixdialog.c:2246
+#: gtk/gtkprintunixdialog.c:2265
 msgid "On _hold"
 msgstr "보류(_H)"
 
-#: gtk/gtkprintunixdialog.c:2265
+#: gtk/gtkprintunixdialog.c:2284
 msgid "Add Cover Page"
 msgstr "표지 사용"
 
-#: gtk/gtkprintunixdialog.c:2271
+#: gtk/gtkprintunixdialog.c:2290
 msgid "Be_fore:"
 msgstr "앞에(_F):"
 
-#: gtk/gtkprintunixdialog.c:2286
+#: gtk/gtkprintunixdialog.c:2305
 msgid "_After:"
 msgstr "뒤에(_A):"
 
-#: gtk/gtkprintunixdialog.c:2301
+#: gtk/gtkprintunixdialog.c:2320
 msgid "Job"
 msgstr "작업"
 
-#: gtk/gtkprintunixdialog.c:2367
+#: gtk/gtkprintunixdialog.c:2386
 msgid "Advanced"
 msgstr "고급"
 
-#: gtk/gtkprintunixdialog.c:2402
+#: gtk/gtkprintunixdialog.c:2421
 msgid "Image Quality"
 msgstr "그림 화질"
 
-#: gtk/gtkprintunixdialog.c:2405
+#: gtk/gtkprintunixdialog.c:2424
 msgid "Color"
 msgstr "색"
 
-#: gtk/gtkprintunixdialog.c:2408
+#: gtk/gtkprintunixdialog.c:2427
 msgid "Finishing"
 msgstr "마무리"
 
-#: gtk/gtkprintunixdialog.c:2418
+#: gtk/gtkprintunixdialog.c:2437
 msgid "Some of the settings in the dialog conflict"
 msgstr "대화 상자의 설정이 충돌합니다"
 
-#: gtk/gtkprintunixdialog.c:2441
+#: gtk/gtkprintunixdialog.c:2460
 msgid "Print"
 msgstr "인쇄"
 
@@ -2669,45 +2685,45 @@ msgid "Unable to locate image file in pixmap_path: \"%s\""
 msgstr "그림 파일을 pixmap_path에서 찾을 수 없음: \"%s\""
 
 #: gtk/gtkrecentaction.c:155 gtk/gtkrecentaction.c:163
-#: gtk/gtkrecentchoosermenu.c:567 gtk/gtkrecentchoosermenu.c:575
+#: gtk/gtkrecentchoosermenu.c:555 gtk/gtkrecentchoosermenu.c:563
 #, c-format
 msgid "This function is not implemented for widgets of class '%s'"
 msgstr "이 기능은 '%s' 클래스의 위젯에서 구현되지 않았습니다"
 
-#: gtk/gtkrecentchooserdefault.c:459
+#: gtk/gtkrecentchooserdefault.c:465
 msgid "Select which type of documents are shown"
 msgstr "어떤 종류의 문서를 표시할 지 선택합니다"
 
-#: gtk/gtkrecentchooserdefault.c:1124 gtk/gtkrecentchooserdefault.c:1161
+#: gtk/gtkrecentchooserdefault.c:1107 gtk/gtkrecentchooserdefault.c:1144
 #, c-format
 msgid "No item for URI '%s' found"
 msgstr "'%s' URI에 대한 항목이 없습니다"
 
-#: gtk/gtkrecentchooserdefault.c:1288
+#: gtk/gtkrecentchooserdefault.c:1271
 msgid "Untitled filter"
 msgstr ""
 
-#: gtk/gtkrecentchooserdefault.c:1596
+#: gtk/gtkrecentchooserdefault.c:1626
 msgid "Could not remove item"
 msgstr "항목을 지울 수 없습니다"
 
-#: gtk/gtkrecentchooserdefault.c:1639
+#: gtk/gtkrecentchooserdefault.c:1669
 msgid "Could not clear list"
 msgstr "목록을 비울 수 없습니다"
 
-#: gtk/gtkrecentchooserdefault.c:1723
+#: gtk/gtkrecentchooserdefault.c:1753
 msgid "Copy _Location"
 msgstr "위치 복사(_L)"
 
-#: gtk/gtkrecentchooserdefault.c:1736
+#: gtk/gtkrecentchooserdefault.c:1766
 msgid "_Remove From List"
 msgstr "목록에서 지우기(_R)"
 
-#: gtk/gtkrecentchooserdefault.c:1745
+#: gtk/gtkrecentchooserdefault.c:1775
 msgid "_Clear List"
 msgstr "목록 비우기(_C)"
 
-#: gtk/gtkrecentchooserdefault.c:1759
+#: gtk/gtkrecentchooserdefault.c:1789
 msgid "Show _Private Resources"
 msgstr "개인 리소스 표시(_P)"
 
@@ -2721,21 +2737,21 @@ msgstr "개인 리소스 표시(_P)"
 #. * user appended or prepended custom menu items to the
 #. * recent chooser menu widget.
 #.
-#: gtk/gtkrecentchoosermenu.c:332
+#: gtk/gtkrecentchoosermenu.c:320
 msgid "No items found"
 msgstr "항목이 없습니다"
 
-#: gtk/gtkrecentchoosermenu.c:487 gtk/gtkrecentchoosermenu.c:543
+#: gtk/gtkrecentchoosermenu.c:475 gtk/gtkrecentchoosermenu.c:531
 #, c-format
 msgid "No recently used resource found with URI `%s'"
 msgstr "`%s' URI에 최근에 사용한 리소스가 없습니다"
 
-#: gtk/gtkrecentchoosermenu.c:757
+#: gtk/gtkrecentchoosermenu.c:742
 #, c-format
 msgid "Open '%s'"
 msgstr "'%s' 열기"
 
-#: gtk/gtkrecentchoosermenu.c:789
+#: gtk/gtkrecentchoosermenu.c:772
 msgid "Unknown item"
 msgstr "알 수 없는 항목"
 
@@ -2746,7 +2762,7 @@ msgstr "알 수 없는 항목"
 #. *
 #. * Don't include the prefix "recent menu label|" in the translation.
 #.
-#: gtk/gtkrecentchoosermenu.c:802
+#: gtk/gtkrecentchoosermenu.c:785
 #, c-format
 msgid "recent menu label|_%d. %s"
 msgstr ""
@@ -2756,13 +2772,13 @@ msgstr ""
 #. *
 #. * Don't include the prefix "recent menu label|" in the translation.
 #.
-#: gtk/gtkrecentchoosermenu.c:809
+#: gtk/gtkrecentchoosermenu.c:792
 #, c-format
 msgid "recent menu label|%d. %s"
 msgstr ""
 
-#: gtk/gtkrecentmanager.c:1047 gtk/gtkrecentmanager.c:1194
-#: gtk/gtkrecentmanager.c:1204 gtk/gtkrecentmanager.c:1257
+#: gtk/gtkrecentmanager.c:1041 gtk/gtkrecentmanager.c:1188
+#: gtk/gtkrecentmanager.c:1198 gtk/gtkrecentmanager.c:1251
 #, c-format
 msgid "Unable to find an item with URI '%s'"
 msgstr "'%s' URI로 항목을 찾을 수 없습니다"
@@ -4191,91 +4207,91 @@ msgstr "ROC 8k"
 msgid "different idatas found for symlinked '%s' and '%s'\n"
 msgstr "심볼릭 링크가 걸린 '%s' 및 '%s'의 idata가 다릅니다\n"
 
-#: gtk/updateiconcache.c:1379
+#: gtk/updateiconcache.c:1376
 #, c-format
 msgid "Failed to write header\n"
 msgstr "헤더를 쓰는 데 실패\n"
 
-#: gtk/updateiconcache.c:1385
+#: gtk/updateiconcache.c:1382
 #, c-format
 msgid "Failed to write hash table\n"
 msgstr "해시 테이블을 쓰는 데 실패\n"
 
-#: gtk/updateiconcache.c:1391
+#: gtk/updateiconcache.c:1388
 #, c-format
 msgid "Failed to write folder index\n"
 msgstr "폴더 인덱스를 쓰는 데 실패\n"
 
-#: gtk/updateiconcache.c:1399
+#: gtk/updateiconcache.c:1396
 #, c-format
 msgid "Failed to rewrite header\n"
 msgstr "헤더를 다시 쓰는 데 실패\n"
 
-#: gtk/updateiconcache.c:1451
+#: gtk/updateiconcache.c:1448
 #, c-format
 msgid "Failed to write cache file: %s\n"
 msgstr "캐시 파일을 쓰는 데 실패: %s\n"
 
-#: gtk/updateiconcache.c:1486
+#: gtk/updateiconcache.c:1483
 #, c-format
 msgid "The generated cache was invalid.\n"
 msgstr "만들어진 캐시가 잘못되었습니다.\n"
 
-#: gtk/updateiconcache.c:1500
+#: gtk/updateiconcache.c:1497
 #, c-format
 msgid "Could not rename %s to %s: %s, removing %s then.\n"
 msgstr "%s의 이름을 %s(으)로 바꿀 수 없습니다: %s, %s을(를) 지웁니다.\n"
 
-#: gtk/updateiconcache.c:1512
+#: gtk/updateiconcache.c:1509
 #, c-format
 msgid "Could not rename %s to %s: %s\n"
 msgstr "%s의 이름을 %s(으)로 바꿀 수 없습니다: %s\n"
 
-#: gtk/updateiconcache.c:1519
+#: gtk/updateiconcache.c:1516
 #, c-format
 msgid "Could not rename %s back to %s: %s.\n"
 msgstr "%s의 이름을 %s(으)로 되돌릴 수 없습니다: %s.\n"
 
-#: gtk/updateiconcache.c:1541
+#: gtk/updateiconcache.c:1538
 #, c-format
 msgid "Cache file created successfully.\n"
 msgstr "캐시 파일을 성공적으로 만들었습니다.\n"
 
-#: gtk/updateiconcache.c:1580
+#: gtk/updateiconcache.c:1577
 msgid "Overwrite an existing cache, even if up to date"
 msgstr "캐시가 최신이더라도 현재 캐시를 덮어 씁니다"
 
-#: gtk/updateiconcache.c:1581
+#: gtk/updateiconcache.c:1578
 msgid "Don't check for the existence of index.theme"
 msgstr "index.theme 파일이 있는 지 검사하지 않습니다"
 
-#: gtk/updateiconcache.c:1582
+#: gtk/updateiconcache.c:1579
 msgid "Don't include image data in the cache"
 msgstr "캐시에 그림 데이터를 포함하지 않습니다"
 
-#: gtk/updateiconcache.c:1583
+#: gtk/updateiconcache.c:1580
 msgid "Output a C header file"
 msgstr "C 헤더 파일을 출력합니다"
 
-#: gtk/updateiconcache.c:1584
+#: gtk/updateiconcache.c:1581
 msgid "Turn off verbose output"
 msgstr "자세히 출력하지 않습니다"
 
-#: gtk/updateiconcache.c:1585
+#: gtk/updateiconcache.c:1582
 msgid "Validate existing icon cache"
 msgstr "현재 아이콘 캐시 확인"
 
-#: gtk/updateiconcache.c:1620
+#: gtk/updateiconcache.c:1617
 #, c-format
 msgid "File not found: %s\n"
 msgstr "파일이 없습니다: %s\n"
 
-#: gtk/updateiconcache.c:1626
+#: gtk/updateiconcache.c:1623
 #, c-format
 msgid "Not a valid icon cache: %s\n"
 msgstr "올바른 아이콘 캐시가 아닙니다: %s\n"
 
-#: gtk/updateiconcache.c:1637
+#: gtk/updateiconcache.c:1634
 #, c-format
 msgid ""
 "No theme index file in '%s'.\n"
@@ -4423,33 +4439,33 @@ msgid "Custom %.2fx%.2f"
 msgstr "사용자 설정 %.2fx%.2f"
 
 #. default filename used for print-to-file
-#: modules/printbackends/file/gtkprintbackendfile.c:235
+#: modules/printbackends/file/gtkprintbackendfile.c:236
 #, c-format
 msgid "output.%s"
 msgstr "출력.%s"
 
-#: modules/printbackends/file/gtkprintbackendfile.c:464
+#: modules/printbackends/file/gtkprintbackendfile.c:465
 msgid "Print to File"
 msgstr "파일로 인쇄"
 
-#: modules/printbackends/file/gtkprintbackendfile.c:489
+#: modules/printbackends/file/gtkprintbackendfile.c:542
 msgid "PDF"
 msgstr "PDF"
 
-#: modules/printbackends/file/gtkprintbackendfile.c:489
+#: modules/printbackends/file/gtkprintbackendfile.c:542
 msgid "Postscript"
 msgstr "Postscript"
 
-#: modules/printbackends/file/gtkprintbackendfile.c:501
+#: modules/printbackends/file/gtkprintbackendfile.c:554
 #: modules/printbackends/test/gtkprintbackendtest.c:501
 msgid "Pages per _sheet:"
 msgstr "한 장당 페이지 수(_S):"
 
-#: modules/printbackends/file/gtkprintbackendfile.c:547
+#: modules/printbackends/file/gtkprintbackendfile.c:600
 msgid "File"
 msgstr "파일"
 
-#: modules/printbackends/file/gtkprintbackendfile.c:556
+#: modules/printbackends/file/gtkprintbackendfile.c:609
 msgid "_Output format"
 msgstr "출력 형식(_O)"
 

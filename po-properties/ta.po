@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-properties.gtk-2-10.ta\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-07-20 18:13-0400\n"
+"POT-Creation-Date: 2007-09-13 19:20-0400\n"
 "PO-Revision-Date: 2006-08-29 18:20+0530\n"
 "Last-Translator: Felix <ifelix25@gmail.com>\n"
 "Language-Team: Tamil <ta@li.org>\n"
@@ -393,7 +393,7 @@ msgid "Whether the action group is visible."
 msgstr "செயல்குழு தெரிகிறதா."
 
 #: gtk/gtkadjustment.c:86 gtk/gtkcellrendererprogress.c:128
-#: gtk/gtkspinbutton.c:268
+#: gtk/gtkscalebutton.c:181 gtk/gtkspinbutton.c:268
 msgid "Value"
 msgstr "மதிப்பு"
 
@@ -754,6 +754,15 @@ msgstr "இடம்"
 msgid "The index of the child in the parent"
 msgstr "பெற்றோரில் சேயின் அகரவரிசை"
 
+#: gtk/gtkbuilder.c:104
+#, fuzzy
+msgid "Translation Domain"
+msgstr "மொழிப்பெயர்ப்பாளர் சன்மானம்"
+
+#: gtk/gtkbuilder.c:105
+msgid "The translation domain used by gettext"
+msgstr ""
+
 #: gtk/gtkbutton.c:200
 msgid ""
 "Text of the label widget inside the button, if the button contains a label "
@@ -783,11 +792,11 @@ msgid ""
 msgstr ""
 "If set, the label is used to pick a stock item instead of being displayed"
 
-#: gtk/gtkbutton.c:223 gtk/gtkcombobox.c:751 gtk/gtkfilechooserbutton.c:401
+#: gtk/gtkbutton.c:223 gtk/gtkcombobox.c:785 gtk/gtkfilechooserbutton.c:398
 msgid "Focus on click"
 msgstr "முன்னிலைப்படுத்தலில் சொடுக்கு"
 
-#: gtk/gtkbutton.c:224 gtk/gtkfilechooserbutton.c:402
+#: gtk/gtkbutton.c:224 gtk/gtkfilechooserbutton.c:399
 msgid "Whether the button grabs focus when it is clicked with the mouse"
 msgstr ""
 
@@ -1230,8 +1239,8 @@ msgstr "திசை அமைவு"
 msgid "Orientation and growth direction of the progress bar"
 msgstr ""
 
-#: gtk/gtkcellrendererspin.c:93 gtk/gtkprogressbar.c:122 gtk/gtkrange.c:345
-#: gtk/gtkspinbutton.c:207
+#: gtk/gtkcellrendererspin.c:93 gtk/gtkprogressbar.c:122 gtk/gtkrange.c:346
+#: gtk/gtkscalebutton.c:200 gtk/gtkspinbutton.c:207
 msgid "Adjustment"
 msgstr "ஒழிங்குபடுத்தல்"
 
@@ -1435,7 +1444,7 @@ msgid ""
 "have enough room to display the entire string"
 msgstr ""
 
-#: gtk/gtkcellrenderertext.c:429 gtk/gtkfilechooserbutton.c:429
+#: gtk/gtkcellrenderertext.c:429 gtk/gtkfilechooserbutton.c:426
 #: gtk/gtklabel.c:449
 msgid "Width In Characters"
 msgstr "அகலம் உள்ளே எழுத்துக்கள்"
@@ -1454,7 +1463,7 @@ msgid ""
 "have enough room to display the entire string"
 msgstr ""
 
-#: gtk/gtkcellrenderertext.c:468 gtk/gtkcombobox.c:640
+#: gtk/gtkcellrenderertext.c:468 gtk/gtkcombobox.c:674
 msgid "Wrap width"
 msgstr "அகல மடிப்பு"
 
@@ -1694,7 +1703,7 @@ msgstr "ஆல்ஃபாவை பயன்படுத்து"
 msgid "Whether or not to give the color an alpha value"
 msgstr ""
 
-#: gtk/gtkcolorbutton.c:187 gtk/gtkfilechooserbutton.c:415
+#: gtk/gtkcolorbutton.c:187 gtk/gtkfilechooserbutton.c:412
 #: gtk/gtkfontbutton.c:143 gtk/gtkprintjob.c:116 gtk/gtktreeviewcolumn.c:264
 msgid "Title"
 msgstr "தலைப்பு"
@@ -1703,7 +1712,7 @@ msgstr "தலைப்பு"
 msgid "The title of the color selection dialog"
 msgstr "நிற தேர்ந்தெடுப்பு உரையாடலின் தலைப்பு"
 
-#: gtk/gtkcolorbutton.c:202 gtk/gtkcolorsel.c:1871
+#: gtk/gtkcolorbutton.c:202 gtk/gtkcolorsel.c:1857
 msgid "Current Color"
 msgstr "தற்போதைய வண்ணம்"
 
@@ -1711,7 +1720,7 @@ msgstr "தற்போதைய வண்ணம்"
 msgid "The selected color"
 msgstr "தேர்ந்தெடுக்கப்பட்ட நிறம்"
 
-#: gtk/gtkcolorbutton.c:217 gtk/gtkcolorsel.c:1878
+#: gtk/gtkcolorbutton.c:217 gtk/gtkcolorsel.c:1864
 msgid "Current Alpha"
 msgstr "தற்போதைய Alpha"
 
@@ -1719,35 +1728,35 @@ msgstr "தற்போதைய Alpha"
 msgid "The selected opacity value (0 fully transparent, 65535 fully opaque)"
 msgstr ""
 
-#: gtk/gtkcolorsel.c:1857
+#: gtk/gtkcolorsel.c:1843
 msgid "Has Opacity Control"
 msgstr "ஒளிப் புகாமை கட்டுப்பாடு உண்டு"
 
-#: gtk/gtkcolorsel.c:1858
+#: gtk/gtkcolorsel.c:1844
 msgid "Whether the color selector should allow setting opacity"
 msgstr "வண்ணத் தேரிவு ஒளிப் புகாமை அமைதைதலுக்கு அநுமதி கொடுக்கவேண்டுமா"
 
-#: gtk/gtkcolorsel.c:1864
+#: gtk/gtkcolorsel.c:1850
 msgid "Has palette"
 msgstr "வண்ணத் தட்டு உண்டு"
 
-#: gtk/gtkcolorsel.c:1865
+#: gtk/gtkcolorsel.c:1851
 msgid "Whether a palette should be used"
 msgstr "ஒரு நிறத்தட்டு பயன்படுத்த வேண்டுமா"
 
-#: gtk/gtkcolorsel.c:1872
+#: gtk/gtkcolorsel.c:1858
 msgid "The current color"
 msgstr "தற்போதைய வண்ணம்"
 
-#: gtk/gtkcolorsel.c:1879
+#: gtk/gtkcolorsel.c:1865
 msgid "The current opacity value (0 fully transparent, 65535 fully opaque)"
 msgstr "தற்போதைய ஒளிப் புகாமை மதிப்பு (0 fully transparent, 65535 fully opaque)"
 
-#: gtk/gtkcolorsel.c:1893
+#: gtk/gtkcolorsel.c:1879
 msgid "Custom palette"
 msgstr "தனிப்பயன் வண்ணத் தட்டு"
 
-#: gtk/gtkcolorsel.c:1894
+#: gtk/gtkcolorsel.c:1880
 msgid "Palette to use in the color selector"
 msgstr "வண்ணத் தேர்தலில் பயன்படுத்த வேண்டிய வண்ணத் தட்டு"
 
@@ -1791,105 +1800,105 @@ msgstr "பட்டியலில் உள்ள மதிப்பு"
 msgid "Whether entered values must already be present in the list"
 msgstr ""
 
-#: gtk/gtkcombobox.c:623
+#: gtk/gtkcombobox.c:657
 msgid "ComboBox model"
 msgstr "சேர்க்கை பெட்டி மாதிரி"
 
-#: gtk/gtkcombobox.c:624
+#: gtk/gtkcombobox.c:658
 msgid "The model for the combo box"
 msgstr "சேர்க்கைப்பெட்டியின் மாதிரி"
 
-#: gtk/gtkcombobox.c:641
+#: gtk/gtkcombobox.c:675
 msgid "Wrap width for laying out the items in a grid"
 msgstr ""
 
-#: gtk/gtkcombobox.c:663
+#: gtk/gtkcombobox.c:697
 msgid "Row span column"
 msgstr ""
 
-#: gtk/gtkcombobox.c:664
+#: gtk/gtkcombobox.c:698
 msgid "TreeModel column containing the row span values"
 msgstr ""
 
-#: gtk/gtkcombobox.c:685
+#: gtk/gtkcombobox.c:719
 msgid "Column span column"
 msgstr "நிரல் அளவு நிரல்"
 
-#: gtk/gtkcombobox.c:686
+#: gtk/gtkcombobox.c:720
 msgid "TreeModel column containing the column span values"
 msgstr ""
 
-#: gtk/gtkcombobox.c:707
+#: gtk/gtkcombobox.c:741
 msgid "Active item"
 msgstr "செயலிலுள்ள உருப்படி"
 
-#: gtk/gtkcombobox.c:708
+#: gtk/gtkcombobox.c:742
 msgid "The item which is currently active"
 msgstr ""
 
-#: gtk/gtkcombobox.c:727 gtk/gtkuimanager.c:220
+#: gtk/gtkcombobox.c:761 gtk/gtkuimanager.c:220
 msgid "Add tearoffs to menus"
 msgstr ""
 
-#: gtk/gtkcombobox.c:728
+#: gtk/gtkcombobox.c:762
 msgid "Whether dropdowns should have a tearoff menu item"
 msgstr ""
 
-#: gtk/gtkcombobox.c:743 gtk/gtkentry.c:522
+#: gtk/gtkcombobox.c:777 gtk/gtkentry.c:522
 msgid "Has Frame"
 msgstr "சட்டம் கொன்டது"
 
-#: gtk/gtkcombobox.c:744
+#: gtk/gtkcombobox.c:778
 msgid "Whether the combo box draws a frame around the child"
 msgstr ""
 
-#: gtk/gtkcombobox.c:752
+#: gtk/gtkcombobox.c:786
 msgid "Whether the combo box grabs focus when it is clicked with the mouse"
 msgstr ""
 
-#: gtk/gtkcombobox.c:767 gtk/gtkmenu.c:484
+#: gtk/gtkcombobox.c:801 gtk/gtkmenu.c:484
 msgid "Tearoff Title"
 msgstr ""
 
-#: gtk/gtkcombobox.c:768
+#: gtk/gtkcombobox.c:802
 msgid ""
 "A title that may be displayed by the window manager when the popup is torn-"
 "off"
 msgstr ""
 
-#: gtk/gtkcombobox.c:785
+#: gtk/gtkcombobox.c:819
 msgid "Popup shown"
 msgstr ""
 
-#: gtk/gtkcombobox.c:786
+#: gtk/gtkcombobox.c:820
 msgid "Whether the combo's dropdown is shown"
 msgstr ""
 
-#: gtk/gtkcombobox.c:792
+#: gtk/gtkcombobox.c:826
 msgid "Appears as list"
 msgstr "பட்டியலாக தோன்றச்செய்"
 
-#: gtk/gtkcombobox.c:793
+#: gtk/gtkcombobox.c:827
 msgid "Whether dropdowns should look like lists rather than menus"
 msgstr ""
 
-#: gtk/gtkcombobox.c:809
+#: gtk/gtkcombobox.c:843
 #, fuzzy
 msgid "Arrow Size"
 msgstr "அம்பு திசை"
 
-#: gtk/gtkcombobox.c:810
+#: gtk/gtkcombobox.c:844
 #, fuzzy
 msgid "The minimum size of the arrow in the combo box"
 msgstr "சேர்க்கைப்பெட்டியின் மாதிரி"
 
-#: gtk/gtkcombobox.c:825 gtk/gtkentry.c:622 gtk/gtkhandlebox.c:176
+#: gtk/gtkcombobox.c:859 gtk/gtkentry.c:622 gtk/gtkhandlebox.c:176
 #: gtk/gtkmenubar.c:201 gtk/gtkstatusbar.c:186 gtk/gtktoolbar.c:613
 #: gtk/gtkviewport.c:122
 msgid "Shadow type"
 msgstr "நிழல் வகை"
 
-#: gtk/gtkcombobox.c:826
+#: gtk/gtkcombobox.c:860
 #, fuzzy
 msgid "Which kind of shadow to draw around the combo box"
 msgstr "தத்தல் அடையாளத்தை சுற்றியுள்ள எல்லையின் அகலம்"
@@ -2266,7 +2275,7 @@ msgstr "கோப்பு கணினி பின்தளம்"
 msgid "Name of file system backend to use"
 msgstr ""
 
-#: gtk/gtkfilechooser.c:210 gtk/gtkrecentchooser.c:169
+#: gtk/gtkfilechooser.c:210 gtk/gtkrecentchooser.c:252
 msgid "Filter"
 msgstr "வடிகட்டி"
 
@@ -2315,7 +2324,7 @@ msgstr "கூடுதல் சாளரம்"
 msgid "Application supplied widget for extra options."
 msgstr ""
 
-#: gtk/gtkfilechooser.c:246 gtk/gtkfilesel.c:539 gtk/gtkrecentchooser.c:142
+#: gtk/gtkfilechooser.c:246 gtk/gtkfilesel.c:539 gtk/gtkrecentchooser.c:191
 msgid "Select Multiple"
 msgstr "பலவற்றை தேர்ந்தெடு"
 
@@ -2341,19 +2350,19 @@ msgid ""
 "dialog if necessary."
 msgstr ""
 
-#: gtk/gtkfilechooserbutton.c:384
+#: gtk/gtkfilechooserbutton.c:381
 msgid "Dialog"
 msgstr "உரையாடல்"
 
-#: gtk/gtkfilechooserbutton.c:385
+#: gtk/gtkfilechooserbutton.c:382
 msgid "The file chooser dialog to use."
 msgstr "பயன்படுத்த கோப்பு தேர்ந்தெடுப்பு உரையாடல்."
 
-#: gtk/gtkfilechooserbutton.c:416
+#: gtk/gtkfilechooserbutton.c:413
 msgid "The title of the file chooser dialog."
 msgstr ""
 
-#: gtk/gtkfilechooserbutton.c:430
+#: gtk/gtkfilechooserbutton.c:427
 msgid "The desired width of the button widget, in characters."
 msgstr ""
 
@@ -2697,7 +2706,7 @@ msgstr "குறும்படம் அமை"
 msgid "Icon set to display"
 msgstr "காட்ட அமைக்கப்படும் சின்னம்"
 
-#: gtk/gtkimage.c:187 gtk/gtktoolbar.c:530
+#: gtk/gtkimage.c:187 gtk/gtkscalebutton.c:191 gtk/gtktoolbar.c:530
 msgid "Icon size"
 msgstr "குறும்படம் அளவு"
 
@@ -3042,11 +3051,11 @@ msgstr ""
 msgid "A boolean that determines whether the menu grabs the keyboard focus"
 msgstr ""
 
-#: gtk/gtkmenutoolbutton.c:236 gtk/gtkoptionmenu.c:161
+#: gtk/gtkmenutoolbutton.c:230 gtk/gtkoptionmenu.c:161
 msgid "Menu"
 msgstr "பட்டி"
 
-#: gtk/gtkmenutoolbutton.c:237
+#: gtk/gtkmenutoolbutton.c:231
 msgid "The dropdown menu"
 msgstr ""
 
@@ -3523,7 +3532,7 @@ msgstr "அமைவுகள்"
 msgid "Printer settings"
 msgstr "அச்சடிப்பி அமைவுகள்"
 
-#: gtk/gtkprintjob.c:143 gtk/gtkprintjob.c:144 gtk/gtkprintunixdialog.c:231
+#: gtk/gtkprintjob.c:143 gtk/gtkprintjob.c:144 gtk/gtkprintunixdialog.c:240
 msgid "Page Setup"
 msgstr "பக்கம் அமைப்பு"
 
@@ -3545,11 +3554,11 @@ msgstr "முன்னிருப்பு பக்கம் அமைப்�
 msgid "The GtkPageSetup used by default"
 msgstr ""
 
-#: gtk/gtkprintoperation.c:896 gtk/gtkprintunixdialog.c:249
+#: gtk/gtkprintoperation.c:896 gtk/gtkprintunixdialog.c:258
 msgid "Print Settings"
 msgstr "அச்சிடும் அமைவுகள்"
 
-#: gtk/gtkprintoperation.c:897 gtk/gtkprintunixdialog.c:250
+#: gtk/gtkprintoperation.c:897 gtk/gtkprintunixdialog.c:259
 msgid "The GtkPrintSettings used for initializing the dialog"
 msgstr ""
 
@@ -3569,11 +3578,11 @@ msgstr "பக்கங்களின் எண்ணிக்கை"
 msgid "The number of pages in the document."
 msgstr ""
 
-#: gtk/gtkprintoperation.c:962 gtk/gtkprintunixdialog.c:239
+#: gtk/gtkprintoperation.c:962 gtk/gtkprintunixdialog.c:248
 msgid "Current Page"
 msgstr "நடப்பு பக்கம்"
 
-#: gtk/gtkprintoperation.c:963 gtk/gtkprintunixdialog.c:240
+#: gtk/gtkprintoperation.c:963 gtk/gtkprintunixdialog.c:249
 msgid "The current page in the document"
 msgstr "ஆவணத்தின் நடப்பு பக்கம்"
 
@@ -3645,15 +3654,15 @@ msgstr "தனிபயன் தத்தல் பெயர்"
 msgid "Label for the tab containing custom widgets."
 msgstr ""
 
-#: gtk/gtkprintunixdialog.c:232
+#: gtk/gtkprintunixdialog.c:241
 msgid "The GtkPageSetup to use"
 msgstr "பயன்படுத்த GtkPageSetup"
 
-#: gtk/gtkprintunixdialog.c:257
+#: gtk/gtkprintunixdialog.c:266
 msgid "Selected Printer"
 msgstr "தேர்ந்தெடுக்கப்பட்ட அச்சடிப்பி"
 
-#: gtk/gtkprintunixdialog.c:258
+#: gtk/gtkprintunixdialog.c:267
 msgid "The GtkPrinter which is selected"
 msgstr "தேர்ந்தெடுக்கப்பட்ட GtkPrinter"
 
@@ -3786,228 +3795,228 @@ msgstr ""
 msgid "The radio menu item whose group this widget belongs to."
 msgstr ""
 
-#: gtk/gtkrange.c:336
+#: gtk/gtkrange.c:337
 msgid "Update policy"
 msgstr "நிலைப்புதிப்பித்தல் திட்டம்"
 
-#: gtk/gtkrange.c:337
+#: gtk/gtkrange.c:338
 msgid "How the range should be updated on the screen"
 msgstr "வீச்சு திறையில் எப்படி நிலைப்புதிப்பிக்க வேணடும்"
 
-#: gtk/gtkrange.c:346
+#: gtk/gtkrange.c:347
 msgid "The GtkAdjustment that contains the current value of this range object"
 msgstr "TheஃGtkAdjustmentஃthatஃcontainsஃtheஃcurrentஃvalueஃofஃthisஃrangeஃobject"
 
-#: gtk/gtkrange.c:353
+#: gtk/gtkrange.c:354
 msgid "Inverted"
 msgstr "புரண்டது"
 
-#: gtk/gtkrange.c:354
+#: gtk/gtkrange.c:355
 msgid "Invert direction slider moves to increase range value"
 msgstr "Invertஃdirectionஃsliderஃmovesஃtoஃincreaseஃrangeஃvalue"
 
-#: gtk/gtkrange.c:361
+#: gtk/gtkrange.c:362
 msgid "Lower stepper sensitivity"
 msgstr ""
 
-#: gtk/gtkrange.c:362
+#: gtk/gtkrange.c:363
 msgid ""
 "The sensitivity policy for the stepper that points to the adjustment's lower "
 "side"
 msgstr ""
 
-#: gtk/gtkrange.c:370
+#: gtk/gtkrange.c:371
 msgid "Upper stepper sensitivity"
 msgstr ""
 
-#: gtk/gtkrange.c:371
+#: gtk/gtkrange.c:372
 msgid ""
 "The sensitivity policy for the stepper that points to the adjustment's upper "
 "side"
 msgstr ""
 
-#: gtk/gtkrange.c:388
+#: gtk/gtkrange.c:389
 msgid "Show Fill Level"
 msgstr ""
 
-#: gtk/gtkrange.c:389
+#: gtk/gtkrange.c:390
 msgid "Whether to display a fill level indicator graphics on trough."
 msgstr ""
 
-#: gtk/gtkrange.c:405
+#: gtk/gtkrange.c:406
 msgid "Restrict to Fill Level"
 msgstr ""
 
-#: gtk/gtkrange.c:406
+#: gtk/gtkrange.c:407
 msgid "Whether to restrict the upper boundary to the fill level."
 msgstr ""
 
-#: gtk/gtkrange.c:421
+#: gtk/gtkrange.c:422
 msgid "Fill Level"
 msgstr ""
 
-#: gtk/gtkrange.c:422
+#: gtk/gtkrange.c:423
 msgid "The fill level."
 msgstr ""
 
-#: gtk/gtkrange.c:430
+#: gtk/gtkrange.c:431
 msgid "Slider Width"
 msgstr "Slider அகளம்"
 
-#: gtk/gtkrange.c:431
+#: gtk/gtkrange.c:432
 msgid "Width of scrollbar or scale thumb"
 msgstr "Width of scrollbar or scale thumb"
 
-#: gtk/gtkrange.c:438
+#: gtk/gtkrange.c:439
 msgid "Trough Border"
 msgstr "Trough Border"
 
-#: gtk/gtkrange.c:439
+#: gtk/gtkrange.c:440
 msgid "Spacing between thumb/steppers and outer trough bevel"
 msgstr "Spacing between thumb/steppers and outer trough bevel"
 
-#: gtk/gtkrange.c:446
+#: gtk/gtkrange.c:447
 msgid "Stepper Size"
 msgstr "Stepper Size"
 
-#: gtk/gtkrange.c:447
+#: gtk/gtkrange.c:448
 msgid "Length of step buttons at ends"
 msgstr "Length of step buttons at ends"
 
-#: gtk/gtkrange.c:462
+#: gtk/gtkrange.c:463
 msgid "Stepper Spacing"
 msgstr "Stepper Spacing"
 
-#: gtk/gtkrange.c:463
+#: gtk/gtkrange.c:464
 msgid "Spacing between step buttons and thumb"
 msgstr "Spacing between step buttons and thumb"
 
-#: gtk/gtkrange.c:470
+#: gtk/gtkrange.c:471
 msgid "Arrow X Displacement"
 msgstr ""
 
-#: gtk/gtkrange.c:471
+#: gtk/gtkrange.c:472
 msgid ""
 "How far in the x direction to move the arrow when the button is depressed"
 msgstr ""
 
-#: gtk/gtkrange.c:478
+#: gtk/gtkrange.c:479
 msgid "Arrow Y Displacement"
 msgstr ""
 
-#: gtk/gtkrange.c:479
+#: gtk/gtkrange.c:480
 msgid ""
 "How far in the y direction to move the arrow when the button is depressed"
 msgstr ""
 
-#: gtk/gtkrange.c:487
+#: gtk/gtkrange.c:488
 msgid "Draw slider ACTIVE during drag"
 msgstr ""
 
-#: gtk/gtkrange.c:488
+#: gtk/gtkrange.c:489
 msgid ""
 "With this option set to TRUE, sliders will be drawn ACTIVE and with shadow "
 "IN while they are dragged"
 msgstr ""
 
-#: gtk/gtkrange.c:502
+#: gtk/gtkrange.c:503
 msgid "Trough Side Details"
 msgstr ""
 
-#: gtk/gtkrange.c:503
+#: gtk/gtkrange.c:504
 msgid ""
 "When TRUE, the parts of the trough on the two sides of the slider are drawn "
 "with different details"
 msgstr ""
 
-#: gtk/gtkrange.c:519
+#: gtk/gtkrange.c:520
 msgid "Trough Under Steppers"
 msgstr ""
 
-#: gtk/gtkrange.c:520
+#: gtk/gtkrange.c:521
 #, fuzzy
 msgid ""
 "Whether to draw trough for full length of range or exclude the steppers and "
 "spacing"
 msgstr "draw க்கு of மற்றும்"
 
-#: gtk/gtkrecentaction.c:654 gtk/gtkrecentchoosermenu.c:212
+#: gtk/gtkrecentaction.c:654 gtk/gtkrecentchoosermenu.c:209
 msgid "Show Numbers"
 msgstr "எண்களை காட்டு"
 
-#: gtk/gtkrecentaction.c:655 gtk/gtkrecentchoosermenu.c:213
+#: gtk/gtkrecentaction.c:655 gtk/gtkrecentchoosermenu.c:210
 msgid "Whether the items should be displayed with a number"
 msgstr ""
 
-#: gtk/gtkrecentchooser.c:112
+#: gtk/gtkrecentchooser.c:120
 msgid "Recent Manager"
 msgstr "சமீபத்திய மேலாளர்"
 
-#: gtk/gtkrecentchooser.c:113
+#: gtk/gtkrecentchooser.c:121
 msgid "The RecentManager object to use"
 msgstr ""
 
-#: gtk/gtkrecentchooser.c:118
+#: gtk/gtkrecentchooser.c:135
 msgid "Show Private"
 msgstr "தனிப்பட்டதை காட்டு"
 
-#: gtk/gtkrecentchooser.c:119
+#: gtk/gtkrecentchooser.c:136
 msgid "Whether the private items should be displayed"
 msgstr ""
 
-#: gtk/gtkrecentchooser.c:124
+#: gtk/gtkrecentchooser.c:149
 msgid "Show Tooltips"
 msgstr ""
 
-#: gtk/gtkrecentchooser.c:125
+#: gtk/gtkrecentchooser.c:150
 msgid "Whether there should be a tooltip on the item"
 msgstr ""
 
-#: gtk/gtkrecentchooser.c:130
+#: gtk/gtkrecentchooser.c:162
 msgid "Show Icons"
 msgstr ""
 
-#: gtk/gtkrecentchooser.c:131
+#: gtk/gtkrecentchooser.c:163
 msgid "Whether there should be an icon near the item"
 msgstr ""
 
-#: gtk/gtkrecentchooser.c:136
+#: gtk/gtkrecentchooser.c:178
 msgid "Show Not Found"
 msgstr "காட்சி இல்லை"
 
-#: gtk/gtkrecentchooser.c:137
+#: gtk/gtkrecentchooser.c:179
 msgid "Whether the items pointing to unavailable resources should be displayed"
 msgstr ""
 
-#: gtk/gtkrecentchooser.c:143
+#: gtk/gtkrecentchooser.c:192
 msgid "Whether to allow multiple items to be selected"
 msgstr ""
 
-#: gtk/gtkrecentchooser.c:148
+#: gtk/gtkrecentchooser.c:205
 msgid "Local only"
 msgstr "உள்ளமை மட்டும்"
 
-#: gtk/gtkrecentchooser.c:149
+#: gtk/gtkrecentchooser.c:206
 msgid "Whether the selected resource(s) should be limited to local file: URIs"
 msgstr ""
 
-#: gtk/gtkrecentchooser.c:154 gtk/gtkrecentmanager.c:265
+#: gtk/gtkrecentchooser.c:222 gtk/gtkrecentmanager.c:265
 msgid "Limit"
 msgstr "வரையறை"
 
-#: gtk/gtkrecentchooser.c:155
+#: gtk/gtkrecentchooser.c:223
 msgid "The maximum number of items to be displayed"
 msgstr ""
 
-#: gtk/gtkrecentchooser.c:162
+#: gtk/gtkrecentchooser.c:237
 msgid "Sort Type"
 msgstr "வரிசைப்படுத்து வகை"
 
-#: gtk/gtkrecentchooser.c:163
+#: gtk/gtkrecentchooser.c:238
 msgid "The sorting order of the items displayed"
 msgstr ""
 
-#: gtk/gtkrecentchooser.c:170
+#: gtk/gtkrecentchooser.c:253
 msgid "The current filter for selecting which resources are displayed"
 msgstr ""
 
@@ -4095,6 +4104,32 @@ msgstr "மதிப்பு இடைவெளி"
 #: gtk/gtkscale.c:178
 msgid "Space between value text and the slider/trough area"
 msgstr "Space between value text and the slider/trough area"
+
+#: gtk/gtkscalebutton.c:182
+#, fuzzy
+msgid "The value of the scale"
+msgstr "ஒழுங்கின் மதிப்பு"
+
+#: gtk/gtkscalebutton.c:192
+#, fuzzy
+msgid "The icon size"
+msgstr "கருவிப் பட்டை குறும்பட அளவு"
+
+#: gtk/gtkscalebutton.c:201
+#, fuzzy
+msgid ""
+"The GtkAdjustment that contains the current value of this scale button object"
+msgstr "TheஃGtkAdjustmentஃthatஃcontainsஃtheஃcurrentஃvalueஃofஃthisஃrangeஃobject"
+
+#: gtk/gtkscalebutton.c:229
+#, fuzzy
+msgid "Icons"
+msgstr "குறும்படம்"
+
+#: gtk/gtkscalebutton.c:230
+#, fuzzy
+msgid "List of icon names"
+msgstr "சின்ன சிறுபட பெயர்"
 
 #: gtk/gtkscrollbar.c:50
 msgid "Minimum Slider Length"

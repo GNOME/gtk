@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: mn\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-07-20 18:13-0400\n"
+"POT-Creation-Date: 2007-09-13 19:20-0400\n"
 "PO-Revision-Date: 2004-03-17 17:16+0100\n"
 "Last-Translator: Sanlig Badral <badral@openmn.org>\n"
 "Language-Team: Mongolian <openmn-gnome@lists.sf.net>\n"
@@ -414,26 +414,27 @@ msgid "Unsupported animation type"
 msgstr "Хөдөлгөөнт зургийн тодорхойгүй төрөл"
 
 # gdk-pixbuf/io-ico.c:303
-#: gdk-pixbuf/io-ani.c:348 gdk-pixbuf/io-ani.c:536
+#: gdk-pixbuf/io-ani.c:348 gdk-pixbuf/io-ani.c:406 gdk-pixbuf/io-ani.c:432
+#: gdk-pixbuf/io-ani.c:455 gdk-pixbuf/io-ani.c:482 gdk-pixbuf/io-ani.c:569
 #, c-format
 msgid "Invalid header in animation"
 msgstr "Хөдөлгөөнт зургийн толгой хэсэг хүчингүй"
 
 # gdk-pixbuf/io-ico.c:262 gdk-pixbuf/io-ico.c:318 gdk-pixbuf/io-ico.c:381
 # gdk-pixbuf/io-ico.c:443 gdk-pixbuf/io-ico.c:460
-#: gdk-pixbuf/io-ani.c:358 gdk-pixbuf/io-ani.c:380 gdk-pixbuf/io-ani.c:439
-#: gdk-pixbuf/io-ani.c:458 gdk-pixbuf/io-ani.c:509 gdk-pixbuf/io-ani.c:581
+#: gdk-pixbuf/io-ani.c:358 gdk-pixbuf/io-ani.c:380 gdk-pixbuf/io-ani.c:464
+#: gdk-pixbuf/io-ani.c:491 gdk-pixbuf/io-ani.c:542 gdk-pixbuf/io-ani.c:614
 #, c-format
 msgid "Not enough memory to load animation"
 msgstr "Хөдөлгөөнт зураг ачаалахад санах ой хүрэлцэхгүй байна"
 
-#: gdk-pixbuf/io-ani.c:398 gdk-pixbuf/io-ani.c:415 gdk-pixbuf/io-ani.c:426
+#: gdk-pixbuf/io-ani.c:398 gdk-pixbuf/io-ani.c:424 gdk-pixbuf/io-ani.c:443
 #, c-format
 msgid "Malformed chunk in animation"
 msgstr "Хөдөлгөөнт зурагт кадр дутуу байна"
 
 # gdk-pixbuf/gdk-pixdata.c:151
-#: gdk-pixbuf/io-ani.c:680
+#: gdk-pixbuf/io-ani.c:713
 msgid "The ANI image format"
 msgstr "ANI зургийн төрөл "
 
@@ -1065,7 +1066,7 @@ msgstr "TGA контекст бүтцэд зориулан санах ой га�
 msgid "Excess data in file"
 msgstr "Файлд илүүдэл өгөгдөл байна"
 
-#: gdk-pixbuf/io-tga.c:1001
+#: gdk-pixbuf/io-tga.c:1002
 msgid "The Targa image format"
 msgstr "Targa зургийн төрөл "
 
@@ -1400,6 +1401,23 @@ msgstr ""
 msgid "keyboard label|Backslash"
 msgstr ""
 
+# gdk-pixbuf/io-xbm.c:283
+#: gtk/gtkbuilderparser.c:289
+#, fuzzy, c-format
+msgid "Invalid type function: `%s'"
+msgstr "Буруу файлын нэр: %s"
+
+# gdk-pixbuf/io-xbm.c:283
+#: gtk/gtkbuilderparser.c:729
+#, fuzzy, c-format
+msgid "Invalid root element: '%s'"
+msgstr "Буруу файлын нэр: %s"
+
+#: gtk/gtkbuilderparser.c:761
+#, c-format
+msgid "Unhandled tag: '%s'"
+msgstr ""
+
 # gtk/gtkinputdialog.c:667
 #. Translate to calendar:YM if you want years to be displayed
 #. * before months; otherwise translate to calendar:MY.
@@ -1493,7 +1511,7 @@ msgstr ""
 #. * an accelerator when the cell is clicked to change the
 #. * acelerator.
 #.
-#: gtk/gtkcellrendereraccel.c:364 gtk/gtkcellrendereraccel.c:576
+#: gtk/gtkcellrendereraccel.c:368 gtk/gtkcellrendereraccel.c:580
 msgid "New accelerator..."
 msgstr ""
 
@@ -1511,7 +1529,7 @@ msgstr "Өнгө сонгох"
 msgid "Received invalid color data\n"
 msgstr "Хүчингүй өнгөний өгөгдөл хүлээн авлаа\n"
 
-#: gtk/gtkcolorsel.c:561
+#: gtk/gtkcolorsel.c:550
 msgid ""
 "The previously-selected color, for comparison to the color you're selecting "
 "now. You can drag this color to a palette entry, or select this color as "
@@ -1521,7 +1539,7 @@ msgstr ""
 "нийлүүрийг чирч орох, эсвэл энэ бусад өнгөний жижигрүүлсэн юм уу  чирч "
 "байгаа шиг өнгө сонгох. "
 
-#: gtk/gtkcolorsel.c:566
+#: gtk/gtkcolorsel.c:554
 msgid ""
 "The color you've chosen. You can drag this color to a palette entry to save "
 "it for use in the future."
@@ -1529,11 +1547,11 @@ msgstr ""
 "Таны сонгосон өнгө. Та энэ өнгөний нийлүүлгэтэйгээ дараа нь ашиглахын  тулд "
 "хадгалж орж чадна."
 
-#: gtk/gtkcolorsel.c:954
+#: gtk/gtkcolorsel.c:942
 msgid "_Save color here"
 msgstr "Энд _Хадгалах өнгө "
 
-#: gtk/gtkcolorsel.c:1159
+#: gtk/gtkcolorsel.c:1146
 msgid ""
 "Click this palette entry to make it the current color. To change this entry, "
 "drag a color swatch here or right-click it and select \"Save color here.\""
@@ -1543,7 +1561,7 @@ msgstr ""
 "өнгө\" гэдгийг сонго"
 
 # gtk/gtkcolorsel.c:1784
-#: gtk/gtkcolorsel.c:1937
+#: gtk/gtkcolorsel.c:1920
 msgid ""
 "Select the color you want from the outer ring. Select the darkness or "
 "lightness of that color using the inner triangle."
@@ -1552,7 +1570,7 @@ msgstr ""
 "Харавтар эсвэл  Гэгээлэг өнгө сонго "
 
 # gtk/gtkcolorsel.c:1812
-#: gtk/gtkcolorsel.c:1962
+#: gtk/gtkcolorsel.c:1944
 msgid ""
 "Click the eyedropper, then click a color anywhere on your screen to select "
 "that color."
@@ -1561,83 +1579,83 @@ msgstr ""
 "сонгох болно. "
 
 # gtk/gtkcolorsel.c:1821
-#: gtk/gtkcolorsel.c:1971
+#: gtk/gtkcolorsel.c:1953
 msgid "_Hue:"
 msgstr "_Өнгө:"
 
 # gtk/gtkcolorsel.c:1822
-#: gtk/gtkcolorsel.c:1972
+#: gtk/gtkcolorsel.c:1954
 msgid "Position on the color wheel."
 msgstr "Өнгөндээрх дугуй байрлал."
 
 # gtk/gtkcolorsel.c:1823
-#: gtk/gtkcolorsel.c:1974
+#: gtk/gtkcolorsel.c:1956
 msgid "_Saturation:"
 msgstr "Хан_галуун:"
 
 # gtk/gtkcolorsel.c:1824
-#: gtk/gtkcolorsel.c:1975
+#: gtk/gtkcolorsel.c:1957
 msgid "\"Deepness\" of the color."
 msgstr "Өнгөний \"Гүн гүнзгий\" байдал."
 
 # gtk/gtkcolorsel.c:1825
-#: gtk/gtkcolorsel.c:1976
+#: gtk/gtkcolorsel.c:1958
 msgid "_Value:"
 msgstr "Ут_га:"
 
 # gtk/gtkcolorsel.c:1826
-#: gtk/gtkcolorsel.c:1977
+#: gtk/gtkcolorsel.c:1959
 msgid "Brightness of the color."
 msgstr "Өнгөний гэрэлдэлт."
 
 # gtk/gtkcolorsel.c:1827
-#: gtk/gtkcolorsel.c:1978
+#: gtk/gtkcolorsel.c:1960
 msgid "_Red:"
 msgstr "Улаан:"
 
 # gtk/gtkcolorsel.c:1828
-#: gtk/gtkcolorsel.c:1979
+#: gtk/gtkcolorsel.c:1961
 msgid "Amount of red light in the color."
 msgstr "Өнгө дахь цайвар улааны утга."
 
 # gtk/gtkcolorsel.c:1829
-#: gtk/gtkcolorsel.c:1980
+#: gtk/gtkcolorsel.c:1962
 msgid "_Green:"
 msgstr "Ногоон:"
 
 # gtk/gtkcolorsel.c:1830
-#: gtk/gtkcolorsel.c:1981
+#: gtk/gtkcolorsel.c:1963
 msgid "Amount of green light in the color."
 msgstr "Өнгө дахь цайвар ногооны утга."
 
 # gtk/gtkcolorsel.c:1831
-#: gtk/gtkcolorsel.c:1982
+#: gtk/gtkcolorsel.c:1964
 msgid "_Blue:"
 msgstr "Хөх:"
 
 # gtk/gtkcolorsel.c:1832
-#: gtk/gtkcolorsel.c:1983
+#: gtk/gtkcolorsel.c:1965
 msgid "Amount of blue light in the color."
 msgstr "Өнгө дахь цайвар хөхийн утга."
 
 # gtk/gtkcolorsel.c:1835
-#: gtk/gtkcolorsel.c:1986
+#: gtk/gtkcolorsel.c:1968
 #, fuzzy
 msgid "Op_acity:"
 msgstr "Харанхуй:"
 
 # gtk/gtkcolorsel.c:1843
-#: gtk/gtkcolorsel.c:1994 gtk/gtkcolorsel.c:2005
+#: gtk/gtkcolorsel.c:1975 gtk/gtkcolorsel.c:1985
 msgid "Transparency of the color."
 msgstr "Өнгөний тунгалаг."
 
 # gtk/gtkcolorsel.c:1858
-#: gtk/gtkcolorsel.c:2012
+#: gtk/gtkcolorsel.c:1992
 #, fuzzy
 msgid "Color _name:"
 msgstr "Өнгөний _Нэр:"
 
-#: gtk/gtkcolorsel.c:2027
+#: gtk/gtkcolorsel.c:2006
 msgid ""
 "You can enter an HTML-style hexadecimal color value, or simply a color name "
 "such as 'orange' in this entry."
@@ -1646,13 +1664,13 @@ msgstr ""
 "өнгөний нэрээр оруулж болно."
 
 # gtk/gtkcolorsel.c:1889
-#: gtk/gtkcolorsel.c:2057
+#: gtk/gtkcolorsel.c:2036
 #, fuzzy
 msgid "_Palette:"
 msgstr "Будгийн нийлүүр"
 
 # gtk/gtkinputdialog.c:479
-#: gtk/gtkcolorsel.c:2086
+#: gtk/gtkcolorsel.c:2065
 #, fuzzy
 msgid "Color Wheel"
 msgstr "Дугуй"
@@ -1678,7 +1696,7 @@ msgstr "Удирдлагын Unicode тэмдэгт _оруулах"
 msgid "Select A File"
 msgstr "Файл устгах"
 
-#: gtk/gtkfilechooserbutton.c:69 gtk/gtkfilechooserdefault.c:1966
+#: gtk/gtkfilechooserbutton.c:69 gtk/gtkfilechooserdefault.c:1982
 msgid "Desktop"
 msgstr "Ажлын тавцан"
 
@@ -1688,7 +1706,7 @@ msgstr "Ажлын тавцан"
 msgid "(None)"
 msgstr "байхгүй"
 
-#: gtk/gtkfilechooserbutton.c:2052
+#: gtk/gtkfilechooserbutton.c:2048
 msgid "Other..."
 msgstr ""
 
@@ -1744,266 +1762,266 @@ msgstr ""
 #. * is a hostname. Nautilus and the panel contain the same string
 #. * to translate.
 #.
-#: gtk/gtkfilechooserdefault.c:1715
+#: gtk/gtkfilechooserdefault.c:1731
 #, c-format
 msgid "%1$s on %2$s"
 msgstr "%1$s, %2$s"
 
-#: gtk/gtkfilechooserdefault.c:1893
+#: gtk/gtkfilechooserdefault.c:1909
 msgid "Search"
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:1917
+#: gtk/gtkfilechooserdefault.c:1933
 msgid "Recently Used"
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:3006
+#: gtk/gtkfilechooserdefault.c:2597
+msgid "Select which types of files are shown"
+msgstr ""
+
+#: gtk/gtkfilechooserdefault.c:3025
 #, c-format
 msgid "Add the folder '%s' to the bookmarks"
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:3047
+#: gtk/gtkfilechooserdefault.c:3066
 #, c-format
 msgid "Add the current folder to the bookmarks"
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:3049
+#: gtk/gtkfilechooserdefault.c:3068
 #, c-format
 msgid "Add the selected folders to the bookmarks"
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:3089
+#: gtk/gtkfilechooserdefault.c:3108
 #, c-format
 msgid "Remove the bookmark '%s'"
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:3522
+#: gtk/gtkfilechooserdefault.c:3540
 #, fuzzy, c-format
 msgid "Could not add a bookmark for '%s' because it is an invalid path name."
 msgstr "%s-н хувьд хавчуурга нэмэгдэх боломжгүй.Учир нь зам хүчингүй байна"
 
 # gtk/gtkstock.c:319
-#: gtk/gtkfilechooserdefault.c:3747
+#: gtk/gtkfilechooserdefault.c:3765
 msgid "Remove"
 msgstr "Устга"
 
 # gtk/gtkfilesel.c:1712
-#: gtk/gtkfilechooserdefault.c:3756
+#: gtk/gtkfilechooserdefault.c:3774
 #, fuzzy
 msgid "Rename..."
 msgstr "_Сольж нэрлэх"
 
 #. Accessible object name for the file chooser's shortcuts pane
-#: gtk/gtkfilechooserdefault.c:3898
+#: gtk/gtkfilechooserdefault.c:3916
 msgid "Places"
 msgstr ""
 
 # gtk/gtkfilesel.c:1712
 #. Column header for the file chooser's shortcuts pane
-#: gtk/gtkfilechooserdefault.c:3952
+#: gtk/gtkfilechooserdefault.c:3970
 #, fuzzy
 msgid "_Places"
 msgstr "_Сольж нэрлэх"
 
-#: gtk/gtkfilechooserdefault.c:4007 gtk/gtkstock.c:297
+#: gtk/gtkfilechooserdefault.c:4025 gtk/gtkstock.c:297
 msgid "_Add"
 msgstr "_Нэм"
 
-#: gtk/gtkfilechooserdefault.c:4014
+#: gtk/gtkfilechooserdefault.c:4032
 msgid "Add the selected folder to the Bookmarks"
 msgstr ""
 
 # gtk/gtkstock.c:319
-#: gtk/gtkfilechooserdefault.c:4019 gtk/gtkstock.c:385
+#: gtk/gtkfilechooserdefault.c:4037 gtk/gtkstock.c:385
 msgid "_Remove"
 msgstr "_Арилгах"
 
-#: gtk/gtkfilechooserdefault.c:4026
+#: gtk/gtkfilechooserdefault.c:4044
 msgid "Remove the selected bookmark"
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:4122
+#: gtk/gtkfilechooserdefault.c:4140
 #, fuzzy
 msgid "Could not select file"
 msgstr ""
 "%s-г тэмдэглэж чадсангүй:\n"
 "%s"
 
-#: gtk/gtkfilechooserdefault.c:4259
+#: gtk/gtkfilechooserdefault.c:4277
 #, fuzzy, c-format
 msgid "Could not select file '%s' because it is an invalid path name."
 msgstr "%s-н хувьд хавчуурга нэмэгдэх боломжгүй.Учир нь зам хүчингүй байна"
 
-#: gtk/gtkfilechooserdefault.c:4316
+#: gtk/gtkfilechooserdefault.c:4334
 msgid "_Add to Bookmarks"
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:4330
+#: gtk/gtkfilechooserdefault.c:4348
 msgid "Show _Hidden Files"
 msgstr ""
 
 # gtk/gtkfilesel.c:742
-#: gtk/gtkfilechooserdefault.c:4574 gtk/gtkfilesel.c:729
+#: gtk/gtkfilechooserdefault.c:4592 gtk/gtkfilesel.c:729
 msgid "Files"
 msgstr "Файлууд"
 
 # gtk/gtkcolorsel.c:1858
-#: gtk/gtkfilechooserdefault.c:4623
+#: gtk/gtkfilechooserdefault.c:4641
 msgid "Name"
 msgstr "Нэр"
 
 # gtk/gtkfontsel.c:333
-#: gtk/gtkfilechooserdefault.c:4648
+#: gtk/gtkfilechooserdefault.c:4666
 msgid "Size"
 msgstr "Хэмжээ"
 
 # gtk/gtksizegroup.c:242
-#: gtk/gtkfilechooserdefault.c:4662
+#: gtk/gtkfilechooserdefault.c:4680
 msgid "Modified"
 msgstr "Өөрчлөгдсөн"
 
-#: gtk/gtkfilechooserdefault.c:4697
-msgid "Select which types of files are shown"
-msgstr ""
-
 # gtk/gtkcolorsel.c:1858
 #. Label
-#: gtk/gtkfilechooserdefault.c:4908 gtk/gtkprinteroptionwidget.c:786
+#: gtk/gtkfilechooserdefault.c:4900 gtk/gtkprinteroptionwidget.c:786
 msgid "_Name:"
 msgstr "_Нэр:"
 
-#: gtk/gtkfilechooserdefault.c:4950
+#: gtk/gtkfilechooserdefault.c:4942
 msgid "_Browse for other folders"
 msgstr "Бусад лавлахуудыг _нэгжих"
 
 # gdk-pixbuf/io-xbm.c:283
-#: gtk/gtkfilechooserdefault.c:5205
+#: gtk/gtkfilechooserdefault.c:5197
 #, fuzzy
 msgid "Type a file name"
 msgstr "Буруу файлын нэр: %s"
 
 # gtk/gtkfilesel.c:1403
 #. Create Folder
-#: gtk/gtkfilechooserdefault.c:5242
+#: gtk/gtkfilechooserdefault.c:5234
 #, fuzzy
 msgid "Create Fo_lder"
 msgstr "_Хавтас үүсгэх"
 
 # gtk/gtkfilesel.c:2103
-#: gtk/gtkfilechooserdefault.c:5252
+#: gtk/gtkfilechooserdefault.c:5244
 #, fuzzy
 msgid "_Location:"
 msgstr "_Байршил:"
 
 # gtk/gtkfilesel.c:1403
-#: gtk/gtkfilechooserdefault.c:5490
+#: gtk/gtkfilechooserdefault.c:5482
 msgid "Save in _folder:"
 msgstr "_Хавтас дотор хадгалах:"
 
 # gtk/gtkfilesel.c:1403
-#: gtk/gtkfilechooserdefault.c:5492
+#: gtk/gtkfilechooserdefault.c:5484
 msgid "Create in _folder:"
 msgstr "_Хавтас дотор үүсгэх:"
 
-#: gtk/gtkfilechooserdefault.c:7095
+#: gtk/gtkfilechooserdefault.c:7087
 #, fuzzy, c-format
 msgid "Cannot change to folder because it is not local"
 msgstr "Хавтас руу очих боломжгүй.Учир нь өгсөн зам дотоод зам биш байна"
 
-#: gtk/gtkfilechooserdefault.c:7711 gtk/gtkfilechooserdefault.c:7732
+#: gtk/gtkfilechooserdefault.c:7703 gtk/gtkfilechooserdefault.c:7724
 #, fuzzy, c-format
 msgid "Shortcut %s already exists"
 msgstr "%s богино тушаал алга"
 
-#: gtk/gtkfilechooserdefault.c:7822
+#: gtk/gtkfilechooserdefault.c:7814
 #, fuzzy, c-format
 msgid "Shortcut %s does not exist"
 msgstr "%s богино тушаал алга"
 
-#: gtk/gtkfilechooserdefault.c:8077
+#: gtk/gtkfilechooserdefault.c:8069
 #, c-format
 msgid "A file named \"%s\" already exists.  Do you want to replace it?"
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:8080
+#: gtk/gtkfilechooserdefault.c:8072
 #, c-format
 msgid ""
 "The file already exists in \"%s\".  Replacing it will overwrite its contents."
 msgstr ""
 
 # gtk/gtkfilesel.c:1712
-#: gtk/gtkfilechooserdefault.c:8085
+#: gtk/gtkfilechooserdefault.c:8077
 #, fuzzy
 msgid "_Replace"
 msgstr "_Сольж нэрлэх"
 
 # gdk-pixbuf/io-wbmp.c:366
-#: gtk/gtkfilechooserdefault.c:8916
+#: gtk/gtkfilechooserdefault.c:8911
 #, fuzzy
 msgid "Could not start the search process"
 msgstr "Хадгалж чадсангүй"
 
-#: gtk/gtkfilechooserdefault.c:8917
+#: gtk/gtkfilechooserdefault.c:8912
 msgid ""
 "The program was not able to create a connection to the indexer daemon.  "
 "Please make sure it is running."
 msgstr ""
 
 # gdk-pixbuf/io-wbmp.c:366
-#: gtk/gtkfilechooserdefault.c:8931
+#: gtk/gtkfilechooserdefault.c:8926
 #, fuzzy
 msgid "Could not send the search request"
 msgstr "Хадгалж чадсангүй"
 
 #. Label
-#: gtk/gtkfilechooserdefault.c:9357
+#: gtk/gtkfilechooserdefault.c:9352
 msgid "_Search:"
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:10307
+#: gtk/gtkfilechooserdefault.c:10305
 #, fuzzy, c-format
 msgid "Could not mount %s"
 msgstr ""
 "%s-г тэмдэглэж чадсангүй:\n"
 "%s"
 
-#: gtk/gtkfilechooserdefault.c:10935
+#: gtk/gtkfilechooserdefault.c:10933
 msgid "Type name of new folder"
 msgstr "Шинэ хавтасын нэрийг бич"
 
-#: gtk/gtkfilechooserdefault.c:10983
+#: gtk/gtkfilechooserdefault.c:10981
 #, c-format
 msgid "%d byte"
 msgid_plural "%d bytes"
 msgstr[0] "%d байт"
 msgstr[1] "%d байт"
 
-#: gtk/gtkfilechooserdefault.c:10985
+#: gtk/gtkfilechooserdefault.c:10983
 #, fuzzy, c-format
 msgid "%.1f KB"
 msgstr "%.1f К"
 
-#: gtk/gtkfilechooserdefault.c:10987
+#: gtk/gtkfilechooserdefault.c:10985
 #, fuzzy, c-format
 msgid "%.1f MB"
 msgstr "%.1f М"
 
-#: gtk/gtkfilechooserdefault.c:10989
+#: gtk/gtkfilechooserdefault.c:10987
 #, fuzzy, c-format
 msgid "%.1f GB"
 msgstr "%.1f Г"
 
 # gtk/gtkinputdialog.c:582
-#: gtk/gtkfilechooserdefault.c:11085 gtk/gtkfilechooserdefault.c:11106
-#: gtk/gtkfilechooserdefault.c:11138
+#: gtk/gtkfilechooserdefault.c:11083 gtk/gtkfilechooserdefault.c:11104
+#: gtk/gtkfilechooserdefault.c:11136
 msgid "Unknown"
 msgstr "Тодорхойгүй"
 
-#: gtk/gtkfilechooserdefault.c:11124
+#: gtk/gtkfilechooserdefault.c:11122
 msgid "Today at %H:%M"
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:11126
+#: gtk/gtkfilechooserdefault.c:11124
 #, fuzzy
 msgid "Yesterday at %H:%M"
 msgstr "Өчигдар"
@@ -2536,26 +2554,26 @@ msgstr ""
 #. * Do *not* translate it to "predefinito:mm", if it
 #. * it isn't default:mm or default:inch it will not work
 #.
-#: gtk/gtkpagesetupunixdialog.c:154
+#: gtk/gtkpagesetupunixdialog.c:152
 #, fuzzy
 msgid "default:mm"
 msgstr "default:LTR"
 
-#: gtk/gtkpagesetupunixdialog.c:310
+#: gtk/gtkpagesetupunixdialog.c:308
 msgid ""
 "<b>Any Printer</b>\n"
 "For portable documents"
 msgstr ""
 
-#: gtk/gtkpagesetupunixdialog.c:885 gtk/gtkpagesetupunixdialog.c:1401
+#: gtk/gtkpagesetupunixdialog.c:883 gtk/gtkpagesetupunixdialog.c:1395
 msgid "mm"
 msgstr ""
 
-#: gtk/gtkpagesetupunixdialog.c:887 gtk/gtkpagesetupunixdialog.c:1399
+#: gtk/gtkpagesetupunixdialog.c:885 gtk/gtkpagesetupunixdialog.c:1393
 msgid "inch"
 msgstr ""
 
-#: gtk/gtkpagesetupunixdialog.c:906
+#: gtk/gtkpagesetupunixdialog.c:904
 #, c-format
 msgid ""
 "Margins:\n"
@@ -2565,82 +2583,82 @@ msgid ""
 " Bottom: %s %s"
 msgstr ""
 
-#: gtk/gtkpagesetupunixdialog.c:957
+#: gtk/gtkpagesetupunixdialog.c:953
 msgid "Manage Custom Sizes..."
 msgstr ""
 
-#: gtk/gtkpagesetupunixdialog.c:1005
+#: gtk/gtkpagesetupunixdialog.c:1001
 msgid "_Format for:"
 msgstr ""
 
 # gtk/gtkstock.c:315
-#: gtk/gtkpagesetupunixdialog.c:1026
+#: gtk/gtkpagesetupunixdialog.c:1022
 #, fuzzy
 msgid "_Paper size:"
 msgstr "_Гар тохируулга"
 
 # gtk/gtkcolorsel.c:1823
-#: gtk/gtkpagesetupunixdialog.c:1062
+#: gtk/gtkpagesetupunixdialog.c:1058
 #, fuzzy
 msgid "_Orientation:"
 msgstr "Хан_галуун:"
 
 # gtk/gtknotebook.c:2439 gtk/gtknotebook.c:4695
-#: gtk/gtkpagesetupunixdialog.c:1127 gtk/gtkprintunixdialog.c:2156
+#: gtk/gtkpagesetupunixdialog.c:1121 gtk/gtkprintunixdialog.c:2175
 #, fuzzy
 msgid "Page Setup"
 msgstr "Хуудас %u"
 
-#: gtk/gtkpagesetupunixdialog.c:1446
+#: gtk/gtkpagesetupunixdialog.c:1440
 msgid "Margins from Printer..."
 msgstr ""
 
-#: gtk/gtkpagesetupunixdialog.c:1606
+#: gtk/gtkpagesetupunixdialog.c:1600
 #, c-format
 msgid "Custom Size %d"
 msgstr ""
 
-#: gtk/gtkpagesetupunixdialog.c:1835
+#: gtk/gtkpagesetupunixdialog.c:1829
 msgid "Manage Custom Sizes"
 msgstr ""
 
-#: gtk/gtkpagesetupunixdialog.c:1931
+#: gtk/gtkpagesetupunixdialog.c:1925
 msgid "_Width:"
 msgstr ""
 
 # gtk/gtkcolorsel.c:1821
-#: gtk/gtkpagesetupunixdialog.c:1943
+#: gtk/gtkpagesetupunixdialog.c:1937
 #, fuzzy
 msgid "_Height:"
 msgstr "_Өнгө:"
 
-#: gtk/gtkpagesetupunixdialog.c:1955
+#: gtk/gtkpagesetupunixdialog.c:1949
 msgid "Paper Size"
 msgstr ""
 
 # gtk/gtkstock.c:293
-#: gtk/gtkpagesetupunixdialog.c:1965
+#: gtk/gtkpagesetupunixdialog.c:1959
 #, fuzzy
 msgid "_Top:"
 msgstr "_Дээд"
 
 # gtk/gtkstock.c:290
-#: gtk/gtkpagesetupunixdialog.c:1977
+#: gtk/gtkpagesetupunixdialog.c:1971
 #, fuzzy
 msgid "_Bottom:"
 msgstr "_Доод"
 
 # gtk/gtkstock.c:305
-#: gtk/gtkpagesetupunixdialog.c:1989
+#: gtk/gtkpagesetupunixdialog.c:1983
 #, fuzzy
 msgid "_Left:"
 msgstr " _Зүүн"
 
-#: gtk/gtkpagesetupunixdialog.c:2001
+#: gtk/gtkpagesetupunixdialog.c:1995
 msgid "_Right:"
 msgstr ""
 
-#: gtk/gtkpagesetupunixdialog.c:2042
+#: gtk/gtkpagesetupunixdialog.c:2036
 msgid "Paper Margins"
 msgstr ""
 
@@ -2812,204 +2830,204 @@ msgid "Error from StartDoc"
 msgstr ""
 
 # gtk/gtkstock.c:313
-#: gtk/gtkprintunixdialog.c:1485
+#: gtk/gtkprintunixdialog.c:1504
 #, fuzzy
 msgid "Printer"
 msgstr "_хэвлэ"
 
 # gtk/gtkfilesel.c:2103
-#: gtk/gtkprintunixdialog.c:1493 gtk/gtkrecentchooserdefault.c:1005
+#: gtk/gtkprintunixdialog.c:1512
 #, fuzzy
 msgid "Location"
 msgstr "_Байршил:"
 
-#: gtk/gtkprintunixdialog.c:1502
+#: gtk/gtkprintunixdialog.c:1521
 msgid "Status"
 msgstr ""
 
-#: gtk/gtkprintunixdialog.c:1524
+#: gtk/gtkprintunixdialog.c:1543
 #, fuzzy
 msgid "Print Pages"
 msgstr "Хэвлэх_харагдац"
 
 # gtk/gtkstock.c:304
-#: gtk/gtkprintunixdialog.c:1528
+#: gtk/gtkprintunixdialog.c:1547
 #, fuzzy
 msgid "_All"
 msgstr "_Бөглө"
 
 # gtk/gtkfilesel.c:1444
-#: gtk/gtkprintunixdialog.c:1535
+#: gtk/gtkprintunixdialog.c:1554
 #, fuzzy
 msgid "C_urrent"
 msgstr "Үү_сгэх"
 
-#: gtk/gtkprintunixdialog.c:1544
+#: gtk/gtkprintunixdialog.c:1563
 msgid "Ra_nge"
 msgstr ""
 
-#: gtk/gtkprintunixdialog.c:1545
+#: gtk/gtkprintunixdialog.c:1564
 msgid ""
 "Specify one or more page ranges,\n"
 " e.g. 1-3,7,11"
 msgstr ""
 
-#: gtk/gtkprintunixdialog.c:1564
+#: gtk/gtkprintunixdialog.c:1583
 msgid "Copies"
 msgstr ""
 
 #. FIXME chpe: too much space between Copies and spinbutton, put those 2 in a hbox and make it span 2 columns
-#: gtk/gtkprintunixdialog.c:1569
+#: gtk/gtkprintunixdialog.c:1588
 msgid "Copie_s:"
 msgstr ""
 
 # gtk/gtkfilesel.c:1444
-#: gtk/gtkprintunixdialog.c:1587
+#: gtk/gtkprintunixdialog.c:1606
 #, fuzzy
 msgid "C_ollate"
 msgstr "Үү_сгэх"
 
 # gtk/gtkstock.c:320
-#: gtk/gtkprintunixdialog.c:1595
+#: gtk/gtkprintunixdialog.c:1614
 #, fuzzy
 msgid "_Reverse"
 msgstr "_Буцааж тавих"
 
-#: gtk/gtkprintunixdialog.c:1612
+#: gtk/gtkprintunixdialog.c:1631
 msgid "General"
 msgstr ""
 
-#: gtk/gtkprintunixdialog.c:2012
+#: gtk/gtkprintunixdialog.c:2031
 msgid "Layout"
 msgstr ""
 
 # gtk/gtkstock.c:315
-#: gtk/gtkprintunixdialog.c:2016
+#: gtk/gtkprintunixdialog.c:2035
 #, fuzzy
 msgid "Pages per _side:"
 msgstr "_Гар тохируулга"
 
-#: gtk/gtkprintunixdialog.c:2032
+#: gtk/gtkprintunixdialog.c:2051
 msgid "T_wo-sided:"
 msgstr ""
 
 # gtk/gtkstock.c:313
-#: gtk/gtkprintunixdialog.c:2047
+#: gtk/gtkprintunixdialog.c:2066
 #, fuzzy
 msgid "_Only print:"
 msgstr "_хэвлэ"
 
 #. In enum order
-#: gtk/gtkprintunixdialog.c:2062
+#: gtk/gtkprintunixdialog.c:2081
 msgid "All sheets"
 msgstr ""
 
-#: gtk/gtkprintunixdialog.c:2063
+#: gtk/gtkprintunixdialog.c:2082
 msgid "Even sheets"
 msgstr ""
 
-#: gtk/gtkprintunixdialog.c:2064
+#: gtk/gtkprintunixdialog.c:2083
 msgid "Odd sheets"
 msgstr ""
 
 # gtk/gtkcolorsel.c:1825
-#: gtk/gtkprintunixdialog.c:2067
+#: gtk/gtkprintunixdialog.c:2086
 #, fuzzy
 msgid "Sc_ale:"
 msgstr "Ут_га:"
 
-#: gtk/gtkprintunixdialog.c:2094
+#: gtk/gtkprintunixdialog.c:2113
 msgid "Paper"
 msgstr ""
 
 # gtk/gtkstock.c:315
-#: gtk/gtkprintunixdialog.c:2098
+#: gtk/gtkprintunixdialog.c:2117
 #, fuzzy
 msgid "Paper _type:"
 msgstr "_Гар тохируулга"
 
 # gtk/gtkstock.c:315
-#: gtk/gtkprintunixdialog.c:2113
+#: gtk/gtkprintunixdialog.c:2132
 #, fuzzy
 msgid "Paper _source:"
 msgstr "_Гар тохируулга"
 
-#: gtk/gtkprintunixdialog.c:2128
+#: gtk/gtkprintunixdialog.c:2147
 msgid "Output t_ray:"
 msgstr ""
 
-#: gtk/gtkprintunixdialog.c:2179
+#: gtk/gtkprintunixdialog.c:2198
 msgid "Job Details"
 msgstr ""
 
-#: gtk/gtkprintunixdialog.c:2185
+#: gtk/gtkprintunixdialog.c:2204
 msgid "Pri_ority:"
 msgstr ""
 
-#: gtk/gtkprintunixdialog.c:2200
+#: gtk/gtkprintunixdialog.c:2219
 msgid "_Billing info:"
 msgstr ""
 
-#: gtk/gtkprintunixdialog.c:2218
+#: gtk/gtkprintunixdialog.c:2237
 msgid "Print Document"
 msgstr ""
 
 # gtk/gtkstock.c:308
-#: gtk/gtkprintunixdialog.c:2224
+#: gtk/gtkprintunixdialog.c:2243
 #, fuzzy
 msgid "_Now"
 msgstr "_Үгүй"
 
-#: gtk/gtkprintunixdialog.c:2231
+#: gtk/gtkprintunixdialog.c:2250
 msgid "A_t:"
 msgstr ""
 
 # gtk/gtkstock.c:277
-#: gtk/gtkprintunixdialog.c:2246
+#: gtk/gtkprintunixdialog.c:2265
 #, fuzzy
 msgid "On _hold"
 msgstr "_Тод"
 
-#: gtk/gtkprintunixdialog.c:2265
+#: gtk/gtkprintunixdialog.c:2284
 msgid "Add Cover Page"
 msgstr ""
 
-#: gtk/gtkprintunixdialog.c:2271
+#: gtk/gtkprintunixdialog.c:2290
 msgid "Be_fore:"
 msgstr ""
 
-#: gtk/gtkprintunixdialog.c:2286
+#: gtk/gtkprintunixdialog.c:2305
 msgid "_After:"
 msgstr ""
 
-#: gtk/gtkprintunixdialog.c:2301
+#: gtk/gtkprintunixdialog.c:2320
 msgid "Job"
 msgstr ""
 
-#: gtk/gtkprintunixdialog.c:2367
+#: gtk/gtkprintunixdialog.c:2386
 msgid "Advanced"
 msgstr ""
 
-#: gtk/gtkprintunixdialog.c:2402
+#: gtk/gtkprintunixdialog.c:2421
 msgid "Image Quality"
 msgstr ""
 
 # gtk/gtkstock.c:323
-#: gtk/gtkprintunixdialog.c:2405
+#: gtk/gtkprintunixdialog.c:2424
 #, fuzzy
 msgid "Color"
 msgstr "_Өнгө"
 
-#: gtk/gtkprintunixdialog.c:2408
+#: gtk/gtkprintunixdialog.c:2427
 msgid "Finishing"
 msgstr ""
 
-#: gtk/gtkprintunixdialog.c:2418
+#: gtk/gtkprintunixdialog.c:2437
 msgid "Some of the settings in the dialog conflict"
 msgstr ""
 
 # gtk/gtkstock.c:313
-#: gtk/gtkprintunixdialog.c:2441
+#: gtk/gtkprintunixdialog.c:2460
 #, fuzzy
 msgid "Print"
 msgstr "_хэвлэ"
@@ -3035,54 +3053,54 @@ msgid "Unable to locate image file in pixmap_path: \"%s\""
 msgstr "pixmap_path: \"%s\" дэх зурагтай файл олдсонгүй."
 
 #: gtk/gtkrecentaction.c:155 gtk/gtkrecentaction.c:163
-#: gtk/gtkrecentchoosermenu.c:567 gtk/gtkrecentchoosermenu.c:575
+#: gtk/gtkrecentchoosermenu.c:555 gtk/gtkrecentchoosermenu.c:563
 #, c-format
 msgid "This function is not implemented for widgets of class '%s'"
 msgstr ""
 
-#: gtk/gtkrecentchooserdefault.c:459
+#: gtk/gtkrecentchooserdefault.c:465
 msgid "Select which type of documents are shown"
 msgstr ""
 
-#: gtk/gtkrecentchooserdefault.c:1124 gtk/gtkrecentchooserdefault.c:1161
+#: gtk/gtkrecentchooserdefault.c:1107 gtk/gtkrecentchooserdefault.c:1144
 #, c-format
 msgid "No item for URI '%s' found"
 msgstr ""
 
-#: gtk/gtkrecentchooserdefault.c:1288
+#: gtk/gtkrecentchooserdefault.c:1271
 msgid "Untitled filter"
 msgstr ""
 
-#: gtk/gtkrecentchooserdefault.c:1596
+#: gtk/gtkrecentchooserdefault.c:1626
 #, fuzzy
 msgid "Could not remove item"
 msgstr ""
 "%s-г тэмдэглэж чадсангүй:\n"
 "%s"
 
-#: gtk/gtkrecentchooserdefault.c:1639
+#: gtk/gtkrecentchooserdefault.c:1669
 #, fuzzy
 msgid "Could not clear list"
 msgstr ""
 "%s-г тэмдэглэж чадсангүй:\n"
 "%s"
 
-#: gtk/gtkrecentchooserdefault.c:1723
+#: gtk/gtkrecentchooserdefault.c:1753
 #, fuzzy
 msgid "Copy _Location"
 msgstr "Байршил нээх"
 
-#: gtk/gtkrecentchooserdefault.c:1736
+#: gtk/gtkrecentchooserdefault.c:1766
 msgid "_Remove From List"
 msgstr ""
 
 # gtk/gtkstock.c:280
-#: gtk/gtkrecentchooserdefault.c:1745
+#: gtk/gtkrecentchooserdefault.c:1775
 #, fuzzy
 msgid "_Clear List"
 msgstr "_Цэвэрлэх"
 
-#: gtk/gtkrecentchooserdefault.c:1759
+#: gtk/gtkrecentchooserdefault.c:1789
 msgid "Show _Private Resources"
 msgstr ""
 
@@ -3097,23 +3115,23 @@ msgstr ""
 #. * user appended or prepended custom menu items to the
 #. * recent chooser menu widget.
 #.
-#: gtk/gtkrecentchoosermenu.c:332
+#: gtk/gtkrecentchoosermenu.c:320
 #, fuzzy
 msgid "No items found"
 msgstr "XPM биш толгой олдлоо"
 
-#: gtk/gtkrecentchoosermenu.c:487 gtk/gtkrecentchoosermenu.c:543
+#: gtk/gtkrecentchoosermenu.c:475 gtk/gtkrecentchoosermenu.c:531
 #, c-format
 msgid "No recently used resource found with URI `%s'"
 msgstr ""
 
-#: gtk/gtkrecentchoosermenu.c:757
+#: gtk/gtkrecentchoosermenu.c:742
 #, c-format
 msgid "Open '%s'"
 msgstr ""
 
 # gtk/gtkinputdialog.c:582
-#: gtk/gtkrecentchoosermenu.c:789
+#: gtk/gtkrecentchoosermenu.c:772
 #, fuzzy
 msgid "Unknown item"
 msgstr "Тодорхойгүй"
@@ -3125,7 +3143,7 @@ msgstr "Тодорхойгүй"
 #. *
 #. * Don't include the prefix "recent menu label|" in the translation.
 #.
-#: gtk/gtkrecentchoosermenu.c:802
+#: gtk/gtkrecentchoosermenu.c:785
 #, c-format
 msgid "recent menu label|_%d. %s"
 msgstr ""
@@ -3135,14 +3153,14 @@ msgstr ""
 #. *
 #. * Don't include the prefix "recent menu label|" in the translation.
 #.
-#: gtk/gtkrecentchoosermenu.c:809
+#: gtk/gtkrecentchoosermenu.c:792
 #, c-format
 msgid "recent menu label|%d. %s"
 msgstr ""
 
 # gtk/gtkrc.c:2270
-#: gtk/gtkrecentmanager.c:1047 gtk/gtkrecentmanager.c:1194
-#: gtk/gtkrecentmanager.c:1204 gtk/gtkrecentmanager.c:1257
+#: gtk/gtkrecentmanager.c:1041 gtk/gtkrecentmanager.c:1188
+#: gtk/gtkrecentmanager.c:1198 gtk/gtkrecentmanager.c:1251
 #, fuzzy, c-format
 msgid "Unable to find an item with URI '%s'"
 msgstr "Дагалдах файлыг олж чадсангүй: \"%s\""
@@ -4647,99 +4665,99 @@ msgid "different idatas found for symlinked '%s' and '%s'\n"
 msgstr ""
 
 # gdk-pixbuf/io-tiff.c:273
-#: gtk/updateiconcache.c:1379
+#: gtk/updateiconcache.c:1376
 #, fuzzy, c-format
 msgid "Failed to write header\n"
 msgstr "TIFF зураг онгойсонгүй "
 
 # gdk-pixbuf/io-tiff.c:273
-#: gtk/updateiconcache.c:1385
+#: gtk/updateiconcache.c:1382
 #, fuzzy, c-format
 msgid "Failed to write hash table\n"
 msgstr "TIFF зураг онгойсонгүй "
 
 # gdk-pixbuf/io-xbm.c:427
-#: gtk/updateiconcache.c:1391
+#: gtk/updateiconcache.c:1388
 #, fuzzy, c-format
 msgid "Failed to write folder index\n"
 msgstr "Түр зуурын файлаас уншигдсангүй"
 
 # gdk-pixbuf/io-tiff.c:273
-#: gtk/updateiconcache.c:1399
+#: gtk/updateiconcache.c:1396
 #, fuzzy, c-format
 msgid "Failed to rewrite header\n"
 msgstr "TIFF зураг онгойсонгүй "
 
 # gdk-pixbuf/gdk-pixbuf-animation.c:144 gdk-pixbuf/gdk-pixbuf-io.c:581
-#: gtk/updateiconcache.c:1451
+#: gtk/updateiconcache.c:1448
 #, fuzzy, c-format
 msgid "Failed to write cache file: %s\n"
 msgstr "\"%s\" файл нээгдсэнгүй: %s"
 
-#: gtk/updateiconcache.c:1486
+#: gtk/updateiconcache.c:1483
 #, c-format
 msgid "The generated cache was invalid.\n"
 msgstr ""
 
-#: gtk/updateiconcache.c:1500
+#: gtk/updateiconcache.c:1497
 #, c-format
 msgid "Could not rename %s to %s: %s, removing %s then.\n"
 msgstr ""
 
 # gtk/gtkfilesel.c:1369
-#: gtk/updateiconcache.c:1512
+#: gtk/updateiconcache.c:1509
 #, fuzzy, c-format
 msgid "Could not rename %s to %s: %s\n"
 msgstr "\"%s\" хавтас үүсгэхэд алдлаа: %s"
 
 # gtk/gtkfilesel.c:1369
-#: gtk/updateiconcache.c:1519
+#: gtk/updateiconcache.c:1516
 #, fuzzy, c-format
 msgid "Could not rename %s back to %s: %s.\n"
 msgstr "\"%s\" хавтас үүсгэхэд алдлаа: %s"
 
-#: gtk/updateiconcache.c:1541
+#: gtk/updateiconcache.c:1538
 #, c-format
 msgid "Cache file created successfully.\n"
 msgstr ""
 
-#: gtk/updateiconcache.c:1580
+#: gtk/updateiconcache.c:1577
 msgid "Overwrite an existing cache, even if up to date"
 msgstr ""
 
-#: gtk/updateiconcache.c:1581
+#: gtk/updateiconcache.c:1578
 msgid "Don't check for the existence of index.theme"
 msgstr ""
 
-#: gtk/updateiconcache.c:1582
+#: gtk/updateiconcache.c:1579
 msgid "Don't include image data in the cache"
 msgstr ""
 
-#: gtk/updateiconcache.c:1583
+#: gtk/updateiconcache.c:1580
 msgid "Output a C header file"
 msgstr ""
 
-#: gtk/updateiconcache.c:1584
+#: gtk/updateiconcache.c:1581
 msgid "Turn off verbose output"
 msgstr ""
 
-#: gtk/updateiconcache.c:1585
+#: gtk/updateiconcache.c:1582
 msgid "Validate existing icon cache"
 msgstr ""
 
-#: gtk/updateiconcache.c:1620
+#: gtk/updateiconcache.c:1617
 #, fuzzy, c-format
 msgid "File not found: %s\n"
 msgstr ""
 "%s-г тэмдэглэж чадсангүй:\n"
 "%s"
 
-#: gtk/updateiconcache.c:1626
+#: gtk/updateiconcache.c:1623
 #, c-format
 msgid "Not a valid icon cache: %s\n"
 msgstr ""
 
-#: gtk/updateiconcache.c:1637
+#: gtk/updateiconcache.c:1634
 #, c-format
 msgid ""
 "No theme index file in '%s'.\n"
@@ -4897,39 +4915,39 @@ msgid "Custom %.2fx%.2f"
 msgstr ""
 
 #. default filename used for print-to-file
-#: modules/printbackends/file/gtkprintbackendfile.c:235
+#: modules/printbackends/file/gtkprintbackendfile.c:236
 #, c-format
 msgid "output.%s"
 msgstr ""
 
 # gtk/gtkstock.c:313
-#: modules/printbackends/file/gtkprintbackendfile.c:464
+#: modules/printbackends/file/gtkprintbackendfile.c:465
 #, fuzzy
 msgid "Print to File"
 msgstr "_хэвлэ"
 
-#: modules/printbackends/file/gtkprintbackendfile.c:489
+#: modules/printbackends/file/gtkprintbackendfile.c:542
 msgid "PDF"
 msgstr ""
 
 # gtk/gtkstock.c:313
-#: modules/printbackends/file/gtkprintbackendfile.c:489
+#: modules/printbackends/file/gtkprintbackendfile.c:542
 #, fuzzy
 msgid "Postscript"
 msgstr "_хэвлэ"
 
-#: modules/printbackends/file/gtkprintbackendfile.c:501
+#: modules/printbackends/file/gtkprintbackendfile.c:554
 #: modules/printbackends/test/gtkprintbackendtest.c:501
 msgid "Pages per _sheet:"
 msgstr ""
 
 # gtk/gtkfilesel.c:742
-#: modules/printbackends/file/gtkprintbackendfile.c:547
+#: modules/printbackends/file/gtkprintbackendfile.c:600
 #, fuzzy
 msgid "File"
 msgstr "Файлууд"
 
-#: modules/printbackends/file/gtkprintbackendfile.c:556
+#: modules/printbackends/file/gtkprintbackendfile.c:609
 msgid "_Output format"
 msgstr ""
 

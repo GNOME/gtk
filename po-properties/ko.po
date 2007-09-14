@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-properties.HEAD\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-07-20 18:13-0400\n"
+"POT-Creation-Date: 2007-09-13 19:20-0400\n"
 "PO-Revision-Date: 2007-07-12 18:00+0900\n"
 "Last-Translator: Eunju Kim <eukim@redhat.com>\n"
 "Language-Team: GNOME Korea <gnome-kr-hackers@lists.kldp.net>\n"
@@ -390,7 +390,7 @@ msgid "Whether the action group is visible."
 msgstr "동작 그룹을 표시할 지 여부."
 
 #: gtk/gtkadjustment.c:86 gtk/gtkcellrendererprogress.c:128
-#: gtk/gtkspinbutton.c:268
+#: gtk/gtkscalebutton.c:181 gtk/gtkspinbutton.c:268
 msgid "Value"
 msgstr "값"
 
@@ -756,6 +756,15 @@ msgstr "위치"
 msgid "The index of the child in the parent"
 msgstr "상위 위젯에서의 하위 위젯 인덱스"
 
+#: gtk/gtkbuilder.c:104
+#, fuzzy
+msgid "Translation Domain"
+msgstr "옮긴이"
+
+#: gtk/gtkbuilder.c:105
+msgid "The translation domain used by gettext"
+msgstr ""
+
 #: gtk/gtkbutton.c:200
 msgid ""
 "Text of the label widget inside the button, if the button contains a label "
@@ -786,11 +795,11 @@ msgstr ""
 "참이면, 레이블은 그 텍스트를 표시하는 게 아니라 스톡 아이템을 선택하는 데 쓰"
 "입니다"
 
-#: gtk/gtkbutton.c:223 gtk/gtkcombobox.c:751 gtk/gtkfilechooserbutton.c:401
+#: gtk/gtkbutton.c:223 gtk/gtkcombobox.c:785 gtk/gtkfilechooserbutton.c:398
 msgid "Focus on click"
 msgstr "클릭하면 포커스"
 
-#: gtk/gtkbutton.c:224 gtk/gtkfilechooserbutton.c:402
+#: gtk/gtkbutton.c:224 gtk/gtkfilechooserbutton.c:399
 msgid "Whether the button grabs focus when it is clicked with the mouse"
 msgstr "마우스로 클릭하면 단추에 포커스가 가는 지 여부"
 
@@ -1230,8 +1239,8 @@ msgstr "방향"
 msgid "Orientation and growth direction of the progress bar"
 msgstr "진행 막대의 위치와 진행 방향"
 
-#: gtk/gtkcellrendererspin.c:93 gtk/gtkprogressbar.c:122 gtk/gtkrange.c:345
-#: gtk/gtkspinbutton.c:207
+#: gtk/gtkcellrendererspin.c:93 gtk/gtkprogressbar.c:122 gtk/gtkrange.c:346
+#: gtk/gtkscalebutton.c:200 gtk/gtkspinbutton.c:207
 msgid "Adjustment"
 msgstr "조정"
 
@@ -1436,7 +1445,7 @@ msgstr ""
 "말줄임표를 붙이려는 위치 (셀 렌더러에서 전체 문자열을 표시할 공간이 부족한 경"
 "우)"
 
-#: gtk/gtkcellrenderertext.c:429 gtk/gtkfilechooserbutton.c:429
+#: gtk/gtkcellrenderertext.c:429 gtk/gtkfilechooserbutton.c:426
 #: gtk/gtklabel.c:449
 msgid "Width In Characters"
 msgstr "너비 (문자 개수 단위)"
@@ -1457,7 +1466,7 @@ msgstr ""
 "문자열을 어떻게 여러 줄로 나눌 지, 셀 렌더러에서 전체 문자열을 표시할 공간이 "
 "부족한 경우"
 
-#: gtk/gtkcellrenderertext.c:468 gtk/gtkcombobox.c:640
+#: gtk/gtkcellrenderertext.c:468 gtk/gtkcombobox.c:674
 msgid "Wrap width"
 msgstr "줄바꿈 너비"
 
@@ -1695,7 +1704,7 @@ msgstr "투명 사용"
 msgid "Whether or not to give the color an alpha value"
 msgstr "색에 투명 값을 사용할 지 여부"
 
-#: gtk/gtkcolorbutton.c:187 gtk/gtkfilechooserbutton.c:415
+#: gtk/gtkcolorbutton.c:187 gtk/gtkfilechooserbutton.c:412
 #: gtk/gtkfontbutton.c:143 gtk/gtkprintjob.c:116 gtk/gtktreeviewcolumn.c:264
 msgid "Title"
 msgstr "제목"
@@ -1704,7 +1713,7 @@ msgstr "제목"
 msgid "The title of the color selection dialog"
 msgstr "색 선택 대화 상자의 제목"
 
-#: gtk/gtkcolorbutton.c:202 gtk/gtkcolorsel.c:1871
+#: gtk/gtkcolorbutton.c:202 gtk/gtkcolorsel.c:1857
 msgid "Current Color"
 msgstr "현재 색"
 
@@ -1712,7 +1721,7 @@ msgstr "현재 색"
 msgid "The selected color"
 msgstr "선택한 색"
 
-#: gtk/gtkcolorbutton.c:217 gtk/gtkcolorsel.c:1878
+#: gtk/gtkcolorbutton.c:217 gtk/gtkcolorsel.c:1864
 msgid "Current Alpha"
 msgstr "현재 투명값"
 
@@ -1720,35 +1729,35 @@ msgstr "현재 투명값"
 msgid "The selected opacity value (0 fully transparent, 65535 fully opaque)"
 msgstr "선택한 투명도 값 (0은 완전히 투명, 65535는 완전히 불투명)"
 
-#: gtk/gtkcolorsel.c:1857
+#: gtk/gtkcolorsel.c:1843
 msgid "Has Opacity Control"
 msgstr "투명도 조정 사용"
 
-#: gtk/gtkcolorsel.c:1858
+#: gtk/gtkcolorsel.c:1844
 msgid "Whether the color selector should allow setting opacity"
 msgstr "색 선택기에서 투명도를 조정할 수 있는 지 여부"
 
-#: gtk/gtkcolorsel.c:1864
+#: gtk/gtkcolorsel.c:1850
 msgid "Has palette"
 msgstr "색상표 사용"
 
-#: gtk/gtkcolorsel.c:1865
+#: gtk/gtkcolorsel.c:1851
 msgid "Whether a palette should be used"
 msgstr "색상표를 사용하는 지 여부"
 
-#: gtk/gtkcolorsel.c:1872
+#: gtk/gtkcolorsel.c:1858
 msgid "The current color"
 msgstr "현재 색"
 
-#: gtk/gtkcolorsel.c:1879
+#: gtk/gtkcolorsel.c:1865
 msgid "The current opacity value (0 fully transparent, 65535 fully opaque)"
 msgstr "현재 투명도 값 (0은 완전히 투명, 65535는 완전히 불투명)"
 
-#: gtk/gtkcolorsel.c:1893
+#: gtk/gtkcolorsel.c:1879
 msgid "Custom palette"
 msgstr "사용자 색상표"
 
-#: gtk/gtkcolorsel.c:1894
+#: gtk/gtkcolorsel.c:1880
 msgid "Palette to use in the color selector"
 msgstr "색 선택기에서 사용할 색상표"
 
@@ -1792,103 +1801,103 @@ msgstr "목록에 있는 값"
 msgid "Whether entered values must already be present in the list"
 msgstr "입력된 값이 목록에 이미 있는 값이어야 하는 지 여부"
 
-#: gtk/gtkcombobox.c:623
+#: gtk/gtkcombobox.c:657
 msgid "ComboBox model"
 msgstr "콤보 상자 모델"
 
-#: gtk/gtkcombobox.c:624
+#: gtk/gtkcombobox.c:658
 msgid "The model for the combo box"
 msgstr "콤보 상자를 위한 모델"
 
-#: gtk/gtkcombobox.c:641
+#: gtk/gtkcombobox.c:675
 msgid "Wrap width for laying out the items in a grid"
 msgstr "격자에 항목을 배치할 때 줄바꿈 너비"
 
-#: gtk/gtkcombobox.c:663
+#: gtk/gtkcombobox.c:697
 msgid "Row span column"
 msgstr "행 범위 열"
 
-#: gtk/gtkcombobox.c:664
+#: gtk/gtkcombobox.c:698
 msgid "TreeModel column containing the row span values"
 msgstr "행 범위 값이 들어 있는 트리모델 열"
 
-#: gtk/gtkcombobox.c:685
+#: gtk/gtkcombobox.c:719
 msgid "Column span column"
 msgstr "열 범위 열"
 
-#: gtk/gtkcombobox.c:686
+#: gtk/gtkcombobox.c:720
 msgid "TreeModel column containing the column span values"
 msgstr "열 범위 값이 들어 있는 트리모델 열"
 
-#: gtk/gtkcombobox.c:707
+#: gtk/gtkcombobox.c:741
 msgid "Active item"
 msgstr "활성 항목"
 
-#: gtk/gtkcombobox.c:708
+#: gtk/gtkcombobox.c:742
 msgid "The item which is currently active"
 msgstr "현재 활성화된 항목"
 
-#: gtk/gtkcombobox.c:727 gtk/gtkuimanager.c:220
+#: gtk/gtkcombobox.c:761 gtk/gtkuimanager.c:220
 msgid "Add tearoffs to menus"
 msgstr "메뉴에 떼어내기 더하기"
 
-#: gtk/gtkcombobox.c:728
+#: gtk/gtkcombobox.c:762
 msgid "Whether dropdowns should have a tearoff menu item"
 msgstr "드롭다운 메뉴의 항목이 떼어내가 메뉴 항목인 지 여부"
 
-#: gtk/gtkcombobox.c:743 gtk/gtkentry.c:522
+#: gtk/gtkcombobox.c:777 gtk/gtkentry.c:522
 msgid "Has Frame"
 msgstr "프레임 사용"
 
-#: gtk/gtkcombobox.c:744
+#: gtk/gtkcombobox.c:778
 msgid "Whether the combo box draws a frame around the child"
 msgstr "콤보 상자의 하위 위젯 주위에 프레임을 그릴 지 여부"
 
-#: gtk/gtkcombobox.c:752
+#: gtk/gtkcombobox.c:786
 msgid "Whether the combo box grabs focus when it is clicked with the mouse"
 msgstr "마우스로 킬릭하면 콤보 상자에 포커스가 가는 지 여부"
 
-#: gtk/gtkcombobox.c:767 gtk/gtkmenu.c:484
+#: gtk/gtkcombobox.c:801 gtk/gtkmenu.c:484
 msgid "Tearoff Title"
 msgstr "떼어내기 제목"
 
-#: gtk/gtkcombobox.c:768
+#: gtk/gtkcombobox.c:802
 msgid ""
 "A title that may be displayed by the window manager when the popup is torn-"
 "off"
 msgstr "팝업을 떼어냈을 때 창 관리자가 표시할 제목"
 
-#: gtk/gtkcombobox.c:785
+#: gtk/gtkcombobox.c:819
 msgid "Popup shown"
 msgstr "팝업 표시"
 
-#: gtk/gtkcombobox.c:786
+#: gtk/gtkcombobox.c:820
 msgid "Whether the combo's dropdown is shown"
 msgstr "콤보에 드롭다운 메뉴를 표시할 지 여부"
 
-#: gtk/gtkcombobox.c:792
+#: gtk/gtkcombobox.c:826
 msgid "Appears as list"
 msgstr "목록으로 표시"
 
-#: gtk/gtkcombobox.c:793
+#: gtk/gtkcombobox.c:827
 msgid "Whether dropdowns should look like lists rather than menus"
 msgstr "드롭다운이 메뉴가 아니라 목록으로 표시할 지 여부"
 
-#: gtk/gtkcombobox.c:809
+#: gtk/gtkcombobox.c:843
 msgid "Arrow Size"
 msgstr "화살표 크기"
 
-#: gtk/gtkcombobox.c:810
+#: gtk/gtkcombobox.c:844
 msgid "The minimum size of the arrow in the combo box"
 msgstr "콤보 상자에 있는 화살표의 최소 크기"
 
-#: gtk/gtkcombobox.c:825 gtk/gtkentry.c:622 gtk/gtkhandlebox.c:176
+#: gtk/gtkcombobox.c:859 gtk/gtkentry.c:622 gtk/gtkhandlebox.c:176
 #: gtk/gtkmenubar.c:201 gtk/gtkstatusbar.c:186 gtk/gtktoolbar.c:613
 #: gtk/gtkviewport.c:122
 msgid "Shadow type"
 msgstr "그림자 형식"
 
-#: gtk/gtkcombobox.c:826
+#: gtk/gtkcombobox.c:860
 msgid "Which kind of shadow to draw around the combo box"
 msgstr "콤보 상자 주위의 그림자 종류"
 
@@ -2268,7 +2277,7 @@ msgstr "파일 시스템 백엔드"
 msgid "Name of file system backend to use"
 msgstr "사용할 파일 시스템 백엔드의 이름"
 
-#: gtk/gtkfilechooser.c:210 gtk/gtkrecentchooser.c:169
+#: gtk/gtkfilechooser.c:210 gtk/gtkrecentchooser.c:252
 msgid "Filter"
 msgstr "필터"
 
@@ -2318,7 +2327,7 @@ msgstr "추가 위젯"
 msgid "Application supplied widget for extra options."
 msgstr "추가적인 기능을 위해 프로그램에서 만든 위젯."
 
-#: gtk/gtkfilechooser.c:246 gtk/gtkfilesel.c:539 gtk/gtkrecentchooser.c:142
+#: gtk/gtkfilechooser.c:246 gtk/gtkfilesel.c:539 gtk/gtkrecentchooser.c:191
 msgid "Select Multiple"
 msgstr "여러 개 선택"
 
@@ -2344,19 +2353,19 @@ msgid ""
 "dialog if necessary."
 msgstr "저장 모드인 파일 선택 상자에서 덮어쓸 경우 확인 질문을 할 지 여부."
 
-#: gtk/gtkfilechooserbutton.c:384
+#: gtk/gtkfilechooserbutton.c:381
 msgid "Dialog"
 msgstr "대화 상자"
 
-#: gtk/gtkfilechooserbutton.c:385
+#: gtk/gtkfilechooserbutton.c:382
 msgid "The file chooser dialog to use."
 msgstr "사용할 파일 선택 대화 상자."
 
-#: gtk/gtkfilechooserbutton.c:416
+#: gtk/gtkfilechooserbutton.c:413
 msgid "The title of the file chooser dialog."
 msgstr "파일 선택 대화 상자의 제목."
 
-#: gtk/gtkfilechooserbutton.c:430
+#: gtk/gtkfilechooserbutton.c:427
 msgid "The desired width of the button widget, in characters."
 msgstr "단추 위젯의 폭, 문자 개수 단위."
 
@@ -2704,7 +2713,7 @@ msgstr "아이콘 집합"
 msgid "Icon set to display"
 msgstr "표시할 아이콘 집합"
 
-#: gtk/gtkimage.c:187 gtk/gtktoolbar.c:530
+#: gtk/gtkimage.c:187 gtk/gtkscalebutton.c:191 gtk/gtktoolbar.c:530
 msgid "Icon size"
 msgstr "아이콘 크기"
 
@@ -3058,11 +3067,11 @@ msgstr "포커스 받음"
 msgid "A boolean that determines whether the menu grabs the keyboard focus"
 msgstr "메뉴가 키보드 포커스를 잡는 지 여부를 결정하는 불리언 값"
 
-#: gtk/gtkmenutoolbutton.c:236 gtk/gtkoptionmenu.c:161
+#: gtk/gtkmenutoolbutton.c:230 gtk/gtkoptionmenu.c:161
 msgid "Menu"
 msgstr "메뉴"
 
-#: gtk/gtkmenutoolbutton.c:237
+#: gtk/gtkmenutoolbutton.c:231
 msgid "The dropdown menu"
 msgstr "드롭다운 메뉴"
 
@@ -3534,7 +3543,7 @@ msgstr "설정"
 msgid "Printer settings"
 msgstr "프린터 설정"
 
-#: gtk/gtkprintjob.c:143 gtk/gtkprintjob.c:144 gtk/gtkprintunixdialog.c:231
+#: gtk/gtkprintjob.c:143 gtk/gtkprintjob.c:144 gtk/gtkprintunixdialog.c:240
 msgid "Page Setup"
 msgstr "페이지 설정"
 
@@ -3558,11 +3567,11 @@ msgstr "기본 페이지 설정"
 msgid "The GtkPageSetup used by default"
 msgstr "기본으로 사용하는 GtkPageSetup"
 
-#: gtk/gtkprintoperation.c:896 gtk/gtkprintunixdialog.c:249
+#: gtk/gtkprintoperation.c:896 gtk/gtkprintunixdialog.c:258
 msgid "Print Settings"
 msgstr "프린터 설정"
 
-#: gtk/gtkprintoperation.c:897 gtk/gtkprintunixdialog.c:250
+#: gtk/gtkprintoperation.c:897 gtk/gtkprintunixdialog.c:259
 msgid "The GtkPrintSettings used for initializing the dialog"
 msgstr "대화 상자를 초기화할 때 사용하는 GtkPrintSettings"
 
@@ -3582,11 +3591,11 @@ msgstr "페이지 수"
 msgid "The number of pages in the document."
 msgstr "문서의 페이지 수."
 
-#: gtk/gtkprintoperation.c:962 gtk/gtkprintunixdialog.c:239
+#: gtk/gtkprintoperation.c:962 gtk/gtkprintunixdialog.c:248
 msgid "Current Page"
 msgstr "현재 페이지"
 
-#: gtk/gtkprintoperation.c:963 gtk/gtkprintunixdialog.c:240
+#: gtk/gtkprintoperation.c:963 gtk/gtkprintunixdialog.c:249
 msgid "The current page in the document"
 msgstr "문서의 현재 페이지"
 
@@ -3662,15 +3671,15 @@ msgstr "사용자 설정 탭 레이블"
 msgid "Label for the tab containing custom widgets."
 msgstr "사용자 설정 위젯이 들어 있는 탭의 레이블."
 
-#: gtk/gtkprintunixdialog.c:232
+#: gtk/gtkprintunixdialog.c:241
 msgid "The GtkPageSetup to use"
 msgstr "사용할 GtkPageSetup"
 
-#: gtk/gtkprintunixdialog.c:257
+#: gtk/gtkprintunixdialog.c:266
 msgid "Selected Printer"
 msgstr "선택한 프린터"
 
-#: gtk/gtkprintunixdialog.c:258
+#: gtk/gtkprintunixdialog.c:267
 msgid "The GtkPrinter which is selected"
 msgstr "선택한 GtkPrinter"
 
@@ -3807,126 +3816,126 @@ msgstr "이 위젯이 속한 그룹의 라디오 단추."
 msgid "The radio menu item whose group this widget belongs to."
 msgstr "이 위젯이 속한 그룹의 라디오 메뉴 항목."
 
-#: gtk/gtkrange.c:336
+#: gtk/gtkrange.c:337
 msgid "Update policy"
 msgstr "업데이트 정책"
 
-#: gtk/gtkrange.c:337
+#: gtk/gtkrange.c:338
 msgid "How the range should be updated on the screen"
 msgstr "범위를 스크린에 어떻게 업데이트할 것인가"
 
-#: gtk/gtkrange.c:346
+#: gtk/gtkrange.c:347
 msgid "The GtkAdjustment that contains the current value of this range object"
 msgstr "이 범위 개체의 현재값을 갖고 있는 GtkAdjustment"
 
-#: gtk/gtkrange.c:353
+#: gtk/gtkrange.c:354
 msgid "Inverted"
 msgstr "반전"
 
-#: gtk/gtkrange.c:354
+#: gtk/gtkrange.c:355
 msgid "Invert direction slider moves to increase range value"
 msgstr "값이 증가할 때 슬라이더가 움직일 방향을 반전합니다"
 
-#: gtk/gtkrange.c:361
+#: gtk/gtkrange.c:362
 msgid "Lower stepper sensitivity"
 msgstr "아래 조정 단추 감도"
 
-#: gtk/gtkrange.c:362
+#: gtk/gtkrange.c:363
 msgid ""
 "The sensitivity policy for the stepper that points to the adjustment's lower "
 "side"
 msgstr "조정의 아래쪽을 가리키는 조정 단추의 감도 정책"
 
-#: gtk/gtkrange.c:370
+#: gtk/gtkrange.c:371
 msgid "Upper stepper sensitivity"
 msgstr "위 조정 단추 감도"
 
-#: gtk/gtkrange.c:371
+#: gtk/gtkrange.c:372
 msgid ""
 "The sensitivity policy for the stepper that points to the adjustment's upper "
 "side"
 msgstr "조정의 위쪽을 가리키는 조정 단추의 감도 정책"
 
-#: gtk/gtkrange.c:388
+#: gtk/gtkrange.c:389
 msgid "Show Fill Level"
 msgstr "채움 정도 보기"
 
-#: gtk/gtkrange.c:389
+#: gtk/gtkrange.c:390
 msgid "Whether to display a fill level indicator graphics on trough."
 msgstr "채움 정도 표시기 그래픽을 표시할 지에 대한 여부."
 
-#: gtk/gtkrange.c:405
+#: gtk/gtkrange.c:406
 msgid "Restrict to Fill Level"
 msgstr "채움 정도 제한"
 
-#: gtk/gtkrange.c:406
+#: gtk/gtkrange.c:407
 msgid "Whether to restrict the upper boundary to the fill level."
 msgstr "위쪽 경계를 채움 정도로 제한할 지에 대한 여부."
 
-#: gtk/gtkrange.c:421
+#: gtk/gtkrange.c:422
 msgid "Fill Level"
 msgstr "채움 정도"
 
-#: gtk/gtkrange.c:422
+#: gtk/gtkrange.c:423
 msgid "The fill level."
 msgstr "채움 정도."
 
-#: gtk/gtkrange.c:430
+#: gtk/gtkrange.c:431
 msgid "Slider Width"
 msgstr "슬라이더 너비"
 
 # 참고: scrollbar => 스크롤 막대
-#: gtk/gtkrange.c:431
+#: gtk/gtkrange.c:432
 msgid "Width of scrollbar or scale thumb"
 msgstr "스크롤 막대 혹은 범위 스크롤 상자의 너비"
 
-#: gtk/gtkrange.c:438
+#: gtk/gtkrange.c:439
 msgid "Trough Border"
 msgstr "골짜기 테두리"
 
-#: gtk/gtkrange.c:439
+#: gtk/gtkrange.c:440
 msgid "Spacing between thumb/steppers and outer trough bevel"
 msgstr "스크롤 상자/스테퍼와 외부 골짜기 경사 사이의 간격"
 
-#: gtk/gtkrange.c:446
+#: gtk/gtkrange.c:447
 msgid "Stepper Size"
 msgstr "스테퍼 크기"
 
-#: gtk/gtkrange.c:447
+#: gtk/gtkrange.c:448
 msgid "Length of step buttons at ends"
 msgstr "끝에 있는 스테퍼 단추의 길이"
 
-#: gtk/gtkrange.c:462
+#: gtk/gtkrange.c:463
 msgid "Stepper Spacing"
 msgstr "스테퍼 간격"
 
-#: gtk/gtkrange.c:463
+#: gtk/gtkrange.c:464
 msgid "Spacing between step buttons and thumb"
 msgstr "스텝 단추와 스크롤 상자 사이의 간격"
 
-#: gtk/gtkrange.c:470
+#: gtk/gtkrange.c:471
 msgid "Arrow X Displacement"
 msgstr "화살표 가로 움직임"
 
-#: gtk/gtkrange.c:471
+#: gtk/gtkrange.c:472
 msgid ""
 "How far in the x direction to move the arrow when the button is depressed"
 msgstr "단추를 눌렀을 때 화살표가 가로 방향으로 움직이는 거리"
 
-#: gtk/gtkrange.c:478
+#: gtk/gtkrange.c:479
 msgid "Arrow Y Displacement"
 msgstr "화살표 세로 움직임"
 
-#: gtk/gtkrange.c:479
+#: gtk/gtkrange.c:480
 msgid ""
 "How far in the y direction to move the arrow when the button is depressed"
 msgstr "단추를 눌렀을 때 화살표가 세로 방향으로 움직이는 거리"
 
-#: gtk/gtkrange.c:487
+#: gtk/gtkrange.c:488
 msgid "Draw slider ACTIVE during drag"
 msgstr "끌어 놓을 때 슬라이더를 활성화"
 
-#: gtk/gtkrange.c:488
+#: gtk/gtkrange.c:489
 msgid ""
 "With this option set to TRUE, sliders will be drawn ACTIVE and with shadow "
 "IN while they are dragged"
@@ -3934,103 +3943,103 @@ msgstr ""
 "이 옵션이 참이면, 드래그할 때 슬라이더를 활성화하고 그림자를 안쪽으로 들어가"
 "게 합니다"
 
-#: gtk/gtkrange.c:502
+#: gtk/gtkrange.c:503
 msgid "Trough Side Details"
 msgstr "파인 부분 상세히"
 
-#: gtk/gtkrange.c:503
+#: gtk/gtkrange.c:504
 msgid ""
 "When TRUE, the parts of the trough on the two sides of the slider are drawn "
 "with different details"
 msgstr "참이면 슬라이더의 양쪽의 파인 부분이 다른 모양으로 표시됩니다"
 
-#: gtk/gtkrange.c:519
+#: gtk/gtkrange.c:520
 msgid "Trough Under Steppers"
 msgstr "조정 단추 아래 파인 부분"
 
-#: gtk/gtkrange.c:520
+#: gtk/gtkrange.c:521
 msgid ""
 "Whether to draw trough for full length of range or exclude the steppers and "
 "spacing"
 msgstr "범위 끝에 파인 부분을 그릴 지 여부, 아니면 조정 단추와 간격 없앰"
 
-#: gtk/gtkrecentaction.c:654 gtk/gtkrecentchoosermenu.c:212
+#: gtk/gtkrecentaction.c:654 gtk/gtkrecentchoosermenu.c:209
 msgid "Show Numbers"
 msgstr "번호 표시"
 
-#: gtk/gtkrecentaction.c:655 gtk/gtkrecentchoosermenu.c:213
+#: gtk/gtkrecentaction.c:655 gtk/gtkrecentchoosermenu.c:210
 msgid "Whether the items should be displayed with a number"
 msgstr "항목에 번호를 함께 표시할 지 여부"
 
-#: gtk/gtkrecentchooser.c:112
+#: gtk/gtkrecentchooser.c:120
 msgid "Recent Manager"
 msgstr "최근 관리자"
 
-#: gtk/gtkrecentchooser.c:113
+#: gtk/gtkrecentchooser.c:121
 msgid "The RecentManager object to use"
 msgstr "사용할 RecentManager 오브젝트"
 
-#: gtk/gtkrecentchooser.c:118
+#: gtk/gtkrecentchooser.c:135
 msgid "Show Private"
 msgstr "개인 항목 표시"
 
-#: gtk/gtkrecentchooser.c:119
+#: gtk/gtkrecentchooser.c:136
 msgid "Whether the private items should be displayed"
 msgstr "개인 항목을 표시할 지 여부"
 
-#: gtk/gtkrecentchooser.c:124
+#: gtk/gtkrecentchooser.c:149
 msgid "Show Tooltips"
 msgstr "도구 설명 표시"
 
-#: gtk/gtkrecentchooser.c:125
+#: gtk/gtkrecentchooser.c:150
 msgid "Whether there should be a tooltip on the item"
 msgstr "항목에 도구 설명을 붙일 지 여부"
 
-#: gtk/gtkrecentchooser.c:130
+#: gtk/gtkrecentchooser.c:162
 msgid "Show Icons"
 msgstr "아이콘 표시"
 
-#: gtk/gtkrecentchooser.c:131
+#: gtk/gtkrecentchooser.c:163
 msgid "Whether there should be an icon near the item"
 msgstr "항목 옆에 아이콘을 표시할 지 여부"
 
-#: gtk/gtkrecentchooser.c:136
+#: gtk/gtkrecentchooser.c:178
 msgid "Show Not Found"
 msgstr "없음 표시"
 
-#: gtk/gtkrecentchooser.c:137
+#: gtk/gtkrecentchooser.c:179
 msgid "Whether the items pointing to unavailable resources should be displayed"
 msgstr "사용할 수 없는 리소스를 가리키는 항목을 표시할 지 여부"
 
-#: gtk/gtkrecentchooser.c:143
+#: gtk/gtkrecentchooser.c:192
 msgid "Whether to allow multiple items to be selected"
 msgstr "여러 항목을 선택할 수 있도록 허용할 지 여부"
 
-#: gtk/gtkrecentchooser.c:148
+#: gtk/gtkrecentchooser.c:205
 msgid "Local only"
 msgstr "로컬 전용"
 
-#: gtk/gtkrecentchooser.c:149
+#: gtk/gtkrecentchooser.c:206
 msgid "Whether the selected resource(s) should be limited to local file: URIs"
 msgstr "선택할 파일을 로컬 file: URL에만 한정하는 지 여부"
 
-#: gtk/gtkrecentchooser.c:154 gtk/gtkrecentmanager.c:265
+#: gtk/gtkrecentchooser.c:222 gtk/gtkrecentmanager.c:265
 msgid "Limit"
 msgstr "한계값"
 
-#: gtk/gtkrecentchooser.c:155
+#: gtk/gtkrecentchooser.c:223
 msgid "The maximum number of items to be displayed"
 msgstr "표시할 항목의 최대 개수"
 
-#: gtk/gtkrecentchooser.c:162
+#: gtk/gtkrecentchooser.c:237
 msgid "Sort Type"
 msgstr "정렬 순서"
 
-#: gtk/gtkrecentchooser.c:163
+#: gtk/gtkrecentchooser.c:238
 msgid "The sorting order of the items displayed"
 msgstr "표시할 항목의 정렬 순서"
 
-#: gtk/gtkrecentchooser.c:170
+#: gtk/gtkrecentchooser.c:253
 msgid "The current filter for selecting which resources are displayed"
 msgstr "어떤 리소스를 표시할 지 고를 때 쓰는 현재 필터"
 
@@ -4118,6 +4127,32 @@ msgstr "값 간격"
 #: gtk/gtkscale.c:178
 msgid "Space between value text and the slider/trough area"
 msgstr "값 텍스트와 슬라이더/골짜기 영역 사이의 간격"
+
+#: gtk/gtkscalebutton.c:182
+#, fuzzy
+msgid "The value of the scale"
+msgstr "조정 값"
+
+#: gtk/gtkscalebutton.c:192
+#, fuzzy
+msgid "The icon size"
+msgstr "도구 모음 아이콘 크기"
+
+#: gtk/gtkscalebutton.c:201
+#, fuzzy
+msgid ""
+"The GtkAdjustment that contains the current value of this scale button object"
+msgstr "이 범위 개체의 현재값을 갖고 있는 GtkAdjustment"
+
+#: gtk/gtkscalebutton.c:229
+#, fuzzy
+msgid "Icons"
+msgstr "아이콘"
+
+#: gtk/gtkscalebutton.c:230
+#, fuzzy
+msgid "List of icon names"
+msgstr "로고 아이콘 이름"
 
 #: gtk/gtkscrollbar.c:50
 msgid "Minimum Slider Length"

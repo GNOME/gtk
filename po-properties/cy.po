@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-07-20 18:13-0400\n"
+"POT-Creation-Date: 2007-09-13 19:20-0400\n"
 "PO-Revision-Date: 2007-05-14 22:44-0000\n"
 "Last-Translator: Rhys Jones <rhys@sucs.org>\n"
 "Language-Team: Cymraeg <gnome-cy@pengwyn.linux.org.uk>\n"
@@ -401,7 +401,7 @@ msgid "Whether the action group is visible."
 msgstr "A ydy'r grŵp gweithred yn weladwy."
 
 #: gtk/gtkadjustment.c:86 gtk/gtkcellrendererprogress.c:128
-#: gtk/gtkspinbutton.c:268
+#: gtk/gtkscalebutton.c:181 gtk/gtkspinbutton.c:268
 msgid "Value"
 msgstr "Gwerth"
 
@@ -767,6 +767,15 @@ msgstr "Safle"
 msgid "The index of the child in the parent"
 msgstr "Mynegai'r plentyn o fewn y rhiant"
 
+#: gtk/gtkbuilder.c:104
+#, fuzzy
+msgid "Translation Domain"
+msgstr "Clodau cyfieithwyr"
+
+#: gtk/gtkbuilder.c:105
+msgid "The translation domain used by gettext"
+msgstr ""
+
 #: gtk/gtkbutton.c:200
 msgid ""
 "Text of the label widget inside the button, if the button contains a label "
@@ -796,11 +805,11 @@ msgid ""
 "If set, the label is used to pick a stock item instead of being displayed"
 msgstr "A ddylid defnyddio’r label er mwyn dewis eitem stoc yn lle ei ddangos"
 
-#: gtk/gtkbutton.c:223 gtk/gtkcombobox.c:751 gtk/gtkfilechooserbutton.c:401
+#: gtk/gtkbutton.c:223 gtk/gtkcombobox.c:785 gtk/gtkfilechooserbutton.c:398
 msgid "Focus on click"
 msgstr "Ffocysu pan mae clic"
 
-#: gtk/gtkbutton.c:224 gtk/gtkfilechooserbutton.c:402
+#: gtk/gtkbutton.c:224 gtk/gtkfilechooserbutton.c:399
 msgid "Whether the button grabs focus when it is clicked with the mouse"
 msgstr "A ydy'r botwm yn dwyn y ffocws pan gaiff ei glicio efo'r llygoden"
 
@@ -1251,8 +1260,8 @@ msgstr "Gogwydd"
 msgid "Orientation and growth direction of the progress bar"
 msgstr "Gogwydd a chyfeiriad tyfu'r bar cynnydd"
 
-#: gtk/gtkcellrendererspin.c:93 gtk/gtkprogressbar.c:122 gtk/gtkrange.c:345
-#: gtk/gtkspinbutton.c:207
+#: gtk/gtkcellrendererspin.c:93 gtk/gtkprogressbar.c:122 gtk/gtkrange.c:346
+#: gtk/gtkscalebutton.c:200 gtk/gtkspinbutton.c:207
 msgid "Adjustment"
 msgstr "Addasiad"
 
@@ -1462,7 +1471,7 @@ msgstr ""
 "Y man dewisol i roi marc colli geiriau (...) yn y llinyn, os nad oes gan y "
 "llunydd cellau ddigon o le i ddangos y llinyn yn gyfan"
 
-#: gtk/gtkcellrenderertext.c:429 gtk/gtkfilechooserbutton.c:429
+#: gtk/gtkcellrenderertext.c:429 gtk/gtkfilechooserbutton.c:426
 #: gtk/gtklabel.c:449
 msgid "Width In Characters"
 msgstr "Lled Mewn Nodau"
@@ -1483,7 +1492,7 @@ msgstr ""
 "Sut i dorri'r llinyn yn amryw linellau, os nad oes gan y llunydd cellau "
 "ddigon o le i ddangos y llinyn yn gyfan, neu o gwbl"
 
-#: gtk/gtkcellrenderertext.c:468 gtk/gtkcombobox.c:640
+#: gtk/gtkcellrenderertext.c:468 gtk/gtkcombobox.c:674
 msgid "Wrap width"
 msgstr "Lled amlapio"
 
@@ -1724,7 +1733,7 @@ msgstr "Defnyddio alffa"
 msgid "Whether or not to give the color an alpha value"
 msgstr "A ddylid rhoi gwerth alffa i'r lliw ai peidio"
 
-#: gtk/gtkcolorbutton.c:187 gtk/gtkfilechooserbutton.c:415
+#: gtk/gtkcolorbutton.c:187 gtk/gtkfilechooserbutton.c:412
 #: gtk/gtkfontbutton.c:143 gtk/gtkprintjob.c:116 gtk/gtktreeviewcolumn.c:264
 msgid "Title"
 msgstr "Teitl"
@@ -1733,7 +1742,7 @@ msgstr "Teitl"
 msgid "The title of the color selection dialog"
 msgstr "Teitl y deialog dewis lliw"
 
-#: gtk/gtkcolorbutton.c:202 gtk/gtkcolorsel.c:1871
+#: gtk/gtkcolorbutton.c:202 gtk/gtkcolorsel.c:1857
 msgid "Current Color"
 msgstr "Y Lliw Cyfredol"
 
@@ -1741,7 +1750,7 @@ msgstr "Y Lliw Cyfredol"
 msgid "The selected color"
 msgstr "Y lliw dewisedig"
 
-#: gtk/gtkcolorbutton.c:217 gtk/gtkcolorsel.c:1878
+#: gtk/gtkcolorbutton.c:217 gtk/gtkcolorsel.c:1864
 msgid "Current Alpha"
 msgstr "Yr Alffa Gyfredol"
 
@@ -1749,35 +1758,35 @@ msgstr "Yr Alffa Gyfredol"
 msgid "The selected opacity value (0 fully transparent, 65535 fully opaque)"
 msgstr "Y gwerth tryloywder dewisedig (0 cwbl dryloyw, 65535 cwbl afloyw)"
 
-#: gtk/gtkcolorsel.c:1857
+#: gtk/gtkcolorsel.c:1843
 msgid "Has Opacity Control"
 msgstr "Biau Rheolwr Tryloywder"
 
-#: gtk/gtkcolorsel.c:1858
+#: gtk/gtkcolorsel.c:1844
 msgid "Whether the color selector should allow setting opacity"
 msgstr "A ydy'r dewisydd lliw yn caniatáu gosod tryloywder"
 
-#: gtk/gtkcolorsel.c:1864
+#: gtk/gtkcolorsel.c:1850
 msgid "Has palette"
 msgstr "Biau Palet"
 
-#: gtk/gtkcolorsel.c:1865
+#: gtk/gtkcolorsel.c:1851
 msgid "Whether a palette should be used"
 msgstr "A ddylid darparu palet"
 
-#: gtk/gtkcolorsel.c:1872
+#: gtk/gtkcolorsel.c:1858
 msgid "The current color"
 msgstr "Y lliw cyfredol"
 
-#: gtk/gtkcolorsel.c:1879
+#: gtk/gtkcolorsel.c:1865
 msgid "The current opacity value (0 fully transparent, 65535 fully opaque)"
 msgstr "Y gwerth tryloywder cyfredol (0 cwbl dryloyw, 65535 cwbl afloyw)"
 
-#: gtk/gtkcolorsel.c:1893
+#: gtk/gtkcolorsel.c:1879
 msgid "Custom palette"
 msgstr "Palet addasedig"
 
-#: gtk/gtkcolorsel.c:1894
+#: gtk/gtkcolorsel.c:1880
 msgid "Palette to use in the color selector"
 msgstr "Y palet i'w ddefnyddio yn y dewisydd lliw"
 
@@ -1825,106 +1834,106 @@ msgstr "Gwerth yn y rhestr"
 msgid "Whether entered values must already be present in the list"
 msgstr "Oes rhaid i werth y maes fod yn y rhestr yn barod"
 
-#: gtk/gtkcombobox.c:623
+#: gtk/gtkcombobox.c:657
 msgid "ComboBox model"
 msgstr "Model ComboBox"
 
-#: gtk/gtkcombobox.c:624
+#: gtk/gtkcombobox.c:658
 msgid "The model for the combo box"
 msgstr "Y model ar gyfer y blwch combo"
 
-#: gtk/gtkcombobox.c:641
+#: gtk/gtkcombobox.c:675
 msgid "Wrap width for laying out the items in a grid"
 msgstr "Lled amlapio ar gyfer gosod eitemau mewn grid"
 
-#: gtk/gtkcombobox.c:663
+#: gtk/gtkcombobox.c:697
 msgid "Row span column"
 msgstr "Colofn rhychwant rhes"
 
-#: gtk/gtkcombobox.c:664
+#: gtk/gtkcombobox.c:698
 msgid "TreeModel column containing the row span values"
 msgstr "Colofn TreeModel yn cynnwys y gwerthoedd rhychwant rhes"
 
-#: gtk/gtkcombobox.c:685
+#: gtk/gtkcombobox.c:719
 msgid "Column span column"
 msgstr "Colofn rhychwant colofn"
 
-#: gtk/gtkcombobox.c:686
+#: gtk/gtkcombobox.c:720
 msgid "TreeModel column containing the column span values"
 msgstr "Colofn TreeModel yn cynnwys y gwerthoedd rhychwant colofn"
 
-#: gtk/gtkcombobox.c:707
+#: gtk/gtkcombobox.c:741
 msgid "Active item"
 msgstr "Eitem weithredol"
 
-#: gtk/gtkcombobox.c:708
+#: gtk/gtkcombobox.c:742
 msgid "The item which is currently active"
 msgstr "Yr eitem sydd yn weithredol yn gyfredol"
 
-#: gtk/gtkcombobox.c:727 gtk/gtkuimanager.c:220
+#: gtk/gtkcombobox.c:761 gtk/gtkuimanager.c:220
 msgid "Add tearoffs to menus"
 msgstr "Ychwanegu rhwygynnau at ddewislenni"
 
-#: gtk/gtkcombobox.c:728
+#: gtk/gtkcombobox.c:762
 msgid "Whether dropdowns should have a tearoff menu item"
 msgstr "A ddylid medru rhwygo ymaith eitemau'r dewislenni sy'n gostwng"
 
-#: gtk/gtkcombobox.c:743 gtk/gtkentry.c:522
+#: gtk/gtkcombobox.c:777 gtk/gtkentry.c:522
 msgid "Has Frame"
 msgstr "Ganddo Ffrâm"
 
 # EFALLAI
-#: gtk/gtkcombobox.c:744
+#: gtk/gtkcombobox.c:778
 msgid "Whether the combo box draws a frame around the child"
 msgstr "A ydy'r blwch combo yn tynnu ffrâm o amgylch y plentyn"
 
-#: gtk/gtkcombobox.c:752
+#: gtk/gtkcombobox.c:786
 msgid "Whether the combo box grabs focus when it is clicked with the mouse"
 msgstr ""
 "A ydy'r blwch combo yn dwyn y ffocws pan gaiff ei glicio gyda'r llygoden"
 
-#: gtk/gtkcombobox.c:767 gtk/gtkmenu.c:484
+#: gtk/gtkcombobox.c:801 gtk/gtkmenu.c:484
 msgid "Tearoff Title"
 msgstr "Teitl Rhwygun"
 
-#: gtk/gtkcombobox.c:768
+#: gtk/gtkcombobox.c:802
 msgid ""
 "A title that may be displayed by the window manager when the popup is torn-"
 "off"
 msgstr ""
 "Teitl a all gael ei ddangos gan y rheolwr ffenestri pan rwygir y naidlen"
 
-#: gtk/gtkcombobox.c:785
+#: gtk/gtkcombobox.c:819
 msgid "Popup shown"
 msgstr "Dangos naidlen"
 
-#: gtk/gtkcombobox.c:786
+#: gtk/gtkcombobox.c:820
 msgid "Whether the combo's dropdown is shown"
 msgstr "A ddangosir dewislen gwympo'r combo ai peidio"
 
-#: gtk/gtkcombobox.c:792
+#: gtk/gtkcombobox.c:826
 msgid "Appears as list"
 msgstr "Ymddangosir fel rhestr"
 
-#: gtk/gtkcombobox.c:793
+#: gtk/gtkcombobox.c:827
 msgid "Whether dropdowns should look like lists rather than menus"
 msgstr "A ddylai dewislenni cwymp edrych fel rhestrau yn hytrach na dewislenni"
 
-#: gtk/gtkcombobox.c:809
+#: gtk/gtkcombobox.c:843
 msgid "Arrow Size"
 msgstr "Maint Saeth"
 
-#: gtk/gtkcombobox.c:810
+#: gtk/gtkcombobox.c:844
 msgid "The minimum size of the arrow in the combo box"
 msgstr "Maint lleiaf y saeth yn y blwch combo"
 
-#: gtk/gtkcombobox.c:825 gtk/gtkentry.c:622 gtk/gtkhandlebox.c:176
+#: gtk/gtkcombobox.c:859 gtk/gtkentry.c:622 gtk/gtkhandlebox.c:176
 #: gtk/gtkmenubar.c:201 gtk/gtkstatusbar.c:186 gtk/gtktoolbar.c:613
 #: gtk/gtkviewport.c:122
 msgid "Shadow type"
 msgstr "Math cysgod"
 
-#: gtk/gtkcombobox.c:826
+#: gtk/gtkcombobox.c:860
 msgid "Which kind of shadow to draw around the combo box"
 msgstr "Pa fath o gysgod i'w dynnu o amgylch y blwch combo"
 
@@ -2311,7 +2320,7 @@ msgstr "Ochr Gefn System Ffeiliau"
 msgid "Name of file system backend to use"
 msgstr "Enw'r ochr gefn system ffeiliau i'w ddefnyddio"
 
-#: gtk/gtkfilechooser.c:210 gtk/gtkrecentchooser.c:169
+#: gtk/gtkfilechooser.c:210 gtk/gtkrecentchooser.c:252
 msgid "Filter"
 msgstr "Hidl"
 
@@ -2362,7 +2371,7 @@ msgstr "Teclyn ychwanegol"
 msgid "Application supplied widget for extra options."
 msgstr "Teclyn a ddarparwyd gan y rhaglen ar gyfer opsiynau ychwanegol."
 
-#: gtk/gtkfilechooser.c:246 gtk/gtkfilesel.c:539 gtk/gtkrecentchooser.c:142
+#: gtk/gtkfilechooser.c:246 gtk/gtkfilesel.c:539 gtk/gtkrecentchooser.c:191
 msgid "Select Multiple"
 msgstr "Amlddewis"
 
@@ -2390,19 +2399,19 @@ msgstr ""
 "A fydd dewisydd ffeil wrth gadw yn rhoi deialog cadarnhau trosysgrifo os yn "
 "briodol."
 
-#: gtk/gtkfilechooserbutton.c:384
+#: gtk/gtkfilechooserbutton.c:381
 msgid "Dialog"
 msgstr "Deialog"
 
-#: gtk/gtkfilechooserbutton.c:385
+#: gtk/gtkfilechooserbutton.c:382
 msgid "The file chooser dialog to use."
 msgstr "Pa ddeialog dewisydd ffeiliau i'w ddefnyddio."
 
-#: gtk/gtkfilechooserbutton.c:416
+#: gtk/gtkfilechooserbutton.c:413
 msgid "The title of the file chooser dialog."
 msgstr "Teitl y deialog dewis ffeil"
 
-#: gtk/gtkfilechooserbutton.c:430
+#: gtk/gtkfilechooserbutton.c:427
 msgid "The desired width of the button widget, in characters."
 msgstr "Lled ddewisol y teclyn botwm, mewn nodau."
 
@@ -2759,7 +2768,7 @@ msgstr "Set eiconau"
 msgid "Icon set to display"
 msgstr "Set eiconau i'w ddangos"
 
-#: gtk/gtkimage.c:187 gtk/gtktoolbar.c:530
+#: gtk/gtkimage.c:187 gtk/gtkscalebutton.c:191 gtk/gtktoolbar.c:530
 msgid "Icon size"
 msgstr "Maint eicon"
 
@@ -3131,11 +3140,11 @@ msgid "A boolean that determines whether the menu grabs the keyboard focus"
 msgstr ""
 "Gwerth Boole sy'n penderfynu a fydd y ddewislen yn cipio ffocws y bysellfwrdd"
 
-#: gtk/gtkmenutoolbutton.c:236 gtk/gtkoptionmenu.c:161
+#: gtk/gtkmenutoolbutton.c:230 gtk/gtkoptionmenu.c:161
 msgid "Menu"
 msgstr "Dewislen"
 
-#: gtk/gtkmenutoolbutton.c:237
+#: gtk/gtkmenutoolbutton.c:231
 msgid "The dropdown menu"
 msgstr "Y ddewislen gostwng"
 
@@ -3611,7 +3620,7 @@ msgstr "Gosodiadau"
 msgid "Printer settings"
 msgstr "Gosodiadau argraffydd"
 
-#: gtk/gtkprintjob.c:143 gtk/gtkprintjob.c:144 gtk/gtkprintunixdialog.c:231
+#: gtk/gtkprintjob.c:143 gtk/gtkprintjob.c:144 gtk/gtkprintunixdialog.c:240
 msgid "Page Setup"
 msgstr "Gosodiad Tudalen"
 
@@ -3635,11 +3644,11 @@ msgstr "Gosodiad Rhagosodedig Tudalen"
 msgid "The GtkPageSetup used by default"
 msgstr "Y GtkPageSetup ddefnyddir yn rhagosodedig"
 
-#: gtk/gtkprintoperation.c:896 gtk/gtkprintunixdialog.c:249
+#: gtk/gtkprintoperation.c:896 gtk/gtkprintunixdialog.c:258
 msgid "Print Settings"
 msgstr "Gosodiadau Argraffu"
 
-#: gtk/gtkprintoperation.c:897 gtk/gtkprintunixdialog.c:250
+#: gtk/gtkprintoperation.c:897 gtk/gtkprintunixdialog.c:259
 msgid "The GtkPrintSettings used for initializing the dialog"
 msgstr "Y GtkPrintSettings ddefnyddiwyd i ymgychwyn y ddeialog"
 
@@ -3659,11 +3668,11 @@ msgstr "Nifer y Tudalennau"
 msgid "The number of pages in the document."
 msgstr "Nifer y tudalennau yn y ddogfen"
 
-#: gtk/gtkprintoperation.c:962 gtk/gtkprintunixdialog.c:239
+#: gtk/gtkprintoperation.c:962 gtk/gtkprintunixdialog.c:248
 msgid "Current Page"
 msgstr "Tudalen Gyfredol"
 
-#: gtk/gtkprintoperation.c:963 gtk/gtkprintunixdialog.c:240
+#: gtk/gtkprintoperation.c:963 gtk/gtkprintunixdialog.c:249
 msgid "The current page in the document"
 msgstr "Y dudalen bresennol yn y ddogfen"
 
@@ -3741,15 +3750,15 @@ msgstr "Label tab addasedig"
 msgid "Label for the tab containing custom widgets."
 msgstr "Label ar gyfer y tab sy'n cynnwys teclynnau addasedig."
 
-#: gtk/gtkprintunixdialog.c:232
+#: gtk/gtkprintunixdialog.c:241
 msgid "The GtkPageSetup to use"
 msgstr "Y GtkPageSetup i'w ddefnyddio"
 
-#: gtk/gtkprintunixdialog.c:257
+#: gtk/gtkprintunixdialog.c:266
 msgid "Selected Printer"
 msgstr "Argraffydd sydd wedi'i Ddewis"
 
-#: gtk/gtkprintunixdialog.c:258
+#: gtk/gtkprintunixdialog.c:267
 msgid "The GtkPrinter which is selected"
 msgstr "Y GtkPrinter sydd wedi'i ddewis"
 
@@ -3895,132 +3904,132 @@ msgid "The radio menu item whose group this widget belongs to."
 msgstr ""
 "Eitem y ddewislen radio sydd yn y grŵp mae'r teclyn hwn yn perthyn iddo."
 
-#: gtk/gtkrange.c:336
+#: gtk/gtkrange.c:337
 msgid "Update policy"
 msgstr "Polisi diweddaru"
 
-#: gtk/gtkrange.c:337
+#: gtk/gtkrange.c:338
 msgid "How the range should be updated on the screen"
 msgstr "Sut dylid diweddaru'r cyfwng ar y sgrin"
 
-#: gtk/gtkrange.c:346
+#: gtk/gtkrange.c:347
 msgid "The GtkAdjustment that contains the current value of this range object"
 msgstr "Y GtkAdjustment sy'n cynnwys gwerth cyfredol y gwrthrych cyfwng hwn"
 
 # EFALLAI
-#: gtk/gtkrange.c:353
+#: gtk/gtkrange.c:354
 msgid "Inverted"
 msgstr "Gwrthdroi"
 
 # EFALLAI
-#: gtk/gtkrange.c:354
+#: gtk/gtkrange.c:355
 msgid "Invert direction slider moves to increase range value"
 msgstr ""
 "Gwrthdroi'r cyfeiriad mae'r llithrydd yn symud er mwyn cynyddu gwerth y "
 "cyfwng"
 
-#: gtk/gtkrange.c:361
+#: gtk/gtkrange.c:362
 msgid "Lower stepper sensitivity"
 msgstr "Sensitifrwydd y camydd is"
 
-#: gtk/gtkrange.c:362
+#: gtk/gtkrange.c:363
 msgid ""
 "The sensitivity policy for the stepper that points to the adjustment's lower "
 "side"
 msgstr "Y polisi sensitifrwydd i'r camydd sy'n pwyntio at ochr is yr addasiad"
 
-#: gtk/gtkrange.c:370
+#: gtk/gtkrange.c:371
 msgid "Upper stepper sensitivity"
 msgstr "Sensitifrwydd y camydd uwch"
 
-#: gtk/gtkrange.c:371
+#: gtk/gtkrange.c:372
 msgid ""
 "The sensitivity policy for the stepper that points to the adjustment's upper "
 "side"
 msgstr ""
 "Y polisi sensitifrwydd i'r camydd sy'n pwyntio at ochr uwch yr addasiad"
 
-#: gtk/gtkrange.c:388
+#: gtk/gtkrange.c:389
 msgid "Show Fill Level"
 msgstr "Dangos Lefel Llenwi"
 
-#: gtk/gtkrange.c:389
+#: gtk/gtkrange.c:390
 msgid "Whether to display a fill level indicator graphics on trough."
 msgstr "A ddylid dangos graffeg lefel llenwi ar y cafn."
 
-#: gtk/gtkrange.c:405
+#: gtk/gtkrange.c:406
 msgid "Restrict to Fill Level"
 msgstr "Cyfyngu i'r Lefel Llenwi"
 
-#: gtk/gtkrange.c:406
+#: gtk/gtkrange.c:407
 msgid "Whether to restrict the upper boundary to the fill level."
 msgstr "A ddylid cyfyngu'r ffin uchaf i'r lefel llenwi."
 
-#: gtk/gtkrange.c:421
+#: gtk/gtkrange.c:422
 msgid "Fill Level"
 msgstr "Lefel Llenwi"
 
-#: gtk/gtkrange.c:422
+#: gtk/gtkrange.c:423
 msgid "The fill level."
 msgstr "Y lefel llenwi."
 
-#: gtk/gtkrange.c:430
+#: gtk/gtkrange.c:431
 msgid "Slider Width"
 msgstr "Lled y Llithrydd"
 
 # EFALLAI
-#: gtk/gtkrange.c:431
+#: gtk/gtkrange.c:432
 msgid "Width of scrollbar or scale thumb"
 msgstr "Lled y bar sgrolio neu'r llusgydd graddio"
 
 # EFALLAI
-#: gtk/gtkrange.c:438
+#: gtk/gtkrange.c:439
 msgid "Trough Border"
 msgstr "Border Cafn"
 
-#: gtk/gtkrange.c:439
+#: gtk/gtkrange.c:440
 msgid "Spacing between thumb/steppers and outer trough bevel"
 msgstr "Bylchu rhwng y llusgydd/camwyr a befel y cafn allanol"
 
-#: gtk/gtkrange.c:446
+#: gtk/gtkrange.c:447
 msgid "Stepper Size"
 msgstr "Maint Camydd"
 
-#: gtk/gtkrange.c:447
+#: gtk/gtkrange.c:448
 msgid "Length of step buttons at ends"
 msgstr "Maint y botymau camu ger yr ymylau"
 
-#: gtk/gtkrange.c:462
+#: gtk/gtkrange.c:463
 msgid "Stepper Spacing"
 msgstr "Bylchu Camydd"
 
-#: gtk/gtkrange.c:463
+#: gtk/gtkrange.c:464
 msgid "Spacing between step buttons and thumb"
 msgstr "Bylchu rhwng y botymau a'r llusgydd"
 
-#: gtk/gtkrange.c:470
+#: gtk/gtkrange.c:471
 msgid "Arrow X Displacement"
 msgstr "Dadleoliad X y Saeth"
 
-#: gtk/gtkrange.c:471
+#: gtk/gtkrange.c:472
 msgid ""
 "How far in the x direction to move the arrow when the button is depressed"
 msgstr "Pa mor bell yn y cyfeiriad x i symud y saeth pan wasgir y botwm"
 
-#: gtk/gtkrange.c:478
+#: gtk/gtkrange.c:479
 msgid "Arrow Y Displacement"
 msgstr "Dadleoliad Y y Saeth"
 
-#: gtk/gtkrange.c:479
+#: gtk/gtkrange.c:480
 msgid ""
 "How far in the y direction to move the arrow when the button is depressed"
 msgstr "Pa mor bell yn y cyfeiriad y i symud y saeth pan wasgir y botwm"
 
-#: gtk/gtkrange.c:487
+#: gtk/gtkrange.c:488
 msgid "Draw slider ACTIVE during drag"
 msgstr "Dangos y llithrydd yn WEITHREDOL wrth ei lusgo"
 
-#: gtk/gtkrange.c:488
+#: gtk/gtkrange.c:489
 msgid ""
 "With this option set to TRUE, sliders will be drawn ACTIVE and with shadow "
 "IN while they are dragged"
@@ -4028,11 +4037,11 @@ msgstr ""
 "Os yw'r opsiwn hwn yn WIR, bydd llithryddion yn cael eu dangos yn WEITHREDOL "
 "a gyda chysgod I MEWN wrth iddyn nhw gael eu llusgo"
 
-#: gtk/gtkrange.c:502
+#: gtk/gtkrange.c:503
 msgid "Trough Side Details"
 msgstr "Manylion Ochr y Cafn"
 
-#: gtk/gtkrange.c:503
+#: gtk/gtkrange.c:504
 msgid ""
 "When TRUE, the parts of the trough on the two sides of the slider are drawn "
 "with different details"
@@ -4040,94 +4049,94 @@ msgstr ""
 "Pan yn WIR, fe dynnir rhannau'r cafn ar ddwy ochr y llithrydd gyda manylion "
 "gwahanol"
 
-#: gtk/gtkrange.c:519
+#: gtk/gtkrange.c:520
 msgid "Trough Under Steppers"
 msgstr "Cafn o dan y Stepwyr"
 
-#: gtk/gtkrange.c:520
+#: gtk/gtkrange.c:521
 msgid ""
 "Whether to draw trough for full length of range or exclude the steppers and "
 "spacing"
 msgstr ""
 "A ddylid tynnu'r cafn am ei hyd cyfan, neu ac eithrio'r stepwyr a'r bylchiad"
 
-#: gtk/gtkrecentaction.c:654 gtk/gtkrecentchoosermenu.c:212
+#: gtk/gtkrecentaction.c:654 gtk/gtkrecentchoosermenu.c:209
 msgid "Show Numbers"
 msgstr "Dangos Rhifau"
 
-#: gtk/gtkrecentaction.c:655 gtk/gtkrecentchoosermenu.c:213
+#: gtk/gtkrecentaction.c:655 gtk/gtkrecentchoosermenu.c:210
 msgid "Whether the items should be displayed with a number"
 msgstr "A ddylid dangos rhifau gyda'r eitemau"
 
-#: gtk/gtkrecentchooser.c:112
+#: gtk/gtkrecentchooser.c:120
 msgid "Recent Manager"
 msgstr "Rheolwr Adnoddau Diweddar"
 
-#: gtk/gtkrecentchooser.c:113
+#: gtk/gtkrecentchooser.c:121
 msgid "The RecentManager object to use"
 msgstr "Y gwrthrych RecentManager i'w ddefnyddio"
 
-#: gtk/gtkrecentchooser.c:118
+#: gtk/gtkrecentchooser.c:135
 msgid "Show Private"
 msgstr "Dangos Eitemau Preifat"
 
-#: gtk/gtkrecentchooser.c:119
+#: gtk/gtkrecentchooser.c:136
 msgid "Whether the private items should be displayed"
 msgstr "A ddylid dangos yr eitemau preifat ai peidio"
 
-#: gtk/gtkrecentchooser.c:124
+#: gtk/gtkrecentchooser.c:149
 msgid "Show Tooltips"
 msgstr "Dangos Brysgymorth"
 
-#: gtk/gtkrecentchooser.c:125
+#: gtk/gtkrecentchooser.c:150
 msgid "Whether there should be a tooltip on the item"
 msgstr "A ddylid dangos brysgymorth ar yr eitem ai peidio"
 
-#: gtk/gtkrecentchooser.c:130
+#: gtk/gtkrecentchooser.c:162
 msgid "Show Icons"
 msgstr "Dangos Eiconau"
 
-#: gtk/gtkrecentchooser.c:131
+#: gtk/gtkrecentchooser.c:163
 msgid "Whether there should be an icon near the item"
 msgstr "A ddylai fod eicon gerllaw'r eitem"
 
-#: gtk/gtkrecentchooser.c:136
+#: gtk/gtkrecentchooser.c:178
 msgid "Show Not Found"
 msgstr "Dangos Gwrthrychau heb eu Canfod"
 
-#: gtk/gtkrecentchooser.c:137
+#: gtk/gtkrecentchooser.c:179
 msgid "Whether the items pointing to unavailable resources should be displayed"
 msgstr "A ddylid dangos yr eitemau sy'n cyfeirio at adnoddau sydd ddim ar gael"
 
-#: gtk/gtkrecentchooser.c:143
+#: gtk/gtkrecentchooser.c:192
 msgid "Whether to allow multiple items to be selected"
 msgstr "A ddylid caniatáu dewis mwy nag un eitem"
 
-#: gtk/gtkrecentchooser.c:148
+#: gtk/gtkrecentchooser.c:205
 msgid "Local only"
 msgstr "Lleol yn Unig"
 
-#: gtk/gtkrecentchooser.c:149
+#: gtk/gtkrecentchooser.c:206
 msgid "Whether the selected resource(s) should be limited to local file: URIs"
 msgstr "A ddylid ffeiliau a ddewisir cael eu cyfyngu i URIau file: lleol"
 
-#: gtk/gtkrecentchooser.c:154 gtk/gtkrecentmanager.c:265
+#: gtk/gtkrecentchooser.c:222 gtk/gtkrecentmanager.c:265
 msgid "Limit"
 msgstr "Terfyn"
 
-#: gtk/gtkrecentchooser.c:155
+#: gtk/gtkrecentchooser.c:223
 msgid "The maximum number of items to be displayed"
 msgstr "Uchafrif yr eitemau i'w dangos"
 
-#: gtk/gtkrecentchooser.c:162
+#: gtk/gtkrecentchooser.c:237
 msgid "Sort Type"
 msgstr "Math Trefnu"
 
-#: gtk/gtkrecentchooser.c:163
+#: gtk/gtkrecentchooser.c:238
 msgid "The sorting order of the items displayed"
 msgstr "Trefniant yr eitemau a ddangosir"
 
-#: gtk/gtkrecentchooser.c:170
+#: gtk/gtkrecentchooser.c:253
 msgid "The current filter for selecting which resources are displayed"
 msgstr "Yr hidl gyfredol ar gyfer dewis pa adnoddau a ddangosir"
 
@@ -4221,6 +4230,32 @@ msgstr "Bylchu'r gwerth"
 #: gtk/gtkscale.c:178
 msgid "Space between value text and the slider/trough area"
 msgstr "Gofod rhwng testun y gwerth a'r ardal llithrydd/cafn"
+
+#: gtk/gtkscalebutton.c:182
+#, fuzzy
+msgid "The value of the scale"
+msgstr "Gwerth yr addasiad"
+
+#: gtk/gtkscalebutton.c:192
+#, fuzzy
+msgid "The icon size"
+msgstr "Maint eiconau bar offer"
+
+#: gtk/gtkscalebutton.c:201
+#, fuzzy
+msgid ""
+"The GtkAdjustment that contains the current value of this scale button object"
+msgstr "Y GtkAdjustment sy'n cynnwys gwerth cyfredol y gwrthrych cyfwng hwn"
+
+#: gtk/gtkscalebutton.c:229
+#, fuzzy
+msgid "Icons"
+msgstr "Eicon"
+
+#: gtk/gtkscalebutton.c:230
+#, fuzzy
+msgid "List of icon names"
+msgstr "Enw Eicon y Logo"
 
 #: gtk/gtkscrollbar.c:50
 msgid "Minimum Slider Length"

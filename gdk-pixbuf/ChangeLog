@@ -1,5 +1,9 @@
 2007-09-13  Matthias Clasen  <mclasen@redhat.com>
 
+	* === Released 2.12.0 ===
+
+2007-09-13  Matthias Clasen  <mclasen@redhat.com>
+
 	* gdk-pixbuf-scaled-anim.c (get_scaled_pixbuf): Don't leak 
 	options.  
 

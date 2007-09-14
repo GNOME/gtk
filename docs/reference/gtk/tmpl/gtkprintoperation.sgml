@@ -502,15 +502,6 @@ The #GQuark used for #GtkPrintError errors.
 @Returns: 
 
 
-<!-- ##### FUNCTION gtk_print_operation_get_error ##### -->
-<para>
-
-</para>
-
-@op: 
-@error: 
-
-
 <!-- ##### FUNCTION gtk_print_run_page_setup_dialog ##### -->
 <para>
 

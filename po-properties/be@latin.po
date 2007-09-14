@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-properties\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-07-20 18:13-0400\n"
+"POT-Creation-Date: 2007-09-13 19:20-0400\n"
 "PO-Revision-Date: 2007-03-13 12:04+0100\n"
 "Last-Translator: Alaksandar Navicki <zolak@lacinka.org>\n"
 "Language-Team: i18n@mova.org <i18n@mova.org>\n"
@@ -407,7 +407,7 @@ msgid "Whether the action group is visible."
 msgstr "Akreślivaje, ci bačnaja aperacyjnaja hrupa."
 
 #: gtk/gtkadjustment.c:86 gtk/gtkcellrendererprogress.c:128
-#: gtk/gtkspinbutton.c:268
+#: gtk/gtkscalebutton.c:181 gtk/gtkspinbutton.c:268
 msgid "Value"
 msgstr "Vartaść"
 
@@ -781,6 +781,15 @@ msgstr "Element"
 msgid "The index of the child in the parent"
 msgstr "Numar elementu widgetu siarod naščadkaŭ widgetu-baćĸi"
 
+#: gtk/gtkbuilder.c:104
+#, fuzzy
+msgid "Translation Domain"
+msgstr "Zasłuhi pierakładčykaŭ"
+
+#: gtk/gtkbuilder.c:105
+msgid "The translation domain used by gettext"
+msgstr ""
+
 #: gtk/gtkbutton.c:200
 msgid ""
 "Text of the label widget inside the button, if the button contains a label "
@@ -811,11 +820,11 @@ msgstr ""
 "Akreślivaje, ci treba ŭžyć etykietu dziela vybaru typovaha elementu zamiest "
 "taho, kab jaje pakazvać."
 
-#: gtk/gtkbutton.c:223 gtk/gtkcombobox.c:751 gtk/gtkfilechooserbutton.c:401
+#: gtk/gtkbutton.c:223 gtk/gtkcombobox.c:785 gtk/gtkfilechooserbutton.c:398
 msgid "Focus on click"
 msgstr "Fokus ad kliku"
 
-#: gtk/gtkbutton.c:224 gtk/gtkfilechooserbutton.c:402
+#: gtk/gtkbutton.c:224 gtk/gtkfilechooserbutton.c:399
 msgid "Whether the button grabs focus when it is clicked with the mouse"
 msgstr "Akreślivaje, ci knopka fakusuje ad kliku myšaj"
 
@@ -1269,8 +1278,8 @@ msgstr "Aryjentacyja"
 msgid "Orientation and growth direction of the progress bar"
 msgstr "Aryjentacyja j napramak pryrostu paneli prahresu"
 
-#: gtk/gtkcellrendererspin.c:93 gtk/gtkprogressbar.c:122 gtk/gtkrange.c:345
-#: gtk/gtkspinbutton.c:207
+#: gtk/gtkcellrendererspin.c:93 gtk/gtkprogressbar.c:122 gtk/gtkrange.c:346
+#: gtk/gtkscalebutton.c:200 gtk/gtkspinbutton.c:207
 msgid "Adjustment"
 msgstr "Widget dapasavańnia"
 
@@ -1478,7 +1487,7 @@ msgstr ""
 "Pažadanaje miesca pieranosu tekstavaha łancuha, kali abjekt renderavańnia "
 "jačejek nia maje miesca pakazać jaho sucelna"
 
-#: gtk/gtkcellrenderertext.c:429 gtk/gtkfilechooserbutton.c:429
+#: gtk/gtkcellrenderertext.c:429 gtk/gtkfilechooserbutton.c:426
 #: gtk/gtklabel.c:449
 msgid "Width In Characters"
 msgstr "Šyrynia ŭ znakach"
@@ -1499,7 +1508,7 @@ msgstr ""
 "Sposab parušeńnia tekstavaha łancuha pavodle radkoŭ, kali abjekt "
 "renderavańnia jačejek nia maje miesca pakazać jaho sucelna"
 
-#: gtk/gtkcellrenderertext.c:468 gtk/gtkcombobox.c:640
+#: gtk/gtkcellrenderertext.c:468 gtk/gtkcombobox.c:674
 msgid "Wrap width"
 msgstr "Šyrynia pieranosu"
 
@@ -1742,7 +1751,7 @@ msgstr "Užyvańnie kanału alfa"
 msgid "Whether or not to give the color an alpha value"
 msgstr "Akreślivaje, ci treba nadavać koleru vartaść alfa"
 
-#: gtk/gtkcolorbutton.c:187 gtk/gtkfilechooserbutton.c:415
+#: gtk/gtkcolorbutton.c:187 gtk/gtkfilechooserbutton.c:412
 #: gtk/gtkfontbutton.c:143 gtk/gtkprintjob.c:116 gtk/gtktreeviewcolumn.c:264
 msgid "Title"
 msgstr "Zahałovak"
@@ -1751,7 +1760,7 @@ msgstr "Zahałovak"
 msgid "The title of the color selection dialog"
 msgstr "Zahałovak akna dyjalohu vybaru koleru"
 
-#: gtk/gtkcolorbutton.c:202 gtk/gtkcolorsel.c:1871
+#: gtk/gtkcolorbutton.c:202 gtk/gtkcolorsel.c:1857
 msgid "Current Color"
 msgstr "Dziejny koler"
 
@@ -1759,7 +1768,7 @@ msgstr "Dziejny koler"
 msgid "The selected color"
 msgstr "Abrany kolor"
 
-#: gtk/gtkcolorbutton.c:217 gtk/gtkcolorsel.c:1878
+#: gtk/gtkcolorbutton.c:217 gtk/gtkcolorsel.c:1864
 msgid "Current Alpha"
 msgstr "Dziejnaja vartaść alfa"
 
@@ -1769,39 +1778,39 @@ msgstr ""
 "Dziejnaja vartaść nieprazrystaści (0 – całkam prazrysty, 65535 – całkam "
 "nieprazrysty)"
 
-#: gtk/gtkcolorsel.c:1857
+#: gtk/gtkcolorsel.c:1843
 msgid "Has Opacity Control"
 msgstr "Nałady nieprazrystaści"
 
-#: gtk/gtkcolorsel.c:1858
+#: gtk/gtkcolorsel.c:1844
 msgid "Whether the color selector should allow setting opacity"
 msgstr ""
 "Akreślivaje, ci pry vybary koleru pavinna być mahčymaść akreśleńnia jahonaj "
 "prazrystaści."
 
-#: gtk/gtkcolorsel.c:1864
+#: gtk/gtkcolorsel.c:1850
 msgid "Has palette"
 msgstr "Z palitraj"
 
-#: gtk/gtkcolorsel.c:1865
+#: gtk/gtkcolorsel.c:1851
 msgid "Whether a palette should be used"
 msgstr "Akreślivaje, ci pavinna być vykarystanaja palitra"
 
-#: gtk/gtkcolorsel.c:1872
+#: gtk/gtkcolorsel.c:1858
 msgid "The current color"
 msgstr "Dziejny koler"
 
-#: gtk/gtkcolorsel.c:1879
+#: gtk/gtkcolorsel.c:1865
 msgid "The current opacity value (0 fully transparent, 65535 fully opaque)"
 msgstr ""
 "Dziejnaja vartaść nieprazrystaści (0 – całkam prazrysty, 65535 – całkam "
 "nieprazrysty)"
 
-#: gtk/gtkcolorsel.c:1893
+#: gtk/gtkcolorsel.c:1879
 msgid "Custom palette"
 msgstr "Palitra karystalnika"
 
-#: gtk/gtkcolorsel.c:1894
+#: gtk/gtkcolorsel.c:1880
 msgid "Palette to use in the color selector"
 msgstr "Palitra dziela vybaru koleru"
 
@@ -1849,108 +1858,108 @@ msgstr "Vartaść u śpisie"
 msgid "Whether entered values must already be present in the list"
 msgstr "Akreślivaje, ci ŭviedzienyja vartaści musiać znachodzicca ŭ śpisie"
 
-#: gtk/gtkcombobox.c:623
+#: gtk/gtkcombobox.c:657
 msgid "ComboBox model"
 msgstr "Madel skrynki typu ComboBox"
 
-#: gtk/gtkcombobox.c:624
+#: gtk/gtkcombobox.c:658
 msgid "The model for the combo box"
 msgstr "Madel dla skrynki tupu Combo"
 
-#: gtk/gtkcombobox.c:641
+#: gtk/gtkcombobox.c:675
 msgid "Wrap width for laying out the items in a grid"
 msgstr "Šyrynia pieranosu padčas pryviazki elementaŭ da sietki"
 
-#: gtk/gtkcombobox.c:663
+#: gtk/gtkcombobox.c:697
 msgid "Row span column"
 msgstr "Kalona vodstupaŭ radkoŭ"
 
-#: gtk/gtkcombobox.c:664
+#: gtk/gtkcombobox.c:698
 msgid "TreeModel column containing the row span values"
 msgstr "Kalona z vartaściami vodstupaŭ radkoŭ"
 
-#: gtk/gtkcombobox.c:685
+#: gtk/gtkcombobox.c:719
 msgid "Column span column"
 msgstr "Kalona vodstupaŭ u kalonie"
 
-#: gtk/gtkcombobox.c:686
+#: gtk/gtkcombobox.c:720
 msgid "TreeModel column containing the column span values"
 msgstr "Kalona z vartaściami vodstupaŭ kalon"
 
-#: gtk/gtkcombobox.c:707
+#: gtk/gtkcombobox.c:741
 msgid "Active item"
 msgstr "Dziejny element"
 
-#: gtk/gtkcombobox.c:708
+#: gtk/gtkcombobox.c:742
 msgid "The item which is currently active"
 msgstr "Dziejny element"
 
-#: gtk/gtkcombobox.c:727 gtk/gtkuimanager.c:220
+#: gtk/gtkcombobox.c:761 gtk/gtkuimanager.c:220
 msgid "Add tearoffs to menus"
 msgstr "Dadavańnie novych razhortvalnikaŭ u menu"
 
-#: gtk/gtkcombobox.c:728
+#: gtk/gtkcombobox.c:762
 msgid "Whether dropdowns should have a tearoff menu item"
 msgstr "Akreślivaje, ci razhortvalnyja menu pavinny mieć element adklučeńnia"
 
-#: gtk/gtkcombobox.c:743 gtk/gtkentry.c:522
+#: gtk/gtkcombobox.c:777 gtk/gtkentry.c:522
 msgid "Has Frame"
 msgstr "Z ramkaj"
 
-#: gtk/gtkcombobox.c:744
+#: gtk/gtkcombobox.c:778
 msgid "Whether the combo box draws a frame around the child"
 msgstr "Akreślivaje, ci element typu combo box rysuje ramku vakoł naščadka"
 
-#: gtk/gtkcombobox.c:752
+#: gtk/gtkcombobox.c:786
 msgid "Whether the combo box grabs focus when it is clicked with the mouse"
 msgstr ""
 "Akreślivaje, ci element combo box pierachopvaje fokus paśla kliku myšaj"
 
-#: gtk/gtkcombobox.c:767 gtk/gtkmenu.c:484
+#: gtk/gtkcombobox.c:801 gtk/gtkmenu.c:484
 msgid "Tearoff Title"
 msgstr "Zahałovak pry adryvie"
 
-#: gtk/gtkcombobox.c:768
+#: gtk/gtkcombobox.c:802
 msgid ""
 "A title that may be displayed by the window manager when the popup is torn-"
 "off"
 msgstr ""
 "Zahałovak, jaki moža być pakazany kiraŭnikom voknaŭ, kali menu adarvanaje"
 
-#: gtk/gtkcombobox.c:785
+#: gtk/gtkcombobox.c:819
 msgid "Popup shown"
 msgstr "Pakazvaje vakno popup"
 
-#: gtk/gtkcombobox.c:786
+#: gtk/gtkcombobox.c:820
 msgid "Whether the combo's dropdown is shown"
 msgstr "Akreślivaje, ci było razhornutaje pole combo"
 
-#: gtk/gtkcombobox.c:792
+#: gtk/gtkcombobox.c:826
 msgid "Appears as list"
 msgstr "Vyhlad śpisu"
 
-#: gtk/gtkcombobox.c:793
+#: gtk/gtkcombobox.c:827
 msgid "Whether dropdowns should look like lists rather than menus"
 msgstr ""
 "Akreślivaje, ci razhortvalnaje menu pavinna vyhladać jak śpis zamiest menu"
 
-#: gtk/gtkcombobox.c:809
+#: gtk/gtkcombobox.c:843
 #, fuzzy
 msgid "Arrow Size"
 msgstr "Napramak strełki"
 
-#: gtk/gtkcombobox.c:810
+#: gtk/gtkcombobox.c:844
 #, fuzzy
 msgid "The minimum size of the arrow in the combo box"
 msgstr "Madel dla skrynki tupu Combo"
 
-#: gtk/gtkcombobox.c:825 gtk/gtkentry.c:622 gtk/gtkhandlebox.c:176
+#: gtk/gtkcombobox.c:859 gtk/gtkentry.c:622 gtk/gtkhandlebox.c:176
 #: gtk/gtkmenubar.c:201 gtk/gtkstatusbar.c:186 gtk/gtktoolbar.c:613
 #: gtk/gtkviewport.c:122
 msgid "Shadow type"
 msgstr "Typ cieniu"
 
-#: gtk/gtkcombobox.c:826
+#: gtk/gtkcombobox.c:860
 #, fuzzy
 msgid "Which kind of shadow to draw around the combo box"
 msgstr "Šyrynia kraju vakoł etykiet zakładak"
@@ -2346,7 +2355,7 @@ msgstr "Padtrymka fajłavaj systemy"
 msgid "Name of file system backend to use"
 msgstr "Nazva ŭžyvanaj padtrymki fajłavaj systemy"
 
-#: gtk/gtkfilechooser.c:210 gtk/gtkrecentchooser.c:169
+#: gtk/gtkfilechooser.c:210 gtk/gtkrecentchooser.c:252
 msgid "Filter"
 msgstr "Filter"
 
@@ -2397,7 +2406,7 @@ msgstr "Dadatkovy widget"
 msgid "Application supplied widget for extra options."
 msgstr "Aplikacyja, što dała widget dziela nałady dadatkovych opcyjaŭ."
 
-#: gtk/gtkfilechooser.c:246 gtk/gtkfilesel.c:539 gtk/gtkrecentchooser.c:142
+#: gtk/gtkfilechooser.c:246 gtk/gtkfilesel.c:539 gtk/gtkrecentchooser.c:191
 msgid "Select Multiple"
 msgstr "Masavaje zaznačeńnie"
 
@@ -2425,19 +2434,19 @@ msgstr ""
 "Akreślivaje, ci vakno vybaru fajłaŭ u režymie zapisu budzie pakazvać, kali "
 "nieabchodna vakno paćvierdžańnia nadpisańnia."
 
-#: gtk/gtkfilechooserbutton.c:384
+#: gtk/gtkfilechooserbutton.c:381
 msgid "Dialog"
 msgstr "Akno dyjalohu"
 
-#: gtk/gtkfilechooserbutton.c:385
+#: gtk/gtkfilechooserbutton.c:382
 msgid "The file chooser dialog to use."
 msgstr "Užyvanaje vakno dyjalohu vybaru fajłaŭ."
 
-#: gtk/gtkfilechooserbutton.c:416
+#: gtk/gtkfilechooserbutton.c:413
 msgid "The title of the file chooser dialog."
 msgstr "Zahałovak vakna dyjalohu vybaru fajłaŭ."
 
-#: gtk/gtkfilechooserbutton.c:430
+#: gtk/gtkfilechooserbutton.c:427
 msgid "The desired width of the button widget, in characters."
 msgstr "Pažadanaja šyrynia widgetu knopki (u znakach)."
 
@@ -2787,7 +2796,7 @@ msgstr "Nabor ikon"
 msgid "Icon set to display"
 msgstr "Nabor ikon, kab pakazać"
 
-#: gtk/gtkimage.c:187 gtk/gtktoolbar.c:530
+#: gtk/gtkimage.c:187 gtk/gtkscalebutton.c:191 gtk/gtktoolbar.c:530
 msgid "Icon size"
 msgstr "Pamier ikony"
 
@@ -3154,11 +3163,11 @@ msgstr ""
 "Lahičnaja vartaść, jakaja śviedčyć pra toje, ci menu pierajmaje fokus "
 "klavijatury"
 
-#: gtk/gtkmenutoolbutton.c:236 gtk/gtkoptionmenu.c:161
+#: gtk/gtkmenutoolbutton.c:230 gtk/gtkoptionmenu.c:161
 msgid "Menu"
 msgstr "Menu"
 
-#: gtk/gtkmenutoolbutton.c:237
+#: gtk/gtkmenutoolbutton.c:231
 msgid "The dropdown menu"
 msgstr "Razhortvalnaje menu"
 
@@ -3643,7 +3652,7 @@ msgstr "Nałady"
 msgid "Printer settings"
 msgstr "Nałady drukarki"
 
-#: gtk/gtkprintjob.c:143 gtk/gtkprintjob.c:144 gtk/gtkprintunixdialog.c:231
+#: gtk/gtkprintjob.c:143 gtk/gtkprintjob.c:144 gtk/gtkprintunixdialog.c:240
 msgid "Page Setup"
 msgstr "Nałady staronki"
 
@@ -3667,11 +3676,11 @@ msgstr "Zmoŭčanyja nałady staronki"
 msgid "The GtkPageSetup used by default"
 msgstr "Zmoŭčana ŭžyvajecca GtkPageSetup"
 
-#: gtk/gtkprintoperation.c:896 gtk/gtkprintunixdialog.c:249
+#: gtk/gtkprintoperation.c:896 gtk/gtkprintunixdialog.c:258
 msgid "Print Settings"
 msgstr "Nałady vydruku"
 
-#: gtk/gtkprintoperation.c:897 gtk/gtkprintunixdialog.c:250
+#: gtk/gtkprintoperation.c:897 gtk/gtkprintunixdialog.c:259
 msgid "The GtkPrintSettings used for initializing the dialog"
 msgstr "GtkPrintSettings užyvajecca, kab inicyjavać vakno"
 
@@ -3691,11 +3700,11 @@ msgstr "Kolkaść staronak"
 msgid "The number of pages in the document."
 msgstr "Kolkaść staronak u dakumencie."
 
-#: gtk/gtkprintoperation.c:962 gtk/gtkprintunixdialog.c:239
+#: gtk/gtkprintoperation.c:962 gtk/gtkprintunixdialog.c:248
 msgid "Current Page"
 msgstr "Dziejnaja staronka"
 
-#: gtk/gtkprintoperation.c:963 gtk/gtkprintunixdialog.c:240
+#: gtk/gtkprintoperation.c:963 gtk/gtkprintunixdialog.c:249
 msgid "The current page in the document"
 msgstr "Dziejnaja staronka dakumentu"
 
@@ -3773,15 +3782,15 @@ msgstr "Etykieta ŭłasnaj zakładki"
 msgid "Label for the tab containing custom widgets."
 msgstr "Etykieta zakładki z ułasnymi widgetami."
 
-#: gtk/gtkprintunixdialog.c:232
+#: gtk/gtkprintunixdialog.c:241
 msgid "The GtkPageSetup to use"
 msgstr "Vykarystoŭvajecca GtkPageSetup"
 
-#: gtk/gtkprintunixdialog.c:257
+#: gtk/gtkprintunixdialog.c:266
 msgid "Selected Printer"
 msgstr "Abranaja drukarka"
 
-#: gtk/gtkprintunixdialog.c:258
+#: gtk/gtkprintunixdialog.c:267
 msgid "The GtkPrinter which is selected"
 msgstr "Abrany GtkPrinter"
 
@@ -3931,130 +3940,130 @@ msgstr ""
 "Hety widget naležyć da hrupy, jakaja źjaŭlajecca častkaj menu adnarazovaha "
 "vybaru."
 
-#: gtk/gtkrange.c:336
+#: gtk/gtkrange.c:337
 msgid "Update policy"
 msgstr "Praviła aktualizacyi"
 
-#: gtk/gtkrange.c:337
+#: gtk/gtkrange.c:338
 msgid "How the range should be updated on the screen"
 msgstr "Akreślivaje, jakim čynam aktualizujecca widget na ekranie."
 
-#: gtk/gtkrange.c:346
+#: gtk/gtkrange.c:347
 msgid "The GtkAdjustment that contains the current value of this range object"
 msgstr ""
 "Abjekt GtkAdjustment, jaki maje dziejnuju vartaść hetaha abjektu abšaru"
 
-#: gtk/gtkrange.c:353
+#: gtk/gtkrange.c:354
 msgid "Inverted"
 msgstr "Adviernuty"
 
-#: gtk/gtkrange.c:354
+#: gtk/gtkrange.c:355
 msgid "Invert direction slider moves to increase range value"
 msgstr "Advaročvaje ruchi paŭzunka, kab pavialičyć vartaść abšaru"
 
-#: gtk/gtkrange.c:361
+#: gtk/gtkrange.c:362
 msgid "Lower stepper sensitivity"
 msgstr "Nizkaja ŭražlivaść stepera"
 
-#: gtk/gtkrange.c:362
+#: gtk/gtkrange.c:363
 msgid ""
 "The sensitivity policy for the stepper that points to the adjustment's lower "
 "side"
 msgstr "Napramak uražlivaści stepera śviedčyć pra nizki bok redahavańnia"
 
-#: gtk/gtkrange.c:370
+#: gtk/gtkrange.c:371
 msgid "Upper stepper sensitivity"
 msgstr "Vysokaja ŭražlivaść stepera"
 
-#: gtk/gtkrange.c:371
+#: gtk/gtkrange.c:372
 msgid ""
 "The sensitivity policy for the stepper that points to the adjustment's upper "
 "side"
 msgstr "Napramak uražlivaści stepera śviedčyć pra vysoki bok redahavańnia"
 
-#: gtk/gtkrange.c:388
+#: gtk/gtkrange.c:389
 msgid "Show Fill Level"
 msgstr ""
 
-#: gtk/gtkrange.c:389
+#: gtk/gtkrange.c:390
 msgid "Whether to display a fill level indicator graphics on trough."
 msgstr ""
 
-#: gtk/gtkrange.c:405
+#: gtk/gtkrange.c:406
 msgid "Restrict to Fill Level"
 msgstr ""
 
-#: gtk/gtkrange.c:406
+#: gtk/gtkrange.c:407
 msgid "Whether to restrict the upper boundary to the fill level."
 msgstr ""
 
-#: gtk/gtkrange.c:421
+#: gtk/gtkrange.c:422
 msgid "Fill Level"
 msgstr ""
 
-#: gtk/gtkrange.c:422
+#: gtk/gtkrange.c:423
 msgid "The fill level."
 msgstr ""
 
-#: gtk/gtkrange.c:430
+#: gtk/gtkrange.c:431
 msgid "Slider Width"
 msgstr "Šyrynia paŭzunka"
 
-#: gtk/gtkrange.c:431
+#: gtk/gtkrange.c:432
 msgid "Width of scrollbar or scale thumb"
 msgstr "Šyrynia paneli prakrutki albo paŭzunka"
 
-#: gtk/gtkrange.c:438
+#: gtk/gtkrange.c:439
 msgid "Trough Border"
 msgstr "Niepasredny kraj"
 
-#: gtk/gtkrange.c:439
+#: gtk/gtkrange.c:440
 msgid "Spacing between thumb/steppers and outer trough bevel"
 msgstr "Vodstup pamiž paŭzunkom dy knopkami i vonkavym kantam"
 
-#: gtk/gtkrange.c:446
+#: gtk/gtkrange.c:447
 msgid "Stepper Size"
 msgstr "Pamiery knopak"
 
-#: gtk/gtkrange.c:447
+#: gtk/gtkrange.c:448
 msgid "Length of step buttons at ends"
 msgstr "Daŭžynia krokavych knopak na kancach"
 
-#: gtk/gtkrange.c:462
+#: gtk/gtkrange.c:463
 msgid "Stepper Spacing"
 msgstr "Vodstupy knopak"
 
-#: gtk/gtkrange.c:463
+#: gtk/gtkrange.c:464
 msgid "Spacing between step buttons and thumb"
 msgstr "Vodstupy pamiž krokavymi knopkami i paŭzunkom"
 
-#: gtk/gtkrange.c:470
+#: gtk/gtkrange.c:471
 msgid "Arrow X Displacement"
 msgstr "Haryzantalnaje pieramiaščeńnie strełki"
 
-#: gtk/gtkrange.c:471
+#: gtk/gtkrange.c:472
 msgid ""
 "How far in the x direction to move the arrow when the button is depressed"
 msgstr ""
 "Akreślivaje, jak daloka pavinna być pieramieščanaja strełka pa haryzantali, "
 "kali knopku puščajuć."
 
-#: gtk/gtkrange.c:478
+#: gtk/gtkrange.c:479
 msgid "Arrow Y Displacement"
 msgstr "Vertykalnaje pieramiaščeńnie strełki"
 
-#: gtk/gtkrange.c:479
+#: gtk/gtkrange.c:480
 msgid ""
 "How far in the y direction to move the arrow when the button is depressed"
 msgstr ""
 "Akreślivaje, jak daloka pavinna być pieramieščanaja strełka pa vertykali, "
 "kali puścić knopku."
 
-#: gtk/gtkrange.c:487
+#: gtk/gtkrange.c:488
 msgid "Draw slider ACTIVE during drag"
 msgstr "Rysik aktyŭny padčas pierasiahvańnia"
 
-#: gtk/gtkrange.c:488
+#: gtk/gtkrange.c:489
 msgid ""
 "With this option set to TRUE, sliders will be drawn ACTIVE and with shadow "
 "IN while they are dragged"
@@ -4062,22 +4071,22 @@ msgstr ""
 "Z opcyjaj PRAŬDA rysiki buduć ACTIVE z uklučanymi cieniami (IN) padčas "
 "pieraciahvańnia"
 
-#: gtk/gtkrange.c:502
+#: gtk/gtkrange.c:503
 msgid "Trough Side Details"
 msgstr "Detali jamkavaj staronki"
 
-#: gtk/gtkrange.c:503
+#: gtk/gtkrange.c:504
 msgid ""
 "When TRUE, the parts of the trough on the two sides of the slider are drawn "
 "with different details"
 msgstr ""
 "Kali PRAŬDA, častki jamak dvuch bakoŭ rysika rysavanyja z roznymi detalami"
 
-#: gtk/gtkrange.c:519
+#: gtk/gtkrange.c:520
 msgid "Trough Under Steppers"
 msgstr "Jamka pad steperami"
 
-#: gtk/gtkrange.c:520
+#: gtk/gtkrange.c:521
 #, fuzzy
 msgid ""
 "Whether to draw trough for full length of range or exclude the steppers and "
@@ -4086,85 +4095,85 @@ msgstr ""
 "Niešta, kab rysavać jamki poŭnaj daŭžyni albo absiahu albo vyklučeńnie "
 "steperaŭ i prabiełaŭ"
 
-#: gtk/gtkrecentaction.c:654 gtk/gtkrecentchoosermenu.c:212
+#: gtk/gtkrecentaction.c:654 gtk/gtkrecentchoosermenu.c:209
 msgid "Show Numbers"
 msgstr "Pakazvaj numary"
 
-#: gtk/gtkrecentaction.c:655 gtk/gtkrecentchoosermenu.c:213
+#: gtk/gtkrecentaction.c:655 gtk/gtkrecentchoosermenu.c:210
 msgid "Whether the items should be displayed with a number"
 msgstr "Akreślivaje, ci elementy pavinny być pakazanyja z numarami"
 
-#: gtk/gtkrecentchooser.c:112
+#: gtk/gtkrecentchooser.c:120
 msgid "Recent Manager"
 msgstr "Dziejny kiraŭnik"
 
-#: gtk/gtkrecentchooser.c:113
+#: gtk/gtkrecentchooser.c:121
 msgid "The RecentManager object to use"
 msgstr "Užyvany abjekt fajłavaj systemy"
 
-#: gtk/gtkrecentchooser.c:118
+#: gtk/gtkrecentchooser.c:135
 msgid "Show Private"
 msgstr "Pakažy pryvatnyja fajły"
 
-#: gtk/gtkrecentchooser.c:119
+#: gtk/gtkrecentchooser.c:136
 msgid "Whether the private items should be displayed"
 msgstr "Akreślivaje, ci pavinny być bačnyja pryvatnyja elementy"
 
-#: gtk/gtkrecentchooser.c:124
+#: gtk/gtkrecentchooser.c:149
 msgid "Show Tooltips"
 msgstr "Pakažy padkazki"
 
-#: gtk/gtkrecentchooser.c:125
+#: gtk/gtkrecentchooser.c:150
 msgid "Whether there should be a tooltip on the item"
 msgstr "Akreślivaje, ci na elemencie pavinna być bačnaja padkazka"
 
-#: gtk/gtkrecentchooser.c:130
+#: gtk/gtkrecentchooser.c:162
 msgid "Show Icons"
 msgstr "Pakažy ikony"
 
-#: gtk/gtkrecentchooser.c:131
+#: gtk/gtkrecentchooser.c:163
 msgid "Whether there should be an icon near the item"
 msgstr "Akreślivaje, ci ikona pavinna być blizka la elementu"
 
-#: gtk/gtkrecentchooser.c:136
+#: gtk/gtkrecentchooser.c:178
 msgid "Show Not Found"
 msgstr "Pakaz nia znojdzieny"
 
-#: gtk/gtkrecentchooser.c:137
+#: gtk/gtkrecentchooser.c:179
 msgid "Whether the items pointing to unavailable resources should be displayed"
 msgstr "Pakazvać, kali elementy spasyłajucca na niedastupnyja resursy"
 
-#: gtk/gtkrecentchooser.c:143
+#: gtk/gtkrecentchooser.c:192
 msgid "Whether to allow multiple items to be selected"
 msgstr "Akreślivaje, ci dapuščalna zaznačać elementy masava"
 
-#: gtk/gtkrecentchooser.c:148
+#: gtk/gtkrecentchooser.c:205
 msgid "Local only"
 msgstr "Tolki lakalnyja"
 
-#: gtk/gtkrecentchooser.c:149
+#: gtk/gtkrecentchooser.c:206
 msgid "Whether the selected resource(s) should be limited to local file: URIs"
 msgstr ""
 "Akreślivaje, ci zaznačanyja resursy pavinny być abmiežavanyja da lakalnych "
 "adrasoŭ URI:"
 
-#: gtk/gtkrecentchooser.c:154 gtk/gtkrecentmanager.c:265
+#: gtk/gtkrecentchooser.c:222 gtk/gtkrecentmanager.c:265
 msgid "Limit"
 msgstr "Limit"
 
-#: gtk/gtkrecentchooser.c:155
+#: gtk/gtkrecentchooser.c:223
 msgid "The maximum number of items to be displayed"
 msgstr "Maksymalnaja kolkaść pakazanych elementaŭ"
 
-#: gtk/gtkrecentchooser.c:162
+#: gtk/gtkrecentchooser.c:237
 msgid "Sort Type"
 msgstr "Vid sartavańnia"
 
-#: gtk/gtkrecentchooser.c:163
+#: gtk/gtkrecentchooser.c:238
 msgid "The sorting order of the items displayed"
 msgstr "Paradak sartavańnia pakazanych elementaŭ"
 
-#: gtk/gtkrecentchooser.c:170
+#: gtk/gtkrecentchooser.c:253
 msgid "The current filter for selecting which resources are displayed"
 msgstr "Dziejny filter, kab zaznačać, jakija resursy majuć być pakazanyja"
 
@@ -4257,6 +4266,33 @@ msgstr "Vodstup vartaści"
 #: gtk/gtkscale.c:178
 msgid "Space between value text and the slider/trough area"
 msgstr "Vodstup pamiž tekstam z vartaściu i abšaram paŭzunka"
+
+#: gtk/gtkscalebutton.c:182
+#, fuzzy
+msgid "The value of the scale"
+msgstr "Akreślenaja vartaść"
+
+#: gtk/gtkscalebutton.c:192
+#, fuzzy
+msgid "The icon size"
+msgstr "Pamier ikon paneli pryładździa"
+
+#: gtk/gtkscalebutton.c:201
+#, fuzzy
+msgid ""
+"The GtkAdjustment that contains the current value of this scale button object"
+msgstr ""
+"Abjekt GtkAdjustment, jaki maje dziejnuju vartaść hetaha abjektu abšaru"
+
+#: gtk/gtkscalebutton.c:229
+#, fuzzy
+msgid "Icons"
+msgstr "Ikona"
+
+#: gtk/gtkscalebutton.c:230
+#, fuzzy
+msgid "List of icon names"
+msgstr "Nazva ikony lahatypu"
 
 #: gtk/gtkscrollbar.c:50
 msgid "Minimum Slider Length"
