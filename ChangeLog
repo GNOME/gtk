@@ -1,3 +1,9 @@
+2007-09-14  Emmanuele Bassi  <ebassi@gnome.org>
+
+	* gtk/gtkrecentaction.c:
+	* gtk/gtkrecentchoosermenu.c: Remove the warning for the
+	"select-multiple" property getter. (#476686, Christian Persch)
+
 2007-09-14  Michael Natterer  <mitch@imendio.com>
 
 	* gtk/gtkmenubar.c (remove_from_window): no need to get the list

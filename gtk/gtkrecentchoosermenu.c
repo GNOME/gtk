@@ -420,9 +420,7 @@ gtk_recent_chooser_menu_get_property (GObject    *object,
       g_value_set_boolean (value, priv->show_icons);
       break;
     case GTK_RECENT_CHOOSER_PROP_SELECT_MULTIPLE:
-      g_warning ("%s: Choosers of type `%s' do not support selecting multiple items.",
-                 G_STRFUNC,
-                 G_OBJECT_TYPE_NAME (object));
+      g_value_set_boolean (value, FALSE);
       break;
     case GTK_RECENT_CHOOSER_PROP_FILTER:
       g_value_set_object (value, priv->current_filter);

@@ -614,9 +614,7 @@ gtk_recent_action_get_property (GObject    *gobject,
       g_value_set_object (value, priv->current_filter);
       break;
     case GTK_RECENT_CHOOSER_PROP_SELECT_MULTIPLE:
-      g_warning ("%s: Choosers of type `%s' do not support selecting multiple items.",
-                 G_STRFUNC,
-                 G_OBJECT_TYPE_NAME (gobject));
+      g_value_set_boolean (value, FALSE);
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (gobject, prop_id, pspec);
