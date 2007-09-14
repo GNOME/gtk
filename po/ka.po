@@ -1,11 +1,10 @@
-# translation of ka.po to Georgian
 # Georgian translation for GTK+.
 # Copyright © 2006 The GTK Team
 # This file is distributed under the same license as the GTK package.
 #
 # Gia Shervashidze <giasher@telenet.ge>, 2005.
-# Vladimer Sichinava <alinux@siena.linux.it>, 2006.
 # Vladimer Sichinava ვლადიმერ სიჭინავა <vsichi@gnome.org>, 2007.
+#
 msgid ""
 msgstr ""
 "Project-Id-Version: ka\n"
