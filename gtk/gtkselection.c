@@ -530,10 +530,11 @@ gtk_target_list_remove (GtkTargetList *list,
  * gtk_target_list_find:
  * @list: a #GtkTargetList
  * @target: an interned atom representing the target to search for
- * @info: a pointer to the location to store application info for target
- * 
+ * @info: a pointer to the location to store application info for target,
+ *        or %NULL
+ *
  * Looks up a given target in a #GtkTargetList.
- * 
+ *
  * Return value: %TRUE if the target was found, otherwise %FALSE
  **/
 gboolean
@@ -541,16 +542,23 @@ gtk_target_list_find (GtkTargetList *list,
 		      GdkAtom        target,
 		      guint         *info)
 {
-  GList *tmp_list = list->list;
+  GList *tmp_list;
+
+  g_return_if_fail (list != NULL);
+
+  tmp_list = list->list;
   while (tmp_list)
     {
       GtkTargetPair *pair = tmp_list->data;
 
       if (pair->target == target)
 	{
-	  *info = pair->info;
+          if (info)
+            *info = pair->info;
+
 	  return TRUE;
 	}
+
       tmp_list = tmp_list->next;
     }
 

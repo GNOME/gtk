@@ -1,3 +1,9 @@
+2007-09-15  Michael Natterer  <mitch@imendio.com>
+
+	* gtk/gtkselection.c (gtk_target_list_find): don't simply crash if
+	any of the pointer args are NULL. Instead, g_return_if_fail() on
+	"list != NULL" and allow to pass NULL as return location for "info".
+
 2007-09-14  Emmanuele Bassi  <ebassi@gnome.org>
 
 	* gtk/gtkrecentaction.c:
