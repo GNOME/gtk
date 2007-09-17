@@ -1,3 +1,7 @@
+2007-09-17  Amitakhya Phukan  <amitakhya@svn.gnome.org>
+
+	* configure.in: Added as to ALL_LINGUAS.
+
 2007-09-15  Michael Natterer  <mitch@imendio.com>
 
 	* gtk/gtkselection.c (gtk_target_list_find): don't simply crash if
