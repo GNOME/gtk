@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: gtk+ 2.8.2\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2007-09-17 09:14+0200\n"
-"PO-Revision-Date: 2007-09-17 09:16+0200\n"
+"PO-Revision-Date: 2007-09-17 21:50+0200\n"
 "Last-Translator: Jordi Mallach <jordi@sindominio.net>\n"
 "Language-Team: Catalan <tradgnome@softcatala.org>\n"
 "MIME-Version: 1.0\n"
@@ -4416,7 +4416,7 @@ msgstr "prova-de-sortida.%s"
 
 #: ../modules/printbackends/test/gtkprintbackendtest.c:465
 msgid "Print to Test Printer"
-msgstr "Imprimeix a la impressora de prova"
+msgstr "Imprimiu per a provar la impressora"
 
 #: ../tests/testfilechooser.c:205
 #, c-format
