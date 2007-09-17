@@ -857,8 +857,10 @@ dpgettext (const char *domain,
   size_t msgctxt_len = strlen (msgctxt) + 1;
   size_t msgid_len = strlen (msgid) + 1;
   const char *translation;
-  char msg_ctxt_id[msgctxt_len + msgid_len];
+  char* msg_ctxt_id;
 
+  msg_ctxt_id = g_alloca (msgctxt_len + msgid_len);
+  
   memcpy (msg_ctxt_id, msgctxt, msgctxt_len - 1);
   msg_ctxt_id[msgctxt_len - 1] = '\004';
   memcpy (msg_ctxt_id + msgctxt_len, msgid, msgid_len);

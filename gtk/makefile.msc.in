@@ -70,9 +70,14 @@ gtkbuiltincache.h: gtk-update-icon-cache.exe
 	gtk-update-icon-cache --force --ignore-theme-index 	\
 	   --source builtin_icons stock-icons > gtkbuiltincache.h
 
+GENERATED = \
+	gtktypebuiltins.h gtktypebuiltins.c \
+	gtkmarshal.h gtkmarshal.c gtkmarshalers.h gtkmarshalers.c \
+	gtk.def gtkalias.h gtkaliasdef.c
+
 all :						\
 	..\config.h				\
-	generated				\
+	$(GENERATED)				\
 	gtk-update-icon-cache.exe		\
 	gtkbuiltincache.h			\
 	libgtk-win32-$(GTK_VER)-0.dll		\
@@ -98,6 +103,9 @@ gtk_OBJECTS = 					\
 	gtkbindings.obj				\
 	gtkbbox.obj				\
 	gtkbox.obj				\
+	gtkbuildable.obj	\
+	gtkbuilder.obj		\
+	gtkbuilderparser.obj	\
 	gtkbutton.obj				\
 	gtkcalendar.obj				\
 	gtkcelleditable.obj			\
@@ -322,35 +330,37 @@ gtk_public_h_sources =		\
 	gtkaccelgroup.h		\
 	gtkaccellabel.h		\
 	gtkaccelmap.h		\
-	gtkaccessible.h \
+	gtkaccessible.h		\
 	gtkaction.h		\
 	gtkactiongroup.h	\
 	gtkadjustment.h		\
 	gtkalignment.h		\
 	gtkarrow.h		\
 	gtkaspectframe.h	\
-	gtkassistant.h	\
+	gtkassistant.h		\
 	gtkbbox.h		\
 	gtkbin.h		\
 	gtkbindings.h		\
 	gtkbox.h		\
+	gtkbuilder.h		\
+	gtkbuildable.h		\
 	gtkbutton.h		\
 	gtkcalendar.h		\
 	gtkcelleditable.h	\
 	gtkcelllayout.h		\
 	gtkcellrenderer.h	\
 	gtkcellrendereraccel.h	\
+	gtkcellrenderercombo.h	\
 	gtkcellrendererpixbuf.h	\
- 	gtkcellrendererprogress.h \
+	gtkcellrendererprogress.h \
 	gtkcellrendererspin.h   \
 	gtkcellrenderertext.h	\
 	gtkcellrenderertoggle.h	\
-	gtkcellview.h \
+	gtkcellview.h		\
 	gtkcheckbutton.h	\
 	gtkcheckmenuitem.h	\
 	gtkclipboard.h		\
 	gtkclist.h		\
-	gtkclipboard.h		\
 	gtkcolorbutton.h	\
 	gtkcolorsel.h		\
 	gtkcolorseldialog.h	\
@@ -360,17 +370,18 @@ gtk_public_h_sources =		\
 	gtkcontainer.h		\
 	gtkctree.h		\
 	gtkcurve.h		\
-	gtkdebug.h		\
+	gtkdebug.h              \
 	gtkdialog.h		\
 	gtkdnd.h		\
 	gtkdrawingarea.h	\
-	gtkeditable.h		\
+	gtkeditable.h           \
 	gtkentry.h		\
 	gtkentrycompletion.h	\
 	gtkenums.h		\
 	gtkeventbox.h		\
 	gtkexpander.h		\
 	gtkfilechooser.h        \
+	gtkfilechooserbutton.h  \
 	gtkfilechooserdialog.h  \
 	gtkfilechooserwidget.h  \
 	gtkfilefilter.h		\
@@ -389,8 +400,6 @@ gtk_public_h_sources =		\
 	gtkhscale.h		\
 	gtkhscrollbar.h		\
 	gtkhseparator.h		\
-	gtkstatusicon.h		\
-	gtkhsv.h		\
 	gtkiconfactory.h	\
 	gtkicontheme.h		\
 	gtkiconview.h		\
@@ -405,19 +414,20 @@ gtk_public_h_sources =		\
 	gtkitem.h		\
 	gtkitemfactory.h	\
 	gtklabel.h		\
-	gtklayout.h		\
+	gtklayout.h             \
 	gtklinkbutton.h		\
 	gtklist.h		\
 	gtklistitem.h		\
 	gtkliststore.h		\
 	gtkmain.h		\
-	gtkmarshal.h	\
 	gtkmenu.h		\
 	gtkmenubar.h		\
 	gtkmenuitem.h		\
 	gtkmenushell.h		\
+	gtkmenutoolbutton.h	\
 	gtkmessagedialog.h	\
 	gtkmisc.h		\
+	gtkmodules.h		\
 	gtknotebook.h		\
 	gtkobject.h		\
 	gtkoldeditable.h	\
@@ -430,11 +440,11 @@ gtk_public_h_sources =		\
 	gtkpreview.h		\
 	gtkprintcontext.h	\
 	gtkprintoperation.h	\
+	gtkprintoperationpreview.h	\
 	gtkprintsettings.h	\
 	gtkprivate.h		\
 	gtkprogress.h		\
 	gtkprogressbar.h	\
-	gtkquery.h	\
 	gtkradioaction.h	\
 	gtkradiobutton.h	\
 	gtkradiomenuitem.h	\
@@ -453,29 +463,27 @@ gtk_public_h_sources =		\
 	gtkscalebutton.h	\
 	gtkscrollbar.h		\
 	gtkscrolledwindow.h	\
-	gtksearchengine.h	\
 	gtkselection.h		\
 	gtkseparator.h		\
 	gtkseparatormenuitem.h	\
 	gtkseparatortoolitem.h	\
 	gtksettings.h		\
 	gtksignal.h		\
-	gtksizegroup.h	\
-	gtksignal.h		\
+	gtksizegroup.h		\
 	gtksocket.h		\
 	gtkspinbutton.h		\
 	gtkstatusbar.h		\
+	gtkstatusicon.h		\
 	gtkstock.h		\
 	gtkstyle.h		\
 	gtktable.h		\
-	gtktearoffmenuitem.h	\
+	gtktearoffmenuitem.h    \
 	gtktext.h		\
 	gtktextbuffer.h		\
 	gtktextbufferrichtext.h	\
 	gtktextchild.h		\
 	gtktextdisplay.h	\
 	gtktextiter.h		\
-	gtktextlayout.h		\
 	gtktextmark.h		\
 	gtktexttag.h		\
 	gtktexttagtable.h	\
@@ -487,6 +495,7 @@ gtk_public_h_sources =		\
 	gtktoolbar.h		\
 	gtktoolbutton.h		\
 	gtktoolitem.h		\
+	gtktooltip.h		\
 	gtktooltips.h		\
 	gtktree.h		\
 	gtktreednd.h		\
@@ -500,7 +509,7 @@ gtk_public_h_sources =		\
 	gtktreeview.h		\
 	gtktreeviewcolumn.h	\
 	gtktypeutils.h		\
-	gtkuimanager.h	\
+	gtkuimanager.h		\
 	gtkvbbox.h		\
 	gtkvbox.h		\
 	gtkviewport.h		\
@@ -521,17 +530,6 @@ gtk_extra_sources = \
 
 ..\config.h : ..\config.h.win32
 	copy ..\config.h.win32 ..\config.h
-
-GENERATED = \
-	gtktypebuiltins.h gtktypebuiltins.c \
-	gtkmarshal.h gtkmarshal.c gtkmarshalers.h gtkmarshalers.c \
-	gtk.def gtkalias.h gtkaliasdef.c
-
-#
-# Generated source files:
-#
-generated : $(GENERATED)
-	$(TOUCH) generated
 
 gtk.def: gtk.symbols makefile.msc
 	echo EXPORTS > gtk.def
@@ -569,10 +567,10 @@ gtktypebuiltins.c: $(gtk_public_h_sources) makefile.msc
 	copy xgen-gtbc gtktypebuiltins.c
 
 # private marshalers
-gtkmarshalers.h : gtkmarshalers.list
-	$(GLIB)\gobject\glib-genmarshal --prefix=_gtk_marshal gtkmarshalers.list --header >>gtkmarshalers.h
+gtkmarshalers.h : gtkmarshalers.list makefile.msc
+	$(GLIB)\gobject\glib-genmarshal --prefix=_gtk_marshal gtkmarshalers.list --header >gtkmarshalers.h
 
-gtkmarshalers.c : gtkmarshalers.list
+gtkmarshalers.c : gtkmarshalers.list makefile.msc
 	$(GLIB)\gobject\glib-genmarshal --prefix=_gtk_marshal gtkmarshalers.list --body >gtkmarshalers.c
 
 # public, deprecated marshalers

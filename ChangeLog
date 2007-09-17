@@ -1,3 +1,15 @@
+2007-09-17  Hans Breuer  <hans@breuer.org>
+
+	* gtk/makefile.msc.in : updated msvc build
+	* gtk/gtkbuilderparser.c : fixed gccism - stack allocated variable 
+	size array
+	
+	* gtk/gtkselection.c(547) : error C4033: 'gtk_target_list_find' 
+	must return a value
+
+	* test/makefile.msc : added some more tests
+	* tests/autotestfilesystem.c : HAVE_UNISTD_H, _rmdir
+
 2007-09-17  Amitakhya Phukan  <amitakhya@svn.gnome.org>
 
 	* configure.in: Added as to ALL_LINGUAS.

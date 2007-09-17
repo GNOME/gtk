@@ -40,13 +40,14 @@ all :	\
 # Test programs:
 #
 TESTAPPS = \
-	autotestfilechooser floatingtest \
+	autotestfilechooser autotestfilesystem \
+	buildertest floatingtest \
 	testaccel testactions testassistant \
 	testbbox \
 	testcairo testcalendar testcellrenderertext testcombo testcombochange \
 	testdnd \
 	testellipsise testentrycompletion \
-	testfilechooser testfilechooserbutton \
+	testfilechooser testfilechooserbutton testframe \
 	testgrouping testgtk \
 	testicontheme testiconview testimage testinput \
 	testmenus testmenubars testmerge testmultidisplay testmultiscreen \

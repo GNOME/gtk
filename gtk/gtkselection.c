@@ -544,7 +544,7 @@ gtk_target_list_find (GtkTargetList *list,
 {
   GList *tmp_list;
 
-  g_return_if_fail (list != NULL);
+  g_return_val_if_fail (list != NULL, FALSE);
 
   tmp_list = list->list;
   while (tmp_list)
