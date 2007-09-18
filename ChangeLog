@@ -1,3 +1,9 @@
+2007-09-18  Emmanuele Bassi  <ebassi@gnome.org>
+
+	* gtk/gtksearchenginetracker.c: Search libtrackerclient.so.0
+	as libtracker changed the shared library name. (#478173,
+	Michael Kuhn)
+
 2007-09-17  Hans Breuer  <hans@breuer.org>
 
 	* gtk/makefile.msc.in : updated msvc build

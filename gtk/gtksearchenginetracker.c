@@ -71,10 +71,16 @@ open_libtracker (void)
     {
       int i;
       GModule *tracker;
+      GModuleFlags flags;
       
       done = TRUE;
- 
-      tracker = g_module_open ("libtracker.so.0", G_MODULE_BIND_LAZY | G_MODULE_BIND_LOCAL);
+      flags = G_MODULE_BIND_LAZY | G_MODULE_BIND_LOCAL;
+
+      tracker = g_module_open ("libtrackerclient.so.0", flags);
+
+      if (!tracker)
+        tracker = g_module_open ("libtracker.so.0", flags);
+
       if (!tracker)
 	return;
       
