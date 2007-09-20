@@ -1,3 +1,10 @@
+2007-09-20  Cody Russell  <bratsche@gnome.org>
+
+	* modules/engines/ms-windows/msw_style.c: Override draw_layout
+	method in GtkStyle in order to adjust by 2 pixels any labels
+	that are in GtkNotebook tabs using XP theme, so that they appear
+	correctly centered. (#478637)
+
 2007-09-18  Emmanuele Bassi  <ebassi@gnome.org>
 
 	* gtk/gtksearchenginetracker.c: Search libtrackerclient.so.0
