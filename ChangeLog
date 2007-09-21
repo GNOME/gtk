@@ -1,3 +1,8 @@
+2007-09-21  Jean Brefort  <jean.brefort@normalesup.org>
+
+	* gtk/gtkprintoperation.c: (print_pages_idle): abort printing 
+	when the range is NULL. (#478803)
+
 2007-09-21  Michael Natterer  <mitch@imendio.com>
 
 	* gtk/gtktextview.c (gtk_text_view_move_cursor_internal)

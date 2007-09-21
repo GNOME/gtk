@@ -2098,6 +2098,11 @@ print_pages_idle (gpointer user_data)
        */
       if (priv->print_pages == GTK_PRINT_PAGES_RANGES)
 	{
+	  if (priv->page_ranges == NULL) {
+		  g_warning ("no pages to print");
+		  priv->cancelled = TRUE;
+		  goto out;
+	  }
 	  data->ranges = priv->page_ranges;
 	  data->num_ranges = priv->num_page_ranges;
           for (i = 0; i < data->num_ranges; i++)
