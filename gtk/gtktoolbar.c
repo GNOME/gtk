@@ -3860,7 +3860,7 @@ internal_insert_element (GtkToolbar          *toolbar,
 typedef enum {
   UNKNOWN,
   YES,
-  NO,
+  NO
 } TriState;
 
 struct _ToolbarContent
