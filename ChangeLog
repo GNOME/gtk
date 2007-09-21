@@ -1,3 +1,10 @@
+2007-09-21  Michael Natterer  <mitch@imendio.com>
+
+	* gtk/gtktextview.c (gtk_text_view_move_cursor_internal)
+	(gtk_text_view_move_viewport): merged patch from maemo-gtk which
+	handles failed keynav correctly also when the cursor is invisible.
+	(Tommi Komulainen)
+
 2007-09-21  Matthias Clasen <mclasen@redhat.com>
 
 	* gtk/gtktoolbar.c: Remove trailing commas from enumerations.
