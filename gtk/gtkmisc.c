@@ -196,6 +196,13 @@ gtk_misc_set_alignment (GtkMisc *misc,
 
   if ((xalign != misc->xalign) || (yalign != misc->yalign))
     {
+      g_object_freeze_notify (G_OBJECT (misc));
+      if (xalign != misc->xalign)
+	g_object_notify (G_OBJECT (misc), "xalign");
+
+      if (yalign != misc->yalign)
+	g_object_notify (G_OBJECT (misc), "yalign");
+
       misc->xalign = xalign;
       misc->yalign = yalign;
       
@@ -209,12 +216,6 @@ gtk_misc_set_alignment (GtkMisc *misc,
           gtk_widget_queue_draw (widget);
         }
 
-      g_object_freeze_notify (G_OBJECT (misc));
-      if (xalign != misc->xalign)
-	g_object_notify (G_OBJECT (misc), "xalign");
-
-      if (yalign != misc->yalign)
-	g_object_notify (G_OBJECT (misc), "yalign");
       g_object_thaw_notify (G_OBJECT (misc));
     }
 }
@@ -257,6 +258,13 @@ gtk_misc_set_padding (GtkMisc *misc,
   
   if ((xpad != misc->xpad) || (ypad != misc->ypad))
     {
+      g_object_freeze_notify (G_OBJECT (misc));
+      if (xpad != misc->xpad)
+	g_object_notify (G_OBJECT (misc), "xpad");
+
+      if (ypad != misc->ypad)
+	g_object_notify (G_OBJECT (misc), "ypad");
+
       requisition = &(GTK_WIDGET (misc)->requisition);
       requisition->width -= misc->xpad * 2;
       requisition->height -= misc->ypad * 2;
@@ -270,12 +278,6 @@ gtk_misc_set_padding (GtkMisc *misc,
       if (GTK_WIDGET_DRAWABLE (misc))
 	gtk_widget_queue_resize (GTK_WIDGET (misc));
 
-      g_object_freeze_notify (G_OBJECT (misc));
-      if (xpad != misc->xpad)
-	g_object_notify (G_OBJECT (misc), "xpad");
-
-      if (ypad != misc->ypad)
-	g_object_notify (G_OBJECT (misc), "ypad");
       g_object_thaw_notify (G_OBJECT (misc));
     }
 }
