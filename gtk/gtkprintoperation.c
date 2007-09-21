@@ -2090,23 +2090,21 @@ print_pages_idle (gpointer user_data)
 	    goto out;
 	}
 
-      /* FIXME handle this better */
-      if (priv->nr_of_pages == 0)
-	g_warning ("no pages to print");
-      
       /* Initialize parts of PrintPagesData that depend on nr_of_pages
        */
       if (priv->print_pages == GTK_PRINT_PAGES_RANGES)
 	{
-	  if (priv->page_ranges == NULL) {
-		  g_warning ("no pages to print");
-		  priv->cancelled = TRUE;
-		  goto out;
+          if (priv->page_ranges == NULL) 
+            {
+              g_warning ("no pages to print");
+              priv->cancelled = TRUE;
+              goto out;
 	  }
 	  data->ranges = priv->page_ranges;
 	  data->num_ranges = priv->num_page_ranges;
           for (i = 0; i < data->num_ranges; i++)
-            if (data->ranges[i].end == -1)
+            if (data->ranges[i].end == -1 || 
+                data->ranges[i].end >= priv->nr_of_pages)
               data->ranges[i].end = priv->nr_of_pages - 1;
 	}
       else if (priv->print_pages == GTK_PRINT_PAGES_CURRENT &&

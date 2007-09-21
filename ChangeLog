@@ -1,3 +1,8 @@
+2007-09-21  Matthias Clasen <mclasen@redhat.com>
+
+	* gtk/gtkprintoperation.c (print_pages_idle): Some more
+	fixed to prevent segfaults with missing or nonsensical ranges.
+
 2007-09-21  Jean Brefort  <jean.brefort@normalesup.org>
 
 	* gtk/gtkprintoperation.c: (print_pages_idle): abort printing 
