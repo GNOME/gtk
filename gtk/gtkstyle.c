@@ -3245,7 +3245,7 @@ option_menu_get_props (GtkWidget      *widget,
   if (tmp_size)
     {
       *indicator_size = *tmp_size;
-      g_free (tmp_size);
+      gtk_requisition_free (tmp_size);
     }
   else
     *indicator_size = default_option_indicator_size;

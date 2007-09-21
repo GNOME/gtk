@@ -1,3 +1,10 @@
+2007-09-21  Manish Singh  <yosh@gimp.org>
+
+	* gtk/gtkstyle.c (option_menu_get_props)
+	* gtk/gtkoptionmenu.c (gtk_option_menu_get_props): use
+	gtk_requisition_free() instead of g_free() for freeing
+	requisitions.
+
 2007-09-21  Matthias Clasen <mclasen@redhat.com>
 
 	* gtk/gtkprintoperation.c (print_pages_idle): Some more
