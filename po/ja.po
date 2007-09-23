@@ -12,8 +12,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ trunk\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-09-15 18:12+0900\n"
-"PO-Revision-Date: 2007-09-15 13:12+0900\n"
+"POT-Creation-Date: 2007-09-23 10:57+0900\n"
+"PO-Revision-Date: 2007-09-23 10:57+0900\n"
 "Last-Translator: Takeshi AIHANA <takeshi.aihana@gmail.com>\n"
 "Language-Team: Japanese <gnome-translation@gnome.gr.jp>\n"
 "MIME-Version: 1.0\n"
@@ -1512,11 +1512,11 @@ msgstr "色ホイール"
 msgid "Color Selection"
 msgstr "色の選択"
 
-#: ../gtk/gtkentry.c:5253 ../gtk/gtktextview.c:7605
+#: ../gtk/gtkentry.c:5253 ../gtk/gtktextview.c:7617
 msgid "Input _Methods"
 msgstr "入力メソッド(_M)"
 
-#: ../gtk/gtkentry.c:5267 ../gtk/gtktextview.c:7619
+#: ../gtk/gtkentry.c:5267 ../gtk/gtktextview.c:7631
 msgid "_Insert Unicode Control Character"
 msgstr "Unicode 制御文字の挿入(_I)"
 
@@ -2442,7 +2442,7 @@ msgstr "完了 (エラー有り)"
 msgid "Preparing %d"
 msgstr "%d の準備中です"
 
-#: ../gtk/gtkprintoperation.c:1988 ../gtk/gtkprintoperation.c:2240
+#: ../gtk/gtkprintoperation.c:1988 ../gtk/gtkprintoperation.c:2243
 msgid "Preparing"
 msgstr "準備中"
 
@@ -3107,7 +3107,7 @@ msgstr "終了(_Q)"
 
 #: ../gtk/gtkstock.c:383
 msgid "_Redo"
-msgstr "やり直し(_R)"
+msgstr "やり直す(_R)"
 
 #: ../gtk/gtkstock.c:384
 msgid "_Refresh"
