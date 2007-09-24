@@ -1,3 +1,9 @@
+2007-09-24  Kristian Rietveld  <kris@imendio.com>
+
+	* gtk/gtktooltips.c (gtk_tooltips_set_tip): add extra NULL check
+	for tooltipsdata to avoid code fiddling with active_tips_data
+	from crashing.  (Fixes #460194, Peter Wright, Matthijs De Smedt).
+
 2007-09-24  Matthias Clasen <mclasen@redhat.com>
 
 	* modules/printbackends/file/gtkprintbackendfile.c: Correct a comment.

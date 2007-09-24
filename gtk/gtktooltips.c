@@ -230,6 +230,7 @@ gtk_tooltips_set_tip (GtkTooltips *tooltips,
     }
   
   if (tooltips->active_tips_data 
+      && tooltipsdata
       && tooltips->active_tips_data->widget == widget
       && GTK_WIDGET_DRAWABLE (tooltips->active_tips_data->widget))
     {
