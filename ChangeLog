@@ -1,3 +1,8 @@
+2007-09-24  Tor Lillqvist  <tml@novell.com>
+
+	* gtk/gtkprintoperation-win32.c (pageDlgProc): Set the
+	GtkWin32EmbedWidget we create here as modal. Fixes #389358.
+
 2007-09-21  Manish Singh  <yosh@gimp.org>
 
 	* gtk/gtkstyle.c (option_menu_get_props)
