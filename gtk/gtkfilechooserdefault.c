@@ -8994,6 +8994,8 @@ search_stop_searching (GtkFileChooserDefault *impl,
   
   if (impl->search_engine)
     {
+      _gtk_search_engine_stop (impl->search_engine);
+      
       g_object_unref (impl->search_engine);
       impl->search_engine = NULL;
     }

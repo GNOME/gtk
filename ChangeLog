@@ -1,3 +1,16 @@
+2007-09-25  Emmanuele Bassi  <ebassi@gnome.org>
+
+	Fixes for bug #480123.
+
+	* gtk/gtksearchenginesimple.c:
+	(gtk_search_engine_simple_dispose), (search_thread_done_idle): Cancel
+	the file tree walking thread when disposing the search engine
+	implementation.
+
+	* gtk/gtkfilechooserdefault.c (search_stop_searching): Forcibly
+	stop the search engine implementation when stopping the search,
+	instead of just unreffing the object.
+
 2007-09-24  Kristian Rietveld  <kris@imendio.com>
 
 	* gtk/gtktooltips.c (gtk_tooltips_set_tip): add extra NULL check

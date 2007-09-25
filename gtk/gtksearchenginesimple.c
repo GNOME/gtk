@@ -72,19 +72,27 @@ struct _GtkSearchEngineSimplePrivate
 G_DEFINE_TYPE (GtkSearchEngineSimple, _gtk_search_engine_simple, GTK_TYPE_SEARCH_ENGINE);
 
 static void
-finalize (GObject *object)
+gtk_search_engine_simple_dispose (GObject *object)
 {
   GtkSearchEngineSimple *simple;
+  GtkSearchEngineSimplePrivate *priv;
   
   simple = GTK_SEARCH_ENGINE_SIMPLE (object);
+  priv = simple->priv;
   
-  if (simple->priv->query) 
+  if (priv->query) 
     {
-      g_object_unref (simple->priv->query);
-      simple->priv->query = NULL;
+      g_object_unref (priv->query);
+      priv->query = NULL;
+    }
+
+  if (priv->active_search)
+    {
+      priv->active_search->cancelled = TRUE;
+      priv->active_search = NULL;
     }
   
-  G_OBJECT_CLASS (_gtk_search_engine_simple_parent_class)->finalize (object);
+  G_OBJECT_CLASS (_gtk_search_engine_simple_parent_class)->dispose (object);
 }
 
 static SearchThreadData *
@@ -131,12 +139,10 @@ search_thread_done_idle (gpointer user_data)
 
   data = user_data;
   
-  if (!data->cancelled) 
-    {
-      _gtk_search_engine_finished (GTK_SEARCH_ENGINE (data->engine));
-      data->engine->priv->active_search = NULL;
-    }
-  
+  if (!data->cancelled)
+    _gtk_search_engine_finished (GTK_SEARCH_ENGINE (data->engine));
+     
+  data->engine->priv->active_search = NULL;
   search_thread_data_free (data);
   
   return FALSE;
@@ -181,6 +187,7 @@ send_batch (SearchThreadData *data)
       hits = g_new (SearchHits, 1);
       hits->uris = data->uri_hits;
       hits->thread_data = data;
+      
       gdk_threads_add_idle (search_thread_add_hits_idle, hits);
     }
   data->uri_hits = NULL;
@@ -349,7 +356,7 @@ _gtk_search_engine_simple_class_init (GtkSearchEngineSimpleClass *class)
   GtkSearchEngineClass *engine_class;
   
   gobject_class = G_OBJECT_CLASS (class);
-  gobject_class->finalize = finalize;
+  gobject_class->dispose = gtk_search_engine_simple_dispose;
   
   engine_class = GTK_SEARCH_ENGINE_CLASS (class);
   engine_class->set_query = gtk_search_engine_simple_set_query;
