@@ -230,7 +230,7 @@ msgstr "Logotipoaren ikonoaren izena"
 
 #: ../gtk/gtkaboutdialog.c:399
 msgid "A named icon to use as the logo for the about box."
-msgstr "'Honi buruz' kutxako logotipoan erabiliko den ikonoaren izena"
+msgstr "'Honi buruz' kutxako logotipoan erabiliko den izendun ikonoa"
 
 #
 #: ../gtk/gtkaboutdialog.c:412
@@ -2899,7 +2899,7 @@ msgstr "Ikonoaren tamaina"
 #: ../gtk/gtkimage.c:188
 msgid "Symbolic size to use for stock icon, icon set or named icon"
 msgstr ""
-"Stock-ikonoarentzat, ikono-multzoarentzat edo ikono-izenarentzat erabili "
+"Stock-ikonoarentzat, ikono-multzoarentzat edo izendun ikonoarentzat erabili "
 "beharreko tamaina sinbolikoa"
 
 #
@@ -2909,7 +2909,7 @@ msgstr "Pixel-tamaina"
 
 #: ../gtk/gtkimage.c:205
 msgid "Pixel size to use for named icon"
-msgstr "Ikono-izenarentzat erabiliko den pixel-tamaina"
+msgstr "Izendun ikonoan erabiliko den pixel-tamaina"
 
 #
 #: ../gtk/gtkimage.c:213
@@ -4817,7 +4817,7 @@ msgstr "Kolore-eskema"
 
 #: ../gtk/gtksettings.c:527
 msgid "A palette of named colors for use in themes"
-msgstr "Izenadatutako koloreen paleta gaietan erabiltzeko"
+msgstr "Izendun koloreen paleta gaietan erabiltzeko"
 
 #
 #: ../gtk/gtksettings.c:536
