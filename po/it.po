@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: gtk+ 2.12\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2007-09-18 09:28+0200\n"
-"PO-Revision-Date: 2007-09-18 09:28+0200\n"
+"PO-Revision-Date: 2007-09-27 14:54+0200\n"
 "Last-Translator: Luca Ferretti <elle.uca@libero.it>\n"
 "Language-Team: Italian <tp@lists.linux.it>\n"
 "MIME-Version: 1.0\n"
@@ -1775,10 +1775,15 @@ msgstr "Dimensione"
 msgid "Modified"
 msgstr "Data di modifica"
 
+# GTK-2-10
+# cambiato acceleratore per evitare conflitto con
+# a_nnulla, ris_orse e _esplora in filechooser.
+#
+# Da verificare nel printeroption!!   --Luca
 #. Label
 #: ../gtk/gtkfilechooserdefault.c:4900 ../gtk/gtkprinteroptionwidget.c:786
 msgid "_Name:"
-msgstr "_Nome:"
+msgstr "No_me:"
 
 #: ../gtk/gtkfilechooserdefault.c:4942
 msgid "_Browse for other folders"
@@ -1798,9 +1803,19 @@ msgstr "_Crea cartella"
 msgid "_Location:"
 msgstr "_Posizione:"
 
+# GTK-2-12
+#
+# questo e quello sotto sono mutualmente esclusivi
+# usare lo stesso acceleratore.
+#
+# Inoltre "Salva nella _cartella" non è attivo quando
+# è visibilie "_Crea cartella", quindi nessun conflitto
+# a usare la C come tasto d'accesso.
+#
+#  --Luca
 #: ../gtk/gtkfilechooserdefault.c:5482
 msgid "Save in _folder:"
-msgstr "Salva nella ca_rtella:"
+msgstr "Salva nella _cartella:"
 
 #: ../gtk/gtkfilechooserdefault.c:5484
 msgid "Create in _folder:"
