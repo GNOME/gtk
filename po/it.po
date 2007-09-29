@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.12\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-09-18 09:28+0200\n"
-"PO-Revision-Date: 2007-09-27 14:54+0200\n"
+"POT-Creation-Date: 2007-09-29 11:36+0200\n"
+"PO-Revision-Date: 2007-09-29 11:35+0200\n"
 "Last-Translator: Luca Ferretti <elle.uca@libero.it>\n"
 "Language-Team: Italian <tp@lists.linux.it>\n"
 "MIME-Version: 1.0\n"
@@ -722,37 +722,43 @@ msgstr "Nessuna tavolozza trovata alla fine dei dati PCX"
 msgid "The PCX image format"
 msgstr "Formato PCX"
 
+# GTK-2-12
 #: ../gdk-pixbuf/io-png.c:55
 #, c-format
 msgid "Bits per channel of PNG image is invalid."
-msgstr "Numero di bit per canale dell'immagine PNG non valido."
+msgstr "I bit per canale dell'immagine PNG è non valido."
 
+# GTK-2-12
 #: ../gdk-pixbuf/io-png.c:136 ../gdk-pixbuf/io-png.c:618
 #, c-format
 msgid "Transformed PNG has zero width or height."
-msgstr "L'immagine convertita in PNG ha larghezza o altezza pari a zero."
+msgstr "L'immagine PNG trasformata ha larghezza o altezza pari a zero."
 
+# GTK-2-12
 #: ../gdk-pixbuf/io-png.c:144
 #, c-format
 msgid "Bits per channel of transformed PNG is not 8."
-msgstr "Numero di bit per canale dell'immagine convertita in PNG non è 8."
+msgstr "I bit per canale dell'immagine PNG trasformata non è 8."
 
+# GTK-2-12
 #: ../gdk-pixbuf/io-png.c:153
 #, c-format
 msgid "Transformed PNG not RGB or RGBA."
-msgstr "L'immagine convertita in PNG non utilizza RGB o RGBA."
+msgstr "L'immagine PNG trasformata non utilizza RGB o RGBA."
 
+# GTK-2-12
 #: ../gdk-pixbuf/io-png.c:162
 #, c-format
 msgid "Transformed PNG has unsupported number of channels, must be 3 or 4."
 msgstr ""
-"Immagine convertita in PNG con numero di canali non supportato, deve essere "
-"3 o 4."
+"L'immagine PNG trasformata presenta un numero di canali non supportato, deve "
+"essere 3 o 4."
 
+# GTK-2-12
 #: ../gdk-pixbuf/io-png.c:183
 #, c-format
 msgid "Fatal error in PNG image file: %s"
-msgstr "Errore nel file PNG: %s"
+msgstr "Errore critico nel file di immagine PNG: %s"
 
 #: ../gdk-pixbuf/io-png.c:310
 #, c-format
@@ -768,15 +774,17 @@ msgstr ""
 "Memoria insufficiente per contenere un'immagine %ld × %ld; chiudere qualche "
 "applicazione per liberare memoria"
 
+# GTK-2-12
 #: ../gdk-pixbuf/io-png.c:684
 #, c-format
 msgid "Fatal error reading PNG image file"
-msgstr "Errore nella lettura del file PNG"
+msgstr "Errore critico nella lettura del file PNG"
 
+# GTK-2-12
 #: ../gdk-pixbuf/io-png.c:733
 #, c-format
 msgid "Fatal error reading PNG image file: %s"
-msgstr "Errore nella lettura del file PNG: %s"
+msgstr "Errore critico nella lettura del file PNG: %s"
 
 #: ../gdk-pixbuf/io-png.c:825
 #, c-format
@@ -826,41 +834,47 @@ msgid "PNM loader expected to find an integer, but didn't"
 msgstr ""
 "Il numero intero atteso dal modulo di caricamento PNM non è stato trovato"
 
+# GTK-2-12
 #: ../gdk-pixbuf/io-pnm.c:282
 #, c-format
 msgid "PNM file has an incorrect initial byte"
-msgstr "File PNM con byte iniziale non corretto"
+msgstr "Il file PNM presenta un byte iniziale non corretto"
 
 #: ../gdk-pixbuf/io-pnm.c:312
 #, c-format
 msgid "PNM file is not in a recognized PNM subformat"
 msgstr "Il file PNM non è in un sottoformato PNM riconosciuto"
 
+# GTK-2-12
 #: ../gdk-pixbuf/io-pnm.c:337
 #, c-format
 msgid "PNM file has an image width of 0"
-msgstr "File PNM con larghezza pari a zero"
+msgstr "Il file PNM ha larghezza pari a zero"
 
+# GTK-2-12
 #: ../gdk-pixbuf/io-pnm.c:358
 #, c-format
 msgid "PNM file has an image height of 0"
-msgstr "File PNM con altezza pari a zero"
+msgstr "Il file PNM ha altezza pari a zero"
 
+# GTK-2-12
 #: ../gdk-pixbuf/io-pnm.c:381
 #, c-format
 msgid "Maximum color value in PNM file is 0"
-msgstr "Valore massimo del colore nel file PNM è zero"
+msgstr "Il valore di colore massimo nel file PNM è zero"
 
+# GTK-2-12
 #: ../gdk-pixbuf/io-pnm.c:389
 #, c-format
 msgid "Maximum color value in PNM file is too large"
-msgstr "Valore massimo del colore nel file PNM troppo grande"
+msgstr "Il valore di colore massimo nel file PNM troppo grande"
 
+# GTK-2-12
 #: ../gdk-pixbuf/io-pnm.c:429 ../gdk-pixbuf/io-pnm.c:459
 #: ../gdk-pixbuf/io-pnm.c:504
 #, c-format
 msgid "Raw PNM image type is invalid"
-msgstr "Tipo di immagine Raw PNM non è valido"
+msgstr "Il tipo di immagine PNM Raw è non valido"
 
 #: ../gdk-pixbuf/io-pnm.c:654
 #, c-format
@@ -905,15 +919,17 @@ msgstr "Memoria insufficiente per caricare il file PNM"
 msgid "The PNM/PBM/PGM/PPM image format family"
 msgstr "Famiglia formati PNM/PBM/PGM/PPM"
 
+# GTK-2-12
 #: ../gdk-pixbuf/io-ras.c:126
 #, c-format
 msgid "RAS image has bogus header data"
-msgstr "Immagine RAS con dati fasulli nell'header"
+msgstr "L'immagine RAS presenta dati fasulli nell'header"
 
+# GTK-2-12
 #: ../gdk-pixbuf/io-ras.c:148
 #, c-format
 msgid "RAS image has unknown type"
-msgstr "Immagine RAS di tipo sconosciuto"
+msgstr "L'immagine RAS ha tipo sconosciuto"
 
 #: ../gdk-pixbuf/io-ras.c:156
 #, c-format
@@ -949,10 +965,11 @@ msgstr "Impossibile riallocare i dati IOBuffer"
 msgid "Cannot allocate temporary IOBuffer data"
 msgstr "Impossibile allocare i dati IOBuffer temporanei"
 
+# GTK-2-12
 #: ../gdk-pixbuf/io-tga.c:347
 #, c-format
 msgid "Cannot allocate new pixbuf"
-msgstr "Impossibile allocare un nuovo pixbuf"
+msgstr "Impossibile allocare il nuovo pixbuf"
 
 #: ../gdk-pixbuf/io-tga.c:687
 #, c-format
@@ -974,10 +991,11 @@ msgstr "Profondità di colore inattesa per gli elementi della colormap"
 msgid "Cannot allocate TGA header memory"
 msgstr "Impossibile allocare memoria per l'header TGA"
 
+# GTK-2-12
 #: ../gdk-pixbuf/io-tga.c:767
 #, c-format
 msgid "TGA image has invalid dimensions"
-msgstr "Dimensioni dell'immagine TGA non valide"
+msgstr "L'immagine TGA presenta dimensioni non valide"
 
 #: ../gdk-pixbuf/io-tga.c:773 ../gdk-pixbuf/io-tga.c:782
 #: ../gdk-pixbuf/io-tga.c:792 ../gdk-pixbuf/io-tga.c:802
@@ -1008,10 +1026,11 @@ msgstr "Impossibile ottenere la larghezza dell'immagine (file TIFF difettoso)"
 msgid "Could not get image height (bad TIFF file)"
 msgstr "Impossibile ottenere l'altezza dell'immagine (file TIFF difettoso)"
 
+# GTK-2-12
 #: ../gdk-pixbuf/io-tiff.c:175
 #, c-format
 msgid "Width or height of TIFF image is zero"
-msgstr "Larghezza o altezza dell'immagine TIFF pari a zero"
+msgstr "La larghezza o altezza dell'immagine TIFF è pari a zero"
 
 #: ../gdk-pixbuf/io-tiff.c:184 ../gdk-pixbuf/io-tiff.c:193
 #, c-format
@@ -1154,10 +1173,13 @@ msgstr ""
 msgid "The XPM image format"
 msgstr "Formato XPM"
 
+# GTK-2-12
+#
+# s/asincrone/sincrone !!! 
 #. Description of --sync in --help output
 #: ../gdk/win32/gdkmain-win32.c:54
 msgid "Don't batch GDI requests"
-msgstr "Rende asincrone le richieste GDI"
+msgstr "Rende sincrone le richieste GDI"
 
 #. Description of --no-wintab in --help output
 #: ../gdk/win32/gdkmain-win32.c:56
@@ -1218,30 +1240,27 @@ msgstr "Informazioni su %s"
 msgid "Credits"
 msgstr "Riconoscimenti"
 
+# GTK-2-12
 #: ../gtk/gtkaboutdialog.c:2053
 msgid "Written by"
-msgstr "Scritto da"
+msgstr "Codice"
 
+# GTK-2-12
 #: ../gtk/gtkaboutdialog.c:2056
 msgid "Documented by"
-msgstr "Documentato da"
+msgstr "Documentazione"
 
+# GTK-2-12
 #: ../gtk/gtkaboutdialog.c:2068
 msgid "Translated by"
-msgstr "Tradotto da"
+msgstr "Traduzione"
 
 # GTK-2-12
 #
-# generalista, ma almento allineato in
-# lunghezza con i precedenti  -Luca
-#
-# PS io metterei 
-#
-#   Codice | Documentazione | Traduzione | Grafica
-#
+# Nota: "art work" --> grafica (da garzantilinguistica.it)
 #: ../gtk/gtkaboutdialog.c:2072
 msgid "Artwork by"
-msgstr "Grafica di"
+msgstr "Grafica"
 
 #. This is the text that should appear next to menu accelerators
 #. * that use the shift key. If the text on this key isn't typically
@@ -1318,12 +1337,10 @@ msgid "keyboard label|Backslash"
 msgstr "Backslash"
 
 # GTK-2-12
-#
-# o "funzione tipo" ??
 #: ../gtk/gtkbuilderparser.c:289
 #, c-format
 msgid "Invalid type function: `%s'"
-msgstr "Tipo di funzione non valida: \"%s\""
+msgstr "Funzione tipo non valida: \"%s\""
 
 # GTK-2-12
 #: ../gtk/gtkbuilderparser.c:729
@@ -1504,9 +1521,10 @@ msgstr ""
 msgid "_Hue:"
 msgstr "_Tonalità:"
 
+# GTK-2-12
 #: ../gtk/gtkcolorsel.c:1954
 msgid "Position on the color wheel."
-msgstr "Posizione sull'anello del colore."
+msgstr "Posizione sull'anello dei colori."
 
 #: ../gtk/gtkcolorsel.c:1956
 msgid "_Saturation:"
@@ -1572,19 +1590,20 @@ msgstr ""
 msgid "_Palette:"
 msgstr "_Tavolozza:"
 
+# GTK-2-12
 #: ../gtk/gtkcolorsel.c:2065
 msgid "Color Wheel"
-msgstr "Anello del colore"
+msgstr "Anello dei colori"
 
 #: ../gtk/gtkcolorseldialog.c:101
 msgid "Color Selection"
 msgstr "Selezione colore"
 
-#: ../gtk/gtkentry.c:5253 ../gtk/gtktextview.c:7605
+#: ../gtk/gtkentry.c:5253 ../gtk/gtktextview.c:7617
 msgid "Input _Methods"
 msgstr "_Metodi di input"
 
-#: ../gtk/gtkentry.c:5267 ../gtk/gtktextview.c:7619
+#: ../gtk/gtkentry.c:5267 ../gtk/gtktextview.c:7631
 msgid "_Insert Unicode Control Character"
 msgstr "_Inserisci carattere di controllo unicode"
 
@@ -1875,53 +1894,53 @@ msgstr "Impossibile inviare la richiesta di ricerca"
 
 # GTK-2-12
 #. Label
-#: ../gtk/gtkfilechooserdefault.c:9352
+#: ../gtk/gtkfilechooserdefault.c:9354
 msgid "_Search:"
 msgstr "_Cerca:"
 
-#: ../gtk/gtkfilechooserdefault.c:10305
+#: ../gtk/gtkfilechooserdefault.c:10307
 #, c-format
 msgid "Could not mount %s"
 msgstr "Impossibile montare «%s»"
 
-#: ../gtk/gtkfilechooserdefault.c:10933
+#: ../gtk/gtkfilechooserdefault.c:10935
 msgid "Type name of new folder"
 msgstr "Digitare il nome della nuova cartella"
 
-#: ../gtk/gtkfilechooserdefault.c:10981
+#: ../gtk/gtkfilechooserdefault.c:10983
 #, c-format
 msgid "%d byte"
 msgid_plural "%d bytes"
 msgstr[0] "%d byte"
 msgstr[1] "%d byte"
 
-#: ../gtk/gtkfilechooserdefault.c:10983
+#: ../gtk/gtkfilechooserdefault.c:10985
 #, c-format
 msgid "%.1f KB"
 msgstr "%.1f kB"
 
-#: ../gtk/gtkfilechooserdefault.c:10985
+#: ../gtk/gtkfilechooserdefault.c:10987
 #, c-format
 msgid "%.1f MB"
 msgstr "%.1f MB"
 
-#: ../gtk/gtkfilechooserdefault.c:10987
+#: ../gtk/gtkfilechooserdefault.c:10989
 #, c-format
 msgid "%.1f GB"
 msgstr "%.1f GB"
 
-#: ../gtk/gtkfilechooserdefault.c:11083 ../gtk/gtkfilechooserdefault.c:11104
-#: ../gtk/gtkfilechooserdefault.c:11136
+#: ../gtk/gtkfilechooserdefault.c:11085 ../gtk/gtkfilechooserdefault.c:11106
+#: ../gtk/gtkfilechooserdefault.c:11138
 msgid "Unknown"
 msgstr "Sconosciuto"
 
 # GTK-2-12
-#: ../gtk/gtkfilechooserdefault.c:11122
+#: ../gtk/gtkfilechooserdefault.c:11124
 msgid "Today at %H:%M"
 msgstr "Oggi alle %k.%M"
 
 # GTK-2-12
-#: ../gtk/gtkfilechooserdefault.c:11124
+#: ../gtk/gtkfilechooserdefault.c:11126
 msgid "Yesterday at %H:%M"
 msgstr "Ieri alle %k.%M"
 
@@ -2126,7 +2145,7 @@ msgstr "«%s» non è presente nell'elenco dei segnalibri"
 msgid "Path is not a folder: '%s'"
 msgstr "Il percorso non è una cartella: «%s»"
 
-# qualcuno dovrebbe vedere se è questa la traduzione in Win32... -Luca
+# Emanuele Aina ha controllato, è la traduzione come in Win32... -Luca
 #: ../gtk/gtkfilesystemwin32.c:1292
 #, c-format
 msgid "Network Drive (%s)"
@@ -2308,17 +2327,19 @@ msgstr "_Pulisci"
 msgid "URI"
 msgstr "URI"
 
+# GTK-2-12
 #: ../gtk/gtklinkbutton.c:142
 msgid "The URI bound to this button"
-msgstr "La URI legata a questo pulsante"
+msgstr "L'URI legato a questo pulsante"
 
 #: ../gtk/gtklinkbutton.c:396
 msgid "Copy URL"
 msgstr "Copia URL"
 
+# GTK-2-12
 #: ../gtk/gtklinkbutton.c:536
 msgid "Invalid URI"
-msgstr "URI non valida"
+msgstr "URI non valido"
 
 #. Description of --gtk-module=MODULES in --help output
 #: ../gtk/gtkmain.c:409
@@ -2577,7 +2598,7 @@ msgstr "Terminato con errore"
 msgid "Preparing %d"
 msgstr "Preparazione di %d"
 
-#: ../gtk/gtkprintoperation.c:1988 ../gtk/gtkprintoperation.c:2240
+#: ../gtk/gtkprintoperation.c:1988 ../gtk/gtkprintoperation.c:2243
 msgid "Preparing"
 msgstr "Preparazione"
 
@@ -2596,7 +2617,7 @@ msgstr "Errore nel lanciare l'anteprima"
 msgid "Error printing"
 msgstr "Errore nello stampare"
 
-#: ../gtk/gtkprintoperation-unix.c:388 ../gtk/gtkprintoperation-win32.c:1394
+#: ../gtk/gtkprintoperation-unix.c:388 ../gtk/gtkprintoperation-win32.c:1395
 msgid "Application"
 msgstr "Applicazione"
 
@@ -2620,33 +2641,33 @@ msgstr "Richiesto l'intervento dell'utente"
 msgid "Custom size"
 msgstr "Dimensione personalizzata"
 
-#: ../gtk/gtkprintoperation-win32.c:1484 ../gtk/gtkprintoperation-win32.c:1507
-#: ../gtk/gtkprintoperation-win32.c:1555
+#: ../gtk/gtkprintoperation-win32.c:1485 ../gtk/gtkprintoperation-win32.c:1508
+#: ../gtk/gtkprintoperation-win32.c:1556
 #, c-format
 msgid "Not enough free memory"
 msgstr "Memoria insufficiente"
 
-#: ../gtk/gtkprintoperation-win32.c:1560
+#: ../gtk/gtkprintoperation-win32.c:1561
 #, c-format
 msgid "Invalid argument to PrintDlgEx"
 msgstr "Argomento per PrintDlgEx non valido"
 
-#: ../gtk/gtkprintoperation-win32.c:1565
+#: ../gtk/gtkprintoperation-win32.c:1566
 #, c-format
 msgid "Invalid pointer to PrintDlgEx"
 msgstr "Puntatore a PrintDlgEx non valido"
 
-#: ../gtk/gtkprintoperation-win32.c:1570
+#: ../gtk/gtkprintoperation-win32.c:1571
 #, c-format
 msgid "Invalid handle to PrintDlgEx"
 msgstr "Handle per PrintDlgEx non valido"
 
-#: ../gtk/gtkprintoperation-win32.c:1575
+#: ../gtk/gtkprintoperation-win32.c:1576
 #, c-format
 msgid "Unspecified error"
 msgstr "Errore non specificato"
 
-#: ../gtk/gtkprintoperation-win32.c:1626
+#: ../gtk/gtkprintoperation-win32.c:1627
 #, c-format
 msgid "Error from StartDoc"
 msgstr "Errore da StartDoc"
@@ -2838,10 +2859,12 @@ msgstr "Stampa"
 msgid "Group"
 msgstr "Gruppo"
 
+# GTK-2-12
 #: ../gtk/gtkradiotoolbutton.c:66
 msgid "The radio tool button whose group this button belongs to."
 msgstr ""
-"Il pulsante dello strumento radio al quale gruppo questo pulsante appartiene."
+"Il pulsante radio sulla barra degli strumenti al cui gruppo appartiene "
+"questo pulsante."
 
 #: ../gtk/gtkrc.c:2866
 #, c-format
@@ -3493,13 +3516,15 @@ msgstr "LRE _inserimento sinistra-destra"
 msgid "RLE Right-to-left e_mbedding"
 msgstr "RLE i_nserimento destra-sinistra"
 
+# GTK-2-12
 #: ../gtk/gtktextutil.c:64
 msgid "LRO Left-to-right _override"
-msgstr "LRO _sovrascrivi sinistra-destra"
+msgstr "LRO _forza sinistra-destra"
 
+# GTK-2-12
 #: ../gtk/gtktextutil.c:65
 msgid "RLO Right-to-left o_verride"
-msgstr "RLO sovrascrivi destra-sinistra"
+msgstr "RLO f_orza destra-sinistra"
 
 #: ../gtk/gtktextutil.c:66
 msgid "PDF _Pop directional formatting"
@@ -3524,7 +3549,7 @@ msgstr "Impossibile trovare il motore del tema in module_path: «%s»,"
 
 #: ../gtk/gtktipsquery.c:187
 msgid "--- No Tip ---"
-msgstr "«Nessun suggerimento»"
+msgstr "--- Nessun suggerimento ---"
 
 #: ../gtk/gtkuimanager.c:1226
 #, c-format
@@ -4026,13 +4051,13 @@ msgstr "oufuku (cartolina di risposta)"
 msgid "paper size|you4 Envelope"
 msgstr "Busta you4"
 
+# GTK-2-12 usato × invece di x
+# (anche nei successivi)
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:181
 msgid "paper size|10x11"
-msgstr "10\"x11\""
+msgstr "10\"×11\""
 
-# GTK-2-12 usato × invece di x
-# (anche nei successivi)
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:183
 msgid "paper size|10x13"
@@ -4535,7 +4560,7 @@ msgstr "IPA"
 #. ID
 #: ../modules/input/immultipress.c:31
 msgid "Multipress"
-msgstr "Pressioni multiple"
+msgstr "Pressione multipla"
 
 #. ID
 #: ../modules/input/imthai.c:35
