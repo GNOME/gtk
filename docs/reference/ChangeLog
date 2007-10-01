@@ -1,3 +1,8 @@
+2007-10-01 20:21:28  Tim Janik  <timj@imendio.com>
+
+	* gtk/tmpl/gtkmenu.sgml: reworded push_in description with Owen's
+	help, fixes bug #482034.
+
 2007-09-13  Matthias Clasen  <mclasen@redhat.com>
 
 	* === Released 2.12.0 ===
