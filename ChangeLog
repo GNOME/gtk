@@ -1,3 +1,9 @@
+2007-10-01  Kristian Rietveld  <kris@imendio.com>
+
+	* gtk/gtktreeviewcolumn.c (gtk_tree_view_column_update_button):
+	fix up if-condition to only set the true arrow type if
+	show_sort_indicator is TRUE.  (#448343, reported by Emil Nowak).
+
 2007-09-25  Emmanuele Bassi  <ebassi@gnome.org>
 
 	Fixes for bug #480123.
