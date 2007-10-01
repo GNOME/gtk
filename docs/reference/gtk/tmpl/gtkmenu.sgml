@@ -402,8 +402,11 @@ menu shall be drawn.  This is an output parameter.
         scroll position to keep the menu items "in place", i.e. at the same monitor
         position they would have been without resizing.
         In practice, this behavior is only useful for combobox popups or option
-        menus and cannot be used to simply confine a menu to monitor boundaries
-        (in which case the scroll offset shouldn't be changed).
+        menus and cannot be used to simply confine a menu to monitor boundaries.
+        In that case, changing the scroll offset is not desirable.
+        To simply constrain the menu within the monitor, get its size with
+        gtk_widget_size_request() before showing it, and alter the coordinates
+        passed to gtk_menu_popup() accordingly.
 @user_data: the data supplied by the user in the gtk_menu_popup() @data
 parameter.
 
