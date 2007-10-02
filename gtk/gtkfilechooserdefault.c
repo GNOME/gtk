@@ -5142,22 +5142,26 @@ location_mode_set (GtkFileChooserDefault *impl,
 }
 
 static void
-toggle_location_mode (GtkFileChooserDefault *impl,
-                      gboolean               set_button)
-{
-  LocationMode new_mode;
-
-  /* toggle value */
-  new_mode = (impl->location_mode == LOCATION_MODE_PATH_BAR) ?
-    LOCATION_MODE_FILENAME_ENTRY : LOCATION_MODE_PATH_BAR;
-
-  location_mode_set (impl, new_mode, set_button);
-}
-
-static void
 location_toggle_popup_handler (GtkFileChooserDefault *impl)
 {
-  toggle_location_mode (impl, TRUE);
+  /* If the file entry is not visible, show it.
+   * If it is visible, turn it off only if it is focused.  Otherwise, switch to the entry.
+   */
+  if (impl->location_mode == LOCATION_MODE_PATH_BAR)
+    {
+      location_mode_set (impl, LOCATION_MODE_FILENAME_ENTRY, TRUE);
+    }
+  else if (impl->location_mode == LOCATION_MODE_FILENAME_ENTRY)
+    {
+      if (GTK_WIDGET_HAS_FOCUS (impl->location_entry))
+        {
+          location_mode_set (impl, LOCATION_MODE_PATH_BAR, TRUE);
+        }
+      else
+        {
+          gtk_widget_grab_focus (impl->location_entry);
+        }
+    }
 }
 
 /* Callback used when one of the location mode buttons is toggled */
@@ -5166,15 +5170,22 @@ location_button_toggled_cb (GtkToggleButton *toggle,
 			    GtkFileChooserDefault *impl)
 {
   gboolean is_active;
+  LocationMode new_mode;
 
   is_active = gtk_toggle_button_get_active (toggle);
 
   if (is_active)
-    g_assert (impl->location_mode == LOCATION_MODE_PATH_BAR);
+    {
+      g_assert (impl->location_mode == LOCATION_MODE_PATH_BAR);
+      new_mode = LOCATION_MODE_FILENAME_ENTRY;
+    }
   else
-    g_assert (impl->location_mode == LOCATION_MODE_FILENAME_ENTRY);
+    {
+      g_assert (impl->location_mode == LOCATION_MODE_FILENAME_ENTRY);
+      new_mode = LOCATION_MODE_PATH_BAR;
+    }
 
-  toggle_location_mode (impl, FALSE);
+  location_mode_set (impl, new_mode, FALSE);
 }
 
 /* Creates a toggle button for the location entry. */

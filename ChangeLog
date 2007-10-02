@@ -1,3 +1,18 @@
+2007-10-02  Federico Mena Quintero  <federico@novell.com>
+
+	Fix http://bugzilla.gnome.org/show_bug.cgi?id=455284 - In the file
+	chooser, Ctrl-L should switch to the location entry.  If we are
+	already on the location entry, turn it off.  Based on a patch by
+	Jaap A. Haitsma <jaap@haitsma.org> and an idea by Wouter
+	Bolsterlee.
+
+	* gtk/gtkfilechooserdefault.c (location_button_toggled_cb): Call
+	location_mode_set() directly instead of using toggle_location_mode().
+	(toggle_location_mode): Removed.
+	(location_toggle_popup_handler): If the file entry is not visible,
+	show it.  If it is visible, turn it off only if it is focused.
+	Otherwise, switch to the entry.
+
 2007-10-01  Kristian Rietveld  <kris@imendio.com>
 
 	* gtk/gtktreeviewcolumn.c (gtk_tree_view_column_update_button):
