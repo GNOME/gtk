@@ -1,3 +1,14 @@
+2007-10-02  Richard Hult  <richard@imendio.com>
+
+	* gdk/quartz/gdkwindow-quartz.c: (gdk_window_move),
+	(gdk_window_resize): Don't do anything while in fullscreen mode.
+	(gdk_window_set_decorations): Update the size of the window after
+	showing/hiding the title bar so the size of the content area
+	doesn't change.
+	(gdk_window_get_decorations): NSBorderlessWindowMask is 0, so
+	don't try to check it as a bit being set.
+	(gdk_window_fullscreen), (gdk_window_unfullscreen): Implement.
+
 2007-10-02  Federico Mena Quintero  <federico@novell.com>
 
 	Fix http://bugzilla.gnome.org/show_bug.cgi?id=455284 - In the file
