@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: gtk+ 2.10.7\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2007-09-13 19:20-0400\n"
-"PO-Revision-Date: 2007-09-01 19:38+0200\n"
+"PO-Revision-Date: 2007-09-30 19:38+0200\n"
 "Last-Translator: Yannig MARCHEGAY (Kokoyaya) <yannig@marchegay.org>\n"
 "Language-Team: Occitan (post 1500) <ubuntu-l10n-oci@lists.ubuntu.com>\n"
 "MIME-Version: 1.0\n"
@@ -277,12 +277,12 @@ msgstr ""
 #: gdk-pixbuf/gdk-pixbuf-io.c:659 gdk-pixbuf/gdk-pixbuf-io.c:688
 #, c-format
 msgid "Image type '%s' is not supported"
-msgstr "Tipe d'imatge '%s' pas compatibla"
+msgstr "Tipe d'imatge '%s' pas compatible"
 
 #: gdk-pixbuf/gdk-pixbuf-io.c:728
 #, c-format
 msgid "Couldn't recognize the image file format for file '%s'"
-msgstr "Impossible reconéisser lo format d'imatge del fichièr '%s'"
+msgstr "Impossible de reconéisser lo format d'imatge del fichièr '%s'"
 
 #: gdk-pixbuf/gdk-pixbuf-io.c:736
 #, c-format
@@ -430,7 +430,7 @@ msgstr ""
 #: gdk-pixbuf/io-bmp.c:1347
 #, c-format
 msgid "Couldn't write to BMP file"
-msgstr "Impossible escriure lo fichièr BMP"
+msgstr "Impossible d'escriure lo fichièr BMP"
 
 #: gdk-pixbuf/io-bmp.c:1402
 msgid "The BMP image format"
@@ -449,7 +449,7 @@ msgstr ""
 #: gdk-pixbuf/io-gif.c:505
 #, c-format
 msgid "Internal error in the GIF loader (%s)"
-msgstr "Error intèrna dins lo cargador GIF (%s)"
+msgstr "Error intèrna dins lo cargaire GIF (%s)"
 
 #: gdk-pixbuf/io-gif.c:579
 #, c-format
@@ -490,7 +490,7 @@ msgstr ""
 #: gdk-pixbuf/io-gif.c:1178
 #, c-format
 msgid "File does not appear to be a GIF file"
-msgstr "Lo fichièr pareis pas èsser al format GIF"
+msgstr "Sembla que lo fichièr es pas al format GIF"
 
 #: gdk-pixbuf/io-gif.c:1190
 #, c-format
@@ -1146,9 +1146,7 @@ msgstr "A prepaus de %s"
 
 #: gtk/gtkaboutdialog.c:2024
 msgid "Credits"
-msgstr ""
-"La còla occitana de revirada d'Ubuntu <ubuntu-l10n-oci@lists.ubuntu.com>, "
-"2006"
+msgstr "Yannig Marchegay (Kokoyaya) <yannig@marchegay.org)"
 
 #: gtk/gtkaboutdialog.c:2053
 msgid "Written by"
@@ -1358,7 +1356,7 @@ msgstr "%d %%"
 
 #: gtk/gtkcolorbutton.c:189 gtk/gtkcolorbutton.c:560
 msgid "Pick a Color"
-msgstr "Causissètz un color"
+msgstr "Causissètz una color"
 
 #: gtk/gtkcolorbutton.c:449
 msgid "Received invalid color data\n"
@@ -1521,7 +1519,7 @@ msgstr "Impossible de suprimir lo signet"
 
 #: gtk/gtkfilechooserdefault.c:1136
 msgid "The folder could not be created"
-msgstr "Impossible crear lo repertòri"
+msgstr "Impossible de crear lo repertòri"
 
 #: gtk/gtkfilechooserdefault.c:1149
 msgid ""
@@ -1535,7 +1533,7 @@ msgstr "Nom de fichièr invalid"
 
 #: gtk/gtkfilechooserdefault.c:1172
 msgid "The folder contents could not be displayed"
-msgstr "Impossible visualizar lo contengut del repertòri"
+msgstr "Impossible de visualizar lo contengut del repertòri"
 
 #. Translators: the first string is a path and the second string
 #. * is a hostname. Nautilus and the panel contain the same string
@@ -2613,7 +2611,7 @@ msgstr "Avançat"
 
 #: gtk/gtkprintunixdialog.c:2421
 msgid "Image Quality"
-msgstr "Qualitat del imatge"
+msgstr "Qualitat de l'imatge"
 
 #: gtk/gtkprintunixdialog.c:2424
 msgid "Color"

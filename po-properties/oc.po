@@ -193,9 +193,7 @@ msgstr ""
 
 #: gtk/gtkaboutdialog.c:366
 msgid "Translator credits"
-msgstr ""
-"La còla occitana de revirada d'Ubuntu <ubuntu-l10n-oci@lists.ubuntu.com>, "
-"2006"
+msgstr "Yannig Marchegay (Kokoyaya) <yannig@marchegay.org)"
 
 #: gtk/gtkaboutdialog.c:367
 msgid ""
@@ -1671,7 +1669,7 @@ msgstr ""
 #: gtk/gtkcolorbutton.c:187 gtk/gtkfilechooserbutton.c:412
 #: gtk/gtkfontbutton.c:143 gtk/gtkprintjob.c:116 gtk/gtktreeviewcolumn.c:264
 msgid "Title"
-msgstr "Titol"
+msgstr "Títol"
 
 #: gtk/gtkcolorbutton.c:188
 msgid "The title of the color selection dialog"
@@ -6048,7 +6046,7 @@ msgstr ""
 
 #: gtk/gtkwindow.c:474
 msgid "The title of the window"
-msgstr "Lo titol de la fenèstra"
+msgstr "Lo títol de la fenèstra"
 
 #: gtk/gtkwindow.c:481
 msgid "Window Role"
