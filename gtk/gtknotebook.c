@@ -350,10 +350,6 @@ static GList * gtk_notebook_search_page      (GtkNotebook      *notebook,
 					      GList            *list,
 					      gint              direction,
 					      gboolean          find_visible);
-static GtkNotebook *gtk_notebook_create_window (GtkNotebook    *notebook,
-                                                GtkWidget      *page,
-                                                gint            x,
-                                                gint            y);
 
 /*** GtkNotebook Drawing Functions ***/
 static void gtk_notebook_paint               (GtkWidget        *widget,
