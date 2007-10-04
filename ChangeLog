@@ -1,3 +1,10 @@
+2007-10-04  Matthias Clasen  <mclasen@redhat.com>
+
+	* tests/testvolumebutton.c: Add a second volume button.
+
+	* gtk/gtkscalebutton.c: Doh, don't release grabs we don't hold.
+	(#478371, reported by Bill Nottingham)
+
 2007-10-04  Loïc Minier  <lool@dooz.org>
 
 	* gtk/gtkfilechooserdefault.c: (list_mtime_data_func): Fix warnings

@@ -60,15 +60,22 @@ int main (int argc, char **argv)
 {
 	GtkWidget *window;
 	GtkWidget *button;
+	GtkWidget *button2;
+	GtkWidget *box;
 
 	gtk_init (&argc, &argv);
 
 	window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
 	button = gtk_volume_button_new ();
+	button2 = gtk_volume_button_new ();
+ 	box = gtk_hbox_new (FALSE, 0);      
+  
 	g_signal_connect (G_OBJECT (button),
 			  "value-changed",
 			  G_CALLBACK (value_changed), NULL);
-	gtk_container_add (GTK_CONTAINER (window), button);
+	gtk_container_add (GTK_CONTAINER (window), box);
+	gtk_container_add (GTK_CONTAINER (box), button);
+	gtk_container_add (GTK_CONTAINER (box), button2);
 
 	gtk_widget_show_all (window);
 	gtk_button_clicked (GTK_BUTTON (button));
