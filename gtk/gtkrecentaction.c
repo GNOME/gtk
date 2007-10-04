@@ -192,6 +192,7 @@ gtk_recent_action_set_sort_func (GtkRecentChooser  *chooser,
 {
   GtkRecentAction *action = GTK_RECENT_ACTION (chooser);
   GtkRecentActionPrivate *priv = action->priv;
+  GSList *l;
   
   if (priv->data_destroy)
     {
@@ -208,6 +209,15 @@ gtk_recent_action_set_sort_func (GtkRecentChooser  *chooser,
       priv->sort_data = sort_data;
       priv->data_destroy = data_destroy;
     }
+
+  for (l = priv->choosers; l; l = l->next)
+    {
+      GtkRecentChooser *chooser_menu = l->data;
+
+      gtk_recent_chooser_set_sort_func (chooser_menu, priv->sort_func,
+                                        priv->sort_data,
+                                        priv->data_destroy);
+    }
 }
 
 static void
@@ -215,6 +225,7 @@ set_current_filter (GtkRecentAction *action,
                     GtkRecentFilter *filter)
 {
   GtkRecentActionPrivate *priv = action->priv;
+  GSList *l;
 
   g_object_ref (action);
 
@@ -225,6 +236,13 @@ set_current_filter (GtkRecentAction *action,
 
   if (priv->current_filter)
     g_object_ref_sink (priv->current_filter);
+
+  for (l = priv->choosers; l; l = l->next)
+    {
+      GtkRecentChooser *chooser = l->data;
+
+      gtk_recent_chooser_set_filter (chooser, priv->current_filter);
+    }
 
   g_object_notify (G_OBJECT (action), "filter");
 
@@ -331,6 +349,7 @@ gtk_recent_action_connect_proxy (GtkAction *action,
                     "show-numbers", priv->show_numbers,
                     "limit", priv->limit,
                     "sort-type", priv->sort_type,
+                    "filter", priv->current_filter,
                     NULL);
   
       if (priv->sort_func)
@@ -384,6 +403,7 @@ gtk_recent_action_create_menu (GtkAction *action)
                          "limit", priv->limit,
                          "sort-type", priv->sort_type,
                          "recent-manager", priv->manager,
+                         "filter", priv->current_filter,
                          NULL);
   
   if (priv->sort_func)
@@ -552,16 +572,21 @@ gtk_recent_action_set_property (GObject      *gobject,
       priv->sort_type = g_value_get_enum (value);
       break;
     case GTK_RECENT_CHOOSER_PROP_FILTER:
+      /* this already iterates over the choosers list */
       set_current_filter (action, g_value_get_object (value));
-      break;
+      return;
     case GTK_RECENT_CHOOSER_PROP_SELECT_MULTIPLE:
       g_warning ("%s: Choosers of type `%s' do not support selecting multiple items.",
                  G_STRFUNC,
                  G_OBJECT_TYPE_NAME (gobject));
-      break;
+      return;
     case GTK_RECENT_CHOOSER_PROP_RECENT_MANAGER:
+      /* this is a construct-only property; we set the recent-manager
+       * of the choosers with this value when we create them, so there's
+       * no need to iterate later.
+       */
       set_recent_manager (action, g_value_get_object (value));
-      break;
+      return;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (gobject, prop_id, pspec);
       return;
