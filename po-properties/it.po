@@ -34,8 +34,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-properties\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-10-02 22:27+0200\n"
-"PO-Revision-Date: 2007-10-02 22:43+0200\n"
+"POT-Creation-Date: 2007-10-04 15:21+0200\n"
+"PO-Revision-Date: 2007-10-04 16:05+0200\n"
 "Last-Translator: Luca Ferretti <elle.uca@libero.it>\n"
 "Language-Team: Italian <tp@lists.linux.it>\n"
 "MIME-Version: 1.0\n"
@@ -54,10 +54,15 @@ msgstr "Il numero di campioni per pixel"
 msgid "Colorspace"
 msgstr "Spazio dei colori"
 
+# GTK-2-12
+# Era "Lo spazio dei colori a cui appartengono i campioni"
+# Ho usato una forma + aderente all'originale. Ho controllato
+# (brevemente) sui messaggi del TP per vedere se c'era un
+# motivo particolare per quell'appartenere, ma o mi è 
+# sfuggito o non se n'è discusso    --Luca
 #: ../gdk-pixbuf/gdk-pixbuf.c:100
-#, fuzzy
 msgid "The colorspace in which the samples are interpreted"
-msgstr "Lo spazio dei colori a cui appartengono i campioni"
+msgstr "Lo spazio dei colori in cui i campioni vengono interpretati"
 
 #: ../gdk-pixbuf/gdk-pixbuf.c:108
 msgid "Has Alpha"
@@ -397,7 +402,9 @@ msgstr "Visibile quando eccedere"
 msgid ""
 "When TRUE, toolitem proxies for this action are represented in the toolbar "
 "overflow menu."
-msgstr "Se TRUE, per questa azione i toolitem proxy sono rappresentati nel menu a cascata alla fine della barra strumenti."
+msgstr ""
+"Se TRUE, per questa azione i toolitem proxy sono rappresentati nel menu a "
+"cascata alla fine della barra strumenti."
 
 #: ../gtk/gtkaction.c:289 ../gtk/gtktoolitem.c:137
 msgid "Visible when vertical"
@@ -420,7 +427,9 @@ msgstr "È importante"
 msgid ""
 "Whether the action is considered important. When TRUE, toolitem proxies for "
 "this action show text in GTK_TOOLBAR_BOTH_HORIZ mode."
-msgstr "Indica se l'azione è considerata importante. Se TRUE, per questa azione i toolitem proxy visualizzano il testo nella modalità GTK_TOOLBAR_BOTH_HORIZ."
+msgstr ""
+"Indica se l'azione è considerata importante. Se TRUE, per questa azione i "
+"toolitem proxy visualizzano il testo nella modalità GTK_TOOLBAR_BOTH_HORIZ."
 
 #: ../gtk/gtkaction.c:306
 msgid "Hide if empty"
@@ -759,25 +768,29 @@ msgstr "Altezza minima figlio"
 msgid "Minimum height of buttons inside the box"
 msgstr "L'altezza minima dei pulsanti all'interno del box"
 
-# FIXME
+# GTK-2-12
+# sarebbe il nome, dovrebbe essere un po' corto
+# ma mi pare impossibile
 #: ../gtk/gtkbbox.c:110
 msgid "Child internal width padding"
-msgstr "Riempimento interno in larghezza del figlio"
+msgstr "Riempimento interno del figlio in larghezza"
 
+# GTK-2-12
 #: ../gtk/gtkbbox.c:111
-#, fuzzy
 msgid "Amount to increase child's size on either side"
-msgstr "Incremento per ambo le dimensioni del widget figlio"
+msgstr "Quantità di cui incrementare la dimensione del figlio da ambo i lati"
 
-# FIXME
+# GTK-2-12
+# sarebbe il nome, dovrebbe essere un po' corto
+# ma mi pare impossibile
 #: ../gtk/gtkbbox.c:119
 msgid "Child internal height padding"
-msgstr "Riempimento interno in altezza del figlio"
+msgstr "Riempimento interno del figlio in altezza "
 
+# GTK-2-12
 #: ../gtk/gtkbbox.c:120
-#, fuzzy
 msgid "Amount to increase child's size on the top and bottom"
-msgstr "Incremento per la parte superiore ed inferiore del widget figlio"
+msgstr "Quantità di cui incrementare la dimensione del figlio sopra e sotto"
 
 # GTK-2-12
 #: ../gtk/gtkbbox.c:128
@@ -815,7 +828,7 @@ msgstr "Spaziatura"
 msgid "The amount of space between children"
 msgstr "La quantità di spazio tra i widget figli"
 
-#: ../gtk/gtkbox.c:108 ../gtk/gtknotebook.c:638 ../gtk/gtktable.c:165
+#: ../gtk/gtkbox.c:108 ../gtk/gtknotebook.c:634 ../gtk/gtktable.c:165
 #: ../gtk/gtktoolbar.c:563
 msgid "Homogeneous"
 msgstr "Omogeneo"
@@ -866,7 +879,7 @@ msgid "Pack type"
 msgstr "Tipo inserimento"
 
 # GTK-2-12
-#: ../gtk/gtkbox.c:138 ../gtk/gtknotebook.c:705
+#: ../gtk/gtkbox.c:138 ../gtk/gtknotebook.c:701
 msgid ""
 "A GtkPackType indicating whether the child is packed with reference to the "
 "start or end of the parent"
@@ -874,13 +887,13 @@ msgstr ""
 "Un GtkPackType che indica se il widget è inserito all'inizio o alla fine del "
 "widget genitore"
 
-#: ../gtk/gtkbox.c:144 ../gtk/gtknotebook.c:683 ../gtk/gtkpaned.c:219
+#: ../gtk/gtkbox.c:144 ../gtk/gtknotebook.c:679 ../gtk/gtkpaned.c:219
 #: ../gtk/gtkruler.c:110
 msgid "Position"
 msgstr "Posizione"
 
 # GTK-2-12
-#: ../gtk/gtkbox.c:145 ../gtk/gtknotebook.c:684
+#: ../gtk/gtkbox.c:145 ../gtk/gtknotebook.c:680
 msgid "The index of the child in the parent"
 msgstr "La posizione del widget figlio nel widget genitore"
 
@@ -1366,7 +1379,9 @@ msgstr "Pulsazione"
 msgid ""
 "Set this to positive values to indicate that some progress is made, but you "
 "don't know how much."
-msgstr "Impostare a un valore positivo per indicare che è stato fatto qualche progresso, ma non si sa quanto."
+msgstr ""
+"Impostare a un valore positivo per indicare che è stato fatto qualche "
+"progresso, ma non si sa quanto."
 
 #: ../gtk/gtkcellrendererprogress.c:187 ../gtk/gtkprogress.c:115
 msgid "Text x alignment"
@@ -2180,9 +2195,10 @@ msgstr "La finestra di dialogo ha un separatore sopra i pulsanti"
 msgid "Content area border"
 msgstr "Bordo dell'area del contenuto"
 
+# GTK-2-12
 #: ../gtk/gtkdialog.c:166
 msgid "Width of border around the main dialog area"
-msgstr "Larghezza del bordo intorno all'area di dialogo principale"
+msgstr "Larghezza del bordo intorno all'area principale della finestra di dialogo"
 
 #: ../gtk/gtkdialog.c:173
 msgid "Button spacing"
@@ -3445,77 +3461,77 @@ msgid ""
 "The amount of space to add on the top and bottom of the widget, in pixels"
 msgstr "Quantità di spazio, in pixel, da aggiungere sopra e sotto del widget"
 
-#: ../gtk/gtknotebook.c:566
+#: ../gtk/gtknotebook.c:562
 msgid "Page"
 msgstr "Pagina"
 
-#: ../gtk/gtknotebook.c:567
+#: ../gtk/gtknotebook.c:563
 msgid "The index of the current page"
 msgstr "L'indice della pagina corrente"
 
-#: ../gtk/gtknotebook.c:575
+#: ../gtk/gtknotebook.c:571
 msgid "Tab Position"
 msgstr "Posizione linguette"
 
-#: ../gtk/gtknotebook.c:576
+#: ../gtk/gtknotebook.c:572
 msgid "Which side of the notebook holds the tabs"
 msgstr "In quale parte dello schedario vengono mostrate le linguette"
 
-#: ../gtk/gtknotebook.c:583
+#: ../gtk/gtknotebook.c:579
 msgid "Tab Border"
 msgstr "Bordo della linguetta"
 
-#: ../gtk/gtknotebook.c:584
+#: ../gtk/gtknotebook.c:580
 msgid "Width of the border around the tab labels"
 msgstr "Larghezza del bordo attorno alle etichette delle linguette"
 
-#: ../gtk/gtknotebook.c:592
+#: ../gtk/gtknotebook.c:588
 msgid "Horizontal Tab Border"
 msgstr "Bordo orizzontale della linguetta"
 
-#: ../gtk/gtknotebook.c:593
+#: ../gtk/gtknotebook.c:589
 msgid "Width of the horizontal border of tab labels"
 msgstr "Larghezza del bordo orizzontale nelle etichette delle linguette"
 
-#: ../gtk/gtknotebook.c:601
+#: ../gtk/gtknotebook.c:597
 msgid "Vertical Tab Border"
 msgstr "Bordo verticale della linguetta"
 
-#: ../gtk/gtknotebook.c:602
+#: ../gtk/gtknotebook.c:598
 msgid "Width of the vertical border of tab labels"
 msgstr "Larghezza del bordo verticale nelle etichette delle linguette"
 
-#: ../gtk/gtknotebook.c:610
+#: ../gtk/gtknotebook.c:606
 msgid "Show Tabs"
 msgstr "Mostra le linguette"
 
-#: ../gtk/gtknotebook.c:611
+#: ../gtk/gtknotebook.c:607
 msgid "Whether tabs should be shown or not"
 msgstr "Indica se le linguette devono essere visualizzate"
 
-#: ../gtk/gtknotebook.c:617
+#: ../gtk/gtknotebook.c:613
 msgid "Show Border"
 msgstr "Mostra bordo"
 
-#: ../gtk/gtknotebook.c:618
+#: ../gtk/gtknotebook.c:614
 msgid "Whether the border should be shown or not"
 msgstr "Indica se il bordo deve essere visualizzato"
 
-#: ../gtk/gtknotebook.c:624
+#: ../gtk/gtknotebook.c:620
 msgid "Scrollable"
 msgstr "Scorribile"
 
-#: ../gtk/gtknotebook.c:625
+#: ../gtk/gtknotebook.c:621
 msgid "If TRUE, scroll arrows are added if there are too many tabs to fit"
 msgstr ""
 "Se TRUE, verranno aggiunte delle freccie di scorrimento quando ci sono "
 "troppo linguette"
 
-#: ../gtk/gtknotebook.c:631
+#: ../gtk/gtknotebook.c:627
 msgid "Enable Popup"
 msgstr "Abilita il menu popup"
 
-#: ../gtk/gtknotebook.c:632
+#: ../gtk/gtknotebook.c:628
 msgid ""
 "If TRUE, pressing the right mouse button on the notebook pops up a menu that "
 "you can use to go to a page"
@@ -3523,131 +3539,131 @@ msgstr ""
 "Se TRUE, premendo il pulsante destro del mouse sullo schedario verrà "
 "visualizzato un menu che potrà essere usato per muoversi tra le pagine"
 
-#: ../gtk/gtknotebook.c:639
+#: ../gtk/gtknotebook.c:635
 msgid "Whether tabs should have homogeneous sizes"
 msgstr "Indica se le linguette devono avere tutte la stessa dimensione"
 
-#: ../gtk/gtknotebook.c:645
+#: ../gtk/gtknotebook.c:641
 msgid "Group ID"
 msgstr "ID Gruppo"
 
-#: ../gtk/gtknotebook.c:646
+#: ../gtk/gtknotebook.c:642
 msgid "Group ID for tabs drag and drop"
 msgstr "ID gruppo per il «drag and drop» delle linguette"
 
-#: ../gtk/gtknotebook.c:662 ../gtk/gtkradioaction.c:128
+#: ../gtk/gtknotebook.c:658 ../gtk/gtkradioaction.c:128
 #: ../gtk/gtkradiobutton.c:82 ../gtk/gtkradiomenuitem.c:342
 msgid "Group"
 msgstr "Gruppo"
 
 # GTK-2-12
-#: ../gtk/gtknotebook.c:663
+#: ../gtk/gtknotebook.c:659
 msgid "Group for tabs drag and drop"
 msgstr "Gruppo per il «drag and drop» delle linguette"
 
-#: ../gtk/gtknotebook.c:669
+#: ../gtk/gtknotebook.c:665
 msgid "Tab label"
 msgstr "Etichetta della linguetta"
 
-#: ../gtk/gtknotebook.c:670
+#: ../gtk/gtknotebook.c:666
 msgid "The string displayed on the child's tab label"
 msgstr "La stringa visualizzata nell'etichetta delle linguette figlie"
 
-#: ../gtk/gtknotebook.c:676
+#: ../gtk/gtknotebook.c:672
 msgid "Menu label"
 msgstr "Etichetta menu"
 
-#: ../gtk/gtknotebook.c:677
+#: ../gtk/gtknotebook.c:673
 msgid "The string displayed in the child's menu entry"
 msgstr "La stringa visualizzata nelle voci dei menu figli"
 
-#: ../gtk/gtknotebook.c:690
+#: ../gtk/gtknotebook.c:686
 msgid "Tab expand"
 msgstr "Espandi linguetta"
 
-#: ../gtk/gtknotebook.c:691
+#: ../gtk/gtknotebook.c:687
 msgid "Whether to expand the child's tab or not"
 msgstr "Indica se le linguette (figlie) devono essere espanse"
 
-#: ../gtk/gtknotebook.c:697
+#: ../gtk/gtknotebook.c:693
 msgid "Tab fill"
 msgstr "Riempimento linguette"
 
-#: ../gtk/gtknotebook.c:698
+#: ../gtk/gtknotebook.c:694
 msgid "Whether the child's tab should fill the allocated area or not"
 msgstr "Indica se le linguette devono utilizzare tutta l'area disponibile"
 
-#: ../gtk/gtknotebook.c:704
+#: ../gtk/gtknotebook.c:700
 msgid "Tab pack type"
 msgstr "Tipo di inserimento linguette"
 
-#: ../gtk/gtknotebook.c:711
+#: ../gtk/gtknotebook.c:707
 msgid "Tab reorderable"
 msgstr "Linguette riordinabili"
 
-#: ../gtk/gtknotebook.c:712
+#: ../gtk/gtknotebook.c:708
 msgid "Whether the tab is reorderable by user action or not"
 msgstr "Indica se le linguette sono riordinabili dall'utente"
 
-#: ../gtk/gtknotebook.c:718
+#: ../gtk/gtknotebook.c:714
 msgid "Tab detachable"
 msgstr "Linguetta staccabile"
 
-#: ../gtk/gtknotebook.c:719
+#: ../gtk/gtknotebook.c:715
 msgid "Whether the tab is detachable"
 msgstr "Indica se la linguetta può essere staccata"
 
-#: ../gtk/gtknotebook.c:734 ../gtk/gtkscrollbar.c:83
+#: ../gtk/gtknotebook.c:730 ../gtk/gtkscrollbar.c:83
 msgid "Secondary backward stepper"
 msgstr "Pulsante indietro secondario"
 
-#: ../gtk/gtknotebook.c:735
+#: ../gtk/gtknotebook.c:731
 msgid ""
 "Display a second backward arrow button on the opposite end of the tab area"
 msgstr ""
 "Visualizza un secondo pulsante freccia indietro nella parte opposta "
 "dell'area delle linguette"
 
-#: ../gtk/gtknotebook.c:750 ../gtk/gtkscrollbar.c:91
+#: ../gtk/gtknotebook.c:746 ../gtk/gtkscrollbar.c:91
 msgid "Secondary forward stepper"
 msgstr "Pulsante avanti secondario"
 
-#: ../gtk/gtknotebook.c:751
+#: ../gtk/gtknotebook.c:747
 msgid ""
 "Display a second forward arrow button on the opposite end of the tab area"
 msgstr ""
 "Visualizza un secondo pulsante freccia avanti sulla parte opposta dell'area "
 "delle linguette"
 
-#: ../gtk/gtknotebook.c:765 ../gtk/gtkscrollbar.c:67
+#: ../gtk/gtknotebook.c:761 ../gtk/gtkscrollbar.c:67
 msgid "Backward stepper"
 msgstr "Pulsante indietro"
 
-#: ../gtk/gtknotebook.c:766 ../gtk/gtkscrollbar.c:68
+#: ../gtk/gtknotebook.c:762 ../gtk/gtkscrollbar.c:68
 msgid "Display the standard backward arrow button"
 msgstr "Visualizza il pulsante standard freccia indietro"
 
-#: ../gtk/gtknotebook.c:780 ../gtk/gtkscrollbar.c:75
+#: ../gtk/gtknotebook.c:776 ../gtk/gtkscrollbar.c:75
 msgid "Forward stepper"
 msgstr "Pulsante avanti"
 
-#: ../gtk/gtknotebook.c:781 ../gtk/gtkscrollbar.c:76
+#: ../gtk/gtknotebook.c:777 ../gtk/gtkscrollbar.c:76
 msgid "Display the standard forward arrow button"
 msgstr "Visualizza il pulsante standard freccia avanti"
 
-#: ../gtk/gtknotebook.c:795
+#: ../gtk/gtknotebook.c:791
 msgid "Tab overlap"
 msgstr "Sovrapposizione linguetta"
 
-#: ../gtk/gtknotebook.c:796
+#: ../gtk/gtknotebook.c:792
 msgid "Size of tab overlap area"
 msgstr "Dimensione dell'area di sovrapposizione della linguetta"
 
-#: ../gtk/gtknotebook.c:811
+#: ../gtk/gtknotebook.c:807
 msgid "Tab curvature"
 msgstr "Curvatura della linguetta"
 
-#: ../gtk/gtknotebook.c:812
+#: ../gtk/gtknotebook.c:808
 msgid "Size of tab curvature"
 msgstr "Valore della curvatura della linguetta"
 
@@ -3900,14 +3916,16 @@ msgstr "La pagina corrente nel documento"
 msgid "Use full page"
 msgstr "Usa pagina intera"
 
+# GTK-2-12
+#
+# Nota "contex" qui è sottinteso "cairo context".
+# Non so se è opportuno tradurlo, quindi lo lascio invariato...
+# --Luca
 #: ../gtk/gtkprintoperation.c:985
-#, fuzzy
 msgid ""
 "TRUE if the origin of the context should be at the corner of the page and "
 "not the corner of the imageable area"
-msgstr ""
-"TRUE se il punto di origine per il contesto è l'angolo della pagina e non "
-"l'angolo dell'area destinata all'immagine"
+msgstr "TRUE se il punto di origine per il context è l'angolo della pagina e non l'angolo dell'area destinata all'immagine"
 
 #: ../gtk/gtkprintoperation.c:1006
 msgid ""
@@ -3928,7 +3946,7 @@ msgstr "L'unità di misura in cui vengono misurate le distanze nel contesto"
 
 #: ../gtk/gtkprintoperation.c:1041
 msgid "Show Dialog"
-msgstr "Mostra la finestra di dialogo"
+msgstr "Mostra finestra di dialogo"
 
 #: ../gtk/gtkprintoperation.c:1042
 msgid "TRUE if a progress dialog is shown while printing."
@@ -3945,7 +3963,7 @@ msgstr ""
 
 #: ../gtk/gtkprintoperation.c:1089 ../gtk/gtkprintoperation.c:1090
 msgid "Export filename"
-msgstr "Esporta il nome del file"
+msgstr "Esporta nome del file"
 
 #: ../gtk/gtkprintoperation.c:1104
 msgid "Status"
@@ -3987,17 +4005,13 @@ msgstr "Il GtkPrinter selezionato"
 msgid "Activity mode"
 msgstr "Modalità attiva"
 
+# GTK-2-12
 #: ../gtk/gtkprogress.c:100
-#, fuzzy
 msgid ""
 "If TRUE, the GtkProgress is in activity mode, meaning that it signals "
 "something is happening, but not how much of the activity is finished. This "
 "is used when you're doing something but don't know how long it will take."
-msgstr ""
-"Se TRUE, GtkProgress è in modo attività, questo indica che qualcosa è in "
-"esecuzione, ma non si è in grado di stabilire quanto è già stato completato. "
-"Ciò è utile quando si sta eseguendo qualcosa che non si sa a priori quanto "
-"durerà"
+msgstr "Se TRUE, il GtkProgress è in modo attività: questo significa che il widget segnala che qualcosa sta accadendo, ma non la porzione completata dell'attività. Ciò è utile quando si sta eseguendo qualcosa la cui durata non è nota."
 
 #: ../gtk/gtkprogress.c:108
 msgid "Show text"
@@ -4182,10 +4196,12 @@ msgid "Show Fill Level"
 msgstr "Mostra livello riempimento"
 
 # GTK-2-12
-# trough --> avvallamento ??
+# trough --> avvallamento
 #: ../gtk/gtkrange.c:390
 msgid "Whether to display a fill level indicator graphics on trough."
-msgstr "Indica se mostrare un indicatore grafico del livello di riempimento sull'avvallamento."
+msgstr ""
+"Indica se mostrare un indicatore grafico del livello di riempimento "
+"sull'avvallamento."
 
 # FIXME
 #: ../gtk/gtkrange.c:406
@@ -4215,13 +4231,15 @@ msgstr "Larghezza dello slider"
 msgid "Width of scrollbar or scale thumb"
 msgstr "Larghezza della barra di scorrimento o elemento di scala"
 
+# GTK-2-12
 #: ../gtk/gtkrange.c:439
 msgid "Trough Border"
-msgstr "Bordo scavato"
+msgstr "Bordo avvallamento"
 
+# GTK-2-12
 #: ../gtk/gtkrange.c:440
 msgid "Spacing between thumb/steppers and outer trough bevel"
-msgstr "Spazio tra cursore di scorrimento/passo e il bordo scavato più esterno"
+msgstr "Spazio tra cursore di scorrimento/passo e il bordo più esterno dell'avvallamento"
 
 #: ../gtk/gtkrange.c:447
 msgid "Stepper Size"
@@ -4271,30 +4289,29 @@ msgstr ""
 "Se questa opzione è TRUE, gli slider saranno visualizzati come ACTIVE e "
 "dotati di ombra IN mentre vengono trascinati"
 
+# GTK-2-12
 #: ../gtk/gtkrange.c:503
 msgid "Trough Side Details"
-msgstr "Dettagli depressione laterale"
+msgstr "Dettagli lati avvallamento"
 
+# GTK-2-12
 #: ../gtk/gtkrange.c:504
 msgid ""
 "When TRUE, the parts of the trough on the two sides of the slider are drawn "
 "with different details"
-msgstr ""
-"Quando è TRUE, le parti della depressione nei due lati dello slider vengono "
-"visualizzate con dettaglio differente"
+msgstr "Quando è TRUE, le parti dell'avvallamento ai due lati dello slider vengono visualizzate con dettaglio differente"
 
+# GTK-2-12
 #: ../gtk/gtkrange.c:520
 msgid "Trough Under Steppers"
-msgstr "Depressione sotto gli stepper"
+msgstr "Avvallamento sotto gli stepper"
 
+# GTK-2-12
 #: ../gtk/gtkrange.c:521
-#, fuzzy
 msgid ""
 "Whether to draw trough for full length of range or exclude the steppers and "
 "spacing"
-msgstr ""
-"Indica se disegnare la depressione per tutta la lunghezza dell'intervallo o "
-"escludere gli stepper e la spaziatura"
+msgstr "Indica se disegnare l'avvallamento per tutta la lunghezza dell'intervallo o escludere gli stepper e la spaziatura"
 
 #: ../gtk/gtkrecentaction.c:652 ../gtk/gtkrecentchoosermenu.c:209
 msgid "Show Numbers"
@@ -4346,13 +4363,15 @@ msgstr ""
 "Indica se devono essere visualizzati gli elementi che si riferiscono a "
 "risorse non disponibili"
 
+# GTK-2-12
 #: ../gtk/gtkrecentchooser.c:192
 msgid "Whether to allow multiple items to be selected"
-msgstr "Indica se è possibile selezionare più file"
+msgstr "Indica se è possibile selezionare più elementi"
 
+# GTK-2-12
 #: ../gtk/gtkrecentchooser.c:205
 msgid "Local only"
-msgstr "Solo risorse locali"
+msgstr "Solo locale"
 
 #: ../gtk/gtkrecentchooser.c:206
 msgid "Whether the selected resource(s) should be limited to local file: URIs"
@@ -4368,9 +4387,10 @@ msgstr "Limite"
 msgid "The maximum number of items to be displayed"
 msgstr "Il numero massimo di elementi da visualizzare"
 
+# GTK-2-12
 #: ../gtk/gtkrecentchooser.c:237
 msgid "Sort Type"
-msgstr "Tipo di ordinamento"
+msgstr "Tipo ordinamento"
 
 #: ../gtk/gtkrecentchooser.c:238
 msgid "The sorting order of the items displayed"
@@ -4380,10 +4400,10 @@ msgstr "Il tipo di ordinamento degli elementi visualizzati"
 msgid "The current filter for selecting which resources are displayed"
 msgstr "Il filtro attualmente usato per selezionare quali risorse visualizzare"
 
+# GTK-2-12
 #: ../gtk/gtkrecentmanager.c:251
 msgid "The full path to the file to be used to store and read the list"
-msgstr ""
-"Il percorso completo del file da usare per immagazzinare e leggere l'elenco"
+msgstr "Il percorso completo del file da usare per memorizzare e leggere l'elenco"
 
 #: ../gtk/gtkrecentmanager.c:266
 msgid ""
@@ -4436,9 +4456,10 @@ msgstr "L'unità di misura usata per il righello"
 msgid "The number of decimal places that are displayed in the value"
 msgstr "Numero di cifre decimali usate per visualizzate il valore"
 
+# GTK-2-12
 #: ../gtk/gtkscale.c:152
 msgid "Draw Value"
-msgstr "Mostra il valore"
+msgstr "Mostra valore"
 
 #: ../gtk/gtkscale.c:153
 msgid "Whether the current value is displayed as a string next to the slider"
@@ -4446,29 +4467,33 @@ msgstr ""
 "Indica se il valore corrente viene visualizzato come stringa vicino allo "
 "slider"
 
+# GTK-2-12
 #: ../gtk/gtkscale.c:160
 msgid "Value Position"
-msgstr "Posizione del valore"
+msgstr "Posizione valore"
 
 #: ../gtk/gtkscale.c:161
 msgid "The position in which the current value is displayed"
 msgstr "La posizione nella quale il valore corrente verrà visualizzato"
 
+# GTK-2-12
 #: ../gtk/gtkscale.c:168
 msgid "Slider Length"
-msgstr "Lunghezza dello slider"
+msgstr "Lunghezza slider"
 
 #: ../gtk/gtkscale.c:169
 msgid "Length of scale's slider"
-msgstr "Lunghezza dello slider di scala"
+msgstr "La lunghezza dello slider di scala"
 
+# GTK-2-12
 #: ../gtk/gtkscale.c:177
 msgid "Value spacing"
-msgstr "Spaziatura del valore"
+msgstr "Spaziatura valore"
 
+# GTK-2-12
 #: ../gtk/gtkscale.c:178
 msgid "Space between value text and the slider/trough area"
-msgstr "Spazio tra il testo del valore e l'area slider/trough"
+msgstr "Spazio tra il testo del valore e l'area slider/avvallamento"
 
 # GTK-2-12
 # FIXME
@@ -4486,7 +4511,9 @@ msgstr "La dimensione dell'icona"
 #: ../gtk/gtkscalebutton.c:201
 msgid ""
 "The GtkAdjustment that contains the current value of this scale button object"
-msgstr "Il GtkAdjustment che contiene il valore attuale di questo oggetto pulsante scala"
+msgstr ""
+"Il GtkAdjustment che contiene il valore attuale di questo oggetto pulsante "
+"scala"
 
 # GTK-2-12
 #: ../gtk/gtkscalebutton.c:229
@@ -4498,17 +4525,19 @@ msgstr "Icone"
 msgid "List of icon names"
 msgstr "Elenco di nomi di icona"
 
+# GTK-2-12
 #: ../gtk/gtkscrollbar.c:50
 msgid "Minimum Slider Length"
-msgstr "Lunghezza minima dello slider"
+msgstr "Lunghezza minima slider"
 
 #: ../gtk/gtkscrollbar.c:51
 msgid "Minimum length of scrollbar slider"
 msgstr "Lunghezza minima dello slider della barra di scorrimento"
 
+# GTK-2-12
 #: ../gtk/gtkscrollbar.c:59
 msgid "Fixed slider size"
-msgstr "Dimensione fissa dello slider"
+msgstr "Dimensione fissa slider"
 
 #: ../gtk/gtkscrollbar.c:60
 msgid "Don't change slider size, just lock it to the minimum length"
@@ -4540,17 +4569,19 @@ msgstr "Regolazione orizzontale"
 msgid "Vertical Adjustment"
 msgstr "Regolazione verticale"
 
+# GTK-2-12
 #: ../gtk/gtkscrolledwindow.c:235
 msgid "Horizontal Scrollbar Policy"
-msgstr "Comportamento della barra di scorrimento orizzontale"
+msgstr "Politica barra scorrimento orizzontale"
 
 #: ../gtk/gtkscrolledwindow.c:236
 msgid "When the horizontal scrollbar is displayed"
 msgstr "Indica quando verrà visualizzata la barra di scorrimento orizzontale"
 
+# GTK-2-12
 #: ../gtk/gtkscrolledwindow.c:243
 msgid "Vertical Scrollbar Policy"
-msgstr "Comportamento della barra di scorrimento verticale"
+msgstr "Politica barra scorrimento verticale"
 
 #: ../gtk/gtkscrolledwindow.c:244
 msgid "When the vertical scrollbar is displayed"
@@ -4585,25 +4616,29 @@ msgstr ""
 msgid "Shadow Type"
 msgstr "Tipo ombra"
 
+# GTK-2-12
 #: ../gtk/gtkscrolledwindow.c:278
 msgid "Style of bevel around the contents"
-msgstr "Stile del rilievo intorno agli elementi contenuti"
+msgstr "Stile della smussatura attorno al contenuto"
 
+# GTK-2-12
 #: ../gtk/gtkscrolledwindow.c:292
 msgid "Scrollbars within bevel"
-msgstr ""
+msgstr "Barre scorrimento dentro smussatura"
 
+# GTK-2-12
 #: ../gtk/gtkscrolledwindow.c:293
 msgid "Place scrollbars within the scrolled window's bevel"
-msgstr ""
+msgstr "Pone le barre di scorrimento all'interno della smussatura della finestra di scorrimento"
 
 #: ../gtk/gtkscrolledwindow.c:299
 msgid "Scrollbar spacing"
-msgstr "Spaziatura barra di scorrimento"
+msgstr "Spaziatura barra scorrimento"
 
+# GTK-2-12
 #: ../gtk/gtkscrolledwindow.c:300
 msgid "Number of pixels between the scrollbars and the scrolled window"
-msgstr "Numero di pixel tra la barra di scorrimento e la finestra che scorre"
+msgstr "Numero di pixel tra la barra di scorrimento e la finestra di scorrimento"
 
 #: ../gtk/gtkscrolledwindow.c:315
 msgid "Scrolled Window Placement"
@@ -4613,10 +4648,7 @@ msgstr "Posizionamento finestra di scorrimento"
 msgid ""
 "Where the contents of scrolled windows are located with respect to the "
 "scrollbars, if not overridden by the scrolled window's own placement."
-msgstr ""
-"Indica dove verranno visualizzati i contenuti della finestra rispetto alla "
-"barra di scorrimento, se non vincolato dal posizionamento della finestra di "
-"scorrimento."
+msgstr "Indica dove verranno visualizzati i contenuti della finestra rispetto alla barra di scorrimento, se non vincolato dal posizionamento della finestra di scorrimento."
 
 #: ../gtk/gtkseparatortoolitem.c:107
 msgid "Draw"
@@ -4630,12 +4662,14 @@ msgstr "Indica se il separatore è disegnato o solo lasciato vuoto"
 msgid "Double Click Time"
 msgstr "Durata doppio clic"
 
+# GTK-2-12
+# reso + simile a originale e a successivo
 #: ../gtk/gtksettings.c:205
+#, fuzzy
 msgid ""
 "Maximum time allowed between two clicks for them to be considered a double "
 "click (in milliseconds)"
-msgstr ""
-"Ritardo, in millisecondi, affinché due clic siano considerati un doppio clic"
+msgstr "Massimo tempo consentita tra due clic affinché siano considerati doppio clic (in millisecondi)"
 
 #: ../gtk/gtksettings.c:212
 msgid "Double Click Distance"
@@ -4645,9 +4679,7 @@ msgstr "Distanza doppio clic"
 msgid ""
 "Maximum distance allowed between two clicks for them to be considered a "
 "double click (in pixels)"
-msgstr ""
-"Massima distanza consentita tra due clic affinché siano considerati doppio "
-"clic (in pixel)"
+msgstr "Massima distanza consentita tra due clic affinché siano considerati doppio clic (in pixel)"
 
 #: ../gtk/gtksettings.c:229
 msgid "Cursor Blink"
@@ -4688,49 +4720,58 @@ msgstr ""
 "Indica se devono essere visualizzati due cursori per testo misto, sinistra-"
 "destra e destra-sinistra"
 
+# GTK-2-12
 #: ../gtk/gtksettings.c:273
 msgid "Theme Name"
-msgstr "Nome del tema"
+msgstr "Nome tema"
 
 #: ../gtk/gtksettings.c:274
 msgid "Name of theme RC file to load"
 msgstr "Nome del file RC del tema da caricare"
 
+# GTK-2-12
 #: ../gtk/gtksettings.c:282
 msgid "Icon Theme Name"
-msgstr "Nome del tema delle icone"
+msgstr "Nome tema icone"
 
 #: ../gtk/gtksettings.c:283
 msgid "Name of icon theme to use"
 msgstr "Nome del tema delle icone da utilizzare"
 
+# GTK-2-12
 #: ../gtk/gtksettings.c:291
 msgid "Fallback Icon Theme Name"
-msgstr "Nome di ripiego del tema delle icone"
+msgstr "Nome tema icone di ripiego"
 
 #: ../gtk/gtksettings.c:292
 msgid "Name of a icon theme to fall back to"
 msgstr "Nome di un tema delle icone su cui ripiegare"
 
+# GTK-2-12
+# visto che il tema non ha nulla a che vedere con
+# le chiavi, direi che qui è key --> tasto  --Luca
 #: ../gtk/gtksettings.c:300
 msgid "Key Theme Name"
-msgstr "Nome chiave del tema"
+msgstr "Nome tema tasti"
 
+# GTK-2-12
 #: ../gtk/gtksettings.c:301
 msgid "Name of key theme RC file to load"
-msgstr "Nome del file RC con la chiave del tema da caricare"
+msgstr "Nome del file RC del tema dei tasti da caricare"
 
+# GTK-2-12
 #: ../gtk/gtksettings.c:309
 msgid "Menu bar accelerator"
-msgstr "Acceleratore per la barra dei menu"
+msgstr "Acceleratore barra dei menu"
 
 #: ../gtk/gtksettings.c:310
 msgid "Keybinding to activate the menu bar"
 msgstr "Sequenza di tasti per attivare la barra dei menu"
 
+# GTK-2-12
 #: ../gtk/gtksettings.c:318
 msgid "Drag threshold"
-msgstr "Soglia per il trascinamento"
+msgstr "Soglia trascinamento"
 
 #: ../gtk/gtksettings.c:319
 msgid "Number of pixels the cursor can move before dragging"
@@ -4738,29 +4779,34 @@ msgstr ""
 "Numero di pixel di cui può essere mosso il cursore prima che venga attivato "
 "il trascinamento"
 
+# GTK-2-12
 #: ../gtk/gtksettings.c:327
 msgid "Font Name"
-msgstr "Nome del carattere"
+msgstr "Nome carattere"
 
+# GTK-2-12
 #: ../gtk/gtksettings.c:328
 msgid "Name of default font to use"
-msgstr "Nome del carattere predefinito da utilizzare"
+msgstr "Nome del tipo di carattere predefinito da utilizzare"
 
+# GTK-2-12
 #: ../gtk/gtksettings.c:336
 msgid "Icon Sizes"
-msgstr "Dimensioni icona"
+msgstr "Dimensioni icone"
 
+# GTK-2-12
 #: ../gtk/gtksettings.c:337
 msgid "List of icon sizes (gtk-menu=16,16:gtk-button=20,20..."
-msgstr "Lista delle dimensioni di icona (gtk-menu=16,16;gtk-button=20,20...)"
+msgstr "Elenco delle dimensioni delle icona (gtk-menu=16,16;gtk-button=20,20...)"
 
 #: ../gtk/gtksettings.c:345
 msgid "GTK Modules"
 msgstr "Moduli GTK"
 
+# GTK-2-12
 #: ../gtk/gtksettings.c:346
 msgid "List of currently active GTK modules"
-msgstr "Lista dei moduli GTK attivi correntemente"
+msgstr "Elenco dei moduli GTK attualmenti attivi"
 
 #: ../gtk/gtksettings.c:355
 msgid "Xft Antialias"
@@ -4827,9 +4873,10 @@ msgid "Size to use for cursors, or 0 to use the default size"
 msgstr ""
 "La dimensione da usare per i cursori, 0 per usare la dimensione predefinita"
 
+# GTK-2-12
 #: ../gtk/gtksettings.c:425
 msgid "Alternative button order"
-msgstr "Ordine alternativo dei pulsanti"
+msgstr "Ordine alternativo pulsanti"
 
 #: ../gtk/gtksettings.c:426
 msgid "Whether buttons in dialogs should use the alternative button order"
@@ -4837,16 +4884,18 @@ msgstr ""
 "Indica se nelle finestre di dialogo i pulsanti devono usare la disposizione "
 "alternativa"
 
+# GTK-2-12
 #: ../gtk/gtksettings.c:443
-#, fuzzy
 msgid "Alternative sort indicator direction"
-msgstr "Ordine alternativo dei pulsanti"
+msgstr "Direzione alternativa indicatori ordinameno"
 
+# GTK-2-12
+# aggiunto un paio di parole sottintese nella parentesi
 #: ../gtk/gtksettings.c:444
 msgid ""
 "Whether the direction of the sort indicators in list and tree views is "
 "inverted compared to the default (where down means ascending)"
-msgstr ""
+msgstr "Indica se la direzione degli indicatori di ordinamento nelle viste a elenco e ad albero è invertita rispetto a quella predefinita (dove la freccia rivolta verso il basso indica ordine ascendente)"
 
 #: ../gtk/gtksettings.c:452
 msgid "Show the 'Input Methods' menu"
@@ -4906,17 +4955,19 @@ msgstr "Schema colore"
 msgid "A palette of named colors for use in themes"
 msgstr "Una tavolozza di colori dotati di nome da usare nei temi"
 
+# GTK-2-12
 #: ../gtk/gtksettings.c:536
 msgid "Enable Animations"
-msgstr "Abilita le animazioni"
+msgstr "Abilita animazioni"
 
 #: ../gtk/gtksettings.c:537
 msgid "Whether to enable toolkit-wide animations."
 msgstr "Indica se abilitare le animazioni per tutto il toolkit."
 
+# GTK-2-12
 #: ../gtk/gtksettings.c:555
 msgid "Enable Touchscreen Mode"
-msgstr "Abilità la modalità Touchscreen"
+msgstr "Abilita modalità touchscreen"
 
 #: ../gtk/gtksettings.c:556
 msgid "When TRUE, there are no motion notify events delivered on this screen"
@@ -4934,29 +4985,42 @@ msgstr "Temporizzazione suggerimento"
 msgid "Timeout before tooltip is shown"
 msgstr "Periodo di tempo prima che il suggerimento sia mostato"
 
+# GTK-2-12
+#
+# Browse mode is enabled when the mouse pointer moves off an object
+# where a tooltip was currently being displayed. If the mouse pointer
+# hits another object before the browse mode timeout expires (see
+# #GtkSettings:gtk-tooltip-browse-mode-timeout), it will take the 
+# amount of milliseconds specified by this setting to popup the tooltip
+# for the new object.
 #: ../gtk/gtksettings.c:599
 msgid "Tooltip browse timeout"
-msgstr ""
+msgstr "Temporizzazione suggerimento browse"
 
+# GTK-2-12
 #: ../gtk/gtksettings.c:600
 msgid "Timeout before tooltip is shown when browse mode is enabled"
-msgstr ""
+msgstr "Periodo di tempo prima che il suggerimento sia mostrato quando la modalità browse è abilitata"
 
+# GTK-2-12
 #: ../gtk/gtksettings.c:621
 msgid "Tooltip browse mode timeout"
-msgstr ""
+msgstr "Temporizzazione modalità browse dei suggerimenti"
 
+# GTK-2-12
 #: ../gtk/gtksettings.c:622
 msgid "Timeout after which browse mode is disabled"
-msgstr ""
+msgstr "Periodo di tempo dopo il quale la modalità browse è disabilitata"
 
+# GTK-2-12
 #: ../gtk/gtksettings.c:641
 msgid "Keynav Cursor Only"
-msgstr ""
+msgstr "Navigazione con solo tasti cursore"
 
+# GTK-2-12
 #: ../gtk/gtksettings.c:642
 msgid "When TRUE, there are only cursor keys available to navigate widgets"
-msgstr ""
+msgstr "Quando TRUE, sono disponibili solo i tasti cursore per spostarsi tra i widget"
 
 #: ../gtk/gtksettings.c:659
 msgid "Keynav Wrap Around"
@@ -4985,17 +5049,19 @@ msgstr "Hash colore"
 msgid "A hash table representation of the color scheme."
 msgstr "Una rappresentazione con tabella hash dello schema dei colori."
 
+# GTK-2-12
 #: ../gtk/gtksettings.c:707
 msgid "Default file chooser backend"
-msgstr "Backend predefinito del selettore file"
+msgstr "Backend predefinito per selettore file"
 
 #: ../gtk/gtksettings.c:708
 msgid "Name of the GtkFileChooser backend to use by default"
 msgstr "Nome del backend di GtkFileChooser da usare come predefinito"
 
+# GTK-2-12
 #: ../gtk/gtksettings.c:725
 msgid "Default print backend"
-msgstr "Backend di stampa predefinito"
+msgstr "Backend predefinito per stampa"
 
 #: ../gtk/gtksettings.c:726
 msgid "List of the GtkPrintBackend backends to use by default"
@@ -5029,7 +5095,7 @@ msgstr "Abilita acceleratori"
 # GTK-2-12
 #: ../gtk/gtksettings.c:784
 msgid "Whether menu items should have accelerators"
-msgstr "Indica se le vodi di menu devono avere gli acceleratori"
+msgstr "Indica se le voci di menu devono avere gli acceleratori"
 
 # GTK-2-12
 #: ../gtk/gtksettings.c:801
