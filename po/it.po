@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.12\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-09-29 11:36+0200\n"
-"PO-Revision-Date: 2007-09-29 11:35+0200\n"
+"POT-Creation-Date: 2007-10-04 09:09+0200\n"
+"PO-Revision-Date: 2007-10-04 09:10+0200\n"
 "Last-Translator: Luca Ferretti <elle.uca@libero.it>\n"
 "Language-Team: Italian <tp@lists.linux.it>\n"
 "MIME-Version: 1.0\n"
@@ -1808,17 +1808,17 @@ msgstr "No_me:"
 msgid "_Browse for other folders"
 msgstr "_Esplora altre cartelle"
 
-#: ../gtk/gtkfilechooserdefault.c:5197
+#: ../gtk/gtkfilechooserdefault.c:5208
 msgid "Type a file name"
 msgstr "Digitare un nome di file"
 
 # GTK-2-12
 #. Create Folder
-#: ../gtk/gtkfilechooserdefault.c:5234
+#: ../gtk/gtkfilechooserdefault.c:5245
 msgid "Create Fo_lder"
 msgstr "_Crea cartella"
 
-#: ../gtk/gtkfilechooserdefault.c:5244
+#: ../gtk/gtkfilechooserdefault.c:5255
 msgid "_Location:"
 msgstr "_Posizione:"
 
@@ -1832,36 +1832,36 @@ msgstr "_Posizione:"
 # a usare la C come tasto d'accesso.
 #
 #  --Luca
-#: ../gtk/gtkfilechooserdefault.c:5482
+#: ../gtk/gtkfilechooserdefault.c:5493
 msgid "Save in _folder:"
 msgstr "Salva nella _cartella:"
 
-#: ../gtk/gtkfilechooserdefault.c:5484
+#: ../gtk/gtkfilechooserdefault.c:5495
 msgid "Create in _folder:"
 msgstr "Crea nella _cartella:"
 
-#: ../gtk/gtkfilechooserdefault.c:7087
+#: ../gtk/gtkfilechooserdefault.c:7098
 #, c-format
 msgid "Cannot change to folder because it is not local"
 msgstr "Impossibile spostarsi in una cartella non locale"
 
-#: ../gtk/gtkfilechooserdefault.c:7703 ../gtk/gtkfilechooserdefault.c:7724
+#: ../gtk/gtkfilechooserdefault.c:7714 ../gtk/gtkfilechooserdefault.c:7735
 #, c-format
 msgid "Shortcut %s already exists"
 msgstr "La scorciatoia «%s» esiste già"
 
-#: ../gtk/gtkfilechooserdefault.c:7814
+#: ../gtk/gtkfilechooserdefault.c:7825
 #, c-format
 msgid "Shortcut %s does not exist"
 msgstr "La scorciatoia «%s» non esiste"
 
 # GTK-2-12
-#: ../gtk/gtkfilechooserdefault.c:8069
+#: ../gtk/gtkfilechooserdefault.c:8080
 #, c-format
 msgid "A file named \"%s\" already exists.  Do you want to replace it?"
 msgstr "Esiste già un file con nome «%s». Sostituirlo?"
 
-#: ../gtk/gtkfilechooserdefault.c:8072
+#: ../gtk/gtkfilechooserdefault.c:8083
 #, c-format
 msgid ""
 "The file already exists in \"%s\".  Replacing it will overwrite its contents."
@@ -1869,17 +1869,17 @@ msgstr ""
 "Il file esiste già in «%s». Scegliendo di sostituirlo il suo contenuto verrà "
 "sovrascritto."
 
-#: ../gtk/gtkfilechooserdefault.c:8077
+#: ../gtk/gtkfilechooserdefault.c:8088
 msgid "_Replace"
 msgstr "_Sostituisci"
 
 # GTK-2-12
-#: ../gtk/gtkfilechooserdefault.c:8911
+#: ../gtk/gtkfilechooserdefault.c:8922
 msgid "Could not start the search process"
 msgstr "Impossibile avviare il processo di ricerca"
 
 # GTK-2-12
-#: ../gtk/gtkfilechooserdefault.c:8912
+#: ../gtk/gtkfilechooserdefault.c:8923
 msgid ""
 "The program was not able to create a connection to the indexer daemon.  "
 "Please make sure it is running."
@@ -1888,59 +1888,59 @@ msgstr ""
 "indicizzazione. Assicurarsi che sia in esecuzione."
 
 # GTK-2-12
-#: ../gtk/gtkfilechooserdefault.c:8926
+#: ../gtk/gtkfilechooserdefault.c:8937
 msgid "Could not send the search request"
 msgstr "Impossibile inviare la richiesta di ricerca"
 
 # GTK-2-12
 #. Label
-#: ../gtk/gtkfilechooserdefault.c:9354
+#: ../gtk/gtkfilechooserdefault.c:9365
 msgid "_Search:"
 msgstr "_Cerca:"
 
-#: ../gtk/gtkfilechooserdefault.c:10307
+#: ../gtk/gtkfilechooserdefault.c:10318
 #, c-format
 msgid "Could not mount %s"
 msgstr "Impossibile montare «%s»"
 
-#: ../gtk/gtkfilechooserdefault.c:10935
+#: ../gtk/gtkfilechooserdefault.c:10946
 msgid "Type name of new folder"
 msgstr "Digitare il nome della nuova cartella"
 
-#: ../gtk/gtkfilechooserdefault.c:10983
+#: ../gtk/gtkfilechooserdefault.c:10994
 #, c-format
 msgid "%d byte"
 msgid_plural "%d bytes"
 msgstr[0] "%d byte"
 msgstr[1] "%d byte"
 
-#: ../gtk/gtkfilechooserdefault.c:10985
+#: ../gtk/gtkfilechooserdefault.c:10996
 #, c-format
 msgid "%.1f KB"
 msgstr "%.1f kB"
 
-#: ../gtk/gtkfilechooserdefault.c:10987
+#: ../gtk/gtkfilechooserdefault.c:10998
 #, c-format
 msgid "%.1f MB"
 msgstr "%.1f MB"
 
-#: ../gtk/gtkfilechooserdefault.c:10989
+#: ../gtk/gtkfilechooserdefault.c:11000
 #, c-format
 msgid "%.1f GB"
 msgstr "%.1f GB"
 
-#: ../gtk/gtkfilechooserdefault.c:11085 ../gtk/gtkfilechooserdefault.c:11106
-#: ../gtk/gtkfilechooserdefault.c:11138
+#: ../gtk/gtkfilechooserdefault.c:11096 ../gtk/gtkfilechooserdefault.c:11117
+#: ../gtk/gtkfilechooserdefault.c:11149
 msgid "Unknown"
 msgstr "Sconosciuto"
 
 # GTK-2-12
-#: ../gtk/gtkfilechooserdefault.c:11124
+#: ../gtk/gtkfilechooserdefault.c:11135
 msgid "Today at %H:%M"
 msgstr "Oggi alle %k.%M"
 
 # GTK-2-12
-#: ../gtk/gtkfilechooserdefault.c:11126
+#: ../gtk/gtkfilechooserdefault.c:11137
 msgid "Yesterday at %H:%M"
 msgstr "Ieri alle %k.%M"
 
@@ -2171,13 +2171,14 @@ msgstr "Tipo di carattere"
 
 # Messe le lettere accentante per fare vedede dall'anteprima
 # se il font selezionato fornisce i caratteri accentati
-# (alcuni non lo fanno) -Luca
+# (alcuni non lo fanno). Analogo discorso per simbolo
+# dell'euro su suggerimento di Emanuele               -Luca
 #
 #. This is the default text shown in the preview entry, though the user
 #. can set it. Remember that some fonts only have capital letters.
 #: ../gtk/gtkfontsel.c:75
 msgid "abcdefghijk ABCDEFGHIJK"
-msgstr "abcde ABCDE àèìòù"
+msgstr "abcde ABCDE àèìòù €"
 
 #: ../gtk/gtkfontsel.c:326
 msgid "_Family:"
@@ -2383,15 +2384,15 @@ msgstr "Opzioni GTK+"
 msgid "Show GTK+ Options"
 msgstr "Mostra le opzioni GTK+"
 
-#: ../gtk/gtknotebook.c:828
+#: ../gtk/gtknotebook.c:824
 msgid "Arrow spacing"
 msgstr "Spaziatura freccia"
 
-#: ../gtk/gtknotebook.c:829
+#: ../gtk/gtknotebook.c:825
 msgid "Scroll arrow spacing"
 msgstr "Spaziatura freccia di scorrimento"
 
-#: ../gtk/gtknotebook.c:4392 ../gtk/gtknotebook.c:6898
+#: ../gtk/gtknotebook.c:4388 ../gtk/gtknotebook.c:6894
 #, c-format
 msgid "Page %u"
 msgstr "Pagina %u"
