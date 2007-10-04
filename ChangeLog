@@ -1,3 +1,9 @@
+2007-10-04  Loïc Minier  <lool@dooz.org>
+
+	* gtk/gtkfilechooserdefault.c: (list_mtime_data_func): Fix warnings
+	and display of modified date / time in filechooser for some locales as
+	it was missing a locale to UTF-8 conversion. Fixes #482504.
+
 2007-10-03  Xan Lopez  <xan@gnome.org>
 
 	* gtk/gtknotebook.c: remove duplicated declaration of
