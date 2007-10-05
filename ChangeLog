@@ -1,3 +1,12 @@
+2007-10-05  Murray Cumming  <murrayc@murrayc.com>
+
+	* gtk/gtkprintoperation.c: (print_pages_idle):
+	Revert the change on 2007-04-29 ("Also check
+	the default handler when deciding whether to emit the
+	paginate signal.  (#345345, Yevgen Muntyan)").
+	This stopped printing from working in gtkmm, and is apparently 
+	not appropriate anyway - bug #482089.
+
 2007-08-27  Stefan Kost  <ensonic@users.sf.net>
 
 	Merge from trunk:

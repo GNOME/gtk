@@ -2087,8 +2087,7 @@ print_pages_idle (gpointer user_data)
 	  goto out;
 	}
       
-      if (GTK_PRINT_OPERATION_GET_CLASS (data->op)->paginate != NULL ||
-          g_signal_has_handler_pending (data->op, signals[PAGINATE], 0, FALSE))
+      if (g_signal_has_handler_pending (data->op, signals[PAGINATE], 0, FALSE))
 	{
 	  gboolean paginated = FALSE;
 
