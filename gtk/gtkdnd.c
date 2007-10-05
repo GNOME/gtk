@@ -1801,7 +1801,7 @@ gtk_drag_proxy_begin (GtkWidget       *widget,
   source_info = gtk_drag_get_source_info (context, TRUE);
 
   source_info->ipc_widget = ipc_widget;
-  source_info->widget = gtk_widget_ref (widget);
+  source_info->widget = g_object_ref (widget);
 
   source_info->target_list = gtk_target_list_new (NULL, 0);
   tmp_list = dest_info->context->targets;
@@ -2235,7 +2235,7 @@ gtk_drag_begin_internal (GtkWidget         *widget,
   info->ipc_widget = ipc_widget;
   g_object_set_data (G_OBJECT (info->ipc_widget), I_("gtk-info"), info);
 
-  info->widget = gtk_widget_ref (widget);
+  info->widget = g_object_ref (widget);
   
   info->button = button;
   info->cursor = cursor;
@@ -2885,7 +2885,7 @@ gtk_drag_set_icon_window (GdkDragContext *context,
   gtk_drag_remove_icon (info);
 
   if (widget)
-    gtk_widget_ref (widget);  
+    g_object_ref (widget);  
   
   info->icon_window = widget;
   info->hot_x = hot_x;

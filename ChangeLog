@@ -1,3 +1,8 @@
+2007-10-05  Hiroyuki Ikezoe  <poincare@ikezoe.net>
+
+	* gtk/gtkdnd.c: Use g_object_ref() instead of gtk_widget_ref().
+	(#483563)
+
 2007-10-04  Emmanuele Bassi  <ebassi@gnome.org>
 
 	* gtk/gtkrecentaction.c:
