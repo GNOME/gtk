@@ -24,7 +24,8 @@ the separator. (The space in which the separator
 is called the gutter.) Often, it is useful
 to put each child inside a #GtkFrame with the
 shadow type set to %GTK_SHADOW_IN so that the
-gutter appears as a ridge.
+gutter appears as a ridge. No separator is drawn
+if one of the children is missing.
 </para>
 <para>
 Each child has two options that can be set, 
@@ -97,27 +98,33 @@ gtk_widget_set_size_request (frame2, 50, -1);
 
 </para>
 
-@paned: the object which received the signal.
-@arg1: 
 @Returns: 
+@Param4: 
+@Returns: 
+<!-- # Unused Parameters # -->
+@paned: the object which received the signal.
 
 <!-- ##### SIGNAL GtkPaned::cycle-handle-focus ##### -->
 <para>
 
 </para>
 
-@paned: the object which received the signal.
-@arg1: 
 @Returns: 
+@Param4: 
+@Returns: 
+<!-- # Unused Parameters # -->
+@paned: the object which received the signal.
 
 <!-- ##### SIGNAL GtkPaned::move-handle ##### -->
 <para>
 
 </para>
 
-@paned: the object which received the signal.
-@arg1: 
 @Returns: 
+@Param4: 
+@Returns: 
+<!-- # Unused Parameters # -->
+@paned: the object which received the signal.
 
 <!-- ##### SIGNAL GtkPaned::toggle-handle-focus ##### -->
 <para>

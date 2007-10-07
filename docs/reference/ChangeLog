@@ -1,3 +1,8 @@
+2007-10-07  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/tmpl/gtkpaned.sgml: Mention behaviour with a single child.
+	(#477447, Juri Pakaste)
+
 2007-10-01 20:21:28  Tim Janik  <timj@imendio.com>
 
 	* gtk/tmpl/gtkmenu.sgml: reworded push_in description with Owen's
