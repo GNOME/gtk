@@ -86,6 +86,7 @@ struct _GtkXIMInfo
   GtkSettings *settings;
   gulong status_set;
   gulong preedit_set;
+  gulong display_closed_cb;
   XIMStyles *xim_styles;
   GSList *ics;
 
@@ -143,6 +144,10 @@ static void xim_destroy_callback   (XIM      xim,
 				    XPointer call_data);
 
 static XIC       gtk_im_context_xim_get_ic            (GtkIMContextXIM *context_xim);
+static void           xim_info_display_closed (GdkDisplay *display,
+			                       gboolean    is_error,
+			                       GtkXIMInfo *info);
+
 static GObjectClass *parent_class;
 
 GType gtk_type_im_context_xim = 0;
@@ -307,6 +312,7 @@ setup_im (GtkXIMInfo *info)
 {
   XIMValuesList *ic_values = NULL;
   XIMCallback im_destroy_callback;
+  GdkDisplay *display;
 
   if (info->im == NULL)
     return;
@@ -376,6 +382,10 @@ setup_im (GtkXIMInfo *info)
 
   status_style_change (info);
   preedit_style_change (info);
+
+  display = gdk_screen_get_display (info->screen);
+  info->display_closed_cb = g_signal_connect (display, "closed",
+	                                      G_CALLBACK (xim_info_display_closed), info);
 }
 
 static void
@@ -394,12 +404,16 @@ xim_info_display_closed (GdkDisplay *display,
     set_ic_client_window (tmp_list->data, NULL);
 
   g_slist_free (ics);
-  
-  g_signal_handler_disconnect (info->settings, info->status_set);
-  g_signal_handler_disconnect (info->settings, info->preedit_set);
-  
-  XFree (info->xim_styles->supported_styles);
-  XFree (info->xim_styles);
+
+  if (info->status_set)
+    g_signal_handler_disconnect (info->settings, info->status_set);
+  if (info->preedit_set)
+    g_signal_handler_disconnect (info->settings, info->preedit_set);
+  if (info->display_closed_cb)
+    g_signal_handler_disconnect (display, info->display_closed_cb);
+
+  if (info->xim_styles)
+    XFree (info->xim_styles);
   g_free (info->locale);
 
   if (info->im)
@@ -455,9 +469,6 @@ xim_info_try_im (GtkXIMInfo *info)
 	  return;
 	}
       setup_im (info);
-
-      g_signal_connect (display, "closed",
-			G_CALLBACK (xim_info_display_closed), info);
     }
 }
 
@@ -471,7 +482,9 @@ xim_destroy_callback (XIM      xim,
   info->im = NULL;
 
   g_signal_handler_disconnect (info->settings, info->status_set);
+  info->status_set = 0;
   g_signal_handler_disconnect (info->settings, info->preedit_set);
+  info->preedit_set = 0;
 
   reinitialize_all_ics (info);
   xim_info_try_im (info);
@@ -520,6 +533,7 @@ get_im (GdkWindow *client_window,
       info->settings = NULL;
       info->preedit_set = 0;
       info->status_set = 0;
+      info->display_closed_cb = 0;
       info->ics = NULL;
       info->reconnecting = FALSE;
       info->im = NULL;
@@ -1860,4 +1874,13 @@ gtk_im_context_xim_shutdown (void)
 {
   while (status_windows)
     status_window_free (status_windows->data);
+
+  while (open_ims)
+    {
+      GtkXIMInfo *info = open_ims->data;
+      GdkDisplay *display = gdk_screen_get_display (info->screen);
+
+      xim_info_display_closed (display, FALSE, info);
+      open_ims = g_slist_remove_link (open_ims, open_ims);
+    }
 }

@@ -1,3 +1,8 @@
+2007-10-07  Matthias Clasen  <mclasen@redhat.com>
+
+	* modules/input/gtkimcontextxim.c: Clean up issues around
+	with life cycle handling.  (#483223, Karl Tomlinson)
+
 2007-10-05  Murray Cumming  <murrayc@murrayc.com>
 
 	* gtk/gtkprintoperation.c: (print_pages_idle):
