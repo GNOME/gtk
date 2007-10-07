@@ -1,5 +1,9 @@
 2007-10-07  Matthias Clasen  <mclasen@redhat.com>
 
+	* configure.in: Don't hardcode use of echo -n.  (#484008)
+
+2007-10-07  Matthias Clasen  <mclasen@redhat.com>
+
 	* modules/input/gtkimcontextxim.c: Clean up issues around
 	with life cycle handling.  (#483223, Karl Tomlinson)
 
