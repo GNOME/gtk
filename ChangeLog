@@ -1,3 +1,13 @@
+2007-10-08  Kristian Rietveld  <kris@imendio.com>
+
+	Fix #482841, patch by Karl Tomlinson.
+
+	* gtk/gtktooltip.c (gtk_tooltip_display_closed): use g_object_set_data
+	instead of g_object_set ...
+	(_gtk_tooltip_toggle_keyboard_mode),
+	(_gtk_tooltip_handle_event): connect to GdkDisplay::closed after
+	creating tooltip.
+
 2007-10-07  Matthias Clasen  <mclasen@redhat.com>
 
 	* configure.in: Don't hardcode use of echo -n.  (#484008)

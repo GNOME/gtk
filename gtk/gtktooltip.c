@@ -704,7 +704,7 @@ gtk_tooltip_display_closed (GdkDisplay *display,
 			    gboolean    was_error,
 			    GtkTooltip *tooltip)
 {
-  g_object_set (display, "gdk-display-current-tooltip", NULL);
+  g_object_set_data (G_OBJECT (display), "gdk-display-current-tooltip", NULL);
 }
 
 static gboolean
@@ -1090,6 +1090,9 @@ _gtk_tooltip_toggle_keyboard_mode (GtkWidget *widget)
       g_object_set_data_full (G_OBJECT (display),
 			      "gdk-display-current-tooltip",
 			      tooltip, g_object_unref);
+      g_signal_connect (display, "closed",
+			G_CALLBACK (gtk_tooltip_display_closed),
+			tooltip);
     }
 
   tooltip->keyboard_mode_enabled ^= 1;
@@ -1264,6 +1267,9 @@ _gtk_tooltip_handle_event (GdkEvent *event)
 	    g_object_set_data_full (G_OBJECT (display),
 				    "gdk-display-current-tooltip",
 				    current_tooltip, g_object_unref);
+	    g_signal_connect (display, "closed",
+			      G_CALLBACK (gtk_tooltip_display_closed),
+			      current_tooltip);
 
 	    current_tooltip->last_window = event->any.window;
 	    gdk_event_get_root_coords (event,
