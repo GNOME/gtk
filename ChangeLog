@@ -1,4 +1,11 @@
 2007-10-08  Cody Russell  <bratsche@gnome.org>
+	* modules/engines/ms-windows/msw_style.c:
+	(draw_tab): Fix memory leak, and fix two instances where
+	a GtkRequisition and a GtkBorder were being freed with
+	g_free() rather than gtk_requisition_free() and
+	gtk_border_free(). (#484730, Daniel Atallah)
+	
+2007-10-08  Cody Russell  <bratsche@gnome.org>
 	* docs/reference/gdk/tmpl/event_structs.sgml:
 	Fix a typo in GdkEventGrabBroken where it said
 	"@grab_window id NULL" and should say
