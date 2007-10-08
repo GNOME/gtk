@@ -1,5 +1,10 @@
 2007-10-08  Richard Hult  <richard@imendio.com>
 
+	* gdk/quartz/gdkwindow-quartz.c: (gdk_window_focus): Implement,
+	patch from Paul Davis.
+
+2007-10-08  Richard Hult  <richard@imendio.com>
+
 	* gdk/quartz/gdkwindow-quartz.c: (move_resize_window_internal):
 	Ignore if there are no changes, fixes bug #467269. Patch from
 	Jonathan Dempsey.

@@ -2039,9 +2039,23 @@ void
 gdk_window_focus (GdkWindow *window,
                   guint32    timestamp)
 {
+  GdkWindowObject *private;
+  GdkWindowImplQuartz *impl;
+	
   g_return_if_fail (GDK_IS_WINDOW (window));
 
-  /* FIXME: Implement */
+  private = (GdkWindowObject*) window;
+  impl = GDK_WINDOW_IMPL_QUARTZ (private->impl);
+
+  if (impl->toplevel)
+    {
+      if (private->accept_focus && private->window_type != GDK_WINDOW_TEMP) 
+        {
+          GDK_QUARTZ_ALLOC_POOL;
+          [impl->toplevel makeKeyWindow];
+          GDK_QUARTZ_RELEASE_POOL;
+        }
+    }
 }
 
 void
