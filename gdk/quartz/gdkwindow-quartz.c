@@ -1063,17 +1063,50 @@ move_resize_window_internal (GdkWindow *window,
 {
   GdkWindowObject *private = (GdkWindowObject *)window;
   GdkWindowImplQuartz *impl;
+  GdkRectangle old_visible;
+  GdkRectangle new_visible;
+  GdkRectangle scroll_rect;
+  GdkRegion *old_region;
+  GdkRegion *expose_region;
+  NSSize delta;
 
   if (GDK_WINDOW_DESTROYED (window))
     return;
 
   impl = GDK_WINDOW_IMPL_QUARTZ (private->impl);
 
+  if (!impl->toplevel)
+    {
+      /* The previously visible area of this window in a coordinate
+       * system rooted at the origin of this window.
+       */
+      old_visible.x = -private->x;
+      old_visible.y = -private->y;
+
+      gdk_window_get_size (GDK_DRAWABLE (private->parent), 
+                           &old_visible.width, 
+                           &old_visible.height);
+    }
+
   if (x != -1)
-    private->x = x;
+    {
+      delta.width = x - private->x;
+      private->x = x;
+    }
+  else
+    {
+      delta.width = 0;
+    }
 
   if (y != -1)
-    private->y = y;
+    {
+      delta.height = y - private->y;
+      private->y = y;
+    }
+  else
+    {
+      delta.height = 0;
+    }
 
   if (width != -1)
     impl->width = width;
@@ -1097,13 +1130,69 @@ move_resize_window_internal (GdkWindow *window,
   else 
     {
       if (!private->input_only)
-	{
-	  NSRect nsrect;
+        {
+          NSRect nsrect;
 
-	  nsrect = NSMakeRect (private->x, private->y, impl->width, impl->height);
-	  [impl->view setFrame: nsrect];
-	  [impl->view setNeedsDisplay:YES];
-	}
+          nsrect = NSMakeRect (private->x, private->y, impl->width, impl->height);
+
+          /* The newly visible area of this window in a coordinate
+           * system rooted at the origin of this window.
+           */
+          new_visible.x = -private->x;
+          new_visible.y = -private->y;
+          new_visible.width = old_visible.width;   /* parent has not changed size */
+          new_visible.height = old_visible.height; /* parent has not changed size */
+
+          expose_region = gdk_region_rectangle (&new_visible);
+          old_region = gdk_region_rectangle (&old_visible);
+          gdk_region_subtract (expose_region, old_region);
+
+          /* Determine what (if any) part of the previously visible
+           * part of the window can be copied without a redraw
+           */
+          scroll_rect = old_visible;
+          scroll_rect.x -= delta.width;
+          scroll_rect.y -= delta.height;
+          gdk_rectangle_intersect (&scroll_rect, &old_visible, &scroll_rect);
+
+          if (!gdk_region_empty (expose_region))
+            {
+              GdkRectangle* rects;
+              gint n_rects;
+              gint n;
+
+              if (scroll_rect.width != 0 && scroll_rect.height != 0)
+                {
+                  [impl->view scrollRect:NSMakeRect (scroll_rect.x,
+                                                     scroll_rect.y,
+                                                     scroll_rect.width,
+                                                     scroll_rect.height)
+			              by:delta];
+                }
+
+              [impl->view setFrame:nsrect];
+
+              gdk_region_get_rectangles (expose_region, &rects, &n_rects);
+
+              for (n = 0; n < n_rects; ++n)
+                {
+                  [impl->view setNeedsDisplayInRect:NSMakeRect (rects[n].x,
+                                                                rects[n].y,
+                                                                rects[n].width,
+                                                                rects[n].height)];
+                }
+
+              g_free (rects);
+            }
+          else
+            {
+              [impl->view setFrame:nsrect];
+              [impl->view setNeedsDisplay:YES];
+            }
+
+          gdk_region_destroy (expose_region);
+          gdk_region_destroy (old_region);
+        }
     }
 
   GDK_QUARTZ_RELEASE_POOL;

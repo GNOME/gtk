@@ -1,3 +1,9 @@
+2007-10-08  Richard Hult  <richard@imendio.com>
+
+	* gdk/quartz/gdkwindow-quartz.c: (move_resize_window_internal):
+	Patch from Paul Davis to implement this in terms of scrollRect,
+	fixes bug #478377.
+
 2007-10-08  Cody Russell  <bratsche@gnome.org>
 	* modules/engines/ms-windows/msw_style.c:
 	(draw_tab): Fix memory leak, and fix two instances where
