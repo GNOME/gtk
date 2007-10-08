@@ -1,6 +1,12 @@
 2007-10-08  Richard Hult  <richard@imendio.com>
 
 	* gdk/quartz/gdkwindow-quartz.c: (move_resize_window_internal):
+	Ignore if there are no changes, fixes bug #467269. Patch from
+	Jonathan Dempsey.
+
+2007-10-08  Richard Hult  <richard@imendio.com>
+
+	* gdk/quartz/gdkwindow-quartz.c: (move_resize_window_internal):
 	Patch from Paul Davis to implement this in terms of scrollRect,
 	fixes bug #478377.
 

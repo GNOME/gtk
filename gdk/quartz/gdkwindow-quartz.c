@@ -1075,6 +1075,14 @@ move_resize_window_internal (GdkWindow *window,
 
   impl = GDK_WINDOW_IMPL_QUARTZ (private->impl);
 
+  if ((x == private->x) &&
+      (y == private->y) &&
+      (width == impl->width) &&
+      (height == impl->height))
+    {
+      return;
+    }
+
   if (!impl->toplevel)
     {
       /* The previously visible area of this window in a coordinate
