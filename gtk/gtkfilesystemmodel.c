@@ -664,8 +664,6 @@ got_root_folder_cb (GtkFileSystemHandle *handle,
     }
   g_slist_free (roots);
 
-  model->roots = (FileModelNode *) g_slist_reverse ((GSList *)model->roots);
-
 out:
   g_object_unref (model);
   g_object_unref (handle);
@@ -1576,8 +1574,6 @@ get_children_get_folder_cb (GtkFileSystemHandle *handle,
 	}
       g_slist_free (child_paths);
     }
-
-  data->node->children = (FileModelNode *)g_slist_reverse ((GSList *)data->node->children);
 
   g_signal_connect (data->node->folder, "deleted",
 		    G_CALLBACK (deleted_callback), data->node);

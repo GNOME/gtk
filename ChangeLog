@@ -1,5 +1,13 @@
 2007-10-08  Kristian Rietveld  <kris@imendio.com>
 
+	* gtk/gtkfilesystemmodel.c (got_root_folder_cb),
+	(get_children_get_folder_cb): don't "corrupt" all iterators by
+	reversing the list after adding the items.  Reversing the list isn't
+	needed anyway as the order of the items in the model does not matter.
+	(Fixes #327243, comment 10).
+
+2007-10-08  Kristian Rietveld  <kris@imendio.com>
+
 	Fix #482841, patch by Karl Tomlinson.
 
 	* gtk/gtktooltip.c (gtk_tooltip_display_closed): use g_object_set_data
