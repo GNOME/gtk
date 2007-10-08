@@ -444,7 +444,7 @@ can also cause #GdkEventGrabBroken events.
 @implicit: %TRUE if the broken grab was implicit
 @grab_window: If this event is caused by another grab in the same 
   application, @grab_window contains the new grab window. Otherwise
-  @grab_window id %NULL.
+  @grab_window is %NULL.
 @Since: 2.8
 
 <!-- ##### ENUM GdkScrollDirection ##### -->

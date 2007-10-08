@@ -1,3 +1,9 @@
+2007-10-08  Cody Russell  <bratsche@gnome.org>
+	* docs/reference/gdk/tmpl/event_structs.sgml:
+	Fix a typo in GdkEventGrabBroken where it said
+	"@grab_window id NULL" and should say
+	"@grab_window is NULL". (#484650, Chris Lord)
+	
 2007-10-08  Kristian Rietveld  <kris@imendio.com>
 
 	* gtk/gtkfilesystemmodel.c (got_root_folder_cb),
