@@ -1,5 +1,11 @@
 2007-10-09  Kristian Rietveld  <kris@imendio.com>
 
+	* gtk/gtktreeview.c (gtk_tree_view_move_cursor_page_up_down): make
+	sure the new cursor node is visible when we are done. (Fixes #472965,
+	Carlos Garnacho).
+
+2007-10-09  Kristian Rietveld  <kris@imendio.com>
+
 	* gtk/gtktreeview.c (gtk_tree_view_move_cursor_up_down): we should
 	only "don't move the cursor, but just select the current node" if the
 	cursor node is actually selectable.  (Fixes #483730, reported by
