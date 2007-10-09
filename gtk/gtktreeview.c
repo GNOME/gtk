@@ -9655,6 +9655,7 @@ gtk_tree_view_move_cursor_up_down (GtkTreeView *tree_view,
   GtkRBNode *new_cursor_node = NULL;
   GtkTreePath *cursor_path = NULL;
   gboolean grab_focus = TRUE;
+  gboolean selectable;
 
   if (! GTK_WIDGET_HAS_FOCUS (tree_view))
     return;
@@ -9667,17 +9668,20 @@ gtk_tree_view_move_cursor_up_down (GtkTreeView *tree_view,
   cursor_path = gtk_tree_row_reference_get_path (tree_view->priv->cursor);
   _gtk_tree_view_find_node (tree_view, cursor_path,
 			    &cursor_tree, &cursor_node);
-  gtk_tree_path_free (cursor_path);
 
   if (cursor_tree == NULL)
     /* FIXME: we lost the cursor; should we get the first? */
     return;
 
   selection_count = gtk_tree_selection_count_selected_rows (tree_view->priv->selection);
+  selectable = _gtk_tree_selection_row_is_selectable (tree_view->priv->selection,
+						      cursor_node,
+						      cursor_path);
 
   if (selection_count == 0
       && tree_view->priv->selection->type != GTK_SELECTION_NONE
-      && !tree_view->priv->ctrl_pressed)
+      && !tree_view->priv->ctrl_pressed
+      && selectable)
     {
       /* Don't move the cursor, but just select the current node */
       new_cursor_tree = cursor_tree;
@@ -9692,6 +9696,8 @@ gtk_tree_view_move_cursor_up_down (GtkTreeView *tree_view,
 	_gtk_rbtree_next_full (cursor_tree, cursor_node,
 			       &new_cursor_tree, &new_cursor_node);
     }
+
+  gtk_tree_path_free (cursor_path);
 
   if (new_cursor_node)
     {

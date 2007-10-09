@@ -1,3 +1,10 @@
+2007-10-09  Kristian Rietveld  <kris@imendio.com>
+
+	* gtk/gtktreeview.c (gtk_tree_view_move_cursor_up_down): we should
+	only "don't move the cursor, but just select the current node" if the
+	cursor node is actually selectable.  (Fixes #483730, reported by
+	Geoff Bache).
+
 2007-10-08  Richard Hult  <richard@imendio.com>
 
 	* gdk/quartz/gdkwindow-quartz.c: (gdk_window_focus): Implement,
