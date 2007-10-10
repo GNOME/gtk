@@ -1557,8 +1557,8 @@ if test "x$CUPS_CONFIG" != "xno"; then
   CUPS_LIBS=`cups-config --libs`
 
   CUPS_API_VERSION=`cups-config --api-version`
-  CUPS_API_MAJOR=`$as_echo_n $CUPS_API_VERSION | awk -F. '{print $1}'`
-  CUPS_API_MINOR=`$as_echo_n $CUPS_API_VERSION | awk -F. '{print $2}'`
+  CUPS_API_MAJOR=`echo $ECHO_N $CUPS_API_VERSION | awk -F. '{print $1}'`
+  CUPS_API_MINOR=`echo $ECHO_N $CUPS_API_VERSION | awk -F. '{print $2}'`
 
   if test $CUPS_API_MAJOR -gt 1 -o \
           $CUPS_API_MAJOR -eq 1 -a $CUPS_API_MINOR -ge 2; then
