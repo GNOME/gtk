@@ -11101,6 +11101,7 @@ list_mtime_data_func (GtkTreeViewColumn *tree_column,
       struct tm tm_mtime;
       time_t time_now;
       const gchar *format;
+      gchar *locale_format = NULL;
       gchar buf[256];
 
 #ifdef HAVE_LOCALTIME_R
@@ -11143,10 +11144,14 @@ list_mtime_data_func (GtkTreeViewColumn *tree_column,
 	    format = "%x"; /* Any other date */
 	}
 
-      if (strftime (buf, sizeof (buf), format, &tm_mtime) != 0)
+      locale_format = g_locale_from_utf8 (format, -1, NULL, NULL, NULL);
+
+      if (strftime (buf, sizeof (buf), locale_format, &tm_mtime) != 0)
         date_str = g_locale_to_utf8 (buf, -1, NULL, NULL, NULL);
       else
 	date_str = g_strdup (_("Unknown"));
+
+      g_free (locale_format);
     }
 
   g_object_set (cell,
