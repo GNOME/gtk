@@ -11023,7 +11023,7 @@ list_mtime_data_func (GtkTreeViewColumn *tree_column,
 		      gpointer           data)
 {
   GtkFileChooserDefault *impl;
-  GtkFileTime time_mtime;
+  time_t time_mtime;
   gchar *date_str = NULL;
   gboolean sensitive = TRUE;
 
@@ -11063,7 +11063,7 @@ list_mtime_data_func (GtkTreeViewColumn *tree_column,
                           -1);
 
       if (info)
-        time_mtime = (GtkFileTime) gtk_recent_info_get_modified (info);
+        time_mtime = gtk_recent_info_get_modified (info);
       else
         time_mtime = 0;
 
@@ -11085,7 +11085,7 @@ list_mtime_data_func (GtkTreeViewColumn *tree_column,
 	  return;
 	}
 
-      time_mtime = gtk_file_info_get_modification_time (info);
+      time_mtime = (time_t) gtk_file_info_get_modification_time (info);
 
       if (impl->action == GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER ||
 	  impl->action == GTK_FILE_CHOOSER_ACTION_CREATE_FOLDER)
