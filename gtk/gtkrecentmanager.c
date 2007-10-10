@@ -1140,8 +1140,7 @@ build_recent_info (GBookmarkFile  *bookmarks,
       app_info->count = count;
       app_info->stamp = stamp;
       
-      info->applications = g_slist_append (info->applications,
-      					   app_info);
+      info->applications = g_slist_prepend (info->applications, app_info);
       g_hash_table_replace (info->apps_lookup, app_info->name, app_info);
     }
   
@@ -1936,7 +1935,8 @@ get_icon_fallback (const gchar *icon_name,
  *
  * Retrieves the icon of size @size associated to the resource MIME type.
  *
- * Return value: a #GdkPixbuf containing the icon, or %NULL.
+ * Return value: a #GdkPixbuf containing the icon, or %NULL. Use
+ *   g_object_unref() when finished using the icon.
  *
  * Since: 2.10
  */
@@ -2202,7 +2202,8 @@ gtk_recent_info_get_short_name (GtkRecentInfo *info)
  * is local, it returns a local path; if the resource is not local,
  * it returns the UTF-8 encoded content of gtk_recent_info_get_uri().
  *
- * Return value: a UTF-8 string containing the resource's URI or %NULL
+ * Return value: a newly allocated UTF-8 string containing the
+ *   resource's URI or %NULL. Use g_free() when done using it.
  *
  * Since: 2.10
  */

@@ -1,5 +1,14 @@
 2007-10-10  Emmanuele Bassi  <ebassi@gnome.org>
 
+	* gtk/gtkrecentmanager.c (gtk_recent_info_get_icon): Document
+	that you need to unref the returned GdkPixbuf. (#484132,
+	Christian Persch)
+
+	(build_recent_info): Use g_slist_prepend() when building
+	the applications list.
+
+2007-10-10  Emmanuele Bassi  <ebassi@gnome.org>
+
 	* gtk/gtkfilechooserdefault.c (list_mtime_data_func): Convert
 	the format to the current locale before passing it to
 	strtime(). Fixes corrupt dates with non-UTF8 encodings on
