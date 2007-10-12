@@ -199,13 +199,6 @@ typedef struct
   guint icon_data_size;
 } Image;
 
-static void
-free_icon_data (IconData *icon_data)
-{
-  g_free (icon_data->attach_points);
-  g_strfreev (icon_data->display_names);
-  g_free (icon_data);
-}
 
 static gboolean
 foreach_remove_func (gpointer key, gpointer value, gpointer user_data)
@@ -219,7 +212,6 @@ foreach_remove_func (gpointer key, gpointer value, gpointer user_data)
     {
       /* just a .icon file, throw away */
       g_free (key);
-      free_icon_data (image->icon_data);
       g_free (image);
 
       return TRUE;
