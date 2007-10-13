@@ -432,7 +432,7 @@ class GtkBuilderConverter(object):
         child.appendChild(action)
 
         for accelerator in get_accelerator_nodes(node):
-            signal = accelerator.getAttribute('signal')
+            signal_name = accelerator.getAttribute('signal')
             if signal_name != 'activate':
                 print 'Unhandled accelerator signal for %s::%s' % (
                     node.getAttribute('class'), signal_name)
