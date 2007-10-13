@@ -4,7 +4,7 @@
 	(GtkBuilderConverter._add_action_from_menuitem): signal_name instead
 	of signal. (#486360, Xavier Claessens)
 
-2007-10-12  Matthias Clasen  <mclasne@redhat.com> 
+2007-10-12  Matthias Clasen  <mclasen@redhat.com> 
 
 	* gtk/updateiconcache.c: Avoid double-free problems by not
 	freeing data that may be cached elsewhere.
