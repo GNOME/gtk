@@ -933,7 +933,9 @@ gtk_init (int *argc, char ***argv)
   if (!gtk_init_check (argc, argv))
     {
       const char *display_name_arg = gdk_get_display_arg_name ();
-      g_warning ("cannot open display: %s", display_name_arg ? display_name_arg : " ");
+      if (display_name_arg == NULL)
+        display_name_arg = getenv("DISPLAY");
+      g_warning ("cannot open display: %s", display_name_arg ? display_name_arg : "");
       exit (1);
     }
 }
