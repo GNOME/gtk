@@ -1,3 +1,7 @@
+2007-10-16  Matthias Clasen <mclasen@redhat.com>
+
+	* NEWS: Updates
+
 2007-10-15  Loïc Minier  <lool@dooz.org>
 
 	* gtk/gtkmain.c: (gtk_init): Fix "cannot open display" error message

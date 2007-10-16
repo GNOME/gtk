@@ -1,3 +1,60 @@
+Overview of Changes from GTK+ 2.12.0 to 2.12.1
+==============================================
+
+ * Bugs fixed: 
+ 472965 a small improvement for scrolling behavior with PgUp/PgDown
+ 460194 Gtk tooltips + swt crash
+ 478803 Segfault in gtk_print_operation_run when no range specified
+ 480123 Crash from GTK's new search feature
+ 483223 im-xim.so leaves callbacks connected to display "closed" ...
+ 476342 Icon cache validation causes severe page-in
+ 484008 configure fails during CUPS version tests on some platforms
+ 327243 GtkFileChooserButton emits two "selection-changed" signal...
+ 465380 gtkfilechooser cannot show the modified date on none UTF-...
+ 467269 Inkscape Flickers horribly
+ 476686 gtkrecentchooser select-multiple property
+ 478173 GTK's Tracker search engine does not work anymore
+ 478371 totem volume slider appears on all workspaces
+ 482089 GtkPrintOperation check for null default signal handler b...
+ 482504 Missing locale to UTF-8 conversion for modification time ...
+ 482841 critical warnings on gdk_display_close after _gtk_tooltip...
+ 483563 remains of gtk_widget_ref() in gtkdnd.c
+ 483730 Keyboard navigation of mutiple-selecting gtk.TreeViews im...
+ 484650 Typo in docs for GdkGrabBroken
+ 484730 In MS-Windows theme, GtkBorder freed with g_free() instea...
+ 486360 Failed to convert Empathy Glade files
+ 389358 print dialog: unit selection dialog can't be closed
+ 448343 File chooser should maintain sort state during folder swi...
+ 477447 GtkPaned documentation doesn't mention behaviour with onl...
+ 482034 GtkMenuPositionFunc push_in parameter description
+ 482837 duplicate declaration of gtk_notebook_create_window()
+ 478637 Notebook tab labels not correctly centered in ms-windows ...
+ 484132 gtk_recent_info_get_icon docs
+ 486636 "Cannot open display" message doesn't include display whe...
+ 455284 Ctrl+L should work depending if it has focus or not
+ 478377 10x speed up for window motion/scroll (gdk-quartz)
+
+ * Updated translations:
+ - Arabic (ar)
+ - Assamese (as)
+ - Belarusian Latin (be@latin)
+ - Catalan (ca)
+ - Estonian (et)
+ - Basque (eu)
+ - Hebrew (he)
+ - Ido (io)
+ - Italian (it)
+ - Japanese (ja)
+ - Georgian (ka)
+ - Kannada (kn)
+ - Korean (ko)
+ - Lithuanian (lt)
+ - Dutch (nl)
+ - Polish (pl)
+ - Romanian (ro)
+ - Slovenian (sl)
+
+
 Overview of Changes from GTK+ 2.11.6 to 2.12.0
 ==============================================
 
