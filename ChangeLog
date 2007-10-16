@@ -1,5 +1,12 @@
 2007-10-16  Matthias Clasen <mclasen@redhat.com>
 
+	* tests/testxinerama.c: Change testcase to not update
+	screen information on configure-event, since it hides
+	information for all available screens but add a button 
+	to query current monitor instead (#485437, Frederic Crozat)
+
+2007-10-16  Matthias Clasen <mclasen@redhat.com>
+
 	* gtk/gtkprinteroptionwidget.c (update_widgets): Actually use
 	the utf-8 version of the filename.  (#485301, Takao Fujiwara)
 
