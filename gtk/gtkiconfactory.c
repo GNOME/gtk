@@ -831,6 +831,9 @@ icon_size_lookup_intern (GtkSettings *settings,
   
   init_icon_sizes ();
 
+  if (size == (GtkIconSize)-1)
+    return FALSE:
+
   if (size >= icon_sizes_used)
     return FALSE;
 
@@ -1338,7 +1341,7 @@ find_best_matching_source (GtkIconSet       *icon_set,
       
       if ((s->any_direction || (s->direction == direction)) &&
           (s->any_state || (s->state == state)) &&
-          (s->any_size || (sizes_equivalent (size, s->size))))
+          (s->any_size || size == (GtkIconSize)-1 || (sizes_equivalent (size, s->size))))
         {
 	  if (!g_slist_find (failed, s))
 	    {
@@ -1417,7 +1420,7 @@ render_icon_name_pixbuf (GtkIconSource    *icon_source,
 
   if (!gtk_icon_size_lookup_for_settings (settings, size, &width, &height))
     {
-      if (size == -1)
+      if (size == (GtkIconSize)-1)
 	{
 	  /* Find an available size close to 48 
 	   */
@@ -2438,7 +2441,7 @@ find_in_cache (GtkIconSet      *icon_set,
       if (icon->style == style &&
           icon->direction == direction &&
           icon->state == state &&
-          icon->size == size)
+          (size == (GtkIconSize)-1 || icon->size == size))
         {
           if (prev)
             {
