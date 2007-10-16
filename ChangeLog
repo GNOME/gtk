@@ -1,5 +1,10 @@
 2007-10-16  Matthias Clasen <mclasen@redhat.com>
 
+	* gtk/gtkprinteroptionwidget.c (update_widgets): Actually use
+	the utf-8 version of the filename.  (#485301, Takao Fujiwara)
+
+2007-10-16  Matthias Clasen <mclasen@redhat.com>
+
 	* NEWS: Updates
 
 2007-10-15  Loïc Minier  <lool@dooz.org>

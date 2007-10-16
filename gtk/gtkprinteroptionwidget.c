@@ -866,7 +866,7 @@ update_widgets (GtkPrinterOptionWidget *widget)
             text = g_filename_to_utf8 (basename, -1, NULL, NULL, NULL);
 
             if (text != NULL)
-              gtk_entry_set_text (GTK_ENTRY (priv->entry), basename);
+              gtk_entry_set_text (GTK_ENTRY (priv->entry), text);
             if (g_path_is_absolute (dirname))
               gtk_file_chooser_set_current_folder (GTK_FILE_CHOOSER (priv->combo),
                                                    dirname);
