@@ -1,5 +1,10 @@
 2007-10-16  Matthias Clasen <mclasen@redhat.com>
 
+	* gtk/gtktextiter.c (gtk_text_iter_forward_line): Improve 
+	the docs.  (#486155, Owen Taylor)
+
+2007-10-16  Matthias Clasen <mclasen@redhat.com>
+
 	* tests/testxinerama.c: Change testcase to not update
 	screen information on configure-event, since it hides
 	information for all available screens but add a button 

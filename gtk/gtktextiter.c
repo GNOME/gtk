@@ -2479,10 +2479,10 @@ gtk_text_iter_backward_text_chars (GtkTextIter *iter,
  * gtk_text_iter_forward_line:
  * @iter: an iterator
  *
- * Moves @iter to the start of the next line. Returns %TRUE if there
- * was a next line to move to, and %FALSE if @iter was simply moved to
- * the end of the buffer and is now not dereferenceable, or if @iter was
- * already at the end of the buffer.
+ * Moves @iter to the start of the next line. If the iter is already on the
+ * last line of the buffer, moves the iter to the end of the current line.
+ * If after the operation, the iter is at the end of the buffer and not
+ * dereferencable, returns %FALSE. Otherwise, returns %TRUE.
  *
  * Return value: whether @iter can be dereferenced
  **/
