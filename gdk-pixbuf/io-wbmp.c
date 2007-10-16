@@ -357,7 +357,10 @@ void
 MODULE_ENTRY (wbmp, fill_info) (GdkPixbufFormat *info)
 {
 	static GdkPixbufModulePattern signature[] = {
-		{ " ", "z", 1 }, 
+		{ "  ",    "zz", 1 }, 
+		{ " \140", "z ", 1 },
+		{ " \100", "z ", 1 },
+		{ " \040", "z ", 1 },
 		{ NULL, NULL, 0 }
 	};
 	static gchar * mime_types[] = {

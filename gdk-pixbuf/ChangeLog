@@ -1,3 +1,7 @@
+2007-10-16  Matthias Clasen  <mclasen@redhat.com>
+
+	* io-wbmp.c: Use better magic.  (#339877, Bastien Nocera)
+
 2007-09-13  Matthias Clasen  <mclasen@redhat.com>
 
 	* === Released 2.12.0 ===
