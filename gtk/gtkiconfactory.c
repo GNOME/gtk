@@ -832,7 +832,7 @@ icon_size_lookup_intern (GtkSettings *settings,
   init_icon_sizes ();
 
   if (size == (GtkIconSize)-1)
-    return FALSE:
+    return FALSE;
 
   if (size >= icon_sizes_used)
     return FALSE;
