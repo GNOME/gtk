@@ -303,11 +303,11 @@ data in the three <structfield>user_data</structfield> members.
 
 </para>
 
-@model: 
-@path: 
-@iter: 
-@data: 
-@Returns: 
+@model: The #GtkTreeModel currently being iterated
+@path: The current #GtkTreePath
+@iter: The current #GtkTreeIter
+@data: The user data passed to gtk_tree_model_foreach()
+@Returns: %TRUE to stop iterating, %FALSE to continue.
 
 
 <!-- ##### ENUM GtkTreeModelFlags ##### -->
