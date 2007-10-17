@@ -1,5 +1,10 @@
 2007-10-16  Matthias Clasen <mclasen@redhat.com>
 
+	* gtk/gtkentrycompletion.c: Update the docs for the 
+	::text-column property.  (#352643, Josselin Mouette)
+
+2007-10-16  Matthias Clasen <mclasen@redhat.com>
+
 	* gtk/gtkdnd.c (gtk_drag_drop_finished): Avoid a critical
 	warning.  (#456676, Campbell Barton)
 

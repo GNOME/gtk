@@ -293,6 +293,7 @@ gtk_entry_completion_class_init (GtkEntryCompletionClass *klass)
    * GtkEntryCompletion:text-column:
    *
    * The column of the model containing the strings.
+   * Note that the strings must be UTF-8.
    *
    * Since: 2.6
    */
