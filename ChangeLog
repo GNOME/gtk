@@ -1,3 +1,8 @@
+2007-10-17  Tor Lillqvist  <tml@novell.com>
+
+	* gtk/Makefile.am (libgtk_win32_2_0_la_LIBADD): Use -Wl,-luuid
+	instead of -luuid to work around libtool lossage.
+
 2007-10-17  Matthias Clasen <mclasen@redhat.com>
 
 	* configure.in: Bump version
