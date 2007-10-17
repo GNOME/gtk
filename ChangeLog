@@ -1,3 +1,8 @@
+2007-10-17  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/Makefile.am (libgtk_win32_2_0_la_LDFLAGS): Move -Wl,-luuid
+	to LDFLAGS to make libtool happy.
+
 2007-10-17  Tor Lillqvist  <tml@novell.com>
 
 	* gtk/Makefile.am (libgtk_win32_2_0_la_LIBADD): Use -Wl,-luuid

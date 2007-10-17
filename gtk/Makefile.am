@@ -834,13 +834,13 @@ libgtk_directfb_2_0_la_SOURCES = $(gtk_c_sources)
 
 libgtk_x11_2_0_la_LDFLAGS = $(libtool_opts)
 libgtk_linux_fb_2_0_la_LDFLAGS = $(libtool_opts)
-libgtk_win32_2_0_la_LDFLAGS = $(libtool_opts)
+libgtk_win32_2_0_la_LDFLAGS = $(libtool_opts) -Wl,-luuid
 libgtk_quartz_2_0_la_LDFLAGS = $(libtool_opts)
 libgtk_directfb_2_0_la_LDFLAGS = $(libtool_opts)
 
 libgtk_x11_2_0_la_LIBADD = $(libadd)
 libgtk_linux_fb_2_0_la_LIBADD = $(libadd)
-libgtk_win32_2_0_la_LIBADD = $(libadd) -lole32 -lgdi32 -lcomdlg32 -lwinspool -lcomctl32 -Wl,-luuid
+libgtk_win32_2_0_la_LIBADD = $(libadd) -lole32 -lgdi32 -lcomdlg32 -lwinspool -lcomctl32
 libgtk_win32_2_0_la_DEPENDENCIES = $(gtk_def) $(gtk_win32_res)
 libgtk_quartz_2_0_la_LIBADD = $(libadd)
 libgtk_directfb_2_0_la_LIBADD = $(libadd)
