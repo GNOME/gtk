@@ -33,6 +33,16 @@ Overview of Changes from GTK+ 2.12.0 to 2.12.1
  486636 "Cannot open display" message doesn't include display whe...
  455284 Ctrl+L should work depending if it has focus or not
  478377 10x speed up for window motion/scroll (gdk-quartz)
+ 485301 Filename is garbled in print dialog on none UTF-8
+ 485437 Fix testxinerama.c to not query current monitor by default
+ 486155 Docs for gtk_text_iter_forward_line()
+ 339877 pixbuf loader incorrectly returns wbmp
+ 456137 Pidgin will crash in fail-safe session due to a NULL poin...
+ 456676 Critical warning in gtk_drag_drop_finished()
+ 352643 crash in gtk_entry_completion_default_completion_func
+ 477280 volume button docs fix
+ 477704 Add docs for GtkTreeModelForeachFunc
+ 476920 Move GtkFileSelection to the deprecated section
 
  * Updated translations:
  - Arabic (ar)
