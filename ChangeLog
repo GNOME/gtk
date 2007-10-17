@@ -1,5 +1,10 @@
 2007-10-16  Matthias Clasen <mclasen@redhat.com>
 
+	* gtk/gtkdnd.c (gtk_drag_drop_finished): Avoid a critical
+	warning.  (#456676, Campbell Barton)
+
+2007-10-16  Matthias Clasen <mclasen@redhat.com>
+
 	* gkt/gtkiconsize.c: Be more careful when handling 
 	(GtkIconSize)-1.  (#456137, Harry Lu, Chris Wang, et al)
 
