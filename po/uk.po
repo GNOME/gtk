@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-09-13 19:20-0400\n"
+"POT-Creation-Date: 2007-10-16 23:54-0400\n"
 "PO-Revision-Date: 2007-09-07 14:52+0200\n"
 "Last-Translator: Maxim Dziumanenko <dziumanenko@gmail.com>\n"
 "Language-Team: Ukrainian <linux@linux.org.ua>\n"
@@ -1034,7 +1034,7 @@ msgstr "Недостатньо пам'яті для завантаження з�
 msgid "Couldn't save the rest"
 msgstr "Не вдається зберегти залишок"
 
-#: gdk-pixbuf/io-wbmp.c:374
+#: gdk-pixbuf/io-wbmp.c:377
 msgid "The WBMP image format"
 msgstr "Формат зображень WBMP"
 
@@ -1510,11 +1510,11 @@ msgstr "Колірне коло"
 msgid "Color Selection"
 msgstr "Вибір кольору"
 
-#: gtk/gtkentry.c:5253 gtk/gtktextview.c:7605
+#: gtk/gtkentry.c:5253 gtk/gtktextview.c:7617
 msgid "Input _Methods"
 msgstr "М_етоди вводу"
 
-#: gtk/gtkentry.c:5267 gtk/gtktextview.c:7619
+#: gtk/gtkentry.c:5267 gtk/gtktextview.c:7631
 msgid "_Insert Unicode Control Character"
 msgstr "Вс_тавити керівний символ Юнікоду"
 
@@ -1694,62 +1694,62 @@ msgstr "_Назва:"
 msgid "_Browse for other folders"
 msgstr "О_глянути інші теки"
 
-#: gtk/gtkfilechooserdefault.c:5197
+#: gtk/gtkfilechooserdefault.c:5208
 msgid "Type a file name"
 msgstr "Введіть назву файлу"
 
 #. Create Folder
-#: gtk/gtkfilechooserdefault.c:5234
+#: gtk/gtkfilechooserdefault.c:5245
 msgid "Create Fo_lder"
 msgstr "Створити _теку"
 
-#: gtk/gtkfilechooserdefault.c:5244
+#: gtk/gtkfilechooserdefault.c:5255
 msgid "_Location:"
 msgstr "_Адреса:"
 
-#: gtk/gtkfilechooserdefault.c:5482
+#: gtk/gtkfilechooserdefault.c:5493
 msgid "Save in _folder:"
 msgstr "Зберегти у _теці:"
 
-#: gtk/gtkfilechooserdefault.c:5484
+#: gtk/gtkfilechooserdefault.c:5495
 msgid "Create in _folder:"
 msgstr "Створити у _теці:"
 
-#: gtk/gtkfilechooserdefault.c:7087
+#: gtk/gtkfilechooserdefault.c:7098
 #, c-format
 msgid "Cannot change to folder because it is not local"
 msgstr "Не вдається перейти у вказану теку, тому що вона не локальна"
 
-#: gtk/gtkfilechooserdefault.c:7703 gtk/gtkfilechooserdefault.c:7724
+#: gtk/gtkfilechooserdefault.c:7714 gtk/gtkfilechooserdefault.c:7735
 #, c-format
 msgid "Shortcut %s already exists"
 msgstr "Ярлик %s вже існує"
 
-#: gtk/gtkfilechooserdefault.c:7814
+#: gtk/gtkfilechooserdefault.c:7825
 #, c-format
 msgid "Shortcut %s does not exist"
 msgstr "Ярлика %s не існує"
 
-#: gtk/gtkfilechooserdefault.c:8069
+#: gtk/gtkfilechooserdefault.c:8080
 #, c-format
 msgid "A file named \"%s\" already exists.  Do you want to replace it?"
 msgstr "Файл з назвою \"%s\" вже існує. Бажаєте замінити його?"
 
-#: gtk/gtkfilechooserdefault.c:8072
+#: gtk/gtkfilechooserdefault.c:8083
 #, c-format
 msgid ""
 "The file already exists in \"%s\".  Replacing it will overwrite its contents."
 msgstr "Файл вже існує у \"%s\". Перезапис призведе до втрати вмісту."
 
-#: gtk/gtkfilechooserdefault.c:8077
+#: gtk/gtkfilechooserdefault.c:8088
 msgid "_Replace"
 msgstr "_Замінити"
 
-#: gtk/gtkfilechooserdefault.c:8911
+#: gtk/gtkfilechooserdefault.c:8922
 msgid "Could not start the search process"
 msgstr "Не вдається почати пошук"
 
-#: gtk/gtkfilechooserdefault.c:8912
+#: gtk/gtkfilechooserdefault.c:8923
 msgid ""
 "The program was not able to create a connection to the indexer daemon.  "
 "Please make sure it is running."
@@ -1757,25 +1757,25 @@ msgstr ""
 "Не вдається з'єднатися з службою індексованого пошуку. Перевірте, що службу "
 "запущено."
 
-#: gtk/gtkfilechooserdefault.c:8926
+#: gtk/gtkfilechooserdefault.c:8937
 msgid "Could not send the search request"
 msgstr "Не вдається надіслати запит на пошук"
 
 #. Label
-#: gtk/gtkfilechooserdefault.c:9352
+#: gtk/gtkfilechooserdefault.c:9365
 msgid "_Search:"
 msgstr "П_ошук:"
 
-#: gtk/gtkfilechooserdefault.c:10305
+#: gtk/gtkfilechooserdefault.c:10318
 #, c-format
 msgid "Could not mount %s"
 msgstr "Не вдається підключити %s"
 
-#: gtk/gtkfilechooserdefault.c:10933
+#: gtk/gtkfilechooserdefault.c:10946
 msgid "Type name of new folder"
 msgstr "Введіть назву нової теки"
 
-#: gtk/gtkfilechooserdefault.c:10981
+#: gtk/gtkfilechooserdefault.c:10994
 #, c-format
 msgid "%d byte"
 msgid_plural "%d bytes"
@@ -1783,31 +1783,31 @@ msgstr[0] "%d байт"
 msgstr[1] "%d байти"
 msgstr[2] "%d байтів"
 
-#: gtk/gtkfilechooserdefault.c:10983
+#: gtk/gtkfilechooserdefault.c:10996
 #, c-format
 msgid "%.1f KB"
 msgstr "%.1f Кб"
 
-#: gtk/gtkfilechooserdefault.c:10985
+#: gtk/gtkfilechooserdefault.c:10998
 #, c-format
 msgid "%.1f MB"
 msgstr "%.1f Мб"
 
-#: gtk/gtkfilechooserdefault.c:10987
+#: gtk/gtkfilechooserdefault.c:11000
 #, c-format
 msgid "%.1f GB"
 msgstr "%.1f Гб"
 
-#: gtk/gtkfilechooserdefault.c:11083 gtk/gtkfilechooserdefault.c:11104
-#: gtk/gtkfilechooserdefault.c:11136
+#: gtk/gtkfilechooserdefault.c:11096 gtk/gtkfilechooserdefault.c:11118
+#: gtk/gtkfilechooserdefault.c:11152
 msgid "Unknown"
 msgstr "Невідомо"
 
-#: gtk/gtkfilechooserdefault.c:11122
+#: gtk/gtkfilechooserdefault.c:11136
 msgid "Today at %H:%M"
 msgstr "Сьогодні о %H:%M"
 
-#: gtk/gtkfilechooserdefault.c:11124
+#: gtk/gtkfilechooserdefault.c:11138
 msgid "Yesterday at %H:%M"
 msgstr "Вчора о %H:%M"
 
@@ -1956,12 +1956,12 @@ msgstr "Не вдається перетворити назву файлу"
 msgid "Could not get a stock icon for %s\n"
 msgstr "Не вдається отримати вбудований значок для '%s'\n"
 
-#: gtk/gtkfilesystemmodel.c:745
+#: gtk/gtkfilesystemmodel.c:743
 #, c-format
 msgid "Could not obtain root folder"
 msgstr "Не вдається отримати кореневу теку"
 
-#: gtk/gtkfilesystemmodel.c:1338
+#: gtk/gtkfilesystemmodel.c:1336
 msgid "(Empty)"
 msgstr "(Пусто)"
 
@@ -2071,7 +2071,7 @@ msgstr "_Гама-значення"
 #. Remove this icon source so we don't keep trying to
 #. * load it.
 #.
-#: gtk/gtkiconfactory.c:1371
+#: gtk/gtkiconfactory.c:1374
 #, c-format
 msgid "Error loading icon: %s"
 msgstr "Помилка завантаження значка: %s"
@@ -2240,15 +2240,15 @@ msgstr "Параметри GTK+"
 msgid "Show GTK+ Options"
 msgstr "Показати параметри GTK+"
 
-#: gtk/gtknotebook.c:828
+#: gtk/gtknotebook.c:824
 msgid "Arrow spacing"
 msgstr "Простір навколо стрілки"
 
-#: gtk/gtknotebook.c:829
+#: gtk/gtknotebook.c:825
 msgid "Scroll arrow spacing"
 msgstr "Простір навколо стрілки прокрутки"
 
-#: gtk/gtknotebook.c:4392 gtk/gtknotebook.c:6898
+#: gtk/gtknotebook.c:4388 gtk/gtknotebook.c:6894
 #, c-format
 msgid "Page %u"
 msgstr "Сторінка %u"
@@ -2443,7 +2443,7 @@ msgstr "Завершено з помилкою"
 msgid "Preparing %d"
 msgstr "Підготовка %d"
 
-#: gtk/gtkprintoperation.c:1988 gtk/gtkprintoperation.c:2240
+#: gtk/gtkprintoperation.c:1988 gtk/gtkprintoperation.c:2242
 #, c-format
 msgid "Preparing"
 msgstr "Підготовка"
@@ -2463,7 +2463,7 @@ msgstr "Помилка попереднього перегляду"
 msgid "Error printing"
 msgstr "Помилка друку"
 
-#: gtk/gtkprintoperation-unix.c:388 gtk/gtkprintoperation-win32.c:1394
+#: gtk/gtkprintoperation-unix.c:388 gtk/gtkprintoperation-win32.c:1395
 msgid "Application"
 msgstr "Програма"
 
@@ -2487,33 +2487,33 @@ msgstr "Потрібне втручання користувача"
 msgid "Custom size"
 msgstr "Власний розмір"
 
-#: gtk/gtkprintoperation-win32.c:1484 gtk/gtkprintoperation-win32.c:1507
-#: gtk/gtkprintoperation-win32.c:1555
+#: gtk/gtkprintoperation-win32.c:1485 gtk/gtkprintoperation-win32.c:1508
+#: gtk/gtkprintoperation-win32.c:1556
 #, c-format
 msgid "Not enough free memory"
 msgstr "Недостатньо вільної пам'яті"
 
-#: gtk/gtkprintoperation-win32.c:1560
+#: gtk/gtkprintoperation-win32.c:1561
 #, c-format
 msgid "Invalid argument to PrintDlgEx"
 msgstr "Неправильний аргумент для PrintDlgEx"
 
-#: gtk/gtkprintoperation-win32.c:1565
+#: gtk/gtkprintoperation-win32.c:1566
 #, c-format
 msgid "Invalid pointer to PrintDlgEx"
 msgstr "Неправильний вказівник для PrintDlgEx"
 
-#: gtk/gtkprintoperation-win32.c:1570
+#: gtk/gtkprintoperation-win32.c:1571
 #, c-format
 msgid "Invalid handle to PrintDlgEx"
 msgstr "Неправильний дескриптор для PrintDlgEx"
 
-#: gtk/gtkprintoperation-win32.c:1575
+#: gtk/gtkprintoperation-win32.c:1576
 #, c-format
 msgid "Unspecified error"
 msgstr "Невизначена помилка"
 
-#: gtk/gtkprintoperation-win32.c:1626
+#: gtk/gtkprintoperation-win32.c:1627
 #, c-format
 msgid "Error from StartDoc"
 msgstr "Помилка від StartDoc"
@@ -2711,7 +2711,7 @@ msgid "Unable to locate image file in pixmap_path: \"%s\""
 msgstr "Файл із зображенням не знайдено в pixmap_path: \"%s\""
 
 #: gtk/gtkrecentaction.c:155 gtk/gtkrecentaction.c:163
-#: gtk/gtkrecentchoosermenu.c:555 gtk/gtkrecentchoosermenu.c:563
+#: gtk/gtkrecentchoosermenu.c:553 gtk/gtkrecentchoosermenu.c:561
 #, c-format
 msgid "This function is not implemented for widgets of class '%s'"
 msgstr "Ця функція не реалізована для віджета класу '%s'"
@@ -2767,17 +2767,17 @@ msgstr "_Показати особисті ресурси"
 msgid "No items found"
 msgstr "Елементи не знайдені"
 
-#: gtk/gtkrecentchoosermenu.c:475 gtk/gtkrecentchoosermenu.c:531
+#: gtk/gtkrecentchoosermenu.c:473 gtk/gtkrecentchoosermenu.c:529
 #, c-format
 msgid "No recently used resource found with URI `%s'"
 msgstr "Ресурс, що нещодавно використовувався не знайдено URI `%s'"
 
-#: gtk/gtkrecentchoosermenu.c:742
+#: gtk/gtkrecentchoosermenu.c:740
 #, c-format
 msgid "Open '%s'"
 msgstr "Відкрити '%s'"
 
-#: gtk/gtkrecentchoosermenu.c:772
+#: gtk/gtkrecentchoosermenu.c:770
 msgid "Unknown item"
 msgstr "Невідомий елемент"
 
@@ -2788,7 +2788,7 @@ msgstr "Невідомий елемент"
 #. *
 #. * Don't include the prefix "recent menu label|" in the translation.
 #.
-#: gtk/gtkrecentchoosermenu.c:785
+#: gtk/gtkrecentchoosermenu.c:783
 #, c-format
 msgid "recent menu label|_%d. %s"
 msgstr "_%d. %s"
@@ -2798,13 +2798,13 @@ msgstr "_%d. %s"
 #. *
 #. * Don't include the prefix "recent menu label|" in the translation.
 #.
-#: gtk/gtkrecentchoosermenu.c:792
+#: gtk/gtkrecentchoosermenu.c:790
 #, c-format
 msgid "recent menu label|%d. %s"
 msgstr "%d. %s"
 
-#: gtk/gtkrecentmanager.c:1041 gtk/gtkrecentmanager.c:1188
-#: gtk/gtkrecentmanager.c:1198 gtk/gtkrecentmanager.c:1251
+#: gtk/gtkrecentmanager.c:1041 gtk/gtkrecentmanager.c:1187
+#: gtk/gtkrecentmanager.c:1197 gtk/gtkrecentmanager.c:1250
 #, c-format
 msgid "Unable to find an item with URI '%s'"
 msgstr "Не вдається знайти елемент з URI '%s'"
@@ -4228,96 +4228,96 @@ msgstr "ROC 16k"
 msgid "paper size|ROC 8k"
 msgstr "ROC 8k"
 
-#: gtk/updateiconcache.c:498 gtk/updateiconcache.c:558
+#: gtk/updateiconcache.c:490 gtk/updateiconcache.c:550
 #, c-format
 msgid "different idatas found for symlinked '%s' and '%s'\n"
 msgstr "знайдено різні idatas для символічних посилань '%s' та '%s'\n"
 
-#: gtk/updateiconcache.c:1376
+#: gtk/updateiconcache.c:1368
 #, c-format
 msgid "Failed to write header\n"
 msgstr "Не вдається записати заголовок\n"
 
-#: gtk/updateiconcache.c:1382
+#: gtk/updateiconcache.c:1374
 #, c-format
 msgid "Failed to write hash table\n"
 msgstr "Не вдається записати хеш-таблицю\n"
 
-#: gtk/updateiconcache.c:1388
+#: gtk/updateiconcache.c:1380
 #, c-format
 msgid "Failed to write folder index\n"
 msgstr "Не вдається записати індекс каталогу\n"
 
-#: gtk/updateiconcache.c:1396
+#: gtk/updateiconcache.c:1388
 #, c-format
 msgid "Failed to rewrite header\n"
 msgstr "Не вдається перезаписати заголовок\n"
 
-#: gtk/updateiconcache.c:1448
+#: gtk/updateiconcache.c:1440
 #, c-format
 msgid "Failed to write cache file: %s\n"
 msgstr "Не вдається записати файл кешу: %s\n"
 
-#: gtk/updateiconcache.c:1483
+#: gtk/updateiconcache.c:1475
 #, c-format
 msgid "The generated cache was invalid.\n"
 msgstr "Створений кеш містить помилки.\n"
 
-#: gtk/updateiconcache.c:1497
+#: gtk/updateiconcache.c:1489
 #, c-format
 msgid "Could not rename %s to %s: %s, removing %s then.\n"
 msgstr "Не вдається перейменувати %s на %s: %s, з подальшим видаленням %s.\n"
 
-#: gtk/updateiconcache.c:1509
+#: gtk/updateiconcache.c:1501
 #, c-format
 msgid "Could not rename %s to %s: %s\n"
 msgstr "не вдається перейменувати %s у %s: %s\n"
 
-#: gtk/updateiconcache.c:1516
+#: gtk/updateiconcache.c:1508
 #, c-format
 msgid "Could not rename %s back to %s: %s.\n"
 msgstr "Не вдається перейменувати %s назад на %s: %s.\n"
 
-#: gtk/updateiconcache.c:1538
+#: gtk/updateiconcache.c:1530
 #, c-format
 msgid "Cache file created successfully.\n"
 msgstr "Файл Cache успішно створено.\n"
 
-#: gtk/updateiconcache.c:1577
+#: gtk/updateiconcache.c:1569
 msgid "Overwrite an existing cache, even if up to date"
 msgstr "Перезаписати існуючий кеш, навіть якщо він оновлений"
 
-#: gtk/updateiconcache.c:1578
+#: gtk/updateiconcache.c:1570
 msgid "Don't check for the existence of index.theme"
 msgstr "Не перевіряти існування файлу index.theme"
 
-#: gtk/updateiconcache.c:1579
+#: gtk/updateiconcache.c:1571
 msgid "Don't include image data in the cache"
 msgstr "Не включати зображення в кеш"
 
-#: gtk/updateiconcache.c:1580
+#: gtk/updateiconcache.c:1572
 msgid "Output a C header file"
 msgstr "Видавати файл заголовків на мові C"
 
-#: gtk/updateiconcache.c:1581
+#: gtk/updateiconcache.c:1573
 msgid "Turn off verbose output"
 msgstr "Вимкнути розширений вивід"
 
-#: gtk/updateiconcache.c:1582
+#: gtk/updateiconcache.c:1574
 msgid "Validate existing icon cache"
 msgstr "Перевірити поточний кеш значків"
 
-#: gtk/updateiconcache.c:1617
+#: gtk/updateiconcache.c:1609
 #, c-format
 msgid "File not found: %s\n"
 msgstr "Не вдається знайти файл: %s\n"
 
-#: gtk/updateiconcache.c:1623
+#: gtk/updateiconcache.c:1615
 #, c-format
 msgid "Not a valid icon cache: %s\n"
 msgstr "Некоректний кеш: %s\n"
 
-#: gtk/updateiconcache.c:1634
+#: gtk/updateiconcache.c:1626
 #, c-format
 msgid ""
 "No theme index file in '%s'.\n"

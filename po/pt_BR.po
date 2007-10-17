@@ -13,7 +13,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-09-13 19:20-0400\n"
+"POT-Creation-Date: 2007-10-16 23:54-0400\n"
 "PO-Revision-Date: 2007-09-07 10:00-0300\n"
 "Last-Translator: Og Maciel <ogmaciel@gnome.org>\n"
 "Language-Team: Brazilian Portuguese <gnome-l10n-br@listas.cipsga.org.br>\n"
@@ -1036,7 +1036,7 @@ msgstr "Memória insuficiente para carregar a imagem"
 msgid "Couldn't save the rest"
 msgstr "Não foi possível salvar o restante"
 
-#: gdk-pixbuf/io-wbmp.c:374
+#: gdk-pixbuf/io-wbmp.c:377
 msgid "The WBMP image format"
 msgstr "Formato de imagem WBMP"
 
@@ -1513,11 +1513,11 @@ msgstr "Roda de Cores"
 msgid "Color Selection"
 msgstr "Seleção de Cor"
 
-#: gtk/gtkentry.c:5253 gtk/gtktextview.c:7605
+#: gtk/gtkentry.c:5253 gtk/gtktextview.c:7617
 msgid "Input _Methods"
 msgstr "_Métodos de Entrada"
 
-#: gtk/gtkentry.c:5267 gtk/gtktextview.c:7619
+#: gtk/gtkentry.c:5267 gtk/gtktextview.c:7631
 msgid "_Insert Unicode Control Character"
 msgstr "_Inserir Caracter de Controle Unicode"
 
@@ -1702,63 +1702,63 @@ msgstr "_Nome:"
 msgid "_Browse for other folders"
 msgstr "_Navegar em outras pastas"
 
-#: gtk/gtkfilechooserdefault.c:5197
+#: gtk/gtkfilechooserdefault.c:5208
 msgid "Type a file name"
 msgstr "Digite um nome de arquivo"
 
 #. Create Folder
-#: gtk/gtkfilechooserdefault.c:5234
+#: gtk/gtkfilechooserdefault.c:5245
 msgid "Create Fo_lder"
 msgstr "Criar _Pasta"
 
-#: gtk/gtkfilechooserdefault.c:5244
+#: gtk/gtkfilechooserdefault.c:5255
 msgid "_Location:"
 msgstr "_Localização"
 
-#: gtk/gtkfilechooserdefault.c:5482
+#: gtk/gtkfilechooserdefault.c:5493
 msgid "Save in _folder:"
 msgstr "Salvar na _pasta:"
 
-#: gtk/gtkfilechooserdefault.c:5484
+#: gtk/gtkfilechooserdefault.c:5495
 msgid "Create in _folder:"
 msgstr "Criar na _pasta:"
 
-#: gtk/gtkfilechooserdefault.c:7087
+#: gtk/gtkfilechooserdefault.c:7098
 #, c-format
 msgid "Cannot change to folder because it is not local"
 msgstr "Não foi possível ir para a pasta porque ela não é local"
 
-#: gtk/gtkfilechooserdefault.c:7703 gtk/gtkfilechooserdefault.c:7724
+#: gtk/gtkfilechooserdefault.c:7714 gtk/gtkfilechooserdefault.c:7735
 #, c-format
 msgid "Shortcut %s already exists"
 msgstr "O atalho %s já existe"
 
-#: gtk/gtkfilechooserdefault.c:7814
+#: gtk/gtkfilechooserdefault.c:7825
 #, c-format
 msgid "Shortcut %s does not exist"
 msgstr "O atalho %s não existe"
 
-#: gtk/gtkfilechooserdefault.c:8069
+#: gtk/gtkfilechooserdefault.c:8080
 #, c-format
 msgid "A file named \"%s\" already exists.  Do you want to replace it?"
 msgstr "Um arquivo com o nome \"%s\" já existe. Você deseja substituí-lo?"
 
-#: gtk/gtkfilechooserdefault.c:8072
+#: gtk/gtkfilechooserdefault.c:8083
 #, c-format
 msgid ""
 "The file already exists in \"%s\".  Replacing it will overwrite its contents."
 msgstr ""
 "O arquivo já existe em \"%s\". Substituí-lo irá sobrescrever seu conteúdo."
 
-#: gtk/gtkfilechooserdefault.c:8077
+#: gtk/gtkfilechooserdefault.c:8088
 msgid "_Replace"
 msgstr "Substitui_r"
 
-#: gtk/gtkfilechooserdefault.c:8911
+#: gtk/gtkfilechooserdefault.c:8922
 msgid "Could not start the search process"
 msgstr "Não foi possível iniciar o processo de pesquisa"
 
-#: gtk/gtkfilechooserdefault.c:8912
+#: gtk/gtkfilechooserdefault.c:8923
 msgid ""
 "The program was not able to create a connection to the indexer daemon.  "
 "Please make sure it is running."
@@ -1766,56 +1766,56 @@ msgstr ""
 "Não foi possível estabelecer uma conexão com o serviço indexador. Por favor, "
 "certifique-se de que o serviço está em execução."
 
-#: gtk/gtkfilechooserdefault.c:8926
+#: gtk/gtkfilechooserdefault.c:8937
 msgid "Could not send the search request"
 msgstr "Não foi possível enviar o pedido de pesquisa"
 
 #. Label
-#: gtk/gtkfilechooserdefault.c:9352
+#: gtk/gtkfilechooserdefault.c:9365
 msgid "_Search:"
 msgstr "_Pesquisar:"
 
-#: gtk/gtkfilechooserdefault.c:10305
+#: gtk/gtkfilechooserdefault.c:10318
 #, c-format
 msgid "Could not mount %s"
 msgstr "Não foi possível montar %s"
 
-#: gtk/gtkfilechooserdefault.c:10933
+#: gtk/gtkfilechooserdefault.c:10946
 msgid "Type name of new folder"
 msgstr "Digite o nome da nova pasta"
 
-#: gtk/gtkfilechooserdefault.c:10981
+#: gtk/gtkfilechooserdefault.c:10994
 #, c-format
 msgid "%d byte"
 msgid_plural "%d bytes"
 msgstr[0] "%d byte"
 msgstr[1] "%d bytes"
 
-#: gtk/gtkfilechooserdefault.c:10983
+#: gtk/gtkfilechooserdefault.c:10996
 #, c-format
 msgid "%.1f KB"
 msgstr "%.1f KB"
 
-#: gtk/gtkfilechooserdefault.c:10985
+#: gtk/gtkfilechooserdefault.c:10998
 #, c-format
 msgid "%.1f MB"
 msgstr "%.1f MB"
 
-#: gtk/gtkfilechooserdefault.c:10987
+#: gtk/gtkfilechooserdefault.c:11000
 #, c-format
 msgid "%.1f GB"
 msgstr "%.1f GB"
 
-#: gtk/gtkfilechooserdefault.c:11083 gtk/gtkfilechooserdefault.c:11104
-#: gtk/gtkfilechooserdefault.c:11136
+#: gtk/gtkfilechooserdefault.c:11096 gtk/gtkfilechooserdefault.c:11118
+#: gtk/gtkfilechooserdefault.c:11152
 msgid "Unknown"
 msgstr "Desconhecido"
 
-#: gtk/gtkfilechooserdefault.c:11122
+#: gtk/gtkfilechooserdefault.c:11136
 msgid "Today at %H:%M"
 msgstr "Hoje às %H:%M"
 
-#: gtk/gtkfilechooserdefault.c:11124
+#: gtk/gtkfilechooserdefault.c:11138
 msgid "Yesterday at %H:%M"
 msgstr "Ontem às %H:%M"
 
@@ -1965,12 +1965,12 @@ msgstr "Não foi possível converter o nome do arquivo"
 msgid "Could not get a stock icon for %s\n"
 msgstr "Não foi possível obter um ícone para %s\n"
 
-#: gtk/gtkfilesystemmodel.c:745
+#: gtk/gtkfilesystemmodel.c:743
 #, c-format
 msgid "Could not obtain root folder"
 msgstr "Não foi possível obter a pasta raiz"
 
-#: gtk/gtkfilesystemmodel.c:1338
+#: gtk/gtkfilesystemmodel.c:1336
 msgid "(Empty)"
 msgstr "(Vazio)"
 
@@ -2080,7 +2080,7 @@ msgstr "Valor _Gamma"
 #. Remove this icon source so we don't keep trying to
 #. * load it.
 #.
-#: gtk/gtkiconfactory.c:1371
+#: gtk/gtkiconfactory.c:1374
 #, c-format
 msgid "Error loading icon: %s"
 msgstr "Erro ao carregar o ícone: %s"
@@ -2249,15 +2249,15 @@ msgstr "Opções do GTK+"
 msgid "Show GTK+ Options"
 msgstr "Mostra as opções do GTK+"
 
-#: gtk/gtknotebook.c:828
+#: gtk/gtknotebook.c:824
 msgid "Arrow spacing"
 msgstr "Espaçamento da seta"
 
-#: gtk/gtknotebook.c:829
+#: gtk/gtknotebook.c:825
 msgid "Scroll arrow spacing"
 msgstr "Espaçamento da seta de rolagem"
 
-#: gtk/gtknotebook.c:4392 gtk/gtknotebook.c:6898
+#: gtk/gtknotebook.c:4388 gtk/gtknotebook.c:6894
 #, c-format
 msgid "Page %u"
 msgstr "Página %u"
@@ -2452,7 +2452,7 @@ msgstr "Terminado com erro"
 msgid "Preparing %d"
 msgstr "Preparando %d"
 
-#: gtk/gtkprintoperation.c:1988 gtk/gtkprintoperation.c:2240
+#: gtk/gtkprintoperation.c:1988 gtk/gtkprintoperation.c:2242
 #, c-format
 msgid "Preparing"
 msgstr "Preparando"
@@ -2472,7 +2472,7 @@ msgstr "Erro ao lançar visualização"
 msgid "Error printing"
 msgstr "Erro ao imprimir"
 
-#: gtk/gtkprintoperation-unix.c:388 gtk/gtkprintoperation-win32.c:1394
+#: gtk/gtkprintoperation-unix.c:388 gtk/gtkprintoperation-win32.c:1395
 msgid "Application"
 msgstr "Aplicação"
 
@@ -2496,33 +2496,33 @@ msgstr "Precisa de intervenção do usuário"
 msgid "Custom size"
 msgstr "Tamanho personalizado"
 
-#: gtk/gtkprintoperation-win32.c:1484 gtk/gtkprintoperation-win32.c:1507
-#: gtk/gtkprintoperation-win32.c:1555
+#: gtk/gtkprintoperation-win32.c:1485 gtk/gtkprintoperation-win32.c:1508
+#: gtk/gtkprintoperation-win32.c:1556
 #, c-format
 msgid "Not enough free memory"
 msgstr "Memória livre insuficiente"
 
-#: gtk/gtkprintoperation-win32.c:1560
+#: gtk/gtkprintoperation-win32.c:1561
 #, c-format
 msgid "Invalid argument to PrintDlgEx"
 msgstr "Argumento inválido para PrintDlgEx"
 
-#: gtk/gtkprintoperation-win32.c:1565
+#: gtk/gtkprintoperation-win32.c:1566
 #, c-format
 msgid "Invalid pointer to PrintDlgEx"
 msgstr "Ponteiro para PrintDlgEx inválido"
 
-#: gtk/gtkprintoperation-win32.c:1570
+#: gtk/gtkprintoperation-win32.c:1571
 #, c-format
 msgid "Invalid handle to PrintDlgEx"
 msgstr "Manipulador para PrintDlgEx inválido"
 
-#: gtk/gtkprintoperation-win32.c:1575
+#: gtk/gtkprintoperation-win32.c:1576
 #, c-format
 msgid "Unspecified error"
 msgstr "Erro não especificado"
 
-#: gtk/gtkprintoperation-win32.c:1626
+#: gtk/gtkprintoperation-win32.c:1627
 #, c-format
 msgid "Error from StartDoc"
 msgstr "Erro de StartDoc"
@@ -2720,7 +2720,7 @@ msgid "Unable to locate image file in pixmap_path: \"%s\""
 msgstr "Não foi possível encontrar o arquivo de imagem no pixmap_path: \"%s\""
 
 #: gtk/gtkrecentaction.c:155 gtk/gtkrecentaction.c:163
-#: gtk/gtkrecentchoosermenu.c:555 gtk/gtkrecentchoosermenu.c:563
+#: gtk/gtkrecentchoosermenu.c:553 gtk/gtkrecentchoosermenu.c:561
 #, c-format
 msgid "This function is not implemented for widgets of class '%s'"
 msgstr "Esta função não está implementada para widgets da classe '%s'"
@@ -2776,17 +2776,17 @@ msgstr "Mostrar recursos _privados"
 msgid "No items found"
 msgstr "Nenhum item encontrado"
 
-#: gtk/gtkrecentchoosermenu.c:475 gtk/gtkrecentchoosermenu.c:531
+#: gtk/gtkrecentchoosermenu.c:473 gtk/gtkrecentchoosermenu.c:529
 #, c-format
 msgid "No recently used resource found with URI `%s'"
 msgstr "Nenhum recurso recentemente usado encontrado com o URI '%s'"
 
-#: gtk/gtkrecentchoosermenu.c:742
+#: gtk/gtkrecentchoosermenu.c:740
 #, c-format
 msgid "Open '%s'"
 msgstr "Abrir '%s'"
 
-#: gtk/gtkrecentchoosermenu.c:772
+#: gtk/gtkrecentchoosermenu.c:770
 msgid "Unknown item"
 msgstr "Item desconhecido"
 
@@ -2797,7 +2797,7 @@ msgstr "Item desconhecido"
 #. *
 #. * Don't include the prefix "recent menu label|" in the translation.
 #.
-#: gtk/gtkrecentchoosermenu.c:785
+#: gtk/gtkrecentchoosermenu.c:783
 #, c-format
 msgid "recent menu label|_%d. %s"
 msgstr "_%d. %s"
@@ -2807,13 +2807,13 @@ msgstr "_%d. %s"
 #. *
 #. * Don't include the prefix "recent menu label|" in the translation.
 #.
-#: gtk/gtkrecentchoosermenu.c:792
+#: gtk/gtkrecentchoosermenu.c:790
 #, c-format
 msgid "recent menu label|%d. %s"
 msgstr "%d. %s"
 
-#: gtk/gtkrecentmanager.c:1041 gtk/gtkrecentmanager.c:1188
-#: gtk/gtkrecentmanager.c:1198 gtk/gtkrecentmanager.c:1251
+#: gtk/gtkrecentmanager.c:1041 gtk/gtkrecentmanager.c:1187
+#: gtk/gtkrecentmanager.c:1197 gtk/gtkrecentmanager.c:1250
 #, c-format
 msgid "Unable to find an item with URI '%s'"
 msgstr "Não foi possível encontrar um item com o URI '%s'"
@@ -4238,97 +4238,97 @@ msgstr "ROC 16k"
 msgid "paper size|ROC 8k"
 msgstr "ROC 8k"
 
-#: gtk/updateiconcache.c:498 gtk/updateiconcache.c:558
+#: gtk/updateiconcache.c:490 gtk/updateiconcache.c:550
 #, c-format
 msgid "different idatas found for symlinked '%s' and '%s'\n"
 msgstr ""
 "idatas diferentes encontrados para '%s' e '%s' ligados simbolicamente\n"
 
-#: gtk/updateiconcache.c:1376
+#: gtk/updateiconcache.c:1368
 #, c-format
 msgid "Failed to write header\n"
 msgstr "Falha ao gravar cabeçalho\n"
 
-#: gtk/updateiconcache.c:1382
+#: gtk/updateiconcache.c:1374
 #, c-format
 msgid "Failed to write hash table\n"
 msgstr "Falha ao gravar tabela hash\n"
 
-#: gtk/updateiconcache.c:1388
+#: gtk/updateiconcache.c:1380
 #, c-format
 msgid "Failed to write folder index\n"
 msgstr "Falha ao gravar índice da pasta\n"
 
-#: gtk/updateiconcache.c:1396
+#: gtk/updateiconcache.c:1388
 #, c-format
 msgid "Failed to rewrite header\n"
 msgstr "Falha ao regravar cabeçalho\n"
 
-#: gtk/updateiconcache.c:1448
+#: gtk/updateiconcache.c:1440
 #, c-format
 msgid "Failed to write cache file: %s\n"
 msgstr "Falha ao gravar arquivo de cache: %s\n"
 
-#: gtk/updateiconcache.c:1483
+#: gtk/updateiconcache.c:1475
 #, c-format
 msgid "The generated cache was invalid.\n"
 msgstr "O cache gerado era inválido.\n"
 
-#: gtk/updateiconcache.c:1497
+#: gtk/updateiconcache.c:1489
 #, c-format
 msgid "Could not rename %s to %s: %s, removing %s then.\n"
 msgstr "Não foi possível renomear %s para %s: %s, então removendo %s.\n"
 
-#: gtk/updateiconcache.c:1509
+#: gtk/updateiconcache.c:1501
 #, c-format
 msgid "Could not rename %s to %s: %s\n"
 msgstr "Não foi possível renomear %s para %s: %s\n"
 
-#: gtk/updateiconcache.c:1516
+#: gtk/updateiconcache.c:1508
 #, c-format
 msgid "Could not rename %s back to %s: %s.\n"
 msgstr "Não foi possível renomear %s de volta para %s: %s\n"
 
-#: gtk/updateiconcache.c:1538
+#: gtk/updateiconcache.c:1530
 #, c-format
 msgid "Cache file created successfully.\n"
 msgstr "Arquivo de criado com sucesso.\n"
 
-#: gtk/updateiconcache.c:1577
+#: gtk/updateiconcache.c:1569
 msgid "Overwrite an existing cache, even if up to date"
 msgstr "Sobrescrever um cache existente, mesmo que atualizado"
 
-#: gtk/updateiconcache.c:1578
+#: gtk/updateiconcache.c:1570
 msgid "Don't check for the existence of index.theme"
 msgstr "Não verificar a existência de index.theme"
 
-#: gtk/updateiconcache.c:1579
+#: gtk/updateiconcache.c:1571
 msgid "Don't include image data in the cache"
 msgstr "Não incluir dados da imagem no cache"
 
-#: gtk/updateiconcache.c:1580
+#: gtk/updateiconcache.c:1572
 msgid "Output a C header file"
 msgstr "Exibir um arquivo de cabeçalho C"
 
-#: gtk/updateiconcache.c:1581
+#: gtk/updateiconcache.c:1573
 msgid "Turn off verbose output"
 msgstr "Desligar saída detalhada"
 
-#: gtk/updateiconcache.c:1582
+#: gtk/updateiconcache.c:1574
 msgid "Validate existing icon cache"
 msgstr "Validar o cache de ícones atual"
 
-#: gtk/updateiconcache.c:1617
+#: gtk/updateiconcache.c:1609
 #, c-format
 msgid "File not found: %s\n"
 msgstr "Arquivo não encontrado: %s\n"
 
-#: gtk/updateiconcache.c:1623
+#: gtk/updateiconcache.c:1615
 #, c-format
 msgid "Not a valid icon cache: %s\n"
 msgstr "Não é um cache de ícones válido: %s\n"
 
-#: gtk/updateiconcache.c:1634
+#: gtk/updateiconcache.c:1626
 #, c-format
 msgid ""
 "No theme index file in '%s'.\n"

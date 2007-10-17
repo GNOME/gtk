@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-09-13 19:20-0400\n"
+"POT-Creation-Date: 2007-10-16 23:54-0400\n"
 "PO-Revision-Date: 2007-05-14 21:28-0000\n"
 "Last-Translator: Rhys Jones <rhys@sucs.org>\n"
 "Language-Team: Cymraeg <gnome-cy@pengwyn.linux.org.uk>\n"
@@ -1026,7 +1026,7 @@ msgstr "Dim digon o gof er mwyn llwytho delwedd"
 msgid "Couldn't save the rest"
 msgstr "Methu cadw'r gweddill"
 
-#: gdk-pixbuf/io-wbmp.c:374
+#: gdk-pixbuf/io-wbmp.c:377
 msgid "The WBMP image format"
 msgstr "Y fformat delwedd WBMP"
 
@@ -1501,11 +1501,11 @@ msgstr "Olwyn Lliw"
 msgid "Color Selection"
 msgstr "Dewis Lliw"
 
-#: gtk/gtkentry.c:5253 gtk/gtktextview.c:7605
+#: gtk/gtkentry.c:5253 gtk/gtktextview.c:7617
 msgid "Input _Methods"
 msgstr "Moddau _Mewnbwn"
 
-#: gtk/gtkentry.c:5267 gtk/gtktextview.c:7619
+#: gtk/gtkentry.c:5267 gtk/gtktextview.c:7631
 msgid "_Insert Unicode Control Character"
 msgstr "_Mewnosod Nod Rheoli Unicode"
 
@@ -1685,48 +1685,48 @@ msgstr "_Enw:"
 msgid "_Browse for other folders"
 msgstr "_Pori am blygellau eraill"
 
-#: gtk/gtkfilechooserdefault.c:5197
+#: gtk/gtkfilechooserdefault.c:5208
 msgid "Type a file name"
 msgstr "Teipiwch enw ffeil"
 
 #. Create Folder
-#: gtk/gtkfilechooserdefault.c:5234
+#: gtk/gtkfilechooserdefault.c:5245
 msgid "Create Fo_lder"
 msgstr "Creu _Plygell"
 
-#: gtk/gtkfilechooserdefault.c:5244
+#: gtk/gtkfilechooserdefault.c:5255
 msgid "_Location:"
 msgstr "_Lleoliad:"
 
-#: gtk/gtkfilechooserdefault.c:5482
+#: gtk/gtkfilechooserdefault.c:5493
 msgid "Save in _folder:"
 msgstr "Cadw mewn _plygell:"
 
-#: gtk/gtkfilechooserdefault.c:5484
+#: gtk/gtkfilechooserdefault.c:5495
 msgid "Create in _folder:"
 msgstr "Creu mewn _plygell:"
 
-#: gtk/gtkfilechooserdefault.c:7087
+#: gtk/gtkfilechooserdefault.c:7098
 #, c-format
 msgid "Cannot change to folder because it is not local"
 msgstr "Methwyd newid i'r blygell am nad yw'n lleol"
 
-#: gtk/gtkfilechooserdefault.c:7703 gtk/gtkfilechooserdefault.c:7724
+#: gtk/gtkfilechooserdefault.c:7714 gtk/gtkfilechooserdefault.c:7735
 #, c-format
 msgid "Shortcut %s already exists"
 msgstr "Byrlwybr %s yn bodoli'n barod"
 
-#: gtk/gtkfilechooserdefault.c:7814
+#: gtk/gtkfilechooserdefault.c:7825
 #, c-format
 msgid "Shortcut %s does not exist"
 msgstr "Nid yw'r byrlwybr %s yn bodoli"
 
-#: gtk/gtkfilechooserdefault.c:8069
+#: gtk/gtkfilechooserdefault.c:8080
 #, c-format
 msgid "A file named \"%s\" already exists.  Do you want to replace it?"
 msgstr "Mae ffeil o'r enw \"%s\" eisoes yn bodoli. Ydych chi am ei hamnewid?"
 
-#: gtk/gtkfilechooserdefault.c:8072
+#: gtk/gtkfilechooserdefault.c:8083
 #, c-format
 msgid ""
 "The file already exists in \"%s\".  Replacing it will overwrite its contents."
@@ -1734,15 +1734,15 @@ msgstr ""
 "Mae'r ffeil eisoes yn bodoli yn \"%s\". Bydd amnewid y ffeil yn "
 "trosysgrifo'i chynnwys."
 
-#: gtk/gtkfilechooserdefault.c:8077
+#: gtk/gtkfilechooserdefault.c:8088
 msgid "_Replace"
 msgstr "_Amnewid"
 
-#: gtk/gtkfilechooserdefault.c:8911
+#: gtk/gtkfilechooserdefault.c:8922
 msgid "Could not start the search process"
 msgstr "Methu cychwyn y broses chwilio"
 
-#: gtk/gtkfilechooserdefault.c:8912
+#: gtk/gtkfilechooserdefault.c:8923
 msgid ""
 "The program was not able to create a connection to the indexer daemon.  "
 "Please make sure it is running."
@@ -1750,56 +1750,56 @@ msgstr ""
 "Methodd y rhaglen a chreu cysylltiad â'r ellyll mynegai.  Gwnewch yn siŵr ei "
 "fod yn rhedeg."
 
-#: gtk/gtkfilechooserdefault.c:8926
+#: gtk/gtkfilechooserdefault.c:8937
 msgid "Could not send the search request"
 msgstr "Methu anfon y cais chwilio"
 
 #. Label
-#: gtk/gtkfilechooserdefault.c:9352
+#: gtk/gtkfilechooserdefault.c:9365
 msgid "_Search:"
 msgstr "_Chwilio:"
 
-#: gtk/gtkfilechooserdefault.c:10305
+#: gtk/gtkfilechooserdefault.c:10318
 #, c-format
 msgid "Could not mount %s"
 msgstr "Methu â gosod %s"
 
-#: gtk/gtkfilechooserdefault.c:10933
+#: gtk/gtkfilechooserdefault.c:10946
 msgid "Type name of new folder"
 msgstr "Teipiwch enw'r plygell newydd"
 
-#: gtk/gtkfilechooserdefault.c:10981
+#: gtk/gtkfilechooserdefault.c:10994
 #, c-format
 msgid "%d byte"
 msgid_plural "%d bytes"
 msgstr[0] "%d beit"
 msgstr[1] "%d feit"
 
-#: gtk/gtkfilechooserdefault.c:10983
+#: gtk/gtkfilechooserdefault.c:10996
 #, c-format
 msgid "%.1f KB"
 msgstr "%.1f KB"
 
-#: gtk/gtkfilechooserdefault.c:10985
+#: gtk/gtkfilechooserdefault.c:10998
 #, c-format
 msgid "%.1f MB"
 msgstr "%.1f MB"
 
-#: gtk/gtkfilechooserdefault.c:10987
+#: gtk/gtkfilechooserdefault.c:11000
 #, c-format
 msgid "%.1f GB"
 msgstr "%.1f GB"
 
-#: gtk/gtkfilechooserdefault.c:11083 gtk/gtkfilechooserdefault.c:11104
-#: gtk/gtkfilechooserdefault.c:11136
+#: gtk/gtkfilechooserdefault.c:11096 gtk/gtkfilechooserdefault.c:11118
+#: gtk/gtkfilechooserdefault.c:11152
 msgid "Unknown"
 msgstr "Anhysbys"
 
-#: gtk/gtkfilechooserdefault.c:11122
+#: gtk/gtkfilechooserdefault.c:11136
 msgid "Today at %H:%M"
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:11124
+#: gtk/gtkfilechooserdefault.c:11138
 #, fuzzy
 msgid "Yesterday at %H:%M"
 msgstr "Ddoe"
@@ -1949,12 +1949,12 @@ msgstr "Methu trawsnewid enw y ffeil"
 msgid "Could not get a stock icon for %s\n"
 msgstr "Methwyd cael eicon stoc ar gyfer %s\n"
 
-#: gtk/gtkfilesystemmodel.c:745
+#: gtk/gtkfilesystemmodel.c:743
 #, c-format
 msgid "Could not obtain root folder"
 msgstr "Methwyd cyrchu'r blygell wraidd"
 
-#: gtk/gtkfilesystemmodel.c:1338
+#: gtk/gtkfilesystemmodel.c:1336
 msgid "(Empty)"
 msgstr "(Gwag)"
 
@@ -2064,7 +2064,7 @@ msgstr "_Gwerth Gamma"
 #. Remove this icon source so we don't keep trying to
 #. * load it.
 #.
-#: gtk/gtkiconfactory.c:1371
+#: gtk/gtkiconfactory.c:1374
 #, c-format
 msgid "Error loading icon: %s"
 msgstr "Gwall wrth lwytho eicon: %s"
@@ -2233,15 +2233,15 @@ msgstr "Opsiynau GTK+"
 msgid "Show GTK+ Options"
 msgstr "Dangos Opsiynau GTK+"
 
-#: gtk/gtknotebook.c:828
+#: gtk/gtknotebook.c:824
 msgid "Arrow spacing"
 msgstr "Bwlch rhwng saethau"
 
-#: gtk/gtknotebook.c:829
+#: gtk/gtknotebook.c:825
 msgid "Scroll arrow spacing"
 msgstr "Bwlch rhwng saethau sgrolio"
 
-#: gtk/gtknotebook.c:4392 gtk/gtknotebook.c:6898
+#: gtk/gtknotebook.c:4388 gtk/gtknotebook.c:6894
 #, c-format
 msgid "Page %u"
 msgstr "Tudalen %u"
@@ -2436,7 +2436,7 @@ msgstr "Wedi gorffen, gyda gwall"
 msgid "Preparing %d"
 msgstr "Wrthi'n paratoi %d"
 
-#: gtk/gtkprintoperation.c:1988 gtk/gtkprintoperation.c:2240
+#: gtk/gtkprintoperation.c:1988 gtk/gtkprintoperation.c:2242
 #, c-format
 msgid "Preparing"
 msgstr "Wrthi'n paratoi"
@@ -2456,7 +2456,7 @@ msgstr "Gwall wrth lansio rhagolwg"
 msgid "Error printing"
 msgstr "Gwall wrth argraffu"
 
-#: gtk/gtkprintoperation-unix.c:388 gtk/gtkprintoperation-win32.c:1394
+#: gtk/gtkprintoperation-unix.c:388 gtk/gtkprintoperation-win32.c:1395
 msgid "Application"
 msgstr "Rhaglen"
 
@@ -2480,33 +2480,33 @@ msgstr "Angen i'r defnyddiwr ymyrryd"
 msgid "Custom size"
 msgstr "Maint addasedig"
 
-#: gtk/gtkprintoperation-win32.c:1484 gtk/gtkprintoperation-win32.c:1507
-#: gtk/gtkprintoperation-win32.c:1555
+#: gtk/gtkprintoperation-win32.c:1485 gtk/gtkprintoperation-win32.c:1508
+#: gtk/gtkprintoperation-win32.c:1556
 #, c-format
 msgid "Not enough free memory"
 msgstr "Dim digon o gof yn rhydd"
 
-#: gtk/gtkprintoperation-win32.c:1560
+#: gtk/gtkprintoperation-win32.c:1561
 #, c-format
 msgid "Invalid argument to PrintDlgEx"
 msgstr "Arg annilys i PrintDlgEx"
 
-#: gtk/gtkprintoperation-win32.c:1565
+#: gtk/gtkprintoperation-win32.c:1566
 #, c-format
 msgid "Invalid pointer to PrintDlgEx"
 msgstr "Pwyntydd annilys i PrintDlgEx"
 
-#: gtk/gtkprintoperation-win32.c:1570
+#: gtk/gtkprintoperation-win32.c:1571
 #, c-format
 msgid "Invalid handle to PrintDlgEx"
 msgstr "Dolen annilys i PrintDlgEx"
 
-#: gtk/gtkprintoperation-win32.c:1575
+#: gtk/gtkprintoperation-win32.c:1576
 #, c-format
 msgid "Unspecified error"
 msgstr "Gwall anhysbys"
 
-#: gtk/gtkprintoperation-win32.c:1626
+#: gtk/gtkprintoperation-win32.c:1627
 #, c-format
 msgid "Error from StartDoc"
 msgstr "Gwall o fewn StartDoc"
@@ -2704,7 +2704,7 @@ msgid "Unable to locate image file in pixmap_path: \"%s\""
 msgstr "Methu canfod ffeil delwedd yn pixmap_path: \"%s\""
 
 #: gtk/gtkrecentaction.c:155 gtk/gtkrecentaction.c:163
-#: gtk/gtkrecentchoosermenu.c:555 gtk/gtkrecentchoosermenu.c:563
+#: gtk/gtkrecentchoosermenu.c:553 gtk/gtkrecentchoosermenu.c:561
 #, c-format
 msgid "This function is not implemented for widgets of class '%s'"
 msgstr "Nid yw'r swyddogaeth hon ar gael i declynnau o'r dosbarth '%s'"
@@ -2760,17 +2760,17 @@ msgstr "Dangos Adnoddau _Preifat"
 msgid "No items found"
 msgstr "Dim eitemau wedi'u canfod"
 
-#: gtk/gtkrecentchoosermenu.c:475 gtk/gtkrecentchoosermenu.c:531
+#: gtk/gtkrecentchoosermenu.c:473 gtk/gtkrecentchoosermenu.c:529
 #, c-format
 msgid "No recently used resource found with URI `%s'"
 msgstr "Heb ddefnyddio adnodd yn ddiweddar â'r URI `%s'"
 
-#: gtk/gtkrecentchoosermenu.c:742
+#: gtk/gtkrecentchoosermenu.c:740
 #, c-format
 msgid "Open '%s'"
 msgstr "Agor '%s'"
 
-#: gtk/gtkrecentchoosermenu.c:772
+#: gtk/gtkrecentchoosermenu.c:770
 msgid "Unknown item"
 msgstr "Eitem anhysbys"
 
@@ -2781,7 +2781,7 @@ msgstr "Eitem anhysbys"
 #. *
 #. * Don't include the prefix "recent menu label|" in the translation.
 #.
-#: gtk/gtkrecentchoosermenu.c:785
+#: gtk/gtkrecentchoosermenu.c:783
 #, c-format
 msgid "recent menu label|_%d. %s"
 msgstr ""
@@ -2791,13 +2791,13 @@ msgstr ""
 #. *
 #. * Don't include the prefix "recent menu label|" in the translation.
 #.
-#: gtk/gtkrecentchoosermenu.c:792
+#: gtk/gtkrecentchoosermenu.c:790
 #, c-format
 msgid "recent menu label|%d. %s"
 msgstr ""
 
-#: gtk/gtkrecentmanager.c:1041 gtk/gtkrecentmanager.c:1188
-#: gtk/gtkrecentmanager.c:1198 gtk/gtkrecentmanager.c:1251
+#: gtk/gtkrecentmanager.c:1041 gtk/gtkrecentmanager.c:1187
+#: gtk/gtkrecentmanager.c:1197 gtk/gtkrecentmanager.c:1250
 #, c-format
 msgid "Unable to find an item with URI '%s'"
 msgstr "Methu canfod eitem gyda'r URI '%s'"
@@ -4227,98 +4227,98 @@ msgstr "ROC 16k"
 msgid "paper size|ROC 8k"
 msgstr "ROC 8k"
 
-#: gtk/updateiconcache.c:498 gtk/updateiconcache.c:558
+#: gtk/updateiconcache.c:490 gtk/updateiconcache.c:550
 #, c-format
 msgid "different idatas found for symlinked '%s' and '%s'\n"
 msgstr ""
 "idatas gwahanol wedi'u canfod ar gyfer '%s' a '%s' sydd â chyswllt "
 "symbolaidd rhyngddynt\n"
 
-#: gtk/updateiconcache.c:1376
+#: gtk/updateiconcache.c:1368
 #, c-format
 msgid "Failed to write header\n"
 msgstr "Methu ysgrifennu pennyn\n"
 
-#: gtk/updateiconcache.c:1382
+#: gtk/updateiconcache.c:1374
 #, c-format
 msgid "Failed to write hash table\n"
 msgstr "Methu ysgrifennu tabl stwnsh\n"
 
-#: gtk/updateiconcache.c:1388
+#: gtk/updateiconcache.c:1380
 #, c-format
 msgid "Failed to write folder index\n"
 msgstr "Methu ysgrifennu mynegai ffolder\n"
 
-#: gtk/updateiconcache.c:1396
+#: gtk/updateiconcache.c:1388
 #, c-format
 msgid "Failed to rewrite header\n"
 msgstr "Methu ail-ysgrifennu pennyn\n"
 
-#: gtk/updateiconcache.c:1448
+#: gtk/updateiconcache.c:1440
 #, c-format
 msgid "Failed to write cache file: %s\n"
 msgstr "Methu ysgrifennu'r ffeil storfa: %s\n"
 
-#: gtk/updateiconcache.c:1483
+#: gtk/updateiconcache.c:1475
 #, c-format
 msgid "The generated cache was invalid.\n"
 msgstr "Roedd y storfa a grëwyd yn annilys.\n"
 
-#: gtk/updateiconcache.c:1497
+#: gtk/updateiconcache.c:1489
 #, c-format
 msgid "Could not rename %s to %s: %s, removing %s then.\n"
 msgstr "Methu ail-enwi %s yn %s: %s, felly'n tynnu %s.\n"
 
-#: gtk/updateiconcache.c:1509
+#: gtk/updateiconcache.c:1501
 #, c-format
 msgid "Could not rename %s to %s: %s\n"
 msgstr "Methu ail-enwi %s yn %s: %s\n"
 
-#: gtk/updateiconcache.c:1516
+#: gtk/updateiconcache.c:1508
 #, c-format
 msgid "Could not rename %s back to %s: %s.\n"
 msgstr "Methu ail-enwi %s yn ôl i %s: %s\n"
 
-#: gtk/updateiconcache.c:1538
+#: gtk/updateiconcache.c:1530
 #, c-format
 msgid "Cache file created successfully.\n"
 msgstr "Ffeil storfa wedi'i chynhyrchu'n llwyddiannus.\n"
 
-#: gtk/updateiconcache.c:1577
+#: gtk/updateiconcache.c:1569
 msgid "Overwrite an existing cache, even if up to date"
 msgstr "Trosysgrifo'r storfa sy'n bodoli, hyd yn oed os yw hi'n gyfoes"
 
-#: gtk/updateiconcache.c:1578
+#: gtk/updateiconcache.c:1570
 msgid "Don't check for the existence of index.theme"
 msgstr "Peidio â gwirio am fodolaeth index.theme"
 
-#: gtk/updateiconcache.c:1579
+#: gtk/updateiconcache.c:1571
 msgid "Don't include image data in the cache"
 msgstr "Peidio â chynnwys data delwedd yn y storfa"
 
-#: gtk/updateiconcache.c:1580
+#: gtk/updateiconcache.c:1572
 msgid "Output a C header file"
 msgstr "Cynhyrchu ffeil bennyn C"
 
-#: gtk/updateiconcache.c:1581
+#: gtk/updateiconcache.c:1573
 msgid "Turn off verbose output"
 msgstr "Diffodd allbwn amleiriog"
 
-#: gtk/updateiconcache.c:1582
+#: gtk/updateiconcache.c:1574
 msgid "Validate existing icon cache"
 msgstr "Gwirio'r storfa eiconau sy'n bodoli"
 
-#: gtk/updateiconcache.c:1617
+#: gtk/updateiconcache.c:1609
 #, c-format
 msgid "File not found: %s\n"
 msgstr "Methu canfod ffeil: %s\n"
 
-#: gtk/updateiconcache.c:1623
+#: gtk/updateiconcache.c:1615
 #, c-format
 msgid "Not a valid icon cache: %s\n"
 msgstr "Ddim yn storfa eiconau ddilys: %s\n"
 
-#: gtk/updateiconcache.c:1634
+#: gtk/updateiconcache.c:1626
 #, c-format
 msgid ""
 "No theme index file in '%s'.\n"

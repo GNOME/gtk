@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-properties trunk\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-09-13 19:20-0400\n"
+"POT-Creation-Date: 2007-10-16 23:55-0400\n"
 "PO-Revision-Date: 2007-08-29 08:30+0300\n"
 "Last-Translator: Alexander Shopov <ash@contact.bg>\n"
 "Language-Team: Bulgarian <dict@fsa-bg.org>\n"
@@ -718,7 +718,7 @@ msgstr "Разредка"
 msgid "The amount of space between children"
 msgstr "Разстоянието между дъщерни елементи"
 
-#: gtk/gtkbox.c:108 gtk/gtknotebook.c:638 gtk/gtktable.c:165
+#: gtk/gtkbox.c:108 gtk/gtknotebook.c:634 gtk/gtktable.c:165
 #: gtk/gtktoolbar.c:563
 msgid "Homogeneous"
 msgstr "Еднакво големи"
@@ -762,7 +762,7 @@ msgstr "Допълнително място между дъщерния елем
 msgid "Pack type"
 msgstr "Тип пакетиране"
 
-#: gtk/gtkbox.c:138 gtk/gtknotebook.c:705
+#: gtk/gtkbox.c:138 gtk/gtknotebook.c:701
 msgid ""
 "A GtkPackType indicating whether the child is packed with reference to the "
 "start or end of the parent"
@@ -770,12 +770,12 @@ msgstr ""
 "GtkPackType, който указва, дали дъщерният елемент е пакетиран с спрямо "
 "началото или края на контейнера"
 
-#: gtk/gtkbox.c:144 gtk/gtknotebook.c:683 gtk/gtkpaned.c:219
+#: gtk/gtkbox.c:144 gtk/gtknotebook.c:679 gtk/gtkpaned.c:219
 #: gtk/gtkruler.c:110
 msgid "Position"
 msgstr "Позиция"
 
-#: gtk/gtkbox.c:145 gtk/gtknotebook.c:684
+#: gtk/gtkbox.c:145 gtk/gtknotebook.c:680
 msgid "The index of the child in the parent"
 msgstr "Индексът на дъщерния елемент в контейнера"
 
@@ -1937,7 +1937,7 @@ msgid "The minimum size of the arrow in the combo box"
 msgstr "Минималният размер на стрелката в падащото меню"
 
 #: gtk/gtkcombobox.c:859 gtk/gtkentry.c:622 gtk/gtkhandlebox.c:176
-#: gtk/gtkmenubar.c:201 gtk/gtkstatusbar.c:186 gtk/gtktoolbar.c:613
+#: gtk/gtkmenubar.c:194 gtk/gtkstatusbar.c:186 gtk/gtktoolbar.c:613
 #: gtk/gtkviewport.c:122
 msgid "Shadow type"
 msgstr "Вид сянка"
@@ -2195,53 +2195,53 @@ msgstr "Минимална дължина на ключа"
 msgid "Minimum length of the search key in order to look up matches"
 msgstr "Минимална дължина на низа за търсене, за да се търсят съвпадения"
 
-#: gtk/gtkentrycompletion.c:302 gtk/gtkiconview.c:586
+#: gtk/gtkentrycompletion.c:303 gtk/gtkiconview.c:586
 msgid "Text column"
 msgstr "Текстова колона"
 
-#: gtk/gtkentrycompletion.c:303
+#: gtk/gtkentrycompletion.c:304
 msgid "The column of the model containing the strings."
 msgstr "Колоната в модела, от която да се взимат низове"
 
-#: gtk/gtkentrycompletion.c:322
+#: gtk/gtkentrycompletion.c:323
 msgid "Inline completion"
 msgstr "Вътрешно дописване"
 
-#: gtk/gtkentrycompletion.c:323
+#: gtk/gtkentrycompletion.c:324
 msgid "Whether the common prefix should be inserted automatically"
 msgstr "Дали общият префикс да се показва автоматично"
 
-#: gtk/gtkentrycompletion.c:337
+#: gtk/gtkentrycompletion.c:338
 msgid "Popup completion"
 msgstr "Изскачащо дописване"
 
-#: gtk/gtkentrycompletion.c:338
+#: gtk/gtkentrycompletion.c:339
 msgid "Whether the completions should be shown in a popup window"
 msgstr "Дали автоматичното дописване да се показва в изскачащ прозорец"
 
-#: gtk/gtkentrycompletion.c:353
+#: gtk/gtkentrycompletion.c:354
 msgid "Popup set width"
 msgstr "Широчина на изскачащ прозорец"
 
-#: gtk/gtkentrycompletion.c:354
+#: gtk/gtkentrycompletion.c:355
 msgid "If TRUE, the popup window will have the same size as the entry"
 msgstr ""
 "Ако е ИСТИНА, изскачащият прозорец ще е със същата широчина като елемента"
 
-#: gtk/gtkentrycompletion.c:372
+#: gtk/gtkentrycompletion.c:373
 msgid "Popup single match"
 msgstr "Единствено условие на изскачащ прозорец"
 
-#: gtk/gtkentrycompletion.c:373
+#: gtk/gtkentrycompletion.c:374
 msgid "If TRUE, the popup window will appear for a single match."
 msgstr ""
 "Ако е ИСТИНА, изскачащият прозорец ще се появява при единствено условие."
 
-#: gtk/gtkentrycompletion.c:387
+#: gtk/gtkentrycompletion.c:388
 msgid "Inline selection"
 msgstr "Вътрешно избиране"
 
-#: gtk/gtkentrycompletion.c:388
+#: gtk/gtkentrycompletion.c:389
 msgid "Your description here"
 msgstr "Вашето описание"
 
@@ -3095,39 +3095,39 @@ msgid ""
 msgstr ""
 "Време преди скриване на подменю, през което показалеца се движи към подменюто"
 
-#: gtk/gtkmenubar.c:175
+#: gtk/gtkmenubar.c:168
 msgid "Pack direction"
 msgstr "Посока на пакетиране"
 
-#: gtk/gtkmenubar.c:176
+#: gtk/gtkmenubar.c:169
 msgid "The pack direction of the menubar"
 msgstr "Посока на пакетирането на лентата с инструменти"
 
-#: gtk/gtkmenubar.c:192
+#: gtk/gtkmenubar.c:185
 msgid "Child Pack direction"
 msgstr "Посока на пакетирането на дъщерните елементи"
 
-#: gtk/gtkmenubar.c:193
+#: gtk/gtkmenubar.c:186
 msgid "The child pack direction of the menubar"
 msgstr "Посока на пакетирането на дъщерните елементи на лентата с инструменти"
 
-#: gtk/gtkmenubar.c:202
+#: gtk/gtkmenubar.c:195
 msgid "Style of bevel around the menubar"
 msgstr "Стил на вдаване около лентата с менюта"
 
-#: gtk/gtkmenubar.c:209 gtk/gtktoolbar.c:580
+#: gtk/gtkmenubar.c:202 gtk/gtktoolbar.c:580
 msgid "Internal padding"
 msgstr "Вътрешно пространство"
 
-#: gtk/gtkmenubar.c:210
+#: gtk/gtkmenubar.c:203
 msgid "Amount of border space between the menubar shadow and the menu items"
 msgstr "Пространство между сянката на лентата с менюта и елементите на менюта"
 
-#: gtk/gtkmenubar.c:217
+#: gtk/gtkmenubar.c:210
 msgid "Delay before drop down menus appear"
 msgstr "Закъснение преди появяване на падащи менюта"
 
-#: gtk/gtkmenubar.c:218
+#: gtk/gtkmenubar.c:211
 msgid "Delay before the submenus of a menu bar appear"
 msgstr "Закъснението преди появяване на подменютата"
 
@@ -3252,77 +3252,77 @@ msgstr ""
 "Количеството празно пространство, което да се добави отгоре и отдолу на "
 "графичния обект в пиксели"
 
-#: gtk/gtknotebook.c:566
+#: gtk/gtknotebook.c:562
 msgid "Page"
 msgstr "Страница"
 
-#: gtk/gtknotebook.c:567
+#: gtk/gtknotebook.c:563
 msgid "The index of the current page"
 msgstr "Индексът на текущата страница"
 
-#: gtk/gtknotebook.c:575
+#: gtk/gtknotebook.c:571
 msgid "Tab Position"
 msgstr "Положение на табовете"
 
-#: gtk/gtknotebook.c:576
+#: gtk/gtknotebook.c:572
 msgid "Which side of the notebook holds the tabs"
 msgstr "От коя страна на контейнера-бележник са табовете"
 
-#: gtk/gtknotebook.c:583
+#: gtk/gtknotebook.c:579
 msgid "Tab Border"
 msgstr "Граница на табовете"
 
-#: gtk/gtknotebook.c:584
+#: gtk/gtknotebook.c:580
 msgid "Width of the border around the tab labels"
 msgstr "Широчина на рамката около етикетите на таб"
 
-#: gtk/gtknotebook.c:592
+#: gtk/gtknotebook.c:588
 msgid "Horizontal Tab Border"
 msgstr "Хоризонтална рамка на таб"
 
-#: gtk/gtknotebook.c:593
+#: gtk/gtknotebook.c:589
 msgid "Width of the horizontal border of tab labels"
 msgstr "Широчина на хоризонталната рамка около етикетите на таб"
 
-#: gtk/gtknotebook.c:601
+#: gtk/gtknotebook.c:597
 msgid "Vertical Tab Border"
 msgstr "Вертикална рамка на таб"
 
-#: gtk/gtknotebook.c:602
+#: gtk/gtknotebook.c:598
 msgid "Width of the vertical border of tab labels"
 msgstr "Широчина на вертикалната рамка около етикетите на таб"
 
-#: gtk/gtknotebook.c:610
+#: gtk/gtknotebook.c:606
 msgid "Show Tabs"
 msgstr "Показване на табове"
 
-#: gtk/gtknotebook.c:611
+#: gtk/gtknotebook.c:607
 msgid "Whether tabs should be shown or not"
 msgstr "Дали табовете ще бъдат показани или не"
 
-#: gtk/gtknotebook.c:617
+#: gtk/gtknotebook.c:613
 msgid "Show Border"
 msgstr "Граници"
 
-#: gtk/gtknotebook.c:618
+#: gtk/gtknotebook.c:614
 msgid "Whether the border should be shown or not"
 msgstr "Показва дали ще се показват граници"
 
-#: gtk/gtknotebook.c:624
+#: gtk/gtknotebook.c:620
 msgid "Scrollable"
 msgstr "Може да се придвижва"
 
-#: gtk/gtknotebook.c:625
+#: gtk/gtknotebook.c:621
 msgid "If TRUE, scroll arrows are added if there are too many tabs to fit"
 msgstr ""
 "Ако е ИСТИНА, се добавят стрелки за придвижване, когато табовете са повече "
 "отколкото свободното екранно място"
 
-#: gtk/gtknotebook.c:631
+#: gtk/gtknotebook.c:627
 msgid "Enable Popup"
 msgstr "Изскачащи менюта"
 
-#: gtk/gtknotebook.c:632
+#: gtk/gtknotebook.c:628
 msgid ""
 "If TRUE, pressing the right mouse button on the notebook pops up a menu that "
 "you can use to go to a page"
@@ -3330,126 +3330,126 @@ msgstr ""
 "Ако е ИСТИНА, натискането на десен клавиш на мишката в контейнера-бележник "
 "предизвиква появата на меню за придвижването до страница"
 
-#: gtk/gtknotebook.c:639
+#: gtk/gtknotebook.c:635
 msgid "Whether tabs should have homogeneous sizes"
 msgstr "Дали табовете ще имат еднакви размери"
 
-#: gtk/gtknotebook.c:645
+#: gtk/gtknotebook.c:641
 msgid "Group ID"
 msgstr "Идентификатор на група"
 
-#: gtk/gtknotebook.c:646
+#: gtk/gtknotebook.c:642
 msgid "Group ID for tabs drag and drop"
 msgstr "Идентификатор на група за влачене и пускане"
 
-#: gtk/gtknotebook.c:662 gtk/gtkradioaction.c:128 gtk/gtkradiobutton.c:82
+#: gtk/gtknotebook.c:658 gtk/gtkradioaction.c:128 gtk/gtkradiobutton.c:82
 #: gtk/gtkradiomenuitem.c:342
 msgid "Group"
 msgstr "Група"
 
-#: gtk/gtknotebook.c:663
+#: gtk/gtknotebook.c:659
 msgid "Group for tabs drag and drop"
 msgstr "Група за влачене и пускане"
 
-#: gtk/gtknotebook.c:669
+#: gtk/gtknotebook.c:665
 msgid "Tab label"
 msgstr "Текст на таба"
 
-#: gtk/gtknotebook.c:670
+#: gtk/gtknotebook.c:666
 msgid "The string displayed on the child's tab label"
 msgstr "Низът изобразен на етикета на таба на дъщерния елемент"
 
-#: gtk/gtknotebook.c:676
+#: gtk/gtknotebook.c:672
 msgid "Menu label"
 msgstr "Етикет на менюто"
 
-#: gtk/gtknotebook.c:677
+#: gtk/gtknotebook.c:673
 msgid "The string displayed in the child's menu entry"
 msgstr "Низът изобразен в елемента в менюто за поделемента"
 
-#: gtk/gtknotebook.c:690
+#: gtk/gtknotebook.c:686
 msgid "Tab expand"
 msgstr "Разширение на таба"
 
-#: gtk/gtknotebook.c:691
+#: gtk/gtknotebook.c:687
 msgid "Whether to expand the child's tab or not"
 msgstr "Дали да се разширява таба на дъщерния елемент или не"
 
-#: gtk/gtknotebook.c:697
+#: gtk/gtknotebook.c:693
 msgid "Tab fill"
 msgstr "Допълване на таба"
 
-#: gtk/gtknotebook.c:698
+#: gtk/gtknotebook.c:694
 msgid "Whether the child's tab should fill the allocated area or not"
 msgstr "Дали табът на дъщерния елемент да запълва заделеното място или не"
 
-#: gtk/gtknotebook.c:704
+#: gtk/gtknotebook.c:700
 msgid "Tab pack type"
 msgstr "Тип пакетиране на таба"
 
-#: gtk/gtknotebook.c:711
+#: gtk/gtknotebook.c:707
 msgid "Tab reorderable"
 msgstr "Преподредими табове"
 
-#: gtk/gtknotebook.c:712
+#: gtk/gtknotebook.c:708
 msgid "Whether the tab is reorderable by user action or not"
 msgstr "Дали табовете могат да се преподреждат от потребителя или не"
 
-#: gtk/gtknotebook.c:718
+#: gtk/gtknotebook.c:714
 msgid "Tab detachable"
 msgstr "Отделими табове"
 
-#: gtk/gtknotebook.c:719
+#: gtk/gtknotebook.c:715
 msgid "Whether the tab is detachable"
 msgstr "Дали табът може да се отделя."
 
-#: gtk/gtknotebook.c:734 gtk/gtkscrollbar.c:83
+#: gtk/gtknotebook.c:730 gtk/gtkscrollbar.c:83
 msgid "Secondary backward stepper"
 msgstr "Втора стрелка назад"
 
-#: gtk/gtknotebook.c:735
+#: gtk/gtknotebook.c:731
 msgid ""
 "Display a second backward arrow button on the opposite end of the tab area"
 msgstr "Втори бутон със стрелка назад от другата страна на лентата с табове"
 
-#: gtk/gtknotebook.c:750 gtk/gtkscrollbar.c:91
+#: gtk/gtknotebook.c:746 gtk/gtkscrollbar.c:91
 msgid "Secondary forward stepper"
 msgstr "Втора стрелка напред"
 
-#: gtk/gtknotebook.c:751
+#: gtk/gtknotebook.c:747
 msgid ""
 "Display a second forward arrow button on the opposite end of the tab area"
 msgstr "Втори бутон със стрелка напред от другата страна на лентата с табовете"
 
-#: gtk/gtknotebook.c:765 gtk/gtkscrollbar.c:67
+#: gtk/gtknotebook.c:761 gtk/gtkscrollbar.c:67
 msgid "Backward stepper"
 msgstr "Стрелка назад"
 
-#: gtk/gtknotebook.c:766 gtk/gtkscrollbar.c:68
+#: gtk/gtknotebook.c:762 gtk/gtkscrollbar.c:68
 msgid "Display the standard backward arrow button"
 msgstr "Използване на стандартния бутон за стрелка назад"
 
-#: gtk/gtknotebook.c:780 gtk/gtkscrollbar.c:75
+#: gtk/gtknotebook.c:776 gtk/gtkscrollbar.c:75
 msgid "Forward stepper"
 msgstr "Стрелка напред"
 
-#: gtk/gtknotebook.c:781 gtk/gtkscrollbar.c:76
+#: gtk/gtknotebook.c:777 gtk/gtkscrollbar.c:76
 msgid "Display the standard forward arrow button"
 msgstr "Използване на стандартния бутон за стрелка напред"
 
-#: gtk/gtknotebook.c:795
+#: gtk/gtknotebook.c:791
 msgid "Tab overlap"
 msgstr "Припокриване на табовете"
 
-#: gtk/gtknotebook.c:796
+#: gtk/gtknotebook.c:792
 msgid "Size of tab overlap area"
 msgstr "Размер на припокриването на табовете"
 
-#: gtk/gtknotebook.c:811
+#: gtk/gtknotebook.c:807
 msgid "Tab curvature"
 msgstr "Заобляне на табовете"
 
-#: gtk/gtknotebook.c:812
+#: gtk/gtknotebook.c:808
 msgid "Size of tab curvature"
 msgstr "Размер на заоблянето на табовете"
 
@@ -4078,11 +4078,11 @@ msgstr ""
 "Дали жлебът на скалата да се изчертава през целия интервал или да се "
 "пропускат позициите и отстоянията"
 
-#: gtk/gtkrecentaction.c:654 gtk/gtkrecentchoosermenu.c:209
+#: gtk/gtkrecentaction.c:677 gtk/gtkrecentchoosermenu.c:209
 msgid "Show Numbers"
 msgstr "Показване на номерата"
 
-#: gtk/gtkrecentaction.c:655 gtk/gtkrecentchoosermenu.c:210
+#: gtk/gtkrecentaction.c:678 gtk/gtkrecentchoosermenu.c:210
 msgid "Whether the items should be displayed with a number"
 msgstr "Дали елементите да се показват с номер"
 
@@ -6583,18 +6583,18 @@ msgstr "Непрозрачност на прозореца"
 msgid "The opacity of the window, from 0 to 1"
 msgstr "Непрозрачност на прозореца, от 0 до 1"
 
-#: modules/input/gtkimcontextxim.c:330
+#: modules/input/gtkimcontextxim.c:336
 msgid "IM Preedit style"
 msgstr "Изчертаване преди промяната"
 
-#: modules/input/gtkimcontextxim.c:331
+#: modules/input/gtkimcontextxim.c:337
 msgid "How to draw the input method preedit string"
 msgstr "Как да се изчертава низът преди промяната чрез метода за вход"
 
-#: modules/input/gtkimcontextxim.c:339
+#: modules/input/gtkimcontextxim.c:345
 msgid "IM Status style"
 msgstr "Стил на лентата на метода за вход"
 
-#: modules/input/gtkimcontextxim.c:340
+#: modules/input/gtkimcontextxim.c:346
 msgid "How to draw the input method statusbar"
 msgstr "Как да се изчертава лентата за състоянието на метода за вход"

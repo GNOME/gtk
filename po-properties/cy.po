@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-09-13 19:20-0400\n"
+"POT-Creation-Date: 2007-10-16 23:55-0400\n"
 "PO-Revision-Date: 2007-05-14 22:44-0000\n"
 "Last-Translator: Rhys Jones <rhys@sucs.org>\n"
 "Language-Team: Cymraeg <gnome-cy@pengwyn.linux.org.uk>\n"
@@ -708,7 +708,7 @@ msgstr "Bylchu"
 msgid "The amount of space between children"
 msgstr "Faint o le sydd rhwng plant"
 
-#: gtk/gtkbox.c:108 gtk/gtknotebook.c:638 gtk/gtktable.c:165
+#: gtk/gtkbox.c:108 gtk/gtknotebook.c:634 gtk/gtktable.c:165
 #: gtk/gtktoolbar.c:563
 msgid "Homogeneous"
 msgstr "Cydryw"
@@ -750,7 +750,7 @@ msgstr "Gofod ychwanegol i'w rhoi rhwng y plentyn a'i gymdogion, mewn picseli"
 msgid "Pack type"
 msgstr "Math pacio"
 
-#: gtk/gtkbox.c:138 gtk/gtknotebook.c:705
+#: gtk/gtkbox.c:138 gtk/gtknotebook.c:701
 msgid ""
 "A GtkPackType indicating whether the child is packed with reference to the "
 "start or end of the parent"
@@ -758,12 +758,12 @@ msgstr ""
 "Gwerth GtkPackType yn dynodi a ydi'r plentyn i'w bacio ar ddechrau neu ar "
 "ddiwedd ei rhiant"
 
-#: gtk/gtkbox.c:144 gtk/gtknotebook.c:683 gtk/gtkpaned.c:219
+#: gtk/gtkbox.c:144 gtk/gtknotebook.c:679 gtk/gtkpaned.c:219
 #: gtk/gtkruler.c:110
 msgid "Position"
 msgstr "Safle"
 
-#: gtk/gtkbox.c:145 gtk/gtknotebook.c:684
+#: gtk/gtkbox.c:145 gtk/gtknotebook.c:680
 msgid "The index of the child in the parent"
 msgstr "Mynegai'r plentyn o fewn y rhiant"
 
@@ -1928,7 +1928,7 @@ msgid "The minimum size of the arrow in the combo box"
 msgstr "Maint lleiaf y saeth yn y blwch combo"
 
 #: gtk/gtkcombobox.c:859 gtk/gtkentry.c:622 gtk/gtkhandlebox.c:176
-#: gtk/gtkmenubar.c:201 gtk/gtkstatusbar.c:186 gtk/gtktoolbar.c:613
+#: gtk/gtkmenubar.c:194 gtk/gtkstatusbar.c:186 gtk/gtktoolbar.c:613
 #: gtk/gtkviewport.c:122
 msgid "Shadow type"
 msgstr "Math cysgod"
@@ -2188,51 +2188,51 @@ msgstr "Hyd Allwedd Lleiaf"
 msgid "Minimum length of the search key in order to look up matches"
 msgstr "Hyd lleiaf y llinyn chwilio er mwyn edrych am gydweddiadau"
 
-#: gtk/gtkentrycompletion.c:302 gtk/gtkiconview.c:586
+#: gtk/gtkentrycompletion.c:303 gtk/gtkiconview.c:586
 msgid "Text column"
 msgstr "Colofn testun"
 
-#: gtk/gtkentrycompletion.c:303
+#: gtk/gtkentrycompletion.c:304
 msgid "The column of the model containing the strings."
 msgstr "Colofn yn y model ffynhonnell data i gyrchu'r llinynnau ohoni"
 
-#: gtk/gtkentrycompletion.c:322
+#: gtk/gtkentrycompletion.c:323
 msgid "Inline completion"
 msgstr "Cwblhau'r llinell"
 
-#: gtk/gtkentrycompletion.c:323
+#: gtk/gtkentrycompletion.c:324
 msgid "Whether the common prefix should be inserted automatically"
 msgstr "A ddylid ychwanegu'r rhagddodiad cyffredin yn awtomatig"
 
-#: gtk/gtkentrycompletion.c:337
+#: gtk/gtkentrycompletion.c:338
 msgid "Popup completion"
 msgstr "Naidlenni'r awgrymiadau gorffen"
 
-#: gtk/gtkentrycompletion.c:338
+#: gtk/gtkentrycompletion.c:339
 msgid "Whether the completions should be shown in a popup window"
 msgstr "A ddylid dangos yr awgrymiadau gorffen mewn naidlen ai peidio"
 
-#: gtk/gtkentrycompletion.c:353
+#: gtk/gtkentrycompletion.c:354
 msgid "Popup set width"
 msgstr "Lled benodol i naidlen"
 
-#: gtk/gtkentrycompletion.c:354
+#: gtk/gtkentrycompletion.c:355
 msgid "If TRUE, the popup window will have the same size as the entry"
 msgstr "Os GWIR, bydd ffenestr y naidlen yr un maint â'r cofnod"
 
-#: gtk/gtkentrycompletion.c:372
+#: gtk/gtkentrycompletion.c:373
 msgid "Popup single match"
 msgstr "Naidlen os oes un yn cydweddu"
 
-#: gtk/gtkentrycompletion.c:373
+#: gtk/gtkentrycompletion.c:374
 msgid "If TRUE, the popup window will appear for a single match."
 msgstr "Os GWIR, bydd ffenestr y naidlen yn ymddangos os ceir un cydweddiad."
 
-#: gtk/gtkentrycompletion.c:387
+#: gtk/gtkentrycompletion.c:388
 msgid "Inline selection"
 msgstr "Dewis yn fewnol"
 
-#: gtk/gtkentrycompletion.c:388
+#: gtk/gtkentrycompletion.c:389
 msgid "Your description here"
 msgstr "Eich disgrifiad chi fan hyn"
 
@@ -3087,39 +3087,39 @@ msgstr ""
 "Y saib cyn cuddio is-ddewislen pan mae'r pwyntydd yn symud tuag at yr is-"
 "ddewislen"
 
-#: gtk/gtkmenubar.c:175
+#: gtk/gtkmenubar.c:168
 msgid "Pack direction"
 msgstr "Cyfeiriad pacio"
 
-#: gtk/gtkmenubar.c:176
+#: gtk/gtkmenubar.c:169
 msgid "The pack direction of the menubar"
 msgstr "Cyfeiriad pacio'r bar dewis"
 
-#: gtk/gtkmenubar.c:192
+#: gtk/gtkmenubar.c:185
 msgid "Child Pack direction"
 msgstr "Cyfeiriad pacio plentyn"
 
-#: gtk/gtkmenubar.c:193
+#: gtk/gtkmenubar.c:186
 msgid "The child pack direction of the menubar"
 msgstr "Cyfeiriad pacio plentyn y bar dewis"
 
-#: gtk/gtkmenubar.c:202
+#: gtk/gtkmenubar.c:195
 msgid "Style of bevel around the menubar"
 msgstr "Arddull y befel o amgylch y bar dewislen"
 
-#: gtk/gtkmenubar.c:209 gtk/gtktoolbar.c:580
+#: gtk/gtkmenubar.c:202 gtk/gtktoolbar.c:580
 msgid "Internal padding"
 msgstr "Bylchu mewnol"
 
-#: gtk/gtkmenubar.c:210
+#: gtk/gtkmenubar.c:203
 msgid "Amount of border space between the menubar shadow and the menu items"
 msgstr "Y gofod border rhwng cysgod y bar dewislen a'r eitemau dewislen"
 
-#: gtk/gtkmenubar.c:217
+#: gtk/gtkmenubar.c:210
 msgid "Delay before drop down menus appear"
 msgstr "Saib cyn mae dewislenni gostwng yn ymddangos"
 
-#: gtk/gtkmenubar.c:218
+#: gtk/gtkmenubar.c:211
 msgid "Delay before the submenus of a menu bar appear"
 msgstr "Y saib cyn mae is-ddewislenni'r bar dewislen yn ymddangos"
 
@@ -3239,76 +3239,76 @@ msgid ""
 "The amount of space to add on the top and bottom of the widget, in pixels"
 msgstr "Faint o le i'w ychwanegu at frig a gwaelod y teclyn, mewn picseli"
 
-#: gtk/gtknotebook.c:566
+#: gtk/gtknotebook.c:562
 msgid "Page"
 msgstr "Tudalen"
 
 # EFALLAI
-#: gtk/gtknotebook.c:567
+#: gtk/gtknotebook.c:563
 msgid "The index of the current page"
 msgstr "Mynegrif y dudalen gyfredol"
 
-#: gtk/gtknotebook.c:575
+#: gtk/gtknotebook.c:571
 msgid "Tab Position"
 msgstr "Safle Tabiau"
 
-#: gtk/gtknotebook.c:576
+#: gtk/gtknotebook.c:572
 msgid "Which side of the notebook holds the tabs"
 msgstr "Pa ochr o'r nodlyfr sy'n dal y tabiau"
 
-#: gtk/gtknotebook.c:583
+#: gtk/gtknotebook.c:579
 msgid "Tab Border"
 msgstr "Border Tabiau"
 
-#: gtk/gtknotebook.c:584
+#: gtk/gtknotebook.c:580
 msgid "Width of the border around the tab labels"
 msgstr "Lled y border o amgylch labeli'r tabiau"
 
-#: gtk/gtknotebook.c:592
+#: gtk/gtknotebook.c:588
 msgid "Horizontal Tab Border"
 msgstr "Border Llorweddol Tabiau"
 
-#: gtk/gtknotebook.c:593
+#: gtk/gtknotebook.c:589
 msgid "Width of the horizontal border of tab labels"
 msgstr "Lled border llorweddol labeli tabiau"
 
-#: gtk/gtknotebook.c:601
+#: gtk/gtknotebook.c:597
 msgid "Vertical Tab Border"
 msgstr "Border Fertigol Tabiau"
 
-#: gtk/gtknotebook.c:602
+#: gtk/gtknotebook.c:598
 msgid "Width of the vertical border of tab labels"
 msgstr "Lled border fertigol labeli tabiau"
 
-#: gtk/gtknotebook.c:610
+#: gtk/gtknotebook.c:606
 msgid "Show Tabs"
 msgstr "Dangos Tabiau"
 
-#: gtk/gtknotebook.c:611
+#: gtk/gtknotebook.c:607
 msgid "Whether tabs should be shown or not"
 msgstr "A ddylid dangos tabiau ai peidio"
 
-#: gtk/gtknotebook.c:617
+#: gtk/gtknotebook.c:613
 msgid "Show Border"
 msgstr "Dangos Border"
 
-#: gtk/gtknotebook.c:618
+#: gtk/gtknotebook.c:614
 msgid "Whether the border should be shown or not"
 msgstr "A ddylid dangos y border ai peidio"
 
-#: gtk/gtknotebook.c:624
+#: gtk/gtknotebook.c:620
 msgid "Scrollable"
 msgstr "Sgrolio"
 
-#: gtk/gtknotebook.c:625
+#: gtk/gtknotebook.c:621
 msgid "If TRUE, scroll arrows are added if there are too many tabs to fit"
 msgstr "Os TRUE, ychwanegir saethau sgrolio os mae gormod o dabiau i ffitio"
 
-#: gtk/gtknotebook.c:631
+#: gtk/gtknotebook.c:627
 msgid "Enable Popup"
 msgstr "Galluogi Bryslen"
 
-#: gtk/gtknotebook.c:632
+#: gtk/gtknotebook.c:628
 msgid ""
 "If TRUE, pressing the right mouse button on the notebook pops up a menu that "
 "you can use to go to a page"
@@ -3316,128 +3316,128 @@ msgstr ""
 "Os TRUE, bydd gwasgu botwm de'r llygoden ar y nodlyfr yn dangos bryslen "
 "gallwch ddefnyddio er mwyn mynd at dudalen"
 
-#: gtk/gtknotebook.c:639
+#: gtk/gtknotebook.c:635
 msgid "Whether tabs should have homogeneous sizes"
 msgstr "A ddylai tabiau gael yr un maint"
 
-#: gtk/gtknotebook.c:645
+#: gtk/gtknotebook.c:641
 msgid "Group ID"
 msgstr "ID Grŵp"
 
-#: gtk/gtknotebook.c:646
+#: gtk/gtknotebook.c:642
 msgid "Group ID for tabs drag and drop"
 msgstr "ID Grŵp ar gyfer llusgo a gollwng tabiau"
 
-#: gtk/gtknotebook.c:662 gtk/gtkradioaction.c:128 gtk/gtkradiobutton.c:82
+#: gtk/gtknotebook.c:658 gtk/gtkradioaction.c:128 gtk/gtkradiobutton.c:82
 #: gtk/gtkradiomenuitem.c:342
 msgid "Group"
 msgstr "Grŵp"
 
-#: gtk/gtknotebook.c:663
+#: gtk/gtknotebook.c:659
 msgid "Group for tabs drag and drop"
 msgstr "ID Grŵp ar gyfer llusgo a gollwng tabiau"
 
-#: gtk/gtknotebook.c:669
+#: gtk/gtknotebook.c:665
 msgid "Tab label"
 msgstr "Label tab"
 
-#: gtk/gtknotebook.c:670
+#: gtk/gtknotebook.c:666
 msgid "The string displayed on the child's tab label"
 msgstr "Y llinyn a ddangosir ar label tab y plentyn"
 
-#: gtk/gtknotebook.c:676
+#: gtk/gtknotebook.c:672
 msgid "Menu label"
 msgstr "Label dewislen"
 
-#: gtk/gtknotebook.c:677
+#: gtk/gtknotebook.c:673
 msgid "The string displayed in the child's menu entry"
 msgstr "Y llinyn a ddangosir yng nghofnod dewislen y plentyn"
 
-#: gtk/gtknotebook.c:690
+#: gtk/gtknotebook.c:686
 msgid "Tab expand"
 msgstr "Ehangu'r tab"
 
-#: gtk/gtknotebook.c:691
+#: gtk/gtknotebook.c:687
 msgid "Whether to expand the child's tab or not"
 msgstr "A ddylid ehangu tab y plentyn ai peidio"
 
 # EFALLAI
-#: gtk/gtknotebook.c:697
+#: gtk/gtknotebook.c:693
 msgid "Tab fill"
 msgstr "Tab yn llenwi"
 
-#: gtk/gtknotebook.c:698
+#: gtk/gtknotebook.c:694
 msgid "Whether the child's tab should fill the allocated area or not"
 msgstr "A ddylai tab y plentyn lenwi'r lle a ddarparwyd ar ei gyfer, ai peidio"
 
-#: gtk/gtknotebook.c:704
+#: gtk/gtknotebook.c:700
 msgid "Tab pack type"
 msgstr "Math pacio tabiau"
 
-#: gtk/gtknotebook.c:711
+#: gtk/gtknotebook.c:707
 msgid "Tab reorderable"
 msgstr "Gellir aildrefnu'r tab"
 
-#: gtk/gtknotebook.c:712
+#: gtk/gtknotebook.c:708
 msgid "Whether the tab is reorderable by user action or not"
 msgstr "A oes modd i ddefnyddiwr aildrefnu'r tab ai peidio"
 
-#: gtk/gtknotebook.c:718
+#: gtk/gtknotebook.c:714
 msgid "Tab detachable"
 msgstr "Gellir datod y tab"
 
-#: gtk/gtknotebook.c:719
+#: gtk/gtknotebook.c:715
 msgid "Whether the tab is detachable"
 msgstr "A ellir datod y tab ai peidio"
 
-#: gtk/gtknotebook.c:734 gtk/gtkscrollbar.c:83
+#: gtk/gtknotebook.c:730 gtk/gtkscrollbar.c:83
 msgid "Secondary backward stepper"
 msgstr "Camydd tuag-yn-ôl eilaidd"
 
-#: gtk/gtknotebook.c:735
+#: gtk/gtknotebook.c:731
 msgid ""
 "Display a second backward arrow button on the opposite end of the tab area"
 msgstr "Dangos saeth eilaidd tuag yn ôl ar yr ochr gyferbyn y maes tab"
 
-#: gtk/gtknotebook.c:750 gtk/gtkscrollbar.c:91
+#: gtk/gtknotebook.c:746 gtk/gtkscrollbar.c:91
 msgid "Secondary forward stepper"
 msgstr "Camydd eilaidd tuag ymlaen"
 
-#: gtk/gtknotebook.c:751
+#: gtk/gtknotebook.c:747
 msgid ""
 "Display a second forward arrow button on the opposite end of the tab area"
 msgstr ""
 "Dangos botwm eilaidd tuag ymlaen eilaidd ar ochr gyferbyn y bar sgrolio"
 
-#: gtk/gtknotebook.c:765 gtk/gtkscrollbar.c:67
+#: gtk/gtknotebook.c:761 gtk/gtkscrollbar.c:67
 msgid "Backward stepper"
 msgstr "Camydd tuag yn ôl"
 
-#: gtk/gtknotebook.c:766 gtk/gtkscrollbar.c:68
+#: gtk/gtknotebook.c:762 gtk/gtkscrollbar.c:68
 msgid "Display the standard backward arrow button"
 msgstr "Dangos y botwm safonol saeth tuag yn ôl"
 
-#: gtk/gtknotebook.c:780 gtk/gtkscrollbar.c:75
+#: gtk/gtknotebook.c:776 gtk/gtkscrollbar.c:75
 msgid "Forward stepper"
 msgstr "Camydd tuag ymlaen"
 
-#: gtk/gtknotebook.c:781 gtk/gtkscrollbar.c:76
+#: gtk/gtknotebook.c:777 gtk/gtkscrollbar.c:76
 msgid "Display the standard forward arrow button"
 msgstr "Dangos y saeth tuag ymlaen safonol"
 
-#: gtk/gtknotebook.c:795
+#: gtk/gtknotebook.c:791
 msgid "Tab overlap"
 msgstr "Gorgyffwrdd Tab"
 
-#: gtk/gtknotebook.c:796
+#: gtk/gtknotebook.c:792
 msgid "Size of tab overlap area"
 msgstr "Maint ardal gorgyffwrdd y tab"
 
-#: gtk/gtknotebook.c:811
+#: gtk/gtknotebook.c:807
 msgid "Tab curvature"
 msgstr "Crymedd tab"
 
-#: gtk/gtknotebook.c:812
+#: gtk/gtknotebook.c:808
 msgid "Size of tab curvature"
 msgstr "Maint crymedd y tab"
 
@@ -4060,11 +4060,11 @@ msgid ""
 msgstr ""
 "A ddylid tynnu'r cafn am ei hyd cyfan, neu ac eithrio'r stepwyr a'r bylchiad"
 
-#: gtk/gtkrecentaction.c:654 gtk/gtkrecentchoosermenu.c:209
+#: gtk/gtkrecentaction.c:677 gtk/gtkrecentchoosermenu.c:209
 msgid "Show Numbers"
 msgstr "Dangos Rhifau"
 
-#: gtk/gtkrecentaction.c:655 gtk/gtkrecentchoosermenu.c:210
+#: gtk/gtkrecentaction.c:678 gtk/gtkrecentchoosermenu.c:210
 msgid "Whether the items should be displayed with a number"
 msgstr "A ddylid dangos rhifau gyda'r eitemau"
 
@@ -6597,19 +6597,19 @@ msgstr "Didreiddedd y Ffenestr"
 msgid "The opacity of the window, from 0 to 1"
 msgstr "Didreiddedd y ffenestr, o 0 i 1"
 
-#: modules/input/gtkimcontextxim.c:330
+#: modules/input/gtkimcontextxim.c:336
 msgid "IM Preedit style"
 msgstr "Arddull Cyn-olygu modd mewnbwn"
 
-#: modules/input/gtkimcontextxim.c:331
+#: modules/input/gtkimcontextxim.c:337
 msgid "How to draw the input method preedit string"
 msgstr "Sut i arlunio llinyn cyn-olygu'r modd mewnbwn"
 
-#: modules/input/gtkimcontextxim.c:339
+#: modules/input/gtkimcontextxim.c:345
 msgid "IM Status style"
 msgstr "Arddull statws modd mewnbwn"
 
-#: modules/input/gtkimcontextxim.c:340
+#: modules/input/gtkimcontextxim.c:346
 msgid "How to draw the input method statusbar"
 msgstr "Sut i arlunio'r bar statws modd mewnbwn"
 

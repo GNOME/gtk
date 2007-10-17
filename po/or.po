@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-09-13 19:20-0400\n"
+"POT-Creation-Date: 2007-10-16 23:54-0400\n"
 "PO-Revision-Date: 2006-12-13 15:11+0530\n"
 "Last-Translator: Subhransu Behera <sbehera@redhat.com>\n"
 "Language-Team: Oriya <oriya-group@lists.sarovar.org>\n"
@@ -1019,7 +1019,7 @@ msgstr "ଚିତ୍ର ଧାରଣ କରିବା ପାଇଁ ଯଥେଷ�
 msgid "Couldn't save the rest"
 msgstr "ବାକି ସଞ୍ଚିତ କରିହେଲା ନାହିଁ"
 
-#: gdk-pixbuf/io-wbmp.c:374
+#: gdk-pixbuf/io-wbmp.c:377
 msgid "The WBMP image format"
 msgstr "WBMP ଚିତ୍ର ଶୈଳୀ"
 
@@ -1490,11 +1490,11 @@ msgstr "ରଙ୍ଗ ଚକ୍ର"
 msgid "Color Selection"
 msgstr "ରଙ୍ଗ ଚୟନ"
 
-#: gtk/gtkentry.c:5253 gtk/gtktextview.c:7605
+#: gtk/gtkentry.c:5253 gtk/gtktextview.c:7617
 msgid "Input _Methods"
 msgstr "ନିବେଶ ପ୍ରଣାଳୀ (_M)"
 
-#: gtk/gtkentry.c:5267 gtk/gtktextview.c:7619
+#: gtk/gtkentry.c:5267 gtk/gtktextview.c:7631
 msgid "_Insert Unicode Control Character"
 msgstr "ୟୁନିକୋଡ ନିୟନ୍ତ୍ରଣ ଅକ୍ଷର ଭର୍ତ୍ତି କରନ୍ତୁ (_I)"
 
@@ -1674,119 +1674,119 @@ msgstr "ନାମ: (_N)"
 msgid "_Browse for other folders"
 msgstr "ଅନ୍ଯ ଫୋଲ୍ଡର ପାଇଁ ଖୋଜିବୁଲନ୍ତୁ (_B)"
 
-#: gtk/gtkfilechooserdefault.c:5197
+#: gtk/gtkfilechooserdefault.c:5208
 msgid "Type a file name"
 msgstr "ଗୋଟିଏ ଫାଇଲ ନାମକୁ ଟାଇପ କରନ୍ତୁ"
 
 #. Create Folder
-#: gtk/gtkfilechooserdefault.c:5234
+#: gtk/gtkfilechooserdefault.c:5245
 msgid "Create Fo_lder"
 msgstr "ଫୋଲ୍ଡର ସୃଷ୍ଟି କରନ୍ତୁ (_l)"
 
-#: gtk/gtkfilechooserdefault.c:5244
+#: gtk/gtkfilechooserdefault.c:5255
 msgid "_Location:"
 msgstr "ଅବସ୍ଥାନ (_L):"
 
-#: gtk/gtkfilechooserdefault.c:5482
+#: gtk/gtkfilechooserdefault.c:5493
 msgid "Save in _folder:"
 msgstr "ଫୋଲ୍ଡରରେ ସଞ୍ଚିତ କରନ୍ତୁ: (_f)"
 
-#: gtk/gtkfilechooserdefault.c:5484
+#: gtk/gtkfilechooserdefault.c:5495
 msgid "Create in _folder:"
 msgstr "ଫୋଲ୍ଡରରେ ସୃଷ୍ଟି କରନ୍ତୁ: (_f)"
 
-#: gtk/gtkfilechooserdefault.c:7087
+#: gtk/gtkfilechooserdefault.c:7098
 #, c-format
 msgid "Cannot change to folder because it is not local"
 msgstr "ଏହି ଫୋଲ୍ଡର ସ୍ତାନୀୟ ନ ଥିବାରୁ ଏଠିକି ଯାଇ ହେବ ନାହିଁ"
 
-#: gtk/gtkfilechooserdefault.c:7703 gtk/gtkfilechooserdefault.c:7724
+#: gtk/gtkfilechooserdefault.c:7714 gtk/gtkfilechooserdefault.c:7735
 #, c-format
 msgid "Shortcut %s already exists"
 msgstr "%s ସଂକ୍ଷିପ୍ତ ପଥ ପୂର୍ବରୁ ଅଛି"
 
-#: gtk/gtkfilechooserdefault.c:7814
+#: gtk/gtkfilechooserdefault.c:7825
 #, c-format
 msgid "Shortcut %s does not exist"
 msgstr "%s ସଂକ୍ଷିପ୍ତ ପଥ ଅବସ୍ଥିତ ନାହିଁ"
 
-#: gtk/gtkfilechooserdefault.c:8069
+#: gtk/gtkfilechooserdefault.c:8080
 #, c-format
 msgid "A file named \"%s\" already exists.  Do you want to replace it?"
 msgstr "\"%s\" ନାମର ଫାଇଲ ପୂର୍ବରୁ ଅଛି. ଆପଣ ତାହାକୁ ବଦଳାଇବାକୁ ଚାହାନ୍ତି କି?"
 
-#: gtk/gtkfilechooserdefault.c:8072
+#: gtk/gtkfilechooserdefault.c:8083
 #, c-format
 msgid ""
 "The file already exists in \"%s\".  Replacing it will overwrite its contents."
 msgstr "\"%s\"ରେ ଫାଇଲ ପୂର୍ବରୁ ଅଛି. ଏହାକୁ ବଦଳାଇଲେ, ତାହାର ସୂଚୀ ନବଲିଖିତ ହୋଇଯିବ."
 
-#: gtk/gtkfilechooserdefault.c:8077
+#: gtk/gtkfilechooserdefault.c:8088
 msgid "_Replace"
 msgstr "ବଦଳାନ୍ତୁ (_R)"
 
-#: gtk/gtkfilechooserdefault.c:8911
+#: gtk/gtkfilechooserdefault.c:8922
 #, fuzzy
 msgid "Could not start the search process"
 msgstr "ବାକି ସଞ୍ଚିତ କରିହେଲା ନାହିଁ"
 
-#: gtk/gtkfilechooserdefault.c:8912
+#: gtk/gtkfilechooserdefault.c:8923
 msgid ""
 "The program was not able to create a connection to the indexer daemon.  "
 "Please make sure it is running."
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:8926
+#: gtk/gtkfilechooserdefault.c:8937
 #, fuzzy
 msgid "Could not send the search request"
 msgstr "ବାକି ସଞ୍ଚିତ କରିହେଲା ନାହିଁ"
 
 #. Label
-#: gtk/gtkfilechooserdefault.c:9352
+#: gtk/gtkfilechooserdefault.c:9365
 msgid "_Search:"
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:10305
+#: gtk/gtkfilechooserdefault.c:10318
 #, c-format
 msgid "Could not mount %s"
 msgstr "%s ସ୍ଥାପନ କରିହେଲା ନାହିଁ"
 
-#: gtk/gtkfilechooserdefault.c:10933
+#: gtk/gtkfilechooserdefault.c:10946
 msgid "Type name of new folder"
 msgstr "ନୂତନ ଫୋଲ୍ଡରର ପ୍ରକାରର ନାମ"
 
-#: gtk/gtkfilechooserdefault.c:10981
+#: gtk/gtkfilechooserdefault.c:10994
 #, c-format
 msgid "%d byte"
 msgid_plural "%d bytes"
 msgstr[0] "%d ବାଇଟ"
 msgstr[1] "%d ବାଇଟ"
 
-#: gtk/gtkfilechooserdefault.c:10983
+#: gtk/gtkfilechooserdefault.c:10996
 #, c-format
 msgid "%.1f KB"
 msgstr "%.1f କିଲୋ-ବାଇଟ୍"
 
-#: gtk/gtkfilechooserdefault.c:10985
+#: gtk/gtkfilechooserdefault.c:10998
 #, c-format
 msgid "%.1f MB"
 msgstr "%.1f ମେଗା-ବାଇଟ୍"
 
-#: gtk/gtkfilechooserdefault.c:10987
+#: gtk/gtkfilechooserdefault.c:11000
 #, c-format
 msgid "%.1f GB"
 msgstr "%.1f ଗିଗା-ବାଇଟ୍"
 
-#: gtk/gtkfilechooserdefault.c:11083 gtk/gtkfilechooserdefault.c:11104
-#: gtk/gtkfilechooserdefault.c:11136
+#: gtk/gtkfilechooserdefault.c:11096 gtk/gtkfilechooserdefault.c:11118
+#: gtk/gtkfilechooserdefault.c:11152
 msgid "Unknown"
 msgstr "ଅଜଣା"
 
-#: gtk/gtkfilechooserdefault.c:11122
+#: gtk/gtkfilechooserdefault.c:11136
 msgid "Today at %H:%M"
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:11124
+#: gtk/gtkfilechooserdefault.c:11138
 #, fuzzy
 msgid "Yesterday at %H:%M"
 msgstr "ଗତକାଲି"
@@ -1933,12 +1933,12 @@ msgstr "ଫାଇଲ ନାମ ରୂପାନ୍ତରିତ କରିହେଲ
 msgid "Could not get a stock icon for %s\n"
 msgstr "%s ପାଇଁ ଷ୍ଟୋକ୍ ଚିତ୍ରସଙ୍କେତ ପାଇପାରିଲା ନାହିଁ\n"
 
-#: gtk/gtkfilesystemmodel.c:745
+#: gtk/gtkfilesystemmodel.c:743
 #, c-format
 msgid "Could not obtain root folder"
 msgstr "ରୁଟ୍ ଫୋଲଡରକୁ ପାଇପାରିଲା ନାହିଁ"
 
-#: gtk/gtkfilesystemmodel.c:1338
+#: gtk/gtkfilesystemmodel.c:1336
 msgid "(Empty)"
 msgstr "(ଖାଲି)"
 
@@ -2047,7 +2047,7 @@ msgstr "ଗାମା ମୂଲ୍ଯ (_G)"
 #. Remove this icon source so we don't keep trying to
 #. * load it.
 #.
-#: gtk/gtkiconfactory.c:1371
+#: gtk/gtkiconfactory.c:1374
 #, c-format
 msgid "Error loading icon: %s"
 msgstr "ଚିତ୍ରସଙ୍କେତ ଧାରଣ କରିବାରେ ତୃଟି: %s"
@@ -2216,15 +2216,15 @@ msgstr "ଜି.ଟି.କେ.+ ପସନ୍ଦ"
 msgid "Show GTK+ Options"
 msgstr "ଜି.ଟି.କେ.+ ପସନ୍ଦ ଦେଖାନ୍ତୁ"
 
-#: gtk/gtknotebook.c:828
+#: gtk/gtknotebook.c:824
 msgid "Arrow spacing"
 msgstr "ତୀର ସ୍ଥାନ"
 
-#: gtk/gtknotebook.c:829
+#: gtk/gtknotebook.c:825
 msgid "Scroll arrow spacing"
 msgstr "ତୀର ସ୍ଥାନକୁ ସ୍କ୍ରୋଲ କରନ୍ତୁ"
 
-#: gtk/gtknotebook.c:4392 gtk/gtknotebook.c:6898
+#: gtk/gtknotebook.c:4388 gtk/gtknotebook.c:6894
 #, c-format
 msgid "Page %u"
 msgstr "ପୃଷ୍ଠା %u"
@@ -2420,7 +2420,7 @@ msgstr "ତୃଟି ସହିତ ସମାପ୍ତ"
 msgid "Preparing %d"
 msgstr "%dକୁ ପ୍ରସ୍ତୁତ କରୁଅଛି"
 
-#: gtk/gtkprintoperation.c:1988 gtk/gtkprintoperation.c:2240
+#: gtk/gtkprintoperation.c:1988 gtk/gtkprintoperation.c:2242
 #, c-format
 msgid "Preparing"
 msgstr "ପ୍ରସ୍ତୁତ କରୁଅଛି"
@@ -2440,7 +2440,7 @@ msgstr "ପ୍ରାକଦର୍ଶନକୁ ଚଲାଇବା ସମୟରେ 
 msgid "Error printing"
 msgstr "ମୂଦ୍ରଣ କରିବା ସମୟରେ ତୃଟି"
 
-#: gtk/gtkprintoperation-unix.c:388 gtk/gtkprintoperation-win32.c:1394
+#: gtk/gtkprintoperation-unix.c:388 gtk/gtkprintoperation-win32.c:1395
 msgid "Application"
 msgstr "ପ୍ରୟୋଗ"
 
@@ -2464,33 +2464,33 @@ msgstr "ଚାଳକ ହସ୍ତକ୍ଷେପ ଆବଶ୍ଯକ"
 msgid "Custom size"
 msgstr "ଆକାରକୁ ଇଚ୍ଛାରୂପଣ କରନ୍ତୁ"
 
-#: gtk/gtkprintoperation-win32.c:1484 gtk/gtkprintoperation-win32.c:1507
-#: gtk/gtkprintoperation-win32.c:1555
+#: gtk/gtkprintoperation-win32.c:1485 gtk/gtkprintoperation-win32.c:1508
+#: gtk/gtkprintoperation-win32.c:1556
 #, c-format
 msgid "Not enough free memory"
 msgstr "ଯଥେଷ୍ଟ ଅବ୍ଯବହ୍ରୁତ ସ୍ମୃତି ନାହିଁ"
 
-#: gtk/gtkprintoperation-win32.c:1560
+#: gtk/gtkprintoperation-win32.c:1561
 #, c-format
 msgid "Invalid argument to PrintDlgEx"
 msgstr "PrintDlgEx ପାଇଁ ଅବୈଧ ସ୍ବତନ୍ତ୍ରଚର"
 
-#: gtk/gtkprintoperation-win32.c:1565
+#: gtk/gtkprintoperation-win32.c:1566
 #, c-format
 msgid "Invalid pointer to PrintDlgEx"
 msgstr "PrintDlgEx ପାଇଁ ଅବୈଧ ସୂଚକ"
 
-#: gtk/gtkprintoperation-win32.c:1570
+#: gtk/gtkprintoperation-win32.c:1571
 #, c-format
 msgid "Invalid handle to PrintDlgEx"
 msgstr "PrintDlgEx ପାଇଁ ଅବୈଧ ନିୟନ୍ତ୍ରକ"
 
-#: gtk/gtkprintoperation-win32.c:1575
+#: gtk/gtkprintoperation-win32.c:1576
 #, c-format
 msgid "Unspecified error"
 msgstr "ଅନିର୍ଦ୍ଦିଷ୍ଟ ତୃଟି"
 
-#: gtk/gtkprintoperation-win32.c:1626
+#: gtk/gtkprintoperation-win32.c:1627
 #, c-format
 msgid "Error from StartDoc"
 msgstr "StartDoc ରୁ ତୃଟି"
@@ -2688,7 +2688,7 @@ msgid "Unable to locate image file in pixmap_path: \"%s\""
 msgstr "\"%s\" ପିକ୍ସମ୍ଯାପ_ପଥରେ ଚିତ୍ର ଫାଇଲ ମିଳିଲା ନାହିଁ"
 
 #: gtk/gtkrecentaction.c:155 gtk/gtkrecentaction.c:163
-#: gtk/gtkrecentchoosermenu.c:555 gtk/gtkrecentchoosermenu.c:563
+#: gtk/gtkrecentchoosermenu.c:553 gtk/gtkrecentchoosermenu.c:561
 #, c-format
 msgid "This function is not implemented for widgets of class '%s'"
 msgstr "'%s' ଶ୍ରେଣୀର ୱିଜେଟଟ ପାଇଁ ଏହି ପ୍ରକ୍ରିୟାି  ଲାଗୁ କରାଯାଇ ନାହିଁ"
@@ -2744,17 +2744,17 @@ msgstr "ବ୍ଯକ୍ତିଗତ ସମ୍ବଳ ଗୁଡିକୁ ଦେଖ
 msgid "No items found"
 msgstr "କୌଣସି ବସ୍ତୁ ମିଳିଲା ନାହିଁ"
 
-#: gtk/gtkrecentchoosermenu.c:475 gtk/gtkrecentchoosermenu.c:531
+#: gtk/gtkrecentchoosermenu.c:473 gtk/gtkrecentchoosermenu.c:529
 #, c-format
 msgid "No recently used resource found with URI `%s'"
 msgstr "`%s' ୟୁ.ଆର.ଆଇ. ରେ ନିକଟ ଅତୀତରେ ବ୍ଯବହ୍ରୁତ କୌଣସି ମିଳିଲା ନାହିଁ"
 
-#: gtk/gtkrecentchoosermenu.c:742
+#: gtk/gtkrecentchoosermenu.c:740
 #, c-format
 msgid "Open '%s'"
 msgstr "'%s' କୁ ଖୋଲନ୍ତୁ"
 
-#: gtk/gtkrecentchoosermenu.c:772
+#: gtk/gtkrecentchoosermenu.c:770
 msgid "Unknown item"
 msgstr "ଅଜଣା ବସ୍ତୁ"
 
@@ -2765,7 +2765,7 @@ msgstr "ଅଜଣା ବସ୍ତୁ"
 #. *
 #. * Don't include the prefix "recent menu label|" in the translation.
 #.
-#: gtk/gtkrecentchoosermenu.c:785
+#: gtk/gtkrecentchoosermenu.c:783
 #, c-format
 msgid "recent menu label|_%d. %s"
 msgstr ""
@@ -2775,13 +2775,13 @@ msgstr ""
 #. *
 #. * Don't include the prefix "recent menu label|" in the translation.
 #.
-#: gtk/gtkrecentchoosermenu.c:792
+#: gtk/gtkrecentchoosermenu.c:790
 #, c-format
 msgid "recent menu label|%d. %s"
 msgstr ""
 
-#: gtk/gtkrecentmanager.c:1041 gtk/gtkrecentmanager.c:1188
-#: gtk/gtkrecentmanager.c:1198 gtk/gtkrecentmanager.c:1251
+#: gtk/gtkrecentmanager.c:1041 gtk/gtkrecentmanager.c:1187
+#: gtk/gtkrecentmanager.c:1197 gtk/gtkrecentmanager.c:1250
 #, c-format
 msgid "Unable to find an item with URI '%s'"
 msgstr "\"%s\" ୟୁ.ଆର.ଆଇ. ବିଶିଷ୍ଟ ଗୋଟିଏ ବସ୍ତୁକୁ ଖୋଜି ପାରିଲା ନାହିଁ"
@@ -4204,97 +4204,97 @@ msgstr "ROC 16k"
 msgid "paper size|ROC 8k"
 msgstr "ROC 8k"
 
-#: gtk/updateiconcache.c:498 gtk/updateiconcache.c:558
+#: gtk/updateiconcache.c:490 gtk/updateiconcache.c:550
 #, c-format
 msgid "different idatas found for symlinked '%s' and '%s'\n"
 msgstr "'%s' ଏବଂ '%s' ପ୍ରତିକାତ୍ମାକ ସଂଯୋଗ ପାଇଁ ବିଭିନ୍ନ ଆଇ-ଡାଟା ମିଳିଲା\n"
 
-#: gtk/updateiconcache.c:1376
+#: gtk/updateiconcache.c:1368
 #, c-format
 msgid "Failed to write header\n"
 msgstr "ଶୀର୍ଷକକୁ ଲେଖିବାରେ ବିଫଳ\n"
 
-#: gtk/updateiconcache.c:1382
+#: gtk/updateiconcache.c:1374
 #, c-format
 msgid "Failed to write hash table\n"
 msgstr "ଦୃତାନ୍ବେଷଣ ସାରଣୀରେ ଲେଖିବାରେ ବିଫଳ\n"
 
-#: gtk/updateiconcache.c:1388
+#: gtk/updateiconcache.c:1380
 #, fuzzy, c-format
 msgid "Failed to write folder index\n"
 msgstr "ଡିରେକ୍ଟୋରି ଅନୁକ୍ରମଣିକାକୁ ଲେଖିବାରେ ବିଫଳ\n"
 
-#: gtk/updateiconcache.c:1396
+#: gtk/updateiconcache.c:1388
 #, c-format
 msgid "Failed to rewrite header\n"
 msgstr "ଶୀର୍ଷକର ପୁନଃଲିଖନରେ ବିଫଳ\n"
 
-#: gtk/updateiconcache.c:1448
+#: gtk/updateiconcache.c:1440
 #, c-format
 msgid "Failed to write cache file: %s\n"
 msgstr "ସଞ୍ଚୟ ଫାଇଲରେ ଲେଖିବାରେ ବିଫଳ: %s\n"
 
-#: gtk/updateiconcache.c:1483
+#: gtk/updateiconcache.c:1475
 #, c-format
 msgid "The generated cache was invalid.\n"
 msgstr ""
 
-#: gtk/updateiconcache.c:1497
+#: gtk/updateiconcache.c:1489
 #, c-format
 msgid "Could not rename %s to %s: %s, removing %s then.\n"
 msgstr "%s ନାମକୁ %sରେ ବଦଳାଇ ପାରିଲା ନାହିଁ: %s, ସେଥିପାଇଁ %s କୁ ଅପସାରିତ କରିଦେଉଛି।\n"
 
-#: gtk/updateiconcache.c:1509
+#: gtk/updateiconcache.c:1501
 #, c-format
 msgid "Could not rename %s to %s: %s\n"
 msgstr "%sର ନାମକୁ %sରେ ବଦଳାଇ ପାରିଲା ନାହିଁ: %s\n"
 
-#: gtk/updateiconcache.c:1516
+#: gtk/updateiconcache.c:1508
 #, c-format
 msgid "Could not rename %s back to %s: %s.\n"
 msgstr "%sର ନାମକୁ ତାହାର ପୂର୍ବ ନାମ %sରେ ବଦଳାଇ ପାରିଲା ନାହିଁ: %s\n"
 
-#: gtk/updateiconcache.c:1538
+#: gtk/updateiconcache.c:1530
 #, c-format
 msgid "Cache file created successfully.\n"
 msgstr "ସଞ୍ଚୟ ଫାଇଲକୁ ସଫଳତାର ସହିତ ସୃଷ୍ଟି କରାଯାଇଛି।\n"
 
-#: gtk/updateiconcache.c:1577
+#: gtk/updateiconcache.c:1569
 #, fuzzy
 msgid "Overwrite an existing cache, even if up to date"
 msgstr "ଗୋଟିଏ ଅବସ୍ଥିତ ସଞ୍ଚୟକୁ ନବଲିଖନ କରନ୍ତୁ, ଯଦିଚ ଏହା ଅଦ୍ଯତିତ ହୋଇଛି"
 
-#: gtk/updateiconcache.c:1578
+#: gtk/updateiconcache.c:1570
 msgid "Don't check for the existence of index.theme"
 msgstr "index.theme ଅସ୍ତିତ୍ବକୁ ଯାଞ୍ଚ କରନ୍ତୁ ନାହିଁ"
 
-#: gtk/updateiconcache.c:1579
+#: gtk/updateiconcache.c:1571
 msgid "Don't include image data in the cache"
 msgstr "ସଞ୍ଚୟରେ ଗୋଟିଏ ପ୍ରତିଛବିକୁ ଅନ୍ତର୍ଭୂକ୍ତ କରନ୍ତୁ ନାହିଁ"
 
-#: gtk/updateiconcache.c:1580
+#: gtk/updateiconcache.c:1572
 msgid "Output a C header file"
 msgstr "ଗୋଟିଏ C ଶୀର୍ଷକ ଫାଇଲ ନିର୍ଗମ କରନ୍ତୁ"
 
-#: gtk/updateiconcache.c:1581
+#: gtk/updateiconcache.c:1573
 msgid "Turn off verbose output"
 msgstr "ଦୃଷ୍ଟି ସୂଚନାଯୁକ୍ତ ନିର୍ଗମକୁ ବନ୍ଦ କରନ୍ତୁ"
 
-#: gtk/updateiconcache.c:1582
+#: gtk/updateiconcache.c:1574
 msgid "Validate existing icon cache"
 msgstr ""
 
-#: gtk/updateiconcache.c:1617
+#: gtk/updateiconcache.c:1609
 #, fuzzy, c-format
 msgid "File not found: %s\n"
 msgstr "%s ସ୍ଥାପନ କରିହେଲା ନାହିଁ"
 
-#: gtk/updateiconcache.c:1623
+#: gtk/updateiconcache.c:1615
 #, c-format
 msgid "Not a valid icon cache: %s\n"
 msgstr ""
 
-#: gtk/updateiconcache.c:1634
+#: gtk/updateiconcache.c:1626
 #, c-format
 msgid ""
 "No theme index file in '%s'.\n"

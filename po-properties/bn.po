@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-properties HEAD\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-09-13 19:20-0400\n"
+"POT-Creation-Date: 2007-10-16 23:55-0400\n"
 "PO-Revision-Date: 2006-09-03 15:50+0600\n"
 "Last-Translator: Khandakar Mujahidul Islam <suzan@bengalinux.org>\n"
 "Language-Team: Bangla <gnome-translation@BengaLinux.Org>\n"
@@ -721,7 +721,7 @@ msgstr "স্পেস স্থাপন"
 msgid "The amount of space between children"
 msgstr "চিলড্রেনের মাঝে স্পেসের পরিমাণ"
 
-#: gtk/gtkbox.c:108 gtk/gtknotebook.c:638 gtk/gtktable.c:165
+#: gtk/gtkbox.c:108 gtk/gtknotebook.c:634 gtk/gtktable.c:165
 #: gtk/gtktoolbar.c:563
 msgid "Homogeneous"
 msgstr "সমজাতীয়"
@@ -763,7 +763,7 @@ msgstr "চাইল্ড ও তার প্রতিবেশীর মধ�
 msgid "Pack type"
 msgstr "প্যাক-এর ধরন"
 
-#: gtk/gtkbox.c:138 gtk/gtknotebook.c:705
+#: gtk/gtkbox.c:138 gtk/gtknotebook.c:701
 msgid ""
 "A GtkPackType indicating whether the child is packed with reference to the "
 "start or end of the parent"
@@ -771,12 +771,12 @@ msgstr ""
 "এটি একটি GtkPackType যা নির্দেশ করে যে চাইল্ডটি প্যারেন্টের আরম্ভ নাকি শেষের "
 "সাপেক্ষে স্থাপিত"
 
-#: gtk/gtkbox.c:144 gtk/gtknotebook.c:683 gtk/gtkpaned.c:219
+#: gtk/gtkbox.c:144 gtk/gtknotebook.c:679 gtk/gtkpaned.c:219
 #: gtk/gtkruler.c:110
 msgid "Position"
 msgstr "অবস্থান"
 
-#: gtk/gtkbox.c:145 gtk/gtknotebook.c:684
+#: gtk/gtkbox.c:145 gtk/gtknotebook.c:680
 msgid "The index of the child in the parent"
 msgstr "প্যারেন্টে চাইল্ডের ক্রমিক সংখ্যা"
 
@@ -1969,7 +1969,7 @@ msgid "The minimum size of the arrow in the combo box"
 msgstr "কম্বোবক্সের মডেল"
 
 #: gtk/gtkcombobox.c:859 gtk/gtkentry.c:622 gtk/gtkhandlebox.c:176
-#: gtk/gtkmenubar.c:201 gtk/gtkstatusbar.c:186 gtk/gtktoolbar.c:613
+#: gtk/gtkmenubar.c:194 gtk/gtkstatusbar.c:186 gtk/gtktoolbar.c:613
 #: gtk/gtkviewport.c:122
 msgid "Shadow type"
 msgstr "ছায়ার ধরন"
@@ -2226,53 +2226,53 @@ msgstr "মূলশব্দের (Key) সর্বনিম্ন দৈর�
 msgid "Minimum length of the search key in order to look up matches"
 msgstr "মিল খোঁজায় ব্যবহৃত মূলশব্দের (Key) সর্বনিম্ন দৈর্ঘ্য"
 
-#: gtk/gtkentrycompletion.c:302 gtk/gtkiconview.c:586
+#: gtk/gtkentrycompletion.c:303 gtk/gtkiconview.c:586
 msgid "Text column"
 msgstr "টেক্সট কলাম"
 
-#: gtk/gtkentrycompletion.c:303
+#: gtk/gtkentrycompletion.c:304
 msgid "The column of the model containing the strings."
 msgstr "মডেলের যে কলামে পঙ্‌ক্তি রয়েছে।"
 
-#: gtk/gtkentrycompletion.c:322
+#: gtk/gtkentrycompletion.c:323
 msgid "Inline completion"
 msgstr "ইন-লাইন সমাপ্তি"
 
-#: gtk/gtkentrycompletion.c:323
+#: gtk/gtkentrycompletion.c:324
 msgid "Whether the common prefix should be inserted automatically"
 msgstr "সাধারণ (Common) উপসর্গকে স্বয়ংক্রিয়ভাবে ঢোকানো হবে কিনা"
 
-#: gtk/gtkentrycompletion.c:337
+#: gtk/gtkentrycompletion.c:338
 msgid "Popup completion"
 msgstr "পপ-আপ সমাপ্তি"
 
-#: gtk/gtkentrycompletion.c:338
+#: gtk/gtkentrycompletion.c:339
 msgid "Whether the completions should be shown in a popup window"
 msgstr "পপ-আপ উইন্ডোতে সমাপ্তি প্রদর্শন করা হবে কিনা"
 
-#: gtk/gtkentrycompletion.c:353
+#: gtk/gtkentrycompletion.c:354
 msgid "Popup set width"
 msgstr "পপ-আপ সেট-এর প্রস্থ"
 
-#: gtk/gtkentrycompletion.c:354
+#: gtk/gtkentrycompletion.c:355
 msgid "If TRUE, the popup window will have the same size as the entry"
 msgstr "এটির মান সত্য (TRUE) হলে, পপ-আপ উইন্ডোর আকার হবে এন্ট্রির আকারের সমান"
 
 # FIXME
-#: gtk/gtkentrycompletion.c:372
+#: gtk/gtkentrycompletion.c:373
 msgid "Popup single match"
 msgstr "পপ-আপ একটি মিল"
 
-#: gtk/gtkentrycompletion.c:373
+#: gtk/gtkentrycompletion.c:374
 msgid "If TRUE, the popup window will appear for a single match."
 msgstr "এটির মান সত্য (TRUE) হলে, একটি মিলের জন্য পপ-আপ উইন্ডো আবির্ভূত হবে।"
 
-#: gtk/gtkentrycompletion.c:387
+#: gtk/gtkentrycompletion.c:388
 #, fuzzy
 msgid "Inline selection"
 msgstr "ইন-লাইন সমাপ্তি"
 
-#: gtk/gtkentrycompletion.c:388
+#: gtk/gtkentrycompletion.c:389
 #, fuzzy
 msgid "Your description here"
 msgstr "ফন্টের সংক্ষিপ্ত বর্ণনা"
@@ -3120,39 +3120,39 @@ msgid ""
 "submenu"
 msgstr "পয়েন্টার সাবমেনুর দিকে সরে আসার সময় সাবমেনুটি আড়াল করার পূর্বে বিলম্ব"
 
-#: gtk/gtkmenubar.c:175
+#: gtk/gtkmenubar.c:168
 msgid "Pack direction"
 msgstr "প্যাক-এর দিক"
 
-#: gtk/gtkmenubar.c:176
+#: gtk/gtkmenubar.c:169
 msgid "The pack direction of the menubar"
 msgstr "মেনুবারের প্যাক-এর দিক"
 
-#: gtk/gtkmenubar.c:192
+#: gtk/gtkmenubar.c:185
 msgid "Child Pack direction"
 msgstr "চাইল্ড প্যাক-এর দিক"
 
-#: gtk/gtkmenubar.c:193
+#: gtk/gtkmenubar.c:186
 msgid "The child pack direction of the menubar"
 msgstr "মেনুবারের চাইল্ড প্যাক-এর দিক"
 
-#: gtk/gtkmenubar.c:202
+#: gtk/gtkmenubar.c:195
 msgid "Style of bevel around the menubar"
 msgstr "মেনুবারের চারদিকে বেভেলের ধরন"
 
-#: gtk/gtkmenubar.c:209 gtk/gtktoolbar.c:580
+#: gtk/gtkmenubar.c:202 gtk/gtktoolbar.c:580
 msgid "Internal padding"
 msgstr "অভ্যন্তরীণ প্যাডিং (Padding)"
 
-#: gtk/gtkmenubar.c:210
+#: gtk/gtkmenubar.c:203
 msgid "Amount of border space between the menubar shadow and the menu items"
 msgstr "মেনুবারের ছায়া ও মেনুবারের সদস্যের মাঝে প্রান্তীয় স্থান"
 
-#: gtk/gtkmenubar.c:217
+#: gtk/gtkmenubar.c:210
 msgid "Delay before drop down menus appear"
 msgstr "ড্রপ ড্রাউন মেনু দেখা দেয়ার পূর্বে বিলম্ব"
 
-#: gtk/gtkmenubar.c:218
+#: gtk/gtkmenubar.c:211
 msgid "Delay before the submenus of a menu bar appear"
 msgstr "মেনুবার থেকে কোন সাবমেনু দেখা দেয়ার পূর্বে বিলম্ব"
 
@@ -3277,77 +3277,77 @@ msgid ""
 "The amount of space to add on the top and bottom of the widget, in pixels"
 msgstr "উইজেটের উপর ও নীচে যত পিক্সেল ফাঁকা স্থান যোগ করা হবে"
 
-#: gtk/gtknotebook.c:566
+#: gtk/gtknotebook.c:562
 msgid "Page"
 msgstr "পৃষ্ঠা"
 
-#: gtk/gtknotebook.c:567
+#: gtk/gtknotebook.c:563
 msgid "The index of the current page"
 msgstr "বর্তমান পাতার সূচী"
 
-#: gtk/gtknotebook.c:575
+#: gtk/gtknotebook.c:571
 msgid "Tab Position"
 msgstr "ট্যাবের অবস্থান"
 
-#: gtk/gtknotebook.c:576
+#: gtk/gtknotebook.c:572
 msgid "Which side of the notebook holds the tabs"
 msgstr "নোট বইয়ের কোন দিকটি ট্যাব ধারণ করে"
 
-#: gtk/gtknotebook.c:583
+#: gtk/gtknotebook.c:579
 msgid "Tab Border"
 msgstr "ট্যাবের প্রান্ত"
 
-#: gtk/gtknotebook.c:584
+#: gtk/gtknotebook.c:580
 msgid "Width of the border around the tab labels"
 msgstr "ট্যাব লেবেলের প্রান্তের প্রস্থ"
 
-#: gtk/gtknotebook.c:592
+#: gtk/gtknotebook.c:588
 msgid "Horizontal Tab Border"
 msgstr "ট্যাবের অনুভূমিক প্রান্ত"
 
-#: gtk/gtknotebook.c:593
+#: gtk/gtknotebook.c:589
 msgid "Width of the horizontal border of tab labels"
 msgstr "ট্যাব লেবেলের অনুভূমিক প্রান্তের প্রস্থ"
 
-#: gtk/gtknotebook.c:601
+#: gtk/gtknotebook.c:597
 msgid "Vertical Tab Border"
 msgstr "ট্যাবের উলম্ব প্রান্ত"
 
-#: gtk/gtknotebook.c:602
+#: gtk/gtknotebook.c:598
 msgid "Width of the vertical border of tab labels"
 msgstr "ট্যাব লেবেলের উলম্ব প্রান্তের প্রস্থ"
 
-#: gtk/gtknotebook.c:610
+#: gtk/gtknotebook.c:606
 msgid "Show Tabs"
 msgstr "ট্যাব প্রদর্শন করো"
 
-#: gtk/gtknotebook.c:611
+#: gtk/gtknotebook.c:607
 msgid "Whether tabs should be shown or not"
 msgstr "ট্যাব প্রদর্শন করা হবে কিনা"
 
-#: gtk/gtknotebook.c:617
+#: gtk/gtknotebook.c:613
 msgid "Show Border"
 msgstr "প্রান্ত প্রদর্শন করো"
 
-#: gtk/gtknotebook.c:618
+#: gtk/gtknotebook.c:614
 msgid "Whether the border should be shown or not"
 msgstr "প্রান্ত প্রদর্শন করা হবে কিনা"
 
-#: gtk/gtknotebook.c:624
+#: gtk/gtknotebook.c:620
 msgid "Scrollable"
 msgstr "স্ক্রল করার যোগ্য"
 
-#: gtk/gtknotebook.c:625
+#: gtk/gtknotebook.c:621
 msgid "If TRUE, scroll arrows are added if there are too many tabs to fit"
 msgstr ""
 "এর মান সত্য (TRUE) হলে, ট্যাবের সংখ্যা যদি অত্যধিক হয় তবে স্ক্রলযোগ্য তীরচিহ্ন যোগ "
 "করা হবে"
 
-#: gtk/gtknotebook.c:631
+#: gtk/gtknotebook.c:627
 msgid "Enable Popup"
 msgstr "পপ আপ সক্রিয় করো"
 
-#: gtk/gtknotebook.c:632
+#: gtk/gtknotebook.c:628
 msgid ""
 "If TRUE, pressing the right mouse button on the notebook pops up a menu that "
 "you can use to go to a page"
@@ -3355,88 +3355,88 @@ msgstr ""
 "যদি TRUE হয় তবে নোটবইয়ে মাউসের ডান বাটন চাপলে একটি মেনু দেখা যাবে যেখান থেকে "
 "অন্যান্য পৃষ্ঠায় যাওয়া যাবে"
 
-#: gtk/gtknotebook.c:639
+#: gtk/gtknotebook.c:635
 msgid "Whether tabs should have homogeneous sizes"
 msgstr "সকল ট্যাবের আকার একই হবে কিনা"
 
-#: gtk/gtknotebook.c:645
+#: gtk/gtknotebook.c:641
 msgid "Group ID"
 msgstr "গ্রুপ আইডি"
 
-#: gtk/gtknotebook.c:646
+#: gtk/gtknotebook.c:642
 msgid "Group ID for tabs drag and drop"
 msgstr ""
 
-#: gtk/gtknotebook.c:662 gtk/gtkradioaction.c:128 gtk/gtkradiobutton.c:82
+#: gtk/gtknotebook.c:658 gtk/gtkradioaction.c:128 gtk/gtkradiobutton.c:82
 #: gtk/gtkradiomenuitem.c:342
 msgid "Group"
 msgstr "গ্রুপ"
 
-#: gtk/gtknotebook.c:663
+#: gtk/gtknotebook.c:659
 msgid "Group for tabs drag and drop"
 msgstr ""
 
-#: gtk/gtknotebook.c:669
+#: gtk/gtknotebook.c:665
 msgid "Tab label"
 msgstr "ট্যাবের লেবেল"
 
-#: gtk/gtknotebook.c:670
+#: gtk/gtknotebook.c:666
 msgid "The string displayed on the child's tab label"
 msgstr "চাইল্ডের ট্যাব লেবেলে প্রদর্শিত পংক্তি"
 
-#: gtk/gtknotebook.c:676
+#: gtk/gtknotebook.c:672
 msgid "Menu label"
 msgstr "মেনুর লেবেল"
 
-#: gtk/gtknotebook.c:677
+#: gtk/gtknotebook.c:673
 msgid "The string displayed in the child's menu entry"
 msgstr "চাইল্ডের মেনু এন্ট্রিতে প্রদর্শিত পংক্তি"
 
-#: gtk/gtknotebook.c:690
+#: gtk/gtknotebook.c:686
 msgid "Tab expand"
 msgstr "ট্যাব প্রসারণ"
 
-#: gtk/gtknotebook.c:691
+#: gtk/gtknotebook.c:687
 msgid "Whether to expand the child's tab or not"
 msgstr "চাইল্ডের ট্যাব প্রসারিত করা হবে কিনা"
 
-#: gtk/gtknotebook.c:697
+#: gtk/gtknotebook.c:693
 msgid "Tab fill"
 msgstr "ট্যাব পূরণ"
 
-#: gtk/gtknotebook.c:698
+#: gtk/gtknotebook.c:694
 msgid "Whether the child's tab should fill the allocated area or not"
 msgstr "চাইল্ডের ট্যাব বরাদ্দকৃত ক্ষেত্র পূরণ করবে কিনা"
 
-#: gtk/gtknotebook.c:704
+#: gtk/gtknotebook.c:700
 msgid "Tab pack type"
 msgstr "ট্যাব আটানোর (Pack) ধরন"
 
-#: gtk/gtknotebook.c:711
+#: gtk/gtknotebook.c:707
 #, fuzzy
 msgid "Tab reorderable"
 msgstr "পুনরায় সাজানোর যোগ্য"
 
-#: gtk/gtknotebook.c:712
+#: gtk/gtknotebook.c:708
 #, fuzzy
 msgid "Whether the tab is reorderable by user action or not"
 msgstr "প্রান্ত প্রদর্শন করা হবে কিনা"
 
-#: gtk/gtknotebook.c:718
+#: gtk/gtknotebook.c:714
 #, fuzzy
 msgid "Tab detachable"
 msgstr "ট্যাবের লেবেল"
 
-#: gtk/gtknotebook.c:719
+#: gtk/gtknotebook.c:715
 #, fuzzy
 msgid "Whether the tab is detachable"
 msgstr "কাজটি সক্রিয় কিনা"
 
-#: gtk/gtknotebook.c:734 gtk/gtkscrollbar.c:83
+#: gtk/gtknotebook.c:730 gtk/gtkscrollbar.c:83
 msgid "Secondary backward stepper"
 msgstr "পশ্চাত্‍গামী গৌণ স্টেপার"
 
-#: gtk/gtknotebook.c:735
+#: gtk/gtknotebook.c:731
 msgid ""
 "Display a second backward arrow button on the opposite end of the tab area"
 msgstr ""
@@ -3444,47 +3444,47 @@ msgstr ""
 "করো"
 
 # FIXME: ভাল হইলো না ;-(
-#: gtk/gtknotebook.c:750 gtk/gtkscrollbar.c:91
+#: gtk/gtknotebook.c:746 gtk/gtkscrollbar.c:91
 msgid "Secondary forward stepper"
 msgstr "সম্মুখগামী গৌণ স্টেপার"
 
-#: gtk/gtknotebook.c:751
+#: gtk/gtknotebook.c:747
 msgid ""
 "Display a second forward arrow button on the opposite end of the tab area"
 msgstr ""
 "ট্যাব অংশের বিপরীত প্রান্তে একটি সম্মুখগামী গৌণ স্টেপার তীরচিহ্নধারী বাটন প্রদর্শন করো"
 
-#: gtk/gtknotebook.c:765 gtk/gtkscrollbar.c:67
+#: gtk/gtknotebook.c:761 gtk/gtkscrollbar.c:67
 msgid "Backward stepper"
 msgstr "পশ্চাত্‍গামী স্টেপার"
 
-#: gtk/gtknotebook.c:766 gtk/gtkscrollbar.c:68
+#: gtk/gtknotebook.c:762 gtk/gtkscrollbar.c:68
 msgid "Display the standard backward arrow button"
 msgstr "পশ্চাত্‍গামী প্রমিত তীরচিহ্নধারী বাটন প্রদর্শন করো"
 
-#: gtk/gtknotebook.c:780 gtk/gtkscrollbar.c:75
+#: gtk/gtknotebook.c:776 gtk/gtkscrollbar.c:75
 msgid "Forward stepper"
 msgstr "সম্মুখগামী স্টেপার"
 
-#: gtk/gtknotebook.c:781 gtk/gtkscrollbar.c:76
+#: gtk/gtknotebook.c:777 gtk/gtkscrollbar.c:76
 msgid "Display the standard forward arrow button"
 msgstr "সম্মুখগামী প্রমিত তীরচিহ্নধারী বাটন প্রদর্শন করো"
 
-#: gtk/gtknotebook.c:795
+#: gtk/gtknotebook.c:791
 #, fuzzy
 msgid "Tab overlap"
 msgstr "ট্যাবের প্রান্ত"
 
-#: gtk/gtknotebook.c:796
+#: gtk/gtknotebook.c:792
 #, fuzzy
 msgid "Size of tab overlap area"
 msgstr "বর্ধিষ্ণু তীরচিহ্নের আকার"
 
-#: gtk/gtknotebook.c:811
+#: gtk/gtknotebook.c:807
 msgid "Tab curvature"
 msgstr ""
 
-#: gtk/gtknotebook.c:812
+#: gtk/gtknotebook.c:808
 #, fuzzy
 msgid "Size of tab curvature"
 msgstr "স্পেসার (Spacer) এর আকার"
@@ -4119,12 +4119,12 @@ msgid ""
 "spacing"
 msgstr ""
 
-#: gtk/gtkrecentaction.c:654 gtk/gtkrecentchoosermenu.c:209
+#: gtk/gtkrecentaction.c:677 gtk/gtkrecentchoosermenu.c:209
 #, fuzzy
 msgid "Show Numbers"
 msgstr "সপ্তাহের নম্বর প্রদর্শন করো"
 
-#: gtk/gtkrecentaction.c:655 gtk/gtkrecentchoosermenu.c:210
+#: gtk/gtkrecentaction.c:678 gtk/gtkrecentchoosermenu.c:210
 #, fuzzy
 msgid "Whether the items should be displayed with a number"
 msgstr "টিয়ারঅফ (Tearoff) মেনু আইটেমকে মেনুতে যোগ করা হবে কিনা"
@@ -6666,19 +6666,19 @@ msgstr ""
 msgid "The opacity of the window, from 0 to 1"
 msgstr "উইন্ডোর ধরন "
 
-#: modules/input/gtkimcontextxim.c:330
+#: modules/input/gtkimcontextxim.c:336
 msgid "IM Preedit style"
 msgstr "IM-এর এডিটপূর্ব ধরন"
 
-#: modules/input/gtkimcontextxim.c:331
+#: modules/input/gtkimcontextxim.c:337
 msgid "How to draw the input method preedit string"
 msgstr "যেভাবে ইনপুট পদ্ধতির এডিটপূর্ব পংক্তি আঁকা হবে"
 
-#: modules/input/gtkimcontextxim.c:339
+#: modules/input/gtkimcontextxim.c:345
 msgid "IM Status style"
 msgstr "IM-এর অবস্থাসূচক ধরন"
 
-#: modules/input/gtkimcontextxim.c:340
+#: modules/input/gtkimcontextxim.c:346
 msgid "How to draw the input method statusbar"
 msgstr "যে ভাবে ইনপুট পদ্ধতির স্ট্যাটাসবার আঁকা হবে"
 
