@@ -478,7 +478,6 @@ that is, GUI components such as #GtkButton or #GtkTextView.
         &GtkColorButton;
         &GtkColorSelection;
         &GtkColorSelectionDialog;
-        &GtkFileSelection;
 	&GtkFileChooser;
 	&GtkFileChooserButton;
 	&GtkFileChooserDialog;
@@ -605,6 +604,7 @@ that is, GUI components such as #GtkButton or #GtkTextView.
         &GtkCList;      
         &GtkCTree;
         &GtkCombo;
+        &GtkFileSelection;
         &GtkItemFactory;
         &GtkList;
         &GtkListItem;
