@@ -3363,9 +3363,7 @@ gdk_event_translate (MSG  *msg,
 	}
       break;
 
-    case WM_ACTIVATE:
-      ;
-
+    case WM_ACTIVATE: {
       /*
        * On Windows, transient windows will not have their own taskbar entries.
        * Because of this, we must hide and restore groups of transients in both
@@ -3406,7 +3404,6 @@ gdk_event_translate (MSG  *msg,
 	    }
         }
 
-
       /* Bring any tablet contexts to the top of the overlap order when
        * one of our windows is activated.
        * NOTE: It doesn't seem to work well if it is done in WM_ACTIVATEAPP
@@ -3415,7 +3412,8 @@ gdk_event_translate (MSG  *msg,
       if (LOWORD(msg->wParam) != WA_INACTIVE)
 	_gdk_input_set_tablet_active ();
       break;
-      
+    }
+
       /* Handle WINTAB events here, as we know that gdkinput.c will
        * use the fixed WT_DEFBASE as lcMsgBase, and we thus can use the
        * constants as case labels.

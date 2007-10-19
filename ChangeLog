@@ -1,3 +1,9 @@
+2007-10-19  Tor Lillqvist  <tml@novell.com>
+
+	* gdk/win32/gdkevents-win32.c (gdk_event_translate): Add a block
+	around the WM_ACTIVATE case to avoid declaring variables in the
+	middle of a block. (#488017)
+
 2007-10-18  Cody Russell  <cody@jhu.edu>
 
 	* modules/engines/ms-windows/msw_style.c: Draw focus rect for
