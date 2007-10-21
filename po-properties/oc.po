@@ -9,17 +9,17 @@ msgstr ""
 "Project-Id-Version: gtk+-properties.HEAD.or\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2007-10-16 23:55-0400\n"
-"PO-Revision-Date: 2007-09-01 19:36+0200\n"
+"PO-Revision-Date: 2007-10-21 23:48+0200\n"
 "Last-Translator: Yannig Marchegay (Kokoyaya) <yannig@marchegay.org>\n"
 "Language-Team: Occitan (post 1500) <ubuntu-l10n-oci@lists.ubuntu.com>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);"
 
 #: gdk-pixbuf/gdk-pixbuf.c:89
 msgid "Number of Channels"
-msgstr ""
+msgstr "Nombre de canals"
 
 #: gdk-pixbuf/gdk-pixbuf.c:90
 msgid "The number of samples per pixel"
@@ -6263,3 +6263,4 @@ msgstr ""
 #: modules/input/gtkimcontextxim.c:346
 msgid "How to draw the input method statusbar"
 msgstr ""
+
