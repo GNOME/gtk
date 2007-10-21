@@ -9,13 +9,13 @@ msgstr ""
 "Project-Id-Version: gtk+ 2.10.7\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2007-10-16 23:54-0400\n"
-"PO-Revision-Date: 2007-09-30 19:38+0200\n"
+"PO-Revision-Date: 2007-10-21 23:50+0200\n"
 "Last-Translator: Yannig MARCHEGAY (Kokoyaya) <yannig@marchegay.org>\n"
 "Language-Team: Occitan (post 1500) <ubuntu-l10n-oci@lists.ubuntu.com>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);"
 
 #: gdk/directfb/gdkdisplay-directfb.c:55
 msgid "directfb arg"
@@ -366,9 +366,7 @@ msgstr "Donadas dels pixeles de l'imatge corrompudas"
 #: gdk-pixbuf/gdk-pixdata.c:431
 #, c-format
 msgid "failed to allocate image buffer of %u byte"
-msgid_plural "failed to allocate image buffer of %u bytes"
-msgstr[0] ""
-msgstr[1] ""
+msgstr ""
 
 #: gdk-pixbuf/io-ani.c:244
 #, c-format
@@ -662,7 +660,7 @@ msgstr ""
 #: gdk-pixbuf/io-pcx.c:704
 #, c-format
 msgid "Didn't get all lines of PCX image"
-msgstr "Impossible d'obténer totas las linhas de l'imatge PCX"
+msgstr ""
 
 #: gdk-pixbuf/io-pcx.c:711
 #, c-format
