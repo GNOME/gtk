@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ HEAD\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-10-21 11:04-0600\n"
-"PO-Revision-Date: 2007-10-21 11:01-0600\n"
+"POT-Creation-Date: 2007-10-21 17:20-0600\n"
+"PO-Revision-Date: 2007-10-21 16:12-0700\n"
 "Last-Translator: Seán de Búrca <leftmostcat@gmail.com>\n"
 "Language-Team: Irish <gaeilge-gnulinux@lists.sourceforge.net>\n"
 "MIME-Version: 1.0\n"
@@ -295,7 +295,7 @@ msgstr "Theip ar luchtú íomhá '%s': %s"
 #: ../gdk-pixbuf/gdk-pixbuf-io.c:1381
 #, c-format
 msgid "Error writing to image file: %s"
-msgstr "Earráid agus comhad íomhá a scríobh: %s"
+msgstr "Earráid agus comhad íomhá á scríobh: %s"
 
 #: ../gdk-pixbuf/gdk-pixbuf-io.c:1427 ../gdk-pixbuf/gdk-pixbuf-io.c:1558
 #, c-format
@@ -543,7 +543,7 @@ msgstr "An fhormáid íomhá ICO"
 #: ../gdk-pixbuf/io-jpeg.c:117
 #, c-format
 msgid "Error interpreting JPEG image file (%s)"
-msgstr "Earráid agus léirmhíniú comhad íomhá JPEG (%s)"
+msgstr "Earráid agus comhad íomhá JPEG á léirmhíniú (%s)"
 
 #: ../gdk-pixbuf/io-jpeg.c:509
 msgid ""
@@ -1667,7 +1667,7 @@ msgstr "Inné ar a %H:%M"
 #: ../gtk/gtkfilesystemwin32.c:1167
 #, c-format
 msgid "Error creating folder '%s': %s"
-msgstr "Earráid agus fillteán '%s' a chruthú: %s"
+msgstr "Earráid agus fillteán '%s' á chruthú: %s"
 
 #: ../gtk/gtkfilesel.c:693
 msgid "Folders"
@@ -1732,7 +1732,7 @@ msgstr ""
 #: ../gtk/gtkfilesel.c:1536 ../gtk/gtkfilesel.c:1546
 #, c-format
 msgid "Error deleting file '%s': %s"
-msgstr "Earráid agus comhad '%s' a scriosadh: %s"
+msgstr "Earráid agus comhad '%s' á scriosadh: %s"
 
 #: ../gtk/gtkfilesel.c:1589
 #, c-format
@@ -1746,17 +1746,17 @@ msgstr "Dealaigh Comhad"
 #: ../gtk/gtkfilesel.c:1642
 #, c-format
 msgid "Error renaming file to \"%s\": %s"
-msgstr "Earráid agus athainmniú comhad mar \"%s\": %s"
+msgstr "Earráid agus comhad á athainmniú go \"%s\": %s"
 
 #: ../gtk/gtkfilesel.c:1655
 #, c-format
 msgid "Error renaming file \"%s\": %s"
-msgstr "Earráid agus athainmniú comhad \"%s\": %s"
+msgstr "Earráid agus comhad \"%s\" á athainmniú: %s"
 
 #: ../gtk/gtkfilesel.c:1664
 #, c-format
 msgid "Error renaming file \"%s\" to \"%s\": %s"
-msgstr "Earráid agus athainmniú comhad \"%s\" mar \"%s\": %s"
+msgstr "Earráid agus comhad \"%s\" á athainmniú go \"%s\": %s"
 
 #: ../gtk/gtkfilesel.c:1711
 msgid "Rename File"
@@ -1812,7 +1812,7 @@ msgstr "(Folamh)"
 #: ../gtk/gtkfilesystemwin32.c:2245 ../gtk/gtkfilesystemwin32.c:2295
 #, c-format
 msgid "Error getting information for '%s': %s"
-msgstr "Earráid agus eolas a fháil le '%s': %s"
+msgstr "Earráid agus eolas le '%s' á fháil: %s"
 
 #: ../gtk/gtkfilesystemunix.c:1153 ../gtk/gtkfilesystemwin32.c:1274
 msgid "This file system does not support mounting"
@@ -1913,7 +1913,7 @@ msgstr "Luach _gáma"
 #: ../gtk/gtkiconfactory.c:1374
 #, c-format
 msgid "Error loading icon: %s"
-msgstr "Earráid agus deilbhín a luchtú: %s"
+msgstr "Earráid agus deilbhín á luchtú: %s"
 
 #: ../gtk/gtkicontheme.c:1321
 #, c-format
@@ -2281,11 +2281,11 @@ msgstr "Ag priontáil %d"
 
 #: ../gtk/gtkprintoperation-unix.c:243
 msgid "Error launching preview"
-msgstr "Earráid agus tosú réamhamharc"
+msgstr "Earráid agus réamhamharc á thosú"
 
 #: ../gtk/gtkprintoperation-unix.c:281
 msgid "Error printing"
-msgstr "Earráid agus priontáil"
+msgstr "Earráid agus ag priontáil"
 
 #: ../gtk/gtkprintoperation-unix.c:388 ../gtk/gtkprintoperation-win32.c:1395
 msgid "Application"
@@ -2334,7 +2334,7 @@ msgstr "Earráid gan sonrú"
 
 #: ../gtk/gtkprintoperation-win32.c:1627
 msgid "Error from StartDoc"
-msgstr "Earráid as StartDoc"
+msgstr "Earráid ó StartDoc"
 
 #: ../gtk/gtkprintunixdialog.c:1504
 msgid "Printer"
@@ -3095,7 +3095,7 @@ msgstr ""
 #: ../gtk/gtktextbufferserialize.c:1285
 #, c-format
 msgid "Tag \"%s\" already defined"
-msgstr ""
+msgstr "Sainmhíníodh clib \"%s\" cheana."
 
 #: ../gtk/gtktextbufferserialize.c:1296
 #, c-format
@@ -3127,27 +3127,27 @@ msgstr ""
 
 #: ../gtk/gtktextutil.c:60
 msgid "LRM _Left-to-right mark"
-msgstr ""
+msgstr "LRM Marc _Clé-go-deas"
 
 #: ../gtk/gtktextutil.c:61
 msgid "RLM _Right-to-left mark"
-msgstr ""
+msgstr "RLM Marc _Deas-go-clé"
 
 #: ../gtk/gtktextutil.c:62
 msgid "LRE Left-to-right _embedding"
-msgstr ""
+msgstr "LRE _Leabú Clé-go-deas"
 
 #: ../gtk/gtktextutil.c:63
 msgid "RLE Right-to-left e_mbedding"
-msgstr ""
+msgstr "RLE L_eabú Deas-go-clé"
 
 #: ../gtk/gtktextutil.c:64
 msgid "LRO Left-to-right _override"
-msgstr ""
+msgstr "LRO _Sárú Clé-go-deas"
 
 #: ../gtk/gtktextutil.c:65
 msgid "RLO Right-to-left o_verride"
-msgstr ""
+msgstr "RLO Sá_rú Deas-go-clé"
 
 #: ../gtk/gtktextutil.c:66
 msgid "PDF _Pop directional formatting"
