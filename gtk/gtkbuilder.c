@@ -21,7 +21,6 @@
  */
 
 #include <config.h>
-#include <ctype.h> /* tolower, toupper */
 #include <errno.h> /* errno */
 #include <stdlib.h> /* strtol, strtoul */
 #include <string.h> /* strlen */
@@ -210,13 +209,13 @@ _gtk_builder_resolve_type_lazily (const gchar *name)
     {
       c = name[i];
       /* skip if uppercase, first or previous is uppercase */
-      if ((c == toupper (c) &&
-           i > 0 && name[i-1] != toupper (name[i-1])) ||
-          (i > 2 && name[i]   == toupper (name[i]) &&
-           name[i-1] == toupper (name[i-1]) &&
-           name[i-2] == toupper (name[i-2])))
+      if ((c == g_ascii_toupper (c) &&
+           i > 0 && name[i-1] != g_ascii_toupper (name[i-1])) ||
+          (i > 2 && name[i]   == g_ascii_toupper (name[i]) &&
+           name[i-1] == g_ascii_toupper (name[i-1]) &&
+           name[i-2] == g_ascii_toupper (name[i-2])))
         g_string_append_c (symbol_name, '_');
-      g_string_append_c (symbol_name, tolower (c));
+      g_string_append_c (symbol_name, g_ascii_tolower (c));
     }
   g_string_append (symbol_name, "_get_type");
   

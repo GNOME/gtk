@@ -1,3 +1,8 @@
+2007-10-22  Johan Dahlin  <jdahlin@async.com.br>
+
+	* gtk/gtkbuilder.c: Use gtk_ascii_tolower/toupper instead of the C 
+	library variants. (#488918, Sertaç Ö. Yıldız)
+
 2007-10-19  Tor Lillqvist  <tml@novell.com>
 
 	* gdk/win32/gdkevents-win32.c (gdk_event_translate): Add a block
