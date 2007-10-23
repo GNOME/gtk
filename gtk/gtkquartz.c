@@ -100,7 +100,6 @@ _gtk_quartz_target_list_to_pasteboard_types (GtkTargetList *target_list)
   return [set allObjects];
 }
 
-
 NSArray *
 _gtk_quartz_target_entries_to_pasteboard_types (const GtkTargetEntry *targets,
 						guint                 n_targets)
@@ -164,11 +163,12 @@ _gtk_quartz_get_selection_data_from_pasteboard (NSPasteboard *pasteboard,
   if (target == gdk_atom_intern_static_string ("UTF8_STRING"))
     {
       NSString *s = [pasteboard stringForType:NSStringPboardType];
-      int len = [s length];
 
       if (s)
 	{
-	  selection_data->type = target;
+          int len = [s length];
+
+          selection_data->type = target;
 	  selection_data->format = 8;
 	  selection_data->length = len;
 	  selection_data->data = g_memdup ([s UTF8String], len + 1);
@@ -176,7 +176,8 @@ _gtk_quartz_get_selection_data_from_pasteboard (NSPasteboard *pasteboard,
     }
   else if (target == gdk_atom_intern_static_string ("application/x-color"))
     {
-      NSColor *nscolor = [[NSColor colorFromPasteboard:pasteboard] colorUsingColorSpaceName:NSDeviceRGBColorSpace];
+      NSColor *nscolor = [[NSColor colorFromPasteboard:pasteboard]
+                          colorUsingColorSpaceName:NSDeviceRGBColorSpace];
       
       guint16 color[4];
       
@@ -191,14 +192,39 @@ _gtk_quartz_get_selection_data_from_pasteboard (NSPasteboard *pasteboard,
     }
   else if (target == gdk_atom_intern_static_string ("text/uri-list"))
     {
-      gchar *uris[2];
-      NSURL *url = [NSURL URLFromPasteboard:pasteboard];
+      if ([[pasteboard types] containsObject:NSFilenamesPboardType])
+        {
+           gchar **uris;
+           NSArray *files = [pasteboard propertyListForType:NSFilenamesPboardType];
+           int n_files = [files count];
+           int i;
 
-      selection_data->target = gdk_atom_intern_static_string ("text/uri-list");
+           selection_data->target = gdk_atom_intern_static_string ("text/uri-list");
+
+           uris = (gchar **) g_malloc (sizeof (gchar*) * (n_files + 1));
+           for (i = 0; i < n_files; ++i)
+             {
+               NSString* uriString = [files objectAtIndex:i];
+               uriString = [@"file://" stringByAppendingString:uriString];
+               uriString = [uriString stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+               uris[i] = (gchar *) [uriString cStringUsingEncoding:NSUTF8StringEncoding];
+             }
+           uris[i] = NULL;
+
+           gtk_selection_data_set_uris (selection_data, uris);
+           g_free (uris);
+         }
+      else if ([[pasteboard types] containsObject:NSURLPboardType])
+        {
+          gchar *uris[2];
+          NSURL *url = [NSURL URLFromPasteboard:pasteboard];
+
+          selection_data->target = gdk_atom_intern_static_string ("text/uri-list");
       
-      uris[0] = [[url description] UTF8String];
-      uris[1] = NULL;
-      gtk_selection_data_set_uris (selection_data, uris);
+          uris[0] = (gchar *) [[url description] UTF8String];
+          uris[1] = NULL;
+          gtk_selection_data_set_uris (selection_data, uris);
+        }
     }
   else
     {
@@ -233,7 +259,6 @@ _gtk_quartz_set_selection_data_for_pasteboard (NSPasteboard *pasteboard,
 					       GtkSelectionData *selection_data)
 {
   NSString *type;
-  NSData *data;
   gchar *target = gdk_atom_name (selection_data->target);
 
   type = target_to_pasteboard_type (target);

@@ -1,5 +1,13 @@
 2007-10-23  Richard Hult  <richard@imendio.com>
 
+	* gtk/gtkquartz.c:
+	(_gtk_quartz_get_selection_data_from_pasteboard): Handle
+	NSFilenamesPboardType in addition to NSURLPboardType to support
+	dnd with multiple files from Finder, based on patch from Paul
+	Davis (bug #467490).
+
+2007-10-23  Richard Hult  <richard@imendio.com>
+
 	* gdk/quartz/gdkwindow-quartz.c:
 	(gdk_window_raise, gdk_window_lower, gdk_window_new,
 	_gdk_windowing_window_destroy): Maintain a list for the stacking
