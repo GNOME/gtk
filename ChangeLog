@@ -1,3 +1,16 @@
+2007-10-23  Richard Hult  <richard@imendio.com>
+
+	* gdk/quartz/gdkwindow-quartz.c:
+	(gdk_window_raise, gdk_window_lower, gdk_window_new,
+	_gdk_windowing_window_destroy): Maintain a list for the stacking
+	order of windows. Implement lower and raise for child windows. The
+	list for toplevels is created on demand, and cleared when a window
+	gets or resigns main status and when new windows are created.
+	(find_child_window_helper): Use the sorted list to go through
+	windows from top to bottom. Take any titlebar in consideration for
+	toplevels, to stop events from sometimes punching through (bugs
+	#473813 and #489370).
+
 2007-10-22  Johan Dahlin  <jdahlin@async.com.br>
 
 	* gtk/gtkbuilder.c: Use gtk_ascii_tolower/toupper instead of the C 

@@ -66,6 +66,9 @@ struct _GdkWindowImplQuartz
   gint in_paint_rect_count;
 
   GdkWindow *transient_for;
+
+  /* Sorted by z-order */
+  GList *sorted_children;
 };
  
 struct _GdkWindowImplQuartzClass 
