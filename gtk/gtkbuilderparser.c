@@ -774,6 +774,8 @@ end_element (GMarkupParseContext *context,
       if (GTK_IS_BUILDABLE (object_info->object) &&
           GTK_BUILDABLE_GET_IFACE (object_info->object)->parser_finished)
         data->finalizers = g_slist_prepend (data->finalizers, object_info->object);
+      _gtk_builder_add_signals (data->builder, object_info->signals);
+
       free_object_info (object_info);
     }
   else if (strcmp (element_name, "property") == 0)

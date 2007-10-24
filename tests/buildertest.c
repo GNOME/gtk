@@ -189,6 +189,15 @@ gboolean test_connect_signals (void)
     "    <signal name=\"notify::title\" handler=\"signal_extra2\"/>"
     "  </object>"
     "</interface>";
+  const gchar buffer_after_child[] =
+    "<interface>"
+    "  <object class=\"GtkWindow\" id=\"window1\">"
+    "    <child>"
+    "      <object class=\"GtkButton\" id=\"button1\"/>"
+    "    </child>"
+    "    <signal name=\"notify::title\" handler=\"signal_normal\"/>"
+    "  </object>"
+    "</interface>";
 
   builder = builder_new_from_string (buffer, -1, NULL);
   gtk_builder_connect_signals (builder, NULL);
@@ -229,6 +238,19 @@ gboolean test_connect_signals (void)
   
   g_object_unref (builder);
 
+  /* new test, reset globals */
+  after = 0;
+  normal = 0;
+  
+  builder = builder_new_from_string (buffer_after_child, -1, NULL);
+  window = gtk_builder_get_object (builder, "window1");
+  gtk_builder_connect_signals (builder, NULL);
+  gtk_window_set_title (GTK_WINDOW (window), "test");
+
+  g_return_val_if_fail (normal == 1, FALSE);
+  gtk_widget_destroy (GTK_WIDGET (window));
+  g_object_unref (builder);
+  
   return TRUE;
 }
 

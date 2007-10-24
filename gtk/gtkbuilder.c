@@ -497,8 +497,6 @@ _gtk_builder_construct (GtkBuilder *builder,
     }
   g_hash_table_insert (builder->priv->objects, g_strdup (info->id), obj);
   
-  builder->priv->signals = g_slist_concat (builder->priv->signals,
-                                           g_slist_copy (info->signals));
   return obj;
 }
 
@@ -543,6 +541,14 @@ _gtk_builder_add (GtkBuilder *builder,
 			   child_info->type);
 
   child_info->added = TRUE;
+}
+
+void
+_gtk_builder_add_signals (GtkBuilder *builder,
+			  GSList     *signals)
+{
+  builder->priv->signals = g_slist_concat (builder->priv->signals,
+                                           g_slist_copy (signals));
 }
 
 static void
