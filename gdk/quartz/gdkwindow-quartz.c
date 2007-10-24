@@ -1371,6 +1371,8 @@ update_toplevel_order (void)
   if (root_impl->sorted_children)
     return;
 
+  GDK_QUARTZ_ALLOC_POOL;
+
   enumerator = [[NSApp orderedWindows] objectEnumerator];
   while ((nswindow = [enumerator nextObject]))
     {
@@ -1382,6 +1384,8 @@ update_toplevel_order (void)
       window = [(GdkQuartzView *)[nswindow contentView] gdkWindow];
       toplevels = g_list_prepend (toplevels, window);
     }
+
+  GDK_QUARTZ_RELEASE_POOL;
 
   root_impl->sorted_children = g_list_reverse (toplevels);
 }

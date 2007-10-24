@@ -1,3 +1,8 @@
+2007-10-24  Richard Hult  <richard@imendio.com>
+
+	* gdk/quartz/gdkwindow-quartz.c: (update_toplevel_order): Use an
+	autorelease pool.
+
 2007-10-24  Johan Dahlin  <jdahlin@async.com.br>
 
 	* gtk/gtk-builder-convert 
