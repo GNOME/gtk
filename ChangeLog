@@ -1,3 +1,8 @@
+2007-10-24  Johan Dahlin  <jdahlin@async.com.br>
+
+	* gtk/gtkbuilderparser.c (end_element): Allow empty property nodes
+	so we can set empty strings. (#486420, Xavier Claessens)
+
 2007-10-23  Richard Hult  <richard@imendio.com>
 
 	* gtk/gtkquartz.c:

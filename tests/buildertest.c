@@ -76,13 +76,6 @@ gboolean test_parser (void)
   g_return_val_if_fail (error->code == GTK_BUILDER_ERROR_INVALID_TAG, FALSE);
   g_error_free (error);
 
-  error = NULL;
-  gtk_builder_add_from_string (builder, "<interface><object class=\"GtkWindow\" id=\"a\"><property name=\"type\"/></object></interface>", -1, &error);
-  g_assert (error != NULL);
-  g_return_val_if_fail (error->domain == GTK_BUILDER_ERROR, FALSE);
-  g_return_val_if_fail (error->code == GTK_BUILDER_ERROR_MISSING_PROPERTY_VALUE, FALSE);
-  g_error_free (error);
-
   g_object_unref (builder);
   
   return TRUE;
@@ -1507,6 +1500,42 @@ gboolean test_widget (void)
   return TRUE;
 }
 
+gboolean test_window (void)
+{
+  gchar *buffer1 =
+    "<interface>"
+    "  <object class=\"GtkWindow\" id=\"window1\">"
+    "     <property name=\"title\"></property>"
+    "  </object>"
+   "</interface>";
+  gchar *buffer2 =
+    "<interface>"
+    "  <object class=\"GtkWindow\" id=\"window1\">"
+    "  </object>"
+   "</interface>";
+  GtkBuilder *builder;
+  GObject *window1;
+  gchar *title;
+  
+  builder = builder_new_from_string (buffer1, -1, NULL);
+  window1 = gtk_builder_get_object (builder, "window1");
+  g_object_get (window1, "title", &title, NULL);
+  g_return_val_if_fail (strcmp (title, "") == 0, FALSE);
+  g_free (title);
+  gtk_widget_destroy (GTK_WIDGET (window1));
+  g_object_unref (builder);
+
+  builder = builder_new_from_string (buffer2, -1, NULL);
+  window1 = gtk_builder_get_object (builder, "window1");
+  g_return_val_if_fail (title != NULL, FALSE);
+  g_free (title);
+  gtk_widget_destroy (GTK_WIDGET (window1));
+  g_object_unref (builder);
+
+
+  return TRUE;
+}
+
 static gboolean
 test_value_from_string (void)
 {
@@ -1809,6 +1838,10 @@ main (int argc, char **argv)
   g_print ("Testing reference counting\n");
   if (!test_reference_counting ())
     g_error ("test_reference_counting failed");
+
+  g_print ("Testing window\n");
+  if (!test_window ())
+    g_error ("test_window failed");
 
   return 0;
 }

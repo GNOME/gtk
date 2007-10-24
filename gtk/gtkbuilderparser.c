@@ -139,24 +139,6 @@ error_invalid_tag (ParserData *data,
 		 line_number, char_number, tag);
 }
 
-static void
-error_missing_property_value (ParserData *data,
-			      GError **error)
-{
-  gint line_number, char_number;
-
-  g_markup_parse_context_get_position (data->ctx,
-                                       &line_number,
-                                       &char_number);
-
-  g_set_error (error,
-	       GTK_BUILDER_ERROR,
-	       GTK_BUILDER_ERROR_MISSING_PROPERTY_VALUE,
-	       "%s:%d:%d <property> must have a value set",
-	       data->filename,
-	       line_number, char_number);
-}
-
 gboolean
 _gtk_builder_boolean_from_string (const gchar  *string,
 				  gboolean     *value,
@@ -799,15 +781,6 @@ end_element (GMarkupParseContext *context,
       PropertyInfo *prop_info = state_pop_info (data, PropertyInfo);
       CommonInfo *info = state_peek_info (data, CommonInfo);
 
-      if (!prop_info->data)
-	{
-	  error_missing_property_value (data, error);
-	  free_property_info (prop_info);
-	  if (strcmp (info->tag.name, "object") == 0)
-	    free_object_info((ObjectInfo*)info);
-	  return;
-	}
-      
       /* Normal properties */
       if (strcmp (info->tag.name, "object") == 0)
         {
