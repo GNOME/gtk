@@ -467,6 +467,10 @@ class GtkBuilderConverter(object):
     def _convert_dialog_response(self, node, object_name, response):
         # 1) Get parent dialog node
         while True:
+            # If we can't find the parent dialog, give up
+            if node == self._dom:
+                return
+
             if (node.tagName == 'object' and
                 node.getAttribute('class') == 'GtkDialog'):
                 dialog = node

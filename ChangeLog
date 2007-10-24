@@ -1,5 +1,13 @@
 2007-10-24  Johan Dahlin  <jdahlin@async.com.br>
 
+	* gtk/gtk-builder-convert 
+	(GtkBuilderConverter._convert_dialog_response): 
+	Give up instead of raising an error if we can't find
+	the parent dialog when converting response ids.
+	(#479463, Priyank)
+
+2007-10-24  Johan Dahlin  <jdahlin@async.com.br>
+
 	* gtk/gtkbuilder.c: (_gtk_builder_construct),
 	(_gtk_builder_add_signals):
 	* gtk/gtkbuilderparser.c: (end_element):
