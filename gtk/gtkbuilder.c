@@ -1406,7 +1406,8 @@ _gtk_builder_flags_from_string (GType         type,
  * @type_name: type name to lookup
  *
  * Looks up a type by name, using the virtual function that 
- * #GtkBuilder has for that purpose.
+ * #GtkBuilder has for that purpose. This is mainly used when
+ * implementing the #GtkBuildable interface on a type.
  *
  * Returns: the #GType found for @type_name or #G_TYPE_INVALID 
  *   if no type was found
