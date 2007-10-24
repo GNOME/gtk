@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ HEAD\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-10-21 17:20-0600\n"
-"PO-Revision-Date: 2007-10-21 16:12-0700\n"
+"POT-Creation-Date: 2007-10-23 06:33-0600\n"
+"PO-Revision-Date: 2007-10-21 19:45-0700\n"
 "Last-Translator: Seán de Búrca <leftmostcat@gmail.com>\n"
 "Language-Team: Irish <gaeilge-gnulinux@lists.sourceforge.net>\n"
 "MIME-Version: 1.0\n"
@@ -304,7 +304,7 @@ msgstr ""
 
 #: ../gdk-pixbuf/gdk-pixbuf-io.c:1461
 msgid "Insufficient memory to save image to callback"
-msgstr ""
+msgstr "Cuimhne easnamhach chun íomhá a shábháil go aisghlaoch"
 
 #: ../gdk-pixbuf/gdk-pixbuf-io.c:1474
 msgid "Failed to open temporary file"
@@ -330,7 +330,7 @@ msgstr ""
 
 #: ../gdk-pixbuf/gdk-pixbuf-io.c:1980 ../gdk-pixbuf/gdk-pixbuf-io.c:2030
 msgid "Insufficient memory to save image into a buffer"
-msgstr ""
+msgstr "Cuimhne easnamhach chun íomhá a shábháil isteach i maolán"
 
 #: ../gdk-pixbuf/gdk-pixbuf-loader.c:330
 #, c-format
@@ -471,7 +471,7 @@ msgstr ""
 
 #: ../gdk-pixbuf/io-gif.c:1178
 msgid "File does not appear to be a GIF file"
-msgstr ""
+msgstr "Is cosúil nach comhad GIF é an comhad"
 
 #: ../gdk-pixbuf/io-gif.c:1190
 #, c-format
@@ -621,7 +621,7 @@ msgstr "Ní bhfuair gach líne den íomhá PCX"
 
 #: ../gdk-pixbuf/io-pcx.c:711
 msgid "No palette found at end of PCX data"
-msgstr ""
+msgstr "Níor aimsíodh aon phailéad ag deireadh na sonraí PCX"
 
 #: ../gdk-pixbuf/io-pcx.c:758
 msgid "The PCX image format"
@@ -629,7 +629,7 @@ msgstr "An fhormáid íomhá PCX"
 
 #: ../gdk-pixbuf/io-png.c:55
 msgid "Bits per channel of PNG image is invalid."
-msgstr ""
+msgstr "Is neamhbhailí giotán sa chainéal na híomhá PNG."
 
 #: ../gdk-pixbuf/io-png.c:136 ../gdk-pixbuf/io-png.c:618
 msgid "Transformed PNG has zero width or height."
@@ -849,11 +849,11 @@ msgstr "An fhormáid íomhá Targa"
 
 #: ../gdk-pixbuf/io-tiff.c:160
 msgid "Could not get image width (bad TIFF file)"
-msgstr ""
+msgstr "Níorbh fhéidir leithead íomhá a fháil (drochchomhad TIFF)"
 
 #: ../gdk-pixbuf/io-tiff.c:167
 msgid "Could not get image height (bad TIFF file)"
-msgstr ""
+msgstr "Níorbh fhéidir airde íomhá a fháil (drochchomhad TIFF)"
 
 #: ../gdk-pixbuf/io-tiff.c:175
 msgid "Width or height of TIFF image is zero"
@@ -878,7 +878,7 @@ msgstr "Theip ar oscail íomhá TIFF"
 
 #: ../gdk-pixbuf/io-tiff.c:343 ../gdk-pixbuf/io-tiff.c:722
 msgid "TIFFClose operation failed"
-msgstr ""
+msgstr "Theip oibríocht TIFFClose"
 
 #: ../gdk-pixbuf/io-tiff.c:473 ../gdk-pixbuf/io-tiff.c:486
 msgid "Failed to load TIFF image"
@@ -914,7 +914,7 @@ msgstr "Níl cuimhne go leor ann chun an íomhá a luchtú"
 
 #: ../gdk-pixbuf/io-wbmp.c:334
 msgid "Couldn't save the rest"
-msgstr ""
+msgstr "Níorbh fhéidir an chuid eile a shábháil"
 
 #: ../gdk-pixbuf/io-wbmp.c:377
 msgid "The WBMP image format"
@@ -930,7 +930,7 @@ msgstr "Cuimhne easnamhach chun comhad íomhá SBM a luchtú"
 
 #: ../gdk-pixbuf/io-xbm.c:453
 msgid "Failed to write to temporary file when loading XBM image"
-msgstr ""
+msgstr "Theip ar scríobh go comhad sealadach agus ag luchtú íomhá XBM"
 
 #: ../gdk-pixbuf/io-xbm.c:494
 msgid "The XBM image format"
@@ -938,7 +938,7 @@ msgstr "An fhormáid íomhá XBM"
 
 #: ../gdk-pixbuf/io-xpm.c:468
 msgid "No XPM header found"
-msgstr ""
+msgstr "Níor aimsíodh aon cheanntásc XPM"
 
 #: ../gdk-pixbuf/io-xpm.c:477
 msgid "Invalid XPM header"
@@ -971,7 +971,7 @@ msgstr "Ní féidir mapa datha XPM a léamh"
 
 #: ../gdk-pixbuf/io-xpm.c:777
 msgid "Failed to write to temporary file when loading XPM image"
-msgstr ""
+msgstr "Theip ar scríobh go comhad sealadach agus ag luchtú íomhá XPM"
 
 #: ../gdk-pixbuf/io-xpm.c:818
 msgid "The XPM image format"
@@ -1010,7 +1010,7 @@ msgstr "DATHANNA"
 #. Description of --sync in --help output
 #: ../gdk/x11/gdkmain-x11.c:92
 msgid "Make X calls synchronous"
-msgstr ""
+msgstr "Déan sioncronach glaonna X"
 
 #: ../gtk/gtkaboutdialog.c:264 ../gtk/gtkaboutdialog.c:2100
 msgid "License"
@@ -1141,7 +1141,7 @@ msgstr "Fréamheilimint neamhbhailí: '%s'"
 #: ../gtk/gtkbuilderparser.c:761
 #, c-format
 msgid "Unhandled tag: '%s'"
-msgstr ""
+msgstr "Clib gan láimhseáil: '%s'"
 
 #. Translate to calendar:YM if you want years to be displayed
 #. * before months; otherwise translate to calendar:MY.
@@ -1574,17 +1574,17 @@ msgstr ""
 #: ../gtk/gtkfilechooserdefault.c:7714 ../gtk/gtkfilechooserdefault.c:7735
 #, c-format
 msgid "Shortcut %s already exists"
-msgstr ""
+msgstr "Tá aicearra %s ann cheana"
 
 #: ../gtk/gtkfilechooserdefault.c:7825
 #, c-format
 msgid "Shortcut %s does not exist"
-msgstr ""
+msgstr "Níl aicearra %s ann"
 
 #: ../gtk/gtkfilechooserdefault.c:8080
 #, c-format
 msgid "A file named \"%s\" already exists.  Do you want to replace it?"
-msgstr ""
+msgstr "Tá comhad darbh ainm \"%s\" ann cheana. Ar mhaith leat é a athchur?"
 
 #: ../gtk/gtkfilechooserdefault.c:8083
 #, c-format
@@ -2045,7 +2045,7 @@ msgstr "MODÚIL"
 #. Description of --g-fatal-warnings in --help output
 #: ../gtk/gtkmain.c:412
 msgid "Make all warnings fatal"
-msgstr ""
+msgstr "Déan marfach gach rabhadh"
 
 #. Description of --gtk-debug=FLAGS in --help output
 #: ../gtk/gtkmain.c:415
@@ -3034,7 +3034,7 @@ msgstr ""
 #: ../gtk/gtktextbufferserialize.c:846
 #, c-format
 msgid "<%s> element has invalid id \"%s\""
-msgstr ""
+msgstr "Tá CA neamhbhailí \"%2$s\" ag eilimint <%1$s>"
 
 #: ../gtk/gtktextbufferserialize.c:856
 #, c-format
