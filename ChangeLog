@@ -1,3 +1,9 @@
+2007-10-26  Cody Russell  <cody@jhu.edu>
+
+	* modules/engines/ms-windows/Theme/gtk-2.0/gtkrc:
+	Disable beeps when backspacing in textviews by default on
+	Win32 systems. (#490624, Daniel Atallah)
+
 2007-10-26  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtktextbtree.c (_gtk_text_btree_char_is_invisible):
