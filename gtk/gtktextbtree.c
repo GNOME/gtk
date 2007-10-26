@@ -2498,7 +2498,7 @@ _gtk_text_btree_char_is_invisible (const GtkTextIter *iter)
           || (seg->type == &gtk_text_toggle_off_type))
         {
           tag = seg->body.toggle.info->tag;
-          if (tag->invisible_set && tag->values->invisible)
+          if (tag->invisible_set)
             {
               tags[tag->priority] = tag;
               tagCnts[tag->priority]++;
@@ -2522,7 +2522,7 @@ _gtk_text_btree_char_is_invisible (const GtkTextIter *iter)
               || (seg->type == &gtk_text_toggle_off_type))
             {
               tag = seg->body.toggle.info->tag;
-              if (tag->invisible_set && tag->values->invisible)
+              if (tag->invisible_set)
                 {
                   tags[tag->priority] = tag;
                   tagCnts[tag->priority]++;
@@ -2551,7 +2551,7 @@ _gtk_text_btree_char_is_invisible (const GtkTextIter *iter)
               if (summary->toggle_count & 1)
                 {
                   tag = summary->info->tag;
-                  if (tag->invisible_set && tag->values->invisible)
+                  if (tag->invisible_set)
                     {
                       tags[tag->priority] = tag;
                       tagCnts[tag->priority] += summary->toggle_count;

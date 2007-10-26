@@ -1,3 +1,9 @@
+2007-10-26  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtktextbtree.c (_gtk_text_btree_char_is_invisible):
+	Pay attention to tags that turn invisibility off as well
+	as tags that turn invsibility on. (#488051, Mathias Hasselmann)	
+
 2007-10-24  Johan Dahlin  <jdahlin@async.com.br>
 
 	* gtk/gtkbuilder.c: Improve gtk_builder_get_type_from_name()
