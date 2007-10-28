@@ -1724,7 +1724,12 @@ gtk_text_buffer_delete_interactive (GtkTextBuffer *buffer,
 
           gtk_text_buffer_emit_delete (buffer, &start, &iter);
 
-          current_state = FALSE;
+	  /* It's more robust to ask for the state again then to assume that
+	   * we're on the next not-editable segment. We don't know what the
+	   * ::delete-range handler did.... maybe it deleted the following not-editable
+	   * segment because it was associated with the editable segment.
+	   */
+	  current_state = gtk_text_iter_editable (&iter, default_editable);
           deleted_stuff = TRUE;
 
           /* revalidate user's iterators. */

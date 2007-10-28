@@ -1,3 +1,11 @@
+2007-10-28  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtktextbuffer.c (gtk_text_buffer_delete_interactive): Allow
+	the ::delete-range handler to delete text after the text it was
+	explicitly asked to delete without confusing us as to whether
+	we're currently on an editable or not-editable segment.
+	(#491207)
+
 2007-10-26  Cody Russell  <cody@jhu.edu>
 
 	* modules/engines/ms-windows/Theme/gtk-2.0/gtkrc:
