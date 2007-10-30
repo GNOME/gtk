@@ -129,19 +129,22 @@ gtk_builder_init (GtkBuilder *builder)
 static void
 gtk_builder_finalize (GObject *object)
 {
-  GtkBuilder *builder = GTK_BUILDER (object);
+  GtkBuilderPrivate *priv = GTK_BUILDER (object)->priv;
   
-  g_free (builder->priv->domain);
+  g_free (priv->domain);
+  g_free (priv->current_root);
+  g_free (priv->filename);
+  
+  g_hash_table_destroy (priv->objects);
+  g_hash_table_destroy (priv->delayed_properties);
 
-  g_free (builder->priv->current_root);
-  g_hash_table_destroy (builder->priv->delayed_properties);
-  builder->priv->delayed_properties = NULL;
-  g_slist_foreach (builder->priv->signals, (GFunc)_free_signal_info, NULL);
-  g_slist_free (builder->priv->signals);
-  g_hash_table_destroy (builder->priv->objects);
-  g_slist_foreach (builder->priv->root_objects, (GFunc)g_object_unref, NULL);
-  g_slist_free (builder->priv->root_objects);
-  g_free (builder->priv->filename);
+  g_slist_foreach (priv->signals, (GFunc) _free_signal_info, NULL);
+  g_slist_free (priv->signals);
+  
+  g_slist_foreach (priv->root_objects, (GFunc) g_object_unref, NULL);
+  g_slist_free (priv->root_objects);
+
+  G_OBJECT_CLASS (gtk_builder_parent_class)->finalize (object);
 }
 
 static void

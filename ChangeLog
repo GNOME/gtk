@@ -1,3 +1,8 @@
+2007-10-30  Emmanuele Bassi  <ebassi@gnome.org>
+
+	* gtk/gtkbuilder.c (gtk_builder_finalize): Chain up to the
+	parent's finalize virtual function.
+
 2007-10-28  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtktextbuffer.c (gtk_text_buffer_delete_interactive): Allow
