@@ -122,7 +122,7 @@
   if (trackingRect)
     {
       [self removeTrackingRect:trackingRect];
-      trackingRect = nil;
+      trackingRect = 0;
     }
 
   if (!impl->toplevel)
@@ -152,7 +152,7 @@
   if (newWindow == nil && trackingRect)
     {
       [self removeTrackingRect:trackingRect];
-      trackingRect = nil;
+      trackingRect = 0;
     }
 }
 
