@@ -1,5 +1,11 @@
 2007-10-31  Richard Hult  <richard@imendio.com>
 
+	* gdk/quartz/gdkwindow-quartz.c:
+	(gdk_window_impl_quartz_process_updates): Setup autorelease pool,
+	plugs occasional leak on leopard.
+
+2007-10-31  Richard Hult  <richard@imendio.com>
+
 	* gdk/quartz/GdkQuartzView.c: Fix build warning (trackingRect should be
 	0, not nil).
 

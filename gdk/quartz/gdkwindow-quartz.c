@@ -369,8 +369,10 @@ gdk_window_impl_quartz_process_updates (GdkPaintable *paintable,
 
   if (private->update_area)
     {
+      GDK_QUARTZ_ALLOC_POOL;
       gdk_window_quartz_process_updates_internal ((GdkWindow *) private);
       update_windows = g_slist_remove (update_windows, private);
+      GDK_QUARTZ_RELEASE_POOL;
     }
 }
 
