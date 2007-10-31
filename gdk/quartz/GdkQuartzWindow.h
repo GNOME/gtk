@@ -24,9 +24,20 @@
 @interface GdkQuartzWindow : NSWindow {
   BOOL leftDown;
   BOOL inMove;
+
+  /* Manually triggered move/resize (not by the window manager) */
+  BOOL    inManualMove;
+  BOOL    inManualResize;
+  NSPoint initialMoveLocation;
+  NSPoint initialResizeLocation;
+  NSRect  initialResizeFrame;
 }
 
 -(BOOL)isInMove;
+-(void)beginManualMove;
+-(BOOL)trackManualMove;
+-(void)beginManualResize;
+-(BOOL)trackManualResize;
 
 @end
 

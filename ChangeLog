@@ -1,5 +1,12 @@
 2007-10-31  Richard Hult  <richard@imendio.com>
 
+	* gdk/quartz/GdkQuartzWindow.c:
+	* gdk/quartz/GdkQuartzWindow.h:
+	* gdk/quartz/gdkwindow-quartz.c: (gdk_window_begin_resize_drag),
+	(gdk_window_begin_move_drag): Implement manual resize and move.
+
+2007-10-31  Richard Hult  <richard@imendio.com>
+
 	* gdk/quartz/gdkwindow-quartz.c:
 	(gdk_window_impl_quartz_process_updates): Setup autorelease pool,
 	plugs occasional leak on leopard.

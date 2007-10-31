@@ -2356,9 +2356,30 @@ gdk_window_begin_resize_drag (GdkWindow     *window,
                               gint           root_y,
                               guint32        timestamp)
 {
+  GdkWindowObject *private;
+  GdkWindowImplQuartz *impl;
+
   g_return_if_fail (GDK_IS_WINDOW (window));
 
-  /* FIXME: Implement */  
+  if (edge != GDK_WINDOW_EDGE_SOUTH_EAST)
+    {
+      g_warning ("Resizing is only implemented for GDK_WINDOW_EDGE_SOUTH_EAST on Mac OS");
+      return;
+    }
+
+  if (GDK_WINDOW_DESTROYED (window))
+    return;
+
+  private = GDK_WINDOW_OBJECT (window);
+  impl = GDK_WINDOW_IMPL_QUARTZ (private->impl);
+
+  if (!impl->toplevel)
+    {
+      g_warning ("Can't call gdk_window_begin_resize_drag on non-toplevel window");
+      return;
+    }
+
+  [(GdkQuartzWindow *)impl->toplevel beginManualResize];
 }
 
 void
@@ -2368,9 +2389,24 @@ gdk_window_begin_move_drag (GdkWindow *window,
                             gint       root_y,
                             guint32    timestamp)
 {
+  GdkWindowObject *private;
+  GdkWindowImplQuartz *impl;
+
   g_return_if_fail (GDK_IS_WINDOW (window));
 
-  /* FIXME: Implement */
+  if (GDK_WINDOW_DESTROYED (window))
+    return;
+
+  private = GDK_WINDOW_OBJECT (window);
+  impl = GDK_WINDOW_IMPL_QUARTZ (private->impl);
+
+  if (!impl->toplevel)
+    {
+      g_warning ("Can't call gdk_window_begin_move_drag on non-toplevel window");
+      return;
+    }
+
+  [(GdkQuartzWindow *)impl->toplevel beginManualMove];
 }
 
 void
