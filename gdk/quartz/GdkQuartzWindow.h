@@ -18,7 +18,7 @@
  * Boston, MA 02111-1307, USA.
  */
 
-#import <AppKit/AppKit.h>
+#import <Cocoa/Cocoa.h>
 #include <glib.h>
 
 @interface GdkQuartzWindow : NSWindow {

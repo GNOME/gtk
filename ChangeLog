@@ -1,3 +1,7 @@
+2007-11-01  Richard Hult  <richard@imendio.com>
+
+	* gdk/quartz/GdkQuartzWindow.h: Fix build, bug #492117.
+
 2007-10-31  Richard Hult  <richard@imendio.com>
 
 	* gdk/quartz/GdkQuartzWindow.c:
