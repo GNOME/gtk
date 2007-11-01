@@ -210,3 +210,9 @@ gdk_drag_drop_succeeded (GdkDragContext *context)
   /* FIXME: Implement */
   return FALSE;
 }
+
+id
+gdk_quartz_drag_context_get_dragging_info_libgtk_only (GdkDragContext *context)
+{
+  return GDK_DRAG_CONTEXT_PRIVATE (context)->dragging_info;
+}

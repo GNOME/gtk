@@ -1,5 +1,15 @@
 2007-11-01  Richard Hult  <richard@imendio.com>
 
+	* gdk/quartz/GdkQuartzWindow.c:
+	* gdk/quartz/GdkQuartzWindow.h:
+	* gdk/quartz/gdkdnd-quartz.c:
+	* gdk/quartz/gdkquartz.h:
+	* gtk/gtkdnd-quartz.c: Redo the fix for bug #492117, by adding a
+	getter for the private drag context info so we don't need to
+	expose so much in the public quartz header file.
+
+2007-11-01  Richard Hult  <richard@imendio.com>
+
 	* gdk/quartz/GdkQuartzWindow.h: Fix build, bug #492117.
 
 2007-10-31  Richard Hult  <richard@imendio.com>

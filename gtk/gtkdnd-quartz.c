@@ -181,11 +181,14 @@ gtk_drag_get_data (GtkWidget      *widget,
 		   GdkAtom         target,
 		   guint32         time)
 {
-  id <NSDraggingInfo> dragging_info = GDK_DRAG_CONTEXT_PRIVATE (context)->dragging_info;
-  NSPasteboard *pasteboard = [dragging_info draggingPasteboard];
+  id <NSDraggingInfo> dragging_info;
+  NSPasteboard *pasteboard;
   GtkSelectionData *selection_data;
   GtkDragDestInfo *info;
   GtkDragDestSite *site;
+
+  dragging_info = gdk_quartz_drag_context_get_dragging_info_libgtk_only (context);
+  pasteboard = [dragging_info draggingPasteboard];
 
   info = gtk_drag_get_dest_info (context, FALSE);
   site = g_object_get_data (G_OBJECT (widget), "gtk-drag-dest");
@@ -976,8 +979,8 @@ gtk_drag_dest_find_target (GtkWidget      *widget,
                            GdkDragContext *context,
                            GtkTargetList  *target_list)
 {
-  id <NSDraggingInfo> dragging_info = GDK_DRAG_CONTEXT_PRIVATE (context)->dragging_info;
-  NSPasteboard *pasteboard = [dragging_info draggingPasteboard];
+  id <NSDraggingInfo> dragging_info;
+  NSPasteboard *pasteboard;
   GtkWidget *source_widget;
   GList *tmp_target;
   GList *tmp_source = NULL;
@@ -986,6 +989,9 @@ gtk_drag_dest_find_target (GtkWidget      *widget,
   g_return_val_if_fail (GTK_IS_WIDGET (widget), GDK_NONE);
   g_return_val_if_fail (GDK_IS_DRAG_CONTEXT (context), GDK_NONE);
   g_return_val_if_fail (!context->is_source, GDK_NONE);
+
+  dragging_info = gdk_quartz_drag_context_get_dragging_info_libgtk_only (context);
+  pasteboard = [dragging_info draggingPasteboard];
 
   source_widget = gtk_drag_get_source_widget (context);
 

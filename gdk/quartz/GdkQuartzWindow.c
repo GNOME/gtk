@@ -411,7 +411,8 @@ update_context_from_dragging_info (id <NSDraggingInfo> sender)
 
 - (void)draggingEnded:(id <NSDraggingInfo>)sender
 {
-  g_object_unref (current_context);
+  if (current_context)
+    g_object_unref (current_context);
   current_context = NULL;
 }
 
