@@ -98,23 +98,17 @@
  */
 -(void)windowWillMove:(NSNotification *)aNotification
 {
-  if (leftDown)
-    inMove = YES;
+  inMove = YES;
 }
 
 -(void)sendEvent:(NSEvent *)event
 {
   switch ([event type])
     {
-    case NSLeftMouseDown:
-      leftDown = YES;
-      break;
-
     case NSLeftMouseUp:
-      leftDown = NO;
-      inMove = NO;
       inManualMove = NO;
       inManualResize = NO;
+      inMove = NO;
       break;
 
     case NSLeftMouseDragged:
@@ -143,7 +137,7 @@
   GdkEvent *event;
 
   private->x = content_rect.origin.x;
-  private->y = _gdk_quartz_window_get_inverted_screen_y (content_rect.origin.y) - impl->height;
+  private->y = _gdk_quartz_window_get_inverted_screen_y (content_rect.origin.y + content_rect.size.height);
 
   /* Synthesize a configure event */
   event = gdk_event_new (GDK_CONFIGURE);

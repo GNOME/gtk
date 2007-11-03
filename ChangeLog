@@ -1,5 +1,12 @@
 2007-11-03  Richard Hult  <richard@imendio.com>
 
+	* gdk/quartz/GdkQuartzWindow.c:
+	* gdk/quartz/GdkQuartzWindow.h: Make the grab breaking on window
+	move work on Leopard (as well as Tiger) by ignoring which mouse
+	button is pressed.
+
+2007-11-03  Richard Hult  <richard@imendio.com>
+
 	* gdk/quartz/gdkwindow-quartz.c: (move_resize_window_internal):
 	Calculate the frame rect correctly when resizing toplevels, fixes
 	bug #492209.

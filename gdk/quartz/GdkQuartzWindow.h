@@ -23,7 +23,6 @@
 #include <glib.h>
 
 @interface GdkQuartzWindow : NSWindow {
-  BOOL leftDown;
   BOOL inMove;
 
   /* Manually triggered move/resize (not by the window manager) */
