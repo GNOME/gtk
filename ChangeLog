@@ -1,5 +1,11 @@
 2007-11-03  Richard Hult  <richard@imendio.com>
 
+	* gtk/gtkclipboard-quartz.c: (clipboard_owner_destroyed),
+	(gtk_clipboard_set_contents), (clipboard_unset): Fix bug #486369,
+	by passing the selection info along when pasting.
+
+2007-11-03  Richard Hult  <richard@imendio.com>
+
 	* gdk/quartz/GdkQuartzWindow.c:
 	* gdk/quartz/GdkQuartzWindow.h: Make the grab breaking on window
 	move work on Leopard (as well as Tiger) by ignoring which mouse

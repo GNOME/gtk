@@ -53,6 +53,7 @@ struct _GtkClipboard
   GtkClipboardClearFunc clear_func;
   gpointer user_data;
   gboolean have_owner;
+  GtkTargetList *target_list;
 
   gboolean have_selection;
   GdkDisplay *display;
@@ -91,18 +92,26 @@ struct _GtkClipboardClass
 -(void)pasteboard:(NSPasteboard *)sender provideDataForType:(NSString *)type
 {
   GtkSelectionData selection_data;
+  guint info;
 
   selection_data.selection = clipboard->selection;
   selection_data.data = NULL;
   selection_data.target = _gtk_quartz_pasteboard_type_to_atom (type);
 
-  /* FIXME: We need to find out what the info argument should be
-   * here by storing it in the clipboard object in
-   * gtk_clipboard_set_contents
-   */
-  clipboard->get_func (clipboard, &selection_data, 0, clipboard->user_data);
+  if (clipboard->target_list &&
+      gtk_target_list_find (clipboard->target_list, selection_data.target, &info))
+    {
+      clipboard->get_func (clipboard, &selection_data,
+                           info,
+                           clipboard->user_data);
+    }
+  else
+    {
+      selection_data.length = -1;
+    }
 
-  _gtk_quartz_set_selection_data_for_pasteboard (clipboard->pasteboard, &selection_data);
+  _gtk_quartz_set_selection_data_for_pasteboard (clipboard->pasteboard,
+                                                 &selection_data);
 
   g_free (selection_data.data);
 }
@@ -326,6 +335,12 @@ clipboard_owner_destroyed (gpointer data)
       clipboard->user_data = NULL;
       clipboard->have_owner = FALSE;
 
+      if (clipboard->target_list)
+        {
+          gtk_target_list_unref (clipboard->target_list);
+          clipboard->target_list = NULL;
+        }
+
       gtk_clipboard_clear (clipboard);
 
       tmp_list = tmp_list->next;
@@ -385,11 +400,15 @@ gtk_clipboard_set_contents (GtkClipboard         *clipboard,
   clipboard->get_func = get_func;
   clipboard->clear_func = clear_func;
 
+  if (clipboard->target_list)
+    gtk_target_list_unref (clipboard->target_list);
+  clipboard->target_list = gtk_target_list_new (targets, n_targets);
+
   [clipboard->pasteboard declareTypes:types owner:owner];
 
   [pool release];
 
-  return true;
+  return TRUE;
 }
 
 /**
@@ -520,6 +539,12 @@ clipboard_unset (GtkClipboard *clipboard)
   
   if (old_clear_func)
     old_clear_func (clipboard, old_data);
+
+  if (clipboard->target_list)
+    {
+      gtk_target_list_unref (clipboard->target_list);
+      clipboard->target_list = NULL;
+    }
 
   /* If we've transferred the clipboard data to the manager,
    * unref the owner
