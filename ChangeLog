@@ -1,3 +1,9 @@
+2007-11-03  Richard Hult  <richard@imendio.com>
+
+	* gdk/quartz/gdkwindow-quartz.c: (move_resize_window_internal):
+	Calculate the frame rect correctly when resizing toplevels, fixes
+	bug #492209.
+
 2007-11-01  Richard Hult  <richard@imendio.com>
 
 	* gdk/quartz/GdkQuartzWindow.c:

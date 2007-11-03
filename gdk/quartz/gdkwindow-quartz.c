@@ -1196,13 +1196,14 @@ move_resize_window_internal (GdkWindow *window,
 
   if (impl->toplevel)
     {
-      NSRect content_rect = 
-	NSMakeRect (private->x, 
-		    _gdk_quartz_window_get_inverted_screen_y (private->y),
-		    impl->width, impl->height);
-      NSRect frame_rect = [impl->toplevel frameRectForContentRect:content_rect];
+      NSRect content_rect;
+      NSRect frame_rect;
+
+      content_rect =  NSMakeRect (private->x,
+                                  _gdk_quartz_window_get_inverted_screen_y (private->y + impl->height),
+                                  impl->width, impl->height);
       
-      frame_rect.origin.y -= frame_rect.size.height;
+      frame_rect = [impl->toplevel frameRectForContentRect:content_rect];
       [impl->toplevel setFrame:frame_rect display:YES];
     }
   else 
