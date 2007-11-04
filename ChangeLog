@@ -1,3 +1,9 @@
+2007-11-04  Richard Hult  <richard@imendio.com>
+
+	* gdk/quartz/gdkkeys-quartz.c: (maybe_update_keymap): Make shift
+	tab work with unicode layouts (e.g. all Leopard layouts), fixes
+	bug #493404.
+
 2007-11-03  Richard Hult  <richard@imendio.com>
 
 	* gtk/gtkclipboard-quartz.c: (clipboard_owner_destroyed),

@@ -322,6 +322,12 @@ maybe_update_keymap (void)
 			      break;
 			    }
 			}
+
+		      /* Special-case shift-tab since GTK+ expects
+		       * GDK_ISO_Left_Tab for that.
+		       */
+		      if (found && p[j] == GDK_Tab && modifiers[j] == shiftKey)
+			p[j] = GDK_ISO_Left_Tab;
 		      
 		      if (!found)
 			p[j] = gdk_unicode_to_keyval (uc);
