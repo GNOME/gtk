@@ -15,7 +15,7 @@ msgstr ""
 "Project-Id-Version: gtk+ HEAD\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2007-08-16 03:58+0100\n"
-"PO-Revision-Date: 2007-10-16 05:32+0300\n"
+"PO-Revision-Date: 2007-11-03 19:48+0200\n"
 "Last-Translator: Ivar Smolin <okul@linux.ee>\n"
 "Language-Team: Estonian <gnome-et@linux.ee>\n"
 "MIME-Version: 1.0\n"
@@ -2133,7 +2133,7 @@ msgstr "Lehekülg %u"
 #: ../gtk/gtkpagesetup.c:570 ../gtk/gtkpapersize.c:825
 #: ../gtk/gtkpapersize.c:865
 msgid "Not a valid page setup file"
-msgstr ""
+msgstr "Pole korrektne lehekülje sätete fail"
 
 #. Translate to the default units to use for presenting
 #. * lengths to the user. Translate to default:inch if you
@@ -2722,7 +2722,7 @@ msgstr "_Tühjenda"
 
 #: ../gtk/gtkstock.c:303
 msgid "_Close"
-msgstr "_Sulge"
+msgstr "Sul_ge"
 
 #: ../gtk/gtkstock.c:304
 msgid "C_onnect"
@@ -2746,7 +2746,7 @@ msgstr "Ku_stuta"
 
 #: ../gtk/gtkstock.c:309
 msgid "_Discard"
-msgstr ""
+msgstr "_Hülga"
 
 #: ../gtk/gtkstock.c:310
 msgid "_Disconnect"
@@ -3864,12 +3864,12 @@ msgstr ""
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:241
 msgid "paper size|Government Legal"
-msgstr ""
+msgstr "Government Legal"
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:243
 msgid "paper size|Government Letter"
-msgstr ""
+msgstr "Government Letter"
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:245
