@@ -6790,7 +6790,7 @@ gtk_widget_child_focus (GtkWidget       *widget,
  *
  * This function should be called whenever keyboard navigation within
  * a single widget hits a boundary. The function emits the
- * #GtkWidget::keynav-changed signal on the widget and its return 
+ * #GtkWidget::keynav-failed signal on the widget and its return
  * value should be interpreted in a way similar to the return value of
  * gtk_widget_child_focus():
  *
@@ -6805,7 +6805,7 @@ gtk_widget_child_focus (GtkWidget       *widget,
  * The default ::keynav-failed handler returns %TRUE for 
  * %GTK_DIR_TAB_FORWARD and %GTK_DIR_TAB_BACKWARD. For the other 
  * values of #GtkDirectionType, it looks at the 
- * #GtkSettings:gtk-keynav-cursor-only" setting and returns %FALSE 
+ * #GtkSettings:gtk-keynav-cursor-only setting and returns %FALSE 
  * if the setting is %TRUE. This way the entire user interface
  * becomes cursor-navigatable on input devices such as mobile phones
  * which only have cursor keys but no tab key.
