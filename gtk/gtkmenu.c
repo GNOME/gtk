@@ -1449,6 +1449,13 @@ gtk_menu_popup (GtkMenu		    *menu,
    */
   gtk_widget_show (menu->toplevel);
 
+  /* flush the X event queue for the popup to become realized and
+   * mapped, since grabbing requires a mapped window. (this only works
+   * for popups, regular windows need gtk_widget_show_now() to sync
+   * with window manager interaction).
+   */
+  gdk_flush ();
+
   if (xgrab_shell == widget)
     popup_grab_on_window (widget->window, activate_time, grab_keyboard); /* Should always succeed */
   gtk_grab_add (GTK_WIDGET (menu));

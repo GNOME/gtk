@@ -1,5 +1,11 @@
 2007-11-06  Michael Natterer  <mitch@imendio.com>
 
+	* gtk/gtkmenu.c (gtk_menu_popup): call gdk_flush() after showing
+	the menu so we can definitely grab on it. Grab failure found by
+	Xan Lopez.
+
+2007-11-06  Michael Natterer  <mitch@imendio.com>
+
 	* gtk/gtkwidget.c (gtk_widget_keynav_failed): fixed docs.
 
 2007-11-04  Richard Hult  <richard@imendio.com>
