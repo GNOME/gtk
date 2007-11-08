@@ -416,6 +416,7 @@ parse_property (ParserData   *data,
   info->name = name;
   info->translatable = translatable;
   info->context = context;
+  info->text = g_string_new ("");
   state_push (data, info);
 
   info->tag.name = element_name;
@@ -744,6 +745,40 @@ start_element (GMarkupParseContext *context,
 		   element_name);
 }
 
+/* This function is taken from gettext.h 
+ * GNU gettext uses '\004' to separate context and msgid in .mo files.
+ */
+static const char *
+dpgettext (const char *domain,
+           const char *msgctxt,
+           const char *msgid)
+{
+  size_t msgctxt_len = strlen (msgctxt) + 1;
+  size_t msgid_len = strlen (msgid) + 1;
+  const char *translation;
+  char* msg_ctxt_id;
+
+  msg_ctxt_id = g_alloca (msgctxt_len + msgid_len);
+  
+  memcpy (msg_ctxt_id, msgctxt, msgctxt_len - 1);
+  msg_ctxt_id[msgctxt_len - 1] = '\004';
+  memcpy (msg_ctxt_id + msgctxt_len, msgid, msgid_len);
+
+  translation = dgettext (domain, msg_ctxt_id);
+
+  if (translation == msg_ctxt_id) 
+    {
+      /* try the old way of doing message contexts, too */
+      msg_ctxt_id[msgctxt_len - 1] = '|';
+      translation = dgettext (domain, msg_ctxt_id);
+  
+      if (translation == msg_ctxt_id)
+        return msgid;
+    }
+ 
+  return translation;
+}
+
 /* Called for close tags </foo> */
 static void
 end_element (GMarkupParseContext *context,
@@ -787,6 +822,27 @@ end_element (GMarkupParseContext *context,
       if (strcmp (info->tag.name, "object") == 0)
         {
           ObjectInfo *object_info = (ObjectInfo*)info;
+
+          if (prop_info->translatable && prop_info->text->len)
+            {
+              const char *text;
+
+              if (prop_info->context)
+                text = dpgettext (data->domain,
+                                  prop_info->context,
+                                  prop_info->text->str);
+              else
+                text = dgettext (data->domain, prop_info->text->str);
+
+              prop_info->data = g_strdup (text);
+              g_string_free (prop_info->text, TRUE);
+            }
+          else
+            {
+              prop_info->data = prop_info->text->str;
+              g_string_free (prop_info->text, FALSE);
+            }
+
           object_info->properties =
             g_slist_prepend (object_info->properties, prop_info);
         }
@@ -821,40 +877,6 @@ end_element (GMarkupParseContext *context,
     }
 }
 
-/* This function is taken from gettext.h 
- * GNU gettext uses '\004' to separate context and msgid in .mo files.
- */
-static const char *
-dpgettext (const char *domain,
-           const char *msgctxt,
-           const char *msgid)
-{
-  size_t msgctxt_len = strlen (msgctxt) + 1;
-  size_t msgid_len = strlen (msgid) + 1;
-  const char *translation;
-  char* msg_ctxt_id;
-
-  msg_ctxt_id = g_alloca (msgctxt_len + msgid_len);
-  
-  memcpy (msg_ctxt_id, msgctxt, msgctxt_len - 1);
-  msg_ctxt_id[msgctxt_len - 1] = '\004';
-  memcpy (msg_ctxt_id + msgctxt_len, msgid, msgid_len);
-
-  translation = dgettext (domain, msg_ctxt_id);
-
-  if (translation == msg_ctxt_id) 
-    {
-      /* try the old way of doing message contexts, too */
-      msg_ctxt_id[msgctxt_len - 1] = '|';
-      translation = dgettext (domain, msg_ctxt_id);
-  
-      if (translation == msg_ctxt_id)
-        return msgid;
-    }
- 
-  return translation;
-}
-
 /* Called for character data */
 /* text is not nul-terminated */
 static void
@@ -885,21 +907,7 @@ text (GMarkupParseContext *context,
     {
       PropertyInfo *prop_info = (PropertyInfo*)info;
 
-      /* text is not guaranteed to be null-terminated */
-      char *string = g_strndup (text, text_len);
-
-      if (prop_info->translatable && text_len)
-        {
-	  if (prop_info->context)
-            text = dpgettext (data->domain, prop_info->context, string);
-          else
-            text = dgettext (data->domain, string);
-
-	  prop_info->data = g_strdup (text);
-	  g_free (string);
-        }
-      else
-	prop_info->data = string;
+      g_string_append_len (prop_info->text, text, text_len);
     }
 }
 

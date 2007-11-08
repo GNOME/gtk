@@ -1,3 +1,14 @@
+2007-11-07  Ryan Lortie  <desrt@desrt.ca>
+
+	* gtk/gtkbuilderprivate.h: Add GString 'text' to the property info
+	structure.  Used to accumulate property text across multiple 'text'
+	calls.
+
+	* gtk/gtkbuilderparser.c: Instead of translating/copying text on each
+	'text' call while in <property> accumulate the text until the end and
+	do it all in one go.  This fixes handling of <!-- --> inside
+	properties as well as <property/> cases.
+
 2007-11-06  Michael Natterer  <mitch@imendio.com>
 
 	* gtk/gtkmenu.c (gtk_menu_popup): call gdk_flush() after showing
