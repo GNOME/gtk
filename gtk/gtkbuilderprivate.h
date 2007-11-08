@@ -59,6 +59,7 @@ typedef struct {
 typedef struct {
   TagInfo tag;
   gchar *name;
+  GString *text;
   gchar *data;
   gboolean translatable;
   gchar *context;
