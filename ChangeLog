@@ -1,3 +1,7 @@
+2007-11-08  Michael Natterer  <mitch@imendio.com>
+
+	* gtk/gtkbuildable.h: include <glib.h> instead of <glib/gmarkup.h>
+
 2007-11-07  Ryan Lortie  <desrt@desrt.ca>
 
 	* gtk/gtkbuilderprivate.h: Add GString 'text' to the property info

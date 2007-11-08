@@ -21,7 +21,7 @@
 #ifndef __GTK_BUILDABLE_H__
 #define __GTK_BUILDABLE_H__
 
-#include <glib/gmarkup.h>
+#include <glib.h>
 #include <gtk/gtkbuilder.h>
 #include <gtk/gtktypeutils.h>
 
