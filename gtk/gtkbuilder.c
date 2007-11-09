@@ -660,6 +660,7 @@ gtk_builder_add_from_file (GtkBuilder   *builder,
       return 0;
     }
   
+  g_free (builder->priv->filename);
   builder->priv->filename = g_strdup (filename);
 
   _gtk_builder_parser_parse_buffer (builder, filename,
@@ -704,6 +705,7 @@ gtk_builder_add_from_string (GtkBuilder   *builder,
 
   tmp_error = NULL;
 
+  g_free (builder->priv->filename);
   builder->priv->filename = g_strdup (".");
 
   _gtk_builder_parser_parse_buffer (builder, "<input>",
