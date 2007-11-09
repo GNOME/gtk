@@ -1,3 +1,9 @@
+2007-11-09  Kristian Rietveld  <kris@imendio.com>
+
+	* gdk/gdkwindow.c (gdk_window_process_all_updates): guard for
+	windows with GDK_WINDOW_DESTROYED set.  (Fixes #482531, reported
+	by Sebastien Bacher).
+
 2007-11-09  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtkmain.c:

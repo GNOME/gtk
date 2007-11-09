@@ -2435,12 +2435,15 @@ gdk_window_process_all_updates (void)
     {
       GdkWindowObject *private = (GdkWindowObject *)tmp_list->data;
       
-      if (private->update_freeze_count ||
-	  gdk_window_is_toplevel_frozen (tmp_list->data))
-	update_windows = g_slist_prepend (update_windows, private);
-      else
-	gdk_window_process_updates_internal (tmp_list->data);
-      
+      if (!GDK_WINDOW_DESTROYED (tmp_list->data))
+        {
+	  if (private->update_freeze_count ||
+	      gdk_window_is_toplevel_frozen (tmp_list->data))
+	    update_windows = g_slist_prepend (update_windows, private);
+	  else
+	    gdk_window_process_updates_internal (tmp_list->data);
+	}
+
       g_object_unref (tmp_list->data);
       tmp_list = tmp_list->next;
     }
