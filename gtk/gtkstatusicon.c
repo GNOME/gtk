@@ -1691,10 +1691,11 @@ gtk_status_icon_set_visible (GtkStatusIcon *status_icon,
 #ifdef GDK_WINDOWING_X11
       if (visible)
 	gtk_widget_show (priv->tray_icon);
-      else if (GTK_WIDGET_REALIZED (priv->tray_icon)) {
-	gtk_widget_hide (priv->tray_icon);
-	gtk_widget_unrealize (priv->tray_icon);
-      }
+      else if (GTK_WIDGET_REALIZED (priv->tray_icon)) 
+        {
+	  gtk_widget_hide (priv->tray_icon);
+	  gtk_widget_unrealize (priv->tray_icon);
+        }
 #endif
 #ifdef GDK_WINDOWING_WIN32
       if (priv->nid.hWnd != NULL)

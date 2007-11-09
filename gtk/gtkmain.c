@@ -652,11 +652,10 @@ do_post_parse_initialization (int    *argc,
    * it isn't default:LTR or default:RTL it will not work 
    */
     char *e = _("default:LTR");
-    if (strcmp (e, "default:RTL")==0) {
+    if (strcmp (e, "default:RTL")==0) 
       gtk_widget_set_default_direction (GTK_TEXT_DIR_RTL);
-    } else if (strcmp (e, "default:LTR")) {
+    else if (strcmp (e, "default:LTR"))
       g_warning ("Whoever translated default:LTR did so wrongly.\n");
-    }
   }
 
   gtk_type_init (0);
