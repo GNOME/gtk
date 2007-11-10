@@ -1,5 +1,7 @@
 2007-11-10  Matthias Clasen  <mclasen@redhat.com>
 
+	* tests/buildertest.c: Parse a file given on the cmdline.
+
 	* gtk/gtkbuilderparser.c (_gtk_builder_parser_parse_buffer):
 	Leak less in error paths.
 

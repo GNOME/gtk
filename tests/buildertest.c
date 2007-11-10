@@ -1760,11 +1760,36 @@ test_reference_counting (void)
   return TRUE;
 }
 
+static void 
+test_file (const gchar *filename)
+{
+  GtkBuilder *builder;
+  GError *error = NULL;
+
+  builder = gtk_builder_new ();
+
+  if (!gtk_builder_add_from_file (builder, filename, &error))
+    {
+      g_print ("%s\n", error->message);
+      g_error_free (error);
+    }
+
+  g_object_unref (builder);
+  builder = NULL;
+}
+
 int
 main (int argc, char **argv)
 {
   gtk_init (&argc, &argv);
   
+  if (argc > 1) 
+    {
+      test_file (argv[1]);
+
+      return 0;
+    }
+
   g_print ("Testing parser\n");
   if (!test_parser ())
     g_error ("test_parser failed");
