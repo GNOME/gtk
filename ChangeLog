@@ -1,4 +1,7 @@
 2007-11-09  Matthias Clasen  <mclasen@redhat.com>
+	
+	* gtk/gtkbuilderparser.c (parse_signal): Handle misplaced
+	signal elements without asserting.
 
 	* gtk/gtkbuilderparser.c (parse_property): Handle misplaced
 	property elements without asserting.

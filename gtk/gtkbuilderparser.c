@@ -297,7 +297,6 @@ parse_object (ParserData   *data,
   object_info->id = object_id;
   object_info->constructor = constructor;
   state_push (data, object_info);
-  g_assert (state_peek (data) != NULL);
   object_info->tag.name = element_name;
 
   if (child_info)
@@ -341,7 +340,6 @@ parse_child (ParserData   *data,
   
   child_info = g_slice_new0 (ChildInfo);
   state_push (data, child_info);
-  g_assert (state_peek (data) != NULL);
   child_info->tag.name = element_name;
   for (i = 0; names[i]; i++)
     {
@@ -450,7 +448,11 @@ parse_signal (ParserData   *data,
   gboolean swapped_set = FALSE;
   int i;
 
-  g_assert (data->stack != NULL);
+  if (data->stack == NULL)
+    {
+      error_invalid_tag (data, "signal", NULL, error);
+      return;
+    }
 
   for (i = 0; names[i] != NULL; i++)
     {
