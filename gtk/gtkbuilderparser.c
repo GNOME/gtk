@@ -244,8 +244,6 @@ parse_object (ParserData   *data,
   if (child_info && strcmp (child_info->tag.name, "object") == 0)
     {
       error_invalid_tag (data, element_name, NULL, error);
-      if (child_info)
-	free_object_info ((ObjectInfo*)child_info);
       return;
     }
 
@@ -332,9 +330,7 @@ parse_child (ParserData   *data,
   object_info = state_peek_info (data, ObjectInfo);
   if (!object_info || strcmp (object_info->tag.name, "object") != 0)
     {
-      error_invalid_tag (data, element_name, "object", error);
-      if (object_info)
-	free_object_info (object_info);
+      error_invalid_tag (data, element_name, NULL, error);
       return;
     }
   
@@ -375,11 +371,13 @@ parse_property (ParserData   *data,
   gchar *name = NULL;
   gchar *context = NULL;
   gboolean translatable = FALSE;
+  ObjectInfo *object_info;
   int i;
 
-  if (data->stack == NULL) 
+  object_info = state_peek_info (data, ObjectInfo);
+  if (!object_info || strcmp (object_info->tag.name, "object") != 0)
     {
-      error_invalid_tag (data, "property", NULL, error);
+      error_invalid_tag (data, element_name, NULL, error);
       return;
     }
 
@@ -446,11 +444,13 @@ parse_signal (ParserData   *data,
   gboolean after = FALSE;
   gboolean swapped = FALSE;
   gboolean swapped_set = FALSE;
+  ObjectInfo *object_info;
   int i;
 
-  if (data->stack == NULL)
+  object_info = state_peek_info (data, ObjectInfo);
+  if (!object_info || strcmp (object_info->tag.name, "object") != 0)
     {
-      error_invalid_tag (data, "signal", NULL, error);
+      error_invalid_tag (data, element_name, NULL, error);
       return;
     }
 

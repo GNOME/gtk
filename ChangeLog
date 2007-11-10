@@ -1,5 +1,8 @@
 2007-11-09  Matthias Clasen  <mclasen@redhat.com>
 	
+	* gtk/gtkbuilderparser.c: More robustness improvements
+	for the parser.
+
 	* gtk/gtkbuilderparser.c (parse_signal): Handle misplaced
 	signal elements without asserting.
 
