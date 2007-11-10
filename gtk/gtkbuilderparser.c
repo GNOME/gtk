@@ -917,6 +917,21 @@ text (GMarkupParseContext *context,
     }
 }
 
+static void
+free_info (CommonInfo *info)
+{
+  if (strcmp (info->tag.name, "object") == 0) 
+    free_object_info ((ObjectInfo *)info);
+  else if (strcmp (info->tag.name, "child") == 0) 
+    free_child_info ((ChildInfo *)info);
+  else if (strcmp (info->tag.name, "property") == 0) 
+    free_property_info ((PropertyInfo *)info);
+  else if (strcmp (info->tag.name, "signal") == 0) 
+    _free_signal_info ((SignalInfo *)info, NULL);
+  else 
+    g_assert_not_reached ();
+}
+
 static const GMarkupParser parser = {
   start_element,
   end_element,
@@ -940,8 +955,9 @@ _gtk_builder_parser_parse_buffer (GtkBuilder   *builder,
   data->filename = filename;
   data->domain = g_strdup (gtk_builder_get_translation_domain (builder));
 
-  data->ctx = g_markup_parse_context_new (
-                  &parser, G_MARKUP_TREAT_CDATA_AS_TEXT, data, NULL);
+  data->ctx = g_markup_parse_context_new (&parser, 
+                                          G_MARKUP_TREAT_CDATA_AS_TEXT, 
+                                          data, NULL);
 
   if (!g_markup_parse_context_parse (data->ctx, buffer, length, error))
     goto out;
@@ -960,7 +976,6 @@ _gtk_builder_parser_parse_buffer (GtkBuilder   *builder,
                                      sub->child,
                                      sub->tagname,
                                      sub->data);
-      free_subparser (sub);
     }
   
   /* Common parser_finished, for all created objects */
@@ -972,11 +987,13 @@ _gtk_builder_parser_parse_buffer (GtkBuilder   *builder,
     }
 
  out:
-  g_markup_parse_context_free (data->ctx);
 
+  g_slist_foreach (data->stack, (GFunc)free_info, NULL);
   g_slist_free (data->stack);
+  g_slist_foreach (data->custom_finalizers, (GFunc)free_subparser, NULL);
   g_slist_free (data->custom_finalizers);
   g_slist_free (data->finalizers);
   g_free (data->domain);
+  g_markup_parse_context_free (data->ctx);
   g_free (data);
 }

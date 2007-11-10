@@ -1,5 +1,10 @@
 2007-11-10  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkbuilderparser.c (_gtk_builder_parser_parse_buffer):
+	Leak less in error paths.
+
+2007-11-10  Matthias Clasen  <mclasen@redhat.com>
+
 	* gtk/gtkbuilder.c (gtk_builder_add_from_file): Don't
 	leak buffer if an error occurs.  
 
