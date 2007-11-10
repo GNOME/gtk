@@ -1,3 +1,8 @@
+2007-11-10  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtkbuilder.c (gtk_builder_add_from_file): Don't
+	leak buffer if an error occurs.  
+
 2007-11-09  Matthias Clasen  <mclasen@redhat.com>
 	
 	* gtk/gtkbuilderparser.c: More robustness improvements

@@ -667,13 +667,13 @@ gtk_builder_add_from_file (GtkBuilder   *builder,
                                     buffer, length,
                                     &tmp_error);
 
+  g_free (buffer);
+
   if (tmp_error != NULL)
     {
       g_propagate_error (error, tmp_error);
       return 0;
     }
-
-  g_free (buffer);
 
   return 1;
 }
