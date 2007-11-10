@@ -1,3 +1,8 @@
+2007-11-09  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtkbuilderparser.c (parse_property): Handle misplaced
+	property elements without asserting.
+
 2007-11-09  Kristian Rietveld  <kris@imendio.com>
 
 	* gdk/gdkwindow.c (gdk_window_process_all_updates): guard for

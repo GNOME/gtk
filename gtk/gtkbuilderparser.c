@@ -379,7 +379,11 @@ parse_property (ParserData   *data,
   gboolean translatable = FALSE;
   int i;
 
-  g_assert (data->stack != NULL);
+  if (data->stack == NULL) 
+    {
+      error_invalid_tag (data, "property", NULL, error);
+      return;
+    }
 
   for (i = 0; names[i] != NULL; i++)
     {
