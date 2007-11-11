@@ -1,3 +1,8 @@
+2007-11-10  Ryan Lortie  <desrt@desrt.ca>
+
+	* gtk/gtkbuilder.c: Convert delayed_properties hashtable to linked
+	list.  Fixes #495769.
+
 2007-11-10  Matthias Clasen  <mclasen@redhat.com>
 
 	* tests/buildertest.c: Parse a file given on the cmdline.
