@@ -107,6 +107,7 @@ typedef struct _GtkTextViewPrivate GtkTextViewPrivate;
 struct _GtkTextViewPrivate 
 {
   guint blink_time;  /* time in msec the cursor has blinked since last user event */
+  guint im_spot_idle;
 };
 
 
@@ -1991,6 +1992,49 @@ gtk_text_view_update_im_spot_location (GtkTextView *text_view)
   gtk_im_context_set_cursor_location (text_view->im_context, &area);
 }
 
+static gboolean
+do_update_im_spot_location (gpointer text_view)
+{
+  GtkTextViewPrivate *priv;
+
+  priv = GTK_TEXT_VIEW_GET_PRIVATE (text_view);
+  priv->im_spot_idle = 0;
+
+  gtk_text_view_update_im_spot_location (text_view);
+  return FALSE;
+}
+
+static void
+queue_update_im_spot_location (GtkTextView *text_view)
+{
+  GtkTextViewPrivate *priv;
+
+  priv = GTK_TEXT_VIEW_GET_PRIVATE (text_view);
+
+  /* Use priority a little higher than GTK_TEXT_VIEW_PRIORITY_VALIDATE,
+   * so we don't wait until the entire buffer has been validated. */
+  if (!priv->im_spot_idle)
+    priv->im_spot_idle = gdk_threads_add_idle_full (GTK_TEXT_VIEW_PRIORITY_VALIDATE - 1,
+						    do_update_im_spot_location,
+						    text_view,
+						    NULL);
+}
+
+static void
+flush_update_im_spot_location (GtkTextView *text_view)
+{
+  GtkTextViewPrivate *priv;
+
+  priv = GTK_TEXT_VIEW_GET_PRIVATE (text_view);
+
+  if (priv->im_spot_idle)
+    {
+      g_source_remove (priv->im_spot_idle);
+      priv->im_spot_idle = 0;
+      gtk_text_view_update_im_spot_location (text_view);
+    }
+}
+
 /**
  * gtk_text_view_scroll_to_mark:
  * @text_view: a #GtkTextView
@@ -2699,8 +2743,10 @@ static void
 gtk_text_view_destroy (GtkObject *object)
 {
   GtkTextView *text_view;
-  
+  GtkTextViewPrivate *priv;
+
   text_view = GTK_TEXT_VIEW (object);
+  priv = GTK_TEXT_VIEW_GET_PRIVATE (text_view);
 
   gtk_text_view_remove_validate_idles (text_view);
   gtk_text_view_set_buffer (text_view, NULL);
@@ -2710,6 +2756,12 @@ gtk_text_view_destroy (GtkObject *object)
     {
       g_source_remove (text_view->scroll_timeout);
       text_view->scroll_timeout = 0;
+    }
+
+  if (priv->im_spot_idle)
+    {
+      g_source_remove (priv->im_spot_idle);
+      priv->im_spot_idle = 0;
     }
 
   (* GTK_OBJECT_CLASS (gtk_text_view_parent_class)->destroy) (object);
@@ -3529,7 +3581,7 @@ changed_handler (GtkTextLayout     *layout,
             text_window_invalidate_rect (text_view->bottom_window,
                                          &redraw_rect);
 
-          gtk_text_view_update_im_spot_location (text_view);
+          queue_update_im_spot_location (text_view);
         }
     }
   
@@ -4024,6 +4076,9 @@ gtk_text_view_key_press_event (GtkWidget *widget, GdkEventKey *event)
   if (text_view->layout == NULL ||
       get_buffer (text_view) == NULL)
     return FALSE;
+
+  /* Make sure input method knows where it is */
+  flush_update_im_spot_location (text_view);
 
   insert = gtk_text_buffer_get_insert (get_buffer (text_view));
   gtk_text_buffer_get_iter_at_mark (get_buffer (text_view), &iter, insert);

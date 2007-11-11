@@ -1,3 +1,14 @@
+2007-11-11  Yevgen Muntyan  <muntyan@tamu.edu>
+
+	* gtk/gtktextview.c: Moved gtk_text_view_update_im_spot_location()
+	calls into an idle, fixes #494776.
+	GtkTextViewPrivate:im_spot_idle, do_update_im_spot_location(),
+	queue_update_im_spot_location(), flush_update_im_spot_location(): new
+	field and functions to queue the call;
+	(changed_handler): call queue_update_im_spot_location() instead of
+	gtk_text_view_update_im_spot_location();
+	(gtk_text_view_key_press_event): flush the idle here.
+
 2007-11-10  Ryan Lortie  <desrt@desrt.ca>
 
 	* gtk/gtkbuilder.c: Convert delayed_properties hashtable to linked
