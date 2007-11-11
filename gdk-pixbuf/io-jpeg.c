@@ -292,6 +292,26 @@ const char types[] = {0x00, 0x01, 0x01, 0x02, 0x04, 0x08, 0x00,
 #define EXIF_JPEG_MARKER   JPEG_APP0+1
 #define EXIF_IDENT_STRING  "Exif\000\000"
 
+static unsigned short de_get16(void *ptr, guint endian)
+{
+       unsigned short val;
+
+       memcpy(&val, ptr, sizeof(val));
+       val = DE_ENDIAN16(val);
+
+       return val;
+}
+
+static unsigned int de_get32(void *ptr, guint endian)
+{
+       unsigned int val;
+
+       memcpy(&val, ptr, sizeof(val));
+       val = DE_ENDIAN32(val);
+
+       return val;
+}
+
 static gint 
 get_orientation (j_decompress_ptr cinfo)
 {
@@ -382,7 +402,7 @@ get_orientation (j_decompress_ptr cinfo)
         orient_tag_id = ENDIAN16_IT(0x112);
  
         /* Read out the offset pointer to IFD0 */
-        offset  = DE_ENDIAN32(*((unsigned long*) (&exif_marker->data[i] + 4)));
+        offset  = de_get32(&exif_marker->data[i] + 4, endian);
  	i       = i + offset;
 
 	/* Check that we still are within the buffer and can read the tag count */
@@ -391,7 +411,7 @@ get_orientation (j_decompress_ptr cinfo)
 
 	/* Find out how many tags we have in IFD0. As per the TIFF spec, the first
 	   two bytes of the IFD contain a count of the number of tags. */
-	tags    = DE_ENDIAN16(*((unsigned short*) (&exif_marker->data[i])));
+	tags    = de_get16(&exif_marker->data[i], endian);
 	i       = i + 2;
 
 	/* Check that we still have enough data for all tags to check. The tags
@@ -402,8 +422,8 @@ get_orientation (j_decompress_ptr cinfo)
 
 	/* Check through IFD0 for tags of interest */
 	while (tags--){
-		type   = DE_ENDIAN16(*((unsigned short*)(&exif_marker->data[i + 2])));
-		count  = DE_ENDIAN32(*((unsigned long*) (&exif_marker->data[i + 4])));
+		type   = de_get16(&exif_marker->data[i + 2], endian);
+		count  = de_get32(&exif_marker->data[i + 4], endian);
 
 		/* Is this the orientation tag? */
 		if (memcmp (&exif_marker->data[i], (char *) &orient_tag_id, 2) == 0){ 
@@ -414,7 +434,7 @@ get_orientation (j_decompress_ptr cinfo)
 
 			/* Return the orientation value. Within the 12-byte block, the
 			   pointer to the actual data is at offset 8. */
-			ret = DE_ENDIAN16(*((unsigned short*) (&exif_marker->data[i + 8])));
+			ret =  de_get16(&exif_marker->data[i + 8], endian);
 			return ret <= 8 ? ret : 0;
 		}
 		/* move the pointer to the next 12-byte tag field. */
