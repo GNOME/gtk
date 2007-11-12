@@ -727,7 +727,8 @@ gdk_string_to_compound_text_for_display (GdkDisplay  *display,
  * from the input string and also canonicalizes \r, and \r\n to \n
  */
 static gchar * 
-sanitize_utf8 (const gchar *src)
+sanitize_utf8 (const gchar *src,
+	       gboolean return_latin1)
 {
   gint len = strlen (src);
   GString *result = g_string_sized_new (len);
@@ -746,13 +747,26 @@ sanitize_utf8 (const gchar *src)
       else
 	{
 	  gunichar ch = g_utf8_get_char (p);
-	  char buf[7];
-	  gint buflen;
 	  
 	  if (!((ch < 0x20 && ch != '\t' && ch != '\n') || (ch >= 0x7f && ch < 0xa0)))
 	    {
-	      buflen = g_unichar_to_utf8 (ch, buf);
-	      g_string_append_len (result, buf, buflen);
+	      if (return_latin1)
+		{
+		  if (ch <= 0xff)
+		    g_string_append_c (result, ch);
+		  else
+		    g_string_append_printf (result,
+					    ch < 0x10000 ? "\\u%04x" : "\\U%08x",
+					    ch);
+		}
+	      else
+		{
+		  char buf[7];
+		  gint buflen;
+		  
+		  buflen = g_unichar_to_utf8 (ch, buf);
+		  g_string_append_len (result, buf, buflen);
+		}
 	    }
 
 	  p = g_utf8_next_char (p);
@@ -779,21 +793,7 @@ sanitize_utf8 (const gchar *src)
 gchar *
 gdk_utf8_to_string_target (const gchar *str)
 {
-  GError *error = NULL;
-  
-  gchar *tmp_str = sanitize_utf8 (str);
-  gchar *result =  g_convert_with_fallback (tmp_str, -1,
-					    "ISO-8859-1", "UTF-8",
-					    NULL, NULL, NULL, &error);
-  if (!result)
-    {
-      g_warning ("Error converting from UTF-8 to STRING: %s",
-		 error->message);
-      g_error_free (error);
-    }
-  
-  g_free (tmp_str);
-  return result;
+  return sanitize_utf8 (str, TRUE);
 }
 
 /**
@@ -832,7 +832,7 @@ gdk_utf8_to_compound_text_for_display (GdkDisplay  *display,
 
   need_conversion = !g_get_charset (&charset);
 
-  tmp_str = sanitize_utf8 (str);
+  tmp_str = sanitize_utf8 (str, FALSE);
 
   if (need_conversion)
     {

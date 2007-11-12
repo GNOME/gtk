@@ -1,3 +1,10 @@
+2007-11-12  Alexander Larsson  <alexl@redhat.com>
+
+        * gdk/x11/gdkselection-x11.c:
+	Avoid loading the ISO8859-1 iconv module.
+	We're already doing all the required work anyway.
+	This saves 4kb private dirty memory per gtk+ process
+
 2007-11-11  Yevgen Muntyan  <muntyan@tamu.edu>
 
 	* gtk/gtktextview.c: Moved gtk_text_view_update_im_spot_location()
