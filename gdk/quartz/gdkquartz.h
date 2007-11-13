@@ -22,7 +22,7 @@
 #define __GDK_QUARTZ_H__
 
 #include <AppKit/AppKit.h>
-#include "gdk/gdkprivate.h"
+#include <gdk/gdkprivate.h>
 
 G_BEGIN_DECLS
 

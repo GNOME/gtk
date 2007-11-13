@@ -1,3 +1,10 @@
+2007-11-12  Sven Herzberg  <herzi@imendio.com>
+
+	Reviewed by Richard:
+
+	* gdk/quartz/gdkquartz.h: include <gdk/gdkprivate.h> with angle
+	brackets and not with quotation marks
+
 2007-11-12  Alexander Larsson  <alexl@redhat.com>
 
         * gdk/x11/gdkselection-x11.c:
@@ -21,6 +28,7 @@
 	* gtk/gtkbuilder.c: Convert delayed_properties hashtable to linked
 	list.  Fixes #495769.
 
+>>>>>>> .r18986
 2007-11-10  Matthias Clasen  <mclasen@redhat.com>
 
 	* tests/buildertest.c: Parse a file given on the cmdline.
