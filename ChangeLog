@@ -1,5 +1,10 @@
 2007-11-14  Michael Natterer  <mitch@imendio.com>
 
+	* gtk/gtkmenu.c (gtk_menu_popup): remove recently added
+	gdk_flush() again, it's not needed after all.
+
+2007-11-14  Michael Natterer  <mitch@imendio.com>
+
 	* tests/testbbox.c
 	* tests/testframe.c: use g_object_ref/unref instead of deprecated
 	functions.
