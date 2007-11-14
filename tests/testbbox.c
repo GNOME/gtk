@@ -70,10 +70,10 @@ reparent_widget (GtkWidget *widget,
 		 GtkWidget *old_parent,
 		 GtkWidget *new_parent)
 {
-  gtk_widget_ref (widget);
+  g_object_ref (widget);
   gtk_container_remove (GTK_CONTAINER (old_parent), widget);
   gtk_container_add (GTK_CONTAINER (new_parent), widget);
-  gtk_widget_unref (widget);
+  g_object_unref (widget);
 }
 
 static void

@@ -30,7 +30,8 @@ spin_ythickness_cb (GtkSpinButton *spin, gpointer user_data)
   rcstyle->xthickness = GTK_WIDGET (frame)->style->xthickness;
   rcstyle->ythickness = gtk_spin_button_get_value (spin);
   gtk_widget_modify_style (frame, rcstyle);
-  gtk_rc_style_unref (rcstyle);
+
+  g_object_unref (rcstyle);
 }
 
 static void
@@ -44,7 +45,7 @@ spin_xthickness_cb (GtkSpinButton *spin, gpointer user_data)
   rcstyle->ythickness = GTK_WIDGET (frame)->style->ythickness;
   gtk_widget_modify_style (frame, rcstyle);
 
-  gtk_rc_style_unref (rcstyle);
+  g_object_unref (rcstyle);
 }
 
 /* Function to normalize rounding errors in FP arithmetic to

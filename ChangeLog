@@ -1,5 +1,11 @@
 2007-11-14  Michael Natterer  <mitch@imendio.com>
 
+	* tests/testbbox.c
+	* tests/testframe.c: use g_object_ref/unref instead of deprecated
+	functions.
+
+2007-11-14  Michael Natterer  <mitch@imendio.com>
+
 	* gtk/gtkstyle.c (gtk_default_draw_focus): cast pointers to fix
 	warnings about signdness.
 
