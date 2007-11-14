@@ -4521,7 +4521,7 @@ gtk_default_draw_focus (GtkStyle      *style,
   cairo_t *cr;
   gboolean free_dash_list = FALSE;
   gint line_width = 1;
-  gint8 *dash_list = "\1\1";
+  gint8 *dash_list = (gint8 *) "\1\1";
 
   if (widget)
     {
@@ -4537,15 +4537,15 @@ gtk_default_draw_focus (GtkStyle      *style,
     {
       if (free_dash_list)
 	g_free (dash_list);
-      
-      dash_list = "\4\4";
+
+      dash_list = (gint8 *) "\4\4";
       free_dash_list = FALSE;
     }
 
   sanitize_size (window, &width, &height);
 
   cr = gdk_cairo_create (window);
-  
+
   if (detail && !strcmp (detail, "colorwheel_light"))
     cairo_set_source_rgb (cr, 0., 0., 0.);
   else if (detail && !strcmp (detail, "colorwheel_dark"))
@@ -4557,7 +4557,7 @@ gtk_default_draw_focus (GtkStyle      *style,
 
   if (dash_list[0])
     {
-      gint n_dashes = strlen (dash_list);
+      gint n_dashes = strlen ((const gchar *) dash_list);
       gdouble *dashes = g_new (gdouble, n_dashes);
       gdouble total_length = 0;
       gdouble dash_offset;

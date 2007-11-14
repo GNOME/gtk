@@ -1,3 +1,8 @@
+2007-11-14  Michael Natterer  <mitch@imendio.com>
+
+	* gtk/gtkstyle.c (gtk_default_draw_focus): cast pointers to fix
+	warnings about signdness.
+
 2007-11-12  Sven Herzberg  <herzi@imendio.com>
 
 	Reviewed by Richard:
