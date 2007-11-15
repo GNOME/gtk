@@ -1,3 +1,12 @@
+2007-11-15  Yevgen Muntyan  <muntyan@tamu.edu>
+
+	* gtk/gtktextlayout.c: (gtk_text_layout_get_line_display),
+	(get_style): do not call _gtk_text_btree_get_iter_at_line() and
+	_gtk_text_btree_get_tags() for every segment, instead call them
+	once and then collect the tags while iterating over the segments.
+	(get_tags_array_at_iter), (tags_array_toggle_tag): new functions
+	for tags array handling.
+
 2007-11-14  Michael Natterer  <mitch@imendio.com>
 
 	* gtk/gtkmenu.c (gtk_menu_popup): remove recently added
