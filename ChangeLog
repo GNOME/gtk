@@ -1,5 +1,12 @@
 2007-11-15  Yevgen Muntyan  <muntyan@tamu.edu>
 
+	* gtk/gtktextbtree.c (_gtk_text_btree_get_tags): sort returned
+	tags array by tags priority (#497102).
+	* gtk/gtktextiter.c (gtk_text_iter_get_tags), (gtk_text_iter_get_attributes):
+	* gtk/gtktextlayout.c (get_tags_array_at_iter): and do not sort it here.
+
+2007-11-15  Yevgen Muntyan  <muntyan@tamu.edu>
+
 	* gtk/gtktextlayout.c: (gtk_text_layout_get_line_display),
 	(get_style): do not call _gtk_text_btree_get_iter_at_line() and
 	_gtk_text_btree_get_tags() for every segment, instead call them

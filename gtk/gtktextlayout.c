@@ -2072,8 +2072,6 @@ get_tags_array_at_iter (GtkTextIter *iter)
 
   if (n_tags > 0)
     {
-      /* Sort tags in ascending order of priority */
-      _gtk_text_tag_array_sort (tags, n_tags);
       array = g_ptr_array_sized_new (n_tags);
       g_ptr_array_set_size (array, n_tags);
       memcpy (array->pdata, tags, n_tags * sizeof (GtkTextTag*));

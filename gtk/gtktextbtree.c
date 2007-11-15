@@ -2196,6 +2196,8 @@ _gtk_text_btree_get_line_at_char (GtkTextBTree      *tree,
   return line;
 }
 
+/* It returns an array sorted by tags priority, ready to pass to
+ * _gtk_text_attributes_fill_from_tags() */
 GtkTextTag**
 _gtk_text_btree_get_tags (const GtkTextIter *iter,
                          gint *num_tags)
@@ -2304,6 +2306,10 @@ _gtk_text_btree_get_tags (const GtkTextIter *iter,
       g_free (tagInfo.tags);
       return NULL;
     }
+
+  /* Sort tags in ascending order of priority */
+  _gtk_text_tag_array_sort (tagInfo.tags, dst);
+
   return tagInfo.tags;
 }
 
