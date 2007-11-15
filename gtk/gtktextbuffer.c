@@ -2296,8 +2296,7 @@ gtk_text_buffer_get_insert (GtkTextBuffer *buffer)
 {
   g_return_val_if_fail (GTK_IS_TEXT_BUFFER (buffer), NULL);
 
-  /* FIXME use struct member in btree */
-  return gtk_text_buffer_get_mark (buffer, "insert");
+  return _gtk_text_btree_get_insert (get_btree (buffer));
 }
 
 /**
@@ -2323,8 +2322,7 @@ gtk_text_buffer_get_selection_bound (GtkTextBuffer *buffer)
 {
   g_return_val_if_fail (GTK_IS_TEXT_BUFFER (buffer), NULL);
 
-  /* FIXME use struct member in btree */
-  return gtk_text_buffer_get_mark (buffer, "selection_bound");
+  return _gtk_text_btree_get_selection_bound (get_btree (buffer));
 }
 
 /**

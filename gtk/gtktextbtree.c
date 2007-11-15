@@ -2972,6 +2972,18 @@ _gtk_text_btree_mark_is_selection_bound (GtkTextBTree *tree,
   return segment == tree->selection_bound_mark;
 }
 
+GtkTextMark *
+_gtk_text_btree_get_insert (GtkTextBTree *tree)
+{
+  return tree->insert_mark;
+}
+
+GtkTextMark *
+_gtk_text_btree_get_selection_bound (GtkTextBTree *tree)
+{
+  return tree->selection_bound_mark;
+}
+
 GtkTextMark*
 _gtk_text_btree_get_mark_by_name (GtkTextBTree *tree,
                                   const gchar *name)

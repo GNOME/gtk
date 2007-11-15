@@ -200,12 +200,13 @@ void                _gtk_text_btree_place_cursor            (GtkTextBTree       
                                                              const GtkTextIter  *where);
 void                _gtk_text_btree_select_range            (GtkTextBTree       *tree,
                                                              const GtkTextIter  *ins,
-							     const GtkTextIter 
-*bound);
+							     const GtkTextIter  *bound);
 gboolean            _gtk_text_btree_mark_is_insert          (GtkTextBTree       *tree,
                                                              GtkTextMark        *segment);
 gboolean            _gtk_text_btree_mark_is_selection_bound (GtkTextBTree       *tree,
                                                              GtkTextMark        *segment);
+GtkTextMark        *_gtk_text_btree_get_insert		    (GtkTextBTree       *tree);
+GtkTextMark        *_gtk_text_btree_get_selection_bound	    (GtkTextBTree       *tree);
 GtkTextMark        *_gtk_text_btree_get_mark_by_name        (GtkTextBTree       *tree,
                                                              const gchar        *name);
 GtkTextLine *       _gtk_text_btree_first_could_contain_tag (GtkTextBTree       *tree,

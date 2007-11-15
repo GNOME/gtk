@@ -1,5 +1,14 @@
 2007-11-15  Yevgen Muntyan  <muntyan@tamu.edu>
 
+	* gtk/gtktextbtree.h:
+	* gtk/gtktextbtree.c: new functions _gtk_text_btree_get_insert()
+	and _gtk_text_btree_get_selection_bound() (#497102).
+	* gtk/gtktextbuffer.c (gtk_text_buffer_get_insert),
+	(gtk_text_buffer_get_selection_bound): use them here instead of
+	hash table lookup.
+
+2007-11-15  Yevgen Muntyan  <muntyan@tamu.edu>
+
 	* gtk/gtktextbtree.c (_gtk_text_btree_get_tags): sort returned
 	tags array by tags priority (#497102).
 	* gtk/gtktextiter.c (gtk_text_iter_get_tags), (gtk_text_iter_get_attributes):
