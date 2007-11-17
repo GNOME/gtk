@@ -519,7 +519,7 @@ gtk_text_layout_set_cursor_visible (GtkTextLayout *layout,
       /* Now queue a redraw on the paragraph containing the cursor
        */
       gtk_text_buffer_get_iter_at_mark (layout->buffer, &iter,
-                                        gtk_text_buffer_get_mark (layout->buffer, "insert"));
+                                        gtk_text_buffer_get_insert (layout->buffer));
 
       gtk_text_layout_get_line_yrange (layout, &iter, &y, &height);
       gtk_text_layout_emit_changed (layout, y, height, height);
@@ -859,8 +859,8 @@ gtk_text_layout_update_cursor_line(GtkTextLayout *layout)
   GtkTextIter iter;
 
   gtk_text_buffer_get_iter_at_mark (layout->buffer, &iter,
-                                    gtk_text_buffer_get_mark (layout->buffer, "insert"));
-  
+                                    gtk_text_buffer_get_insert (layout->buffer));
+
   priv->cursor_line = _gtk_text_iter_get_text_line (&iter);
 }
 
@@ -953,8 +953,6 @@ gtk_text_layout_real_free_line_data (GtkTextLayout     *layout,
 
   g_free (line_data);
 }
-
-
 
 /**
  * gtk_text_layout_is_valid:
@@ -1432,7 +1430,6 @@ gtk_text_attr_appearance_compare (const PangoAttribute *attr1,
           appearance1->underline == appearance2->underline &&
           appearance1->strikethrough == appearance2->strikethrough &&
           appearance1->draw_bg == appearance2->draw_bg);
-
 }
 
 /**
@@ -1473,7 +1470,6 @@ gtk_text_attr_appearance_new (const GtkTextAppearance *appearance)
 
   return (PangoAttribute *)result;
 }
-
 
 static void
 add_generic_attrs (GtkTextLayout      *layout,
@@ -2721,8 +2717,7 @@ gtk_text_layout_get_cursor_locations (GtkTextLayout  *layout,
                                            line, layout);
   
   gtk_text_buffer_get_iter_at_mark (layout->buffer, &insert_iter,
-                                    gtk_text_buffer_get_mark (layout->buffer,
-                                                              "insert"));
+                                    gtk_text_buffer_get_insert (layout->buffer));
 
   if (gtk_text_iter_equal (iter, &insert_iter))
     index += layout->preedit_cursor - layout->preedit_len;

@@ -1,3 +1,10 @@
+2007-11-17  Paolo Borelli  <pborelli@katamail.com>
+
+	* gtk/gtktextbuffer.c:
+	* gtk/gtktextlayout.c:
+	* gtk/gtktextview.c:
+	Use gtk_text_buffer_get_insert instead of get_mark. Fixes Bug 497164.
+
 2007-11-15  Yevgen Muntyan  <muntyan@tamu.edu>
 
 	* gtk/gtktextbtree.h:
