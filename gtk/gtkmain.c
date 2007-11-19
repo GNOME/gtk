@@ -202,7 +202,7 @@ static const GDebugKey gtk_debug_keys[] = {
  *   The returned string is owned by GTK+ and should not be modified
  *   or freed.
  **/
-gchar*
+const gchar*
 gtk_check_version (guint required_major,
 		   guint required_minor,
 		   guint required_micro)

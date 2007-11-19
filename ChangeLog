@@ -1,5 +1,10 @@
 2007-11-19  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkmain.[hc]: Make gtk_check_version() return const.
+	(#496734, Nicolas Joseph)
+
+2007-11-19  Matthias Clasen  <mclasen@redhat.com>
+
 	* gtk/gtkaboutdialog.c: Correct docs for program-name property.
 	(#496689, Thomas Wood)
 

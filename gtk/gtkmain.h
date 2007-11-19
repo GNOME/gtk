@@ -76,9 +76,9 @@ GTKMAIN_C_VAR const guint gtk_minor_version;
 GTKMAIN_C_VAR const guint gtk_micro_version;
 GTKMAIN_C_VAR const guint gtk_binary_age;
 GTKMAIN_C_VAR const guint gtk_interface_age;
-gchar* gtk_check_version (guint	required_major,
-			  guint	required_minor,
-			  guint	required_micro);
+const gchar* gtk_check_version (guint	required_major,
+			        guint	required_minor,
+			        guint	required_micro);
 
 
 /* Initialization, exit, mainloop and miscellaneous routines
