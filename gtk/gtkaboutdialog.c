@@ -184,12 +184,12 @@ gtk_about_dialog_class_init (GtkAboutDialogClass *klass)
 
 
   /**
-   * GtkAboutDialog:name:
+   * GtkAboutDialog:program-name:
    *
    * The name of the program. 
    * If this is not set, it defaults to g_get_application_name().
    *
-   * Since: 2.6
+   * Since: 2.12
    */  
   g_object_class_install_property (object_class,
 				   PROP_NAME,

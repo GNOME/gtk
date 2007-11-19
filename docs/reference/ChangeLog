@@ -1,5 +1,10 @@
 2007-11-19  Matthias Clasen <mclasen@redhat.com>
 
+	* gtk/tmpl/gtkaboutdialog.sgml: Add some hints about
+	program-name vs name.  (#496689, Thomas Wood)
+
+2007-11-19  Matthias Clasen <mclasen@redhat.com>
+
 	* gtk/tmpl/gtkbuilder.sgml: Small correction to the
 	informational DTD.  (#496277, Nicolas Joseph)
 

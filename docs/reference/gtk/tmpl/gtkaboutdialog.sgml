@@ -37,11 +37,16 @@ a #GtkAboutDialog, as shown in the following example:
 </para>
 <informalexample><programlisting>
 gtk_show_about_dialog (NULL, 
-                       "name", "ExampleCode",
+                       "program-name", "ExampleCode",
                        "logo", example_logo,
                        "title" _("About ExampleCode"),
                        NULL);
 </programlisting></informalexample>
+<para>
+Note that prior to GTK+ 2.12, the #GtkAboutDialog:program-name property
+was called "name". This was changed to avoid the conflict with the
+#GtkWidget:name property.
+</para>
 
 <!-- ##### SECTION See_Also ##### -->
 <para>
