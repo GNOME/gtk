@@ -3207,6 +3207,7 @@ validate_gnode (GNode* node)
  * </columns>
  */
 typedef struct {
+  GtkBuilder *builder;
   GObject *object;
   GSList *items;
 } GSListSubParserData;
@@ -3229,9 +3230,55 @@ tree_model_start_element (GMarkupParseContext *context,
     }
 }
 
+static void
+tree_model_end_element (GMarkupParseContext *context,
+			const gchar         *element_name,
+			gpointer             user_data,
+			GError             **error)
+{
+  guint i;
+  GSListSubParserData *data = (GSListSubParserData*)user_data;
+
+  g_assert(data->builder);
+
+  if (strcmp (element_name, "columns") == 0)
+    {
+      GSList *l;
+      GType *types;
+      int i;
+      GType type;
+
+      data = (GSListSubParserData*)user_data;
+      data->items = g_slist_reverse (data->items);
+      types = g_new0 (GType, g_slist_length (data->items));
+
+      for (l = data->items, i = 0; l; l = l->next, i++)
+        {
+          type = gtk_builder_get_type_from_name (data->builder, l->data);
+          if (type == G_TYPE_INVALID)
+            {
+              g_warning ("Unknown type %s specified in treemodel %s",
+                         (const gchar*)l->data,
+                         gtk_buildable_get_name (GTK_BUILDABLE (data->object)));
+              continue;
+            }
+          types[i] = type;
+
+          g_free (l->data);
+        }
+
+      gtk_tree_store_set_column_types (GTK_TREE_STORE (data->object), i, types);
+
+      g_free (types);
+    }
+  else if (strcmp (element_name, "column") == 0)
+    ;
+}
+
 static const GMarkupParser tree_model_parser =
   {
-    tree_model_start_element
+    tree_model_start_element,
+    tree_model_end_element
   };
 
 
@@ -3251,6 +3298,7 @@ gtk_tree_store_buildable_custom_tag_start (GtkBuildable  *buildable,
   if (strcmp (tagname, "columns") == 0)
     {
       parser_data = g_slice_new0 (GSListSubParserData);
+      parser_data->builder = builder;
       parser_data->items = NULL;
       parser_data->object = G_OBJECT (buildable);
 
@@ -3269,37 +3317,13 @@ gtk_tree_store_buildable_custom_finished (GtkBuildable *buildable,
 					  const gchar  *tagname,
 					  gpointer      user_data)
 {
-  GSList *l;
   GSListSubParserData *data;
-  GType *types;
-  int i;
-  GType type;
 
   if (strcmp (tagname, "columns"))
     return;
 
   data = (GSListSubParserData*)user_data;
-  data->items = g_slist_reverse (data->items);
-  types = g_new0 (GType, g_slist_length (data->items));
 
-  for (l = data->items, i = 0; l; l = l->next, i++)
-    {
-      type = gtk_builder_get_type_from_name (builder, l->data);
-      if (type == G_TYPE_INVALID)
-	{
-	  g_warning ("Unknown type %s specified in treemodel %s",
-		     (const gchar*)l->data,
-		     gtk_buildable_get_name (GTK_BUILDABLE (data->object)));
-	  continue;
-	}
-      types[i] = type;
-
-      g_free (l->data);
-    }
-
-  gtk_tree_store_set_column_types (GTK_TREE_STORE (data->object), i, types);
-
-  g_free (types);
   g_slist_free (data->items);
   g_slice_free (GSListSubParserData, data);
 }

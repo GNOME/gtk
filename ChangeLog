@@ -1,5 +1,10 @@
 2007-11-19  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtktreestore.c: Fix the GtkBuildable implementation
+	to allow setting column types.  (#496795, James Stephenson)
+
+2007-11-19  Matthias Clasen  <mclasen@redhat.com>
+
 	* gtk/gtkmain.[hc]: Make gtk_check_version() return const.
 	(#496734, Nicolas Joseph)
 
