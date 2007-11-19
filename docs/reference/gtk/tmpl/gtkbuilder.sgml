@@ -58,7 +58,7 @@ which are more limited in scope.
 
 <!ATTLIST interface  domain         	    #IMPLIED >
 <!ATTLIST object     id             	    #REQUIRED
-                     class          	    #IMPLIED
+                     class          	    #REQUIRED
                      type-func      	    #IMPLIED
                      constructor    	    #IMPLIED >
 <!ATTLIST property   name           	    #REQUIRED

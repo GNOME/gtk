@@ -1,3 +1,8 @@
+2007-11-19  Matthias Clasen <mclasen@redhat.com>
+
+	* gtk/tmpl/gtkbuilder.sgml: Small correction to the
+	informational DTD.  (#496277, Nicolas Joseph)
+
 2007-10-16  Matthias Clasen <mclasen@redhat.com>
 
 	* === Released 2.12.1 ===
