@@ -1,3 +1,9 @@
+2007-11-20  Bastien Nocera  <hadess@hadess.net>
+
+	* Makefile.am:
+	* io-icns.c: Add icns (MacOS X icons) loader, based on work by
+	Lyonel Vincent <lyonel@ezix.org> (Closes: #395738)
+
 2007-11-10  Matthias Clasen <mclasen@redhat.com>
 
 	* io-jpeg.c: Avoid unaligned accesses that cause
@@ -147,7 +153,7 @@ Sat Jul  7 17:34:33 2007  Tim Janik  <timj@gtk.org>
 
 	* gdk-pixbuf-simple-anim.c (gdk_pixbuf_simple_anim_add_frame):
 	Don't double the delay time of the first frame.  (#431997,
-	Björn Lindqvist)
+	Bj?rn Lindqvist)
 
 2007-04-25  Matthias Clasen <mclasen@redhat.com>
 
@@ -1583,7 +1589,7 @@ Mon Aug 18 10:25:29 2003  Owen Taylor  <otaylor@redhat.com>
 
 	* pixops/pixops.c (correct_total): Split correction into multiple
 	pieces if no single weight is large enough to apply the unsplit
-	correction.  (#117431, problem reported by Tomas Ögren) 
+	correction.  (#117431, problem reported by Tomas ?gren) 
 
 2003-07-13  Matthias Clasen  <maclas@gmx.de>
 
@@ -2371,7 +2377,7 @@ Wed Feb 27 18:33:04 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* gdk-pixdata.c (gdk_pixdata_to_csource): Use {} not
 	() to group around string assigned to char[]. (#72767,
-	Tomas Ögren)
+	Tomas ?gren)
 
 2002-02-21  Havoc Pennington  <hp@pobox.com>
 
@@ -3594,7 +3600,7 @@ Wed Jun 21 16:02:48 2000  Owen Taylor  <otaylor@redhat.com>
 2000-06-05	Mathieu Lacage  <mathieu@gnome.org>
 
 	* configure.in: add some gtk parameters to the
-	GDK_PIXBUF_LIBÃï¿½²S and GDK_PIXBUG_INCLUDEDIR vars. One more
+	GDK_PIXBUF_LIB?ï¿½?S and GDK_PIXBUG_INCLUDEDIR vars. One more
 	fight in my crusade for strange prefix compile...
 
 2000-05-30  Not Zed  <NotZed@HelixCode.com>
@@ -3691,7 +3697,7 @@ Fri May  5 12:16:32 2000  Owen Taylor  <otaylor@redhat.com>
 	* gdk-pixbuf/Makefile.am (INCLUDES): Add $(GNOME_CFLAGS).
 	Reported by Jens Finke.
 
-2000-04-14 Tomasz KÃï¿½³opczko <kloczek@pld.org.pl>
+2000-04-14 Tomasz K?ï¿½?opczko <kloczek@pld.org.pl>
 
 	* gdk-pixbuf/pixops/makefile.am: $(LIBART_CFLAGS) replaced by 
 	$(GTK_CFLAGS) - now gdk-pixbuf compiles correctly.

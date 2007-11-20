@@ -165,6 +165,14 @@ libpixbufloader_tga_la_LDFLAGS = -avoid-version -module $(no_undefined)
 libpixbufloader_tga_la_LIBADD = $(module_libs)
 
 #
+# The .icns loader
+#
+libpixbufloader_static_icns_la_SOURCES = io-icns.c
+libpixbufloader_icns_la_SOURCES = io-icns.c
+libpixbufloader_icns_la_LDFLAGS = -avoid-version -module $(no_undefined)
+libpixbufloader_icns_la_LIBADD = $(module_libs)
+
+#
 # The PCX loader
 #
 libstatic_pixbufloader_pcx_la_SOURCES = io-pcx.c
@@ -262,6 +270,12 @@ else
 PCX_LIB = libpixbufloader-pcx.la
 endif
 
+if INCLUDE_ICNS
+STATIC_ICNS_LIB = libpixbufloader-static-icns.la
+else
+ICNS_LIB = libpixbufloader-icns.la
+endif
+
 if BUILD_DYNAMIC_MODULES
 
 loader_LTLIBRARIES = 	\
@@ -278,6 +292,7 @@ loader_LTLIBRARIES = 	\
 	$(XPM_LIB)	\
 	$(XBM_LIB)	\
 	$(TGA_LIB)	\
+	$(ICNS_LIB)	\
 	$(PCX_LIB)
 
 
@@ -297,6 +312,7 @@ noinst_LTLIBRARIES =		\
 	$(STATIC_XPM_LIB)	\
 	$(STATIC_XBM_LIB)	\
 	$(STATIC_TGA_LIB)	\
+	$(STATIC_ICNS_LIB)	\
 	$(STATIC_PCX_LIB)
 
 builtin_objs = @INCLUDED_LOADER_OBJ@

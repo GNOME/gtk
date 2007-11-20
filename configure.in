@@ -886,7 +886,7 @@ else
    fi
 fi
 
-all_loaders="png,bmp,wbmp,gif,ico,ani,jpeg,pnm,ras,tiff,xpm,xbm,tga,pcx"
+all_loaders="png,bmp,wbmp,gif,ico,ani,jpeg,pnm,ras,tiff,xpm,xbm,tga,pcx,icns"
 included_loaders=""
 # If no loaders specified, include all
 if test "x$with_included_loaders" = xyes ; then
@@ -930,6 +930,7 @@ AM_CONDITIONAL(INCLUDE_XPM, [test x"$INCLUDE_xpm" = xyes])
 AM_CONDITIONAL(INCLUDE_XBM, [test x"$INCLUDE_xbm" = xyes])
 AM_CONDITIONAL(INCLUDE_TGA, [test x"$INCLUDE_tga" = xyes])
 AM_CONDITIONAL(INCLUDE_PCX, [test x"$INCLUDE_pcx" = xyes])
+AM_CONDITIONAL(INCLUDE_ICNS, [test x"$INCLUDE_icns" = xyes])
 
 AC_HEADER_SYS_WAIT
 
