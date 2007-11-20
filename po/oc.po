@@ -1,21 +1,24 @@
+# translation of oc.po to Occitan
 # Occitan translation of gtk+ 2.x.
 # Copyright (C) 1998-2007 Free Software Foundation, Inc.
 # This file is distributed under the GNU Library General Public License Version 2.
 #
 # Yannig MARCHEGAY (yannig@marchegay.org) - 2006-2007
 #
+# Yannig Marchegay (Kokoyaya) <yannig@marchegay.org>, 2007.
 msgid ""
 msgstr ""
-"Project-Id-Version: gtk+ 2.10.7\n"
+"Project-Id-Version: oc\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2007-10-16 23:54-0400\n"
-"PO-Revision-Date: 2007-10-21 23:50+0200\n"
-"Last-Translator: Yannig MARCHEGAY (Kokoyaya) <yannig@marchegay.org>\n"
-"Language-Team: Occitan (post 1500) <ubuntu-l10n-oci@lists.ubuntu.com>\n"
+"PO-Revision-Date: 2007-11-20 14:31+0100\n"
+"Last-Translator: Yannig Marchegay (Kokoyaya) <yannig@marchegay.org>\n"
+"Language-Team: Occitan <ubuntu-l10n-oci@lists.ubuntu.com>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=(n > 1);"
+"Plural-Forms: nplurals=2; plural=(n > 1);X-Generator: KBabel 1.11.4\n"
+"X-Generator: KBabel 1.11.4\n"
 
 #: gdk/directfb/gdkdisplay-directfb.c:55
 msgid "directfb arg"
@@ -245,8 +248,7 @@ msgstr "Lo fichièr imatge '%s' conten pas de donadas"
 #: gdk-pixbuf/gdk-pixbuf-animation.c:209 gdk-pixbuf/gdk-pixbuf-io.c:896
 #: gdk-pixbuf/gdk-pixbuf-io.c:1153 tests/testfilechooser.c:263
 #, c-format
-msgid ""
-"Failed to load image '%s': reason not known, probably a corrupt image file"
+msgid "Failed to load image '%s': reason not known, probably a corrupt image file"
 msgstr ""
 "Impossible de cargar l'imatge '%s' : rason desconeguda, probable que siá "
 "corrompuda"
@@ -607,8 +609,7 @@ msgstr ""
 
 #: gdk-pixbuf/io-jpeg.c:1124
 #, c-format
-msgid ""
-"JPEG quality must be a value between 0 and 100; value '%d' is not allowed."
+msgid "JPEG quality must be a value between 0 and 100; value '%d' is not allowed."
 msgstr ""
 "La qualitat de JPEG deu èsser una valor entre 0 e 100 ; la valor '%d' es pas "
 "autorisada."
@@ -725,8 +726,7 @@ msgstr "Error fatala al moment de legir lo fichièr d'imatge PNG : %s"
 
 #: gdk-pixbuf/io-png.c:825
 #, c-format
-msgid ""
-"Keys for PNG text chunks must have at least 1 and at most 79 characters."
+msgid "Keys for PNG text chunks must have at least 1 and at most 79 characters."
 msgstr ""
 
 #: gdk-pixbuf/io-png.c:833
@@ -1144,7 +1144,7 @@ msgstr "A prepaus de %s"
 
 #: gtk/gtkaboutdialog.c:2024
 msgid "Credits"
-msgstr "Yannig Marchegay (Kokoyaya) <yannig@marchegay.org)"
+msgstr "Yannig MARCHEGAY (Kokoyaya) <yannig@marchegay.org>"
 
 #: gtk/gtkaboutdialog.c:2053
 msgid "Written by"
@@ -1698,8 +1698,7 @@ msgstr "Lo fichièr \"%s\" existís ja, lo volètz remplaçar ?"
 
 #: gtk/gtkfilechooserdefault.c:8083
 #, c-format
-msgid ""
-"The file already exists in \"%s\".  Replacing it will overwrite its contents."
+msgid "The file already exists in \"%s\".  Replacing it will overwrite its contents."
 msgstr ""
 
 #: gtk/gtkfilechooserdefault.c:8088
@@ -1739,7 +1738,7 @@ msgstr "Picatz lo nom del repertòri novèl"
 msgid "%d byte"
 msgid_plural "%d bytes"
 msgstr[0] "%d octet"
-msgstr[1] "%d octets"
+msgstr[1] "%d octet"
 
 #: gtk/gtkfilechooserdefault.c:10996
 #, c-format
@@ -1815,8 +1814,7 @@ msgstr ""
 
 #: gtk/gtkfilesel.c:1406
 #, c-format
-msgid ""
-"The folder name \"%s\" contains symbols that are not allowed in filenames"
+msgid "The folder name \"%s\" contains symbols that are not allowed in filenames"
 msgstr ""
 
 #: gtk/gtkfilesel.c:1451
@@ -2128,7 +2126,7 @@ msgstr "_Netejar"
 
 #: gtk/gtklinkbutton.c:141
 msgid "URI"
-msgstr "URI"
+msgstr "URL"
 
 #: gtk/gtklinkbutton.c:142
 msgid "The URI bound to this button"
@@ -2605,7 +2603,7 @@ msgstr ""
 
 #: gtk/gtkprintunixdialog.c:2386
 msgid "Advanced"
-msgstr "Avançat"
+msgstr "A_vançat"
 
 #: gtk/gtkprintunixdialog.c:2421
 msgid "Image Quality"
@@ -2798,7 +2796,7 @@ msgstr "Se _connectar"
 
 #: gtk/gtkstock.c:305
 msgid "_Convert"
-msgstr "_Convertir"
+msgstr "_Somari"
 
 #: gtk/gtkstock.c:306
 msgid "_Copy"
@@ -3010,7 +3008,7 @@ msgstr "Païsatge"
 
 #: gtk/gtkstock.c:374
 msgid "Portrait"
-msgstr "Retrach"
+msgstr "Contrast"
 
 #: gtk/gtkstock.c:375
 msgid "Reverse landscape"
@@ -3066,7 +3064,7 @@ msgstr "Enregistrar _coma"
 
 #: gtk/gtkstock.c:389
 msgid "Select _All"
-msgstr "_Tot seleccionar"
+msgstr "Seleccionar un fichièr"
 
 #: gtk/gtkstock.c:390
 msgid "_Color"
@@ -3200,8 +3198,7 @@ msgstr ""
 
 #: gtk/gtktextbufferserialize.c:1193
 #, c-format
-msgid ""
-"\"%s\" could not be converted to a value of type \"%s\" for attribute \"%s\""
+msgid "\"%s\" could not be converted to a value of type \"%s\" for attribute \"%s\""
 msgstr ""
 
 #: gtk/gtktextbufferserialize.c:1202
@@ -3240,8 +3237,7 @@ msgstr ""
 
 #: gtk/gtktextbufferserialize.c:1866
 #, c-format
-msgid ""
-"Serialized data is malformed. First section isn't GTKTEXTBUFFERCONTENTS-0001"
+msgid "Serialized data is malformed. First section isn't GTKTEXTBUFFERCONTENTS-0001"
 msgstr ""
 
 #: gtk/gtktextutil.c:60
@@ -4450,5 +4446,3 @@ msgstr ""
 msgid "Could not get information for file '%s': %s"
 msgstr "Impossible d'obténer las informacions pel fichièr '%s' : %s"
 
-#~ msgid "Today"
-#~ msgstr "Uèi"
