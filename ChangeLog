@@ -1,3 +1,63 @@
+Tue Nov 20 15:19:42 2007 +0100 Tim Janik
+
+	Moved Gdk test functions from Gtk+ to Gdk test utils.
+
+	* gdk/Makefile.am: added gdktestutils.h to public includes.
+
+	* gdk/gdk.h: added gdktestutils.h to public includes.
+
+	* gdk/gdk.symbols: added gdk_test_simulate_button, gdk_test_simulate_key,
+	gdk_test_render_sync.
+
+	* gdk/gdktestutils.h: new file, added prototypes for gdk_test_simulate_button,
+	gdk_test_simulate_key, gdk_test_render_sync.
+
+	* gdk/x11/Makefile.am: build gdktestutils-x11.c.
+
+	* gdk/x11/gdktestutils-x11.c: implemented gdk_test_simulate_button,
+	gdk_test_simulate_key, gdk_test_render_sync.
+
+	* gtk/gtktestutils.c:
+	* gtk/gtktestutils.h:
+	* gtk/gtk.symbols: removed gtk_test_simulate_button
+	gtk_test_simulate_key, gtk_test_xserver_render_sync.
+
+	* gtk/tests/testing.c: call gdk_test_render_sync.
+
+Thu Nov 15 13:11:39 2007 +0100 Tim Janik
+
+	Added unit tests for Gtk+ testing utilities.
+
+	* gtk/tests/testing.c: added a sample test program that tests Gtk+ test
+	utility functions. some g_test_* related portions are disabled and need
+	to be enabled once Gtk+ depends on a new glib with the GLib testing
+	framework integrated.
+
+	* gtk/tests/Makefile.am: new subdirectory to include quick Gtk+ tests.
+	added exemplary test rules to run tests inside Xvfb. this needs to depend
+	on gtester for full fledged testing.
+
+	* gtk/Makefile.am: build gtk+/gtk/tests, define -DGTK_ENABLE_BROKEN when
+	collecting _get_type functions to catch e.g. gtk_text_get_type().
+
+	* configure.in: create gtk/tests/Makefile.in and gtk/tests/Makefile.
+
+Thu Nov 15 11:55:34 2007 +0100 Tim Janik
+
+	Added Gtk+ testing utilities.
+
+	* gtk/gtktestutils.h, gtk/gtktestutils.c: added unit test utility functions.
+	for the most part, the functions herein involve navigating and interacting
+	with dialog elements programatically, to automate user interaction tests of
+	dialogs and widgets.
+
+	* gtk/gtk.h: include gtk/gtktestutils.h as public API.
+
+	* gtk/gtk.symbols: added gtk_test_* symbols.
+
+	* gtk/Makefile.am: include gtktestutils.h and gtktestutils.c into the build.
+	generate gtktypefuncs.c which contains a list of all _get_type functions in
+	Gtk+ and Gdk.
 2007-11-20  Bastien Nocera  <hadess@hadess.net>
 
 	* configure.in: add support for conditional icns gdk-pixbuf loader
