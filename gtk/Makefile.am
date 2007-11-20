@@ -279,6 +279,7 @@ gtk_public_h_sources =          \
 	gtkstyle.h		\
 	gtktable.h		\
 	gtktearoffmenuitem.h    \
+	gtktestutils.h		\
 	gtktext.h		\
 	gtktextbuffer.h		\
 	gtktextbufferrichtext.h	\
@@ -559,6 +560,7 @@ gtk_base_c_sources =            \
 	gtkstyle.c		\
 	gtktable.c		\
 	gtktearoffmenuitem.c    \
+	gtktestutils.c		\
 	gtktext.c		\
 	gtktextbtree.c		\
 	gtktextbuffer.c		\
@@ -714,6 +716,7 @@ gtk_built_private_headers =			\
 gtk_built_sources =				\
 	gtkaliasdef.c				\
 	gtktypebuiltins.c			\
+	gtktypefuncs.c				\
 	gtkmarshalers.c				\
 	gtkmarshal.c				\
 	${gtk_built_private_headers}		\
@@ -751,7 +754,7 @@ EXTRA_DIST += $(STOCK_ICONS)
 # rules to generate built sources
 #
 # setup autogeneration dependencies
-gen_sources = xgen-gdef xgen-gtbh xgen-gtic xgen-gmh xgen-gmc xgen-gmlh xgen-gmlc
+gen_sources = xgen-gdef xgen-gtbh xgen-gtic xgen-gmh xgen-gmc xgen-gmlh xgen-gmlc xgen-gtfsrc.c xgen-gtf
 CLEANFILES = $(gen_sources)
 
 BUILT_SOURCES = $(gtk_built_sources)
@@ -816,6 +819,14 @@ gtktypebuiltins.c: @REBUILD@ $(gtk_public_h_sources) Makefile
 		$(gtk_public_h_sources) ) > xgen-gtbc \
 	&& cp xgen-gtbc gtktypebuiltins.c  \
 	&& rm -f xgen-gtbc
+
+gtktypefuncs.c: @REBUILD@ $(top_srcdir)/gtk/*.h $(top_srcdir)/gdk/*.h Makefile
+	echo '#include <gtk/gtk.h>' > xgen-gtfsrc.c && \
+	  ${CPP} $(DEFS) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) xgen-gtfsrc.c | \
+	  egrep -o '\<g[td]k_[a-zA-Z0-9_]+_get_type\>' | sort | uniq | \
+	  sed '{ s/^/vgt=/; s/$$/();/; }' > xgen-gtf \
+	&& cp xgen-gtf $@ && rm -f xgen-gtf
+gtktestutils.c: gtktypefuncs.c
 
 # target platform:
 lib_LTLIBRARIES = $(gtktargetlib)
