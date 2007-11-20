@@ -1,3 +1,7 @@
+2007-11-20  Bastien Nocera  <hadess@hadess.net>
+
+	* POTFILES.in: Add icns loader to the files to translate
+
 2007-11-14  Matej Urbančič <mateju@svn.gnome.org>
 
 	* sl.po: Updated Slovenian Translation.
