@@ -88,7 +88,9 @@ load_resources (unsigned size, IN gpointer data, gsize datalen,
       switch (size)
 	{
 	case 256:
-          if (memcmp (header->id, "ic08", 4) == 0)	/* 256x256 icon */
+	case 512:
+          if (memcmp (header->id, "ic08", 4) == 0	/* 256x256 icon */
+              || memcmp (header->id, "ic09", 4) == 0)	/* 512x512 icon */
             {
 	      *picture = (gpointer) (current + sizeof (IcnsBlockHeader));
 	      *plen = blocklen - sizeof (IcnsBlockHeader);

@@ -1,5 +1,10 @@
 2007-11-20  Bastien Nocera  <hadess@hadess.net>
 
+	* io-icns.c: (load_resources): Add support for 512x512 Leopard
+	icons, using the ic09 iconType
+
+2007-11-20  Bastien Nocera  <hadess@hadess.net>
+
 	* Makefile.am:
 	* io-icns.c: Add icns (MacOS X icons) loader, based on work by
 	Lyonel Vincent <lyonel@ezix.org> (Closes: #395738)
