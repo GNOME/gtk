@@ -1,6 +1,6 @@
 # Makefile.am for gtk+/gtk
 
-SUBDIRS=theme-bits
+SUBDIRS = theme-bits . tests
 
 if OS_UNIX
 SUBDIRS += xdgmime
@@ -822,7 +822,7 @@ gtktypebuiltins.c: @REBUILD@ $(gtk_public_h_sources) Makefile
 
 gtktypefuncs.c: @REBUILD@ $(top_srcdir)/gtk/*.h $(top_srcdir)/gdk/*.h Makefile
 	echo '#include <gtk/gtk.h>' > xgen-gtfsrc.c && \
-	  ${CPP} $(DEFS) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) xgen-gtfsrc.c | \
+	  ${CPP} $(DEFS) $(INCLUDES) -DGTK_ENABLE_BROKEN $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) xgen-gtfsrc.c | \
 	  egrep -o '\<g[td]k_[a-zA-Z0-9_]+_get_type\>' | sort | uniq | \
 	  sed '{ s/^/vgt=/; s/$$/();/; }' > xgen-gtf \
 	&& cp xgen-gtf $@ && rm -f xgen-gtf
