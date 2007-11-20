@@ -40,7 +40,6 @@ GtkWidget*      gtk_test_create_simple_window   (const gchar    *window_title,
 GtkWidget*      gtk_test_display_button_window  (const gchar    *window_title,
                                                  const gchar    *dialog_text,
                                                  ...); /* NULL terminated list of (label, &int) pairs */
-void            gtk_test_xserver_render_sync    (GdkWindow      *window);
 void            gtk_test_slider_set_perc        (GtkWidget      *widget, /* GtkRange-alike */
                                                  double          percentage);
 double          gtk_test_slider_get_value       (GtkWidget      *widget);
@@ -63,18 +62,6 @@ GtkWidget*      gtk_test_find_sibling           (GtkWidget      *base_widget,
                                                  GType           widget_type);
 GtkWidget*      gtk_test_find_label             (GtkWidget      *widget,
                                                  const gchar    *label_pattern);
-gboolean        gtk_test_simulate_key           (GdkWindow      *window,
-                                                 gint            x,
-                                                 gint            y,
-                                                 guint           keyval,
-                                                 GdkModifierType modifiers,
-                                                 gboolean        press_or_release);
-gboolean        gtk_test_simulate_button        (GdkWindow      *window,
-                                                 gint            x,
-                                                 gint            y,
-                                                 guint           button, /*1..3*/
-                                                 GdkModifierType modifiers,
-                                                 gboolean        press_or_release);
 G_END_DECLS;
 
 #endif /* __GTK_TEST_UTILS_H__ */

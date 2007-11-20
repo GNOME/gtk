@@ -50,6 +50,7 @@
 #include <gdk/gdkscreen.h>
 #include <gdk/gdkselection.h>
 #include <gdk/gdkspawn.h>
+#include <gdk/gdktestutils.h>
 #include <gdk/gdktypes.h>
 #include <gdk/gdkvisual.h>
 #include <gdk/gdkwindow.h>

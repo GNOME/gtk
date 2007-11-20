@@ -18,11 +18,9 @@
  */
 #include "gtktestutils.h"
 #include <gtk/gtk.h>
-#include <gdk/gdkkeysyms.h>
-#include <x11/gdkx.h>
+#include <gdk/gdktestutils.h>
 #include "gtkalias.h"
 
-#include <X11/Xlib.h>
 #include <locale.h>
 #include <string.h>
 #include <math.h>
@@ -89,99 +87,6 @@ test_find_widget_input_windows (GtkWidget *widget,
 }
 
 /**
- * gtk_test_simulate_key
- * @window: Gdk window to simulate a key event for.
- * @x:      x coordinate within @window for the key event.
- * @y:      y coordinate within @window for the key event.
- * @keyval: A Gdk keyboard value.
- * @modifiers: Keyboard modifiers the event is setup with.
- * @press_or_release: %TRUE to generate key press events, %FALSE to generate key release events.
- *
- * This function is intended to be used in Gtk+ test programs.
- * If (@x,@y) are > (-1,-1), it will warp the mouse pointer to
- * the given (@x,@y) corrdinates within @window and simulate a
- * key press or release event.
- * When the mouse pointer is warped to the target location, use
- * of this function outside of test programs that run in their
- * own virtual windowing system (e.g. Xvfb) is not recommended.
- * If (@x,@y) are passed as (-1,-1), the mouse pointer will not
- * be warped and @window origin will be used as mouse pointer
- * location for the event.
- * Also, gtk_test_simulate_key() is a fairly low level function,
- * for most testing purposes, gtk_test_widget_send_key() is the
- * right function to call which will generate a key press event
- * followed by its accompanying key release event.
- *
- * Returns: wether all actions neccessary for a key event simulation were carried out successfully.
- **/
-gboolean
-gtk_test_simulate_key (GdkWindow      *window,
-                       gint            x,
-                       gint            y,
-                       guint           keyval,
-                       GdkModifierType modifiers,
-                       gboolean        press_or_release)
-{
-  GdkScreen *screen = gdk_colormap_get_screen (gdk_drawable_get_colormap (window));
-  GdkKeymapKey *keys = NULL;
-  gboolean success;
-  gint n_keys = 0;
-  XKeyEvent xev = {
-    0,  /* type */
-    0,  /* serial */
-    1,  /* send_event */
-  };
-  if (x < 0 && y < 0)
-    {
-      gdk_drawable_get_size (window, &x, &y);
-      x /= 2;
-      y /= 2;
-    }
-  xev.type = press_or_release ? KeyPress : KeyRelease;
-  xev.display = GDK_DRAWABLE_XDISPLAY (window);
-  xev.window = GDK_WINDOW_XID (window);
-  xev.root = RootWindow (xev.display, GDK_SCREEN_XNUMBER (screen));
-  xev.subwindow = 0;
-  xev.time = 0;
-  xev.x = MAX (x, 0);
-  xev.y = MAX (y, 0);
-  xev.x_root = 0;
-  xev.y_root = 0;
-  xev.state = modifiers;
-  xev.keycode = 0;
-  success = gdk_keymap_get_entries_for_keyval (gdk_keymap_get_for_display (gdk_drawable_get_display (window)), keyval, &keys, &n_keys);
-  success &= n_keys > 0;
-  if (success)
-    {
-      gint i;
-      for (i = 0; i < n_keys; i++)
-        if (keys[i].group == 0 && keys[i].level == 0)
-          {
-            xev.keycode = keys[i].keycode;
-            break;
-          }
-      if (i >= n_keys) /* no match for group==0 and level==0 */
-        xev.keycode = keys[0].keycode;
-    }
-  g_free (keys);
-  if (!success)
-    return FALSE;
-  gdk_error_trap_push ();
-  xev.same_screen = XTranslateCoordinates (xev.display, xev.window, xev.root,
-                                           xev.x, xev.y, &xev.x_root, &xev.y_root,
-                                           &xev.subwindow);
-  if (!xev.subwindow)
-    xev.subwindow = xev.window;
-  success &= xev.same_screen;
-  if (x >= 0 && y >= 0)
-    success &= 0 != XWarpPointer (xev.display, None, xev.window, 0, 0, 0, 0, xev.x, xev.y);
-  success &= 0 != XSendEvent (xev.display, xev.window, True, press_or_release ? KeyPressMask : KeyReleaseMask, (XEvent*) &xev);
-  XSync (xev.display, False);
-  success &= 0 == gdk_error_trap_pop();
-  return success;
-}
-
-/**
  * gtk_test_widget_send_key
  * @widget: Widget to generate a key press and release on.
  * @keyval: A Gdk keyboard value.
@@ -193,7 +98,7 @@ gtk_test_simulate_key (GdkWindow      *window,
  * input-only event window. For other widgets, this is usually widget->window.
  * Certain caveats should be considered when using this function, in
  * particular because the mouse pointer is warped to the key press
- * location, see gtk_test_simulate_key() for details.
+ * location, see gdk_test_simulate_key() for details.
  *
  * Returns: wether all actions neccessary for the key event simulation were carried out successfully.
  **/
@@ -208,79 +113,10 @@ gtk_test_widget_send_key (GtkWidget      *widget,
     iwindows = test_find_widget_input_windows (widget, TRUE);
   if (!iwindows)
     return FALSE;
-  k1res = gtk_test_simulate_key (iwindows->data, -1, -1, keyval, modifiers, TRUE);
-  k2res = gtk_test_simulate_key (iwindows->data, -1, -1, keyval, modifiers, FALSE);
+  k1res = gdk_test_simulate_key (iwindows->data, -1, -1, keyval, modifiers, GDK_KEY_PRESS);
+  k2res = gdk_test_simulate_key (iwindows->data, -1, -1, keyval, modifiers, GDK_KEY_RELEASE);
   g_slist_free (iwindows);
   return k1res && k2res;
-}
-
-/**
- * gtk_test_simulate_button
- * @window: Gdk window to simulate a button event for.
- * @x:      x coordinate within @window for the button event.
- * @y:      y coordinate within @window for the button event.
- * @button: Number of the pointer button for the event, usually 1, 2 or 3.
- * @modifiers: Keyboard modifiers the event is setup with.
- * @press_or_release: %TRUE to generate button press events, %FALSE to generate button release events.
- *
- * This function is intended to be used in Gtk+ test programs.
- * It will warp the mouse pointer to the given (@x,@y) corrdinates
- * within @window and simulate a button press or release event.
- * Because the mouse pointer needs to be warped to the target
- * location, use of this function outside of test programs that
- * run in their own virtual windowing system (e.g. Xvfb) is not
- * recommended.
- * Also, gtk_test_simulate_button() is a fairly low level function,
- * for most testing purposes, gtk_test_widget_click() is the right
- * function to call which will generate a button press event followed
- * by its accompanying button release event.
- *
- * Returns: wether all actions neccessary for a button event simulation were carried out successfully.
- **/
-gboolean
-gtk_test_simulate_button (GdkWindow      *window,
-                          gint            x,
-                          gint            y,
-                          guint           button, /*1..3*/
-                          GdkModifierType modifiers,
-                          gboolean        press_or_release)
-{
-  GdkScreen *screen = gdk_colormap_get_screen (gdk_drawable_get_colormap (window));
-  XButtonEvent xev = {
-    0,  /* type */
-    0,  /* serial */
-    1,  /* send_event */
-  };
-  if (x < 0 && y < 0)
-    {
-      gdk_drawable_get_size (window, &x, &y);
-      x /= 2;
-      y /= 2;
-    }
-  xev.type = press_or_release ? ButtonPress : ButtonRelease;
-  xev.display = GDK_DRAWABLE_XDISPLAY (window);
-  xev.window = GDK_WINDOW_XID (window);
-  xev.root = RootWindow (xev.display, GDK_SCREEN_XNUMBER (screen));
-  xev.subwindow = 0;
-  xev.time = 0;
-  xev.x = x;
-  xev.y = y;
-  xev.x_root = 0;
-  xev.y_root = 0;
-  xev.state = modifiers;
-  xev.button = button;
-  gdk_error_trap_push ();
-  xev.same_screen = XTranslateCoordinates (xev.display, xev.window, xev.root,
-                                           xev.x, xev.y, &xev.x_root, &xev.y_root,
-                                           &xev.subwindow);
-  if (!xev.subwindow)
-    xev.subwindow = xev.window;
-  gboolean success = xev.same_screen;
-  success &= 0 != XWarpPointer (xev.display, None, xev.window, 0, 0, 0, 0, xev.x, xev.y);
-  success &= 0 != XSendEvent (xev.display, xev.window, True, press_or_release ? ButtonPressMask : ButtonReleaseMask, (XEvent*) &xev);
-  XSync (xev.display, False);
-  success &= 0 == gdk_error_trap_pop();
-  return success;
 }
 
 /**
@@ -296,7 +132,7 @@ gtk_test_simulate_button (GdkWindow      *window,
  * input-only event window. For other widgets, this is usually widget->window.
  * Certain caveats should be considered when using this function, in
  * particular because the mouse pointer is warped to the button click
- * location, see gtk_test_simulate_button() for details.
+ * location, see gdk_test_simulate_button() for details.
  *
  * Returns: wether all actions neccessary for the button click simulation were carried out successfully.
  **/
@@ -311,8 +147,8 @@ gtk_test_widget_click (GtkWidget      *widget,
     iwindows = test_find_widget_input_windows (widget, TRUE);
   if (!iwindows)
     return FALSE;
-  b1res = gtk_test_simulate_button (iwindows->data, -1, -1, button, modifiers, TRUE);
-  b2res = gtk_test_simulate_button (iwindows->data, -1, -1, button, modifiers, FALSE);
+  b1res = gdk_test_simulate_button (iwindows->data, -1, -1, button, modifiers, GDK_BUTTON_PRESS);
+  b2res = gdk_test_simulate_button (iwindows->data, -1, -1, button, modifiers, GDK_BUTTON_RELEASE);
   g_slist_free (iwindows);
   return b1res && b2res;
 }
@@ -340,8 +176,8 @@ gtk_test_spin_button_click (GtkSpinButton  *spinner,
       gint width, height, pos;
       gdk_drawable_get_size (spinner->panel, &width, &height);
       pos = upwards ? 0 : height - 1;
-      b1res = gtk_test_simulate_button (spinner->panel, width - 1, pos, button, 0, TRUE);
-      b2res = gtk_test_simulate_button (spinner->panel, width - 1, pos, button, 0, FALSE);
+      b1res = gdk_test_simulate_button (spinner->panel, width - 1, pos, button, 0, GDK_BUTTON_PRESS);
+      b2res = gdk_test_simulate_button (spinner->panel, width - 1, pos, button, 0, GDK_BUTTON_RELEASE);
     }
   return b1res && b2res;
 }
@@ -730,25 +566,6 @@ gtk_test_create_simple_window (const gchar *window_title,
   g_signal_connect (window, "destroy", G_CALLBACK (try_main_quit), NULL);
   gtk_widget_show_all (vbox);
   return window;
-}
-
-/**
- * gtk_test_xserver_render_sync
- * @window: a mapped GdkWindow
- *
- * This function retrives a pixel from @window to force the windowing
- * system to carry out any pending rendering commands.
- * This function is intended to be used to syncronize with rendering
- * pipelines, to benchmark windowing system rendering operations.
- **/
-void
-gtk_test_xserver_render_sync (GdkWindow *window)
-{
-  static GdkImage *p1image = NULL;
-  /* syncronize to X drawing queue, see:
-   * http://mail.gnome.org/archives/gtk-devel-list/2006-October/msg00103.html
-   */
-  p1image = gdk_drawable_copy_to_image (window, p1image, 0, 0, 0, 0, 1, 1);
 }
 
 /**

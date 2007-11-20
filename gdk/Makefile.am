@@ -85,6 +85,7 @@ gdk_public_h_sources =				\
 	gdkscreen.h				\
 	gdkselection.h				\
 	gdkspawn.h				\
+	gdktestutils.h				\
 	gdktypes.h				\
 	gdkvisual.h				\
 	gdkwindow.h

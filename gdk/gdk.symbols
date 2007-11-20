@@ -27,6 +27,14 @@ gdk_events_pending
 #endif
 #endif
 
+#if IN_HEADER(__GDK_TEST_UTILS_H__)
+#if IN_FILE(__GDK_TEST_UTILS_X11_C__)
+gdk_test_simulate_button
+gdk_test_simulate_key
+gdk_test_render_sync
+#endif
+#endif
+
 #if IN_HEADER(__GDK_EVENTS_H__)
 #if IN_FILE(__GDK_EVENTS_C__)
 gdk_event_copy

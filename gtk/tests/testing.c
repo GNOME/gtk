@@ -157,7 +157,7 @@ test_xserver_sync (void)
         {
           gdk_draw_line (darea->window, darea->style->black_gc, 0, 0, 320, 200);
           gdk_draw_line (darea->window, darea->style->black_gc, 320, 0, 0, 200);
-          gtk_test_xserver_render_sync (darea->window);
+          gdk_test_render_sync (darea->window);
         }
       g_timer_stop (gtimer);
       sync_time = g_timer_elapsed (gtimer, NULL);
