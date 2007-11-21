@@ -1,3 +1,8 @@
+2007-11-21  Behdad Esfahbod  <behdad@gnome.org>
+
+	* tests/testrichtext.c (setup_buffer): Fix C89 compilation issue.
+	(#467711, The Written Word)
+
 2007-11-21  Ross Burton  <ross@openedhand.com>
 
 	* gdk/x11/gdksettings.c:
