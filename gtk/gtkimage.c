@@ -1342,6 +1342,7 @@ static gint
 animation_timeout (gpointer data)
 {
   GtkImage *image;
+  int delay;
 
   image = GTK_IMAGE (data);
   
@@ -1349,16 +1350,17 @@ animation_timeout (gpointer data)
 
   gdk_pixbuf_animation_iter_advance (image->data.anim.iter, NULL);
 
-  if (gdk_pixbuf_animation_iter_get_delay_time (image->data.anim.iter) >= 0)
-    image->data.anim.frame_timeout =
-      gdk_threads_add_timeout (gdk_pixbuf_animation_iter_get_delay_time (image->data.anim.iter),
-                     animation_timeout,
-                     image);
+  delay = gdk_pixbuf_animation_iter_get_delay_time (image->data.anim.iter);
+  if (delay >= 0)
+    {
+      image->data.anim.frame_timeout =
+        gdk_threads_add_timeout (delay, animation_timeout, image);
 
-  gtk_widget_queue_draw (GTK_WIDGET (image));
+      gtk_widget_queue_draw (GTK_WIDGET (image));
 
-  if (GTK_WIDGET_DRAWABLE (image))
-    gdk_window_process_updates (GTK_WIDGET (image)->window, TRUE);
+      if (GTK_WIDGET_DRAWABLE (image))
+        gdk_window_process_updates (GTK_WIDGET (image)->window, TRUE);
+    }
 
   return FALSE;
 }
