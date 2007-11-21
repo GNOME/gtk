@@ -45,6 +45,7 @@ libgdk_quartz_la_SOURCES =    	\
 	gdkscreen-quartz.c	\
 	gdkselection-quartz.c	\
 	gdkspawn-quartz.c	\
+	gdktestutils-quartz.c	\
 	gdkvisual-quartz.c	\
 	gdkwindow-quartz.c	\
 	gdkwindow-quartz.h	\

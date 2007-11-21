@@ -1,3 +1,8 @@
+2007-11-21  Richard Hult  <richard@imendio.com>
+
+	* gdk/quartz/Makefile.am: * gdk/quartz/gdktestutils-quartz.c: Add
+	stubs for the testing functions to fix the build.
+
 2007-11-21  Behdad Esfahbod  <behdad@gnome.org>
 
 	* tests/testrichtext.c (setup_buffer): Fix C89 compilation issue.
