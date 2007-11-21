@@ -1,3 +1,8 @@
+2007-11-21  Ross Burton  <ross@openedhand.com>
+
+	* gdk/x11/gdksettings.c:
+	Add xsetting for gtk-scrolled-window-placement (#458103).
+
 2007-11-21  Behdad Esfahbod  <behdad@gnome.org>
 
 	* gtk/gtkmenuitem.c (gtk_menu_item_class_init),
