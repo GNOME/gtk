@@ -1,3 +1,10 @@
+2007-11-21  Behdad Esfahbod  <behdad@gnome.org>
+
+	* gdk/x11/gdksettings.c (gdk_settings_names, gdk_settings_map): Add
+	Gtk/EnableAccels and Gtk/EnableMnemonics xsettings for
+	gtk-enable-accels and gtk-enable-mnemonics GtkSettings respectively.
+	(#436536, Tommi Komulainen)
+
 2007-11-21  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtktoolbar.c: Fix the default value of the toolbar-style

@@ -65,7 +65,9 @@ static const char gdk_settings_names[] =
   "Xft/RGBA\0"                "gtk-xft-rgba\0"
   "Xft/DPI\0"                 "gtk-xft-dpi\0"
   "Net/FallbackIconTheme\0"   "gtk-fallback-icon-theme\0"
-  "Gtk/TouchscreenMode\0"     "gtk-touchscreen-mode\0";
+  "Gtk/TouchscreenMode\0"     "gtk-touchscreen-mode\0"
+  "Gtk/EnableAccels\0"        "gtk-enable-accels\0"
+  "Gtk/EnableMnemonics\0"     "gtk-enable-mnemonics\0";
 
 static const struct
 {
@@ -107,5 +109,7 @@ static const struct
   { 1197, 1206 },
   { 1219, 1227 },
   { 1239, 1261 },
-  { 1285, 1305 }
+  { 1285, 1305 },
+  { 1326, 1343 },
+  { 1361, 1381 }
 };
