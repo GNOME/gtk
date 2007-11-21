@@ -241,6 +241,13 @@ gtk_menu_item_class_init (GtkMenuItemClass *klass)
 							     G_MAXINT,
 							     10,
 							     GTK_PARAM_READABLE));
+
+  gtk_widget_class_install_style_property (widget_class,
+                                           g_param_spec_float ("arrow-scaling",
+                                                               P_("Arrow Scaling"),
+                                                               P_("Amount of space used up by arrow, relative to the menu item's font size"),
+                                                               0.0, 2.0, 0.8,
+                                                               GTK_PARAM_READABLE));
 }
 
 static void
@@ -862,31 +869,34 @@ gtk_menu_item_paint (GtkWidget    *widget,
 	  gint arrow_size;
 	  gint arrow_extent;
 	  guint horizontal_padding;
+          gfloat arrow_scaling;
 	  GtkTextDirection direction;
 	  GtkArrowType arrow_type;
 	  PangoContext *context;
 	  PangoFontMetrics *metrics;
-	  gint ascent, descent;
 
 	  direction = gtk_widget_get_direction (widget);
       
  	  gtk_widget_style_get (widget,
  				"horizontal-padding", &horizontal_padding,
+                                "arrow-scaling", &arrow_scaling,
  				NULL);
  	  
 	  context = gtk_widget_get_pango_context (GTK_BIN (menu_item)->child);
 	  metrics = pango_context_get_metrics (context, 
 					       GTK_WIDGET (GTK_BIN (menu_item)->child)->style->font_desc,
 					       pango_context_get_language (context));
-	  
-	  ascent = pango_font_metrics_get_ascent (metrics);
-	  descent = pango_font_metrics_get_descent (metrics);
-	  pango_font_metrics_unref (metrics);
-	  
-	  arrow_size = PANGO_PIXELS (ascent + descent) - 2 * widget->style->ythickness;
 
-	  arrow_extent = arrow_size * 0.8;
-	  
+	  arrow_size = (PANGO_PIXELS (pango_font_metrics_get_ascent (metrics) +
+                                      pango_font_metrics_get_descent (metrics)));
+
+	  pango_font_metrics_unref (metrics);
+
+	  arrow_extent = arrow_size * arrow_scaling;
+
+          g_printerr ("%s: scaling = %f   size = %d   extent = %d\n",
+                      G_STRFUNC, arrow_scaling, arrow_size, arrow_extent);
+
 	  shadow_type = GTK_SHADOW_OUT;
 	  if (state_type == GTK_STATE_PRELIGHT)
 	    shadow_type = GTK_SHADOW_IN;
