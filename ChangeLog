@@ -1,4 +1,11 @@
-2007-11-22 15:39:40  Tim Janik  <timj@imendio.com>
+2007-11-22 15:48:26  Tim Janik  <timj@imendio.com>
+
+        * Makefile.decl: initialize automake variables EXTRA_DIST and
+	TEST_PROGS for unconditional appending via += in other makefiles.
+	define recursive test targets: test, test-report, perf-report,
+	full-report, as described here:
+      http://mail.gnome.org/archives/gtk-devel-list/2007-November/msg00000.html
+	the test targets will execute Gtk+ test programs within an Xvfb session.
 
         * gtk/gtktestutils.c: call g_test_init() from gtk_test_init().
 
