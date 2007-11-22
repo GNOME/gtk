@@ -622,7 +622,7 @@ _post_send (GtkCupsRequest *request)
   if (request->data_io != NULL)
     {
       fstat (g_io_channel_unix_get_fd (request->data_io), &data_info);
-      sprintf (length, "%lu", (unsigned long) ippLength (request->ipp_request) + data_info.st_size);
+      sprintf (length, "%lu", (unsigned long) (ippLength (request->ipp_request) + data_info.st_size));
     }
   else
     sprintf (length, "%lu", (unsigned long) ippLength (request->ipp_request));
