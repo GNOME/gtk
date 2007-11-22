@@ -1,3 +1,7 @@
+2007-11-22  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtktextiter.c: Fix an aliasing problem.  (#347585, Ed Catmur)
+
 2007-11-21  Richard Hult  <richard@imendio.com>
 
 	* gdk/quartz/Makefile.am: * gdk/quartz/gdktestutils-quartz.c: Add
