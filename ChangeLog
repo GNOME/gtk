@@ -2,6 +2,13 @@
 
 	Merged from trunk:
 
+	* gtk/gtktoolbar.c: Fix the default value of the toolbar-style
+	property.  (#489782, Jan Janech)
+
+2007-11-22  Matthias Clasen  <mclasen@redhat.com>
+
+	Merged from trunk:
+
 	* gtk/gtkimage.c (animation_timeout): Avoid drawing one too many
 	frames.  (#107398, Owen Taylor, Miguel Gomez)
 
