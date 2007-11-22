@@ -64,11 +64,13 @@ setup_buffer (GtkTextBuffer *buffer)
 {
   const guint tlen = strlen (example_text);
   const guint tcount = 17;
-  GtkTextTag *tags[tcount];
+  GtkTextTag **tags;
   GtkTextTagTable *ttable = gtk_text_buffer_get_tag_table (buffer);
   GSList *node, *slist = NULL;
   GdkAtom atom;
   guint i;
+
+  tags = g_malloc (sizeof (GtkTextTag *) * tcount);
 
   /* cleanup */
   gtk_text_buffer_set_text (buffer, "", 0);
@@ -103,6 +105,8 @@ setup_buffer (GtkTextBuffer *buffer)
   /* return serialization format */
   atom = gtk_text_buffer_register_deserialize_tagset (buffer, NULL);
   gtk_text_buffer_deserialize_set_can_create_tags (buffer, atom, TRUE);
+
+  g_free (tags);
 
   return atom;
 }

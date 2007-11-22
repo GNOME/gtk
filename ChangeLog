@@ -2,6 +2,13 @@
 
 	Merged from trunk:
 
+	* tests/testrichtext.c (setup_buffer): Fix C89 compilation issue.
+	(#467711, The Written Word)
+
+2007-11-22  Matthias Clasen  <mclasen@redhat.com>
+
+	Merged from trunk:
+
 	* gtk/gtktoolbar.c: Fix the default value of the toolbar-style
 	property.  (#489782, Jan Janech)
 
