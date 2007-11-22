@@ -1,3 +1,10 @@
+2007-11-22  Matthias Clasen  <mclasen@redhat.com>
+
+	Merged from trunk:
+
+	* gtk/gtkimage.c (animation_timeout): Avoid drawing one too many
+	frames.  (#107398, Owen Taylor, Miguel Gomez)
+
 2007-11-19 10:27:39  Tim Janik  <timj@imendio.com>
 
 	=== Branch for 2.12 ===
