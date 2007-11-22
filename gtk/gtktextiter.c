@@ -38,7 +38,7 @@
 
 typedef struct _GtkTextRealIter GtkTextRealIter;
 
-struct _GtkTextRealIter
+struct G_GNUC_MAY_ALIAS _GtkTextRealIter
 {
   /* Always-valid information */
   GtkTextBTree *tree;

@@ -2,6 +2,12 @@
 
 	Merged from trunk:
 
+	* gtk/gtktextiter.c: Fix an aliasing problem.  (#347585, Ed Catmur)
+
+2007-11-22  Matthias Clasen  <mclasen@redhat.com>
+
+	Merged from trunk:
+
 	* tests/testrichtext.c (setup_buffer): Fix C89 compilation issue.
 	(#467711, The Written Word)
 
