@@ -2,6 +2,13 @@
 
 	Merged from trunk:
 
+	* modules/printbackends/cups/gtkcupsutils.c: Fix a casting problem.
+	(#485662, patch by Herbert Valerio Riedel)
+
+2007-11-22  Matthias Clasen  <mclasen@redhat.com>
+
+	Merged from trunk:
+
 	* gtk/gtktextiter.c: Fix an aliasing problem.  (#347585, Ed Catmur)
 
 2007-11-22  Matthias Clasen  <mclasen@redhat.com>
