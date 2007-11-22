@@ -15,7 +15,7 @@ msgstr ""
 "Project-Id-Version: gtk+-properties HEAD\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2007-08-24 03:51+0100\n"
-"PO-Revision-Date: 2007-11-11 19:59+0200\n"
+"PO-Revision-Date: 2007-11-22 08:17+0200\n"
 "Last-Translator: Ivar Smolin <okul@linux.ee>\n"
 "Language-Team: Estonian <gnome-et@linux.ee>\n"
 "MIME-Version: 1.0\n"
@@ -536,15 +536,15 @@ msgstr "Noole vari"
 
 #: ../gtk/gtkarrow.c:85
 msgid "Appearance of the shadow surrounding the arrow"
-msgstr ""
+msgstr "Noolt ümbritseva varju välimus"
 
 #: ../gtk/gtkarrow.c:91
 msgid "Arrow Scaling"
-msgstr ""
+msgstr "Noole skaleerimine"
 
 #: ../gtk/gtkarrow.c:92
 msgid "Amount of space used up by arrow"
-msgstr ""
+msgstr "Noole poolt kasutatava ruumi hulk"
 
 #: ../gtk/gtkaspectframe.c:79
 msgid "Horizontal Alignment"
@@ -835,7 +835,7 @@ msgstr ""
 
 #: ../gtk/gtkbutton.c:411
 msgid "Extra space to add for CAN_DEFAULT buttons"
-msgstr ""
+msgstr "CAN_DEFAULT nuppudele lisatav täiendav ruum"
 
 #: ../gtk/gtkbutton.c:417
 msgid "Default Outside Spacing"
@@ -889,7 +889,7 @@ msgstr ""
 
 #: ../gtk/gtkbutton.c:477
 msgid "Spacing in pixels between the image and label"
-msgstr ""
+msgstr "Pildi ja sildi vahel oleva vahe suurus pikslites"
 
 #: ../gtk/gtkbutton.c:485
 msgid "Show button images"
@@ -1027,19 +1027,19 @@ msgstr "Fikseeritud kõrgus"
 
 #: ../gtk/gtkcellrenderer.c:261
 msgid "Is Expander"
-msgstr ""
+msgstr "On laiendaja"
 
 #: ../gtk/gtkcellrenderer.c:262
 msgid "Row has children"
-msgstr ""
+msgstr "Rida omab alamridu"
 
 #: ../gtk/gtkcellrenderer.c:270
 msgid "Is Expanded"
-msgstr ""
+msgstr "On laiendatud"
 
 #: ../gtk/gtkcellrenderer.c:271
 msgid "Row is an expander row, and is expanded"
-msgstr ""
+msgstr "Rida on laiendaja ja on ka laiendatud olekus"
 
 #: ../gtk/gtkcellrenderer.c:278
 msgid "Cell background color name"
@@ -1991,7 +1991,7 @@ msgstr ""
 
 #: ../gtk/gtkdialog.c:174
 msgid "Spacing between buttons"
-msgstr ""
+msgstr "Nuppude vahel olev ruum"
 
 #: ../gtk/gtkdialog.c:182
 msgid "Action area border"
@@ -2116,7 +2116,7 @@ msgstr ""
 
 #: ../gtk/gtkentry.c:891
 msgid "Border between text and frame."
-msgstr ""
+msgstr "Teksti ja raami vahel asuv ääris."
 
 #: ../gtk/gtkentry.c:896 ../gtk/gtklabel.c:625
 msgid "Select on focus"
@@ -2228,7 +2228,7 @@ msgstr "Las laiendaja on lapsvidina näitamiseks avatud või mitte"
 
 #: ../gtk/gtkexpander.c:196
 msgid "Text of the expander's label"
-msgstr ""
+msgstr "Laiendaja sildi tekst"
 
 #: ../gtk/gtkexpander.c:211 ../gtk/gtklabel.c:311
 msgid "Use markup"
@@ -2252,15 +2252,15 @@ msgstr ""
 
 #: ../gtk/gtkexpander.c:236 ../gtk/gtktreeview.c:777
 msgid "Expander Size"
-msgstr ""
+msgstr "Laiendaja suurus"
 
 #: ../gtk/gtkexpander.c:237 ../gtk/gtktreeview.c:778
 msgid "Size of the expander arrow"
-msgstr ""
+msgstr "Laiendaja noole suurus"
 
 #: ../gtk/gtkexpander.c:246
 msgid "Spacing around expander arrow"
-msgstr ""
+msgstr "Laiendaja noole ümber olev ruum"
 
 #: ../gtk/gtkfilechooser.c:197
 msgid "Action"
@@ -2429,7 +2429,7 @@ msgstr "Valitud kirjatüübi nimi"
 
 #: ../gtk/gtkfontbutton.c:161
 msgid "Sans 12"
-msgstr ""
+msgstr "Sans 12"
 
 #: ../gtk/gtkfontbutton.c:176
 msgid "Use font in label"
@@ -2449,27 +2449,27 @@ msgstr "Kas silt joonistatakse valitud suurusega või mitte"
 
 #: ../gtk/gtkfontbutton.c:209
 msgid "Show style"
-msgstr ""
+msgstr "Laadi näitamine"
 
 #: ../gtk/gtkfontbutton.c:210
 msgid "Whether the selected font style is shown in the label"
-msgstr ""
+msgstr "Kas valitud kirjatüübi laadi näidatakse sildil või mitte"
 
 #: ../gtk/gtkfontbutton.c:225
 msgid "Show size"
-msgstr ""
+msgstr "Suuruse näitamine"
 
 #: ../gtk/gtkfontbutton.c:226
 msgid "Whether selected font size is shown in the label"
-msgstr ""
+msgstr "Kas valitud kirjatüübi suurust näidatakse sildil või mitte"
 
 #: ../gtk/gtkfontsel.c:180
 msgid "The X string that represents this font"
-msgstr ""
+msgstr "Seda kirjatüüpi esitav X-string"
 
 #: ../gtk/gtkfontsel.c:187
 msgid "The GdkFont that is currently selected"
-msgstr ""
+msgstr "Hetkel valitud GdkFont"
 
 #: ../gtk/gtkfontsel.c:193
 msgid "Preview text"
@@ -2481,7 +2481,7 @@ msgstr ""
 
 #: ../gtk/gtkframe.c:106
 msgid "Text of the frame's label"
-msgstr ""
+msgstr "Raami sildi tekst"
 
 #: ../gtk/gtkframe.c:113
 msgid "Label xalign"
@@ -2505,11 +2505,11 @@ msgstr ""
 
 #: ../gtk/gtkframe.c:138
 msgid "Frame shadow"
-msgstr ""
+msgstr "Raami vari"
 
 #: ../gtk/gtkframe.c:139
 msgid "Appearance of the frame border"
-msgstr ""
+msgstr "Raami äärise välimus"
 
 #: ../gtk/gtkframe.c:148
 msgid "A widget to display in place of the usual frame label"
@@ -2517,7 +2517,7 @@ msgstr ""
 
 #: ../gtk/gtkhandlebox.c:177
 msgid "Appearance of the shadow that surrounds the container"
-msgstr ""
+msgstr "Konteineri ümber oleva varju välimus"
 
 #: ../gtk/gtkhandlebox.c:185
 msgid "Handle position"
@@ -2946,7 +2946,7 @@ msgstr "Topeltnooled"
 
 #: ../gtk/gtkmenu.c:543
 msgid "When scrolling, always show both arrows."
-msgstr ""
+msgstr "Kerimisel näidatakse alati mõlemat noolt."
 
 #: ../gtk/gtkmenu.c:551
 msgid "Left Attach"
@@ -3378,7 +3378,7 @@ msgstr ""
 
 #: ../gtk/gtkoptionmenu.c:175
 msgid "Spacing around indicator"
-msgstr ""
+msgstr "Näidiku ümber olev ruum"
 
 #: ../gtk/gtkpaned.c:220
 msgid ""
@@ -4731,39 +4731,39 @@ msgstr "Salve suund"
 
 #: ../gtk/gtktable.c:129
 msgid "Rows"
-msgstr "Read"
+msgstr "Ridu"
 
 #: ../gtk/gtktable.c:130
 msgid "The number of rows in the table"
-msgstr "Ridade arv tabelis"
+msgstr "Tabelis olevate ridade arv"
 
 #: ../gtk/gtktable.c:138
 msgid "Columns"
-msgstr "Veerud"
+msgstr "Veerge"
 
 #: ../gtk/gtktable.c:139
 msgid "The number of columns in the table"
-msgstr "Veergude arv tabelis"
+msgstr "Tabelis olevate veergude arv"
 
 #: ../gtk/gtktable.c:147
 msgid "Row spacing"
-msgstr ""
+msgstr "Ruum ridade vahel"
 
 #: ../gtk/gtktable.c:148
 msgid "The amount of space between two consecutive rows"
-msgstr ""
+msgstr "Kahe kohakuti oleva rea vahele jäetava ruumi hulk"
 
 #: ../gtk/gtktable.c:156
 msgid "Column spacing"
-msgstr ""
+msgstr "Ruum veergude vahel"
 
 #: ../gtk/gtktable.c:157
 msgid "The amount of space between two consecutive columns"
-msgstr ""
+msgstr "Kahe kõrvuti oleva veeru vahele jäetava ruumi hulk"
 
 #: ../gtk/gtktable.c:166
 msgid "If TRUE, the table cells are all the same width/height"
-msgstr ""
+msgstr "Kui märgitud, siis on kõik tabeli lahtrid sama kõrguse ja laiusega"
 
 #: ../gtk/gtktable.c:173
 msgid "Left attachment"
@@ -4814,6 +4814,8 @@ msgid ""
 "Extra space to put between the child and its left and right neighbors, in "
 "pixels"
 msgstr ""
+"Lapskirje vasak- ja parempoolse naaberkirje vahele jäetava täiendava ruumi "
+"hulk pikslites"
 
 #: ../gtk/gtktable.c:222
 msgid "Vertical padding"
@@ -4824,14 +4826,16 @@ msgid ""
 "Extra space to put between the child and its upper and lower neighbors, in "
 "pixels"
 msgstr ""
+"Lapskirje ülemise ja alumise naaberkirje vahele jäetava täiendava ruumi "
+"hulk pikslites"
 
 #: ../gtk/gtktext.c:542
 msgid "Horizontal adjustment for the text widget"
-msgstr ""
+msgstr "Tekstividina rõhtjoondus"
 
 #: ../gtk/gtktext.c:550
 msgid "Vertical adjustment for the text widget"
-msgstr ""
+msgstr "Tekstividina püstjoondus"
 
 #: ../gtk/gtktext.c:557
 msgid "Line Wrap"
@@ -5500,11 +5504,11 @@ msgstr ""
 
 #: ../gtk/gtktreeview.c:604
 msgid "Expander Column"
-msgstr ""
+msgstr "Laiendusveerg"
 
 #: ../gtk/gtktreeview.c:605
 msgid "Set the column for the expander column"
-msgstr ""
+msgstr "Veeru määramine laiendusveeruks"
 
 #: ../gtk/gtktreeview.c:620
 msgid "Rules Hint"
@@ -5878,11 +5882,11 @@ msgstr "Kas vidin aktsepteerib sisendi fookust või mitte"
 
 #: ../gtk/gtkwidget.c:537
 msgid "Has focus"
-msgstr ""
+msgstr "On fookuses"
 
 #: ../gtk/gtkwidget.c:538
 msgid "Whether the widget has the input focus"
-msgstr ""
+msgstr "Kas vidin on sisestamisfookuses või mitte"
 
 #: ../gtk/gtkwidget.c:544
 msgid "Is focus"
@@ -5894,19 +5898,19 @@ msgstr ""
 
 #: ../gtk/gtkwidget.c:551
 msgid "Can default"
-msgstr ""
+msgstr "Võib olla vaikimisi vidin"
 
 #: ../gtk/gtkwidget.c:552
 msgid "Whether the widget can be the default widget"
-msgstr ""
+msgstr "Kas vidin võib olla vaikimisi vidin või mitte"
 
 #: ../gtk/gtkwidget.c:558
 msgid "Has default"
-msgstr ""
+msgstr "On vaikimisi vidin"
 
 #: ../gtk/gtkwidget.c:559
 msgid "Whether the widget is the default widget"
-msgstr ""
+msgstr "Kas vidin on vaikimisi vidin või mitte"
 
 #: ../gtk/gtkwidget.c:565
 msgid "Receives default"
