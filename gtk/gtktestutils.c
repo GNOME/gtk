@@ -50,6 +50,7 @@ gtk_test_init (int    *argcp,
                char ***argvp,
                ...)
 {
+  g_test_init (argcp, argvp, NULL);
   /* - enter C locale
    * - call g_test_init();
    * - call gtk_init();

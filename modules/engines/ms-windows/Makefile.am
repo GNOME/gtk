@@ -1,6 +1,8 @@
+include $(top_srcdir)/Makefile.decl
+
 SUBDIRS=Theme
 
-EXTRA_DIST=Makefile.msc
+EXTRA_DIST += Makefile.msc
 
 INCLUDES = \
 	-I$(top_srcdir) 				\

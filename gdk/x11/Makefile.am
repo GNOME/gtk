@@ -1,4 +1,5 @@
 ## Process this file with automake to produce Makefile.in
+include $(top_srcdir)/Makefile.decl
 
 libgdkincludedir = $(includedir)/gtk-2.0/gdk
 
@@ -76,7 +77,7 @@ TESTS = checksettings
 
 # We need to include all these C files here since the conditionals
 # don't seem to be correctly expanded for the dist files.
-EXTRA_DIST = 			\
+EXTRA_DIST += 			\
 	gdkinput-x11.c		\
 	gdkinput-xfree.c	\
 	gdkinput-none.c		\

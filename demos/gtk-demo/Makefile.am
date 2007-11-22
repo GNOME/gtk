@@ -1,4 +1,5 @@
 ## Makefile.am for gtk+/demos
+include $(top_srcdir)/Makefile.decl
 
 democodedir=$(datadir)/gtk-2.0/demo
 
@@ -60,7 +61,7 @@ bin_PROGRAMS = gtk-demo
 
 BUILT_SOURCES = demos.h
 
-EXTRA_DIST = 		\
+EXTRA_DIST += 		\
 	$(IMAGEFILES)	\
 	demo.ui
 

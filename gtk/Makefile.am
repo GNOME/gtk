@@ -1,4 +1,5 @@
 # Makefile.am for gtk+/gtk
+include $(top_srcdir)/Makefile.decl
 
 SUBDIRS = theme-bits . tests
 
@@ -746,7 +747,7 @@ gtk_extra_sources =				\
 #
 MAINTAINERCLEANFILES = $(gtk_built_sources) $(stamp_files) $(GENERATED_ICONS)
 EXTRA_HEADERS =
-EXTRA_DIST = $(gtk_private_h_sources) $(gtk_extra_sources)
+EXTRA_DIST += $(gtk_private_h_sources) $(gtk_extra_sources)
 EXTRA_DIST += $(gtk_built_sources)
 EXTRA_DIST += $(STOCK_ICONS)
 

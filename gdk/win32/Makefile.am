@@ -1,4 +1,5 @@
 ## Process this file with automake to produce Makefile.in
+include $(top_srcdir)/Makefile.decl
 
 libgdkincludedir = $(includedir)/gtk-2.0/gdk
 
@@ -19,7 +20,7 @@ noinst_LTLIBRARIES = libgdk-win32.la
 
 SUBDIRS=rc
 
-EXTRA_DIST = \
+EXTRA_DIST += \
 	bdfcursor.c \
 	makefile.msc
 

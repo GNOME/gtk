@@ -1,4 +1,5 @@
 ## Makefile.am for GTK+
+include $(top_srcdir)/Makefile.decl
 
 SRC_SUBDIRS = gdk-pixbuf gdk gtk modules demos tests perf contrib
 SUBDIRS = po po-properties $(SRC_SUBDIRS) docs m4macros
@@ -6,7 +7,7 @@ SUBDIRS = po po-properties $(SRC_SUBDIRS) docs m4macros
 # require automake 1.4
 AUTOMAKE_OPTIONS = 1.7
 
-EXTRA_DIST =			\
+EXTRA_DIST +=			\
 	HACKING			\
 	makecopyright		\
 	NEWS.pre-1-0		\

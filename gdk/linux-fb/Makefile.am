@@ -1,4 +1,5 @@
 ## Process this file with automake to produce Makefile.in
+include $(top_srcdir)/Makefile.decl
 
 bin_PROGRAMS =
 
@@ -80,4 +81,4 @@ gdkfbmanager_LDFLAGS = $(GLIB_LIBS)
 gdkfbswitch_sources = gdkfbswitch.c
 gdkfbswitch_LDFLAGS = $(GLIB_LIBS)
 
-EXTRA_DIST=x-cursors.xbm
+EXTRA_DIST += x-cursors.xbm

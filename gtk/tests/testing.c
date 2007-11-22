@@ -222,11 +222,11 @@ main (int   argc,
 {
   gtk_test_init (&argc, &argv);
   gtk_test_register_all_types();
-  test_text_access();
-  test_button_clicks();
-  test_button_keys();
-  test_slider_ranges();
-  test_xserver_sync();
-  test_spin_button_arrows();
-  return 0;
+  g_test_add_func ("/ui-tests/text-access", test_text_access);
+  g_test_add_func ("/ui-tests/button-clicks", test_button_clicks);
+  g_test_add_func ("/ui-tests/keys-events", test_button_keys);
+  g_test_add_func ("/ui-tests/slider-ranges", test_slider_ranges);
+  g_test_add_func ("/ui-tests/xserver-sync", test_xserver_sync);
+  g_test_add_func ("/ui-tests/spin-button-arrows", test_spin_button_arrows);
+  return g_test_run();
 }

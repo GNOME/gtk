@@ -1,8 +1,9 @@
 ## Process this file with automake to produce Makefile.in
+include $(top_srcdir)/Makefile.decl
 
 SUBDIRS = tutorial faq reference tools
 
-EXTRA_DIST = \
+EXTRA_DIST += \
 	defsformat.txt			\
 	developers.txt			\
 	dnd_internals.txt		\

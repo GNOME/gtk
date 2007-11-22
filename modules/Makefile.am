@@ -1,3 +1,5 @@
+include $(top_srcdir)/Makefile.decl
+
 if OS_UNIX
 PRINTBACKENDS_SUBDIR=printbackends
 endif

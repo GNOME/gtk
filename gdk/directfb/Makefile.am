@@ -1,4 +1,5 @@
 ## Makefile.am for gtk+/gdk/gdk-directfb
+include $(top_srcdir)/Makefile.decl
 
 libgdkincludedir = $(includedir)/gtk-2.0/gdk
 
@@ -52,4 +53,4 @@ libgdkinclude_HEADERS =		\
 	gdkprivate-directfb.h
 
 
-EXTRA_DIST = AUTHORS README TODO 
+EXTRA_DIST += AUTHORS README TODO 

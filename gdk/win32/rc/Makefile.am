@@ -1,4 +1,6 @@
-EXTRA_DIST = \
+include $(top_srcdir)/Makefile.decl
+
+EXTRA_DIST += \
 	gdk.rc \
 	gdk.rc.in \
 	gtk.ico

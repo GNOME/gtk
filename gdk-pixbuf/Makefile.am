@@ -1,3 +1,4 @@
+include $(top_srcdir)/Makefile.decl
 
 SUBDIRS = pixops
 
@@ -482,7 +483,7 @@ distclean-local:
 	  rm -f $(MAINTAINERCLEANFILES); \
 	fi
 
-EXTRA_DIST =					\
+EXTRA_DIST +=					\
         gdk-pixbuf-csource.1			\
 	makefile.msc				\
 	gdk-pixbuf.symbols			\

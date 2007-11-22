@@ -1,3 +1,34 @@
+2007-11-22 15:39:40  Tim Janik  <timj@imendio.com>
+
+        * gtk/gtktestutils.c: call g_test_init() from gtk_test_init().
+
+        * gtk/tests/testing.c: use g_test_add_func() to register tests and use
+	g_test_run() to run the tests to integrate with the testing framework.
+
+        * gtk/tests/Makefile.am: removed exemplary testing rules.
+
+        * Makefile.am, gtk/tests/Makefile.am, gtk/Makefile.am:
+        * gtk/xdgmime/Makefile.am, gtk/theme-bits/Makefile.am:
+        * tests/Makefile.am, docs/reference/gdk-pixbuf/Makefile.am:
+        * docs/reference/gdk/Makefile.am, docs/reference/gtk/Makefile.am:
+        * docs/reference/Makefile.am, docs/tools/Makefile.am:
+        * docs/tutorial/Makefile.am, docs/faq/Makefile.am, docs/Makefile.am:
+        * gdk-pixbuf/pixops/Makefile.am, gdk-pixbuf/Makefile.am:
+        * demos/gtk-demo/Makefile.am, demos/Makefile.am:
+        * modules/input/Makefile.am, modules/printbackends/file/Makefile.am:
+        * modules/printbackends/test/Makefile.am, modules/printbackends/Makefile.am:
+        * modules/printbackends/cups/Makefile.am, modules/printbackends/lpr/Makefile.am:
+        * modules/engines/ms-windows/Theme/gtk-2.0/Makefile.am:
+        * modules/engines/ms-windows/Theme/Makefile.am:
+        * modules/engines/ms-windows/Makefile.am:
+        * modules/engines/Makefile.am,  modules/engines/pixbuf/Makefile.am:
+        * modules/Makefile.am, m4macros/Makefile.am, perf/Makefile.am:
+        * contrib/Makefile.am, contrib/gdk-pixbuf-xlib/Makefile.am:
+        * gdk/directfb/Makefile.am, gdk/linux-fb/Makefile.am:
+        * gdk/quartz/Makefile.am, gdk/win32/rc/Makefile.am:
+        * gdk/win32/Makefile.am, gdk/x11/Makefile.am, gdk/Makefile.am:
+	include $(top_srcdir)/Makefile.decl, adapted EXTRA_DIST assignments.
+
 2007-11-22  Matthias Clasen  <mclasen@redhat.com>
 
 	* modules/printbackends/cups/gtkcupsutils.c: Fix a casting problem.

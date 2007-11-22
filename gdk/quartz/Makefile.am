@@ -1,3 +1,5 @@
+include $(top_srcdir)/Makefile.decl
+
 libgdkincludedir = $(includedir)/gtk-2.0/gdk
 
 INCLUDES = 				\

@@ -1,4 +1,5 @@
 ## Makefile.am for gtk+/tests
+include $(top_srcdir)/Makefile.decl
 
 INCLUDES =					\
 	-I$(top_srcdir)				\
@@ -317,7 +318,7 @@ testrecentchoosermenu_SOURCES =	\
 testvolumebutton_SOURCES =	\
 	testvolumebutton.c
 
-EXTRA_DIST = 			\
+EXTRA_DIST += 			\
 	prop-editor.h		\
 	testgtk.1 		\
 	testgtkrc 		\

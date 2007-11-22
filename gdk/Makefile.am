@@ -1,9 +1,10 @@
 ## Makefile.am for gtk+/gdk
+include $(top_srcdir)/Makefile.decl
 
 SUBDIRS = $(gdktarget)
 DIST_SUBDIRS = win32 x11 quartz directfb
 
-EXTRA_DIST =			\
+EXTRA_DIST +=			\
 	keynames.txt		\
 	keyname-table.h		\
 	gen-keyname-table.pl	\

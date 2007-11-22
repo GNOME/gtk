@@ -1,4 +1,5 @@
 ## Makefile.am for gtk+/perf
+include $(top_srcdir)/Makefile.decl
 
 INCLUDES =					\
 	-I$(top_srcdir)				\
@@ -93,7 +94,7 @@ typebuiltins.c: @REBUILD@ $(headers_with_enums) Makefile
 	&& rm -f xgen-gtbc
 
 
-EXTRA_DIST = 		\
+EXTRA_DIST += 		\
 	README		\
 	marshalers.list	\
 	$(BUILT_SOURCES)

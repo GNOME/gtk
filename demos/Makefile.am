@@ -1,4 +1,5 @@
 ## Makefile.am for gtk+/demos
+include $(top_srcdir)/Makefile.decl
 
 SUBDIRS = gtk-demo
 
@@ -70,7 +71,7 @@ testpixbuf_scale_SOURCES = testpixbuf-scale.c pixbuf-init.c
 testanimation_SOURCES = testanimation.c pixbuf-init.c
 pixbuf_demo_SOURCES = pixbuf-demo.c pixbuf-init.c
 
-EXTRA_DIST =			\
+EXTRA_DIST +=			\
 	apple-red.png		\
 	background.jpg		\
 	gnome-applets.png	\

@@ -1,6 +1,8 @@
+include $(top_srcdir)/Makefile.decl
+
 .PHONY: html pdf
 
-EXTRA_DIST = \
+EXTRA_DIST += \
 	gtk-tut.sgml			\
 	images/arrow.png		\
 	images/aspectframe.png		\

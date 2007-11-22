@@ -1,3 +1,5 @@
+include $(top_srcdir)/Makefile.decl
+
 INCLUDES = -DXDG_PREFIX=_gtk_xdg
 
 noinst_LTLIBRARIES = libxdgmime.la
