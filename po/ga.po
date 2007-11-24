@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ HEAD\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-10-23 06:33-0600\n"
-"PO-Revision-Date: 2007-10-21 19:45-0700\n"
+"POT-Creation-Date: 2007-11-24 15:14-0700\n"
+"PO-Revision-Date: 2007-11-24 15:14-0700\n"
 "Last-Translator: Seán de Búrca <leftmostcat@gmail.com>\n"
 "Language-Team: Irish <gaeilge-gnulinux@lists.sourceforge.net>\n"
 "MIME-Version: 1.0\n"
@@ -545,40 +545,40 @@ msgstr "An fhormáid íomhá ICO"
 msgid "Error interpreting JPEG image file (%s)"
 msgstr "Earráid agus comhad íomhá JPEG á léirmhíniú (%s)"
 
-#: ../gdk-pixbuf/io-jpeg.c:509
+#: ../gdk-pixbuf/io-jpeg.c:529
 msgid ""
 "Insufficient memory to load image, try exiting some applications to free "
 "memory"
 msgstr ""
 
-#: ../gdk-pixbuf/io-jpeg.c:550 ../gdk-pixbuf/io-jpeg.c:756
+#: ../gdk-pixbuf/io-jpeg.c:570 ../gdk-pixbuf/io-jpeg.c:776
 #, c-format
 msgid "Unsupported JPEG color space (%s)"
 msgstr "Spás datha JPEG gan tacaíocht (%s)"
 
-#: ../gdk-pixbuf/io-jpeg.c:648 ../gdk-pixbuf/io-jpeg.c:920
-#: ../gdk-pixbuf/io-jpeg.c:1153 ../gdk-pixbuf/io-jpeg.c:1162
+#: ../gdk-pixbuf/io-jpeg.c:668 ../gdk-pixbuf/io-jpeg.c:940
+#: ../gdk-pixbuf/io-jpeg.c:1173 ../gdk-pixbuf/io-jpeg.c:1182
 msgid "Couldn't allocate memory for loading JPEG file"
 msgstr "Níorbh fhéidir cuimhne a dháileadh chun comhad JPEG a luchtú"
 
-#: ../gdk-pixbuf/io-jpeg.c:896
+#: ../gdk-pixbuf/io-jpeg.c:916
 msgid "Transformed JPEG has zero width or height."
 msgstr "Tá leithead nó airde nialais ag JPEG trasfhoirmithe."
 
-#: ../gdk-pixbuf/io-jpeg.c:1109
+#: ../gdk-pixbuf/io-jpeg.c:1129
 #, c-format
 msgid ""
 "JPEG quality must be a value between 0 and 100; value '%s' could not be "
 "parsed."
 msgstr ""
 
-#: ../gdk-pixbuf/io-jpeg.c:1124
+#: ../gdk-pixbuf/io-jpeg.c:1144
 #, c-format
 msgid ""
 "JPEG quality must be a value between 0 and 100; value '%d' is not allowed."
 msgstr ""
 
-#: ../gdk-pixbuf/io-jpeg.c:1287
+#: ../gdk-pixbuf/io-jpeg.c:1307
 msgid "The JPEG image format"
 msgstr "An fhormáid íomhá JPEG"
 
@@ -1041,15 +1041,15 @@ msgstr "Admhálacha"
 
 #: ../gtk/gtkaboutdialog.c:2053
 msgid "Written by"
-msgstr "Scríofa le"
+msgstr "Scríofa ag"
 
 #: ../gtk/gtkaboutdialog.c:2056
 msgid "Documented by"
-msgstr "Doiciméadaithe le"
+msgstr "Doiciméadaithe ag"
 
 #: ../gtk/gtkaboutdialog.c:2068
 msgid "Translated by"
-msgstr "Aistrithe le"
+msgstr "Aistrithe ag"
 
 #: ../gtk/gtkaboutdialog.c:2072
 msgid "Artwork by"
@@ -1128,17 +1128,17 @@ msgstr "Space"
 msgid "keyboard label|Backslash"
 msgstr "Backslash"
 
-#: ../gtk/gtkbuilderparser.c:289
+#: ../gtk/gtkbuilderparser.c:269
 #, c-format
 msgid "Invalid type function: `%s'"
 msgstr "Feidhm chineáil neamhbhailí: `%s'"
 
-#: ../gtk/gtkbuilderparser.c:729
+#: ../gtk/gtkbuilderparser.c:718
 #, c-format
 msgid "Invalid root element: '%s'"
 msgstr "Fréamheilimint neamhbhailí: '%s'"
 
-#: ../gtk/gtkbuilderparser.c:761
+#: ../gtk/gtkbuilderparser.c:750
 #, c-format
 msgid "Unhandled tag: '%s'"
 msgstr "Clib gan láimhseáil: '%s'"
@@ -1366,11 +1366,11 @@ msgstr "Roth na nDathanna"
 msgid "Color Selection"
 msgstr "Roghnú Datha"
 
-#: ../gtk/gtkentry.c:5253 ../gtk/gtktextview.c:7617
+#: ../gtk/gtkentry.c:5253 ../gtk/gtktextview.c:7652
 msgid "Input _Methods"
 msgstr "_Modhanna Ionchuir"
 
-#: ../gtk/gtkentry.c:5267 ../gtk/gtktextview.c:7631
+#: ../gtk/gtkentry.c:5267 ../gtk/gtktextview.c:7666
 msgid "_Insert Unicode Control Character"
 msgstr "_Ionsáigh Carachtar Rialú Unicode"
 
@@ -2066,11 +2066,11 @@ msgstr "Bratacha dífhabhtaithe GTK+ a dhíshocrú"
 msgid "default:LTR"
 msgstr "default:LTR"
 
-#: ../gtk/gtkmain.c:751
+#: ../gtk/gtkmain.c:750
 msgid "GTK+ Options"
 msgstr "Roghanna GTK+"
 
-#: ../gtk/gtkmain.c:751
+#: ../gtk/gtkmain.c:750
 msgid "Show GTK+ Options"
 msgstr "Taispeáin Roghanna GTK+"
 
