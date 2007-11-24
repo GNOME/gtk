@@ -15,7 +15,7 @@ msgstr ""
 "Project-Id-Version: gtk+ HEAD\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2007-08-16 03:58+0100\n"
-"PO-Revision-Date: 2007-11-03 19:48+0200\n"
+"PO-Revision-Date: 2007-11-24 14:36+0200\n"
 "Last-Translator: Ivar Smolin <okul@linux.ee>\n"
 "Language-Team: Estonian <gnome-et@linux.ee>\n"
 "MIME-Version: 1.0\n"
@@ -838,7 +838,7 @@ msgstr "Värvikaardi kirjetele pole võimalik mälu eraldada"
 
 #: ../gdk-pixbuf/io-tga.c:716
 msgid "Unexpected bitdepth for colormap entries"
-msgstr ""
+msgstr "Ootamatu bitisügavus värvikaardi kirjetele"
 
 #: ../gdk-pixbuf/io-tga.c:734
 msgid "Cannot allocate TGA header memory"
@@ -1145,7 +1145,7 @@ msgstr "Tühik"
 #. do not translate the part before the |
 #: ../gtk/gtkaccellabel.c:626
 msgid "keyboard label|Backslash"
-msgstr "Backslash"
+msgstr "Kurakaldkriips"
 
 #: ../gtk/gtkbuilderparser.c:289
 #, c-format
@@ -1966,6 +1966,10 @@ msgid ""
 "You can get a copy from:\n"
 "\t%s"
 msgstr ""
+"Ikooni '%s' pole võimalik leida. Teemat '%s'\n"
+"ei leitud, seda pole võib-olla paigaldatudki.\n"
+"Sul on võimalik hankida koopia:\n"
+"\t%s"
 
 #: ../gtk/gtkicontheme.c:1501
 #, c-format
@@ -2119,11 +2123,11 @@ msgstr "GTK+ võtmete näitamine"
 
 #: ../gtk/gtknotebook.c:828
 msgid "Arrow spacing"
-msgstr ""
+msgstr "Ruum noole ümber"
 
 #: ../gtk/gtknotebook.c:829
 msgid "Scroll arrow spacing"
-msgstr ""
+msgstr "Ruum kerimisnoole ümber"
 
 #: ../gtk/gtknotebook.c:4392 ../gtk/gtknotebook.c:6898
 #, c-format
@@ -2419,6 +2423,8 @@ msgid ""
 "Specify one or more page ranges,\n"
 " e.g. 1-3,7,11"
 msgstr ""
+"Määra üks või rohkem leheküljevahemikku.\n"
+" Näiteks: 1-3,7,11"
 
 #: ../gtk/gtkprintunixdialog.c:1553
 msgid "Copies"
@@ -3279,7 +3285,7 @@ msgstr "%d %%"
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:5
 msgid "paper size|asme_f"
-msgstr ""
+msgstr "asme_f"
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:7
@@ -3674,7 +3680,7 @@ msgstr "JB9"
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:163
 msgid "paper size|jis exec"
-msgstr ""
+msgstr "jis exec"
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:165
@@ -3804,7 +3810,7 @@ msgstr "Arch E"
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:217
 msgid "paper size|b-plus"
-msgstr ""
+msgstr "b-plus"
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:219
@@ -3844,7 +3850,7 @@ msgstr ""
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:233
 msgid "paper size|f"
-msgstr ""
+msgstr "f"
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:235
@@ -3909,7 +3915,7 @@ msgstr "US Legal"
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:259
 msgid "paper size|US Legal Extra"
-msgstr ""
+msgstr "US Legal Extra"
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:261
@@ -3969,12 +3975,12 @@ msgstr ""
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:283
 msgid "paper size|Super A"
-msgstr ""
+msgstr "Super A"
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:285
 msgid "paper size|Super B"
-msgstr ""
+msgstr "Super B"
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:287
@@ -3984,7 +3990,7 @@ msgstr "Laiformaat"
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:289
 msgid "paper size|Dai-pa-kai"
-msgstr ""
+msgstr "Dai-pa-kai"
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:291
@@ -4009,12 +4015,12 @@ msgstr "Itaalia ümbrik"
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:299
 msgid "paper size|juuro-ku-kai"
-msgstr ""
+msgstr "juuro-ku-kai"
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:301
 msgid "paper size|pa-kai"
-msgstr ""
+msgstr "pa-kai"
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:303
