@@ -15,7 +15,7 @@ msgstr ""
 "Project-Id-Version: gtk+-properties HEAD\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2007-08-24 03:51+0100\n"
-"PO-Revision-Date: 2007-11-22 08:17+0200\n"
+"PO-Revision-Date: 2007-11-24 14:39+0200\n"
 "Last-Translator: Ivar Smolin <okul@linux.ee>\n"
 "Language-Team: Estonian <gnome-et@linux.ee>\n"
 "MIME-Version: 1.0\n"
@@ -713,7 +713,7 @@ msgstr "Laiendamine"
 
 #: ../gtk/gtkbox.c:117
 msgid "Whether the child should receive extra space when the parent grows"
-msgstr "Kas laps saab rohkem ruumi, kui tema vanema suurus kasvab"
+msgstr "Kas lapsobjekt saab rohkem ruumi, kui vanemobjekti suurus kasvab"
 
 #: ../gtk/gtkbox.c:123
 msgid "Fill"
@@ -724,6 +724,8 @@ msgid ""
 "Whether extra space given to the child should be allocated to the child or "
 "used as padding"
 msgstr ""
+"Kas lapsobjektile antud lisaruum tuleb eraldada lapsobjektile või selle "
+"polsterdusele"
 
 #: ../gtk/gtkbox.c:130
 msgid "Padding"
@@ -885,7 +887,7 @@ msgstr ""
 
 #: ../gtk/gtkbutton.c:476
 msgid "Image spacing"
-msgstr ""
+msgstr "Pildi kaugus"
 
 #: ../gtk/gtkbutton.c:477
 msgid "Spacing in pixels between the image and label"
@@ -1987,7 +1989,7 @@ msgstr "Ümber peadialoogi piirkonna oleva äärise laius"
 
 #: ../gtk/gtkdialog.c:173
 msgid "Button spacing"
-msgstr ""
+msgstr "Nupu kaugus"
 
 #: ../gtk/gtkdialog.c:174
 msgid "Spacing between buttons"
@@ -2727,7 +2729,7 @@ msgstr "Piksli suurus"
 
 #: ../gtk/gtkimage.c:205
 msgid "Pixel size to use for named icon"
-msgstr ""
+msgstr "Nimekise ikooni jaoks kasutatav piksli suurus"
 
 #: ../gtk/gtkimage.c:213
 msgid "Animation"
@@ -4103,7 +4105,7 @@ msgstr "Skaleerimisliuguri pikkus"
 
 #: ../gtk/gtkscale.c:177
 msgid "Value spacing"
-msgstr ""
+msgstr "Väärtuse kaugus"
 
 #: ../gtk/gtkscale.c:178
 msgid "Space between value text and the slider/trough area"
@@ -4220,11 +4222,11 @@ msgstr ""
 
 #: ../gtk/gtkscrolledwindow.c:299
 msgid "Scrollbar spacing"
-msgstr ""
+msgstr "Kerimisriba kaugus"
 
 #: ../gtk/gtkscrolledwindow.c:300
 msgid "Number of pixels between the scrollbars and the scrolled window"
-msgstr ""
+msgstr "Kerimisriba ja keritava akna vahel olevate pikslite arv"
 
 #: ../gtk/gtkscrolledwindow.c:315
 msgid "Scrolled Window Placement"
@@ -5450,7 +5452,7 @@ msgstr "Ikoonividin kirje kuvamiseks"
 
 #: ../gtk/gtktoolbutton.c:239
 msgid "Icon spacing"
-msgstr ""
+msgstr "Ikooni kaugus"
 
 #: ../gtk/gtktoolbutton.c:240
 msgid "Spacing in pixels between the icon and label"
