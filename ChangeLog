@@ -1,5 +1,11 @@
 2007-11-26  Tor Lillqvist  <tml@novell.com>
 
+	* gdk/win32/gdktestutils-win32.c: New file, dummy implementations.
+
+	* gdk/win32/Makefile.am: Add it.
+
+2007-11-26  Tor Lillqvist  <tml@novell.com>
+
 	* configure.in: Don't add jasper to all_loaders if no libjasper.
 
 2007-11-25  Bastien Nocera  <hadess@hadess.net>
