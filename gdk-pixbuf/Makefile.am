@@ -168,7 +168,7 @@ libpixbufloader_tga_la_LIBADD = $(module_libs)
 #
 # The .icns loader
 #
-libpixbufloader_static_icns_la_SOURCES = io-icns.c
+libstatic_pixbufloader_icns_la_SOURCES = io-icns.c
 libpixbufloader_icns_la_SOURCES = io-icns.c
 libpixbufloader_icns_la_LDFLAGS = -avoid-version -module $(no_undefined)
 libpixbufloader_icns_la_LIBADD = $(module_libs)
@@ -280,7 +280,7 @@ PCX_LIB = libpixbufloader-pcx.la
 endif
 
 if INCLUDE_ICNS
-STATIC_ICNS_LIB = libpixbufloader-static-icns.la
+STATIC_ICNS_LIB = libstatic-pixbufloader-icns.la
 else
 ICNS_LIB = libpixbufloader-icns.la
 endif

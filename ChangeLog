@@ -1,3 +1,7 @@
+2007-11-26  Tor Lillqvist  <tml@novell.com>
+
+	* configure.in: Don't add jasper to all_loaders if no libjasper.
+
 2007-11-25  Bastien Nocera  <hadess@hadess.net>
 
 	* configure.in: Add detection for libjasper, used by the
