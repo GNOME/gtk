@@ -504,18 +504,18 @@ gdk_threads_dispatch_free (gpointer data)
  * running in thread A and accessing @self after it has been finalized
  * in thread B:
  *
- * <informalexample><programlisting>
+ * |[
  * static gboolean
  * idle_callback (gpointer data)
  * {
- *    // gdk_threads_enter(); would be needed for g_idle_add()
+ *    /&ast; gdk_threads_enter(); would be needed for g_idle_add() &ast;/
  *
  *    SomeWidget *self = data;
- *    /<!-- -->* do stuff with self *<!-- -->/
+ *    /&ast; do stuff with self &ast;/
  *
  *    self->idle_id = 0;
  *
- *    // gdk_threads_leave(); would be needed for g_idle_add()
+ *    /&ast; gdk_threads_leave(); would be needed for g_idle_add() &ast;/
  *    return FALSE;
  * }
  *
@@ -523,7 +523,7 @@ gdk_threads_dispatch_free (gpointer data)
  * some_widget_do_stuff_later (SomeWidget *self)
  * {
  *    self->idle_id = gdk_threads_add_idle (idle_callback, self)
- *    // using g_idle_add() here would require thread protection in the callback
+ *    /&ast; using g_idle_add() here would require thread protection in the callback &ast;/
  * }
  *
  * static void
@@ -534,7 +534,7 @@ gdk_threads_dispatch_free (gpointer data)
  *      g_source_remove (self->idle_id);
  *    G_OBJECT_CLASS (parent_class)->finalize (object);
  * }
- * </programlisting></informalexample>
+ * ]|
  *
  * Return value: the ID (greater than 0) of the event source.
  *
@@ -610,12 +610,12 @@ gdk_threads_add_idle (GSourceFunc    function,
  * This variant of g_timeout_add_full() can be thought of a MT-safe version 
  * for GTK+ widgets for the following use case:
  *
- * <informalexample><programlisting>
+ * |[
  * static gboolean timeout_callback (gpointer data)
  * {
  *    SomeWidget *self = data;
  *    
- *    /<!-- -->* do stuff with self *<!-- -->/
+ *    /&ast; do stuff with self &ast;/
  *    
  *    self->timeout_id = 0;
  *    
@@ -629,14 +629,14 @@ gdk_threads_add_idle (GSourceFunc    function,
  *  
  * static void some_widget_finalize (GObject *object)
  * {
- *    SomeWidget *self = SOME_WIDGET(object);
+ *    SomeWidget *self = SOME_WIDGET (object);
  *    
  *    if (self->timeout_id)
  *      g_source_remove (self->timeout_id);
  *    
  *    G_OBJECT_CLASS (parent_class)->finalize (object);
  * }
- * </programlisting></informalexample>
+ * ]|
  *
  * Return value: the ID (greater than 0) of the event source.
  * 

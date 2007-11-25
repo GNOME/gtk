@@ -1,5 +1,11 @@
 2007-11-25  Matthias Clasen  <mclasen@redhat.com>
 
+	* configure.in: Require gtk-doc 1.8
+
+	* */*.c: Use gtk-doc abbreviations for examples in docs.
+
+2007-11-25  Matthias Clasen  <mclasen@redhat.com>
+
 	* gtk/gtktreeview.c (gtk_tree_view_set_show_expanders): Fix a
 	typo.  (#498922)
 

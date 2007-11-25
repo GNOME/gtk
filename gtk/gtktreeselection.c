@@ -392,10 +392,10 @@ gtk_tree_selection_get_selected (GtkTreeSelection  *selection,
  * To do this, you can use gtk_tree_row_reference_new().
  *
  * To free the return value, use:
- * <informalexample><programlisting>
+ * |[
  * g_list_foreach (list, gtk_tree_path_free, NULL);
  * g_list_free (list);
- * </programlisting></informalexample>
+ * ]|
  *
  * Return value: A #GList containing a #GtkTreePath for each selected row.
  *

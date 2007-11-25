@@ -168,11 +168,10 @@ gtk_recent_filter_init (GtkRecentFilter *filter)
  * gtk_recent_filter_add_pattern(), gtk_recent_filter_add_mime_type(),
  * gtk_recent_filter_add_application(), gtk_recent_filter_add_age().
  * To create a filter that accepts any recently used resource, use:
- *
- * <informalexample><programlisting>
- * GtkRecentFilter *filter = gtk_recent_filter_new (<!-- -->);
+ * |[
+ * GtkRecentFilter *filter = gtk_recent_filter_new ();
  * gtk_recent_filter_add_pattern (filter, "*");
- * </programlisting></informalexample>
+ * ]|
  *
  * Return value: a new #GtkRecentFilter
  *

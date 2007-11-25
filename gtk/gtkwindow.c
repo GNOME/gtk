@@ -7663,14 +7663,13 @@ gtk_XParseGeometry (const char   *string,
  * to be called when the window has its "final" size, i.e. after calling
  * gtk_widget_show_all() on the contents and gtk_window_set_geometry_hints()
  * on the window.
- * 
- * <informalexample><programlisting>
- * #include &lt;gtk/gtk.h&gt;
+ * |[
+ * #include <gtk/gtk.h>
  *    
  * static void
  * fill_with_content (GtkWidget *vbox)
  * {
- *   /<!-- -->* fill with content... *<!-- -->/
+ *   /&ast; fill with content... &ast;/
  * }
  *    
  * int
@@ -7681,7 +7680,7 @@ gtk_XParseGeometry (const char   *string,
  *     100, 50, 0, 0, 100, 50, 10, 10, 0.0, 0.0, GDK_GRAVITY_NORTH_WEST  
  *   };
  *    
- *   gtk_init (&amp;argc, &amp;argv);
+ *   gtk_init (&argc, &argv);
  *   
  *   window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
  *   vbox = gtk_vbox_new (FALSE, 0);
@@ -7692,7 +7691,7 @@ gtk_XParseGeometry (const char   *string,
  *   
  *   gtk_window_set_geometry_hints (GTK_WINDOW (window),
  * 	  			    window,
- * 				    &amp;size_hints,
+ * 				    &size_hints,
  * 				    GDK_HINT_MIN_SIZE | 
  * 				    GDK_HINT_BASE_SIZE | 
  * 				    GDK_HINT_RESIZE_INC);
@@ -7700,7 +7699,7 @@ gtk_XParseGeometry (const char   *string,
  *   if (argc &gt; 1)
  *     {
  *       if (!gtk_window_parse_geometry (GTK_WINDOW (window), argv[1]))
- *         fprintf (stderr, "Failed to parse '&percnt;s'\n", argv[1]);
+ *         fprintf (stderr, "Failed to parse '%s'\n", argv[1]);
  *     }
  *    
  *   gtk_widget_show_all (window);
@@ -7708,7 +7707,7 @@ gtk_XParseGeometry (const char   *string,
  *    
  *   return 0;
  * }
- * </programlisting></informalexample>
+ * ]|
  *
  * Return value: %TRUE if string was parsed successfully
  **/

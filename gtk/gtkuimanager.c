@@ -2782,8 +2782,7 @@ queue_update (GtkUIManager *self)
  * UI in an idle function. A typical example where this function is
  * useful is to enforce that the menubar and toolbar have been added to 
  * the main window before showing it:
- * <informalexample>
- * <programlisting>
+ * |[
  * gtk_container_add (GTK_CONTAINER (window), vbox); 
  * g_signal_connect (merge, "add_widget", 
  *                   G_CALLBACK (add_widget), vbox);
@@ -2791,8 +2790,7 @@ queue_update (GtkUIManager *self)
  * gtk_ui_manager_add_ui_from_file (merge, "my-toolbars");
  * gtk_ui_manager_ensure_update (merge);  
  * gtk_widget_show (window);
- * </programlisting>
- * </informalexample>
+ * ]|
  *
  * Since: 2.4
  **/

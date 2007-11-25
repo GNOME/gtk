@@ -144,11 +144,10 @@ gtk_file_filter_finalize (GObject  *object)
  * gtk_file_filter_add_mime_type(), gtk_file_filter_add_pattern(),
  * or gtk_file_filter_add_custom(). To create a filter
  * that accepts any file, use:
- *
- * <informalexample><programlisting>
- * GtkFileFilter *filter = gtk_file_filter_new (<!-- -->);
+ * |[
+ * GtkFileFilter *filter = gtk_file_filter_new ();
  * gtk_file_filter_add_pattern (filter, "*");
- * </programlisting></informalexample>
+ * ]|
  * 
  * Return value: a new #GtkFileFilter
  * 

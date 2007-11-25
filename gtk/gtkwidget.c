@@ -1675,8 +1675,7 @@ gtk_widget_class_init (GtkWidgetClass *klass)
    * #GtkWidget::drag-leave and if not, treat the drag-motion signal as an 
    * "enter" signal. Upon an "enter", the handler will typically highlight 
    * the drop site with gtk_drag_highlight().
-   *
-   * <informalexample><programlisting> 
+   * |[
    * static void
    * drag_motion (GtkWidget *widget,
    *       	  GdkDragContext *context,
@@ -1721,11 +1720,11 @@ gtk_widget_class_init (GtkWidgetClass *klass)
    *    {
    *      private_data->suggested_action = 0;
    *      
-   *     /<!-- -->* We are getting this data due to a request in drag_motion,
+   *     /&ast; We are getting this data due to a request in drag_motion,
    *      * rather than due to a request in drag_drop, so we are just
-   *      * supposed to call gdk_drag_status(<!-- -->), not actually paste in 
+   *      * supposed to call gdk_drag_status (), not actually paste in 
    *      * the data.
-   *      *<!-- -->/
+   *      &ast;/
    *      str = gtk_selection_data_get_text (selection_data);
    *      if (!data_is_acceptable (str)) 
    *        gdk_drag_status (context, 0, time);
@@ -1734,10 +1733,10 @@ gtk_widget_class_init (GtkWidgetClass *klass)
    *    }
    *   else
    *    {
-   *      /<!-- -->* accept the drop *<!-- -->/
+   *      /&ast; accept the drop &ast;/
    *    }
    * }
-   * </programlisting></informalexample>
+   * ]|
    */
   widget_signals[DRAG_MOTION] =
     g_signal_new (I_("drag_motion"),
@@ -1837,7 +1836,7 @@ gtk_widget_class_init (GtkWidgetClass *klass)
    * The handler may inspect and modify @drag_context->action before calling 
    * gtk_drag_finish(), e.g. to implement %GDK_ACTION_ASK as shown in the 
    * following example:
-   * <informalexample><programlisting>
+   * |[
    * void  
    * drag_data_received (GtkWidget          *widget,
    *                     GdkDragContext     *drag_context,
@@ -1875,7 +1874,7 @@ gtk_widget_class_init (GtkWidgetClass *klass)
    *       
    *    gtk_drag_finish (drag_context, FALSE, FALSE, time);
    *  }
-   * </programlisting></informalexample>
+   * ]|
    */
   widget_signals[DRAG_DATA_RECEIVED] =
     g_signal_new (I_("drag_data_received"),
@@ -5317,11 +5316,11 @@ gtk_widget_set_state (GtkWidget           *widget,
  * Note that the background is still drawn when the widget is mapped.
  * If this is not suitable (e.g. because you want to make a transparent
  * window using an RGBA visual), you can work around this by doing:
- * <informalexample><programlisting>
+ * |[
  *  gtk_widget_realize (window);
  *  gdk_window_set_back_pixmap (window->window, NULL, FALSE);
  *  gtk_widget_show (window);
- * </programlisting></informalexample> 
+ * ]|
  **/
 void
 gtk_widget_set_app_paintable (GtkWidget *widget,
@@ -7264,13 +7263,13 @@ gtk_widget_set_extension_events (GtkWidget *widget,
  * To reliably find the toplevel #GtkWindow, use
  * gtk_widget_get_toplevel() and check if the %TOPLEVEL flags
  * is set on the result.
- * <informalexample><programlisting>
+ * |[
  *  GtkWidget *toplevel = gtk_widget_get_toplevel (widget);
  *  if (GTK_WIDGET_TOPLEVEL (toplevel))
  *    {
- *      [ Perform action on toplevel. ]
+ *      /&ast; Perform action on toplevel. &ast;/
  *    }
- * </programlisting></informalexample>
+ * ]|
  *
  * Return value: the topmost ancestor of @widget, or @widget itself 
  *    if there's no ancestor.
@@ -7593,15 +7592,15 @@ gtk_widget_get_composite_name (GtkWidget *widget)
  * builders might want to treat them in a different way.
  * 
  * Here is a simple example:
- * <informalexample><programlisting>
- *   gtk_widget_push_composite_child (<!-- -->);
+ * |[
+ *   gtk_widget_push_composite_child ();
  *   scrolled_window->hscrollbar = gtk_hscrollbar_new (hadjustment);
  *   gtk_widget_set_composite_name (scrolled_window->hscrollbar, "hscrollbar");
- *   gtk_widget_pop_composite_child (<!-- -->);
+ *   gtk_widget_pop_composite_child ();
  *   gtk_widget_set_parent (scrolled_window->hscrollbar, 
  *                          GTK_WIDGET (scrolled_window));
  *   g_object_ref (scrolled_window->hscrollbar);
- * </programlisting></informalexample>
+ * ]|
  **/
 void
 gtk_widget_push_composite_child (void)

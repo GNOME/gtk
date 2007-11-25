@@ -377,18 +377,18 @@ create_menu_item (GtkAction *action)
  * to the group. 
  *
  * A common way to set up a group of radio group is the following:
- * <informalexample><programlisting>
+ * |[
  *   GSList *group = NULL;
  *   GtkRadioAction *action;
  *  
- *   while (/<!-- -->* more actions to add *<!-- -->/)
+ *   while (/&ast; more actions to add &ast;/)
  *     {
  *        action = gtk_radio_action_new (...);
  *        
  *        gtk_radio_action_set_group (action, group);
  *        group = gtk_radio_action_get_group (action);
  *     }
- * </programlisting></informalexample>
+ * ]|
  *
  * Returns: the list representing the radio group for this object
  *

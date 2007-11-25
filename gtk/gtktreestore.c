@@ -1388,10 +1388,10 @@ gtk_tree_store_insert_after (GtkTreeStore *tree_store,
  * Calling
  * <literal>gtk_tree_store_insert_with_values (tree_store, iter, position, ...)</literal>
  * has the same effect as calling
- * <informalexample><programlisting>
+ * |[
  * gtk_tree_store_insert (tree_store, iter, position);
  * gtk_tree_store_set (tree_store, iter, ...);
- * </programlisting></informalexample>
+ * ]|
  * with the different that the former will only emit a row_inserted signal,
  * while the latter will emit row_inserted, row_changed and if the tree store
  * is sorted, rows_reordered.  Since emitting the rows_reordered signal

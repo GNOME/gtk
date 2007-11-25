@@ -566,8 +566,7 @@ gtk_message_dialog_new (GtkWindow     *parent,
  * instead, since you can't pass the markup string either
  * as the format (it might contain '%' characters) or as a string
  * argument.
- *
- * <informalexample><programlisting>
+ * |[
  *  GtkWidget *dialog;
  *  dialog = gtk_message_dialog_new (main_application_window,
  *                                   GTK_DIALOG_DESTROY_WITH_PARENT,
@@ -576,7 +575,7 @@ gtk_message_dialog_new (GtkWindow     *parent,
  *                                   NULL);
  *  gtk_message_dialog_set_markup (GTK_MESSAGE_DIALOG (dialog),
  *                                 markup);
- * </programlisting></informalexample>
+ * ]|
  * 
  * Return value: a new #GtkMessageDialog
  *

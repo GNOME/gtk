@@ -843,14 +843,15 @@ gdk_event_get_axis (GdkEvent   *event,
  * core pointer. Coordinate extraction, processing and requesting more
  * motion events from a %GDK_MOTION_NOTIFY event usually works like this:
  *
- * <informalexample><programlisting>
- * {  // motion_event handler
+ * |[
+ * { 
+ *   /&ast; motion_event handler &ast;/
  *   x = motion_event->x;
  *   y = motion_event->y;
- *   ; // handle (x,y) motion
- *   gdk_event_request_motions (motion_event); // handles is_hint events
+ *   /&ast; handle (x,y) motion &ast;/
+ *   gdk_event_request_motions (motion_event); /&ast; handles is_hint events &ast;/
  * }
- * </programlisting></informalexample>
+ * ]|
  *
  * Since: 2.12
  **/

@@ -1452,9 +1452,9 @@ gtk_about_dialog_get_translator_credits (GtkAboutDialog *about)
  * of the language which is currently used in the user interface.
  * Using gettext(), a simple way to achieve that is to mark the
  * string for translation:
- * <informalexample><programlisting>
+ * |[
  *  gtk_about_dialog_set_translator_credits (about, _("translator-credits"));
- * </programlisting></informalexample>
+ * ]|
  * It is a good idea to use the customary msgid "translator-credits" for this
  * purpose, since translators will already know the purpose of that msgid, and
  * since #GtkAboutDialog will detect if "translator-credits" is untranslated

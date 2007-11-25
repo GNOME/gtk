@@ -481,26 +481,26 @@ gtk_file_chooser_get_filename (GtkFileChooser *chooser)
  * Note that the file must exist, or nothing will be done except
  * for the directory change.
  *
- * If you are implementing a <guimenuitem>File/Save As...</guimenuitem> dialog, you
- * should use this function if you already have a file name to which the user may save; for example,
- * when the user opens an existing file and then does <guimenuitem>File/Save As...</guimenuitem>
- * on it.  If you don't have a file name already &mdash; for example, if the user just created
- * a new file and is saving it for the first time, do not call this function.  Instead, use
- * something similar to this:
- *
- * <programlisting>
+ * If you are implementing a <guimenuitem>File/Save As...</guimenuitem> dialog,
+ * you should use this function if you already have a file name to which the 
+ * user may save; for example, when the user opens an existing file and then 
+ * does <guimenuitem>File/Save As...</guimenuitem> on it.  If you don't have 
+ * a file name already &mdash; for example, if the user just created a new 
+ * file and is saving it for the first time, do not call this function.  
+ * Instead, use something similar to this:
+ * |[
  * if (document_is_new)
  *   {
- *     /<!-- -->* the user just created a new document *<!-- -->/
+ *     /&ast; the user just created a new document &ast;/
  *     gtk_file_chooser_set_current_folder (chooser, default_folder_for_saving);
  *     gtk_file_chooser_set_current_name (chooser, "Untitled document");
  *   }
  * else
  *   {
- *     /<!-- -->* the user edited an existing document *<!-- -->/ 
+ *     /&ast; the user edited an existing document &ast;/ 
  *     gtk_file_chooser_set_filename (chooser, existing_filename);
  *   }
- * </programlisting>
+ * ]|
  * 
  * Return value: %TRUE if both the folder could be changed and the file was
  * selected successfully, %FALSE otherwise.
@@ -805,28 +805,28 @@ gtk_file_chooser_get_uri (GtkFileChooser *chooser)
  * to a sequence of gtk_file_chooser_unselect_all() followed by
  * gtk_file_chooser_select_uri().
  *
- * Note that the URI must exist, or nothing will be done except
- * for the directory change.
- * If you are implementing a <guimenuitem>File/Save As...</guimenuitem> dialog, you
- * should use this function if you already have a file name to which the user may save; for example,
- * when the user opens an existing file and then does <guimenuitem>File/Save As...</guimenuitem>
- * on it.  If you don't have a file name already &mdash; for example, if the user just created
- * a new file and is saving it for the first time, do not call this function.  Instead, use
- * something similar to this:
- *
- * <programlisting>
+ * Note that the URI must exist, or nothing will be done except for the 
+ * directory change.
+ * If you are implementing a <guimenuitem>File/Save As...</guimenuitem> dialog,
+ * you should use this function if you already have a file name to which the 
+ * user may save; for example, when the user opens an existing file and then 
+ * does <guimenuitem>File/Save As...</guimenuitem> on it.  If you don't have 
+ * a file name already &mdash; for example, if the user just created a new 
+ * file and is saving it for the first time, do not call this function.  
+ * Instead, use something similar to this:
+ * |[
  * if (document_is_new)
  *   {
- *     /<!-- -->* the user just created a new document *<!-- -->/
+ *     /&ast; the user just created a new document &ast;/
  *     gtk_file_chooser_set_current_folder_uri (chooser, default_folder_for_saving);
  *     gtk_file_chooser_set_current_name (chooser, "Untitled document");
  *   }
  * else
  *   {
- *     /<!-- -->* the user edited an existing document *<!-- -->/ 
+ *     /&ast; the user edited an existing document &ast;/ 
  *     gtk_file_chooser_set_uri (chooser, existing_uri);
  *   }
- * </programlisting>
+ * ]|
  *
  * Return value: %TRUE if both the folder could be changed and the URI was
  * selected successfully, %FALSE otherwise.

@@ -667,8 +667,7 @@ gtk_print_operation_class_init (GtkPrintOperationClass *class)
    * Emitted for every page that is printed. The signal handler
    * must render the @page_nr's page onto the cairo context obtained
    * from @context using gtk_print_context_get_cairo_context().
-   *
-   * <informalexample><programlisting>
+   * |[
    * static void
    * draw_page (GtkPrintOperation *operation,
    *            GtkPrintContext   *context,
@@ -699,7 +698,7 @@ gtk_print_operation_class_init (GtkPrintOperationClass *class)
    *   pango_layout_set_width (layout, width * PANGO_SCALE);
    *   pango_layout_set_alignment (layout, PANGO_ALIGN_CENTER);
    *      		      
-   *   pango_layout_get_size (layout, NULL, &amp;layout_height);
+   *   pango_layout_get_size (layout, NULL, &layout_height);
    *   text_height = (gdouble)layout_height / PANGO_SCALE;
    *   
    *   cairo_move_to (cr, width / 2,  (HEADER_HEIGHT - text_height) / 2);
@@ -707,7 +706,7 @@ gtk_print_operation_class_init (GtkPrintOperationClass *class)
    *   
    *   g_object_unref (layout);
    * }
-   * </programlisting></informalexample>
+   * ]|
    *
    * Use gtk_print_operation_set_use_full_page() and 
    * gtk_print_operation_set_unit() before starting the print operation
@@ -2349,8 +2348,7 @@ gtk_print_operation_get_error (GtkPrintOperation  *op,
  * platform. The #GtkPrintOperation::done signal will be emitted with the 
  * operation results when the operation is done (i.e. when the dialog is 
  * canceled, or when the print succeeds or fails).
- *
- * <informalexample><programlisting>
+ * |[
  * if (settings != NULL)
  *   gtk_print_operation_set_print_settings (print, settings);
  *   
@@ -2358,11 +2356,14 @@ gtk_print_operation_get_error (GtkPrintOperation  *op,
  *   gtk_print_operation_set_default_page_setup (print, page_setup);
  *   
  * g_signal_connect (print, "begin-print", 
- *                   G_CALLBACK (begin_print), &amp;data);
+ *                   G_CALLBACK (begin_print), &data);
  * g_signal_connect (print, "draw-page", 
- *                   G_CALLBACK (draw_page), &amp;data);
+ *                   G_CALLBACK (draw_page), &data);
  *  
- * res = gtk_print_operation_run (print, GTK_PRINT_OPERATION_ACTION_PRINT_DIALOG, parent, &amp;error);
+ * res = gtk_print_operation_run (print, 
+ *                                GTK_PRINT_OPERATION_ACTION_PRINT_DIALOG, 
+ *                                parent, 
+ *                                &error);
  *  
  * if (res == GTK_PRINT_OPERATION_RESULT_ERROR)
  *  {
@@ -2370,7 +2371,7 @@ gtk_print_operation_get_error (GtkPrintOperation  *op,
  *   			                     GTK_DIALOG_DESTROY_WITH_PARENT,
  * 					     GTK_MESSAGE_ERROR,
  * 					     GTK_BUTTONS_CLOSE,
- * 					     "Error printing file:\n&percnt;s",
+ * 					     "Error printing file:\n%s",
  * 					     error->message);
  *    g_signal_connect (error_dialog, "response", 
  *                      G_CALLBACK (gtk_widget_destroy), NULL);
@@ -2383,7 +2384,7 @@ gtk_print_operation_get_error (GtkPrintOperation  *op,
  *	g_object_unref (settings);
  *    settings = g_object_ref (gtk_print_operation_get_print_settings (print));
  *  }
- * </programlisting></informalexample>
+ * ]|
  *
  * Note that gtk_print_operation_run() can only be called once on a
  * given #GtkPrintOperation.
