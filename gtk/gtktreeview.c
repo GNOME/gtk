@@ -15290,7 +15290,7 @@ gtk_tree_view_set_show_expanders (GtkTreeView *tree_view,
   else
     GTK_TREE_VIEW_UNSET_FLAG (tree_view, GTK_TREE_VIEW_SHOW_EXPANDERS);
 
-  if (was_enabled != was_enabled)
+  if (enabled != was_enabled)
     gtk_widget_queue_draw (GTK_WIDGET (tree_view));
 }
 
