@@ -1,3 +1,8 @@
+2007-11-25  Bastien Nocera  <hadess@hadess.net>
+
+	* configure.in: Add detection for libjasper, used by the
+	gdk-pixbuf JPEG2000 loader
+
 2007-11-25  Matthias Clasen  <mclasen@redhat.com>
 
 	* configure.in: Require gtk-doc 1.8

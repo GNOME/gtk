@@ -181,6 +181,14 @@ libpixbufloader_pcx_la_SOURCES = io-pcx.c
 libpixbufloader_pcx_la_LDFLAGS = -avoid-version -module $(no_undefined)
 libpixbufloader_pcx_la_LIBADD = $(module_libs)
 
+#
+# The JPEG2000 loader
+#
+libstatic_pixbufloader_jasper_la_SOURCES = io-jasper.c
+libpixbufloader_jasper_la_SOURCES = io-jasper.c
+libpixbufloader_jasper_la_LDFLAGS = -avoid-version -module $(no_undefined)
+libpixbufloader_jasper_la_LIBADD = $(LIBJASPER) $(module_libs)
+
 if HAVE_PNG
 if INCLUDE_PNG
 STATIC_PNG_LIB = libstatic-pixbufloader-png.la
@@ -277,6 +285,14 @@ else
 ICNS_LIB = libpixbufloader-icns.la
 endif
 
+if HAVE_JASPER
+if INCLUDE_JASPER
+STATIC_JASPER_LIB = libstatic-pixbufloader-jasper.la
+else
+JASPER_LIB = libpixbufloader-jasper.la
+endif
+endif
+
 if BUILD_DYNAMIC_MODULES
 
 loader_LTLIBRARIES = 	\
@@ -294,7 +310,8 @@ loader_LTLIBRARIES = 	\
 	$(XBM_LIB)	\
 	$(TGA_LIB)	\
 	$(ICNS_LIB)	\
-	$(PCX_LIB)
+	$(PCX_LIB)	\
+	$(JASPER_LIB)
 
 
 endif
@@ -314,7 +331,8 @@ noinst_LTLIBRARIES =		\
 	$(STATIC_XBM_LIB)	\
 	$(STATIC_TGA_LIB)	\
 	$(STATIC_ICNS_LIB)	\
-	$(STATIC_PCX_LIB)
+	$(STATIC_PCX_LIB)	\
+	$(STATIC_JASPER_LIB)
 
 builtin_objs = @INCLUDED_LOADER_OBJ@
 

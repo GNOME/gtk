@@ -757,6 +757,9 @@ AC_ARG_WITH(libjpeg,
 AC_ARG_WITH(libtiff,
             [AC_HELP_STRING([--without-libtiff],
                             [disable TIFF loader for gdk-pixbuf])])
+AC_ARG_WITH(libjasper,
+            [AC_HELP_STRING([--without-libjasper],
+                            [disable JPEG2000 loader for gdk-pixbuf])])
 
 dnl Test for libtiff
   if test x$with_libtiff != xno && test -z "$LIBTIFF"; then
@@ -858,9 +861,21 @@ dnl Test for libpng
 *** from CVS.])
   fi
 
+dnl Test for libjasper
+  if test x$with_libjasper != xno && test -z "$LIBJASPER"; then
+    AC_CHECK_LIB(jasper, jas_init, LIBJASPER=-ljasper, [])
+  fi
+
+  if test x$with_libjasper != xno && test -z "$LIBJASPER"; then
+     AC_MSG_ERROR([
+*** Checks for JPEG2000 loader failed. You can build without it by passing 
+*** --without-libjasper to configure])
+  fi
+
 AC_SUBST(LIBTIFF)
 AC_SUBST(LIBJPEG)
 AC_SUBST(LIBPNG)
+AC_SUBST(LIBJASPER)
 
 AM_CONDITIONAL(BUILD_DYNAMIC_MODULES, $dynworks)
 
@@ -886,7 +901,7 @@ else
    fi
 fi
 
-all_loaders="png,bmp,wbmp,gif,ico,ani,jpeg,pnm,ras,tiff,xpm,xbm,tga,pcx,icns"
+all_loaders="png,bmp,wbmp,gif,ico,ani,jpeg,pnm,ras,tiff,xpm,xbm,tga,pcx,icns,jasper"
 included_loaders=""
 # If no loaders specified, include all
 if test "x$with_included_loaders" = xyes ; then
@@ -931,6 +946,7 @@ AM_CONDITIONAL(INCLUDE_XBM, [test x"$INCLUDE_xbm" = xyes])
 AM_CONDITIONAL(INCLUDE_TGA, [test x"$INCLUDE_tga" = xyes])
 AM_CONDITIONAL(INCLUDE_PCX, [test x"$INCLUDE_pcx" = xyes])
 AM_CONDITIONAL(INCLUDE_ICNS, [test x"$INCLUDE_icns" = xyes])
+AM_CONDITIONAL(INCLUDE_JASPER, [test x"$INCLUDE_jasper" = xyes])
 
 AC_HEADER_SYS_WAIT
 
@@ -939,6 +955,7 @@ AC_TYPE_SIGNAL
 AM_CONDITIONAL(HAVE_TIFF, test "x$LIBTIFF" != x)
 AM_CONDITIONAL(HAVE_PNG, test "x$LIBPNG" != x)
 AM_CONDITIONAL(HAVE_JPEG, test "x$LIBJPEG" != x)
+AM_CONDITIONAL(HAVE_JASPER, test "x$LIBJASPER" != x)
 
 if $dynworks ; then
   STATIC_LIB_DEPS=
