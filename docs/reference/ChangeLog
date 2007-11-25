@@ -1,3 +1,7 @@
+2007-11-25  Matthias Clasen <mclasen@redhat.com>
+
+	* gtk/tmpl/gtkdialog.sgml: Move signal docs inline.
+
 2007-11-19  Matthias Clasen <mclasen@redhat.com>
 
 	* gtk/tmpl/gtknotebook.sgml:

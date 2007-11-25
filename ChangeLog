@@ -1,3 +1,9 @@
+2007-11-25  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtkdialog.c: Move signal and property documentation inline,
+	fix a problem with the ::response signal docs.  (#499133, Josselin
+	Mouette)
+
 2007-11-22 15:48:26  Tim Janik  <timj@imendio.com>
 
         * Makefile.decl: initialize automake variables EXTRA_DIST and
