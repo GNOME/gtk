@@ -3313,9 +3313,11 @@ struct _FullscreenInfo
 void
 gdk_window_fullscreen (GdkWindow *window)
 {
-  gint width, height;
+  gint x, y, width, height;
   FullscreenInfo *fi;
   GdkWindowObject *private = (GdkWindowObject *) window;
+  HMONITOR monitor;
+  MONITORINFO mi;
 
   g_return_if_fail (GDK_IS_WINDOW (window));
 
@@ -3327,9 +3329,22 @@ gdk_window_fullscreen (GdkWindow *window)
     {
       GdkWindowImplWin32 *impl = GDK_WINDOW_IMPL_WIN32 (private->impl);
 
-      width = GetSystemMetrics (SM_CXSCREEN);
-      height = GetSystemMetrics (SM_CYSCREEN);
- 
+      monitor = MonitorFromWindow (GDK_WINDOW_HWND (window), MONITOR_DEFAULTTONEAREST);
+      mi.cbSize = sizeof (mi);
+      if (monitor && GetMonitorInfo (monitor, &mi))
+	{
+	  x = mi.rcMonitor.left;
+	  y = mi.rcMonitor.top;
+	  width = mi.rcMonitor.right - x;
+	  height = mi.rcMonitor.bottom - y;
+	}
+      else
+	{
+	  x = y = 0;
+	  width = GetSystemMetrics (SM_CXSCREEN);
+	  height = GetSystemMetrics (SM_CYSCREEN);
+	}
+
       /* remember for restoring */
       fi->hint_flags = impl->hint_flags;
       impl->hint_flags &= ~GDK_HINT_MAX_SIZE;
@@ -3340,7 +3355,7 @@ gdk_window_fullscreen (GdkWindow *window)
                      (fi->style & ~WS_OVERLAPPEDWINDOW) | WS_POPUP);
 
       API_CALL (SetWindowPos, (GDK_WINDOW_HWND (window), HWND_TOP,
-			       0, 0, width, height,
+			       x, y, width, height,
 			       SWP_NOCOPYBITS | SWP_SHOWWINDOW));
 
       gdk_synthesize_window_state (window, 0, GDK_WINDOW_STATE_FULLSCREEN);

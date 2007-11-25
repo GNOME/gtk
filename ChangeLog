@@ -1,3 +1,9 @@
+2007-11-26  Tor Lillqvist  <tml@novell.com>
+
+	* gdk/win32/gdkwindow-win32.c (gdk_window_fullscreen): Use the
+	monitor the window currently is on, not always the primary
+	monitor. (#463865, Tim Evans)
+
 2007-11-25  Matthias Clasen  <mclasen@redhat.com>
 
 	Merged from trunk:
