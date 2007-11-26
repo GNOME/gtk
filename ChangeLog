@@ -2,6 +2,13 @@
 
 	Merged from trunk:
 
+	* configure.in: Use $CUPS_CONFIG instead of hardcoded cups-config.
+	(#495574, Richard Hult)
+
+2007-11-26  Matthias Clasen  <mclasen@redhat.com>
+
+	Merged from trunk:
+
 	* gtk/gtknotebook.c (gtk_notebook_update_labels): Short-circuit on
 	destroy.
 	(gtk_notebook_destroy): Destroy tab_label widgets.  (#388321, 
