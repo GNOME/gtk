@@ -1,5 +1,11 @@
 2007-11-26  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkfilechooserbutton.c:
+	* gtk/gtktoolbar.c: Don't use guint8 for bitfields, since
+	some compilers choke on that.  (#467722)
+
+2007-11-26  Matthias Clasen  <mclasen@redhat.com>
+
 	* gtk/gtkaboutdialog.c (gtk_about_dialog_set_website): Add a note
 	about hook setup.  (#425004, Emmanuele Bassi)
 
