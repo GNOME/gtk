@@ -1,5 +1,9 @@
 2007-11-26  Matthias Clasen  <mclasen@redhat.com>
 
+	* NEWS: Updates
+
+2007-11-26  Matthias Clasen  <mclasen@redhat.com>
+
 	Merged from trunk:
 
 	* configure.in: Use $CUPS_CONFIG instead of hardcoded cups-config.

@@ -1,3 +1,58 @@
+Overview of Changes from GTK+ 2.12.1 to 2.12.2
+==============================================
+
+ * Bugs fixed:
+ 494776 text file with html causes lockeup
+ 482531 firefox crashed on print preview [@IA__gdk_window_get_top...
+ 488918 gtkbuilder cannot resolve type in turkish locale
+ 347585 segv in gtk_text_iter_ends_line with gcc 4.1.1 -finline-f...
+ 479463 gtk-builder-convert fails to convert glade files generate...
+ 164537 Non-modal transient dialogs should iconify with parent
+ 371036 Win32: Raise modal children dialogs when clicking parent ...
+ 388321 gtk_notebook_remove_tab_label
+ 405178 GTK_DIALOG_MODAL not working with gtk_message_dialog_new
+ 461222 gtk_builder_get_type_from_name() docs could be better
+ 467711 tests/testrichtext.c fails to build on HP-UX 10.20
+ 467722 Invalid bit-field types for AIX 4.3.3 compiler
+ 468793 GtkBuilder ignores <signal> after <child>
+ 473813 Events on the title bar "punch through" sometimes
+ 476827 Wrong button order in GtkAssistant
+ 485662 [gutsy] getting "Error Printing: Too many failed attempts...
+ 486369 Copy and Paste doesn't work
+ 486420 Allow empty property node values
+ 487954 Buttons with relief set to 'none' should draw a focus rect
+ 488017 gdkevents-win32.c: variable is declared at middle of block
+ 488051 Bad cursor movement when tags override visibility
+ 489370 Stacking order for child windows not implemented
+ 491207 gtk_text_buffer_delete_interactive() robustness against c...
+ 492117 ../gdk/quartz/GdkQuartzWindow.h:32: error: ISO C++ forbid...
+ 492209 The expander demo moves the whole window on the first click
+ 493404 Shift-tab not working in leopard
+ 495574 cups-config hardcoded in configure check
+ 495769 useless (i think) delayed_properties hashtable
+ 496689 GtkAboutDialog "name" property deprecation not explained ...
+ 497164 use text_buffer_get_insert everywhere
+ 499703 Text color of the calendar widget wrong for dark background
+ 107398 One too many frame updates for GIF animations?
+ 463865 gtk/gdk_window_fullscreen always uses the primary monitor
+ 489782 Two different default values for toolbar-style property i...
+ 490624 Can we have gtk-error-bell set to FALSE by default on Win...
+ 496734 No constant gtk_check_version return value
+ 496795 GtkTreeStore in a GtkBuilder XML file cannot set column t...
+ 498922 show-expanders code has impossible test
+ 467490 allow multi-file DnD with gtk-osx/quartz
+ 497102 Small patch for textview internals
+
+ * Updated translations:
+ - Arabic (ar)
+ - Belarusian Latin (be@latin)
+ - Estonian (et)
+ - Finnish (fi)
+ - Irish (ga)
+ - Norwegian bokmål (nb)
+ - Slovenian (sl)
+ 
+ 
 Overview of Changes from GTK+ 2.12.0 to 2.12.1
 ==============================================
 
