@@ -1,5 +1,14 @@
 2007-11-26  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkmain.c:
+	* gtk/gtknotebook.c:
+	* gtk/gtkplugprivate.h:
+	* gtk/gtksocket.c:
+	* gtk/gtksocketprivate.h:
+	* gtk/gtktable.c: Fix up some doc comments to shut up gtk-doc.
+
+2007-11-26  Matthias Clasen  <mclasen@redhat.com>
+
 	* configure.in: Use $CUPS_CONFIG instead of hardcoded cups-config.
 	(#495574, Richard Hult)
 

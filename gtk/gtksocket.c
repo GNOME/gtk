@@ -84,7 +84,7 @@ enum {
 
 static guint socket_signals[LAST_SIGNAL] = { 0 };
 
-/**
+/*
  * _gtk_socket_get_private:
  *
  * @socket: a #GtkSocket

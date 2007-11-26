@@ -36,7 +36,7 @@ void _gtk_plug_handle_modality_off    (GtkPlug          *plug);
 
 /* In backend-specific file: */
 
-/**
+/*
  * _gtk_plug_windowing_get_id:
  *
  * @plug: a #GtkPlug
@@ -45,7 +45,7 @@ void _gtk_plug_handle_modality_off    (GtkPlug          *plug);
  */
 GdkNativeWindow _gtk_plug_windowing_get_id (GtkPlug *plug);
 
-/**
+/*
  * _gtk_plug_windowing_realize_toplevel:
  *
  * @plug_window: a #GtkPlug's #GdkWindow
@@ -55,7 +55,7 @@ GdkNativeWindow _gtk_plug_windowing_get_id (GtkPlug *plug);
  */
 void _gtk_plug_windowing_realize_toplevel (GtkPlug *plug);
 
-/**
+/*
  * _gtk_plug_windowing_map_toplevel:
  *
  * @plug: a #GtkPlug
@@ -65,7 +65,7 @@ void _gtk_plug_windowing_realize_toplevel (GtkPlug *plug);
  */
 void _gtk_plug_windowing_map_toplevel (GtkPlug *plug);
 
-/**
+/*
  * _gtk_plug_windowing_map_toplevel:
  *
  * @plug: a #GtkPlug
@@ -75,7 +75,7 @@ void _gtk_plug_windowing_map_toplevel (GtkPlug *plug);
  */
 void _gtk_plug_windowing_unmap_toplevel (GtkPlug *plug);
 
-/**
+/*
  * _gtk_plug_windowing_set_focus:
  *
  * @plug: a #GtkPlug
@@ -85,7 +85,7 @@ void _gtk_plug_windowing_unmap_toplevel (GtkPlug *plug);
  */
 void _gtk_plug_windowing_set_focus (GtkPlug *plug);
 
-/**
+/*
  * _gtk_plug_windowing_add_grabbed_key:
  *
  * @plug: a #GtkPlug
@@ -99,7 +99,7 @@ void _gtk_plug_windowing_add_grabbed_key (GtkPlug         *plug,
 					  guint            accelerator_key,
 					  GdkModifierType  accelerator_mods);
 
-/**
+/*
  * _gtk_plug_windowing_remove_grabbed_key:
  *
  * @plug: a #GtkPlug
@@ -113,7 +113,7 @@ void _gtk_plug_windowing_remove_grabbed_key (GtkPlug         *plug,
 					     guint            accelerator_key,
 					     GdkModifierType  accelerator_mods);
 
-/**
+/*
  * _gtk_plug_windowing_focus_to_parent:
  *
  * @plug: a #GtkPlug
@@ -125,7 +125,7 @@ void _gtk_plug_windowing_remove_grabbed_key (GtkPlug         *plug,
 void _gtk_plug_windowing_focus_to_parent (GtkPlug         *plug,
 					  GtkDirectionType direction);
 
-/**
+/*
  * _gtk_plug_windowing_filter_func:
  *
  * @gdk_xevent: a windowing system native event
