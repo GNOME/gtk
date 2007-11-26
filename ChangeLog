@@ -1,5 +1,9 @@
 2007-11-26  Matthias Clasen  <mclasen@redhat.com>
 
+	* configure.in: Bump glib requirement to 2.15.0 (for g_test_init)
+
+2007-11-26  Matthias Clasen  <mclasen@redhat.com>
+
 	Use templates for glib-mkenums calls instead of 
 	complicated commandlines in Makefiles.  (#429910)
 
