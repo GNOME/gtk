@@ -1,5 +1,10 @@
 2007-11-26  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkassistant.c: Improve alternative button
+	ordering.  (#476827, Yevgen Muntyan, patch by Carlos Garnacho)
+
+2007-11-26  Matthias Clasen  <mclasen@redhat.com>
+
 	* gtk/gtkcalendar.c: Fix a theming problem with colors
 	in GtkCalendar.  (#499703, Michael Hofmann)
 
