@@ -212,6 +212,8 @@ static void     gtk_notebook_move_focus_out      (GtkNotebook      *notebook,
 static gboolean gtk_notebook_reorder_tab         (GtkNotebook      *notebook,
 						  GtkDirectionType  direction_type,
 						  gboolean          move_to_last);
+static void     gtk_notebook_remove_tab_label    (GtkNotebook      *notebook,
+						  GtkNotebookPage  *page);
 
 /*** GtkObject Methods ***/
 static void gtk_notebook_destroy             (GtkObject        *object);
@@ -1453,7 +1455,8 @@ gtk_notebook_destroy (GtkObject *object)
 {
   GtkNotebook *notebook = GTK_NOTEBOOK (object);
   GtkNotebookPrivate *priv = GTK_NOTEBOOK_GET_PRIVATE (notebook);
-  
+  GList *l;
+
   if (notebook->menu)
     gtk_notebook_popup_disable (notebook);
 
@@ -1468,6 +1471,23 @@ gtk_notebook_destroy (GtkObject *object)
       g_source_remove (priv->switch_tab_timer);
       priv->switch_tab_timer = 0;
     }
+
+  for (l = notebook->children; l; l = l->next)
+    {
+      GtkNotebookPage *page = l->data;
+      GtkWidget *w = page->tab_label;
+      if (w) {
+	g_object_ref (w);
+	gtk_notebook_remove_tab_label (notebook, page);
+	gtk_widget_destroy (w);
+	g_object_unref (w);
+      }
+    }
+  /*
+   * Prevent gtk_notebook_update_labels from doing work.  (And from crashing
+   * since we have NULL tab_labels all over.
+   */
+  notebook->show_tabs = FALSE;
 
   GTK_OBJECT_CLASS (gtk_notebook_parent_class)->destroy (object);
 }
@@ -4379,6 +4399,9 @@ gtk_notebook_update_labels (GtkNotebook *notebook)
   GList *list;
   gchar string[32];
   gint page_num = 1;
+
+  if (!notebook->show_tabs && !notebook->menu)
+    return;
 
   for (list = gtk_notebook_search_page (notebook, NULL, STEP_NEXT, FALSE);
        list;
