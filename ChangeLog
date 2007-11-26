@@ -1,5 +1,10 @@
 2007-11-26  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkcalendar.c: Fix a theming problem with colors
+	in GtkCalendar.  (#499703, Michael Hofmann)
+
+2007-11-26  Matthias Clasen  <mclasen@redhat.com>
+
 	* configure.in: Bump glib requirement to 2.15.0 (for g_test_init)
 
 2007-11-26  Matthias Clasen  <mclasen@redhat.com>
