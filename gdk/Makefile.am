@@ -18,6 +18,8 @@ EXTRA_DIST +=			\
 	gdk.symbols		\
 	makegdkalias.pl		\
 	gdkaliasdef.c		\
+	gdkenumtypes.c.template	\
+	gdkenumtypes.h.template	\
 	abicheck.sh		\
 	pltcheck.sh
 
@@ -242,24 +244,14 @@ BUILT_SOURCES =					\
 
 gdkenumtypes.h: stamp-gdkenumtypes.h
 	@true
-stamp-gdkenumtypes.h: @REBUILD@ $(gdk_public_h_sources) Makefile
-	( cd $(srcdir) && $(GLIB_MKENUMS) \
-			--fhead "#ifndef __GDK_ENUM_TYPES_H__\n#define __GDK_ENUM_TYPES_H__\n\n#include <glib-object.h>\n\nG_BEGIN_DECLS\n" \
-			--fprod "/* enumerations from \"@filename@\" */\n" \
-			--vhead "GType @enum_name@_get_type (void) G_GNUC_CONST;\n#define GDK_TYPE_@ENUMSHORT@ (@enum_name@_get_type())\n" \
-			--ftail "G_END_DECLS\n\n#endif /* __GDK_ENUM_TYPES_H__ */" \
+stamp-gdkenumtypes.h: @REBUILD@ $(gdk_public_h_sources) gdkenumtypes.h.template
+	( cd $(srcdir) && $(GLIB_MKENUMS) --template gdkenumtypes.h.template \
 		$(gdk_public_h_sources) ) >> xgen-geth \
 	&& (cmp -s xgen-geth gdkenumtypes.h || cp xgen-geth gdkenumtypes.h ) \
 	&& rm -f xgen-geth \
 	&& echo timestamp > $(@F)
-gdkenumtypes.c: @REBUILD@ $(gdk_public_h_sources) Makefile
-	( cd $(srcdir) && $(GLIB_MKENUMS) \
-			--fhead "#define GDK_ENABLE_BROKEN\n#include \"gdk.h\"\n#include \"gdkalias.h\"\n" \
-			--fprod "\n/* enumerations from \"@filename@\" */" \
-			--ftail "\n#define __GDK_ENUM_TYPES_C__\n#include \"gdkaliasdef.c\"\n" \
-			--vhead "GType\n@enum_name@_get_type (void)\n{\n  static GType etype = 0;\n  if (etype == 0) {\n    static const G@Type@Value values[] = {" \
-			--vprod "      { @VALUENAME@, \"@VALUENAME@\", \"@valuenick@\" }," \
-			--vtail "      { 0, NULL, NULL }\n    };\n    etype = g_@type@_register_static (g_intern_static_string (\"@EnumName@\"), values);\n  }\n  return etype;\n}\n" \
+gdkenumtypes.c: @REBUILD@ $(gdk_public_h_sources) gdkenumtypes.c.template
+	( cd $(srcdir) && $(GLIB_MKENUMS) --template gdkenumtypes.c.template \
 		$(gdk_public_h_sources) ) > xgen-getc \
 	&& cp xgen-getc gdkenumtypes.c  \
 	&& rm -f xgen-getc

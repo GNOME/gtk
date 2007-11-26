@@ -442,12 +442,8 @@ MAINTAINERCLEANFILES = 		\
 gdk-pixbuf-enum-types.h: s-enum-types-h
 	@true
 
-s-enum-types-h: @REBUILD@ $(gdk_pixbuf_headers) Makefile
-	( cd $(srcdir) && $(GLIB_MKENUMS) \
-			--fhead "#ifndef __GDK_PIXBUF_ENUM_TYPES_H__\n#define __GDK_PIXBUF_ENUM_TYPES_H__\n\n#include <glib-object.h>\n\nG_BEGIN_DECLS\n" \
-			--fprod "/* enumerations from \"@filename@\" */\n" \
-			--vhead "GType @enum_name@_get_type (void) G_GNUC_CONST;\n#define GDK_TYPE_@ENUMSHORT@ (@enum_name@_get_type())\n"         \
-			--ftail "G_END_DECLS\n\n#endif /* __GDK_PIXBUF_ENUM_TYPES_H__ */" \
+s-enum-types-h: @REBUILD@ $(gdk_pixbuf_headers) gdk-pixbuf-enum-types.h.template
+	( cd $(srcdir) && $(GLIB_MKENUMS) --template gdk-pixbuf-enum-types.h.template \
 		$(gdk_pixbuf_headers) ) > tmp-gdk-pixbuf-enum-types.h \
 	&& (cmp -s tmp-gdk-pixbuf-enum-types.h gdk-pixbuf-enum-types.h || cp tmp-gdk-pixbuf-enum-types.h gdk-pixbuf-enum-types.h ) \
 	&& rm -f tmp-gdk-pixbuf-enum-types.h \
@@ -459,14 +455,8 @@ MAINTAINERCLEANFILES += s-enum-types-h
 #
 # gdk-pixbuf-enum-types.c
 #
-gdk-pixbuf-enum-types.c: @REBUILD@ $(gdk_pixbuf_headers) Makefile
-	(cd $(srcdir) && $(GLIB_MKENUMS) \
-		--fhead "#include <gdk-pixbuf/gdk-pixbuf.h>\n#include \"gdk-pixbuf-alias.h\"\n" \
-		--fprod "\n/* enumerations from \"@filename@\" */" \
-		--ftail "\n#define __GDK_PIXBUF_ENUM_TYPES_C__\n#include \"gdk-pixbuf-aliasdef.c\"" \
-		--vhead "GType\n@enum_name@_get_type (void)\n{\n  static GType etype = 0;\n  if (etype == 0) {\n    static const G@Type@Value values[] = {"       \
-		--vprod "      { @VALUENAME@, \"@VALUENAME@\", \"@valuenick@\" }," \
-		--vtail "      { 0, NULL, NULL }\n    };\n    etype = g_@type@_register_static (g_intern_static_string (\"@EnumName@\"), values);\n  }\n  return etype;\n}\n" \
+gdk-pixbuf-enum-types.c: @REBUILD@ $(gdk_pixbuf_headers) gdk-pixbuf-enum-types.c.template
+	(cd $(srcdir) && $(GLIB_MKENUMS) --template gdk-pixbuf-enum-types.c.template \
 		  $(gdk_pixbuf_headers)) > gdk-pixbuf-enum-types.c
 
 #
@@ -512,6 +502,8 @@ EXTRA_DIST +=					\
 	gdk_pixbuf.rc				\
 	gdk-pixbuf-marshal.c			\
 	gdk-pixbuf-marshal.list			\
+	gdk-pixbuf-enum-types.c.template	\
+	gdk-pixbuf-enum-types.h.template	\
 	gen-color-table.pl
 
 if CROSS_COMPILING

@@ -1,5 +1,20 @@
 2007-11-26  Matthias Clasen  <mclasen@redhat.com>
 
+	Use templates for glib-mkenums calls instead of 
+	complicated commandlines in Makefiles.  (#429910)
+
+	* gdk-pixbuf/Makefile.am:
+	* gdk/Makefile.am: 
+	* gtk/Makefile.am: 
+	* perf/Makefile.am: Use templates for glib-mkenums
+
+	* gdk-pixbuf/gdk-pixbuf-enum-types.[ch].template:
+	* gdk/gdkenumtypes.[ch].template: 
+	* gtk/gtktypebuiltings.[ch].template: 
+	* perf/typebuiltins.[ch].template: The templates
+
+2007-11-26  Matthias Clasen  <mclasen@redhat.com>
+
 	* gtk/gtkfilechooserbutton.c:
 	* gtk/gtktoolbar.c: Don't use guint8 for bitfields, since
 	some compilers choke on that.  (#467722)
