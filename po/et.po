@@ -14,8 +14,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ HEAD\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-08-16 03:58+0100\n"
-"PO-Revision-Date: 2007-11-24 14:36+0200\n"
+"POT-Creation-Date: 2007-11-26 04:01+0000\n"
+"PO-Revision-Date: 2007-11-26 11:07+0000\n"
 "Last-Translator: Ivar Smolin <okul@linux.ee>\n"
 "Language-Team: Estonian <gnome-et@linux.ee>\n"
 "MIME-Version: 1.0\n"
@@ -237,18 +237,18 @@ msgstr "KP_Delete"
 msgid "keyboard label|Delete"
 msgstr "Delete"
 
-#: ../gdk-pixbuf/gdk-pixbuf-animation.c:154 ../gdk-pixbuf/gdk-pixbuf-io.c:847
+#: ../gdk-pixbuf/gdk-pixbuf-animation.c:133 ../gdk-pixbuf/gdk-pixbuf-io.c:847
 #: ../gdk-pixbuf/gdk-pixbuf-io.c:1102 ../tests/testfilechooser.c:218
 #, c-format
 msgid "Failed to open file '%s': %s"
 msgstr "Tõrge faili '%s' avamisel: %s"
 
-#: ../gdk-pixbuf/gdk-pixbuf-animation.c:167 ../gdk-pixbuf/gdk-pixbuf-io.c:859
+#: ../gdk-pixbuf/gdk-pixbuf-animation.c:146 ../gdk-pixbuf/gdk-pixbuf-io.c:859
 #, c-format
 msgid "Image file '%s' contains no data"
 msgstr "Pildifaili '%s' ei sisalda andmeid"
 
-#: ../gdk-pixbuf/gdk-pixbuf-animation.c:209 ../gdk-pixbuf/gdk-pixbuf-io.c:896
+#: ../gdk-pixbuf/gdk-pixbuf-animation.c:188 ../gdk-pixbuf/gdk-pixbuf-io.c:896
 #: ../gdk-pixbuf/gdk-pixbuf-io.c:1153 ../tests/testfilechooser.c:263
 #, c-format
 msgid ""
@@ -257,7 +257,7 @@ msgstr ""
 "Tõrge pildifaili '%s' laadimisel: põhjus teadmata, arvatavasti on pildifail "
 "rikutud"
 
-#: ../gdk-pixbuf/gdk-pixbuf-animation.c:242
+#: ../gdk-pixbuf/gdk-pixbuf-animation.c:221
 #, c-format
 msgid ""
 "Failed to load animation '%s': reason not known, probably a corrupt "
@@ -379,22 +379,24 @@ msgstr "Animatsioonis on ootamatu ikoonitükk"
 msgid "Unsupported animation type"
 msgstr "Animatsioonitüüp pole toetatud"
 
-#: ../gdk-pixbuf/io-ani.c:348 ../gdk-pixbuf/io-ani.c:536
+#: ../gdk-pixbuf/io-ani.c:348 ../gdk-pixbuf/io-ani.c:406
+#: ../gdk-pixbuf/io-ani.c:432 ../gdk-pixbuf/io-ani.c:455
+#: ../gdk-pixbuf/io-ani.c:482 ../gdk-pixbuf/io-ani.c:569
 msgid "Invalid header in animation"
 msgstr "Vigane päis animatsioonis"
 
 #: ../gdk-pixbuf/io-ani.c:358 ../gdk-pixbuf/io-ani.c:380
-#: ../gdk-pixbuf/io-ani.c:439 ../gdk-pixbuf/io-ani.c:458
-#: ../gdk-pixbuf/io-ani.c:509 ../gdk-pixbuf/io-ani.c:581
+#: ../gdk-pixbuf/io-ani.c:464 ../gdk-pixbuf/io-ani.c:491
+#: ../gdk-pixbuf/io-ani.c:542 ../gdk-pixbuf/io-ani.c:614
 msgid "Not enough memory to load animation"
 msgstr "Animatsiooni laadimiseks pole piisavalt mälu"
 
-#: ../gdk-pixbuf/io-ani.c:398 ../gdk-pixbuf/io-ani.c:415
-#: ../gdk-pixbuf/io-ani.c:426
+#: ../gdk-pixbuf/io-ani.c:398 ../gdk-pixbuf/io-ani.c:424
+#: ../gdk-pixbuf/io-ani.c:443
 msgid "Malformed chunk in animation"
 msgstr "Animatsioonis on vigaselt vormindatud tükk"
 
-#: ../gdk-pixbuf/io-ani.c:680
+#: ../gdk-pixbuf/io-ani.c:713
 msgid "The ANI image format"
 msgstr "ANI-pildivorming"
 
@@ -544,12 +546,25 @@ msgstr "Toetamata värvisügavus %d ICO-faili jaoks."
 msgid "The ICO image format"
 msgstr "ICO-pildivorming"
 
+#: ../gdk-pixbuf/io-icns.c:345
+#, c-format
+msgid "Error reading ICNS image: %s"
+msgstr "Viga ICNS-pildi lugemisel: %s"
+
+#: ../gdk-pixbuf/io-icns.c:362
+msgid "Could not decode ICNS file"
+msgstr "ICNS-faili pole võimalik dekodeerida"
+
+#: ../gdk-pixbuf/io-icns.c:391
+msgid "The ICNS image format"
+msgstr "ICNS-pildivorming"
+
 #: ../gdk-pixbuf/io-jpeg.c:117
 #, c-format
 msgid "Error interpreting JPEG image file (%s)"
 msgstr "Viga JPEG-pildifaili (%s) tõlgendamisel"
 
-#: ../gdk-pixbuf/io-jpeg.c:509
+#: ../gdk-pixbuf/io-jpeg.c:529
 msgid ""
 "Insufficient memory to load image, try exiting some applications to free "
 "memory"
@@ -557,21 +572,21 @@ msgstr ""
 "Pildifaili laadimiseks pole piisavalt mälu. Mälu vabastamiseks võid sa "
 "proovida sulgeda mõned rakendused"
 
-#: ../gdk-pixbuf/io-jpeg.c:550 ../gdk-pixbuf/io-jpeg.c:756
+#: ../gdk-pixbuf/io-jpeg.c:570 ../gdk-pixbuf/io-jpeg.c:776
 #, c-format
 msgid "Unsupported JPEG color space (%s)"
 msgstr "Toetamata JPEG värvituum (%s)"
 
-#: ../gdk-pixbuf/io-jpeg.c:648 ../gdk-pixbuf/io-jpeg.c:920
-#: ../gdk-pixbuf/io-jpeg.c:1153 ../gdk-pixbuf/io-jpeg.c:1162
+#: ../gdk-pixbuf/io-jpeg.c:668 ../gdk-pixbuf/io-jpeg.c:940
+#: ../gdk-pixbuf/io-jpeg.c:1173 ../gdk-pixbuf/io-jpeg.c:1182
 msgid "Couldn't allocate memory for loading JPEG file"
 msgstr "JPEG-faili laadimiseks pole võimalik mälu eraldada"
 
-#: ../gdk-pixbuf/io-jpeg.c:896
+#: ../gdk-pixbuf/io-jpeg.c:916
 msgid "Transformed JPEG has zero width or height."
 msgstr "Transformeeritud JPEG laius või kõrgus on null."
 
-#: ../gdk-pixbuf/io-jpeg.c:1109
+#: ../gdk-pixbuf/io-jpeg.c:1129
 #, c-format
 msgid ""
 "JPEG quality must be a value between 0 and 100; value '%s' could not be "
@@ -580,14 +595,14 @@ msgstr ""
 "JPEG kvaliteedi väärtus peab olema 0 ja 100 vahel; väärtust '%s' pole "
 "võimalik analüüsida."
 
-#: ../gdk-pixbuf/io-jpeg.c:1124
+#: ../gdk-pixbuf/io-jpeg.c:1144
 #, c-format
 msgid ""
 "JPEG quality must be a value between 0 and 100; value '%d' is not allowed."
 msgstr ""
 "JPEG kvaliteedi väärtus peab olema 0 ja 100 vahel; väärtus '%d' pole lubatud."
 
-#: ../gdk-pixbuf/io-jpeg.c:1287
+#: ../gdk-pixbuf/io-jpeg.c:1307
 msgid "The JPEG image format"
 msgstr "JPEG-pildivorming"
 
@@ -862,7 +877,7 @@ msgstr "TGA kontekstistruktuuri jaoks pole võimalik mälu eraldada"
 msgid "Excess data in file"
 msgstr "Failis on liigsed andmed"
 
-#: ../gdk-pixbuf/io-tga.c:1001
+#: ../gdk-pixbuf/io-tga.c:1002
 msgid "The Targa image format"
 msgstr "Targa pildivorming"
 
@@ -935,7 +950,7 @@ msgstr "Pildi laadimiseks pole piisavalt mälu"
 msgid "Couldn't save the rest"
 msgstr "Ülejäänud pole võimalik salvestada"
 
-#: ../gdk-pixbuf/io-wbmp.c:374
+#: ../gdk-pixbuf/io-wbmp.c:377
 msgid "The WBMP image format"
 msgstr "WBMP-pildivorming"
 
@@ -1147,17 +1162,17 @@ msgstr "Tühik"
 msgid "keyboard label|Backslash"
 msgstr "Kurakaldkriips"
 
-#: ../gtk/gtkbuilderparser.c:289
+#: ../gtk/gtkbuilderparser.c:269
 #, c-format
 msgid "Invalid type function: `%s'"
 msgstr "Vigane liigi funktsioon: `%s'"
 
-#: ../gtk/gtkbuilderparser.c:729
+#: ../gtk/gtkbuilderparser.c:718
 #, c-format
 msgid "Invalid root element: '%s'"
 msgstr "Vigane juurkirje: %s"
 
-#: ../gtk/gtkbuilderparser.c:761
+#: ../gtk/gtkbuilderparser.c:750
 #, c-format
 msgid "Unhandled tag: '%s'"
 msgstr "Käsitlematu silt: '%s'"
@@ -1254,7 +1269,7 @@ msgstr "Keelatud"
 #. * an accelerator when the cell is clicked to change the
 #. * acelerator.
 #.
-#: ../gtk/gtkcellrendereraccel.c:364 ../gtk/gtkcellrendereraccel.c:576
+#: ../gtk/gtkcellrendereraccel.c:368 ../gtk/gtkcellrendereraccel.c:580
 msgid "New accelerator..."
 msgstr "Uus kiirendi..."
 
@@ -1399,11 +1414,11 @@ msgstr "Värviratas"
 msgid "Color Selection"
 msgstr "Värvi valik"
 
-#: ../gtk/gtkentry.c:5253 ../gtk/gtktextview.c:7605
+#: ../gtk/gtkentry.c:5253 ../gtk/gtktextview.c:7652
 msgid "Input _Methods"
 msgstr "Sisestus_meetodid"
 
-#: ../gtk/gtkentry.c:5267 ../gtk/gtktextview.c:7619
+#: ../gtk/gtkentry.c:5267 ../gtk/gtktextview.c:7666
 msgid "_Insert Unicode Control Character"
 msgstr "L_isa Unicode'i juhtmärk"
 
@@ -1411,7 +1426,7 @@ msgstr "L_isa Unicode'i juhtmärk"
 msgid "Select A File"
 msgstr "Faili valimine"
 
-#: ../gtk/gtkfilechooserbutton.c:69 ../gtk/gtkfilechooserdefault.c:1966
+#: ../gtk/gtkfilechooserbutton.c:69 ../gtk/gtkfilechooserdefault.c:1982
 msgid "Desktop"
 msgstr "Töölaud"
 
@@ -1419,7 +1434,7 @@ msgstr "Töölaud"
 msgid "(None)"
 msgstr "(puudub)"
 
-#: ../gtk/gtkfilechooserbutton.c:2052
+#: ../gtk/gtkfilechooserbutton.c:2048
 msgid "Other..."
 msgstr "Muu..."
 
@@ -1466,178 +1481,178 @@ msgstr "Kataloogi sisu pole võimalik kuvada"
 #. * is a hostname. Nautilus and the panel contain the same string
 #. * to translate.
 #.
-#: ../gtk/gtkfilechooserdefault.c:1715
+#: ../gtk/gtkfilechooserdefault.c:1731
 #, c-format
 msgid "%1$s on %2$s"
 msgstr "%1$s hostil %2$s"
 
-#: ../gtk/gtkfilechooserdefault.c:1893
+#: ../gtk/gtkfilechooserdefault.c:1909
 msgid "Search"
 msgstr "Otsing"
 
-#: ../gtk/gtkfilechooserdefault.c:1917
+#: ../gtk/gtkfilechooserdefault.c:1933
 msgid "Recently Used"
 msgstr "Viimati kasutatud"
 
-#: ../gtk/gtkfilechooserdefault.c:2581
+#: ../gtk/gtkfilechooserdefault.c:2597
 msgid "Select which types of files are shown"
 msgstr "Vali, milliseid failitüüpe näidata"
 
-#: ../gtk/gtkfilechooserdefault.c:3009
+#: ../gtk/gtkfilechooserdefault.c:3025
 #, c-format
 msgid "Add the folder '%s' to the bookmarks"
 msgstr "Kataloogi '%s' lisamine järjehoidjatesse"
 
-#: ../gtk/gtkfilechooserdefault.c:3050
+#: ../gtk/gtkfilechooserdefault.c:3066
 msgid "Add the current folder to the bookmarks"
 msgstr "Käesoleva kataloogi lisamine järjehoidjatesse"
 
-#: ../gtk/gtkfilechooserdefault.c:3052
+#: ../gtk/gtkfilechooserdefault.c:3068
 msgid "Add the selected folders to the bookmarks"
 msgstr "Valitud kataloogide lisamine järjehoidjatesse"
 
-#: ../gtk/gtkfilechooserdefault.c:3092
+#: ../gtk/gtkfilechooserdefault.c:3108
 #, c-format
 msgid "Remove the bookmark '%s'"
 msgstr "Järjehoidja '%s' eemaldamine"
 
-#: ../gtk/gtkfilechooserdefault.c:3524
+#: ../gtk/gtkfilechooserdefault.c:3540
 #, c-format
 msgid "Could not add a bookmark for '%s' because it is an invalid path name."
 msgstr "Järjehoidjat '%s' pole võimalik lisada kuna selle rajanimi on vigane."
 
-#: ../gtk/gtkfilechooserdefault.c:3749
+#: ../gtk/gtkfilechooserdefault.c:3765
 msgid "Remove"
 msgstr "Eemalda"
 
-#: ../gtk/gtkfilechooserdefault.c:3758
+#: ../gtk/gtkfilechooserdefault.c:3774
 msgid "Rename..."
 msgstr "Muuda nime..."
 
 #. Accessible object name for the file chooser's shortcuts pane
-#: ../gtk/gtkfilechooserdefault.c:3900
+#: ../gtk/gtkfilechooserdefault.c:3916
 msgid "Places"
 msgstr "Asukohad"
 
 #. Column header for the file chooser's shortcuts pane
-#: ../gtk/gtkfilechooserdefault.c:3954
+#: ../gtk/gtkfilechooserdefault.c:3970
 msgid "_Places"
 msgstr "As_ukohad"
 
-#: ../gtk/gtkfilechooserdefault.c:4009 ../gtk/gtkstock.c:297
+#: ../gtk/gtkfilechooserdefault.c:4025 ../gtk/gtkstock.c:297
 msgid "_Add"
 msgstr "L_isa"
 
-#: ../gtk/gtkfilechooserdefault.c:4016
+#: ../gtk/gtkfilechooserdefault.c:4032
 msgid "Add the selected folder to the Bookmarks"
 msgstr "Valitud kataloogi lisamine järjehoidjate hulka"
 
-#: ../gtk/gtkfilechooserdefault.c:4021 ../gtk/gtkstock.c:385
+#: ../gtk/gtkfilechooserdefault.c:4037 ../gtk/gtkstock.c:385
 msgid "_Remove"
 msgstr "_Eemalda"
 
-#: ../gtk/gtkfilechooserdefault.c:4028
+#: ../gtk/gtkfilechooserdefault.c:4044
 msgid "Remove the selected bookmark"
 msgstr "Eemalda valitud järjehoidja"
 
-#: ../gtk/gtkfilechooserdefault.c:4124
+#: ../gtk/gtkfilechooserdefault.c:4140
 msgid "Could not select file"
 msgstr "Faili pole võimalik valida"
 
-#: ../gtk/gtkfilechooserdefault.c:4261
+#: ../gtk/gtkfilechooserdefault.c:4277
 #, c-format
 msgid "Could not select file '%s' because it is an invalid path name."
 msgstr "Faili '%s' pole võimalik lisada kuna selle rajanimi on vigane."
 
-#: ../gtk/gtkfilechooserdefault.c:4318
+#: ../gtk/gtkfilechooserdefault.c:4334
 msgid "_Add to Bookmarks"
 msgstr "_Lisa järjehoidjatesse"
 
-#: ../gtk/gtkfilechooserdefault.c:4332
+#: ../gtk/gtkfilechooserdefault.c:4348
 msgid "Show _Hidden Files"
 msgstr "Näita _peidetud faile"
 
-#: ../gtk/gtkfilechooserdefault.c:4576 ../gtk/gtkfilesel.c:729
+#: ../gtk/gtkfilechooserdefault.c:4592 ../gtk/gtkfilesel.c:729
 msgid "Files"
 msgstr "Failid"
 
-#: ../gtk/gtkfilechooserdefault.c:4625
+#: ../gtk/gtkfilechooserdefault.c:4641
 msgid "Name"
 msgstr "Nimi"
 
-#: ../gtk/gtkfilechooserdefault.c:4650
+#: ../gtk/gtkfilechooserdefault.c:4666
 msgid "Size"
 msgstr "Suurus"
 
-#: ../gtk/gtkfilechooserdefault.c:4664
+#: ../gtk/gtkfilechooserdefault.c:4680
 msgid "Modified"
 msgstr "Muudetud"
 
 #. Label
-#: ../gtk/gtkfilechooserdefault.c:4884 ../gtk/gtkprinteroptionwidget.c:786
+#: ../gtk/gtkfilechooserdefault.c:4900 ../gtk/gtkprinteroptionwidget.c:786
 msgid "_Name:"
 msgstr "_Nimi:"
 
-#: ../gtk/gtkfilechooserdefault.c:4926
+#: ../gtk/gtkfilechooserdefault.c:4942
 msgid "_Browse for other folders"
 msgstr "Si_rvi teisi katalooge"
 
-#: ../gtk/gtkfilechooserdefault.c:5181
+#: ../gtk/gtkfilechooserdefault.c:5208
 msgid "Type a file name"
 msgstr "Faili nime sisestamine"
 
 #. Create Folder
-#: ../gtk/gtkfilechooserdefault.c:5218
+#: ../gtk/gtkfilechooserdefault.c:5245
 msgid "Create Fo_lder"
 msgstr "Loo _kataloog"
 
-#: ../gtk/gtkfilechooserdefault.c:5228
+#: ../gtk/gtkfilechooserdefault.c:5255
 msgid "_Location:"
 msgstr "Asuk_oht:"
 
-#: ../gtk/gtkfilechooserdefault.c:5466
+#: ../gtk/gtkfilechooserdefault.c:5493
 msgid "Save in _folder:"
 msgstr "Salvestada _kataloogi:"
 
-#: ../gtk/gtkfilechooserdefault.c:5468
+#: ../gtk/gtkfilechooserdefault.c:5495
 msgid "Create in _folder:"
 msgstr "Loo _kataloogi:"
 
-#: ../gtk/gtkfilechooserdefault.c:7071
+#: ../gtk/gtkfilechooserdefault.c:7098
 msgid "Cannot change to folder because it is not local"
 msgstr "Kataloogi pole võimalik muuta kuna see pole kohalik kataloog"
 
-#: ../gtk/gtkfilechooserdefault.c:7687 ../gtk/gtkfilechooserdefault.c:7708
+#: ../gtk/gtkfilechooserdefault.c:7714 ../gtk/gtkfilechooserdefault.c:7735
 #, c-format
 msgid "Shortcut %s already exists"
 msgstr "Kiirklahv %s on juba olemas"
 
-#: ../gtk/gtkfilechooserdefault.c:7798
+#: ../gtk/gtkfilechooserdefault.c:7825
 #, c-format
 msgid "Shortcut %s does not exist"
 msgstr "Kiirklahvi %s pole olemas"
 
-#: ../gtk/gtkfilechooserdefault.c:8053
+#: ../gtk/gtkfilechooserdefault.c:8080
 #, c-format
 msgid "A file named \"%s\" already exists.  Do you want to replace it?"
 msgstr "Fail nimega \"%s\" on juba olemas.  Kas sa soovid seda asendada?"
 
-#: ../gtk/gtkfilechooserdefault.c:8056
+#: ../gtk/gtkfilechooserdefault.c:8083
 #, c-format
 msgid ""
 "The file already exists in \"%s\".  Replacing it will overwrite its contents."
 msgstr ""
 "Fail on juba \"%s\" all olemas.  Asendamine kirjutab selle faili sisu üle."
 
-#: ../gtk/gtkfilechooserdefault.c:8061
+#: ../gtk/gtkfilechooserdefault.c:8088
 msgid "_Replace"
 msgstr "_Asenda"
 
-#: ../gtk/gtkfilechooserdefault.c:8892
+#: ../gtk/gtkfilechooserdefault.c:8922
 msgid "Could not start the search process"
 msgstr "Otsinguprotsessi pole võimalik alustada"
 
-#: ../gtk/gtkfilechooserdefault.c:8893
+#: ../gtk/gtkfilechooserdefault.c:8923
 msgid ""
 "The program was not able to create a connection to the indexer daemon.  "
 "Please make sure it is running."
@@ -1645,56 +1660,56 @@ msgstr ""
 "Programmil pole võimalik indekseerimisdeemoniga ühendust luua. Palun veendu, "
 "et see deemon töötaks."
 
-#: ../gtk/gtkfilechooserdefault.c:8907
+#: ../gtk/gtkfilechooserdefault.c:8937
 msgid "Could not send the search request"
 msgstr "Otsingupäringut pole võimalik saata"
 
 #. Label
-#: ../gtk/gtkfilechooserdefault.c:9333
+#: ../gtk/gtkfilechooserdefault.c:9365
 msgid "_Search:"
 msgstr "_Otsing:"
 
-#: ../gtk/gtkfilechooserdefault.c:10283
+#: ../gtk/gtkfilechooserdefault.c:10318
 #, c-format
 msgid "Could not mount %s"
 msgstr "%s pole võimalik ühendada"
 
-#: ../gtk/gtkfilechooserdefault.c:10911
+#: ../gtk/gtkfilechooserdefault.c:10946
 msgid "Type name of new folder"
 msgstr "Sisesta uue kataloogi nimi"
 
-#: ../gtk/gtkfilechooserdefault.c:10959
+#: ../gtk/gtkfilechooserdefault.c:10994
 #, c-format
 msgid "%d byte"
 msgid_plural "%d bytes"
 msgstr[0] "%d bait"
 msgstr[1] "%d baiti"
 
-#: ../gtk/gtkfilechooserdefault.c:10961
+#: ../gtk/gtkfilechooserdefault.c:10996
 #, c-format
 msgid "%.1f KB"
 msgstr "%.1f KB"
 
-#: ../gtk/gtkfilechooserdefault.c:10963
+#: ../gtk/gtkfilechooserdefault.c:10998
 #, c-format
 msgid "%.1f MB"
 msgstr "%.1f MB"
 
-#: ../gtk/gtkfilechooserdefault.c:10965
+#: ../gtk/gtkfilechooserdefault.c:11000
 #, c-format
 msgid "%.1f GB"
 msgstr "%.1f GB"
 
-#: ../gtk/gtkfilechooserdefault.c:11061 ../gtk/gtkfilechooserdefault.c:11082
-#: ../gtk/gtkfilechooserdefault.c:11114
+#: ../gtk/gtkfilechooserdefault.c:11096 ../gtk/gtkfilechooserdefault.c:11118
+#: ../gtk/gtkfilechooserdefault.c:11152
 msgid "Unknown"
 msgstr "tundmatu"
 
-#: ../gtk/gtkfilechooserdefault.c:11100
+#: ../gtk/gtkfilechooserdefault.c:11136
 msgid "Today at %H:%M"
 msgstr "Täna kell %H:%M"
 
-#: ../gtk/gtkfilechooserdefault.c:11102
+#: ../gtk/gtkfilechooserdefault.c:11138
 msgid "Yesterday at %H:%M"
 msgstr "Eile kell %H:%M"
 
@@ -1840,11 +1855,11 @@ msgstr "Failinime pole võimalik teisendada"
 msgid "Could not get a stock icon for %s\n"
 msgstr ""
 
-#: ../gtk/gtkfilesystemmodel.c:745
+#: ../gtk/gtkfilesystemmodel.c:743
 msgid "Could not obtain root folder"
 msgstr "Juurkataloogi pole võimalik hankida"
 
-#: ../gtk/gtkfilesystemmodel.c:1338
+#: ../gtk/gtkfilesystemmodel.c:1336
 msgid "(Empty)"
 msgstr "(tühi)"
 
@@ -1953,7 +1968,7 @@ msgstr "_Gamma väärtus"
 #. Remove this icon source so we don't keep trying to
 #. * load it.
 #.
-#: ../gtk/gtkiconfactory.c:1371
+#: ../gtk/gtkiconfactory.c:1374
 #, c-format
 msgid "Error loading icon: %s"
 msgstr "Viga ikooni laadimisel: %s"
@@ -2113,23 +2128,23 @@ msgstr "GTK+ silumislipud, mida maha võtta"
 msgid "default:LTR"
 msgstr "default:LTR"
 
-#: ../gtk/gtkmain.c:751
+#: ../gtk/gtkmain.c:750
 msgid "GTK+ Options"
 msgstr "GTK+ võtmed"
 
-#: ../gtk/gtkmain.c:751
+#: ../gtk/gtkmain.c:750
 msgid "Show GTK+ Options"
 msgstr "GTK+ võtmete näitamine"
 
-#: ../gtk/gtknotebook.c:828
+#: ../gtk/gtknotebook.c:824
 msgid "Arrow spacing"
 msgstr "Ruum noole ümber"
 
-#: ../gtk/gtknotebook.c:829
+#: ../gtk/gtknotebook.c:825
 msgid "Scroll arrow spacing"
 msgstr "Ruum kerimisnoole ümber"
 
-#: ../gtk/gtknotebook.c:4392 ../gtk/gtknotebook.c:6898
+#: ../gtk/gtknotebook.c:4388 ../gtk/gtknotebook.c:6894
 #, c-format
 msgid "Page %u"
 msgstr "Lehekülg %u"
@@ -2196,7 +2211,7 @@ msgstr "_Paberi suurus:"
 msgid "_Orientation:"
 msgstr "_Suund:"
 
-#: ../gtk/gtkpagesetupunixdialog.c:1121 ../gtk/gtkprintunixdialog.c:2145
+#: ../gtk/gtkpagesetupunixdialog.c:1121 ../gtk/gtkprintunixdialog.c:2175
 msgid "Page Setup"
 msgstr "Lehekülje sätted"
 
@@ -2275,60 +2290,60 @@ msgid "%s job #%d"
 msgstr ""
 
 #. translators, strip the prefix up to and including the first |
-#: ../gtk/gtkprintoperation.c:1497
+#: ../gtk/gtkprintoperation.c:1496
 msgid "print operation status|Initial state"
 msgstr "Lähteolek"
 
 #. translators, strip the prefix up to and including the first |
-#: ../gtk/gtkprintoperation.c:1499
+#: ../gtk/gtkprintoperation.c:1498
 msgid "print operation status|Preparing to print"
 msgstr "Printimiseks valmistumine"
 
 #. translators, strip the prefix up to and including the first |
-#: ../gtk/gtkprintoperation.c:1501
+#: ../gtk/gtkprintoperation.c:1500
 msgid "print operation status|Generating data"
 msgstr "Andmete genereerimine"
 
 #. translators, strip the prefix up to and including the first |
-#: ../gtk/gtkprintoperation.c:1503
+#: ../gtk/gtkprintoperation.c:1502
 msgid "print operation status|Sending data"
 msgstr "Andmete saatmine"
 
 #. translators, strip the prefix up to and including the first |
-#: ../gtk/gtkprintoperation.c:1505
+#: ../gtk/gtkprintoperation.c:1504
 msgid "print operation status|Waiting"
 msgstr "Ootamine"
 
 #. translators, strip the prefix up to and including the first |
-#: ../gtk/gtkprintoperation.c:1507
+#: ../gtk/gtkprintoperation.c:1506
 msgid "print operation status|Blocking on issue"
 msgstr "Probleemi tõttu blokeerunud"
 
 #. translators, strip the prefix up to and including the first |
-#: ../gtk/gtkprintoperation.c:1509
+#: ../gtk/gtkprintoperation.c:1508
 msgid "print operation status|Printing"
 msgstr "Printimine"
 
 #. translators, strip the prefix up to and including the first |
-#: ../gtk/gtkprintoperation.c:1511
+#: ../gtk/gtkprintoperation.c:1510
 msgid "print operation status|Finished"
 msgstr "Lõpetatud"
 
 #. translators, strip the prefix up to and including the first |
-#: ../gtk/gtkprintoperation.c:1513
+#: ../gtk/gtkprintoperation.c:1512
 msgid "print operation status|Finished with error"
 msgstr "Lõpetatud veaga"
 
-#: ../gtk/gtkprintoperation.c:1986
+#: ../gtk/gtkprintoperation.c:1985
 #, c-format
 msgid "Preparing %d"
 msgstr "Ettevalmistamine: %d"
 
-#: ../gtk/gtkprintoperation.c:1988 ../gtk/gtkprintoperation.c:2240
+#: ../gtk/gtkprintoperation.c:1987 ../gtk/gtkprintoperation.c:2241
 msgid "Preparing"
 msgstr "Ettevalmistamine"
 
-#: ../gtk/gtkprintoperation.c:1991
+#: ../gtk/gtkprintoperation.c:1990
 #, c-format
 msgid "Printing %d"
 msgstr "Printimine: %d"
@@ -2341,7 +2356,7 @@ msgstr "Viga eelvaate näitamisel"
 msgid "Error printing"
 msgstr "Viga printimisel"
 
-#: ../gtk/gtkprintoperation-unix.c:388 ../gtk/gtkprintoperation-win32.c:1394
+#: ../gtk/gtkprintoperation-unix.c:388 ../gtk/gtkprintoperation-win32.c:1395
 msgid "Application"
 msgstr "Rakendus"
 
@@ -2365,60 +2380,60 @@ msgstr "Vajalik on kasutaja sekkumine"
 msgid "Custom size"
 msgstr "Kohandatud suurus"
 
-#: ../gtk/gtkprintoperation-win32.c:1484 ../gtk/gtkprintoperation-win32.c:1507
-#: ../gtk/gtkprintoperation-win32.c:1555
+#: ../gtk/gtkprintoperation-win32.c:1485 ../gtk/gtkprintoperation-win32.c:1508
+#: ../gtk/gtkprintoperation-win32.c:1556
 msgid "Not enough free memory"
 msgstr "Vaba mälu pole piisavalt"
 
-#: ../gtk/gtkprintoperation-win32.c:1560
+#: ../gtk/gtkprintoperation-win32.c:1561
 msgid "Invalid argument to PrintDlgEx"
 msgstr "Vigane PrintDlgEx argument"
 
-#: ../gtk/gtkprintoperation-win32.c:1565
+#: ../gtk/gtkprintoperation-win32.c:1566
 msgid "Invalid pointer to PrintDlgEx"
 msgstr "Vigane PrintDlgEx pointer"
 
-#: ../gtk/gtkprintoperation-win32.c:1570
+#: ../gtk/gtkprintoperation-win32.c:1571
 msgid "Invalid handle to PrintDlgEx"
 msgstr "Vigane PrintDlgEx käsitleja"
 
-#: ../gtk/gtkprintoperation-win32.c:1575
+#: ../gtk/gtkprintoperation-win32.c:1576
 msgid "Unspecified error"
 msgstr "Kirjeldamata viga"
 
-#: ../gtk/gtkprintoperation-win32.c:1626
+#: ../gtk/gtkprintoperation-win32.c:1627
 msgid "Error from StartDoc"
 msgstr "Viga StartDoc'ist"
 
-#: ../gtk/gtkprintunixdialog.c:1474
+#: ../gtk/gtkprintunixdialog.c:1504
 msgid "Printer"
 msgstr "Printer"
 
-#: ../gtk/gtkprintunixdialog.c:1482
+#: ../gtk/gtkprintunixdialog.c:1512
 msgid "Location"
 msgstr "Asukoht"
 
-#: ../gtk/gtkprintunixdialog.c:1491
+#: ../gtk/gtkprintunixdialog.c:1521
 msgid "Status"
 msgstr "Olek"
 
-#: ../gtk/gtkprintunixdialog.c:1513
+#: ../gtk/gtkprintunixdialog.c:1543
 msgid "Print Pages"
 msgstr "Prinditakse leheküljed"
 
-#: ../gtk/gtkprintunixdialog.c:1517
+#: ../gtk/gtkprintunixdialog.c:1547
 msgid "_All"
 msgstr "_Kõik"
 
-#: ../gtk/gtkprintunixdialog.c:1524
+#: ../gtk/gtkprintunixdialog.c:1554
 msgid "C_urrent"
 msgstr "Kä_esolev"
 
-#: ../gtk/gtkprintunixdialog.c:1533
+#: ../gtk/gtkprintunixdialog.c:1563
 msgid "Ra_nge"
 msgstr "Va_hemik"
 
-#: ../gtk/gtkprintunixdialog.c:1534
+#: ../gtk/gtkprintunixdialog.c:1564
 msgid ""
 "Specify one or more page ranges,\n"
 " e.g. 1-3,7,11"
@@ -2426,142 +2441,142 @@ msgstr ""
 "Määra üks või rohkem leheküljevahemikku.\n"
 " Näiteks: 1-3,7,11"
 
-#: ../gtk/gtkprintunixdialog.c:1553
+#: ../gtk/gtkprintunixdialog.c:1583
 msgid "Copies"
 msgstr "Koopiad"
 
 #. FIXME chpe: too much space between Copies and spinbutton, put those 2 in a hbox and make it span 2 columns
-#: ../gtk/gtkprintunixdialog.c:1558
+#: ../gtk/gtkprintunixdialog.c:1588
 msgid "Copie_s:"
 msgstr "Koop_iaid:"
 
-#: ../gtk/gtkprintunixdialog.c:1576
+#: ../gtk/gtkprintunixdialog.c:1606
 msgid "C_ollate"
 msgstr "_Eksemplarhaaval"
 
-#: ../gtk/gtkprintunixdialog.c:1584
+#: ../gtk/gtkprintunixdialog.c:1614
 msgid "_Reverse"
 msgstr "Pöö_ratud järjestuses"
 
-#: ../gtk/gtkprintunixdialog.c:1601
+#: ../gtk/gtkprintunixdialog.c:1631
 msgid "General"
 msgstr "Üldine"
 
-#: ../gtk/gtkprintunixdialog.c:2001
+#: ../gtk/gtkprintunixdialog.c:2031
 msgid "Layout"
 msgstr "Paigutus"
 
-#: ../gtk/gtkprintunixdialog.c:2005
+#: ../gtk/gtkprintunixdialog.c:2035
 msgid "Pages per _side:"
 msgstr "Le_hekülgi slaidil:"
 
 # msgstr "Le_hekülgi lehel:"
-#: ../gtk/gtkprintunixdialog.c:2021
+#: ../gtk/gtkprintunixdialog.c:2051
 msgid "T_wo-sided:"
 msgstr "Kahe_poolne:"
 
-#: ../gtk/gtkprintunixdialog.c:2036
+#: ../gtk/gtkprintunixdialog.c:2066
 msgid "_Only print:"
 msgstr "Prindita_kse ainult:"
 
 #. In enum order
-#: ../gtk/gtkprintunixdialog.c:2051
+#: ../gtk/gtkprintunixdialog.c:2081
 msgid "All sheets"
 msgstr "Kõik leheküljed"
 
-#: ../gtk/gtkprintunixdialog.c:2052
+#: ../gtk/gtkprintunixdialog.c:2082
 msgid "Even sheets"
 msgstr "Paarisnumbriga leheküljed"
 
-#: ../gtk/gtkprintunixdialog.c:2053
+#: ../gtk/gtkprintunixdialog.c:2083
 msgid "Odd sheets"
 msgstr "Paaritu numbriga leheküljed"
 
-#: ../gtk/gtkprintunixdialog.c:2056
+#: ../gtk/gtkprintunixdialog.c:2086
 msgid "Sc_ale:"
 msgstr "_Skaleerimine:"
 
-#: ../gtk/gtkprintunixdialog.c:2083
+#: ../gtk/gtkprintunixdialog.c:2113
 msgid "Paper"
 msgstr "Paber"
 
-#: ../gtk/gtkprintunixdialog.c:2087
+#: ../gtk/gtkprintunixdialog.c:2117
 msgid "Paper _type:"
 msgstr "Pa_beri liik:"
 
-#: ../gtk/gtkprintunixdialog.c:2102
+#: ../gtk/gtkprintunixdialog.c:2132
 msgid "Paper _source:"
 msgstr "Paberi _allikas:"
 
-#: ../gtk/gtkprintunixdialog.c:2117
+#: ../gtk/gtkprintunixdialog.c:2147
 msgid "Output t_ray:"
 msgstr "_Väljundsalv:"
 
-#: ../gtk/gtkprintunixdialog.c:2168
+#: ../gtk/gtkprintunixdialog.c:2198
 msgid "Job Details"
 msgstr "Töö üksikasjad"
 
-#: ../gtk/gtkprintunixdialog.c:2174
+#: ../gtk/gtkprintunixdialog.c:2204
 msgid "Pri_ority:"
 msgstr "Tä_htsus:"
 
-#: ../gtk/gtkprintunixdialog.c:2189
+#: ../gtk/gtkprintunixdialog.c:2219
 msgid "_Billing info:"
 msgstr "_Maksmise andmed:"
 
-#: ../gtk/gtkprintunixdialog.c:2207
+#: ../gtk/gtkprintunixdialog.c:2237
 msgid "Print Document"
 msgstr "Dokumenti printimine"
 
-#: ../gtk/gtkprintunixdialog.c:2213
+#: ../gtk/gtkprintunixdialog.c:2243
 msgid "_Now"
 msgstr "_Nüüd"
 
-#: ../gtk/gtkprintunixdialog.c:2220
+#: ../gtk/gtkprintunixdialog.c:2250
 msgid "A_t:"
 msgstr "A_jal:"
 
-#: ../gtk/gtkprintunixdialog.c:2235
+#: ../gtk/gtkprintunixdialog.c:2265
 msgid "On _hold"
 msgstr ""
 
-#: ../gtk/gtkprintunixdialog.c:2254
+#: ../gtk/gtkprintunixdialog.c:2284
 msgid "Add Cover Page"
 msgstr "Esilehe lisamine"
 
-#: ../gtk/gtkprintunixdialog.c:2260
+#: ../gtk/gtkprintunixdialog.c:2290
 msgid "Be_fore:"
 msgstr "_Enne:"
 
-#: ../gtk/gtkprintunixdialog.c:2275
+#: ../gtk/gtkprintunixdialog.c:2305
 msgid "_After:"
 msgstr "_Pärast:"
 
-#: ../gtk/gtkprintunixdialog.c:2290
+#: ../gtk/gtkprintunixdialog.c:2320
 msgid "Job"
 msgstr "Töö"
 
-#: ../gtk/gtkprintunixdialog.c:2356
+#: ../gtk/gtkprintunixdialog.c:2386
 msgid "Advanced"
 msgstr "Laiendatud"
 
-#: ../gtk/gtkprintunixdialog.c:2391
+#: ../gtk/gtkprintunixdialog.c:2421
 msgid "Image Quality"
 msgstr "Pildikvaliteet"
 
-#: ../gtk/gtkprintunixdialog.c:2394
+#: ../gtk/gtkprintunixdialog.c:2424
 msgid "Color"
 msgstr "Värv"
 
-#: ../gtk/gtkprintunixdialog.c:2397
+#: ../gtk/gtkprintunixdialog.c:2427
 msgid "Finishing"
 msgstr "Lõpetamine"
 
-#: ../gtk/gtkprintunixdialog.c:2407
+#: ../gtk/gtkprintunixdialog.c:2437
 msgid "Some of the settings in the dialog conflict"
 msgstr "Selle dialoogi mõned sätted on omavahel vastuolus"
 
-#: ../gtk/gtkprintunixdialog.c:2430
+#: ../gtk/gtkprintunixdialog.c:2460
 msgid "Print"
 msgstr "Prindi"
 
@@ -2573,18 +2588,18 @@ msgstr "Grupp"
 msgid "The radio tool button whose group this button belongs to."
 msgstr "Grupp, millesse raadionupp kuulub."
 
-#: ../gtk/gtkrc.c:2866
+#: ../gtk/gtkrc.c:2867
 #, c-format
 msgid "Unable to find include file: \"%s\""
 msgstr "Faili pole võimalik kaasata: \"%s\""
 
-#: ../gtk/gtkrc.c:3494 ../gtk/gtkrc.c:3497
+#: ../gtk/gtkrc.c:3495 ../gtk/gtkrc.c:3498
 #, c-format
 msgid "Unable to locate image file in pixmap_path: \"%s\""
 msgstr "Ei leia pildifaili otsingurajalt 'pixmap_path': \"%s\""
 
 #: ../gtk/gtkrecentaction.c:155 ../gtk/gtkrecentaction.c:163
-#: ../gtk/gtkrecentchoosermenu.c:555 ../gtk/gtkrecentchoosermenu.c:563
+#: ../gtk/gtkrecentchoosermenu.c:553 ../gtk/gtkrecentchoosermenu.c:561
 #, c-format
 msgid "This function is not implemented for widgets of class '%s'"
 msgstr "See funktsioon pole vidinate klassis '%s' teostatud"
@@ -2640,17 +2655,17 @@ msgstr "Näita _privaatressursse"
 msgid "No items found"
 msgstr "Kirjeid ei leitud"
 
-#: ../gtk/gtkrecentchoosermenu.c:475 ../gtk/gtkrecentchoosermenu.c:531
+#: ../gtk/gtkrecentchoosermenu.c:473 ../gtk/gtkrecentchoosermenu.c:529
 #, c-format
 msgid "No recently used resource found with URI `%s'"
 msgstr "URI-ga `%s' ei leitud viimati kasutatud ressurssi"
 
-#: ../gtk/gtkrecentchoosermenu.c:742
+#: ../gtk/gtkrecentchoosermenu.c:740
 #, c-format
 msgid "Open '%s'"
 msgstr "'%s' avamine"
 
-#: ../gtk/gtkrecentchoosermenu.c:772
+#: ../gtk/gtkrecentchoosermenu.c:770
 msgid "Unknown item"
 msgstr "Tundmatu kirje"
 
@@ -2661,7 +2676,7 @@ msgstr "Tundmatu kirje"
 #. *
 #. * Don't include the prefix "recent menu label|" in the translation.
 #.
-#: ../gtk/gtkrecentchoosermenu.c:785
+#: ../gtk/gtkrecentchoosermenu.c:783
 #, c-format
 msgid "recent menu label|_%d. %s"
 msgstr "_%d. %s"
@@ -2671,13 +2686,13 @@ msgstr "_%d. %s"
 #. *
 #. * Don't include the prefix "recent menu label|" in the translation.
 #.
-#: ../gtk/gtkrecentchoosermenu.c:792
+#: ../gtk/gtkrecentchoosermenu.c:790
 #, c-format
 msgid "recent menu label|%d. %s"
 msgstr "%d. %s"
 
-#: ../gtk/gtkrecentmanager.c:1047 ../gtk/gtkrecentmanager.c:1194
-#: ../gtk/gtkrecentmanager.c:1204 ../gtk/gtkrecentmanager.c:1257
+#: ../gtk/gtkrecentmanager.c:1041 ../gtk/gtkrecentmanager.c:1187
+#: ../gtk/gtkrecentmanager.c:1197 ../gtk/gtkrecentmanager.c:1250
 #, c-format
 msgid "Unable to find an item with URI '%s'"
 msgstr "URI-ga `%s' pole võimalik leida ühtegi kirjet"
@@ -4097,90 +4112,90 @@ msgstr "ROC 16k"
 msgid "paper size|ROC 8k"
 msgstr "ROC 8k"
 
-#: ../gtk/updateiconcache.c:498 ../gtk/updateiconcache.c:558
+#: ../gtk/updateiconcache.c:490 ../gtk/updateiconcache.c:550
 #, c-format
 msgid "different idatas found for symlinked '%s' and '%s'\n"
 msgstr ""
 
-#: ../gtk/updateiconcache.c:1379
+#: ../gtk/updateiconcache.c:1368
 msgid "Failed to write header\n"
 msgstr "Tõrge päise kirjutamisel\n"
 
-#: ../gtk/updateiconcache.c:1385
+#: ../gtk/updateiconcache.c:1374
 msgid "Failed to write hash table\n"
 msgstr "Tõrge räsitabeli kirjutamisel\n"
 
-#: ../gtk/updateiconcache.c:1391
+#: ../gtk/updateiconcache.c:1380
 msgid "Failed to write folder index\n"
 msgstr "Tõrge kataloogiindeksi kirjutamisel\n"
 
-#: ../gtk/updateiconcache.c:1399
+#: ../gtk/updateiconcache.c:1388
 msgid "Failed to rewrite header\n"
 msgstr "Tõrge päise uuestikirjutamisel\n"
 
-#: ../gtk/updateiconcache.c:1451
+#: ../gtk/updateiconcache.c:1440
 #, c-format
 msgid "Failed to write cache file: %s\n"
 msgstr "Tõrge puhverfaili kirjutamisel: %s\n"
 
-#: ../gtk/updateiconcache.c:1486
+#: ../gtk/updateiconcache.c:1475
 msgid "The generated cache was invalid.\n"
 msgstr "Genereeritud puhver on vigane.\n"
 
-#: ../gtk/updateiconcache.c:1500
+#: ../gtk/updateiconcache.c:1489
 #, c-format
 msgid "Could not rename %s to %s: %s, removing %s then.\n"
 msgstr ""
 
-#: ../gtk/updateiconcache.c:1512
+#: ../gtk/updateiconcache.c:1501
 #, c-format
 msgid "Could not rename %s to %s: %s\n"
 msgstr "Kataloogi %s pole võimalik nime %s alla ümber nimetada: %s\n"
 
-#: ../gtk/updateiconcache.c:1519
+#: ../gtk/updateiconcache.c:1508
 #, c-format
 msgid "Could not rename %s back to %s: %s.\n"
 msgstr "Kataloogi %s pole võimalik tagasi nime %s alla ümber nimetada: %s\n"
 
-#: ../gtk/updateiconcache.c:1541
+#: ../gtk/updateiconcache.c:1530
 msgid "Cache file created successfully.\n"
 msgstr "Puhverfail edukalt loodud.\n"
 
-#: ../gtk/updateiconcache.c:1580
+#: ../gtk/updateiconcache.c:1569
 msgid "Overwrite an existing cache, even if up to date"
 msgstr "Olemasoleva puhvri ülekirjutamine isegi värskeima puhvri korral"
 
-#: ../gtk/updateiconcache.c:1581
+#: ../gtk/updateiconcache.c:1570
 msgid "Don't check for the existence of index.theme"
 msgstr "index.theme olemasolu ei kontrollita"
 
-#: ../gtk/updateiconcache.c:1582
+#: ../gtk/updateiconcache.c:1571
 msgid "Don't include image data in the cache"
 msgstr "Pildiandmeid puhvrisse ei kaasata"
 
-#: ../gtk/updateiconcache.c:1583
+#: ../gtk/updateiconcache.c:1572
 msgid "Output a C header file"
 msgstr "C-päisefaili väljastamine"
 
-#: ../gtk/updateiconcache.c:1584
+#: ../gtk/updateiconcache.c:1573
 msgid "Turn off verbose output"
 msgstr "Teaberohke väljundi keelamine"
 
-#: ../gtk/updateiconcache.c:1585
+#: ../gtk/updateiconcache.c:1574
 msgid "Validate existing icon cache"
 msgstr "Olemasoleva ikoonipuhvri valideerimine"
 
-#: ../gtk/updateiconcache.c:1620
+#: ../gtk/updateiconcache.c:1609
 #, c-format
 msgid "File not found: %s\n"
 msgstr "Faili ei leitud: %s\n"
 
-#: ../gtk/updateiconcache.c:1626
+#: ../gtk/updateiconcache.c:1615
 #, c-format
 msgid "Not a valid icon cache: %s\n"
 msgstr "Ikoonipuhver pole korras: %s\n"
 
-#: ../gtk/updateiconcache.c:1637
+#: ../gtk/updateiconcache.c:1626
 #, c-format
 msgid ""
 "No theme index file in '%s'.\n"
