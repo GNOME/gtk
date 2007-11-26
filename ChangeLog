@@ -1,5 +1,10 @@
 2007-11-26  Matthias Clasen  <mclasen@redhat.com>
 
+	* configure.in: Use $CUPS_CONFIG instead of hardcoded cups-config.
+	(#495574, Richard Hult)
+
+2007-11-26  Matthias Clasen  <mclasen@redhat.com>
+
 	* gtk/gtkprintunixdialog.c: Change some labels to be clearer.
 	String change !   (#376361, Sven Neumann)
 
