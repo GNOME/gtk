@@ -714,7 +714,7 @@ gtk_table_set_row_spacings (GtkTable *table,
  * the spacing that will be used for newly added rows.
  * (See gtk_table_set_row_spacings())
  *
- * Returns value: the default row spacing
+ * Return value: the default row spacing
  **/
 guint
 gtk_table_get_default_row_spacing (GtkTable *table)
@@ -750,7 +750,7 @@ gtk_table_set_col_spacings (GtkTable *table,
  * the spacing that will be used for newly added columns.
  * (See gtk_table_set_col_spacings())
  *
- * Returns value: the default column spacing
+ * Return value: the default column spacing
  **/
 guint
 gtk_table_get_default_col_spacing (GtkTable *table)

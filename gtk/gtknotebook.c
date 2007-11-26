@@ -6970,10 +6970,10 @@ gtk_notebook_set_tab_label_text (GtkNotebook *notebook,
  * Retrieves the text of the tab label for the page containing
  *    @child.
  *
- * Returns value: the text of the tab label, or %NULL if the
- *                tab label widget is not a #GtkLabel. The
- *                string is owned by the widget and must not
- *                be freed.
+ * Return value: the text of the tab label, or %NULL if the
+ *               tab label widget is not a #GtkLabel. The
+ *               string is owned by the widget and must not
+ *               be freed.
  **/
 G_CONST_RETURN gchar *
 gtk_notebook_get_tab_label_text (GtkNotebook *notebook,
@@ -7104,11 +7104,11 @@ gtk_notebook_set_menu_label_text (GtkNotebook *notebook,
  * Retrieves the text of the menu label for the page containing
  *    @child.
  *
- * Returns value: the text of the tab label, or %NULL if the
- *                widget does not have a menu label other than
- *                the default menu label, or the menu label widget
- *                is not a #GtkLabel. The string is owned by
- *                the widget and must not be freed.
+ * Return value: the text of the tab label, or %NULL if the
+ *               widget does not have a menu label other than
+ *               the default menu label, or the menu label widget
+ *               is not a #GtkLabel. The string is owned by
+ *               the widget and must not be freed.
  **/
 G_CONST_RETURN gchar *
 gtk_notebook_get_menu_label_text (GtkNotebook *notebook,

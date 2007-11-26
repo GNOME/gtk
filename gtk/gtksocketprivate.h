@@ -56,7 +56,7 @@ void _gtk_socket_advance_toplevel_focus (GtkSocket        *socket,
 
 /* In backend-specific file: */
 
-/**
+/*
  * _gtk_socket_windowing_get_id:
  *
  * @socket: a #GtkSocket
@@ -65,25 +65,25 @@ void _gtk_socket_advance_toplevel_focus (GtkSocket        *socket,
  */
 GdkNativeWindow _gtk_socket_windowing_get_id (GtkSocket *socket);
 
-/**
+/*
  * _gtk_socket_windowing_realize_window:
  *
  */
 void _gtk_socket_windowing_realize_window (GtkSocket *socket);
 
-/**
+/*
  * _gtk_socket_windowing_end_embedding_toplevel:
  *
  */
 void _gtk_socket_windowing_end_embedding_toplevel (GtkSocket *socket);
 
-/**
+/*
  * _gtk_socket_windowing_size_request:
  *
  */
 void _gtk_socket_windowing_size_request (GtkSocket *socket);
 
-/**
+/*
  * _gtk_socket_windowing_send_key_event:
  *
  */
@@ -91,41 +91,41 @@ void _gtk_socket_windowing_send_key_event (GtkSocket *socket,
 					   GdkEvent  *gdk_event,
 					   gboolean   mask_key_presses);
 
-/**
+/*
  * _gtk_socket_windowing_focus_change:
  *
  */
 void _gtk_socket_windowing_focus_change (GtkSocket *socket,
 					 gboolean   focus_in);
 
-/**
+/*
  * _gtk_socket_windowing_update_active:
  *
  */
 void _gtk_socket_windowing_update_active (GtkSocket *socket,
 					  gboolean   active);
 
-/**
+/*
  * _gtk_socket_windowing_update_modality:
  *
  */
 void _gtk_socket_windowing_update_modality (GtkSocket *socket,
 					    gboolean   modality);
 
-/**
+/*
  * _gtk_socket_windowing_focus:
  *
  */
 void _gtk_socket_windowing_focus (GtkSocket *socket,
 				  GtkDirectionType direction);
 
-/**
+/*
  * _gtk_socket_windowing_send_configure_event:
  *
  */
 void _gtk_socket_windowing_send_configure_event (GtkSocket *socket);
 
-/**
+/*
  * _gtk_socket_windowing_select_plug_window_input:
  *
  * Asks the windowing system to send necessary events related to the
@@ -134,7 +134,7 @@ void _gtk_socket_windowing_send_configure_event (GtkSocket *socket);
  */
 void _gtk_socket_windowing_select_plug_window_input (GtkSocket *socket);
 
-/**
+/*
  * _gtk_socket_windowing_embed_get_info:
  *
  * Gets whatever information necessary about an out-of-process plug
@@ -142,25 +142,25 @@ void _gtk_socket_windowing_select_plug_window_input (GtkSocket *socket);
  */
 void _gtk_socket_windowing_embed_get_info (GtkSocket *socket);
 
-/**
+/*
  * _gtk_socket_windowing_embed_notify:
  *
  */
 void _gtk_socket_windowing_embed_notify (GtkSocket *socket);
 
-/**
+/*
  * _gtk_socket_windowing_embed_get_focus_wrapped:
  *
  */
 gboolean _gtk_socket_windowing_embed_get_focus_wrapped (void);
 
-/**
+/*
  * _gtk_socket_windowing_embed_set_focus_wrapped:
  *
  */
 void _gtk_socket_windowing_embed_set_focus_wrapped (void);
 
-/**
+/*
  * _gtk_socket_windowing_filter_func:
  *
  */

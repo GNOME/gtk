@@ -731,7 +731,7 @@ post_parse_hook (GOptionContext *context,
  * with g_option_context_add_group(), if you are using 
  * g_option_context_parse() to parse your commandline arguments.
  *
- * Returns a #GOptionGroup for the commandline arguments recognized
+ * Returns: a #GOptionGroup for the commandline arguments recognized
  *   by GTK+
  *
  * Since: 2.6
