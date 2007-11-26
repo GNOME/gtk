@@ -1,5 +1,12 @@
 2007-11-26  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtknotebook.c (gtk_notebook_update_labels): Short-circuit on
+	destroy.
+	(gtk_notebook_destroy): Destroy tab_label widgets. (#388321, Morten
+	Welinder)
+
+2007-11-26  Matthias Clasen  <mclasen@redhat.com>
+
 	* gtk/gtkassistant.c: Improve alternative button
 	ordering.  (#476827, Yevgen Muntyan, patch by Carlos Garnacho)
 
