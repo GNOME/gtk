@@ -1,3 +1,18 @@
+2007-11-26  Josselin Mouette <joss@malsain.org>
+
+	reviewed by: Federico Mena Quintero
+
+	* gtk/gtkfilechooserdefault.c: (shortcuts_append_paths),
+	(shortcuts_add_bookmarks), (shortcuts_selection_changed_cb),
+	(shortcuts_list_create), (gtk_file_chooser_default_should_respond):
+	Make the shortcuts activate with a single click. (#148828)
+        Fix a few things affected by the change:
+	  - Set selection mode to GTK_SELECTION_SINGLE to allow a case 
+	    where no shortcut is selected.
+	  - Don't activate a shortcut in the response callback.
+	  - Filter out duplicate entries in volumes and bookmarks to 
+	    avoid the selection to change when reordering them with DnD.
+
 2007-11-26  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtkmain.c:
