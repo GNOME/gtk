@@ -1,3 +1,9 @@
+2007-11-26  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtkfilechooserbutton.c:
+	* gtk/gtktoolbar.c: Don't use guint8 for bitfields, since
+	some compilers choke on that.  (#467722)
+
 2007-11-26  Tor Lillqvist  <tml@novell.com>
 
 	* gdk/win32/gdkwindow-win32.c (gdk_window_fullscreen): Use the

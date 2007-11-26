@@ -3877,7 +3877,7 @@ struct _ToolbarContent
       GtkAllocation	goal_allocation;
       guint		is_placeholder : 1;
       guint		disappearing : 1;
-      TriState		has_menu : 2;
+      guint		has_menu : 2;
     } tool_item;
     
     struct

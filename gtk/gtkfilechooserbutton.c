@@ -162,18 +162,18 @@ struct _GtkFileChooserButtonPrivate
   guint8 n_volumes;
   guint8 n_shortcuts;
   guint8 n_bookmarks;
-  guint8 has_bookmark_separator       : 1;
-  guint8 has_current_folder_separator : 1;
-  guint8 has_current_folder           : 1;
-  guint8 has_other_separator          : 1;
+  guint  has_bookmark_separator       : 1;
+  guint  has_current_folder_separator : 1;
+  guint  has_current_folder           : 1;
+  guint  has_other_separator          : 1;
 
   /* Used for hiding/showing the dialog when the button is hidden */
-  guint8 active                       : 1;
+  guint  active                       : 1;
 
   /* Used to track whether we need to set a default current folder on ::map() */
-  guint8 folder_has_been_set          : 1;
+  guint  folder_has_been_set          : 1;
 
-  guint8 focus_on_click               : 1;
+  guint  focus_on_click               : 1;
 };
 
 
