@@ -1,5 +1,10 @@
 2007-11-26  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkprintunixdialog.c: Change some labels to be clearer.
+	String change !   (#376361, Sven Neumann)
+
+2007-11-26  Matthias Clasen  <mclasen@redhat.com>
+
 	* gtk/gtknotebook.c (gtk_notebook_update_labels): Short-circuit on
 	destroy.
 	(gtk_notebook_destroy): Destroy tab_label widgets. (#388321, Morten

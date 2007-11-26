@@ -1540,18 +1540,18 @@ create_main_page (GtkPrintUnixDialog *dialog)
   table = gtk_table_new (3, 2, FALSE);
   gtk_table_set_row_spacings (GTK_TABLE (table), 6);
   gtk_table_set_col_spacings (GTK_TABLE (table), 12);
-  frame = wrap_in_frame (_("Print Pages"), table);
+  frame = wrap_in_frame (_("Range"), table);
   gtk_box_pack_start (GTK_BOX (hbox), frame, TRUE, TRUE, 0);
   gtk_widget_show (table);
 
-  radio = gtk_radio_button_new_with_mnemonic (NULL, _("_All"));
+  radio = gtk_radio_button_new_with_mnemonic (NULL, _("_All Pages"));
   priv->all_pages_radio = radio;
   gtk_widget_show (radio);
   gtk_table_attach (GTK_TABLE (table), radio,
 		    0, 2, 0, 1,  GTK_FILL, 0,
 		    0, 0);
   radio = gtk_radio_button_new_with_mnemonic (gtk_radio_button_get_group (GTK_RADIO_BUTTON (radio)),
-					      _("C_urrent"));
+					      _("C_urrent Page"));
   if (priv->current_page == -1)
     gtk_widget_set_sensitive (radio, FALSE);    
   priv->current_page_radio = radio;
@@ -1560,7 +1560,7 @@ create_main_page (GtkPrintUnixDialog *dialog)
 		    0, 2, 1, 2,  GTK_FILL, 0,
 		    0, 0);
  
-  radio = gtk_radio_button_new_with_mnemonic (gtk_radio_button_get_group (GTK_RADIO_BUTTON (radio)), _("Ra_nge"));
+  radio = gtk_radio_button_new_with_mnemonic (gtk_radio_button_get_group (GTK_RADIO_BUTTON (radio)), _("Pag_es:"));
   gtk_widget_set_tooltip_text (radio, _("Specify one or more page ranges,\n e.g. 1-3,7,11"));
  
   priv->page_range_radio = radio;
