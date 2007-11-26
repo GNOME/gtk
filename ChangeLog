@@ -1,3 +1,8 @@
+2007-11-26  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtkaboutdialog.c (gtk_about_dialog_set_website): Add a note
+	about hook setup.  (#425004, Emmanuele Bassi)
+
 2007-11-26  Tor Lillqvist  <tml@novell.com>
 
 	* gdk/win32/gdkwindow-win32.c (gdk_window_fullscreen): Use the
