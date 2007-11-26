@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: eu\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-10-16 23:54-0400\n"
+"POT-Creation-Date: 2007-11-26 15:19-0500\n"
 "PO-Revision-Date: 2007-09-08 19:07+0200\n"
 "Last-Translator: Iñaki Larrañaga Murgoitio <dooteo@zundan.com>\n"
 "Language-Team: Basque <itzulpena@euskalgnu.org>\n"
@@ -582,7 +582,7 @@ msgstr "ICO irudi-formatua"
 msgid "Error interpreting JPEG image file (%s)"
 msgstr "Errorea JPEG irudi-fitxategia (%s) interpretatzen "
 
-#: gdk-pixbuf/io-jpeg.c:509
+#: gdk-pixbuf/io-jpeg.c:529
 #, c-format
 msgid ""
 "Insufficient memory to load image, try exiting some applications to free "
@@ -591,23 +591,23 @@ msgstr ""
 "Ez dago nahikoa memoria irudia kargatzeko, saiatu aplikazio batzuetatik "
 "irteten memoria libratzeko"
 
-#: gdk-pixbuf/io-jpeg.c:550 gdk-pixbuf/io-jpeg.c:756
+#: gdk-pixbuf/io-jpeg.c:570 gdk-pixbuf/io-jpeg.c:776
 #, c-format
 msgid "Unsupported JPEG color space (%s)"
 msgstr "Onartzen ez den JPEGren kolore-area (%s)"
 
-#: gdk-pixbuf/io-jpeg.c:648 gdk-pixbuf/io-jpeg.c:920 gdk-pixbuf/io-jpeg.c:1153
-#: gdk-pixbuf/io-jpeg.c:1162
+#: gdk-pixbuf/io-jpeg.c:668 gdk-pixbuf/io-jpeg.c:940 gdk-pixbuf/io-jpeg.c:1173
+#: gdk-pixbuf/io-jpeg.c:1182
 #, c-format
 msgid "Couldn't allocate memory for loading JPEG file"
 msgstr "Ezin izan da JPEG fitxategia kargatzeko memoria esleitu"
 
-#: gdk-pixbuf/io-jpeg.c:896
+#: gdk-pixbuf/io-jpeg.c:916
 #, c-format
 msgid "Transformed JPEG has zero width or height."
 msgstr "Bihurtutako JPEGren zabalera edo altuera zero da."
 
-#: gdk-pixbuf/io-jpeg.c:1109
+#: gdk-pixbuf/io-jpeg.c:1129
 #, c-format
 msgid ""
 "JPEG quality must be a value between 0 and 100; value '%s' could not be "
@@ -616,7 +616,7 @@ msgstr ""
 "JPEG kalitatearen balioak 0 eta 100 artean egon behar du; '%s' balioa ezin "
 "izan da analizatu."
 
-#: gdk-pixbuf/io-jpeg.c:1124
+#: gdk-pixbuf/io-jpeg.c:1144
 #, c-format
 msgid ""
 "JPEG quality must be a value between 0 and 100; value '%d' is not allowed."
@@ -624,7 +624,7 @@ msgstr ""
 "JPEG kalitatearen balioak 0 eta 100 artean egon behar du; '%d' balioa ez da "
 "onartzen."
 
-#: gdk-pixbuf/io-jpeg.c:1287
+#: gdk-pixbuf/io-jpeg.c:1307
 msgid "The JPEG image format"
 msgstr "JPEG irudi-formatua"
 
@@ -1250,17 +1250,17 @@ msgstr "Zuriunea"
 msgid "keyboard label|Backslash"
 msgstr "Alderantzizko barra"
 
-#: gtk/gtkbuilderparser.c:289
+#: gtk/gtkbuilderparser.c:269
 #, c-format
 msgid "Invalid type function: `%s'"
 msgstr "Funtzio mota baliogabea: %s"
 
-#: gtk/gtkbuilderparser.c:729
+#: gtk/gtkbuilderparser.c:718
 #, c-format
 msgid "Invalid root element: '%s'"
 msgstr "Erroko elementu baliogabea: %s"
 
-#: gtk/gtkbuilderparser.c:761
+#: gtk/gtkbuilderparser.c:750
 #, c-format
 msgid "Unhandled tag: '%s'"
 msgstr "Kudeatu gabeko etiketa: '%s'"
@@ -1502,11 +1502,11 @@ msgstr "Kolore-gurpila"
 msgid "Color Selection"
 msgstr "Kolore-hautapena"
 
-#: gtk/gtkentry.c:5253 gtk/gtktextview.c:7617
+#: gtk/gtkentry.c:5253 gtk/gtktextview.c:7652
 msgid "Input _Methods"
 msgstr "Sartzeko _metodoak"
 
-#: gtk/gtkentry.c:5267 gtk/gtktextview.c:7631
+#: gtk/gtkentry.c:5267 gtk/gtktextview.c:7666
 msgid "_Insert Unicode Control Character"
 msgstr "_Txertatu Unicode kontrol-karakterea"
 
@@ -2226,23 +2226,23 @@ msgstr "Ezarpenetik kendu beharreko Gtk+ arazketa-banderak"
 msgid "default:LTR"
 msgstr "default:LTR"
 
-#: gtk/gtkmain.c:751
+#: gtk/gtkmain.c:750
 msgid "GTK+ Options"
 msgstr "GTK+ aukerak"
 
-#: gtk/gtkmain.c:751
+#: gtk/gtkmain.c:750
 msgid "Show GTK+ Options"
 msgstr "Erakutsi GTK+ aukerak"
 
-#: gtk/gtknotebook.c:824
+#: gtk/gtknotebook.c:826
 msgid "Arrow spacing"
 msgstr "Gezi-tartea"
 
-#: gtk/gtknotebook.c:825
+#: gtk/gtknotebook.c:827
 msgid "Scroll arrow spacing"
 msgstr "Korritzeko gezien arteko tartea"
 
-#: gtk/gtknotebook.c:4388 gtk/gtknotebook.c:6894
+#: gtk/gtknotebook.c:4411 gtk/gtknotebook.c:6917
 #, c-format
 msgid "Page %u"
 msgstr "%u. orrialdea"

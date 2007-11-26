@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+.HEAD.hy\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-10-16 23:54-0400\n"
+"POT-Creation-Date: 2007-11-26 15:19-0500\n"
 "PO-Revision-Date: 2006-09-04 13:36+0200\n"
 "Last-Translator: Norayr Chilingaryan <norik@freenet.am>\n"
 "Language-Team:  <norik@freenet.am>\n"
@@ -580,7 +580,7 @@ msgstr "Պատկերի ICO ֆորմատ"
 msgid "Error interpreting JPEG image file (%s)"
 msgstr "JPEG պատկերային ֆայլի մեկնաբանման սխալ՝ (%s)"
 
-#: gdk-pixbuf/io-jpeg.c:509
+#: gdk-pixbuf/io-jpeg.c:529
 #, c-format
 msgid ""
 "Insufficient memory to load image, try exiting some applications to free "
@@ -589,36 +589,36 @@ msgstr ""
 "Հիշողությունը բավական չէ պատկերը բեռնելու համար. փորձեք ազատել "
 "հիշողությունը, փակելով որոշ ծրագրեր"
 
-#: gdk-pixbuf/io-jpeg.c:550 gdk-pixbuf/io-jpeg.c:756
+#: gdk-pixbuf/io-jpeg.c:570 gdk-pixbuf/io-jpeg.c:776
 #, c-format
 msgid "Unsupported JPEG color space (%s)"
 msgstr "Չապահովվող JPEG գունային երանգ (%s)"
 
-#: gdk-pixbuf/io-jpeg.c:648 gdk-pixbuf/io-jpeg.c:920 gdk-pixbuf/io-jpeg.c:1153
-#: gdk-pixbuf/io-jpeg.c:1162
+#: gdk-pixbuf/io-jpeg.c:668 gdk-pixbuf/io-jpeg.c:940 gdk-pixbuf/io-jpeg.c:1173
+#: gdk-pixbuf/io-jpeg.c:1182
 #, c-format
 msgid "Couldn't allocate memory for loading JPEG file"
 msgstr "Չի հաջողվել հիշողություն հատկացնել JPEG ֆայլ բեռնելու համար"
 
-#: gdk-pixbuf/io-jpeg.c:896
+#: gdk-pixbuf/io-jpeg.c:916
 #, fuzzy, c-format
 msgid "Transformed JPEG has zero width or height."
 msgstr "Ձևափոխված PNG–ն ունի զրոյական լայնք կամ բարձրություն"
 
-#: gdk-pixbuf/io-jpeg.c:1109
+#: gdk-pixbuf/io-jpeg.c:1129
 #, c-format
 msgid ""
 "JPEG quality must be a value between 0 and 100; value '%s' could not be "
 "parsed."
 msgstr "JPEG որակը պետք է ունենա 0–ից 100 արժեք. '%s' արժեքը անվերլուծելի է"
 
-#: gdk-pixbuf/io-jpeg.c:1124
+#: gdk-pixbuf/io-jpeg.c:1144
 #, c-format
 msgid ""
 "JPEG quality must be a value between 0 and 100; value '%d' is not allowed."
 msgstr "JPEG որակը պետք է ունենա 0–ից 100 արժեք. '%d' արժեքը անթույլատրելի է"
 
-#: gdk-pixbuf/io-jpeg.c:1287
+#: gdk-pixbuf/io-jpeg.c:1307
 msgid "The JPEG image format"
 msgstr "Պատկերի JPEG ֆորմատ"
 
@@ -1248,17 +1248,17 @@ msgstr ""
 msgid "keyboard label|Backslash"
 msgstr ""
 
-#: gtk/gtkbuilderparser.c:289
+#: gtk/gtkbuilderparser.c:269
 #, fuzzy, c-format
 msgid "Invalid type function: `%s'"
 msgstr "Ֆայլի սխալ անվանում: %s"
 
-#: gtk/gtkbuilderparser.c:729
+#: gtk/gtkbuilderparser.c:718
 #, fuzzy, c-format
 msgid "Invalid root element: '%s'"
 msgstr "Ֆայլի սխալ անվանում: %s"
 
-#: gtk/gtkbuilderparser.c:761
+#: gtk/gtkbuilderparser.c:750
 #, c-format
 msgid "Unhandled tag: '%s'"
 msgstr ""
@@ -1507,11 +1507,11 @@ msgstr "Գունային Անիվ"
 msgid "Color Selection"
 msgstr "Գույնի ընտրություն"
 
-#: gtk/gtkentry.c:5253 gtk/gtktextview.c:7617
+#: gtk/gtkentry.c:5253 gtk/gtktextview.c:7652
 msgid "Input _Methods"
 msgstr "Ներմուծման _Ձևեր"
 
-#: gtk/gtkentry.c:5267 gtk/gtktextview.c:7631
+#: gtk/gtkentry.c:5267 gtk/gtktextview.c:7666
 #, fuzzy
 msgid "_Insert Unicode Control Character"
 msgstr "_Ներմուծել Unicode Control Նիշ"
@@ -2255,23 +2255,23 @@ msgstr "Հանել GTK+ կարգաբերման դրոշները"
 msgid "default:LTR"
 msgstr "default:LTR"
 
-#: gtk/gtkmain.c:751
+#: gtk/gtkmain.c:750
 msgid "GTK+ Options"
 msgstr "GTK+ Ընտրության տարբերակներ"
 
-#: gtk/gtkmain.c:751
+#: gtk/gtkmain.c:750
 msgid "Show GTK+ Options"
 msgstr "Ցուցադրել GTK+ Ընտրության տարբերակները"
 
-#: gtk/gtknotebook.c:824
+#: gtk/gtknotebook.c:826
 msgid "Arrow spacing"
 msgstr ""
 
-#: gtk/gtknotebook.c:825
+#: gtk/gtknotebook.c:827
 msgid "Scroll arrow spacing"
 msgstr ""
 
-#: gtk/gtknotebook.c:4388 gtk/gtknotebook.c:6894
+#: gtk/gtknotebook.c:4411 gtk/gtknotebook.c:6917
 #, c-format
 msgid "Page %u"
 msgstr "Էջ %u"

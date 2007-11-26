@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-10-16 23:54-0400\n"
+"POT-Creation-Date: 2007-11-26 15:19-0500\n"
 "PO-Revision-Date: 2007-05-14 21:28-0000\n"
 "Last-Translator: Rhys Jones <rhys@sucs.org>\n"
 "Language-Team: Cymraeg <gnome-cy@pengwyn.linux.org.uk>\n"
@@ -580,7 +580,7 @@ msgstr "Y fformat delwedd ICO"
 msgid "Error interpreting JPEG image file (%s)"
 msgstr "Gwall wrth ddehongli ffeil delwedd JPEG (%s)"
 
-#: gdk-pixbuf/io-jpeg.c:509
+#: gdk-pixbuf/io-jpeg.c:529
 #, c-format
 msgid ""
 "Insufficient memory to load image, try exiting some applications to free "
@@ -589,23 +589,23 @@ msgstr ""
 "Dim digon o gof er mwyn llwytho'r ddelwedd, ceisiwch gau rhai rhaglenni er "
 "mwyn rhyddhau cof"
 
-#: gdk-pixbuf/io-jpeg.c:550 gdk-pixbuf/io-jpeg.c:756
+#: gdk-pixbuf/io-jpeg.c:570 gdk-pixbuf/io-jpeg.c:776
 #, c-format
 msgid "Unsupported JPEG color space (%s)"
 msgstr "Gofod lliw JPEG ni chynhelir (%s)"
 
-#: gdk-pixbuf/io-jpeg.c:648 gdk-pixbuf/io-jpeg.c:920 gdk-pixbuf/io-jpeg.c:1153
-#: gdk-pixbuf/io-jpeg.c:1162
+#: gdk-pixbuf/io-jpeg.c:668 gdk-pixbuf/io-jpeg.c:940 gdk-pixbuf/io-jpeg.c:1173
+#: gdk-pixbuf/io-jpeg.c:1182
 #, c-format
 msgid "Couldn't allocate memory for loading JPEG file"
 msgstr "Methu canfod digon o gof er mwyn llwytho'r ffeil JPEG"
 
-#: gdk-pixbuf/io-jpeg.c:896
+#: gdk-pixbuf/io-jpeg.c:916
 #, c-format
 msgid "Transformed JPEG has zero width or height."
 msgstr "Mae gan y ddelwedd JPEG drawsffurfedig hyd neu led o sero."
 
-#: gdk-pixbuf/io-jpeg.c:1109
+#: gdk-pixbuf/io-jpeg.c:1129
 #, c-format
 msgid ""
 "JPEG quality must be a value between 0 and 100; value '%s' could not be "
@@ -614,7 +614,7 @@ msgstr ""
 "Mae'n rhaid i'r ansawdd JPEG fod yn rhif rhwng 0 a 100; methu adnabod y "
 "gwerth '%s'."
 
-#: gdk-pixbuf/io-jpeg.c:1124
+#: gdk-pixbuf/io-jpeg.c:1144
 #, c-format
 msgid ""
 "JPEG quality must be a value between 0 and 100; value '%d' is not allowed."
@@ -622,7 +622,7 @@ msgstr ""
 "Mae'n rhaid i ansawdd delweddau JPEG fod yn werth rhwng 0 a 100; ni "
 "chaniateir y gwerth '%d'."
 
-#: gdk-pixbuf/io-jpeg.c:1287
+#: gdk-pixbuf/io-jpeg.c:1307
 msgid "The JPEG image format"
 msgstr "Y fformat delwedd JPEG"
 
@@ -1249,17 +1249,17 @@ msgstr "Bylchwr/Space"
 msgid "keyboard label|Backslash"
 msgstr "Ôlslaes"
 
-#: gtk/gtkbuilderparser.c:289
+#: gtk/gtkbuilderparser.c:269
 #, fuzzy, c-format
 msgid "Invalid type function: `%s'"
 msgstr "Enw ffeil annilys: %s"
 
-#: gtk/gtkbuilderparser.c:729
+#: gtk/gtkbuilderparser.c:718
 #, fuzzy, c-format
 msgid "Invalid root element: '%s'"
 msgstr "Enw ffeil annilys: %s"
 
-#: gtk/gtkbuilderparser.c:761
+#: gtk/gtkbuilderparser.c:750
 #, c-format
 msgid "Unhandled tag: '%s'"
 msgstr ""
@@ -1501,11 +1501,11 @@ msgstr "Olwyn Lliw"
 msgid "Color Selection"
 msgstr "Dewis Lliw"
 
-#: gtk/gtkentry.c:5253 gtk/gtktextview.c:7617
+#: gtk/gtkentry.c:5253 gtk/gtktextview.c:7652
 msgid "Input _Methods"
 msgstr "Moddau _Mewnbwn"
 
-#: gtk/gtkentry.c:5267 gtk/gtktextview.c:7631
+#: gtk/gtkentry.c:5267 gtk/gtktextview.c:7666
 msgid "_Insert Unicode Control Character"
 msgstr "_Mewnosod Nod Rheoli Unicode"
 
@@ -2225,23 +2225,23 @@ msgstr "Opsiynau datnamu GTK+ i'w dadosod"
 msgid "default:LTR"
 msgstr "default:LTR"
 
-#: gtk/gtkmain.c:751
+#: gtk/gtkmain.c:750
 msgid "GTK+ Options"
 msgstr "Opsiynau GTK+"
 
-#: gtk/gtkmain.c:751
+#: gtk/gtkmain.c:750
 msgid "Show GTK+ Options"
 msgstr "Dangos Opsiynau GTK+"
 
-#: gtk/gtknotebook.c:824
+#: gtk/gtknotebook.c:826
 msgid "Arrow spacing"
 msgstr "Bwlch rhwng saethau"
 
-#: gtk/gtknotebook.c:825
+#: gtk/gtknotebook.c:827
 msgid "Scroll arrow spacing"
 msgstr "Bwlch rhwng saethau sgrolio"
 
-#: gtk/gtknotebook.c:4388 gtk/gtknotebook.c:6894
+#: gtk/gtknotebook.c:4411 gtk/gtknotebook.c:6917
 #, c-format
 msgid "Page %u"
 msgstr "Tudalen %u"

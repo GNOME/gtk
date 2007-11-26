@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: lt\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-10-16 23:55-0400\n"
+"POT-Creation-Date: 2007-11-26 15:19-0500\n"
 "PO-Revision-Date: 2007-09-17 12:43+0300\n"
 "Last-Translator: Žygimantas Beručka <zygis@gnome.org>\n"
 "Language-Team: Lithuanian <gnome-lt@lists.akl.lt>\n"
@@ -710,7 +710,7 @@ msgstr "Tarpai"
 msgid "The amount of space between children"
 msgstr "Tarpas tarp susijusių objektų"
 
-#: gtk/gtkbox.c:108 gtk/gtknotebook.c:634 gtk/gtktable.c:165
+#: gtk/gtkbox.c:108 gtk/gtknotebook.c:636 gtk/gtktable.c:165
 #: gtk/gtktoolbar.c:563
 msgid "Homogeneous"
 msgstr "Vienalytis"
@@ -752,7 +752,7 @@ msgstr "Papildomas tarpas tarp antrinio objekto ir jo kaimynų, pikseliais"
 msgid "Pack type"
 msgstr "Paketo tipas"
 
-#: gtk/gtkbox.c:138 gtk/gtknotebook.c:701
+#: gtk/gtkbox.c:138 gtk/gtknotebook.c:703
 msgid ""
 "A GtkPackType indicating whether the child is packed with reference to the "
 "start or end of the parent"
@@ -760,20 +760,20 @@ msgstr ""
 "GtkPackType požymis rodantis ar antrinis elementas supakuotas su nuoroda į "
 "pirminio elemento pradžią, ar pabaigą"
 
-#: gtk/gtkbox.c:144 gtk/gtknotebook.c:679 gtk/gtkpaned.c:219
+#: gtk/gtkbox.c:144 gtk/gtknotebook.c:681 gtk/gtkpaned.c:219
 #: gtk/gtkruler.c:110
 msgid "Position"
 msgstr "Pozicija"
 
-#: gtk/gtkbox.c:145 gtk/gtknotebook.c:680
+#: gtk/gtkbox.c:145 gtk/gtknotebook.c:682
 msgid "The index of the child in the parent"
 msgstr "Antrinio elemento indeksas pirminiame elemente"
 
-#: gtk/gtkbuilder.c:104
+#: gtk/gtkbuilder.c:102
 msgid "Translation Domain"
 msgstr "Vertimų sritis"
 
-#: gtk/gtkbuilder.c:105
+#: gtk/gtkbuilder.c:103
 msgid "The translation domain used by gettext"
 msgstr "Vertimų sritis, naudojama gettext"
 
@@ -1346,11 +1346,11 @@ msgid "Foreground color as a GdkColor"
 msgstr "Priekinio plano spalva kaip GdkColor"
 
 #: gtk/gtkcellrenderertext.c:259 gtk/gtkentry.c:497 gtk/gtktexttag.c:251
-#: gtk/gtktextview.c:570
+#: gtk/gtktextview.c:571
 msgid "Editable"
 msgstr "Taisomas"
 
-#: gtk/gtkcellrenderertext.c:260 gtk/gtktexttag.c:252 gtk/gtktextview.c:571
+#: gtk/gtkcellrenderertext.c:260 gtk/gtktexttag.c:252 gtk/gtktextview.c:572
 msgid "Whether the text can be modified by the user"
 msgstr "Ar tekstas gali būti keičiamas vartotojo"
 
@@ -2799,7 +2799,7 @@ msgstr "Žymės tekstas"
 msgid "A list of style attributes to apply to the text of the label"
 msgstr "Žymės teksto stiliaus atributų sąrašas"
 
-#: gtk/gtklabel.c:326 gtk/gtktexttag.c:359 gtk/gtktextview.c:587
+#: gtk/gtklabel.c:326 gtk/gtktexttag.c:359 gtk/gtktextview.c:588
 msgid "Justification"
 msgstr "Abipusė lygiuotė"
 
@@ -3204,76 +3204,76 @@ msgid ""
 "The amount of space to add on the top and bottom of the widget, in pixels"
 msgstr "Tarpas pridedamas objekto viršuje ir apačioje, pikseliais"
 
-#: gtk/gtknotebook.c:562
+#: gtk/gtknotebook.c:564
 msgid "Page"
 msgstr "Puslapis"
 
-#: gtk/gtknotebook.c:563
+#: gtk/gtknotebook.c:565
 msgid "The index of the current page"
 msgstr "Esamo puslapio indeksas"
 
-#: gtk/gtknotebook.c:571
+#: gtk/gtknotebook.c:573
 msgid "Tab Position"
 msgstr "Kortelių pozicija"
 
-#: gtk/gtknotebook.c:572
+#: gtk/gtknotebook.c:574
 msgid "Which side of the notebook holds the tabs"
 msgstr "Kurioje rašymo laukelio pusėje bus rodomos kortelės"
 
-#: gtk/gtknotebook.c:579
+#: gtk/gtknotebook.c:581
 msgid "Tab Border"
 msgstr "Kortelių rėmelis"
 
-#: gtk/gtknotebook.c:580
+#: gtk/gtknotebook.c:582
 msgid "Width of the border around the tab labels"
 msgstr "Rėmelio apie kortelių užrašus plotis"
 
-#: gtk/gtknotebook.c:588
+#: gtk/gtknotebook.c:590
 msgid "Horizontal Tab Border"
 msgstr "Horizontalus kortelių rėmelis"
 
-#: gtk/gtknotebook.c:589
+#: gtk/gtknotebook.c:591
 msgid "Width of the horizontal border of tab labels"
 msgstr "Horizontalaus rėmelio apie kortelių užrašus plotis"
 
-#: gtk/gtknotebook.c:597
+#: gtk/gtknotebook.c:599
 msgid "Vertical Tab Border"
 msgstr "Vertikalus kortelių rėmelis"
 
-#: gtk/gtknotebook.c:598
+#: gtk/gtknotebook.c:600
 msgid "Width of the vertical border of tab labels"
 msgstr "Vertikalaus rėmelio apie kortelių užrašus plotis"
 
-#: gtk/gtknotebook.c:606
+#: gtk/gtknotebook.c:608
 msgid "Show Tabs"
 msgstr "Rodyti tabuliaciją"
 
-#: gtk/gtknotebook.c:607
+#: gtk/gtknotebook.c:609
 msgid "Whether tabs should be shown or not"
 msgstr "Ar turi būti rodomos kortelės"
 
-#: gtk/gtknotebook.c:613
+#: gtk/gtknotebook.c:615
 msgid "Show Border"
 msgstr "Rodyti rėmelį"
 
-#: gtk/gtknotebook.c:614
+#: gtk/gtknotebook.c:616
 msgid "Whether the border should be shown or not"
 msgstr "Ar paraštė turi būti rodoma"
 
-#: gtk/gtknotebook.c:620
+#: gtk/gtknotebook.c:622
 msgid "Scrollable"
 msgstr "Slenkamas"
 
-#: gtk/gtknotebook.c:621
+#: gtk/gtknotebook.c:623
 msgid "If TRUE, scroll arrows are added if there are too many tabs to fit"
 msgstr ""
 "Jei TEIGIAMA, bus pridėtos slinkties rodyklės, jei kortelės netilps lange"
 
-#: gtk/gtknotebook.c:627
+#: gtk/gtknotebook.c:629
 msgid "Enable Popup"
 msgstr "Įjungti iššokimus"
 
-#: gtk/gtknotebook.c:628
+#: gtk/gtknotebook.c:630
 msgid ""
 "If TRUE, pressing the right mouse button on the notebook pops up a menu that "
 "you can use to go to a page"
@@ -3281,127 +3281,127 @@ msgstr ""
 "Jei TEIGIAMA, paspaudus dešinįjį pelės mygtuką ant kortelių bus parodytas "
 "meniu, kurį galite naudoti pereitį į kitą puslapį"
 
-#: gtk/gtknotebook.c:635
+#: gtk/gtknotebook.c:637
 msgid "Whether tabs should have homogeneous sizes"
 msgstr "Ar kortelės turi būti vienodo dydžio"
 
-#: gtk/gtknotebook.c:641
+#: gtk/gtknotebook.c:643
 msgid "Group ID"
 msgstr "Grupės ID"
 
-#: gtk/gtknotebook.c:642
+#: gtk/gtknotebook.c:644
 msgid "Group ID for tabs drag and drop"
 msgstr "Kortelių tempimo ir paleidimo grupės ID"
 
-#: gtk/gtknotebook.c:658 gtk/gtkradioaction.c:128 gtk/gtkradiobutton.c:82
+#: gtk/gtknotebook.c:660 gtk/gtkradioaction.c:128 gtk/gtkradiobutton.c:82
 #: gtk/gtkradiomenuitem.c:342
 msgid "Group"
 msgstr "Grupė"
 
-#: gtk/gtknotebook.c:659
+#: gtk/gtknotebook.c:661
 msgid "Group for tabs drag and drop"
 msgstr "Kortelių tempimo ir paleidimo grupė"
 
-#: gtk/gtknotebook.c:665
+#: gtk/gtknotebook.c:667
 msgid "Tab label"
 msgstr "Kortelės užrašas"
 
-#: gtk/gtknotebook.c:666
+#: gtk/gtknotebook.c:668
 msgid "The string displayed on the child's tab label"
 msgstr "Eilutė rodoma antrinės kortelės užraše"
 
-#: gtk/gtknotebook.c:672
+#: gtk/gtknotebook.c:674
 msgid "Menu label"
 msgstr "Meniu žymė"
 
-#: gtk/gtknotebook.c:673
+#: gtk/gtknotebook.c:675
 msgid "The string displayed in the child's menu entry"
 msgstr "Tekstas išvedamas antrinio objekto meniu įraše"
 
-#: gtk/gtknotebook.c:686
+#: gtk/gtknotebook.c:688
 msgid "Tab expand"
 msgstr "Kortelių išplėtimas"
 
-#: gtk/gtknotebook.c:687
+#: gtk/gtknotebook.c:689
 msgid "Whether to expand the child's tab or not"
 msgstr "Ar išplėsti antrinio objekto korteles, ar ne"
 
-#: gtk/gtknotebook.c:693
+#: gtk/gtknotebook.c:695
 msgid "Tab fill"
 msgstr "Kortelių užpildymas"
 
-#: gtk/gtknotebook.c:694
+#: gtk/gtknotebook.c:696
 msgid "Whether the child's tab should fill the allocated area or not"
 msgstr ""
 "Ar antrinių objektų kortelės turi užpildyti visą jiems skirtą erdvę, ar ne"
 
-#: gtk/gtknotebook.c:700
+#: gtk/gtknotebook.c:702
 msgid "Tab pack type"
 msgstr "Kortelių sutraukimo tipas"
 
-#: gtk/gtknotebook.c:707
+#: gtk/gtknotebook.c:709
 msgid "Tab reorderable"
 msgstr "Kortelės tvarka keičiama"
 
-#: gtk/gtknotebook.c:708
+#: gtk/gtknotebook.c:710
 msgid "Whether the tab is reorderable by user action or not"
 msgstr "Ar kortelės tvarka gali būti keičiama naudotojo, ar ne"
 
-#: gtk/gtknotebook.c:714
+#: gtk/gtknotebook.c:716
 msgid "Tab detachable"
 msgstr "Kortelė atkabinama"
 
-#: gtk/gtknotebook.c:715
+#: gtk/gtknotebook.c:717
 msgid "Whether the tab is detachable"
 msgstr "Ar kortelė yra atkabinama"
 
-#: gtk/gtknotebook.c:730 gtk/gtkscrollbar.c:83
+#: gtk/gtknotebook.c:732 gtk/gtkscrollbar.c:83
 msgid "Secondary backward stepper"
 msgstr "Antras žingnis atgal"
 
-#: gtk/gtknotebook.c:731
+#: gtk/gtknotebook.c:733
 msgid ""
 "Display a second backward arrow button on the opposite end of the tab area"
 msgstr "Rodyti antrą judėjimo atgal mygtuką kitame kortelių srities gale"
 
-#: gtk/gtknotebook.c:746 gtk/gtkscrollbar.c:91
+#: gtk/gtknotebook.c:748 gtk/gtkscrollbar.c:91
 msgid "Secondary forward stepper"
 msgstr "Antras žingsnis pirmyn"
 
-#: gtk/gtknotebook.c:747
+#: gtk/gtknotebook.c:749
 msgid ""
 "Display a second forward arrow button on the opposite end of the tab area"
 msgstr "Rodyti antrą judėjimo pirmyn mygtuką kitame kortelių srities gale"
 
-#: gtk/gtknotebook.c:761 gtk/gtkscrollbar.c:67
+#: gtk/gtknotebook.c:763 gtk/gtkscrollbar.c:67
 msgid "Backward stepper"
 msgstr "Žingsnis atgal"
 
-#: gtk/gtknotebook.c:762 gtk/gtkscrollbar.c:68
+#: gtk/gtknotebook.c:764 gtk/gtkscrollbar.c:68
 msgid "Display the standard backward arrow button"
 msgstr "Rodyti standartinį atgalinės navigacijos mygtuką"
 
-#: gtk/gtknotebook.c:776 gtk/gtkscrollbar.c:75
+#: gtk/gtknotebook.c:778 gtk/gtkscrollbar.c:75
 msgid "Forward stepper"
 msgstr "Žingnis pirmyn"
 
-#: gtk/gtknotebook.c:777 gtk/gtkscrollbar.c:76
+#: gtk/gtknotebook.c:779 gtk/gtkscrollbar.c:76
 msgid "Display the standard forward arrow button"
 msgstr "Rodyti standartinį priekinės navigacijos mygtuką"
 
-#: gtk/gtknotebook.c:791
+#: gtk/gtknotebook.c:793
 msgid "Tab overlap"
 msgstr "Kortelių persidengimas"
 
-#: gtk/gtknotebook.c:792
+#: gtk/gtknotebook.c:794
 msgid "Size of tab overlap area"
 msgstr "Kortelių persidengimo ploto dydis"
 
-#: gtk/gtknotebook.c:807
+#: gtk/gtknotebook.c:809
 msgid "Tab curvature"
 msgstr "Kortelių išlinkimas"
 
-#: gtk/gtknotebook.c:808
+#: gtk/gtknotebook.c:810
 msgid "Size of tab curvature"
 msgstr "Kortelių išlinkimo dydis"
 
@@ -5095,7 +5095,7 @@ msgstr ""
 "prisitaiko prie temos pakeitimo ir t.t. Ji yra naudotina. Pango posistemė "
 "aprašo dalį mastelių kaip pvz. PANGO_SCALE_X_LARGE"
 
-#: gtk/gtktexttag.c:360 gtk/gtktextview.c:588
+#: gtk/gtktexttag.c:360 gtk/gtktextview.c:589
 msgid "Left, right, or center justification"
 msgstr "Kairys, dešinys arba vidurinis lygiavimas"
 
@@ -5112,7 +5112,7 @@ msgstr ""
 msgid "Left margin"
 msgstr "Kairė paraštė"
 
-#: gtk/gtktexttag.c:387 gtk/gtktextview.c:597
+#: gtk/gtktexttag.c:387 gtk/gtktextview.c:598
 msgid "Width of the left margin in pixels"
 msgstr "Kairės paraštės plotis pikseliais"
 
@@ -5120,15 +5120,15 @@ msgstr "Kairės paraštės plotis pikseliais"
 msgid "Right margin"
 msgstr "Dešinė paraštė"
 
-#: gtk/gtktexttag.c:397 gtk/gtktextview.c:607
+#: gtk/gtktexttag.c:397 gtk/gtktextview.c:608
 msgid "Width of the right margin in pixels"
 msgstr "Dešinės paraštės plotis pikseliais"
 
-#: gtk/gtktexttag.c:407 gtk/gtktextview.c:616
+#: gtk/gtktexttag.c:407 gtk/gtktextview.c:617
 msgid "Indent"
 msgstr "Įtraukti"
 
-#: gtk/gtktexttag.c:408 gtk/gtktextview.c:617
+#: gtk/gtktexttag.c:408 gtk/gtktextview.c:618
 msgid "Amount to indent the paragraph, in pixels"
 msgstr "Pastraipos atitraukimo dydis, pikseliais"
 
@@ -5144,7 +5144,7 @@ msgstr ""
 msgid "Pixels above lines"
 msgstr "Taškai virš eilučių"
 
-#: gtk/gtktexttag.c:429 gtk/gtktextview.c:541
+#: gtk/gtktexttag.c:429 gtk/gtktextview.c:542
 msgid "Pixels of blank space above paragraphs"
 msgstr "Tuščia erdvė taškais virš pastraipų"
 
@@ -5152,7 +5152,7 @@ msgstr "Tuščia erdvė taškais virš pastraipų"
 msgid "Pixels below lines"
 msgstr "Taškai žemiau eilučių"
 
-#: gtk/gtktexttag.c:439 gtk/gtktextview.c:551
+#: gtk/gtktexttag.c:439 gtk/gtktextview.c:552
 msgid "Pixels of blank space below paragraphs"
 msgstr "Tuščia erdvė taškais žemiau pastraipų"
 
@@ -5160,20 +5160,20 @@ msgstr "Tuščia erdvė taškais žemiau pastraipų"
 msgid "Pixels inside wrap"
 msgstr "Taškai laužymo viduje"
 
-#: gtk/gtktexttag.c:449 gtk/gtktextview.c:561
+#: gtk/gtktexttag.c:449 gtk/gtktextview.c:562
 msgid "Pixels of blank space between wrapped lines in a paragraph"
 msgstr "Taškai sudarantys tarpą tarp laužomų pastraipos eilučių"
 
-#: gtk/gtktexttag.c:476 gtk/gtktextview.c:579
+#: gtk/gtktexttag.c:476 gtk/gtktextview.c:580
 msgid ""
 "Whether to wrap lines never, at word boundaries, or at character boundaries"
 msgstr "Nelaužyti eilučių, laužyti jas žodžiais ar laužyti jas simboliais"
 
-#: gtk/gtktexttag.c:485 gtk/gtktextview.c:626
+#: gtk/gtktexttag.c:485 gtk/gtktextview.c:627
 msgid "Tabs"
 msgstr "Tabai"
 
-#: gtk/gtktexttag.c:486 gtk/gtktextview.c:627
+#: gtk/gtktexttag.c:486 gtk/gtktextview.c:628
 msgid "Custom tabs for this text"
 msgstr "Specialūs šio teksto lapai"
 
@@ -5317,67 +5317,67 @@ msgstr "Pastraipos fonas nustatytas"
 msgid "Whether this tag affects the paragraph background color"
 msgstr "Ar ši žyma keičia pastraipos fono spalvą"
 
-#: gtk/gtktextview.c:540
+#: gtk/gtktextview.c:541
 msgid "Pixels Above Lines"
 msgstr "Pikseliai virš eilučių"
 
-#: gtk/gtktextview.c:550
+#: gtk/gtktextview.c:551
 msgid "Pixels Below Lines"
 msgstr "Pikseliai žemiau eilučių"
 
-#: gtk/gtktextview.c:560
+#: gtk/gtktextview.c:561
 msgid "Pixels Inside Wrap"
 msgstr "Pikseliai tarp eilučių"
 
-#: gtk/gtktextview.c:578
+#: gtk/gtktextview.c:579
 msgid "Wrap Mode"
 msgstr "Laužymo veiksena"
 
-#: gtk/gtktextview.c:596
+#: gtk/gtktextview.c:597
 msgid "Left Margin"
 msgstr "Kairė paraštė"
 
-#: gtk/gtktextview.c:606
+#: gtk/gtktextview.c:607
 msgid "Right Margin"
 msgstr "Dešinė paraštė"
 
-#: gtk/gtktextview.c:634
+#: gtk/gtktextview.c:635
 msgid "Cursor Visible"
 msgstr "Žymeklis matomas"
 
-#: gtk/gtktextview.c:635
+#: gtk/gtktextview.c:636
 msgid "If the insertion cursor is shown"
 msgstr "Jei įterpimo žymeklis yra rodomas"
 
-#: gtk/gtktextview.c:642
+#: gtk/gtktextview.c:643
 msgid "Buffer"
 msgstr "Buferis"
 
-#: gtk/gtktextview.c:643
+#: gtk/gtktextview.c:644
 msgid "The buffer which is displayed"
 msgstr "Išvedamas buferis"
 
-#: gtk/gtktextview.c:650
+#: gtk/gtktextview.c:651
 msgid "Overwrite mode"
 msgstr "Perrašymo veiksena"
 
-#: gtk/gtktextview.c:651
+#: gtk/gtktextview.c:652
 msgid "Whether entered text overwrites existing contents"
 msgstr "Ar įvedamas tekstas pakeičia esamas vertes"
 
-#: gtk/gtktextview.c:658
+#: gtk/gtktextview.c:659
 msgid "Accepts tab"
 msgstr "Leisti tabuliaciją"
 
-#: gtk/gtktextview.c:659
+#: gtk/gtktextview.c:660
 msgid "Whether Tab will result in a tab character being entered"
 msgstr "Ar Tab klavišas turi įvesti tabuliacijos simbolį"
 
-#: gtk/gtktextview.c:668
+#: gtk/gtktextview.c:669
 msgid "Error underline color"
 msgstr "Klaidinga pabraukimo spalva"
 
-#: gtk/gtktextview.c:669
+#: gtk/gtktextview.c:670
 msgid "Color with which to draw error-indication underlines"
 msgstr "Spalva, kuria spalvinti klaidas rodančius pabraukimus"
 

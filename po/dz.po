@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+.HEAD.dz\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-10-16 23:54-0400\n"
+"POT-Creation-Date: 2007-11-26 15:19-0500\n"
 "PO-Revision-Date: 2006-08-09 10:30+0530\n"
 "Last-Translator: Mindu Dorji\n"
 "Language-Team: DZONGKHA <pgeyleg@dit.gov.bt>\n"
@@ -584,7 +584,7 @@ msgstr "ཨའི་སི་ཨོ་ གཟུགས་བརྙན་གྱ�
 msgid "Error interpreting JPEG image file (%s)"
 msgstr "ཇེ་པི་ཨི་ཇི་ཡིག་སྣོད་ (%s) ཁ་བསྒྱུར་ནི་ལུ་འཛོལ་བ། "
 
-#: gdk-pixbuf/io-jpeg.c:509
+#: gdk-pixbuf/io-jpeg.c:529
 #, c-format
 msgid ""
 "Insufficient memory to load image, try exiting some applications to free "
@@ -593,23 +593,23 @@ msgstr ""
 "གཟུགས་བརྙན་མངོན་གསལ་འབད་ནིའི་ དྲན་ཚད་ལངམ་མིན་འདུག དྲན་ཚད་བཟོ་ནིའི་དོན་ལུ་ གློག་རིམ་ལ་ལོ་ཅིག་ ཕྱིར་"
 "ཐོན་འབད་ནི་ལུ་ འབད་རྩོལ་བསྐྱེད་གནང༌།"
 
-#: gdk-pixbuf/io-jpeg.c:550 gdk-pixbuf/io-jpeg.c:756
+#: gdk-pixbuf/io-jpeg.c:570 gdk-pixbuf/io-jpeg.c:776
 #, c-format
 msgid "Unsupported JPEG color space (%s)"
 msgstr "ཇེ་པི་ཨི་ཇི་ ཚོས་གཞིའི་བར་སྟོང་ (%s) དེ་ལུ་ རྒྱབ་སྐྱོར་མིན་འདུག"
 
-#: gdk-pixbuf/io-jpeg.c:648 gdk-pixbuf/io-jpeg.c:920 gdk-pixbuf/io-jpeg.c:1153
-#: gdk-pixbuf/io-jpeg.c:1162
+#: gdk-pixbuf/io-jpeg.c:668 gdk-pixbuf/io-jpeg.c:940 gdk-pixbuf/io-jpeg.c:1173
+#: gdk-pixbuf/io-jpeg.c:1182
 #, c-format
 msgid "Couldn't allocate memory for loading JPEG file"
 msgstr "ཇེ་པི་ཨི་ཇི་ཡིག་སྣོད་ མངོན་གསལ་འབད་ནིའི་དོན་ལུ་ དྲན་ཚད་སྤྲོད་མ་ཚུགས།"
 
-#: gdk-pixbuf/io-jpeg.c:896
+#: gdk-pixbuf/io-jpeg.c:916
 #, fuzzy, c-format
 msgid "Transformed JPEG has zero width or height."
 msgstr "བཟོ་བསྒྱུར་ཅན་གྱི་ པི་ཨེན་ཇི་ལུ་ རྒྱ་ཚད་དམ་མཐོ་ཚད་ ཀླད་ཀོར་འདུག"
 
-#: gdk-pixbuf/io-jpeg.c:1109
+#: gdk-pixbuf/io-jpeg.c:1129
 #, c-format
 msgid ""
 "JPEG quality must be a value between 0 and 100; value '%s' could not be "
@@ -618,13 +618,13 @@ msgstr ""
 "ཇེ་པི་ཨི་ཇི་གི་ སྤུས་ཚད་དེ་ བེ་ལུ་ ༠ ལས་ ༡༠༠ གི་བར་ན་འོང་དགོ  བེ་ལུ་ ’%s’ དེ་ མིང་དཔྱད་འབད་མ་"
 "ཚུགས།"
 
-#: gdk-pixbuf/io-jpeg.c:1124
+#: gdk-pixbuf/io-jpeg.c:1144
 #, c-format
 msgid ""
 "JPEG quality must be a value between 0 and 100; value '%d' is not allowed."
 msgstr "ཇེ་པི་ཨི་ཇི་གི་ སྤུས་ཚད་དེ་ བེ་ལུ་ ༠ ལས་ ༡༠༠ གི་བར་ན་འོང་དགོ བེ་ལུ་ ’%d’ དེ་མི་ཆོག"
 
-#: gdk-pixbuf/io-jpeg.c:1287
+#: gdk-pixbuf/io-jpeg.c:1307
 msgid "The JPEG image format"
 msgstr "ཇེ་པི་ཨི་ཇི་ གཟུགས་བརྙན་གྱི་རྩ་སྒྲིག"
 
@@ -1253,17 +1253,17 @@ msgstr "བར་སྟོང་།"
 msgid "keyboard label|Backslash"
 msgstr "ལོག་ཤད།"
 
-#: gtk/gtkbuilderparser.c:289
+#: gtk/gtkbuilderparser.c:269
 #, fuzzy, c-format
 msgid "Invalid type function: `%s'"
 msgstr "ཡིག་སྣོད་ཀྱི་མིང་ %s ནུས་མེད་ཨིན་པས།"
 
-#: gtk/gtkbuilderparser.c:729
+#: gtk/gtkbuilderparser.c:718
 #, fuzzy, c-format
 msgid "Invalid root element: '%s'"
 msgstr "ཡིག་སྣོད་ཀྱི་མིང་ %s ནུས་མེད་ཨིན་པས།"
 
-#: gtk/gtkbuilderparser.c:761
+#: gtk/gtkbuilderparser.c:750
 #, c-format
 msgid "Unhandled tag: '%s'"
 msgstr ""
@@ -1505,11 +1505,11 @@ msgstr "ཚོས་གཞིའི་འཁོར་ལོ།"
 msgid "Color Selection"
 msgstr "ཚོས་གཞིའི་སེལ་འཐུ།"
 
-#: gtk/gtkentry.c:5253 gtk/gtktextview.c:7617
+#: gtk/gtkentry.c:5253 gtk/gtktextview.c:7652
 msgid "Input _Methods"
 msgstr "ཨིན་པུཊི་ཐབས་ཤེས།(_M)"
 
-#: gtk/gtkentry.c:5267 gtk/gtktextview.c:7631
+#: gtk/gtkentry.c:5267 gtk/gtktextview.c:7666
 msgid "_Insert Unicode Control Character"
 msgstr "ཡུ་ནི་ཀོཌི་ ཚད་འཛིན་གྱི་ ཡིག་འབྲུ་བཙུགས།(_I)"
 
@@ -2224,23 +2224,23 @@ msgstr "ཇི་ཊི་ཀེ་+གིས་ སྒྲིག་བཤོལ�
 msgid "default:LTR"
 msgstr "default:LTR"
 
-#: gtk/gtkmain.c:751
+#: gtk/gtkmain.c:750
 msgid "GTK+ Options"
 msgstr "ཇི་ཊི་ཀེ་+གདམ་ཁ་ཚུ།"
 
-#: gtk/gtkmain.c:751
+#: gtk/gtkmain.c:750
 msgid "Show GTK+ Options"
 msgstr "ཇི་ཊི་ཀེ་+ གདམ་ཁ་ཚུ་སྟོན།"
 
-#: gtk/gtknotebook.c:824
+#: gtk/gtknotebook.c:826
 msgid "Arrow spacing"
 msgstr "མདའ་རྟགས་ཀྱི་བར་སྟོང་བཞག་ཐངས།"
 
-#: gtk/gtknotebook.c:825
+#: gtk/gtknotebook.c:827
 msgid "Scroll arrow spacing"
 msgstr "མདའ་རྟགས་ཀྱི་བར་སྟོང་བཤུད་སྒྲིལ་འབད།"
 
-#: gtk/gtknotebook.c:4388 gtk/gtknotebook.c:6894
+#: gtk/gtknotebook.c:4411 gtk/gtknotebook.c:6917
 #, c-format
 msgid "Page %u"
 msgstr "ཤོག་ལེབ་ %u "

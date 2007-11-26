@@ -1,5 +1,9 @@
 2007-11-26  Matthias Clasen  <mclasen@redhat.com>
 
+	* === Released 2.12.2 ===
+
+2007-11-26  Matthias Clasen  <mclasen@redhat.com>
+
 	* gtk/gtkmain.c:
 	* gtk/gtknotebook.c:
 	* gtk/gtkplugprivate.h:

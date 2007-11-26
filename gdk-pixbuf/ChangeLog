@@ -1,3 +1,7 @@
+2007-11-26  Matthias Clasen  <mclasen@redhat.com>
+
+	* === Released 2.12.2 ===
+
 2007-11-10  Matthias Clasen <mclasen@redhat.com>
 
 	* io-jpeg.c: Avoid unaligned accesses that cause

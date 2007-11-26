@@ -52,6 +52,8 @@ accessed through the function described below.
 @orientation: 
 @style: 
 @icon_size: 
+@tooltips: 
+@_tooltips: 
 
 <!-- ##### SIGNAL GtkToolbar::focus-home-or-end ##### -->
 <para>

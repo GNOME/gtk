@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: mr\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-10-16 23:54-0400\n"
+"POT-Creation-Date: 2007-11-26 15:19-0500\n"
 "PO-Revision-Date: 2006-09-04 02:23+0530\n"
 "Last-Translator: Rahul Bhalerao <b.rahul.pm@gmail.com>\n"
 "Language-Team: Marathi\n"
@@ -647,7 +647,7 @@ msgid "Error interpreting JPEG image file (%s)"
 msgstr "JPEG फाइल (%s) मधील चित्रणाचा अर्थ/आशय कळण्यात चुक आढळते"
 
 # gdk-pixbuf/io-jpeg.c:234
-#: gdk-pixbuf/io-jpeg.c:509
+#: gdk-pixbuf/io-jpeg.c:529
 #, c-format
 msgid ""
 "Insufficient memory to load image, try exiting some applications to free "
@@ -656,26 +656,26 @@ msgstr ""
 "प्रतिमा सुरू करण्यासाठी पुरेशी स्मरणशक्ती नाही, त्यातील काही भाग काढून स्मरणशक्ती वाढवावी"
 
 # gdk-pixbuf/io-ico.c:428
-#: gdk-pixbuf/io-jpeg.c:550 gdk-pixbuf/io-jpeg.c:756
+#: gdk-pixbuf/io-jpeg.c:570 gdk-pixbuf/io-jpeg.c:776
 #, c-format
 msgid "Unsupported JPEG color space (%s)"
 msgstr "असमर्थनीय JPEG रंग अंतराळ (%s)"
 
 # gdk-pixbuf/io-jpeg.c:345 gdk-pixbuf/io-jpeg.c:538 gdk-pixbuf/io-jpeg.c:710
-#: gdk-pixbuf/io-jpeg.c:648 gdk-pixbuf/io-jpeg.c:920 gdk-pixbuf/io-jpeg.c:1153
-#: gdk-pixbuf/io-jpeg.c:1162
+#: gdk-pixbuf/io-jpeg.c:668 gdk-pixbuf/io-jpeg.c:940 gdk-pixbuf/io-jpeg.c:1173
+#: gdk-pixbuf/io-jpeg.c:1182
 #, c-format
 msgid "Couldn't allocate memory for loading JPEG file"
 msgstr "JPEG मधील फाइल सुरु करण्यासाठी आवश्यक ती स्मरणशक्ती देता येत नाही"
 
 # gdk-pixbuf/io-png.c:136
-#: gdk-pixbuf/io-jpeg.c:896
+#: gdk-pixbuf/io-jpeg.c:916
 #, fuzzy, c-format
 msgid "Transformed JPEG has zero width or height."
 msgstr "परिवर्तित PNG मधील ऊंची  किंवा रुंदी शुन्य आहे."
 
 # gdk-pixbuf/io-jpeg.c:664
-#: gdk-pixbuf/io-jpeg.c:1109
+#: gdk-pixbuf/io-jpeg.c:1129
 #, c-format
 msgid ""
 "JPEG quality must be a value between 0 and 100; value '%s' could not be "
@@ -684,13 +684,13 @@ msgstr ""
 "JPEG ची  गुणवत्ता ० ते १०० दरम्यान असायला हवी; %s ची गुणवत्ता मोजली जाऊ शकत नाही."
 
 # gdk-pixbuf/io-jpeg.c:679
-#: gdk-pixbuf/io-jpeg.c:1124
+#: gdk-pixbuf/io-jpeg.c:1144
 #, c-format
 msgid ""
 "JPEG quality must be a value between 0 and 100; value '%d' is not allowed."
 msgstr "JPEG मधील गुणवत्ता किंमत  ० ते १०० दरम्यान असायला हवी; '%d' वैध नाही."
 
-#: gdk-pixbuf/io-jpeg.c:1287
+#: gdk-pixbuf/io-jpeg.c:1307
 msgid "The JPEG image format"
 msgstr "JPEG प्रतिमा स्वरूप"
 
@@ -1399,18 +1399,18 @@ msgid "keyboard label|Backslash"
 msgstr "Backslash"
 
 # gdk-pixbuf/io-xbm.c:283
-#: gtk/gtkbuilderparser.c:289
+#: gtk/gtkbuilderparser.c:269
 #, fuzzy, c-format
 msgid "Invalid type function: `%s'"
 msgstr "अवैध फाइलनाम:%s"
 
 # gdk-pixbuf/io-xbm.c:283
-#: gtk/gtkbuilderparser.c:729
+#: gtk/gtkbuilderparser.c:718
 #, fuzzy, c-format
 msgid "Invalid root element: '%s'"
 msgstr "अवैध फाइलनाम:%s"
 
-#: gtk/gtkbuilderparser.c:761
+#: gtk/gtkbuilderparser.c:750
 #, c-format
 msgid "Unhandled tag: '%s'"
 msgstr ""
@@ -1676,12 +1676,12 @@ msgid "Color Selection"
 msgstr "फोन्ट निवडणे"
 
 # gtk/gtktextview.c:6366
-#: gtk/gtkentry.c:5253 gtk/gtktextview.c:7617
+#: gtk/gtkentry.c:5253 gtk/gtktextview.c:7652
 msgid "Input _Methods"
 msgstr "माहीती गोळा करण्याच्या पध्दत्ती"
 
 # gtk/gtkentry.c:3870 gtk/gtktextview.c:6375
-#: gtk/gtkentry.c:5267 gtk/gtktextview.c:7631
+#: gtk/gtkentry.c:5267 gtk/gtktextview.c:7666
 msgid "_Insert Unicode Control Character"
 msgstr "युनिकोड नियंत्रण अक्षर घाला(_I)"
 
@@ -2483,29 +2483,29 @@ msgstr "अनिर्धारित करायचा GTK+ त्रुट�
 msgid "default:LTR"
 msgstr "default:LTR"
 
-#: gtk/gtkmain.c:751
+#: gtk/gtkmain.c:750
 msgid "GTK+ Options"
 msgstr "GTK+ पर्याय"
 
 # gtk/gtkfilesel.c:543
-#: gtk/gtkmain.c:751
+#: gtk/gtkmain.c:750
 msgid "Show GTK+ Options"
 msgstr "GTK+ पर्याय दाखवा"
 
 # gtk/gtktable.c:174
-#: gtk/gtknotebook.c:824
+#: gtk/gtknotebook.c:826
 #, fuzzy
 msgid "Arrow spacing"
 msgstr "ओळीमधील रिकामी जागा"
 
 # gtk/gtktable.c:174
-#: gtk/gtknotebook.c:825
+#: gtk/gtknotebook.c:827
 #, fuzzy
 msgid "Scroll arrow spacing"
 msgstr "ओळीमधील रिकामी जागा"
 
 # gtk/gtknotebook.c:2439 gtk/gtknotebook.c:4695
-#: gtk/gtknotebook.c:4388 gtk/gtknotebook.c:6894
+#: gtk/gtknotebook.c:4411 gtk/gtknotebook.c:6917
 #, c-format
 msgid "Page %u"
 msgstr "पान %u"

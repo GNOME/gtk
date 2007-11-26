@@ -15,7 +15,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+_properties 2.11\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-10-16 23:55-0400\n"
+"POT-Creation-Date: 2007-11-26 15:19-0500\n"
 "PO-Revision-Date: 2007-08-20 14:15+0200\n"
 "Last-Translator: Claude Paroz <claude@2xlibre.net>\n"
 "Language-Team: GNOME French Team <gnomefr@traduc.org>\n"
@@ -725,7 +725,7 @@ msgstr "Espacement"
 msgid "The amount of space between children"
 msgstr "La quantité d'espace entre les fils"
 
-#: gtk/gtkbox.c:108 gtk/gtknotebook.c:634 gtk/gtktable.c:165
+#: gtk/gtkbox.c:108 gtk/gtknotebook.c:636 gtk/gtktable.c:165
 #: gtk/gtktoolbar.c:563
 msgid "Homogeneous"
 msgstr "Homogène"
@@ -770,7 +770,7 @@ msgstr ""
 msgid "Pack type"
 msgstr "Type de disposition"
 
-#: gtk/gtkbox.c:138 gtk/gtknotebook.c:701
+#: gtk/gtkbox.c:138 gtk/gtknotebook.c:703
 msgid ""
 "A GtkPackType indicating whether the child is packed with reference to the "
 "start or end of the parent"
@@ -778,20 +778,20 @@ msgstr ""
 "Un GtkPackType indique si le fils est positionné relativement au début ou à "
 "la fin du parent"
 
-#: gtk/gtkbox.c:144 gtk/gtknotebook.c:679 gtk/gtkpaned.c:219
+#: gtk/gtkbox.c:144 gtk/gtknotebook.c:681 gtk/gtkpaned.c:219
 #: gtk/gtkruler.c:110
 msgid "Position"
 msgstr "Position"
 
-#: gtk/gtkbox.c:145 gtk/gtknotebook.c:680
+#: gtk/gtkbox.c:145 gtk/gtknotebook.c:682
 msgid "The index of the child in the parent"
 msgstr "L'index du fils dans le parent"
 
-#: gtk/gtkbuilder.c:104
+#: gtk/gtkbuilder.c:102
 msgid "Translation Domain"
 msgstr "Domaine de traduction"
 
-#: gtk/gtkbuilder.c:105
+#: gtk/gtkbuilder.c:103
 msgid "The translation domain used by gettext"
 msgstr "Le domaine de traduction utilisé par gettext"
 
@@ -1371,11 +1371,11 @@ msgid "Foreground color as a GdkColor"
 msgstr "Couleur de premier plan en tant que GdkColor"
 
 #: gtk/gtkcellrenderertext.c:259 gtk/gtkentry.c:497 gtk/gtktexttag.c:251
-#: gtk/gtktextview.c:570
+#: gtk/gtktextview.c:571
 msgid "Editable"
 msgstr "Éditable"
 
-#: gtk/gtkcellrenderertext.c:260 gtk/gtktexttag.c:252 gtk/gtktextview.c:571
+#: gtk/gtkcellrenderertext.c:260 gtk/gtktexttag.c:252 gtk/gtktextview.c:572
 msgid "Whether the text can be modified by the user"
 msgstr "Indique si le texte peut être modifié par l'utilisateur"
 
@@ -2878,7 +2878,7 @@ msgstr "Le texte de l'étiquette"
 msgid "A list of style attributes to apply to the text of the label"
 msgstr "Une liste d'attributs de style à appliquer au texte de l'étiquette"
 
-#: gtk/gtklabel.c:326 gtk/gtktexttag.c:359 gtk/gtktextview.c:587
+#: gtk/gtklabel.c:326 gtk/gtktexttag.c:359 gtk/gtktextview.c:588
 msgid "Justification"
 msgstr "Justification"
 
@@ -3291,77 +3291,77 @@ msgid ""
 msgstr ""
 "Espacement à ajouter en haut et en bas du composant graphique, en pixels"
 
-#: gtk/gtknotebook.c:562
+#: gtk/gtknotebook.c:564
 msgid "Page"
 msgstr "Page"
 
-#: gtk/gtknotebook.c:563
+#: gtk/gtknotebook.c:565
 msgid "The index of the current page"
 msgstr "L'index de la page actuelle"
 
-#: gtk/gtknotebook.c:571
+#: gtk/gtknotebook.c:573
 msgid "Tab Position"
 msgstr "Position des onglets"
 
-#: gtk/gtknotebook.c:572
+#: gtk/gtknotebook.c:574
 msgid "Which side of the notebook holds the tabs"
 msgstr "Indique la position des onglets par rapport au bloc-note"
 
-#: gtk/gtknotebook.c:579
+#: gtk/gtknotebook.c:581
 msgid "Tab Border"
 msgstr "Bordure des onglets"
 
-#: gtk/gtknotebook.c:580
+#: gtk/gtknotebook.c:582
 msgid "Width of the border around the tab labels"
 msgstr "Largeur de la bordure autour du texte des onglets"
 
-#: gtk/gtknotebook.c:588
+#: gtk/gtknotebook.c:590
 msgid "Horizontal Tab Border"
 msgstr "Bordure horizontale des onglets"
 
-#: gtk/gtknotebook.c:589
+#: gtk/gtknotebook.c:591
 msgid "Width of the horizontal border of tab labels"
 msgstr "Largeur de la bordure horizontale du texte des onglets"
 
-#: gtk/gtknotebook.c:597
+#: gtk/gtknotebook.c:599
 msgid "Vertical Tab Border"
 msgstr "Bordure verticale des onglets"
 
-#: gtk/gtknotebook.c:598
+#: gtk/gtknotebook.c:600
 msgid "Width of the vertical border of tab labels"
 msgstr "Largeur de la bordure verticale du texte des onglets"
 
-#: gtk/gtknotebook.c:606
+#: gtk/gtknotebook.c:608
 msgid "Show Tabs"
 msgstr "Afficher les onglets"
 
-#: gtk/gtknotebook.c:607
+#: gtk/gtknotebook.c:609
 msgid "Whether tabs should be shown or not"
 msgstr "Indique si les onglets doivent être affichés ou non"
 
-#: gtk/gtknotebook.c:613
+#: gtk/gtknotebook.c:615
 msgid "Show Border"
 msgstr "Afficher la bordure"
 
-#: gtk/gtknotebook.c:614
+#: gtk/gtknotebook.c:616
 msgid "Whether the border should be shown or not"
 msgstr "Indique si la bordure doit être affichée ou non"
 
-#: gtk/gtknotebook.c:620
+#: gtk/gtknotebook.c:622
 msgid "Scrollable"
 msgstr "Défilement possible"
 
-#: gtk/gtknotebook.c:621
+#: gtk/gtknotebook.c:623
 msgid "If TRUE, scroll arrows are added if there are too many tabs to fit"
 msgstr ""
 "Si VRAI, des flèches de défilement sont ajoutées lorsque il y a trop "
 "d'onglets"
 
-#: gtk/gtknotebook.c:627
+#: gtk/gtknotebook.c:629
 msgid "Enable Popup"
 msgstr "Activer le popup"
 
-#: gtk/gtknotebook.c:628
+#: gtk/gtknotebook.c:630
 msgid ""
 "If TRUE, pressing the right mouse button on the notebook pops up a menu that "
 "you can use to go to a page"
@@ -3369,127 +3369,127 @@ msgstr ""
 "Si VRAI, presser le bouton droit de la souris sur le carnet affiche un menu "
 "que l'on peut utiliser pour changer de page"
 
-#: gtk/gtknotebook.c:635
+#: gtk/gtknotebook.c:637
 msgid "Whether tabs should have homogeneous sizes"
 msgstr "Indique si la taille des onglets doit être la même pour tous"
 
-#: gtk/gtknotebook.c:641
+#: gtk/gtknotebook.c:643
 msgid "Group ID"
 msgstr "ID de groupe"
 
-#: gtk/gtknotebook.c:642
+#: gtk/gtknotebook.c:644
 msgid "Group ID for tabs drag and drop"
 msgstr "ID de groupe pour le glisser-déposer des onglets"
 
-#: gtk/gtknotebook.c:658 gtk/gtkradioaction.c:128 gtk/gtkradiobutton.c:82
+#: gtk/gtknotebook.c:660 gtk/gtkradioaction.c:128 gtk/gtkradiobutton.c:82
 #: gtk/gtkradiomenuitem.c:342
 msgid "Group"
 msgstr "Groupe"
 
-#: gtk/gtknotebook.c:659
+#: gtk/gtknotebook.c:661
 msgid "Group for tabs drag and drop"
 msgstr "Groupe pour le glisser-déposer des onglets"
 
-#: gtk/gtknotebook.c:665
+#: gtk/gtknotebook.c:667
 msgid "Tab label"
 msgstr "Étiquette de l'onglet"
 
-#: gtk/gtknotebook.c:666
+#: gtk/gtknotebook.c:668
 msgid "The string displayed on the child's tab label"
 msgstr "La chaîne affiché sur l'étiquette des onglets fils"
 
-#: gtk/gtknotebook.c:672
+#: gtk/gtknotebook.c:674
 msgid "Menu label"
 msgstr "Étiquette de menu"
 
-#: gtk/gtknotebook.c:673
+#: gtk/gtknotebook.c:675
 msgid "The string displayed in the child's menu entry"
 msgstr "La chaîne affichée dans l'entrée du menu fils"
 
-#: gtk/gtknotebook.c:686
+#: gtk/gtknotebook.c:688
 msgid "Tab expand"
 msgstr "Déployer l'onglet"
 
-#: gtk/gtknotebook.c:687
+#: gtk/gtknotebook.c:689
 msgid "Whether to expand the child's tab or not"
 msgstr "Indique si l'onglet fils doit être étendu ou non"
 
-#: gtk/gtknotebook.c:693
+#: gtk/gtknotebook.c:695
 msgid "Tab fill"
 msgstr "Remplir l'onglet"
 
-#: gtk/gtknotebook.c:694
+#: gtk/gtknotebook.c:696
 msgid "Whether the child's tab should fill the allocated area or not"
 msgstr "Indique si l'onglet fils doit remplir l'aire alloué ou non"
 
-#: gtk/gtknotebook.c:700
+#: gtk/gtknotebook.c:702
 msgid "Tab pack type"
 msgstr "Type de positionnement des onglets"
 
-#: gtk/gtknotebook.c:707
+#: gtk/gtknotebook.c:709
 msgid "Tab reorderable"
 msgstr "Onglet déplaçable"
 
-#: gtk/gtknotebook.c:708
+#: gtk/gtknotebook.c:710
 msgid "Whether the tab is reorderable by user action or not"
 msgstr ""
 "Indique si l'onglet peut être réarrangé par une action de l'utilisateur"
 
-#: gtk/gtknotebook.c:714
+#: gtk/gtknotebook.c:716
 msgid "Tab detachable"
 msgstr "Onglet détachable"
 
-#: gtk/gtknotebook.c:715
+#: gtk/gtknotebook.c:717
 msgid "Whether the tab is detachable"
 msgstr "Indique si l'onglet peut être détaché"
 
-#: gtk/gtknotebook.c:730 gtk/gtkscrollbar.c:83
+#: gtk/gtknotebook.c:732 gtk/gtkscrollbar.c:83
 msgid "Secondary backward stepper"
 msgstr "Bouton secondaire inversé"
 
-#: gtk/gtknotebook.c:731
+#: gtk/gtknotebook.c:733
 msgid ""
 "Display a second backward arrow button on the opposite end of the tab area"
 msgstr "Afficher un second bouton fléché inversé au côté opposé de l'onglet"
 
-#: gtk/gtknotebook.c:746 gtk/gtkscrollbar.c:91
+#: gtk/gtknotebook.c:748 gtk/gtkscrollbar.c:91
 msgid "Secondary forward stepper"
 msgstr "Bouton secondaire avant"
 
-#: gtk/gtknotebook.c:747
+#: gtk/gtknotebook.c:749
 msgid ""
 "Display a second forward arrow button on the opposite end of the tab area"
 msgstr "Afficher un second bouton fléché avant au côté opposé de l'onglet"
 
-#: gtk/gtknotebook.c:761 gtk/gtkscrollbar.c:67
+#: gtk/gtknotebook.c:763 gtk/gtkscrollbar.c:67
 msgid "Backward stepper"
 msgstr "Bouton inversé"
 
-#: gtk/gtknotebook.c:762 gtk/gtkscrollbar.c:68
+#: gtk/gtknotebook.c:764 gtk/gtkscrollbar.c:68
 msgid "Display the standard backward arrow button"
 msgstr "Afficher le bouton de retour en arrière standard"
 
-#: gtk/gtknotebook.c:776 gtk/gtkscrollbar.c:75
+#: gtk/gtknotebook.c:778 gtk/gtkscrollbar.c:75
 msgid "Forward stepper"
 msgstr "Bouton avant"
 
-#: gtk/gtknotebook.c:777 gtk/gtkscrollbar.c:76
+#: gtk/gtknotebook.c:779 gtk/gtkscrollbar.c:76
 msgid "Display the standard forward arrow button"
 msgstr "Afficher le bouton standard de flèche vers l'avant"
 
-#: gtk/gtknotebook.c:791
+#: gtk/gtknotebook.c:793
 msgid "Tab overlap"
 msgstr "Superposition d'onglet"
 
-#: gtk/gtknotebook.c:792
+#: gtk/gtknotebook.c:794
 msgid "Size of tab overlap area"
 msgstr "Taille de la zone de superposition des onglets"
 
-#: gtk/gtknotebook.c:807
+#: gtk/gtknotebook.c:809
 msgid "Tab curvature"
 msgstr "Courbure d'onglet"
 
-#: gtk/gtknotebook.c:808
+#: gtk/gtknotebook.c:810
 msgid "Size of tab curvature"
 msgstr "Taille de la courbure d'onglet"
 
@@ -5272,7 +5272,7 @@ msgstr ""
 "aussi c'est recommandé. Pango prédéfini quelques échelles tel que "
 "PANGO_SCALE_X_LARGE"
 
-#: gtk/gtktexttag.c:360 gtk/gtktextview.c:588
+#: gtk/gtktexttag.c:360 gtk/gtktextview.c:589
 msgid "Left, right, or center justification"
 msgstr "Alignement à droite, à gauche ou centré"
 
@@ -5289,7 +5289,7 @@ msgstr ""
 msgid "Left margin"
 msgstr "Marge gauche"
 
-#: gtk/gtktexttag.c:387 gtk/gtktextview.c:597
+#: gtk/gtktexttag.c:387 gtk/gtktextview.c:598
 msgid "Width of the left margin in pixels"
 msgstr "Largeur de la marge de gauche en pixels"
 
@@ -5297,15 +5297,15 @@ msgstr "Largeur de la marge de gauche en pixels"
 msgid "Right margin"
 msgstr "Marge droite"
 
-#: gtk/gtktexttag.c:397 gtk/gtktextview.c:607
+#: gtk/gtktexttag.c:397 gtk/gtktextview.c:608
 msgid "Width of the right margin in pixels"
 msgstr "Largeur de la marge de droite en pixels"
 
-#: gtk/gtktexttag.c:407 gtk/gtktextview.c:616
+#: gtk/gtktexttag.c:407 gtk/gtktextview.c:617
 msgid "Indent"
 msgstr "Indentation"
 
-#: gtk/gtktexttag.c:408 gtk/gtktextview.c:617
+#: gtk/gtktexttag.c:408 gtk/gtktextview.c:618
 msgid "Amount to indent the paragraph, in pixels"
 msgstr "Indentation du paragraphe, en pixels"
 
@@ -5321,7 +5321,7 @@ msgstr ""
 msgid "Pixels above lines"
 msgstr "Pixels au-dessus de la ligne"
 
-#: gtk/gtktexttag.c:429 gtk/gtktextview.c:541
+#: gtk/gtktexttag.c:429 gtk/gtktextview.c:542
 msgid "Pixels of blank space above paragraphs"
 msgstr "Espacement en pixels au-dessus des paragraphes"
 
@@ -5329,7 +5329,7 @@ msgstr "Espacement en pixels au-dessus des paragraphes"
 msgid "Pixels below lines"
 msgstr "Pixels au-dessous des lignes"
 
-#: gtk/gtktexttag.c:439 gtk/gtktextview.c:551
+#: gtk/gtktexttag.c:439 gtk/gtktextview.c:552
 msgid "Pixels of blank space below paragraphs"
 msgstr "Espacement en pixels au-dessous des paragraphes"
 
@@ -5337,22 +5337,22 @@ msgstr "Espacement en pixels au-dessous des paragraphes"
 msgid "Pixels inside wrap"
 msgstr "Pixels à l'intérieur de la coupure"
 
-#: gtk/gtktexttag.c:449 gtk/gtktextview.c:561
+#: gtk/gtktexttag.c:449 gtk/gtktextview.c:562
 msgid "Pixels of blank space between wrapped lines in a paragraph"
 msgstr "Pixels de l'espace blanc entre les lignes coupées dans un paragraphe"
 
-#: gtk/gtktexttag.c:476 gtk/gtktextview.c:579
+#: gtk/gtktexttag.c:476 gtk/gtktextview.c:580
 msgid ""
 "Whether to wrap lines never, at word boundaries, or at character boundaries"
 msgstr ""
 "Indique si les coupures des lignes doivent s'effectuer entre des mots ou "
 "entre les caractères"
 
-#: gtk/gtktexttag.c:485 gtk/gtktextview.c:626
+#: gtk/gtktexttag.c:485 gtk/gtktextview.c:627
 msgid "Tabs"
 msgstr "Onglets"
 
-#: gtk/gtktexttag.c:486 gtk/gtktextview.c:627
+#: gtk/gtktexttag.c:486 gtk/gtktextview.c:628
 msgid "Custom tabs for this text"
 msgstr "Onglets personnalisés pour ce texte"
 
@@ -5500,67 +5500,67 @@ msgstr "Arrière-plan du paragraphe défini"
 msgid "Whether this tag affects the paragraph background color"
 msgstr "Indique si cette balise affecte la couleur de fond du paragraphe"
 
-#: gtk/gtktextview.c:540
+#: gtk/gtktextview.c:541
 msgid "Pixels Above Lines"
 msgstr "Pixels au-dessus des lignes"
 
-#: gtk/gtktextview.c:550
+#: gtk/gtktextview.c:551
 msgid "Pixels Below Lines"
 msgstr "Pixels au-dessous des lignes"
 
-#: gtk/gtktextview.c:560
+#: gtk/gtktextview.c:561
 msgid "Pixels Inside Wrap"
 msgstr "Pixels à l'intérieur de la coupure"
 
-#: gtk/gtktextview.c:578
+#: gtk/gtktextview.c:579
 msgid "Wrap Mode"
 msgstr "Mode de coupure"
 
-#: gtk/gtktextview.c:596
+#: gtk/gtktextview.c:597
 msgid "Left Margin"
 msgstr "Marge gauche"
 
-#: gtk/gtktextview.c:606
+#: gtk/gtktextview.c:607
 msgid "Right Margin"
 msgstr "Marge droite"
 
-#: gtk/gtktextview.c:634
+#: gtk/gtktextview.c:635
 msgid "Cursor Visible"
 msgstr "Curseur visible"
 
-#: gtk/gtktextview.c:635
+#: gtk/gtktextview.c:636
 msgid "If the insertion cursor is shown"
 msgstr "Si le curseur d'insertion est affiché"
 
-#: gtk/gtktextview.c:642
+#: gtk/gtktextview.c:643
 msgid "Buffer"
 msgstr "Tampon"
 
-#: gtk/gtktextview.c:643
+#: gtk/gtktextview.c:644
 msgid "The buffer which is displayed"
 msgstr "Le tampon qui est affiché"
 
-#: gtk/gtktextview.c:650
+#: gtk/gtktextview.c:651
 msgid "Overwrite mode"
 msgstr "Mode d'écrasement"
 
-#: gtk/gtktextview.c:651
+#: gtk/gtktextview.c:652
 msgid "Whether entered text overwrites existing contents"
 msgstr "Indique si le texte saisi écrase le contenu existant"
 
-#: gtk/gtktextview.c:658
+#: gtk/gtktextview.c:659
 msgid "Accepts tab"
 msgstr "Accepte les tabulations"
 
-#: gtk/gtktextview.c:659
+#: gtk/gtktextview.c:660
 msgid "Whether Tab will result in a tab character being entered"
 msgstr "Indique si la touche tabulation insère un caractère tabulation"
 
-#: gtk/gtktextview.c:668
+#: gtk/gtktextview.c:669
 msgid "Error underline color"
 msgstr "Erreur dans la couleur de soulignement"
 
-#: gtk/gtktextview.c:669
+#: gtk/gtktextview.c:670
 msgid "Color with which to draw error-indication underlines"
 msgstr "Couleur utilisée pour indiquer les erreurs"
 

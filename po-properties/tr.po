@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-properties\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-10-16 23:55-0400\n"
+"POT-Creation-Date: 2007-11-26 15:19-0500\n"
 "PO-Revision-Date: 2007-08-07 03:17+0300\n"
 "Last-Translator: Baris Cicek <baris@teamforce.name.tr>\n"
 "Language-Team: Turkish <gnome-turk@gnome.org>\n"
@@ -789,7 +789,7 @@ msgid "The amount of space between children"
 msgstr "Altlar arasındaki boşluk miktarı"
 
 # gtk/gtkbox.c:136 gtk/gtknotebook.c:396
-#: gtk/gtkbox.c:108 gtk/gtknotebook.c:634 gtk/gtktable.c:165
+#: gtk/gtkbox.c:108 gtk/gtknotebook.c:636 gtk/gtktable.c:165
 #: gtk/gtktoolbar.c:563
 msgid "Homogeneous"
 msgstr "Eşdağılım"
@@ -835,7 +835,7 @@ msgstr "Altların, diğerleri ile arasında olacak boşluk, piksel değerinde"
 msgid "Pack type"
 msgstr "Paket türü"
 
-#: gtk/gtkbox.c:138 gtk/gtknotebook.c:701
+#: gtk/gtkbox.c:138 gtk/gtknotebook.c:703
 msgid ""
 "A GtkPackType indicating whether the child is packed with reference to the "
 "start or end of the parent"
@@ -844,22 +844,22 @@ msgstr ""
 "bir GtkPackType"
 
 # gtk/gtkpaned.c:116 gtk/gtkruler.c:138
-#: gtk/gtkbox.c:144 gtk/gtknotebook.c:679 gtk/gtkpaned.c:219
+#: gtk/gtkbox.c:144 gtk/gtknotebook.c:681 gtk/gtkpaned.c:219
 #: gtk/gtkruler.c:110
 msgid "Position"
 msgstr "Konum"
 
 # gtk/gtknotebook.c:325
-#: gtk/gtkbox.c:145 gtk/gtknotebook.c:680
+#: gtk/gtkbox.c:145 gtk/gtknotebook.c:682
 msgid "The index of the child in the parent"
 msgstr "Üstteki altların indeksi"
 
-#: gtk/gtkbuilder.c:104
+#: gtk/gtkbuilder.c:102
 #, fuzzy
 msgid "Translation Domain"
 msgstr "Çeviren"
 
-#: gtk/gtkbuilder.c:105
+#: gtk/gtkbuilder.c:103
 msgid "The translation domain used by gettext"
 msgstr ""
 
@@ -1526,12 +1526,12 @@ msgstr "Bir GdkColor olarak önplan rengi"
 # gtk/gtkcellrenderertext.c:211 gtk/gtkentry.c:396 gtk/gtktexttag.c:276
 # gtk/gtktextview.c:552
 #: gtk/gtkcellrenderertext.c:259 gtk/gtkentry.c:497 gtk/gtktexttag.c:251
-#: gtk/gtktextview.c:570
+#: gtk/gtktextview.c:571
 msgid "Editable"
 msgstr "Düzenlenebilir"
 
 # gtk/gtkcellrenderertext.c:212 gtk/gtktexttag.c:277 gtk/gtktextview.c:553
-#: gtk/gtkcellrenderertext.c:260 gtk/gtktexttag.c:252 gtk/gtktextview.c:571
+#: gtk/gtkcellrenderertext.c:260 gtk/gtktexttag.c:252 gtk/gtktextview.c:572
 msgid "Whether the text can be modified by the user"
 msgstr "Metnin kullanıcı tarafından değiştirilebilmesi"
 
@@ -3239,7 +3239,7 @@ msgid "A list of style attributes to apply to the text of the label"
 msgstr "Etiket metnine uygulanacak özniteliklerin listesi"
 
 # gtk/gtklabel.c:227 gtk/gtktexttag.c:377 gtk/gtktextview.c:569
-#: gtk/gtklabel.c:326 gtk/gtktexttag.c:359 gtk/gtktextview.c:587
+#: gtk/gtklabel.c:326 gtk/gtktexttag.c:359 gtk/gtktextview.c:588
 msgid "Justification"
 msgstr "İç hizalama"
 
@@ -3690,92 +3690,92 @@ msgid ""
 msgstr "Parçanın üstüne ve altına eklenecek alanın piksel cinsinden değeri"
 
 # gtk/gtknotebook.c:324
-#: gtk/gtknotebook.c:562
+#: gtk/gtknotebook.c:564
 msgid "Page"
 msgstr "Sayfa"
 
 # gtk/gtknotebook.c:325
-#: gtk/gtknotebook.c:563
+#: gtk/gtknotebook.c:565
 msgid "The index of the current page"
 msgstr "Mevcut sayfanın indeksi"
 
 # gtk/gtknotebook.c:333
-#: gtk/gtknotebook.c:571
+#: gtk/gtknotebook.c:573
 msgid "Tab Position"
 msgstr "Sekme Konumu"
 
 # gtk/gtknotebook.c:334
-#: gtk/gtknotebook.c:572
+#: gtk/gtknotebook.c:574
 msgid "Which side of the notebook holds the tabs"
 msgstr "Defterin hangi tarafının sekmeleri tutacağı"
 
 # gtk/gtknotebook.c:341
-#: gtk/gtknotebook.c:579
+#: gtk/gtknotebook.c:581
 msgid "Tab Border"
 msgstr "Sekme Kenarlığı"
 
 # gtk/gtknotebook.c:342
-#: gtk/gtknotebook.c:580
+#: gtk/gtknotebook.c:582
 msgid "Width of the border around the tab labels"
 msgstr "Sekme etiketlerinin çevresindeki kenarlığın genişliği"
 
 # gtk/gtknotebook.c:350
-#: gtk/gtknotebook.c:588
+#: gtk/gtknotebook.c:590
 msgid "Horizontal Tab Border"
 msgstr "Yatay Sekme Kenarlığı"
 
 # gtk/gtknotebook.c:351
-#: gtk/gtknotebook.c:589
+#: gtk/gtknotebook.c:591
 msgid "Width of the horizontal border of tab labels"
 msgstr "Sekme etiketlerinin yatay kenarlıklarının genişliği"
 
 # gtk/gtknotebook.c:359
-#: gtk/gtknotebook.c:597
+#: gtk/gtknotebook.c:599
 msgid "Vertical Tab Border"
 msgstr "Düşey Sekme Kenarlığı"
 
 # gtk/gtknotebook.c:360
-#: gtk/gtknotebook.c:598
+#: gtk/gtknotebook.c:600
 msgid "Width of the vertical border of tab labels"
 msgstr "Sekme etiketlerinin düşey kenarlıklarının genişliği"
 
 # gtk/gtknotebook.c:368
-#: gtk/gtknotebook.c:606
+#: gtk/gtknotebook.c:608
 msgid "Show Tabs"
 msgstr "Sekmeleri Göster"
 
 # gtk/gtknotebook.c:369
-#: gtk/gtknotebook.c:607
+#: gtk/gtknotebook.c:609
 msgid "Whether tabs should be shown or not"
 msgstr "Sekmelerin gösterilmesi"
 
 # gtk/gtknotebook.c:375
-#: gtk/gtknotebook.c:613
+#: gtk/gtknotebook.c:615
 msgid "Show Border"
 msgstr "Kenarlık Göster"
 
 # gtk/gtknotebook.c:376
-#: gtk/gtknotebook.c:614
+#: gtk/gtknotebook.c:616
 msgid "Whether the border should be shown or not"
 msgstr "Kenarlıkların gösterilmesi"
 
 # gtk/gtknotebook.c:382
-#: gtk/gtknotebook.c:620
+#: gtk/gtknotebook.c:622
 msgid "Scrollable"
 msgstr "Kaydırılabilir"
 
 # gtk/gtknotebook.c:383
-#: gtk/gtknotebook.c:621
+#: gtk/gtknotebook.c:623
 msgid "If TRUE, scroll arrows are added if there are too many tabs to fit"
 msgstr "Eğer TRUE ise, sekmeler kenara sığmadığında kaydırma okları eklenir"
 
 # gtk/gtknotebook.c:389
-#: gtk/gtknotebook.c:627
+#: gtk/gtknotebook.c:629
 msgid "Enable Popup"
 msgstr "Açılan Etkin"
 
 # gtk/gtknotebook.c:390
-#: gtk/gtknotebook.c:628
+#: gtk/gtknotebook.c:630
 msgid ""
 "If TRUE, pressing the right mouse button on the notebook pops up a menu that "
 "you can use to go to a page"
@@ -3784,142 +3784,142 @@ msgstr ""
 "seçerek ilgili sekmeye gidilebilir"
 
 # gtk/gtknotebook.c:397
-#: gtk/gtknotebook.c:635
+#: gtk/gtknotebook.c:637
 msgid "Whether tabs should have homogeneous sizes"
 msgstr "Sekmelerin aynı boyutlarda olmaları"
 
-#: gtk/gtknotebook.c:641
+#: gtk/gtknotebook.c:643
 msgid "Group ID"
 msgstr "Grup Kimliği"
 
-#: gtk/gtknotebook.c:642
+#: gtk/gtknotebook.c:644
 msgid "Group ID for tabs drag and drop"
 msgstr "Sekme sürükle ve bırak için grup kimliği"
 
-#: gtk/gtknotebook.c:658 gtk/gtkradioaction.c:128 gtk/gtkradiobutton.c:82
+#: gtk/gtknotebook.c:660 gtk/gtkradioaction.c:128 gtk/gtkradiobutton.c:82
 #: gtk/gtkradiomenuitem.c:342
 msgid "Group"
 msgstr "Grup"
 
-#: gtk/gtknotebook.c:659
+#: gtk/gtknotebook.c:661
 msgid "Group for tabs drag and drop"
 msgstr "Sekme sürükle ve bırak için grup"
 
-#: gtk/gtknotebook.c:665
+#: gtk/gtknotebook.c:667
 msgid "Tab label"
 msgstr "Sekme etiketi"
 
-#: gtk/gtknotebook.c:666
+#: gtk/gtknotebook.c:668
 msgid "The string displayed on the child's tab label"
 msgstr "Altların sekme etiketinde gösterilecek dizgi"
 
-#: gtk/gtknotebook.c:672
+#: gtk/gtknotebook.c:674
 msgid "Menu label"
 msgstr "Menü etiketi"
 
-#: gtk/gtknotebook.c:673
+#: gtk/gtknotebook.c:675
 msgid "The string displayed in the child's menu entry"
 msgstr "Altların menü girdisinde gösterilecek dizgi"
 
 # gtk/gtkcellrenderer.c:146
-#: gtk/gtknotebook.c:686
+#: gtk/gtknotebook.c:688
 msgid "Tab expand"
 msgstr "Sekme genişlemesi"
 
 # gtk/gtknotebook.c:376
-#: gtk/gtknotebook.c:687
+#: gtk/gtknotebook.c:689
 msgid "Whether to expand the child's tab or not"
 msgstr "Altların sekmelerinin genişletilmesi"
 
-#: gtk/gtknotebook.c:693
+#: gtk/gtknotebook.c:695
 msgid "Tab fill"
 msgstr "Sekme doldurması"
 
 # gtk/gtkbox.c:137
-#: gtk/gtknotebook.c:694
+#: gtk/gtknotebook.c:696
 msgid "Whether the child's tab should fill the allocated area or not"
 msgstr "Altların sekmelerinin tahsis edilen alanı doldurması"
 
-#: gtk/gtknotebook.c:700
+#: gtk/gtknotebook.c:702
 msgid "Tab pack type"
 msgstr "Sekme paket türü"
 
 # gtk/gtktreeview.c:505 gtk/gtktreeviewcolumn.c:253
-#: gtk/gtknotebook.c:707
+#: gtk/gtknotebook.c:709
 msgid "Tab reorderable"
 msgstr "Sekme sıralanabilir"
 
 # gtk/gtknotebook.c:376
-#: gtk/gtknotebook.c:708
+#: gtk/gtknotebook.c:710
 msgid "Whether the tab is reorderable by user action or not"
 msgstr "Sekmenin kullanıcı eylemi ile sıralanabilirliği"
 
-#: gtk/gtknotebook.c:714
+#: gtk/gtknotebook.c:716
 msgid "Tab detachable"
 msgstr "Sekme ayrılabilir"
 
 # gtk/gtkwidget.c:443
-#: gtk/gtknotebook.c:715
+#: gtk/gtknotebook.c:717
 msgid "Whether the tab is detachable"
 msgstr "Sekmenin ayrılabilirliği"
 
 # gtk/gtkscrollbar.c:109
-#: gtk/gtknotebook.c:730 gtk/gtkscrollbar.c:83
+#: gtk/gtknotebook.c:732 gtk/gtkscrollbar.c:83
 msgid "Secondary backward stepper"
 msgstr "İkincil geriye adımlayıcı"
 
 # gtk/gtkscrollbar.c:110
-#: gtk/gtknotebook.c:731
+#: gtk/gtknotebook.c:733
 msgid ""
 "Display a second backward arrow button on the opposite end of the tab area"
 msgstr "Sekme alanının karşı ucunda ikincil geriye doğru ok düğmesi göster"
 
 # gtk/gtkscrollbar.c:117
-#: gtk/gtknotebook.c:746 gtk/gtkscrollbar.c:91
+#: gtk/gtknotebook.c:748 gtk/gtkscrollbar.c:91
 msgid "Secondary forward stepper"
 msgstr "İkincil ileri adımlayıcı"
 
 # gtk/gtkscrollbar.c:118
-#: gtk/gtknotebook.c:747
+#: gtk/gtknotebook.c:749
 msgid ""
 "Display a second forward arrow button on the opposite end of the tab area"
 msgstr "Sekme alanının karşı ucunda ikincil ileriye doğru ok düğmesi göster"
 
 # gtk/gtkscrollbar.c:93
-#: gtk/gtknotebook.c:761 gtk/gtkscrollbar.c:67
+#: gtk/gtknotebook.c:763 gtk/gtkscrollbar.c:67
 msgid "Backward stepper"
 msgstr "Geriye adımlayıcı"
 
 # gtk/gtkscrollbar.c:94
-#: gtk/gtknotebook.c:762 gtk/gtkscrollbar.c:68
+#: gtk/gtknotebook.c:764 gtk/gtkscrollbar.c:68
 msgid "Display the standard backward arrow button"
 msgstr "Standart geri oku düğmesini göster"
 
 # gtk/gtkscrollbar.c:101
-#: gtk/gtknotebook.c:776 gtk/gtkscrollbar.c:75
+#: gtk/gtknotebook.c:778 gtk/gtkscrollbar.c:75
 msgid "Forward stepper"
 msgstr "İleriye adımlayıcı"
 
 # gtk/gtkscrollbar.c:102
-#: gtk/gtknotebook.c:777 gtk/gtkscrollbar.c:76
+#: gtk/gtknotebook.c:779 gtk/gtkscrollbar.c:76
 msgid "Display the standard forward arrow button"
 msgstr "Standart ileri ok düğmesini göster"
 
 # gtk/gtknotebook.c:341
-#: gtk/gtknotebook.c:791
+#: gtk/gtknotebook.c:793
 msgid "Tab overlap"
 msgstr "Sekme çakışması"
 
-#: gtk/gtknotebook.c:792
+#: gtk/gtknotebook.c:794
 msgid "Size of tab overlap area"
 msgstr "Sekme çakışma alanı boyutu"
 
-#: gtk/gtknotebook.c:807
+#: gtk/gtknotebook.c:809
 msgid "Tab curvature"
 msgstr "Sekme eğriltmesi"
 
 # gtk/gtktoolbar.c:242
-#: gtk/gtknotebook.c:808
+#: gtk/gtknotebook.c:810
 msgid "Size of tab curvature"
 msgstr "Sekme eğriltmesinin boyutu"
 
@@ -5843,7 +5843,7 @@ msgstr ""
 "önceden atamıştır, mesela PANGO_SCALE_X_LARGE"
 
 # gtk/gtktexttag.c:378 gtk/gtktextview.c:570
-#: gtk/gtktexttag.c:360 gtk/gtktextview.c:588
+#: gtk/gtktexttag.c:360 gtk/gtktextview.c:589
 msgid "Left, right, or center justification"
 msgstr "Sola, sağa veya ortaya hizalama"
 
@@ -5862,7 +5862,7 @@ msgid "Left margin"
 msgstr "Sol kenar boşluğu"
 
 # gtk/gtktexttag.c:395 gtk/gtktextview.c:579
-#: gtk/gtktexttag.c:387 gtk/gtktextview.c:597
+#: gtk/gtktexttag.c:387 gtk/gtktextview.c:598
 msgid "Width of the left margin in pixels"
 msgstr "Piksel cinsinden sol kenar boşluğunun genişliği"
 
@@ -5872,17 +5872,17 @@ msgid "Right margin"
 msgstr "Sağ kenar boşluğu"
 
 # gtk/gtktexttag.c:405 gtk/gtktextview.c:589
-#: gtk/gtktexttag.c:397 gtk/gtktextview.c:607
+#: gtk/gtktexttag.c:397 gtk/gtktextview.c:608
 msgid "Width of the right margin in pixels"
 msgstr "Piksel cinsinden sağ kenar boşluğunun genişliği"
 
 # gtk/gtktexttag.c:415 gtk/gtktextview.c:598
-#: gtk/gtktexttag.c:407 gtk/gtktextview.c:616
+#: gtk/gtktexttag.c:407 gtk/gtktextview.c:617
 msgid "Indent"
 msgstr "Girinti"
 
 # gtk/gtktexttag.c:416 gtk/gtktextview.c:599
-#: gtk/gtktexttag.c:408 gtk/gtktextview.c:617
+#: gtk/gtktexttag.c:408 gtk/gtktextview.c:618
 msgid "Amount to indent the paragraph, in pixels"
 msgstr "Piksel olarak paragraf satırbaşı girintisi"
 
@@ -5901,7 +5901,7 @@ msgid "Pixels above lines"
 msgstr "Satırların üstündeki pikseller"
 
 # gtk/gtktexttag.c:437 gtk/gtktextview.c:523
-#: gtk/gtktexttag.c:429 gtk/gtktextview.c:541
+#: gtk/gtktexttag.c:429 gtk/gtktextview.c:542
 msgid "Pixels of blank space above paragraphs"
 msgstr "Piksel cinsinden paragraf üstündeki boş alan"
 
@@ -5911,7 +5911,7 @@ msgid "Pixels below lines"
 msgstr "Satırların altındaki pikseller"
 
 # gtk/gtktexttag.c:447 gtk/gtktextview.c:533
-#: gtk/gtktexttag.c:439 gtk/gtktextview.c:551
+#: gtk/gtktexttag.c:439 gtk/gtktextview.c:552
 msgid "Pixels of blank space below paragraphs"
 msgstr "Piksel cinsinden paragraf altındaki boş alan"
 
@@ -5921,12 +5921,12 @@ msgid "Pixels inside wrap"
 msgstr "Bölünmüşler içindeki pikseller"
 
 # gtk/gtktexttag.c:457 gtk/gtktextview.c:543
-#: gtk/gtktexttag.c:449 gtk/gtktextview.c:561
+#: gtk/gtktexttag.c:449 gtk/gtktextview.c:562
 msgid "Pixels of blank space between wrapped lines in a paragraph"
 msgstr "Piksel cinsinden paragraf satırları arasındaki boş alan"
 
 # gtk/gtktexttag.c:484 gtk/gtktextview.c:561
-#: gtk/gtktexttag.c:476 gtk/gtktextview.c:579
+#: gtk/gtktexttag.c:476 gtk/gtktextview.c:580
 msgid ""
 "Whether to wrap lines never, at word boundaries, or at character boundaries"
 msgstr ""
@@ -5934,12 +5934,12 @@ msgstr ""
 "karakter sınırlarında olması"
 
 # gtk/gtktexttag.c:493 gtk/gtktextview.c:608
-#: gtk/gtktexttag.c:485 gtk/gtktextview.c:626
+#: gtk/gtktexttag.c:485 gtk/gtktextview.c:627
 msgid "Tabs"
 msgstr "Sekmeler"
 
 # gtk/gtktexttag.c:494 gtk/gtktextview.c:609
-#: gtk/gtktexttag.c:486 gtk/gtktextview.c:627
+#: gtk/gtktexttag.c:486 gtk/gtktextview.c:628
 msgid "Custom tabs for this text"
 msgstr "Bu metin için özel sekmeler"
 
@@ -6118,77 +6118,77 @@ msgid "Whether this tag affects the paragraph background color"
 msgstr "Bu etiketin paragraf arkaplan rengini etkilemesi"
 
 # gtk/gtktextview.c:522
-#: gtk/gtktextview.c:540
+#: gtk/gtktextview.c:541
 msgid "Pixels Above Lines"
 msgstr "Satırların Üstüneki Pikseller"
 
 # gtk/gtktextview.c:532
-#: gtk/gtktextview.c:550
+#: gtk/gtktextview.c:551
 msgid "Pixels Below Lines"
 msgstr "Satırların Altındaki Pikseller"
 
 # gtk/gtktextview.c:542
-#: gtk/gtktextview.c:560
+#: gtk/gtktextview.c:561
 msgid "Pixels Inside Wrap"
 msgstr "Sarmalar Arasındaki Pikseller"
 
 # gtk/gtktextview.c:560
-#: gtk/gtktextview.c:578
+#: gtk/gtktextview.c:579
 msgid "Wrap Mode"
 msgstr "Sarma Kipi"
 
 # gtk/gtktextview.c:578
-#: gtk/gtktextview.c:596
+#: gtk/gtktextview.c:597
 msgid "Left Margin"
 msgstr "Sol Kenar Boşluğu"
 
 # gtk/gtktextview.c:588
-#: gtk/gtktextview.c:606
+#: gtk/gtktextview.c:607
 msgid "Right Margin"
 msgstr "Sağ Kenar Boşluğu"
 
 # gtk/gtktextview.c:616
-#: gtk/gtktextview.c:634
+#: gtk/gtktextview.c:635
 msgid "Cursor Visible"
 msgstr "Görünür İmleç"
 
 # gtk/gtktextview.c:617
-#: gtk/gtktextview.c:635
+#: gtk/gtktextview.c:636
 msgid "If the insertion cursor is shown"
 msgstr "Ekleme imleci gösterilirse"
 
-#: gtk/gtktextview.c:642
+#: gtk/gtktextview.c:643
 msgid "Buffer"
 msgstr "Tampon"
 
-#: gtk/gtktextview.c:643
+#: gtk/gtktextview.c:644
 msgid "The buffer which is displayed"
 msgstr "Görüntülenecek tampon"
 
 # gtk/gtkcontainer.c:207
-#: gtk/gtktextview.c:650
+#: gtk/gtktextview.c:651
 msgid "Overwrite mode"
 msgstr "Üzerine yazma kipi"
 
-#: gtk/gtktextview.c:651
+#: gtk/gtktextview.c:652
 msgid "Whether entered text overwrites existing contents"
 msgstr "Girilen metnin mevcut içeriğin üstüne yazılması"
 
-#: gtk/gtktextview.c:658
+#: gtk/gtktextview.c:659
 msgid "Accepts tab"
 msgstr "Sekme kabul ediyor"
 
-#: gtk/gtktextview.c:659
+#: gtk/gtktextview.c:660
 msgid "Whether Tab will result in a tab character being entered"
 msgstr "Tab'ın girilen bir sekme karakteri olarak sonuçlanması"
 
 # gtk/gtkcellrenderertext.c:202 gtk/gtktexttag.c:250
-#: gtk/gtktextview.c:668
+#: gtk/gtktextview.c:669
 msgid "Error underline color"
 msgstr "Hata altçizgisinin rengi"
 
 # gtk/gtkentry.c:457
-#: gtk/gtktextview.c:669
+#: gtk/gtktextview.c:670
 msgid "Color with which to draw error-indication underlines"
 msgstr "Hata belirten altçizgilerin çizileceği renk"
 

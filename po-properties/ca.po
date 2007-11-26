@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.3.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-10-16 23:55-0400\n"
+"POT-Creation-Date: 2007-11-26 15:19-0500\n"
 "PO-Revision-Date: 2007-09-17 20:57+0200\n"
 "Last-Translator: Jordi Mallach <jordi@sindominio.net>\n"
 "Language-Team: Catalan <tradgnome@softcatala.org>\n"
@@ -708,7 +708,7 @@ msgstr "Espaiament"
 msgid "The amount of space between children"
 msgstr "La quantitat d'espai entre fills"
 
-#: gtk/gtkbox.c:108 gtk/gtknotebook.c:634 gtk/gtktable.c:165
+#: gtk/gtkbox.c:108 gtk/gtknotebook.c:636 gtk/gtktable.c:165
 #: gtk/gtktoolbar.c:563
 msgid "Homogeneous"
 msgstr "Homogeni"
@@ -750,7 +750,7 @@ msgstr "Espai extra per posar entre el fill i els seus veïns, en píxels"
 msgid "Pack type"
 msgstr "Tipus de paquet"
 
-#: gtk/gtkbox.c:138 gtk/gtknotebook.c:701
+#: gtk/gtkbox.c:138 gtk/gtknotebook.c:703
 msgid ""
 "A GtkPackType indicating whether the child is packed with reference to the "
 "start or end of the parent"
@@ -758,20 +758,20 @@ msgstr ""
 "Un GtkPackType que indica si el fill s'empaqueta en referència a l'inici o "
 "al final del pare"
 
-#: gtk/gtkbox.c:144 gtk/gtknotebook.c:679 gtk/gtkpaned.c:219
+#: gtk/gtkbox.c:144 gtk/gtknotebook.c:681 gtk/gtkpaned.c:219
 #: gtk/gtkruler.c:110
 msgid "Position"
 msgstr "Posició"
 
-#: gtk/gtkbox.c:145 gtk/gtknotebook.c:680
+#: gtk/gtkbox.c:145 gtk/gtknotebook.c:682
 msgid "The index of the child in the parent"
 msgstr "L'índex del fill en el pare"
 
-#: gtk/gtkbuilder.c:104
+#: gtk/gtkbuilder.c:102
 msgid "Translation Domain"
 msgstr "Domini de la traducció"
 
-#: gtk/gtkbuilder.c:105
+#: gtk/gtkbuilder.c:103
 msgid "The translation domain used by gettext"
 msgstr "El domini de la traducció que utilitzarà el gettext"
 
@@ -1349,11 +1349,11 @@ msgid "Foreground color as a GdkColor"
 msgstr "Color de primer pla com a GdkColor"
 
 #: gtk/gtkcellrenderertext.c:259 gtk/gtkentry.c:497 gtk/gtktexttag.c:251
-#: gtk/gtktextview.c:570
+#: gtk/gtktextview.c:571
 msgid "Editable"
 msgstr "Editable"
 
-#: gtk/gtkcellrenderertext.c:260 gtk/gtktexttag.c:252 gtk/gtktextview.c:571
+#: gtk/gtkcellrenderertext.c:260 gtk/gtktexttag.c:252 gtk/gtktextview.c:572
 msgid "Whether the text can be modified by the user"
 msgstr "Si el text pot ser modificat per l'usuari"
 
@@ -2832,7 +2832,7 @@ msgstr "El text de l'etiqueta"
 msgid "A list of style attributes to apply to the text of the label"
 msgstr "Una llista d'atributs d'estil per aplicar al text de l'etiqueta"
 
-#: gtk/gtklabel.c:326 gtk/gtktexttag.c:359 gtk/gtktextview.c:587
+#: gtk/gtklabel.c:326 gtk/gtktexttag.c:359 gtk/gtktextview.c:588
 msgid "Justification"
 msgstr "Justificació"
 
@@ -3244,77 +3244,77 @@ msgid ""
 "The amount of space to add on the top and bottom of the widget, in pixels"
 msgstr "L'alineació d'espai a afegir de dalt a baix del giny, en píxels"
 
-#: gtk/gtknotebook.c:562
+#: gtk/gtknotebook.c:564
 msgid "Page"
 msgstr "Pàgina"
 
-#: gtk/gtknotebook.c:563
+#: gtk/gtknotebook.c:565
 msgid "The index of the current page"
 msgstr "L'índex de la pàgina actual"
 
-#: gtk/gtknotebook.c:571
+#: gtk/gtknotebook.c:573
 msgid "Tab Position"
 msgstr "Posició de les pestanyes"
 
-#: gtk/gtknotebook.c:572
+#: gtk/gtknotebook.c:574
 msgid "Which side of the notebook holds the tabs"
 msgstr "Quin costat del bloc de notes conté les pestanyes"
 
-#: gtk/gtknotebook.c:579
+#: gtk/gtknotebook.c:581
 msgid "Tab Border"
 msgstr "Límit de la pestanya"
 
-#: gtk/gtknotebook.c:580
+#: gtk/gtknotebook.c:582
 msgid "Width of the border around the tab labels"
 msgstr "Amplada del contorn al voltant de les etiquetes de pestanya"
 
-#: gtk/gtknotebook.c:588
+#: gtk/gtknotebook.c:590
 msgid "Horizontal Tab Border"
 msgstr "Contorn pestanya horitzontal"
 
-#: gtk/gtknotebook.c:589
+#: gtk/gtknotebook.c:591
 msgid "Width of the horizontal border of tab labels"
 msgstr "Amplada del contorn horitzontal de les etiquetes de pestanya"
 
-#: gtk/gtknotebook.c:597
+#: gtk/gtknotebook.c:599
 msgid "Vertical Tab Border"
 msgstr "Contorn pestanya vertical"
 
-#: gtk/gtknotebook.c:598
+#: gtk/gtknotebook.c:600
 msgid "Width of the vertical border of tab labels"
 msgstr "Amplada del contorn vertical de les etiquetes de pestanya"
 
-#: gtk/gtknotebook.c:606
+#: gtk/gtknotebook.c:608
 msgid "Show Tabs"
 msgstr "Mostra les pestanyes"
 
-#: gtk/gtknotebook.c:607
+#: gtk/gtknotebook.c:609
 msgid "Whether tabs should be shown or not"
 msgstr "Si les pestanyes s'haurien de mostrar o no"
 
-#: gtk/gtknotebook.c:613
+#: gtk/gtknotebook.c:615
 msgid "Show Border"
 msgstr "Mostra el contorn"
 
-#: gtk/gtknotebook.c:614
+#: gtk/gtknotebook.c:616
 msgid "Whether the border should be shown or not"
 msgstr "Si el contorn hauria de ser mostrat o no"
 
-#: gtk/gtknotebook.c:620
+#: gtk/gtknotebook.c:622
 msgid "Scrollable"
 msgstr "Desplaçable"
 
-#: gtk/gtknotebook.c:621
+#: gtk/gtknotebook.c:623
 msgid "If TRUE, scroll arrows are added if there are too many tabs to fit"
 msgstr ""
 "Si és CERT, s'afegeixen fletxes de desplaçament si hi ha massa tabulacions "
 "per ajustar"
 
-#: gtk/gtknotebook.c:627
+#: gtk/gtknotebook.c:629
 msgid "Enable Popup"
 msgstr "Disponible el menú emergent"
 
-#: gtk/gtknotebook.c:628
+#: gtk/gtknotebook.c:630
 msgid ""
 "If TRUE, pressing the right mouse button on the notebook pops up a menu that "
 "you can use to go to a page"
@@ -3322,131 +3322,131 @@ msgstr ""
 "Si és CERT, prement el botó dret del ratolí sobre el llibre de notes apareix "
 "un menú que podeu utilitzar per anar a una pàgina"
 
-#: gtk/gtknotebook.c:635
+#: gtk/gtknotebook.c:637
 msgid "Whether tabs should have homogeneous sizes"
 msgstr "Si les pestanyes haurien de tenir mides homogènies"
 
-#: gtk/gtknotebook.c:641
+#: gtk/gtknotebook.c:643
 msgid "Group ID"
 msgstr "ID del grup"
 
-#: gtk/gtknotebook.c:642
+#: gtk/gtknotebook.c:644
 msgid "Group ID for tabs drag and drop"
 msgstr "ID del grup per a pestanyes per arrossegar i deixar anar"
 
-#: gtk/gtknotebook.c:658 gtk/gtkradioaction.c:128 gtk/gtkradiobutton.c:82
+#: gtk/gtknotebook.c:660 gtk/gtkradioaction.c:128 gtk/gtkradiobutton.c:82
 #: gtk/gtkradiomenuitem.c:342
 msgid "Group"
 msgstr "Grup"
 
-#: gtk/gtknotebook.c:659
+#: gtk/gtknotebook.c:661
 #, fuzzy
 msgid "Group for tabs drag and drop"
 msgstr "ID del grup per a pestanyes per arrossegar i deixar anar"
 
-#: gtk/gtknotebook.c:665
+#: gtk/gtknotebook.c:667
 msgid "Tab label"
 msgstr "Etiqueta de la pestanya"
 
-#: gtk/gtknotebook.c:666
+#: gtk/gtknotebook.c:668
 msgid "The string displayed on the child's tab label"
 msgstr "La cadena mostrada a l'etiqueta de la pestanya del fill"
 
-#: gtk/gtknotebook.c:672
+#: gtk/gtknotebook.c:674
 msgid "Menu label"
 msgstr "Etiqueta del menú"
 
-#: gtk/gtknotebook.c:673
+#: gtk/gtknotebook.c:675
 msgid "The string displayed in the child's menu entry"
 msgstr "La cadena mostrada a l'entrada de menú del fill"
 
-#: gtk/gtknotebook.c:686
+#: gtk/gtknotebook.c:688
 msgid "Tab expand"
 msgstr "Expansió de pestanya"
 
-#: gtk/gtknotebook.c:687
+#: gtk/gtknotebook.c:689
 msgid "Whether to expand the child's tab or not"
 msgstr "Si s'ha expandir la pestanya dels fills o no"
 
-#: gtk/gtknotebook.c:693
+#: gtk/gtknotebook.c:695
 msgid "Tab fill"
 msgstr "Farciment de pestanya"
 
-#: gtk/gtknotebook.c:694
+#: gtk/gtknotebook.c:696
 msgid "Whether the child's tab should fill the allocated area or not"
 msgstr "Si la pestanya del fill hauria d'omplir l'àrea assignada o no"
 
-#: gtk/gtknotebook.c:700
+#: gtk/gtknotebook.c:702
 msgid "Tab pack type"
 msgstr "Tipus de paquet de pestanya"
 
-#: gtk/gtknotebook.c:707
+#: gtk/gtknotebook.c:709
 msgid "Tab reorderable"
 msgstr "Pestanya reordenable"
 
-#: gtk/gtknotebook.c:708
+#: gtk/gtknotebook.c:710
 msgid "Whether the tab is reorderable by user action or not"
 msgstr "Si l'usuari pot fer una acció per canviar l'ordre de les pestanyes"
 
-#: gtk/gtknotebook.c:714
+#: gtk/gtknotebook.c:716
 msgid "Tab detachable"
 msgstr "Pestanya separable"
 
-#: gtk/gtknotebook.c:715
+#: gtk/gtknotebook.c:717
 msgid "Whether the tab is detachable"
 msgstr "Si la pestanya es pot separar"
 
-#: gtk/gtknotebook.c:730 gtk/gtkscrollbar.c:83
+#: gtk/gtknotebook.c:732 gtk/gtkscrollbar.c:83
 msgid "Secondary backward stepper"
 msgstr "Caminador posterior secundari"
 
-#: gtk/gtknotebook.c:731
+#: gtk/gtknotebook.c:733
 msgid ""
 "Display a second backward arrow button on the opposite end of the tab area"
 msgstr ""
 "Mostra una altre botó amb fletxa cap endarrere a l'altre extrem de l'àrea de "
 "pestanyes"
 
-#: gtk/gtknotebook.c:746 gtk/gtkscrollbar.c:91
+#: gtk/gtknotebook.c:748 gtk/gtkscrollbar.c:91
 msgid "Secondary forward stepper"
 msgstr "Caminador davanter secundari"
 
-#: gtk/gtknotebook.c:747
+#: gtk/gtknotebook.c:749
 msgid ""
 "Display a second forward arrow button on the opposite end of the tab area"
 msgstr ""
 "Mostra una altre botó amb fletxa cap endavant a l'altre extrem de l'àrea de "
 "pestanyes"
 
-#: gtk/gtknotebook.c:761 gtk/gtkscrollbar.c:67
+#: gtk/gtknotebook.c:763 gtk/gtkscrollbar.c:67
 msgid "Backward stepper"
 msgstr "Caminador posterior"
 
-#: gtk/gtknotebook.c:762 gtk/gtkscrollbar.c:68
+#: gtk/gtknotebook.c:764 gtk/gtkscrollbar.c:68
 msgid "Display the standard backward arrow button"
 msgstr "Visualitza el botó de retrocés estàndard"
 
-#: gtk/gtknotebook.c:776 gtk/gtkscrollbar.c:75
+#: gtk/gtknotebook.c:778 gtk/gtkscrollbar.c:75
 msgid "Forward stepper"
 msgstr "Caminador anterior"
 
-#: gtk/gtknotebook.c:777 gtk/gtkscrollbar.c:76
+#: gtk/gtknotebook.c:779 gtk/gtkscrollbar.c:76
 msgid "Display the standard forward arrow button"
 msgstr "Visualitza el botó d'avanç estàndard"
 
-#: gtk/gtknotebook.c:791
+#: gtk/gtknotebook.c:793
 msgid "Tab overlap"
 msgstr "Sobreposat de les pestanyes"
 
-#: gtk/gtknotebook.c:792
+#: gtk/gtknotebook.c:794
 msgid "Size of tab overlap area"
 msgstr "Mida de l'àrea del sobreposat de les pestanyes"
 
-#: gtk/gtknotebook.c:807
+#: gtk/gtknotebook.c:809
 msgid "Tab curvature"
 msgstr "Curvatura de la pestanya"
 
-#: gtk/gtknotebook.c:808
+#: gtk/gtknotebook.c:810
 msgid "Size of tab curvature"
 msgstr "Mida de la curvatura de la pestanya"
 
@@ -5205,7 +5205,7 @@ msgstr ""
 "defecte. Això s'adapta pròpiament a canvis de tema, etc., per tant es "
 "recomana. El Pango predefineix algunes escales com ara PANGO_SCALE_X_LARGE"
 
-#: gtk/gtktexttag.c:360 gtk/gtktextview.c:588
+#: gtk/gtktexttag.c:360 gtk/gtktextview.c:589
 msgid "Left, right, or center justification"
 msgstr "Justificació a l'esquerre, dreta, o centre"
 
@@ -5221,7 +5221,7 @@ msgstr ""
 msgid "Left margin"
 msgstr "Marge esquerre"
 
-#: gtk/gtktexttag.c:387 gtk/gtktextview.c:597
+#: gtk/gtktexttag.c:387 gtk/gtktextview.c:598
 msgid "Width of the left margin in pixels"
 msgstr "Amplada del marge esquerre en píxels"
 
@@ -5229,15 +5229,15 @@ msgstr "Amplada del marge esquerre en píxels"
 msgid "Right margin"
 msgstr "Marge dret"
 
-#: gtk/gtktexttag.c:397 gtk/gtktextview.c:607
+#: gtk/gtktexttag.c:397 gtk/gtktextview.c:608
 msgid "Width of the right margin in pixels"
 msgstr "Amplada del marge dret en píxels"
 
-#: gtk/gtktexttag.c:407 gtk/gtktextview.c:616
+#: gtk/gtktexttag.c:407 gtk/gtktextview.c:617
 msgid "Indent"
 msgstr "Sagnat"
 
-#: gtk/gtktexttag.c:408 gtk/gtktextview.c:617
+#: gtk/gtktexttag.c:408 gtk/gtktextview.c:618
 msgid "Amount to indent the paragraph, in pixels"
 msgstr "Quantitat a sagnar el paràgraf, en píxels"
 
@@ -5253,7 +5253,7 @@ msgstr ""
 msgid "Pixels above lines"
 msgstr "Píxels per sobre les línies"
 
-#: gtk/gtktexttag.c:429 gtk/gtktextview.c:541
+#: gtk/gtktexttag.c:429 gtk/gtktextview.c:542
 msgid "Pixels of blank space above paragraphs"
 msgstr "Pìxels d'espais en blanc per sobre els paràgrafs"
 
@@ -5261,7 +5261,7 @@ msgstr "Pìxels d'espais en blanc per sobre els paràgrafs"
 msgid "Pixels below lines"
 msgstr "Píxels per sota les línies"
 
-#: gtk/gtktexttag.c:439 gtk/gtktextview.c:551
+#: gtk/gtktexttag.c:439 gtk/gtktextview.c:552
 msgid "Pixels of blank space below paragraphs"
 msgstr "Píxels d'espais en blanc per sota els paràgrafs"
 
@@ -5269,22 +5269,22 @@ msgstr "Píxels d'espais en blanc per sota els paràgrafs"
 msgid "Pixels inside wrap"
 msgstr "Píxels dins l'ajustament"
 
-#: gtk/gtktexttag.c:449 gtk/gtktextview.c:561
+#: gtk/gtktexttag.c:449 gtk/gtktextview.c:562
 msgid "Pixels of blank space between wrapped lines in a paragraph"
 msgstr "Píxels d'espais en blanc entre línies ajustades a un paràgraf"
 
-#: gtk/gtktexttag.c:476 gtk/gtktextview.c:579
+#: gtk/gtktexttag.c:476 gtk/gtktextview.c:580
 msgid ""
 "Whether to wrap lines never, at word boundaries, or at character boundaries"
 msgstr ""
 "Si no s'ha d'ajustar mai les línies, o fer-ho en els límits de les paraules "
 "o caràcters"
 
-#: gtk/gtktexttag.c:485 gtk/gtktextview.c:626
+#: gtk/gtktexttag.c:485 gtk/gtktextview.c:627
 msgid "Tabs"
 msgstr "Pestanyes"
 
-#: gtk/gtktexttag.c:486 gtk/gtktextview.c:627
+#: gtk/gtktexttag.c:486 gtk/gtktextview.c:628
 msgid "Custom tabs for this text"
 msgstr "Pestanyes personalitzades per a aquest text"
 
@@ -5433,67 +5433,67 @@ msgstr "Estableix el fons del paràgraf"
 msgid "Whether this tag affects the paragraph background color"
 msgstr "Si aquest marcador afecta el color de fons del paràgraf"
 
-#: gtk/gtktextview.c:540
+#: gtk/gtktextview.c:541
 msgid "Pixels Above Lines"
 msgstr "Píxels per sobre les línies"
 
-#: gtk/gtktextview.c:550
+#: gtk/gtktextview.c:551
 msgid "Pixels Below Lines"
 msgstr "Píxels per sota les línies"
 
-#: gtk/gtktextview.c:560
+#: gtk/gtktextview.c:561
 msgid "Pixels Inside Wrap"
 msgstr "Píxels dins de l'ajust"
 
-#: gtk/gtktextview.c:578
+#: gtk/gtktextview.c:579
 msgid "Wrap Mode"
 msgstr "Mode ajust"
 
-#: gtk/gtktextview.c:596
+#: gtk/gtktextview.c:597
 msgid "Left Margin"
 msgstr "Marge esquerre"
 
-#: gtk/gtktextview.c:606
+#: gtk/gtktextview.c:607
 msgid "Right Margin"
 msgstr "Marge dret"
 
-#: gtk/gtktextview.c:634
+#: gtk/gtktextview.c:635
 msgid "Cursor Visible"
 msgstr "Cursor visible"
 
-#: gtk/gtktextview.c:635
+#: gtk/gtktextview.c:636
 msgid "If the insertion cursor is shown"
 msgstr "Si es mostra el cursor d'inserció"
 
-#: gtk/gtktextview.c:642
+#: gtk/gtktextview.c:643
 msgid "Buffer"
 msgstr "Text a memòria intermèdia"
 
-#: gtk/gtktextview.c:643
+#: gtk/gtktextview.c:644
 msgid "The buffer which is displayed"
 msgstr "El text a la memòria intermèdia que es mostrarà"
 
-#: gtk/gtktextview.c:650
+#: gtk/gtktextview.c:651
 msgid "Overwrite mode"
 msgstr "Mode de sobreescriptura"
 
-#: gtk/gtktextview.c:651
+#: gtk/gtktextview.c:652
 msgid "Whether entered text overwrites existing contents"
 msgstr "Si el text entrat sobreescriu l'existent"
 
-#: gtk/gtktextview.c:658
+#: gtk/gtktextview.c:659
 msgid "Accepts tab"
 msgstr "Accepta tabuladors"
 
-#: gtk/gtktextview.c:659
+#: gtk/gtktextview.c:660
 msgid "Whether Tab will result in a tab character being entered"
 msgstr "Si la tecla de tabulació entra un caràcter de tabulació"
 
-#: gtk/gtktextview.c:668
+#: gtk/gtktextview.c:669
 msgid "Error underline color"
 msgstr "Color de les línie d'error inferiors"
 
-#: gtk/gtktextview.c:669
+#: gtk/gtktextview.c:670
 msgid "Color with which to draw error-indication underlines"
 msgstr "El color amb el que es dibuixa la línia inferior que indica un error"
 
