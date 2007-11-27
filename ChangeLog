@@ -1,3 +1,8 @@
+2006-11-26  Ryan Lortie  <desrt@desrt.ca>
+
+	* gtkbuilder.c: remove concept of root objects and just refcount
+	all objects in the builder.  Fixes #496651.
+
 2007-11-26  Ryan Lortie  <desrt@desrt.ca>
 
 	* tests/buildertest.c (test_window): fix invalid free

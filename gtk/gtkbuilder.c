@@ -67,7 +67,6 @@ struct _GtkBuilderPrivate
   GHashTable *objects;
   GSList *delayed_properties;
   GSList *signals;
-  GSList *root_objects;
   gchar *filename;
 };
 
@@ -114,7 +113,7 @@ gtk_builder_init (GtkBuilder *builder)
                                                GtkBuilderPrivate);
   builder->priv->domain = NULL;
   builder->priv->objects = g_hash_table_new_full (g_str_hash, g_str_equal,
-                                                  g_free, NULL);
+                                                  g_free, g_object_unref);
 }
 
 
@@ -135,9 +134,6 @@ gtk_builder_finalize (GObject *object)
   g_slist_foreach (priv->signals, (GFunc) _free_signal_info, NULL);
   g_slist_free (priv->signals);
   
-  g_slist_foreach (priv->root_objects, (GFunc) g_object_unref, NULL);
-  g_slist_free (priv->root_objects);
-
   G_OBJECT_CLASS (gtk_builder_parent_class)->finalize (object);
 }
 
@@ -406,7 +402,7 @@ _gtk_builder_construct (GtkBuilder *builder,
       g_assert (obj != NULL);
       if (construct_parameters->len)
         g_warning ("Can't pass in construct-only parameters to %s", info->id);
-
+      g_object_ref (obj);
     }
   else if (info->parent && ((ChildInfo*)info->parent)->internal_child != NULL)
     {
@@ -414,12 +410,25 @@ _gtk_builder_construct (GtkBuilder *builder,
       obj = gtk_builder_get_internal_child (builder, info, childname);
       if (construct_parameters->len)
         g_warning ("Can't pass in construct-only parameters to %s", childname);
+      g_object_ref (obj);
     }
   else
     {
       obj = g_object_newv (object_type,
                            construct_parameters->len,
                            (GParameter *)construct_parameters->data);
+
+      /* No matter what, make sure we have a reference.
+       *
+       * If it's an initially unowned object, sink it.
+       * If it's not initially unowned then we have the reference already.
+       *
+       * In the case that this is a window it will be sunk already and
+       * this is effectively a call to g_object_ref().  That's what
+       * we want.
+       */
+      if (G_IS_INITIALLY_UNOWNED (obj))
+        g_object_ref_sink (obj);
 
       GTK_NOTE (BUILDER,
                 g_print ("created %s of type %s\n", info->id, info->class_name));
@@ -472,15 +481,7 @@ _gtk_builder_construct (GtkBuilder *builder,
                             g_strdup (info->id),
                             g_free);
 
-
-  if (!info->parent && !GTK_IS_WINDOW (obj))
-    {
-      if (g_object_is_floating (obj))
-	  g_object_ref_sink (obj);
-      
-      builder->priv->root_objects =
-        g_slist_prepend (builder->priv->root_objects, obj);
-    }
+  /* we already own a reference to obj.  put it in the hash table. */
   g_hash_table_insert (builder->priv->objects, g_strdup (info->id), obj);
   
   return obj;
