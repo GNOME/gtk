@@ -402,7 +402,6 @@ _gtk_builder_construct (GtkBuilder *builder,
       g_assert (obj != NULL);
       if (construct_parameters->len)
         g_warning ("Can't pass in construct-only parameters to %s", info->id);
-      g_object_ref (obj);
     }
   else if (info->parent && ((ChildInfo*)info->parent)->internal_child != NULL)
     {

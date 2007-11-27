@@ -1,5 +1,18 @@
 2006-11-26  Ryan Lortie  <desrt@desrt.ca>
 
+	* docs/reference/gtk/tmpl/gtkbuildable.sgml: add clarification stating
+	that the construct_child function is responsible for returning a
+	reference.
+	* gtkbuilder.c (_gtk_builder_construct): remove g_object_ref() for
+	objects from constructors
+	* gtkuimanager.c (gtk_ui_manager_buildable_construct_child): add
+	g_object_ref() to this construction function (it's the only
+	implementer in GTK)
+
+	Fixes #496645.
+
+2006-11-26  Ryan Lortie  <desrt@desrt.ca>
+
 	* gtkbuilder.c: remove concept of root objects and just refcount
 	all objects in the builder.  Fixes #496651.
 
