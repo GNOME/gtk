@@ -1,3 +1,7 @@
+2007-11-26  Ryan Lortie  <desrt@desrt.ca>
+
+	* tests/buildertest.c (test_window): fix invalid free
+
 2007-11-26  Josselin Mouette <joss@malsain.org>
 
 	reviewed by: Federico Mena Quintero
