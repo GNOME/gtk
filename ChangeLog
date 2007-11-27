@@ -1,3 +1,10 @@
+2007-11-27  Matthias Clasen <mclasen@redhat.com>
+
+	Merged from trunk:
+
+	* gtk/gtkwindow.c (gtk_window_move_resize): Zero some
+	variables to silence valgrind.  (#495124, Morten Welinder)
+
 2007-11-27  Mart Raudsepp  <leio@gentoo.org>
 
 	Merged from trunk:
