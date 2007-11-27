@@ -1549,11 +1549,8 @@ gboolean test_window (void)
 
   builder = builder_new_from_string (buffer2, -1, NULL);
   window1 = gtk_builder_get_object (builder, "window1");
-  g_return_val_if_fail (title != NULL, FALSE);
-  g_free (title);
   gtk_widget_destroy (GTK_WIDGET (window1));
   g_object_unref (builder);
-
 
   return TRUE;
 }

@@ -1,3 +1,9 @@
+2007-11-27  Mart Raudsepp  <leio@gentoo.org>
+
+	Merged from trunk:
+
+	* tests/buildertest.c: (test_window): fix invalid free
+
 2007-11-26  Matthias Clasen  <mclasen@redhat.com>
 
 	* configure.in: Bump version
