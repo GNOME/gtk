@@ -1,5 +1,11 @@
 2007-11-28  Tor Lillqvist  <tml@novell.com>
 
+	* gtk/Makefile.am: Improve portability. The -o option is present
+	only in newish GNU egreps. Use one more sed in the pipeline
+	instead.
+
+2007-11-28  Tor Lillqvist  <tml@novell.com>
+
 	Fix #375893, patch by Ben Hague:
 
 	* gtk/gtkfilesystemwin32.c (get_viewable_logical_drives): Wrapper
