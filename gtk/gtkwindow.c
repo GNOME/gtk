@@ -6061,6 +6061,8 @@ gtk_window_move_resize (GtkWindow *window)
 	  GtkAllocation allocation;
 
 	  /* Directly size allocate for override redirect (popup) windows. */
+          allocation.x = 0;
+	  allocation.y = 0;
 	  allocation.width = new_request.width;
 	  allocation.height = new_request.height;
 

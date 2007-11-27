@@ -1,3 +1,8 @@
+2007-11-27  Matthias Clasen <mclasen@redhat.com>
+
+	* gtk/gtkwindow.c (gtk_window_move_resize): Zero some
+	variables to silence valgrind.  (#495124, Morten Welinder)
+
 2006-11-26  Ryan Lortie  <desrt@desrt.ca>
 
 	* docs/reference/gtk/tmpl/gtkbuildable.sgml: add clarification stating
