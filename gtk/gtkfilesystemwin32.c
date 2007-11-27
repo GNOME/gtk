@@ -50,6 +50,7 @@
 #undef STRICT
 #include <shlobj.h>
 #include <shellapi.h>
+#include <winreg.h>
 
 #define BOOKMARKS_FILENAME ".gtk-bookmarks"
 
@@ -330,6 +331,51 @@ gtk_file_system_win32_iface_init (GtkFileSystemIface *iface)
   iface->set_bookmark_label = gtk_file_system_win32_set_bookmark_label;
 }
 
+/**
+ * get_viewable_logical_drives:
+ * 
+ * Returns the list of logical and viewable drives as defined by
+ * GetLogicalDrives() and the registry keys
+ * Software\Microsoft\Windows\CurrentVersion\Policies\Explorer under
+ * HKLM or HKCU. If neither key exists the result of
+ * GetLogicalDrives() is returned.
+ *
+ * Return value: bitmask with same meaning as returned by GetLogicalDrives()
+**/
+static guint32 
+get_viewable_logical_drives (void)
+{
+  guint viewable_drives = GetLogicalDrives ();
+  HKEY my_key;
+
+  DWORD var_type = REG_DWORD; //the value's a REG_DWORD type
+  DWORD no_drives_size = 4;
+  DWORD no_drives;
+  gboolean hklm_present = FALSE;
+
+  RegOpenKeyEx (HKEY_LOCAL_MACHINE, "Software\\Microsoft\\Windows\\CurrentVersion\\Policies\\Explorer", 0, KEY_READ, &my_key);
+  if (RegQueryValueEx (my_key, "NoDrives", NULL, &var_type, &no_drives, &no_drives_size) == ERROR_SUCCESS)
+    {
+      // We need the bits that are set in viewable_drives, and unset in no_drives.
+      viewable_drives = viewable_drives & ~no_drives;
+      hklm_present = TRUE;
+    }
+
+  // If the key is present in HKLM then the one in HKCU should be ignored
+  if (!hklm_present)
+    {
+      RegOpenKeyEx (HKEY_CURRENT_USER, "Software\\Microsoft\\Windows\\CurrentVersion\\Policies\\Explorer", 0, KEY_READ, &my_key);
+    if (RegQueryValueEx (my_key, "NoDrives", NULL, &var_type, &no_drives, &no_drives_size) == ERROR_SUCCESS)
+      {
+	// We need the bits that are set in viewable_drives, and unset in no_drives.
+	viewable_drives = viewable_drives & ~no_drives;
+      }
+  }
+
+  RegCloseKey (my_key);
+  return viewable_drives; 
+}
+
 static gboolean
 check_volumes (gpointer data)
 {
@@ -337,10 +383,10 @@ check_volumes (gpointer data)
 
   g_return_val_if_fail (system_win32, FALSE);
 
-  if (system_win32->drives != GetLogicalDrives())
-		{
-			g_signal_emit_by_name (system_win32, "volumes-changed", 0);
-		}
+  if (system_win32->drives != get_viewable_logical_drives ())
+    {
+      g_signal_emit_by_name (system_win32, "volumes-changed", 0);
+    }
 
   return TRUE;
 }
@@ -527,11 +573,11 @@ gtk_file_system_win32_list_volumes (GtkFileSystem *file_system)
   GSList *list = NULL;
   GtkFileSystemWin32 *system_win32 = (GtkFileSystemWin32 *)file_system;
 
-  drives = GetLogicalDrives();
+  drives = get_viewable_logical_drives ();
 
   system_win32->drives = drives;
   if (!drives)
-    g_warning ("GetLogicalDrives failed.");
+    g_warning ("get_viewable_logical_drives failed.");
 
   while (drives && drive[0] <= 'Z')
     {
