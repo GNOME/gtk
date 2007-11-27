@@ -1,3 +1,15 @@
+2007-11-28  Tor Lillqvist  <tml@novell.com>
+
+	Merged from trunk: Fix #375893, patch by Ben Hague:
+
+	* gtk/gtkfilesystemwin32.c (get_viewable_logical_drives): Wrapper
+	around GetLogicalDrives() that takes also the viewable drive
+	restrictions in the Registry (which are usually the result of an
+	Active Directory Group Policy) into account.
+
+	(check_volumes, gtk_file_system_win32_list_volumes) Call
+	get_viewable_logical_drives() instead of GetLogicalDrives().
+
 2007-11-27  Matthias Clasen <mclasen@redhat.com>
 
 	Merged from trunk:
