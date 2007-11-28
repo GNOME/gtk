@@ -1,5 +1,29 @@
 2007-11-28  Tor Lillqvist  <tml@novell.com>
 
+	Merged from trunk: 
+
+	A proper build of GNU libintl is supposed to export the variable
+	_nl_msg_cat_cntr. configure looks for that variable in order to
+	recognize GNU gettext. If it sees that it is indeed GNU gettext
+	that is used, it decides to install message catalogs in
+	share/locale, otherwise in lib/locale. Until now on Windows I have
+	built GTK+ against a build of GNU gettext that did not export
+	_nl_msg_cat_cntr. But this will change, so we can't assume message
+	catalogs are always in lib/locale.
+
+	* gtk/gtkmain.c: (_gtk_get_localedir) [Win32]: Rework to handle
+	GTK_LOCALEDIR being either in "lib" or "share". Move the function
+	before the inclusion of gtkprivate.h so that it sees the original
+	GTK_LOCALEDIR.
+
+	* gtk-zip.sh.in: Check whether the message catalogs are in
+	share/locale or lib/locale.
+
+	* config.h.win32.in: Tack on "/share/locale" to GTK_LOCALEDIR so
+	that the code in _gtk_get_localedir() will find the slashes.
+
+2007-11-28  Tor Lillqvist  <tml@novell.com>
+
 	Merged from trunk: Fix #375893, patch by Ben Hague:
 
 	* gtk/gtkfilesystemwin32.c (get_viewable_logical_drives): Wrapper
