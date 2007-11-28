@@ -17,6 +17,9 @@
 	* gtk-zip.sh.in: Check whether the message catalogs are in
 	share/locale or lib/locale.
 
+	* config.h.win32.in: Tack on "/share/locale" to GTK_LOCALEDIR so
+	that the code in _gtk_get_localedir() will find the slashes.
+
 2007-11-28  Tor Lillqvist  <tml@novell.com>
 
 	* gtk/Makefile.am: Improve portability. The -o option is present
