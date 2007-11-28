@@ -14,7 +14,6 @@ cp -p @abs_srcdir@/COPYING share/doc/gtk+-dev-@GTK_VERSION@
 
 rm $ZIP
 zip $ZIP -@ <<EOF
-COPYING.LIB-2
 etc/gtk-2.0/gdk-pixbuf.loaders
 etc/gtk-2.0/gtkrc
 etc/gtk-2.0/gtk.immodules
@@ -32,8 +31,21 @@ zip $ZIP share/themes/Default/gtk-2.0-key/gtkrc
 zip $ZIP share/themes/Emacs/gtk-2.0-key/gtkrc
 zip $ZIP share/themes/MS-Windows/gtk-2.0/gtkrc
 
-zip $ZIP lib/locale/*/LC_MESSAGES/gtk20.mo
-zip $ZIP lib/locale/*/LC_MESSAGES/gtk20-properties.mo
+if [ -f lib/locale/de/LC_MESSAGES/gtk20.mo -a -f share/locale/de/LC_MESSAGES/gtk20.mo ]; then
+  if [ lib/locale/de/LC_MESSAGES/gtk20.mo -nt share/locale/de/LC_MESSAGES/gtk20.mo ]; then
+    zip -r $ZIP lib/locale/*/LC_MESSAGES/gtk20.mo
+    zip -r $ZIP lib/locale/*/LC_MESSAGES/gtk20-properties.mo
+  else
+    zip -r $ZIP share/locale/*/LC_MESSAGES/gtk20.mo
+    zip -r $ZIP share/locale/*/LC_MESSAGES/gtk20-properties.mo
+  fi
+elif [ -f lib/locale/de/LC_MESSAGES/gtk20.mo ]; then
+  zip -r $ZIP lib/locale/*/LC_MESSAGES/gtk20.mo
+  zip -r $ZIP lib/locale/*/LC_MESSAGES/gtk20-properties.mo
+else
+  zip -r $ZIP share/locale/*/LC_MESSAGES/gtk20.mo
+  zip -r $ZIP share/locale/*/LC_MESSAGES/gtk20-properties.mo
+fi
 
 zip -r $ZIP share/doc/gtk+-@GTK_VERSION@
 

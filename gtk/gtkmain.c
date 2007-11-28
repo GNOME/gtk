@@ -67,11 +67,51 @@
 #include "gtkwidget.h"
 #include "gtkwindow.h"
 #include "gtktooltip.h"
-#include "gtkprivate.h"
 #include "gtkdebug.h"
 #include "gtkalias.h"
 
 #include "gdk/gdkprivate.h" /* for GDK_WINDOW_DESTROYED */
+
+#ifdef G_OS_WIN32
+
+G_WIN32_DLLMAIN_FOR_DLL_NAME(static, dll_name)
+
+/* This here before inclusion of gtkprivate.h so that it sees the
+ * original GTK_LOCALEDIR definition. Yeah, this is a bit sucky.
+ */
+const gchar *
+_gtk_get_localedir (void)
+{
+  static char *gtk_localedir = NULL;
+  if (gtk_localedir == NULL)
+    {
+      const gchar *p;
+      gchar *temp;
+      
+      /* GTK_LOCALEDIR ends in either /lib/locale or
+       * /share/locale. Scan for that slash.
+       */
+      p = GTK_LOCALEDIR + strlen (GTK_LOCALEDIR);
+      while (*--p != '/')
+	;
+      while (*--p != '/')
+	;
+
+      temp = g_win32_get_package_installation_subdirectory
+        (GETTEXT_PACKAGE, dll_name, p);
+
+      /* gtk_localedir is passed to bindtextdomain() which isn't
+       * UTF-8-aware.
+       */
+      gtk_localedir = g_win32_locale_filename_from_utf8 (temp);
+      g_free (temp);
+    }
+  return gtk_localedir;
+}
+
+#endif
+
+#include "gtkprivate.h"
 
 /* Private type definitions
  */
@@ -268,8 +308,6 @@ check_setugid (void)
 
 #ifdef G_OS_WIN32
 
-G_WIN32_DLLMAIN_FOR_DLL_NAME(static, dll_name)
-
 const gchar *
 _gtk_get_datadir (void)
 {
@@ -290,26 +328,6 @@ _gtk_get_libdir (void)
       (GETTEXT_PACKAGE, dll_name, "lib");
 
   return gtk_libdir;
-}
-
-const gchar *
-_gtk_get_localedir (void)
-{
-  static char *gtk_localedir = NULL;
-  if (gtk_localedir == NULL)
-    {
-      gchar *temp;
-      
-      temp = g_win32_get_package_installation_subdirectory
-        (GETTEXT_PACKAGE, dll_name, "lib\\locale");
-
-      /* gtk_localedir is passed to bindtextdomain() which isn't
-       * UTF-8-aware.
-       */
-      gtk_localedir = g_win32_locale_filename_from_utf8 (temp);
-      g_free (temp);
-    }
-  return gtk_localedir;
 }
 
 const gchar *
