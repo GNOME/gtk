@@ -1,13 +1,14 @@
 # Makefile.am for gtk+/gtk
 include $(top_srcdir)/Makefile.decl
 
-SUBDIRS = theme-bits . tests
+xdgmimedir =
 
 if OS_UNIX
-SUBDIRS += xdgmime
+xdgmimedir += xdgmime
 GTK_PRINT_PREVIEW_COMMAND="evince --unlink-tempfile --preview --print-settings %s %f"
 endif
 
+SUBDIRS = theme-bits $(xdgmimedir) . tests
 DIST_SUBDIRS=theme-bits xdgmime
 
 if HAVE_CUPS
