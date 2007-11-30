@@ -3834,7 +3834,7 @@ gtk_rc_parse_priority (GScanner	           *scanner,
 /**
  * gtk_rc_parse_color:
  * @scanner: a #GScanner
- * @color: a pointer to a #GtkColor structure in which to store the result
+ * @color: a pointer to a #GdkColor structure in which to store the result
  *
  * Parses a color in the <link linkend="color=format">format</link> expected
  * in a RC file. 
@@ -3856,7 +3856,7 @@ gtk_rc_parse_color (GScanner *scanner,
  * gtk_rc_parse_color_full:
  * @scanner: a #GScanner
  * @style: a #GtkRcStyle, or %NULL
- * @color: a pointer to a #GtkColor structure in which to store the result
+ * @color: a pointer to a #GdkColor structure in which to store the result
  *
  * Parses a color in the <link linkend="color=format">format</link> expected
  * in a RC file. If @style is not %NULL, it will be consulted to resolve
