@@ -894,9 +894,6 @@ gtk_menu_item_paint (GtkWidget    *widget,
 
 	  arrow_extent = arrow_size * arrow_scaling;
 
-          g_printerr ("%s: scaling = %f   size = %d   extent = %d\n",
-                      G_STRFUNC, arrow_scaling, arrow_size, arrow_extent);
-
 	  shadow_type = GTK_SHADOW_OUT;
 	  if (state_type == GTK_STATE_PRELIGHT)
 	    shadow_type = GTK_SHADOW_IN;

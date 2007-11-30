@@ -1,4 +1,9 @@
 2007-11-29  Matthias Clasen  <mclasen@redhat.com>
+	
+	* gtk/gtkmenuitem.c (gtk_menu_item_paint): Remove leftover
+	debug spew.
+
+2007-11-29  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/Makefile.am: Fix ordering of subdirs.
 
