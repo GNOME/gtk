@@ -1232,6 +1232,11 @@ gtk_paned_set_position (GtkPaned *paned,
   g_object_thaw_notify (object);
 
   gtk_widget_queue_resize (GTK_WIDGET (paned));
+
+#ifdef G_OS_WIN32
+  /* Hacky work-around for bug #144269 */
+  gtk_widget_queue_resize (paned->child2);
+#endif
 }
 
 /**

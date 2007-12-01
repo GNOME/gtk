@@ -1,3 +1,13 @@
+2007-12-1  Cody Russell  <bratsche@gnome.org>
+
+	* gtk/gtkpaned.c: (gtk_paned_set_position) [Win32]:
+	On Windows, queue a redraw of child2 whenever we set
+	the pane handle position.  This is unfortunately kind
+	of hacky, but solves the visual artifacts that were
+	occuring on at least certain types of child widgets
+	(e.g., text views and tree views) that are inside
+	horizontal or vertical panes. (#144269)
+
 2007-11-30  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtkrc.c: Fix doc typos.  (#500672, David Lambert)
