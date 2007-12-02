@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ HEAD\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-11-27 23:11-0700\n"
-"PO-Revision-Date: 2007-11-27 23:11-0700\n"
+"POT-Creation-Date: 2007-12-02 15:10-0700\n"
+"PO-Revision-Date: 2007-12-02 15:10-0700\n"
 "Last-Translator: Seán de Búrca <leftmostcat@gmail.com>\n"
 "Language-Team: Irish <gaeilge-gnulinux@lists.sourceforge.net>\n"
 "MIME-Version: 1.0\n"
@@ -467,7 +467,7 @@ msgstr ""
 
 #: ../gdk-pixbuf/io-gif.c:1128
 msgid "GIF image is corrupt (incorrect LZW compression)"
-msgstr ""
+msgstr "Is truallaithe í an íomhá GIF (comhbhrú LZW mícheart)"
 
 #: ../gdk-pixbuf/io-gif.c:1178
 msgid "File does not appear to be a GIF file"
@@ -476,7 +476,7 @@ msgstr "Is cosúil nach comhad GIF é an comhad"
 #: ../gdk-pixbuf/io-gif.c:1190
 #, c-format
 msgid "Version %s of the GIF file format is not supported"
-msgstr ""
+msgstr "Ní thacaítear leagan %s an fhormáid chomhaid GIF"
 
 #: ../gdk-pixbuf/io-gif.c:1299
 msgid ""
@@ -486,7 +486,7 @@ msgstr ""
 
 #: ../gdk-pixbuf/io-gif.c:1533
 msgid "GIF image was truncated or incomplete."
-msgstr ""
+msgstr "Bhí íomhá GIF teasctha nó neamhiomlán."
 
 #: ../gdk-pixbuf/io-gif.c:1691
 msgid "The GIF image format"
@@ -529,7 +529,7 @@ msgstr "Bhí an íomhá rómhór le sábháil mar ICO"
 
 #: ../gdk-pixbuf/io-ico.c:964
 msgid "Cursor hotspot outside image"
-msgstr ""
+msgstr "Ball te cúrsóra lasmuigh den íomhá"
 
 #: ../gdk-pixbuf/io-ico.c:987
 #, c-format
@@ -710,7 +710,7 @@ msgstr ""
 
 #: ../gdk-pixbuf/io-pnm.c:282
 msgid "PNM file has an incorrect initial byte"
-msgstr ""
+msgstr "Tá beart tosaigh mícheart ag an gcomhad PNM"
 
 #: ../gdk-pixbuf/io-pnm.c:312
 msgid "PNM file is not in a recognized PNM subformat"
@@ -1445,7 +1445,7 @@ msgstr "Úsáidte le Déanaí"
 
 #: ../gtk/gtkfilechooserdefault.c:2597
 msgid "Select which types of files are shown"
-msgstr ""
+msgstr "Roghnaigh an cineál comhad atá taispeánta"
 
 #: ../gtk/gtkfilechooserdefault.c:3025
 #, c-format
@@ -2777,7 +2777,7 @@ msgstr "Diosca _Crua"
 
 #: ../gtk/gtkstock.c:335
 msgid "_Help"
-msgstr "_Cabhair"
+msgstr "Cab_hair"
 
 #: ../gtk/gtkstock.c:336
 msgid "_Home"
