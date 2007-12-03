@@ -1,5 +1,11 @@
 2007-12-03  Richard Hult  <richard@imendio.com>
 
+	* gtk/gtkquartz.c: (_gtk_quartz_set_selection_data_for_pasteboard):
+	Don't crash when dragging from a source that doesn't support uri
+	lists (bug #499868, Paul Davis).
+
+2007-12-03  Richard Hult  <richard@imendio.com>
+
 	* gdk/quartz/gdkwindow-quartz.c:
 	(gdk_window_impl_quartz_begin_paint_region): Don't crash when a
 	parent relative bg pixmap is set, and no parent has a bg

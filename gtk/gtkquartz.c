@@ -220,7 +220,7 @@ _gtk_quartz_get_selection_data_from_pasteboard (NSPasteboard *pasteboard,
           NSURL *url = [NSURL URLFromPasteboard:pasteboard];
 
           selection_data->target = gdk_atom_intern_static_string ("text/uri-list");
-      
+
           uris[0] = (gchar *) [[url description] UTF8String];
           uris[1] = NULL;
           gtk_selection_data_set_uris (selection_data, uris);
@@ -295,14 +295,16 @@ _gtk_quartz_set_selection_data_for_pasteboard (NSPasteboard *pasteboard,
 							      &list);
 
       if (count > 0)
-	result = g_uri_list_extract_uris (list[0]);
+        {
+          result = g_uri_list_extract_uris (list[0]);
+
+          url = [NSURL URLWithString:[NSString stringWithUTF8String:result[0]]];
+          [url writeToPasteboard:pasteboard];
+
+          g_strfreev (result);
+        }
+
       g_strfreev (list);
-
-      url = [NSURL URLWithString:[NSString stringWithUTF8String:result[0]]];
-      [url writeToPasteboard:pasteboard];
-
-      g_strfreev (result);
-
     }
   else
     [pasteboard setData:[NSData dataWithBytesNoCopy:selection_data->data
@@ -310,5 +312,3 @@ _gtk_quartz_set_selection_data_for_pasteboard (NSPasteboard *pasteboard,
 			               freeWhenDone:NO]
                 forType:type];
 }
-
-
