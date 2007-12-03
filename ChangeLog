@@ -1,3 +1,9 @@
+2007-12-03 15:18:17  Tim Janik  <timj@imendio.com>
+
+	* gtk/Makefile.am (gtktypefuncs.c): use 'grep -o' to extract _get_type
+	functions from header files. this should be portable across linux and
+	Mac OS, unlike the previpous sed expression.
+
 2007-12-1  Cody Russell  <bratsche@gnome.org>
 
 	* gtk/gtkpaned.c: (gtk_paned_set_position) [Win32]:
@@ -13,7 +19,7 @@
 	* gtk/gtkrc.c: Fix doc typos.  (#500672, David Lambert)
 
 2007-11-29  Matthias Clasen  <mclasen@redhat.com>
-	
+
 	* gtk/gtkmenuitem.c (gtk_menu_item_paint): Remove leftover
 	debug spew.
 
