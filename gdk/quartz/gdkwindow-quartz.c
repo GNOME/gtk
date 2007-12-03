@@ -209,7 +209,7 @@ gdk_window_impl_quartz_begin_paint_region (GdkPaintable *paintable,
       x_offset = y_offset = 0;
 
       window = GDK_WINDOW (drawable_impl->wrapper);
-      while (window && ((GdkWindowObject *) window)->bg_pixmap == GDK_PARENT_RELATIVE_BG)
+      while (window && bg_pixmap == GDK_PARENT_RELATIVE_BG)
         {
           /* If this window should have the same background as the parent,
            * fetch the parent. (And if the same goes for the parent, fetch
@@ -218,6 +218,16 @@ gdk_window_impl_quartz_begin_paint_region (GdkPaintable *paintable,
           x_offset += ((GdkWindowObject *) window)->x;
           y_offset += ((GdkWindowObject *) window)->y;
           window = GDK_WINDOW (((GdkWindowObject *) window)->parent);
+          bg_pixmap = ((GdkWindowObject *) window)->bg_pixmap;
+        }
+
+      if (bg_pixmap == NULL || bg_pixmap == GDK_NO_BG || bg_pixmap == GDK_PARENT_RELATIVE_BG)
+        {
+          /* Parent relative background but the parent doesn't have a
+           * pixmap.
+           */ 
+          g_free (rects);
+          return;
         }
 
       /* Note: There should be a CG API to draw tiled images, we might
