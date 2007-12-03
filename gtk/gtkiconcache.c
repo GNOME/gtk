@@ -49,11 +49,14 @@
 #define GET_UINT16(cache, offset) (GUINT16_FROM_BE (*(guint16 *)((cache) + (offset))))
 #define GET_UINT32(cache, offset) (GUINT32_FROM_BE (*(guint32 *)((cache) + (offset))))
 
+
 struct _GtkIconCache {
   gint ref_count;
 
   GMappedFile *map;
   gchar *buffer;
+
+  guint32 last_chain_offset;
 };
 
 GtkIconCache *
@@ -191,11 +194,11 @@ get_directory_index (GtkIconCache *cache,
   return -1;
 }
 
-gboolean
-_gtk_icon_cache_has_directory (GtkIconCache *cache,
-			       const gchar *directory)
+gint
+_gtk_icon_cache_get_directory_index (GtkIconCache *cache,
+			             const gchar *directory)
 {
-  return get_directory_index (cache, directory) != -1;
+  return get_directory_index (cache, directory);
 }
 
 static guint
@@ -214,19 +217,28 @@ icon_name_hash (gconstpointer key)
 static gint
 find_image_offset (GtkIconCache *cache,
 		   const gchar  *icon_name,
-		   const gchar  *directory)
+		   gint          directory_index)
 {
   guint32 hash_offset;
   guint32 n_buckets;
   guint32 chain_offset;
-  int hash, directory_index;
+  int hash;
   guint32 image_list_offset, n_images;
   gboolean found = FALSE;
   int i;
-  
+
+  chain_offset = cache->last_chain_offset;
+  if (chain_offset)
+    {
+      guint32 name_offset = GET_UINT32 (cache->buffer, chain_offset + 4);
+      gchar *name = cache->buffer + name_offset;
+
+      if (strcmp (name, icon_name) == 0)
+        goto find_dir;
+    }
+
   hash_offset = GET_UINT32 (cache->buffer, 4);
   n_buckets = GET_UINT32 (cache->buffer, hash_offset);
-
   hash = icon_name_hash (icon_name) % n_buckets;
 
   chain_offset = GET_UINT32 (cache->buffer, hash_offset + 4 + 4 * hash);
@@ -236,20 +248,19 @@ find_image_offset (GtkIconCache *cache,
       gchar *name = cache->buffer + name_offset;
 
       if (strcmp (name, icon_name) == 0)
-	{
-	  found = TRUE;
-	  break;
+        {
+          cache->last_chain_offset = chain_offset;
+          goto find_dir;
 	}
-	  
+  
       chain_offset = GET_UINT32 (cache->buffer, chain_offset);
     }
 
-  if (!found) {
-    return 0;
-  }
+  cache->last_chain_offset = 0;
+  return 0;
 
+find_dir:
   /* We've found an icon list, now check if we have the right icon in it */
-  directory_index = get_directory_index (cache, directory);
   image_list_offset = GET_UINT32 (cache->buffer, chain_offset + 8);
   n_images = GET_UINT32 (cache->buffer, image_list_offset);
   
@@ -266,11 +277,11 @@ find_image_offset (GtkIconCache *cache,
 gint
 _gtk_icon_cache_get_icon_flags (GtkIconCache *cache,
 				const gchar  *icon_name,
-				const gchar  *directory)
+				gint          directory_index)
 {
   guint32 image_offset;
 
-  image_offset = find_image_offset (cache, icon_name, directory);
+  image_offset = find_image_offset (cache, icon_name, directory_index);
 
   if (!image_offset)
     return 0;
@@ -417,7 +428,7 @@ pixbuf_destroy_cb (guchar   *pixels,
 GdkPixbuf *
 _gtk_icon_cache_get_icon (GtkIconCache *cache,
 			  const gchar  *icon_name,
-			  const gchar  *directory)
+			  gint          directory_index)
 {
   guint32 offset, image_data_offset, pixel_data_offset;
   guint32 length, type;
@@ -425,7 +436,7 @@ _gtk_icon_cache_get_icon (GtkIconCache *cache,
   GdkPixdata pixdata;
   GError *error = NULL;
 
-  offset = find_image_offset (cache, icon_name, directory);
+  offset = find_image_offset (cache, icon_name, directory_index);
   
   image_data_offset = GET_UINT32 (cache->buffer, offset + 4);
   
@@ -478,13 +489,13 @@ _gtk_icon_cache_get_icon (GtkIconCache *cache,
 GtkIconData  *
 _gtk_icon_cache_get_icon_data  (GtkIconCache *cache,
 				const gchar  *icon_name,
-				const gchar  *directory)
+				gint          directory_index)
 {
   guint32 offset, image_data_offset, meta_data_offset;
   GtkIconData *data;
   int i;
 
-  offset = find_image_offset (cache, icon_name, directory);
+  offset = find_image_offset (cache, icon_name, directory_index);
   if (!offset)
     return NULL;
 

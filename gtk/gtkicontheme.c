@@ -161,6 +161,7 @@ typedef struct
 
   char *dir;
   char *subdir;
+  int subdir_index;
   
   GtkIconCache *cache;
   
@@ -1149,11 +1150,11 @@ _gtk_icon_theme_ensure_builtin_cache (void)
   IconThemeDir *dir;
   static IconThemeDir dirs[5] = 
     {
-      { ICON_THEME_DIR_THRESHOLD, 0, 16, 16, 16, 2, NULL, "16", NULL, NULL, NULL },
-      { ICON_THEME_DIR_THRESHOLD, 0, 20, 20, 20, 2, NULL, "20", NULL, NULL, NULL },
-      { ICON_THEME_DIR_THRESHOLD, 0, 24, 24, 24, 2, NULL, "24", NULL, NULL, NULL },
-      { ICON_THEME_DIR_THRESHOLD, 0, 32, 32, 32, 2, NULL, "32", NULL, NULL, NULL },
-      { ICON_THEME_DIR_THRESHOLD, 0, 48, 48, 48, 2, NULL, "48", NULL, NULL, NULL }
+      { ICON_THEME_DIR_THRESHOLD, 0, 16, 16, 16, 2, NULL, "16", -1, NULL, NULL, NULL },
+      { ICON_THEME_DIR_THRESHOLD, 0, 20, 20, 20, 2, NULL, "20", -1,  NULL, NULL, NULL },
+      { ICON_THEME_DIR_THRESHOLD, 0, 24, 24, 24, 2, NULL, "24", -1, NULL, NULL, NULL },
+      { ICON_THEME_DIR_THRESHOLD, 0, 32, 32, 32, 2, NULL, "32", -1, NULL, NULL, NULL },
+      { ICON_THEME_DIR_THRESHOLD, 0, 48, 48, 48, 2, NULL, "48", -1, NULL, NULL, NULL }
     };
   gint i;
 
@@ -1167,6 +1168,7 @@ _gtk_icon_theme_ensure_builtin_cache (void)
 	{
 	  dir = &(dirs[i]);
 	  dir->cache = _gtk_icon_cache_ref (_builtin_cache);
+          dir->subdir_index = _gtk_icon_cache_get_directory_index (dir->cache, dir->subdir);
 
 	  builtin_dirs = g_list_append (builtin_dirs, dir);
 	}
@@ -1612,6 +1614,9 @@ gtk_icon_theme_get_icon_sizes (GtkIconTheme *icon_theme,
 	{
 	  IconThemeDir *dir = d->data;
 
+          if (dir->type != ICON_THEME_DIR_SCALABLE && g_hash_table_lookup_extended (sizes, GINT_TO_POINTER (dir->size), NULL, NULL))
+            continue;
+
 	  suffix = theme_dir_get_icon_suffix (dir, icon_name, NULL);	  
 	  if (suffix != ICON_SUFFIX_NONE)
 	    {
@@ -1627,6 +1632,9 @@ gtk_icon_theme_get_icon_sizes (GtkIconTheme *icon_theme,
     {
       IconThemeDir *dir = d->data;
       
+      if (dir->type != ICON_THEME_DIR_SCALABLE && g_hash_table_lookup_extended (sizes, GINT_TO_POINTER (dir->size), NULL, NULL))
+        continue;
+
       suffix = theme_dir_get_icon_suffix (dir, icon_name, NULL);	  
       if (suffix != ICON_SUFFIX_NONE)
 	{
@@ -2019,7 +2027,7 @@ theme_dir_get_icon_suffix (IconThemeDir *dir,
     {
       suffix = (IconSuffix)_gtk_icon_cache_get_icon_flags (dir->cache,
 							   icon_name,
-							   dir->subdir);
+							   dir->subdir_index);
 
       if (has_icon_file)
 	*has_icon_file = suffix & HAS_ICON_FILE;
@@ -2058,7 +2066,7 @@ theme_lookup_icon (IconTheme          *theme,
   /* Builtin icons are logically part of the default theme and
    * are searched before other subdirectories of the default theme.
    */
-  if (strcmp (theme->name, DEFAULT_THEME_NAME) == 0 && use_builtin)
+  if (use_builtin && strcmp (theme->name, DEFAULT_THEME_NAME) == 0)
     {
       closest_builtin = find_builtin_icon (icon_name, 
 					   size,
@@ -2078,7 +2086,7 @@ theme_lookup_icon (IconTheme          *theme,
     {
       dir = l->data;
 
-      GTK_NOTE (ICONTHEME, 
+      GTK_NOTE (ICONTHEME,
 		g_print ("theme_lookup_icon dir %s\n", dir->dir));
       suffix = theme_dir_get_icon_suffix (dir, icon_name, NULL);
       if (best_suffix (suffix, allow_svg) != ICON_SUFFIX_NONE)
@@ -2178,7 +2186,7 @@ theme_lookup_icon (IconTheme          *theme,
 
       if (icon_info->data == NULL && min_dir->cache != NULL)
 	{
-	  icon_info->data = _gtk_icon_cache_get_icon_data (min_dir->cache, icon_name, min_dir->subdir);
+	  icon_info->data = _gtk_icon_cache_get_icon_data (min_dir->cache, icon_name, min_dir->subdir_index);
 	  if (icon_info->data)
 	    {
 	      if (min_dir->icon_data == NULL)
@@ -2212,7 +2220,7 @@ theme_lookup_icon (IconTheme          *theme,
       if (min_dir->cache)
 	{
 	  icon_info->cache_pixbuf = _gtk_icon_cache_get_icon (min_dir->cache, icon_name,
-							      min_dir->subdir);
+							      min_dir->subdir_index);
 	}
 
       icon_info->dir_type = min_dir->type;
@@ -2520,10 +2528,14 @@ theme_subdir_load (GtkIconTheme *icon_theme,
 	  dir->icon_data = NULL;
 	  dir->subdir = g_strdup (subdir);
 	  if (dir_mtime->cache != NULL)
-	    dir->cache = _gtk_icon_cache_ref (dir_mtime->cache);
+            {
+	      dir->cache = _gtk_icon_cache_ref (dir_mtime->cache);
+              dir->subdir_index = _gtk_icon_cache_get_directory_index (dir->cache, dir->subdir);
+            }
 	  else
 	    {
 	      dir->cache = NULL;
+              dir->subdir_index = -1;
 	      scan_directory (icon_theme->priv, dir, full_dir);
 	    }
 

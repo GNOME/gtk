@@ -1,3 +1,17 @@
+2007-12-03  Matthias Clasen  <mclasen@redhat.com>
+
+	Two optimizations for icon cache lookups.
+
+	* gtk/gtkiconcache.[hc]:
+	* gtk/gtkicontheme.c: Remember the directory index for
+	subdirectories, instead of running over the directory list
+	again and again.
+
+	* gtk/gtkiconcache.c (find_image_offset): Remember the last 
+	chain and try it first; this helps with the the usage patterns
+	in gtkicontheme.c, where the same icon is queried for a lot
+	of subdirectories.
+
 2007-12-03 15:18:17  Tim Janik  <timj@imendio.com>
 
 	* gtk/Makefile.am (gtktypefuncs.c): use 'grep -o' to extract _get_type
