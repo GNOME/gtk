@@ -1455,7 +1455,6 @@ gtk_notebook_destroy (GtkObject *object)
 {
   GtkNotebook *notebook = GTK_NOTEBOOK (object);
   GtkNotebookPrivate *priv = GTK_NOTEBOOK_GET_PRIVATE (notebook);
-  GList *l;
 
   if (notebook->menu)
     gtk_notebook_popup_disable (notebook);
@@ -1471,23 +1470,6 @@ gtk_notebook_destroy (GtkObject *object)
       g_source_remove (priv->switch_tab_timer);
       priv->switch_tab_timer = 0;
     }
-
-  for (l = notebook->children; l; l = l->next)
-    {
-      GtkNotebookPage *page = l->data;
-      GtkWidget *w = page->tab_label;
-      if (w) {
-	g_object_ref (w);
-	gtk_notebook_remove_tab_label (notebook, page);
-	gtk_widget_destroy (w);
-	g_object_unref (w);
-      }
-    }
-  /*
-   * Prevent gtk_notebook_update_labels from doing work.  (And from crashing
-   * since we have NULL tab_labels all over.
-   */
-  notebook->show_tabs = FALSE;
 
   GTK_OBJECT_CLASS (gtk_notebook_parent_class)->destroy (object);
 }
@@ -4331,6 +4313,7 @@ gtk_notebook_real_remove (GtkNotebook *notebook,
   GtkNotebookPage *page;
   GList * next_list;
   gint need_resize = FALSE;
+  GtkWidget *tab_label;
 
   gboolean destroying;
 
@@ -4365,7 +4348,12 @@ gtk_notebook_real_remove (GtkNotebook *notebook,
 
   gtk_widget_unparent (page->child);
 
+  tab_label = page->tab_label;
+  g_object_ref (tab_label);
   gtk_notebook_remove_tab_label (notebook, page);
+  if (destroying)
+    gtk_widget_destroy (tab_label);
+  g_object_unref (tab_label);
   
   if (notebook->menu)
     {
