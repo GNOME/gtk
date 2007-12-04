@@ -1,3 +1,10 @@
+2007-12-04  Richard Hult  <richard@imendio.com>
+
+	Merged from trunk:
+
+	* gdk/quartz/gdkwindow-quartz.c: (_gdk_windowing_window_init):
+	Fully initialize the root window, fixes bug #501583.
+
 2007-12-04  Matthias Clasen  <mclasen@redhat.com>
 
 	Merge from trunk:
