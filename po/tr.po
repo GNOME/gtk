@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+.HEAD.tr\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-11-26 15:19-0500\n"
+"POT-Creation-Date: 2007-12-04 14:38-0500\n"
 "PO-Revision-Date: 2007-04-07 21:06+0300\n"
 "Last-Translator: Baris Cicek <baris@teamforce.name.tr>\n"
 "Language-Team: Turkish <gnome-turk@gnome.org>\n"
@@ -80,7 +80,7 @@ msgstr "İşaretlenecek Gdk hata ayıklama imleri"
 #. Placeholder in --gdk-no-debug=FLAGS in --help output
 #. Placeholder in --gtk-debug=FLAGS in --help output
 #. Placeholder in --gtk-no-debug=FLAGS in --help output
-#: gdk/gdk.c:140 gdk/gdk.c:143 gtk/gtkmain.c:416 gtk/gtkmain.c:419
+#: gdk/gdk.c:140 gdk/gdk.c:143 gtk/gtkmain.c:434 gtk/gtkmain.c:437
 msgid "FLAGS"
 msgstr "İMLER"
 
@@ -1969,7 +1969,7 @@ msgstr "Dün"
 # gtk/gtkfilesel.c:1011
 #: gtk/gtkfilechoosersettings.c:262 gtk/gtkfilesel.c:1408
 #: gtk/gtkfilesel.c:1417 gtk/gtkfilesystemunix.c:1047
-#: gtk/gtkfilesystemwin32.c:1167
+#: gtk/gtkfilesystemwin32.c:1213
 #, c-format
 msgid "Error creating folder '%s': %s"
 msgstr "'%s' klasörü oluşturulurken hata: %s"
@@ -2148,12 +2148,12 @@ msgstr "(Boş)"
 # gtk/gtkfilesel.c:1011
 #: gtk/gtkfilesystemunix.c:960 gtk/gtkfilesystemunix.c:1208
 #: gtk/gtkfilesystemunix.c:2196 gtk/gtkfilesystemunix.c:2236
-#: gtk/gtkfilesystemwin32.c:2245 gtk/gtkfilesystemwin32.c:2295
+#: gtk/gtkfilesystemwin32.c:2291 gtk/gtkfilesystemwin32.c:2341
 #, c-format
 msgid "Error getting information for '%s': %s"
 msgstr "'%s' için bilgi alınırken hata: %s"
 
-#: gtk/gtkfilesystemunix.c:1153 gtk/gtkfilesystemwin32.c:1274
+#: gtk/gtkfilesystemunix.c:1153 gtk/gtkfilesystemwin32.c:1320
 #, c-format
 msgid "This file system does not support mounting"
 msgstr "Bu dosya sistemi bağlama işlemini desteklemiyor"
@@ -2163,7 +2163,7 @@ msgstr "Bu dosya sistemi bağlama işlemini desteklemiyor"
 msgid "File System"
 msgstr "Dosya Sistemi"
 
-#: gtk/gtkfilesystemunix.c:1329 gtk/gtkfilesystemwin32.c:1584
+#: gtk/gtkfilesystemunix.c:1329 gtk/gtkfilesystemwin32.c:1630
 #, c-format
 msgid ""
 "The name \"%s\" is not valid because it contains the character \"%s\". "
@@ -2172,32 +2172,32 @@ msgstr ""
 "\"%s\" ismi yanlış çünkü \"%s\" karakterini içeriyor. Lütfen başla bir isim "
 "kullanın."
 
-#: gtk/gtkfilesystemunix.c:1878 gtk/gtkfilesystemwin32.c:1925
+#: gtk/gtkfilesystemunix.c:1878 gtk/gtkfilesystemwin32.c:1971
 #, c-format
 msgid "Bookmark saving failed: %s"
 msgstr "Yer imi kaydı başarısız: %s"
 
-#: gtk/gtkfilesystemunix.c:1933 gtk/gtkfilesystemwin32.c:1980
+#: gtk/gtkfilesystemunix.c:1933 gtk/gtkfilesystemwin32.c:2026
 #, c-format
 msgid "'%s' already exists in the bookmarks list"
 msgstr "'%s' zaten yer imleri listesinde bulunuyor"
 
-#: gtk/gtkfilesystemunix.c:2005 gtk/gtkfilesystemwin32.c:2052
+#: gtk/gtkfilesystemunix.c:2005 gtk/gtkfilesystemwin32.c:2098
 #, c-format
 msgid "'%s' does not exist in the bookmarks list"
 msgstr "'%s' yer imleri listesinde bulunmuyor"
 
-#: gtk/gtkfilesystemwin32.c:1090
+#: gtk/gtkfilesystemwin32.c:1136
 #, c-format
 msgid "Path is not a folder: '%s'"
 msgstr "Yol bir klasöre gitmiyor: '%s'"
 
-#: gtk/gtkfilesystemwin32.c:1292
+#: gtk/gtkfilesystemwin32.c:1338
 #, c-format
 msgid "Network Drive (%s)"
 msgstr "Ağ Sürücüsü (%s)"
 
-#: gtk/gtkfilesystemwin32.c:1314
+#: gtk/gtkfilesystemwin32.c:1360
 #, c-format
 msgid "%s (%s)"
 msgstr "%s (%s)"
@@ -2412,27 +2412,27 @@ msgid "Invalid URI"
 msgstr "Geçersiz URI"
 
 #. Description of --gtk-module=MODULES in --help output
-#: gtk/gtkmain.c:409
+#: gtk/gtkmain.c:427
 msgid "Load additional GTK+ modules"
 msgstr "Ek GTK+ modülleri yükle"
 
 #. Placeholder in --gtk-module=MODULES in --help output
-#: gtk/gtkmain.c:410
+#: gtk/gtkmain.c:428
 msgid "MODULES"
 msgstr "MODÜLLER"
 
 #. Description of --g-fatal-warnings in --help output
-#: gtk/gtkmain.c:412
+#: gtk/gtkmain.c:430
 msgid "Make all warnings fatal"
 msgstr "Tüm uyarıları ölümcül yap"
 
 #. Description of --gtk-debug=FLAGS in --help output
-#: gtk/gtkmain.c:415
+#: gtk/gtkmain.c:433
 msgid "GTK+ debugging flags to set"
 msgstr "GTK+ hata ayıklama imleri işaretlendi"
 
 #. Description of --gtk-no-debug=FLAGS in --help output
-#: gtk/gtkmain.c:418
+#: gtk/gtkmain.c:436
 msgid "GTK+ debugging flags to unset"
 msgstr "GTK+ hata ayıklama imleri kaldırıldı"
 
@@ -2442,15 +2442,15 @@ msgstr "GTK+ hata ayıklama imleri kaldırıldı"
 #. * Do *not* translate it to "predefinito:LTR", if it
 #. * it isn't default:LTR or default:RTL it will not work
 #.
-#: gtk/gtkmain.c:654
+#: gtk/gtkmain.c:672
 msgid "default:LTR"
 msgstr "default:LTR"
 
-#: gtk/gtkmain.c:750
+#: gtk/gtkmain.c:768
 msgid "GTK+ Options"
 msgstr "GTK+ Seçenekleri"
 
-#: gtk/gtkmain.c:750
+#: gtk/gtkmain.c:768
 msgid "Show GTK+ Options"
 msgstr "GTK+ Seçeneklerini Göster"
 
@@ -2463,7 +2463,7 @@ msgid "Scroll arrow spacing"
 msgstr "Kaydırma okları boşlukları"
 
 # gtk/gtknotebook.c:2125 gtk/gtknotebook.c:4517
-#: gtk/gtknotebook.c:4411 gtk/gtknotebook.c:6917
+#: gtk/gtknotebook.c:4399 gtk/gtknotebook.c:6905
 #, c-format
 msgid "Page %u"
 msgstr "Sayfa %u"

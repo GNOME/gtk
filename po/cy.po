@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-11-26 15:19-0500\n"
+"POT-Creation-Date: 2007-12-04 14:38-0500\n"
 "PO-Revision-Date: 2007-05-14 21:28-0000\n"
 "Last-Translator: Rhys Jones <rhys@sucs.org>\n"
 "Language-Team: Cymraeg <gnome-cy@pengwyn.linux.org.uk>\n"
@@ -74,7 +74,7 @@ msgstr "Pa opsiynau datnamu Gdk i'w gosod"
 #. Placeholder in --gdk-no-debug=FLAGS in --help output
 #. Placeholder in --gtk-debug=FLAGS in --help output
 #. Placeholder in --gtk-no-debug=FLAGS in --help output
-#: gdk/gdk.c:140 gdk/gdk.c:143 gtk/gtkmain.c:416 gtk/gtkmain.c:419
+#: gdk/gdk.c:140 gdk/gdk.c:143 gtk/gtkmain.c:434 gtk/gtkmain.c:437
 msgid "FLAGS"
 msgstr "OPSIYNAU"
 
@@ -1806,7 +1806,7 @@ msgstr "Ddoe"
 
 #: gtk/gtkfilechoosersettings.c:262 gtk/gtkfilesel.c:1408
 #: gtk/gtkfilesel.c:1417 gtk/gtkfilesystemunix.c:1047
-#: gtk/gtkfilesystemwin32.c:1167
+#: gtk/gtkfilesystemwin32.c:1213
 #, c-format
 msgid "Error creating folder '%s': %s"
 msgstr "Gwall wrth greu'r plygell '%s': %s"
@@ -1960,12 +1960,12 @@ msgstr "(Gwag)"
 
 #: gtk/gtkfilesystemunix.c:960 gtk/gtkfilesystemunix.c:1208
 #: gtk/gtkfilesystemunix.c:2196 gtk/gtkfilesystemunix.c:2236
-#: gtk/gtkfilesystemwin32.c:2245 gtk/gtkfilesystemwin32.c:2295
+#: gtk/gtkfilesystemwin32.c:2291 gtk/gtkfilesystemwin32.c:2341
 #, c-format
 msgid "Error getting information for '%s': %s"
 msgstr "Gwall wrth gyrchu gwybodaeth ar gyfer '%s': %s"
 
-#: gtk/gtkfilesystemunix.c:1153 gtk/gtkfilesystemwin32.c:1274
+#: gtk/gtkfilesystemunix.c:1153 gtk/gtkfilesystemwin32.c:1320
 #, c-format
 msgid "This file system does not support mounting"
 msgstr "Nid yw'r system ffeiliau yma yn cynnal gosod disgiau"
@@ -1974,7 +1974,7 @@ msgstr "Nid yw'r system ffeiliau yma yn cynnal gosod disgiau"
 msgid "File System"
 msgstr "System Ffeiliau"
 
-#: gtk/gtkfilesystemunix.c:1329 gtk/gtkfilesystemwin32.c:1584
+#: gtk/gtkfilesystemunix.c:1329 gtk/gtkfilesystemwin32.c:1630
 #, c-format
 msgid ""
 "The name \"%s\" is not valid because it contains the character \"%s\". "
@@ -1983,32 +1983,32 @@ msgstr ""
 "Nid yw'r enw \"%s\" yn ddilys gan ei fod yn cynnwys y nod \"%s\". "
 "Defnyddiwch enw gwahanol os gwelwch yn dda."
 
-#: gtk/gtkfilesystemunix.c:1878 gtk/gtkfilesystemwin32.c:1925
+#: gtk/gtkfilesystemunix.c:1878 gtk/gtkfilesystemwin32.c:1971
 #, c-format
 msgid "Bookmark saving failed: %s"
 msgstr "Methwyd cadw llyfrnodau: %s"
 
-#: gtk/gtkfilesystemunix.c:1933 gtk/gtkfilesystemwin32.c:1980
+#: gtk/gtkfilesystemunix.c:1933 gtk/gtkfilesystemwin32.c:2026
 #, c-format
 msgid "'%s' already exists in the bookmarks list"
 msgstr "'%s' yn y ffeil llyfrnodau'n barod"
 
-#: gtk/gtkfilesystemunix.c:2005 gtk/gtkfilesystemwin32.c:2052
+#: gtk/gtkfilesystemunix.c:2005 gtk/gtkfilesystemwin32.c:2098
 #, c-format
 msgid "'%s' does not exist in the bookmarks list"
 msgstr "Nid yw '%s' yn bodoli yn y ffeil llyfrnodau"
 
-#: gtk/gtkfilesystemwin32.c:1090
+#: gtk/gtkfilesystemwin32.c:1136
 #, c-format
 msgid "Path is not a folder: '%s'"
 msgstr "Nid yw'r llwybr yn blygell: '%s'"
 
-#: gtk/gtkfilesystemwin32.c:1292
+#: gtk/gtkfilesystemwin32.c:1338
 #, c-format
 msgid "Network Drive (%s)"
 msgstr "Gyriant Rhwydwaith (%s)"
 
-#: gtk/gtkfilesystemwin32.c:1314
+#: gtk/gtkfilesystemwin32.c:1360
 #, c-format
 msgid "%s (%s)"
 msgstr "%s (%s)"
@@ -2192,27 +2192,27 @@ msgid "Invalid URI"
 msgstr "URI annilys"
 
 #. Description of --gtk-module=MODULES in --help output
-#: gtk/gtkmain.c:409
+#: gtk/gtkmain.c:427
 msgid "Load additional GTK+ modules"
 msgstr "Llwytho modylau GTK+ ychwanegol"
 
 #. Placeholder in --gtk-module=MODULES in --help output
-#: gtk/gtkmain.c:410
+#: gtk/gtkmain.c:428
 msgid "MODULES"
 msgstr "MODYLAU"
 
 #. Description of --g-fatal-warnings in --help output
-#: gtk/gtkmain.c:412
+#: gtk/gtkmain.c:430
 msgid "Make all warnings fatal"
 msgstr "Gwneud pob gwall yn farwol"
 
 #. Description of --gtk-debug=FLAGS in --help output
-#: gtk/gtkmain.c:415
+#: gtk/gtkmain.c:433
 msgid "GTK+ debugging flags to set"
 msgstr "Opsiynau datnamu GTK+ i'w gosod"
 
 #. Description of --gtk-no-debug=FLAGS in --help output
-#: gtk/gtkmain.c:418
+#: gtk/gtkmain.c:436
 msgid "GTK+ debugging flags to unset"
 msgstr "Opsiynau datnamu GTK+ i'w dadosod"
 
@@ -2221,15 +2221,15 @@ msgstr "Opsiynau datnamu GTK+ i'w dadosod"
 #. * Do *not* translate it to "predefinito:LTR", if it
 #. * it isn't default:LTR or default:RTL it will not work
 #.
-#: gtk/gtkmain.c:654
+#: gtk/gtkmain.c:672
 msgid "default:LTR"
 msgstr "default:LTR"
 
-#: gtk/gtkmain.c:750
+#: gtk/gtkmain.c:768
 msgid "GTK+ Options"
 msgstr "Opsiynau GTK+"
 
-#: gtk/gtkmain.c:750
+#: gtk/gtkmain.c:768
 msgid "Show GTK+ Options"
 msgstr "Dangos Opsiynau GTK+"
 
@@ -2241,7 +2241,7 @@ msgstr "Bwlch rhwng saethau"
 msgid "Scroll arrow spacing"
 msgstr "Bwlch rhwng saethau sgrolio"
 
-#: gtk/gtknotebook.c:4411 gtk/gtknotebook.c:6917
+#: gtk/gtknotebook.c:4399 gtk/gtknotebook.c:6905
 #, c-format
 msgid "Page %u"
 msgstr "Tudalen %u"

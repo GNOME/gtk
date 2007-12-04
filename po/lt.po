@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: lt\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-11-26 15:19-0500\n"
+"POT-Creation-Date: 2007-12-04 14:38-0500\n"
 "PO-Revision-Date: 2007-09-17 12:38+0300\n"
 "Last-Translator: Žygimantas Beručka <zygis@gnome.org>\n"
 "Language-Team: Lithuanian <gnome-lt@lists.akl.lt>\n"
@@ -79,7 +79,7 @@ msgstr "Gdk derinimo parametrai, kuriuos nurodyti"
 #. Placeholder in --gdk-no-debug=FLAGS in --help output
 #. Placeholder in --gtk-debug=FLAGS in --help output
 #. Placeholder in --gtk-no-debug=FLAGS in --help output
-#: gdk/gdk.c:140 gdk/gdk.c:143 gtk/gtkmain.c:416 gtk/gtkmain.c:419
+#: gdk/gdk.c:140 gdk/gdk.c:143 gtk/gtkmain.c:434 gtk/gtkmain.c:437
 msgid "FLAGS"
 msgstr "PARAMETRAI"
 
@@ -1810,7 +1810,7 @@ msgstr "Vakar %H:%M"
 
 #: gtk/gtkfilechoosersettings.c:262 gtk/gtkfilesel.c:1408
 #: gtk/gtkfilesel.c:1417 gtk/gtkfilesystemunix.c:1047
-#: gtk/gtkfilesystemwin32.c:1167
+#: gtk/gtkfilesystemwin32.c:1213
 #, c-format
 msgid "Error creating folder '%s': %s"
 msgstr "Klaida kuriant aplanką „%s“: %s"
@@ -1962,12 +1962,12 @@ msgstr "(Tuščia)"
 
 #: gtk/gtkfilesystemunix.c:960 gtk/gtkfilesystemunix.c:1208
 #: gtk/gtkfilesystemunix.c:2196 gtk/gtkfilesystemunix.c:2236
-#: gtk/gtkfilesystemwin32.c:2245 gtk/gtkfilesystemwin32.c:2295
+#: gtk/gtkfilesystemwin32.c:2291 gtk/gtkfilesystemwin32.c:2341
 #, c-format
 msgid "Error getting information for '%s': %s"
 msgstr "Klaida bandant gauti „%s“ informaciją: %s"
 
-#: gtk/gtkfilesystemunix.c:1153 gtk/gtkfilesystemwin32.c:1274
+#: gtk/gtkfilesystemunix.c:1153 gtk/gtkfilesystemwin32.c:1320
 #, c-format
 msgid "This file system does not support mounting"
 msgstr "Ši failų sistema nepalaiko prijungimo"
@@ -1976,7 +1976,7 @@ msgstr "Ši failų sistema nepalaiko prijungimo"
 msgid "File System"
 msgstr "Failų sistema"
 
-#: gtk/gtkfilesystemunix.c:1329 gtk/gtkfilesystemwin32.c:1584
+#: gtk/gtkfilesystemunix.c:1329 gtk/gtkfilesystemwin32.c:1630
 #, c-format
 msgid ""
 "The name \"%s\" is not valid because it contains the character \"%s\". "
@@ -1985,32 +1985,32 @@ msgstr ""
 "Vardas „%s“ yra netinkamas, nes jame yra simbolis „%s“. Prašom naudoti kitą "
 "vardą."
 
-#: gtk/gtkfilesystemunix.c:1878 gtk/gtkfilesystemwin32.c:1925
+#: gtk/gtkfilesystemunix.c:1878 gtk/gtkfilesystemwin32.c:1971
 #, c-format
 msgid "Bookmark saving failed: %s"
 msgstr "Nepavyko išsaugoti žymelės: %s"
 
-#: gtk/gtkfilesystemunix.c:1933 gtk/gtkfilesystemwin32.c:1980
+#: gtk/gtkfilesystemunix.c:1933 gtk/gtkfilesystemwin32.c:2026
 #, c-format
 msgid "'%s' already exists in the bookmarks list"
 msgstr "„%s“ jau yra žymelių sąraše"
 
-#: gtk/gtkfilesystemunix.c:2005 gtk/gtkfilesystemwin32.c:2052
+#: gtk/gtkfilesystemunix.c:2005 gtk/gtkfilesystemwin32.c:2098
 #, c-format
 msgid "'%s' does not exist in the bookmarks list"
 msgstr "„%s“ nėra žymelių sąraše"
 
-#: gtk/gtkfilesystemwin32.c:1090
+#: gtk/gtkfilesystemwin32.c:1136
 #, c-format
 msgid "Path is not a folder: '%s'"
 msgstr "Kelias nėra aplankas: „%s“"
 
-#: gtk/gtkfilesystemwin32.c:1292
+#: gtk/gtkfilesystemwin32.c:1338
 #, c-format
 msgid "Network Drive (%s)"
 msgstr "Tinklo diskas (%s)"
 
-#: gtk/gtkfilesystemwin32.c:1314
+#: gtk/gtkfilesystemwin32.c:1360
 #, c-format
 msgid "%s (%s)"
 msgstr "%s (%s)"
@@ -2194,27 +2194,27 @@ msgid "Invalid URI"
 msgstr "Netinkamas URI"
 
 #. Description of --gtk-module=MODULES in --help output
-#: gtk/gtkmain.c:409
+#: gtk/gtkmain.c:427
 msgid "Load additional GTK+ modules"
 msgstr "Įkelti papildomus GTK+ modulius"
 
 #. Placeholder in --gtk-module=MODULES in --help output
-#: gtk/gtkmain.c:410
+#: gtk/gtkmain.c:428
 msgid "MODULES"
 msgstr "MODULIAI"
 
 #. Description of --g-fatal-warnings in --help output
-#: gtk/gtkmain.c:412
+#: gtk/gtkmain.c:430
 msgid "Make all warnings fatal"
 msgstr "Visi perspėjimai yra „mirtini“"
 
 #. Description of --gtk-debug=FLAGS in --help output
-#: gtk/gtkmain.c:415
+#: gtk/gtkmain.c:433
 msgid "GTK+ debugging flags to set"
 msgstr "GTK+ derinimo parametrai, kuriuos naudoti"
 
 #. Description of --gtk-no-debug=FLAGS in --help output
-#: gtk/gtkmain.c:418
+#: gtk/gtkmain.c:436
 msgid "GTK+ debugging flags to unset"
 msgstr "GTK+ derinimo parametrai, kuriu nenaudoti"
 
@@ -2223,15 +2223,15 @@ msgstr "GTK+ derinimo parametrai, kuriu nenaudoti"
 #. * Do *not* translate it to "predefinito:LTR", if it
 #. * it isn't default:LTR or default:RTL it will not work
 #.
-#: gtk/gtkmain.c:654
+#: gtk/gtkmain.c:672
 msgid "default:LTR"
 msgstr "default:LTR"
 
-#: gtk/gtkmain.c:750
+#: gtk/gtkmain.c:768
 msgid "GTK+ Options"
 msgstr "GTK+ parinktys"
 
-#: gtk/gtkmain.c:750
+#: gtk/gtkmain.c:768
 msgid "Show GTK+ Options"
 msgstr "Rodyti GTK+ parinktis"
 
@@ -2243,7 +2243,7 @@ msgstr "Rodyklių protarpis"
 msgid "Scroll arrow spacing"
 msgstr "Slinkties rodyklės protarpis"
 
-#: gtk/gtknotebook.c:4411 gtk/gtknotebook.c:6917
+#: gtk/gtknotebook.c:4399 gtk/gtknotebook.c:6905
 #, c-format
 msgid "Page %u"
 msgstr "%u puslapis"

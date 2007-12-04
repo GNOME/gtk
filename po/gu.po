@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+.HEAD.gu\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-11-26 15:19-0500\n"
+"POT-Creation-Date: 2007-12-04 14:38-0500\n"
 "PO-Revision-Date: 2007-08-16 13:26+0530\n"
 "Last-Translator: Ankit Patel <ankit@redhat.com>\n"
 "Language-Team: Gujarati <fedora-trans-gu@redhat.com>\n"
@@ -100,7 +100,7 @@ msgstr "સુયોજિત કરવા માટેના Gdk ડિબગ�
 #. Placeholder in --gdk-no-debug=FLAGS in --help output
 #. Placeholder in --gtk-debug=FLAGS in --help output
 #. Placeholder in --gtk-no-debug=FLAGS in --help output
-#: gdk/gdk.c:140 gdk/gdk.c:143 gtk/gtkmain.c:416 gtk/gtkmain.c:419
+#: gdk/gdk.c:140 gdk/gdk.c:143 gtk/gtkmain.c:434 gtk/gtkmain.c:437
 msgid "FLAGS"
 msgstr "FLAGS"
 
@@ -1815,7 +1815,7 @@ msgstr "ગઈકાલે %H:%M વાગ્યે"
 
 #: gtk/gtkfilechoosersettings.c:262 gtk/gtkfilesel.c:1408
 #: gtk/gtkfilesel.c:1417 gtk/gtkfilesystemunix.c:1047
-#: gtk/gtkfilesystemwin32.c:1167
+#: gtk/gtkfilesystemwin32.c:1213
 #, c-format
 msgid "Error creating folder '%s': %s"
 msgstr "ફોલ્ડર '%s' બનાવવામાં ભૂલ: %s"
@@ -1966,12 +1966,12 @@ msgstr "(ખાલી)"
 
 #: gtk/gtkfilesystemunix.c:960 gtk/gtkfilesystemunix.c:1208
 #: gtk/gtkfilesystemunix.c:2196 gtk/gtkfilesystemunix.c:2236
-#: gtk/gtkfilesystemwin32.c:2245 gtk/gtkfilesystemwin32.c:2295
+#: gtk/gtkfilesystemwin32.c:2291 gtk/gtkfilesystemwin32.c:2341
 #, c-format
 msgid "Error getting information for '%s': %s"
 msgstr "'%s' માટેની જાણકારી મેળવવામાં ભૂલ: %s"
 
-#: gtk/gtkfilesystemunix.c:1153 gtk/gtkfilesystemwin32.c:1274
+#: gtk/gtkfilesystemunix.c:1153 gtk/gtkfilesystemwin32.c:1320
 #, c-format
 msgid "This file system does not support mounting"
 msgstr "આ ફાઇલ સિસ્ટમ માઉન્ટ કરવાનુને આધાર આપતી નથી"
@@ -1980,7 +1980,7 @@ msgstr "આ ફાઇલ સિસ્ટમ માઉન્ટ કરવાન�
 msgid "File System"
 msgstr "ફાઈલ સિસ્ટમ"
 
-#: gtk/gtkfilesystemunix.c:1329 gtk/gtkfilesystemwin32.c:1584
+#: gtk/gtkfilesystemunix.c:1329 gtk/gtkfilesystemwin32.c:1630
 #, c-format
 msgid ""
 "The name \"%s\" is not valid because it contains the character \"%s\". "
@@ -1988,32 +1988,32 @@ msgid ""
 msgstr ""
 "નામ \"%s\" યોગ્ય નથી, કારણ કે તે \"%s\" અક્ષર ધરાવે છે. મહેરબાની કરી બીજું નામ વાપરો."
 
-#: gtk/gtkfilesystemunix.c:1878 gtk/gtkfilesystemwin32.c:1925
+#: gtk/gtkfilesystemunix.c:1878 gtk/gtkfilesystemwin32.c:1971
 #, c-format
 msgid "Bookmark saving failed: %s"
 msgstr "બૂકમાર્કનો સંગ્રહ કરવાનુ નિષ્ફળ: %s"
 
-#: gtk/gtkfilesystemunix.c:1933 gtk/gtkfilesystemwin32.c:1980
+#: gtk/gtkfilesystemunix.c:1933 gtk/gtkfilesystemwin32.c:2026
 #, c-format
 msgid "'%s' already exists in the bookmarks list"
 msgstr "'%s' પહેલાથી જ બુકમાર્કોની યાદીમાં હાજર છે"
 
-#: gtk/gtkfilesystemunix.c:2005 gtk/gtkfilesystemwin32.c:2052
+#: gtk/gtkfilesystemunix.c:2005 gtk/gtkfilesystemwin32.c:2098
 #, c-format
 msgid "'%s' does not exist in the bookmarks list"
 msgstr "'%s' બુકમાર્કોની યાદીમાં હાજર નથી"
 
-#: gtk/gtkfilesystemwin32.c:1090
+#: gtk/gtkfilesystemwin32.c:1136
 #, c-format
 msgid "Path is not a folder: '%s'"
 msgstr "પાથ એ ફોલ્ડર નથી: '%s'"
 
-#: gtk/gtkfilesystemwin32.c:1292
+#: gtk/gtkfilesystemwin32.c:1338
 #, c-format
 msgid "Network Drive (%s)"
 msgstr "નેટવર્ક ડ્રાઈવ (%s)"
 
-#: gtk/gtkfilesystemwin32.c:1314
+#: gtk/gtkfilesystemwin32.c:1360
 #, c-format
 msgid "%s (%s)"
 msgstr "%s (%s)"
@@ -2197,27 +2197,27 @@ msgid "Invalid URI"
 msgstr "અયોગ્ય URI"
 
 #. Description of --gtk-module=MODULES in --help output
-#: gtk/gtkmain.c:409
+#: gtk/gtkmain.c:427
 msgid "Load additional GTK+ modules"
 msgstr "વધારાના GTK+ મોડ્યુલો લાવો"
 
 #. Placeholder in --gtk-module=MODULES in --help output
-#: gtk/gtkmain.c:410
+#: gtk/gtkmain.c:428
 msgid "MODULES"
 msgstr "MODULES"
 
 #. Description of --g-fatal-warnings in --help output
-#: gtk/gtkmain.c:412
+#: gtk/gtkmain.c:430
 msgid "Make all warnings fatal"
 msgstr "બધી ચેતવણીઓ ઘાતક બનાવો"
 
 #. Description of --gtk-debug=FLAGS in --help output
-#: gtk/gtkmain.c:415
+#: gtk/gtkmain.c:433
 msgid "GTK+ debugging flags to set"
 msgstr "સુયોજિત કરવા માટેના GTK+ ડિબગીંગ ફ્લેગો"
 
 #. Description of --gtk-no-debug=FLAGS in --help output
-#: gtk/gtkmain.c:418
+#: gtk/gtkmain.c:436
 msgid "GTK+ debugging flags to unset"
 msgstr "નહિં સુયોજિત કરવા માટેના GTK+ ડિબગીંગ ફ્લેગો"
 
@@ -2226,15 +2226,15 @@ msgstr "નહિં સુયોજિત કરવા માટેના GTK+ 
 #. * Do *not* translate it to "predefinito:LTR", if it
 #. * it isn't default:LTR or default:RTL it will not work
 #.
-#: gtk/gtkmain.c:654
+#: gtk/gtkmain.c:672
 msgid "default:LTR"
 msgstr "default:LTR"
 
-#: gtk/gtkmain.c:750
+#: gtk/gtkmain.c:768
 msgid "GTK+ Options"
 msgstr "GTK+ વિકલ્પો"
 
-#: gtk/gtkmain.c:750
+#: gtk/gtkmain.c:768
 msgid "Show GTK+ Options"
 msgstr "GTK+ વિકલ્પો બતાવો"
 
@@ -2246,7 +2246,7 @@ msgstr "તીર જગ્યા"
 msgid "Scroll arrow spacing"
 msgstr "તીર જગ્યા સરકાવો"
 
-#: gtk/gtknotebook.c:4411 gtk/gtknotebook.c:6917
+#: gtk/gtknotebook.c:4399 gtk/gtknotebook.c:6905
 #, c-format
 msgid "Page %u"
 msgstr "પાનું %u"

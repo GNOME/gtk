@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-11-26 15:19-0500\n"
+"POT-Creation-Date: 2007-12-04 14:38-0500\n"
 "PO-Revision-Date: 2004-11-16 14:57-0700\n"
 "Last-Translator: Steve Murphy <murf@e-tools.com>\n"
 "Language-Team: Kinyarwanda <translation-team-rw@lists.sourceforge.net>\n"
@@ -85,7 +85,7 @@ msgstr "Amabendera Kuri Gushyiraho"
 #. Placeholder in --gdk-no-debug=FLAGS in --help output
 #. Placeholder in --gtk-debug=FLAGS in --help output
 #. Placeholder in --gtk-no-debug=FLAGS in --help output
-#: gdk/gdk.c:140 gdk/gdk.c:143 gtk/gtkmain.c:416 gtk/gtkmain.c:419
+#: gdk/gdk.c:140 gdk/gdk.c:143 gtk/gtkmain.c:434 gtk/gtkmain.c:437
 #, fuzzy
 msgid "FLAGS"
 msgstr "Amabendera"
@@ -1902,7 +1902,7 @@ msgstr "Ejo"
 
 #: gtk/gtkfilechoosersettings.c:262 gtk/gtkfilesel.c:1408
 #: gtk/gtkfilesel.c:1417 gtk/gtkfilesystemunix.c:1047
-#: gtk/gtkfilesystemwin32.c:1167
+#: gtk/gtkfilesystemwin32.c:1213
 #, fuzzy, c-format
 msgid "Error creating folder '%s': %s"
 msgstr "Ububiko"
@@ -2063,12 +2063,12 @@ msgstr "(ubusa)"
 
 #: gtk/gtkfilesystemunix.c:960 gtk/gtkfilesystemunix.c:1208
 #: gtk/gtkfilesystemunix.c:2196 gtk/gtkfilesystemunix.c:2236
-#: gtk/gtkfilesystemwin32.c:2245 gtk/gtkfilesystemwin32.c:2295
+#: gtk/gtkfilesystemwin32.c:2291 gtk/gtkfilesystemwin32.c:2341
 #, fuzzy, c-format
 msgid "Error getting information for '%s': %s"
 msgstr "Ibisobanuro kugirango"
 
-#: gtk/gtkfilesystemunix.c:1153 gtk/gtkfilesystemwin32.c:1274
+#: gtk/gtkfilesystemunix.c:1153 gtk/gtkfilesystemwin32.c:1320
 #, fuzzy, c-format
 msgid "This file system does not support mounting"
 msgstr "IDOSIYE Sisitemu OYA Gushigikira"
@@ -2078,39 +2078,39 @@ msgstr "IDOSIYE Sisitemu OYA Gushigikira"
 msgid "File System"
 msgstr "imiterere ya dosiye"
 
-#: gtk/gtkfilesystemunix.c:1329 gtk/gtkfilesystemwin32.c:1584
+#: gtk/gtkfilesystemunix.c:1329 gtk/gtkfilesystemwin32.c:1630
 #, fuzzy, c-format
 msgid ""
 "The name \"%s\" is not valid because it contains the character \"%s\". "
 "Please use a different name."
 msgstr "Izina: ni OYA Byemewe Kirimo Inyuguti Gukoresha a Izina:"
 
-#: gtk/gtkfilesystemunix.c:1878 gtk/gtkfilesystemwin32.c:1925
+#: gtk/gtkfilesystemunix.c:1878 gtk/gtkfilesystemwin32.c:1971
 #, fuzzy, c-format
 msgid "Bookmark saving failed: %s"
 msgstr "Mu kubika Byanze"
 
-#: gtk/gtkfilesystemunix.c:1933 gtk/gtkfilesystemwin32.c:1980
+#: gtk/gtkfilesystemunix.c:1933 gtk/gtkfilesystemwin32.c:2026
 #, fuzzy, c-format
 msgid "'%s' already exists in the bookmarks list"
 msgstr "'%s'in Ibirango Urutonde"
 
-#: gtk/gtkfilesystemunix.c:2005 gtk/gtkfilesystemwin32.c:2052
+#: gtk/gtkfilesystemunix.c:2005 gtk/gtkfilesystemwin32.c:2098
 #, fuzzy, c-format
 msgid "'%s' does not exist in the bookmarks list"
 msgstr "'%s'OYA in Ibirango Urutonde"
 
-#: gtk/gtkfilesystemwin32.c:1090
+#: gtk/gtkfilesystemwin32.c:1136
 #, c-format
 msgid "Path is not a folder: '%s'"
 msgstr ""
 
-#: gtk/gtkfilesystemwin32.c:1292
+#: gtk/gtkfilesystemwin32.c:1338
 #, c-format
 msgid "Network Drive (%s)"
 msgstr ""
 
-#: gtk/gtkfilesystemwin32.c:1314
+#: gtk/gtkfilesystemwin32.c:1360
 #, fuzzy, c-format
 msgid "%s (%s)"
 msgstr "%s(%s)"
@@ -2328,30 +2328,30 @@ msgid "Invalid URI"
 msgstr "8"
 
 #. Description of --gtk-module=MODULES in --help output
-#: gtk/gtkmain.c:409
+#: gtk/gtkmain.c:427
 #, fuzzy
 msgid "Load additional GTK+ modules"
 msgstr "Modire"
 
 #. Placeholder in --gtk-module=MODULES in --help output
-#: gtk/gtkmain.c:410
+#: gtk/gtkmain.c:428
 msgid "MODULES"
 msgstr "Modire"
 
 #. Description of --g-fatal-warnings in --help output
-#: gtk/gtkmain.c:412
+#: gtk/gtkmain.c:430
 #, fuzzy
 msgid "Make all warnings fatal"
 msgstr "Byose Iburira"
 
 #. Description of --gtk-debug=FLAGS in --help output
-#: gtk/gtkmain.c:415
+#: gtk/gtkmain.c:433
 #, fuzzy
 msgid "GTK+ debugging flags to set"
 msgstr "Amabendera Kuri Gushyiraho"
 
 #. Description of --gtk-no-debug=FLAGS in --help output
-#: gtk/gtkmain.c:418
+#: gtk/gtkmain.c:436
 #, fuzzy
 msgid "GTK+ debugging flags to unset"
 msgstr "Amabendera Kuri"
@@ -2361,15 +2361,15 @@ msgstr "Amabendera Kuri"
 #. * Do *not* translate it to "predefinito:LTR", if it
 #. * it isn't default:LTR or default:RTL it will not work
 #.
-#: gtk/gtkmain.c:654
+#: gtk/gtkmain.c:672
 msgid "default:LTR"
 msgstr "default:LTR"
 
-#: gtk/gtkmain.c:750
+#: gtk/gtkmain.c:768
 msgid "GTK+ Options"
 msgstr ""
 
-#: gtk/gtkmain.c:750
+#: gtk/gtkmain.c:768
 msgid "Show GTK+ Options"
 msgstr ""
 
@@ -2385,7 +2385,7 @@ msgstr ""
 # sc/source\ui\src\menue.src:RID_OBJECTMENU_CELLS.SID_FORMATPAGE.text
 # #-#-#-#-#  sc.pot (Gnome 2.12)  #-#-#-#-#
 # sc/source\ui\src\menue.src:RID_OBJECTMENU_EDIT.SID_FORMATPAGE.text
-#: gtk/gtknotebook.c:4411 gtk/gtknotebook.c:6917
+#: gtk/gtknotebook.c:4399 gtk/gtknotebook.c:6905
 #, fuzzy, c-format
 msgid "Page %u"
 msgstr "Ipaji..."

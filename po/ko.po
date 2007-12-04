@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-11-26 15:19-0500\n"
+"POT-Creation-Date: 2007-12-04 14:38-0500\n"
 "PO-Revision-Date: 2007-09-22 16:02+0900\n"
 "Last-Translator: Changwoo Ryu <cwryu@debian.org>\n"
 "Language-Team: Gnome Korea <gnome-kr-hackers@lists.kldp.net>\n"
@@ -71,7 +71,7 @@ msgstr "설정할 GDK 디버깅 플래그"
 #. Placeholder in --gdk-no-debug=FLAGS in --help output
 #. Placeholder in --gtk-debug=FLAGS in --help output
 #. Placeholder in --gtk-no-debug=FLAGS in --help output
-#: gdk/gdk.c:140 gdk/gdk.c:143 gtk/gtkmain.c:416 gtk/gtkmain.c:419
+#: gdk/gdk.c:140 gdk/gdk.c:143 gtk/gtkmain.c:434 gtk/gtkmain.c:437
 msgid "FLAGS"
 msgstr "<플래그>"
 
@@ -1787,7 +1787,7 @@ msgstr "어제 %H:%M"
 
 #: gtk/gtkfilechoosersettings.c:262 gtk/gtkfilesel.c:1408
 #: gtk/gtkfilesel.c:1417 gtk/gtkfilesystemunix.c:1047
-#: gtk/gtkfilesystemwin32.c:1167
+#: gtk/gtkfilesystemwin32.c:1213
 #, c-format
 msgid "Error creating folder '%s': %s"
 msgstr "폴더 \"%s\"을(를) 만드는 중 오류: %s"
@@ -1940,12 +1940,12 @@ msgstr "(빈 파일)"
 
 #: gtk/gtkfilesystemunix.c:960 gtk/gtkfilesystemunix.c:1208
 #: gtk/gtkfilesystemunix.c:2196 gtk/gtkfilesystemunix.c:2236
-#: gtk/gtkfilesystemwin32.c:2245 gtk/gtkfilesystemwin32.c:2295
+#: gtk/gtkfilesystemwin32.c:2291 gtk/gtkfilesystemwin32.c:2341
 #, c-format
 msgid "Error getting information for '%s': %s"
 msgstr "'%s'에 대한 정보를 가져오는 데 오류가 발생했습니다: %s"
 
-#: gtk/gtkfilesystemunix.c:1153 gtk/gtkfilesystemwin32.c:1274
+#: gtk/gtkfilesystemunix.c:1153 gtk/gtkfilesystemwin32.c:1320
 #, c-format
 msgid "This file system does not support mounting"
 msgstr "이 파일 시스템은 마운트를 지원하지 않습니다"
@@ -1954,7 +1954,7 @@ msgstr "이 파일 시스템은 마운트를 지원하지 않습니다"
 msgid "File System"
 msgstr "파일시스템"
 
-#: gtk/gtkfilesystemunix.c:1329 gtk/gtkfilesystemwin32.c:1584
+#: gtk/gtkfilesystemunix.c:1329 gtk/gtkfilesystemwin32.c:1630
 #, c-format
 msgid ""
 "The name \"%s\" is not valid because it contains the character \"%s\". "
@@ -1963,32 +1963,32 @@ msgstr ""
 "\"%s\"(이)라는 이름은 쓸 수 없습니다. 이름에 \"%s\" 문자가 들어 있습니다. 다"
 "른 이름을 사용하십시오."
 
-#: gtk/gtkfilesystemunix.c:1878 gtk/gtkfilesystemwin32.c:1925
+#: gtk/gtkfilesystemunix.c:1878 gtk/gtkfilesystemwin32.c:1971
 #, c-format
 msgid "Bookmark saving failed: %s"
 msgstr "책갈피 저장이 실패했습니다: %s"
 
-#: gtk/gtkfilesystemunix.c:1933 gtk/gtkfilesystemwin32.c:1980
+#: gtk/gtkfilesystemunix.c:1933 gtk/gtkfilesystemwin32.c:2026
 #, c-format
 msgid "'%s' already exists in the bookmarks list"
 msgstr "책갈피 목록에 '%s'이(가) 이미 있습니다"
 
-#: gtk/gtkfilesystemunix.c:2005 gtk/gtkfilesystemwin32.c:2052
+#: gtk/gtkfilesystemunix.c:2005 gtk/gtkfilesystemwin32.c:2098
 #, c-format
 msgid "'%s' does not exist in the bookmarks list"
 msgstr "책갈피 목록에 '%s'이(가) 없습니다"
 
-#: gtk/gtkfilesystemwin32.c:1090
+#: gtk/gtkfilesystemwin32.c:1136
 #, c-format
 msgid "Path is not a folder: '%s'"
 msgstr "경로가 폴더가 아닙니다: '%s'"
 
-#: gtk/gtkfilesystemwin32.c:1292
+#: gtk/gtkfilesystemwin32.c:1338
 #, c-format
 msgid "Network Drive (%s)"
 msgstr "네트워크 드라이브 (%s)"
 
-#: gtk/gtkfilesystemwin32.c:1314
+#: gtk/gtkfilesystemwin32.c:1360
 #, c-format
 msgid "%s (%s)"
 msgstr "%s (%s)"
@@ -2173,27 +2173,27 @@ msgid "Invalid URI"
 msgstr "올바르지 않은 URI"
 
 #. Description of --gtk-module=MODULES in --help output
-#: gtk/gtkmain.c:409
+#: gtk/gtkmain.c:427
 msgid "Load additional GTK+ modules"
 msgstr "GTK+ 모듈을 추가로 읽어들입니다"
 
 #. Placeholder in --gtk-module=MODULES in --help output
-#: gtk/gtkmain.c:410
+#: gtk/gtkmain.c:428
 msgid "MODULES"
 msgstr "<모듈>"
 
 #. Description of --g-fatal-warnings in --help output
-#: gtk/gtkmain.c:412
+#: gtk/gtkmain.c:430
 msgid "Make all warnings fatal"
 msgstr "모든 경고를 치명적인 것으로 간주합니다"
 
 #. Description of --gtk-debug=FLAGS in --help output
-#: gtk/gtkmain.c:415
+#: gtk/gtkmain.c:433
 msgid "GTK+ debugging flags to set"
 msgstr "설정할 GTK+ 디버깅 플래그"
 
 #. Description of --gtk-no-debug=FLAGS in --help output
-#: gtk/gtkmain.c:418
+#: gtk/gtkmain.c:436
 msgid "GTK+ debugging flags to unset"
 msgstr "설정 해제할 GTK+ 디버깅 플래그"
 
@@ -2202,15 +2202,15 @@ msgstr "설정 해제할 GTK+ 디버깅 플래그"
 #. * Do *not* translate it to "predefinito:LTR", if it
 #. * it isn't default:LTR or default:RTL it will not work
 #.
-#: gtk/gtkmain.c:654
+#: gtk/gtkmain.c:672
 msgid "default:LTR"
 msgstr "default:LTR"
 
-#: gtk/gtkmain.c:750
+#: gtk/gtkmain.c:768
 msgid "GTK+ Options"
 msgstr "GTK+ 옵션"
 
-#: gtk/gtkmain.c:750
+#: gtk/gtkmain.c:768
 msgid "Show GTK+ Options"
 msgstr "GTK+ 옵션 표시"
 
@@ -2222,7 +2222,7 @@ msgstr "화살표 간격"
 msgid "Scroll arrow spacing"
 msgstr "스크롤 화살표 간격"
 
-#: gtk/gtknotebook.c:4411 gtk/gtknotebook.c:6917
+#: gtk/gtknotebook.c:4399 gtk/gtknotebook.c:6905
 #, c-format
 msgid "Page %u"
 msgstr "%u페이지"
