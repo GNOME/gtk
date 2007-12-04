@@ -1,3 +1,22 @@
+Overview of Changes from GTK+ 2.12.2 to 2.12.3
+==============================================
+
+ * Win32:
+ - Respect viewable drive restrictions 
+
+ * Bugs fixed:
+ 499868 fix for crash during DnD on Quartz
+ 500804 null pointer dereference in quartz drawing function
+ 144269 GtkHPaned flickers and leaves widgets in child panels unr...
+ 495124 Valgrind error with windows of type GTK_WINDOW_POPUP
+ 501583 Root window not fully initialized
+
+ * Updated translations:
+ Estonian (et)
+ French (fr)
+ Irish (ga)
+
+
 Overview of Changes from GTK+ 2.12.1 to 2.12.2
 ==============================================
 

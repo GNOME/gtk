@@ -7,6 +7,10 @@
 
 2007-12-04  Matthias Clasen  <mclasen@redhat.com>
 
+	* NEWS: Updates
+
+2007-12-04  Matthias Clasen  <mclasen@redhat.com>
+
 	Merge from trunk:
 
 	* gtk/gtknotebook.c: Modify the tab-label-destroy fix to not
