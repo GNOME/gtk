@@ -1,5 +1,9 @@
 2007-12-04  Matthias Clasen  <mclasen@redhat.com>
 
+	* configure.in: Bump version
+
+2007-12-04  Matthias Clasen  <mclasen@redhat.com>
+
 	* === Released 2.12.3 ===
 
 2007-12-04  Richard Hult  <richard@imendio.com>
