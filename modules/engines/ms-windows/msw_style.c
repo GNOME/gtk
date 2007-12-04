@@ -3262,11 +3262,7 @@ draw_focus ( GtkStyle      *style,
     if( !GTK_WIDGET_CAN_FOCUS(widget) ) {
         return;
     }
-    if( detail && 0 == strcmp(detail, "button") 
-        && GTK_RELIEF_NONE == gtk_button_get_relief( GTK_BUTTON(widget) ) )
-    {
-        return;
-    }
+
     if ( is_combo_box_child(widget) 
         && (GTK_IS_ARROW(widget) || GTK_IS_BUTTON(widget)) ) {
         return;
