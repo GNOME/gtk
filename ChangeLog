@@ -1,3 +1,8 @@
+2007-12-04  Richard Hult  <richard@imendio.com>
+
+	* gdk/quartz/gdkwindow-quartz.c: (_gdk_windowing_window_init):
+	Fully initialize the root window, fixes bug #501583.
+
 2007-12-04  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtknotebook.c: Modify the tab-label-destroy fix to not

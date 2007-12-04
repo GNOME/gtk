@@ -834,6 +834,7 @@ _gdk_windowing_window_init (void)
 {
   GdkWindowObject *private;
   GdkWindowImplQuartz *impl;
+  GdkDrawableImplQuartz *drawable_impl;
   NSRect rect;
 
   g_assert (_gdk_root == NULL);
@@ -851,6 +852,12 @@ _gdk_windowing_window_init (void)
   private->state = 0; /* We don't want GDK_WINDOW_STATE_WITHDRAWN here */
   private->window_type = GDK_WINDOW_ROOT;
   private->depth = 24;
+
+  drawable_impl = GDK_DRAWABLE_IMPL_QUARTZ (private->impl);
+  
+  drawable_impl->wrapper = GDK_DRAWABLE (private);
+  drawable_impl->colormap = gdk_screen_get_system_colormap (_gdk_screen);
+  g_object_ref (drawable_impl->colormap);
 }
 
 void
