@@ -1,3 +1,11 @@
+2007-12-4  Cody Russell  <cody@jhu.edu>
+
+	Merge from trunk:
+
+	* modules/engines/ms-windows/Theme/gtk-2.0/gtkrc:
+	Disable beeps when backspacing in textviews by default on
+	Win32 systems. (#490624, Daniel Atallah)
+
 2007-12-4  Cody Russell  <bratsche@gnome.org>
 
 	Merge from trunk:

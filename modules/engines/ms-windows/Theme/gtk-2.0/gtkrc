@@ -14,6 +14,9 @@ gtk-alternative-button-order = 1
 # use the win32 sort indicators direction, as in Explorer
 gtk-alternative-sort-arrows = 1
 
+# Windows users don't expect the PC Speaker beeping at them when they backspace in an empty textview and stuff like that
+gtk-error-bell = 0
+
 style "msw-default"
 {
   GtkWidget::interior-focus = 1
