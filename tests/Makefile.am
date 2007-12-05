@@ -25,9 +25,16 @@ if USE_X11
 testsocket_programs = testsocket testsocket_child
 endif
 
+
+TEST_PROGS              += objecttests
+objecttests_SOURCES      = objecttests.c
+objecttests_LDADD        = $(LDADDS)
+objecttests_DEPENDENCIES = $(TEST_DEPS)
+
+
 TESTS = floatingtest buildertest
 
-noinst_PROGRAMS =			\
+noinst_PROGRAMS =  $(TEST_PROGS)	\
 	autotestfilechooser		\
 	autotestkeywords		\
 	floatingtest			\

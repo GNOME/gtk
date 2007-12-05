@@ -30,6 +30,7 @@ void            gtk_test_init                   (int            *argcp,
                                                  char         ***argvp,
                                                  ...);
 void            gtk_test_register_all_types     (void);
+const GType*    gtk_test_list_all_types         (guint          *n_types);
 GtkWidget*      gtk_test_find_widget            (GtkWidget      *widget,
                                                  const gchar    *label_pattern,
                                                  GType           widget_type);

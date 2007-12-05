@@ -1,3 +1,17 @@
+2007-12-05 18:59:59  Tim Janik  <timj@imendio.com>
+
+	* gtk+/Makefile.decl: run tests in current dir after setting up the
+	logging directory, so their results get properly merged into the
+	resulting test log.
+
+	* gtk+/gtk/gtktestutils.[hc]: added gtk_test_list_all_types() for
+	tests to loop over registered Gdk/Gtk+ types.
+
+	* gtk+/tests/objecttests.c: new test program, implements automated
+	property tests. several properties are blacklisted because they
+	seem to trigger Gdk/Gtk+ bugs. ./objecttests -m thorough --verbose
+	can be used to test blacklisted properties and see which proprty failed.
+
 2007-12-04  Richard Hult  <richard@imendio.com>
 
 	* gdk/quartz/gdkwindow-quartz.c: (_gdk_windowing_window_init):

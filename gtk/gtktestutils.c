@@ -60,7 +60,6 @@ gtk_test_init (int    *argcp,
    * FUTURE TODO:
    * - this function could install a mock object around GtkSettings
    */
-  // FIXME: g_test_init (argcp, argvp, NULL);
   g_setenv ("GTK_MODULES", "", TRUE);
   g_setenv ("GTK2_RC_FILES", "/dev/null", TRUE);
   gtk_disable_setlocale();
@@ -570,6 +569,25 @@ gtk_test_create_simple_window (const gchar *window_title,
   return window;
 }
 
+static GType *all_registered_types = NULL;
+static guint  n_all_registered_types = 0;
+
+/**
+ * gtk_test_list_all_types
+ * @n_types: location to store number of types
+ * @returns: 0-terminated array of type ids
+ *
+ * Return the type ids that have been registered after
+ * calling gtk_test_register_all_types().
+ **/
+const GType*
+gtk_test_list_all_types (guint *n_types)
+{
+  if (n_types)
+    *n_types = n_all_registered_types;
+  return all_registered_types;
+}
+
 /**
  * gtk_test_register_all_types
  *
@@ -580,8 +598,17 @@ gtk_test_create_simple_window (const gchar *window_title,
 void
 gtk_test_register_all_types (void)
 {
-  volatile GType vgt;
+  if (!all_registered_types)
+    {
+      const guint max_gtk_types = 999;
+      GType *tp;
+      all_registered_types = g_new0 (GType, max_gtk_types);
+      tp = all_registered_types;
 #include "gtktypefuncs.c"
+      n_all_registered_types = tp - all_registered_types;
+      g_assert (n_all_registered_types + 1 < max_gtk_types);
+      *tp = 0;
+    }
 }
 
 #define __GTK_TEST_UTILS_C__

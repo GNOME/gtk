@@ -3263,6 +3263,7 @@ gtk_test_find_sibling
 gtk_test_find_widget
 gtk_test_init
 gtk_test_register_all_types
+gtk_test_list_all_types
 gtk_test_slider_get_value
 gtk_test_slider_set_perc
 gtk_test_spin_button_click

@@ -32,20 +32,6 @@ test:	${TEST_PROGS}
 # perf-report: run tests in subdirs with -m perf and generate report
 # full-report: like test-report: with -m perf and -m slow
 test-report perf-report full-report:	${TEST_PROGS}
-	@test -z "${TEST_PROGS}" || { \
-	  case $@ in \
-	  test-report) test_options="-k";; \
-	  perf-report) test_options="-k -m=perf";; \
-	  full-report) test_options="-k -m=perf -m=slow";; \
-	  esac ; \
-	  $(XVFB_START) && { \
-	    if test -z "$$GTESTER_LOGDIR" ; then \
-	      ${GTESTER} --verbose $$test_options -o test-report.xml ${TEST_PROGS} ; \
-	    elif test -n "${TEST_PROGS}" ; then \
-	      ${GTESTER} --verbose $$test_options -o `mktemp "$$GTESTER_LOGDIR/log-XXXXXX"` ${TEST_PROGS} ; \
-	    fi ; \
-	  } \
-	}
 	@ ignore_logdir=true ; \
 	  if test -z "$$GTESTER_LOGDIR" ; then \
 	    GTESTER_LOGDIR=`mktemp -d "\`pwd\`/.testlogs-XXXXXX"`; export GTESTER_LOGDIR ; \
@@ -55,6 +41,20 @@ test-report perf-report full-report:	${TEST_PROGS}
 	    test "$$subdir" = "." -o "$$subdir" = "po" -o "$$subdir" = "po-properties" || \
 	    ( cd $$subdir && $(MAKE) $(AM_MAKEFLAGS) $@ ) || exit $? ; \
 	  done ; \
+	  test -z "${TEST_PROGS}" || { \
+	    case $@ in \
+	    test-report) test_options="-k";; \
+	    perf-report) test_options="-k -m=perf";; \
+	    full-report) test_options="-k -m=perf -m=slow";; \
+	    esac ; \
+	    $(XVFB_START) && { \
+	      if test -z "$$GTESTER_LOGDIR" ; then \
+	        ${GTESTER} --verbose $$test_options -o test-report.xml ${TEST_PROGS} ; \
+	      elif test -n "${TEST_PROGS}" ; then \
+	        ${GTESTER} --verbose $$test_options -o `mktemp "$$GTESTER_LOGDIR/log-XXXXXX"` ${TEST_PROGS} ; \
+	      fi ; \
+	    }; \
+	  }; \
 	  $$ignore_logdir || { \
 	    echo '<?xml version="1.0"?>' > $@.xml ; \
 	    echo '<report-collection>'  >> $@.xml ; \
