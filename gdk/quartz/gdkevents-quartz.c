@@ -1172,7 +1172,8 @@ synthesize_crossing_events_for_ns_event (NSEvent *nsevent)
 
         /* If there is a window other than the root window at this
          * position, it means we didn't exit to the root window and we
-         * ignore the event.
+         * ignore the event. (Note that we can get NULL here when swithing
+         * spaces for example.)
          *
          * FIXME: This is not enough, it doesn't catch the case where
          * we leave a GDK window to a non-GDK window that has GDK
@@ -1180,9 +1181,12 @@ synthesize_crossing_events_for_ns_event (NSEvent *nsevent)
          */
         mouse_window = _gdk_quartz_window_find_child (_gdk_root, x, y);
 
-        if (gdk_window_get_toplevel (mouse_window) == 
+        if (!mouse_window ||
+            gdk_window_get_toplevel (mouse_window) ==
             gdk_window_get_toplevel (current_mouse_window))
-          mouse_window = _gdk_root;
+          {
+            mouse_window = _gdk_root;
+          }
 
         if (mouse_window == _gdk_root)
           synthesize_crossing_events (_gdk_root, GDK_CROSSING_NORMAL, nsevent, x, y);

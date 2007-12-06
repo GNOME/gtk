@@ -1,3 +1,11 @@
+2007-12-06  Richard Hult  <richard@imendio.com>
+
+	Merged from trunk:
+
+	* gdk/quartz/gdkevents-quartz.c:
+	(synthesize_crossing_events_for_ns_event): Fix warning when
+	switching spaces in leopard.
+
 2007-12-04  Matthias Clasen  <mclasen@redhat.com>
 
 	* configure.in: Bump version
