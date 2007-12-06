@@ -1,3 +1,10 @@
+2007-12-06  Tommi Komulainen  <tommi.komulainen@iki.fi>
+
+	* gdk-pixbuf/gdk-pixbuf.symbols:
+	* gdk/gdk.symbols:
+	* gdk/gtk.symbols: Remove trailing whitespace that can trigger false
+	positives in abicheck.sh
+
 2007-12-06 18:45:06  Attilio Fiandrotti  <attilio.fiandrotti@gmail.com>
 
 	* gdk/directfb/gdkevents-directfb.c: Committed a patch by DOK to fix

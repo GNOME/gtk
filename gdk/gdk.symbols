@@ -1,17 +1,17 @@
 /* This file lists all exported symbols. It is used to generate
  * the gdk.def file used to control exports on Windows and the
- * gdkalias.h/gdkaliasdef.c files used to avoid PLT entries for 
+ * gdkalias.h/gdkaliasdef.c files used to avoid PLT entries for
  * internal uses of exported functions (see makegdkalias.pl).
- * 
+ *
  * Every symbol must be included in the right
  * #ifdef IN_HEADER(sym) #endif and
  * #ifdef IN_FILE(sym) #endif sections.
- * 
+ *
  * gdkalias.h must be included *after* all other gdk headers
  * in each source file, gdkaliasdef.c must be included at the
  * very bottom, after a line defining the right symbol.
- *  
- * (This would be much easier if there was a rational 1-1 
+ *
+ * (This would be much easier if there was a rational 1-1
  *  relation between headers and source files.)
  */
 #ifdef ALL_FILES

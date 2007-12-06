@@ -1,11 +1,11 @@
 /* This file lists all exported symbols. It is used to generate
  * the gdk_pixbuf.def file used to control exports on Windows and the
- * gdk-pixbuf-alias.h/gdk-pixbuf-aliasdef.c files used to avoid PLT 
+ * gdk-pixbuf-alias.h/gdk-pixbuf-aliasdef.c files used to avoid PLT
  * entries for internal uses of exported functions (see makegdkpixbufalias.pl).
- * 
+ *
  * Every symbol must be included in the right
  * #ifdef IN_HEADER(sym) #endif and
- * #ifdef IN_FILE(sym) #endif sections. 
+ * #ifdef IN_FILE(sym) #endif sections.
  */
 #ifdef ALL_FILES
 #define IN_FILE(x) 1
@@ -182,7 +182,7 @@ gdk_colorspace_get_type G_GNUC_CONST
 gdk_interp_type_get_type G_GNUC_CONST
 gdk_pixbuf_alpha_mode_get_type G_GNUC_CONST
 gdk_pixbuf_rotation_get_type G_GNUC_CONST
-gdk_pixbuf_error_get_type 
+gdk_pixbuf_error_get_type
 #endif
 #endif
 
