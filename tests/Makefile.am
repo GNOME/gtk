@@ -26,16 +26,19 @@ testsocket_programs = testsocket testsocket_child
 endif
 
 
-TEST_PROGS              += objecttests
-objecttests_SOURCES      = objecttests.c
-objecttests_LDADD        = $(LDADDS)
-objecttests_DEPENDENCIES = $(TEST_DEPS)
+TEST_PROGS                      += objecttests
+objecttests_SOURCES              = objecttests.c
+objecttests_LDADD                = $(LDADDS)
+objecttests_DEPENDENCIES         = $(TEST_DEPS)
+TEST_PROGS                      += autotestfilechooser
+autotestfilechooser_DEPENDENCIES = $(TEST_DEPS)
+autotestfilechooser_LDADD        = $(LDADDS)
+autotestfilechooser_SOURCES      = autotestfilechooser.c
 
 
 TESTS = floatingtest buildertest
 
 noinst_PROGRAMS =  $(TEST_PROGS)	\
-	autotestfilechooser		\
 	autotestkeywords		\
 	floatingtest			\
 	buildertest			\
@@ -113,7 +116,6 @@ endif
 
 endif
 
-autotestfilechooser_DEPENDENCIES = $(TEST_DEPS)
 simple_DEPENDENCIES = $(TEST_DEPS)
 floatingtest_DEPENDENCIES = $(TEST_DEPS)
 buildertest_DEPENDENCIES = $(TEST_DEPS)
@@ -170,7 +172,6 @@ testgrouping_DEPENDENCIES = $(TEST_DEPS)
 testtooltips_DEPENDENCIES = $(TEST_DEPS)
 testvolumebutton_DEPENDENCIES = $(TEST_DEPS)
 
-autotestfilechooser_LDADD = $(LDADDS)
 simple_LDADD = $(LDADDS)
 floatingtest_LDADD = $(LDADDS)
 buildertest_LDADD = $(LDADDS)
@@ -235,9 +236,6 @@ testtooltips_LDADD = $(LDADDS)
 testvolumebutton_LDADD = $(LDADDS)
 
 buildertest_LDFLAGS = -export-dynamic
-
-autotestfilechooser_SOURCES =	\
-	autotestfilechooser.c
 
 testentrycompletion_SOURCES = 	\
 	prop-editor.c		\

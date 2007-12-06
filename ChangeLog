@@ -1,3 +1,14 @@
+2007-12-06 10:44:52  Tim Janik  <timj@imendio.com>
+
+	* tests/autotestfilechooser.c: majorly speed up execution by reducing
+	timeouts and converting main loop sleeps to pending/iterate loops with
+	very low priority async handlers. eliminate output for non-verbose
+	tests. assert successfull subtests in all test functions. use testing
+	framework in main().
+
+	* tests/Makefile.am: add autotestfilechooser to TEST_PROGS, so it's
+	executed inside Xvfb upon make check.
+
 2007-12-06 08:23:38  Tim Janik  <timj@imendio.com>
 
 	* tests/objecttests.c: use string comparisons for string property

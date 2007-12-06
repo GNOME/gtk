@@ -31,6 +31,7 @@
 
 #define GTK_FILE_SYSTEM_ENABLE_UNSUPPORTED
 #undef GTK_DISABLE_DEPRECATED
+#define SLEEP_DURATION  100
 
 #include <config.h>
 #include <string.h>
@@ -50,7 +51,8 @@ log_test (gboolean passed, const char *test_name, ...)
   str = g_strdup_vprintf (test_name, args);
   va_end (args);
 
-  g_printf ("%s: %s\n", passed ? "PASSED" : "FAILED", str);
+  if (g_test_verbose())
+    g_printf ("%s: %s\n", passed ? "PASSED" : "FAILED", str);
   g_free (str);
 }
 
@@ -123,7 +125,7 @@ test_set_filename (GtkFileChooserAction action,
 
   (* set_filename_fn) (GTK_FILE_CHOOSER (chooser), data);
 
-  gdk_threads_add_timeout (2000, set_filename_timeout_cb, &closure);
+  gdk_threads_add_timeout_full (G_MAXINT, SLEEP_DURATION, set_filename_timeout_cb, &closure, NULL);
   gtk_dialog_run (GTK_DIALOG (chooser));
 
   retval = (* compare_filename_fn) (GTK_FILE_CHOOSER (chooser), data);
@@ -250,7 +252,7 @@ test_black_box_set_current_name (const char *path, const char *current_name, gbo
 /* https://bugzilla.novell.com/show_bug.cgi?id=184875
  * http://bugzilla.gnome.org/show_bug.cgi?id=347066
  */
-static gboolean
+static void
 test_black_box (void)
 {
   gboolean passed;
@@ -259,24 +261,32 @@ test_black_box (void)
   passed = TRUE;
 
   passed = passed && test_black_box_set_filename (GTK_FILE_CHOOSER_ACTION_OPEN, FILE_NAME, FALSE);
+  g_assert (passed);
   passed = passed && test_black_box_set_filename (GTK_FILE_CHOOSER_ACTION_OPEN, FILE_NAME, TRUE);
+  g_assert (passed);
   passed = passed && test_black_box_set_filename (GTK_FILE_CHOOSER_ACTION_SAVE, FILE_NAME, FALSE);
+  g_assert (passed);
   passed = passed && test_black_box_set_filename (GTK_FILE_CHOOSER_ACTION_SAVE, FILE_NAME, TRUE);
+  g_assert (passed);
   passed = passed && test_black_box_set_filename (GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER, FOLDER_NAME, FALSE);
+  g_assert (passed);
   passed = passed && test_black_box_set_filename (GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER, FOLDER_NAME, TRUE);
+  g_assert (passed);
   passed = passed && test_black_box_set_filename (GTK_FILE_CHOOSER_ACTION_CREATE_FOLDER, FOLDER_NAME, FALSE);
+  g_assert (passed);
   passed = passed && test_black_box_set_filename (GTK_FILE_CHOOSER_ACTION_CREATE_FOLDER, FOLDER_NAME, TRUE);
+  g_assert (passed);
 
   cwd = g_get_current_dir ();
 
   passed = passed && test_black_box_set_current_name (cwd, CURRENT_NAME, FALSE);
+  g_assert (passed);
   passed = passed && test_black_box_set_current_name (cwd, CURRENT_NAME, TRUE);
+  g_assert (passed);
 
   g_free (cwd);
 
   log_test (passed, "Black box tests");
-
-  return passed;
 }
 
 struct confirm_overwrite_closure {
@@ -291,7 +301,8 @@ confirm_overwrite_cb (GtkFileChooser *chooser, gpointer data)
 {
   struct confirm_overwrite_closure *closure = data;
 
-  printf ("bling!\n");
+  if (g_test_verbose())
+    printf ("bling!\n");
   closure->confirm_overwrite_signal_emitted += 1;
 
   return GTK_FILE_CHOOSER_CONFIRMATION_ACCEPT_FILENAME;
@@ -303,7 +314,8 @@ overwrite_response_cb (GtkFileChooser *chooser, gint response, gpointer data)
   struct confirm_overwrite_closure *closure = data;
   char *filename;
 
-  printf ("plong!\n");
+  if (g_test_verbose())
+    printf ("plong!\n");
 
   if (response != GTK_RESPONSE_ACCEPT)
     return;
@@ -388,7 +400,7 @@ test_confirm_overwrite_for_path (const char *path, gboolean append_extension)
       gtk_file_chooser_set_filename (GTK_FILE_CHOOSER (closure.chooser), path);
     }
 
-  gdk_threads_add_timeout (2000, confirm_overwrite_timeout_cb, &closure);
+  gdk_threads_add_timeout_full (G_MAXINT, SLEEP_DURATION, confirm_overwrite_timeout_cb, &closure, NULL);
   gtk_dialog_run (GTK_DIALOG (closure.chooser));
 
   filename = gtk_file_chooser_get_filename (GTK_FILE_CHOOSER (closure.chooser));
@@ -404,16 +416,16 @@ test_confirm_overwrite_for_path (const char *path, gboolean append_extension)
   return passed;
 }
 
-static gboolean
+static void
 test_confirm_overwrite (void)
 {
   gboolean passed = TRUE;
 
   /* first test for a file we know will always exist */
   passed = passed && test_confirm_overwrite_for_path ("/etc/passwd", FALSE); 
+  g_assert (passed);
   passed = passed && test_confirm_overwrite_for_path ("/etc/resolv.conf", TRUE); 
-  
-  return passed;
+  g_assert (passed);
 }
 
 static const GtkFileChooserAction open_actions[] = {
@@ -616,7 +628,7 @@ switch_from_action_cb (GtkFileChooserDialog *dialog,
   return foreach_action (dialog, switch_from_to_action_cb, &closure);
 }
 
-static gboolean
+static void
 test_action_widgets (void)
 {
   GtkWidget *dialog;
@@ -637,15 +649,13 @@ test_action_widgets (void)
 
   passed = test_widgets_for_current_action (GTK_FILE_CHOOSER_DIALOG (dialog), action);
   log_test (passed, "test_action_widgets(): widgets for initial action %s", get_action_name (action));
-  if (!passed)
-    return FALSE;
+  g_assert (passed);
 
   passed = foreach_action (GTK_FILE_CHOOSER_DIALOG (dialog), switch_from_action_cb, NULL);
   log_test (passed, "test_action_widgets(): all transitions through property change");
+  g_assert (passed);
 
   gtk_widget_destroy (dialog);
-
-  return passed;
 }
 
 static gboolean
@@ -791,20 +801,18 @@ test_reload_sequence (gboolean set_folder_before_map)
   return passed;
 }
 
-static gboolean
+static void
 test_reload (void)
 {
   gboolean passed;
 
   passed = test_reload_sequence (FALSE);
   log_test (passed, "test_reload(): create and use the default folder");
-  if (!passed)
-    return FALSE;
+  g_assert (passed);
 
   passed = test_reload_sequence (TRUE);
   log_test (passed, "test_reload(): set a folder explicitly before mapping");
-
-  return passed;
+  g_assert (passed);
 }
 
 static gboolean
@@ -922,7 +930,7 @@ test_button_folder_states_for_action (GtkFileChooserAction action, gboolean use_
   return passed;
 }
 
-static gboolean
+static void
 test_button_folder_states (void)
 {
   /* GtkFileChooserButton only supports OPEN and SELECT_FOLDER */
@@ -938,13 +946,15 @@ test_button_folder_states (void)
   for (i = 0; i < G_N_ELEMENTS (actions_to_test); i++)
     {
       passed = passed && test_button_folder_states_for_action (actions_to_test[i], FALSE, FALSE);
+      g_assert (passed);
       passed = passed && test_button_folder_states_for_action (actions_to_test[i], TRUE, FALSE);
+      g_assert (passed);
       passed = passed && test_button_folder_states_for_action (actions_to_test[i], TRUE, TRUE);
+      g_assert (passed);
       log_test (passed, "test_button_folder_states(): action %s", get_action_name (actions_to_test[i]));
     }
 
   log_test (passed, "test_button_folder_states(): all supported actions");
-  return passed;
 }
 
 static gboolean
@@ -955,13 +965,20 @@ sleep_timeout_cb (gpointer data)
 }
 
 static void
-sleep_in_main_loop (int milliseconds)
+sleep_in_main_loop (double fraction)
 {
-  gdk_threads_add_timeout (milliseconds, sleep_timeout_cb, NULL);
+  /* process all pending idles and events */
+  while (g_main_context_pending (NULL))
+    g_main_context_iteration (NULL, FALSE);
+  /* sleeping probably isn't strictly necessary here */
+  gdk_threads_add_timeout_full (G_MAXINT, fraction * SLEEP_DURATION, sleep_timeout_cb, NULL, NULL);
   gtk_main ();
+  /* process any pending idles or events that arrived during sleep */
+  while (g_main_context_pending (NULL))
+    g_main_context_iteration (NULL, FALSE);
 }
 
-static gboolean
+static void
 test_folder_switch_and_filters (void)
 {
   gboolean passed;
@@ -989,8 +1006,7 @@ test_folder_switch_and_filters (void)
   base_dir_path = gtk_file_system_filename_to_path (impl->file_system, base_dir);
 
   passed = passed && gtk_file_chooser_set_current_folder (GTK_FILE_CHOOSER (dialog), base_dir);
-  if (!passed)
-    goto out;
+  g_assert (passed);
 
   /* All files filter */
 
@@ -1009,33 +1025,35 @@ test_folder_switch_and_filters (void)
 
   gtk_file_chooser_set_filter (GTK_FILE_CHOOSER (dialog), all_filter);
   passed = passed && (gtk_file_chooser_get_filter (GTK_FILE_CHOOSER (dialog)) == all_filter);
+  g_assert (passed);
 
   gtk_file_chooser_set_filter (GTK_FILE_CHOOSER (dialog), txt_filter);
   passed = passed && (gtk_file_chooser_get_filter (GTK_FILE_CHOOSER (dialog)) == txt_filter);
-
   log_test (passed, "test_folder_switch_and_filters(): set and get filter");
+  g_assert (passed);
 
   gtk_widget_show (dialog);
 
   /* Test that filter is unchanged when we switch folders */
 
   gtk_file_chooser_set_current_folder (GTK_FILE_CHOOSER (dialog), cwd);
-  sleep_in_main_loop (1000);
+  sleep_in_main_loop (0.5);
   passed = passed && (gtk_file_chooser_get_filter (GTK_FILE_CHOOSER (dialog)) == txt_filter);
+  g_assert (passed);
 
   gtk_file_chooser_set_current_folder (GTK_FILE_CHOOSER (dialog), base_dir);
-  sleep_in_main_loop (500);
+  sleep_in_main_loop (0.25);
 
   g_signal_emit_by_name (impl->browse_path_bar, "path-clicked",
 			 (GtkFilePath *) cwd_path,
 			 (GtkFilePath *) base_dir_path,
 			 FALSE);
-  sleep_in_main_loop (500);
+  sleep_in_main_loop (0.25);
   passed = passed && (gtk_file_chooser_get_filter (GTK_FILE_CHOOSER (dialog)) == txt_filter);
-
   log_test (passed, "test_folder_switch_and_filters(): filter after changing folder");
+  g_assert (passed);
 
- out:
+  /* cleanups */
   g_free (cwd);
   g_free (base_dir);
   gtk_file_path_free (cwd_path);
@@ -1044,70 +1062,23 @@ test_folder_switch_and_filters (void)
   gtk_widget_destroy (dialog);
 
   log_test (passed, "test_folder_switch_and_filters(): all filter tests");
-  return passed;
-}
-
-static GLogFunc default_log_handler;
-static int num_warnings;
-static int num_errors;
-static int num_critical_errors;
-
-static void
-log_override_cb (const gchar   *log_domain,
-		 GLogLevelFlags log_level,
-		 const gchar   *message,
-		 gpointer       user_data)
-{
-  if (log_level & G_LOG_LEVEL_WARNING)
-    num_warnings++;
-
-  if (log_level & G_LOG_LEVEL_ERROR)
-    num_errors++;
-
-  if (log_level & G_LOG_LEVEL_CRITICAL)
-    num_critical_errors++;
-
-  (* default_log_handler) (log_domain, log_level, message, user_data);
 }
 
 int
-main (int argc, char **argv)
+main (int    argc,
+      char **argv)
 {
-  gboolean passed;
-  gboolean zero_warnings;
-  gboolean zero_errors;
-  gboolean zero_critical_errors;
+  /* initialize test program */
+  gtk_test_init (&argc, &argv);
 
-  default_log_handler = g_log_set_default_handler (log_override_cb, NULL);
-  passed = TRUE;
+  /* register tests */
+  g_test_add_func ("/GtkFileChooser/black_box", test_black_box);
+  g_test_add_func ("/GtkFileChooser/confirm_overwrite", test_confirm_overwrite);
+  g_test_add_func ("/GtkFileChooser/action_widgets", test_action_widgets);
+  g_test_add_func ("/GtkFileChooser/reload", test_reload);
+  g_test_add_func ("/GtkFileChooser/button_folder_states", test_button_folder_states);
+  g_test_add_func ("/GtkFileChooser/folder_switch_and_filters", test_folder_switch_and_filters);
 
-  gtk_init (&argc, &argv);
-
-  /* Start tests */
-
-  passed = passed && test_black_box ();
-  passed = passed && test_confirm_overwrite ();
-  passed = passed && test_action_widgets ();
-  passed = passed && test_reload ();
-  passed = passed && test_button_folder_states ();
-  passed = passed && test_folder_switch_and_filters ();
-  log_test (passed, "main(): main tests");
-
-  /* Warnings and errors */
-
-  zero_warnings = num_warnings == 0;
-  zero_errors = num_errors == 0;
-  zero_critical_errors = num_critical_errors == 0;
-
-  log_test (zero_warnings, "main(): zero warnings (actual number %d)", num_warnings);
-  log_test (zero_errors, "main(): zero errors (actual number %d)", num_errors);
-  log_test (zero_critical_errors, "main(): zero critical errors (actual number %d)", num_critical_errors);
-
-  /* Done */
-
-  passed = passed && zero_warnings && zero_errors && zero_critical_errors;
-
-  log_test (passed, "main(): ALL TESTS");
-
-  return 0;
+  /* run and check selected tests */
+  return g_test_run();
 }
