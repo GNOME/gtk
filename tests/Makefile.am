@@ -25,7 +25,9 @@ if USE_X11
 testsocket_programs = testsocket testsocket_child
 endif
 
-
+TEST_PROGS			+= floatingtest
+floatingtest_DEPENDENCIES	 = $(TEST_DEPS)
+floatingtest_LDADD		 = $(LDADDS)
 TEST_PROGS                      += objecttests
 objecttests_SOURCES              = objecttests.c
 objecttests_LDADD                = $(LDADDS)
@@ -36,11 +38,10 @@ autotestfilechooser_LDADD        = $(LDADDS)
 autotestfilechooser_SOURCES      = autotestfilechooser.c
 
 
-TESTS = floatingtest buildertest
+TESTS = buildertest
 
 noinst_PROGRAMS =  $(TEST_PROGS)	\
 	autotestkeywords		\
-	floatingtest			\
 	buildertest			\
 	simple				\
 	print-editor			\
@@ -117,7 +118,6 @@ endif
 endif
 
 simple_DEPENDENCIES = $(TEST_DEPS)
-floatingtest_DEPENDENCIES = $(TEST_DEPS)
 buildertest_DEPENDENCIES = $(TEST_DEPS)
 print_editor_DEPENDENCIES = $(TEST_DEPS)
 testicontheme_DEPENDENCIES = $(TEST_DEPS)
@@ -173,7 +173,6 @@ testtooltips_DEPENDENCIES = $(TEST_DEPS)
 testvolumebutton_DEPENDENCIES = $(TEST_DEPS)
 
 simple_LDADD = $(LDADDS)
-floatingtest_LDADD = $(LDADDS)
 buildertest_LDADD = $(LDADDS)
 print_editor_LDADD = $(LDADDS)
 testaccel_LDADD = $(LDADDS)

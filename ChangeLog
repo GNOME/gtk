@@ -1,3 +1,9 @@
+2007-12-06 13:38:36  Tim Janik  <timj@imendio.com>
+
+	* tests/floatingtest.c: ported to new testing framework.
+
+	* tests/Makefile.am: run floatingtest as testing framework test.
+
 2007-12-06 10:44:52  Tim Janik  <timj@imendio.com>
 
 	* tests/autotestfilechooser.c: majorly speed up execution by reducing

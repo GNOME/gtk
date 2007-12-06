@@ -20,16 +20,16 @@
 #include "../gtk/gtk.h"
 
 static gboolean destroyed = FALSE;
-static void destroy (void) { destroyed = TRUE; }
-     
-int
-main (int   argc,
-      char *argv[])
+static void
+destroy (void)
 {
-  GtkWidget *widget;
-  gtk_init (&argc, &argv);
+  destroyed = TRUE;
+}
 
-  widget = g_object_new (GTK_TYPE_LABEL, NULL);
+static void
+floating_tests (void)
+{
+  GtkWidget *widget = g_object_new (GTK_TYPE_LABEL, NULL);
   g_object_connect (widget, "signal::destroy", destroy, NULL, NULL);
 
   g_assert (GTK_OBJECT_FLOATING (widget));
@@ -59,6 +59,13 @@ main (int   argc,
   g_assert (!destroyed);
   g_object_unref (widget);
   g_assert (destroyed);
-  
-  return 0;
+}
+
+int
+main (int   argc,
+      char *argv[])
+{
+  gtk_test_init (&argc, &argv);
+  g_test_add_func ("/floatingtest", floating_tests);
+  return g_test_run();
 }
