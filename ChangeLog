@@ -1,3 +1,8 @@
+2007-12-06 18:45:06  Attilio Fiandrotti  <attilio.fiandrotti@gmail.com>
+
+	* gdk/directfb/gdkevents-directfb.c: Committed a patch by DOK to fix
+	GDK events generations in the DirectFB backend.
+
 2007-12-06 13:55:06  Tim Janik  <timj@imendio.com>
 
 	* Makefile.decl: replaced seq(1) invokation for X11 ids with a hardcoded

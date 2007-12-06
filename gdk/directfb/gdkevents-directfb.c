@@ -69,13 +69,93 @@ static GdkEvent * gdk_event_translate  (DFBWindowEvent  *dfbevent,
  */
 static GList *client_filters;  /* Filters for client messages */
 
+
+static void
+fixup_event (GdkEvent *event)
+{
+  if (event->any.window)
+    g_object_ref (event->any.window);
+  if (((event->any.type == GDK_ENTER_NOTIFY) ||
+       (event->any.type == GDK_LEAVE_NOTIFY)) &&
+      (event->crossing.subwindow != NULL))
+    g_object_ref (event->crossing.subwindow);
+  event->any.send_event = FALSE;
+}
+
+static GdkFilterReturn
+apply_filters (GdkWindow      *window,
+               DFBWindowEvent *dfbevent,
+               GList          *filters)
+{
+  GdkFilterReturn result = GDK_FILTER_CONTINUE;
+  GdkEvent *event;
+  GList *node;
+  GList *tmp_list;
+
+  event = gdk_event_new (GDK_NOTHING);
+  if (window != NULL)
+    event->any.window = g_object_ref (window);
+  ((GdkEventPrivate *)event)->flags |= GDK_EVENT_PENDING;
+
+  /* I think GdkFilterFunc semantics require the passed-in event
+   * to already be in the queue. The filter func can generate
+   * more events and append them after it if it likes.
+   */
+  node = _gdk_event_queue_append ((GdkDisplay*)_gdk_display, event);
+  
+  tmp_list = filters;
+  while (tmp_list)
+    {
+      GdkEventFilter *filter = (GdkEventFilter *) tmp_list->data;
+      
+      tmp_list = tmp_list->next;
+      result = filter->function (dfbevent, event, filter->data);
+      if (result != GDK_FILTER_CONTINUE)
+        break;
+    }
+
+  if (result == GDK_FILTER_CONTINUE || result == GDK_FILTER_REMOVE)
+    {
+      _gdk_event_queue_remove_link ((GdkDisplay*)_gdk_display, node);
+      g_list_free_1 (node);
+      gdk_event_free (event);
+    }
+  else /* GDK_FILTER_TRANSLATE */
+    {
+      ((GdkEventPrivate *)event)->flags &= ~GDK_EVENT_PENDING;
+      fixup_event (event);
+    }
+  return result;
+}
+
 static void
 dfb_events_process_window_event (DFBWindowEvent *event)
 {
-  GdkWindow *window = gdk_directfb_window_id_table_lookup (event->window_id);
+  GdkWindow *window;
 
-  if (! window)
-     return;
+  /*
+   * Apply global filters
+   *
+   * If result is GDK_FILTER_CONTINUE, we continue as if nothing
+   * happened. If it is GDK_FILTER_REMOVE or GDK_FILTER_TRANSLATE,
+   * we return TRUE and won't dispatch the event.
+   */
+  if (_gdk_default_filters)
+    {
+      switch (apply_filters (NULL, event, _gdk_default_filters))
+        {
+        case GDK_FILTER_REMOVE:
+        case GDK_FILTER_TRANSLATE:
+          return;
+
+        default:
+          break;
+        }
+    }
+
+  window = gdk_directfb_window_id_table_lookup (event->window_id);
+  if (!window)
+    return;
 
   gdk_event_translate (event, window);
 }
@@ -379,6 +459,28 @@ gdk_event_translate (DFBWindowEvent *dfbevent,
   private = GDK_WINDOW_OBJECT (window);
 
   g_object_ref (G_OBJECT (window));
+
+  /*
+   * Apply per-window filters
+   *
+   * If result is GDK_FILTER_CONTINUE, we continue as if nothing
+   * happened. If it is GDK_FILTER_REMOVE or GDK_FILTER_TRANSLATE,
+   * we return TRUE and won't dispatch the event.
+   */
+  if (private->filters)
+    {
+      switch (apply_filters (window, dfbevent, private->filters))
+        {
+        case GDK_FILTER_REMOVE:
+        case GDK_FILTER_TRANSLATE:
+          g_object_unref (G_OBJECT (window));
+          return NULL;
+
+        default:
+          break;
+        }
+    }
+
   display = gdk_drawable_get_display (GDK_DRAWABLE (window));
 
   switch (dfbevent->type)
