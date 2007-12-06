@@ -1,3 +1,9 @@
+2007-12-06  Richard Hult  <richard@imendio.com>
+
+	* gdk/quartz/gdkevents-quartz.c:
+	(synthesize_crossing_events_for_ns_event): Fix warning when
+	switching spaces in leopard.
+
 2007-12-06 13:38:36  Tim Janik  <timj@imendio.com>
 
 	* tests/floatingtest.c: ported to new testing framework.
