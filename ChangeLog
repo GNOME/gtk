@@ -1,3 +1,8 @@
+2007-12-06 13:55:06  Tim Janik  <timj@imendio.com>
+
+	* Makefile.decl: replaced seq(1) invokation for X11 ids with a hardcoded
+	set of likely unused display ids, because MacOS has no seq(1) command.
+
 2007-12-06  Richard Hult  <richard@imendio.com>
 
 	* gdk/quartz/gdkevents-quartz.c:
