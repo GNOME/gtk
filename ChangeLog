@@ -1,3 +1,8 @@
+2007-12-06 08:23:38  Tim Janik  <timj@imendio.com>
+
+	* tests/objecttests.c: use string comparisons for string property
+	values and get rid of referencing symbols in array initialization.
+
 2007-12-05 18:59:59  Tim Janik  <timj@imendio.com>
 
 	* gtk+/Makefile.decl: run tests in current dir after setting up the

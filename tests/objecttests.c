@@ -44,9 +44,6 @@
             "random")
 #define MATCH_ANY_VALUE         ((void*) 0xf1874c23)
 
-/* --- variables --- */
-static const char * const the_empty_string = ""; // use this constant to allow pointer comparisons of ""
-
 /* --- property blacklists --- */
 typedef struct {
   const char   *type_name;
@@ -65,7 +62,7 @@ list_ignore_properties (gboolean buglist)
     { "GtkWidget",              "has-default",          (void*) TRUE, },                /* conflicts with toplevel-less widgets */
     { "GtkWidget",              "screen",               NULL, },
     { "GtkWindow",              "type-hint",            (void*) GDK_WINDOW_TYPE_HINT_DND, }, /* conflicts with ::visible=TRUE */
-    { "GtkCellView",            "background",           (void*) the_empty_string, },    /* "" is not a valid background color */
+    { "GtkCellView",            "background",           (void*) "", },                  /* "" is not a valid background color */
     { "GtkColorButton",         "color",                (void*) NULL, },                /* not a valid boxed color */
     { "GtkInputDialog",         "has-separator",        (void*) MATCH_ANY_VALUE, },     /* property disabled */
     { "GtkMessageDialog",       "has-separator",        (void*) MATCH_ANY_VALUE, },     /* property disabled */
@@ -164,8 +161,6 @@ pspec_select_value (GParamSpec *pspec,
         g_value_take_string (value, g_strdup_printf ("%c%c", sspec->cset_first[0], sspec->cset_nth[0]));
       else /* if (sspec->ensure_non_null) */
         g_value_set_string (value, "");
-      if (g_value_get_string (value) && strcmp (g_value_get_string (value), the_empty_string) == 0)
-        g_value_set_static_string (value, the_empty_string); // allow pointer comparisons of ""
     }
   else if (G_IS_PARAM_SPEC_ENUM (pspec))
     {
@@ -247,7 +242,9 @@ object_test_property (GObject           *object,
         if (g_type_is_a (G_OBJECT_TYPE (object), g_type_from_name (ignore_properties[i].type_name)) &&
             strcmp (pspec->name, ignore_properties[i].name) == 0 &&
             (MATCH_ANY_VALUE == ignore_properties[i].value ||
-             value_as_pointer (&value) == ignore_properties[i].value))
+             value_as_pointer (&value) == ignore_properties[i].value ||
+             (G_VALUE_HOLDS_STRING (&value) &&
+              strcmp (g_value_get_string (&value), ignore_properties[i].value) == 0)))
           break;
       /* ignore known property bugs if not testing thoroughly */
       if (ignore_properties[i].name == NULL && !g_test_thorough())
@@ -257,7 +254,9 @@ object_test_property (GObject           *object,
             if (g_type_is_a (G_OBJECT_TYPE (object), g_type_from_name (ignore_properties[i].type_name)) &&
                 strcmp (pspec->name, ignore_properties[i].name) == 0 &&
                 (MATCH_ANY_VALUE == ignore_properties[i].value ||
-                 value_as_pointer (&value) == ignore_properties[i].value))
+                 value_as_pointer (&value) == ignore_properties[i].value ||
+                 (G_VALUE_HOLDS_STRING (&value) &&
+                  strcmp (g_value_get_string (&value), ignore_properties[i].value) == 0)))
               break;
         }
       /* assign unignored properties */
