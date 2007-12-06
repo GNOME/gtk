@@ -1,3 +1,10 @@
+2007-12-06 18:45:06  Attilio Fiandrotti  <attilio.fiandrotti@gmail.com>
+
+	Merge from trunk:
+	
+	* gdk/directfb/gdkevents-directfb.c: Committed a patch by DOK to fix
+	GDK events generations in the DirectFB backend.
+
 2007-12-4  Cody Russell  <cody@jhu.edu>
 
 	Merge from trunk:
