@@ -1,5 +1,10 @@
 2007-12-07  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkcontainer.c: Correct the documentation of child
+	property getter arguments.  (#501992, David Brigada)
+
+2007-12-07  Matthias Clasen  <mclasen@redhat.com>
+
 	* gtk/gtkfilechooserdefault.c (shortcuts_reload_icons): Don't
 	leak pixbufs.  (#502250, Yevgen Muntyan)
 
