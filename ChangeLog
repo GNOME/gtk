@@ -1,3 +1,9 @@
+2007-12-07  Yevgen Muntyan  <muntyan@tamu.edu>
+
+	* gtk/gtkprintunixdialog.c:
+	* gtk/gtkpagesetupunixdialog.c: added alternative button order in
+	Print and Page Setup dialogs.
+
 2007-12-07 13:16:33  Tim Janik  <timj@imendio.com>
 
 	* Makefile.decl: skip tests if gdktarget!=x11, since GUI tests need
