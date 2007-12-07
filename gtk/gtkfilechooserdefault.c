@@ -1386,13 +1386,6 @@ shortcuts_reload_icons (GtkFileChooserDefault *impl)
 	      volume = data;
 	      pixbuf = gtk_file_system_volume_render_icon (impl->file_system, volume, GTK_WIDGET (impl),
 							   impl->icon_size, NULL);
-
-	      gtk_list_store_set (impl->shortcuts_model, &iter,
-				  SHORTCUTS_COL_PIXBUF, pixbuf,
-				  -1);
-
-	      if (pixbuf)
-		g_object_unref (pixbuf);
 	    }
 	  else if (shortcut_type == SHORTCUT_TYPE_PATH)
             {
@@ -1429,13 +1422,6 @@ shortcuts_reload_icons (GtkFileChooserDefault *impl)
 	          icon_theme = gtk_icon_theme_get_for_screen (gtk_widget_get_screen (GTK_WIDGET (impl)));
 	          pixbuf = gtk_icon_theme_load_icon (icon_theme, "gnome-fs-share", 
 						     impl->icon_size, 0, NULL);
-
-	          gtk_list_store_set (impl->shortcuts_model, &iter,
-				      SHORTCUTS_COL_PIXBUF, pixbuf,
-				      -1);
-
-	          if (pixbuf)
-		    g_object_unref (pixbuf);
 	        }
             }
 	  else if (shortcut_type == SHORTCUT_TYPE_SEARCH)
@@ -1446,6 +1432,14 @@ shortcuts_reload_icons (GtkFileChooserDefault *impl)
             {
               pixbuf = render_recent_icon (impl);
             }
+
+          gtk_list_store_set (impl->shortcuts_model, &iter,
+  	   	              SHORTCUTS_COL_PIXBUF, pixbuf,
+	                      -1);
+
+          if (pixbuf)
+            g_object_unref (pixbuf);
+
 	}
     }
   while (gtk_tree_model_iter_next (GTK_TREE_MODEL (impl->shortcuts_model),&iter));
