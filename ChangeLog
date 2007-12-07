@@ -2,7 +2,7 @@
 
 	* gtk/gtkprintunixdialog.c:
 	* gtk/gtkpagesetupunixdialog.c: added alternative button order in
-	Print and Page Setup dialogs.
+	Print and Page Setup dialogs (#502202).
 
 2007-12-07 13:16:33  Tim Janik  <timj@imendio.com>
 
