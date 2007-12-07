@@ -1,3 +1,9 @@
+2007-12-07 13:16:33  Tim Janik  <timj@imendio.com>
+
+	* Makefile.decl: skip tests if gdktarget!=x11, since GUI tests need
+	Xvfb. only start Xvfb if TEST_PROGS is not empty. moved "set -e" out
+	of XVFB_START, since it's the GTESTER invokation that needs this.
+
 2007-12-06  Tommi Komulainen  <tommi.komulainen@iki.fi>
 
 	* gdk-pixbuf/gdk-pixbuf.symbols:
