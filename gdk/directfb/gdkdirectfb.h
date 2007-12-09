@@ -33,6 +33,11 @@
 #ifndef __GDK_DIRECTFB_H__
 #define __GDK_DIRECTFB_H__
 
+/* This define disables some experimental code
+ */
+#ifndef GDK_DIRECTFB_NO_EXPERIMENTS
+#define GDK_DIRECTFB_NO_EXPERIMENTS
+
 #include <cairo.h>
 #include <directfb.h>
 #include "gdk/gdkprivate.h"

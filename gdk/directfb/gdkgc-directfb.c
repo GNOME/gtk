@@ -113,8 +113,8 @@ gdk_gc_directfb_finalize (GObject *object)
   GdkGC         *gc      = GDK_GC (object);
   GdkGCDirectFB *private = GDK_GC_DIRECTFB (gc);
 
-  if (private->clip_region)
-    gdk_region_destroy (private->clip_region);
+  if (private->clip_region.numRects)
+    temp_region_deinit (&private->clip_region);
   if (private->values.clip_mask)
     g_object_unref (private->values.clip_mask);
   if (private->values.stipple)
@@ -262,11 +262,7 @@ gdk_directfb_gc_set_values (GdkGC           *gc,
       if (oldpm)
         g_object_unref (oldpm);
 
-      if (private->clip_region)
-        {
-          gdk_region_destroy (private->clip_region);
-          private->clip_region = NULL;
-        }
+      temp_region_reset (&private->clip_region);
     }
 
   if (values_mask & GDK_GC_SUBWINDOW)
@@ -363,17 +359,13 @@ _gdk_windowing_gc_set_clip_region (GdkGC     *gc,
 
   data = GDK_GC_DIRECTFB (gc);
 
-  if (region == data->clip_region)
+  if (region == &data->clip_region)
     return;
 
-  if (data->clip_region)
-    {
-      gdk_region_destroy (data->clip_region);
-      data->clip_region = NULL;
-    }
-
   if (region)
-    data->clip_region = gdk_region_copy (region);
+       temp_region_init_copy (&data->clip_region, region);
+  else
+       temp_region_reset (&data->clip_region);
 
   gc->clip_x_origin = 0;
   gc->clip_y_origin = 0;
@@ -394,8 +386,7 @@ _gdk_windowing_gc_copy (GdkGC *dst_gc,
 
   dst_private = GDK_GC_DIRECTFB (dst_gc);
 
-  if (dst_private->clip_region)
-    gdk_region_destroy(dst_private->clip_region);
+  temp_region_reset(&dst_private->clip_region);
 
   if (dst_private->values_mask & GDK_GC_FONT)
     gdk_font_unref (dst_private->values.font);
@@ -415,8 +406,6 @@ _gdk_windowing_gc_copy (GdkGC *dst_gc,
     g_object_ref (dst_private->values.stipple);
   if (dst_private->values_mask & GDK_GC_CLIP_MASK)
     g_object_ref (dst_private->values.clip_mask);
-  if (dst_private->clip_region)
-    dst_private->clip_region = gdk_region_copy (dst_private->clip_region);
 }
 
 /**

@@ -1,3 +1,16 @@
+2007-12-09 09:56:06  Attilio Fiandrotti  <attilio.fiandrotti@gmail.com>
+
+	* gdk/directfb/gdkgc-directfb.c:
+	* gdk/directfb/gdkdrawable-directfb.c:
+	* gdk/directfb/gdkdirectfb.h:
+	* gdk/directfb/gdkwindow-directfb.c:
+	* gdk/directfb/gdkprivate-directfb.h: Committed several patches
+	(window_flip_group, no_background_pixmap_fix, opt_temp_region2,
+	blit_after_cairo_fix, rect_clip_fix, fast_blend, opt_temp_region_etc,
+	opt_clip_region_and_fill_rects, no_state_resets) by Denis Oliver Knopp
+	which are expected to improve the performance of the DirectFB backend.
+	Experimental pieces of code (GDK_DIRECTFB_NO_EXPERIMENTS) are disabled.
+
 2007-12-07  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtkcontainer.c: Correct the documentation of child

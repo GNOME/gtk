@@ -46,6 +46,8 @@
 #include "cairo.h"
 #include <assert.h>
 
+#include <directfb_util.h>
+
 static GdkRegion * gdk_window_impl_directfb_get_visible_region (GdkDrawable *drawable);
 static void        gdk_window_impl_directfb_set_colormap       (GdkDrawable *drawable,
                                                                 GdkColormap *colormap);
@@ -92,6 +94,35 @@ gdk_window_directfb_process_all_updates (void)
       g_object_unref (tmp_list->data);
       tmp_list = tmp_list->next;
     }
+
+
+#ifndef GDK_DIRECTFB_NO_EXPERIMENTS
+  tmp_list = old_update_windows;
+
+  g_slist_foreach (old_update_windows, (GFunc)g_object_ref, NULL);
+
+  while (tmp_list) {
+       GdkWindowObject *top = GDK_WINDOW_OBJECT( gdk_window_get_toplevel( tmp_list->data ) );
+
+       if (top) {
+            GdkWindowImplDirectFB *wimpl = GDK_WINDOW_IMPL_DIRECTFB (top->impl);
+
+            if (wimpl->flips.num_regions) {
+                 //direct_log_printf( NULL, "Flipping bounding box of paints: %d,%d - %dx%d (top %p, wimpl %p)\n",
+                 //                   DFB_RECTANGLE_VALS_FROM_REGION( &wimpl->flips.bounding ), top, wimpl );
+
+                 wimpl->drawable.surface->Flip( wimpl->drawable.surface, &wimpl->flips.bounding, DSFLIP_NONE );
+
+                 dfb_updates_reset( &wimpl->flips );
+            }
+       }
+
+
+       g_object_unref (tmp_list->data);
+       tmp_list = tmp_list->next;
+  }
+#endif
+
 
   g_slist_free (old_update_windows);
 
@@ -311,6 +342,12 @@ create_directfb_window (GdkWindowImplDirectFB *impl,
 
   impl->window = window;
 
+#ifndef GDK_DIRECTFB_NO_EXPERIMENTS
+  //direct_log_printf( NULL, "Initializing (window %p, wimpl %p)\n", win, impl );
+
+  dfb_updates_init( &impl->flips, impl->flip_regions, G_N_ELEMENTS(impl->flip_regions) );
+#endif
+
   return TRUE;
 }
 
@@ -333,7 +370,7 @@ _gdk_windowing_window_init (void)
   private->window_type = GDK_WINDOW_ROOT;
   private->state       = 0;
   private->children    = NULL;
-  impl->drawable.paint_region   = NULL;
+//  impl->drawable.paint_region   = NULL;
   impl->gdkWindow      = _gdk_parent_root;
   impl->window           = NULL;
   impl->drawable.abs_x   = 0;
@@ -1797,10 +1834,15 @@ gdk_window_set_back_pixmap (GdkWindow *window,
     }
   else
     {
-      if (pixmap && pixmap != GDK_NO_BG && pixmap != GDK_PARENT_RELATIVE_BG)
-        g_object_ref (pixmap);
-
-      private->bg_pixmap = pixmap;
+      if (pixmap)
+        {
+          g_object_ref (pixmap);
+          private->bg_pixmap = pixmap;
+        }
+      else
+        {
+          private->bg_pixmap = GDK_NO_BG;
+        }
     }
 }
 
@@ -2777,9 +2819,9 @@ gdk_window_set_urgency_hint (GdkWindow *window,
 
 static void
 gdk_window_impl_directfb_invalidate_maybe_recurse (GdkPaintable *paintable,
-                         GdkRegion    *region,
-                         gboolean    (*child_func) (GdkWindow *, gpointer),
-                         gpointer      user_data)
+                                                   GdkRegion    *region,
+                                                   gboolean    (*child_func) (GdkWindow *, gpointer),
+                                                   gpointer      user_data)
 {
   GdkWindow *window;
   GdkWindowObject *private;
@@ -2791,7 +2833,7 @@ gdk_window_impl_directfb_invalidate_maybe_recurse (GdkPaintable *paintable,
   window = wimpl->gdkWindow;
   private = (GdkWindowObject *)window;
 
-  GdkRegion *visible_region;
+  GdkRegion visible_region;
   GList *tmp_list;
 
   g_return_if_fail (window != NULL);
@@ -2803,69 +2845,65 @@ gdk_window_impl_directfb_invalidate_maybe_recurse (GdkPaintable *paintable,
   if (private->input_only || !GDK_WINDOW_IS_MAPPED (window))
     return;
 
-  visible_region = gdk_drawable_get_visible_region (window);
-  gdk_region_intersect (visible_region, region);
+  temp_region_init_rectangle_vals( &visible_region, 0, 0, impl->width, impl->height );
+  gdk_region_intersect (&visible_region, region);
 
   tmp_list = private->children;
   while (tmp_list)
     {
-      GdkWindowObject *child = tmp_list->data;
+      GdkWindowObject         *child = tmp_list->data;
+      GdkDrawableImplDirectFB *cimpl = (GdkDrawableImplDirectFB *) child->impl;
       
       if (!child->input_only)
-	{
-	  GdkRegion *child_region;
-	  GdkRectangle child_rect;
-	  
-	  gdk_window_get_position ((GdkWindow *)child,
-				   &child_rect.x, &child_rect.y);
-	  gdk_drawable_get_size ((GdkDrawable *)child,
-				 &child_rect.width, &child_rect.height);
+        {
+          GdkRegion child_region;
+          
+          temp_region_init_rectangle_vals( &child_region, child->x, child->y, cimpl->width, cimpl->height );
+          
+          /* remove child area from the invalid area of the parent */
+          if (GDK_WINDOW_IS_MAPPED (child) && !child->shaped)
+            gdk_region_subtract (&visible_region, &child_region);
+          
+          if (child_func && (*child_func) ((GdkWindow *)child, user_data))
+            {
+              gdk_region_offset (region, - child->x, - child->y);
+              gdk_region_offset (&child_region, - child->x, - child->y);
+              gdk_region_intersect (&child_region, region);
+              
+              gdk_window_invalidate_maybe_recurse ((GdkWindow *)child,
+                                                   &child_region, child_func, user_data);
+              
+              gdk_region_offset (region, child->x, child->y);
+            }
 
-	  child_region = gdk_region_rectangle (&child_rect);
-	  
-	  /* remove child area from the invalid area of the parent */
-	  if (GDK_WINDOW_IS_MAPPED (child) && !child->shaped)
-	    gdk_region_subtract (visible_region, child_region);
-	  
-	  if (child_func && (*child_func) ((GdkWindow *)child, user_data))
-	    {
-	      gdk_region_offset (region, - child_rect.x, - child_rect.y);
-	      gdk_region_offset (child_region, - child_rect.x, - child_rect.y);
-	      gdk_region_intersect (child_region, region);
-	      
-	      gdk_window_invalidate_maybe_recurse ((GdkWindow *)child,
-						   child_region, child_func, user_data);
-	      
-	      gdk_region_offset (region, child_rect.x, child_rect.y);
-	    }
-
-	  gdk_region_destroy (child_region);
-	}
+          temp_region_deinit( &child_region );
+        }
 
       tmp_list = tmp_list->next;
     }
   
-  if (!gdk_region_empty (visible_region))
+  if (!gdk_region_empty (&visible_region))
     {
       
       if (private->update_area)
-	{
-	  gdk_region_union (private->update_area, visible_region);
-	}
+        {
+          gdk_region_union (private->update_area, &visible_region);
+        }
       else
-	{
-	  update_windows = g_slist_prepend (update_windows, window);
-	  private->update_area = gdk_region_copy (visible_region);
-	  gdk_window_schedule_update (window);
-	}
+        {
+          update_windows = g_slist_prepend (update_windows, window);
+          private->update_area = gdk_region_copy (&visible_region);
+          gdk_window_schedule_update (window);
+        }
     }
-    gdk_region_destroy (visible_region);
+
+  temp_region_deinit( &visible_region );
 }
 
 
 static void
 gdk_window_impl_directfb_process_updates (GdkPaintable *paintable,
-                    gboolean      update_children)
+                                          gboolean      update_children)
 {
   GdkWindow *window;
   GdkWindowObject *private;
@@ -2888,58 +2926,49 @@ gdk_window_impl_directfb_process_updates (GdkPaintable *paintable,
       private->update_area = NULL;
       
       if (_gdk_event_func && gdk_window_is_viewable (window))
-	{
-	  GdkRectangle window_rect;
-	  GdkRegion *expose_region;
-	  GdkRegion *window_region;
-          gint width, height;
-	  save_region = _gdk_windowing_window_queue_antiexpose (window, update_area);
+        {
+          GdkRegion *expose_region;
+          GdkRegion  window_region;
+          save_region = _gdk_windowing_window_queue_antiexpose (window, update_area);
 
-	  if (save_region)
-	    expose_region = gdk_region_copy (update_area);
-	  else
-	    expose_region = update_area;
-	  
-          gdk_drawable_get_size (GDK_DRAWABLE (private), &width, &height);
+          if (save_region)
+            expose_region = gdk_region_copy (update_area);
+          else
+            expose_region = update_area;
+          
+          temp_region_init_rectangle_vals( &window_region, 0, 0, impl->width, impl->height );
+          gdk_region_intersect (expose_region,
+                                &window_region);
+          temp_region_deinit (&window_region);
+          
+          if (!gdk_region_empty (expose_region) &&
+              (private->event_mask & GDK_EXPOSURE_MASK))
+            {
+              GdkEvent event;
+              
+              event.expose.type = GDK_EXPOSE;
+              event.expose.window = g_object_ref (window);
+              event.expose.send_event = FALSE;
+              event.expose.count = 0;
+              event.expose.region = expose_region;
+              gdk_region_get_clipbox (expose_region, &event.expose.area);
+              (*_gdk_event_func) (&event, _gdk_event_data);
+              
+              g_object_unref (window);
+            }
 
-	  window_rect.x = 0;
-	  window_rect.y = 0;
-	  window_rect.width = width;
-	  window_rect.height = height;
-
-	  window_region = gdk_region_rectangle (&window_rect);
-	  gdk_region_intersect (expose_region,
-				window_region);
-	  gdk_region_destroy (window_region);
-	  
-	  if (!gdk_region_empty (expose_region) &&
-	      (private->event_mask & GDK_EXPOSURE_MASK))
-	    {
-	      GdkEvent event;
-	      
-	      event.expose.type = GDK_EXPOSE;
-	      event.expose.window = g_object_ref (window);
-	      event.expose.send_event = FALSE;
-	      event.expose.count = 0;
-	      event.expose.region = expose_region;
-	      gdk_region_get_clipbox (expose_region, &event.expose.area);
-	      (*_gdk_event_func) (&event, _gdk_event_data);
-	      
-	      g_object_unref (window);
-	    }
-
-	  if (expose_region != update_area)
-	    gdk_region_destroy (expose_region);
-	}
+          if (expose_region != update_area)
+            gdk_region_destroy (expose_region);
+        }
       if (!save_region)
-	gdk_region_destroy (update_area);
+        gdk_region_destroy (update_area);
     }
 }
 
 
 static void
 gdk_window_impl_directfb_begin_paint_region (GdkPaintable *paintable,
-					   GdkRegion    *region)
+                                             GdkRegion    *region)
 {
   GdkDrawableImplDirectFB *impl;
   GdkWindowImplDirectFB *wimpl;
@@ -2949,16 +2978,29 @@ gdk_window_impl_directfb_begin_paint_region (GdkPaintable *paintable,
   g_assert (region != NULL );
   wimpl = GDK_WINDOW_IMPL_DIRECTFB (paintable);
   impl = (GdkDrawableImplDirectFB *)wimpl;
-  impl->buffered = TRUE;
-  impl->paint_depth++;
 
   if (!region)
     return;
 
-  if (impl->paint_region)
-    gdk_region_union (impl->paint_region, region);
-  else
-    impl->paint_region = gdk_region_copy (region);
+  if (impl->buffered) {
+       g_assert( impl->paint_depth > 0 );
+
+       gdk_region_union (&impl->paint_region, region);
+  }
+  else {
+       g_assert( impl->paint_depth == 0 );
+
+       gdk_directfb_clip_region( GDK_DRAWABLE(paintable), NULL, NULL, &impl->clip_region );
+
+       temp_region_init_copy( &impl->paint_region, region );
+
+       impl->buffered = TRUE;
+  }
+
+  gdk_region_intersect (&impl->paint_region, &impl->clip_region);
+
+  impl->paint_depth++;
+
 
   for (i = 0; i < region->numRects; i++)
     {
@@ -2982,24 +3024,59 @@ gdk_window_impl_directfb_end_paint (GdkPaintable *paintable)
 
   g_return_if_fail (impl->paint_depth > 0);
 
+  g_assert( impl->buffered );
+
   impl->paint_depth--;
 
+#ifdef GDK_DIRECTFB_NO_EXPERIMENTS
   if (impl->paint_depth == 0)
     {
       impl->buffered = FALSE;
 
-      if (impl->paint_region)
+      if (impl->paint_region.numRects)
         {
-          DFBRegion reg = { impl->paint_region->extents.x1,
-                            impl->paint_region->extents.y1,
-                            impl->paint_region->extents.x2 ,
-                            impl->paint_region->extents.y2 };
+          DFBRegion reg = { impl->paint_region.extents.x1,
+                            impl->paint_region.extents.y1,
+                            impl->paint_region.extents.x2 ,
+                            impl->paint_region.extents.y2 };
 
-          impl->surface->Flip(impl->surface, &reg,0);
-          gdk_region_destroy (impl->paint_region);
-          impl->paint_region = NULL;
+          impl->surface->Flip( impl->surface, &reg, 0 );
+
+          temp_region_reset( &impl->paint_region );
         }
     }
+#else
+  if (impl->paint_depth == 0) {
+       impl->buffered = FALSE;
+
+       temp_region_deinit( &impl->clip_region );
+
+       if (impl->paint_region.numRects) {
+            GdkWindow *window = GDK_WINDOW( impl->wrapper );
+
+            if (GDK_IS_WINDOW(window)) {
+                 GdkWindowObject *top = GDK_WINDOW_OBJECT( gdk_window_get_toplevel( window ) );
+
+                 if (top) {
+                      DFBRegion              reg;
+                      GdkWindowImplDirectFB *wimpl = GDK_WINDOW_IMPL_DIRECTFB (top->impl);
+
+                      reg.x1 = impl->abs_x - top->x + impl->paint_region.extents.x1;
+                      reg.y1 = impl->abs_y - top->y + impl->paint_region.extents.y1;
+                      reg.x2 = impl->abs_x - top->x + impl->paint_region.extents.x2 - 1;
+                      reg.y2 = impl->abs_y - top->y + impl->paint_region.extents.y2 - 1;
+
+                      //direct_log_printf( NULL, "Adding bounding box of paint: %d,%d - %dx%d (top %p, wimpl %p)\n",
+                      //                   DFB_RECTANGLE_VALS_FROM_REGION( &reg ), top, wimpl );
+
+                      dfb_updates_add( &wimpl->flips, &reg );
+                 }
+            }
+
+            temp_region_reset( &impl->paint_region );
+       }
+  }
+#endif
 }
 
 
