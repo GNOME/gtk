@@ -812,7 +812,7 @@ gdk_pixbuf__jpeg_image_load_increment (gpointer data,
 	struct           jpeg_decompress_struct *cinfo;
 	my_src_ptr       src;
 	guint            num_left, num_copy;
-	guint            last_bytes_left;
+	guint            last_num_left, last_bytes_left;
 	guint            spinguard;
 	gboolean         first;
 	const guchar    *bufhd;
@@ -853,6 +853,7 @@ gdk_pixbuf__jpeg_image_load_increment (gpointer data,
 	if (num_left == 0)
 		return TRUE;
 
+	last_num_left = num_left;
 	last_bytes_left = 0;
 	spinguard = 0;
 	first = TRUE;
@@ -880,10 +881,13 @@ gdk_pixbuf__jpeg_image_load_increment (gpointer data,
                 if (first) {
                         last_bytes_left = src->pub.bytes_in_buffer;
                         first = FALSE;
-                } else if (src->pub.bytes_in_buffer == last_bytes_left)
+                } else if (src->pub.bytes_in_buffer == last_bytes_left
+			   && num_left == last_num_left) {
                         spinguard++;
-                else
+		} else {
                         last_bytes_left = src->pub.bytes_in_buffer;
+			last_num_left = num_left;
+		}
 
 		/* should not go through twice and not pull bytes out of buf */
 		if (spinguard > 2)
