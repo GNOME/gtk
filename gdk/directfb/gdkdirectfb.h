@@ -35,7 +35,6 @@
 
 /* This define disables some experimental code
  */
-#ifndef GDK_DIRECTFB_NO_EXPERIMENTS
 #define GDK_DIRECTFB_NO_EXPERIMENTS
 
 #include <cairo.h>
