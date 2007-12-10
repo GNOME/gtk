@@ -1,3 +1,10 @@
+2007-12-10  Tor Lillqvist  <tml@novell.com>
+
+	Merged from trunk:
+
+	* gtk-zip.sh.in: Include bin/gtk-builder-convert in the dev
+	package. (#502850)
+
 2007-12-10  Matthias Clasen  <mclasen@redhat.com>
 
 	Merged from trunk:
