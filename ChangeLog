@@ -1,3 +1,18 @@
+2007-12-10  Richard Hult  <richard@imendio.com>
+
+	Merged from trunk:
+
+	* gdk/quartz/gdkprivate-quartz.h: 
+	* gdk/quartz/gdkeventloop-quartz.c:
+	(_gdk_quartz_event_loop_get_pending),
+	(_gdk_quartz_event_loop_check_pending),
+	(_gdk_quartz_event_loop_release_event), (gdk_event_prepare),
+	(gdk_event_check), (gdk_event_dispatch):
+	* gdk/quartz/gdkevents-quartz.c: (gdk_events_pending)
+	(_gdk_events_queue): Fix a bug where we could end up trying to
+	handle the same event more than once. Based on patch from Paul
+	Davis.
+
 2007-12-10  Tor Lillqvist  <tml@novell.com>
 
 	Merged from trunk:

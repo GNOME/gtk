@@ -158,8 +158,9 @@ extern GdkWindow *_gdk_quartz_keyboard_grab_window;
 extern GdkWindow *_gdk_quartz_pointer_grab_window;
 
 /* Event loop */
-NSEvent *  _gdk_quartz_event_loop_get_current     (void);
-void       _gdk_quartz_event_loop_release_current (void);
+gboolean   _gdk_quartz_event_loop_check_pending (void);
+NSEvent *  _gdk_quartz_event_loop_get_pending   (void);
+void       _gdk_quartz_event_loop_release_event (NSEvent *event);
 
 /* FIXME: image */
 GdkImage *_gdk_quartz_image_copy_to_image (GdkDrawable *drawable,

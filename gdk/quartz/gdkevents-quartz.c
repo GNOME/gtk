@@ -130,7 +130,7 @@ gboolean
 gdk_events_pending (void)
 {
   return (_gdk_event_queue_find_first (_gdk_display) ||
-	  (_gdk_quartz_event_loop_get_current () != NULL));
+	  (_gdk_quartz_event_loop_check_pending ()));
 }
 
 GdkEvent*
@@ -1829,14 +1829,15 @@ gdk_event_translate (NSEvent *nsevent)
 void
 _gdk_events_queue (GdkDisplay *display)
 {  
-  NSEvent *current_event = _gdk_quartz_event_loop_get_current ();
+  NSEvent *event;
 
-  if (current_event)
+  event = _gdk_quartz_event_loop_get_pending ();
+  if (event)
     {
-      if (!gdk_event_translate (current_event)) 
-	[NSApp sendEvent:current_event];
-		
-      _gdk_quartz_event_loop_release_current ();
+      if (!gdk_event_translate (event))
+        [NSApp sendEvent:event];
+
+      _gdk_quartz_event_loop_release_event (event);
     }
 }
 
