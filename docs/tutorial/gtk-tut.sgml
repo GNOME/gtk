@@ -2851,7 +2851,7 @@ values set to <literal>0.0</literal> (which isn't very useful in this case).
 In order to avoid confusing yourself, you probably want to create your
 adjustment with a <literal>page_size</literal> of <literal>0.0</literal> so 
 that its <literal>upper</literal> value actually corresponds to the highest 
-value the user can select. The _new_with_range() variants take care of creating
+value the user can select. The _new_with_range()ï¿½variants take care of creating
 a suitable adjustment. (If you're <emphasis>already</emphasis> thoroughly
 confused, read the section on <link linkend="ch-Adjustments">Adjustments</link> 
 again for an explanation of what exactly adjustments do and how to create and 
@@ -5519,7 +5519,7 @@ example code.</para>
 <programlisting role="C">
 <!-- example-start calendar calendar.c -->
 /*
- * Copyright (C) 1998 Cesar Miquel, Shawn T. Amundson, Mattias Grönlund
+ * Copyright (C) 1998 Cesar Miquel, Shawn T. Amundson, Mattias Grï¿½nlund
  * Copyright (C) 2000 Tony Gale
  *
  * This program is free software; you can redistribute it and/or modify
@@ -11943,7 +11943,7 @@ gtk_dial_realize (GtkWidget *widget)
   attributes.colormap = gtk_widget_get_colormap (widget);
 
   attributes_mask = GDK_WA_X | GDK_WA_Y | GDK_WA_VISUAL | GDK_WA_COLORMAP;
-  widget->window = gdk_window_new (widget->parent->window, &amp;attributes, attributes_mask);
+  widget->window = gdk_window_new (gtk_widget_get_parent_window (widget), &amp;attributes, attributes_mask);
 
   widget->style = gtk_style_attach (widget->style, widget->window);
 
