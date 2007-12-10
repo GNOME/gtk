@@ -64,6 +64,15 @@
   if (!(private->event_mask & GDK_EXPOSURE_MASK))
     return;
 
+  /* For some reason, we occasionally get draw requests for zero sized rects
+   * at 0,0, just ignore those.
+   */
+  if (rect.origin.x == 0 && rect.origin.y == 0 &&
+      rect.size.width == 0 && rect.size.height == 0)
+    {
+      return;
+    }
+
   GDK_QUARTZ_ALLOC_POOL;
 
   [self getRectsBeingDrawn:&drawn_rects count:&count];
