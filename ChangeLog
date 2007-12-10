@@ -2,6 +2,21 @@
 
 	Merged from trunk:
 
+	* gdk/quartz/gdkdrawable-quartz.c:
+	(gdk_quartz_drawable_get_context),
+	(gdk_quartz_drawable_release_context):
+	* gdk/quartz/gdkeventloop-quartz.c: (gdk_event_prepare),
+	(gdk_event_check), (gdk_event_dispatch), (poll_func):
+	* gdk/quartz/gdkwindow-quartz.h: Replace the autorelease pools
+	used for each drawing context and in prepare, dispatch and poll
+	with one that exists across each main loop iteration. Fixes leaks
+	on leopard and protects against future leaks introduce when the
+	underlying system changes again (bug #492977).
+
+2007-12-10  Richard Hult  <richard@imendio.com>
+
+	Merged from trunk:
+
 	* gdk/quartz/gdkwindow-quartz.c: (move_resize_window_internal):
 	Fix the check for no changes to position and size.
 
