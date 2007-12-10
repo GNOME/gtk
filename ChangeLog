@@ -1,3 +1,10 @@
+2007-12-10  Matthias Clasen  <mclasen@redhat.com>
+
+	Merged from trunk:
+
+	* gtk/gtknotebook.c (gtk_notebook_real_remove): Another fix
+	to avoid further fallout from the fix for bug 388321.
+
 2007-12-07  Matthias Clasen  <mclasen@redhat.com>
 
 	Merged from trunk:
