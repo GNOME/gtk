@@ -4349,12 +4349,15 @@ gtk_notebook_real_remove (GtkNotebook *notebook,
   gtk_widget_unparent (page->child);
 
   tab_label = page->tab_label;
-  g_object_ref (tab_label);
-  gtk_notebook_remove_tab_label (notebook, page);
-  if (destroying)
-    gtk_widget_destroy (tab_label);
-  g_object_unref (tab_label);
-  
+  if (tab_label)
+    {
+      g_object_ref (tab_label);
+      gtk_notebook_remove_tab_label (notebook, page);
+      if (destroying)
+        gtk_widget_destroy (tab_label);
+      g_object_unref (tab_label);
+    } 
+
   if (notebook->menu)
     {
       gtk_container_remove (GTK_CONTAINER (notebook->menu), 
