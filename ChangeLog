@@ -2,6 +2,13 @@
 
 	Merged from trunk:
 
+	* gdk/quartz/gdkwindow-quartz.c: (move_resize_window_internal):
+	Fix the check for no changes to position and size.
+
+2007-12-10  Richard Hult  <richard@imendio.com>
+
+	Merged from trunk:
+
 	* gdk/quartz/GdkQuartzView.c: Ignore drawRect calls with zero
 	sized areas at (0, 0), patch from Paul Davis.
 

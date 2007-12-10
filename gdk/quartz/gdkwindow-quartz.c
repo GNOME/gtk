@@ -1162,10 +1162,10 @@ move_resize_window_internal (GdkWindow *window,
 
   impl = GDK_WINDOW_IMPL_QUARTZ (private->impl);
 
-  if ((x == private->x) &&
-      (y == private->y) &&
-      (width == impl->width) &&
-      (height == impl->height))
+  if ((x == -1 || (x == private->x)) &&
+      (y == -1 || (y == private->y)) &&
+      (width == -1 || (width == impl->width)) &&
+      (height == -1 || (height == impl->height)))
     {
       return;
     }
