@@ -53,6 +53,7 @@ rm $DEVZIP
 zip -r $DEVZIP -@ <<EOF
 include/gtk-2.0
 bin/gdk-pixbuf-csource.exe
+bin/gtk-builder-convert
 bin/gtk-demo.exe
 man/man1/gdk-pixbuf-csource.1
 lib/libgdk_pixbuf-@GTK_API_VERSION@.dll.a
