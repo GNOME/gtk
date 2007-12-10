@@ -1,5 +1,12 @@
 2007-12-10  Richard Hult  <richard@imendio.com>
 
+	* gdk/quartz/Makefile.am:
+	* gdk/quartz/gdkquartz.h:
+	* gdk/quartz/gdkwindow-quartz.c: Install backend specific
+	header (bug #405915). Also add a getter for the toplevel nswindow.
+
+2007-12-10  Richard Hult  <richard@imendio.com>
+
 	* gdk/quartz/gdkdrawable-quartz.c:
 	(gdk_quartz_drawable_get_context),
 	(gdk_quartz_drawable_release_context):

@@ -52,3 +52,7 @@ libgdk_quartz_la_SOURCES =    	\
 	gdkwindow-quartz.c	\
 	gdkwindow-quartz.h	\
 	xcursors.h
+
+libgdkinclude_HEADERS = 	\
+	gdkquartz.h
+

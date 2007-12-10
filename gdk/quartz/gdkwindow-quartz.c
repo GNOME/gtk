@@ -44,7 +44,21 @@ gdk_quartz_window_get_nsview (GdkWindow *window)
 {
   GdkWindowObject *private = (GdkWindowObject *)window;
 
+  if (GDK_WINDOW_DESTROYED (window))
+    return NULL;
+
   return ((GdkWindowImplQuartz *)private->impl)->view;
+}
+
+NSWindow *
+gdk_quartz_window_get_nswindow (GdkWindow *window)
+{
+  GdkWindowObject *private = (GdkWindowObject *)window;
+
+  if (GDK_WINDOW_DESTROYED (window))
+    return NULL;
+
+  return ((GdkWindowImplQuartz *)private->impl)->toplevel;
 }
 
 static void
