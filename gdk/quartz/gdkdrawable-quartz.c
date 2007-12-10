@@ -687,14 +687,8 @@ gdk_quartz_drawable_get_context (GdkDrawable *drawable,
        */
       if (window_impl->in_paint_rect_count == 0)
 	{
-	  window_impl->pool = [[NSAutoreleasePool alloc] init];
 	  if (![window_impl->view lockFocusIfCanDraw])
-	    {
-	      [window_impl->pool release];
-	      window_impl->pool = NULL;
-
-	      return NULL;
-	    }
+            return NULL;
 	}
 
       cg_context = [[NSGraphicsContext currentContext] graphicsPort];
@@ -767,15 +761,7 @@ gdk_quartz_drawable_release_context (GdkDrawable  *drawable,
 
       /* See comment in gdk_quartz_drawable_get_context(). */
       if (window_impl->in_paint_rect_count == 0)
-	{
-	  [window_impl->view unlockFocus];
-
-	  if (window_impl->pool)
-	    {
-	      [window_impl->pool release];
-	      window_impl->pool = NULL;
-	    }
-	}
+        [window_impl->view unlockFocus];
     }
   else if (GDK_IS_PIXMAP_IMPL_QUARTZ (drawable))
     CGContextRelease (cg_context);
