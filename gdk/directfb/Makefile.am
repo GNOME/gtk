@@ -41,7 +41,8 @@ libgdk_directfb_la_SOURCES =	\
 	gdkproperty-directfb.c	\
 	gdkscreen-directfb.c	\
 	gdkselection-directfb.c	\
-	gdkspawn-directfb.c     \
+	gdkspawn-directfb.c 	\
+	gdktestutils-directfb.c	\
 	gdkvisual-directfb.c	\
 	gdkdirectfb.h		\
 	gdkwindow-directfb.c	\

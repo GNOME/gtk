@@ -1,5 +1,11 @@
 2007-12-11  Attilio Fiandrotti  <attilio.fiandrotti@gmail.com>
 
+	* gdk/directfb/gdktestutils-directfb.c:
+	* gdk/directfb/Makefile.am: Applied a patch by Claudio Ciccani
+	which adds testing functions to the DirectFB backend.
+
+2007-12-11  Attilio Fiandrotti  <attilio.fiandrotti@gmail.com>
+
 	* gdk/directfb/gdkdrawable-directfb.c: Applied a patch by Claudio
 	Ciccani	which fixes the mixing of gdk and cairo rendering.
 
