@@ -1,3 +1,8 @@
+2007-12-11  Attilio Fiandrotti  <attilio.fiandrotti@gmail.com>
+
+	* gdk/directfb/gdkdrawable-directfb.c: Applied a patch by Claudio
+	Ciccani	which fixes the mixing of gdk and cairo rendering.
+
 2007-12-11  Mathias Hasselmann  <mathias@openismus.com>
 
 	* gtk/gtkdnd.c, gtk/gtkwidget.c: Mention impact of GtkDestDefaults

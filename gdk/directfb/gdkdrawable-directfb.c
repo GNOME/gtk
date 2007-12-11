@@ -1542,27 +1542,39 @@ gdk_directfb_cairo_surface_destroy (void *data)
 static cairo_surface_t *
 gdk_directfb_ref_cairo_surface (GdkDrawable *drawable)
 {
-    g_return_val_if_fail (GDK_IS_DRAWABLE (drawable), NULL);
-    g_return_val_if_fail (GDK_IS_DRAWABLE_IMPL_DIRECTFB (drawable), NULL);
+  GdkDrawableImplDirectFB *impl;
+  IDirectFB               *dfb;
+  
+  g_return_val_if_fail (GDK_IS_DRAWABLE (drawable), NULL);
+  g_return_val_if_fail (GDK_IS_DRAWABLE_IMPL_DIRECTFB (drawable), NULL);
 
-    GdkDrawableImplDirectFB *impl = GDK_DRAWABLE_IMPL_DIRECTFB (drawable);
-    IDirectFB *dfb = GDK_DISPLAY_DFB(gdk_drawable_get_display(drawable))->directfb;
-    if (!impl->cairo_surface) {
-//      IDirectFBSurface *surface;
-     // if (impl->surface->GetSubSurface (impl->surface, NULL, &surface) == DFB_OK) {
-        //impl->cairo_surface = cairo_directfb_surface_create (dfb, surface);
-        g_assert( impl->surface != NULL);
-        impl->cairo_surface = cairo_directfb_surface_create (dfb,impl->surface);
-        g_assert( impl->cairo_surface != NULL);
+  impl = GDK_DRAWABLE_IMPL_DIRECTFB (drawable);
+  dfb = GDK_DISPLAY_DFB(gdk_drawable_get_display(drawable))->directfb;
+  
+  if (!impl->cairo_surface) {
+    IDirectFBSurface *surface;
+    g_assert (impl->surface != NULL);
+#if defined(CAIRO_VERSION_CODE) && CAIRO_VERSION_CODE >= CAIRO_VERSION_ENCODE(1,5,5)
+    impl->surface->GetSubSurface (impl->surface, NULL, &surface);
+#else
+    surface = impl->surface;
+#endif
+    if (surface) {
+      impl->cairo_surface = cairo_directfb_surface_create (dfb, surface);
+      if (impl->cairo_surface) {
         cairo_surface_set_user_data (impl->cairo_surface, 
                                      &gdk_directfb_cairo_key, drawable, 
                                      gdk_directfb_cairo_surface_destroy);
-       // surface->Release (surface);
-      //}
-    } else {
-        cairo_surface_reference (impl->cairo_surface);
+      }
+#if defined(CAIRO_VERSION_CODE) && CAIRO_VERSION_CODE >= CAIRO_VERSION_ENCODE(1,5,5)
+      surface->Release (surface);
+#endif
     }
-  g_assert( impl->cairo_surface != NULL);
+  } else {
+    cairo_surface_reference (impl->cairo_surface);
+  }
+  
+  g_assert (impl->cairo_surface != NULL);
   return impl->cairo_surface;
 }
 
