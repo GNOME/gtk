@@ -1,3 +1,8 @@
+2007-12-11  Mathias Hasselmann  <mathias@openismus.com>
+
+	* docs/reference/gtk/tmpl/gtkdnd.sgml:
+	Move documentation for gtk_drag_dest_set to gtkdnd.c.
+
 2007-11-30  Matthias Clasen <mclasen@redhat.com>
 
 	* gkt/question-index.sgml: Correct a typo. (#500686, 
