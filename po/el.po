@@ -29,7 +29,7 @@ msgstr ""
 "Project-Id-Version: el\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2007-12-11 09:48+0200\n"
-"PO-Revision-Date: 2007-12-11 09:51+0200\n"
+"PO-Revision-Date: 2007-12-11 10:06+0200\n"
 "Last-Translator: Kostas Papadimas <pkst@gnome.org>\n"
 "Language-Team: Greek <team@gnome.gr>\n"
 "MIME-Version: 1.0\n"
@@ -2383,7 +2383,7 @@ msgstr "_Πλάτος:"
 
 #: ../gtk/gtkpagesetupunixdialog.c:1941
 msgid "_Height:"
-msgstr "_Ύψος:"
+msgstr "Ύ_ψος:"
 
 #: ../gtk/gtkpagesetupunixdialog.c:1953
 msgid "Paper Size"
@@ -2427,7 +2427,7 @@ msgstr "Μη διαθέσιμο"
 
 #: ../gtk/gtkprinteroptionwidget.c:798
 msgid "_Save in folder:"
-msgstr "Αποθ_ήκευση σε φάκελο:"
+msgstr "Αποθήκευ_ση σε φάκελο:"
 
 #. translators: this string is the default job title for print
 #. * jobs. %s gets replaced by the application name, %d gets replaced
@@ -2886,7 +2886,7 @@ msgstr "_Εφαρμογή"
 
 #: ../gtk/gtkstock.c:299
 msgid "_Bold"
-msgstr "_Έντονα"
+msgstr "Έν_τονα"
 
 #: ../gtk/gtkstock.c:300
 msgid "_Cancel"
@@ -3154,7 +3154,7 @@ msgstr "_Ιδιότητες"
 
 #: ../gtk/gtkstock.c:382
 msgid "_Quit"
-msgstr "_Έξοδος"
+msgstr "Έ_ξοδος"
 
 #: ../gtk/gtkstock.c:383
 msgid "_Redo"
@@ -3238,7 +3238,7 @@ msgstr "Μεγέ_θυνση"
 
 #: ../gtk/gtkstock.c:404
 msgid "Zoom _Out"
-msgstr "Σμ_ίκρυνση"
+msgstr "Σμίκ_ρυνση"
 
 #: ../gtk/gtktextbufferrichtext.c:651
 #, c-format
