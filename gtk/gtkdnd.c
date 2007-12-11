@@ -1071,26 +1071,37 @@ gtk_drag_dest_set_internal (GtkWidget       *widget,
   g_object_set_data_full (G_OBJECT (widget), I_("gtk-drag-dest"),
 			  site, gtk_drag_dest_site_destroy);
 }
-			    
 
-/*************************************************************
+/**
  * gtk_drag_dest_set:
- *     Register a drop site, and possibly add default behaviors.
- *   arguments:
- *     widget:    
- *     flags:     Which types of default drag behavior to use
- *     targets:   Table of targets that can be accepted
- *     n_targets: Number of of entries in targets
- *     actions:   
- *   results:
- *************************************************************/
-
-void 
-gtk_drag_dest_set   (GtkWidget            *widget,
-		     GtkDestDefaults       flags,
-		     const GtkTargetEntry *targets,
-		     gint                  n_targets,
-		     GdkDragAction         actions)
+ * @widget: a #GtkWidget
+ * @flags: which types of default drag behavior to use
+ * @targets: a pointer to an array of #GtkTargetEntry<!-- -->s indicating
+ * the drop types that this @widget will accept.
+ * @n_targets: the number of entries in @targets.
+ * @actions: a bitmask of possible actions for a drop onto this @widget.
+ *
+ * Sets a widget as a potential drop destination, and adds default behaviors.
+ *
+ * The default behaviors listed in @flags have an effect similar
+ * to installing default handlers for the widget's drag-and-drop signals
+ * (#GtkWidget:drag-motion, #GtkWidget:drag-drop, ...). They are exist for
+ * convenience, but have to be selected carefully as some of those default
+ * behaviors make assumptions, that can conflict with your own signal handlers.
+ * For instance the default behaviors implied by #GTK_DEST_DEFAULT_DROP,
+ * #GTK_DEST_DEFAULT_MOTION and #GTK_DEST_DEFAULT_ALL, use #gdk_drag_status
+ * and gtk_drag_finish() in a way that conflicts with #GtkWidget:drag-motion
+ * handlers calling gtk_drag_get_data() to inspect the dragged data.
+ *
+ * The list of @targets can be retrieved with gtk_drag_dest_get_target_list(),
+ * or gtk_drag_dest_find_target().
+ */
+void
+gtk_drag_dest_set (GtkWidget            *widget,
+		   GtkDestDefaults       flags,
+		   const GtkTargetEntry *targets,
+		   gint                  n_targets,
+		   GdkDragAction         actions)
 {
   GtkDragDestSite *site;
   

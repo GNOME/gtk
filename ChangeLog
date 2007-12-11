@@ -1,3 +1,9 @@
+2007-12-11  Mathias Hasselmann  <mathias@openismus.com>
+
+	* gtk/gtkdnd.c, gtk/gtkwidget.c: Mention impact of GtkDestDefaults
+	on "drag-motion" handlers. Clearify documentation for
+	gtk_drag_dest_set.
+
 2007-12-11 15:44:01  Tim Janik  <timj@imendio.com>
 
         * buildertest.c: made unnecessarily exported symbols static.

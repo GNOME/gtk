@@ -1658,27 +1658,31 @@ gtk_widget_class_init (GtkWidgetClass *klass)
    * @time: the timestamp of the motion event
    * @returns: whether the cursor position is in a drop zone
    *
-   * The ::drag-motion signal is emitted on the drop site when the user 
-   * moves the cursor over the widget during a drag. The signal handler 
-   * must determine whether the cursor position is in a drop zone or not. 
-   * If it is not in a drop zone, it returns %FALSE and no further processing 
-   * is necessary. Otherwise, the handler returns %TRUE. In this case, the 
-   * handler is responsible for providing the necessary information for 
-   * displaying feedback to the user, by calling gdk_drag_status(). If the 
-   * decision whether the drop will be accepted or rejected can't be made
-   * based solely on the cursor position and the type of the data, the handler 
-   * may inspect the dragged data by calling gtk_drag_get_data() and defer the 
-   * gdk_drag_status() call to the #GtkWidget::drag-data-received handler. 
+   * The drag-motion signal is emitted on the drop site when the user
+   * moves the cursor over the widget during a drag. The signal handler
+   * must determine whether the cursor position is in a drop zone or not.
+   * If it is not in a drop zone, it returns %FALSE and no further processing
+   * is necessary. Otherwise, the handler returns %TRUE. In this case, the
+   * handler is responsible for providing the necessary information for
+   * displaying feedback to the user, by calling gdk_drag_status().
    *
-   * Note that there is no drag-enter signal. The drag receiver has to keep 
-   * track of whether he has received any drag-motion signals since the last 
-   * #GtkWidget::drag-leave and if not, treat the drag-motion signal as an 
-   * "enter" signal. Upon an "enter", the handler will typically highlight 
+   * If the decision whether the drop will be accepted or rejected can't be
+   * made based solely on the cursor position and the type of the data, the
+   * handler may inspect the dragged data by calling gtk_drag_get_data() and
+   * defer the gdk_drag_status() call to the #GtkWidget::drag-data-received
+   * handler. Note that you cannot not pass #GTK_DEST_DEFAULT_DROP,
+   * #GTK_DEST_DEFAULT_MOTION or #GTK_DEST_DEFAULT_ALL to gtk_drag_dest_set()
+   * when using the drag-motion signal that way.
+   *
+   * Also note that there is no drag-enter signal. The drag receiver has to
+   * keep track of whether he has received any drag-motion signals since the
+   * last #GtkWidget::drag-leave and if not, treat the drag-motion signal as
+   * an "enter" signal. Upon an "enter", the handler will typically highlight
    * the drop site with gtk_drag_highlight().
    * |[
    * static void
    * drag_motion (GtkWidget *widget,
-   *       	  GdkDragContext *context,
+   *              GdkDragContext *context,
    *              gint x,
    *              gint y,
    *              guint time)
