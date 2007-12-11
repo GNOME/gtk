@@ -1,3 +1,13 @@
+2007-12-11 15:44:01  Tim Janik  <timj@imendio.com>
+
+        * buildertest.c: made unnecessarily exported symbols static.
+        switched g_return_if_fail() statements in tests to assertions.
+        special cased currently failing Widget/accesibility test to
+        run only for g_test_thorough(), so it doesn't break make check.
+        some coding style fixes.
+
+        * Makefile.am: added buildertest to TEST_PROGS.
+
 2007-12-11  Stefan Kost  <ensonic@users.sf.net>
 
 	* docs/tutorial/gtk-tut.sgml:
