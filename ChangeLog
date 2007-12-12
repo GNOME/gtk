@@ -1,3 +1,7 @@
+2007-12-12  Mathias Hasselmann  <mathias@openismus.com>
+
+	* gtk/gtkdnd.c: Another attempt to improve gtk_drag_dest_set docs.
+
 2007-12-11  Attilio Fiandrotti  <attilio.fiandrotti@gmail.com>
 
 	* gdk/directfb/gdktestutils-directfb.c:

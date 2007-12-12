@@ -1077,7 +1077,8 @@ gtk_drag_dest_set_internal (GtkWidget       *widget,
  * @widget: a #GtkWidget
  * @flags: which types of default drag behavior to use
  * @targets: a pointer to an array of #GtkTargetEntry<!-- -->s indicating
- * the drop types that this @widget will accept.
+ * the drop types that this @widget will accept. Later you can access the list
+ * with gtk_drag_dest_get_target_list() and gtk_drag_dest_find_target().
  * @n_targets: the number of entries in @targets.
  * @actions: a bitmask of possible actions for a drop onto this @widget.
  *
@@ -1085,16 +1086,19 @@ gtk_drag_dest_set_internal (GtkWidget       *widget,
  *
  * The default behaviors listed in @flags have an effect similar
  * to installing default handlers for the widget's drag-and-drop signals
- * (#GtkWidget:drag-motion, #GtkWidget:drag-drop, ...). They are exist for
- * convenience, but have to be selected carefully as some of those default
- * behaviors make assumptions, that can conflict with your own signal handlers.
- * For instance the default behaviors implied by #GTK_DEST_DEFAULT_DROP,
- * #GTK_DEST_DEFAULT_MOTION and #GTK_DEST_DEFAULT_ALL, use #gdk_drag_status
- * and gtk_drag_finish() in a way that conflicts with #GtkWidget:drag-motion
- * handlers calling gtk_drag_get_data() to inspect the dragged data.
+ * (#GtkWidget:drag-motion, #GtkWidget:drag-drop, ...). They all exist
+ * for convenience. When passing #GTK_DEST_DEFAULT_ALL for instance it is
+ * sufficient to connect to the widget's #GtkWidget::drag-data-received
+ * signal to get primitive, but consistent drag-and-drop support.
  *
- * The list of @targets can be retrieved with gtk_drag_dest_get_target_list(),
- * or gtk_drag_dest_find_target().
+ * Things become more complicated when you try to preview the dragged data,
+ * as described in the documentation for #GtkWidget:drag-motion. The default
+ * behaviors described by @flags make some assumptions, that can conflict
+ * with your own signal handlers. For instance #GTK_DEST_DEFAULT_DROP causes
+ * invokations of gdk_drag_status() in the context of #GtkWidget:drag-motion,
+ * and invokations of gtk_drag_finish() in #GtkWidget:drag-data-received.
+ * Especially the later is dramatic, when your own #GtkWidget:drag-motion
+ * handler calls gtk_drag_get_data() to inspect the dragged data.
  */
 void
 gtk_drag_dest_set (GtkWidget            *widget,
