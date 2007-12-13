@@ -51,6 +51,7 @@ enum
 {
   SIZE_CHANGED,
   COMPOSITED_CHANGED,
+  MONITORS_CHANGED,
   LAST_SIGNAL
 };
 
@@ -120,6 +121,28 @@ gdk_screen_class_init (GdkScreenClass *klass)
 		  G_OBJECT_CLASS_TYPE (klass),
 		  G_SIGNAL_RUN_LAST,
 		  G_STRUCT_OFFSET (GdkScreenClass, composited_changed),
+		  NULL, NULL,
+		  g_cclosure_marshal_VOID__VOID,
+		  G_TYPE_NONE,
+		  0);
+	
+  /**
+   * GdkScreen::monitors-changed:
+   * @screen: the object on which the signal is emitted
+   *
+   * The ::monitors_changed signal is emitted when the number, size
+   * or position of the monitors attached to the screen change. 
+   *
+   * Only for X for now. Future implementations for Win32 and
+   * OS X may be a possibility.
+   *
+   * Since: 2.14
+   */
+  signals[MONITORS_CHANGED] =
+    g_signal_new (g_intern_static_string ("monitors_changed"),
+		  G_OBJECT_CLASS_TYPE (klass),
+		  G_SIGNAL_RUN_LAST,
+		  G_STRUCT_OFFSET (GdkScreenClass, monitors_changed),
 		  NULL, NULL,
 		  g_cclosure_marshal_VOID__VOID,
 		  G_TYPE_NONE,

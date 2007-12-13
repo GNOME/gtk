@@ -58,6 +58,7 @@ struct _GdkScreenClass
 
   void (*size_changed) (GdkScreen *screen);
   void (*composited_changed) (GdkScreen *screen);
+  void (*monitors_changed) (GdkScreen *screen);
 };
 
 GType        gdk_screen_get_type              (void) G_GNUC_CONST;
@@ -93,6 +94,12 @@ gint          gdk_screen_get_monitor_at_point  (GdkScreen *screen,
 						gint       y);
 gint          gdk_screen_get_monitor_at_window (GdkScreen *screen,
 						GdkWindow *window);
+gint          gdk_screen_get_monitor_width_mm  (GdkScreen *screen,
+                                                gint       monitor_num);
+gint          gdk_screen_get_monitor_height_mm (GdkScreen *screen,
+                                                gint       monitor_num);
+gchar *       gdk_screen_get_monitor_plug_name (GdkScreen *screen,
+                                                gint       monitor_num);
 
 void          gdk_screen_broadcast_client_message  (GdkScreen       *screen,
 						    GdkEvent        *event);

@@ -58,6 +58,10 @@
 #include <X11/extensions/Xfixes.h>
 #endif
 
+#ifdef HAVE_RANDR
+#include <X11/extensions/Xrandr.h>
+#endif
+
 #include <X11/Xatom.h>
 
 typedef struct _GdkIOClosure GdkIOClosure;
@@ -2101,6 +2105,16 @@ gdk_event_translate (GdkDisplay *display,
 	  return_val = TRUE;
 	}
       else
+#endif
+#ifdef HAVE_RANDR
+      if (xevent->type - display_x11->xrandr_event_base == RRNotify)
+	{
+	    XRRNotifyEvent *notify = (XRRNotifyEvent *)xevent;
+	    
+	    if (screen)
+		_gdk_x11_screen_process_monitors_change (screen);
+	}
+      else 
 #endif
 #if defined(HAVE_XCOMPOSITE) && defined (HAVE_XDAMAGE) && defined (HAVE_XFIXES)
       if (display_x11->have_xdamage && window_private && window_private->composited &&

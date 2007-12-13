@@ -43,6 +43,8 @@ typedef struct _GdkScreenX11Class GdkScreenX11Class;
 #define GDK_IS_SCREEN_X11_CLASS(klass)   (G_TYPE_CHECK_CLASS_TYPE ((klass), GDK_TYPE_SCREEN_X11))
 #define GDK_SCREEN_X11_GET_CLASS(obj)    (G_TYPE_INSTANCE_GET_CLASS ((obj), GDK_TYPE_SCREEN_X11, GdkScreenX11Class))
 
+typedef struct _GdkX11Monitor GdkX11Monitor;
+
 struct _GdkScreenX11
 {
   GdkScreen parent_instance;
@@ -87,9 +89,9 @@ struct _GdkScreenX11
   XSettingsClient *xsettings_client;
   guint xsettings_in_init : 1;
   
-  /* Xinerama */
-  gint     num_monitors;
-  GdkRectangle *monitors;
+  /* Xinerama/RandR 1.2 */
+  gint		 n_monitors;
+  GdkX11Monitor	*monitors;
 
   /* Pango renderer object singleton */
   PangoRenderer *renderer;
@@ -124,6 +126,7 @@ void _gdk_x11_screen_size_changed           (GdkScreen *screen,
 					     XEvent    *event);
 void _gdk_x11_screen_process_owner_change (GdkScreen *screen,
 					   XEvent    *event);
+void _gdk_x11_screen_process_monitors_change (GdkScreen *screen);
 
 G_END_DECLS
 

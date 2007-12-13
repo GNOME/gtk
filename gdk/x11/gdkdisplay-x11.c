@@ -62,6 +62,10 @@
 #include <X11/extensions/Xdamage.h>
 #endif
 
+#ifdef HAVE_RANDR
+#include <X11/extensions/Xrandr.h>
+#endif
+
 
 static void   gdk_display_x11_dispose            (GObject            *object);
 static void   gdk_display_x11_finalize           (GObject            *object);
@@ -164,6 +168,21 @@ gdk_display_open (const gchar *display_name)
   /* Set up handlers for Xlib internal connections */
   XAddConnectionWatch (xdisplay, gdk_internal_connection_watch, NULL);
 #endif /* HAVE_X11R6 */
+  
+  /* RandR must be initialized before we initialize the screens */
+  display_x11->have_randr12 = FALSE;
+#ifdef HAVE_RANDR
+  if (XRRQueryExtension (display_x11->xdisplay,
+			 &display_x11->xrandr_event_base, &ignore))
+  {
+      int major, minor;
+      
+      XRRQueryVersion (display_x11->xdisplay, &major, &minor);
+
+      if ((major == 1 && minor >= 2) || major > 1)
+	  display_x11->have_randr12 = TRUE;
+  }
+#endif
   
   /* initialize the display's screens */ 
   display_x11->screens = g_new (GdkScreen *, ScreenCount (display_x11->xdisplay));

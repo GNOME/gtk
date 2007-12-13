@@ -1,3 +1,10 @@
+Thu Dec 13 13:14:50 2007  Søren Sandmann  <sandmann@redhat.com>
+
+	* Add RandR 1.2 support
+
+	- New monitors_changed signal - New API to get width/height of
+	  monitors, and the name of the plug
+
 2007-12-13  Kristian Rietveld  <kris@imendio.com>
 
 	* gtk/tests/liststore.c:

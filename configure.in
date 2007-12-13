@@ -1325,19 +1325,10 @@ if test "x$gdktarget" = "xx11"; then
   AM_CONDITIONAL(XINPUT_XFREE, test x$with_xinput = xxfree || test x$with_xinput = xyes)
 
   # Check for the RANDR extension
+  if $PKG_CONFIG --exists "xrandr >= 1.2" ; then
+     AC_DEFINE(HAVE_RANDR, 1, Have the Xrandr extension library)
 
-  have_randr=false
-  if $PKG_CONFIG --exists xrandr ; then
-    have_randr=true
-    X_PACKAGES="$X_PACKAGES xrandr"
-  else    
-    AC_CHECK_LIB(Xrandr, XRRUpdateConfiguration,
-       [AC_CHECK_HEADER(X11/extensions/Xrandr.h,
-          # RANDR requires RENDER
-          [have_randr=true
-          GTK_ADD_LIB(x_extra_libs, Xrender)
-          GTK_ADD_LIB(x_extra_libs, Xrandr)],
-	  :, [#include <X11/Xlib.h>])])
+     X_PACKAGES="$X_PACKAGES xrandr"
   fi
 
   if $have_randr ; then
