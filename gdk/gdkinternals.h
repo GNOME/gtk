@@ -29,6 +29,7 @@
 #include <gdk/gdktypes.h>
 #include <gdk/gdkwindow.h>
 #include <gdk/gdkprivate.h>
+#include <gio/gappinfo.h>
 
 #ifndef __GDK_INTERNALS_H__
 #define __GDK_INTERNALS_H__

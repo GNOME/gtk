@@ -1,3 +1,10 @@
+2007-12-13  Mathias Hasselmann  <mathias@openismus.com>
+
+	Make the code compile again after the GdkAppLaunchContext changes.
+
+	* configure.in: Add gio-2.0 to GDK_PACKAGES.
+	* gdk/gdkinternals.h: Include <gio/gappinfo.h>.
+
 2007-12-12  Matthias Clasen  <mclasen@redhat.com>
 
 	* gdk/gdkapplaunchcontext.c: Add docs

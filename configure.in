@@ -1477,7 +1477,7 @@ fi
 CFLAGS="$saved_cflags"
 LDFLAGS="$saved_ldflags"
 
-GDK_PACKAGES="$PANGO_PACKAGES"
+GDK_PACKAGES="$PANGO_PACKAGES gio-2.0"
 if test "x$gdktarget" = "xx11"; then
   GDK_PACKAGES="$GDK_PACKAGES $X_PACKAGES"
 fi
