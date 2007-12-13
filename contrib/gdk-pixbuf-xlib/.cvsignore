@@ -1,7 +1,0 @@
-Makefile
-Makefile.in
-*.la
-*.lo
-.libs
-.deps
-gdk-pixbuf-xlib-2.0.pc
