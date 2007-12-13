@@ -108,6 +108,16 @@ gdk_app_launch_context_init (GdkAppLaunchContext *context)
   context->priv->workspace = -1;
 }
 
+/**
+ * gdk_app_launch_context_set_display:
+ * @context: a #GdkAppLaunchContext
+ * @display: a #GdkDisplay
+ *
+ * Sets the display on which applications will be launched when
+ * using this context. See also gdk_app_launch_context_set_screen().
+ *
+ * Since: 2.16
+ */
 void
 gdk_app_launch_context_set_display (GdkAppLaunchContext *context,
 				    GdkDisplay          *display)
@@ -121,6 +131,18 @@ gdk_app_launch_context_set_display (GdkAppLaunchContext *context,
   if (display)
     context->priv->display = g_object_ref (display);
 }
+
+/**
+ * gdk_app_launch_context_set_screen:
+ * @context: a #GdkAppLaunchContext
+ * @screen: a #GdkScreen
+ *
+ * Sets the screen on which applications will be launched when
+ * using this context. See also gdk_app_launch_context_set_display().
+ * If both @screen and @display are set, the @screen takes priority.
+ *
+ * Since: 2.16
+ */
 void
 gdk_app_launch_context_set_screen (GdkAppLaunchContext *context,
 				   GdkScreen           *screen)
@@ -135,7 +157,19 @@ gdk_app_launch_context_set_screen (GdkAppLaunchContext *context,
     context->priv->screen = g_object_ref (screen);
 }
 
-
+/**
+ * gdk_app_launch_context_set_desktop:
+ * @context: a #GdkAppLaunchContext
+ * @desktop: the number of a workspace, or -1
+ *
+ * Sets the workspace on which applications will be launched when
+ * using this context when running under a window manager that 
+ * supports multiple workspaces, as described in the 
+ * <ulink url="http://www.freedesktop.org/Standards/wm-spec">Extended 
+ * Window Manager Hints</ulink>. 
+ *
+ * Since: 2.16
+ */
 void
 gdk_app_launch_context_set_desktop (GdkAppLaunchContext *context,
 				    gint                 desktop)
@@ -143,6 +177,16 @@ gdk_app_launch_context_set_desktop (GdkAppLaunchContext *context,
   context->priv->workspace = desktop;
 }
 
+/**
+ * gdk_app_launch_context_set_timestamp:
+ * @context: a #GdkAppLaunchContext
+ * @timestamp: a timestamp
+ *
+ * Sets the timestamp of @context. The timestamp should ideally
+ * be taken from the event that triggered the launch.
+ *
+ * Since: 2.16
+ */
 void
 gdk_app_launch_context_set_timestamp (GdkAppLaunchContext *context,
 				      guint32              timestamp)
@@ -150,6 +194,16 @@ gdk_app_launch_context_set_timestamp (GdkAppLaunchContext *context,
   context->priv->timestamp = timestamp;
 }
 
+/**
+ * gdk_app_launch_context_set_icon:
+ * @context: a #GdkAppLaunchContext
+ * @icon: a #GIcon, or %NULL
+ *
+ * Sets the icon for applications that are launched with this
+ * context. See also gdk_app_launch_context_set_icon_name().
+ *
+ * Since: 2.16
+ */
 void
 gdk_app_launch_context_set_icon (GdkAppLaunchContext *context, 
                                  GIcon               *icon)
@@ -164,6 +218,19 @@ gdk_app_launch_context_set_icon (GdkAppLaunchContext *context,
     context->priv->icon = g_object_ref (icon);
 }
 
+/**
+ * gdk_app_launch_context_set_icon_name:
+ * @context: a #GdkAppLaunchContext
+ * @icon_name: an icon name, or %NULL
+ *
+ * Sets the icon for applications that are launched with this
+ * context. The @icon_name will be interpreted in the same way 
+ * as the Icon field in desktop files. 
+ * See also gdk_app_launch_context_set_icon(). If both @icon 
+ * and @icon_name are set, the @icon_name takes priority.
+ * 
+ * Since: 2.16
+ */
 void
 gdk_app_launch_context_set_icon_name (GdkAppLaunchContext *context,
 				      const char          *icon_name)
@@ -172,12 +239,22 @@ gdk_app_launch_context_set_icon_name (GdkAppLaunchContext *context,
   context->priv->icon_name = g_strdup (icon_name);
 }
 
+/**
+ * gdk_app_launch_context_new:
+ *
+ * Creates a new #GdkAppLaunchContext.
+ *
+ * Returns: a new #GdkAppLaunchContext
+ *
+ * Since: 2.16
+ */
 GdkAppLaunchContext *
 gdk_app_launch_context_new (void)
 {
   GdkAppLaunchContext *context;
 
   context = g_object_new (gdk_app_launch_context_get_type (), NULL);
+
   return context;
 }
 

@@ -1334,3 +1334,16 @@ GDK_HAVE_WCTYPE_H
 gdk_iswalnum
 gdk_iswspace
 </SECTION>
+
+<SECTION>
+<INCLUDE>gdk/gdkapplaunchcontext.h</INCLUDE>
+<TITLE>Application launching</TITLE>
+<FILE>gdkapplaunchcontext</FILE>
+gdk_app_launch_context_new
+gdk_app_launch_context_set_display
+gdk_app_launch_context_set_screen
+gdk_app_launch_context_set_desktop
+gdk_app_launch_context_set_timestamp
+gdk_app_launch_context_set_icon
+gdk_app_launch_context_set_icon_name
+</SECTION>

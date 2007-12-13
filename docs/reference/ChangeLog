@@ -1,3 +1,8 @@
+2007-12-12  Matthias Clasen  <mclasen@redhat.com>
+
+	* gdk/gdk-docs.sgml:
+	* gdk/gdk-sections.txt: Add GdkAppLaunchContext
+
 2007-12-11  Mathias Hasselmann  <mathias@openismus.com>
 
 	* docs/reference/gtk/tmpl/gtkdnd.sgml:

@@ -1,5 +1,9 @@
 2007-12-12  Matthias Clasen  <mclasen@redhat.com>
 
+	* gdk/gdkapplaunchcontext.c: Add docs
+
+2007-12-12  Matthias Clasen  <mclasen@redhat.com>
+
 	* gdk/gdkapplaunchcontext.[hc]: Implement GAppLaunchContext 
 	in gdk, providing startup notification.  (#503203)
 
