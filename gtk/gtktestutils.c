@@ -64,6 +64,7 @@ gtk_test_init (int    *argcp,
   g_setenv ("GTK2_RC_FILES", "/dev/null", TRUE);
   gtk_disable_setlocale();
   setlocale (LC_ALL, "C");
+  g_test_bug_base ("http://bugzilla.gnome.org/show_bug.cgi?id=%s");
   gtk_init (argcp, argvp);
 }
 

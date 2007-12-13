@@ -683,6 +683,8 @@ scroll_new_row (ScrollFixture *fixture,
 	 * See #81627.
 	 */
 
+	g_test_bug ("81627");
+
 	gtk_widget_show_all (fixture->window);
 
 	while (gtk_events_pending ())
@@ -728,6 +730,8 @@ test_bug316689 (ScrollFixture *fixture,
 	 * See #316689.
 	 */
 
+	g_test_bug ("316689");
+
 	/* Scroll to some place close to the end */
 	path = gtk_tree_path_new_from_indices (N_ROWS - 4, -1);
 	scroll (fixture, path, FALSE, 0.0);
@@ -766,6 +770,7 @@ test_bug359231 (void)
 	ScrollFixture *fixture;
 
 	/* See #359231. */
+	g_test_bug ("359231");
 
 	/* Create model (GtkTreeStore in this case) */
 	store = gtk_tree_store_new (1, G_TYPE_STRING);

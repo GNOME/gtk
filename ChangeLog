@@ -1,5 +1,13 @@
 2007-12-13  Kristian Rietveld  <kris@imendio.com>
 
+	* gtk/gtktestutils.c (gtk_test_init): add a call to
+	g_test_bug_base().
+
+	* gtk/tests/treeview-scrolling.c: add g_test_bug() calls to
+	appriopriate tests.
+
+2007-12-13  Kristian Rietveld  <kris@imendio.com>
+
 	* gtk/tests/liststore.c:
 	* gtk/tests/treestore.c: start composing tests for the list and tree
 	store.
