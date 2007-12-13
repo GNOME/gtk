@@ -19,8 +19,6 @@
  */
 
 /* To do:
- *  - We probably want to do all move and swap tests on a 1-item list store
- *    also.
  *  - Test implementations of the interfaces: DnD, sortable, buildable
  *    and the tree model interface itself?
  *  - Need to check if the emitted signals are right.
@@ -273,6 +271,30 @@ list_store_test_swap_end (ListStore     *fixture,
   check_model (fixture, new_order, -1);
 }
 
+static void
+list_store_test_swap_single (void)
+{
+  GtkTreeIter iter;
+  GtkTreeIter iter_copy;
+  GtkListStore *store;
+
+  store = gtk_list_store_new (1, G_TYPE_INT);
+
+  /* Check if swap on a store with a single node does not corrupt
+   * the store.
+   */
+
+  gtk_list_store_append (store, &iter);
+  iter_copy = iter;
+
+  gtk_list_store_swap (store, &iter, &iter);
+  g_assert (iters_equal (&iter, &iter_copy));
+  g_assert (gtk_tree_model_get_iter_first (GTK_TREE_MODEL (store), &iter));
+  g_assert (iters_equal (&iter, &iter_copy));
+
+  g_object_unref (store);
+}
+
 /* move after */
 
 static void
@@ -394,6 +416,35 @@ list_store_test_move_after_NULL (ListStore     *fixture,
   check_model (fixture, new_order, -1);
 }
 
+static void
+list_store_test_move_after_single (void)
+{
+  GtkTreeIter iter;
+  GtkTreeIter iter_copy;
+  GtkListStore *store;
+
+  store = gtk_list_store_new (1, G_TYPE_INT);
+
+  /* Check if move-after on a store with a single node does not corrupt
+   * the store.
+   */
+
+  gtk_list_store_append (store, &iter);
+  iter_copy = iter;
+
+  gtk_list_store_move_after (store, &iter, NULL);
+  g_assert (iters_equal (&iter, &iter_copy));
+  g_assert (gtk_tree_model_get_iter_first (GTK_TREE_MODEL (store), &iter));
+  g_assert (iters_equal (&iter, &iter_copy));
+
+  gtk_list_store_move_after (store, &iter, &iter);
+  g_assert (iters_equal (&iter, &iter_copy));
+  g_assert (gtk_tree_model_get_iter_first (GTK_TREE_MODEL (store), &iter));
+  g_assert (iters_equal (&iter, &iter_copy));
+
+  g_object_unref (store);
+}
+
 /* move before */
 
 static void
@@ -496,6 +547,35 @@ list_store_test_move_before_NULL (ListStore     *fixture,
   check_model (fixture, new_order, -1);
 }
 
+static void
+list_store_test_move_before_single (void)
+{
+  GtkTreeIter iter;
+  GtkTreeIter iter_copy;
+  GtkListStore *store;
+
+  store = gtk_list_store_new (1, G_TYPE_INT);
+
+  /* Check if move-before on a store with a single node does not corrupt
+   * the store.
+   */
+
+  gtk_list_store_append (store, &iter);
+  iter_copy = iter;
+
+  gtk_list_store_move_before (store, &iter, NULL);
+  g_assert (iters_equal (&iter, &iter_copy));
+  g_assert (gtk_tree_model_get_iter_first (GTK_TREE_MODEL (store), &iter));
+  g_assert (iters_equal (&iter, &iter_copy));
+
+  gtk_list_store_move_before (store, &iter, &iter);
+  g_assert (iters_equal (&iter, &iter_copy));
+  g_assert (gtk_tree_model_get_iter_first (GTK_TREE_MODEL (store), &iter));
+  g_assert (iters_equal (&iter, &iter_copy));
+
+  g_object_unref (store);
+}
+
 /* main */
 
 int
@@ -541,6 +621,8 @@ main (int    argc,
   g_test_add ("/list-store/swap-end", ListStore, NULL,
 	      list_store_setup, list_store_test_swap_end,
 	      list_store_teardown);
+  g_test_add_func ("/list-store/swap-single",
+		   list_store_test_swap_single);
 
   /* moving */
   g_test_add ("/list-store/move-after-from-start", ListStore, NULL,
@@ -564,6 +646,8 @@ main (int    argc,
   g_test_add ("/list-store/move-after-NULL", ListStore, NULL,
 	      list_store_setup, list_store_test_move_after_NULL,
 	      list_store_teardown);
+  g_test_add_func ("/list-store/move-after-single",
+		   list_store_test_move_after_single);
 
   g_test_add ("/list-store/move-before-next", ListStore, NULL,
 	      list_store_setup, list_store_test_move_before_next,
@@ -583,6 +667,8 @@ main (int    argc,
   g_test_add ("/list-store/move-before-NULL", ListStore, NULL,
 	      list_store_setup, list_store_test_move_before_NULL,
 	      list_store_teardown);
+  g_test_add_func ("/list-store/move-before-single",
+		   list_store_test_move_before_single);
 
   return g_test_run ();
 }

@@ -1,5 +1,11 @@
 2007-12-13  Kristian Rietveld  <kris@imendio.com>
 
+	* gtk/tests/liststore.c:
+	* gtk/tests/treestore.c: test the move and swap functions on a
+	store with only one node.
+
+2007-12-13  Kristian Rietveld  <kris@imendio.com>
+
 	* gtk/gtktestutils.c (gtk_test_init): add a call to
 	g_test_bug_base().
 

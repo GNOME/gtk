@@ -271,6 +271,30 @@ tree_store_test_swap_end (TreeStore     *fixture,
   check_model (fixture, new_order, -1);
 }
 
+static void
+tree_store_test_swap_single (void)
+{
+  GtkTreeIter iter;
+  GtkTreeIter iter_copy;
+  GtkTreeStore *store;
+
+  store = gtk_tree_store_new (1, G_TYPE_INT);
+
+  /* Check if swap on a store with a single node does not corrupt
+   * the store.
+   */
+
+  gtk_tree_store_append (store, &iter, NULL);
+  iter_copy = iter;
+
+  gtk_tree_store_swap (store, &iter, &iter);
+  g_assert (iters_equal (&iter, &iter_copy));
+  g_assert (gtk_tree_model_get_iter_first (GTK_TREE_MODEL (store), &iter));
+  g_assert (iters_equal (&iter, &iter_copy));
+
+  g_object_unref (store);
+}
+
 /* move after */
 
 static void
@@ -392,6 +416,35 @@ tree_store_test_move_after_NULL (TreeStore     *fixture,
   check_model (fixture, new_order, -1);
 }
 
+static void
+tree_store_test_move_after_single (void)
+{
+  GtkTreeIter iter;
+  GtkTreeIter iter_copy;
+  GtkTreeStore *store;
+
+  store = gtk_tree_store_new (1, G_TYPE_INT);
+
+  /* Check if move-after on a store with a single node does not corrupt
+   * the store.
+   */
+
+  gtk_tree_store_append (store, &iter, NULL);
+  iter_copy = iter;
+
+  gtk_tree_store_move_after (store, &iter, NULL);
+  g_assert (iters_equal (&iter, &iter_copy));
+  g_assert (gtk_tree_model_get_iter_first (GTK_TREE_MODEL (store), &iter));
+  g_assert (iters_equal (&iter, &iter_copy));
+
+  gtk_tree_store_move_after (store, &iter, &iter);
+  g_assert (iters_equal (&iter, &iter_copy));
+  g_assert (gtk_tree_model_get_iter_first (GTK_TREE_MODEL (store), &iter));
+  g_assert (iters_equal (&iter, &iter_copy));
+
+  g_object_unref (store);
+}
+
 /* move before */
 
 static void
@@ -494,6 +547,35 @@ tree_store_test_move_before_NULL (TreeStore     *fixture,
   check_model (fixture, new_order, -1);
 }
 
+static void
+tree_store_test_move_before_single (void)
+{
+  GtkTreeIter iter;
+  GtkTreeIter iter_copy;
+  GtkTreeStore *store;
+
+  store = gtk_tree_store_new (1, G_TYPE_INT);
+
+  /* Check if move-after on a store with a single node does not corrupt
+   * the store.
+   */
+
+  gtk_tree_store_append (store, &iter, NULL);
+  iter_copy = iter;
+
+  gtk_tree_store_move_before (store, &iter, NULL);
+  g_assert (iters_equal (&iter, &iter_copy));
+  g_assert (gtk_tree_model_get_iter_first (GTK_TREE_MODEL (store), &iter));
+  g_assert (iters_equal (&iter, &iter_copy));
+
+  gtk_tree_store_move_before (store, &iter, &iter);
+  g_assert (iters_equal (&iter, &iter_copy));
+  g_assert (gtk_tree_model_get_iter_first (GTK_TREE_MODEL (store), &iter));
+  g_assert (iters_equal (&iter, &iter_copy));
+
+  g_object_unref (store);
+}
+
 /* main */
 
 int
@@ -539,6 +621,8 @@ main (int    argc,
   g_test_add ("/tree-store/swap-end", TreeStore, NULL,
 	      tree_store_setup, tree_store_test_swap_end,
 	      tree_store_teardown);
+  g_test_add_func ("/tree-store/swap-single",
+		   tree_store_test_swap_single);
 
   /* moving */
   g_test_add ("/tree-store/move-after-from-start", TreeStore, NULL,
@@ -562,6 +646,8 @@ main (int    argc,
   g_test_add ("/tree-store/move-after-NULL", TreeStore, NULL,
 	      tree_store_setup, tree_store_test_move_after_NULL,
 	      tree_store_teardown);
+  g_test_add_func ("/tree-store/move-after-single",
+		   tree_store_test_move_after_single);
 
   g_test_add ("/tree-store/move-before-next", TreeStore, NULL,
 	      tree_store_setup, tree_store_test_move_before_next,
@@ -581,6 +667,8 @@ main (int    argc,
   g_test_add ("/tree-store/move-before-NULL", TreeStore, NULL,
 	      tree_store_setup, tree_store_test_move_before_NULL,
 	      tree_store_teardown);
+  g_test_add_func ("/tree-store/move-before-single",
+		   tree_store_test_move_before_single);
 
   return g_test_run ();
 }
