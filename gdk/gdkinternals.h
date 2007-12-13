@@ -409,6 +409,23 @@ void _gdk_windowing_gc_get_foreground (GdkGC    *gc,
 void _gdk_windowing_gc_get_background (GdkGC    *gc,
 				       GdkColor *color);
 
+struct GdkAppLaunchContextPrivate
+{
+  GdkDisplay *display;
+  GdkScreen *screen;
+  gint workspace;
+  guint32 timestamp;
+  GIcon *icon;
+  char *icon_name;
+};
+
+char *_gdk_windowing_get_startup_notify_id (GAppLaunchContext *context,
+					    GAppInfo          *info, 
+					    GList             *files);
+void  _gdk_windowing_launch_failed         (GAppLaunchContext *context, 
+				            const char        *startup_notify_id);
+
+
 /************************************
  * Initialization and exit routines *
  ************************************/

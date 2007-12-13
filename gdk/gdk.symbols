@@ -1254,6 +1254,18 @@ gdk_xid_table_lookup_for_display
 #endif
 #endif
 
+#if IN_HEADER(__GDK_APP_LAUNCH_CONTEXT_H__)
+#if IN_FILE(__GDK_APP_LAUNCH_CONTEXT_C__)
+gdk_app_launch_context_new
+gdk_app_launch_context_set_display
+gdk_app_launch_context_set_screen
+gdk_app_launch_context_set_desktop
+gdk_app_launch_context_set_timestamp
+gdk_app_launch_context_set_icon
+gdk_app_launch_context_set_icon_name
+#endif
+#endif
+
 #ifdef INCLUDE_VARIABLES
 gdk_threads_mutex
 gdk_threads_lock

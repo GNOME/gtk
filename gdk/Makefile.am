@@ -64,6 +64,7 @@ endif
 #
 gdk_public_h_sources =				\
 	gdk.h					\
+	gdkapplaunchcontext.h			\
 	gdkcairo.h				\
 	gdkcolor.h				\
 	gdkcursor.h				\
@@ -102,6 +103,7 @@ gdk_headers =                     \
 gdk_c_sources =                 \
 	$(medialib_sources)     \
 	gdk.c			\
+	gdkapplaunchcontext.c	\
 	gdkcairo.c		\
 	gdkcolor.c		\
 	gdkcursor.c		\

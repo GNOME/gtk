@@ -19,6 +19,7 @@ LDADDS = 		\
 noinst_LTLIBRARIES = libgdk-directfb.la
 
 libgdk_directfb_la_SOURCES =	\
+	gdkapplaunchcontext-directfb.c \
 	gdkcolor-directfb.c	\
 	gdkcursor-directfb.c	\
 	gdkdnd-directfb.c	\

@@ -19,6 +19,7 @@ noinst_LTLIBRARIES = libgdk-x11.la
 
 libgdk_x11_la_SOURCES =    	\
 	MwmUtil.h	   	\
+	gdkapplaunchcontext-x11.c \
 	gdkasync.c		\
 	gdkasync.h		\
 	gdkcolor-x11.c	   	\
