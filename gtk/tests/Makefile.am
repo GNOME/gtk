@@ -24,3 +24,15 @@ noinst_PROGRAMS = $(TEST_PROGS)
 TEST_PROGS       += testing
 testing_SOURCES	  = testing.c
 testing_LDADD	  = $(progs_ldadd)
+
+TEST_PROGS       += liststore
+liststore_SOURCES = liststore.c
+liststore_LDADD	  = $(progs_ldadd)
+
+TEST_PROGS       += treestore
+treestore_SOURCES = treestore.c
+treestore_LDADD	  = $(progs_ldadd)
+
+TEST_PROGS		       += treeview-scrolling
+treeview_scrolling_SOURCES	= treeview-scrolling.c
+treeview_scrolling_LDADD	= $(progs_ldadd)

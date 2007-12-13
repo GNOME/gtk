@@ -1,3 +1,14 @@
+2007-12-13  Kristian Rietveld  <kris@imendio.com>
+
+	* gtk/tests/liststore.c:
+	* gtk/tests/treestore.c: start composing tests for the list and tree
+	store.
+
+	* gtk/tests/treeview-scrolling.c: added automated tests for
+	GtkTreeView's scrolling "subsystem".
+
+	* gtk/tests/Makefile.am: updated; added new test programs.
+
 2007-12-13  Mathias Hasselmann  <mathias@openismus.com>
 
 	Make the code compile again after the GdkAppLaunchContext changes.
