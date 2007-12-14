@@ -274,7 +274,7 @@ gtk_tooltip_set_icon (GtkTooltip *tooltip,
 /**
  * gtk_tooltip_set_icon_from_stock:
  * @tooltip: a #GtkTooltip
- * @stock_id: a stock icon name, or %NULL
+ * @stock_id: a stock id, or %NULL
  * @size: a stock icon size
  *
  * Sets the icon of the tooltip (which is in front of the text) to be
@@ -293,6 +293,33 @@ gtk_tooltip_set_icon_from_stock (GtkTooltip  *tooltip,
   gtk_image_set_from_stock (GTK_IMAGE (tooltip->image), stock_id, size);
 
   if (stock_id)
+    gtk_widget_show (tooltip->image);
+  else
+    gtk_widget_hide (tooltip->image);
+}
+
+/**
+ * gtk_tooltip_set_icon_from_icon_name:
+ * @tooltip: a #GtkTooltip
+ * @icon_name: an icon name, or %NULL
+ * @size: a stock icon size
+ *
+ * Sets the icon of the tooltip (which is in front of the text) to be
+ * the icon indicated by @icon_name with the size indicated
+ * by @size.  If @icon_name is %NULL, the image will be hidden.
+ *
+ * Since: 2.16
+ */
+void
+gtk_tooltip_set_icon_from_icon_name(GtkTooltip  *tooltip,
+				    const gchar *icon_name,
+				    GtkIconSize  size)
+{
+  g_return_if_fail (GTK_IS_TOOLTIP (tooltip));
+
+  gtk_image_set_from_icon_name (GTK_IMAGE (tooltip->image), icon_name, size);
+
+  if (icon_name)
     gtk_widget_show (tooltip->image);
   else
     gtk_widget_hide (tooltip->image);

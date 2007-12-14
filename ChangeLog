@@ -1,3 +1,8 @@
+2007-12-14  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtk.symbols:
+	* gtk/gtktooltip.[hc]: Add gtk_tooltip_set_icon_from_icon_name().
+
 2007-12-14  Kristian Rietveld  <kris@imendio.com>
 
 	* gtk/tests/liststore.c:
