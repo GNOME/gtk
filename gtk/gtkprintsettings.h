@@ -49,10 +49,17 @@ GtkPrintSettings *gtk_print_settings_copy                    (GtkPrintSettings  
 
 GtkPrintSettings *gtk_print_settings_new_from_file           (const gchar          *file_name,
 							      GError              **error);
+gboolean          gtk_print_settings_load_file               (GtkPrintSettings     *settings,
+							      const gchar          *file_name,
+							      GError              **error);
 gboolean          gtk_print_settings_to_file                 (GtkPrintSettings     *settings,
 							      const gchar          *file_name,
 							      GError              **error);
 GtkPrintSettings *gtk_print_settings_new_from_key_file       (GKeyFile             *key_file,
+							      const gchar          *group_name,
+							      GError              **error);
+gboolean          gtk_print_settings_load_key_file           (GtkPrintSettings     *settings,
+							      GKeyFile             *key_file,
 							      const gchar          *group_name,
 							      GError              **error);
 void              gtk_print_settings_to_key_file             (GtkPrintSettings     *settings,

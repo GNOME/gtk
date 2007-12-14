@@ -82,12 +82,19 @@ gdouble            gtk_page_setup_get_page_height   (GtkPageSetup       *setup,
 /* Saving and restoring page setup */
 GtkPageSetup	  *gtk_page_setup_new_from_file	    (const gchar         *file_name,
 						     GError              **error);
+gboolean	   gtk_page_setup_load_file	    (GtkPageSetup        *setup,
+						     const char          *file_name,
+						     GError             **error);
 gboolean	   gtk_page_setup_to_file	    (GtkPageSetup        *setup,
 						     const char          *file_name,
 						     GError             **error);
 GtkPageSetup	  *gtk_page_setup_new_from_key_file (GKeyFile            *key_file,
 						     const gchar         *group_name,
 						     GError             **error);
+gboolean           gtk_page_setup_load_key_file     (GtkPageSetup        *setup,
+				                     GKeyFile            *key_file,
+				                     const gchar         *group_name,
+				                     GError             **error);
 void		   gtk_page_setup_to_key_file	    (GtkPageSetup        *setup,
 						     GKeyFile            *key_file,
 						     const gchar         *group_name);

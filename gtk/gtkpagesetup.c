@@ -471,6 +471,40 @@ gtk_page_setup_get_page_height (GtkPageSetup *setup,
   return _gtk_print_convert_from_mm (height, unit);
 }
 
+/**
+ * gtk_page_setup_load_file:
+ * @setup: a #GtkPageSetup
+ * @file_name: the filename to read the page setup from
+ * @error: return location for an error, or %NULL
+ *
+ * Reads the page setup from the file @file_name.
+ * See gtk_page_setup_load_file().
+ *
+ * Return value: %TRUE on success
+ *
+ * Since: 2.14
+ */
+gboolean
+gtk_page_setup_load_file (GtkPageSetup *setup,
+                          const gchar  *file_name,
+			  GError      **error)
+{
+  gboolean retval = FALSE;
+  GKeyFile *key_file;
+
+  g_return_val_if_fail (GTK_IS_PAGE_SETUP (setup), FALSE);
+  g_return_val_if_fail (file_name != NULL, FALSE);
+
+  key_file = g_key_file_new ();
+
+  if (g_key_file_load_from_file (key_file, file_name, 0, error) &&
+      gtk_page_setup_load_key_file (setup, key_file, NULL, error))
+    retval = TRUE;
+
+  g_key_file_free (key_file);
+
+  return retval;
+}
 
 /**
  * gtk_page_setup_new_from_file:
@@ -489,24 +523,15 @@ GtkPageSetup *
 gtk_page_setup_new_from_file (const gchar  *file_name,
 			      GError      **error)
 {
-  GtkPageSetup *page_setup;
-  GKeyFile *key_file;
-  GError *err = NULL;
+  GtkPageSetup *setup = gtk_page_setup_new ();
 
-  g_return_val_if_fail (file_name != NULL, NULL);
-
-  key_file = g_key_file_new ();
-  if (!g_key_file_load_from_file (key_file, file_name, 0, &err))
+  if (!gtk_page_setup_load_file (setup, file_name, error))
     {
-      g_key_file_free (key_file);
-      g_propagate_error (error, err);
-      return NULL;
+      g_object_unref (setup);
+      setup = NULL;
     }
 
-  page_setup = gtk_page_setup_new_from_key_file (key_file, NULL, error);
-  g_key_file_free (key_file);
-
-  return page_setup;
+  return setup;
 }
 
 /* something like this should really be in gobject! */
@@ -531,33 +556,34 @@ string_to_enum (GType type,
 }
 
 /**
- * gtk_page_setup_new_from_key_file:
+ * gtk_page_setup_load_key_file:
+ * @setup: a #GtkPageSetup
  * @key_file: the #GKeyFile to retrieve the page_setup from
  * @group_name: the name of the group in the key_file to read, or %NULL
  *              to use the default name "Page Setup"
  * @error: return location for an error, or %NULL
  * 
  * Reads the page setup from the group @group_name in the key file
- * @key_file. Returns a new #GtkPageSetup object with the restored
- * page setup, or %NULL if an error occurred.
- *
- * Return value: the restored #GtkPageSetup
+ * @key_file.
  * 
- * Since: 2.12
+ * Return value: %TRUE on success
+ *
+ * Since: 2.14
  */
-GtkPageSetup *
-gtk_page_setup_new_from_key_file (GKeyFile     *key_file,
-			          const gchar  *group_name,
-				  GError      **error)
+gboolean
+gtk_page_setup_load_key_file (GtkPageSetup *setup,
+                              GKeyFile     *key_file,
+                              const gchar  *group_name,
+                              GError      **error)
 {
-  GtkPageSetup *page_setup = NULL;
   GtkPaperSize *paper_size;
   gdouble top, bottom, left, right;
   char *orientation = NULL, *freeme = NULL;
-  gboolean retval = TRUE;
+  gboolean retval = FALSE;
   GError *err = NULL;
 
-  g_return_val_if_fail (key_file != NULL, NULL);
+  g_return_val_if_fail (GTK_IS_PAGE_SETUP (setup), FALSE);
+  g_return_val_if_fail (key_file != NULL, FALSE);
 
   if (!group_name)
     group_name = KEYFILE_GROUP_NAME;
@@ -568,7 +594,6 @@ gtk_page_setup_new_from_key_file (GKeyFile     *key_file,
 		   GTK_PRINT_ERROR,
 		   GTK_PRINT_ERROR_INVALID_FILE,
 		   _("Not a valid page setup file"));
-      retval = FALSE;
       goto out;
     }
 
@@ -577,7 +602,6 @@ gtk_page_setup_new_from_key_file (GKeyFile     *key_file,
   if (err != NULL) \
     { \
       g_propagate_error (error, err);\
-      retval = FALSE;\
       goto out;\
     }
 
@@ -595,29 +619,60 @@ gtk_page_setup_new_from_key_file (GKeyFile     *key_file,
       goto out;
     }
 
-  page_setup = gtk_page_setup_new ();
-  gtk_page_setup_set_paper_size (page_setup, paper_size);
+  gtk_page_setup_set_paper_size (setup, paper_size);
   gtk_paper_size_free (paper_size);
 
-  gtk_page_setup_set_top_margin (page_setup, top, GTK_UNIT_MM);
-  gtk_page_setup_set_bottom_margin (page_setup, bottom, GTK_UNIT_MM);
-  gtk_page_setup_set_left_margin (page_setup, left, GTK_UNIT_MM);
-  gtk_page_setup_set_right_margin (page_setup, right, GTK_UNIT_MM);
+  gtk_page_setup_set_top_margin (setup, top, GTK_UNIT_MM);
+  gtk_page_setup_set_bottom_margin (setup, bottom, GTK_UNIT_MM);
+  gtk_page_setup_set_left_margin (setup, left, GTK_UNIT_MM);
+  gtk_page_setup_set_right_margin (setup, right, GTK_UNIT_MM);
 
   orientation = g_key_file_get_string (key_file, group_name,
 				       "Orientation", NULL);
   if (orientation)
     {
-      gtk_page_setup_set_orientation (page_setup,
+      gtk_page_setup_set_orientation (setup,
 				      string_to_enum (GTK_TYPE_PAGE_ORIENTATION,
 						      orientation));
       g_free (orientation);
     }
 
+  retval = TRUE;
+
 out:
   g_free (freeme);
+  return retval;
+}
 
-  return page_setup;
+/**
+ * gtk_page_setup_new_from_key_file:
+ * @key_file: the #GKeyFile to retrieve the page_setup from
+ * @group_name: the name of the group in the key_file to read, or %NULL
+ *              to use the default name "Page Setup"
+ * @error: return location for an error, or %NULL
+ *
+ * Reads the page setup from the group @group_name in the key file
+ * @key_file. Returns a new #GtkPageSetup object with the restored
+ * page setup, or %NULL if an error occurred.
+ *
+ * Return value: the restored #GtkPageSetup
+ *
+ * Since: 2.12
+ */
+GtkPageSetup *
+gtk_page_setup_new_from_key_file (GKeyFile     *key_file,
+				  const gchar  *group_name,
+				  GError      **error)
+{
+  GtkPageSetup *setup = gtk_page_setup_new ();
+
+  if (!gtk_page_setup_load_key_file (setup, key_file, group_name, error))
+    {
+      g_object_unref (setup);
+      setup = NULL;
+    }
+
+  return setup;
 }
 
 /**

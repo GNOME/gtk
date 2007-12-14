@@ -1,3 +1,14 @@
+2007-12-14  Mathias Hasselmann  <mathias@openismus.com>
+
+	Extract loading of GtkPageSetup and GtkPrintSettings from their
+	*_new_*() functions and move that code into separate
+	*_load_*() functions (#475565).
+
+	* gtk/gtk.symbols, gtk/gtkpagesetup.c, gtk/gtkpagesetup.h:
+	Extract gtk_page_setup_load_file, gtk_page_setup_load_key_file,
+	gtk_print_settings_load_file and gtk_print_settings_load_key_file.
+	Change the matching *_new_*() functions to use those functions.
+
 2007-12-14  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtk.symbols:

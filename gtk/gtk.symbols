@@ -2580,6 +2580,8 @@ gtk_page_setup_get_type G_GNUC_CONST
 gtk_page_setup_new
 gtk_page_setup_new_from_file
 gtk_page_setup_new_from_key_file
+gtk_page_setup_load_file
+gtk_page_setup_load_key_file
 gtk_page_setup_to_file
 gtk_page_setup_to_key_file
 gtk_page_setup_copy
@@ -2847,6 +2849,8 @@ gtk_print_settings_get_type G_GNUC_CONST
 gtk_print_settings_new
 gtk_print_settings_new_from_file
 gtk_print_settings_new_from_key_file
+gtk_print_settings_load_file
+gtk_print_settings_load_key_file
 gtk_print_settings_to_file
 gtk_print_settings_to_key_file
 gtk_print_settings_copy
