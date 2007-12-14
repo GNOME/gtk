@@ -26,8 +26,6 @@
 #include <unistd.h>
 
 #include <glib.h>
-#include <gio/gfileicon.h>
-#include <gio/gthemedicon.h>
 
 #include "gdkx.h"
 #include "gdkapplaunchcontext.h"

@@ -1,3 +1,13 @@
+2007-12-14  Michael Natterer  <mitch@imendio.com>
+
+	* gdk/gdkinternals.h
+	* gdk/gdkapplaunchcontext.h: #include <gio/gio.h> instead of
+	individual files.
+
+	* gdk/gdkapplaunchcontext.c
+	* gdk/x11/gdkapplaunchcontext-x11.c: remove all gio includes, the
+	header already includes everything now.
+
 2007-12-14  Mathias Hasselmann  <mathias@openismus.com>
 
 	Correct "Since:" tags for GtkPageSetup and GtkPrintSettings as

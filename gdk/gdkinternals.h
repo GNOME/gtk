@@ -26,10 +26,10 @@
 
 /* Uninstalled header defining types and functions internal to GDK */
 
+#include <gio/gio.h>
 #include <gdk/gdktypes.h>
 #include <gdk/gdkwindow.h>
 #include <gdk/gdkprivate.h>
-#include <gio/gappinfo.h>
 
 #ifndef __GDK_INTERNALS_H__
 #define __GDK_INTERNALS_H__

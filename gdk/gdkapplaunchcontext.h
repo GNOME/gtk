@@ -24,7 +24,7 @@
 #define __GDK_APP_LAUNCH_CONTEXT_H__
 
 #include <glib.h>
-#include <gio/gappinfo.h>
+#include <gio/gio.h>
 #include <gdk/gdkdisplay.h>
 
 G_BEGIN_DECLS
