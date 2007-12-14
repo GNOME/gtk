@@ -1,3 +1,9 @@
+2007-12-14  Ray Strode  <rstrode@redhat.com>
+
+	* gtk/gtkwidget.c: Suggest g_signal_connect (..., "realize", ...)
+	instead of g_signal_connect_after (..., "realize", ...) as an
+	alternative to gtk_widget_realize () (bug 503537).
+
 2007-12-14  Michael Natterer  <mitch@imendio.com>
 
 	* gdk/gdkinternals.h

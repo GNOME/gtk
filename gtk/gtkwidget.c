@@ -3225,7 +3225,7 @@ gtk_widget_set_extension_events_internal (GtkWidget        *widget,
  * isn't very useful otherwise. Many times when you think you might
  * need it, a better approach is to connect to a signal that will be
  * called after the widget is realized automatically, such as
- * GtkWidget::expose-event. Or simply g_signal_connect_after() to the
+ * GtkWidget::expose-event. Or simply g_signal_connect () to the
  * GtkWidget::realize signal.
  **/
 void
