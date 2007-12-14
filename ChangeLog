@@ -1,5 +1,12 @@
 2007-12-14  Mathias Hasselmann  <mathias@openismus.com>
 
+	Correct "Since:" tags for GtkPageSetup and GtkPrintSettings as
+	next stable release shall be 2.16, not 2.14 - even if disagree.
+
+	* gtk/gtkpagesetup.c, gtk/gtkprintsettings.c: s/2.14/2.16/
+
+2007-12-14  Mathias Hasselmann  <mathias@openismus.com>
+
 	Change GtkToolItem to retrieve its properties from GtkToolShell
 	interface, instead of relying on being child of a GtkToolbar.
 	(#5034079)
