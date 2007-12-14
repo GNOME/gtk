@@ -175,7 +175,6 @@ void            _gtk_toolbar_paint_space_line       (GtkWidget       *widget,
 						     GdkRectangle    *area,
 						     GtkAllocation   *allocation);
 gint            _gtk_toolbar_get_default_space_size (void);
-void            _gtk_toolbar_rebuild_menu           (GtkToolbar      *toolbar);
 
 
 void       gtk_toolbar_set_icon_size   (GtkToolbar      *toolbar,

@@ -3927,6 +3927,21 @@ gtk_toggle_button_get_type
 </SECTION>
 
 <SECTION>
+<FILE>gtktoolshell</FILE>
+<TITLE>GtkToolShell</TITLE>
+GtkToolShell
+GtkToolShellIface
+gtk_tool_shell_get_icon_size
+gtk_tool_shell_get_orientation
+gtk_tool_shell_get_relief_style
+gtk_tool_shell_get_style
+gtk_tool_shell_rebuild_menu
+
+<SUBSECTION Private>
+gtk_tool_shell_get_type
+</SECTION>
+
+<SECTION>
 <FILE>gtktoolbar</FILE>
 <TITLE>GtkToolbar</TITLE>
 GtkToolbar
@@ -6691,3 +6706,4 @@ GTK_PAGE_SETUP_UNIX_DIALOG_GET_CLASS
 GtkPageSetupUnixDialogPrivate
 gtk_page_setup_unix_dialog_get_type
 </SECTION>
+

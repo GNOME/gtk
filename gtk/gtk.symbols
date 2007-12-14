@@ -4049,6 +4049,16 @@ gtk_toolbar_unset_style
 #endif
 #endif
 
+#if IN_HEADER(__GTK_TOOL_SHELL_H__)
+#if IN_FILE(__GTK_TOOL_SHELL_C__)
+gtk_tool_shell_get_icon_size
+gtk_tool_shell_get_orientation
+gtk_tool_shell_get_style
+gtk_tool_shell_get_relief_style
+gtk_tool_shell_rebuild_menu
+#endif
+#endif
+
 #if IN_HEADER(__GTK_TOOL_BUTTON_H__)
 #if IN_FILE(__GTK_TOOL_BUTTON_C__)
 gtk_tool_button_get_icon_name

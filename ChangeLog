@@ -1,5 +1,21 @@
 2007-12-14  Mathias Hasselmann  <mathias@openismus.com>
 
+	Change GtkToolItem to retrieve its properties from GtkToolShell
+	interface, instead of relying on being child of a GtkToolbar.
+	(#5034079)
+
+	* gtk/gtk.symbols, docs/reference/gtk/gtk-docs.sgml,
+	docs/reference/gtk/gtk-sections.txt: Add GtkToolShell symbols.
+	* docs/reference/gtk/tmpl/gtktoolitem.sgml: Move section docs inline.
+	* gtk/gtktoolbar.c: Implement GtkToolShellIface.
+	* gtk/gtktoolbar.h: Remove _gtk_toolbar_rebuild_menu.
+	* gtk/gtktoolitem.c: Use GtkToolShell, instead of GtkToolbar.
+	Take section docs from template file and update them for GtkToolShell.
+	* gtk/Makefile.am: Add gtk/gtktoolshell.c and gtk/gtktoolshell.h.
+	* gtk/gtktoolshell.c, gtk/gtktoolshell.h: New GtkToolShellIface.
+
+2007-12-14  Mathias Hasselmann  <mathias@openismus.com>
+
 	Extract loading of GtkPageSetup and GtkPrintSettings from their
 	*_new_*() functions and move that code into separate
 	*_load_*() functions (#475565).

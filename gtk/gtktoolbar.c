@@ -34,6 +34,7 @@
 #include <config.h>
 #include "gtkarrow.h"
 #include "gtktoolbar.h"
+#include "gtktoolshell.h"
 #include "gtkradiotoolbutton.h"
 #include "gtkseparatortoolitem.h"
 #include "gtkmenu.h"
@@ -299,12 +300,20 @@ static void            toolbar_content_hide_all             (ToolbarContent     
 static void	       toolbar_content_set_expand	    (ToolbarContent      *content,
 							     gboolean		  expand);
 
+static void            toolbar_tool_shell_iface_init        (GtkToolShellIface   *iface);
+static GtkIconSize     toolbar_get_icon_size                (GtkToolShell        *shell);
+static GtkOrientation  toolbar_get_orientation              (GtkToolShell        *shell);
+static GtkToolbarStyle toolbar_get_style                    (GtkToolShell        *shell);
+static GtkReliefStyle  toolbar_get_relief_style             (GtkToolShell        *shell);
+static void            toolbar_rebuild_menu                 (GtkToolShell        *shell);
+
 #define GTK_TOOLBAR_GET_PRIVATE(o)  \
   (G_TYPE_INSTANCE_GET_PRIVATE ((o), GTK_TYPE_TOOLBAR, GtkToolbarPrivate))
 
 static guint			toolbar_signals [LAST_SIGNAL] = { 0 };
 
-G_DEFINE_TYPE (GtkToolbar, gtk_toolbar, GTK_TYPE_CONTAINER)
+G_DEFINE_TYPE_WITH_CODE (GtkToolbar, gtk_toolbar, GTK_TYPE_CONTAINER,
+                         G_IMPLEMENT_INTERFACE (GTK_TYPE_TOOL_SHELL, toolbar_tool_shell_iface_init))
 
 static void
 add_arrow_bindings (GtkBindingSet   *binding_set,
@@ -334,6 +343,16 @@ add_ctrl_tab_bindings (GtkBindingSet    *binding_set,
 				GDK_KP_Tab, GDK_CONTROL_MASK | modifiers,
 				"move_focus", 1,
 				GTK_TYPE_DIRECTION_TYPE, direction);
+}
+
+static void
+toolbar_tool_shell_iface_init (GtkToolShellIface *iface)
+{
+  iface->get_icon_size    = toolbar_get_icon_size;
+  iface->get_orientation  = toolbar_get_orientation;
+  iface->get_style        = toolbar_get_style;
+  iface->get_relief_style = toolbar_get_relief_style;
+  iface->rebuild_menu     = toolbar_rebuild_menu;
 }
 
 static void
@@ -846,7 +865,7 @@ gtk_toolbar_unrealize (GtkWidget *widget)
     }
   
   if (GTK_WIDGET_CLASS (gtk_toolbar_parent_class)->unrealize)
-    (* GTK_WIDGET_CLASS (gtk_toolbar_parent_class)->unrealize) (widget);
+    GTK_WIDGET_CLASS (gtk_toolbar_parent_class)->unrealize (widget);
 }
 
 static gint
@@ -2527,14 +2546,14 @@ gtk_toolbar_forall (GtkContainer *container,
 	  GtkWidget *child = toolbar_content_get_widget (content);
 	  
 	  if (child)
-	    (*callback) (child, callback_data);
+	    callback (child, callback_data);
 	}
       
       list = next;
     }
   
   if (include_internals)
-    (* callback) (priv->arrow_button, callback_data);
+    callback (priv->arrow_button, callback_data);
 }
 
 static GType
@@ -4932,10 +4951,34 @@ _gtk_toolbar_elide_underscores (const gchar *original)
   return result;
 }
 
-void
-_gtk_toolbar_rebuild_menu (GtkToolbar *toolbar)
+static GtkIconSize
+toolbar_get_icon_size (GtkToolShell *shell)
 {
-  GtkToolbarPrivate *priv = GTK_TOOLBAR_GET_PRIVATE (toolbar);
+  return GTK_TOOLBAR (shell)->icon_size;
+}
+
+static GtkOrientation
+toolbar_get_orientation (GtkToolShell *shell)
+{
+  return GTK_TOOLBAR (shell)->orientation;
+}
+
+static GtkToolbarStyle
+toolbar_get_style (GtkToolShell *shell)
+{
+  return GTK_TOOLBAR (shell)->style;
+}
+
+static GtkReliefStyle
+toolbar_get_relief_style (GtkToolShell *shell)
+{
+  return get_button_relief (GTK_TOOLBAR (shell));
+}
+
+static void
+toolbar_rebuild_menu (GtkToolShell *shell)
+{
+  GtkToolbarPrivate *priv = GTK_TOOLBAR_GET_PRIVATE (shell);
   GList *list;
 
   priv->need_rebuild = TRUE;
@@ -4947,7 +4990,7 @@ _gtk_toolbar_rebuild_menu (GtkToolbar *toolbar)
       toolbar_content_set_unknown_menu_status (content);
     }
   
-  gtk_widget_queue_resize (GTK_WIDGET (toolbar));
+  gtk_widget_queue_resize (GTK_WIDGET (shell));
 }
 
 #define __GTK_TOOLBAR_C__

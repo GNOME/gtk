@@ -23,7 +23,7 @@
 #include <config.h>
 #include "gtktoolitem.h"
 #include "gtkmarshalers.h"
-#include "gtktoolbar.h"
+#include "gtktoolshell.h"
 #include "gtkseparatormenuitem.h"
 #include "gtkintl.h"
 #include "gtkmain.h"
@@ -31,6 +31,29 @@
 #include "gtkalias.h"
 
 #include <string.h>
+
+/**
+ * SECTION:gtktoolitem
+ * @short_description: The base class of widgets that can be added to #GtkToolShell
+ *
+ * #GtkToolItem<!-- -->s are widgets that can appear on a toolbar. To
+ * create a toolbar item that contain something else than a button, use
+ * gtk_tool_item_new(). Use gtk_container_add() to add a child
+ * widget to the tool item.
+ *
+ * For toolbar items that contain buttons, see the #GtkToolButton,
+ * #GtkToggleToolButton and #GtkRadioToolButton classes.
+ *
+ * See the #GtkToolbar class for a description of the toolbar widget, and
+ * #GtkToolShell for a description of the tool shell interface.
+ */
+
+/**
+ * GtkToolItem:
+ *
+ * The GtkToolItem struct contains only private data.
+ * It should only be accessed through the functions described below.
+ */
 
 enum {
   CREATE_MENU_PROXY,
@@ -192,10 +215,10 @@ gtk_tool_item_class_init (GtkToolItemClass *klass)
  * item is a child of changes. For custom subclasses of #GtkToolItem,
  * the default handler of this signal use the functions
  * <itemizedlist>
- * <listitem>gtk_toolbar_get_orientation()</listitem>
- * <listitem>gtk_toolbar_get_style()</listitem>
- * <listitem>gtk_toolbar_get_icon_size()</listitem>
- * <listitem>gtk_toolbar_get_relief_style()</listitem>
+ * <listitem>gtk_tool_shell_get_orientation()</listitem>
+ * <listitem>gtk_tool_shell_get_style()</listitem>
+ * <listitem>gtk_tool_shell_get_icon_size()</listitem>
+ * <listitem>gtk_tool_shell_get_relief_style()</listitem>
  * </itemizedlist>
  * to find out what the toolbar should look like and change
  * themselves accordingly.
@@ -518,10 +541,10 @@ gtk_tool_item_get_icon_size (GtkToolItem *tool_item)
   g_return_val_if_fail (GTK_IS_TOOL_ITEM (tool_item), GTK_ICON_SIZE_LARGE_TOOLBAR);
 
   parent = GTK_WIDGET (tool_item)->parent;
-  if (!parent || !GTK_IS_TOOLBAR (parent))
+  if (!parent || !GTK_IS_TOOL_SHELL (parent))
     return GTK_ICON_SIZE_LARGE_TOOLBAR;
 
-  return gtk_toolbar_get_icon_size (GTK_TOOLBAR (parent));
+  return gtk_tool_shell_get_icon_size (GTK_TOOL_SHELL (parent));
 }
 
 /**
@@ -545,10 +568,10 @@ gtk_tool_item_get_orientation (GtkToolItem *tool_item)
   g_return_val_if_fail (GTK_IS_TOOL_ITEM (tool_item), GTK_ORIENTATION_HORIZONTAL);
 
   parent = GTK_WIDGET (tool_item)->parent;
-  if (!parent || !GTK_IS_TOOLBAR (parent))
+  if (!parent || !GTK_IS_TOOL_SHELL (parent))
     return GTK_ORIENTATION_HORIZONTAL;
 
-  return gtk_toolbar_get_orientation (GTK_TOOLBAR (parent));
+  return gtk_tool_shell_get_orientation (GTK_TOOL_SHELL (parent));
 }
 
 /**
@@ -588,10 +611,10 @@ gtk_tool_item_get_toolbar_style (GtkToolItem *tool_item)
   g_return_val_if_fail (GTK_IS_TOOL_ITEM (tool_item), GTK_TOOLBAR_ICONS);
 
   parent = GTK_WIDGET (tool_item)->parent;
-  if (!parent || !GTK_IS_TOOLBAR (parent))
+  if (!parent || !GTK_IS_TOOL_SHELL (parent))
     return GTK_TOOLBAR_ICONS;
 
-  return gtk_toolbar_get_style (GTK_TOOLBAR (parent));
+  return gtk_tool_shell_get_style (GTK_TOOL_SHELL (parent));
 }
 
 /**
@@ -616,10 +639,10 @@ gtk_tool_item_get_relief_style (GtkToolItem *tool_item)
   g_return_val_if_fail (GTK_IS_TOOL_ITEM (tool_item), GTK_RELIEF_NONE);
 
   parent = GTK_WIDGET (tool_item)->parent;
-  if (!parent || !GTK_IS_TOOLBAR (parent))
+  if (!parent || !GTK_IS_TOOL_SHELL (parent))
     return GTK_RELIEF_NONE;
 
-  return gtk_toolbar_get_relief_style (GTK_TOOLBAR (parent));
+  return gtk_tool_shell_get_relief_style (GTK_TOOL_SHELL (parent));
 }
 
 /**
@@ -1095,8 +1118,8 @@ gtk_tool_item_rebuild_menu (GtkToolItem *tool_item)
 
   widget = GTK_WIDGET (tool_item);
   
-  if (widget->parent && GTK_IS_TOOLBAR (widget->parent))
-    _gtk_toolbar_rebuild_menu (GTK_TOOLBAR (widget->parent));
+  if (widget->parent && GTK_IS_TOOL_SHELL (widget->parent))
+    gtk_tool_shell_rebuild_menu (GTK_TOOL_SHELL (widget->parent));
 }
 
 /**

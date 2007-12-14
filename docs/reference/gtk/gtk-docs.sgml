@@ -135,6 +135,7 @@
 <!ENTITY GtkToggleAction SYSTEM "xml/gtktoggleaction.xml">
 <!ENTITY GtkToggleButton SYSTEM "xml/gtktogglebutton.xml">
 <!ENTITY GtkToggleToolButton SYSTEM "xml/gtktoggletoolbutton.xml">
+<!ENTITY GtkToolShell SYSTEM "xml/gtktoolshell.xml">
 <!ENTITY GtkToolbar SYSTEM "xml/gtktoolbar.xml">
 <!ENTITY GtkToolButton SYSTEM "xml/gtktoolbutton.xml">
 <!ENTITY GtkToolItem SYSTEM "xml/gtktoolitem.xml">
@@ -239,6 +240,7 @@
     <releaseinfo>for GTK+ &version;</releaseinfo>
   </bookinfo>
 
+<!--
   <part id="gtk">
     <title>GTK+ Overview</title>
     <partintro>
@@ -441,7 +443,7 @@ that is, GUI components such as #GtkButton or #GtkTextView.
         &GtkListStore;
         &GtkTreeStore;
     </chapter>
-
+-->
     <chapter id="MenusAndCombos">
       <title>Menus, Combo Box, Toolbar</title>
 	&GtkComboBox;
@@ -454,6 +456,7 @@ that is, GUI components such as #GtkButton or #GtkTextView.
         &GtkCheckMenuItem;      
         &GtkSeparatorMenuItem;
         &GtkTearoffMenuItem;
+        &GtkToolShell;
         &GtkToolbar;
         &GtkToolItem;
         &GtkSeparatorToolItem;
@@ -462,7 +465,7 @@ that is, GUI components such as #GtkButton or #GtkTextView.
         &GtkToggleToolButton;
         &GtkRadioToolButton;
     </chapter>
- 
+<!--
     <chapter id="Actions">
       <title>Action-based menus and toolbars</title>
         &GtkUIManager;
@@ -684,5 +687,5 @@ that is, GUI components such as #GtkButton or #GtkTextView.
   <index role="2.12">
     <title>Index of new symbols in 2.12</title>
   </index>  
-
+-->
 </book>
