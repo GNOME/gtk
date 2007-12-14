@@ -20,6 +20,9 @@
 
 /* To do:
  *  - All the to do items from liststore.c, plus:
+ *  - Finish up the insertion tests; things aren't as nicely refactored
+ *    here as in GtkListStore, so we need to check for corner cases on
+ *    all insertion functions separately.
  *  - We only test in the root level, we also need all tests "duplicated"
  *    for child levels.
  *  - And we also need tests for creating these child levels, etc.
@@ -41,6 +44,26 @@ iters_equal (GtkTreeIter *a,
   /* user_data2 and user_data3 are not used in GtkTreeStore */
 
   return TRUE;
+}
+
+static gboolean
+iter_position (GtkTreeStore *store,
+	       GtkTreeIter  *iter,
+	       int           n)
+{
+  gboolean ret = TRUE;
+  GtkTreePath *path;
+
+  path = gtk_tree_model_get_path (GTK_TREE_MODEL (store), iter);
+  if (!path)
+    return FALSE;
+
+  if (gtk_tree_path_get_indices (path)[0] != n)
+    ret = FALSE;
+
+  gtk_tree_path_free (path);
+
+  return ret;
 }
 
 /*
@@ -113,6 +136,261 @@ check_model (TreeStore *fixture,
     }
 
   gtk_tree_path_free (path);
+}
+
+/* insertion */
+static void
+tree_store_test_insert_high_values (void)
+{
+  GtkTreeIter iter, iter2;
+  GtkTreeIter iter_copy;
+  GtkTreeStore *store;
+
+  store = gtk_tree_store_new (1, G_TYPE_INT);
+
+  gtk_tree_store_insert (store, &iter, NULL, 1234);
+  g_assert (gtk_tree_store_iter_is_valid (store, &iter));
+  g_assert (gtk_tree_model_iter_n_children (GTK_TREE_MODEL (store), NULL) == 1);
+  g_assert (gtk_tree_model_get_iter_first (GTK_TREE_MODEL (store), &iter_copy));
+  g_assert (iters_equal (&iter, &iter_copy));
+  g_assert (iter_position (store, &iter, 0));
+
+  gtk_tree_store_insert (store, &iter2, NULL, 765);
+  g_assert (gtk_tree_store_iter_is_valid (store, &iter2));
+  g_assert (gtk_tree_model_iter_n_children (GTK_TREE_MODEL (store), NULL) == 2);
+
+  /* Walk over the model */
+  g_assert (gtk_tree_model_get_iter_first (GTK_TREE_MODEL (store), &iter_copy));
+  g_assert (iters_equal (&iter, &iter_copy));
+  g_assert (iter_position (store, &iter, 0));
+
+  g_assert (gtk_tree_model_iter_next (GTK_TREE_MODEL (store), &iter_copy));
+  g_assert (iters_equal (&iter2, &iter_copy));
+  g_assert (iter_position (store, &iter2, 1));
+
+  g_assert (!gtk_tree_model_iter_next (GTK_TREE_MODEL (store), &iter_copy));
+
+  g_assert (gtk_tree_model_iter_nth_child (GTK_TREE_MODEL (store), &iter_copy, NULL, 1));
+  g_assert (iters_equal (&iter2, &iter_copy));
+
+  g_object_unref (store);
+}
+
+static void
+tree_store_test_append (void)
+{
+  GtkTreeIter iter, iter2;
+  GtkTreeIter iter_copy;
+  GtkTreeStore *store;
+
+  store = gtk_tree_store_new (1, G_TYPE_INT);
+
+  gtk_tree_store_append (store, &iter, NULL);
+  g_assert (gtk_tree_store_iter_is_valid (store, &iter));
+  g_assert (gtk_tree_model_iter_n_children (GTK_TREE_MODEL (store), NULL) == 1);
+  g_assert (gtk_tree_model_get_iter_first (GTK_TREE_MODEL (store), &iter_copy));
+  g_assert (iters_equal (&iter, &iter_copy));
+  g_assert (iter_position (store, &iter, 0));
+
+  gtk_tree_store_append (store, &iter2, NULL);
+  g_assert (gtk_tree_store_iter_is_valid (store, &iter2));
+  g_assert (gtk_tree_model_iter_n_children (GTK_TREE_MODEL (store), NULL) == 2);
+
+  /* Walk over the model */
+  g_assert (gtk_tree_model_get_iter_first (GTK_TREE_MODEL (store), &iter_copy));
+  g_assert (iters_equal (&iter, &iter_copy));
+  g_assert (iter_position (store, &iter, 0));
+
+  g_assert (gtk_tree_model_iter_next (GTK_TREE_MODEL (store), &iter_copy));
+  g_assert (iters_equal (&iter2, &iter_copy));
+  g_assert (iter_position (store, &iter2, 1));
+
+  g_assert (!gtk_tree_model_iter_next (GTK_TREE_MODEL (store), &iter_copy));
+
+  g_assert (gtk_tree_model_iter_nth_child (GTK_TREE_MODEL (store), &iter_copy, NULL, 1));
+  g_assert (iters_equal (&iter2, &iter_copy));
+
+  g_object_unref (store);
+}
+
+static void
+tree_store_test_prepend (void)
+{
+  GtkTreeIter iter, iter2;
+  GtkTreeIter iter_copy;
+  GtkTreeStore *store;
+
+  store = gtk_tree_store_new (1, G_TYPE_INT);
+
+  gtk_tree_store_prepend (store, &iter, NULL);
+  g_assert (gtk_tree_store_iter_is_valid (store, &iter));
+  g_assert (gtk_tree_model_iter_n_children (GTK_TREE_MODEL (store), NULL) == 1);
+  g_assert (gtk_tree_model_get_iter_first (GTK_TREE_MODEL (store), &iter_copy));
+  g_assert (iters_equal (&iter, &iter_copy));
+  g_assert (iter_position (store, &iter, 0));
+
+  gtk_tree_store_prepend (store, &iter2, NULL);
+  g_assert (gtk_tree_store_iter_is_valid (store, &iter2));
+  g_assert (gtk_tree_model_iter_n_children (GTK_TREE_MODEL (store), NULL) == 2);
+
+  /* Walk over the model */
+  g_assert (gtk_tree_model_get_iter_first (GTK_TREE_MODEL (store), &iter_copy));
+  g_assert (iters_equal (&iter2, &iter_copy));
+  g_assert (iter_position (store, &iter2, 0));
+
+  g_assert (gtk_tree_model_iter_next (GTK_TREE_MODEL (store), &iter_copy));
+  g_assert (iters_equal (&iter, &iter_copy));
+  g_assert (iter_position (store, &iter, 1));
+
+  g_assert (!gtk_tree_model_iter_next (GTK_TREE_MODEL (store), &iter_copy));
+
+  g_assert (gtk_tree_model_iter_nth_child (GTK_TREE_MODEL (store), &iter_copy, NULL, 1));
+  g_assert (iters_equal (&iter, &iter_copy));
+
+  g_object_unref (store);
+}
+
+static void
+tree_store_test_insert_after (void)
+{
+  GtkTreeIter iter, iter2, iter3;
+  GtkTreeIter iter_copy;
+  GtkTreeStore *store;
+
+  store = gtk_tree_store_new (1, G_TYPE_INT);
+
+  gtk_tree_store_append (store, &iter, NULL);
+  gtk_tree_store_append (store, &iter2, NULL);
+
+  gtk_tree_store_insert_after (store, &iter3, NULL, &iter);
+  g_assert (gtk_tree_store_iter_is_valid (store, &iter3));
+  g_assert (gtk_tree_model_iter_n_children (GTK_TREE_MODEL (store), NULL) == 3);
+  g_assert (gtk_tree_model_iter_nth_child (GTK_TREE_MODEL (store), &iter_copy, NULL, 1));
+  g_assert (iters_equal (&iter3, &iter_copy));
+  g_assert (iter_position (store, &iter3, 1));
+
+  /* Walk over the model */
+  g_assert (gtk_tree_model_get_iter_first (GTK_TREE_MODEL (store), &iter_copy));
+  g_assert (iters_equal (&iter, &iter_copy));
+  g_assert (iter_position (store, &iter_copy, 0));
+
+  g_assert (gtk_tree_model_iter_next (GTK_TREE_MODEL (store), &iter_copy));
+  g_assert (iters_equal (&iter3, &iter_copy));
+  g_assert (iter_position (store, &iter_copy, 1));
+
+  g_assert (gtk_tree_model_iter_next (GTK_TREE_MODEL (store), &iter_copy));
+  g_assert (iters_equal (&iter2, &iter_copy));
+  g_assert (iter_position (store, &iter_copy, 2));
+
+  g_assert (!gtk_tree_model_iter_next (GTK_TREE_MODEL (store), &iter_copy));
+
+  g_object_unref (store);
+}
+
+static void
+tree_store_test_insert_after_NULL (void)
+{
+  GtkTreeIter iter, iter2;
+  GtkTreeIter iter_copy;
+  GtkTreeStore *store;
+
+  store = gtk_tree_store_new (1, G_TYPE_INT);
+
+  gtk_tree_store_append (store, &iter, NULL);
+
+  /* move_after NULL is basically a prepend */
+  gtk_tree_store_insert_after (store, &iter2, NULL, NULL);
+  g_assert (gtk_tree_store_iter_is_valid (store, &iter2));
+  g_assert (gtk_tree_model_iter_n_children (GTK_TREE_MODEL (store), NULL) == 2);
+
+  /* Walk over the model */
+  g_assert (gtk_tree_model_get_iter_first (GTK_TREE_MODEL (store), &iter_copy));
+  g_assert (iters_equal (&iter2, &iter_copy));
+  g_assert (iter_position (store, &iter2, 0));
+
+  g_assert (gtk_tree_model_iter_next (GTK_TREE_MODEL (store), &iter_copy));
+  g_assert (iters_equal (&iter, &iter_copy));
+  g_assert (iter_position (store, &iter, 1));
+
+  g_assert (!gtk_tree_model_iter_next (GTK_TREE_MODEL (store), &iter_copy));
+
+  g_assert (gtk_tree_model_iter_nth_child (GTK_TREE_MODEL (store), &iter_copy, NULL, 0));
+  g_assert (iters_equal (&iter2, &iter_copy));
+
+  g_object_unref (store);
+}
+
+static void
+tree_store_test_insert_before (void)
+{
+  GtkTreeIter iter, iter2, iter3;
+  GtkTreeIter iter_copy;
+  GtkTreeStore *store;
+
+  store = gtk_tree_store_new (1, G_TYPE_INT);
+
+  gtk_tree_store_append (store, &iter, NULL);
+  gtk_tree_store_append (store, &iter2, NULL);
+
+  gtk_tree_store_insert_before (store, &iter3, NULL, &iter2);
+  g_assert (gtk_tree_store_iter_is_valid (store, &iter3));
+  g_assert (gtk_tree_model_iter_n_children (GTK_TREE_MODEL (store), NULL) == 3);
+  g_assert (gtk_tree_model_iter_nth_child (GTK_TREE_MODEL (store), &iter_copy, NULL, 1));
+  g_assert (iters_equal (&iter3, &iter_copy));
+  g_assert (iter_position (store, &iter3, 1));
+
+  /* Walk over the model */
+  g_assert (gtk_tree_model_get_iter_first (GTK_TREE_MODEL (store), &iter_copy));
+  g_assert (iters_equal (&iter, &iter_copy));
+  g_assert (iter_position (store, &iter_copy, 0));
+
+  g_assert (gtk_tree_model_iter_next (GTK_TREE_MODEL (store), &iter_copy));
+  g_assert (iters_equal (&iter3, &iter_copy));
+  g_assert (iter_position (store, &iter_copy, 1));
+
+  g_assert (gtk_tree_model_iter_next (GTK_TREE_MODEL (store), &iter_copy));
+  g_assert (iters_equal (&iter2, &iter_copy));
+  g_assert (iter_position (store, &iter_copy, 2));
+
+  g_assert (!gtk_tree_model_iter_next (GTK_TREE_MODEL (store), &iter_copy));
+
+  g_assert (gtk_tree_model_iter_nth_child (GTK_TREE_MODEL (store), &iter_copy, NULL, 1));
+  g_assert (iters_equal (&iter3, &iter_copy));
+
+  g_object_unref (store);
+}
+
+static void
+tree_store_test_insert_before_NULL (void)
+{
+  GtkTreeIter iter, iter2;
+  GtkTreeIter iter_copy;
+  GtkTreeStore *store;
+
+  store = gtk_tree_store_new (1, G_TYPE_INT);
+
+  gtk_tree_store_append (store, &iter, NULL);
+
+  /* move_before NULL is basically an append */
+  gtk_tree_store_insert_before (store, &iter2, NULL, NULL);
+  g_assert (gtk_tree_store_iter_is_valid (store, &iter2));
+  g_assert (gtk_tree_model_iter_n_children (GTK_TREE_MODEL (store), NULL) == 2);
+
+  /* Walk over the model */
+  g_assert (gtk_tree_model_get_iter_first (GTK_TREE_MODEL (store), &iter_copy));
+  g_assert (iters_equal (&iter, &iter_copy));
+  g_assert (iter_position (store, &iter, 0));
+
+  g_assert (gtk_tree_model_iter_next (GTK_TREE_MODEL (store), &iter_copy));
+  g_assert (iters_equal (&iter2, &iter_copy));
+  g_assert (iter_position (store, &iter2, 1));
+
+  g_assert (!gtk_tree_model_iter_next (GTK_TREE_MODEL (store), &iter_copy));
+
+  g_assert (gtk_tree_model_iter_nth_child (GTK_TREE_MODEL (store), &iter_copy, NULL, 1));
+  g_assert (iters_equal (&iter2, &iter_copy));
+
+  g_object_unref (store);
 }
 
 /* removal */
@@ -584,7 +862,21 @@ main (int    argc,
 {
   gtk_test_init (&argc, &argv, NULL);
 
-  /* insertion (FIXME) */
+  /* insertion */
+  g_test_add_func ("/tree-store/insert-high-values",
+	           tree_store_test_insert_high_values);
+  g_test_add_func ("/tree-store/append",
+		   tree_store_test_append);
+  g_test_add_func ("/tree-store/prepend",
+		   tree_store_test_prepend);
+  g_test_add_func ("/tree-store/insert-after",
+		   tree_store_test_insert_after);
+  g_test_add_func ("/tree-store/insert-after-NULL",
+		   tree_store_test_insert_after_NULL);
+  g_test_add_func ("/tree-store/insert-before",
+		   tree_store_test_insert_before);
+  g_test_add_func ("/tree-store/insert-before-NULL",
+		   tree_store_test_insert_before_NULL);
 
   /* setting values (FIXME) */
 

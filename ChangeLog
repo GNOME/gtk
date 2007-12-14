@@ -1,3 +1,8 @@
+2007-12-14  Kristian Rietveld  <kris@imendio.com>
+
+	* gtk/tests/liststore.c:
+	* gtk/tests/treestore.c: added tests for insertion functions.
+
 Thu Dec 13 13:14:50 2007  Søren Sandmann  <sandmann@redhat.com>
 
 	* Add RandR 1.2 support
