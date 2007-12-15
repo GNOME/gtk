@@ -1,3 +1,12 @@
+2007-12-15  Sebastian Dröge  <slomo@circular-chaos.org>
+
+	Merged from trunk:
+
+	* gdk/directfb/gdkcursor-directfb.c: (gdk_cursor_new_for_display):
+	Use u32 instead of __u32 and u8 instead of __u8 as the other types
+	are deprecated since DirectFB 1.0.0. If compiling with an older
+	version define the new type name to the old types. Fixes bug #503190.
+
 2007-12-10  Richard Hult  <richard@imendio.com>
 
 	Merged from trunk:
