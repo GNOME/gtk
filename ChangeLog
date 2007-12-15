@@ -1,3 +1,10 @@
+2007-12-15  Xan Lopez  <xan.lopez@nokia.com>
+
+	* gtk/gtktreeviewcolumn.c (gtk_tree_view_column_cell_layout_reorder):
+
+	Plug leak: When reordering the info in the list the old node is
+	removed but not freed. (#503569)
+
 2007-12-15  Sebastian Dröge  <slomo@circular-chaos.org>
 
 	* gdk/directfb/gdkcursor-directfb.c: (gdk_cursor_new_for_display):
