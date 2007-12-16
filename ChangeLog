@@ -1,3 +1,11 @@
+2007-12-16  Mathias Hasselmann  <mathias@openismus.com>
+
+	Prevent assertion failure in gtk_paned_find_neighbours. (#503824,
+	Sébastien Granjoux)
+
+	* gtk/gtkpaned.c: Call gtk_container_forall instead of
+	gtk_container_foreach in get_child_panes.
+
 2007-12-15  Xan Lopez  <xan.lopez@nokia.com>
 
 	Merged from trunk:

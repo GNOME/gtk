@@ -1600,7 +1600,7 @@ get_child_panes (GtkWidget  *widget,
     }
   else if (GTK_IS_CONTAINER (widget))
     {
-      gtk_container_foreach (GTK_CONTAINER (widget),
+      gtk_container_forall (GTK_CONTAINER (widget),
 			     (GtkCallback)get_child_panes, panes);
     }
 }
