@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-12-17 16:54+0100\n"
-"PO-Revision-Date: 2007-12-17 16:57+0100\n"
+"POT-Creation-Date: 2007-12-17 19:20+0100\n"
+"PO-Revision-Date: 2007-12-17 19:21+0100\n"
 "Last-Translator: Daniel Nylander <po@danielnylander.se>\n"
 "Language-Team: Swedish <tp-sv@listor.tp-sv.se>\n"
 "MIME-Version: 1.0\n"
@@ -601,7 +601,7 @@ msgstr "Fel vid läsning av ICNS-bild: %s"
 #: ../gdk-pixbuf/io-icns.c:362
 #, c-format
 msgid "Could not decode ICNS file"
-msgstr "Fel vid läsning av ICNS-bild: %s"
+msgstr "Kunde inte avkoda ICNS-fil"
 
 #: ../gdk-pixbuf/io-icns.c:391
 msgid "The ICNS image format"
