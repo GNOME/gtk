@@ -92,6 +92,8 @@ static void       gtk_tooltip_window_hide          (GtkWidget       *widget,
 static void       gtk_tooltip_display_closed       (GdkDisplay      *display,
 						    gboolean         was_error,
 						    GtkTooltip      *tooltip);
+static void       gtk_tooltip_set_last_window      (GtkTooltip      *tooltip,
+						    GdkWindow       *window);
 
 
 G_DEFINE_TYPE (GtkTooltip, gtk_tooltip, G_TYPE_OBJECT);
@@ -178,6 +180,8 @@ gtk_tooltip_finalize (GObject *object)
       g_source_remove (tooltip->browse_mode_timeout_id);
       tooltip->browse_mode_timeout_id = 0;
     }
+
+  gtk_tooltip_set_last_window (tooltip, NULL);
 
   if (tooltip->window)
     {
@@ -734,6 +738,21 @@ gtk_tooltip_display_closed (GdkDisplay *display,
   g_object_set_data (G_OBJECT (display), "gdk-display-current-tooltip", NULL);
 }
 
+static void
+gtk_tooltip_set_last_window (GtkTooltip *tooltip,
+			     GdkWindow  *window)
+{
+  if (tooltip->last_window)
+    g_object_remove_weak_pointer (G_OBJECT (tooltip->last_window),
+				  (gpointer *) &tooltip->last_window);
+
+  tooltip->last_window = window;
+
+  if (window)
+    g_object_add_weak_pointer (G_OBJECT (tooltip->last_window),
+			       (gpointer *) &tooltip->last_window);
+}
+
 static gboolean
 gtk_tooltip_run_requery (GtkWidget  **widget,
 			 GtkTooltip  *tooltip,
@@ -1190,7 +1209,7 @@ _gtk_tooltip_handle_event (GdkEvent *event)
 
   if (current_tooltip)
     {
-      current_tooltip->last_window = event->any.window;
+      gtk_tooltip_set_last_window (current_tooltip, event->any.window);
       gdk_event_get_root_coords (event,
 				&current_tooltip->last_x,
 				&current_tooltip->last_y);
@@ -1298,7 +1317,7 @@ _gtk_tooltip_handle_event (GdkEvent *event)
 			      G_CALLBACK (gtk_tooltip_display_closed),
 			      current_tooltip);
 
-	    current_tooltip->last_window = event->any.window;
+	    gtk_tooltip_set_last_window (current_tooltip, event->any.window);
 	    gdk_event_get_root_coords (event,
 				       &current_tooltip->last_x,
 				       &current_tooltip->last_y);
