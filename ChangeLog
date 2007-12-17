@@ -1,3 +1,9 @@
+2007-12-17  Kristian Rietveld  <kris@imendio.com>
+
+	* gtk/gtktreeviewcolumn.c (gtk_tree_view_column_update_button):
+	always determine what arrow to show if show_sort_indicator is true.
+	(#352738, Chris Vine).
+
 2007-12-16  Mathias Hasselmann  <mathias@openismus.com>
 
 	Prevent assertion failure in gtk_paned_find_neighbours. (#503824,

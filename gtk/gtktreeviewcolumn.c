@@ -925,8 +925,7 @@ gtk_tree_view_column_update_button (GtkTreeViewColumn *tree_column)
 					  &sort_column_id,
 					  NULL);
 
-  if (tree_column->show_sort_indicator
-      && (sort_column_id >= 0 && sort_column_id == tree_column->sort_column_id))
+  if (tree_column->show_sort_indicator)
     {
       gboolean alternative;
 
