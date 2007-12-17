@@ -1,3 +1,12 @@
+2007-12-17  Kristian Rietveld  <kris@imendio.com>
+
+	Merge from trunk.
+
+	* gtk/gtktooltip.c (gtk_tooltip_finalize),
+	(gtk_tooltip_set_last_window): use a weak pointer to set last_window
+	to NULL as soon as it's destroyed.  (#496546, patch from
+	Benjamin Berg).
+
 2007-12-16  Mathias Hasselmann  <mathias@openismus.com>
 
 	Prevent assertion failure in gtk_paned_find_neighbours. (#503824,
