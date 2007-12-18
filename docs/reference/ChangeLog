@@ -1,3 +1,7 @@
+2007-12-17  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/running.sgml: Mention the Gtk/IMModule XSetting.
+
 2007-12-12  Matthias Clasen  <mclasen@redhat.com>
 
 	* gdk/gdk-docs.sgml:

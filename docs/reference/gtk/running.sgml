@@ -242,7 +242,10 @@ additional environment variables.
 
   <para>
     Specifies an IM module to use in preference to the one determined
-    from the locale. 
+    from the locale.  If this isn't set and you are running on the system
+    that enables <literal>XSETTINGS</literal> and has a value in
+    <literal>Gtk/IMModule</literal>, that will be used for the default
+    IM module.
   </para>
 </formalpara>
 

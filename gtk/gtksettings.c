@@ -106,7 +106,8 @@ enum {
   PROP_PRINT_PREVIEW_COMMAND,
   PROP_ENABLE_MNEMONICS,
   PROP_ENABLE_ACCELS,
-  PROP_RECENT_FILES_LIMIT
+  PROP_RECENT_FILES_LIMIT,
+  PROP_IM_MODULE
 };
 
 
@@ -805,6 +806,20 @@ gtk_settings_class_init (GtkSettingsClass *class)
  							       GTK_PARAM_READWRITE),
 					     NULL);
   g_assert (result == PROP_RECENT_FILES_LIMIT);
+
+  /**
+   * GtkSettings:gtk-im-module:
+   *
+   * Which IM module should be used by default.
+   */
+  result = settings_install_property_parser (class,
+					     g_param_spec_string ("gtk-im-module",
+								  P_("Default IM module"),
+								  P_("Which IM module should be used by default"),
+								  NULL,
+								  GTK_PARAM_READWRITE),
+					     NULL);
+  g_assert (result == PROP_IM_MODULE);
 }
 
 static void

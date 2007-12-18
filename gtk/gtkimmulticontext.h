@@ -45,7 +45,7 @@ struct _GtkIMMulticontext
 
   GtkIMMulticontextPrivate *priv;
 
-  const gchar *context_id;
+  gchar *context_id;
 };
 
 struct _GtkIMMulticontextClass

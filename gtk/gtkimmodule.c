@@ -37,6 +37,8 @@
 #include <pango/pango-utils.h>
 #include "gtkimmodule.h"
 #include "gtkimcontextsimple.h"
+#include "gtksettings.h"
+#include "gtkmain.h"
 #include "gtkrc.h"
 #include "gtkintl.h"
 #include "gtkalias.h"
@@ -418,7 +420,7 @@ _gtk_im_module_list (const GtkIMContextInfo ***contexts,
 #endif
 		GtkIMContextInfo simple_context_info = {
     SIMPLE_ID,
-    N_("Default"),
+    N_("Simple"),
     GETTEXT_PACKAGE,
 #ifdef GTK_LOCALEDIR
     GTK_LOCALEDIR,
@@ -546,17 +548,15 @@ match_locale (const gchar *locale,
 
 /**
  * _gtk_im_module_get_default_context_id:
- * @locale: a locale id in the form 'en_US'
+ * @client_window: a window
  * 
- * Return the context_id of the best IM context type
- * for the given locale ID.
+ * Return the context_id of the best IM context type 
+ * for the given window.
  * 
  * Return value: the context ID (will never be %NULL)
- *    the value is newly allocated and must be freed
- *    with g_free().
  **/
 const gchar *
-_gtk_im_module_get_default_context_id (const gchar *locale)
+_gtk_im_module_get_default_context_id (GdkWindow *client_window)
 {
   GSList *tmp_list;
   const gchar *context_id = NULL;
@@ -564,6 +564,8 @@ _gtk_im_module_get_default_context_id (const gchar *locale)
   gint i;
   gchar *tmp_locale, *tmp;
   const gchar *envvar;
+  GdkScreen *screen;
+  GtkSettings *settings;
       
   if (!contexts_hash)
     gtk_im_module_initialize ();
@@ -571,12 +573,41 @@ _gtk_im_module_get_default_context_id (const gchar *locale)
   envvar = g_getenv ("GTK_IM_MODULE");
   if (envvar &&
       (strcmp (envvar, SIMPLE_ID) == 0 ||
-       g_hash_table_lookup (contexts_hash, envvar)))
-    return g_strdup (envvar);
+       g_hash_table_lookup (contexts_hash, envvar))) 
+    return envvar;
+
+  /* Check if the certain immodule is set in XSETTINGS.
+   */
+  if (client_window != NULL && GDK_IS_DRAWABLE (client_window))
+    {
+      screen = gdk_drawable_get_screen (GDK_DRAWABLE (client_window));
+      if (screen)
+        settings = gtk_settings_get_for_screen (screen);
+      else
+        settings = gtk_settings_get_default ();
+
+      g_object_get (G_OBJECT (settings), "gtk-im-module", &tmp, NULL);
+      if (tmp)
+        {
+          if (strcmp (tmp, SIMPLE_ID) == 0)
+            context_id = SIMPLE_ID;
+          else 
+            {
+              GtkIMModule *module;
+              module = g_hash_table_lookup (contexts_hash, tmp);
+              if (module)
+                context_id = module->contexts[0]->context_id;
+            }
+          g_free (tmp);
+
+       	  if (context_id) 
+            return context_id;
+        }
+    }
 
   /* Strip the locale code down to the essentials
    */
-  tmp_locale = g_strdup (locale);
+  tmp_locale = _gtk_get_lc_ctype ();
   tmp = strchr (tmp_locale, '.');
   if (tmp)
     *tmp = '\0';
@@ -589,7 +620,7 @@ _gtk_im_module_get_default_context_id (const gchar *locale)
     {
       GtkIMModule *module = tmp_list->data;
      
-      for (i=0; i<module->n_contexts; i++)
+      for (i = 0; i < module->n_contexts; i++)
 	{
 	  const gchar *p = module->contexts[i]->default_locales;
 	  while (p)
@@ -612,5 +643,5 @@ _gtk_im_module_get_default_context_id (const gchar *locale)
 
   g_free (tmp_locale);
   
-  return g_strdup (context_id ? context_id : SIMPLE_ID);
+  return context_id ? context_id : SIMPLE_ID;
 }
