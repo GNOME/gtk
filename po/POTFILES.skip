@@ -1,2 +1,4 @@
 demos/gtk-demo/demo.ui
 gtk/paper_names.c
+modules/other/gail/gailimage.c
+

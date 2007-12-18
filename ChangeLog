@@ -1,3 +1,16 @@
+2007-12-18  Christian Persch  <chpe@gnome.org>
+
+	* configure.in:
+	* docs/reference/Makefile.am:
+	* docs/reference/libgail-util/*:
+	* gail-uninstalled.pc.in:
+	* gail.pc.in:
+	* modules/Makefile.am:
+	* modules/other/Makefile.am:
+	* modules/other/gail/*:
+	* modules/other/gail/libgail-util/*:
+	* po/POTFILES.skip: Integrate gail into gtk+. Bug #169488.
+
 2007-12-17  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtksettings.c: Add a gtk-im-module GTK setting

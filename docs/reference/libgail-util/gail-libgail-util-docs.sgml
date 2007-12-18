@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+<!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook XML V4.1.2//EN"
+               "http://www.oasis-open.org/docbook/xml/4.1.2/docbookx.dtd" [
+<!ENTITY gail-libgail-util-gailtextutil SYSTEM "xml/gailtextutil.xml">
+<!ENTITY gail-libgail-util-gailmisc SYSTEM "xml/gailmisc.xml">
+]>
+
+<book>
+  <bookinfo>
+    <title>GAIL Reference Manual</title>
+  </bookinfo>
+  <chapter id="libgail-util-main">
+    <title>GAIL libgail-util Library</title>
+    &gail-libgail-util-gailtextutil;
+    &gail-libgail-util-gailmisc;
+  </chapter>
+</book>

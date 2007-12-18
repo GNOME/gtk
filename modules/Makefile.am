@@ -1,8 +1,7 @@
 include $(top_srcdir)/Makefile.decl
 
-if OS_UNIX
-PRINTBACKENDS_SUBDIR=printbackends
-endif
+SUBDIRS = input engines other
 
-SUBDIRS=input engines $(PRINTBACKENDS_SUBDIR)
-DIST_SUBDIRS=input engines printbackends
+if OS_UNIX
+SUBDIRS += printbackends
+endif

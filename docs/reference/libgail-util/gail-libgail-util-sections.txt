@@ -1,0 +1,34 @@
+<SECTION>
+<FILE>gailtextutil</FILE>
+<TITLE>GailTextUtil</TITLE>
+GailTextUtil
+GailOffsetType
+gail_text_util_new
+gail_text_util_text_setup
+gail_text_util_buffer_setup
+gail_text_util_get_text
+gail_text_util_get_substring
+<SUBSECTION Standard>
+GailTextUtilClass
+GAIL_TEXT_UTIL
+GAIL_IS_TEXT_UTIL
+GAIL_TYPE_TEXT_UTIL
+GAIL_TEXT_UTIL_CLASS
+GAIL_IS_TEXT_UTIL_CLASS
+GAIL_TEXT_UTIL_GET_CLASS
+<SUBSECTION Private>
+gail_text_util_get_type
+</SECTION>
+
+<SECTION>
+<FILE>gailmisc</FILE>
+<TITLE>GailMisc</TITLE>
+gail_misc_add_attribute
+gail_misc_layout_get_run_attributes
+gail_misc_get_default_attributes
+gail_misc_get_extents_from_pango_rectangle
+gail_misc_get_index_at_point_in_layout
+gail_misc_get_origins
+gail_misc_add_to_attr_set
+gail_misc_buffer_get_run_attributes
+</SECTION>
