@@ -2008,10 +2008,11 @@ calendar_paint_week_numbers (GtkCalendar *calendar)
   GtkWidget *widget = GTK_WIDGET (calendar);
   GtkCalendarPrivate *priv = GTK_CALENDAR_GET_PRIVATE (calendar);
   cairo_t *cr;
-  gint row, week = 0, year;
-  gint x_loc;
+
+  guint week = 0, year;
+  gint row, x_loc, y_loc;
+  gint day_height;
   char buffer[32];
-  gint y_loc, day_height;
   PangoLayout *layout;
   PangoRectangle logical_rect;
   gint focus_padding;
@@ -2233,10 +2234,6 @@ calendar_paint_day (GtkCalendar *calendar,
       gtk_paint_focus (widget->style, 
 		       priv->main_win,
 	               state,
-#if 0
-		       (calendar->selected_day == day) 
-		          ? GTK_STATE_SELECTED : GTK_STATE_NORMAL, 
-#endif
 		       NULL, widget, "calendar-day",
 		       day_rect.x,     day_rect.y, 
 		       day_rect.width, day_rect.height);
@@ -3075,7 +3072,8 @@ gtk_calendar_drag_data_received (GtkWidget        *widget,
        * supposed to call drag_status, not actually paste in the
        * data.
        */
-      str = gtk_selection_data_get_text (selection_data);
+      str = (gchar*) gtk_selection_data_get_text (selection_data);
+
       if (str) 
 	{
 	  date = g_date_new ();
@@ -3094,7 +3092,7 @@ gtk_calendar_drag_data_received (GtkWidget        *widget,
     }
 
   date = g_date_new ();
-  str = gtk_selection_data_get_text (selection_data);
+  str = (gchar*) gtk_selection_data_get_text (selection_data);
   if (str) 
     {
       g_date_set_parse (date, str);

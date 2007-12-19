@@ -1,3 +1,13 @@
+2007-12-17  Mathias Hasselmann  <mathias@openismus.com>
+
+	Avoid some compiler warnings and remove obsolete code. (#339540)
+
+	* gtk/gtkcalendar.c: Change week and year variable in
+	calendar_paint_week_numbers from gint to guint. Remove obsolete "#if
+	0" block from calendar_paint_day: The feature in question is handled
+	few lines above. Cast data returned by gtk_selection_data_get_text()
+	to (gchar*) in gtk_calendar_drag_data_received.
+
 2007-12-19 17:05:31  Tim Janik  <timj@imendio.com>
 
 	* modules/other/Makefile.am: include Makefile.decl to unbreak test rules.
