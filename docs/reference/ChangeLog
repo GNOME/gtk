@@ -1,3 +1,7 @@
+2007-12-19 19:54:11  Tim Janik  <timj@imendio.com>
+
+	* libgail-util/Makefile.am: include Makefile.decl to unbreak test rules.
+
 2007-12-17  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/running.sgml: Mention the Gtk/IMModule XSetting.
