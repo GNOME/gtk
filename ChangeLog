@@ -1,3 +1,10 @@
+2007-12-19  Johan Dahlin  <johan@gnome.org>
+
+	* tests/buildertest.c (test_object_properties): 
+	Add another call to gtk_builder_add_string after using
+	delayed properties, as reported in #504393 but already
+	fixed in #495769.
+
 2007-12-18  Christian Persch  <chpe@gnome.org>
 
 	* configure.in:

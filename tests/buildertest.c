@@ -838,7 +838,11 @@ test_object_properties (void)
     "    </child>"
     "  </object>"
     "</interface>";
-  GObject *label, *spinbutton;
+  const gchar buffer2[] =
+    "<interface>"
+    "  <object class=\"GtkWindow\" id=\"window2\"/>"
+    "</interface>";
+  GObject *label, *spinbutton, *window;
   
   builder = builder_new_from_string (buffer, -1, NULL);
   label = gtk_builder_get_object (builder, "label1");
@@ -846,7 +850,12 @@ test_object_properties (void)
   spinbutton = gtk_builder_get_object (builder, "spinbutton1");
   g_assert (spinbutton != NULL);
   g_assert (spinbutton == (GObject*)gtk_label_get_mnemonic_widget (GTK_LABEL (label)));
-  
+
+  gtk_builder_add_from_string (builder, buffer2, -1, NULL);
+  window = gtk_builder_get_object (builder, "window2");
+  g_assert (window != NULL);
+  gtk_widget_destroy (GTK_WIDGET (window));
+
   g_object_unref (builder);
 }
 
