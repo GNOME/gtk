@@ -1,3 +1,7 @@
+2007-12-19 17:05:31  Tim Janik  <timj@imendio.com>
+
+	* modules/other/Makefile.am: include Makefile.decl to unbreak test rules.
+
 2007-12-19  Johan Dahlin  <johan@gnome.org>
 
 	* tests/buildertest.c (test_object_properties): 
