@@ -241,9 +241,11 @@ class GtkBuilderConverter(object):
             self._packing_prop_to_child_attr(
                 node, "type", "label_item", "label")
         elif klass == "GtkMenuBar":
-            self._convert_menubar(node)
-        elif klass == "GtkMenu":
             self._convert_menu(node)
+        elif klass == "GtkMenu":
+            # Only convert toplevel popups
+            if node.parentNode == self._interface:
+                self._convert_menu(node, popup=True)
         elif klass in WINDOWS and self.skip_windows:
             self._remove_window(node)
         self._default_widget_converter(node)
@@ -279,42 +281,20 @@ class GtkBuilderConverter(object):
         parent.removeChild(node)
         parent.appendChild(object_node)
 
-    def _convert_menubar(self, node):
+    def _convert_menu(self, node, popup=False):
         if node.hasAttribute('constructor'):
             return
 
         uimgr = self._create_root_object('GtkUIManager',
                                          template='uimanager')
 
-        menubar = self._dom.createElement('menubar')
-        menubar.setAttribute('name', node.getAttribute('id'))
-        node.setAttribute('constructor', uimgr.getAttribute('id'))
+        if popup:
+            name = 'popup'
+        else:
+            name = 'menubar'
 
-        for child in get_child_nodes(node):
-            obj_node = get_object_node(child)
-            item = self._convert_menuitem(uimgr, obj_node)
-            menubar.appendChild(item)
-            child.removeChild(obj_node)
-            child.parentNode.removeChild(child)
-
-        ui = self._dom.createElement('ui')
-        uimgr.appendChild(ui)
-
-        ui.appendChild(menubar)
-
-    def _convert_menu(self, node):
-        if node.hasAttribute('constructor'):
-            return
-
-        # Only convert toplevel menu objects
-        if node.parentNode != self._interface:
-            return
-        uimgr = self._create_root_object('GtkUIManager',
-                                         template='uimanager')
-
-        menu = self._dom.createElement('menubar')
+        menu = self._dom.createElement(name)
         menu.setAttribute('name', node.getAttribute('id'))
-
         node.setAttribute('constructor', uimgr.getAttribute('id'))
 
         for child in get_child_nodes(node):
