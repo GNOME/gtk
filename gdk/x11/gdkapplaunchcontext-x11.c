@@ -47,7 +47,7 @@ get_display_name (GFile *file)
 
   name = NULL;
   info = g_file_query_info (file,
-			    G_FILE_ATTRIBUTE_STD_DISPLAY_NAME, 0, NULL, NULL);
+			    G_FILE_ATTRIBUTE_STANDARD_DISPLAY_NAME, 0, NULL, NULL);
   if (info)
     {
       name = g_strdup (g_file_info_get_display_name (info));
@@ -77,7 +77,7 @@ get_icon (GFile *file)
   GIcon *icon;
 
   icon = NULL;
-  info = g_file_query_info (file, G_FILE_ATTRIBUTE_STD_ICON, 0, NULL, NULL);
+  info = g_file_query_info (file, G_FILE_ATTRIBUTE_STANDARD_ICON, 0, NULL, NULL);
   if (info)
     {
       icon = g_file_info_get_icon (info);

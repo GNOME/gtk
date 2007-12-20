@@ -1,3 +1,8 @@
+2007-12-20  Alexander Larsson  <alexl@redhat.com>
+
+        * gdk/x11/gdkapplaunchcontext-x11.c:
+	Update for gio API changes
+
 2007-12-20  Richard Hult  <richard@imendio.com>
 
 	* gdk/quartz/GdkQuartzWindow.c:
