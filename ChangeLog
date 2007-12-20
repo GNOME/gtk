@@ -1,7 +1,7 @@
 2007-12-20  Richard Hult  <richard@imendio.com>
 
 	* modules/other/gail/gailwindow.c: (gail_window_get_mdi_zorder):
-	Add stub for quartz for fix build.
+	Add stub for quartz to fix build.
 
 2007-12-20  Christian Persch  <chpe@gnome.org>
 
