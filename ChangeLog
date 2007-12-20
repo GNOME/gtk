@@ -1,3 +1,8 @@
+2007-12-20  Kristian Rietveld  <kris@imendio.com>
+
+	* configure.in: Remove leftovers from old XRandR check.  Makes
+	the build work again on systems without xrandr 1.2.
+
 2007-12-20  Christian Persch  <chpe@gnome.org>
 
 	* configure.in:

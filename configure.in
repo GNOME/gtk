@@ -1337,10 +1337,6 @@ if test "x$gdktarget" = "xx11"; then
 
      X_PACKAGES="$X_PACKAGES xrandr"
   fi
-
-  if $have_randr ; then
-     AC_DEFINE(HAVE_RANDR, 1, Have the Xrandr extension library)
-  fi
        
   # Checks for Xcursor library
   
