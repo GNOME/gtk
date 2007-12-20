@@ -1,3 +1,7 @@
+2007-12-20 15:30:09  Tim Janik  <timj@imendio.com>
+
+	* Makefile.decl: generate HTML reports for test-report perf-report full-report.
+
 2007-12-20  Alexander Larsson  <alexl@redhat.com>
 
         * gdk/x11/gdkapplaunchcontext-x11.c:

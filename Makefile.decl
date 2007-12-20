@@ -1,6 +1,7 @@
 # GTK+ - The GIMP Toolkit
 
-GTESTER = gtester 			# for non-GLIB packages
+GTESTER        = gtester		# in $PATH for non-GLIB packages
+GTESTER_REPORT = gtester-report		# in $PATH for non-GLIB packages
 
 # initialize variables for unconditional += appending
 EXTRA_DIST =
@@ -74,6 +75,7 @@ test-report perf-report full-report:	${TEST_PROGS}
 	    echo >> $@.xml ; \
 	    echo '</report-collection>' >> $@.xml ; \
 	    rm -rf "$$GTESTER_LOGDIR"/ ; \
+	    ${GTESTER_REPORT} --version 2>/dev/null 1>&2 ; test "$$?" != 0 || ${GTESTER_REPORT} $@.xml >$@.html ; \
 	  }
 .PHONY: test test-report perf-report full-report
 # run make test as part of make check
