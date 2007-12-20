@@ -1,6 +1,13 @@
+2007-12-20  Johan Dahlin  <johan@gnome.org>
+
+	* gtk/gtk-builder-convert (GtkBuilderConverter._remove_window): 
+	Refactor to avoid some duplication.
+	Convert toplevel GtkMenu's top popups and not menubars in the ui manager.
+	Fixes #504749, Yuri Pimenov
+
 2007-12-20  Kristian Rietveld  <kris@imendio.com>
 
-	* configure.in: Remove leftovers from old XRandR check.  Makes
+	* configure.in: RYuri Pimenovemove leftovers from old XRandR check.  Makes
 	the build work again on systems without xrandr 1.2.
 
 2007-12-20  Christian Persch  <chpe@gnome.org>
