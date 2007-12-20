@@ -28,6 +28,7 @@
   /* Manually triggered move/resize (not by the window manager) */
   BOOL    inManualMove;
   BOOL    inManualResize;
+  BOOL    inTrackManualResize;
   NSPoint initialMoveLocation;
   NSPoint initialResizeLocation;
   NSRect  initialResizeFrame;
