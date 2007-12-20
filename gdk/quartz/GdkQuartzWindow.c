@@ -301,8 +301,10 @@
   float dx, dy;
   NSSize min_size;
 
-  if (!inManualResize)
+  if (!inManualResize || inTrackManualResize)
     return NO;
+
+  inTrackManualResize = YES;
 
   currentLocation = [self convertBaseToScreen:[self mouseLocationOutsideOfEventStream]];
   currentLocation.x -= initialResizeFrame.origin.x;
@@ -331,6 +333,12 @@
   newFrame.origin.y = initialResizeFrame.origin.y - dy;
 
   [self setFrame:newFrame display:YES];
+
+  /* Let the resizing be handled by GTK+. */
+  if (g_main_context_pending (NULL))
+    g_main_context_iteration (NULL, FALSE);
+
+  inTrackManualResize = NO;
 
   return YES;
 }

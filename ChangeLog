@@ -1,3 +1,11 @@
+2007-12-20  Richard Hult  <richard@imendio.com>
+
+	Merged from trunk:
+
+	* gdk/quartz/GdkQuartzWindow.c:
+	* gdk/quartz/GdkQuartzWindow.h: Make manual resizing smoother by
+	processing events after changing the size.
+
 2007-12-17  Kristian Rietveld  <kris@imendio.com>
 
 	Merge from trunk.
