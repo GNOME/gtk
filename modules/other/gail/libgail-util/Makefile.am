@@ -62,13 +62,13 @@ libgailutil_la_LIBADD = \
 	$(GTK_DEP_LIBS)
 
 libgailutil_la_LDFLAGS = \
-	-version-info $(LT_VERSION_INFO)	\
+	-version-info $(GAIL_LT_VERSION_INFO)	\
 	$(no_undefined)				\
 	$(export_symbols)			\
         $(LDFLAGS)
 
 gailutil.lib: libgailutil.la gailutil.def
-	lib -name:libgailutil-@LT_CURRENT_MINUS_AGE@.dll -def:gailutil.def -out:$@
+	lib -name:libgailutil-$(GAIL_LT_CURRENT_MINUS_AGE).dll -def:gailutil.def -out:$@
 
 install-data-local: install-ms-lib install-libtool-import-lib
 

@@ -1,10 +1,17 @@
+2007-12-20  Christian Persch  <chpe@gnome.org>
+
+	* configure.in:
+	* modules/other/gail/libgail-util/Makefile.am:
+	Keep the same libtool version as the standalone	libgail-util had.
+        Bug #504643.
+
 2007-12-20 15:30:09  Tim Janik  <timj@imendio.com>
 
 	* Makefile.decl: generate HTML reports for test-report perf-report full-report.
 
 2007-12-20  Alexander Larsson  <alexl@redhat.com>
-
-        * gdk/x11/gdkapplaunchcontext-x11.c:
+        
+	* gdk/x11/gdkapplaunchcontext-x11.c:
 	Update for gio API changes
 
 2007-12-20  Richard Hult  <richard@imendio.com>
