@@ -1090,5 +1090,21 @@ gail_window_get_mdi_zorder (AtkComponent *component)
 }
 
 #else
-#error Port to this GDK backend
+
+static gint
+gail_window_get_mdi_zorder (AtkComponent *component)
+{
+  GtkWidget *widget = GTK_ACCESSIBLE (component)->widget;
+
+  if (widget == NULL)
+    /*
+     * State is defunct
+     */
+    return -1;
+
+  gail_return_val_if_fail (GTK_IS_WINDOW (widget), -1);
+
+  return 0;			/* Punt, FIXME */
+}
+
 #endif
