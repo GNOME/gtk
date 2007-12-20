@@ -17,12 +17,14 @@
  * Boston, MA 02111-1307, USA.
  */
 
+#include <config.h>
+
+#include <string.h>
 #include <gtk/gtk.h>
 #include "gailimage.h"
-#include "gailintl.h"
 
 static void      gail_image_class_init         (GailImageClass *klass);
-static void      gail_image_object_init        (GailImage      *image);
+static void      gail_image_init               (GailImage      *image);
 static G_CONST_RETURN gchar* gail_image_get_name  (AtkObject     *accessible);
 
 
@@ -40,163 +42,9 @@ static void      gail_image_get_image_size     (AtkImage        *image,
 static gboolean  gail_image_set_image_description (AtkImage     *image,
                                                 const gchar     *description);
 static void      gail_image_finalize           (GObject         *object);
-                                                         
-typedef struct _GailImageItem GailImageItem;
 
-struct _GailImageItem
-{
-  GQuark id;
-  gchar *name;
-  gchar *stock_id;
-};
-
-static GailImageItem stock_items [] =
-{
-  { 0, N_("dialog authentication"), "gtk-dialog-authentication"},
-  { 0, N_("dialog information"), "gtk-dialog-info"},
-  { 0, N_("dialog warning"), "gtk-dialog-warning"},
-  { 0, N_("dialog error"), "gtk-dialog-error"},
-  { 0, N_("dialog question"), "gtk-dialog-question"},
-  { 0, N_("drag and drop"), "gtk-dnd"},
-  { 0, N_("multiple drag and drop"), "gtk-dnd-multiple"},
-  { 0, N_("add"), "gtk-add"},
-  { 0, N_("apply"), "gtk-apply"},
-  { 0, N_("bold"), "gtk-bold"},
-  { 0, N_("cancel"), "gtk_cancel"},
-  { 0, N_("cdrom"), "gtk-cdrom"},
-  { 0, N_("clear"), "gtk-clear"},
-  { 0, N_("close"), "gtk-close"},
-  { 0, N_("color picker"), "gtk-color-picker"},
-  { 0, N_("convert"), "gtk-convert"},
-  { 0, N_("copy"), "gtk-copy"},
-  { 0, N_("cut"), "gtk-cut"},
-  { 0, N_("delete"), "gtk-delete"},
-  { 0, N_("execute"), "gtk-execute"},
-  { 0, N_("find"), "gtk-find"},
-  { 0, N_("find and replace"), "gtk-find-and-replace"},
-  { 0, N_("floppy"), "gtk-floppy"},
-  { 0, N_("go to bottom"), "gtk-goto-bottom"},
-  { 0, N_("go to first"), "gtk-goto-first"},
-  { 0, N_("go to last"), "gtk-goto-last"},
-  { 0, N_("go to top"), "gtk-goto-top"},
-  { 0, N_("go back"), "gtk-go-back"},
-  { 0, N_("go down"), "gtk-go-down"},
-  { 0, N_("go forward"), "gtk-go-forward"},
-  { 0, N_("go up"), "gtk-go-up"},
-  { 0, N_("help"), "gtk-help"},
-  { 0, N_("home"), "gtk-home"},
-  { 0, N_("index"), "gtk-index"},
-  { 0, N_("italic"), "gtk-italic"},
-  { 0, N_("jump to"), "gtk-jump-to"},
-  { 0, N_("justify center"), "gtk-justify-center"},
-  { 0, N_("justify fill"), "gtk-justify-fill"},
-  { 0, N_("justify left"), "gtk-justify-left"},
-  { 0, N_("justify right"), "gtk-justify-right"},
-  { 0, N_("missing image"), "gtk-missing-image"},
-  { 0, N_("new"), "gtk-new"},
-  { 0, N_("no"), "gtk-no"},
-  { 0, N_("ok"), "gtk-ok"},
-  { 0, N_("open"), "gtk-open"},
-  { 0, N_("paste"), "gtk-paste"},
-  { 0, N_("preferences"), "gtk-preferences"},
-  { 0, N_("print"), "gtk-print"},
-  { 0, N_("print preview"), "gtk-print-preview"},
-  { 0, N_("properties"), "gtk-properties"},
-  { 0, N_("quit"), "gtk-quit"},
-  { 0, N_("redo"), "gtk-redo"},
-  { 0, N_("refresh"), "gtk-refresh"},
-  { 0, N_("remove"), "gtk-remove"},
-  { 0, N_("revert to saved"), "gtk-revert-to-saved"},
-  { 0, N_("save"), "gtk-save"},
-  { 0, N_("save as"), "gtk-save-as"},
-  { 0, N_("select color"), "gtk-select-color"},
-  { 0, N_("select font"), "gtk-select-font"},
-  { 0, N_("sort ascending"), "gtk-sort-ascending"},
-  { 0, N_("sort descending"), "gtk-sort-descending"},
-  { 0, N_("spell check"), "gtk-spell-check"},
-  { 0, N_("stop"), "gtk-stop"},
-  { 0, N_("strikethrough"), "gtk-strikethrough"},
-  { 0, N_("undelete"), "gtk-undelete"},
-  { 0, N_("underline"), "gtk-underline"},
-  { 0, N_("yes"), "gtk-yes"},
-  { 0, N_("zoom 100 percent"), "gtk-zoom-100"},
-  { 0, N_("zoom fit"), "gtk-zoom-fit"},
-  { 0, N_("zoom in"), "gtk-zoom-in"},
-  { 0, N_("zoom out"), "gtk-zoom-out"},
-
-  { 0, N_("timer"), "gnome-stock-timer"},
-  { 0, N_("timer stop"), "gnome-stock-timer-stop"},
-  { 0, N_("trash"), "gnome-stock-trash"},
-  { 0, N_("trash full"), "gnome-stock-trash-full"},
-  { 0, N_("scores"), "gnome-stock-scores"},
-  { 0, N_("about"), "gnome-stock-about"},
-  { 0, N_("blank"), "gnome-stock-blank"},
-  { 0, N_("volume"), "gnome-stock-volume"},
-  { 0, N_("midi"), "gnome-stock-midi"},
-  { 0, N_("microphone"), "gnome-stock-mic"},
-  { 0, N_("line in"), "gnome-stock-line-in"},
-  { 0, N_("mail"), "gnome-stock-mail"},
-  { 0, N_("mail receive"), "gnome-stock-mail-rcv"},
-  { 0, N_("mail send"), "gnome-stock-mail-snd"},
-  { 0, N_("mail reply"), "gnome-stock-mail-rpl"},
-  { 0, N_("mail forward"), "gnome-stock-mail-fwd"},
-  { 0, N_("mail new"), "gnome-stock-mail-new"},
-  { 0, N_("attach"), "gnome-stock-attach"},
-  { 0, N_("book red"), "gnome-stock-book-red"},
-  { 0, N_("book green"), "gnome-stock-book-green"},
-  { 0, N_("book blue"), "gnome-stock-book-blue"},
-  { 0, N_("book yellow"), "gnome-stock-book-yellow"},
-  { 0, N_("book open"), "gnome-stock-book-open"},
-  { 0, N_("multiple file"), "gnome-stock-multiple-file"},
-  { 0, N_("not"), "gnome-stock-not"},
-  { 0, N_("table borders"), "gnome-stock-table-borders"},
-  { 0, N_("table fill"), "gnome-stock-table-fill"},
-  { 0, N_("text indent"), "gnome-stock-text-indent"},
-  { 0, N_("text unindent"), "gnome-stock-text-unindent"},
-  { 0, N_("text bulleted list"), "gnome-stock-text-bulleted-list"},
-  { 0, N_("text numbered list"), "gnome-stock-text-numbered-list"},
-  { 0, N_("authentication"), "gnome-stock-authentication"}
-};
-
-static gpointer parent_class = NULL;
-
-GType
-gail_image_get_type (void)
-{
-  static GType type = 0;
-
-  if (!type)
-  {
-    static const GTypeInfo tinfo =
-    {
-      sizeof (GailImageClass),
-      (GBaseInitFunc) NULL, /* base init */
-      (GBaseFinalizeFunc) NULL, /* base finalize */
-      (GClassInitFunc) gail_image_class_init, /* class init */
-      (GClassFinalizeFunc) NULL, /* class finalize */
-      NULL, /* class data */
-      sizeof (GailImage), /* instance size */
-      0, /* nb preallocs */
-      (GInstanceInitFunc) gail_image_object_init, /* instance init */
-      NULL /* value table */
-    };
-
-    static const GInterfaceInfo atk_image_info =
-    {
-        (GInterfaceInitFunc) atk_image_interface_init,
-        (GInterfaceFinalizeFunc) NULL,
-        NULL
-    };
-
-    type = g_type_register_static (GAIL_TYPE_WIDGET,
-                                   "GailImage", &tinfo, 0);
-
-    g_type_add_interface_static (type, ATK_TYPE_IMAGE,
-                                 &atk_image_info);
-  }
-
-  return type;
-}
+G_DEFINE_TYPE_WITH_CODE (GailImage, gail_image, GAIL_TYPE_WIDGET,
+                         G_IMPLEMENT_INTERFACE (ATK_TYPE_IMAGE, atk_image_interface_init))
 
 static void
 gail_image_class_init (GailImageClass *klass)
@@ -204,14 +52,12 @@ gail_image_class_init (GailImageClass *klass)
   GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
   AtkObjectClass  *class = ATK_OBJECT_CLASS (klass);
 
-  parent_class = g_type_class_peek_parent (klass);
-
   gobject_class->finalize = gail_image_finalize;
   class->get_name = gail_image_get_name;
 }
 
 static void
-gail_image_object_init (GailImage *image)
+gail_image_init (GailImage *image)
 {
   image->image_description = NULL;
 }
@@ -234,81 +80,91 @@ gail_image_new (GtkWidget *widget)
   return accessible;
 }
 
-static void
-init_strings (void)
+/* Copied from gtktoolbar.c, keep in sync */
+static gchar *
+elide_underscores (const gchar *original)
 {
-  gint i;
+  gchar *q, *result;
+  const gchar *p, *end;
+  gsize len;
+  gboolean last_underscore;
+  
+  if (!original)
+    return NULL;
 
-  for (i = 0; i < G_N_ELEMENTS (stock_items); i++)
-    stock_items[i].id = g_quark_from_static_string (stock_items[i].stock_id);
-}
-
-static G_CONST_RETURN gchar*
-get_localized_name (const gchar *str)
-{
-  GQuark str_q;
-  gint i;
-
-#if 0
-  static gboolean gettext_initialized = FALSE;
-
-  if (!gettext_initialized)
+  len = strlen (original);
+  q = result = g_malloc (len + 1);
+  last_underscore = FALSE;
+  
+  end = original + len;
+  for (p = original; p < end; p++)
     {
-      init_strings ();
-      gettext_initialized = TRUE;
-#ifdef ENABLE_NLS
-      bindtextdomain (GETTEXT_PACKAGE, GAIL_LOCALEDIR);
-#ifdef HAVE_BIND_TEXTDOMAIN_CODESET
-      bind_textdomain_codeset (GETTEXT_PACKAGE, "UTF-8");
-#endif
-#endif
+      if (!last_underscore && *p == '_')
+	last_underscore = TRUE;
+      else
+	{
+	  last_underscore = FALSE;
+	  if (original + 2 <= p && p + 1 <= end && 
+              p[-2] == '(' && p[-1] == '_' && p[0] != '_' && p[1] == ')')
+	    {
+	      q--;
+	      *q = '\0';
+	      p++;
+	    }
+	  else
+	    *q++ = *p;
+	}
     }
-#endif
 
-  str_q = g_quark_try_string (str);
-  for (i = 0; i <  G_N_ELEMENTS (stock_items); i++)
-    {
-      if (str_q == stock_items[i].id)
-         return dgettext (GETTEXT_PACKAGE, stock_items[i].name);
-  }
-
-  return str;
+  if (last_underscore)
+    *q++ = '_';
+  
+  *q = '\0';
+  
+  return result;
 }
 
 static G_CONST_RETURN gchar*
 gail_image_get_name (AtkObject *accessible)
 {
-  G_CONST_RETURN gchar *name;
+  GtkWidget* widget;
+  GtkImage *image;
+  GailImage *image_accessible;
+  GtkStockItem stock_item;
+  const gchar *name;
 
-  name = ATK_OBJECT_CLASS (parent_class)->get_name (accessible); 
+  name = ATK_OBJECT_CLASS (gail_image_parent_class)->get_name (accessible); 
   if (name)
     return name;
-  else
-    {
-      GtkWidget* widget = GTK_ACCESSIBLE (accessible)->widget;
-      GtkImage *image;
 
-      if (widget == NULL)
-        /*
-         * State is defunct
-         */
-        return NULL;
+  widget = GTK_ACCESSIBLE (accessible)->widget;
+  /*
+   * State is defunct
+   */
+  if (widget == NULL)
+    return NULL;
 
-      g_return_val_if_fail (GTK_IS_IMAGE (widget), NULL);
-      image = GTK_IMAGE (widget);
+  g_return_val_if_fail (GTK_IS_IMAGE (widget), NULL);
+  image = GTK_IMAGE (widget);
+  image_accessible = GAIL_IMAGE (accessible);
 
-      if (image->storage_type == GTK_IMAGE_STOCK &&
-          image->data.stock.stock_id)
-        return get_localized_name (image->data.stock.stock_id); 
-      else return NULL;
-    }
+  g_free (image_accessible->stock_name);
+  image_accessible->stock_name = NULL;
+
+  if (image->storage_type != GTK_IMAGE_STOCK ||
+      image->data.stock.stock_id == NULL)
+    return NULL;
+
+  if (!gtk_stock_lookup (image->data.stock.stock_id, &stock_item))
+    return NULL;
+
+  image_accessible->stock_name = elide_underscores (stock_item.label);
+  return image_accessible->stock_name;
 }
 
 static void
 atk_image_interface_init (AtkImageIface *iface)
 {
-  g_return_if_fail (iface != NULL);
-
   iface->get_image_description = gail_image_get_image_description;
   iface->get_image_position = gail_image_get_image_position;
   iface->get_image_size = gail_image_get_image_size;
@@ -426,5 +282,7 @@ gail_image_finalize (GObject      *object)
   GailImage *aimage = GAIL_IMAGE (object);
 
   g_free (aimage->image_description);
-  G_OBJECT_CLASS (parent_class)->finalize (object);
+  g_free (aimage->stock_name);
+
+  G_OBJECT_CLASS (gail_image_parent_class)->finalize (object);
 }

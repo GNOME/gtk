@@ -1,3 +1,14 @@
+2007-12-20  Christian Persch  <chpe@gnome.org>
+
+	* modules/other/gail/Makefile.am:
+	* modules/other/gail/gailimage.c: (gail_image_class_init),
+	(gail_image_init), (elide_underscores), (gail_image_get_name),
+	(atk_image_interface_init), (gail_image_finalize):
+	* modules/other/gail/gailimage.h:
+	R modules/other/gail/gailintl.h:
+	* po/POTFILES.skip: Use the stock item's label as the name of the
+	accessible in gailimage.c. Bug #504246.
+
 2007-12-19  Mathias Hasselmann  <mathias@openismus.com>
 
 	Avoid some compiler warnings and remove obsolete code. (#339540)

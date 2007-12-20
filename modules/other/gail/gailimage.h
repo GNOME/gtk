@@ -42,6 +42,7 @@ struct _GailImage
   GailWidget parent;
 
   gchar*     image_description;
+  gchar*     stock_name;
 };
 
 GType gail_image_get_type (void);

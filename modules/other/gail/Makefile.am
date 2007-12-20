@@ -6,7 +6,7 @@ if OS_WIN32
 no_undefined = -no-undefined
 endif
 
-moduledir = $(libdir)/gtk-2.0/$(GTK_BINARY_VERSION)/other
+moduledir = $(libdir)/gtk-2.0/modules
 module_LTLIBRARIES = libgail.la
 
 gail_c_sources =			\
@@ -100,7 +100,6 @@ gail_private_h_sources =		\
 	gailimage.h			\
 	gailimagecell.h			\
 	gailimagecellfactory.h		\
-	gailintl.h			\
 	gailitem.h			\
 	gaillabel.h			\
 	gaillist.h			\
