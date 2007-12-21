@@ -40,6 +40,9 @@ TEST_PROGS                      += buildertest
 buildertest_DEPENDENCIES 	 = $(TEST_DEPS)
 buildertest_LDADD 		 = $(LDADDS)
 buildertest_LDFLAGS 		 = -export-dynamic
+TEST_PROGS                      += defaultvaluetest
+defaultvaluetest_DEPENDENCIES 	 = $(TEST_DEPS)
+defaultvaluetest_LDADD 		 = $(LDADDS)
 
 noinst_PROGRAMS =  $(TEST_PROGS)	\
 	autotestkeywords		\
