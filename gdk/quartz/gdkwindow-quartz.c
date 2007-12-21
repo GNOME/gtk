@@ -868,6 +868,7 @@ _gdk_windowing_window_destroy (GdkWindow *window,
   GdkWindowObject *private;
   GdkWindowImplQuartz *impl;
   GdkWindowObject *parent;
+  GdkWindow *mouse_window;
 
   private = GDK_WINDOW_OBJECT (window);
   impl = GDK_WINDOW_IMPL_QUARTZ (private->impl);
@@ -895,24 +896,21 @@ _gdk_windowing_window_destroy (GdkWindow *window,
   if (window == _gdk_quartz_keyboard_grab_window)
     gdk_keyboard_ungrab (0);
 
+  _gdk_quartz_drawable_finish (GDK_DRAWABLE (impl));
+
+  mouse_window = _gdk_quartz_events_get_mouse_window (FALSE);
+  if (window == mouse_window ||
+      _gdk_quartz_window_is_ancestor (window, mouse_window))
+    _gdk_quartz_events_update_mouse_window (_gdk_root);
+
   if (!recursing && !foreign_destroy)
     {
-      GdkWindowImplQuartz *impl = GDK_WINDOW_IMPL_QUARTZ (GDK_WINDOW_OBJECT (window)->impl);
-      GdkWindow *mouse_window;
-
-      mouse_window = _gdk_quartz_events_get_mouse_window (FALSE);
-      if (window == mouse_window ||
-          _gdk_quartz_window_is_ancestor (window, mouse_window))
-        _gdk_quartz_events_update_mouse_window (_gdk_root);
-
       GDK_QUARTZ_ALLOC_POOL;
-
-      _gdk_quartz_drawable_finish (GDK_DRAWABLE (impl));
 
       if (impl->toplevel)
 	[impl->toplevel close];
       else if (impl->view)
-	[impl->view release];
+	[impl->view removeFromSuperview];
 
       GDK_QUARTZ_RELEASE_POOL;
     }
@@ -2884,9 +2882,6 @@ gdk_window_configure_finished (GdkWindow *window)
 void
 gdk_window_destroy_notify (GdkWindow *window)
 {
-  /* FIXME: Implement. We should call this from -[GdkQuartzWindow dealloc] or
-   * -[GdkQuartzView dealloc], although I suspect that currently they leak
-   * anyway. */
 }
 
 void 
