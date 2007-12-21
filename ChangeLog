@@ -1,3 +1,8 @@
+2007-12-21  Richard Hult  <richard@imendio.com>
+
+	* gdk/quartz/gdkwindow-quartz.c: (_gdk_windowing_window_destroy):
+	Plug leak of destroyed subviews, fixes bug #504753.
+
 2007-12-20  Johan Dahlin  <johan@gnome.org>
 
 	* tests/Makefile.am (TEST_PROGS): 
