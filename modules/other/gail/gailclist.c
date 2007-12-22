@@ -456,6 +456,8 @@ gail_clist_finalize (GObject            *object)
         }
       g_list_free (clist->cell_data);
     }
+
+  G_OBJECT_CLASS (parent_class)->finalize (object);
 }
 
 static gint

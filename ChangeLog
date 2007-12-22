@@ -1,3 +1,8 @@
+2007-12-22  Matthias Clasen  <mclasen@redhat.com>
+
+	* modules/other/gail/gailclist.c: Chain up the finalizer (#504570,
+	Christian Persch)
+
 2007-12-21  Richard Hult  <richard@imendio.com>
 
 	* gdk/quartz/gdkwindow-quartz.c: (_gdk_windowing_window_destroy):
