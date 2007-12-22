@@ -162,11 +162,14 @@ libgail_la_CFLAGS = \
 	$(AM_CFLAGS)
 
 libgail_la_LIBADD =  \
-        $(GTK_DEP_LIBS)	\
+	$(top_builddir)/gdk-pixbuf/libgdk_pixbuf-$(GTK_API_VERSION).la 	\
+	$(top_builddir)/gdk/$(gdktargetlib) 				\
+	$(top_builddir)/gtk/$(gtktargetlib)				\
+	$(top_builddir)/modules/other/gail/libgail-util/libgailutil.la	\
+	$(GTK_DEP_LIBS)							\
 	$(INTLLIBS)
 
 libgail_la_LDFLAGS =    \
-	$(top_builddir)/modules/other/gail/libgail-util/libgailutil.la	\
 	-rpath $(moduledir) -module -avoid-version \
 	$(no_undefined) \
         $(LDFLAGS)
