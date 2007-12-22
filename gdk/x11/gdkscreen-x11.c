@@ -678,12 +678,14 @@ init_randr12 (GdkScreen *screen)
   if (!display_x11->have_randr12)
       return FALSE;
 
-  monitors = g_array_new (TRUE, TRUE, sizeof (GdkX11Monitor));
-  
   resources = XRRGetScreenResources (screen_x11->xdisplay,
 				     screen_x11->xroot_window);
+  if (!resources)
+    return FALSE;
   
-  /* FIXME: can GetScreenResources return NULL except when it's out of memory? */
+  monitors = g_array_sized_new (FALSE, TRUE, sizeof (GdkX11Monitor),
+                                monitors->len);
+
   for (i = 0; i < resources->noutput; ++i)
     {
       XRROutputInfo *output =
@@ -707,14 +709,18 @@ init_randr12 (GdkScreen *screen)
 	  monitor.manufacturer = NULL;
 
 	  g_array_append_val (monitors, monitor);
+
+          XRRFreeCrtcInfo (crtc);
 	}
 
       XRRFreeOutputInfo (output);
     }
 
+  XRRFreeScreenResources (resources);
+
   screen_x11->n_monitors = monitors->len;
   screen_x11->monitors = (GdkX11Monitor *)g_array_free (monitors, FALSE);
-  
+
   return TRUE;
 #endif
   

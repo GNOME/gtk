@@ -1,4 +1,8 @@
 2007-12-22  Christian Persch  <chpe@gnome.org>
+
+	* gdk/x11/gdkscreen-x11.c: (init_randr12): Plug mem leaks. Bug #504886.
+
+2007-12-22  Christian Persch  <chpe@gnome.org>
         
         * modules/other/gail/gail.c:
         * modules/other/gail/gailbutton.c:
