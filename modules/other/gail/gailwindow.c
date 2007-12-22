@@ -511,15 +511,10 @@ idle_notify_name_change (gpointer data)
   GailWindow *window;
   AtkObject *obj;
 
-  GDK_THREADS_ENTER ();
-
   window = GAIL_WINDOW (data);
   window->name_change_handler = 0;
   if (GTK_ACCESSIBLE (window)->widget == NULL)
-    {
-      GDK_THREADS_LEAVE ();
-      return FALSE;
-    }
+    return FALSE;
 
   obj = ATK_OBJECT (window);
   if (obj->name == NULL)
@@ -530,7 +525,7 @@ idle_notify_name_change (gpointer data)
       g_object_notify (G_OBJECT (obj), "accessible-name");
     }
   g_signal_emit_by_name (obj, "visible_data_changed");
-  GDK_THREADS_LEAVE ();
+
   return FALSE;
 }
 
@@ -562,7 +557,7 @@ gail_window_real_notify_gtk (GObject		*obj,
           window->previous_name = g_strdup (name);
        
           if (window->name_change_handler == 0)
-            window->name_change_handler = g_idle_add (idle_notify_name_change, atk_obj);    
+            window->name_change_handler = gdk_threads_add_idle (idle_notify_name_change, atk_obj);
         }
     }
   else
@@ -825,14 +820,10 @@ update_screen_info (gpointer data)
 {
   int screen_n = GPOINTER_TO_INT (data);
 
-  GDK_THREADS_ENTER ();
-
   gail_screens [screen_n].update_handler = 0;
   gail_screens [screen_n].update_stacked_windows = FALSE;
 
   get_stacked_windows (&gail_screens [screen_n]);
-
-  GDK_THREADS_LEAVE ();
 
   return FALSE;
 }
@@ -843,8 +834,6 @@ update_desktop_info (gpointer data)
   int screen_n = GPOINTER_TO_INT (data);
   GailScreenInfo *info;
   int i;
-
-  GDK_THREADS_ENTER ();
 
   info = &gail_screens [screen_n];
   info->update_desktop_handler = 0;
@@ -857,8 +846,6 @@ update_desktop_info (gpointer data)
           info->desktop_changed [i] = FALSE;
         }
     }
-
-  GDK_THREADS_LEAVE ();
 
   return FALSE;
 }
@@ -887,8 +874,8 @@ filter_func (GdkXEvent *gdkxevent,
               gail_screens [screen_n].update_stacked_windows = TRUE;
               if (!gail_screens [screen_n].update_handler)
                 {
-                  gail_screens [screen_n].update_handler = g_idle_add (update_screen_info,
-	        						       GINT_TO_POINTER (screen_n));
+                  gail_screens [screen_n].update_handler = gdk_threads_add_idle (update_screen_info,
+	        						                 GINT_TO_POINTER (screen_n));
                 }
             }
         }
@@ -908,8 +895,8 @@ filter_func (GdkXEvent *gdkxevent,
                       info->desktop_changed [j] = TRUE;
                       if (!info->update_desktop_handler)
                         {
-                          info->update_desktop_handler = g_idle_add (update_desktop_info, 
-                                                                     GINT_TO_POINTER (i));
+                          info->update_desktop_handler = gdk_threads_add_idle (update_desktop_info,
+                                                                               GINT_TO_POINTER (i));
                         }
                       break;
                     }

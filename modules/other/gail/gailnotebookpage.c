@@ -184,11 +184,11 @@ notify_child_added (gpointer data)
   GailNotebookPage *page;
   AtkObject *atk_object, *atk_parent;
 
-  GDK_THREADS_ENTER ();
-
   g_return_val_if_fail (GAIL_IS_NOTEBOOK_PAGE (data), FALSE);
   page = GAIL_NOTEBOOK_PAGE (data);
   atk_object = ATK_OBJECT (data);
+
+  page->notify_child_added_id = 0;
 
   /* The widget page->notebook may be deleted before this handler is called */
   if (page->notebook != NULL)
@@ -198,8 +198,6 @@ notify_child_added (gpointer data)
       g_signal_emit_by_name (atk_parent, "children_changed::add", page->index, atk_object, NULL);
     }
   
-  GDK_THREADS_LEAVE ();
-
   return FALSE;
 }
 
@@ -236,7 +234,7 @@ gail_notebook_page_new (GtkNotebook *notebook,
   atk_object->role = ATK_ROLE_PAGE_TAB;
   atk_object->layer = ATK_LAYER_WIDGET;
 
-  g_idle_add (notify_child_added, atk_object);
+  page->notify_child_added_id = gdk_threads_add_idle (notify_child_added, atk_object);
   /*
    * We get notified of changes to the label
    */
@@ -329,8 +327,10 @@ gail_notebook_page_finalize (GObject *object)
   if (page->textutil)
     g_object_unref (page->textutil);
 
-  G_OBJECT_CLASS (parent_class)->finalize (object);
+  if (page->notify_child_added_id)
+    g_source_remove (page->notify_child_added_id);
 
+  G_OBJECT_CLASS (parent_class)->finalize (object);
 }
 
 static G_CONST_RETURN gchar*

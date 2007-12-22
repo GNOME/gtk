@@ -47,6 +47,7 @@ struct _GailNotebookPage
   GtkNotebookPage *page;
   
   gint index;
+  guint notify_child_added_id;
 
   GailTextUtil *textutil;
 };

@@ -310,7 +310,7 @@ gail_notebook_real_notify_gtk (GObject           *obj,
         {
           if (gail_notebook->idle_focus_id)
             g_source_remove (gail_notebook->idle_focus_id);
-          gail_notebook->idle_focus_id = g_idle_add (gail_notebook_check_focus_tab, atk_obj);
+          gail_notebook->idle_focus_id = gdk_threads_add_idle (gail_notebook_check_focus_tab, atk_obj);
         }
     }
   else
@@ -337,6 +337,10 @@ gail_notebook_finalize (GObject            *object)
     }
 
   g_list_free (notebook->page_cache);
+
+  if (notebook->idle_focus_id)
+    g_source_remove (notebook->idle_focus_id);
+
   G_OBJECT_CLASS (parent_class)->finalize (object);
 }
 
@@ -593,9 +597,8 @@ gail_notebook_focus_cb (GtkWidget      *widget,
     {
     case GTK_DIR_LEFT:
     case GTK_DIR_RIGHT:
-      if (gail_notebook->idle_focus_id)
-        g_source_remove (gail_notebook->idle_focus_id);
-      gail_notebook->idle_focus_id = g_idle_add (gail_notebook_check_focus_tab, atk_obj);
+      if (gail_notebook->idle_focus_id == 0)
+        gail_notebook->idle_focus_id = gdk_threads_add_idle (gail_notebook_check_focus_tab, atk_obj);
       break;
     default:
       break;
@@ -612,8 +615,6 @@ gail_notebook_check_focus_tab (gpointer data)
   GailNotebook *gail_notebook;
   GtkNotebook *gtk_notebook;
 
-  GDK_THREADS_ENTER ();
-
   atk_obj = ATK_OBJECT (data);
   gail_notebook = GAIL_NOTEBOOK (atk_obj);
   widget = GTK_ACCESSIBLE (atk_obj)->widget;
@@ -623,10 +624,7 @@ gail_notebook_check_focus_tab (gpointer data)
   gail_notebook->idle_focus_id = 0;
 
   if (!gtk_notebook->focus_tab)
-    {
-      GDK_THREADS_LEAVE ();
-      return FALSE;
-    }
+    return FALSE;
 
   old_focus_page_num = gail_notebook->focus_tab_page;
   focus_page_num = g_list_index (gtk_notebook->children, gtk_notebook->focus_tab->data);
@@ -640,8 +638,6 @@ gail_notebook_check_focus_tab (gpointer data)
       g_object_unref (obj);
     }
 
-  GDK_THREADS_LEAVE ();
-
   return FALSE;
 }
 
@@ -651,5 +647,8 @@ gail_notebook_destroyed (gpointer data)
   GailNotebook *gail_notebook = GAIL_NOTEBOOK (data);
 
   if (gail_notebook->idle_focus_id)
-    g_source_remove (gail_notebook->idle_focus_id);
+    {
+      g_source_remove (gail_notebook->idle_focus_id);
+      gail_notebook->idle_focus_id = 0;
+    }
 }

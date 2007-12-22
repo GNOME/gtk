@@ -412,7 +412,7 @@ gail_range_do_action (AtkAction *action,
     if (range->action_idle_handler)
       return_value = FALSE;
     else
-      range->action_idle_handler = g_idle_add (idle_do_action, range);
+      range->action_idle_handler = gdk_threads_add_idle (idle_do_action, range);
    }
   else
      return_value = FALSE;
@@ -425,21 +425,14 @@ idle_do_action (gpointer data)
   GailRange *range;
   GtkWidget *widget;
 
-  GDK_THREADS_ENTER ();
-
   range = GAIL_RANGE (data);
   range->action_idle_handler = 0;
   widget = GTK_ACCESSIBLE (range)->widget;
   if (widget == NULL /* State is defunct */ ||
      !GTK_WIDGET_SENSITIVE (widget) || !GTK_WIDGET_VISIBLE (widget))
-   {
-    GDK_THREADS_LEAVE ();
     return FALSE;
-   }
 
    gtk_widget_activate (widget);
-
-   GDK_THREADS_LEAVE ();
 
    return FALSE;
 }

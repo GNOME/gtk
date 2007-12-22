@@ -510,7 +510,7 @@ gail_cell_action_do_action (AtkAction *action,
   if (cell->action_idle_handler)
     return FALSE;
   cell->action_func = info->do_action_func;
-  cell->action_idle_handler = g_idle_add (idle_do_action, cell);
+  cell->action_idle_handler = gdk_threads_add_idle (idle_do_action, cell);
   return TRUE;
 }
 
@@ -519,13 +519,9 @@ idle_do_action (gpointer data)
 {
   GailCell *cell;
 
-  GDK_THREADS_ENTER ();
-
   cell = GAIL_CELL (data);
   cell->action_idle_handler = 0;
   cell->action_func (cell);
-
-  GDK_THREADS_LEAVE ();
 
   return FALSE;
 }

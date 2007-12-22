@@ -311,8 +311,11 @@ gail_menu_item_do_action (AtkAction *action,
         return FALSE;
       else
 	{
-	  g_object_ref (gail_menu_item);
-	  gail_menu_item->action_idle_handler = g_idle_add (idle_do_action, gail_menu_item);
+	  gail_menu_item->action_idle_handler =
+            gdk_threads_add_idle_full (G_PRIORITY_DEFAULT_IDLE,
+                                       idle_do_action,
+                                       g_object_ref (gail_menu_item),
+                                       (GDestroyNotify) g_object_unref);
 	}
       return TRUE;
     }
@@ -352,18 +355,12 @@ idle_do_action (gpointer data)
   GailMenuItem *menu_item;
   gboolean item_mapped;
 
-  GDK_THREADS_ENTER ();
-
   menu_item = GAIL_MENU_ITEM (data);
   menu_item->action_idle_handler = 0;
   item = GTK_ACCESSIBLE (menu_item)->widget;
   if (item == NULL /* State is defunct */ ||
       !GTK_WIDGET_SENSITIVE (item) || !GTK_WIDGET_VISIBLE (item))
-  {
-    g_object_unref (menu_item);
-    GDK_THREADS_LEAVE ();
     return FALSE;
-  }
 
   item_parent = gtk_widget_get_parent (item);
   gtk_menu_shell_select_item (GTK_MENU_SHELL (item_parent), item);
@@ -375,9 +372,6 @@ idle_do_action (gpointer data)
                          /*force_hide*/ 1); 
   if (!item_mapped)
     ensure_menus_unposted (menu_item);
-
-  g_object_unref (menu_item);
-  GDK_THREADS_LEAVE ();
 
   return FALSE;
 }

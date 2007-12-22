@@ -256,7 +256,7 @@ gail_option_menu_do_action (AtkAction *action,
       if (button->action_idle_handler)
         return_value = FALSE;
       else
-        button->action_idle_handler = g_idle_add (idle_do_action, button);
+        button->action_idle_handler = gdk_threads_add_idle (idle_do_action, button);
       break;
     default:
       return_value = FALSE;
@@ -273,18 +273,13 @@ idle_do_action (gpointer data)
   GdkEvent tmp_event;
   GailButton *gail_button;
 
-  GDK_THREADS_ENTER ();
-
   gail_button = GAIL_BUTTON (data);
   gail_button->action_idle_handler = 0;
 
   widget = GTK_ACCESSIBLE (gail_button)->widget;
   if (widget == NULL /* State is defunct */ ||
       !GTK_WIDGET_SENSITIVE (widget) || !GTK_WIDGET_VISIBLE (widget))
-    {
-      GDK_THREADS_LEAVE ();
-      return FALSE;
-    }
+    return FALSE;
 
   button = GTK_BUTTON (widget); 
 
@@ -303,9 +298,7 @@ idle_do_action (gpointer data)
 
   gtk_widget_event (widget, &tmp_event);
 
-  GDK_THREADS_LEAVE ();
-
-  return FALSE; 
+  return FALSE;
 }
 
 static gint

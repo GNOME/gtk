@@ -687,7 +687,11 @@ gail_tree_view_finalize (GObject	    *object)
 
   /* remove any idle handlers still pending */
   if (view->idle_garbage_collect_id)
-      g_source_remove (view->idle_garbage_collect_id);
+    g_source_remove (view->idle_garbage_collect_id);
+  if (view->idle_cursor_changed_id)
+    g_source_remove (view->idle_cursor_changed_id);
+  if (view->idle_expand_id)
+    g_source_remove (view->idle_expand_id);
 
   if (view->caption)
     g_object_unref (view->caption);
@@ -2299,8 +2303,9 @@ gail_tree_view_expand_row_gtk (GtkTreeView       *tree_view,
    */
   /* this seems wrong since it overwrites any other pending expand handlers... */
   gailview->idle_expand_path = gtk_tree_path_copy (path);
-  if (gailview->idle_expand_id) g_source_remove (gailview->idle_expand_id);
-  gailview->idle_expand_id = g_idle_add (idle_expand_row, gailview);
+  if (gailview->idle_expand_id)
+    g_source_remove (gailview->idle_expand_id);
+  gailview->idle_expand_id = gdk_threads_add_idle (idle_expand_row, gailview);
   return FALSE;
 }
 
@@ -2314,7 +2319,7 @@ idle_expand_row (gpointer data)
   GtkTreeModel *tree_model;
   gint n_inserted, row;
 
-  GDK_THREADS_ENTER ();
+  gailview->idle_expand_id = 0;
 
   path = gailview->idle_expand_path;
   tree_view = GTK_TREE_VIEW (GTK_ACCESSIBLE (gailview)->widget);
@@ -2322,14 +2327,11 @@ idle_expand_row (gpointer data)
   g_assert (GTK_IS_TREE_VIEW (tree_view));
 
   tree_model = gtk_tree_view_get_model(tree_view);
-
-  g_assert (GTK_IS_TREE_MODEL (tree_model));
+  if (!tree_model)
+    return FALSE;
 
   if (!path || !gtk_tree_model_get_iter (tree_model, &iter, path))
-    {
-      GDK_THREADS_LEAVE ();
-      return FALSE;
-    }
+    return FALSE;
 
   /*
    * Update visibility of cells below expansion row
@@ -2358,7 +2360,6 @@ idle_expand_row (gpointer data)
   else
     {
       /* We can get here if the row expanded callback deleted the row */
-      GDK_THREADS_LEAVE ();
       return FALSE;
     }
 
@@ -2379,8 +2380,6 @@ idle_expand_row (gpointer data)
   gailview->idle_expand_path = NULL;
 
   gtk_tree_path_free (path);
-
-  GDK_THREADS_LEAVE ();
 
   return FALSE;
 }
@@ -2661,45 +2660,42 @@ columns_changed (GtkTreeView *tree_view)
 static void
 cursor_changed (GtkTreeView *tree_view)
 {
+  GailTreeView *gailview;
+
+  gailview = GAIL_TREE_VIEW (gtk_widget_get_accessible (GTK_WIDGET (tree_view)));
+  if (gailview->idle_cursor_changed_id != 0)
+    return;
+
   /*
    * We notify the focus change in a idle handler so that the processing
    * of the cursor change is completed when the focus handler is called.
    * This will allow actions to be called in the focus handler
    */ 
-  g_idle_add (idle_cursor_changed, gtk_widget_get_accessible (GTK_WIDGET (tree_view)));
+  gailview->idle_cursor_changed_id = gdk_threads_add_idle (idle_cursor_changed, gailview);
 }
 
 static gint
 idle_cursor_changed (gpointer data)
 {
+  GailTreeView *gail_tree_view = GAIL_TREE_VIEW (data);
   GtkTreeView *tree_view;
   GtkWidget *widget;
-  AtkObject *parent;
   AtkObject *cell;
 
-  GDK_THREADS_ENTER ();
+  gail_tree_view->idle_cursor_changed_id = 0;
 
-  parent = ATK_OBJECT (data);
-
-  widget = GTK_ACCESSIBLE (parent)->widget;
+  widget = GTK_ACCESSIBLE (gail_tree_view)->widget;
   /*
    * Widget has been deleted
    */
   if (widget == NULL)
-    {
-      GDK_THREADS_LEAVE ();
-      return FALSE;
-    }
+    return FALSE;
 
   tree_view = GTK_TREE_VIEW (widget);
 
   cell = gail_tree_view_ref_focus_cell (tree_view);
   if (cell)
     {
-      GailTreeView *gail_tree_view;
-
-      gail_tree_view = GAIL_TREE_VIEW (parent);
-
       if (cell != gail_tree_view->focus_cell)
         {
           if (gail_tree_view->focus_cell)
@@ -2711,15 +2707,13 @@ idle_cursor_changed (gpointer data)
 
           if (GTK_WIDGET_HAS_FOCUS (widget))
             gail_cell_add_state (GAIL_CELL (cell), ATK_STATE_ACTIVE, FALSE);
-          g_signal_emit_by_name (parent,
+          g_signal_emit_by_name (gail_tree_view,
                                  "active-descendant-changed",
                                  cell);
         }
       else
         g_object_unref (cell);
     }
-
-  GDK_THREADS_LEAVE ();
 
   return FALSE;
 }
@@ -2855,13 +2849,14 @@ model_row_inserted (GtkTreeModel *tree_model,
   if (gailview->idle_expand_id)
     {
       g_source_remove (gailview->idle_expand_id);
+      gailview->idle_expand_id = 0;
+
       /* don't do this if the insertion precedes the idle path, since it will now be invalid */
       if (path && gailview->idle_expand_path &&
 	  (gtk_tree_path_compare (path, gailview->idle_expand_path) > 0))
 	  set_expand_state (tree_view, tree_model, gailview, gailview->idle_expand_path, FALSE);
       if (gailview->idle_expand_path) 
 	  gtk_tree_path_free (gailview->idle_expand_path);
-      gailview->idle_expand_id = 0;
     }
   /* Check to see if row is visible */
   row = get_row_from_tree_path (tree_view, path);
@@ -3542,8 +3537,9 @@ clean_cell_info (GailTreeView *gailview,
       cell_info->in_use = FALSE; 
       if (!gailview->garbage_collection_pending) {
 	  gailview->garbage_collection_pending = TRUE;
+          g_assert (gailview->idle_garbage_collect_id == 0);
 	  gailview->idle_garbage_collect_id = 
-	      g_idle_add (idle_garbage_collect_cell_data, gailview);
+	    gdk_threads_add_idle (idle_garbage_collect_cell_data, gailview);
       }
   }
 }
@@ -3648,13 +3644,11 @@ clean_cols (GailTreeView      *gailview,
     }
 }
 
-
 static gboolean
 idle_garbage_collect_cell_data (gpointer data)
 {
       GailTreeView *tree_view;
 
-      GDK_THREADS_ENTER ();
       g_assert (GAIL_IS_TREE_VIEW (data));
       tree_view = (GailTreeView *)data;
 
@@ -3666,9 +3660,7 @@ idle_garbage_collect_cell_data (gpointer data)
 
       tree_view->garbage_collection_pending = garbage_collect_cell_data (data);
 
-      GDK_THREADS_LEAVE ();
-
-      /* N.B.: if for some reason another handler has re-enterantly been queued 
+      /* N.B.: if for some reason another handler has re-enterantly been queued
        * while this handler was being serviced, it has its own gsource, therefore this handler
        * should always return FALSE.
        */
@@ -4105,7 +4097,7 @@ cell_destroyed (gpointer data)
       if (!cell_info->view->garbage_collection_pending) {
 	  cell_info->view->garbage_collection_pending = TRUE;
 	  cell_info->view->idle_garbage_collect_id =
-	    g_idle_add (idle_garbage_collect_cell_data, cell_info->view);
+	    gdk_threads_add_idle (idle_garbage_collect_cell_data, cell_info->view);
       }
   }
 }

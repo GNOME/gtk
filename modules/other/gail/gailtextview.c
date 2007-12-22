@@ -1591,7 +1591,7 @@ _gail_text_view_changed_cb (GtkTextBuffer *buffer,
     {
       if (!gail_text_view->insert_notify_handler)
         {
-          gail_text_view->insert_notify_handler = g_idle_add (insert_idle_handler, accessible);
+          gail_text_view->insert_notify_handler = gdk_threads_add_idle (insert_idle_handler, accessible);
         }
       return;
     }
@@ -1680,8 +1680,6 @@ insert_idle_handler (gpointer data)
   GailTextView *gail_text_view;
   GtkTextBuffer *buffer;
 
-  GDK_THREADS_ENTER ();
-
   gail_text_view = GAIL_TEXT_VIEW (data);
 
   g_signal_emit_by_name (data,
@@ -1702,8 +1700,6 @@ insert_idle_handler (gpointer data)
       emit_text_caret_moved (gail_text_view, get_insert_offset (buffer));
       gail_text_view->previous_selection_bound = get_selection_bound (buffer);
     }
-
-  GDK_THREADS_LEAVE ();
 
   return FALSE;
 }

@@ -187,15 +187,11 @@ notify_deselect (gpointer data)
 {
   GailCombo *combo;
 
-  GDK_THREADS_ENTER ();
-
   combo = GAIL_COMBO (data);
 
   combo->old_selection = NULL;
   combo->deselect_idle_handler = 0;
   g_signal_emit_by_name (data, "selection_changed");
-
-  GDK_THREADS_LEAVE ();
 
   return FALSE;
 }
@@ -205,14 +201,10 @@ notify_select (gpointer data)
 {
   GailCombo *combo;
 
-  GDK_THREADS_ENTER ();
-
   combo = GAIL_COMBO (data);
 
   combo->select_idle_handler = 0;
   g_signal_emit_by_name (data, "selection_changed");
-
-  GDK_THREADS_LEAVE ();
 
   return FALSE;
 }
@@ -240,7 +232,7 @@ gail_combo_selection_changed_gtk (GtkWidget      *widget,
         {
           gail_combo->old_selection = slist->data;
           if (gail_combo->select_idle_handler == 0)
-            gail_combo->select_idle_handler =  g_idle_add (notify_select, gail_combo);
+            gail_combo->select_idle_handler = gdk_threads_add_idle (notify_select, gail_combo);
         }
       if (gail_combo->deselect_idle_handler)
         {
@@ -251,7 +243,7 @@ gail_combo_selection_changed_gtk (GtkWidget      *widget,
   else
     {
       if (gail_combo->deselect_idle_handler == 0)
-        gail_combo->deselect_idle_handler =  g_idle_add (notify_deselect, gail_combo);
+        gail_combo->deselect_idle_handler = gdk_threads_add_idle (notify_deselect, gail_combo);
       if (gail_combo->select_idle_handler)
         {
           g_source_remove (gail_combo->select_idle_handler);
@@ -344,7 +336,7 @@ gail_combo_do_action (AtkAction *action,
       if (combo->action_idle_handler)
         return FALSE;
 
-      combo->action_idle_handler = g_idle_add (idle_do_action, combo);
+      combo->action_idle_handler = gdk_threads_add_idle (idle_do_action, combo);
       return TRUE;
     }
   else
@@ -369,17 +361,12 @@ idle_do_action (gpointer data)
   gboolean do_popup;
   GdkEvent tmp_event;
 
-  GDK_THREADS_ENTER ();
-
   gail_combo = GAIL_COMBO (data);
   gail_combo->action_idle_handler = 0;
   widget = GTK_ACCESSIBLE (gail_combo)->widget;
   if (widget == NULL /* State is defunct */ ||
       !GTK_WIDGET_SENSITIVE (widget) || !GTK_WIDGET_VISIBLE (widget))
-    {
-      GDK_THREADS_LEAVE ();
-      return FALSE;
-    }
+    return FALSE;
 
   combo = GTK_COMBO (widget);
 
@@ -399,6 +386,7 @@ idle_do_action (gpointer data)
 
       gtk_widget_event (action_widget, &tmp_event);
 
+      /* FIXME !*/
       g_idle_add (_gail_combo_button_release, combo);
     }
     else
@@ -409,10 +397,9 @@ idle_do_action (gpointer data)
       action_widget = combo->popwin;
     
       gtk_widget_event (action_widget, &tmp_event);
+      /* FIXME !*/
       g_idle_add (_gail_combo_popup_release, combo);
     }
-
-  GDK_THREADS_LEAVE ();
 
   return FALSE;
 }

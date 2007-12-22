@@ -509,12 +509,9 @@ gail_switch_page_watcher (GSignalInvocationHint *ihint,
   return TRUE;
 }
 
-
-static gint
+static gboolean
 gail_focus_idle_handler (gpointer data)
 {
-  GDK_THREADS_ENTER();
-
   focus_notify_handler = 0;
   /*
    * The widget which was to receive focus may have been removed
@@ -522,10 +519,7 @@ gail_focus_idle_handler (gpointer data)
   if (!next_focus_widget)
     {
       if (next_focus_widget != data)
-	{
-	  GDK_THREADS_LEAVE ();
-	  return FALSE;
-	}
+        return FALSE;
     }
   else
     {
@@ -536,8 +530,7 @@ gail_focus_idle_handler (gpointer data)
     
   gail_focus_notify (data);
 
-  GDK_THREADS_LEAVE ();
-  return FALSE; 
+  return FALSE;
 }
 
 static void
@@ -656,7 +649,7 @@ gail_focus_notify_when_idle (GtkWidget *widget)
         }
     }
 
-  focus_notify_handler = g_idle_add (gail_focus_idle_handler, widget);
+  focus_notify_handler = gdk_threads_add_idle (gail_focus_idle_handler, widget);
 }
 
 static gboolean

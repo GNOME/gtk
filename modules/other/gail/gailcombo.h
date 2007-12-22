@@ -42,10 +42,10 @@ struct _GailCombo
 {
   GailContainer parent;
 
-  gchar         *press_description;
-  guint         action_idle_handler;
-
   gpointer      old_selection;
+  gchar         *press_description;
+
+  guint         action_idle_handler;
   guint         select_idle_handler;
   guint         deselect_idle_handler;
 };

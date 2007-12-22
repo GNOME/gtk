@@ -379,7 +379,7 @@ gail_combo_box_do_action (AtkAction *action,
       if (combo_box->action_idle_handler)
         return FALSE;
 
-      combo_box->action_idle_handler = g_idle_add (idle_do_action, combo_box);
+      combo_box->action_idle_handler = gdk_threads_add_idle (idle_do_action, combo_box);
       return TRUE;
     }
   else
@@ -395,17 +395,12 @@ idle_do_action (gpointer data)
   AtkObject *popup;
   gboolean do_popup;
 
-  GDK_THREADS_ENTER ();
-
   gail_combo_box = GAIL_COMBO_BOX (data);
   gail_combo_box->action_idle_handler = 0;
   widget = GTK_ACCESSIBLE (gail_combo_box)->widget;
   if (widget == NULL || /* State is defunct */
       !GTK_WIDGET_SENSITIVE (widget) || !GTK_WIDGET_VISIBLE (widget))
-    {
-      GDK_THREADS_LEAVE ();
-      return FALSE;
-    }
+    return FALSE;
 
   combo_box = GTK_COMBO_BOX (widget);
 
@@ -415,8 +410,6 @@ idle_do_action (gpointer data)
       gtk_combo_box_popup (combo_box);
   else
       gtk_combo_box_popdown (combo_box);
-
-  GDK_THREADS_LEAVE ();
 
   return FALSE;
 }

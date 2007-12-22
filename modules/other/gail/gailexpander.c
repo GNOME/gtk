@@ -434,7 +434,7 @@ gail_expander_do_action (AtkAction *action,
       if (expander->action_idle_handler)
         return_value = FALSE;
       else
-	expander->action_idle_handler = g_idle_add (idle_do_action, expander);
+	expander->action_idle_handler = gdk_threads_add_idle (idle_do_action, expander);
       break;
     default:
       return_value = FALSE;
@@ -449,24 +449,17 @@ idle_do_action (gpointer data)
   GtkWidget *widget;
   GailExpander *gail_expander;
 
-  GDK_THREADS_ENTER ();
-
   gail_expander = GAIL_EXPANDER (data);
   gail_expander->action_idle_handler = 0;
 
   widget = GTK_ACCESSIBLE (gail_expander)->widget;
   if (widget == NULL /* State is defunct */ ||
       !GTK_WIDGET_IS_SENSITIVE (widget) || !GTK_WIDGET_VISIBLE (widget))
-    {
-      GDK_THREADS_LEAVE ();
-      return FALSE;
-    }
+    return FALSE;
 
   gtk_widget_activate (widget);
 
-  GDK_THREADS_LEAVE ();
-
-  return FALSE; 
+  return FALSE;
 }
 
 static gint

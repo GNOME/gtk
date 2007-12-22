@@ -1067,13 +1067,9 @@ idle_notify_insert (gpointer data)
 {
   GailEntry *entry;
 
-  GDK_THREADS_ENTER ();
-
   entry = GAIL_ENTRY (data);
   entry->insert_idle_handler = 0;
   gail_entry_notify_insert (entry);
-
-  GDK_THREADS_LEAVE ();
 
   return FALSE;
 }
@@ -1117,7 +1113,7 @@ _gail_entry_insert_text_cb (GtkEntry *entry,
    * or in an idle handler if it not updated.
    */
    if (gail_entry->insert_idle_handler == 0)
-     gail_entry->insert_idle_handler = g_idle_add (idle_notify_insert, gail_entry);
+     gail_entry->insert_idle_handler = gdk_threads_add_idle (idle_notify_insert, gail_entry);
 }
 
 static gunichar 
@@ -1274,7 +1270,7 @@ gail_entry_do_action (AtkAction *action,
       if (entry->action_idle_handler)
         return_value = FALSE;
       else
-        entry->action_idle_handler = g_idle_add (idle_do_action, entry);
+        entry->action_idle_handler = gdk_threads_add_idle (idle_do_action, entry);
       break;
     default:
       return_value = FALSE;
@@ -1289,21 +1285,14 @@ idle_do_action (gpointer data)
   GailEntry *entry;
   GtkWidget *widget;
 
-  GDK_THREADS_ENTER ();
-
   entry = GAIL_ENTRY (data);
   entry->action_idle_handler = 0;
   widget = GTK_ACCESSIBLE (entry)->widget;
   if (widget == NULL /* State is defunct */ ||
       !GTK_WIDGET_SENSITIVE (widget) || !GTK_WIDGET_VISIBLE (widget))
-    {
-      GDK_THREADS_LEAVE ();
-      return FALSE;
-    }
+    return FALSE;
 
   gtk_widget_activate (widget);
-
-  GDK_THREADS_LEAVE ();
 
   return FALSE;
 }

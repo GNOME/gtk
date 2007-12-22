@@ -1,3 +1,25 @@
+2007-12-22  Christian Persch  <chpe@gnome.org>
+        
+        * modules/other/gail/gail.c:
+        * modules/other/gail/gailbutton.c:
+        * modules/other/gail/gailcell.c:
+        * modules/other/gail/gailcombo.c:
+        * modules/other/gail/gailcombo.h:
+        * modules/other/gail/gailcombobox.c:
+        * modules/other/gail/gailentry.c:
+        * modules/other/gail/gailexpander.c:
+        * modules/other/gail/gailmenuitem.c:
+        * modules/other/gail/gailnotebook.c:
+        * modules/other/gail/gailnotebookpage.c:
+        * modules/other/gail/gailnotebookpage.h:
+        * modules/other/gail/gailoptionmenu.c:
+        * modules/other/gail/gailrange.c:
+        * modules/other/gail/gailtextview.c:
+        * modules/other/gail/gailtreeview.c:
+        * modules/other/gail/gailtreeview.h:
+        * modules/other/gail/gailwindow.c: Use gdk_threads_add_idle.
+        Bug #504571.
+
 2007-12-22  Matthias Clasen  <mclasen@redhat.com>
 
 	* modules/other/gail/gailclist.c: Chain up the finalizer (#504570,
