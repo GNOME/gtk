@@ -1,5 +1,5 @@
 # Irish translations for gtk+ package.
-# Copyright (C) 1999, 2004, 2007 Free Software Foundation, Inc.
+# Copyright (C) 1999-2007 Free Software Foundation, Inc.
 # Seán Ó Ceallaigh <soc@users.sourceforge.net>, 1999.
 # Alastair McKinstry <mckinstry@computer.org>, 2004.
 # Alan Horkan <horkan@maths.tcd.ie>, 2005.
@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ HEAD\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-12-20 12:44-0700\n"
-"PO-Revision-Date: 2007-12-20 12:44-0700\n"
+"POT-Creation-Date: 2007-12-22 03:03-0700\n"
+"PO-Revision-Date: 2007-12-22 03:03-0700\n"
 "Last-Translator: Seán de Búrca <leftmostcat@gmail.com>\n"
 "Language-Team: Irish <gaeilge-gnulinux@lists.sourceforge.net>\n"
 "MIME-Version: 1.0\n"
@@ -50,7 +50,7 @@ msgstr "AINM"
 #. Description of --display=DISPLAY in --help output
 #: ../gdk/gdk.c:132
 msgid "X display to use"
-msgstr "Taispeáint X a úsáid"
+msgstr "Taispeáint X le húsáid"
 
 #. Placeholder in --display=DISPLAY in --help output
 #: ../gdk/gdk.c:133
@@ -60,7 +60,7 @@ msgstr "TAISPEÁINT"
 #. Description of --screen=SCREEN in --help output
 #: ../gdk/gdk.c:135
 msgid "X screen to use"
-msgstr "Scáileán X a úsáid"
+msgstr "Scáileán X le húsáid"
 
 #. Placeholder in --screen=SCREEN in --help output
 #: ../gdk/gdk.c:136
@@ -70,7 +70,7 @@ msgstr "SCÁILEÁN"
 #. Description of --gdk-debug=FLAGS in --help output
 #: ../gdk/gdk.c:139
 msgid "Gdk debugging flags to set"
-msgstr "Bratacha dífhabhtaithe Gdk a shocrú"
+msgstr "Bratacha dífhabhtaithe Gdk le socrú"
 
 #. Placeholder in --gdk-debug=FLAGS in --help output
 #. Placeholder in --gdk-no-debug=FLAGS in --help output
@@ -83,7 +83,7 @@ msgstr "BRATACHA"
 #. Description of --gdk-no-debug=FLAGS in --help output
 #: ../gdk/gdk.c:142
 msgid "Gdk debugging flags to unset"
-msgstr "Bratacha dífhabhtaithe Gdk a dhíshocrú"
+msgstr "Bratacha dífhabhtaithe Gdk le díshocrú"
 
 #: ../gdk/keyname-table.h:3940
 msgid "keyboard label|BackSpace"
@@ -2107,6 +2107,8 @@ msgid ""
 "<b>Any Printer</b>\n"
 "For portable documents"
 msgstr ""
+"<b>Printéir ar Bith</b>\n"
+"Le cáipéisí iniompartha"
 
 #: ../gtk/gtkpagesetupunixdialog.c:883 ../gtk/gtkpagesetupunixdialog.c:1395
 msgid "mm"
@@ -2653,7 +2655,7 @@ msgstr "_Maidir Leis Seo"
 
 #: ../gtk/gtkstock.c:298
 msgid "_Apply"
-msgstr "_Cuir i bhFeidhm"
+msgstr "Cuir i bh_Feidhm"
 
 #: ../gtk/gtkstock.c:299
 msgid "_Bold"
