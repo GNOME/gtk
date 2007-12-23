@@ -8737,7 +8737,7 @@ gtk_tree_view_build_tree (GtkTreeView *tree_view,
 	    {
 	      gboolean expand;
 
-	      g_signal_emit (tree_view, tree_view_signals[TEST_EXPAND_ROW], 0, &iter, path, &expand);
+	      g_signal_emit (tree_view, tree_view_signals[TEST_EXPAND_ROW], 0, iter, path, &expand);
 
 	      if (gtk_tree_model_iter_has_child (tree_view->priv->model, iter)
 		  && !expand)
