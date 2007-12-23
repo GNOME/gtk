@@ -1,6 +1,10 @@
 2007-12-22  Christian Persch  <chpe@gnome.org>
 
-	* module/other/gail/*.c: Use G_DEFINE_TYPE[_WITH_CODE] instead of
+	* modules/other/gail/*.c: Include config.h. Bug #504720.
+
+2007-12-22  Christian Persch  <chpe@gnome.org>
+
+	* modules/other/gail/*.c: Use G_DEFINE_TYPE[_WITH_CODE] instead of
 	handwritten get_type functions. Bug #504661.
 
 2007-12-23  Xan Lopez  <xan@gnome.org>

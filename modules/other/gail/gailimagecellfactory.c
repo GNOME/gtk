@@ -17,6 +17,8 @@
  * Boston, MA 02111-1307, USA.
  */
 
+#include <config.h>
+
 #include <gtk/gtkcellrendererpixbuf.h>
 #include "gailimagecellfactory.h"
 #include "gailimagecell.h"

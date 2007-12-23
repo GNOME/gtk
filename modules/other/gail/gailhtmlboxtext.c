@@ -17,6 +17,8 @@
  * Boston, MA 02111-1307, USA.
  */
 
+#include <config.h>
+
 #include "gailhtmlboxtext.h"
 
 static void           gail_html_box_text_class_init          (GailHtmlBoxTextClass *klass);
