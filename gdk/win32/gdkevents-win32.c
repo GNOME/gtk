@@ -1288,10 +1288,13 @@ show_window_recurse (GdkWindow *window, gboolean hide_window)
 	    }
 	}
 
-      if (!hide_window)
-	ShowWindow (GDK_WINDOW_HWND (window), SW_RESTORE);
-      else
-	ShowWindow (GDK_WINDOW_HWND (window), SW_MINIMIZE);
+      if (GDK_WINDOW_IS_MAPPED (window))
+	{
+	  if (!hide_window)
+	    ShowWindow (GDK_WINDOW_HWND (window), SW_RESTORE);
+	  else
+	    ShowWindow (GDK_WINDOW_HWND (window), SW_MINIMIZE);
+	}
 
       impl->changing_state = FALSE;
     }
