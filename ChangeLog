@@ -1,3 +1,10 @@
+2007-12-23  Xan Lopez  <xan@gnome.org>
+
+	* gtk/gtktreeview.c (gtk_tree_view_build_tree): pass correct argument
+	to g_signal_emit for TEST_EXPAND_ROW (GtkTreeIter* vs. GtkTreeIter**).
+
+	Patch by Sadrul Habib Chowdhury (#504804)
+
 2007-12-21  Richard Hult  <richard@imendio.com>
 
 	Merged from trunk:
