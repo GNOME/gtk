@@ -26,7 +26,7 @@
 #define GAIL_BUTTON_ATTACHED_MENUS "gtk-attached-menus"
 
 static void                  gail_button_class_init       (GailButtonClass *klass);
-static void                  gail_button_object_init      (GailButton      *button);
+static void                  gail_button_init             (GailButton      *button);
 
 static G_CONST_RETURN gchar* gail_button_get_name         (AtkObject       *obj);
 static gint                  gail_button_get_n_children   (AtkObject       *obj);
@@ -142,64 +142,10 @@ static gint                  get_n_attached_menus       (GtkWidget      *widget)
 static GtkWidget*            get_nth_attached_menu      (GtkWidget      *widget,
                                                          gint           index);
 
-static GailContainer* parent_class = NULL;
-
-GType
-gail_button_get_type (void)
-{
-  static GType type = 0;
-
-  if (!type)
-    {
-      static const GTypeInfo tinfo =
-      {
-        sizeof (GailButtonClass),
-        (GBaseInitFunc) NULL, /* base init */
-        (GBaseFinalizeFunc) NULL, /* base finalize */
-        (GClassInitFunc) gail_button_class_init, /* class init */
-        (GClassFinalizeFunc) NULL, /* class finalize */
-        NULL, /* class data */
-        sizeof (GailButton), /* instance size */
-        0, /* nb preallocs */
-        (GInstanceInitFunc) gail_button_object_init, /* instance init */
-        NULL /* value table */
-      };
-
-      static const GInterfaceInfo atk_action_info =
-      {
-        (GInterfaceInitFunc) atk_action_interface_init,
-        (GInterfaceFinalizeFunc) NULL,
-        NULL
-      };
-
-      static const GInterfaceInfo atk_image_info =
-      {
-        (GInterfaceInitFunc) atk_image_interface_init,
-        (GInterfaceFinalizeFunc) NULL,
-        NULL
-      };
-
-      static const GInterfaceInfo atk_text_info =
-      {
-        (GInterfaceInitFunc) atk_text_interface_init,
-        (GInterfaceFinalizeFunc) NULL,
-        NULL
-      };
-
-      type = g_type_register_static (GAIL_TYPE_CONTAINER,
-                                     "GailButton", &tinfo, 0);
-
-      g_type_add_interface_static (type, ATK_TYPE_ACTION,
-                                   &atk_action_info);
-      g_type_add_interface_static (type, ATK_TYPE_IMAGE,
-                                   &atk_image_info);
-      g_type_add_interface_static (type, ATK_TYPE_TEXT,
-                                   &atk_text_info);
-
-    }
-
-  return type;
-}
+G_DEFINE_TYPE_WITH_CODE (GailButton, gail_button, GAIL_TYPE_CONTAINER,
+                         G_IMPLEMENT_INTERFACE (ATK_TYPE_ACTION, atk_action_interface_init)
+                         G_IMPLEMENT_INTERFACE (ATK_TYPE_IMAGE, atk_image_interface_init)
+                         G_IMPLEMENT_INTERFACE (ATK_TYPE_TEXT, atk_text_interface_init))
 
 static void
 gail_button_class_init (GailButtonClass *klass)
@@ -214,8 +160,6 @@ gail_button_class_init (GailButtonClass *klass)
 
   gobject_class->finalize = gail_button_finalize;
 
-  parent_class = g_type_class_peek_parent (klass);
-
   class->get_name = gail_button_get_name;
   class->get_n_children = gail_button_get_n_children;
   class->ref_child = gail_button_ref_child;
@@ -227,7 +171,7 @@ gail_button_class_init (GailButtonClass *klass)
 }
 
 static void
-gail_button_object_init (GailButton      *button)
+gail_button_init (GailButton *button)
 {
   button->click_description = NULL;
   button->press_description = NULL;
@@ -261,7 +205,7 @@ gail_button_get_name (AtkObject *obj)
 
   g_return_val_if_fail (GAIL_IS_BUTTON (obj), NULL);
 
-  name = ATK_OBJECT_CLASS (parent_class)->get_name (obj);
+  name = ATK_OBJECT_CLASS (gail_button_parent_class)->get_name (obj);
   if (name == NULL)
     {
       /*
@@ -335,7 +279,7 @@ gail_button_real_initialize (AtkObject *obj,
   GtkWidget  *label;
   GtkWidget  *widget;
 
-  ATK_OBJECT_CLASS (parent_class)->initialize (obj, data);
+  ATK_OBJECT_CLASS (gail_button_parent_class)->initialize (obj, data);
 
   button->state = GTK_STATE_NORMAL;
 
@@ -506,8 +450,6 @@ gail_button_real_add_gtk (GtkContainer *container,
 static void
 atk_action_interface_init (AtkActionIface *iface)
 {
-  g_return_if_fail (iface != NULL);
-
   iface->do_action = gail_button_do_action;
   iface->get_n_actions = gail_button_get_n_actions;
   iface->get_description = gail_button_get_description;
@@ -922,7 +864,7 @@ gail_button_ref_state_set (AtkObject *obj)
   GtkWidget *widget;
   GtkButton *button;
 
-  state_set = ATK_OBJECT_CLASS (parent_class)->ref_state_set (obj);
+  state_set = ATK_OBJECT_CLASS (gail_button_parent_class)->ref_state_set (obj);
   widget = GTK_ACCESSIBLE (obj)->widget;
 
   if (widget == NULL)
@@ -977,8 +919,6 @@ gail_button_released_leave_handler (GtkWidget       *widget)
 static void
 atk_image_interface_init (AtkImageIface *iface)
 {
-  g_return_if_fail (iface != NULL);
-
   iface->get_image_description = gail_button_get_image_description;
   iface->get_image_position = gail_button_get_image_position;
   iface->get_image_size = gail_button_get_image_size;
@@ -1142,7 +1082,6 @@ gail_button_set_image_description (AtkImage    *image,
 static void
 atk_text_interface_init (AtkTextIface *iface)
 {
-  g_return_if_fail (iface != NULL);
   iface->get_text = gail_button_get_text;
   iface->get_character_at_offset = gail_button_get_character_at_offset;
   iface->get_text_before_offset = gail_button_get_text_before_offset;
@@ -1497,7 +1436,7 @@ gail_button_finalize (GObject            *object)
     {
       g_object_unref (button->textutil);
     }
-  G_OBJECT_CLASS (parent_class)->finalize (object);
+  G_OBJECT_CLASS (gail_button_parent_class)->finalize (object);
 }
 
 static GtkWidget*

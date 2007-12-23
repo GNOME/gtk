@@ -20,38 +20,12 @@
 #include <gtk/gtk.h>
 #include "gailscrollbar.h"
 
-static void	    gail_scrollbar_class_init        (GailScrollbarClass *klass);
+static void gail_scrollbar_class_init  (GailScrollbarClass *klass);
+static void gail_scrollbar_init        (GailScrollbar      *accessible);
 
-static gint         gail_scrollbar_get_index_in_parent (AtkObject *accessible);
+static gint gail_scrollbar_get_index_in_parent (AtkObject *accessible);
 
-static GailRangeClass *parent_class = NULL;
-
-GType
-gail_scrollbar_get_type (void)
-{
-  static GType type = 0;
-
-  if (!type)
-  {
-    static const GTypeInfo tinfo =
-    {
-      sizeof (GailScrollbarClass),
-      (GBaseInitFunc) NULL, /* base init */
-      (GBaseFinalizeFunc) NULL, /* base finalize */
-      (GClassInitFunc) gail_scrollbar_class_init, /* class init */
-      (GClassFinalizeFunc) NULL, /* class finalize */
-      NULL, /* class data */
-      sizeof (GailScrollbar), /* instance size */
-      0, /* nb preallocs */
-      (GInstanceInitFunc) NULL, /* instance init */
-      NULL /* value table */
-    };
-
-    type = g_type_register_static (GAIL_TYPE_RANGE,
-                                   "GailScrollbar", &tinfo, 0);
-  }
-  return type;
-}
+G_DEFINE_TYPE (GailScrollbar, gail_scrollbar, GAIL_TYPE_RANGE)
 
 static void	 
 gail_scrollbar_class_init (GailScrollbarClass *klass)
@@ -59,8 +33,11 @@ gail_scrollbar_class_init (GailScrollbarClass *klass)
   AtkObjectClass *class = ATK_OBJECT_CLASS (klass);
 
   class->get_index_in_parent = gail_scrollbar_get_index_in_parent;
+}
 
-  parent_class = g_type_class_peek_parent (klass);
+static void
+gail_scrollbar_init (GailScrollbar      *accessible)
+{
 }
 
 AtkObject* 
@@ -101,7 +78,7 @@ gail_scrollbar_get_index_in_parent (AtkObject *accessible)
   g_return_val_if_fail (GTK_IS_SCROLLBAR (widget), -1);
 
   if (!GTK_IS_SCROLLED_WINDOW(widget->parent))
-    return ATK_OBJECT_CLASS (parent_class)->get_index_in_parent (accessible);
+    return ATK_OBJECT_CLASS (gail_scrollbar_parent_class)->get_index_in_parent (accessible);
 
   scrolled_window = GTK_SCROLLED_WINDOW (widget->parent);
   children = gtk_container_get_children (GTK_CONTAINER (scrolled_window));

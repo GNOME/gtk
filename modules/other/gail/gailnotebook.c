@@ -24,7 +24,7 @@
 #include "gail-private-macros.h"
 
 static void         gail_notebook_class_init          (GailNotebookClass *klass);
-static void         gail_notebook_object_init         (GailNotebook      *notebook);
+static void         gail_notebook_init                (GailNotebook      *notebook);
 static void         gail_notebook_finalize            (GObject           *object);
 static void         gail_notebook_real_initialize     (AtkObject         *obj,
                                                        gpointer          data);
@@ -64,43 +64,9 @@ static gboolean     gail_notebook_focus_cb            (GtkWidget      *widget,
 static gboolean     gail_notebook_check_focus_tab     (gpointer       data);
 static void         gail_notebook_destroyed           (gpointer       data);
 
-static gpointer parent_class = NULL;
 
-GType
-gail_notebook_get_type (void)
-{
-  static GType type = 0;
-
-  if (!type)
-    {
-      static const GTypeInfo tinfo =
-      {
-        sizeof (GailNotebookClass),
-        (GBaseInitFunc) NULL, /* base init */
-        (GBaseFinalizeFunc) NULL, /* base finalize */
-        (GClassInitFunc) gail_notebook_class_init, /* class init */
-        (GClassFinalizeFunc) NULL, /* class finalize */
-        NULL, /* class data */
-        sizeof (GailNotebook), /* instance size */
-        0, /* nb preallocs */
-        (GInstanceInitFunc) gail_notebook_object_init, /* instance init */
-        NULL /* value table */
-      };
-
-      static const GInterfaceInfo atk_selection_info = 
-      {
-        (GInterfaceInitFunc) atk_selection_interface_init,
-        (GInterfaceFinalizeFunc) NULL,
-        NULL
-      };
-	
-      type = g_type_register_static (GAIL_TYPE_CONTAINER,
-                                     "GailNotebook", &tinfo, 0);
-      g_type_add_interface_static (type, ATK_TYPE_SELECTION,
-                                   &atk_selection_info);
-    }
-  return type;
-}
+G_DEFINE_TYPE_WITH_CODE (GailNotebook, gail_notebook, GAIL_TYPE_CONTAINER,
+                         G_IMPLEMENT_INTERFACE (ATK_TYPE_SELECTION, atk_selection_interface_init))
 
 static void
 gail_notebook_class_init (GailNotebookClass *klass)
@@ -113,8 +79,6 @@ gail_notebook_class_init (GailNotebookClass *klass)
   widget_class = (GailWidgetClass*)klass;
   container_class = (GailContainerClass*)klass;
 
-  parent_class = g_type_class_peek_parent (klass);
-  
   gobject_class->finalize = gail_notebook_finalize;
 
   widget_class->notify_gtk = gail_notebook_real_notify_gtk;
@@ -130,7 +94,7 @@ gail_notebook_class_init (GailNotebookClass *klass)
 }
 
 static void
-gail_notebook_object_init (GailNotebook      *notebook)
+gail_notebook_init (GailNotebook      *notebook)
 {
   notebook->page_cache = NULL;
   notebook->selected_page = -1;
@@ -208,7 +172,7 @@ gail_notebook_real_initialize (AtkObject *obj,
   GtkNotebook *gtk_notebook;
   gint i;
 
-  ATK_OBJECT_CLASS (parent_class)->initialize (obj, data);
+  ATK_OBJECT_CLASS (gail_notebook_parent_class)->initialize (obj, data);
 
   notebook = GAIL_NOTEBOOK (obj);
   gtk_notebook = GTK_NOTEBOOK (data);
@@ -314,7 +278,7 @@ gail_notebook_real_notify_gtk (GObject           *obj,
         }
     }
   else
-    GAIL_WIDGET_CLASS (parent_class)->notify_gtk (obj, pspec);
+    GAIL_WIDGET_CLASS (gail_notebook_parent_class)->notify_gtk (obj, pspec);
 }
 
 static void
@@ -341,14 +305,12 @@ gail_notebook_finalize (GObject            *object)
   if (notebook->idle_focus_id)
     g_source_remove (notebook->idle_focus_id);
 
-  G_OBJECT_CLASS (parent_class)->finalize (object);
+  G_OBJECT_CLASS (gail_notebook_parent_class)->finalize (object);
 }
 
 static void
 atk_selection_interface_init (AtkSelectionIface *iface)
 {
-  g_return_if_fail (iface != NULL);
-  
   iface->add_selection = gail_notebook_add_selection;
   iface->ref_selection = gail_notebook_ref_selection;
   iface->get_selection_count = gail_notebook_get_selection_count;

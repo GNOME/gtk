@@ -21,47 +21,16 @@
 #include "gailradiobutton.h"
 
 static void      gail_radio_button_class_init        (GailRadioButtonClass *klass);
-static void      gail_radio_button_instance_init     (GailRadioButton      *radio_button);
+static void      gail_radio_button_init              (GailRadioButton      *radio_button);
 
-static AtkRelationSet* gail_radio_button_ref_relation_set (AtkObject       *obj)
-;
+static AtkRelationSet* gail_radio_button_ref_relation_set (AtkObject       *obj);
 
-static GailToggleButtonClass *parent_class = NULL;
-
-GType
-gail_radio_button_get_type (void)
-{
-  static GType type = 0;
-
-  if (!type)
-  {
-    static const GTypeInfo tinfo =
-    {
-      sizeof (GailRadioButtonClass),
-      (GBaseInitFunc) NULL, /* base init */
-      (GBaseFinalizeFunc) NULL, /* base finalize */
-      (GClassInitFunc) gail_radio_button_class_init, /* class init */
-      (GClassFinalizeFunc) NULL, /* class finalize */
-      NULL, /* class data */
-      sizeof (GailRadioButton), /* instance size */
-      0, /* nb preallocs */
-      (GInstanceInitFunc) gail_radio_button_instance_init, /* instance init */
-      NULL /* value table */
-    };
-
-    type = g_type_register_static (GAIL_TYPE_TOGGLE_BUTTON,
-                                   "GailRadioButton", &tinfo, 0);
-  }
-
-  return type;
-}
+G_DEFINE_TYPE (GailRadioButton, gail_radio_button, GAIL_TYPE_TOGGLE_BUTTON)
 
 static void
 gail_radio_button_class_init (GailRadioButtonClass *klass)
 {
   AtkObjectClass *class = ATK_OBJECT_CLASS (klass);
-
-  parent_class = g_type_class_peek_parent (klass);
 
   class->ref_relation_set = gail_radio_button_ref_relation_set;
 }
@@ -84,7 +53,7 @@ gail_radio_button_new (GtkWidget *widget)
 }
 
 static void
-gail_radio_button_instance_init (GailRadioButton *radio_button)
+gail_radio_button_init (GailRadioButton *radio_button)
 {
   radio_button->old_group = NULL;
 }
@@ -109,7 +78,7 @@ gail_radio_button_ref_relation_set (AtkObject *obj)
   }
   radio_button = GAIL_RADIO_BUTTON (obj);
 
-  relation_set = ATK_OBJECT_CLASS (parent_class)->ref_relation_set (obj);
+  relation_set = ATK_OBJECT_CLASS (gail_radio_button_parent_class)->ref_relation_set (obj);
 
   /*
    * If the radio button'group has changed remove the relation

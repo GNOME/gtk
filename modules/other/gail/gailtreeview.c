@@ -35,6 +35,7 @@ typedef struct _GailTreeViewRowInfo    GailTreeViewRowInfo;
 typedef struct _GailTreeViewCellInfo   GailTreeViewCellInfo;
 
 static void             gail_tree_view_class_init       (GailTreeViewClass      *klass);
+static void             gail_tree_view_init             (GailTreeView           *view);
 static void             gail_tree_view_real_initialize  (AtkObject              *obj,
                                                          gpointer               data);
 static void             gail_tree_view_real_notify_gtk  (GObject		*obj,
@@ -342,7 +343,6 @@ static AtkObject *       get_header_from_column         (GtkTreeViewColumn      
 static gboolean          idle_garbage_collect_cell_data (gpointer data);
 static gboolean          garbage_collect_cell_data      (gpointer data);
 
-static GailWidgetClass *parent_class = NULL;
 static GQuark quark_column_desc_object = 0;
 static GQuark quark_column_header_object = 0;
 static gboolean editing = FALSE;
@@ -365,70 +365,11 @@ struct _GailTreeViewCellInfo
   gboolean in_use;
 };
 
-GType
-gail_tree_view_get_type (void)
-{
-  static GType type = 0;
-
-  if (!type)
-    {
-      static const GTypeInfo tinfo =
-      {
-        sizeof (GailTreeViewClass),
-        (GBaseInitFunc) NULL, /* base init */
-        (GBaseFinalizeFunc) NULL, /* base finalize */
-        (GClassInitFunc) gail_tree_view_class_init, /* class init */
-        (GClassFinalizeFunc) NULL, /* class finalize */
-        NULL, /* class data */
-        sizeof (GailTreeView), /* instance size */
-        0, /* nb preallocs */
-        (GInstanceInitFunc) NULL, /* instance init */
-        NULL /* value table */
-      };
-
-      static const GInterfaceInfo atk_table_info =
-      {
-     	(GInterfaceInitFunc) atk_table_interface_init,
-	(GInterfaceFinalizeFunc) NULL,
-	NULL
-      };
-
-      static const GInterfaceInfo atk_selection_info =
-      {
-     	(GInterfaceInitFunc) atk_selection_interface_init,
-	(GInterfaceFinalizeFunc) NULL,
-	NULL
-      };
-
-      static const GInterfaceInfo atk_component_info =
-      {
-        (GInterfaceInitFunc) atk_component_interface_init,
-        (GInterfaceFinalizeFunc) NULL,
-        NULL
-      };
-
-      static const GInterfaceInfo gail_cell_parent_info =
-      {
-     	(GInterfaceInitFunc) gail_cell_parent_interface_init,
-	(GInterfaceFinalizeFunc) NULL,
-	NULL
-      };
-
-      type = g_type_register_static (GAIL_TYPE_CONTAINER,
-                                     "GailTreeView", &tinfo, 0);
-
-      g_type_add_interface_static (type, ATK_TYPE_TABLE,
-                                   &atk_table_info);
-      g_type_add_interface_static (type, ATK_TYPE_SELECTION,
-                                   &atk_selection_info);
-      g_type_add_interface_static (type, ATK_TYPE_COMPONENT,
-                                   &atk_component_info);
-      g_type_add_interface_static (type, GAIL_TYPE_CELL_PARENT,
-                                   &gail_cell_parent_info);
-    }
-
-  return type;
-}
+G_DEFINE_TYPE_WITH_CODE (GailTreeView, gail_tree_view, GAIL_TYPE_CONTAINER,
+                         G_IMPLEMENT_INTERFACE (ATK_TYPE_TABLE, atk_table_interface_init)
+                         G_IMPLEMENT_INTERFACE (ATK_TYPE_SELECTION, atk_selection_interface_init)
+                         G_IMPLEMENT_INTERFACE (ATK_TYPE_COMPONENT, atk_component_interface_init)
+                         G_IMPLEMENT_INTERFACE (GAIL_TYPE_CELL_PARENT, gail_cell_parent_interface_init))
 
 static void
 gail_tree_view_class_init (GailTreeViewClass *klass)
@@ -442,8 +383,6 @@ gail_tree_view_class_init (GailTreeViewClass *klass)
   accessible_class = (GtkAccessibleClass*)klass;
   widget_class = (GailWidgetClass*)klass;
   container_class = (GailContainerClass*)klass;
-
-  parent_class = g_type_class_peek_parent (klass);
 
   class->get_n_children = gail_tree_view_get_n_children;
   class->ref_child = gail_tree_view_ref_child;
@@ -469,6 +408,11 @@ gail_tree_view_class_init (GailTreeViewClass *klass)
 }
 
 static void
+gail_tree_view_init (GailTreeView *view)
+{
+}
+
+static void
 gail_tree_view_real_initialize (AtkObject *obj,
                                 gpointer  data)
 {
@@ -479,7 +423,7 @@ gail_tree_view_real_initialize (AtkObject *obj,
   GList *tv_cols, *tmp_list;
   GtkWidget *widget;
 
-  ATK_OBJECT_CLASS (parent_class)->initialize (obj, data);
+  ATK_OBJECT_CLASS (gail_tree_view_parent_class)->initialize (obj, data);
 
   view = GAIL_TREE_VIEW (obj);
   view->caption = NULL;
@@ -659,7 +603,7 @@ gail_tree_view_real_notify_gtk (GObject             *obj,
                         tree_view);
     }
   else
-    parent_class->notify_gtk (obj, pspec);
+    GAIL_WIDGET_CLASS (gail_tree_view_parent_class)->notify_gtk (obj, pspec);
 }
 
 AtkObject*
@@ -713,7 +657,7 @@ gail_tree_view_finalize (GObject	    *object)
       g_array_free (array, TRUE);
     }
 
-  G_OBJECT_CLASS (parent_class)->finalize (object);
+  G_OBJECT_CLASS (gail_tree_view_parent_class)->finalize (object);
 }
 
 static void
@@ -726,7 +670,7 @@ gail_tree_view_connect_widget_destroyed (GtkAccessible *accessible)
                               G_CALLBACK (gail_tree_view_destroyed),
                               accessible);
     }
-  GTK_ACCESSIBLE_CLASS (parent_class)->connect_widget_destroyed (accessible);
+  GTK_ACCESSIBLE_CLASS (gail_tree_view_parent_class)->connect_widget_destroyed (accessible);
 }
 
 static void
@@ -944,9 +888,9 @@ gail_tree_view_ref_child (AtkObject *obj,
       gail_return_val_if_fail (container, NULL);
 
       container_cell = GAIL_CELL (container);
-      gail_cell_init (container_cell,
-                      widget, ATK_OBJECT (gailview), 
-                      i);
+      gail_cell_initialise (container_cell,
+                            widget, ATK_OBJECT (gailview), 
+                            i);
       /*
        * The GailTreeViewCellInfo structure for the container will be before
        * the ones for the cells so that the first one we find for a position
@@ -982,9 +926,9 @@ gail_tree_view_ref_child (AtkObject *obj,
     /* Create the GailTreeViewCellInfo structure for this cell */
     cell_info_new (gailview, tree_model, path, tv_col, cell);
 
-    gail_cell_init (cell,
-                    widget, parent, 
-                    i);
+    gail_cell_initialise (cell,
+                          widget, parent, 
+                          i);
 
     cell->refresh_index = refresh_cell_index;
 
@@ -1017,9 +961,9 @@ gail_tree_view_ref_child (AtkObject *obj,
         /* Create the GailTreeViewCellInfo structure for this cell */
         cell_info_new (gailview, tree_model, path, tv_col, cell);
 
-        gail_cell_init (cell,
-                        widget, parent, 
-                        i);
+        gail_cell_initialise (cell,
+                              widget, parent, 
+                              i);
 
         if (container)
           gail_container_cell_add_child (container, cell);
@@ -1108,7 +1052,7 @@ gail_tree_view_ref_state_set (AtkObject *obj)
   AtkStateSet *state_set;
   GtkWidget *widget;
 
-  state_set = ATK_OBJECT_CLASS (parent_class)->ref_state_set (obj);
+  state_set = ATK_OBJECT_CLASS (gail_tree_view_parent_class)->ref_state_set (obj);
   widget = GTK_ACCESSIBLE (obj)->widget;
 
   if (widget != NULL)
@@ -1122,8 +1066,6 @@ gail_tree_view_ref_state_set (AtkObject *obj)
 static void
 atk_component_interface_init (AtkComponentIface *iface)
 {
-  g_return_if_fail (iface != NULL);
-
   iface->ref_accessible_at_point = gail_tree_view_ref_accessible_at_point;
 }
 
@@ -1173,7 +1115,6 @@ gail_tree_view_ref_accessible_at_point (AtkComponent           *component,
 static void 
 atk_table_interface_init (AtkTableIface *iface)
 {
-  g_return_if_fail (iface != NULL);
   iface->ref_at = gail_tree_view_table_ref_at;
   iface->get_n_rows = gail_tree_view_get_n_rows;	
   iface->get_n_columns = gail_tree_view_get_n_columns;	
@@ -1955,7 +1896,6 @@ get_row_info (AtkTable    *table,
 
 static void atk_selection_interface_init (AtkSelectionIface *iface)
 {
-  g_return_if_fail (iface != NULL);
   iface->add_selection = gail_tree_view_add_selection;
   iface->clear_selection = gail_tree_view_clear_selection;
   iface->ref_selection = gail_tree_view_ref_selection;
@@ -2055,8 +1995,6 @@ gail_tree_view_is_child_selected (AtkSelection *selection,
 
 static void gail_cell_parent_interface_init (GailCellParentIface *iface)
 {
-  g_return_if_fail (iface);
-
   iface->get_cell_extents = gail_tree_view_get_cell_extents;
   iface->get_cell_area = gail_tree_view_get_cell_area;
   iface->grab_focus = gail_tree_view_grab_cell_focus;

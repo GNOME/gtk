@@ -125,44 +125,8 @@ gchar *gail_text_cell_property_list[] = {
   NULL
 };
 
-static gpointer parent_class = NULL;
-
-GType
-gail_text_cell_get_type (void)
-{
-  static GType type = 0;
-
-  if (!type)
-    {
-      static const GTypeInfo tinfo =
-      {
-        sizeof (GailTextCellClass),
-        (GBaseInitFunc) NULL, /* base init */
-        (GBaseFinalizeFunc) NULL, /* base finalize */
-        (GClassInitFunc) gail_text_cell_class_init, /* class init */
-        (GClassFinalizeFunc) NULL, /* class finalize */
-        NULL, /* class data */
-        sizeof (GailTextCell), /* instance size */
-        0, /* nb preallocs */
-        (GInstanceInitFunc) gail_text_cell_init, /* instance init */
-        NULL /* value table */
-      };
-
-      static const GInterfaceInfo atk_text_info =
-      {
-        (GInterfaceInitFunc) atk_text_interface_init,
-        (GInterfaceFinalizeFunc) NULL,
-        NULL
-      };
-
-      type = g_type_register_static (GAIL_TYPE_RENDERER_CELL,
-                                     "GailTextCell", &tinfo, 0);
-      g_type_add_interface_static (type, ATK_TYPE_TEXT,
-                                   &atk_text_info);
-      gail_cell_type_add_action_interface (type);
-    }
-  return type;
-}
+G_DEFINE_TYPE_WITH_CODE (GailTextCell, gail_text_cell, GAIL_TYPE_RENDERER_CELL,
+                         G_IMPLEMENT_INTERFACE (ATK_TYPE_TEXT, atk_text_interface_init))
 
 static void 
 gail_text_cell_class_init (GailTextCellClass *klass)
@@ -171,7 +135,6 @@ gail_text_cell_class_init (GailTextCellClass *klass)
   AtkObjectClass *atk_object_class = ATK_OBJECT_CLASS (klass);
   GailRendererCellClass *renderer_cell_class = GAIL_RENDERER_CELL_CLASS (klass);
 
-  parent_class = g_type_class_peek_parent (klass);
   renderer_cell_class->update_cache = gail_text_cell_update_cache;
   renderer_cell_class->property_list = gail_text_cell_property_list;
 
@@ -223,7 +186,7 @@ gail_text_cell_finalize (GObject            *object)
   g_object_unref (text_cell->textutil);
   g_free (text_cell->cell_text);
 
-  G_OBJECT_CLASS (parent_class)->finalize (object);
+  G_OBJECT_CLASS (gail_text_cell_parent_class)->finalize (object);
 }
 
 static G_CONST_RETURN gchar*
@@ -311,7 +274,6 @@ gail_text_cell_update_cache (GailRendererCell *cell,
 static void
 atk_text_interface_init (AtkTextIface *iface)
 {
-  g_return_if_fail (iface != NULL);
   iface->get_text = gail_text_cell_get_text;
   iface->get_character_at_offset = gail_text_cell_get_character_at_offset;
   iface->get_text_before_offset = gail_text_cell_get_text_before_offset;

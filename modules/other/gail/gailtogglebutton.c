@@ -23,6 +23,8 @@
 
 static void      gail_toggle_button_class_init        (GailToggleButtonClass *klass);
 
+static void      gail_toggle_button_init              (GailToggleButton      *button);
+
 static void      gail_toggle_button_toggled_gtk       (GtkWidget             *widget);
 
 static void      gail_toggle_button_real_notify_gtk   (GObject               *obj,
@@ -33,35 +35,7 @@ static void      gail_toggle_button_real_initialize   (AtkObject             *ob
 
 static AtkStateSet* gail_toggle_button_ref_state_set  (AtkObject             *accessible);
 
-static GailButtonClass *parent_class = NULL;
-
-GType
-gail_toggle_button_get_type (void)
-{
-  static GType type = 0;
-
-  if (!type)
-    {
-      static const GTypeInfo tinfo =
-      {
-        sizeof (GailToggleButtonClass),
-        (GBaseInitFunc) NULL, /* base init */
-        (GBaseFinalizeFunc) NULL, /* base finalize */
-        (GClassInitFunc) gail_toggle_button_class_init, /* class init */
-        (GClassFinalizeFunc) NULL, /* class finalize */
-        NULL, /* class data */
-        sizeof (GailToggleButton), /* instance size */
-        0, /* nb preallocs */
-        (GInstanceInitFunc) NULL, /* instance init */
-        NULL /* value table */
-      };
-
-      type = g_type_register_static (GAIL_TYPE_BUTTON,
-                                     "GailToggleButton", &tinfo, 0);
-    }
-
-  return type;
-}
+G_DEFINE_TYPE (GailToggleButton, gail_toggle_button, GAIL_TYPE_BUTTON)
 
 static void
 gail_toggle_button_class_init (GailToggleButtonClass *klass)
@@ -72,10 +46,13 @@ gail_toggle_button_class_init (GailToggleButtonClass *klass)
   widget_class = (GailWidgetClass*)klass;
   widget_class->notify_gtk = gail_toggle_button_real_notify_gtk;
 
-  parent_class = g_type_class_peek_parent (klass);
-
   class->ref_state_set = gail_toggle_button_ref_state_set;
   class->initialize = gail_toggle_button_real_initialize;
+}
+
+static void
+gail_toggle_button_init (GailToggleButton *button)
+{
 }
 
 AtkObject* 
@@ -98,7 +75,7 @@ static void
 gail_toggle_button_real_initialize (AtkObject *obj,
                                     gpointer  data)
 {
-  ATK_OBJECT_CLASS (parent_class)->initialize (obj, data);
+  ATK_OBJECT_CLASS (gail_toggle_button_parent_class)->initialize (obj, data);
 
   g_signal_connect (data,
                     "toggled",
@@ -131,7 +108,7 @@ gail_toggle_button_ref_state_set (AtkObject *accessible)
   GtkToggleButton *toggle_button;
   GtkWidget *widget;
 
-  state_set = ATK_OBJECT_CLASS (parent_class)->ref_state_set (accessible);
+  state_set = ATK_OBJECT_CLASS (gail_toggle_button_parent_class)->ref_state_set (accessible);
   widget = GTK_ACCESSIBLE (accessible)->widget;
  
   if (widget == NULL)
@@ -161,5 +138,5 @@ gail_toggle_button_real_notify_gtk (GObject           *obj,
     atk_object_notify_state_change (atk_obj, ATK_STATE_ENABLED,
                        !gtk_toggle_button_get_inconsistent (toggle_button));
   else
-    GAIL_WIDGET_CLASS (parent_class)->notify_gtk (obj, pspec);
+    GAIL_WIDGET_CLASS (gail_toggle_button_parent_class)->notify_gtk (obj, pspec);
 }

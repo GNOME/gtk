@@ -24,22 +24,23 @@
 GType
 gail_cell_parent_get_type (void)
 {
-  static GType type = 0;
+  static volatile gsize g_define_type_id__volatile = 0;
 
-  if (!type) 
+  if (g_once_init_enter (&g_define_type_id__volatile))
     {
-      static const GTypeInfo tinfo =
-      {
-        sizeof (GailCellParentIface),
-        (GBaseInitFunc) NULL,
-        (GBaseFinalizeFunc) NULL,
+      GType g_define_type_id =
+        g_type_register_static_simple (G_TYPE_INTERFACE,
+                                       "GailCellParent",
+                                       sizeof (GailCellParentIface),
+                                       NULL,
+                                       0,
+                                       NULL,
+                                       0);
 
-      };
-
-      type = g_type_register_static (G_TYPE_INTERFACE, "GailCellParent", &tinfo, 0);
+      g_once_init_leave (&g_define_type_id__volatile, g_define_type_id);
     }
 
-  return type;
+  return g_define_type_id__volatile;
 }
 
 /**

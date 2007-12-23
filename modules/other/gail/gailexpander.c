@@ -24,7 +24,7 @@
 #include <libgail-util/gailmisc.h>
 
 static void                  gail_expander_class_init       (GailExpanderClass *klass);
-static void                  gail_expander_object_init      (GailExpander      *expander);
+static void                  gail_expander_init             (GailExpander      *expander);
 
 static G_CONST_RETURN gchar* gail_expander_get_name         (AtkObject         *obj);
 static gint                  gail_expander_get_n_children   (AtkObject         *obj)
@@ -109,55 +109,9 @@ static AtkAttributeSet* gail_expander_get_run_attributes
 static AtkAttributeSet* gail_expander_get_default_attributes
                                                    (AtkText           *text);
 
-static GailContainer* parent_class = NULL;
-
-GType
-gail_expander_get_type (void)
-{
-  static GType type = 0;
-
-  if (!type)
-    {
-      static const GTypeInfo tinfo =
-      {
-        sizeof (GailExpanderClass),
-        (GBaseInitFunc) NULL, /* base init */
-        (GBaseFinalizeFunc) NULL, /* base finalize */
-        (GClassInitFunc) gail_expander_class_init, /* class init */
-        (GClassFinalizeFunc) NULL, /* class finalize */
-        NULL, /* class data */
-        sizeof (GailExpander), /* instance size */
-        0, /* nb preallocs */
-        (GInstanceInitFunc) gail_expander_object_init, /* instance init */
-        NULL /* value table */
-      };
-
-      static const GInterfaceInfo atk_action_info =
-      {
-        (GInterfaceInitFunc) atk_action_interface_init,
-        (GInterfaceFinalizeFunc) NULL,
-        NULL
-      };
-
-      static const GInterfaceInfo atk_text_info =
-      {
-        (GInterfaceInitFunc) atk_text_interface_init,
-        (GInterfaceFinalizeFunc) NULL,
-        NULL
-      };
-
-      type = g_type_register_static (GAIL_TYPE_CONTAINER,
-                                     "GailExpander", &tinfo, 0);
-
-      g_type_add_interface_static (type, ATK_TYPE_ACTION,
-                                   &atk_action_info);
-      g_type_add_interface_static (type, ATK_TYPE_TEXT,
-                                   &atk_text_info);
-
-    }
-
-  return type;
-}
+G_DEFINE_TYPE_WITH_CODE (GailExpander, gail_expander, GAIL_TYPE_CONTAINER,
+                         G_IMPLEMENT_INTERFACE (ATK_TYPE_ACTION, atk_action_interface_init)
+                         G_IMPLEMENT_INTERFACE (ATK_TYPE_TEXT, atk_text_interface_init))
 
 static void
 gail_expander_class_init (GailExpanderClass *klass)
@@ -171,8 +125,6 @@ gail_expander_class_init (GailExpanderClass *klass)
 
   gobject_class->finalize = gail_expander_finalize;
 
-  parent_class = g_type_class_peek_parent (klass);
-
   class->get_name = gail_expander_get_name;
   class->get_n_children = gail_expander_get_n_children;
   class->ref_child = gail_expander_ref_child;
@@ -182,7 +134,7 @@ gail_expander_class_init (GailExpanderClass *klass)
 }
 
 static void
-gail_expander_object_init (GailExpander *expander)
+gail_expander_init (GailExpander *expander)
 {
   expander->activate_description = NULL;
   expander->activate_keybinding = NULL;
@@ -212,7 +164,7 @@ gail_expander_get_name (AtkObject *obj)
   G_CONST_RETURN gchar *name;
   g_return_val_if_fail (GAIL_IS_EXPANDER (obj), NULL);
 
-  name = ATK_OBJECT_CLASS (parent_class)->get_name (obj);
+  name = ATK_OBJECT_CLASS (gail_expander_parent_class)->get_name (obj);
   if (name != NULL)
     return name;
   else
@@ -315,7 +267,7 @@ gail_expander_real_initialize (AtkObject *obj,
   GailExpander *gail_expander = GAIL_EXPANDER (obj);
   GtkWidget  *expander;
 
-  ATK_OBJECT_CLASS (parent_class)->initialize (obj, data);
+  ATK_OBJECT_CLASS (gail_expander_parent_class)->initialize (obj, data);
 
   expander = GTK_WIDGET (data);
   if (GTK_WIDGET_MAPPED (expander))
@@ -382,7 +334,7 @@ gail_expander_real_notify_gtk (GObject    *obj,
       g_signal_emit_by_name (atk_obj, "visible_data_changed");
     }
   else
-    GAIL_WIDGET_CLASS (parent_class)->notify_gtk (obj, pspec);
+    GAIL_WIDGET_CLASS (gail_expander_parent_class)->notify_gtk (obj, pspec);
 }
 
 static void
@@ -399,8 +351,6 @@ gail_expander_init_textutil (GailExpander *expander,
 static void
 atk_action_interface_init (AtkActionIface *iface)
 {
-  g_return_if_fail (iface != NULL);
-
   iface->do_action = gail_expander_do_action;
   iface->get_n_actions = gail_expander_get_n_actions;
   iface->get_description = gail_expander_get_description;
@@ -589,7 +539,7 @@ gail_expander_ref_state_set (AtkObject *obj)
   GtkWidget *widget;
   GtkExpander *expander;
 
-  state_set = ATK_OBJECT_CLASS (parent_class)->ref_state_set (obj);
+  state_set = ATK_OBJECT_CLASS (gail_expander_parent_class)->ref_state_set (obj);
   widget = GTK_ACCESSIBLE (obj)->widget;
 
   if (widget == NULL)
@@ -612,7 +562,6 @@ gail_expander_ref_state_set (AtkObject *obj)
 static void
 atk_text_interface_init (AtkTextIface *iface)
 {
-  g_return_if_fail (iface != NULL);
   iface->get_text = gail_expander_get_text;
   iface->get_character_at_offset = gail_expander_get_character_at_offset;
   iface->get_text_before_offset = gail_expander_get_text_before_offset;
@@ -939,5 +888,5 @@ gail_expander_finalize (GObject *object)
   if (expander->textutil)
     g_object_unref (expander->textutil);
 
-  G_OBJECT_CLASS (parent_class)->finalize (object);
+  G_OBJECT_CLASS (gail_expander_parent_class)->finalize (object);
 }

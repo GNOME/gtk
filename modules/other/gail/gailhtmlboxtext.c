@@ -91,43 +91,8 @@ static gchar*         get_text_near_offset                     (AtkText         
                                                                 gint              *start_offset,
                                                                 gint              *end_offset);
 
-static AtkObjectClass *parent_class = NULL;
-
-GType
-gail_html_box_text_get_type (void)
-{
-  static GType type = 0;
-
-  if (!type)
-    {
-      static const GTypeInfo tinfo =
-      {
-        sizeof (GailHtmlBoxTextClass),
-        (GBaseInitFunc) NULL, /* base init */
-        (GBaseFinalizeFunc) NULL, /* base finalize */
-        (GClassInitFunc) gail_html_box_text_class_init, /* class init */
-        (GClassFinalizeFunc) NULL, /* class finalize */
-        NULL, /* class data */
-        sizeof (GailHtmlBoxText), /* instance size */
-        0, /* nb preallocs */
-        (GInstanceInitFunc) NULL, /* instance init */
-        NULL /* value table */
-      };
-
-      static const GInterfaceInfo atk_text_info =
-      {
-        (GInterfaceInitFunc) gail_html_box_text_text_interface_init,
-        (GInterfaceFinalizeFunc) NULL,
-        NULL
-      };
-      type = g_type_register_static (GAIL_TYPE_HTML_BOX,
-                                     "GailHtmlBoxText", &tinfo, 0);
-      g_type_add_interface_static (type, ATK_TYPE_TEXT,
-                                   &atk_text_info);      
-    }
-
-  return type;
-}
+G_DEFINE_TYPE_WITH_CODE (GailHtmlBoxText, gail_html_box_text, GAIL_TYPE_HTML_BOX,
+                         G_IMPLEMENT_INTERFACE (ATK_TYPE_TEXT, gail_html_box_text_text_interface_init))
 
 AtkObject*
 gail_html_box_text_new (GObject *obj)
@@ -155,14 +120,11 @@ gail_html_box_text_new (GObject *obj)
 static void
 gail_html_box_text_class_init (GailHtmlBoxTextClass *klass)
 {
-  parent_class = g_type_class_ref (ATK_TYPE_OBJECT);
 }
 
 static void
 gail_html_box_text_text_interface_init (AtkTextIface *iface)
 {
-  g_return_if_fail (iface != NULL);
-
   iface->get_text = gail_html_box_text_get_text;
   iface->get_text_after_offset = gail_html_box_text_get_text_after_offset;
   iface->get_text_at_offset = gail_html_box_text_get_text_at_offset;

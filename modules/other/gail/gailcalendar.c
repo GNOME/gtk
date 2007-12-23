@@ -21,36 +21,17 @@
 #include "gailcalendar.h"
 
 static void         gail_calendar_class_init          (GailCalendarClass *klass);
+static void         gail_calendar_init                (GailCalendar      *calendar);
 
-GType
-gail_calendar_get_type (void)
-{
-  static GType type = 0;
-
-  if (!type)
-  {
-    static const GTypeInfo tinfo =
-    {
-      sizeof (GailCalendarClass),
-      (GBaseInitFunc) NULL, /* base init */
-      (GBaseFinalizeFunc) NULL, /* base finalize */
-      (GClassInitFunc) gail_calendar_class_init, /* class init */
-      (GClassFinalizeFunc) NULL, /* class finalize */
-      NULL, /* class data */
-      sizeof (GailCalendar), /* instance size */
-      0, /* nb preallocs */
-      (GInstanceInitFunc) NULL, /* instance init */
-      NULL /* value table */
-    };
-
-    type = g_type_register_static (GAIL_TYPE_WIDGET,
-                                   "GailCalendar", &tinfo, 0);
-  }
-  return type;
-}
+G_DEFINE_TYPE (GailCalendar, gail_calendar, GAIL_TYPE_WIDGET)
 
 static void
 gail_calendar_class_init (GailCalendarClass *klass)
+{
+}
+
+static void
+gail_calendar_init (GailCalendar *calendar)
 {
 }
 

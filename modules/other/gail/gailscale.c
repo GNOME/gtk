@@ -24,6 +24,8 @@
 
 static void	    gail_scale_class_init        (GailScaleClass *klass);
 
+static void         gail_scale_init              (GailScale      *scale);
+
 static void         gail_scale_real_initialize   (AtkObject      *obj,
                                                   gpointer      data);
 static void         gail_scale_notify            (GObject       *obj,
@@ -77,44 +79,8 @@ static AtkAttributeSet* gail_scale_get_run_attributes
 static AtkAttributeSet* gail_scale_get_default_attributes
                                                    (AtkText           *text);
 
-static gpointer parent_class = NULL;
-
-GType
-gail_scale_get_type (void)
-{
-  static GType type = 0;
-
-  if (!type)
-    {
-      static const GTypeInfo tinfo =
-      {
-        sizeof (GailRangeClass),
-        (GBaseInitFunc) NULL, /* base init */
-        (GBaseFinalizeFunc) NULL, /* base finalize */
-        (GClassInitFunc) gail_scale_class_init, /* class init */
-        (GClassFinalizeFunc) NULL, /* class finalize */
-        NULL, /* class data */
-        sizeof (GailScale), /* instance size */
-        0, /* nb preallocs */
-        (GInstanceInitFunc) NULL, /* instance init */
-        NULL /* value table */
-      };
-
-      static const GInterfaceInfo atk_text_info =
-      {
-        (GInterfaceInitFunc) atk_text_interface_init,
-        (GInterfaceFinalizeFunc) NULL,
-        NULL
-      };
-
-      type = g_type_register_static (GAIL_TYPE_RANGE,
-                                     "GailScale", &tinfo, 0);
-
-      g_type_add_interface_static (type, ATK_TYPE_TEXT,
-                                   &atk_text_info);
-    }
-  return type;
-}
+G_DEFINE_TYPE_WITH_CODE (GailScale, gail_scale, GAIL_TYPE_RANGE,
+                         G_IMPLEMENT_INTERFACE (ATK_TYPE_TEXT, atk_text_interface_init))
 
 static void	 
 gail_scale_class_init (GailScaleClass *klass)
@@ -126,8 +92,6 @@ gail_scale_class_init (GailScaleClass *klass)
 
   gobject_class->finalize = gail_scale_finalize;
   gobject_class->notify = gail_scale_notify;
-
-  parent_class = g_type_class_peek_parent (klass);
 }
 
 AtkObject* 
@@ -147,6 +111,11 @@ gail_scale_new (GtkWidget *widget)
 }
 
 static void
+gail_scale_init (GailScale      *scale)
+{
+}
+
+static void
 gail_scale_real_initialize (AtkObject *obj,
                             gpointer  data)
 {
@@ -154,7 +123,7 @@ gail_scale_real_initialize (AtkObject *obj,
   const gchar *txt;
   PangoLayout *layout;
 
-  ATK_OBJECT_CLASS (parent_class)->initialize (obj, data);
+  ATK_OBJECT_CLASS (gail_scale_parent_class)->initialize (obj, data);
 
   gail_scale = GAIL_SCALE (obj);
   gail_scale->textutil = gail_text_util_new ();
@@ -176,7 +145,7 @@ gail_scale_finalize (GObject *object)
   GailScale *scale = GAIL_SCALE (object);
 
   g_object_unref (scale->textutil);
-  G_OBJECT_CLASS (parent_class)->finalize (object);
+  G_OBJECT_CLASS (gail_scale_parent_class)->finalize (object);
 
 }
 
@@ -213,7 +182,7 @@ gail_scale_notify (GObject    *obj,
             }
         }
     }
-  G_OBJECT_CLASS (parent_class)->notify (obj, pspec);
+  G_OBJECT_CLASS (gail_scale_parent_class)->notify (obj, pspec);
 }
 
 /* atktext.h */
@@ -221,7 +190,6 @@ gail_scale_notify (GObject    *obj,
 static void
 atk_text_interface_init (AtkTextIface *iface)
 {
-  g_return_if_fail (iface != NULL);
   iface->get_text = gail_scale_get_text;
   iface->get_character_at_offset = gail_scale_get_character_at_offset;
   iface->get_text_before_offset = gail_scale_get_text_before_offset;

@@ -23,6 +23,7 @@
 #include "gailoptionmenu.h"
 
 static void                  gail_option_menu_class_init       (GailOptionMenuClass *klass);
+static void                  gail_option_menu_init             (GailOptionMenu  *menu);
 static void		     gail_option_menu_real_initialize  (AtkObject       *obj,
                                                                 gpointer        data);
 
@@ -51,44 +52,8 @@ static gboolean              gail_option_menu_set_description  (AtkAction       
                                                                 gint            i,
                                                                 const gchar     *desc);
 
-static GailButtonClass* parent_class = NULL;
-
-GType
-gail_option_menu_get_type (void)
-{
-  static GType type = 0;
-
-  if (!type)
-    {
-      static const GTypeInfo tinfo =
-      {
-        sizeof (GailOptionMenuClass),
-        (GBaseInitFunc) NULL, /* base init */
-        (GBaseFinalizeFunc) NULL, /* base finalize */
-        (GClassInitFunc) gail_option_menu_class_init, /* class init */
-        (GClassFinalizeFunc) NULL, /* class finalize */
-        NULL, /* class data */
-        sizeof (GailOptionMenu), /* instance size */
-        0, /* nb preallocs */
-        (GInstanceInitFunc) NULL, /* instance init */
-        NULL /* value table */
-      };
-  
-      static const GInterfaceInfo atk_action_info =
-      {
-        (GInterfaceInitFunc) atk_action_interface_init,
-        (GInterfaceFinalizeFunc) NULL,
-        NULL
-      };
-
-      type = g_type_register_static (GAIL_TYPE_BUTTON,
-                                     "GailOptionMenu", &tinfo, 0);
-      g_type_add_interface_static (type, ATK_TYPE_ACTION,
-                                   &atk_action_info);
-    }
-
-  return type;
-}
+G_DEFINE_TYPE_WITH_CODE (GailOptionMenu, gail_option_menu, GAIL_TYPE_BUTTON,
+                         G_IMPLEMENT_INTERFACE (ATK_TYPE_ACTION, atk_action_interface_init))
 
 static void
 gail_option_menu_class_init (GailOptionMenuClass *klass)
@@ -104,7 +69,11 @@ gail_option_menu_class_init (GailOptionMenuClass *klass)
 
   container_class->add_gtk = gail_option_menu_real_add_gtk;
   container_class->remove_gtk = gail_option_menu_real_remove_gtk;
-  parent_class = g_type_class_peek_parent (klass);
+}
+
+static void
+gail_option_menu_init (GailOptionMenu  *menu)
+{
 }
 
 AtkObject* 
@@ -127,7 +96,7 @@ static void
 gail_option_menu_real_initialize (AtkObject *obj,
                                   gpointer  data)
 {
-  ATK_OBJECT_CLASS (parent_class)->initialize (obj, data);
+  ATK_OBJECT_CLASS (gail_option_menu_parent_class)->initialize (obj, data);
 
   obj->role = ATK_ROLE_COMBO_BOX;
 }
@@ -188,7 +157,7 @@ gail_option_menu_real_add_gtk (GtkContainer *container,
   AtkObject* atk_parent = ATK_OBJECT (data);
   AtkObject* atk_child = gtk_widget_get_accessible (widget);
 
-  GAIL_CONTAINER_CLASS (parent_class)->add_gtk (container, widget, data);
+  GAIL_CONTAINER_CLASS (gail_option_menu_parent_class)->add_gtk (container, widget, data);
 
   g_object_notify (G_OBJECT (atk_child), "accessible_parent");
 
@@ -222,8 +191,6 @@ gail_option_menu_real_remove_gtk (GtkContainer *container,
 static void
 atk_action_interface_init (AtkActionIface *iface)
 {
-  g_return_if_fail (iface != NULL);
-
   iface->do_action = gail_option_menu_do_action;
   iface->get_n_actions = gail_option_menu_get_n_actions;
   iface->get_description = gail_option_menu_get_description;

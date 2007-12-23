@@ -23,6 +23,8 @@
 
 static void         gail_list_class_init            (GailListClass  *klass); 
 
+static void         gail_list_init                  (GailList       *list);
+
 static gint         gail_list_get_index_in_parent   (AtkObject      *accessible);
 
 static void         atk_selection_interface_init    (AtkSelectionIface *iface);
@@ -38,54 +40,20 @@ static gboolean     gail_list_remove_selection      (AtkSelection   *selection,
                                                      gint           i);
 
 
-static GailContainerClass *parent_class = NULL;
-
-GType
-gail_list_get_type (void)
-{
-  static GType type = 0;
-
-  if (!type)
-  {
-    static const GTypeInfo tinfo =
-    {
-      sizeof (GailListClass),
-      (GBaseInitFunc) NULL, /* base init */
-      (GBaseFinalizeFunc) NULL, /* base finalize */
-      (GClassInitFunc) gail_list_class_init, /* class init */
-      (GClassFinalizeFunc) NULL, /* class finalize */
-      NULL, /* class data */
-      sizeof (GailList), /* instance size */
-      0, /* nb preallocs */
-      (GInstanceInitFunc) NULL, /* instance init */
-      NULL /* value table */
-    };
-    static const GInterfaceInfo atk_selection_info =
-    {
-      (GInterfaceInitFunc) atk_selection_interface_init,
-      (GInterfaceFinalizeFunc) NULL,
-      NULL
-    };
-
-    type = g_type_register_static (GAIL_TYPE_CONTAINER,
-                                   "GailList", &tinfo, 0);
-
-    g_type_add_interface_static (type, ATK_TYPE_SELECTION,
-                                   &atk_selection_info);
-
-
-  }
-  return type;
-}
+G_DEFINE_TYPE_WITH_CODE (GailList, gail_list, GAIL_TYPE_CONTAINER,
+                         G_IMPLEMENT_INTERFACE (ATK_TYPE_SELECTION, atk_selection_interface_init))
 
 static void
 gail_list_class_init (GailListClass *klass)
 {
   AtkObjectClass  *class = ATK_OBJECT_CLASS (klass);
 
-  parent_class = g_type_class_peek_parent (klass);
-
   class->get_index_in_parent = gail_list_get_index_in_parent;
+}
+
+static void
+gail_list_init (GailList *list)
+{
 }
 
 AtkObject* 
@@ -118,14 +86,12 @@ gail_list_get_index_in_parent (AtkObject *accessible)
     if (GAIL_IS_COMBO (accessible->accessible_parent))
       return 0;
   }
-  return ATK_OBJECT_CLASS (parent_class)->get_index_in_parent (accessible);
+  return ATK_OBJECT_CLASS (gail_list_parent_class)->get_index_in_parent (accessible);
 }
 
 static void
 atk_selection_interface_init (AtkSelectionIface *iface)
 {
-  g_return_if_fail (iface != NULL);
-
   iface->add_selection = gail_list_add_selection;
   iface->clear_selection = gail_list_clear_selection;
   iface->ref_selection = gail_list_ref_selection;

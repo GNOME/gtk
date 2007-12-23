@@ -21,7 +21,7 @@
 #include "gailpixmap.h"
 
 static void	 gail_pixmap_class_init		(GailPixmapClass *klass);
-static void  gail_pixmap_object_init    (GailPixmap      *pixmap);
+static void      gail_pixmap_init               (GailPixmap      *pixmap);
 
 /* AtkImage */
 static void  atk_image_interface_init   (AtkImageIface  *iface);
@@ -40,44 +40,8 @@ static gboolean gail_pixmap_set_image_description
                                         const gchar    *description);
 static void  gail_pixmap_finalize       (GObject         *object);
 
-static GailWidgetClass* parent_class = NULL;
-
-GType
-gail_pixmap_get_type (void)
-{
-  static GType type = 0;
-
-  if (!type)
-    {
-      static const GTypeInfo tinfo =
-      {
-        sizeof (GailPixmapClass),
-        (GBaseInitFunc) NULL, /* base init */
-        (GBaseFinalizeFunc) NULL, /* base finalize */
-        (GClassInitFunc) gail_pixmap_class_init, /* class init */
-        (GClassFinalizeFunc) NULL, /* class finalize */
-        NULL, /* class data */
-        sizeof (GailPixmap), /* instance size */
-        0, /* nb preallocs */
-        (GInstanceInitFunc) gail_pixmap_object_init, /* instance init */
-        NULL /* value table */
-      };
-
-      static const GInterfaceInfo atk_image_info =
-      {
-        (GInterfaceInitFunc) atk_image_interface_init,
-        (GInterfaceFinalizeFunc) NULL,
-        NULL
-      };
-
-      type = g_type_register_static (GAIL_TYPE_WIDGET,
-                                     "GailPixmap", &tinfo, 0);
-
-      g_type_add_interface_static (type, ATK_TYPE_IMAGE,
-                                   &atk_image_info);
-    }
-  return type;
-}
+G_DEFINE_TYPE_WITH_CODE (GailPixmap, gail_pixmap, GAIL_TYPE_WIDGET,
+                         G_IMPLEMENT_INTERFACE (ATK_TYPE_IMAGE, atk_image_interface_init))
 
 static void	 
 gail_pixmap_class_init (GailPixmapClass *klass)
@@ -85,12 +49,10 @@ gail_pixmap_class_init (GailPixmapClass *klass)
   GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
  
   gobject_class->finalize = gail_pixmap_finalize;
-
-  parent_class = g_type_class_peek_parent (klass);
 }
 
 static void
-gail_pixmap_object_init (GailPixmap *pixmap)
+gail_pixmap_init (GailPixmap *pixmap)
 {
   pixmap->image_description = NULL;
 }
@@ -117,8 +79,6 @@ gail_pixmap_new (GtkWidget *widget)
 static void
 atk_image_interface_init (AtkImageIface *iface)
 {
-  g_return_if_fail (iface != NULL);
-
   iface->get_image_description = gail_pixmap_get_image_description;
   iface->get_image_position = gail_pixmap_get_image_position;
   iface->get_image_size = gail_pixmap_get_image_size;
@@ -194,5 +154,5 @@ gail_pixmap_finalize (GObject      *object)
   GailPixmap *pixmap = GAIL_PIXMAP (object);
 
   g_free (pixmap->image_description);
-  G_OBJECT_CLASS (parent_class)->finalize (object);
+  G_OBJECT_CLASS (gail_pixmap_parent_class)->finalize (object);
 }

@@ -23,6 +23,7 @@
 
 
 static void         gail_scrolled_window_class_init     (GailScrolledWindowClass  *klass); 
+static void         gail_scrolled_window_init           (GailScrolledWindow       *window);
 static void         gail_scrolled_window_real_initialize
                                                         (AtkObject     *obj,
                                                          gpointer      data);
@@ -35,45 +36,21 @@ static void         gail_scrolled_window_scrollbar_visibility_changed
                                                          GParamSpec    *pspec,
                                                          gpointer      user_data);
 
-static GailContainerClass *parent_class = NULL;
-
-GType
-gail_scrolled_window_get_type (void)
-{
-  static GType type = 0;
-
-  if (!type)
-    {
-      static const GTypeInfo tinfo =
-      {
-        sizeof (GailScrolledWindowClass),
-        (GBaseInitFunc) NULL, /* base init */
-        (GBaseFinalizeFunc) NULL, /* base finalize */
-        (GClassInitFunc) gail_scrolled_window_class_init, /* class init */
-        (GClassFinalizeFunc) NULL, /* class finalize */
-        NULL, /* class data */
-        sizeof (GailScrolledWindow), /* instance size */
-        0, /* nb preallocs */
-        (GInstanceInitFunc) NULL, /* instance init */
-        NULL /* value table */
-      };
-
-      type = g_type_register_static (GAIL_TYPE_CONTAINER,
-                                     "GailScrolledWindow", &tinfo, 0);
-    }
-  return type;
-}
+G_DEFINE_TYPE (GailScrolledWindow, gail_scrolled_window, GAIL_TYPE_CONTAINER)
 
 static void
 gail_scrolled_window_class_init (GailScrolledWindowClass *klass)
 {
   AtkObjectClass  *class = ATK_OBJECT_CLASS (klass);
 
-  parent_class = g_type_class_peek_parent (klass);
-
   class->get_n_children = gail_scrolled_window_get_n_children;
   class->ref_child = gail_scrolled_window_ref_child;
   class->initialize = gail_scrolled_window_real_initialize;
+}
+
+static void
+gail_scrolled_window_init (GailScrolledWindow *window)
+{
 }
 
 AtkObject* 
@@ -98,7 +75,7 @@ gail_scrolled_window_real_initialize (AtkObject *obj,
 {
   GtkScrolledWindow *window;
 
-  ATK_OBJECT_CLASS (parent_class)->initialize (obj, data);
+  ATK_OBJECT_CLASS (gail_scrolled_window_parent_class)->initialize (obj, data);
 
   window = GTK_SCROLLED_WINDOW (data);
   g_signal_connect_data (window->hscrollbar, "notify::visible",

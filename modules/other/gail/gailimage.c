@@ -133,7 +133,7 @@ gail_image_get_name (AtkObject *accessible)
   GtkStockItem stock_item;
   const gchar *name;
 
-  name = ATK_OBJECT_CLASS (gail_image_parent_class)->get_name (accessible); 
+  name = ATK_OBJECT_CLASS (gail_image_parent_class)->get_name (accessible);
   if (name)
     return name;
 

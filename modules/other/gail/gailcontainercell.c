@@ -21,6 +21,7 @@
 #include "gailcontainercell.h"
 
 static void       gail_container_cell_class_init          (GailContainerCellClass *klass);
+static void       gail_container_cell_init                (GailContainerCell   *cell);
 static void       gail_container_cell_finalize            (GObject             *obj);
 
 
@@ -34,34 +35,7 @@ static gint       gail_container_cell_get_n_children      (AtkObject *obj);
 static AtkObject* gail_container_cell_ref_child           (AtkObject *obj,
                                                            gint      child);
 
-static gpointer parent_class = NULL;
-
-GType
-gail_container_cell_get_type (void)
-{
-  static GType type = 0;
-
-  if (!type)
-  {
-    static const GTypeInfo tinfo =
-    {
-      sizeof (GailContainerCellClass),
-      (GBaseInitFunc) NULL, /* base init */
-      (GBaseFinalizeFunc) NULL, /* base finalize */
-      (GClassInitFunc) gail_container_cell_class_init, /* class init */
-      (GClassFinalizeFunc) NULL, /* class finalize */
-      NULL, /* class data */
-      sizeof (GailContainerCell), /* instance size */
-      0, /* nb preallocs */
-      (GInstanceInitFunc) NULL, /* instance init */
-      NULL /* value table */
-    };
-
-    type = g_type_register_static (GAIL_TYPE_CELL,
-                                   "GailContainerCell", &tinfo, 0);
-  }
-  return type;
-}
+G_DEFINE_TYPE (GailContainerCell, gail_container_cell, GAIL_TYPE_CELL)
 
 static void 
 gail_container_cell_class_init (GailContainerCellClass *klass)
@@ -69,13 +43,16 @@ gail_container_cell_class_init (GailContainerCellClass *klass)
   AtkObjectClass *class = ATK_OBJECT_CLASS(klass);
   GObjectClass *g_object_class = G_OBJECT_CLASS (klass);
 
-  parent_class = g_type_class_peek_parent (klass);
   g_object_class->finalize = gail_container_cell_finalize;
 
   class->get_n_children = gail_container_cell_get_n_children;
   class->ref_child = gail_container_cell_ref_child;
 }
 
+static void
+gail_container_cell_init (GailContainerCell   *cell)
+{
+}
 
 GailContainerCell * 
 gail_container_cell_new (void)
@@ -111,7 +88,7 @@ gail_container_cell_finalize (GObject *obj)
   }
   g_list_free (container->children);
   
-  G_OBJECT_CLASS (parent_class)->finalize (obj);
+  G_OBJECT_CLASS (gail_container_cell_parent_class)->finalize (obj);
 }
 
 

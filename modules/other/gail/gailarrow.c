@@ -20,8 +20,8 @@
 #include <gtk/gtk.h>
 #include "gailarrow.h"
 
-static void	 gail_arrow_class_init		(GailArrowClass *klass);
-static void  gail_arrow_object_init		(GailArrow		*arrow);
+static void gail_arrow_class_init	(GailArrowClass *klass);
+static void gail_arrow_init		(GailArrow	*arrow);
 
 /* AtkImage */
 static void  atk_image_interface_init   (AtkImageIface  *iface);
@@ -32,44 +32,8 @@ static gboolean gail_arrow_set_image_description
                                         const gchar    *description);
 static void  gail_arrow_finalize       (GObject         *object);
 
-static GailWidgetClass* parent_class = NULL;
-
-GType
-gail_arrow_get_type (void)
-{
-  static GType type = 0;
-
-  if (!type)
-  {
-    static const GTypeInfo tinfo =
-    {
-      sizeof (GailArrowClass),
-      (GBaseInitFunc) NULL, /* base init */
-      (GBaseFinalizeFunc) NULL, /* base finalize */
-      (GClassInitFunc) gail_arrow_class_init, /* class init */
-      (GClassFinalizeFunc) NULL, /* class finalize */
-      NULL, /* class data */
-      sizeof (GailArrow), /* instance size */
-      0, /* nb preallocs */
-      (GInstanceInitFunc) gail_arrow_object_init, /* instance init */
-      NULL /* value table */
-    };
-
-    static const GInterfaceInfo atk_image_info =
-    {
-        (GInterfaceInitFunc) atk_image_interface_init,
-        (GInterfaceFinalizeFunc) NULL,
-        NULL
-    };
-
-    type = g_type_register_static (GAIL_TYPE_WIDGET,
-                                   "GailArrow", &tinfo, 0);
-
-    g_type_add_interface_static (type, ATK_TYPE_IMAGE,
-                                 &atk_image_info);
-  }
-  return type;
-}
+G_DEFINE_TYPE_WITH_CODE (GailArrow, gail_arrow, GAIL_TYPE_WIDGET,
+                         G_IMPLEMENT_INTERFACE (ATK_TYPE_IMAGE, atk_image_interface_init))
 
 static void	 
 gail_arrow_class_init		(GailArrowClass *klass)
@@ -77,12 +41,10 @@ gail_arrow_class_init		(GailArrowClass *klass)
   GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
 
   gobject_class->finalize = gail_arrow_finalize;
-
-  parent_class = g_type_class_peek_parent (klass);
 }
 
 static void
-gail_arrow_object_init (GailArrow *arrow)
+gail_arrow_init (GailArrow *arrow)
 {
   arrow->image_description = NULL;
 }
@@ -107,8 +69,6 @@ gail_arrow_new (GtkWidget *widget)
 static void
 atk_image_interface_init (AtkImageIface *iface)
 {
-  g_return_if_fail (iface != NULL);
-
   iface->get_image_description = gail_arrow_get_image_description;
   iface->set_image_description = gail_arrow_set_image_description;
 }
@@ -123,9 +83,7 @@ gail_arrow_get_image_description (AtkImage       *obj)
   arrow = GAIL_ARROW (obj);
 
   return arrow->image_description;
-
 }
-
 
 static gboolean 
 gail_arrow_set_image_description (AtkImage       *obj,
@@ -160,5 +118,5 @@ gail_arrow_finalize (GObject      *object)
   GailArrow *arrow = GAIL_ARROW (object);
 
   g_free (arrow->image_description);
-  G_OBJECT_CLASS (parent_class)->finalize (object);
+  G_OBJECT_CLASS (gail_arrow_parent_class)->finalize (object);
 }

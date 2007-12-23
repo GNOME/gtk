@@ -71,7 +71,7 @@ struct _ActionInfo {
 };
 
 
-void      gail_cell_init                 (GailCell        *cell,
+void      gail_cell_initialise           (GailCell        *cell,
                                           GtkWidget       *widget, 
                                           AtkObject       *parent,
 			                  gint            index);

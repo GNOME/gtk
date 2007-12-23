@@ -26,7 +26,7 @@
 #include <libgail-util/gailmisc.h>
 
 static void       gail_entry_class_init            (GailEntryClass       *klass);
-static void       gail_entry_object_init           (GailEntry            *entry);
+static void       gail_entry_init                  (GailEntry            *entry);
 static void	  gail_entry_real_initialize       (AtkObject            *obj,
                                                     gpointer             data);
 static void       text_setup                       (GailEntry            *entry,
@@ -158,8 +158,6 @@ static gboolean              gail_entry_set_description  (AtkAction       *actio
                                                           gint            i,
                                                           const gchar     *desc);
 
-static GailWidgetClass *parent_class = NULL;
-
 typedef struct _GailEntryPaste			GailEntryPaste;
 
 struct _GailEntryPaste
@@ -168,59 +166,10 @@ struct _GailEntryPaste
   gint position;
 };
 
-GType
-gail_entry_get_type (void)
-{
-  static GType type = 0;
-
-  if (!type)
-    {
-      static const GTypeInfo tinfo =
-      {
-        sizeof (GailEntryClass),
-        (GBaseInitFunc) NULL, /* base init */
-        (GBaseFinalizeFunc) NULL, /* base finalize */
-        (GClassInitFunc) gail_entry_class_init, /* class init */
-        (GClassFinalizeFunc) NULL, /* class finalize */
-        NULL, /* class data */
-        sizeof (GailEntry), /* instance size */
-        0, /* nb preallocs */
-        (GInstanceInitFunc) gail_entry_object_init, /* instance init */
-        NULL /* value table */
-      };
-
-      static const GInterfaceInfo atk_editable_text_info =
-      {
-        (GInterfaceInitFunc) atk_editable_text_interface_init,
-        (GInterfaceFinalizeFunc) NULL,
-        NULL
-      };
-
-      static const GInterfaceInfo atk_text_info =
-      {
-        (GInterfaceInitFunc) atk_text_interface_init,
-        (GInterfaceFinalizeFunc) NULL,
-        NULL
-      };
-
-      static const GInterfaceInfo atk_action_info =
-      {
-        (GInterfaceInitFunc) atk_action_interface_init,
-        (GInterfaceFinalizeFunc) NULL,
-        NULL
-      };
-
-      type = g_type_register_static (GAIL_TYPE_WIDGET,
-                                     "GailEntry", &tinfo, 0);
-      g_type_add_interface_static (type, ATK_TYPE_EDITABLE_TEXT,
-                                   &atk_editable_text_info);
-      g_type_add_interface_static (type, ATK_TYPE_TEXT,
-                                   &atk_text_info);
-      g_type_add_interface_static (type, ATK_TYPE_ACTION,
-                                   &atk_action_info);
-    }
-  return type;
-}
+G_DEFINE_TYPE_WITH_CODE (GailEntry, gail_entry, GAIL_TYPE_WIDGET,
+                         G_IMPLEMENT_INTERFACE (ATK_TYPE_EDITABLE_TEXT, atk_editable_text_interface_init)
+                         G_IMPLEMENT_INTERFACE (ATK_TYPE_TEXT, atk_text_interface_init)
+                         G_IMPLEMENT_INTERFACE (ATK_TYPE_ACTION, atk_action_interface_init))
 
 static void
 gail_entry_class_init (GailEntryClass *klass)
@@ -230,8 +179,6 @@ gail_entry_class_init (GailEntryClass *klass)
   GailWidgetClass *widget_class;
 
   widget_class = (GailWidgetClass*)klass;
-
-  parent_class = g_type_class_peek_parent (klass);
 
   gobject_class->finalize = gail_entry_finalize;
 
@@ -243,7 +190,7 @@ gail_entry_class_init (GailEntryClass *klass)
 }
 
 static void
-gail_entry_object_init (GailEntry *entry)
+gail_entry_init (GailEntry *entry)
 {
   entry->textutil = NULL;
   entry->signal_name_insert = NULL;
@@ -261,7 +208,7 @@ gail_entry_real_initialize (AtkObject *obj,
   GtkEntry *entry;
   GailEntry *gail_entry;
 
-  ATK_OBJECT_CLASS (parent_class)->initialize (obj, data);
+  ATK_OBJECT_CLASS (gail_entry_parent_class)->initialize (obj, data);
 
   gail_entry = GAIL_ENTRY (obj);
   gail_entry->textutil = gail_text_util_new ();
@@ -343,7 +290,7 @@ gail_entry_real_notify_gtk (GObject		*obj,
       text_setup (entry, gtk_entry);
     }
   else
-    parent_class->notify_gtk (obj, pspec);
+    GAIL_WIDGET_CLASS (gail_entry_parent_class)->notify_gtk (obj, pspec);
 }
 
 static void
@@ -396,7 +343,7 @@ gail_entry_finalize (GObject            *object)
       g_source_remove (entry->insert_idle_handler);
       entry->insert_idle_handler = 0;
     }
-  G_OBJECT_CLASS (parent_class)->finalize (object);
+  G_OBJECT_CLASS (gail_entry_parent_class)->finalize (object);
 }
 
 AtkObject* 
@@ -427,7 +374,7 @@ gail_entry_get_index_in_parent (AtkObject *accessible)
         GAIL_IS_COMBO_BOX (accessible->accessible_parent))
       return 1;
 
-  return ATK_OBJECT_CLASS (parent_class)->get_index_in_parent (accessible);
+  return ATK_OBJECT_CLASS (gail_entry_parent_class)->get_index_in_parent (accessible);
 }
 
 /* atkobject.h */
@@ -440,7 +387,7 @@ gail_entry_ref_state_set (AtkObject *accessible)
   gboolean value;
   GtkWidget *widget;
 
-  state_set = ATK_OBJECT_CLASS (parent_class)->ref_state_set (accessible);
+  state_set = ATK_OBJECT_CLASS (gail_entry_parent_class)->ref_state_set (accessible);
   widget = GTK_ACCESSIBLE (accessible)->widget;
   
   if (widget == NULL)
@@ -461,8 +408,6 @@ gail_entry_ref_state_set (AtkObject *accessible)
 static void
 atk_text_interface_init (AtkTextIface *iface)
 {
-  g_return_if_fail (iface != NULL);
-
   iface->get_text = gail_entry_get_text;
   iface->get_character_at_offset = gail_entry_get_character_at_offset;
   iface->get_text_before_offset = gail_entry_get_text_before_offset;
@@ -900,8 +845,6 @@ gail_entry_set_selection (AtkText *text,
 static void
 atk_editable_text_interface_init (AtkEditableTextIface *iface)
 {
-  g_return_if_fail (iface != NULL);
-
   iface->set_text_contents = gail_entry_set_text_contents;
   iface->insert_text = gail_entry_insert_text;
   iface->copy_text = gail_entry_copy_text;
@@ -1235,8 +1178,6 @@ check_for_selection_change (GailEntry   *entry,
 static void
 atk_action_interface_init (AtkActionIface *iface)
 {
-  g_return_if_fail (iface != NULL);
-
   iface->do_action = gail_entry_do_action;
   iface->get_n_actions = gail_entry_get_n_actions;
   iface->get_description = gail_entry_get_description;

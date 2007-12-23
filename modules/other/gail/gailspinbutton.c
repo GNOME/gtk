@@ -24,6 +24,7 @@
 #include "gail-private-macros.h"
 
 static void      gail_spin_button_class_init        (GailSpinButtonClass *klass);
+static void      gail_spin_button_init              (GailSpinButton *button);
 static void      gail_spin_button_real_initialize   (AtkObject      *obj,
                                                      gpointer       data);
 static void      gail_spin_button_finalize          (GObject        *object);
@@ -43,46 +44,9 @@ static gboolean  gail_spin_button_set_current_value (AtkValue       *obj,
                                                      const GValue   *value);
 static void      gail_spin_button_value_changed     (GtkAdjustment  *adjustment,
                                                      gpointer       data);
-                                                         
-static GailWidgetClass *parent_class = NULL;
-
-GType
-gail_spin_button_get_type (void)
-{
-  static GType type = 0;
-
-  if (!type)
-    {
-      static const GTypeInfo tinfo =
-      {
-        sizeof (GailSpinButtonClass),
-        (GBaseInitFunc) NULL, /* base init */
-        (GBaseFinalizeFunc) NULL, /* base finalize */
-        (GClassInitFunc) gail_spin_button_class_init, /* class init */
-        (GClassFinalizeFunc) NULL, /* class finalize */
-        NULL, /* class data */
-        sizeof (GailSpinButton), /* instance size */
-        0, /* nb preallocs */
-        (GInstanceInitFunc) NULL, /* instance init */
-        NULL /* value table */
-      };
-
-      static const GInterfaceInfo atk_value_info =
-      {
-        (GInterfaceInitFunc) atk_value_interface_init,
-        (GInterfaceFinalizeFunc) NULL,
-        NULL
-      };
-
-      type = g_type_register_static (GAIL_TYPE_ENTRY,
-                                     "GailSpinButton", &tinfo, 0);
-
-      g_type_add_interface_static (type, ATK_TYPE_VALUE,
-                                   &atk_value_info);
-    }
-
-  return type;
-}
+        
+G_DEFINE_TYPE_WITH_CODE (GailSpinButton, gail_spin_button, GAIL_TYPE_ENTRY,
+                         G_IMPLEMENT_INTERFACE (ATK_TYPE_VALUE, atk_value_interface_init))
 
 static void
 gail_spin_button_class_init (GailSpinButtonClass *klass)
@@ -91,8 +55,6 @@ gail_spin_button_class_init (GailSpinButtonClass *klass)
   AtkObjectClass *class = ATK_OBJECT_CLASS (klass);
   GailWidgetClass *widget_class;
 
-  parent_class = g_type_class_peek_parent (klass);
-
   widget_class = (GailWidgetClass*)klass;
 
   widget_class->notify_gtk = gail_spin_button_real_notify_gtk;
@@ -100,6 +62,11 @@ gail_spin_button_class_init (GailSpinButtonClass *klass)
   class->initialize = gail_spin_button_real_initialize;
 
   gobject_class->finalize = gail_spin_button_finalize;
+}
+
+static void
+gail_spin_button_init (GailSpinButton *button)
+{
 }
 
 AtkObject* 
@@ -125,7 +92,7 @@ gail_spin_button_real_initialize (AtkObject *obj,
   GailSpinButton *spin_button = GAIL_SPIN_BUTTON (obj);
   GtkSpinButton *gtk_spin_button;
 
-  ATK_OBJECT_CLASS (parent_class)->initialize (obj, data);
+  ATK_OBJECT_CLASS (gail_spin_button_parent_class)->initialize (obj, data);
 
   gtk_spin_button = GTK_SPIN_BUTTON (data); 
   /*
@@ -150,8 +117,6 @@ gail_spin_button_real_initialize (AtkObject *obj,
 static void
 atk_value_interface_init (AtkValueIface *iface)
 {
-  g_return_if_fail (iface != NULL);
-
   iface->get_current_value = gail_spin_button_get_current_value;
   iface->get_maximum_value = gail_spin_button_get_maximum_value;
   iface->get_minimum_value = gail_spin_button_get_minimum_value;
@@ -240,7 +205,7 @@ gail_spin_button_finalize (GObject            *object)
       g_object_unref (spin_button->adjustment);
       spin_button->adjustment = NULL;
     }
-  G_OBJECT_CLASS (parent_class)->finalize (object);
+  G_OBJECT_CLASS (gail_spin_button_parent_class)->finalize (object);
 }
 
 
@@ -276,7 +241,7 @@ gail_spin_button_real_notify_gtk (GObject    *obj,
                         spin_button);
     }
   else
-    parent_class->notify_gtk (obj, pspec);
+    GAIL_WIDGET_CLASS (gail_spin_button_parent_class)->notify_gtk (obj, pspec);
 }
 
 

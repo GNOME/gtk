@@ -21,7 +21,7 @@
 #include "gailcontainer.h"
 
 static void         gail_container_class_init          (GailContainerClass *klass);
-static void         gail_container_object_init         (GailContainer      *container);
+static void         gail_container_init                (GailContainer      *container);
 
 static gint         gail_container_get_n_children      (AtkObject          *obj);
 static AtkObject*   gail_container_ref_child           (AtkObject          *obj,
@@ -44,43 +44,13 @@ static void          gail_container_real_initialize    (AtkObject          *obj,
 
 static void          gail_container_finalize           (GObject            *object);
 
-static GailWidgetClass *parent_class = NULL;
-
-GType
-gail_container_get_type (void)
-{
-  static GType type = 0;
-
-  if (!type)
-    {
-      static const GTypeInfo tinfo =
-      {
-        sizeof (GailContainerClass),
-        (GBaseInitFunc) NULL, /* base init */
-        (GBaseFinalizeFunc) NULL, /* base finalize */
-        (GClassInitFunc) gail_container_class_init, /* class init */
-        (GClassFinalizeFunc) NULL, /* class finalize */
-        NULL, /* class data */
-        sizeof (GailContainer), /* instance size */
-        0, /* nb preallocs */
-        (GInstanceInitFunc) gail_container_object_init, /* instance init */
-        NULL /* value table */
-      };
-
-      type = g_type_register_static (GAIL_TYPE_WIDGET,
-                                     "GailContainer", &tinfo, 0);
-    }
-
-  return type;
-}
+G_DEFINE_TYPE (GailContainer, gail_container, GAIL_TYPE_WIDGET)
 
 static void
 gail_container_class_init (GailContainerClass *klass)
 {
   GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
   AtkObjectClass *class = ATK_OBJECT_CLASS (klass);
-
-  parent_class = g_type_class_peek_parent (klass);
 
   gobject_class->finalize = gail_container_finalize;
 
@@ -93,7 +63,7 @@ gail_container_class_init (GailContainerClass *klass)
 }
 
 static void
-gail_container_object_init (GailContainer      *container)
+gail_container_init (GailContainer      *container)
 {
   container->children = NULL;
 }
@@ -259,7 +229,7 @@ gail_container_real_initialize (AtkObject *obj,
   GailContainer *container = GAIL_CONTAINER (obj);
   guint handler_id;
 
-  ATK_OBJECT_CLASS (parent_class)->initialize (obj, data);
+  ATK_OBJECT_CLASS (gail_container_parent_class)->initialize (obj, data);
 
   container->children = gtk_container_get_children (GTK_CONTAINER (data));
 
@@ -294,5 +264,5 @@ gail_container_finalize (GObject *object)
   GailContainer *container = GAIL_CONTAINER (object);
 
   g_list_free (container->children);
-  G_OBJECT_CLASS (parent_class)->finalize (object);
+  G_OBJECT_CLASS (gail_container_parent_class)->finalize (object);
 }

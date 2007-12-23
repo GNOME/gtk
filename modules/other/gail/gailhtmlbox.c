@@ -41,51 +41,13 @@ static gboolean     gail_html_box_grab_focus               (AtkComponent      *c
 static void         gail_html_box_remove_focus_handler     (AtkComponent      *component,
                                                             guint             handler_id);
 
-static AtkGObjectClass *parent_class = NULL;
-
-GType
-gail_html_box_get_type (void)
-{
-  static GType type = 0;
-
-  if (!type)
-    {
-      static const GTypeInfo tinfo =
-      {
-        sizeof (GailHtmlBoxClass),
-        (GBaseInitFunc) NULL, /* base init */
-        (GBaseFinalizeFunc) NULL, /* base finalize */
-        (GClassInitFunc) gail_html_box_class_init, /* class init */
-        (GClassFinalizeFunc) NULL, /* class finalize */
-        NULL, /* class data */
-        sizeof (GailHtmlBox), /* instance size */
-        0, /* nb preallocs */
-        (GInstanceInitFunc) NULL, /* instance init */
-        NULL /* value table */
-      };
-
-      static const GInterfaceInfo atk_component_info =
-      {
-        (GInterfaceInitFunc) gail_html_box_component_interface_init,
-        (GInterfaceFinalizeFunc) NULL,
-        NULL
-      };
-
-      type = g_type_register_static (ATK_TYPE_GOBJECT,
-                                     "GailHtmlBox", &tinfo, 0);
-      g_type_add_interface_static (type, ATK_TYPE_COMPONENT,
-                                   &atk_component_info);
-    }
-
-  return type;
-}
+G_DEFINE_TYPE_WITH_CODE (GailHtmlBox, gail_html_box, ATK_TYPE_GOBJECT,
+                         G_IMPLEMENT_INTERFACE (ATK_TYPE_COMPONENT, gail_html_box_component_interface_init))
 
 static void
 gail_html_box_class_init (GailHtmlBoxClass *klass)
 {
   AtkObjectClass *class = ATK_OBJECT_CLASS (klass);
-
-  parent_class = g_type_class_ref (ATK_TYPE_GOBJECT);
 
   class->get_index_in_parent = gail_html_box_get_index_in_parent;
   class->ref_state_set = gail_html_box_ref_state_set;
@@ -111,7 +73,7 @@ gail_html_box_initialize (AtkObject *obj,
                           gpointer  data)
 {
   HtmlBox *box;
-  ATK_OBJECT_CLASS (parent_class)->initialize (obj, data);
+  ATK_OBJECT_CLASS (gail_html_box_parent_class)->initialize (obj, data);
 
   box = HTML_BOX (data);
 
@@ -186,7 +148,7 @@ gail_html_box_ref_state_set (AtkObject	  *obj)
 
   g_return_val_if_fail (GAIL_IS_HTML_BOX (obj), NULL);
   atk_gobj = ATK_GOBJECT (obj);
-  state_set = ATK_OBJECT_CLASS (parent_class)->ref_state_set (obj);
+  state_set = ATK_OBJECT_CLASS (gail_html_box_parent_class)->ref_state_set (obj);
 
   g_obj = atk_gobject_get_object (atk_gobj);
   if (g_obj == NULL)
@@ -212,8 +174,6 @@ gail_html_box_ref_state_set (AtkObject	  *obj)
 static void
 gail_html_box_component_interface_init (AtkComponentIface *iface)
 {
-  g_return_if_fail (iface != NULL);
-
   /*
    * Use default implementation for contains and get_position
    */

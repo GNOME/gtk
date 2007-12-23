@@ -21,12 +21,8 @@
 #include <gdk/gdkkeysyms.h>
 #include "gailcombobox.h"
 
-#if GTK_MINOR_VERSION > 4
-#define GAIL_COMBOX_BOX_A11y_COMPLETE
-#endif
-
 static void         gail_combo_box_class_init              (GailComboBoxClass *klass);
-static void         gail_combo_box_object_init             (GailComboBox      *combo_box);
+static void         gail_combo_box_init                    (GailComboBox      *combo_box);
 static void         gail_combo_box_real_initialize         (AtkObject      *obj,
                                                             gpointer       data);
 
@@ -37,14 +33,12 @@ static gint         gail_combo_box_get_n_children          (AtkObject      *obj)
 static AtkObject*   gail_combo_box_ref_child               (AtkObject      *obj,
                                                             gint           i);
 static void         gail_combo_box_finalize                (GObject        *object);
-#ifdef GAIL_COMBOX_BOX_A11y_COMPLETE
 static void         atk_action_interface_init              (AtkActionIface *iface);
 
 static gboolean     gail_combo_box_do_action               (AtkAction      *action,
                                                             gint           i);
 static gboolean     idle_do_action                         (gpointer       data);
-static gint         gail_combo_box_get_n_actions           (AtkAction      *action)
-;
+static gint         gail_combo_box_get_n_actions           (AtkAction      *action);
 static G_CONST_RETURN gchar* gail_combo_box_get_description(AtkAction      *action,
                                                             gint           i);
 static G_CONST_RETURN gchar* gail_combo_box_get_keybinding   (AtkAction       *action,
@@ -54,8 +48,6 @@ static G_CONST_RETURN gchar* gail_combo_box_action_get_name(AtkAction      *acti
 static gboolean              gail_combo_box_set_description(AtkAction      *action,
                                                             gint           i,
                                                             const gchar    *desc);
-#endif
-
 static void         atk_selection_interface_init           (AtkSelectionIface *iface);
 static gboolean     gail_combo_box_add_selection           (AtkSelection   *selection,
                                                             gint           i);
@@ -68,57 +60,9 @@ static gboolean     gail_combo_box_is_child_selected       (AtkSelection   *sele
 static gboolean     gail_combo_box_remove_selection        (AtkSelection   *selection,
                                                             gint           i);
 
-static gpointer parent_class = NULL;
-
-GType
-gail_combo_box_get_type (void)
-{
-  static GType type = 0;
-
-  if (!type)
-    {
-      static const GTypeInfo tinfo =
-      {
-        sizeof (GailComboBoxClass),
-        (GBaseInitFunc) NULL, /* base init */
-        (GBaseFinalizeFunc) NULL, /* base finalize */
-        (GClassInitFunc) gail_combo_box_class_init, /* class init */
-        (GClassFinalizeFunc) NULL, /* class finalize */
-        NULL, /* class data */
-        sizeof (GailComboBox), /* instance size */
-        0, /* nb preallocs */
-        (GInstanceInitFunc) gail_combo_box_object_init, /* instance init */
-        NULL /* value table */
-      };
-
-#ifdef GAIL_COMBOX_BOX_A11y_COMPLETE
-      static const GInterfaceInfo atk_action_info =
-      {
-        (GInterfaceInitFunc) atk_action_interface_init,
-        (GInterfaceFinalizeFunc) NULL,
-        NULL
-      };
-#endif
-      static const GInterfaceInfo atk_selection_info =
-      {
-        (GInterfaceInitFunc) atk_selection_interface_init,
-        (GInterfaceFinalizeFunc) NULL,
-        NULL
-      };
-
-      type = g_type_register_static (GAIL_TYPE_CONTAINER,
-                                     "GailComboBox", &tinfo, 0);
-
-#ifdef GAIL_COMBOX_BOX_A11y_COMPLETE
-      g_type_add_interface_static (type, ATK_TYPE_ACTION,
-                                   &atk_action_info);
-#endif
-      g_type_add_interface_static (type, ATK_TYPE_SELECTION,
-                                   &atk_selection_info);
-    }
-
-  return type;
-}
+G_DEFINE_TYPE_WITH_CODE (GailComboBox, gail_combo_box, GAIL_TYPE_CONTAINER,
+                         G_IMPLEMENT_INTERFACE (ATK_TYPE_ACTION, atk_action_interface_init)
+                         G_IMPLEMENT_INTERFACE (ATK_TYPE_SELECTION, atk_selection_interface_init))
 
 static void
 gail_combo_box_class_init (GailComboBoxClass *klass)
@@ -128,8 +72,6 @@ gail_combo_box_class_init (GailComboBoxClass *klass)
 
   gobject_class->finalize = gail_combo_box_finalize;
 
-  parent_class = g_type_class_peek_parent (klass);
-
   class->get_name = gail_combo_box_get_name;
   class->get_n_children = gail_combo_box_get_n_children;
   class->ref_child = gail_combo_box_ref_child;
@@ -137,7 +79,7 @@ gail_combo_box_class_init (GailComboBoxClass *klass)
 }
 
 static void
-gail_combo_box_object_init (GailComboBox      *combo_box)
+gail_combo_box_init (GailComboBox      *combo_box)
 {
   combo_box->press_description = NULL;
   combo_box->press_keybinding = NULL;
@@ -168,11 +110,9 @@ gail_combo_box_real_initialize (AtkObject *obj,
 {
   GtkComboBox *combo_box;
   GailComboBox *gail_combo_box;
-#ifdef GAIL_COMBOX_BOX_A11y_COMPLETE
   AtkObject *popup;
-#endif
 
-  ATK_OBJECT_CLASS (parent_class)->initialize (obj, data);
+  ATK_OBJECT_CLASS (gail_combo_box_parent_class)->initialize (obj, data);
 
   combo_box = GTK_COMBO_BOX (data);
 
@@ -184,7 +124,6 @@ gail_combo_box_real_initialize (AtkObject *obj,
                     NULL);
   gail_combo_box->old_selection = gtk_combo_box_get_active (combo_box);
 
-#ifdef GAIL_COMBOX_BOX_A11y_COMPLETE
   popup = gtk_combo_box_get_popup_accessible (combo_box);
   if (popup)
     {
@@ -193,7 +132,6 @@ gail_combo_box_real_initialize (AtkObject *obj,
     }
   if (GTK_IS_COMBO_BOX_ENTRY (combo_box))
     atk_object_set_parent (gtk_widget_get_accessible (gtk_bin_get_child (GTK_BIN (combo_box))), obj);
-#endif
 
   obj->role = ATK_ROLE_COMBO_BOX;
 }
@@ -232,7 +170,7 @@ gail_combo_box_get_name (AtkObject *obj)
 
   g_return_val_if_fail (GAIL_IS_COMBO_BOX (obj), NULL);
 
-  name = ATK_OBJECT_CLASS (parent_class)->get_name (obj);
+  name = ATK_OBJECT_CLASS (gail_combo_box_parent_class)->get_name (obj);
   if (name)
     return name;
 
@@ -288,11 +226,9 @@ gail_combo_box_get_n_children (AtkObject* obj)
      */
     return 0;
 
-#ifdef GAIL_COMBOX_BOX_A11y_COMPLETE
   n_children++;
   if (GTK_IS_COMBO_BOX_ENTRY (widget))
     n_children ++;
-#endif
 
   return n_children;
 }
@@ -302,10 +238,8 @@ gail_combo_box_ref_child (AtkObject *obj,
                           gint      i)
 {
   GtkWidget *widget;
-#ifdef GAIL_COMBOX_BOX_A11y_COMPLETE
   AtkObject *child;
   GailComboBox *box;
-#endif
 
   g_return_val_if_fail (GAIL_IS_COMBO_BOX (obj), NULL);
 
@@ -317,7 +251,6 @@ gail_combo_box_ref_child (AtkObject *obj,
      */
     return NULL;
 
-#ifdef GAIL_COMBOX_BOX_A11y_COMPLETE
   if (i == 0)
     {
       child = gtk_combo_box_get_popup_accessible (GTK_COMBO_BOX (widget));
@@ -337,17 +270,11 @@ gail_combo_box_ref_child (AtkObject *obj,
       return NULL;
     }
   return g_object_ref (child);
-#else
-  return NULL;
-#endif
 }
 
-#ifdef GAIL_COMBOX_BOX_A11y_COMPLETE
 static void
 atk_action_interface_init (AtkActionIface *iface)
 {
-  g_return_if_fail (iface != NULL);
-
   iface->do_action = gail_combo_box_do_action;
   iface->get_n_actions = gail_combo_box_get_n_actions;
   iface->get_description = gail_combo_box_get_description;
@@ -519,13 +446,10 @@ gail_combo_box_set_description (AtkAction   *action,
   else
     return FALSE;
 }
-#endif
 
 static void
 atk_selection_interface_init (AtkSelectionIface *iface)
 {
-  g_return_if_fail (iface != NULL);
-
   iface->add_selection = gail_combo_box_add_selection;
   iface->clear_selection = gail_combo_box_clear_selection;
   iface->ref_selection = gail_combo_box_ref_selection;
@@ -583,10 +507,8 @@ gail_combo_box_ref_selection (AtkSelection *selection,
 {
   GtkComboBox *combo_box;
   GtkWidget *widget;
-#ifdef GAIL_COMBOX_BOX_A11y_COMPLETE
   AtkObject *obj;
   gint index;
-#endif
 
   widget = GTK_ACCESSIBLE (selection)->widget;
   if (widget == NULL)
@@ -603,13 +525,9 @@ gail_combo_box_ref_selection (AtkSelection *selection,
   if (i != 0)
     return NULL;
 
-#ifdef GAIL_COMBOX_BOX_A11y_COMPLETE
   obj = gtk_combo_box_get_popup_accessible (combo_box);
   index = gtk_combo_box_get_active (combo_box);
   return atk_object_ref_accessible_child (obj, index);
-#else
-  return NULL;
-#endif
 }
 
 static gint
@@ -675,5 +593,5 @@ gail_combo_box_finalize (GObject *object)
       g_source_remove (combo_box->action_idle_handler);
       combo_box->action_idle_handler = 0;
     }
-  G_OBJECT_CLASS (parent_class)->finalize (object);
+  G_OBJECT_CLASS (gail_combo_box_parent_class)->finalize (object);
 }

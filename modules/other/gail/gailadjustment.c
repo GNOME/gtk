@@ -23,6 +23,8 @@
 
 static void	 gail_adjustment_class_init        (GailAdjustmentClass *klass);
 
+static void	 gail_adjustment_init              (GailAdjustment      *adjustment);
+
 static void	 gail_adjustment_real_initialize   (AtkObject	        *obj,
                                                     gpointer            data);
 
@@ -40,53 +42,20 @@ static gboolean	 gail_adjustment_set_current_value (AtkValue            *obj,
 static void      gail_adjustment_destroyed         (GtkAdjustment       *adjustment,
                                                     GailAdjustment      *gail_adjustment);
 
-static gpointer parent_class = NULL;
-
-GType
-gail_adjustment_get_type (void)
-{
-  static GType type = 0;
-
-  if (!type)
-  {
-    static const GTypeInfo tinfo =
-    {
-      sizeof (GailAdjustmentClass),
-      (GBaseInitFunc) NULL, /* base init */
-      (GBaseFinalizeFunc) NULL, /* base finalize */
-      (GClassInitFunc) gail_adjustment_class_init, /* class init */
-      (GClassFinalizeFunc) NULL, /* class finalize */
-      NULL, /* class data */
-      sizeof (GailAdjustment), /* instance size */
-      0, /* nb preallocs */
-      (GInstanceInitFunc) NULL, /* instance init */
-      NULL /* value table */
-    };
-
-    static const GInterfaceInfo atk_value_info =
-    {
-        (GInterfaceInitFunc) atk_value_interface_init,
-        (GInterfaceFinalizeFunc) NULL,
-        NULL
-    };
-
-    type = g_type_register_static (ATK_TYPE_OBJECT,
-                                   "GailAdjustment", &tinfo, 0);
-
-    g_type_add_interface_static (type, ATK_TYPE_VALUE,
-                                 &atk_value_info);
-  }
-  return type;
-}
+G_DEFINE_TYPE_WITH_CODE (GailAdjustment, gail_adjustment, ATK_TYPE_OBJECT,
+                         G_IMPLEMENT_INTERFACE (ATK_TYPE_VALUE, atk_value_interface_init))
 
 static void	 
 gail_adjustment_class_init (GailAdjustmentClass *klass)
 {
   AtkObjectClass *class = ATK_OBJECT_CLASS (klass);
 
-  parent_class = g_type_class_peek_parent (klass);
-
   class->initialize = gail_adjustment_real_initialize;
+}
+
+static void
+gail_adjustment_init (GailAdjustment *adjustment)
+{
 }
 
 AtkObject* 
@@ -113,7 +82,7 @@ gail_adjustment_real_initialize (AtkObject *obj,
 {
   GtkAdjustment *adjustment;
 
-  ATK_OBJECT_CLASS (parent_class)->initialize (obj, data);
+  ATK_OBJECT_CLASS (gail_adjustment_parent_class)->initialize (obj, data);
 
   adjustment = GTK_ADJUSTMENT (data);
 
@@ -129,13 +98,10 @@ gail_adjustment_real_initialize (AtkObject *obj,
 static void	 
 atk_value_interface_init (AtkValueIface *iface)
 {
-  g_return_if_fail (iface != NULL);
-
   iface->get_current_value = gail_adjustment_get_current_value;
   iface->get_maximum_value = gail_adjustment_get_maximum_value;
   iface->get_minimum_value = gail_adjustment_get_minimum_value;
   iface->set_current_value = gail_adjustment_set_current_value;
-
 }
 
 static void	 

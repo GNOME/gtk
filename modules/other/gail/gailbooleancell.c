@@ -21,7 +21,7 @@
 #include "gailbooleancell.h"
 
 static void      gail_boolean_cell_class_init          (GailBooleanCellClass *klass);
-
+static void      gail_boolean_cell_init                (GailBooleanCell *cell);
 /* Misc */
 
 static gboolean gail_boolean_cell_update_cache         (GailRendererCell     *cell,
@@ -33,33 +33,8 @@ gchar *gail_boolean_cell_property_list[] = {
   NULL
 };
 
-GType
-gail_boolean_cell_get_type (void)
-{
-  static GType type = 0;
-
-  if (!type)
-    {
-      static const GTypeInfo tinfo =
-      {
-        sizeof (GailBooleanCellClass),
-        (GBaseInitFunc) NULL, /* base init */
-        (GBaseFinalizeFunc) NULL, /* base finalize */
-        (GClassInitFunc) gail_boolean_cell_class_init, /* class init */
-        (GClassFinalizeFunc) NULL, /* class finalize */
-        NULL, /* class data */
-        sizeof (GailBooleanCell), /* instance size */
-        0, /* nb preallocs */
-        NULL, /* instance init */
-        NULL /* value table */
-      };
-
-      type = g_type_register_static (GAIL_TYPE_RENDERER_CELL,
-                                     "GailBooleanCell", &tinfo, 0);
-      gail_cell_type_add_action_interface (type);
-    }
-  return type;
-}
+G_DEFINE_TYPE_WITH_CODE (GailBooleanCell, gail_boolean_cell, GAIL_TYPE_RENDERER_CELL,
+                         gail_cell_type_add_action_interface (g_define_type_id))
 
 static void 
 gail_boolean_cell_class_init (GailBooleanCellClass *klass)
@@ -68,6 +43,11 @@ gail_boolean_cell_class_init (GailBooleanCellClass *klass)
 
   renderer_cell_class->update_cache = gail_boolean_cell_update_cache;
   renderer_cell_class->property_list = gail_boolean_cell_property_list;
+}
+
+static void
+gail_boolean_cell_init (GailBooleanCell *cell)
+{
 }
 
 AtkObject* 

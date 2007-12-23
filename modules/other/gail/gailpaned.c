@@ -23,6 +23,8 @@
 
 static void         gail_paned_class_init          (GailPanedClass *klass); 
 
+static void         gail_paned_init                (GailPaned      *paned);
+
 static void         gail_paned_real_initialize     (AtkObject      *obj,
                                                     gpointer       data);
 static void         gail_paned_size_allocate_gtk   (GtkWidget      *widget,
@@ -40,54 +42,21 @@ static void         gail_paned_get_minimum_value   (AtkValue       *obj,
 static gboolean     gail_paned_set_current_value   (AtkValue       *obj,
                                                     const GValue   *value);
 
-static GailContainerClass *parent_class = NULL;
-
-GType
-gail_paned_get_type (void)
-{
-  static GType type = 0;
-
-  if (!type)
-    {
-      static const GTypeInfo tinfo =
-      {
-        sizeof (GailPanedClass),
-        (GBaseInitFunc) NULL, /* base init */
-        (GBaseFinalizeFunc) NULL, /* base finalize */
-        (GClassInitFunc) gail_paned_class_init, /* class init */
-        (GClassFinalizeFunc) NULL, /* class finalize */
-        NULL, /* class data */
-        sizeof (GailPaned), /* instance size */
-        0, /* nb preallocs */
-        (GInstanceInitFunc) NULL, /* instance init */
-        NULL /* value table */
-      };
-
-      static const GInterfaceInfo atk_value_info =
-      {
-        (GInterfaceInitFunc) atk_value_interface_init,
-        (GInterfaceFinalizeFunc) NULL,
-        NULL
-      };
-
-      type = g_type_register_static (GAIL_TYPE_CONTAINER,
-                                     "GailPaned", &tinfo, 0);
-
-      g_type_add_interface_static (type, ATK_TYPE_VALUE,
-                                   &atk_value_info);
-    }
-  return type;
-}
+G_DEFINE_TYPE_WITH_CODE (GailPaned, gail_paned, GAIL_TYPE_CONTAINER,
+                         G_IMPLEMENT_INTERFACE (ATK_TYPE_VALUE, atk_value_interface_init))
 
 static void
 gail_paned_class_init (GailPanedClass *klass)
 {
   AtkObjectClass  *class = ATK_OBJECT_CLASS (klass);
 
-  parent_class = g_type_class_peek_parent (klass);
-
   class->ref_state_set = gail_paned_ref_state_set;
   class->initialize = gail_paned_real_initialize;
+}
+
+static void
+gail_paned_init (GailPaned *paned)
+{
 }
 
 AtkObject* 
@@ -112,7 +81,7 @@ gail_paned_ref_state_set (AtkObject *accessible)
   AtkStateSet *state_set;
   GtkWidget *widget;
 
-  state_set = ATK_OBJECT_CLASS (parent_class)->ref_state_set (accessible);
+  state_set = ATK_OBJECT_CLASS (gail_paned_parent_class)->ref_state_set (accessible);
   widget = GTK_ACCESSIBLE (accessible)->widget;
 
   if (widget == NULL)
@@ -130,7 +99,7 @@ static void
 gail_paned_real_initialize (AtkObject *obj,
                             gpointer  data)
 {
-  ATK_OBJECT_CLASS (parent_class)->initialize (obj, data);
+  ATK_OBJECT_CLASS (gail_paned_parent_class)->initialize (obj, data);
 
   g_signal_connect (data,
                     "size_allocate",
@@ -153,13 +122,10 @@ gail_paned_size_allocate_gtk (GtkWidget      *widget,
 static void
 atk_value_interface_init (AtkValueIface *iface)
 {
-  g_return_if_fail (iface != NULL);
-
   iface->get_current_value = gail_paned_get_current_value;
   iface->get_maximum_value = gail_paned_get_maximum_value;
   iface->get_minimum_value = gail_paned_get_minimum_value;
   iface->set_current_value = gail_paned_set_current_value;
-
 }
 
 static void

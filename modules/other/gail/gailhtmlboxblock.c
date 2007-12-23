@@ -25,35 +25,7 @@ static gint       gail_html_box_block_get_n_children  (AtkObject             *ob
 static AtkObject* gail_html_box_block_ref_child       (AtkObject             *obj,
                                                        gint                  i);
 
-static GailHtmlBoxClass *parent_class = NULL;
-
-GType
-gail_html_box_block_get_type (void)
-{
-  static GType type = 0;
-
-  if (!type)
-    {
-      static const GTypeInfo tinfo =
-      {
-        sizeof (GailHtmlBoxBlockClass),
-        (GBaseInitFunc) NULL, /* base init */
-        (GBaseFinalizeFunc) NULL, /* base finalize */
-        (GClassInitFunc) gail_html_box_block_class_init, /* class init */
-        (GClassFinalizeFunc) NULL, /* class finalize */
-        NULL, /* class data */
-        sizeof (GailHtmlBoxBlock), /* instance size */
-        0, /* nb preallocs */
-        (GInstanceInitFunc) NULL, /* instance init */
-        NULL /* value table */
-      };
-
-      type = g_type_register_static (GAIL_TYPE_HTML_BOX,
-                                     "GailHtmlBoxBlock", &tinfo, 0);
-    }
-
-  return type;
-}
+G_DEFINE_TYPE (GailHtmlBoxBlock, gail_html_box_block, GAIL_TYPE_HTML_BOX)
 
 AtkObject*
 gail_html_box_block_new (GObject *obj)
@@ -73,8 +45,6 @@ static void
 gail_html_box_block_class_init (GailHtmlBoxBlockClass *klass)
 {
   AtkObjectClass *class = ATK_OBJECT_CLASS (klass);
-
-  parent_class = g_type_class_ref (GAIL_TYPE_HTML_BOX);
 
   class->get_n_children = gail_html_box_block_get_n_children;
   class->ref_child = gail_html_box_block_ref_child;

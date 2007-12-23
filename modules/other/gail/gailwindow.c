@@ -38,6 +38,8 @@ enum {
 
 static void gail_window_class_init (GailWindowClass *klass);
 
+static void                  gail_window_init            (GailWindow   *accessible);
+
 static void                  gail_window_real_initialize (AtkObject    *obj,
                                                           gpointer     data);
 static void                  gail_window_finalize        (GObject      *object);
@@ -73,44 +75,8 @@ static void                  gail_window_get_size         (AtkComponent         
 
 static guint gail_window_signals [LAST_SIGNAL] = { 0, };
 
-static gpointer parent_class = NULL;
-
-GType
-gail_window_get_type (void)
-{
-  static GType type = 0;
-
-  if (!type)
-    {
-      static const GTypeInfo tinfo =
-      {
-        sizeof (GailWindowClass),
-        (GBaseInitFunc) NULL, /* base init */
-        (GBaseFinalizeFunc) NULL, /* base finalize */
-        (GClassInitFunc) gail_window_class_init, /* class init */
-        (GClassFinalizeFunc) NULL, /* class finalize */
-        NULL, /* class data */
-        sizeof (GailWindow), /* instance size */
-        0, /* nb preallocs */
-        (GInstanceInitFunc) NULL, /* instance init */
-        NULL /* value table */
-      };
-  
-      static const GInterfaceInfo atk_component_info =
-      {
-        (GInterfaceInitFunc) atk_component_interface_init,
-        (GInterfaceFinalizeFunc) NULL,
-        NULL
-      };      
-      type = g_type_register_static (GAIL_TYPE_CONTAINER,
-                                     "GailWindow", &tinfo, 0);
-
-      g_type_add_interface_static (type, ATK_TYPE_COMPONENT,
-                                   &atk_component_info);
-    }
-
-  return type;
-}
+G_DEFINE_TYPE_WITH_CODE (GailWindow, gail_window, GAIL_TYPE_CONTAINER,
+                         G_IMPLEMENT_INTERFACE (ATK_TYPE_COMPONENT, atk_component_interface_init))
 
 static void
 gail_window_class_init (GailWindowClass *klass)
@@ -124,8 +90,6 @@ gail_window_class_init (GailWindowClass *klass)
   widget_class = (GailWidgetClass*)klass;
   widget_class->focus_gtk = gail_window_real_focus_gtk;
   widget_class->notify_gtk = gail_window_real_notify_gtk;
-
-  parent_class = g_type_class_peek_parent (klass);
 
   class->get_name = gail_window_get_name;
   class->get_parent = gail_window_get_parent;
@@ -238,13 +202,18 @@ gail_window_new (GtkWidget *widget)
 }
 
 static void
+gail_window_init (GailWindow   *accessible)
+{
+}
+
+static void
 gail_window_real_initialize (AtkObject *obj,
                              gpointer  data)
 {
   GtkWidget *widget;
   GailWindow *window;
 
-  ATK_OBJECT_CLASS (parent_class)->initialize (obj, data);
+  ATK_OBJECT_CLASS (gail_window_parent_class)->initialize (obj, data);
 
   window = GAIL_WINDOW (obj);
   window->name_change_handler = 0;
@@ -301,7 +270,7 @@ gail_window_finalize (GObject *object)
       window->previous_name = NULL;
     }
 
-  G_OBJECT_CLASS (parent_class)->finalize (object);
+  G_OBJECT_CLASS (gail_window_parent_class)->finalize (object);
 }
 
 static G_CONST_RETURN gchar*
@@ -309,7 +278,7 @@ gail_window_get_name (AtkObject *accessible)
 {
   G_CONST_RETURN gchar* name;
 
-  name = ATK_OBJECT_CLASS (parent_class)->get_name (accessible);
+  name = ATK_OBJECT_CLASS (gail_window_parent_class)->get_name (accessible);
   if (name == NULL)
     {
       /*
@@ -373,7 +342,7 @@ gail_window_get_parent (AtkObject *accessible)
 {
   AtkObject* parent;
 
-  parent = ATK_OBJECT_CLASS (parent_class)->get_parent (accessible);
+  parent = ATK_OBJECT_CLASS (gail_window_parent_class)->get_parent (accessible);
 
   return parent;
 }
@@ -393,7 +362,7 @@ gail_window_get_index_in_parent (AtkObject *accessible)
 
   gail_return_val_if_fail (GTK_IS_WIDGET (widget), -1);
 
-  index = ATK_OBJECT_CLASS (parent_class)->get_index_in_parent (accessible);
+  index = ATK_OBJECT_CLASS (gail_window_parent_class)->get_index_in_parent (accessible);
   if (index != -1)
     return index;
 
@@ -449,7 +418,7 @@ gail_window_ref_relation_set (AtkObject *obj)
      */
     return NULL;
 
-  relation_set = ATK_OBJECT_CLASS (parent_class)->ref_relation_set (obj);
+  relation_set = ATK_OBJECT_CLASS (gail_window_parent_class)->ref_relation_set (obj);
 
   if (atk_object_get_role (obj) == ATK_ROLE_TOOL_TIP)
     {
@@ -479,7 +448,7 @@ gail_window_ref_state_set (AtkObject *accessible)
   GtkWindow *window;
   GdkWindowState state;
 
-  state_set = ATK_OBJECT_CLASS (parent_class)->ref_state_set (accessible);
+  state_set = ATK_OBJECT_CLASS (gail_window_parent_class)->ref_state_set (accessible);
   widget = GTK_ACCESSIBLE (accessible)->widget;
  
   if (widget == NULL)
@@ -561,7 +530,7 @@ gail_window_real_notify_gtk (GObject		*obj,
         }
     }
   else
-    GAIL_WIDGET_CLASS (parent_class)->notify_gtk (obj, pspec);
+    GAIL_WIDGET_CLASS (gail_window_parent_class)->notify_gtk (obj, pspec);
 }
 
 static gboolean
@@ -579,8 +548,6 @@ gail_window_state_event_gtk (GtkWidget           *widget,
 static void
 atk_component_interface_init (AtkComponentIface *iface)
 {
-  gail_return_if_fail (iface != NULL);
-
   iface->get_extents = gail_window_get_extents;
   iface->get_size = gail_window_get_size;
   iface->get_mdi_zorder = gail_window_get_mdi_zorder;

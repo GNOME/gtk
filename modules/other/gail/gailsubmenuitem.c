@@ -21,6 +21,7 @@
 #include "gailsubmenuitem.h"
 
 static void         gail_sub_menu_item_class_init       (GailSubMenuItemClass *klass);
+static void         gail_sub_menu_item_init             (GailSubMenuItem *item);
 static void         gail_sub_menu_item_real_initialize  (AtkObject      *obj,
                                                          gpointer       data);
 
@@ -42,44 +43,8 @@ static gint         menu_item_add_gtk                   (GtkContainer   *contain
 static gint         menu_item_remove_gtk                (GtkContainer   *container,
                                                          GtkWidget      *widget);
 
-static gpointer parent_class = NULL;
-
-GType
-gail_sub_menu_item_get_type (void)
-{
-  static GType type = 0;
-
-  if (!type)
-  {
-    static const GTypeInfo tinfo =
-    {
-      sizeof (GailSubMenuItemClass),
-      (GBaseInitFunc) NULL, /* base init */
-      (GBaseFinalizeFunc) NULL, /* base finalize */
-      (GClassInitFunc) gail_sub_menu_item_class_init, /* class init */
-      (GClassFinalizeFunc) NULL, /* class finalize */
-      NULL, /* class data */
-      sizeof (GailSubMenuItem), /* instance size */
-      0, /* nb preallocs */
-      (GInstanceInitFunc) NULL, /* instance init */
-      NULL /* value table */
-    };
-
-    static const GInterfaceInfo atk_selection_info =
-    {
-        (GInterfaceInitFunc) atk_selection_interface_init,
-        (GInterfaceFinalizeFunc) NULL,
-        NULL
-    };
-
-    type = g_type_register_static (GAIL_TYPE_MENU_ITEM,
-                                   "GailSubMenuItem", &tinfo, 0);
-    g_type_add_interface_static (type, ATK_TYPE_SELECTION,
-                                 &atk_selection_info);
-  }
-
-  return type;
-}
+G_DEFINE_TYPE_WITH_CODE (GailSubMenuItem, gail_sub_menu_item, GAIL_TYPE_MENU_ITEM,
+                         G_IMPLEMENT_INTERFACE (ATK_TYPE_SELECTION, atk_selection_interface_init))
 
 static void
 gail_sub_menu_item_class_init (GailSubMenuItemClass *klass)
@@ -87,8 +52,11 @@ gail_sub_menu_item_class_init (GailSubMenuItemClass *klass)
   AtkObjectClass *class = ATK_OBJECT_CLASS (klass);
 
   class->initialize = gail_sub_menu_item_real_initialize;
+}
 
-  parent_class = g_type_class_peek_parent (klass);
+static void
+gail_sub_menu_item_init (GailSubMenuItem *item)
+{
 }
 
 static void
@@ -97,7 +65,7 @@ gail_sub_menu_item_real_initialize (AtkObject *obj,
 {
   GtkWidget *submenu;
 
-  ATK_OBJECT_CLASS (parent_class)->initialize (obj, data);
+  ATK_OBJECT_CLASS (gail_sub_menu_item_parent_class)->initialize (obj, data);
 
   submenu = gtk_menu_item_get_submenu (GTK_MENU_ITEM (data));
   g_return_if_fail (submenu);
@@ -133,8 +101,6 @@ gail_sub_menu_item_new (GtkWidget *widget)
 static void
 atk_selection_interface_init (AtkSelectionIface *iface)
 {
-  g_return_if_fail (iface != NULL);
-
   iface->add_selection = gail_sub_menu_item_add_selection;
   iface->clear_selection = gail_sub_menu_item_clear_selection;
   iface->ref_selection = gail_sub_menu_item_ref_selection;

@@ -21,7 +21,7 @@
 #include "gailcombo.h"
 
 static void         gail_combo_class_init              (GailComboClass *klass);
-static void         gail_combo_object_init             (GailCombo      *combo);
+static void         gail_combo_init                    (GailCombo      *combo);
 static void         gail_combo_real_initialize         (AtkObject      *obj,
                                                         gpointer       data);
 
@@ -63,53 +63,9 @@ static gint         _gail_combo_button_release         (gpointer       data);
 static gint         _gail_combo_popup_release          (gpointer       data);
 
 
-static gpointer parent_class = NULL;
-
-GType
-gail_combo_get_type (void)
-{
-  static GType type = 0;
-
-  if (!type)
-    {
-      static const GTypeInfo tinfo =
-      {
-        sizeof (GailComboClass),
-        (GBaseInitFunc) NULL, /* base init */
-        (GBaseFinalizeFunc) NULL, /* base finalize */
-        (GClassInitFunc) gail_combo_class_init, /* class init */
-        (GClassFinalizeFunc) NULL, /* class finalize */
-        NULL, /* class data */
-        sizeof (GailCombo), /* instance size */
-        0, /* nb preallocs */
-        (GInstanceInitFunc) gail_combo_object_init, /* instance init */
-        NULL /* value table */
-      };
-
-      static const GInterfaceInfo atk_action_info =
-      {
-        (GInterfaceInitFunc) atk_action_interface_init,
-        (GInterfaceFinalizeFunc) NULL,
-        NULL
-      };
-      static const GInterfaceInfo atk_selection_info =
-      {
-        (GInterfaceInitFunc) atk_selection_interface_init,
-        (GInterfaceFinalizeFunc) NULL,
-        NULL
-      };
-
-      type = g_type_register_static (GAIL_TYPE_CONTAINER,
-                                     "GailCombo", &tinfo, 0);
-
-      g_type_add_interface_static (type, ATK_TYPE_ACTION,
-                                   &atk_action_info);
-      g_type_add_interface_static (type, ATK_TYPE_SELECTION,
-                                   &atk_selection_info);
-    }
-
-  return type;
-}
+G_DEFINE_TYPE_WITH_CODE (GailCombo, gail_combo, GAIL_TYPE_CONTAINER,
+                         G_IMPLEMENT_INTERFACE (ATK_TYPE_ACTION, atk_action_interface_init)
+                         G_IMPLEMENT_INTERFACE (ATK_TYPE_SELECTION, atk_selection_interface_init))
 
 static void
 gail_combo_class_init (GailComboClass *klass)
@@ -119,15 +75,13 @@ gail_combo_class_init (GailComboClass *klass)
 
   gobject_class->finalize = gail_combo_finalize;
 
-  parent_class = g_type_class_peek_parent (klass);
-
   class->get_n_children = gail_combo_get_n_children;
   class->ref_child = gail_combo_ref_child;
   class->initialize = gail_combo_real_initialize;
 }
 
 static void
-gail_combo_object_init (GailCombo      *combo)
+gail_combo_init (GailCombo      *combo)
 {
   combo->press_description = NULL;
   combo->old_selection = NULL;
@@ -160,7 +114,7 @@ gail_combo_real_initialize (AtkObject *obj,
   GList *slist; 
   GailCombo *gail_combo;
 
-  ATK_OBJECT_CLASS (parent_class)->initialize (obj, data);
+  ATK_OBJECT_CLASS (gail_combo_parent_class)->initialize (obj, data);
 
   combo = GTK_COMBO (data);
 
@@ -304,8 +258,6 @@ gail_combo_ref_child (AtkObject *obj,
 static void
 atk_action_interface_init (AtkActionIface *iface)
 {
-  g_return_if_fail (iface != NULL);
-
   iface->do_action = gail_combo_do_action;
   iface->get_n_actions = gail_combo_get_n_actions;
   iface->get_description = gail_combo_get_description;
@@ -441,8 +393,6 @@ gail_combo_get_name (AtkAction *action,
 static void
 atk_selection_interface_init (AtkSelectionIface *iface)
 {
-  g_return_if_fail (iface != NULL);
-
   iface->add_selection = gail_combo_add_selection;
   iface->clear_selection = gail_combo_clear_selection;
   iface->ref_selection = gail_combo_ref_selection;
@@ -697,5 +647,5 @@ gail_combo_finalize (GObject            *object)
       g_source_remove (combo->select_idle_handler);
       combo->select_idle_handler = 0;       
     }
-  G_OBJECT_CLASS (parent_class)->finalize (object);
+  G_OBJECT_CLASS (gail_combo_parent_class)->finalize (object);
 }

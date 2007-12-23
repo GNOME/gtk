@@ -24,6 +24,7 @@
 #include <libgail-util/gailmisc.h>
 
 static void       gail_label_class_init            (GailLabelClass    *klass);
+static void       gail_label_init                  (GailLabel         *label);
 static void	  gail_label_real_initialize	   (AtkObject 	      *obj,
                                                     gpointer	      data);
 static void	  gail_label_real_notify_gtk	   (GObject	      *obj,
@@ -101,43 +102,8 @@ static AtkAttributeSet* gail_label_get_run_attributes
 static AtkAttributeSet* gail_label_get_default_attributes
                                                    (AtkText           *text);
 
-static GailWidgetClass *parent_class = NULL;
-
-GType
-gail_label_get_type (void)
-{
-  static GType type = 0;
-
-  if (!type)
-    {
-      static const GTypeInfo tinfo =
-      {
-        sizeof (GailLabelClass),
-        (GBaseInitFunc) NULL, /* base init */
-        (GBaseFinalizeFunc) NULL, /* base finalize */
-        (GClassInitFunc) gail_label_class_init, /* class init */
-        (GClassFinalizeFunc) NULL, /* class finalize */
-        NULL, /* class data */
-        sizeof (GailLabel), /* instance size */
-        0, /* nb preallocs */
-        (GInstanceInitFunc) NULL, /* instance init */
-        NULL /* value table */
-      };
-
-      static const GInterfaceInfo atk_text_info =
-      {
-        (GInterfaceInitFunc) atk_text_interface_init,
-        (GInterfaceFinalizeFunc) NULL,
-        NULL
-      };
-
-      type = g_type_register_static (GAIL_TYPE_WIDGET,
-                                     "GailLabel", &tinfo, 0);
-      g_type_add_interface_static (type, ATK_TYPE_TEXT,
-                                   &atk_text_info);
-    }
-  return type;
-}
+G_DEFINE_TYPE_WITH_CODE (GailLabel, gail_label, GAIL_TYPE_WIDGET,
+                         G_IMPLEMENT_INTERFACE (ATK_TYPE_TEXT, atk_text_interface_init))
 
 static void
 gail_label_class_init (GailLabelClass *klass)
@@ -151,12 +117,15 @@ gail_label_class_init (GailLabelClass *klass)
   widget_class = (GailWidgetClass*)klass;
   widget_class->notify_gtk = gail_label_real_notify_gtk;
 
-  parent_class = g_type_class_peek_parent (klass);
-
   class->get_name = gail_label_get_name;
   class->ref_state_set = gail_label_ref_state_set;
   class->ref_relation_set = gail_label_ref_relation_set;
   class->initialize = gail_label_real_initialize;
+}
+
+static void
+gail_label_init (GailLabel *label)
+{
 }
 
 static void
@@ -166,7 +135,7 @@ gail_label_real_initialize (AtkObject *obj,
   GtkWidget  *widget;
   GailLabel *gail_label;
 
-  ATK_OBJECT_CLASS (parent_class)->initialize (obj, data);
+  ATK_OBJECT_CLASS (gail_label_parent_class)->initialize (obj, data);
   
   gail_label = GAIL_LABEL (obj);
 
@@ -426,7 +395,7 @@ gail_label_real_notify_gtk (GObject           *obj,
 
     }
   else
-    parent_class->notify_gtk (obj, pspec);
+    GAIL_WIDGET_CLASS (gail_label_parent_class)->notify_gtk (obj, pspec);
 }
 
 static void
@@ -436,7 +405,7 @@ gail_label_finalize (GObject            *object)
 
   if (label->textutil)
     g_object_unref (label->textutil);
-  G_OBJECT_CLASS (parent_class)->finalize (object);
+  G_OBJECT_CLASS (gail_label_parent_class)->finalize (object);
 }
 
 
@@ -448,7 +417,7 @@ gail_label_ref_state_set (AtkObject *accessible)
   AtkStateSet *state_set;
   GtkWidget *widget;
 
-  state_set = ATK_OBJECT_CLASS (parent_class)->ref_state_set (accessible);
+  state_set = ATK_OBJECT_CLASS (gail_label_parent_class)->ref_state_set (accessible);
   widget = GTK_ACCESSIBLE (accessible)->widget;
 
   if (widget == NULL)
@@ -474,7 +443,7 @@ gail_label_ref_relation_set (AtkObject *obj)
      */
     return NULL;
 
-  relation_set = ATK_OBJECT_CLASS (parent_class)->ref_relation_set (obj);
+  relation_set = ATK_OBJECT_CLASS (gail_label_parent_class)->ref_relation_set (obj);
 
   if (!atk_relation_set_contains (relation_set, ATK_RELATION_LABEL_FOR))
     {
@@ -568,7 +537,7 @@ gail_label_get_name (AtkObject *accessible)
 
   g_return_val_if_fail (GAIL_IS_LABEL (accessible), NULL);
 
-  name = ATK_OBJECT_CLASS (parent_class)->get_name (accessible);
+  name = ATK_OBJECT_CLASS (gail_label_parent_class)->get_name (accessible);
   if (name != NULL)
     return name;
   else
@@ -596,7 +565,6 @@ gail_label_get_name (AtkObject *accessible)
 static void
 atk_text_interface_init (AtkTextIface *iface)
 {
-  g_return_if_fail (iface != NULL);
   iface->get_text = gail_label_get_text;
   iface->get_character_at_offset = gail_label_get_character_at_offset;
   iface->get_text_before_offset = gail_label_get_text_before_offset;

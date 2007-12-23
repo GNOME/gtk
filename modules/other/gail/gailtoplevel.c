@@ -23,7 +23,7 @@
 #include "gailtoplevel.h"
 
 static void             gail_toplevel_class_init        (GailToplevelClass      *klass);
-static void             gail_toplevel_object_init       (GailToplevel           *toplevel);
+static void             gail_toplevel_init              (GailToplevel           *toplevel);
 static void             gail_toplevel_object_finalize   (GObject                *obj);
 
 /* atkobject.h */
@@ -55,35 +55,7 @@ static gboolean  is_attached_menu_window                (GtkWidget              
 static gboolean  is_combo_window                        (GtkWidget              *widget);
 
 
-static gpointer parent_class = NULL;
-
-GType
-gail_toplevel_get_type (void)
-{
-  static GType type = 0;
-
-  if (!type)
-    {
-      static const GTypeInfo tinfo =
-        {
-          sizeof (GailToplevelClass),
-          (GBaseInitFunc) NULL, /* base init */
-          (GBaseFinalizeFunc) NULL, /* base finalize */
-          (GClassInitFunc) gail_toplevel_class_init, /* class init */
-          (GClassFinalizeFunc) NULL, /* class finalize */
-          NULL, /* class data */
-          sizeof (GailToplevel), /* instance size */
-          0, /* nb preallocs */
-          (GInstanceInitFunc) gail_toplevel_object_init, /* instance init */
-          NULL /* value table */
-        };
-
-      type = g_type_register_static (ATK_TYPE_OBJECT,
-                                   "GailToplevel", &tinfo, 0);
-    }
-
-  return type;
-}
+G_DEFINE_TYPE (GailToplevel, gail_toplevel, ATK_TYPE_OBJECT)
 
 AtkObject*
 gail_toplevel_new (void)
@@ -108,8 +80,6 @@ gail_toplevel_class_init (GailToplevelClass *klass)
   AtkObjectClass *class = ATK_OBJECT_CLASS(klass);
   GObjectClass *g_object_class = G_OBJECT_CLASS(klass);
 
-  parent_class = g_type_class_peek_parent (klass);
-
   class->get_n_children = gail_toplevel_get_n_children;
   class->ref_child = gail_toplevel_ref_child;
   class->get_parent = gail_toplevel_get_parent;
@@ -118,7 +88,7 @@ gail_toplevel_class_init (GailToplevelClass *klass)
 }
 
 static void
-gail_toplevel_object_init (GailToplevel *toplevel)
+gail_toplevel_init (GailToplevel *toplevel)
 {
   GtkWindow *window;
   GtkWidget *widget;
@@ -171,7 +141,7 @@ gail_toplevel_object_finalize (GObject *obj)
   if (toplevel->window_list)
     g_list_free (toplevel->window_list);
 
-  G_OBJECT_CLASS (parent_class)->finalize (obj);
+  G_OBJECT_CLASS (gail_toplevel_parent_class)->finalize (obj);
 }
 
 static AtkObject*

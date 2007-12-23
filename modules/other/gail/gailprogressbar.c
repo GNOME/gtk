@@ -23,6 +23,7 @@
 #include "gailadjustment.h"
 
 static void	 gail_progress_bar_class_init        (GailProgressBarClass *klass);
+static void	 gail_progress_bar_init              (GailProgressBar *bar);
 static void      gail_progress_bar_real_initialize   (AtkObject      *obj,
                                                       gpointer       data);
 static void      gail_progress_bar_finalize          (GObject        *object);
@@ -43,44 +44,8 @@ static void	 gail_progress_bar_get_minimum_value (AtkValue       *obj,
 static void      gail_progress_bar_value_changed     (GtkAdjustment  *adjustment,
                                                       gpointer       data);
 
-static GailWidgetClass *parent_class = NULL;
-
-GType
-gail_progress_bar_get_type (void)
-{
-  static GType type = 0;
-
-  if (!type)
-    {
-      static const GTypeInfo tinfo =
-      {
-        sizeof (GailProgressBarClass),
-        (GBaseInitFunc) NULL, /* base init */
-        (GBaseFinalizeFunc) NULL, /* base finalize */
-        (GClassInitFunc) gail_progress_bar_class_init, /* class init */
-        (GClassFinalizeFunc) NULL, /* class finalize */
-        NULL, /* class data */
-        sizeof (GailProgressBar), /* instance size */
-        0, /* nb preallocs */
-        (GInstanceInitFunc) NULL, /* instance init */
-        NULL /* value table */
-      };
-
-      static const GInterfaceInfo atk_value_info =
-      {
-        (GInterfaceInitFunc) atk_value_interface_init,
-        (GInterfaceFinalizeFunc) NULL,
-        NULL
-      };
-
-      type = g_type_register_static (GAIL_TYPE_WIDGET,
-                                     "GailProgressBar", &tinfo, 0);
-
-      g_type_add_interface_static (type, ATK_TYPE_VALUE,
-                                   &atk_value_info);
-    }
-  return type;
-}
+G_DEFINE_TYPE_WITH_CODE (GailProgressBar, gail_progress_bar, GAIL_TYPE_WIDGET,
+                         G_IMPLEMENT_INTERFACE (ATK_TYPE_VALUE, atk_value_interface_init))
 
 static void	 
 gail_progress_bar_class_init		(GailProgressBarClass *klass)
@@ -96,8 +61,11 @@ gail_progress_bar_class_init		(GailProgressBarClass *klass)
   class->initialize = gail_progress_bar_real_initialize;
 
   gobject_class->finalize = gail_progress_bar_finalize;
+}
 
-  parent_class = g_type_class_peek_parent (klass);
+static void
+gail_progress_bar_init (GailProgressBar *bar)
+{
 }
 
 AtkObject* 
@@ -123,7 +91,7 @@ gail_progress_bar_real_initialize (AtkObject *obj,
   GailProgressBar *progress_bar = GAIL_PROGRESS_BAR (obj);
   GtkProgress *gtk_progress;
 
-  ATK_OBJECT_CLASS (parent_class)->initialize (obj, data);
+  ATK_OBJECT_CLASS (gail_progress_bar_parent_class)->initialize (obj, data);
 
   gtk_progress = GTK_PROGRESS (data);
   /*
@@ -147,9 +115,6 @@ gail_progress_bar_real_initialize (AtkObject *obj,
 static void	 
 atk_value_interface_init (AtkValueIface *iface)
 {
-
-  g_return_if_fail (iface != NULL);
-
   iface->get_current_value = gail_progress_bar_get_current_value;
   iface->get_maximum_value = gail_progress_bar_get_maximum_value;
   iface->get_minimum_value = gail_progress_bar_get_minimum_value;
@@ -220,7 +185,7 @@ gail_progress_bar_finalize (GObject            *object)
       progress_bar->adjustment = NULL;
     }
 
-  G_OBJECT_CLASS (parent_class)->finalize (object);
+  G_OBJECT_CLASS (gail_progress_bar_parent_class)->finalize (object);
 }
 
 
@@ -253,7 +218,7 @@ gail_progress_bar_real_notify_gtk (GObject           *obj,
                         progress_bar);
     }
   else
-    parent_class->notify_gtk (obj, pspec);
+    GAIL_WIDGET_CLASS (gail_progress_bar_parent_class)->notify_gtk (obj, pspec);
 }
 
 static void

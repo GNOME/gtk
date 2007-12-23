@@ -24,6 +24,7 @@
 #include "gailmenu.h"
 
 static void gail_menu_class_init (GailMenuClass *klass);
+static void gail_menu_init       (GailMenu      *accessible);
 
 static void	  gail_menu_real_initialize     (AtkObject *obj,
                                                  gpointer  data);
@@ -31,35 +32,7 @@ static void	  gail_menu_real_initialize     (AtkObject *obj,
 static AtkObject* gail_menu_get_parent          (AtkObject *accessible);
 static gint       gail_menu_get_index_in_parent (AtkObject *accessible);
 
-static GailMenuShell *parent_class = NULL;
-
-GType
-gail_menu_get_type (void)
-{
-  static GType type = 0;
-
-  if (!type)
-    {
-      static const GTypeInfo tinfo =
-      {
-        sizeof (GailMenuClass),
-        (GBaseInitFunc) NULL, /* base init */
-        (GBaseFinalizeFunc) NULL, /* base finalize */
-        (GClassInitFunc) gail_menu_class_init, /* class init */
-        (GClassFinalizeFunc) NULL, /* class finalize */
-        NULL, /* class data */
-        sizeof (GailMenu), /* instance size */
-        0, /* nb preallocs */
-        (GInstanceInitFunc) NULL, /* instance init */
-        NULL /* value table */
-      };
-
-      type = g_type_register_static (GAIL_TYPE_MENU_SHELL,
-                                     "GailMenu", &tinfo, 0);
-    }
-
-  return type;
-}
+G_DEFINE_TYPE (GailMenu, gail_menu, GAIL_TYPE_MENU_SHELL)
 
 static void
 gail_menu_class_init (GailMenuClass *klass)
@@ -69,8 +42,11 @@ gail_menu_class_init (GailMenuClass *klass)
   class->get_parent = gail_menu_get_parent;
   class->get_index_in_parent = gail_menu_get_index_in_parent;
   class->initialize = gail_menu_real_initialize;
+}
 
-  parent_class = g_type_class_peek_parent (klass);
+static void
+gail_menu_init (GailMenu *accessible)
+{
 }
 
 AtkObject*
@@ -95,7 +71,7 @@ static void
 gail_menu_real_initialize (AtkObject *obj,
                            gpointer  data)
 {
-  ATK_OBJECT_CLASS (parent_class)->initialize (obj, data);
+  ATK_OBJECT_CLASS (gail_menu_parent_class)->initialize (obj, data);
 
   obj->role = ATK_ROLE_MENU;
 }
@@ -163,5 +139,5 @@ gail_menu_get_index_in_parent (AtkObject *accessible)
     {
       return 0;
     }
-  return ATK_OBJECT_CLASS (parent_class)->get_index_in_parent (accessible);
+  return ATK_OBJECT_CLASS (gail_menu_parent_class)->get_index_in_parent (accessible);
 }

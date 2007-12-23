@@ -29,7 +29,7 @@
 extern GtkWidget *focus_widget;
 
 static void gail_widget_class_init (GailWidgetClass *klass);
-
+static void gail_widget_init                     (GailWidget       *accessible);
 static void gail_widget_connect_widget_destroyed (GtkAccessible    *accessible);
 static void gail_widget_destroyed                (GtkWidget        *widget,
                                                   GtkAccessible    *accessible);
@@ -102,52 +102,14 @@ static void       gail_widget_real_initialize    (AtkObject     *obj,
 static GtkWidget* gail_widget_find_viewport      (GtkWidget     *widget);
 static gboolean   gail_widget_on_screen          (GtkWidget     *widget);
 
-static gpointer parent_class = NULL;
-
-GType
-gail_widget_get_type (void)
-{
-  static GType type = 0;
-
-  if (!type)
-    {
-      static const GTypeInfo tinfo =
-      {
-        sizeof (GailWidgetClass),
-        (GBaseInitFunc) NULL, /* base init */
-        (GBaseFinalizeFunc) NULL, /* base finalize */
-        (GClassInitFunc) gail_widget_class_init, /* class init */
-        (GClassFinalizeFunc) NULL, /* class finalize */
-        NULL, /* class data */
-        sizeof (GailWidget), /* instance size */
-        0, /* nb preallocs */
-        (GInstanceInitFunc) NULL, /* instance init */
-        NULL /* value table */
-      };
-
-      static const GInterfaceInfo atk_component_info =
-      {
-        (GInterfaceInitFunc) atk_component_interface_init,
-        (GInterfaceFinalizeFunc) NULL,
-        NULL
-      };
-
-      type = g_type_register_static (GTK_TYPE_ACCESSIBLE,
-                                     "GailWidget", &tinfo, 0);
-      g_type_add_interface_static (type, ATK_TYPE_COMPONENT,
-                                   &atk_component_info);
-    }
-
-  return type;
-}
+G_DEFINE_TYPE_WITH_CODE (GailWidget, gail_widget, GTK_TYPE_ACCESSIBLE,
+                         G_IMPLEMENT_INTERFACE (ATK_TYPE_COMPONENT, atk_component_interface_init))
 
 static void
 gail_widget_class_init (GailWidgetClass *klass)
 {
   AtkObjectClass *class = ATK_OBJECT_CLASS (klass);
   GtkAccessibleClass *accessible_class = GTK_ACCESSIBLE_CLASS (klass);
-
-  parent_class = g_type_class_peek_parent (klass);
 
   klass->notify_gtk = gail_widget_real_notify_gtk;
   klass->focus_gtk = gail_widget_real_focus_gtk;
@@ -160,6 +122,11 @@ gail_widget_class_init (GailWidgetClass *klass)
   class->ref_state_set = gail_widget_ref_state_set;
   class->get_index_in_parent = gail_widget_get_index_in_parent;
   class->initialize = gail_widget_real_initialize;
+}
+
+static void
+gail_widget_init (GailWidget *accessible)
+{
 }
 
 /**
@@ -412,7 +379,7 @@ gail_widget_ref_relation_set (AtkObject *obj)
      */
     return NULL;
 
-  relation_set = ATK_OBJECT_CLASS (parent_class)->ref_relation_set (obj);
+  relation_set = ATK_OBJECT_CLASS (gail_widget_parent_class)->ref_relation_set (obj);
 
   if (GTK_IS_BOX (widget) && !GTK_IS_COMBO (widget))
       /*
@@ -506,7 +473,7 @@ gail_widget_ref_state_set (AtkObject *accessible)
   GtkWidget *widget = GTK_ACCESSIBLE (accessible)->widget;
   AtkStateSet *state_set;
 
-  state_set = ATK_OBJECT_CLASS (parent_class)->ref_state_set (accessible);
+  state_set = ATK_OBJECT_CLASS (gail_widget_parent_class)->ref_state_set (accessible);
 
   if (widget == NULL)
     {
@@ -633,8 +600,6 @@ gail_widget_get_index_in_parent (AtkObject *accessible)
 static void 
 atk_component_interface_init (AtkComponentIface *iface)
 {
-  g_return_if_fail (iface != NULL);
-
   /*
    * Use default implementation for contains and get_position
    */

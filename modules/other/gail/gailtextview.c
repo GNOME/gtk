@@ -168,8 +168,6 @@ static void             emit_text_caret_moved          (GailTextView     *gail_t
                                                         gint             insert_offset);
 static gint             insert_idle_handler            (gpointer         data);
 
-static GailWidgetClass *parent_class = NULL;
-
 typedef struct _GailTextViewPaste                       GailTextViewPaste;
 
 struct _GailTextViewPaste
@@ -178,60 +176,10 @@ struct _GailTextViewPaste
   gint position;
 };
 
-GType
-gail_text_view_get_type (void)
-{
-  static GType type = 0;
-
-  if (!type)
-    {
-      static const GTypeInfo tinfo =
-      {
-        sizeof (GailTextViewClass),
-        (GBaseInitFunc) NULL, /* base init */
-        (GBaseFinalizeFunc) NULL, /* base finalize */
-        (GClassInitFunc) gail_text_view_class_init, /* class init */
-        (GClassFinalizeFunc) NULL, /* class finalize */
-        NULL, /* class data */
-        sizeof (GailTextView), /* instance size */
-        0, /* nb preallocs */
-        (GInstanceInitFunc) gail_text_view_init, /* instance init */
-        NULL /* value table */
-      };
-
-      static const GInterfaceInfo atk_editable_text_info =
-      {
-        (GInterfaceInitFunc) atk_editable_text_interface_init,
-        (GInterfaceFinalizeFunc) NULL,
-        NULL
-      };
-
-      static const GInterfaceInfo atk_text_info =
-      {
-        (GInterfaceInitFunc) atk_text_interface_init,
-        (GInterfaceFinalizeFunc) NULL,
-        NULL
-      };
-
-      static const GInterfaceInfo atk_streamable_content_info =
-      {
-        (GInterfaceInitFunc) atk_streamable_content_interface_init,
-        (GInterfaceFinalizeFunc) NULL,
-        NULL
-      };
-
-      type = g_type_register_static (GAIL_TYPE_CONTAINER,
-                                     "GailTextView", &tinfo, 0);
-      g_type_add_interface_static (type, ATK_TYPE_EDITABLE_TEXT,
-                                   &atk_editable_text_info);
-      g_type_add_interface_static (type, ATK_TYPE_TEXT,
-                                   &atk_text_info);
-      g_type_add_interface_static (type, ATK_TYPE_STREAMABLE_CONTENT,
-                                   &atk_streamable_content_info);
-    }
-
-  return type;
-}
+G_DEFINE_TYPE_WITH_CODE (GailTextView, gail_text_view, GAIL_TYPE_CONTAINER,
+                         G_IMPLEMENT_INTERFACE (ATK_TYPE_EDITABLE_TEXT, atk_editable_text_interface_init)
+                         G_IMPLEMENT_INTERFACE (ATK_TYPE_TEXT, atk_text_interface_init)
+                         G_IMPLEMENT_INTERFACE (ATK_TYPE_STREAMABLE_CONTENT, atk_streamable_content_interface_init))
 
 static void
 gail_text_view_class_init (GailTextViewClass *klass)
@@ -241,8 +189,6 @@ gail_text_view_class_init (GailTextViewClass *klass)
   GailWidgetClass *widget_class;
 
   widget_class = (GailWidgetClass*)klass;
-
-  parent_class = g_type_class_peek_parent (klass);
 
   gobject_class->finalize = gail_text_view_finalize;
 
@@ -294,7 +240,7 @@ gail_text_view_real_initialize (AtkObject *obj,
   GtkTextView *view;
   GailTextView *gail_view;
 
-  ATK_OBJECT_CLASS (parent_class)->initialize (obj, data);
+  ATK_OBJECT_CLASS (gail_text_view_parent_class)->initialize (obj, data);
 
   view = GTK_TEXT_VIEW (data);
 
@@ -314,7 +260,7 @@ gail_text_view_finalize (GObject            *object)
   if (text_view->insert_notify_handler)
     g_source_remove (text_view->insert_notify_handler);
 
-  G_OBJECT_CLASS (parent_class)->finalize (object);
+  G_OBJECT_CLASS (gail_text_view_parent_class)->finalize (object);
 }
 
 AtkObject*
@@ -355,7 +301,7 @@ gail_text_view_real_notify_gtk (GObject             *obj,
       setup_buffer (GTK_TEXT_VIEW (obj), GAIL_TEXT_VIEW (atk_obj));
     }
   else
-    parent_class->notify_gtk (obj, pspec);
+    GAIL_WIDGET_CLASS (gail_text_view_parent_class)->notify_gtk (obj, pspec);
 }
 
 /* atkobject.h */
@@ -367,7 +313,7 @@ gail_text_view_ref_state_set (AtkObject *accessible)
   GtkTextView *text_view;
   GtkWidget *widget;
 
-  state_set = ATK_OBJECT_CLASS (parent_class)->ref_state_set (accessible);
+  state_set = ATK_OBJECT_CLASS (gail_text_view_parent_class)->ref_state_set (accessible);
   widget = GTK_ACCESSIBLE (accessible)->widget;
 
   if (widget == NULL)
@@ -387,8 +333,6 @@ gail_text_view_ref_state_set (AtkObject *accessible)
 static void
 atk_text_interface_init (AtkTextIface *iface)
 {
-  g_return_if_fail (iface != NULL);
-
   iface->get_text = gail_text_view_get_text;
   iface->get_text_after_offset = gail_text_view_get_text_after_offset;
   iface->get_text_at_offset = gail_text_view_get_text_at_offset;
@@ -1014,8 +958,6 @@ gail_text_view_set_selection (AtkText *text,
 static void
 atk_editable_text_interface_init (AtkEditableTextIface *iface)
 {
-  g_return_if_fail (iface != NULL);
-
   iface->set_text_contents = gail_text_view_set_text_contents;
   iface->insert_text = gail_text_view_insert_text;
   iface->copy_text = gail_text_view_copy_text;
@@ -1707,8 +1649,6 @@ insert_idle_handler (gpointer data)
 static void       
 atk_streamable_content_interface_init    (AtkStreamableContentIface *iface)
 {
-  g_return_if_fail (iface != NULL);
-  
   iface->get_n_mime_types = gail_streamable_content_get_n_mime_types;
   iface->get_mime_type = gail_streamable_content_get_mime_type;
   iface->get_stream = gail_streamable_content_get_stream;

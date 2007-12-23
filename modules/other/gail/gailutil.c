@@ -26,7 +26,7 @@
 #include "gail-private-macros.h"
 
 static void		gail_util_class_init			(GailUtilClass		*klass);
-
+static void             gail_util_init                          (GailUtil               *utils);
 /* atkutil.h */
 
 static guint		gail_util_add_global_event_listener	(GSignalEmissionHook	listener,
@@ -41,6 +41,7 @@ static G_CONST_RETURN gchar *gail_util_get_toolkit_version      (void);
 
 /* gailmisc/AtkMisc */
 static void		gail_misc_class_init			(GailMiscClass		*klass);
+static void             gail_misc_init                          (GailMisc               *misc);
 
 static void gail_misc_threads_enter (AtkMisc *misc);
 static void gail_misc_threads_leave (AtkMisc *misc);
@@ -93,32 +94,7 @@ struct _GailKeyEventInfo
   gpointer func_data;
 };
 
-GType
-gail_util_get_type (void)
-{
-  static GType type = 0;
-
-  if (!type)
-  {
-    static const GTypeInfo tinfo =
-    {
-      sizeof (GailUtilClass),
-      (GBaseInitFunc) NULL, /* base init */
-      (GBaseFinalizeFunc) NULL, /* base finalize */
-      (GClassInitFunc) gail_util_class_init, /* class init */
-      (GClassFinalizeFunc) NULL, /* class finalize */
-      NULL, /* class data */
-      sizeof (GailUtil), /* instance size */
-      0, /* nb preallocs */
-      (GInstanceInitFunc) NULL, /* instance init */
-      NULL /* value table */
-    };
-
-    type = g_type_register_static (ATK_TYPE_UTIL,
-                                   "GailUtil", &tinfo, 0);
-  }
-  return type;
-}
+G_DEFINE_TYPE (GailUtil, gail_util, ATK_TYPE_UTIL)
 
 static void	 
 gail_util_class_init (GailUtilClass *klass)
@@ -143,6 +119,11 @@ gail_util_class_init (GailUtilClass *klass)
 
   listener_list = g_hash_table_new_full(g_int_hash, g_int_equal, NULL, 
      _listener_info_destroy);
+}
+
+static void
+gail_util_init (GailUtil *utils)
+{
 }
 
 static guint
@@ -609,32 +590,7 @@ configure_event_watcher (GSignalInvocationHint  *hint,
     }
 }
 
-GType
-gail_misc_get_type (void)
-{
-  static GType type = 0;
-
-  if (!type)
-  {
-    static const GTypeInfo tinfo =
-    {
-      sizeof (GailMiscClass),
-      (GBaseInitFunc) NULL, /* base init */
-      (GBaseFinalizeFunc) NULL, /* base finalize */
-      (GClassInitFunc) gail_misc_class_init, /* class init */
-      (GClassFinalizeFunc) NULL, /* class finalize */
-      NULL, /* class data */
-      sizeof (GailMisc), /* instance size */
-      0, /* nb preallocs */
-      (GInstanceInitFunc) NULL, /* instance init */
-      NULL /* value table */
-    };
-
-    type = g_type_register_static (ATK_TYPE_MISC,
-                                   "GailMisc", &tinfo, 0);
-  }
-  return type;
-}
+G_DEFINE_TYPE (GailMisc, gail_misc, ATK_TYPE_MISC)
 
 static void	 
 gail_misc_class_init (GailMiscClass *klass)
@@ -645,6 +601,11 @@ gail_misc_class_init (GailMiscClass *klass)
   miscclass->threads_leave =
     gail_misc_threads_leave;
   atk_misc_instance = g_object_new (GAIL_TYPE_MISC, NULL);
+}
+
+static void
+gail_misc_init (GailMisc *misc)
+{
 }
 
 static void gail_misc_threads_enter (AtkMisc *misc)

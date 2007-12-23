@@ -25,7 +25,7 @@
 #define KEYBINDING_SEPARATOR ";"
 
 static void gail_menu_item_class_init  (GailMenuItemClass *klass);
-static void gail_menu_item_object_init (GailMenuItem      *menu_item);
+static void gail_menu_item_init        (GailMenuItem      *menu_item);
 
 static void                  gail_menu_item_real_initialize
                                                           (AtkObject       *obj,
@@ -60,43 +60,8 @@ static gboolean              find_accel_new                (GtkAccelKey    *key,
                                                             GClosure       *closure,
                                                             gpointer       data);
 
-static gpointer parent_class = NULL;
-
-GType
-gail_menu_item_get_type (void)
-{
-  static GType type = 0;
-
-  if (!type)
-    {
-      static const GTypeInfo tinfo =
-      {
-        sizeof (GailMenuItemClass),
-        (GBaseInitFunc) NULL, /* base init */
-        (GBaseFinalizeFunc) NULL, /* base finalize */
-        (GClassInitFunc) gail_menu_item_class_init, /* class init */
-        (GClassFinalizeFunc) NULL, /* class finalize */
-        NULL, /* class data */
-        sizeof (GailMenuItem), /* instance size */
-        0, /* nb preallocs */
-        (GInstanceInitFunc) gail_menu_item_object_init, /* instance init */
-        NULL /* value table */
-      };
-
-      static const GInterfaceInfo atk_action_info =
-      {
-        (GInterfaceInitFunc) atk_action_interface_init,
-        (GInterfaceFinalizeFunc) NULL,
-        NULL
-      };
-
-      type = g_type_register_static (GAIL_TYPE_ITEM,
-                                     "GailMenuItem", &tinfo, 0);
-      g_type_add_interface_static (type, ATK_TYPE_ACTION,
-                                   &atk_action_info);
-    }
-  return type;
-}
+G_DEFINE_TYPE_WITH_CODE (GailMenuItem, gail_menu_item, GAIL_TYPE_ITEM,
+                         G_IMPLEMENT_INTERFACE (ATK_TYPE_ACTION, atk_action_interface_init))
 
 static void
 gail_menu_item_class_init (GailMenuItemClass *klass)
@@ -109,8 +74,6 @@ gail_menu_item_class_init (GailMenuItemClass *klass)
   class->get_n_children = gail_menu_item_get_n_children;
   class->ref_child = gail_menu_item_ref_child;
   class->initialize = gail_menu_item_real_initialize;
-
-  parent_class = g_type_class_peek_parent (klass);
 }
 
 static void
@@ -120,7 +83,7 @@ gail_menu_item_real_initialize (AtkObject *obj,
   GtkWidget *widget;
   GtkWidget *parent;
 
-  ATK_OBJECT_CLASS (parent_class)->initialize (obj, data);
+  ATK_OBJECT_CLASS (gail_menu_item_parent_class)->initialize (obj, data);
 
   g_signal_connect (data,
                     "select",
@@ -157,7 +120,7 @@ gail_menu_item_real_initialize (AtkObject *obj,
 }
 
 static void
-gail_menu_item_object_init (GailMenuItem *menu_item)
+gail_menu_item_init (GailMenuItem *menu_item)
 {
   menu_item->click_keybinding = NULL;
   menu_item->click_description = NULL;
@@ -279,8 +242,6 @@ gail_menu_item_ref_child (AtkObject *obj,
 static void
 atk_action_interface_init (AtkActionIface *iface)
 {
-  g_return_if_fail (iface != NULL);
-
   iface->do_action = gail_menu_item_do_action;
   iface->get_n_actions = gail_menu_item_get_n_actions;
   iface->get_description = gail_menu_item_get_description;
@@ -627,7 +588,7 @@ gail_menu_item_finalize (GObject *object)
       menu_item->action_idle_handler = 0;
     }
 
-  G_OBJECT_CLASS (parent_class)->finalize (object);
+  G_OBJECT_CLASS (gail_menu_item_parent_class)->finalize (object);
 }
 
 static void

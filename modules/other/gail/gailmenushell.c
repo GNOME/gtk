@@ -21,7 +21,7 @@
 #include "gailmenushell.h"
 
 static void         gail_menu_shell_class_init          (GailMenuShellClass *klass);
-
+static void         gail_menu_shell_init                (GailMenuShell      *menu_shell);
 static void         atk_selection_interface_init        (AtkSelectionIface  *iface);
 static gboolean     gail_menu_shell_add_selection       (AtkSelection   *selection,
                                                          gint           i);
@@ -34,45 +34,16 @@ static gboolean     gail_menu_shell_is_child_selected   (AtkSelection   *selecti
 static gboolean     gail_menu_shell_remove_selection    (AtkSelection   *selection,
                                                          gint           i);
 
-GType
-gail_menu_shell_get_type (void)
-{
-  static GType type = 0;
-
-  if (!type)
-  {
-    static const GTypeInfo tinfo =
-    {
-      sizeof (GailMenuShellClass),
-      (GBaseInitFunc) NULL, /* base init */
-      (GBaseFinalizeFunc) NULL, /* base finalize */
-      (GClassInitFunc) gail_menu_shell_class_init, /* class init */
-      (GClassFinalizeFunc) NULL, /* class finalize */
-      NULL, /* class data */
-      sizeof (GailMenuShell), /* instance size */
-      0, /* nb preallocs */
-      (GInstanceInitFunc) NULL, /* instance init */
-      NULL /* value table */
-    };
-
-    static const GInterfaceInfo atk_selection_info =
-    {
-        (GInterfaceInitFunc) atk_selection_interface_init,
-        (GInterfaceFinalizeFunc) NULL,
-        NULL
-    };
-
-    type = g_type_register_static (GAIL_TYPE_CONTAINER,
-                                   "GailMenuShell", &tinfo, 0);
-    g_type_add_interface_static (type, ATK_TYPE_SELECTION,
-                                 &atk_selection_info);
-  }
-
-  return type;
-}
+G_DEFINE_TYPE_WITH_CODE (GailMenuShell, gail_menu_shell, GAIL_TYPE_CONTAINER,
+                         G_IMPLEMENT_INTERFACE (ATK_TYPE_SELECTION, atk_selection_interface_init))
 
 static void
 gail_menu_shell_class_init (GailMenuShellClass *klass)
+{
+}
+
+static void
+gail_menu_shell_init (GailMenuShell *menu_shell)
 {
 }
 
@@ -103,8 +74,6 @@ gail_menu_shell_new (GtkWidget *widget)
 static void
 atk_selection_interface_init (AtkSelectionIface *iface)
 {
-  g_return_if_fail (iface != NULL);
-
   iface->add_selection = gail_menu_shell_add_selection;
   iface->clear_selection = gail_menu_shell_clear_selection;
   iface->ref_selection = gail_menu_shell_ref_selection;

@@ -24,7 +24,7 @@
 #include "gail-private-macros.h"
 
 static void      gail_notebook_page_class_init      (GailNotebookPageClass     *klass);
-
+static void                  gail_notebook_page_init           (GailNotebookPage *page);
 static void                  gail_notebook_page_finalize       (GObject   *object);
 static void                  gail_notebook_page_label_map_gtk  (GtkWidget *widget,
                                                                 gpointer  data);
@@ -112,61 +112,16 @@ static AtkAttributeSet* gail_notebook_page_get_default_attributes
 static GtkWidget* get_label_from_notebook_page     (GailNotebookPage  *page);
 static GtkWidget* find_label_child (GtkContainer *container);
 
-static gpointer parent_class = NULL;
-
-GType
-gail_notebook_page_get_type (void)
-{
-  static GType type = 0;
-
-  if (!type)
-    {
-      static const GTypeInfo tinfo = 
-      {
-        sizeof (GailNotebookPageClass),
-        (GBaseInitFunc) NULL, /* base init */
-        (GBaseFinalizeFunc) NULL, /* base finalize */
-        (GClassInitFunc) gail_notebook_page_class_init, /* class init */
-        (GClassFinalizeFunc) NULL, /* class finalize */
-        NULL, /* class data */
-        sizeof (GailNotebookPage), /* instance size */
-        0, /* nb preallocs */
-        (GInstanceInitFunc) NULL, /* instance init */
-        NULL /* value table */
-      };
-	
-      static const GInterfaceInfo atk_component_info =
-      {
-        (GInterfaceInitFunc) atk_component_interface_init,
-        (GInterfaceFinalizeFunc) NULL,
-        NULL
-      };
-
-      static const GInterfaceInfo atk_text_info =
-      {
-        (GInterfaceInitFunc) atk_text_interface_init,
-        (GInterfaceFinalizeFunc) NULL,
-        NULL
-      };
-
-      type = g_type_register_static (ATK_TYPE_OBJECT,
-                                     "GailNotebookPage", &tinfo, 0);
-
-      g_type_add_interface_static (type, ATK_TYPE_COMPONENT,
-                                   &atk_component_info);
-      g_type_add_interface_static (type, ATK_TYPE_TEXT,
-                                   &atk_text_info);
-    }
-  return type;
-}
+/* FIXME: not GAIL_TYPE_OBJECT? */
+G_DEFINE_TYPE_WITH_CODE (GailNotebookPage, gail_notebook_page, ATK_TYPE_OBJECT,
+                         G_IMPLEMENT_INTERFACE (ATK_TYPE_COMPONENT, atk_component_interface_init)
+                         G_IMPLEMENT_INTERFACE (ATK_TYPE_TEXT, atk_text_interface_init))
 
 static void
 gail_notebook_page_class_init (GailNotebookPageClass *klass)
 {
   GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
   AtkObjectClass *class = ATK_OBJECT_CLASS (klass);
-  
-  parent_class = g_type_class_peek_parent (klass);
   
   class->get_name = gail_notebook_page_get_name;
   class->get_parent = gail_notebook_page_get_parent;
@@ -176,6 +131,11 @@ gail_notebook_page_class_init (GailNotebookPageClass *klass)
   class->get_index_in_parent = gail_notebook_page_get_index_in_parent;
 
   gobject_class->finalize = gail_notebook_page_finalize;
+}
+
+static void
+gail_notebook_page_init (GailNotebookPage *page)
+{
 }
 
 static gint
@@ -330,7 +290,7 @@ gail_notebook_page_finalize (GObject *object)
   if (page->notify_child_added_id)
     g_source_remove (page->notify_child_added_id);
 
-  G_OBJECT_CLASS (parent_class)->finalize (object);
+  G_OBJECT_CLASS (gail_notebook_page_parent_class)->finalize (object);
 }
 
 static G_CONST_RETURN gchar*
@@ -419,7 +379,7 @@ gail_notebook_page_ref_state_set (AtkObject *accessible)
 
   g_return_val_if_fail (GAIL_NOTEBOOK_PAGE (accessible), NULL);
 
-  state_set = ATK_OBJECT_CLASS (parent_class)->ref_state_set (accessible);
+  state_set = ATK_OBJECT_CLASS (gail_notebook_page_parent_class)->ref_state_set (accessible);
 
   atk_label = _gail_notebook_page_get_tab_label (GAIL_NOTEBOOK_PAGE (accessible));
   if (atk_label)
@@ -457,8 +417,6 @@ gail_notebook_page_ref_state_set (AtkObject *accessible)
 static void
 atk_component_interface_init (AtkComponentIface *iface)
 {
-  g_return_if_fail (iface != NULL);
-
   /*
    * We use the default implementations for contains, get_position, get_size
    */
@@ -535,7 +493,6 @@ _gail_notebook_page_get_tab_label (GailNotebookPage *page)
 static void
 atk_text_interface_init (AtkTextIface *iface)
 {
-  g_return_if_fail (iface != NULL);
   iface->get_text = gail_notebook_page_get_text;
   iface->get_character_at_offset = gail_notebook_page_get_character_at_offset;
   iface->get_text_before_offset = gail_notebook_page_get_text_before_offset;

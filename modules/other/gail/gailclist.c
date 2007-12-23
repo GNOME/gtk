@@ -105,6 +105,7 @@ typedef struct _GailCListCellData   GailCListCellData;
 
 
 static void       gail_clist_class_init            (GailCListClass    *klass);
+static void       gail_clist_init                  (GailCList         *clist);
 static void       gail_clist_real_initialize       (AtkObject         *obj,
                                                     gpointer          data);
 static void       gail_clist_finalize              (GObject           *object);
@@ -260,61 +261,10 @@ struct _GailCListCellData
   int column_number;
 };
 
-static gpointer parent_class = NULL;
-
-GType
-gail_clist_get_type (void)
-{
-  static GType type = 0;
-
-  if (!type)
-    {
-      static const GTypeInfo tinfo =
-      {
-        sizeof (GailCListClass),
-        (GBaseInitFunc) NULL, /* base init */
-        (GBaseFinalizeFunc) NULL, /* base finalize */
-        (GClassInitFunc) gail_clist_class_init, /* class init */
-        (GClassFinalizeFunc) NULL, /* class finalize */
-        NULL, /* class data */
-        sizeof (GailCList), /* instance size */
-        0, /* nb preallocs */
-        (GInstanceInitFunc) NULL, /* instance init */
-        NULL /* value table */
-      };
-
-      static const GInterfaceInfo atk_table_info =
-      {
-        (GInterfaceInitFunc) atk_table_interface_init,
-        (GInterfaceFinalizeFunc) NULL,
-        NULL
-      };
-
-      static const GInterfaceInfo atk_selection_info =
-      {
-        (GInterfaceInitFunc) atk_selection_interface_init,
-        (GInterfaceFinalizeFunc) NULL,
-        NULL
-      };
-
-      static const GInterfaceInfo gail_cell_parent_info =
-      {
-        (GInterfaceInitFunc) gail_cell_parent_interface_init,
-        (GInterfaceFinalizeFunc) NULL,
-        NULL
-      };
-
-      type = g_type_register_static (GAIL_TYPE_CONTAINER,
-                                     "GailCList", &tinfo, 0);
-      g_type_add_interface_static (type, ATK_TYPE_TABLE,
-                                   &atk_table_info);
-      g_type_add_interface_static (type, ATK_TYPE_SELECTION,
-                                   &atk_selection_info);
-      g_type_add_interface_static (type, GAIL_TYPE_CELL_PARENT,
-                                   &gail_cell_parent_info);
-    }
-  return type;
-}
+G_DEFINE_TYPE_WITH_CODE (GailCList, gail_clist, GAIL_TYPE_CONTAINER,
+                         G_IMPLEMENT_INTERFACE (ATK_TYPE_TABLE, atk_table_interface_init)
+                         G_IMPLEMENT_INTERFACE (ATK_TYPE_SELECTION, atk_selection_interface_init)
+                         G_IMPLEMENT_INTERFACE (GAIL_TYPE_CELL_PARENT, gail_cell_parent_interface_init))
 
 static void
 gail_clist_class_init (GailCListClass *klass)
@@ -322,14 +272,17 @@ gail_clist_class_init (GailCListClass *klass)
   AtkObjectClass *class = ATK_OBJECT_CLASS (klass);
   GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
 
-  parent_class = g_type_class_peek_parent (klass);
- 
   class->get_n_children = gail_clist_get_n_children;
   class->ref_child = gail_clist_ref_child;
   class->ref_state_set = gail_clist_ref_state_set;
   class->initialize = gail_clist_real_initialize;
 
   gobject_class->finalize = gail_clist_finalize;
+}
+
+static void
+gail_clist_init (GailCList *clist)
+{
 }
 
 AtkObject* 
@@ -358,7 +311,7 @@ gail_clist_real_initialize (AtkObject *obj,
   GtkCList *gtk_clist;
   gint i;
 
-  ATK_OBJECT_CLASS (parent_class)->initialize (obj, data);
+  ATK_OBJECT_CLASS (gail_clist_parent_class)->initialize (obj, data);
 
   clist = GAIL_CLIST (obj);
 
@@ -457,7 +410,7 @@ gail_clist_finalize (GObject            *object)
       g_list_free (clist->cell_data);
     }
 
-  G_OBJECT_CLASS (parent_class)->finalize (object);
+  G_OBJECT_CLASS (gail_clist_parent_class)->finalize (object);
 }
 
 static gint
@@ -513,7 +466,7 @@ gail_clist_ref_state_set (AtkObject *obj)
   AtkStateSet *state_set;
   GtkWidget *widget;
 
-  state_set = ATK_OBJECT_CLASS (parent_class)->ref_state_set (obj);
+  state_set = ATK_OBJECT_CLASS (gail_clist_parent_class)->ref_state_set (obj);
   widget = GTK_ACCESSIBLE (obj)->widget;
 
   if (widget != NULL)
@@ -525,8 +478,6 @@ gail_clist_ref_state_set (AtkObject *obj)
 static void
 atk_selection_interface_init (AtkSelectionIface *iface)
 {
-  g_return_if_fail (iface != NULL);
-  
   iface->clear_selection = gail_clist_clear_selection;
   iface->ref_selection = gail_clist_ref_selection;
   iface->get_selection_count = gail_clist_get_selection_count;
@@ -623,7 +574,6 @@ gail_clist_select_all_selection (AtkSelection   *selection)
 static void
 atk_table_interface_init (AtkTableIface *iface)
 {
-  g_return_if_fail (iface != NULL);
   iface->ref_at = gail_clist_ref_at;
   iface->get_index_at = gail_clist_get_index_at;
   iface->get_column_at_index = gail_clist_get_column_at_index;
@@ -732,8 +682,8 @@ gail_clist_ref_at_actual (AtkTable      *table,
 
       g_return_val_if_fail (ATK_IS_OBJECT (table), NULL);
 
-      gail_cell_init (cell, widget, ATK_OBJECT (table),
-                      index);
+      gail_cell_initialise (cell, widget, ATK_OBJECT (table),
+                            index);
       /*
        * Store the cell in a cache
        */
@@ -1185,8 +1135,6 @@ gail_clist_set_summary (AtkTable      *table,
 
 static void gail_cell_parent_interface_init (GailCellParentIface *iface)
 {
-  g_return_if_fail (iface);
-
   iface->get_cell_extents = gail_clist_get_cell_extents;
   iface->get_cell_area = gail_clist_get_cell_area;
 }

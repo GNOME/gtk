@@ -20,46 +20,23 @@
 #include <gtk/gtk.h>
 #include "gailbox.h"
 
-static void         gail_box_class_init            (GailBoxClass  *klass); 
+static void         gail_box_class_init            (GailBoxClass  *klass);
+static void         gail_box_init                  (GailBox       *box);
 static AtkStateSet* gail_box_ref_state_set         (AtkObject     *accessible);
 
-static GailContainerClass *parent_class = NULL;
-
-GType
-gail_box_get_type (void)
-{
-  static GType type = 0;
-
-  if (!type)
-  {
-    static const GTypeInfo tinfo =
-    {
-      sizeof (GailBoxClass),
-      (GBaseInitFunc) NULL, /* base init */
-      (GBaseFinalizeFunc) NULL, /* base finalize */
-      (GClassInitFunc) gail_box_class_init, /* class init */
-      (GClassFinalizeFunc) NULL, /* class finalize */
-      NULL, /* class data */
-      sizeof (GailBox), /* instance size */
-      0, /* nb preallocs */
-      (GInstanceInitFunc) NULL, /* instance init */
-      NULL /* value table */
-    };
-
-    type = g_type_register_static (GAIL_TYPE_CONTAINER,
-                                   "GailBox", &tinfo, 0);
-  }
-  return type;
-}
+G_DEFINE_TYPE (GailBox, gail_box, GAIL_TYPE_CONTAINER)
 
 static void
 gail_box_class_init (GailBoxClass *klass)
 {
   AtkObjectClass  *class = ATK_OBJECT_CLASS (klass);
 
-  parent_class = g_type_class_peek_parent (klass);
-
   class->ref_state_set = gail_box_ref_state_set;
+}
+
+static void
+gail_box_init (GailBox *box)
+{
 }
 
 AtkObject* 
@@ -86,7 +63,7 @@ gail_box_ref_state_set (AtkObject *accessible)
   AtkStateSet *state_set;
   GtkWidget *widget;
 
-  state_set = ATK_OBJECT_CLASS (parent_class)->ref_state_set (accessible);
+  state_set = ATK_OBJECT_CLASS (gail_box_parent_class)->ref_state_set (accessible);
   widget = GTK_ACCESSIBLE (accessible)->widget;
 
   if (widget == NULL)

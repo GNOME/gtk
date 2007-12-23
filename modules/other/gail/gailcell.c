@@ -27,7 +27,7 @@ static void	    gail_cell_class_init          (GailCellClass       *klass);
 static void         gail_cell_destroyed           (GtkWidget           *widget,
                                                    GailCell            *cell);
 
-static void         gail_cell_object_init         (GailCell            *cell);
+static void         gail_cell_init                (GailCell            *cell);
 static void         gail_cell_object_finalize     (GObject             *cell);
 static AtkStateSet* gail_cell_ref_state_set       (AtkObject           *obj);
 static gint         gail_cell_get_index_in_parent (AtkObject           *obj);
@@ -72,45 +72,8 @@ static void         gail_cell_get_extents         (AtkComponent        *componen
                                                    AtkCoordType        coord_type);
 static gboolean     gail_cell_grab_focus         (AtkComponent        *component);
 
-static gpointer parent_class = NULL;
-
-GType
-gail_cell_get_type (void)
-{
-  static GType type = 0;
-
-  if (!type)
-    {
-      static const GTypeInfo tinfo =
-      {
-        sizeof (GailCellClass),
-        (GBaseInitFunc) NULL, /* base init */
-        (GBaseFinalizeFunc) NULL, /* base finalize */
-        (GClassInitFunc) gail_cell_class_init, /* class init */
-        (GClassFinalizeFunc) NULL, /* class finalize */
-        NULL, /* class data */
-        sizeof (GailCell), /* instance size */
-        0, /* nb preallocs */
-        (GInstanceInitFunc) gail_cell_object_init, /* instance init */
-        NULL /* value table */
-      };
-
-      static const GInterfaceInfo atk_component_info =
-      {
-        (GInterfaceInitFunc) atk_component_interface_init,
-        (GInterfaceFinalizeFunc) NULL,
-        NULL
-      };
-
-
-      type = g_type_register_static (ATK_TYPE_OBJECT,
-                                     "GailCell", &tinfo, 0);
-      g_type_add_interface_static (type, ATK_TYPE_COMPONENT,
-                                   &atk_component_info);
-
-    }
-  return type;
-}
+G_DEFINE_TYPE_WITH_CODE (GailCell, gail_cell, ATK_TYPE_OBJECT,
+                         G_IMPLEMENT_INTERFACE (ATK_TYPE_COMPONENT, atk_component_interface_init))
 
 static void	 
 gail_cell_class_init (GailCellClass *klass)
@@ -118,7 +81,6 @@ gail_cell_class_init (GailCellClass *klass)
   AtkObjectClass *class = ATK_OBJECT_CLASS (klass);
   GObjectClass *g_object_class = G_OBJECT_CLASS (klass);
 
-  parent_class = g_type_class_peek_parent (klass);
   g_object_class->finalize = gail_cell_object_finalize;
 
   class->get_index_in_parent = gail_cell_get_index_in_parent;
@@ -126,10 +88,10 @@ gail_cell_class_init (GailCellClass *klass)
 }
 
 void 
-gail_cell_init (GailCell  *cell,
-                GtkWidget *widget,
-                AtkObject *parent,
-                gint      index)
+gail_cell_initialise (GailCell  *cell,
+                      GtkWidget *widget,
+                      AtkObject *parent,
+                      gint      index)
 {
   g_return_if_fail (GAIL_IS_CELL (cell));
   g_return_if_fail (GTK_IS_WIDGET (widget));
@@ -156,7 +118,7 @@ gail_cell_destroyed (GtkWidget       *widget,
 }
 
 static void
-gail_cell_object_init (GailCell *cell)
+gail_cell_init (GailCell *cell)
 {
   cell->state_set = atk_state_set_new ();
   cell->widget = NULL;
@@ -206,7 +168,7 @@ gail_cell_object_finalize (GObject *obj)
         }
       g_object_unref (relation_set);
     }
-  G_OBJECT_CLASS (parent_class)->finalize (obj);
+  G_OBJECT_CLASS (gail_cell_parent_class)->finalize (obj);
 }
 
 static AtkStateSet *
@@ -318,8 +280,6 @@ gail_cell_get_index_in_parent (AtkObject *obj)
 static void
 gail_cell_atk_action_interface_init (AtkActionIface *iface)
 {
-  g_assert (iface != NULL);
-
   iface->get_n_actions = gail_cell_action_get_n_actions;
   iface->do_action = gail_cell_action_do_action;
   iface->get_name = gail_cell_action_get_name;
@@ -331,7 +291,7 @@ gail_cell_atk_action_interface_init (AtkActionIface *iface)
 void
 gail_cell_type_add_action_interface (GType type)
 {
-  static const GInterfaceInfo atk_action_info =
+  const GInterfaceInfo atk_action_info =
   {
     (GInterfaceInitFunc) gail_cell_atk_action_interface_init,
     (GInterfaceFinalizeFunc) NULL,
@@ -529,8 +489,6 @@ idle_do_action (gpointer data)
 static void
 atk_component_interface_init (AtkComponentIface *iface)
 {
-  g_assert (iface != NULL);
-
   iface->get_extents = gail_cell_get_extents;
   iface->grab_focus = gail_cell_grab_focus;
 }

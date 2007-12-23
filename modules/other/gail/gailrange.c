@@ -26,6 +26,8 @@
 
 static void	    gail_range_class_init        (GailRangeClass *klass);
 
+static void         gail_range_init              (GailRange      *range);
+
 static void         gail_range_real_initialize   (AtkObject      *obj,
                                                   gpointer      data);
 
@@ -63,55 +65,10 @@ static G_CONST_RETURN gchar* gail_range_action_get_name  (AtkAction    *action,
 static gboolean   gail_range_set_description  (AtkAction       *action,
                                               gint            i,
                                               const gchar     *desc);
-static GailWidgetClass *parent_class = NULL;
 
-GType
-gail_range_get_type (void)
-{
-  static GType type = 0;
-
-  if (!type)
-    {
-      static const GTypeInfo tinfo =
-      {
-        sizeof (GailRangeClass),
-        (GBaseInitFunc) NULL, /* base init */
-        (GBaseFinalizeFunc) NULL, /* base finalize */
-        (GClassInitFunc) gail_range_class_init, /* class init */
-        (GClassFinalizeFunc) NULL, /* class finalize */
-        NULL, /* class data */
-        sizeof (GailRange), /* instance size */
-        0, /* nb preallocs */
-        (GInstanceInitFunc) NULL, /* instance init */
-        NULL /* value table */
-      };
-
-      static const GInterfaceInfo atk_action_info =
-      {
-       (GInterfaceInitFunc) atk_action_interface_init,
-       (GInterfaceFinalizeFunc) NULL,
-       NULL
-      };
-
-
-      static const GInterfaceInfo atk_value_info =
-      {
-        (GInterfaceInitFunc) atk_value_interface_init,
-        (GInterfaceFinalizeFunc) NULL,
-        NULL
-      };
-
-      type = g_type_register_static (GAIL_TYPE_WIDGET,
-                                     "GailRange", &tinfo, 0);
-
-      g_type_add_interface_static (type, ATK_TYPE_ACTION,
-                                       &atk_action_info);
-
-      g_type_add_interface_static (type, ATK_TYPE_VALUE,
-                                   &atk_value_info);
-    }
-  return type;
-}
+G_DEFINE_TYPE_WITH_CODE (GailRange, gail_range, GAIL_TYPE_WIDGET,
+                         G_IMPLEMENT_INTERFACE (ATK_TYPE_ACTION, atk_action_interface_init)
+                         G_IMPLEMENT_INTERFACE (ATK_TYPE_VALUE, atk_value_interface_init))
 
 static void	 
 gail_range_class_init		(GailRangeClass *klass)
@@ -128,8 +85,11 @@ gail_range_class_init		(GailRangeClass *klass)
   class->initialize = gail_range_real_initialize;
 
   gobject_class->finalize = gail_range_finalize;
+}
 
-  parent_class = g_type_class_peek_parent (klass);
+static void
+gail_range_init (GailRange      *range)
+{
 }
 
 AtkObject* 
@@ -155,7 +115,7 @@ gail_range_real_initialize (AtkObject *obj,
   GailRange *range = GAIL_RANGE (obj);
   GtkRange *gtk_range;
 
-  ATK_OBJECT_CLASS (parent_class)->initialize (obj, data);
+  ATK_OBJECT_CLASS (gail_range_parent_class)->initialize (obj, data);
 
   gtk_range = GTK_RANGE (data);
   /*
@@ -187,7 +147,7 @@ gail_range_ref_state_set (AtkObject *obj)
   GtkWidget *widget;
   GtkRange *range;
 
-  state_set = ATK_OBJECT_CLASS (parent_class)->ref_state_set (obj);
+  state_set = ATK_OBJECT_CLASS (gail_range_parent_class)->ref_state_set (obj);
   widget = GTK_ACCESSIBLE (obj)->widget;
 
   if (widget == NULL)
@@ -210,13 +170,10 @@ gail_range_ref_state_set (AtkObject *obj)
 static void	 
 atk_value_interface_init (AtkValueIface *iface)
 {
-  g_return_if_fail (iface != NULL);
-
   iface->get_current_value = gail_range_get_current_value;
   iface->get_maximum_value = gail_range_get_maximum_value;
   iface->get_minimum_value = gail_range_get_minimum_value;
   iface->set_current_value = gail_range_set_current_value;
-
 }
 
 static void	 
@@ -327,7 +284,7 @@ gail_range_finalize (GObject            *object)
     range->action_idle_handler = 0;
    }
 
-  G_OBJECT_CLASS (parent_class)->finalize (object);
+  G_OBJECT_CLASS (gail_range_parent_class)->finalize (object);
 }
 
 
@@ -360,7 +317,7 @@ gail_range_real_notify_gtk (GObject           *obj,
                         range);
     }
   else
-    parent_class->notify_gtk (obj, pspec);
+    GAIL_WIDGET_CLASS (gail_range_parent_class)->notify_gtk (obj, pspec);
 }
 
 static void
@@ -380,8 +337,6 @@ gail_range_value_changed (GtkAdjustment    *adjustment,
 static void
 atk_action_interface_init (AtkActionIface *iface)
 {
-  g_return_if_fail (iface != NULL);
- 
   iface->do_action = gail_range_do_action;
   iface->get_n_actions = gail_range_get_n_actions;
   iface->get_description = gail_range_get_description;

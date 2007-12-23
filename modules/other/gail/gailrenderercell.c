@@ -21,45 +21,16 @@
 #include "gailrenderercell.h"
 
 static void      gail_renderer_cell_class_init          (GailRendererCellClass *klass);
-static void      gail_renderer_cell_object_init         (GailRendererCell      *renderer_cell);
+static void      gail_renderer_cell_init                (GailRendererCell      *renderer_cell);
 
-static void      gail_renderer_cell_finalize            (GObject               *object)
-;
-static gpointer parent_class = NULL;
+static void      gail_renderer_cell_finalize            (GObject               *object);
 
-GType
-gail_renderer_cell_get_type (void)
-{
-  static GType type = 0;
-
-  if (!type)
-  {
-    static const GTypeInfo tinfo =
-    {
-      sizeof (GailRendererCellClass),
-      (GBaseInitFunc) NULL, /* base init */
-      (GBaseFinalizeFunc) NULL, /* base finalize */
-      (GClassInitFunc) gail_renderer_cell_class_init, /* class init */
-      (GClassFinalizeFunc) NULL, /* class finalize */
-      NULL, /* class data */
-      sizeof (GailRendererCell), /* instance size */
-      0, /* nb preallocs */
-      (GInstanceInitFunc) gail_renderer_cell_object_init, /* instance init */
-      NULL /* value table */
-    };
-
-    type = g_type_register_static (GAIL_TYPE_CELL,
-                                   "GailRendererCell", &tinfo, 0);
-  }
-  return type;
-}
+G_DEFINE_TYPE (GailRendererCell, gail_renderer_cell, GAIL_TYPE_CELL)
 
 static void 
 gail_renderer_cell_class_init (GailRendererCellClass *klass)
 {
   GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
-
-  parent_class = g_type_class_peek_parent (klass);
 
   klass->property_list = NULL;
 
@@ -67,7 +38,7 @@ gail_renderer_cell_class_init (GailRendererCellClass *klass)
 }
 
 static void
-gail_renderer_cell_object_init (GailRendererCell *renderer_cell)
+gail_renderer_cell_init (GailRendererCell *renderer_cell)
 {
   renderer_cell->renderer = NULL;
 }
@@ -79,7 +50,7 @@ gail_renderer_cell_finalize (GObject  *object)
 
   if (renderer_cell->renderer)
     g_object_unref (renderer_cell->renderer);
-  G_OBJECT_CLASS (parent_class)->finalize (object);
+  G_OBJECT_CLASS (gail_renderer_cell_parent_class)->finalize (object);
 }
 
 gboolean

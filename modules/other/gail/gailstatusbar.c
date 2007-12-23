@@ -23,6 +23,7 @@
 #include <libgail-util/gailmisc.h>
 
 static void         gail_statusbar_class_init          (GailStatusbarClass *klass);
+static void         gail_statusbar_init                (GailStatusbar      *bar);
 static G_CONST_RETURN gchar* gail_statusbar_get_name   (AtkObject          *obj);
 static gint         gail_statusbar_get_n_children      (AtkObject          *obj);
 static AtkObject*   gail_statusbar_ref_child           (AtkObject          *obj,
@@ -85,44 +86,8 @@ static AtkAttributeSet* gail_statusbar_get_default_attributes
                                                    (AtkText           *text);
 static GtkWidget* get_label_from_statusbar         (GtkWidget         *statusbar);
 
-static GailContainerClass* parent_class = NULL;
-
-GType
-gail_statusbar_get_type (void)
-{
-  static GType type = 0;
-
-  if (!type)
-    {
-      static const GTypeInfo tinfo =
-      {
-        sizeof (GailStatusbarClass),
-        (GBaseInitFunc) NULL, /* base init */
-        (GBaseFinalizeFunc) NULL, /* base finalize */
-        (GClassInitFunc) gail_statusbar_class_init, /* class init */
-        (GClassFinalizeFunc) NULL, /* class finalize */
-        NULL, /* class data */
-        sizeof (GailStatusbar), /* instance size */
-        0, /* nb preallocs */
-        (GInstanceInitFunc) NULL, /* instance init */
-        NULL /* value table */
-      };
-
-      static const GInterfaceInfo atk_text_info =
-      {
-        (GInterfaceInitFunc) atk_text_interface_init,
-        (GInterfaceFinalizeFunc) NULL,
-        NULL
-      };
-
-      type = g_type_register_static (GAIL_TYPE_CONTAINER,
-                                     "GailStatusbar", &tinfo, 0);
-
-      g_type_add_interface_static (type, ATK_TYPE_TEXT,
-                                   &atk_text_info);
-    }
-  return type;
-}
+G_DEFINE_TYPE_WITH_CODE (GailStatusbar, gail_statusbar, GAIL_TYPE_CONTAINER,
+                         G_IMPLEMENT_INTERFACE (ATK_TYPE_TEXT, atk_text_interface_init))
 
 static void
 gail_statusbar_class_init (GailStatusbarClass *klass)
@@ -132,8 +97,6 @@ gail_statusbar_class_init (GailStatusbarClass *klass)
   GailContainerClass *container_class;
 
   container_class = (GailContainerClass*)klass;
-
-  parent_class = g_type_class_peek_parent (klass);
 
   gobject_class->finalize = gail_statusbar_finalize;
 
@@ -147,6 +110,11 @@ gail_statusbar_class_init (GailStatusbarClass *klass)
    */
   container_class->add_gtk = NULL;
   container_class->remove_gtk = NULL;
+}
+
+static void
+gail_statusbar_init (GailStatusbar *bar)
+{
 }
 
 AtkObject* 
@@ -172,7 +140,7 @@ gail_statusbar_get_name (AtkObject *obj)
 
   g_return_val_if_fail (GAIL_IS_STATUSBAR (obj), NULL);
 
-  name = ATK_OBJECT_CLASS (parent_class)->get_name (obj);
+  name = ATK_OBJECT_CLASS (gail_statusbar_parent_class)->get_name (obj);
   if (name != NULL)
     return name;
   else
@@ -257,7 +225,7 @@ gail_statusbar_real_initialize (AtkObject *obj,
   GailStatusbar *statusbar = GAIL_STATUSBAR (obj);
   GtkWidget *label;
 
-  ATK_OBJECT_CLASS (parent_class)->initialize (obj, data);
+  ATK_OBJECT_CLASS (gail_statusbar_parent_class)->initialize (obj, data);
 
   /*
    * We get notified of changes to the label
@@ -331,7 +299,7 @@ gail_statusbar_finalize (GObject *object)
     {
       g_object_unref (statusbar->textutil);
     }
-  G_OBJECT_CLASS (parent_class)->finalize (object);
+  G_OBJECT_CLASS (gail_statusbar_parent_class)->finalize (object);
 }
 
 /* atktext.h */
@@ -339,7 +307,6 @@ gail_statusbar_finalize (GObject *object)
 static void
 atk_text_interface_init (AtkTextIface *iface)
 {
-  g_return_if_fail (iface != NULL);
   iface->get_text = gail_statusbar_get_text;
   iface->get_character_at_offset = gail_statusbar_get_character_at_offset;
   iface->get_text_before_offset = gail_statusbar_get_text_before_offset;

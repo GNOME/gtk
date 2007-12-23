@@ -21,7 +21,7 @@
 #include "gailimagecell.h"
 
 static void      gail_image_cell_class_init          (GailImageCellClass *klass);
-static void      gail_image_cell_object_init         (GailImageCell      *image_cell);
+static void      gail_image_cell_init                (GailImageCell      *image_cell);
 
 static void      gail_image_cell_finalize            (GObject            *object);
 
@@ -44,58 +44,20 @@ static void      gail_image_cell_get_image_size        (AtkImage       *image,
 static gboolean  gail_image_cell_update_cache          (GailRendererCell *cell,
                                                         gboolean         emit_change_signal);
 
+// FIXMEchpe static!!!
 gchar *gail_image_cell_property_list[] = {
   "pixbuf",
   NULL
 };
 
-static gpointer parent_class = NULL;
-
-GType
-gail_image_cell_get_type (void)
-{
-  static GType type = 0;
-
-  if (!type)
-    {
-      static const GTypeInfo tinfo =
-      {
-        sizeof (GailImageCellClass),
-        (GBaseInitFunc) NULL, /* base init */
-        (GBaseFinalizeFunc) NULL, /* base finalize */
-        (GClassInitFunc) gail_image_cell_class_init, /* class init */
-        (GClassFinalizeFunc) NULL, /* class finalize */
-        NULL, /* class data */
-        sizeof (GailImageCell), /* instance size */
-        0, /* nb preallocs */
-        (GInstanceInitFunc) gail_image_cell_object_init, /* instance init */
-        NULL /* value table */
-      };
-
-      static const GInterfaceInfo atk_image_info =
-      {
-        (GInterfaceInitFunc) atk_image_interface_init,
-        (GInterfaceFinalizeFunc) NULL,
-        NULL
-      };
-
-      type = g_type_register_static (GAIL_TYPE_RENDERER_CELL,
-                                     "GailImageCell", &tinfo, 0);
-
-      g_type_add_interface_static (type, ATK_TYPE_IMAGE,
-                                   &atk_image_info);
-
-    }
-  return type;
-}
+G_DEFINE_TYPE_WITH_CODE (GailImageCell, gail_image_cell, GAIL_TYPE_RENDERER_CELL,
+                         G_IMPLEMENT_INTERFACE (ATK_TYPE_IMAGE, atk_image_interface_init))
 
 static void 
 gail_image_cell_class_init (GailImageCellClass *klass)
 {
   GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
   GailRendererCellClass *renderer_cell_class = GAIL_RENDERER_CELL_CLASS(klass);
-
-  parent_class = g_type_class_peek_parent (klass);
 
   gobject_class->finalize = gail_image_cell_finalize;
 
@@ -126,7 +88,7 @@ gail_image_cell_new (void)
 }
 
 static void
-gail_image_cell_object_init (GailImageCell *image_cell)
+gail_image_cell_init (GailImageCell *image_cell)
 {
   image_cell->image_description = NULL;
 }
@@ -138,7 +100,7 @@ gail_image_cell_finalize (GObject *object)
   GailImageCell *image_cell = GAIL_IMAGE_CELL (object);
 
   g_free (image_cell->image_description);
-  G_OBJECT_CLASS (parent_class)->finalize (object);
+  G_OBJECT_CLASS (gail_image_cell_parent_class)->finalize (object);
 }
 
 static gboolean

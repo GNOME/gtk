@@ -23,6 +23,7 @@
 #include <libgail-util/gailmisc.h>
 
 static void                  gail_item_class_init      (GailItemClass *klass);
+static void                  gail_item_init            (GailItem      *item);
 static G_CONST_RETURN gchar* gail_item_get_name        (AtkObject     *obj);
 static gint                  gail_item_get_n_children  (AtkObject     *obj);
 static AtkObject*            gail_item_ref_child       (AtkObject     *obj,
@@ -82,46 +83,8 @@ static AtkAttributeSet* gail_item_get_default_attributes
                                                    (AtkText           *text);
 static GtkWidget*            get_label_from_container   (GtkWidget    *container);
 
-
-
-static GailContainerClass* parent_class = NULL;
-
-GType
-gail_item_get_type (void)
-{
-  static GType type = 0;
-
-  if (!type)
-    {
-      static const GTypeInfo tinfo =
-      {
-        sizeof (GailItemClass),
-        (GBaseInitFunc) NULL, /* base init */
-        (GBaseFinalizeFunc) NULL, /* base finalize */
-        (GClassInitFunc) gail_item_class_init, /* class init */
-        (GClassFinalizeFunc) NULL, /* class finalize */
-        NULL, /* class data */
-        sizeof (GailItem), /* instance size */
-        0, /* nb preallocs */
-        (GInstanceInitFunc) NULL, /* instance init */
-        NULL /* value table */
-      };
-
-      static const GInterfaceInfo atk_text_info =
-      {
-        (GInterfaceInitFunc) atk_text_interface_init,
-        (GInterfaceFinalizeFunc) NULL,
-        NULL
-      };
-
-      type = g_type_register_static (GAIL_TYPE_CONTAINER,
-                                     "GailItem", &tinfo, 0);
-      g_type_add_interface_static (type, ATK_TYPE_TEXT,
-                                   &atk_text_info);
-    }
-
-  return type;
-}
+G_DEFINE_TYPE_WITH_CODE (GailItem, gail_item, GAIL_TYPE_CONTAINER,
+                         G_IMPLEMENT_INTERFACE (ATK_TYPE_TEXT, atk_text_interface_init))
 
 static void
 gail_item_class_init (GailItemClass *klass)
@@ -129,8 +92,6 @@ gail_item_class_init (GailItemClass *klass)
   GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
   AtkObjectClass *class = ATK_OBJECT_CLASS (klass);
   GailContainerClass *container_class;
-
-  parent_class = g_type_class_peek_parent (klass);
 
   container_class = (GailContainerClass *)klass;
 
@@ -146,6 +107,11 @@ gail_item_class_init (GailItemClass *klass)
    */
   container_class->add_gtk = NULL;
   container_class->remove_gtk = NULL;
+}
+
+static void
+gail_item_init (GailItem      *item)
+{
 }
 
 AtkObject*
@@ -171,7 +137,7 @@ gail_item_real_initialize (AtkObject *obj,
   GailItem *item = GAIL_ITEM (obj);
   GtkWidget  *label;
 
-  ATK_OBJECT_CLASS (parent_class)->initialize (obj, data);
+  ATK_OBJECT_CLASS (gail_item_parent_class)->initialize (obj, data);
 
   item->textutil = NULL;
   item->text = NULL;
@@ -233,7 +199,7 @@ gail_item_finalize (GObject *object)
       g_free (item->text);
       item->text = NULL;
     }
-  G_OBJECT_CLASS (parent_class)->finalize (object);
+  G_OBJECT_CLASS (gail_item_parent_class)->finalize (object);
 }
 
 static G_CONST_RETURN gchar*
@@ -243,7 +209,7 @@ gail_item_get_name (AtkObject *obj)
 
   g_return_val_if_fail (GAIL_IS_ITEM (obj), NULL);
 
-  name = ATK_OBJECT_CLASS (parent_class)->get_name (obj);
+  name = ATK_OBJECT_CLASS (gail_item_parent_class)->get_name (obj);
   if (name == NULL)
     {
       /*
@@ -390,7 +356,6 @@ gail_item_notify_label_gtk (GObject           *obj,
 static void
 atk_text_interface_init (AtkTextIface *iface)
 {
-  g_return_if_fail (iface != NULL);
   iface->get_text = gail_item_get_text;
   iface->get_character_at_offset = gail_item_get_character_at_offset;
   iface->get_text_before_offset = gail_item_get_text_before_offset;

@@ -22,37 +22,10 @@
 #include "gailframe.h"
 
 static void                  gail_frame_class_init       (GailFrameClass  *klass);
+static void                  gail_frame_init             (GailFrame       *frame);
 static G_CONST_RETURN gchar* gail_frame_get_name         (AtkObject       *obj);
 
-static gpointer parent_class = NULL;
-
-GType
-gail_frame_get_type (void)
-{
-  static GType type = 0;
-
-  if (!type)
-  {
-    static const GTypeInfo tinfo =
-    {
-      sizeof (GailFrameClass),
-      (GBaseInitFunc) NULL, /* base init */
-      (GBaseFinalizeFunc) NULL, /* base finalize */
-      (GClassInitFunc) gail_frame_class_init, /* class init */
-      (GClassFinalizeFunc) NULL, /* class finalize */
-      NULL, /* class data */
-      sizeof (GailFrame), /* instance size */
-      0, /* nb preallocs */
-      (GInstanceInitFunc) NULL, /* instance init */
-      NULL /* value table */
-    };
-
-    type = g_type_register_static (GAIL_TYPE_CONTAINER,
-                                   "GailFrame", &tinfo, 0);
-  }
-
-  return type;
-}
+G_DEFINE_TYPE (GailFrame, gail_frame, GAIL_TYPE_CONTAINER)
 
 static void
 gail_frame_class_init (GailFrameClass *klass)
@@ -60,8 +33,11 @@ gail_frame_class_init (GailFrameClass *klass)
   AtkObjectClass *class = ATK_OBJECT_CLASS (klass);
 
   class->get_name = gail_frame_get_name;
+}
 
-  parent_class = g_type_class_peek_parent (klass);
+static void
+gail_frame_init (GailFrame       *frame)
+{
 }
 
 AtkObject* 
@@ -88,7 +64,7 @@ gail_frame_get_name (AtkObject *obj)
   G_CONST_RETURN gchar *name;
   g_return_val_if_fail (GAIL_IS_FRAME (obj), NULL);
 
-  name = ATK_OBJECT_CLASS (parent_class)->get_name (obj);
+  name = ATK_OBJECT_CLASS (gail_frame_parent_class)->get_name (obj);
   if (name != NULL)
   {
     return name;

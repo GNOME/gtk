@@ -21,35 +21,11 @@
 #include "gailclistcell.h"
 
 static void	 gail_clist_cell_class_init        (GailCListCellClass *klass);
+static void	 gail_clist_cell_init              (GailCListCell      *cell);
 
 static G_CONST_RETURN gchar* gail_clist_cell_get_name (AtkObject *accessible);
 
-GType
-gail_clist_cell_get_type (void)
-{
-  static GType type = 0;
-
-  if (!type)
-    {
-      static const GTypeInfo tinfo =
-      {
-        sizeof (GailCListCellClass),
-        (GBaseInitFunc) NULL, /* base init */
-        (GBaseFinalizeFunc) NULL, /* base finalize */
-        (GClassInitFunc) gail_clist_cell_class_init, /* class init */
-        (GClassFinalizeFunc) NULL, /* class finalize */
-        NULL, /* class data */
-        sizeof (GailCListCell), /* instance size */
-        0, /* nb preallocs */
-        (GInstanceInitFunc) NULL, /* instance init */
-        NULL /* value table */
-      };
-
-      type = g_type_register_static (GAIL_TYPE_CELL,
-                                     "GailCListCell", &tinfo, 0);
-    }
-  return type;
-}
+G_DEFINE_TYPE (GailCListCell, gail_clist_cell, GAIL_TYPE_CELL)
 
 static void	 
 gail_clist_cell_class_init (GailCListCellClass *klass)
@@ -57,6 +33,11 @@ gail_clist_cell_class_init (GailCListCellClass *klass)
   AtkObjectClass *class = ATK_OBJECT_CLASS (klass);
 
   class->get_name = gail_clist_cell_get_name;
+}
+
+static void
+gail_clist_cell_init (GailCListCell *cell)
+{
 }
 
 AtkObject* 

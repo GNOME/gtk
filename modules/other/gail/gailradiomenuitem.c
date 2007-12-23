@@ -22,47 +22,16 @@
 #include "gailradiosubmenuitem.h"
 
 static void      gail_radio_menu_item_class_init        (GailRadioMenuItemClass *klass);
-static void      gail_radio_menu_item_instance_init     (GailRadioMenuItem      *radio_menu_item);
+static void      gail_radio_menu_item_init              (GailRadioMenuItem      *radio_menu_item);
 
-static AtkRelationSet* gail_radio_menu_item_ref_relation_set (AtkObject       *obj)
-;
+static AtkRelationSet* gail_radio_menu_item_ref_relation_set (AtkObject       *obj);
 
-static GailCheckMenuItemClass *parent_class = NULL;
-
-GType
-gail_radio_menu_item_get_type (void)
-{
-  static GType type = 0;
-
-  if (!type)
-  {
-    static const GTypeInfo tinfo =
-    {
-      sizeof (GailRadioMenuItemClass),
-      (GBaseInitFunc) NULL, /* base init */
-      (GBaseFinalizeFunc) NULL, /* base finalize */
-      (GClassInitFunc) gail_radio_menu_item_class_init, /* class init */
-      (GClassFinalizeFunc) NULL, /* class finalize */
-      NULL, /* class data */
-      sizeof (GailRadioMenuItem), /* instance size */
-      0, /* nb preallocs */
-      (GInstanceInitFunc) gail_radio_menu_item_instance_init, /* instance init */
-      NULL /* value table */
-    };
-
-    type = g_type_register_static (GAIL_TYPE_CHECK_MENU_ITEM,
-                                   "GailRadioMenuItem", &tinfo, 0);
-  }
-
-  return type;
-}
+G_DEFINE_TYPE (GailRadioMenuItem, gail_radio_menu_item, GAIL_TYPE_CHECK_MENU_ITEM)
 
 static void
 gail_radio_menu_item_class_init (GailRadioMenuItemClass *klass)
 {
   AtkObjectClass *class = ATK_OBJECT_CLASS (klass);
-
-  parent_class = g_type_class_peek_parent (klass);
 
   class->ref_relation_set = gail_radio_menu_item_ref_relation_set;
 }
@@ -88,7 +57,7 @@ gail_radio_menu_item_new (GtkWidget *widget)
 }
 
 static void
-gail_radio_menu_item_instance_init (GailRadioMenuItem *radio_menu_item)
+gail_radio_menu_item_init (GailRadioMenuItem *radio_menu_item)
 {
   radio_menu_item->old_group = NULL;
 }
@@ -113,7 +82,7 @@ gail_radio_menu_item_ref_relation_set (AtkObject *obj)
   }
   radio_menu_item = GAIL_RADIO_MENU_ITEM (obj);
 
-  relation_set = ATK_OBJECT_CLASS (parent_class)->ref_relation_set (obj);
+  relation_set = ATK_OBJECT_CLASS (gail_radio_menu_item_parent_class)->ref_relation_set (obj);
 
   /*
    * If the radio menu_item'group has changed remove the relation
