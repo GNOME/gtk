@@ -1016,65 +1016,65 @@ gail_text_view_set_run_attributes (AtkEditableText *text,
       name = at->name;
       value = at->value;
 
-      if (!g_strcasecmp (name, atk_text_attribute_get_name (ATK_TEXT_ATTR_LEFT_MARGIN)))
+      if (!strcmp (name, atk_text_attribute_get_name (ATK_TEXT_ATTR_LEFT_MARGIN)))
         g_object_set (G_OBJECT (tag), "left_margin", atoi (value), NULL);
 
-      else if (!g_strcasecmp (name, atk_text_attribute_get_name (ATK_TEXT_ATTR_RIGHT_MARGIN)))
+      else if (!strcmp (name, atk_text_attribute_get_name (ATK_TEXT_ATTR_RIGHT_MARGIN)))
         g_object_set (G_OBJECT (tag), "right_margin", atoi (value), NULL);
 
-      else if (!g_strcasecmp (name, atk_text_attribute_get_name (ATK_TEXT_ATTR_INDENT)))
+      else if (!strcmp (name, atk_text_attribute_get_name (ATK_TEXT_ATTR_INDENT)))
         g_object_set (G_OBJECT (tag), "indent", atoi (value), NULL);
 
-      else if (!g_strcasecmp (name, atk_text_attribute_get_name (ATK_TEXT_ATTR_PIXELS_ABOVE_LINES)))
+      else if (!strcmp (name, atk_text_attribute_get_name (ATK_TEXT_ATTR_PIXELS_ABOVE_LINES)))
         g_object_set (G_OBJECT (tag), "pixels_above_lines", atoi (value), NULL);
 
-      else if (!g_strcasecmp(name, atk_text_attribute_get_name (ATK_TEXT_ATTR_PIXELS_BELOW_LINES)))
+      else if (!strcmp(name, atk_text_attribute_get_name (ATK_TEXT_ATTR_PIXELS_BELOW_LINES)))
         g_object_set (G_OBJECT (tag), "pixels_below_lines", atoi (value), NULL);
 
-      else if (!g_strcasecmp (name, atk_text_attribute_get_name (ATK_TEXT_ATTR_PIXELS_INSIDE_WRAP)))
+      else if (!strcmp (name, atk_text_attribute_get_name (ATK_TEXT_ATTR_PIXELS_INSIDE_WRAP)))
         g_object_set (G_OBJECT (tag), "pixels_inside_wrap", atoi (value), NULL);
 
-      else if (!g_strcasecmp (name, atk_text_attribute_get_name (ATK_TEXT_ATTR_SIZE)))
+      else if (!strcmp (name, atk_text_attribute_get_name (ATK_TEXT_ATTR_SIZE)))
         g_object_set (G_OBJECT (tag), "size", atoi (value), NULL);
 
-      else if (!g_strcasecmp (name, atk_text_attribute_get_name (ATK_TEXT_ATTR_RISE)))
+      else if (!strcmp (name, atk_text_attribute_get_name (ATK_TEXT_ATTR_RISE)))
         g_object_set (G_OBJECT (tag), "rise", atoi (value), NULL);
 
-      else if (!g_strcasecmp (name, atk_text_attribute_get_name (ATK_TEXT_ATTR_WEIGHT)))
+      else if (!strcmp (name, atk_text_attribute_get_name (ATK_TEXT_ATTR_WEIGHT)))
         g_object_set (G_OBJECT (tag), "weight", atoi (value), NULL);
 
-      else if (!g_strcasecmp (name, atk_text_attribute_get_name (ATK_TEXT_ATTR_BG_FULL_HEIGHT)))
+      else if (!strcmp (name, atk_text_attribute_get_name (ATK_TEXT_ATTR_BG_FULL_HEIGHT)))
         {
           g_object_set (G_OBJECT (tag), "bg_full_height", 
-                   (g_strcasecmp (value, atk_text_attribute_get_value (ATK_TEXT_ATTR_BG_FULL_HEIGHT, 0))),
+                   (strcmp (value, atk_text_attribute_get_value (ATK_TEXT_ATTR_BG_FULL_HEIGHT, 0))),
                    NULL);
         }
 
-      else if (!g_strcasecmp (name, atk_text_attribute_get_name (ATK_TEXT_ATTR_LANGUAGE)))
+      else if (!strcmp (name, atk_text_attribute_get_name (ATK_TEXT_ATTR_LANGUAGE)))
         g_object_set (G_OBJECT (tag), "language", value, NULL);
 
-      else if (!g_strcasecmp (name, atk_text_attribute_get_name (ATK_TEXT_ATTR_FAMILY_NAME)))
+      else if (!strcmp (name, atk_text_attribute_get_name (ATK_TEXT_ATTR_FAMILY_NAME)))
         g_object_set (G_OBJECT (tag), "family", value, NULL);
 
-      else if (!g_strcasecmp (name, atk_text_attribute_get_name (ATK_TEXT_ATTR_EDITABLE)))
+      else if (!strcmp (name, atk_text_attribute_get_name (ATK_TEXT_ATTR_EDITABLE)))
         {
           g_object_set (G_OBJECT (tag), "editable", 
-                   (g_strcasecmp (value, atk_text_attribute_get_value (ATK_TEXT_ATTR_EDITABLE, 0))),
+                   (strcmp (value, atk_text_attribute_get_value (ATK_TEXT_ATTR_EDITABLE, 0))),
                    NULL);
         }
 
-      else if (!g_strcasecmp (name, atk_text_attribute_get_name (ATK_TEXT_ATTR_INVISIBLE)))
+      else if (!strcmp (name, atk_text_attribute_get_name (ATK_TEXT_ATTR_INVISIBLE)))
         {
           g_object_set (G_OBJECT (tag), "invisible", 
-                   (g_strcasecmp (value, atk_text_attribute_get_value (ATK_TEXT_ATTR_EDITABLE, 0))),
+                   (strcmp (value, atk_text_attribute_get_value (ATK_TEXT_ATTR_EDITABLE, 0))),
                    NULL);
         }
 
-      else if (!g_strcasecmp (name, atk_text_attribute_get_name (ATK_TEXT_ATTR_UNDERLINE)))
+      else if (!strcmp (name, atk_text_attribute_get_name (ATK_TEXT_ATTR_UNDERLINE)))
         {
           for (j = 0; j < 3; j++)
             {
-              if (!g_strcasecmp (value, atk_text_attribute_get_value (ATK_TEXT_ATTR_UNDERLINE, j)))
+              if (!strcmp (value, atk_text_attribute_get_value (ATK_TEXT_ATTR_UNDERLINE, j)))
                 {
                   g_object_set (G_OBJECT (tag), "underline", j, NULL);
                   break;
@@ -1082,14 +1082,14 @@ gail_text_view_set_run_attributes (AtkEditableText *text,
             } 
         }
 
-      else if (!g_strcasecmp (name, atk_text_attribute_get_name (ATK_TEXT_ATTR_STRIKETHROUGH)))
+      else if (!strcmp (name, atk_text_attribute_get_name (ATK_TEXT_ATTR_STRIKETHROUGH)))
         {
           g_object_set (G_OBJECT (tag), "strikethrough", 
-                   (g_strcasecmp (value, atk_text_attribute_get_value (ATK_TEXT_ATTR_STRIKETHROUGH, 0))),
+                   (strcmp (value, atk_text_attribute_get_value (ATK_TEXT_ATTR_STRIKETHROUGH, 0))),
                    NULL);
         }
 
-      else if (!g_strcasecmp (name, atk_text_attribute_get_name (ATK_TEXT_ATTR_BG_COLOR)))
+      else if (!strcmp (name, atk_text_attribute_get_name (ATK_TEXT_ATTR_BG_COLOR)))
         {
           RGB_vals = g_strsplit (value, ",", 3);
           color = g_malloc (sizeof (GdkColor));
@@ -1099,7 +1099,7 @@ gail_text_view_set_run_attributes (AtkEditableText *text,
           g_object_set (G_OBJECT (tag), "background_gdk", color, NULL);
         }
   
-      else if (!g_strcasecmp (name, atk_text_attribute_get_name (ATK_TEXT_ATTR_FG_COLOR)))
+      else if (!strcmp (name, atk_text_attribute_get_name (ATK_TEXT_ATTR_FG_COLOR)))
         {
           RGB_vals = g_strsplit (value, ",", 3);
           color = g_malloc (sizeof (GdkColor));
@@ -1109,11 +1109,11 @@ gail_text_view_set_run_attributes (AtkEditableText *text,
           g_object_set (G_OBJECT (tag), "foreground_gdk", color, NULL);
         }
 
-      else if (!g_strcasecmp (name, atk_text_attribute_get_name (ATK_TEXT_ATTR_STRETCH)))
+      else if (!strcmp (name, atk_text_attribute_get_name (ATK_TEXT_ATTR_STRETCH)))
         {
           for (j = 0; j < 9; j++)
             {
-              if (!g_strcasecmp (value, atk_text_attribute_get_value (ATK_TEXT_ATTR_STRETCH, j)))
+              if (!strcmp (value, atk_text_attribute_get_value (ATK_TEXT_ATTR_STRETCH, j)))
                 {
                   g_object_set (G_OBJECT (tag), "stretch", j, NULL);
                   break;
@@ -1121,11 +1121,11 @@ gail_text_view_set_run_attributes (AtkEditableText *text,
             }
         }
 
-      else if (!g_strcasecmp (name, atk_text_attribute_get_name (ATK_TEXT_ATTR_JUSTIFICATION)))
+      else if (!strcmp (name, atk_text_attribute_get_name (ATK_TEXT_ATTR_JUSTIFICATION)))
         {
           for (j = 0; j < 4; j++)
             {
-              if (!g_strcasecmp (value, atk_text_attribute_get_value (ATK_TEXT_ATTR_JUSTIFICATION, j)))
+              if (!strcmp (value, atk_text_attribute_get_value (ATK_TEXT_ATTR_JUSTIFICATION, j)))
                 {
                   g_object_set (G_OBJECT (tag), "justification", j, NULL);
                   break;
@@ -1133,11 +1133,11 @@ gail_text_view_set_run_attributes (AtkEditableText *text,
             }
         }
 
-      else if (!g_strcasecmp (name, atk_text_attribute_get_name (ATK_TEXT_ATTR_DIRECTION)))
+      else if (!strcmp (name, atk_text_attribute_get_name (ATK_TEXT_ATTR_DIRECTION)))
         {
           for (j = 0; j < 3; j++)
             {
-              if (!g_strcasecmp (value, atk_text_attribute_get_value (ATK_TEXT_ATTR_DIRECTION, j)))
+              if (!strcmp (value, atk_text_attribute_get_value (ATK_TEXT_ATTR_DIRECTION, j)))
                 {
                   g_object_set (G_OBJECT (tag), "direction", j, NULL);
                   break;
@@ -1145,11 +1145,11 @@ gail_text_view_set_run_attributes (AtkEditableText *text,
             }
         }
 
-      else if (!g_strcasecmp (name, atk_text_attribute_get_name (ATK_TEXT_ATTR_VARIANT)))
+      else if (!strcmp (name, atk_text_attribute_get_name (ATK_TEXT_ATTR_VARIANT)))
         {
           for (j = 0; j < 2; j++)
             {
-              if (!g_strcasecmp (value, atk_text_attribute_get_value (ATK_TEXT_ATTR_VARIANT, j)))
+              if (!strcmp (value, atk_text_attribute_get_value (ATK_TEXT_ATTR_VARIANT, j)))
                 {
                   g_object_set (G_OBJECT (tag), "variant", j, NULL);
                   break;
@@ -1157,11 +1157,11 @@ gail_text_view_set_run_attributes (AtkEditableText *text,
             }
         }
 
-      else if (!g_strcasecmp (name, atk_text_attribute_get_name (ATK_TEXT_ATTR_WRAP_MODE)))
+      else if (!strcmp (name, atk_text_attribute_get_name (ATK_TEXT_ATTR_WRAP_MODE)))
         {
           for (j = 0; j < 3; j++)
             {
-              if (!g_strcasecmp (value, atk_text_attribute_get_value (ATK_TEXT_ATTR_WRAP_MODE, j)))
+              if (!strcmp (value, atk_text_attribute_get_value (ATK_TEXT_ATTR_WRAP_MODE, j)))
                 {
                   g_object_set (G_OBJECT (tag), "wrap_mode", j, NULL);
                   break;
@@ -1169,11 +1169,11 @@ gail_text_view_set_run_attributes (AtkEditableText *text,
             }
         }
 
-      else if (!g_strcasecmp (name, atk_text_attribute_get_name (ATK_TEXT_ATTR_STYLE)))
+      else if (!strcmp (name, atk_text_attribute_get_name (ATK_TEXT_ATTR_STYLE)))
         {
           for (j = 0; j < 3; j++)
             {
-              if (!g_strcasecmp (value, atk_text_attribute_get_value (ATK_TEXT_ATTR_STYLE, j)))
+              if (!strcmp (value, atk_text_attribute_get_value (ATK_TEXT_ATTR_STYLE, j)))
                 {
                   g_object_set (G_OBJECT (tag), "style", j, NULL);
                   break;
@@ -1724,8 +1724,8 @@ static GIOChannel*       gail_streamable_content_get_stream       (AtkStreamable
 	    gtk_text_buffer_get_iter_at_offset (buffer, &end, -1);
 	    if (!strcmp ("text/plain", mime_type)) 
 	    {
-		cbuf = gtk_text_buffer_get_text (buffer, &start, &end, FALSE);
-		len = strlen (cbuf); 
+		cbuf = (guint8*) gtk_text_buffer_get_text (buffer, &start, &end, FALSE);
+		len = strlen ((const char *) cbuf); 
 	    }
 	    else
 	    {
@@ -1735,7 +1735,7 @@ static GIOChannel*       gail_streamable_content_get_stream       (AtkStreamable
 	    fd = g_mkstemp (tname);
 	    gio = g_io_channel_unix_new (fd);
 	    g_io_channel_set_encoding (gio, NULL, &err);
-	    if (!err) g_io_channel_write_chars (gio, cbuf, (gssize) len, &written, &err);
+	    if (!err) g_io_channel_write_chars (gio, (const char *) cbuf, (gssize) len, &written, &err);
 	    else g_message (err->message);
 	    if (!err) g_io_channel_seek_position (gio, 0, G_SEEK_SET, &err);
 	    else g_message (err->message);

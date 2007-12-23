@@ -17,6 +17,8 @@
  * Boston, MA 02111-1307, USA.
  */
 
+#include <config.h>
+#include <string.h>
 #include <gtk/gtk.h>
 #include "gailtextcell.h"
 #include "gailcontainercell.h"
@@ -221,7 +223,7 @@ gail_text_cell_update_cache (GailRendererCell *cell,
       * value has changed.
       */
       if (new_cache == NULL ||
-          g_strcasecmp (text_cell->cell_text, new_cache))
+          strcmp (text_cell->cell_text, new_cache))
         {
           g_free (text_cell->cell_text);
           temp_length = text_cell->cell_length;

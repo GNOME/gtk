@@ -119,7 +119,7 @@ gail_container_cell_remove_child (GailContainerCell *container,
   g_return_if_fail (GAIL_IS_CELL(child));
   g_return_if_fail (container->NChildren > 0);
 
-  g_list_remove (container->children, (gpointer) child);
+  container->children = g_list_remove (container->children, (gpointer) child);
   _gail_container_cell_recompute_child_indices (container);
   container->NChildren--;
 }

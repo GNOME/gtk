@@ -1,5 +1,14 @@
 2007-12-22  Christian Persch  <chpe@gnome.org>
 
+	* modules/other/gail/gailcell.c:
+	* modules/other/gail/gailcontainercell.c:
+	* modules/other/gail/gailexpander.c:
+	* modules/other/gail/gailtextcell.c:
+	* modules/other/gail/gailtextview.c:
+	* modules/other/gail/gailwindow.c: Fix compile warnings. Bug #504701.
+
+2007-12-22  Christian Persch  <chpe@gnome.org>
+
 	* modules/other/gail/*.c: Include config.h. Bug #504720.
 
 2007-12-22  Christian Persch  <chpe@gnome.org>

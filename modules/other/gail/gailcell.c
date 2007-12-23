@@ -19,6 +19,7 @@
 
 #include <config.h>
 
+#include <string.h>
 #include <stdlib.h>
 #include <gtk/gtk.h>
 #include "gailcontainercell.h"
@@ -359,7 +360,7 @@ gail_cell_remove_action_by_name (GailCell    *cell,
   for (list_node = cell->action_list; list_node && !action_found; 
                     list_node = list_node->next)
     {
-      if (!g_strcasecmp (((ActionInfo *)(list_node->data))->name, action_name))
+      if (!strcmp (((ActionInfo *)(list_node->data))->name, action_name))
 	{
 	  action_found = TRUE;
 	  break;

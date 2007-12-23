@@ -209,7 +209,7 @@ gail_expander_get_n_children (AtkObject* obj)
   /* See if there is a label - if there is, reduce our count by 1
    * since we don't want the label included with the children.
    */
-  if (gtk_expander_get_label_widget (widget))
+  if (gtk_expander_get_label_widget (GTK_EXPANDER (widget)))
     count -= 1;
 
   return count; 
@@ -237,7 +237,7 @@ gail_expander_ref_child (AtkObject *obj,
   /* See if there is a label - if there is, we need to skip it
    * since we don't want the label included with the children.
    */
-  label = gtk_expander_get_label_widget (widget);
+  label = gtk_expander_get_label_widget (GTK_EXPANDER (widget));
   if (label) {
     count = g_list_length (children);
     for (index = 0; index <= i; index++) {

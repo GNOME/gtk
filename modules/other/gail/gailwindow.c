@@ -317,7 +317,7 @@ gail_window_get_name (AtkObject *accessible)
                     {
                       GList *children;
                       guint count;
-                      children = gtk_container_get_children (child);
+                      children = gtk_container_get_children (GTK_CONTAINER (child));
                       count = g_list_length (children);
                       if (count == 2) 
                         {
