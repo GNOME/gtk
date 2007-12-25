@@ -1,5 +1,10 @@
 2007-12-24  Matthias Clasen  <mclasen@redhat.com>
 
+	* gdk/gdkapplaunchcontext.c: Remove unneeded includes. (#505411,
+	 Kazuki IWAMOTO)
+
+2007-12-24  Matthias Clasen  <mclasen@redhat.com>
+
 	* gtk/gtkcombobox.c: When popping up a menu from a treeview cell,
 	use the time and button information from the event.  (#504901,
 	Peter Bloomfield)
