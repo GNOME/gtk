@@ -1,5 +1,12 @@
 2007-12-24  Matthias Clasen  <mclasen@redhat.com>
 
+	* modules/other/gail/gailentry.c:
+	* modules/other/gail/gailimage.c:
+	* modules/other/gail/gailtextview.c: Remove non-multihead-safe
+	uses of clipboards and settings.  (#504722, Christian Persch)
+
+2007-12-24  Matthias Clasen  <mclasen@redhat.com>
+
 	* gdk/gdkapplaunchcontext.c: Remove unneeded includes. (#505411,
 	 Kazuki IWAMOTO)
 

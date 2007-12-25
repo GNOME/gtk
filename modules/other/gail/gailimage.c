@@ -237,15 +237,19 @@ gail_image_get_image_size (AtkImage *image,
     case GTK_IMAGE_STOCK:
     {
       GtkIconSize size;
+      GtkSettings *settings;
+      settings = gtk_settings_get_for_screen (gtk_widget_get_screen (widget));
       gtk_image_get_stock(gtk_image, NULL, &size);
-      gtk_icon_size_lookup(size, width, height);
+      gtk_icon_size_lookup_for_settings (settings, size, width, height);
       break;
     }
     case GTK_IMAGE_ICON_SET:
     {
       GtkIconSize size;
+      GtkSettings *settings;
+      settings = gtk_settings_get_for_screen (gtk_widget_get_screen (widget));
       gtk_image_get_icon_set(gtk_image, NULL, &size);
-      gtk_icon_size_lookup(size, width, height);
+      gtk_icon_size_lookup_for_settings (settings, size, width, height);
       break;
     }
     case GTK_IMAGE_ANIMATION:

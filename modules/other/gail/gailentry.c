@@ -909,6 +909,7 @@ gail_entry_copy_text   (AtkEditableText *text,
   GtkWidget *widget;
   GtkEditable *editable;
   gchar *str;
+  GtkClipboard *clipboard;
 
   widget = GTK_ACCESSIBLE (text)->widget;
   if (widget == NULL)
@@ -918,7 +919,9 @@ gail_entry_copy_text   (AtkEditableText *text,
   entry = GTK_ENTRY (widget);
   editable = GTK_EDITABLE (entry);
   str = gtk_editable_get_chars (editable, start_pos, end_pos);
-  gtk_clipboard_set_text (gtk_clipboard_get (GDK_NONE), str, -1);
+  clipboard = gtk_clipboard_get_for_display (gtk_widget_get_display (widget),
+                                             GDK_SELECTION_CLIPBOARD);
+  gtk_clipboard_set_text (clipboard, str, -1);
 }
 
 static void
@@ -930,6 +933,7 @@ gail_entry_cut_text (AtkEditableText *text,
   GtkWidget *widget;
   GtkEditable *editable;
   gchar *str;
+  GtkClipboard *clipboard;
 
   widget = GTK_ACCESSIBLE (text)->widget;
   if (widget == NULL)
@@ -941,7 +945,9 @@ gail_entry_cut_text (AtkEditableText *text,
   if (!gtk_editable_get_editable (editable))
     return;
   str = gtk_editable_get_chars (editable, start_pos, end_pos);
-  gtk_clipboard_set_text (gtk_clipboard_get (GDK_NONE), str, -1);
+  clipboard = gtk_clipboard_get_for_display (gtk_widget_get_display (widget),
+                                             GDK_SELECTION_CLIPBOARD);
+  gtk_clipboard_set_text (clipboard, str, -1);
   gtk_editable_delete_text (editable, start_pos, end_pos);
 }
 
@@ -974,6 +980,7 @@ gail_entry_paste_text (AtkEditableText *text,
   GtkWidget *widget;
   GtkEditable *editable;
   GailEntryPaste paste_struct;
+  GtkClipboard *clipboard;
 
   widget = GTK_ACCESSIBLE (text)->widget;
   if (widget == NULL)
@@ -987,7 +994,9 @@ gail_entry_paste_text (AtkEditableText *text,
   paste_struct.position = position;
 
   g_object_ref (paste_struct.entry);
-  gtk_clipboard_request_text (gtk_clipboard_get(GDK_NONE),
+  clipboard = gtk_clipboard_get_for_display (gtk_widget_get_display (widget),
+                                             GDK_SELECTION_CLIPBOARD);
+  gtk_clipboard_request_text (clipboard,
     gail_entry_paste_received, &paste_struct);
 }
 

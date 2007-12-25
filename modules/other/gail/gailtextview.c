@@ -1247,6 +1247,7 @@ gail_text_view_copy_text   (AtkEditableText *text,
   GtkTextBuffer *buffer;
   GtkTextIter start, end;
   gchar *str;
+  GtkClipboard *clipboard;
 
   widget = GTK_ACCESSIBLE (text)->widget;
   if (widget == NULL)
@@ -1259,7 +1260,9 @@ gail_text_view_copy_text   (AtkEditableText *text,
   gtk_text_buffer_get_iter_at_offset (buffer, &start, start_pos);
   gtk_text_buffer_get_iter_at_offset (buffer, &end, end_pos);
   str = gtk_text_buffer_get_text (buffer, &start, &end, FALSE);
-  gtk_clipboard_set_text (gtk_clipboard_get (GDK_NONE), str, -1);
+  clipboard = gtk_clipboard_get_for_display (gtk_widget_get_display (widget),
+                                             GDK_SELECTION_CLIPBOARD);
+  gtk_clipboard_set_text (clipboard, str, -1);
 }
 
 static void
@@ -1272,6 +1275,7 @@ gail_text_view_cut_text (AtkEditableText *text,
   GtkTextBuffer *buffer;
   GtkTextIter start, end;
   gchar *str;
+  GtkClipboard *clipboard;
 
   widget = GTK_ACCESSIBLE (text)->widget;
   if (widget == NULL)
@@ -1286,7 +1290,9 @@ gail_text_view_cut_text (AtkEditableText *text,
   gtk_text_buffer_get_iter_at_offset (buffer, &start, start_pos);
   gtk_text_buffer_get_iter_at_offset (buffer, &end, end_pos);
   str = gtk_text_buffer_get_text (buffer, &start, &end, FALSE);
-  gtk_clipboard_set_text (gtk_clipboard_get (GDK_NONE), str, -1);
+  clipboard = gtk_clipboard_get_for_display (gtk_widget_get_display (widget),
+                                             GDK_SELECTION_CLIPBOARD);
+  gtk_clipboard_set_text (clipboard, str, -1);
   gtk_text_buffer_delete (buffer, &start, &end);
 }
 
@@ -1324,6 +1330,7 @@ gail_text_view_paste_text (AtkEditableText *text,
   GtkWidget *widget;
   GtkTextBuffer *buffer;
   GailTextViewPaste paste_struct;
+  GtkClipboard *clipboard;
 
   widget = GTK_ACCESSIBLE (text)->widget;
   if (widget == NULL)
@@ -1339,7 +1346,9 @@ gail_text_view_paste_text (AtkEditableText *text,
   paste_struct.position = position;
 
   g_object_ref (paste_struct.buffer);
-  gtk_clipboard_request_text (gtk_clipboard_get (GDK_NONE),
+  clipboard = gtk_clipboard_get_for_display (gtk_widget_get_display (widget),
+                                             GDK_SELECTION_CLIPBOARD);
+  gtk_clipboard_request_text (clipboard,
     gail_text_view_paste_received, &paste_struct);
 }
 
