@@ -1,3 +1,9 @@
+2007-12-24  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtkcombobox.c: When popping up a menu from a treeview cell,
+	use the time and button information from the event.  (#504901,
+	Peter Bloomfield)
+
 2007-12-23  Cody Russell  <bratsche@gnome.org>
 
 	* gdk/win32/gdkevents-win32.c (show_window_recurse): Check that

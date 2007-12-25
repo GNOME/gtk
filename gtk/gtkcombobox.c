@@ -104,6 +104,8 @@ struct _GtkComboBoxPrivate
   guint reordered_id;
   guint changed_id;
   guint popup_idle_id;
+  guint activate_button;
+  guint32 activate_time;
   guint scroll_timer;
   guint resize_idle_id;
 
@@ -1859,7 +1861,9 @@ gtk_combo_box_real_popup (GtkComboBox *combo_box)
 
   if (GTK_IS_MENU (combo_box->priv->popup_widget))
     {
-      gtk_combo_box_menu_popup (combo_box, 0, 0);
+      gtk_combo_box_menu_popup (combo_box, 
+                                combo_box->priv->activate_button,
+                                combo_box->priv->activate_time);
       return;
     }
 
@@ -5380,6 +5384,8 @@ popup_idle (gpointer data)
   gtk_combo_box_popup (combo_box);
 
   combo_box->priv->popup_idle_id = 0;
+  combo_box->priv->activate_button = 0;
+  combo_box->priv->activate_time = 0;
 
   return FALSE;
 }
@@ -5415,7 +5421,18 @@ gtk_combo_box_start_editing (GtkCellEditable *cell_editable,
    */  
   if (combo_box->priv->is_cell_renderer && 
       combo_box->priv->cell_view && !combo_box->priv->tree_view)
-    combo_box->priv->popup_idle_id = gdk_threads_add_idle (popup_idle, combo_box);
+    {
+      if (event && event->type == GDK_BUTTON_PRESS)
+        {
+          GdkEventButton *event_button = (GdkEventButton *)event;
+
+          combo_box->priv->activate_button = event_button->button;
+          combo_box->priv->activate_time = event_button->time;
+        }
+
+      combo_box->priv->popup_idle_id = 
+          gdk_threads_add_idle (popup_idle, combo_box);
+    }
 }
 
 
