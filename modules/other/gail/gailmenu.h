@@ -23,10 +23,7 @@
 #include <gtk/gtkaccessible.h>
 #include <gail/gailmenushell.h>
 
-
-#ifdef __cplusplus
-extern "C" {
-#endif /* __cplusplus */
+G_BEGIN_DECLS
 
 #define GAIL_TYPE_MENU                          (gail_menu_get_type ())
 #define GAIL_MENU(obj)                          (G_TYPE_CHECK_INSTANCE_CAST ((obj), GAIL_TYPE_MENU_SHELL, GailMenu))
@@ -50,9 +47,6 @@ struct _GailMenuClass
   GailMenuShellClass parent_class;
 };
 
-#ifdef __cplusplus
-}
-#endif /* __cplusplus */
-
+G_END_DECLS
 
 #endif /* __GAIL_MENU_H__ */

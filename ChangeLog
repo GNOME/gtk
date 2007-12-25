@@ -1,5 +1,9 @@
 2007-12-22  Christian Persch  <chpe@gnome.org>
 
+        * modules/other/gail/*.h: Use G_BEGIN_DECLS/G_END_DECLS. Bug #505268.
+	
+2007-12-22  Christian Persch  <chpe@gnome.org>
+
 	* modules/other/gail/*.[ch]: Remove relocations from the atk
 	factories. Remove unused gail_foo_new() functions. Fix object
 	instantiation to be derivation safe by moving initialisation code

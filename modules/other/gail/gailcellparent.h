@@ -25,9 +25,7 @@
 #include <atk/atkutil.h>
 #include <gail/gailcell.h>
 
-#ifdef __cplusplus
-extern "C" {
-#endif /* __cplusplus */
+G_BEGIN_DECLS
 
 /*
  * The GailCellParent interface should be supported by any object which
@@ -82,7 +80,6 @@ void  gail_cell_parent_get_cell_area           (GailCellParent        *parent,
 gboolean gail_cell_parent_grab_focus           (GailCellParent        *parent,
                                                 GailCell              *cell);
 
-#ifdef __cplusplus
-}
-#endif /* __cplusplus */
+G_END_DECLS
+
 #endif /* __GAIL_CELL_PARENT_H__ */

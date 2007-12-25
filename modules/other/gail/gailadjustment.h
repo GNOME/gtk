@@ -22,10 +22,7 @@
 
 #include <atk/atk.h>
 
-
-#ifdef __cplusplus
-extern "C" {
-#endif /* __cplusplus */
+G_BEGIN_DECLS
 
 #define GAIL_TYPE_ADJUSTMENT                     (gail_adjustment_get_type ())
 #define GAIL_ADJUSTMENT(obj)                     (G_TYPE_CHECK_INSTANCE_CAST ((obj), GAIL_TYPE_ADJUSTMENT, GailAdjustment))
@@ -53,9 +50,6 @@ struct _GailAdjustmentClass
 
 AtkObject *gail_adjustment_new (GtkAdjustment *adjustment);
 
-#ifdef __cplusplus
-}
-#endif /* __cplusplus */
-
+G_END_DECLS
 
 #endif /* __GAIL_ADJUSTMENT_H__ */

@@ -23,9 +23,7 @@
 #include <gtk/gtkaccessible.h>
 #include <gail/gailcontainer.h>
 
-#ifdef __cplusplus
-extern "C" {
-#endif /* __cplusplus */
+G_BEGIN_DECLS
 
 #define GAIL_TYPE_NOTEBOOK                   (gail_notebook_get_type ())
 #define GAIL_NOTEBOOK(obj)                   (G_TYPE_CHECK_INSTANCE_CAST ((obj), GAIL_TYPE_NOTEBOOK, GailNotebook))
@@ -63,9 +61,6 @@ struct _GailNotebookClass
   GailContainerClass parent_class;
 };
 
-#ifdef __cplusplus
-}
-#endif /* __cplusplus */
-
+G_END_DECLS
 
 #endif /* __GAIL_NOTEBOOK_H__ */

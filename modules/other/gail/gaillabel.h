@@ -24,9 +24,7 @@
 #include <gail/gailwidget.h>
 #include <libgail-util/gailtextutil.h>
 
-#ifdef __cplusplus
-extern "C" {
-#endif /* __cplusplus */
+G_BEGIN_DECLS
 
 #define GAIL_TYPE_LABEL                      (gail_label_get_type ())
 #define GAIL_LABEL(obj)                      (G_TYPE_CHECK_INSTANCE_CAST ((obj), GAIL_TYPE_LABEL, GailLabel))
@@ -57,9 +55,6 @@ struct _GailLabelClass
   GailWidgetClass parent_class;
 };
 
-#ifdef __cplusplus
-}
-#endif /* __cplusplus */
-
+G_END_DECLS
 
 #endif /* __GAIL_LABEL_H__ */

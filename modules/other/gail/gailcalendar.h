@@ -23,9 +23,7 @@
 #include <gtk/gtkaccessible.h>
 #include <gail/gailcontainer.h>
 
-#ifdef __cplusplus
-extern "C" {
-#endif /* __cplusplus */
+G_BEGIN_DECLS
 
 #define GAIL_TYPE_CALENDAR                   (gail_calendar_get_type ())
 #define GAIL_CALENDAR(obj)                   (G_TYPE_CHECK_INSTANCE_CAST ((obj), GAIL_TYPE_CALENDAR, GailCalendar))
@@ -49,9 +47,6 @@ struct _GailCalendarClass
   GailWidgetClass parent_class;
 };
 
-#ifdef __cplusplus
-}
-#endif /* __cplusplus */
-
+G_END_DECLS
 
 #endif /* __GAIL_CALENDAR_H__ */

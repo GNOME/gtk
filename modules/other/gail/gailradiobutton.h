@@ -23,9 +23,7 @@
 #include <gtk/gtkaccessible.h>
 #include <gail/gailtogglebutton.h>
 
-#ifdef __cplusplus
-extern "C" {
-#endif /* __cplusplus */
+G_BEGIN_DECLS
 
 #define GAIL_TYPE_RADIO_BUTTON               (gail_radio_button_get_type ())
 #define GAIL_RADIO_BUTTON(obj)               (G_TYPE_CHECK_INSTANCE_CAST ((obj), GAIL_TYPE_RADIO_BUTTON, GailRadioButton))
@@ -51,9 +49,6 @@ struct _GailRadioButtonClass
   GailToggleButtonClass parent_class;
 };
 
-#ifdef __cplusplus
-}
-#endif /* __cplusplus */
-
+G_END_DECLS
 
 #endif /* __GAIL_RADIO_BUTTON_H__ */

@@ -23,9 +23,7 @@
 #include <gtk/gtkaccessible.h>
 #include <gail/gailentry.h>
 
-#ifdef __cplusplus
-extern "C" {
-#endif /* __cplusplus */
+G_BEGIN_DECLS
 
 #define GAIL_TYPE_SPIN_BUTTON                      (gail_spin_button_get_type ())
 #define GAIL_SPIN_BUTTON(obj)                      (G_TYPE_CHECK_INSTANCE_CAST ((obj), GAIL_TYPE_SPIN_BUTTON, GailSpinButton))
@@ -51,9 +49,6 @@ struct _GailSpinButtonClass
   GailEntryClass parent_class;
 };
 
-#ifdef __cplusplus
-}
-#endif /* __cplusplus */
-
+G_END_DECLS
 
 #endif /* __GAIL_SPIN_BUTTON_H__ */

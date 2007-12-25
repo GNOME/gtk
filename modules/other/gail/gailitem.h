@@ -24,9 +24,7 @@
 #include <gail/gailcontainer.h>
 #include <libgail-util/gailtextutil.h>
 
-#ifdef __cplusplus
-extern "C" {
-#endif /* __cplusplus */
+G_BEGIN_DECLS
 
 #define GAIL_TYPE_ITEM                          (gail_item_get_type ())
 #define GAIL_ITEM(obj)                          (G_TYPE_CHECK_INSTANCE_CAST ((obj), GAIL_TYPE_ITEM, GailItem))
@@ -54,9 +52,6 @@ struct _GailItemClass
   GailContainerClass parent_class;
 };
 
-#ifdef __cplusplus
-}
-#endif /* __cplusplus */
-
+G_END_DECLS
 
 #endif /* __GAIL_ITEM_H__ */

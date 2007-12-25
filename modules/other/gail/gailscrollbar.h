@@ -23,10 +23,7 @@
 #include <gtk/gtkaccessible.h>
 #include <gail/gailrange.h>
 
-
-#ifdef __cplusplus
-extern "C" {
-#endif /* __cplusplus */
+G_BEGIN_DECLS
 
 #define GAIL_TYPE_SCROLLBAR                     (gail_scrollbar_get_type ())
 #define GAIL_SCROLLBAR(obj)                     (G_TYPE_CHECK_INSTANCE_CAST ((obj), GAIL_TYPE_SCROLLBAR, GailScrollbar))
@@ -50,9 +47,6 @@ struct _GailScrollbarClass
   GailRangeClass parent_class;
 };
 
-#ifdef __cplusplus
-}
-#endif /* __cplusplus */
-
+G_END_DECLS
 
 #endif /* __GAIL_SCROLLBAR_H__ */

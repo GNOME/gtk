@@ -24,9 +24,7 @@
 #include <gail/gailcontainer.h>
 #include <libgail-util/gailtextutil.h>
 
-#ifdef __cplusplus
-extern "C" {
-#endif /* __cplusplus */
+G_BEGIN_DECLS
 
 #define GAIL_TYPE_STATUSBAR                  (gail_statusbar_get_type ())
 #define GAIL_STATUSBAR(obj)                  (G_TYPE_CHECK_INSTANCE_CAST ((obj), GAIL_TYPE_STATUSBAR, GailStatusbar))
@@ -52,9 +50,6 @@ struct _GailStatusbarClass
   GailContainerClass parent_class;
 };
 
-#ifdef __cplusplus
-}
-#endif /* __cplusplus */
-
+G_END_DECLS
 
 #endif /* __GAIL_STATUSBAR_H__ */

@@ -23,9 +23,7 @@
 #include <gtk/gtkaccessible.h>
 #include <gail/gailwidget.h>
 
-#ifdef __cplusplus
-extern "C" {
-#endif /* __cplusplus */
+G_BEGIN_DECLS
 
 #define GAIL_TYPE_ARROW                      (gail_arrow_get_type ())
 #define GAIL_ARROW(obj)                      (G_TYPE_CHECK_INSTANCE_CAST ((obj), GAIL_TYPE_ARROW, GailArrow))
@@ -51,9 +49,6 @@ struct _GailArrowClass
   GailWidgetClass parent_class;
 };
 
-#ifdef __cplusplus
-}
-#endif /* __cplusplus */
-
+G_END_DECLS
 
 #endif /* __GAIL_ARROW_H__ */

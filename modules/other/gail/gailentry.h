@@ -24,9 +24,7 @@
 #include <gail/gailwidget.h>
 #include <libgail-util/gailtextutil.h>
 
-#ifdef __cplusplus
-extern "C" {
-#endif /* __cplusplus */
+G_BEGIN_DECLS
 
 #define GAIL_TYPE_ENTRY                      (gail_entry_get_type ())
 #define GAIL_ENTRY(obj)                      (G_TYPE_CHECK_INSTANCE_CAST ((obj), GAIL_TYPE_ENTRY, GailEntry))
@@ -68,9 +66,6 @@ struct _GailEntryClass
   GailWidgetClass parent_class;
 };
 
-#ifdef __cplusplus
-}
-#endif /* __cplusplus */
-
+G_END_DECLS
 
 #endif /* __GAIL_ENTRY_H__ */

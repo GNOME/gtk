@@ -23,9 +23,7 @@
 #include <gtk/gtkaccessible.h>
 #include <gail/gailcheckmenuitem.h>
 
-#ifdef __cplusplus
-extern "C" {
-#endif /* __cplusplus */
+G_BEGIN_DECLS
 
 #define GAIL_TYPE_RADIO_MENU_ITEM               (gail_radio_menu_item_get_type ())
 #define GAIL_RADIO_MENU_ITEM(obj)               (G_TYPE_CHECK_INSTANCE_CAST ((obj), GAIL_TYPE_RADIO_MENU_ITEM, GailRadioMenuItem))
@@ -53,9 +51,6 @@ struct _GailRadioMenuItemClass
 
 AtkObject* gail_radio_menu_item_new (GtkWidget *widget);
 
-#ifdef __cplusplus
-}
-#endif /* __cplusplus */
-
+G_END_DECLS
 
 #endif /* __GAIL_RADIO_MENU_ITEM_H__ */

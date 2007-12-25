@@ -23,9 +23,7 @@
 #include <gtk/gtkaccessible.h>
 #include <gail/gailwidget.h>
 
-#ifdef __cplusplus
-extern "C" {
-#endif /* __cplusplus */
+G_BEGIN_DECLS
 
 #define GAIL_TYPE_SEPARATOR                  (gail_separator_get_type ())
 #define GAIL_SEPARATOR(obj)                  (G_TYPE_CHECK_INSTANCE_CAST ((obj), GAIL_TYPE_SEPARATOR, GailSeparator))
@@ -49,9 +47,6 @@ struct _GailSeparatorClass
   GailWidgetClass parent_class;
 };
 
-#ifdef __cplusplus
-}
-#endif /* __cplusplus */
-
+G_END_DECLS
 
 #endif /* __GAIL_SEPARATOR_H__ */

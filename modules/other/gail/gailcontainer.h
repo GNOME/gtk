@@ -23,10 +23,7 @@
 #include <gtk/gtkaccessible.h>
 #include <gail/gailwidget.h>
 
-
-#ifdef __cplusplus
-extern "C" {
-#endif /* __cplusplus */
+G_BEGIN_DECLS
 
 #define GAIL_TYPE_CONTAINER                  (gail_container_get_type ())
 #define GAIL_CONTAINER(obj)                  (G_TYPE_CHECK_INSTANCE_CAST ((obj), GAIL_TYPE_CONTAINER, GailContainer))
@@ -62,9 +59,6 @@ struct _GailContainerClass
                       gpointer     data);
 };
 
-#ifdef __cplusplus
-}
-#endif /* __cplusplus */
-
+G_END_DECLS
 
 #endif /* __GAIL_CONTAINER_H__ */

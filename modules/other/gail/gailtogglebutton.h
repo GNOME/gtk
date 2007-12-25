@@ -23,9 +23,7 @@
 #include <gtk/gtkaccessible.h>
 #include <gail/gailbutton.h>
 
-#ifdef __cplusplus
-extern "C" {
-#endif /* __cplusplus */
+G_BEGIN_DECLS
 
 #define GAIL_TYPE_TOGGLE_BUTTON              (gail_toggle_button_get_type ())
 #define GAIL_TOGGLE_BUTTON(obj)              (G_TYPE_CHECK_INSTANCE_CAST ((obj), GAIL_TYPE_TOGGLE_BUTTON, GailToggleButton))
@@ -49,9 +47,6 @@ struct _GailToggleButtonClass
   GailButtonClass parent_class;
 };
 
-#ifdef __cplusplus
-}
-#endif /* __cplusplus */
-
+G_END_DECLS
 
 #endif /* __GAIL_TOGGLE_BUTTON_H__ */

@@ -23,9 +23,7 @@
 #include <atk/atk.h>
 #include <gail/gailrenderercell.h>
 
-#ifdef __cplusplus
-extern "C" {
-#endif /* __cplusplus */
+G_BEGIN_DECLS
 
 #define GAIL_TYPE_IMAGE_CELL            (gail_image_cell_get_type ())
 #define GAIL_IMAGE_CELL(obj)            (G_TYPE_CHECK_INSTANCE_CAST ((obj), GAIL_TYPE_IMAGE_CELL, GailImageCell))
@@ -54,9 +52,6 @@ struct _GailImageCellClass
 
 AtkObject *gail_image_cell_new (void);
 
-#ifdef __cplusplus
-}
-#endif /* __cplusplus */
-
+G_END_DECLS
 
 #endif /* __GAIL_TREE_VIEW_IMAGE_CELL_H__ */

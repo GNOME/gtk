@@ -22,10 +22,7 @@
 
 #include <gtk/gtkaccessible.h>
 
-
-#ifdef __cplusplus
-extern "C" {
-#endif /* __cplusplus */
+G_BEGIN_DECLS
 
 #define GAIL_TYPE_WIDGET                     (gail_widget_get_type ())
 #define GAIL_WIDGET(obj)                     (G_TYPE_CHECK_INSTANCE_CAST ((obj), GAIL_TYPE_WIDGET, GailWidget))
@@ -63,9 +60,6 @@ struct _GailWidgetClass
 
 AtkObject*     gail_widget_new         (GtkWidget       *widget);
 
-#ifdef __cplusplus
-}
-#endif /* __cplusplus */
-
+G_END_DECLS
 
 #endif /* __GAIL_WIDGET_H__ */

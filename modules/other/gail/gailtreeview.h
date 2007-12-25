@@ -24,9 +24,7 @@
 #include <gail/gailcontainer.h>
 #include <gail/gailcell.h>
 
-#ifdef __cplusplus
-extern "C" {
-#endif /* __cplusplus */
+G_BEGIN_DECLS
 
 #define GAIL_TYPE_TREE_VIEW                  (gail_tree_view_get_type ())
 #define GAIL_TREE_VIEW(obj)                  (G_TYPE_CHECK_INSTANCE_CAST ((obj), GAIL_TYPE_TREE_VIEW, GailTreeView))
@@ -68,9 +66,6 @@ struct _GailTreeViewClass
 
 AtkObject* gail_tree_view_ref_focus_cell (GtkTreeView *treeview);
  
-#ifdef __cplusplus
-}
-#endif /* __cplusplus */
-
+G_END_DECLS
 
 #endif /* __GAIL_TREE_VIEW_H__ */

@@ -23,9 +23,7 @@
 #include <gtk/gtkaccessible.h>
 #include <gail/gailwidget.h>
 
-#ifdef __cplusplus
-extern "C" {
-#endif /* __cplusplus */
+G_BEGIN_DECLS
 
 #define GAIL_TYPE_IMAGE                      (gail_image_get_type ())
 #define GAIL_IMAGE(obj)                      (G_TYPE_CHECK_INSTANCE_CAST ((obj), GAIL_TYPE_IMAGE, GailImage))
@@ -52,9 +50,6 @@ struct _GailImageClass
   GailWidgetClass parent_class;
 };
 
-#ifdef __cplusplus
-}
-#endif /* __cplusplus */
-
+G_END_DECLS
 
 #endif /* __GAIL_IMAGE_H__ */

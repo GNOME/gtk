@@ -22,9 +22,7 @@
 
 #include <atk/atk.h>
 
-#ifdef __cplusplus
-extern "C" {
-#endif /* __cplusplus */
+G_BEGIN_DECLS
 
 #define GAIL_TYPE_HTML_BOX                   (gail_html_box_get_type ())
 #define GAIL_HTML_BOX(obj)                   (G_TYPE_CHECK_INSTANCE_CAST ((obj), GAIL_TYPE_HTML_BOX, GailHtmlBox))
@@ -48,9 +46,6 @@ struct _GailHtmlBoxClass
 
 GType gail_html_box_get_type (void);
 
-#ifdef __cplusplus
-}
-#endif /* __cplusplus */
-
+G_END_DECLS
 
 #endif /* __GAIL_HTML_BOX_H__ */

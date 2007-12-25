@@ -21,18 +21,13 @@
 #ifndef __GAIL_PRIVATE_MACROS_H__
 #define __GAIL_PRIVATE_MACROS_H__
 
-#ifdef __cplusplus
-extern "C" {
-#endif /* __cplusplus */
+G_BEGIN_DECLS
 
 /* Note: these macros are logic macros, not intended to warn on failure. */
 
 #define gail_return_val_if_fail(a, b)  if (!(a)) return (b)
 #define gail_return_if_fail(a) if (!(a)) return
 
-#ifdef __cplusplus
-}
-#endif /* __cplusplus */
-
+G_END_DECLS
 
 #endif /* __GAIL_PRIVATE_MACROS_H__ */

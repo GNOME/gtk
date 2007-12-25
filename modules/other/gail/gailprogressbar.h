@@ -23,10 +23,7 @@
 #include <gtk/gtkaccessible.h>
 #include <gail/gailwidget.h>
 
-
-#ifdef __cplusplus
-extern "C" {
-#endif /* __cplusplus */
+G_BEGIN_DECLS
 
 #define GAIL_TYPE_PROGRESS_BAR                      (gail_progress_bar_get_type ())
 #define GAIL_PROGRESS_BAR(obj)                      (G_TYPE_CHECK_INSTANCE_CAST ((obj), GAIL_TYPE_PROGRESS_BAR, GailProgressBar))
@@ -52,9 +49,6 @@ struct _GailProgressBarClass
   GailWidgetClass parent_class;
 };
 
-#ifdef __cplusplus
-}
-#endif /* __cplusplus */
-
+G_END_DECLS
 
 #endif /* __GAIL_PROGRESS_BAR_H__ */

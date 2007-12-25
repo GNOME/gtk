@@ -23,9 +23,7 @@
 #include <gtk/gtkaccessible.h>
 #include <gail/gailmenuitem.h>
 
-#ifdef __cplusplus
-extern "C" {
-#endif /* __cplusplus */
+G_BEGIN_DECLS
 
 #define GAIL_TYPE_SUB_MENU_ITEM                     (gail_sub_menu_item_get_type ())
 #define GAIL_SUB_MENU_ITEM(obj)                     (G_TYPE_CHECK_INSTANCE_CAST ((obj), GAIL_TYPE_SUB_MENU_ITEM, GailSubMenuItem))
@@ -52,9 +50,6 @@ struct _GailSubMenuItemClass
 
 AtkObject* gail_sub_menu_item_new (GtkWidget *widget);
 
-#ifdef __cplusplus
-}
-#endif /* __cplusplus */
-
+G_END_DECLS
 
 #endif /* __GAIL_SUB_MENU_ITEM_H__ */

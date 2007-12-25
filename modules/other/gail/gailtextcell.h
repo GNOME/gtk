@@ -24,9 +24,7 @@
 #include <gail/gailrenderercell.h>
 #include <libgail-util/gailtextutil.h>
 
-#ifdef __cplusplus
-extern "C" {
-#endif /* __cplusplus */
+G_BEGIN_DECLS
 
 #define GAIL_TYPE_TEXT_CELL            (gail_text_cell_get_type ())
 #define GAIL_TEXT_CELL(obj)            (G_TYPE_CHECK_INSTANCE_CAST ((obj), GAIL_TYPE_TEXT_CELL, GailTextCell))
@@ -56,9 +54,6 @@ struct _GailTextCellClass
 
 AtkObject *gail_text_cell_new (void);
 
-#ifdef __cplusplus
-}
-#endif /* __cplusplus */
-
+G_END_DECLS
 
 #endif /* __GAIL_TREE_VIEW_TEXT_CELL_H__ */

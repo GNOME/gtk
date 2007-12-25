@@ -24,10 +24,7 @@
 #include <gail/gailcontainer.h>
 #include <libgail-util/gailtextutil.h>
 
-
-#ifdef __cplusplus
-extern "C" {
-#endif /* __cplusplus */
+G_BEGIN_DECLS
 
 #define GAIL_TYPE_BUTTON                     (gail_button_get_type ())
 #define GAIL_BUTTON(obj)                     (G_TYPE_CHECK_INSTANCE_CAST ((obj), GAIL_TYPE_BUTTON, GailButton))
@@ -67,9 +64,6 @@ struct _GailButtonClass
   GailContainerClass parent_class;
 };
 
-#ifdef __cplusplus
-}
-#endif /* __cplusplus */
-
+G_END_DECLS
 
 #endif /* __GAIL_BUTTON_H__ */

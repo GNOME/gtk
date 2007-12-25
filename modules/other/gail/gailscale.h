@@ -24,9 +24,7 @@
 #include <gail/gailrange.h>
 #include <libgail-util/gailtextutil.h>
 
-#ifdef __cplusplus
-extern "C" {
-#endif /* __cplusplus */
+G_BEGIN_DECLS
 
 #define GAIL_TYPE_SCALE                         (gail_scale_get_type ())
 #define GAIL_SCALE(obj)                         (G_TYPE_CHECK_INSTANCE_CAST ((obj), GAIL_TYPE_SCALE, GailScale))
@@ -52,9 +50,6 @@ struct _GailScaleClass
   GailRangeClass parent_class;
 };
 
-#ifdef __cplusplus
-}
-#endif /* __cplusplus */
-
+G_END_DECLS
 
 #endif /* __GAIL_SCALE_H__ */

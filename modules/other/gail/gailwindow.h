@@ -23,10 +23,7 @@
 #include <gtk/gtkaccessible.h>
 #include <gail/gailcontainer.h>
 
-
-#ifdef __cplusplus
-extern "C" {
-#endif /* __cplusplus */
+G_BEGIN_DECLS
 
 #define GAIL_TYPE_WINDOW                        (gail_window_get_type ())
 #define GAIL_WINDOW(obj)                        (G_TYPE_CHECK_INSTANCE_CAST ((obj), GAIL_TYPE_WINDOW, GailWindow))
@@ -53,9 +50,6 @@ struct _GailWindowClass
   GailContainerClass parent_class;
 };
 
-#ifdef __cplusplus
-}
-#endif /* __cplusplus */
-
+G_END_DECLS
 
 #endif /* __GAIL_WINDOW_H__ */

@@ -23,10 +23,7 @@
 #include <gtk/gtkaccessible.h>
 #include <gail/gailwidget.h>
 
-
-#ifdef __cplusplus
-extern "C" {
-#endif /* __cplusplus */
+G_BEGIN_DECLS
 
 #define GAIL_TYPE_RANGE                          (gail_range_get_type ())
 #define GAIL_RANGE(obj)                          (G_TYPE_CHECK_INSTANCE_CAST ((obj), GAIL_TYPE_RANGE, GailRange))
@@ -56,9 +53,6 @@ struct _GailRangeClass
   GailWidgetClass parent_class;
 };
 
-#ifdef __cplusplus
-}
-#endif /* __cplusplus */
-
+G_END_DECLS
 
 #endif /* __GAIL_RANGE_H__ */

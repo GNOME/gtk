@@ -22,9 +22,7 @@
 
 #include <atk/atk.h>
 
-#ifdef __cplusplus
-extern "C" {
-#endif /* __cplusplus */
+G_BEGIN_DECLS
 
 #define GAIL_TYPE_OBJECT                  (gail_object_get_type ())
 #define GAIL_OBJECT(obj)                  (G_TYPE_CHECK_INSTANCE_CAST ((obj), GAIL_TYPE_OBJECT, GailObject)
@@ -48,9 +46,6 @@ struct _GailObjectClass
   AtkGObjectAccessibleClass parent_class;
 };
 
-#ifdef __cplusplus
-}
-#endif /* __cplusplus */
-
+G_END_DECLS
 
 #endif /* __GAIL_OBJECT_H__ */

@@ -23,9 +23,7 @@
 #include <atk/atk.h>
 #include <gail/gailcell.h>
 
-#ifdef __cplusplus
-extern "C" {
-#endif /* __cplusplus */
+G_BEGIN_DECLS
 
 #define GAIL_TYPE_RENDERER_CELL            (gail_renderer_cell_get_type ())
 #define GAIL_RENDERER_CELL(obj)            (G_TYPE_CHECK_INSTANCE_CAST ((obj), GAIL_TYPE_RENDERER_CELL, GailRendererCell))
@@ -57,9 +55,6 @@ gail_renderer_cell_update_cache (GailRendererCell *cell, gboolean emit_change_si
 
 AtkObject *gail_renderer_cell_new (void);
 
-#ifdef __cplusplus
-}
-#endif /* __cplusplus */
-
+G_END_DECLS
 
 #endif /* __GAIL_TREE_VIEW_TEXT_CELL_H__ */

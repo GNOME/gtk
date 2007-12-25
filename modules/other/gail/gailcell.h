@@ -22,10 +22,7 @@
 
 #include <atk/atk.h>
 
-
-#ifdef __cplusplus
-extern "C" {
-#endif /* __cplusplus */
+G_BEGIN_DECLS
 
 #define GAIL_TYPE_CELL                           (gail_cell_get_type ())
 #define GAIL_CELL(obj)                           (G_TYPE_CHECK_INSTANCE_CAST ((obj), GAIL_TYPE_CELL, GailCell))
@@ -70,7 +67,6 @@ struct _ActionInfo {
   ACTION_FUNC do_action_func;
 };
 
-
 void      gail_cell_initialise           (GailCell        *cell,
                                           GtkWidget       *widget, 
                                           AtkObject       *parent,
@@ -99,12 +95,6 @@ gboolean gail_cell_remove_action         (GailCell        *cell,
 gboolean gail_cell_remove_action_by_name (GailCell        *cell,
                                           const gchar     *action_name);
 
-
-
-
-#ifdef __cplusplus
-}
-#endif /* __cplusplus */
-
+G_END_DECLS
 
 #endif /* __GAIL_CELL_H__ */

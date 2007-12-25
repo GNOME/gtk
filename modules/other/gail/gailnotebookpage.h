@@ -25,9 +25,7 @@
 #include <gail/gailnotebook.h>
 #include <libgail-util/gailtextutil.h>
 
-#ifdef __cplusplus
-extern "C" {
-#endif /* __cplusplus */
+G_BEGIN_DECLS
 
 #define GAIL_TYPE_NOTEBOOK_PAGE            (gail_notebook_page_get_type ())
 #define GAIL_NOTEBOOK_PAGE(obj)            (G_TYPE_CHECK_INSTANCE_CAST ((obj),GAIL_TYPE_NOTEBOOK_PAGE, GailNotebookPage))
@@ -61,10 +59,6 @@ struct _GailNotebookPageClass
 
 AtkObject *gail_notebook_page_new(GtkNotebook *notebook, gint pagenum);
 
-#ifdef __cplusplus
-}
-#endif /* __cplusplus */
-
+G_END_DECLS
 
 #endif /* __GAIL_NOTEBOOK_PAGE_H__ */
-

@@ -23,9 +23,7 @@
 #include <gtk/gtkaccessible.h>
 #include <gail/gailcontainer.h>
 
-#ifdef __cplusplus
-extern "C" {
-#endif /* __cplusplus */
+G_BEGIN_DECLS
 
 #define GAIL_TYPE_LIST                       (gail_list_get_type ())
 #define GAIL_LIST(obj)                       (G_TYPE_CHECK_INSTANCE_CAST ((obj), GAIL_TYPE_LIST, GailList))
@@ -49,9 +47,6 @@ struct _GailListClass
   GailContainerClass parent_class;
 };
 
-#ifdef __cplusplus
-}
-#endif /* __cplusplus */
-
+G_END_DECLS
 
 #endif /* __GAIL_LIST_H__ */
