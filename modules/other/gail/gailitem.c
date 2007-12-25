@@ -275,6 +275,8 @@ gail_item_get_name (AtkObject *obj)
                                    g_value_unset (&value);
                                    break;
                                  }
+
+                               g_value_unset (&value);
                             }
                         }
                       name = item->text;
