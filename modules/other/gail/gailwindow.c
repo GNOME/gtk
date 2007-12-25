@@ -183,7 +183,7 @@ static void
 gail_window_real_initialize (AtkObject *obj,
                              gpointer  data)
 {
-  GtkWidget *widget;
+  GtkWidget *widget = GTK_WIDGET (data);
   GailWindow *window;
 
   /*
@@ -198,7 +198,6 @@ gail_window_real_initialize (AtkObject *obj,
   window = GAIL_WINDOW (obj);
   window->name_change_handler = 0;
   window->previous_name = g_strdup (gtk_window_get_title (GTK_WINDOW (data)));
-  widget = GTK_WIDGET (data);
 
   g_signal_connect (data,
                     "window_state_event",
