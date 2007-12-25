@@ -53,8 +53,6 @@ struct _GailWindowClass
   GailContainerClass parent_class;
 };
 
-AtkObject* gail_window_new (GtkWidget *widget);
-
 #ifdef __cplusplus
 }
 #endif /* __cplusplus */

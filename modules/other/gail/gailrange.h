@@ -56,8 +56,6 @@ struct _GailRangeClass
   GailWidgetClass parent_class;
 };
 
-AtkObject* gail_range_new (GtkWidget *widget);
-
 #ifdef __cplusplus
 }
 #endif /* __cplusplus */

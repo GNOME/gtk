@@ -26,6 +26,8 @@
 
 static void             gail_toplevel_class_init        (GailToplevelClass      *klass);
 static void             gail_toplevel_init              (GailToplevel           *toplevel);
+static void             gail_toplevel_initialize        (AtkObject              *accessible,
+                                                         gpointer                data);
 static void             gail_toplevel_object_finalize   (GObject                *obj);
 
 /* atkobject.h */
@@ -59,29 +61,13 @@ static gboolean  is_combo_window                        (GtkWidget              
 
 G_DEFINE_TYPE (GailToplevel, gail_toplevel, ATK_TYPE_OBJECT)
 
-AtkObject*
-gail_toplevel_new (void)
-{
-  GObject *object;
-  AtkObject *accessible;
-
-  object = g_object_new (GAIL_TYPE_TOPLEVEL, NULL);
-  g_return_val_if_fail ((object != NULL), NULL);
-
-  accessible = ATK_OBJECT (object);
-  accessible->role = ATK_ROLE_APPLICATION;
-  accessible->name = g_get_prgname();
-  accessible->accessible_parent = NULL;
-
-  return accessible;
-}
-
 static void
 gail_toplevel_class_init (GailToplevelClass *klass)
 {
   AtkObjectClass *class = ATK_OBJECT_CLASS(klass);
   GObjectClass *g_object_class = G_OBJECT_CLASS(klass);
 
+  class->initialize = gail_toplevel_initialize;
   class->get_n_children = gail_toplevel_get_n_children;
   class->ref_child = gail_toplevel_ref_child;
   class->get_parent = gail_toplevel_get_parent;
@@ -133,6 +119,17 @@ gail_toplevel_init (GailToplevel *toplevel)
   signal_id  = g_signal_lookup ("hide", GTK_TYPE_WINDOW);
   g_signal_add_emission_hook (signal_id, 0,
     gail_toplevel_hide_event_watcher, toplevel, (GDestroyNotify) NULL);
+}
+
+static void
+gail_toplevel_initialize (AtkObject *accessible,
+                          gpointer  data)
+{
+  ATK_OBJECT_CLASS (gail_toplevel_parent_class)->initialize (accessible, data);
+
+  accessible->role = ATK_ROLE_APPLICATION;
+  accessible->name = g_get_prgname();
+  accessible->accessible_parent = NULL;
 }
 
 static void

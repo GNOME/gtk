@@ -52,13 +52,9 @@ struct _GailProgressBarClass
   GailWidgetClass parent_class;
 };
 
-AtkObject* gail_progress_bar_new (GtkWidget *widget);
-
 #ifdef __cplusplus
 }
 #endif /* __cplusplus */
 
 
 #endif /* __GAIL_PROGRESS_BAR_H__ */
-
-

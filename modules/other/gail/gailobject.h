@@ -48,8 +48,6 @@ struct _GailObjectClass
   AtkGObjectAccessibleClass parent_class;
 };
 
-AtkObject* gail_object_new (GObject *obj);
-
 #ifdef __cplusplus
 }
 #endif /* __cplusplus */

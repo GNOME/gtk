@@ -49,8 +49,6 @@ struct _GailSeparatorClass
   GailWidgetClass parent_class;
 };
 
-AtkObject *gail_separator_new (GtkWidget *widget);
-
 #ifdef __cplusplus
 }
 #endif /* __cplusplus */

@@ -24,6 +24,8 @@
 
 static void gail_arrow_class_init	(GailArrowClass *klass);
 static void gail_arrow_init		(GailArrow	*arrow);
+static void gail_arrow_initialize       (AtkObject      *accessible,
+                                         gpointer        data);
 
 /* AtkImage */
 static void  atk_image_interface_init   (AtkImageIface  *iface);
@@ -41,6 +43,9 @@ static void
 gail_arrow_class_init		(GailArrowClass *klass)
 {
   GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
+  AtkObjectClass *atk_object_class = ATK_OBJECT_CLASS (klass);
+
+  atk_object_class->initialize = gail_arrow_initialize;
 
   gobject_class->finalize = gail_arrow_finalize;
 }
@@ -51,21 +56,13 @@ gail_arrow_init (GailArrow *arrow)
   arrow->image_description = NULL;
 }
 
-AtkObject* 
-gail_arrow_new (GtkWidget *widget)
+static void
+gail_arrow_initialize (AtkObject *accessible,
+                       gpointer data)
 {
-  GObject *object;
-  AtkObject *accessible;
+  ATK_OBJECT_CLASS (gail_arrow_parent_class)->initialize (accessible, data);
 
-  g_return_val_if_fail (GTK_IS_ARROW (widget), NULL);
-
-  object = g_object_new (GAIL_TYPE_ARROW, NULL);
-
-  accessible = ATK_OBJECT (object);
-  atk_object_initialize (accessible, widget);
   accessible->role = ATK_ROLE_ICON;
-
-  return accessible;
 }
 
 static void

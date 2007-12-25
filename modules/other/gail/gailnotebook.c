@@ -105,22 +105,6 @@ gail_notebook_init (GailNotebook      *notebook)
   notebook->idle_focus_id = 0;
 }
 
-AtkObject* 
-gail_notebook_new (GtkWidget *widget)
-{
-  GObject *object;
-  AtkObject *accessible;
-
-  g_return_val_if_fail (GTK_IS_NOTEBOOK (widget), NULL);
-
-  object = g_object_new (GAIL_TYPE_NOTEBOOK, NULL);
-
-  accessible = ATK_OBJECT (object);
-  atk_object_initialize (accessible, widget);
-
-  return accessible;
-}
-
 static AtkObject*
 gail_notebook_ref_child (AtkObject      *obj,
                          gint           i)

@@ -50,8 +50,6 @@ struct _GailFrameClass
   GailContainerClass parent_class;
 };
 
-AtkObject* gail_frame_new (GtkWidget *widget);
-
 #ifdef __cplusplus
 }
 #endif /* __cplusplus */

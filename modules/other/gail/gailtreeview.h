@@ -66,8 +66,6 @@ struct _GailTreeViewClass
   GailContainerClass parent_class;
 };
 
-AtkObject* gail_tree_view_new (GtkWidget *widget);
-
 AtkObject* gail_tree_view_ref_focus_cell (GtkTreeView *treeview);
  
 #ifdef __cplusplus

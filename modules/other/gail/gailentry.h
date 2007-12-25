@@ -68,8 +68,6 @@ struct _GailEntryClass
   GailWidgetClass parent_class;
 };
 
-AtkObject* gail_entry_new (GtkWidget *widget);
-
 #ifdef __cplusplus
 }
 #endif /* __cplusplus */

@@ -608,22 +608,6 @@ gail_tree_view_real_notify_gtk (GObject             *obj,
     GAIL_WIDGET_CLASS (gail_tree_view_parent_class)->notify_gtk (obj, pspec);
 }
 
-AtkObject*
-gail_tree_view_new (GtkWidget *widget)
-{
-  GObject *object;
-  AtkObject *accessible;
-
-  g_return_val_if_fail (GTK_IS_TREE_VIEW (widget), NULL);
-
-  object = g_object_new (GAIL_TYPE_TREE_VIEW, NULL);
-
-  accessible = ATK_OBJECT (object);
-  atk_object_initialize (accessible, widget);
-
-  return accessible;
-}
-
 static void
 gail_tree_view_finalize (GObject	    *object)
 {

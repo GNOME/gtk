@@ -287,24 +287,6 @@ gail_clist_init (GailCList *clist)
 {
 }
 
-AtkObject* 
-gail_clist_new (GtkWidget *widget)
-{
-  GObject *object;
-  AtkObject *accessible;
-
-  g_return_val_if_fail (GTK_IS_CLIST (widget), NULL);
-
-  object = g_object_new (GAIL_TYPE_CLIST, NULL);
-
-  accessible = ATK_OBJECT (object);
-  atk_object_initialize (accessible, widget);
-
-  accessible->role = ATK_ROLE_TABLE;
-
-  return accessible;
-}
-
 static void
 gail_clist_real_initialize (AtkObject *obj,
                             gpointer  data)
@@ -314,6 +296,8 @@ gail_clist_real_initialize (AtkObject *obj,
   gint i;
 
   ATK_OBJECT_CLASS (gail_clist_parent_class)->initialize (obj, data);
+
+  obj->role = ATK_ROLE_TABLE;
 
   clist = GAIL_CLIST (obj);
 

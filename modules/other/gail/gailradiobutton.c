@@ -24,6 +24,8 @@
 
 static void      gail_radio_button_class_init        (GailRadioButtonClass *klass);
 static void      gail_radio_button_init              (GailRadioButton      *radio_button);
+static void      gail_radio_button_initialize        (AtkObject            *accessible,
+                                                      gpointer              data);
 
 static AtkRelationSet* gail_radio_button_ref_relation_set (AtkObject       *obj);
 
@@ -34,30 +36,23 @@ gail_radio_button_class_init (GailRadioButtonClass *klass)
 {
   AtkObjectClass *class = ATK_OBJECT_CLASS (klass);
 
+  class->initialize = gail_radio_button_initialize;
   class->ref_relation_set = gail_radio_button_ref_relation_set;
-}
-
-AtkObject* 
-gail_radio_button_new (GtkWidget *widget)
-{
-  GObject *object;
-  AtkObject *accessible;
-
-  g_return_val_if_fail (GTK_IS_RADIO_BUTTON (widget), NULL);
-
-  object = g_object_new (GAIL_TYPE_RADIO_BUTTON, NULL);
-
-  accessible = ATK_OBJECT (object);
-  atk_object_initialize (accessible, widget);
-
-  accessible->role = ATK_ROLE_RADIO_BUTTON;
-  return accessible;
 }
 
 static void
 gail_radio_button_init (GailRadioButton *radio_button)
 {
   radio_button->old_group = NULL;
+}
+
+static void
+gail_radio_button_initialize (AtkObject *accessible,
+                              gpointer  data)
+{
+  ATK_OBJECT_CLASS (gail_radio_button_parent_class)->initialize (accessible, data);
+
+  accessible->role = ATK_ROLE_RADIO_BUTTON;
 }
 
 AtkRelationSet*

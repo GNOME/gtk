@@ -55,22 +55,6 @@ gail_scrolled_window_init (GailScrolledWindow *window)
 {
 }
 
-AtkObject* 
-gail_scrolled_window_new (GtkWidget *widget)
-{
-  GObject *object;
-  AtkObject *accessible;
-  
-  g_return_val_if_fail (GTK_IS_SCROLLED_WINDOW (widget), NULL);
-
-  object = g_object_new (GAIL_TYPE_SCROLLED_WINDOW, NULL);
-
-  accessible = ATK_OBJECT (object);
-  atk_object_initialize (accessible, widget);
-
-  return accessible;
-}
-
 static void
 gail_scrolled_window_real_initialize (AtkObject *obj,
                                       gpointer  data)

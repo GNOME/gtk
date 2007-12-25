@@ -1,3 +1,11 @@
+2007-12-22  Christian Persch  <chpe@gnome.org>
+
+	* modules/other/gail/*.[ch]: Remove relocations from the atk
+	factories. Remove unused gail_foo_new() functions. Fix object
+	instantiation to be derivation safe by moving initialisation code
+	from the removed gail_foo_new() functions to the
+	AtkObjectClass::initialize implementation. Bug #505226.
+
 2007-12-24  Matthias Clasen  <mclasen@redhat.com>
 
 	* modules/other/gail/gailentry.c:

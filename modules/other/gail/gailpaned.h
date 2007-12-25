@@ -49,8 +49,6 @@ struct _GailPanedClass
   GailContainerClass parent_class;
 };
 
-AtkObject* gail_paned_new (GtkWidget *widget);
-
 #ifdef __cplusplus
 }
 #endif /* __cplusplus */

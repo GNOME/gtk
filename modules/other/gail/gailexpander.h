@@ -56,8 +56,6 @@ struct _GailExpanderClass
   GailContainerClass parent_class;
 };
 
-AtkObject* gail_expander_new (GtkWidget *widget);
-
 #ifdef __cplusplus
 }
 #endif /* __cplusplus */

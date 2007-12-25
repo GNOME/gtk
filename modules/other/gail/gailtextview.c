@@ -265,22 +265,6 @@ gail_text_view_finalize (GObject            *object)
   G_OBJECT_CLASS (gail_text_view_parent_class)->finalize (object);
 }
 
-AtkObject*
-gail_text_view_new (GtkWidget *widget)
-{
-  GObject *object;
-  AtkObject *accessible;
-
-  g_return_val_if_fail (GTK_IS_TEXT_VIEW (widget), NULL);
-
-  object = g_object_new (GAIL_TYPE_TEXT_VIEW, NULL);
-
-  accessible = ATK_OBJECT (object);
-  atk_object_initialize (accessible, widget);
-
-  return accessible;
-}
-
 static void
 gail_text_view_real_notify_gtk (GObject             *obj,
                                 GParamSpec          *pspec)

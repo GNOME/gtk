@@ -31,19 +31,6 @@ static void       gail_object_real_initialize          (AtkObject       *obj,
 
 G_DEFINE_TYPE (GailObject, gail_object, ATK_TYPE_GOBJECT_ACCESSIBLE)
 
-AtkObject*
-gail_object_new (GObject *obj)
-{
-  gpointer object;
-  AtkObject *atk_object;
-
-  g_return_val_if_fail (GTK_IS_OBJECT (obj), NULL);
-  object = g_object_new (GAIL_TYPE_OBJECT, NULL);
-  atk_object = ATK_OBJECT (object);
-  atk_object_initialize (atk_object, obj);
-  return atk_object;
-}
-
 static void
 gail_object_class_init (GailObjectClass *klass)
 {

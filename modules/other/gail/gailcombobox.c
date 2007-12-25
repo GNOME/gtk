@@ -90,22 +90,6 @@ gail_combo_box_init (GailComboBox      *combo_box)
   combo_box->popup_set = FALSE;
 }
 
-AtkObject* 
-gail_combo_box_new (GtkWidget *widget)
-{
-  GObject *object;
-  AtkObject *accessible;
-
-  g_return_val_if_fail (GTK_IS_COMBO_BOX (widget), NULL);
-
-  object = g_object_new (GAIL_TYPE_COMBO_BOX, NULL);
-
-  accessible = ATK_OBJECT (object);
-  atk_object_initialize (accessible, widget);
-
-  return accessible;
-}
-
 static void
 gail_combo_box_real_initialize (AtkObject *obj,
                                 gpointer  data)

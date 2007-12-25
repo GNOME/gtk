@@ -15,7 +15,6 @@ gail_c_sources =			\
 	gailadjustment.c		\
 	gailarrow.c			\
 	gailbooleancell.c		\
-	gailbooleancellfactory.c	\
 	gailbox.c			\
 	gailbutton.c			\
 	gailcalendar.c			\
@@ -34,7 +33,6 @@ gail_c_sources =			\
 	gailframe.c			\
 	gailimage.c			\
 	gailimagecell.c			\
-	gailimagecellfactory.c		\
 	gailitem.c			\
 	gaillabel.c			\
 	gaillist.c			\
@@ -44,7 +42,6 @@ gail_c_sources =			\
 	gailnotebook.c			\
 	gailnotebookpage.c		\
 	gailobject.c			\
-	gailobjectfactory.c		\
 	gailoptionmenu.c		\
 	gailpaned.c			\
 	gailpixmap.c			\
@@ -54,7 +51,6 @@ gail_c_sources =			\
 	gailradiosubmenuitem.c		\
 	gailrange.c			\
 	gailrenderercell.c		\
-	gailrenderercellfactory.c	\
 	gailscale.c			\
 	gailscrollbar.c			\
 	gailscrolledwindow.c		\
@@ -63,7 +59,6 @@ gail_c_sources =			\
 	gailsubmenuitem.c		\
 	gailstatusbar.c			\
 	gailtextcell.c			\
-	gailtextcellfactory.c		\
 	gailtextview.c			\
 	gailtogglebutton.c		\
 	gailtoplevel.c			\
@@ -79,7 +74,6 @@ gail_private_h_sources =		\
 	gailadjustment.h		\
 	gailarrow.h			\
 	gailbooleancell.h		\
-	gailbooleancellfactory.h	\
 	gailbox.h			\
 	gailbutton.h			\
 	gailcalendar.h			\
@@ -99,7 +93,6 @@ gail_private_h_sources =		\
 	gailframe.h			\
 	gailimage.h			\
 	gailimagecell.h			\
-	gailimagecellfactory.h		\
 	gailitem.h			\
 	gaillabel.h			\
 	gaillist.h			\
@@ -109,7 +102,6 @@ gail_private_h_sources =		\
 	gailnotebook.h			\
 	gailnotebookpage.h		\
 	gailobject.h			\
-	gailobjectfactory.h		\
 	gailoptionmenu.h		\
 	gailpaned.h			\
 	gailpixmap.h			\
@@ -119,7 +111,6 @@ gail_private_h_sources =		\
 	gailradiosubmenuitem.h		\
 	gailrange.h			\
 	gailrenderercell.h		\
-	gailrenderercellfactory.h	\
 	gailscale.h			\
 	gailscrollbar.h			\
 	gailscrolledwindow.h		\
@@ -128,7 +119,6 @@ gail_private_h_sources =		\
 	gailsubmenuitem.h		\
 	gailstatusbar.h			\
 	gailtextcell.h			\
-	gailtextcellfactory.h		\
 	gailtextview.h			\
 	gailtogglebutton.h		\
 	gailtoplevel.h			\

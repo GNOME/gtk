@@ -70,8 +70,6 @@ gail_adjustment_new (GtkAdjustment *adjustment)
 
   object = g_object_new (GAIL_TYPE_ADJUSTMENT, NULL);
 
-  g_return_val_if_fail (object != NULL, NULL);
-
   atk_object = ATK_OBJECT (object);
   atk_object_initialize (atk_object, adjustment);
 

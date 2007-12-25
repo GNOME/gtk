@@ -309,7 +309,10 @@ static AtkObject*
 gail_util_get_root (void)
 {
   if (!root)
-    root = gail_toplevel_new();
+    {
+      root = g_object_new (GAIL_TYPE_TOPLEVEL, NULL);
+      atk_object_initialize (root, NULL);
+    }
 
   return root;
 }

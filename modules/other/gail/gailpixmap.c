@@ -24,6 +24,8 @@
 
 static void	 gail_pixmap_class_init		(GailPixmapClass *klass);
 static void      gail_pixmap_init               (GailPixmap      *pixmap);
+static void      gail_pixmap_initialize         (AtkObject       *accessible,
+                                                 gpointer         data);
 
 /* AtkImage */
 static void  atk_image_interface_init   (AtkImageIface  *iface);
@@ -49,7 +51,10 @@ static void
 gail_pixmap_class_init (GailPixmapClass *klass)
 {
   GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
+  AtkObjectClass *atk_object_class = ATK_OBJECT_CLASS (klass);
  
+  atk_object_class->initialize = gail_pixmap_initialize;
+
   gobject_class->finalize = gail_pixmap_finalize;
 }
 
@@ -59,23 +64,13 @@ gail_pixmap_init (GailPixmap *pixmap)
   pixmap->image_description = NULL;
 }
 
-AtkObject* 
-gail_pixmap_new (GtkWidget *widget)
+static void
+gail_pixmap_initialize (AtkObject *accessible,
+                        gpointer  data)
 {
-  GObject *object;
-  AtkObject *accessible;
-
-  g_assert (GTK_IS_PIXMAP (widget));
-  g_return_val_if_fail (GTK_IS_PIXMAP (widget), NULL);
-
-  object = g_object_new (GAIL_TYPE_PIXMAP, NULL);
-
-  accessible = ATK_OBJECT (object);
-  atk_object_initialize (accessible, widget);
+  ATK_OBJECT_CLASS (gail_pixmap_parent_class)->initialize (accessible, data);
 
   accessible->role = ATK_ROLE_ICON;
-
-  return accessible;
 }
 
 static void

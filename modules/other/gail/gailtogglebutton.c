@@ -57,22 +57,6 @@ gail_toggle_button_init (GailToggleButton *button)
 {
 }
 
-AtkObject* 
-gail_toggle_button_new (GtkWidget *widget)
-{
-  GObject *object;
-  AtkObject *accessible;
-
-  g_return_val_if_fail (GTK_IS_TOGGLE_BUTTON (widget), NULL);
-
-  object = g_object_new (GAIL_TYPE_TOGGLE_BUTTON, NULL);
-
-  accessible = ATK_OBJECT (object);
-  atk_object_initialize (accessible, widget);
-
-  return accessible;
-}
-
 static void
 gail_toggle_button_real_initialize (AtkObject *obj,
                                     gpointer  data)

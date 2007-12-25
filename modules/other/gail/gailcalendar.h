@@ -49,8 +49,6 @@ struct _GailCalendarClass
   GailWidgetClass parent_class;
 };
 
-AtkObject* gail_calendar_new (GtkWidget *widget);
-
 #ifdef __cplusplus
 }
 #endif /* __cplusplus */

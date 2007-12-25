@@ -56,26 +56,15 @@ gail_html_box_class_init (GailHtmlBoxClass *klass)
   class->initialize = gail_html_box_initialize;
 }
 
-AtkObject*
-gail_html_box_new (GObject *obj)
-{
-  GObject *object;
-  AtkObject *atk_object;
-
-  g_return_val_if_fail (HTML_IS_BOX (obj), NULL);
-  object = g_object_new (GAIL_TYPE_HTML_BOX, NULL);
-  atk_object = ATK_OBJECT (object);
-  atk_object_initialize (atk_object, obj);
-  atk_object->role = ATK_ROLE_UNKNOWN;
-  return atk_object;
-}
-
 static void
 gail_html_box_initialize (AtkObject *obj,
                           gpointer  data)
 {
   HtmlBox *box;
+
   ATK_OBJECT_CLASS (gail_html_box_parent_class)->initialize (obj, data);
+
+  obj->role = ATK_ROLE_UNKNOWN;
 
   box = HTML_BOX (data);
 

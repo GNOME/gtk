@@ -144,22 +144,6 @@ gail_expander_init (GailExpander *expander)
   expander->textutil = NULL;
 }
 
-AtkObject* 
-gail_expander_new (GtkWidget *widget)
-{
-  GObject *object;
-  AtkObject *accessible;
-
-  g_return_val_if_fail (GTK_IS_EXPANDER (widget), NULL);
-
-  object = g_object_new (GAIL_TYPE_EXPANDER, NULL);
-
-  accessible = ATK_OBJECT (object);
-  atk_object_initialize (accessible, widget);
-
-  return accessible;
-}
-
 static G_CONST_RETURN gchar*
 gail_expander_get_name (AtkObject *obj)
 {

@@ -48,8 +48,6 @@ struct _GailHtmlBoxClass
 
 GType gail_html_box_get_type (void);
 
-AtkObject* gail_html_box_new (GObject *obj);
-
 #ifdef __cplusplus
 }
 #endif /* __cplusplus */

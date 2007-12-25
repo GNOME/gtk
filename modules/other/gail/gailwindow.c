@@ -174,35 +174,6 @@ gail_window_class_init (GailWindowClass *klass)
                   G_TYPE_NONE, 0);
 }
 
-AtkObject*
-gail_window_new (GtkWidget *widget)
-{
-  GObject *object;
-  AtkObject *accessible;
-
-  gail_return_val_if_fail (widget != NULL, NULL);
-  /*
-   * A GailWindow can be created for a GtkHandleBox or a GtkWindow
-   */
-  if (!GTK_IS_WINDOW (widget) &&
-      !GTK_IS_HANDLE_BOX (widget))
-    gail_return_val_if_fail (FALSE, NULL);
-
-  object = g_object_new (GAIL_TYPE_WINDOW, NULL);
-
-  accessible = ATK_OBJECT (object);
-  atk_object_initialize (accessible, widget);
-
-  /*
-   * Notify that tooltip is showing
-   */
-  if (accessible->role == ATK_ROLE_TOOL_TIP &&
-      GTK_WIDGET_MAPPED (widget))
-    atk_object_notify_state_change (accessible, ATK_STATE_SHOWING, 1);
-
-  return accessible;
-}
-
 static void
 gail_window_init (GailWindow   *accessible)
 {
@@ -214,6 +185,13 @@ gail_window_real_initialize (AtkObject *obj,
 {
   GtkWidget *widget;
   GailWindow *window;
+
+  /*
+   * A GailWindow can be created for a GtkHandleBox or a GtkWindow
+   */
+  if (!GTK_IS_WINDOW (widget) &&
+      !GTK_IS_HANDLE_BOX (widget))
+    gail_return_if_fail (FALSE);
 
   ATK_OBJECT_CLASS (gail_window_parent_class)->initialize (obj, data);
 
@@ -254,6 +232,13 @@ gail_window_real_initialize (AtkObject *obj,
       else
         obj->role = ATK_ROLE_FRAME;
     }
+
+  /*
+   * Notify that tooltip is showing
+   */
+  if (obj->role == ATK_ROLE_TOOL_TIP &&
+      GTK_WIDGET_MAPPED (widget))
+    atk_object_notify_state_change (obj, ATK_STATE_SHOWING, 1);
 }
 
 static void

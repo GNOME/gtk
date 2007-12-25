@@ -49,8 +49,6 @@ struct _GailScrolledWindowClass
   GailContainerClass parent_class;
 };
 
-AtkObject* gail_scrolled_window_new (GtkWidget *widget);
-
 #ifdef __cplusplus
 }
 #endif /* __cplusplus */

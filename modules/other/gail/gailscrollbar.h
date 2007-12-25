@@ -50,8 +50,6 @@ struct _GailScrollbarClass
   GailRangeClass parent_class;
 };
 
-AtkObject* gail_scrollbar_new (GtkWidget *widget);
-
 #ifdef __cplusplus
 }
 #endif /* __cplusplus */

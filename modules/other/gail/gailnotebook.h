@@ -63,8 +63,6 @@ struct _GailNotebookClass
   GailContainerClass parent_class;
 };
 
-AtkObject* gail_notebook_new (GtkWidget *widget);
-
 #ifdef __cplusplus
 }
 #endif /* __cplusplus */

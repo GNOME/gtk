@@ -91,22 +91,6 @@ gail_combo_init (GailCombo      *combo)
   combo->select_idle_handler = 0;
 }
 
-AtkObject* 
-gail_combo_new (GtkWidget *widget)
-{
-  GObject *object;
-  AtkObject *accessible;
-
-  g_return_val_if_fail (GTK_IS_COMBO (widget), NULL);
-
-  object = g_object_new (GAIL_TYPE_COMBO, NULL);
-
-  accessible = ATK_OBJECT (object);
-  atk_object_initialize (accessible, widget);
-
-  return accessible;
-}
-
 static void
 gail_combo_real_initialize (AtkObject *obj,
                             gpointer  data)

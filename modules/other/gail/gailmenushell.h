@@ -50,8 +50,6 @@ struct _GailMenuShellClass
   GailContainerClass parent_class;
 };
 
-AtkObject* gail_menu_shell_new (GtkWidget *widget);
-
 #ifdef __cplusplus
 }
 #endif /* __cplusplus */

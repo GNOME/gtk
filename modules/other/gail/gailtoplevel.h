@@ -49,8 +49,6 @@ struct _GailToplevelClass
   AtkObjectClass parent_class;
 };
 
-AtkObject *gail_toplevel_new(void);
-
 #ifdef __cplusplus
 }
 #endif /* __cplusplus */

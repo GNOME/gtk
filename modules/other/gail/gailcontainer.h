@@ -62,8 +62,6 @@ struct _GailContainerClass
                       gpointer     data);
 };
 
-AtkObject* gail_container_new (GtkWidget *widget);
-
 #ifdef __cplusplus
 }
 #endif /* __cplusplus */

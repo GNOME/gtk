@@ -24,12 +24,17 @@
 
 static void         gail_calendar_class_init          (GailCalendarClass *klass);
 static void         gail_calendar_init                (GailCalendar      *calendar);
+static void         gail_calendar_initialize          (AtkObject         *accessible,
+                                                       gpointer           data);
 
 G_DEFINE_TYPE (GailCalendar, gail_calendar, GAIL_TYPE_WIDGET)
 
 static void
 gail_calendar_class_init (GailCalendarClass *klass)
 {
+  AtkObjectClass *atk_object_class = ATK_OBJECT_CLASS (klass);
+
+  atk_object_class->initialize = gail_calendar_initialize;
 }
 
 static void
@@ -37,20 +42,11 @@ gail_calendar_init (GailCalendar *calendar)
 {
 }
 
-AtkObject* 
-gail_calendar_new (GtkWidget *widget)
+static void
+gail_calendar_initialize (AtkObject *accessible,
+                          gpointer  data)
 {
-  GObject *object;
-  AtkObject *accessible;
-
-  g_return_val_if_fail (GTK_IS_CALENDAR (widget), NULL);
-
-  object = g_object_new (GAIL_TYPE_CALENDAR, NULL);
-
-  accessible = ATK_OBJECT (object);
-  atk_object_initialize (accessible, widget);
+  ATK_OBJECT_CLASS (gail_calendar_parent_class)->initialize (accessible, data);
 
   accessible->role = ATK_ROLE_CALENDAR;
-
-  return accessible;
 }

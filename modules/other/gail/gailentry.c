@@ -348,22 +348,6 @@ gail_entry_finalize (GObject            *object)
   G_OBJECT_CLASS (gail_entry_parent_class)->finalize (object);
 }
 
-AtkObject* 
-gail_entry_new (GtkWidget *widget)
-{
-  GObject *object;
-  AtkObject *accessible;
-
-  g_return_val_if_fail (GTK_IS_ENTRY (widget), NULL);
-
-  object = g_object_new (GAIL_TYPE_ENTRY, NULL);
-
-  accessible = ATK_OBJECT (object);
-  atk_object_initialize (accessible, widget);
-
-  return accessible;
-}
-
 static gint
 gail_entry_get_index_in_parent (AtkObject *accessible)
 {

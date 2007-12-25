@@ -51,8 +51,6 @@ struct _GailRadioButtonClass
   GailToggleButtonClass parent_class;
 };
 
-AtkObject* gail_radio_button_new (GtkWidget *widget);
-
 #ifdef __cplusplus
 }
 #endif /* __cplusplus */

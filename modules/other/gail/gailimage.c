@@ -25,6 +25,8 @@
 
 static void      gail_image_class_init         (GailImageClass *klass);
 static void      gail_image_init               (GailImage      *image);
+static void      gail_image_initialize         (AtkObject       *accessible,
+                                                gpointer        data);
 static G_CONST_RETURN gchar* gail_image_get_name  (AtkObject     *accessible);
 
 
@@ -53,6 +55,7 @@ gail_image_class_init (GailImageClass *klass)
   AtkObjectClass  *class = ATK_OBJECT_CLASS (klass);
 
   gobject_class->finalize = gail_image_finalize;
+  class->initialize = gail_image_initialize;
   class->get_name = gail_image_get_name;
 }
 
@@ -62,22 +65,13 @@ gail_image_init (GailImage *image)
   image->image_description = NULL;
 }
 
-AtkObject* 
-gail_image_new (GtkWidget *widget)
+static void
+gail_image_initialize (AtkObject *accessible,
+                       gpointer data)
 {
-  GObject *object;
-  AtkObject *accessible;
-
-  g_return_val_if_fail (GTK_IS_IMAGE (widget), NULL);
-
-  object = g_object_new (GAIL_TYPE_IMAGE, NULL);
-
-  accessible = ATK_OBJECT (object);
-  atk_object_initialize (accessible, widget);
+  ATK_OBJECT_CLASS (gail_image_parent_class)->initialize (accessible, data);
 
   accessible->role = ATK_ROLE_ICON;
-
-  return accessible;
 }
 
 /* Copied from gtktoolbar.c, keep in sync */

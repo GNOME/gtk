@@ -24,6 +24,8 @@
 
 static void         gail_menu_shell_class_init          (GailMenuShellClass *klass);
 static void         gail_menu_shell_init                (GailMenuShell      *menu_shell);
+static void         gail_menu_shell_initialize          (AtkObject          *accessible,
+                                                         gpointer            data);
 static void         atk_selection_interface_init        (AtkSelectionIface  *iface);
 static gboolean     gail_menu_shell_add_selection       (AtkSelection   *selection,
                                                          gint           i);
@@ -42,6 +44,9 @@ G_DEFINE_TYPE_WITH_CODE (GailMenuShell, gail_menu_shell, GAIL_TYPE_CONTAINER,
 static void
 gail_menu_shell_class_init (GailMenuShellClass *klass)
 {
+  AtkObjectClass *atk_object_class = ATK_OBJECT_CLASS (klass);
+
+  atk_object_class->initialize = gail_menu_shell_initialize;
 }
 
 static void
@@ -49,28 +54,19 @@ gail_menu_shell_init (GailMenuShell *menu_shell)
 {
 }
 
-AtkObject*
-gail_menu_shell_new (GtkWidget *widget)
+static void
+gail_menu_shell_initialize (AtkObject *accessible,
+                            gpointer  data)
 {
-  GObject *object;
-  AtkObject *accessible;
+  ATK_OBJECT_CLASS (gail_menu_shell_parent_class)->initialize (accessible, data);
 
-  g_return_val_if_fail (GTK_IS_MENU_SHELL (widget), NULL);
-
-  object = g_object_new (GAIL_TYPE_MENU_SHELL, NULL);
-
-  accessible = ATK_OBJECT (object);
-  atk_object_initialize (accessible, widget);
-
-  if (GTK_IS_MENU_BAR (widget))
+  if (GTK_IS_MENU_BAR (data))
     accessible->role = ATK_ROLE_MENU_BAR;
   else
     /*
      * Accessible object for Menu is created in gailmenu.c
      */
     accessible->role = ATK_ROLE_UNKNOWN;
-
-  return accessible;
 }
 
 static void

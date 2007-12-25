@@ -57,8 +57,6 @@ struct _GailLabelClass
   GailWidgetClass parent_class;
 };
 
-AtkObject* gail_label_new (GtkWidget *widget);
-
 #ifdef __cplusplus
 }
 #endif /* __cplusplus */

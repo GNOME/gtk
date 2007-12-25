@@ -24,6 +24,8 @@
 
 static void gail_scrollbar_class_init  (GailScrollbarClass *klass);
 static void gail_scrollbar_init        (GailScrollbar      *accessible);
+static void gail_scrollbar_initialize  (AtkObject           *accessible,
+                                        gpointer             data);
 
 static gint gail_scrollbar_get_index_in_parent (AtkObject *accessible);
 
@@ -34,6 +36,7 @@ gail_scrollbar_class_init (GailScrollbarClass *klass)
 {
   AtkObjectClass *class = ATK_OBJECT_CLASS (klass);
 
+  class->initialize = gail_scrollbar_initialize;
   class->get_index_in_parent = gail_scrollbar_get_index_in_parent;
 }
 
@@ -42,22 +45,13 @@ gail_scrollbar_init (GailScrollbar      *accessible)
 {
 }
 
-AtkObject* 
-gail_scrollbar_new (GtkWidget *widget)
+static void
+gail_scrollbar_initialize (AtkObject *accessible,
+                           gpointer  data)
 {
-  GObject *object;
-  AtkObject *accessible;
-
-  g_return_val_if_fail (GTK_IS_SCROLLBAR (widget), NULL);
-
-  object = g_object_new (GAIL_TYPE_SCROLLBAR, NULL);
-
-  accessible = ATK_OBJECT (object);
-  atk_object_initialize (accessible, widget);
+  ATK_OBJECT_CLASS (gail_scrollbar_parent_class)->initialize (accessible, data);
 
   accessible->role = ATK_ROLE_SCROLL_BAR;
-
-  return accessible;
 }
 
 static gint

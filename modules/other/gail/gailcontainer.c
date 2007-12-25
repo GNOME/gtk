@@ -70,23 +70,7 @@ gail_container_init (GailContainer      *container)
   container->children = NULL;
 }
 
-AtkObject* 
-gail_container_new (GtkWidget *widget)
-{
-  GObject *object;
-  AtkObject *accessible;
-
-  g_return_val_if_fail (GTK_IS_CONTAINER (widget), NULL);
-
-  object = g_object_new (GAIL_TYPE_CONTAINER, NULL);
-
-  accessible = ATK_OBJECT (object);
-  atk_object_initialize (accessible, widget);
-
-  return accessible;
-}
-
-static gint 
+static gint
 gail_container_get_n_children (AtkObject* obj)
 {
   GtkWidget *widget;

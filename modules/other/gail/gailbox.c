@@ -24,6 +24,8 @@
 
 static void         gail_box_class_init            (GailBoxClass  *klass);
 static void         gail_box_init                  (GailBox       *box);
+static void         gail_box_initialize            (AtkObject     *accessible,
+                                                    gpointer       data);
 static AtkStateSet* gail_box_ref_state_set         (AtkObject     *accessible);
 
 G_DEFINE_TYPE (GailBox, gail_box, GAIL_TYPE_CONTAINER)
@@ -33,6 +35,7 @@ gail_box_class_init (GailBoxClass *klass)
 {
   AtkObjectClass  *class = ATK_OBJECT_CLASS (klass);
 
+  class->initialize = gail_box_initialize;
   class->ref_state_set = gail_box_ref_state_set;
 }
 
@@ -41,22 +44,13 @@ gail_box_init (GailBox *box)
 {
 }
 
-AtkObject* 
-gail_box_new (GtkWidget *widget)
+static void
+gail_box_initialize (AtkObject *accessible,
+                     gpointer  data)
 {
-  GObject *object;
-  AtkObject *accessible;
-
-  g_return_val_if_fail (GTK_IS_BOX (widget), NULL);
-
-  object = g_object_new (GAIL_TYPE_BOX, NULL);
-
-  accessible = ATK_OBJECT (object);
-  atk_object_initialize (accessible, widget);
+  ATK_OBJECT_CLASS (gail_box_parent_class)->initialize (accessible, data);
 
   accessible->role = ATK_ROLE_FILLER;
-
-  return accessible;
 }
 
 static AtkStateSet*

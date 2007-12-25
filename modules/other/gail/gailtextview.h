@@ -62,8 +62,6 @@ struct _GailTextViewClass
   GailContainerClass parent_class;
 };
 
-AtkObject* gail_text_view_new (GtkWidget *widget);
-
 #ifdef __cplusplus
 }
 #endif /* __cplusplus */

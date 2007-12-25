@@ -52,8 +52,6 @@ struct _GailStatusbarClass
   GailContainerClass parent_class;
 };
 
-AtkObject* gail_statusbar_new (GtkWidget *widget);
-
 #ifdef __cplusplus
 }
 #endif /* __cplusplus */

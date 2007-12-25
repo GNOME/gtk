@@ -49,8 +49,6 @@ struct _GailListClass
   GailContainerClass parent_class;
 };
 
-AtkObject* gail_list_new (GtkWidget *widget);
-
 #ifdef __cplusplus
 }
 #endif /* __cplusplus */

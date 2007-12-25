@@ -49,8 +49,6 @@ struct _GailToggleButtonClass
   GailButtonClass parent_class;
 };
 
-AtkObject* gail_toggle_button_new( GtkWidget *widget);
-
 #ifdef __cplusplus
 }
 #endif /* __cplusplus */

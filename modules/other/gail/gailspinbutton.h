@@ -51,8 +51,6 @@ struct _GailSpinButtonClass
   GailEntryClass parent_class;
 };
 
-AtkObject* gail_spin_button_new (GtkWidget *widget);
-
 #ifdef __cplusplus
 }
 #endif /* __cplusplus */

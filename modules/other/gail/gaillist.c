@@ -27,6 +27,9 @@ static void         gail_list_class_init            (GailListClass  *klass);
 
 static void         gail_list_init                  (GailList       *list);
 
+static void         gail_list_initialize            (AtkObject      *accessible,
+                                                     gpointer        data);
+
 static gint         gail_list_get_index_in_parent   (AtkObject      *accessible);
 
 static void         atk_selection_interface_init    (AtkSelectionIface *iface);
@@ -50,6 +53,7 @@ gail_list_class_init (GailListClass *klass)
 {
   AtkObjectClass  *class = ATK_OBJECT_CLASS (klass);
 
+  class->initialize = gail_list_initialize;
   class->get_index_in_parent = gail_list_get_index_in_parent;
 }
 
@@ -58,22 +62,13 @@ gail_list_init (GailList *list)
 {
 }
 
-AtkObject* 
-gail_list_new (GtkWidget *widget)
+static void
+gail_list_initialize (AtkObject *accessible,
+                      gpointer  data)
 {
-  GObject *object;
-  AtkObject *accessible;
-
-  g_return_val_if_fail (GTK_IS_LIST (widget), NULL);
-
-  object = g_object_new (GAIL_TYPE_LIST, NULL);
-
-  accessible = ATK_OBJECT (object);
-  atk_object_initialize (accessible, widget);
+  ATK_OBJECT_CLASS (gail_list_parent_class)->initialize (accessible, data);
 
   accessible->role = ATK_ROLE_LIST;
-
-  return accessible;
 }
 
 static gint

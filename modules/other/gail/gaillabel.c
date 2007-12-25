@@ -208,22 +208,6 @@ gail_label_init_text_util (GailLabel *gail_label,
     gail_label->label_length = g_utf8_strlen (label_text, -1);
 }
 
-AtkObject* 
-gail_label_new (GtkWidget *widget)
-{
-  GObject *object;
-  AtkObject *accessible;
-
-  g_return_val_if_fail (GTK_IS_LABEL (widget), NULL);
-
-  object = g_object_new (GAIL_TYPE_LABEL, NULL);
-
-  accessible = ATK_OBJECT (object);
-  atk_object_initialize (accessible, widget);
-
-  return accessible;
-}
-
 static void
 notify_name_change (AtkObject *atk_obj)
 {

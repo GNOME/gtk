@@ -58,8 +58,6 @@ struct _GailComboBoxClass
   GailContainerClass parent_class;
 };
 
-AtkObject* gail_combo_box_new (GtkWidget *widget);
-
 #ifdef __cplusplus
 }
 #endif /* __cplusplus */

@@ -52,12 +52,9 @@ struct _GailPixmapClass
   GailWidgetClass parent_class;
 };
 
-AtkObject* gail_pixmap_new (GtkWidget *widget);
-
 #ifdef __cplusplus
 }
 #endif /* __cplusplus */
 
 
 #endif /* __GAIL_PIXMAP_H__ */
-

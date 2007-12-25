@@ -51,24 +51,6 @@ gail_menu_init (GailMenu *accessible)
 {
 }
 
-AtkObject*
-gail_menu_new (GtkWidget *widget)
-{
-  GObject *object;
-  AtkObject *accessible;
-
-  g_return_val_if_fail (GTK_IS_MENU (widget), NULL);
-
-  object = g_object_new (GAIL_TYPE_MENU, NULL);
-
-  accessible = ATK_OBJECT (object);
-  atk_object_initialize (accessible, widget);
-
-  g_object_set_data (G_OBJECT (accessible), "atk-component-layer",
-		     GINT_TO_POINTER (ATK_LAYER_POPUP));
-  return accessible;
-}
-
 static void
 gail_menu_real_initialize (AtkObject *obj,
                            gpointer  data)
@@ -76,6 +58,9 @@ gail_menu_real_initialize (AtkObject *obj,
   ATK_OBJECT_CLASS (gail_menu_parent_class)->initialize (obj, data);
 
   obj->role = ATK_ROLE_MENU;
+
+  g_object_set_data (G_OBJECT (obj), "atk-component-layer",
+		     GINT_TO_POINTER (ATK_LAYER_POPUP));
 }
 
 static AtkObject*
