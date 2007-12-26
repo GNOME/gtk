@@ -1,15 +1,16 @@
-# translation of gtk+.po to Sinhala
+# translation of si.po to Sinhala
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
 #
 # Danishka Navin <snavin@redhat.com>, 2007.
+# Danishka Navin <danishka@gmail.com>, 2007.
 msgid ""
 msgstr ""
-"Project-Id-Version: gtk+\n"
+"Project-Id-Version: si\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2007-05-29 03:40+0100\n"
-"PO-Revision-Date: 2007-06-14 14:56+0530\n"
-"Last-Translator: Danishka Navin <snavin@redhat.com>\n"
+"PO-Revision-Date: 2007-12-26 11:35+0530\n"
+"Last-Translator: Danishka Navin <danishka@gmail.com>\n"
 "Language-Team: Sinhala <en@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -356,8 +357,8 @@ msgstr "පිළිඹිබු පික්සල දත්ත විනාශ
 #, c-format
 msgid "failed to allocate image buffer of %u byte"
 msgid_plural "failed to allocate image buffer of %u bytes"
-msgstr[0] "%u වර්‍ගයේ පිළිඹිබු ස්වාරක්‍ෂක භාරය වෙන් කළ නොහැකි විය"
-msgstr[1] ""
+msgstr[0] "බයිට %u ක පිළිඹිබු බෆරය වෙන් කළ නොහැකි විය"
+msgstr[1] "බයිට %u ක පිළිඹිබු බෆරය වෙන් කළ නොහැකි විය"
 
 #: ../gdk-pixbuf/io-ani.c:244
 msgid "Unexpected icon chunk in animation"
@@ -2058,7 +2059,7 @@ msgstr ""
 #.
 #: ../gtk/gtkmain.c:652
 msgid "default:LTR"
-msgstr "ප්‍රකෘතිය:LTR"
+msgstr "default:LTR"
 
 #: ../gtk/gtkmain.c:749
 msgid "GTK+ Options"
