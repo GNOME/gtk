@@ -858,7 +858,6 @@ gtk_statusbar_size_allocate  (GtkWidget     *widget,
 
   if (statusbar->has_resize_grip)
     {
-      widget->allocation = *allocation;
       get_grip_rect (statusbar, &rect);    
       
       extra_children = has_extra_children (statusbar);
