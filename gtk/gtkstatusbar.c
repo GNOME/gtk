@@ -825,6 +825,10 @@ has_extra_children (GtkStatusbar *statusbar)
   GList *l;
   GtkBoxChild *child, *frame;
 
+  /* If the internal frame has been modified assume we have extra children */
+  if (gtk_bin_get_child (GTK_BIN (statusbar->frame)) != statusbar->label)
+    return TRUE;
+
   frame = NULL;
   for (l = GTK_BOX (statusbar)->children; l; l = l->next)
     {
