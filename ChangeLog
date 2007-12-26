@@ -1,3 +1,9 @@
+2007-12-26  Xan Lopez  <xan@gnome.org>
+
+	* gtk/gtkstatusbar.c (has_extra_children): take into account the
+	modification of the internal frame contents to decide if we have
+	extra children. (#415677)
+
 2007-12-22  Christian Persch  <chpe@gnome.org>
 
 	* modules/other/gail/gailitem.c: Fix mem leak. Bug #505556.
