@@ -6399,6 +6399,21 @@ gtk_paint_resize_grip (GtkStyle      *style,
 }
 
 /**
+ * gtk_border_new:
+ *
+ * Allocates a new #GtkBorder structure and initializes its elements to zero.
+ * 
+ * Returns: a new empty #GtkBorder. The newly allocated #GtkBorder should be freed
+ * with gtk_border_free()
+ * Since: 2.16
+ **/
+GtkBorder *
+gtk_border_new (void)
+{
+  return g_slice_new0 (GtkBorder);
+}
+
+/**
  * gtk_border_copy:
  * @border_: a #GtkBorder.
  * @returns: a copy of @border_.
@@ -6408,15 +6423,9 @@ gtk_paint_resize_grip (GtkStyle      *style,
 GtkBorder *
 gtk_border_copy (const GtkBorder *border)
 {
-  GtkBorder *ret;
-
   g_return_val_if_fail (border != NULL, NULL);
 
-  ret = g_slice_new (GtkBorder);
-
-  *ret = *border;
-
-  return ret;
+  return g_slice_dup (GtkBorder, border);
 }
 
 /**

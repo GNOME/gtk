@@ -5646,6 +5646,7 @@ gtk_draw_insertion_cursor
 
 <SUBSECTION>
 GtkBorder
+gtk_border_new
 gtk_border_copy
 gtk_border_free
 

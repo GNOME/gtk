@@ -856,6 +856,7 @@ void gtk_paint_resize_grip (GtkStyle		*style,
 
 
 GType      gtk_border_get_type (void) G_GNUC_CONST;
+GtkBorder *gtk_border_new      (void) G_GNUC_MALLOC;
 GtkBorder *gtk_border_copy     (const GtkBorder *border_);
 void       gtk_border_free     (GtkBorder       *border_);
 

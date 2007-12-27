@@ -1172,6 +1172,7 @@ gtk_paint_shadow_gap
 gtk_paint_slider
 gtk_paint_tab
 gtk_paint_vline
+gtk_border_new G_GNUC_MALLOC
 gtk_border_copy
 gtk_border_free
 gtk_border_get_type G_GNUC_CONST

@@ -1,3 +1,7 @@
+2007-12-27  Xan Lopez  <xan@gnome.org>
+
+	* gtk/gtk-sections.txt: Add gtk_border_new
+
 2007-12-19 19:54:11  Tim Janik  <timj@imendio.com>
 
 	* libgail-util/Makefile.am: include Makefile.decl to unbreak test rules.

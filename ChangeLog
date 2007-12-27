@@ -1,3 +1,11 @@
+2007-12-27  Xan Lopez  <xan@gnome.org>
+
+	* gtk/gtk.symbols: 
+	* gtk/gtkstyle.c (gtk_border_new, gtk_border_copy): 
+
+	Add gtk_border_new to avoid memory allocator confusions when using
+	GtkBorders. Also, make gtk_border_copy use g_slice_dup. (#454042)
+
 2007-12-27  Christian Persch  <chpe@gnome.org>
 
 	* gdk/x11/gdkscreen-x11.c: (init_randr12): Fir the patch from 
