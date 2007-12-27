@@ -684,7 +684,7 @@ init_randr12 (GdkScreen *screen)
     return FALSE;
   
   monitors = g_array_sized_new (FALSE, TRUE, sizeof (GdkX11Monitor),
-                                monitors->len);
+                                resources->noutput);
 
   for (i = 0; i < resources->noutput; ++i)
     {

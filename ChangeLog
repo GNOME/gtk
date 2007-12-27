@@ -1,3 +1,8 @@
+2007-12-27  Christian Persch  <chpe@gnome.org>
+
+	* gdk/x11/gdkscreen-x11.c: (init_randr12): Fir the patch from 
+	bug #504886 not to read unitialised memory.
+
 2007-12-26  Xan Lopez  <xan@gnome.org>
 
 	* gtk/gtkstatusbar.c (has_extra_children): take into account the
