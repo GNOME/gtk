@@ -1,3 +1,7 @@
+2007-12-27  Christian Persch  <chpe@gnome.org>
+	
+	* Makefile.am: Install gail.pc. Bug #505859.
+
 2007-12-27  Mathias Hasselmann  <mathias@openismus.com>
 
 	Add infrastructure for GtkCalendar details. (#339540)
