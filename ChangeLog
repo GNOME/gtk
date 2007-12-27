@@ -1,3 +1,11 @@
+2007-12-27  Mathias Hasselmann  <mathias@openismus.com>
+
+	Add infrastructure for GtkCalendar details. (#339540)
+
+	* gtk/gtkcalendar.c, gtk/gtkcalendar.h, gtk/gtk.symbols:
+	Add "detail-width-chars" and "detail-height-rows" properties,
+	and gtk_calendar_set_detail_func function.
+
 2007-12-27  Xan Lopez  <xan@gnome.org>
 
 	* gtk/gtk.symbols: 

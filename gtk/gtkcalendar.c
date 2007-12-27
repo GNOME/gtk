@@ -232,6 +232,8 @@ enum
   PROP_SHOW_DAY_NAMES,
   PROP_NO_MONTH_CHANGE,
   PROP_SHOW_WEEK_NUMBERS,
+  PROP_DETAIL_WIDTH_CHARS,
+  PROP_DETAIL_HEIGHT_ROWS,
   PROP_LAST
 };
 
@@ -280,6 +282,15 @@ struct _GtkCalendarPrivate
 
   gint drag_start_x;
   gint drag_start_y;
+
+  /* Optional callback, used to display extra information for each day. */
+  GtkCalendarDetailFunc detail_func;
+  gpointer              detail_func_user_data;
+  GDestroyNotify        detail_func_destroy;
+
+  /* Size requistion for details provided by the hook. */
+  gint detail_height_rows;
+  gint detail_width_chars;
 };
 
 #define GTK_CALENDAR_GET_PRIVATE(widget)  (GTK_CALENDAR (widget)->priv)
@@ -491,6 +502,38 @@ gtk_calendar_class_init (GtkCalendarClass *class)
 							 P_("If TRUE, week numbers are displayed"),
 							 FALSE,
 							 GTK_PARAM_READWRITE));
+
+/**
+ * GtkCalendar:detail-width-chars:
+ *
+ * Width of a detail cell, in characters.
+ * A value of 0 allows any width. See gtk_calendar_set_detail_func().
+ *
+ * Since: 2.16
+ */
+  g_object_class_install_property (gobject_class,
+                                   PROP_DETAIL_WIDTH_CHARS,
+                                   g_param_spec_int ("detail-width-chars",
+						     P_("Details Width"),
+						     P_("Details width in characters"),
+						     0, 127, 0,
+						     GTK_PARAM_READWRITE));
+
+/**
+ * GtkCalendar:detail-height-rows:
+ *
+ * Height of a detail cell, in rows.
+ * A value of 0 allows any width. See gtk_calendar_set_detail_func().
+ *
+ * Since: 2.16
+ */
+  g_object_class_install_property (gobject_class,
+                                   PROP_DETAIL_HEIGHT_ROWS,
+                                   g_param_spec_int ("detail-height-rows",
+						     P_("Details Height"),
+						     P_("Details height in rows"),
+						     0, 127, 0,
+						     GTK_PARAM_READWRITE));
 
   gtk_calendar_signals[MONTH_CHANGED_SIGNAL] =
     g_signal_new (I_("month_changed"),
@@ -1148,8 +1191,18 @@ gtk_calendar_finalize (GObject *object)
 static void
 gtk_calendar_destroy (GtkObject *object)
 {
+  GtkCalendarPrivate *priv = GTK_CALENDAR_GET_PRIVATE (object);
+
   calendar_stop_spinning (GTK_CALENDAR (object));
   
+  /* Call the destroy function for the extra display callback: */
+  if (priv->detail_func_destroy && priv->detail_func_user_data)
+    {
+      priv->detail_func_destroy (priv->detail_func_user_data);
+      priv->detail_func_user_data = NULL;
+      priv->detail_func_destroy = NULL;
+    }
+
   GTK_OBJECT_CLASS (gtk_calendar_parent_class)->destroy (object);
 }
 
@@ -1220,6 +1273,14 @@ gtk_calendar_set_property (GObject      *object,
 				   GTK_CALENDAR_SHOW_WEEK_NUMBERS,
 				   g_value_get_boolean (value));
       break;
+    case PROP_DETAIL_WIDTH_CHARS:
+      gtk_calendar_set_detail_width_chars (calendar,
+                                           g_value_get_int (value));
+      break;
+    case PROP_DETAIL_HEIGHT_ROWS:
+      gtk_calendar_set_detail_height_rows (calendar,
+                                           g_value_get_int (value));
+      break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
@@ -1232,9 +1293,8 @@ gtk_calendar_get_property (GObject      *object,
 			   GValue       *value,
 			   GParamSpec   *pspec)
 {
-  GtkCalendar *calendar;
-
-  calendar = GTK_CALENDAR (object);
+  GtkCalendarPrivate *priv = GTK_CALENDAR_GET_PRIVATE (object);
+  GtkCalendar *calendar = GTK_CALENDAR (object);
 
   switch (prop_id) 
     {
@@ -1262,6 +1322,12 @@ gtk_calendar_get_property (GObject      *object,
     case PROP_SHOW_WEEK_NUMBERS:
       g_value_set_boolean (value, calendar_get_display_option (calendar,
 							       GTK_CALENDAR_SHOW_WEEK_NUMBERS));
+      break;
+    case PROP_DETAIL_WIDTH_CHARS:
+      g_value_set_int (value, priv->detail_width_chars);
+      break;
+    case PROP_DETAIL_HEIGHT_ROWS:
+      g_value_set_int (value, priv->detail_height_rows);
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -3486,6 +3552,142 @@ gtk_calendar_get_date (GtkCalendar *calendar,
   
   if (day)
     *day = calendar->selected_day;
+}
+
+/**
+ * gtk_calendar_set_detail_func:
+ * @calendar: a #GtkCalendar.
+ * @func: a function providing details for each day.
+ * @data: data to pass to @func invokations.
+ * @destroy: a function for releasing @data.
+ *
+ * Installs a function which provides Pango markup with detail information
+ * for each day. Examples for such details are holidays or appointments. That
+ * information is shown below each day when #GtkCalendar:show-details is set.
+ * A tooltip containing with full detail information is provided, if the entire
+ * text should not fit into the details area, or if #GtkCalendar:show-details
+ * is not set.
+ *
+ * The size of the details area can be restricted by setting the
+ * #GtkCalendar:detail-width-chars and #GtkCalendar:detail-height-rows
+ * properties.
+ *
+ * Since: 2.16
+ */
+void
+gtk_calendar_set_detail_func (GtkCalendar           *calendar,
+                              GtkCalendarDetailFunc  func,
+                              gpointer               data,
+                              GDestroyNotify         destroy)
+{
+  GtkCalendarPrivate *priv;
+
+  g_return_if_fail (GTK_IS_CALENDAR (calendar));
+
+  priv = GTK_CALENDAR_GET_PRIVATE (calendar);
+
+  if (priv->detail_func_destroy)
+    priv->detail_func_destroy (priv->detail_func_user_data);
+
+  priv->detail_func = func;
+  priv->detail_func_user_data = data;
+  priv->detail_func_destroy = destroy;
+
+  gtk_widget_set_has_tooltip (GTK_WIDGET (calendar),
+                              NULL != priv->detail_func);
+  gtk_widget_queue_resize (GTK_WIDGET (calendar));
+}
+
+/**
+ * gtk_calendar_set_detail_width_chars:
+ * @calendar: a #GtkCalendar.
+ * @chars: detail width in characters.
+ *
+ * Updates the width of detail cells.
+ * See #GtkCalendar:detail-width-chars.
+ *
+ * Since: 2.16
+ */
+void
+gtk_calendar_set_detail_width_chars (GtkCalendar *calendar,
+                                     gint         chars)
+{
+  GtkCalendarPrivate *priv;
+
+  g_return_if_fail (GTK_IS_CALENDAR (calendar));
+
+  priv = GTK_CALENDAR_GET_PRIVATE (calendar);
+
+  if (chars != priv->detail_width_chars)
+    {
+      priv->detail_width_chars = chars;
+      g_object_notify (G_OBJECT (calendar), "detail-width-chars");
+      gtk_widget_queue_resize_no_redraw (GTK_WIDGET (calendar));
+    }
+}
+
+/**
+ * gtk_calendar_set_detail_height_rows:
+ * @calendar: a #GtkCalendar.
+ * @rows: detail height in rows.
+ *
+ * Updates the height of detail cells.
+ * See #GtkCalendar:detail-height-rows.
+ *
+ * Since: 2.16
+ */
+void
+gtk_calendar_set_detail_height_rows (GtkCalendar *calendar,
+                                     gint         rows)
+{
+  GtkCalendarPrivate *priv;
+
+  g_return_if_fail (GTK_IS_CALENDAR (calendar));
+
+  priv = GTK_CALENDAR_GET_PRIVATE (calendar);
+
+  if (rows != priv->detail_height_rows)
+    {
+      priv->detail_height_rows = rows;
+      g_object_notify (G_OBJECT (calendar), "detail-height-rows");
+      gtk_widget_queue_resize_no_redraw (GTK_WIDGET (calendar));
+    }
+}
+
+/**
+ * gtk_calendar_get_detail_width_chars:
+ * @calendar: a #GtkCalendar.
+ *
+ * Queries the width of detail cells, in characters.
+ * See #GtkCalendar:detail-width-chars.
+ *
+ * Since: 2.16
+ *
+ * Return value: The width of detail cells, in characters.
+ */
+gint
+gtk_calendar_get_detail_width_chars (GtkCalendar *calendar)
+{
+  g_return_val_if_fail (GTK_IS_CALENDAR (calendar), 0);
+  return GTK_CALENDAR_GET_PRIVATE (calendar)->detail_width_chars;
+}
+
+/**
+ * gtk_calendar_get_detail_height_rows:
+ * @calendar: a #GtkCalendar.
+ *
+ * Queries the height of detail cells, in rows.
+ * See #GtkCalendar:detail-width-chars.
+ *
+ * Since: 2.16
+ *
+ * Return value: The height of detail cells, in rows.
+ */
+gint
+gtk_calendar_get_detail_height_rows (GtkCalendar *calendar)
+{
+  g_return_val_if_fail (GTK_IS_CALENDAR (calendar), 0);
+  return GTK_CALENDAR_GET_PRIVATE (calendar)->detail_height_rows;
 }
 
 /**
