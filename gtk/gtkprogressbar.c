@@ -187,7 +187,7 @@ gtk_progress_bar_class_init (GtkProgressBarClass *class)
 				   g_param_spec_string ("text",
 							P_("Text"),
 							P_("Text to be displayed in the progress bar"),
-							"%P %%",
+							NULL,
 							GTK_PARAM_READWRITE));
 
   /**

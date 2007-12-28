@@ -164,6 +164,8 @@ gtk_print_operation_init (GtkPrintOperation *operation)
   priv->unit = GTK_UNIT_PIXEL;
 
   appname = g_get_application_name ();
+  if (appname == NULL)
+    appname = "";
   /* translators: this string is the default job title for print
    * jobs. %s gets replaced by the application name, %d gets replaced
    * by the job number.
