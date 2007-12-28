@@ -163,11 +163,13 @@ gtk_cell_renderer_text_init (GtkCellRendererText *celltext)
   GTK_CELL_RENDERER (celltext)->yalign = 0.5;
   GTK_CELL_RENDERER (celltext)->xpad = 2;
   GTK_CELL_RENDERER (celltext)->ypad = 2;
+  celltext->font_scale = 1.0;
   celltext->fixed_height_rows = -1;
   celltext->font = pango_font_description_new ();
 
   priv->width_chars = -1;
   priv->wrap_width = -1;
+  priv->wrap_mode = PANGO_WRAP_CHAR;
   priv->align = PANGO_ALIGN_LEFT;
   priv->align_set = FALSE;
 }
@@ -1075,7 +1077,7 @@ gtk_cell_renderer_text_set_property (GObject      *object,
         GdkColor color;
 
         if (!g_value_get_string (value))
-          set_bg_color (celltext, NULL);       /* reset to backgrounmd_set to FALSE */
+          set_bg_color (celltext, NULL);       /* reset to background_set to FALSE */
         else if (gdk_color_parse (g_value_get_string (value), &color))
           set_bg_color (celltext, &color);
         else
