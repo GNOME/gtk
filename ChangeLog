@@ -1,5 +1,15 @@
 2007-12-28  Mathias Hasselmann  <mathias@openismus.com>
 
+	Add GTK_CALENDAR_SHOW_DETAILS display flag, which chooses if details
+	are shown within the widget, or jst as tooltip.
+
+	* gtk/gtkcalendar.c, gtk/gtkcalendar.h: Add "show-details" property
+	aka. GTK_CALENDAR_SHOW_DETAILS, and use it.
+	* tests/testcalendar.c: Test GTK_CALENDAR_SHOW_DETAILS. Reduce padding
+	in flags vbox.
+
+2007-12-28  Mathias Hasselmann  <mathias@openismus.com>
+
 	Try more decent appearance of calendar details separator. (#339540)
 
 	* gtk/gtkcalendar.c: Use different colors for drawing the separator,

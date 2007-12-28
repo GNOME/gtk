@@ -150,16 +150,7 @@ calendar.
 
 <!-- ##### ENUM GtkCalendarDisplayOptions ##### -->
 <para>
-These options can be used to influence the display and behaviour of a #GtkCalendar.
 </para>
-
-@GTK_CALENDAR_SHOW_HEADING: Specifies that the month and year should be displayed.
-@GTK_CALENDAR_SHOW_DAY_NAMES: Specifies that three letter day descriptions should be present.
-@GTK_CALENDAR_NO_MONTH_CHANGE: Prevents the user from switching months with the calendar.
-@GTK_CALENDAR_SHOW_WEEK_NUMBERS: Displays each week numbers of the current year, down the left side 
- of the calendar.
-@GTK_CALENDAR_WEEK_START_MONDAY: Since GTK+ 2.4, this option is deprecated and ignored by GTK+. 
- The information on which day the calendar week starts is derived from the locale.
 
 <!-- ##### FUNCTION gtk_calendar_new ##### -->
 <para>

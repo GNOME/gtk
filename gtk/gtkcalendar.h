@@ -51,13 +51,28 @@ typedef struct _GtkCalendarClass       GtkCalendarClass;
 
 typedef struct _GtkCalendarPrivate     GtkCalendarPrivate;
 
+/**
+ * GtkCalendarDisplayOptions:
+ * @GTK_CALENDAR_SHOW_HEADING: Specifies that the month and year should be displayed.
+ * @GTK_CALENDAR_SHOW_DAY_NAMES: Specifies that three letter day descriptions should be present.
+ * @GTK_CALENDAR_NO_MONTH_CHANGE: Prevents the user from switching months with the calendar.
+ * @GTK_CALENDAR_SHOW_WEEK_NUMBERS: Displays each week numbers of the current year, down the
+ * left side of the calendar.
+ * @GTK_CALENDAR_WEEK_START_MONDAY: Since GTK+ 2.4, this option is deprecated and ignored by GTK+.
+ * The information on which day the calendar week starts is derived from the locale.
+ * @GTK_CALENDAR_SHOW_DETAILS: Just show an indicator, not the full details
+ * text when details are provided. See gtk_calendar_set_detail_func().
+ *
+ * These options can be used to influence the display and behaviour of a #GtkCalendar.
+ */
 typedef enum
 {
   GTK_CALENDAR_SHOW_HEADING		= 1 << 0,
   GTK_CALENDAR_SHOW_DAY_NAMES		= 1 << 1,
   GTK_CALENDAR_NO_MONTH_CHANGE		= 1 << 2,
   GTK_CALENDAR_SHOW_WEEK_NUMBERS	= 1 << 3,
-  GTK_CALENDAR_WEEK_START_MONDAY	= 1 << 4
+  GTK_CALENDAR_WEEK_START_MONDAY	= 1 << 4,
+  GTK_CALENDAR_SHOW_DETAILS		= 1 << 5,
 } GtkCalendarDisplayOptions;
 
 /**

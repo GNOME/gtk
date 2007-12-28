@@ -1,3 +1,8 @@
+2007-12-28  Mathias Hasselmann  <mathias@openismus.com>
+
+	* gtk/tmpl/gtkcalendar.sgml: Move documentation for
+	GtkCalendarDisplayOptions to gtk/gtkcalendar.c.
+
 2007-12-27  Mathias Hasselmann  <mathias@openismus.com>
 
 	* reference/gtk/gtk-sections.txt: Add new GtkCalendar symbols.

@@ -30,9 +30,9 @@
 
 typedef struct _CalendarData
 {
-  GtkWidget     *calendar_widget;
-  GtkWidget *flag_checkboxes[5];
-  gboolean  settings[5];
+  GtkWidget *calendar_widget;
+  GtkWidget *flag_checkboxes[6];
+  gboolean  settings[6];
   GtkWidget *font_dialog;
   GtkWidget *window;
   GtkWidget *prev2_sig;
@@ -431,6 +431,7 @@ create_calendar(void)
       { FALSE, "No Month _Change" },
       { TRUE,  "Show _Week Numbers" },
       { FALSE, "Week Start _Monday" },
+      { TRUE,  "Show De_tails" },
     };
 
   calendar_data.window = NULL;
@@ -602,7 +603,7 @@ create_calendar(void)
 
   gtk_box_pack_start (GTK_BOX (hbox), button, FALSE, TRUE, 0);
 
-  toggle = gtk_check_button_new_with_mnemonic ("_Show Details");
+  toggle = gtk_check_button_new_with_mnemonic ("_Use Details");
   g_signal_connect (toggle, "toggled",
                     G_CALLBACK(calendar_toggle_details),
                     &calendar_data);
@@ -610,7 +611,7 @@ create_calendar(void)
   
   /* Build the Right frame with the flags in */ 
 
-  vbox = gtk_vbox_new(FALSE, DEF_PAD_SMALL);
+  vbox = gtk_vbox_new(FALSE, 0);
   frame = create_expander ("<b>Flags</b>", vbox, 1, 0);
   gtk_box_pack_start (GTK_BOX (rpane), frame, TRUE, TRUE, 0);
 
