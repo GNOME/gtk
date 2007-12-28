@@ -1,3 +1,8 @@
+2007-12-27  Matthias Clasen  <mclasen@redhat.com>
+
+	* gkt/gtksignal.h: Fix 0<>NULL confusion in gtk_signal_connect...
+	defines.  (#505708,  MINAMI Hirokazu)
+
 2007-12-27  Christian Persch  <chpe@gnome.org>
 	
 	* Makefile.am: Install gail.pc. Bug #505859.
@@ -200,6 +205,91 @@
 	accessible in gailimage.c. Bug #504246.
 
 2007-12-19  Mathias Hasselmann  <mathias@openismus.com>
+
+	Add GTK_CALENDAR_SHOW_DETAILS display flag, which chooses if details
+	are shown within the widget, or jst as tooltip.
+
+	* gtk/gtkcalendar.c, gtk/gtkcalendar.h: Add "show-details" property
+	aka. GTK_CALENDAR_SHOW_DETAILS, and use it.
+	* tests/testcalendar.c: Test GTK_CALENDAR_SHOW_DETAILS. Reduce padding
+	in flags vbox.
+
+2007-12-17  Mathias Hasselmann  <mathias@openismus.com>
+
+	Add GTK_CALENDAR_SHOW_DETAILS display flag, which chooses if details
+	are shown within the widget, or jst as tooltip.
+
+	* gtk/gtkcalendar.c, gtk/gtkcalendar.h: Add "show-details" property
+	aka. GTK_CALENDAR_SHOW_DETAILS, and use it.
+	* tests/testcalendar.c: Test GTK_CALENDAR_SHOW_DETAILS. Reduce padding
+	in flags vbox.
+
+2007-12-27  Mathias Hasselmann  <mathias@openismus.com>
+
+	Try more decent appearance of calendar details separator. (#339540)
+
+	* gtk/gtkcalendar.c: Use different colors for drawing the separator,
+	and make it short by one pixel on each side.
+
+2007-12-17  Mathias Hasselmann  <mathias@openismus.com>
+
+	Try more decent appearance of calendar details separator. (#339540)
+
+	* gtk/gtkcalendar.c: Use different colors for drawing the separator,
+	and make it short by one pixel on each side.
+
+2007-12-17  Mathias Hasselmann  <mathias@openismus.com>
+
+	Try more decent appearance of calendar details separator. (#339540)
+
+	* gtk/gtkcalendar.c: Use different colors for drawing the separator,
+	and make it short by one pixel on each side.
+
+2007-12-17  Mathias Hasselmann  <mathias@openismus.com>
+
+	Restructure testcalendar for testing calendar details. (#339540)
+
+	* tests/testcalendar.c: Move code arround to test calendar details.
+
+2007-12-17  Mathias Hasselmann  <mathias@openismus.com>
+
+	Restructure testcalendar for testing calendar details. (#339540)
+
+	* tests/testcalendar.c: Move code arround to test calendar details.
+
+2007-12-17  Mathias Hasselmann  <mathias@openismus.com>
+
+	Implement GtkTooltip API for calendar details. (#339540)
+
+	* gtk/gtkcalendar.c: Add gtk_calendar_query_tooltip and chain it up.
+
+2007-12-17  Mathias Hasselmann  <mathias@openismus.com>
+
+	Without explicitly set "detail-width-chars" and "detail-height-rows"
+	properties not only the widget has to be redrawn on certain
+	conditions, but also its size must be recalculated. (#339540)
+
+	* gtk/gtkcalendar.c: Add calendar_queue_refresh and call
+	that function instead of gtk_widget_queue_draw.
+
+2007-12-17  Mathias Hasselmann  <mathias@openismus.com>
+
+	Without explicitly set "detail-width-chars" and "detail-height-rows"
+	properties not only the widget has to be redrawn on certain
+	conditions, but also its size must be recalculated. (#339540)
+
+	* gtk/gtkcalendar.c: Add calendar_queue_refresh and call
+	that function instead of gtk_widget_queue_draw.
+
+2007-12-17  Mathias Hasselmann  <mathias@openismus.com>
+
+	Consider in size-request and show calender details. (#339540)
+
+	* gtk/gtkcalendar.c: Add gtk_calendar_get_detail and
+	is_color_attribute functions. Change gtk_calendar_size_request and
+	calendar_paint_day to consider and show calender details.
+
+2007-12-17  Mathias Hasselmann  <mathias@openismus.com>
 
 	Avoid some compiler warnings and remove obsolete code. (#339540)
 

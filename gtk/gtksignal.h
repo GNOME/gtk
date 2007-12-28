@@ -48,13 +48,13 @@ G_BEGIN_DECLS
 #define	gtk_signal_emit_stop(object,signal_id)                                         \
    g_signal_stop_emission ((object), (signal_id), 0)
 #define	gtk_signal_connect(object,name,func,func_data)                                 \
-   gtk_signal_connect_full ((object), (name), (func), 0, (func_data), 0, 0, 0)
+   gtk_signal_connect_full ((object), (name), (func), NULL, (func_data), NULL, 0, 0)
 #define	gtk_signal_connect_after(object,name,func,func_data)                           \
-   gtk_signal_connect_full ((object), (name), (func), 0, (func_data), 0, 0, 1)
+   gtk_signal_connect_full ((object), (name), (func), NULL, (func_data), NULL, 0, 1)
 #define	gtk_signal_connect_object(object,name,func,slot_object)                        \
-   gtk_signal_connect_full ((object), (name), (func), 0, (slot_object), 0, 1, 0)
+   gtk_signal_connect_full ((object), (name), (func), NULL, (slot_object), NULL, 1, 0)
 #define	gtk_signal_connect_object_after(object,name,func,slot_object)                  \
-   gtk_signal_connect_full ((object), (name), (func), 0, (slot_object), 0, 1, 1)
+   gtk_signal_connect_full ((object), (name), (func), NULL, (slot_object), NULL, 1, 1)
 #define	gtk_signal_disconnect(object,handler_id)                                       \
    g_signal_handler_disconnect ((object), (handler_id))
 #define	gtk_signal_handler_block(object,handler_id)                                    \
