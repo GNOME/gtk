@@ -802,7 +802,7 @@ gtk_combo_box_class_init (GtkComboBoxClass *klass)
                                    g_param_spec_string ("tearoff-title",
                                                         P_("Tearoff Title"),
                                                         P_("A title that may be displayed by the window manager when the popup is torn-off"),
-                                                        "",
+                                                        NULL,
                                                         GTK_PARAM_READWRITE));
 
 
@@ -5523,13 +5523,17 @@ void
 gtk_combo_box_set_title (GtkComboBox *combo_box,
 			 const gchar *title)
 {
+  GtkComboBoxPrivate *priv;
+
   g_return_if_fail (GTK_IS_COMBO_BOX (combo_box));
 
+  priv = combo_box->priv;
+
   if (strcmp (title ? title : "", 
-	      combo_box->priv->tearoff_title ? combo_box->priv->tearoff_title : "") != 0)
+	      priv->tearoff_title ? priv->tearoff_title : "") != 0)
     {
-      g_free (combo_box->priv->tearoff_title);
-      combo_box->priv->tearoff_title = g_strdup (title);
+      g_free (priv->tearoff_title);
+      priv->tearoff_title = g_strdup (title);
 
       gtk_combo_box_update_title (combo_box);
 

@@ -1,5 +1,8 @@
 2007-12-27  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkcombobox.c: Correct the default value for the 
+	tearoff-title property.
+
 	* gtk/gtkcellrenderertext.c: Fix the default value for the
 	wrap-mode and font-scale properties.
 
