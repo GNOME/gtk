@@ -514,7 +514,9 @@ gtk_item_factory_finalize (GObject *object)
 
   ifactory = GTK_ITEM_FACTORY (object);
 
-  g_object_unref (ifactory->accel_group);
+  if (ifactory->accel_group)
+    g_object_unref (ifactory->accel_group);
+
   g_free (ifactory->path);
   g_assert (ifactory->widget == NULL);
 

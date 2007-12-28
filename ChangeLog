@@ -1,5 +1,10 @@
 2007-12-28  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkitemfactory.c (gtk_item_factory_finalize): Don't unref
+	accel_group unless it is set.
+
+2007-12-28  Matthias Clasen  <mclasen@redhat.com>
+
 	* gdk/x11/gdkwindow-x11.c (get_default_title): Don't return NULL.
 
 2007-12-28  Matthias Clasen  <mclasen@redhat.com>
