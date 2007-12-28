@@ -1,3 +1,9 @@
+2007-12-28  Christian Persch  <chpe@gnome.org>
+
+	* modules/other/gail/Makefile.am:
+	* modules/other/gail/tests/*:
+	* configure.in: Merge tests from standalone gail. Bug #504568.
+
 2007-12-28  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtkclipboard.c: Make the finalizer work when display is

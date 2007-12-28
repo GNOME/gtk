@@ -1,0 +1,314 @@
+
+============================
+GAIL README
+Last Updated: August 2, 2001
+============================
+
+
+General Info
+============
+
+This README describes how to use the various test programs
+in the gail/tests directory.
+
+To run the various test programs described in this README,
+the test libraries must be built and installed.  Running
+"make", then "make install" in the gail top-level directory
+will take care of this.  Then do the following:
+
+1. Set the environment variable GTK_MODULES to
+   "libgail:lib<testname>"
+
+   For example, for ferret, it would be "libgail:libferret"
+
+2. Run the GTK+ test program specified.  These test programs
+   are found in the GTK+ build directory in the subdirectory
+   called "tests".
+
+Most test programs will display output directly to the 
+terminal window where the GTK+ test program was launched.
+Some test programs (testtable and testtext) will launch a
+test GUI program which allows more interactive testing.
+
+The test GUI has two windows.  The first window is the
+"Test Control" window and the second window is the
+"Test Output" window.  In the "Test Control" window,
+press the button(s) that corresponds to the tests to run
+and press the "Run Tests" button at the bottom of the
+screen.  Some tests have associated text entry fields
+which become active when the button is toggled on.  These
+text entry fields correspond to arguments that affect how
+the test is executed.  They are pre-filled with default
+values but the user can change them if desired.  The
+output from the tests is displayed in the "Test Output"
+window.
+
+
+testlib
+=======
+
+Contains general purpose functionality that is used by the
+various tests.  These include functions that find a specific
+widget/AtkObject in the test program, and functions used by
+tests that use the Gail Test GUI.
+
+
+ferret
+======
+
+Ferret is a passive in-process test tool for ATK and GAIL.
+
+Run a GTK+-2.0 application such as "testgtk", and ferret will
+display a window on screen.   In this window accessibility
+information about the GTK+ widgets will appear as they
+receive focus.
+
+The ferret window has several tabs, one for each of the
+following ATK interfaces.
+
+  Object
+  Action
+  Component
+  Image
+  Table
+  Text
+  Value
+
+Tabs that do not apply to the current widget in focus will be
+displayed as inactive.  Clicking on an active tab will display
+information about the AtkObject accessed via the ATK API.  In the
+Action tab the various actions are displayed as buttons.  When
+a button is clicked, the action specified on the button's
+label is performed.
+
+If you have installed the "festival" speech synthesis system,
+running festival in server mode (festival --server) and turning
+on Ferret's Festival support will cause the following to happen:
+
+1. AtkObject accessible names, roles, and keybindings will be
+   spoken as they receive focus.
+2. When the caret (cursor) is moved in a text field, the 
+   current line will be spoken, unless the caret is moved
+   just a single character.  In the later case, only the
+   single character after the caret will be spoken.
+
+Festival support can be turned on by checking "Festival" in the
+menu, or by setting the environment variable FERRET_FESTIVAL
+prior to starting the test.  By checking "Festival Terse" or
+by setting the environment variable FERRET_TERSE, only the
+name of the AtkObject will be spoken (and not the roles and
+keybindings).
+
+A magnifier can be turned on to enlarge the widget in focus
+by checking "Magnifier" in the menu, or by setting the
+environment variable FERRET_MAGNIFIER.  This requires that
+the magnifier standalone code is running.
+
+Checking "Track Mouse in the menu or by setting the environment
+variable FERRET_MOUSETRACK causes ferret to display information
+about the widget that is under the mouse rather than the widget
+that has focus.  The mouse is tracked via GtkWidget
+"enter_notify_event" signals, so flyweight objects are not tracked.
+
+Checking "Terminal Output" in the menu or by setting the 
+environment variable FERRET_ASCII will display the information
+that is normally displayed to the ferret GUI window to the
+terminal screen.
+
+Checking "No ATK Signals" in the menu or by setting the
+environment variable FERRET_NOSIGNALS will cause ferret to
+ignore any ATK signals, and it will not update its display
+when such signals occur.
+
+
+testaction
+==========
+
+This is a GTK+ module used to test the implementation of the ATK
+interface AtkAction, except for atk_action_do_action() in the GAIL 
+library. It is normally used with the GTK+ test program testgtk.
+
+
+testbutton
+==========
+
+This is a GTK+ module used to test the accessible implementation 
+for buttons. It is normally used with the GTK+ test program testgtk.
+
+Set the TEST_ACCESSIBLE_NAME environment variable to have the test
+driver attach to a widget by widget name (compared via the 
+gtk_widget_get_name function call).
+
+Set the environment variable TEST_ACCESSIBLE_AUTO and the program
+will execute the action defined for a GailButton once.
+
+
+testcombo
+=========
+
+This is a GTK+ module used to test the implementation of the ATK action
+interfaces on GailCombo. It is normally used with the GTK+ test program 
+testgtk by putting the focus in the GtkCombo in entry window.
+
+
+testcomponent
+=============
+
+This is a GTK+ module used to test the implementation of the ATK
+interface AtkComponent in the GAIL library. It is normally used with the 
+GTK+ test program testgtk.
+
+
+testimage
+=========
+
+This is a GTK+ module used to test the implementation of the ATK
+interface AtkImage in the GAIL library. It is normally used with the GTK+
+test program testgtk, but can also be used with testdnd when you want
+to test GtkPixmap. This modules pops up an extra dialog on startup , containing
+GtkArrows and a GtkImage. This dialog has to be closed before control is returned to main window.
+
+
+testmenuitem
+============
+
+This is a GTK+ module used to test the accessible implementation 
+for menu items. It is normally used with the GTK+ test program testgtk.
+
+Set the TEST_ACCESSIBLE_NAME environment variable to have the test
+driver attach to a widget by widget name (compared via the 
+gtk_widget_get_name function call).
+
+Set the environment variable TEST_ACCESSIBLE_AUTO and the program
+will execute the action defined for a GailButton once.
+
+
+testnotebook
+=============
+
+This is a GTK+ module used to test the implementation of the ATK
+interface AtkSelection for GailNotebook. It is normally used with the 
+GTK+ test program testgtk.
+
+
+testobject
+==========
+
+This is a GTK+ module used to test the implementation of the ATK
+interface in atkobject.h in the GAIL library. It is normally used with the 
+GTK+ test program testgtk.
+
+
+testoptionmenu
+==============
+
+This is a GTK+ module used to test the implementation of the ATK interfaces
+for GtkOptionmenu. It should be used with the GTK+ test program testgtk and
+its file selection dialog.
+
+
+testpaned
+=========
+
+This is a GTK+ module used to test the implementation of the ATK
+interface AtkValue for GailPaned. It is normally used with the 
+GTK+ test program testgtk. It checks the setting of the position 
+programmatically and that notification is received if the position
+is changed interactively.
+
+
+testprops
+==========
+
+This is a GTK+ module used to test the implementation of ATK properties 
+and property change handlers in the GAIL library. It is normally used with 
+the GTK+ test program testgtk. To see the changing of the state
+ATK_STATE_SHOWING use menus in "progress bar". To see the changing of the
+state ATK_STATE_SENSITIVE uses "labels". To see changing of child and parent
+use resize check box in "panes".
+
+Set the TEST_ACCESSIBLE_NAME environment variable to have the test
+driver attach to a widget by widget name (compared via the 
+gtk_widget_get_name function call).
+
+
+testselection
+=============
+
+This is a GTK+ module used to test the implementation of the AtkSelection
+interface works for the GAIL library. It is normally used with the GTK+ 
+test program testgtk and clicking on the menus option. It can also be used
+with the GtkCombo which can be accessed by clicking on the entry option.
+
+
+teststatusbar
+=============
+
+This is a GTK+ module used to test that the text on the statusbar
+can be retrieved using GailStatusbar. It is normally used with the GTK+ 
+test program testgtk and clicking on statusbar button.
+
+
+testtable
+=========
+
+This is GTK+ module used to test the implementation of AtkTable
+interfaces.  It can be used with GailTreeView, for example.  It
+can be used with any of the following GTK+ test programs:
+testtreecolumns, testtreefocus, testtreesort, testtreeview,
+or treestoretest.
+
+Set the TEST_ACCESSIBLE_NO_PROPERTIES environment variable
+to not receive information about property values changing
+(like cell state changes).
+
+Set the TEST_ACCESSIBLE_NO_GUI environment variable to run the
+test without the GUI program.
+
+
+testtext
+========
+
+This is a GTK+ module used to test the implementation of AtkText and 
+AtkEditableText interfaces on GailTextView.  It is normally used with 
+the GTK+ test program testtext started with a text file loaded.
+It can also be used with the GTK+ test program testgtk, and then
+click on the "entry" or "label" button.
+
+Set the TEST_ACCESSIBLE_NAME environment variable to have the test
+driver attach to a widget by widget name (compared via the 
+gtk_widget_get_name function call).
+
+Set the TEST_ACCESSIBLE_DELAY environment variable to an integer
+and the test driver will attach to only a widget on the nth screen
+that is displayed.
+
+
+testtoplevel
+============
+
+This test exercises the AtkUtil functions.  It accesses the
+atk_get_root() toplevel object, sets/removes global listeners,
+and displays the ATK implementation name/version.
+
+Set the TEST_ACCESSIBLE_DEPTH environment variable to control
+how deep the children of the toplevel object are displayed.
+The default is a depth of 2.  Specifying a depth of -1 will
+show the complete hierarchy.
+
+
+testvalues
+==========
+
+This is a GTK+ module used to test the implementation of AtkValue interface
+works for the GAIL library. GailProgressbar, GailSpinbutton and GailRange
+can all be tested using this module.
+
+
+GAIL README Authors
+===================
+
+-Brian Cameron (brian.cameron@sun.com)
+-Bill Haneman (bill.haneman@sun.com)
+-Padraig O'Briain (padraig.obriain@sun.com)
+
