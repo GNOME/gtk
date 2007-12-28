@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: si\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2007-05-29 03:40+0100\n"
-"PO-Revision-Date: 2007-12-26 11:44+0530\n"
+"PO-Revision-Date: 2007-12-28 13:32+0530\n"
 "Last-Translator: Danishka Navin <danishka@gmail.com>\n"
 "Language-Team: Sinhala <en@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -23,7 +23,7 @@ msgstr "directfb arg"
 
 #: ../gdk/directfb/gdkdisplay-directfb.c:55
 msgid "sdl|system"
-msgstr "system"
+msgstr "පද්ධතිය"
 
 #. Description of --class=CLASS in --help output
 #: ../gdk/gdk.c:126
@@ -2079,7 +2079,7 @@ msgstr ""
 #: ../gtk/gtknotebook.c:4304 ../gtk/gtknotebook.c:6849
 #, c-format
 msgid "Page %u"
-msgstr "පිටුව %u"
+msgstr "%u වන පිටුව "
 
 #: ../gtk/gtkpagesetup.c:570 ../gtk/gtkpapersize.c:825
 #: ../gtk/gtkpapersize.c:865
@@ -2094,7 +2094,7 @@ msgstr "නිරවද්‍ය පිටු සැකසුම් ගොනු
 #.
 #: ../gtk/gtkpagesetupunixdialog.c:154
 msgid "default:mm"
-msgstr "ප්‍රකෘතිය:මි.මි."
+msgstr "default:mm"
 
 #: ../gtk/gtkpagesetupunixdialog.c:310
 msgid ""
@@ -2129,7 +2129,7 @@ msgstr ""
 
 #: ../gtk/gtkpagesetupunixdialog.c:957
 msgid "Manage Custom Sizes..."
-msgstr ""
+msgstr "රිසිකළ ප්‍රමාණ කළමනාකරණය..."
 
 #: ../gtk/gtkpagesetupunixdialog.c:1005
 msgid "_Format for:"
@@ -2154,11 +2154,11 @@ msgstr "මුද්‍රණ යන්ත්‍රයෙන් මායිම�
 #: ../gtk/gtkpagesetupunixdialog.c:1606
 #, c-format
 msgid "Custom Size %d"
-msgstr ""
+msgstr "රිසිකළ ප්‍රමාණය %d"
 
 #: ../gtk/gtkpagesetupunixdialog.c:1835
 msgid "Manage Custom Sizes"
-msgstr ""
+msgstr "රිසිකළ ප්‍රමාණ කළමනාකරණය"
 
 #: ../gtk/gtkpagesetupunixdialog.c:1931
 msgid "_Width:"
@@ -2202,7 +2202,7 @@ msgstr "පහළ මාර්‍ගය"
 
 #: ../gtk/gtkpathbar.c:1374
 msgid "File System Root"
-msgstr ""
+msgstr "ගොනු පද්ධති රූක"
 
 #: ../gtk/gtkprinteroptionwidget.c:685
 msgid "Not available"
@@ -2310,7 +2310,7 @@ msgstr "පරිශීලක මැදිහත් වීම අවශ්‍ය
 
 #: ../gtk/gtkprintoperation-win32.c:670
 msgid "Custom size"
-msgstr ""
+msgstr "රිසිකළ ප්‍රමාණය"
 
 #: ../gtk/gtkprintoperation-win32.c:1484 ../gtk/gtkprintoperation-win32.c:1507
 #: ../gtk/gtkprintoperation-win32.c:1555
@@ -3192,7 +3192,7 @@ msgstr "උපරිම හඬ"
 #: ../gtk/gtkvolumebutton.c:162
 #, c-format
 msgid "volume percentage|%d %%"
-msgstr "හඬ ප්‍රතිශතය|%d %%"
+msgstr "%d %%"
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:5
