@@ -432,6 +432,12 @@ gtk_calendar_class_init (GtkCalendarClass *class)
   widget_class->drag_drop = gtk_calendar_drag_drop;
   widget_class->drag_data_received = gtk_calendar_drag_data_received;
   
+  /**
+   * GtkCalendar:year:
+   *
+   * The selected year. 
+   * This property gets initially set to the current year.
+   */  
   g_object_class_install_property (gobject_class,
                                    PROP_YEAR,
                                    g_param_spec_int ("year",
@@ -439,6 +445,13 @@ gtk_calendar_class_init (GtkCalendarClass *class)
 						     P_("The selected year"),
 						     0, G_MAXINT, 0,
 						     GTK_PARAM_READWRITE));
+
+  /**
+   * GtkCalendar:month:
+   *
+   * The selected month (as a number between 0 and 11). 
+   * This property gets initially set to the current month.
+   */
   g_object_class_install_property (gobject_class,
                                    PROP_MONTH,
                                    g_param_spec_int ("month",
@@ -446,6 +459,14 @@ gtk_calendar_class_init (GtkCalendarClass *class)
 						     P_("The selected month (as a number between 0 and 11)"),
 						     0, 11, 0,
 						     GTK_PARAM_READWRITE));
+
+  /**
+   * GtkCalendar:day:
+   *
+   * The selected day (as a number between 1 and 31, or 0 
+   * to unselect the currently selected day).
+   * This property gets initially set to the current day.
+   */
   g_object_class_install_property (gobject_class,
                                    PROP_DAY,
                                    g_param_spec_int ("day",

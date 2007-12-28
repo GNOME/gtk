@@ -1,3 +1,8 @@
+2007-12-28  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtkcalendar.c: Document the initial values of year/month/day
+	properties.
+
 2007-12-28  Christian Persch  <chpe@gnome.org>
 
 	* gtk/gtkfontsel.c: (gtk_font_selection_get_property): Plug
