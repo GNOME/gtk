@@ -131,7 +131,7 @@ gtk_link_button_class_init (GtkLinkButtonClass *klass)
   /**
    * GtkLinkButton:uri
    * 
-   * The URI bound to this button.
+   * The URI bound to this button. 
    *
    * Since: 2.10
    */
@@ -140,7 +140,7 @@ gtk_link_button_class_init (GtkLinkButtonClass *klass)
   				   g_param_spec_string ("uri",
   				   			_("URI"),
   				   			_("The URI bound to this button"),
-  				   			"http://www.gtk.org",
+  				   			NULL,
   				   			G_PARAM_READWRITE));
   
   g_type_class_add_private (gobject_class, sizeof (GtkLinkButtonPrivate));

@@ -531,7 +531,7 @@ gtk_file_selection_class_init (GtkFileSelectionClass *class)
 				   g_param_spec_boolean ("show-fileops",
 							 P_("Show file operations"),
 							 P_("Whether buttons for creating/manipulating files should be displayed"),
-							 FALSE,
+							 TRUE,
 							 GTK_PARAM_READWRITE));
   g_object_class_install_property (gobject_class,
 				   PROP_SELECT_MULTIPLE,

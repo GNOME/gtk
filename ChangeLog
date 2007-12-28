@@ -1,5 +1,12 @@
 2007-12-28  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkfilesel.c:
+	* gtk/gtklabel.c:
+	* gtk/gtklinkbutton.c:
+	* gtk/gtkmenu.c: More default property value corrections.
+
+2007-12-28  Matthias Clasen  <mclasen@redhat.com>
+
 	* gtk/gtkitemfactory.c (gtk_item_factory_finalize): Don't unref
 	accel_group unless it is set.
 

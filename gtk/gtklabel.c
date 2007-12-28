@@ -296,7 +296,7 @@ gtk_label_class_init (GtkLabelClass *class)
                                    g_param_spec_string ("label",
                                                         P_("Label"),
                                                         P_("The text of the label"),
-                                                        NULL,
+                                                        "",
                                                         GTK_PARAM_READWRITE));
   g_object_class_install_property (gobject_class,
 				   PROP_ATTRIBUTES,

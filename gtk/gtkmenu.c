@@ -483,7 +483,7 @@ gtk_menu_class_init (GtkMenuClass *class)
                                    g_param_spec_string ("tearoff-title",
                                                         P_("Tearoff Title"),
                                                         P_("A title that may be displayed by the window manager when this menu is torn-off"),
-                                                        "",
+                                                        NULL,
                                                         GTK_PARAM_READWRITE));
 
   /**
