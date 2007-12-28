@@ -118,7 +118,7 @@ gtk_printer_class_init (GtkPrinterClass *class)
                                    g_param_spec_string ("name",
 						        P_("Name"),
 						        P_("Name of the printer"),
-						        NULL,
+						        "",
 							GTK_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY));
   g_object_class_install_property (G_OBJECT_CLASS (class),
                                    PROP_BACKEND,
@@ -153,21 +153,21 @@ gtk_printer_class_init (GtkPrinterClass *class)
                                    g_param_spec_string ("state-message",
 						        P_("State Message"),
 						        P_("String giving the current state of the printer"),
-						        NULL,
+						        "",
 							GTK_PARAM_READABLE));
   g_object_class_install_property (G_OBJECT_CLASS (class),
                                    PROP_LOCATION,
                                    g_param_spec_string ("location",
 						        P_("Location"),
 						        P_("The location of the printer"),
-						        NULL,
+						        "",
 							GTK_PARAM_READABLE));
   g_object_class_install_property (G_OBJECT_CLASS (class),
                                    PROP_ICON_NAME,
                                    g_param_spec_string ("icon-name",
 						        P_("Icon Name"),
 						        P_("The icon name to use for the printer"),
-						        NULL,
+						        "",
 							GTK_PARAM_READABLE));
   g_object_class_install_property (G_OBJECT_CLASS (class),
                                    PROP_JOB_COUNT,

@@ -563,9 +563,9 @@ gtk_notebook_class_init (GtkNotebookClass *class)
 				   g_param_spec_int ("page",
  						     P_("Page"),
  						     P_("The index of the current page"),
- 						     0,
+ 						     -1,
  						     G_MAXINT,
- 						     0,
+ 						     -1,
  						     GTK_PARAM_READWRITE));
   g_object_class_install_property (gobject_class,
 				   PROP_TAB_POS,

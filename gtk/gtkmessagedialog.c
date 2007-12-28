@@ -152,7 +152,7 @@ gtk_message_dialog_class_init (GtkMessageDialogClass *class)
                                    g_param_spec_string ("text",
                                                         P_("Text"),
                                                         P_("The primary text of the message dialog"),
-                                                        NULL,
+                                                        "",
                                                         GTK_PARAM_READWRITE));
 
   /**

@@ -1,5 +1,8 @@
 2007-12-28  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkmessagedialog.c:
+	* gtk/gtknotebook.c:
+	* gtk/gtkprinter.c:
 	* gtk/gtkfilesel.c:
 	* gtk/gtklabel.c:
 	* gtk/gtklinkbutton.c:
