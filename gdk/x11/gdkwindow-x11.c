@@ -498,6 +498,8 @@ get_default_title (void)
   title = g_get_application_name ();
   if (!title)
     title = g_get_prgname ();
+  if (!title)
+    title = "";
 
   return title;
 }

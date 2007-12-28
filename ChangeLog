@@ -1,5 +1,9 @@
 2007-12-28  Matthias Clasen  <mclasen@redhat.com>
 
+	* gdk/x11/gdkwindow-x11.c (get_default_title): Don't return NULL.
+
+2007-12-28  Matthias Clasen  <mclasen@redhat.com>
+
 	* gtk/gtkhandlebox.c: Fix the default values of shadow and 
 	shadow-type properties.
 
