@@ -1,3 +1,9 @@
+2007-12-28  Mathias Hasselmann  <mathias@openismus.com>
+
+	Draw bottom shadow of GtkCalender headings. (#506113)
+
+	* gtk/gtkcalendar.c: Set proper initial height for priv->header_win.
+
 2007-12-28  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtkcalendar.c: Document the initial values of year/month/day
@@ -56,7 +62,7 @@
 2007-12-28  Mathias Hasselmann  <mathias@openismus.com>
 
 	Add GTK_CALENDAR_SHOW_DETAILS display flag, which chooses if details
-	are shown within the widget, or jst as tooltip.
+	are shown within the widget, or jst as tooltip. (#339540)
 
 	* gtk/gtkcalendar.c, gtk/gtkcalendar.h: Add "show-details" property
 	aka. GTK_CALENDAR_SHOW_DETAILS, and use it.

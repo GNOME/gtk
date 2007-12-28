@@ -1481,7 +1481,7 @@ calendar_realize_header (GtkCalendar *calendar)
       attributes.x = widget->style->xthickness;
       attributes.y = widget->style->ythickness;
       attributes.width = widget->allocation.width - 2 * attributes.x;
-      attributes.height = priv->header_h - 2 * attributes.y;
+      attributes.height = priv->header_h;
       priv->header_win = gdk_window_new (widget->window,
 					 &attributes, attributes_mask);
       
