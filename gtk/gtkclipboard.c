@@ -193,26 +193,31 @@ static void
 gtk_clipboard_finalize (GObject *object)
 {
   GtkClipboard *clipboard;
-  GtkWidget *clipboard_widget;
-  GSList *clipboards;
+  GtkWidget *clipboard_widget = NULL;
+  GSList *clipboards = NULL;
 
   clipboard = GTK_CLIPBOARD (object);
 
-  clipboards = g_object_get_data (G_OBJECT (clipboard->display), "gtk-clipboard-list");
-  if (g_slist_index (clipboards, clipboard) >= 0)
-    g_warning ("GtkClipboard prematurely finalized");
+  if (clipboard->display)
+    {
+      clipboards = g_object_get_data (G_OBJECT (clipboard->display), "gtk-clipboard-list");
 
-  /*  don't use get_clipboard_widget() here because it would create the
-   *  widget if it doesn't exist.
-   */
-  clipboard_widget = g_object_get_data (G_OBJECT (clipboard->display),
-                                        "gtk-clipboard-widget");
+      if (g_slist_index (clipboards, clipboard) >= 0)
+        g_warning ("GtkClipboard prematurely finalized");
+
+      clipboards = g_slist_remove (clipboards, clipboard);
+
+      g_object_set_data (G_OBJECT (clipboard->display), "gtk-clipboard-list", 
+                         clipboards);
+
+      /* don't use get_clipboard_widget() here because it would create the
+       * widget if it doesn't exist.
+       */
+      clipboard_widget = g_object_get_data (G_OBJECT (clipboard->display),
+                                            "gtk-clipboard-widget");
+    }
 
   clipboard_unset (clipboard);
-  
-  clipboards = g_object_get_data (G_OBJECT (clipboard->display), "gtk-clipboard-list");
-  clipboards = g_slist_remove (clipboards, clipboard);
-  g_object_set_data (G_OBJECT (clipboard->display), I_("gtk-clipboard-list"), clipboards);
 
   if (clipboard->store_loop && g_main_loop_is_running (clipboard->store_loop))
     g_main_loop_quit (clipboard->store_loop);
