@@ -1,5 +1,7 @@
 2007-12-28  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkcurve.c: Fix the default value of the curve-type property.
+
 	* gtk/gtkcombo.c: Fix the default value of the enable-arrows-always
 	property.
 

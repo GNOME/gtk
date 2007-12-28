@@ -124,7 +124,7 @@ gtk_curve_class_init (GtkCurveClass *class)
 						      P_("Curve type"),
 						      P_("Is this curve linear, spline interpolated, or free-form"),
 						      GTK_TYPE_CURVE_TYPE,
-						      GTK_CURVE_TYPE_LINEAR,
+						      GTK_CURVE_TYPE_SPLINE,
 						      GTK_PARAM_READWRITE));
   g_object_class_install_property (gobject_class,
 				   PROP_MIN_X,
