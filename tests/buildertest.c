@@ -1758,6 +1758,7 @@ test_file (const gchar *filename)
 
   g_object_unref (builder);
   builder = NULL;
+
 }
 
 int
