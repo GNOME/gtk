@@ -1,5 +1,11 @@
 2007-12-28  Mathias Hasselmann  <mathias@openismus.com>
 
+	Restructure testcalendar for testing calendar details. (#339540)
+
+	* tests/testcalendar.c: Push code arround for testing calendar details.
+
+2007-12-28  Mathias Hasselmann  <mathias@openismus.com>
+
 	Implement GtkTooltip API for calendar details. (#339540)
 
 	* gtk/gtkcalendar.c: Add gtk_calendar_query_tooltip and chain it up.
