@@ -1,5 +1,11 @@
 2007-12-28  Mathias Hasselmann  <mathias@openismus.com>
 
+	Apply trivial code-style changes from attachement 101101. (#339540)
+
+	* tests/testcalendar.c: Some updates to current GTK+ code-style.
+
+2007-12-28  Mathias Hasselmann  <mathias@openismus.com>
+
 	Restructure testcalendar for testing calendar details. (#339540)
 
 	* tests/testcalendar.c: Push code arround for testing calendar details.
