@@ -54,6 +54,7 @@
 #include "gtkintl.h"
 #include "gtkmain.h"
 #include "gtkmarshalers.h"
+#include "gtktooltip.h"
 #include "gtkprivate.h"
 #include "gdk/gdkkeysyms.h"
 #include "gtkalias.h"
@@ -292,6 +293,7 @@ struct _GtkCalendarPrivate
   /* Size requistion for details provided by the hook. */
   gint detail_height_rows;
   gint detail_width_chars;
+  gint detail_overflow[6];
 };
 
 #define GTK_CALENDAR_GET_PRIVATE(widget)  (GTK_CALENDAR (widget)->priv)
@@ -337,6 +339,11 @@ static void     gtk_calendar_state_changed  (GtkWidget        *widget,
 					     GtkStateType      previous_state);
 static void     gtk_calendar_style_set      (GtkWidget        *widget,
 					     GtkStyle         *previous_style);
+static gboolean gtk_calendar_query_tooltip  (GtkWidget        *widget,
+					     gint              x,
+					     gint              y,
+					     gboolean          keyboard_mode,
+					     GtkTooltip       *tooltip);
 
 static void     gtk_calendar_drag_data_get      (GtkWidget        *widget,
 						 GdkDragContext   *context,
@@ -416,6 +423,7 @@ gtk_calendar_class_init (GtkCalendarClass *class)
   widget_class->state_changed = gtk_calendar_state_changed;
   widget_class->grab_notify = gtk_calendar_grab_notify;
   widget_class->focus_out_event = gtk_calendar_focus_out;
+  widget_class->query_tooltip = gtk_calendar_query_tooltip;
 
   widget_class->drag_data_get = gtk_calendar_drag_data_get;
   widget_class->drag_motion = gtk_calendar_drag_motion;
@@ -1644,6 +1652,50 @@ gtk_calendar_get_detail (GtkCalendar *calendar,
                             priv->detail_func_user_data);
 }
 
+static gboolean
+gtk_calendar_query_tooltip (GtkWidget  *widget,
+                            gint        x,
+                            gint        y,
+                            gboolean    keyboard_mode,
+                            GtkTooltip *tooltip)
+{
+  GtkCalendarPrivate *priv = GTK_CALENDAR_GET_PRIVATE (widget);
+  GtkCalendar *calendar = GTK_CALENDAR (widget);
+  const gchar *detail = NULL;
+  GdkRectangle day_rect;
+
+  if (priv->main_win)
+    {
+      gint x0, y0, row, col;
+
+      gdk_window_get_position (priv->main_win, &x0, &y0);
+      col = calendar_column_from_x (calendar, x - x0);
+      row = calendar_row_from_y (calendar, y - y0);
+
+      if (priv->detail_overflow[row] & (1 << col))
+        {
+          detail = gtk_calendar_get_detail (calendar, row, col);
+          calendar_day_rectangle (calendar, row, col, &day_rect);
+
+          day_rect.x += x0;
+          day_rect.y += y0;
+        }
+    }
+
+  if (detail)
+    {
+      gtk_tooltip_set_tip_area (tooltip, &day_rect);
+      gtk_tooltip_set_markup (tooltip, detail);
+
+      return TRUE;
+    }
+
+  if (GTK_WIDGET_CLASS (gtk_calendar_parent_class)->query_tooltip)
+    return GTK_WIDGET_CLASS (gtk_calendar_parent_class)->query_tooltip (widget, x, y, keyboard_mode, tooltip);
+
+  return FALSE;
+}
+
 
 /****************************************
  *       Size Request and Allocate      *
@@ -2336,6 +2388,7 @@ calendar_paint_day (GtkCalendar *calendar,
 
   PangoLayout *layout;
   PangoRectangle logical_rect;
+  gboolean overflow = FALSE;
   
   g_return_if_fail (row < 6);
   g_return_if_fail (col < 7);
@@ -2457,8 +2510,12 @@ calendar_paint_day (GtkCalendar *calendar,
 
       n_lines = pango_layout_get_line_count (layout);
 
-      if (priv->detail_height_rows)
-        n_lines = MIN (n_lines, priv->detail_height_rows);
+      if (priv->detail_height_rows &&
+          n_lines > priv->detail_height_rows)
+        {
+          n_lines = priv->detail_height_rows;
+          overflow = TRUE;
+        }
 
       for (i = 0; i < n_lines; ++i)
         {
@@ -2492,6 +2549,11 @@ calendar_paint_day (GtkCalendar *calendar,
 		       day_rect.x,     day_rect.y, 
 		       day_rect.width, day_rect.height);
     }
+
+  if (overflow)
+    priv->detail_overflow[row] |= (1 << col);
+  else
+    priv->detail_overflow[row] &= ~(1 << col);
 
   g_object_unref (layout);
   cairo_destroy (cr);

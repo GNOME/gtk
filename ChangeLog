@@ -1,5 +1,13 @@
 2007-12-28  Mathias Hasselmann  <mathias@openismus.com>
 
+	Implement GtkTooltip API for calendar details. (#339540)
+
+	* gtk/gtkcalendar.c: Add gtk_calendar_query_tooltip and chain it up.
+	Remember detail overflows in calendar_paint_day to show the tooltip
+	only when neccessary.
+
+2007-12-28  Mathias Hasselmann  <mathias@openismus.com>
+
 	Without setting "detail-width-chars" and "detail-height-rows"
 	properties not only the widget has to be redrawn on certain
 	conditions, but also its size must be recalculated. (#339540)
