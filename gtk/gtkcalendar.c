@@ -773,6 +773,19 @@ gtk_calendar_init (GtkCalendar *calendar)
  ****************************************/
 
 static void
+calendar_queue_refresh (GtkCalendar *calendar)
+{
+  GtkCalendarPrivate *priv = GTK_CALENDAR_GET_PRIVATE (calendar);
+
+  if (!priv->detail_func ||
+       priv->detail_width_chars ||
+       priv->detail_height_rows)
+    gtk_widget_queue_draw (GTK_WIDGET (calendar));
+  else
+    gtk_widget_queue_resize (GTK_WIDGET (calendar));
+}
+
+static void
 calendar_set_month_next (GtkCalendar *calendar)
 {
   gint month_len;
@@ -809,7 +822,7 @@ calendar_set_month_next (GtkCalendar *calendar)
   else
     gtk_calendar_select_day (calendar, calendar->selected_day);
 
-  gtk_widget_queue_draw (GTK_WIDGET (calendar));
+  calendar_queue_refresh (calendar);
 }
 
 static void
@@ -838,7 +851,7 @@ calendar_set_year_prev (GtkCalendar *calendar)
   else
     gtk_calendar_select_day (calendar, calendar->selected_day);
   
-  gtk_widget_queue_draw (GTK_WIDGET (calendar));
+  calendar_queue_refresh (calendar);
 }
 
 static void
@@ -867,7 +880,7 @@ calendar_set_year_next (GtkCalendar *calendar)
   else
     gtk_calendar_select_day (calendar, calendar->selected_day);
   
-  gtk_widget_queue_draw (GTK_WIDGET (calendar));
+  calendar_queue_refresh (calendar);
 }
 
 static void
@@ -1175,7 +1188,7 @@ calendar_set_month_prev (GtkCalendar *calendar)
       gtk_calendar_select_day (calendar, calendar->selected_day);
     }
 
-  gtk_widget_queue_draw (GTK_WIDGET (calendar));
+  calendar_queue_refresh (calendar);
 }
 
 
@@ -3172,10 +3185,10 @@ gtk_calendar_focus_out (GtkWidget     *widget,
 			GdkEventFocus *event)
 {
   GtkCalendarPrivate *priv = GTK_CALENDAR_GET_PRIVATE (widget);
+  GtkCalendar *calendar = GTK_CALENDAR (widget);
 
-  gtk_widget_queue_draw (widget);
-
-  calendar_stop_spinning (GTK_CALENDAR (widget));
+  calendar_queue_refresh (calendar);
+  calendar_stop_spinning (calendar);
   
   priv->in_drag = 0; 
 
@@ -3573,8 +3586,7 @@ gtk_calendar_select_month (GtkCalendar *calendar,
   calendar->year  = year;
   
   calendar_compute_days (calendar);
-  
-  gtk_widget_queue_draw (GTK_WIDGET (calendar));
+  calendar_queue_refresh (calendar);
 
   g_object_freeze_notify (G_OBJECT (calendar));
   g_object_notify (G_OBJECT (calendar), "month");
@@ -3648,8 +3660,7 @@ gtk_calendar_clear_marks (GtkCalendar *calendar)
     }
 
   calendar->num_marked_dates = 0;
-
-  gtk_widget_queue_draw (GTK_WIDGET (calendar));
+  calendar_queue_refresh (calendar);
 }
 
 /**

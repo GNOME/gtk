@@ -1,5 +1,14 @@
 2007-12-28  Mathias Hasselmann  <mathias@openismus.com>
 
+	Without setting "detail-width-chars" and "detail-height-rows"
+	properties not only the widget has to be redrawn on certain
+	conditions, but also its size must be recalculated. (#339540)
+
+	* gtk/gtkcalendar.c: Add calendar_queue_refresh and call
+	that function instead of gtk_widget_queue_draw.
+
+2007-12-28  Mathias Hasselmann  <mathias@openismus.com>
+
 	Consider details for size-request and expose-event. (#339540)
 
 	* gtk/gtkcalendar.c: Add gtk_calendar_get_detail and
