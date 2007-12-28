@@ -1,3 +1,10 @@
+007-12-27  Matthias Clasen  <mclasen@redhat.com>
+
+	Merged from trunk:
+
+	* gkt/gtksignal.h: Fix 0<>NULL confusion in gtk_signal_connect...
+	defines.  (#505708,  MINAMI Hirokazu)
+
 2007-12-23  Cody Russell  <bratsche@gnome.org>
 
 	Merged from trunk:
