@@ -1,5 +1,8 @@
 2007-12-28  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkhandlebox.c: Fix the default values of shadow and 
+	shadow-type properties.
+
 	* gtk/gtkfontsel.c: Fix the default values of several properties.
 
 	* gtk/gtkfilesel.c: Fix the default value of the show-fileops

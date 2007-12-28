@@ -168,7 +168,7 @@ gtk_handle_box_class_init (GtkHandleBoxClass *class)
                                    g_param_spec_enum ("shadow", NULL,
                                                       P_("Deprecated property, use shadow_type instead"),
 						      GTK_TYPE_SHADOW_TYPE,
-						      GTK_SHADOW_ETCHED_OUT,
+						      GTK_SHADOW_OUT,
                                                       GTK_PARAM_READWRITE));
   g_object_class_install_property (gobject_class,
                                    PROP_SHADOW_TYPE,
@@ -176,7 +176,7 @@ gtk_handle_box_class_init (GtkHandleBoxClass *class)
                                                       P_("Shadow type"),
                                                       P_("Appearance of the shadow that surrounds the container"),
 						      GTK_TYPE_SHADOW_TYPE,
-						      GTK_SHADOW_ETCHED_OUT,
+						      GTK_SHADOW_OUT,
                                                       GTK_PARAM_READWRITE));
   
   g_object_class_install_property (gobject_class,
