@@ -1,4 +1,13 @@
-007-12-27  Matthias Clasen  <mclasen@redhat.com>
+2007-12-28  Johan Dahlin  <johan@gnome.org>
+
+	Merged from trunk:
+
+	* gtk/gtkdialog.c (gtk_dialog_buildable_custom_finished)
+	(gtk_dialog_buildable_custom_tag_start): Chain up. 
+	This makes it possible to have accelerators tags on GtkDialog 
+	subclasses.
+
+2007-12-27  Matthias Clasen  <mclasen@redhat.com>
 
 	Merged from trunk:
 

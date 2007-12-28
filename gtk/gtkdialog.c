@@ -256,9 +256,12 @@ gtk_dialog_init (GtkDialog *dialog)
   gtk_window_set_position (GTK_WINDOW (dialog), GTK_WIN_POS_CENTER_ON_PARENT);
 }
 
+static GtkBuildableIface *parent_buildable_iface;
+
 static void
 gtk_dialog_buildable_interface_init (GtkBuildableIface *iface)
 {
+  parent_buildable_iface = g_type_interface_peek_parent (iface);
   iface->get_internal_child = gtk_dialog_buildable_get_internal_child;
   iface->custom_tag_start = gtk_dialog_buildable_custom_tag_start;
   iface->custom_finished = gtk_dialog_buildable_custom_finished;
@@ -1341,7 +1344,8 @@ gtk_dialog_buildable_custom_tag_start (GtkBuildable  *buildable,
       return TRUE;
     }
 
-  return FALSE;
+  return parent_buildable_iface->custom_tag_start (buildable, builder, child,
+						   tagname, parser, data);
 }
 
 static void
@@ -1359,7 +1363,11 @@ gtk_dialog_buildable_custom_finished (GtkBuildable *buildable,
   guint signal_id;
   
   if (strcmp (tagname, "action-widgets"))
+    {
+    parent_buildable_iface->custom_finished (buildable, builder, child,
+					     tagname, user_data);
     return;
+    }
 
   dialog = GTK_DIALOG (buildable);
   parser_data = (ActionWidgetsSubParserData*)user_data;
