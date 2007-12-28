@@ -235,7 +235,7 @@ static void gtk_font_selection_get_property (GObject         *object,
   switch (prop_id)
     {
     case PROP_FONT_NAME:
-      g_value_set_string (value, gtk_font_selection_get_font_name (fontsel));
+      g_value_take_string (value, gtk_font_selection_get_font_name (fontsel));
       break;
     case PROP_FONT:
       g_value_set_boxed (value, gtk_font_selection_get_font_internal (fontsel));
