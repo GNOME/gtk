@@ -1,5 +1,12 @@
 2007-12-28  Mathias Hasselmann  <mathias@openismus.com>
 
+	Try more decent appearance of calendar details separator. (#339540)
+
+	* gtk/gtkcalendar.c: Use different colors for drawing the separator,
+	and make it short by one pixel on each side.
+
+2007-12-28  Mathias Hasselmann  <mathias@openismus.com>
+
 	Apply trivial code-style changes from attachement 101101. (#339540)
 
 	* tests/testcalendar.c: Some updates to current GTK+ code-style.

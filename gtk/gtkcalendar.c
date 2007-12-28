@@ -2473,10 +2473,21 @@ calendar_paint_day (GtkCalendar *calendar,
 
   if (priv->detail_func)
     {
+      cairo_save (cr);
+
+      if (calendar->selected_day == day)
+        gdk_cairo_set_source_color (cr, &widget->style->text[GTK_STATE_ACTIVE]);
+      else if (calendar->day_month[row][col] == MONTH_CURRENT)
+        gdk_cairo_set_source_color (cr, &widget->style->base[GTK_STATE_ACTIVE]);
+      else
+        gdk_cairo_set_source_color (cr, &widget->style->base[GTK_STATE_INSENSITIVE]);
+
       cairo_set_line_width (cr, 1);
-      cairo_move_to (cr, day_rect.x + 1, y_loc + 0.5);
-      cairo_line_to (cr, day_rect.x + day_rect.width - 1, y_loc + 0.5);
+      cairo_move_to (cr, day_rect.x + 2, y_loc + 0.5);
+      cairo_line_to (cr, day_rect.x + day_rect.width - 2, y_loc + 0.5);
       cairo_stroke (cr);
+
+      cairo_restore (cr);
 
       y_loc += 2;
     }
