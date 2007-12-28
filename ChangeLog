@@ -5,6 +5,8 @@
 
 2007-12-28  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtktable.c:
+	* gtk/gtktreeview.c:
 	* gtk/gtkprintoperation.c:
 	* gtk/gtkprogressbar.c:
 	* gtk/gtkmessagedialog.c:
