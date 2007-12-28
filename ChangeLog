@@ -1,3 +1,11 @@
+2007-12-28  Mathias Hasselmann  <mathias@openismus.com>
+
+	Consider details for size-request and expose-event. (#339540)
+
+	* gtk/gtkcalendar.c: Add gtk_calendar_get_detail and
+	is_color_attribute functions. Change gtk_calendar_size_request
+	and calendar_paint_day to consider and show calender details.
+
 2007-12-28  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtkcombobox.c: Introduce local priv variables to 

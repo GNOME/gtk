@@ -255,6 +255,7 @@ struct _GtkCalendarPrivate
   guint	     arrow_width;
   guint	     max_month_width;
   guint	     max_year_width;
+  guint	     max_detail_height;
   
   guint day_width;
   guint week_width;
@@ -1602,6 +1603,34 @@ gtk_calendar_unrealize (GtkWidget *widget)
     (* GTK_WIDGET_CLASS (gtk_calendar_parent_class)->unrealize) (widget);
 }
 
+static G_CONST_RETURN gchar*
+gtk_calendar_get_detail (GtkCalendar *calendar,
+                         gint         row,
+                         gint         column)
+{
+  GtkCalendarPrivate *priv = GTK_CALENDAR_GET_PRIVATE (calendar);
+  gint year, month;
+
+  year = calendar->year;
+  month = calendar->month + calendar->day_month[row][column] - MONTH_CURRENT;
+
+  if (month < 0)
+    {
+      month += 12;
+      year -= 1;
+    }
+  else if (month > 11)
+    {
+      month -= 12;
+      year += 1;
+    }
+
+  return priv->detail_func (calendar,
+                            year, month,
+                            calendar->day[row][column],
+                            priv->detail_func_user_data);
+}
+
 
 /****************************************
  *       Size Request and Allocate      *
@@ -1617,7 +1646,7 @@ gtk_calendar_size_request (GtkWidget	  *widget,
   PangoRectangle logical_rect;
 
   gint height;
-  gint i;
+  gint i, r, c;
   gint calendar_margin = CALENDAR_MARGIN;
   gint header_width, main_width;
   gint max_header_height = 0;
@@ -1700,8 +1729,6 @@ gtk_calendar_size_request (GtkWidget	  *widget,
       priv->max_day_char_descent = MAX (priv->max_day_char_descent, 
 						PANGO_DESCENT (logical_rect));
     }
-  /* We add one to max_day_char_width to be able to make the marked day "bold" */
-  priv->max_day_char_width = priv->min_day_width / 2 + 1;
   
   priv->max_label_char_ascent = 0;
   priv->max_label_char_descent = 0;
@@ -1730,6 +1757,77 @@ gtk_calendar_size_request (GtkWidget	  *widget,
 					   logical_rect.width / 2);
       }
   
+  /* Calculate detail extents. Do this as late as possible since
+   * pango_layout_set_markup is called which alters font settings. */
+  priv->max_detail_height = 0;
+
+  if (priv->detail_func)
+    {
+      gchar *markup, *tail;
+
+      if (priv->detail_width_chars || priv->detail_height_rows)
+        {
+          gint rows = MAX (1, priv->detail_height_rows) - 1;
+          gsize len = priv->detail_width_chars + rows + 16;
+
+          markup = tail = g_alloca (len);
+
+          memcpy (tail,     "<small>", 7);
+          tail += 7;
+
+          memset (tail, 'm', priv->detail_width_chars);
+          tail += priv->detail_width_chars;
+
+          memset (tail, '\n', rows);
+          tail += rows;
+
+          memcpy (tail,     "</small>", 9);
+          tail += 9;
+
+          g_assert (len == (tail - markup));
+
+          pango_layout_set_markup (layout, markup, -1);
+          pango_layout_get_pixel_extents (layout, NULL, &logical_rect);
+
+
+          if (priv->detail_width_chars)
+            priv->min_day_width = MAX (priv->min_day_width, logical_rect.width);
+          if (priv->detail_height_rows)
+            priv->max_detail_height = MAX (priv->max_detail_height, logical_rect.height);
+        }
+
+      if (!priv->detail_width_chars || !priv->detail_height_rows)
+        for (r = 0; r < 6; r++)
+          for (c = 0; c < 7; c++)
+            {
+              const gchar *detail = gtk_calendar_get_detail (calendar, r, c);
+
+              if (detail)
+                {
+                  markup = g_strconcat ("<small>", detail, "</small>", NULL);
+                  pango_layout_set_markup (layout, markup, -1);
+
+                  if (priv->detail_width_chars)
+                    {
+                      pango_layout_set_wrap (layout, PANGO_WRAP_WORD_CHAR);
+                      pango_layout_set_width (layout, PANGO_SCALE * priv->min_day_width);
+                    }
+
+                  pango_layout_get_pixel_extents (layout, NULL, &logical_rect);
+
+                  if (!priv->detail_width_chars)
+                    priv->min_day_width = MAX (priv->min_day_width, logical_rect.width);
+                  if (!priv->detail_height_rows)
+                    priv->max_detail_height = MAX (priv->max_detail_height, logical_rect.height);
+
+                  g_free (markup);
+                }
+            }
+    }
+
+  /* We add one to max_day_char_width to be able to make the marked day "bold" */
+  priv->max_day_char_width = priv->min_day_width / 2 + 1;
+
   main_width = (7 * (priv->min_day_width + (focus_padding + focus_width) * 2) + (DAY_XSEP * 6) + CALENDAR_MARGIN * 2
 		+ (priv->max_week_char_width
 		   ? priv->max_week_char_width * 2 + (focus_padding + focus_width) * 2 + CALENDAR_XSEP * 2
@@ -1766,6 +1864,7 @@ gtk_calendar_size_request (GtkWidget	  *widget,
   priv->main_h = (CALENDAR_MARGIN + calendar_margin
 			  + 6 * (priv->max_day_char_ascent
 				 + priv->max_day_char_descent 
+                                 + priv->max_detail_height
 				 + 2 * (focus_padding + focus_width))
 			  + DAY_YSEP * 5);
   
@@ -2199,6 +2298,14 @@ calendar_invalidate_day (GtkCalendar *calendar,
     }
 }
 
+static gboolean
+is_color_attribute (PangoAttribute *attribute,
+                    gpointer        data)
+{
+  return (attribute->klass->type == PANGO_ATTR_FOREGROUND ||
+          attribute->klass->type == PANGO_ATTR_BACKGROUND);
+}
+
 static void
 calendar_paint_day (GtkCalendar *calendar,
 		    gint	     row,
@@ -2208,6 +2315,7 @@ calendar_paint_day (GtkCalendar *calendar,
   GtkCalendarPrivate *priv = GTK_CALENDAR_GET_PRIVATE (calendar);
   cairo_t *cr;
   GdkColor *text_color;
+  const gchar *detail;
   gchar buffer[32];
   gint day;
   gint x_loc, y_loc;
@@ -2269,12 +2377,20 @@ calendar_paint_day (GtkCalendar *calendar,
    * too.
    */
   g_snprintf (buffer, sizeof (buffer), Q_("calendar:day:digits|%d"), day);
+
+  /* Get extra information to show, if any: */
+
+  if (priv->detail_func)
+    detail = gtk_calendar_get_detail (calendar, row, col);
+  else
+    detail = NULL;
+
   layout = gtk_widget_create_pango_layout (widget, buffer);
+  pango_layout_set_alignment (layout, PANGO_ALIGN_CENTER);
   pango_layout_get_pixel_extents (layout, NULL, &logical_rect);
   
-  x_loc = day_rect.x + day_rect.width / 2 + priv->max_day_char_width;
-  x_loc -= logical_rect.width;
-  y_loc = day_rect.y + (day_rect.height - logical_rect.height) / 2;
+  x_loc = day_rect.x + (day_rect.width - logical_rect.width) / 2;
+  y_loc = day_rect.y;
   
   gdk_cairo_set_source_color (cr, text_color);
   cairo_move_to (cr, x_loc, y_loc);
@@ -2285,6 +2401,65 @@ calendar_paint_day (GtkCalendar *calendar,
     {
       cairo_move_to (cr, x_loc - 1, y_loc);
       pango_cairo_show_layout (cr, layout);
+    }
+
+  y_loc += priv->max_day_char_descent;
+
+  if (priv->detail_func)
+    {
+      cairo_set_line_width (cr, 1);
+      cairo_move_to (cr, day_rect.x + 1, y_loc + 0.5);
+      cairo_line_to (cr, day_rect.x + day_rect.width - 1, y_loc + 0.5);
+      cairo_stroke (cr);
+
+      y_loc += 2;
+    }
+
+  if (detail)
+    {
+      gint i, n_lines;
+
+      gchar *markup = g_strconcat ("<small>", detail, "</small>", NULL);
+      pango_layout_set_markup (layout, markup, -1);
+      g_free (markup);
+
+      if (day == calendar->selected_day)
+        {
+          /* Stripping colors as they conflict with selection marking. */
+
+          PangoAttrList *attrs = pango_layout_get_attributes (layout);
+          PangoAttrList *colors = NULL;
+
+          if (attrs)
+            colors = pango_attr_list_filter (attrs, is_color_attribute, NULL);
+          if (colors)
+            pango_attr_list_unref (colors);
+        }
+
+      if (priv->detail_width_chars)
+        {
+          pango_layout_set_wrap (layout, PANGO_WRAP_WORD_CHAR);
+          pango_layout_set_width (layout, PANGO_SCALE * priv->min_day_width);
+        }
+
+      n_lines = pango_layout_get_line_count (layout);
+
+      if (priv->detail_height_rows)
+        n_lines = MIN (n_lines, priv->detail_height_rows);
+
+      for (i = 0; i < n_lines; ++i)
+        {
+          PangoLayoutLine *line = pango_layout_get_line_readonly (layout, i);
+          pango_layout_line_get_pixel_extents (line, NULL, &logical_rect);
+
+          x_loc  = day_rect.x + (day_rect.width - logical_rect.width) / 2;
+          y_loc += PANGO_ASCENT (logical_rect);
+
+          cairo_move_to (cr, x_loc, y_loc);
+          pango_cairo_show_layout_line (cr, line);
+
+          y_loc += PANGO_DESCENT (logical_rect);
+        }
     }
 
   if (GTK_WIDGET_HAS_FOCUS (calendar) 
