@@ -1,3 +1,8 @@
+2007-12-28  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtkcombo.c: Fix the default value of the enable-arrows-always
+	property.
+
 2007-12-28  Johan Dahlin  <johan@gnome.org>
 
 	* gtk/gtkdialog.c (gtk_dialog_buildable_custom_finished)
