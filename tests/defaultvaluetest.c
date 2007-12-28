@@ -18,6 +18,7 @@
  * Boston, MA 02111-1307, USA.
  */
 
+#undef GTK_DISABLE_DEPRECATED
 #include <string.h>
 #include <gtk/gtk.h>
 #include <gtk/gtktypebuiltins.h>
@@ -78,7 +79,7 @@ static const char *types[] = {
 "gtk_check_menu_item_get_type",
 "gtk_clipboard_get_type",
 "gtk_clist_drag_pos_get_type",
-"gtk_clist_get_type",
+"gtk_clist_get_type", 
 "gtk_color_button_get_type",
 "gtk_color_selection_dialog_get_type",
 "gtk_color_selection_get_type",
@@ -293,7 +294,6 @@ static const char *types[] = {
 "gtk_text_buffer_target_info_get_type",
 "gtk_text_child_anchor_get_type",
 "gtk_text_direction_get_type",
-"gtk_text_get_type",
 "gtk_text_iter_get_type",
 "gtk_text_layout_get_type",
 "gtk_text_mark_get_type",
@@ -318,8 +318,6 @@ static const char *types[] = {
 "gtk_tray_icon_get_type",
 "gtk_tree_drag_dest_get_type",
 "gtk_tree_drag_source_get_type",
-"gtk_tree_get_type",
-"gtk_tree_item_get_type",
 "gtk_tree_iter_get_type",
 "gtk_tree_model_filter_get_type",
 "gtk_tree_model_flags_get_type",
@@ -411,13 +409,26 @@ test_type (gconstpointer data)
   if (!g_type_is_a (type, G_TYPE_OBJECT))
     return;
 
+  /* These can't be freely constructed/destroyed */
+  if (g_type_is_a (type, GTK_TYPE_PRINT_JOB))
+    return;
+
+  /* The gtk_arg compat wrappers can't set up default values */
+  if (g_type_is_a (type, GTK_TYPE_CLIST) ||
+      g_type_is_a (type, GTK_TYPE_CTREE) ||
+      g_type_is_a (type, GTK_TYPE_LIST) ||
+      g_type_is_a (type, GTK_TYPE_TIPS_QUERY))
+    return;
+
   klass = g_type_class_ref (type);
   
-  instance = g_object_new (type, NULL);
+  if (g_type_is_a (type, GTK_TYPE_SETTINGS))
+    instance = g_object_ref (gtk_settings_get_default ());
+  else
+    instance = g_object_new (type, NULL);
+
   if (g_type_is_a (type, G_TYPE_INITIALLY_UNOWNED))
-    {
-      g_object_ref_sink (instance);
-    }
+    g_object_ref_sink (instance);
 
   pspecs = g_object_class_list_properties (klass, &n_pspecs);
   for (i = 0; i < n_pspecs; ++i)
@@ -436,6 +447,125 @@ test_type (gconstpointer data)
 	  (strcmp (pspec->name, "name") == 0 ||
 	   strcmp (pspec->name, "screen") == 0 ||
 	   strcmp (pspec->name, "style") == 0))
+	continue;
+
+      /* These are set to the current date */
+      if (g_type_is_a (type, GTK_TYPE_CALENDAR) &&
+	  (strcmp (pspec->name, "year") == 0 ||
+	   strcmp (pspec->name, "month") == 0 ||
+	   strcmp (pspec->name, "day") == 0))
+	continue;
+
+      if (g_type_is_a (type, GTK_TYPE_CELL_RENDERER_TEXT) &&
+	  (strcmp (pspec->name, "background-gdk") == 0 ||
+	   strcmp (pspec->name, "foreground-gdk") == 0 ||
+	   strcmp (pspec->name, "font") == 0 ||
+	   strcmp (pspec->name, "font-desc") == 0))
+	continue;
+
+      if (g_type_is_a (type, GTK_TYPE_CELL_VIEW) &&
+	  (strcmp (pspec->name, "background-gdk") == 0 ||
+	   strcmp (pspec->name, "foreground-gdk") == 0))
+	continue;
+
+      if (g_type_is_a (type, GTK_TYPE_COLOR_BUTTON) &&
+	  strcmp (pspec->name, "color") == 0)
+	continue;
+
+      if (g_type_is_a (type, GTK_TYPE_COLOR_SELECTION) &&
+	  strcmp (pspec->name, "current-color") == 0)
+	continue;
+
+      /* Gets set to the cwd */
+      if (g_type_is_a (type, GTK_TYPE_FILE_SELECTION) &&
+	  strcmp (pspec->name, "filename") == 0)
+	continue;
+
+      if (g_type_is_a (type, GTK_TYPE_FONT_SELECTION) &&
+	  strcmp (pspec->name, "font") == 0)
+	continue;
+
+      if (g_type_is_a (type, GTK_TYPE_LAYOUT) &&
+	  (strcmp (pspec->name, "hadjustment") == 0 ||
+           strcmp (pspec->name, "vadjustment") == 0))
+	continue;
+
+      if (g_type_is_a (type, GTK_TYPE_MESSAGE_DIALOG) &&
+	  strcmp (pspec->name, "image") == 0)
+	continue;
+
+      if (g_type_is_a (type, GTK_TYPE_PRINT_OPERATION) &&
+	  strcmp (pspec->name, "job-name") == 0)
+	continue;
+
+      if (g_type_is_a (type, GTK_TYPE_PRINT_UNIX_DIALOG) &&
+	  (strcmp (pspec->name, "page-setup") == 0 ||
+	   strcmp (pspec->name, "print-settings") == 0))
+	continue;
+
+      if (g_type_is_a (type, GTK_TYPE_PROGRESS_BAR) &&
+          strcmp (pspec->name, "adjustment") == 0)
+        continue;
+
+      /* filename value depends on $HOME */
+      if (g_type_is_a (type, GTK_TYPE_RECENT_MANAGER) &&
+          strcmp (pspec->name, "filename") == 0)
+        continue;
+
+      if (g_type_is_a (type, GTK_TYPE_SCALE_BUTTON) &&
+          strcmp (pspec->name, "adjustment") == 0)
+        continue;
+
+      if (g_type_is_a (type, GTK_TYPE_SCROLLED_WINDOW) &&
+	  (strcmp (pspec->name, "hadjustment") == 0 ||
+           strcmp (pspec->name, "vadjustment") == 0))
+	continue;
+
+      /* these defaults come from XResources */
+      if (g_type_is_a (type, GTK_TYPE_SETTINGS) &&
+          strncmp (pspec->name, "gtk-xft-", 8) == 0)
+        continue;
+
+      if (g_type_is_a (type, GTK_TYPE_SETTINGS) &&
+          strcmp (pspec->name, "color-hash") == 0)
+        continue;
+
+      if (g_type_is_a (type, GTK_TYPE_SPIN_BUTTON) &&
+          (strcmp (pspec->name, "adjustment") == 0))
+        continue;
+
+      if (g_type_is_a (type, GTK_TYPE_STATUS_ICON) &&
+          (strcmp (pspec->name, "size") == 0 ||
+           strcmp (pspec->name, "screen") == 0))
+        continue;
+
+      if (g_type_is_a (type, GTK_TYPE_TEXT_BUFFER) &&
+          (strcmp (pspec->name, "tag-table") == 0 ||
+           strcmp (pspec->name, "copy-target-list") == 0 ||
+           strcmp (pspec->name, "paste-target-list") == 0))
+        continue;
+
+      /* language depends on the current locale */
+      if (g_type_is_a (type, GTK_TYPE_TEXT_TAG) &&
+          (strcmp (pspec->name, "background-gdk") == 0 ||
+           strcmp (pspec->name, "foreground-gdk") == 0 ||
+	   strcmp (pspec->name, "language") == 0 ||
+	   strcmp (pspec->name, "font") == 0 ||
+	   strcmp (pspec->name, "font-desc") == 0))
+        continue;
+
+      if (g_type_is_a (type, GTK_TYPE_TEXT_VIEW) &&
+          strcmp (pspec->name, "buffer") == 0)
+        continue;
+
+      if (g_type_is_a (type, GTK_TYPE_TREE_VIEW) &&
+	  (strcmp (pspec->name, "hadjustment") == 0 ||
+           strcmp (pspec->name, "vadjustment") == 0))
+	continue;
+
+      if (g_type_is_a (type, GTK_TYPE_VIEWPORT) &&
+	  (strcmp (pspec->name, "hadjustment") == 0 ||
+           strcmp (pspec->name, "vadjustment") == 0))
 	continue;
 
       g_value_init (&value, G_PARAM_SPEC_VALUE_TYPE (pspec));

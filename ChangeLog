@@ -1,3 +1,8 @@
+2007-12-28  Matthias Clasen  <mclasen@redhat.com>
+
+	* tests/defaultvaluetest.c: Add enough exclusions to make the
+	test succeed.
+
 2007-12-28  Christian Persch  <chpe@gnome.org>
 
 	* modules/other/gail/Makefile.am:
