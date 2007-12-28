@@ -1,3 +1,10 @@
+2007-12-28  Mathias Hasselmann  <mathias@openismus.com>
+
+	Remove max_detail_height field from GtkCalendarPrivate. (#339540)
+
+	* gtk/gtkcalendar.c: Drop max_detail_height field, and use
+	a local variable instead in gtk_calendar_size_request.
+
 2007-12-28  Matthias Clasen  <mclasen@redhat.com>
 
 	* tests/defaultvaluetest.c: Add enough exclusions to make the

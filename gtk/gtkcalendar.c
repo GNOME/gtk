@@ -257,7 +257,6 @@ struct _GtkCalendarPrivate
   guint	     arrow_width;
   guint	     max_month_width;
   guint	     max_year_width;
-  guint	     max_detail_height;
   
   guint day_width;
   guint week_width;
@@ -1767,7 +1766,8 @@ gtk_calendar_size_request (GtkWidget	  *widget,
   gint max_header_height = 0;
   gint focus_width;
   gint focus_padding;
-  
+  gint max_detail_height;
+
   gtk_widget_style_get (GTK_WIDGET (widget),
 			"focus-line-width", &focus_width,
 			"focus-padding", &focus_padding,
@@ -1874,7 +1874,7 @@ gtk_calendar_size_request (GtkWidget	  *widget,
   
   /* Calculate detail extents. Do this as late as possible since
    * pango_layout_set_markup is called which alters font settings. */
-  priv->max_detail_height = 0;
+  max_detail_height = 0;
 
   if (priv->detail_func && (calendar->display_flags & GTK_CALENDAR_SHOW_DETAILS))
     {
@@ -1904,11 +1904,10 @@ gtk_calendar_size_request (GtkWidget	  *widget,
           pango_layout_set_markup (layout, markup, -1);
           pango_layout_get_pixel_extents (layout, NULL, &logical_rect);
 
-
           if (priv->detail_width_chars)
             priv->min_day_width = MAX (priv->min_day_width, logical_rect.width);
           if (priv->detail_height_rows)
-            priv->max_detail_height = MAX (priv->max_detail_height, logical_rect.height);
+            max_detail_height = MAX (max_detail_height, logical_rect.height);
         }
 
       if (!priv->detail_width_chars || !priv->detail_height_rows)
@@ -1933,7 +1932,7 @@ gtk_calendar_size_request (GtkWidget	  *widget,
                   if (!priv->detail_width_chars)
                     priv->min_day_width = MAX (priv->min_day_width, logical_rect.width);
                   if (!priv->detail_height_rows)
-                    priv->max_detail_height = MAX (priv->max_detail_height, logical_rect.height);
+                    max_detail_height = MAX (max_detail_height, logical_rect.height);
 
                   g_free (markup);
                 }
@@ -1979,7 +1978,7 @@ gtk_calendar_size_request (GtkWidget	  *widget,
   priv->main_h = (CALENDAR_MARGIN + calendar_margin
 			  + 6 * (priv->max_day_char_ascent
 				 + priv->max_day_char_descent 
-                                 + priv->max_detail_height
+                                 + max_detail_height
 				 + 2 * (focus_padding + focus_width))
 			  + DAY_YSEP * 5);
   
