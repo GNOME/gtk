@@ -74,6 +74,8 @@
    can set it. Remember that some fonts only have capital letters. */
 #define PREVIEW_TEXT N_("abcdefghijk ABCDEFGHIJK")
 
+#define DEFAULT_FONT_NAME "Sans 10"
+
 /* This is the initial and maximum height of the preview entry (it expands
    when large font sizes are selected). Initial height is also the minimum. */
 #define INITIAL_PREVIEW_HEIGHT 44
@@ -177,8 +179,8 @@ gtk_font_selection_class_init (GtkFontSelectionClass *klass)
                                    PROP_FONT_NAME,
                                    g_param_spec_string ("font-name",
                                                         P_("Font name"),
-                                                        P_("The X string that represents this font"),
-                                                        NULL,
+                                                        P_("The string that represents this font"),
+                                                        DEFAULT_FONT_NAME,
                                                         GTK_PARAM_READWRITE));
   g_object_class_install_property (gobject_class,
 				   PROP_FONT,
@@ -192,7 +194,7 @@ gtk_font_selection_class_init (GtkFontSelectionClass *klass)
                                    g_param_spec_string ("preview-text",
                                                         P_("Preview text"),
                                                         P_("The text to display in order to demonstrate the selected font"),
-                                                        PREVIEW_TEXT,
+                                                        _(PREVIEW_TEXT),
                                                         GTK_PARAM_READWRITE));
   gobject_class->finalize = gtk_font_selection_finalize;
 }
@@ -236,7 +238,7 @@ static void gtk_font_selection_get_property (GObject         *object,
       g_value_set_string (value, gtk_font_selection_get_font_name (fontsel));
       break;
     case PROP_FONT:
-      g_value_set_object (value, gtk_font_selection_get_font_internal (fontsel));
+      g_value_set_boxed (value, gtk_font_selection_get_font_internal (fontsel));
       break;
     case PROP_PREVIEW_TEXT:
       g_value_set_string (value, gtk_font_selection_get_preview_text (fontsel));
@@ -523,6 +525,7 @@ gtk_font_selection_init (GtkFontSelection *fontsel)
   
   fontsel->preview_entry = gtk_entry_new ();
   gtk_label_set_mnemonic_widget (GTK_LABEL (label), fontsel->preview_entry);
+  gtk_entry_set_text (GTK_ENTRY (fontsel->preview_entry), _(PREVIEW_TEXT));
   
   gtk_widget_show (fontsel->preview_entry);
   g_signal_connect (fontsel->preview_entry, "changed",
@@ -1058,7 +1061,7 @@ gtk_font_selection_get_font_description (GtkFontSelection *fontsel)
       pango_font_description_set_size (font_desc, fontsel->size);
     }
   else
-    font_desc = pango_font_description_from_string ("Sans 10");
+    font_desc = pango_font_description_from_string (DEFAULT_FONT_NAME);
 
   return font_desc;
 }
