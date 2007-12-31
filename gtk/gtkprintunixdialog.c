@@ -1,6 +1,7 @@
 /* GtkPrintUnixDialog
  * Copyright (C) 2006 John (J5) Palmieri  <johnp@redhat.com>
  * Copyright (C) 2006 Alexander Larsson <alexl@redhat.com>
+ * Copyright © 2006, 2007 Christian Persch
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -589,7 +590,7 @@ gtk_print_unix_dialog_get_property (GObject    *object,
       g_value_set_int (value, priv->current_page);
       break;
     case PROP_PRINT_SETTINGS:
-      g_value_set_object (value, gtk_print_unix_dialog_get_settings (dialog));
+      g_value_take_object (value, gtk_print_unix_dialog_get_settings (dialog));
       break;
     case PROP_SELECTED_PRINTER:
       g_value_set_object (value, priv->current_printer);
@@ -733,7 +734,7 @@ wrap_in_frame (const gchar *label,
   GtkWidget *frame, *alignment, *label_widget;
   gchar *bold_text;
 
-  label_widget = gtk_label_new ("");
+  label_widget = gtk_label_new (NULL);
   gtk_misc_set_alignment (GTK_MISC (label_widget), 0.0, 0.5);
   gtk_widget_show (label_widget);
   
@@ -1728,7 +1729,7 @@ dialog_set_page_ranges (GtkPrintUnixDialog *dialog,
 {
   GtkPrintUnixDialogPrivate *priv = dialog->priv;
   gint i;
-  GString *s = g_string_new ("");
+  GString *s = g_string_new (NULL);
 
   for (i = 0; i < n_ranges; i++)
     {
