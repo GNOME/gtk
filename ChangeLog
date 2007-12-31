@@ -1,3 +1,7 @@
+2007-12-31  Philip Van Hoof  <pvanhoof@gnome.org>
+
+        * gtk/gtktreemodel.c: Using GSlice for GtkTreePath
+
 2007-12-31  Christian Persch  <chpe@gnome.org>
 
 	* gtk/gtkprintunixdialog.c: (gtk_print_unix_dialog_get_property):

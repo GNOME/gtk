@@ -389,7 +389,7 @@ GtkTreePath *
 gtk_tree_path_new (void)
 {
   GtkTreePath *retval;
-  retval = g_new (GtkTreePath, 1);
+  retval = g_slice_new (GtkTreePath);
   retval->depth = 0;
   retval->indices = NULL;
 
@@ -632,7 +632,7 @@ gtk_tree_path_free (GtkTreePath *path)
     return;
 
   g_free (path->indices);
-  g_free (path);
+  g_slice_free (GtkTreePath, path);
 }
 
 /**
@@ -650,7 +650,7 @@ gtk_tree_path_copy (const GtkTreePath *path)
 
   g_return_val_if_fail (path != NULL, NULL);
 
-  retval = g_new (GtkTreePath, 1);
+  retval = g_slice_new (GtkTreePath);
   retval->depth = path->depth;
   retval->indices = g_new (gint, path->depth);
   memcpy (retval->indices, path->indices, path->depth * sizeof (gint));
