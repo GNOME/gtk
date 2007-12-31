@@ -1,3 +1,8 @@
+2007-12-31  Christian Persch  <chpe@gnome.org>
+
+	* gtk/gtkprintunixdialog.c: (gtk_print_unix_dialog_get_property):
+	Plug a mem leak. Bug #506107.
+
 2007-12-28  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtkiconfactory.c (render_fallback_image): Adjust to
