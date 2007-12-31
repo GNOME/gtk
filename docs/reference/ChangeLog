@@ -1,3 +1,9 @@
+2007-12-30  Johannes Schmid <jhs@gnome.org>
+
+	* gtk/tmpl/gtknotebook.sgml:
+	Fix method names (gtk_notebook_popup_enable vs. 
+	gtk_notebook_enable_popup)
+
 2007-12-04  Matthias Clasen  <mclasen@redhat.com>
 
 	* === Released 2.12.3 ===

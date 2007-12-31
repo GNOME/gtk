@@ -201,13 +201,14 @@ create_notebook_with_notebooks (gchar           **labels,
   while (*labels)
     {
       page = create_notebook (labels, group, packing, pos);
-
+      gtk_notebook_popup_enable (GTK_NOTEBOOK (page));
+      
       title = gtk_label_new (*labels);
 
       gtk_notebook_append_page (GTK_NOTEBOOK (notebook), page, title);
       gtk_notebook_set_tab_reorderable (GTK_NOTEBOOK (notebook), page, TRUE);
       gtk_notebook_set_tab_detachable (GTK_NOTEBOOK (notebook), page, TRUE);
-
+      
       if (packing == PACK_END ||
 	  (packing == PACK_ALTERNATE && count % 2 == 1))
 	gtk_container_child_set (GTK_CONTAINER (notebook), page, "tab-pack", GTK_PACK_END, NULL);

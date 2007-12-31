@@ -16,7 +16,7 @@ things, you can choose on which edge the tabs appear
 tabs to fit the noteobook should be made bigger or scrolling
 arrows added (see gtk_notebook_set_scrollable), and whether there
 will be a popup menu allowing the users to switch pages.
-(see gtk_notebook_enable_popup(), gtk_noteobook_disable_popup())
+(see gtk_notebook_popup_enable(), gtk_noteobook_popup_disable())
 </para>
 
 <refsect2 id="GtkNotebook-BUILDER-UI">

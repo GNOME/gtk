@@ -1,3 +1,12 @@
+2007-12-30  Johannes Schmid <jhs@gnome.org>
+
+	* gtk/gtknotebook.c: (gtk_notebook_stop_reorder):
+	Also reorder menu when reordering tabs by drag & drop
+	
+	* tests/testnotebookdnd.c: (create_notebook_with_notebooks):
+	Add a menu to one of the notebooks to have a test-case for
+	the change mentioned above.
+
 2007-12-31  Christian Persch  <chpe@gnome.org>
 
 	* gtk/gtkprintunixdialog.c: (gtk_print_unix_dialog_get_property):
