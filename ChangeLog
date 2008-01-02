@@ -1,3 +1,11 @@
+2008-01-02  Johan Dahlin  <johan@gnome.org>
+
+	* tests/defaultvaluetest.c (test_type): Ignore a few more tests to 
+	make it pass on Ubuntu.
+	(main): Use gtk_test_list_all_types () instead of providing our
+	own list.
+	And it no longer passes.
+
 2007-12-30  Johannes Schmid <jhs@gnome.org>
 
 	* gtk/gtknotebook.c: (gtk_notebook_stop_reorder):

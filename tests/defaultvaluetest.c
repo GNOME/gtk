@@ -26,338 +26,6 @@
 #include <gtk/gtkpagesetupunixdialog.h>
 #include <gtk/gtkprintunixdialog.h>
 
-typedef GType (* GetTypeFunc) (void);
-
-static const char *types[] = {
-"gtk_about_dialog_get_type",
-"gtk_accel_flags_get_type",
-"gtk_accel_group_get_type",
-"gtk_accel_label_get_type",
-"gtk_accel_map_get_type",
-"gtk_accessible_get_type",
-"gtk_action_get_type",
-"gtk_action_group_get_type",
-"gtk_adjustment_get_type",
-"gtk_alignment_get_type",
-"gtk_anchor_type_get_type",
-"gtk_arg_flags_get_type",
-"gtk_arrow_get_type",
-"gtk_arrow_type_get_type",
-"gtk_aspect_frame_get_type",
-"gtk_assistant_get_type",
-"gtk_assistant_page_type_get_type",
-"gtk_attach_options_get_type",
-"gtk_bin_get_type",
-"gtk_border_get_type",
-"gtk_box_get_type",
-"gtk_buildable_get_type",
-"gtk_builder_error_get_type",
-"gtk_builder_get_type",
-"gtk_button_action_get_type",
-"gtk_button_box_get_type",
-"gtk_button_box_style_get_type",
-"gtk_button_get_type",
-"gtk_buttons_type_get_type",
-"gtk_calendar_display_options_get_type",
-"gtk_calendar_get_type",
-"gtk_cell_editable_get_type",
-"gtk_cell_layout_get_type",
-"gtk_cell_renderer_accel_get_type",
-"gtk_cell_renderer_accel_mode_get_type",
-"gtk_cell_renderer_combo_get_type",
-"gtk_cell_renderer_get_type",
-"gtk_cell_renderer_mode_get_type",
-"gtk_cell_renderer_pixbuf_get_type",
-"gtk_cell_renderer_progress_get_type",
-"gtk_cell_renderer_spin_get_type",
-"gtk_cell_renderer_state_get_type",
-"gtk_cell_renderer_text_get_type",
-"gtk_cell_renderer_toggle_get_type",
-"gtk_cell_type_get_type",
-"gtk_cell_view_get_type",
-"gtk_check_button_get_type",
-"gtk_check_menu_item_get_type",
-"gtk_clipboard_get_type",
-"gtk_clist_drag_pos_get_type",
-"gtk_clist_get_type", 
-"gtk_color_button_get_type",
-"gtk_color_selection_dialog_get_type",
-"gtk_color_selection_get_type",
-"gtk_combo_box_entry_get_type",
-"gtk_combo_box_get_type",
-"gtk_combo_get_type",
-"gtk_container_get_type",
-"gtk_corner_type_get_type",
-"gtk_ctree_expander_style_get_type",
-"gtk_ctree_expansion_type_get_type",
-"gtk_ctree_get_type",
-"gtk_ctree_line_style_get_type",
-"gtk_ctree_node_get_type",
-"gtk_ctree_pos_get_type",
-"gtk_curve_get_type",
-"gtk_curve_type_get_type",
-"gtk_debug_flag_get_type",
-"gtk_delete_type_get_type",
-"gtk_dest_defaults_get_type",
-"gtk_dialog_flags_get_type",
-"gtk_dialog_get_type",
-"gtk_direction_type_get_type",
-"gtk_drag_result_get_type",
-"gtk_drawing_area_get_type",
-"gtk_editable_get_type",
-"gtk_entry_completion_get_type",
-"gtk_entry_get_type",
-"gtk_event_box_get_type",
-"gtk_expander_get_type",
-"gtk_expander_style_get_type",
-"gtk_file_chooser_action_get_type",
-"gtk_file_chooser_button_get_type",
-"gtk_file_chooser_confirmation_get_type",
-"gtk_file_chooser_dialog_get_type",
-"gtk_file_chooser_error_get_type",
-"gtk_file_chooser_get_type",
-"gtk_file_chooser_widget_get_type",
-"gtk_file_filter_flags_get_type",
-"gtk_file_filter_get_type",
-"gtk_file_folder_get_type",
-"gtk_file_info_get_type",
-"gtk_file_path_get_type",
-"gtk_file_selection_get_type",
-"gtk_file_system_get_type",
-"gtk_file_system_handle_get_type",
-"gtk_file_system_unix_get_type",
-"gtk_fixed_get_type",
-"gtk_font_button_get_type",
-"gtk_font_selection_dialog_get_type",
-"gtk_font_selection_get_type",
-"gtk_frame_get_type",
-"gtk_gamma_curve_get_type",
-"gtk_handle_box_get_type",
-"gtk_hbox_get_type",
-"gtk_hbutton_box_get_type",
-"gtk_hpaned_get_type",
-"gtk_hruler_get_type",
-"gtk_hscale_get_type",
-"gtk_hscrollbar_get_type",
-"gtk_hseparator_get_type",
-"gtk_hsv_get_type",
-"gtk_icon_factory_get_type",
-"gtk_icon_info_get_type",
-"gtk_icon_lookup_flags_get_type",
-"gtk_icon_set_get_type",
-"gtk_icon_size_get_type",
-"gtk_icon_source_get_type",
-"gtk_icon_theme_error_get_type",
-"gtk_icon_theme_get_type",
-"gtk_icon_view_drop_position_get_type",
-"gtk_icon_view_get_type",
-"gtk_identifier_get_type",
-"gtk_image_get_type",
-"gtk_image_menu_item_get_type",
-"gtk_image_type_get_type",
-"gtk_im_context_get_type",
-"gtk_im_context_simple_get_type",
-"gtk_im_multicontext_get_type",
-"gtk_im_preedit_style_get_type",
-"gtk_im_status_style_get_type",
-"gtk_input_dialog_get_type",
-"gtk_invisible_get_type",
-"gtk_item_factory_get_type",
-"gtk_item_get_type",
-"gtk_justification_get_type",
-"gtk_label_get_type",
-"gtk_layout_get_type",
-"gtk_link_button_get_type",
-"gtk_list_get_type",
-"gtk_list_item_get_type",
-"gtk_list_store_get_type",
-"gtk_match_type_get_type",
-"gtk_menu_bar_get_type",
-"gtk_menu_direction_type_get_type",
-"gtk_menu_get_type",
-"gtk_menu_item_get_type",
-"gtk_menu_shell_get_type",
-"gtk_menu_tool_button_get_type",
-"gtk_message_dialog_get_type",
-"gtk_message_type_get_type",
-"gtk_metric_type_get_type",
-"gtk_misc_get_type",
-"gtk_movement_step_get_type",
-"gtk_notebook_get_type",
-"gtk_notebook_tab_get_type",
-"gtk_object_flags_get_type",
-"gtk_object_get_type",
-"gtk_old_editable_get_type",
-"gtk_option_menu_get_type",
-"gtk_orientation_get_type",
-"gtk_pack_direction_get_type",
-"gtk_pack_type_get_type",
-"gtk_page_orientation_get_type",
-"gtk_page_set_get_type",
-"gtk_page_setup_get_type",
-"gtk_page_setup_unix_dialog_get_type",
-"gtk_paned_get_type",
-"gtk_paper_size_get_type",
-"gtk_path_bar_get_type",
-"gtk_path_priority_type_get_type",
-"gtk_path_type_get_type",
-"gtk_pixmap_get_type",
-"gtk_plug_get_type",
-"gtk_policy_type_get_type",
-"gtk_position_type_get_type",
-"gtk_preview_get_type",
-"gtk_preview_type_get_type",
-"gtk_print_backend_get_type",
-"gtk_print_capabilities_get_type",
-"gtk_print_context_get_type",
-"gtk_print_duplex_get_type",
-"gtk_printer_get_type",
-"gtk_printer_option_get_type",
-"gtk_printer_option_set_get_type",
-"gtk_printer_option_widget_get_type",
-"gtk_print_error_get_type",
-"gtk_print_job_get_type",
-"gtk_print_operation_action_get_type",
-"gtk_print_operation_get_type",
-"gtk_print_operation_preview_get_type",
-"gtk_print_operation_result_get_type",
-"gtk_print_pages_get_type",
-"gtk_print_quality_get_type",
-"gtk_print_settings_get_type",
-"gtk_print_status_get_type",
-"gtk_print_unix_dialog_get_type",
-"gtk_private_flags_get_type",
-"gtk_progress_bar_get_type",
-"gtk_progress_bar_orientation_get_type",
-"gtk_progress_bar_style_get_type",
-"gtk_progress_get_type",
-"gtk_radio_action_get_type",
-"gtk_radio_button_get_type",
-"gtk_radio_menu_item_get_type",
-"gtk_radio_tool_button_get_type",
-"gtk_range_get_type",
-"gtk_rc_flags_get_type",
-"gtk_rc_style_get_type",
-"gtk_rc_token_type_get_type",
-"gtk_recent_action_get_type",
-"gtk_recent_chooser_dialog_get_type",
-"gtk_recent_chooser_error_get_type",
-"gtk_recent_chooser_get_type",
-"gtk_recent_chooser_menu_get_type",
-"gtk_recent_chooser_widget_get_type",
-"gtk_recent_filter_flags_get_type",
-"gtk_recent_filter_get_type",
-"gtk_recent_info_get_type",
-"gtk_recent_manager_error_get_type",
-"gtk_recent_manager_get_type",
-"gtk_recent_sort_type_get_type",
-"gtk_relief_style_get_type",
-"gtk_requisition_get_type",
-"gtk_resize_mode_get_type",
-"gtk_response_type_get_type",
-"gtk_ruler_get_type",
-"gtk_scale_button_get_type",
-"gtk_scale_get_type",
-"gtk_scrollbar_get_type",
-"gtk_scrolled_window_get_type",
-"gtk_scroll_step_get_type",
-"gtk_scroll_type_get_type",
-"gtk_selection_data_get_type",
-"gtk_selection_mode_get_type",
-"gtk_sensitivity_type_get_type",
-"gtk_separator_get_type",
-"gtk_separator_menu_item_get_type",
-"gtk_separator_tool_item_get_type",
-"gtk_settings_get_type",
-"gtk_shadow_type_get_type",
-"gtk_side_type_get_type",
-"gtk_signal_run_type_get_type",
-"gtk_size_group_get_type",
-"gtk_size_group_mode_get_type",
-"gtk_socket_get_type",
-"gtk_sort_type_get_type",
-"gtk_spin_button_get_type",
-"gtk_spin_button_update_policy_get_type",
-"gtk_spin_type_get_type",
-"gtk_state_type_get_type",
-"gtk_statusbar_get_type",
-"gtk_status_icon_get_type",
-"gtk_style_get_type",
-"gtk_submenu_direction_get_type",
-"gtk_submenu_placement_get_type",
-"gtk_table_get_type",
-"gtk_target_flags_get_type",
-"gtk_target_list_get_type",
-"gtk_tearoff_menu_item_get_type",
-"gtk_text_attributes_get_type",
-"gtk_text_buffer_get_type",
-"gtk_text_buffer_target_info_get_type",
-"gtk_text_child_anchor_get_type",
-"gtk_text_direction_get_type",
-"gtk_text_iter_get_type",
-"gtk_text_layout_get_type",
-"gtk_text_mark_get_type",
-"gtk_text_search_flags_get_type",
-"gtk_text_tag_get_type",
-"gtk_text_tag_table_get_type",
-"gtk_text_view_get_type",
-"gtk_text_window_type_get_type",
-"gtk_theme_engine_get_type",
-"gtk_tips_query_get_type",
-"gtk_toggle_action_get_type",
-"gtk_toggle_button_get_type",
-"gtk_toggle_tool_button_get_type",
-"gtk_toolbar_child_type_get_type",
-"gtk_toolbar_get_type",
-"gtk_toolbar_space_style_get_type",
-"gtk_toolbar_style_get_type",
-"gtk_tool_button_get_type",
-"gtk_tool_item_get_type",
-"gtk_tooltip_get_type",
-"gtk_tooltips_get_type",
-"gtk_tray_icon_get_type",
-"gtk_tree_drag_dest_get_type",
-"gtk_tree_drag_source_get_type",
-"gtk_tree_iter_get_type",
-"gtk_tree_model_filter_get_type",
-"gtk_tree_model_flags_get_type",
-"gtk_tree_model_get_type",
-"gtk_tree_model_sort_get_type",
-"gtk_tree_path_get_type",
-"gtk_tree_row_reference_get_type",
-"gtk_tree_selection_get_type",
-"gtk_tree_sortable_get_type",
-"gtk_tree_store_get_type",
-"gtk_tree_view_column_get_type",
-"gtk_tree_view_column_sizing_get_type",
-"gtk_tree_view_drop_position_get_type",
-"gtk_tree_view_get_type",
-"gtk_tree_view_grid_lines_get_type",
-"gtk_tree_view_mode_get_type",
-"gtk_ui_manager_get_type",
-"gtk_ui_manager_item_type_get_type",
-"gtk_unit_get_type",
-"gtk_update_type_get_type",
-"gtk_vbox_get_type",
-"gtk_vbutton_box_get_type",
-"gtk_viewport_get_type",
-"gtk_visibility_get_type",
-"gtk_volume_button_get_type",
-"gtk_vpaned_get_type",
-"gtk_vruler_get_type",
-"gtk_vscale_get_type",
-"gtk_vscrollbar_get_type",
-"gtk_vseparator_get_type",
-"gtk_widget_flags_get_type",
-"gtk_widget_get_type",
-"gtk_widget_help_type_get_type",
-"gtk_window_get_type",
-"gtk_window_group_get_type",
-"gtk_window_position_get_type",
-"gtk_window_type_get_type",
-"gtk_wrap_mode_get_type",
-};
-
 static void
 check_property (const char *output,
 	        GParamSpec *pspec,
@@ -449,6 +117,10 @@ test_type (gconstpointer data)
 	   strcmp (pspec->name, "style") == 0))
 	continue;
 
+      if (g_type_is_a (type, GTK_TYPE_ABOUT_DIALOG) &&
+	  (strcmp (pspec->name, "program-name") == 0))
+	continue;
+      
       /* These are set to the current date */
       if (g_type_is_a (type, GTK_TYPE_CALENDAR) &&
 	  (strcmp (pspec->name, "year") == 0 ||
@@ -509,7 +181,8 @@ test_type (gconstpointer data)
 
       /* filename value depends on $HOME */
       if (g_type_is_a (type, GTK_TYPE_RECENT_MANAGER) &&
-          strcmp (pspec->name, "filename") == 0)
+          (strcmp (pspec->name, "filename") == 0 ||
+	   strcmp (pspec->name, "size") == 0))
         continue;
 
       if (g_type_is_a (type, GTK_TYPE_SCALE_BUTTON) &&
@@ -527,7 +200,15 @@ test_type (gconstpointer data)
         continue;
 
       if (g_type_is_a (type, GTK_TYPE_SETTINGS) &&
-          strcmp (pspec->name, "color-hash") == 0)
+          (strcmp (pspec->name, "color-hash") == 0 ||
+	   strcmp (pspec->name, "gtk-cursor-theme-name") == 0 ||
+	   strcmp (pspec->name, "gtk-cursor-theme-size") == 0 ||
+	   strcmp (pspec->name, "gtk-double-click-time") == 0 ||
+	   strcmp (pspec->name, "gtk-file-chooser-backend") == 0 ||
+	   strcmp (pspec->name, "gtk-icon-theme-name") == 0 ||
+	   strcmp (pspec->name, "gtk-fallback-icon-theme") == 0 ||
+	   strcmp (pspec->name, "gtk-key-theme-name") == 0 ||
+	   strcmp (pspec->name, "gtk-theme-name") == 0))
         continue;
 
       if (g_type_is_a (type, GTK_TYPE_SPIN_BUTTON) &&
@@ -603,36 +284,21 @@ test_type (gconstpointer data)
 int
 main (int argc, char **argv)
 {
-  GModule *module;
+  const GType *otypes;
   guint i;
 
   gtk_test_init (&argc, &argv);
+  gtk_test_register_all_types();
   
-  module = g_module_open (NULL, 0);
-  if (!module)
-    return 1;
-
-  /* GtkAboutDialog:program-name workaround */
-  g_set_prgname (NULL);
-
-  for (i = 0; i < G_N_ELEMENTS (types); ++i)
+  otypes = gtk_test_list_all_types (NULL);
+  for (i = 0; otypes[i]; i++)
     {
-      GetTypeFunc func;
-      gpointer ptr = &func;
-      GType type;
       gchar *testname;
       
-      if (!g_module_symbol (module, types[i], ptr))
-	g_assert_not_reached ();
-      
-      type = func ();
-
-      g_assert (type != G_TYPE_INVALID);
-
       testname = g_strdup_printf ("/Default Values/%s",
-				  g_type_name (type));
+				  g_type_name (otypes[i]));
       g_test_add_data_func (testname,
-			    GINT_TO_POINTER (type),
+			    GINT_TO_POINTER (otypes[i]),
 			    test_type);
       g_free (testname);
     }
