@@ -1,3 +1,9 @@
+2008-01-03  Tor Lillqvist  <tml@novell.com>
+
+	* io.po: Remove fuzzy marker for the metadata entry (the first
+	one, for the string ""), as having that fuzzy crashes msgfmt from
+	gettext 0.17, at least for me.
+
 2008-01-02  Priit Laes  <plaes at svn dot gnome dot org>
 
 	* et.po: Translation updated by Ivar Smolin
