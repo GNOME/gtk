@@ -9861,7 +9861,7 @@ recent_sort_mru (gconstpointer a,
   GtkRecentInfo *info_a = (GtkRecentInfo *) a;
   GtkRecentInfo *info_b = (GtkRecentInfo *) b;
 
-  return (gtk_recent_info_get_modified (info_a) < gtk_recent_info_get_modified (info_b));
+  return (gtk_recent_info_get_modified (info_b) - gtk_recent_info_get_modified (info_a));
 }
 
 static gint

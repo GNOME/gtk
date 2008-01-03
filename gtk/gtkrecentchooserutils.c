@@ -302,7 +302,7 @@ sort_recent_items_mru (GtkRecentInfo *a,
 {
   g_assert (a != NULL && b != NULL);
   
-  return (gtk_recent_info_get_modified (a) < gtk_recent_info_get_modified (b));
+  return (gtk_recent_info_get_modified (b) - gtk_recent_info_get_modified (a));
 }
 
 static gint
@@ -312,7 +312,7 @@ sort_recent_items_lru (GtkRecentInfo *a,
 {
   g_assert (a != NULL && b != NULL);
   
-  return (gtk_recent_info_get_modified (a) > gtk_recent_info_get_modified (b));
+  return -1 * (gtk_recent_info_get_modified (b) > gtk_recent_info_get_modified (a));
 }
 
 typedef struct

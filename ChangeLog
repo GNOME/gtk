@@ -1,3 +1,15 @@
+2008-01-03  Emmanuele Bassi  <ebassi@gnome.org>
+
+	Backport from trunk
+
+	* gtk/gtkfilechooserdefault.c (recent_sort_mru): Use the
+	correct comparison function (kudos to Christian Persch and
+	Claudio Saavedra for spotting this).
+
+	* gtk/gtkrecentchooserutils.c:
+	(sort_recent_items_mru),
+	(sort_recent_items_lru): Ditto as above.
+
 2007-12-30  Johannes Schmid <jhs@gnome.org>
 
 	* gtk/gtknotebook.c: (gtk_notebook_stop_reorder):
