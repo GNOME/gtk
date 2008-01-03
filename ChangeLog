@@ -1,3 +1,13 @@
+2008-01-03  Emmanuele Bassi  <ebassi@gnome.org>
+
+	* gtk/gtkfilechooserdefault.c (recent_sort_mru): Use the
+	correct comparison function (kudos to Christian Persch and
+	Claudio Saavedra for spotting this)
+
+	* gtk/gtkrecentchooserutils.c:
+	(sort_recent_items_mru),
+	(sort_recent_items_lru): Ditto as above.
+
 2008-01-03  Johan Dahlin  <johan@gnome.org>
 
 	* tests/defaultvaluetest.c: Make it pass again.
