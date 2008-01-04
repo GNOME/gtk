@@ -754,11 +754,16 @@ _gdk_device_get_history (GdkDevice         *device,
   if (device_coords)
     {
       coords = _gdk_device_allocate_history (device, *n_events);
-      
-      for (i=0; i<*n_events; i++)
-	gdk_input_translate_coordinates (gdkdev, input_window,
-					 device_coords[i].data,
-					 coords[i]->axes, NULL, NULL);
+
+      for (i = 0; i < *n_events; i++)
+        {
+          coords[i]->time = device_coords[i].time;
+
+          gdk_input_translate_coordinates (gdkdev, input_window,
+                                           device_coords[i].data,
+                                           coords[i]->axes, NULL, NULL);
+        }
+
       XFreeDeviceMotionEvents (device_coords);
 
       *events = coords;
