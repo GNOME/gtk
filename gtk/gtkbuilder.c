@@ -1111,7 +1111,8 @@ gtk_builder_value_from_string_type (GtkBuilder   *builder,
       }
     case G_TYPE_FLAGS:
       {
-	gint flags_value;
+	guint flags_value;
+
 	if (!_gtk_builder_flags_from_string (type, string, &flags_value, error))
 	  {
 	    ret = FALSE;
@@ -1293,7 +1294,7 @@ _gtk_builder_enum_from_string (GType         type,
 gboolean
 _gtk_builder_flags_from_string (GType         type, 
                                 const gchar  *string,
-				gint         *flags_value,
+				guint        *flags_value,
 				GError      **error)
 {
   GFlagsClass *fclass;

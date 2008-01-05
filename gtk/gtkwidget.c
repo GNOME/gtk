@@ -4762,12 +4762,12 @@ gtk_widget_reparent_subwindows (GtkWidget *widget,
 
       for (tmp_list = children; tmp_list; tmp_list = tmp_list->next)
 	{
-	  GtkWidget *child;
 	  GdkWindow *window = tmp_list->data;
+	  gpointer child;
 
-	  gdk_window_get_user_data (window, (void **)&child);
+	  gdk_window_get_user_data (window, &child);
 	  while (child && child != widget)
-	    child = child->parent;
+	    child = ((GtkWidget*) child)->parent;
 
 	  if (child)
 	    gdk_window_reparent (window, new_window, 0, 0);
@@ -4790,10 +4790,11 @@ gtk_widget_reparent_subwindows (GtkWidget *widget,
 	 
 	 for (tmp_list = children; tmp_list; tmp_list = tmp_list->next)
 	   {
-	     GtkWidget *child;
 	     GdkWindow *window = tmp_list->data;
-	     
-	     gdk_window_get_user_data (window, (void **)&child);
+	     gpointer child;
+
+	     gdk_window_get_user_data (window, &child);
+
 	     if (child == widget)
 	       gdk_window_reparent (window, new_window, 0, 0);
 	   }

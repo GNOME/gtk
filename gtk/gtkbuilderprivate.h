@@ -116,7 +116,7 @@ gboolean _gtk_builder_boolean_from_string (const gchar  *string,
 					   GError      **error);
 gboolean  _gtk_builder_flags_from_string (GType       type,
 					  const char *string,
-					  gint       *value,
+					  guint      *value,
 					  GError    **error);
 
 #endif /* __GTK_BUILDER_PRIVATE_H__ */
