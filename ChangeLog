@@ -1,3 +1,8 @@
+2008-01-05  Christian Persch  <chpe@gnome.org>
+
+        * tests/defaultvaluetest.c: Fix mem leak, and don't pass
+        GType as integer through gpointer. Bug #507395.
+
 2008-01-04  Mathias Hasselmann  <mathias@openismus.com>
 
 	Avoid some compiler warnings (#507000).

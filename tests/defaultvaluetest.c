@@ -63,9 +63,9 @@ test_type (gconstpointer data)
   GParamSpec **pspecs;
   guint n_pspecs, i;
   GType type;
-  
-  type = GPOINTER_TO_INT (data);
-  
+
+  type = * (GType *) data;
+
   if (!G_TYPE_IS_CLASSED (type))
     return;
 
@@ -278,6 +278,7 @@ test_type (gconstpointer data)
       check_property ("Property", pspec, &value);
       g_value_unset (&value);
     }
+  g_free (pspecs);
 
   if (g_type_is_a (type, GTK_TYPE_WIDGET))
     {
@@ -299,6 +300,8 @@ test_type (gconstpointer data)
 	  check_property ("Style property", pspec, &value);
 	  g_value_unset (&value);
 	}
+
+      g_free (pspecs);
     }
   
   if (g_type_is_a (type, GDK_TYPE_WINDOW))
@@ -326,7 +329,7 @@ main (int argc, char **argv)
       testname = g_strdup_printf ("/Default Values/%s",
 				  g_type_name (otypes[i]));
       g_test_add_data_func (testname,
-			    GINT_TO_POINTER (otypes[i]),
+                            &otypes[i],
 			    test_type);
       g_free (testname);
     }
