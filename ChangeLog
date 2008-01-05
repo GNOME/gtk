@@ -1,3 +1,8 @@
+2008-01-05  Johan Dahlin  <johan@gnome.org>
+
+	* modules/other/gail/tests/Makefile.am: Include Makefile.decl,
+	to make sure that make test-report works properly
+
 2008-01-05  Christian Persch  <chpe@gnome.org>
 
         * tests/defaultvaluetest.c: Fix mem leak, and don't pass
