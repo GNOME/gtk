@@ -275,7 +275,7 @@ gtk_builder_get_parameters (GtkBuilder  *builder,
                                             prop->name);
       if (!pspec)
         {
-          g_warning ("Unknown property: %s.%s\n",
+          g_warning ("Unknown property: %s.%s",
                      g_type_name (object_type), prop->name);
           continue;
         }
@@ -508,7 +508,7 @@ _gtk_builder_add (GtkBuilder *builder,
 
   if (!child_info->parent)
     {
-      g_warning ("%s: Not adding, No parent\n",
+      g_warning ("%s: Not adding, No parent",
                  gtk_buildable_get_name (GTK_BUILDABLE (object)));
       return;
     }
@@ -570,7 +570,7 @@ gtk_builder_apply_delayed_properties (GtkBuilder *builder)
       pspec = g_object_class_find_property (G_OBJECT_CLASS (oclass),
                                             property->name);
       if (!pspec)
-        g_warning ("Unknown property: %s.%s\n", g_type_name (object_type),
+        g_warning ("Unknown property: %s.%s", g_type_name (object_type),
                    property->name);
       else
         {
@@ -578,7 +578,7 @@ gtk_builder_apply_delayed_properties (GtkBuilder *builder)
 
           obj = g_hash_table_lookup (builder->priv->objects, property->value);
           if (!obj)
-            g_warning ("No object called: %s\n", property->value);
+            g_warning ("No object called: %s", property->value);
           else
             g_object_set (object, property->name, obj, NULL);
         }

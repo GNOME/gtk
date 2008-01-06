@@ -1,5 +1,8 @@
 2008-01-06  Johan Dahlin  <johan@gnome.org>
 
+	* gtk/gtkbuilder.c: Avoid adding unnecessary trailing newlines 
+	to g_warning calls.
+
 	* gtk/gtktreestore.c (tree_model_end_element): 
 	Remove an unused variable
 
