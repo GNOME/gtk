@@ -1,5 +1,8 @@
 2008-01-06  Johan Dahlin  <johan@gnome.org>
 
+	* tests/buildertest.c (test_domain): 
+	Update, GtkBuilder::translation-domain is no longer set
+	
 	* gtk/gtkbuilderparser.c (parse_interface): 
 	Allow domains to be overridden in <interface>'s if a translation-domain
 	is set in the builder.

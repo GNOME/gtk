@@ -343,8 +343,7 @@ test_domain (void)
   
   builder = builder_new_from_string (buffer2, -1, NULL);
   domain = gtk_builder_get_translation_domain (builder);
-  g_assert (domain);
-  g_assert (strcmp (domain, "domain") == 0);
+  g_assert (domain == NULL);
   g_object_unref (builder);
   
   builder = builder_new_from_string (buffer2, -1, "domain-1");
