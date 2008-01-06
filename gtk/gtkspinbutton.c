@@ -290,6 +290,33 @@ gtk_spin_button_class_init (GtkSpinButtonClass *class)
 		  G_TYPE_INT, 1,
 		  G_TYPE_POINTER);
 
+  /**
+   * GtkSpinButton::output:
+   * @spin_button: the object which received the signal
+   * 
+   * The ::output signal can be used to change to formatting
+   * of the value that is displayed in the spin buttons entry.
+   * |[
+   * /&ast; show leading zeros &ast;/
+   * static gboolean
+   * on_output (GtkSpinButton *spin,
+   *            gpointer       data)
+   * {
+   *    GtkAdjustment *adj;
+   *    gchar *text;
+   *    
+   *    adj = gtk_spin_button_get_adjustment (spin);
+   *    value = (int)gtk_adjustment_get_value (adj);
+   *    text = g_strdup_printf ("%02d", value);
+   *    gtk_entry_set_text (GTK_ENTRY (spin), text);
+   *    g_free (text);
+   *    
+   *    return TRUE;
+   * }
+   * ]|
+   *
+   * Returns: %TRUE if the value has been displayed.
+   */
   spinbutton_signals[OUTPUT] =
     g_signal_new (I_("output"),
 		  G_TYPE_FROM_CLASS (gobject_class),

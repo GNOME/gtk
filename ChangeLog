@@ -1,3 +1,8 @@
+2008-01-06  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtkspinbutton.c: Document the ::output signal and
+	add an example.  (#507566, example by Owen Taylor)
+
 2008-01-06  Johan Dahlin  <johan@gnome.org>
 
 	* gtk/gtkcellrenderercombo.c:
@@ -96,6 +101,18 @@
 
 	* gtk/gtkiconfactory.c (render_fallback_image): Adjust to
 	icon cache api change.  (#506135, Kazuki Iwamoto)
+
+2007-12-28  Mathias Hasselmann  <mathias@openismus.com>
+
+	Consider "wide-separators" and "separator-height" style properties:
+	The separator is drawn using gtk_paint_box instead of cairo, when
+	"wide-separators" is set. Also do not highlight details for previous
+	or next month, if their day matches the selected day. (#339540)
+
+	* gtk/gtkcalendar.c: Consider "wide-separators" and "separator-height"
+	in gtk_calendar_size_request and calendar_paint_day
+	* gtk/gtkstyle.c: Modify gtk_default_draw_box to use special colors
+	for selected detail separators in GtkCalendar.
 
 2007-12-28  Mathias Hasselmann  <mathias@openismus.com>
 
