@@ -1,5 +1,13 @@
 2008-01-06  Johan Dahlin  <johan@gnome.org>
 
+	* gtk/gtkbuilderparser.c (parse_interface): 
+	Allow domains to be overridden in <interface>'s if a translation-domain
+	is set in the builder.
+	(_gtk_builder_parser_parse_buffer): Do not modify the translation-domain
+	of the builder, make the domain set in the <interface> apply only to strings
+	in that interface.
+	(#496831, Ryan Lortie)
+
 	* gtk/gtkbuilder.c: Avoid adding unnecessary trailing newlines 
 	to g_warning calls.
 

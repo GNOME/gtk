@@ -534,8 +534,9 @@ parse_interface (ParserData   *data,
 
   for (i = 0; names[i] != NULL; i++)
     {
-      if (strcmp (names[i], "domain") == 0 && !data->domain)
+      if (strcmp (names[i], "domain") == 0)
 	{
+	  g_free (data->domain);
 	  data->domain = g_strdup (values[i]);
 	  break;
 	}
@@ -962,7 +963,6 @@ _gtk_builder_parser_parse_buffer (GtkBuilder   *builder,
   if (!g_markup_parse_context_parse (data->ctx, buffer, length, error))
     goto out;
   
-  gtk_builder_set_translation_domain (data->builder, data->domain);
   _gtk_builder_finish (builder);
 
   /* Custom parser_finished */
