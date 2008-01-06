@@ -3236,7 +3236,6 @@ tree_model_end_element (GMarkupParseContext *context,
 			gpointer             user_data,
 			GError             **error)
 {
-  guint i;
   GSListSubParserData *data = (GSListSubParserData*)user_data;
 
   g_assert(data->builder);
