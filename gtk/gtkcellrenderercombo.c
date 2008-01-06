@@ -203,6 +203,7 @@ gtk_cell_renderer_combo_get_property (GObject    *object,
       break;
    default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+      break;
     }
 }
 
@@ -244,6 +245,7 @@ gtk_cell_renderer_combo_set_property (GObject      *object,
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+      break;
     }
 }
 

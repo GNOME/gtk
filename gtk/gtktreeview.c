@@ -1436,6 +1436,7 @@ gtk_tree_view_set_property (GObject         *object,
       gtk_tree_view_set_tooltip_column (tree_view, g_value_get_int (value));
       break;
     default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
     }
 }

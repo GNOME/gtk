@@ -1,5 +1,28 @@
 2008-01-06  Johan Dahlin  <johan@gnome.org>
 
+	* gtk/gtkcellrenderercombo.c:
+	(gtk_cell_renderer_combo_get_property),
+	(gtk_cell_renderer_combo_set_property):
+	* gtk/gtkcombobox.c: (gtk_combo_box_set_property):
+	* gtk/gtkcomboboxentry.c: (gtk_combo_box_entry_set_property):
+	* gtk/gtknotebook.c: (gtk_notebook_set_property):
+	* gtk/gtkspinbutton.c: (gtk_spin_button_set_property):
+	* gtk/gtktextbuffer.c: (gtk_text_buffer_set_property),
+	(gtk_text_buffer_get_property):
+	* gtk/gtktextview.c: (gtk_text_view_set_property):
+	* gtk/gtktogglebutton.c: (gtk_toggle_button_set_property):
+	* gtk/gtktoolbutton.c: (gtk_tool_button_set_property),
+	(gtk_tool_button_get_property):
+	* gtk/gtktoolitem.c: (gtk_tool_item_set_property),
+	(gtk_tool_item_get_property):
+	* gtk/gtktreeview.c: (gtk_tree_view_set_property):
+	* gtk/gtkwidget.c: (gtk_widget_set_property):
+	* gtk/gtkwindow.c: (gtk_window_set_property):
+	Use G_OBJECT_WARN_INVALID_PROPERTY_ID consistently.
+	Fixes #507585
+
+2008-01-06  Johan Dahlin  <johan@gnome.org>
+
 	* gtk/gtk-builder-convert (GtkBuilderConverter._strip_root): 
 	Make sure that --root works for toplevel widgets.
 	(#491847, Phil Lello)

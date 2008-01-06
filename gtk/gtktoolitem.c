@@ -318,6 +318,7 @@ gtk_tool_item_set_property (GObject      *object,
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+      break;
     }
 }
 
@@ -342,6 +343,7 @@ gtk_tool_item_get_property (GObject    *object,
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+      break;
     }
 }
 

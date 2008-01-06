@@ -403,6 +403,7 @@ gtk_spin_button_set_property (GObject      *object,
       gtk_spin_button_set_value (spin_button, g_value_get_double (value));
       break;
     default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
     }
 }

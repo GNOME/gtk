@@ -1528,6 +1528,7 @@ gtk_notebook_set_property (GObject         *object,
       gtk_notebook_set_group (notebook, g_value_get_pointer (value));
       break;
     default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
     }
 }

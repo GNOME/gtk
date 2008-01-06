@@ -1010,6 +1010,7 @@ gtk_window_set_property (GObject      *object,
       gtk_window_set_opacity (window, g_value_get_double (value));
       break;
     default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
     }
 }

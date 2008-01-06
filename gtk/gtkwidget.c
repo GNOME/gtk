@@ -2453,6 +2453,7 @@ gtk_widget_set_property (GObject         *object,
       gtk_widget_real_set_has_tooltip (widget, tmp, FALSE);
       break;
     default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
     }
 }

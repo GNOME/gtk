@@ -981,6 +981,7 @@ gtk_combo_box_set_property (GObject      *object,
         break;
 
       default:
+        G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
         break;
     }
 }
