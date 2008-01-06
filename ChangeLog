@@ -1,3 +1,9 @@
+2008-01-06  Johan Dahlin  <johan@gnome.org>
+
+	* gtk/gtk-builder-convert (GtkBuilderConverter._strip_root): 
+	Make sure that --root works for toplevel widgets.
+	(#491847, Phil Lello)
+
 2008-01-05  Johan Dahlin  <johan@gnome.org>
 
 	* modules/other/gail/tests/Makefile.am: Include Makefile.decl,

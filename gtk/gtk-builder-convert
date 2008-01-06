@@ -597,16 +597,11 @@ class GtkBuilderConverter(object):
             raise SystemExit("Could not find an object called `%s'" % (
                 root_name))
 
-        # If it's already a root object, don't do anything
-        if widget.parentNode is self._interface:
-            return
-
         for child in self._interface.childNodes[:]:
             if child.nodeType != Node.ELEMENT_NODE:
                 continue
             child.parentNode.removeChild(child)
 
-        widget.parentNode.removeChild(widget)
         self._interface.appendChild(widget)
 
 
