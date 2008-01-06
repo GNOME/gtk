@@ -1,5 +1,6 @@
 /* GtkPageSetupUnixDialog 
  * Copyright (C) 2006 Alexander Larsson <alexl@redhat.com>
+ * Copyright © 2006, 2007, 2008 Christian Persch
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -73,7 +74,6 @@ struct GtkPageSetupUnixDialogPrivate
   GtkWidget *printer_combo;
   GtkWidget *paper_size_combo;
   GtkWidget *paper_size_label;
-  GtkWidget *paper_size_eventbox;
 
   GtkWidget *portrait_radio;
   GtkWidget *reverse_portrait_radio;
@@ -920,7 +920,7 @@ paper_size_changed (GtkComboBox            *combo_box,
       g_free (left);
       g_free (right);
       
-      gtk_widget_set_tooltip_text (priv->paper_size_eventbox, str);
+      gtk_widget_set_tooltip_text (priv->paper_size_label, str);
       g_free (str);
       
       g_object_unref (page_setup);
@@ -928,7 +928,7 @@ paper_size_changed (GtkComboBox            *combo_box,
   else
     {
       gtk_label_set_text (label, "");
-      gtk_widget_set_tooltip_text (priv->paper_size_eventbox, NULL);
+      gtk_widget_set_tooltip_text (priv->paper_size_label, NULL);
       if (priv->last_setup)
 	g_object_unref (priv->last_setup);
       priv->last_setup = NULL;
@@ -984,7 +984,7 @@ populate_dialog (GtkPageSetupUnixDialog *ps_dialog)
 {
   GtkPageSetupUnixDialogPrivate *priv = ps_dialog->priv;
   GtkDialog *dialog = GTK_DIALOG (ps_dialog);
-  GtkWidget *table, *label, *combo, *radio_button, *ebox;
+  GtkWidget *table, *label, *combo, *radio_button;
   GtkCellRenderer *cell;
 
   gtk_window_set_resizable (GTK_WINDOW (dialog), FALSE);
@@ -1003,6 +1003,7 @@ populate_dialog (GtkPageSetupUnixDialog *ps_dialog)
   gtk_widget_show (table);
 
   label = gtk_label_new_with_mnemonic (_("_Format for:"));
+  gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
   gtk_table_attach (GTK_TABLE (table), label,
 		    0, 1, 0, 1,
 		    GTK_FILL, 0, 0, 0);
@@ -1024,6 +1025,7 @@ populate_dialog (GtkPageSetupUnixDialog *ps_dialog)
   gtk_label_set_mnemonic_widget (GTK_LABEL (label), combo);
 
   label = gtk_label_new_with_mnemonic (_("_Paper size:"));
+  gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
   gtk_table_attach (GTK_TABLE (table), label,
 		    0, 1, 1, 2,
 		    GTK_FILL, 0, 0, 0);
@@ -1045,21 +1047,16 @@ populate_dialog (GtkPageSetupUnixDialog *ps_dialog)
   gtk_widget_show (combo);
   gtk_label_set_mnemonic_widget (GTK_LABEL (label), combo);
 
-  ebox = gtk_event_box_new ();
-  priv->paper_size_eventbox = ebox;
-  gtk_event_box_set_visible_window (GTK_EVENT_BOX (ebox), FALSE);
-  gtk_table_attach (GTK_TABLE (table), ebox,
-		    1, 4, 2, 3,
-		    GTK_FILL, 0, 0, 0);
-  gtk_widget_show (ebox);
-  
-  label = gtk_label_new ("");
+  label = gtk_label_new (NULL);
   priv->paper_size_label = label;
   gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
-  gtk_container_add (GTK_CONTAINER (ebox), label);
+  gtk_table_attach (GTK_TABLE (table), label,
+		    1, 4, 2, 3,
+		    GTK_FILL, 0, 0, 0);
   gtk_widget_show (label);
 
   label = gtk_label_new_with_mnemonic (_("_Orientation:"));
+  gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
   gtk_table_attach (GTK_TABLE (table), label,
 		    0, 1, 3, 4,
 		    GTK_FILL, 0, 0, 0);
@@ -1314,7 +1311,7 @@ wrap_in_frame (const gchar *label,
   GtkWidget *frame, *alignment, *label_widget;
   gchar *bold_text;
 
-  label_widget = gtk_label_new ("");
+  label_widget = gtk_label_new (NULL);
   gtk_misc_set_alignment (GTK_MISC (label_widget), 0.0, 0.5);
   gtk_widget_show (label_widget);
   
