@@ -2,20 +2,20 @@
 # Estonian translation of GTK+.
 #
 # Copyright (C) 1999-2006 Free Software Foundation, Inc.
-# Copyright (C) 2007 The GNOME Project.
+# Copyright (C) 2007, 2008 The GNOME Project.
 # This file is distributed under the same license as the gtk package.
 #
 # Lauris Kaplinski <lauris@ariman.ee>, 1999.
 # Tõivo Leedjärv <toivo@linux.ee>, 2002-2004.
 # Priit Laes <amd@tt.ee>, 2004, 2005.
-# Ivar Smolin <okul@linux.ee>, 2005-2007.
+# Ivar Smolin <okul@linux.ee>, 2005-2008.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ HEAD\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2007-11-26 04:01+0000\n"
-"PO-Revision-Date: 2007-11-26 11:07+0000\n"
+"PO-Revision-Date: 2008-01-05 11:03+0200\n"
 "Last-Translator: Ivar Smolin <okul@linux.ee>\n"
 "Language-Team: Estonian <gnome-et@linux.ee>\n"
 "MIME-Version: 1.0\n"
@@ -455,7 +455,7 @@ msgstr "GIF-pildifaili laadija ei saa sellest pildist aru. "
 
 #: ../gdk-pixbuf/io-gif.c:668
 msgid "Bad code encountered"
-msgstr ""
+msgstr "Avastati vigane kood"
 
 #: ../gdk-pixbuf/io-gif.c:678
 msgid "Circular table entry in GIF file"
@@ -620,7 +620,7 @@ msgstr "Pildil on vigane laius ja/või kõrgus"
 
 #: ../gdk-pixbuf/io-pcx.c:613 ../gdk-pixbuf/io-pcx.c:674
 msgid "Image has unsupported bpp"
-msgstr ""
+msgstr "Pildil on toetamata värvisügavus"
 
 #: ../gdk-pixbuf/io-pcx.c:618 ../gdk-pixbuf/io-pcx.c:626
 #, c-format
@@ -2287,7 +2287,7 @@ msgstr "Salvestada _kataloogi:"
 #: ../gtk/gtkprintoperation.c:171
 #, c-format
 msgid "%s job #%d"
-msgstr ""
+msgstr "Rakenduse %s printimistöö #%d"
 
 #. translators, strip the prefix up to and including the first |
 #: ../gtk/gtkprintoperation.c:1496
@@ -2538,7 +2538,7 @@ msgstr "A_jal:"
 
 #: ../gtk/gtkprintunixdialog.c:2265
 msgid "On _hold"
-msgstr ""
+msgstr "_Ootel"
 
 #: ../gtk/gtkprintunixdialog.c:2284
 msgid "Add Cover Page"
@@ -3156,6 +3156,8 @@ msgstr "\"%s\" pole rekvisiidi väärtuseks lubatud"
 msgid ""
 "\"%s\" could not be converted to a value of type \"%s\" for attribute \"%s\""
 msgstr ""
+"Väärtust \"%1$s\" pole võimalik rekvisiidi \"%3$s\" jaoks "
+"\"%2$s\"-tüübiliseks väärtuseks teisendada"
 
 #: ../gtk/gtktextbufferserialize.c:1202
 #, c-format
@@ -3860,7 +3862,7 @@ msgstr "Euroopa edp"
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:231
 msgid "paper size|Executive"
-msgstr ""
+msgstr "Executive"
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:233
@@ -3870,17 +3872,17 @@ msgstr "f"
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:235
 msgid "paper size|FanFold European"
-msgstr ""
+msgstr "FanFold European"
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:237
 msgid "paper size|FanFold US"
-msgstr ""
+msgstr "FanFold US"
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:239
 msgid "paper size|FanFold German Legal"
-msgstr ""
+msgstr "FanFold German Legal"
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:241
@@ -4115,7 +4117,7 @@ msgstr "ROC 8k"
 #: ../gtk/updateiconcache.c:490 ../gtk/updateiconcache.c:550
 #, c-format
 msgid "different idatas found for symlinked '%s' and '%s'\n"
-msgstr ""
+msgstr "erinevad idata andmed nimega viidatud '%s' ja '%s' jaoks\n"
 
 #: ../gtk/updateiconcache.c:1368
 msgid "Failed to write header\n"
@@ -4146,6 +4148,7 @@ msgstr "Genereeritud puhver on vigane.\n"
 #, c-format
 msgid "Could not rename %s to %s: %s, removing %s then.\n"
 msgstr ""
+"Faili %s nime pole võimalik nimeks %s muuta: %s, sestap %s eemaldatakse.\n"
 
 #: ../gtk/updateiconcache.c:1501
 #, c-format
@@ -4233,7 +4236,7 @@ msgstr "IPA"
 #. ID
 #: ../modules/input/immultipress.c:31
 msgid "Multipress"
-msgstr ""
+msgstr "Multipress"
 
 #. ID
 #: ../modules/input/imthai.c:35
