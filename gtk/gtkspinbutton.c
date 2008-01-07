@@ -304,6 +304,7 @@ gtk_spin_button_class_init (GtkSpinButtonClass *class)
    * {
    *    GtkAdjustment *adj;
    *    gchar *text;
+   *    int value;
    *    
    *    adj = gtk_spin_button_get_adjustment (spin);
    *    value = (int)gtk_adjustment_get_value (adj);

@@ -1,3 +1,8 @@
+2008-01-06  Johan Dahlin  <johan@gnome.org>
+
+	* gtk/gtkspinbutton.c: Declare value in the example code for
+	GtkSpinButton::output, as pointed out by Anders Carlsson.
+
 2008-01-06  Christian Persch  <chpe@gnome.org>
 
 	* gtk/gtkpagesetupunixdialog.c: Make the labels left-aligned,
