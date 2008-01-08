@@ -869,6 +869,9 @@ remove_page (GtkAssistant *assistant,
 	  while (page_node && !GTK_WIDGET_VISIBLE (((GtkAssistantPage *) page_node->data)->page))
 	    page_node = page_node->next;
 
+          if (page_node == element)
+            page_node = page_node->next;
+
 	  if (page_node)
 	    priv->current_page = page_node->data;
 	  else
