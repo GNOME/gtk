@@ -1295,7 +1295,7 @@ msgstr "calendar:week_start:1"
 #.
 #: gtk/gtkcalendar.c:1595
 msgid "year measurement template|2000"
-msgstr ""
+msgstr "2000"
 
 #. Translators: this defines whether the day numbers should use
 #. * localized digits or the ones used in English (0123...).
@@ -1311,7 +1311,7 @@ msgstr ""
 #: gtk/gtkcalendar.c:1626 gtk/gtkcalendar.c:2204
 #, c-format
 msgid "calendar:day:digits|%d"
-msgstr ""
+msgstr "%d"
 
 #. Translators: this defines whether the week numbers should use
 #. * localized digits or the ones used in English (0123...).
@@ -1325,9 +1325,9 @@ msgstr ""
 #. * too.
 #.
 #: gtk/gtkcalendar.c:1660 gtk/gtkcalendar.c:2078
-#, fuzzy, c-format
+#, c-format
 msgid "calendar:week:digits|%d"
-msgstr "calendar:week_start:1"
+msgstr "%d"
 
 #. Translators: This dictates how the year is displayed in
 #. * gtkcalendar widget.  See strftime() manual for the format.
@@ -1342,7 +1342,7 @@ msgstr "calendar:week_start:1"
 #.
 #: gtk/gtkcalendar.c:1869
 msgid "calendar year format|%Y"
-msgstr ""
+msgstr "%Y"
 
 #. This label is displayed in a treeview cell displaying
 #. * a disabled accelerator key combination. Only include
@@ -1364,7 +1364,7 @@ msgstr ""
 #: gtk/gtkcellrendererprogress.c:362 gtk/gtkcellrendererprogress.c:449
 #, c-format
 msgid "progress bar label|%d %%"
-msgstr ""
+msgstr "%d %%"
 
 #: gtk/gtkcolorbutton.c:189 gtk/gtkcolorbutton.c:560
 msgid "Pick a Color"
@@ -1482,7 +1482,7 @@ msgid "Transparency of the color."
 msgstr "Kor klar den valde fargen er."
 
 #: gtk/gtkcolorsel.c:1992
-#, fuzzy
+#
 msgid "Color _name:"
 msgstr "Farge_namn:"
 
@@ -1495,14 +1495,14 @@ msgstr ""
 "fargenamn som t.d. «oransje»."
 
 #: gtk/gtkcolorsel.c:2036
-#, fuzzy
+#
 msgid "_Palette:"
-msgstr "_Palett"
+msgstr "_Palett:"
 
 #: gtk/gtkcolorsel.c:2065
-#, fuzzy
+#
 msgid "Color Wheel"
-msgstr "Hjul"
+msgstr "Fargehjul"
 
 #: gtk/gtkcolorseldialog.c:101
 msgid "Color Selection"
@@ -1517,18 +1517,18 @@ msgid "_Insert Unicode Control Character"
 msgstr "Set _inn Unicode-kontrollteikn"
 
 #: gtk/gtkfilechooserbutton.c:68
-#, fuzzy
+#
 msgid "Select A File"
-msgstr "Slett fil"
+msgstr "Vel ei fil"
 
 #: gtk/gtkfilechooserbutton.c:69 gtk/gtkfilechooserdefault.c:1976
 msgid "Desktop"
 msgstr "Skrivebord"
 
 #: gtk/gtkfilechooserbutton.c:70
-#, fuzzy
+#
 msgid "(None)"
-msgstr "ingen"
+msgstr "(Ingen)"
 
 #: gtk/gtkfilechooserbutton.c:2048
 msgid "Other..."
