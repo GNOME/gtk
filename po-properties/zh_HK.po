@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-properties 2.8.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-12-04 14:38-0500\n"
+"POT-Creation-Date: 2008-01-08 00:16-0500\n"
 "PO-Revision-Date: 2006-04-17 19:14+0800\n"
 "Last-Translator: Chao-Hsiung Liao <j_h_liau@yahoo.com.tw>\n"
 "Language-Team: Chinese (Taiwan) <community@linuxhall.org>\n"
@@ -698,7 +698,7 @@ msgstr "間距"
 msgid "The amount of space between children"
 msgstr "子元件之間的間距"
 
-#: gtk/gtkbox.c:108 gtk/gtknotebook.c:636 gtk/gtktable.c:165
+#: gtk/gtkbox.c:108 gtk/gtknotebook.c:638 gtk/gtktable.c:165
 #: gtk/gtktoolbar.c:563
 msgid "Homogeneous"
 msgstr "尺寸一致"
@@ -740,19 +740,19 @@ msgstr "加入額外的空位隔開子元件及周圍的元件，以像素為單
 msgid "Pack type"
 msgstr "排列方式"
 
-#: gtk/gtkbox.c:138 gtk/gtknotebook.c:703
+#: gtk/gtkbox.c:138 gtk/gtknotebook.c:705
 msgid ""
 "A GtkPackType indicating whether the child is packed with reference to the "
 "start or end of the parent"
 msgstr ""
 "GtkPackType 意指子元件的排列方式是從主元件的開始位置，還是從結束位置進行排列"
 
-#: gtk/gtkbox.c:144 gtk/gtknotebook.c:681 gtk/gtkpaned.c:219
+#: gtk/gtkbox.c:144 gtk/gtknotebook.c:683 gtk/gtkpaned.c:219
 #: gtk/gtkruler.c:110
 msgid "Position"
 msgstr "位置"
 
-#: gtk/gtkbox.c:145 gtk/gtknotebook.c:682
+#: gtk/gtkbox.c:145 gtk/gtknotebook.c:684
 msgid "The index of the child in the parent"
 msgstr "子元件在母元件中的索引編號"
 
@@ -3185,207 +3185,207 @@ msgid ""
 "The amount of space to add on the top and bottom of the widget, in pixels"
 msgstr "加在視窗元件上下的空間，單位為像素"
 
-#: gtk/gtknotebook.c:564
+#: gtk/gtknotebook.c:566
 msgid "Page"
 msgstr "頁碼"
 
-#: gtk/gtknotebook.c:565
+#: gtk/gtknotebook.c:567
 msgid "The index of the current page"
 msgstr "本頁的索引"
 
-#: gtk/gtknotebook.c:573
+#: gtk/gtknotebook.c:575
 msgid "Tab Position"
 msgstr "標簽位置"
 
-#: gtk/gtknotebook.c:574
+#: gtk/gtknotebook.c:576
 msgid "Which side of the notebook holds the tabs"
 msgstr "標簽頁中含有標簽的一邊"
 
-#: gtk/gtknotebook.c:581
+#: gtk/gtknotebook.c:583
 msgid "Tab Border"
 msgstr "標簽邊框"
 
-#: gtk/gtknotebook.c:582
+#: gtk/gtknotebook.c:584
 msgid "Width of the border around the tab labels"
 msgstr "標簽標題周圍的邊框寬度"
 
-#: gtk/gtknotebook.c:590
+#: gtk/gtknotebook.c:592
 msgid "Horizontal Tab Border"
 msgstr "水平標簽邊框"
 
-#: gtk/gtknotebook.c:591
+#: gtk/gtknotebook.c:593
 msgid "Width of the horizontal border of tab labels"
 msgstr "標簽標題周圍的水平邊框寬度"
 
-#: gtk/gtknotebook.c:599
+#: gtk/gtknotebook.c:601
 msgid "Vertical Tab Border"
 msgstr "垂直標簽邊框"
 
-#: gtk/gtknotebook.c:600
+#: gtk/gtknotebook.c:602
 msgid "Width of the vertical border of tab labels"
 msgstr "標籤標題周圍的垂直邊框寬度"
 
-#: gtk/gtknotebook.c:608
+#: gtk/gtknotebook.c:610
 msgid "Show Tabs"
 msgstr "顯示標簽"
 
-#: gtk/gtknotebook.c:609
+#: gtk/gtknotebook.c:611
 msgid "Whether tabs should be shown or not"
 msgstr "應否顯示標簽"
 
-#: gtk/gtknotebook.c:615
+#: gtk/gtknotebook.c:617
 msgid "Show Border"
 msgstr "顯示邊框"
 
-#: gtk/gtknotebook.c:616
+#: gtk/gtknotebook.c:618
 msgid "Whether the border should be shown or not"
 msgstr "應否顯示邊框"
 
-#: gtk/gtknotebook.c:622
+#: gtk/gtknotebook.c:624
 msgid "Scrollable"
 msgstr "可捲動"
 
-#: gtk/gtknotebook.c:623
+#: gtk/gtknotebook.c:625
 msgid "If TRUE, scroll arrows are added if there are too many tabs to fit"
 msgstr "如設為定為‘TRUE’，如果標籤太多時，會在兩旁加上箭頭"
 
-#: gtk/gtknotebook.c:629
+#: gtk/gtknotebook.c:631
 msgid "Enable Popup"
 msgstr "使用蹦出選單"
 
-#: gtk/gtknotebook.c:630
+#: gtk/gtknotebook.c:632
 msgid ""
 "If TRUE, pressing the right mouse button on the notebook pops up a menu that "
 "you can use to go to a page"
 msgstr "若為 TRUE，在標籤頁按下滑鼠右鍵時會蹦出可選擇頁面的選單"
 
-#: gtk/gtknotebook.c:637
+#: gtk/gtknotebook.c:639
 msgid "Whether tabs should have homogeneous sizes"
 msgstr "標籤的尺寸應否統一"
 
-#: gtk/gtknotebook.c:643
+#: gtk/gtknotebook.c:645
 #, fuzzy
 msgid "Group ID"
 msgstr "群組"
 
-#: gtk/gtknotebook.c:644
+#: gtk/gtknotebook.c:646
 msgid "Group ID for tabs drag and drop"
 msgstr ""
 
-#: gtk/gtknotebook.c:660 gtk/gtkradioaction.c:128 gtk/gtkradiobutton.c:82
+#: gtk/gtknotebook.c:662 gtk/gtkradioaction.c:128 gtk/gtkradiobutton.c:82
 #: gtk/gtkradiomenuitem.c:342
 msgid "Group"
 msgstr "群組"
 
-#: gtk/gtknotebook.c:661
+#: gtk/gtknotebook.c:663
 msgid "Group for tabs drag and drop"
 msgstr ""
 
-#: gtk/gtknotebook.c:667
+#: gtk/gtknotebook.c:669
 msgid "Tab label"
 msgstr "標籤文字"
 
-#: gtk/gtknotebook.c:668
+#: gtk/gtknotebook.c:670
 msgid "The string displayed on the child's tab label"
 msgstr "子分頁標籤所顯示的文字"
 
-#: gtk/gtknotebook.c:674
+#: gtk/gtknotebook.c:676
 msgid "Menu label"
 msgstr "選單文字標籤"
 
-#: gtk/gtknotebook.c:675
+#: gtk/gtknotebook.c:677
 msgid "The string displayed in the child's menu entry"
 msgstr "子選單項目顯示的字串"
 
-#: gtk/gtknotebook.c:688
+#: gtk/gtknotebook.c:690
 msgid "Tab expand"
 msgstr "擴展標籤"
 
-#: gtk/gtknotebook.c:689
+#: gtk/gtknotebook.c:691
 msgid "Whether to expand the child's tab or not"
 msgstr "是否擴展子分頁"
 
-#: gtk/gtknotebook.c:695
+#: gtk/gtknotebook.c:697
 msgid "Tab fill"
 msgstr "標籤填滿"
 
-#: gtk/gtknotebook.c:696
+#: gtk/gtknotebook.c:698
 msgid "Whether the child's tab should fill the allocated area or not"
 msgstr "子分頁是否應填滿配置的區域"
 
-#: gtk/gtknotebook.c:702
+#: gtk/gtknotebook.c:704
 msgid "Tab pack type"
 msgstr "標籤包裝形式"
 
-#: gtk/gtknotebook.c:709
+#: gtk/gtknotebook.c:711
 #, fuzzy
 msgid "Tab reorderable"
 msgstr "可重新排列"
 
-#: gtk/gtknotebook.c:710
+#: gtk/gtknotebook.c:712
 #, fuzzy
 msgid "Whether the tab is reorderable by user action or not"
 msgstr "應否顯示邊框"
 
-#: gtk/gtknotebook.c:716
+#: gtk/gtknotebook.c:718
 #, fuzzy
 msgid "Tab detachable"
 msgstr "標籤文字"
 
-#: gtk/gtknotebook.c:717
+#: gtk/gtknotebook.c:719
 #, fuzzy
 msgid "Whether the tab is detachable"
 msgstr "本指令是否有效。"
 
-#: gtk/gtknotebook.c:732 gtk/gtkscrollbar.c:83
+#: gtk/gtknotebook.c:734 gtk/gtkscrollbar.c:83
 msgid "Secondary backward stepper"
 msgstr "次要倒退鍵"
 
-#: gtk/gtknotebook.c:733
+#: gtk/gtknotebook.c:735
 msgid ""
 "Display a second backward arrow button on the opposite end of the tab area"
 msgstr "在標籤區域對面顯示第二個用來倒退的箭頭"
 
-#: gtk/gtknotebook.c:748 gtk/gtkscrollbar.c:91
+#: gtk/gtknotebook.c:750 gtk/gtkscrollbar.c:91
 msgid "Secondary forward stepper"
 msgstr "次要前進鍵"
 
-#: gtk/gtknotebook.c:749
+#: gtk/gtknotebook.c:751
 msgid ""
 "Display a second forward arrow button on the opposite end of the tab area"
 msgstr "在標籤區域對面顯示第二個用來前進的箭頭"
 
-#: gtk/gtknotebook.c:763 gtk/gtkscrollbar.c:67
+#: gtk/gtknotebook.c:765 gtk/gtkscrollbar.c:67
 msgid "Backward stepper"
 msgstr "倒退鍵"
 
-#: gtk/gtknotebook.c:764 gtk/gtkscrollbar.c:68
+#: gtk/gtknotebook.c:766 gtk/gtkscrollbar.c:68
 msgid "Display the standard backward arrow button"
 msgstr "顯示標準倒退箭頭按鈕"
 
-#: gtk/gtknotebook.c:778 gtk/gtkscrollbar.c:75
+#: gtk/gtknotebook.c:780 gtk/gtkscrollbar.c:75
 msgid "Forward stepper"
 msgstr "前進鍵"
 
-#: gtk/gtknotebook.c:779 gtk/gtkscrollbar.c:76
+#: gtk/gtknotebook.c:781 gtk/gtkscrollbar.c:76
 msgid "Display the standard forward arrow button"
 msgstr "顯示標準前進箭頭按鈕"
 
-#: gtk/gtknotebook.c:793
+#: gtk/gtknotebook.c:795
 #, fuzzy
 msgid "Tab overlap"
 msgstr "標簽邊框"
 
-#: gtk/gtknotebook.c:794
+#: gtk/gtknotebook.c:796
 #, fuzzy
 msgid "Size of tab overlap area"
 msgstr "可擴展元件的箭頭大小"
 
-#: gtk/gtknotebook.c:809
+#: gtk/gtknotebook.c:811
 msgid "Tab curvature"
 msgstr ""
 
-#: gtk/gtknotebook.c:810
+#: gtk/gtknotebook.c:812
 #, fuzzy
 msgid "Size of tab curvature"
 msgstr "間隔的大小"
@@ -3582,7 +3582,7 @@ msgstr ""
 msgid "Printer settings"
 msgstr ""
 
-#: gtk/gtkprintjob.c:143 gtk/gtkprintjob.c:144 gtk/gtkprintunixdialog.c:240
+#: gtk/gtkprintjob.c:143 gtk/gtkprintjob.c:144 gtk/gtkprintunixdialog.c:241
 #, fuzzy
 msgid "Page Setup"
 msgstr "分頁大小"
@@ -3606,11 +3606,11 @@ msgstr "預設高度"
 msgid "The GtkPageSetup used by default"
 msgstr ""
 
-#: gtk/gtkprintoperation.c:896 gtk/gtkprintunixdialog.c:258
+#: gtk/gtkprintoperation.c:896 gtk/gtkprintunixdialog.c:259
 msgid "Print Settings"
 msgstr ""
 
-#: gtk/gtkprintoperation.c:897 gtk/gtkprintunixdialog.c:259
+#: gtk/gtkprintoperation.c:897 gtk/gtkprintunixdialog.c:260
 msgid "The GtkPrintSettings used for initializing the dialog"
 msgstr ""
 
@@ -3633,12 +3633,12 @@ msgstr "頻道數目"
 msgid "The number of pages in the document."
 msgstr "表格的行數"
 
-#: gtk/gtkprintoperation.c:962 gtk/gtkprintunixdialog.c:248
+#: gtk/gtkprintoperation.c:962 gtk/gtkprintunixdialog.c:249
 #, fuzzy
 msgid "Current Page"
 msgstr "目前的透明度"
 
-#: gtk/gtkprintoperation.c:963 gtk/gtkprintunixdialog.c:249
+#: gtk/gtkprintoperation.c:963 gtk/gtkprintunixdialog.c:250
 #, fuzzy
 msgid "The current page in the document"
 msgstr "調整元件的分頁大小"
@@ -3718,16 +3718,16 @@ msgstr "自訂色盤"
 msgid "Label for the tab containing custom widgets."
 msgstr ""
 
-#: gtk/gtkprintunixdialog.c:241
+#: gtk/gtkprintunixdialog.c:242
 msgid "The GtkPageSetup to use"
 msgstr ""
 
-#: gtk/gtkprintunixdialog.c:266
+#: gtk/gtkprintunixdialog.c:267
 #, fuzzy
 msgid "Selected Printer"
 msgstr "選取的年份"
 
-#: gtk/gtkprintunixdialog.c:267
+#: gtk/gtkprintunixdialog.c:268
 #, fuzzy
 msgid "The GtkPrinter which is selected"
 msgstr "目前有效的項目"

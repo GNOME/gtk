@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-properties.HEAD\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-12-04 14:38-0500\n"
+"POT-Creation-Date: 2008-01-08 00:16-0500\n"
 "PO-Revision-Date: 2005-05-15 15:47+0545\n"
 "Last-Translator: Ganesh Ghimire <gghimire@gmail.com>\n"
 "Language-Team: Nepali <info@mpp.org.np>\n"
@@ -706,7 +706,7 @@ msgstr "स्पेसिङ्ग"
 msgid "The amount of space between children"
 msgstr "शाखाहरुको बीचको ठाँउको मूल्य"
 
-#: gtk/gtkbox.c:108 gtk/gtknotebook.c:636 gtk/gtktable.c:165
+#: gtk/gtkbox.c:108 gtk/gtknotebook.c:638 gtk/gtktable.c:165
 #: gtk/gtktoolbar.c:563
 msgid "Homogeneous"
 msgstr "उस्तै प्रकारको"
@@ -746,7 +746,7 @@ msgstr "पिक्सलभित्र शाखाहरु र यसका
 msgid "Pack type"
 msgstr "थन्क्याउने प्रकार"
 
-#: gtk/gtkbox.c:138 gtk/gtknotebook.c:703
+#: gtk/gtkbox.c:138 gtk/gtknotebook.c:705
 msgid ""
 "A GtkPackType indicating whether the child is packed with reference to the "
 "start or end of the parent"
@@ -754,12 +754,12 @@ msgstr ""
 " जीटीके बँधाइको प्रकारले के देखाउँछ भने जब उपशाखा बन्द गरिन्छ संदर्भसँग मूल कम्प्युटर सुरू वा "
 "बन्द हुन्छ"
 
-#: gtk/gtkbox.c:144 gtk/gtknotebook.c:681 gtk/gtkpaned.c:219
+#: gtk/gtkbox.c:144 gtk/gtknotebook.c:683 gtk/gtkpaned.c:219
 #: gtk/gtkruler.c:110
 msgid "Position"
 msgstr "अवस्था"
 
-#: gtk/gtkbox.c:145 gtk/gtknotebook.c:682
+#: gtk/gtkbox.c:145 gtk/gtknotebook.c:684
 msgid "The index of the child in the parent"
 msgstr "मुख्यभित्र शाखाको सूचक"
 
@@ -3205,75 +3205,75 @@ msgid ""
 "The amount of space to add on the top and bottom of the widget, in pixels"
 msgstr "औजारको तल र माथि पिक्सेल थप्न खालीस्थानको मात्रा "
 
-#: gtk/gtknotebook.c:564
+#: gtk/gtknotebook.c:566
 msgid "Page"
 msgstr "पन्ना"
 
-#: gtk/gtknotebook.c:565
+#: gtk/gtknotebook.c:567
 msgid "The index of the current page"
 msgstr "विद्यमान पन्नाको विवरणिका"
 
-#: gtk/gtknotebook.c:573
+#: gtk/gtknotebook.c:575
 msgid "Tab Position"
 msgstr "ट्याब स्थिति"
 
-#: gtk/gtknotebook.c:574
+#: gtk/gtknotebook.c:576
 msgid "Which side of the notebook holds the tabs"
 msgstr "अभ्यास पुस्तिकाको कुन छेउले ट्याबहरु समात्छ"
 
-#: gtk/gtknotebook.c:581
+#: gtk/gtknotebook.c:583
 msgid "Tab Border"
 msgstr "ट्याब सीमाना"
 
-#: gtk/gtknotebook.c:582
+#: gtk/gtknotebook.c:584
 msgid "Width of the border around the tab labels"
 msgstr "ट्याब लेवलहरुको वरिपरि सीमारेखाको चौडाइ"
 
-#: gtk/gtknotebook.c:590
+#: gtk/gtknotebook.c:592
 msgid "Horizontal Tab Border"
 msgstr "क्षितिजीय ट्याब सीमाना"
 
-#: gtk/gtknotebook.c:591
+#: gtk/gtknotebook.c:593
 msgid "Width of the horizontal border of tab labels"
 msgstr "ट्याब लेवलहरुको क्षितिजीय सीमारेखाको चौडाइ"
 
-#: gtk/gtknotebook.c:599
+#: gtk/gtknotebook.c:601
 msgid "Vertical Tab Border"
 msgstr "उर्ध्व ट्याब सीमाना"
 
-#: gtk/gtknotebook.c:600
+#: gtk/gtknotebook.c:602
 msgid "Width of the vertical border of tab labels"
 msgstr "ट्याब लेवलहरुको उर्ध्व सीमारेखाको चौडाइ"
 
-#: gtk/gtknotebook.c:608
+#: gtk/gtknotebook.c:610
 msgid "Show Tabs"
 msgstr "ट्याबहरु देखाऊ"
 
-#: gtk/gtknotebook.c:609
+#: gtk/gtknotebook.c:611
 msgid "Whether tabs should be shown or not"
 msgstr "जहा ट्याबहरु देखाइन सकिन्थ्यो वा सकिन्नथ्यो"
 
-#: gtk/gtknotebook.c:615
+#: gtk/gtknotebook.c:617
 msgid "Show Border"
 msgstr "सीमाना देखाऊ"
 
-#: gtk/gtknotebook.c:616
+#: gtk/gtknotebook.c:618
 msgid "Whether the border should be shown or not"
 msgstr "जहा सीमारेखा देखाइन सकिन्थ्यो वा सकिन्नथ्यो"
 
-#: gtk/gtknotebook.c:622
+#: gtk/gtknotebook.c:624
 msgid "Scrollable"
 msgstr "स्क्रोलेवल"
 
-#: gtk/gtknotebook.c:623
+#: gtk/gtknotebook.c:625
 msgid "If TRUE, scroll arrows are added if there are too many tabs to fit"
 msgstr "यदि सत्यहो भने ,यदि त्यहाँ धेरै ट्याबहरु मिलेकाछन् भने बिधुतिय बृतको एरोहरु थपिन्छन"
 
-#: gtk/gtknotebook.c:629
+#: gtk/gtknotebook.c:631
 msgid "Enable Popup"
 msgstr "तुरुन्तै हेर्न सक्षम"
 
-#: gtk/gtknotebook.c:630
+#: gtk/gtknotebook.c:632
 msgid ""
 "If TRUE, pressing the right mouse button on the notebook pops up a menu that "
 "you can use to go to a page"
@@ -3281,133 +3281,133 @@ msgstr ""
 "यदि सत्य हो भने अभ्यास पुस्तिकाको दायाँ माउस बटन थिच्दा मेनु पप-अप गरिन्छ र तपाईँ "
 "पन्नाभित्र जान सक्नुहुन्छ"
 
-#: gtk/gtknotebook.c:637
+#: gtk/gtknotebook.c:639
 msgid "Whether tabs should have homogeneous sizes"
 msgstr "जहा ट्याबहरु उस्तै प्रकारको आकारहरुमा हुनुपर्छ"
 
-#: gtk/gtknotebook.c:643
+#: gtk/gtknotebook.c:645
 #, fuzzy
 msgid "Group ID"
 msgstr "समूह"
 
-#: gtk/gtknotebook.c:644
+#: gtk/gtknotebook.c:646
 msgid "Group ID for tabs drag and drop"
 msgstr ""
 
-#: gtk/gtknotebook.c:660 gtk/gtkradioaction.c:128 gtk/gtkradiobutton.c:82
+#: gtk/gtknotebook.c:662 gtk/gtkradioaction.c:128 gtk/gtkradiobutton.c:82
 #: gtk/gtkradiomenuitem.c:342
 msgid "Group"
 msgstr "समूह"
 
-#: gtk/gtknotebook.c:661
+#: gtk/gtknotebook.c:663
 msgid "Group for tabs drag and drop"
 msgstr ""
 
-#: gtk/gtknotebook.c:667
+#: gtk/gtknotebook.c:669
 msgid "Tab label"
 msgstr "ट्याब लेबल"
 
-#: gtk/gtknotebook.c:668
+#: gtk/gtknotebook.c:670
 msgid "The string displayed on the child's tab label"
 msgstr "बच्चाको ट्याब लेवलमा स्ट्रिङ देखाइयो"
 
-#: gtk/gtknotebook.c:674
+#: gtk/gtknotebook.c:676
 msgid "Menu label"
 msgstr "मेनु लेबल"
 
-#: gtk/gtknotebook.c:675
+#: gtk/gtknotebook.c:677
 msgid "The string displayed in the child's menu entry"
 msgstr "बच्चाको मेनु प्रबिष्टि भित्र स्ट्रिङ देखाइयो"
 
-#: gtk/gtknotebook.c:688
+#: gtk/gtknotebook.c:690
 msgid "Tab expand"
 msgstr "ट्याब बढाउनु"
 
-#: gtk/gtknotebook.c:689
+#: gtk/gtknotebook.c:691
 msgid "Whether to expand the child's tab or not"
 msgstr "बच्चाको ट्याब थपिन्छ कि थपिदैन"
 
-#: gtk/gtknotebook.c:695
+#: gtk/gtknotebook.c:697
 msgid "Tab fill"
 msgstr "ट्याब भर्नु"
 
-#: gtk/gtknotebook.c:696
+#: gtk/gtknotebook.c:698
 msgid "Whether the child's tab should fill the allocated area or not"
 msgstr "बच्चाको ट्याब तोकिएको क्षेत्रमा भरिनु पर्छ कि पर्दैनभर्न सक्छकि सक्दैन"
 
-#: gtk/gtknotebook.c:702
+#: gtk/gtknotebook.c:704
 msgid "Tab pack type"
 msgstr "ट्याब थन्क्याउने प्रकार"
 
-#: gtk/gtknotebook.c:709
+#: gtk/gtknotebook.c:711
 #, fuzzy
 msgid "Tab reorderable"
 msgstr "पुनर्क्रमबद्धित"
 
-#: gtk/gtknotebook.c:710
+#: gtk/gtknotebook.c:712
 #, fuzzy
 msgid "Whether the tab is reorderable by user action or not"
 msgstr "जहा सीमारेखा देखाइन सकिन्थ्यो वा सकिन्नथ्यो"
 
-#: gtk/gtknotebook.c:716
+#: gtk/gtknotebook.c:718
 #, fuzzy
 msgid "Tab detachable"
 msgstr "ट्याब लेबल"
 
-#: gtk/gtknotebook.c:717
+#: gtk/gtknotebook.c:719
 #, fuzzy
 msgid "Whether the tab is detachable"
 msgstr "जहाँ कार्य सक्षम छ"
 
-#: gtk/gtknotebook.c:732 gtk/gtkscrollbar.c:83
+#: gtk/gtknotebook.c:734 gtk/gtkscrollbar.c:83
 msgid "Secondary backward stepper"
 msgstr "द्वितीयक पश्चगामी खुड्किला"
 
-#: gtk/gtknotebook.c:733
+#: gtk/gtknotebook.c:735
 msgid ""
 "Display a second backward arrow button on the opposite end of the tab area"
 msgstr "ट्याब क्षेत्रको दुवै किनारामा देखाउन दोस्रो पश्चगामी तीर बटन"
 
-#: gtk/gtknotebook.c:748 gtk/gtkscrollbar.c:91
+#: gtk/gtknotebook.c:750 gtk/gtkscrollbar.c:91
 msgid "Secondary forward stepper"
 msgstr "द्वितीयक अग्रगामी खुड्किलो"
 
-#: gtk/gtknotebook.c:749
+#: gtk/gtknotebook.c:751
 msgid ""
 "Display a second forward arrow button on the opposite end of the tab area"
 msgstr "ट्याब क्षेत्रको दुवै किनारामा देखाउन दोस्रो अग्रगामी तीर बटन"
 
-#: gtk/gtknotebook.c:763 gtk/gtkscrollbar.c:67
+#: gtk/gtknotebook.c:765 gtk/gtkscrollbar.c:67
 msgid "Backward stepper"
 msgstr "पश्चगामी खुड्किला "
 
-#: gtk/gtknotebook.c:764 gtk/gtkscrollbar.c:68
+#: gtk/gtknotebook.c:766 gtk/gtkscrollbar.c:68
 msgid "Display the standard backward arrow button"
 msgstr "मानक पश्चगामी तीर बटन देखाऊ"
 
-#: gtk/gtknotebook.c:778 gtk/gtkscrollbar.c:75
+#: gtk/gtknotebook.c:780 gtk/gtkscrollbar.c:75
 msgid "Forward stepper"
 msgstr "अग्रगामी खुड्किला"
 
-#: gtk/gtknotebook.c:779 gtk/gtkscrollbar.c:76
+#: gtk/gtknotebook.c:781 gtk/gtkscrollbar.c:76
 msgid "Display the standard forward arrow button"
 msgstr "मानक अग्रगामी तीर बटन देखाऊ"
 
-#: gtk/gtknotebook.c:793
+#: gtk/gtknotebook.c:795
 #, fuzzy
 msgid "Tab overlap"
 msgstr "ट्याब सीमाना"
 
-#: gtk/gtknotebook.c:794
+#: gtk/gtknotebook.c:796
 #, fuzzy
 msgid "Size of tab overlap area"
 msgstr "वृद्धिकारक बाणको आकार"
 
-#: gtk/gtknotebook.c:809
+#: gtk/gtknotebook.c:811
 msgid "Tab curvature"
 msgstr ""
 
-#: gtk/gtknotebook.c:810
+#: gtk/gtknotebook.c:812
 #, fuzzy
 msgid "Size of tab curvature"
 msgstr "खालीस्थानकर्ताको आकार"
@@ -3604,7 +3604,7 @@ msgstr ""
 msgid "Printer settings"
 msgstr ""
 
-#: gtk/gtkprintjob.c:143 gtk/gtkprintjob.c:144 gtk/gtkprintunixdialog.c:240
+#: gtk/gtkprintjob.c:143 gtk/gtkprintjob.c:144 gtk/gtkprintunixdialog.c:241
 #, fuzzy
 msgid "Page Setup"
 msgstr "पन्नाको आकार"
@@ -3628,11 +3628,11 @@ msgstr "पूर्वनिर्धारित उचाई"
 msgid "The GtkPageSetup used by default"
 msgstr ""
 
-#: gtk/gtkprintoperation.c:896 gtk/gtkprintunixdialog.c:258
+#: gtk/gtkprintoperation.c:896 gtk/gtkprintunixdialog.c:259
 msgid "Print Settings"
 msgstr ""
 
-#: gtk/gtkprintoperation.c:897 gtk/gtkprintunixdialog.c:259
+#: gtk/gtkprintoperation.c:897 gtk/gtkprintunixdialog.c:260
 msgid "The GtkPrintSettings used for initializing the dialog"
 msgstr ""
 
@@ -3655,12 +3655,12 @@ msgstr "प्रसारणमार्गहरुको संख्या"
 msgid "The number of pages in the document."
 msgstr "टेवलमा पंक्तिहरुको संख्या"
 
-#: gtk/gtkprintoperation.c:962 gtk/gtkprintunixdialog.c:248
+#: gtk/gtkprintoperation.c:962 gtk/gtkprintunixdialog.c:249
 #, fuzzy
 msgid "Current Page"
 msgstr "विद्यमान अल्फा"
 
-#: gtk/gtkprintoperation.c:963 gtk/gtkprintunixdialog.c:249
+#: gtk/gtkprintoperation.c:963 gtk/gtkprintunixdialog.c:250
 #, fuzzy
 msgid "The current page in the document"
 msgstr "मिलानका लागि पन्नाको आकार"
@@ -3739,16 +3739,16 @@ msgstr "रङ्गदानि प्रथा"
 msgid "Label for the tab containing custom widgets."
 msgstr ""
 
-#: gtk/gtkprintunixdialog.c:241
+#: gtk/gtkprintunixdialog.c:242
 msgid "The GtkPageSetup to use"
 msgstr ""
 
-#: gtk/gtkprintunixdialog.c:266
+#: gtk/gtkprintunixdialog.c:267
 #, fuzzy
 msgid "Selected Printer"
 msgstr "छानिएको वर्ष"
 
-#: gtk/gtkprintunixdialog.c:267
+#: gtk/gtkprintunixdialog.c:268
 #, fuzzy
 msgid "The GtkPrinter which is selected"
 msgstr "आइटम जुन चाँही भरखरै सक्रिय भएको छ"

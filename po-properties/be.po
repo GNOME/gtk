@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-12-04 14:38-0500\n"
+"POT-Creation-Date: 2008-01-08 00:16-0500\n"
 "PO-Revision-Date: 2003-03-31 07:40+0300\n"
 "Last-Translator: Ales Nyakhaychyk <nab@mail.by>\n"
 "Language-Team: Belarusian <i18n@mova.org>\n"
@@ -748,7 +748,7 @@ msgstr "Адлегласьць"
 msgid "The amount of space between children"
 msgstr "Памер прасторы паміж нашчадкамі"
 
-#: gtk/gtkbox.c:108 gtk/gtknotebook.c:636 gtk/gtktable.c:165
+#: gtk/gtkbox.c:108 gtk/gtknotebook.c:638 gtk/gtktable.c:165
 #: gtk/gtktoolbar.c:563
 msgid "Homogeneous"
 msgstr "Аднародны"
@@ -794,7 +794,7 @@ msgstr ""
 msgid "Pack type"
 msgstr "Від упакоўкі"
 
-#: gtk/gtkbox.c:138 gtk/gtknotebook.c:703
+#: gtk/gtkbox.c:138 gtk/gtknotebook.c:705
 msgid ""
 "A GtkPackType indicating whether the child is packed with reference to the "
 "start or end of the parent"
@@ -802,12 +802,12 @@ msgstr ""
 "GtkPackType паказвае ці будзе нашчадак упакаваны адносна пачатка ці канца "
 "бацькоўскага віджэта."
 
-#: gtk/gtkbox.c:144 gtk/gtknotebook.c:681 gtk/gtkpaned.c:219
+#: gtk/gtkbox.c:144 gtk/gtknotebook.c:683 gtk/gtkpaned.c:219
 #: gtk/gtkruler.c:110
 msgid "Position"
 msgstr "Становішча"
 
-#: gtk/gtkbox.c:145 gtk/gtknotebook.c:682
+#: gtk/gtkbox.c:145 gtk/gtknotebook.c:684
 msgid "The index of the child in the parent"
 msgstr "Індэкс нашчадка ў бацьку"
 
@@ -3394,77 +3394,77 @@ msgid ""
 "The amount of space to add on the top and bottom of the widget, in pixels"
 msgstr "Памер прасторы зьверху й зьнізу ад віджэ�у ў піксэлях"
 
-#: gtk/gtknotebook.c:564
+#: gtk/gtknotebook.c:566
 msgid "Page"
 msgstr "Старонка"
 
-#: gtk/gtknotebook.c:565
+#: gtk/gtknotebook.c:567
 msgid "The index of the current page"
 msgstr "Індэкс бягучае старонкі"
 
-#: gtk/gtknotebook.c:573
+#: gtk/gtknotebook.c:575
 msgid "Tab Position"
 msgstr "Становішча лычкі"
 
-#: gtk/gtknotebook.c:574
+#: gtk/gtknotebook.c:576
 msgid "Which side of the notebook holds the tabs"
 msgstr "На якім баку нататніку зьмяшчаюцца лычкі"
 
-#: gtk/gtknotebook.c:581
+#: gtk/gtknotebook.c:583
 msgid "Tab Border"
 msgstr "Мяжы лычкі"
 
-#: gtk/gtknotebook.c:582
+#: gtk/gtknotebook.c:584
 msgid "Width of the border around the tab labels"
 msgstr "Шырыня мяжы вакол адмецін лычкі"
 
-#: gtk/gtknotebook.c:590
+#: gtk/gtknotebook.c:592
 msgid "Horizontal Tab Border"
 msgstr "Гарызантальная мяжа лычкі"
 
-#: gtk/gtknotebook.c:591
+#: gtk/gtknotebook.c:593
 msgid "Width of the horizontal border of tab labels"
 msgstr "Шырыня гарызантальнае мяжы адмецін лычкі"
 
-#: gtk/gtknotebook.c:599
+#: gtk/gtknotebook.c:601
 msgid "Vertical Tab Border"
 msgstr "Вэртыкальная мяжа лычкі"
 
-#: gtk/gtknotebook.c:600
+#: gtk/gtknotebook.c:602
 msgid "Width of the vertical border of tab labels"
 msgstr "Шырыня вэртыкальнае мяжы адмецін лычкі"
 
-#: gtk/gtknotebook.c:608
+#: gtk/gtknotebook.c:610
 msgid "Show Tabs"
 msgstr "Паказаць лычкі"
 
-#: gtk/gtknotebook.c:609
+#: gtk/gtknotebook.c:611
 msgid "Whether tabs should be shown or not"
 msgstr "Ці павінны адлюстроўвацца лычкі"
 
-#: gtk/gtknotebook.c:615
+#: gtk/gtknotebook.c:617
 msgid "Show Border"
 msgstr "Адлюстроўваць мяжу"
 
-#: gtk/gtknotebook.c:616
+#: gtk/gtknotebook.c:618
 msgid "Whether the border should be shown or not"
 msgstr "Ці павінна адлюстроўвацца мяжа"
 
-#: gtk/gtknotebook.c:622
+#: gtk/gtknotebook.c:624
 msgid "Scrollable"
 msgstr "Пракручваемае"
 
-#: gtk/gtknotebook.c:623
+#: gtk/gtknotebook.c:625
 msgid "If TRUE, scroll arrows are added if there are too many tabs to fit"
 msgstr ""
 "Калі ІСЬЦІНА (TRUE), будуць далучаны стрэлкі пракруткі ўвыпадку,калі вельмі "
 "шмат укладак для адлюстраваньня."
 
-#: gtk/gtknotebook.c:629
+#: gtk/gtknotebook.c:631
 msgid "Enable Popup"
 msgstr "Уключыць усплываючае"
 
-#: gtk/gtknotebook.c:630
+#: gtk/gtknotebook.c:632
 msgid ""
 "If TRUE, pressing the right mouse button on the notebook pops up a menu that "
 "you can use to go to a page"
@@ -3472,93 +3472,93 @@ msgstr ""
 "Калі ІСЬЦІНА (TRUE), націсканьне правае кнопкі мышы на нататніку выклікае "
 "ўспываючае мэню, якое вы можаце выкарыстоўваць для пераходу на староку"
 
-#: gtk/gtknotebook.c:637
+#: gtk/gtknotebook.c:639
 msgid "Whether tabs should have homogeneous sizes"
 msgstr "Ці павінны укладкі мець аднолькавя памеры"
 
-#: gtk/gtknotebook.c:643
+#: gtk/gtknotebook.c:645
 #, fuzzy
 msgid "Group ID"
 msgstr "Група"
 
-#: gtk/gtknotebook.c:644
+#: gtk/gtknotebook.c:646
 msgid "Group ID for tabs drag and drop"
 msgstr ""
 
-#: gtk/gtknotebook.c:660 gtk/gtkradioaction.c:128 gtk/gtkradiobutton.c:82
+#: gtk/gtknotebook.c:662 gtk/gtkradioaction.c:128 gtk/gtkradiobutton.c:82
 #: gtk/gtkradiomenuitem.c:342
 msgid "Group"
 msgstr "Група"
 
-#: gtk/gtknotebook.c:661
+#: gtk/gtknotebook.c:663
 msgid "Group for tabs drag and drop"
 msgstr ""
 
-#: gtk/gtknotebook.c:667
+#: gtk/gtknotebook.c:669
 msgid "Tab label"
 msgstr "Адмеціна ўкладкі"
 
-#: gtk/gtknotebook.c:668
+#: gtk/gtknotebook.c:670
 #, fuzzy
 msgid "The string displayed on the child's tab label"
 msgstr "Радок, што будзе адлюстраваны на укладцы"
 
-#: gtk/gtknotebook.c:674
+#: gtk/gtknotebook.c:676
 msgid "Menu label"
 msgstr "Адмеціна мэню"
 
-#: gtk/gtknotebook.c:675
+#: gtk/gtknotebook.c:677
 #, fuzzy
 msgid "The string displayed in the child's menu entry"
 msgstr "Радок, што адлюстроўваецца ў запісе мэню нашчадка"
 
-#: gtk/gtknotebook.c:688
+#: gtk/gtknotebook.c:690
 msgid "Tab expand"
 msgstr "Запаўненьне ўкладкі"
 
-#: gtk/gtknotebook.c:689
+#: gtk/gtknotebook.c:691
 #, fuzzy
 msgid "Whether to expand the child's tab or not"
 msgstr "Ці будуць запаўняць прастору нашчадкі ўкладкі, ці не"
 
-#: gtk/gtknotebook.c:695
+#: gtk/gtknotebook.c:697
 msgid "Tab fill"
 msgstr "Укладкі напаўняюць"
 
-#: gtk/gtknotebook.c:696
+#: gtk/gtknotebook.c:698
 #, fuzzy
 msgid "Whether the child's tab should fill the allocated area or not"
 msgstr "Ці павінна ўкладка нашчадка запаўняць разьмеркаваную плошчу, ці не,"
 
-#: gtk/gtknotebook.c:702
+#: gtk/gtknotebook.c:704
 msgid "Tab pack type"
 msgstr "Від упакоўкі ўкладкі"
 
-#: gtk/gtknotebook.c:709
+#: gtk/gtknotebook.c:711
 #, fuzzy
 msgid "Tab reorderable"
 msgstr "Пераўпарадкаваны"
 
-#: gtk/gtknotebook.c:710
+#: gtk/gtknotebook.c:712
 #, fuzzy
 msgid "Whether the tab is reorderable by user action or not"
 msgstr "Ці павінна адлюстроўвацца мяжа"
 
-#: gtk/gtknotebook.c:716
+#: gtk/gtknotebook.c:718
 #, fuzzy
 msgid "Tab detachable"
 msgstr "Адмеціна ўкладкі"
 
-#: gtk/gtknotebook.c:717
+#: gtk/gtknotebook.c:719
 #, fuzzy
 msgid "Whether the tab is detachable"
 msgstr "Ці будзе віджэт бачны"
 
-#: gtk/gtknotebook.c:732 gtk/gtkscrollbar.c:83
+#: gtk/gtknotebook.c:734 gtk/gtkscrollbar.c:83
 msgid "Secondary backward stepper"
 msgstr "Дадатковая кнопка руху назад"
 
-#: gtk/gtknotebook.c:733
+#: gtk/gtknotebook.c:735
 #, fuzzy
 msgid ""
 "Display a second backward arrow button on the opposite end of the tab area"
@@ -3566,11 +3566,11 @@ msgstr ""
 "Адлюстроўваць дадатковую кнопку руху назад на супрацьлеглым баку палоскі "
 "пракруткі"
 
-#: gtk/gtknotebook.c:748 gtk/gtkscrollbar.c:91
+#: gtk/gtknotebook.c:750 gtk/gtkscrollbar.c:91
 msgid "Secondary forward stepper"
 msgstr "Дадатковая кнопка руху наперад"
 
-#: gtk/gtknotebook.c:749
+#: gtk/gtknotebook.c:751
 #, fuzzy
 msgid ""
 "Display a second forward arrow button on the opposite end of the tab area"
@@ -3578,37 +3578,37 @@ msgstr ""
 "Адлюстроўваць дадатковую кнопку руху наперад на супрацьлеглым баку палоскі "
 "пракруткі"
 
-#: gtk/gtknotebook.c:763 gtk/gtkscrollbar.c:67
+#: gtk/gtknotebook.c:765 gtk/gtkscrollbar.c:67
 msgid "Backward stepper"
 msgstr "Кнопка руху назад"
 
-#: gtk/gtknotebook.c:764 gtk/gtkscrollbar.c:68
+#: gtk/gtknotebook.c:766 gtk/gtkscrollbar.c:68
 msgid "Display the standard backward arrow button"
 msgstr "Адлюстроўваць звычайную кнопку руху назад"
 
-#: gtk/gtknotebook.c:778 gtk/gtkscrollbar.c:75
+#: gtk/gtknotebook.c:780 gtk/gtkscrollbar.c:75
 msgid "Forward stepper"
 msgstr "Кнопка руху наперад"
 
-#: gtk/gtknotebook.c:779 gtk/gtkscrollbar.c:76
+#: gtk/gtknotebook.c:781 gtk/gtkscrollbar.c:76
 msgid "Display the standard forward arrow button"
 msgstr "Адлюстроўваць звычайную кнопку руху наперад"
 
-#: gtk/gtknotebook.c:793
+#: gtk/gtknotebook.c:795
 #, fuzzy
 msgid "Tab overlap"
 msgstr "Мяжы лычкі"
 
-#: gtk/gtknotebook.c:794
+#: gtk/gtknotebook.c:796
 #, fuzzy
 msgid "Size of tab overlap area"
 msgstr "Памер стрэлкі пашыральніка."
 
-#: gtk/gtknotebook.c:809
+#: gtk/gtknotebook.c:811
 msgid "Tab curvature"
 msgstr ""
 
-#: gtk/gtknotebook.c:810
+#: gtk/gtknotebook.c:812
 #, fuzzy
 msgid "Size of tab curvature"
 msgstr "Памер прагалу"
@@ -3812,7 +3812,7 @@ msgstr ""
 msgid "Printer settings"
 msgstr ""
 
-#: gtk/gtkprintjob.c:143 gtk/gtkprintjob.c:144 gtk/gtkprintunixdialog.c:240
+#: gtk/gtkprintjob.c:143 gtk/gtkprintjob.c:144 gtk/gtkprintunixdialog.c:241
 #, fuzzy
 msgid "Page Setup"
 msgstr "Найбольшы памер"
@@ -3836,11 +3836,11 @@ msgstr "Дапомная вышыня"
 msgid "The GtkPageSetup used by default"
 msgstr ""
 
-#: gtk/gtkprintoperation.c:896 gtk/gtkprintunixdialog.c:258
+#: gtk/gtkprintoperation.c:896 gtk/gtkprintunixdialog.c:259
 msgid "Print Settings"
 msgstr ""
 
-#: gtk/gtkprintoperation.c:897 gtk/gtkprintunixdialog.c:259
+#: gtk/gtkprintoperation.c:897 gtk/gtkprintunixdialog.c:260
 msgid "The GtkPrintSettings used for initializing the dialog"
 msgstr ""
 
@@ -3863,12 +3863,12 @@ msgstr "Колькасьць слупкоў у табліцы."
 msgid "The number of pages in the document."
 msgstr "Колькасьць радкоў у табліцы"
 
-#: gtk/gtkprintoperation.c:962 gtk/gtkprintunixdialog.c:248
+#: gtk/gtkprintoperation.c:962 gtk/gtkprintunixdialog.c:249
 #, fuzzy
 msgid "Current Page"
 msgstr "Бягучы альфа-каналь"
 
-#: gtk/gtkprintoperation.c:963 gtk/gtkprintunixdialog.c:249
+#: gtk/gtkprintoperation.c:963 gtk/gtkprintunixdialog.c:250
 #, fuzzy
 msgid "The current page in the document"
 msgstr "Пераключыць стан кнопкі"
@@ -3947,16 +3947,16 @@ msgstr "Пажаданая палітра"
 msgid "Label for the tab containing custom widgets."
 msgstr ""
 
-#: gtk/gtkprintunixdialog.c:241
+#: gtk/gtkprintunixdialog.c:242
 msgid "The GtkPageSetup to use"
 msgstr ""
 
-#: gtk/gtkprintunixdialog.c:266
+#: gtk/gtkprintunixdialog.c:267
 #, fuzzy
 msgid "Selected Printer"
 msgstr "Назоў файла, адзначанага зараз."
 
-#: gtk/gtkprintunixdialog.c:267
+#: gtk/gtkprintunixdialog.c:268
 #, fuzzy
 msgid "The GtkPrinter which is selected"
 msgstr "GdkFont, што вылучаны ў бягучы момант."

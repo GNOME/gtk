@@ -46,7 +46,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-12-04 14:38-0500\n"
+"POT-Creation-Date: 2008-01-08 00:16-0500\n"
 "PO-Revision-Date: 2007-09-01 15:59+0200\n"
 "Last-Translator: Ask Hjorth Larsen <asklarsen@gmail.com>\n"
 "Language-Team: Danish <dansk@dansk-gruppen.dk>\n"
@@ -756,7 +756,7 @@ msgstr "Mellemrum"
 msgid "The amount of space between children"
 msgstr "Hvor meget mellemrum der er mellem børnene"
 
-#: gtk/gtkbox.c:108 gtk/gtknotebook.c:636 gtk/gtktable.c:165
+#: gtk/gtkbox.c:108 gtk/gtknotebook.c:638 gtk/gtktable.c:165
 #: gtk/gtktoolbar.c:563
 msgid "Homogeneous"
 msgstr "Homogen"
@@ -799,7 +799,7 @@ msgstr "Ekstra mellemrum mellem underelementet og dets naboer, i skærmpunkter"
 msgid "Pack type"
 msgstr "Pakningstype"
 
-#: gtk/gtkbox.c:138 gtk/gtknotebook.c:703
+#: gtk/gtkbox.c:138 gtk/gtknotebook.c:705
 msgid ""
 "A GtkPackType indicating whether the child is packed with reference to the "
 "start or end of the parent"
@@ -807,12 +807,12 @@ msgstr ""
 "En GtkPackType der angiver om underelementet skal pakkes med reference til "
 "begyndelsen eller slutningen af ophavselementet"
 
-#: gtk/gtkbox.c:144 gtk/gtknotebook.c:681 gtk/gtkpaned.c:219
+#: gtk/gtkbox.c:144 gtk/gtknotebook.c:683 gtk/gtkpaned.c:219
 #: gtk/gtkruler.c:110
 msgid "Position"
 msgstr "Position"
 
-#: gtk/gtkbox.c:145 gtk/gtknotebook.c:682
+#: gtk/gtkbox.c:145 gtk/gtknotebook.c:684
 msgid "The index of the child in the parent"
 msgstr "Indekset for underelementet i ophavselementet"
 
@@ -3289,78 +3289,78 @@ msgstr ""
 "Andelen af mellemrum der skal tilføjes over og under kontrollen, i "
 "skærmpunkter"
 
-#: gtk/gtknotebook.c:564
+#: gtk/gtknotebook.c:566
 msgid "Page"
 msgstr "Side"
 
-#: gtk/gtknotebook.c:565
+#: gtk/gtknotebook.c:567
 msgid "The index of the current page"
 msgstr "Indeks for den aktuelle side"
 
-#: gtk/gtknotebook.c:573
+#: gtk/gtknotebook.c:575
 msgid "Tab Position"
 msgstr "Fanebladplacering"
 
-#: gtk/gtknotebook.c:574
+#: gtk/gtknotebook.c:576
 msgid "Which side of the notebook holds the tabs"
 msgstr "Hvilken side af notesbogen der indeholder fanebladene"
 
-#: gtk/gtknotebook.c:581
+#: gtk/gtknotebook.c:583
 msgid "Tab Border"
 msgstr "Fanebladkant"
 
-#: gtk/gtknotebook.c:582
+#: gtk/gtknotebook.c:584
 msgid "Width of the border around the tab labels"
 msgstr "Bredden af kanten omkring fanebladetiketterne"
 
-#: gtk/gtknotebook.c:590
+#: gtk/gtknotebook.c:592
 msgid "Horizontal Tab Border"
 msgstr "Vandret fanebladkant"
 
-#: gtk/gtknotebook.c:591
+#: gtk/gtknotebook.c:593
 msgid "Width of the horizontal border of tab labels"
 msgstr "Bredden af den vandrette kant på fanebladetiketterne"
 
-#: gtk/gtknotebook.c:599
+#: gtk/gtknotebook.c:601
 msgid "Vertical Tab Border"
 msgstr "Lodret fanebladkant"
 
-#: gtk/gtknotebook.c:600
+#: gtk/gtknotebook.c:602
 msgid "Width of the vertical border of tab labels"
 msgstr "Bredden af den lodrette kant på fanebladetiketterne"
 
-#: gtk/gtknotebook.c:608
+#: gtk/gtknotebook.c:610
 msgid "Show Tabs"
 msgstr "Vis faneblade"
 
-#: gtk/gtknotebook.c:609
+#: gtk/gtknotebook.c:611
 msgid "Whether tabs should be shown or not"
 msgstr "Om faneblade skal vises eller ej"
 
-#: gtk/gtknotebook.c:615
+#: gtk/gtknotebook.c:617
 msgid "Show Border"
 msgstr "Vis kant"
 
-#: gtk/gtknotebook.c:616
+#: gtk/gtknotebook.c:618
 msgid "Whether the border should be shown or not"
 msgstr "Om kanten skal vises eller ej"
 
-#: gtk/gtknotebook.c:622
+#: gtk/gtknotebook.c:624
 msgid "Scrollable"
 msgstr "Med rulning"
 
-#: gtk/gtknotebook.c:623
+#: gtk/gtknotebook.c:625
 msgid "If TRUE, scroll arrows are added if there are too many tabs to fit"
 msgstr ""
 "Hvis TRUE bliver rullepile tilføjet hvis der er for mange faneblade til at "
 "alle kan vises"
 
 # se næste tekst for forklaring
-#: gtk/gtknotebook.c:629
+#: gtk/gtknotebook.c:631
 msgid "Enable Popup"
 msgstr "Aktivér menu"
 
-#: gtk/gtknotebook.c:630
+#: gtk/gtknotebook.c:632
 msgid ""
 "If TRUE, pressing the right mouse button on the notebook pops up a menu that "
 "you can use to go to a page"
@@ -3368,130 +3368,130 @@ msgstr ""
 "Hvis TRUE vil højreklik på notesbogen starte en menu som kan bruges til at "
 "gå til en bestemt side"
 
-#: gtk/gtknotebook.c:637
+#: gtk/gtknotebook.c:639
 msgid "Whether tabs should have homogeneous sizes"
 msgstr "Om faneblade skal have samme størrelser"
 
-#: gtk/gtknotebook.c:643
+#: gtk/gtknotebook.c:645
 msgid "Group ID"
 msgstr "Gruppe-id"
 
-#: gtk/gtknotebook.c:644
+#: gtk/gtknotebook.c:646
 msgid "Group ID for tabs drag and drop"
 msgstr "Gruppe-id for faneblades træk og slip"
 
-#: gtk/gtknotebook.c:660 gtk/gtkradioaction.c:128 gtk/gtkradiobutton.c:82
+#: gtk/gtknotebook.c:662 gtk/gtkradioaction.c:128 gtk/gtkradiobutton.c:82
 #: gtk/gtkradiomenuitem.c:342
 msgid "Group"
 msgstr "Gruppe"
 
-#: gtk/gtknotebook.c:661
+#: gtk/gtknotebook.c:663
 msgid "Group for tabs drag and drop"
 msgstr "Gruppe for faneblads-træk og slip"
 
-#: gtk/gtknotebook.c:667
+#: gtk/gtknotebook.c:669
 msgid "Tab label"
 msgstr "Fanebladetiket"
 
-#: gtk/gtknotebook.c:668
+#: gtk/gtknotebook.c:670
 msgid "The string displayed on the child's tab label"
 msgstr "Strengen der vises i underelementets fanebladsetiket"
 
-#: gtk/gtknotebook.c:674
+#: gtk/gtknotebook.c:676
 msgid "Menu label"
 msgstr "Menuetiket"
 
-#: gtk/gtknotebook.c:675
+#: gtk/gtknotebook.c:677
 msgid "The string displayed in the child's menu entry"
 msgstr "Strengen der vises i underelementets menupunkt"
 
-#: gtk/gtknotebook.c:688
+#: gtk/gtknotebook.c:690
 msgid "Tab expand"
 msgstr "Fanebladudvidning"
 
-#: gtk/gtknotebook.c:689
+#: gtk/gtknotebook.c:691
 msgid "Whether to expand the child's tab or not"
 msgstr "Om underelementets faneblad skal udvides eller ej"
 
-#: gtk/gtknotebook.c:695
+#: gtk/gtknotebook.c:697
 msgid "Tab fill"
 msgstr "Fanebladudfyldning"
 
-#: gtk/gtknotebook.c:696
+#: gtk/gtknotebook.c:698
 msgid "Whether the child's tab should fill the allocated area or not"
 msgstr "Om underelementets faneblad skal udfylde det tildelte område eller ej"
 
-#: gtk/gtknotebook.c:702
+#: gtk/gtknotebook.c:704
 msgid "Tab pack type"
 msgstr "Fanebladpakningstype"
 
-#: gtk/gtknotebook.c:709
+#: gtk/gtknotebook.c:711
 msgid "Tab reorderable"
 msgstr "Faneblad kan sorteres om"
 
-#: gtk/gtknotebook.c:710
+#: gtk/gtknotebook.c:712
 msgid "Whether the tab is reorderable by user action or not"
 msgstr "Om fanebladet kan omsorteres af brugeren"
 
-#: gtk/gtknotebook.c:716
+#: gtk/gtknotebook.c:718
 msgid "Tab detachable"
 msgstr "Faneblad kan hægtes af"
 
-#: gtk/gtknotebook.c:717
+#: gtk/gtknotebook.c:719
 msgid "Whether the tab is detachable"
 msgstr "Om fanebladet kan hægtes af"
 
-#: gtk/gtknotebook.c:732 gtk/gtkscrollbar.c:83
+#: gtk/gtknotebook.c:734 gtk/gtkscrollbar.c:83
 msgid "Secondary backward stepper"
 msgstr "Sekundær tilbagepil"
 
-#: gtk/gtknotebook.c:733
+#: gtk/gtknotebook.c:735
 msgid ""
 "Display a second backward arrow button on the opposite end of the tab area"
 msgstr "Vis en ekstra tilbagepilsknap i den modsatte ende af fanebladområdet"
 
-#: gtk/gtknotebook.c:748 gtk/gtkscrollbar.c:91
+#: gtk/gtknotebook.c:750 gtk/gtkscrollbar.c:91
 msgid "Secondary forward stepper"
 msgstr "Sekundær fremadpil"
 
-#: gtk/gtknotebook.c:749
+#: gtk/gtknotebook.c:751
 msgid ""
 "Display a second forward arrow button on the opposite end of the tab area"
 msgstr "Vis en ekstra fremadpilsknap i den modsatte ende af fanebladområdet"
 
-#: gtk/gtknotebook.c:763 gtk/gtkscrollbar.c:67
+#: gtk/gtknotebook.c:765 gtk/gtkscrollbar.c:67
 msgid "Backward stepper"
 msgstr "Tilbagepil"
 
-#: gtk/gtknotebook.c:764 gtk/gtkscrollbar.c:68
+#: gtk/gtknotebook.c:766 gtk/gtkscrollbar.c:68
 msgid "Display the standard backward arrow button"
 msgstr "Vis standard-tilbagepilsknappen"
 
-#: gtk/gtknotebook.c:778 gtk/gtkscrollbar.c:75
+#: gtk/gtknotebook.c:780 gtk/gtkscrollbar.c:75
 msgid "Forward stepper"
 msgstr "Fremadpil"
 
-#: gtk/gtknotebook.c:779 gtk/gtkscrollbar.c:76
+#: gtk/gtknotebook.c:781 gtk/gtkscrollbar.c:76
 msgid "Display the standard forward arrow button"
 msgstr "Vis standard-fremadpilsknappen"
 
-#: gtk/gtknotebook.c:793
+#: gtk/gtknotebook.c:795
 msgid "Tab overlap"
 msgstr "Fanebladsoverlap"
 
-#: gtk/gtknotebook.c:794
+#: gtk/gtknotebook.c:796
 msgid "Size of tab overlap area"
 msgstr "Størrelse af faneblads-overlapområde"
 
 # Sikker hjørnerunding, i fejlrapport
 # Bekræftet: hjørnerunding
-#: gtk/gtknotebook.c:809
+#: gtk/gtknotebook.c:811
 msgid "Tab curvature"
 msgstr "Fanebladsrunding"
 
 # Sikker hjørnerunding, i fejlrapport
 # Bekræftet: hjørnerunding
-#: gtk/gtknotebook.c:810
+#: gtk/gtknotebook.c:812
 msgid "Size of tab curvature"
 msgstr "Omfanget af afrunding af fanebladshjørner"
 
@@ -3679,7 +3679,7 @@ msgstr "Indstillinger"
 msgid "Printer settings"
 msgstr "Printerindstillinger"
 
-#: gtk/gtkprintjob.c:143 gtk/gtkprintjob.c:144 gtk/gtkprintunixdialog.c:240
+#: gtk/gtkprintjob.c:143 gtk/gtkprintjob.c:144 gtk/gtkprintunixdialog.c:241
 msgid "Page Setup"
 msgstr "Sideopsætning"
 
@@ -3705,11 +3705,11 @@ msgstr "Forvalgt sideopsætning"
 msgid "The GtkPageSetup used by default"
 msgstr "Den GtkPageSetup der bruges som standard"
 
-#: gtk/gtkprintoperation.c:896 gtk/gtkprintunixdialog.c:258
+#: gtk/gtkprintoperation.c:896 gtk/gtkprintunixdialog.c:259
 msgid "Print Settings"
 msgstr "Udskriftsindstillinger"
 
-#: gtk/gtkprintoperation.c:897 gtk/gtkprintunixdialog.c:259
+#: gtk/gtkprintoperation.c:897 gtk/gtkprintunixdialog.c:260
 msgid "The GtkPrintSettings used for initializing the dialog"
 msgstr ""
 "De GtkPrintSettings der bliver brugt ved initialisering af dialogvinduet"
@@ -3730,11 +3730,11 @@ msgstr "Antal sider"
 msgid "The number of pages in the document."
 msgstr "Antallet af sider i dokumentet."
 
-#: gtk/gtkprintoperation.c:962 gtk/gtkprintunixdialog.c:248
+#: gtk/gtkprintoperation.c:962 gtk/gtkprintunixdialog.c:249
 msgid "Current Page"
 msgstr "Nuværende side"
 
-#: gtk/gtkprintoperation.c:963 gtk/gtkprintunixdialog.c:249
+#: gtk/gtkprintoperation.c:963 gtk/gtkprintunixdialog.c:250
 msgid "The current page in the document"
 msgstr "Den nuværende side i dokumentet"
 
@@ -3811,15 +3811,15 @@ msgstr "Etiket for fanebladet for brugertilpassede"
 msgid "Label for the tab containing custom widgets."
 msgstr "Etiket for fanebladet der indeholder brugertilpassede kontroller."
 
-#: gtk/gtkprintunixdialog.c:241
+#: gtk/gtkprintunixdialog.c:242
 msgid "The GtkPageSetup to use"
 msgstr "Den GtkPageSetup som skal bruges"
 
-#: gtk/gtkprintunixdialog.c:266
+#: gtk/gtkprintunixdialog.c:267
 msgid "Selected Printer"
 msgstr "Valgte printer"
 
-#: gtk/gtkprintunixdialog.c:267
+#: gtk/gtkprintunixdialog.c:268
 msgid "The GtkPrinter which is selected"
 msgstr "Den GtkPrinter som er valgt"
 

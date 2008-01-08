@@ -32,7 +32,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-properties.HEAD\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-12-04 14:38-0500\n"
+"POT-Creation-Date: 2008-01-08 00:16-0500\n"
 "PO-Revision-Date: 2004-03-07 18:05+0200\n"
 "Last-Translator: Mətin Əmirov <metin@karegen.com>\n"
 "Language-Team: Azerbaijani Turkish <translation-team-az@lists.sourceforge."
@@ -747,7 +747,7 @@ msgstr "Boşluq"
 msgid "The amount of space between children"
 msgstr "Törəmələr arasındakı boşluq miqdarı"
 
-#: gtk/gtkbox.c:108 gtk/gtknotebook.c:636 gtk/gtktable.c:165
+#: gtk/gtkbox.c:108 gtk/gtknotebook.c:638 gtk/gtktable.c:165
 #: gtk/gtktoolbar.c:563
 msgid "Homogeneous"
 msgstr "Homojen"
@@ -789,7 +789,7 @@ msgstr "Törəmə ilə qonşuları arasına qoyulacaq əlavə boşluq, piksel ol
 msgid "Pack type"
 msgstr "Paket tərzi"
 
-#: gtk/gtkbox.c:138 gtk/gtknotebook.c:703
+#: gtk/gtkbox.c:138 gtk/gtknotebook.c:705
 msgid ""
 "A GtkPackType indicating whether the child is packed with reference to the "
 "start or end of the parent"
@@ -797,12 +797,12 @@ msgstr ""
 "Törəmənin valideynən başlanğıcına yoxsa sonuna nəzələn paketlənəcəyini "
 "müəyyən edən GtkPackType"
 
-#: gtk/gtkbox.c:144 gtk/gtknotebook.c:681 gtk/gtkpaned.c:219
+#: gtk/gtkbox.c:144 gtk/gtknotebook.c:683 gtk/gtkpaned.c:219
 #: gtk/gtkruler.c:110
 msgid "Position"
 msgstr "Yer"
 
-#: gtk/gtkbox.c:145 gtk/gtknotebook.c:682
+#: gtk/gtkbox.c:145 gtk/gtknotebook.c:684
 msgid "The index of the child in the parent"
 msgstr "Qohumdakı törəmənin məzmunu (indeksi)"
 
@@ -3316,75 +3316,75 @@ msgstr ""
 "Pəncərəciklərin üst və alt tərəflərinə əlavə ediləcək sahə miqdarı, piksel "
 "olaraq"
 
-#: gtk/gtknotebook.c:564
+#: gtk/gtknotebook.c:566
 msgid "Page"
 msgstr "Səhifə"
 
-#: gtk/gtknotebook.c:565
+#: gtk/gtknotebook.c:567
 msgid "The index of the current page"
 msgstr "Hazırkı səhifənin məzmunu"
 
-#: gtk/gtknotebook.c:573
+#: gtk/gtknotebook.c:575
 msgid "Tab Position"
 msgstr "Səkmə Yeri"
 
-#: gtk/gtknotebook.c:574
+#: gtk/gtknotebook.c:576
 msgid "Which side of the notebook holds the tabs"
 msgstr "Səkmələrin tutulduğu qeyd dəftərçəsi yeri"
 
-#: gtk/gtknotebook.c:581
+#: gtk/gtknotebook.c:583
 msgid "Tab Border"
 msgstr "Səkmə Kənarı"
 
-#: gtk/gtknotebook.c:582
+#: gtk/gtknotebook.c:584
 msgid "Width of the border around the tab labels"
 msgstr "Səkmə etiketləri ətrafındakı kənar eni"
 
-#: gtk/gtknotebook.c:590
+#: gtk/gtknotebook.c:592
 msgid "Horizontal Tab Border"
 msgstr "Üfüqi Səkmə Kənarı"
 
-#: gtk/gtknotebook.c:591
+#: gtk/gtknotebook.c:593
 msgid "Width of the horizontal border of tab labels"
 msgstr "Səkmə etiketlərinin üfüqi kənar eni"
 
-#: gtk/gtknotebook.c:599
+#: gtk/gtknotebook.c:601
 msgid "Vertical Tab Border"
 msgstr "Şaquli Səkmə Kənarı"
 
-#: gtk/gtknotebook.c:600
+#: gtk/gtknotebook.c:602
 msgid "Width of the vertical border of tab labels"
 msgstr "Səkmə etiketlərinin şaquli kənar eni"
 
-#: gtk/gtknotebook.c:608
+#: gtk/gtknotebook.c:610
 msgid "Show Tabs"
 msgstr "Səkmələri Göstər"
 
-#: gtk/gtknotebook.c:609
+#: gtk/gtknotebook.c:611
 msgid "Whether tabs should be shown or not"
 msgstr "Səkmələrin harda göstərilib göstərilməyəcəyi"
 
-#: gtk/gtknotebook.c:615
+#: gtk/gtknotebook.c:617
 msgid "Show Border"
 msgstr "Kənarı Göstər"
 
-#: gtk/gtknotebook.c:616
+#: gtk/gtknotebook.c:618
 msgid "Whether the border should be shown or not"
 msgstr "Kənarın harda göstərilib göstərilməyəcəyi"
 
-#: gtk/gtknotebook.c:622
+#: gtk/gtknotebook.c:624
 msgid "Scrollable"
 msgstr "Sürüşdürülə bilən"
 
-#: gtk/gtknotebook.c:623
+#: gtk/gtknotebook.c:625
 msgid "If TRUE, scroll arrows are added if there are too many tabs to fit"
 msgstr "Əgər TRUE isə, səkmələr sığışmasa sürüşdürmə çubuqları əlavə ediləcək"
 
-#: gtk/gtknotebook.c:629
+#: gtk/gtknotebook.c:631
 msgid "Enable Popup"
 msgstr "Popapı Fəallaşdır"
 
-#: gtk/gtknotebook.c:630
+#: gtk/gtknotebook.c:632
 msgid ""
 "If TRUE, pressing the right mouse button on the notebook pops up a menu that "
 "you can use to go to a page"
@@ -3392,137 +3392,137 @@ msgstr ""
 "Əgər DÜZdürsə, siçan düyməsinin Qeyd Dəftərçəsində tıqlanması gediləcək "
 "səhifə menyusunu açar"
 
-#: gtk/gtknotebook.c:637
+#: gtk/gtknotebook.c:639
 msgid "Whether tabs should have homogeneous sizes"
 msgstr "Səkmələrin harda homojen böyüklükləri olacağı"
 
-#: gtk/gtknotebook.c:643
+#: gtk/gtknotebook.c:645
 #, fuzzy
 msgid "Group ID"
 msgstr "Qrup"
 
-#: gtk/gtknotebook.c:644
+#: gtk/gtknotebook.c:646
 msgid "Group ID for tabs drag and drop"
 msgstr ""
 
-#: gtk/gtknotebook.c:660 gtk/gtkradioaction.c:128 gtk/gtkradiobutton.c:82
+#: gtk/gtknotebook.c:662 gtk/gtkradioaction.c:128 gtk/gtkradiobutton.c:82
 #: gtk/gtkradiomenuitem.c:342
 msgid "Group"
 msgstr "Qrup"
 
-#: gtk/gtknotebook.c:661
+#: gtk/gtknotebook.c:663
 msgid "Group for tabs drag and drop"
 msgstr ""
 
-#: gtk/gtknotebook.c:667
+#: gtk/gtknotebook.c:669
 msgid "Tab label"
 msgstr "Tab etiketi"
 
-#: gtk/gtknotebook.c:668
+#: gtk/gtknotebook.c:670
 #, fuzzy
 msgid "The string displayed on the child's tab label"
 msgstr "Törəmə səkməsinin etiketində göstəriləcək qatar (mətn)"
 
-#: gtk/gtknotebook.c:674
+#: gtk/gtknotebook.c:676
 msgid "Menu label"
 msgstr "Menyu etiketi"
 
-#: gtk/gtknotebook.c:675
+#: gtk/gtknotebook.c:677
 #, fuzzy
 msgid "The string displayed in the child's menu entry"
 msgstr "Törəmə menyu girişində göstəriləcək qatar (mətn)"
 
-#: gtk/gtknotebook.c:688
+#: gtk/gtknotebook.c:690
 msgid "Tab expand"
 msgstr "Tab genişləməsi"
 
-#: gtk/gtknotebook.c:689
+#: gtk/gtknotebook.c:691
 #, fuzzy
 msgid "Whether to expand the child's tab or not"
 msgstr "Törəmə səkmələrin genişlədilib genişlədilməməsi"
 
-#: gtk/gtknotebook.c:695
+#: gtk/gtknotebook.c:697
 msgid "Tab fill"
 msgstr "Tab dolğusu"
 
-#: gtk/gtknotebook.c:696
+#: gtk/gtknotebook.c:698
 #, fuzzy
 msgid "Whether the child's tab should fill the allocated area or not"
 msgstr "Törəmə tabının ayrılmış yerin hamısını doldurub doldurması"
 
-#: gtk/gtknotebook.c:702
+#: gtk/gtknotebook.c:704
 msgid "Tab pack type"
 msgstr "Tab paket növü"
 
-#: gtk/gtknotebook.c:709
+#: gtk/gtknotebook.c:711
 #, fuzzy
 msgid "Tab reorderable"
 msgstr "Yenidən sıraya qoyula bilən"
 
-#: gtk/gtknotebook.c:710
+#: gtk/gtknotebook.c:712
 #, fuzzy
 msgid "Whether the tab is reorderable by user action or not"
 msgstr "Kənarın harda göstərilib göstərilməyəcəyi"
 
-#: gtk/gtknotebook.c:716
+#: gtk/gtknotebook.c:718
 #, fuzzy
 msgid "Tab detachable"
 msgstr "Tab etiketi"
 
-#: gtk/gtknotebook.c:717
+#: gtk/gtknotebook.c:719
 #, fuzzy
 msgid "Whether the tab is detachable"
 msgstr "Gedişatın fəal olması."
 
-#: gtk/gtknotebook.c:732 gtk/gtkscrollbar.c:83
+#: gtk/gtknotebook.c:734 gtk/gtkscrollbar.c:83
 msgid "Secondary backward stepper"
 msgstr "İkinci arxa stepper"
 
-#: gtk/gtknotebook.c:733
+#: gtk/gtknotebook.c:735
 msgid ""
 "Display a second backward arrow button on the opposite end of the tab area"
 msgstr "Səkmə sahəsinin tərəfində ikinci geri ox düyməsini göstər"
 
-#: gtk/gtknotebook.c:748 gtk/gtkscrollbar.c:91
+#: gtk/gtknotebook.c:750 gtk/gtkscrollbar.c:91
 msgid "Secondary forward stepper"
 msgstr "İkinci iləri stepper"
 
-#: gtk/gtknotebook.c:749
+#: gtk/gtknotebook.c:751
 msgid ""
 "Display a second forward arrow button on the opposite end of the tab area"
 msgstr "Səkmə sahəsinin qarşı tərəfində ikinci irəli ox düyməsini göstər"
 
-#: gtk/gtknotebook.c:763 gtk/gtkscrollbar.c:67
+#: gtk/gtknotebook.c:765 gtk/gtkscrollbar.c:67
 msgid "Backward stepper"
 msgstr "Arxa plan addımlayıcısı"
 
-#: gtk/gtknotebook.c:764 gtk/gtkscrollbar.c:68
+#: gtk/gtknotebook.c:766 gtk/gtkscrollbar.c:68
 msgid "Display the standard backward arrow button"
 msgstr "Standart geri ox düyməsini göstər"
 
-#: gtk/gtknotebook.c:778 gtk/gtkscrollbar.c:75
+#: gtk/gtknotebook.c:780 gtk/gtkscrollbar.c:75
 msgid "Forward stepper"
 msgstr "Çatdırma addımlayıcısı"
 
-#: gtk/gtknotebook.c:779 gtk/gtkscrollbar.c:76
+#: gtk/gtknotebook.c:781 gtk/gtkscrollbar.c:76
 msgid "Display the standard forward arrow button"
 msgstr "Standart irəli ox düyməsini göstər"
 
-#: gtk/gtknotebook.c:793
+#: gtk/gtknotebook.c:795
 #, fuzzy
 msgid "Tab overlap"
 msgstr "Səkmə Kənarı"
 
-#: gtk/gtknotebook.c:794
+#: gtk/gtknotebook.c:796
 #, fuzzy
 msgid "Size of tab overlap area"
 msgstr "Genişlədici oxun böyüklüyü"
 
-#: gtk/gtknotebook.c:809
+#: gtk/gtknotebook.c:811
 msgid "Tab curvature"
 msgstr ""
 
-#: gtk/gtknotebook.c:810
+#: gtk/gtknotebook.c:812
 #, fuzzy
 msgid "Size of tab curvature"
 msgstr "Aralandırıcıların böyüklüyü"
@@ -3723,7 +3723,7 @@ msgstr ""
 msgid "Printer settings"
 msgstr ""
 
-#: gtk/gtkprintjob.c:143 gtk/gtkprintjob.c:144 gtk/gtkprintunixdialog.c:240
+#: gtk/gtkprintjob.c:143 gtk/gtkprintjob.c:144 gtk/gtkprintunixdialog.c:241
 #, fuzzy
 msgid "Page Setup"
 msgstr "Səhifə Böyüklüyü"
@@ -3747,11 +3747,11 @@ msgstr "Əsas Hündürlük"
 msgid "The GtkPageSetup used by default"
 msgstr ""
 
-#: gtk/gtkprintoperation.c:896 gtk/gtkprintunixdialog.c:258
+#: gtk/gtkprintoperation.c:896 gtk/gtkprintunixdialog.c:259
 msgid "Print Settings"
 msgstr ""
 
-#: gtk/gtkprintoperation.c:897 gtk/gtkprintunixdialog.c:259
+#: gtk/gtkprintoperation.c:897 gtk/gtkprintunixdialog.c:260
 msgid "The GtkPrintSettings used for initializing the dialog"
 msgstr ""
 
@@ -3774,12 +3774,12 @@ msgstr "Kanal Ədədi"
 msgid "The number of pages in the document."
 msgstr "Cəvəldəki sıraların miqdarı"
 
-#: gtk/gtkprintoperation.c:962 gtk/gtkprintunixdialog.c:248
+#: gtk/gtkprintoperation.c:962 gtk/gtkprintunixdialog.c:249
 #, fuzzy
 msgid "Current Page"
 msgstr "Hazırkı Alfa"
 
-#: gtk/gtkprintoperation.c:963 gtk/gtkprintunixdialog.c:249
+#: gtk/gtkprintoperation.c:963 gtk/gtkprintunixdialog.c:250
 #, fuzzy
 msgid "The current page in the document"
 msgstr "Qurğunun səhifə böyüklüyü"
@@ -3858,16 +3858,16 @@ msgstr "Hazırkı palet"
 msgid "Label for the tab containing custom widgets."
 msgstr ""
 
-#: gtk/gtkprintunixdialog.c:241
+#: gtk/gtkprintunixdialog.c:242
 msgid "The GtkPageSetup to use"
 msgstr ""
 
-#: gtk/gtkprintunixdialog.c:266
+#: gtk/gtkprintunixdialog.c:267
 #, fuzzy
 msgid "Selected Printer"
 msgstr "Seçili il"
 
-#: gtk/gtkprintunixdialog.c:267
+#: gtk/gtkprintunixdialog.c:268
 #, fuzzy
 msgid "The GtkPrinter which is selected"
 msgstr "Hazırda fəal olan üzv"

@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.12\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-12-04 14:38-0500\n"
+"POT-Creation-Date: 2008-01-08 00:16-0500\n"
 "PO-Revision-Date: 2007-10-04 09:10+0200\n"
 "Last-Translator: Luca Ferretti <elle.uca@libero.it>\n"
 "Language-Team: Italian <tp@lists.linux.it>\n"
@@ -629,18 +629,18 @@ msgstr ""
 msgid "Unsupported JPEG color space (%s)"
 msgstr "Spazio di colore JPEG (%s) non supportato"
 
-#: gdk-pixbuf/io-jpeg.c:668 gdk-pixbuf/io-jpeg.c:940 gdk-pixbuf/io-jpeg.c:1173
-#: gdk-pixbuf/io-jpeg.c:1182
+#: gdk-pixbuf/io-jpeg.c:668 gdk-pixbuf/io-jpeg.c:944 gdk-pixbuf/io-jpeg.c:1177
+#: gdk-pixbuf/io-jpeg.c:1186
 #, c-format
 msgid "Couldn't allocate memory for loading JPEG file"
 msgstr "Impossibile allocare memoria per caricare il file JPEG"
 
-#: gdk-pixbuf/io-jpeg.c:916
+#: gdk-pixbuf/io-jpeg.c:920
 #, c-format
 msgid "Transformed JPEG has zero width or height."
 msgstr "L'immagine convertita in JPEG ha larghezza o altezza pari a zero."
 
-#: gdk-pixbuf/io-jpeg.c:1129
+#: gdk-pixbuf/io-jpeg.c:1133
 #, c-format
 msgid ""
 "JPEG quality must be a value between 0 and 100; value '%s' could not be "
@@ -649,7 +649,7 @@ msgstr ""
 "La qualità di un'immagine JPEG deve essere compresa tra 0 e 100; il valore «%"
 "s» non può essere analizzato."
 
-#: gdk-pixbuf/io-jpeg.c:1144
+#: gdk-pixbuf/io-jpeg.c:1148
 #, c-format
 msgid ""
 "JPEG quality must be a value between 0 and 100; value '%d' is not allowed."
@@ -657,7 +657,7 @@ msgstr ""
 "La qualità di un'immagine JPEG deve essere compresa tra 0 e 100; il valore «%"
 "d» non è permesso."
 
-#: gdk-pixbuf/io-jpeg.c:1307
+#: gdk-pixbuf/io-jpeg.c:1311
 msgid "The JPEG image format"
 msgstr "Formato JPEG"
 
@@ -1611,7 +1611,7 @@ msgstr "Seleziona un file"
 #
 # In questo modo i due bookmark hanno la stessa traduzione.
 # -Luca
-#: gtk/gtkfilechooserbutton.c:69 gtk/gtkfilechooserdefault.c:1982
+#: gtk/gtkfilechooserbutton.c:69 gtk/gtkfilechooserdefault.c:1976
 msgid "Desktop"
 msgstr "Scrivania"
 
@@ -1666,120 +1666,120 @@ msgstr "Il contenuto della cartella non può essere visualizzato"
 #. * is a hostname. Nautilus and the panel contain the same string
 #. * to translate.
 #.
-#: gtk/gtkfilechooserdefault.c:1731
+#: gtk/gtkfilechooserdefault.c:1725
 #, c-format
 msgid "%1$s on %2$s"
 msgstr "%1$s su %2$s"
 
 # GTK-2-12
-#: gtk/gtkfilechooserdefault.c:1909
+#: gtk/gtkfilechooserdefault.c:1903
 msgid "Search"
 msgstr "Ricerca"
 
 # GTK-2-12
-#: gtk/gtkfilechooserdefault.c:1933
+#: gtk/gtkfilechooserdefault.c:1927
 msgid "Recently Used"
 msgstr "Usati di recente"
 
-#: gtk/gtkfilechooserdefault.c:2597
+#: gtk/gtkfilechooserdefault.c:2591
 msgid "Select which types of files are shown"
 msgstr "Seleziona quali tipi di file mostrare"
 
-#: gtk/gtkfilechooserdefault.c:3025
+#: gtk/gtkfilechooserdefault.c:3019
 #, c-format
 msgid "Add the folder '%s' to the bookmarks"
 msgstr "Aggiunge la cartella «%s» ai segnalibri"
 
-#: gtk/gtkfilechooserdefault.c:3066
+#: gtk/gtkfilechooserdefault.c:3060
 #, c-format
 msgid "Add the current folder to the bookmarks"
 msgstr "Aggiunge la cartella corrente ai segnalibri"
 
-#: gtk/gtkfilechooserdefault.c:3068
+#: gtk/gtkfilechooserdefault.c:3062
 #, c-format
 msgid "Add the selected folders to the bookmarks"
 msgstr "Aggiunge le cartelle selezionate ai segnalibri"
 
-#: gtk/gtkfilechooserdefault.c:3108
+#: gtk/gtkfilechooserdefault.c:3102
 #, c-format
 msgid "Remove the bookmark '%s'"
 msgstr "Rimuove il segnalibro «%s»"
 
-#: gtk/gtkfilechooserdefault.c:3540
+#: gtk/gtkfilechooserdefault.c:3534
 #, c-format
 msgid "Could not add a bookmark for '%s' because it is an invalid path name."
 msgstr ""
 "Impossibile aggiungere un segnalibro per «%s» perché è un nome di percorso "
 "non valido."
 
-#: gtk/gtkfilechooserdefault.c:3765
+#: gtk/gtkfilechooserdefault.c:3759
 msgid "Remove"
 msgstr "Rimuovi"
 
-#: gtk/gtkfilechooserdefault.c:3774
+#: gtk/gtkfilechooserdefault.c:3768
 msgid "Rename..."
 msgstr "Rinomina..."
 
 #. Accessible object name for the file chooser's shortcuts pane
-#: gtk/gtkfilechooserdefault.c:3916
+#: gtk/gtkfilechooserdefault.c:3910
 msgid "Places"
 msgstr "Risorse"
 
 # GKT-2-12
 #. Column header for the file chooser's shortcuts pane
-#: gtk/gtkfilechooserdefault.c:3970
+#: gtk/gtkfilechooserdefault.c:3964
 msgid "_Places"
 msgstr "Ris_orse"
 
-#: gtk/gtkfilechooserdefault.c:4025 gtk/gtkstock.c:297
+#: gtk/gtkfilechooserdefault.c:4019 gtk/gtkstock.c:297
 msgid "_Add"
 msgstr "A_ggiungi"
 
-#: gtk/gtkfilechooserdefault.c:4032
+#: gtk/gtkfilechooserdefault.c:4026
 msgid "Add the selected folder to the Bookmarks"
 msgstr "Aggiunge la cartella selezionata ai segnalibri"
 
-#: gtk/gtkfilechooserdefault.c:4037 gtk/gtkstock.c:385
+#: gtk/gtkfilechooserdefault.c:4031 gtk/gtkstock.c:385
 msgid "_Remove"
 msgstr "_Rimuovi"
 
-#: gtk/gtkfilechooserdefault.c:4044
+#: gtk/gtkfilechooserdefault.c:4038
 msgid "Remove the selected bookmark"
 msgstr "Rimuove il segnalibro selezionato"
 
-#: gtk/gtkfilechooserdefault.c:4140
+#: gtk/gtkfilechooserdefault.c:4134
 msgid "Could not select file"
 msgstr "Impossibile selezionare il file"
 
-#: gtk/gtkfilechooserdefault.c:4277
+#: gtk/gtkfilechooserdefault.c:4271
 #, c-format
 msgid "Could not select file '%s' because it is an invalid path name."
 msgstr ""
 "Impossibile selezionare il file «%s» perché presenta un nome di percorso non "
 "valido."
 
-#: gtk/gtkfilechooserdefault.c:4334
+#: gtk/gtkfilechooserdefault.c:4328
 msgid "_Add to Bookmarks"
 msgstr "A_ggiungi ai segnalibri"
 
-#: gtk/gtkfilechooserdefault.c:4348
+#: gtk/gtkfilechooserdefault.c:4342
 msgid "Show _Hidden Files"
 msgstr "_Mostra file nascosti"
 
-#: gtk/gtkfilechooserdefault.c:4592 gtk/gtkfilesel.c:729
+#: gtk/gtkfilechooserdefault.c:4586 gtk/gtkfilesel.c:729
 msgid "Files"
 msgstr "File"
 
-#: gtk/gtkfilechooserdefault.c:4641
+#: gtk/gtkfilechooserdefault.c:4635
 msgid "Name"
 msgstr "Nome"
 
-#: gtk/gtkfilechooserdefault.c:4666
+#: gtk/gtkfilechooserdefault.c:4660
 msgid "Size"
 msgstr "Dimensione"
 
 # Visto che si applica a cartelle (f) e file (m) mi pare più corretto.
-#: gtk/gtkfilechooserdefault.c:4680
+#: gtk/gtkfilechooserdefault.c:4674
 msgid "Modified"
 msgstr "Data di modifica"
 
@@ -1789,25 +1789,25 @@ msgstr "Data di modifica"
 #
 # Da verificare nel printeroption!!   --Luca
 #. Label
-#: gtk/gtkfilechooserdefault.c:4900 gtk/gtkprinteroptionwidget.c:786
+#: gtk/gtkfilechooserdefault.c:4894 gtk/gtkprinteroptionwidget.c:786
 msgid "_Name:"
 msgstr "No_me:"
 
-#: gtk/gtkfilechooserdefault.c:4942
+#: gtk/gtkfilechooserdefault.c:4936
 msgid "_Browse for other folders"
 msgstr "_Esplora altre cartelle"
 
-#: gtk/gtkfilechooserdefault.c:5208
+#: gtk/gtkfilechooserdefault.c:5202
 msgid "Type a file name"
 msgstr "Digitare un nome di file"
 
 # GTK-2-12
 #. Create Folder
-#: gtk/gtkfilechooserdefault.c:5245
+#: gtk/gtkfilechooserdefault.c:5239
 msgid "Create Fo_lder"
 msgstr "_Crea cartella"
 
-#: gtk/gtkfilechooserdefault.c:5255
+#: gtk/gtkfilechooserdefault.c:5249
 msgid "_Location:"
 msgstr "_Posizione:"
 
@@ -1821,36 +1821,36 @@ msgstr "_Posizione:"
 # a usare la C come tasto d'accesso.
 #
 #  --Luca
-#: gtk/gtkfilechooserdefault.c:5493
+#: gtk/gtkfilechooserdefault.c:5487
 msgid "Save in _folder:"
 msgstr "Salva nella _cartella:"
 
-#: gtk/gtkfilechooserdefault.c:5495
+#: gtk/gtkfilechooserdefault.c:5489
 msgid "Create in _folder:"
 msgstr "Crea nella _cartella:"
 
-#: gtk/gtkfilechooserdefault.c:7098
+#: gtk/gtkfilechooserdefault.c:7092
 #, c-format
 msgid "Cannot change to folder because it is not local"
 msgstr "Impossibile spostarsi in una cartella non locale"
 
-#: gtk/gtkfilechooserdefault.c:7714 gtk/gtkfilechooserdefault.c:7735
+#: gtk/gtkfilechooserdefault.c:7708 gtk/gtkfilechooserdefault.c:7729
 #, c-format
 msgid "Shortcut %s already exists"
 msgstr "La scorciatoia «%s» esiste già"
 
-#: gtk/gtkfilechooserdefault.c:7825
+#: gtk/gtkfilechooserdefault.c:7819
 #, c-format
 msgid "Shortcut %s does not exist"
 msgstr "La scorciatoia «%s» non esiste"
 
 # GTK-2-12
-#: gtk/gtkfilechooserdefault.c:8080
+#: gtk/gtkfilechooserdefault.c:8074
 #, c-format
 msgid "A file named \"%s\" already exists.  Do you want to replace it?"
 msgstr "Esiste già un file con nome «%s». Sostituirlo?"
 
-#: gtk/gtkfilechooserdefault.c:8083
+#: gtk/gtkfilechooserdefault.c:8077
 #, c-format
 msgid ""
 "The file already exists in \"%s\".  Replacing it will overwrite its contents."
@@ -1858,17 +1858,17 @@ msgstr ""
 "Il file esiste già in «%s». Scegliendo di sostituirlo il suo contenuto verrà "
 "sovrascritto."
 
-#: gtk/gtkfilechooserdefault.c:8088
+#: gtk/gtkfilechooserdefault.c:8082
 msgid "_Replace"
 msgstr "_Sostituisci"
 
 # GTK-2-12
-#: gtk/gtkfilechooserdefault.c:8922
+#: gtk/gtkfilechooserdefault.c:8916
 msgid "Could not start the search process"
 msgstr "Impossibile avviare il processo di ricerca"
 
 # GTK-2-12
-#: gtk/gtkfilechooserdefault.c:8923
+#: gtk/gtkfilechooserdefault.c:8917
 msgid ""
 "The program was not able to create a connection to the indexer daemon.  "
 "Please make sure it is running."
@@ -1877,59 +1877,59 @@ msgstr ""
 "indicizzazione. Assicurarsi che sia in esecuzione."
 
 # GTK-2-12
-#: gtk/gtkfilechooserdefault.c:8937
+#: gtk/gtkfilechooserdefault.c:8931
 msgid "Could not send the search request"
 msgstr "Impossibile inviare la richiesta di ricerca"
 
 # GTK-2-12
 #. Label
-#: gtk/gtkfilechooserdefault.c:9365
+#: gtk/gtkfilechooserdefault.c:9359
 msgid "_Search:"
 msgstr "_Cerca:"
 
-#: gtk/gtkfilechooserdefault.c:10318
+#: gtk/gtkfilechooserdefault.c:10312
 #, c-format
 msgid "Could not mount %s"
 msgstr "Impossibile montare «%s»"
 
-#: gtk/gtkfilechooserdefault.c:10946
+#: gtk/gtkfilechooserdefault.c:10940
 msgid "Type name of new folder"
 msgstr "Digitare il nome della nuova cartella"
 
-#: gtk/gtkfilechooserdefault.c:10994
+#: gtk/gtkfilechooserdefault.c:10988
 #, c-format
 msgid "%d byte"
 msgid_plural "%d bytes"
 msgstr[0] "%d byte"
 msgstr[1] "%d byte"
 
-#: gtk/gtkfilechooserdefault.c:10996
+#: gtk/gtkfilechooserdefault.c:10990
 #, c-format
 msgid "%.1f KB"
 msgstr "%.1f kB"
 
-#: gtk/gtkfilechooserdefault.c:10998
+#: gtk/gtkfilechooserdefault.c:10992
 #, c-format
 msgid "%.1f MB"
 msgstr "%.1f MB"
 
-#: gtk/gtkfilechooserdefault.c:11000
+#: gtk/gtkfilechooserdefault.c:10994
 #, c-format
 msgid "%.1f GB"
 msgstr "%.1f GB"
 
-#: gtk/gtkfilechooserdefault.c:11096 gtk/gtkfilechooserdefault.c:11118
-#: gtk/gtkfilechooserdefault.c:11152
+#: gtk/gtkfilechooserdefault.c:11090 gtk/gtkfilechooserdefault.c:11112
+#: gtk/gtkfilechooserdefault.c:11146
 msgid "Unknown"
 msgstr "Sconosciuto"
 
 # GTK-2-12
-#: gtk/gtkfilechooserdefault.c:11136
+#: gtk/gtkfilechooserdefault.c:11130
 msgid "Today at %H:%M"
 msgstr "Oggi alle %k.%M"
 
 # GTK-2-12
-#: gtk/gtkfilechooserdefault.c:11138
+#: gtk/gtkfilechooserdefault.c:11132
 msgid "Yesterday at %H:%M"
 msgstr "Ieri alle %k.%M"
 
@@ -2373,15 +2373,15 @@ msgstr "Opzioni GTK+"
 msgid "Show GTK+ Options"
 msgstr "Mostra le opzioni GTK+"
 
-#: gtk/gtknotebook.c:826
+#: gtk/gtknotebook.c:828
 msgid "Arrow spacing"
 msgstr "Spaziatura freccia"
 
-#: gtk/gtknotebook.c:827
+#: gtk/gtknotebook.c:829
 msgid "Scroll arrow spacing"
 msgstr "Spaziatura freccia di scorrimento"
 
-#: gtk/gtknotebook.c:4399 gtk/gtknotebook.c:6905
+#: gtk/gtknotebook.c:4405 gtk/gtknotebook.c:6911
 #, c-format
 msgid "Page %u"
 msgstr "Pagina %u"
@@ -2449,7 +2449,7 @@ msgstr "_Dimensione carta:"
 msgid "_Orientation:"
 msgstr "_Orientamento:"
 
-#: gtk/gtkpagesetupunixdialog.c:1121 gtk/gtkprintunixdialog.c:2175
+#: gtk/gtkpagesetupunixdialog.c:1121 gtk/gtkprintunixdialog.c:2176
 msgid "Page Setup"
 msgstr "Imposta pagina"
 
@@ -2664,37 +2664,37 @@ msgstr "Errore non specificato"
 msgid "Error from StartDoc"
 msgstr "Errore da StartDoc"
 
-#: gtk/gtkprintunixdialog.c:1504
+#: gtk/gtkprintunixdialog.c:1505
 msgid "Printer"
 msgstr "Stampante"
 
-#: gtk/gtkprintunixdialog.c:1512
+#: gtk/gtkprintunixdialog.c:1513
 msgid "Location"
 msgstr "Posizione"
 
-#: gtk/gtkprintunixdialog.c:1521
+#: gtk/gtkprintunixdialog.c:1522
 msgid "Status"
 msgstr "Stato"
 
-#: gtk/gtkprintunixdialog.c:1543
+#: gtk/gtkprintunixdialog.c:1544
 msgid "Print Pages"
 msgstr "Pagine da stampare"
 
-#: gtk/gtkprintunixdialog.c:1547
+#: gtk/gtkprintunixdialog.c:1548
 msgid "_All"
 msgstr "_Tutte"
 
-#: gtk/gtkprintunixdialog.c:1554
+#: gtk/gtkprintunixdialog.c:1555
 msgid "C_urrent"
 msgstr "C_orrente"
 
 # GTK-2-12
-#: gtk/gtkprintunixdialog.c:1563
+#: gtk/gtkprintunixdialog.c:1564
 msgid "Ra_nge"
 msgstr "Inter_vallo"
 
 # GTK-2-12
-#: gtk/gtkprintunixdialog.c:1564
+#: gtk/gtkprintunixdialog.c:1565
 msgid ""
 "Specify one or more page ranges,\n"
 " e.g. 1-3,7,11"
@@ -2702,148 +2702,148 @@ msgstr ""
 "Specificare uno o più intervalli di pagine,\n"
 "per esempio: 1-3,7,11"
 
-#: gtk/gtkprintunixdialog.c:1583
+#: gtk/gtkprintunixdialog.c:1584
 msgid "Copies"
 msgstr "Copie"
 
 #. FIXME chpe: too much space between Copies and spinbutton, put those 2 in a hbox and make it span 2 columns
-#: gtk/gtkprintunixdialog.c:1588
+#: gtk/gtkprintunixdialog.c:1589
 msgid "Copie_s:"
 msgstr "Copi_e:"
 
-#: gtk/gtkprintunixdialog.c:1606
+#: gtk/gtkprintunixdialog.c:1607
 msgid "C_ollate"
 msgstr "Ra_ggruppa"
 
-#: gtk/gtkprintunixdialog.c:1614
+#: gtk/gtkprintunixdialog.c:1615
 msgid "_Reverse"
 msgstr "Ordine inve_rso"
 
-#: gtk/gtkprintunixdialog.c:1631
+#: gtk/gtkprintunixdialog.c:1632
 msgid "General"
 msgstr "Generale"
 
 # GTK-2-12
 #
 # in tipografia layout-->impaginazione (garzantilinguistica.it)
-#: gtk/gtkprintunixdialog.c:2031
+#: gtk/gtkprintunixdialog.c:2032
 msgid "Layout"
 msgstr "Impaginazione"
 
 # GTK-2-12
-#: gtk/gtkprintunixdialog.c:2035
+#: gtk/gtkprintunixdialog.c:2036
 msgid "Pages per _side:"
 msgstr "P_agine per facciata:"
 
 # GTK-2-12 aggiunto acceleratore
-#: gtk/gtkprintunixdialog.c:2051
+#: gtk/gtkprintunixdialog.c:2052
 msgid "T_wo-sided:"
 msgstr "_Fronte-retro:"
 
-#: gtk/gtkprintunixdialog.c:2066
+#: gtk/gtkprintunixdialog.c:2067
 msgid "_Only print:"
 msgstr "Sta_mpare solo:"
 
 #. In enum order
-#: gtk/gtkprintunixdialog.c:2081
+#: gtk/gtkprintunixdialog.c:2082
 msgid "All sheets"
 msgstr "Tutti i fogli"
 
-#: gtk/gtkprintunixdialog.c:2082
+#: gtk/gtkprintunixdialog.c:2083
 msgid "Even sheets"
 msgstr "Fogli pari"
 
-#: gtk/gtkprintunixdialog.c:2083
+#: gtk/gtkprintunixdialog.c:2084
 msgid "Odd sheets"
 msgstr "Fogli dispari"
 
-#: gtk/gtkprintunixdialog.c:2086
+#: gtk/gtkprintunixdialog.c:2087
 msgid "Sc_ale:"
 msgstr "_Scala:"
 
-#: gtk/gtkprintunixdialog.c:2113
+#: gtk/gtkprintunixdialog.c:2114
 msgid "Paper"
 msgstr "Carta"
 
-#: gtk/gtkprintunixdialog.c:2117
+#: gtk/gtkprintunixdialog.c:2118
 msgid "Paper _type:"
 msgstr "_Tipo di carta:"
 
-#: gtk/gtkprintunixdialog.c:2132
+#: gtk/gtkprintunixdialog.c:2133
 msgid "Paper _source:"
 msgstr "_Sorgente carta:"
 
-#: gtk/gtkprintunixdialog.c:2147
+#: gtk/gtkprintunixdialog.c:2148
 msgid "Output t_ray:"
 msgstr "Cassetto di _uscita:"
 
 # GTK-2-12
-#: gtk/gtkprintunixdialog.c:2198
+#: gtk/gtkprintunixdialog.c:2199
 msgid "Job Details"
 msgstr "Dettagli lavoro"
 
-#: gtk/gtkprintunixdialog.c:2204
+#: gtk/gtkprintunixdialog.c:2205
 msgid "Pri_ority:"
 msgstr "P_riorità:"
 
-#: gtk/gtkprintunixdialog.c:2219
+#: gtk/gtkprintunixdialog.c:2220
 msgid "_Billing info:"
 msgstr "In_formazioni fatturazione:"
 
-#: gtk/gtkprintunixdialog.c:2237
+#: gtk/gtkprintunixdialog.c:2238
 msgid "Print Document"
 msgstr "Stampa documento"
 
-#: gtk/gtkprintunixdialog.c:2243
+#: gtk/gtkprintunixdialog.c:2244
 msgid "_Now"
 msgstr "A_desso"
 
-#: gtk/gtkprintunixdialog.c:2250
+#: gtk/gtkprintunixdialog.c:2251
 msgid "A_t:"
 msgstr "_Alle:"
 
-#: gtk/gtkprintunixdialog.c:2265
+#: gtk/gtkprintunixdialog.c:2266
 msgid "On _hold"
 msgstr "_In attesa"
 
-#: gtk/gtkprintunixdialog.c:2284
+#: gtk/gtkprintunixdialog.c:2285
 msgid "Add Cover Page"
 msgstr "Aggiungi pagina di copertina"
 
-#: gtk/gtkprintunixdialog.c:2290
+#: gtk/gtkprintunixdialog.c:2291
 msgid "Be_fore:"
 msgstr "P_rima:"
 
-#: gtk/gtkprintunixdialog.c:2305
+#: gtk/gtkprintunixdialog.c:2306
 msgid "_After:"
 msgstr "_Dopo:"
 
 # GTK-2-12
-#: gtk/gtkprintunixdialog.c:2320
+#: gtk/gtkprintunixdialog.c:2321
 msgid "Job"
 msgstr "Lavoro"
 
-#: gtk/gtkprintunixdialog.c:2386
+#: gtk/gtkprintunixdialog.c:2387
 msgid "Advanced"
 msgstr "Avanzato"
 
-#: gtk/gtkprintunixdialog.c:2421
+#: gtk/gtkprintunixdialog.c:2422
 msgid "Image Quality"
 msgstr "Qualità immagine"
 
-#: gtk/gtkprintunixdialog.c:2424
+#: gtk/gtkprintunixdialog.c:2425
 msgid "Color"
 msgstr "Colore"
 
-#: gtk/gtkprintunixdialog.c:2427
+#: gtk/gtkprintunixdialog.c:2428
 msgid "Finishing"
 msgstr "Completamento in corso"
 
-#: gtk/gtkprintunixdialog.c:2437
+#: gtk/gtkprintunixdialog.c:2438
 msgid "Some of the settings in the dialog conflict"
 msgstr "Alcune impostazioni nella finestra di dialogo sono in conflitto"
 
-#: gtk/gtkprintunixdialog.c:2460
+#: gtk/gtkprintunixdialog.c:2461
 msgid "Print"
 msgstr "Stampa"
 
