@@ -1,3 +1,34 @@
+Overview of Changes from GTK+ 2.12.3 to 2.12.4
+==============================================
+
+ * Bugs fixed:
+ 494667 gdkpixloader jpeg loader problems with some files
+ 496546 Tooltips may crashe because a window is destroyed
+ 503824 gtk_paned_find_neighbours aborts with assertion failure
+ 388321 gtk_notebook_remove_tab_label
+ 503190 Doesn't build with directfb >= 1.0
+ 491847 gtk-builder-convert --root option doesn't work for GtkWin...
+ 492977 Setup autorelease pool automatically in each mainloop ite...
+ 499951 GtkAssistant remove_page may leave current_page as a dang...
+ 502250 Leak in gtkfilechooserdefault.c:shortcuts_reload_icons()
+ 503569 Leak in GtkTreeViewColumn
+ 504753 Destroyed subviews are not removed from the view hierarchy
+ 504804 Typo in TEST_EXPAND_ROW signal
+ 504984 Problems with hiding/showing transient windows
+ 505708 compatibility macros for signals has wrong type.
+ 506107 mem leak in print dialogue
+ 502850 gtk-builder-convert program not found
+ 504749 gtk-builder-convert and GtkMenu 
+
+ * Updated translations:
+ Greek (el)
+ Spanish (es)
+ Estonian (et)
+ Basque (eu)
+ Irish (ga)
+ Swedish (sv)
+
+
 Overview of Changes from GTK+ 2.12.2 to 2.12.3
 ==============================================
 

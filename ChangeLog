@@ -1,5 +1,9 @@
 2008-01-07  Matthias Clasen  <mclasen@redhat.com>
 
+	* NEWS: Updates
+
+2008-01-07  Matthias Clasen  <mclasen@redhat.com>
+
 	Merged from trunk:
 
 	* gtk/gtkassistant.c (remove_page): Be more robust when removing
