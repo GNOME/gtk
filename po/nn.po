@@ -1481,8 +1481,8 @@ msgstr "_Uklarleik:"
 msgid "Transparency of the color."
 msgstr "Kor klar den valde fargen er."
 
-#: gtk/gtkcolorsel.c:1992
 #
+#: gtk/gtkcolorsel.c:1992
 msgid "Color _name:"
 msgstr "Farge_namn:"
 
@@ -1494,13 +1494,13 @@ msgstr ""
 "Du kan skriva inn ein heksadesimal fargeverdi i HTML-stil, eller eit "
 "fargenamn som t.d. «oransje»."
 
-#: gtk/gtkcolorsel.c:2036
 #
+#: gtk/gtkcolorsel.c:2036
 msgid "_Palette:"
 msgstr "_Palett:"
 
-#: gtk/gtkcolorsel.c:2065
 #
+#: gtk/gtkcolorsel.c:2065
 msgid "Color Wheel"
 msgstr "Fargehjul"
 
@@ -1516,8 +1516,8 @@ msgstr "Inndata _metoder"
 msgid "_Insert Unicode Control Character"
 msgstr "Set _inn Unicode-kontrollteikn"
 
-#: gtk/gtkfilechooserbutton.c:68
 #
+#: gtk/gtkfilechooserbutton.c:68
 msgid "Select A File"
 msgstr "Vel ei fil"
 
@@ -1525,8 +1525,8 @@ msgstr "Vel ei fil"
 msgid "Desktop"
 msgstr "Skrivebord"
 
-#: gtk/gtkfilechooserbutton.c:70
 #
+#: gtk/gtkfilechooserbutton.c:70
 msgid "(None)"
 msgstr "(Ingen)"
 
