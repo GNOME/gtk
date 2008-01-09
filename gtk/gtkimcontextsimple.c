@@ -1186,7 +1186,7 @@ beep_window (GdkWindow *window)
 {
   GtkWidget *widget;
 
-  gdk_window_get_user_data (window, &widget);
+  gdk_window_get_user_data (window, (gpointer) &widget);
 
   if (GTK_IS_WIDGET (widget))
     {

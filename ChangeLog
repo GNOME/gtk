@@ -1,3 +1,19 @@
+2008-01-09  Michael Natterer  <mitch@imendio.com>
+
+	* gtk/gtkcolorsel.c (make_label_spinbutton): remove unused
+	variable.
+
+	* gtk/gtkcombobox.c (gtk_combo_box_detacher)
+	* gtk/gtkicontheme.c (theme_list_contexts)
+	(gtk_icon_theme_lookup_icon)
+	* gtk/gtkimcontextsimple.c (beep_window)
+	* gtk/gtklinkbutton.c (set_link_color)
+	* gtk/gtkuimanager.c (child_hierarchy_changed_cb): add casts to
+	fix warnings.
+
+	* gtk/gtkpathbar.c (_gtk_path_bar_set_file_system): remove unused
+	variable and add const to another to fix a warning.
+
 2008-01-07  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtkassistant.c (remove_page): Be more robust when removing 

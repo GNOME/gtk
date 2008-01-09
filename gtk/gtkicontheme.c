@@ -1375,7 +1375,7 @@ gtk_icon_theme_lookup_icon (GtkIconTheme       *icon_theme,
       gchar *p;
  
       dashes = 0;
-      for (p = icon_name; *p; p++)
+      for (p = (gchar *) icon_name; *p; p++)
         if (*p == '-')
           dashes++;
 
@@ -1389,13 +1389,13 @@ gtk_icon_theme_lookup_icon (GtkIconTheme       *icon_theme,
         }
       names[dashes + 1] = NULL;
    
-      info = choose_icon (icon_theme, names, size, flags);
+      info = choose_icon (icon_theme, (const gchar **) names, size, flags);
       
       g_strfreev (names);
     }
   else 
     {
-      gchar *names[2];
+      const gchar *names[2];
       
       names[0] = icon_name;
       names[1] = NULL;
@@ -2282,7 +2282,7 @@ theme_list_contexts (IconTheme  *theme,
       dir = l->data;
 
       context = g_quark_to_string (dir->context);
-      g_hash_table_replace (contexts, context, NULL);
+      g_hash_table_replace (contexts, (gpointer) context, NULL);
 
       l = l->next;
     }

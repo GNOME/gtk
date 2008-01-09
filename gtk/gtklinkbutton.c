@@ -225,19 +225,19 @@ set_link_color (GtkLinkButton *link_button)
 
   if (link_button->priv->visited)
     {
-      gtk_widget_style_get (GTK_WIDGET (link_button), 
+      gtk_widget_style_get (GTK_WIDGET (link_button),
 			    "visited-link-color", &link_color, NULL);
       if (!link_color)
-	link_color = &default_visited_link_color;
+	link_color = (GdkColor *) &default_visited_link_color;
     }
   else
     {
-      gtk_widget_style_get (GTK_WIDGET (link_button), 
+      gtk_widget_style_get (GTK_WIDGET (link_button),
 			    "link-color", &link_color, NULL);
       if (!link_color)
-	link_color = &default_link_color;
+	link_color = (GdkColor *) &default_link_color;
     }
-  
+
   gtk_widget_modify_fg (label, GTK_STATE_NORMAL, link_color);
   gtk_widget_modify_fg (label, GTK_STATE_ACTIVE, link_color);
   gtk_widget_modify_fg (label, GTK_STATE_PRELIGHT, link_color);

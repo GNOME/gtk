@@ -1626,8 +1626,7 @@ make_label_spinbutton (GtkColorSelection *colorsel,
 {
   GtkWidget *label;
   GtkAdjustment *adjust;
-  ColorSelectionPrivate *priv = colorsel->private_data;
-  
+
   if (channel_type == COLORSEL_HUE)
     {
       adjust = GTK_ADJUSTMENT (gtk_adjustment_new (0.0, 0.0, 360.0, 1.0, 1.0, 1.0));

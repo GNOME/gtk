@@ -467,7 +467,7 @@ child_hierarchy_changed_cb (GtkWidget *widget,
     return;
   
   group = gtk_ui_manager_get_accel_group (uimgr);
-  groups = gtk_accel_groups_from_object (toplevel);
+  groups = gtk_accel_groups_from_object (G_OBJECT (toplevel));
   if (g_slist_find (groups, group) == NULL)
     gtk_window_add_accel_group (GTK_WINDOW (toplevel), group);
 

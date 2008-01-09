@@ -1664,7 +1664,6 @@ _gtk_path_bar_set_file_system (GtkPathBar    *path_bar,
 			       GtkFileSystem *file_system)
 {
   const char *home;
-  char *desktop;
 
   g_return_if_fail (GTK_IS_PATH_BAR (path_bar));
 
@@ -1675,7 +1674,7 @@ _gtk_path_bar_set_file_system (GtkPathBar    *path_bar,
   home = g_get_home_dir ();
   if (home != NULL)
     {
-      gchar *freeme = NULL;
+      const gchar *desktop;
 
       path_bar->home_path = gtk_file_system_filename_to_path (path_bar->file_system, home);
       /* FIXME: Need file system backend specific way of getting the
