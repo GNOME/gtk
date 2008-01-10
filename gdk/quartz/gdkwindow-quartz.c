@@ -976,30 +976,15 @@ show_window_internal (GdkWindow *window,
 
   if (impl->toplevel)
     {
+      gboolean make_key;
+
       /* Move the window into place, to guarantee that we get the
        * initial MouseEntered event.
        */
-      if (!GDK_WINDOW_IS_MAPPED (window))
-        {
-          NSRect content_rect;
-          NSRect frame_rect;
+      make_key = (private->accept_focus && focus_on_map && raise && 
+                  private->window_type != GDK_WINDOW_TEMP);
 
-          content_rect =
-            NSMakeRect (private->x,
-                        _gdk_quartz_window_get_inverted_screen_y (private->y) - impl->height,
-                        impl->width, impl->height);
-          frame_rect = [impl->toplevel frameRectForContentRect:content_rect];
-          [impl->toplevel setFrame:frame_rect display:NO];
-        }
-
-      /* We should make the window not raise for !raise, but at least
-       * this will keep it from getting focused in that case.
-       */
-      if (private->accept_focus && focus_on_map && raise &&
-          private->window_type != GDK_WINDOW_TEMP)
-        [impl->toplevel makeKeyAndOrderFront:impl->toplevel];
-      else
-        [impl->toplevel orderFront:nil];
+      [(GdkQuartzWindow*)impl->toplevel showAndMakeKey:make_key];
     }
   else
     {
@@ -1124,16 +1109,7 @@ gdk_window_hide (GdkWindow *window)
       if (impl->transient_for)
         _gdk_quartz_window_detach_from_parent (window);
 
-      /* Big hack in gdk_window_new() and show_window_internal()
-       * continued. Move the window away when hidden so that we can
-       * move it back before showing it.
-       */
-      content_rect = NSMakeRect (-500 - impl->width, -500 - impl->height,
-                                 impl->width, impl->height);
-      frame_rect = [impl->toplevel frameRectForContentRect:content_rect];
-      [impl->toplevel setFrame:frame_rect display:NO];
-
-      [impl->toplevel orderOut:nil];
+      [(GdkQuartzWindow*)impl->toplevel hide];
     }
   else if (impl->view)
     {
@@ -1228,12 +1204,19 @@ move_resize_window_internal (GdkWindow *window,
       NSRect content_rect;
       NSRect frame_rect;
 
-      content_rect =  NSMakeRect (private->x,
-                                  _gdk_quartz_window_get_inverted_screen_y (private->y + impl->height),
-                                  impl->width, impl->height);
-      
-      frame_rect = [impl->toplevel frameRectForContentRect:content_rect];
-      [impl->toplevel setFrame:frame_rect display:YES];
+      /* We don't update the NSWindow while unmapped, since we move windows
+       * off-screen when hiding in order for MouseEntered to be triggered
+       * reliably when showing windows and they appear under the mouse.
+       */
+      if (GDK_WINDOW_IS_MAPPED (window))
+        {
+          content_rect =  NSMakeRect (private->x,
+                                      _gdk_quartz_window_get_inverted_screen_y (private->y + impl->height),
+                                      impl->width, impl->height);
+
+          frame_rect = [impl->toplevel frameRectForContentRect:content_rect];
+          [impl->toplevel setFrame:frame_rect display:YES];
+        }
     }
   else 
     {

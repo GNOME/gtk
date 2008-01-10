@@ -1,3 +1,13 @@
+2008-01-10  Richard Hult  <richard@imendio.com>
+
+	* gdk/quartz/gdkwindow-quartz.c: (show_window_internal),
+	(gdk_window_hide), (move_resize_window_internal): Move the
+	tracking rect workaround from here...
+
+	* gdk/quartz/GdkQuartzWindow.c:
+	* gdk/quartz/GdkQuartzWindow.h: ...to here, and ignore window
+	movements during showing/hiding operations. Fixes bug #508516.
+
 2008-01-10  Michael Natterer  <mitch@imendio.com>
 
 	* gdk/directfb/gdkscreen-directfb.c
