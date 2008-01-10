@@ -40,7 +40,9 @@ TEST_PROGS                      += buildertest
 buildertest_DEPENDENCIES 	 = $(TEST_DEPS)
 buildertest_LDADD 		 = $(LDADDS)
 buildertest_LDFLAGS 		 = -export-dynamic
+if OS_UNIX
 TEST_PROGS                      += defaultvaluetest
+endif
 defaultvaluetest_DEPENDENCIES 	 = $(TEST_DEPS)
 defaultvaluetest_LDADD 		 = $(LDADDS)
 

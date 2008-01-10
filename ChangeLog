@@ -1,5 +1,10 @@
 2008-01-10  Tor Lillqvist  <tml@novell.com>
 
+	* tests/Makefile.am: Build defaultvaluetest only on Unix as it
+	uses gtkprintunixdialog API.
+
+2008-01-10  Tor Lillqvist  <tml@novell.com>
+
 	* gdk/win32/gdkdisplay-win32.c
 	* gdk/win32/gdkglobals-win32.c
 	* gdk/win32/gdkprivate-win32.h
