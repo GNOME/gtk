@@ -2216,12 +2216,13 @@ gtk_tree_model_filter_get_path (GtkTreeModel *model,
   g_return_val_if_fail (GTK_TREE_MODEL_FILTER (model)->priv->child_model != NULL, NULL);
   g_return_val_if_fail (GTK_TREE_MODEL_FILTER (model)->priv->stamp == iter->stamp, NULL);
 
-  retval = gtk_tree_path_new ();
   level = iter->user_data;
   elt = iter->user_data2;
 
   if (!elt->visible)
     return NULL;
+
+  retval = gtk_tree_path_new ();
 
   while (level)
     {
