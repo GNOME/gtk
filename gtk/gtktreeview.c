@@ -6367,6 +6367,7 @@ gtk_tree_view_top_row_to_dy (GtkTreeView *tree_view)
   GtkTreePath *path;
   GtkRBTree *tree;
   GtkRBNode *node;
+  int new_dy;
 
   if (tree_view->priv->top_row)
     path = gtk_tree_row_reference_get_path (tree_view->priv->top_row);
@@ -6400,16 +6401,17 @@ gtk_tree_view_top_row_to_dy (GtkTreeView *tree_view)
       return;
     }
 
-  tree_view->priv->dy = _gtk_rbtree_node_find_offset (tree, node);
-  tree_view->priv->dy += tree_view->priv->top_row_dy;
+  new_dy = _gtk_rbtree_node_find_offset (tree, node);
+  new_dy += tree_view->priv->top_row_dy;
 
-  if (tree_view->priv->dy + tree_view->priv->vadjustment->page_size > tree_view->priv->height)
-    tree_view->priv->dy = tree_view->priv->height - tree_view->priv->vadjustment->page_size;
+  if (new_dy + tree_view->priv->vadjustment->page_size > tree_view->priv->height)
+    new_dy = tree_view->priv->height - tree_view->priv->vadjustment->page_size;
 
-  tree_view->priv->dy = MAX (0, tree_view->priv->dy);
+  new_dy = MAX (0, new_dy);
 
-  gtk_adjustment_set_value (tree_view->priv->vadjustment,
-			    (gdouble)tree_view->priv->dy);
+  tree_view->priv->in_top_row_to_dy = TRUE;
+  gtk_adjustment_set_value (tree_view->priv->vadjustment, (gdouble)new_dy);
+  tree_view->priv->in_top_row_to_dy = FALSE;
 }
 
 
@@ -8081,7 +8083,7 @@ gtk_tree_view_real_move_cursor (GtkTreeView       *tree_view,
 static void
 gtk_tree_view_put (GtkTreeView *tree_view,
 		   GtkWidget   *child_widget,
-		   /* in tree coordinates */
+		   /* in bin_window coordinates */
 		   gint         x,
 		   gint         y,
 		   gint         width,
@@ -10613,7 +10615,9 @@ gtk_tree_view_adjustment_changed (GtkAdjustment *adjustment,
         {
           /* update our dy and top_row */
           tree_view->priv->dy = (int) tree_view->priv->vadjustment->value;
-          gtk_tree_view_dy_to_top_row (tree_view);
+
+          if (!tree_view->priv->in_top_row_to_dy)
+            gtk_tree_view_dy_to_top_row (tree_view);
 	}
     }
 }
@@ -14792,8 +14796,7 @@ gtk_tree_view_real_start_editing (GtkTreeView       *tree_view,
   _gtk_tree_view_column_start_editing (column, GTK_CELL_EDITABLE (cell_editable));
 
   gtk_tree_view_real_set_cursor (tree_view, path, FALSE, TRUE);
-
-  cell_area->y += pre_val - tree_view->priv->vadjustment->value;
+  cell_area->y += pre_val - (int)tree_view->priv->vadjustment->value;
 
   gtk_widget_size_request (GTK_WIDGET (cell_editable), &requisition);
 

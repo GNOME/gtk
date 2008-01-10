@@ -1,3 +1,20 @@
+2008-01-10  Kristian Rietveld  <kris@imendio.com>
+
+	Merge from trunk (omitted unit test updates):
+
+	Fix #477175, reported by Juri Pakaste.
+
+	* gtk/gtktreeprivate.h:
+	* gtk/gtktreeview.c (gtk_tree_view_top_row_to_dy): do not set
+	tree_view->priv->dy here directly, just calculate the new value
+	and set it on the adjustment,
+	(gtk_tree_view_adjustment_changed): add guards to not call
+	gtk_tree_view_dy_to_top_row() if we are currently in
+	gtk_tree_view_top_row_to_dy(),
+	(gtk_tree_view_put): fix coordinate annotation: these are bin_window
+	coordinates, not tree coordinates,
+	(gtk_tree_view_real_start_editing): add cast.
+
 2007-01-06  Johan Dahlin  <johan@gnome.org>
 
 	Merged from trunk:
