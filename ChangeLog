@@ -1,3 +1,10 @@
+2008-01-10  Cody Russell  <bratsche@gnome.org>
+
+	Merge from trunk:
+
+	* gdk/win32/gdkwindow-win32.c: (gdk_window_set_transient_for),
+	Properly ref/unref windows and parents.  (#506769)
+
 2008-01-10  Richard Hult  <richard@imendio.com>
 
 	Merged from trunk:
