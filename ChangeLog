@@ -1,5 +1,10 @@
 2008-01-10  Kristian Rietveld  <kris@imendio.com>
 
+	* gtk/gtktreemodelfilter.c (gtk_tree_model_filter_get_path): Fix
+	a leak of the path (#504611, patch from Sadrul Habib Chowdhury).
+
+2008-01-10  Kristian Rietveld  <kris@imendio.com>
+
 	Fix #477175, reported by Juri Pakaste.
 
 	* gtk/gtktreeprivate.h:
