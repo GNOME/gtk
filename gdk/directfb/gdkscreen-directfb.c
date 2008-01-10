@@ -101,6 +101,27 @@ gdk_screen_get_monitor_geometry (GdkScreen    *screen,
 }
 
 gint
+gdk_screen_get_monitor_width_mm (GdkScreen *screen,
+                                 gint       monitor_num)
+{
+  return gdk_screen_get_width_mm (screen);
+}
+
+gint
+gdk_screen_get_monitor_height_mm (GdkScreen *screen,
+                                  gint       monitor_num)
+{
+  return gdk_screen_get_height_mm (screen);
+}
+
+gchar *
+gdk_screen_get_monitor_plug_name (GdkScreen *screen,
+                                  gint       monitor_num)
+{
+  return g_strdup ("DirectFB");
+}
+
+gint
 gdk_screen_get_number (GdkScreen *screen)
 {
   g_return_val_if_fail (GDK_IS_SCREEN (screen), 0);
