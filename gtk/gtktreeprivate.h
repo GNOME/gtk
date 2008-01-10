@@ -221,6 +221,8 @@ struct _GtkTreeViewPrivate
 
   guint init_hadjust_value : 1;
 
+  guint in_top_row_to_dy : 1;
+
   /* interactive search */
   guint enable_search : 1;
   guint disable_popdown : 1;

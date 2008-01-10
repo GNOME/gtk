@@ -669,12 +669,43 @@ create_new_row (GtkListStore *store,
 }
 
 static void
+scroll_new_row_editing_started (GtkCellRenderer *cell,
+				GtkCellEditable *editable,
+				const char      *path,
+				gpointer         user_data)
+{
+	GtkWidget **widget = user_data;
+
+	*widget = GTK_WIDGET (editable);
+}
+
+static void
+test_editable_position (GtkWidget   *tree_view,
+			GtkWidget   *editable,
+			GtkTreePath *cursor_path)
+{
+	GdkRectangle rect;
+	GtkAdjustment *vadj;
+
+	gtk_tree_view_get_background_area (GTK_TREE_VIEW (tree_view),
+					   cursor_path, NULL, &rect);
+
+	vadj = gtk_tree_view_get_vadjustment (GTK_TREE_VIEW (tree_view));
+
+	/* There are all in bin_window coordinates */
+	g_assert (editable->allocation.y == rect.y + ((rect.height - editable->allocation.height) / 2));
+}
+
+static void
 scroll_new_row (ScrollFixture *fixture,
 		gconstpointer  test_data)
 {
 	GtkTreeIter scroll_iter;
 	GtkTreePath *scroll_path;
 	GtkTreeModel *model;
+	GList *renderers;
+	GtkTreeViewColumn *column;
+	GtkWidget *editable;
 
 	/* The aim of this test is creating a new row at several places,
 	 * and immediately put the cursor on it.  TreeView should correctly
@@ -695,10 +726,19 @@ scroll_new_row (ScrollFixture *fixture,
 	create_new_row (GTK_LIST_STORE (model), GPOINTER_TO_INT (test_data),
 			&scroll_iter);
 
+	/* Set up a signal handler to acquire the editable widget */
+	column = gtk_tree_view_get_column (GTK_TREE_VIEW (fixture->tree_view), 0);
+	renderers = gtk_tree_view_column_get_cell_renderers (column);
+
+	g_signal_connect (G_OBJECT (renderers->data), "editing-started",
+			  G_CALLBACK (scroll_new_row_editing_started),
+			  &editable);
+
+	/* Now set the cursor on the path and start editing */
 	scroll_path = gtk_tree_model_get_path (model, &scroll_iter);
 	gtk_tree_view_set_cursor (GTK_TREE_VIEW (fixture->tree_view),
 				  scroll_path,
-				  gtk_tree_view_get_column (GTK_TREE_VIEW (fixture->tree_view), 0),
+				  column,
 				  TRUE);
 
 	while (gtk_events_pending ())
@@ -707,6 +747,7 @@ scroll_new_row (ScrollFixture *fixture,
 	/* Test position */
 	test_position (GTK_TREE_VIEW (fixture->tree_view), scroll_path,
 		       FALSE, 0.0, 0.0);
+	test_editable_position (fixture->tree_view, editable, scroll_path);
 
 	gtk_tree_path_free (scroll_path);
 }
