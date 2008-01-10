@@ -59,6 +59,8 @@ libgailutil_la_CFLAGS = \
 	$(AM_CFLAGS)
 
 libgailutil_la_LIBADD = \
+	$(top_builddir)/gtk/$(gtktargetlib)	\
+	$(top_builddir)/gdk/$(gdktargetlib)	\
 	$(GTK_DEP_LIBS)
 
 libgailutil_la_LDFLAGS = \

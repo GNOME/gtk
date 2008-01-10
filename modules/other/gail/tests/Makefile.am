@@ -5,8 +5,9 @@ if OS_WIN32
 no_undefined = -no-undefined
 endif
 
-if !OS_WIN32
 moduledir = $(libdir)/gtk-2.0/modules
+
+if !OS_WIN32
 module_LTLIBRARIES = \
 	libferret.la
 endif
@@ -61,6 +62,8 @@ libtestaction_la_SOURCES = 	\
 
 libtestaction_la_LDFLAGS =	\
 	-rpath $(moduledir) -module -avoid-version $(no_undefined) \
+	$(top_builddir)/gtk/$(gtktargetlib) \
+	$(top_builddir)/gdk/$(gdktargetlib) \
 	$(GTK_DEP_LIBS)	\
 	$(LDFLAGS)
 
@@ -71,8 +74,10 @@ libtestbutton_la_SOURCES = 	\
 
 libtestbutton_la_LDFLAGS =	\
 	-rpath $(moduledir) -module -avoid-version $(no_undefined) \
+	$(top_builddir)/gtk/$(gtktargetlib) \
+	$(top_builddir)/gdk/$(gdktargetlib) \
 	$(GTK_DEP_LIBS)	\
- 	$(LDFLAGS)
+	$(LDFLAGS)
 
 libtestcombo_la_SOURCES = 	\
 	testlib.c		\
@@ -81,24 +86,30 @@ libtestcombo_la_SOURCES = 	\
 
 libtestcombo_la_LDFLAGS =		\
 	-rpath $(moduledir) -module -avoid-version $(no_undefined) \
+	$(top_builddir)/gtk/$(gtktargetlib) \
+	$(top_builddir)/gdk/$(gdktargetlib) \
 	$(GTK_DEP_LIBS)	\
- $(LDFLAGS)
+	$(LDFLAGS)
 
 libtestcomponent_la_SOURCES =	\
 	testcomponent.c
 
 libtestcomponent_la_LDFLAGS =	\
 	-rpath $(moduledir) -module -avoid-version $(no_undefined) \
+	$(top_builddir)/gtk/$(gtktargetlib) \
+	$(top_builddir)/gdk/$(gdktargetlib) \
 	$(GTK_DEP_LIBS)	\
- 	$(LDFLAGS)
+	$(LDFLAGS)
 
 libtestimage_la_SOURCES = 	\
 	testimage.c
 
 libtestimage_la_LDFLAGS =		\
 	-rpath $(moduledir) -module -avoid-version $(no_undefined) \
+	$(top_builddir)/gtk/$(gtktargetlib) \
+	$(top_builddir)/gdk/$(gdktargetlib) \
 	$(GTK_DEP_LIBS)	\
- 	$(LDFLAGS)
+	$(LDFLAGS)
 
 libtestmenuitem_la_SOURCES = 	\
 	testlib.c		\
@@ -107,8 +118,10 @@ libtestmenuitem_la_SOURCES = 	\
 
 libtestmenuitem_la_LDFLAGS =		\
 	-rpath $(moduledir) -module -avoid-version $(no_undefined) \
+	$(top_builddir)/gtk/$(gtktargetlib) \
+	$(top_builddir)/gdk/$(gdktargetlib) \
 	$(GTK_DEP_LIBS)	\
- 	$(LDFLAGS)
+	$(LDFLAGS)
 
 libtestnotebook_la_SOURCES = 	\
 	testlib.c		\
@@ -117,8 +130,10 @@ libtestnotebook_la_SOURCES = 	\
 
 libtestnotebook_la_LDFLAGS =		\
 	-rpath $(moduledir) -module -avoid-version $(no_undefined) \
+	$(top_builddir)/gtk/$(gtktargetlib) \
+	$(top_builddir)/gdk/$(gdktargetlib) \
 	$(GTK_DEP_LIBS)	\
- 	$(LDFLAGS)
+	$(LDFLAGS)
 
 libtestobject_la_SOURCES = 	\
 	testlib.c		\
@@ -127,6 +142,8 @@ libtestobject_la_SOURCES = 	\
 
 libtestobject_la_LDFLAGS =		\
 	-rpath $(moduledir) -module -avoid-version $(no_undefined) \
+	$(top_builddir)/gtk/$(gtktargetlib) \
+	$(top_builddir)/gdk/$(gdktargetlib) \
 	$(GTK_DEP_LIBS)	\
 	$(LDFLAGS)
 
@@ -137,6 +154,8 @@ libtestoptionmenu_la_SOURCES = 	\
 
 libtestoptionmenu_la_LDFLAGS =	\
 	-rpath $(moduledir) -module -avoid-version $(no_undefined) \
+	$(top_builddir)/gtk/$(gtktargetlib) \
+	$(top_builddir)/gdk/$(gdktargetlib) \
 	$(GTK_DEP_LIBS)	\
 	$(LDFLAGS)
 
@@ -147,6 +166,8 @@ libtestpaned_la_SOURCES = 	\
 
 libtestpaned_la_LDFLAGS =	\
 	-rpath $(moduledir) -module -avoid-version $(no_undefined) \
+	$(top_builddir)/gtk/$(gtktargetlib) \
+	$(top_builddir)/gdk/$(gdktargetlib) \
 	$(GTK_DEP_LIBS)	\
 	$(LDFLAGS)
 
@@ -157,6 +178,8 @@ libtestprops_la_SOURCES = 	\
 
 libtestprops_la_LDFLAGS =	\
 	-rpath $(moduledir) -module -avoid-version $(no_undefined) \
+	$(top_builddir)/gtk/$(gtktargetlib) \
+	$(top_builddir)/gdk/$(gdktargetlib) \
 	$(GTK_DEP_LIBS)	\
 	$(LDFLAGS)
 
@@ -165,6 +188,8 @@ libtestselection_la_SOURCES = \
 
 libtestselection_la_LDFLAGS =	\
 	-rpath $(moduledir) -module -avoid-version $(no_undefined) \
+	$(top_builddir)/gtk/$(gtktargetlib) \
+	$(top_builddir)/gdk/$(gdktargetlib) \
 	$(GTK_DEP_LIBS)	\
 	$(LDFLAGS)
 
@@ -173,6 +198,8 @@ libteststatusbar_la_SOURCES = \
 
 libteststatusbar_la_LDFLAGS =	\
 	-rpath $(moduledir) -module -avoid-version $(no_undefined) \
+	$(top_builddir)/gtk/$(gtktargetlib) \
+	$(top_builddir)/gdk/$(gdktargetlib) \
 	$(GTK_DEP_LIBS)	\
 	$(LDFLAGS)
 
@@ -185,6 +212,8 @@ libtesttable_la_SOURCES = 	\
 
 libtesttable_la_LDFLAGS =	\
 	-rpath $(moduledir) -module -avoid-version $(no_undefined) \
+	$(top_builddir)/gtk/$(gtktargetlib) \
+	$(top_builddir)/gdk/$(gdktargetlib) \
 	$(GTK_DEP_LIBS)	\
 	$(LDFLAGS)
 
@@ -197,6 +226,8 @@ libtesttext_la_SOURCES = 	\
 
 libtesttext_la_LDFLAGS =	\
 	-rpath $(moduledir) -module -avoid-version $(no_undefined) \
+	$(top_builddir)/gtk/$(gtktargetlib) \
+	$(top_builddir)/gdk/$(gdktargetlib) \
 	$(GTK_DEP_LIBS)	\
 	$(LDFLAGS)
 
@@ -207,6 +238,8 @@ libtesttoplevel_la_SOURCES = 	\
 
 libtesttoplevel_la_LDFLAGS =	\
 	-rpath $(moduledir) -module -avoid-version $(no_undefined) \
+	$(top_builddir)/gtk/$(gtktargetlib) \
+	$(top_builddir)/gdk/$(gdktargetlib) \
 	$(GTK_DEP_LIBS)	\
 	$(LDFLAGS)
 
@@ -217,6 +250,8 @@ libtesttreetable_la_SOURCES =	\
 
 libtesttreetable_la_LDFLAGS =	\
 	-rpath $(moduledir) -module -avoid-version $(no_undefined) \
+	$(top_builddir)/gtk/$(gtktargetlib) \
+	$(top_builddir)/gdk/$(gdktargetlib) \
 	$(GTK_DEP_LIBS)	\
 	$(LDFLAGS)
 
@@ -225,5 +260,7 @@ libtestvalues_la_SOURCES = 	\
 
 libtestvalues_la_LDFLAGS =	\
 	-rpath $(moduledir) -module -avoid-version $(no_undefined) \
+	$(top_builddir)/gtk/$(gtktargetlib) \
+	$(top_builddir)/gdk/$(gdktargetlib) \
 	$(GTK_DEP_LIBS)	\
 	$(LDFLAGS)
