@@ -65,9 +65,10 @@ enum_monitor (HMONITOR hmonitor,
 	      LPARAM   data)
 {
   MONITORINFOEX monitor_info;
+  HDC hDC;
 
   gint *index = (gint *) data;
-  GdkRectangle *monitor;
+  GdkWin32Monitor *monitor;
 
   g_assert (*index < _gdk_num_monitors);
 
@@ -80,10 +81,15 @@ enum_monitor (HMONITOR hmonitor,
 #define MONITORINFOF_PRIMARY 1
 #endif
 
-  monitor->x = monitor_info.rcMonitor.left;
-  monitor->y = monitor_info.rcMonitor.top;
-  monitor->width = monitor_info.rcMonitor.right - monitor_info.rcMonitor.left;
-  monitor->height = monitor_info.rcMonitor.bottom - monitor_info.rcMonitor.top;
+  monitor->name = g_strdup (monitor_info.szDevice);
+  hDC = CreateDCA ("DISPLAY", monitor_info.szDevice, NULL, NULL);
+  monitor->width_mm = GetDeviceCaps (hDC, HORZSIZE);
+  monitor->height_mm = GetDeviceCaps (hDC, VERTSIZE);
+  DeleteDC (hDC);
+  monitor->rect.x = monitor_info.rcMonitor.left;
+  monitor->rect.y = monitor_info.rcMonitor.top;
+  monitor->rect.width = monitor_info.rcMonitor.right - monitor_info.rcMonitor.left;
+  monitor->rect.height = monitor_info.rcMonitor.bottom - monitor_info.rcMonitor.top;
 
   if (monitor_info.dwFlags & MONITORINFOF_PRIMARY &&
       *index != 0)
@@ -91,7 +97,7 @@ enum_monitor (HMONITOR hmonitor,
       /* Put primary monitor at index 0, just in case somebody needs
        * to know which one is the primary.
        */
-      GdkRectangle temp = *monitor;
+      GdkWin32Monitor temp = *monitor;
       *monitor = _gdk_monitors[0];
       _gdk_monitors[0] = temp;
     }
@@ -126,7 +132,7 @@ _gdk_monitor_init (void)
 
       (*p_EnumDisplayMonitors) (NULL, NULL, count_monitor, (LPARAM) &_gdk_num_monitors);
 
-      _gdk_monitors = g_renew (GdkRectangle, _gdk_monitors, _gdk_num_monitors);
+      _gdk_monitors = g_renew (GdkWin32Monitor, _gdk_monitors, _gdk_num_monitors);
 
       index = 0;
       (*p_EnumDisplayMonitors) (NULL, NULL, enum_monitor, (LPARAM) &index);
@@ -136,39 +142,42 @@ _gdk_monitor_init (void)
 
       /* Calculate offset */
       for (i = 0; i < _gdk_num_monitors; i++)
-	{
-	  _gdk_offset_x = MAX (_gdk_offset_x, -_gdk_monitors[i].x);
-	  _gdk_offset_y = MAX (_gdk_offset_y, -_gdk_monitors[i].y);
-	}
+        {
+          _gdk_offset_x = MAX (_gdk_offset_x, -_gdk_monitors[i].rect.x);
+          _gdk_offset_y = MAX (_gdk_offset_y, -_gdk_monitors[i].rect.y);
+        }
       GDK_NOTE (MISC, g_print ("Multi-monitor offset: (%d,%d)\n",
-			       _gdk_offset_x, _gdk_offset_y));
+                               _gdk_offset_x, _gdk_offset_y));
 
       /* Translate monitor coords into GDK coordinate space */
       for (i = 0; i < _gdk_num_monitors; i++)
-	{
-	  _gdk_monitors[i].x += _gdk_offset_x;
-	  _gdk_monitors[i].y += _gdk_offset_y;
-	  GDK_NOTE (MISC, g_print ("Monitor %d: %dx%d@%+d%+d\n",
-				   i, _gdk_monitors[i].width,
-				   _gdk_monitors[i].height,
-				   _gdk_monitors[i].x, _gdk_monitors[i].y));
-	}
+        {
+          _gdk_monitors[i].rect.x += _gdk_offset_x;
+          _gdk_monitors[i].rect.y += _gdk_offset_y;
+          GDK_NOTE (MISC, g_print ("Monitor %d: %dx%d@%+d%+d\n",
+                                   i, _gdk_monitors[i].rect.width,
+                                   _gdk_monitors[i].rect.height,
+                                   _gdk_monitors[i].rect.x,
+                                   _gdk_monitors[i].rect.y));
+        }
     }
   else
 #endif /* HAVE_MONITOR_INFO */
     {
-      unsigned int width, height;
+      HDC hDC;
 
       _gdk_num_monitors = 1;
-      _gdk_monitors = g_renew (GdkRectangle, _gdk_monitors, 1);
+      _gdk_monitors = g_renew (GdkWin32Monitor, _gdk_monitors, 1);
 
-      width = GetSystemMetrics (SM_CXSCREEN);
-      height = GetSystemMetrics (SM_CYSCREEN);
-
-      _gdk_monitors[0].x = 0;
-      _gdk_monitors[0].y = 0;
-      _gdk_monitors[0].width = width;
-      _gdk_monitors[0].height = height;
+      _gdk_monitors[0].name = g_strdup ("DISPLAY");
+      hDC = GetDC (NULL);
+      _gdk_monitors[0].width_mm = GetDeviceCaps (hDC, HORZSIZE);
+      _gdk_monitors[0].height_mm = GetDeviceCaps (hDC, VERTSIZE);
+      ReleaseDC (NULL, hDC);
+      _gdk_monitors[0].rect.x = 0;
+      _gdk_monitors[0].rect.y = 0;
+      _gdk_monitors[0].rect.width = GetSystemMetrics (SM_CXSCREEN);
+      _gdk_monitors[0].rect.height = GetSystemMetrics (SM_CYSCREEN);
       _gdk_offset_x = 0;
       _gdk_offset_y = 0;
     }

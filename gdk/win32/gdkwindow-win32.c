@@ -260,9 +260,9 @@ _gdk_root_window_size_init (void)
   int i;
 
   impl = GDK_WINDOW_IMPL_WIN32 (((GdkWindowObject *) _gdk_root)->impl);
-  rect = _gdk_monitors[0];
+  rect = _gdk_monitors[0].rect;
   for (i = 1; i < _gdk_num_monitors; i++)
-    gdk_rectangle_union (&rect, _gdk_monitors+i, &rect);
+    gdk_rectangle_union (&rect, &_gdk_monitors[i].rect, &rect);
 
   impl->width = rect.width;
   impl->height = rect.height;

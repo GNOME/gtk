@@ -66,6 +66,39 @@ gdk_screen_get_n_monitors (GdkScreen *screen)
   return _gdk_num_monitors;
 }
 
+gint
+gdk_screen_get_monitor_width_mm (GdkScreen *screen,
+                                 gint       num_monitor)
+{
+  g_return_val_if_fail (screen == _gdk_screen, 0);
+  g_return_val_if_fail (num_monitor < _gdk_num_monitors, 0);
+  g_return_val_if_fail (num_monitor >= 0, 0);
+
+  return _gdk_monitors[num_monitor].width_mm;
+}
+
+gint
+gdk_screen_get_monitor_height_mm (GdkScreen *screen,
+                                  gint       num_monitor)
+{
+  g_return_val_if_fail (screen == _gdk_screen, 0);
+  g_return_val_if_fail (num_monitor < _gdk_num_monitors, 0);
+  g_return_val_if_fail (num_monitor >= 0, 0);
+
+  return _gdk_monitors[num_monitor].height_mm;
+}
+
+gchar *
+gdk_screen_get_monitor_plug_name (GdkScreen *screen,
+                                  gint       num_monitor)
+{
+  g_return_val_if_fail (screen == _gdk_screen, 0);
+  g_return_val_if_fail (num_monitor < _gdk_num_monitors, 0);
+  g_return_val_if_fail (num_monitor >= 0, 0);
+
+  return g_strdup (_gdk_monitors[num_monitor].name);
+}
+
 void
 gdk_screen_get_monitor_geometry (GdkScreen    *screen, 
 				 gint          num_monitor,
@@ -75,7 +108,7 @@ gdk_screen_get_monitor_geometry (GdkScreen    *screen,
   g_return_if_fail (num_monitor < _gdk_num_monitors);
   g_return_if_fail (num_monitor >= 0);
 
-  *dest = _gdk_monitors[num_monitor];
+  *dest = _gdk_monitors[num_monitor].rect;
 }
 
 GdkColormap *

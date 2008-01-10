@@ -1,3 +1,14 @@
+2008-01-10  Tor Lillqvist  <tml@novell.com>
+
+	* gdk/win32/gdkdisplay-win32.c
+	* gdk/win32/gdkglobals-win32.c
+	* gdk/win32/gdkprivate-win32.h
+	* gdk/win32/gdkscreen-win32.c
+	* gdk/win32/gdkwindow-win32.c: Implement
+	gdk_screen_get_monitor_width_mm(), gdk_screen_get_monitor_height_mm()
+	and gdk_screen_get_monitor_plug_name(). Thanks to Kazuki
+	Iwamoto. (#505753)
+
 2008-01-10  Cody Russell  <bratsche@gnome.org>
 
 	* gdk/win32/gdkwindow-win32.c: (gdk_window_set_transient_for),
