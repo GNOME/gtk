@@ -1,5 +1,11 @@
 2008-01-10  Kristian Rietveld  <kris@imendio.com>
 
+	* gtk/gtktreeview.c (gtk_tree_view_motion_draw_column_motion_arrow),
+	(_gtk_tree_view_column_start_drag): fully initialize GdkWindowAttr to
+	avoid valgrind warnings.  (#507751, patch from Christian Persch).
+
+2008-01-10  Kristian Rietveld  <kris@imendio.com>
+
 	* gtk/gtktreemodelfilter.c (gtk_tree_model_filter_get_path): Fix
 	a leak of the path (#504611, patch from Sadrul Habib Chowdhury).
 
