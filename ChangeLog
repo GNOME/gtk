@@ -1,3 +1,10 @@
+2008-01-10  Emmanuele Bassi  <ebassi@gnome.org>
+
+	* gtk/gtkrecentchoosermenu.c:
+	(idle_populate_func), (idle_populate_clean_up): Fix possible
+	recursion by resetting the idle source id. (#507605, William
+	Pitcock)
+
 2008-01-10  Kristian Rietveld  <kris@imendio.com>
 
 	* gtk/gtktreeview.c (gtk_tree_view_motion_draw_column_motion_arrow),
