@@ -136,6 +136,14 @@
   GdkWindowImplQuartz *impl = GDK_WINDOW_IMPL_QUARTZ (private->impl);
   GdkEvent *event;
 
+  /* Ignore new position during showing/hiding the window, otherwise we
+   * would get the off-screen position that is used for hidden windows to
+   * get reliable MouseEntered events when showing them again. See comments
+   * in show() and hide().
+   */
+  if (inShowOrHide)
+    return;
+
   private->x = content_rect.origin.x;
   private->y = _gdk_quartz_window_get_inverted_screen_y (content_rect.origin.y + content_rect.size.height);
 
@@ -255,6 +263,63 @@
     }
   
   return YES;
+}
+
+- (void)showAndMakeKey:(BOOL)makeKey
+{
+  GdkWindow *window = [[self contentView] gdkWindow];
+  GdkWindowObject *private = (GdkWindowObject *)window;
+  GdkWindowImplQuartz *impl = GDK_WINDOW_IMPL_QUARTZ (private->impl);
+
+  inShowOrHide = YES;
+
+  if (!GDK_WINDOW_IS_MAPPED (window))
+    {
+      NSRect content_rect;
+      NSRect frame_rect;
+
+      /* We move the window in place if it's not mapped. See comment in
+       * hide().
+       */
+      content_rect =
+        NSMakeRect (private->x,
+                    _gdk_quartz_window_get_inverted_screen_y (private->y) - impl->height,
+                    impl->width, impl->height);
+      frame_rect = [impl->toplevel frameRectForContentRect:content_rect];
+      [impl->toplevel setFrame:frame_rect display:NO];
+    }
+
+  if (makeKey)
+    [impl->toplevel makeKeyAndOrderFront:impl->toplevel];
+  else
+    [impl->toplevel orderFront:nil];
+
+  inShowOrHide = NO;
+}
+
+- (void)hide
+{
+  GdkWindow *window = [[self contentView] gdkWindow];
+  GdkWindowObject *private = (GdkWindowObject *)window;
+  GdkWindowImplQuartz *impl = GDK_WINDOW_IMPL_QUARTZ (private->impl);
+  NSRect content_rect;
+  NSRect frame_rect;
+
+  inShowOrHide = YES;
+
+  /* We move the window away when hiding, to make it possible to move it in
+   * place when showing to get reliable tracking rect events (which are used
+   * to generate crossing events). We have to do this, probably a bug in
+   * quartz.
+   */
+  content_rect = NSMakeRect (-500 - impl->width, -500 - impl->height,
+                             impl->width, impl->height);
+  frame_rect = [impl->toplevel frameRectForContentRect:content_rect];
+  [impl->toplevel setFrame:frame_rect display:NO];
+
+  [impl->toplevel orderOut:nil];
+
+  inShowOrHide = NO;
 }
 
 - (BOOL)trackManualMove

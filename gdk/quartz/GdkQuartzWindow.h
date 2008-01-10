@@ -23,7 +23,8 @@
 #include <glib.h>
 
 @interface GdkQuartzWindow : NSWindow {
-  BOOL inMove;
+  BOOL    inMove;
+  BOOL    inShowOrHide;
 
   /* Manually triggered move/resize (not by the window manager) */
   BOOL    inManualMove;
@@ -39,6 +40,8 @@
 -(BOOL)trackManualMove;
 -(void)beginManualResize;
 -(BOOL)trackManualResize;
+-(void)showAndMakeKey:(BOOL)makeKey;
+-(void)hide;
 
 @end
 
