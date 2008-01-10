@@ -3332,17 +3332,16 @@ gtk_tree_view_motion_draw_column_motion_arrow (GtkTreeView *tree_view)
 
 	  attributes.window_type = GDK_WINDOW_CHILD;
 	  attributes.wclass = GDK_INPUT_OUTPUT;
+          attributes.x = tree_view->priv->drag_column_x;
+          attributes.y = 0;
+	  width = attributes.width = tree_view->priv->drag_column->button->allocation.width;
+	  height = attributes.height = tree_view->priv->drag_column->button->allocation.height;
 	  attributes.visual = gtk_widget_get_visual (GTK_WIDGET (tree_view));
 	  attributes.colormap = gtk_widget_get_colormap (GTK_WIDGET (tree_view));
 	  attributes.event_mask = GDK_VISIBILITY_NOTIFY_MASK | GDK_EXPOSURE_MASK | GDK_POINTER_MOTION_MASK;
 	  attributes_mask = GDK_WA_X | GDK_WA_Y | GDK_WA_VISUAL | GDK_WA_COLORMAP;
 	  tree_view->priv->drag_highlight_window = gdk_window_new (tree_view->priv->header_window, &attributes, attributes_mask);
 	  gdk_window_set_user_data (tree_view->priv->drag_highlight_window, GTK_WIDGET (tree_view));
-
-	  width = tree_view->priv->drag_column->button->allocation.width;
-	  height = tree_view->priv->drag_column->button->allocation.height;
-	  gdk_window_move_resize (tree_view->priv->drag_highlight_window,
-				  tree_view->priv->drag_column_x, 0, width, height);
 
 	  mask = gdk_pixmap_new (tree_view->priv->drag_highlight_window, width, height, 1);
 	  gc = gdk_gc_new (mask);
@@ -3399,6 +3398,8 @@ gtk_tree_view_motion_draw_column_motion_arrow (GtkTreeView *tree_view)
 	  attributes.colormap = gtk_widget_get_colormap (GTK_WIDGET (tree_view));
 	  attributes.event_mask = GDK_VISIBILITY_NOTIFY_MASK | GDK_EXPOSURE_MASK | GDK_POINTER_MOTION_MASK;
 	  attributes_mask = GDK_WA_X | GDK_WA_Y | GDK_WA_VISUAL | GDK_WA_COLORMAP;
+          attributes.x = x;
+          attributes.y = y;
 	  attributes.width = width;
 	  attributes.height = height;
 	  tree_view->priv->drag_highlight_window = gdk_window_new (gtk_widget_get_root_window (widget),
@@ -3473,6 +3474,8 @@ gtk_tree_view_motion_draw_column_motion_arrow (GtkTreeView *tree_view)
 	  attributes.colormap = gtk_widget_get_colormap (GTK_WIDGET (tree_view));
 	  attributes.event_mask = GDK_VISIBILITY_NOTIFY_MASK | GDK_EXPOSURE_MASK | GDK_POINTER_MOTION_MASK;
 	  attributes_mask = GDK_WA_X | GDK_WA_Y | GDK_WA_VISUAL | GDK_WA_COLORMAP;
+          attributes.x = x;
+          attributes.y = y;
 	  attributes.width = width;
 	  attributes.height = height;
 	  tree_view->priv->drag_highlight_window = gdk_window_new (NULL, &attributes, attributes_mask);
@@ -9339,6 +9342,10 @@ _gtk_tree_view_column_start_drag (GtkTreeView       *tree_view,
 
       attributes.window_type = GDK_WINDOW_CHILD;
       attributes.wclass = GDK_INPUT_OUTPUT;
+      attributes.x = column->button->allocation.x;
+      attributes.y = 0;
+      attributes.width = column->button->allocation.width;
+      attributes.height = column->button->allocation.height;
       attributes.visual = gtk_widget_get_visual (GTK_WIDGET (tree_view));
       attributes.colormap = gtk_widget_get_colormap (GTK_WIDGET (tree_view));
       attributes.event_mask = GDK_VISIBILITY_NOTIFY_MASK | GDK_EXPOSURE_MASK | GDK_POINTER_MOTION_MASK;
@@ -9380,12 +9387,6 @@ _gtk_tree_view_column_start_drag (GtkTreeView       *tree_view,
 
   gtk_propagate_event (column->button, send_event);
   gdk_event_free (send_event);
-
-  gdk_window_move_resize (tree_view->priv->drag_window,
-			  column->button->allocation.x,
-			  0,
-			  column->button->allocation.width,
-			  column->button->allocation.height);
 
   /* Kids, don't try this at home */
   g_object_ref (column->button);
