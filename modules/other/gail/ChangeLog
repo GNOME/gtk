@@ -1,5 +1,12 @@
 2008-01-11  Li Yuan  <li.yuan@sun.com>
 
+	* gailtreeview.c: (gail_tree_view_ref_child),
+	(idle_cursor_changed):
+	Bug #497218. Emit "active-descendant-changed" when focus first comes
+	into treeview. Add/remove ATK_STATE_FOCUSED when cursor changes.
+
+2008-01-11  Li Yuan  <li.yuan@sun.com>
+
 	* gailtreeview.c: (gail_tree_view_get_n_rows):
 	Bug #508715. Should use gtk_tree_path_free to free a GtkTreePath.
 

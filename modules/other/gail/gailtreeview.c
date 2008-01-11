@@ -987,6 +987,9 @@ gail_tree_view_ref_child (AtkObject *obj,
           {
             gailview->focus_cell = g_object_ref (cell);
             gail_cell_add_state (cell, ATK_STATE_FOCUSED, FALSE);
+            g_signal_emit_by_name (gailview,
+                                   "active-descendant-changed",
+                                   cell);
           }
       }
     g_list_free (renderer_list); 
@@ -2625,12 +2628,16 @@ idle_cursor_changed (gpointer data)
           if (gail_tree_view->focus_cell)
             {
               gail_cell_remove_state (GAIL_CELL (gail_tree_view->focus_cell), ATK_STATE_ACTIVE, FALSE); 
+              gail_cell_remove_state (GAIL_CELL (gail_tree_view->focus_cell), ATK_STATE_FOCUSED, FALSE);
               g_object_unref (gail_tree_view->focus_cell);
             }
           gail_tree_view->focus_cell = cell;
 
           if (GTK_WIDGET_HAS_FOCUS (widget))
-            gail_cell_add_state (GAIL_CELL (cell), ATK_STATE_ACTIVE, FALSE);
+            {
+              gail_cell_add_state (GAIL_CELL (cell), ATK_STATE_ACTIVE, FALSE);
+              gail_cell_add_state (GAIL_CELL (cell), ATK_STATE_FOCUSED, FALSE);
+            }
           g_signal_emit_by_name (gail_tree_view,
                                  "active-descendant-changed",
                                  cell);
