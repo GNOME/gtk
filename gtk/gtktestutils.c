@@ -457,7 +457,7 @@ gtk_test_text_get (GtkWidget *widget)
  * This function wraps g_object_new() for widget types.
  * It'll automatically show all created non window widgets, also
  * g_object_ref_sink() them (to keep them alive across a running test)
- * and set them up for destruction during test teardown phase.
+ * and set them up for destruction during the next test teardown phase.
  *
  * Returns: a newly created widget.
  */
@@ -477,10 +477,8 @@ gtk_test_create_widget (GType        widget_type,
       if (!GTK_IS_WINDOW (widget))
         gtk_widget_show (widget);
       g_object_ref_sink (widget);
-#ifdef __G_TESTFRAMEWORK_H__ /* FIXME */
       g_test_queue_unref (widget);
       g_test_queue_destroy ((GDestroyNotify) gtk_widget_destroy, widget);
-#endif
     }
   return widget;
 }

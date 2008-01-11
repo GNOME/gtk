@@ -41,7 +41,6 @@ test_button_clicks (void)
   while (gtk_events_pending ())
     gtk_main_iteration ();
   g_assert (a == 0 && b > 0 && c == 0);
-  gtk_widget_destroy (window); // FIXME: use generic teardown
 }
 
 static void
@@ -64,7 +63,6 @@ test_button_keys (void)
   while (gtk_events_pending ())
     gtk_main_iteration ();
   g_assert (a == 0 && b > 0 && c == 0);
-  gtk_widget_destroy (window); // FIXME: use generic teardown
 }
 
 static void
@@ -89,7 +87,6 @@ test_slider_ranges (void)
   while (gtk_events_pending ())
     gtk_main_iteration ();
   g_assert (gtk_test_slider_get_value (hscale) == +50.0);
-  gtk_widget_destroy (window); // FIXME: use generic teardown
 }
 
 static void
@@ -119,8 +116,6 @@ test_text_access (void)
       g_assert (strcmp (text, "") == 0);
       g_free (text);
     }
-  for (i = 0; i < N_WIDGETS; i++)
-    gtk_widget_destroy (widgets[i]); // FIXME: use generic teardown
 }
 
 static void
@@ -166,7 +161,6 @@ test_xserver_sync (void)
     }
   g_timer_destroy (gtimer);
   g_assert (sync_is_slower > 0);
-  gtk_widget_destroy (window); // FIXME: use generic teardown
 }
 
 static void
@@ -212,8 +206,6 @@ test_spin_button_arrows (void)
     gtk_main_iteration ();
   oldval = gtk_test_slider_get_value (spinner);
   g_assert (oldval == 0);
-  /* shutdown */
-  gtk_widget_destroy (window); // FIXME: use generic teardown
 }
 
 int

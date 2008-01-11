@@ -1,3 +1,12 @@
+2008-01-11 13:28:02  Tim Janik  <timj@imendio.com>
+
+	* gtk/gtktestutils.c (gtk_test_create_widget): removed old testutils
+	special casing so test widgets are always queues for destruction
+	during teardown.
+
+	* gtk/tests/testing.c: removed bits left-over from testing without
+	gtestutils.h.
+
 2008-01-10  Tor Lillqvist  <tml@novell.com>
 
 	* modules/other/gail/libgail-util/Makefile.am
