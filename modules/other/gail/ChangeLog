@@ -1,5 +1,13 @@
 2008-01-11  Li Yuan  <li.yuan@sun.com>
 
+	* gailtreeview.c: (gail_tree_view_real_initialize), (focus_in),
+	(focus_out):
+	Bug #508255. Remove ATK_STATE_FOCUSED state when focus jumps out.
+	Emit "active-descendant-changed" and add ATK_STATE_FOCUSED state when
+	focus comes in again.
+
+2008-01-11  Li Yuan  <li.yuan@sun.com>
+
 	* gailtreeview.c: (gail_tree_view_ref_child),
 	(idle_cursor_changed):
 	Bug #497218. Emit "active-descendant-changed" when focus first comes

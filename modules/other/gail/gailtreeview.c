@@ -194,6 +194,8 @@ static void             gail_tree_view_changed_gtk      (GtkTreeSelection       
 static void             columns_changed                 (GtkTreeView            *tree_view);
 static void             cursor_changed                  (GtkTreeView            *tree_view);
 static gint             idle_cursor_changed             (gpointer               data);
+static void             focus_in                        (GtkWidget		*widget);
+static void             focus_out                       (GtkWidget              *widget);
 
 static void             model_row_changed               (GtkTreeModel           *tree_model,
                                                          GtkTreePath            *path,
@@ -469,6 +471,10 @@ gail_tree_view_real_initialize (AtkObject *obj,
     (GCallback) columns_changed, NULL, NULL, 0);
   g_signal_connect_data (tree_view, "cursor-changed",
     (GCallback) cursor_changed, NULL, NULL, 0);
+  g_signal_connect_data (GTK_WIDGET (tree_view), "focus-in-event",
+    (GCallback) focus_in, NULL, NULL, 0);
+  g_signal_connect_data (GTK_WIDGET (tree_view), "focus-out-event",
+    (GCallback) focus_out, NULL, NULL, 0);
 
   view->tree_model = tree_model;
   if (tree_model)
@@ -2647,6 +2653,55 @@ idle_cursor_changed (gpointer data)
     }
 
   return FALSE;
+}
+
+static void
+focus_in (GtkWidget *widget)
+{
+  GtkTreeView *tree_view;
+  GailTreeView *gail_tree_view;
+  AtkStateSet *state_set;
+  AtkObject *cell;
+
+  tree_view = GTK_TREE_VIEW (widget);
+  gail_tree_view = GAIL_TREE_VIEW (gtk_widget_get_accessible (widget));
+
+  if (gail_tree_view->focus_cell == NULL)
+    {
+      cell = gail_tree_view_ref_focus_cell (tree_view);
+      if (cell)
+        {
+          state_set = atk_object_ref_state_set (cell);
+          if (state_set)
+            {
+              if (!atk_state_set_contains_state (state_set, ATK_STATE_FOCUSED))
+                {
+                  gail_cell_add_state (GAIL_CELL (cell), ATK_STATE_ACTIVE, FALSE);
+                  gail_tree_view->focus_cell = cell;
+                  gail_cell_add_state (GAIL_CELL (cell), ATK_STATE_FOCUSED, FALSE);
+                  g_signal_emit_by_name (gail_tree_view,
+                                         "active-descendant-changed",
+                                         cell);
+                }
+              g_object_unref (state_set);
+            }
+        }
+    }
+}
+
+static void
+focus_out (GtkWidget *widget)
+{
+  GailTreeView *gail_tree_view;
+
+  gail_tree_view = GAIL_TREE_VIEW (gtk_widget_get_accessible (widget));
+  if (gail_tree_view->focus_cell)
+  {
+    gail_cell_remove_state (GAIL_CELL (gail_tree_view->focus_cell), ATK_STATE_ACTIVE, FALSE);
+    gail_cell_remove_state (GAIL_CELL (gail_tree_view->focus_cell), ATK_STATE_FOCUSED, FALSE);
+    g_object_unref (gail_tree_view->focus_cell);
+    gail_tree_view->focus_cell = NULL;
+  }
 }
 
 static void
