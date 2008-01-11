@@ -1256,7 +1256,7 @@ gail_tree_view_get_n_rows (AtkTable *table)
       root_tree = gtk_tree_path_new_root ();
       iterate_thru_children (tree_view, tree_model,
                              root_tree, NULL, &n_rows, 0);
-      g_free (root_tree);
+      gtk_tree_path_free (root_tree);
     }
 
   return n_rows;

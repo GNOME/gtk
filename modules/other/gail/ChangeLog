@@ -1,0 +1,5 @@
+2008-01-11  Li Yuan  <li.yuan@sun.com>
+
+	* gailtreeview.c: (gail_tree_view_get_n_rows):
+	Bug #508715. Should use gtk_tree_path_free to free a GtkTreePath.
+
