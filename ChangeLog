@@ -1,5 +1,11 @@
 2008-01-12  Mathias Hasselmann  <mathias@openismus.com>
 
+	Include <gtk/gtktoolshell.h> from gtk.h.
+
+	* gtk/gtk.h: Add gtktoolshell.h
+
+2008-01-12  Mathias Hasselmann  <mathias@openismus.com>
+
 	Print angle brackets arround e-mail addresses in the about dialog
 	(#409520, Mariano Suárez-Alvarez).
 

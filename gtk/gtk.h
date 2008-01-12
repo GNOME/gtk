@@ -181,6 +181,7 @@
 #include <gtk/gtktoolbar.h>
 #include <gtk/gtktoolbutton.h>
 #include <gtk/gtktoolitem.h>
+#include <gtk/gtktoolshell.h>
 #include <gtk/gtktooltip.h>
 #include <gtk/gtktooltips.h>
 #include <gtk/gtktestutils.h>
