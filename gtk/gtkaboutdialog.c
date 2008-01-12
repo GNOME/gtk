@@ -1966,21 +1966,23 @@ add_credits_page (GtkAboutDialog *about,
 	      gchar *link;
 	      const gchar *link_type;
 	      GtkTextTag *tag;
-	      
-	      gtk_text_buffer_insert_at_cursor (buffer, q0, q1 - q0);
-	      gtk_text_buffer_get_end_iter (buffer, &end);
+
+	      if (*q1 == '<')
+		{
+		  gtk_text_buffer_insert_at_cursor (buffer, q0, (q1 - q0) + 1);
+		  gtk_text_buffer_get_end_iter (buffer, &end);
+		  q1++;
+		  link_type = I_("email");
+		}
+	      else
+		{
+		  gtk_text_buffer_insert_at_cursor (buffer, q0, q1 - q0);
+		  gtk_text_buffer_get_end_iter (buffer, &end);
+		  link_type = I_("url");
+		}
 
 	      q0 = q2;
 
-	      if (*q1 == '<') 
-		{
-		  q1++;
-		  q0++;
-		  link_type = I_("email");
-		}
-	      else 
-		link_type = I_("url");
-	      
 	      link = g_strndup (q1, q2 - q1);
 
 	      if (g_slist_find_custom (priv->visited_links, link, (GCompareFunc)strcmp))

@@ -1,3 +1,10 @@
+2008-01-12  Mathias Hasselmann  <mathias@openismus.com>
+
+	Print angle brackets arround e-mail addresses in the about dialog
+	(#409520, Mariano Suárez-Alvarez).
+
+	* gtk/gtkaboutdialog.c: Keep e-mail brackets in add_credits_page().
+
 2008-01-11 13:28:02  Tim Janik  <timj@imendio.com>
 
 	* gtk/gtktestutils.c (gtk_test_create_widget): removed old testutils
