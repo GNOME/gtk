@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: ku\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2007-10-16 23:54-0400\n"
-"PO-Revision-Date: 2008-01-13 12:49+0100\n"
+"PO-Revision-Date: 2008-01-13 19:37+0100\n"
 "Last-Translator: Erdal Ronahi <erdal dot ronahi at gmail dot com>\n"
 "Language-Team: Kurdish <ku@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -1269,7 +1269,7 @@ msgstr "calendar:MY"
 #.
 #: gtk/gtkcalendar.c:708
 msgid "calendar:week_start:0"
-msgstr "Salname:week_start:0"
+msgstr "calendar:week_start:1"
 
 #. Translators:  This is a text measurement template.
 #. * Translate it to the widest year text.
