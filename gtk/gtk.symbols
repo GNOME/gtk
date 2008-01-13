@@ -4114,6 +4114,7 @@ gtk_tool_item_set_tooltip_text
 gtk_tool_item_set_use_drag_window
 gtk_tool_item_set_visible_horizontal
 gtk_tool_item_set_visible_vertical
+gtk_tool_item_toolbar_reconfigured
 #endif
 #endif
 

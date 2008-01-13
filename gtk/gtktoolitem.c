@@ -294,7 +294,7 @@ gtk_tool_item_parent_set (GtkWidget   *toolitem,
 			  GtkWidget   *prev_parent)
 {
   if (GTK_WIDGET (toolitem)->parent != NULL)
-    _gtk_tool_item_toolbar_reconfigured (GTK_TOOL_ITEM (toolitem));
+    gtk_tool_item_toolbar_reconfigured (GTK_TOOL_ITEM (toolitem));
 }
 
 static void
@@ -1167,17 +1167,17 @@ gtk_tool_item_set_proxy_menu_item (GtkToolItem *tool_item,
 }
 
 /**
- * _gtk_tool_item_toolbar_reconfigured:
- * @tool_item: a #GtkToolItem: 
- * 
- * Emits the signal #GtkToolItem::toolbar_reconfigured on @tool_item. This
- * internal function is called by #GtkToolbar when some aspect of its
- * configuration changes.
- * 
- * Since: 2.4
+ * gtk_tool_item_toolbar_reconfigured:
+ * @tool_item: a #GtkToolItem
+ *
+ * Emits the signal #GtkToolItem::toolbar_reconfigured on @tool_item.
+ * #GtkToolbar and other #GtkToolShell implementations use this function
+ * to notify children, when some aspect of their configuration changes.
+ *
+ * Since: 2.16
  **/
 void
-_gtk_tool_item_toolbar_reconfigured (GtkToolItem *tool_item)
+gtk_tool_item_toolbar_reconfigured (GtkToolItem *tool_item)
 {
   g_return_if_fail (GTK_IS_TOOL_ITEM (tool_item));
 

@@ -4594,7 +4594,7 @@ toolbar_content_toolbar_reconfigured (ToolbarContent *content,
   switch (content->type)
     {
     case TOOL_ITEM:
-      _gtk_tool_item_toolbar_reconfigured (content->u.tool_item.item);
+      gtk_tool_item_toolbar_reconfigured (content->u.tool_item.item);
       break;
       
     case COMPATIBILITY:

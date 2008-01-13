@@ -1,3 +1,13 @@
+2008-01-14  Mathias Hasselmann  <mathias@openismus.com>
+
+	Make _gtk_tool_item_toolbar_reconfigured public to allow GtkToolShell
+	implementations to notify its children, when some aspect of their
+	configuration changed (#509042).
+
+	* gtk/gtk.symbols: Add gtk_tool_item_toolbar_reconfigured.
+	* gtk/gtktoolbar.c, gtk/gtktoolitem.c, gtk/gtktoolitem.h:
+	Rename _gtk_tool_item_toolbar_reconfigured.
+
 2008-01-12  Mathias Hasselmann  <mathias@openismus.com>
 
 	Include <gtk/gtktoolshell.h> from gtk.h.
