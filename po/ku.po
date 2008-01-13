@@ -3,15 +3,14 @@
 # Copyright (C) 2005 THE gtk+'S COPYRIGHT HOLDER.
 #
 #
-# Erdal Ronahi <erdal.ronahi@gmail.com, pckurd@hotmail.com>, 2005, 2006.
-# Reimar Heider <reimar.heider@gmail.com>, 2008.
+# Erdal Ronahi <erdal dot ronahi at gmail dot com>, 2008.
 msgid ""
 msgstr ""
 "Project-Id-Version: ku\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2007-10-16 23:54-0400\n"
-"PO-Revision-Date: 2008-01-13 05:47+0100\n"
-"Last-Translator: Reimar Heider <reimar.heider@gmail.com>\n"
+"PO-Revision-Date: 2008-01-13 12:49+0100\n"
+"Last-Translator: Erdal Ronahi <erdal dot ronahi at gmail dot com>\n"
 "Language-Team: Kurdish <ku@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -597,9 +596,9 @@ msgid "Couldn't allocate memory for loading JPEG file"
 msgstr "Nikare bîrekê bo barkirina dosya JPEG veqetîne"
 
 #: gdk-pixbuf/io-jpeg.c:896
-#, fuzzy, c-format
+#, c-format
 msgid "Transformed JPEG has zero width or height."
-msgstr "Nirxê wêneyê PNG ê sarkirî sifire."
+msgstr "Bilindahî an firehiya JPEG a guherî sifir e."
 
 #: gdk-pixbuf/io-jpeg.c:1109
 #, c-format
@@ -1237,14 +1236,14 @@ msgid "keyboard label|Backslash"
 msgstr "Backslash"
 
 #: gtk/gtkbuilderparser.c:289
-#, fuzzy, c-format
+#, c-format
 msgid "Invalid type function: `%s'"
-msgstr "Navê pelê nederbasdar: %s"
+msgstr "Fonksiyona nivîsandina nederbasdar: `%s'"
 
 #: gtk/gtkbuilderparser.c:729
-#, fuzzy, c-format
+#, c-format
 msgid "Invalid root element: '%s'"
-msgstr "Navê pelê nederbasdar: %s"
+msgstr "Navê pelê nederbasdar: `%s'"
 
 #: gtk/gtkbuilderparser.c:761
 #, c-format
@@ -1560,11 +1559,11 @@ msgstr "%1$s di %2$s de"
 
 #: gtk/gtkfilechooserdefault.c:1909
 msgid "Search"
-msgstr ""
+msgstr "Lêgerîn"
 
 #: gtk/gtkfilechooserdefault.c:1933
 msgid "Recently Used"
-msgstr ""
+msgstr "Teze Bikaranî"
 
 #: gtk/gtkfilechooserdefault.c:2597
 msgid "Select which types of files are shown"
@@ -1724,9 +1723,8 @@ msgid "_Replace"
 msgstr "_Guhestin"
 
 #: gtk/gtkfilechooserdefault.c:8922
-#, fuzzy
 msgid "Could not start the search process"
-msgstr "Nikare yê mayî tomar bike"
+msgstr "Despêkirina lêgerînê biserneket"
 
 #: gtk/gtkfilechooserdefault.c:8923
 msgid ""
@@ -1735,14 +1733,13 @@ msgid ""
 msgstr ""
 
 #: gtk/gtkfilechooserdefault.c:8937
-#, fuzzy
 msgid "Could not send the search request"
-msgstr "Nikare yê mayî tomar bike"
+msgstr "Şandina lêpirsîna lêgerînê biserneket"
 
 #. Label
 #: gtk/gtkfilechooserdefault.c:9365
 msgid "_Search:"
-msgstr ""
+msgstr "Lê_gerîn:"
 
 #: gtk/gtkfilechooserdefault.c:10318
 #, c-format
@@ -1782,17 +1779,16 @@ msgstr "Nenas"
 
 #: gtk/gtkfilechooserdefault.c:11136
 msgid "Today at %H:%M"
-msgstr ""
+msgstr "Îro de %H:%M de"
 
 #: gtk/gtkfilechooserdefault.c:11138
-#, fuzzy
 msgid "Yesterday at %H:%M"
-msgstr "Do"
+msgstr "Do de %H:%M de"
 
 #: gtk/gtkfilechoosersettings.c:262 gtk/gtkfilesel.c:1408
 #: gtk/gtkfilesel.c:1417 gtk/gtkfilesystemunix.c:1047
 #: gtk/gtkfilesystemwin32.c:1167
-#, fuzzy, c-format
+#, c-format
 msgid "Error creating folder '%s': %s"
 msgstr "Di afirandina peldanka '%s' de çewtî: %s"
 
@@ -2069,9 +2065,9 @@ msgid "Icon '%s' not present in theme"
 msgstr "îkon %s' ne têde ye"
 
 #: gtk/gtkicontheme.c:2915
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to load icon"
-msgstr "Barkirina wêneya TIFF biserneket"
+msgstr "Barkirina îkonê biserneket"
 
 #: gtk/gtkimmodule.c:421
 msgid "Default"
@@ -2230,7 +2226,7 @@ msgstr "Rûpela %u"
 #: gtk/gtkpagesetup.c:570 gtk/gtkpapersize.c:825 gtk/gtkpapersize.c:865
 #, c-format
 msgid "Not a valid page setup file"
-msgstr ""
+msgstr "Pelê sazkirina rûpelê yê nederbasdar"
 
 #. Translate to the default units to use for presenting
 #. * lengths to the user. Translate to default:inch if you
@@ -2347,9 +2343,8 @@ msgid "Down Path"
 msgstr ""
 
 #: gtk/gtkpathbar.c:1377
-#, fuzzy
 msgid "File System Root"
-msgstr "Pergala Pelan"
+msgstr "Koka Pergala Pelan"
 
 #: gtk/gtkprinteroptionwidget.c:685
 msgid "Not available"
@@ -2366,7 +2361,7 @@ msgstr "Di _peldankê de tomar bike:"
 #: gtk/gtkprintoperation.c:171
 #, c-format
 msgid "%s job #%d"
-msgstr ""
+msgstr "Xebata %s a #%d"
 
 #. translators, strip the prefix up to and including the first |
 #: gtk/gtkprintoperation.c:1497
@@ -2518,9 +2513,8 @@ msgid "C_urrent"
 msgstr "_Heyî"
 
 #: gtk/gtkprintunixdialog.c:1563
-#, fuzzy
 msgid "Ra_nge"
-msgstr "Dabeşkirin: "
+msgstr ""
 
 #: gtk/gtkprintunixdialog.c:1564
 msgid ""
@@ -2554,9 +2548,8 @@ msgid "Layout"
 msgstr "Bicihkirin"
 
 #: gtk/gtkprintunixdialog.c:2035
-#, fuzzy
 msgid "Pages per _side:"
-msgstr "Rûpelê her ka_xizekê:"
+msgstr "Di her ka_xizekê rûpel:"
 
 #: gtk/gtkprintunixdialog.c:2051
 msgid "T_wo-sided:"
@@ -2580,9 +2573,8 @@ msgid "Odd sheets"
 msgstr "Kaxizên fer"
 
 #: gtk/gtkprintunixdialog.c:2086
-#, fuzzy
 msgid "Sc_ale:"
-msgstr "_Nirx:"
+msgstr ""
 
 #: gtk/gtkprintunixdialog.c:2113
 msgid "Paper"
@@ -2703,7 +2695,7 @@ msgstr "Ti hêman ji bo URI '%s' nehate xuyakirin"
 
 #: gtk/gtkrecentchooserdefault.c:1271
 msgid "Untitled filter"
-msgstr ""
+msgstr "Parzûna bênav"
 
 #: gtk/gtkrecentchooserdefault.c:1626
 msgid "Could not remove item"
@@ -2767,7 +2759,7 @@ msgstr "Hêmana nenas"
 #: gtk/gtkrecentchoosermenu.c:783
 #, c-format
 msgid "recent menu label|_%d. %s"
-msgstr ""
+msgstr "_%d. %s"
 
 #. This is the format that is used for items in a recent files menu.
 #. * The %d is the number of the item, the %s is the name of the item.
@@ -2777,7 +2769,7 @@ msgstr ""
 #: gtk/gtkrecentchoosermenu.c:790
 #, c-format
 msgid "recent menu label|%d. %s"
-msgstr ""
+msgstr "%d. %s"
 
 #: gtk/gtkrecentmanager.c:1041 gtk/gtkrecentmanager.c:1187
 #: gtk/gtkrecentmanager.c:1197 gtk/gtkrecentmanager.c:1250
@@ -2854,9 +2846,8 @@ msgid "_Delete"
 msgstr "_Rake"
 
 #: gtk/gtkstock.c:309
-#, fuzzy
 msgid "_Discard"
-msgstr "Ne çalak"
+msgstr "Bia_vêje"
 
 #: gtk/gtkstock.c:310
 msgid "_Disconnect"
@@ -3357,17 +3348,16 @@ msgid "Empty"
 msgstr "Vala"
 
 #: gtk/gtkvolumebutton.c:81
-#, fuzzy
 msgid "Volume"
-msgstr "_Nirx:"
+msgstr "Deng"
 
 #: gtk/gtkvolumebutton.c:83
 msgid "Volume Down"
-msgstr ""
+msgstr "Kêmtir Deng"
 
 #: gtk/gtkvolumebutton.c:85
 msgid "Volume Up"
-msgstr ""
+msgstr "Zêdetir Deng"
 
 #: gtk/gtkvolumebutton.c:139
 msgid "Muted"
@@ -3375,7 +3365,7 @@ msgstr "Bêdeng"
 
 #: gtk/gtkvolumebutton.c:143
 msgid "Full Volume"
-msgstr ""
+msgstr "Tam Deng"
 
 #. Translators: this is the percentage of the current volume,
 #. * as used in the tooltip, eg. "49 %".
@@ -4220,9 +4210,9 @@ msgid "Failed to write hash table\n"
 msgstr "Çewtî di nivisandina hash tabloyê de\n"
 
 #: gtk/updateiconcache.c:1380
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to write folder index\n"
-msgstr "Nivisîna ji pêrista rêveberiyê biserneket\n"
+msgstr "Nivisîna pêrista peldankê biserneket\n"
 
 #: gtk/updateiconcache.c:1388
 #, c-format
@@ -4237,7 +4227,7 @@ msgstr "Nivisîna pelê pêşbîrê biserneket: %s\n"
 #: gtk/updateiconcache.c:1475
 #, c-format
 msgid "The generated cache was invalid.\n"
-msgstr ""
+msgstr "Pêşbîra afirandî nederbasdar bû.\n"
 
 #: gtk/updateiconcache.c:1489
 #, c-format
@@ -4281,17 +4271,17 @@ msgstr "Derana kîtekît bigire"
 
 #: gtk/updateiconcache.c:1574
 msgid "Validate existing icon cache"
-msgstr ""
+msgstr "Pêşbîra îkonan a heyî kontrol bike"
 
 #: gtk/updateiconcache.c:1609
-#, fuzzy, c-format
+#, c-format
 msgid "File not found: %s\n"
-msgstr "Siwarkirina %s biserneket"
+msgstr "Pel nehat dîtin: %s\n"
 
 #: gtk/updateiconcache.c:1615
 #, c-format
 msgid "Not a valid icon cache: %s\n"
-msgstr ""
+msgstr "Pêşbîra îkonan a nederbasdar: %s\n"
 
 #: gtk/updateiconcache.c:1626
 #, c-format
@@ -4331,7 +4321,7 @@ msgstr "IPA"
 #. ID
 #: modules/input/immultipress.c:31
 msgid "Multipress"
-msgstr ""
+msgstr "Multipress"
 
 #. ID
 #: modules/input/imthai.c:35
@@ -4438,7 +4428,7 @@ msgstr "Ji rêzê"
 #: modules/printbackends/cups/gtkprintbackendcups.c:2302
 #, c-format
 msgid "Custom %.2fx%.2f"
-msgstr ""
+msgstr "Taybet %.2fx%.2f"
 
 #. default filename used for print-to-file
 #: modules/printbackends/file/gtkprintbackendfile.c:236
@@ -4485,14 +4475,13 @@ msgstr "Rêzika Fermanê"
 
 #. default filename used for print-to-test
 #: modules/printbackends/test/gtkprintbackendtest.c:235
-#, fuzzy, c-format
+#, c-format
 msgid "test-output.%s"
-msgstr "Derketan %s"
+msgstr "Derketana-test.%s"
 
 #: modules/printbackends/test/gtkprintbackendtest.c:465
-#, fuzzy
 msgid "Print to Test Printer"
-msgstr "Li ser pelê (file) çap bike"
+msgstr "Bi çapera test çap bike"
 
 #: tests/testfilechooser.c:205
 #, c-format
