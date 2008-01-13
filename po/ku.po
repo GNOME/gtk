@@ -1,21 +1,23 @@
 # translation of ku.po to Kurdish
 # This file is distributed under the same license as the gtk+ package.
 # Copyright (C) 2005 THE gtk+'S COPYRIGHT HOLDER.
+#
+#
 # Erdal Ronahi <erdal.ronahi@gmail.com, pckurd@hotmail.com>, 2005, 2006.
-#
-#
+# Reimar Heider <reimar.heider@gmail.com>, 2008.
 msgid ""
 msgstr ""
 "Project-Id-Version: ku\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2007-10-16 23:54-0400\n"
-"PO-Revision-Date: 2007-03-04 16:47+0100\n"
-"Last-Translator: Erdal Ronahi <erdal.ronahi@gmail.com>\n"
+"PO-Revision-Date: 2008-01-13 05:47+0100\n"
+"Last-Translator: Reimar Heider <reimar.heider@gmail.com>\n"
 "Language-Team: Kurdish <ku@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural= n != 1\n"
+"X-Generator: KBabel 1.11.4\n"
 
 #: gdk/directfb/gdkdisplay-directfb.c:55
 msgid "directfb arg"
@@ -28,8 +30,7 @@ msgstr "pergala/sdl"
 #. Description of --class=CLASS in --help output
 #: gdk/gdk.c:126
 msgid "Program class as used by the window manager"
-msgstr ""
-"Dabeşkirina bernameyê weke ku ji alî gerînendeyê paceyan ve tê bikaranîn"
+msgstr "Dabeşkirina bernameyê weke ku ji alî gerînendeyê paceyan ve tê bikaranîn"
 
 #. Placeholder in --class=CLASS in --help output
 #: gdk/gdk.c:127
@@ -246,10 +247,8 @@ msgstr "Di pelê wêne '%s' de qet agahî nîn e"
 #: gdk-pixbuf/gdk-pixbuf-animation.c:209 gdk-pixbuf/gdk-pixbuf-io.c:896
 #: gdk-pixbuf/gdk-pixbuf-io.c:1153 tests/testfilechooser.c:263
 #, c-format
-msgid ""
-"Failed to load image '%s': reason not known, probably a corrupt image file"
-msgstr ""
-"Wêneyê '%s' nehate barkirin: sedem nayê zanîn, dibe pelê wêne xerabe be"
+msgid "Failed to load image '%s': reason not known, probably a corrupt image file"
+msgstr "Wêneyê '%s' nehate barkirin: sedem nayê zanîn, dibe pelê wêne xerabe be"
 
 #: gdk-pixbuf/gdk-pixbuf-animation.c:242
 #, c-format
@@ -371,10 +370,8 @@ msgstr "Daneya pixel na xebite"
 #, c-format
 msgid "failed to allocate image buffer of %u byte"
 msgid_plural "failed to allocate image buffer of %u bytes"
-msgstr[0] ""
-"Veqetandina bîra navbênkar bo wêneyê bi meznahiya %u byte bi ser neket"
-msgstr[1] ""
-"Veqetandina bîra navbênkar bo wêneyê bi meznahiya %u byte bi ser neket"
+msgstr[0] "Veqetandina bîra navbênkar bo wêneyê bi meznahiya %u byte bi ser neket"
+msgstr[1] "Veqetandina bîra navbênkar bo wêneyê bi meznahiya %u byte bi ser neket"
 
 #: gdk-pixbuf/io-ani.c:244
 #, c-format
@@ -609,13 +606,11 @@ msgstr "Nirxê wêneyê PNG ê sarkirî sifire."
 msgid ""
 "JPEG quality must be a value between 0 and 100; value '%s' could not be "
 "parsed."
-msgstr ""
-"Pêwiste ku nirxê JPEG di navbera 0 û 100 de be; nirxa %s' nayê şîrovekirin."
+msgstr "Pêwiste ku nirxê JPEG di navbera 0 û 100 de be; nirxa %s' nayê şîrovekirin."
 
 #: gdk-pixbuf/io-jpeg.c:1124
 #, c-format
-msgid ""
-"JPEG quality must be a value between 0 and 100; value '%d' is not allowed."
+msgid "JPEG quality must be a value between 0 and 100; value '%d' is not allowed."
 msgstr ""
 "Pêwiste ku nirxê kalîteya JPEG  di navbera 0 û 100 de be; nirxa  '%d' ne "
 "gengaz e."
@@ -734,8 +729,7 @@ msgstr "Çewtiyek mezin di dema xwendina dosya wêneyê PNG de: %s"
 
 #: gdk-pixbuf/io-png.c:825
 #, c-format
-msgid ""
-"Keys for PNG text chunks must have at least 1 and at most 79 characters."
+msgid "Keys for PNG text chunks must have at least 1 and at most 79 characters."
 msgstr ""
 "Mifteyên lodên tekstê yê PNG herî kêm divê 1 karakter û herî zêde jî divê 79 "
 "karakter be."
@@ -759,8 +753,7 @@ msgstr ""
 msgid ""
 "PNG compression level must be a value between 0 and 9; value '%d' is not "
 "allowed."
-msgstr ""
-"Pêwiste ku nirxa JPEG di navbera 0 û 100 de be , nirxa %d' nayê destekirin."
+msgstr "Pêwiste ku nirxa JPEG di navbera 0 û 100 de be , nirxa %d' nayê destekirin."
 
 #: gdk-pixbuf/io-png.c:896
 #, c-format
@@ -1721,8 +1714,7 @@ msgstr "Pelek bi navê \"%s\" ji berê ve heye. Tu dixwazî ser wî binivîsî?"
 
 #: gtk/gtkfilechooserdefault.c:8083
 #, c-format
-msgid ""
-"The file already exists in \"%s\".  Replacing it will overwrite its contents."
+msgid "The file already exists in \"%s\".  Replacing it will overwrite its contents."
 msgstr ""
 "Ev pel ji berê ve di \"%s\" de heye. Heke tu biguhêrî dê di ser naveroka "
 "pelê berê de were nivisandin."
@@ -1846,8 +1838,7 @@ msgstr "_Navê pelê biguherîne"
 
 #: gtk/gtkfilesel.c:1406
 #, c-format
-msgid ""
-"The folder name \"%s\" contains symbols that are not allowed in filenames"
+msgid "The folder name \"%s\" contains symbols that are not allowed in filenames"
 msgstr "Di navê peldankê de\"%s\" sembolên henu ku di navên pelan de qedexe ne"
 
 #: gtk/gtkfilesel.c:1451
@@ -3231,8 +3222,7 @@ msgstr "Etîketa anonîm hate dîtin û etîket nikarin werin afirandin."
 #: gtk/gtktextbufferserialize.c:1045
 #, c-format
 msgid "Tag \"%s\" does not exist in buffer and tags can not be created."
-msgstr ""
-"Etîketa \"%s\" di tamponê de nayê xuyakirin û etîket nikare were afirandin."
+msgstr "Etîketa \"%s\" di tamponê de nayê xuyakirin û etîket nikare were afirandin."
 
 #: gtk/gtktextbufferserialize.c:1144 gtk/gtktextbufferserialize.c:1219
 #: gtk/gtktextbufferserialize.c:1320 gtk/gtktextbufferserialize.c:1394
@@ -3252,8 +3242,7 @@ msgstr "\"%s\" ne navekî derbasbare ji bo pêşbîrê"
 
 #: gtk/gtktextbufferserialize.c:1193
 #, c-format
-msgid ""
-"\"%s\" could not be converted to a value of type \"%s\" for attribute \"%s\""
+msgid "\"%s\" could not be converted to a value of type \"%s\" for attribute \"%s\""
 msgstr ""
 "\"%s\" nikare were veguhertin ji bo nirxa cureyê \"%s\" yê nirxdariya \"%s\" "
 "ye"
@@ -3296,10 +3285,8 @@ msgstr "Daneya vegerandî xirabûye"
 
 #: gtk/gtktextbufferserialize.c:1866
 #, c-format
-msgid ""
-"Serialized data is malformed. First section isn't GTKTEXTBUFFERCONTENTS-0001"
-msgstr ""
-"Xirakirina Daneya vegerandî. Beşa destpêkê ne eve GTKTEXTBUFFERCONTENTS-0001"
+msgid "Serialized data is malformed. First section isn't GTKTEXTBUFFERCONTENTS-0001"
+msgstr "Xirakirina Daneya vegerandî. Beşa destpêkê ne eve GTKTEXTBUFFERCONTENTS-0001"
 
 #: gtk/gtktextutil.c:60
 msgid "LRM _Left-to-right mark"
@@ -3384,7 +3371,7 @@ msgstr ""
 
 #: gtk/gtkvolumebutton.c:139
 msgid "Muted"
-msgstr ""
+msgstr "Bêdeng"
 
 #: gtk/gtkvolumebutton.c:143
 msgid "Full Volume"
@@ -3400,12 +3387,12 @@ msgstr ""
 #: gtk/gtkvolumebutton.c:158
 #, c-format
 msgid "volume percentage|%d %%"
-msgstr ""
+msgstr "%d %%"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:5
 msgid "paper size|asme_f"
-msgstr "Mezinahiya rûpel |asme_f"
+msgstr "asme_f"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:7
@@ -3420,17 +3407,17 @@ msgstr "A0"
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:11
 msgid "paper size|A0x3"
-msgstr "Mezinahiya rûpel |A0x3"
+msgstr "A0x3"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:13
 msgid "paper size|A1"
-msgstr "mezinahiya rûpel |A1"
+msgstr "A1"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:15
 msgid "paper size|A10"
-msgstr "mezinahiya rûpel |A10"
+msgstr "A10"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:17
@@ -4512,37 +4499,3 @@ msgstr "Li ser pelê (file) çap bike"
 msgid "Could not get information for file '%s': %s"
 msgstr "Nikarî agahiya pelê '%s' bistîne: %s"
 
-#~ msgid "Today"
-#~ msgstr "Îro"
-
-#, fuzzy
-#~ msgid "Location:"
-#~ msgstr "_Cih:"
-
-#~ msgid "Line %d, column %d: missing attribute \"%s\""
-#~ msgstr "Rêzik %d, stûn %d: çawaniya kem \"%s\""
-
-#~ msgid "Line %d, column %d: unexpected element \"%s\""
-#~ msgstr "Rêzik %d, stûn %d: hêmana ne li bendê \"%s\""
-
-#~ msgid ""
-#~ "Line %d, column %d: expected end of element \"%s\", but found end for "
-#~ "element \"%s\" instead"
-#~ msgstr ""
-#~ "Rêzika %d, stûn %d: dawiya texmînkirî ya \"%s\", lê li şûnê wê dawiya "
-#~ "hêmana \"%s\" hatiye dîtin"
-
-#~ msgid ""
-#~ "Line %d, column %d: expected \"%s\" at the toplevel, but found \"%s\" "
-#~ "instead"
-#~ msgstr ""
-#~ "Rêzika %d, stûnê %d: texmînkirî \"%s\" di asta serî de, lê li şûnê \"%s\" "
-#~ "dibîne"
-
-#~ msgid ""
-#~ "Line %d, column %d: expected \"%s\" or \"%s\", but found \"%s\" instead"
-#~ msgstr ""
-#~ "Rêza %d, stûn %d: texmînkirî \"%s\" an \"%s\", li şûna wê \"%s\" dibîne"
-
-#~ msgid "Could not create directory: %s"
-#~ msgstr "Nikare pelrêçê biafirîne :%s"
