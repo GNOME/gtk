@@ -583,7 +583,7 @@ drag_source_drag_data_get (GtkTreeDragSource *drag_source,
   gtk_selection_data_set (selection_data,
 			  gdk_atom_intern_static_string ("text/uri-list"),
 			  8,
-			  uris,
+			  (guchar *) uris,
 			  strlen (uris) + 1);
 
   g_free (uri);

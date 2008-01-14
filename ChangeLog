@@ -1,3 +1,8 @@
+2008-01-14  Michael Natterer  <mitch@gimp.org>
+
+	* gtk/gtkfilesystemmodel.c (drag_source_drag_data_get): cast
+	"uris" to guchar* when passing it to gtk_selection_data_set().
+
 2008-01-14  Michael Natterer  <mitch@imendio.com>
 
 	* gdk/gdk.h
