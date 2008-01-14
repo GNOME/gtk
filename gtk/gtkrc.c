@@ -1285,7 +1285,9 @@ _gtk_rc_style_unset_rc_property (GtkRcStyle *rc_style,
 
   g_return_if_fail (GTK_IS_RC_STYLE (rc_style));
 
-  node = _gtk_rc_style_lookup_rc_property (rc_style, type_name, property_name);
+  node = (GtkRcProperty *) _gtk_rc_style_lookup_rc_property (rc_style,
+                                                             type_name,
+                                                             property_name);
 
   if (node != NULL)
     {
@@ -2253,11 +2255,9 @@ gtk_rc_parse_any (GtkRcContext *context,
 
 	  if (expected_token != G_TOKEN_NONE)
 	    {
-	      gchar *symbol_name;
-	      gchar *msg;
-	      
-	      msg = NULL;
-	      symbol_name = NULL;
+	      const gchar *symbol_name = NULL;
+	      gchar *msg = NULL;
+
 	      if (scanner->scope_id == 0)
 		{
 		  /* if we are in scope 0, we know the symbol names
@@ -2268,12 +2268,16 @@ gtk_rc_parse_any (GtkRcContext *context,
 		  if (expected_token > GTK_RC_TOKEN_INVALID &&
 		      expected_token < GTK_RC_TOKEN_LAST)
 		    {
+                      const gchar *sym = NULL;
+
 		      for (i = 0; i < G_N_ELEMENTS (symbols); i++)
 			if (symbols[i].token == expected_token)
-			  msg = symbol_names + symbols[i].name_offset;
-		      if (msg)
-			msg = g_strconcat ("e.g. `", msg, "'", NULL);
+			  sym = symbol_names + symbols[i].name_offset;
+
+		      if (sym)
+			msg = g_strconcat ("e.g. `", sym, "'", NULL);
 		    }
+
 		  if (scanner->token > GTK_RC_TOKEN_INVALID &&
 		      scanner->token < GTK_RC_TOKEN_LAST)
 		    {
@@ -2283,6 +2287,7 @@ gtk_rc_parse_any (GtkRcContext *context,
 			  symbol_name = symbol_names + symbols[i].name_offset;
 		    }
 		}
+
 	      g_scanner_unexp_token (scanner,
 				     expected_token,
 				     NULL,

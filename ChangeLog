@@ -1,5 +1,13 @@
 2008-01-14  Michael Natterer  <mitch@imendio.com>
 
+	* gtk/gtkrc.c (_gtk_rc_style_unset_rc_property): add cast to fix
+	const warning.
+
+	(gtk_rc_parse_any): change variables to const and introduce
+	another local variable to fix const warnings.
+
+2008-01-14  Michael Natterer  <mitch@imendio.com>
+
 	* gdk/gdkscreen.c (gdk_screen_get_property): cast the return value
 	of gdk_screen_get_font_options() to gpointer to get rid of const
 	warning.
