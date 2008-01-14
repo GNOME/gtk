@@ -1179,6 +1179,13 @@ gtk_tool_item_set_proxy_menu_item (GtkToolItem *tool_item,
 void
 gtk_tool_item_toolbar_reconfigured (GtkToolItem *tool_item)
 {
+  /* The slightely inaccurate name "gtk_tool_item_toolbar_reconfigured" was
+   * choosen over "gtk_tool_item_tool_shell_reconfigured", since the function
+   * emits the "toolbar-reconfigured" signal, not "tool-shell-reconfigured".
+   * Its not possible to rename the signal, and emitting another name than
+   * indicated by the function name would be quite confusing. That's the
+   * price of providing stable APIs.
+   */
   g_return_if_fail (GTK_IS_TOOL_ITEM (tool_item));
 
   g_signal_emit (tool_item, toolitem_signals[TOOLBAR_RECONFIGURED], 0);
