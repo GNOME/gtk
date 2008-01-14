@@ -1,5 +1,10 @@
 2008-01-14  Michael Natterer  <mitch@imendio.com>
 
+	* gtk/gtkoldeditable.c (gtk_old_editable_selection_received): fix
+	signedness warning.
+
+2008-01-14  Michael Natterer  <mitch@imendio.com>
+
 	* gtk/gtkiconcache.c (find_image_offset): remove unused variable.
 
 2008-01-14  Michael Natterer  <mitch@imendio.com>

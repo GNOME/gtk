@@ -634,7 +634,7 @@ gtk_old_editable_selection_received  (GtkWidget         *widget,
 {
   GtkOldEditable *old_editable = GTK_OLD_EDITABLE (widget);
 
-  gchar *text = gtk_selection_data_get_text (selection_data);
+  guchar *text = gtk_selection_data_get_text (selection_data);
 
   if (!text)
     {
@@ -660,7 +660,7 @@ gtk_old_editable_selection_received  (GtkWidget         *widget,
 
   if (text)
     {
-      gtk_old_editable_paste_received (old_editable, text, FALSE);
+      gtk_old_editable_paste_received (old_editable, (gchar *) text, FALSE);
       g_free (text);
     }
 }
