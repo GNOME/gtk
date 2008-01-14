@@ -1,5 +1,10 @@
 2008-01-14  Michael Natterer  <mitch@imendio.com>
 
+	* tests/testdnd.c (source_drag_data_get): fix another call to
+	gtk_selection_data_set().
+
+2008-01-14  Michael Natterer  <mitch@imendio.com>
+
 	* gtk/gtkoldeditable.c (gtk_old_editable_selection_received): fix
 	signedness warning.
 

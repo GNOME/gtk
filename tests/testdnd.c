@@ -428,7 +428,7 @@ source_drag_data_get  (GtkWidget          *widget,
   else
     gtk_selection_data_set (selection_data,
 			    selection_data->target,
-			    8, "I'm Data!", 9);
+			    8, (guchar *) "I'm Data!", 9);
 }
   
 /* The following is a rather elaborate example demonstrating/testing
