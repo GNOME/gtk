@@ -1,4 +1,8 @@
-2008-01-14  Michael Natterer  <mitch@gimp.org>
+2008-01-14  Michael Natterer  <mitch@imendio.com>
+
+	* gtk/gtkiconcache.c (find_image_offset): remove unused variable.
+
+2008-01-14  Michael Natterer  <mitch@imendio.com>
 
 	* gtk/gtkfilesystemmodel.c (drag_source_drag_data_get): cast
 	"uris" to guchar* when passing it to gtk_selection_data_set().

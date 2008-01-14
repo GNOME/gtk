@@ -224,7 +224,6 @@ find_image_offset (GtkIconCache *cache,
   guint32 chain_offset;
   int hash;
   guint32 image_list_offset, n_images;
-  gboolean found = FALSE;
   int i;
 
   chain_offset = cache->last_chain_offset;
