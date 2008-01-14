@@ -279,10 +279,10 @@ gdk_pixbuf_loader_prepare (GdkPixbuf          *pixbuf,
                 anim = gdk_pixbuf_non_anim_new (pixbuf);
   
 	if (priv->needs_scale) {
-		priv->animation  = _gdk_pixbuf_scaled_anim_new (anim, 	
+		priv->animation  = GDK_PIXBUF_ANIMATION (_gdk_pixbuf_scaled_anim_new (anim,
                                          (double) priv->width / gdk_pixbuf_get_width (pixbuf),
                                          (double) priv->height / gdk_pixbuf_get_height (pixbuf),
-					  1.0);
+					  1.0));
 			g_object_unref (anim);
 	}
 	else

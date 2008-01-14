@@ -1,3 +1,9 @@
+2008-01-14  Michael Natterer  <mitch@imendio.com>
+
+	* gdk-pixbuf-loader.c (gdk_pixbuf_loader_prepare): cast the return
+	value of _gdk_pixbuf_scaled_anim_new() to fix incompatible pointer
+	warning.
+
 2007-12-09  Matthias Clasen  <mclasen@redhat.com>
 
 	* io-jpeg.c: Fix the spinguard logic for big buffers.
