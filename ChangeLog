@@ -1,5 +1,11 @@
 2008-01-14  Michael Natterer  <mitch@imendio.com>
 
+	* gdk/gdkscreen.c (gdk_screen_get_property): cast the return value
+	of gdk_screen_get_font_options() to gpointer to get rid of const
+	warning.
+
+2008-01-14  Michael Natterer  <mitch@imendio.com>
+
 	* tests/testdnd.c (source_drag_data_get): fix another call to
 	gtk_selection_data_set().
 

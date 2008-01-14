@@ -506,7 +506,7 @@ gdk_screen_get_property (GObject      *object,
   switch (prop_id)
     {
     case PROP_FONT_OPTIONS:
-      g_value_set_pointer (value, gdk_screen_get_font_options (screen));
+      g_value_set_pointer (value, (gpointer) gdk_screen_get_font_options (screen));
       break;
     case PROP_RESOLUTION:
       g_value_set_double (value, gdk_screen_get_resolution (screen));
