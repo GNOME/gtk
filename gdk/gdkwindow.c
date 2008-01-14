@@ -905,8 +905,8 @@ gdk_window_get_state (GdkWindow *window)
  * 
  **/
 void
-gdk_window_begin_paint_rect (GdkWindow    *window,
-			     GdkRectangle *rectangle)
+gdk_window_begin_paint_rect (GdkWindow          *window,
+                             const GdkRectangle *rectangle)
 {
   GdkRegion *region;
 
@@ -968,8 +968,8 @@ gdk_window_begin_paint_rect (GdkWindow    *window,
  * 
  **/
 void	      
-gdk_window_begin_paint_region (GdkWindow *window,
-			       GdkRegion *region)
+gdk_window_begin_paint_region (GdkWindow       *window,
+                               const GdkRegion *region)
 {
 #ifdef USE_BACKING_STORE
   GdkWindowObject *private = (GdkWindowObject *)window;
@@ -2518,9 +2518,9 @@ gdk_window_process_updates (GdkWindow *window,
  * gdk_window_invalidate_region() for details.
  **/
 void
-gdk_window_invalidate_rect   (GdkWindow    *window,
-			      GdkRectangle *rect,
-			      gboolean      invalidate_children)
+gdk_window_invalidate_rect (GdkWindow          *window,
+                            const GdkRectangle *rect,
+                            gboolean            invalidate_children)
 {
   GdkRectangle window_rect;
   GdkRegion *region;
@@ -2551,8 +2551,8 @@ gdk_window_invalidate_rect   (GdkWindow    *window,
 }
 
 static void
-draw_ugly_color (GdkWindow *window,
-                GdkRegion *region)
+draw_ugly_color (GdkWindow       *window,
+                 const GdkRegion *region)
 {
   /* Draw ugly color all over the newly-invalid region */
   GdkColor ugly_color = { 0, 50000, 10000, 10000 };
@@ -2600,9 +2600,10 @@ draw_ugly_color (GdkWindow *window,
  * invalidated.
  **/
 void
-gdk_window_invalidate_maybe_recurse (GdkWindow *window,
-				     GdkRegion *region,
-				     gboolean (*child_func) (GdkWindow *, gpointer),
+gdk_window_invalidate_maybe_recurse (GdkWindow       *window,
+                                     const GdkRegion *region,
+                                     gboolean       (*child_func) (GdkWindow *,
+                                                                   gpointer),
 				     gpointer   user_data)
 {
   GdkWindowObject *private = (GdkWindowObject *)window;
@@ -2655,14 +2656,16 @@ gdk_window_invalidate_maybe_recurse (GdkWindow *window,
 	  
 	  if (child_func && (*child_func) ((GdkWindow *)child, user_data))
 	    {
-	      gdk_region_offset (region, - child_rect.x, - child_rect.y);
+              GdkRegion *tmp = gdk_region_copy (region);
+
+	      gdk_region_offset (tmp, - child_rect.x, - child_rect.y);
 	      gdk_region_offset (child_region, - child_rect.x, - child_rect.y);
-	      gdk_region_intersect (child_region, region);
+	      gdk_region_intersect (child_region, tmp);
 	      
 	      gdk_window_invalidate_maybe_recurse ((GdkWindow *)child,
 						   child_region, child_func, user_data);
 	      
-	      gdk_region_offset (region, child_rect.x, child_rect.y);
+	      gdk_region_destroy (tmp);
 	    }
 
 	  gdk_region_destroy (child_region);
@@ -2724,9 +2727,9 @@ true_predicate (GdkWindow *window,
  * fine grained control over which children are invalidated.
  **/
 void
-gdk_window_invalidate_region (GdkWindow *window,
-			      GdkRegion *region,
-			      gboolean   invalidate_children)
+gdk_window_invalidate_region (GdkWindow       *window,
+			      const GdkRegion *region,
+			      gboolean         invalidate_children)
 {
   gdk_window_invalidate_maybe_recurse (window, region,
 				       invalidate_children ?

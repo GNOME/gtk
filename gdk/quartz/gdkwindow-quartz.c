@@ -2074,10 +2074,10 @@ gdk_window_set_transient_for (GdkWindow *window,
 }
 
 void
-gdk_window_shape_combine_region (GdkWindow *window,
-                                 GdkRegion *shape,
-                                 gint       x,
-                                 gint       y)
+gdk_window_shape_combine_region (GdkWindow       *window,
+                                 const GdkRegion *shape,
+                                 gint             x,
+                                 gint             y)
 {
   g_return_if_fail (GDK_IS_WINDOW (window));
 
@@ -2092,7 +2092,7 @@ gdk_window_shape_combine_mask (GdkWindow *window,
   /* FIXME: Implement */
 }
 
-void 
+void
 gdk_window_input_shape_combine_mask (GdkWindow *window,
 				     GdkBitmap *mask,
 				     gint       x,
@@ -2101,11 +2101,11 @@ gdk_window_input_shape_combine_mask (GdkWindow *window,
   /* FIXME: Implement */
 }
 
-void 
-gdk_window_input_shape_combine_region (GdkWindow *window,
-				       GdkRegion *shape_region,
-				       gint       offset_x,
-				       gint       offset_y)
+void
+gdk_window_input_shape_combine_region (GdkWindow       *window,
+                                       const GdkRegion *shape_region,
+                                       gint             offset_x,
+                                       gint             offset_y)
 {
   /* FIXME: Implement */
 }

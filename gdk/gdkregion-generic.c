@@ -75,27 +75,27 @@ SOFTWARE.
 #include "gdkregion-generic.h"
 #include "gdkalias.h"
 
-typedef void (*overlapFunc) (GdkRegion    *pReg,
-			     GdkRegionBox *r1,
-			     GdkRegionBox *r1End,
-			     GdkRegionBox *r2,
-			     GdkRegionBox *r2End,
-			     gint          y1,
-			     gint          y2);
-typedef void (*nonOverlapFunc) (GdkRegion    *pReg,
-				GdkRegionBox *r,
-				GdkRegionBox *rEnd,
-				gint          y1,
-				gint          y2);
+typedef void (* overlapFunc)    (GdkRegion    *pReg,
+                                 GdkRegionBox *r1,
+                                 GdkRegionBox *r1End,
+                                 GdkRegionBox *r2,
+                                 GdkRegionBox *r2End,
+                                 gint          y1,
+                                 gint          y2);
+typedef void (* nonOverlapFunc) (GdkRegion    *pReg,
+                                 GdkRegionBox *r,
+                                 GdkRegionBox *rEnd,
+                                 gint          y1,
+                                 gint          y2);
 
-static void miRegionCopy (GdkRegion      *dstrgn,
-			  GdkRegion      *rgn);
-static void miRegionOp   (GdkRegion      *newReg,
-			  GdkRegion      *reg1,
-			  GdkRegion      *reg2,
-			  overlapFunc     overlapFn,
-			  nonOverlapFunc  nonOverlap1Fn,
-			  nonOverlapFunc  nonOverlap2Fn);
+static void miRegionCopy (GdkRegion       *dstrgn,
+			  const GdkRegion *rgn);
+static void miRegionOp   (GdkRegion       *newReg,
+			  GdkRegion       *reg1,
+			  const GdkRegion *reg2,
+			  overlapFunc      overlapFn,
+			  nonOverlapFunc   nonOverlap1Fn,
+			  nonOverlapFunc   nonOverlap2Fn);
 
 /**
  * gdk_region_new:
@@ -131,7 +131,7 @@ gdk_region_new (void)
  * Return value: a new region
  **/
 GdkRegion *
-gdk_region_rectangle (GdkRectangle *rectangle)
+gdk_region_rectangle (const GdkRectangle *rectangle)
 {
   GdkRegion *temp;
 
@@ -162,7 +162,7 @@ gdk_region_rectangle (GdkRectangle *rectangle)
  * Return value: a new region identical to @region
  **/
 GdkRegion *
-gdk_region_copy (GdkRegion *region)
+gdk_region_copy (const GdkRegion *region)
 {
   GdkRegion *temp;
 
@@ -184,8 +184,8 @@ gdk_region_copy (GdkRegion *region)
  *
  */
 void
-gdk_region_get_clipbox (GdkRegion    *region, 
-			GdkRectangle *rectangle)
+gdk_region_get_clipbox (const GdkRegion *region,
+			GdkRectangle    *rectangle)
 {
   g_return_if_fail (region != NULL);
   g_return_if_fail (rectangle != NULL);
@@ -207,9 +207,9 @@ gdk_region_get_clipbox (GdkRegion    *region,
  * The array returned in @rectangles must be freed with g_free().
  **/
 void
-gdk_region_get_rectangles (GdkRegion     *region,
-                           GdkRectangle **rectangles,
-                           gint          *n_rectangles)
+gdk_region_get_rectangles (const GdkRegion  *region,
+                           GdkRectangle    **rectangles,
+                           gint             *n_rectangles)
 {
   gint i;
   
@@ -241,8 +241,8 @@ gdk_region_get_rectangles (GdkRegion     *region,
  * either @region or @rect.
  **/
 void
-gdk_region_union_with_rect (GdkRegion    *region,
-			    GdkRectangle *rect)
+gdk_region_union_with_rect (GdkRegion          *region,
+			    const GdkRectangle *rect)
 {
   GdkRegion tmp_region;
 
@@ -567,8 +567,8 @@ miIntersectO (GdkRegion    *pReg,
  * both @source1 and @source2.
  **/
 void
-gdk_region_intersect (GdkRegion *source1,
-		      GdkRegion *source2)
+gdk_region_intersect (GdkRegion       *source1,
+		      const GdkRegion *source2)
 {
   g_return_if_fail (source1 != NULL);
   g_return_if_fail (source2 != NULL);
@@ -578,7 +578,7 @@ gdk_region_intersect (GdkRegion *source1,
       (!EXTENTCHECK(&source1->extents, &source2->extents)))
     source1->numRects = 0;
   else
-    miRegionOp (source1, source1, source2, 
+    miRegionOp (source1, source1, source2,
     		miIntersectO, (nonOverlapFunc) NULL, (nonOverlapFunc) NULL);
     
   /*
@@ -591,8 +591,8 @@ gdk_region_intersect (GdkRegion *source1,
 }
 
 static void
-miRegionCopy (GdkRegion *dstrgn, 
-	      GdkRegion *rgn)
+miRegionCopy (GdkRegion       *dstrgn,
+	      const GdkRegion *rgn)
 {
   if (dstrgn != rgn) /*  don't want to copy to itself */
     {  
@@ -788,15 +788,15 @@ miCoalesce (GdkRegion *pReg,         /* Region to coalesce */
  */
 /* static void*/
 static void
-miRegionOp(GdkRegion *newReg,
-	   GdkRegion *reg1,
-	   GdkRegion *reg2,
-	   overlapFunc    overlapFn,   	        /* Function to call for over-
+miRegionOp(GdkRegion       *newReg,
+	   GdkRegion       *reg1,
+	   const GdkRegion *reg2,
+	   overlapFunc      overlapFn,          /* Function to call for over-
 						 * lapping bands */
-	   nonOverlapFunc nonOverlap1Fn,	/* Function to call for non-
+	   nonOverlapFunc   nonOverlap1Fn,	/* Function to call for non-
 						 * overlapping bands in region
 						 * 1 */
-	   nonOverlapFunc nonOverlap2Fn)	/* Function to call for non-
+	   nonOverlapFunc   nonOverlap2Fn)	/* Function to call for non-
 						 * overlapping bands in region
 						 * 2 */
 {
@@ -1189,8 +1189,8 @@ miUnionO (GdkRegion *pReg,
  * either @source1 or @source2.
  **/
 void
-gdk_region_union (GdkRegion *source1,
-		  GdkRegion *source2)
+gdk_region_union (GdkRegion       *source1,
+		  const GdkRegion *source2)
 {
   g_return_if_fail (source1 != NULL);
   g_return_if_fail (source2 != NULL);
@@ -1450,8 +1450,8 @@ miSubtractO (GdkRegion    *pReg,
  * area is the set of pixels contained in @source1 but not in @source2.
  **/
 void
-gdk_region_subtract (GdkRegion *source1,
-		     GdkRegion *source2)
+gdk_region_subtract (GdkRegion       *source1,
+		     const GdkRegion *source2)
 {
   g_return_if_fail (source1 != NULL);
   g_return_if_fail (source2 != NULL);
@@ -1483,8 +1483,8 @@ gdk_region_subtract (GdkRegion *source1,
  * or the other of the two sources but not in both.
  **/
 void
-gdk_region_xor (GdkRegion *source1,
-		GdkRegion *source2)
+gdk_region_xor (GdkRegion       *source1,
+		const GdkRegion *source2)
 {
   GdkRegion *trb;
 
@@ -1510,7 +1510,7 @@ gdk_region_xor (GdkRegion *source1,
  * Returns: %TRUE if @region is empty.
  */
 gboolean
-gdk_region_empty (GdkRegion *region)
+gdk_region_empty (const GdkRegion *region)
 {
   g_return_val_if_fail (region != NULL, FALSE);
   
@@ -1530,8 +1530,8 @@ gdk_region_empty (GdkRegion *region)
  * Returns: %TRUE if @region1 and @region2 are equal.
  */
 gboolean
-gdk_region_equal (GdkRegion *region1,
-		  GdkRegion *region2)
+gdk_region_equal (const GdkRegion *region1,
+		  const GdkRegion *region2)
 {
   int i;
 
@@ -1566,9 +1566,9 @@ gdk_region_equal (GdkRegion *region1,
  * Returns: %TRUE if the point is in @region.
  */
 gboolean
-gdk_region_point_in (GdkRegion *region,
-		     int        x,
-		     int        y)
+gdk_region_point_in (const GdkRegion *region,
+		     int              x,
+		     int              y)
 {
   int i;
 
@@ -1598,8 +1598,8 @@ gdk_region_point_in (GdkRegion *region,
  *   outside, or partly inside the #GdkRegion, respectively.
  */
 GdkOverlapType
-gdk_region_rect_in (GdkRegion    *region,
-		    GdkRectangle *rectangle)
+gdk_region_rect_in (const GdkRegion    *region,
+		    const GdkRectangle *rectangle)
 {
   GdkRegionBox *pbox;
   GdkRegionBox *pboxEnd;

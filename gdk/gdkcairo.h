@@ -26,23 +26,23 @@
 
 G_BEGIN_DECLS
 
-cairo_t *gdk_cairo_create (GdkDrawable *drawable);
+cairo_t *gdk_cairo_create            (GdkDrawable        *drawable);
 
-void gdk_cairo_set_source_color  (cairo_t      *cr,
-				  GdkColor     *color);
-void gdk_cairo_set_source_pixbuf (cairo_t      *cr,
-				  GdkPixbuf    *pixbuf,
-				  double        pixbuf_x,
-				  double        pixbuf_y);
-void gdk_cairo_set_source_pixmap (cairo_t   *cr,
-				  GdkPixmap *pixmap,
-				  double     pixmap_x,
-				  double     pixmap_y);
+void     gdk_cairo_set_source_color  (cairo_t            *cr,
+                                      const GdkColor     *color);
+void     gdk_cairo_set_source_pixbuf (cairo_t            *cr,
+                                      const GdkPixbuf    *pixbuf,
+                                      double              pixbuf_x,
+                                      double              pixbuf_y);
+void     gdk_cairo_set_source_pixmap (cairo_t            *cr,
+                                      GdkPixmap          *pixmap,
+                                      double              pixmap_x,
+                                      double              pixmap_y);
 
-void gdk_cairo_rectangle (cairo_t      *cr,
-			  GdkRectangle *rectangle);
-void gdk_cairo_region    (cairo_t      *cr,
-			  GdkRegion    *region);
+void     gdk_cairo_rectangle         (cairo_t            *cr,
+                                      const GdkRectangle *rectangle);
+void     gdk_cairo_region            (cairo_t            *cr,
+                                      const GdkRegion    *region);
 
 G_END_DECLS
 

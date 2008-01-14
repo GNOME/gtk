@@ -207,8 +207,8 @@ _gdk_quartz_gc_new (GdkDrawable      *drawable,
 }
 
 void
-_gdk_windowing_gc_set_clip_region (GdkGC     *gc,
-				   GdkRegion *region)
+_gdk_windowing_gc_set_clip_region (GdkGC           *gc,
+				   const GdkRegion *region)
 {
   GdkGCQuartz *private = GDK_GC_QUARTZ (gc);
 

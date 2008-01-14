@@ -220,11 +220,11 @@ cairo_surface_t *_gdk_drawable_ref_cairo_surface (GdkDrawable *drawable);
 GdkGC *_gdk_drawable_get_scratch_gc (GdkDrawable *drawable,
 				     gboolean     graphics_exposures);
 
-void _gdk_gc_update_context (GdkGC     *gc,
-			     cairo_t   *cr,
-			     GdkColor  *override_foreground,
-			     GdkBitmap *override_stipple,
-			     gboolean   gc_changed);
+void _gdk_gc_update_context (GdkGC          *gc,
+			     cairo_t        *cr,
+			     const GdkColor *override_foreground,
+			     GdkBitmap      *override_stipple,
+			     gboolean        gc_changed);
 
 /*************************************
  * Interfaces used by windowing code *
@@ -310,8 +310,8 @@ gint _gdk_windowing_get_bits_for_depth (GdkDisplay *display,
  * the region; if the result is TRUE, then the windowing layer is responsible
  * for destroying the region later.
  */
-gboolean _gdk_windowing_window_queue_antiexpose (GdkWindow  *window,
-						 GdkRegion  *area);
+gboolean _gdk_windowing_window_queue_antiexpose (GdkWindow *window,
+						 GdkRegion *area);
 
 /* Called to do the windowing system specific part of gdk_window_destroy(),
  *
@@ -355,16 +355,16 @@ struct _GdkPaintableIface
 {
   GTypeInterface g_iface;
   
-  void (* begin_paint_region) (GdkPaintable *paintable,
-			       GdkRegion    *region);
-  void (* end_paint)          (GdkPaintable *paintable);
+  void (* begin_paint_region)       (GdkPaintable    *paintable,
+                                     const GdkRegion *region);
+  void (* end_paint)                (GdkPaintable    *paintable);
 
-  void (* invalidate_maybe_recurse) (GdkPaintable *paintable,
-				     GdkRegion    *region,
-				     gboolean    (*child_func) (GdkWindow *, gpointer),
-				     gpointer      user_data);
-  void (* process_updates)          (GdkPaintable *paintable,
-				     gboolean      update_children);
+  void (* invalidate_maybe_recurse) (GdkPaintable    *paintable,
+				     const GdkRegion *region,
+				     gboolean       (*child_func) (GdkWindow *, gpointer),
+				     gpointer         user_data);
+  void (* process_updates)          (GdkPaintable    *paintable,
+				     gboolean         update_children);
 };
 
 GType _gdk_paintable_get_type (void) G_GNUC_CONST;
@@ -388,8 +388,8 @@ GType _gdk_pixmap_impl_get_type (void) G_GNUC_CONST;
  * When this function is called, _gdk_gc_get_clip_region
  * will already return the new region.
  **/
-void _gdk_windowing_gc_set_clip_region (GdkGC     *gc,
-					GdkRegion *region);
+void _gdk_windowing_gc_set_clip_region (GdkGC           *gc,
+					const GdkRegion *region);
 
 /**
  * _gdk_windowing_gc_copy:

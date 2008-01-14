@@ -287,9 +287,9 @@ gdk_colors_free (GdkColormap *colormap,
 }
 
 void
-gdk_colormap_free_colors (GdkColormap *colormap,
-                          GdkColor    *colors,
-                          gint         ncolors)
+gdk_colormap_free_colors (GdkColormap    *colormap,
+                          const GdkColor *colors,
+                          gint            ncolors)
 {
   GdkColormapPrivateDirectFB *private;
   gint                        i;

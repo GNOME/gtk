@@ -607,8 +607,8 @@ gdk_x11_gc_values_to_xvalues (GdkGCValues    *values,
 }
 
 void
-_gdk_windowing_gc_set_clip_region (GdkGC     *gc,
-				   GdkRegion *region)
+_gdk_windowing_gc_set_clip_region (GdkGC           *gc,
+				   const GdkRegion *region)
 {
   GdkGCX11 *x11_gc = GDK_GC_X11 (gc);
 

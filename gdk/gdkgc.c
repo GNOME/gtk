@@ -566,8 +566,8 @@ _gdk_gc_set_clip_region_internal (GdkGC     *gc,
  * origin. (See gdk_gc_set_clip_origin()).
  **/
 void
-gdk_gc_set_clip_rectangle (GdkGC	*gc,
-			   GdkRectangle *rectangle)
+gdk_gc_set_clip_rectangle (GdkGC              *gc,
+			   const GdkRectangle *rectangle)
 {
   GdkRegion *region;
   
@@ -591,15 +591,19 @@ gdk_gc_set_clip_rectangle (GdkGC	*gc,
  * gdk_gc_set_clip_origin()).
  **/
 void
-gdk_gc_set_clip_region (GdkGC	  *gc,
-			GdkRegion *region)
+gdk_gc_set_clip_region (GdkGC           *gc,
+			const GdkRegion *region)
 {
+  GdkRegion *copy;
+
   g_return_if_fail (GDK_IS_GC (gc));
 
   if (region)
-    region = gdk_region_copy (region);
-  
-  _gdk_gc_set_clip_region_internal (gc, region);
+    copy = gdk_region_copy (region);
+  else
+    copy = NULL;
+
+  _gdk_gc_set_clip_region_internal (gc, copy);
 }
 
 /**
@@ -1119,11 +1123,11 @@ gc_get_background (GdkGC    *gc,
  * and functions other than %GDK_COPY are not currently handled.
  **/
 void
-_gdk_gc_update_context (GdkGC     *gc,
-			cairo_t   *cr,
-			GdkColor  *override_foreground,
-			GdkBitmap *override_stipple,
-			gboolean   gc_changed)
+_gdk_gc_update_context (GdkGC          *gc,
+                        cairo_t        *cr,
+                        const GdkColor *override_foreground,
+                        GdkBitmap      *override_stipple,
+                        gboolean        gc_changed)
 {
   GdkGCPrivate *priv;
   GdkFill fill;

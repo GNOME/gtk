@@ -79,10 +79,10 @@ gdk_window_scroll (GdkWindow *window,
 }
 
 void
-gdk_window_move_region (GdkWindow *window,
-			GdkRegion *region,
-			gint       dx,
-			gint       dy)
+gdk_window_move_region (GdkWindow       *window,
+                        const GdkRegion *region,
+                        gint             dx,
+                        gint             dy)
 {
   /* FIXME: Implement */
 }

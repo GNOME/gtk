@@ -649,9 +649,9 @@ gdk_colors_free (GdkColormap *colormap,
  * Frees previously allocated colors.
  **/
 void
-gdk_colormap_free_colors (GdkColormap *colormap,
-			  GdkColor    *colors,
-			  gint         ncolors)
+gdk_colormap_free_colors (GdkColormap    *colormap,
+			  const GdkColor *colors,
+			  gint            ncolors)
 {
   GdkColormapPrivateX11 *private;
   gulong *pixels;
@@ -702,9 +702,9 @@ gdk_colormap_free_colors (GdkColormap *colormap,
  * cache the result in our colormap, and store in ret.
  */
 static gboolean 
-gdk_colormap_alloc1 (GdkColormap *colormap,
-		     GdkColor    *color,
-		     GdkColor    *ret)
+gdk_colormap_alloc1 (GdkColormap    *colormap,
+		     const GdkColor *color,
+		     GdkColor       *ret)
 {
   GdkColormapPrivateX11 *private;
   XColor xcolor;

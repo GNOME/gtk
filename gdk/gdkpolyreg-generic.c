@@ -62,12 +62,11 @@ SOFTWARE.
  *
  */
 static void
-InsertEdgeInET(ET, ETE, scanline, SLLBlock, iSLLBlock)
-    EdgeTable *ET;
-    EdgeTableEntry *ETE;
-    int scanline;
-    ScanLineListBlock **SLLBlock;
-    int *iSLLBlock;
+InsertEdgeInET (EdgeTable          *ET,
+                EdgeTableEntry     *ETE,
+                int                 scanline,
+                ScanLineListBlock **SLLBlock,
+                int                *iSLLBlock)
 {
     EdgeTableEntry *start, *prev;
     ScanLineList *pSLL, *pPrevSLL;
@@ -150,16 +149,15 @@ InsertEdgeInET(ET, ETE, scanline, SLLBlock, iSLLBlock)
  */
 
 static void
-CreateETandAET(count, pts, ET, AET, pETEs, pSLLBlock)
-    int count;
-    GdkPoint *pts;
-    EdgeTable *ET;
-    EdgeTableEntry *AET;
-    EdgeTableEntry *pETEs;
-    ScanLineListBlock   *pSLLBlock;
+CreateETandAET (int                count,
+                const GdkPoint    *pts,
+                EdgeTable         *ET,
+                EdgeTableEntry    *AET,
+                EdgeTableEntry    *pETEs,
+                ScanLineListBlock *pSLLBlock)
 {
-    GdkPoint *top, *bottom;
-    GdkPoint *PrevPt, *CurrPt;
+    const GdkPoint *top, *bottom;
+    const GdkPoint *PrevPt, *CurrPt;
     int iSLLBlock = 0;
     int dy;
 
@@ -242,8 +240,8 @@ CreateETandAET(count, pts, ET, AET, pETEs, pSLLBlock)
  */
 
 static void
-loadAET(AET, ETEs)
-    EdgeTableEntry *AET, *ETEs;
+loadAET(EdgeTableEntry *AET,
+        EdgeTableEntry *ETEs)
 {
     EdgeTableEntry *pPrevAET;
     EdgeTableEntry *tmp;
@@ -290,8 +288,7 @@ loadAET(AET, ETEs)
  *
  */
 static void
-computeWAET(AET)
-    EdgeTableEntry *AET;
+computeWAET (EdgeTableEntry *AET)
 {
     EdgeTableEntry *pWETE;
     int inside = 1;
@@ -329,8 +326,7 @@ computeWAET(AET)
  */
 
 static int
-InsertionSort(AET)
-    EdgeTableEntry *AET;
+InsertionSort (EdgeTableEntry *AET)
 {
     EdgeTableEntry *pETEchase;
     EdgeTableEntry *pETEinsert;
@@ -366,8 +362,7 @@ InsertionSort(AET)
  *     Clean up our act.
  */
 static void
-FreeStorage(pSLLBlock)
-    ScanLineListBlock   *pSLLBlock;
+FreeStorage (ScanLineListBlock *pSLLBlock)
 {
     ScanLineListBlock   *tmpSLLBlock;
 
@@ -387,10 +382,11 @@ FreeStorage(pSLLBlock)
  *     stack by the calling procedure.
  *
  */
-static int PtsToRegion(numFullPtBlocks, iCurPtBlock, FirstPtBlock, reg)
-    int  numFullPtBlocks, iCurPtBlock;
-    POINTBLOCK *FirstPtBlock;
-    GdkRegion *reg;
+static int
+PtsToRegion (int         numFullPtBlocks,
+             int         iCurPtBlock,
+             POINTBLOCK *FirstPtBlock,
+             GdkRegion  *reg)
 {
     GdkRegionBox *rects;
     GdkPoint *pts;
@@ -464,7 +460,9 @@ static int PtsToRegion(numFullPtBlocks, iCurPtBlock, FirstPtBlock, reg)
  * Returns: a new #GdkRegion based on the given polygon
  */
 GdkRegion *
-gdk_region_polygon(GdkPoint *Pts, gint Count, GdkFillRule rule)
+gdk_region_polygon (const GdkPoint *Pts,
+                    gint            Count,
+                    GdkFillRule     rule)
 {
     GdkRegion *region;
     EdgeTableEntry *pAET;   /* Active Edge Table       */
@@ -472,7 +470,7 @@ gdk_region_polygon(GdkPoint *Pts, gint Count, GdkFillRule rule)
     int iPts = 0;           /* number of pts in buffer */
     EdgeTableEntry *pWETE;  /* Winding Edge Table Entry*/
     ScanLineList *pSLL;     /* current scanLineList    */
-    GdkPoint *pts;             /* output buffer           */
+    GdkPoint *pts;          /* output buffer           */
     EdgeTableEntry *pPrevAET;        /* ptr to previous AET     */
     EdgeTable ET;                    /* header node for ET      */
     EdgeTableEntry AET;              /* header node for AET     */
@@ -486,21 +484,20 @@ gdk_region_polygon(GdkPoint *Pts, gint Count, GdkFillRule rule)
     region = gdk_region_new ();
 
     /* special case a rectangle */
-    pts = Pts;
     if (((Count == 4) ||
-	 ((Count == 5) && (pts[4].x == pts[0].x) && (pts[4].y == pts[0].y))) &&
-	(((pts[0].y == pts[1].y) &&
-	  (pts[1].x == pts[2].x) &&
-	  (pts[2].y == pts[3].y) &&
-	  (pts[3].x == pts[0].x)) ||
-	 ((pts[0].x == pts[1].x) &&
-	  (pts[1].y == pts[2].y) &&
-	  (pts[2].x == pts[3].x) &&
-	  (pts[3].y == pts[0].y)))) {
-	region->extents.x1 = MIN(pts[0].x, pts[2].x);
-	region->extents.y1 = MIN(pts[0].y, pts[2].y);
-	region->extents.x2 = MAX(pts[0].x, pts[2].x);
-	region->extents.y2 = MAX(pts[0].y, pts[2].y);
+	 ((Count == 5) && (Pts[4].x == Pts[0].x) && (Pts[4].y == Pts[0].y))) &&
+	(((Pts[0].y == Pts[1].y) &&
+	  (Pts[1].x == Pts[2].x) &&
+	  (Pts[2].y == Pts[3].y) &&
+	  (Pts[3].x == Pts[0].x)) ||
+	 ((Pts[0].x == Pts[1].x) &&
+	  (Pts[1].y == Pts[2].y) &&
+	  (Pts[2].x == Pts[3].x) &&
+	  (Pts[3].y == Pts[0].y)))) {
+	region->extents.x1 = MIN(Pts[0].x, Pts[2].x);
+	region->extents.y1 = MIN(Pts[0].y, Pts[2].y);
+	region->extents.x2 = MAX(Pts[0].x, Pts[2].x);
+	region->extents.y2 = MAX(Pts[0].y, Pts[2].y);
 	if ((region->extents.x1 != region->extents.x2) &&
 	    (region->extents.y1 != region->extents.y2)) {
 	    region->numRects = 1;

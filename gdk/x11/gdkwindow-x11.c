@@ -4018,11 +4018,11 @@ gdk_window_input_shape_combine_mask (GdkWindow *window,
 
 
 static void
-do_shape_combine_region (GdkWindow *window,
-			 GdkRegion *shape_region,
-			 gint       offset_x,
-			 gint       offset_y,
-			 gint       shape)
+do_shape_combine_region (GdkWindow       *window,
+			 const GdkRegion *shape_region,
+			 gint             offset_x,
+			 gint             offset_y,
+			 gint             shape)
 {
   GdkWindowObject *private = (GdkWindowObject *)window;
   gint xoffset, yoffset;
@@ -4101,10 +4101,10 @@ do_shape_combine_region (GdkWindow *window,
  * 
  **/
 void
-gdk_window_shape_combine_region (GdkWindow *window,
-                                 GdkRegion *shape_region,
-                                 gint       offset_x,
-                                 gint       offset_y)
+gdk_window_shape_combine_region (GdkWindow       *window,
+                                 const GdkRegion *shape_region,
+                                 gint             offset_x,
+                                 gint             offset_y)
 { 
   do_shape_combine_region (window, shape_region, offset_x, offset_y, ShapeBounding);
 }
@@ -4136,10 +4136,10 @@ gdk_window_shape_combine_region (GdkWindow *window,
  * Since: 2.10
  */
 void 
-gdk_window_input_shape_combine_region (GdkWindow *window,
-				       GdkRegion *shape_region,
-				       gint       offset_x,
-				       gint       offset_y)
+gdk_window_input_shape_combine_region (GdkWindow       *window,
+				       const GdkRegion *shape_region,
+				       gint             offset_x,
+				       gint             offset_y)
 {
 #ifdef ShapeInput
   do_shape_combine_region (window, shape_region, offset_x, offset_y, ShapeInput);

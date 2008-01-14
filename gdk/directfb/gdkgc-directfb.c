@@ -350,8 +350,8 @@ gc_unset_clip_mask (GdkGC *gc)
 
 
 void
-_gdk_windowing_gc_set_clip_region (GdkGC     *gc,
-                        GdkRegion *region)
+_gdk_windowing_gc_set_clip_region (GdkGC           *gc,
+                                   const GdkRegion *region)
 {
   GdkGCDirectFB *data;
 
@@ -363,9 +363,9 @@ _gdk_windowing_gc_set_clip_region (GdkGC     *gc,
     return;
 
   if (region)
-       temp_region_init_copy (&data->clip_region, region);
+    temp_region_init_copy (&data->clip_region, region);
   else
-       temp_region_reset (&data->clip_region);
+    temp_region_reset (&data->clip_region);
 
   gc->clip_x_origin = 0;
   gc->clip_y_origin = 0;

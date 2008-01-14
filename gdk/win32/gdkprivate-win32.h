@@ -254,9 +254,9 @@ COLORREF  _gdk_win32_colormap_color     (GdkColormap *colormap,
 
 HRGN	  _gdk_win32_bitmap_to_hrgn     (GdkPixmap   *bitmap);
 
-HRGN	  _gdk_win32_gdkregion_to_hrgn  (GdkRegion   *region,
-					 gint         x_origin,
-					 gint         y_origin);
+HRGN	  _gdk_win32_gdkregion_to_hrgn  (const GdkRegion *region,
+					 gint             x_origin,
+					 gint             y_origin);
 
 GdkRegion *_gdk_win32_hrgn_to_region    (HRGN hrgn);
 

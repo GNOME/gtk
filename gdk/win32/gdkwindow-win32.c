@@ -3561,10 +3561,10 @@ gdk_window_get_type_hint (GdkWindow *window)
 }
 
 void
-gdk_window_shape_combine_region (GdkWindow *window,
-                                 GdkRegion *shape_region,
-                                 gint       offset_x,
-                                 gint       offset_y)
+gdk_window_shape_combine_region (GdkWindow       *window,
+                                 const GdkRegion *shape_region,
+                                 gint             offset_x,
+                                 gint             offset_y)
 {
   GdkWindowObject *private = (GdkWindowObject *)window;
 
@@ -3598,10 +3598,10 @@ gdk_window_shape_combine_region (GdkWindow *window,
 }
 
 void 
-gdk_window_input_shape_combine_region (GdkWindow *window,
-				       GdkRegion *shape_region,
-				       gint       offset_x,
-				       gint       offset_y)
+gdk_window_input_shape_combine_region (GdkWindow       *window,
+                                       const GdkRegion *shape_region,
+                                       gint             offset_x,
+                                       gint             offset_y)
 {
   g_return_if_fail (GDK_IS_WINDOW (window));
 
@@ -3611,7 +3611,8 @@ gdk_window_input_shape_combine_region (GdkWindow *window,
 }
 
 GdkWindow *
-gdk_window_lookup_for_display (GdkDisplay *display, GdkNativeWindow anid)
+gdk_window_lookup_for_display (GdkDisplay      *display,
+                               GdkNativeWindow  anid)
 {
   g_return_val_if_fail (display == _gdk_display, NULL);
 

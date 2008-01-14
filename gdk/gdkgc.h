@@ -257,9 +257,9 @@ void   gdk_gc_set_clip_origin	  (GdkGC	    *gc,
 void   gdk_gc_set_clip_mask	  (GdkGC	    *gc,
 				   GdkBitmap	    *mask);
 void   gdk_gc_set_clip_rectangle  (GdkGC	    *gc,
-				   GdkRectangle	    *rectangle);
+				   const GdkRectangle *rectangle);
 void   gdk_gc_set_clip_region	  (GdkGC	    *gc,
-				   GdkRegion	    *region);
+				   const GdkRegion  *region);
 void   gdk_gc_set_subwindow	  (GdkGC	    *gc,
 				   GdkSubwindowMode  mode);
 void   gdk_gc_set_exposures	  (GdkGC	    *gc,

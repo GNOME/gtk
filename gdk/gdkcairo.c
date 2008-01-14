@@ -59,8 +59,8 @@ gdk_cairo_create (GdkDrawable *drawable)
  * Since: 2.8
  **/
 void
-gdk_cairo_set_source_color (cairo_t  *cr,
-			    GdkColor *color)
+gdk_cairo_set_source_color (cairo_t        *cr,
+			    const GdkColor *color)
 {
   g_return_if_fail (cr != NULL);
   g_return_if_fail (color != NULL);
@@ -81,8 +81,8 @@ gdk_cairo_set_source_color (cairo_t  *cr,
  * Since: 2.8
  **/
 void
-gdk_cairo_rectangle (cairo_t      *cr,
-		     GdkRectangle *rectangle)
+gdk_cairo_rectangle (cairo_t            *cr,
+		     const GdkRectangle *rectangle)
 {
   g_return_if_fail (cr != NULL);
   g_return_if_fail (rectangle != NULL);
@@ -102,8 +102,8 @@ gdk_cairo_rectangle (cairo_t      *cr,
  * Since: 2.8
  **/
 void
-gdk_cairo_region (cairo_t   *cr,
-		  GdkRegion *region)
+gdk_cairo_region (cairo_t         *cr,
+		  const GdkRegion *region)
 {
   GdkRegionBox *boxes;
   gint n_boxes, i;
@@ -136,10 +136,10 @@ gdk_cairo_region (cairo_t   *cr,
  * Since: 2.8
  **/
 void
-gdk_cairo_set_source_pixbuf (cairo_t   *cr,
-			     GdkPixbuf *pixbuf,
-			     double     pixbuf_x,
-			     double     pixbuf_y)
+gdk_cairo_set_source_pixbuf (cairo_t         *cr,
+			     const GdkPixbuf *pixbuf,
+			     double           pixbuf_x,
+			     double           pixbuf_y)
 {
   gint width = gdk_pixbuf_get_width (pixbuf);
   gint height = gdk_pixbuf_get_height (pixbuf);

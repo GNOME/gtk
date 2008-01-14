@@ -147,12 +147,12 @@ void gdk_set_double_click_time             (guint       msec);
 
 /* Rectangle utilities
  */
-gboolean gdk_rectangle_intersect (GdkRectangle *src1,
-				  GdkRectangle *src2,
-				  GdkRectangle *dest);
-void     gdk_rectangle_union     (GdkRectangle *src1,
-				  GdkRectangle *src2,
-				  GdkRectangle *dest);
+gboolean gdk_rectangle_intersect (const GdkRectangle *src1,
+				  const GdkRectangle *src2,
+				  GdkRectangle       *dest);
+void     gdk_rectangle_union     (const GdkRectangle *src1,
+				  const GdkRectangle *src2,
+				  GdkRectangle       *dest);
 
 GType gdk_rectangle_get_type (void) G_GNUC_CONST;
 

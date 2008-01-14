@@ -1,3 +1,43 @@
+2008-01-14  Michael Natterer  <mitch@imendio.com>
+
+	* gdk/gdk.h
+	* gdk/gdkcairo.h
+	* gdk/gdkcolor.h
+	* gdk/gdkgc.h
+	* gdk/gdkinternals.h
+	* gdk/gdkregion.h
+	* gdk/gdkwindow.h: made GdkRectangle*, GdkRegion* and GdkColor*
+	parameters const.
+
+	* gdk/gdkcairo.c
+	* gdk/gdkgc.c
+	* gdk/gdkwindow.c
+	* gdk/gdkrectangle.c
+	* gdk/gdkpolyreg-generic.c
+	* gdk/gdkregion-generic.c
+	* gdk/directfb/gdkcolor-directfb.c
+	* gdk/directfb/gdkgc-directfb.c
+	* gdk/directfb/gdkgeometry-directfb.c
+	* gdk/directfb/gdkwindow-directfb.c
+	* gdk/quartz/gdkcolor-quartz.c
+	* gdk/quartz/gdkgc-quartz.c
+	* gdk/quartz/gdkgeometry-quartz.c
+	* gdk/quartz/gdkwindow-quartz.c
+	* gdk/win32/gdkcolor-win32.c
+	* gdk/win32/gdkgc-win32.c
+	* gdk/win32/gdkgeometry-win32.c
+	* gdk/win32/gdkprivate-win32.h
+	* gdk/win32/gdkwindow-win32.c
+	* gdk/x11/gdkcolor-x11.c
+	* gdk/x11/gdkgc-x11.c
+	* gdk/x11/gdkgeometry-x11.c
+	* gdk/x11/gdkmain-x11.c
+	* gdk/x11/gdkprivate-x11.h
+	* gdk/x11/gdkwindow-x11.c: changed accordingly.
+
+	* gdk/gdkpolyreg-generic.c: uncruftify to have proper function
+	headers.
+
 2008-01-14  Mathias Hasselmann  <mathias@openismus.com>
 
 	Explain name choice for gtk_tool_item_toolbar_reconfigured.
