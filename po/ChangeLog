@@ -1,3 +1,8 @@
+2008-01-13  Andre Klapper  <a9016009@gmx.de>
+
+	* si.po: Unbreak the build caused by adding si.po 
+	to ALL_LINGUAS.
+
 2008-01-10  Priit Laes  <plaes at svn dot gnome dot org>
 
 	* et.po: Translation updated by Ivar Smolin

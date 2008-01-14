@@ -353,7 +353,7 @@ msgid "Image pixel data corrupt"
 msgstr "පිළිඹිබු පික්සල දත්ත විනාශ විය"
 
 #: ../gdk-pixbuf/gdk-pixdata.c:431
-#, c-format
+#, fuzzy, c-format
 msgid "failed to allocate image buffer of %u byte"
 msgid_plural "failed to allocate image buffer of %u bytes"
 msgstr[0] "%u වර්‍ගයේ පිළිඹිබු ස්වාරක්‍ෂක භාරය වෙන් කළ නොහැකි විය"
