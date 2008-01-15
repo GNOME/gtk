@@ -511,32 +511,32 @@ GdkEvent* gdk_event_get			(void);
 
 GdkEvent* gdk_event_peek                (void);
 GdkEvent* gdk_event_get_graphics_expose (GdkWindow 	*window);
-void      gdk_event_put	 		(GdkEvent  	*event);
+void      gdk_event_put	 		(const GdkEvent *event);
 
 GdkEvent* gdk_event_new                 (GdkEventType    type);
-GdkEvent* gdk_event_copy     		(GdkEvent 	*event);
+GdkEvent* gdk_event_copy     		(const GdkEvent *event);
 void	  gdk_event_free     		(GdkEvent 	*event);
 
-guint32   gdk_event_get_time            (GdkEvent        *event);
-gboolean  gdk_event_get_state           (GdkEvent        *event,
+guint32   gdk_event_get_time            (const GdkEvent  *event);
+gboolean  gdk_event_get_state           (const GdkEvent  *event,
                                          GdkModifierType *state);
-gboolean  gdk_event_get_coords		(GdkEvent	 *event,
+gboolean  gdk_event_get_coords		(const GdkEvent  *event,
 					 gdouble	 *x_win,
 					 gdouble	 *y_win);
-gboolean  gdk_event_get_root_coords	(GdkEvent	 *event,
+gboolean  gdk_event_get_root_coords	(const GdkEvent  *event,
 					 gdouble	 *x_root,
 					 gdouble	 *y_root);
-gboolean  gdk_event_get_axis            (GdkEvent        *event,
+gboolean  gdk_event_get_axis            (const GdkEvent  *event,
                                          GdkAxisUse       axis_use,
                                          gdouble         *value);
-void      gdk_event_request_motions     (GdkEventMotion  *event);
+void      gdk_event_request_motions     (const GdkEventMotion *event);
 void	  gdk_event_handler_set 	(GdkEventFunc    func,
 					 gpointer        data,
 					 GDestroyNotify  notify);
 
-void       gdk_event_set_screen (GdkEvent  *event,
-				 GdkScreen *screen);
-GdkScreen *gdk_event_get_screen (GdkEvent  *event);
+void       gdk_event_set_screen         (GdkEvent        *event,
+                                         GdkScreen       *screen);
+GdkScreen *gdk_event_get_screen         (const GdkEvent  *event);
 
 void	  gdk_set_show_events		(gboolean	 show_events);
 gboolean  gdk_get_show_events		(void);

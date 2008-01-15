@@ -475,10 +475,10 @@ void gdk_window_set_skip_pager_hint   (GdkWindow *window,
 void gdk_window_set_urgency_hint      (GdkWindow *window,
 				       gboolean   urgent);
 
-void          gdk_window_set_geometry_hints (GdkWindow        *window,
-					     GdkGeometry      *geometry,
-					     GdkWindowHints    geom_mask);
-void          gdk_set_sm_client_id          (const gchar      *sm_client_id);
+void          gdk_window_set_geometry_hints (GdkWindow          *window,
+					     const GdkGeometry  *geometry,
+					     GdkWindowHints      geom_mask);
+void          gdk_set_sm_client_id          (const gchar        *sm_client_id);
 
 void	      gdk_window_begin_paint_rect   (GdkWindow          *window,
 					     const GdkRectangle *rectangle);

@@ -237,7 +237,7 @@ gdk_event_peek (void)
  * queue if event->any.window is %NULL. See gdk_display_put_event().
  **/
 void
-gdk_event_put (GdkEvent *event)
+gdk_event_put (const GdkEvent *event)
 {
   GdkDisplay *display;
   
@@ -332,7 +332,7 @@ gdk_event_new (GdkEventType type)
 }
 
 static gboolean
-gdk_event_is_allocated (GdkEvent *event)
+gdk_event_is_allocated (const GdkEvent *event)
 {
   if (event_hash)
     return g_hash_table_lookup (event_hash, event) != NULL;
@@ -351,7 +351,7 @@ gdk_event_is_allocated (GdkEvent *event)
  * gdk_event_free().
  **/
 GdkEvent*
-gdk_event_copy (GdkEvent *event)
+gdk_event_copy (const GdkEvent *event)
 {
   GdkEventPrivate *new_private;
   GdkEvent *new_event;
@@ -499,7 +499,7 @@ gdk_event_free (GdkEvent *event)
  * Return value: time stamp field from @event
  **/
 guint32
-gdk_event_get_time (GdkEvent *event)
+gdk_event_get_time (const GdkEvent *event)
 {
   if (event)
     switch (event->type)
@@ -570,8 +570,8 @@ gdk_event_get_time (GdkEvent *event)
  * Return value: %TRUE if there was a state field in the event 
  **/
 gboolean
-gdk_event_get_state (GdkEvent        *event,
-                     GdkModifierType *state)
+gdk_event_get_state (const GdkEvent        *event,
+                     GdkModifierType       *state)
 {
   g_return_val_if_fail (state != NULL, FALSE);
   
@@ -646,9 +646,9 @@ gdk_event_get_state (GdkEvent        *event,
  * Return value: %TRUE if the event delivered event window coordinates
  **/
 gboolean
-gdk_event_get_coords (GdkEvent *event,
-		      gdouble  *x_win,
-		      gdouble  *y_win)
+gdk_event_get_coords (const GdkEvent *event,
+		      gdouble        *x_win,
+		      gdouble        *y_win)
 {
   gdouble x = 0, y = 0;
   gboolean fetched = TRUE;
@@ -705,9 +705,9 @@ gdk_event_get_coords (GdkEvent *event,
  * Return value: %TRUE if the event delivered root window coordinates
  **/
 gboolean
-gdk_event_get_root_coords (GdkEvent *event,
-			   gdouble  *x_root,
-			   gdouble  *y_root)
+gdk_event_get_root_coords (const GdkEvent *event,
+			   gdouble        *x_root,
+			   gdouble        *y_root)
 {
   gdouble x = 0, y = 0;
   gboolean fetched = TRUE;
@@ -770,9 +770,9 @@ gdk_event_get_root_coords (GdkEvent *event,
  * Return value: %TRUE if the specified axis was found, otherwise %FALSE
  **/
 gboolean
-gdk_event_get_axis (GdkEvent   *event,
-		    GdkAxisUse  axis_use,
-		    gdouble    *value)
+gdk_event_get_axis (const GdkEvent *event,
+		    GdkAxisUse      axis_use,
+		    gdouble        *value)
 {
   gdouble *axes;
   GdkDevice *device;
@@ -856,7 +856,7 @@ gdk_event_get_axis (GdkEvent   *event,
  * Since: 2.12
  **/
 void
-gdk_event_request_motions (GdkEventMotion *event)
+gdk_event_request_motions (const GdkEventMotion *event)
 {
   g_return_if_fail (event != NULL);
   if (event->type == GDK_MOTION_NOTIFY && event->is_hint)
@@ -904,7 +904,7 @@ gdk_event_set_screen (GdkEvent  *event,
  * Since: 2.2
  **/
 GdkScreen *
-gdk_event_get_screen (GdkEvent *event)
+gdk_event_get_screen (const GdkEvent *event)
 {
   if (gdk_event_is_allocated (event))
     {

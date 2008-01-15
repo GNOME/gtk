@@ -1844,9 +1844,9 @@ get_effective_window_decorations (GdkWindow       *window,
 }
 
 void 
-gdk_window_set_geometry_hints (GdkWindow      *window,
-			       GdkGeometry    *geometry,
-			       GdkWindowHints  geom_mask)
+gdk_window_set_geometry_hints (GdkWindow         *window,
+			       const GdkGeometry *geometry,
+			       GdkWindowHints     geom_mask)
 {
   GdkWindowImplWin32 *impl;
 

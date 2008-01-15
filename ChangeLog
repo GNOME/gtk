@@ -1,3 +1,31 @@
+2008-01-15  Michael Natterer  <mitch@imendio.com>
+
+	* gdk/gdkdisplay.h
+	* gdk/gdkdrawable.h
+	* gdk/gdkevents.h
+	* gdk/gdkpango.h
+	* gdk/gdkregion.h
+	* gdk/gdkrgb.h
+	* gdk/gdkwindow.h: made more struct pointer and array parameters
+	const. GDK should now be constified as far as possible without
+	breaking source compatibility. Includes some minor cleanup like
+	indentation and s/nfoo/n_foo/ (bug #508544).
+
+	* gdk/gdkdisplay.c
+	* gdk/gdkdraw.c
+	* gdk/gdkevents.c
+	* gdk/gdkpango.c
+	* gdk/gdkregion-generic.c
+	* gdk/gdkrgb.c
+	* gdk/directfb/gdkdisplay-directfb.c
+	* gdk/directfb/gdkwindow-directfb.c
+	* gdk/quartz/gdkdisplay-quartz.c
+	* gdk/quartz/gdkwindow-quartz.c
+	* gdk/win32/gdkdisplay-win32.c
+	* gdk/win32/gdkwindow-win32.c
+	* gdk/x11/gdkdisplay-x11.c
+	* gdk/x11/gdkwindow-x11.c: changed accordingly.
+
 2008-01-14  Michael Natterer  <mitch@imendio.com>
 
 	* gtk/gtkrc.c (_gtk_rc_style_unset_rc_property): add cast to fix
@@ -40,7 +68,7 @@
 	* gdk/gdkinternals.h
 	* gdk/gdkregion.h
 	* gdk/gdkwindow.h: made GdkRectangle*, GdkRegion* and GdkColor*
-	parameters const.
+	parameters const (bug #508544).
 
 	* gdk/gdkcairo.c
 	* gdk/gdkgc.c

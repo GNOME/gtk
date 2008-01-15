@@ -50,7 +50,7 @@ typedef struct _GdkRgbCmapInfo GdkRgbCmapInfo;
 typedef void (*GdkRgbConvFunc) (GdkRgbInfo *image_info, GdkImage *image,
 				gint x0, gint y0,
 				gint width, gint height,
-				guchar *buf, int rowstride,
+				const guchar *buf, int rowstride,
 				gint x_align, gint y_align,
 				GdkRgbCmap *cmap);
 
@@ -849,13 +849,13 @@ gdk_rgb_find_color (GdkColormap *colormap, GdkColor *color)
 static void
 gdk_rgb_convert_8 (GdkRgbInfo *image_info, GdkImage *image,
 		   gint x0, gint y0, gint width, gint height,
-		   guchar *buf, int rowstride,
+		   const guchar *buf, int rowstride,
 		   gint x_align, gint y_align, GdkRgbCmap *cmap)
 {
   int x, y;
   gint bpl;
   guchar *obuf, *obptr;
-  guchar *bptr, *bp2;
+  const guchar *bptr, *bp2;
   gint r, g, b;
   guchar *colorcube = image_info->colorcube;
 
@@ -925,13 +925,13 @@ gdk_rgb_convert_8 (GdkRgbInfo *image_info, GdkImage *image,
 static void
 gdk_rgb_convert_8 (GdkRgbInfo *image_info, GdkImage *image,
 		   gint x0, gint y0, gint width, gint height,
-		   guchar *buf, int rowstride,
+		   const guchar *buf, int rowstride,
 		   gint x_align, gint y_align, GdkRgbCmap *cmap)
 {
   int x, y;
   gint bpl;
   guchar *obuf, *obptr;
-  guchar *bptr, *bp2;
+  const guchar *bptr, *bp2;
   gint r, g, b;
   guchar *colorcube = image_info->colorcube;
 
@@ -1298,13 +1298,13 @@ gdk_rgb_preprocess_dm_565 (void)
 static void
 gdk_rgb_convert_8_d666 (GdkRgbInfo *image_info, GdkImage *image,
 			gint x0, gint y0, gint width, gint height,
-			guchar *buf, int rowstride,
+			const guchar *buf, int rowstride,
 			gint x_align, gint y_align, GdkRgbCmap *cmap)
 {
   int x, y;
   gint bpl;
   guchar *obuf, *obptr;
-  guchar *bptr, *bp2;
+  const guchar *bptr, *bp2;
   gint r, g, b;
   const guchar *dmp;
   gint dith;
@@ -1338,14 +1338,14 @@ gdk_rgb_convert_8_d666 (GdkRgbInfo *image_info, GdkImage *image,
 static void
 gdk_rgb_convert_8_d (GdkRgbInfo *image_info, GdkImage *image,
 		     gint x0, gint y0, gint width, gint height,
-		     guchar *buf, int rowstride,
+		     const guchar *buf, int rowstride,
 		     gint x_align, gint y_align,
 		     GdkRgbCmap *cmap)
 {
   int x, y;
   gint bpl;
   guchar *obuf, *obptr;
-  guchar *bptr, *bp2;
+  const guchar *bptr, *bp2;
   gint r, g, b;
   const guchar *dmp;
   gint dith;
@@ -1383,13 +1383,13 @@ gdk_rgb_convert_8_d (GdkRgbInfo *image_info, GdkImage *image,
 static void
 gdk_rgb_convert_8_indexed (GdkRgbInfo *image_info, GdkImage *image,
 			   gint x0, gint y0, gint width, gint height,
-			   guchar *buf, int rowstride,
+			   const guchar *buf, int rowstride,
 			   gint x_align, gint y_align, GdkRgbCmap *cmap)
 {
   int x, y;
   gint bpl;
   guchar *obuf, *obptr;
-  guchar *bptr, *bp2;
+  const guchar *bptr, *bp2;
   guchar c;
   guchar *lut;
   GdkRgbCmapInfo *cmap_info = gdk_rgb_cmap_get_info (cmap, image_info);
@@ -1416,13 +1416,13 @@ gdk_rgb_convert_8_indexed (GdkRgbInfo *image_info, GdkImage *image,
 static void
 gdk_rgb_convert_gray8 (GdkRgbInfo *image_info, GdkImage *image,
 		       gint x0, gint y0, gint width, gint height,
-		       guchar *buf, int rowstride,
+		       const guchar *buf, int rowstride,
 		       gint x_align, gint y_align, GdkRgbCmap *cmap)
 {
   int x, y;
   gint bpl;
   guchar *obuf, *obptr;
-  guchar *bptr, *bp2;
+  const guchar *bptr, *bp2;
   gint r, g, b;
 
   bptr = buf;
@@ -1448,13 +1448,13 @@ gdk_rgb_convert_gray8 (GdkRgbInfo *image_info, GdkImage *image,
 static void
 gdk_rgb_convert_gray8_gray (GdkRgbInfo *image_info, GdkImage *image,
 			    gint x0, gint y0, gint width, gint height,
-			    guchar *buf, int rowstride,
+			    const guchar *buf, int rowstride,
 			    gint x_align, gint y_align, GdkRgbCmap *cmap)
 {
   int y;
   gint bpl;
   guchar *obuf;
-  guchar *bptr;
+  const guchar *bptr;
 
   bptr = buf;
   bpl = image->bpl;
@@ -1483,13 +1483,13 @@ gdk_rgb_convert_gray8_gray (GdkRgbInfo *image_info, GdkImage *image,
 static void
 gdk_rgb_convert_565 (GdkRgbInfo *image_info, GdkImage *image,
 		     gint x0, gint y0, gint width, gint height,
-		     guchar *buf, int rowstride,
+		     const guchar *buf, int rowstride,
 		     gint x_align, gint y_align, GdkRgbCmap *cmap)
 {
   int x, y;
   guchar *obuf, *obptr;
   gint bpl;
-  guchar *bptr, *bp2;
+  const guchar *bptr, *bp2;
   guchar r, g, b;
 
   bptr = buf;
@@ -1580,13 +1580,13 @@ gdk_rgb_convert_565 (GdkRgbInfo *image_info, GdkImage *image,
 static void
 gdk_rgb_convert_565 (GdkRgbInfo *image_info, GdkImage *image,
 		     gint x0, gint y0, gint width, gint height,
-		     guchar *buf, int rowstride,
+		     const guchar *buf, int rowstride,
 		     gint x_align, gint y_align, GdkRgbCmap *cmap)
 {
   int x, y;
   guchar *obuf;
   gint bpl;
-  guchar *bptr, *bp2;
+  const guchar *bptr, *bp2;
   guchar r, g, b;
 
   bptr = buf;
@@ -1614,13 +1614,13 @@ gdk_rgb_convert_565 (GdkRgbInfo *image_info, GdkImage *image,
 static void
 gdk_rgb_convert_565_gray (GdkRgbInfo *image_info, GdkImage *image,
 			  gint x0, gint y0, gint width, gint height,
-			  guchar *buf, int rowstride,
+			  const guchar *buf, int rowstride,
 			  gint x_align, gint y_align, GdkRgbCmap *cmap)
 {
   int x, y;
   guchar *obuf, *obptr;
   gint bpl;
-  guchar *bptr, *bp2;
+  const guchar *bptr, *bp2;
   guchar g;
 
   bptr = buf;
@@ -1682,13 +1682,13 @@ gdk_rgb_convert_565_gray (GdkRgbInfo *image_info, GdkImage *image,
 static void
 gdk_rgb_convert_565_gray (GdkRgbInfo *image_info, GdkImage *image,
 			  gint x0, gint y0, gint width, gint height,
-			  guchar *buf, int rowstride,
+			  const guchar *buf, int rowstride,
 			  gint x_align, gint y_align, GdkRgbCmap *cmap)
 {
   int x, y;
   guchar *obuf;
   gint bpl;
-  guchar *bptr, *bp2;
+  const guchar *bptr, *bp2;
   guchar g;
 
   bptr = buf;
@@ -1713,13 +1713,13 @@ gdk_rgb_convert_565_gray (GdkRgbInfo *image_info, GdkImage *image,
 static void
 gdk_rgb_convert_565_br (GdkRgbInfo *image_info, GdkImage *image,
 			gint x0, gint y0, gint width, gint height,
-			guchar *buf, int rowstride,
+			const guchar *buf, int rowstride,
 			gint x_align, gint y_align, GdkRgbCmap *cmap)
 {
   int x, y;
   guchar *obuf;
   gint bpl;
-  guchar *bptr, *bp2;
+  const guchar *bptr, *bp2;
   guchar r, g, b;
 
   bptr = buf;
@@ -1751,15 +1751,15 @@ gdk_rgb_convert_565_br (GdkRgbInfo *image_info, GdkImage *image,
 #ifdef HAIRY_CONVERT_565
 static void
 gdk_rgb_convert_565_d (GdkRgbInfo *image_info, GdkImage *image,
-		     gint x0, gint y0, gint width, gint height,
-		     guchar *buf, int rowstride,
-		     gint x_align, gint y_align, GdkRgbCmap *cmap)
+                       gint x0, gint y0, gint width, gint height,
+                       const guchar *buf, int rowstride,
+                       gint x_align, gint y_align, GdkRgbCmap *cmap)
 {
   /* Now this is what I'd call some highly tuned code! */
   int x, y;
   guchar *obuf, *obptr;
   gint bpl;
-  guchar *bptr, *bp2;
+  const guchar *bptr, *bp2;
 
   width += x_align;
   height += y_align;
@@ -1877,13 +1877,13 @@ gdk_rgb_convert_565_d (GdkRgbInfo *image_info, GdkImage *image,
 static void
 gdk_rgb_convert_565_d (GdkRgbInfo *image_info, GdkImage *image,
                        gint x0, gint y0, gint width, gint height,
-                       guchar *buf, int rowstride,
+                       const guchar *buf, int rowstride,
                        gint x_align, gint y_align, GdkRgbCmap *cmap)
 {
   int x, y;
   guchar *obuf;
   gint bpl;
-  guchar *bptr;
+  const guchar *bptr;
 
   width += x_align;
   height += y_align;
@@ -1922,13 +1922,13 @@ gdk_rgb_convert_565_d (GdkRgbInfo *image_info, GdkImage *image,
 static void
 gdk_rgb_convert_555 (GdkRgbInfo *image_info, GdkImage *image,
 		     gint x0, gint y0, gint width, gint height,
-		     guchar *buf, int rowstride,
+		     const guchar *buf, int rowstride,
 		     gint x_align, gint y_align, GdkRgbCmap *cmap)
 {
   int x, y;
   guchar *obuf;
   gint bpl;
-  guchar *bptr, *bp2;
+  const guchar *bptr, *bp2;
   guchar r, g, b;
 
   bptr = buf;
@@ -1954,13 +1954,13 @@ gdk_rgb_convert_555 (GdkRgbInfo *image_info, GdkImage *image,
 static void
 gdk_rgb_convert_555_br (GdkRgbInfo *image_info, GdkImage *image,
 			gint x0, gint y0, gint width, gint height,
-			guchar *buf, int rowstride,
+			const guchar *buf, int rowstride,
 			gint x_align, gint y_align, GdkRgbCmap *cmap)
 {
   int x, y;
   guchar *obuf;
   gint bpl;
-  guchar *bptr, *bp2;
+  const guchar *bptr, *bp2;
   guchar r, g, b;
 
   bptr = buf;
@@ -1990,13 +1990,13 @@ gdk_rgb_convert_555_br (GdkRgbInfo *image_info, GdkImage *image,
 static void
 gdk_rgb_convert_888_msb (GdkRgbInfo *image_info, GdkImage *image,
 			 gint x0, gint y0, gint width, gint height,
-			 guchar *buf, int rowstride,
+			 const guchar *buf, int rowstride,
 			 gint x_align, gint y_align, GdkRgbCmap *cmap)
 {
   int y;
   guchar *obuf;
   gint bpl;
-  guchar *bptr;
+  const guchar *bptr;
 
   bptr = buf;
   bpl = image->bpl;
@@ -2018,13 +2018,13 @@ gdk_rgb_convert_888_msb (GdkRgbInfo *image_info, GdkImage *image,
 static void
 gdk_rgb_convert_888_lsb (GdkRgbInfo *image_info, GdkImage *image,
 			 gint x0, gint y0, gint width, gint height,
-			 guchar *buf, int rowstride,
+			 const guchar *buf, int rowstride,
 			 gint x_align, gint y_align, GdkRgbCmap *cmap)
 {
   int x, y;
   guchar *obuf, *obptr;
   gint bpl;
-  guchar *bptr, *bp2;
+  const guchar *bptr, *bp2;
   int r, g, b;
 
   bptr = buf;
@@ -2092,13 +2092,13 @@ gdk_rgb_convert_888_lsb (GdkRgbInfo *image_info, GdkImage *image,
 static void
 gdk_rgb_convert_888_lsb (GdkRgbInfo *image_info, GdkImage *image,
 			 gint x0, gint y0, gint width, gint height,
-			 guchar *buf, int rowstride,
+			 const guchar *buf, int rowstride,
 			 gint x_align, gint y_align, GdkRgbCmap *cmap)
 {
   int x, y;
   guchar *obuf;
   gint bpl;
-  guchar *bptr, *bp2;
+  const guchar *bptr, *bp2;
   int r, g, b;
 
   bptr = buf;
@@ -2128,13 +2128,13 @@ gdk_rgb_convert_888_lsb (GdkRgbInfo *image_info, GdkImage *image,
 static void
 gdk_rgb_convert_0888 (GdkRgbInfo *image_info, GdkImage *image,
 		      gint x0, gint y0, gint width, gint height,
-		      guchar *buf, int rowstride,
+		      const guchar *buf, int rowstride,
 		      gint x_align, gint y_align, GdkRgbCmap *cmap)
 {
   int y, w;
   guchar *obuf, *p;
   gint bpl;
-  guchar *bptr, *bp2;
+  const guchar *bptr, *bp2;
 
   bptr = buf;
   bpl = image->bpl;
@@ -2163,13 +2163,13 @@ gdk_rgb_convert_0888 (GdkRgbInfo *image_info, GdkImage *image,
 static void
 gdk_rgb_convert_0888_medialib (GdkRgbInfo *image_info, GdkImage *image,
 			       gint x0, gint y0, gint width, gint height,
-			       guchar *buf, int rowstride,
+			       const guchar *buf, int rowstride,
 			       gint x_align, gint y_align, GdkRgbCmap *cmap)
 {
   int y, w;
   guchar *obuf, *p;
   gint bpl;
-  guchar *bptr, *bp2;
+  const guchar *bptr, *bp2;
 
   bptr = buf;
   bpl = image->bpl;
@@ -2184,13 +2184,13 @@ gdk_rgb_convert_0888_medialib (GdkRgbInfo *image_info, GdkImage *image,
 static void
 gdk_rgb_convert_0888_br (GdkRgbInfo *image_info, GdkImage *image,
 			 gint x0, gint y0, gint width, gint height,
-			 guchar *buf, int rowstride,
+			 const guchar *buf, int rowstride,
 			 gint x_align, gint y_align, GdkRgbCmap *cmap)
 {
   int y, w;
   guchar *obuf, *p;
   gint bpl;
-  guchar *bptr, *bp2;
+  const guchar *bptr, *bp2;
 
   bptr = buf;
   bpl = image->bpl;
@@ -2217,13 +2217,13 @@ gdk_rgb_convert_0888_br (GdkRgbInfo *image_info, GdkImage *image,
 static void
 gdk_rgb_convert_8880_br (GdkRgbInfo *image_info, GdkImage *image,
 			 gint x0, gint y0, gint width, gint height,
-			 guchar *buf, int rowstride,
+			 const guchar *buf, int rowstride,
 			 gint x_align, gint y_align, GdkRgbCmap *cmap)
 {
   int x, y;
   guchar *obuf;
   gint bpl;
-  guchar *bptr, *bp2;
+  const guchar *bptr, *bp2;
   int r, g, b;
 
   bptr = buf;
@@ -2250,14 +2250,14 @@ gdk_rgb_convert_8880_br (GdkRgbInfo *image_info, GdkImage *image,
 static void
 gdk_rgb_convert_truecolor_lsb (GdkRgbInfo *image_info, GdkImage *image,
 			       gint x0, gint y0, gint width, gint height,
-			       guchar *buf, int rowstride,
+			       const guchar *buf, int rowstride,
 			       gint x_align, gint y_align,
 			       GdkRgbCmap *cmap)
 {
   int x, y;
   guchar *obuf, *obptr;
   gint bpl;
-  guchar *bptr, *bp2;
+  const guchar *bptr, *bp2;
   gint r, g, b;
   gint r_right, r_left;
   gint g_right, g_left;
@@ -2304,14 +2304,14 @@ gdk_rgb_convert_truecolor_lsb (GdkRgbInfo *image_info, GdkImage *image,
 static void
 gdk_rgb_convert_truecolor_lsb_d (GdkRgbInfo *image_info, GdkImage *image,
 				 gint x0, gint y0, gint width, gint height,
-				 guchar *buf, int rowstride,
+				 const guchar *buf, int rowstride,
 				 gint x_align, gint y_align,
 				 GdkRgbCmap *cmap)
 {
   int x, y;
   guchar *obuf, *obptr;
   gint bpl;
-  guchar *bptr, *bp2;
+  const guchar *bptr, *bp2;
   gint r, g, b;
   gint r_right, r_left, r_prec;
   gint g_right, g_left, g_prec;
@@ -2369,14 +2369,14 @@ gdk_rgb_convert_truecolor_lsb_d (GdkRgbInfo *image_info, GdkImage *image,
 static void
 gdk_rgb_convert_truecolor_msb (GdkRgbInfo *image_info, GdkImage *image,
 			       gint x0, gint y0, gint width, gint height,
-			       guchar *buf, int rowstride,
+			       const guchar *buf, int rowstride,
 			       gint x_align, gint y_align,
 			       GdkRgbCmap *cmap)
 {
   int x, y;
   guchar *obuf, *obptr;
   gint bpl;
-  guchar *bptr, *bp2;
+  const guchar *bptr, *bp2;
   gint r, g, b;
   gint r_right, r_left;
   gint g_right, g_left;
@@ -2423,14 +2423,14 @@ gdk_rgb_convert_truecolor_msb (GdkRgbInfo *image_info, GdkImage *image,
 static void
 gdk_rgb_convert_truecolor_msb_d (GdkRgbInfo *image_info, GdkImage *image,
 				 gint x0, gint y0, gint width, gint height,
-				 guchar *buf, int rowstride,
+				 const guchar *buf, int rowstride,
 				 gint x_align, gint y_align,
 				 GdkRgbCmap *cmap)
 {
   int x, y;
   guchar *obuf, *obptr;
   gint bpl;
-  guchar *bptr, *bp2;
+  const guchar *bptr, *bp2;
   gint r, g, b;
   gint r_right, r_left, r_prec;
   gint g_right, g_left, g_prec;
@@ -2489,14 +2489,14 @@ gdk_rgb_convert_truecolor_msb_d (GdkRgbInfo *image_info, GdkImage *image,
 static void
 gdk_rgb_convert_4 (GdkRgbInfo *image_info, GdkImage *image,
 		   gint x0, gint y0, gint width, gint height,
-		   guchar *buf, int rowstride,
+		   const guchar *buf, int rowstride,
 		   gint x_align, gint y_align,
 		   GdkRgbCmap *cmap)
 {
   int x, y;
   gint bpl;
   guchar *obuf, *obptr;
-  guchar *bptr, *bp2;
+  const guchar *bptr, *bp2;
   gint r, g, b;
   const guchar *dmp;
   gint dith;
@@ -2529,14 +2529,14 @@ gdk_rgb_convert_4 (GdkRgbInfo *image_info, GdkImage *image,
 static void
 gdk_rgb_convert_4_pack (GdkRgbInfo *image_info, GdkImage *image,
 			gint x0, gint y0, gint width, gint height,
-			guchar *buf, int rowstride,
+			const guchar *buf, int rowstride,
 			gint x_align, gint y_align,
 			GdkRgbCmap *cmap)
 {
   int x, y, ix;
   gint bpl;
   guchar *obuf, *obptr;
-  guchar *bptr, *bp2;
+  const guchar *bptr, *bp2;
   gint r, g, b;
   const guchar *dmp;
   gint dith;
@@ -2603,13 +2603,13 @@ gdk_rgb_convert_4_pack (GdkRgbInfo *image_info, GdkImage *image,
 static void
 gdk_rgb_convert_gray4 (GdkRgbInfo *image_info, GdkImage *image,
 		       gint x0, gint y0, gint width, gint height,
-		       guchar *buf, int rowstride,
+		       const guchar *buf, int rowstride,
 		       gint x_align, gint y_align, GdkRgbCmap *cmap)
 {
   int x, y;
   gint bpl;
   guchar *obuf, *obptr;
-  guchar *bptr, *bp2;
+  const guchar *bptr, *bp2;
   gint r, g, b;
   gint shift;
 
@@ -2637,13 +2637,13 @@ gdk_rgb_convert_gray4 (GdkRgbInfo *image_info, GdkImage *image,
 static void
 gdk_rgb_convert_gray4_pack (GdkRgbInfo *image_info, GdkImage *image,
 			    gint x0, gint y0, gint width, gint height,
-			    guchar *buf, int rowstride,
+			    const guchar *buf, int rowstride,
 			    gint x_align, gint y_align, GdkRgbCmap *cmap)
 {
   int x, y;
   gint bpl;
   guchar *obuf, *obptr;
-  guchar *bptr, *bp2;
+  const guchar *bptr, *bp2;
   gint r, g, b;
   gint shift;
   guchar pix0, pix1;
@@ -2697,13 +2697,13 @@ gdk_rgb_convert_gray4_pack (GdkRgbInfo *image_info, GdkImage *image,
 static void
 gdk_rgb_convert_gray4_d (GdkRgbInfo *image_info, GdkImage *image,
 			 gint x0, gint y0, gint width, gint height,
-			 guchar *buf, int rowstride,
+			 const guchar *buf, int rowstride,
 			 gint x_align, gint y_align, GdkRgbCmap *cmap)
 {
   int x, y;
   gint bpl;
   guchar *obuf, *obptr;
-  guchar *bptr, *bp2;
+  const guchar *bptr, *bp2;
   gint r, g, b;
   const guchar *dmp;
   gint prec, right;
@@ -2737,13 +2737,13 @@ gdk_rgb_convert_gray4_d (GdkRgbInfo *image_info, GdkImage *image,
 static void
 gdk_rgb_convert_gray4_d_pack (GdkRgbInfo *image_info, GdkImage *image,
 			      gint x0, gint y0, gint width, gint height,
-			      guchar *buf, int rowstride,
+			      const guchar *buf, int rowstride,
 			      gint x_align, gint y_align, GdkRgbCmap *cmap)
 {
   int x, y;
   gint bpl;
   guchar *obuf, *obptr;
-  guchar *bptr, *bp2;
+  const guchar *bptr, *bp2;
   gint r, g, b;
   const guchar *dmp;
   gint prec, right;
@@ -2806,14 +2806,14 @@ gdk_rgb_convert_gray4_d_pack (GdkRgbInfo *image_info, GdkImage *image,
 static void
 gdk_rgb_convert_1 (GdkRgbInfo *image_info, GdkImage *image,
 		   gint x0, gint y0, gint width, gint height,
-		   guchar *buf, int rowstride,
+		   const guchar *buf, int rowstride,
 		   gint x_align, gint y_align,
 		   GdkRgbCmap *cmap)
 {
   int x, y;
   gint bpl;
   guchar *obuf, *obptr;
-  guchar *bptr, *bp2;
+  const guchar *bptr, *bp2;
   gint r, g, b;
   const guchar *dmp;
   gint dith;
@@ -2860,11 +2860,13 @@ gdk_rgb_ensure_stage (GdkRgbInfo *image_info)
 /* This is slow. Speed me up, please. */
 static void
 gdk_rgb_32_to_stage (GdkRgbInfo *image_info,
-		     guchar *buf, gint rowstride, gint width, gint height)
+		     const guchar *buf, gint rowstride, gint width, gint height)
 {
   gint x, y;
-  guchar *pi_start, *po_start;
-  guchar *pi, *po;
+  const guchar *pi_start;
+  guchar *po_start;
+  const guchar *pi;
+  guchar *po;
 
   pi_start = buf;
   po_start = gdk_rgb_ensure_stage (image_info);
@@ -2889,7 +2891,7 @@ gdk_rgb_32_to_stage (GdkRgbInfo *image_info,
 static void
 gdk_rgb_convert_32_generic (GdkRgbInfo *image_info, GdkImage *image,
 			    gint x0, gint y0, gint width, gint height,
-			    guchar *buf, gint rowstride,
+			    const guchar *buf, gint rowstride,
 			    gint x_align, gint y_align, GdkRgbCmap *cmap)
 {
   gdk_rgb_32_to_stage (image_info, buf, rowstride, width, height);
@@ -2904,7 +2906,7 @@ gdk_rgb_convert_32_generic (GdkRgbInfo *image_info, GdkImage *image,
 static void
 gdk_rgb_convert_32_generic_d (GdkRgbInfo *image_info, GdkImage *image,
 			      gint x0, gint y0, gint width, gint height,
-			      guchar *buf, gint rowstride,
+			      const guchar *buf, gint rowstride,
 			      gint x_align, gint y_align, GdkRgbCmap *cmap)
 {
   gdk_rgb_32_to_stage (image_info, buf, rowstride, width, height);
@@ -2917,11 +2919,13 @@ gdk_rgb_convert_32_generic_d (GdkRgbInfo *image_info, GdkImage *image,
 /* This is slow. Speed me up, please. */
 static void
 gdk_rgb_gray_to_stage (GdkRgbInfo *image_info,
-		       guchar *buf, gint rowstride, gint width, gint height)
+		       const guchar *buf, gint rowstride, gint width, gint height)
 {
   gint x, y;
-  guchar *pi_start, *po_start;
-  guchar *pi, *po;
+  const guchar *pi_start;
+  guchar *po_start;
+  const guchar *pi;
+  guchar *po;
   guchar gray;
 
   pi_start = buf;
@@ -2947,7 +2951,7 @@ gdk_rgb_gray_to_stage (GdkRgbInfo *image_info,
 static void
 gdk_rgb_convert_gray_generic (GdkRgbInfo *image_info, GdkImage *image,
 			      gint x0, gint y0, gint width, gint height,
-			      guchar *buf, gint rowstride,
+			      const guchar *buf, gint rowstride,
 			      gint x_align, gint y_align, GdkRgbCmap *cmap)
 {
   gdk_rgb_gray_to_stage (image_info, buf, rowstride, width, height);
@@ -2960,7 +2964,7 @@ gdk_rgb_convert_gray_generic (GdkRgbInfo *image_info, GdkImage *image,
 static void
 gdk_rgb_convert_gray_generic_d (GdkRgbInfo *image_info, GdkImage *image,
 				gint x0, gint y0, gint width, gint height,
-				guchar *buf, gint rowstride,
+				const guchar *buf, gint rowstride,
 				gint x_align, gint y_align, GdkRgbCmap *cmap)
 {
   gdk_rgb_gray_to_stage (image_info, buf, rowstride, width, height);
@@ -2974,7 +2978,7 @@ gdk_rgb_convert_gray_generic_d (GdkRgbInfo *image_info, GdkImage *image,
 static void
 gdk_rgb_convert_gray_cmap (GdkRgbInfo *image_info, GdkImage *image,
 			   gint x0, gint y0, gint width, gint height,
-			   guchar *buf, gint rowstride,
+			   const guchar *buf, gint rowstride,
 			   gint x_align, gint y_align, GdkRgbCmap *cmap)
 {
   (*image_info->conv_indexed) (image_info, image, x0, y0, width, height,
@@ -2986,7 +2990,7 @@ gdk_rgb_convert_gray_cmap (GdkRgbInfo *image_info, GdkImage *image,
 static void
 gdk_rgb_convert_gray_cmap_d (GdkRgbInfo *image_info, GdkImage *image,
 			     gint x0, gint y0, gint width, gint height,
-			     guchar *buf, gint rowstride,
+			     const guchar *buf, gint rowstride,
 			     gint x_align, gint y_align, GdkRgbCmap *cmap)
 {
   (*image_info->conv_indexed_d) (image_info, image, x0, y0, width, height,
@@ -2998,12 +3002,14 @@ gdk_rgb_convert_gray_cmap_d (GdkRgbInfo *image_info, GdkImage *image,
 /* This is slow. Speed me up, please. */
 static void
 gdk_rgb_indexed_to_stage (GdkRgbInfo *image_info,
-			  guchar *buf, gint rowstride, gint width, gint height,
+			  const guchar *buf, gint rowstride, gint width, gint height,
 			  GdkRgbCmap *cmap)
 {
   gint x, y;
-  guchar *pi_start, *po_start;
-  guchar *pi, *po;
+  const guchar *pi_start;
+  guchar *po_start;
+  const guchar *pi;
+  guchar *po;
   gint rgb;
 
   pi_start = buf;
@@ -3029,7 +3035,7 @@ gdk_rgb_indexed_to_stage (GdkRgbInfo *image_info,
 static void
 gdk_rgb_convert_indexed_generic (GdkRgbInfo *image_info, GdkImage *image,
 				 gint x0, gint y0, gint width, gint height,
-				 guchar *buf, gint rowstride,
+				 const guchar *buf, gint rowstride,
 				 gint x_align, gint y_align, GdkRgbCmap *cmap)
 {
   gdk_rgb_indexed_to_stage (image_info, buf, rowstride, width, height, cmap);
@@ -3042,7 +3048,7 @@ gdk_rgb_convert_indexed_generic (GdkRgbInfo *image_info, GdkImage *image,
 static void
 gdk_rgb_convert_indexed_generic_d (GdkRgbInfo *image_info, GdkImage *image,
 				   gint x0, gint y0, gint width, gint height,
-				   guchar *buf, gint rowstride,
+				   const guchar *buf, gint rowstride,
 				   gint x_align, gint y_align,
 				   GdkRgbCmap *cmap)
 {
@@ -3289,26 +3295,26 @@ gdk_rgb_select_conv (GdkRgbInfo *image_info)
 }
 
 static void
-gdk_draw_rgb_image_core (GdkRgbInfo *image_info,
-			 GdkDrawable *drawable,
-			 GdkGC *gc,
-			 gint x,
-			 gint y,
-			 gint width,
-			 gint height,
-			 guchar *buf,
-			 gint pixstride,
-			 gint rowstride,
-			 GdkRgbConvFunc conv,
-			 GdkRgbCmap *cmap,
-			 gint xdith,
-			 gint ydith)
+gdk_draw_rgb_image_core (GdkRgbInfo     *image_info,
+			 GdkDrawable    *drawable,
+			 GdkGC          *gc,
+			 gint            x,
+			 gint            y,
+			 gint            width,
+			 gint            height,
+			 const guchar   *buf,
+			 gint            pixstride,
+			 gint            rowstride,
+			 GdkRgbConvFunc  conv,
+			 GdkRgbCmap     *cmap,
+			 gint            xdith,
+			 gint            ydith)
 {
   gint y0, x0;
   gint xs0, ys0;
   GdkImage *image;
   gint width1, height1;
-  guchar *buf_ptr;
+  const guchar *buf_ptr;
 
   if (image_info->bitmap)
     {
@@ -3370,15 +3376,15 @@ gdk_rgb_get_info_from_drawable (GdkDrawable *drawable)
 }
 
 void
-gdk_draw_rgb_image (GdkDrawable *drawable,
-		    GdkGC *gc,
-		    gint x,
-		    gint y,
-		    gint width,
-		    gint height,
-		    GdkRgbDither dith,
-		    guchar *rgb_buf,
-		    gint rowstride)
+gdk_draw_rgb_image (GdkDrawable  *drawable,
+		    GdkGC        *gc,
+		    gint          x,
+		    gint          y,
+		    gint          width,
+		    gint          height,
+		    GdkRgbDither  dith,
+		    const guchar *rgb_buf,
+		    gint          rowstride)
 {
   GdkRgbInfo *image_info = gdk_rgb_get_info_from_drawable (drawable);
   if (!image_info)
@@ -3396,17 +3402,17 @@ gdk_draw_rgb_image (GdkDrawable *drawable,
 }
 
 void
-gdk_draw_rgb_image_dithalign (GdkDrawable *drawable,
-			      GdkGC *gc,
-			      gint x,
-			      gint y,
-			      gint width,
-			      gint height,
-			      GdkRgbDither dith,
-			      guchar *rgb_buf,
-			      gint rowstride,
-			      gint xdith,
-			      gint ydith)
+gdk_draw_rgb_image_dithalign (GdkDrawable  *drawable,
+			      GdkGC        *gc,
+			      gint          x,
+			      gint          y,
+			      gint          width,
+			      gint          height,
+			      GdkRgbDither  dith,
+			      const guchar *rgb_buf,
+			      gint          rowstride,
+			      gint          xdith,
+			      gint          ydith)
 {
   GdkRgbInfo *image_info = gdk_rgb_get_info_from_drawable (drawable);
   if (!image_info)
@@ -3424,15 +3430,15 @@ gdk_draw_rgb_image_dithalign (GdkDrawable *drawable,
 }
 
 void
-gdk_draw_rgb_32_image (GdkDrawable *drawable,
-		       GdkGC *gc,
-		       gint x,
-		       gint y,
-		       gint width,
-		       gint height,
-		       GdkRgbDither dith,
-		       guchar *buf,
-		       gint rowstride)
+gdk_draw_rgb_32_image (GdkDrawable  *drawable,
+		       GdkGC        *gc,
+		       gint          x,
+		       gint          y,
+		       gint          width,
+		       gint          height,
+		       GdkRgbDither  dith,
+		       const guchar *buf,
+		       gint          rowstride)
 {
   GdkRgbInfo *image_info = gdk_rgb_get_info_from_drawable (drawable);
   if (!image_info)
@@ -3468,17 +3474,17 @@ gdk_draw_rgb_32_image (GdkDrawable *drawable,
  * 
  **/
 void
-gdk_draw_rgb_32_image_dithalign (GdkDrawable *drawable,
-				 GdkGC *gc,
-				 gint x,
-				 gint y,
-				 gint width,
-				 gint height,
-				 GdkRgbDither dith,
-				 guchar *buf,
-				 gint rowstride,
-				 gint xdith,
-				 gint ydith)
+gdk_draw_rgb_32_image_dithalign (GdkDrawable  *drawable,
+				 GdkGC        *gc,
+				 gint          x,
+				 gint          y,
+				 gint          width,
+				 gint          height,
+				 GdkRgbDither  dith,
+				 const guchar *buf,
+				 gint          rowstride,
+				 gint          xdith,
+				 gint          ydith)
 {
   GdkRgbInfo *image_info = gdk_rgb_get_info_from_drawable (drawable);
   if (!image_info)
@@ -3507,15 +3513,15 @@ gdk_rgb_make_gray_cmap (GdkRgbInfo *info)
 }
 
 void
-gdk_draw_gray_image (GdkDrawable *drawable,
-		     GdkGC *gc,
-		     gint x,
-		     gint y,
-		     gint width,
-		     gint height,
-		     GdkRgbDither dith,
-		     guchar *buf,
-		     gint rowstride)
+gdk_draw_gray_image (GdkDrawable  *drawable,
+		     GdkGC        *gc,
+		     gint          x,
+		     gint          y,
+		     gint          width,
+		     gint          height,
+		     GdkRgbDither  dith,
+		     const guchar *buf,
+		     gint          rowstride)
 {
   GdkRgbInfo *image_info = gdk_rgb_get_info_from_drawable (drawable);
   if (!image_info)
@@ -3623,16 +3629,16 @@ gdk_rgb_cmap_free (GdkRgbCmap *cmap)
 }
 
 void
-gdk_draw_indexed_image (GdkDrawable *drawable,
-			GdkGC *gc,
-			gint x,
-			gint y,
-			gint width,
-			gint height,
-			GdkRgbDither dith,
-			guchar *buf,
-			gint rowstride,
-			GdkRgbCmap *cmap)
+gdk_draw_indexed_image (GdkDrawable  *drawable,
+			GdkGC        *gc,
+			gint          x,
+			gint          y,
+			gint          width,
+			gint          height,
+			GdkRgbDither  dith,
+			const guchar *buf,
+			gint          rowstride,
+			GdkRgbCmap   *cmap)
 {
   GdkRgbInfo *image_info = gdk_rgb_get_info_from_drawable (drawable);
   if (!image_info)

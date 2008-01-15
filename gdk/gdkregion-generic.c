@@ -1689,17 +1689,16 @@ gdk_region_rect_in (const GdkRegion    *region,
 
 
 static void
-gdk_region_unsorted_spans_intersect_foreach (GdkRegion *region,
-					     GdkSpan   *spans,
-					     int        n_spans,
-					     GdkSpanFunc function,
-					     gpointer data)
+gdk_region_unsorted_spans_intersect_foreach (GdkRegion     *region,
+					     const GdkSpan *spans,
+					     int            n_spans,
+					     GdkSpanFunc    function,
+					     gpointer       data)
 {
   gint i, left, right, y;
   gint clipped_left, clipped_right;
   GdkRegionBox *pbox;
   GdkRegionBox *pboxEnd;
-  GdkSpan out_span;
 
   if (!region->numRects)
     return;
@@ -1729,6 +1728,8 @@ gdk_region_unsorted_spans_intersect_foreach (GdkRegion *region,
 	  
 	  if ((right > pbox->x1) && (left < pbox->x2)) 
 	    {
+              GdkSpan out_span;
+
 	      clipped_left = MAX (left, pbox->x1);
 	      clipped_right = MIN (right, pbox->x2);
 	      
@@ -1753,20 +1754,19 @@ gdk_region_unsorted_spans_intersect_foreach (GdkRegion *region,
  * Calls a function on each span in the intersection of @region and @spans.
  */
 void
-gdk_region_spans_intersect_foreach (GdkRegion  *region,
-				    GdkSpan    *spans,
-				    int         n_spans,
-				    gboolean    sorted,
-				    GdkSpanFunc function,
-				    gpointer    data)
+gdk_region_spans_intersect_foreach (GdkRegion     *region,
+				    const GdkSpan *spans,
+				    int            n_spans,
+				    gboolean       sorted,
+				    GdkSpanFunc    function,
+				    gpointer       data)
 {
   gint left, right, y;
   gint clipped_left, clipped_right;
   GdkRegionBox *pbox;
   GdkRegionBox *pboxEnd;
-  GdkSpan *span, *tmpspan;
-  GdkSpan *end_span;
-  GdkSpan out_span;
+  const GdkSpan *span, *tmpspan;
+  const GdkSpan *end_span;
 
   g_return_if_fail (region != NULL);
   g_return_if_fail (spans != NULL);
@@ -1825,6 +1825,8 @@ gdk_region_spans_intersect_foreach (GdkRegion  *region,
 	  
 	  if ((right > pbox->x1) && (left < pbox->x2))
 	    {
+              GdkSpan out_span;
+
 	      clipped_left = MAX (left, pbox->x1);
 	      clipped_right = MIN (right, pbox->x2);
 	      

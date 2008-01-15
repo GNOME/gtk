@@ -1707,9 +1707,9 @@ gdk_window_set_hints (GdkWindow *window,
 }
 
 void
-gdk_window_set_geometry_hints (GdkWindow      *window,
-                               GdkGeometry    *geometry,
-                               GdkWindowHints  geom_mask)
+gdk_window_set_geometry_hints (GdkWindow         *window,
+                               const GdkGeometry *geometry,
+                               GdkWindowHints     geom_mask)
 {
   g_return_if_fail (GDK_IS_WINDOW (window));
 

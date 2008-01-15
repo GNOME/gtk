@@ -1300,11 +1300,11 @@ gdk_display_supports_clipboard_persistence (GdkDisplay *display)
  * Since: 2.6
  */
 void
-gdk_display_store_clipboard (GdkDisplay *display,
-			     GdkWindow  *clipboard_window,
-			     guint32     time_,
-			     GdkAtom    *targets,
-			     gint        n_targets)
+gdk_display_store_clipboard (GdkDisplay    *display,
+			     GdkWindow     *clipboard_window,
+			     guint32        time_,
+			     const GdkAtom *targets,
+			     gint           n_targets)
 {
   GdkDisplayX11 *display_x11 = GDK_DISPLAY_X11 (display);
   Atom clipboard_manager, save_targets;

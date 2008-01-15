@@ -122,10 +122,10 @@ void	    gdk_display_close		   (GdkDisplay  *display);
 
 GList *     gdk_display_list_devices       (GdkDisplay  *display);
 
-GdkEvent* gdk_display_get_event  (GdkDisplay *display);
-GdkEvent* gdk_display_peek_event (GdkDisplay *display);
-void      gdk_display_put_event  (GdkDisplay *display,
-				  GdkEvent   *event);
+GdkEvent* gdk_display_get_event  (GdkDisplay     *display);
+GdkEvent* gdk_display_peek_event (GdkDisplay     *display);
+void      gdk_display_put_event  (GdkDisplay     *display,
+				  const GdkEvent *event);
 
 void gdk_display_add_client_message_filter (GdkDisplay   *display,
 					    GdkAtom       message_type,
@@ -172,12 +172,12 @@ gboolean gdk_display_supports_selection_notification (GdkDisplay *display);
 gboolean gdk_display_request_selection_notification  (GdkDisplay *display,
 						      GdkAtom     selection);
 
-gboolean gdk_display_supports_clipboard_persistence (GdkDisplay *display);
-void     gdk_display_store_clipboard                (GdkDisplay *display,
-						     GdkWindow  *clipboard_window,
-						     guint32     time_,
-						     GdkAtom    *targets,
-						     gint        n_targets);
+gboolean gdk_display_supports_clipboard_persistence (GdkDisplay    *display);
+void     gdk_display_store_clipboard                (GdkDisplay    *display,
+						     GdkWindow     *clipboard_window,
+						     guint32        time_,
+						     const GdkAtom *targets,
+						     gint           n_targets);
 
 gboolean gdk_display_supports_shapes           (GdkDisplay    *display);
 gboolean gdk_display_supports_input_shapes     (GdkDisplay    *display);

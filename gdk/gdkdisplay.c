@@ -251,8 +251,8 @@ gdk_display_peek_event (GdkDisplay *display)
  * Since: 2.2
  **/
 void
-gdk_display_put_event (GdkDisplay *display,
-		       GdkEvent   *event)
+gdk_display_put_event (GdkDisplay     *display,
+		       const GdkEvent *event)
 {
   g_return_if_fail (GDK_IS_DISPLAY (display));
   g_return_if_fail (event != NULL);

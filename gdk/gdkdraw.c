@@ -467,22 +467,23 @@ gdk_draw_arc (GdkDrawable *drawable,
  *     necessary.
  * @points: an array of #GdkPoint structures specifying the points making 
  *     up the polygon.
- * @npoints: the number of points.
+ * @n_points: the number of points.
  * 
  * Draws an outlined or filled polygon.
  **/
 void
-gdk_draw_polygon (GdkDrawable *drawable,
-		  GdkGC       *gc,
-		  gboolean     filled,
-		  GdkPoint    *points,
-		  gint         npoints)
+gdk_draw_polygon (GdkDrawable    *drawable,
+		  GdkGC          *gc,
+		  gboolean        filled,
+		  const GdkPoint *points,
+		  gint            n_points)
 {
   g_return_if_fail (GDK_IS_DRAWABLE (drawable));
   g_return_if_fail (GDK_IS_GC (gc));
 
   GDK_DRAWABLE_GET_CLASS (drawable)->draw_polygon (drawable, gc, filled,
-                                                   points, npoints);
+                                                   (GdkPoint *) points,
+                                                   n_points);
 }
 
 /* gdk_draw_string
@@ -741,17 +742,17 @@ gdk_draw_image (GdkDrawable *drawable,
  **/
 void
 gdk_draw_pixbuf (GdkDrawable     *drawable,
-		  GdkGC           *gc,
-		  GdkPixbuf       *pixbuf,
-		  gint             src_x,
-		  gint             src_y,
-		  gint             dest_x,
-		  gint             dest_y,
-		  gint             width,
-		  gint             height,
-		  GdkRgbDither     dither,
-		  gint             x_dither,
-		  gint             y_dither)
+                 GdkGC           *gc,
+                 const GdkPixbuf *pixbuf,
+                 gint             src_x,
+                 gint             src_y,
+                 gint             dest_x,
+                 gint             dest_y,
+                 gint             width,
+                 gint             height,
+                 GdkRgbDither     dither,
+                 gint             x_dither,
+                 gint             y_dither)
 {
   g_return_if_fail (GDK_IS_DRAWABLE (drawable));
   g_return_if_fail (gc == NULL || GDK_IS_GC (gc));
@@ -765,7 +766,8 @@ gdk_draw_pixbuf (GdkDrawable     *drawable,
   if (height == -1)
     height = gdk_pixbuf_get_height (pixbuf);
 
-  GDK_DRAWABLE_GET_CLASS (drawable)->draw_pixbuf (drawable, gc, pixbuf,
+  GDK_DRAWABLE_GET_CLASS (drawable)->draw_pixbuf (drawable, gc,
+                                                  (GdkPixbuf *) pixbuf,
 						  src_x, src_y, dest_x, dest_y,
                                                   width, height,
 						  dither, x_dither, y_dither);
@@ -776,26 +778,27 @@ gdk_draw_pixbuf (GdkDrawable     *drawable,
  * @drawable: a #GdkDrawable (a #GdkWindow or a #GdkPixmap).
  * @gc: a #GdkGC.
  * @points: an array of #GdkPoint structures.
- * @npoints: the number of points to be drawn.
+ * @n_points: the number of points to be drawn.
  * 
  * Draws a number of points, using the foreground color and other 
  * attributes of the #GdkGC.
  **/
 void
-gdk_draw_points (GdkDrawable *drawable,
-		 GdkGC       *gc,
-		 GdkPoint    *points,
-		 gint         npoints)
+gdk_draw_points (GdkDrawable    *drawable,
+		 GdkGC          *gc,
+		 const GdkPoint *points,
+		 gint            n_points)
 {
   g_return_if_fail (GDK_IS_DRAWABLE (drawable));
-  g_return_if_fail ((points != NULL) && (npoints > 0));
+  g_return_if_fail ((points != NULL) && (n_points > 0));
   g_return_if_fail (GDK_IS_GC (gc));
-  g_return_if_fail (npoints >= 0);
+  g_return_if_fail (n_points >= 0);
 
-  if (npoints == 0)
+  if (n_points == 0)
     return;
 
-  GDK_DRAWABLE_GET_CLASS (drawable)->draw_points (drawable, gc, points, npoints);
+  GDK_DRAWABLE_GET_CLASS (drawable)->draw_points (drawable, gc,
+                                                  (GdkPoint *) points, n_points);
 }
 
 /**
@@ -804,27 +807,28 @@ gdk_draw_points (GdkDrawable *drawable,
  * @gc: a #GdkGC.
  * @segs: an array of #GdkSegment structures specifying the start and 
  *   end points of the lines to be drawn.
- * @nsegs: the number of line segments to draw, i.e. the size of the 
+ * @n_segs: the number of line segments to draw, i.e. the size of the 
  *   @segs array.
  * 
  * Draws a number of unconnected lines.
  **/
 void
-gdk_draw_segments (GdkDrawable *drawable,
-		   GdkGC       *gc,
-		   GdkSegment  *segs,
-		   gint         nsegs)
+gdk_draw_segments (GdkDrawable      *drawable,
+		   GdkGC            *gc,
+		   const GdkSegment *segs,
+		   gint              n_segs)
 {
   g_return_if_fail (GDK_IS_DRAWABLE (drawable));
 
-  if (nsegs == 0)
+  if (n_segs == 0)
     return;
 
   g_return_if_fail (segs != NULL);
   g_return_if_fail (GDK_IS_GC (gc));
-  g_return_if_fail (nsegs >= 0);
+  g_return_if_fail (n_segs >= 0);
 
-  GDK_DRAWABLE_GET_CLASS (drawable)->draw_segments (drawable, gc, segs, nsegs);
+  GDK_DRAWABLE_GET_CLASS (drawable)->draw_segments (drawable, gc,
+                                                    (GdkSegment *) segs, n_segs);
 }
 
 /**
@@ -832,7 +836,7 @@ gdk_draw_segments (GdkDrawable *drawable,
  * @drawable: a #GdkDrawable (a #GdkWindow or a #GdkPixmap).
  * @gc: a #GdkGC.
  * @points: an array of #GdkPoint structures specifying the endpoints of the
- * @npoints: the size of the @points array.
+ * @n_points: the size of the @points array.
  * 
  * Draws a series of lines connecting the given points.
  * The way in which joins between lines are draw is determined by the
@@ -840,30 +844,31 @@ gdk_draw_segments (GdkDrawable *drawable,
  * gdk_gc_set_line_attributes().
  **/
 void
-gdk_draw_lines (GdkDrawable *drawable,
-		GdkGC       *gc,
-		GdkPoint    *points,
-		gint         npoints)
+gdk_draw_lines (GdkDrawable    *drawable,
+		GdkGC          *gc,
+		const GdkPoint *points,
+		gint            n_points)
 {
   g_return_if_fail (GDK_IS_DRAWABLE (drawable));
   g_return_if_fail (points != NULL);
   g_return_if_fail (GDK_IS_GC (gc));
-  g_return_if_fail (npoints >= 0);
+  g_return_if_fail (n_points >= 0);
 
-  if (npoints == 0)
+  if (n_points == 0)
     return;
 
-  GDK_DRAWABLE_GET_CLASS (drawable)->draw_lines (drawable, gc, points, npoints);
+  GDK_DRAWABLE_GET_CLASS (drawable)->draw_lines (drawable, gc,
+                                                 (GdkPoint *) points, n_points);
 }
 
 static void
-real_draw_glyphs (GdkDrawable      *drawable,
-		  GdkGC	           *gc,
-		  PangoMatrix      *matrix,
-		  PangoFont        *font,
-		  gdouble           x,
-		  gdouble           y,
-		  PangoGlyphString *glyphs)
+real_draw_glyphs (GdkDrawable       *drawable,
+		  GdkGC	            *gc,
+		  const PangoMatrix *matrix,
+		  PangoFont         *font,
+		  gdouble            x,
+		  gdouble            y,
+		  PangoGlyphString  *glyphs)
 {
   cairo_t *cr;
 
@@ -948,13 +953,13 @@ gdk_draw_glyphs (GdkDrawable      *drawable,
  * Since: 2.6
  **/
 void
-gdk_draw_glyphs_transformed (GdkDrawable      *drawable,
-			     GdkGC	      *gc,
-			     PangoMatrix      *matrix,
-			     PangoFont        *font,
-			     gint              x,
-			     gint              y,
-			     PangoGlyphString *glyphs)
+gdk_draw_glyphs_transformed (GdkDrawable       *drawable,
+			     GdkGC	       *gc,
+			     const PangoMatrix *matrix,
+			     PangoFont         *font,
+			     gint               x,
+			     gint               y,
+			     PangoGlyphString  *glyphs)
 {
   g_return_if_fail (GDK_IS_DRAWABLE (drawable));
   g_return_if_fail (GDK_IS_GC (gc));
@@ -979,10 +984,10 @@ gdk_draw_glyphs_transformed (GdkDrawable      *drawable,
  * Since: 2.6
  **/
 void
-gdk_draw_trapezoids (GdkDrawable    *drawable,
-		     GdkGC	    *gc,
-		     GdkTrapezoid   *trapezoids,
-		     gint            n_trapezoids)
+gdk_draw_trapezoids (GdkDrawable        *drawable,
+		     GdkGC	        *gc,
+		     const GdkTrapezoid *trapezoids,
+		     gint                n_trapezoids)
 {
   cairo_t *cr;
   int i;

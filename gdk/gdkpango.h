@@ -119,12 +119,12 @@ void          gdk_pango_context_set_colormap   (PangoContext *context,
 GdkRegion    *gdk_pango_layout_line_get_clip_region (PangoLayoutLine *line,
                                                      gint             x_origin,
                                                      gint             y_origin,
-                                                     gint            *index_ranges,
+                                                     const gint      *index_ranges,
                                                      gint             n_ranges);
 GdkRegion    *gdk_pango_layout_get_clip_region      (PangoLayout     *layout,
                                                      gint             x_origin,
                                                      gint             y_origin,
-                                                     gint            *index_ranges,
+                                                     const gint      *index_ranges,
                                                      gint             n_ranges);
 
 

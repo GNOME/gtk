@@ -97,7 +97,7 @@ void           gdk_region_xor             (GdkRegion          *source1,
                                            const GdkRegion    *source2);
 
 void   gdk_region_spans_intersect_foreach (GdkRegion          *region,
-                                           GdkSpan            *spans,
+                                           const GdkSpan      *spans,
                                            int                 n_spans,
                                            gboolean            sorted,
                                            GdkSpanFunc         function,
