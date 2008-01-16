@@ -2468,8 +2468,8 @@ gtk_widget_get_property (GObject         *object,
   
   switch (prop_id)
     {
-      gint *eventp;
-      GdkExtensionMode *modep;
+      gpointer *eventp;
+      gpointer *modep;
 
     case PROP_NAME:
       if (widget->name)
@@ -2532,17 +2532,11 @@ gtk_widget_get_property (GObject         *object,
       break;
     case PROP_EVENTS:
       eventp = g_object_get_qdata (G_OBJECT (widget), quark_event_mask);
-      if (!eventp)
-	g_value_set_flags (value, 0);
-      else
-	g_value_set_flags (value, *eventp);
+      g_value_set_flags (value, GPOINTER_TO_INT (eventp));
       break;
     case PROP_EXTENSION_EVENTS:
       modep = g_object_get_qdata (G_OBJECT (widget), quark_extension_event_mode);
-      if (!modep)
- 	g_value_set_enum (value, 0);
-      else
- 	g_value_set_enum (value, (GdkExtensionMode) *modep);
+      g_value_set_enum (value, GPOINTER_TO_INT (modep));
       break;
     case PROP_NO_SHOW_ALL:
       g_value_set_boolean (value, gtk_widget_get_no_show_all (widget));
@@ -7117,27 +7111,11 @@ void
 gtk_widget_set_events (GtkWidget *widget,
 		       gint	  events)
 {
-  gint *eventp;
-  
   g_return_if_fail (GTK_IS_WIDGET (widget));
   g_return_if_fail (!GTK_WIDGET_REALIZED (widget));
   
-  eventp = g_object_get_qdata (G_OBJECT (widget), quark_event_mask);
-  
-  if (events)
-    {
-      if (!eventp)
-	eventp = g_slice_new (gint);
-      
-      *eventp = events;
-      g_object_set_qdata (G_OBJECT (widget), quark_event_mask, eventp);
-    }
-  else if (eventp)
-    {
-      g_slice_free (gint, eventp);
-      g_object_set_qdata (G_OBJECT (widget), quark_event_mask, NULL);
-    }
-
+  g_object_set_qdata (G_OBJECT (widget), quark_event_mask,
+                      GINT_TO_POINTER (events));
   g_object_notify (G_OBJECT (widget), "events");
 }
 
@@ -7179,28 +7157,13 @@ void
 gtk_widget_add_events (GtkWidget *widget,
 		       gint	  events)
 {
-  gint *eventp;
-  
+  gint old_events;
+
   g_return_if_fail (GTK_IS_WIDGET (widget));
 
-  eventp = g_object_get_qdata (G_OBJECT (widget), quark_event_mask);
-  
-  if (events)
-    {
-      if (!eventp)
-	{
-	  eventp = g_slice_new (gint);
-	  *eventp = 0;
-	}
-      
-      *eventp |= events;
-      g_object_set_qdata (G_OBJECT (widget), quark_event_mask, eventp);
-    }
-  else if (eventp)
-    {
-      g_slice_free (gint, eventp);
-      g_object_set_qdata (G_OBJECT (widget), quark_event_mask, NULL);
-    }
+  old_events = GPOINTER_TO_INT (g_object_get_qdata (G_OBJECT (widget), quark_event_mask));
+  g_object_set_qdata (G_OBJECT (widget), quark_event_mask,
+                      GINT_TO_POINTER (old_events | events));
 
   if (GTK_WIDGET_REALIZED (widget))
     {
@@ -7231,20 +7194,13 @@ void
 gtk_widget_set_extension_events (GtkWidget *widget,
 				 GdkExtensionMode mode)
 {
-  GdkExtensionMode *modep;
-
   g_return_if_fail (GTK_IS_WIDGET (widget));
-
-  modep = g_object_get_qdata (G_OBJECT (widget), quark_extension_event_mode);
-
-  if (!modep)
-    modep = g_slice_new (GdkExtensionMode);
 
   if (GTK_WIDGET_REALIZED (widget))
     gtk_widget_set_extension_events_internal (widget, mode, NULL);
 
-  *modep = mode;
-  g_object_set_qdata (G_OBJECT (widget), quark_extension_event_mode, modep);
+  g_object_set_qdata (G_OBJECT (widget), quark_extension_event_mode,
+                      GINT_TO_POINTER (mode));
   g_object_notify (G_OBJECT (widget), "extension-events");
 }
 
@@ -7437,15 +7393,9 @@ gtk_widget_set_colormap (GtkWidget   *widget,
 gint
 gtk_widget_get_events (GtkWidget *widget)
 {
-  gint *events;
-  
   g_return_val_if_fail (GTK_IS_WIDGET (widget), 0);
-  
-  events = g_object_get_qdata (G_OBJECT (widget), quark_event_mask);
-  if (events)
-    return *events;
-  
-  return 0;
+
+  return GPOINTER_TO_INT (g_object_get_qdata (G_OBJECT (widget), quark_event_mask));
 }
 
 /**
@@ -7460,15 +7410,9 @@ gtk_widget_get_events (GtkWidget *widget)
 GdkExtensionMode
 gtk_widget_get_extension_events (GtkWidget *widget)
 {
-  GdkExtensionMode *mode;
-  
   g_return_val_if_fail (GTK_IS_WIDGET (widget), 0);
-  
-  mode = g_object_get_qdata (G_OBJECT (widget), quark_extension_event_mode);
-  if (mode)
-    return *mode;
-  
-  return 0;
+
+  return GPOINTER_TO_INT (g_object_get_qdata (G_OBJECT (widget), quark_extension_event_mode));
 }
 
 /**
@@ -7883,8 +7827,6 @@ gtk_widget_finalize (GObject *object)
 {
   GtkWidget *widget = GTK_WIDGET (object);
   GtkWidgetAuxInfo *aux_info;
-  gint *events;
-  GdkExtensionMode *mode;
   GtkAccessible *accessible;
   
   gtk_grab_remove (widget);
@@ -7897,14 +7839,6 @@ gtk_widget_finalize (GObject *object)
   aux_info =_gtk_widget_get_aux_info (widget, FALSE);
   if (aux_info)
     gtk_widget_aux_info_destroy (aux_info);
-  
-  events = g_object_get_qdata (G_OBJECT (widget), quark_event_mask);
-  if (events)
-    g_slice_free (gint, events);
-  
-  mode = g_object_get_qdata (G_OBJECT (widget), quark_extension_event_mode);
-  if (mode)
-    g_slice_free (GdkExtensionMode, mode);
 
   accessible = g_object_get_qdata (G_OBJECT (widget), quark_accessible_object);
   if (accessible)
