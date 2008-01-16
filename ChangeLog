@@ -1,3 +1,8 @@
+2008-01-16  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtkcombobox.c (gtk_combo_box_set_model): Emit
+	the notify::model signal.  (#509819, David Zeuthen)
+
 2008-01-15  Michael Natterer  <mitch@imendio.com>
 
 	* gdk/gdkdisplay.h
