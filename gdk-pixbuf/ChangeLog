@@ -1,5 +1,18 @@
 2008-01-16  Michael Natterer  <mitch@imendio.com>
 
+	* gdk-pixbuf-io.c (save_to_stream): fix signature of this function
+	and propagate errors from g_output_stream_write(). Return error
+	also on incomplete writes (which don't generate an error by
+	themselves).
+
+	Unrelated:
+
+	(gdk_pixbuf_io_init): initialize "builtin_module" on a separate
+	line to avoid compiler warning in the common case of no built-in
+	modules.
+
+2008-01-16  Michael Natterer  <mitch@imendio.com>
+
 	* Makefile.am (LDADDS): use $GDK_PIXBUF_DEP_LIBS instead of
 	$GLIB_LIBS so gio gets pulled in.
 

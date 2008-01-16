@@ -306,7 +306,12 @@ gdk_pixbuf_io_init (void)
 	GdkPixbufModulePattern *pattern;
 	GError *error = NULL;
 #endif
-	GdkPixbufModule *builtin_module = NULL;
+	GdkPixbufModule *builtin_module ;
+
+        /*  initialize on separate line to avoid compiler warnings in the
+         *  common case of no compiled-in modules.
+         */
+	builtin_module = NULL;
 
 #define load_one_builtin_module(format)					\
 	builtin_module = g_new0 (GdkPixbufModule, 1);			\
@@ -2209,16 +2214,29 @@ typedef struct {
 static gboolean
 save_to_stream (const gchar  *buffer,
 		gsize         count,
-		GCancellable *cancellable,
 		GError      **error,
 		gpointer      data)
 {
 	SaveToStreamData *sdata = (SaveToStreamData *)data;
+        GError *my_error = NULL;
+	gsize n;
 
-	g_output_stream_write (sdata->stream, 
-			       buffer, count, 
-			       sdata->cancellable, 
-			       error);
+	n = g_output_stream_write (sdata->stream, 
+                                   buffer, count, 
+                                   sdata->cancellable, 
+                                   &my_error);
+	if (n != count) {
+		if (!my_error) {
+                        g_set_error (error,
+                                     G_IO_ERROR, 0,
+                                     _("Error writing to image stream"));
+                }
+                else {
+                        g_propagate_error (error, my_error);
+                }
+                return FALSE;
+	}
+	return TRUE;
 }
 
 /** 
