@@ -56,6 +56,8 @@ gdk_pixbuf_new_from_file_at_scale PRIVATE
 gdk_pixbuf_new_from_file_at_scale_utf8
 #endif
 gdk_pixbuf_new_from_xpm_data
+gdk_pixbuf_new_from_stream
+gdk_pixbuf_new_from_stream_at_scale
 gdk_pixbuf_save PRIVATE G_GNUC_NULL_TERMINATED
 #ifdef G_OS_WIN32
 gdk_pixbuf_save_utf8
@@ -68,6 +70,7 @@ gdk_pixbuf_savev PRIVATE
 #ifdef G_OS_WIN32
 gdk_pixbuf_savev_utf8
 #endif
+gdk_pixbuf_save_to_stream
 #endif
 #endif
 

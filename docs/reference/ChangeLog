@@ -1,9 +1,30 @@
+2008-01-14  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtk-docs.sgml:
+	* gdk-pixbuf/gdk-pixbuf.sgml: Add indices for 2.16 
+
+	* gdk-pixbuf/gdk-pixbuf-sections.txt: Add stream i/o functions.
+
 2008-01-10  Sven Neumann  <sven@gimp.org>
 
 	* gtk/tmpl/gtkeditable.sgml: corrected documentation for
 	GtkEditable::delete-text.
 
 2007-12-28  Mathias Hasselmann  <mathias@openismus.com>
+
+	* gtk/tmpl/gtkcalendar.sgml: Move documentation for
+	GtkCalendarDisplayOptions to gtk/gtkcalendar.c.
+
+2007-12-27  Mathias Hasselmann  <mathias@openismus.com>
+
+	* gtk/tmpl/gtkcalendar.sgml: Move documentation for
+	GtkCalendarDisplayOptions to gtk/gtkcalendar.c.
+
+2007-12-27  Mathias Hasselmann  <mathias@openismus.com>
+
+	* docs/reference/gtk/gtk-sections.txt: Add new GtkCalendar symbols.
+
+2007-12-27  Mathias Hasselmann  <mathias@openismus.com>
 
 	* gtk/tmpl/gtkcalendar.sgml: Move documentation for
 	GtkCalendarDisplayOptions to gtk/gtkcalendar.c.

@@ -65,6 +65,8 @@ gdk_pixbuf_new_from_file
 gdk_pixbuf_new_from_file_at_size
 gdk_pixbuf_new_from_file_at_scale
 gdk_pixbuf_get_file_info
+gdk_pixbuf_new_from_stream
+gdk_pixbuf_new_from_stream_at_scale
 </SECTION>
 
 <SECTION>
@@ -76,6 +78,7 @@ gdk_pixbuf_save_to_callback
 gdk_pixbuf_save_to_callbackv
 gdk_pixbuf_save_to_buffer
 gdk_pixbuf_save_to_bufferv
+gdk_pixbuf_save_to_stream
 </SECTION>
 
 <SECTION>

@@ -1,3 +1,11 @@
+2008-01-15  Matthias Clasen  <mclasne@redhat.com>
+
+	* gdk-pixbuf.symbols:
+	* gdk-pixbuf-core.h:
+	* gdk-pixbuf-io.c (gdk_pixbuf_new_from_stream):
+	(gdk_pixbuf_new_from_stream_at_scale):
+	(gdk_pixbuf_save_to_stream): New stream i/o functions.
+
 2008-01-14  Michael Natterer  <mitch@imendio.com>
 
 	* gdk-pixbuf-loader.c (gdk_pixbuf_loader_prepare): cast the return

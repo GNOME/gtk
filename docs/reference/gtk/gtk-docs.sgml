@@ -686,4 +686,7 @@ that is, GUI components such as #GtkButton or #GtkTextView.
   <index role="2.12">
     <title>Index of new symbols in 2.12</title>
   </index>  
+  <index role="2.16">
+    <title>Index of new symbols in 2.16</title>
+  </index>  
 </book>
