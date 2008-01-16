@@ -4704,7 +4704,7 @@ gtk_combo_box_set_model (GtkComboBox  *combo_box,
   gtk_combo_box_unset_model (combo_box);
 
   if (model == NULL)
-    return;
+    goto out;
 
   combo_box->priv->model = model;
   g_object_ref (combo_box->priv->model);
@@ -4744,6 +4744,9 @@ gtk_combo_box_set_model (GtkComboBox  *combo_box,
   if (combo_box->priv->cell_view)
     gtk_cell_view_set_model (GTK_CELL_VIEW (combo_box->priv->cell_view),
                              combo_box->priv->model);
+
+out:
+    g_object_notify (G_OBJECT (combo_box), "model");
 }
 
 /**
