@@ -2218,24 +2218,32 @@ save_to_stream (const gchar  *buffer,
 		gpointer      data)
 {
 	SaveToStreamData *sdata = (SaveToStreamData *)data;
+	gsize remaining;
+	gssize written;
         GError *my_error = NULL;
-	gsize n;
 
-	n = g_output_stream_write (sdata->stream, 
-                                   buffer, count, 
-                                   sdata->cancellable, 
-                                   &my_error);
-	if (n != count) {
-		if (!my_error) {
-                        g_set_error (error,
-                                     G_IO_ERROR, 0,
-                                     _("Error writing to image stream"));
-                }
-                else {
-                        g_propagate_error (error, my_error);
-                }
-                return FALSE;
+	remaining = count;
+	written = 0;
+	while (remaining > 0) {
+		buffer += written;
+		remaining -= written;
+		written = g_output_stream_write (sdata->stream, 
+						 buffer, remaining, 
+						 sdata->cancellable, 
+                                   		 &my_error);
+		if (written < 0) {
+			if (!my_error) {
+                        	g_set_error (error,
+                                     	     G_IO_ERROR, 0,
+                                     	     _("Error writing to image stream"));
+                	}
+                	else {
+                        	g_propagate_error (error, my_error);
+                	}
+                	return FALSE;
+		}
 	}
+
 	return TRUE;
 }
 

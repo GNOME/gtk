@@ -1,3 +1,7 @@
+2008-01-15  Matthias Clasen  <mclasne@redhat.com>
+
+	* gdk-pixbuf-io.c (save_to_stream): Handle partial writes.
+
 2008-01-16  Michael Natterer  <mitch@imendio.com>
 
 	* gdk-pixbuf-io.c (save_to_stream): fix signature of this function
