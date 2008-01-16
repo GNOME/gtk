@@ -1,3 +1,8 @@
+2008-01-16  Michael Natterer  <mitch@imendio.com>
+
+	* configure.in (GDK_PIXBUF_PACKAGES): add "gio-2.0" because
+	gdk-pixbuf now uses gio functions.
+
 2008-01-16  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtkcombobox.c (gtk_combo_box_set_model): Emit
