@@ -1,3 +1,11 @@
+2008-01-16  Mathias Hasselmann  <mathias@openismus.com>
+
+	Change GtkCalendarDetailFunc to return newly allocated string. (#339540)
+
+	* gtk/gtkcalendar.c: Release the memory returned by the detail_func.
+	* gtk/gtkcalendar.h: Remove G_CONST_RETURN from GtkCalendarDetailFunc.
+	* tests/testcalendar.c: Duplicate calendar details before returning.
+
 2008-01-16  Christian Persch  <chpe@gnome.org>
 
 	* gtk/gtkwidget.c: Store the event mask and extension event mode

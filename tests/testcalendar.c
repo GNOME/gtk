@@ -85,7 +85,7 @@ calendar_set_detail (CalendarData *data,
   g_hash_table_replace (data->details_table, key, detail);
 }
 
-static G_CONST_RETURN gchar*
+static gchar*
 calendar_get_detail (CalendarData *data,
                      guint         year,
                      guint         month,
@@ -98,7 +98,7 @@ calendar_get_detail (CalendarData *data,
   detail = g_hash_table_lookup (data->details_table, key);
   g_free (key);
 
-  return detail;
+  return (detail ? g_strdup (detail) : NULL);
 }
 
 static void

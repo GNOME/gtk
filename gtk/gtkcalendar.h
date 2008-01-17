@@ -89,13 +89,14 @@ typedef enum
  *
  * Since: 2.16
  *
- * Return value: Pango markup with details for the specified day, or %NULL.
+ * Return value: Newly allocated string with Pango markup with details
+ * for the specified day, or %NULL.
  */
-typedef G_CONST_RETURN gchar* (*GtkCalendarDetailFunc) (GtkCalendar *calendar,
-                                                        guint        year,
-                                                        guint        month,
-                                                        guint        day,
-                                                        gpointer     user_data);
+typedef gchar* (*GtkCalendarDetailFunc) (GtkCalendar *calendar,
+                                         guint        year,
+                                         guint        month,
+                                         guint        day,
+                                         gpointer     user_data);
 
 struct _GtkCalendar
 {

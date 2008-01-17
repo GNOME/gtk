@@ -1672,7 +1672,7 @@ gtk_calendar_unrealize (GtkWidget *widget)
     (* GTK_WIDGET_CLASS (gtk_calendar_parent_class)->unrealize) (widget);
 }
 
-static G_CONST_RETURN gchar*
+static gchar*
 gtk_calendar_get_detail (GtkCalendar *calendar,
                          gint         row,
                          gint         column)
@@ -1709,7 +1709,7 @@ gtk_calendar_query_tooltip (GtkWidget  *widget,
 {
   GtkCalendarPrivate *priv = GTK_CALENDAR_GET_PRIVATE (widget);
   GtkCalendar *calendar = GTK_CALENDAR (widget);
-  const gchar *detail = NULL;
+  gchar *detail = NULL;
   GdkRectangle day_rect;
 
   if (priv->main_win)
@@ -1735,6 +1735,8 @@ gtk_calendar_query_tooltip (GtkWidget  *widget,
     {
       gtk_tooltip_set_tip_area (tooltip, &day_rect);
       gtk_tooltip_set_markup (tooltip, detail);
+
+      g_free (detail);
 
       return TRUE;
     }
@@ -1914,7 +1916,7 @@ gtk_calendar_size_request (GtkWidget	  *widget,
         for (r = 0; r < 6; r++)
           for (c = 0; c < 7; c++)
             {
-              const gchar *detail = gtk_calendar_get_detail (calendar, r, c);
+              gchar *detail = gtk_calendar_get_detail (calendar, r, c);
 
               if (detail)
                 {
@@ -1935,6 +1937,7 @@ gtk_calendar_size_request (GtkWidget	  *widget,
                     max_detail_height = MAX (max_detail_height, logical_rect.height);
 
                   g_free (markup);
+                  g_free (detail);
                 }
             }
     }
@@ -2429,7 +2432,7 @@ calendar_paint_day (GtkCalendar *calendar,
   GtkCalendarPrivate *priv = GTK_CALENDAR_GET_PRIVATE (calendar);
   cairo_t *cr;
   GdkColor *text_color;
-  const gchar *detail;
+  gchar *detail;
   gchar buffer[32];
   gint day;
   gint x_loc, y_loc;
@@ -2619,6 +2622,7 @@ calendar_paint_day (GtkCalendar *calendar,
 
   g_object_unref (layout);
   cairo_destroy (cr);
+  g_free (detail);
 }
 
 static void
