@@ -1,3 +1,15 @@
+2008-01-18  Johan Dahlin  <johan@gnome.org>
+
+	Merge from trunk:
+
+	* gtk/gtk-builder-convert (get_property_node): New method
+	(GtkBuilderConverter._create_object): Conditionally take a node as
+	a property value, so don't lose translate/context attributes if they
+	are set. 
+	(GtkBuilderConverter._add_action_from_menuitem): Send in Node as
+	property values instead of strings.
+	(#509153, Erik van Pienbroek)
+
 2008-01-12  Andre Klapper  <a9016009@gmx.de>
 
 	* configure.in: add Kannada (kn) and Sinhala (si) to ALL_LINGUAS.
