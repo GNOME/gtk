@@ -82,6 +82,17 @@ def get_property(node, property_name):
     properties = get_properties(node)
     return properties.get(property_name)
 
+def get_property_node(node, property_name):
+    assert node.tagName == 'object'
+    properties = {}
+    for child in node.childNodes:
+        if child.nodeType == Node.TEXT_NODE:
+            continue
+        if child.tagName != 'property':
+            continue
+        if child.getAttribute('name') == property_name:
+            return child
+
 def get_signal_nodes(node):
     assert node.tagName == 'object'
     signals = []
@@ -126,9 +137,11 @@ def get_object_node(child_node):
 def copy_properties(node, props, prop_dict):
     assert node.tagName == 'object'
     for prop_name in props:
-        value = get_property(node, prop_name)
-        if value is not None:
-            prop_dict[prop_name] = value
+        child = get_property_node(node, prop_name)
+        if child is not None:
+            prop_dict[prop_name] = child
+
+    return node
 
 class GtkBuilderConverter(object):
 
@@ -166,6 +179,21 @@ class GtkBuilderConverter(object):
                       if w.getAttribute(attribute) == value]
 
     def _create_object(self, obj_class, obj_id, template=None, **properties):
+        """
+        Creates a new <object> tag.
+        Optionally a name template can be provided which will be used
+        to avoid naming collisions.
+        The properties dictionary can either contain string values or Node
+        values. If a node is provided the name of the node will be overridden
+        by the dictionary key.
+
+        @param obj_class: class of the object (class tag)
+        @param obj_id: identifier of the object (id tag)
+        @param template: name template to use, for example 'button'
+        @param properties: dictionary of properties
+        @type properties: string or Node.
+        @returns: Newly created node of the object
+        """
         if template is not None:
             count = 1
             while True:
@@ -180,9 +208,15 @@ class GtkBuilderConverter(object):
         obj.setAttribute('class', obj_class)
         obj.setAttribute('id', obj_id)
         for name, value in properties.items():
-            prop = self._dom.createElement('property')
+            if isinstance(value, Node):
+                # Reuse the node, so translatable and context still will be
+                # set when converting nodes. See also #509153
+                prop = value
+            else:
+                prop = self._dom.createElement('property')
+                prop.appendChild(self._dom.createTextNode(value))
+
             prop.setAttribute('name', name)
-            prop.appendChild(self._dom.createTextNode(value))
             obj.appendChild(prop)
         self.objects[obj_id] = obj
         return obj
@@ -371,18 +405,18 @@ class GtkBuilderConverter(object):
             if (children and
                 children[0].getAttribute('internal-child') == 'image'):
                 image = get_object_node(children[0])
-                stock_id = get_property(image, 'stock')
-                if stock_id is not None:
-                    properties['stock_id'] = stock_id
+                child = get_property_node(image, 'stock')
+                if child is not None:
+                    properties['stock_id'] = child
         elif object_class == 'GtkSeparatorMenuItem':
             return
         else:
             raise NotImplementedError(object_class)
 
         if get_property(node, 'use_stock') == 'True':
-            stock_id = get_property(node, 'label')
-            if stock_id is not None:
-                properties['stock_id'] = stock_id
+            child = get_property_node(node, 'label')
+            if child:
+                properties['stock_id'] = child
 
         properties['name'] = object_id
         action = self._create_object(name,
