@@ -6,15 +6,17 @@
 # Abel Cheung <maddog@linux.org.hk>, 2001.
 # He Qiangqiang <carton@263.net>, 2001.
 # Funda Wang <fundawang@linux.net.cn>, 2003,2004
+# Yang Zhang <zyangmath@gmail.com>, 2007.
+# Deng Xiyue <manphiz@gmail.com>, 2008.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2008-01-08 00:16-0500\n"
-"PO-Revision-Date: 2007-08-23 16:37+0800\n"
-"Last-Translator: Yang Zhang <zyangmath@gmail.com>\n"
-"Language-Team: zh_CN <i18n-translation@lists.linux.net.cn>\n"
+"PO-Revision-Date: 2008-01-19 22:09+0800\n"
+"Last-Translator: Deng Xiyue <manphiz@gmail.com>\n"
+"Language-Team: i18n-zh <i18n-zh@googlegroups.com>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -88,35 +90,35 @@ msgstr "要取消的 Gdk 调试标志"
 
 #: gdk/keyname-table.h:3940
 msgid "keyboard label|BackSpace"
-msgstr "BackSpace"
+msgstr "退格"
 
 #: gdk/keyname-table.h:3941
 msgid "keyboard label|Tab"
-msgstr "Tab"
+msgstr "制表"
 
 #: gdk/keyname-table.h:3942
 msgid "keyboard label|Return"
-msgstr "Enter"
+msgstr "回车"
 
 #: gdk/keyname-table.h:3943
 msgid "keyboard label|Pause"
-msgstr "Pause"
+msgstr "暂停"
 
 #: gdk/keyname-table.h:3944
 msgid "keyboard label|Scroll_Lock"
-msgstr "ScrollLock"
+msgstr "滚动锁"
 
 #: gdk/keyname-table.h:3945
 msgid "keyboard label|Sys_Req"
-msgstr "SysRq"
+msgstr "系统请求"
 
 #: gdk/keyname-table.h:3946
 msgid "keyboard label|Escape"
-msgstr "Esc"
+msgstr "退出"
 
 #: gdk/keyname-table.h:3947
 msgid "keyboard label|Multi_key"
-msgstr "MultiKey"
+msgstr "Multi_key"
 
 #: gdk/keyname-table.h:3948
 msgid "keyboard label|Home"
@@ -124,27 +126,27 @@ msgstr "Home"
 
 #: gdk/keyname-table.h:3949
 msgid "keyboard label|Left"
-msgstr "Left"
+msgstr "左"
 
 #: gdk/keyname-table.h:3950
 msgid "keyboard label|Up"
-msgstr "Up"
+msgstr "上"
 
 #: gdk/keyname-table.h:3951
 msgid "keyboard label|Right"
-msgstr "Right"
+msgstr "右"
 
 #: gdk/keyname-table.h:3952
 msgid "keyboard label|Down"
-msgstr "Down"
+msgstr "下"
 
 #: gdk/keyname-table.h:3953
 msgid "keyboard label|Page_Up"
-msgstr "PageUp"
+msgstr "向上翻页"
 
 #: gdk/keyname-table.h:3954
 msgid "keyboard label|Page_Down"
-msgstr "PageDown"
+msgstr "向下翻页"
 
 #: gdk/keyname-table.h:3955
 msgid "keyboard label|End"
@@ -156,15 +158,15 @@ msgstr "Begin"
 
 #: gdk/keyname-table.h:3957
 msgid "keyboard label|Print"
-msgstr "Print"
+msgstr "打印"
 
 #: gdk/keyname-table.h:3958
 msgid "keyboard label|Insert"
-msgstr "Insert"
+msgstr "插入"
 
 #: gdk/keyname-table.h:3959
 msgid "keyboard label|Num_Lock"
-msgstr "NumLock"
+msgstr "数字锁"
 
 #: gdk/keyname-table.h:3960
 msgid "keyboard label|KP_Space"
@@ -851,7 +853,7 @@ msgstr "内存不足以载入 RAS 图像"
 
 #: gdk-pixbuf/io-ras.c:547
 msgid "The Sun raster image format"
-msgstr "Sun 矢量图像格式"
+msgstr "Sun 光栅图像格式"
 
 #: gdk-pixbuf/io-tga.c:154
 #, c-format
@@ -2309,11 +2311,11 @@ msgstr "纸张边距"
 
 #: gtk/gtkpathbar.c:148
 msgid "Up Path"
-msgstr ""
+msgstr "上一层路径"
 
 #: gtk/gtkpathbar.c:150
 msgid "Down Path"
-msgstr ""
+msgstr "下一层路径"
 
 #: gtk/gtkpathbar.c:1377
 msgid "File System Root"
@@ -2487,7 +2489,7 @@ msgstr "当前页(_U)"
 
 #: gtk/gtkprintunixdialog.c:1564
 msgid "Ra_nge"
-msgstr "范围(_N)"
+msgstr "范围"
 
 #: gtk/gtkprintunixdialog.c:1565
 msgid ""
@@ -2523,7 +2525,6 @@ msgid "Layout"
 msgstr "布局"
 
 #: gtk/gtkprintunixdialog.c:2036
-#, fuzzy
 msgid "Pages per _side:"
 msgstr "每面页数(_S)："
 
@@ -4464,9 +4465,8 @@ msgstr "无法获得文件“%s”的信息：%s"
 #~ msgid "Today"
 #~ msgstr "今天"
 
-#, fuzzy
 #~ msgid "Location:"
-#~ msgstr "位置(_L)："
+#~ msgstr "位置："
 
 #~ msgid "PNM image format is invalid"
 #~ msgstr "PNM 图像格式非法"
@@ -4496,3 +4496,51 @@ msgstr "无法获得文件“%s”的信息：%s"
 
 #~ msgid "Thai (Broken)"
 #~ msgstr "泰语(不可用)"
+
+#~ msgid "Error writing to image stream"
+#~ msgstr "写入图像流时出错"
+
+#~ msgid "Error reading ICNS image: %s"
+#~ msgstr "读入 ICNS 图像文件时发生错误：%s"
+
+#~ msgid "Could not decode ICNS file"
+#~ msgstr "无法解码 ICNS 文件"
+
+#~ msgid "The ICNS image format"
+#~ msgstr "ICNS 图像格式"
+
+#~ msgid "Couldn't allocate memory for stream"
+#~ msgstr "无法为流分配内存"
+
+#~ msgid "Couldn't decode image"
+#~ msgstr "无法解码图像"
+
+#~ msgid "Transformed JPEG2000 has zero width or height"
+#~ msgstr "已转换的 JPEG2000 的宽度或高度为零。"
+
+#~ msgid "Image type currently not supported"
+#~ msgstr "目前不支持该图像类型"
+
+#~ msgid "Couldn't allocate memory for color profile"
+#~ msgstr "无法为颜色配置分配内存"
+
+#~ msgid "Insufficient memory to open JPEG 2000 file"
+#~ msgstr "内存不足以打开 JPEG 2000 文件"
+
+#~ msgid "Couldn't allocate memory to buffer image data"
+#~ msgstr "无法为缓冲图像数据分配内存"
+
+#~ msgid "The JPEG 2000 image format"
+#~ msgstr "JPEG 2000 图像格式"
+
+#~ msgid "Simple"
+#~ msgstr "简单"
+
+#~ msgid "input method menu|System"
+#~ msgstr "输入法菜单|系统"
+
+#~ msgid "_All Pages"
+#~ msgstr "所有页面(_A)"
+
+#~ msgid "Pag_es:"
+#~ msgstr "页面(_E)："
