@@ -5,20 +5,24 @@
 # Chih-Wei Huang <cwhuang@linux.org.tw>, 2000.
 # Abel Cheung <maddog@linux.org.hk>, 2001.
 # He Qiangqiang <carton@263.net>, 2001.
-# Funda Wang <fundawang@linux.net.cn>, 2003, 2004
+# Funda Wang <fundawang@linux.net.cn>, 2003, 2004.
+# Deng Xiyue <manphiz@gmail.com>, 2007, 2008.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2008-01-08 00:16-0500\n"
-"PO-Revision-Date: 2007-09-18 14:20+0800\n"
-"Last-Translator: 王剑 <wj2552@163.com>\n"
-"Language-Team: zh_CN <i18n-translation@lists.linux.net.cn>\n"
+"PO-Revision-Date: 2008-01-19 22:39+0800\n"
+"Last-Translator: Deng Xiyue <manphiz@gmail.com>\n"
+"Language-Team: i18n-zh <i18n-zh@googlegroups.com>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "X-Poedit-Bookmarks: 784,-1,-1,-1,-1,-1,-1,-1,-1,-1\n"
+"X-Poedit-Language: Chinese\n"
+"X-Poedit-Country: CHINA\n"
+"X-Poedit-SourceCharset: utf-8\n"
 
 #: gdk-pixbuf/gdk-pixbuf.c:89
 msgid "Number of Channels"
@@ -742,13 +746,12 @@ msgid "The index of the child in the parent"
 msgstr "子部件在父部件中的索引"
 
 #: gtk/gtkbuilder.c:102
-#, fuzzy
 msgid "Translation Domain"
-msgstr "翻译者致谢"
+msgstr "翻译者"
 
 #: gtk/gtkbuilder.c:103
 msgid "The translation domain used by gettext"
-msgstr ""
+msgstr "gettext 使用的翻译域"
 
 #: gtk/gtkbutton.c:200
 msgid ""
@@ -2100,9 +2103,8 @@ msgid "Password Hint Timeout"
 msgstr "密码提示超时"
 
 #: gtk/gtkentry.c:912
-#, fuzzy
 msgid "How long to show the last input character in hidden entries"
-msgstr "在隐藏输入框中输入的上个字符要显示多久"
+msgstr "在隐藏输入框中显示的上个输入字符要多久"
 
 #: gtk/gtkentrycompletion.c:279
 msgid "Completion Model"
@@ -2431,7 +2433,7 @@ msgstr "标签中是否显示选中的字体大小"
 
 #: gtk/gtkfontsel.c:180
 msgid "The X string that represents this font"
-msgstr "用来表示此字体的 X 字符串。"
+msgstr "代表此字体的 X 字符串"
 
 #: gtk/gtkfontsel.c:187
 msgid "The GdkFont that is currently selected"
@@ -3477,9 +3479,8 @@ msgid "Source option"
 msgstr "源选项"
 
 #: gtk/gtkprinteroptionwidget.c:124
-#, fuzzy
 msgid "The PrinterOption backing this widget"
-msgstr "支持这个部件的打印选项"
+msgstr "支持这个控件的打印选项"
 
 #: gtk/gtkprintjob.c:117
 msgid "Title of the print job"
@@ -3562,11 +3563,10 @@ msgid "Use full page"
 msgstr "使用整页"
 
 #: gtk/gtkprintoperation.c:985
-#, fuzzy
 msgid ""
 "TRUE if the origin of the context should be at the corner of the page and "
 "not the corner of the imageable area"
-msgstr "如果原始的上下文在页面的角点上，而不是在可成像区域的角点上，则为 TRUE"
+msgstr "如果原始的上下文在页面的角落，而不是在可成像区域的角落，则为 TRUE"
 
 #: gtk/gtkprintoperation.c:1006
 msgid ""
@@ -3730,10 +3730,9 @@ msgstr ""
 
 #: gtk/gtkprogressbar.c:218
 msgid "XSpacing"
-msgstr ""
+msgstr "XSpacing"
 
 #: gtk/gtkprogressbar.c:219
-#, fuzzy
 msgid "Extra spacing applied to the width of a progress bar."
 msgstr "应用在进度栏宽度上的附加的空白"
 
@@ -3973,9 +3972,8 @@ msgid "Local only"
 msgstr "只有本地"
 
 #: gtk/gtkrecentchooser.c:206
-#, fuzzy
 msgid "Whether the selected resource(s) should be limited to local file: URIs"
-msgstr "选中的资源共享是否限制为本地 file: URIs"
+msgstr "选中的资源是否限制为本地 file: URIs"
 
 #: gtk/gtkrecentchooser.c:222 gtk/gtkrecentmanager.c:265
 msgid "Limit"
@@ -4184,14 +4182,12 @@ msgid "Style of bevel around the contents"
 msgstr "内容周围的立体样式"
 
 #: gtk/gtkscrolledwindow.c:292
-#, fuzzy
 msgid "Scrollbars within bevel"
-msgstr "立体效果中的滚动条"
+msgstr "立体效果的滚动条"
 
 #: gtk/gtkscrolledwindow.c:293
-#, fuzzy
 msgid "Place scrollbars within the scrolled window's bevel"
-msgstr "滚动条和滚动窗口之间的像素数"
+msgstr "将滚动条放置在滚动窗口的斜面上"
 
 #: gtk/gtkscrolledwindow.c:299
 msgid "Scrollbar spacing"
@@ -4447,18 +4443,16 @@ msgid "Start timeout"
 msgstr "启动超时"
 
 #: gtk/gtksettings.c:471
-#, fuzzy
 msgid "Starting value for timeouts, when button is pressed"
-msgstr "当按钮按下时，各种超时时限的开始值"
+msgstr "当按钮按下时，超时的起始值"
 
 #: gtk/gtksettings.c:480
 msgid "Repeat timeout"
 msgstr "重复超时"
 
 #: gtk/gtksettings.c:481
-#, fuzzy
 msgid "Repeat value for timeouts, when button is pressed"
-msgstr "当按钮按下时，各种超时时限的重复值"
+msgstr "当按钮按下时，超时的重复值"
 
 #: gtk/gtksettings.c:490
 msgid "Expand timeout"
@@ -4489,9 +4483,8 @@ msgid "Enable Touchscreen Mode"
 msgstr "启用触摸屏模式"
 
 #: gtk/gtksettings.c:556
-#, fuzzy
 msgid "When TRUE, there are no motion notify events delivered on this screen"
-msgstr "为 TRUE 时，此屏幕上无运动通知事件"
+msgstr "设置为真时，此屏幕上不显示运动通知事件"
 
 #: gtk/gtksettings.c:573
 msgid "Tooltip timeout"
@@ -4519,19 +4512,19 @@ msgstr "禁用浏览模式后超时"
 
 #: gtk/gtksettings.c:641
 msgid "Keynav Cursor Only"
-msgstr ""
+msgstr "仅 Keynav 光标"
 
 #: gtk/gtksettings.c:642
 msgid "When TRUE, there are only cursor keys available to navigate widgets"
-msgstr ""
+msgstr "设置为真时，只有光标键可用于遍历控件"
 
 #: gtk/gtksettings.c:659
 msgid "Keynav Wrap Around"
-msgstr ""
+msgstr "Keynav 换行"
 
 #: gtk/gtksettings.c:660
 msgid "Whether to wrap around when keyboard-navigating widgets"
-msgstr ""
+msgstr "用键盘遍历控件时是否换行"
 
 #: gtk/gtksettings.c:680
 msgid "Error Bell"
@@ -4539,12 +4532,11 @@ msgstr "出错响铃"
 
 #: gtk/gtksettings.c:681
 msgid "When TRUE, keyboard navigation and other errors will cause a beep"
-msgstr ""
+msgstr "设置为真时，键盘遍历和其他出错时会有响铃"
 
 #: gtk/gtksettings.c:698
-#, fuzzy
 msgid "Color Hash"
-msgstr "色彩空间"
+msgstr "颜色 Hash"
 
 #: gtk/gtksettings.c:699
 msgid "A hash table representation of the color scheme."
@@ -4568,40 +4560,35 @@ msgstr "默认要使用的 GtkPrintBackend 后端名称"
 
 #: gtk/gtksettings.c:749
 msgid "Default command to run when displaying a print preview"
-msgstr ""
+msgstr "显示打印预览时默认执行的命令"
 
 #: gtk/gtksettings.c:750
 msgid "Command to run when displaying a print preview"
-msgstr ""
+msgstr "当显示打印预览时默认执行该命令"
 
 #: gtk/gtksettings.c:766
-#, fuzzy
 msgid "Enable Mnemonics"
-msgstr "允许动画"
+msgstr "允许助记符"
 
 #: gtk/gtksettings.c:767
-#, fuzzy
 msgid "Whether labels should have mnemonics"
-msgstr "标签是否应统一大小"
+msgstr "标签是否有助记符"
 
 #: gtk/gtksettings.c:783
-#, fuzzy
 msgid "Enable Accelerators"
-msgstr "可更改加速键"
+msgstr "开启加速键"
 
 #: gtk/gtksettings.c:784
-#, fuzzy
 msgid "Whether menu items should have accelerators"
-msgstr "是否要将撕下的菜单项添加到菜单中"
+msgstr "菜单项是否有加速键"
 
 #: gtk/gtksettings.c:801
 msgid "Recent Files Limit"
-msgstr ""
+msgstr "最近文件数限制"
 
 #: gtk/gtksettings.c:802
-#, fuzzy
 msgid "Number of recently used files"
-msgstr "列数"
+msgstr "最近文件数"
 
 #: gtk/gtksizegroup.c:293
 msgid "Mode"
@@ -4618,10 +4605,9 @@ msgid "Ignore hidden"
 msgstr "忽略隐藏"
 
 #: gtk/gtksizegroup.c:311
-#, fuzzy
 msgid ""
 "If TRUE, unmapped widgets are ignored when determining the size of the group"
-msgstr "如果为 TRUE，则在确定组大小时忽略隐藏部件"
+msgstr "如果为真，则在确定组大小时忽略未映射控件"
 
 #: gtk/gtkspinbutton.c:208
 msgid "The adjustment that holds the value of the spinbutton"
@@ -4691,9 +4677,8 @@ msgid "The size of the icon"
 msgstr "图标的大小"
 
 #: gtk/gtkstatusicon.c:226
-#, fuzzy
 msgid "The screen where this status icon will be displayed"
-msgstr "此窗口要显示的屏幕"
+msgstr "设置状态图标显示在哪个屏幕上"
 
 #: gtk/gtkstatusicon.c:233
 msgid "Blinking"
@@ -4708,9 +4693,8 @@ msgid "Whether or not the status icon is visible"
 msgstr "状态图标是否可见"
 
 #: gtk/gtkstatusicon.c:258
-#, fuzzy
 msgid "Whether or not the status icon is embedded"
-msgstr "状态图标是否可见"
+msgstr "状态图标是否内嵌"
 
 #: gtk/gtkstatusicon.c:274 gtk/gtktrayicon-x11.c:97
 msgid "The orientation of the tray"
@@ -4889,12 +4873,10 @@ msgid "Mark name"
 msgstr "标记名称"
 
 #: gtk/gtktextmark.c:97
-#, fuzzy
 msgid "Left gravity"
 msgstr "左重力"
 
 #: gtk/gtktextmark.c:98
-#, fuzzy
 msgid "Whether the mark has left gravity"
 msgstr "此标记是否有左重力"
 
@@ -5352,9 +5334,8 @@ msgid "Amount of border space between the toolbar shadow and the buttons"
 msgstr "工具栏阴影与按钮之间的间距"
 
 #: gtk/gtktoolbar.c:589
-#, fuzzy
 msgid "Maximum child expand"
-msgstr "最大的子部件展开"
+msgstr "最大的子控件展开"
 
 #: gtk/gtktoolbar.c:590
 msgid "Maximum amount of space an expandable item will be given"
@@ -5566,7 +5547,7 @@ msgstr "每级别的额外缩进"
 
 #: gtk/gtktreeview.c:738
 msgid "Rubber Banding"
-msgstr ""
+msgstr "弹性限制"
 
 #: gtk/gtktreeview.c:739
 msgid ""
@@ -6120,14 +6101,12 @@ msgid "Unique identifier for the window to be used when restoring a session"
 msgstr "恢复会话时要使用的窗口唯一标识符"
 
 #: gtk/gtkwindow.c:498
-#, fuzzy
 msgid "Startup ID"
-msgstr "组 ID"
+msgstr "启动 ID"
 
 #: gtk/gtkwindow.c:499
-#, fuzzy
 msgid "Unique startup identifier for the window used by startup-notification"
-msgstr "恢复会话时要使用的窗口唯一标识符"
+msgstr "启动通知使用的用于该窗口的统一启动标识符"
 
 #: gtk/gtkwindow.c:506
 msgid "Allow Shrink"
@@ -6299,12 +6278,11 @@ msgstr "窗口的窗口重力"
 
 #: gtk/gtkwindow.c:744
 msgid "Transient for Window"
-msgstr ""
+msgstr "临时窗体"
 
 #: gtk/gtkwindow.c:745
-#, fuzzy
 msgid "The transient parent of the dialog"
-msgstr "对话框的暂时的父对话框"
+msgstr "对话框的临时的父对话框"
 
 #: gtk/gtkwindow.c:759
 msgid "Opacity for Window"
@@ -6339,3 +6317,31 @@ msgstr "如何绘制输入法状态栏"
 #~ "A number between 0.0 and 1.0 specifying the vertical alignment of the "
 #~ "text in the progress widget"
 #~ msgstr "一个0.0与1.0之间的数值来表示在进度部件中文字的垂直排列"
+
+#~ msgid "Details Width"
+#~ msgstr "细节宽度"
+
+#~ msgid "Details width in characters"
+#~ msgstr "细节宽度，以字符数计"
+
+#~ msgid "Details Height"
+#~ msgstr "细节高度"
+
+#~ msgid "Details height in rows"
+#~ msgstr "行中的细节高度"
+
+#~ msgid "Show Details"
+#~ msgstr "显示细节"
+
+#~ msgid "If TRUE, details are shown"
+#~ msgstr "若为 TRUE，则显示细节"
+
+#~ msgid ""
+#~ "Amount of space used up by arrow, relative to the menu item's font size"
+#~ msgstr "箭头所占空间大小，相对于菜单项中的字体大小"
+
+#~ msgid "Default IM module"
+#~ msgstr "默认输入法模块"
+
+#~ msgid "Which IM module should be used by default"
+#~ msgstr "默认使用哪个输入法模块"
