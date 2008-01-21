@@ -1,3 +1,7 @@
+2008-01-21  Ihar Hrachyshka <ihar.hrachyshka@gmail.com>
+
+	* be.po: Backported Belarusian translation from trunk (gtk-2.14).
+
 2008-01-13  Andre Klapper  <a9016009@gmx.de>
 
 	* si.po: Unbreak the build caused by adding si.po 
