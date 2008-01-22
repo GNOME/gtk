@@ -1,5 +1,12 @@
 2008-01-22  Mathias Hasselmann  <mathias@openismus.com>
 
+	Add gdk_app_launch_context_get_type() to gdk.symbols (#511308, Kazuki
+	IWAMOTO).
+
+	* gdk/gdk.symbols: Add gdk_app_launch_context_get_type().
+
+2008-01-22  Mathias Hasselmann  <mathias@openismus.com>
+
 	Use pango_layout_set_height() for calendar details (#506049).
 
 	* configure.in: Require 1.19.3 for pango_layout_set_height().

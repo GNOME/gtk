@@ -1260,6 +1260,7 @@ gdk_xid_table_lookup_for_display
 
 #if IN_HEADER(__GDK_APP_LAUNCH_CONTEXT_H__)
 #if IN_FILE(__GDK_APP_LAUNCH_CONTEXT_C__)
+gdk_app_launch_context_get_type G_GNUC_CONST
 gdk_app_launch_context_new
 gdk_app_launch_context_set_display
 gdk_app_launch_context_set_screen
