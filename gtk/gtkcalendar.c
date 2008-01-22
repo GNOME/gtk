@@ -2548,8 +2548,6 @@ calendar_paint_day (GtkCalendar *calendar,
 
   if (detail && show_details)
     {
-      gint i, n_lines;
-
       gchar *markup = g_strconcat ("<small>", detail, "</small>", NULL);
       pango_layout_set_markup (layout, markup, -1);
       g_free (markup);
@@ -2567,34 +2565,18 @@ calendar_paint_day (GtkCalendar *calendar,
             pango_attr_list_unref (colors);
         }
 
-      if (priv->detail_width_chars)
+      pango_layout_set_wrap (layout, PANGO_WRAP_WORD_CHAR);
+      pango_layout_set_width (layout, PANGO_SCALE * day_rect.width);
+
+      if (priv->detail_height_rows)
         {
-          pango_layout_set_wrap (layout, PANGO_WRAP_WORD_CHAR);
-          pango_layout_set_width (layout, PANGO_SCALE * priv->min_day_width);
+          gint dy = day_rect.height - (y_loc - day_rect.y);
+          pango_layout_set_height (layout, PANGO_SCALE * dy);
+          pango_layout_set_ellipsize (layout, PANGO_ELLIPSIZE_END);
         }
 
-      n_lines = pango_layout_get_line_count (layout);
-
-      if (priv->detail_height_rows &&
-          n_lines > priv->detail_height_rows)
-        {
-          n_lines = priv->detail_height_rows;
-          overflow = TRUE;
-        }
-
-      for (i = 0; i < n_lines; ++i)
-        {
-          PangoLayoutLine *line = pango_layout_get_line_readonly (layout, i);
-          pango_layout_line_get_pixel_extents (line, NULL, &logical_rect);
-
-          x_loc  = day_rect.x + (day_rect.width - logical_rect.width) / 2;
-          y_loc += PANGO_ASCENT (logical_rect);
-
-          cairo_move_to (cr, x_loc, y_loc);
-          pango_cairo_show_layout_line (cr, line);
-
-          y_loc += PANGO_DESCENT (logical_rect);
-        }
+      cairo_move_to (cr, day_rect.x, y_loc);
+      pango_cairo_show_layout (cr, layout);
     }
 
   if (GTK_WIDGET_HAS_FOCUS (calendar) 

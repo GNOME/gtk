@@ -1,3 +1,10 @@
+2008-01-22  Mathias Hasselmann  <mathias@openismus.com>
+
+	Use pango_layout_set_height() for calendar details (#506049).
+
+	* configure.in: Require 1.19.3 for pango_layout_set_height().
+	* gtk/gtkcalendar.c: Use pango_layout_set_height() for details.
+
 2008-01-18  Johan Dahlin  <johan@gnome.org>
 
 	* gtk/gtk-builder-convert (get_property_node): New method
