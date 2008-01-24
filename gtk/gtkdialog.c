@@ -301,7 +301,9 @@ gtk_dialog_buildable_get_internal_child (GtkBuildable *buildable,
     else if (strcmp (childname, "action_area") == 0)
       return G_OBJECT (GTK_DIALOG (buildable)->action_area);
 
-    return NULL;
+    return parent_buildable_iface->get_internal_child (buildable,
+						       builder,
+						       childname);
 }
 
 static void 

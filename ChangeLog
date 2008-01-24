@@ -1,3 +1,8 @@
+2008-01-24  Johan Dahlin  <johan@gnome.org>
+
+	* gtk/gtkdialog.c (gtk_dialog_buildable_get_internal_child): 
+	Chain up to parent, so widgets can have internal children.
+
 2008-01-22  Mathias Hasselmann  <mathias@openismus.com>
 
 	Add gdk_app_launch_context_get_type() to gdk.symbols (#511308, Kazuki
