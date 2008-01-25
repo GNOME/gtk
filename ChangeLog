@@ -1,3 +1,10 @@
+2008-01-25  Sven Herzberg  <sven@imendio.com>
+
+	Reviewed by Johan Dahlin.
+
+	* gtk/gtkuimanager.c (gtk_ui_manager_remove_ui): emit a warning if
+	this is called with something that's not a GtkUIManager
+
 2008-01-24  Johan Dahlin  <johan@gnome.org>
 
 	* gtk/gtkdialog.c (gtk_dialog_buildable_get_internal_child): 
