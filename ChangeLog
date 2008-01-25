@@ -1,5 +1,10 @@
 2008-01-25  Richard Hult  <richard@imendio.com>
 
+	* gdk/quartz/GdkQuartzView.c: Don't recreate a tracking rect if it
+	didn't change, fixes focus event issues for undecorated windows.
+
+2008-01-25  Richard Hult  <richard@imendio.com>
+
 	* gdk/quartz/gdkwindow-quartz.c: Fix compile warnings (add missing
 	const and remove unused variables).
 

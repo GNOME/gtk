@@ -167,8 +167,22 @@
 
 -(void)setBounds:(NSRect)bounds
 {
+  NSRect old_bounds;
+  gboolean changed = FALSE;
+
+  old_bounds = [self bounds];
+  if (old_bounds.origin.x != bounds.origin.x ||
+      old_bounds.origin.y != bounds.origin.y ||
+      old_bounds.size.width != bounds.size.width ||
+      old_bounds.size.height != bounds.size.height)
+    {
+      changed = TRUE;
+    }
+  
   [super setBounds:bounds];
-  [self updateTrackingRect];
+
+  if (changed)
+    [self updateTrackingRect];
 }
 
 @end
