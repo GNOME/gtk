@@ -381,7 +381,7 @@ class GtkBuilderConverter(object):
         return menu
 
     def _menuitem_to_action(self, node, properties):
-        copy_properties(node, ['label'], properties)
+        copy_properties(node, ['label', 'tooltip'], properties)
 
     def _togglemenuitem_to_action(self, node, properties):
         self._menuitem_to_action(node, properties)
@@ -413,6 +413,7 @@ class GtkBuilderConverter(object):
                 child = get_property_node(image, 'stock')
                 if child is not None:
                     properties['stock_id'] = child
+            self._menuitem_to_action(node, properties)
         elif object_class == 'GtkSeparatorMenuItem':
             return
         else:
@@ -430,7 +431,7 @@ class GtkBuilderConverter(object):
 
         for signal in get_signal_nodes(node):
             signal_name = signal.getAttribute('name')
-            if signal_name == 'activate':
+            if signal_name in ['activate', 'toggled']:
                 action.appendChild(signal)
             else:
                 print 'Unhandled signal %s::%s' % (node.getAttribute('class'),
@@ -528,7 +529,9 @@ class GtkBuilderConverter(object):
         prop.childNodes[0].data = adj.getAttribute('id')
 
     def _convert_combobox_items(self, node, prop):
+        parent = prop.parentNode
         if not prop.childNodes:
+            parent.removeChild(prop)
             return
         value = prop.childNodes[0].data
         model = self._create_root_object("GtkListStore",
@@ -553,7 +556,6 @@ class GtkBuilderConverter(object):
             col.appendChild(self._dom.createTextNode(item))
             row.appendChild(col)
 
-        parent = prop.parentNode
         model_prop = self._dom.createElement('property')
         model_prop.setAttribute('name', 'model')
         model_prop.appendChild(

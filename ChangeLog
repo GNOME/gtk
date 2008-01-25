@@ -1,5 +1,15 @@
 2008-01-25  Johan Dahlin  <johan@gnome.org>
 
+	* gtk/gtk-builder-convert
+	(GtkBuilderConverter._convert_combobox_items): Remove the items
+	even if there are no items set.
+	(GtkBuilderConverter._add_action_from_menuitem): Convert toggled
+	signals and tooltips for all menu items subclasses and 
+	GtkImageMenuItem:label. 
+	Makes it possible to fully convert and run Jokosher.glade.
+
+2008-01-25  Johan Dahlin  <johan@gnome.org>
+
 	* gtk/gtkwidget.c: (gtk_widget_buildable_interface_init),
 	(gtk_widget_buildable_get_internal_child), (free_action),
 	(free_relation), (gtk_widget_buildable_parser_finished),
