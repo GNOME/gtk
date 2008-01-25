@@ -167,8 +167,8 @@ gdk_window_impl_quartz_init (GdkWindowImplQuartz *impl)
 }
 
 static void
-gdk_window_impl_quartz_begin_paint_region (GdkPaintable *paintable,
-					   GdkRegion    *region)
+gdk_window_impl_quartz_begin_paint_region (GdkPaintable    *paintable,
+					   const GdkRegion *region)
 {
   GdkWindowImplQuartz *impl = GDK_WINDOW_IMPL_QUARTZ (paintable);
   GdkDrawableImplQuartz *drawable_impl;
@@ -353,10 +353,10 @@ gdk_window_quartz_update_idle (gpointer data)
 }
 
 static void
-gdk_window_impl_quartz_invalidate_maybe_recurse (GdkPaintable *paintable,
-						 GdkRegion    *region,
-						 gboolean    (*child_func) (GdkWindow *, gpointer),
-						 gpointer      user_data)
+gdk_window_impl_quartz_invalidate_maybe_recurse (GdkPaintable    *paintable,
+						 const GdkRegion *region,
+						 gboolean        (*child_func) (GdkWindow *, gpointer),
+						 gpointer         user_data)
 {
   GdkWindowImplQuartz *window_impl = GDK_WINDOW_IMPL_QUARTZ (paintable);
   GdkDrawableImplQuartz *drawable_impl = (GdkDrawableImplQuartz *) window_impl;
@@ -1098,9 +1098,6 @@ gdk_window_hide (GdkWindow *window)
 
   if (impl->toplevel) 
     {
-      NSRect content_rect;
-      NSRect frame_rect;
-
      /* Update main window. */
       main_window_stack = g_slist_remove (main_window_stack, window);
       if ([NSApp mainWindow] == impl->toplevel)
