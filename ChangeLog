@@ -1,5 +1,8 @@
 2008-01-25  Johan Dahlin  <johan@gnome.org>
 
+	* gtk/gtktestutils.c (gtk_test_init): Restore accidentally removed
+	unsetting of GTK_MODULES.
+
 	* gtk/gtk-builder-convert
 	(GtkBuilderConverter._convert_adjustment): Handle the case where
 	there is no child text node.

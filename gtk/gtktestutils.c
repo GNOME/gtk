@@ -60,6 +60,7 @@ gtk_test_init (int    *argcp,
    * FUTURE TODO:
    * - this function could install a mock object around GtkSettings
    */
+  g_setenv ("GTK_MODULES", "", TRUE);
   g_setenv ("GTK2_RC_FILES", "/dev/null", TRUE);
   gtk_disable_setlocale();
   setlocale (LC_ALL, "C");
