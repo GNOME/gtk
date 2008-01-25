@@ -58,7 +58,7 @@ def get_child_nodes(node):
     assert node.tagName == 'object'
     nodes = []
     for child in node.childNodes:
-        if child.nodeType == Node.TEXT_NODE:
+        if child.nodeType != Node.ELEMENT_NODE:
             continue
         if child.tagName != 'child':
             continue
@@ -69,7 +69,7 @@ def get_properties(node):
     assert node.tagName == 'object'
     properties = {}
     for child in node.childNodes:
-        if child.nodeType == Node.TEXT_NODE:
+        if child.nodeType != Node.ELEMENT_NODE:
             continue
         if child.tagName != 'property':
             continue
@@ -86,7 +86,7 @@ def get_property_node(node, property_name):
     assert node.tagName == 'object'
     properties = {}
     for child in node.childNodes:
-        if child.nodeType == Node.TEXT_NODE:
+        if child.nodeType != Node.ELEMENT_NODE:
             continue
         if child.tagName != 'property':
             continue
@@ -97,7 +97,7 @@ def get_signal_nodes(node):
     assert node.tagName == 'object'
     signals = []
     for child in node.childNodes:
-        if child.nodeType == Node.TEXT_NODE:
+        if child.nodeType != Node.ELEMENT_NODE:
             continue
         if child.tagName == 'signal':
             signals.append(child)
@@ -107,8 +107,9 @@ def get_property_nodes(node):
     assert node.tagName == 'object'
     properties = []
     for child in node.childNodes:
-        if child.nodeType == Node.TEXT_NODE:
+        if child.nodeType != Node.ELEMENT_NODE:
             continue
+        # FIXME: handle comments
         if child.tagName == 'property':
             properties.append(child)
     return properties
@@ -117,7 +118,7 @@ def get_accelerator_nodes(node):
     assert node.tagName == 'object'
     accelerators = []
     for child in node.childNodes:
-        if child.nodeType == Node.TEXT_NODE:
+        if child.nodeType != Node.ELEMENT_NODE:
             continue
         if child.tagName == 'accelerator':
             accelerators.append(child)
@@ -127,7 +128,7 @@ def get_object_node(child_node):
     assert child_node.tagName == 'child', child_node
     nodes = []
     for node in child_node.childNodes:
-        if node.nodeType == Node.TEXT_NODE:
+        if node.nodeType != Node.ELEMENT_NODE:
             continue
         if node.tagName == 'object':
             nodes.append(node)
@@ -500,7 +501,7 @@ class GtkBuilderConverter(object):
 
         # 2) Get dialogs action-widgets tag, create if not found
         for child in dialog.childNodes:
-            if child.nodeType == Node.TEXT_NODE:
+            if child.nodeType != Node.ELEMENT_NODE:
                 continue
             if child.tagName == 'action-widgets':
                 actions = child
@@ -516,16 +517,22 @@ class GtkBuilderConverter(object):
         actions.appendChild(action)
 
     def _convert_adjustment(self, prop):
-        data = prop.childNodes[0].data
-        value, lower, upper, step, page, page_size = data.split(' ')
+        properties = {}
+        if prop.childNodes:
+            data = prop.childNodes[0].data
+            value, lower, upper, step, page, page_size = data.split(' ')
+            properties.update(value=value,
+                              lower=lower,
+                              upper=upper,
+                              step_increment=step,
+                              page_increment=page,
+                              page_size=page_size)
+        else:
+            prop.appendChild(self._dom.createTextNode(""))
+
         adj = self._create_root_object("GtkAdjustment",
                                        template='adjustment',
-                                       properties=dict(value=value,
-                                                       lower=lower,
-                                                       upper=upper,
-                                                       step_increment=step,
-                                                       page_increment=page,
-                                                       page_size=page_size))
+                                       properties=properties)
         prop.childNodes[0].data = adj.getAttribute('id')
 
     def _convert_combobox_items(self, node, prop):
