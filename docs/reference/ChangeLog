@@ -1,3 +1,8 @@
+2008-01-24  Johan Dahlin  <johan@gnome.org>
+
+	* gtk/tmpl/gtkwidget.sgml:
+	Add documentation for <accessible> buildable tag.
+
 2008-01-14  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtk-docs.sgml:

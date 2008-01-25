@@ -1,3 +1,20 @@
+2008-01-25  Johan Dahlin  <johan@gnome.org>
+
+	* gtk/gtkwidget.c: (gtk_widget_buildable_interface_init),
+	(gtk_widget_buildable_get_internal_child), (free_action),
+	(free_relation), (gtk_widget_buildable_parser_finished),
+	(accessibility_start_element),
+	(gtk_widget_buildable_custom_tag_start),
+	(gtk_widget_buildable_custom_finished):
+	Implement accessible support, fixes #454653.
+
+	* gtk/gtk-builder-convert:
+	Add support for migrating old glade files
+	
+	* tests/buildertest.c: (test_widget), (test_file):
+	Add accessible tests and imprve the test_file function to display
+	toplevels and run dialogs.
+
 2008-01-25  Richard Hult  <richard@imendio.com>
 
 	* gdk/quartz/GdkQuartzView.c: Don't recreate a tracking rect if it

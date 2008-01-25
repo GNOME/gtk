@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 #
-# Copyright (C) 2006-2007 Async Open Source
+# Copyright (C) 2006-2008 Async Open Source
 #                         Henrique Romano <henrique@async.com.br>
 #                         Johan Dahlin <jdahlin@async.com.br>
 #
@@ -124,7 +124,7 @@ def get_accelerator_nodes(node):
     return accelerators
 
 def get_object_node(child_node):
-    assert child_node.tagName == 'child'
+    assert child_node.tagName == 'child', child_node
     nodes = []
     for node in child_node.childNodes:
         if node.nodeType == Node.TEXT_NODE:
@@ -178,7 +178,7 @@ class GtkBuilderConverter(object):
         return [w for w in self._dom.getElementsByTagName("object")
                       if w.getAttribute(attribute) == value]
 
-    def _create_object(self, obj_class, obj_id, template=None, **properties):
+    def _create_object(self, obj_class, obj_id, template=None, properties=None):
         """
         Creates a new <object> tag.
         Optionally a name template can be provided which will be used
@@ -207,22 +207,23 @@ class GtkBuilderConverter(object):
         obj = self._dom.createElement('object')
         obj.setAttribute('class', obj_class)
         obj.setAttribute('id', obj_id)
-        for name, value in properties.items():
-            if isinstance(value, Node):
-                # Reuse the node, so translatable and context still will be
-                # set when converting nodes. See also #509153
-                prop = value
-            else:
-                prop = self._dom.createElement('property')
-                prop.appendChild(self._dom.createTextNode(value))
+        if properties:
+            for name, value in properties.items():
+                if isinstance(value, Node):
+                    # Reuse the node, so translatable and context still will be
+                    # set when converting nodes. See also #509153
+                    prop = value
+                else:
+                    prop = self._dom.createElement('property')
+                    prop.appendChild(self._dom.createTextNode(value))
 
-            prop.setAttribute('name', name)
-            obj.appendChild(prop)
+                prop.setAttribute('name', str(name))
+                obj.appendChild(prop)
         self.objects[obj_id] = obj
         return obj
 
-    def _create_root_object(self, obj_class, template, **properties):
-        obj = self._create_object(obj_class, None, template, **properties)
+    def _create_root_object(self, obj_class, template, properties=None):
+        obj = self._create_object(obj_class, None, template, properties)
         self.root_objects.append(obj)
         return obj
 
@@ -260,6 +261,10 @@ class GtkBuilderConverter(object):
         # Convert Gazpachos UI tag
         for node in self._dom.getElementsByTagName("ui"):
             self._convert_ui(node)
+
+        # Convert accessibility tag
+        for node in self._dom.getElementsByTagName("accessibility"):
+            self._convert_accessibility(node)
 
         # Output the newly created root objects and sort them
         # by attribute id
@@ -421,7 +426,7 @@ class GtkBuilderConverter(object):
         properties['name'] = object_id
         action = self._create_object(name,
                                      object_id,
-                                     **properties)
+                                     properties=properties)
 
         for signal in get_signal_nodes(node):
             signal_name = signal.getAttribute('name')
@@ -514,12 +519,12 @@ class GtkBuilderConverter(object):
         value, lower, upper, step, page, page_size = data.split(' ')
         adj = self._create_root_object("GtkAdjustment",
                                        template='adjustment',
-                                       value=value,
-                                       lower=lower,
-                                       upper=upper,
-                                       step_increment=step,
-                                       page_increment=page,
-                                       page_size=page_size)
+                                       properties=dict(value=value,
+                                                       lower=lower,
+                                                       upper=upper,
+                                                       step_increment=step,
+                                                       page_increment=page,
+                                                       page_size=page_size))
         prop.childNodes[0].data = adj.getAttribute('id')
 
     def _convert_combobox_items(self, node, prop):
@@ -581,7 +586,7 @@ class GtkBuilderConverter(object):
             prop.removeAttribute('translatable')
         tbuffer = self._create_root_object("GtkTextBuffer",
                                            template='textbuffer',
-                                           text=data)
+                                           properties=dict(text=data))
         prop.childNodes[0].data = tbuffer.getAttribute('id')
 
     def _packing_prop_to_child_attr(self, node, prop_name, prop_val,
@@ -622,6 +627,35 @@ class GtkBuilderConverter(object):
                                                 node.getAttribute("id")):
             widget.getAttributeNode("constructor").value = parent_id
         node.removeAttribute("id")
+
+    def _convert_accessibility(self, node):
+        objectNode = node.parentNode
+        parent_id = objectNode.getAttribute("id")
+
+        properties = {}
+        for node in node.childNodes:
+            if node.nodeName == 'atkproperty':
+                node.tagName = 'property'
+                properties[node.getAttribute('name')] = node
+                node.parentNode.removeChild(node)
+            elif node.nodeName == 'atkrelation':
+                node.tagName = 'relation'
+                relation_type = node.getAttribute('type')
+                relation_type = relation_type.replace('_', '-')
+                node.setAttribute('type', relation_type)
+            elif node.nodeName == 'atkaction':
+                node.tagName = 'action'
+
+        if properties:
+            child = self._dom.createElement('child')
+            child.setAttribute("internal-child", "accessible")
+
+            atkobject = self._create_object(
+                "AtkObject", None,
+                template='a11y-%s' % (parent_id,),
+                properties=properties)
+            child.appendChild(atkobject)
+            objectNode.appendChild(child)
 
     def _strip_root(self, root_name):
         for widget in self._dom.getElementsByTagName("widget"):

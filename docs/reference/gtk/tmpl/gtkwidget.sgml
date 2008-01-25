@@ -37,6 +37,31 @@ modifiers and signal and allows to specify accelerators.
 </object>
 ]]></programlisting>
 </example>
+In addition to accelerators, <structname>GtkWidget</structname> also support a 
+custom &lt;accessible&gt; element, which supports actions and relations. 
+Properties on the accessible implementation of an object can be set by accessing the 
+internal child "accessible" of a <structname>GtkWidget</structname>.
+<example>
+<title>A UI definition fragment specifying an accessible</title>
+<programlisting><![CDATA[
+<object class="GtkButton" id="label1"/>
+  <property name="label">I am a Label for a Button</property>
+</object>
+<object class="GtkButton" id="button1">
+  <accessibility>
+    <action action_name="click" description="Click the button."/>
+    <relation target="label1" type="labelled-by"/>
+  </accessibility>
+  <child internal-child="accessible">
+    <object class="AtkObject" id="a11y-button1">
+      <property name="AtkObject::name">Clickable Button</property>
+    </object>
+  </child>
+</object>
+]]></programlisting>
+</example>
+
+
 </refsect2>
 
 <!-- ##### SECTION See_Also ##### -->
