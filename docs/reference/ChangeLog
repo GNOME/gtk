@@ -1,4 +1,9 @@
-2008-01-08  Matthias Clasen  <mclasen@redhat.com>
+2008-01-24  Johan Dahlin  <johan@gnome.org>
+
+	* gtk/tmpl/gtkwidget.sgml:
+	Add documentation for <accessible> buildable tag.
+
+2008-01-14  Matthias Clasen  <mclasen@redhat.com>
 
 	* === Released 2.12.5 ===
 

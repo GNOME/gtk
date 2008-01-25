@@ -1,3 +1,35 @@
+2008-01-25  Johan Dahlin  <johan@gnome.org>
+
+	Merge from trunk:
+
+	* gtk/gtk-builder-convert
+	(GtkBuilderConverter._convert_adjustment): Handle the case where
+	there is no child text node.
+	(GtkBuilderConverter): Allow xml comments in most places.
+
+	* gtk/gtk-builder-convert
+	(GtkBuilderConverter._convert_combobox_items): Remove the items
+	even if there are no items set.
+	(GtkBuilderConverter._add_action_from_menuitem): Convert toggled
+	signals and tooltips for all menu items subclasses and 
+	GtkImageMenuItem:label. 
+	Makes it possible to fully convert and run Jokosher.glade.
+
+	* gtk/gtkwidget.c: (gtk_widget_buildable_interface_init),
+	(gtk_widget_buildable_get_internal_child), (free_action),
+	(free_relation), (gtk_widget_buildable_parser_finished),
+	(accessibility_start_element),
+	(gtk_widget_buildable_custom_tag_start),
+	(gtk_widget_buildable_custom_finished):
+	Implement accessible support, fixes #454653.
+
+	* gtk/gtk-builder-convert:
+	Add support for migrating old glade files
+	
+	* tests/buildertest.c: (test_widget), (test_file):
+	Add accessible tests and imprve the test_file function to display
+	toplevels and run dialogs.
+
 2008-01-25  Sven Herzberg  <sven@imendio.com>
 
 	Merge from trunk:

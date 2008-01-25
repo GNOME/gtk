@@ -251,6 +251,9 @@ static void             gtk_widget_buildable_interface_init     (GtkBuildableIfa
 static void             gtk_widget_buildable_set_name           (GtkBuildable     *buildable,
                                                                  const gchar      *name);
 static const gchar *    gtk_widget_buildable_get_name           (GtkBuildable     *buildable);
+static GObject *        gtk_widget_buildable_get_internal_child (GtkBuildable *buildable,
+								 GtkBuilder   *builder,
+								 const gchar  *childname);
 static void             gtk_widget_buildable_set_buildable_property (GtkBuildable     *buildable,
 								     GtkBuilder       *builder,
 								     const gchar      *name,
@@ -8847,17 +8850,20 @@ gtk_widget_ref_accessible (AtkImplementor *implementor)
 /*
  * GtkBuildable implementation
  */
-static GQuark		quark_builder_has_default = 0;
-static GQuark		quark_builder_has_focus = 0;
+static GQuark		 quark_builder_has_default = 0;
+static GQuark		 quark_builder_has_focus = 0;
+static GQuark		 quark_builder_atk_relations = 0;
 
 static void
 gtk_widget_buildable_interface_init (GtkBuildableIface *iface)
 {
   quark_builder_has_default = g_quark_from_static_string ("gtk-builder-has-default");
   quark_builder_has_focus = g_quark_from_static_string ("gtk-builder-has-focus");
+  quark_builder_atk_relations = g_quark_from_static_string ("gtk-builder-atk-relations");
 
   iface->set_name = gtk_widget_buildable_set_name;
   iface->get_name = gtk_widget_buildable_get_name;
+  iface->get_internal_child = gtk_widget_buildable_get_internal_child;
   iface->set_buildable_property = gtk_widget_buildable_set_buildable_property;
   iface->parser_finished = gtk_widget_buildable_parser_finished;
   iface->custom_tag_start = gtk_widget_buildable_custom_tag_start;
@@ -8877,6 +8883,17 @@ gtk_widget_buildable_get_name (GtkBuildable *buildable)
   return gtk_widget_get_name (GTK_WIDGET (buildable));
 }
 
+static GObject *
+gtk_widget_buildable_get_internal_child (GtkBuildable *buildable,
+					 GtkBuilder   *builder,
+					 const gchar  *childname)
+{
+  if (strcmp (childname, "accessible") == 0)
+    return G_OBJECT (gtk_widget_get_accessible (GTK_WIDGET (buildable)));
+
+  return NULL;
+}
+
 static void
 gtk_widget_buildable_set_buildable_property (GtkBuildable *buildable,
 					     GtkBuilder   *builder,
@@ -8893,15 +8910,222 @@ gtk_widget_buildable_set_buildable_property (GtkBuildable *buildable,
     g_object_set_property (G_OBJECT (buildable), name, value);
 }
 
+typedef struct {
+  gchar *action_name;
+  gchar *description;
+} AtkActionData;
+  
+typedef struct {
+  gchar *target;
+  gchar *type;
+} AtkRelationData;
+
+static void
+free_action (AtkActionData *data, gpointer user_data)
+{
+  g_free (data->action_name);
+  g_free (data->description);
+  g_slice_free (AtkActionData, data);
+}
+
+static void
+free_relation (AtkRelationData *data, gpointer user_data)
+{
+  g_free (data->target);
+  g_free (data->type);
+  g_slice_free (AtkRelationData, data);
+}
+
 static void
 gtk_widget_buildable_parser_finished (GtkBuildable *buildable,
 				      GtkBuilder   *builder)
 {
+  GSList *atk_relations;
+  
   if (g_object_get_qdata (G_OBJECT (buildable), quark_builder_has_default))
     gtk_widget_grab_default (GTK_WIDGET (buildable));
   if (g_object_get_qdata (G_OBJECT (buildable), quark_builder_has_focus))
     gtk_widget_grab_focus (GTK_WIDGET (buildable));
+
+  atk_relations = g_object_get_qdata (G_OBJECT (buildable),
+				      quark_builder_atk_relations);
+  if (atk_relations)
+    {
+      AtkObject *accessible;
+      AtkRelationSet *relation_set;
+      GSList *l;
+      GObject *target;
+      AtkRelationType relation_type;
+      AtkObject *target_accessible;
+      
+      accessible = gtk_widget_get_accessible (GTK_WIDGET (buildable));
+      relation_set = atk_object_ref_relation_set (accessible);
+
+      for (l = atk_relations; l; l = l->next)
+	{
+	  AtkRelationData *relation = (AtkRelationData*)l->data;
+	  
+	  target = gtk_builder_get_object (builder, relation->target);
+	  if (!target)
+	    {
+	      g_warning ("Target object %s in <relation> does not exist",
+			 relation->target);
+	      continue;
+	    }
+	  target_accessible = gtk_widget_get_accessible (GTK_WIDGET (target));
+	  g_assert (target_accessible != NULL);
+	  
+	  relation_type = atk_relation_type_for_name (relation->type);
+	  if (relation_type == ATK_RELATION_NULL)
+	    {
+	      g_warning ("<relation> type %s not found",
+			 relation->type);
+	      continue;
+	    }
+	  atk_relation_set_add_relation_by_type (relation_set, relation_type,
+						 target_accessible);
+	}
+      g_object_unref (relation_set);
+
+      g_slist_foreach (atk_relations, (GFunc)free_relation, NULL);
+      g_slist_free (atk_relations);
+      g_object_set_qdata (G_OBJECT (buildable), quark_builder_atk_relations,
+			  NULL);
+    }
+    
 }
+
+typedef struct {
+  GSList *actions;
+  GSList *relations;
+} AccessibilitySubParserData;
+
+static void
+accessibility_start_element (GMarkupParseContext *context,
+			     const gchar         *element_name,
+			     const gchar        **names,
+			     const gchar        **values,
+			     gpointer             user_data,
+			     GError             **error)
+{
+  AccessibilitySubParserData *data = (AccessibilitySubParserData*)user_data;
+  guint i;
+  gint line_number, char_number;
+
+  if (strcmp (element_name, "relation") == 0)
+    {
+      gchar *target = NULL;
+      gchar *type = NULL;
+      AtkRelationData *relation;
+      
+      for (i = 0; names[i]; i++)
+	{
+	  if (strcmp (names[i], "target") == 0)
+	    target = g_strdup (values[i]);
+	  else if (strcmp (names[i], "type") == 0)
+	    type = g_strdup (values[i]);
+	  else
+	    {
+	      g_markup_parse_context_get_position (context,
+						   &line_number,
+						   &char_number);
+	      g_set_error (error,
+			   GTK_BUILDER_ERROR,
+			   GTK_BUILDER_ERROR_INVALID_ATTRIBUTE,
+			   "%s:%d:%d '%s' is not a valid attribute of <%s>",
+			   "<input>",
+			   line_number, char_number, names[i], "relation");
+	      g_free (target);
+	      g_free (type);
+	      return;
+	    }
+	}
+
+      if (!target || !type)
+	{
+	  g_markup_parse_context_get_position (context,
+					       &line_number,
+					       &char_number);
+	  g_set_error (error,
+		       GTK_BUILDER_ERROR,
+		       GTK_BUILDER_ERROR_MISSING_ATTRIBUTE,
+		       "%s:%d:%d <%s> requires attribute \"%s\"",
+		       "<input>",
+		       line_number, char_number, "relation",
+		       type ? "target" : "type");
+	  g_free (target);
+	  g_free (type);
+	  return;
+	}
+
+      relation = g_slice_new (AtkRelationData);
+      relation->target = target;
+      relation->type = type;
+      
+      data->relations = g_slist_prepend (data->relations, relation);
+    }
+  else if (strcmp (element_name, "action") == 0)
+    {
+      gchar *action_name = NULL;
+      gchar *description = NULL;
+      AtkActionData *action;
+      
+      for (i = 0; names[i]; i++)
+	{
+	  if (strcmp (names[i], "action_name") == 0)
+	    action_name = g_strdup (values[i]);
+	  else if (strcmp (names[i], "description") == 0)
+	    description = g_strdup (values[i]);
+	  else
+	    {
+	      g_markup_parse_context_get_position (context,
+						   &line_number,
+						   &char_number);
+	      g_set_error (error,
+			   GTK_BUILDER_ERROR,
+			   GTK_BUILDER_ERROR_INVALID_ATTRIBUTE,
+			   "%s:%d:%d '%s' is not a valid attribute of <%s>",
+			   "<input>",
+			   line_number, char_number, names[i], "action");
+	      g_free (action_name);
+	      g_free (description);
+	      return;
+	    }
+	}
+
+      if (!action_name || !description)
+	{
+	  g_markup_parse_context_get_position (context,
+					       &line_number,
+					       &char_number);
+	  g_set_error (error,
+		       GTK_BUILDER_ERROR,
+		       GTK_BUILDER_ERROR_MISSING_ATTRIBUTE,
+		       "%s:%d:%d <%s> requires attribute \"%s\"",
+		       "<input>",
+		       line_number, char_number, "action",
+		       description ? "action_name" : "description");
+	  g_free (action_name);
+	  g_free (description);
+	  return;
+	}
+
+      action = g_slice_new (AtkActionData);
+      action->action_name = action_name;
+      action->description = description;
+      
+      data->actions = g_slist_prepend (data->actions, action);
+    }
+  else if (strcmp (element_name, "accessibility") == 0)
+    ;
+  else
+    g_warning ("Unsupported tag for GtkWidget: %s\n", element_name);
+}
+
+static const GMarkupParser accessibility_parser =
+  {
+    accessibility_start_element,
+  };
 
 typedef struct {
   GObject *object;
@@ -8955,12 +9179,6 @@ static const GMarkupParser accel_group_parser =
     accel_group_start_element,
   };
 
-static const GMarkupParser accessibility_parser =
-  {
-    NULL,
-  };
-
-
 static gboolean
 gtk_widget_buildable_custom_tag_start (GtkBuildable     *buildable,
 				       GtkBuilder       *builder,
@@ -8969,31 +9187,25 @@ gtk_widget_buildable_custom_tag_start (GtkBuildable     *buildable,
 				       GMarkupParser    *parser,
 				       gpointer         *data)
 {
-  AccelGroupParserData *parser_data;
-
   g_assert (buildable);
 
   if (strcmp (tagname, "accelerator") == 0)
     {
+      AccelGroupParserData *parser_data;
+
       parser_data = g_slice_new0 (AccelGroupParserData);
       parser_data->object = g_object_ref (buildable);
       *parser = accel_group_parser;
       *data = parser_data;
       return TRUE;
     }
-  else if (strcmp (tagname, "accessibility") == 0)
+  if (strcmp (tagname, "accessibility") == 0)
     {
-      static gboolean warning_showed = FALSE;
+      AccessibilitySubParserData *parser_data;
 
-      if (!warning_showed)
-	{
-	  g_warning ("<accessibility> is being ignored,\n"
-		     "see http://bugzilla.gnome.org/show_bug.cgi?id=454653\n");
-	  warning_showed = TRUE;
-	}
-
+      parser_data = g_slice_new0 (AccessibilitySubParserData);
       *parser = accessibility_parser;
-      *data = NULL;
+      *data = parser_data;
       return TRUE;
     }
   return FALSE;
@@ -9006,17 +9218,18 @@ gtk_widget_buildable_custom_finished (GtkBuildable *buildable,
 				      const gchar  *tagname,
 				      gpointer      user_data)
 {
-  AccelGroupParserData *data;
+  AccelGroupParserData *accel_data;
+  AccessibilitySubParserData *a11y_data;
   GtkWidget *toplevel;
   GSList *accel_groups;
   GtkAccelGroup *accel_group;
 
   if (strcmp (tagname, "accelerator") == 0)
     {
-      data = (AccelGroupParserData*)user_data;
-      g_assert (data->object);
+      accel_data = (AccelGroupParserData*)user_data;
+      g_assert (accel_data->object);
 
-      toplevel = gtk_widget_get_toplevel (GTK_WIDGET (data->object));
+      toplevel = gtk_widget_get_toplevel (GTK_WIDGET (accel_data->object));
       accel_groups = gtk_accel_groups_from_object (G_OBJECT (toplevel));
       if (g_slist_length (accel_groups) == 0)
 	{
@@ -9028,15 +9241,56 @@ gtk_widget_buildable_custom_finished (GtkBuildable *buildable,
 	  g_assert (g_slist_length (accel_groups) == 1);
 	  accel_group = g_slist_nth_data (accel_groups, 0);
 	}
-      gtk_widget_add_accelerator (GTK_WIDGET(data->object),
-				  data->signal,
+      gtk_widget_add_accelerator (GTK_WIDGET (accel_data->object),
+				  accel_data->signal,
 				  accel_group,
-				  data->key,
-				  data->modifiers,
+				  accel_data->key,
+				  accel_data->modifiers,
 				  GTK_ACCEL_VISIBLE);
-      g_object_unref (data->object);
-      g_free (data->signal);
-      g_slice_free (AccelGroupParserData, data);
+      g_object_unref (accel_data->object);
+      g_free (accel_data->signal);
+      g_slice_free (AccelGroupParserData, accel_data);
+    }
+  else if (strcmp (tagname, "accessibility") == 0)
+    {
+      a11y_data = (AccessibilitySubParserData*)user_data;
+
+      if (a11y_data->actions)
+	{
+	  AtkObject *accessible;
+	  AtkAction *action;
+	  gint i, n_actions;
+	  GSList *l;
+	  
+	  accessible = gtk_widget_get_accessible (GTK_WIDGET (buildable));
+	  
+	  action = ATK_ACTION (accessible);
+	  n_actions = atk_action_get_n_actions (action);    
+	  
+	  for (l = a11y_data->actions; l; l = l->next)
+	    {
+	      AtkActionData *action_data = (AtkActionData*)l->data;
+	      
+	      for (i = 0; i < n_actions; i++)
+		if (strcmp (atk_action_get_name (action, i),
+			    action_data->action_name) == 0)
+		  break;
+
+	      if (i < n_actions)
+		atk_action_set_description (action, i,
+					    action_data->description);
+	    }
+	  
+	  g_slist_foreach (a11y_data->actions, (GFunc)free_action, NULL);
+	  g_slist_free (a11y_data->actions);
+	}
+
+      if (a11y_data->relations)
+	g_object_set_qdata (G_OBJECT (buildable), quark_builder_atk_relations,
+			    a11y_data->relations);
+      
+      g_slice_free (AccessibilitySubParserData, a11y_data);
+      
     }
 }
 
