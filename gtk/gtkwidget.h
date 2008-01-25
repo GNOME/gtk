@@ -489,7 +489,7 @@ void	   gtk_widget_queue_resize	  (GtkWidget	       *widget);
 void	   gtk_widget_queue_resize_no_redraw (GtkWidget *widget);
 #ifndef GTK_DISABLE_DEPRECATED
 void	   gtk_widget_draw		  (GtkWidget	       *widget,
-					   GdkRectangle	       *area);
+					   const GdkRectangle  *area);
 #endif /* GTK_DISABLE_DEPRECATED */
 void	   gtk_widget_size_request	  (GtkWidget	       *widget,
 					   GtkRequisition      *requisition);
@@ -530,10 +530,10 @@ gboolean   gtk_widget_set_scroll_adjustments (GtkWidget        *widget,
 void	   gtk_widget_reparent		  (GtkWidget	       *widget,
 					   GtkWidget	       *new_parent);
 gboolean   gtk_widget_intersect		  (GtkWidget	       *widget,
-					   GdkRectangle	       *area,
+					   const GdkRectangle  *area,
 					   GdkRectangle	       *intersection);
 GdkRegion *gtk_widget_region_intersect	  (GtkWidget	       *widget,
-					   GdkRegion	       *region);
+					   const GdkRegion     *region);
 
 void	gtk_widget_freeze_child_notify	  (GtkWidget	       *widget);
 void	gtk_widget_child_notify		  (GtkWidget	       *widget,

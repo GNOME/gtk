@@ -4840,10 +4840,10 @@ _gtk_toolbar_get_default_space_size (void)
 }
 
 void
-_gtk_toolbar_paint_space_line (GtkWidget       *widget,
-			       GtkToolbar      *toolbar,
-			       GdkRectangle    *area,
-			       GtkAllocation   *allocation)
+_gtk_toolbar_paint_space_line (GtkWidget           *widget,
+			       GtkToolbar          *toolbar,
+			       const GdkRectangle  *area,
+			       const GtkAllocation *allocation)
 {
   const double start_fraction = (SPACE_LINE_START / SPACE_LINE_DIVISION);
   const double end_fraction = (SPACE_LINE_END / SPACE_LINE_DIVISION);

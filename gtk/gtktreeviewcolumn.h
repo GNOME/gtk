@@ -218,7 +218,7 @@ void                    gtk_tree_view_column_cell_set_cell_data  (GtkTreeViewCol
 								  gboolean                 is_expander,
 								  gboolean                 is_expanded);
 void                    gtk_tree_view_column_cell_get_size       (GtkTreeViewColumn       *tree_column,
-								  GdkRectangle            *cell_area,
+								  const GdkRectangle      *cell_area,
 								  gint                    *x_offset,
 								  gint                    *y_offset,
 								  gint                    *width,

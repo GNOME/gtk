@@ -387,8 +387,8 @@ gtk_tooltip_set_custom (GtkTooltip *tooltip,
  * Since: 2.12
  */
 void
-gtk_tooltip_set_tip_area (GtkTooltip   *tooltip,
-			  GdkRectangle *rect)
+gtk_tooltip_set_tip_area (GtkTooltip         *tooltip,
+			  const GdkRectangle *rect)
 {
   g_return_if_fail (GTK_IS_TOOLTIP (tooltip));
 

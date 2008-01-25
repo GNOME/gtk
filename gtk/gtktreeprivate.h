@@ -366,7 +366,7 @@ void         _gtk_tree_view_child_move_resize         (GtkTreeView       *tree_v
 void         _gtk_tree_view_queue_draw_node           (GtkTreeView       *tree_view,
 						       GtkRBTree         *tree,
 						       GtkRBNode         *node,
-						       GdkRectangle      *clip_rect);
+						       const GdkRectangle *clip_rect);
 
 void _gtk_tree_view_column_realize_button   (GtkTreeViewColumn *column);
 void _gtk_tree_view_column_unrealize_button (GtkTreeViewColumn *column);
@@ -383,8 +383,8 @@ gboolean _gtk_tree_view_column_cell_event   (GtkTreeViewColumn  *tree_column,
 					     GtkCellEditable   **editable_widget,
 					     GdkEvent           *event,
 					     gchar              *path_string,
-					     GdkRectangle       *background_area,
-					     GdkRectangle       *cell_area,
+					     const GdkRectangle *background_area,
+					     const GdkRectangle *cell_area,
 					     guint               flags);
 void _gtk_tree_view_column_start_editing (GtkTreeViewColumn *tree_column,
 					  GtkCellEditable   *editable_widget);
@@ -407,28 +407,28 @@ gboolean          _gtk_tree_selection_row_is_selectable  (GtkTreeSelection *sele
 							  GtkRBNode        *node,
 							  GtkTreePath      *path);
 
-void		  _gtk_tree_view_column_cell_render      (GtkTreeViewColumn *tree_column,
-							  GdkWindow         *window,
-							  GdkRectangle      *background_area,
-							  GdkRectangle      *cell_area,
-							  GdkRectangle      *expose_area,
-							  guint              flags);
-void		  _gtk_tree_view_column_get_focus_area   (GtkTreeViewColumn *tree_column,
-							  GdkRectangle      *background_area,
-							  GdkRectangle      *cell_area,
-							  GdkRectangle      *focus_area);
-gboolean	  _gtk_tree_view_column_cell_focus       (GtkTreeViewColumn *tree_column,
-							  gint               direction,
-							  gboolean           left,
-							  gboolean           right);
-void		  _gtk_tree_view_column_cell_draw_focus  (GtkTreeViewColumn *tree_column,
-							  GdkWindow         *window,
-							  GdkRectangle      *background_area,
-							  GdkRectangle      *cell_area,
-							  GdkRectangle      *expose_area,
-							  guint              flags);
-void		  _gtk_tree_view_column_cell_set_dirty	 (GtkTreeViewColumn *tree_column,
-							  gboolean           install_handler);
+void		  _gtk_tree_view_column_cell_render      (GtkTreeViewColumn  *tree_column,
+							  GdkWindow          *window,
+							  const GdkRectangle *background_area,
+							  const GdkRectangle *cell_area,
+							  const GdkRectangle *expose_area,
+							  guint               flags);
+void		  _gtk_tree_view_column_get_focus_area   (GtkTreeViewColumn  *tree_column,
+							  const GdkRectangle *background_area,
+							  const GdkRectangle *cell_area,
+							  GdkRectangle       *focus_area);
+gboolean	  _gtk_tree_view_column_cell_focus       (GtkTreeViewColumn  *tree_column,
+							  gint                direction,
+							  gboolean            left,
+							  gboolean            right);
+void		  _gtk_tree_view_column_cell_draw_focus  (GtkTreeViewColumn  *tree_column,
+							  GdkWindow          *window,
+							  const GdkRectangle *background_area,
+							  const GdkRectangle *cell_area,
+							  const GdkRectangle *expose_area,
+							  guint               flags);
+void		  _gtk_tree_view_column_cell_set_dirty	 (GtkTreeViewColumn  *tree_column,
+							  gboolean            install_handler);
 void              _gtk_tree_view_column_get_neighbor_sizes (GtkTreeViewColumn *column,
 							    GtkCellRenderer   *cell,
 							    gint              *left,

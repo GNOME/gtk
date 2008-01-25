@@ -361,8 +361,8 @@ gtk_im_context_reset (GtkIMContext   *context)
  * window.
  **/
 void
-gtk_im_context_set_cursor_location (GtkIMContext *context,
-				    GdkRectangle *area)
+gtk_im_context_set_cursor_location (GtkIMContext       *context,
+				    const GdkRectangle *area)
 {
   GtkIMContextClass *klass;
   
@@ -370,7 +370,7 @@ gtk_im_context_set_cursor_location (GtkIMContext *context,
 
   klass = GTK_IM_CONTEXT_GET_CLASS (context);
   if (klass->set_cursor_location)
-    klass->set_cursor_location (context, area);
+    klass->set_cursor_location (context, (GdkRectangle *) area);
 }
 
 /**

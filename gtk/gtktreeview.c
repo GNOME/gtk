@@ -309,90 +309,90 @@ static void     gtk_tree_view_top_row_to_dy (GtkTreeView *tree_view);
 static void     invalidate_empty_focus      (GtkTreeView *tree_view);
 
 /* Internal functions */
-static gboolean gtk_tree_view_is_expander_column             (GtkTreeView       *tree_view,
-							      GtkTreeViewColumn *column);
-static void     gtk_tree_view_add_move_binding               (GtkBindingSet     *binding_set,
-							      guint              keyval,
-							      guint              modmask,
-							      gboolean           add_shifted_binding,
-							      GtkMovementStep    step,
-							      gint               count);
-static gint     gtk_tree_view_unref_and_check_selection_tree (GtkTreeView       *tree_view,
-							      GtkRBTree         *tree);
-static void     gtk_tree_view_queue_draw_path                (GtkTreeView       *tree_view,
-							      GtkTreePath       *path,
-							      GdkRectangle      *clip_rect);
-static void     gtk_tree_view_queue_draw_arrow               (GtkTreeView       *tree_view,
-							      GtkRBTree         *tree,
-							      GtkRBNode         *node,
-							      GdkRectangle      *clip_rect);
-static void     gtk_tree_view_draw_arrow                     (GtkTreeView       *tree_view,
-							      GtkRBTree         *tree,
-							      GtkRBNode         *node,
-							      gint               x,
-							      gint               y);
-static void     gtk_tree_view_get_arrow_xrange               (GtkTreeView       *tree_view,
-							      GtkRBTree         *tree,
-							      gint              *x1,
-							      gint              *x2);
-static gint     gtk_tree_view_new_column_width               (GtkTreeView       *tree_view,
-							      gint               i,
-							      gint              *x);
-static void     gtk_tree_view_adjustment_changed             (GtkAdjustment     *adjustment,
-							      GtkTreeView       *tree_view);
-static void     gtk_tree_view_build_tree                     (GtkTreeView       *tree_view,
-							      GtkRBTree         *tree,
-							      GtkTreeIter       *iter,
-							      gint               depth,
-							      gboolean           recurse);
-static gboolean gtk_tree_view_discover_dirty_iter            (GtkTreeView       *tree_view,
-							      GtkTreeIter       *iter,
-							      gint               depth,
-							      gint              *height,
-							      GtkRBNode         *node);
-static void     gtk_tree_view_discover_dirty                 (GtkTreeView       *tree_view,
-							      GtkRBTree         *tree,
-							      GtkTreeIter       *iter,
-							      gint               depth);
-static void     gtk_tree_view_clamp_node_visible             (GtkTreeView       *tree_view,
-							      GtkRBTree         *tree,
-							      GtkRBNode         *node);
-static void     gtk_tree_view_clamp_column_visible           (GtkTreeView       *tree_view,
-							      GtkTreeViewColumn *column,
-							      gboolean           focus_to_cell);
-static gboolean gtk_tree_view_maybe_begin_dragging_row       (GtkTreeView       *tree_view,
-							      GdkEventMotion    *event);
-static void     gtk_tree_view_focus_to_cursor                (GtkTreeView       *tree_view);
-static void     gtk_tree_view_move_cursor_up_down            (GtkTreeView       *tree_view,
-							      gint               count);
-static void     gtk_tree_view_move_cursor_page_up_down       (GtkTreeView       *tree_view,
-							      gint               count);
-static void     gtk_tree_view_move_cursor_left_right         (GtkTreeView       *tree_view,
-							      gint               count);
-static void     gtk_tree_view_move_cursor_start_end          (GtkTreeView       *tree_view,
-							      gint               count);
-static gboolean gtk_tree_view_real_collapse_row              (GtkTreeView       *tree_view,
-							      GtkTreePath       *path,
-							      GtkRBTree         *tree,
-							      GtkRBNode         *node,
-							      gboolean           animate);
-static gboolean gtk_tree_view_real_expand_row                (GtkTreeView       *tree_view,
-							      GtkTreePath       *path,
-							      GtkRBTree         *tree,
-							      GtkRBNode         *node,
-							      gboolean           open_all,
-							      gboolean           animate);
-static void     gtk_tree_view_real_set_cursor                (GtkTreeView       *tree_view,
-							      GtkTreePath       *path,
-							      gboolean           clear_and_select,
-							      gboolean           clamp_node);
-static gboolean gtk_tree_view_has_special_cell               (GtkTreeView       *tree_view);
-static void     column_sizing_notify                         (GObject           *object,
-                                                              GParamSpec        *pspec,
-                                                              gpointer           data);
-static gboolean expand_collapse_timeout                      (gpointer           data);
-static gboolean do_expand_collapse                           (GtkTreeView       *tree_view);
-static void     gtk_tree_view_stop_rubber_band                (GtkTreeView       *tree_view);
+static gboolean gtk_tree_view_is_expander_column             (GtkTreeView        *tree_view,
+							      GtkTreeViewColumn  *column);
+static void     gtk_tree_view_add_move_binding               (GtkBindingSet      *binding_set,
+							      guint               keyval,
+							      guint               modmask,
+							      gboolean            add_shifted_binding,
+							      GtkMovementStep     step,
+							      gint                count);
+static gint     gtk_tree_view_unref_and_check_selection_tree (GtkTreeView        *tree_view,
+							      GtkRBTree          *tree);
+static void     gtk_tree_view_queue_draw_path                (GtkTreeView        *tree_view,
+							      GtkTreePath        *path,
+							      const GdkRectangle *clip_rect);
+static void     gtk_tree_view_queue_draw_arrow               (GtkTreeView        *tree_view,
+							      GtkRBTree          *tree,
+							      GtkRBNode          *node,
+							      const GdkRectangle *clip_rect);
+static void     gtk_tree_view_draw_arrow                     (GtkTreeView        *tree_view,
+							      GtkRBTree          *tree,
+							      GtkRBNode          *node,
+							      gint                x,
+							      gint                y);
+static void     gtk_tree_view_get_arrow_xrange               (GtkTreeView        *tree_view,
+							      GtkRBTree          *tree,
+							      gint               *x1,
+							      gint               *x2);
+static gint     gtk_tree_view_new_column_width               (GtkTreeView        *tree_view,
+							      gint                i,
+							      gint               *x);
+static void     gtk_tree_view_adjustment_changed             (GtkAdjustment      *adjustment,
+							      GtkTreeView        *tree_view);
+static void     gtk_tree_view_build_tree                     (GtkTreeView        *tree_view,
+							      GtkRBTree          *tree,
+							      GtkTreeIter        *iter,
+							      gint                depth,
+							      gboolean            recurse);
+static gboolean gtk_tree_view_discover_dirty_iter            (GtkTreeView        *tree_view,
+							      GtkTreeIter        *iter,
+							      gint                depth,
+							      gint               *height,
+							      GtkRBNode          *node);
+static void     gtk_tree_view_discover_dirty                 (GtkTreeView        *tree_view,
+							      GtkRBTree          *tree,
+							      GtkTreeIter        *iter,
+							      gint                depth);
+static void     gtk_tree_view_clamp_node_visible             (GtkTreeView        *tree_view,
+							      GtkRBTree          *tree,
+							      GtkRBNode          *node);
+static void     gtk_tree_view_clamp_column_visible           (GtkTreeView        *tree_view,
+							      GtkTreeViewColumn  *column,
+							      gboolean            focus_to_cell);
+static gboolean gtk_tree_view_maybe_begin_dragging_row       (GtkTreeView        *tree_view,
+							      GdkEventMotion     *event);
+static void     gtk_tree_view_focus_to_cursor                (GtkTreeView        *tree_view);
+static void     gtk_tree_view_move_cursor_up_down            (GtkTreeView        *tree_view,
+							      gint                count);
+static void     gtk_tree_view_move_cursor_page_up_down       (GtkTreeView        *tree_view,
+							      gint                count);
+static void     gtk_tree_view_move_cursor_left_right         (GtkTreeView        *tree_view,
+							      gint                count);
+static void     gtk_tree_view_move_cursor_start_end          (GtkTreeView        *tree_view,
+							      gint                count);
+static gboolean gtk_tree_view_real_collapse_row              (GtkTreeView        *tree_view,
+							      GtkTreePath        *path,
+							      GtkRBTree          *tree,
+							      GtkRBNode          *node,
+							      gboolean            animate);
+static gboolean gtk_tree_view_real_expand_row                (GtkTreeView        *tree_view,
+							      GtkTreePath        *path,
+							      GtkRBTree          *tree,
+							      GtkRBNode          *node,
+							      gboolean            open_all,
+							      gboolean            animate);
+static void     gtk_tree_view_real_set_cursor                (GtkTreeView        *tree_view,
+							      GtkTreePath        *path,
+							      gboolean            clear_and_select,
+							      gboolean            clamp_node);
+static gboolean gtk_tree_view_has_special_cell               (GtkTreeView        *tree_view);
+static void     column_sizing_notify                         (GObject            *object,
+                                                              GParamSpec         *pspec,
+                                                              gpointer            data);
+static gboolean expand_collapse_timeout                      (gpointer            data);
+static gboolean do_expand_collapse                           (GtkTreeView        *tree_view);
+static void     gtk_tree_view_stop_rubber_band               (GtkTreeView        *tree_view);
 
 /* interactive search */
 static void     gtk_tree_view_ensure_interactive_directory (GtkTreeView *tree_view);
@@ -9423,10 +9423,10 @@ _gtk_tree_view_column_start_drag (GtkTreeView       *tree_view,
 }
 
 static void
-gtk_tree_view_queue_draw_arrow (GtkTreeView      *tree_view,
-				GtkRBTree        *tree,
-				GtkRBNode        *node,
-				GdkRectangle     *clip_rect)
+gtk_tree_view_queue_draw_arrow (GtkTreeView        *tree_view,
+				GtkRBTree          *tree,
+				GtkRBNode          *node,
+				const GdkRectangle *clip_rect)
 {
   GdkRectangle rect;
 
@@ -9454,10 +9454,10 @@ gtk_tree_view_queue_draw_arrow (GtkTreeView      *tree_view,
 }
 
 void
-_gtk_tree_view_queue_draw_node (GtkTreeView  *tree_view,
-				GtkRBTree    *tree,
-				GtkRBNode    *node,
-				GdkRectangle *clip_rect)
+_gtk_tree_view_queue_draw_node (GtkTreeView        *tree_view,
+				GtkRBTree          *tree,
+				GtkRBNode          *node,
+				const GdkRectangle *clip_rect)
 {
   GdkRectangle rect;
 
@@ -9485,9 +9485,9 @@ _gtk_tree_view_queue_draw_node (GtkTreeView  *tree_view,
 }
 
 static void
-gtk_tree_view_queue_draw_path (GtkTreeView      *tree_view,
-                               GtkTreePath      *path,
-                               GdkRectangle     *clip_rect)
+gtk_tree_view_queue_draw_path (GtkTreeView        *tree_view,
+                               GtkTreePath        *path,
+                               const GdkRectangle *clip_rect)
 {
   GtkRBTree *tree = NULL;
   GtkRBNode *node = NULL;

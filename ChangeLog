@@ -1,3 +1,26 @@
+2008-01-25  Michael Natterer  <mitch@imendio.com>
+
+	* gtk/gtkbutton.h
+	* gtk/gtkcellrenderer.h
+	* gtk/gtkimcontext.h
+	* gtk/gtkstyle.h
+	* gtk/gtktoolbar.h
+	* gtk/gtktooltip.h
+	* gtk/gtktreeprivate.h
+	* gtk/gtktreeviewcolumn.h
+	* gtk/gtkwidget.h: add const to constant structs which are passed
+	into GTK+. Also add some forgotten const for const strings.
+
+	* gtk/gtkbutton.c
+	* gtk/gtkcellrenderer.c
+	* gtk/gtkimcontext.c
+	* gtk/gtkstyle.c
+	* gtk/gtktoolbar.c
+	* gtk/gtktooltip.c
+	* gtk/gtktreeview.c
+	* gtk/gtktreeviewcolumn.c
+	* gtk/gtkwidget.c: changed accordingly.
+
 2008-01-25  Sven Herzberg  <sven@imendio.com>
 
 	Reviewed by Johan Dahlin.

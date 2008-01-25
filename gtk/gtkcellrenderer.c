@@ -479,13 +479,13 @@ set_cell_bg_color (GtkCellRenderer *cell,
  * in @x_offset and @y_offset are inclusive of the xpad and ypad properties.
  **/
 void
-gtk_cell_renderer_get_size (GtkCellRenderer *cell,
-			    GtkWidget       *widget,
-			    GdkRectangle    *cell_area,
-			    gint            *x_offset,
-			    gint            *y_offset,
-			    gint            *width,
-			    gint            *height)
+gtk_cell_renderer_get_size (GtkCellRenderer    *cell,
+			    GtkWidget          *widget,
+			    const GdkRectangle *cell_area,
+			    gint               *x_offset,
+			    gint               *y_offset,
+			    gint               *width,
+			    gint               *height)
 {
   gint *real_width = width;
   gint *real_height = height;
@@ -506,7 +506,7 @@ gtk_cell_renderer_get_size (GtkCellRenderer *cell,
 
   GTK_CELL_RENDERER_GET_CLASS (cell)->get_size (cell,
 						widget,
-						cell_area,
+						(GdkRectangle *) cell_area,
 						x_offset,
 						y_offset,
 						real_width,
@@ -533,13 +533,13 @@ gtk_cell_renderer_get_size (GtkCellRenderer *cell,
  * @window.  @expose_area is a clip rectangle.
  **/
 void
-gtk_cell_renderer_render (GtkCellRenderer     *cell,
-			  GdkWindow           *window,
-			  GtkWidget           *widget,
-			  GdkRectangle        *background_area,
-			  GdkRectangle        *cell_area,
-			  GdkRectangle        *expose_area,
-			  GtkCellRendererState flags)
+gtk_cell_renderer_render (GtkCellRenderer      *cell,
+			  GdkWindow            *window,
+			  GtkWidget            *widget,
+			  const GdkRectangle   *background_area,
+			  const GdkRectangle   *cell_area,
+			  const GdkRectangle   *expose_area,
+			  GtkCellRendererState  flags)
 {
   gboolean selected = FALSE;
   GtkCellRendererPrivate *priv = GTK_CELL_RENDERER_GET_PRIVATE (cell);
@@ -563,9 +563,9 @@ gtk_cell_renderer_render (GtkCellRenderer     *cell,
   GTK_CELL_RENDERER_GET_CLASS (cell)->render (cell,
 					      window,
 					      widget,
-					      background_area,
-					      cell_area,
-					      expose_area,
+					      (GdkRectangle *) background_area,
+					      (GdkRectangle *) cell_area,
+					      (GdkRectangle *) expose_area,
 					      flags);
 }
 
@@ -591,8 +591,8 @@ gtk_cell_renderer_activate (GtkCellRenderer      *cell,
 			    GdkEvent             *event,
 			    GtkWidget            *widget,
 			    const gchar          *path,
-			    GdkRectangle         *background_area,
-			    GdkRectangle         *cell_area,
+			    const GdkRectangle   *background_area,
+			    const GdkRectangle   *cell_area,
 			    GtkCellRendererState  flags)
 {
   g_return_val_if_fail (GTK_IS_CELL_RENDERER (cell), FALSE);
@@ -607,8 +607,8 @@ gtk_cell_renderer_activate (GtkCellRenderer      *cell,
 						       event,
 						       widget,
 						       path,
-						       background_area,
-						       cell_area,
+						       (GdkRectangle *) background_area,
+						       (GdkRectangle *) cell_area,
 						       flags);
 }
 
@@ -632,8 +632,8 @@ gtk_cell_renderer_start_editing (GtkCellRenderer      *cell,
 				 GdkEvent             *event,
 				 GtkWidget            *widget,
 				 const gchar          *path,
-				 GdkRectangle         *background_area,
-				 GdkRectangle         *cell_area,
+				 const GdkRectangle   *background_area,
+				 const GdkRectangle   *cell_area,
 				 GtkCellRendererState  flags)
 
 {
@@ -651,8 +651,8 @@ gtk_cell_renderer_start_editing (GtkCellRenderer      *cell,
 								event,
 								widget,
 								path,
-								background_area,
-								cell_area,
+								(GdkRectangle *) background_area,
+								(GdkRectangle *) cell_area,
 								flags);
 
   g_signal_emit (cell, 

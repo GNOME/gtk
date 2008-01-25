@@ -1217,12 +1217,12 @@ gtk_button_size_allocate (GtkWidget     *widget,
 }
 
 void
-_gtk_button_paint (GtkButton    *button,
-		   GdkRectangle *area,
-		   GtkStateType  state_type,
-		   GtkShadowType shadow_type,
-		   const gchar  *main_detail,
-		   const gchar  *default_detail)
+_gtk_button_paint (GtkButton          *button,
+		   const GdkRectangle *area,
+		   GtkStateType        state_type,
+		   GtkShadowType       shadow_type,
+		   const gchar        *main_detail,
+		   const gchar        *default_detail)
 {
   GtkWidget *widget;
   gint width, height;

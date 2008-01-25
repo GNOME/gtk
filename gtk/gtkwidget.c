@@ -3578,8 +3578,8 @@ gtk_widget_queue_resize_no_redraw (GtkWidget *widget)
  * a better choice if you want to draw a region of a widget.
  **/
 void
-gtk_widget_draw (GtkWidget    *widget,
-		 GdkRectangle *area)
+gtk_widget_draw (GtkWidget          *widget,
+		 const GdkRectangle *area)
 {
   g_return_if_fail (GTK_IS_WIDGET (widget));
 
@@ -4877,9 +4877,9 @@ gtk_widget_reparent (GtkWidget *widget,
  * Return value: %TRUE if there was an intersection
  **/
 gboolean
-gtk_widget_intersect (GtkWidget	   *widget,
-		      GdkRectangle *area,
-		      GdkRectangle *intersection)
+gtk_widget_intersect (GtkWidget	         *widget,
+		      const GdkRectangle *area,
+		      GdkRectangle       *intersection)
 {
   GdkRectangle *dest;
   GdkRectangle tmp;
@@ -4922,8 +4922,8 @@ gtk_widget_intersect (GtkWidget	   *widget,
  * check.
  **/
 GdkRegion *
-gtk_widget_region_intersect (GtkWidget *widget,
-			     GdkRegion *region)
+gtk_widget_region_intersect (GtkWidget       *widget,
+			     const GdkRegion *region)
 {
   GdkRectangle rect;
   GdkRegion *dest;
