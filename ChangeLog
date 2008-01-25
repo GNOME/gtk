@@ -10,6 +10,7 @@
 	* gtk/gtktreeviewcolumn.h
 	* gtk/gtkwidget.h: add const to constant structs which are passed
 	into GTK+. Also add some forgotten const for const strings.
+	Fixes bug #511554.
 
 	* gtk/gtkbutton.c
 	* gtk/gtkcellrenderer.c
