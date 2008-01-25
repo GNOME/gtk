@@ -1850,6 +1850,8 @@ void
 gtk_ui_manager_remove_ui (GtkUIManager *self, 
 			  guint         merge_id)
 {
+  g_return_if_fail (GTK_IS_UI_MANAGER (self));
+
   g_node_traverse (self->private_data->root_node, 
 		   G_POST_ORDER, G_TRAVERSE_ALL, -1,
 		   remove_ui, GUINT_TO_POINTER (merge_id));
