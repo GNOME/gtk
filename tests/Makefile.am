@@ -45,6 +45,10 @@ TEST_PROGS                      += defaultvaluetest
 endif
 defaultvaluetest_DEPENDENCIES 	 = $(TEST_DEPS)
 defaultvaluetest_LDADD 		 = $(LDADDS)
+TEST_PROGS                      += textbuffertest
+textbuffertest_DEPENDENCIES 	 = $(TEST_DEPS)
+textbuffertest_LDADD 		 = $(LDADDS)
+textbuffertest_SOURCES           = textbuffertest.c
 
 noinst_PROGRAMS =  $(TEST_PROGS)	\
 	autotestkeywords		\
@@ -85,7 +89,6 @@ noinst_PROGRAMS =  $(TEST_PROGS)	\
 	testspinbutton			\
 	teststatusicon			\
 	testtext			\
-        testtextbuffer			\
 	testtoolbar			\
 	stresstest-toolbar		\
 	testtreeedit			\
@@ -160,7 +163,6 @@ testsocket_child_DEPENDENCIES = $(DEPS)
 testspinbutton_DEPENDENCIES = $(TEST_DEPS)
 teststatusicon_DEPENDENCIES = $(TEST_DEPS)
 testtext_DEPENDENCIES = $(TEST_DEPS)
-testtextbuffer_DEPENDENCIES = $(TEST_DEPS)
 testtreeedit_DEPENDENCIES = $(DEPS)
 testtreemodel_DEPENDENCIES = $(DEPS)
 testtreeview_DEPENDENCIES = $(DEPS)
@@ -213,7 +215,6 @@ testsocket_LDADD = $(LDADDS)
 testsocket_child_LDADD = $(LDADDS)
 testspinbutton_LDADD = $(LDADDS)
 teststatusicon_LDADD = $(LDADDS)
-testtextbuffer_LDADD = $(LDADDS)
 testtoolbar_LDADD = $(LDADDS)
 stresstest_toolbar_LDADD = $(LDADDS)
 testtreeedit_LDADD = $(LDADDS)

@@ -1,3 +1,9 @@
+2008-01-26  Johan Dahlin  <johan@gnome.org>
+
+	* tests/Makefile.am:
+	* tests/textbuffertest.c:
+	Rename textbuffer test and port it to the new test framework
+	
 2008-01-25  Johan Dahlin  <johan@gnome.org>
 
 	* gtk/gtktestutils.c (gtk_test_init): Restore accidentally removed

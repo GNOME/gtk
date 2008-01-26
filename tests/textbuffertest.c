@@ -36,119 +36,6 @@ gtk_text_iter_spew (const GtkTextIter *iter, const gchar *desc)
            gtk_text_iter_get_line_index (iter));
 }
 
-static void fill_buffer (GtkTextBuffer *buffer);
-
-static void run_tests (GtkTextBuffer *buffer);
-
-static void check_get_set_text (GtkTextBuffer *buffer,
-                                const char    *str);
-
-
-static void line_separator_tests (void);
-
-static void logical_motion_tests (void);
-
-static void mark_tests (void);
-
-int
-main (int argc, char** argv)
-{
-  GtkTextBuffer *buffer;
-  int n;
-  gunichar ch;
-  GtkTextIter start, end;
-  
-  gtk_init (&argc, &argv);
-
-  /* Check UTF8 unknown char thing */
-  g_assert (g_utf8_strlen (gtk_text_unknown_char_utf8, 3) == 1);
-  ch = g_utf8_get_char (gtk_text_unknown_char_utf8);
-  g_assert (ch == GTK_TEXT_UNKNOWN_CHAR);
-
-  /* First, we turn on btree debugging. */
-  gtk_debug_flags |= GTK_DEBUG_TEXT;
-
-  /* Check some line separator stuff */
-  line_separator_tests ();
-
-  /* Check log attr motion */
-  logical_motion_tests ();
-  
-  /* Create a buffer */
-  buffer = gtk_text_buffer_new (NULL);
-
-  /* Marks */
-  mark_tests ();
-
-  /* Check that buffer starts with one empty line and zero chars */
-
-  n = gtk_text_buffer_get_line_count (buffer);
-  if (n != 1)
-    g_error ("%d lines, expected 1", n);
-
-  n = gtk_text_buffer_get_char_count (buffer);
-  if (n != 0)
-    g_error ("%d chars, expected 0", n);
-
-  /* empty first line contains 0 chars */
-  gtk_text_buffer_get_start_iter (buffer, &start);
-  n = gtk_text_iter_get_chars_in_line (&start);
-  if (n != 0)
-    g_error ("%d chars in first line, expected 0", n);
-  n = gtk_text_iter_get_bytes_in_line (&start);
-  if (n != 0)
-    g_error ("%d bytes in first line, expected 0", n);
-  
-  /* Run gruesome alien test suite on buffer */
-  run_tests (buffer);
-
-  /* Check set/get text */
-  check_get_set_text (buffer, "Hello");
-  check_get_set_text (buffer, "Hello\n");
-  check_get_set_text (buffer, "Hello\r\n");
-  check_get_set_text (buffer, "Hello\r");
-  check_get_set_text (buffer, "Hello\nBar\nFoo");
-  check_get_set_text (buffer, "Hello\nBar\nFoo\n");
-
-  g_print ("get/set tests passed.\n");
-  
-  /* Put stuff in the buffer */
-
-  fill_buffer (buffer);
-
-  /* Subject stuff-bloated buffer to further torment */
-  run_tests (buffer);
-
-  /* Delete all stuff from the buffer */
-  gtk_text_buffer_get_bounds (buffer, &start, &end);
-  gtk_text_buffer_delete (buffer, &start, &end);
-
-  /* Check buffer for emptiness (note that a single
-     empty line always remains in the buffer) */
-  n = gtk_text_buffer_get_line_count (buffer);
-  if (n != 1)
-    g_error ("%d lines, expected 1", n);
-
-  n = gtk_text_buffer_get_char_count (buffer);
-  if (n != 0)
-    g_error ("%d chars, expected 0", n);
-
-  run_tests (buffer);
-
-  gtk_text_buffer_set_text (buffer, "adcdef", -1);
-  gtk_text_buffer_get_iter_at_offset (buffer, &start, 1);
-  gtk_text_buffer_get_iter_at_offset (buffer, &end, 3);
-  gtk_text_buffer_apply_tag_by_name (buffer, "fg_blue", &start, &end);
-  
-  run_tests (buffer);
-  
-  g_object_unref (buffer);
-  
-  g_print ("All tests passed.\n");
-
-  return 0;
-}
-
 static void
 check_get_set_text (GtkTextBuffer *buffer,
                     const char    *str)
@@ -995,7 +882,7 @@ split_r_n_separators_test (void)
 }
 
 static void
-line_separator_tests (void)
+test_line_separator (void)
 {
   char *str;
   char buf[7] = { '\0', };
@@ -1023,12 +910,10 @@ line_separator_tests (void)
   g_free (str);
 
   split_r_n_separators_test ();
-
-  g_print ("Line separator tests passed\n");
 }
 
 static void
-logical_motion_tests (void)
+test_logical_motion (void)
 {
   char *str;
   char buf1[7] = { '\0', };
@@ -1211,13 +1096,11 @@ logical_motion_tests (void)
   if (gtk_text_iter_get_offset (&iter) != 0)
     g_error ("Expected to stop at the start iterator\n");
   
-  g_print ("Logical motion tests passed\n");
-
   g_object_unref (buffer);
 }
 
 static void
-mark_tests (void)
+test_marks (void)
 {
   GtkTextBuffer *buf1, *buf2;
   GtkTextMark *mark;
@@ -1284,4 +1167,139 @@ mark_tests (void)
   g_object_unref (mark);
   g_object_unref (buf1);
   g_object_unref (buf2);
+}
+
+static void
+test_utf8 (void)
+{
+  gunichar ch;
+
+  /* Check UTF8 unknown char thing */
+  g_assert (g_utf8_strlen (gtk_text_unknown_char_utf8, 3) == 1);
+  ch = g_utf8_get_char (gtk_text_unknown_char_utf8);
+  g_assert (ch == GTK_TEXT_UNKNOWN_CHAR);
+}
+
+static void
+test_empty_buffer (void)
+{
+  GtkTextBuffer *buffer;
+  int n;
+  GtkTextIter start;
+
+  buffer = gtk_text_buffer_new (NULL);
+
+  /* Check that buffer starts with one empty line and zero chars */
+  n = gtk_text_buffer_get_line_count (buffer);
+  if (n != 1)
+    g_error ("%d lines, expected 1", n);
+
+  n = gtk_text_buffer_get_char_count (buffer);
+  if (n != 0)
+    g_error ("%d chars, expected 0", n);
+
+  /* empty first line contains 0 chars */
+  gtk_text_buffer_get_start_iter (buffer, &start);
+  n = gtk_text_iter_get_chars_in_line (&start);
+  if (n != 0)
+    g_error ("%d chars in first line, expected 0", n);
+  n = gtk_text_iter_get_bytes_in_line (&start);
+  if (n != 0)
+    g_error ("%d bytes in first line, expected 0", n);
+  
+  /* Run gruesome alien test suite on buffer */
+  run_tests (buffer);
+
+  g_object_unref (buffer);
+}
+
+static void
+test_get_set(void)
+{
+  GtkTextBuffer *buffer;
+
+  buffer = gtk_text_buffer_new (NULL);
+
+  check_get_set_text (buffer, "Hello");
+  check_get_set_text (buffer, "Hello\n");
+  check_get_set_text (buffer, "Hello\r\n");
+  check_get_set_text (buffer, "Hello\r");
+  check_get_set_text (buffer, "Hello\nBar\nFoo");
+  check_get_set_text (buffer, "Hello\nBar\nFoo\n");
+
+  g_object_unref (buffer);
+}
+
+static void
+test_fill_empty (void)
+{
+  GtkTextBuffer *buffer;
+  int n;
+  GtkTextIter start, end;
+  
+  buffer = gtk_text_buffer_new (NULL);
+
+  /* Put stuff in the buffer */
+  fill_buffer (buffer);
+
+  /* Subject stuff-bloated buffer to further torment */
+  run_tests (buffer);
+
+  /* Delete all stuff from the buffer */
+  gtk_text_buffer_get_bounds (buffer, &start, &end);
+  gtk_text_buffer_delete (buffer, &start, &end);
+
+  /* Check buffer for emptiness (note that a single
+     empty line always remains in the buffer) */
+  n = gtk_text_buffer_get_line_count (buffer);
+  if (n != 1)
+    g_error ("%d lines, expected 1", n);
+
+  n = gtk_text_buffer_get_char_count (buffer);
+  if (n != 0)
+    g_error ("%d chars, expected 0", n);
+
+  run_tests (buffer);
+
+  g_object_unref (buffer);
+}
+
+static void
+test_tag (void)
+{
+  GtkTextBuffer *buffer;
+  GtkTextIter start, end;
+  
+  buffer = gtk_text_buffer_new (NULL);
+
+  fill_buffer (buffer);
+
+  gtk_text_buffer_set_text (buffer, "adcdef", -1);
+  gtk_text_buffer_get_iter_at_offset (buffer, &start, 1);
+  gtk_text_buffer_get_iter_at_offset (buffer, &end, 3);
+  gtk_text_buffer_apply_tag_by_name (buffer, "fg_blue", &start, &end);
+  
+  run_tests (buffer);
+  
+  g_object_unref (buffer);
+}
+
+int
+main (int argc, char** argv)
+{
+  /* First, we turn on btree debugging. */
+  gtk_debug_flags |= GTK_DEBUG_TEXT;
+
+  gtk_test_init (&argc, &argv);
+
+  g_test_add_func ("/TextBuffer/UTF8 unknown char", test_utf8);
+  g_test_add_func ("/TextBuffer/Line separator", test_line_separator);
+  g_test_add_func ("/TextBuffer/Logical motion", test_logical_motion);
+  g_test_add_func ("/TextBuffer/Marks", test_marks);
+  g_test_add_func ("/TextBuffer/Empty buffer", test_empty_buffer);
+  g_test_add_func ("/TextBuffer/Get and Set", test_get_set);
+  g_test_add_func ("/TextBuffer/Fill and Empty", test_fill_empty);
+  g_test_add_func ("/TextBuffer/Tag", test_tag);
+  
+  return g_test_run();
 }
