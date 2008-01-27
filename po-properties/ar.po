@@ -14,14 +14,14 @@ msgstr ""
 "Project-Id-Version: gtk+-properties.HEAD.ar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2008-01-10 12:52+0000\n"
-"PO-Revision-Date: 2008-01-11 14:35+0200\n"
+"PO-Revision-Date: 2008-01-26 17:46+0200\n"
 "Last-Translator: Khaled Hosny <khaledhosny@eglug.org>\n"
-"Language-Team: Arabic <doc@eglug.org>\n"
+"Language-Team: Arabic <doc@arabeyes.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: KBabel 1.11.4\n"
-"Plural-Forms:  nplurals=6; plural=n==0 ? 0 : n==1 ? 1 : n==2 ? 2 : n>=3 && n<=10 ? 3 : n>=11 && n<=99 ? 4 : 5;\n"
+"Plural-Forms: nplurals=6; plural=n==0 ? 0 : n==1 ? 1 : n==2 ? 2 : n%100>=3 && n%100<=10 ? 3 : n%100>=11 && n%100<=99 ? 4 : 5;\n"
 
 #: ../gdk-pixbuf/gdk-pixbuf.c:89
 msgid "Number of Channels"
@@ -199,7 +199,7 @@ msgstr "قائمة بالأشخاص الذي شاركوا بأعمال فنية 
 
 #: ../gtk/gtkaboutdialog.c:366
 msgid "Translator credits"
-msgstr "شكر المترجمين"
+msgstr "شكر للمترجمين"
 
 #: ../gtk/gtkaboutdialog.c:367
 msgid "Credits to the translators. This string should be marked as translatable"
