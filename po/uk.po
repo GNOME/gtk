@@ -2309,7 +2309,7 @@ msgstr "_Формат для:"
 
 #: gtk/gtkpagesetupunixdialog.c:1022
 msgid "_Paper size:"
-msgstr "_Розмір паперу:"
+msgstr "Розмір _паперу:"
 
 #: gtk/gtkpagesetupunixdialog.c:1058
 msgid "_Orientation:"
@@ -2540,7 +2540,7 @@ msgstr "_Всі"
 
 #: gtk/gtkprintunixdialog.c:1554
 msgid "C_urrent"
-msgstr "_Поточну"
+msgstr "Пото_чну"
 
 #: gtk/gtkprintunixdialog.c:1563
 msgid "Ra_nge"
@@ -2581,7 +2581,7 @@ msgstr "Розташування"
 
 #: gtk/gtkprintunixdialog.c:2035
 msgid "Pages per _side:"
-msgstr "Сторінок на _сторону:"
+msgstr "Сторінок на с_торону:"
 
 #: gtk/gtkprintunixdialog.c:2051
 msgid "T_wo-sided:"
