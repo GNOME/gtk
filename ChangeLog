@@ -1,3 +1,8 @@
+2008-01-28  Paolo Borelli  <pborelli@katamail.com>
+
+	* gtk/gtkprintunixdialog.c (draw_page_cb): do not leak the pango
+	layout, fixes #512375.
+
 2008-01-25  Johan Dahlin  <johan@gnome.org>
 
 	Merge from trunk:
