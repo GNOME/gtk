@@ -17,7 +17,8 @@ about_activate (GtkAction *action)
   GtkWidget *about_dlg;
 
   about_dlg = gtk_about_dialog_new ();
-  gtk_about_dialog_set_name (GTK_ABOUT_DIALOG (about_dlg), "GtkBuilder demo");
+  gtk_about_dialog_set_program_name (GTK_ABOUT_DIALOG (about_dlg),
+                                     "GtkBuilder demo");
   gtk_dialog_run (GTK_DIALOG (about_dlg));
   gtk_widget_destroy (about_dlg);
 }
