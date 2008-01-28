@@ -55,21 +55,23 @@
 #include "gtkintl.h"
 #include "gtkalias.h"
 
-#define CHECK_IN_BUFFER(anchor)                                                            \
-  G_STMT_START {                                                                           \
-    if ((anchor)->segment == NULL)                                                         \
-      {                                                                                    \
-        g_warning ("%s: GtkTextChildAnchor hasn't been in a buffer yet", G_GNUC_FUNCTION); \
-      }                                                                                    \
+#define CHECK_IN_BUFFER(anchor)                                         \
+  G_STMT_START {                                                        \
+    if ((anchor)->segment == NULL)                                      \
+      {                                                                 \
+        g_warning ("%s: GtkTextChildAnchor hasn't been in a buffer yet",\
+                   G_STRLOC);                                           \
+      }                                                                 \
   } G_STMT_END
 
-#define CHECK_IN_BUFFER_RETURN(anchor, val)                                                \
-  G_STMT_START {                                                                           \
-    if ((anchor)->segment == NULL)                                                         \
-      {                                                                                    \
-        g_warning ("%s: GtkTextChildAnchor hasn't been in a buffer yet", G_GNUC_FUNCTION); \
-        return (val);                                                                      \
-      }                                                                                    \
+#define CHECK_IN_BUFFER_RETURN(anchor, val)                             \
+  G_STMT_START {                                                        \
+    if ((anchor)->segment == NULL)                                      \
+      {                                                                 \
+        g_warning ("%s: GtkTextChildAnchor hasn't been in a buffer yet",\
+                   G_STRLOC);                                           \
+        return (val);                                                   \
+      }                                                                 \
   } G_STMT_END
 
 static GtkTextLineSegment *

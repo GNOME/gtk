@@ -1,3 +1,9 @@
+2008-01-28  Michael Natterer  <mitch@imendio.com>
+
+	* gtk/gtktextchild.c
+	* gtk/gtktextview.c: use G_STRLOC instead of G_GNUC_FUNCTION (which
+	is deprecated now).
+
 2008-01-26  Johan Dahlin  <johan@gnome.org>
 
 	* tests/Makefile.am:
