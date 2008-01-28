@@ -2000,7 +2000,8 @@ draw_page_cb (GtkWidget	         *widget,
 	  cairo_restore (cr);
 	}
     }
-    
+
+  g_object_unref (layout);
   cairo_destroy (cr);
 
   return TRUE;
