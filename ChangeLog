@@ -1,5 +1,10 @@
 2008-01-28  Michael Natterer  <mitch@imendio.com>
 
+	* gtk/gtktextchild.c
+	* gtk/gtktextview.c: meant to use G_STRFUNC, not G_STRLOC...
+
+2008-01-28  Michael Natterer  <mitch@imendio.com>
+
 	* demos/gtk-demo/builder.c (about_activate): use
 	gtk_about_dialog_set_program_name() instead of the deprecated
 	set_name().

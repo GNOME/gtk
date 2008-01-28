@@ -60,7 +60,7 @@
     if ((anchor)->segment == NULL)                                      \
       {                                                                 \
         g_warning ("%s: GtkTextChildAnchor hasn't been in a buffer yet",\
-                   G_STRLOC);                                           \
+                   G_STRFUNC);                                          \
       }                                                                 \
   } G_STMT_END
 
@@ -69,7 +69,7 @@
     if ((anchor)->segment == NULL)                                      \
       {                                                                 \
         g_warning ("%s: GtkTextChildAnchor hasn't been in a buffer yet",\
-                   G_STRLOC);                                           \
+                   G_STRFUNC);                                          \
         return (val);                                                   \
       }                                                                 \
   } G_STMT_END
