@@ -1,3 +1,7 @@
+2008-01-28  Matthias Clasen  <mclasen@redhat.com>
+
+	* configure.in: Bump version
+
 2008-01-28  Paolo Borelli  <pborelli@katamail.com>
 
 	* gtk/gtkprintunixdialog.c (draw_page_cb): do not leak the pango
