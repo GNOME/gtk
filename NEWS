@@ -1,3 +1,29 @@
+Overview of Changes from GTK+ 2.12.5 to 2.12.6
+==============================================
+
+ * GtkBuilder supports accessibility properties and
+   relations now
+
+ * Bugs fixed: 
+ 506769 GtkCellRendererCombo fails for 2.12.3 under Windows
+ 477175 gtk_tree_view_set_cursor doesn't scroll the treeview corr...
+ 496645 dubious refcounting in GtkBuilder
+ 496651 gtkbuilder should refcount everything
+ 504611 A small leak fix
+ 507751 Conditional jump or move depends on uninitialised value(s)
+ 508516 Re-showing a hidden window results in wrong window position
+ 509153 Menu items don't get translated when using GtkBuilder
+ 512375 draw_page_cb leaks the pango context
+ 454653 GtkBuilder accessibility support
+
+ * Updated translations:
+ Belarusian (be)
+ Czech (cs)
+ Estonian (et)
+ French (fr) 
+ Sinhala (si)
+  
+
 Overview of Changes from GTK+ 2.12.3 to 2.12.5
 ==============================================
 

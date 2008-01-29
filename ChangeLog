@@ -1,5 +1,7 @@
 2008-01-28  Matthias Clasen  <mclasen@redhat.com>
 
+	* NEWS: Updates
+
 	* configure.in: Bump version
 
 2008-01-28  Paolo Borelli  <pborelli@katamail.com>
@@ -134,6 +136,8 @@
 	Fixes #496645.
 
 2008-01-08  Matthias Clasen  <mclasen@redhat.com>
+
+	* configure.in: Bump version
 
 	* === Released 2.12.5 ===
 
