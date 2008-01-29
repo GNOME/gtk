@@ -8,12 +8,12 @@
 # Hendrik Brandt <heb@gnome-de.org>, 2004-2005.
 #
 # IM = Input method => Eingabemethode
-# 
+#
 msgid ""
 msgstr ""
 "Project-Id-Version: GTK+ HEAD\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-01-08 00:16-0500\n"
+"POT-Creation-Date: 2008-01-28 23:09-0500\n"
 "PO-Revision-Date: 2007-09-10 11:22+0200\n"
 "Last-Translator: Hendrik Richter <hendrikr@gnome.org>\n"
 "Language-Team: German <gnome-de@gnome.org>\n"
@@ -2341,7 +2341,7 @@ msgstr "Ei_genschaften:"
 msgid "_Orientation:"
 msgstr "_Ausrichtung:"
 
-#: gtk/gtkpagesetupunixdialog.c:1121 gtk/gtkprintunixdialog.c:2176
+#: gtk/gtkpagesetupunixdialog.c:1121 gtk/gtkprintunixdialog.c:2177
 msgid "Page Setup"
 msgstr "Seite einrichten"
 
@@ -2602,123 +2602,123 @@ msgstr "_Rückwärts"
 msgid "General"
 msgstr "Allgemein"
 
-#: gtk/gtkprintunixdialog.c:2032
+#: gtk/gtkprintunixdialog.c:2033
 msgid "Layout"
 msgstr "Layout"
 
-#: gtk/gtkprintunixdialog.c:2036
+#: gtk/gtkprintunixdialog.c:2037
 msgid "Pages per _side:"
 msgstr "Seiten pro _Blatt:"
 
-#: gtk/gtkprintunixdialog.c:2052
+#: gtk/gtkprintunixdialog.c:2053
 msgid "T_wo-sided:"
 msgstr "_Beidseitig"
 
-#: gtk/gtkprintunixdialog.c:2067
+#: gtk/gtkprintunixdialog.c:2068
 msgid "_Only print:"
 msgstr "Be_schränken auf:"
 
 #. In enum order
-#: gtk/gtkprintunixdialog.c:2082
+#: gtk/gtkprintunixdialog.c:2083
 msgid "All sheets"
 msgstr "Alle Seiten"
 
-#: gtk/gtkprintunixdialog.c:2083
+#: gtk/gtkprintunixdialog.c:2084
 msgid "Even sheets"
 msgstr "Gerade Seiten"
 
-#: gtk/gtkprintunixdialog.c:2084
+#: gtk/gtkprintunixdialog.c:2085
 msgid "Odd sheets"
 msgstr "Ungerade Seiten"
 
-#: gtk/gtkprintunixdialog.c:2087
+#: gtk/gtkprintunixdialog.c:2088
 msgid "Sc_ale:"
 msgstr "S_kalierung:"
 
-#: gtk/gtkprintunixdialog.c:2114
+#: gtk/gtkprintunixdialog.c:2115
 msgid "Paper"
 msgstr "Papier"
 
-#: gtk/gtkprintunixdialog.c:2118
+#: gtk/gtkprintunixdialog.c:2119
 msgid "Paper _type:"
 msgstr "Papier_typ:"
 
-#: gtk/gtkprintunixdialog.c:2133
+#: gtk/gtkprintunixdialog.c:2134
 msgid "Paper _source:"
 msgstr "Papiere_inzug:"
 
-#: gtk/gtkprintunixdialog.c:2148
+#: gtk/gtkprintunixdialog.c:2149
 msgid "Output t_ray:"
 msgstr "Ausgabes_chacht:"
 
-#: gtk/gtkprintunixdialog.c:2199
+#: gtk/gtkprintunixdialog.c:2200
 msgid "Job Details"
 msgstr "Druckauftrag"
 
-#: gtk/gtkprintunixdialog.c:2205
+#: gtk/gtkprintunixdialog.c:2206
 msgid "Pri_ority:"
 msgstr "_Priorität:"
 
 # CHECK
-#: gtk/gtkprintunixdialog.c:2220
+#: gtk/gtkprintunixdialog.c:2221
 msgid "_Billing info:"
 msgstr "_Abrechnungsinfo:"
 
 # CHECK
-#: gtk/gtkprintunixdialog.c:2238
+#: gtk/gtkprintunixdialog.c:2239
 msgid "Print Document"
 msgstr "Druckauftrag ausführen"
 
-#: gtk/gtkprintunixdialog.c:2244
+#: gtk/gtkprintunixdialog.c:2245
 msgid "_Now"
 msgstr "_Jetzt"
 
-#: gtk/gtkprintunixdialog.c:2251
+#: gtk/gtkprintunixdialog.c:2252
 msgid "A_t:"
 msgstr "_Um:"
 
-#: gtk/gtkprintunixdialog.c:2266
+#: gtk/gtkprintunixdialog.c:2267
 msgid "On _hold"
 msgstr "In Warteschleife stellen"
 
-#: gtk/gtkprintunixdialog.c:2285
+#: gtk/gtkprintunixdialog.c:2286
 msgid "Add Cover Page"
 msgstr "Deckblatt hinzufügen"
 
-#: gtk/gtkprintunixdialog.c:2291
+#: gtk/gtkprintunixdialog.c:2292
 msgid "Be_fore:"
 msgstr "Be_vor:"
 
-#: gtk/gtkprintunixdialog.c:2306
+#: gtk/gtkprintunixdialog.c:2307
 msgid "_After:"
 msgstr "_Nach:"
 
-#: gtk/gtkprintunixdialog.c:2321
+#: gtk/gtkprintunixdialog.c:2322
 msgid "Job"
 msgstr "Auftrag"
 
-#: gtk/gtkprintunixdialog.c:2387
+#: gtk/gtkprintunixdialog.c:2388
 msgid "Advanced"
 msgstr "Erweitert"
 
-#: gtk/gtkprintunixdialog.c:2422
+#: gtk/gtkprintunixdialog.c:2423
 msgid "Image Quality"
 msgstr "Druckqualität"
 
-#: gtk/gtkprintunixdialog.c:2425
+#: gtk/gtkprintunixdialog.c:2426
 msgid "Color"
 msgstr "Farbe"
 
 # CHECK
-#: gtk/gtkprintunixdialog.c:2428
+#: gtk/gtkprintunixdialog.c:2429
 msgid "Finishing"
 msgstr "Nachbearbeitung"
 
-#: gtk/gtkprintunixdialog.c:2438
+#: gtk/gtkprintunixdialog.c:2439
 msgid "Some of the settings in the dialog conflict"
 msgstr "Einige Einstellungen in diesem Dialog stehen in Konflikt zueinander"
 
-#: gtk/gtkprintunixdialog.c:2461
+#: gtk/gtkprintunixdialog.c:2462
 msgid "Print"
 msgstr "Drucken"
 
@@ -3308,8 +3308,8 @@ msgstr "»%s« ist kein gültiger Attributsname"
 msgid ""
 "\"%s\" could not be converted to a value of type \"%s\" for attribute \"%s\""
 msgstr ""
-"»%s« konnte für das Attribut »%s« nicht in einen Wert vom Typ »%s« "
-"konvertiert werden"
+"»%s« konnte für das Attribut »%s« nicht in einen Wert vom Typ »%s« konvertiert "
+"werden"
 
 #: gtk/gtktextbufferserialize.c:1202
 #, c-format
@@ -3417,7 +3417,7 @@ msgstr "Unerwarteter, öffnender Tag »%s« in Zeile %d, Zeichen %d"
 msgid "Unexpected character data on line %d char %d"
 msgstr "Unerwartete Zeichendaten in Zeile %d, Zeichen %d"
 
-#: gtk/gtkuimanager.c:2354
+#: gtk/gtkuimanager.c:2356
 msgid "Empty"
 msgstr "Leer"
 
@@ -4308,8 +4308,7 @@ msgstr "Der erstellte Cache war ungültig.\n"
 #, c-format
 msgid "Could not rename %s to %s: %s, removing %s then.\n"
 msgstr ""
-"»%s« konnte nicht in »%s« umbenannt werden: %s; »%s« wird deswegen "
-"entfernt.\n"
+"»%s« konnte nicht in »%s« umbenannt werden: %s; »%s« wird deswegen entfernt.\n"
 
 #: gtk/updateiconcache.c:1501
 #, c-format
@@ -4595,8 +4594,7 @@ msgstr "Es konnten keine Informationen zur Datei »%s« abgerufen werden: %s"
 
 #~ msgid ""
 #~ "Line %d, column %d: expected \"%s\" or \"%s\", but found \"%s\" instead"
-#~ msgstr ""
-#~ "Zeile %d, Spalte %d: »%s« oder »%s« wurde erwartet, aber »%s« gefunden"
+#~ msgstr "Zeile %d, Spalte %d: »%s« oder »%s« wurde erwartet, aber »%s« gefunden"
 
 #~ msgid "Could not create directory: %s"
 #~ msgstr "Ordner konnte nicht angelegt werden: %s"

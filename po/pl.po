@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk20\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-01-08 00:16-0500\n"
+"POT-Creation-Date: 2008-01-28 23:09-0500\n"
 "PO-Revision-Date: 2007-08-19 18:33+0100\n"
 "Last-Translator: Tomasz Dominikowski <dominikowski@gmail.com>\n"
 "Language-Team: Polish <translators@gnomepl.org>\n"
@@ -2318,7 +2318,7 @@ msgstr "_Rozmiar papieru:"
 msgid "_Orientation:"
 msgstr "_Położenie:"
 
-#: gtk/gtkpagesetupunixdialog.c:1121 gtk/gtkprintunixdialog.c:2176
+#: gtk/gtkpagesetupunixdialog.c:1121 gtk/gtkprintunixdialog.c:2177
 msgid "Page Setup"
 msgstr "Ustawienia strony"
 
@@ -2578,120 +2578,120 @@ msgstr "Odw_rotnie"
 msgid "General"
 msgstr "Ogólne"
 
-#: gtk/gtkprintunixdialog.c:2032
+#: gtk/gtkprintunixdialog.c:2033
 msgid "Layout"
 msgstr "Układ"
 
-#: gtk/gtkprintunixdialog.c:2036
+#: gtk/gtkprintunixdialog.c:2037
 msgid "Pages per _side:"
 msgstr "Stron _na kartkę:"
 
-#: gtk/gtkprintunixdialog.c:2052
+#: gtk/gtkprintunixdialog.c:2053
 msgid "T_wo-sided:"
 msgstr "_Dwustronnie:"
 
-#: gtk/gtkprintunixdialog.c:2067
+#: gtk/gtkprintunixdialog.c:2068
 msgid "_Only print:"
 msgstr "Wydruk _tylko:"
 
 #. In enum order
-#: gtk/gtkprintunixdialog.c:2082
+#: gtk/gtkprintunixdialog.c:2083
 msgid "All sheets"
 msgstr "Wszystkie kartki"
 
-#: gtk/gtkprintunixdialog.c:2083
+#: gtk/gtkprintunixdialog.c:2084
 msgid "Even sheets"
 msgstr "Kartki parzyste"
 
-#: gtk/gtkprintunixdialog.c:2084
+#: gtk/gtkprintunixdialog.c:2085
 msgid "Odd sheets"
 msgstr "Kartki nieparzyste"
 
-#: gtk/gtkprintunixdialog.c:2087
+#: gtk/gtkprintunixdialog.c:2088
 msgid "Sc_ale:"
 msgstr "Ska_la:"
 
-#: gtk/gtkprintunixdialog.c:2114
+#: gtk/gtkprintunixdialog.c:2115
 msgid "Paper"
 msgstr "Papier"
 
-#: gtk/gtkprintunixdialog.c:2118
+#: gtk/gtkprintunixdialog.c:2119
 msgid "Paper _type:"
 msgstr "Rodzaj papier_u:"
 
-#: gtk/gtkprintunixdialog.c:2133
+#: gtk/gtkprintunixdialog.c:2134
 msgid "Paper _source:"
 msgstr "Źródło pap_ieru:"
 
-#: gtk/gtkprintunixdialog.c:2148
+#: gtk/gtkprintunixdialog.c:2149
 msgid "Output t_ray:"
 msgstr "_Tacka wyjściowa:"
 
-#: gtk/gtkprintunixdialog.c:2199
+#: gtk/gtkprintunixdialog.c:2200
 msgid "Job Details"
 msgstr "Szczegóły zadania"
 
-#: gtk/gtkprintunixdialog.c:2205
+#: gtk/gtkprintunixdialog.c:2206
 msgid "Pri_ority:"
 msgstr "Pri_orytet:"
 
-#: gtk/gtkprintunixdialog.c:2220
+#: gtk/gtkprintunixdialog.c:2221
 msgid "_Billing info:"
 msgstr "Informacje o opłatac_h:"
 
-#: gtk/gtkprintunixdialog.c:2238
+#: gtk/gtkprintunixdialog.c:2239
 msgid "Print Document"
 msgstr "Wydruk dokumentu"
 
-#: gtk/gtkprintunixdialog.c:2244
+#: gtk/gtkprintunixdialog.c:2245
 msgid "_Now"
 msgstr "_Teraz"
 
-#: gtk/gtkprintunixdialog.c:2251
+#: gtk/gtkprintunixdialog.c:2252
 msgid "A_t:"
 msgstr "_O:"
 
-#: gtk/gtkprintunixdialog.c:2266
+#: gtk/gtkprintunixdialog.c:2267
 msgid "On _hold"
 msgstr "Wstrzy_many"
 
-#: gtk/gtkprintunixdialog.c:2285
+#: gtk/gtkprintunixdialog.c:2286
 msgid "Add Cover Page"
 msgstr "Strona tytułowa"
 
-#: gtk/gtkprintunixdialog.c:2291
+#: gtk/gtkprintunixdialog.c:2292
 msgid "Be_fore:"
 msgstr "P_rzed:"
 
-#: gtk/gtkprintunixdialog.c:2306
+#: gtk/gtkprintunixdialog.c:2307
 msgid "_After:"
 msgstr "_Po:"
 
-#: gtk/gtkprintunixdialog.c:2321
+#: gtk/gtkprintunixdialog.c:2322
 msgid "Job"
 msgstr "Zadanie"
 
-#: gtk/gtkprintunixdialog.c:2387
+#: gtk/gtkprintunixdialog.c:2388
 msgid "Advanced"
 msgstr "Zaawansowane"
 
-#: gtk/gtkprintunixdialog.c:2422
+#: gtk/gtkprintunixdialog.c:2423
 msgid "Image Quality"
 msgstr "Jakość obrazu"
 
-#: gtk/gtkprintunixdialog.c:2425
+#: gtk/gtkprintunixdialog.c:2426
 msgid "Color"
 msgstr "Kolor"
 
-#: gtk/gtkprintunixdialog.c:2428
+#: gtk/gtkprintunixdialog.c:2429
 msgid "Finishing"
 msgstr "Kończenie"
 
-#: gtk/gtkprintunixdialog.c:2438
+#: gtk/gtkprintunixdialog.c:2439
 msgid "Some of the settings in the dialog conflict"
 msgstr "Część ustawień w oknie jest sprzecznych"
 
-#: gtk/gtkprintunixdialog.c:2461
+#: gtk/gtkprintunixdialog.c:2462
 msgid "Print"
 msgstr "Wydruk"
 
@@ -3381,7 +3381,7 @@ msgstr "Nieoczekiwany znacznik początku \"%s\" w wierszu %d znak %d"
 msgid "Unexpected character data on line %d char %d"
 msgstr "Nieoczekiwane dane znakowe w wierszu %d znak %d"
 
-#: gtk/gtkuimanager.c:2354
+#: gtk/gtkuimanager.c:2356
 msgid "Empty"
 msgstr "Pusty"
 

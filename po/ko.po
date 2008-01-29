@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-01-08 00:16-0500\n"
+"POT-Creation-Date: 2008-01-28 23:09-0500\n"
 "PO-Revision-Date: 2007-09-22 16:02+0900\n"
 "Last-Translator: Changwoo Ryu <cwryu@debian.org>\n"
 "Language-Team: Gnome Korea <gnome-kr-hackers@lists.kldp.net>\n"
@@ -2289,7 +2289,7 @@ msgstr "용지 크기(_P):"
 msgid "_Orientation:"
 msgstr "방향(_O):"
 
-#: gtk/gtkpagesetupunixdialog.c:1121 gtk/gtkprintunixdialog.c:2176
+#: gtk/gtkpagesetupunixdialog.c:1121 gtk/gtkprintunixdialog.c:2177
 msgid "Page Setup"
 msgstr "페이지 설정"
 
@@ -2549,120 +2549,120 @@ msgstr "마지막 페이지부터(_R)"
 msgid "General"
 msgstr "일반"
 
-#: gtk/gtkprintunixdialog.c:2032
+#: gtk/gtkprintunixdialog.c:2033
 msgid "Layout"
 msgstr "배치"
 
-#: gtk/gtkprintunixdialog.c:2036
+#: gtk/gtkprintunixdialog.c:2037
 msgid "Pages per _side:"
 msgstr "한 장당 페이지 수(_S):"
 
-#: gtk/gtkprintunixdialog.c:2052
+#: gtk/gtkprintunixdialog.c:2053
 msgid "T_wo-sided:"
 msgstr "양면(_W):"
 
-#: gtk/gtkprintunixdialog.c:2067
+#: gtk/gtkprintunixdialog.c:2068
 msgid "_Only print:"
 msgstr "다음만 인쇄(_O):"
 
 #. In enum order
-#: gtk/gtkprintunixdialog.c:2082
+#: gtk/gtkprintunixdialog.c:2083
 msgid "All sheets"
 msgstr "모든 페이지"
 
-#: gtk/gtkprintunixdialog.c:2083
+#: gtk/gtkprintunixdialog.c:2084
 msgid "Even sheets"
 msgstr "짝수 페이지"
 
-#: gtk/gtkprintunixdialog.c:2084
+#: gtk/gtkprintunixdialog.c:2085
 msgid "Odd sheets"
 msgstr "홀수 페이지"
 
-#: gtk/gtkprintunixdialog.c:2087
+#: gtk/gtkprintunixdialog.c:2088
 msgid "Sc_ale:"
 msgstr "크기 조정(_A):"
 
-#: gtk/gtkprintunixdialog.c:2114
+#: gtk/gtkprintunixdialog.c:2115
 msgid "Paper"
 msgstr "용지"
 
-#: gtk/gtkprintunixdialog.c:2118
+#: gtk/gtkprintunixdialog.c:2119
 msgid "Paper _type:"
 msgstr "용지 종류(_T):"
 
-#: gtk/gtkprintunixdialog.c:2133
+#: gtk/gtkprintunixdialog.c:2134
 msgid "Paper _source:"
 msgstr "용지 공급(_S):"
 
-#: gtk/gtkprintunixdialog.c:2148
+#: gtk/gtkprintunixdialog.c:2149
 msgid "Output t_ray:"
 msgstr "출력 트레이(_R):"
 
-#: gtk/gtkprintunixdialog.c:2199
+#: gtk/gtkprintunixdialog.c:2200
 msgid "Job Details"
 msgstr "작업 상세 정보"
 
-#: gtk/gtkprintunixdialog.c:2205
+#: gtk/gtkprintunixdialog.c:2206
 msgid "Pri_ority:"
 msgstr "우선순위(_O):"
 
-#: gtk/gtkprintunixdialog.c:2220
+#: gtk/gtkprintunixdialog.c:2221
 msgid "_Billing info:"
 msgstr "요금 정보(_B):"
 
-#: gtk/gtkprintunixdialog.c:2238
+#: gtk/gtkprintunixdialog.c:2239
 msgid "Print Document"
 msgstr "문서 인쇄"
 
-#: gtk/gtkprintunixdialog.c:2244
+#: gtk/gtkprintunixdialog.c:2245
 msgid "_Now"
 msgstr "지금(_N)"
 
-#: gtk/gtkprintunixdialog.c:2251
+#: gtk/gtkprintunixdialog.c:2252
 msgid "A_t:"
 msgstr "시각(_T):"
 
-#: gtk/gtkprintunixdialog.c:2266
+#: gtk/gtkprintunixdialog.c:2267
 msgid "On _hold"
 msgstr "보류(_H)"
 
-#: gtk/gtkprintunixdialog.c:2285
+#: gtk/gtkprintunixdialog.c:2286
 msgid "Add Cover Page"
 msgstr "표지 사용"
 
-#: gtk/gtkprintunixdialog.c:2291
+#: gtk/gtkprintunixdialog.c:2292
 msgid "Be_fore:"
 msgstr "앞에(_F):"
 
-#: gtk/gtkprintunixdialog.c:2306
+#: gtk/gtkprintunixdialog.c:2307
 msgid "_After:"
 msgstr "뒤에(_A):"
 
-#: gtk/gtkprintunixdialog.c:2321
+#: gtk/gtkprintunixdialog.c:2322
 msgid "Job"
 msgstr "작업"
 
-#: gtk/gtkprintunixdialog.c:2387
+#: gtk/gtkprintunixdialog.c:2388
 msgid "Advanced"
 msgstr "고급"
 
-#: gtk/gtkprintunixdialog.c:2422
+#: gtk/gtkprintunixdialog.c:2423
 msgid "Image Quality"
 msgstr "그림 화질"
 
-#: gtk/gtkprintunixdialog.c:2425
+#: gtk/gtkprintunixdialog.c:2426
 msgid "Color"
 msgstr "색"
 
-#: gtk/gtkprintunixdialog.c:2428
+#: gtk/gtkprintunixdialog.c:2429
 msgid "Finishing"
 msgstr "마무리"
 
-#: gtk/gtkprintunixdialog.c:2438
+#: gtk/gtkprintunixdialog.c:2439
 msgid "Some of the settings in the dialog conflict"
 msgstr "대화 상자의 설정이 충돌합니다"
 
-#: gtk/gtkprintunixdialog.c:2461
+#: gtk/gtkprintunixdialog.c:2462
 msgid "Print"
 msgstr "인쇄"
 
@@ -3351,7 +3351,7 @@ msgstr "갑작스런 시작 태그 '%s' (%d번째 줄 문자 %d)"
 msgid "Unexpected character data on line %d char %d"
 msgstr "갑작스런 문자 데이터 (%d번째 줄 문자 %d)"
 
-#: gtk/gtkuimanager.c:2354
+#: gtk/gtkuimanager.c:2356
 msgid "Empty"
 msgstr "비었음"
 

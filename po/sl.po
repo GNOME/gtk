@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: GTK+\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-01-08 00:16-0500\n"
+"POT-Creation-Date: 2008-01-28 23:09-0500\n"
 "PO-Revision-Date: 2007-11-14 15:03+0100\n"
 "Last-Translator: Matej Urbančič <mateju@svn.gnome.org>\n"
 "Language-Team: Slovenian GNOME Translation Team <gnome-si@googlegroups.com>\n"
@@ -2308,7 +2308,7 @@ msgstr "_Velikost papirja:"
 msgid "_Orientation:"
 msgstr "_Usmerjenost:"
 
-#: gtk/gtkpagesetupunixdialog.c:1121 gtk/gtkprintunixdialog.c:2176
+#: gtk/gtkpagesetupunixdialog.c:1121 gtk/gtkprintunixdialog.c:2177
 msgid "Page Setup"
 msgstr "Nastavitev strani"
 
@@ -2568,120 +2568,120 @@ msgstr "_Obrnjeno"
 msgid "General"
 msgstr "Splošno"
 
-#: gtk/gtkprintunixdialog.c:2032
+#: gtk/gtkprintunixdialog.c:2033
 msgid "Layout"
 msgstr "Postavitev"
 
-#: gtk/gtkprintunixdialog.c:2036
+#: gtk/gtkprintunixdialog.c:2037
 msgid "Pages per _side:"
 msgstr "Strani na _stran:"
 
-#: gtk/gtkprintunixdialog.c:2052
+#: gtk/gtkprintunixdialog.c:2053
 msgid "T_wo-sided:"
 msgstr "D_vostransko:"
 
-#: gtk/gtkprintunixdialog.c:2067
+#: gtk/gtkprintunixdialog.c:2068
 msgid "_Only print:"
 msgstr "_Samo natisni"
 
 #. In enum order
-#: gtk/gtkprintunixdialog.c:2082
+#: gtk/gtkprintunixdialog.c:2083
 msgid "All sheets"
 msgstr "Vsi listi"
 
-#: gtk/gtkprintunixdialog.c:2083
+#: gtk/gtkprintunixdialog.c:2084
 msgid "Even sheets"
 msgstr "Sodi listi"
 
-#: gtk/gtkprintunixdialog.c:2084
+#: gtk/gtkprintunixdialog.c:2085
 msgid "Odd sheets"
 msgstr "Lihi listi"
 
-#: gtk/gtkprintunixdialog.c:2087
+#: gtk/gtkprintunixdialog.c:2088
 msgid "Sc_ale:"
 msgstr "L_estvica:"
 
-#: gtk/gtkprintunixdialog.c:2114
+#: gtk/gtkprintunixdialog.c:2115
 msgid "Paper"
 msgstr "Papir"
 
-#: gtk/gtkprintunixdialog.c:2118
+#: gtk/gtkprintunixdialog.c:2119
 msgid "Paper _type:"
 msgstr "V_rsta papirja"
 
-#: gtk/gtkprintunixdialog.c:2133
+#: gtk/gtkprintunixdialog.c:2134
 msgid "Paper _source:"
 msgstr "_Vir papirja:"
 
-#: gtk/gtkprintunixdialog.c:2148
+#: gtk/gtkprintunixdialog.c:2149
 msgid "Output t_ray:"
 msgstr "Izhodni p_ladenj:"
 
-#: gtk/gtkprintunixdialog.c:2199
+#: gtk/gtkprintunixdialog.c:2200
 msgid "Job Details"
 msgstr "Podrobnosti o opravilu"
 
-#: gtk/gtkprintunixdialog.c:2205
+#: gtk/gtkprintunixdialog.c:2206
 msgid "Pri_ority:"
 msgstr "Pr_ioriteta:"
 
-#: gtk/gtkprintunixdialog.c:2220
+#: gtk/gtkprintunixdialog.c:2221
 msgid "_Billing info:"
 msgstr "_Podatki o fakturiranju:"
 
-#: gtk/gtkprintunixdialog.c:2238
+#: gtk/gtkprintunixdialog.c:2239
 msgid "Print Document"
 msgstr "Natisni dokument"
 
-#: gtk/gtkprintunixdialog.c:2244
+#: gtk/gtkprintunixdialog.c:2245
 msgid "_Now"
 msgstr "_Zdaj"
 
-#: gtk/gtkprintunixdialog.c:2251
+#: gtk/gtkprintunixdialog.c:2252
 msgid "A_t:"
 msgstr "N_a:"
 
-#: gtk/gtkprintunixdialog.c:2266
+#: gtk/gtkprintunixdialog.c:2267
 msgid "On _hold"
 msgstr "Na č_akanju"
 
-#: gtk/gtkprintunixdialog.c:2285
+#: gtk/gtkprintunixdialog.c:2286
 msgid "Add Cover Page"
 msgstr "Dodaj naslovno stran"
 
-#: gtk/gtkprintunixdialog.c:2291
+#: gtk/gtkprintunixdialog.c:2292
 msgid "Be_fore:"
 msgstr "P_rej:"
 
-#: gtk/gtkprintunixdialog.c:2306
+#: gtk/gtkprintunixdialog.c:2307
 msgid "_After:"
 msgstr "P_otem:"
 
-#: gtk/gtkprintunixdialog.c:2321
+#: gtk/gtkprintunixdialog.c:2322
 msgid "Job"
 msgstr "Posel"
 
-#: gtk/gtkprintunixdialog.c:2387
+#: gtk/gtkprintunixdialog.c:2388
 msgid "Advanced"
 msgstr "Napredno"
 
-#: gtk/gtkprintunixdialog.c:2422
+#: gtk/gtkprintunixdialog.c:2423
 msgid "Image Quality"
 msgstr "Kvaliteta slike"
 
-#: gtk/gtkprintunixdialog.c:2425
+#: gtk/gtkprintunixdialog.c:2426
 msgid "Color"
 msgstr "Barva"
 
-#: gtk/gtkprintunixdialog.c:2428
+#: gtk/gtkprintunixdialog.c:2429
 msgid "Finishing"
 msgstr "Zaključevanje"
 
-#: gtk/gtkprintunixdialog.c:2438
+#: gtk/gtkprintunixdialog.c:2439
 msgid "Some of the settings in the dialog conflict"
 msgstr "Nekatere nastavitve v pogovornem oknu si nasprotujejo"
 
-#: gtk/gtkprintunixdialog.c:2461
+#: gtk/gtkprintunixdialog.c:2462
 msgid "Print"
 msgstr "Natisni"
 
@@ -3373,7 +3373,7 @@ msgstr "Nepričakovana začetna oznaka (start tag) '%s' v vrstici %d, znak %d"
 msgid "Unexpected character data on line %d char %d"
 msgstr "Nepričakovani znakovni podatki v vrstici %d, znak %d"
 
-#: gtk/gtkuimanager.c:2354
+#: gtk/gtkuimanager.c:2356
 msgid "Empty"
 msgstr "Prazno"
 

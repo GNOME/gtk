@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-properties.HEAD\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-01-08 00:16-0500\n"
+"POT-Creation-Date: 2008-01-28 23:10-0500\n"
 "PO-Revision-Date: 2007-09-11 09:40+0200\n"
 "Last-Translator: Arangel Angov <arangel@linux.net.mk>\n"
 "Language-Team: Macedonian <ossm-members@hedona.on.net.mk>\n"
@@ -362,7 +362,7 @@ msgid "When TRUE, empty menu proxies for this action are hidden."
 msgstr "When TRUE, empty menu proxies for this action are hidden."
 
 #: gtk/gtkaction.c:313 gtk/gtkactiongroup.c:177 gtk/gtkcellrenderer.c:193
-#: gtk/gtkwidget.c:516
+#: gtk/gtkwidget.c:519
 msgid "Sensitive"
 msgstr "Sensitive"
 
@@ -371,7 +371,7 @@ msgid "Whether the action is enabled."
 msgstr "Дали дејството е вклучено."
 
 #: gtk/gtkaction.c:320 gtk/gtkactiongroup.c:184 gtk/gtkstatusicon.c:241
-#: gtk/gtktreeviewcolumn.c:191 gtk/gtkwidget.c:509
+#: gtk/gtktreeviewcolumn.c:191 gtk/gtkwidget.c:512
 msgid "Visible"
 msgstr "Видливо"
 
@@ -768,11 +768,11 @@ msgstr "Позиција"
 msgid "The index of the child in the parent"
 msgstr "The index of the child in the parent"
 
-#: gtk/gtkbuilder.c:102
+#: gtk/gtkbuilder.c:101
 msgid "Translation Domain"
 msgstr "Домен за превод"
 
-#: gtk/gtkbuilder.c:103
+#: gtk/gtkbuilder.c:102
 msgid "The translation domain used by gettext"
 msgstr "Доменот за превод кој се користи од gettext"
 
@@ -5978,27 +5978,27 @@ msgstr ""
 msgid "Determines how the shadowed box around the viewport is drawn"
 msgstr "Determines how the shadowed box around the viewport is drawn"
 
-#: gtk/gtkwidget.c:476
+#: gtk/gtkwidget.c:479
 msgid "Widget name"
 msgstr "Widget name"
 
-#: gtk/gtkwidget.c:477
+#: gtk/gtkwidget.c:480
 msgid "The name of the widget"
 msgstr "The name of the widget"
 
-#: gtk/gtkwidget.c:483
+#: gtk/gtkwidget.c:486
 msgid "Parent widget"
 msgstr "Parent widget"
 
-#: gtk/gtkwidget.c:484
+#: gtk/gtkwidget.c:487
 msgid "The parent widget of this widget. Must be a Container widget"
 msgstr "The parent widget of this widget. Must be a Container widget"
 
-#: gtk/gtkwidget.c:491
+#: gtk/gtkwidget.c:494
 msgid "Width request"
 msgstr "Width request"
 
-#: gtk/gtkwidget.c:492
+#: gtk/gtkwidget.c:495
 msgid ""
 "Override for width request of the widget, or -1 if natural request should be "
 "used"
@@ -6006,11 +6006,11 @@ msgstr ""
 "Override for width request of the widget, or -1 if natural request should be "
 "used"
 
-#: gtk/gtkwidget.c:500
+#: gtk/gtkwidget.c:503
 msgid "Height request"
 msgstr "Height request"
 
-#: gtk/gtkwidget.c:501
+#: gtk/gtkwidget.c:504
 msgid ""
 "Override for height request of the widget, or -1 if natural request should "
 "be used"
@@ -6018,83 +6018,83 @@ msgstr ""
 "Override for height request of the widget, or -1 if natural request should "
 "be used"
 
-#: gtk/gtkwidget.c:510
+#: gtk/gtkwidget.c:513
 msgid "Whether the widget is visible"
 msgstr "Whether the widget is visible"
 
-#: gtk/gtkwidget.c:517
+#: gtk/gtkwidget.c:520
 msgid "Whether the widget responds to input"
 msgstr "Whether the widget responds to input"
 
-#: gtk/gtkwidget.c:523
+#: gtk/gtkwidget.c:526
 msgid "Application paintable"
 msgstr "Application paintable"
 
-#: gtk/gtkwidget.c:524
+#: gtk/gtkwidget.c:527
 msgid "Whether the application will paint directly on the widget"
 msgstr "Whether the application will paint directly on the widget"
 
-#: gtk/gtkwidget.c:530
+#: gtk/gtkwidget.c:533
 msgid "Can focus"
 msgstr "Can focus"
 
-#: gtk/gtkwidget.c:531
+#: gtk/gtkwidget.c:534
 msgid "Whether the widget can accept the input focus"
 msgstr "Whether the widget can accept the input focus"
 
-#: gtk/gtkwidget.c:537
+#: gtk/gtkwidget.c:540
 msgid "Has focus"
 msgstr "Has focus"
 
-#: gtk/gtkwidget.c:538
+#: gtk/gtkwidget.c:541
 msgid "Whether the widget has the input focus"
 msgstr "Whether the widget has the input focus"
 
-#: gtk/gtkwidget.c:544
+#: gtk/gtkwidget.c:547
 msgid "Is focus"
 msgstr "Is focus"
 
-#: gtk/gtkwidget.c:545
+#: gtk/gtkwidget.c:548
 msgid "Whether the widget is the focus widget within the toplevel"
 msgstr "Whether the widget is the focus widget within the toplevel"
 
-#: gtk/gtkwidget.c:551
+#: gtk/gtkwidget.c:554
 msgid "Can default"
 msgstr "Can default"
 
-#: gtk/gtkwidget.c:552
+#: gtk/gtkwidget.c:555
 msgid "Whether the widget can be the default widget"
 msgstr "Whether the widget can be the default widget"
 
-#: gtk/gtkwidget.c:558
+#: gtk/gtkwidget.c:561
 msgid "Has default"
 msgstr "Has default"
 
-#: gtk/gtkwidget.c:559
+#: gtk/gtkwidget.c:562
 msgid "Whether the widget is the default widget"
 msgstr "Whether the widget is the default widget"
 
-#: gtk/gtkwidget.c:565
+#: gtk/gtkwidget.c:568
 msgid "Receives default"
 msgstr "Receives default"
 
-#: gtk/gtkwidget.c:566
+#: gtk/gtkwidget.c:569
 msgid "If TRUE, the widget will receive the default action when it is focused"
 msgstr "If TRUE, the widget will receive the default action when it is focused"
 
-#: gtk/gtkwidget.c:572
+#: gtk/gtkwidget.c:575
 msgid "Composite child"
 msgstr "Composite child"
 
-#: gtk/gtkwidget.c:573
+#: gtk/gtkwidget.c:576
 msgid "Whether the widget is part of a composite widget"
 msgstr "Whether the widget is part of a composite widget"
 
-#: gtk/gtkwidget.c:579
+#: gtk/gtkwidget.c:582
 msgid "Style"
 msgstr "Стил"
 
-#: gtk/gtkwidget.c:580
+#: gtk/gtkwidget.c:583
 msgid ""
 "The style of the widget, which contains information about how it will look "
 "(colors etc)"
@@ -6102,95 +6102,95 @@ msgstr ""
 "The style of the widget, which contains information about how it will look "
 "(colors etc)"
 
-#: gtk/gtkwidget.c:586
+#: gtk/gtkwidget.c:589
 msgid "Events"
 msgstr "Настани"
 
-#: gtk/gtkwidget.c:587
+#: gtk/gtkwidget.c:590
 msgid "The event mask that decides what kind of GdkEvents this widget gets"
 msgstr "The event mask that decides what kind of GdkEvents this widget gets"
 
-#: gtk/gtkwidget.c:594
+#: gtk/gtkwidget.c:597
 msgid "Extension events"
 msgstr "Настани поврзани со екстензии"
 
-#: gtk/gtkwidget.c:595
+#: gtk/gtkwidget.c:598
 msgid "The mask that decides what kind of extension events this widget gets"
 msgstr "The mask that decides what kind of extension events this widget gets"
 
-#: gtk/gtkwidget.c:602
+#: gtk/gtkwidget.c:605
 msgid "No show all"
 msgstr "No show all"
 
-#: gtk/gtkwidget.c:603
+#: gtk/gtkwidget.c:606
 msgid "Whether gtk_widget_show_all() should not affect this widget"
 msgstr "Whether gtk_widget_show_all() should not affect this widget"
 
-#: gtk/gtkwidget.c:625
+#: gtk/gtkwidget.c:628
 msgid "Has tooltip"
 msgstr "Има балонче со совет"
 
-#: gtk/gtkwidget.c:626
+#: gtk/gtkwidget.c:629
 msgid "Whether this widget has a tooltip"
 msgstr "Дали оваа графичка контрола има балонче со совет"
 
-#: gtk/gtkwidget.c:646
+#: gtk/gtkwidget.c:649
 msgid "Tooltip Text"
 msgstr "Текст на балончето со совет"
 
-#: gtk/gtkwidget.c:647 gtk/gtkwidget.c:668
+#: gtk/gtkwidget.c:650 gtk/gtkwidget.c:671
 msgid "The contents of the tooltip for this widget"
 msgstr "Содржините на балончето со совет за оваа графичка контрола"
 
-#: gtk/gtkwidget.c:667
+#: gtk/gtkwidget.c:670
 msgid "Tooltip markup"
 msgstr "Маркирање на балончето со совет"
 
-#: gtk/gtkwidget.c:2160
+#: gtk/gtkwidget.c:2163
 msgid "Interior Focus"
 msgstr "Внатрешен фокус"
 
-#: gtk/gtkwidget.c:2161
+#: gtk/gtkwidget.c:2164
 msgid "Whether to draw the focus indicator inside widgets"
 msgstr "Whether to draw the focus indicator inside widgets"
 
-#: gtk/gtkwidget.c:2167
+#: gtk/gtkwidget.c:2170
 msgid "Focus linewidth"
 msgstr "Focus linewidth"
 
-#: gtk/gtkwidget.c:2168
+#: gtk/gtkwidget.c:2171
 msgid "Width, in pixels, of the focus indicator line"
 msgstr "Width, in pixels, of the focus indicator line"
 
-#: gtk/gtkwidget.c:2174
+#: gtk/gtkwidget.c:2177
 msgid "Focus line dash pattern"
 msgstr "Focus line dash pattern"
 
-#: gtk/gtkwidget.c:2175
+#: gtk/gtkwidget.c:2178
 msgid "Dash pattern used to draw the focus indicator"
 msgstr "Dash pattern used to draw the focus indicator"
 
-#: gtk/gtkwidget.c:2180
+#: gtk/gtkwidget.c:2183
 msgid "Focus padding"
 msgstr "Focus padding"
 
-#: gtk/gtkwidget.c:2181
+#: gtk/gtkwidget.c:2184
 msgid "Width, in pixels, between focus indicator and the widget 'box'"
 msgstr "Width, in pixels, between focus indicator and the widget 'box'"
 
-#: gtk/gtkwidget.c:2186
+#: gtk/gtkwidget.c:2189
 msgid "Cursor color"
 msgstr "Боја на стрелката"
 
-#: gtk/gtkwidget.c:2187
+#: gtk/gtkwidget.c:2190
 msgid "Color with which to draw insertion cursor"
 msgstr "Боја на стрелката за влечење"
 
-#: gtk/gtkwidget.c:2192
+#: gtk/gtkwidget.c:2195
 msgid "Secondary cursor color"
 msgstr "Secondary cursor color"
 
-#: gtk/gtkwidget.c:2193
+#: gtk/gtkwidget.c:2196
 msgid ""
 "Color with which to draw the secondary insertion cursor when editing mixed "
 "right-to-left and left-to-right text"
@@ -6198,43 +6198,43 @@ msgstr ""
 "Color with which to draw the secondary insertion cursor when editing mixed "
 "right-to-left and left-to-right text"
 
-#: gtk/gtkwidget.c:2198
+#: gtk/gtkwidget.c:2201
 msgid "Cursor line aspect ratio"
 msgstr "Cursor line aspect ratio"
 
-#: gtk/gtkwidget.c:2199
+#: gtk/gtkwidget.c:2202
 msgid "Aspect ratio with which to draw insertion cursor"
 msgstr "Aspect ratio with which to draw insertion cursor"
 
-#: gtk/gtkwidget.c:2213
+#: gtk/gtkwidget.c:2216
 msgid "Draw Border"
 msgstr "Нацртај граница"
 
-#: gtk/gtkwidget.c:2214
+#: gtk/gtkwidget.c:2217
 msgid "Size of areas outside the widget's allocation to draw"
 msgstr "Size of areas outside the widget's allocation to draw"
 
-#: gtk/gtkwidget.c:2227
+#: gtk/gtkwidget.c:2230
 msgid "Unvisited Link Color"
 msgstr "Боја на непосетена врска"
 
-#: gtk/gtkwidget.c:2228
+#: gtk/gtkwidget.c:2231
 msgid "Color of unvisited links"
 msgstr "Бојата на непосетените врски"
 
-#: gtk/gtkwidget.c:2241
+#: gtk/gtkwidget.c:2244
 msgid "Visited Link Color"
 msgstr "Боја на постена врска"
 
-#: gtk/gtkwidget.c:2242
+#: gtk/gtkwidget.c:2245
 msgid "Color of visited links"
 msgstr "Боја на посетените врски"
 
-#: gtk/gtkwidget.c:2256
+#: gtk/gtkwidget.c:2259
 msgid "Wide Separators"
 msgstr "Широки разделувачи"
 
-#: gtk/gtkwidget.c:2257
+#: gtk/gtkwidget.c:2260
 msgid ""
 "Whether separators have configurable width and should be drawn using a box "
 "instead of a line"
@@ -6242,36 +6242,36 @@ msgstr ""
 "Дали разделувачите имаат приспособлива ширина и дали треба да бидат "
 "повлекувани со користење на поле наместо линија"
 
-#: gtk/gtkwidget.c:2271
+#: gtk/gtkwidget.c:2274
 msgid "Separator Width"
 msgstr "Ширина на разделувач"
 
-#: gtk/gtkwidget.c:2272
+#: gtk/gtkwidget.c:2275
 msgid "The width of separators if wide-separators is TRUE"
 msgstr "Ширина на разделувачите ако поставувањето wide-separators е TRUE"
 
-#: gtk/gtkwidget.c:2286
+#: gtk/gtkwidget.c:2289
 msgid "Separator Height"
 msgstr "Должина на разделувач"
 
-#: gtk/gtkwidget.c:2287
+#: gtk/gtkwidget.c:2290
 msgid "The height of separators if \"wide-separators\" is TRUE"
 msgstr ""
 "Должината на разделувачите ако поставувањето \"wide-separators\" е TRUE"
 
-#: gtk/gtkwidget.c:2301
+#: gtk/gtkwidget.c:2304
 msgid "Horizontal Scroll Arrow Length"
 msgstr "Должина на хоризонталната стрелка за скролање"
 
-#: gtk/gtkwidget.c:2302
+#: gtk/gtkwidget.c:2305
 msgid "The length of horizontal scroll arrows"
 msgstr "Должината на хоризонталните стрелки за скролање"
 
-#: gtk/gtkwidget.c:2316
+#: gtk/gtkwidget.c:2319
 msgid "Vertical Scroll Arrow Length"
 msgstr "Должина на вертикалната стрелка за скролање"
 
-#: gtk/gtkwidget.c:2317
+#: gtk/gtkwidget.c:2320
 msgid "The length of vertical scroll arrows"
 msgstr "Должината на вертикалните стрелки за скролање"
 

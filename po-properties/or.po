@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: or\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-01-08 00:16-0500\n"
+"POT-Creation-Date: 2008-01-28 23:10-0500\n"
 "PO-Revision-Date: 2007-09-07 19:28+0530\n"
 "Last-Translator: Subhransu Behera <arya_subhransu@yahoo.co.in>\n"
 "Language-Team: Oriya <oriya-group@lists.sarovar.org>\n"
@@ -357,7 +357,7 @@ msgid "When TRUE, empty menu proxies for this action are hidden."
 msgstr ""
 
 #: gtk/gtkaction.c:313 gtk/gtkactiongroup.c:177 gtk/gtkcellrenderer.c:193
-#: gtk/gtkwidget.c:516
+#: gtk/gtkwidget.c:519
 msgid "Sensitive"
 msgstr ""
 
@@ -366,7 +366,7 @@ msgid "Whether the action is enabled."
 msgstr ""
 
 #: gtk/gtkaction.c:320 gtk/gtkactiongroup.c:184 gtk/gtkstatusicon.c:241
-#: gtk/gtktreeviewcolumn.c:191 gtk/gtkwidget.c:509
+#: gtk/gtktreeviewcolumn.c:191 gtk/gtkwidget.c:512
 msgid "Visible"
 msgstr "ଦ୍ରୁଶ୍ଯମାନ୍ଯ"
 
@@ -745,12 +745,12 @@ msgstr "ଅବସ୍ଥାନ"
 msgid "The index of the child in the parent"
 msgstr ""
 
-#: gtk/gtkbuilder.c:102
+#: gtk/gtkbuilder.c:101
 #, fuzzy
 msgid "Translation Domain"
 msgstr "ଶୁଭ୍ରାଂଶୁ ବେହେରା <arya_subhransu@yahoo.co.in>"
 
-#: gtk/gtkbuilder.c:103
+#: gtk/gtkbuilder.c:102
 msgid "The translation domain used by gettext"
 msgstr ""
 
@@ -5770,216 +5770,216 @@ msgid "Determines how the shadowed box around the viewport is drawn"
 msgstr ""
 "ଦୃଶ୍ଯ ସଂଯୋଗିକୀ ଚତଃପାର୍ଶ୍ବରେ ଛାୟାଙ୍କିତ ବାକ୍ସ ମାନଙ୍କୁ କିପରି ଅଙ୍କନ କରାଯାଇଛି ତାହା ସ୍ଥିର କରନ୍ତୁ"
 
-#: gtk/gtkwidget.c:476
+#: gtk/gtkwidget.c:479
 msgid "Widget name"
 msgstr "ୱିଜେଟ ନାମ"
 
-#: gtk/gtkwidget.c:477
+#: gtk/gtkwidget.c:480
 msgid "The name of the widget"
 msgstr "ୱିଜେଟର ନାମ"
 
-#: gtk/gtkwidget.c:483
+#: gtk/gtkwidget.c:486
 msgid "Parent widget"
 msgstr "ମୂଳ ୱିଜେଟ"
 
-#: gtk/gtkwidget.c:484
+#: gtk/gtkwidget.c:487
 msgid "The parent widget of this widget. Must be a Container widget"
 msgstr "ଏହି ୱିଜେଟଟ ମୂଳ ୱିଜେଟ। ଗୋଟିଏ ଆଧାର ୱିଜେଟ ହେବା ଉଚିତ"
 
-#: gtk/gtkwidget.c:491
+#: gtk/gtkwidget.c:494
 msgid "Width request"
 msgstr "ଓସାର ନିବେଦନ"
 
-#: gtk/gtkwidget.c:492
+#: gtk/gtkwidget.c:495
 msgid ""
 "Override for width request of the widget, or -1 if natural request should be "
 "used"
 msgstr ""
 "ୱିଜେଟର ଓସାର ନିବେଦନକୁ ନବଲିଖନ କରିଦିଅନ୍ତୁ, କିମ୍ବା -1 ଯଦି ସ୍ବାଭାବିକ ନିବେଦନ ମାନଙ୍କୁ ବ୍ଯବହାର କରାଯିବ"
 
-#: gtk/gtkwidget.c:500
+#: gtk/gtkwidget.c:503
 msgid "Height request"
 msgstr "ଉଚ୍ଚତା ନିବେଦନ"
 
-#: gtk/gtkwidget.c:501
+#: gtk/gtkwidget.c:504
 msgid ""
 "Override for height request of the widget, or -1 if natural request should "
 "be used"
 msgstr ""
 "ୱିଜେଟର ଉଚ୍ଚତା ନିବେଦନକୁ ନବଲିଖନ କରିଦିଅନ୍ତୁ, କିମ୍ବା -1 ଯଦି ସ୍ବାଭାବିକ ନିବେଦନ ମାନଙ୍କୁ ବ୍ଯବହାର କରାଯିବ"
 
-#: gtk/gtkwidget.c:510
+#: gtk/gtkwidget.c:513
 msgid "Whether the widget is visible"
 msgstr "ୱିଜେଟଟି ଦୃଶ୍ଯମାନ ଅଟେ ନାଁ ନାହିଁ"
 
-#: gtk/gtkwidget.c:517
+#: gtk/gtkwidget.c:520
 msgid "Whether the widget responds to input"
 msgstr "ୱିଜେଟଟି ନିବେଶକୁ ଉତ୍ତର ଦେଇଥାଏ କି ନାହିଁ"
 
-#: gtk/gtkwidget.c:523
+#: gtk/gtkwidget.c:526
 msgid "Application paintable"
 msgstr "ପ୍ରୟୋଗ ମୂଦ୍ରଣଯୋଗ୍ଯ"
 
-#: gtk/gtkwidget.c:524
+#: gtk/gtkwidget.c:527
 msgid "Whether the application will paint directly on the widget"
 msgstr "ପ୍ରୟୋଗଟି ସିଧାସଳଖ ଭାବରେ ୱିଜେଟକୁ ରଞ୍ଜିତ କରିବ କି"
 
-#: gtk/gtkwidget.c:530
+#: gtk/gtkwidget.c:533
 msgid "Can focus"
 msgstr "ଫୋକସ କରିପାରିବ"
 
-#: gtk/gtkwidget.c:531
+#: gtk/gtkwidget.c:534
 msgid "Whether the widget can accept the input focus"
 msgstr "ୱିଜେଟ ନିବଶ ଫୋକସକୁ ଗ୍ରହଣ କରିପାରିବ କି ନାହିଁ"
 
-#: gtk/gtkwidget.c:537
+#: gtk/gtkwidget.c:540
 msgid "Has focus"
 msgstr "ନିକଟରେ ଫୋକସ ଅଛି"
 
-#: gtk/gtkwidget.c:538
+#: gtk/gtkwidget.c:541
 msgid "Whether the widget has the input focus"
 msgstr "ୱିଜେଟ ନିକଟରେ ନିବେଶ ଫୋକସ ଅଛି କି ନାହିଁ"
 
-#: gtk/gtkwidget.c:544
+#: gtk/gtkwidget.c:547
 msgid "Is focus"
 msgstr "ଫୋକସ ଅଟେ"
 
-#: gtk/gtkwidget.c:545
+#: gtk/gtkwidget.c:548
 msgid "Whether the widget is the focus widget within the toplevel"
 msgstr "ଉପରେ ସ୍ତରରେ ଥିବା ୱିଜେଟଟି ପୂର୍ବନିର୍ଦ୍ଧାରିତ ୱିଜେଟ କି ନୁହେଁ"
 
-#: gtk/gtkwidget.c:551
+#: gtk/gtkwidget.c:554
 msgid "Can default"
 msgstr "ପୂର୍ବନିର୍ଦ୍ଧାରିତ ହୋଇପାରିବ"
 
-#: gtk/gtkwidget.c:552
+#: gtk/gtkwidget.c:555
 msgid "Whether the widget can be the default widget"
 msgstr "ୱିଜେଟଟି ଗୋଟିଏ ପୂର୍ବନିର୍ଦ୍ଧାରିତ ୱିଜେଟ ହୋଇପାରିବ କି ନୁହେଁ"
 
-#: gtk/gtkwidget.c:558
+#: gtk/gtkwidget.c:561
 msgid "Has default"
 msgstr "ନିକଟରେ ପୂର୍ବନିର୍ଦ୍ଧାରିତ ଅଛି"
 
-#: gtk/gtkwidget.c:559
+#: gtk/gtkwidget.c:562
 msgid "Whether the widget is the default widget"
 msgstr "ୱିଜେଟଟି ଗୋଟିଏ ପୂର୍ବନିର୍ଦ୍ଧାରିତ ୱିଜେଟ କି ନୁହେଁ"
 
-#: gtk/gtkwidget.c:565
+#: gtk/gtkwidget.c:568
 msgid "Receives default"
 msgstr "ପୂର୍ବନିର୍ଦ୍ଧାରିତକୁ ପ୍ରାପ୍ତ କରୁଅଛି"
 
-#: gtk/gtkwidget.c:566
+#: gtk/gtkwidget.c:569
 msgid "If TRUE, the widget will receive the default action when it is focused"
 msgstr ""
 "ଯଦି ସତ (TRUE), ୱିଜେଟ ଗୋଟିଏ ପୂର୍ବନିର୍ଦ୍ଧାରିତ କାର୍ଯ୍ଯକୁ ପାଇବ ଯେତେବେଳେ ଏହାକୁ ଫୋକସ କରାଯିବ"
 
-#: gtk/gtkwidget.c:572
+#: gtk/gtkwidget.c:575
 msgid "Composite child"
 msgstr "ମିଶ୍ରିତ ନିର୍ଭରକ"
 
-#: gtk/gtkwidget.c:573
+#: gtk/gtkwidget.c:576
 msgid "Whether the widget is part of a composite widget"
 msgstr "ୱିଜେଟଟି ଗୋଟିଏ ମିଶ୍ରିତ ୱିଜେଟର ଗୋଟିଏ ଅଂଶ କି ନୁହିଁ"
 
-#: gtk/gtkwidget.c:579
+#: gtk/gtkwidget.c:582
 msgid "Style"
 msgstr "ଶୈଳୀ"
 
-#: gtk/gtkwidget.c:580
+#: gtk/gtkwidget.c:583
 msgid ""
 "The style of the widget, which contains information about how it will look "
 "(colors etc)"
 msgstr "ୱିଜେଟର ଶୈଳୀ, ଯାହାକି ଏହା କିପରି ଦେଖାଯିବ (କେଉଁ ରଙ୍ଗ ବିଶିଷ୍ଟ) ସେ ବିଷୟରେ ସୂଚନା ରଖିଥାଏ"
 
-#: gtk/gtkwidget.c:586
+#: gtk/gtkwidget.c:589
 msgid "Events"
 msgstr "ଘଟଣା"
 
-#: gtk/gtkwidget.c:587
+#: gtk/gtkwidget.c:590
 msgid "The event mask that decides what kind of GdkEvents this widget gets"
 msgstr "ଏହି ୱିଜେଟ କେଉଁ ପ୍ରକାରର GdkEvents ପାଇଥାଏ ତାହା ଏହି ଘଟଣା ମାସ୍କଟି ସ୍ଥିର କରିଥାଏ"
 
-#: gtk/gtkwidget.c:594
+#: gtk/gtkwidget.c:597
 msgid "Extension events"
 msgstr "ଅଭିବୃଦ୍ଧି ଘଟଣା"
 
-#: gtk/gtkwidget.c:595
+#: gtk/gtkwidget.c:598
 msgid "The mask that decides what kind of extension events this widget gets"
 msgstr "ଏହି ୱିଜେଟ କେଉଁ ପ୍ରକାରର ଅଭିବୃଦ୍ଧି ପାଇଥାଏ ତାହା ଏହି ମାସ୍କଟି ସ୍ଥିର କରିଥାଏ"
 
-#: gtk/gtkwidget.c:602
+#: gtk/gtkwidget.c:605
 msgid "No show all"
 msgstr "ନାଁ ସବୁକିଛି ଦେଖାନ୍ତୁ"
 
-#: gtk/gtkwidget.c:603
+#: gtk/gtkwidget.c:606
 msgid "Whether gtk_widget_show_all() should not affect this widget"
 msgstr "gtk_widget_show_all() ଏହି ୱିଜେଟ ଉପରେ ପ୍ରଭାବ ପକାଇବ କି ନାହିଁ"
 
-#: gtk/gtkwidget.c:625
+#: gtk/gtkwidget.c:628
 msgid "Has tooltip"
 msgstr "ଏହାର ଉପକରଣ ସୂଚନା ଅଛି"
 
-#: gtk/gtkwidget.c:626
+#: gtk/gtkwidget.c:629
 msgid "Whether this widget has a tooltip"
 msgstr "ଏହି ୱିଜେଟର ଗୋଟିଏ ଉପକରଣ ସୂଚନା ଅଛି କି ନାହିଁ"
 
-#: gtk/gtkwidget.c:646
+#: gtk/gtkwidget.c:649
 msgid "Tooltip Text"
 msgstr "ଉପକରଣ ସୂଚନା ପାଠ୍ୟ"
 
-#: gtk/gtkwidget.c:647 gtk/gtkwidget.c:668
+#: gtk/gtkwidget.c:650 gtk/gtkwidget.c:671
 msgid "The contents of the tooltip for this widget"
 msgstr "ଏହି ୱିଜେଟ ପାଇଁ ଉପକରଣ ସୂଚନାର ବିଷୟବସ୍ତୁ"
 
-#: gtk/gtkwidget.c:667
+#: gtk/gtkwidget.c:670
 msgid "Tooltip markup"
 msgstr "ଉପକରଣ ସୂଚନା ମାର୍କ-ଅପ"
 
-#: gtk/gtkwidget.c:2160
+#: gtk/gtkwidget.c:2163
 msgid "Interior Focus"
 msgstr "ଅଭ୍ଯନ୍ତରୀଣ ଫୋକସ"
 
-#: gtk/gtkwidget.c:2161
+#: gtk/gtkwidget.c:2164
 msgid "Whether to draw the focus indicator inside widgets"
 msgstr "ୱିଜେଟ ମଧ୍ଯରେ ଫୋକସ ସୂଚକକୁ ଅଙ୍କନ କରାଯିବ କି ନାହିଁ"
 
-#: gtk/gtkwidget.c:2167
+#: gtk/gtkwidget.c:2170
 msgid "Focus linewidth"
 msgstr "ଫୋକସ ଲାଇନ ଓସାର"
 
-#: gtk/gtkwidget.c:2168
+#: gtk/gtkwidget.c:2171
 msgid "Width, in pixels, of the focus indicator line"
 msgstr "ପିକ୍ସେଲରେ ଫୋକସ ସୂଚକ ରେଖାର ଓସାର"
 
-#: gtk/gtkwidget.c:2174
+#: gtk/gtkwidget.c:2177
 msgid "Focus line dash pattern"
 msgstr "ଫୋକସ ବିଖଣ୍ଡିତ ରେଖା ଶୈଳୀ"
 
-#: gtk/gtkwidget.c:2175
+#: gtk/gtkwidget.c:2178
 msgid "Dash pattern used to draw the focus indicator"
 msgstr "ଫୋକସ ସୂଚକକୁ ଅଙ୍କନ କରିବା ପାଇଁ ବ୍ଯବହୃତ ବିଖଣ୍ଡିତ ରେଖା ଶୈଳୀ"
 
-#: gtk/gtkwidget.c:2180
+#: gtk/gtkwidget.c:2183
 msgid "Focus padding"
 msgstr "ଫୋକସ ପ୍ଯାଡିଙ୍ଗ"
 
-#: gtk/gtkwidget.c:2181
+#: gtk/gtkwidget.c:2184
 msgid "Width, in pixels, between focus indicator and the widget 'box'"
 msgstr "ଫୋକସ ସୂଚକ ଏବଂ ୱିଜେଟ 'ବାକ୍ସ' ମଧ୍ଯରେ ଓସାର, ପିକ୍ସେଲରେ"
 
-#: gtk/gtkwidget.c:2186
+#: gtk/gtkwidget.c:2189
 msgid "Cursor color"
 msgstr "ଦର୍ଶିକା ରଙ୍ଗ"
 
-#: gtk/gtkwidget.c:2187
+#: gtk/gtkwidget.c:2190
 msgid "Color with which to draw insertion cursor"
 msgstr "ଯେଉଁ ରଙ୍ଗର ସନ୍ନିବେଶନ ଦର୍ଶିକାକୁ ଅଙ୍କନ କରିଯିବ"
 
-#: gtk/gtkwidget.c:2192
+#: gtk/gtkwidget.c:2195
 msgid "Secondary cursor color"
 msgstr "ଦ୍ବିତୀୟକ ଦର୍ଶିକା ରଙ୍ଗ"
 
-#: gtk/gtkwidget.c:2193
+#: gtk/gtkwidget.c:2196
 msgid ""
 "Color with which to draw the secondary insertion cursor when editing mixed "
 "right-to-left and left-to-right text"
@@ -5987,43 +5987,43 @@ msgstr ""
 "ମିଶ୍ର ଡାହାଣରୁ-ବାମକୁ ଏବଂ ବାମରୁ-ଡାହଣକୁ ପାଠ୍ଯକୁ ସମ୍ପାଦନ କରିବା ସମୟରେ ଯେଉଁ ରଙ୍ଗରେ ଦ୍ବିତୀୟକ "
 "ସନ୍ନିବେଶନ ଦର୍ଶିକାକୁ ଅଙ୍କନ କରାଯିବ"
 
-#: gtk/gtkwidget.c:2198
+#: gtk/gtkwidget.c:2201
 msgid "Cursor line aspect ratio"
 msgstr "ଦର୍ଶିକା ରେଖା ପରିମାପ ଅନୁପାତ"
 
-#: gtk/gtkwidget.c:2199
+#: gtk/gtkwidget.c:2202
 msgid "Aspect ratio with which to draw insertion cursor"
 msgstr "ପରିମାପ ଅନୁପାତ ଯାହା ସହିତ ସନ୍ନିବେଶନ ଦର୍ଶିକାକୁ ଅଙ୍କନ କରାଯିବ"
 
-#: gtk/gtkwidget.c:2213
+#: gtk/gtkwidget.c:2216
 msgid "Draw Border"
 msgstr "ଅଙ୍କନ ଧାର"
 
-#: gtk/gtkwidget.c:2214
+#: gtk/gtkwidget.c:2217
 msgid "Size of areas outside the widget's allocation to draw"
 msgstr "ଅଙ୍କନ କରିବା ପାଇଁ ୱିଜେଟର ସ୍ଥାନ ବାହ୍ଯକ୍ଷେତ୍ରର ଆକାର"
 
-#: gtk/gtkwidget.c:2227
+#: gtk/gtkwidget.c:2230
 msgid "Unvisited Link Color"
 msgstr "ଅପରଦର୍ଶିତ ସଂଯୋଗର ରଙ୍ଗ"
 
-#: gtk/gtkwidget.c:2228
+#: gtk/gtkwidget.c:2231
 msgid "Color of unvisited links"
 msgstr "ଅପରିଦର୍ଶିତ ସଂଯୋଗ ମାନଙ୍କର ରଙ୍ଗ"
 
-#: gtk/gtkwidget.c:2241
+#: gtk/gtkwidget.c:2244
 msgid "Visited Link Color"
 msgstr "ପରଦର୍ଶିତ ସଂଯୋଗର ରଙ୍ଗ"
 
-#: gtk/gtkwidget.c:2242
+#: gtk/gtkwidget.c:2245
 msgid "Color of visited links"
 msgstr "ପରିଦର୍ଶିତ ସଂଯୋଗ ମାନଙ୍କର ରଙ୍ଗ"
 
-#: gtk/gtkwidget.c:2256
+#: gtk/gtkwidget.c:2259
 msgid "Wide Separators"
 msgstr "ପ୍ରଶସ୍ତ"
 
-#: gtk/gtkwidget.c:2257
+#: gtk/gtkwidget.c:2260
 msgid ""
 "Whether separators have configurable width and should be drawn using a box "
 "instead of a line"
@@ -6031,35 +6031,35 @@ msgstr ""
 "ବିଭାଜକ ମାନଙ୍କର ବିନ୍ଯାସ ଯୋଗ୍ଯ ଓସାର ଅଛି କି ନାହିଁ ଏବଂ ସେମାନଙ୍କୁ ଗୋଟିଏ ରେଖା ପରିବର୍ତ୍ତେ ଗୋଟିଏ "
 "ବାକ୍ସ ବ୍ଯବହାର କରି ଅଙ୍କନ କରାଯିବା ଉଚିତ କି"
 
-#: gtk/gtkwidget.c:2271
+#: gtk/gtkwidget.c:2274
 msgid "Separator Width"
 msgstr "ବିଭାଜକର ଓସାର"
 
-#: gtk/gtkwidget.c:2272
+#: gtk/gtkwidget.c:2275
 msgid "The width of separators if wide-separators is TRUE"
 msgstr "ବିଭାଜକର ଓସାର ଯଦି ପ୍ରଶସ୍ତ-ବିଭାଜକ ସକ୍ରିୟ (TRUE) ଅଟେ"
 
-#: gtk/gtkwidget.c:2286
+#: gtk/gtkwidget.c:2289
 msgid "Separator Height"
 msgstr "ବିଭାଜକ ଉଚ୍ଚତା"
 
-#: gtk/gtkwidget.c:2287
+#: gtk/gtkwidget.c:2290
 msgid "The height of separators if \"wide-separators\" is TRUE"
 msgstr "ବିଭାଜକର ଉଚ୍ଚତା ଯଦି \"ପ୍ରଶସ୍ତ-ବିଭାଜକ\" ସକ୍ରିୟ (TRUE) ଅଟେ"
 
-#: gtk/gtkwidget.c:2301
+#: gtk/gtkwidget.c:2304
 msgid "Horizontal Scroll Arrow Length"
 msgstr "ଭୂସମାନ୍ତର ସ୍କ୍ରୋଲ ତୀର ଲମ୍ବ"
 
-#: gtk/gtkwidget.c:2302
+#: gtk/gtkwidget.c:2305
 msgid "The length of horizontal scroll arrows"
 msgstr "ଭୂସମାନ୍ତର ସ୍କ୍ରୋଲ ତୀରର ଲମ୍ବ"
 
-#: gtk/gtkwidget.c:2316
+#: gtk/gtkwidget.c:2319
 msgid "Vertical Scroll Arrow Length"
 msgstr "ଭୂଲମ୍ବ ସ୍କ୍ରୋଲ ତୀର ଲମ୍ବ"
 
-#: gtk/gtkwidget.c:2317
+#: gtk/gtkwidget.c:2320
 msgid "The length of vertical scroll arrows"
 msgstr "ଭୂଲମ୍ବ ସ୍କ୍ରୋଲ ତୀରର ଲମ୍ବ"
 

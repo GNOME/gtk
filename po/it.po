@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.12\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-01-08 00:16-0500\n"
+"POT-Creation-Date: 2008-01-28 23:09-0500\n"
 "PO-Revision-Date: 2007-10-04 09:10+0200\n"
 "Last-Translator: Luca Ferretti <elle.uca@libero.it>\n"
 "Language-Team: Italian <tp@lists.linux.it>\n"
@@ -291,14 +291,13 @@ msgid ""
 "Failed to load animation '%s': reason not known, probably a corrupt "
 "animation file"
 msgstr ""
-"Caricamento dell'animazione «%s» fallito: causa sconosciuta, probabilmente "
-"un file d'animazione corrotto"
+"Caricamento dell'animazione «%s» fallito: causa sconosciuta, probabilmente un "
+"file d'animazione corrotto"
 
 #: gdk-pixbuf/gdk-pixbuf-io.c:527
 #, c-format
 msgid "Unable to load image-loading module: %s: %s"
-msgstr ""
-"Impossibile aprire il modulo «%s» per il caricamento delle immagini: %s"
+msgstr "Impossibile aprire il modulo «%s» per il caricamento delle immagini: %s"
 
 #: gdk-pixbuf/gdk-pixbuf-io.c:542
 #, c-format
@@ -2003,8 +2002,7 @@ msgstr "C_rea"
 #: gtk/gtkfilesel.c:1533 gtk/gtkfilesel.c:1640 gtk/gtkfilesel.c:1653
 #, c-format
 msgid "The filename \"%s\" contains symbols that are not allowed in filenames"
-msgstr ""
-"Il nome del file «%s» contiene simboli non consentiti nei nomi dei file"
+msgstr "Il nome del file «%s» contiene simboli non consentiti nei nomi dei file"
 
 #: gtk/gtkfilesel.c:1536 gtk/gtkfilesel.c:1546
 #, c-format
@@ -2449,7 +2447,7 @@ msgstr "_Dimensione carta:"
 msgid "_Orientation:"
 msgstr "_Orientamento:"
 
-#: gtk/gtkpagesetupunixdialog.c:1121 gtk/gtkprintunixdialog.c:2176
+#: gtk/gtkpagesetupunixdialog.c:1121 gtk/gtkprintunixdialog.c:2177
 msgid "Page Setup"
 msgstr "Imposta pagina"
 
@@ -2726,124 +2724,124 @@ msgstr "Generale"
 # GTK-2-12
 #
 # in tipografia layout-->impaginazione (garzantilinguistica.it)
-#: gtk/gtkprintunixdialog.c:2032
+#: gtk/gtkprintunixdialog.c:2033
 msgid "Layout"
 msgstr "Impaginazione"
 
 # GTK-2-12
-#: gtk/gtkprintunixdialog.c:2036
+#: gtk/gtkprintunixdialog.c:2037
 msgid "Pages per _side:"
 msgstr "P_agine per facciata:"
 
 # GTK-2-12 aggiunto acceleratore
-#: gtk/gtkprintunixdialog.c:2052
+#: gtk/gtkprintunixdialog.c:2053
 msgid "T_wo-sided:"
 msgstr "_Fronte-retro:"
 
-#: gtk/gtkprintunixdialog.c:2067
+#: gtk/gtkprintunixdialog.c:2068
 msgid "_Only print:"
 msgstr "Sta_mpare solo:"
 
 #. In enum order
-#: gtk/gtkprintunixdialog.c:2082
+#: gtk/gtkprintunixdialog.c:2083
 msgid "All sheets"
 msgstr "Tutti i fogli"
 
-#: gtk/gtkprintunixdialog.c:2083
+#: gtk/gtkprintunixdialog.c:2084
 msgid "Even sheets"
 msgstr "Fogli pari"
 
-#: gtk/gtkprintunixdialog.c:2084
+#: gtk/gtkprintunixdialog.c:2085
 msgid "Odd sheets"
 msgstr "Fogli dispari"
 
-#: gtk/gtkprintunixdialog.c:2087
+#: gtk/gtkprintunixdialog.c:2088
 msgid "Sc_ale:"
 msgstr "_Scala:"
 
-#: gtk/gtkprintunixdialog.c:2114
+#: gtk/gtkprintunixdialog.c:2115
 msgid "Paper"
 msgstr "Carta"
 
-#: gtk/gtkprintunixdialog.c:2118
+#: gtk/gtkprintunixdialog.c:2119
 msgid "Paper _type:"
 msgstr "_Tipo di carta:"
 
-#: gtk/gtkprintunixdialog.c:2133
+#: gtk/gtkprintunixdialog.c:2134
 msgid "Paper _source:"
 msgstr "_Sorgente carta:"
 
-#: gtk/gtkprintunixdialog.c:2148
+#: gtk/gtkprintunixdialog.c:2149
 msgid "Output t_ray:"
 msgstr "Cassetto di _uscita:"
 
 # GTK-2-12
-#: gtk/gtkprintunixdialog.c:2199
+#: gtk/gtkprintunixdialog.c:2200
 msgid "Job Details"
 msgstr "Dettagli lavoro"
 
-#: gtk/gtkprintunixdialog.c:2205
+#: gtk/gtkprintunixdialog.c:2206
 msgid "Pri_ority:"
 msgstr "P_riorità:"
 
-#: gtk/gtkprintunixdialog.c:2220
+#: gtk/gtkprintunixdialog.c:2221
 msgid "_Billing info:"
 msgstr "In_formazioni fatturazione:"
 
-#: gtk/gtkprintunixdialog.c:2238
+#: gtk/gtkprintunixdialog.c:2239
 msgid "Print Document"
 msgstr "Stampa documento"
 
-#: gtk/gtkprintunixdialog.c:2244
+#: gtk/gtkprintunixdialog.c:2245
 msgid "_Now"
 msgstr "A_desso"
 
-#: gtk/gtkprintunixdialog.c:2251
+#: gtk/gtkprintunixdialog.c:2252
 msgid "A_t:"
 msgstr "_Alle:"
 
-#: gtk/gtkprintunixdialog.c:2266
+#: gtk/gtkprintunixdialog.c:2267
 msgid "On _hold"
 msgstr "_In attesa"
 
-#: gtk/gtkprintunixdialog.c:2285
+#: gtk/gtkprintunixdialog.c:2286
 msgid "Add Cover Page"
 msgstr "Aggiungi pagina di copertina"
 
-#: gtk/gtkprintunixdialog.c:2291
+#: gtk/gtkprintunixdialog.c:2292
 msgid "Be_fore:"
 msgstr "P_rima:"
 
-#: gtk/gtkprintunixdialog.c:2306
+#: gtk/gtkprintunixdialog.c:2307
 msgid "_After:"
 msgstr "_Dopo:"
 
 # GTK-2-12
-#: gtk/gtkprintunixdialog.c:2321
+#: gtk/gtkprintunixdialog.c:2322
 msgid "Job"
 msgstr "Lavoro"
 
-#: gtk/gtkprintunixdialog.c:2387
+#: gtk/gtkprintunixdialog.c:2388
 msgid "Advanced"
 msgstr "Avanzato"
 
-#: gtk/gtkprintunixdialog.c:2422
+#: gtk/gtkprintunixdialog.c:2423
 msgid "Image Quality"
 msgstr "Qualità immagine"
 
-#: gtk/gtkprintunixdialog.c:2425
+#: gtk/gtkprintunixdialog.c:2426
 msgid "Color"
 msgstr "Colore"
 
-#: gtk/gtkprintunixdialog.c:2428
+#: gtk/gtkprintunixdialog.c:2429
 msgid "Finishing"
 msgstr "Completamento in corso"
 
-#: gtk/gtkprintunixdialog.c:2438
+#: gtk/gtkprintunixdialog.c:2439
 msgid "Some of the settings in the dialog conflict"
 msgstr "Alcune impostazioni nella finestra di dialogo sono in conflitto"
 
-#: gtk/gtkprintunixdialog.c:2461
+#: gtk/gtkprintunixdialog.c:2462
 msgid "Print"
 msgstr "Stampa"
 
@@ -3447,8 +3445,7 @@ msgstr "«%s» non è un nome di attributo valido"
 msgid ""
 "\"%s\" could not be converted to a value of type \"%s\" for attribute \"%s\""
 msgstr ""
-"Non è possibile convertire «%s» in un valore di tipo «%s» per l'attributo «%"
-"s»"
+"Non è possibile convertire «%s» in un valore di tipo «%s» per l'attributo «%s»"
 
 #: gtk/gtktextbufferserialize.c:1202
 #, c-format
@@ -3558,7 +3555,7 @@ msgstr "Tag iniziale «%s» non atteso alla riga %d, carattere %d"
 msgid "Unexpected character data on line %d char %d"
 msgstr "Dati carattere non attesi alla riga %d, carattere %d"
 
-#: gtk/gtkuimanager.c:2354
+#: gtk/gtkuimanager.c:2356
 msgid "Empty"
 msgstr "Vuoto"
 

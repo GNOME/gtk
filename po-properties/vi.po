@@ -2,12 +2,12 @@
 # Copyright © 2007 Gnome i18n Project for Vietnamese.
 # Nguyễn Thái Ngọc Duy <pclouds@gmx.net>, 2002.
 # Clytie Siddall <clytie@riverland.net.au>, 2005-2007.
-# 
+#
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-properties 2.11.4\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-01-08 00:16-0500\n"
+"POT-Creation-Date: 2008-01-28 23:10-0500\n"
 "PO-Revision-Date: 2007-09-03 22:59+0930\n"
 "Last-Translator: Clytie Siddall <clytie@riverland.net.au>\n"
 "Language-Team: Vietnamese <gnomevi-list@lists.sourceforge.net>\n"
@@ -215,8 +215,8 @@ msgid ""
 "gtk_window_get_default_icon_list()"
 msgstr ""
 "Một biểu hình cho hộp giới thiệu chương trình. Nếu chưa đặt thì giá trị mặc "
-"định là « gtk_window_get_default_icon_list() » (gtk cửa sổ lấy danh sách "
-"biểu tượng mặc định)"
+"định là « gtk_window_get_default_icon_list() » (gtk cửa sổ lấy danh sách biểu "
+"tượng mặc định)"
 
 #: gtk/gtkaboutdialog.c:398
 msgid "Logo Icon Name"
@@ -359,7 +359,7 @@ msgid "When TRUE, empty menu proxies for this action are hidden."
 msgstr "Khi ĐÚNG thì ủy nhiệm trình đơn rỗng nào bị ẩn."
 
 #: gtk/gtkaction.c:313 gtk/gtkactiongroup.c:177 gtk/gtkcellrenderer.c:193
-#: gtk/gtkwidget.c:516
+#: gtk/gtkwidget.c:519
 msgid "Sensitive"
 msgstr "Nhạy cảm"
 
@@ -368,7 +368,7 @@ msgid "Whether the action is enabled."
 msgstr "Có nên hiệu lực hành động này hay không."
 
 #: gtk/gtkaction.c:320 gtk/gtkactiongroup.c:184 gtk/gtkstatusicon.c:241
-#: gtk/gtktreeviewcolumn.c:191 gtk/gtkwidget.c:509
+#: gtk/gtktreeviewcolumn.c:191 gtk/gtkwidget.c:512
 msgid "Visible"
 msgstr "Hiển thị"
 
@@ -769,11 +769,11 @@ msgstr "Vị trí"
 msgid "The index of the child in the parent"
 msgstr "Chỉ mục của ô điều khiển con trong ô điều khiển mẹ"
 
-#: gtk/gtkbuilder.c:102
+#: gtk/gtkbuilder.c:101
 msgid "Translation Domain"
 msgstr "Miền thông dịch:"
 
-#: gtk/gtkbuilder.c:103
+#: gtk/gtkbuilder.c:102
 msgid "The translation domain used by gettext"
 msgstr "Miền thông dịch được gettext dùng"
 
@@ -853,8 +853,7 @@ msgstr "Khoảng cách mặc định"
 
 #: gtk/gtkbutton.c:411
 msgid "Extra space to add for CAN_DEFAULT buttons"
-msgstr ""
-"Khoảng cách phụ thêm cho các nút kiểu « CAN_DEFAULT » (có thể mặc định)"
+msgstr "Khoảng cách phụ thêm cho các nút kiểu « CAN_DEFAULT » (có thể mặc định)"
 
 #: gtk/gtkbutton.c:417
 msgid "Default Outside Spacing"
@@ -4089,8 +4088,8 @@ msgstr "Chỉ cục bộ"
 #: gtk/gtkrecentchooser.c:206
 msgid "Whether the selected resource(s) should be limited to local file: URIs"
 msgstr ""
-"Có nên hạn chế các tài nguyên được chọn thành địa điểm URI kiểu « file: » "
-"cục bộ hay không"
+"Có nên hạn chế các tài nguyên được chọn thành địa điểm URI kiểu « file: » cục "
+"bộ hay không"
 
 #: gtk/gtkrecentchooser.c:222 gtk/gtkrecentmanager.c:265
 msgid "Limit"
@@ -4298,8 +4297,8 @@ msgid ""
 "Whether \"window-placement\" should be used to determine the location of the "
 "contents with respect to the scrollbars."
 msgstr ""
-"Có nên dùng « Đặt vị trí cửa sổ » để xác định địa điểm của nội dung tượng "
-"ứng với những thanh cuộn, hay không."
+"Có nên dùng « Đặt vị trí cửa sổ » để xác định địa điểm của nội dung tượng ứng "
+"với những thanh cuộn, hay không."
 
 #: gtk/gtkscrolledwindow.c:277
 msgid "Shadow Type"
@@ -5118,8 +5117,8 @@ msgstr ""
 #: gtk/gtktexttag.c:301
 msgid "Font variant as a PangoVariant, e.g. PANGO_VARIANT_SMALL_CAPS"
 msgstr ""
-"Biến thể phông chữ dạng PangoVariant, v.d. « PANGO_VARIANT_SMALL_CAPS "
-"» (biến thể pango chữ hoa nhỏ)"
+"Biến thể phông chữ dạng PangoVariant, v.d. « PANGO_VARIANT_SMALL_CAPS » (biến "
+"thể pango chữ hoa nhỏ)"
 
 #: gtk/gtktexttag.c:310
 msgid ""
@@ -5994,125 +5993,125 @@ msgstr ""
 msgid "Determines how the shadowed box around the viewport is drawn"
 msgstr "Xác định vẽ ô bóng quanh cổng xem như thế nào"
 
-#: gtk/gtkwidget.c:476
+#: gtk/gtkwidget.c:479
 msgid "Widget name"
 msgstr "Tên ô điều khiển"
 
-#: gtk/gtkwidget.c:477
+#: gtk/gtkwidget.c:480
 msgid "The name of the widget"
 msgstr "Tên của ô điều khiển"
 
-#: gtk/gtkwidget.c:483
+#: gtk/gtkwidget.c:486
 msgid "Parent widget"
 msgstr "Ô điều khiển mẹ"
 
-#: gtk/gtkwidget.c:484
+#: gtk/gtkwidget.c:487
 msgid "The parent widget of this widget. Must be a Container widget"
 msgstr ""
 "Ô điều khiển mẹ của ô điều khiển này. Phải là ô điều khiển kiểu chứa "
 "(Container)"
 
-#: gtk/gtkwidget.c:491
+#: gtk/gtkwidget.c:494
 msgid "Width request"
 msgstr "Yêu cầu độ rộng"
 
-#: gtk/gtkwidget.c:492
+#: gtk/gtkwidget.c:495
 msgid ""
 "Override for width request of the widget, or -1 if natural request should be "
 "used"
 msgstr ""
 "Đè chiều rộng yêu cầu của ô điều khiển, hoặc -1 nếu dùng chiều rộng tự nhiên"
 
-#: gtk/gtkwidget.c:500
+#: gtk/gtkwidget.c:503
 msgid "Height request"
 msgstr "Yêu cầu độ cao"
 
-#: gtk/gtkwidget.c:501
+#: gtk/gtkwidget.c:504
 msgid ""
 "Override for height request of the widget, or -1 if natural request should "
 "be used"
 msgstr ""
 "Đè chiều cao yêu cầu của ô điều khiển, hoặc -1 nếu dùng chiều cao tự nhiên"
 
-#: gtk/gtkwidget.c:510
+#: gtk/gtkwidget.c:513
 msgid "Whether the widget is visible"
 msgstr "Ô điều khiển có hiển thị hay không"
 
-#: gtk/gtkwidget.c:517
+#: gtk/gtkwidget.c:520
 msgid "Whether the widget responds to input"
 msgstr "Ô điều khiển có thể nhận tín hiệu vào hay không"
 
-#: gtk/gtkwidget.c:523
+#: gtk/gtkwidget.c:526
 msgid "Application paintable"
 msgstr "Ứng dụng sơn"
 
-#: gtk/gtkwidget.c:524
+#: gtk/gtkwidget.c:527
 msgid "Whether the application will paint directly on the widget"
 msgstr "Ứng dụng có sơn trực tiếp lên ô điều khiển hay không"
 
-#: gtk/gtkwidget.c:530
+#: gtk/gtkwidget.c:533
 msgid "Can focus"
 msgstr "Nhận tiêu điểm"
 
-#: gtk/gtkwidget.c:531
+#: gtk/gtkwidget.c:534
 msgid "Whether the widget can accept the input focus"
 msgstr "Có thể nhận tiêu điểm gõ hay không"
 
-#: gtk/gtkwidget.c:537
+#: gtk/gtkwidget.c:540
 msgid "Has focus"
 msgstr "Có tiêu điểm"
 
-#: gtk/gtkwidget.c:538
+#: gtk/gtkwidget.c:541
 msgid "Whether the widget has the input focus"
 msgstr "Ô điều khiển có tiêu điểm gõ hay không"
 
-#: gtk/gtkwidget.c:544
+#: gtk/gtkwidget.c:547
 msgid "Is focus"
 msgstr "Là tiêu điểm"
 
-#: gtk/gtkwidget.c:545
+#: gtk/gtkwidget.c:548
 msgid "Whether the widget is the focus widget within the toplevel"
 msgstr ""
 "Ô điều khiển này là ô điều khiển mặc định (có tiêu điểm) ở trong cấp đầu"
 
-#: gtk/gtkwidget.c:551
+#: gtk/gtkwidget.c:554
 msgid "Can default"
 msgstr "Có thể làm mặc định"
 
-#: gtk/gtkwidget.c:552
+#: gtk/gtkwidget.c:555
 msgid "Whether the widget can be the default widget"
 msgstr "Có thể là ô điều khiển mặc định hay không"
 
-#: gtk/gtkwidget.c:558
+#: gtk/gtkwidget.c:561
 msgid "Has default"
 msgstr "Mặc định"
 
-#: gtk/gtkwidget.c:559
+#: gtk/gtkwidget.c:562
 msgid "Whether the widget is the default widget"
 msgstr "Nó là ô điều khiển mặc định hay không"
 
-#: gtk/gtkwidget.c:565
+#: gtk/gtkwidget.c:568
 msgid "Receives default"
 msgstr "Nhận mặc định"
 
-#: gtk/gtkwidget.c:566
+#: gtk/gtkwidget.c:569
 msgid "If TRUE, the widget will receive the default action when it is focused"
 msgstr ""
 "Nếu ĐÚNG thì ô điều khiển này sẽ nhận hành động mặc định khi có tiêu điểm"
 
-#: gtk/gtkwidget.c:572
+#: gtk/gtkwidget.c:575
 msgid "Composite child"
 msgstr "Con ghép"
 
-#: gtk/gtkwidget.c:573
+#: gtk/gtkwidget.c:576
 msgid "Whether the widget is part of a composite widget"
 msgstr "Ô điều khiển này là một phần của ô điều khiển ghép hay không"
 
-#: gtk/gtkwidget.c:579
+#: gtk/gtkwidget.c:582
 msgid "Style"
 msgstr "Kiểu dáng"
 
-#: gtk/gtkwidget.c:580
+#: gtk/gtkwidget.c:583
 msgid ""
 "The style of the widget, which contains information about how it will look "
 "(colors etc)"
@@ -6120,99 +6119,99 @@ msgstr ""
 "Kiểu dáng của ô điều khiển này, bao gồm các thông tin về cách hiển thị như "
 "màu sắc v.v."
 
-#: gtk/gtkwidget.c:586
+#: gtk/gtkwidget.c:589
 msgid "Events"
 msgstr "Sự kiện"
 
-#: gtk/gtkwidget.c:587
+#: gtk/gtkwidget.c:590
 msgid "The event mask that decides what kind of GdkEvents this widget gets"
 msgstr ""
 "Mặt nạ sự kiện quyết định ô điều khiển này nhận sự kiện GdkEvent kiểu nào"
 
-#: gtk/gtkwidget.c:594
+#: gtk/gtkwidget.c:597
 msgid "Extension events"
 msgstr "Sự kiện mở rộng"
 
-#: gtk/gtkwidget.c:595
+#: gtk/gtkwidget.c:598
 msgid "The mask that decides what kind of extension events this widget gets"
 msgstr ""
 "Mặt nạ sự kiện quyết định ô điều khiển này nhận sự kiện mở rộng kiểu nào"
 
-#: gtk/gtkwidget.c:602
+#: gtk/gtkwidget.c:605
 msgid "No show all"
 msgstr "Không hiện hết"
 
-#: gtk/gtkwidget.c:603
+#: gtk/gtkwidget.c:606
 msgid "Whether gtk_widget_show_all() should not affect this widget"
 msgstr ""
-"« gtk_widget_show_all() » (Gtk ô điều khiển hiển thị tất cả) nên không có "
-"tác động tới ô điều khiển này hay có"
+"« gtk_widget_show_all() » (Gtk ô điều khiển hiển thị tất cả) nên không có tác "
+"động tới ô điều khiển này hay có"
 
-#: gtk/gtkwidget.c:625
+#: gtk/gtkwidget.c:628
 msgid "Has tooltip"
 msgstr "Có mẹo công cụ"
 
-#: gtk/gtkwidget.c:626
+#: gtk/gtkwidget.c:629
 msgid "Whether this widget has a tooltip"
 msgstr "Ô điều khiển có mẹo công cụ hay không"
 
-#: gtk/gtkwidget.c:646
+#: gtk/gtkwidget.c:649
 msgid "Tooltip Text"
 msgstr "Văn bản méo công cụ"
 
-#: gtk/gtkwidget.c:647 gtk/gtkwidget.c:668
+#: gtk/gtkwidget.c:650 gtk/gtkwidget.c:671
 msgid "The contents of the tooltip for this widget"
 msgstr "Nội dung của mẹo công cụ cho ô điều khiển này"
 
-#: gtk/gtkwidget.c:667
+#: gtk/gtkwidget.c:670
 msgid "Tooltip markup"
 msgstr "Định dạng mẹo công cụ"
 
-#: gtk/gtkwidget.c:2160
+#: gtk/gtkwidget.c:2163
 msgid "Interior Focus"
 msgstr "Tiêu điểm trong"
 
-#: gtk/gtkwidget.c:2161
+#: gtk/gtkwidget.c:2164
 msgid "Whether to draw the focus indicator inside widgets"
 msgstr "Có nên vẽ cái chỉ tiêu điểm ở trong các ô điều khiển"
 
-#: gtk/gtkwidget.c:2167
+#: gtk/gtkwidget.c:2170
 msgid "Focus linewidth"
 msgstr "Độ rộng dòng tiêu điểm"
 
-#: gtk/gtkwidget.c:2168
+#: gtk/gtkwidget.c:2171
 msgid "Width, in pixels, of the focus indicator line"
 msgstr "Độ rộng của dòng chỉ tiêu điểm (theo điểm ảnh)"
 
-#: gtk/gtkwidget.c:2174
+#: gtk/gtkwidget.c:2177
 msgid "Focus line dash pattern"
 msgstr "Mẫu gạch dòng tiêu điểm"
 
-#: gtk/gtkwidget.c:2175
+#: gtk/gtkwidget.c:2178
 msgid "Dash pattern used to draw the focus indicator"
 msgstr "Mẫu gạch được dùng để vẽ cái chỉ tiêu điểm"
 
-#: gtk/gtkwidget.c:2180
+#: gtk/gtkwidget.c:2183
 msgid "Focus padding"
 msgstr "Đệm tiêu điểm"
 
-#: gtk/gtkwidget.c:2181
+#: gtk/gtkwidget.c:2184
 msgid "Width, in pixels, between focus indicator and the widget 'box'"
 msgstr "Độ rộng giữa cái chỉ tiêu điểm và « hộp » ô điều khiển, theo điểm ảnh"
 
-#: gtk/gtkwidget.c:2186
+#: gtk/gtkwidget.c:2189
 msgid "Cursor color"
 msgstr "Màu con trỏ"
 
-#: gtk/gtkwidget.c:2187
+#: gtk/gtkwidget.c:2190
 msgid "Color with which to draw insertion cursor"
 msgstr "Màu vẽ con trỏ chèn"
 
-#: gtk/gtkwidget.c:2192
+#: gtk/gtkwidget.c:2195
 msgid "Secondary cursor color"
 msgstr "Màu con trỏ phụ"
 
-#: gtk/gtkwidget.c:2193
+#: gtk/gtkwidget.c:2196
 msgid ""
 "Color with which to draw the secondary insertion cursor when editing mixed "
 "right-to-left and left-to-right text"
@@ -6220,43 +6219,43 @@ msgstr ""
 "Màu vẽ con trỏ chèn phụ khi hiệu chỉnh văn bản cả phải-sang-trái lẫn trái-"
 "sang-phải đều trộn với nhau"
 
-#: gtk/gtkwidget.c:2198
+#: gtk/gtkwidget.c:2201
 msgid "Cursor line aspect ratio"
 msgstr "Tỷ lệ hình thể dòng con trỏ"
 
-#: gtk/gtkwidget.c:2199
+#: gtk/gtkwidget.c:2202
 msgid "Aspect ratio with which to draw insertion cursor"
 msgstr "Tỷ lệ hình thể với đó cần vẽ con trỏ chèn"
 
-#: gtk/gtkwidget.c:2213
+#: gtk/gtkwidget.c:2216
 msgid "Draw Border"
 msgstr "Vẽ viền"
 
-#: gtk/gtkwidget.c:2214
+#: gtk/gtkwidget.c:2217
 msgid "Size of areas outside the widget's allocation to draw"
 msgstr "Kích thước vùng ở ngoại vùng được cấp cho ô điều khiển cần vẽ"
 
-#: gtk/gtkwidget.c:2227
+#: gtk/gtkwidget.c:2230
 msgid "Unvisited Link Color"
 msgstr "Màu liên kết chưa thăm"
 
-#: gtk/gtkwidget.c:2228
+#: gtk/gtkwidget.c:2231
 msgid "Color of unvisited links"
 msgstr "Màu của liên kết chưa thăm, chưa nhắp vào"
 
-#: gtk/gtkwidget.c:2241
+#: gtk/gtkwidget.c:2244
 msgid "Visited Link Color"
 msgstr "Màu liên kết đã thăm"
 
-#: gtk/gtkwidget.c:2242
+#: gtk/gtkwidget.c:2245
 msgid "Color of visited links"
 msgstr "Màu của liên kết đã thăm, đã nhắp vào"
 
-#: gtk/gtkwidget.c:2256
+#: gtk/gtkwidget.c:2259
 msgid "Wide Separators"
 msgstr "Bộ ngăn cách rộng"
 
-#: gtk/gtkwidget.c:2257
+#: gtk/gtkwidget.c:2260
 msgid ""
 "Whether separators have configurable width and should be drawn using a box "
 "instead of a line"
@@ -6264,37 +6263,37 @@ msgstr ""
 "Bộ ngăn cách có độ rộng có thể cấu hình hay không; nó nên được vẽ bằng hộp "
 "thay vào đường hay không"
 
-#: gtk/gtkwidget.c:2271
+#: gtk/gtkwidget.c:2274
 msgid "Separator Width"
 msgstr "Độ rộng bộ ngăn cách"
 
-#: gtk/gtkwidget.c:2272
+#: gtk/gtkwidget.c:2275
 msgid "The width of separators if wide-separators is TRUE"
 msgstr "Độ rộng của bộ ngăn cách nếu bộ ngăn cách có độ rộng"
 
-#: gtk/gtkwidget.c:2286
+#: gtk/gtkwidget.c:2289
 msgid "Separator Height"
 msgstr "Độ cao bộ ngăn cách"
 
-#: gtk/gtkwidget.c:2287
+#: gtk/gtkwidget.c:2290
 msgid "The height of separators if \"wide-separators\" is TRUE"
 msgstr ""
 "Độ cao của bộ ngăn cách nếu bộ ngăn cách có độ rộng (wide-separators) là "
 "TRUE (đúng)"
 
-#: gtk/gtkwidget.c:2301
+#: gtk/gtkwidget.c:2304
 msgid "Horizontal Scroll Arrow Length"
 msgstr "Độ dài mũi tên cuộn ngang"
 
-#: gtk/gtkwidget.c:2302
+#: gtk/gtkwidget.c:2305
 msgid "The length of horizontal scroll arrows"
 msgstr "Độ dài của các mũi tên cuộn theo chiều ngang"
 
-#: gtk/gtkwidget.c:2316
+#: gtk/gtkwidget.c:2319
 msgid "Vertical Scroll Arrow Length"
 msgstr "Độ dài mũi tên cuộn dọc"
 
-#: gtk/gtkwidget.c:2317
+#: gtk/gtkwidget.c:2320
 msgid "The length of vertical scroll arrows"
 msgstr "Độ dài của các mũi tên cuộn theo chiều dọc"
 

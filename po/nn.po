@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: nn\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-01-08 00:16-0500\n"
+"POT-Creation-Date: 2008-01-28 23:09-0500\n"
 "PO-Revision-Date: 2004-03-21 21:36+0100\n"
 "Last-Translator: Åsmund Skjæveland\n"
 "Language-Team: Norwegian Nynorsk <i18n-nn@lister.ping.uio.no>\n"
@@ -613,8 +613,7 @@ msgid ""
 "JPEG quality must be a value between 0 and 100; value '%s' could not be "
 "parsed."
 msgstr ""
-"JPEG-kvalitet må vera eit tal mellom 0 og 100. Verdien «%s» kan ikkje "
-"tolkast."
+"JPEG-kvalitet må vera eit tal mellom 0 og 100. Verdien «%s» kan ikkje tolkast."
 
 #: gdk-pixbuf/io-jpeg.c:1148
 #, c-format
@@ -755,8 +754,7 @@ msgid ""
 "PNG compression level must be a value between 0 and 9; value '%s' could not "
 "be parsed."
 msgstr ""
-"JPEG-kvalitet må vera eit tal mellom 0 og 100. Verdien «%s» kan ikkje "
-"tolkast."
+"JPEG-kvalitet må vera eit tal mellom 0 og 100. Verdien «%s» kan ikkje tolkast."
 
 #: gdk-pixbuf/io-png.c:858
 #, fuzzy, c-format
@@ -1402,8 +1400,8 @@ msgid ""
 "drag a color swatch here or right-click it and select \"Save color here.\""
 msgstr ""
 "Klikk på denne palettoppføringa for å gjera henne til den noverande fargen. "
-"For å endra denne oppføringa kan dra ein fargeprøve hit og velja «Lagra "
-"farge her»."
+"For å endra denne oppføringa kan dra ein fargeprøve hit og velja «Lagra farge "
+"her»."
 
 #: gtk/gtkcolorsel.c:1920
 msgid ""
@@ -1959,8 +1957,8 @@ msgid ""
 "The filename \"%s\" couldn't be converted to UTF-8. (try setting the "
 "environment variable G_FILENAME_ENCODING): %s"
 msgstr ""
-"Filnamnet «%s» kan ikkje konverterast til UTF-8 (prøv å setja "
-"miljøvariabelen G_BROKEN_FILENAMES): %s"
+"Filnamnet «%s» kan ikkje konverterast til UTF-8 (prøv å setja miljøvariabelen "
+"G_BROKEN_FILENAMES): %s"
 
 #: gtk/gtkfilesel.c:3110
 msgid "Invalid UTF-8"
@@ -2346,7 +2344,7 @@ msgstr "_Eigenskapar"
 msgid "_Orientation:"
 msgstr "_Metning:"
 
-#: gtk/gtkpagesetupunixdialog.c:1121 gtk/gtkprintunixdialog.c:2176
+#: gtk/gtkpagesetupunixdialog.c:1121 gtk/gtkprintunixdialog.c:2177
 #, fuzzy
 msgid "Page Setup"
 msgstr "Side %u"
@@ -2620,128 +2618,128 @@ msgstr "_Gå tilbake"
 msgid "General"
 msgstr ""
 
-#: gtk/gtkprintunixdialog.c:2032
+#: gtk/gtkprintunixdialog.c:2033
 msgid "Layout"
 msgstr ""
 
-#: gtk/gtkprintunixdialog.c:2036
+#: gtk/gtkprintunixdialog.c:2037
 #, fuzzy
 msgid "Pages per _side:"
 msgstr "_Eigenskapar"
 
-#: gtk/gtkprintunixdialog.c:2052
+#: gtk/gtkprintunixdialog.c:2053
 msgid "T_wo-sided:"
 msgstr ""
 
-#: gtk/gtkprintunixdialog.c:2067
+#: gtk/gtkprintunixdialog.c:2068
 #, fuzzy
 msgid "_Only print:"
 msgstr "S_kriv ut"
 
 #. In enum order
-#: gtk/gtkprintunixdialog.c:2082
+#: gtk/gtkprintunixdialog.c:2083
 msgid "All sheets"
 msgstr ""
 
-#: gtk/gtkprintunixdialog.c:2083
+#: gtk/gtkprintunixdialog.c:2084
 msgid "Even sheets"
 msgstr ""
 
-#: gtk/gtkprintunixdialog.c:2084
+#: gtk/gtkprintunixdialog.c:2085
 msgid "Odd sheets"
 msgstr ""
 
-#: gtk/gtkprintunixdialog.c:2087
+#: gtk/gtkprintunixdialog.c:2088
 #, fuzzy
 msgid "Sc_ale:"
 msgstr "_Verdi:"
 
-#: gtk/gtkprintunixdialog.c:2114
+#: gtk/gtkprintunixdialog.c:2115
 msgid "Paper"
 msgstr ""
 
-#: gtk/gtkprintunixdialog.c:2118
+#: gtk/gtkprintunixdialog.c:2119
 #, fuzzy
 msgid "Paper _type:"
 msgstr "_Eigenskapar"
 
-#: gtk/gtkprintunixdialog.c:2133
+#: gtk/gtkprintunixdialog.c:2134
 #, fuzzy
 msgid "Paper _source:"
 msgstr "_Eigenskapar"
 
-#: gtk/gtkprintunixdialog.c:2148
+#: gtk/gtkprintunixdialog.c:2149
 msgid "Output t_ray:"
 msgstr ""
 
-#: gtk/gtkprintunixdialog.c:2199
+#: gtk/gtkprintunixdialog.c:2200
 msgid "Job Details"
 msgstr ""
 
-#: gtk/gtkprintunixdialog.c:2205
+#: gtk/gtkprintunixdialog.c:2206
 msgid "Pri_ority:"
 msgstr ""
 
-#: gtk/gtkprintunixdialog.c:2220
+#: gtk/gtkprintunixdialog.c:2221
 msgid "_Billing info:"
 msgstr ""
 
-#: gtk/gtkprintunixdialog.c:2238
+#: gtk/gtkprintunixdialog.c:2239
 msgid "Print Document"
 msgstr ""
 
-#: gtk/gtkprintunixdialog.c:2244
+#: gtk/gtkprintunixdialog.c:2245
 #, fuzzy
 msgid "_Now"
 msgstr "_Nei"
 
-#: gtk/gtkprintunixdialog.c:2251
+#: gtk/gtkprintunixdialog.c:2252
 msgid "A_t:"
 msgstr ""
 
-#: gtk/gtkprintunixdialog.c:2266
+#: gtk/gtkprintunixdialog.c:2267
 #, fuzzy
 msgid "On _hold"
 msgstr "_Feit"
 
-#: gtk/gtkprintunixdialog.c:2285
+#: gtk/gtkprintunixdialog.c:2286
 msgid "Add Cover Page"
 msgstr ""
 
-#: gtk/gtkprintunixdialog.c:2291
+#: gtk/gtkprintunixdialog.c:2292
 msgid "Be_fore:"
 msgstr ""
 
-#: gtk/gtkprintunixdialog.c:2306
+#: gtk/gtkprintunixdialog.c:2307
 msgid "_After:"
 msgstr ""
 
-#: gtk/gtkprintunixdialog.c:2321
+#: gtk/gtkprintunixdialog.c:2322
 msgid "Job"
 msgstr ""
 
-#: gtk/gtkprintunixdialog.c:2387
+#: gtk/gtkprintunixdialog.c:2388
 msgid "Advanced"
 msgstr ""
 
-#: gtk/gtkprintunixdialog.c:2422
+#: gtk/gtkprintunixdialog.c:2423
 msgid "Image Quality"
 msgstr ""
 
-#: gtk/gtkprintunixdialog.c:2425
+#: gtk/gtkprintunixdialog.c:2426
 #, fuzzy
 msgid "Color"
 msgstr "_Lukk"
 
-#: gtk/gtkprintunixdialog.c:2428
+#: gtk/gtkprintunixdialog.c:2429
 msgid "Finishing"
 msgstr ""
 
-#: gtk/gtkprintunixdialog.c:2438
+#: gtk/gtkprintunixdialog.c:2439
 msgid "Some of the settings in the dialog conflict"
 msgstr ""
 
-#: gtk/gtkprintunixdialog.c:2461
+#: gtk/gtkprintunixdialog.c:2462
 #, fuzzy
 msgid "Print"
 msgstr "S_kriv ut"
@@ -3449,7 +3447,7 @@ msgstr "Uventa startmerke «%s» på linje %d, teikn %d"
 msgid "Unexpected character data on line %d char %d"
 msgstr "Uventa teikndata på linje %d teikn %d"
 
-#: gtk/gtkuimanager.c:2354
+#: gtk/gtkuimanager.c:2356
 msgid "Empty"
 msgstr "Tom"
 

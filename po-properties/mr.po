@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+.mr\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-01-08 00:16-0500\n"
+"POT-Creation-Date: 2008-01-28 23:10-0500\n"
 "PO-Revision-Date: 2004-03-13 14:59+0530\n"
 "Last-Translator: Jitendra Shah <jitendras@vsnl.com>\n"
 "Language-Team:  Marathi <www.indictrans.org>\n"
@@ -405,7 +405,7 @@ msgstr ""
 
 # gtk/gtkwidget.c:430
 #: gtk/gtkaction.c:313 gtk/gtkactiongroup.c:177 gtk/gtkcellrenderer.c:193
-#: gtk/gtkwidget.c:516
+#: gtk/gtkwidget.c:519
 msgid "Sensitive"
 msgstr "संवेदनशील"
 
@@ -417,7 +417,7 @@ msgstr "विडगेट दिसतो का"
 
 # gtk/gtktreeview.c:538 gtk/gtktreeviewcolumn.c:174 gtk/gtkwidget.c:423
 #: gtk/gtkaction.c:320 gtk/gtkactiongroup.c:184 gtk/gtkstatusicon.c:241
-#: gtk/gtktreeviewcolumn.c:191 gtk/gtkwidget.c:509
+#: gtk/gtktreeviewcolumn.c:191 gtk/gtkwidget.c:512
 msgid "Visible"
 msgstr "दर्शनीय"
 
@@ -917,11 +917,11 @@ msgstr "स्थिति"
 msgid "The index of the child in the parent"
 msgstr "वर्तमान पानावरील अनुक्रम"
 
-#: gtk/gtkbuilder.c:102
+#: gtk/gtkbuilder.c:101
 msgid "Translation Domain"
 msgstr ""
 
-#: gtk/gtkbuilder.c:103
+#: gtk/gtkbuilder.c:102
 msgid "The translation domain used by gettext"
 msgstr ""
 
@@ -7304,33 +7304,33 @@ msgid "Determines how the shadowed box around the viewport is drawn"
 msgstr "दृश्याभोवतीची छायांकीत चौकट कशी बनवायची ते ठरविते"
 
 # gtk/gtkwidget.c:390
-#: gtk/gtkwidget.c:476
+#: gtk/gtkwidget.c:479
 msgid "Widget name"
 msgstr "विडगेटचे नाव"
 
 # gtk/gtkwidget.c:391
-#: gtk/gtkwidget.c:477
+#: gtk/gtkwidget.c:480
 msgid "The name of the widget"
 msgstr "विडगेटचे नाव"
 
 # gtk/gtkwidget.c:397
-#: gtk/gtkwidget.c:483
+#: gtk/gtkwidget.c:486
 msgid "Parent widget"
 msgstr "मोठे विडगेट"
 
 # gtk/gtkwidget.c:398
-#: gtk/gtkwidget.c:484
+#: gtk/gtkwidget.c:487
 #, fuzzy
 msgid "The parent widget of this widget. Must be a Container widget"
 msgstr "ह्या विडगेटचा मोठा विडगेट. हा एका पेटीचा विडगेट असायला हवा"
 
 # gtk/gtkwidget.c:405
-#: gtk/gtkwidget.c:491
+#: gtk/gtkwidget.c:494
 msgid "Width request"
 msgstr "रुंदीसाठी सूचना"
 
 # gtk/gtkwidget.c:406
-#: gtk/gtkwidget.c:492
+#: gtk/gtkwidget.c:495
 #, fuzzy
 msgid ""
 "Override for width request of the widget, or -1 if natural request should be "
@@ -7340,12 +7340,12 @@ msgstr ""
 "रुंदीस्वीकारा"
 
 # gtk/gtkwidget.c:414
-#: gtk/gtkwidget.c:500
+#: gtk/gtkwidget.c:503
 msgid "Height request"
 msgstr "उंचीसाठी सूचना"
 
 # gtk/gtkwidget.c:406
-#: gtk/gtkwidget.c:501
+#: gtk/gtkwidget.c:504
 #, fuzzy
 msgid ""
 "Override for height request of the widget, or -1 if natural request should "
@@ -7355,105 +7355,105 @@ msgstr ""
 "रुंदीस्वीकारा"
 
 # gtk/gtkwidget.c:424
-#: gtk/gtkwidget.c:510
+#: gtk/gtkwidget.c:513
 msgid "Whether the widget is visible"
 msgstr "विडगेट दिसतो का"
 
 # gtk/gtkwidget.c:431
-#: gtk/gtkwidget.c:517
+#: gtk/gtkwidget.c:520
 msgid "Whether the widget responds to input"
 msgstr "विडगेट प्रत्युत्तर देतो का"
 
 # gtk/gtkwidget.c:437
-#: gtk/gtkwidget.c:523
+#: gtk/gtkwidget.c:526
 msgid "Application paintable"
 msgstr "रंगवण्यास योग्य आहे"
 
 # gtk/gtkwidget.c:438
-#: gtk/gtkwidget.c:524
+#: gtk/gtkwidget.c:527
 msgid "Whether the application will paint directly on the widget"
 msgstr "विडगेटवर प्रत्यक्ष रंग भरले जातील का "
 
 # gtk/gtkwidget.c:444
-#: gtk/gtkwidget.c:530
+#: gtk/gtkwidget.c:533
 msgid "Can focus"
 msgstr "प्रकाशमान करता येते"
 
 # gtk/gtkwidget.c:445
-#: gtk/gtkwidget.c:531
+#: gtk/gtkwidget.c:534
 msgid "Whether the widget can accept the input focus"
 msgstr "प्रकाशात आलेली (दिसणारी) माहिती विडगेट स्वीकारेल का"
 
 # gtk/gtkwidget.c:451
-#: gtk/gtkwidget.c:537
+#: gtk/gtkwidget.c:540
 msgid "Has focus"
 msgstr "प्रकाशात आहे(दिसते आहे)"
 
 # gtk/gtkwidget.c:452
-#: gtk/gtkwidget.c:538
+#: gtk/gtkwidget.c:541
 msgid "Whether the widget has the input focus"
 msgstr "प्रकाशात आलेली (दिसणारी) माहिती विडगेटकडे आहे का"
 
 # gtk/gtkwidget.c:451
-#: gtk/gtkwidget.c:544
+#: gtk/gtkwidget.c:547
 #, fuzzy
 msgid "Is focus"
 msgstr "प्रकाशात आहे(दिसते आहे)"
 
 # gtk/gtkwidget.c:466
-#: gtk/gtkwidget.c:545
+#: gtk/gtkwidget.c:548
 #, fuzzy
 msgid "Whether the widget is the focus widget within the toplevel"
 msgstr "हा विडगेट सर्वसाधारण विडगेट आहे का"
 
 # gtk/gtkwidget.c:458
-#: gtk/gtkwidget.c:551
+#: gtk/gtkwidget.c:554
 msgid "Can default"
 msgstr "सर्वसाधारण करता येते"
 
 # gtk/gtkwidget.c:459
-#: gtk/gtkwidget.c:552
+#: gtk/gtkwidget.c:555
 msgid "Whether the widget can be the default widget"
 msgstr "हा विडगेट सर्वसाधारण विडगेटप्रमाणे करता येईल का"
 
 # gtk/gtkwidget.c:465
-#: gtk/gtkwidget.c:558
+#: gtk/gtkwidget.c:561
 msgid "Has default"
 msgstr "सर्वसाधारण आहे"
 
 # gtk/gtkwidget.c:466
-#: gtk/gtkwidget.c:559
+#: gtk/gtkwidget.c:562
 msgid "Whether the widget is the default widget"
 msgstr "हा विडगेट सर्वसाधारण विडगेट आहे का"
 
 # gtk/gtkwidget.c:472
-#: gtk/gtkwidget.c:565
+#: gtk/gtkwidget.c:568
 msgid "Receives default"
 msgstr "सर्वसाधारण (विडगेट) स्वीकारतो"
 
 # gtk/gtkwidget.c:473
-#: gtk/gtkwidget.c:566
+#: gtk/gtkwidget.c:569
 #, fuzzy
 msgid "If TRUE, the widget will receive the default action when it is focused"
 msgstr "जर खरे आहे, तर प्रकाशमय केल्यावर हा विडगेट सर्वसाधारण कार्य स्वीकारतो"
 
 # gtk/gtkwidget.c:479
-#: gtk/gtkwidget.c:572
+#: gtk/gtkwidget.c:575
 msgid "Composite child"
 msgstr "एकत्रित उपरचना"
 
 # gtk/gtkwidget.c:466
-#: gtk/gtkwidget.c:573
+#: gtk/gtkwidget.c:576
 msgid "Whether the widget is part of a composite widget"
 msgstr "हा विडगेट एकत्रित उपरचना  भाग आहे का"
 
 # gtk/gtkwidget.c:486
-#: gtk/gtkwidget.c:579
+#: gtk/gtkwidget.c:582
 msgid "Style"
 msgstr "शैली"
 
 # gtk/gtkwidget.c:487
-#: gtk/gtkwidget.c:580
+#: gtk/gtkwidget.c:583
 #, fuzzy
 msgid ""
 "The style of the widget, which contains information about how it will look "
@@ -7461,125 +7461,125 @@ msgid ""
 msgstr "विगेटची शैली, अशी की त्या विगेटमध्ये असणारी माहिती कशी दिसते ते दाखविते(रंग इ.)"
 
 # gtk/gtkwidget.c:493
-#: gtk/gtkwidget.c:586
+#: gtk/gtkwidget.c:589
 msgid "Events"
 msgstr "घटना"
 
 # gtk/gtkwidget.c:494
-#: gtk/gtkwidget.c:587
+#: gtk/gtkwidget.c:590
 #, fuzzy
 msgid "The event mask that decides what kind of GdkEvents this widget gets"
 msgstr "ह्या विगेटसाठी कोणत्या प्रकारच्या Gdk घटना मिळतील ते निश्चित करणारे आच्छादन"
 
 # gtk/gtkwidget.c:501
-#: gtk/gtkwidget.c:594
+#: gtk/gtkwidget.c:597
 msgid "Extension events"
 msgstr "क्षेत्रविस्तारण संकेत"
 
 # gtk/gtkwidget.c:502
-#: gtk/gtkwidget.c:595
+#: gtk/gtkwidget.c:598
 #, fuzzy
 msgid "The mask that decides what kind of extension events this widget gets"
 msgstr ""
 "ह्या विगेटसाठी कोणत्या प्रकारचे Gdk क्षेत्रविस्तारण संकेत  मिळतील ते निश्चित करणारे आच्छादन"
 
-#: gtk/gtkwidget.c:602
+#: gtk/gtkwidget.c:605
 msgid "No show all"
 msgstr ""
 
-#: gtk/gtkwidget.c:603
+#: gtk/gtkwidget.c:606
 msgid "Whether gtk_widget_show_all() should not affect this widget"
 msgstr ""
 
 # gtk/gtkcolorsel.c:1711
-#: gtk/gtkwidget.c:625
+#: gtk/gtkwidget.c:628
 #, fuzzy
 msgid "Has tooltip"
 msgstr "रंगफळी आहे"
 
 # gtk/gtkwidget.c:452
-#: gtk/gtkwidget.c:626
+#: gtk/gtkwidget.c:629
 #, fuzzy
 msgid "Whether this widget has a tooltip"
 msgstr "प्रकाशात आलेली (दिसणारी) माहिती विडगेटकडे आहे का"
 
 # gtk/gtktreeview.c:600
-#: gtk/gtkwidget.c:646
+#: gtk/gtkwidget.c:649
 #, fuzzy
 msgid "Tooltip Text"
 msgstr "विस्तारकाचा आकार"
 
 # gtk/gtkentry.c:524
-#: gtk/gtkwidget.c:647 gtk/gtkwidget.c:668
+#: gtk/gtkwidget.c:650 gtk/gtkwidget.c:671
 #, fuzzy
 msgid "The contents of the tooltip for this widget"
 msgstr "नोंदीचा मजकूर"
 
-#: gtk/gtkwidget.c:667
+#: gtk/gtkwidget.c:670
 msgid "Tooltip markup"
 msgstr ""
 
 # gtk/gtkwidget.c:1051
-#: gtk/gtkwidget.c:2160
+#: gtk/gtkwidget.c:2163
 msgid "Interior Focus"
 msgstr "प्रकाशित अंतर्भाग"
 
 # gtk/gtkwidget.c:1052
-#: gtk/gtkwidget.c:2161
+#: gtk/gtkwidget.c:2164
 #, fuzzy
 msgid "Whether to draw the focus indicator inside widgets"
 msgstr "विजेटचा आतील भाग प्रकाशमय करायचा आहे का"
 
 # gtk/gtkwidget.c:1058
-#: gtk/gtkwidget.c:2167
+#: gtk/gtkwidget.c:2170
 msgid "Focus linewidth"
 msgstr "ओळींची रुंदी प्रकाशित करा"
 
 # gtk/gtkwidget.c:1059
-#: gtk/gtkwidget.c:2168
+#: gtk/gtkwidget.c:2171
 #, fuzzy
 msgid "Width, in pixels, of the focus indicator line"
 msgstr "प्रकाशित सूचक ओळींची रुंदी"
 
 # gtk/gtkwidget.c:1065
-#: gtk/gtkwidget.c:2174
+#: gtk/gtkwidget.c:2177
 msgid "Focus line dash pattern"
 msgstr "प्रकाशित करणारी ओळ तुटक रेषेच्या कोणत्या स्वरुपात दाखवावी"
 
 # gtk/gtkwidget.c:1066
-#: gtk/gtkwidget.c:2175
+#: gtk/gtkwidget.c:2178
 #, fuzzy
 msgid "Dash pattern used to draw the focus indicator"
 msgstr "प्रकाशित ओळ बनविण्यासाठी वापरायची तुटक रेषा पध्दती "
 
 # gtk/gtkwidget.c:1071
-#: gtk/gtkwidget.c:2180
+#: gtk/gtkwidget.c:2183
 msgid "Focus padding"
 msgstr ""
 
 # gtk/gtkwidget.c:1072
-#: gtk/gtkwidget.c:2181
+#: gtk/gtkwidget.c:2184
 #, fuzzy
 msgid "Width, in pixels, between focus indicator and the widget 'box'"
 msgstr "प्रकाशित सूचक ओळी आणि विजेट 'चौकट' यांच्या मधील चित्रकणांच्या स्वरुपातील रुंदी"
 
 # gtk/gtkwidget.c:1077
-#: gtk/gtkwidget.c:2186
+#: gtk/gtkwidget.c:2189
 msgid "Cursor color"
 msgstr "कर्सरचा रंग"
 
 # gtk/gtkwidget.c:1078
-#: gtk/gtkwidget.c:2187
+#: gtk/gtkwidget.c:2190
 msgid "Color with which to draw insertion cursor"
 msgstr "ज्या रंगाने कर्सर बनवायचा आहे तो रंग"
 
 # gtk/gtkwidget.c:1083
-#: gtk/gtkwidget.c:2192
+#: gtk/gtkwidget.c:2195
 msgid "Secondary cursor color"
 msgstr "कर्सरचा दुय्यम रंग"
 
 # gtk/gtkwidget.c:1084
-#: gtk/gtkwidget.c:2193
+#: gtk/gtkwidget.c:2196
 #, fuzzy
 msgid ""
 "Color with which to draw the secondary insertion cursor when editing mixed "
@@ -7589,101 +7589,101 @@ msgstr ""
 "डावीकडून-उजवीकडे असा मजकुर असताना"
 
 # gtk/gtkwidget.c:1089
-#: gtk/gtkwidget.c:2198
+#: gtk/gtkwidget.c:2201
 msgid "Cursor line aspect ratio"
 msgstr ""
 
 # gtk/gtkwidget.c:1090
-#: gtk/gtkwidget.c:2199
+#: gtk/gtkwidget.c:2202
 msgid "Aspect ratio with which to draw insertion cursor"
 msgstr ""
 
 # gtk/gtknotebook.c:379
-#: gtk/gtkwidget.c:2213
+#: gtk/gtkwidget.c:2216
 #, fuzzy
 msgid "Draw Border"
 msgstr "टॅबची सीमा"
 
-#: gtk/gtkwidget.c:2214
+#: gtk/gtkwidget.c:2217
 msgid "Size of areas outside the widget's allocation to draw"
 msgstr ""
 
 # gtk/gtkstock.c:323
-#: gtk/gtkwidget.c:2227
+#: gtk/gtkwidget.c:2230
 #, fuzzy
 msgid "Unvisited Link Color"
 msgstr "रंग(_C)"
 
 # gtk/gtkwindow.c:417
-#: gtk/gtkwidget.c:2228
+#: gtk/gtkwidget.c:2231
 #, fuzzy
 msgid "Color of unvisited links"
 msgstr "विन्डोचे शीर्षक"
 
 # gtk/gtkstock.c:323
-#: gtk/gtkwidget.c:2241
+#: gtk/gtkwidget.c:2244
 #, fuzzy
 msgid "Visited Link Color"
 msgstr "रंग(_C)"
 
 # gtk/gtkwindow.c:417
-#: gtk/gtkwidget.c:2242
+#: gtk/gtkwidget.c:2245
 #, fuzzy
 msgid "Color of visited links"
 msgstr "विन्डोचे शीर्षक"
 
 # gtk/gtkdialog.c:128
-#: gtk/gtkwidget.c:2256
+#: gtk/gtkwidget.c:2259
 #, fuzzy
 msgid "Wide Separators"
 msgstr "भेदक आहे"
 
-#: gtk/gtkwidget.c:2257
+#: gtk/gtkwidget.c:2260
 msgid ""
 "Whether separators have configurable width and should be drawn using a box "
 "instead of a line"
 msgstr ""
 
 # gtk/gtktreeview.c:609
-#: gtk/gtkwidget.c:2271
+#: gtk/gtkwidget.c:2274
 #, fuzzy
 msgid "Separator Width"
 msgstr "उभ्या विभाजकाची रुंदी"
 
-#: gtk/gtkwidget.c:2272
+#: gtk/gtkwidget.c:2275
 msgid "The width of separators if wide-separators is TRUE"
 msgstr ""
 
 # gtk/gtkwindow.c:476
-#: gtk/gtkwidget.c:2286
+#: gtk/gtkwidget.c:2289
 #, fuzzy
 msgid "Separator Height"
 msgstr "सर्वसाधारण ऊंची"
 
-#: gtk/gtkwidget.c:2287
+#: gtk/gtkwidget.c:2290
 msgid "The height of separators if \"wide-separators\" is TRUE"
 msgstr ""
 
 # gtk/gtkscrolledwindow.c:250
-#: gtk/gtkwidget.c:2301
+#: gtk/gtkwidget.c:2304
 #, fuzzy
 msgid "Horizontal Scroll Arrow Length"
 msgstr "क्षितिजपातळीवरील स्क्रोलबारची रीत"
 
 # gtk/gtkscrolledwindow.c:251
-#: gtk/gtkwidget.c:2302
+#: gtk/gtkwidget.c:2305
 #, fuzzy
 msgid "The length of horizontal scroll arrows"
 msgstr "क्षितिजपातळीवरील स्क्रोलबार केव्हा प्रदर्शित करायचा आहे"
 
 # gtk/gtkscrolledwindow.c:258
-#: gtk/gtkwidget.c:2316
+#: gtk/gtkwidget.c:2319
 #, fuzzy
 msgid "Vertical Scroll Arrow Length"
 msgstr "उभ्या दिशेकडील स्क्रोलबारची रीत"
 
 # gtk/gtkscrolledwindow.c:259
-#: gtk/gtkwidget.c:2317
+#: gtk/gtkwidget.c:2320
 #, fuzzy
 msgid "The length of vertical scroll arrows"
 msgstr "उभ्या दिशेकडील स्क्रोलबार केव्हा प्रदर्शित करायचा आहे"
