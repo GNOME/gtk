@@ -141,18 +141,28 @@
           </toolbar>
         </ui>
     </object>
-
+    <object class="GtkAboutDialog" id="aboutdialog1">
+        <property name="program-name" translatable="yes">GtkBuilder demo</property>
+         <accessibility>
+	     <relation target="window1" type="subwindow-of"/>
+	 </accessibility>
+    </object>
     <object class="GtkWindow" id="window1">
         <property name="default_height">250</property>
         <property name="default_width">440</property>
-        <property name="title">builder</property>
+        <property name="title">GtkBuilder demo</property>
         <child>
             <object class="GtkVBox" id="vbox1">
                 <property name="visible">True</property>
                 <child>
                     <object constructor="uimanager" class="GtkMenuBar" id="menubar1">
                         <property name="visible">True</property>
-                    </object>
+	            	<child internal-child="accessible">
+	            	    <object class="AtkObject" id="a11y-menubar">
+	            	        <property name="AtkObject::accessible-name">The menubar</property>
+	            	    </object>
+	            	</child>
+	            </object>
                     <packing>
                         <property name="expand">False</property>
                     </packing>
@@ -160,6 +170,11 @@
                 <child>
                     <object constructor="uimanager" class="GtkToolbar" id="toolbar1">
                         <property name="visible">True</property>
+	            	<child internal-child="accessible">
+	            	    <object class="AtkObject" id="a11y-toolbar">
+	            	        <property name="AtkObject::accessible-name">The toolbar</property>
+	            	    </object>
+	            	</child>
                     </object>
                     <packing>
                         <property name="expand">False</property>
@@ -177,6 +192,14 @@
                           <property name="visible">True</property>
                           <property name="model">liststore1</property>
                           <property name="tooltip-column">3</property>
+	            	  <child internal-child="accessible">
+	            	      <object class="AtkObject" id="a11y-treeview">
+	            	          <property name="AtkObject::accessible-name">Name list</property>
+                                  <property name="AtkObject::accessible-description">
+                                    A list of person with name, surname and age columns
+                                  </property>
+	            	      </object>
+	            	  </child>
                           <child>
                             <object class="GtkTreeViewColumn" id="column1">
                               <property name="title">Name</property>
@@ -212,6 +235,9 @@
                           </child>
                         </object>
                       </child>
+		    <accessibility>
+		      	<action action_name="move-cursor" description="Move the cursor to select another person."/>
+		    </accessibility>
                     </object>
                     <packing>
                         <property name="position">2</property>

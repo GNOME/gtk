@@ -1,3 +1,11 @@
+2008-01-29  Johan Dahlin,,,  <johan@gnome.org>
+
+	* demos/gtk-demo/builder.c: (quit_activate), (about_activate),
+	(do_builder):
+	* demos/gtk-demo/demo.ui:
+	Move the about dialog to the glade file, add accessible tags
+	examples to the markup file.
+
 2008-01-28  Paolo Borelli  <pborelli@katamail.com>
 
 	* gtk/gtkprintunixdialog.c (draw_page_cb): do not leak the pango
