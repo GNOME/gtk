@@ -49,16 +49,6 @@
 
 #include "cairo-directfb.h"
 
-#define WARN_UNIMPLEMENTED(func)\
-{\
-  static gboolean first_call = TRUE;\
-  if (first_call)\
-    {\
-                        g_message ("unimplemented " func);\
-      first_call = FALSE;\
-    }\
-}
-
 
 /* From DirectFB's <gfx/generix/duffs_device.h> */
 #define DUFF_1() \
@@ -556,7 +546,7 @@ gdk_directfb_draw_arc (GdkDrawable *drawable,
                        gint         angle1,
                        gint         angle2)
 {
-  WARN_UNIMPLEMENTED (G_GNUC_FUNCTION);
+  D_UNIMPLEMENTED();
 }
 
 static void
@@ -640,7 +630,7 @@ gdk_directfb_draw_text (GdkDrawable *drawable,
                         const gchar *text,
                         gint         text_length)
 {
-  WARN_UNIMPLEMENTED (G_GNUC_FUNCTION);
+  D_UNIMPLEMENTED();
 }
 
 static void
@@ -652,7 +642,7 @@ gdk_directfb_draw_text_wc (GdkDrawable    *drawable,
                            const GdkWChar *text,
                            gint            text_length)
 {
-  WARN_UNIMPLEMENTED (G_GNUC_FUNCTION);
+  D_UNIMPLEMENTED();
 }
 
 static void

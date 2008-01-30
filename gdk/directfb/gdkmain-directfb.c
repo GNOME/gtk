@@ -435,7 +435,7 @@ gdk_keyboard_grab (GdkWindow *window,
                    gint       owner_events,
                    guint32    time) 
 {
-	return gdk_display_keyboard_grab(gdk_display_get_default(),
+	return gdk_directfb_keyboard_grab(gdk_display_get_default(),
 			window,
 			owner_events,
 			time);

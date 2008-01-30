@@ -112,7 +112,6 @@ gdk_visual_get_type (void)
 void
 _gdk_visual_init ()
 {
-  DFBResult              ret;
   DFBDisplayLayerConfig  dlc;
   DFBSurfaceDescription  desc;
   IDirectFBSurface      *dest;

@@ -41,16 +41,6 @@
 #include <directfb.h>
 #include "gdk/gdkprivate.h"
 
-/* macro for a safe call to DirectFB functions */
-#define DFBCHECK(x...) \
-     {                                                                \
-          int err = x;                                                    \
-          if (err != DFB_OK) {                                        \
-               fprintf( stderr, "%s <%d>:\n\t", __FILE__, __LINE__ ); \
-               DirectFBErrorFatal( #x, err );                         \
-          }                                                           \
-     }
-
 
 extern GdkWindow * _gdk_parent_root;
 

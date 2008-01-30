@@ -83,7 +83,7 @@ _gdk_keyval_to_directfb (guint keyval)
     case GDK_Cancel:
       return DIKS_CANCEL;
       /* TODO: handle them all */
-    defualt:
+    default:
       break;
   }
 

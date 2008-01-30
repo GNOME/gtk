@@ -1,3 +1,19 @@
+2008-01-30  Sven Neumann  <sven@gimp.org>
+
+	* gdk/directfb/gdkdirectfb.h
+	* gdk/directfb/gdkdisplay-directfb.c
+	* gdk/directfb/gdkdrawable-directfb.c
+	* gdk/directfb/gdkim-directfb.c
+	* gdk/directfb/gdkimage-directfb.c
+	* gdk/directfb/gdkinput-directfb.c
+	* gdk/directfb/gdkmain-directfb.c
+	* gdk/directfb/gdkpixmap-directfb.c
+	* gdk/directfb/gdktestutils-directfb.c
+	* gdk/directfb/gdkvisual-directfb.c
+	* gdk/directfb/gdkwindow-directfb.c: applied patch from Denis
+	Oliver Kropp <dok@directfb.org>. Fixes various warnings, some
+	errors and has some cleanups.
+
 2008-01-30  Michael Natterer  <mitch@imendio.com>
 
 	* gtk/gtkbuilderparser.c (parse_custom): use the right type for

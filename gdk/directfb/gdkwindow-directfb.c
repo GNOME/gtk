@@ -2453,7 +2453,7 @@ gdk_window_set_functions (GdkWindow     *window,
     return;
 
   /* N/A */
-  g_message("unimplemented %s", G_GNUC_FUNCTION);
+  g_message("unimplemented %s", __FUNCTION__);
 }
 
 void
@@ -2486,7 +2486,7 @@ gdk_window_set_static_gravities (GdkWindow *window,
     return FALSE;
 
   /* N/A */
-  g_message("unimplemented %s", G_GNUC_FUNCTION);
+  g_message("unimplemented %s", __FUNCTION__);
 
   return FALSE;
 }
@@ -2504,7 +2504,7 @@ gdk_window_begin_resize_drag (GdkWindow     *window,
   if (GDK_WINDOW_DESTROYED (window))
     return;
 
-  g_message("unimplemented %s", G_GNUC_FUNCTION);
+  g_message("unimplemented %s", __FUNCTION__);
 }
 
 void
@@ -2519,7 +2519,7 @@ gdk_window_begin_move_drag (GdkWindow *window,
   if (GDK_WINDOW_DESTROYED (window))
     return;
 
-  g_message("unimplemented %s", G_GNUC_FUNCTION);
+  g_message("unimplemented %s", __FUNCTION__);
 }
 
 /**
@@ -2818,10 +2818,10 @@ gdk_window_set_urgency_hint (GdkWindow *window,
 }
 
 static void
-gdk_window_impl_directfb_invalidate_maybe_recurse (GdkPaintable *paintable,
-                                                   GdkRegion    *region,
-                                                   gboolean    (*child_func) (GdkWindow *, gpointer),
-                                                   gpointer      user_data)
+gdk_window_impl_directfb_invalidate_maybe_recurse (GdkPaintable    *paintable,
+                                                   const GdkRegion *region,
+                                                   gboolean       (*child_func) (GdkWindow *, gpointer),
+                                                   gpointer         user_data)
 {
   GdkWindow *window;
   GdkWindowObject *private;
@@ -2866,14 +2866,11 @@ gdk_window_impl_directfb_invalidate_maybe_recurse (GdkPaintable *paintable,
           
           if (child_func && (*child_func) ((GdkWindow *)child, user_data))
             {
-              gdk_region_offset (region, - child->x, - child->y);
-              gdk_region_offset (&child_region, - child->x, - child->y);
               gdk_region_intersect (&child_region, region);
+              gdk_region_offset (&child_region, - child->x, - child->y);
               
               gdk_window_invalidate_maybe_recurse ((GdkWindow *)child,
                                                    &child_region, child_func, user_data);
-              
-              gdk_region_offset (region, child->x, child->y);
             }
 
           temp_region_deinit( &child_region );
@@ -2967,8 +2964,8 @@ gdk_window_impl_directfb_process_updates (GdkPaintable *paintable,
 
 
 static void
-gdk_window_impl_directfb_begin_paint_region (GdkPaintable *paintable,
-                                             GdkRegion    *region)
+gdk_window_impl_directfb_begin_paint_region (GdkPaintable    *paintable,
+                                             const GdkRegion *region)
 {
   GdkDrawableImplDirectFB *impl;
   GdkWindowImplDirectFB *wimpl;

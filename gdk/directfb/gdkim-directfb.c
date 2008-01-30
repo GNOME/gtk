@@ -151,7 +151,7 @@ gdk_wcstombs (const GdkWChar *src)
 
   *bp = 0;
 
-  return mbstr;
+  return (gchar*)mbstr;
 }
 
 
