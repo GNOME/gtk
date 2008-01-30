@@ -744,7 +744,7 @@ find_string (const gchar *n)
 static void
 add_string (const gchar *n, int offset)
 {
-  g_hash_table_insert (string_pool, n, GINT_TO_POINTER (offset));
+  g_hash_table_insert (string_pool, (gpointer) n, GINT_TO_POINTER (offset));
 }
 
 static gboolean

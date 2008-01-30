@@ -636,7 +636,7 @@ parse_custom (GMarkupParseContext *context,
 {
   CommonInfo* parent_info;
   GMarkupParser parser;
-  gpointer *subparser_data;
+  gpointer subparser_data;
   GObject *object;
   GObject *child;
 
@@ -671,7 +671,7 @@ parse_custom (GMarkupParseContext *context,
 				       child,
 				       element_name,
 				       &parser,
-				       (gpointer*)&subparser_data))
+				       &subparser_data))
     return FALSE;
       
   data->subparser = create_subparser (object, child, element_name,

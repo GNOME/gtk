@@ -105,7 +105,7 @@ static void
 calendar_update_details (CalendarData *data)
 {
   guint year, month, day;
-  const gchar *detail;
+  gchar *detail;
 
   gtk_calendar_get_date (GTK_CALENDAR (data->calendar_widget), &year, &month, &day);
   detail = calendar_get_detail (data, year, month, day);
@@ -113,6 +113,8 @@ calendar_update_details (CalendarData *data)
   g_signal_handler_block (data->details_buffer, data->details_changed);
   gtk_text_buffer_set_text (data->details_buffer, detail ? detail : "", -1);
   g_signal_handler_unblock (data->details_buffer, data->details_changed);
+
+  g_free (detail);
 }
 
 static void
@@ -257,7 +259,7 @@ void calendar_select_font (GtkWidget    *button,
 	}
 }
 
-static G_CONST_RETURN gchar*
+static gchar*
 calendar_detail_cb (GtkCalendar *calendar,
                     guint        year,
                     guint        month,

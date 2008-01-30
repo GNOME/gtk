@@ -1,3 +1,17 @@
+2008-01-30  Michael Natterer  <mitch@imendio.com>
+
+	* gtk/gtkbuilderparser.c (parse_custom): use the right type for
+	"subparser_data" and remove the (gpointer*) cast. Fixes bogus
+	aliasing warning.
+
+	* gtk/updateiconcache.c (add_string): cast const gchar* to
+	gpointer when inserting in a GHashTable.
+
+	* tests/testcalendar.c (calendar_detail_cb): remove const from
+	return value since it's a newly allocated string.
+
+	(calendar_update_details): free the detail.
+
 2008-01-29  Johan Dahlin  <johan@gnome.org>
 
 	* demos/gtk-demo/builder.c: (quit_activate), (about_activate),
