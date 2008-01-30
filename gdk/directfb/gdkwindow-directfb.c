@@ -46,7 +46,19 @@
 #include "cairo.h"
 #include <assert.h>
 
+#include <direct/debug.h>
+
 #include <directfb_util.h>
+
+
+
+
+
+D_DEBUG_DOMAIN( GDKDFB_Crossing,  "GDKDFB/Crossing",  "GDK DirectFB Crossing Events" );
+D_DEBUG_DOMAIN( GDKDFB_Updates,   "GDKDFB/Updates",   "GDK DirectFB Updates" );
+D_DEBUG_DOMAIN( GDKDFB_Paintable, "GDKDFB/Paintable", "GDK DirectFB Paintable" );
+D_DEBUG_DOMAIN( GDKDFB_Window,    "GDKDFB/Window",    "GDK DirectFB Window" );
+
 
 static GdkRegion * gdk_window_impl_directfb_get_visible_region (GdkDrawable *drawable);
 static void        gdk_window_impl_directfb_set_colormap       (GdkDrawable *drawable,
@@ -71,8 +83,8 @@ static guint update_idle = 0;
 static void
 gdk_window_directfb_process_all_updates (void)
 {
+  GSList *tmp_list;
   GSList *old_update_windows = update_windows;
-  GSList *tmp_list = update_windows;
 
   if (update_idle)
     g_source_remove (update_idle);
@@ -80,52 +92,67 @@ gdk_window_directfb_process_all_updates (void)
   update_windows = NULL;
   update_idle = 0;
 
-  g_slist_foreach (old_update_windows, (GFunc)g_object_ref, NULL);
+  D_DEBUG_AT( GDKDFB_Updates, "%s()\n", __FUNCTION__ );
   
+  g_slist_foreach (old_update_windows, (GFunc)g_object_ref, NULL);
+  tmp_list = old_update_windows;
   while (tmp_list)
     {
-      GdkWindowObject *private = (GdkWindowObject *)tmp_list->data;
+      GdkWindowObject       *private = GDK_WINDOW_OBJECT( tmp_list->data );
+      GdkWindowImplDirectFB *wimpl   = GDK_WINDOW_IMPL_DIRECTFB( private->impl );
       
       if (private->update_freeze_count)
-	update_windows = g_slist_prepend (update_windows, private);
+        {
+          D_DEBUG_AT( GDKDFB_Updates, "  -> %p frozen [%4d,%4d-%4dx%4d] (%d boxes)\n",
+                      private, DFB_RECTANGLE_VALS_FROM_REGION( &wimpl->flips.bounding ),
+                      wimpl->flips.num_regions );
+          update_windows = g_slist_prepend (update_windows, private);
+        }
       else
-	gdk_window_process_updates(tmp_list->data,TRUE);
+        {
+          D_DEBUG_AT( GDKDFB_Updates, "  -> %p update [%4d,%4d-%4dx%4d] (%d boxes)\n",
+                      private, DFB_RECTANGLE_VALS_FROM_REGION( &wimpl->flips.bounding ),
+                      wimpl->flips.num_regions );
+          gdk_window_process_updates(tmp_list->data,TRUE);
+        }
       
       g_object_unref (tmp_list->data);
       tmp_list = tmp_list->next;
     }
 
-
 #ifndef GDK_DIRECTFB_NO_EXPERIMENTS
-  tmp_list = old_update_windows;
-
   g_slist_foreach (old_update_windows, (GFunc)g_object_ref, NULL);
+  tmp_list = old_update_windows;
+  while (tmp_list)
+    {
+      GdkWindowObject *top = GDK_WINDOW_OBJECT( gdk_window_get_toplevel( tmp_list->data ) );
 
-  while (tmp_list) {
-       GdkWindowObject *top = GDK_WINDOW_OBJECT( gdk_window_get_toplevel( tmp_list->data ) );
+      if (top)
+        {
+          GdkWindowImplDirectFB *wimpl = GDK_WINDOW_IMPL_DIRECTFB (top->impl);
 
-       if (top) {
-            GdkWindowImplDirectFB *wimpl = GDK_WINDOW_IMPL_DIRECTFB (top->impl);
+          if (wimpl->flips.num_regions)
+            {
+              D_DEBUG_AT( GDKDFB_Updates, "  -> %p flip   [%4d,%4d-%4dx%4d] (%d boxes)\n",
+                          top, DFB_RECTANGLE_VALS_FROM_REGION( &wimpl->flips.bounding ),
+                          wimpl->flips.num_regions );
 
-            if (wimpl->flips.num_regions) {
-                 //direct_log_printf( NULL, "Flipping bounding box of paints: %d,%d - %dx%d (top %p, wimpl %p)\n",
-                 //                   DFB_RECTANGLE_VALS_FROM_REGION( &wimpl->flips.bounding ), top, wimpl );
+              wimpl->drawable.surface->Flip( wimpl->drawable.surface, &wimpl->flips.bounding, DSFLIP_NONE );
 
-                 wimpl->drawable.surface->Flip( wimpl->drawable.surface, &wimpl->flips.bounding, DSFLIP_NONE );
-
-                 dfb_updates_reset( &wimpl->flips );
+              dfb_updates_reset( &wimpl->flips );
             }
-       }
+          else
+            D_DEBUG_AT( GDKDFB_Updates, "  -> %p has no flips!\n", top );
+        }
+      else
+        D_DEBUG_AT( GDKDFB_Updates, "  -> %p has no top level window!\n", tmp_list->data );
 
-
-       g_object_unref (tmp_list->data);
-       tmp_list = tmp_list->next;
-  }
+      g_object_unref (tmp_list->data);
+      tmp_list = tmp_list->next;
+    }
 #endif
 
-
   g_slist_free (old_update_windows);
-
 }
 
 static gboolean
@@ -139,13 +166,18 @@ gdk_window_update_idle (gpointer data)
 static void
 gdk_window_schedule_update (GdkWindow *window)
 {
+  D_DEBUG_AT( GDKDFB_Updates, "%s( %p ) <- freeze count %d\n", __FUNCTION__, window,
+              window ? GDK_WINDOW_OBJECT (window)->update_freeze_count : -1 );
+  
   if (window && GDK_WINDOW_OBJECT (window)->update_freeze_count)
     return;
 
   if (!update_idle)
     {
+      D_DEBUG_AT( GDKDFB_Updates, "  -> adding idle callback\n" );
+
       update_idle = gdk_threads_add_idle_full (GDK_PRIORITY_REDRAW,
-				     gdk_window_update_idle, NULL, NULL);
+                                               gdk_window_update_idle, NULL, NULL);
     }
 }
 
@@ -251,6 +283,8 @@ gdk_window_impl_directfb_finalize (GObject *object)
 {
   GdkWindowImplDirectFB *impl = GDK_WINDOW_IMPL_DIRECTFB (object);
 
+  D_DEBUG_AT( GDKDFB_Window, "%s( %p ) <- %dx%d\n", __FUNCTION__, impl, impl->drawable.width, impl->drawable.height );
+
   if (GDK_WINDOW_IS_MAPPED (impl->drawable.wrapper))
     gdk_window_hide (impl->drawable.wrapper);
 
@@ -280,12 +314,17 @@ gdk_window_impl_directfb_get_visible_region (GdkDrawable *drawable)
   GdkRectangle             rect = { 0, 0, 0, 0 };
   DFBRectangle             drect = { 0, 0, 0, 0 };
 
+  D_DEBUG_AT( GDKDFB_Window, "%s( %p )\n", __FUNCTION__, drawable );
+
   if (priv->surface)
   priv->surface->GetVisibleRectangle (priv->surface, &drect);
   rect.x= drect.x;
   rect.y= drect.y;
   rect.width=drect.w;
   rect.height=drect.h;
+
+  D_DEBUG_AT( GDKDFB_Window, "  -> returning %4d,%4d-%4dx%4d\n", drect.x, drect.y, drect.w, drect.h );
+
   return gdk_region_rectangle (&rect);
 }
 
@@ -317,6 +356,8 @@ create_directfb_window (GdkWindowImplDirectFB *impl,
 {
   DFBResult        ret;
   IDirectFBWindow *window;
+
+  D_DEBUG_AT( GDKDFB_Window, "%s( %4dx%4d, caps 0x%08x )\n", __FUNCTION__, desc->width, desc->height, desc->caps );
 
   ret = _gdk_display->layer->CreateWindow (_gdk_display->layer, desc, &window);
 
@@ -426,6 +467,8 @@ gdk_directfb_window_new (GdkWindow              *parent,
   gint x, y;
 
   g_return_val_if_fail (attributes != NULL, NULL);
+
+  D_DEBUG_AT( GDKDFB_Window, "%s( %p )\n", __FUNCTION__, parent );
 
   if (!parent || attributes->window_type != GDK_WINDOW_CHILD)
     parent = _gdk_parent_root;
@@ -609,6 +652,8 @@ gdk_window_new (GdkWindow     *parent,
 {
   g_return_val_if_fail (attributes != NULL, NULL);
 
+  D_DEBUG_AT( GDKDFB_Window, "%s( %p )\n", __FUNCTION__, parent );
+
   return gdk_directfb_window_new (parent, attributes, attributes_mask,
                                   DWCAPS_NONE, DWOP_NONE, DSCAPS_NONE);
 }
@@ -632,6 +677,9 @@ _gdk_windowing_window_destroy (GdkWindow *window,
   GdkWindowImplDirectFB *impl;
 
   g_return_if_fail (GDK_IS_WINDOW (window));
+
+  D_DEBUG_AT( GDKDFB_Window, "%s( %p, %srecursing, %sforeign )\n", __FUNCTION__, window,
+              recursing ? "" : "not ", foreign_destroy ? "" : "no " );
 
   private = GDK_WINDOW_OBJECT (window);
   impl = GDK_WINDOW_IMPL_DIRECTFB (private->impl);
@@ -673,6 +721,8 @@ void
 gdk_window_destroy_notify (GdkWindow *window)
 {
   g_return_if_fail (GDK_IS_WINDOW (window));
+
+  D_DEBUG_AT( GDKDFB_Window, "%s( %p )\n", __FUNCTION__, window );
 
   if (!GDK_WINDOW_DESTROYED (window))
     {
@@ -721,6 +771,7 @@ gdk_directfb_change_focus (GdkWindow *new_focus_window)
   GdkWindow     *new_win;
   GdkWindow     *event_win;
 
+  D_DEBUG_AT( GDKDFB_Window, "%s( %p )\n", __FUNCTION__, new_focus_window );
 
   /* No focus changes while the pointer is grabbed */
   if (_gdk_directfb_pointer_grab_window)
@@ -796,6 +847,8 @@ gdk_directfb_window_raise (GdkWindow *window)
 {
   GdkWindowObject *parent;
 
+  D_DEBUG_AT( GDKDFB_Window, "%s( %p )\n", __FUNCTION__, window );
+
   parent = GDK_WINDOW_OBJECT (window)->parent;
 
   if (parent->children->data == window)
@@ -811,6 +864,8 @@ static void
 gdk_directfb_window_lower (GdkWindow *window)
 {
   GdkWindowObject *parent;
+
+  D_DEBUG_AT( GDKDFB_Window, "%s( %p )\n", __FUNCTION__, window );
 
   parent = GDK_WINDOW_OBJECT (window)->parent;
 
@@ -840,6 +895,8 @@ send_map_events (GdkWindowObject *private)
 
   if (!GDK_WINDOW_IS_MAPPED (private))
     return;
+
+  D_DEBUG_AT( GDKDFB_Window, "%s( %p )\n", __FUNCTION__, private );
 
   event_win = gdk_directfb_other_event_window ((GdkWindow *) private, GDK_MAP);
   if (event_win)
@@ -882,6 +939,8 @@ gdk_directfb_window_send_crossing_events (GdkWindow       *src,
   GdkWindow       *b;
   GdkWindow       *event_win;
 
+  D_DEBUG_AT( GDKDFB_Crossing, "%s( %p -> %p, %d )\n", __FUNCTION__, src, dest, mode );
+
   /* Do a possible cursor change before checking if we need to
      generate crossing events so cursor changes due to pointer
      grabs work correctly. */
@@ -911,8 +970,10 @@ gdk_directfb_window_send_crossing_events (GdkWindow       *src,
       }
   }
 
-  if (dest == gdk_directfb_window_containing_pointer)
+  if (dest == gdk_directfb_window_containing_pointer) {
+    D_DEBUG_AT( GDKDFB_Crossing, "  -> already containing the pointer\n" );
     return;
+  }
 
   if (gdk_directfb_window_containing_pointer == NULL)
     gdk_directfb_window_containing_pointer = g_object_ref (_gdk_parent_root);
@@ -924,25 +985,35 @@ gdk_directfb_window_send_crossing_events (GdkWindow       *src,
 
   b = dest;
 
-  if (a == b)
+  if (a == b) {
+    D_DEBUG_AT( GDKDFB_Crossing, "  -> src == dest\n" );
     return;
+  }
 
   /* gdk_directfb_window_containing_pointer might have been destroyed.
    * The refcount we hold on it should keep it, but it's parents
    * might have died.
    */
-  if (GDK_WINDOW_DESTROYED (a))
+  if (GDK_WINDOW_DESTROYED (a)) {
+    D_DEBUG_AT( GDKDFB_Crossing, "  -> src is destroyed!\n" );
     a = _gdk_parent_root;
+  }
 
   gdk_directfb_mouse_get_info (&x, &y, &modifiers);
 
   c = gdk_directfb_find_common_ancestor (a, b);
 
+  D_DEBUG_AT( GDKDFB_Crossing, "  -> common ancestor %p\n", c );
+
   non_linear = (c != a) && (c != b);
+
+  D_DEBUG_AT( GDKDFB_Crossing, "  -> non_linear: %s\n", non_linear ? "YES" : "NO" );
 
   event_win = gdk_directfb_pointer_event_window (a, GDK_LEAVE_NOTIFY);
   if (event_win)
     {
+      D_DEBUG_AT( GDKDFB_Crossing, "  -> sending LEAVE to src\n" );
+
       event = gdk_directfb_event_make (event_win, GDK_LEAVE_NOTIFY);
       event->crossing.subwindow = NULL;
 
@@ -963,6 +1034,11 @@ gdk_directfb_window_send_crossing_events (GdkWindow       *src,
 
       event->crossing.focus = FALSE;
       event->crossing.state = modifiers;
+
+      D_DEBUG_AT( GDKDFB_Crossing, "  => LEAVE (%p/%p) at %4f,%4f (%4f,%4f) mode %d, detail %d\n",
+                  event_win, a,
+                  event->crossing.x, event->crossing.y, event->crossing.x_root, event->crossing.y_root,
+                  event->crossing.mode, event->crossing.detail );
     }
 
    /* Traverse up from a to (excluding) c */
@@ -996,6 +1072,11 @@ gdk_directfb_window_send_crossing_events (GdkWindow       *src,
 
               event->crossing.focus = FALSE;
               event->crossing.state = modifiers;
+
+              D_DEBUG_AT( GDKDFB_Crossing, "  -> LEAVE (%p/%p) at %4f,%4f (%4f,%4f) mode %d, detail %d\n",
+                          event_win, win,
+                          event->crossing.x, event->crossing.y, event->crossing.x_root, event->crossing.y_root,
+                          event->crossing.mode, event->crossing.detail );
             }
 
           last = win;
@@ -1049,6 +1130,11 @@ gdk_directfb_window_send_crossing_events (GdkWindow       *src,
 
               event->crossing.focus = FALSE;
               event->crossing.state = modifiers;
+
+              D_DEBUG_AT( GDKDFB_Crossing, "  -> ENTER (%p/%p) at %4f,%4f (%4f,%4f) mode %d, detail %d\n",
+                          event_win, win,
+                          event->crossing.x, event->crossing.y, event->crossing.x_root, event->crossing.y_root,
+                          event->crossing.mode, event->crossing.detail );
             }
         }
 
@@ -1079,6 +1165,11 @@ gdk_directfb_window_send_crossing_events (GdkWindow       *src,
 
       event->crossing.focus = FALSE;
       event->crossing.state = modifiers;
+
+      D_DEBUG_AT( GDKDFB_Crossing, "  => ENTER (%p/%p) at %4f,%4f (%4f,%4f) mode %d, detail %d\n",
+                  event_win, b,
+                  event->crossing.x, event->crossing.y, event->crossing.x_root, event->crossing.y_root,
+                  event->crossing.mode, event->crossing.detail );
     }
 
   if (mode != GDK_CROSSING_GRAB)
@@ -1100,6 +1191,8 @@ show_window_internal (GdkWindow *window,
   GdkWindowObject       *private;
   GdkWindowImplDirectFB *impl;
   GdkWindow             *mousewin;
+
+  D_DEBUG_AT( GDKDFB_Window, "%s( %p, %sraise )\n", __FUNCTION__, window, raise ? "" : "no " );
 
   private = GDK_WINDOW_OBJECT (window);
   impl = GDK_WINDOW_IMPL_DIRECTFB (private->impl);
@@ -1142,6 +1235,8 @@ gdk_window_show_unraised (GdkWindow *window)
 {
   g_return_if_fail (GDK_IS_WINDOW (window));
 
+  D_DEBUG_AT( GDKDFB_Window, "%s( %p )\n", __FUNCTION__, window );
+
   show_window_internal (window, FALSE);
 }
 
@@ -1149,6 +1244,8 @@ void
 gdk_window_show (GdkWindow *window)
 {
   g_return_if_fail (GDK_IS_WINDOW (window));
+
+  D_DEBUG_AT( GDKDFB_Window, "%s( %p )\n", __FUNCTION__, window );
 
   show_window_internal (window, TRUE);
 }
@@ -1162,6 +1259,8 @@ gdk_window_hide (GdkWindow *window)
   GdkWindow             *event_win;
 
   g_return_if_fail (GDK_IS_WINDOW (window));
+
+  D_DEBUG_AT( GDKDFB_Window, "%s( %p )\n", __FUNCTION__, window );
 
   private = GDK_WINDOW_OBJECT (window);
   impl    = GDK_WINDOW_IMPL_DIRECTFB (private->impl);
@@ -1527,11 +1626,15 @@ _gdk_windowing_window_clear_area (GdkWindow *window,
   gint                     dx = 0;
   gint                     dy = 0;
 
+  D_DEBUG_AT( GDKDFB_Window, "%s( %p, %4d,%4d-%4dx%4d )\n", __FUNCTION__, window, x, y, width, height );
+
   g_return_if_fail (GDK_IS_WINDOW (window));
 
-  if (GDK_WINDOW_DESTROYED (window))
+  if (GDK_WINDOW_DESTROYED (window)) {
+    D_DEBUG_AT( GDKDFB_Window, "  -> DESTROYED!\n" );
     return;
-
+  }
+  
   private = GDK_WINDOW_OBJECT (window);
 
   impl = GDK_DRAWABLE_IMPL_DIRECTFB (private->impl);
@@ -1555,8 +1658,10 @@ _gdk_windowing_window_clear_area (GdkWindow *window,
       dy += relative_to->y;
     }
 
-  if (bg_pixmap == GDK_NO_BG)
+  if (bg_pixmap == GDK_NO_BG) {
+    D_DEBUG_AT( GDKDFB_Window, "  -> NO BG\n" );
     return;
+  }
 
   if (bg_pixmap && bg_pixmap != GDK_PARENT_RELATIVE_BG)
     {
@@ -1566,6 +1671,8 @@ _gdk_windowing_window_clear_area (GdkWindow *window,
       values.tile = bg_pixmap;
       values.ts_x_origin = - dx;
       values.ts_y_origin = - dy;
+
+      D_DEBUG_AT( GDKDFB_Window, "  -> PIXMAP\n" );
 
       gc = gdk_gc_new_with_values (GDK_DRAWABLE (impl), &values,
                                    GDK_GC_FILL | GDK_GC_TILE |
@@ -1579,6 +1686,8 @@ _gdk_windowing_window_clear_area (GdkWindow *window,
       GdkGCValues  values;
 
       values.foreground = relative_to->bg_color;
+
+      D_DEBUG_AT( GDKDFB_Window, "  -> COLOR\n" );
 
       gc = gdk_gc_new_with_values (GDK_DRAWABLE (impl), &values,
                                    GDK_GC_FOREGROUND);
@@ -1602,6 +1711,8 @@ _gdk_windowing_window_clear_area_e (GdkWindow *window,
   GdkWindowObject       *private;
   GdkWindowImplDirectFB *impl;
 
+  D_DEBUG_AT( GDKDFB_Window, "%s( %p, %4d,%4d-%4dx%4d )\n", __FUNCTION__, window, x, y, width, height );
+
   g_return_if_fail (GDK_IS_WINDOW (window));
 
   private = GDK_WINDOW_OBJECT (window);
@@ -1622,8 +1733,10 @@ _gdk_windowing_window_clear_area_e (GdkWindow *window,
 
   g_return_if_fail (GDK_IS_WINDOW (window));
 
-  if (GDK_WINDOW_DESTROYED (window))
+  if (GDK_WINDOW_DESTROYED (window)) {
+    D_DEBUG_AT( GDKDFB_Window, "  -> DESTROYED!\n" );
     return;
+  }
 
   _gdk_windowing_window_clear_area (window, x, y, width, height);
 
@@ -1634,6 +1747,8 @@ void
 gdk_window_raise (GdkWindow *window)
 {
   GdkWindowImplDirectFB *impl;
+
+  D_DEBUG_AT( GDKDFB_Window, "%s( %p )\n", __FUNCTION__, window );
 
   g_return_if_fail (GDK_IS_WINDOW (window));
 
@@ -1663,6 +1778,8 @@ void
 gdk_window_lower (GdkWindow *window)
 {
   GdkWindowImplDirectFB *impl;
+
+  D_DEBUG_AT( GDKDFB_Window, "%s( %p )\n", __FUNCTION__, window );
 
   g_return_if_fail (GDK_IS_WINDOW (window));
 
@@ -1703,6 +1820,8 @@ gdk_window_set_hints (GdkWindow *window,
   if (GDK_WINDOW_DESTROYED (window))
     return;
 
+  D_DEBUG_AT( GDKDFB_Window, "%s( %p, %3d,%3d, min %4dx%4d, max %4dx%4d, flags 0x%08x )\n", __FUNCTION__,
+              window, x,y, min_width, min_height, max_width, max_height, flags );
   /* N/A */
 }
 
@@ -1728,7 +1847,9 @@ gdk_window_set_title (GdkWindow   *window,
   if (GDK_WINDOW_DESTROYED (window))
     return;
 
+  D_DEBUG_AT( GDKDFB_Window, "%s( %p, '%s' )\n", __FUNCTION__, window, title );
   /* N/A */
+  D_DEBUG_AT( GDKDFB_Window, "%s( %p )\n", __FUNCTION__, window );
 }
 
 void
@@ -1796,6 +1917,8 @@ gdk_window_set_background (GdkWindow *window,
 
   g_return_if_fail (color != NULL);
 
+  D_DEBUG_AT( GDKDFB_Window, "%s( %p, %d,%d,%d )\n", __FUNCTION__, window, color->red, color->green, color->blue );
+
   private = GDK_WINDOW_OBJECT (window);
   private->bg_color = *color;
 
@@ -1817,6 +1940,9 @@ gdk_window_set_back_pixmap (GdkWindow *window,
 
   g_return_if_fail (GDK_IS_WINDOW (window));
   g_return_if_fail (pixmap == NULL || !parent_relative);
+
+  D_DEBUG_AT( GDKDFB_Window, "%s( %p, %p, %srelative )\n", __FUNCTION__,
+              window, pixmap, parent_relative ? "" : "not " );
 
   private = GDK_WINDOW_OBJECT (window);
   old_pixmap = private->bg_pixmap;
@@ -1943,6 +2069,8 @@ _gdk_directfb_calc_abs (GdkWindow *window)
       impl->abs_x += parent_impl->abs_x;
       impl->abs_y += parent_impl->abs_y;
     }
+
+  D_DEBUG_AT( GDKDFB_Window, "%s( %p ) -> %4d,%4d\n", __FUNCTION__, window, impl->abs_x, impl->abs_y );
 
   for (list = private->children; list; list = list->next)
     {
@@ -2902,64 +3030,62 @@ static void
 gdk_window_impl_directfb_process_updates (GdkPaintable *paintable,
                                           gboolean      update_children)
 {
-  GdkWindow *window;
-  GdkWindowObject *private;
   GdkWindowImplDirectFB *wimpl;
   GdkDrawableImplDirectFB *impl;
+  GdkWindow               *window;
+  GdkWindowObject         *private;
+  GdkRegion               *update_area;
 
   wimpl = GDK_WINDOW_IMPL_DIRECTFB (paintable);
   impl = (GdkDrawableImplDirectFB *)wimpl;
   window = wimpl->gdkWindow;
   private = (GdkWindowObject *)window;
-  gboolean save_region = FALSE;
+
+  D_DEBUG_AT( GDKDFB_Paintable, "%s( %p, %schildren )\n", __FUNCTION__,
+              paintable, update_children ? "update " : "no " );
 
   /* If an update got queued during update processing, we can get a
    * window in the update queue that has an empty update_area.
    * just ignore it.
    */
-  if (private->update_area)
-    {
-      GdkRegion *update_area = private->update_area;
-      private->update_area = NULL;
+  if (!private->update_area)
+    return;
+
+  update_area = private->update_area;
+  private->update_area = NULL;
       
-      if (_gdk_event_func && gdk_window_is_viewable (window))
+  D_DEBUG_AT( GDKDFB_Paintable, "  -> update area %4d,%4d-%4dx%4d\n",
+              GDKDFB_RECTANGLE_VALS_FROM_SEGMENT( &update_area->extents ) );
+
+  if (_gdk_event_func && gdk_window_is_viewable (window))
+    {
+      GdkRegion *expose_region = update_area;
+      GdkRegion  window_region;
+          
+      temp_region_init_rectangle_vals( &window_region, 0, 0, impl->width, impl->height );
+      gdk_region_intersect( expose_region, &window_region );
+      temp_region_deinit (&window_region);
+          
+      if (!gdk_region_empty (expose_region) && (private->event_mask & GDK_EXPOSURE_MASK))
         {
-          GdkRegion *expose_region;
-          GdkRegion  window_region;
-          save_region = _gdk_windowing_window_queue_antiexpose (window, update_area);
-
-          if (save_region)
-            expose_region = gdk_region_copy (update_area);
-          else
-            expose_region = update_area;
-          
-          temp_region_init_rectangle_vals( &window_region, 0, 0, impl->width, impl->height );
-          gdk_region_intersect (expose_region,
-                                &window_region);
-          temp_region_deinit (&window_region);
-          
-          if (!gdk_region_empty (expose_region) &&
-              (private->event_mask & GDK_EXPOSURE_MASK))
-            {
-              GdkEvent event;
+          GdkEvent event;
               
-              event.expose.type = GDK_EXPOSE;
-              event.expose.window = g_object_ref (window);
-              event.expose.send_event = FALSE;
-              event.expose.count = 0;
-              event.expose.region = expose_region;
-              gdk_region_get_clipbox (expose_region, &event.expose.area);
-              (*_gdk_event_func) (&event, _gdk_event_data);
+          event.expose.type = GDK_EXPOSE;
+          event.expose.window = g_object_ref (window);
+          event.expose.send_event = FALSE;
+          event.expose.count = 0;
+          event.expose.region = expose_region;
+          gdk_region_get_clipbox (expose_region, &event.expose.area);
+          (*_gdk_event_func) (&event, _gdk_event_data);
               
-              g_object_unref (window);
-            }
-
-          if (expose_region != update_area)
-            gdk_region_destroy (expose_region);
+          g_object_unref (window);
         }
-      if (!save_region)
-        gdk_region_destroy (update_area);
+
+      if (expose_region != update_area)
+        gdk_region_destroy (expose_region);
     }
+
+  gdk_region_destroy (update_area);
 }
 
 
@@ -2968,7 +3094,7 @@ gdk_window_impl_directfb_begin_paint_region (GdkPaintable    *paintable,
                                              const GdkRegion *region)
 {
   GdkDrawableImplDirectFB *impl;
-  GdkWindowImplDirectFB *wimpl;
+  GdkWindowImplDirectFB   *wimpl;
   gint                     i;
 
 
@@ -2979,36 +3105,59 @@ gdk_window_impl_directfb_begin_paint_region (GdkPaintable    *paintable,
   if (!region)
     return;
 
-  if (impl->buffered) {
-       g_assert( impl->paint_depth > 0 );
+  D_DEBUG_AT( GDKDFB_Window, "%s( %p ) <- %4d,%4d-%4d,%4d (%d boxes)\n", __FUNCTION__,
+              paintable, GDKDFB_RECTANGLE_VALS_FROM_SEGMENT(&region->extents), region->numRects );
 
-       gdk_region_union (&impl->paint_region, region);
-  }
-  else {
-       g_assert( impl->paint_depth == 0 );
+  /* When it's buffered... */
+  if (impl->buffered)
+    {
+      /* ...we're already painting on it! */
+      g_assert( impl->paint_depth > 0 );
+    
+      D_DEBUG_AT( GDKDFB_Window, "  -> painted  %4d,%4d-%4dx%4d (%d boxes)\n",
+                  DFB_RECTANGLE_VALS_FROM_REGION( &impl->paint_region.extents ), impl->paint_region.numRects );
 
-       gdk_directfb_clip_region( GDK_DRAWABLE(paintable), NULL, NULL, &impl->clip_region );
+      /* Add the new region to the paint region... */
+      gdk_region_union (&impl->paint_region, region);
+    }
+  else
+    {
+      /* ...otherwise it's the first time! */
+      g_assert( impl->paint_depth == 0 );
 
-       temp_region_init_copy( &impl->paint_region, region );
+      /* Generate the clip region for painting around child windows. */
+      gdk_directfb_clip_region( GDK_DRAWABLE(paintable), NULL, NULL, &impl->clip_region );
 
-       impl->buffered = TRUE;
-  }
+      /* Initialize the paint region with the new one... */
+      temp_region_init_copy( &impl->paint_region, region );
 
+      impl->buffered = TRUE;
+    }
+
+  D_DEBUG_AT( GDKDFB_Window, "  -> painting %4d,%4d-%4dx%4d (%d boxes)\n",
+              DFB_RECTANGLE_VALS_FROM_REGION( &impl->paint_region.extents ), impl->paint_region.numRects );
+
+  /* ...but clip the initial/compound result against the clip region. */
   gdk_region_intersect (&impl->paint_region, &impl->clip_region);
+
+  D_DEBUG_AT( GDKDFB_Window, "  -> clipped  %4d,%4d-%4dx%4d (%d boxes)\n",
+              DFB_RECTANGLE_VALS_FROM_REGION( &impl->paint_region.extents ), impl->paint_region.numRects );
 
   impl->paint_depth++;
 
+  D_DEBUG_AT( GDKDFB_Window, "  -> depth is now %d\n", impl->paint_depth );
 
   for (i = 0; i < region->numRects; i++)
     {
       GdkRegionBox *box = &region->rects[i];
+
+      D_DEBUG_AT( GDKDFB_Window, "  -> [%2d] %4d,%4d-%4dx%4d\n", i, GDKDFB_RECTANGLE_VALS_FROM_SEGMENT( box ) );
 
       _gdk_windowing_window_clear_area (GDK_WINDOW(wimpl->gdkWindow),
                                         box->x1,
                                         box->y1,
                                         box->x2 - box->x1,
                                         box->y2 - box->y1);
-                                        
     }
 }
 
@@ -3018,6 +3167,8 @@ gdk_window_impl_directfb_end_paint (GdkPaintable *paintable)
   GdkDrawableImplDirectFB *impl;
 
   impl = GDK_DRAWABLE_IMPL_DIRECTFB (paintable);
+
+  D_DEBUG_AT( GDKDFB_Window, "%s( %p )\n", __FUNCTION__, paintable );
 
   g_return_if_fail (impl->paint_depth > 0);
 
@@ -3034,8 +3185,11 @@ gdk_window_impl_directfb_end_paint (GdkPaintable *paintable)
         {
           DFBRegion reg = { impl->paint_region.extents.x1,
                             impl->paint_region.extents.y1,
-                            impl->paint_region.extents.x2 ,
-                            impl->paint_region.extents.y2 };
+                            impl->paint_region.extents.x2-1,
+                            impl->paint_region.extents.y2-1 };
+
+          D_DEBUG_AT( GDKDFB_Window, "  -> flip %4d,%4d-%4dx%4d (%d boxes)\n",
+                      DFB_RECTANGLE_VALS_FROM_REGION( &reg ), impl->paint_region.numRects );
 
           impl->surface->Flip( impl->surface, &reg, 0 );
 
@@ -3043,37 +3197,43 @@ gdk_window_impl_directfb_end_paint (GdkPaintable *paintable)
         }
     }
 #else
-  if (impl->paint_depth == 0) {
-       impl->buffered = FALSE;
-
-       temp_region_deinit( &impl->clip_region );
-
-       if (impl->paint_region.numRects) {
-            GdkWindow *window = GDK_WINDOW( impl->wrapper );
-
-            if (GDK_IS_WINDOW(window)) {
-                 GdkWindowObject *top = GDK_WINDOW_OBJECT( gdk_window_get_toplevel( window ) );
-
-                 if (top) {
-                      DFBRegion              reg;
-                      GdkWindowImplDirectFB *wimpl = GDK_WINDOW_IMPL_DIRECTFB (top->impl);
-
-                      reg.x1 = impl->abs_x - top->x + impl->paint_region.extents.x1;
-                      reg.y1 = impl->abs_y - top->y + impl->paint_region.extents.y1;
-                      reg.x2 = impl->abs_x - top->x + impl->paint_region.extents.x2 - 1;
-                      reg.y2 = impl->abs_y - top->y + impl->paint_region.extents.y2 - 1;
-
-                      //direct_log_printf( NULL, "Adding bounding box of paint: %d,%d - %dx%d (top %p, wimpl %p)\n",
-                      //                   DFB_RECTANGLE_VALS_FROM_REGION( &reg ), top, wimpl );
-
-                      dfb_updates_add( &wimpl->flips, &reg );
-                 }
+  if (impl->paint_depth == 0)
+    {
+      impl->buffered = FALSE;
+  
+      temp_region_deinit( &impl->clip_region );
+  
+      if (impl->paint_region.numRects)
+        {
+          GdkWindow *window = GDK_WINDOW( impl->wrapper );
+  
+          if (GDK_IS_WINDOW(window))
+            {
+              GdkWindowObject *top = GDK_WINDOW_OBJECT( gdk_window_get_toplevel( window ) );
+  
+              if (top)
+                {
+                  DFBRegion              reg;
+                  GdkWindowImplDirectFB *wimpl = GDK_WINDOW_IMPL_DIRECTFB (top->impl);
+  
+                  reg.x1 = impl->abs_x - top->x + impl->paint_region.extents.x1;
+                  reg.y1 = impl->abs_y - top->y + impl->paint_region.extents.y1;
+                  reg.x2 = impl->abs_x - top->x + impl->paint_region.extents.x2 - 1;
+                  reg.y2 = impl->abs_y - top->y + impl->paint_region.extents.y2 - 1;
+  
+                  D_DEBUG_AT( GDKDFB_Window, "  -> queue flip %4d,%4d-%4dx%4d (%d boxes)\n",
+                              DFB_RECTANGLE_VALS_FROM_REGION( &reg ), impl->paint_region.numRects );
+  
+                  dfb_updates_add( &wimpl->flips, &reg );
+                }
             }
-
-            temp_region_reset( &impl->paint_region );
-       }
-  }
+  
+          temp_region_reset( &impl->paint_region );
+        }
+    }
 #endif
+  else
+    D_DEBUG_AT( GDKDFB_Window, "  -> depth is still %d\n", impl->paint_depth );
 }
 
 

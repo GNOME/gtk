@@ -1,5 +1,13 @@
 2008-01-30  Sven Neumann  <sven@gimp.org>
 
+	* gdk/directfb/gdkdrawable-directfb.c
+	* gdk/directfb/gdkwindow-directfb.c
+	* gdk/directfb/gdkprivate-directfb.h: applied patch from Denis
+	Oliver Kropp <dok@directfb.org>. Adds debug messages using
+	DirectFB's debugging system
+
+2008-01-30  Sven Neumann  <sven@gimp.org>
+
 	* gdk/directfb/gdkdirectfb.h
 	* gdk/directfb/gdkdisplay-directfb.c
 	* gdk/directfb/gdkdrawable-directfb.c

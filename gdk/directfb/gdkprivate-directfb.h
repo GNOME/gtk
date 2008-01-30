@@ -410,4 +410,7 @@ temp_region_deinit( GdkRegion *region )
 }
 
 
+#define GDKDFB_RECTANGLE_VALS_FROM_SEGMENT(s)     (s)->x1, (s)->y1, (s)->x2-(s)->x1, (s)->y2-(s)->y1
+
+
 #endif /* __GDK_PRIVATE_DIRECTFB_H__ */

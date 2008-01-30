@@ -50,6 +50,16 @@
 #include "cairo-directfb.h"
 
 
+#include <direct/debug.h>
+#include <direct/messages.h>
+
+/*
+ * There can be multiple domains in one file and one domain (same same) in multiple files.
+ */
+D_DEBUG_DOMAIN( GDKDFB_Drawable, "GDKDFB/Drawable", "GDK DirectFB Drawable" );
+D_DEBUG_DOMAIN( GDKDFB_DrawClip, "GDKDFB/DrawClip", "GDK DirectFB Drawable Clip Region" );
+
+
 /* From DirectFB's <gfx/generix/duffs_device.h> */
 #define DUFF_1() \
                case 1:\
@@ -150,6 +160,8 @@ gdk_directfb_set_colormap (GdkDrawable *drawable,
 
   impl = GDK_DRAWABLE_IMPL_DIRECTFB (drawable);
 
+  D_DEBUG_AT( GDKDFB_Drawable, "%s( %p, %p ) <- old %p\n", __FUNCTION__, drawable, colormap, impl->colormap );
+
   if (impl->colormap == colormap)
     return;
 
@@ -223,6 +235,8 @@ gdk_directfb_clip_region (GdkDrawable  *drawable,
   g_return_if_fail (GDK_IS_DRAWABLE_IMPL_DIRECTFB (drawable));
   g_return_if_fail (ret_clip != NULL);
 
+  D_DEBUG_AT( GDKDFB_DrawClip, "%s( %p, %p, %p )\n", __FUNCTION__, drawable, gc, draw_rect );
+
   private = GDK_DRAWABLE_IMPL_DIRECTFB (drawable);
 
   if (!draw_rect)
@@ -234,11 +248,18 @@ gdk_directfb_clip_region (GdkDrawable  *drawable,
 
       draw_rect = &rect;
     }
+  D_DEBUG_AT( GDKDFB_DrawClip, "  -> draw rectangle   == %4d,%4d - %4dx%4d =\n",
+              draw_rect->x, draw_rect->y, draw_rect->width, draw_rect->height );
 
   temp_region_init_rectangle( ret_clip, draw_rect );
 
-  if (private->buffered)
+  if (private->buffered) {
+       D_DEBUG_AT( GDKDFB_DrawClip, "  -> buffered region   > %4d,%4d - %4dx%4d <  (%ld boxes)\n",
+                   GDKDFB_RECTANGLE_VALS_FROM_SEGMENT( &private->paint_region.extents ),
+                   private->paint_region.numRects );
+
     gdk_region_intersect (ret_clip, &private->paint_region);
+  }
 
   if (gc)
     {
@@ -247,6 +268,9 @@ gdk_directfb_clip_region (GdkDrawable  *drawable,
 
       if (region->numRects)
         {
+          D_DEBUG_AT( GDKDFB_DrawClip, "  -> clipping region   > %4d,%4d - %4dx%4d <  (%ld boxes)\n",
+                      GDKDFB_RECTANGLE_VALS_FROM_SEGMENT( &region->extents ), region->numRects );
+
           if (gc->clip_x_origin || gc->clip_y_origin)
             {
               gdk_region_offset (ret_clip, -gc->clip_x_origin, -gc->clip_y_origin);
@@ -264,8 +288,11 @@ gdk_directfb_clip_region (GdkDrawable  *drawable,
         return;
     }
 
-  if (private->buffered)
+  if (private->buffered) {
+       D_DEBUG_AT( GDKDFB_DrawClip, "  => returning clip   >> %4d,%4d - %4dx%4d << (%ld boxes)\n",
+                   GDKDFB_RECTANGLE_VALS_FROM_SEGMENT( &ret_clip->extents ), ret_clip->numRects );
     return;
+  }
 
   if (GDK_IS_WINDOW (private->wrapper) &&
       GDK_WINDOW_IS_MAPPED (private->wrapper) &&
@@ -297,9 +324,15 @@ gdk_directfb_clip_region (GdkDrawable  *drawable,
           temp.extents.x2 = cur_private->x + cur_impl->width;
           temp.extents.y2 = cur_private->y + cur_impl->height;
 
+          D_DEBUG_AT( GDKDFB_DrawClip, "  -> clipping child    [ %4d,%4d - %4dx%4d ]\n",
+                      GDKDFB_RECTANGLE_VALS_FROM_SEGMENT( &temp.extents ), temp.numRects );
+
           gdk_region_subtract (ret_clip, &temp);
         }
     }
+
+  D_DEBUG_AT( GDKDFB_DrawClip, "  => returning clip   >> %4d,%4d - %4dx%4d << (%ld boxes)\n",
+              GDKDFB_RECTANGLE_VALS_FROM_SEGMENT( &ret_clip->extents ), ret_clip->numRects );
 }
 
 /* Drawing
@@ -402,11 +435,13 @@ _gdk_directfb_draw_rectangle (GdkDrawable *drawable,
 
   g_return_if_fail (GDK_IS_DRAWABLE (drawable));
 
+  D_DEBUG_AT( GDKDFB_Drawable, "%s( %p, %p, %s, %4d,%4d - %4dx%4d )\n", __FUNCTION__,
+              drawable, gc, filled ? " filled" : "outline", x, y, width, height );
+
   impl = GDK_DRAWABLE_IMPL_DIRECTFB (drawable);
 
   if (!impl->surface)
     return;
-
 
   if (gc)
     gc_private = GDK_GC_DIRECTFB (gc);
@@ -558,13 +593,15 @@ gdk_directfb_draw_polygon (GdkDrawable *drawable,
 {
   g_return_if_fail (GDK_IS_DRAWABLE (drawable));
 
+  D_DEBUG_AT( GDKDFB_Drawable, "%s( %p, %p, %s, %p, %d )\n", __FUNCTION__,
+              drawable, gc, filled ? " filled" : "outline", points, npoints );
+
   if (npoints < 3)
     return;
 
   if (filled)
     {
-                if (npoints == 3 ||
-                                (npoints == 4 && 
+      if (npoints == 3 || (npoints == 4 && 
                                  points[0].x == points[npoints-1].x &&
                                  points[0].y == points[npoints-1].y))
           {
@@ -667,6 +704,9 @@ gdk_directfb_draw_drawable (GdkDrawable *drawable,
   DFBRectangle rect = { xsrc, ysrc, width, height };
   gint i;
 
+  D_DEBUG_AT( GDKDFB_Drawable, "%s( %p, %p, %p, %4d,%4d -> %4d,%4d - %dx%d )\n", __FUNCTION__,
+              drawable, gc, src, xsrc, ysrc, xdest, ydest, width, height );
+
   impl = GDK_DRAWABLE_IMPL_DIRECTFB (drawable);
 
   if (!impl->surface)
@@ -708,6 +748,8 @@ gdk_directfb_draw_points (GdkDrawable *drawable,
   GdkRegion                clip;
 
   DFBRegion region = { points->x, points->y, points->x, points->y };
+
+  D_DEBUG_AT( GDKDFB_Drawable, "%s( %p, %p, %p, %d )\n", __FUNCTION__, drawable, gc, points, npoints );
 
   if (npoints < 1)
     return;
@@ -755,6 +797,8 @@ gdk_directfb_draw_segments (GdkDrawable *drawable,
   gint                     i;
 
 //  DFBRegion region = { segs->x1, segs->y1, segs->x2, segs->y2 };
+
+  D_DEBUG_AT( GDKDFB_Drawable, "%s( %p, %p, %p, %d )\n", __FUNCTION__, drawable, gc, segs, nsegs );
 
   if (nsegs < 1)
     return;
@@ -834,6 +878,8 @@ gdk_directfb_draw_lines (GdkDrawable *drawable,
 
   DFBRegion region = { points->x, points->y, points->x, points->y };
 
+  D_DEBUG_AT( GDKDFB_Drawable, "%s( %p, %p, %p, %d )\n", __FUNCTION__, drawable, gc, points, npoints );
+
   if (npoints < 2)
     return;
 
@@ -906,6 +952,9 @@ gdk_directfb_draw_image (GdkDrawable *drawable,
 
   g_return_if_fail (GDK_IS_DRAWABLE (drawable));
   g_return_if_fail (image != NULL);
+
+  D_DEBUG_AT( GDKDFB_Drawable, "%s( %p, %p, %p, %4d,%4d -> %4d,%4d - %dx%d )\n", __FUNCTION__,
+              drawable, gc, image, xsrc, ysrc, xdest, ydest, width, height );
 
   impl = GDK_DRAWABLE_IMPL_DIRECTFB (drawable);
   image_private = image->windowing_data;
@@ -1152,6 +1201,9 @@ gdk_directfb_draw_pixbuf (GdkDrawable  *drawable,
   g_return_if_fail (width >= 0 && height >= 0);
   g_return_if_fail (src_x >= 0 && src_x + width <= pixbuf->width);
   g_return_if_fail (src_y >= 0 && src_y + height <= pixbuf->height);
+
+  D_DEBUG_AT( GDKDFB_Drawable, "%s( %p, %p, %p, %4d,%4d -> %4d,%4d - %dx%d )\n", __FUNCTION__,
+              drawable, gc, pixbuf, src_x, src_y, dest_x, dest_y, width, height );
 
   /* Clip to the drawable; this is required for get_from_drawable() so
    * can't be done implicitly
@@ -1420,12 +1472,32 @@ convert_rgb_pixbuf_to_image (guchar  *src,
 /*
  * Object stuff
  */
+static inline const char *
+drawable_impl_type_name( GObject *object )
+{
+     if (GDK_IS_PIXMAP (object))
+          return "PIXMAP";
+
+     if (GDK_IS_WINDOW (object))
+          return "WINDOW";
+
+     if (GDK_IS_DRAWABLE_IMPL_DIRECTFB (object))
+          return "DRAWABLE";
+
+     return "unknown";
+}
+
 
 static void
 gdk_drawable_impl_directfb_finalize (GObject *object)
 {
   GdkDrawableImplDirectFB *impl;
   impl = GDK_DRAWABLE_IMPL_DIRECTFB (object);
+
+  D_DEBUG_AT( GDKDFB_Drawable, "%s( %p ) <- %dx%d (%s at %4d,%4d)\n", __FUNCTION__,
+              object, impl->width, impl->height,
+              drawable_impl_type_name( object ),
+              impl->abs_x, impl->abs_y );
 
   gdk_directfb_set_colormap (GDK_DRAWABLE (object), NULL);
   if( impl->cairo_surface ) {
