@@ -1,17 +1,15 @@
 # Swedish messages for GTK+.
-# Copyright (C) 1999-2007 Free Software Foundation, Inc.
-# Daniel Nylander <po@danielnylander.se>, 2006, 2007.
+# Copyright (C) 1999-2008 Free Software Foundation, Inc.
+# Daniel Nylander <po@danielnylander.se>, 2006, 2007, 2008.
 # Tomas Ögren <stric@ing.umu.se>, 1999.
 # Christian Rose <menthos@menthos.com>, 2000, 2001, 2002, 2003, 2004, 2005.
-#
-# $Id: sv.po,v 1.152 2006/09/22 16:11:04 matthiasc Exp $
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-12-17 19:20+0100\n"
-"PO-Revision-Date: 2007-12-17 19:21+0100\n"
+"POT-Creation-Date: 2008-01-31 00:53+0100\n"
+"PO-Revision-Date: 2008-01-31 00:55+0100\n"
 "Last-Translator: Daniel Nylander <po@danielnylander.se>\n"
 "Language-Team: Swedish <tp-sv@listor.tp-sv.se>\n"
 "MIME-Version: 1.0\n"
@@ -238,8 +236,8 @@ msgid "keyboard label|Delete"
 msgstr "Delete"
 
 #: ../gdk-pixbuf/gdk-pixbuf-animation.c:133
-#: ../gdk-pixbuf/gdk-pixbuf-io.c:847
-#: ../gdk-pixbuf/gdk-pixbuf-io.c:1102
+#: ../gdk-pixbuf/gdk-pixbuf-io.c:858
+#: ../gdk-pixbuf/gdk-pixbuf-io.c:1111
 #: ../tests/testfilechooser.c:218
 #, c-format
 msgid "Failed to open file '%s': %s"
@@ -247,14 +245,14 @@ msgstr "Misslyckades med att öppna filen \"%s\": %s"
 
 # SUN CHANGED MESSAGE
 #: ../gdk-pixbuf/gdk-pixbuf-animation.c:146
-#: ../gdk-pixbuf/gdk-pixbuf-io.c:859
+#: ../gdk-pixbuf/gdk-pixbuf-io.c:870
 #, c-format
 msgid "Image file '%s' contains no data"
 msgstr "Bildfilen \"%s\" innehåller inga data"
 
 #: ../gdk-pixbuf/gdk-pixbuf-animation.c:188
-#: ../gdk-pixbuf/gdk-pixbuf-io.c:896
-#: ../gdk-pixbuf/gdk-pixbuf-io.c:1153
+#: ../gdk-pixbuf/gdk-pixbuf-io.c:907
+#: ../gdk-pixbuf/gdk-pixbuf-io.c:1163
 #: ../tests/testfilechooser.c:263
 #, c-format
 msgid "Failed to load image '%s': reason not known, probably a corrupt image file"
@@ -265,78 +263,83 @@ msgstr "Misslyckades med att läsa in bilden \"%s\": anledningen är okänd, tro
 msgid "Failed to load animation '%s': reason not known, probably a corrupt animation file"
 msgstr "Misslyckades med att läsa in animeringen \"%s\": anledningen är okänd, troligtvis en trasig animeringsfil"
 
-#: ../gdk-pixbuf/gdk-pixbuf-io.c:527
+#: ../gdk-pixbuf/gdk-pixbuf-io.c:538
 #, c-format
 msgid "Unable to load image-loading module: %s: %s"
 msgstr "Kan inte läsa in bildinläsningsmodulen: %s: %s"
 
-#: ../gdk-pixbuf/gdk-pixbuf-io.c:542
+#: ../gdk-pixbuf/gdk-pixbuf-io.c:553
 #, c-format
 msgid "Image-loading module %s does not export the proper interface; perhaps it's from a different GTK version?"
 msgstr "Bildinläsningsmodulen %s exporterar inte rätt gränssnitt; den kanske är från en annan GTK-version?"
 
-#: ../gdk-pixbuf/gdk-pixbuf-io.c:659
-#: ../gdk-pixbuf/gdk-pixbuf-io.c:688
+#: ../gdk-pixbuf/gdk-pixbuf-io.c:670
+#: ../gdk-pixbuf/gdk-pixbuf-io.c:699
 #, c-format
 msgid "Image type '%s' is not supported"
 msgstr "Bildtypen \"%s\" stöds inte"
 
-#: ../gdk-pixbuf/gdk-pixbuf-io.c:728
+#: ../gdk-pixbuf/gdk-pixbuf-io.c:739
 #, c-format
 msgid "Couldn't recognize the image file format for file '%s'"
 msgstr "Kunde inte känna igen bildfilformatet på filen \"%s\""
 
-#: ../gdk-pixbuf/gdk-pixbuf-io.c:736
+#: ../gdk-pixbuf/gdk-pixbuf-io.c:747
 #, c-format
 msgid "Unrecognized image file format"
 msgstr "Okänt bildfilformat"
 
-#: ../gdk-pixbuf/gdk-pixbuf-io.c:905
+#: ../gdk-pixbuf/gdk-pixbuf-io.c:916
 #, c-format
 msgid "Failed to load image '%s': %s"
 msgstr "Misslyckades med att läsa in bilden \"%s\": %s"
 
-#: ../gdk-pixbuf/gdk-pixbuf-io.c:1381
+#: ../gdk-pixbuf/gdk-pixbuf-io.c:1542
 #, c-format
 msgid "Error writing to image file: %s"
 msgstr "Fel vid skrivning till bildfil: %s"
 
-#: ../gdk-pixbuf/gdk-pixbuf-io.c:1427
-#: ../gdk-pixbuf/gdk-pixbuf-io.c:1558
+#: ../gdk-pixbuf/gdk-pixbuf-io.c:1588
+#: ../gdk-pixbuf/gdk-pixbuf-io.c:1719
 #, c-format
 msgid "This build of gdk-pixbuf does not support saving the image format: %s"
 msgstr "Detta bygge av gdk-pixbuf stöder inte sparande av bildformatet: %s"
 
-#: ../gdk-pixbuf/gdk-pixbuf-io.c:1461
+#: ../gdk-pixbuf/gdk-pixbuf-io.c:1622
 #, c-format
 msgid "Insufficient memory to save image to callback"
 msgstr "Inte tillräckligt med minne för att spara bild till återuppringning"
 
-#: ../gdk-pixbuf/gdk-pixbuf-io.c:1474
+#: ../gdk-pixbuf/gdk-pixbuf-io.c:1635
 #, c-format
 msgid "Failed to open temporary file"
 msgstr "Misslyckades med att öppna temporär fil"
 
-#: ../gdk-pixbuf/gdk-pixbuf-io.c:1500
+#: ../gdk-pixbuf/gdk-pixbuf-io.c:1661
 #, c-format
 msgid "Failed to read from temporary file"
 msgstr "Misslyckades med att läsa från temporär fil"
 
-#: ../gdk-pixbuf/gdk-pixbuf-io.c:1735
+#: ../gdk-pixbuf/gdk-pixbuf-io.c:1896
 #, c-format
 msgid "Failed to open '%s' for writing: %s"
 msgstr "Misslyckades med att öppna \"%s\" för skrivning: %s"
 
-#: ../gdk-pixbuf/gdk-pixbuf-io.c:1760
+#: ../gdk-pixbuf/gdk-pixbuf-io.c:1921
 #, c-format
 msgid "Failed to close '%s' while writing image, all data may not have been saved: %s"
 msgstr "Misslyckades med att stänga \"%s\" när bilden skrevs, all data kanske inte har sparats korrekt: %s"
 
-#: ../gdk-pixbuf/gdk-pixbuf-io.c:1980
-#: ../gdk-pixbuf/gdk-pixbuf-io.c:2030
+#: ../gdk-pixbuf/gdk-pixbuf-io.c:2141
+#: ../gdk-pixbuf/gdk-pixbuf-io.c:2192
 #, c-format
 msgid "Insufficient memory to save image into a buffer"
 msgstr "Inte tillräckligt med minne för att spara bild till en buffert"
+
+#: ../gdk-pixbuf/gdk-pixbuf-io.c:2238
+#, c-format
+msgid "Error writing to image stream"
+msgstr "Fel vid skrivning till bildström"
 
 #: ../gdk-pixbuf/gdk-pixbuf-loader.c:330
 #, c-format
@@ -606,6 +609,46 @@ msgstr "Kunde inte avkoda ICNS-fil"
 #: ../gdk-pixbuf/io-icns.c:391
 msgid "The ICNS image format"
 msgstr "Bildformatet ICNS"
+
+#: ../gdk-pixbuf/io-jasper.c:74
+#, c-format
+msgid "Couldn't allocate memory for stream"
+msgstr "Kunde inte allokera minne för ström"
+
+#: ../gdk-pixbuf/io-jasper.c:103
+#, c-format
+msgid "Couldn't decode image"
+msgstr "Kunde inte avkoda bild"
+
+#: ../gdk-pixbuf/io-jasper.c:121
+#, c-format
+msgid "Transformed JPEG2000 has zero width or height"
+msgstr "Transformerad JPEG2000 har bredden eller höjden noll."
+
+#: ../gdk-pixbuf/io-jasper.c:134
+#, c-format
+msgid "Image type currently not supported"
+msgstr "Bildtypen stöds inte för tillfället"
+
+#: ../gdk-pixbuf/io-jasper.c:145
+#: ../gdk-pixbuf/io-jasper.c:152
+#, c-format
+msgid "Couldn't allocate memory for color profile"
+msgstr "Kunde inte allokera minne för färgprofil"
+
+#: ../gdk-pixbuf/io-jasper.c:177
+#, c-format
+msgid "Insufficient memory to open JPEG 2000 file"
+msgstr "Inte tillräckligt med minne för att öppna JPEG 2000-fil"
+
+#: ../gdk-pixbuf/io-jasper.c:258
+#, c-format
+msgid "Couldn't allocate memory to buffer image data"
+msgstr "Kunde inte allokera minne för att buffra bilddata"
+
+#: ../gdk-pixbuf/io-jasper.c:298
+msgid "The JPEG 2000 image format"
+msgstr "Bildformatet JPEG 2000"
 
 #: ../gdk-pixbuf/io-jpeg.c:117
 #, c-format
@@ -1158,7 +1201,7 @@ msgid "Make X calls synchronous"
 msgstr "Gör X-anrop synkrona"
 
 #: ../gtk/gtkaboutdialog.c:264
-#: ../gtk/gtkaboutdialog.c:2103
+#: ../gtk/gtkaboutdialog.c:2105
 msgid "License"
 msgstr "Licens"
 
@@ -1169,7 +1212,7 @@ msgstr "Licensen för programmet"
 #. Add the credits button
 #: ../gtk/gtkaboutdialog.c:500
 msgid "C_redits"
-msgstr "_Tack"
+msgstr "Ta_ck"
 
 #. Add the license button
 #: ../gtk/gtkaboutdialog.c:513
@@ -1181,23 +1224,23 @@ msgstr "_Licens"
 msgid "About %s"
 msgstr "Om %s"
 
-#: ../gtk/gtkaboutdialog.c:2027
+#: ../gtk/gtkaboutdialog.c:2029
 msgid "Credits"
 msgstr "Tack"
 
-#: ../gtk/gtkaboutdialog.c:2056
+#: ../gtk/gtkaboutdialog.c:2058
 msgid "Written by"
 msgstr "Skrivet av"
 
-#: ../gtk/gtkaboutdialog.c:2059
+#: ../gtk/gtkaboutdialog.c:2061
 msgid "Documented by"
 msgstr "Dokumenterat av"
 
-#: ../gtk/gtkaboutdialog.c:2071
+#: ../gtk/gtkaboutdialog.c:2073
 msgid "Translated by"
 msgstr "Översatt av"
 
-#: ../gtk/gtkaboutdialog.c:2075
+#: ../gtk/gtkaboutdialog.c:2077
 msgid "Artwork by"
 msgstr "Grafik av"
 
@@ -1279,12 +1322,12 @@ msgstr "Omvänt snedstreck"
 msgid "Invalid type function: `%s'"
 msgstr "Ogiltig typfunktion: \"%s\""
 
-#: ../gtk/gtkbuilderparser.c:718
+#: ../gtk/gtkbuilderparser.c:719
 #, c-format
 msgid "Invalid root element: '%s'"
 msgstr "Ogiltigt rotelement: \"%s\""
 
-#: ../gtk/gtkbuilderparser.c:750
+#: ../gtk/gtkbuilderparser.c:751
 #, c-format
 msgid "Unhandled tag: '%s'"
 msgstr "Ohanterad tagg: \"%s\""
@@ -1298,7 +1341,7 @@ msgstr "Ohanterad tagg: \"%s\""
 #. * so if you have a default text direction of RTL and YM, then
 #. * the year will appear on the right.
 #.
-#: ../gtk/gtkcalendar.c:670
+#: ../gtk/gtkcalendar.c:761
 msgid "calendar:MY"
 msgstr "calendar:MY"
 
@@ -1308,7 +1351,7 @@ msgstr "calendar:MY"
 #. * first day of the week to calendar:week_start:1 if you want Monday
 #. * to be the first day of the week, and so on.
 #.
-#: ../gtk/gtkcalendar.c:708
+#: ../gtk/gtkcalendar.c:799
 msgid "calendar:week_start:0"
 msgstr "calendar:week_start:1"
 
@@ -1320,7 +1363,7 @@ msgstr "calendar:week_start:1"
 #. *
 #. * If you don't understand this, leave it as "2000"
 #.
-#: ../gtk/gtkcalendar.c:1595
+#: ../gtk/gtkcalendar.c:1807
 msgid "year measurement template|2000"
 msgstr "2000"
 
@@ -1335,8 +1378,8 @@ msgstr "2000"
 #. * digits.  That needs support from your system and locale definition
 #. * too.
 #.
-#: ../gtk/gtkcalendar.c:1626
-#: ../gtk/gtkcalendar.c:2204
+#: ../gtk/gtkcalendar.c:1838
+#: ../gtk/gtkcalendar.c:2499
 #, c-format
 msgid "calendar:day:digits|%d"
 msgstr "%d"
@@ -1354,8 +1397,8 @@ msgstr "%d"
 #. * digits.  That needs support from your system and locale definition
 #. * too.
 #.
-#: ../gtk/gtkcalendar.c:1660
-#: ../gtk/gtkcalendar.c:2078
+#: ../gtk/gtkcalendar.c:1870
+#: ../gtk/gtkcalendar.c:2361
 #, c-format
 msgid "calendar:week:digits|%d"
 msgstr "%d"
@@ -1371,7 +1414,7 @@ msgstr "%d"
 #. * Don't include the prefix "calendar year format|" in the
 #. * translation. "%Y" is appropriate for most locales.
 #.
-#: ../gtk/gtkcalendar.c:1869
+#: ../gtk/gtkcalendar.c:2151
 msgid "calendar year format|%Y"
 msgstr "%Y"
 
@@ -1424,84 +1467,84 @@ msgstr "_Spara färgen här"
 msgid "Click this palette entry to make it the current color. To change this entry, drag a color swatch here or right-click it and select \"Save color here.\""
 msgstr "Klicka på denna palettpost för att göra den till aktuell färg. För att ändra denna post kan du dra ett färgprov hit eller högerklicka och välja \"Spara färg här\"."
 
-#: ../gtk/gtkcolorsel.c:1920
+#: ../gtk/gtkcolorsel.c:1919
 msgid "Select the color you want from the outer ring. Select the darkness or lightness of that color using the inner triangle."
 msgstr "Välj den färg som du vill ha från den yttre ringen. Välj mörkheten eller ljusheten på den färgen genom att använda den inre triangeln."
 
-#: ../gtk/gtkcolorsel.c:1944
+#: ../gtk/gtkcolorsel.c:1943
 msgid "Click the eyedropper, then click a color anywhere on your screen to select that color."
 msgstr "Klicka på pipetten, och klicka sedan på en färg någonstans på din skärm för att välja den färgen."
 
-#: ../gtk/gtkcolorsel.c:1953
+#: ../gtk/gtkcolorsel.c:1952
 msgid "_Hue:"
 msgstr "_Nyans:"
 
-#: ../gtk/gtkcolorsel.c:1954
+#: ../gtk/gtkcolorsel.c:1953
 msgid "Position on the color wheel."
 msgstr "Position på färghjulet."
 
-#: ../gtk/gtkcolorsel.c:1956
+#: ../gtk/gtkcolorsel.c:1955
 msgid "_Saturation:"
 msgstr "_Mättnad:"
 
-#: ../gtk/gtkcolorsel.c:1957
+#: ../gtk/gtkcolorsel.c:1956
 msgid "\"Deepness\" of the color."
 msgstr "\"Djup\" på färgen."
 
-#: ../gtk/gtkcolorsel.c:1958
+#: ../gtk/gtkcolorsel.c:1957
 msgid "_Value:"
 msgstr "_Värde:"
 
-#: ../gtk/gtkcolorsel.c:1959
+#: ../gtk/gtkcolorsel.c:1958
 msgid "Brightness of the color."
 msgstr "Ljushet på färgen."
 
-#: ../gtk/gtkcolorsel.c:1960
+#: ../gtk/gtkcolorsel.c:1959
 msgid "_Red:"
 msgstr "_Röd:"
 
-#: ../gtk/gtkcolorsel.c:1961
+#: ../gtk/gtkcolorsel.c:1960
 msgid "Amount of red light in the color."
 msgstr "Mängd rött ljus i färgen."
 
-#: ../gtk/gtkcolorsel.c:1962
+#: ../gtk/gtkcolorsel.c:1961
 msgid "_Green:"
 msgstr "_Grön:"
 
-#: ../gtk/gtkcolorsel.c:1963
+#: ../gtk/gtkcolorsel.c:1962
 msgid "Amount of green light in the color."
 msgstr "Mängd grönt ljus i färgen."
 
-#: ../gtk/gtkcolorsel.c:1964
+#: ../gtk/gtkcolorsel.c:1963
 msgid "_Blue:"
 msgstr "_Blå:"
 
-#: ../gtk/gtkcolorsel.c:1965
+#: ../gtk/gtkcolorsel.c:1964
 msgid "Amount of blue light in the color."
 msgstr "Mängd blått ljus i bilden."
 
-#: ../gtk/gtkcolorsel.c:1968
+#: ../gtk/gtkcolorsel.c:1967
 msgid "Op_acity:"
 msgstr "Op_acitet:"
 
-#: ../gtk/gtkcolorsel.c:1975
-#: ../gtk/gtkcolorsel.c:1985
+#: ../gtk/gtkcolorsel.c:1974
+#: ../gtk/gtkcolorsel.c:1984
 msgid "Transparency of the color."
 msgstr "Genomskinlighet för färgen."
 
-#: ../gtk/gtkcolorsel.c:1992
+#: ../gtk/gtkcolorsel.c:1991
 msgid "Color _name:"
 msgstr "Färg_namn:"
 
-#: ../gtk/gtkcolorsel.c:2006
+#: ../gtk/gtkcolorsel.c:2005
 msgid "You can enter an HTML-style hexadecimal color value, or simply a color name such as 'orange' in this entry."
 msgstr "Du kan ange ett hexadecimalt färgvärde i HTML-stil, eller helt enkelt ange ett engelskt namn på färgen som exempelvis \"orange\" i detta fält."
 
-#: ../gtk/gtkcolorsel.c:2036
+#: ../gtk/gtkcolorsel.c:2035
 msgid "_Palette:"
 msgstr "_Palett:"
 
-#: ../gtk/gtkcolorsel.c:2065
+#: ../gtk/gtkcolorsel.c:2064
 msgid "Color Wheel"
 msgstr "Färghjul"
 
@@ -2040,24 +2083,24 @@ msgstr "Typsnitt"
 msgid "abcdefghijk ABCDEFGHIJK"
 msgstr "abcdefghijk ABCDEFGHIJK"
 
-#: ../gtk/gtkfontsel.c:326
+#: ../gtk/gtkfontsel.c:328
 msgid "_Family:"
 msgstr "_Familj:"
 
-#: ../gtk/gtkfontsel.c:332
+#: ../gtk/gtkfontsel.c:334
 msgid "_Style:"
 msgstr "_Stil:"
 
-#: ../gtk/gtkfontsel.c:338
+#: ../gtk/gtkfontsel.c:340
 msgid "Si_ze:"
 msgstr "S_torlek:"
 
 #. create the text entry widget
-#: ../gtk/gtkfontsel.c:515
+#: ../gtk/gtkfontsel.c:517
 msgid "_Preview:"
 msgstr "_Förhandsvisning:"
 
-#: ../gtk/gtkfontsel.c:1359
+#: ../gtk/gtkfontsel.c:1362
 msgid "Font Selection"
 msgstr "Typsnittsval"
 
@@ -2100,9 +2143,13 @@ msgstr "Ikonen \"%s\" finns inte i temat"
 msgid "Failed to load icon"
 msgstr "Misslyckades med att läsa in ikon"
 
-#: ../gtk/gtkimmodule.c:421
-msgid "Default"
-msgstr "Standard"
+#: ../gtk/gtkimmodule.c:423
+msgid "Simple"
+msgstr "Enkel"
+
+#: ../gtk/gtkimmulticontext.c:542
+msgid "input method menu|System"
+msgstr "System"
 
 #: ../gtk/gtkinputdialog.c:190
 msgid "Input"
@@ -2244,16 +2291,16 @@ msgstr "Alternativ för GTK+"
 msgid "Show GTK+ Options"
 msgstr "Visa alternativ för GTK+"
 
-#: ../gtk/gtknotebook.c:826
+#: ../gtk/gtknotebook.c:828
 msgid "Arrow spacing"
 msgstr "Pilmellanrum"
 
-#: ../gtk/gtknotebook.c:827
+#: ../gtk/gtknotebook.c:829
 msgid "Scroll arrow spacing"
 msgstr "Rullpilsmellanrum"
 
-#: ../gtk/gtknotebook.c:4402
-#: ../gtk/gtknotebook.c:6908
+#: ../gtk/gtknotebook.c:4406
+#: ../gtk/gtknotebook.c:6912
 #, c-format
 msgid "Page %u"
 msgstr "Sida %u"
@@ -2284,12 +2331,12 @@ msgstr ""
 "För portabla dokument"
 
 #: ../gtk/gtkpagesetupunixdialog.c:887
-#: ../gtk/gtkpagesetupunixdialog.c:1399
+#: ../gtk/gtkpagesetupunixdialog.c:1396
 msgid "mm"
 msgstr "mm"
 
 #: ../gtk/gtkpagesetupunixdialog.c:889
-#: ../gtk/gtkpagesetupunixdialog.c:1397
+#: ../gtk/gtkpagesetupunixdialog.c:1394
 msgid "inch"
 msgstr "tum"
 
@@ -2316,61 +2363,61 @@ msgstr "Hantera anpassade storlekar..."
 msgid "_Format for:"
 msgstr "_Format för:"
 
-#: ../gtk/gtkpagesetupunixdialog.c:1026
+#: ../gtk/gtkpagesetupunixdialog.c:1027
 msgid "_Paper size:"
 msgstr "_Pappersstorlek:"
 
-#: ../gtk/gtkpagesetupunixdialog.c:1062
+#: ../gtk/gtkpagesetupunixdialog.c:1058
 msgid "_Orientation:"
 msgstr "_Orientering:"
 
-#: ../gtk/gtkpagesetupunixdialog.c:1125
-#: ../gtk/gtkprintunixdialog.c:2180
+#: ../gtk/gtkpagesetupunixdialog.c:1122
+#: ../gtk/gtkprintunixdialog.c:2182
 msgid "Page Setup"
 msgstr "Sidinställning"
 
-#: ../gtk/gtkpagesetupunixdialog.c:1444
+#: ../gtk/gtkpagesetupunixdialog.c:1441
 msgid "Margins from Printer..."
 msgstr "Marginaler från skrivare..."
 
-#: ../gtk/gtkpagesetupunixdialog.c:1604
+#: ../gtk/gtkpagesetupunixdialog.c:1601
 #, c-format
 msgid "Custom Size %d"
 msgstr "Anpassad storlek %d"
 
-#: ../gtk/gtkpagesetupunixdialog.c:1833
+#: ../gtk/gtkpagesetupunixdialog.c:1830
 msgid "Manage Custom Sizes"
 msgstr "Hantera anpassade storlekar"
 
-#: ../gtk/gtkpagesetupunixdialog.c:1929
+#: ../gtk/gtkpagesetupunixdialog.c:1926
 msgid "_Width:"
 msgstr "_Bredd:"
 
-#: ../gtk/gtkpagesetupunixdialog.c:1941
+#: ../gtk/gtkpagesetupunixdialog.c:1938
 msgid "_Height:"
 msgstr "_Höjd:"
 
-#: ../gtk/gtkpagesetupunixdialog.c:1953
+#: ../gtk/gtkpagesetupunixdialog.c:1950
 msgid "Paper Size"
 msgstr "Pappersstorlek"
 
-#: ../gtk/gtkpagesetupunixdialog.c:1963
+#: ../gtk/gtkpagesetupunixdialog.c:1960
 msgid "_Top:"
 msgstr "_Överst:"
 
-#: ../gtk/gtkpagesetupunixdialog.c:1975
+#: ../gtk/gtkpagesetupunixdialog.c:1972
 msgid "_Bottom:"
 msgstr "_Nederst:"
 
-#: ../gtk/gtkpagesetupunixdialog.c:1987
+#: ../gtk/gtkpagesetupunixdialog.c:1984
 msgid "_Left:"
 msgstr "_Vänster:"
 
-#: ../gtk/gtkpagesetupunixdialog.c:1999
+#: ../gtk/gtkpagesetupunixdialog.c:1996
 msgid "_Right:"
 msgstr "_Höger:"
 
-#: ../gtk/gtkpagesetupunixdialog.c:2040
+#: ../gtk/gtkpagesetupunixdialog.c:2037
 msgid "Paper Margins"
 msgstr "Pappersmarginaler"
 
@@ -2398,67 +2445,67 @@ msgstr "_Spara i mapp:"
 #. * jobs. %s gets replaced by the application name, %d gets replaced
 #. * by the job number.
 #.
-#: ../gtk/gtkprintoperation.c:171
+#: ../gtk/gtkprintoperation.c:173
 #, c-format
 msgid "%s job #%d"
 msgstr "%s jobbnr %d"
 
 #. translators, strip the prefix up to and including the first |
-#: ../gtk/gtkprintoperation.c:1496
+#: ../gtk/gtkprintoperation.c:1498
 msgid "print operation status|Initial state"
 msgstr "Initialt tillstånd"
 
 #. translators, strip the prefix up to and including the first |
-#: ../gtk/gtkprintoperation.c:1498
+#: ../gtk/gtkprintoperation.c:1500
 msgid "print operation status|Preparing to print"
 msgstr "Förbereder för utskrift"
 
 #. translators, strip the prefix up to and including the first |
-#: ../gtk/gtkprintoperation.c:1500
+#: ../gtk/gtkprintoperation.c:1502
 msgid "print operation status|Generating data"
 msgstr "Genererar data"
 
 #. translators, strip the prefix up to and including the first |
-#: ../gtk/gtkprintoperation.c:1502
+#: ../gtk/gtkprintoperation.c:1504
 msgid "print operation status|Sending data"
 msgstr "Skickar data"
 
 #. translators, strip the prefix up to and including the first |
-#: ../gtk/gtkprintoperation.c:1504
+#: ../gtk/gtkprintoperation.c:1506
 msgid "print operation status|Waiting"
 msgstr "Väntar"
 
 #. translators, strip the prefix up to and including the first |
-#: ../gtk/gtkprintoperation.c:1506
+#: ../gtk/gtkprintoperation.c:1508
 msgid "print operation status|Blocking on issue"
 msgstr "Blockerar vid problem"
 
 #. translators, strip the prefix up to and including the first |
-#: ../gtk/gtkprintoperation.c:1508
+#: ../gtk/gtkprintoperation.c:1510
 msgid "print operation status|Printing"
 msgstr "Skriver ut"
 
 #. translators, strip the prefix up to and including the first |
-#: ../gtk/gtkprintoperation.c:1510
+#: ../gtk/gtkprintoperation.c:1512
 msgid "print operation status|Finished"
 msgstr "Färdig"
 
 #. translators, strip the prefix up to and including the first |
-#: ../gtk/gtkprintoperation.c:1512
+#: ../gtk/gtkprintoperation.c:1514
 msgid "print operation status|Finished with error"
 msgstr "Färdig men med fel"
 
-#: ../gtk/gtkprintoperation.c:1985
+#: ../gtk/gtkprintoperation.c:1987
 #, c-format
 msgid "Preparing %d"
 msgstr "Förbereder %d"
 
-#: ../gtk/gtkprintoperation.c:1987
-#: ../gtk/gtkprintoperation.c:2241
+#: ../gtk/gtkprintoperation.c:1989
+#: ../gtk/gtkprintoperation.c:2243
 msgid "Preparing"
 msgstr "Förbereder"
 
-#: ../gtk/gtkprintoperation.c:1990
+#: ../gtk/gtkprintoperation.c:1992
 #, c-format
 msgid "Printing %d"
 msgstr "Skriver ut %d"
@@ -2528,35 +2575,35 @@ msgstr "Ospecificerat fel"
 msgid "Error from StartDoc"
 msgstr "Fel från StartDoc"
 
-#: ../gtk/gtkprintunixdialog.c:1509
+#: ../gtk/gtkprintunixdialog.c:1510
 msgid "Printer"
 msgstr "Skrivare"
 
-#: ../gtk/gtkprintunixdialog.c:1517
+#: ../gtk/gtkprintunixdialog.c:1518
 msgid "Location"
 msgstr "Plats"
 
-#: ../gtk/gtkprintunixdialog.c:1526
+#: ../gtk/gtkprintunixdialog.c:1527
 msgid "Status"
 msgstr "Status"
 
-#: ../gtk/gtkprintunixdialog.c:1548
+#: ../gtk/gtkprintunixdialog.c:1549
 msgid "Range"
 msgstr "Intervall"
 
-#: ../gtk/gtkprintunixdialog.c:1552
+#: ../gtk/gtkprintunixdialog.c:1553
 msgid "_All Pages"
 msgstr "_Alla sidor"
 
-#: ../gtk/gtkprintunixdialog.c:1559
+#: ../gtk/gtkprintunixdialog.c:1560
 msgid "C_urrent Page"
 msgstr "A_ktuell sida"
 
-#: ../gtk/gtkprintunixdialog.c:1568
+#: ../gtk/gtkprintunixdialog.c:1569
 msgid "Pag_es:"
 msgstr "Sid_or:"
 
-#: ../gtk/gtkprintunixdialog.c:1569
+#: ../gtk/gtkprintunixdialog.c:1570
 msgid ""
 "Specify one or more page ranges,\n"
 " e.g. 1-3,7,11"
@@ -2564,142 +2611,142 @@ msgstr ""
 "Ange en eller flera sidintervall,\n"
 " exempelvis 1-3,7,11"
 
-#: ../gtk/gtkprintunixdialog.c:1588
+#: ../gtk/gtkprintunixdialog.c:1589
 msgid "Copies"
 msgstr "Kopior"
 
 #. FIXME chpe: too much space between Copies and spinbutton, put those 2 in a hbox and make it span 2 columns
-#: ../gtk/gtkprintunixdialog.c:1593
+#: ../gtk/gtkprintunixdialog.c:1594
 msgid "Copie_s:"
 msgstr "Kop_ior:"
 
-#: ../gtk/gtkprintunixdialog.c:1611
+#: ../gtk/gtkprintunixdialog.c:1612
 msgid "C_ollate"
 msgstr "S_ortera"
 
-#: ../gtk/gtkprintunixdialog.c:1619
+#: ../gtk/gtkprintunixdialog.c:1620
 msgid "_Reverse"
 msgstr "_Omvänd"
 
-#: ../gtk/gtkprintunixdialog.c:1636
+#: ../gtk/gtkprintunixdialog.c:1637
 msgid "General"
 msgstr "Allmänt"
 
-#: ../gtk/gtkprintunixdialog.c:2036
+#: ../gtk/gtkprintunixdialog.c:2038
 msgid "Layout"
 msgstr "Layout"
 
-#: ../gtk/gtkprintunixdialog.c:2040
+#: ../gtk/gtkprintunixdialog.c:2042
 msgid "Pages per _side:"
 msgstr "Sidor per _blad:"
 
-#: ../gtk/gtkprintunixdialog.c:2056
+#: ../gtk/gtkprintunixdialog.c:2058
 msgid "T_wo-sided:"
 msgstr "T_våsidig:"
 
-#: ../gtk/gtkprintunixdialog.c:2071
+#: ../gtk/gtkprintunixdialog.c:2073
 msgid "_Only print:"
 msgstr "Skriv endast _ut:"
 
 #. In enum order
-#: ../gtk/gtkprintunixdialog.c:2086
+#: ../gtk/gtkprintunixdialog.c:2088
 msgid "All sheets"
 msgstr "Alla blad"
 
-#: ../gtk/gtkprintunixdialog.c:2087
+#: ../gtk/gtkprintunixdialog.c:2089
 msgid "Even sheets"
 msgstr "Jämna blad"
 
-#: ../gtk/gtkprintunixdialog.c:2088
+#: ../gtk/gtkprintunixdialog.c:2090
 msgid "Odd sheets"
 msgstr "Udda blad"
 
-#: ../gtk/gtkprintunixdialog.c:2091
+#: ../gtk/gtkprintunixdialog.c:2093
 msgid "Sc_ale:"
 msgstr "Sk_ala:"
 
-#: ../gtk/gtkprintunixdialog.c:2118
+#: ../gtk/gtkprintunixdialog.c:2120
 msgid "Paper"
 msgstr "Papper"
 
-#: ../gtk/gtkprintunixdialog.c:2122
+#: ../gtk/gtkprintunixdialog.c:2124
 msgid "Paper _type:"
 msgstr "Pappers_typ:"
 
-#: ../gtk/gtkprintunixdialog.c:2137
+#: ../gtk/gtkprintunixdialog.c:2139
 msgid "Paper _source:"
 msgstr "Pappers_källa:"
 
-#: ../gtk/gtkprintunixdialog.c:2152
+#: ../gtk/gtkprintunixdialog.c:2154
 msgid "Output t_ray:"
 msgstr "Utsk_riftsfack:"
 
-#: ../gtk/gtkprintunixdialog.c:2203
+#: ../gtk/gtkprintunixdialog.c:2205
 msgid "Job Details"
 msgstr "Jobbdetaljer"
 
-#: ../gtk/gtkprintunixdialog.c:2209
+#: ../gtk/gtkprintunixdialog.c:2211
 msgid "Pri_ority:"
 msgstr "Pri_oritet:"
 
-#: ../gtk/gtkprintunixdialog.c:2224
+#: ../gtk/gtkprintunixdialog.c:2226
 msgid "_Billing info:"
 msgstr "Fak_tureringsinformation:"
 
-#: ../gtk/gtkprintunixdialog.c:2242
+#: ../gtk/gtkprintunixdialog.c:2244
 msgid "Print Document"
 msgstr "Skriv ut dokument"
 
-#: ../gtk/gtkprintunixdialog.c:2248
+#: ../gtk/gtkprintunixdialog.c:2250
 msgid "_Now"
 msgstr "_Nu"
 
-#: ../gtk/gtkprintunixdialog.c:2255
+#: ../gtk/gtkprintunixdialog.c:2257
 msgid "A_t:"
 msgstr "Kloc_kan:"
 
 # Är detta verkligen en bra översättning?
-#: ../gtk/gtkprintunixdialog.c:2270
+#: ../gtk/gtkprintunixdialog.c:2272
 msgid "On _hold"
 msgstr "_Pausad"
 
-#: ../gtk/gtkprintunixdialog.c:2289
+#: ../gtk/gtkprintunixdialog.c:2291
 msgid "Add Cover Page"
 msgstr "Lägg till försättssida"
 
-#: ../gtk/gtkprintunixdialog.c:2295
+#: ../gtk/gtkprintunixdialog.c:2297
 msgid "Be_fore:"
 msgstr "_Före:"
 
-#: ../gtk/gtkprintunixdialog.c:2310
+#: ../gtk/gtkprintunixdialog.c:2312
 msgid "_After:"
 msgstr "_Efter:"
 
-#: ../gtk/gtkprintunixdialog.c:2325
+#: ../gtk/gtkprintunixdialog.c:2327
 msgid "Job"
 msgstr "Jobb"
 
-#: ../gtk/gtkprintunixdialog.c:2391
+#: ../gtk/gtkprintunixdialog.c:2393
 msgid "Advanced"
 msgstr "Avancerat"
 
-#: ../gtk/gtkprintunixdialog.c:2426
+#: ../gtk/gtkprintunixdialog.c:2428
 msgid "Image Quality"
 msgstr "Bildkvalitet"
 
-#: ../gtk/gtkprintunixdialog.c:2429
+#: ../gtk/gtkprintunixdialog.c:2431
 msgid "Color"
 msgstr "Färg"
 
-#: ../gtk/gtkprintunixdialog.c:2432
+#: ../gtk/gtkprintunixdialog.c:2434
 msgid "Finishing"
 msgstr "Färdigställning"
 
-#: ../gtk/gtkprintunixdialog.c:2442
+#: ../gtk/gtkprintunixdialog.c:2444
 msgid "Some of the settings in the dialog conflict"
 msgstr "Vissa av inställningarna i dialogen är i konflikt"
 
-#: ../gtk/gtkprintunixdialog.c:2465
+#: ../gtk/gtkprintunixdialog.c:2467
 msgid "Print"
 msgstr "Skriv ut"
 
@@ -2711,13 +2758,13 @@ msgstr "Grupp"
 msgid "The radio tool button whose group this button belongs to."
 msgstr "Den radioverktygsknapp vars grupp denna knapp tillhör."
 
-#: ../gtk/gtkrc.c:2867
+#: ../gtk/gtkrc.c:2872
 #, c-format
 msgid "Unable to find include file: \"%s\""
 msgstr "Kan inte hitta inkluderingsfil: \"%s\""
 
-#: ../gtk/gtkrc.c:3495
-#: ../gtk/gtkrc.c:3498
+#: ../gtk/gtkrc.c:3500
+#: ../gtk/gtkrc.c:3503
 #, c-format
 msgid "Unable to locate image file in pixmap_path: \"%s\""
 msgstr "Kan inte hitta bildfil i \"pixmap_path\": \"%s\""
@@ -3395,7 +3442,7 @@ msgstr "Oväntad starttagg \"%s\" på rad %d tecken %d"
 msgid "Unexpected character data on line %d char %d"
 msgstr "Oväntade teckendata på rad %d tecken %d"
 
-#: ../gtk/gtkuimanager.c:2354
+#: ../gtk/gtkuimanager.c:2356
 msgid "Empty"
 msgstr "Tom"
 
@@ -4544,6 +4591,8 @@ msgstr "Skriv ut till testskrivare"
 msgid "Could not get information for file '%s': %s"
 msgstr "Kunde inte hämta information för filen \"%s\": %s"
 
+#~ msgid "Default"
+#~ msgstr "Standard"
 #~ msgid "Print Pages"
 #~ msgstr "Skriv ut sidor"
 #~ msgid "_All"
