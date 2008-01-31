@@ -2,6 +2,17 @@
 
 	Merge from trunk:
 
+        * gdk/win32/gdkevents-win32.c:
+	Refactored some of the window hiding/showing code from
+	WM_ACTIVATE to WM_SIZE and WM_SYSCOMMAND.  Having this
+	under WM_ACTIVATE was causing the application to go into
+	a weird state when the user right-clicked on the taskbar
+	entry of a window that was minimized.  (#505928)
+	
+2008-01-31  Cody Russell  <bratsche@gnome.org>
+
+	Merge from trunk:
+
 	* gtk/gtkpaned.c (gtk_paned_set_position):
 	Change queue_resize() to queue_draw(), and add a check for
 	child2 != NULL in case someone calls this before there is
