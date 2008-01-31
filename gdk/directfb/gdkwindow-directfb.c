@@ -3055,7 +3055,7 @@ gdk_window_impl_directfb_process_updates (GdkPaintable *paintable,
   private->update_area = NULL;
       
   D_DEBUG_AT( GDKDFB_Paintable, "  -> update area %4d,%4d-%4dx%4d\n",
-              GDKDFB_RECTANGLE_VALS_FROM_SEGMENT( &update_area->extents ) );
+              GDKDFB_RECTANGLE_VALS_FROM_BOX( &update_area->extents ) );
 
   if (_gdk_event_func && gdk_window_is_viewable (window))
     {
@@ -3105,8 +3105,8 @@ gdk_window_impl_directfb_begin_paint_region (GdkPaintable    *paintable,
   if (!region)
     return;
 
-  D_DEBUG_AT( GDKDFB_Window, "%s( %p ) <- %4d,%4d-%4d,%4d (%d boxes)\n", __FUNCTION__,
-              paintable, GDKDFB_RECTANGLE_VALS_FROM_SEGMENT(&region->extents), region->numRects );
+  D_DEBUG_AT( GDKDFB_Window, "%s( %p ) <- %4d,%4d-%4d,%4d (%ld boxes)\n", __FUNCTION__,
+              paintable, GDKDFB_RECTANGLE_VALS_FROM_BOX(&region->extents), region->numRects );
 
   /* When it's buffered... */
   if (impl->buffered)
@@ -3114,7 +3114,7 @@ gdk_window_impl_directfb_begin_paint_region (GdkPaintable    *paintable,
       /* ...we're already painting on it! */
       g_assert( impl->paint_depth > 0 );
     
-      D_DEBUG_AT( GDKDFB_Window, "  -> painted  %4d,%4d-%4dx%4d (%d boxes)\n",
+      D_DEBUG_AT( GDKDFB_Window, "  -> painted  %4d,%4d-%4dx%4d (%ld boxes)\n",
                   DFB_RECTANGLE_VALS_FROM_REGION( &impl->paint_region.extents ), impl->paint_region.numRects );
 
       /* Add the new region to the paint region... */
@@ -3134,13 +3134,13 @@ gdk_window_impl_directfb_begin_paint_region (GdkPaintable    *paintable,
       impl->buffered = TRUE;
     }
 
-  D_DEBUG_AT( GDKDFB_Window, "  -> painting %4d,%4d-%4dx%4d (%d boxes)\n",
+  D_DEBUG_AT( GDKDFB_Window, "  -> painting %4d,%4d-%4dx%4d (%ld boxes)\n",
               DFB_RECTANGLE_VALS_FROM_REGION( &impl->paint_region.extents ), impl->paint_region.numRects );
 
   /* ...but clip the initial/compound result against the clip region. */
   gdk_region_intersect (&impl->paint_region, &impl->clip_region);
 
-  D_DEBUG_AT( GDKDFB_Window, "  -> clipped  %4d,%4d-%4dx%4d (%d boxes)\n",
+  D_DEBUG_AT( GDKDFB_Window, "  -> clipped  %4d,%4d-%4dx%4d (%ld boxes)\n",
               DFB_RECTANGLE_VALS_FROM_REGION( &impl->paint_region.extents ), impl->paint_region.numRects );
 
   impl->paint_depth++;
@@ -3151,7 +3151,7 @@ gdk_window_impl_directfb_begin_paint_region (GdkPaintable    *paintable,
     {
       GdkRegionBox *box = &region->rects[i];
 
-      D_DEBUG_AT( GDKDFB_Window, "  -> [%2d] %4d,%4d-%4dx%4d\n", i, GDKDFB_RECTANGLE_VALS_FROM_SEGMENT( box ) );
+      D_DEBUG_AT( GDKDFB_Window, "  -> [%2d] %4d,%4d-%4dx%4d\n", i, GDKDFB_RECTANGLE_VALS_FROM_BOX( box ) );
 
       _gdk_windowing_window_clear_area (GDK_WINDOW(wimpl->gdkWindow),
                                         box->x1,
@@ -3188,7 +3188,7 @@ gdk_window_impl_directfb_end_paint (GdkPaintable *paintable)
                             impl->paint_region.extents.x2-1,
                             impl->paint_region.extents.y2-1 };
 
-          D_DEBUG_AT( GDKDFB_Window, "  -> flip %4d,%4d-%4dx%4d (%d boxes)\n",
+          D_DEBUG_AT( GDKDFB_Window, "  -> flip %4d,%4d-%4dx%4d (%ld boxes)\n",
                       DFB_RECTANGLE_VALS_FROM_REGION( &reg ), impl->paint_region.numRects );
 
           impl->surface->Flip( impl->surface, &reg, 0 );
@@ -3221,7 +3221,7 @@ gdk_window_impl_directfb_end_paint (GdkPaintable *paintable)
                   reg.x2 = impl->abs_x - top->x + impl->paint_region.extents.x2 - 1;
                   reg.y2 = impl->abs_y - top->y + impl->paint_region.extents.y2 - 1;
   
-                  D_DEBUG_AT( GDKDFB_Window, "  -> queue flip %4d,%4d-%4dx%4d (%d boxes)\n",
+                  D_DEBUG_AT( GDKDFB_Window, "  -> queue flip %4d,%4d-%4dx%4d (%ld boxes)\n",
                               DFB_RECTANGLE_VALS_FROM_REGION( &reg ), impl->paint_region.numRects );
   
                   dfb_updates_add( &wimpl->flips, &reg );

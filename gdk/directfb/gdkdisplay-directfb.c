@@ -410,9 +410,10 @@ gdk_display_pointer_ungrab (GdkDisplay *display,guint32 time)
  */
 
 GdkGrabStatus
-gdk_directfb_keyboard_grab (GdkDisplay *display,GdkWindow *window,
-                            gint       owner_events,
-                            guint32    time)
+gdk_directfb_keyboard_grab (GdkDisplay *display,
+                            GdkWindow  *window,
+                            gint        owner_events,
+                            guint32     time)
 {
   GdkWindow             *toplevel;
   GdkWindowImplDirectFB *impl;
@@ -437,7 +438,8 @@ gdk_directfb_keyboard_grab (GdkDisplay *display,GdkWindow *window,
 }
 
 void
-gdk_directfb_keyboard_ungrab (GdkDisplay *display,guint32 time)
+gdk_directfb_keyboard_ungrab (GdkDisplay *display,
+                              guint32     time)
 {
   GdkWindow             *toplevel;
   GdkWindowImplDirectFB *impl;
@@ -445,8 +447,7 @@ gdk_directfb_keyboard_ungrab (GdkDisplay *display,guint32 time)
   if (!_gdk_directfb_keyboard_grab_window)
     return;
 
-  toplevel =
-    gdk_directfb_window_find_toplevel (_gdk_directfb_keyboard_grab_window);
+  toplevel = gdk_directfb_window_find_toplevel (_gdk_directfb_keyboard_grab_window);
   impl = GDK_WINDOW_IMPL_DIRECTFB (GDK_WINDOW_OBJECT (toplevel)->impl);
 
   if (impl->window)
@@ -477,50 +478,19 @@ gdk_directfb_keyboard_ungrab (GdkDisplay *display,guint32 time)
  */
 
 GdkGrabStatus
-gdk_display_keyboard_grab (GdkDisplay *display,GdkWindow *window,
-                   gint       owner_events,
-                   guint32    time)
+gdk_display_keyboard_grab (GdkDisplay *display,
+                           GdkWindow  *window,
+                           gint        owner_events,
+                           guint32     time)
 {
-  GdkWindow             *toplevel;
-  GdkWindowImplDirectFB *impl;
-
-  g_return_val_if_fail (GDK_IS_WINDOW (window), 0);
-
-  if (_gdk_directfb_keyboard_grab_window)
-    gdk_keyboard_ungrab (time);
-
-  toplevel = gdk_directfb_window_find_toplevel (window);
-  impl = GDK_WINDOW_IMPL_DIRECTFB (GDK_WINDOW_OBJECT (toplevel)->impl);
-
-  if (impl->window)
-    {
-      if (impl->window->GrabKeyboard (impl->window) == DFB_LOCKED)
-        return GDK_GRAB_ALREADY_GRABBED;
-    }
-
-  _gdk_directfb_keyboard_grab_window = g_object_ref (window);
-  _gdk_directfb_keyboard_grab_owner_events = owner_events;
-  return GDK_GRAB_SUCCESS;
+  return gdk_directfb_keyboard_grab (display, window, owner_events, time);
 }
 
 void
-gdk_display_keyboard_ungrab (GdkDisplay *display,guint32 time)
+gdk_display_keyboard_ungrab (GdkDisplay *display,
+                             guint32     time)
 {
-  GdkWindow             *toplevel;
-  GdkWindowImplDirectFB *impl;
-
-  if (!_gdk_directfb_keyboard_grab_window)
-    return;
-
-  toplevel =
-    gdk_directfb_window_find_toplevel (_gdk_directfb_keyboard_grab_window);
-  impl = GDK_WINDOW_IMPL_DIRECTFB (GDK_WINDOW_OBJECT (toplevel)->impl);
-
-  if (impl->window)
-    impl->window->UngrabKeyboard (impl->window);
-
-  g_object_unref (_gdk_directfb_keyboard_grab_window);
-  _gdk_directfb_keyboard_grab_window = NULL;
+  return gdk_directfb_keyboard_ungrab (display, time);
 }
 
 

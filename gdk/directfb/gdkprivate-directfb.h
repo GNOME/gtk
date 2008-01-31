@@ -96,17 +96,6 @@ typedef struct
 
 GType      gdk_drawable_impl_directfb_get_type (void);
 
-void       _gdk_directfb_draw_rectangle (GdkDrawable *drawable,
-                                         GdkGC       *gc,
-                                         gint         filled,
-                                         gint         x,
-                                         gint         y,
-                                         gint         width,
-                                         gint         height);
-
-void       _gdk_directfb_update         (GdkDrawableImplDirectFB *impl,
-                                         DFBRegion               *region);
-
 GdkEvent *  gdk_directfb_event_make     (GdkWindow               *window,
                                          GdkEventType             type);
 
@@ -243,6 +232,14 @@ void       gdk_directfb_event_windows_add (GdkWindow *window);
 #if (DIRECTFB_MAJOR_VERSION >= 1)
 void       gdk_directfb_event_windows_remove (GdkWindow *window);
 #endif
+
+GdkGrabStatus gdk_directfb_keyboard_grab  (GdkDisplay          *display,
+                                           GdkWindow           *window,
+                                           gint                 owner_events,
+                                           guint32              time);
+
+void          gdk_directfb_keyboard_ungrab(GdkDisplay          *display,
+                                           guint32              time);
 
 GdkGrabStatus gdk_directfb_pointer_grab   (GdkWindow           *window,
                                            gint                 owner_events,
@@ -410,7 +407,7 @@ temp_region_deinit( GdkRegion *region )
 }
 
 
-#define GDKDFB_RECTANGLE_VALS_FROM_SEGMENT(s)     (s)->x1, (s)->y1, (s)->x2-(s)->x1, (s)->y2-(s)->y1
+#define GDKDFB_RECTANGLE_VALS_FROM_BOX(s)   (s)->x1, (s)->y1, (s)->x2-(s)->x1, (s)->y2-(s)->y1
 
 
 #endif /* __GDK_PRIVATE_DIRECTFB_H__ */

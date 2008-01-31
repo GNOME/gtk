@@ -255,7 +255,7 @@ gdk_directfb_clip_region (GdkDrawable  *drawable,
 
   if (private->buffered) {
        D_DEBUG_AT( GDKDFB_DrawClip, "  -> buffered region   > %4d,%4d - %4dx%4d <  (%ld boxes)\n",
-                   GDKDFB_RECTANGLE_VALS_FROM_SEGMENT( &private->paint_region.extents ),
+                   GDKDFB_RECTANGLE_VALS_FROM_BOX( &private->paint_region.extents ),
                    private->paint_region.numRects );
 
     gdk_region_intersect (ret_clip, &private->paint_region);
@@ -269,7 +269,7 @@ gdk_directfb_clip_region (GdkDrawable  *drawable,
       if (region->numRects)
         {
           D_DEBUG_AT( GDKDFB_DrawClip, "  -> clipping region   > %4d,%4d - %4dx%4d <  (%ld boxes)\n",
-                      GDKDFB_RECTANGLE_VALS_FROM_SEGMENT( &region->extents ), region->numRects );
+                      GDKDFB_RECTANGLE_VALS_FROM_BOX( &region->extents ), region->numRects );
 
           if (gc->clip_x_origin || gc->clip_y_origin)
             {
@@ -290,7 +290,7 @@ gdk_directfb_clip_region (GdkDrawable  *drawable,
 
   if (private->buffered) {
        D_DEBUG_AT( GDKDFB_DrawClip, "  => returning clip   >> %4d,%4d - %4dx%4d << (%ld boxes)\n",
-                   GDKDFB_RECTANGLE_VALS_FROM_SEGMENT( &ret_clip->extents ), ret_clip->numRects );
+                   GDKDFB_RECTANGLE_VALS_FROM_BOX( &ret_clip->extents ), ret_clip->numRects );
     return;
   }
 
@@ -324,15 +324,15 @@ gdk_directfb_clip_region (GdkDrawable  *drawable,
           temp.extents.x2 = cur_private->x + cur_impl->width;
           temp.extents.y2 = cur_private->y + cur_impl->height;
 
-          D_DEBUG_AT( GDKDFB_DrawClip, "  -> clipping child    [ %4d,%4d - %4dx%4d ]\n",
-                      GDKDFB_RECTANGLE_VALS_FROM_SEGMENT( &temp.extents ), temp.numRects );
+          D_DEBUG_AT( GDKDFB_DrawClip, "  -> clipping child    [ %4d,%4d - %4dx%4d ]  (%ld boxes)\n",
+                      GDKDFB_RECTANGLE_VALS_FROM_BOX( &temp.extents ), temp.numRects );
 
           gdk_region_subtract (ret_clip, &temp);
         }
     }
 
   D_DEBUG_AT( GDKDFB_DrawClip, "  => returning clip   >> %4d,%4d - %4dx%4d << (%ld boxes)\n",
-              GDKDFB_RECTANGLE_VALS_FROM_SEGMENT( &ret_clip->extents ), ret_clip->numRects );
+              GDKDFB_RECTANGLE_VALS_FROM_BOX( &ret_clip->extents ), ret_clip->numRects );
 }
 
 /* Drawing
@@ -418,14 +418,14 @@ gdk_directfb_setup_for_drawing (GdkDrawableImplDirectFB *impl,
   return TRUE;
 }
 
-void
-_gdk_directfb_draw_rectangle (GdkDrawable *drawable,
-                              GdkGC       *gc,
-                              gint         filled,
-                              gint         x,
-                              gint         y,
-                              gint         width,
-                              gint         height)
+static void
+gdk_directfb_draw_rectangle (GdkDrawable *drawable,
+                             GdkGC       *gc,
+                             gint         filled,
+                             gint         x,
+                             gint         y,
+                             gint         width,
+                             gint         height)
 {
   GdkDrawableImplDirectFB *impl;
   GdkRegion                clip;
@@ -1519,7 +1519,7 @@ gdk_drawable_impl_directfb_class_init (GdkDrawableImplDirectFBClass *klass)
   object_class->finalize = gdk_drawable_impl_directfb_finalize;
 
   drawable_class->create_gc      = _gdk_directfb_gc_new;
-  drawable_class->draw_rectangle = _gdk_directfb_draw_rectangle;
+  drawable_class->draw_rectangle = gdk_directfb_draw_rectangle;
   drawable_class->draw_arc       = gdk_directfb_draw_arc;
   drawable_class->draw_polygon   = gdk_directfb_draw_polygon;
   drawable_class->draw_text      = gdk_directfb_draw_text;
