@@ -1,3 +1,11 @@
+2008-01-31  Richard Hult  <richard@imendio.com>
+
+	* gdk/quartz/GdkQuartzView.c: Another attempt at fixing focus
+	issues with undecorated windows. Revert the change done on
+	2008-01-25 and fix it by using the view's bounds instead. The
+	bounds will always be up to date when setting up the tracking
+	rect, so this should be more robust.
+
 2008-01-30  Sven Neumann  <sven@gimp.org>
 
 	* gdk/directfb/gdkdrawable-directfb.c

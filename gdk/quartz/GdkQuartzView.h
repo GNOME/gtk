@@ -30,7 +30,3 @@
 -(GdkWindow *)gdkWindow;
 
 @end
-
-
-
-
