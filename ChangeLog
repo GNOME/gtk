@@ -1,3 +1,12 @@
+2008-01-31  Cody Russell  <bratsche@gnome.org>
+
+	Merge from trunk:
+
+	* gtk/gtkpaned.c (gtk_paned_set_position):
+	Change queue_resize() to queue_draw(), and add a check for
+	child2 != NULL in case someone calls this before there is
+	a child packed in there.  (#144269 again)
+
 2008-01-31  Richard Hult  <richard@imendio.com>
 
 	Merge from trunk, except for the reverting since that part wasn't
