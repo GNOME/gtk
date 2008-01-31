@@ -1,3 +1,10 @@
+2008-01-31  Cody Russell  <bratsche@gnome.org>
+
+	* gtk/gtkpaned.c (gtk_paned_set_position):
+	Change queue_resize() to queue_draw(), and add a check for
+	child2 != NULL in case someone calls this before there is
+	a child packed in there.  (#144269 again)
+
 2008-01-31  Sven Neumann  <sven@gimp.org>
 
 	* gdk/directfb/gdkimage-directfb.c (_gdk_directfb_copy_to_image):
