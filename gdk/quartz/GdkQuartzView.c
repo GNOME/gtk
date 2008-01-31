@@ -141,7 +141,7 @@
    * NSPointInRect ([[self window] convertScreenToBase:[NSEvent mouseLocation]], rect)
    */
 
-  rect = NSMakeRect (0, 0, impl->width, impl->height);
+  rect = [self bounds];
   trackingRect = [self addTrackingRect:rect
                                  owner:self
                               userData:nil
