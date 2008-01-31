@@ -1,5 +1,10 @@
 2008-01-31  Sven Neumann  <sven@gimp.org>
 
+	* gdk/directfb/gdkimage-directfb.c (_gdk_directfb_copy_to_image):
+	applied patch from Denis Oliver Kropp <dok@directfb.org>.
+
+2008-01-31  Sven Neumann  <sven@gimp.org>
+
 	* gdk/directfb/gdkdisplay-directfb.c
 	* gdk/directfb/gdkdrawable-directfb.c
 	* gdk/directfb/gdkprivate-directfb.h
