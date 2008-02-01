@@ -6761,8 +6761,8 @@ insert_row_clist (GtkWidget *widget, gpointer data)
 
   if (!style1)
     {
-      GdkColor col1;
-      GdkColor col2;
+      GdkColor col1 = { 0, };
+      GdkColor col2 = { 0, };
 
       col1.red   = 0;
       col1.green = 56000;
@@ -6887,8 +6887,8 @@ create_clist (GtkWidget *widget)
   GtkWidget *label;
 
   GtkStyle *style;
-  GdkColor col1;
-  GdkColor col2;
+  GdkColor col1 = { 0, };
+  GdkColor col2 = { 0, };
 
   if (!window)
     {
@@ -7204,8 +7204,8 @@ void change_style (GtkWidget *widget, GtkCTree *ctree)
   static GtkStyle *style2 = NULL;
 
   GtkCTreeNode *node;
-  GdkColor col1;
-  GdkColor col2;
+  GdkColor col1 = { 0, };
+  GdkColor col2 = { 0, };
 
   if (GTK_CLIST (ctree)->focus_row >= 0)
     node = GTK_CTREE_NODE

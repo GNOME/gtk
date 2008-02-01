@@ -95,13 +95,15 @@ show_accel_dialog (GtkAction *action)
 }
 
 static void
-toolbar_style (GtkAction *action, 
-	       gpointer   user_data)
+toolbar_style (GtkAction *action)
 {
   GtkToolbarStyle style;
 
   g_return_if_fail (toolbar != NULL);
-  style = GPOINTER_TO_INT (user_data);
+
+  radio_action (action);
+
+  style = gtk_radio_action_get_current_value (GTK_RADIO_ACTION (action));
 
   gtk_toolbar_set_style (toolbar, style);
 }
@@ -430,7 +432,7 @@ main (int argc, char **argv)
   gtk_action_group_add_radio_actions (action_group, 
 				      toolbar_entries, n_toolbar_entries, 
 				      GTK_TOOLBAR_BOTH,
-				      G_CALLBACK (radio_action), NULL);
+				      G_CALLBACK (toolbar_style), NULL);
   gtk_action_group_add_action_with_accel (action_group, action, NULL);
 
   create_window (action_group);

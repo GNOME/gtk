@@ -1,3 +1,12 @@
+2008-02-01  Michael Natterer  <mitch@imendio.com>
+
+	* tests/testgtk.c: initialize GdkColor structs to fix warning
+	about uninitialized "pixel" member.
+
+	* tests/testactions.c: connect the toolbar_style() callback so it
+	does something useful and doesn't warn about being defined but not
+	used.
+
 2008-01-31  Cody Russell  <bratsche@gnome.org>
 
 	* gdk/win32/gdkevents-win32.c:
