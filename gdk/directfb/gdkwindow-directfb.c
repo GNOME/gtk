@@ -2411,7 +2411,7 @@ gdk_window_set_functions (GdkWindow     *window,
     return;
 
   /* N/A */
-  g_message("unimplemented %s", G_GNUC_FUNCTION);
+  g_message("unimplemented %s", G_STRLOC);
 }
 
 void
@@ -2444,7 +2444,7 @@ gdk_window_set_static_gravities (GdkWindow *window,
     return FALSE;
 
   /* N/A */
-  g_message("unimplemented %s", G_GNUC_FUNCTION);
+  g_message("unimplemented %s", G_STRLOC);
 
   return FALSE;
 }
@@ -2462,7 +2462,7 @@ gdk_window_begin_resize_drag (GdkWindow     *window,
   if (GDK_WINDOW_DESTROYED (window))
     return;
 
-  g_message("unimplemented %s", G_GNUC_FUNCTION);
+  g_message("unimplemented %s", G_STRLOC);
 }
 
 void
@@ -2477,7 +2477,7 @@ gdk_window_begin_move_drag (GdkWindow *window,
   if (GDK_WINDOW_DESTROYED (window))
     return;
 
-  g_message("unimplemented %s", G_GNUC_FUNCTION);
+  g_message("unimplemented %s", G_STRLOC);
 }
 
 /**

@@ -476,7 +476,7 @@ gdk_directfb_draw_arc (GdkDrawable *drawable,
                        gint         angle1,
                        gint         angle2)
 {
-  WARN_UNIMPLEMENTED (G_GNUC_FUNCTION);
+  WARN_UNIMPLEMENTED (G_STRLOC);
 }
 
 static void
@@ -560,7 +560,7 @@ gdk_directfb_draw_text (GdkDrawable *drawable,
                         const gchar *text,
                         gint         text_length)
 {
-  WARN_UNIMPLEMENTED (G_GNUC_FUNCTION);
+  WARN_UNIMPLEMENTED (G_STRLOC);
 }
 
 static void
@@ -572,7 +572,7 @@ gdk_directfb_draw_text_wc (GdkDrawable    *drawable,
                            const GdkWChar *text,
                            gint            text_length)
 {
-  WARN_UNIMPLEMENTED (G_GNUC_FUNCTION);
+  WARN_UNIMPLEMENTED (G_STRLOC);
 }
 
 static void

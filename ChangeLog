@@ -1,3 +1,13 @@
+2008-02-01  Sven Neumann  <sven@gimp.org>
+
+	* gdk/directfb/gdkdrawable-directfb.c
+	* gdk/directfb/gdkimage-directfb.c
+	* gdk/directfb/gdkinput-directfb.c
+	* gdk/directfb/gdkpixmap-directfb.c
+	* gdk/directfb/gdkwindow-directfb.c: applied
+	directfb-deprecation-fixes.patch from Debian. Fixes build with
+	GLib 2.15 deprecation of G_GNUC_FUNCTION in favor of G_STRLOC.
+
 2008-01-31  Cody Russell  <bratsche@gnome.org>
 
 	Merge from trunk:

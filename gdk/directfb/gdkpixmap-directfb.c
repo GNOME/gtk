@@ -172,7 +172,7 @@ gdk_pixmap_new (GdkDrawable *drawable,
           format = DSPF_RGB32;
           break;
         default:
-          g_message ("unimplemented %s for depth %d", G_GNUC_FUNCTION, depth);
+          g_message ("unimplemented %s for depth %d", G_STRLOC, depth);
           return NULL;
         }
     }

@@ -151,7 +151,7 @@ gdk_image_new_bitmap (GdkVisual *visual,
 
   GDK_NOTE (MISC, g_print ("gdk_image_new_bitmap: %dx%d\n", w, h));
 
-  g_message ("not fully implemented %s", G_GNUC_FUNCTION);
+  g_message ("not fully implemented %s", G_STRLOC);
 
   image->bpl = (w + 7) / 8;
   image->mem = g_malloc (image->bpl * h);
@@ -209,7 +209,7 @@ _gdk_image_new_for_depth (GdkScreen    *screen,
       format = DSPF_ARGB;
       break;
     default:
-      g_message ("unimplemented %s for depth %d", G_GNUC_FUNCTION, depth);
+      g_message ("unimplemented %s for depth %d", G_STRLOC, depth);
       return NULL;
     }
 
