@@ -122,8 +122,8 @@ gboolean xp_theme_draw (GdkWindow *win, XpThemeElement element,
                         GdkRectangle *area);
 gboolean xp_theme_is_drawable (XpThemeElement element);
 gboolean xp_theme_get_system_font (XpThemeClass klazz, XpThemeFont fontId, OUT LOGFONT *lf);
-gboolean xp_theme_get_system_color (XpThemeClass klazz, int colorId, OUT DWORD * pColor);
-gboolean xp_theme_get_system_metric (XpThemeClass klazz, int metricId, OUT int * pVal);
+gboolean xp_theme_get_system_color (XpThemeClass klazz, int colorId, OUT DWORD *pColor);
+gboolean xp_theme_get_system_metric (XpThemeClass klazz, int metricId, OUT int *pVal);
 
 gboolean xp_theme_is_active (void);
 

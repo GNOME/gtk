@@ -32,45 +32,45 @@ static GtkRcStyleClass *parent_class;
 GType msw_type_rc_style = 0;
 
 void
-msw_rc_style_register_type (GTypeModule * module)
+msw_rc_style_register_type (GTypeModule *module)
 {
-    static const GTypeInfo object_info = {
-	sizeof (MswRcStyleClass),
-	(GBaseInitFunc) NULL,
-	(GBaseFinalizeFunc) NULL,
-	(GClassInitFunc) msw_rc_style_class_init,
-	NULL,			/* class_finalize */
-	NULL,			/* class_data */
-	sizeof (MswRcStyle),
-	0,			/* n_preallocs */
-	(GInstanceInitFunc) msw_rc_style_init,
-    };
+  static const GTypeInfo object_info = {
+    sizeof (MswRcStyleClass),
+    (GBaseInitFunc) NULL,
+    (GBaseFinalizeFunc) NULL,
+    (GClassInitFunc) msw_rc_style_class_init,
+    NULL,			/* class_finalize */
+    NULL,			/* class_data */
+    sizeof (MswRcStyle),
+    0,				/* n_preallocs */
+    (GInstanceInitFunc) msw_rc_style_init,
+  };
 
-    msw_type_rc_style = g_type_module_register_type (module,
-						     GTK_TYPE_RC_STYLE,
-						     "MswRcStyle",
-						     &object_info, 0);
+  msw_type_rc_style = g_type_module_register_type (module,
+						   GTK_TYPE_RC_STYLE,
+						   "MswRcStyle",
+						   &object_info, 0);
 }
 
 static void
-msw_rc_style_init (MswRcStyle * style)
+msw_rc_style_init (MswRcStyle *style)
 {
 }
 
 static void
-msw_rc_style_class_init (MswRcStyleClass * klass)
+msw_rc_style_class_init (MswRcStyleClass *klass)
 {
-    GtkRcStyleClass *rc_style_class = GTK_RC_STYLE_CLASS (klass);
+  GtkRcStyleClass *rc_style_class = GTK_RC_STYLE_CLASS (klass);
 
-    parent_class = g_type_class_peek_parent (klass);
+  parent_class = g_type_class_peek_parent (klass);
 
-    rc_style_class->create_style = msw_rc_style_create_style;
+  rc_style_class->create_style = msw_rc_style_create_style;
 }
 
 /* Create an empty style suitable to this RC style
  */
 static GtkStyle *
-msw_rc_style_create_style (GtkRcStyle * rc_style)
+msw_rc_style_create_style (GtkRcStyle *rc_style)
 {
-    return g_object_new (MSW_TYPE_STYLE, NULL);
+  return g_object_new (MSW_TYPE_STYLE, NULL);
 }
