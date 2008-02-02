@@ -1173,7 +1173,7 @@ msgstr "_Licenza"
 #: ../gtk/gtkaboutdialog.c:742
 #, c-format
 msgid "About %s"
-msgstr "Acerca de %s"
+msgstr "Sobre %s"
 
 #: ../gtk/gtkaboutdialog.c:2024
 msgid "Credits"
