@@ -1095,8 +1095,7 @@ combo_box_draw_arrow (GtkStyle *style,
 
       dc = get_window_dc (style, window, state, area->x, area->y, area->width,
 			  area->height, &rect);
-      border = (GTK_TOGGLE_BUTTON (widget->parent)->
-		active ? DFCS_PUSHED | DFCS_FLAT : 0);
+      border = (GTK_TOGGLE_BUTTON (widget->parent)->active ? DFCS_PUSHED | DFCS_FLAT : 0);
 
       InflateRect (&rect, 1, 1);
       DrawFrameControl (dc, &rect, DFC_SCROLL, DFCS_SCROLLDOWN | border);
@@ -1600,8 +1599,7 @@ draw_arrow (GtkStyle *style,
       /* draw the toolbar chevrons - waiting for GTK 2.4 */
       if (name && !strcmp (name, "gtk-toolbar-arrow"))
 	{
-	  if (xp_theme_draw
-	      (window, XP_THEME_ELEMENT_REBAR_CHEVRON, style, x, y,
+	  if (xp_theme_draw (window, XP_THEME_ELEMENT_REBAR_CHEVRON, style, x, y,
 	       width, height, state, area))
 	    {
 	      return;
@@ -1611,8 +1609,7 @@ draw_arrow (GtkStyle *style,
       else if (0		/* widget->parent && GTK_IS_BUTTON
 				   (widget->parent) */ )
 	{
-	  if (xp_theme_draw
-	      (window, XP_THEME_ELEMENT_COMBOBUTTON, style, x - 3,
+	  if (xp_theme_draw (window, XP_THEME_ELEMENT_COMBOBUTTON, style, x - 3,
 	       widget->allocation.y + 1, width + 5,
 	       widget->allocation.height - 4, state, area))
 	    {
@@ -1997,8 +1994,7 @@ draw_box (GtkStyle *style,
     {
       if (GTK_IS_TREE_VIEW (widget->parent) || GTK_IS_CLIST (widget->parent))
 	{
-	  if (xp_theme_draw
-	      (window, XP_THEME_ELEMENT_LIST_HEADER, style, x, y,
+	  if (xp_theme_draw (window, XP_THEME_ELEMENT_LIST_HEADER, style, x, y,
 	       width, height, state_type, area))
 	    {
 	      return;
@@ -2029,11 +2025,10 @@ draw_box (GtkStyle *style,
       else
 	{
 	  gboolean is_default = GTK_WIDGET_HAS_DEFAULT (widget);
-	  if (xp_theme_draw
-	      (window,
-	       is_default ? XP_THEME_ELEMENT_DEFAULT_BUTTON :
-	       XP_THEME_ELEMENT_BUTTON, style, x, y, width, height,
-	       state_type, area))
+	  if (xp_theme_draw (window,
+			     is_default ? XP_THEME_ELEMENT_DEFAULT_BUTTON :
+			     XP_THEME_ELEMENT_BUTTON, style, x, y, width, height,
+			     state_type, area))
 	    {
 	      return;
 	    }
@@ -2082,9 +2077,7 @@ draw_box (GtkStyle *style,
 	  gboolean is_v = GTK_IS_VSCROLLBAR (widget);
 
 	  if (xp_theme_draw (window,
-			     is_v
-			     ? XP_THEME_ELEMENT_SCROLLBAR_V
-			     : XP_THEME_ELEMENT_SCROLLBAR_H,
+			     is_v ? XP_THEME_ELEMENT_SCROLLBAR_V : XP_THEME_ELEMENT_SCROLLBAR_H,
 			     style, x, y, width, height, state_type, area))
 	    {
 	      XpThemeElement gripper =
@@ -2152,8 +2145,7 @@ draw_box (GtkStyle *style,
 	  GtkProgressBar *progress_bar = GTK_PROGRESS_BAR (widget);
 	  XpThemeElement xp_progress_bar =
 	    map_gtk_progress_bar_to_xp (progress_bar, TRUE);
-	  if (xp_theme_draw
-	      (window, xp_progress_bar, style, x, y, width, height,
+	  if (xp_theme_draw (window, xp_progress_bar, style, x, y, width, height,
 	       state_type, area))
 	    {
 	      return;
@@ -2168,9 +2160,7 @@ draw_box (GtkStyle *style,
 	  gboolean is_vertical = GTK_IS_VSCROLLBAR (widget);
 
 	  if (xp_theme_draw (window,
-			     is_vertical
-			     ? XP_THEME_ELEMENT_TROUGH_V
-			     : XP_THEME_ELEMENT_TROUGH_H,
+			     is_vertical ? XP_THEME_ELEMENT_TROUGH_V : XP_THEME_ELEMENT_TROUGH_H,
 			     style, x, y, width, height, state_type, area))
 	    {
 	      return;
@@ -2205,10 +2195,9 @@ draw_box (GtkStyle *style,
 
 	  if (is_vertical)
 	    {
-	      if (xp_theme_draw
-		  (window, XP_THEME_ELEMENT_SCALE_TROUGH_V,
-		   style, (2 * x + width) / 2, y, 2, height,
-		   state_type, area))
+	      if (xp_theme_draw (window, XP_THEME_ELEMENT_SCALE_TROUGH_V,
+				 style, (2 * x + width) / 2, y, 2, height,
+				 state_type, area))
 		{
 		  return;
 		}
@@ -2220,10 +2209,9 @@ draw_box (GtkStyle *style,
 	    }
 	  else
 	    {
-	      if (xp_theme_draw
-		  (window, XP_THEME_ELEMENT_SCALE_TROUGH_H,
-		   style, x, (2 * y + height) / 2, width, 2,
-		   state_type, area))
+	      if (xp_theme_draw (window, XP_THEME_ELEMENT_SCALE_TROUGH_H,
+				 style, x, (2 * y + height) / 2, width, 2,
+				 state_type, area))
 		{
 		  return;
 		}
@@ -2287,9 +2275,8 @@ draw_box (GtkStyle *style,
 
       if (name && !strcmp (name, "gtk-tooltips"))
 	{
-	  if (xp_theme_draw
-	      (window, XP_THEME_ELEMENT_TOOLTIP, style, x, y, width,
-	       height, state_type, area))
+	  if (xp_theme_draw (window, XP_THEME_ELEMENT_TOOLTIP, style, x, y, width,
+			     height, state_type, area))
 	    {
 	      return;
 	    }
@@ -3150,8 +3137,7 @@ draw_hline (GtkStyle *style,
 {
   if (xp_theme_is_active () && detail && !strcmp (detail, "menuitem"))
     {
-      if (xp_theme_draw
-	  (window, XP_THEME_ELEMENT_MENU_SEPARATOR, style, x1, y, x2, 1,
+      if (xp_theme_draw (window, XP_THEME_ELEMENT_MENU_SEPARATOR, style, x1, y, x2, 1,
 	   state_type, area))
 	{
 	  return;
@@ -3268,9 +3254,8 @@ draw_resize_grip (GtkStyle *style,
 {
   if (detail && !strcmp (detail, "statusbar"))
     {
-      if (xp_theme_draw
-	  (window, XP_THEME_ELEMENT_STATUS_GRIPPER, style, x, y, width,
-	   height, state_type, area))
+      if (xp_theme_draw (window, XP_THEME_ELEMENT_STATUS_GRIPPER, style, x, y, width,
+			 height, state_type, area))
 	{
 	  return;
 	}
