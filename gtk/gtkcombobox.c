@@ -4264,6 +4264,7 @@ gtk_combo_box_cell_layout_add_attribute (GtkCellLayout   *layout,
   combo_box = GTK_COMBO_BOX (layout);
 
   info = gtk_combo_box_get_cell_info (combo_box, cell);
+  g_return_if_fail (info != NULL);
 
   info->attributes = g_slist_prepend (info->attributes,
                                       GINT_TO_POINTER (column));
