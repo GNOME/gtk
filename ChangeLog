@@ -1,5 +1,16 @@
 2008-02-05  Cody Russell  <bratsche@gnome.org>
 
+	Merge from trunk:
+
+	* gdk/win32/gdkevents-win32.c:
+	Refactored some of the window hiding/showing code from
+	WM_ACTIVATE to WM_SIZE and WM_SYSCOMMAND.  Having this
+	under WM_ACTIVATE was causing the application to go into
+	a weird state when the user right-clicked on the taskbar
+	entry of a window that was minimized.  (#505928)
+
+2008-02-05  Cody Russell  <bratsche@gnome.org>
+
 	Merged from trunk:
 
 	* gdk/win32/gdkwindow-win32.c: (gdk_window_set_transient_for),

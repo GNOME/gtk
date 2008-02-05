@@ -1,7 +1,7 @@
 /* GDK - The GIMP Drawing Kit
  * Copyright (C) 1995-1997 Peter Mattis, Spencer Kimball and Josh MacDonald
  * Copyright (C) 1998-2002 Tor Lillqvist
- * Copyright (C) 2007 Cody Russell
+ * Copyright (C) 2007-2008 Cody Russell
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -1366,6 +1366,32 @@ show_window_recurse (GdkWindow *window, gboolean hide_window)
 	}
 
       impl->changing_state = FALSE;
+    }
+}
+
+static void
+show_window_internal (GdkWindow *window, gboolean hide_window)
+{
+  GdkWindow *tmp_window = NULL;
+  GdkWindowImplWin32 *tmp_impl = GDK_WINDOW_IMPL_WIN32 (GDK_WINDOW_OBJECT (window)->impl);
+
+  if (!tmp_impl->changing_state)
+    {
+      /* Find the top-level window in our transient chain. */
+      while (tmp_impl->transient_owner != NULL)
+	{
+	  tmp_window = tmp_impl->transient_owner;
+	  tmp_impl = GDK_WINDOW_IMPL_WIN32 (GDK_WINDOW_OBJECT (tmp_window)->impl);
+	}
+
+      /* If we couldn't find one, use the window provided. */
+      if (tmp_window == NULL)
+	{
+	  tmp_window = window;
+	}
+
+      /* Recursively show/hide every window in the chain. */
+      show_window_recurse (tmp_window, hide_window);
     }
 }
 
@@ -2945,6 +2971,14 @@ gdk_event_translate (MSG  *msg,
       return_val = TRUE;
       break;
 
+    case WM_SYSCOMMAND:
+
+      if (msg->wParam == SC_MINIMIZE || msg->wParam == SC_RESTORE)
+	{
+	  show_window_internal (window, msg->wParam == SC_MINIMIZE ? TRUE : FALSE);
+	}
+      break;
+
     case WM_SIZE:
       GDK_NOTE (EVENTS,
 		g_print (" %s %dx%d",
@@ -2968,6 +3002,7 @@ gdk_event_translate (MSG  *msg,
 	  gdk_synthesize_window_state (window,
 				       GDK_WINDOW_STATE_WITHDRAWN,
 				       GDK_WINDOW_STATE_ICONIFIED);
+	  show_window_internal (window, TRUE);
 	}
       else if ((msg->wParam == SIZE_RESTORED ||
 		msg->wParam == SIZE_MAXIMIZED) &&
@@ -2980,11 +3015,14 @@ gdk_event_translate (MSG  *msg,
 	    handle_configure_event (msg, window);
 	  
 	  if (msg->wParam == SIZE_RESTORED)
-	    gdk_synthesize_window_state (window,
-					 GDK_WINDOW_STATE_ICONIFIED |
-					 GDK_WINDOW_STATE_MAXIMIZED |
-					 withdrawn_bit,
-					 0);
+	    {
+	      gdk_synthesize_window_state (window,
+					   GDK_WINDOW_STATE_ICONIFIED |
+					   GDK_WINDOW_STATE_MAXIMIZED |
+					   withdrawn_bit,
+					   0);
+	      show_window_internal (window, FALSE);
+	    }
 	  else if (msg->wParam == SIZE_MAXIMIZED)
 	    gdk_synthesize_window_state (window,
 					 GDK_WINDOW_STATE_ICONIFIED |
@@ -3438,48 +3476,6 @@ gdk_event_translate (MSG  *msg,
 
 #ifdef HAVE_WINTAB
     case WM_ACTIVATE:
-      ;
-
-      /*
-       * On Windows, transient windows will not have their own taskbar entries.
-       * Because of this, we must hide and restore groups of transients in both
-       * directions.  That is, all transient children must be hidden or restored
-       * with this window, but if this window's transient owner also has a
-       * transient owner then this window's transient owner must be hidden/restored
-       * with this one.  And etc, up the chain until we hit an ancestor that has no
-       * transient owner.
-       *
-       * It would be a good idea if applications don't chain transient windows
-       * together.  There's a limit to how much evil GTK can try to shield you
-       * from.
-       */
-      GdkWindow *tmp_window = NULL;
-      GdkWindowImplWin32 *tmp_impl = GDK_WINDOW_IMPL_WIN32 (GDK_WINDOW_OBJECT (window)->impl);
-
-      while (tmp_impl->transient_owner != NULL)
-	{
-	  tmp_window = tmp_impl->transient_owner;
-	  tmp_impl = GDK_WINDOW_IMPL_WIN32 (GDK_WINDOW_OBJECT (tmp_window)->impl);
-	}
-
-      if (tmp_window == NULL)
-	tmp_window = window;
-
-      if (LOWORD (msg->wParam) == WA_INACTIVE && HIWORD (msg->wParam))
-        {
-	  if (!tmp_impl->changing_state)
-	    {
-	      show_window_recurse (tmp_window, TRUE);
-	    }
-        }
-      else if (LOWORD (msg->wParam) == WA_ACTIVE && HIWORD (msg->wParam))
-	{
-	  if (!tmp_impl->changing_state)
-	    {
-	      show_window_recurse (tmp_window, FALSE);
-	    }
-        }
-
 
       /* Bring any tablet contexts to the top of the overlap order when
        * one of our windows is activated.
