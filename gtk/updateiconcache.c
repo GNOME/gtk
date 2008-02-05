@@ -623,6 +623,10 @@ scan_directory (const gchar *base_path,
 	  continue;
 	}
 
+      /* ignore images in the toplevel directory */
+      if (subdir == NULL)
+        continue;
+
       retval = g_file_test (path, G_FILE_TEST_IS_REGULAR);
       if (retval)
 	{
@@ -744,7 +748,7 @@ find_string (const gchar *n)
 static void
 add_string (const gchar *n, int offset)
 {
-  g_hash_table_insert (string_pool, n, GINT_TO_POINTER (offset));
+  g_hash_table_insert (string_pool, (gpointer) n, GINT_TO_POINTER (offset));
 }
 
 static gboolean
@@ -1473,7 +1477,7 @@ build_cache (const gchar *path)
   if (!validate_file (tmp_cache_path))
     {
       g_printerr (_("The generated cache was invalid.\n"));
-      g_unlink (tmp_cache_path);
+      //g_unlink (tmp_cache_path);
       exit (1);
     }
 
@@ -1575,6 +1579,32 @@ static GOptionEntry args[] = {
   { NULL }
 };
 
+static void
+printerr_handler (const gchar *string)
+{
+  const gchar *charset;
+
+  fputs (g_get_prgname (), stderr);
+  fputs (": ", stderr);
+  if (g_get_charset (&charset))
+    fputs (string, stderr); /* charset is UTF-8 already */
+  else
+    {
+      gchar *result;
+
+      result = g_convert_with_fallback (string, -1, charset, "UTF-8", "?", NULL, NULL, NULL);
+      
+      if (result)
+        {
+          fputs (result, stderr);
+          g_free (result);
+        }
+   
+      fflush (stderr);
+    }
+}
+
+
 int
 main (int argc, char **argv)
 {
@@ -1583,6 +1613,8 @@ main (int argc, char **argv)
 
   if (argc < 2)
     return 0;
+
+  g_set_printerr_handler (printerr_handler);
   
   setlocale (LC_ALL, "");
 
