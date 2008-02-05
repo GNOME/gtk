@@ -1586,10 +1586,16 @@ printerr_handler (const gchar *string)
     fputs (string, stderr); /* charset is UTF-8 already */
   else
     {
-      gchar *lstring = strdup_convert (string, charset);
-      fputs (lstring, stderr);
-      g_free (lstring);
-        
+      gchar *result;
+
+      result = g_convert_with_fallback (string, -1, charset, "UTF-8", "?", NULL, NULL, NULL);
+      
+      if (result)
+        {
+          fputs (result, stderr);
+          g_free (result);
+        }
+   
       fflush (stderr);
     }
 }
