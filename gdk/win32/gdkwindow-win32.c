@@ -2064,7 +2064,21 @@ _gdk_remove_modal_window (GdkWindow *window)
 GdkWindow *
 _gdk_modal_current ()
 {
-  return modal_window_stack != NULL ? modal_window_stack->data : NULL;
+  if (modal_window_stack != NULL)
+    {
+      GSList *tmp = modal_window_stack;
+
+      while (tmp != NULL && !GDK_WINDOW_IS_MAPPED (tmp->data))
+	{
+	  tmp = g_slist_next (tmp);
+	}
+
+      return tmp != NULL ? tmp->data : NULL;
+    }
+  else
+    {
+      return NULL;
+    }
 }
 
 void
