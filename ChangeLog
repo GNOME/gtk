@@ -1,5 +1,15 @@
 2008-02-05  Cody Russell  <bratsche@gnome.org>
 
+        Merged from trunk:
+
+	* gdk/win32/gdkevents-win32.c (show_window_recurse): Check that
+	the window is mapped before setting SW_RESTORE or SW_MINIMIZE.
+	Fixes a regression caused by #164537 patch where transient
+	windows that are hidden get shown (incorrectly) when their
+	parents are minimized. (#504984)
+
+2008-02-05  Cody Russell  <bratsche@gnome.org>
+
         Merge from trunk:
 
 	* gtk/gtkpaned.c (gtk_paned_set_position):
