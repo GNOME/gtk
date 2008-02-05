@@ -1,3 +1,37 @@
+2008-02-05  Federico Mena Quintero  <federico@novell.com>
+
+	Don't focus the file list when shortcuts get activated.  This
+	removes a lot of ambiguity in when the file selection should
+	change, and makes the overall code flow simpler.
+
+	This fixes http://bugzilla.gnome.org/show_bug.cgi?id=419737 -
+	file/save dialog clears the filename entry when changing
+	directories.
+
+	Also fixes http://bugzilla.gnome.org/show_bug.cgi?id=499940 -
+	focus should not go to the file list when a shortcut is activated.
+
+	* gtk/gtkfilechooserdefault.c
+	(shortcuts_activate_volume_mount_cb): Don't focus the file list
+	(shortcuts_activate_get_info_cb): Likewise.
+
+2008-02-05  Federico Mena Quintero  <federico@novell.com>
+
+	Merged from trunk (patch by Josselin Mouette <joss@malsain.org>):
+	
+	reviewed by: Federico Mena Quintero
+
+	* gtk/gtkfilechooserdefault.c: (shortcuts_append_paths),
+	(shortcuts_add_bookmarks), (shortcuts_selection_changed_cb),
+	(shortcuts_list_create), (gtk_file_chooser_default_should_respond):
+	Make the shortcuts activate with a single click. (#148828)
+        Fix a few things affected by the change:
+	  - Set selection mode to GTK_SELECTION_SINGLE to allow a case 
+	    where no shortcut is selected.
+	  - Don't activate a shortcut in the response callback.
+	  - Filter out duplicate entries in volumes and bookmarks to 
+	    avoid the selection to change when reordering them with DnD.
+
 2008-02-05  Matthias Clasen  <mclasen@redhat.com>
 
 	Merge from trunk:
