@@ -623,6 +623,10 @@ scan_directory (const gchar *base_path,
 	  continue;
 	}
 
+      /* ignore images in the toplevel directory */
+      if (subdir == NULL)
+        continue;
+
       retval = g_file_test (path, G_FILE_TEST_IS_REGULAR);
       if (retval)
 	{
@@ -1473,7 +1477,7 @@ build_cache (const gchar *path)
   if (!validate_file (tmp_cache_path))
     {
       g_printerr (_("The generated cache was invalid.\n"));
-      g_unlink (tmp_cache_path);
+      //g_unlink (tmp_cache_path);
       exit (1);
     }
 

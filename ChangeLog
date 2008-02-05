@@ -1,5 +1,11 @@
 2008-02-05  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/updateiconcache.c: Ignore images in the toplevel theme
+	directory, avoiding one source of invalid caches that has been
+	spotted in the wild.
+
+2008-02-05  Matthias Clasen  <mclasen@redhat.com>
+
 	* gtk/updateiconcache.c: Fix the previous commit to compile.
 
 2008-02-05  Matthias Clasen  <mclasen@redhat.com>
