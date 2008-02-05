@@ -10310,8 +10310,6 @@ shortcuts_activate_volume_mount_cb (GtkFileSystemHandle *handle,
   if (path != NULL)
     {
       change_folder_and_display_error (impl, path, FALSE);
-      focus_browse_tree_view_if_possible (impl);
-      
       gtk_file_path_free (path);
     }
 
@@ -10394,10 +10392,7 @@ shortcuts_activate_get_info_cb (GtkFileSystemHandle *handle,
     goto out;
 
   if (!error && gtk_file_info_get_is_folder (info))
-    {
-      change_folder_and_display_error (data->impl, data->path, FALSE);
-      focus_browse_tree_view_if_possible (data->impl);
-    }
+    change_folder_and_display_error (data->impl, data->path, FALSE);
   else
     gtk_file_chooser_default_select_path (GTK_FILE_CHOOSER (data->impl),
                                           data->path,
