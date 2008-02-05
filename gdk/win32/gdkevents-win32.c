@@ -94,6 +94,7 @@ static gboolean gdk_event_dispatch (GSource     *source,
 				    gpointer     user_data);
 
 static void append_event (GdkEvent *event);
+static gboolean is_modally_blocked (GdkWindow   *window);
 
 /* Private variable declarations
  */
@@ -1767,6 +1768,13 @@ static gboolean
 doesnt_want_key (gint mask,
 		 MSG *msg)
 {
+  GdkWindow *modal_current = _gdk_modal_current ();
+  GdkWindow *window = (GdkWindow *) gdk_win32_handle_table_lookup ((GdkNativeWindow)msg->hwnd);
+  gboolean modally_blocked = modal_current != NULL ? gdk_window_get_toplevel (window) != modal_current : FALSE;
+
+  if (modally_blocked == TRUE)
+    return TRUE;
+
   return (((msg->message == WM_KEYUP || msg->message == WM_SYSKEYUP) &&
 	   !(mask & GDK_KEY_RELEASE_MASK)) ||
 	  ((msg->message == WM_KEYDOWN || msg->message == WM_SYSKEYDOWN) &&
@@ -2811,6 +2819,18 @@ gdk_event_translate (MSG  *msg,
 	   *ret_valp = MA_NOACTIVATE;
 	   return_val = TRUE;
 	 }
+
+       GdkWindow *tmp = _gdk_modal_current ();
+
+       if (tmp != NULL)
+	 {
+	   if (gdk_window_get_toplevel (window) != tmp)
+	     {
+	       *ret_valp = MA_NOACTIVATEANDEAT;
+	       return_val = TRUE;
+	     }
+	 }
+
        break;
 
     case WM_KILLFOCUS:
@@ -2916,10 +2936,14 @@ gdk_event_translate (MSG  *msg,
 
     case WM_SYSCOMMAND:
 
-      if (msg->wParam == SC_MINIMIZE || msg->wParam == SC_RESTORE)
+      switch (msg->wParam)
 	{
+	case SC_MINIMIZE:
+	case SC_RESTORE:
 	  show_window_internal (window, msg->wParam == SC_MINIMIZE ? TRUE : FALSE);
+	  break;
 	}
+
       break;
 
     case WM_SIZE:
@@ -2967,10 +2991,12 @@ gdk_event_translate (MSG  *msg,
 	      show_window_internal (window, FALSE);
 	    }
 	  else if (msg->wParam == SIZE_MAXIMIZED)
-	    gdk_synthesize_window_state (window,
-					 GDK_WINDOW_STATE_ICONIFIED |
-					 withdrawn_bit,
-					 GDK_WINDOW_STATE_MAXIMIZED);
+	    {
+	      gdk_synthesize_window_state (window,
+					   GDK_WINDOW_STATE_ICONIFIED |
+					   withdrawn_bit,
+					   GDK_WINDOW_STATE_MAXIMIZED);
+	    }
 
 	  if (((GdkWindowObject *) window)->resize_count > 1)
 	    ((GdkWindowObject *) window)->resize_count -= 1;
@@ -3226,6 +3252,7 @@ gdk_event_translate (MSG  *msg,
 		  break;
 		}
 	    }
+
 	  *ret_valp = TRUE;
 	  return_val = TRUE;
 	  GDK_NOTE (EVENTS, g_print (" (handled ASPECT: %s)",
@@ -3359,7 +3386,10 @@ gdk_event_translate (MSG  *msg,
           append_event (event);
 	}
       else
-	return_val = TRUE;
+	{
+	  return_val = TRUE;
+	}
+
       break;
 
     case WM_RENDERFORMAT:
@@ -3394,7 +3424,9 @@ gdk_event_translate (MSG  *msg,
 
 	  /* Now the clipboard owner should have rendered */
 	  if (!_delayed_rendering_data)
-	    GDK_NOTE (EVENTS, g_print (" (no _delayed_rendering_data?)"));
+	    {
+	      GDK_NOTE (EVENTS, g_print (" (no _delayed_rendering_data?)"));
+	    }
 	  else
 	    {
 	      if (msg->wParam == CF_DIB)
@@ -3408,6 +3440,7 @@ gdk_event_translate (MSG  *msg,
 		      break;
 		    }
 		}
+
 	      /* The requestor is holding the clipboard, no
 	       * OpenClipboard() is required/possible
 	       */
@@ -3418,6 +3451,18 @@ gdk_event_translate (MSG  *msg,
       break;
 
     case WM_ACTIVATE:
+
+      /* We handle mouse clicks for modally-blocked windows under WM_MOUSEACTIVATE,
+       * but we still need to deal with alt-tab, or with SetActiveWindow() type
+       * situations. */
+      if (is_modally_blocked (window) && msg->wParam == WA_ACTIVE)
+	{
+	  GdkWindow *modal_current = _gdk_modal_current ();
+	  SetActiveWindow (GDK_WINDOW_HWND (modal_current));
+	  *ret_valp = 0;
+	  return_val = TRUE;
+	  break;
+	}
 
       /* Bring any tablet contexts to the top of the overlap order when
        * one of our windows is activated.
@@ -3454,10 +3499,12 @@ gdk_event_translate (MSG  *msg,
       event = gdk_event_new (GDK_NOTHING);
       event->any.window = window;
       g_object_ref (window);
+
       if (_gdk_input_other_event (event, msg, window))
 	append_event (event);
       else
 	gdk_event_free (event);
+
       break;
     }
 
@@ -3515,11 +3562,15 @@ gdk_event_check (GSource *source)
   GDK_THREADS_ENTER ();
 
   if (event_poll_fd.revents & G_IO_IN)
-    retval = (_gdk_event_queue_find_first (_gdk_display) != NULL ||
-	      (modal_win32_dialog == NULL &&
-	       PeekMessageW (&msg, NULL, 0, 0, PM_NOREMOVE)));
+    {
+      retval = (_gdk_event_queue_find_first (_gdk_display) != NULL ||
+		(modal_win32_dialog == NULL &&
+		 PeekMessageW (&msg, NULL, 0, 0, PM_NOREMOVE)));
+    }
   else
-    retval = FALSE;
+    {
+      retval = FALSE;
+    }
 
   GDK_THREADS_LEAVE ();
 
@@ -3557,6 +3608,13 @@ gdk_win32_set_modal_dialog_libgtk_only (HWND window)
   modal_win32_dialog = window;
 }
 
+static gboolean
+is_modally_blocked (GdkWindow *window)
+{
+  GdkWindow *modal_current = _gdk_modal_current ();
+  return modal_current != NULL ? gdk_window_get_toplevel (window) != modal_current : FALSE;
+}
+
 static void
 check_for_too_much_data (GdkEvent *event)
 {
@@ -3564,7 +3622,9 @@ check_for_too_much_data (GdkEvent *event)
       event->client.data.l[2] ||
       event->client.data.l[3] ||
       event->client.data.l[4])
-    g_warning ("Only four bytes of data are passed in client messages on Win32\n");
+    {
+      g_warning ("Only four bytes of data are passed in client messages on Win32\n");
+    }
 }
 
 gboolean

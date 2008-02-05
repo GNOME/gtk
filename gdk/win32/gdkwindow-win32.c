@@ -51,6 +51,7 @@ static void gdk_window_impl_win32_class_init (GdkWindowImplWin32Class *klass);
 static void gdk_window_impl_win32_finalize   (GObject                 *object);
 
 static gpointer parent_class = NULL;
+static GSList *modal_window_stack = NULL;
 
 static void     update_style_bits         (GdkWindow *window);
 static gboolean _gdk_window_get_functions (GdkWindow     *window,
@@ -154,14 +155,17 @@ gdk_window_impl_win32_finalize (GObject *object)
     {
       if (GetCursor () == window_impl->hcursor)
 	SetCursor (NULL);
+
       GDI_CALL (DestroyCursor, (window_impl->hcursor));
       window_impl->hcursor = NULL;
     }
+
   if (window_impl->hicon_big != NULL)
     {
       GDI_CALL (DestroyIcon, (window_impl->hicon_big));
       window_impl->hicon_big = NULL;
     }
+
   if (window_impl->hicon_small != NULL)
     {
       GDI_CALL (DestroyIcon, (window_impl->hicon_small));
@@ -338,6 +342,7 @@ RegisterGdkClass (GdkWindowType wtype, GdkWindowTypeHint wtype_hint)
   wcl.hInstance = _gdk_app_hmodule;
   wcl.hIcon = 0;
   wcl.hIconSm = 0;
+
   /* initialize once! */
   if (0 == hAppIcon && 0 == hAppIconSm)
     {
@@ -346,12 +351,16 @@ RegisterGdkClass (GdkWindowType wtype, GdkWindowTypeHint wtype_hint)
       if (0 != GetModuleFileName (_gdk_app_hmodule, sLoc, MAX_PATH))
         {
           ExtractIconEx (sLoc, 0, &hAppIcon, &hAppIconSm, 1);
+
           if (0 == hAppIcon && 0 == hAppIconSm)
             {
               if (0 != GetModuleFileName (_gdk_dll_hinstance, sLoc, MAX_PATH))
-                ExtractIconEx (sLoc, 0, &hAppIcon, &hAppIconSm, 1);
+		{
+		  ExtractIconEx (sLoc, 0, &hAppIcon, &hAppIconSm, 1);
+		}
             }
         }
+
       if (0 == hAppIcon && 0 == hAppIconSm)
         {
           hAppIcon = LoadImage (NULL, IDI_APPLICATION, IMAGE_ICON,
@@ -362,6 +371,7 @@ RegisterGdkClass (GdkWindowType wtype, GdkWindowTypeHint wtype_hint)
                                   GetSystemMetrics (SM_CYSMICON), 0);
         }
     }
+
   if (0 == hAppIcon)
     hAppIcon = hAppIconSm;
   else if (0 == hAppIconSm)
@@ -843,6 +853,9 @@ _gdk_windowing_window_destroy (GdkWindow *window,
 
   if (private->extension_events != 0)
     _gdk_input_window_destroy (window);
+
+  /* Remove ourself from the modal stack */
+  _gdk_remove_modal_window (window);
 
   /* Remove all our transient children */
   tmp = window_impl->transient_children;
@@ -1775,7 +1788,9 @@ get_effective_window_decorations (GdkWindow       *window,
     
   if (((GdkWindowObject *) window)->window_type != GDK_WINDOW_TOPLEVEL &&
       ((GdkWindowObject *) window)->window_type != GDK_WINDOW_DIALOG)
-    return FALSE;
+    {
+      return FALSE;
+    }
 
   if ((impl->hint_flags & GDK_HINT_MIN_SIZE) &&
       (impl->hint_flags & GDK_HINT_MAX_SIZE) &&
@@ -1783,12 +1798,17 @@ get_effective_window_decorations (GdkWindow       *window,
       impl->hints.min_height == impl->hints.max_height)
     {
       *decoration = GDK_DECOR_ALL | GDK_DECOR_RESIZEH | GDK_DECOR_MAXIMIZE;
+
       if (impl->type_hint == GDK_WINDOW_TYPE_HINT_DIALOG ||
 	  impl->type_hint == GDK_WINDOW_TYPE_HINT_MENU ||
 	  impl->type_hint == GDK_WINDOW_TYPE_HINT_TOOLBAR)
-	*decoration |= GDK_DECOR_MINIMIZE;
+	{
+	  *decoration |= GDK_DECOR_MINIMIZE;
+	}
       else if (impl->type_hint == GDK_WINDOW_TYPE_HINT_SPLASHSCREEN)
-	*decoration |= GDK_DECOR_MENU | GDK_DECOR_MINIMIZE;
+	{
+	  *decoration |= GDK_DECOR_MENU | GDK_DECOR_MINIMIZE;
+	}
 
       return TRUE;
     }
@@ -1798,7 +1818,10 @@ get_effective_window_decorations (GdkWindow       *window,
       if (impl->type_hint == GDK_WINDOW_TYPE_HINT_DIALOG ||
 	  impl->type_hint == GDK_WINDOW_TYPE_HINT_MENU ||
 	  impl->type_hint == GDK_WINDOW_TYPE_HINT_TOOLBAR)
-	*decoration |= GDK_DECOR_MINIMIZE;
+	{
+	  *decoration |= GDK_DECOR_MINIMIZE;
+	}
+
       return TRUE;
     }
   else
@@ -2010,6 +2033,38 @@ gdk_window_set_transient_for (GdkWindow *window,
   if (SetWindowLong (window_id, GWL_HWNDPARENT, (long) parent_id) == 0 &&
       GetLastError () != 0)
     WIN32_API_FAILED ("SetWindowLong");
+}
+
+void
+_gdk_push_modal_window (GdkWindow *window)
+{
+  modal_window_stack = g_slist_prepend (modal_window_stack,
+                                        window);
+}
+
+void
+_gdk_remove_modal_window (GdkWindow *window)
+{
+  g_return_if_fail (window != NULL);
+
+  /* It's possible to be NULL here if someone sets the modal hint of the window
+   * to FALSE before a modal window stack has ever been created. */
+  if (modal_window_stack == NULL)
+    return;
+
+  /* Find the requested window in the stack and remove it.  Yeah, I realize this
+   * means we're not a 'real stack', strictly speaking.  Sue me. :) */
+  GSList *tmp = g_slist_find (modal_window_stack, window);
+  if (tmp != NULL)
+    {
+      modal_window_stack = g_slist_delete_link (modal_window_stack, tmp);
+    }
+}
+
+GdkWindow *
+_gdk_modal_current ()
+{
+  return modal_window_stack != NULL ? modal_window_stack->data : NULL;
 }
 
 void
@@ -3470,13 +3525,20 @@ gdk_window_set_modal_hint (GdkWindow *window,
 
   private->modal_hint = modal;
 
-#if 1
+#if 0
   /* Not sure about this one.. -- Cody */
   if (GDK_WINDOW_IS_MAPPED (window))
     API_CALL (SetWindowPos, (GDK_WINDOW_HWND (window), 
 			     modal ? HWND_TOPMOST : HWND_NOTOPMOST,
 			     0, 0, 0, 0,
 			     SWP_NOMOVE | SWP_NOSIZE));
+#else
+
+  if (modal)
+    _gdk_push_modal_window (window);
+  else
+    _gdk_remove_modal_window (window);
+
 #endif
 }
 

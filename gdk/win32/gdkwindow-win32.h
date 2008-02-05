@@ -96,7 +96,6 @@ struct _GdkWindowImplWin32
 struct _GdkWindowImplWin32Class 
 {
   GdkDrawableImplWin32Class parent_class;
-
 };
 
 GType _gdk_window_impl_win32_get_type (void);

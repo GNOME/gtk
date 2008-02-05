@@ -276,6 +276,11 @@ void    _gdk_wchar_text_handle    (GdkFont       *font,
 							   void *),
 				   void          *arg);
 
+void       _gdk_push_modal_window   (GdkWindow *window);
+void       _gdk_remove_modal_window (GdkWindow *window);
+GdkWindow *_gdk_modal_current       ();
+
+
 #ifdef G_ENABLE_DEBUG
 gchar *_gdk_win32_color_to_string      (const GdkColor *color);
 void   _gdk_win32_print_paletteentries (const PALETTEENTRY *pep,
