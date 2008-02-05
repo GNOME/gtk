@@ -1,3 +1,13 @@
+2008-02-05  Cody Russell  <cody@jhu.edu>
+
+	* gdk/win32/gdkevents-win32.c
+	* gdk/win32/gdkwindow-win32.[ch]: Force non-modal transient dialogs
+	to iconify with their parents on Win32.  Maintain a list of transient
+	children, and whenever a window is hidden or restored we now do the
+	same thing to all connected transient windows above and below the
+	current window in the chain.  See comment under WM_ACTIVATE for the
+	reasons why.  (#164537, #371036, #405178)
+
 2008-01-16  Matthias Clasen  <mclasen@redhat.com>
 
 	Merge from trunk:

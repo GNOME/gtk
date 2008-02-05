@@ -157,6 +157,9 @@ gdk_window_impl_win32_init (GdkWindowImplWin32 *impl)
   impl->type_hint = GDK_WINDOW_TYPE_HINT_NORMAL;
   impl->extension_events_selected = FALSE;
   impl->transient_owner = NULL;
+  impl->transient_children = NULL;
+  impl->num_transients = 0;
+  impl->changing_state = FALSE;
 }
 
 static void
@@ -871,6 +874,7 @@ _gdk_windowing_window_destroy (GdkWindow *window,
 {
   GdkWindowObject *private = (GdkWindowObject *)window;
   GdkWindowImplWin32 *window_impl = GDK_WINDOW_IMPL_WIN32 (private->impl);
+  GSList *tmp;
 
   g_return_if_fail (GDK_IS_WINDOW (window));
   
@@ -879,6 +883,19 @@ _gdk_windowing_window_destroy (GdkWindow *window,
 
   if (private->extension_events != 0)
     _gdk_input_window_destroy (window);
+
+  /* Remove all our transient children */
+  tmp = window_impl->transient_children;
+  while (tmp != NULL)
+    {
+      GdkWindow *child = tmp->data;
+      GdkWindowImplWin32 *child_impl = GDK_WINDOW_IMPL_WIN32 (GDK_WINDOW_OBJECT (child)->impl);
+
+      child_impl->transient_owner = NULL;
+      tmp = g_slist_next (tmp);
+    }
+  g_slist_free (window_impl->transient_children);
+  window_impl->transient_children = NULL;
 
   /* Remove ourself from our transient owner */
   if (window_impl->transient_owner != NULL)
@@ -1977,6 +1994,8 @@ gdk_window_set_transient_for (GdkWindow *window,
 {
   HWND window_id, parent_id;
   GdkWindowImplWin32 *window_impl = GDK_WINDOW_IMPL_WIN32 (GDK_WINDOW_OBJECT (window)->impl);
+  GdkWindowImplWin32 *parent_impl = NULL;
+  GSList *item;
 
   g_return_if_fail (GDK_IS_WINDOW (window));
 
@@ -1999,7 +2018,32 @@ gdk_window_set_transient_for (GdkWindow *window,
       return;
     }
 
-  window_impl->transient_owner = parent;
+  if (parent == NULL)
+    {
+      GdkWindowImplWin32 *trans_impl = GDK_WINDOW_IMPL_WIN32 (GDK_WINDOW_OBJECT (window_impl->transient_owner)->impl);
+      if (trans_impl->transient_children != NULL)
+        {
+          item = g_slist_find (trans_impl->transient_children, window);
+          item->data = NULL;
+          trans_impl->transient_children = g_slist_delete_link (trans_impl->transient_children, item);
+          trans_impl->num_transients--;
+
+          if (!trans_impl->num_transients)
+            {
+              trans_impl->transient_children = NULL;
+            }
+        }
+
+      window_impl->transient_owner = NULL;
+    }
+  else
+    {
+      parent_impl = GDK_WINDOW_IMPL_WIN32 (GDK_WINDOW_OBJECT (parent)->impl);
+
+      parent_impl->transient_children = g_slist_append (parent_impl->transient_children, window);
+      parent_impl->num_transients++;
+      window_impl->transient_owner = parent;
+    }
 
   /* This changes the *owner* of the window, despite the misleading
    * name. (Owner and parent are unrelated concepts.) At least that's
@@ -2964,7 +3008,7 @@ QueryTree (HWND   hwnd,
 	   gint  *nchildren)
 {
   guint i, n;
-  HWND child;
+  HWND child = NULL;
 
   n = 0;
   do {
@@ -3448,7 +3492,7 @@ gdk_window_set_modal_hint (GdkWindow *window,
 
   private->modal_hint = modal;
 
-#if 0
+#if 1
   /* Not sure about this one.. -- Cody */
   if (GDK_WINDOW_IS_MAPPED (window))
     API_CALL (SetWindowPos, (GDK_WINDOW_HWND (window), 
@@ -3466,6 +3510,9 @@ gdk_window_set_skip_taskbar_hint (GdkWindow *window,
   GdkWindowAttr wa;
 
   g_return_if_fail (GDK_IS_WINDOW (window));
+
+  // ### TODO: Need to figure out what to do here.
+  return;
 
   GDK_NOTE (MISC, g_print ("gdk_window_set_skip_taskbar_hint: %p: %s\n",
 			   GDK_WINDOW_HWND (window),

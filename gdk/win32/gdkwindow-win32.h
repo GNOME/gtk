@@ -88,6 +88,9 @@ struct _GdkWindowImplWin32
   gboolean extension_events_selected;
 
   GdkWindow *transient_owner;
+  GSList    *transient_children;
+  gint       num_transients;
+  gboolean   changing_state;
 };
  
 struct _GdkWindowImplWin32Class 

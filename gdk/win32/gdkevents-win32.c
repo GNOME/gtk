@@ -1335,6 +1335,37 @@ apply_filters (GdkWindow  *window,
   return result;
 }
 
+static void
+show_window_recurse (GdkWindow *window, gboolean hide_window)
+{
+  GdkWindowImplWin32 *impl = GDK_WINDOW_IMPL_WIN32 (GDK_WINDOW_OBJECT (window)->impl);
+  GSList *children = impl->transient_children;
+  GdkWindow *child = NULL;
+
+  if (!impl->changing_state)
+    {
+      impl->changing_state = TRUE;
+
+      if (children != NULL)
+	{
+	  while (children != NULL)
+	    {
+	      child = children->data;
+	      show_window_recurse (child, hide_window);
+
+	      children = g_slist_next (children);
+	    }
+	}
+
+      if (!hide_window)
+	ShowWindow (GDK_WINDOW_HWND (window), SW_RESTORE);
+      else
+	ShowWindow (GDK_WINDOW_HWND (window), SW_MINIMIZE);
+
+      impl->changing_state = FALSE;
+    }
+}
+
 static gboolean
 gdk_window_is_ancestor (GdkWindow *ancestor,
 			GdkWindow *window)
@@ -2896,15 +2927,17 @@ gdk_event_translate (MSG  *msg,
 	    {
 	      SetForegroundWindow (GDK_WINDOW_HWND (impl->transient_owner));
 	    }
+
+	  if (p_grab_window == window)
+	    {
+	      gdk_pointer_ungrab (msg->time);
+	    }
+
+	  if (k_grab_window == window)
+	    {
+	      gdk_keyboard_ungrab (msg->time);
+	    }
 	}
-
-      if (event->any.type == GDK_UNMAP &&
-	  p_grab_window == window)
-	gdk_pointer_ungrab (msg->time);
-
-      if (event->any.type == GDK_UNMAP &&
-	  k_grab_window == window)
-	gdk_keyboard_ungrab (msg->time);
 
       return_val = TRUE;
       break;
@@ -3402,6 +3435,49 @@ gdk_event_translate (MSG  *msg,
 
 #ifdef HAVE_WINTAB
     case WM_ACTIVATE:
+      ;
+
+      /*
+       * On Windows, transient windows will not have their own taskbar entries.
+       * Because of this, we must hide and restore groups of transients in both
+       * directions.  That is, all transient children must be hidden or restored
+       * with this window, but if this window's transient owner also has a
+       * transient owner then this window's transient owner must be hidden/restored
+       * with this one.  And etc, up the chain until we hit an ancestor that has no
+       * transient owner.
+       *
+       * It would be a good idea if applications don't chain transient windows
+       * together.  There's a limit to how much evil GTK can try to shield you
+       * from.
+       */
+      GdkWindow *tmp_window = NULL;
+      GdkWindowImplWin32 *tmp_impl = GDK_WINDOW_IMPL_WIN32 (GDK_WINDOW_OBJECT (window)->impl);
+
+      while (tmp_impl->transient_owner != NULL)
+	{
+	  tmp_window = tmp_impl->transient_owner;
+	  tmp_impl = GDK_WINDOW_IMPL_WIN32 (GDK_WINDOW_OBJECT (tmp_window)->impl);
+	}
+
+      if (tmp_window == NULL)
+	tmp_window = window;
+
+      if (LOWORD (msg->wParam) == WA_INACTIVE && HIWORD (msg->wParam))
+        {
+	  if (!tmp_impl->changing_state)
+	    {
+	      show_window_recurse (tmp_window, TRUE);
+	    }
+        }
+      else if (LOWORD (msg->wParam) == WA_ACTIVE && HIWORD (msg->wParam))
+	{
+	  if (!tmp_impl->changing_state)
+	    {
+	      show_window_recurse (tmp_window, FALSE);
+	    }
+        }
+
+
       /* Bring any tablet contexts to the top of the overlap order when
        * one of our windows is activated.
        * NOTE: It doesn't seem to work well if it is done in WM_ACTIVATEAPP
