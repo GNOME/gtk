@@ -2033,6 +2033,8 @@ gdk_window_set_transient_for (GdkWindow *window,
               trans_impl->transient_children = NULL;
             }
         }
+      g_object_unref (G_OBJECT (window_impl->transient_owner));
+      g_object_unref (G_OBJECT (window));
 
       window_impl->transient_owner = NULL;
     }
@@ -2041,8 +2043,10 @@ gdk_window_set_transient_for (GdkWindow *window,
       parent_impl = GDK_WINDOW_IMPL_WIN32 (GDK_WINDOW_OBJECT (parent)->impl);
 
       parent_impl->transient_children = g_slist_append (parent_impl->transient_children, window);
+      g_object_ref (G_OBJECT (window));
       parent_impl->num_transients++;
       window_impl->transient_owner = parent;
+      g_object_ref (G_OBJECT (parent));
     }
 
   /* This changes the *owner* of the window, despite the misleading
