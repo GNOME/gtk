@@ -1,5 +1,16 @@
 2008-02-05  Cody Russell  <bratsche@gnome.org>
 
+	Merged from trunk:
+
+	* gdk/win32/gdkprivate-win32.h
+	* gdk/win32/gdkevents-win32.c
+	* gdk/win32/gdkwindow-win32.c
+	* gdk/win32/gdkwindow-win32.h
+	* gdk/win32/gdkwin32.h:
+	Modal window rework.  (#455627 and #511111)
+
+2008-02-05  Cody Russell  <bratsche@gnome.org>
+
 	Merge from trunk:
 
 	* gdk/win32/gdkevents-win32.c:
