@@ -2,6 +2,15 @@
 
 	Merged from trunk:
 
+        * gdk/win32/gdkwindow-win32.c (_gdk_modal_current): Walk
+	down the stack until we get to a window that is mapped.
+	Otherwise hiding a window will cause all windows in the app
+	to be blocked. (#514643)
+	
+2008-02-05  Cody Russell  <bratsche@gnome.org>
+
+	Merged from trunk:
+
 	* gdk/win32/gdkprivate-win32.h
 	* gdk/win32/gdkevents-win32.c
 	* gdk/win32/gdkwindow-win32.c
