@@ -1575,6 +1575,26 @@ static GOptionEntry args[] = {
   { NULL }
 };
 
+static void
+printerr_handler (const gchar *string)
+{
+  const gchar *charset;
+
+  fputs (g_get_prgname (), stderr);
+  fputs (": ", stderr);
+  if (g_get_charset (&charset))
+    fputs (string, stderr); /* charset is UTF-8 already */
+  else
+    {
+      gchar *lstring = strdup_convert (string, charset);
+      fputs (lstring, stderr);
+      g_free (lstring);
+        
+      fflush (stderr);
+    }
+}
+
+
 int
 main (int argc, char **argv)
 {
@@ -1583,6 +1603,8 @@ main (int argc, char **argv)
 
   if (argc < 2)
     return 0;
+
+  g_set_printerr_handler (printerr_handler);
   
   setlocale (LC_ALL, "");
 

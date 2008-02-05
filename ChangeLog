@@ -1,3 +1,9 @@
+2008-02-05  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/updateiconcache.c: Install a printerr handler that
+	prepends the program name, since gtk-update-icon-cache output
+	often appears in the middle of other output, e.g. rpm update logs.
+
 2008-02-05  Cody Russell  <bratsche@gnome.org>
 
 	* gdk/win32/gdkprivate-win32.h
