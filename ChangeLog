@@ -26,7 +26,7 @@
 2008-02-04  Michael Natterer  <mitch@imendio.com>
 
 	* gtk/gtkcombobox.c (gtk_combo_box_cell_layout_add_attribute):
-	g_return_if_fail() is the cell is not part of the combo instead of
+	g_return_if_fail() if the cell is not part of the combo instead of
 	crashing in the next line.
 
 2008-02-01  Cody Russell  <cody@jhu.edu>
