@@ -1,3 +1,10 @@
+2008-02-06  Cody Russell  <bratsche@gnome.org>
+
+	* gdk/win32/gdkevents-win32.c: Check if the window is a temp window,
+	otherwise things get wonky when you click on a menu.  This fixes
+	a regression caused in #505928.  Thanks to Tor for spotting this
+	one!  (#514789)
+
 2008-02-06  Michael Natterer  <mitch@imendio.com>
 
 	* gtk/gtkcontainer.c
