@@ -305,11 +305,24 @@ gdk_pixbuf_render_pixmap_and_mask_for_colormap (GdkPixbuf   *pixbuf,
 
       gdk_drawable_set_colormap (GDK_DRAWABLE (*pixmap_return), colormap);
       gc = _gdk_drawable_get_scratch_gc (*pixmap_return, FALSE);
-      gdk_draw_pixbuf (*pixmap_return, gc, pixbuf, 
-		       0, 0, 0, 0,
-		       gdk_pixbuf_get_width (pixbuf), gdk_pixbuf_get_height (pixbuf),
-		       GDK_RGB_DITHER_NORMAL,
-		       0, 0);
+
+      /* If the pixbuf has an alpha channel, using gdk_pixbuf_draw would give
+       * random pixel values in the area that are within the mask, but semi-
+       * transparent. So we treat the pixbuf like a pixbuf without alpha channel;
+       * see bug #487865.
+       */
+      if (gdk_pixbuf_get_has_alpha (pixbuf))
+        gdk_draw_rgb_32_image (*pixmap_return, gc,
+                               0, 0,
+                               gdk_pixbuf_get_width (pixbuf), gdk_pixbuf_get_height (pixbuf),
+                               GDK_RGB_DITHER_NORMAL,
+                               gdk_pixbuf_get_pixels (pixbuf), gdk_pixbuf_get_rowstride (pixbuf));
+      else
+        gdk_draw_pixbuf (*pixmap_return, gc, pixbuf, 
+                         0, 0, 0, 0,
+                         gdk_pixbuf_get_width (pixbuf), gdk_pixbuf_get_height (pixbuf),
+                         GDK_RGB_DITHER_NORMAL,
+                         0, 0);
     }
   
   if (mask_return)

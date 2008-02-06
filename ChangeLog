@@ -1,3 +1,11 @@
+2008-02-07  Christian Persch  <chpe@gnome.org>
+
+	* gdk/gdkpixbuf-render.c:
+	(gdk_pixbuf_render_pixmap_and_mask_for_colormap): If the pixbuf has an
+	alpha channel, use gdk_draw_rgb_32_image to draw it to the pixmap;
+	otherwise there will be random pixel values in the semi-transparent
+	area of the pixbuf within the mask. Bug #487865.
+
 2008-02-06  Cody Russell  <bratsche@gnome.org>
 
 	* gdk/win32/gdkevents-win32.c: Check if the window is a temp window,
