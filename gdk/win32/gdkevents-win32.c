@@ -2989,7 +2989,7 @@ gdk_event_translate (MSG  *msg,
 					   withdrawn_bit,
 					   0);
 
-	      if (GDK_WINDOW_TYPE (window) != GDK_WINDOW_TEMP)
+	      if (GDK_WINDOW_TYPE (window) != GDK_WINDOW_TEMP && !GDK_WINDOW_IS_MAPPED (window))
 		{
 		  show_window_internal (window, FALSE);
 		}
