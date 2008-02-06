@@ -1,3 +1,8 @@
+2008-02-05  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtkprintsettings.c (gtk_print_settings_get_page_ranges):
+	Allow to store half-open ranges.
+
 2008-02-05  Cody Russell  <bratsche@gnome.org>
 
 	* gdk/win32/gdkwindow-win32.c (_gdk_modal_current): Walk
