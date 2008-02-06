@@ -951,12 +951,12 @@ gtk_printer_list_papers (GtkPrinter *printer)
 /**
  * gtk_printer_get_default_page_size:
  * @printer: a #GtkPrinter
- * 
+ *
  * Returns default page size of @printer.
  * 
  * Return value: a newly allocated #GtkPageSetup with default page size of the printer.
  *
- * Since: 2.13
+ * Since: 2.14
  */
 GtkPageSetup  *
 gtk_printer_get_default_page_size (GtkPrinter *printer)
@@ -969,16 +969,34 @@ gtk_printer_get_default_page_size (GtkPrinter *printer)
   return backend_class->printer_get_default_page_size (printer);
 }
 
-void
-_gtk_printer_get_hard_margins (GtkPrinter *printer,
-			       gdouble    *top,
-			       gdouble    *bottom,
-			       gdouble    *left,
-			       gdouble    *right)
+/**
+ * gtk_printer_get_hard_margins:
+ * @printer: a #GtkPrinter
+ * @top: a location to store the top margin in
+ * @bottom: a location to store the bottom margin in
+ * @left: a location to store the left margin in
+ * @right: a location to store the right margin in
+ *
+ * Retrieve the hard margins of @printer, i.e. the margins that define
+ * the area at the borders of the paper that the printer cannot print to.
+ *
+ * Note: This will not succeed unless the printer's details are available,
+ * see gtk_printer_has_details() and gtk_printer_request_details().
+ *
+ * Return value: %TRUE iff the hard margins were retrieved
+ *
+ * Since: 2.18
+ */
+gboolean
+gtk_printer_get_hard_margins (GtkPrinter *printer,
+			      gdouble    *top,
+			      gdouble    *bottom,
+			      gdouble    *left,
+			      gdouble    *right)
 {
   GtkPrintBackendClass *backend_class = GTK_PRINT_BACKEND_GET_CLASS (printer->priv->backend);
 
-  backend_class->printer_get_hard_margins (printer, top, bottom, left, right);
+  return backend_class->printer_get_hard_margins (printer, top, bottom, left, right);
 }
 
 /**
@@ -993,7 +1011,7 @@ _gtk_printer_get_hard_margins (GtkPrinter *printer,
  *
  * This will return 0 unless the printer's details are available, see
  * gtk_printer_has_details() and gtk_printer_request_details().
- *  *
+ *
  * Return value: the printer's capabilities
  *
  * Since: 2.12

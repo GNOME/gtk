@@ -802,7 +802,8 @@ set_margins_from_printer (GtkCustomPaperUnixDialog *dialog,
   gdouble top, bottom, left, right;
 
   top = bottom = left = right = 0;
-  _gtk_printer_get_hard_margins (printer, &top, &bottom, &left, &right);
+  if (!gtk_printer_get_hard_margins (printer, &top, &bottom, &left, &right))
+    return;
 
   priv->non_user_change = TRUE;
   unit_widget_set (priv->top_widget, _gtk_print_convert_to_mm (top, GTK_UNIT_POINTS));

@@ -349,11 +349,11 @@ G_DEFINE_TYPE (GtkPrintBackend, gtk_print_backend, G_TYPE_OBJECT)
 static void                 fallback_printer_request_details       (GtkPrinter          *printer);
 static gboolean             fallback_printer_mark_conflicts        (GtkPrinter          *printer,
 								    GtkPrinterOptionSet *options);
-static void                 fallback_printer_get_hard_margins      (GtkPrinter          *printer,
-								    gdouble             *top,
-								    gdouble             *bottom,
-								    gdouble             *left,
-								    gdouble             *right);
+static gboolean             fallback_printer_get_hard_margins      (GtkPrinter          *printer,
+                                                                    gdouble             *top,
+                                                                    gdouble             *bottom,
+                                                                    gdouble             *left,
+                                                                    gdouble             *right);
 static GList *              fallback_printer_list_papers           (GtkPrinter          *printer);
 static GtkPageSetup *       fallback_printer_get_default_page_size (GtkPrinter          *printer);
 static GtkPrintCapabilities fallback_printer_get_capabilities      (GtkPrinter          *printer);
@@ -494,7 +494,7 @@ fallback_printer_mark_conflicts (GtkPrinter          *printer,
   return FALSE;
 }
 
-static void
+static gboolean
 fallback_printer_get_hard_margins (GtkPrinter *printer,
 				   gdouble    *top,
 				   gdouble    *bottom,
@@ -505,6 +505,8 @@ fallback_printer_get_hard_margins (GtkPrinter *printer,
   *bottom = 0;
   *left = 0;
   *right = 0;
+
+  return TRUE;
 }
 
 static GList *

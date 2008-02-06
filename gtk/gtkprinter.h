@@ -113,6 +113,11 @@ gint                     gtk_printer_compare               (GtkPrinter *a,
 gboolean                 gtk_printer_has_details           (GtkPrinter       *printer);
 void                     gtk_printer_request_details       (GtkPrinter       *printer);
 GtkPrintCapabilities     gtk_printer_get_capabilities      (GtkPrinter       *printer);
+gboolean                 gtk_printer_get_hard_margins      (GtkPrinter       *printer,
+                                                            gdouble          *top,
+                                                            gdouble          *bottom,
+                                                            gdouble          *left,
+                                                            gdouble          *right);
 
 typedef gboolean (*GtkPrinterFunc) (GtkPrinter *printer,
 				    gpointer    data);

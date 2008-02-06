@@ -158,11 +158,11 @@ static GtkPageSetup *       cups_printer_get_default_page_size     (GtkPrinter  
 static void                 cups_printer_request_details           (GtkPrinter                        *printer);
 static gboolean             cups_request_default_printer           (GtkPrintBackendCups               *print_backend);
 static gboolean             cups_request_ppd                       (GtkPrinter                        *printer);
-static void                 cups_printer_get_hard_margins          (GtkPrinter                        *printer,
-								    double                            *top,
-								    double                            *bottom,
-								    double                            *left,
-								    double                            *right);
+static gboolean             cups_printer_get_hard_margins          (GtkPrinter                        *printer,
+								    gdouble                           *top,
+								    gdouble                           *bottom,
+								    gdouble                           *left,
+								    gdouble                           *right);
 static GtkPrintCapabilities cups_printer_get_capabilities          (GtkPrinter                        *printer);
 static void                 set_option_from_settings               (GtkPrinterOption                  *option,
 								    GtkPrintSettings                  *setting);
@@ -4428,7 +4428,7 @@ cups_printer_get_default_page_size (GtkPrinter *printer)
   return create_page_setup (ppd_file, size);
 }
 
-static void
+static gboolean
 cups_printer_get_hard_margins (GtkPrinter *printer,
 			       gdouble    *top,
 			       gdouble    *bottom,
@@ -4439,12 +4439,14 @@ cups_printer_get_hard_margins (GtkPrinter *printer,
 
   ppd_file = gtk_printer_cups_get_ppd (GTK_PRINTER_CUPS (printer));
   if (ppd_file == NULL)
-    return;
+    return FALSE;
 
   *left = ppd_file->custom_margins[0];
   *bottom = ppd_file->custom_margins[1];
   *right = ppd_file->custom_margins[2];
   *top = ppd_file->custom_margins[3];
+
+  return TRUE;
 }
 
 static GtkPrintCapabilities

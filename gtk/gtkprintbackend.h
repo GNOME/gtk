@@ -104,11 +104,11 @@ struct _GtkPrintBackendClass
 							      GtkPageSetup        *page_setup);
   GList  *              (*printer_list_papers)               (GtkPrinter          *printer);
   GtkPageSetup *        (*printer_get_default_page_size)     (GtkPrinter          *printer);
-  void                  (*printer_get_hard_margins)          (GtkPrinter          *printer,
-							      double              *top,
-							      double              *bottom,
-							      double              *left,
-							      double              *right);
+  gboolean              (*printer_get_hard_margins)          (GtkPrinter          *printer,
+							      gdouble             *top,
+							      gdouble             *bottom,
+							      gdouble             *left,
+							      gdouble             *right);
   GtkPrintCapabilities  (*printer_get_capabilities)          (GtkPrinter          *printer);
 
   /* Signals */

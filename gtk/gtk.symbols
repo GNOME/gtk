@@ -2945,6 +2945,7 @@ gtk_printer_compare
 gtk_printer_has_details
 gtk_printer_request_details
 gtk_printer_get_capabilities
+gtk_printer_get_hard_margins
 gtk_enumerate_printers
 gtk_print_capabilities_get_type G_GNUC_CONST
 #endif
