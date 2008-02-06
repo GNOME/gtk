@@ -614,7 +614,7 @@ gtk_tool_button_create_menu_proxy (GtkToolItem *item)
   gboolean use_mnemonic = TRUE;
   const char *label;
 
-  if (button->priv->label_widget && GTK_IS_LABEL (button->priv->label_widget))
+  if (GTK_IS_LABEL (button->priv->label_widget))
     {
       label = gtk_label_get_label (GTK_LABEL (button->priv->label_widget));
       use_mnemonic = gtk_label_get_use_underline (GTK_LABEL (button->priv->label_widget));
@@ -638,7 +638,7 @@ gtk_tool_button_create_menu_proxy (GtkToolItem *item)
   else
     menu_item = gtk_image_menu_item_new_with_label (label);
 
-  if (button->priv->icon_widget && GTK_IS_IMAGE (button->priv->icon_widget))
+  if (GTK_IS_IMAGE (button->priv->icon_widget))
     {
       menu_image = clone_image_menu_size (GTK_IMAGE (button->priv->icon_widget),
 					  gtk_widget_get_settings (GTK_WIDGET (button)));

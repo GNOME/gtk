@@ -1119,8 +1119,8 @@ gtk_tool_item_rebuild_menu (GtkToolItem *tool_item)
   g_return_if_fail (GTK_IS_TOOL_ITEM (tool_item));
 
   widget = GTK_WIDGET (tool_item);
-  
-  if (widget->parent && GTK_IS_TOOL_SHELL (widget->parent))
+
+  if (GTK_IS_TOOL_SHELL (widget->parent))
     gtk_tool_shell_rebuild_menu (GTK_TOOL_SHELL (widget->parent));
 }
 

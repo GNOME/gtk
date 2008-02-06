@@ -205,7 +205,7 @@ gtk_separator_tool_item_expose (GtkWidget      *widget,
 
   if (priv->draw)
     {
-      if (widget->parent && GTK_IS_TOOLBAR (widget->parent))
+      if (GTK_IS_TOOLBAR (widget->parent))
 	toolbar = GTK_TOOLBAR (widget->parent);
 
       _gtk_toolbar_paint_space_line (widget, toolbar,

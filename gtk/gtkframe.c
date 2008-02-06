@@ -349,7 +349,7 @@ gtk_frame_get_label (GtkFrame *frame)
 {
   g_return_val_if_fail (GTK_IS_FRAME (frame), NULL);
 
-  if (frame->label_widget && GTK_IS_LABEL (frame->label_widget))
+  if (GTK_IS_LABEL (frame->label_widget))
     return gtk_label_get_text (GTK_LABEL (frame->label_widget));
   else
     return NULL;

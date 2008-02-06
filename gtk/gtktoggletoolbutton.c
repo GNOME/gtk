@@ -193,7 +193,7 @@ gtk_toggle_tool_button_create_menu_proxy (GtkToolItem *item)
   const gchar *label_text = gtk_tool_button_get_label (tool_button);
   const gchar *stock_id = gtk_tool_button_get_stock_id (tool_button);
 
-  if (label_widget && GTK_IS_LABEL (label_widget))
+  if (GTK_IS_LABEL (label_widget))
     {
       label = gtk_label_get_label (GTK_LABEL (label_widget));
       use_mnemonic = gtk_label_get_use_underline (GTK_LABEL (label_widget));

@@ -1867,8 +1867,8 @@ old_focus_coords (GtkContainer *container,
 {
   GtkWidget *widget = GTK_WIDGET (container);
   GtkWidget *toplevel = gtk_widget_get_toplevel (widget);
-  
-  if (toplevel && GTK_IS_WINDOW (toplevel) && GTK_WINDOW (toplevel)->focus_widget)
+
+  if (GTK_IS_WINDOW (toplevel) && GTK_WINDOW (toplevel)->focus_widget)
     {
       GtkWidget *old_focus = GTK_WINDOW (toplevel)->focus_widget;
       

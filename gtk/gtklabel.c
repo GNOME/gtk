@@ -882,15 +882,15 @@ gtk_label_mnemonic_activate (GtkWidget *widget,
    */
   parent = widget->parent;
 
-  if (parent && GTK_IS_NOTEBOOK (parent))
+  if (GTK_IS_NOTEBOOK (parent))
     return FALSE;
   
   while (parent)
     {
       if (GTK_WIDGET_CAN_FOCUS (parent) ||
 	  (!group_cycling && GTK_WIDGET_GET_CLASS (parent)->activate_signal) ||
-          (parent->parent && GTK_IS_NOTEBOOK (parent->parent)) ||
-	  (GTK_IS_MENU_ITEM (parent)))
+          GTK_IS_NOTEBOOK (parent->parent) ||
+	  GTK_IS_MENU_ITEM (parent))
 	return gtk_widget_mnemonic_activate (parent, group_cycling);
       parent = parent->parent;
     }
@@ -949,7 +949,7 @@ gtk_label_setup_mnemonic (GtkLabel *label,
 	  mnemonic_menu = menu_shell;
 	}
       
-      if (!(menu_shell && GTK_IS_MENU (menu_shell)))
+      if (!GTK_IS_MENU (menu_shell))
 	{
 	  gtk_window_add_mnemonic (GTK_WINDOW (toplevel),
 				   label->mnemonic_keyval,

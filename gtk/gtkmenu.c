@@ -1393,7 +1393,7 @@ gtk_menu_popup (GtkMenu		    *menu,
     }
 
   /* Set transient for to get the right window group and parent relationship */
-  if (parent_toplevel && GTK_IS_WINDOW (parent_toplevel))
+  if (GTK_IS_WINDOW (parent_toplevel))
     gtk_window_set_transient_for (GTK_WINDOW (menu->toplevel),
 				  GTK_WINDOW (parent_toplevel));
   

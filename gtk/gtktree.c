@@ -473,7 +473,7 @@ gtk_tree_parent_set (GtkWidget *widget,
   GtkWidget *child;
   GList *children;
   
-  if (widget->parent && GTK_IS_TREE (widget->parent))
+  if (GTK_IS_TREE (widget->parent))
     {
       gtk_tree_unselect_all (tree);
       
@@ -638,7 +638,7 @@ gtk_tree_remove_items (GtkTree *tree,
   else
     {
       GtkWidget *tmp = GTK_WIDGET (tree);
-      while (tmp->parent && GTK_IS_TREE (tmp->parent))
+      while (GTK_IS_TREE (tmp->parent))
 	tmp = tmp->parent;
       
       root_tree = GTK_TREE (tmp);

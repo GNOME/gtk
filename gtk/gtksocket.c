@@ -360,7 +360,7 @@ _gtk_socket_end_embedding (GtkSocket *socket)
   GtkWidget *toplevel = gtk_widget_get_toplevel (GTK_WIDGET (socket));
   gint i;
   
-  if (toplevel && GTK_IS_WINDOW (toplevel))
+  if (GTK_IS_WINDOW (toplevel))
     _gtk_socket_windowing_end_embedding_toplevel (socket);
 
   g_object_unref (socket->plug_window);
@@ -890,7 +890,7 @@ _gtk_socket_add_window (GtkSocket       *socket,
       /* Add a pointer to the socket on our toplevel window */
 
       toplevel = gtk_widget_get_toplevel (GTK_WIDGET (socket));
-      if (toplevel && GTK_IS_WINDOW (toplevel))
+      if (GTK_IS_WINDOW (toplevel))
 	gtk_window_add_embedded_xid (GTK_WINDOW (toplevel), xid);
 
       _gtk_socket_windowing_embed_notify (socket);

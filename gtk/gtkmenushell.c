@@ -1016,7 +1016,7 @@ gtk_menu_shell_is_item (GtkMenuShell *menu_shell,
   g_return_val_if_fail (child != NULL, FALSE);
 
   parent = child->parent;
-  while (parent && GTK_IS_MENU_SHELL (parent))
+  while (GTK_IS_MENU_SHELL (parent))
     {
       if (parent == (GtkWidget*) menu_shell)
 	return TRUE;

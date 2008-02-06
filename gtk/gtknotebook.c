@@ -3655,7 +3655,7 @@ gtk_notebook_get_child_property (GtkContainer    *container,
     case CHILD_PROP_TAB_LABEL:
       label = gtk_notebook_get_tab_label (notebook, child);
 
-      if (label && GTK_IS_LABEL (label))
+      if (GTK_IS_LABEL (label))
 	g_value_set_string (value, GTK_LABEL (label)->label);
       else
 	g_value_set_string (value, NULL);
@@ -3663,7 +3663,7 @@ gtk_notebook_get_child_property (GtkContainer    *container,
     case CHILD_PROP_MENU_LABEL:
       label = gtk_notebook_get_menu_label (notebook, child);
 
-      if (label && GTK_IS_LABEL (label))
+      if (GTK_IS_LABEL (label))
 	g_value_set_string (value, GTK_LABEL (label)->label);
       else
 	g_value_set_string (value, NULL);
@@ -4427,9 +4427,9 @@ gtk_notebook_update_labels (GtkNotebook *notebook)
 	}
       if (notebook->menu && page->default_menu)
 	{
-	  if (page->tab_label && GTK_IS_LABEL (page->tab_label))
+	  if (GTK_IS_LABEL (page->tab_label))
 	    gtk_label_set_text (GTK_LABEL (page->menu_label),
-			   GTK_LABEL (page->tab_label)->label);
+                                GTK_LABEL (page->tab_label)->label);
 	  else
 	    gtk_label_set_text (GTK_LABEL (page->menu_label), string);
 	}
@@ -5929,7 +5929,7 @@ gtk_notebook_menu_item_create (GtkNotebook *notebook,
   page = list->data;
   if (page->default_menu)
     {
-      if (page->tab_label && GTK_IS_LABEL (page->tab_label))
+      if (GTK_IS_LABEL (page->tab_label))
 	page->menu_label = gtk_label_new (GTK_LABEL (page->tab_label)->label);
       else
 	page->menu_label = gtk_label_new ("");
@@ -6981,7 +6981,7 @@ gtk_notebook_get_tab_label_text (GtkNotebook *notebook,
 
   tab_label = gtk_notebook_get_tab_label (notebook, child);
 
-  if (tab_label && GTK_IS_LABEL (tab_label))
+  if (GTK_IS_LABEL (tab_label))
     return gtk_label_get_text (GTK_LABEL (tab_label));
   else
     return NULL;
@@ -7116,7 +7116,7 @@ gtk_notebook_get_menu_label_text (GtkNotebook *notebook,
  
   menu_label = gtk_notebook_get_menu_label (notebook, child);
 
-  if (menu_label && GTK_IS_LABEL (menu_label))
+  if (GTK_IS_LABEL (menu_label))
     return gtk_label_get_text (GTK_LABEL (menu_label));
   else
     return NULL;

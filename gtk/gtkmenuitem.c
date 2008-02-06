@@ -1618,7 +1618,7 @@ gtk_menu_item_set_accel_path (GtkMenuItem *menu_item,
   gtk_widget_set_accel_path (widget, NULL, NULL);
 
   /* install accelerators associated with new path */
-  if (widget->parent && GTK_IS_MENU (widget->parent))
+  if (GTK_IS_MENU (widget->parent))
     {
       GtkMenu *menu = GTK_MENU (widget->parent);
 

@@ -1,3 +1,24 @@
+2008-02-06  Michael Natterer  <mitch@imendio.com>
+
+	* gtk/gtkcontainer.c
+	* gtk/gtkexpander.c
+	* gtk/gtkframe.c
+	* gtk/gtklabel.c
+	* gtk/gtkmain.c
+	* gtk/gtkmenu.c
+	* gtk/gtkmenuitem.c
+	* gtk/gtkmenushell.c
+	* gtk/gtknotebook.c
+	* gtk/gtkseparatortoolitem.c
+	* gtk/gtksocket.c
+	* gtk/gtktextlayout.c
+	* gtk/gtktoggletoolbutton.c
+	* gtk/gtktoolbutton.c
+	* gtk/gtktoolitem.c
+	* gtk/gtktree.c
+	* gtk/gtktreeitem.c: replace "foo && GTK_IS_FOO (foo)" by simply
+	"GTK_IS_FOO (foo)".
+
 2008-02-05  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtkprintsettings.c (gtk_print_settings_get_page_ranges):

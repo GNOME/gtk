@@ -1821,7 +1821,7 @@ allocate_child_widgets (GtkTextLayout      *text_layout,
           /* shaped_object is NULL for child anchors with no
            * widgets stored at them
            */
-          if (shaped_object && GTK_IS_WIDGET (shaped_object))
+          if (GTK_IS_WIDGET (shaped_object))
             {
               PangoRectangle extents;
 

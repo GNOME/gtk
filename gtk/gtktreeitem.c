@@ -784,7 +784,7 @@ gtk_real_tree_item_toggle (GtkItem *item)
   if(!GTK_WIDGET_IS_SENSITIVE(item))
     return;
 
-  if (GTK_WIDGET (item)->parent && GTK_IS_TREE (GTK_WIDGET (item)->parent))
+  if (GTK_IS_TREE (GTK_WIDGET (item)->parent))
     gtk_tree_select_child (GTK_TREE (GTK_WIDGET (item)->parent),
 			   GTK_WIDGET (item));
   else

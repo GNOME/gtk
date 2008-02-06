@@ -1552,7 +1552,7 @@ gtk_expander_get_label (GtkExpander *expander)
 
   priv = expander->priv;
 
-  if (priv->label_widget && GTK_IS_LABEL (priv->label_widget))
+  if (GTK_IS_LABEL (priv->label_widget))
     return gtk_label_get_text (GTK_LABEL (priv->label_widget));
   else
     return NULL;
@@ -1584,7 +1584,7 @@ gtk_expander_set_use_underline (GtkExpander *expander,
     {
       priv->use_underline = use_underline;
 
-      if (priv->label_widget && GTK_IS_LABEL (priv->label_widget))
+      if (GTK_IS_LABEL (priv->label_widget))
 	gtk_label_set_use_underline (GTK_LABEL (priv->label_widget), use_underline);
 
       g_object_notify (G_OBJECT (expander), "use-underline");
@@ -1638,7 +1638,7 @@ gtk_expander_set_use_markup (GtkExpander *expander,
     {
       priv->use_markup = use_markup;
 
-      if (priv->label_widget && GTK_IS_LABEL (priv->label_widget))
+      if (GTK_IS_LABEL (priv->label_widget))
 	gtk_label_set_use_markup (GTK_LABEL (priv->label_widget), use_markup);
 
       g_object_notify (G_OBJECT (expander), "use-markup");
