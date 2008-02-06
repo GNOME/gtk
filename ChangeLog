@@ -1,3 +1,10 @@
+2008-02-05  Matthias Clasen  <mclasen@redhat.com>
+
+	Merge from trunk:
+
+	* gtk/gtkprintsettings.c (gtk_print_settings_get_page_ranges):
+	Allow to store half-open ranges.
+
 2008-02-05  Federico Mena Quintero  <federico@novell.com>
 
 	Don't focus the file list when shortcuts get activated.  This

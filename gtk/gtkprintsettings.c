@@ -1283,8 +1283,6 @@ gtk_print_settings_get_page_ranges (GtkPrintSettings *settings,
 	{
 	  str++;
 	  end = (gint)strtol (str, NULL, 10);
-	  if (end < start)
-	    end = start;
 	}
 
       ranges[i].start = start;
