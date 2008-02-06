@@ -3045,7 +3045,11 @@ gdk_event_translate (MSG  *msg,
 					   GDK_WINDOW_STATE_MAXIMIZED |
 					   withdrawn_bit,
 					   0);
-	      show_window_internal (window, FALSE);
+
+	      if (GDK_WINDOW_TYPE (window) != GDK_WINDOW_TEMP)
+		{
+		  show_window_internal (window, FALSE);
+		}
 	    }
 	  else if (msg->wParam == SIZE_MAXIMIZED)
 	    {
