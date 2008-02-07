@@ -2093,6 +2093,8 @@ _gdk_push_modal_window (GdkWindow *window)
 void
 _gdk_remove_modal_window (GdkWindow *window)
 {
+  GSList *tmp;
+
   g_return_if_fail (window != NULL);
 
   /* It's possible to be NULL here if someone sets the modal hint of the window
@@ -2102,7 +2104,7 @@ _gdk_remove_modal_window (GdkWindow *window)
 
   /* Find the requested window in the stack and remove it.  Yeah, I realize this
    * means we're not a 'real stack', strictly speaking.  Sue me. :) */
-  GSList *tmp = g_slist_find (modal_window_stack, window);
+  tmp = g_slist_find (modal_window_stack, window);
   if (tmp != NULL)
     {
       modal_window_stack = g_slist_delete_link (modal_window_stack, tmp);

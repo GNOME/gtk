@@ -1,3 +1,12 @@
+2008-02-07  Cody Russell  <bratsche@gnome.org>
+
+	Merge from trunk:
+
+	* gdk/win32/gdkevents-win32.c
+	* gdk/win32/gdkwindow-win32.c: Fixed two declarations in the middle
+	of a block that were causing compile problems on old
+	compilers. (#515053, reported by Kazuki IWAMOTO)
+
 2008-02-06  Cody Russell  <bratsche@gnome.org>
 
 	* gdk/win32/gdkevents-win32.c: Check if the window is a temp window,
