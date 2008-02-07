@@ -50,12 +50,8 @@ gtk_hpaned_class_init (GtkHPanedClass *class)
 static void
 gtk_hpaned_init (GtkHPaned *hpaned)
 {
-  GtkPaned *paned;
+  GtkPaned *paned = GTK_PANED (hpaned);
 
-  g_return_if_fail (GTK_IS_PANED (hpaned));
-
-  paned = GTK_PANED (hpaned);
-  
   paned->cursor_type = GDK_SB_H_DOUBLE_ARROW;
   paned->orientation = GTK_ORIENTATION_VERTICAL;
 }

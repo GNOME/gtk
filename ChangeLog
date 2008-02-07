@@ -1,3 +1,23 @@
+2008-02-07  Michael Natterer  <mitch@imendio.com>
+
+	* gtk/gtkaction.c
+	* gtk/gtkassistant.c
+	* gtk/gtkbin.c
+	* gtk/gtkbox.c
+	* gtk/gtkcalendar.c
+	* gtk/gtkcellrenderercombo.c
+	* gtk/gtkcombobox.c
+	* gtk/gtkcombo.c
+	* gtk/gtkdrawingarea.c
+	* gtk/gtkentrycompletion.c
+	* gtk/gtkfixed.h
+	* gtk/gtkgamma.c
+	* gtk/gtkhpaned.c
+	* gtk/gtkiconview.c
+	* gtk/gtkitem.c
+	* gtk/gtkitemfactory.c: remove g_return_if_fail() from private
+	functions and virtual function implementations.
+
 2008-02-07  Christian Persch  <chpe@gnome.org>
 
 	* gdk/gdkpixbuf-render.c:

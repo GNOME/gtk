@@ -836,9 +836,7 @@ static void
 calendar_set_month_next (GtkCalendar *calendar)
 {
   gint month_len;
-  
-  g_return_if_fail (GTK_IS_WIDGET (calendar));
-  
+
   if (calendar->display_flags & GTK_CALENDAR_NO_MONTH_CHANGE)
     return;
   
@@ -876,9 +874,7 @@ static void
 calendar_set_year_prev (GtkCalendar *calendar)
 {
   gint month_len;
-  
-  g_return_if_fail (GTK_IS_WIDGET (calendar));
-  
+
   calendar->year--;
   calendar_compute_days (calendar);
   g_signal_emit (calendar,
@@ -905,9 +901,7 @@ static void
 calendar_set_year_next (GtkCalendar *calendar)
 {
   gint month_len;
-  
-  g_return_if_fail (GTK_IS_WIDGET (calendar));
-  
+
   calendar->year++;
   calendar_compute_days (calendar);
   g_signal_emit (calendar,
@@ -942,8 +936,6 @@ calendar_compute_days (GtkCalendar *calendar)
   gint row;
   gint col;
   gint day;
-
-  g_return_if_fail (GTK_IS_CALENDAR (calendar));
 
   year = calendar->year;
   month = calendar->month + 1;

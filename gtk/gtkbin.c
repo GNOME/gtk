@@ -79,8 +79,6 @@ gtk_bin_add (GtkContainer *container,
 {
   GtkBin *bin = GTK_BIN (container);
 
-  g_return_if_fail (GTK_IS_WIDGET (child));
-
   if (bin->child != NULL)
     {
       g_warning ("Attempting to add a widget with type %s to a %s, "
@@ -104,7 +102,6 @@ gtk_bin_remove (GtkContainer *container,
   GtkBin *bin = GTK_BIN (container);
   gboolean widget_was_visible;
 
-  g_return_if_fail (GTK_IS_WIDGET (child));
   g_return_if_fail (bin->child == child);
 
   widget_was_visible = GTK_WIDGET_VISIBLE (child);
@@ -126,8 +123,6 @@ gtk_bin_forall (GtkContainer *container,
 		gpointer      callback_data)
 {
   GtkBin *bin = GTK_BIN (container);
-
-  g_return_if_fail (callback != NULL);
 
   if (bin->child)
     (* callback) (bin->child, callback_data);

@@ -740,11 +740,9 @@ static void
 gtk_box_remove (GtkContainer *container,
 		GtkWidget    *widget)
 {
-  GtkBox *box;
+  GtkBox *box = GTK_BOX (container);
   GtkBoxChild *child;
   GList *children;
-
-  box = GTK_BOX (container);
 
   children = box->children;
   while (children)
@@ -781,13 +779,9 @@ gtk_box_forall (GtkContainer *container,
 		GtkCallback   callback,
 		gpointer      callback_data)
 {
-  GtkBox *box;
+  GtkBox *box = GTK_BOX (container);
   GtkBoxChild *child;
   GList *children;
-
-  g_return_if_fail (callback != NULL);
-
-  box = GTK_BOX (container);
 
   children = box->children;
   while (children)

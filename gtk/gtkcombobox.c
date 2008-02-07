@@ -4067,14 +4067,10 @@ gtk_combo_box_cell_layout_pack_start (GtkCellLayout   *layout,
                                       GtkCellRenderer *cell,
                                       gboolean         expand)
 {
+  GtkComboBox *combo_box = GTK_COMBO_BOX (layout);;
   ComboCellInfo *info;
-  GtkComboBox *combo_box;
   GtkComboBoxPrivate *priv;
 
-  g_return_if_fail (GTK_IS_COMBO_BOX (layout));
-  g_return_if_fail (GTK_IS_CELL_RENDERER (cell));
-
-  combo_box = GTK_COMBO_BOX (layout);
   priv = combo_box->priv;
 
   g_object_ref_sink (cell);
@@ -4125,14 +4121,10 @@ gtk_combo_box_cell_layout_pack_end (GtkCellLayout   *layout,
                                     GtkCellRenderer *cell,
                                     gboolean         expand)
 {
+  GtkComboBox *combo_box = GTK_COMBO_BOX (layout);
   ComboCellInfo *info;
-  GtkComboBox *combo_box;
   GtkComboBoxPrivate *priv;
 
-  g_return_if_fail (GTK_IS_COMBO_BOX (layout));
-  g_return_if_fail (GTK_IS_CELL_RENDERER (cell));
-
-  combo_box = GTK_COMBO_BOX (layout);
   priv = combo_box->priv;
 
   g_object_ref_sink (cell);
@@ -4158,13 +4150,9 @@ gtk_combo_box_cell_layout_pack_end (GtkCellLayout   *layout,
 static GList *
 gtk_combo_box_cell_layout_get_cells (GtkCellLayout *layout)
 {
+  GtkComboBox *combo_box = GTK_COMBO_BOX (layout);
   GSList *list;
   GList *retval = NULL;
-  GtkComboBox *combo_box;
-
-  g_return_val_if_fail (GTK_IS_COMBO_BOX (layout), NULL);
-
-  combo_box = GTK_COMBO_BOX (layout);
 
   for (list = combo_box->priv->cells; list; list = list->next)
     {
@@ -4255,13 +4243,8 @@ gtk_combo_box_cell_layout_add_attribute (GtkCellLayout   *layout,
                                          const gchar     *attribute,
                                          gint             column)
 {
+  GtkComboBox *combo_box = GTK_COMBO_BOX (layout);
   ComboCellInfo *info;
-  GtkComboBox *combo_box;
-
-  g_return_if_fail (GTK_IS_COMBO_BOX (layout));
-  g_return_if_fail (GTK_IS_CELL_RENDERER (cell));
-
-  combo_box = GTK_COMBO_BOX (layout);
 
   info = gtk_combo_box_get_cell_info (combo_box, cell);
   g_return_if_fail (info != NULL);
@@ -4403,15 +4386,11 @@ static void
 gtk_combo_box_cell_layout_clear_attributes (GtkCellLayout   *layout,
                                             GtkCellRenderer *cell)
 {
-  ComboCellInfo *info;
-  GtkComboBox *combo_box;
+  GtkComboBox *combo_box = GTK_COMBO_BOX (layout);
   GtkComboBoxPrivate *priv;
+  ComboCellInfo *info;
   GSList *list;
 
-  g_return_if_fail (GTK_IS_COMBO_BOX (layout));
-  g_return_if_fail (GTK_IS_CELL_RENDERER (cell));
-
-  combo_box = GTK_COMBO_BOX (layout);
   priv = combo_box->priv;
 
   info = gtk_combo_box_get_cell_info (combo_box, cell);
@@ -4466,15 +4445,11 @@ gtk_combo_box_cell_layout_reorder (GtkCellLayout   *layout,
                                    GtkCellRenderer *cell,
                                    gint             position)
 {
-  ComboCellInfo *info;
-  GtkComboBox *combo_box;
+  GtkComboBox *combo_box = GTK_COMBO_BOX (layout);
   GtkComboBoxPrivate *priv;
+  ComboCellInfo *info;
   GSList *link;
 
-  g_return_if_fail (GTK_IS_COMBO_BOX (layout));
-  g_return_if_fail (GTK_IS_CELL_RENDERER (cell));
-
-  combo_box = GTK_COMBO_BOX (layout);
   priv = combo_box->priv;
 
   info = gtk_combo_box_get_cell_info (combo_box, cell);

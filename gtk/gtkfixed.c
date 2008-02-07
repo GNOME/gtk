@@ -436,13 +436,9 @@ gtk_fixed_forall (GtkContainer *container,
 		  GtkCallback   callback,
 		  gpointer      callback_data)
 {
-  GtkFixed *fixed;
+  GtkFixed *fixed = GTK_FIXED (container);
   GtkFixedChild *child;
   GList *children;
-
-  g_return_if_fail (callback != NULL);
-
-  fixed = GTK_FIXED (container);
 
   children = fixed->children;
   while (children)

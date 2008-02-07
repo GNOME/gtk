@@ -75,13 +75,10 @@ gtk_drawing_area_size (GtkDrawingArea *darea,
 static void
 gtk_drawing_area_realize (GtkWidget *widget)
 {
-  GtkDrawingArea *darea;
+  GtkDrawingArea *darea = GTK_DRAWING_AREA (widget);
   GdkWindowAttr attributes;
   gint attributes_mask;
 
-  g_return_if_fail (GTK_IS_DRAWING_AREA (widget));
-
-  darea = GTK_DRAWING_AREA (widget);
   GTK_WIDGET_SET_FLAGS (widget, GTK_REALIZED);
 
   attributes.window_type = GDK_WINDOW_CHILD;

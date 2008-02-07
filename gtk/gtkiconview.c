@@ -1250,11 +1250,7 @@ static void
 gtk_icon_view_style_set (GtkWidget *widget,
 			 GtkStyle *previous_style)
 {
-  GtkIconView *icon_view;
-
-  g_return_if_fail (GTK_IS_ICON_VIEW (widget));
-
-  icon_view = GTK_ICON_VIEW (widget);
+  GtkIconView *icon_view = GTK_ICON_VIEW (widget);
 
   if (GTK_WIDGET_REALIZED (widget))
     {
@@ -1269,10 +1265,8 @@ static void
 gtk_icon_view_size_request (GtkWidget      *widget,
 			    GtkRequisition *requisition)
 {
-  GtkIconView *icon_view;
+  GtkIconView *icon_view = GTK_ICON_VIEW (widget);
   GList *tmp_list;
-
-  icon_view = GTK_ICON_VIEW (widget);
 
   requisition->width = icon_view->priv->width;
   requisition->height = icon_view->priv->height;

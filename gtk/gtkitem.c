@@ -125,8 +125,6 @@ gtk_item_realize (GtkWidget *widget)
   GdkWindowAttr attributes;
   gint attributes_mask;
 
-  g_return_if_fail (GTK_IS_ITEM (widget));
-
   GTK_WIDGET_SET_FLAGS (widget, GTK_REALIZED);
 
   attributes.x = widget->allocation.x;

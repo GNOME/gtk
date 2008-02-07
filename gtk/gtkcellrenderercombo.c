@@ -184,11 +184,7 @@ gtk_cell_renderer_combo_get_property (GObject    *object,
 				      GValue     *value,
 				      GParamSpec *pspec)
 {
-  GtkCellRendererCombo *cell;
- 
-  g_return_if_fail (GTK_IS_CELL_RENDERER_COMBO (object));
-
-  cell = GTK_CELL_RENDERER_COMBO (object);
+  GtkCellRendererCombo *cell = GTK_CELL_RENDERER_COMBO (object);
 
   switch (prop_id)
     {
@@ -213,11 +209,7 @@ gtk_cell_renderer_combo_set_property (GObject      *object,
 				      const GValue *value,
 				      GParamSpec   *pspec)
 {
-  GtkCellRendererCombo *cell;
-  
-  g_return_if_fail (GTK_IS_CELL_RENDERER_COMBO (object));
-
-  cell = GTK_CELL_RENDERER_COMBO (object);
+  GtkCellRendererCombo *cell = GTK_CELL_RENDERER_COMBO (object);
 
   switch (prop_id)
     {

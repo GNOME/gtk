@@ -670,8 +670,6 @@ gtk_entry_completion_pack_start (GtkCellLayout   *cell_layout,
 {
   GtkEntryCompletionPrivate *priv;
 
-  g_return_if_fail (GTK_IS_ENTRY_COMPLETION (cell_layout));
-
   priv = GTK_ENTRY_COMPLETION_GET_PRIVATE (cell_layout);
 
   gtk_tree_view_column_pack_start (priv->column, cell, expand);
@@ -684,8 +682,6 @@ gtk_entry_completion_pack_end (GtkCellLayout   *cell_layout,
 {
   GtkEntryCompletionPrivate *priv;
 
-  g_return_if_fail (GTK_IS_ENTRY_COMPLETION (cell_layout));
-
   priv = GTK_ENTRY_COMPLETION_GET_PRIVATE (cell_layout);
 
   gtk_tree_view_column_pack_end (priv->column, cell, expand);
@@ -695,8 +691,6 @@ static void
 gtk_entry_completion_clear (GtkCellLayout *cell_layout)
 {
   GtkEntryCompletionPrivate *priv;
-
-  g_return_if_fail (GTK_IS_ENTRY_COMPLETION (cell_layout));
 
   priv = GTK_ENTRY_COMPLETION_GET_PRIVATE (cell_layout);
 
@@ -710,8 +704,6 @@ gtk_entry_completion_add_attribute (GtkCellLayout   *cell_layout,
                                     gint             column)
 {
   GtkEntryCompletionPrivate *priv;
-
-  g_return_if_fail (GTK_IS_ENTRY_COMPLETION (cell_layout));
 
   priv = GTK_ENTRY_COMPLETION_GET_PRIVATE (cell_layout);
 
@@ -727,8 +719,6 @@ gtk_entry_completion_set_cell_data_func (GtkCellLayout          *cell_layout,
 {
   GtkEntryCompletionPrivate *priv;
 
-  g_return_if_fail (GTK_IS_ENTRY_COMPLETION (cell_layout));
-
   priv = GTK_ENTRY_COMPLETION_GET_PRIVATE (cell_layout);
 
   gtk_cell_layout_set_cell_data_func (GTK_CELL_LAYOUT (priv->column),
@@ -741,8 +731,6 @@ gtk_entry_completion_clear_attributes (GtkCellLayout   *cell_layout,
 {
   GtkEntryCompletionPrivate *priv;
 
-  g_return_if_fail (GTK_IS_ENTRY_COMPLETION (cell_layout));
-
   priv = GTK_ENTRY_COMPLETION_GET_PRIVATE (cell_layout);
 
   gtk_tree_view_column_clear_attributes (priv->column, cell);
@@ -754,8 +742,6 @@ gtk_entry_completion_reorder (GtkCellLayout   *cell_layout,
                               gint             position)
 {
   GtkEntryCompletionPrivate *priv;
-
-  g_return_if_fail (GTK_IS_ENTRY_COMPLETION (cell_layout));
 
   priv = GTK_ENTRY_COMPLETION_GET_PRIVATE (cell_layout);
 

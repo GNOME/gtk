@@ -1639,8 +1639,6 @@ static void
 gtk_action_set_action_group (GtkAction	    *action,
 			     GtkActionGroup *action_group)
 {
-  g_return_if_fail (GTK_IS_ACTION (action));
-
   if (action->private_data->action_group == NULL)
     g_return_if_fail (GTK_IS_ACTION_GROUP (action_group));
   else

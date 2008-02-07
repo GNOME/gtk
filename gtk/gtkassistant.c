@@ -1380,8 +1380,6 @@ static void
 gtk_assistant_add (GtkContainer *container,
 		   GtkWidget    *page)
 {
-  g_return_if_fail (GTK_IS_WIDGET (page));
-
   gtk_assistant_append_page (GTK_ASSISTANT (container), page);
 }
 
@@ -1389,10 +1387,8 @@ static void
 gtk_assistant_remove (GtkContainer *container,
 		      GtkWidget    *page)
 {
-  GtkAssistant *assistant;
+  GtkAssistant *assistant = (GtkAssistant*) container;
   GList *element;
-
-  assistant = (GtkAssistant*) container;
 
   element = find_page (assistant, page);
 

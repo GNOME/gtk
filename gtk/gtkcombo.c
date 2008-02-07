@@ -1132,14 +1132,9 @@ static void
 gtk_combo_size_allocate (GtkWidget     *widget,
 			 GtkAllocation *allocation)
 {
-  GtkCombo *combo;
-
-  g_return_if_fail (GTK_IS_COMBO (widget));
-  g_return_if_fail (allocation != NULL);
+  GtkCombo *combo = GTK_COMBO (widget);
 
   GTK_WIDGET_CLASS (gtk_combo_parent_class)->size_allocate (widget, allocation);
-  
-  combo = GTK_COMBO (widget);
 
   if (combo->entry->allocation.height > combo->entry->requisition.height)
     {

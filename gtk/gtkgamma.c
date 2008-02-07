@@ -480,11 +480,7 @@ gtk_gamma_curve_new (void)
 static void
 gtk_gamma_curve_destroy (GtkObject *object)
 {
-  GtkGammaCurve *c;
-
-  g_return_if_fail (GTK_IS_GAMMA_CURVE (object));
-
-  c = GTK_GAMMA_CURVE (object);
+  GtkGammaCurve *c = GTK_GAMMA_CURVE (object);
 
   if (c->gamma_dialog)
     gtk_widget_destroy (c->gamma_dialog);
