@@ -303,13 +303,10 @@ gtk_socket_get_id (GtkSocket *socket)
 static void
 gtk_socket_realize (GtkWidget *widget)
 {
-  GtkSocket *socket;
+  GtkSocket *socket = GTK_SOCKET (widget);
   GdkWindowAttr attributes;
   gint attributes_mask;
 
-  g_return_if_fail (GTK_IS_SOCKET (widget));
-
-  socket = GTK_SOCKET (widget);
   GTK_WIDGET_SET_FLAGS (widget, GTK_REALIZED);
 
   attributes.window_type = GDK_WINDOW_CHILD;
@@ -429,12 +426,7 @@ static void
 gtk_socket_size_allocate (GtkWidget     *widget,
 			  GtkAllocation *allocation)
 {
-  GtkSocket *socket;
-
-  g_return_if_fail (GTK_IS_SOCKET (widget));
-  g_return_if_fail (allocation != NULL);
-
-  socket = GTK_SOCKET (widget);
+  GtkSocket *socket = GTK_SOCKET (widget);
 
   widget->allocation = *allocation;
   if (GTK_WIDGET_REALIZED (widget))
@@ -749,11 +741,7 @@ static gboolean
 gtk_socket_focus (GtkWidget       *widget,
 		  GtkDirectionType direction)
 {
-  GtkSocket *socket;
-
-  g_return_val_if_fail (GTK_IS_SOCKET (widget), FALSE);
-  
-  socket = GTK_SOCKET (widget);
+  GtkSocket *socket = GTK_SOCKET (widget);
 
   if (socket->plug_widget)
     return gtk_widget_child_focus (socket->plug_widget, direction);

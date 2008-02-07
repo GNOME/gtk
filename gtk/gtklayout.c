@@ -370,11 +370,7 @@ gtk_layout_move_internal (GtkLayout       *layout,
                           gint             y)
 {
   GtkLayoutChild *child;
-  
-  g_return_if_fail (GTK_IS_LAYOUT (layout));
-  g_return_if_fail (GTK_IS_WIDGET (widget));
-  g_return_if_fail (widget->parent == GTK_WIDGET (layout));  
-  
+
   child = get_child (layout, widget);
 
   g_assert (child);
@@ -818,14 +814,11 @@ gtk_layout_constructor (GType                  type,
 static void 
 gtk_layout_realize (GtkWidget *widget)
 {
+  GtkLayout *layout = GTK_LAYOUT (widget);
   GList *tmp_list;
-  GtkLayout *layout;
   GdkWindowAttr attributes;
   gint attributes_mask;
 
-  g_return_if_fail (GTK_IS_LAYOUT (widget));
-
-  layout = GTK_LAYOUT (widget);
   GTK_WIDGET_SET_FLAGS (layout, GTK_REALIZED);
 
   attributes.window_type = GDK_WINDOW_CHILD;
@@ -881,15 +874,11 @@ gtk_layout_style_set (GtkWidget *widget, GtkStyle *old_style)
     }
 }
 
-static void 
+static void
 gtk_layout_map (GtkWidget *widget)
 {
+  GtkLayout *layout = GTK_LAYOUT (widget);
   GList *tmp_list;
-  GtkLayout *layout;
-
-  g_return_if_fail (GTK_IS_LAYOUT (widget));
-
-  layout = GTK_LAYOUT (widget);
 
   GTK_WIDGET_SET_FLAGS (widget, GTK_MAPPED);
 
@@ -913,11 +902,7 @@ gtk_layout_map (GtkWidget *widget)
 static void 
 gtk_layout_unrealize (GtkWidget *widget)
 {
-  GtkLayout *layout;
-
-  g_return_if_fail (GTK_IS_LAYOUT (widget));
-
-  layout = GTK_LAYOUT (widget);
+  GtkLayout *layout = GTK_LAYOUT (widget);
 
   gdk_window_set_user_data (layout->bin_window, NULL);
   gdk_window_destroy (layout->bin_window);
@@ -931,12 +916,8 @@ static void
 gtk_layout_size_request (GtkWidget     *widget,
 			 GtkRequisition *requisition)
 {
+  GtkLayout *layout = GTK_LAYOUT (widget);
   GList *tmp_list;
-  GtkLayout *layout;
-
-  g_return_if_fail (GTK_IS_LAYOUT (widget));
-
-  layout = GTK_LAYOUT (widget);
 
   requisition->width = 0;
   requisition->height = 0;
@@ -958,14 +939,10 @@ static void
 gtk_layout_size_allocate (GtkWidget     *widget,
 			  GtkAllocation *allocation)
 {
+  GtkLayout *layout = GTK_LAYOUT (widget);
   GList *tmp_list;
-  GtkLayout *layout;
-
-  g_return_if_fail (GTK_IS_LAYOUT (widget));
 
   widget->allocation = *allocation;
-  
-  layout = GTK_LAYOUT (widget);
 
   tmp_list = layout->children;
 
@@ -1002,13 +979,10 @@ gtk_layout_size_allocate (GtkWidget     *widget,
 }
 
 static gint 
-gtk_layout_expose (GtkWidget *widget, GdkEventExpose *event)
+gtk_layout_expose (GtkWidget      *widget,
+                   GdkEventExpose *event)
 {
-  GtkLayout *layout;
-
-  g_return_val_if_fail (GTK_IS_LAYOUT (widget), FALSE);
-
-  layout = GTK_LAYOUT (widget);
+  GtkLayout *layout = GTK_LAYOUT (widget);
 
   if (event->window != layout->bin_window)
     return FALSE;
@@ -1031,13 +1005,9 @@ static void
 gtk_layout_remove (GtkContainer *container, 
 		   GtkWidget    *widget)
 {
+  GtkLayout *layout = GTK_LAYOUT (container);
   GList *tmp_list;
-  GtkLayout *layout;
   GtkLayoutChild *child = NULL;
-  
-  g_return_if_fail (GTK_IS_LAYOUT (container));
-  
-  layout = GTK_LAYOUT (container);
 
   tmp_list = layout->children;
   while (tmp_list)
@@ -1064,14 +1034,9 @@ gtk_layout_forall (GtkContainer *container,
 		   GtkCallback   callback,
 		   gpointer      callback_data)
 {
-  GtkLayout *layout;
+  GtkLayout *layout = GTK_LAYOUT (container);
   GtkLayoutChild *child;
   GList *tmp_list;
-
-  g_return_if_fail (GTK_IS_LAYOUT (container));
-  g_return_if_fail (callback != NULL);
-
-  layout = GTK_LAYOUT (container);
 
   tmp_list = layout->children;
   while (tmp_list)

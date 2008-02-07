@@ -902,13 +902,9 @@ gtk_menu_init (GtkMenu *menu)
 static void
 gtk_menu_destroy (GtkObject *object)
 {
-  GtkMenu *menu;
+  GtkMenu *menu = GTK_MENU (object);
   GtkMenuAttachData *data;
   GtkMenuPrivate *priv; 
-
-  g_return_if_fail (GTK_IS_MENU (object));
-
-  menu = GTK_MENU (object);
 
   gtk_menu_remove_scroll_timeout (menu);
   
@@ -1114,12 +1110,9 @@ static void
 gtk_menu_remove (GtkContainer *container,
 		 GtkWidget    *widget)
 {
-  GtkMenu *menu;
+  GtkMenu *menu = GTK_MENU (container);
 
-  g_return_if_fail (GTK_IS_MENU (container));
   g_return_if_fail (GTK_IS_MENU_ITEM (widget));
-
-  menu = GTK_MENU (container);
 
   /* Clear out old_active_menu_item if it matches the item we are removing
    */
@@ -2169,11 +2162,7 @@ menu_grab_transfer_window_destroy (GtkMenu *menu)
 static void
 gtk_menu_unrealize (GtkWidget *widget)
 {
-  GtkMenu *menu;
-
-  g_return_if_fail (GTK_IS_MENU (widget));
-
-  menu = GTK_MENU (widget);
+  GtkMenu *menu = GTK_MENU (widget);
 
   menu_grab_transfer_window_destroy (menu);
 

@@ -1,5 +1,24 @@
 2008-02-07  Michael Natterer  <mitch@imendio.com>
 
+	* gtk/gtkcellview.c
+	* gtk/gtklabel.c
+	* gtk/gtklayout.c
+	* gtk/gtklist.c
+	* gtk/gtkmenu.c
+	* gtk/gtkmenushell.c
+	* gtk/gtkmisc.c
+	* gtk/gtkoptionmenu.c
+	* gtk/gtkplug.c
+	* gtk/gtkpreview.c
+	* gtk/gtkprogress.c
+	* gtk/gtkradiomenuitem.c
+	* gtk/gtkscale.c
+	* gtk/gtkscrolledwindow.c
+	* gtk/gtksocket.c: remove g_return_if_fail() from private
+	functions and virtual function implementations.
+
+2008-02-07  Michael Natterer  <mitch@imendio.com>
+
 	* gtk/gtkaction.c
 	* gtk/gtkassistant.c
 	* gtk/gtkbin.c

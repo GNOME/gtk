@@ -622,11 +622,7 @@ _gtk_scale_format_value (GtkScale *scale,
 static void
 gtk_scale_finalize (GObject *object)
 {
-  GtkScale *scale;
-
-  g_return_if_fail (GTK_IS_SCALE (object));
-
-  scale = GTK_SCALE (object);
+  GtkScale *scale = GTK_SCALE (object);
 
   _gtk_scale_clear_layout (scale);
 
@@ -707,7 +703,8 @@ gtk_scale_get_layout_offsets (GtkScale *scale,
     *y = local_y;
 }
 
-void _gtk_scale_clear_layout (GtkScale *scale)
+void
+_gtk_scale_clear_layout (GtkScale *scale)
 {
   GtkScalePrivate *priv = GTK_SCALE_GET_PRIVATE (scale);
 

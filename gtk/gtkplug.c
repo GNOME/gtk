@@ -492,11 +492,7 @@ gtk_plug_finalize (GObject *object)
 static void
 gtk_plug_unrealize (GtkWidget *widget)
 {
-  GtkPlug *plug;
-
-  g_return_if_fail (GTK_IS_PLUG (widget));
-
-  plug = GTK_PLUG (widget);
+  GtkPlug *plug = GTK_PLUG (widget);
 
   if (plug->socket_window != NULL)
     {
@@ -523,16 +519,12 @@ gtk_plug_unrealize (GtkWidget *widget)
 static void
 gtk_plug_realize (GtkWidget *widget)
 {
-  GtkWindow *window;
-  GtkPlug *plug;
+  GtkWindow *window = GTK_WINDOW (widget);
+  GtkPlug *plug = GTK_PLUG (widget);
   GdkWindowAttr attributes;
   gint attributes_mask;
 
-  g_return_if_fail (GTK_IS_PLUG (widget));
-
   GTK_WIDGET_SET_FLAGS (widget, GTK_REALIZED);
-  window = GTK_WINDOW (widget);
-  plug = GTK_PLUG (widget);
 
   attributes.window_type = GDK_WINDOW_CHILD;	/* XXX GDK_WINDOW_PLUG ? */
   attributes.title = window->title;

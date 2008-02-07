@@ -367,14 +367,10 @@ static void
 gtk_list_size_request (GtkWidget      *widget,
 		       GtkRequisition *requisition)
 {
-  GtkList *list;
+  GtkList *list = GTK_LIST (widget);
   GtkWidget *child;
   GList *children;
 
-  g_return_if_fail (GTK_IS_LIST (widget));
-  g_return_if_fail (requisition != NULL);
-
-  list = GTK_LIST (widget);
   requisition->width = 0;
   requisition->height = 0;
 
@@ -407,15 +403,10 @@ static void
 gtk_list_size_allocate (GtkWidget     *widget,
 			GtkAllocation *allocation)
 {
-  GtkList *list;
+  GtkList *list = GTK_LIST (widget);
   GtkWidget *child;
   GtkAllocation child_allocation;
   GList *children;
-
-  g_return_if_fail (GTK_IS_LIST (widget));
-  g_return_if_fail (allocation != NULL);
-
-  list = GTK_LIST (widget);
 
   widget->allocation = *allocation;
   if (GTK_WIDGET_REALIZED (widget))
@@ -458,8 +449,6 @@ gtk_list_realize (GtkWidget *widget)
   GdkWindowAttr attributes;
   gint attributes_mask;
 
-  g_return_if_fail (GTK_IS_LIST (widget));
-
   GTK_WIDGET_SET_FLAGS (widget, GTK_REALIZED);
 
   attributes.window_type = GDK_WINDOW_CHILD;
@@ -494,14 +483,10 @@ list_has_grab (GtkList *list)
 static void
 gtk_list_unmap (GtkWidget *widget)
 {
-  GtkList *list;
-
-  g_return_if_fail (GTK_IS_LIST (widget));
+  GtkList *list = GTK_LIST (widget);
 
   if (!GTK_WIDGET_MAPPED (widget))
     return;
-
-  list = GTK_LIST (widget);
 
   GTK_WIDGET_UNSET_FLAGS (widget, GTK_MAPPED);
 
@@ -520,7 +505,7 @@ static gint
 gtk_list_motion_notify (GtkWidget      *widget,
 			GdkEventMotion *event)
 {
-  GtkList *list;
+  GtkList *list = GTK_LIST (widget);
   GtkWidget *item = NULL;
   GtkAdjustment *adj;
   GtkContainer *container;
@@ -530,11 +515,6 @@ gtk_list_motion_notify (GtkWidget      *widget,
   gint row = -1;
   gint focus_row = 0;
   gint length = 0;
-
-  g_return_val_if_fail (GTK_IS_LIST (widget), FALSE);
-  g_return_val_if_fail (event != NULL, FALSE);
-
-  list = GTK_LIST (widget);
 
   if (!list->drag_selection || !list->children)
     return FALSE;
@@ -631,16 +611,12 @@ static gint
 gtk_list_button_press (GtkWidget      *widget,
 		       GdkEventButton *event)
 {
-  GtkList *list;
+  GtkList *list = GTK_LIST (widget);
   GtkWidget *item;
-
-  g_return_val_if_fail (GTK_IS_LIST (widget), FALSE);
-  g_return_val_if_fail (event != NULL, FALSE);
 
   if (event->button != 1)
     return FALSE;
 
-  list = GTK_LIST (widget);
   item = gtk_get_event_widget ((GdkEvent*) event);
 
   while (item && !GTK_IS_LIST_ITEM (item))
@@ -760,13 +736,8 @@ static gint
 gtk_list_button_release (GtkWidget	*widget,
 			 GdkEventButton *event)
 {
-  GtkList *list;
+  GtkList *list = GTK_LIST (widget);
   GtkWidget *item;
-
-  g_return_val_if_fail (GTK_IS_LIST (widget), FALSE);
-  g_return_val_if_fail (event != NULL, FALSE);
-
-  list = GTK_LIST (widget);
 
   /* we don't handle button 2 and 3 */
   if (event->button != 1)
@@ -812,8 +783,6 @@ static void
 gtk_list_style_set	(GtkWidget      *widget,
 			 GtkStyle       *previous_style)
 {
-  g_return_if_fail (widget != NULL);
-
   if (previous_style && GTK_WIDGET_REALIZED (widget))
     gdk_window_set_background (widget->window, &widget->style->base[GTK_WIDGET_STATE (widget)]);
 }
@@ -832,7 +801,6 @@ gtk_list_add (GtkContainer *container,
 {
   GList *item_list;
 
-  g_return_if_fail (GTK_IS_LIST (container));
   g_return_if_fail (GTK_IS_LIST_ITEM (widget));
 
   item_list = g_list_alloc ();
@@ -846,9 +814,7 @@ gtk_list_remove (GtkContainer *container,
 		 GtkWidget    *widget)
 {
   GList *item_list;
-  
-  g_return_if_fail (GTK_IS_LIST (container));
-  g_return_if_fail (widget != NULL);
+
   g_return_if_fail (container == GTK_CONTAINER (widget->parent));
   
   item_list = g_list_alloc ();
@@ -865,14 +831,10 @@ gtk_list_forall (GtkContainer  *container,
 		 GtkCallback	callback,
 		 gpointer	callback_data)
 {
-  GtkList *list;
+  GtkList *list = GTK_LIST (container);
   GtkWidget *child;
   GList *children;
 
-  g_return_if_fail (GTK_IS_LIST (container));
-  g_return_if_fail (callback != NULL);
-
-  list = GTK_LIST (container);
   children = list->children;
 
   while (children)

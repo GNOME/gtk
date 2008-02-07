@@ -205,13 +205,10 @@ gtk_progress_init (GtkProgress *progress)
 static void
 gtk_progress_realize (GtkWidget *widget)
 {
-  GtkProgress *progress;
+  GtkProgress *progress = GTK_PROGRESS (widget);
   GdkWindowAttr attributes;
   gint attributes_mask;
 
-  g_return_if_fail (GTK_IS_PROGRESS (widget));
-
-  progress = GTK_PROGRESS (widget);
   GTK_WIDGET_SET_FLAGS (widget, GTK_REALIZED);
 
   attributes.window_type = GDK_WINDOW_CHILD;
@@ -240,11 +237,7 @@ gtk_progress_realize (GtkWidget *widget)
 static void
 gtk_progress_destroy (GtkObject *object)
 {
-  GtkProgress *progress;
-
-  g_return_if_fail (GTK_IS_PROGRESS (object));
-
-  progress = GTK_PROGRESS (object);
+  GtkProgress *progress = GTK_PROGRESS (object);
 
   if (progress->adjustment)
     {
@@ -264,11 +257,7 @@ gtk_progress_destroy (GtkObject *object)
 static void
 gtk_progress_finalize (GObject *object)
 {
-  GtkProgress *progress;
-
-  g_return_if_fail (GTK_IS_PROGRESS (object));
-
-  progress = GTK_PROGRESS (object);
+  GtkProgress *progress = GTK_PROGRESS (object);
 
   if (progress->offscreen_pixmap)
     g_object_unref (progress->offscreen_pixmap);
@@ -282,9 +271,6 @@ static gboolean
 gtk_progress_expose (GtkWidget      *widget,
 		     GdkEventExpose *event)
 {
-  g_return_val_if_fail (GTK_IS_PROGRESS (widget), FALSE);
-  g_return_val_if_fail (event != NULL, FALSE);
-
   if (GTK_WIDGET_DRAWABLE (widget))
     gdk_draw_drawable (widget->window,
 		       widget->style->black_gc,
@@ -301,9 +287,6 @@ static void
 gtk_progress_size_allocate (GtkWidget     *widget,
 			    GtkAllocation *allocation)
 {
-  g_return_if_fail (GTK_IS_PROGRESS (widget));
-  g_return_if_fail (allocation != NULL);
-
   widget->allocation = *allocation;
 
   if (GTK_WIDGET_REALIZED (widget))

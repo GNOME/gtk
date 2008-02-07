@@ -586,8 +586,6 @@ gtk_cell_view_cell_layout_pack_start (GtkCellLayout   *layout,
   GtkCellViewCellInfo *info;
   GtkCellView *cellview = GTK_CELL_VIEW (layout);
 
-  g_return_if_fail (GTK_IS_CELL_VIEW (cellview));
-  g_return_if_fail (GTK_IS_CELL_RENDERER (renderer));
   g_return_if_fail (!gtk_cell_view_get_cell_info (cellview, renderer));
 
   g_object_ref_sink (renderer);
@@ -608,8 +606,6 @@ gtk_cell_view_cell_layout_pack_end (GtkCellLayout   *layout,
   GtkCellViewCellInfo *info;
   GtkCellView *cellview = GTK_CELL_VIEW (layout);
 
-  g_return_if_fail (GTK_IS_CELL_VIEW (cellview));
-  g_return_if_fail (GTK_IS_CELL_RENDERER (renderer));
   g_return_if_fail (!gtk_cell_view_get_cell_info (cellview, renderer));
 
   g_object_ref_sink (renderer);
@@ -631,7 +627,6 @@ gtk_cell_view_cell_layout_add_attribute (GtkCellLayout   *layout,
   GtkCellViewCellInfo *info;
   GtkCellView *cellview = GTK_CELL_VIEW (layout);
 
-  g_return_if_fail (GTK_IS_CELL_VIEW (cellview));
   info = gtk_cell_view_get_cell_info (cellview, renderer);
   g_return_if_fail (info != NULL);
 
@@ -645,8 +640,6 @@ static void
 gtk_cell_view_cell_layout_clear (GtkCellLayout *layout)
 {
   GtkCellView *cellview = GTK_CELL_VIEW (layout);
-
-  g_return_if_fail (GTK_IS_CELL_VIEW (cellview));
 
   while (cellview->priv->cell_list)
     {
@@ -670,8 +663,6 @@ gtk_cell_view_cell_layout_set_cell_data_func (GtkCellLayout         *layout,
   GtkCellView *cellview = GTK_CELL_VIEW (layout);
   GtkCellViewCellInfo *info;
 
-  g_return_if_fail (GTK_IS_CELL_VIEW (cellview));
-
   info = gtk_cell_view_get_cell_info (cellview, cell);
   g_return_if_fail (info != NULL);
 
@@ -692,12 +683,9 @@ static void
 gtk_cell_view_cell_layout_clear_attributes (GtkCellLayout   *layout,
                                             GtkCellRenderer *renderer)
 {
-  GtkCellViewCellInfo *info;
   GtkCellView *cellview = GTK_CELL_VIEW (layout);
+  GtkCellViewCellInfo *info;
   GSList *list;
-
-  g_return_if_fail (GTK_IS_CELL_VIEW (cellview));
-  g_return_if_fail (GTK_IS_CELL_RENDERER (renderer));
 
   info = gtk_cell_view_get_cell_info (cellview, renderer);
   if (info != NULL)
@@ -719,12 +707,9 @@ gtk_cell_view_cell_layout_reorder (GtkCellLayout   *layout,
                                    GtkCellRenderer *cell,
                                    gint             position)
 {
-  GList *link;
-  GtkCellViewCellInfo *info;
   GtkCellView *cellview = GTK_CELL_VIEW (layout);
-
-  g_return_if_fail (GTK_IS_CELL_VIEW (cellview));
-  g_return_if_fail (GTK_IS_CELL_RENDERER (cell));
+  GtkCellViewCellInfo *info;
+  GList *link;
 
   info = gtk_cell_view_get_cell_info (cellview, cell);
 
@@ -878,9 +863,6 @@ gtk_cell_view_set_value (GtkCellView     *cell_view,
                          gchar           *property,
                          GValue          *value)
 {
-  g_return_if_fail (GTK_IS_CELL_VIEW (cell_view));
-  g_return_if_fail (GTK_IS_CELL_RENDERER (renderer));
-
   g_object_set_property (G_OBJECT (renderer), property, value);
 
   /* force resize and redraw */

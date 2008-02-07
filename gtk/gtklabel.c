@@ -1883,12 +1883,8 @@ gtk_label_destroy (GtkObject *object)
 static void
 gtk_label_finalize (GObject *object)
 {
-  GtkLabel *label;
-  
-  g_return_if_fail (GTK_IS_LABEL (object));
-  
-  label = GTK_LABEL (object);
-  
+  GtkLabel *label = GTK_LABEL (object);
+
   g_free (label->label);
   g_free (label->text);
 
@@ -2136,16 +2132,12 @@ static void
 gtk_label_size_request (GtkWidget      *widget,
 			GtkRequisition *requisition)
 {
-  GtkLabel *label;
+  GtkLabel *label = GTK_LABEL (widget);
   GtkLabelPrivate *priv;
   gint width, height;
   PangoRectangle logical_rect;
   GtkWidgetAuxInfo *aux_info;
-  
-  g_return_if_fail (GTK_IS_LABEL (widget));
-  g_return_if_fail (requisition != NULL);
-  
-  label = GTK_LABEL (widget);
+
   priv = GTK_LABEL_GET_PRIVATE (widget);
 
   /*  
@@ -2295,11 +2287,7 @@ static void
 gtk_label_style_set (GtkWidget *widget,
 		     GtkStyle  *previous_style)
 {
-  GtkLabel *label;
-  
-  g_return_if_fail (GTK_IS_LABEL (widget));
-  
-  label = GTK_LABEL (widget);
+  GtkLabel *label = GTK_LABEL (widget);
 
   /* We have to clear the layout, fonts etc. may have changed */
   gtk_label_clear_layout (label);

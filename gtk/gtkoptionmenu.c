@@ -372,11 +372,7 @@ gtk_option_menu_get_property (GObject            *object,
 static void
 gtk_option_menu_destroy (GtkObject *object)
 {
-  GtkOptionMenu *option_menu;
-
-  g_return_if_fail (GTK_IS_OPTION_MENU (object));
-
-  option_menu = GTK_OPTION_MENU (object);
+  GtkOptionMenu *option_menu = GTK_OPTION_MENU (object);
 
   if (option_menu->menu)
     gtk_widget_destroy (option_menu->menu);

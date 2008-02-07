@@ -483,12 +483,8 @@ gtk_statusbar_get_has_resize_grip (GtkStatusbar *statusbar)
 static void
 gtk_statusbar_destroy (GtkObject *object)
 {
-  GtkStatusbar *statusbar;
+  GtkStatusbar *statusbar = GTK_STATUSBAR (object);
   GSList *list;
-
-  g_return_if_fail (GTK_IS_STATUSBAR (object));
-
-  statusbar = GTK_STATUSBAR (object);
 
   for (list = statusbar->messages; list; list = list->next)
     {
