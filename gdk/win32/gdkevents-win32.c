@@ -2813,23 +2813,27 @@ gdk_event_translate (MSG  *msg,
       break;
 
      case WM_MOUSEACTIVATE:
-       if (gdk_window_get_window_type (window) == GDK_WINDOW_TEMP 
-	   || !((GdkWindowObject *)window)->accept_focus)
-	 {
-	   *ret_valp = MA_NOACTIVATE;
-	   return_val = TRUE;
-	 }
+       {
+	 GdkWindow *tmp;
 
-       GdkWindow *tmp = _gdk_modal_current ();
+	 if (gdk_window_get_window_type (window) == GDK_WINDOW_TEMP 
+	     || !((GdkWindowObject *)window)->accept_focus)
+	   {
+	     *ret_valp = MA_NOACTIVATE;
+	     return_val = TRUE;
+	   }
 
-       if (tmp != NULL)
-	 {
-	   if (gdk_window_get_toplevel (window) != tmp)
-	     {
-	       *ret_valp = MA_NOACTIVATEANDEAT;
-	       return_val = TRUE;
-	     }
-	 }
+	 tmp = _gdk_modal_current ();
+
+	 if (tmp != NULL)
+	   {
+	     if (gdk_window_get_toplevel (window) != tmp)
+	       {
+		 *ret_valp = MA_NOACTIVATEANDEAT;
+		 return_val = TRUE;
+	       }
+	   }
+       }
 
        break;
 
