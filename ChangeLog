@@ -1,3 +1,12 @@
+2008-02-08  Richard Hult  <richard@imendio.com>
+
+	Merge from trunk:
+
+	* gdk/quartz/gdkevents-quartz.c (gdk_event_translate): Ignore the
+	delta from the NSEvent for now, generating multiple scroll events
+	results in a lot of events getting queued up and things get really
+	slow.
+
 2008-02-08  Sven Herzberg  <sven@imendio.com>
 
 	Merge from trunk:
