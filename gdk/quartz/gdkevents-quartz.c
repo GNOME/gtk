@@ -1781,6 +1781,9 @@ gdk_event_translate (NSEvent *nsevent)
 	    event = create_scroll_event (window, nsevent, direction);
 	    append_event (event);
 	    dy--;
+
+            /* Ignore the delta for now, things get too slow when the events queue up. */
+            break;
 	  }
 
 	/* Now do x events */
@@ -1797,6 +1800,9 @@ gdk_event_translate (NSEvent *nsevent)
 	    event = create_scroll_event (window, nsevent, direction);
 	    append_event (event);
 	    dx--;
+            
+            /* Ignore the delta for now, things get too slow when the events queue up. */
+            break;
 	  }
 
       }
