@@ -637,7 +637,8 @@ _gtk_action_sync_menu_visible (GtkAction *action,
 			       GtkWidget *proxy,
 			       gboolean   empty)
 {
-  gboolean visible, hide_if_empty;
+  gboolean visible = TRUE;
+  gboolean hide_if_empty = TRUE;
 
   g_return_if_fail (GTK_IS_MENU_ITEM (proxy));
   g_return_if_fail (action == NULL || GTK_IS_ACTION (action));
@@ -645,8 +646,12 @@ _gtk_action_sync_menu_visible (GtkAction *action,
   if (action == NULL)
     action = g_object_get_qdata (G_OBJECT (proxy), quark_gtk_action_proxy);
 
-  visible = gtk_action_is_visible (action);
-  hide_if_empty = action->private_data->hide_if_empty;
+  if (action)
+    {
+      /* a GtkMenu for a <popup/> doesn't have to have an action */
+      visible = gtk_action_is_visible (action);
+      hide_if_empty = action->private_data->hide_if_empty;
+    }
 
   if (visible && !(empty && hide_if_empty))
     gtk_widget_show (proxy);
