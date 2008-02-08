@@ -1,3 +1,14 @@
+2008-02-08  Sven Herzberg  <sven@imendio.com>
+
+	Merge from trunk:
+
+	Adjust the code to match the documentation, examples, "common sense"
+	and existing applications.
+
+	* gtk/gtkaction.c: (_gtk_action_sync_menu_visible): take into account
+	that a GtkMenu for a <popup> element doesn't have to have a GtkAction
+	assigned
+
 2008-02-06  Cody Russell  <bratsche@gnome.org>
 
 	Merge from trunk:
@@ -7610,6 +7621,9 @@ Fri Jan 26 13:07:07 2007  Tim Janik  <timj@imendio.com>
 	* modules/printbackend/cups/*.c: Coding style cleanups.
 
 2007-01-03  Matthias Clasen  <mclasen@redhat.com>
+=======
+2008-02-07  Cody Russell  <bratsche@gnome.org>
+>>>>>>> 5cc1ee6... 2008-02-08  Sven Herzberg  <sven@imendio.com>:ChangeLog
 
 	* configure.in: Export SED to make sourcing of
 	libtool work. Tighten up the directfb pkgconfig check.
