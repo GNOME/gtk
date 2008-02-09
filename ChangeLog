@@ -1,3 +1,8 @@
+2008-02-08  Cody Russell  <bratsche@gnome.org>
+
+	* gtk/gtkcombobox.c (gtk_combo_box_cell_layout_pack_start):
+	Removed an extra semicolon.  (#515219, reported by Kazuki IWAMOTO)
+
 2008-02-08  Richard Hult  <richard@imendio.com>
 
 	* gdk/quartz/gdkevents-quartz.c (gdk_event_translate): Ignore the

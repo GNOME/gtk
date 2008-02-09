@@ -4067,7 +4067,7 @@ gtk_combo_box_cell_layout_pack_start (GtkCellLayout   *layout,
                                       GtkCellRenderer *cell,
                                       gboolean         expand)
 {
-  GtkComboBox *combo_box = GTK_COMBO_BOX (layout);;
+  GtkComboBox *combo_box = GTK_COMBO_BOX (layout);
   ComboCellInfo *info;
   GtkComboBoxPrivate *priv;
 
