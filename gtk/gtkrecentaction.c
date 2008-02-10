@@ -350,6 +350,7 @@ gtk_recent_action_connect_proxy (GtkAction *action,
                     "limit", priv->limit,
                     "sort-type", priv->sort_type,
                     "filter", priv->current_filter,
+                    "local-only", priv->local_only,
                     NULL);
   
       if (priv->sort_func)
@@ -404,6 +405,7 @@ gtk_recent_action_create_menu (GtkAction *action)
                          "sort-type", priv->sort_type,
                          "recent-manager", priv->manager,
                          "filter", priv->current_filter,
+                         "local-only", priv->local_only,
                          NULL);
   
   if (priv->sort_func)

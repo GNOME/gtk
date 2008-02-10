@@ -1,3 +1,10 @@
+2008-02-10  Matthias Clasen  <mclasen@redhat.com>
+
+	Merge from trunk:
+
+	* gtk/gtkrecentaction.c: Propagate local-only.  (#511987,
+	Jonh Wendell)
+
 2008-02-08  Richard Hult  <richard@imendio.com>
 
 	Merge from trunk:
