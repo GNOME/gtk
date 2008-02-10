@@ -850,6 +850,12 @@ gtk_builder_connect_signals_default (GtkBuilder    *builder,
  * Note that this function will not work correctly if #GModule is not
  * supported on the platform.
  *
+ * When compiling applications for Windows, you must declare signal callbacks
+ * with #G_MODULE_EXPORT, or they will not be put in the symbol table.
+ * On Linux and Unices, this is not necessary; applications should instead
+ * be compiled with the -Wl,--export-dynamic CFLAGS, and linked against
+ * gmodule-export-2.0.
+ *
  * Since: 2.12
  **/
 void

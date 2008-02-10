@@ -1,3 +1,8 @@
+2008-02-10  Philip Withnall  <pwithnall@svn.gnome.org>
+
+	* gtk/gtkbuilder.c: Improve the documentation for
+	gtk_builder_connect_signals. (#514471)
+
 2008-02-10  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtkrecentaction.c: Propagate local-only.  (#511987, 
