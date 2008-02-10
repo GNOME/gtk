@@ -139,8 +139,8 @@ get_scaled_pixbuf (GdkPixbufScaledAnim *scaled,
 
 	/* Get a new scaled pixbuf */
 	scaled->current  = gdk_pixbuf_scale_simple (pixbuf, 
-			(int) (gdk_pixbuf_get_width (pixbuf) * scaled->xscale),
-			(int) (gdk_pixbuf_get_height (pixbuf) * scaled->yscale),
+			(int) (gdk_pixbuf_get_width (pixbuf) * scaled->xscale + .5),
+			(int) (gdk_pixbuf_get_height (pixbuf) * scaled->yscale + .5),
 			GDK_INTERP_BILINEAR);
 
 	/* Copy the original pixbuf options to the scaled pixbuf */
@@ -170,9 +170,9 @@ get_size (GdkPixbufAnimation *anim,
 
         GDK_PIXBUF_ANIMATION_GET_CLASS (scaled->anim)->get_size (scaled->anim, width, height);
 	if (width) 
-		*width = (int)(*width * scaled->xscale);
+		*width = (int)(*width * scaled->xscale + .5);
 	if (height)
-		*height = (int)(*height * scaled->yscale);
+		*height = (int)(*height * scaled->yscale + .5);
 }
 
 static GdkPixbufAnimationIter *

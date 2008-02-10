@@ -1,3 +1,8 @@
+2008-02-10  Matthias Clasen  <mclasne@redhat.com>
+
+	* gdk-pixbuf-scaled-anim.c: Try harder to return pixbufs
+	of the requested size.  (#494515, Mike Morrison)
+
 2008-01-15  Matthias Clasen  <mclasne@redhat.com>
 
 	* gdk-pixbuf-io.c (save_to_stream): Handle partial writes.
