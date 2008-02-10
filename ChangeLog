@@ -1,3 +1,8 @@
+2008-02-10  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtkrecentaction.c: Propagate local-only.  (#511987, 
+	Jonh Wendell)
+
 2008-02-08  Cody Russell  <bratsche@gnome.org>
 
 	* gtk/gtkcombobox.c (gtk_combo_box_cell_layout_pack_start):
