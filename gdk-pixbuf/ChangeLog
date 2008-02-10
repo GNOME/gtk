@@ -1,3 +1,8 @@
+2008-02-10  Matthias Clasen  <mclasne@redhat.com>
+
+	* gdk-pixbuf-scaled-anim.c: Try harder to return pixbufs
+	of the requested size.  (#494515, Mike Morrison)
+
 2008-01-29  Matthias Clasen  <mclasen@redhat.com>
 
 	* === Released 2.12.7 ===
