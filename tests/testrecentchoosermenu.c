@@ -81,8 +81,6 @@ create_recent_chooser_menu (gint limit)
                     G_CALLBACK (item_activated_cb),
                     NULL);
 
-  gtk_widget_show (menu);
-
   menuitem = gtk_separator_menu_item_new ();
   gtk_menu_shell_prepend (GTK_MENU_SHELL (menu), menuitem);
   gtk_widget_show (menuitem);
@@ -102,6 +100,8 @@ create_recent_chooser_menu (gint limit)
   menuitem = gtk_image_menu_item_new_from_stock (GTK_STOCK_CLEAR, NULL);
   gtk_menu_shell_append (GTK_MENU_SHELL (menu), menuitem);
   gtk_widget_show (menuitem);
+
+  gtk_widget_show_all (menu);
 
   return menu;
 }
