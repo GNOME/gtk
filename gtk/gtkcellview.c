@@ -720,7 +720,7 @@ gtk_cell_view_cell_layout_reorder (GtkCellLayout   *layout,
 
   g_return_if_fail (link != NULL);
 
-  cellview->priv->cell_list = g_list_remove_link (cellview->priv->cell_list,
+  cellview->priv->cell_list = g_list_delete_link (cellview->priv->cell_list,
                                                   link);
   cellview->priv->cell_list = g_list_insert (cellview->priv->cell_list,
                                              info, position);

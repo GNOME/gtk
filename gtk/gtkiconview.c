@@ -4478,8 +4478,8 @@ gtk_icon_view_cell_layout_reorder (GtkCellLayout   *layout,
 
   g_return_if_fail (link != NULL);
 
-  icon_view->priv->cell_list = g_list_remove_link (icon_view->priv->cell_list,
-                                                  link);
+  icon_view->priv->cell_list = g_list_delete_link (icon_view->priv->cell_list,
+                                                   link);
   icon_view->priv->cell_list = g_list_insert (icon_view->priv->cell_list,
                                              info, position);
 
