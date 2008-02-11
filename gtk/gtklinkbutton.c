@@ -538,8 +538,8 @@ gtk_link_button_new (const gchar *uri)
     }
   
   retval = g_object_new (GTK_TYPE_LINK_BUTTON,
-  			 "label", utf8_uri,
   			 "uri", uri,
+  			 "label", utf8_uri,
   			 NULL);
   
   g_free (utf8_uri);
@@ -590,24 +590,17 @@ void
 gtk_link_button_set_uri (GtkLinkButton *link_button,
 			 const gchar   *uri)
 {
-  GtkLinkButtonPrivate *priv;
-  const gchar *label;
   gchar *tmp;
 
   g_return_if_fail (GTK_IS_LINK_BUTTON (link_button));
   g_return_if_fail (uri != NULL);
+  
+  tmp = link_button->priv->uri;
+  link_button->priv->uri = g_strdup (uri);
+  g_free (tmp);
 
-  priv = link_button->priv;
-
-  g_free (priv->uri);
-  priv->uri = g_strdup (uri);
-
-  label = gtk_button_get_label (GTK_BUTTON (link_button));
-  if (label && *label != '\0' && strcmp (label, uri) != 0)
-    gtk_widget_set_tooltip_text (GTK_WIDGET (link_button), uri);
-
-  priv->visited = FALSE;
-
+  link_button->priv->visited = FALSE;
+  
   g_object_notify (G_OBJECT (link_button), "uri");
 }
 
