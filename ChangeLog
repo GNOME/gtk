@@ -1,3 +1,13 @@
+2008-02-11  Emmanuele Bassi  <ebassi@gnome.org>
+
+	* gtk/gtkrecentchoosermenu.c:
+	(gtk_recent_chooser_menu_constructor): Set no-show-all flag
+	on the placeholder menu item.
+
+	* tests/testrecentchoosermenu.c:
+	(create_recent_chooser_menu): Use gtk_widget_show_all() to test
+	whether the placeholder menu item gets shown.
+
 2008-02-10  Cody Russell  <bratsche@gnome.org>
 
 	* gtk/gtkfilechooser.c (gtk_file_chooser_get_current_folder_uri):

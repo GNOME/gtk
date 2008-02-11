@@ -324,6 +324,7 @@ gtk_recent_chooser_menu_constructor (GType                  type,
                      GINT_TO_POINTER (TRUE));
 
   gtk_menu_shell_insert (GTK_MENU_SHELL (menu), priv->placeholder, 0);
+  gtk_widget_set_no_show_all (priv->placeholder, TRUE);
   gtk_widget_show (priv->placeholder);
 
   /* (re)populate the menu */
