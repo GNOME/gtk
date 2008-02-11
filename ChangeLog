@@ -1,3 +1,11 @@
+2008-02-11  Kristian Rietveld  <kris@imendio.com>
+
+	Merge from trunk:
+
+	* gtk/gtkcellview.c (gtk_cell_view_cell_layout_reorder)
+	* gtk/gtkiconview.c (gtk_icon_view_cell_layout_reorder): plug leak
+	wrt. link deletion from list; contination of fix for #503569.
+
 2008-02-11  Emmanuele Bassi  <ebassi@gnome.org>
 
 	Merge from trunk:
