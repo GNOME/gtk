@@ -1,3 +1,9 @@
+2008-02-11  Benjamin Otte  <otte@gnome.org>
+
+	* gdk/tmpl/windows.sgml:
+	remove SGML comment in example code - it was visible in the generated
+	HTML.
+
 2008-01-24  Johan Dahlin  <johan@gnome.org>
 
 	* gtk/tmpl/gtkwidget.sgml:

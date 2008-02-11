@@ -146,7 +146,7 @@ main (int argc, char **argv)
   g_signal_connect_after (window, "expose-event",
                           G_CALLBACK (window_expose_event), NULL);
 
-  gtk_main (<!-- -->);
+  gtk_main ();
 
   return 0;
 }
