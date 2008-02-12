@@ -1049,6 +1049,9 @@ gtk_file_chooser_get_current_folder_uri (GtkFileChooser *chooser)
   file_system = _gtk_file_chooser_get_file_system (chooser);
 
   path = _gtk_file_chooser_get_current_folder_path (chooser);
+  if (!path)
+    return NULL;
+
   uri = gtk_file_system_path_to_uri (file_system, path);
   gtk_file_path_free (path);
 
