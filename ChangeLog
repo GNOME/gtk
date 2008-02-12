@@ -1,5 +1,18 @@
 2008-02-12  Matthias Clasen  <mclasen@redhat.com>
 
+	Skip exensions when selecting filenames in the save-as dialog.
+	(#362516, Carlos Garnacho)
+
+	* gtk/gtkfilechooserentry.h:
+	* gtk/gtkfilechooserentry.c (_gtk_file_chooser_entry_select_filename):
+	New function to skip the extension part when selecting a filename.
+	(_gtk_file_chooser_entry_set_base_folder): Use it here.
+
+	* gtk/gtkfilechooserdefault.c (gtk_file_chooser_entry_grab_focus):
+	...and here.
+
+2008-02-12  Matthias Clasen  <mclasen@redhat.com>
+
 	* gtk/gtkiconview.c: Fix state change reporting for 
 	accessibility.  (#499835, Rich Burridge, patch by LiYan Zhang)
 
