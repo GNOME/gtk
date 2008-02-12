@@ -1,3 +1,11 @@
+2008-02-12  Matthias Clasen  <mclasne@redhat.com>
+
+	* gtk/gtkpapersize.c:
+	* gtk/gtkprintoperation.c:
+	* gtk/gtkvolumebutton.c:
+	* gtk/gtkbulderparser.c: Fix some i18n errors. Pointed
+	out by Behdad Esfahbod.
+
 2008-02-12  Federico Mena Quintero  <federico@novell.com>
 
 	Merged from gtk-2-12:
