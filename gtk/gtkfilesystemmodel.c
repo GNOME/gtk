@@ -566,8 +566,7 @@ drag_source_drag_data_get (GtkTreeDragSource *drag_source,
   GtkFileSystemModel *model;
   GtkTreeIter iter;
   const GtkFilePath *file_path;
-  char *uri;
-  char *uris;
+  char *uris[2]; 
 
   model = GTK_FILE_SYSTEM_MODEL (drag_source);
 
@@ -577,17 +576,12 @@ drag_source_drag_data_get (GtkTreeDragSource *drag_source,
   file_path = _gtk_file_system_model_get_path (model, &iter);
   g_assert (file_path != NULL);
 
-  uri = gtk_file_system_path_to_uri (model->file_system, file_path);
-  uris = g_strconcat (uri, "\r\n", NULL);
+  uris[0] = gtk_file_system_path_to_uri (model->file_system, file_path);
+  uris[1] = NULL;
 
-  gtk_selection_data_set (selection_data,
-			  gdk_atom_intern_static_string ("text/uri-list"),
-			  8,
-			  (guchar *) uris,
-			  strlen (uris) + 1);
+  gtk_selection_data_set_uris (selection_data, uris);
 
-  g_free (uri);
-  g_free (uris);
+  g_free (uris[0]);
 
   return TRUE;
 }

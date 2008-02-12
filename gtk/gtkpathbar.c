@@ -1325,22 +1325,16 @@ button_drag_data_get_cb (GtkWidget          *widget,
 {
   ButtonData *button_data;
   GtkPathBar *path_bar;
-  char *uri;
-  char *uri_list;
+  char *uris[2];
 
   button_data = data;
   path_bar = GTK_PATH_BAR (widget->parent); /* the button's parent *is* the path bar */
 
-  uri = gtk_file_system_path_to_uri (path_bar->file_system, button_data->path);
-  uri_list = g_strconcat (uri, "\r\n", NULL);
-  g_free (uri);
+  uris[0] = gtk_file_system_path_to_uri (path_bar->file_system, button_data->path);
+  uris[1] = NULL;
 
-  gtk_selection_data_set (selection_data,
-			  selection_data->target,
-			  8,
-			  (guchar *)uri_list,
-			  strlen (uri_list));
-  g_free (uri_list);
+  gtk_selection_data_set_uris (selection_data, uris);
+  g_free (uris[0]);
 }
 
 static ButtonData *

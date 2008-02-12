@@ -11426,7 +11426,7 @@ recent_model_sort_drag_data_get (GtkTreeDragSource *drag_source,
   RecentModelSort *model;
   GtkTreeIter iter, child_iter;
   GtkFilePath *file_path;
-  gchar **uris;
+  gchar *uris[2];
 
   model = RECENT_MODEL_SORT (drag_source);
   if (!gtk_tree_model_get_iter (GTK_TREE_MODEL (model), &iter, path))
@@ -11438,13 +11438,12 @@ recent_model_sort_drag_data_get (GtkTreeDragSource *drag_source,
                       -1);
   g_assert (file_path != NULL);
 
-  uris = g_new (gchar *, 2);
   uris[0] = gtk_file_system_path_to_uri (model->impl->file_system, file_path);
   uris[1] = NULL;
 
   gtk_selection_data_set_uris (selection_data, uris);
 
-  g_strfreev (uris);
+  g_free (uris[0]);
 
   return TRUE;
 }
@@ -11512,7 +11511,7 @@ search_model_sort_drag_data_get (GtkTreeDragSource *drag_source,
   SearchModelSort *model;
   GtkTreeIter iter, child_iter;
   GtkFilePath *file_path;
-  gchar **uris;
+  gchar *uris[2];
 
   model = SEARCH_MODEL_SORT (drag_source);
   if (!gtk_tree_model_get_iter (GTK_TREE_MODEL (model), &iter, path))
@@ -11524,13 +11523,12 @@ search_model_sort_drag_data_get (GtkTreeDragSource *drag_source,
                       -1);
   g_assert (file_path != NULL);
 
-  uris = g_new (gchar *, 2);
   uris[0] = gtk_file_system_path_to_uri (model->impl->file_system, file_path);
   uris[1] = NULL;
 
   gtk_selection_data_set_uris (selection_data, uris);
 
-  g_strfreev (uris);
+  g_free (uris[0]);
 
   return TRUE;
 }

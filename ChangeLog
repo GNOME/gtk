@@ -1,3 +1,13 @@
+2008-02-12  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtkfilechooserdefault.c (recent_model_sort_drag_data_get):
+	(recent_model_sort_drag_data_get):
+	(search_model_sort_drag_data_get):
+	* gtk/gtkfilesystemmodel.c (drag_source_drag_data_get):
+	* gtk/gtkpathbar.c (button_drag_data_get_cb):
+	Use gtk_selection_data_set_uris() instead of doing it
+	by hand.  (#514890, Christian Persch)
+
 2008-02-12  Michael Natterer  <mitch@imendio.com>
 
 	* gtk/gtkstatusicon.c: #include "gtkmain.h" for
