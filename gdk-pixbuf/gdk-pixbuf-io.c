@@ -1048,6 +1048,9 @@ at_scale_size_prepared_cb (GdkPixbufLoader *loader,
 			height = info->height;
 	}
 	
+	width = MAX (width, 1);
+        height = MAX (height, 1);
+
 	gdk_pixbuf_loader_set_size (loader, width, height);
 }
 

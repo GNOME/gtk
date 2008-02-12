@@ -1,3 +1,8 @@
+2008-02-12  Matthias Clasen  <mclasne@redhat.com>
+
+	* gdk-pixbuf-io.c (at_scale_size_prepared_cb): Don't let
+	the width or height go below 1.  (#516024, Christian Persch)
+
 2008-02-10  Matthias Clasen  <mclasne@redhat.com>
 
 	* gdk-pixbuf-scaled-anim.c: Try harder to return pixbufs
