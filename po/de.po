@@ -1,28 +1,27 @@
 # German GTK+ translation
 # Copyright (C) 1998-2004 Free Software Foundation, Inc.
 #
-# IM = Input method => Eingabemethode
-#
 # Daniel Egger <Daniel.Egger@t-online>, 1998.
 # Karsten Weiss <karsten@addx.au.s.shuttle.de>, 1999.
 # Matthias Warkus <mawarkus@gnome.org>, 2001, 2002.
 # Christian Neumair <chris@gnome-de.org>, 2002-2004.
-# Hendrik Richter <hendrikr@gnome.org>, 2004, 2005, 2006, 2007.
+# Hendrik Richter <hendrikr@gnome.org>, 2004, 2005, 2006, 2007, 2008.
 # Hendrik Brandt <heb@gnome-de.org>, 2004-2005.
-# Hendrik Richter <henrikr@gnome.org>, 2008.
+#
+# IM = Input method => Eingabemethode
+#
 msgid ""
 msgstr ""
 "Project-Id-Version: GTK+ HEAD\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-02-08 20:27+0100\n"
-"PO-Revision-Date: 2008-02-08 20:39+0100\n"
+"POT-Creation-Date: 2008-02-12 10:33+0100\n"
+"PO-Revision-Date: 2008-02-12 10:34+0100\n"
 "Last-Translator: Hendrik Richter <hendrikr@gnome.org>\n"
-"Language-Team: de <gnome-de@gnome.org>\n"
+"Language-Team: German <gnome-de@gnome.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: KAider 0.1\n"
 
 #: ../gdk/directfb/gdkdisplay-directfb.c:55
 msgid "directfb arg"
@@ -252,7 +251,8 @@ msgstr "Bilddatei »%s« enthält keine Daten"
 #: ../gdk-pixbuf/gdk-pixbuf-animation.c:188 ../gdk-pixbuf/gdk-pixbuf-io.c:907
 #: ../gdk-pixbuf/gdk-pixbuf-io.c:1163 ../tests/testfilechooser.c:263
 #, c-format
-msgid "Failed to load image '%s': reason not known, probably a corrupt image file"
+msgid ""
+"Failed to load image '%s': reason not known, probably a corrupt image file"
 msgstr ""
 "Bild »%s« konnte nicht geladen werden: Grund unbekannt, vermutlich eine "
 "defekte Bilddatei"
@@ -691,7 +691,8 @@ msgstr ""
 
 #: ../gdk-pixbuf/io-jpeg.c:1148
 #, c-format
-msgid "JPEG quality must be a value between 0 and 100; value '%d' is not allowed."
+msgid ""
+"JPEG quality must be a value between 0 and 100; value '%d' is not allowed."
 msgstr ""
 "JPEG-Qualität muss ein Wert zwischen 0 und 100 sein; Wert »%d« ist nicht "
 "erlaubt."
@@ -813,7 +814,8 @@ msgstr "Schwerer Fehler beim Lesen einer PNG-Bilddatei: %s"
 
 #: ../gdk-pixbuf/io-png.c:825
 #, c-format
-msgid "Keys for PNG text chunks must have at least 1 and at most 79 characters."
+msgid ""
+"Keys for PNG text chunks must have at least 1 and at most 79 characters."
 msgstr ""
 "Schlüssel für PNG-Text-Chunks müssen mindestens eines und dürfen maximal 79 "
 "Zeichen lang sein."
@@ -959,7 +961,8 @@ msgstr "Das Bildformat »Sun Raster Image«"
 #: ../gdk-pixbuf/io-tga.c:154
 #, c-format
 msgid "Cannot allocate memory for IOBuffer struct"
-msgstr "Speicher für Struktur des E/A-Puffers konnte nicht bereitgestellt werden"
+msgstr ""
+"Speicher für Struktur des E/A-Puffers konnte nicht bereitgestellt werden"
 
 #: ../gdk-pixbuf/io-tga.c:173
 #, c-format
@@ -969,7 +972,8 @@ msgstr "Speicher für Daten des E/A-Puffers konnte nicht bereitgestellt werden"
 #: ../gdk-pixbuf/io-tga.c:184
 #, c-format
 msgid "Cannot realloc IOBuffer data"
-msgstr "Datenbereich des E/A-Puffers konnte nicht mit realloc() geändert werden"
+msgstr ""
+"Datenbereich des E/A-Puffers konnte nicht mit realloc() geändert werden"
 
 #: ../gdk-pixbuf/io-tga.c:214
 #, c-format
@@ -1613,8 +1617,8 @@ msgstr "(keine)"
 msgid "Other..."
 msgstr "Andere …"
 
-#: ../gtk/gtkfilechooser.c:1694 ../gtk/gtkfilechooser.c:1738
-#: ../gtk/gtkfilechooser.c:1813 ../gtk/gtkfilechooser.c:1857
+#: ../gtk/gtkfilechooser.c:1697 ../gtk/gtkfilechooser.c:1741
+#: ../gtk/gtkfilechooser.c:1816 ../gtk/gtkfilechooser.c:1860
 #, c-format
 msgid "Invalid filename: %s"
 msgstr "Ungültiger Dateiname: %s"
@@ -1824,7 +1828,8 @@ msgstr "Eine Datei namens »%s« existiert bereits. Möchten Sie diese ersetzen?
 
 #: ../gtk/gtkfilechooserdefault.c:8085
 #, c-format
-msgid "The file already exists in \"%s\".  Replacing it will overwrite its contents."
+msgid ""
+"The file already exists in \"%s\".  Replacing it will overwrite its contents."
 msgstr ""
 "Die Datei existiert bereits in »%s«. Durch ihr Ersetzen wird sämtlicher "
 "Inhalt überschrieben."
@@ -1948,8 +1953,10 @@ msgstr "Datei _umbenennen"
 
 #: ../gtk/gtkfilesel.c:1406
 #, c-format
-msgid "The folder name \"%s\" contains symbols that are not allowed in filenames"
-msgstr "Der Ordnername »%s« enthält Symbole, die in Dateinamen nicht erlaubt sind"
+msgid ""
+"The folder name \"%s\" contains symbols that are not allowed in filenames"
+msgstr ""
+"Der Ordnername »%s« enthält Symbole, die in Dateinamen nicht erlaubt sind"
 
 #: ../gtk/gtkfilesel.c:1451
 msgid "New Folder"
@@ -1966,7 +1973,8 @@ msgstr "A_nlegen"
 #: ../gtk/gtkfilesel.c:1533 ../gtk/gtkfilesel.c:1640 ../gtk/gtkfilesel.c:1653
 #, c-format
 msgid "The filename \"%s\" contains symbols that are not allowed in filenames"
-msgstr "Der Dateiname »%s« enthält Symbole, die in Dateinamen nicht erlaubt sind"
+msgstr ""
+"Der Dateiname »%s« enthält Symbole, die in Dateinamen nicht erlaubt sind"
 
 #: ../gtk/gtkfilesel.c:1536 ../gtk/gtkfilesel.c:1546
 #, c-format
@@ -2805,7 +2813,7 @@ msgid "Unable to locate image file in pixmap_path: \"%s\""
 msgstr "Bilddatei konnte nicht in pixmap_path gefunden werden: »%s«"
 
 #: ../gtk/gtkrecentaction.c:155 ../gtk/gtkrecentaction.c:163
-#: ../gtk/gtkrecentchoosermenu.c:553 ../gtk/gtkrecentchoosermenu.c:561
+#: ../gtk/gtkrecentchoosermenu.c:554 ../gtk/gtkrecentchoosermenu.c:562
 #, c-format
 msgid "This function is not implemented for widgets of class '%s'"
 msgstr "Diese Funktion ist für Widgets der Klasse »%s« nicht implementiert"
@@ -2862,19 +2870,19 @@ msgstr "_Private Ressourcen anzeigen"
 msgid "No items found"
 msgstr "Keine Einträge gefunden"
 
-#: ../gtk/gtkrecentchoosermenu.c:473 ../gtk/gtkrecentchoosermenu.c:529
+#: ../gtk/gtkrecentchoosermenu.c:474 ../gtk/gtkrecentchoosermenu.c:530
 #, c-format
 msgid "No recently used resource found with URI `%s'"
 msgstr ""
 "Es konnte keine vor kurzem geöffnete Ressource mit dem URI »%s« gefunden "
 "werden"
 
-#: ../gtk/gtkrecentchoosermenu.c:740
+#: ../gtk/gtkrecentchoosermenu.c:741
 #, c-format
 msgid "Open '%s'"
 msgstr "»%s« öffnen"
 
-#: ../gtk/gtkrecentchoosermenu.c:770
+#: ../gtk/gtkrecentchoosermenu.c:771
 msgid "Unknown item"
 msgstr "Unbekannter Eintrag"
 
@@ -2885,7 +2893,7 @@ msgstr "Unbekannter Eintrag"
 #. *
 #. * Don't include the prefix "recent menu label|" in the translation.
 #.
-#: ../gtk/gtkrecentchoosermenu.c:783
+#: ../gtk/gtkrecentchoosermenu.c:784
 #, c-format
 msgid "recent menu label|_%d. %s"
 msgstr "_%d. %s"
@@ -2895,7 +2903,7 @@ msgstr "_%d. %s"
 #. *
 #. * Don't include the prefix "recent menu label|" in the translation.
 #.
-#: ../gtk/gtkrecentchoosermenu.c:790
+#: ../gtk/gtkrecentchoosermenu.c:791
 #, c-format
 msgid "recent menu label|%d. %s"
 msgstr "%d. %s"
@@ -3348,7 +3356,8 @@ msgstr "Anonymer Tag wurde gefunden und Tags können nicht erstellt werden."
 #: ../gtk/gtktextbufferserialize.c:1045
 #, c-format
 msgid "Tag \"%s\" does not exist in buffer and tags can not be created."
-msgstr "Tag »%s« existiert nicht im Puffer und Tags können nicht erstellt werden."
+msgstr ""
+"Tag »%s« existiert nicht im Puffer und Tags können nicht erstellt werden."
 
 #: ../gtk/gtktextbufferserialize.c:1144 ../gtk/gtktextbufferserialize.c:1219
 #: ../gtk/gtktextbufferserialize.c:1320 ../gtk/gtktextbufferserialize.c:1394
@@ -3368,7 +3377,8 @@ msgstr "»%s« ist kein gültiger Attributsname"
 
 #: ../gtk/gtktextbufferserialize.c:1193
 #, c-format
-msgid "\"%s\" could not be converted to a value of type \"%s\" for attribute \"%s\""
+msgid ""
+"\"%s\" could not be converted to a value of type \"%s\" for attribute \"%s\""
 msgstr ""
 "»%s« konnte für das Attribut »%s« nicht in einen Wert vom Typ »%s« konvertiert "
 "werden"
@@ -3409,7 +3419,8 @@ msgstr "Serialisierte Daten sind fehlerhaft"
 
 #: ../gtk/gtktextbufferserialize.c:1866
 #, c-format
-msgid "Serialized data is malformed. First section isn't GTKTEXTBUFFERCONTENTS-0001"
+msgid ""
+"Serialized data is malformed. First section isn't GTKTEXTBUFFERCONTENTS-0001"
 msgstr ""
 "Serialisierte Daten sind fehlerhaft. Erste Sektion ist nicht "
 "GTKTEXTBUFFERCONTENTS-0001"
@@ -4368,7 +4379,8 @@ msgstr "Der erstellte Cache war ungültig.\n"
 #: ../gtk/updateiconcache.c:1493
 #, c-format
 msgid "Could not rename %s to %s: %s, removing %s then.\n"
-msgstr "»%s« konnte nicht in »%s« umbenannt werden: %s; »%s« wird deswegen entfernt.\n"
+msgstr ""
+"»%s« konnte nicht in »%s« umbenannt werden: %s; »%s« wird deswegen entfernt.\n"
 
 #: ../gtk/updateiconcache.c:1505
 #, c-format
@@ -5249,4 +5261,3 @@ msgstr "Es konnten keine Informationen zur Datei »%s« abgerufen werden: %s"
 
 #~ msgid "Folder"
 #~ msgstr "Ordner"
-
