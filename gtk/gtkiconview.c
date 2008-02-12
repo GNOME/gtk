@@ -396,6 +396,8 @@ static void                 gtk_icon_view_item_activate_cell             (GtkIco
 									  GtkIconViewItem        *item,
 									  GtkIconViewCellInfo    *cell_info,
 									  GdkEvent               *event);
+static void                 gtk_icon_view_item_selected_changed          (GtkIconView            *icon_view,
+		                                                          GtkIconViewItem        *item);
 static void                 gtk_icon_view_put                            (GtkIconView            *icon_view,
 									  GtkWidget              *widget,
 									  GtkIconViewItem        *item,
@@ -1668,6 +1670,25 @@ gtk_icon_view_item_activate_cell (GtkIconView         *icon_view,
 }
 
 static void 
+gtk_icon_view_item_selected_changed (GtkIconView      *icon_view,
+                                     GtkIconViewItem  *item)
+{
+  AtkObject *obj;
+  AtkObject *item_obj;
+
+  obj = gtk_widget_get_accessible (GTK_WIDGET (icon_view));
+  if (obj != NULL)
+    {
+      item_obj = atk_object_ref_accessible_child (obj, item->index);
+      if (item_obj != NULL)
+        {
+          atk_object_notify_state_change (item_obj, ATK_STATE_SELECTED, item->selected);
+          g_object_unref (item_obj);
+        }
+    }
+}
+
+static void 
 gtk_icon_view_put (GtkIconView     *icon_view,
 		   GtkWidget       *widget,
 		   GtkIconViewItem *item,
@@ -2321,6 +2342,7 @@ gtk_icon_view_unselect_all_internal (GtkIconView  *icon_view)
 	  item->selected = FALSE;
 	  dirty = TRUE;
 	  gtk_icon_view_queue_draw_item (icon_view, item);
+	  gtk_icon_view_item_selected_changed (icon_view, item);
 	}
     }
 
@@ -2469,6 +2491,7 @@ gtk_icon_view_real_toggle_cursor_item (GtkIconView *icon_view)
       icon_view->priv->cursor_item->selected = !icon_view->priv->cursor_item->selected;
       g_signal_emit (icon_view, icon_view_signals[SELECTION_CHANGED], 0); 
       
+      gtk_icon_view_item_selected_changed (icon_view, icon_view->priv->cursor_item);      
       gtk_icon_view_queue_draw_item (icon_view, icon_view->priv->cursor_item);
       break;
     }
@@ -3213,14 +3236,23 @@ gtk_icon_view_set_cursor_item (GtkIconView     *icon_view,
 {
   AtkObject *obj;
   AtkObject *item_obj;
+  AtkObject *cursor_item_obj;
 
   if (icon_view->priv->cursor_item == item &&
       (cursor_cell < 0 || cursor_cell == icon_view->priv->cursor_cell))
     return;
 
+  obj = gtk_widget_get_accessible (GTK_WIDGET (icon_view));
   if (icon_view->priv->cursor_item != NULL)
-    gtk_icon_view_queue_draw_item (icon_view, icon_view->priv->cursor_item);
-  
+    {
+      gtk_icon_view_queue_draw_item (icon_view, icon_view->priv->cursor_item);
+      if (obj != NULL)
+        {
+          cursor_item_obj = atk_object_ref_accessible_child (obj, icon_view->priv->cursor_item->index);
+          if (cursor_item_obj != NULL)
+            atk_object_notify_state_change (cursor_item_obj, ATK_STATE_FOCUSED, FALSE);
+        }
+    }
   icon_view->priv->cursor_item = item;
   if (cursor_cell >= 0)
     icon_view->priv->cursor_cell = cursor_cell;
@@ -3228,12 +3260,12 @@ gtk_icon_view_set_cursor_item (GtkIconView     *icon_view,
   gtk_icon_view_queue_draw_item (icon_view, item);
   
   /* Notify that accessible focus object has changed */
-  obj = gtk_widget_get_accessible (GTK_WIDGET (icon_view));
   item_obj = atk_object_ref_accessible_child (obj, item->index);
 
   if (item_obj != NULL)
     {
       atk_focus_tracker_notify (item_obj);
+      atk_object_notify_state_change (item_obj, ATK_STATE_FOCUSED, TRUE);
       g_object_unref (item_obj); 
     }
 }
@@ -3340,9 +3372,10 @@ gtk_icon_view_select_item (GtkIconView      *icon_view,
 
   item->selected = TRUE;
 
-  gtk_icon_view_queue_draw_item (icon_view, item);
-
+  gtk_icon_view_item_selected_changed (icon_view, item);
   g_signal_emit (icon_view, icon_view_signals[SELECTION_CHANGED], 0);
+
+  gtk_icon_view_queue_draw_item (icon_view, item);
 }
 
 
@@ -3362,6 +3395,7 @@ gtk_icon_view_unselect_item (GtkIconView      *icon_view,
   
   item->selected = FALSE;
 
+  gtk_icon_view_item_selected_changed (icon_view, item);
   g_signal_emit (icon_view, icon_view_signals[SELECTION_CHANGED], 0);
 
   gtk_icon_view_queue_draw_item (icon_view, item);
@@ -3859,10 +3893,11 @@ gtk_icon_view_select_all_between (GtkIconView     *icon_view,
 	  col1 <= item->col && item->col <= col2)
 	{
 	  if (!item->selected)
-	    dirty = TRUE;
-
-	  item->selected = TRUE;
-	  
+	    {
+	      dirty = TRUE;
+	      item->selected = TRUE;
+	      gtk_icon_view_item_selected_changed (icon_view, item);
+	    }
 	  gtk_icon_view_queue_draw_item (icon_view, item);
 	}
     }
@@ -8491,6 +8526,10 @@ gtk_icon_view_item_accessible_ref_state_set (AtkObject *obj)
     atk_state_set_add_state (item->state_set, ATK_STATE_FOCUSED);
   else
     atk_state_set_remove_state (item->state_set, ATK_STATE_FOCUSED);
+  if (item->item->selected)
+    atk_state_set_add_state (item->state_set, ATK_STATE_SELECTED);
+  else
+    atk_state_set_remove_state (item->state_set, ATK_STATE_SELECTED);
 
   return g_object_ref (item->state_set);
 }
