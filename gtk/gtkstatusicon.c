@@ -34,6 +34,7 @@
 
 #include "gtkintl.h"
 #include "gtkiconfactory.h"
+#include "gtkmain.h"
 #include "gtkmarshalers.h"
 #include "gtktrayicon.h"
 

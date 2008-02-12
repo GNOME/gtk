@@ -1,5 +1,10 @@
 2008-02-12  Michael Natterer  <mitch@imendio.com>
 
+	* gtk/gtkstatusicon.c: #include "gtkmain.h" for
+	gtk_get_current_event_time().
+
+2008-02-12  Michael Natterer  <mitch@imendio.com>
+
 	* gtk/gtkwindow.c (gtk_window_activate_key): simply use
 	gtk_window_get_key_hash() to get the hash instead of manually
 	fiddling with quarks and gtk_window_keys_changed(). Also add
