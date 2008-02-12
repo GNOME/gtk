@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.4.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-01-29 22:40-0500\n"
+"POT-Creation-Date: 2008-02-12 17:52-0500\n"
 "PO-Revision-Date: 2007-09-07 14:55+0200\n"
 "Last-Translator: dziumanenko@gmail.com\n"
 "Language-Team: Ukrainian <uk@li.org>\n"
@@ -88,7 +88,7 @@ msgstr "Типовий дисплей"
 msgid "The default display for GDK"
 msgstr "Типовий дисплей для підсистеми GDK"
 
-#: gdk/gdkpango.c:490 gtk/gtkinvisible.c:86 gtk/gtkstatusicon.c:225
+#: gdk/gdkpango.c:490 gtk/gtkinvisible.c:86 gtk/gtkstatusicon.c:231
 #: gtk/gtkwindow.c:600
 msgid "Screen"
 msgstr "Екран"
@@ -294,12 +294,12 @@ msgstr ""
 "Вбудований значок, що відображається у віджетах, які представляють дану дію."
 
 #: gtk/gtkaction.c:258 gtk/gtkcellrendererpixbuf.c:172 gtk/gtkimage.c:229
-#: gtk/gtkprinter.c:168 gtk/gtkstatusicon.c:198 gtk/gtkwindow.c:592
+#: gtk/gtkprinter.c:168 gtk/gtkstatusicon.c:204 gtk/gtkwindow.c:592
 msgid "Icon Name"
 msgstr "Назва значка"
 
 #: gtk/gtkaction.c:259 gtk/gtkcellrendererpixbuf.c:173 gtk/gtkimage.c:230
-#: gtk/gtkstatusicon.c:199
+#: gtk/gtkstatusicon.c:205
 msgid "The name of the icon from the icon theme"
 msgstr "Назва значка з теми значків"
 
@@ -370,7 +370,7 @@ msgstr "Чутливий"
 msgid "Whether the action is enabled."
 msgstr "Чи буде дія увімкнена."
 
-#: gtk/gtkaction.c:320 gtk/gtkactiongroup.c:184 gtk/gtkstatusicon.c:241
+#: gtk/gtkaction.c:320 gtk/gtkactiongroup.c:184 gtk/gtkstatusicon.c:247
 #: gtk/gtktreeviewcolumn.c:191 gtk/gtkwidget.c:512
 msgid "Visible"
 msgstr "Видима"
@@ -705,7 +705,7 @@ msgstr ""
 "Якщо встановлено, то вкладений елемент з'явиться у вторинній групі вкладених "
 "елементів; застосовується, наприклад, для кнопок виклику довідки"
 
-#: gtk/gtkbox.c:98 gtk/gtkexpander.c:219 gtk/gtkiconview.c:665
+#: gtk/gtkbox.c:98 gtk/gtkexpander.c:219 gtk/gtkiconview.c:667
 #: gtk/gtktreeviewcolumn.c:216
 msgid "Spacing"
 msgstr "Інтервал"
@@ -907,7 +907,7 @@ msgstr ""
 "Чи повинні властивості child_displacement_x/_y також впливати на прямокутник "
 "фокусу"
 
-#: gtk/gtkbutton.c:462 gtk/gtkentry.c:530 gtk/gtkentry.c:890
+#: gtk/gtkbutton.c:462 gtk/gtkentry.c:530 gtk/gtkentry.c:892
 msgid "Inner Border"
 msgstr "Внутрішній бордюр"
 
@@ -1177,7 +1177,7 @@ msgstr "Pixbuf закритого розширювача"
 msgid "Pixbuf for closed expander"
 msgstr "Об'єкт Pixbuf для закритого розширювача"
 
-#: gtk/gtkcellrendererpixbuf.c:136 gtk/gtkimage.c:171 gtk/gtkstatusicon.c:190
+#: gtk/gtkcellrendererpixbuf.c:136 gtk/gtkimage.c:171 gtk/gtkstatusicon.c:196
 msgid "Stock ID"
 msgstr "ID вбудованого значка"
 
@@ -1186,7 +1186,7 @@ msgid "The stock ID of the stock icon to render"
 msgstr "Ідентифікатор вбудованого значка, для відображення"
 
 #: gtk/gtkcellrendererpixbuf.c:144 gtk/gtkrecentmanager.c:281
-#: gtk/gtkstatusicon.c:215
+#: gtk/gtkstatusicon.c:221
 msgid "Size"
 msgstr "Розмір"
 
@@ -1256,8 +1256,8 @@ msgstr "Вирівнювання тексту по X"
 msgid "The vertical text alignment, from 0 (top) to 1 (bottom)."
 msgstr "Вертикальне вирівнювання тексту, від 0 (вгору) до 1 (вниз)"
 
-#: gtk/gtkcellrendererprogress.c:221 gtk/gtkiconview.c:730
-#: gtk/gtkprogressbar.c:130 gtk/gtkstatusicon.c:273 gtk/gtktoolbar.c:475
+#: gtk/gtkcellrendererprogress.c:221 gtk/gtkiconview.c:732
+#: gtk/gtkprogressbar.c:130 gtk/gtkstatusicon.c:279 gtk/gtktoolbar.c:475
 #: gtk/gtktrayicon-x11.c:96
 msgid "Orientation"
 msgstr "Орієнтація"
@@ -1742,7 +1742,7 @@ msgstr "Заголовок"
 msgid "The title of the color selection dialog"
 msgstr "Заголовок вікна вибору кольору"
 
-#: gtk/gtkcolorbutton.c:202 gtk/gtkcolorsel.c:1857
+#: gtk/gtkcolorbutton.c:202 gtk/gtkcolorsel.c:1859
 msgid "Current Color"
 msgstr "Поточний колір"
 
@@ -1750,7 +1750,7 @@ msgstr "Поточний колір"
 msgid "The selected color"
 msgstr "Вибраний колір"
 
-#: gtk/gtkcolorbutton.c:217 gtk/gtkcolorsel.c:1864
+#: gtk/gtkcolorbutton.c:217 gtk/gtkcolorsel.c:1866
 msgid "Current Alpha"
 msgstr "Поточний альфа-канал"
 
@@ -1760,37 +1760,37 @@ msgstr ""
 "Поточне значення непрозорості (\"0\" — абсолютно прозоре, \"65535\" — "
 "абсолютно непрозоре)"
 
-#: gtk/gtkcolorsel.c:1843
+#: gtk/gtkcolorsel.c:1845
 msgid "Has Opacity Control"
 msgstr "Має керування прозорістю"
 
-#: gtk/gtkcolorsel.c:1844
+#: gtk/gtkcolorsel.c:1846
 msgid "Whether the color selector should allow setting opacity"
 msgstr "Чи повинен вибір кольору дозволяти встановити прозорість"
 
-#: gtk/gtkcolorsel.c:1850
+#: gtk/gtkcolorsel.c:1852
 msgid "Has palette"
 msgstr "Має палітру"
 
-#: gtk/gtkcolorsel.c:1851
+#: gtk/gtkcolorsel.c:1853
 msgid "Whether a palette should be used"
 msgstr "Чи повинна використовуватися палітра"
 
-#: gtk/gtkcolorsel.c:1858
+#: gtk/gtkcolorsel.c:1860
 msgid "The current color"
 msgstr "Поточний колір."
 
-#: gtk/gtkcolorsel.c:1865
+#: gtk/gtkcolorsel.c:1867
 msgid "The current opacity value (0 fully transparent, 65535 fully opaque)"
 msgstr ""
 "Поточне значення непрозорості (\"0\" — абсолютно прозоре, \"65535\" — "
 "абсолютно непрозоре)"
 
-#: gtk/gtkcolorsel.c:1879
+#: gtk/gtkcolorsel.c:1881
 msgid "Custom palette"
 msgstr "Інша палітра"
 
-#: gtk/gtkcolorsel.c:1880
+#: gtk/gtkcolorsel.c:1882
 msgid "Palette to use in the color selector"
 msgstr "Палітра, що використовуватиметься у діалоговому вікні вибору кольору"
 
@@ -2155,23 +2155,23 @@ msgstr "Чи обрізати багаторядні вставки у один 
 msgid "Which kind of shadow to draw around the entry when has-frame is set"
 msgstr "Тип тіні, що виводиться навколо поля з рамкою"
 
-#: gtk/gtkentry.c:891
+#: gtk/gtkentry.c:893
 msgid "Border between text and frame."
 msgstr "Бордюр між текстом та рамкою."
 
-#: gtk/gtkentry.c:896 gtk/gtklabel.c:625
+#: gtk/gtkentry.c:898 gtk/gtklabel.c:625
 msgid "Select on focus"
 msgstr "Вибір на фокусуванні"
 
-#: gtk/gtkentry.c:897
+#: gtk/gtkentry.c:899
 msgid "Whether to select the contents of an entry when it is focused"
 msgstr "Чи буде виділятись вміст поля, коли йому передається фокус "
 
-#: gtk/gtkentry.c:911
+#: gtk/gtkentry.c:913
 msgid "Password Hint Timeout"
 msgstr "Інтервал очікування підказки паролю"
 
-#: gtk/gtkentry.c:912
+#: gtk/gtkentry.c:914
 msgid "How long to show the last input character in hidden entries"
 msgstr "Як довго показувати останній введений символ у прихованих полях"
 
@@ -2191,7 +2191,7 @@ msgstr "Мінімальна довжина ключа"
 msgid "Minimum length of the search key in order to look up matches"
 msgstr "Мінімальна довжина ключа, при пошуку відповідностей"
 
-#: gtk/gtkentrycompletion.c:303 gtk/gtkiconview.c:586
+#: gtk/gtkentrycompletion.c:303 gtk/gtkiconview.c:588
 msgid "Text column"
 msgstr "Текстовий стовпчик"
 
@@ -2421,7 +2421,7 @@ msgid "The desired width of the button widget, in characters."
 msgstr "Бажана ширина віджета кнопки, у символах."
 
 #: gtk/gtkfilesel.c:525 gtk/gtkimage.c:162 gtk/gtkrecentmanager.c:250
-#: gtk/gtkstatusicon.c:182
+#: gtk/gtkstatusicon.c:188
 msgid "Filename"
 msgstr "Назва файлу"
 
@@ -2597,132 +2597,132 @@ msgstr ""
 "Використовувати значення властивості snap_edge чи значення отримане з "
 "handle_position"
 
-#: gtk/gtkiconview.c:549
+#: gtk/gtkiconview.c:551
 msgid "Selection mode"
 msgstr "Режим виділення"
 
-#: gtk/gtkiconview.c:550
+#: gtk/gtkiconview.c:552
 msgid "The selection mode"
 msgstr "Режим виділення"
 
-#: gtk/gtkiconview.c:568
+#: gtk/gtkiconview.c:570
 msgid "Pixbuf column"
 msgstr "Стовпчик pixbuf"
 
-#: gtk/gtkiconview.c:569
+#: gtk/gtkiconview.c:571
 msgid "Model column used to retrieve the icon pixbuf from"
 msgstr ""
 "Модель стовпця, що використовується для отримання зображення (pixbuf) значка"
 
-#: gtk/gtkiconview.c:587
+#: gtk/gtkiconview.c:589
 msgid "Model column used to retrieve the text from"
 msgstr "Модель стовпчика, що використовується для отримання з неї тексту"
 
-#: gtk/gtkiconview.c:606
+#: gtk/gtkiconview.c:608
 msgid "Markup column"
 msgstr "Розмітка стовпчика"
 
-#: gtk/gtkiconview.c:607
+#: gtk/gtkiconview.c:609
 msgid "Model column used to retrieve the text if using Pango markup"
 msgstr ""
 "Модель стовпчика, що використовується для тримання з неї тексту, якщо "
 "використовується розмітка pango"
 
-#: gtk/gtkiconview.c:614
+#: gtk/gtkiconview.c:616
 msgid "Icon View Model"
 msgstr "Модель Icon View"
 
-#: gtk/gtkiconview.c:615
+#: gtk/gtkiconview.c:617
 msgid "The model for the icon view"
 msgstr "Модель для перегляду у вигляді значків"
 
-#: gtk/gtkiconview.c:631
+#: gtk/gtkiconview.c:633
 msgid "Number of columns"
 msgstr "Кількість стовпчиків"
 
-#: gtk/gtkiconview.c:632
+#: gtk/gtkiconview.c:634
 msgid "Number of columns to display"
 msgstr "Кількість стовпчиків, що відображаються"
 
-#: gtk/gtkiconview.c:649
+#: gtk/gtkiconview.c:651
 msgid "Width for each item"
 msgstr "Віджет для кожного елемента"
 
-#: gtk/gtkiconview.c:650
+#: gtk/gtkiconview.c:652
 msgid "The width used for each item"
 msgstr "Ширина, що використовується для кожного елемента"
 
-#: gtk/gtkiconview.c:666
+#: gtk/gtkiconview.c:668
 msgid "Space which is inserted between cells of an item"
 msgstr "Простір, що вставляється між комірками елемента"
 
-#: gtk/gtkiconview.c:681
+#: gtk/gtkiconview.c:683
 msgid "Row Spacing"
 msgstr "Міжрядковий інтервал"
 
-#: gtk/gtkiconview.c:682
+#: gtk/gtkiconview.c:684
 msgid "Space which is inserted between grid rows"
 msgstr "Простір, що вставляється між рядками сітки"
 
-#: gtk/gtkiconview.c:697
+#: gtk/gtkiconview.c:699
 msgid "Column Spacing"
 msgstr "Інтервал між стовпчиками"
 
-#: gtk/gtkiconview.c:698
+#: gtk/gtkiconview.c:700
 msgid "Space which is inserted between grid columns"
 msgstr "Простір, що вставляється між стовпчиками сітки"
 
-#: gtk/gtkiconview.c:713
+#: gtk/gtkiconview.c:715
 msgid "Margin"
 msgstr "Відступ"
 
-#: gtk/gtkiconview.c:714
+#: gtk/gtkiconview.c:716
 msgid "Space which is inserted at the edges of the icon view"
 msgstr "Простір, що вставляється на краях відображення значка"
 
-#: gtk/gtkiconview.c:731
+#: gtk/gtkiconview.c:733
 msgid ""
 "How the text and icon of each item are positioned relative to each other"
 msgstr ""
 "Як текст та значки кожного елемента розташовуються один відносно іншого"
 
-#: gtk/gtkiconview.c:747 gtk/gtktreeview.c:612 gtk/gtktreeviewcolumn.c:307
+#: gtk/gtkiconview.c:749 gtk/gtktreeview.c:612 gtk/gtktreeviewcolumn.c:307
 msgid "Reorderable"
 msgstr "Дозволено перестановку"
 
-#: gtk/gtkiconview.c:748 gtk/gtktreeview.c:613
+#: gtk/gtkiconview.c:750 gtk/gtktreeview.c:613
 msgid "View is reorderable"
 msgstr "Перегляд можна перегрупувати"
 
-#: gtk/gtkiconview.c:755 gtk/gtktreeview.c:763
+#: gtk/gtkiconview.c:757 gtk/gtktreeview.c:763
 msgid "Tooltip Column"
 msgstr "Стовпчик підказки"
 
-#: gtk/gtkiconview.c:756
+#: gtk/gtkiconview.c:758
 msgid "The column in the model containing the tooltip texts for the items"
 msgstr "Стовпчик у моделі, що містить текстову підказку для елементів"
 
-#: gtk/gtkiconview.c:767
+#: gtk/gtkiconview.c:769
 msgid "Selection Box Color"
 msgstr "Колір діалогу виділення виділення"
 
-#: gtk/gtkiconview.c:768
+#: gtk/gtkiconview.c:770
 msgid "Color of the selection box"
 msgstr "Колір діалогу виділення виділення"
 
-#: gtk/gtkiconview.c:774
+#: gtk/gtkiconview.c:776
 msgid "Selection Box Alpha"
 msgstr "Прозорість діалогу виділення"
 
-#: gtk/gtkiconview.c:775
+#: gtk/gtkiconview.c:777
 msgid "Opacity of the selection box"
 msgstr "Заголовок діалогу виділення"
 
-#: gtk/gtkimage.c:130 gtk/gtkstatusicon.c:174
+#: gtk/gtkimage.c:130 gtk/gtkstatusicon.c:180
 msgid "Pixbuf"
 msgstr "Pixbuf"
 
-#: gtk/gtkimage.c:131 gtk/gtkstatusicon.c:175
+#: gtk/gtkimage.c:131 gtk/gtkstatusicon.c:181
 msgid "A GdkPixbuf to display"
 msgstr "Об'єкт GdkPixbuf до відображення"
 
@@ -2750,11 +2750,11 @@ msgstr "Маска"
 msgid "Mask bitmap to use with GdkImage or GdkPixmap"
 msgstr "Бітова маска, що використовується з GdkImage чи GdkPixmap"
 
-#: gtk/gtkimage.c:163 gtk/gtkstatusicon.c:183
+#: gtk/gtkimage.c:163 gtk/gtkstatusicon.c:189
 msgid "Filename to load and display"
 msgstr "Назва файла до завантаження й відображення"
 
-#: gtk/gtkimage.c:172 gtk/gtkstatusicon.c:191
+#: gtk/gtkimage.c:172 gtk/gtkstatusicon.c:197
 msgid "Stock ID for a stock image to display"
 msgstr "Ідентифікатор вбудованого зображення для відображення"
 
@@ -2791,11 +2791,11 @@ msgstr "Анімація"
 msgid "GdkPixbufAnimation to display"
 msgstr "GdkPixbufAnimation до відображення"
 
-#: gtk/gtkimage.c:237 gtk/gtkstatusicon.c:206
+#: gtk/gtkimage.c:237 gtk/gtkstatusicon.c:212
 msgid "Storage type"
 msgstr "Тип зберігання"
 
-#: gtk/gtkimage.c:238 gtk/gtkstatusicon.c:207
+#: gtk/gtkimage.c:238 gtk/gtkstatusicon.c:213
 msgid "The representation being used for image data"
 msgstr "Представлення даних зображення"
 
@@ -3123,11 +3123,11 @@ msgid "The submenu attached to the menu item, or NULL if it has none"
 msgstr ""
 "Підменю, що приєднане до пункту меню, або NULL - якщо поле не має підменю"
 
-#: gtk/gtkmenushell.c:363
+#: gtk/gtkmenushell.c:368
 msgid "Take Focus"
 msgstr "Має фокус"
 
-#: gtk/gtkmenushell.c:364
+#: gtk/gtkmenushell.c:369
 msgid "A boolean that determines whether the menu grabs the keyboard focus"
 msgstr "Логічне значення, яке вказує чи меню отримує фокус вводу"
 
@@ -3516,7 +3516,7 @@ msgstr ""
 "Якщо встановлено, тоді вкладений елемент можна зробити меншим ніж розмір, "
 "який він вимагає"
 
-#: gtk/gtkplug.c:146 gtk/gtkstatusicon.c:257
+#: gtk/gtkplug.c:146 gtk/gtkstatusicon.c:263
 msgid "Embedded"
 msgstr "Вбудований"
 
@@ -4051,11 +4051,11 @@ msgstr ""
 "Чи виводити жолоб на всю довжину діапазону або ж виключати степпер та "
 "відступи"
 
-#: gtk/gtkrecentaction.c:677 gtk/gtkrecentchoosermenu.c:209
+#: gtk/gtkrecentaction.c:679 gtk/gtkrecentchoosermenu.c:209
 msgid "Show Numbers"
 msgstr "Показувати номери"
 
-#: gtk/gtkrecentaction.c:678 gtk/gtkrecentchoosermenu.c:210
+#: gtk/gtkrecentaction.c:680 gtk/gtkrecentchoosermenu.c:210
 msgid "Whether the items should be displayed with a number"
 msgstr "Чи відображати номери з елементами"
 
@@ -4855,31 +4855,31 @@ msgstr "Чи рядок стану маж захват для зміни роз�
 msgid "Style of bevel around the statusbar text"
 msgstr "Стиль фаски навколо тексту в рядку стану"
 
-#: gtk/gtkstatusicon.c:216
+#: gtk/gtkstatusicon.c:222
 msgid "The size of the icon"
 msgstr "Розмір значка"
 
-#: gtk/gtkstatusicon.c:226
+#: gtk/gtkstatusicon.c:232
 msgid "The screen where this status icon will be displayed"
 msgstr "Екран, на якому буде відображено цей значок зі статусом"
 
-#: gtk/gtkstatusicon.c:233
+#: gtk/gtkstatusicon.c:239
 msgid "Blinking"
 msgstr "Блимання"
 
-#: gtk/gtkstatusicon.c:234
+#: gtk/gtkstatusicon.c:240
 msgid "Whether or not the status icon is blinking"
 msgstr "Чи буде блимати значок статусу"
 
-#: gtk/gtkstatusicon.c:242
+#: gtk/gtkstatusicon.c:248
 msgid "Whether or not the status icon is visible"
 msgstr "Чи буде видимий значок статусу"
 
-#: gtk/gtkstatusicon.c:258
+#: gtk/gtkstatusicon.c:264
 msgid "Whether or not the status icon is embedded"
 msgstr "Чи буде вбудованим значок статусу"
 
-#: gtk/gtkstatusicon.c:274 gtk/gtktrayicon-x11.c:97
+#: gtk/gtkstatusicon.c:280 gtk/gtktrayicon-x11.c:97
 msgid "The orientation of the tray"
 msgstr "Орієнтація лотка"
 

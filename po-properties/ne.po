@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-properties.HEAD\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-01-29 22:40-0500\n"
+"POT-Creation-Date: 2008-02-12 17:52-0500\n"
 "PO-Revision-Date: 2005-05-15 15:47+0545\n"
 "Last-Translator: Ganesh Ghimire <gghimire@gmail.com>\n"
 "Language-Team: Nepali <info@mpp.org.np>\n"
@@ -86,7 +86,7 @@ msgstr "पूर्वनिर्धारित प्रदर्शन"
 msgid "The default display for GDK"
 msgstr "जिडिकेका लागि पूर्वनिर्धारित प्रदर्शन"
 
-#: gdk/gdkpango.c:490 gtk/gtkinvisible.c:86 gtk/gtkstatusicon.c:225
+#: gdk/gdkpango.c:490 gtk/gtkinvisible.c:86 gtk/gtkstatusicon.c:231
 #: gtk/gtkwindow.c:600
 msgid "Screen"
 msgstr "पर्दा"
@@ -290,12 +290,12 @@ msgid "The stock icon displayed in widgets representing this action."
 msgstr "यो कार्यको प्रतिनिधित्व औजार भित्र संग्रह छविचित्रले देखायो"
 
 #: gtk/gtkaction.c:258 gtk/gtkcellrendererpixbuf.c:172 gtk/gtkimage.c:229
-#: gtk/gtkprinter.c:168 gtk/gtkstatusicon.c:198 gtk/gtkwindow.c:592
+#: gtk/gtkprinter.c:168 gtk/gtkstatusicon.c:204 gtk/gtkwindow.c:592
 msgid "Icon Name"
 msgstr "प्रतिमाको नाम"
 
 #: gtk/gtkaction.c:259 gtk/gtkcellrendererpixbuf.c:173 gtk/gtkimage.c:230
-#: gtk/gtkstatusicon.c:199
+#: gtk/gtkstatusicon.c:205
 msgid "The name of the icon from the icon theme"
 msgstr "प्रतिमा थिमबाट प्रतिमाको नाम"
 
@@ -358,7 +358,7 @@ msgstr "सम्वेदनशील"
 msgid "Whether the action is enabled."
 msgstr "जहाँ कार्य सक्षम छ"
 
-#: gtk/gtkaction.c:320 gtk/gtkactiongroup.c:184 gtk/gtkstatusicon.c:241
+#: gtk/gtkaction.c:320 gtk/gtkactiongroup.c:184 gtk/gtkstatusicon.c:247
 #: gtk/gtktreeviewcolumn.c:191 gtk/gtkwidget.c:512
 msgid "Visible"
 msgstr "दृश्यात्मक"
@@ -697,7 +697,7 @@ msgid ""
 "g., help buttons"
 msgstr "ठीक छ भने उपशाखा द्वितीय समूहको शाखाका रूपमा देखिन उपयुक्त सहयोगी बटनहरू"
 
-#: gtk/gtkbox.c:98 gtk/gtkexpander.c:219 gtk/gtkiconview.c:665
+#: gtk/gtkbox.c:98 gtk/gtkexpander.c:219 gtk/gtkiconview.c:667
 #: gtk/gtktreeviewcolumn.c:216
 msgid "Spacing"
 msgstr "स्पेसिङ्ग"
@@ -889,7 +889,7 @@ msgid ""
 "rectangle"
 msgstr "या child_displacement_x/_y गुणहरूले पनि आयत केन्द्रितमा असर गर्नु पर्दछ"
 
-#: gtk/gtkbutton.c:462 gtk/gtkentry.c:530 gtk/gtkentry.c:890
+#: gtk/gtkbutton.c:462 gtk/gtkentry.c:530 gtk/gtkentry.c:892
 #, fuzzy
 msgid "Inner Border"
 msgstr "ट्याब सीमाना"
@@ -1170,7 +1170,7 @@ msgstr "पिक्सबफ वृद्धिकारक बन्द गर
 msgid "Pixbuf for closed expander"
 msgstr "बन्द गरिएको वृद्धिकारकको लागि पिक्सबफ"
 
-#: gtk/gtkcellrendererpixbuf.c:136 gtk/gtkimage.c:171 gtk/gtkstatusicon.c:190
+#: gtk/gtkcellrendererpixbuf.c:136 gtk/gtkimage.c:171 gtk/gtkstatusicon.c:196
 msgid "Stock ID"
 msgstr "संग्रहित आइडि"
 
@@ -1179,7 +1179,7 @@ msgid "The stock ID of the stock icon to render"
 msgstr "रेन्डरलाई संग्रहित छविचित्रको संग्रहित आइडि"
 
 #: gtk/gtkcellrendererpixbuf.c:144 gtk/gtkrecentmanager.c:281
-#: gtk/gtkstatusicon.c:215
+#: gtk/gtkstatusicon.c:221
 msgid "Size"
 msgstr "आकार"
 
@@ -1248,8 +1248,8 @@ msgstr "वाई पंक्तिबद्ध पाठ"
 msgid "The vertical text alignment, from 0 (top) to 1 (bottom)."
 msgstr "उर्ध्व पंक्तिबद्ध , ० देखि (माथि) १ सम्म (तल)"
 
-#: gtk/gtkcellrendererprogress.c:221 gtk/gtkiconview.c:730
-#: gtk/gtkprogressbar.c:130 gtk/gtkstatusicon.c:273 gtk/gtktoolbar.c:475
+#: gtk/gtkcellrendererprogress.c:221 gtk/gtkiconview.c:732
+#: gtk/gtkprogressbar.c:130 gtk/gtkstatusicon.c:279 gtk/gtktoolbar.c:475
 #: gtk/gtktrayicon-x11.c:96
 msgid "Orientation"
 msgstr "अभिमुखीकरण"
@@ -1742,7 +1742,7 @@ msgstr "शिर्षक"
 msgid "The title of the color selection dialog"
 msgstr "रङ्ग छानिएको स‍वादको शिर्षक"
 
-#: gtk/gtkcolorbutton.c:202 gtk/gtkcolorsel.c:1857
+#: gtk/gtkcolorbutton.c:202 gtk/gtkcolorsel.c:1859
 msgid "Current Color"
 msgstr "विद्यमान रङ्ग"
 
@@ -1750,7 +1750,7 @@ msgstr "विद्यमान रङ्ग"
 msgid "The selected color"
 msgstr "छानिएको रङ्ग"
 
-#: gtk/gtkcolorbutton.c:217 gtk/gtkcolorsel.c:1864
+#: gtk/gtkcolorbutton.c:217 gtk/gtkcolorsel.c:1866
 msgid "Current Alpha"
 msgstr "विद्यमान अल्फा"
 
@@ -1758,35 +1758,35 @@ msgstr "विद्यमान अल्फा"
 msgid "The selected opacity value (0 fully transparent, 65535 fully opaque)"
 msgstr "छानिएको अपारदर्सि मूल्य (० पुरै पारदर्शि, ६५५३५पुरै अपारदर्सी)"
 
-#: gtk/gtkcolorsel.c:1843
+#: gtk/gtkcolorsel.c:1845
 msgid "Has Opacity Control"
 msgstr "अपारदर्सि नियन्त्रण सँग छ"
 
-#: gtk/gtkcolorsel.c:1844
+#: gtk/gtkcolorsel.c:1846
 msgid "Whether the color selector should allow setting opacity"
 msgstr "जहाँ रङ्ग छान्नेलाई अपारदर्सि स्थापितगरिनलाई अनुमति दिनु पर्छ "
 
-#: gtk/gtkcolorsel.c:1850
+#: gtk/gtkcolorsel.c:1852
 msgid "Has palette"
 msgstr "रङ्गदानिसँग छ"
 
-#: gtk/gtkcolorsel.c:1851
+#: gtk/gtkcolorsel.c:1853
 msgid "Whether a palette should be used"
 msgstr "जहाँ रङ्गदानि प्रयोग गरिनु पर्थ्यो"
 
-#: gtk/gtkcolorsel.c:1858
+#: gtk/gtkcolorsel.c:1860
 msgid "The current color"
 msgstr "विद्यमान रङ्ग"
 
-#: gtk/gtkcolorsel.c:1865
+#: gtk/gtkcolorsel.c:1867
 msgid "The current opacity value (0 fully transparent, 65535 fully opaque)"
 msgstr "विद्यमान अपारदर्सि मूल्य (० पुरै पारदर्शि, ६५५३५पुरै अपारदर्सी)"
 
-#: gtk/gtkcolorsel.c:1879
+#: gtk/gtkcolorsel.c:1881
 msgid "Custom palette"
 msgstr "रङ्गदानि प्रथा"
 
-#: gtk/gtkcolorsel.c:1880
+#: gtk/gtkcolorsel.c:1882
 msgid "Palette to use in the color selector"
 msgstr "रङ्ग छान्नेकाममा रङ्गदानि प्रयोग गरिन्छ"
 
@@ -2144,23 +2144,23 @@ msgstr "जब विविध फाइल चयन गर्न अनुम�
 msgid "Which kind of shadow to draw around the entry when has-frame is set"
 msgstr ""
 
-#: gtk/gtkentry.c:891
+#: gtk/gtkentry.c:893
 msgid "Border between text and frame."
 msgstr ""
 
-#: gtk/gtkentry.c:896 gtk/gtklabel.c:625
+#: gtk/gtkentry.c:898 gtk/gtklabel.c:625
 msgid "Select on focus"
 msgstr "केन्द्रमा छानोट गर्नुहोस् "
 
-#: gtk/gtkentry.c:897
+#: gtk/gtkentry.c:899
 msgid "Whether to select the contents of an entry when it is focused"
 msgstr "जब प्रविष्टिको विषयवस्तु चयन गर्नुछ यसलाई विशेष ध्यान दिइन्छ"
 
-#: gtk/gtkentry.c:911
+#: gtk/gtkentry.c:913
 msgid "Password Hint Timeout"
 msgstr ""
 
-#: gtk/gtkentry.c:912
+#: gtk/gtkentry.c:914
 msgid "How long to show the last input character in hidden entries"
 msgstr ""
 
@@ -2180,7 +2180,7 @@ msgstr "थोरै टीका लम्बाई"
 msgid "Minimum length of the search key in order to look up matches"
 msgstr " तुलनात्मक मिलान हेर्ने क्रममा खोजी टीकाको न्यूनतम लम्बाई"
 
-#: gtk/gtkentrycompletion.c:303 gtk/gtkiconview.c:586
+#: gtk/gtkentrycompletion.c:303 gtk/gtkiconview.c:588
 msgid "Text column"
 msgstr "पाठ्य स्तम्भ"
 
@@ -2404,7 +2404,7 @@ msgid "The desired width of the button widget, in characters."
 msgstr "बटन विजेटको आबस्यक चौडाई, क्यारेक्टरहरूमा"
 
 #: gtk/gtkfilesel.c:525 gtk/gtkimage.c:162 gtk/gtkrecentmanager.c:250
-#: gtk/gtkstatusicon.c:182
+#: gtk/gtkstatusicon.c:188
 msgid "Filename"
 msgstr "फाइलनाम"
 
@@ -2576,132 +2576,132 @@ msgid ""
 "handle_position"
 msgstr "नियन्त्रण स्थितिबाट आएको मान अथवा स्न्याप किनारा विशेषताबाट लिइने मान"
 
-#: gtk/gtkiconview.c:549
+#: gtk/gtkiconview.c:551
 msgid "Selection mode"
 msgstr "चयन गर्ने अबस्था"
 
-#: gtk/gtkiconview.c:550
+#: gtk/gtkiconview.c:552
 msgid "The selection mode"
 msgstr "चयन गर्ने अबस्था"
 
-#: gtk/gtkiconview.c:568
+#: gtk/gtkiconview.c:570
 msgid "Pixbuf column"
 msgstr "पिक्सबफ स्तम्भ"
 
-#: gtk/gtkiconview.c:569
+#: gtk/gtkiconview.c:571
 msgid "Model column used to retrieve the icon pixbuf from"
 msgstr "प्रतिमा पिक्सबफ वाट पुनप्राप्त गर्न नमुना स्तम्भ प्रयोग "
 
-#: gtk/gtkiconview.c:587
+#: gtk/gtkiconview.c:589
 msgid "Model column used to retrieve the text from"
 msgstr "पाठबाट पुन प्राप्त गर्न नमुना स्तम्भ प्रयोग"
 
-#: gtk/gtkiconview.c:606
+#: gtk/gtkiconview.c:608
 msgid "Markup column"
 msgstr "मार्कअप स्तम्भ"
 
-#: gtk/gtkiconview.c:607
+#: gtk/gtkiconview.c:609
 msgid "Model column used to retrieve the text if using Pango markup"
 msgstr ""
 "यदि पाङ्गो चिन्ह दिन प्रयोग गरिरहिन्छ भने पाठ प्राप्त गर्न नमुना स्तम्भ प्रयोग गरिन्छ"
 
-#: gtk/gtkiconview.c:614
+#: gtk/gtkiconview.c:616
 msgid "Icon View Model"
 msgstr "प्रतिमा दृष्य नमुना"
 
-#: gtk/gtkiconview.c:615
+#: gtk/gtkiconview.c:617
 msgid "The model for the icon view"
 msgstr "प्रतिमा दृष्यकालागि नमुना"
 
-#: gtk/gtkiconview.c:631
+#: gtk/gtkiconview.c:633
 msgid "Number of columns"
 msgstr "स्तम्भहरूको संख्या"
 
-#: gtk/gtkiconview.c:632
+#: gtk/gtkiconview.c:634
 msgid "Number of columns to display"
 msgstr "देखाउनलाई स्तम्भहरूको संख्या"
 
-#: gtk/gtkiconview.c:649
+#: gtk/gtkiconview.c:651
 msgid "Width for each item"
 msgstr "प्रत्येक प्रकारका लागि चौडाई"
 
-#: gtk/gtkiconview.c:650
+#: gtk/gtkiconview.c:652
 msgid "The width used for each item"
 msgstr "प्रत्येक प्रकारका लागि चौडाई प्रयोग"
 
-#: gtk/gtkiconview.c:666
+#: gtk/gtkiconview.c:668
 msgid "Space which is inserted between cells of an item"
 msgstr "बस्तुको कक्षहरू बिचमा घुसाउने खालि ठाउँ"
 
-#: gtk/gtkiconview.c:681
+#: gtk/gtkiconview.c:683
 msgid "Row Spacing"
 msgstr "पंक्तिको अन्तराल:"
 
-#: gtk/gtkiconview.c:682
+#: gtk/gtkiconview.c:684
 msgid "Space which is inserted between grid rows"
 msgstr "ग्रिड पंक्तिहरू बिचमा घुसाइने खालि ठाउँ"
 
-#: gtk/gtkiconview.c:697
+#: gtk/gtkiconview.c:699
 msgid "Column Spacing"
 msgstr "स्तम्भ अन्तराल"
 
-#: gtk/gtkiconview.c:698
+#: gtk/gtkiconview.c:700
 #, fuzzy
 msgid "Space which is inserted between grid columns"
 msgstr "ग्रिड स्तम्भ बिचमा घुसाइने खालि ठाउँ"
 
-#: gtk/gtkiconview.c:713
+#: gtk/gtkiconview.c:715
 msgid "Margin"
 msgstr "सीमान्त"
 
-#: gtk/gtkiconview.c:714
+#: gtk/gtkiconview.c:716
 msgid "Space which is inserted at the edges of the icon view"
 msgstr "प्रतिमा दृष्यको किनारामा राखिने खालि ठाउँ"
 
-#: gtk/gtkiconview.c:731
+#: gtk/gtkiconview.c:733
 msgid ""
 "How the text and icon of each item are positioned relative to each other"
 msgstr "जसरी हरेक प्रकारको पाठ र प्रतिमाहरू एक अर्कामा संबन्धित गराएर राखिन्छ"
 
-#: gtk/gtkiconview.c:747 gtk/gtktreeview.c:612 gtk/gtktreeviewcolumn.c:307
+#: gtk/gtkiconview.c:749 gtk/gtktreeview.c:612 gtk/gtktreeviewcolumn.c:307
 msgid "Reorderable"
 msgstr "पुनर्क्रमबद्धित"
 
-#: gtk/gtkiconview.c:748 gtk/gtktreeview.c:613
+#: gtk/gtkiconview.c:750 gtk/gtktreeview.c:613
 msgid "View is reorderable"
 msgstr "दृष्य अभिलेखन योग्य छ"
 
-#: gtk/gtkiconview.c:755 gtk/gtktreeview.c:763
+#: gtk/gtkiconview.c:757 gtk/gtktreeview.c:763
 #, fuzzy
 msgid "Tooltip Column"
 msgstr "पाठ स्तम्भ"
 
-#: gtk/gtkiconview.c:756
+#: gtk/gtkiconview.c:758
 #, fuzzy
 msgid "The column in the model containing the tooltip texts for the items"
 msgstr "स्ट्रिङहरू भएको नमुनाकोा स्तम्भ "
 
-#: gtk/gtkiconview.c:767
+#: gtk/gtkiconview.c:769
 msgid "Selection Box Color"
 msgstr "बाकस रंग चयन"
 
-#: gtk/gtkiconview.c:768
+#: gtk/gtkiconview.c:770
 msgid "Color of the selection box"
 msgstr "छनोट बाकसको रंग"
 
-#: gtk/gtkiconview.c:774
+#: gtk/gtkiconview.c:776
 msgid "Selection Box Alpha"
 msgstr "बाकस अल्फा चयन"
 
-#: gtk/gtkiconview.c:775
+#: gtk/gtkiconview.c:777
 msgid "Opacity of the selection box"
 msgstr "छनोट बाकसको ओपासिटि"
 
-#: gtk/gtkimage.c:130 gtk/gtkstatusicon.c:174
+#: gtk/gtkimage.c:130 gtk/gtkstatusicon.c:180
 msgid "Pixbuf"
 msgstr "पिक्सबफ"
 
-#: gtk/gtkimage.c:131 gtk/gtkstatusicon.c:175
+#: gtk/gtkimage.c:131 gtk/gtkstatusicon.c:181
 msgid "A GdkPixbuf to display"
 msgstr "एउटा जिडिके पिक्सबफ देखाउनको लागि"
 
@@ -2729,11 +2729,11 @@ msgstr "मुकुन्डो"
 msgid "Mask bitmap to use with GdkImage or GdkPixmap"
 msgstr "जीटीके छविचित्र वा जीटीके पिक्सनक्सासँग प्रयोग हुने मुकुण्डोको विटनक्सा "
 
-#: gtk/gtkimage.c:163 gtk/gtkstatusicon.c:183
+#: gtk/gtkimage.c:163 gtk/gtkstatusicon.c:189
 msgid "Filename to load and display"
 msgstr "लेखपत्र लोडगर र देखाऊ"
 
-#: gtk/gtkimage.c:172 gtk/gtkstatusicon.c:191
+#: gtk/gtkimage.c:172 gtk/gtkstatusicon.c:197
 msgid "Stock ID for a stock image to display"
 msgstr "संग्रहित छवि देखाउनलाई संग्रहित आईडी"
 
@@ -2769,11 +2769,11 @@ msgstr "रङ्गचित्राङकन"
 msgid "GdkPixbufAnimation to display"
 msgstr "जिडिके पिक्सबफ चित्राङ्कन देखाउनलाई"
 
-#: gtk/gtkimage.c:237 gtk/gtkstatusicon.c:206
+#: gtk/gtkimage.c:237 gtk/gtkstatusicon.c:212
 msgid "Storage type"
 msgstr "संग्रहगर्ने प्रकार"
 
-#: gtk/gtkimage.c:238 gtk/gtkstatusicon.c:207
+#: gtk/gtkimage.c:238 gtk/gtkstatusicon.c:213
 msgid "The representation being used for image data"
 msgstr "छविचित्र डाटाका लागि प्रयोग गरिएको प्रतिनिधित्व"
 
@@ -3092,11 +3092,11 @@ msgstr ""
 msgid "The submenu attached to the menu item, or NULL if it has none"
 msgstr ""
 
-#: gtk/gtkmenushell.c:363
+#: gtk/gtkmenushell.c:368
 msgid "Take Focus"
 msgstr "केन्द्र लिनुहोस्"
 
-#: gtk/gtkmenushell.c:364
+#: gtk/gtkmenushell.c:369
 msgid "A boolean that determines whether the menu grabs the keyboard focus"
 msgstr "यो मेनुले कुञ्जीपाटी केन्द्र समाउँदाँदा बुलियनले निर्धारण गर्छ"
 
@@ -3486,7 +3486,7 @@ msgstr "संकुचित गर्नु"
 msgid "If TRUE, the child can be made smaller than its requisition"
 msgstr "सत्य हो भने उपशाखाले मागगरिएको भन्दा सानो बनाउनसक्छ"
 
-#: gtk/gtkplug.c:146 gtk/gtkstatusicon.c:257
+#: gtk/gtkplug.c:146 gtk/gtkstatusicon.c:263
 msgid "Embedded"
 msgstr ""
 
@@ -4034,12 +4034,12 @@ msgid ""
 "spacing"
 msgstr ""
 
-#: gtk/gtkrecentaction.c:677 gtk/gtkrecentchoosermenu.c:209
+#: gtk/gtkrecentaction.c:679 gtk/gtkrecentchoosermenu.c:209
 #, fuzzy
 msgid "Show Numbers"
 msgstr "सप्ताहका संख्याहरु देखाऊ"
 
-#: gtk/gtkrecentaction.c:678 gtk/gtkrecentchoosermenu.c:210
+#: gtk/gtkrecentaction.c:680 gtk/gtkrecentchoosermenu.c:210
 #, fuzzy
 msgid "Whether the items should be displayed with a number"
 msgstr "जब च्यात्ने क्षमता भएको मेनु आइटमहरू मेनुमा थप्न सकिन्छ "
@@ -4844,36 +4844,36 @@ msgstr "माथिल्लो अवस्थाको पुनराकृ�
 msgid "Style of bevel around the statusbar text"
 msgstr "स्टाटसबार पाठको वरिपरि बिभेलको शैली"
 
-#: gtk/gtkstatusicon.c:216
+#: gtk/gtkstatusicon.c:222
 #, fuzzy
 msgid "The size of the icon"
 msgstr "विण्डोको शीर्षक"
 
-#: gtk/gtkstatusicon.c:226
+#: gtk/gtkstatusicon.c:232
 #, fuzzy
 msgid "The screen where this status icon will be displayed"
 msgstr "त्यो पर्दा जहाँ यो विण्डो देखाइन्छ"
 
-#: gtk/gtkstatusicon.c:233
+#: gtk/gtkstatusicon.c:239
 msgid "Blinking"
 msgstr ""
 
-#: gtk/gtkstatusicon.c:234
+#: gtk/gtkstatusicon.c:240
 #, fuzzy
 msgid "Whether or not the status icon is blinking"
 msgstr "जहाँ कार्य हेर्न सकिन्छ"
 
-#: gtk/gtkstatusicon.c:242
+#: gtk/gtkstatusicon.c:248
 #, fuzzy
 msgid "Whether or not the status icon is visible"
 msgstr "जहाँ कार्य हेर्न सकिन्छ"
 
-#: gtk/gtkstatusicon.c:258
+#: gtk/gtkstatusicon.c:264
 #, fuzzy
 msgid "Whether or not the status icon is embedded"
 msgstr "जहाँ कार्य हेर्न सकिन्छ"
 
-#: gtk/gtkstatusicon.c:274 gtk/gtktrayicon-x11.c:97
+#: gtk/gtkstatusicon.c:280 gtk/gtktrayicon-x11.c:97
 #, fuzzy
 msgid "The orientation of the tray"
 msgstr "औजारबारको अभिमुखीकरण"

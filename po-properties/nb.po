@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: nb\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-01-29 22:40-0500\n"
+"POT-Creation-Date: 2008-02-12 17:52-0500\n"
 "PO-Revision-Date: 2007-11-02 13:23+0100\n"
 "Last-Translator: Kjartan Maraas <kmaraas@gnome.org>\n"
 "Language-Team: Norwegian Bokmål <i18n-nb@lister.ping.uio.no>\n"
@@ -90,7 +90,7 @@ msgstr "Forvalgt skjerm"
 msgid "The default display for GDK"
 msgstr "Forvalgt skjerm for GDK"
 
-#: gdk/gdkpango.c:490 gtk/gtkinvisible.c:86 gtk/gtkstatusicon.c:225
+#: gdk/gdkpango.c:490 gtk/gtkinvisible.c:86 gtk/gtkstatusicon.c:231
 #: gtk/gtkwindow.c:600
 msgid "Screen"
 msgstr "Skjerm"
@@ -295,12 +295,12 @@ msgstr ""
 "Standard ikon som vises i komponenter som representerer denne handlingen."
 
 #: gtk/gtkaction.c:258 gtk/gtkcellrendererpixbuf.c:172 gtk/gtkimage.c:229
-#: gtk/gtkprinter.c:168 gtk/gtkstatusicon.c:198 gtk/gtkwindow.c:592
+#: gtk/gtkprinter.c:168 gtk/gtkstatusicon.c:204 gtk/gtkwindow.c:592
 msgid "Icon Name"
 msgstr "Navn på ikon"
 
 #: gtk/gtkaction.c:259 gtk/gtkcellrendererpixbuf.c:173 gtk/gtkimage.c:230
-#: gtk/gtkstatusicon.c:199
+#: gtk/gtkstatusicon.c:205
 msgid "The name of the icon from the icon theme"
 msgstr "Navn på ikonet fra ikontemaet"
 
@@ -368,7 +368,7 @@ msgstr "Følsomt"
 msgid "Whether the action is enabled."
 msgstr "Om handlingen er aktivert."
 
-#: gtk/gtkaction.c:320 gtk/gtkactiongroup.c:184 gtk/gtkstatusicon.c:241
+#: gtk/gtkaction.c:320 gtk/gtkactiongroup.c:184 gtk/gtkstatusicon.c:247
 #: gtk/gtktreeviewcolumn.c:191 gtk/gtkwidget.c:512
 msgid "Visible"
 msgstr "Synlig"
@@ -698,7 +698,7 @@ msgstr ""
 "Hvis SANN vil barnet vises i en sekundær gruppe av barn, passer for eksempel "
 "til hjelp-knapper"
 
-#: gtk/gtkbox.c:98 gtk/gtkexpander.c:219 gtk/gtkiconview.c:665
+#: gtk/gtkbox.c:98 gtk/gtkexpander.c:219 gtk/gtkiconview.c:667
 #: gtk/gtktreeviewcolumn.c:216
 msgid "Spacing"
 msgstr "Mellomrom"
@@ -895,7 +895,7 @@ msgid ""
 "rectangle"
 msgstr ""
 
-#: gtk/gtkbutton.c:462 gtk/gtkentry.c:530 gtk/gtkentry.c:890
+#: gtk/gtkbutton.c:462 gtk/gtkentry.c:530 gtk/gtkentry.c:892
 msgid "Inner Border"
 msgstr "Indre kant"
 
@@ -1166,7 +1166,7 @@ msgstr "Pixbuf for lukket utvider"
 msgid "Pixbuf for closed expander"
 msgstr "Pixbuf for lukket utvider"
 
-#: gtk/gtkcellrendererpixbuf.c:136 gtk/gtkimage.c:171 gtk/gtkstatusicon.c:190
+#: gtk/gtkcellrendererpixbuf.c:136 gtk/gtkimage.c:171 gtk/gtkstatusicon.c:196
 msgid "Stock ID"
 msgstr "Standard ID"
 
@@ -1175,7 +1175,7 @@ msgid "The stock ID of the stock icon to render"
 msgstr "Standard-ID for standardikon som skal rendres"
 
 #: gtk/gtkcellrendererpixbuf.c:144 gtk/gtkrecentmanager.c:281
-#: gtk/gtkstatusicon.c:215
+#: gtk/gtkstatusicon.c:221
 msgid "Size"
 msgstr "Størrelse"
 
@@ -1243,8 +1243,8 @@ msgstr "Y-justering for tekst"
 msgid "The vertical text alignment, from 0 (top) to 1 (bottom)."
 msgstr "Vertikal tekstjustering, fra 0 (øverst) til 1 (nederst)."
 
-#: gtk/gtkcellrendererprogress.c:221 gtk/gtkiconview.c:730
-#: gtk/gtkprogressbar.c:130 gtk/gtkstatusicon.c:273 gtk/gtktoolbar.c:475
+#: gtk/gtkcellrendererprogress.c:221 gtk/gtkiconview.c:732
+#: gtk/gtkprogressbar.c:130 gtk/gtkstatusicon.c:279 gtk/gtktoolbar.c:475
 #: gtk/gtktrayicon-x11.c:96
 msgid "Orientation"
 msgstr "Orientering"
@@ -1729,7 +1729,7 @@ msgstr "Tittel"
 msgid "The title of the color selection dialog"
 msgstr "Tittel på dialogen for fargevalg"
 
-#: gtk/gtkcolorbutton.c:202 gtk/gtkcolorsel.c:1857
+#: gtk/gtkcolorbutton.c:202 gtk/gtkcolorsel.c:1859
 msgid "Current Color"
 msgstr "Aktiv farge"
 
@@ -1737,7 +1737,7 @@ msgstr "Aktiv farge"
 msgid "The selected color"
 msgstr "Valgt farge"
 
-#: gtk/gtkcolorbutton.c:217 gtk/gtkcolorsel.c:1864
+#: gtk/gtkcolorbutton.c:217 gtk/gtkcolorsel.c:1866
 msgid "Current Alpha"
 msgstr "Nåværende alpha"
 
@@ -1747,37 +1747,37 @@ msgstr ""
 "Nåværende verdi for ugjennomsiktighet (0 helt gjennomsiktig, 65535 helt "
 "ugjennomsiktig)"
 
-#: gtk/gtkcolorsel.c:1843
+#: gtk/gtkcolorsel.c:1845
 msgid "Has Opacity Control"
 msgstr "Har kontroll for ugjennomsiktighet"
 
-#: gtk/gtkcolorsel.c:1844
+#: gtk/gtkcolorsel.c:1846
 msgid "Whether the color selector should allow setting opacity"
 msgstr "La fargevelgeren tillate å sette ugjennomsiktighet"
 
-#: gtk/gtkcolorsel.c:1850
+#: gtk/gtkcolorsel.c:1852
 msgid "Has palette"
 msgstr "Har palett"
 
-#: gtk/gtkcolorsel.c:1851
+#: gtk/gtkcolorsel.c:1853
 msgid "Whether a palette should be used"
 msgstr "Skal en palett brukes"
 
-#: gtk/gtkcolorsel.c:1858
+#: gtk/gtkcolorsel.c:1860
 msgid "The current color"
 msgstr "Den aktive fargen"
 
-#: gtk/gtkcolorsel.c:1865
+#: gtk/gtkcolorsel.c:1867
 msgid "The current opacity value (0 fully transparent, 65535 fully opaque)"
 msgstr ""
 "Nåværende verdi for ugjennomsiktighet (0 helt gjennomsiktig, 65535 helt "
 "ugjennomsiktig)"
 
-#: gtk/gtkcolorsel.c:1879
+#: gtk/gtkcolorsel.c:1881
 msgid "Custom palette"
 msgstr "Egendefinert palett"
 
-#: gtk/gtkcolorsel.c:1880
+#: gtk/gtkcolorsel.c:1882
 msgid "Palette to use in the color selector"
 msgstr "Palett som skal brukes i fargevelgeren"
 
@@ -2135,23 +2135,23 @@ msgstr "Om «Lim inn» av flere linjer skal endres til én linje."
 msgid "Which kind of shadow to draw around the entry when has-frame is set"
 msgstr ""
 
-#: gtk/gtkentry.c:891
+#: gtk/gtkentry.c:893
 msgid "Border between text and frame."
 msgstr "Kant mellom tekst og ramme."
 
-#: gtk/gtkentry.c:896 gtk/gtklabel.c:625
+#: gtk/gtkentry.c:898 gtk/gtklabel.c:625
 msgid "Select on focus"
 msgstr "Velg på fokus"
 
-#: gtk/gtkentry.c:897
+#: gtk/gtkentry.c:899
 msgid "Whether to select the contents of an entry when it is focused"
 msgstr "Om innholdet i oppføringen skal markeres når den får fokus"
 
-#: gtk/gtkentry.c:911
+#: gtk/gtkentry.c:913
 msgid "Password Hint Timeout"
 msgstr "Tidsavbrudd for passordhint"
 
-#: gtk/gtkentry.c:912
+#: gtk/gtkentry.c:914
 msgid "How long to show the last input character in hidden entries"
 msgstr "Hvor lenge skal siste tegn vises i skjulte oppføringer"
 
@@ -2171,7 +2171,7 @@ msgstr "Minste lengde på nøkkel"
 msgid "Minimum length of the search key in order to look up matches"
 msgstr "Minimumslengde på nøkkel for søk for å slå opp treff"
 
-#: gtk/gtkentrycompletion.c:303 gtk/gtkiconview.c:586
+#: gtk/gtkentrycompletion.c:303 gtk/gtkiconview.c:588
 msgid "Text column"
 msgstr "Tekstkolonne"
 
@@ -2400,7 +2400,7 @@ msgid "The desired width of the button widget, in characters."
 msgstr "Den ønskede bredden på knappelementet, i tegn."
 
 #: gtk/gtkfilesel.c:525 gtk/gtkimage.c:162 gtk/gtkrecentmanager.c:250
-#: gtk/gtkstatusicon.c:182
+#: gtk/gtkstatusicon.c:188
 msgid "Filename"
 msgstr "Filnavn"
 
@@ -2575,131 +2575,131 @@ msgstr ""
 "Om verdien fra egenskapen snap_edge eller en verdi derivert fra "
 "handle_position skal brukes"
 
-#: gtk/gtkiconview.c:549
+#: gtk/gtkiconview.c:551
 msgid "Selection mode"
 msgstr "Utvalgsmodus"
 
-#: gtk/gtkiconview.c:550
+#: gtk/gtkiconview.c:552
 msgid "The selection mode"
 msgstr "Utvalgsmodus som brukes"
 
-#: gtk/gtkiconview.c:568
+#: gtk/gtkiconview.c:570
 msgid "Pixbuf column"
 msgstr "Pixbuf-kolonne"
 
-#: gtk/gtkiconview.c:569
+#: gtk/gtkiconview.c:571
 msgid "Model column used to retrieve the icon pixbuf from"
 msgstr "Modellkolonne brukt til å hente «icon pixbuf» fra"
 
-#: gtk/gtkiconview.c:587
+#: gtk/gtkiconview.c:589
 msgid "Model column used to retrieve the text from"
 msgstr "Modelkolonne brukt til å hente teksten fra"
 
-#: gtk/gtkiconview.c:606
+#: gtk/gtkiconview.c:608
 msgid "Markup column"
 msgstr "Kolonne for tagging"
 
-#: gtk/gtkiconview.c:607
+#: gtk/gtkiconview.c:609
 msgid "Model column used to retrieve the text if using Pango markup"
 msgstr "Modelkolonne brukt til å hente teksten fra hvis «Pango markup» er brukt"
 
-#: gtk/gtkiconview.c:614
+#: gtk/gtkiconview.c:616
 msgid "Icon View Model"
 msgstr "Modell for ikonvisning"
 
-#: gtk/gtkiconview.c:615
+#: gtk/gtkiconview.c:617
 msgid "The model for the icon view"
 msgstr "Modellen for ikonvisning"
 
-#: gtk/gtkiconview.c:631
+#: gtk/gtkiconview.c:633
 msgid "Number of columns"
 msgstr "Antall kolonner"
 
-#: gtk/gtkiconview.c:632
+#: gtk/gtkiconview.c:634
 msgid "Number of columns to display"
 msgstr "Antall kolonner som skal vises"
 
-#: gtk/gtkiconview.c:649
+#: gtk/gtkiconview.c:651
 msgid "Width for each item"
 msgstr "Bredde for hver oppføring"
 
-#: gtk/gtkiconview.c:650
+#: gtk/gtkiconview.c:652
 msgid "The width used for each item"
 msgstr "Bredde som brukes for hver oppføring"
 
-#: gtk/gtkiconview.c:666
+#: gtk/gtkiconview.c:668
 msgid "Space which is inserted between cells of an item"
 msgstr "Plass som er satt inn mellom cellene til et element"
 
-#: gtk/gtkiconview.c:681
+#: gtk/gtkiconview.c:683
 msgid "Row Spacing"
 msgstr "Avstand mellom rader"
 
-#: gtk/gtkiconview.c:682
+#: gtk/gtkiconview.c:684
 msgid "Space which is inserted between grid rows"
 msgstr "Plass som er satt inn mellom ruterekkene"
 
-#: gtk/gtkiconview.c:697
+#: gtk/gtkiconview.c:699
 msgid "Column Spacing"
 msgstr "Avstand mellom kolonner"
 
-#: gtk/gtkiconview.c:698
+#: gtk/gtkiconview.c:700
 msgid "Space which is inserted between grid columns"
 msgstr "Plass som er satt inn mellom rutenettkolonnene"
 
-#: gtk/gtkiconview.c:713
+#: gtk/gtkiconview.c:715
 msgid "Margin"
 msgstr "Marg"
 
-#: gtk/gtkiconview.c:714
+#: gtk/gtkiconview.c:716
 msgid "Space which is inserted at the edges of the icon view"
 msgstr "Plass som er satt inn ved kantene til ikonvisningen"
 
-#: gtk/gtkiconview.c:731
+#: gtk/gtkiconview.c:733
 msgid ""
 "How the text and icon of each item are positioned relative to each other"
 msgstr ""
 "Hvordan teksten og ikonet til hvert element er plassert i forhold til "
 "hverandre"
 
-#: gtk/gtkiconview.c:747 gtk/gtktreeview.c:612 gtk/gtktreeviewcolumn.c:307
+#: gtk/gtkiconview.c:749 gtk/gtktreeview.c:612 gtk/gtktreeviewcolumn.c:307
 msgid "Reorderable"
 msgstr "Kan omorganiseres"
 
-#: gtk/gtkiconview.c:748 gtk/gtktreeview.c:613
+#: gtk/gtkiconview.c:750 gtk/gtktreeview.c:613
 msgid "View is reorderable"
 msgstr "Visningen kan omorganiseres"
 
-#: gtk/gtkiconview.c:755 gtk/gtktreeview.c:763
+#: gtk/gtkiconview.c:757 gtk/gtktreeview.c:763
 msgid "Tooltip Column"
 msgstr "Kolonne for verktøytips"
 
-#: gtk/gtkiconview.c:756
+#: gtk/gtkiconview.c:758
 msgid "The column in the model containing the tooltip texts for the items"
 msgstr ""
 "En kolonne i modellen som inneholder tekst for verktøytips for oppføringene"
 
-#: gtk/gtkiconview.c:767
+#: gtk/gtkiconview.c:769
 msgid "Selection Box Color"
 msgstr "Boks for fargevalg"
 
-#: gtk/gtkiconview.c:768
+#: gtk/gtkiconview.c:770
 msgid "Color of the selection box"
 msgstr "Fargen på valgboksen"
 
-#: gtk/gtkiconview.c:774
+#: gtk/gtkiconview.c:776
 msgid "Selection Box Alpha"
 msgstr "Valgboks alfa"
 
-#: gtk/gtkiconview.c:775
+#: gtk/gtkiconview.c:777
 msgid "Opacity of the selection box"
 msgstr "Ugjennomsiktigheten for valgboksen"
 
-#: gtk/gtkimage.c:130 gtk/gtkstatusicon.c:174
+#: gtk/gtkimage.c:130 gtk/gtkstatusicon.c:180
 msgid "Pixbuf"
 msgstr "Pixbuf"
 
-#: gtk/gtkimage.c:131 gtk/gtkstatusicon.c:175
+#: gtk/gtkimage.c:131 gtk/gtkstatusicon.c:181
 msgid "A GdkPixbuf to display"
 msgstr "En GdkPixuf som skal vises"
 
@@ -2727,11 +2727,11 @@ msgstr "Maske"
 msgid "Mask bitmap to use with GdkImage or GdkPixmap"
 msgstr "Maskebitkart for bruk med GdkImage eller GdkPixmap"
 
-#: gtk/gtkimage.c:163 gtk/gtkstatusicon.c:183
+#: gtk/gtkimage.c:163 gtk/gtkstatusicon.c:189
 msgid "Filename to load and display"
 msgstr "Filnavn som skal lastes og vises"
 
-#: gtk/gtkimage.c:172 gtk/gtkstatusicon.c:191
+#: gtk/gtkimage.c:172 gtk/gtkstatusicon.c:197
 msgid "Stock ID for a stock image to display"
 msgstr "Standard ID for et standardbilde som skal vises"
 
@@ -2768,11 +2768,11 @@ msgstr "Animasjon"
 msgid "GdkPixbufAnimation to display"
 msgstr "GdkPixbufAnimation som skal vises"
 
-#: gtk/gtkimage.c:237 gtk/gtkstatusicon.c:206
+#: gtk/gtkimage.c:237 gtk/gtkstatusicon.c:212
 msgid "Storage type"
 msgstr "Lagertype"
 
-#: gtk/gtkimage.c:238 gtk/gtkstatusicon.c:207
+#: gtk/gtkimage.c:238 gtk/gtkstatusicon.c:213
 msgid "The representation being used for image data"
 msgstr "Representasjonen som brukes for bildedata"
 
@@ -3098,11 +3098,11 @@ msgstr "Undermeny"
 msgid "The submenu attached to the menu item, or NULL if it has none"
 msgstr ""
 
-#: gtk/gtkmenushell.c:363
+#: gtk/gtkmenushell.c:368
 msgid "Take Focus"
 msgstr "Ta fokus"
 
-#: gtk/gtkmenushell.c:364
+#: gtk/gtkmenushell.c:369
 #, fuzzy
 msgid "A boolean that determines whether the menu grabs the keyboard focus"
 msgstr ""
@@ -3485,7 +3485,7 @@ msgstr "Krymp"
 msgid "If TRUE, the child can be made smaller than its requisition"
 msgstr "Hvis SANN vil etter kommer gjøres mindre enn forespurt størrelse"
 
-#: gtk/gtkplug.c:146 gtk/gtkstatusicon.c:257
+#: gtk/gtkplug.c:146 gtk/gtkstatusicon.c:263
 msgid "Embedded"
 msgstr "Innebygget"
 
@@ -4008,11 +4008,11 @@ msgid ""
 "spacing"
 msgstr ""
 
-#: gtk/gtkrecentaction.c:677 gtk/gtkrecentchoosermenu.c:209
+#: gtk/gtkrecentaction.c:679 gtk/gtkrecentchoosermenu.c:209
 msgid "Show Numbers"
 msgstr "Vis tall"
 
-#: gtk/gtkrecentaction.c:678 gtk/gtkrecentchoosermenu.c:210
+#: gtk/gtkrecentaction.c:680 gtk/gtkrecentchoosermenu.c:210
 #, fuzzy
 msgid "Whether the items should be displayed with a number"
 msgstr "Om avrivningsoppføringer skal legges til for menyen"
@@ -4809,32 +4809,32 @@ msgstr "Om statuslinjen har et håndtak for å endre størrelse på toppnoden"
 msgid "Style of bevel around the statusbar text"
 msgstr "Stil for kant rundt statuslinjetekst"
 
-#: gtk/gtkstatusicon.c:216
+#: gtk/gtkstatusicon.c:222
 msgid "The size of the icon"
 msgstr "Størrelse på ikonet"
 
-#: gtk/gtkstatusicon.c:226
+#: gtk/gtkstatusicon.c:232
 msgid "The screen where this status icon will be displayed"
 msgstr "Skjermen hvor dette statusikonet vil vises"
 
-#: gtk/gtkstatusicon.c:233
+#: gtk/gtkstatusicon.c:239
 msgid "Blinking"
 msgstr "Blinkende"
 
-#: gtk/gtkstatusicon.c:234
+#: gtk/gtkstatusicon.c:240
 msgid "Whether or not the status icon is blinking"
 msgstr "Om statusikonet blinker"
 
-#: gtk/gtkstatusicon.c:242
+#: gtk/gtkstatusicon.c:248
 msgid "Whether or not the status icon is visible"
 msgstr "Om statusikonet er synlig"
 
-#: gtk/gtkstatusicon.c:258
+#: gtk/gtkstatusicon.c:264
 #, fuzzy
 msgid "Whether or not the status icon is embedded"
 msgstr "Om handlingen er synlig"
 
-#: gtk/gtkstatusicon.c:274 gtk/gtktrayicon-x11.c:97
+#: gtk/gtkstatusicon.c:280 gtk/gtktrayicon-x11.c:97
 msgid "The orientation of the tray"
 msgstr "Orientering for systemområdet"
 

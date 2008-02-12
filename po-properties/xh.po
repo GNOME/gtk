@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-properties\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-01-29 22:40-0500\n"
+"POT-Creation-Date: 2008-02-12 17:52-0500\n"
 "PO-Revision-Date: 2005-02-08 08:59+0200\n"
 "Last-Translator: Canonical Ltd <translations@canonical.com>\n"
 "Language-Team: Xhosa <xh-translate@ubuntu.com>\n"
@@ -91,7 +91,7 @@ msgstr "Okumiselweyo Okubonakala Kwiskrini"
 msgid "The default display for GDK"
 msgstr "Okumiselweyo okubonakala kwiskrini se-GDK"
 
-#: gdk/gdkpango.c:490 gtk/gtkinvisible.c:86 gtk/gtkstatusicon.c:225
+#: gdk/gdkpango.c:490 gtk/gtkinvisible.c:86 gtk/gtkstatusicon.c:231
 #: gtk/gtkwindow.c:600
 msgid "Screen"
 msgstr "Iskrini"
@@ -305,12 +305,12 @@ msgstr ""
 "Umfanekiso ongumqondiso we-stock obonakaliswe kwizixhobo ezimele esi senzo."
 
 #: gtk/gtkaction.c:258 gtk/gtkcellrendererpixbuf.c:172 gtk/gtkimage.c:229
-#: gtk/gtkprinter.c:168 gtk/gtkstatusicon.c:198 gtk/gtkwindow.c:592
+#: gtk/gtkprinter.c:168 gtk/gtkstatusicon.c:204 gtk/gtkwindow.c:592
 msgid "Icon Name"
 msgstr "Igama Lomfanekiso Ongumqondiso"
 
 #: gtk/gtkaction.c:259 gtk/gtkcellrendererpixbuf.c:173 gtk/gtkimage.c:230
-#: gtk/gtkstatusicon.c:199
+#: gtk/gtkstatusicon.c:205
 msgid "The name of the icon from the icon theme"
 msgstr "Igama lomfanekiso ongumqondiso elikwisihloko somfanekiso ongumqondiso"
 
@@ -380,7 +380,7 @@ msgstr "Inovakalelo"
 msgid "Whether the action is enabled."
 msgstr "Nokuba ngaba isenzo senziwe ukuba sisebenze na."
 
-#: gtk/gtkaction.c:320 gtk/gtkactiongroup.c:184 gtk/gtkstatusicon.c:241
+#: gtk/gtkaction.c:320 gtk/gtkactiongroup.c:184 gtk/gtkstatusicon.c:247
 #: gtk/gtktreeviewcolumn.c:191 gtk/gtkwidget.c:512
 msgid "Visible"
 msgstr "Iyabonakala"
@@ -727,7 +727,7 @@ msgstr ""
 "Ukuba TRUE, inkqubo engumntwana ivela kwiqela elikudidi lwesibini leenkqubo "
 "ezingabantwana, ilungele uku, umz. amaqhosha oncedo"
 
-#: gtk/gtkbox.c:98 gtk/gtkexpander.c:219 gtk/gtkiconview.c:665
+#: gtk/gtkbox.c:98 gtk/gtkexpander.c:219 gtk/gtkiconview.c:667
 #: gtk/gtktreeviewcolumn.c:216
 msgid "Spacing"
 msgstr "Ukunika izithuba"
@@ -939,7 +939,7 @@ msgstr ""
 "Nokuba ngaba ushenxiso ngokwendawo_kwenkqubo engumntwana lwezinto zika_x/_y "
 "zimele nazo zibe negalelo kuxinzelelo loxande"
 
-#: gtk/gtkbutton.c:462 gtk/gtkentry.c:530 gtk/gtkentry.c:890
+#: gtk/gtkbutton.c:462 gtk/gtkentry.c:530 gtk/gtkentry.c:892
 #, fuzzy
 msgid "Inner Border"
 msgstr "Umda Ka-Tab"
@@ -1225,7 +1225,7 @@ msgstr "Isivalo seSandisi se-Pixbuf"
 msgid "Pixbuf for closed expander"
 msgstr "I-pixbuf yesandisi esivaliweyo"
 
-#: gtk/gtkcellrendererpixbuf.c:136 gtk/gtkimage.c:171 gtk/gtkstatusicon.c:190
+#: gtk/gtkcellrendererpixbuf.c:136 gtk/gtkimage.c:171 gtk/gtkstatusicon.c:196
 msgid "Stock ID"
 msgstr "I-Stock ID"
 
@@ -1234,7 +1234,7 @@ msgid "The stock ID of the stock icon to render"
 msgstr "I-stock ID somfanekiso we-stock ongumqondiso onikezelwayo"
 
 #: gtk/gtkcellrendererpixbuf.c:144 gtk/gtkrecentmanager.c:281
-#: gtk/gtkstatusicon.c:215
+#: gtk/gtkstatusicon.c:221
 msgid "Size"
 msgstr "Ubungakanani"
 
@@ -1309,8 +1309,8 @@ msgid "The vertical text alignment, from 0 (top) to 1 (bottom)."
 msgstr ""
 "Ulungelelaniso ngokuthe nkqo, ukusuka ku-0 (emantla) ukuya ku-1 (emazantsi)"
 
-#: gtk/gtkcellrendererprogress.c:221 gtk/gtkiconview.c:730
-#: gtk/gtkprogressbar.c:130 gtk/gtkstatusicon.c:273 gtk/gtktoolbar.c:475
+#: gtk/gtkcellrendererprogress.c:221 gtk/gtkiconview.c:732
+#: gtk/gtkprogressbar.c:130 gtk/gtkstatusicon.c:279 gtk/gtktoolbar.c:475
 #: gtk/gtktrayicon-x11.c:96
 msgid "Orientation"
 msgstr "Imbonakalo"
@@ -1819,7 +1819,7 @@ msgstr "Isihloko"
 msgid "The title of the color selection dialog"
 msgstr "Isihloko sombala webhokisi yokukhetha"
 
-#: gtk/gtkcolorbutton.c:202 gtk/gtkcolorsel.c:1857
+#: gtk/gtkcolorbutton.c:202 gtk/gtkcolorsel.c:1859
 msgid "Current Color"
 msgstr "Umbala Wangoku"
 
@@ -1827,7 +1827,7 @@ msgstr "Umbala Wangoku"
 msgid "The selected color"
 msgstr "Umbala okhethiweyo"
 
-#: gtk/gtkcolorbutton.c:217 gtk/gtkcolorsel.c:1864
+#: gtk/gtkcolorbutton.c:217 gtk/gtkcolorsel.c:1866
 msgid "Current Alpha"
 msgstr "I-Alpha Yangoku"
 
@@ -1837,37 +1837,37 @@ msgstr ""
 "Ixabiso lobumfiliba elikhethiweyo (0 icace ngokuthe gca kwelinye icala, "
 "65535 iluzizi kakhulu)"
 
-#: gtk/gtkcolorsel.c:1843
+#: gtk/gtkcolorsel.c:1845
 msgid "Has Opacity Control"
 msgstr "Inolawulo Lobumfiliba"
 
-#: gtk/gtkcolorsel.c:1844
+#: gtk/gtkcolorsel.c:1846
 msgid "Whether the color selector should allow setting opacity"
 msgstr "Nokuba ngaba isikhethi-mbala simele sikuvumele na ukumisela ubumfiliba"
 
-#: gtk/gtkcolorsel.c:1850
+#: gtk/gtkcolorsel.c:1852
 msgid "Has palette"
 msgstr "Inengqokelela yezixhobo"
 
-#: gtk/gtkcolorsel.c:1851
+#: gtk/gtkcolorsel.c:1853
 msgid "Whether a palette should be used"
 msgstr "Nokuba ngaba ingqokelela yezixhobo imele isetyenziswe"
 
-#: gtk/gtkcolorsel.c:1858
+#: gtk/gtkcolorsel.c:1860
 msgid "The current color"
 msgstr "Umbala wangoku"
 
-#: gtk/gtkcolorsel.c:1865
+#: gtk/gtkcolorsel.c:1867
 msgid "The current opacity value (0 fully transparent, 65535 fully opaque)"
 msgstr ""
 "Ixabiso langoku lobumfiliba (0 icace ngokuthe gca kwelinye icala, 65535 "
 "iluzizi kakhulu)"
 
-#: gtk/gtkcolorsel.c:1879
+#: gtk/gtkcolorsel.c:1881
 msgid "Custom palette"
 msgstr "Ingqokelela yezixhobo ozenzelayo"
 
-#: gtk/gtkcolorsel.c:1880
+#: gtk/gtkcolorsel.c:1882
 msgid "Palette to use in the color selector"
 msgstr "Ingqokelela yezixhobo esetyenziswa kwisikhethi-mbala"
 
@@ -2247,23 +2247,23 @@ msgstr "Nokuba ngaba iifayili eziphindiweyo zingakhethwa na"
 msgid "Which kind of shadow to draw around the entry when has-frame is set"
 msgstr ""
 
-#: gtk/gtkentry.c:891
+#: gtk/gtkentry.c:893
 msgid "Border between text and frame."
 msgstr ""
 
-#: gtk/gtkentry.c:896 gtk/gtklabel.c:625
+#: gtk/gtkentry.c:898 gtk/gtklabel.c:625
 msgid "Select on focus"
 msgstr "Khetha kugxininixo"
 
-#: gtk/gtkentry.c:897
+#: gtk/gtkentry.c:899
 msgid "Whether to select the contents of an entry when it is focused"
 msgstr "Nokuba ngaba ukhethe iziqulatho zesingeniso xa sigxininisiwe"
 
-#: gtk/gtkentry.c:911
+#: gtk/gtkentry.c:913
 msgid "Password Hint Timeout"
 msgstr ""
 
-#: gtk/gtkentry.c:912
+#: gtk/gtkentry.c:914
 msgid "How long to show the last input character in hidden entries"
 msgstr ""
 
@@ -2283,7 +2283,7 @@ msgstr "Obona Bude Bufutshane Beqhosha"
 msgid "Minimum length of the search key in order to look up matches"
 msgstr "Obona bude bufutshane beqhosha u-search ukuze ukhangele ezingqamanayo"
 
-#: gtk/gtkentrycompletion.c:303 gtk/gtkiconview.c:586
+#: gtk/gtkentrycompletion.c:303 gtk/gtkiconview.c:588
 msgid "Text column"
 msgstr "Ikholam yombhalo"
 
@@ -2524,7 +2524,7 @@ msgid "The desired width of the button widget, in characters."
 msgstr "Ububanzi obufunekayo beqhosha lesixhobo, ngokweempawu."
 
 #: gtk/gtkfilesel.c:525 gtk/gtkimage.c:162 gtk/gtkrecentmanager.c:250
-#: gtk/gtkstatusicon.c:182
+#: gtk/gtkstatusicon.c:188
 msgid "Filename"
 msgstr "Igama lefayili"
 
@@ -2703,139 +2703,139 @@ msgstr ""
 "Nokuba kusetyenziswe ixabiso le-snap_edge okanye ixabiso elikhutshwe kwi-"
 "handle_position"
 
-#: gtk/gtkiconview.c:549
+#: gtk/gtkiconview.c:551
 msgid "Selection mode"
 msgstr "Imo yokukhetha"
 
-#: gtk/gtkiconview.c:550
+#: gtk/gtkiconview.c:552
 msgid "The selection mode"
 msgstr "Imo yokukhetha"
 
-#: gtk/gtkiconview.c:568
+#: gtk/gtkiconview.c:570
 msgid "Pixbuf column"
 msgstr "Ikholam ye-pixbuf"
 
-#: gtk/gtkiconview.c:569
+#: gtk/gtkiconview.c:571
 msgid "Model column used to retrieve the icon pixbuf from"
 msgstr ""
 "Imodeli yekholam esetyenziswa ukuphinda ufumane umfanekiso ongumqondiso we-"
 "pixbuf kwi"
 
-#: gtk/gtkiconview.c:587
+#: gtk/gtkiconview.c:589
 msgid "Model column used to retrieve the text from"
 msgstr "Imodeli yekholam esetyenziswa ukuphinda ufumane umbhalo kwi"
 
-#: gtk/gtkiconview.c:606
+#: gtk/gtkiconview.c:608
 msgid "Markup column"
 msgstr "Ikholam yokuphawula"
 
-#: gtk/gtkiconview.c:607
+#: gtk/gtkiconview.c:609
 msgid "Model column used to retrieve the text if using Pango markup"
 msgstr ""
 "Imodeli yekholam esetyenziswa ukuphinda ufumane umbhalo ukuba ngaba "
 "usebenzisa uphawulo lwe-Pango"
 
-#: gtk/gtkiconview.c:614
+#: gtk/gtkiconview.c:616
 msgid "Icon View Model"
 msgstr "Imodeli Yomfanekiso Ongumqondiso Wokubonakalayo"
 
-#: gtk/gtkiconview.c:615
+#: gtk/gtkiconview.c:617
 msgid "The model for the icon view"
 msgstr "Imodeli yembonakalo yomfanekiso ongumqondiso"
 
-#: gtk/gtkiconview.c:631
+#: gtk/gtkiconview.c:633
 msgid "Number of columns"
 msgstr "Inani leekholam"
 
-#: gtk/gtkiconview.c:632
+#: gtk/gtkiconview.c:634
 msgid "Number of columns to display"
 msgstr "Inani leekhom emazibonakale eskrinini"
 
-#: gtk/gtkiconview.c:649
+#: gtk/gtkiconview.c:651
 msgid "Width for each item"
 msgstr "Ububanzi bento nganye ekhethwayo"
 
-#: gtk/gtkiconview.c:650
+#: gtk/gtkiconview.c:652
 msgid "The width used for each item"
 msgstr "Ububanzi obusetyenzisiweyo kwinto nganye ekhethwayo"
 
-#: gtk/gtkiconview.c:666
+#: gtk/gtkiconview.c:668
 msgid "Space which is inserted between cells of an item"
 msgstr "Isithuba esifakwe phakathi kwee-cell zezinto ezikhethwayo"
 
-#: gtk/gtkiconview.c:681
+#: gtk/gtkiconview.c:683
 msgid "Row Spacing"
 msgstr "Ukufaka Izithuba Phakathi Kwemigca"
 
-#: gtk/gtkiconview.c:682
+#: gtk/gtkiconview.c:684
 msgid "Space which is inserted between grid rows"
 msgstr "Isithuba esifakwe phakathi kwemigca yegridi"
 
-#: gtk/gtkiconview.c:697
+#: gtk/gtkiconview.c:699
 msgid "Column Spacing"
 msgstr "Ukufaka Izithuba Phakathi Kweekholam"
 
-#: gtk/gtkiconview.c:698
+#: gtk/gtkiconview.c:700
 #, fuzzy
 msgid "Space which is inserted between grid columns"
 msgstr "Isithuba esifakwe phakathi kweekholam zegridi"
 
-#: gtk/gtkiconview.c:713
+#: gtk/gtkiconview.c:715
 msgid "Margin"
 msgstr "Umda wephepha"
 
-#: gtk/gtkiconview.c:714
+#: gtk/gtkiconview.c:716
 msgid "Space which is inserted at the edges of the icon view"
 msgstr ""
 "Isithuba esifakwe kwiintlangothi sembonakalo yomfanekiso ongumqondiso wento "
 "ekhethwayo"
 
-#: gtk/gtkiconview.c:731
+#: gtk/gtkiconview.c:733
 msgid ""
 "How the text and icon of each item are positioned relative to each other"
 msgstr ""
 "Indlela omiswe ngayo umbhalo kunye nomfanekiso ongumqondiso wento nganye "
 "ekhethwayo ngokunxulumene nenye"
 
-#: gtk/gtkiconview.c:747 gtk/gtktreeview.c:612 gtk/gtktreeviewcolumn.c:307
+#: gtk/gtkiconview.c:749 gtk/gtktreeview.c:612 gtk/gtktreeviewcolumn.c:307
 msgid "Reorderable"
 msgstr "Inokuphindwa i-odolwe"
 
-#: gtk/gtkiconview.c:748 gtk/gtktreeview.c:613
+#: gtk/gtkiconview.c:750 gtk/gtktreeview.c:613
 msgid "View is reorderable"
 msgstr "Imbonakalo inokuphinda i-odolwe"
 
-#: gtk/gtkiconview.c:755 gtk/gtktreeview.c:763
+#: gtk/gtkiconview.c:757 gtk/gtktreeview.c:763
 #, fuzzy
 msgid "Tooltip Column"
 msgstr "Ikholam Yombhalo"
 
-#: gtk/gtkiconview.c:756
+#: gtk/gtkiconview.c:758
 #, fuzzy
 msgid "The column in the model containing the tooltip texts for the items"
 msgstr "Ikholam yemodeli equlethe uluhlu lwamagama."
 
-#: gtk/gtkiconview.c:767
+#: gtk/gtkiconview.c:769
 msgid "Selection Box Color"
 msgstr "Umbala Webhokisi Yokukhetha"
 
-#: gtk/gtkiconview.c:768
+#: gtk/gtkiconview.c:770
 msgid "Color of the selection box"
 msgstr "Umbala webhokisi yokukhetha"
 
-#: gtk/gtkiconview.c:774
+#: gtk/gtkiconview.c:776
 msgid "Selection Box Alpha"
 msgstr "I-Alpha Yebhokisi Yokukhetha"
 
-#: gtk/gtkiconview.c:775
+#: gtk/gtkiconview.c:777
 msgid "Opacity of the selection box"
 msgstr "Ubumfiliba bebhokisi yokukhetha"
 
-#: gtk/gtkimage.c:130 gtk/gtkstatusicon.c:174
+#: gtk/gtkimage.c:130 gtk/gtkstatusicon.c:180
 msgid "Pixbuf"
 msgstr "I-Pixbuf"
 
-#: gtk/gtkimage.c:131 gtk/gtkstatusicon.c:175
+#: gtk/gtkimage.c:131 gtk/gtkstatusicon.c:181
 msgid "A GdkPixbuf to display"
 msgstr "I-GdkPixbuf emayibonakaliswe"
 
@@ -2863,11 +2863,11 @@ msgstr "Isigqubuthelo"
 msgid "Mask bitmap to use with GdkImage or GdkPixmap"
 msgstr "Isiqgubuthelo se-bitmap esisetyenziswa ne-GdkImage okanye i-GdkPixmap"
 
-#: gtk/gtkimage.c:163 gtk/gtkstatusicon.c:183
+#: gtk/gtkimage.c:163 gtk/gtkstatusicon.c:189
 msgid "Filename to load and display"
 msgstr "Igama lefayili emayifakwe ize ibonakaliswe eskrinini"
 
-#: gtk/gtkimage.c:172 gtk/gtkstatusicon.c:191
+#: gtk/gtkimage.c:172 gtk/gtkstatusicon.c:197
 msgid "Stock ID for a stock image to display"
 msgstr "I-Stock ID somfanekiso we-stock emasibonakaliswe"
 
@@ -2907,11 +2907,11 @@ msgstr "Upopayi"
 msgid "GdkPixbufAnimation to display"
 msgstr "I-GdkPixbufAnimation emayibonakaliswe"
 
-#: gtk/gtkimage.c:237 gtk/gtkstatusicon.c:206
+#: gtk/gtkimage.c:237 gtk/gtkstatusicon.c:212
 msgid "Storage type"
 msgstr "Isimbo sovimba"
 
-#: gtk/gtkimage.c:238 gtk/gtkstatusicon.c:207
+#: gtk/gtkimage.c:238 gtk/gtkstatusicon.c:213
 msgid "The representation being used for image data"
 msgstr "Umelo olusetyenzisiweyo kwi-data yomfanekiso"
 
@@ -3254,12 +3254,12 @@ msgstr ""
 msgid "The submenu attached to the menu item, or NULL if it has none"
 msgstr ""
 
-#: gtk/gtkmenushell.c:363
+#: gtk/gtkmenushell.c:368
 #, fuzzy
 msgid "Take Focus"
 msgstr "Inogxilo"
 
-#: gtk/gtkmenushell.c:364
+#: gtk/gtkmenushell.c:369
 #, fuzzy
 msgid "A boolean that determines whether the menu grabs the keyboard focus"
 msgstr "I-boolean ebonisa ukuba imenyu isusiwe na"
@@ -3670,7 +3670,7 @@ msgid "If TRUE, the child can be made smaller than its requisition"
 msgstr ""
 "Ukuba TRUE, inkqubo engumntwana inokwenziwa ibe ncinci kunokuba iceliwe"
 
-#: gtk/gtkplug.c:146 gtk/gtkstatusicon.c:257
+#: gtk/gtkplug.c:146 gtk/gtkstatusicon.c:263
 msgid "Embedded"
 msgstr ""
 
@@ -4235,12 +4235,12 @@ msgid ""
 "spacing"
 msgstr ""
 
-#: gtk/gtkrecentaction.c:677 gtk/gtkrecentchoosermenu.c:209
+#: gtk/gtkrecentaction.c:679 gtk/gtkrecentchoosermenu.c:209
 #, fuzzy
 msgid "Show Numbers"
 msgstr "Bonisa Amanani Eeveki"
 
-#: gtk/gtkrecentaction.c:678 gtk/gtkrecentchoosermenu.c:210
+#: gtk/gtkrecentaction.c:680 gtk/gtkrecentchoosermenu.c:210
 #, fuzzy
 msgid "Whether the items should be displayed with a number"
 msgstr "Nokuba ngaba izinto ezisuswayo zemenyu zimelwe zongezwe na kwimenyu"
@@ -5096,36 +5096,36 @@ msgstr ""
 "Isimbo somphetho othambekileyo ojikeleze umbhalo womgca obonakalisa ubume "
 "bokuqhubekayo"
 
-#: gtk/gtkstatusicon.c:216
+#: gtk/gtkstatusicon.c:222
 #, fuzzy
 msgid "The size of the icon"
 msgstr "Uhlobo lwefestile"
 
-#: gtk/gtkstatusicon.c:226
+#: gtk/gtkstatusicon.c:232
 #, fuzzy
 msgid "The screen where this status icon will be displayed"
 msgstr "Iskrini eso le festile iza kuthi ibonakaliswe kuso"
 
-#: gtk/gtkstatusicon.c:233
+#: gtk/gtkstatusicon.c:239
 msgid "Blinking"
 msgstr ""
 
-#: gtk/gtkstatusicon.c:234
+#: gtk/gtkstatusicon.c:240
 #, fuzzy
 msgid "Whether or not the status icon is blinking"
 msgstr "Nokuba ngaba isenzo siyabonakala na."
 
-#: gtk/gtkstatusicon.c:242
+#: gtk/gtkstatusicon.c:248
 #, fuzzy
 msgid "Whether or not the status icon is visible"
 msgstr "Nokuba ngaba isenzo siyabonakala na."
 
-#: gtk/gtkstatusicon.c:258
+#: gtk/gtkstatusicon.c:264
 #, fuzzy
 msgid "Whether or not the status icon is embedded"
 msgstr "Nokuba ngaba isenzo siyabonakala na."
 
-#: gtk/gtkstatusicon.c:274 gtk/gtktrayicon-x11.c:97
+#: gtk/gtkstatusicon.c:280 gtk/gtktrayicon-x11.c:97
 #, fuzzy
 msgid "The orientation of the tray"
 msgstr "Imbonakalo ye-toolbar"

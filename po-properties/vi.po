@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-properties 2.11.4\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-01-29 22:40-0500\n"
+"POT-Creation-Date: 2008-02-12 17:52-0500\n"
 "PO-Revision-Date: 2007-09-03 22:59+0930\n"
 "Last-Translator: Clytie Siddall <clytie@riverland.net.au>\n"
 "Language-Team: Vietnamese <gnomevi-list@lists.sourceforge.net>\n"
@@ -90,7 +90,7 @@ msgstr "Bộ trình bày mặc định"
 msgid "The default display for GDK"
 msgstr "Bộ trình bày mặc định cho GDK"
 
-#: gdk/gdkpango.c:490 gtk/gtkinvisible.c:86 gtk/gtkstatusicon.c:225
+#: gdk/gdkpango.c:490 gtk/gtkinvisible.c:86 gtk/gtkstatusicon.c:231
 #: gtk/gtkwindow.c:600
 msgid "Screen"
 msgstr "Màn hình"
@@ -295,12 +295,12 @@ msgstr ""
 "này."
 
 #: gtk/gtkaction.c:258 gtk/gtkcellrendererpixbuf.c:172 gtk/gtkimage.c:229
-#: gtk/gtkprinter.c:168 gtk/gtkstatusicon.c:198 gtk/gtkwindow.c:592
+#: gtk/gtkprinter.c:168 gtk/gtkstatusicon.c:204 gtk/gtkwindow.c:592
 msgid "Icon Name"
 msgstr "Tên biểu thượng"
 
 #: gtk/gtkaction.c:259 gtk/gtkcellrendererpixbuf.c:173 gtk/gtkimage.c:230
-#: gtk/gtkstatusicon.c:199
+#: gtk/gtkstatusicon.c:205
 msgid "The name of the icon from the icon theme"
 msgstr "Tên của biểu tượng từ sắc thái biểu tượng"
 
@@ -367,7 +367,7 @@ msgstr "Nhạy cảm"
 msgid "Whether the action is enabled."
 msgstr "Có nên hiệu lực hành động này hay không."
 
-#: gtk/gtkaction.c:320 gtk/gtkactiongroup.c:184 gtk/gtkstatusicon.c:241
+#: gtk/gtkaction.c:320 gtk/gtkactiongroup.c:184 gtk/gtkstatusicon.c:247
 #: gtk/gtktreeviewcolumn.c:191 gtk/gtkwidget.c:512
 msgid "Visible"
 msgstr "Hiển thị"
@@ -697,7 +697,7 @@ msgstr ""
 "Nếu ĐÚNG thì ô điều khiển con này xuất hiện trong một nhóm ô điều khiển con "
 "phụ, thích hợp với, lấy thí dụ, cái nút trợ giúp."
 
-#: gtk/gtkbox.c:98 gtk/gtkexpander.c:219 gtk/gtkiconview.c:665
+#: gtk/gtkbox.c:98 gtk/gtkexpander.c:219 gtk/gtkiconview.c:667
 #: gtk/gtktreeviewcolumn.c:216
 msgid "Spacing"
 msgstr "Khoảng cách"
@@ -897,7 +897,7 @@ msgstr ""
 "Tài sản của « child_displacement_x/_y » (độ dịch chuyển con X/Y) cũng nên có "
 "tác động chữ nhật tiêu điểm hay không"
 
-#: gtk/gtkbutton.c:462 gtk/gtkentry.c:530 gtk/gtkentry.c:890
+#: gtk/gtkbutton.c:462 gtk/gtkentry.c:530 gtk/gtkentry.c:892
 msgid "Inner Border"
 msgstr "Viền bên trong"
 
@@ -1169,7 +1169,7 @@ msgstr "Đệm điểm ảnh bộ đóng"
 msgid "Pixbuf for closed expander"
 msgstr "Đệm điểm ảnh cho bộ đã đóng"
 
-#: gtk/gtkcellrendererpixbuf.c:136 gtk/gtkimage.c:171 gtk/gtkstatusicon.c:190
+#: gtk/gtkcellrendererpixbuf.c:136 gtk/gtkimage.c:171 gtk/gtkstatusicon.c:196
 msgid "Stock ID"
 msgstr "ID chuẩn"
 
@@ -1178,7 +1178,7 @@ msgid "The stock ID of the stock icon to render"
 msgstr "Mã ID chuẩn cho các biểu tượng chuẩn cần vẽ"
 
 #: gtk/gtkcellrendererpixbuf.c:144 gtk/gtkrecentmanager.c:281
-#: gtk/gtkstatusicon.c:215
+#: gtk/gtkstatusicon.c:221
 msgid "Size"
 msgstr "Cỡ"
 
@@ -1247,8 +1247,8 @@ msgstr "Canh lề Y cho văn bản"
 msgid "The vertical text alignment, from 0 (top) to 1 (bottom)."
 msgstr "Chỉnh canh văn bản dọc, từ 0 (trên) tới 1 (dưới)"
 
-#: gtk/gtkcellrendererprogress.c:221 gtk/gtkiconview.c:730
-#: gtk/gtkprogressbar.c:130 gtk/gtkstatusicon.c:273 gtk/gtktoolbar.c:475
+#: gtk/gtkcellrendererprogress.c:221 gtk/gtkiconview.c:732
+#: gtk/gtkprogressbar.c:130 gtk/gtkstatusicon.c:279 gtk/gtktoolbar.c:475
 #: gtk/gtktrayicon-x11.c:96
 msgid "Orientation"
 msgstr "Hướng"
@@ -1737,7 +1737,7 @@ msgstr "Tiêu đề"
 msgid "The title of the color selection dialog"
 msgstr "Tiêu đề của hộp thoại chọn màu"
 
-#: gtk/gtkcolorbutton.c:202 gtk/gtkcolorsel.c:1857
+#: gtk/gtkcolorbutton.c:202 gtk/gtkcolorsel.c:1859
 msgid "Current Color"
 msgstr "Màu hiện có"
 
@@ -1745,7 +1745,7 @@ msgstr "Màu hiện có"
 msgid "The selected color"
 msgstr "Màu hiện thời được chọn"
 
-#: gtk/gtkcolorbutton.c:217 gtk/gtkcolorsel.c:1864
+#: gtk/gtkcolorbutton.c:217 gtk/gtkcolorsel.c:1866
 msgid "Current Alpha"
 msgstr "Độ anfa hiện thời"
 
@@ -1754,36 +1754,36 @@ msgid "The selected opacity value (0 fully transparent, 65535 fully opaque)"
 msgstr ""
 "Giá trị độ đục được chọn (0 là trong suốt hoàn toàn, 65535 là đặc hoàn toàn)"
 
-#: gtk/gtkcolorsel.c:1843
+#: gtk/gtkcolorsel.c:1845
 msgid "Has Opacity Control"
 msgstr "Điều khiển độ đục"
 
-#: gtk/gtkcolorsel.c:1844
+#: gtk/gtkcolorsel.c:1846
 msgid "Whether the color selector should allow setting opacity"
 msgstr "Bộ chọn màu cho phép đặt độ đục hay không"
 
-#: gtk/gtkcolorsel.c:1850
+#: gtk/gtkcolorsel.c:1852
 msgid "Has palette"
 msgstr "Có bảng chọn"
 
-#: gtk/gtkcolorsel.c:1851
+#: gtk/gtkcolorsel.c:1853
 msgid "Whether a palette should be used"
 msgstr "Bảng chọn có được dùng hay không"
 
-#: gtk/gtkcolorsel.c:1858
+#: gtk/gtkcolorsel.c:1860
 msgid "The current color"
 msgstr "Màu hiện thời"
 
-#: gtk/gtkcolorsel.c:1865
+#: gtk/gtkcolorsel.c:1867
 msgid "The current opacity value (0 fully transparent, 65535 fully opaque)"
 msgstr ""
 "Giá trị độ đục hiện thời (0 là trong suốt hoàn toàn, 65535 là đục hoàn toàn)"
 
-#: gtk/gtkcolorsel.c:1879
+#: gtk/gtkcolorsel.c:1881
 msgid "Custom palette"
 msgstr "Bảng chọn riêng"
 
-#: gtk/gtkcolorsel.c:1880
+#: gtk/gtkcolorsel.c:1882
 msgid "Palette to use in the color selector"
 msgstr "Bảng chọn cần dùng trong bộ chọn màu"
 
@@ -2138,23 +2138,23 @@ msgstr "Có nên cắt ngắn việc dán đoạn đa dòng thành một dòng h
 msgid "Which kind of shadow to draw around the entry when has-frame is set"
 msgstr "Kiểu bóng nào cần vẽ chung quanh mục nhập khi « có khung » được đặt"
 
-#: gtk/gtkentry.c:891
+#: gtk/gtkentry.c:893
 msgid "Border between text and frame."
 msgstr "Viền giữa văn bản và khung."
 
-#: gtk/gtkentry.c:896 gtk/gtklabel.c:625
+#: gtk/gtkentry.c:898 gtk/gtklabel.c:625
 msgid "Select on focus"
 msgstr "Chọn khi có tiêu điểm"
 
-#: gtk/gtkentry.c:897
+#: gtk/gtkentry.c:899
 msgid "Whether to select the contents of an entry when it is focused"
 msgstr "Chọn nội dung của mục nhập khi nó nhận tiêu điểm hay không"
 
-#: gtk/gtkentry.c:911
+#: gtk/gtkentry.c:913
 msgid "Password Hint Timeout"
 msgstr "Thời hạn gợi ý mật khẩu"
 
-#: gtk/gtkentry.c:912
+#: gtk/gtkentry.c:914
 msgid "How long to show the last input character in hidden entries"
 msgstr "Thời gian cần hiển thị ký tự mới gõ trong mục nhập đã ẩn"
 
@@ -2174,7 +2174,7 @@ msgstr "Độ dài khóa tối thiểu"
 msgid "Minimum length of the search key in order to look up matches"
 msgstr "Độ dài tối thiểu của khóa tìm kiếm để tra tìm điều khớp"
 
-#: gtk/gtkentrycompletion.c:303 gtk/gtkiconview.c:586
+#: gtk/gtkentrycompletion.c:303 gtk/gtkiconview.c:588
 msgid "Text column"
 msgstr "Cột văn bản"
 
@@ -2407,7 +2407,7 @@ msgid "The desired width of the button widget, in characters."
 msgstr "Độ rộng đã muốn cho ô điều khiển cái nút, theo ký tự."
 
 #: gtk/gtkfilesel.c:525 gtk/gtkimage.c:162 gtk/gtkrecentmanager.c:250
-#: gtk/gtkstatusicon.c:182
+#: gtk/gtkstatusicon.c:188
 msgid "Filename"
 msgstr "Tên tập tin"
 
@@ -2583,128 +2583,128 @@ msgstr ""
 "Có nên dùng giá trị từ tài sản « snap_edge » (canh dính) hoặc giá trị bắt "
 "nguồn từ « handle_position » (vị trí móc)"
 
-#: gtk/gtkiconview.c:549
+#: gtk/gtkiconview.c:551
 msgid "Selection mode"
 msgstr "Chế độ chọn"
 
-#: gtk/gtkiconview.c:550
+#: gtk/gtkiconview.c:552
 msgid "The selection mode"
 msgstr "Chế độ lựa chọn"
 
-#: gtk/gtkiconview.c:568
+#: gtk/gtkiconview.c:570
 msgid "Pixbuf column"
 msgstr "Cột đệm điểm ảnh"
 
-#: gtk/gtkiconview.c:569
+#: gtk/gtkiconview.c:571
 msgid "Model column used to retrieve the icon pixbuf from"
 msgstr "Cột mô hình từ đó cần gọi đệm điểm ảnh của biểu tượng"
 
-#: gtk/gtkiconview.c:587
+#: gtk/gtkiconview.c:589
 msgid "Model column used to retrieve the text from"
 msgstr "Cột mô hình từ đó cần gọi văn bản"
 
-#: gtk/gtkiconview.c:606
+#: gtk/gtkiconview.c:608
 msgid "Markup column"
 msgstr "Cột mã định dạng"
 
-#: gtk/gtkiconview.c:607
+#: gtk/gtkiconview.c:609
 msgid "Model column used to retrieve the text if using Pango markup"
 msgstr "Cột mô hình từ đó cần gọi văn bản nếu đang dùng mã định dạng Pango"
 
-#: gtk/gtkiconview.c:614
+#: gtk/gtkiconview.c:616
 msgid "Icon View Model"
 msgstr "Mô hình xem biểu tượng"
 
-#: gtk/gtkiconview.c:615
+#: gtk/gtkiconview.c:617
 msgid "The model for the icon view"
 msgstr "Mô hình cho khung xem theo biểu tượng"
 
-#: gtk/gtkiconview.c:631
+#: gtk/gtkiconview.c:633
 msgid "Number of columns"
 msgstr "Số cột"
 
-#: gtk/gtkiconview.c:632
+#: gtk/gtkiconview.c:634
 msgid "Number of columns to display"
 msgstr "Số cột cần hiển thị"
 
-#: gtk/gtkiconview.c:649
+#: gtk/gtkiconview.c:651
 msgid "Width for each item"
 msgstr "Độ rộng cho mỗi mục"
 
-#: gtk/gtkiconview.c:650
+#: gtk/gtkiconview.c:652
 msgid "The width used for each item"
 msgstr "Độ rộng được dùng cho mỗi mục"
 
-#: gtk/gtkiconview.c:666
+#: gtk/gtkiconview.c:668
 msgid "Space which is inserted between cells of an item"
 msgstr "Khoảng cách được chèn giữa các ô của mục"
 
-#: gtk/gtkiconview.c:681
+#: gtk/gtkiconview.c:683
 msgid "Row Spacing"
 msgstr "Khoảng cách hàng"
 
-#: gtk/gtkiconview.c:682
+#: gtk/gtkiconview.c:684
 msgid "Space which is inserted between grid rows"
 msgstr "Khoảng cách được chèn giữa các hàng lưới"
 
-#: gtk/gtkiconview.c:697
+#: gtk/gtkiconview.c:699
 msgid "Column Spacing"
 msgstr "Khoảng cách cột"
 
-#: gtk/gtkiconview.c:698
+#: gtk/gtkiconview.c:700
 msgid "Space which is inserted between grid columns"
 msgstr "Khoảng cách được chèn giữa các cột lưới"
 
-#: gtk/gtkiconview.c:713
+#: gtk/gtkiconview.c:715
 msgid "Margin"
 msgstr "Lề"
 
-#: gtk/gtkiconview.c:714
+#: gtk/gtkiconview.c:716
 msgid "Space which is inserted at the edges of the icon view"
 msgstr "Khoảng cách được chèn tại các cạnh của khung xem theo biểu tượng"
 
-#: gtk/gtkiconview.c:731
+#: gtk/gtkiconview.c:733
 msgid ""
 "How the text and icon of each item are positioned relative to each other"
 msgstr "Cách định vị chữ và biểu tượng của mỗi mục, tượng ứng với nhau"
 
-#: gtk/gtkiconview.c:747 gtk/gtktreeview.c:612 gtk/gtktreeviewcolumn.c:307
+#: gtk/gtkiconview.c:749 gtk/gtktreeview.c:612 gtk/gtktreeviewcolumn.c:307
 msgid "Reorderable"
 msgstr "Có thể sắp xếp lại"
 
-#: gtk/gtkiconview.c:748 gtk/gtktreeview.c:613
+#: gtk/gtkiconview.c:750 gtk/gtktreeview.c:613
 msgid "View is reorderable"
 msgstr "Có thể sắp xếp lại khung xem"
 
-#: gtk/gtkiconview.c:755 gtk/gtktreeview.c:763
+#: gtk/gtkiconview.c:757 gtk/gtktreeview.c:763
 msgid "Tooltip Column"
 msgstr "Cột mẹo công cụ"
 
-#: gtk/gtkiconview.c:756
+#: gtk/gtkiconview.c:758
 msgid "The column in the model containing the tooltip texts for the items"
 msgstr "Cột của mô hình chứa các chuỗi mẹo công cụ cho các mục"
 
-#: gtk/gtkiconview.c:767
+#: gtk/gtkiconview.c:769
 msgid "Selection Box Color"
 msgstr "Màu hộp chọn"
 
-#: gtk/gtkiconview.c:768
+#: gtk/gtkiconview.c:770
 msgid "Color of the selection box"
 msgstr "Màu của hộp chọn"
 
-#: gtk/gtkiconview.c:774
+#: gtk/gtkiconview.c:776
 msgid "Selection Box Alpha"
 msgstr "Anfa hộp chọn"
 
-#: gtk/gtkiconview.c:775
+#: gtk/gtkiconview.c:777
 msgid "Opacity of the selection box"
 msgstr "Độ đục của hộp chọn"
 
-#: gtk/gtkimage.c:130 gtk/gtkstatusicon.c:174
+#: gtk/gtkimage.c:130 gtk/gtkstatusicon.c:180
 msgid "Pixbuf"
 msgstr "Đệm điểm ảnh"
 
-#: gtk/gtkimage.c:131 gtk/gtkstatusicon.c:175
+#: gtk/gtkimage.c:131 gtk/gtkstatusicon.c:181
 msgid "A GdkPixbuf to display"
 msgstr "GdkPixbuf cần hiển thị"
 
@@ -2732,11 +2732,11 @@ msgstr "Mặt nạ"
 msgid "Mask bitmap to use with GdkImage or GdkPixmap"
 msgstr "Mảng ảnh mặt nạ cần dùng với GdkImage/GdkPixmap"
 
-#: gtk/gtkimage.c:163 gtk/gtkstatusicon.c:183
+#: gtk/gtkimage.c:163 gtk/gtkstatusicon.c:189
 msgid "Filename to load and display"
 msgstr "Tên tập tin cần tải và hiển thị"
 
-#: gtk/gtkimage.c:172 gtk/gtkstatusicon.c:191
+#: gtk/gtkimage.c:172 gtk/gtkstatusicon.c:197
 msgid "Stock ID for a stock image to display"
 msgstr "Mã ID chuẩn cho ảnh chuẩn cần hiển thị"
 
@@ -2773,11 +2773,11 @@ msgstr "Hoạt cảnh"
 msgid "GdkPixbufAnimation to display"
 msgstr "GdkPixbufAnimation cần hiển thị"
 
-#: gtk/gtkimage.c:237 gtk/gtkstatusicon.c:206
+#: gtk/gtkimage.c:237 gtk/gtkstatusicon.c:212
 msgid "Storage type"
 msgstr "Loại lưu trữ"
 
-#: gtk/gtkimage.c:238 gtk/gtkstatusicon.c:207
+#: gtk/gtkimage.c:238 gtk/gtkstatusicon.c:213
 msgid "The representation being used for image data"
 msgstr "Đại diện được dùng cho dữ liệu ảnh"
 
@@ -3103,11 +3103,11 @@ msgstr "Trình đơn con"
 msgid "The submenu attached to the menu item, or NULL if it has none"
 msgstr "Trình đơn con được gắn vào mục trình đơn, hay NULL nếu không có"
 
-#: gtk/gtkmenushell.c:363
+#: gtk/gtkmenushell.c:368
 msgid "Take Focus"
 msgstr "Lấy tiêu điểm"
 
-#: gtk/gtkmenushell.c:364
+#: gtk/gtkmenushell.c:369
 msgid "A boolean that determines whether the menu grabs the keyboard focus"
 msgstr ""
 "Giá trị hợp lý (đúng/sai) có quyết định nếu trình đơn lấy tiêu điểm bàn phím "
@@ -3489,7 +3489,7 @@ msgstr "Thu nhỏ"
 msgid "If TRUE, the child can be made smaller than its requisition"
 msgstr "Nếu ĐÚNG thì ô điều khiển con có thể thu nhỏ hơn đã yêu cầu"
 
-#: gtk/gtkplug.c:146 gtk/gtkstatusicon.c:257
+#: gtk/gtkplug.c:146 gtk/gtkstatusicon.c:263
 msgid "Embedded"
 msgstr "Nhúng"
 
@@ -4029,11 +4029,11 @@ msgstr ""
 "Có nên vẽ máng xối chiếm toàn phạm vị, hoặc loại trừ những cái nút bước và "
 "khoảng cách"
 
-#: gtk/gtkrecentaction.c:677 gtk/gtkrecentchoosermenu.c:209
+#: gtk/gtkrecentaction.c:679 gtk/gtkrecentchoosermenu.c:209
 msgid "Show Numbers"
 msgstr "Hiện số"
 
-#: gtk/gtkrecentaction.c:678 gtk/gtkrecentchoosermenu.c:210
+#: gtk/gtkrecentaction.c:680 gtk/gtkrecentchoosermenu.c:210
 msgid "Whether the items should be displayed with a number"
 msgstr "Có nên hiển thị mục vớ con số hay không"
 
@@ -4840,31 +4840,31 @@ msgstr "Thanh trạng thái có móc thay đổi kích thước của cấp đ�
 msgid "Style of bevel around the statusbar text"
 msgstr "Kiểu dáng góc xiên quanh văn bản thanh trạng thái"
 
-#: gtk/gtkstatusicon.c:216
+#: gtk/gtkstatusicon.c:222
 msgid "The size of the icon"
 msgstr "Kích cỡ của biểu tượng"
 
-#: gtk/gtkstatusicon.c:226
+#: gtk/gtkstatusicon.c:232
 msgid "The screen where this status icon will be displayed"
 msgstr "Màn hình nơi biểu tượng trạng thái sẽ được hiển thị"
 
-#: gtk/gtkstatusicon.c:233
+#: gtk/gtkstatusicon.c:239
 msgid "Blinking"
 msgstr "Nháy"
 
-#: gtk/gtkstatusicon.c:234
+#: gtk/gtkstatusicon.c:240
 msgid "Whether or not the status icon is blinking"
 msgstr "Có nên nháy biểu tượng trạng thái hay không"
 
-#: gtk/gtkstatusicon.c:242
+#: gtk/gtkstatusicon.c:248
 msgid "Whether or not the status icon is visible"
 msgstr "Có nên hiển thị biểu tượng trạng thái hay không"
 
-#: gtk/gtkstatusicon.c:258
+#: gtk/gtkstatusicon.c:264
 msgid "Whether or not the status icon is embedded"
 msgstr "Có nên nhúng biểu tượng trạng thái hay không"
 
-#: gtk/gtkstatusicon.c:274 gtk/gtktrayicon-x11.c:97
+#: gtk/gtkstatusicon.c:280 gtk/gtktrayicon-x11.c:97
 msgid "The orientation of the tray"
 msgstr "Hướng của khay"
 

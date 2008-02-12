@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: eu\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-01-29 22:40-0500\n"
+"POT-Creation-Date: 2008-02-12 17:52-0500\n"
 "PO-Revision-Date: 2007-12-27 16:24+0100\n"
 "Last-Translator: Iñaki Larrañaga Murgoitio <dooteo@zundan.com>\n"
 "Language-Team: Basque <itzulpena@euskalgnu.org>\n"
@@ -95,7 +95,7 @@ msgstr "Bistaratze lehenetsia"
 msgid "The default display for GDK"
 msgstr "GDKren bistaratze lehenetsia"
 
-#: gdk/gdkpango.c:490 gtk/gtkinvisible.c:86 gtk/gtkstatusicon.c:225
+#: gdk/gdkpango.c:490 gtk/gtkinvisible.c:86 gtk/gtkstatusicon.c:231
 #: gtk/gtkwindow.c:600
 msgid "Screen"
 msgstr "Pantaila"
@@ -302,12 +302,12 @@ msgid "The stock icon displayed in widgets representing this action."
 msgstr "Ekintza hau adierazten duten trepetetan bistaratutako stock-ikonoa."
 
 #: gtk/gtkaction.c:258 gtk/gtkcellrendererpixbuf.c:172 gtk/gtkimage.c:229
-#: gtk/gtkprinter.c:168 gtk/gtkstatusicon.c:198 gtk/gtkwindow.c:592
+#: gtk/gtkprinter.c:168 gtk/gtkstatusicon.c:204 gtk/gtkwindow.c:592
 msgid "Icon Name"
 msgstr "Ikono-izena"
 
 #: gtk/gtkaction.c:259 gtk/gtkcellrendererpixbuf.c:173 gtk/gtkimage.c:230
-#: gtk/gtkstatusicon.c:199
+#: gtk/gtkstatusicon.c:205
 msgid "The name of the icon from the icon theme"
 msgstr "Ikono-gaiko ikonoaren izena"
 
@@ -379,7 +379,7 @@ msgid "Whether the action is enabled."
 msgstr "Ekintza gaituta dagoen ala ez adierazten du."
 
 #
-#: gtk/gtkaction.c:320 gtk/gtkactiongroup.c:184 gtk/gtkstatusicon.c:241
+#: gtk/gtkaction.c:320 gtk/gtkactiongroup.c:184 gtk/gtkstatusicon.c:247
 #: gtk/gtktreeviewcolumn.c:191 gtk/gtkwidget.c:512
 msgid "Visible"
 msgstr "Ikusgai"
@@ -717,7 +717,7 @@ msgstr ""
 "laguntza-botoietarako egoki"
 
 #
-#: gtk/gtkbox.c:98 gtk/gtkexpander.c:219 gtk/gtkiconview.c:665
+#: gtk/gtkbox.c:98 gtk/gtkexpander.c:219 gtk/gtkiconview.c:667
 #: gtk/gtktreeviewcolumn.c:216
 msgid "Spacing"
 msgstr "Tartea"
@@ -921,7 +921,7 @@ msgstr ""
 "child_displacement_x/_y propietateak foko-laukian ere eragingo duen ala ez "
 "adierazten du"
 
-#: gtk/gtkbutton.c:462 gtk/gtkentry.c:530 gtk/gtkentry.c:890
+#: gtk/gtkbutton.c:462 gtk/gtkentry.c:530 gtk/gtkentry.c:892
 msgid "Inner Border"
 msgstr "Barneko ertza"
 
@@ -1203,7 +1203,7 @@ msgstr "Pixbuf zabaltzailea itxita"
 msgid "Pixbuf for closed expander"
 msgstr "Itxitako zabaltzailearen pixbuf-a"
 
-#: gtk/gtkcellrendererpixbuf.c:136 gtk/gtkimage.c:171 gtk/gtkstatusicon.c:190
+#: gtk/gtkcellrendererpixbuf.c:136 gtk/gtkimage.c:171 gtk/gtkstatusicon.c:196
 msgid "Stock ID"
 msgstr "Stock-ID-a"
 
@@ -1213,7 +1213,7 @@ msgstr "Errendatu behar den stock-ikonoaren stock-IDa"
 
 #
 #: gtk/gtkcellrendererpixbuf.c:144 gtk/gtkrecentmanager.c:281
-#: gtk/gtkstatusicon.c:215
+#: gtk/gtkstatusicon.c:221
 msgid "Size"
 msgstr "Tamaina"
 
@@ -1285,8 +1285,8 @@ msgstr "Testuaren y lerrokatzea"
 msgid "The vertical text alignment, from 0 (top) to 1 (bottom)."
 msgstr "Lerrokatze bertikala, 0tik (goian) 1era (behean)."
 
-#: gtk/gtkcellrendererprogress.c:221 gtk/gtkiconview.c:730
-#: gtk/gtkprogressbar.c:130 gtk/gtkstatusicon.c:273 gtk/gtktoolbar.c:475
+#: gtk/gtkcellrendererprogress.c:221 gtk/gtkiconview.c:732
+#: gtk/gtkprogressbar.c:130 gtk/gtkstatusicon.c:279 gtk/gtktoolbar.c:475
 #: gtk/gtktrayicon-x11.c:96
 msgid "Orientation"
 msgstr "Orientazioa"
@@ -1800,7 +1800,7 @@ msgstr "Izenburua"
 msgid "The title of the color selection dialog"
 msgstr "Kolorea hautatzeko elkarrizketa-koadroaren izenburua"
 
-#: gtk/gtkcolorbutton.c:202 gtk/gtkcolorsel.c:1857
+#: gtk/gtkcolorbutton.c:202 gtk/gtkcolorsel.c:1859
 msgid "Current Color"
 msgstr "Uneko kolorea"
 
@@ -1808,7 +1808,7 @@ msgstr "Uneko kolorea"
 msgid "The selected color"
 msgstr "Hautatutako kolorea"
 
-#: gtk/gtkcolorbutton.c:217 gtk/gtkcolorsel.c:1864
+#: gtk/gtkcolorbutton.c:217 gtk/gtkcolorsel.c:1866
 msgid "Current Alpha"
 msgstr "Uneko alfa"
 
@@ -1816,37 +1816,37 @@ msgstr "Uneko alfa"
 msgid "The selected opacity value (0 fully transparent, 65535 fully opaque)"
 msgstr "Hautatutako opakutasun-balioa (0 guztiz gardena, 65535 guztiz opakua)"
 
-#: gtk/gtkcolorsel.c:1843
+#: gtk/gtkcolorsel.c:1845
 msgid "Has Opacity Control"
 msgstr "Opakutasun-kontrola du"
 
-#: gtk/gtkcolorsel.c:1844
+#: gtk/gtkcolorsel.c:1846
 msgid "Whether the color selector should allow setting opacity"
 msgstr ""
 "Kolore-hautatzaileak opakutasuna ezartzeko baimena eman behar duen ala ez "
 "adierazten du"
 
-#: gtk/gtkcolorsel.c:1850
+#: gtk/gtkcolorsel.c:1852
 msgid "Has palette"
 msgstr "Paleta dauka"
 
-#: gtk/gtkcolorsel.c:1851
+#: gtk/gtkcolorsel.c:1853
 msgid "Whether a palette should be used"
 msgstr "Paleta erabili behar den ala ez adierazten du"
 
-#: gtk/gtkcolorsel.c:1858
+#: gtk/gtkcolorsel.c:1860
 msgid "The current color"
 msgstr "Uneko kolorea"
 
-#: gtk/gtkcolorsel.c:1865
+#: gtk/gtkcolorsel.c:1867
 msgid "The current opacity value (0 fully transparent, 65535 fully opaque)"
 msgstr "Uneko opakutasun-balioa (0 guztiz gardena, 65535 guztiz opakua)"
 
-#: gtk/gtkcolorsel.c:1879
+#: gtk/gtkcolorsel.c:1881
 msgid "Custom palette"
 msgstr "Paleta pertsonalizatua"
 
-#: gtk/gtkcolorsel.c:1880
+#: gtk/gtkcolorsel.c:1882
 msgid "Palette to use in the color selector"
 msgstr "Kolore-hautatzailean erabili beharreko paleta"
 
@@ -2227,24 +2227,24 @@ msgstr "Lerro-anitzeko itsatsiak lerro bakarrean trunkatu edo ez"
 msgid "Which kind of shadow to draw around the entry when has-frame is set"
 msgstr "Sarreraren inguruan marraztuko den itzal mota 'markoa du' ezartean"
 
-#: gtk/gtkentry.c:891
+#: gtk/gtkentry.c:893
 msgid "Border between text and frame."
 msgstr "Testu eta markoaren arteko ertza."
 
 #
-#: gtk/gtkentry.c:896 gtk/gtklabel.c:625
+#: gtk/gtkentry.c:898 gtk/gtklabel.c:625
 msgid "Select on focus"
 msgstr "Hautatu enfokatzean"
 
-#: gtk/gtkentry.c:897
+#: gtk/gtkentry.c:899
 msgid "Whether to select the contents of an entry when it is focused"
 msgstr "Enfokatzean, sarreraren edukia hautatuko den ala ez adierazten du"
 
-#: gtk/gtkentry.c:911
+#: gtk/gtkentry.c:913
 msgid "Password Hint Timeout"
 msgstr "Pasahitzaren gonbitearen denbora-muga"
 
-#: gtk/gtkentry.c:912
+#: gtk/gtkentry.c:914
 msgid "How long to show the last input character in hidden entries"
 msgstr ""
 "Zenbat denboran erakutsiko den idatzitako azken karakterea ezkutuko "
@@ -2266,7 +2266,7 @@ msgstr "Gakoaren gutxieneko luzera"
 msgid "Minimum length of the search key in order to look up matches"
 msgstr "Bilaketa-gakoaren gutxieneko luzera berdinak direnak bilatzeko"
 
-#: gtk/gtkentrycompletion.c:303 gtk/gtkiconview.c:586
+#: gtk/gtkentrycompletion.c:303 gtk/gtkiconview.c:588
 msgid "Text column"
 msgstr "Testu-zutabea"
 
@@ -2508,7 +2508,7 @@ msgstr "Botoi-trepetak edukiko duen zabalera, karaktereetan."
 
 #
 #: gtk/gtkfilesel.c:525 gtk/gtkimage.c:162 gtk/gtkrecentmanager.c:250
-#: gtk/gtkstatusicon.c:182
+#: gtk/gtkstatusicon.c:188
 msgid "Filename"
 msgstr "Fitxategi-izena"
 
@@ -2694,135 +2694,135 @@ msgstr ""
 "snap_edge propietatearen balioa edo handle_position-etik eratorritako balioa "
 "erabiliko den adierazten du"
 
-#: gtk/gtkiconview.c:549
+#: gtk/gtkiconview.c:551
 msgid "Selection mode"
 msgstr "Hautapen modua"
 
-#: gtk/gtkiconview.c:550
+#: gtk/gtkiconview.c:552
 msgid "The selection mode"
 msgstr "Hautatzeko modua"
 
-#: gtk/gtkiconview.c:568
+#: gtk/gtkiconview.c:570
 msgid "Pixbuf column"
 msgstr "Pixbuf-zutabea"
 
-#: gtk/gtkiconview.c:569
+#: gtk/gtkiconview.c:571
 msgid "Model column used to retrieve the icon pixbuf from"
 msgstr "Pixbufaren ikonoa eskuratzeko erabiliko de zubate-modeloa"
 
-#: gtk/gtkiconview.c:587
+#: gtk/gtkiconview.c:589
 msgid "Model column used to retrieve the text from"
 msgstr "Testua eskuratzeko erabiliko den zutabe-modeloa"
 
-#: gtk/gtkiconview.c:606
+#: gtk/gtkiconview.c:608
 msgid "Markup column"
 msgstr "Markaketa-zutabea"
 
-#: gtk/gtkiconview.c:607
+#: gtk/gtkiconview.c:609
 msgid "Model column used to retrieve the text if using Pango markup"
 msgstr ""
 "Testua eskuratzeko erabiliko den zutabe-modeloa, Pango markaketa erabiltzen "
 "bada"
 
 #
-#: gtk/gtkiconview.c:614
+#: gtk/gtkiconview.c:616
 msgid "Icon View Model"
 msgstr "Ikono-ikustaile modeloa"
 
-#: gtk/gtkiconview.c:615
+#: gtk/gtkiconview.c:617
 msgid "The model for the icon view"
 msgstr "Ikono-ikustailaren modeloa"
 
-#: gtk/gtkiconview.c:631
+#: gtk/gtkiconview.c:633
 msgid "Number of columns"
 msgstr "Zutabe kopurua"
 
-#: gtk/gtkiconview.c:632
+#: gtk/gtkiconview.c:634
 msgid "Number of columns to display"
 msgstr "Bistaratuko diren zutabeen kopurua"
 
-#: gtk/gtkiconview.c:649
+#: gtk/gtkiconview.c:651
 msgid "Width for each item"
 msgstr "Elementu bakoitzaren zabalera"
 
-#: gtk/gtkiconview.c:650
+#: gtk/gtkiconview.c:652
 msgid "The width used for each item"
 msgstr "Elementu bakoitzean erabiliko den zabalera"
 
-#: gtk/gtkiconview.c:666
+#: gtk/gtkiconview.c:668
 msgid "Space which is inserted between cells of an item"
 msgstr "Elementu bateko gelaxken artean txertatuko den tartea"
 
 #
-#: gtk/gtkiconview.c:681
+#: gtk/gtkiconview.c:683
 msgid "Row Spacing"
 msgstr "Errenkada-tartea"
 
-#: gtk/gtkiconview.c:682
+#: gtk/gtkiconview.c:684
 msgid "Space which is inserted between grid rows"
 msgstr "Saretako errenkaden artean txertatuko den tartea"
 
-#: gtk/gtkiconview.c:697
+#: gtk/gtkiconview.c:699
 msgid "Column Spacing"
 msgstr "Zutabe-tartea"
 
-#: gtk/gtkiconview.c:698
+#: gtk/gtkiconview.c:700
 msgid "Space which is inserted between grid columns"
 msgstr "Saretako zutabeen artean txertatuko den tartea"
 
-#: gtk/gtkiconview.c:713
+#: gtk/gtkiconview.c:715
 msgid "Margin"
 msgstr "Marjina"
 
-#: gtk/gtkiconview.c:714
+#: gtk/gtkiconview.c:716
 msgid "Space which is inserted at the edges of the icon view"
 msgstr "Ikono-ikustailearen ertzetan txertatuko den tartea"
 
-#: gtk/gtkiconview.c:731
+#: gtk/gtkiconview.c:733
 msgid ""
 "How the text and icon of each item are positioned relative to each other"
 msgstr ""
 "Elementu bakoitzaren testua eta ikonoa elkarrekiko erlatiboki nola kokatu"
 
-#: gtk/gtkiconview.c:747 gtk/gtktreeview.c:612 gtk/gtktreeviewcolumn.c:307
+#: gtk/gtkiconview.c:749 gtk/gtktreeview.c:612 gtk/gtktreeviewcolumn.c:307
 msgid "Reorderable"
 msgstr "Berrantolagarria"
 
-#: gtk/gtkiconview.c:748 gtk/gtktreeview.c:613
+#: gtk/gtkiconview.c:750 gtk/gtktreeview.c:613
 msgid "View is reorderable"
 msgstr "Ikuspegia berrantolagarria da"
 
-#: gtk/gtkiconview.c:755 gtk/gtktreeview.c:763
+#: gtk/gtkiconview.c:757 gtk/gtktreeview.c:763
 msgid "Tooltip Column"
 msgstr "Argibidearen zutabea"
 
-#: gtk/gtkiconview.c:756
+#: gtk/gtkiconview.c:758
 msgid "The column in the model containing the tooltip texts for the items"
 msgstr "Elementuen argibideak dituen modeloaren zutabea."
 
 #
-#: gtk/gtkiconview.c:767
+#: gtk/gtkiconview.c:769
 msgid "Selection Box Color"
 msgstr "Hautapen-koadroaren kolorea"
 
-#: gtk/gtkiconview.c:768
+#: gtk/gtkiconview.c:770
 msgid "Color of the selection box"
 msgstr "Hautapen-koadroaren kolorea"
 
 #
-#: gtk/gtkiconview.c:774
+#: gtk/gtkiconview.c:776
 msgid "Selection Box Alpha"
 msgstr "Alfaren hautapen-koadroa"
 
-#: gtk/gtkiconview.c:775
+#: gtk/gtkiconview.c:777
 msgid "Opacity of the selection box"
 msgstr "Hautapen-koadroaren opakutasuna"
 
-#: gtk/gtkimage.c:130 gtk/gtkstatusicon.c:174
+#: gtk/gtkimage.c:130 gtk/gtkstatusicon.c:180
 msgid "Pixbuf"
 msgstr "Pixbuf"
 
-#: gtk/gtkimage.c:131 gtk/gtkstatusicon.c:175
+#: gtk/gtkimage.c:131 gtk/gtkstatusicon.c:181
 msgid "A GdkPixbuf to display"
 msgstr "Bistaratu beharreko GdkPixbuf-a"
 
@@ -2853,11 +2853,11 @@ msgid "Mask bitmap to use with GdkImage or GdkPixmap"
 msgstr ""
 "Maskaratu GdkImage-rekin edo GdkPixmap-arekin erabili beharreko bitmap-a"
 
-#: gtk/gtkimage.c:163 gtk/gtkstatusicon.c:183
+#: gtk/gtkimage.c:163 gtk/gtkstatusicon.c:189
 msgid "Filename to load and display"
 msgstr "Kargatu eta bistaratu beharreko fitxategi-izena"
 
-#: gtk/gtkimage.c:172 gtk/gtkstatusicon.c:191
+#: gtk/gtkimage.c:172 gtk/gtkstatusicon.c:197
 msgid "Stock ID for a stock image to display"
 msgstr "Bistaratu behar den stock-irudiaren stock-IDa"
 
@@ -2900,11 +2900,11 @@ msgid "GdkPixbufAnimation to display"
 msgstr "Bistaratu beharreko GdkPixbufAnimation"
 
 #
-#: gtk/gtkimage.c:237 gtk/gtkstatusicon.c:206
+#: gtk/gtkimage.c:237 gtk/gtkstatusicon.c:212
 msgid "Storage type"
 msgstr "Biltegi-mota"
 
-#: gtk/gtkimage.c:238 gtk/gtkstatusicon.c:207
+#: gtk/gtkimage.c:238 gtk/gtkstatusicon.c:213
 msgid "The representation being used for image data"
 msgstr "Irudien datuentzat erabiltzen den adierazpidea"
 
@@ -3233,11 +3233,11 @@ msgstr "Azpimenua"
 msgid "The submenu attached to the menu item, or NULL if it has none"
 msgstr "Menuko elementuari erantsitako azpimenua, edo NULL ez badu ezer"
 
-#: gtk/gtkmenushell.c:363
+#: gtk/gtkmenushell.c:368
 msgid "Take Focus"
 msgstr "Hartu fokua"
 
-#: gtk/gtkmenushell.c:364
+#: gtk/gtkmenushell.c:369
 msgid "A boolean that determines whether the menu grabs the keyboard focus"
 msgstr ""
 "Menuak teklatuaren fokua hartuko duen ala ez zehazten duen balio boolearra"
@@ -3630,7 +3630,7 @@ msgstr "Txikitu"
 msgid "If TRUE, the child can be made smaller than its requisition"
 msgstr "TRUE (egia) bada, umea eskakizunak baino txikiagoa egin daiteke"
 
-#: gtk/gtkplug.c:146 gtk/gtkstatusicon.c:257
+#: gtk/gtkplug.c:146 gtk/gtkstatusicon.c:263
 msgid "Embedded"
 msgstr "Kapsulatuta"
 
@@ -4181,11 +4181,11 @@ msgid ""
 "spacing"
 msgstr "Barruti osorako marraztu edo desplazamenduko geziak eta tarteak kendu"
 
-#: gtk/gtkrecentaction.c:677 gtk/gtkrecentchoosermenu.c:209
+#: gtk/gtkrecentaction.c:679 gtk/gtkrecentchoosermenu.c:209
 msgid "Show Numbers"
 msgstr "Erakutsi zenbakiak"
 
-#: gtk/gtkrecentaction.c:678 gtk/gtkrecentchoosermenu.c:210
+#: gtk/gtkrecentaction.c:680 gtk/gtkrecentchoosermenu.c:210
 msgid "Whether the items should be displayed with a number"
 msgstr "Elementuak zenbaki batekin bistaratu behar diren edo ez"
 
@@ -5013,31 +5013,31 @@ msgstr ""
 msgid "Style of bevel around the statusbar text"
 msgstr "Egoera-barrako testuaren inguruko alaka-estiloa"
 
-#: gtk/gtkstatusicon.c:216
+#: gtk/gtkstatusicon.c:222
 msgid "The size of the icon"
 msgstr "Ikonoaren tamaina"
 
-#: gtk/gtkstatusicon.c:226
+#: gtk/gtkstatusicon.c:232
 msgid "The screen where this status icon will be displayed"
 msgstr "Egoerako ikono hau bistaratuko den pantaila"
 
-#: gtk/gtkstatusicon.c:233
+#: gtk/gtkstatusicon.c:239
 msgid "Blinking"
 msgstr "Keinukaria"
 
-#: gtk/gtkstatusicon.c:234
+#: gtk/gtkstatusicon.c:240
 msgid "Whether or not the status icon is blinking"
 msgstr "Egoerako ikonoa keinuka ari den edo ez"
 
-#: gtk/gtkstatusicon.c:242
+#: gtk/gtkstatusicon.c:248
 msgid "Whether or not the status icon is visible"
 msgstr "Egoerako ikonoa ikusgai dagoen edo ez"
 
-#: gtk/gtkstatusicon.c:258
+#: gtk/gtkstatusicon.c:264
 msgid "Whether or not the status icon is embedded"
 msgstr "Egoerako ikonoa kapsulatuta dagoen edo ez"
 
-#: gtk/gtkstatusicon.c:274 gtk/gtktrayicon-x11.c:97
+#: gtk/gtkstatusicon.c:280 gtk/gtktrayicon-x11.c:97
 msgid "The orientation of the tray"
 msgstr "Erretiluraren orientazioa"
 

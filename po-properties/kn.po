@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-properties.HEAD\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-01-29 22:40-0500\n"
+"POT-Creation-Date: 2008-02-12 17:52-0500\n"
 "PO-Revision-Date: 2007-09-16 12:38+0530\n"
 "Last-Translator: Shankar Prasad <svenkate@redhat.com>\n"
 "Language-Team: Kannada <en@li.org>\n"
@@ -91,7 +91,7 @@ msgstr "ಪೂರ್ವನಿಯೋಜಿತ ಪ್ರದರ್ಶಕ"
 msgid "The default display for GDK"
 msgstr "GDK ಗಾಗಿನ ಪೂರ್ವನಿಯೋಜಿತ ಪ್ರದರ್ಶಕ"
 
-#: gdk/gdkpango.c:490 gtk/gtkinvisible.c:86 gtk/gtkstatusicon.c:225
+#: gdk/gdkpango.c:490 gtk/gtkinvisible.c:86 gtk/gtkstatusicon.c:231
 #: gtk/gtkwindow.c:600
 msgid "Screen"
 msgstr "ತೆರೆ(Screen)"
@@ -291,12 +291,12 @@ msgid "The stock icon displayed in widgets representing this action."
 msgstr "ಈ ಕಾರ್ಯವನ್ನು ಪ್ರತಿನಿಧಿಸುವ ಶೇಖರಿತ ಚಿಹ್ನೆಗಳು ಸಂಪರ್ಕ ತಟದಲ್ಲಿ ಪ್ರದರ್ಶಿಸಲ್ಪಡುತ್ತವೆ."
 
 #: gtk/gtkaction.c:258 gtk/gtkcellrendererpixbuf.c:172 gtk/gtkimage.c:229
-#: gtk/gtkprinter.c:168 gtk/gtkstatusicon.c:198 gtk/gtkwindow.c:592
+#: gtk/gtkprinter.c:168 gtk/gtkstatusicon.c:204 gtk/gtkwindow.c:592
 msgid "Icon Name"
 msgstr "ಚಿಹ್ನೆಯ ಹೆಸರು"
 
 #: gtk/gtkaction.c:259 gtk/gtkcellrendererpixbuf.c:173 gtk/gtkimage.c:230
-#: gtk/gtkstatusicon.c:199
+#: gtk/gtkstatusicon.c:205
 msgid "The name of the icon from the icon theme"
 msgstr "ಚಿಹ್ನೆ ಥೀಮಿನಲ್ಲಿನ ಚಿಹ್ನೆಯ ಹೆಸರು"
 
@@ -362,7 +362,7 @@ msgstr "ಸಂವೇದಿ"
 msgid "Whether the action is enabled."
 msgstr "ಈ ಕ್ರಿಯೆಯು ಶಕ್ತಗೊಂಡಿದೆಯೆ."
 
-#: gtk/gtkaction.c:320 gtk/gtkactiongroup.c:184 gtk/gtkstatusicon.c:241
+#: gtk/gtkaction.c:320 gtk/gtkactiongroup.c:184 gtk/gtkstatusicon.c:247
 #: gtk/gtktreeviewcolumn.c:191 gtk/gtkwidget.c:512
 msgid "Visible"
 msgstr "ಗೋಚರ"
@@ -701,7 +701,7 @@ msgid ""
 "g., help buttons"
 msgstr "ಸಮೂಹವನ್ನು/ಬಳಗವನ್ನು ತೆಗೆದುಹಾಕು"
 
-#: gtk/gtkbox.c:98 gtk/gtkexpander.c:219 gtk/gtkiconview.c:665
+#: gtk/gtkbox.c:98 gtk/gtkexpander.c:219 gtk/gtkiconview.c:667
 #: gtk/gtktreeviewcolumn.c:216
 msgid "Spacing"
 msgstr "ಅಂತರ"
@@ -908,7 +908,7 @@ msgid ""
 "rectangle"
 msgstr "ಕೆಲಸದಹಾಳೆಯ (ವರ್ಕ್ ಷೀಟ್) ಗುಣಗಳು"
 
-#: gtk/gtkbutton.c:462 gtk/gtkentry.c:530 gtk/gtkentry.c:890
+#: gtk/gtkbutton.c:462 gtk/gtkentry.c:530 gtk/gtkentry.c:892
 msgid "Inner Border"
 msgstr "ಒಳಗಿನ ಅಂಚು"
 
@@ -1213,7 +1213,7 @@ msgstr "ವಿಸ್ತಾರಕ"
 msgid "Pixbuf for closed expander"
 msgstr "ವಿಸ್ತಾರಕ"
 
-#: gtk/gtkcellrendererpixbuf.c:136 gtk/gtkimage.c:171 gtk/gtkstatusicon.c:190
+#: gtk/gtkcellrendererpixbuf.c:136 gtk/gtkimage.c:171 gtk/gtkstatusicon.c:196
 #, fuzzy
 msgid "Stock ID"
 msgstr "ಅನನ್ಯತೆ (ಐ.ಡಿ)"
@@ -1224,7 +1224,7 @@ msgid "The stock ID of the stock icon to render"
 msgstr "ಚಿಹ್ನೆ ಗಾತ್ರ"
 
 #: gtk/gtkcellrendererpixbuf.c:144 gtk/gtkrecentmanager.c:281
-#: gtk/gtkstatusicon.c:215
+#: gtk/gtkstatusicon.c:221
 msgid "Size"
 msgstr "ಗಾತ್ರ"
 
@@ -1299,8 +1299,8 @@ msgstr "ಪಠ್ಯ ಮಾತ್ರ"
 msgid "The vertical text alignment, from 0 (top) to 1 (bottom)."
 msgstr "ಲಂಬ ಸಾಲುಗಳು"
 
-#: gtk/gtkcellrendererprogress.c:221 gtk/gtkiconview.c:730
-#: gtk/gtkprogressbar.c:130 gtk/gtkstatusicon.c:273 gtk/gtktoolbar.c:475
+#: gtk/gtkcellrendererprogress.c:221 gtk/gtkiconview.c:732
+#: gtk/gtkprogressbar.c:130 gtk/gtkstatusicon.c:279 gtk/gtktoolbar.c:475
 #: gtk/gtktrayicon-x11.c:96
 msgid "Orientation"
 msgstr "ನಿಲುವು (Orientation)"
@@ -1858,7 +1858,7 @@ msgstr "ಶೀರ್ಷಿಕೆ"
 msgid "The title of the color selection dialog"
 msgstr "ಬಣ್ಣ ತಿದ್ದುಪಡಿ"
 
-#: gtk/gtkcolorbutton.c:202 gtk/gtkcolorsel.c:1857
+#: gtk/gtkcolorbutton.c:202 gtk/gtkcolorsel.c:1859
 msgid "Current Color"
 msgstr "ಪ್ರಸ್ತುತ ಇರುವ ಬಣ್ಣ"
 
@@ -1866,7 +1866,7 @@ msgstr "ಪ್ರಸ್ತುತ ಇರುವ ಬಣ್ಣ"
 msgid "The selected color"
 msgstr "ಆರಿಸಲ್ಪಟ್ಟ ಬಣ್ಣ"
 
-#: gtk/gtkcolorbutton.c:217 gtk/gtkcolorsel.c:1864
+#: gtk/gtkcolorbutton.c:217 gtk/gtkcolorsel.c:1866
 msgid "Current Alpha"
 msgstr "ಪ್ರಸ್ತುತ ಇರುವ ಆಲ್ಫಾ"
 
@@ -1875,39 +1875,39 @@ msgstr "ಪ್ರಸ್ತುತ ಇರುವ ಆಲ್ಫಾ"
 msgid "The selected opacity value (0 fully transparent, 65535 fully opaque)"
 msgstr "ಆಯ್ದ"
 
-#: gtk/gtkcolorsel.c:1843
+#: gtk/gtkcolorsel.c:1845
 #, fuzzy
 msgid "Has Opacity Control"
 msgstr "ಅಪಾರದರ್ಶಕತ್ವ"
 
-#: gtk/gtkcolorsel.c:1844
+#: gtk/gtkcolorsel.c:1846
 #, fuzzy
 msgid "Whether the color selector should allow setting opacity"
 msgstr "ಬಣ್ಣ ಪದ್ಧತಿ (ಸ್ಕೀಮ್)"
 
-#: gtk/gtkcolorsel.c:1850
+#: gtk/gtkcolorsel.c:1852
 msgid "Has palette"
 msgstr "ವರ್ಣಫಲಕವನ್ನು ಹೊಂದಿದೆ"
 
-#: gtk/gtkcolorsel.c:1851
+#: gtk/gtkcolorsel.c:1853
 msgid "Whether a palette should be used"
 msgstr ""
 
-#: gtk/gtkcolorsel.c:1858
+#: gtk/gtkcolorsel.c:1860
 msgid "The current color"
 msgstr "ಪ್ರಸ್ತುತ ಇರುವ ಬಣ್ಣ"
 
-#: gtk/gtkcolorsel.c:1865
+#: gtk/gtkcolorsel.c:1867
 #, fuzzy
 msgid "The current opacity value (0 fully transparent, 65535 fully opaque)"
 msgstr "ಪ್ರಸ್ತುತ ಪಾಲಕ"
 
-#: gtk/gtkcolorsel.c:1879
+#: gtk/gtkcolorsel.c:1881
 #, fuzzy
 msgid "Custom palette"
 msgstr "ಗ್ರಾಹಕೀಯ (ಕಸ್ಟಮ್)"
 
-#: gtk/gtkcolorsel.c:1880
+#: gtk/gtkcolorsel.c:1882
 #, fuzzy
 msgid "Palette to use in the color selector"
 msgstr "ಬಣ್ಣ ತಿದ್ದುಪಡಿ"
@@ -2315,26 +2315,26 @@ msgstr "ಗಣಕತೆರೆಗೆ"
 msgid "Which kind of shadow to draw around the entry when has-frame is set"
 msgstr "ನೆರಳು"
 
-#: gtk/gtkentry.c:891
+#: gtk/gtkentry.c:893
 msgid "Border between text and frame."
 msgstr "ಪಠ್ಯ ಹಾಗು ಚೌಕಟ್ಟಿನ ನಡುವಿನ ಅಂಚು."
 
-#: gtk/gtkentry.c:896 gtk/gtklabel.c:625
+#: gtk/gtkentry.c:898 gtk/gtklabel.c:625
 #, fuzzy
 msgid "Select on focus"
 msgstr "ಎಲ್ಲವನ್ನೂ ಆರಿಸು"
 
-#: gtk/gtkentry.c:897
+#: gtk/gtkentry.c:899
 #, fuzzy
 msgid "Whether to select the contents of an entry when it is focused"
 msgstr "ಒಳಪಿಡಿಗಳನ್ನು ಸಂಪಾದಿಸು"
 
-#: gtk/gtkentry.c:911
+#: gtk/gtkentry.c:913
 #, fuzzy
 msgid "Password Hint Timeout"
 msgstr "ಪ್ರಸ್ತುತ ಗುಪ್ತಪದ (ಪಾಸ್ ವರ್ಡ್)"
 
-#: gtk/gtkentry.c:912
+#: gtk/gtkentry.c:914
 #, fuzzy
 msgid "How long to show the last input character in hidden entries"
 msgstr "ಲಿಪ್ಯಂಶ (ಕಾರೆಕ್ಟರ್)"
@@ -2359,7 +2359,7 @@ msgstr "ಕನಿಷ್ಠ"
 msgid "Minimum length of the search key in order to look up matches"
 msgstr "ಕನಿಷ್ಠ"
 
-#: gtk/gtkentrycompletion.c:303 gtk/gtkiconview.c:586
+#: gtk/gtkentrycompletion.c:303 gtk/gtkiconview.c:588
 #, fuzzy
 msgid "Text column"
 msgstr "ಪಠ್ಯದ ಬಣ್ಣ"
@@ -2624,7 +2624,7 @@ msgid "The desired width of the button widget, in characters."
 msgstr "ಮಧ್ಯದ ಗುಂಡಿ"
 
 #: gtk/gtkfilesel.c:525 gtk/gtkimage.c:162 gtk/gtkrecentmanager.c:250
-#: gtk/gtkstatusicon.c:182
+#: gtk/gtkstatusicon.c:188
 msgid "Filename"
 msgstr "ಕಡತದ ಹೆಸರು"
 
@@ -2828,155 +2828,155 @@ msgid ""
 "handle_position"
 msgstr "ಮೌಲ್ಯ"
 
-#: gtk/gtkiconview.c:549
+#: gtk/gtkiconview.c:551
 #, fuzzy
 msgid "Selection mode"
 msgstr "ಆಯ್ಕೆ"
 
-#: gtk/gtkiconview.c:550
+#: gtk/gtkiconview.c:552
 #, fuzzy
 msgid "The selection mode"
 msgstr "ಆಯ್ಕೆ"
 
-#: gtk/gtkiconview.c:568
+#: gtk/gtkiconview.c:570
 #, fuzzy
 msgid "Pixbuf column"
 msgstr "ಲಂಬಸಾಲು"
 
-#: gtk/gtkiconview.c:569
+#: gtk/gtkiconview.c:571
 #, fuzzy
 msgid "Model column used to retrieve the icon pixbuf from"
 msgstr "ಮರುಪಡೆ (ರಿಟ್ರೀವ್)"
 
-#: gtk/gtkiconview.c:587
+#: gtk/gtkiconview.c:589
 #, fuzzy
 msgid "Model column used to retrieve the text from"
 msgstr "ಮರುಪಡೆ (ರಿಟ್ರೀವ್)"
 
-#: gtk/gtkiconview.c:606
+#: gtk/gtkiconview.c:608
 #, fuzzy
 msgid "Markup column"
 msgstr "ಲಂಬಸಾಲು"
 
-#: gtk/gtkiconview.c:607
+#: gtk/gtkiconview.c:609
 #, fuzzy
 msgid "Model column used to retrieve the text if using Pango markup"
 msgstr "ಮರುಪಡೆ (ರಿಟ್ರೀವ್)"
 
-#: gtk/gtkiconview.c:614
+#: gtk/gtkiconview.c:616
 #, fuzzy
 msgid "Icon View Model"
 msgstr "ನೋಟ ವಿಧಾನ"
 
-#: gtk/gtkiconview.c:615
+#: gtk/gtkiconview.c:617
 #, fuzzy
 msgid "The model for the icon view"
 msgstr "ನೋಟ ವಿಧಾನ"
 
-#: gtk/gtkiconview.c:631
+#: gtk/gtkiconview.c:633
 #, fuzzy
 msgid "Number of columns"
 msgstr "ಲಂಬಸಾಲುಗಳು"
 
-#: gtk/gtkiconview.c:632
+#: gtk/gtkiconview.c:634
 #, fuzzy
 msgid "Number of columns to display"
 msgstr "ಪ್ರದರ್ಶನವನ್ನು ಸಂರಚಿಸು"
 
-#: gtk/gtkiconview.c:649
+#: gtk/gtkiconview.c:651
 #, fuzzy
 msgid "Width for each item"
 msgstr "ಅಗಲ"
 
-#: gtk/gtkiconview.c:650
+#: gtk/gtkiconview.c:652
 #, fuzzy
 msgid "The width used for each item"
 msgstr "ಅಗಲ"
 
-#: gtk/gtkiconview.c:666
+#: gtk/gtkiconview.c:668
 #, fuzzy
 msgid "Space which is inserted between cells of an item"
 msgstr "ಒಳಸೇರಿಸಲಾದ/ಒಳಸೇರಿಸಲಾಯಿತು"
 
-#: gtk/gtkiconview.c:681
+#: gtk/gtkiconview.c:683
 #, fuzzy
 msgid "Row Spacing"
 msgstr "ಚೌಕಳಿ ಅಂತರ"
 
-#: gtk/gtkiconview.c:682
+#: gtk/gtkiconview.c:684
 #, fuzzy
 msgid "Space which is inserted between grid rows"
 msgstr "ಒಳಸೇರಿಸಲಾದ/ಒಳಸೇರಿಸಲಾಯಿತು"
 
-#: gtk/gtkiconview.c:697
+#: gtk/gtkiconview.c:699
 #, fuzzy
 msgid "Column Spacing"
 msgstr "ಚೌಕಳಿ ಅಂತರ"
 
-#: gtk/gtkiconview.c:698
+#: gtk/gtkiconview.c:700
 #, fuzzy
 msgid "Space which is inserted between grid columns"
 msgstr "ಒಳಸೇರಿಸಲಾದ/ಒಳಸೇರಿಸಲಾಯಿತು"
 
-#: gtk/gtkiconview.c:713
+#: gtk/gtkiconview.c:715
 msgid "Margin"
 msgstr "ಅಂಚು"
 
-#: gtk/gtkiconview.c:714
+#: gtk/gtkiconview.c:716
 #, fuzzy
 msgid "Space which is inserted at the edges of the icon view"
 msgstr "ಒಳಸೇರಿಸಲಾದ/ಒಳಸೇರಿಸಲಾಯಿತು"
 
-#: gtk/gtkiconview.c:731
+#: gtk/gtkiconview.c:733
 #, fuzzy
 msgid ""
 "How the text and icon of each item are positioned relative to each other"
 msgstr "ಸಾಪೇಕ್ಷ"
 
-#: gtk/gtkiconview.c:747 gtk/gtktreeview.c:612 gtk/gtktreeviewcolumn.c:307
+#: gtk/gtkiconview.c:749 gtk/gtktreeview.c:612 gtk/gtktreeviewcolumn.c:307
 msgid "Reorderable"
 msgstr ""
 
-#: gtk/gtkiconview.c:748 gtk/gtktreeview.c:613
+#: gtk/gtkiconview.c:750 gtk/gtktreeview.c:613
 #, fuzzy
 msgid "View is reorderable"
 msgstr "ನೋಟ ವಿಧಾನ"
 
-#: gtk/gtkiconview.c:755 gtk/gtktreeview.c:763
+#: gtk/gtkiconview.c:757 gtk/gtktreeview.c:763
 #, fuzzy
 msgid "Tooltip Column"
 msgstr "ಲಂಬಸಾಲು"
 
-#: gtk/gtkiconview.c:756
+#: gtk/gtkiconview.c:758
 #, fuzzy
 msgid "The column in the model containing the tooltip texts for the items"
 msgstr "ಒಳಗೊಂಡಿರುವ"
 
-#: gtk/gtkiconview.c:767
+#: gtk/gtkiconview.c:769
 #, fuzzy
 msgid "Selection Box Color"
 msgstr "ಬಣ್ಣ ತಿದ್ದುಪಡಿ"
 
-#: gtk/gtkiconview.c:768
+#: gtk/gtkiconview.c:770
 #, fuzzy
 msgid "Color of the selection box"
 msgstr "ಬಣ್ಣ ತಿದ್ದುಪಡಿ"
 
-#: gtk/gtkiconview.c:774
+#: gtk/gtkiconview.c:776
 #, fuzzy
 msgid "Selection Box Alpha"
 msgstr "ಆಯ್ಕೆ"
 
-#: gtk/gtkiconview.c:775
+#: gtk/gtkiconview.c:777
 #, fuzzy
 msgid "Opacity of the selection box"
 msgstr "ಆಯ್ಕೆ"
 
-#: gtk/gtkimage.c:130 gtk/gtkstatusicon.c:174
+#: gtk/gtkimage.c:130 gtk/gtkstatusicon.c:180
 msgid "Pixbuf"
 msgstr "Pixbuf"
 
-#: gtk/gtkimage.c:131 gtk/gtkstatusicon.c:175
+#: gtk/gtkimage.c:131 gtk/gtkstatusicon.c:181
 msgid "A GdkPixbuf to display"
 msgstr "ಪ್ರದರ್ಶಿಸಲು ಒಂದು GdkPixbuf"
 
@@ -3005,11 +3005,11 @@ msgstr "ಮುಸುಕು(Mask)"
 msgid "Mask bitmap to use with GdkImage or GdkPixmap"
 msgstr "ಚುಕ್ಕಿಪಟ"
 
-#: gtk/gtkimage.c:163 gtk/gtkstatusicon.c:183
+#: gtk/gtkimage.c:163 gtk/gtkstatusicon.c:189
 msgid "Filename to load and display"
 msgstr "ಲೋಡ್ ಮಾಡಲು ಹಾಗು ಪ್ರದರ್ಶಿಸಲು ಕಡತದ ಹೆಸರು"
 
-#: gtk/gtkimage.c:172 gtk/gtkstatusicon.c:191
+#: gtk/gtkimage.c:172 gtk/gtkstatusicon.c:197
 #, fuzzy
 msgid "Stock ID for a stock image to display"
 msgstr "ಪ್ರದರ್ಶನವನ್ನು ಸಂರಚಿಸು"
@@ -3051,11 +3051,11 @@ msgstr "ಸಜೀವನಗಳು (ಆನಿಮೇಶನ್)"
 msgid "GdkPixbufAnimation to display"
 msgstr "ಪ್ರದರ್ಶಿಸಲು GdkPixbufAnimation"
 
-#: gtk/gtkimage.c:237 gtk/gtkstatusicon.c:206
+#: gtk/gtkimage.c:237 gtk/gtkstatusicon.c:212
 msgid "Storage type"
 msgstr "ಸಂಗ್ರಹ ಬಗೆ"
 
-#: gtk/gtkimage.c:238 gtk/gtkstatusicon.c:207
+#: gtk/gtkimage.c:238 gtk/gtkstatusicon.c:213
 #, fuzzy
 msgid "The representation being used for image data"
 msgstr "ಬಿಂಬ (ಇಮೇಜ್)"
@@ -3427,12 +3427,12 @@ msgstr "ಉಪಪರಿವಿಡಿ"
 msgid "The submenu attached to the menu item, or NULL if it has none"
 msgstr "ಹೊಸ ಉಪಪರಿವಿಡಿ"
 
-#: gtk/gtkmenushell.c:363
+#: gtk/gtkmenushell.c:368
 #, fuzzy
 msgid "Take Focus"
 msgstr "ನಾಭೀಕರಿಸು (ಫೋಕಸ್)"
 
-#: gtk/gtkmenushell.c:364
+#: gtk/gtkmenushell.c:369
 #, fuzzy
 msgid "A boolean that determines whether the menu grabs the keyboard focus"
 msgstr "ಕೀಲಿಮಣೆ ವಿನ್ಯಾಸ"
@@ -3875,7 +3875,7 @@ msgstr "ಕುಗ್ಗಿಸು"
 msgid "If TRUE, the child can be made smaller than its requisition"
 msgstr ""
 
-#: gtk/gtkplug.c:146 gtk/gtkstatusicon.c:257
+#: gtk/gtkplug.c:146 gtk/gtkstatusicon.c:263
 msgid "Embedded"
 msgstr "ಹುದುಗಿಸಲ್ಪಟ್ಟ (ಎಂಬೆಡೆಡ್)"
 
@@ -4468,11 +4468,11 @@ msgid ""
 "spacing"
 msgstr "ಚೌಕಳಿ ಅಂತರ"
 
-#: gtk/gtkrecentaction.c:677 gtk/gtkrecentchoosermenu.c:209
+#: gtk/gtkrecentaction.c:679 gtk/gtkrecentchoosermenu.c:209
 msgid "Show Numbers"
 msgstr "ಸಂಖ್ಯೆಗಳನ್ನು ತೋರಿಸು"
 
-#: gtk/gtkrecentaction.c:678 gtk/gtkrecentchoosermenu.c:210
+#: gtk/gtkrecentaction.c:680 gtk/gtkrecentchoosermenu.c:210
 #, fuzzy
 msgid "Whether the items should be displayed with a number"
 msgstr "ಪ್ರದರ್ಶಿತ"
@@ -5328,32 +5328,32 @@ msgstr ""
 msgid "Style of bevel around the statusbar text"
 msgstr ""
 
-#: gtk/gtkstatusicon.c:216
+#: gtk/gtkstatusicon.c:222
 msgid "The size of the icon"
 msgstr "ಚಿಹ್ನೆಯ ಗಾತ್ರ"
 
-#: gtk/gtkstatusicon.c:226
+#: gtk/gtkstatusicon.c:232
 msgid "The screen where this status icon will be displayed"
 msgstr ""
 
-#: gtk/gtkstatusicon.c:233
+#: gtk/gtkstatusicon.c:239
 #, fuzzy
 msgid "Blinking"
 msgstr "ಮಿಣುಕು ಸ್ಥಳಸೂಚಕ (ಕರ್ಸರ್)"
 
-#: gtk/gtkstatusicon.c:234
+#: gtk/gtkstatusicon.c:240
 msgid "Whether or not the status icon is blinking"
 msgstr ""
 
-#: gtk/gtkstatusicon.c:242
+#: gtk/gtkstatusicon.c:248
 msgid "Whether or not the status icon is visible"
 msgstr ""
 
-#: gtk/gtkstatusicon.c:258
+#: gtk/gtkstatusicon.c:264
 msgid "Whether or not the status icon is embedded"
 msgstr ""
 
-#: gtk/gtkstatusicon.c:274 gtk/gtktrayicon-x11.c:97
+#: gtk/gtkstatusicon.c:280 gtk/gtktrayicon-x11.c:97
 msgid "The orientation of the tray"
 msgstr ""
 
