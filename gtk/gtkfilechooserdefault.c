@@ -4078,7 +4078,8 @@ trap_activate_cb (GtkWidget   *widget,
   if ((event->keyval == GDK_Return
        || event->keyval == GDK_ISO_Enter
        || event->keyval == GDK_KP_Enter
-       || event->keyval == GDK_space)
+       || event->keyval == GDK_space
+       || event->keyval == GDK_KP_Space)
       && ((event->state & modifiers) == 0)
       && !(impl->action == GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER ||
 	   impl->action == GTK_FILE_CHOOSER_ACTION_CREATE_FOLDER))

@@ -479,6 +479,9 @@ gtk_paned_class_init (GtkPanedClass *class)
 				GDK_Return, 0,
 				"accept_position", 0);
   gtk_binding_entry_add_signal (binding_set,
+				GDK_ISO_Enter, 0,
+				"accept_position", 0);
+  gtk_binding_entry_add_signal (binding_set,
 				GDK_KP_Enter, 0,
 				"accept_position", 0);
   gtk_binding_entry_add_signal (binding_set,

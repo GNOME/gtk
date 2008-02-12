@@ -820,6 +820,8 @@ gtk_entry_class_init (GtkEntryClass *class)
    */
   gtk_binding_entry_add_signal (binding_set, GDK_Return, 0,
 				"activate", 0);
+  gtk_binding_entry_add_signal (binding_set, GDK_ISO_Enter, 0,
+				"activate", 0);
   gtk_binding_entry_add_signal (binding_set, GDK_KP_Enter, 0,
 				"activate", 0);
   

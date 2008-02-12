@@ -870,8 +870,12 @@ gtk_icon_view_class_init (GtkIconViewClass *klass)
 				"unselect_all", 0);
   gtk_binding_entry_add_signal (binding_set, GDK_space, GDK_CONTROL_MASK, 
 				"toggle_cursor_item", 0);
+  gtk_binding_entry_add_signal (binding_set, GDK_KP_Space, GDK_CONTROL_MASK,
+				"toggle_cursor_item", 0);
 
   gtk_binding_entry_add_signal (binding_set, GDK_space, 0, 
+				"activate_cursor_item", 0);
+  gtk_binding_entry_add_signal (binding_set, GDK_KP_Space, 0,
 				"activate_cursor_item", 0);
   gtk_binding_entry_add_signal (binding_set, GDK_Return, 0, 
 				"activate_cursor_item", 0);

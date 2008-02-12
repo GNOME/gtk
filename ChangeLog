@@ -1,3 +1,10 @@
+2008-02-12  Matthias Clasen  <mclasen@redhat.com>
+
+	Merged from trunk:
+
+	* gtk/*.c: Unify the handling of various "Enter" keysyms
+	all over the place.  (#515047, Christian Persch)
+
 2008-02-12  Kristian Rietveld  <kris@imendio.com>
 
 	Merge from trunk:
