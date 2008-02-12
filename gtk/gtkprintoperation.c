@@ -1517,8 +1517,7 @@ _gtk_print_operation_set_status (GtkPrintOperation *op,
     status = GTK_PRINT_STATUS_FINISHED_ABORTED;
 
   if (string == NULL)
-    string = g_strip_context (status_strs[status],
-			      gettext (status_strs[status]));
+    string = g_strip_context (status_strs[status], _(status_strs[status]));
   
   if (priv->status == status &&
       strcmp (string, priv->status_string) == 0)

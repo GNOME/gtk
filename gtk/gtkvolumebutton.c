@@ -29,12 +29,12 @@
 
 #include <config.h>
 
-#include <glib/gi18n.h>
 #include <atk/atk.h>
 
 #include "gtkvolumebutton.h"
 #include "gtkstock.h"
 #include "gtktooltip.h"
+#include "gtkintl.h"
 
 #include "gtkalias.h"
 

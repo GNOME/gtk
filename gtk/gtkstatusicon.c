@@ -53,6 +53,7 @@
 #include "gtklabel.h"
 #endif	
 
+#include "gtkmain.h"
 #include "gdkkeysyms.h"
 
 #include "gtkalias.h"

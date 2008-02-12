@@ -18,24 +18,20 @@
  * Boston, MA 02111-1307, USA.
  */
 
-#include <string.h>
-#include <glib/gfileutils.h>
-#include <glib/gi18n.h>
-#include <glib/gmacros.h>
-#include <glib/gmessages.h>
-#include <glib/gslist.h>
-#include <glib/gstrfuncs.h>
-#include <glib-object.h>
-#include <gmodule.h>
+#include <config.h>
 
+#include <string.h>
+
+#include <gmodule.h>
 #include <gdk/gdkenumtypes.h>
 #include <gdk/gdkkeys.h>
-#include <gtk/gtktypeutils.h>
+#include "gtktypeutils.h"
 #include "gtkbuilderprivate.h"
 #include "gtkbuilder.h"
 #include "gtkbuildable.h"
 #include "gtkdebug.h"
 #include "gtktypeutils.h"
+#include "gtkintl.h"
 #include "gtkalias.h"
 
 static void free_property_info (PropertyInfo *info);
