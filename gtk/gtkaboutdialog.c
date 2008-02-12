@@ -1718,7 +1718,8 @@ credits_key_press_event (GtkWidget      *text_view,
 
   switch (event->keyval)
     {
-      case GDK_Return: 
+      case GDK_Return:
+      case GDK_ISO_Enter:
       case GDK_KP_Enter:
         buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (text_view));
         gtk_text_buffer_get_iter_at_mark (buffer, &iter, 

@@ -1066,6 +1066,7 @@ palette_activate (GtkWidget   *widget,
   /* should have a drawing area subclass with an activate signal */
   if ((event->keyval == GDK_space) ||
       (event->keyval == GDK_Return) ||
+      (event->keyval == GDK_ISO_Enter) ||
       (event->keyval == GDK_KP_Enter) ||
       (event->keyval == GDK_KP_Space))
     {
@@ -1327,6 +1328,7 @@ key_press (GtkWidget   *invisible,
     {
     case GDK_space:
     case GDK_Return:
+    case GDK_ISO_Enter:
     case GDK_KP_Enter:
     case GDK_KP_Space:
       grab_color_at_mouse (screen, x, y, data);

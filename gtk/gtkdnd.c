@@ -4077,6 +4077,7 @@ gtk_drag_key_cb (GtkWidget         *widget,
 
 	case GDK_space:
 	case GDK_Return:
+        case GDK_ISO_Enter:
 	case GDK_KP_Enter:
 	case GDK_KP_Space:
 	  gtk_drag_end (info, event->time);

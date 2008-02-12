@@ -4094,6 +4094,7 @@ gtk_text_view_key_press_event (GtkWidget *widget, GdkEventKey *event)
   /* use overall editability not can_insert, more predictable for users */
   else if (text_view->editable &&
            (event->keyval == GDK_Return ||
+            event->keyval == GDK_ISO_Enter ||
             event->keyval == GDK_KP_Enter))
     {
       /* this won't actually insert the newline if the cursor isn't

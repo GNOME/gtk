@@ -297,6 +297,8 @@ gtk_scale_button_class_init (GtkScaleButtonClass *klass)
 
   gtk_binding_entry_add_signal (binding_set, GDK_space, 0,
 				"popup", 0);
+  gtk_binding_entry_add_signal (binding_set, GDK_KP_Space, 0,
+				"popup", 0);
   gtk_binding_entry_add_signal (binding_set, GDK_Return, 0,
 				"popup", 0);
   gtk_binding_entry_add_signal (binding_set, GDK_ISO_Enter, 0,

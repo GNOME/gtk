@@ -826,7 +826,8 @@ gtk_window_class_init (GtkWindowClass *klass)
   
   gtk_binding_entry_add_signal (binding_set, GDK_Return, 0,
                                 "activate_default", 0);
-
+  gtk_binding_entry_add_signal (binding_set, GDK_ISO_Enter, 0,
+                                "activate_default", 0);
   gtk_binding_entry_add_signal (binding_set, GDK_KP_Enter, 0,
                                 "activate_default", 0);
 
@@ -4877,7 +4878,7 @@ _gtk_window_query_nonaccels (GtkWindow      *window,
   if (!accel_mods)
     {
       static const guint bindings[] = {
-	GDK_space, GDK_KP_Space, GDK_Return, GDK_KP_Enter, GDK_Up, GDK_KP_Up, GDK_Down, GDK_KP_Down,
+	GDK_space, GDK_KP_Space, GDK_Return, GDK_ISO_Enter, GDK_KP_Enter, GDK_Up, GDK_KP_Up, GDK_Down, GDK_KP_Down,
 	GDK_Left, GDK_KP_Left, GDK_Right, GDK_KP_Right, GDK_Tab, GDK_KP_Tab, GDK_ISO_Left_Tab,
       };
       guint i;

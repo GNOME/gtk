@@ -1909,6 +1909,7 @@ gtk_text_key_press (GtkWidget   *widget,
         case GDK_KP_Down:
 	case GDK_Down:      scroll_int (text, +KEY_SCROLL_PIXELS); break;
 	case GDK_Return:
+        case GDK_ISO_Enter:
         case GDK_KP_Enter:
 	  if (event->state & GDK_CONTROL_MASK)
 	    gtk_signal_emit_by_name (GTK_OBJECT (text), "activate");
@@ -2028,6 +2029,7 @@ gtk_text_key_press (GtkWidget   *widget,
 	  gtk_editable_insert_text (GTK_EDITABLE (old_editable), "\t", 1, &position);
 	  break;
         case GDK_KP_Enter:
+        case GDK_ISO_Enter:
 	case GDK_Return:
 	  if (event->state & GDK_CONTROL_MASK)
 	    gtk_signal_emit_by_name (GTK_OBJECT (text), "activate");

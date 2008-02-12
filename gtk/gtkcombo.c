@@ -293,7 +293,9 @@ gtk_combo_window_key_press (GtkWidget   *window,
 {
   guint state = event->state & gtk_accelerator_get_default_mod_mask ();
 
-  if ((event->keyval == GDK_Return || event->keyval == GDK_KP_Enter) &&
+  if ((event->keyval == GDK_Return ||
+       event->keyval == GDK_ISO_Enter ||
+       event->keyval == GDK_KP_Enter) &&
       state == 0)
     {
       gtk_combo_popdown_list (combo);

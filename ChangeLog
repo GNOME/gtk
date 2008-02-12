@@ -1,5 +1,10 @@
 2008-02-12  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/*.c: Unify the handling of various "Enter" keysyms
+	all over the place.  (#515047, Christian Persch)
+
+2008-02-12  Matthias Clasen  <mclasen@redhat.com>
+
 	* gtk/gtkfilesystemmodel.c:
 	* gtk/gtkprinter.c:
 	* gtk/gtkwidget.c: Use g_value_set_static_string() where 
