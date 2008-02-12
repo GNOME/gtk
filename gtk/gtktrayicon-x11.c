@@ -139,13 +139,29 @@ static gboolean
 gtk_tray_icon_expose (GtkWidget      *widget, 
 		      GdkEventExpose *event)
 {
+  GtkWidget *focus_child;
+  gint border_width, x, y, width, height;
+  gboolean retval = FALSE;
+
   gdk_window_clear_area (widget->window, event->area.x, event->area.y,
 			 event->area.width, event->area.height);
 
-  if (GTK_WIDGET_CLASS (gtk_tray_icon_parent_class)->expose_event)  
-    return GTK_WIDGET_CLASS (gtk_tray_icon_parent_class)->expose_event (widget, event);
+  if (GTK_WIDGET_CLASS (gtk_tray_icon_parent_class)->expose_event)
+    retval = GTK_WIDGET_CLASS (gtk_tray_icon_parent_class)->expose_event (widget, event);
 
-  return FALSE;
+  focus_child = GTK_CONTAINER (widget)->focus_child;
+  if (focus_child && GTK_WIDGET_HAS_FOCUS (focus_child))
+    {
+      width  = widget->allocation.width;
+      height = widget->allocation.height;
+
+      gtk_paint_focus (widget->style, widget->window,
+                       GTK_WIDGET_STATE (widget),
+                       &event->area, widget, "tray_icon",
+                       x, y, width, height);
+    }
+
+  return retval;
 }
 
 static void
