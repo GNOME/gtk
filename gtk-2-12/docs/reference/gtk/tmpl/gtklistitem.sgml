@@ -1,0 +1,151 @@
+<!-- ##### SECTION Title ##### -->
+GtkListItem
+
+<!-- ##### SECTION Short_Description ##### -->
+An item in a GtkList
+
+<!-- ##### SECTION Long_Description ##### -->
+<para>
+The #GtkListItem widget is used for each item in a #GtkList.
+</para>
+<para>
+GtkList has has been deprecated since GTK+ 2.0 and should not be used
+in newly written code. Use #GtkTreeView instead.
+</para>
+
+<!-- ##### SECTION See_Also ##### -->
+<para>
+<variablelist>
+
+<varlistentry>
+<term>#GtkList</term>
+<listitem><para>the parent list widget.</para></listitem>
+</varlistentry>
+
+</variablelist>
+
+</para>
+
+<!-- ##### SECTION Stability_Level ##### -->
+
+
+<!-- ##### STRUCT GtkListItem ##### -->
+<para>
+The #GtkListItem struct contains private data only, and should
+only be accessed using the functions below.
+</para>
+
+
+<!-- ##### SIGNAL GtkListItem::end-selection ##### -->
+<para>
+
+</para>
+
+@listitem: the object which received the signal.
+
+<!-- ##### SIGNAL GtkListItem::extend-selection ##### -->
+<para>
+
+</para>
+
+@listitem: the object which received the signal.
+@scroll_type: 
+@position: 
+@auto_start_selection: 
+
+<!-- ##### SIGNAL GtkListItem::scroll-horizontal ##### -->
+<para>
+
+</para>
+
+@listitem: the object which received the signal.
+@scroll_type: 
+@position: 
+
+<!-- ##### SIGNAL GtkListItem::scroll-vertical ##### -->
+<para>
+
+</para>
+
+@listitem: the object which received the signal.
+@scroll_type: 
+@position: 
+
+<!-- ##### SIGNAL GtkListItem::select-all ##### -->
+<para>
+
+</para>
+
+@listitem: the object which received the signal.
+
+<!-- ##### SIGNAL GtkListItem::start-selection ##### -->
+<para>
+
+</para>
+
+@listitem: the object which received the signal.
+
+<!-- ##### SIGNAL GtkListItem::toggle-add-mode ##### -->
+<para>
+
+</para>
+
+@listitem: the object which received the signal.
+
+<!-- ##### SIGNAL GtkListItem::toggle-focus-row ##### -->
+<para>
+
+</para>
+
+@listitem: the object which received the signal.
+
+<!-- ##### SIGNAL GtkListItem::undo-selection ##### -->
+<para>
+
+</para>
+
+@listitem: the object which received the signal.
+
+<!-- ##### SIGNAL GtkListItem::unselect-all ##### -->
+<para>
+
+</para>
+
+@listitem: the object which received the signal.
+
+<!-- ##### FUNCTION gtk_list_item_new ##### -->
+<para>
+Creates a new #GtkListitem.
+</para>
+
+@Returns: a new #GtkListItem.
+
+
+<!-- ##### FUNCTION gtk_list_item_new_with_label ##### -->
+<para>
+Creates a new #GtkListItem with a child label containing the given string.
+</para>
+
+@label: the string to use for the child label.
+@Returns: a new #GtkListItem with a child #GtkLabel with the text set to
+@label.
+
+
+<!-- ##### FUNCTION gtk_list_item_select ##### -->
+<para>
+Selects the item, by emitting the item's "select" signal.
+Depending on the selection mode of the list, this may cause other items to
+be deselected.
+</para>
+
+@list_item: a #GtkListItem.
+
+
+<!-- ##### FUNCTION gtk_list_item_deselect ##### -->
+<para>
+Deselects the item, by emitting the item's "deselect" signal.
+</para>
+
+@list_item: a #GtkListItem.
+
+

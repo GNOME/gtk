@@ -1,0 +1,42 @@
+<!-- ##### SECTION Title ##### -->
+GtkIMMulticontext
+
+<!-- ##### SECTION Short_Description ##### -->
+An input method context supporting multiple, loadable input methods
+
+<!-- ##### SECTION Long_Description ##### -->
+<para>
+
+</para>
+
+<!-- ##### SECTION See_Also ##### -->
+<para>
+
+</para>
+
+<!-- ##### SECTION Stability_Level ##### -->
+
+
+<!-- ##### STRUCT GtkIMMulticontext ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### FUNCTION gtk_im_multicontext_new ##### -->
+<para>
+
+</para>
+
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_im_multicontext_append_menuitems ##### -->
+<para>
+
+</para>
+
+@context: 
+@menushell: 
+
+

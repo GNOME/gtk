@@ -1,0 +1,190 @@
+## Makefile for building the GDK DLL with Microsoft C
+## Use: nmake -f makefile.msc
+
+## You must first build the Win32-dependent sources in the win32 subdirectory.
+
+## There is no install target, you have to decide where and 
+## how to install for yourself.
+
+TOP = ..\..
+!INCLUDE $(TOP)/glib/build/win32/make.msc
+
+# Location of the Wintab toolkit. Downloadable from http://www.pointing.com.
+# definition should possibly go to build/win32/module.def, too.
+WTKIT = ..\..\wtkit126
+
+###############################################################
+
+# Nothing much configurable below
+
+!IFNDEF DEBUG
+# Full optimization:
+OPTIMIZE = -Ox -MD -Zi
+LINKDEBUG = /nodefaultlib:libc.lib
+!ELSE
+# Debugging:
+OPTIMIZE = -Zi -MDd
+LINKDEBUG = /nodefaultlib:libcd.lib /nodefaultlib:libc.lib /debug
+!ENDIF
+
+# cl -? describes the options
+CC = cl -G5 -GF $(OPTIMIZE) -W3 -nologo
+
+LDFLAGS = /link $(LINKDEBUG)
+
+# overwrite version?
+GTK_VER=2.0
+GDK_PIXBUF_VER=$(GTK_VER)
+
+!IFNDEF PERL
+PERL = perl
+!ENDIF
+
+CFLAGS = -FImsvc_recommended_pragmas.h -I . -I .. \
+	$(GLIB_CFLAGS) $(PANGO_CFLAGS) $(CAIRO_CFLAGS) -I ../gdk-pixbuf \
+	$(G_DEBUGGING) -DHAVE_CONFIG_H -DGDK_ENABLE_BROKEN \
+	-DGDK_VERSION=\"$(GTK_VER)\" \
+	-DG_LOG_DOMAIN=\"Gdk\"
+
+EXTRALIBS = $(WTKIT)\lib\i386\wntab32x.lib $(GLIB_LIBS) \
+		..\gdk-pixbuf\gdk_pixbuf-$(GDK_PIXBUF_VER).lib \
+		$(PANGOWIN32_LIBS) $(INTL_LIBS) $(CAIRO_LIBS) \
+		$(PANGOCAIRO_LIBS)
+
+gdk-win32-backend :
+	cd win32
+	nmake -nologo -f makefile.msc
+	cd ..
+	
+all: \
+	..\config.h \
+	gdkconfig.h \
+	gdkalias.h \
+	gdkaliasdef.c \
+	gdkenumtypes.h \
+	gdkenumtypes.c \
+	gdkmarshalers.h \
+	gdkmarshalers.c \
+	gdk-win32-backend \
+	libgdk-win32-$(GTK_VER)-0.dll \
+	testgdk.exe \
+	gdk-win32-$(GTK_VER)s.lib \
+#	gdk-x11-$(GTK_VER).dll \
+
+gdk_OBJECTS = \
+	gdk.obj \
+	gdkcairo.obj \
+	gdkcolor.obj \
+	gdkcursor.obj \
+	gdkdisplay.obj \
+	gdkdisplaymanager.obj \
+	gdkdnd.obj \
+	gdkdraw.obj \
+	gdkenumtypes.obj \
+	gdkevents.obj \
+	gdkfont.obj \
+	gdkgc.obj \
+	gdkglobals.obj \
+	gdkimage.obj \
+	gdkkeynames.obj \
+	gdkkeys.obj \
+	gdkkeyuni.obj \
+	gdkpango.obj \
+	gdkpixbuf-drawable.obj \
+	gdkpixbuf-render.obj \
+	gdkpixmap.obj \
+	gdkpolyreg-generic.obj \
+	gdkrectangle.obj \
+	gdkregion-generic.obj \
+	gdkrgb.obj \
+	gdkscreen.obj \
+	gdkselection.obj \
+	gdkvisual.obj \
+	gdkwindow.obj
+
+gdk_public_h_sources = \
+	gdk.h		\
+	gdkcolor.h	\
+	gdkcursor.h     \
+	gdkdnd.h	\
+	gdkdrawable.h	\
+	gdkevents.h	\
+	gdkfont.h	\
+	gdkgc.h		\
+	gdkkeysyms.h	\
+	gdki18n.h	\
+	gdkimage.h	\
+	gdkinput.h	\
+	gdkkeys.h	\
+	gdkpango.h	\
+	gdkpixbuf.h	\
+	gdkpixmap.h	\
+	gdkproperty.h	\
+	gdkregion.h	\
+	gdkrgb.h	\
+	gdkselection.h	\
+	gdktypes.h	\
+	gdkvisual.h	\
+	gdkwindow.h	\
+
+# private marshalers
+gdkmarshalers.h : gdkmarshalers.list
+	$(GLIB)\gobject\glib-genmarshal --prefix=gdk_marshal gdkmarshalers.list --header >>gdkmarshalers.h
+
+gdkmarshalers.c : gdkmarshalers.list
+	$(GLIB)\gobject\glib-genmarshal --prefix=gdk_marshal gdkmarshalers.list --body >gdkmarshalers.c
+
+gdkenumtypes.h: $(gdk_public_h_sources) makeenums.pl
+	$(PERL) makeenums.pl include $(gdk_public_h_sources) > gdkenumtypes.h
+
+gdkenumtypes.c: $(gdk_public_h_sources) makeenums.pl
+	$(PERL) makeenums.pl cfile $(gdk_public_h_sources) > gdkenumtypes.c
+
+..\config.h : ..\config.h.win32
+	copy ..\config.h.win32 ..\config.h
+
+gdkconfig.h : gdkconfig.h.win32
+	copy gdkconfig.h.win32 gdkconfig.h
+
+gdkalias.h: gdk.symbols
+	perl makegdkalias.pl < gdk.symbols > gdkalias.h
+
+gdkaliasdef.c: gdk.symbols
+	 perl makegdkalias.pl -def < gdk.symbols > gdkaliasdef.c
+
+gdk.def: gdk.symbols
+	echo EXPORTS > gdk.def
+	cl /EP -DINCLUDE_VARIABLES -DG_OS_WIN32 -DGDK_WINDOWING_WIN32 -DALL_FILES \
+		-DG_GNUC_CONST= \
+		gdk.symbols >> gdk.def
+
+libgdk-win32-$(GTK_VER)-0.dll : $(gdk_OBJECTS) gdk.def win32\gdk-win32.lib
+	$(CC) $(CFLAGS) -LD -Fe$@ $(gdk_OBJECTS) win32\gdk-win32.lib $(EXTRALIBS) \
+	gdi32.lib user32.lib imm32.lib shell32.lib ole32.lib uuid.lib win32\gdk.res \
+	$(LDFLAGS) /implib:gdk-win32-$(GTK_VER).lib /def:gdk.def
+
+gdk-win32-$(GTK_VER)s.lib : $(gdk_OBJECTS)
+	lib /out:gdk-win32-$(GTK_VER)s.lib $(gdk_OBJECTS) win32\gdk-win32.lib
+
+gdk-x11-$(GTK_VER).dll : $(gdk_OBJECTS) gdk.def x11\gdk-x11.lib
+	$(CC) $(CFLAGS) -LD -Fegdk-x11-$(GTK_VER).dll $(gdk_OBJECTS) \
+	$(PANGO)\pango\pangox-$(PANGO_VER).lib \
+	x11\gdk-x11.lib $(X11_LIBS) $(EXTRALIBS) user32.lib $(LDFLAGS) /def:gdk.def
+
+testgdk.exe : libgdk-win32-$(GTK_VER)-0.dll testgdk.obj
+	$(CC) -Fetestgdk.exe testgdk.obj gdk-win32-$(GTK_VER).lib $(EXTRALIBS) $(LDFLAGS)
+
+.c.obj :
+	$(CC) $(CFLAGS) -GD -c -DGDK_COMPILATION -DG_LOG_DOMAIN=\"Gdk\" $<
+
+clean::
+	cd win32
+	nmake -f makefile.msc clean
+	cd ..
+	del gdkmarshalers.c
+	del gdkmarshalers.h
+	del *.dll
+	del *.obj
+	del *.lib
+	del *.err
+	del *.res

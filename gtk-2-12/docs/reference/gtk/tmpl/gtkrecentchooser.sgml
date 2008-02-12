@@ -1,0 +1,457 @@
+<!-- ##### SECTION Title ##### -->
+GtkRecentChooser
+
+<!-- ##### SECTION Short_Description ##### -->
+Interface implemented by widgets displaying recently used files
+
+<!-- ##### SECTION Long_Description ##### -->
+<para>
+#GtkRecentChooser is an interface that can be implemented by widgets
+displaying the list of recently used files.  In GTK+, the main objects
+that implement this interface are #GtkRecentChooserWidget,
+#GtkRecentChooserDialog and #GtkRecentChooserMenu.
+</para>
+
+<para>
+Recently used files are supported since GTK+ 2.10.
+</para>
+
+<!-- ##### SECTION See_Also ##### -->
+<para>
+#GtkRecentManager, #GtkRecentChooserDialog, #GtkRecentChooserWidget,
+#GtkRecentChooserMenu
+</para>
+
+<!-- ##### SECTION Stability_Level ##### -->
+
+
+<!-- ##### STRUCT GtkRecentChooser ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### SIGNAL GtkRecentChooser::item-activated ##### -->
+<para>
+
+</para>
+
+@recentchooser: the object which received the signal.
+
+<!-- ##### SIGNAL GtkRecentChooser::selection-changed ##### -->
+<para>
+
+</para>
+
+@recentchooser: the object which received the signal.
+
+<!-- ##### ARG GtkRecentChooser:filter ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkRecentChooser:limit ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkRecentChooser:local-only ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkRecentChooser:recent-manager ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkRecentChooser:select-multiple ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkRecentChooser:show-icons ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkRecentChooser:show-not-found ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkRecentChooser:show-private ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkRecentChooser:show-tips ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkRecentChooser:sort-type ##### -->
+<para>
+
+</para>
+
+<!-- ##### STRUCT GtkRecentChooserIface ##### -->
+<para>
+
+</para>
+
+@base_iface: 
+@set_current_uri: 
+@get_current_uri: 
+@select_uri: 
+@unselect_uri: 
+@select_all: 
+@unselect_all: 
+@get_items: 
+@get_recent_manager: 
+@add_filter: 
+@remove_filter: 
+@list_filters: 
+@set_sort_func: 
+@item_activated: 
+@selection_changed: 
+
+<!-- ##### MACRO GTK_RECENT_CHOOSER_ERROR ##### -->
+<para>
+Used to get the #GError quark for #GtkRecentChooser errors.
+</para>
+
+
+
+<!-- ##### ENUM GtkRecentChooserError ##### -->
+<para>
+These identify the various errors that can occur while calling
+#GtkRecentChooser functions.
+</para>
+
+@GTK_RECENT_CHOOSER_ERROR_NOT_FOUND: Indicates that a file does not exist
+@GTK_RECENT_CHOOSER_ERROR_INVALID_URI: Indicates a malformed URI
+
+<!-- ##### FUNCTION gtk_recent_chooser_set_show_private ##### -->
+<para>
+
+</para>
+
+@chooser: 
+@show_private: 
+
+
+<!-- ##### FUNCTION gtk_recent_chooser_get_show_private ##### -->
+<para>
+
+</para>
+
+@chooser: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_recent_chooser_set_show_not_found ##### -->
+<para>
+
+</para>
+
+@chooser: 
+@show_not_found: 
+
+
+<!-- ##### FUNCTION gtk_recent_chooser_get_show_not_found ##### -->
+<para>
+
+</para>
+
+@chooser: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_recent_chooser_set_show_icons ##### -->
+<para>
+
+</para>
+
+@chooser: 
+@show_icons: 
+
+
+<!-- ##### FUNCTION gtk_recent_chooser_get_show_icons ##### -->
+<para>
+
+</para>
+
+@chooser: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_recent_chooser_set_select_multiple ##### -->
+<para>
+
+</para>
+
+@chooser: 
+@select_multiple: 
+
+
+<!-- ##### FUNCTION gtk_recent_chooser_get_select_multiple ##### -->
+<para>
+
+</para>
+
+@chooser: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_recent_chooser_set_local_only ##### -->
+<para>
+
+</para>
+
+@chooser: 
+@local_only: 
+
+
+<!-- ##### FUNCTION gtk_recent_chooser_get_local_only ##### -->
+<para>
+
+</para>
+
+@chooser: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_recent_chooser_set_limit ##### -->
+<para>
+
+</para>
+
+@chooser: 
+@limit: 
+
+
+<!-- ##### FUNCTION gtk_recent_chooser_get_limit ##### -->
+<para>
+
+</para>
+
+@chooser: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_recent_chooser_set_show_tips ##### -->
+<para>
+
+</para>
+
+@chooser: 
+@show_tips: 
+
+
+<!-- ##### FUNCTION gtk_recent_chooser_get_show_tips ##### -->
+<para>
+
+</para>
+
+@chooser: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_recent_chooser_set_show_numbers ##### -->
+<para>
+
+</para>
+
+@chooser: 
+@show_numbers: 
+
+
+<!-- ##### FUNCTION gtk_recent_chooser_get_show_numbers ##### -->
+<para>
+
+</para>
+
+@chooser: 
+@Returns: 
+
+
+<!-- ##### ENUM GtkRecentSortType ##### -->
+<para>
+
+</para>
+
+@GTK_RECENT_SORT_NONE: 
+@GTK_RECENT_SORT_MRU: 
+@GTK_RECENT_SORT_LRU: 
+@GTK_RECENT_SORT_CUSTOM: 
+
+<!-- ##### FUNCTION gtk_recent_chooser_set_sort_type ##### -->
+<para>
+
+</para>
+
+@chooser: 
+@sort_type: 
+
+
+<!-- ##### FUNCTION gtk_recent_chooser_get_sort_type ##### -->
+<para>
+
+</para>
+
+@chooser: 
+@Returns: 
+
+
+<!-- ##### USER_FUNCTION GtkRecentSortFunc ##### -->
+<para>
+
+</para>
+
+@a: 
+@b: 
+@user_data: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_recent_chooser_set_sort_func ##### -->
+<para>
+
+</para>
+
+@chooser: 
+@sort_func: 
+@sort_data: 
+@data_destroy: 
+
+
+<!-- ##### FUNCTION gtk_recent_chooser_set_current_uri ##### -->
+<para>
+
+</para>
+
+@chooser: 
+@uri: 
+@error: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_recent_chooser_get_current_uri ##### -->
+<para>
+
+</para>
+
+@chooser: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_recent_chooser_get_current_item ##### -->
+<para>
+
+</para>
+
+@chooser: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_recent_chooser_select_uri ##### -->
+<para>
+
+</para>
+
+@chooser: 
+@uri: 
+@error: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_recent_chooser_unselect_uri ##### -->
+<para>
+
+</para>
+
+@chooser: 
+@uri: 
+
+
+<!-- ##### FUNCTION gtk_recent_chooser_select_all ##### -->
+<para>
+
+</para>
+
+@chooser: 
+
+
+<!-- ##### FUNCTION gtk_recent_chooser_unselect_all ##### -->
+<para>
+
+</para>
+
+@chooser: 
+
+
+<!-- ##### FUNCTION gtk_recent_chooser_get_items ##### -->
+<para>
+
+</para>
+
+@chooser: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_recent_chooser_get_uris ##### -->
+<para>
+
+</para>
+
+@chooser: 
+@length: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_recent_chooser_add_filter ##### -->
+<para>
+
+</para>
+
+@chooser: 
+@filter: 
+
+
+<!-- ##### FUNCTION gtk_recent_chooser_remove_filter ##### -->
+<para>
+
+</para>
+
+@chooser: 
+@filter: 
+
+
+<!-- ##### FUNCTION gtk_recent_chooser_list_filters ##### -->
+<para>
+
+</para>
+
+@chooser: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_recent_chooser_set_filter ##### -->
+<para>
+
+</para>
+
+@chooser: 
+@filter: 
+
+
+<!-- ##### FUNCTION gtk_recent_chooser_get_filter ##### -->
+<para>
+
+</para>
+
+@chooser: 
+@Returns: 
+
+

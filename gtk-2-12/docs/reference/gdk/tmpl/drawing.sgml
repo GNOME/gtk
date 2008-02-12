@@ -1,0 +1,500 @@
+<!-- ##### SECTION Title ##### -->
+Drawing Primitives
+
+<!-- ##### SECTION Short_Description ##### -->
+Functions for drawing points, lines, arcs, and text
+
+<!-- ##### SECTION Long_Description ##### -->
+<para>
+These functions provide support for drawing points, lines, arcs and text
+onto what are called 'drawables'. Drawables, as the name suggests, are things
+which support drawing onto them, and are either #GdkWindow or #GdkPixmap
+objects.
+</para>
+<para>
+Many of the drawing operations take a #GdkGC argument, which represents a
+graphics context. This #GdkGC contains a number of drawing attributes such
+as foreground color, background color and line width, and is used to reduce
+the number of arguments needed for each drawing operation. See the
+<link linkend="gdk-Graphics-Contexts">Graphics Contexts</link> section for
+more information.
+</para>
+<para id="pango-data-structures">
+Some of the drawing operations take Pango data structures like #PangoContext,
+#PangoLayout or #PangoLayoutLine as arguments. If you're using GTK+, the ususal 
+way to obtain these structures is via gtk_widget_create_pango_context() or
+gtk_widget_create_pango_layout().
+</para>
+
+<!-- ##### SECTION See_Also ##### -->
+<para>
+
+</para>
+
+<!-- ##### SECTION Stability_Level ##### -->
+
+
+<!-- ##### STRUCT GdkDrawable ##### -->
+<para>
+An opaque structure representing an object that can be
+drawn onto. This can be a #GdkPixmap, a #GdkBitmap,
+or a #GdkWindow.
+</para>
+
+
+<!-- ##### FUNCTION gdk_drawable_ref ##### -->
+<para>
+
+</para>
+
+@drawable: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_drawable_unref ##### -->
+<para>
+
+</para>
+
+@drawable: 
+
+
+<!-- ##### FUNCTION gdk_drawable_set_data ##### -->
+<para>
+
+</para>
+
+@drawable: 
+@key: 
+@data: 
+@destroy_func: 
+
+
+<!-- ##### FUNCTION gdk_drawable_get_data ##### -->
+<para>
+
+</para>
+
+@drawable: 
+@key: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_drawable_get_display ##### -->
+<para>
+
+</para>
+
+@drawable: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_drawable_get_screen ##### -->
+<para>
+
+</para>
+
+@drawable: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_drawable_get_visual ##### -->
+<para>
+
+</para>
+
+@drawable: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_drawable_set_colormap ##### -->
+<para>
+
+</para>
+
+@drawable: 
+@colormap: 
+
+
+<!-- ##### FUNCTION gdk_drawable_get_colormap ##### -->
+<para>
+
+</para>
+
+@drawable: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_drawable_get_depth ##### -->
+<para>
+
+</para>
+
+@drawable: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_drawable_get_size ##### -->
+<para>
+
+</para>
+
+@drawable: 
+@width: 
+@height: 
+
+
+<!-- ##### FUNCTION gdk_drawable_get_clip_region ##### -->
+<para>
+
+</para>
+
+@drawable: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_drawable_get_visible_region ##### -->
+<para>
+
+</para>
+
+@drawable: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_draw_point ##### -->
+<para>
+</para>
+
+@drawable: 
+@gc: 
+@x: 
+@y: 
+
+
+<!-- ##### FUNCTION gdk_draw_points ##### -->
+<para>
+</para>
+
+@drawable: 
+@gc: 
+@points: 
+@npoints: 
+
+
+<!-- ##### FUNCTION gdk_draw_line ##### -->
+<para>
+</para>
+
+@drawable: 
+@gc: 
+@x1_: 
+@y1_: 
+@x2_: 
+@y2_: 
+
+
+<!-- ##### FUNCTION gdk_draw_lines ##### -->
+<para>
+</para>
+
+@drawable: 
+@gc: 
+@points: 
+lines.
+@npoints: 
+
+
+<!-- ##### FUNCTION gdk_draw_pixbuf ##### -->
+<para>
+
+</para>
+
+@drawable: 
+@gc: 
+@pixbuf: 
+@src_x: 
+@src_y: 
+@dest_x: 
+@dest_y: 
+@width: 
+@height: 
+@dither: 
+@x_dither: 
+@y_dither: 
+
+
+<!-- ##### FUNCTION gdk_draw_segments ##### -->
+<para>
+</para>
+
+@drawable: 
+@gc: 
+@segs: 
+@nsegs: 
+
+
+<!-- ##### STRUCT GdkSegment ##### -->
+<para>
+Specifies the start and end point of a line for use by the gdk_draw_segments()
+function.
+</para>
+
+@x1: the x coordinate of the start point.
+@y1: the y coordinate of the start point.
+@x2: the x coordinate of the end point.
+@y2: the y coordinate of the end point.
+
+<!-- ##### FUNCTION gdk_draw_rectangle ##### -->
+<para>
+</para>
+<note>
+<para>
+</para>
+</note>
+
+@drawable: 
+@gc: 
+@filled: 
+@x: 
+@y: 
+@width: 
+@height: 
+
+
+<!-- ##### FUNCTION gdk_draw_arc ##### -->
+<para>
+</para>
+
+@drawable: 
+@gc: 
+@filled: 
+@x: 
+@y: 
+@width: 
+@height: 
+@angle1: 
+@angle2: 
+
+
+<!-- ##### FUNCTION gdk_draw_polygon ##### -->
+<para>
+</para>
+
+@drawable: 
+@gc: 
+@filled: 
+@points: 
+@npoints: 
+
+
+<!-- ##### FUNCTION gdk_draw_trapezoids ##### -->
+<para>
+
+</para>
+
+@drawable: 
+@gc: 
+@trapezoids: 
+@n_trapezoids: 
+
+
+<!-- ##### STRUCT GdkTrapezoid ##### -->
+<para>
+Specifies a trapezpoid for use by the gdk_draw_trapezoids().
+The trapezoids used here have parallel, horizontal top and 
+bottom edges. 
+</para>
+
+@y1: the y coordinate of the start point.
+@x11: the x coordinate of the top left corner
+@x21: the x coordinate of the top right corner
+@y2: the y coordinate of the end point.
+@x12: the x coordinate of the bottom left corner
+@x22: the x coordinate of the bottom right corner
+
+<!-- ##### FUNCTION gdk_draw_glyphs ##### -->
+<para>
+
+</para>
+
+@drawable: 
+@gc: 
+@font: 
+@x: 
+@y: 
+@glyphs: 
+
+
+<!-- ##### FUNCTION gdk_draw_glyphs_transformed ##### -->
+<para>
+
+</para>
+
+@drawable: 
+@gc: 
+@matrix: 
+@font: 
+@x: 
+@y: 
+@glyphs: 
+
+
+<!-- ##### FUNCTION gdk_draw_layout_line ##### -->
+<para>
+
+</para>
+
+@drawable: 
+@gc: 
+@x: 
+@y: 
+@line: 
+
+
+<!-- ##### FUNCTION gdk_draw_layout_line_with_colors ##### -->
+<para>
+
+</para>
+
+@drawable: 
+@gc: 
+@x: 
+@y: 
+@line: 
+@foreground: 
+@background: 
+
+
+<!-- ##### FUNCTION gdk_draw_layout ##### -->
+<para>
+
+</para>
+
+@drawable: 
+@gc: 
+@x: 
+@y: 
+@layout: 
+
+
+<!-- ##### FUNCTION gdk_draw_layout_with_colors ##### -->
+<para>
+
+</para>
+
+@drawable: 
+@gc: 
+@x: 
+@y: 
+@layout: 
+@foreground: 
+@background: 
+
+
+<!-- ##### FUNCTION gdk_draw_string ##### -->
+<para>
+</para>
+
+@drawable: 
+@font: 
+@gc: 
+@x: 
+@y: 
+@string: 
+
+
+<!-- ##### FUNCTION gdk_draw_text ##### -->
+<para>
+</para>
+
+@drawable: 
+@font: 
+@gc: 
+@x: 
+@y: 
+@text: 
+@text_length: 
+
+
+<!-- ##### FUNCTION gdk_draw_text_wc ##### -->
+<para>
+</para>
+
+@drawable: 
+@font: 
+@gc: 
+@x: 
+@y: 
+@text: 
+@text_length: 
+
+
+<!-- ##### MACRO gdk_draw_pixmap ##### -->
+<para>
+Draws a pixmap, or a part of a pixmap, onto another drawable.
+</para>
+
+@Deprecated: Use gdk_draw_drawable() instead.
+
+
+<!-- ##### FUNCTION gdk_draw_drawable ##### -->
+<para>
+
+</para>
+
+@drawable: 
+@gc: 
+@src: 
+@xsrc: 
+@ysrc: 
+@xdest: 
+@ydest: 
+@width: 
+@height: 
+
+
+<!-- ##### FUNCTION gdk_draw_image ##### -->
+<para>
+</para>
+
+@drawable: 
+@gc: 
+@image: 
+@xsrc: 
+@ysrc: 
+@xdest: 
+@ydest: 
+@width: 
+@height: 
+
+
+<!-- ##### FUNCTION gdk_drawable_get_image ##### -->
+<para>
+
+</para>
+
+@drawable: 
+@x: 
+@y: 
+@width: 
+@height: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_drawable_copy_to_image ##### -->
+<para>
+
+</para>
+
+@drawable: 
+@image: 
+@src_x: 
+@src_y: 
+@dest_x: 
+@dest_y: 
+@width: 
+@height: 
+@Returns: 
+
+

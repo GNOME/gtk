@@ -1,0 +1,759 @@
+<!-- ##### SECTION Title ##### -->
+Signals
+
+<!-- ##### SECTION Short_Description ##### -->
+Object methods and callbacks
+
+<!-- ##### SECTION Long_Description ##### -->
+<para>
+The GTK+ signal system merely proxies the GLib signal system now. For future 
+usage, direct use of the <link linkend="gobject-Signals">GSignal</link> API is recommended, this avoids significant 
+performance hits where #GtkArg structures have to be converted into #GValue<!-- -->s.
+</para>
+
+<refsect2>
+<title>What are signals?</title>
+<para>
+Signals are a way to get notification when something happens
+and to customize object behavior according to the
+user's needs.
+Every <wordasword>signal</wordasword> is uniquely identified by a name,
+"class_name::signal_name", where signal_name might be something like
+"clicked" and class_name might be "GtkButton".  Note that some other class
+may also define a "clicked" callback, so long as it doesn't derive from
+#GtkButton.
+</para>
+<para>
+When they are created, they are also assigned a unique positive integer,
+the signal id (1 is the first signal id- 0 is used to flag an error).
+Each is also tied to an array of types that describes
+the prototype of the function pointer(s) (handlers) you may
+connect to the signal.  Finally, every signal has
+a default handler that is given by a function pointer
+in its class structure:  it is run by default whenever the
+signal is emitted.  (It is possible that a signal will
+be emitted and a user-defined handler will prevent the default handler
+from being run.)
+</para>
+<para>
+Signals are used by everyone, but they are only
+created on a per class basis -- so you should not call
+call gtk_signal_new() unless you are writing
+a new #GtkObject type.  However, if you want to make a new signal
+for an existing type, you may use gtk_object_class_user_signal_new()
+to create a signal that doesn't correspond to a class's builtin
+methods.
+</para>
+</refsect2>
+<refsect2>
+<title>How are signals used?</title>
+<para>
+There are two basic actions in the signal handling game.
+If you want notification of an event, you must <emphasis>connect</emphasis>
+a function pointer and a data pointer to that signal;  the data pointer
+will be passed as the last argument to the function (so long as you
+are using the default marshalling functions).
+You will receive a connection id, a unique positive integer
+corresponding to that attachment.
+</para>
+<para>
+Functions that want to notify the user of certain actions,
+<emphasis>emit</emphasis> signals.
+</para>
+</refsect2>
+<refsect2>
+<title>Basic Terminology</title>
+<variablelist>
+
+<varlistentry>
+<term>signal</term>
+<listitem><para>A class method, e.g. GtkButton::clicked.
+More precisely it is a unique class-branch/signal-name pair.
+This means you may not define a signal handler for a class which
+derives from #GtkButton that is called clicked,
+but it is okay to share signals names if they are separate in
+the class tree.
+</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term>default handler</term>
+<listitem><para>The object's internal method which is invoked
+when the signal is emitted.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>user-defined handler</term>
+<listitem><para>A function pointer and data connected
+to a signal (for a particular object).</para>
+<para>There are really two types: those which are connected
+normally, and those which are connected by one 
+of the connect_after functions.  The connect_after handlers
+are always run after the default handler.</para>
+<para>Many toolkits refer to these as <wordasword>callbacks</wordasword>.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>emission</term>
+<listitem><para>the whole process of emitting a signal,
+including the invocation of all
+the different handler types mentioned above.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>signal id</term>
+<listitem><para>The unique positive (nonzero) integer
+used to identify a signal.  It can be used instead of 
+a name to many functions for a slight performance
+improvement.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>connection id</term>
+<listitem><para>The unique positive (nonzero) integer
+used to identify the connection of a user-defined handler
+to a signal.  Notice that it is allowed to connect the
+same function-pointer/user-data pair twice, so
+there is no guarantee that a function-pointer/user-data
+maps to a unique connection id.
+</para>
+</listitem>
+</varlistentry>
+
+</variablelist>
+</refsect2>
+
+<refsect2><title>A brief note on how they work.</title>
+<para>
+The functions responsible for translating an array of #GtkArgs
+to your C compiler's normal semantics are called Marshallers.
+They are identified by
+gtk_marshal_<replaceable>return_value</replaceable>__<replaceable>parameter_list</replaceable>()
+for example a C function returning a gboolean and taking a gint
+can be invoked by using gtk_marshal_BOOL__INT().
+Not all possibly combinations of return/params are available,
+of course, so if you are writing a #GtkObject with parameters
+you might have to write a marshaller.
+</para>
+</refsect2>
+
+<!-- ##### SECTION See_Also ##### -->
+<para>
+<variablelist>
+
+<varlistentry>
+<term>#GtkObject</term>
+<listitem><para>The base class for things which emit signals.</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><link linkend="gobject-Signals">GSignal</link></term>
+<listitem><para>The GLib signal system.</para></listitem>
+</varlistentry>
+</variablelist>
+</para>
+
+<!-- ##### SECTION Stability_Level ##### -->
+
+
+<!-- ##### MACRO GTK_SIGNAL_OFFSET ##### -->
+<para>
+Use in place of <function>offsetof()</function>, which is used if it exists.
+</para>
+
+
+
+<!-- ##### ENUM GtkSignalRunType ##### -->
+<para>
+These configure the signal's emission.  They control
+whether the signal can be emitted recursively on an object
+and
+whether to run the default method before or after the user-defined handlers.
+</para>
+
+<variablelist>
+
+<varlistentry>
+<term>GTK_RUN_FIRST</term>
+<listitem><para>Run the default handler before the connected user-defined
+handlers.
+</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term>GTK_RUN_LAST</term>
+<listitem><para>Run the default handler after the connected
+user-defined handlers.
+(Handlers registered as "after" always run after the default handler though)
+</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term>GTK_RUN_BOTH</term>
+<listitem><para>Run the default handler twice,
+once before the user-defined handlers,
+and
+once after.
+</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term>GTK_RUN_NO_RECURSE</term>
+<listitem><para>Whether to prevent a handler or hook
+from reemitting the signal from within itself.
+Attempts to
+emit the signal while it is running will result in the signal
+emission being restarted once it is done with the current processing.
+</para><para>
+You must be
+careful to avoid having two handlers endlessly reemitting signals,
+gtk_signal_n_emissions() can be helpful.
+</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term>GTK_RUN_ACTION</term>
+<listitem><para>The signal is an action you can 
+invoke without any particular setup or cleanup.
+The signal is treated no differently, but some
+other code can determine if the signal is appropriate to
+delegate to user control.  For example, key binding sets
+only allow bindings of ACTION signals to keystrokes.
+</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term>GTK_RUN_NO_HOOKS</term>
+<listitem><para>This prevents the connection of emission hooks
+to the signal.
+</para></listitem>
+</varlistentry>
+
+</variablelist>
+
+@GTK_RUN_FIRST: 
+@GTK_RUN_LAST: 
+@GTK_RUN_BOTH: 
+@GTK_RUN_NO_RECURSE: 
+@GTK_RUN_ACTION: 
+@GTK_RUN_NO_HOOKS: 
+
+<!-- ##### FUNCTION gtk_signal_new ##### -->
+<para>
+Creates a new signal type.  (This is usually done in the
+class initializer.)
+</para>
+
+@name: the event name for the signal, e.g. "clicked".
+@signal_flags: a combination of #GTK_RUN flags
+specifying detail of when the default handler is to be invoked.
+You should at least specify #GTK_RUN_FIRST
+or #GTK_RUN_LAST.
+@object_type: the type of object this signal pertains to.
+It will also pertain to derivers of this type automatically.
+@function_offset: How many bytes the function pointer is in
+the class structure for this type.  Used to invoke a class
+method generically.
+@marshaller: the function to translate between an array
+of GtkArgs and the native calling convention.  Usually they
+are identified just by the type of arguments they take:
+for example, gtk_marshal_BOOL__STRING() describes a marshaller
+which takes a string and returns a boolean value.
+@return_val: the type of return value, or #GTK_TYPE_NONE for a signal
+without a return value.
+@n_args: the number of parameter the handlers may take.
+@Varargs: a list of #GTK_TYPE_*, one for each parameter.
+@Returns: the signal id.
+@Deprecated: Use g_signal_new() instead.
+
+
+<!-- ##### FUNCTION gtk_signal_newv ##### -->
+<para>
+Creates a new signal type.  (This is usually done in a
+class initializer.)
+</para>
+<para>
+This function take the types as an array, instead of a list
+following the arguments.  Otherwise the same as gtk_signal_new().
+</para>
+
+@name: the name of the signal to create.
+@signal_flags: see gtk_signal_new().
+@object_type: the type of #GtkObject to associate the signal with.
+@function_offset: how many bytes the function pointer is in
+the class structure for this type.
+@marshaller: 
+@return_val: the type of the return value, or #GTK_TYPE_NONE if
+you don't want a return value.
+@n_args: the number of parameters to the user-defined handlers.
+@args: an array of #GtkType<!---->s, describing the prototype to
+the callbacks.
+@Returns: the signal id.
+@Deprecated: Use g_signal_newv() instead.
+
+
+<!-- ##### MACRO gtk_signal_lookup ##### -->
+<para>
+Given the name of the signal and the type of object it connects
+to, get the signal's identifying integer.  Emitting the signal
+by number is somewhat faster than using the name each time.
+</para>
+<para>
+It also tries the ancestors of the given type.
+</para>
+
+@name: the signal's name, e.g. clicked.
+@object_type: the type that the signal operates on, e.g. #GTK_TYPE_BUTTON.
+@Returns: the signal's identifying number, or 0 if no signal was found.
+@Deprecated: Use g_signal_lookup() instead.
+
+
+<!-- ##### MACRO gtk_signal_name ##### -->
+<para>
+Given the signal's identifier, finds its name.
+</para>
+<para>
+Two different signals may have the same name, if they have differing types.
+</para>
+
+@signal_id: the signal's identifying number.
+@Returns: the signal name, or %NULL if the signal number was invalid.
+@Deprecated: Use g_signal_name() instead.
+
+
+<!-- ##### FUNCTION gtk_signal_emit ##### -->
+<para>
+Emits a signal.  This causes the default handler and user-defined
+handlers to be run.
+</para>
+<para>
+Here is what gtk_signal_emit() does:
+</para>
+<para>
+1.  Calls the default handler and the user-connected handlers.
+The default handler will be called first if
+#GTK_RUN_FIRST is set, and last if #GTK_RUN_LAST is set.
+</para>
+<para>
+2.  Calls all handlers connected with the "after" flag set.
+</para>
+
+@object: the object that emits the signal.
+@signal_id: the signal identifier.
+@Varargs: the parameters to the function, followed
+by a pointer to the return type, if any.
+@Deprecated: Use g_signal_emit() instead.
+
+
+<!-- ##### FUNCTION gtk_signal_emit_by_name ##### -->
+<para>
+Emits a signal.  This causes the default handler and user-connected
+handlers to be run.
+</para>
+
+@object: the object that emits the signal.
+@name: the name of the signal.
+@Varargs: the parameters to the function, followed
+by a pointer to the return type, if any.
+@Deprecated: Use g_signal_emit_by_name() instead.
+
+
+<!-- ##### FUNCTION gtk_signal_emitv ##### -->
+<para>
+Emits a signal.  This causes the default handler and user-connected
+handlers to be run.  This differs from gtk_signal_emit() by taking
+an array of GtkArgs instead of using C's varargs mechanism.
+</para>
+
+@object: the object to emit the signal to.
+@signal_id: the signal identifier.
+@args: an array of GtkArgs, one for each parameter,
+followed by one which is a pointer to the return type.
+@Deprecated: Use g_signal_emitv() instead.
+
+
+<!-- ##### FUNCTION gtk_signal_emitv_by_name ##### -->
+<para>
+Emits a signal by name.  This causes the default handler and user-connected
+handlers to be run.  This differs from gtk_signal_emit() by taking
+an array of GtkArgs instead of using C's varargs mechanism.
+</para>
+
+@object: the object to emit the signal to.
+@name: the name of the signal.
+@args: an array of GtkArgs, one for each parameter,
+followed by one which is a pointer to the return type.
+@Deprecated: Use g_signal_emitv() and g_signal_lookup() instead.
+
+
+<!-- ##### MACRO gtk_signal_emit_stop ##### -->
+<para>
+This function aborts a signal's current emission.
+</para>
+<para>
+It will prevent the default method from running,
+if the signal was #GTK_RUN_LAST and you connected
+normally (i.e. without the "after" flag).
+</para>
+<para>
+It will print a warning if used on a signal which
+isn't being emitted.
+</para>
+
+@object: the object whose signal handlers you wish to stop.
+@signal_id: the signal identifier, as returned by g_signal_lookup().
+@Deprecated: Use g_signal_stop_emission() instead.
+
+
+<!-- ##### FUNCTION gtk_signal_emit_stop_by_name ##### -->
+<para>
+This function aborts a signal's current emission.
+</para>
+<para>
+It is just like gtk_signal_emit_stop()
+except it will lookup the signal id for you.
+</para>
+
+@object: the object whose signal handlers you wish to stop.
+@name: the name of the signal you wish to stop.
+@Deprecated: Use g_signal_stop_emission_by_name() instead.
+
+
+<!-- ##### MACRO gtk_signal_connect ##### -->
+<para>
+Attaches a function pointer and user data to a signal for
+a particular object.
+</para>
+<para>
+The #GtkSignalFunction takes a #GtkObject as its first parameter.
+It will be the same object as the one you're connecting
+the hook to.  The @func_data will be passed as the last parameter
+to the hook.
+</para>
+<para>
+All else being equal, signal handlers are invoked in the order 
+connected (see gtk_signal_emit() for the other details of
+which order things are called in).
+</para>
+<para>
+Here is how one passes an integer as user data,
+for when you just want to specify a constant int
+as parameter to your function:
+</para>
+<informalexample>
+<programlisting>
+static void button_clicked_int (GtkButton* button, gpointer func_data)
+{
+	g_print ("button pressed: &percnt;d\n", GPOINTER_TO_INT (func_data));
+}
+
+/* By calling this function, you will make the g_print above
+ * execute, printing the number passed as `to_print'. */
+static void attach_print_signal (GtkButton* button, gint to_print)
+{
+	gtk_signal_connect (GTK_OBJECT (button), "clicked",
+		GTK_SIGNAL_FUNC (button_clicked_int),
+		GINT_TO_POINTER (to_print));
+}
+</programlisting>
+</informalexample>
+
+@object: the object associated with the signal, e.g. if a button
+is getting pressed, this is that button.
+@name: name of the signal.
+@func: function pointer to attach to the signal.
+@func_data: value to pass as to your function (through the marshaller).
+@Returns: the connection id.
+@Deprecated: Use g_signal_connect() instead.
+
+
+<!-- ##### MACRO gtk_signal_connect_after ##### -->
+<para>
+Attaches a function pointer and user data to a signal
+so that this handler will be called after the other handlers.
+</para>
+
+@object: the object associated with the signal.
+@name: name of the signal.
+@func: function pointer to attach to the signal.
+@func_data: value to pass as to your function (through the marshaller).
+@Returns: the unique identifier for this attachment:  the connection id.
+@Deprecated: Use g_signal_connect_after() instead.
+
+
+<!-- ##### MACRO gtk_signal_connect_object ##### -->
+<para>
+This function is for registering a callback that will
+call another object's callback.  That is,
+instead of passing the object which is responsible
+for the event as the first parameter of the callback,
+it is switched with the user data (so the object which emits
+the signal will be the last parameter, which is where the
+user data usually is).
+</para>
+<para>
+This is useful for passing a standard function in as a callback.
+For example, if you wanted a button's press to gtk_widget_show()
+some widget, you could write:
+</para>
+<informalexample>
+<programlisting>
+gtk_signal_connect_object (button, "clicked", gtk_widget_show, window);
+</programlisting>
+</informalexample>
+
+@object: the object which emits the signal.
+@name: the name of the signal.
+@func: the function to callback.
+@slot_object: the object to pass as the first parameter to func.
+(Though it pretends to take an object, you can
+really pass any gpointer as the #slot_object .)
+@Returns: the connection id.
+@Deprecated: Use g_signal_connect_swapped() instead.
+
+
+<!-- ##### MACRO gtk_signal_connect_object_after ##### -->
+<para>
+Attaches a signal hook to a signal, passing in an alternate
+object as the first parameter, and guaranteeing 
+that the default handler and all normal
+handlers are called first.
+</para>
+
+@object: the object associated with the signal.
+@name: name of the signal.
+@func: function pointer to attach to the signal.
+@slot_object: the object to pass as the first parameter to #func.
+@Returns: the connection id.
+@Deprecated: Use g_signal_connect_data() instead, passing 
+<literal>G_CONNECT_AFTER|G_CONNECT_SWAPPED</literal> as @connect_flags.
+
+
+<!-- ##### FUNCTION gtk_signal_connect_full ##### -->
+<para>
+Attaches a function pointer and user data to a signal with
+more control.
+</para>
+
+@object: the object which emits the signal.  For example, a button
+in the button press signal.
+@name: the name of the signal.
+@func: function pointer to attach to the signal.
+@unsupported: 
+@data: the user data associated with the function.
+@destroy_func: function to call when this particular hook is 
+disconnected.
+@object_signal: whether this is an object signal-- basically an "object
+signal" is one that wants its user_data and object fields switched,
+which is useful for calling functions which operate on another
+object primarily.
+@after: whether to invoke the user-defined handler after the signal, or to let 
+the signal's default behavior preside (i.e. depending on #GTK_RUN_FIRST
+and #GTK_RUN_LAST).
+@Returns: the connection id.
+@Deprecated: Use g_signal_connect_data() instead.
+
+
+<!-- ##### FUNCTION gtk_signal_connect_while_alive ##### -->
+<para>
+Attaches a function pointer and another #GtkObject to a signal.
+</para>
+<para>
+This function takes an object whose "destroy" signal
+should be trapped.
+That way, you don't have to clean up the
+signal handler when you destroy the object.
+It is a little less efficient though.
+</para>
+<para>
+(Instead you may call gtk_signal_disconnect_by_data(), if you want
+to explicitly delete all attachments to this object.  This
+is perhaps not recommended since it could be confused
+with an integer masquerading as a pointer (through GINT_TO_POINTER()).)
+</para>
+
+@object: the object that emits the signal.
+@name: name of the signal.
+@func: function pointer to attach to the signal.
+@func_data: pointer to pass to func.
+@alive_object: object whose death should cause the handler connection
+to be destroyed.
+@Deprecated: Use g_signal_connect_object() instead.
+
+
+<!-- ##### FUNCTION gtk_signal_connect_object_while_alive ##### -->
+<para>
+These signal connectors are for signals which refer to objects,
+so they must not be called after the object is deleted.
+</para>
+<para>
+Unlike gtk_signal_connect_while_alive(),
+this swaps the object and user data, making it suitable for
+use with functions which primarily operate on the user data.
+</para>
+<para>
+This function acts just like gtk_signal_connect_object() except
+it traps the "destroy" signal to prevent you from having to
+clean up the handler.
+</para>
+
+@object: the object associated with the signal.
+@name: name of the signal.
+@func: function pointer to attach to the signal.
+@alive_object: the user data, which must be an object, whose destruction
+should signal the removal of this signal.
+@Deprecated: Use g_signal_connect_object() instead, passing 
+<literal>G_CONNECT_SWAPPED</literal> as @connect_flags.
+
+
+<!-- ##### MACRO gtk_signal_disconnect ##### -->
+<para>
+Destroys a user-defined handler connection.
+</para>
+
+@object: the object which the handler pertains to.
+@handler_id: the connection id.
+@Deprecated: Use g_signal_handler_disconnect() instead.
+
+
+<!-- ##### MACRO gtk_signal_disconnect_by_func ##### -->
+<para>
+Destroys all connections for a particular object, with
+the given function-pointer and user-data.
+</para>
+
+@object: the object which emits the signal.
+@func: the function pointer to search for.
+@data: the user data to search for.
+@Deprecated: Use g_signal_handlers_disconnect_by_func() instead.
+
+
+<!-- ##### MACRO gtk_signal_disconnect_by_data ##### -->
+<para>
+Destroys all connections for a particular object, with
+the given user-data.
+</para>
+
+@object: the object which emits the signal.
+@data: the user data to search for.
+@Deprecated: Use g_signal_handlers_disconnect_matched() instead.
+
+
+<!-- ##### MACRO gtk_signal_handler_block ##### -->
+<para>
+Prevents a user-defined handler from being invoked.  All other
+signal processing will go on as normal, but this particular
+handler will ignore it.
+</para>
+
+@object: the object which emits the signal to block.
+@handler_id: the connection id.
+@Deprecated: Use g_signal_handler_block() instead.
+
+
+<!-- ##### MACRO gtk_signal_handler_block_by_func ##### -->
+<para>
+Prevents a user-defined handler from being invoked, by reference to
+the user-defined handler's function pointer and user data.  (It may result in
+multiple hooks being blocked, if you've called connect multiple times.)
+</para>
+
+@object: the object which emits the signal to block.
+@func: the function pointer of the handler to block.
+@data: the user data of the handler to block.
+@Deprecated: Use g_signal_handlers_block_by_func() instead.
+
+
+<!-- ##### MACRO gtk_signal_handler_block_by_data ##### -->
+<para>
+Prevents all user-defined handlers with a certain user data from being invoked.
+</para>
+
+@object: the object which emits the signal we want to block.
+@data: the user data of the handlers to block.
+@Deprecated: Use g_signal_handlers_block_matched() instead.
+
+
+<!-- ##### MACRO gtk_signal_handler_unblock ##### -->
+<para>
+Undoes a block, by connection id.  Note that undoing a block doesn't
+necessarily make the hook callable, because if you block a
+hook twice, you must unblock it twice.
+</para>
+
+@object: the object which emits the signal we want to unblock.
+@handler_id: the emission handler identifier, as returned by
+gtk_signal_connect(), etc.
+@Deprecated: Use g_signal_handler_unblock() instead.
+
+
+<!-- ##### MACRO gtk_signal_handler_unblock_by_func ##### -->
+<para>
+Undoes a block, by function pointer and data.
+Note that undoing a block doesn't
+necessarily make the hook callable, because if you block a
+hook twice, you must unblock it twice.
+</para>
+
+@object: the object which emits the signal we want to unblock.
+@func: the function pointer to search for.
+@data: the user data to search for.
+@Deprecated: Use g_signal_handlers_unblock_by_func() instead.
+
+
+<!-- ##### MACRO gtk_signal_handler_unblock_by_data ##### -->
+<para>
+Undoes block(s), to all signals for a particular object
+with a particular user-data pointer
+</para>
+
+@object: the object which emits the signal we want to unblock.
+@data: the user data to search for.
+@Deprecated: Use g_signal_handlers_unblock_matched() instead.
+
+
+<!-- ##### MACRO gtk_signal_handler_pending ##### -->
+<para>
+Returns a connection id corresponding to a given signal id and object.
+</para>
+<para>
+One example of when you might use this is when the arguments
+to the signal are difficult to compute.  A class implementor
+may opt to not emit the signal if no one is attached anyway,
+thus saving the cost of building the arguments.
+</para>
+
+@object: the object to search for the desired user-defined handler.
+@signal_id: the number of the signal to search for.
+@may_be_blocked: whether it is acceptable to return a blocked
+handler.
+@Returns: the connection id, if a connection was found.  0 otherwise.
+@Deprecated: Use g_signal_has_handler_pending() instead.
+
+
+<!-- ##### MACRO gtk_signal_handler_pending_by_func ##### -->
+<para>
+Returns a connection id corresponding to a given signal id, object, function
+pointer and user data.
+</para>
+
+@object: the object to search for the desired handler.
+@signal_id: the number of the signal to search for.
+@may_be_blocked: whether it is acceptable to return a blocked
+handler.
+@func: the function pointer to search for.
+@data: the user data to search for.
+@Returns: the connection id, if a handler was found.  0 otherwise.
+
+
+<!-- ##### MACRO gtk_signal_default_marshaller ##### -->
+<para>
+A marshaller that returns void and takes no extra parameters.
+</para>
+
+
+

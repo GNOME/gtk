@@ -1,0 +1,227 @@
+<!-- ##### SECTION Title ##### -->
+Drag and Drop
+
+<!-- ##### SECTION Short_Description ##### -->
+Functions for controlling drag and drop handling
+
+<!-- ##### SECTION Long_Description ##### -->
+<para>
+These functions provide a low level interface for drag and drop.
+The X backend of GDK supports both the Xdnd and Motif drag and drop protocols 
+transparently, the Win32 backend supports the WM_DROPFILES protocol.
+</para>
+<para>
+GTK+ provides a higher level abstraction based on top of these functions,
+and so they are not normally needed in GTK+ applications.
+See the <link linkend="gtk-Drag-and-Drop">Drag and Drop</link> section of
+the GTK+ documentation for more information.
+</para>
+
+<!-- ##### SECTION See_Also ##### -->
+<para>
+
+</para>
+
+<!-- ##### SECTION Stability_Level ##### -->
+
+
+<!-- ##### FUNCTION gdk_drag_get_selection ##### -->
+<para>
+</para>
+
+@context: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_drag_abort ##### -->
+<para>
+</para>
+
+@context: 
+@time_: 
+
+
+<!-- ##### FUNCTION gdk_drop_reply ##### -->
+<para>
+</para>
+
+@context: 
+@ok: 
+@time_: 
+
+
+<!-- ##### FUNCTION gdk_drag_context_new ##### -->
+<para>
+</para>
+
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_drag_drop ##### -->
+<para>
+</para>
+
+@context: 
+@time_: 
+
+
+<!-- ##### FUNCTION gdk_drag_find_window ##### -->
+<para>
+</para>
+
+@context: 
+@drag_window: 
+@x_root: 
+@y_root: 
+@dest_window: 
+@protocol: 
+
+
+<!-- ##### FUNCTION gdk_drag_find_window_for_screen ##### -->
+<para>
+
+</para>
+
+@context: 
+@drag_window: 
+@screen: 
+@x_root: 
+@y_root: 
+@dest_window: 
+@protocol: 
+
+
+<!-- ##### FUNCTION gdk_drag_context_ref ##### -->
+<para>
+</para>
+
+@context: 
+
+
+<!-- ##### FUNCTION gdk_drag_begin ##### -->
+<para>
+</para>
+
+@window: 
+@targets: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_drag_motion ##### -->
+<para>
+</para>
+
+@context: 
+@dest_window: 
+@protocol: 
+@x_root: 
+@y_root: 
+@suggested_action: 
+@possible_actions: 
+@time_: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_drop_finish ##### -->
+<para>
+</para>
+
+@context: 
+@success: 
+@time_: 
+
+
+<!-- ##### FUNCTION gdk_drag_get_protocol ##### -->
+<para>
+</para>
+
+@xid: 
+@protocol: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_drag_get_protocol_for_display ##### -->
+<para>
+
+</para>
+
+@display: 
+@xid: 
+@protocol: 
+@Returns: 
+
+
+<!-- ##### ENUM GdkDragProtocol ##### -->
+<para>
+Used in #GdkDragContext to indicate the protocol according to
+which DND is done.
+</para>
+
+@GDK_DRAG_PROTO_MOTIF: The Motif DND protocol.
+@GDK_DRAG_PROTO_XDND: The Xdnd protocol.
+@GDK_DRAG_PROTO_ROOTWIN: An extension to the Xdnd protocol for
+  unclaimed root window drops.
+@GDK_DRAG_PROTO_NONE: no protocol.
+@GDK_DRAG_PROTO_WIN32_DROPFILES: The simple WM_DROPFILES protocol.
+@GDK_DRAG_PROTO_OLE2: The complex OLE2 DND protocol (not implemented).
+@GDK_DRAG_PROTO_LOCAL: Intra-application DND.
+
+<!-- ##### FUNCTION gdk_drag_context_unref ##### -->
+<para>
+</para>
+
+@context: 
+
+
+<!-- ##### STRUCT GdkDragContext ##### -->
+<para>
+A <structname>GdkDragContext</structname> holds information about a 
+drag in progress. It is used on both source and destination sides.
+</para>
+
+@parent_instance: the parent instance
+@protocol: the DND protocol which governs this drag.
+@is_source: %TRUE if the context is used on the source side.
+@source_window: the source of this drag.
+@dest_window: the destination window of this drag.
+@targets: a list of targets offered by the source.
+@actions: a bitmask of actions proposed by the source when 
+   @suggested_action is %GDK_ACTION_ASK.
+@suggested_action: the action suggested by the source.
+@action: the action chosen by the destination.
+@start_time: a timestamp recording the start time of this drag.
+
+<!-- ##### ENUM GdkDragAction ##### -->
+<para>
+Used in #GdkDragContext to indicate what the destination
+should do with the dropped data.
+</para>
+
+@GDK_ACTION_DEFAULT: Means nothing, and should not be used.
+@GDK_ACTION_COPY: Copy the data.
+@GDK_ACTION_MOVE: Move the data, i.e. first copy it, then delete
+  it from the source using the DELETE target of the X selection protocol.
+@GDK_ACTION_LINK: Add a link to the data. Note that this is only
+  useful if source and destination agree on what it means.
+@GDK_ACTION_PRIVATE: Special action which tells the source that the
+  destination will do something that the source doesn't understand.
+@GDK_ACTION_ASK: Ask the user what to do with the data.
+
+<!-- ##### FUNCTION gdk_drag_status ##### -->
+<para>
+</para>
+
+@context: 
+@action: 
+@time_: 
+
+
+<!-- ##### FUNCTION gdk_drag_drop_succeeded ##### -->
+<para>
+
+</para>
+
+@context: 
+@Returns: 
+
+

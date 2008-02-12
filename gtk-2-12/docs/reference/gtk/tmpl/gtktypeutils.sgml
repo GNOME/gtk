@@ -1,0 +1,627 @@
+<!-- ##### SECTION Title ##### -->
+Types
+
+<!-- ##### SECTION Short_Description ##### -->
+Handle run-time type creation
+
+<!-- ##### SECTION Long_Description ##### -->
+<para>
+The GTK+ type system is extensible.  Because of that, types have to be
+managed at runtime.
+</para>
+
+<!-- ##### SECTION See_Also ##### -->
+<para>
+
+</para>
+
+<!-- ##### SECTION Stability_Level ##### -->
+
+
+<!-- ##### TYPEDEF GtkType ##### -->
+<para>
+#GtkType is unique integer identifying the type.  The guts of the
+information about the type is held in a private struct named
+#GtkTypeNode.
+</para>
+
+
+<!-- ##### TYPEDEF GtkFundamentalType ##### -->
+<para>
+#GtkFundamentalType is an enumerated type which lists all the possible
+fundamental types (e.g. <type>char</type>, <type>uchar</type>, <type>int</type>,
+<type>long</type>, <type>float</type>, etc).
+</para>
+
+
+<!-- ##### MACRO GTK_CLASS_NAME ##### -->
+<para>
+Returns the type name of @class.
+</para>
+
+@class: a #GtkTypeClass.
+@Deprecated: Use g_type_name() and G_TYPE_FROM_CLASS() instead.
+
+
+<!-- ##### MACRO GTK_CLASS_TYPE ##### -->
+<para>
+Returns the type of @class.
+</para>
+
+@class: a #GtkTypeClass.
+@Deprecated: Use G_TYPE_FROM_CLASS() instead.
+
+
+<!-- ##### MACRO GTK_TYPE_IS_OBJECT ##### -->
+<para>
+Returns %TRUE if @type is a %GTK_TYPE_OBJECT.
+</para>
+
+@type: a #GtkType.
+@Deprecated: Use G_TYPE_IS_OBJECT() instead.
+
+
+<!-- ##### MACRO GTK_TYPE_FUNDAMENTAL_LAST ##### -->
+<para>
+The highest-numbered structured or flat enumerated type value.
+</para>
+
+@Deprecated: Use #G_TYPE_LAST_RESERVED_FUNDAMENTAL - 1 instead.
+
+
+<!-- ##### MACRO GTK_TYPE_FUNDAMENTAL_MAX ##### -->
+<para>
+The maximum fundamental enumerated type value.
+</para>
+
+@Deprecated: Use #G_TYPE_FUNDAMENTAL_MAX instead.
+
+
+<!-- ##### MACRO GTK_STRUCT_OFFSET ##### -->
+<para>
+Use in place of <function>offsetof()</function>, which is used if it exists.
+</para>
+
+@Deprecated: Use G_STRUCT_OFFSET() instead.
+
+
+<!-- ##### MACRO GTK_CHECK_CAST ##### -->
+<para>
+Casts the object in @tobj into @cast.  If %G_DISABLE_CAST_CHECKS is
+defined, just cast it.  Otherwise, check to see if we can cast @tobj
+into a @cast.
+</para>
+
+
+
+<!-- ##### MACRO GTK_CHECK_CLASS_CAST ##### -->
+<para>
+Casts the object in @tobj into @cast.  If %G_DISABLE_CAST_CHECKS is
+defined, just cast it.  Otherwise, check to see if we can cast @tobj
+into a @cast.
+</para>
+
+<!-- # Unused Parameters # -->
+@tclass: a #GtkClassInitFunc
+@cast_type: a GTK+ type.
+@cast: a C type
+
+
+<!-- ##### MACRO GTK_CHECK_TYPE ##### -->
+<para>
+Determines whether @type_object is a type of @otype.
+</para>
+
+<!-- # Unused Parameters # -->
+@type_object: a #GtkTypeObject object
+
+
+<!-- ##### MACRO GTK_CHECK_CLASS_TYPE ##### -->
+<para>
+Determines whether @type_class is a type of @otype.
+</para>
+
+<!-- # Unused Parameters # -->
+@type_class: a #GtkTypeClass class.
+
+
+<!-- ##### MACRO GTK_CHECK_GET_CLASS ##### -->
+<para>
+Gets the class of @tobj.
+</para>
+
+<!-- # Unused Parameters # -->
+@tobj: a #GtkObject.
+
+
+<!-- ##### MACRO GTK_FUNDAMENTAL_TYPE ##### -->
+<para>
+Converts a GTK+ type into a fundamental type.
+</para>
+
+
+
+<!-- ##### MACRO GTK_SIGNAL_FUNC ##### -->
+<para>
+Just a macroized cast into a #GtkSignalFunc.
+</para>
+
+@f: 
+
+
+<!-- ##### TYPEDEF GtkClassInitFunc ##### -->
+<para>
+Defines a function pointer.
+</para>
+
+
+<!-- ##### TYPEDEF GtkObjectInitFunc ##### -->
+<para>
+Defines a function pointer.
+</para>
+
+
+<!-- ##### USER_FUNCTION GtkSignalFunc ##### -->
+<para>
+Defines a function pointer.
+</para>
+
+
+
+<!-- ##### USER_FUNCTION GtkFunction ##### -->
+<para>
+Defines a function pointer.
+</para>
+
+@data: #gpointer
+@Returns: #gint
+
+
+<!-- ##### USER_FUNCTION GtkDestroyNotify ##### -->
+<para>
+Defines a function pointer.
+</para>
+
+@data: #gpointer
+
+
+<!-- ##### USER_FUNCTION GtkCallbackMarshal ##### -->
+<para>
+Defines a function pointer.
+</para>
+
+@object: #GtkObject*
+@data: #gpointer
+@n_args: #guint
+@args: #GtkArg*
+
+
+<!-- ##### TYPEDEF GtkSignalMarshaller ##### -->
+<para>
+Defines a function pointer.
+</para>
+
+
+<!-- ##### TYPEDEF GtkTypeObject ##### -->
+<para>
+A #GtkTypeObject defines the minimum structure requirements
+for type instances. Type instances returned from gtk_type_new ()
+and initialized through a #GtkObjectInitFunc need to directly inherit
+from this structure or at least copy its fields one by one.
+</para>
+
+
+<!-- ##### STRUCT GtkArg ##### -->
+<para>
+This is a structure that we use to pass in typed values (and names).
+</para>
+
+@type: 
+@name: 
+
+<!-- ##### MACRO GTK_VALUE_CHAR ##### -->
+<para>
+Gets the value of a #GtkArg whose #GtkType is %GTK_TYPE_CHAR.
+</para>
+
+@a: a #GtkArg.
+
+
+<!-- ##### MACRO GTK_VALUE_UCHAR ##### -->
+<para>
+Gets the value of a #GtkArg whose #GtkType is %GTK_TYPE_UCHAR.
+</para>
+
+@a: a #GtkArg.
+
+
+<!-- ##### MACRO GTK_VALUE_BOOL ##### -->
+<para>
+Gets the value of a #GtkArg whose #GtkType is %GTK_TYPE_BOOL.
+</para>
+
+@a: a #GtkArg.
+
+
+<!-- ##### MACRO GTK_VALUE_INT ##### -->
+<para>
+Gets the value of a #GtkArg whose #GtkType is %GTK_TYPE_INT.
+</para>
+
+@a: a #GtkArg.
+
+
+<!-- ##### MACRO GTK_VALUE_UINT ##### -->
+<para>
+Gets the value of a #GtkArg whose #GtkType is %GTK_TYPE_UINT.
+</para>
+
+@a: a #GtkArg.
+
+
+<!-- ##### MACRO GTK_VALUE_LONG ##### -->
+<para>
+Gets the value of a #GtkArg whose #GtkType is %GTK_TYPE_LONG.
+</para>
+
+@a: a #GtkArg.
+
+
+<!-- ##### MACRO GTK_VALUE_ULONG ##### -->
+<para>
+Gets the value of a #GtkArg whose #GtkType is %GTK_TYPE_ULONG.
+</para>
+
+@a: a #GtkArg.
+
+
+<!-- ##### MACRO GTK_VALUE_FLOAT ##### -->
+<para>
+Gets the value of a #GtkArg whose #GtkType is %GTK_TYPE_FLOAT.
+</para>
+
+@a: a #GtkArg.
+
+
+<!-- ##### MACRO GTK_VALUE_DOUBLE ##### -->
+<para>
+Gets the value of a #GtkArg whose #GtkType is %GTK_TYPE_DOUBLE.
+</para>
+
+@a: a #GtkArg.
+
+
+<!-- ##### MACRO GTK_VALUE_STRING ##### -->
+<para>
+Gets the value of a #GtkArg whose #GtkType is %GTK_TYPE_STRING.
+</para>
+
+@a: a #GtkArg.
+
+
+<!-- ##### MACRO GTK_VALUE_ENUM ##### -->
+<para>
+Gets the value of a #GtkArg whose #GtkType is %GTK_TYPE_ENUM.
+</para>
+
+@a: a #GtkArg.
+
+
+<!-- ##### MACRO GTK_VALUE_FLAGS ##### -->
+<para>
+Gets the value of a #GtkArg whose #GtkType is %GTK_TYPE_FLAGS.
+</para>
+
+@a: a #GtkArg.
+
+
+<!-- ##### MACRO GTK_VALUE_BOXED ##### -->
+<para>
+Gets the value of a #GtkArg whose #GtkType is %GTK_TYPE_BOXED.
+</para>
+
+@a: a #GtkArg.
+
+
+<!-- ##### MACRO GTK_VALUE_POINTER ##### -->
+<para>
+Gets the value of a #GtkArg whose #GtkType is %GTK_TYPE_POINTER.
+</para>
+
+@a: a #GtkArg.
+
+
+<!-- ##### MACRO GTK_VALUE_OBJECT ##### -->
+<para>
+Gets the value of a #GtkArg whose #GtkType is %GTK_TYPE_OBJECT.
+</para>
+
+@a: a #GtkArg.
+
+
+<!-- ##### MACRO GTK_VALUE_SIGNAL ##### -->
+<para>
+Gets the value of a #GtkArg whose #GtkType is %GTK_TYPE_SIGNAL.
+</para>
+
+@a: a #GtkArg.
+
+
+<!-- ##### MACRO GTK_RETLOC_CHAR ##### -->
+<para>
+If the #GtkArg contains a pointer to the value, this macro will be a pointer to a %GTK_TYPE_CHAR.
+</para>
+
+@a: a #GtkArg.
+
+
+<!-- ##### MACRO GTK_RETLOC_UCHAR ##### -->
+<para>
+If the #GtkArg contains a pointer to the value, this macro will be a pointer to a %GTK_TYPE_UCHAR.
+</para>
+
+@a: a #GtkArg.
+
+
+<!-- ##### MACRO GTK_RETLOC_BOOL ##### -->
+<para>
+If the #GtkArg contains a pointer to the value, this macro will be a pointer to a %GTK_TYPE_BOOL.
+</para>
+
+@a: a #GtkArg.
+
+
+<!-- ##### MACRO GTK_RETLOC_INT ##### -->
+<para>
+If the #GtkArg contains a pointer to the value, this macro will be a pointer to a %GTK_TYPE_INT.
+</para>
+
+@a: a #GtkArg.
+
+
+<!-- ##### MACRO GTK_RETLOC_UINT ##### -->
+<para>
+If the #GtkArg contains a pointer to the value, this macro will be a pointer to a %GTK_TYPE_UINT.
+</para>
+
+@a: a #GtkArg.
+
+
+<!-- ##### MACRO GTK_RETLOC_LONG ##### -->
+<para>
+If the #GtkArg contains a pointer to the value, this macro will be a pointer to a %GTK_TYPE_LONG.
+</para>
+
+@a: a #GtkArg.
+
+
+<!-- ##### MACRO GTK_RETLOC_ULONG ##### -->
+<para>
+If the #GtkArg contains a pointer to the value, this macro will be a pointer to a %GTK_TYPE_ULONG.
+</para>
+
+@a: a #GtkArg.
+
+
+<!-- ##### MACRO GTK_RETLOC_FLOAT ##### -->
+<para>
+If the #GtkArg contains a pointer to the value, this macro will be a pointer to a %GTK_TYPE_FLOAT.
+</para>
+
+@a: a #GtkArg.
+
+
+<!-- ##### MACRO GTK_RETLOC_DOUBLE ##### -->
+<para>
+If the #GtkArg contains a pointer to the value, this macro will be a pointer to a %GTK_TYPE_DOUBLE.
+</para>
+
+@a: a #GtkArg.
+
+
+<!-- ##### MACRO GTK_RETLOC_STRING ##### -->
+<para>
+If the #GtkArg contains a pointer to the value, this macro will be a pointer to a %GTK_TYPE_STRING.
+</para>
+
+@a: a #GtkArg.
+
+
+<!-- ##### MACRO GTK_RETLOC_ENUM ##### -->
+<para>
+If the #GtkArg contains a pointer to the value, this macro will be a pointer to a %GTK_TYPE_ENUM.
+</para>
+
+@a: a #GtkArg.
+
+
+<!-- ##### MACRO GTK_RETLOC_FLAGS ##### -->
+<para>
+If the #GtkArg contains a pointer to the value, this macro will be a pointer to a %GTK_TYPE_FLAGS.
+</para>
+
+@a: a #GtkArg.
+
+
+<!-- ##### MACRO GTK_RETLOC_BOXED ##### -->
+<para>
+If the #GtkArg contains a pointer to the value, this macro will be a pointer to a %GTK_TYPE_BOXED.
+</para>
+
+@a: a #GtkArg.
+
+
+<!-- ##### MACRO GTK_RETLOC_POINTER ##### -->
+<para>
+If the #GtkArg contains a pointer to the value, this macro will be a pointer to a %GTK_TYPE_POINTER.
+</para>
+
+@a: a #GtkArg.
+
+
+<!-- ##### MACRO GTK_RETLOC_OBJECT ##### -->
+<para>
+If the #GtkArg contains a pointer to the value, this macro will be a pointer to a %GTK_TYPE_OBJECT.
+</para>
+
+@a: a #GtkArg.
+
+
+<!-- ##### STRUCT GtkTypeInfo ##### -->
+<para>
+Holds information about the type.  gtk_type_name() returns the name.
+@object_size is somehow set to the number of bytes that an instance of
+the object will occupy.  @class_init_func holds the type's
+initialization function.  @object_init_func holds the initialization
+function for an instance of the object.  @reserved_1 is used for
+#GtkEnumValue to hold the enumerated values.
+</para>
+
+@type_name: 
+@object_size: 
+@class_size: 
+@class_init_func: 
+@object_init_func: 
+@reserved_1: 
+@reserved_2: 
+@base_class_init_func: 
+
+<!-- ##### TYPEDEF GtkTypeClass ##### -->
+<para>
+The base structure for a GTK+ type. Every type inherits this as a base structure.
+</para>
+
+
+<!-- ##### TYPEDEF GtkEnumValue ##### -->
+<para>
+A structure which contains a single enum value, and its name, and its
+nickname.
+</para>
+
+
+<!-- ##### TYPEDEF GtkFlagValue ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### FUNCTION gtk_type_init ##### -->
+<para>
+Initializes the data structures associated with GTK+ types.
+</para>
+
+@debug_flags: 
+
+
+<!-- ##### FUNCTION gtk_type_unique ##### -->
+<para>
+Creates a new, unique type.
+</para>
+
+@parent_type: if zero, a fundamental type is created.
+@gtkinfo: 
+@Returns: the new #GtkType.
+<!-- # Unused Parameters # -->
+@type_info: must not be %NULL, and @type_info->type_name must also not be %NULL.
+
+
+<!-- ##### MACRO gtk_type_name ##### -->
+<para>
+Returns a pointer to the name of a type, or %NULL if it has none.
+</para>
+
+@type: a #GtkType.
+@Returns: a pointer to the name of a type, or %NULL if it has none.
+
+
+<!-- ##### MACRO gtk_type_from_name ##### -->
+<para>
+Gets the internal representation of a type, given its name.
+</para>
+
+@name: the name of a GTK+ type
+@Returns: a #GtkType.
+
+
+<!-- ##### MACRO gtk_type_parent ##### -->
+<para>
+Returns the parent type of a #GtkType.
+</para>
+
+@type: a #GtkType.
+@Returns: the #GtkType of the parent.
+
+
+<!-- ##### FUNCTION gtk_type_class ##### -->
+<para>
+Returns a pointer pointing to the class of @type or %NULL if there was
+any trouble identifying @type.  Initializes the class if necessary.
+</para>
+
+@type: a #GtkType.
+@Returns: pointer to the class.
+
+
+<!-- ##### FUNCTION gtk_type_new ##### -->
+<para>
+Creates a new object of a given type, and return a pointer to it.
+Returns %NULL if you give it an invalid type.  It allocates the object
+out of the type's memory chunk if there is a memory chunk.  The object
+has all the proper initializers called.
+</para>
+
+@type: a #GtkType.
+@Returns: pointer to a #GtkTypeObject.
+
+
+<!-- ##### MACRO gtk_type_is_a ##### -->
+<para>
+Looks in the type hierarchy to see if @type has @is_a_type among its
+ancestors.  Do so with a simple lookup, not a loop.
+</para>
+
+@type: a #GtkType.
+@is_a_type: another #GtkType.
+@Returns: %TRUE if @type is a @is_a_type.
+
+
+<!-- ##### FUNCTION gtk_type_enum_get_values ##### -->
+<para>
+If @enum_type has values, then return a pointer to all of them.
+</para>
+
+@enum_type: a #GtkType.
+@Returns: #GtkEnumValue*
+
+
+<!-- ##### FUNCTION gtk_type_flags_get_values ##### -->
+<para>
+If @flags_type has values, then return a pointer to all of them.
+</para>
+
+@flags_type: a #GtkType.
+@Returns: #GtkFlagValue*
+
+
+<!-- ##### FUNCTION gtk_type_enum_find_value ##### -->
+<para>
+Returns a pointer to one of @enum_type's #GtkEnumValues's whose name (or nickname) matches @value_name.
+</para>
+
+@enum_type: a #GtkType.
+@value_name: the name to look for.
+@Returns: #GtkEnumValue*
+
+
+<!-- ##### FUNCTION gtk_type_flags_find_value ##### -->
+<para>
+Returns a pointer to one of @flag_type's #GtkFlagValue's whose name (or nickname) matches @value_name.
+</para>
+
+@flags_type: a #GtkType.
+@value_name: the name to look for.
+@Returns: #GtkFlagValue*
+<!-- # Unused Parameters # -->
+@flag_type: GtkType
+
+

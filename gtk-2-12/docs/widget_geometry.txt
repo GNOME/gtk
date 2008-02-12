@@ -1,0 +1,836 @@
+This file is some notes about how different widgets are drawn.
+
+=============
+
+GtkMenu
+
+=============
++----------------------------------------------------------------------------+
+|                                A                                           |
+| +------------------------------------------------------------------------+ |
+| |############################# C ########################################| |
+| |#                             D                                        #| |
+| |# +-------------------------------------------------------------------+#| |
+| |# |                                                                   |#| |
+| |# |                                                                   |#| |
+| |# |                                                                   |#| |
+| |# |                      Item 1                                       |#| |
+| |# |                                                                   |#| |
+| |# |                                                                   |#| |
+| |# |                                                                   |#| |
+| |# |                                                                   |#| |
+| |# |                                                                   |#| |
+| |# +-------------------------------------------------------------------+#| |
+| |# +-------------------------------------------------------------------+#| |
+| |# |                                                                   |#| |
+| |# |                                                                   |#| |
+|A|B |                                                                   |B|A|
+| |# |                      Item 2                                       |#| |
+| |# |                                                                   |#| |
+| |# |                                                                   |#| |
+| |# |                                                                   |#| |
+| |# |                                                                   |#| |
+| |# |                                                                   |#| |
+| |# +-------------------------------------------------------------------+#| |
+| |#                        [...]                                         #| |
+| |# +-------------------------------------------------------------------+#| |
+| |# |                                                                   |#| |
+| |# |                                                                   |#| |
+| |# |                                                                   |#| |
+| |# |                      Item n                                       |#| |
+| |# |                                                                   |#| |
+| |# |                                                                   |#| |
+| |# |                                                                   |#| |
+| |# |                                                                   |#| |
+| |# |                                                                   |#| |
+| |# +-------------------------------------------------------------------+#| |
+| |#                             D                                        #| |
+| |############################# C ########################################| |
+| +------------------------------------------------------------------------| |
+|                                A                                           |
++----------------------------------------------------------------------------+
+
+A: GtkContainer::border_width
+B: xthickness
+C: ythickness
+D: vertical_padding
+
+=============
+
+GtkMenuItem
+
+=============
+
++----------------------------------------------------------------------------+
+|                                A                                           |
+| +------------------------------------------------------------------------+ |
+| |############################# C ########################################| |
+| |#+-+------------+--+-------------------------------+--+-------------+-+#| |
+| |#| |\\\\\\\\\\\\|  |                  /|\          |**|             | |#| |
+| |#| |<------E------>|                   |           |**|      G      | |#| |
+| |#| |\\\\\\\\\\\\|  |                   |           |**|             | |#| |
+| |#| |\\\\\\\\\\\\|  |                   |           |**|   >>        | |#| |
+| |#| |\\\\\\\\\\\\|  |                   |           |**|   >>>>      | |#| |
+| |#| |\\\\\\\\\\\\|  |                   |           |**|   >>>>>>    | |#| |
+|A|B|D|\\\\\\\\\\\\| F|      Child        G           |*H|   >>>>>>>>  |D|B|A|
+| |#| |\\\\\\\\\\\\|  |                   |           |**|   >>>>>>    | |#| |
+| |#| |\\\\\\\\\\\\|  |                   |           |**|   >>>>      | |#| |
+| |#| |\\\\\\\\\\\\|  |                   |           |**|   >>        | |#| |
+| |#| |\\\\\\\\\\\\|  |                   |           |**|             | |#| |
+| |#| |\\\\\\\\\\\\|  |                   |           |**|             | |#| |
+| |#| |\\\\\\\\\\\\|  |                  \|/          |**|             | |#| |
+| |#+-+------------+--+-------------------------------+--+-------------+-+#| |
+| |############################# C ########################################| |
+| +------------------------------------------------------------------------+ |
+|                                A                                           |
++----------------------------------------------------------------------------+
+
+A: GtkContainer:border_width
+B: xthickness
+C: ythickness
+D: horizontal_padding
+E: toggle_size
+F: toggle_spacing
+G: Requested height of child (also used for width of arrow
+H: arrow_spacing spacing (when the item has a non-vertical submenu)
+
+
+=============
+
+GtkOptionMenu:
+
+=============
+
+Geometry parameters
+
+ Style properties
+
+   GtkWidget::interior_focus = TRUE
+   GtkWidget::focus_width = 1
+   GtkWidget::focus_padding = 0
+   GtkOptionMenu::indicator_size = { 7, 13 }
+   GtkOptionMenu::indicator_spacing = { 7, 5, 2, 2 }
+
+ Properties
+
+   GtkContainer::border_width = 0
+
+ #defines
+
+   CHILD_LEFT_SPACING = 5
+   CHILD_RIGHT_SPACING = 1
+   CHILD_TOP_SPACING = 1
+   CHILD_BOTTOM_SPACING = 1
+
+
+I) interior_focus = TRUE
+
++--------------------------------------------------+
++                       A                          |
+| +----------------------------------------------+ |
+| |\\\\\\\\\\\\\\\\\\\\ H ///////////////////////| |
+| |\+------------------------------------------+/| |
+| |\|                   C                      |/| |
+| |\| +------------------------------+         |/| |
+| |\| |################ D ###########|    L    |/| |
+| |\| |#+--------------------------+#|         |/| |
+| |\| |#|         K                |#|         |/| |
+| |\| |#| +----------------------+ |#| +-----+ |/| |
+| |\| |#| |                      | |#| | /#\ | |/| |
+| |\| |#| |                      | |#| | === | |/| |
+|A|B|C|D|E|    	 Child        	 |F|D|G| IxJ |O|B|A|
+| |/| |#| |                      | |#| | === | |\| |
+| |/| |#| |                      | |#| | \#/ | |\| |
+| |/| |#| +----------------------+ |#| +-----+ |\| |
+| |/| |#|         M                |#|         |\| |
+| |/| |#+---------------------------#|         |\| |
+| |/| |################ D ###########|    N    |\| |
+| |/| +------------------------------+         |\| |
+| |/|                   C                      |\| |
+| |/+------------------------------------------+\| |
+| |////////////////////	H \\\\\\\\\\\\\\\\\\\\\\\| |
+| +----------------------------------------------+ |
+|                      	A 		      	   |
++--------------------------------------------------+
+
+  A: GtkContainer::border_width
+  B: xthickness
+  C: GtkWidget::focus_pad
+  D: GtkWidget::focus_width
+  E: CHILD_LEFT_SPACING
+  F: CHILD_RIGHT_SPACING
+  G: GtkOptionMenu::indicator_spacing::left
+  H: ythickness
+  I: GtkOptionMenu::indicator_size::width
+  J: GtkOptionMenu::indicator_size::height
+  K: CHILD_TOP_SPACING
+  L: GtkOptionMenu::indicator_spacing::top + GtkWidget::focus_width + GtkWidget::focus_pad + CHILD_TOP_SPACING
+  M: CHILD_BOTTOM_SPACING
+  N: GtkOptionMenu::indicator_spacing::bottom + GtkWidget::focus_width + GtkWidget::focus_pad + CHILD_BOTTOM_SPACING
+  O: GtkOptionMenu::indicator_spacing::right
+
+
+II) interior_focus = FALSE
+
++--------------------------------------------------+
++                       A                          |
+| +----------------------------------------------+ |
+| |#################### B #######################| |
+| |#+------------------------------------------+#| |
+| |#|                   C                      |#| |
+| |#| +--------------------------------------+ |#| |
+| |#| |\\\\\\\\\\\\\\\\ H ///////////////////| |#| |
+| |#| |\+----------------------------------+/| |#| |
+| |#| |\|         K                   L    |/| |#| |
+| |#| |\| +----------------------+ +-----+ |/| |#| |
+| |#| |\| |                      | | /#\ | |/| |#| |
+| |#| |\| |                      | | === | |/| |#| |
+|A|B|C|D|E|    	 Child         	 |F| IxJ |G|D|C|B|A|
+| |#| |/| |                      | | === | |\| |#| |
+| |#| |/| |                      | | \#/ | |\| |#| |
+| |#| |/| +----------------------+ +-----+ |\| |#| |
+| |#| |/|         M                   N    |\| |#| |
+| |#| |/+----------------------------------+\| |#| |
+| |#| |////////////////	H \\\\\\\\\\\\\\\\\\\| |#| |
+| |#| +--------------------------------------+ |#| |
+| |#|                   C                      |#| |
+| |#+------------------------------------------+#| |
+| |#################### B #######################| |
+| +----------------------------------------------+ |
+|                      	A 	       	      	   |
++--------------------------------------------------+
+
+
+ A: GtkContainer::border_width
+ B: GtkWidget::focus_width
+ C: GtkWidget::focus_padding
+ D: xthickness
+ E: CHILD_LEFT_SPACING
+ F: CHILD_RIGHT_SPACING + GtkOptionMenu::indicator_spacing::left
+ G: GtkOptionMenu::indicator_spacing::right
+ H: ythickness
+ I: GtkOptionMenu::indicator_size::width
+ J: GtkOptionMenu::indicator_size::height
+ K: CHILD_TOP_SPACING
+ L: CHILD_TOP_SPACING + GtkOptionMenu::indicator_spacing::top
+ M: CHILD_BOTTOM_SPACING
+ N: CHILD_BOTTOM_SPACING + GtkOptionMenu::indicator_spacing::bottom
+
+
+III) interior_focus = FALSE, !HAVE_FOCUS
+
++--------------------------------------------------+
++                       A                          |
+| +----------------------------------------------+ |
+| |\\\\\\\\\\\\\\\\\\\\ H ///////////////////////| |
+| |\+------------------------------------------+/| |
+| |\|                                          |/| |
+| |\|                                          |/| |
+| |\|                                          |/| |
+| |\|                                          |/| |
+| |\|             K                   L        |/| |
+| |\|     +----------------------+ +-----+     |/| |
+| |\|     |                      | | /#\ |     |/| |
+| |\|     |                      | | === |     |/| |
+|A|D|    E|    	 Child         	 |F| IxJ |G    |D|A|
+| |/|     |                      | | === |     |\| |
+| |/|     |                      | | \#/ |     |\| |
+| |/|     +----------------------+ +-----+     |\| |
+| |/|             M                   N        |\| |
+| |/|                                          |\| |
+| |/|                                          |\| |
+| |/|                                          |\| |
+| |/|                                          |\| |
+| |/+------------------------------------------+\| |
+| |//////////////////// H \\\\\\\\\\\\\\\\\\\\\\\| |
+| +----------------------------------------------+ |
+|                      	A 	       	      	   |
++--------------------------------------------------+
+
+
+ A: GtkContainer::border_width
+ B: GtkWidget::focus_width
+ C: GtkWidget::focus_padding
+ D: xthickness
+ E: CHILD_LEFT_SPACING + GtkWidget::focus_width + GtkWidget::focus_padding
+ F: CHILD_RIGHT_SPACING + GtkOptionMenu::in+icator_spacing::left
+ G: GtkOptionMenu::indicator_spacing::right + GtkWidget::focus_width + GtkWidget::focus_padding
+ H: ythickness
+ I: GtkOptionMenu::indicator_size::width
+ J: GtkOptionMenu::indicator_size::height
+ K: CHILD_TOP_SPACING + GtkWidget::focus_width + GtkWidget::focus_padding
+ L: CHILD_TOP_SPACING + GtkOptionMenu::indicator_spacing::top + GtkWidget::focus_width + GtkWidget::focus_padding
+ M: CHILD_BOTTOM_SPACING + GtkWidget::focus_width + GtkWidget::focus_padding
+ N: CHILD_BOTTOM_SPACING + GtkOptionMenu::indicator_spacing::bottom + GtkWidget::focus_width + GtkWidget::focus_padding
+
+
+
+=====================
+
+GtkButton
+
+=====================
+
+NOTE: Due to a bug that is basically unfixable in a sufficiently compatible
+NOTE: way, the button gives the space requested for focus_width and 
+NOTE: focus_padding to the child (in addition to the space requested by
+NOTE: the child), if the button is !CAN_FOCUS.
+
+ Style properties
+
+   GtkWidget::interior_focus = TRUE
+   GtkWidget::focus_width = 1
+   GtkWidget::focus_padding = 0
+   GtkButton::default_border = { 1, 1, 1, 1 };
+   GtkButton::default_outside_border = { 0, 0, 0, 0 };
+   GtkButton::child_displacement_x = 0;
+   GtkButton::child_displacement_y = 0;
+
+ Properties
+
+   GtkContainer::border_width = 0
+
+ #defines
+
+   CHILD_SPACING 1
+
+I) HAS_DEFAULT && (!GtkWidget::interior-focus || !HAVE_FOCUS)
+
++----------------------------------------------+
+|    		       A 		       |
+| +------------------------------------------+ |
+| |@@@@@@@@@@@@@@@@@@@ I @@@@@@@@@@@@@@@@@@@@| |
+| |@+--------------------------------------+@| |
+| |@|\\\\\\\\\\\\\\\\\ J //////////////////|@| |
+| |@|\+----------------------------------+/|@| |
+| |@|\|                E                 |/|@| |
+| |@|\| +------------------------------+ |/|@| |
+| |@|\| |############# F ##############| |/|@| |
+| |@|\| |#+--------------------------+#| |/|@| |
+| |@|\| |#|            L             |#| |/|@| |
+| |@|\| |#| +----------------------+ |#| |/|@| |
+| |@|\| |#| |                      | |#| |/|@| |
+| |@|\| |#| |                      | |#| |/|@| |
+|A|B|D|E|F|G|        Child         |M|F|E|D|C|A|
+| |@|/| |#| |                      | |#| |\|@| |
+| |@|/| |#| |                      | |#| |\|@| |
+| |@|/| |#| +----------------------+ |#| |\|@| |
+| |@|/| |#|            N             |#| |\|@| |
+| |@|/| |#+--------------------------+#| |\|@| |
+| |@|/| |############# F ##############| |\|@| |
+| |@|/| +------------------------------+ |\|@| |
+| |@|/|                E                 |\|@| |
+| |@|/+----------------------------------+\|@| |
+| |@|///////////////// J \\\\\\\\\\\\\\\\\\|@| |
+| |@+--------------------------------------+@| |
+| |@@@@@@@@@@@@@@@@@@@ K @@@@@@@@@@@@@@@@@@@@| |
+| +------------------------------------------+ |
+|                      A                       |
++----------------------------------------------+
+
+A: GtkContainer::border-width
+B: GtkButton::default-border::left
+C: GtkButton::default-border::right
+D: xthickness
+E: GtkWidget::focus-padding
+F: GtkWidget::focus-line-width
+G: CHILD_SPACING + (depressed ? GtkButton::child-displacement-x : 0)
+I: GtkButton::default-border::top
+J: ythickness
+K: GtkButton::default-border::bottom
+L: CHILD_SPACING + (depressed ? GtkButton::child-displacement-y : 0)
+M: CHILD_SPACING - (depressed ? GtkButton::child-displacement-x : 0)
+N: CHILD_SPACING - (depressed ? GtkButton::child-displacement-y : 0)
+
+
+II) !HAS_DEFAULT && (!GtkWidget::interior-focus || !HAVE_FOCUS)
+
++----------------------------------------------+
+|    		         		       |
+|                      I                       |
+|                                              |
+|   +--------------------------------------+   |
+|   |\\\\\\\\\\\\\\\\\ J //////////////////|   |
+|   |\+----------------------------------+/|   |
+|   |\|                E                 |/|   |
+|   |\| +------------------------------+ |/|   |
+|   |\| |############# F ##############| |/|   |
+|   |\| |#+--------------------------+#| |/|   |
+|   |\| |#|            L             |#| |/|   |
+|   |\| |#| +----------------------+ |#| |/|   |
+|   |\| |#| |                      | |#| |/|   |
+|   |\| |#| |                      | |#| |/|   |
+| B |D|E|F|G|        Child         |M|F|E|D| C |
+|   |/| |#| |                      | |#| |\|   |
+|   |/| |#| |                      | |#| |\|   |
+|   |/| |#| +----------------------+ |#| |\|   |
+|   |/| |#|            N             |#| |\|   |
+|   |/| |#+--------------------------+#| |\|   |
+|   |/| |############# F ##############| |\|   |
+|   |/| +------------------------------+ |\|   |
+|   |/|                E                 |\|   |
+|   |/+----------------------------------+\|   |
+|   |///////////////// J \\\\\\\\\\\\\\\\\\|   |
+|   +--------------------------------------+   |
+|                                              |
+|                      K                       |
+|                                              |
++----------------------------------------------+
+
+
+a) CAN_DEFAULT
+
+B: GtkContainer::border-width + GtkButton::default-outside-border::left
+C: GtkContainer::border-width + GtkButton::default-outside-border::right
+D: xthickness
+E: GtkWidget::focus-padding
+F: GtkWidget::focus-line-width
+G: CHILD_SPACING + (depressed ? GtkButton::child-displacement-x : 0) +
+   (GtkButton::default-outside-border - GtkButton::default-outside-border)::left
+I: GtkContainer::border-width + GtkButton::default-outside-border::top
+J: ythickness
+K: GtkContainer::border-width + GtkButton::default-outside-border::bottom
+L: CHILD_SPACING + (depressed ? GtkButton::child-displacement-y : 0) +
+   (GtkButton::default-outside-border - GtkButton::default-outside-border)::top
+M: CHILD_SPACING - (depressed ? GtkButton::child-displacement-x : 0) +
+   (GtkButton::default-outside-border - GtkButton::default-outside-border)::right
+N: CHILD_SPACING - (depressed ? GtkButton::child-displacement-y : 0) +
+   (GtkButton::default-outside-border - GtkButton::default-outside-border)::bottom
+
+
+b) !CAN_DEFAULT
+
+B: GtkContainer::border-width
+C: GtkContainer::border-width
+D: xthickness
+E: GtkWidget::focus-padding
+F: GtkWidget::focus-line-width
+G: CHILD_SPACING + (depressed ? GtkButton::child-displacement-x : 0)
+I: GtkContainer::border-width
+J: ythickness
+K: GtkContainer::border-width
+L: CHILD_SPACING + (depressed ? GtkButton::child-displacement-y : 0)
+M: CHILD_SPACING - (depressed ? GtkButton::child-displacement-x : 0)
+N: CHILD_SPACING - (depressed ? GtkButton::child-displacement-y : 0)
+
+
+
+
+III) HAS_DEFAULT && (GtkWidget::interior-focus && HAVE_FOCUS)
+
++----------------------------------------------+
+|    		       A 		       |
+| +------------------------------------------+ |
+| |@@@@@@@@@@@@@@@@@@@ I @@@@@@@@@@@@@@@@@@@@| |
+| |@+--------------------------------------+@| |
+| |@|################# F ##################|@| |
+| |@|#+----------------------------------+#|@| |
+| |@|#|                E                 |#|@| |
+| |@|#| +------------------------------+ |#|@| |
+| |@|#| |\\\\\\\\\\\\\ J //////////////| |#|@| |
+| |@|#| |\+--------------------------+/| |#|@| |
+| |@|#| |\|            L             |/| |#|@| |
+| |@|#| |\| +----------------------+ |/| |#|@| |
+| |@|#| |\| |                      | |/| |#|@| |
+| |@|#| |\| |                      | |/| |#|@| |
+|A|B|F|E|D|G|        Child         |M|D|E|F|C|A|
+| |@|#| |/| |                      | |\| |#|@| |
+| |@|#| |/| |                      | |\| |#|@| |
+| |@|#| |/| +----------------------+ |\| |#|@| |
+| |@|#| |/|            N             |\| |#|@| |
+| |@|#| |/+--------------------------+\| |#|@| |
+| |@|#| |///////////// J \\\\\\\\\\\\\\| |#|@| |
+| |@|#| +------------------------------+ |#|@| |
+| |@|#|                E                 |#|@| |
+| |@|#+----------------------------------+#|@| |
+| |@|################# F ##################|@| |
+| |@+--------------------------------------+@| |
+| |@@@@@@@@@@@@@@@@@@@ K @@@@@@@@@@@@@@@@@@@@| |
+| +------------------------------------------+ |
+|                      A                       |
++----------------------------------------------+
+
+A: GtkContainer::border-width
+B: GtkButton::default-border::left
+C: GtkButton::default-border::right
+D: xthickness
+E: GtkWidget::focus-padding
+F: GtkWidget::focus-line-width
+G: CHILD_SPACING + (depressed ? GtkButton::child-displacement-x : 0)
+I: GtkButton::default-border::top
+J: ythickness
+K: GtkButton::default-border::bottom
+L: CHILD_SPACING + (depressed ? GtkButton::child-displacement-y : 0)
+M: CHILD_SPACING - (depressed ? GtkButton::child-displacement-x : 0)
+N: CHILD_SPACING - (depressed ? GtkButton::child-displacement-y : 0)
+
+
+IV) !HAS_DEFAULT && (GtkWidget::interior-focus && HAVE_FOCUS)
+
++----------------------------------------------+
+|    		         		       |
+|                      I                       |
+|                                              |
+|   +--------------------------------------+   |
+|   |################# J ##################|   |
+|   |#+----------------------------------+#|   |
+|   |#|                E                 |#|   |
+|   |#| +------------------------------+ |#|   |
+|   |#| |\\\\\\\\\\\\\ F //////////////| |#|   |
+|   |#| |\+--------------------------+/| |#|   |
+|   |#| |\|            L             |/| |#|   |
+|   |#| |\| +----------------------+ |/| |#|   |
+|   |#| |\| |                      | |/| |#|   |
+|   |#| |\| |                      | |/| |#|   |
+| B |D|E|F|G|        Child         |M|F|E|D| C |
+|   |#| |/| |                      | |\| |#|   |
+|   |#| |/| |                      | |\| |#|   |
+|   |#| |/| +----------------------+ |\| |#|   |
+|   |#| |/|            N             |\| |#|   |
+|   |#| |/+--------------------------+\| |#|   |
+|   |#| |///////////// F \\\\\\\\\\\\\\| |#|   |
+|   |#| +------------------------------+ |#|   |
+|   |#|                E                 |#|   |
+|   |#+----------------------------------+#|   |
+|   |################# J ##################|   |
+|   +--------------------------------------+   |
+|                                              |
+|                      K                       |
+|                                              |
++----------------------------------------------+
+
+
+a) CAN_DEFAULT
+
+B: GtkContainer::border-width + GtkButton::default-outside-border::left
+C: GtkContainer::border-width + GtkButton::default-outside-border::right
+D: xthickness
+E: GtkWidget::focus-padding
+F: GtkWidget::focus-line-width
+G: CHILD_SPACING + (depressed ? GtkButton::child-displacement-x : 0) +
+   (GtkButton::default-outside-border - GtkButton::default-outside-border)::left
+I: GtkContainer::border-width + GtkButton::default-outside-border::top
+J: ythickness
+K: GtkContainer::border-width + GtkButton::default-outside-border::bottom
+L: CHILD_SPACING + (depressed ? GtkButton::child-displacement-y : 0) +
+   (GtkButton::default-outside-border - GtkButton::default-outside-border)::top
+M: CHILD_SPACING - (depressed ? GtkButton::child-displacement-x : 0) +
+   (GtkButton::default-outside-border - GtkButton::default-outside-border)::right
+N: CHILD_SPACING - (depressed ? GtkButton::child-displacement-y : 0) +
+   (GtkButton::default-outside-border - GtkButton::default-outside-border)::bottom
+
+
+b) !CAN_DEFAULT
+
+B: GtkContainer::border-width
+C: GtkContainer::border-width
+D: xthickness
+E: GtkWidget::focus-padding
+F: GtkWidget::focus-line-width
+G: CHILD_SPACING + (depressed ? GtkButton::child-displacement-x : 0)
+I: GtkContainer::border-width
+J: ythickness
+K: GtkContainer::border-width
+L: CHILD_SPACING + (depressed ? GtkButton::child-displacement-y : 0)
+M: CHILD_SPACING - (depressed ? GtkButton::child-displacement-x : 0)
+N: CHILD_SPACING - (depressed ? GtkButton::child-displacement-y : 0)
+
+
+======================
+
+GtkCheckButton
+
+======================
+
+Note: This is the draw_indicator=TRUE case; draw_indicator=FALSE
+      is like GtkButton)
+
+ Style properties
+
+   GtkWidget::interior_focus = TRUE
+   GtkWidget::focus_width = 1
+   GtkWidget::focus_padding = 0
+   GtkButton::indicator-size = 13
+   GtkButton::indicator-spacing = 2
+
+ Properties
+
+   GtkContainer::border_width = 0
+
+ #defines
+
+   CHILD_SPACING 1
+
+interior_focus
+
+ +-------------------------------------------+
+ |		               F             |
+ |	 G	  +------------------------+ |
+ |		  |########### D ##########| |
+ | +------------+ |#+--------------------+#| |
+ | |            | |#|	       E	 |#| |
+ | |            | |#| +----------------+ |#| |
+ | |            | |#| |		       | |#| |
+ |A|    BxB     |C|D|E|      Child     |E|#|F|
+ | |            | |#| |		       | |#| |
+ | |            | |#| +----------------+ |#| |
+ | |            | |#|	       E       	 |#| |
+ | +------------+ |#+--------------------+#| |
+ |		  |########### D ##########| |
+ |	G	  +------------------------+ |
+ |		               F             |
+ +-------------------------------------------+
+
+A: GtkContainer::border-width + GtkCheckButton::indicator-spacing
+B: GtkCheckButton::indicator-size
+C: 2 * GtkCheckButton::indicator-spacing
+D: GtkWidget::focus-line-width
+E: GtkWidget::focus-padding
+F: GtkContainer::border-width
+G: GtkConainer::border-width + GtkCheckButton::indicator-spacing
+
+!interior_focus
+
+ +-------------------------------------------+
+ |		     A                       |
+ | +---------------------------------------+ |
+ | |################ D ####################| |
+ | |#+-----------------------------------+#| |
+ | |#|       G                E          |#| |
+ | |#| +------------+  +---------------+ |#| |
+ | |#| |            |  |               | |#| |
+ | |#| |            |  |	       | |#| |
+ |A|D|F|    BxB     |C |      Child    |E|D|A|
+ | |#| |            |  |	       | |#| |
+ | |#| |            |  |               | |#| |
+ | |#| +------------+  +---------------+ |#| |
+ | |#|       G                E          |#| |
+ | |#+-----------------------------------+#| |
+ | |################ D ####################| |
+ | +---------------------------------------+ |
+ |		     A                       |
+ +-------------------------------------------+
+
+A: GtkContainer::border-width
+B: GtkCheckButton::indicator-size
+C: 2 * GtkCheckButton::indicator-spacing
+D: GtkWidget::focus-line-width
+E: GtkWidget::focus-padding
+F: GtkWidget::focus-padding + GtkCheckButton::indicator-spacing
+G: GtkWidget::focus-padding + GtkCheckButton::indicator-spacing
+
+===============
+
+GtkEntry
+
+===============
+
+ Style properties
+
+   GtkWidget::interior_focus = TRUE
+   GtkWidget::focus_width = 1
+   GtkWidget::focus_padding = 0
+
+ Properties
+
+   GtkContainer::border_width = 0
+
+ #defines
+
+   INNER_BORDER 2
+
+
+
+interior_focus
+
++--------------------------------------+
+|\\\\\\\\\\\\\\\\\ B //////////////////|
+|\+----------------------------------+/|
+|\|		   D 	       	     |/|
+|\| +------------------------------+ |/|
+|\| |		    	       	   | |/|
+|\| |  	       	       	       	   | |/|
+|A|D|  	       	    	       	   |D|A|
+|\| |		    		   | |/|
+|\| |		    		   | |/|
+|\| +------------------------------+ |/|
+|\| 		   D   		     |/|
+|\+----------------------------------+/|
+|///////////////// B \\\\\\\\\\\\\\\\\/|
++--------------------------------------+
+
+A: xthickness
+B: ythickness
+D: INNER_BORDER
+
+!interior_focus
+
++------------------------------------------+
+|####################C#####################|
+|#+--------------------------------------+#|
+|#|\\\\\\\\\\\\\\\\\ B //////////////////|#|
+|#|\+----------------------------------+/|#|
+|#|\|  	       	     D	       	       |/|#|
+|#|\| +------------------------------+ |/|#|
+|#|\| |		     	       	     | |/|#|
+|#|\| |  	       	       	     | |/|#|
+|C|A|D|  	       	    	     |D|A|C|
+|#|\| |		     		     | |/|#|
+|#|\| |		     		     | |/|#|
+|#|\| +------------------------------+ |/|#|
+|#|\| 		     D 	       	       |/|#|
+|#|\+----------------------------------+/|#|
+|#|///////////////// B \\\\\\\\\\\\\\\\\/|#|
+|#+--------------------------------------+#|
+|####################C#####################|
++------------------------------------------+
+
+A: xthickness
+B: ythickness
+C: GtkWidget::focus-line-width
+D: INNER_BORDER + (HAVE_FOCUS ? 0 : GtkWidget::focus-line-width
+
+Note - effect here for !interior_focus is that bevel moves in
+by focus-line-width when entry gains focus
+
+===============
+
+GtkExpander
+
+===============
+
+ Style properties
+  GtkWidget::focus_line_width
+  GtkWidget::focus_padding
+  GtkExpander::expander_size
+  GtkExpander::expander_spacing
+
+ Properties
+  GtkContainer::border_width
+  GtkExpander::spacing
+
+if (GTK_WIDGET_VISIBLE (bin->child) && interior_focus)
+
++-------------------------------------+
+|                  A                  |
+| +---------+-----------------------+ |
+| |    C    |##########E############| |
+| | +-----+ |#+-------------------+#| |
+| | |     | |#|        F          |#| |
+| | |     | |#| +---------------+ |#| |
+|A|C| BxB |C|E|F| label_widget  |F|E|A|
+| | |     | |#| +---------------+ |#| |
+| | |     | |#|        F          |#| |
+| | +-----+ |#+-------------------+#| |
+| |    C    |##########E############| |
+| +---------+-----------------------+ |
+| |                D                | |
+| +---------------------------------+ |
+| |                                 | |
+| |                                 | |
+| |                                 | |
+|A|             bin->child          |A|
+| |                                 | |
+| |                                 | |
+| |                                 | |
+| +---------------------------------+ |
+|                  A                  |
++-------------------------------------+
+
+ A: GtkContainer::border_width
+ B: GtkExpander::expander_size
+ C: GtkExpander::expander_spacing
+ D: GtkExpander::spacing
+ E: GtkWidget::focus_line_width
+ F: GtkWidget::focus_padding
+
+if (GTK_WIDGET_VISIBLE (bin->child) && !interior_focus)
+
++-------------------------------------------+
+|                    A                      |
+| +---------------------------------------+ |
+| |##################E####################| |
+| |#+-----------------------------------+#| |
+| |#|                F                  |#| |
+| |#| +---------+---------------------+ |#| |
+| |#| |    C    |                     | |#| |
+| |#| | +-----+ |                     | |#| |
+|A|E|F|C| BxB |C|    label_widget     |F|E|A|
+| |#| | +-----+ |                     | |#| |
+| |#| |    C    |                     | |#| |
+| |#| +---------+---------------------+ |#| |
+| |#|                F                  |#| |
+| |#+-----------------------------------+#| |
+| |##################E####################| |
+| +---------------------------------------+ |
+| |                  D                    | |
+| +---------------------------------------+ |
+| |                                       | |
+| |                                       | |
+| |                                       | |
+|A|               bin->child              |A|
+| |                                       | |
+| |                                       | |
+| |                                       | |
+| +---------------------------------------+ |
+|                     A                     |
++-------------------------------------------+
+
+ A: GtkContainer::border_width
+ B: GtkExpander::expander_size
+ C: GtkExpander::expander_spacing
+ D: GtkExpander::spacing
+ E: GtkWidget::focus_line_width
+ F: GtkWidget::focus_padding
+
+if (!GTK_WIDGET_VISIBLE (bin->child) && interior_focus)
+
++-------------------------------------+
+|                  A                  |
+| +---------+-----------------------+ |
+| |    C    |##########E############| |
+| | +-----+ |#+-------------------+#| |
+| | |     | |#|        F          |#| |
+| | |     | |#| +---------------+ |#| |
+|A|C| BxB |C|E|F| label_widget  |F|E|A|
+| | |     | |#| +---------------+ |#| |
+| | |     | |#|        F          |#| |
+| | +-----+ |#+-------------------+#| |
+| |    C    |##########E############| |
+| +---------+-----------------------+ |
+|                  A                  |
++-------------------------------------+
+
+ A: GtkContainer::border_width
+ B: GtkExpander::expander_size
+ C: GtkExpander::expander_spacing
+ E: GtkWidget::focus_line_width
+ F: GtkWidget::focus_padding
+
+if (!GTK_WIDGET_VISIBLE (bin->child) && !interior_focus)
+
++-------------------------------------------+
+|                    A                      |
+| +---------------------------------------+ |
+| |##################E####################| |
+| |#+-----------------------------------+#| |
+| |#|                F                  |#| |
+| |#| +---------+---------------------+ |#| |
+| |#| |    C    |                     | |#| |
+| |#| | +-----+ |                     | |#| |
+|A|E|F|C| BxB |C|     label_widget    |F|E|A|
+| |#| | +-----+ |                     | |#| |
+| |#| |    C    |                     | |#| |
+| |#| +---------+---------------------+ |#| |
+| |#|                F                  |#| |
+| |#+-----------------------------------+#| |
+| |##################E####################| |
+| +---------------------------------------+ |
+|                    A                      |
++-------------------------------------------+
+
+ A: GtkContainer::border_width
+ B: GtkExpander::expander_size
+ C: GtkExpander::expander_spacing
+ E: GtkWidget::focus_line_width
+ F: GtkWidget::focus_padding

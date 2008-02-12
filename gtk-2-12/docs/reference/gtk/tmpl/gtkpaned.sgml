@@ -1,0 +1,270 @@
+<!-- ##### SECTION Title ##### -->
+GtkPaned
+
+<!-- ##### SECTION Short_Description ##### -->
+Base class for widgets with two adjustable panes
+
+<!-- ##### SECTION Long_Description ##### -->
+<para>
+#GtkPaned is the base class for widgets with two panes,
+arranged either horizontally (#GtkHPaned) or
+vertically (#GtkVPaned). Child widgets are 
+added to the panes of the widget with
+gtk_paned_pack1() and gtk_paned_pack2(). The division
+beween the two children is set by default from the
+size requests of the children, but it can be adjusted
+by the user.
+</para>
+<para>
+A paned widget draws a separator between the two
+child widgets and a small handle that the user
+can drag to adjust the division. It does not
+draw any relief around the children or around
+the separator. (The space in which the separator
+is called the gutter.) Often, it is useful
+to put each child inside a #GtkFrame with the
+shadow type set to %GTK_SHADOW_IN so that the
+gutter appears as a ridge. No separator is drawn
+if one of the children is missing.
+</para>
+<para>
+Each child has two options that can be set, 
+@resize and @shrink. If @resize is true, then when the
+#GtkPaned is resized, that child will expand
+or shrink along with the paned widget. If @shrink
+is true, then when that child can be made smaller
+than its requisition by the user. Setting @shrink
+to %FALSE allows the application to set a minimum
+size. If @resize is false for both children, then
+this is treated as if @resize is true for both
+children.
+</para>
+<para>
+The application can set the position of the slider
+as if it were set by the user, by calling
+gtk_paned_set_position().
+</para>
+
+<example>
+<title>Creating a paned widget with minimum sizes.</title>
+<programlisting>
+GtkWidget *hpaned = gtk_hpaned_new (<!-- -->);
+GtkWidget *frame1 = gtk_frame_new (NULL);
+GtkWidget *frame2 = gtk_frame_new (NULL);
+gtk_frame_set_shadow_type (GTK_FRAME (frame1), GTK_SHADOW_IN);
+gtk_frame_set_shadow_type (GTK_FRAME (frame2), GTK_SHADOW_IN);
+
+gtk_widget_set_size_request (hpaned, 200 + GTK_PANED (hpaned)->gutter_size, -1);
+
+gtk_paned_pack1 (GTK_PANED (hpaned), frame1, TRUE, FALSE);
+gtk_widget_set_size_request (frame1, 50, -1);
+
+gtk_paned_pack2 (GTK_PANED (hpaned), frame2, FALSE, FALSE);
+gtk_widget_set_size_request (frame2, 50, -1);
+</programlisting>
+</example>
+
+<!-- ##### SECTION See_Also ##### -->
+<para>
+
+</para>
+
+<!-- ##### SECTION Stability_Level ##### -->
+
+
+<!-- ##### STRUCT GtkPaned ##### -->
+<para>
+</para>
+
+
+<!-- ##### SIGNAL GtkPaned::accept-position ##### -->
+<para>
+
+</para>
+
+@paned: the object which received the signal.
+@Returns: 
+
+<!-- ##### SIGNAL GtkPaned::cancel-position ##### -->
+<para>
+
+</para>
+
+@paned: the object which received the signal.
+@Returns: 
+
+<!-- ##### SIGNAL GtkPaned::cycle-child-focus ##### -->
+<para>
+
+</para>
+
+@Returns: 
+@Param4: 
+@Returns: 
+<!-- # Unused Parameters # -->
+@paned: the object which received the signal.
+
+<!-- ##### SIGNAL GtkPaned::cycle-handle-focus ##### -->
+<para>
+
+</para>
+
+@Returns: 
+@Param4: 
+@Returns: 
+<!-- # Unused Parameters # -->
+@paned: the object which received the signal.
+
+<!-- ##### SIGNAL GtkPaned::move-handle ##### -->
+<para>
+
+</para>
+
+@Returns: 
+@Param4: 
+@Returns: 
+<!-- # Unused Parameters # -->
+@paned: the object which received the signal.
+
+<!-- ##### SIGNAL GtkPaned::toggle-handle-focus ##### -->
+<para>
+
+</para>
+
+@paned: the object which received the signal.
+@Returns: 
+
+<!-- ##### ARG GtkPaned:max-position ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkPaned:min-position ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkPaned:position ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkPaned:position-set ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkPaned:resize ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkPaned:shrink ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkPaned:handle-size ##### -->
+<para>
+
+</para>
+
+<!-- ##### FUNCTION gtk_paned_add1 ##### -->
+<para>
+Adds a child to the top or left pane with
+default parameters. This is equivalent
+to <literal>gtk_paned_pack1 (paned, child, FALSE, TRUE)</literal>.
+</para>
+
+@paned: a paned widget
+@child: the child to add
+
+
+<!-- ##### FUNCTION gtk_paned_add2 ##### -->
+<para>
+Adds a child to the bottom or right pane with default
+parameters. This is equivalent to 
+<literal>gtk_paned_pack2 (paned, child, TRUE, TRUE)</literal>.
+</para>
+
+@paned: a paned widget
+@child: the child to add
+
+
+<!-- ##### MACRO gtk_paned_gutter_size ##### -->
+<para>
+Old name for gtk_paned_set_gutter_size().
+</para>
+
+@p: a paned widget
+@s: the width of the gutter in pixels
+
+
+<!-- ##### FUNCTION gtk_paned_pack1 ##### -->
+<para>
+Adds a child to the top or left pane.
+</para>
+
+@paned: a paned widget
+@child: the child to add
+@resize: should this child expand when the paned widget is resized.
+@shrink: can this child be made smaller than its requisition.
+
+
+<!-- ##### FUNCTION gtk_paned_pack2 ##### -->
+<para>
+Adds a child to the bottom or right pane.
+</para>
+
+@paned: a paned widget
+@child: the child to add
+@resize: should this child expand when the paned widget is resized.
+@shrink: can this child be made smaller than its requisition.
+
+
+<!-- ##### FUNCTION gtk_paned_get_child1 ##### -->
+<para>
+
+</para>
+
+@paned: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_paned_get_child2 ##### -->
+<para>
+
+</para>
+
+@paned: 
+@Returns: 
+
+
+<!-- ##### MACRO gtk_paned_set_gutter_size ##### -->
+<para>
+In older versions of GTK+, this function used to set the width of the 
+gutter (the area between the two panes). It does nothing now.
+</para>
+
+@p: a paned widget
+@s: the width of the gutter in pixels
+
+
+<!-- ##### FUNCTION gtk_paned_set_position ##### -->
+<para>
+
+</para>
+
+@paned: 
+@position: 
+
+
+<!-- ##### FUNCTION gtk_paned_get_position ##### -->
+<para>
+
+</para>
+
+@paned: 
+@Returns: 
+
+

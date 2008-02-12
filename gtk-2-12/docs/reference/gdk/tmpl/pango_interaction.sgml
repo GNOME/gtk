@@ -1,0 +1,312 @@
+<!-- ##### SECTION Title ##### -->
+Pango Interaction
+
+<!-- ##### SECTION Short_Description ##### -->
+Using Pango in GDK
+
+<!-- ##### SECTION Long_Description ##### -->
+<para>
+Pango is the text layout system used by GDK and GTK+. The functions
+and types in this section are used to render Pango objects to GDK.
+drawables, and also extend the set of Pango attributes to include
+stippling and embossing.
+</para>
+<para>
+Creating a #PangoLayout object is the first step in rendering text,
+and requires getting a handle to a #PangoContext. For GTK+ programs,
+you'll usually want to use gtk_widget_get_pango_context(), or
+gtk_widget_create_pango_layout(), rather than using the lowlevel
+gdk_pango_context_get_for_screen(). Once you have a #PangoLayout, you
+can set the text and attributes of it with Pango functions like
+pango_layout_set_text() and get its size with pango_layout_get_size().
+(Note that Pango uses a fixed point system internally, so converting
+between Pango units and pixels using <link
+linkend="PANGO-SCALE-CAPS">PANGO_SCALE</link> or the PANGO_PIXELS() macro.)
+</para>
+<para>
+Rendering a Pango layout is done most simply with gdk_draw_layout();
+you can also draw pieces of the layout with gdk_draw_layout() or
+gdk_draw_glyphs(). #GdkPangoRenderer is a subclass of #PangoRenderer
+that is used internally to implement these functions. Using it
+directly or subclassing it can be useful in some cases. See the
+#GdkPangoRenderer documentation for details.
+</para>
+<example id="rotated-example">
+<title>Using #GdkPangoRenderer to draw transformed text</title>
+<!-- Note that this example is basically the same as
+     demos/gtk-demo/rotated_text.c -->
+<programlisting>
+#define RADIUS 100
+#define N_WORDS 10
+#define FONT "Sans Bold 18"
+  
+GdkScreen *screen = gdk_drawable_get_screen (drawable);
+PangoRenderer *renderer;
+GdkGC *gc;
+
+PangoMatrix matrix = PANGO_MATRIX_INIT;
+PangoContext *context;
+PangoLayout *layout;
+PangoFontDescription *desc;
+
+double device_radius;
+int width, height;
+int i;
+
+/* Get the default renderer for the screen, and set it up for drawing  */
+renderer = gdk_pango_renderer_get_default (screen);
+gdk_pango_renderer_set_drawable (GDK_PANGO_RENDERER (renderer), drawable);
+
+gc = gdk_gc_new (drawable);
+gdk_pango_renderer_set_gc (GDK_PANGO_RENDERER (renderer), gc);
+
+/* Set up a transformation matrix so that the user space coordinates for
+ * where we are drawing are [-RADIUS, RADIUS], [-RADIUS, RADIUS]
+ * We first center, then change the scale */
+gdk_drawable_get_size (drawable, &amp;width, &amp;height);
+device_radius = MIN (width, height) / 2.;
+
+pango_matrix_translate (&amp;matrix,
+                        device_radius + (width - 2 * device_radius) / 2,
+                        device_radius + (height - 2 * device_radius) / 2);
+pango_matrix_scale (&amp;matrix, device_radius / RADIUS, device_radius / RADIUS);
+
+/* Create a PangoLayout, set the font and text */
+context = gdk_pango_context_get_for_screen (screen);
+layout = pango_layout_new (context);
+pango_layout_set_text (layout, "Text", -1);
+desc = pango_font_description_from_string (FONT);
+pango_layout_set_font_description (layout, desc);
+pango_font_description_free (desc);
+
+/* Draw the layout N_WORDS times in a circle */
+for (i = 0; i &lt; N_WORDS; i++)
+  {
+    GdkColor color;
+    PangoMatrix rotated_matrix = matrix;
+    int width, height;
+    double angle = (360. * i) / N_WORDS;
+
+    /* Gradient from red at angle == 60 to blue at angle == 300 */
+    color.red   = 65535 * (1 + cos ((angle - 60) * M_PI / 180.)) / 2;
+    color.green = 0;
+    color.blue  = 65535  - color.red;
+    
+    gdk_pango_renderer_set_override_color (GDK_PANGO_RENDERER (renderer),
+                                           PANGO_RENDER_PART_FOREGROUND, &amp;color);
+                                             
+    pango_matrix_rotate (&amp;rotated_matrix, angle);
+
+    pango_context_set_matrix (context, &amp;rotated_matrix);
+    
+    /* Inform Pango to re-layout the text with the new transformation matrix */
+    pango_layout_context_changed (layout);
+    
+    pango_layout_get_size (layout, &amp;width, &amp;height);
+    pango_renderer_draw_layout (renderer, layout,
+                                - width / 2, - RADIUS * PANGO_SCALE);
+  }
+
+/* Clean up default renderer, since it is shared */
+gdk_pango_renderer_set_override_color (GDK_PANGO_RENDERER (renderer),
+                                       PANGO_RENDER_PART_FOREGROUND, NULL);
+gdk_pango_renderer_set_drawable (GDK_PANGO_RENDERER (renderer), NULL);
+gdk_pango_renderer_set_gc (GDK_PANGO_RENDERER (renderer), NULL);
+
+/* free the objects we created */
+g_object_unref (layout);
+g_object_unref (context);
+g_object_unref (gc);
+</programlisting>
+</example>
+<figure>
+  <title>Output of <xref linkend="rotated-example"/></title>
+  <graphic fileref="rotated-text.png" format="PNG"/>
+</figure>
+
+<!-- ##### SECTION See_Also ##### -->
+<para>
+
+</para>
+
+<!-- ##### SECTION Stability_Level ##### -->
+
+
+<!-- ##### STRUCT GdkPangoRenderer ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### ARG GdkPangoRenderer:screen ##### -->
+<para>
+
+</para>
+
+<!-- ##### STRUCT GdkPangoRendererClass ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### FUNCTION gdk_pango_renderer_new ##### -->
+<para>
+
+</para>
+
+@screen: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_pango_renderer_get_default ##### -->
+<para>
+
+</para>
+
+@screen: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_pango_renderer_set_drawable ##### -->
+<para>
+
+</para>
+
+@gdk_renderer: 
+@drawable: 
+
+
+<!-- ##### FUNCTION gdk_pango_renderer_set_gc ##### -->
+<para>
+
+</para>
+
+@gdk_renderer: 
+@gc: 
+
+
+<!-- ##### FUNCTION gdk_pango_renderer_set_stipple ##### -->
+<para>
+
+</para>
+
+@gdk_renderer: 
+@part: 
+@stipple: 
+
+
+<!-- ##### FUNCTION gdk_pango_renderer_set_override_color ##### -->
+<para>
+
+</para>
+
+@gdk_renderer: 
+@part: 
+@color: 
+
+
+<!-- ##### FUNCTION gdk_pango_context_get ##### -->
+<para>
+
+</para>
+
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_pango_context_get_for_screen ##### -->
+<para>
+
+</para>
+
+@screen: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_pango_context_set_colormap ##### -->
+<para>
+
+</para>
+
+@context: 
+@colormap: 
+
+
+<!-- ##### STRUCT GdkPangoAttrEmbossed ##### -->
+<para>
+A Pango text attribute containing a embossed bitmap to be used when
+rendering the text.
+</para>
+
+@attr: the #PangoAttribute.
+@embossed: the embossed bitmap.
+
+<!-- ##### STRUCT GdkPangoAttrEmbossColor ##### -->
+<para>
+A Pango text attribute specifying the color to emboss text with.
+</para>
+
+@attr: the #PangoAttribute
+@color: the color
+
+<!-- ##### STRUCT GdkPangoAttrStipple ##### -->
+<para>
+A Pango text attribute containing a stipple bitmap to be used when
+rendering the text.
+</para>
+
+@attr: the #PangoAttribute.
+@stipple: the stipple bitmap.
+
+<!-- ##### FUNCTION gdk_pango_attr_emboss_color_new ##### -->
+<para>
+
+</para>
+
+@color: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_pango_attr_embossed_new ##### -->
+<para>
+
+</para>
+
+@embossed: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_pango_attr_stipple_new ##### -->
+<para>
+
+</para>
+
+@stipple: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_pango_layout_get_clip_region ##### -->
+<para>
+
+</para>
+
+@layout: 
+@x_origin: 
+@y_origin: 
+@index_ranges: 
+@n_ranges: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_pango_layout_line_get_clip_region ##### -->
+<para>
+
+</para>
+
+@line: 
+@x_origin: 
+@y_origin: 
+@index_ranges: 
+@n_ranges: 
+@Returns: 
+
+

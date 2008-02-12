@@ -1,0 +1,264 @@
+<!-- ##### SECTION Title ##### -->
+GtkCalendar
+
+<!-- ##### SECTION Short_Description ##### -->
+Displays a calendar and allows the user to select a date
+
+<!-- ##### SECTION Long_Description ##### -->
+<para>
+#GtkCalendar is a widget that displays a calendar, one month at a time. 
+It can be created with gtk_calendar_new().
+</para>
+<para>
+The month and year currently displayed can be altered with 
+gtk_calendar_select_month(). The exact day can be selected from the displayed 
+month using gtk_calendar_select_day().
+</para>
+<para>
+To place a visual marker on a particular day, use gtk_calendar_mark_day() 
+and to remove the marker, gtk_calendar_unmark_day().
+Alternative, all marks can be cleared with gtk_calendar_clear_marks().
+</para>
+<para>
+The way in which the calendar itself is displayed can be altered using
+gtk_calendar_set_display_options().
+</para>
+<para>
+The selected date can be retrieved from a #GtkCalendar using
+gtk_calendar_get_date().
+</para>
+
+<!-- ##### SECTION See_Also ##### -->
+<para>
+
+</para>
+
+<!-- ##### SECTION Stability_Level ##### -->
+
+
+<!-- ##### STRUCT GtkCalendar ##### -->
+<para>
+<structfield>num_marked_dates</structfield> is an integer containing the
+number of days that have a mark over them.
+</para>
+<para>
+<structfield>marked_date</structfield> is an array containing the day numbers
+that currently have a mark over them.
+</para>
+<para>
+<structfield>month</structfield>, <structfield>year</structfield>, and 
+<structfield>selected_day</structfield> contain the currently visible month,
+year, and selected day respectively.
+</para>
+<para>
+All of these fields should be considered read only, and everything in this
+struct should only be modified using the functions provided below.
+</para>
+<note>
+<para>
+Note that <structfield>month</structfield> is zero-based (i.e it allowed values
+are 0-11) while <structfield>selected_day</structfield> is one-based
+(i.e. allowed values are 1-31). 
+</para>
+</note>
+
+
+<!-- ##### SIGNAL GtkCalendar::day-selected ##### -->
+<para>
+Emitted when the user selects a day.
+</para>
+
+@calendar: the object which received the signal.
+
+<!-- ##### SIGNAL GtkCalendar::day-selected-double-click ##### -->
+<para>
+
+</para>
+
+@calendar: the object which received the signal.
+
+<!-- ##### SIGNAL GtkCalendar::month-changed ##### -->
+<para>
+Emitted when the user clicks a button to change the selected month on a
+calendar.
+</para>
+
+@calendar: the object which received the signal.
+
+<!-- ##### SIGNAL GtkCalendar::next-month ##### -->
+<para>
+
+</para>
+
+@calendar: the object which received the signal.
+
+<!-- ##### SIGNAL GtkCalendar::next-year ##### -->
+<para>
+
+</para>
+
+@calendar: the object which received the signal.
+
+<!-- ##### SIGNAL GtkCalendar::prev-month ##### -->
+<para>
+
+</para>
+
+@calendar: the object which received the signal.
+
+<!-- ##### SIGNAL GtkCalendar::prev-year ##### -->
+<para>
+
+</para>
+
+@calendar: the object which received the signal.
+
+<!-- ##### ARG GtkCalendar:day ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkCalendar:month ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkCalendar:no-month-change ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkCalendar:show-day-names ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkCalendar:show-heading ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkCalendar:show-week-numbers ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkCalendar:year ##### -->
+<para>
+
+</para>
+
+<!-- ##### ENUM GtkCalendarDisplayOptions ##### -->
+<para>
+These options can be used to influence the display and behaviour of a #GtkCalendar.
+</para>
+
+@GTK_CALENDAR_SHOW_HEADING: Specifies that the month and year should be displayed.
+@GTK_CALENDAR_SHOW_DAY_NAMES: Specifies that three letter day descriptions should be present.
+@GTK_CALENDAR_NO_MONTH_CHANGE: Prevents the user from switching months with the calendar.
+@GTK_CALENDAR_SHOW_WEEK_NUMBERS: Displays each week numbers of the current year, down the left side 
+ of the calendar.
+@GTK_CALENDAR_WEEK_START_MONDAY: Since GTK+ 2.4, this option is deprecated and ignored by GTK+. 
+ The information on which day the calendar week starts is derived from the locale.
+
+<!-- ##### FUNCTION gtk_calendar_new ##### -->
+<para>
+</para>
+
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_calendar_select_month ##### -->
+<para>
+</para>
+
+@calendar: 
+@month: 
+@year: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_calendar_select_day ##### -->
+<para>
+</para>
+
+@calendar: 
+@day: 
+
+
+<!-- ##### FUNCTION gtk_calendar_mark_day ##### -->
+<para>
+</para>
+
+@calendar: 
+@day: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_calendar_unmark_day ##### -->
+<para>
+</para>
+
+@calendar: 
+@day: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_calendar_clear_marks ##### -->
+<para>
+</para>
+
+@calendar: 
+
+
+<!-- ##### FUNCTION gtk_calendar_get_display_options ##### -->
+<para>
+
+</para>
+
+@calendar: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_calendar_set_display_options ##### -->
+<para>
+
+</para>
+
+@calendar: 
+@flags: 
+
+
+<!-- ##### FUNCTION gtk_calendar_display_options ##### -->
+<para>
+</para>
+
+@calendar: 
+@flags: 
+@Deprecated: 
+
+
+<!-- ##### FUNCTION gtk_calendar_get_date ##### -->
+<para>
+</para>
+
+@calendar: 
+@year: 
+@month: 
+@day: 
+
+
+<!-- ##### FUNCTION gtk_calendar_freeze ##### -->
+<para>
+</para>
+
+@calendar: 
+
+
+<!-- ##### FUNCTION gtk_calendar_thaw ##### -->
+<para>
+</para>
+
+@calendar: 
+
+

@@ -1,0 +1,7 @@
+Makefile
+Makefile.in
+.libs
+.deps
+gtk-demo
+demos.h
+geninclude.pl

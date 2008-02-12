@@ -1,0 +1,127 @@
+<!-- ##### SECTION Title ##### -->
+GtkMisc
+
+<!-- ##### SECTION Short_Description ##### -->
+Base class for widgets with alignments and padding
+
+<!-- ##### SECTION Long_Description ##### -->
+<para>
+The #GtkMisc widget is an abstract widget which is not useful itself, but
+is used to derive subclasses which have alignment and padding attributes.
+</para>
+<para>
+The horizontal and vertical padding attributes allows extra space to be
+added around the widget.
+</para>
+<para>
+The horizontal and vertical alignment attributes enable the widget to be
+positioned within its allocated area. Note that if the widget is added to
+a container in such a way that it expands automatically to fill its
+allocated area, the alignment settings will not alter the widgets position.
+</para>
+
+<!-- ##### SECTION See_Also ##### -->
+<para>
+
+</para>
+
+<!-- ##### SECTION Stability_Level ##### -->
+
+
+<!-- ##### STRUCT GtkMisc ##### -->
+<para>
+The #GtkMisc-struct struct contains the following fields.
+(These fields should be considered read-only. They should never be set by
+an application.)
+
+<informaltable pgwide="1" frame="none" role="struct">
+<tgroup cols="2"><colspec colwidth="2*"/><colspec colwidth="8*"/>
+<tbody>
+
+<row>
+<entry>#gfloat <structfield>xalign</structfield>;</entry>
+<entry>the horizontal alignment, from 0 (left) to 1 (right).</entry>
+</row>
+
+<row>
+<entry>#gfloat <structfield>yalign</structfield>;</entry>
+<entry>the vertical alignment, from 0 (top) to 1 (bottom).</entry>
+</row>
+
+<row>
+<entry>#guint16 <structfield>xpad</structfield>;</entry>
+<entry>the amount of space to add on the left and right of the widget,
+in pixels.</entry>
+</row>
+
+<row>
+<entry>#guint16 <structfield>ypad</structfield>;</entry>
+<entry>the amount of space to add on the top and bottom of the widget,
+in pixels.</entry>
+</row>
+</tbody></tgroup></informaltable>
+</para>
+
+
+<!-- ##### ARG GtkMisc:xalign ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkMisc:xpad ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkMisc:yalign ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkMisc:ypad ##### -->
+<para>
+
+</para>
+
+<!-- ##### FUNCTION gtk_misc_set_alignment ##### -->
+<para>
+Sets the alignment of the widget.
+</para>
+
+@misc: a #GtkMisc.
+@xalign: the horizontal alignment, from 0 (left) to 1 (right).
+@yalign: the vertical alignment, from 0 (top) to 1 (bottom).
+
+
+<!-- ##### FUNCTION gtk_misc_set_padding ##### -->
+<para>
+Sets the amount of space to add around the widget.
+</para>
+
+@misc: a #GtkMisc.
+@xpad: the amount of space to add on the left and right of the widget,
+in pixels.
+@ypad: the amount of space to add on the top and bottom of the widget,
+in pixels.
+
+
+<!-- ##### FUNCTION gtk_misc_get_alignment ##### -->
+<para>
+
+</para>
+
+@misc: 
+@xalign: 
+@yalign: 
+
+
+<!-- ##### FUNCTION gtk_misc_get_padding ##### -->
+<para>
+
+</para>
+
+@misc: 
+@xpad: 
+@ypad: 
+
+

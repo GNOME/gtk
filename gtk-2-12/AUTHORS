@@ -1,0 +1,65 @@
+Please do not mail any of the authors listed here 
+asking questions about this version of GTK+. 
+
+Original Authors
+----------------
+Peter Mattis      <petm@xcf.berkeley.edu>
+Spencer Kimball   <spencer@xcf.berkeley.edu>
+Josh MacDonald    <jmacd@xcf.berkeley.edu>
+
+The GTK+ Team (in alphabetical order)
+-------------------------------------
+Shawn T. Amundson <amundson@gtk.org>
+Jerome Bolliet    <bolliet@gtk.org>
+Damon Chaplin     <damon@gtk.org>
+Tony Gale         <gale@gtk.org>
+Jeff Garzik       <jgarzik@gtk.org>
+Lars Hamann       <lars@gtk.org>
+Raja R Harinath   <harinath@gtk.org>
+Carsten Haitzler  <raster@gtk.org>
+Tim Janik         <timj@gtk.org>
+Stefan Jeske      <stefan@gtk.org>
+Elliot Lee        <sopwith@gtk.org>
+Raph Levien       <raph@gtk.org>
+Ian Main          <imain@gtk.org>
+Federico Mena     <quartic@gtk.org>
+Paolo Molaro      <lupus@gtk.org>
+Jay Painter       <jpaint@gtk.org>
+Manish Singh      <manish@gtk.org>
+Owen Taylor       <otaylor@gtk.org>
+
+There are many others who have contributed patches; we thank them,
+GTK+ is much better because of them.
+
+
+Over time, GTK+ has incorporated some pieces of software which 
+started as independent projects. We list the original authors here:
+
+
+MS-Windows theme engine
+-----------------------
+Raymond Penners
+Dom Lachowicz
+
+
+Pixbuf theme engine
+-------------------
+Owen Taylor
+
+
+IME input method
+----------------
+Takuro Ashie
+Kazuki IWAMOTO
+
+
+Mac OS X backend
+----------------
+Anders Carlsson
+
+
+DirectFB backend
+----------------
+Denis Oliver Kropp
+Sven Neumann
+Mike Emmel

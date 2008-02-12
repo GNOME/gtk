@@ -1,0 +1,33 @@
+<!-- ##### SECTION Title ##### -->
+GtkAccessible
+
+<!-- ##### SECTION Short_Description ##### -->
+Accessibility support for widgets
+
+<!-- ##### SECTION Long_Description ##### -->
+<para>
+
+</para>
+
+<!-- ##### SECTION See_Also ##### -->
+<para>
+
+</para>
+
+<!-- ##### SECTION Stability_Level ##### -->
+
+
+<!-- ##### STRUCT GtkAccessible ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### FUNCTION gtk_accessible_connect_widget_destroyed ##### -->
+<para>
+
+</para>
+
+@accessible: 
+
+

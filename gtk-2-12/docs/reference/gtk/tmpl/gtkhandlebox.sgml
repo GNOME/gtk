@@ -1,0 +1,207 @@
+<!-- ##### SECTION Title ##### -->
+GtkHandleBox
+
+<!-- ##### SECTION Short_Description ##### -->
+a widget for detachable window portions
+
+<!-- ##### SECTION Long_Description ##### -->
+<para>
+The #GtkHandleBox widget allows a portion of a window to be "torn
+off". It is a bin widget which displays its child and a handle that
+the user can drag to tear off a separate window (the <firstterm>float
+window</firstterm>) containing the child widget. A thin
+<firstterm>ghost</firstterm> is drawn in the original location of the
+handlebox. By dragging the separate window back to its original
+location, it can be reattached.
+</para>
+<para>
+When reattaching, the ghost and float window, must be aligned
+along one of the edges, the <firstterm>snap edge</firstterm>.
+This either can be specified by the application programmer
+explicitely, or GTK+ will pick a reasonable default based
+on the handle position.
+</para>
+<para>
+To make detaching and reattaching the handlebox as minimally confusing
+as possible to the user, it is important to set the snap edge so that
+the snap edge does not move when the handlebox is deattached. For
+instance, if the handlebox is packed at the bottom of a VBox, then
+when the handlebox is detached, the bottom edge of the handlebox's
+allocation will remain fixed as the height of the handlebox shrinks,
+so the snap edge should be set to %GTK_POS_BOTTOM.
+</para>
+
+<!-- ##### SECTION See_Also ##### -->
+<para>
+
+</para>
+
+<!-- ##### SECTION Stability_Level ##### -->
+
+
+<!-- ##### STRUCT GtkHandleBox ##### -->
+<para>
+The #GtkHandleBox-struct struct contains the following fields.
+(These fields should be considered read-only. They should never be set by
+an application.)
+
+<informaltable pgwide="1" frame="none" role="struct">
+<tgroup cols="2"><colspec colwidth="2*"/><colspec colwidth="8*"/>
+<tbody>
+
+<row>
+<entry>GtkShadowType shadow_type;</entry>
+<entry>The shadow type for the entry. (See gtk_handle_box_set_shadow_type()).</entry>
+</row>
+
+<row>
+<entry>GtkPositionType handle_position;</entry>
+<entry>The position of the handlebox's handle with respect
+to the child. (See gtk_handle_box_set_handle_position())</entry>
+</row>
+
+<row>
+<entry>gint snap_edge;</entry>
+<entry>A value of type #GtkPosition type indicating snap edge for the widget.
+(See gtk_handle_box_set_snap_edge). The value of -1 indicates
+that this value has not been set.</entry>
+</row>
+
+<row>
+<entry>#gboolean child_detached;</entry>
+<entry>A boolean value indicating whether the handlebox's
+child is attached or detached.</entry>
+</row>
+
+</tbody>
+</tgroup>
+</informaltable>
+
+</para>
+
+
+<!-- ##### SIGNAL GtkHandleBox::child-attached ##### -->
+<para>
+This signal is emitted when the contents of the
+handlebox are reattached to the main window.
+</para>
+
+@handlebox: the object which received the signal.
+@widget: the child widget of the handlebox.
+         (this argument provides no extra information
+          and is here only for backwards-compatibility)
+
+<!-- ##### SIGNAL GtkHandleBox::child-detached ##### -->
+<para>
+This signal is emitted when the contents of the
+handlebox are detached from the main window.
+</para>
+
+@handlebox: the object which received the signal.
+@widget: the child widget of the handlebox. 
+         (this argument provides no extra information
+          and is here only for backwards-compatibility)
+
+<!-- ##### ARG GtkHandleBox:handle-position ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkHandleBox:shadow ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkHandleBox:shadow-type ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkHandleBox:snap-edge ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkHandleBox:snap-edge-set ##### -->
+<para>
+
+</para>
+
+<!-- ##### FUNCTION gtk_handle_box_new ##### -->
+<para>
+Create a new handle box.
+</para>
+
+@Returns: a new #GtkHandleBox.
+
+
+<!-- ##### FUNCTION gtk_handle_box_set_shadow_type ##### -->
+<para>
+Sets the type of shadow to be drawn around the border 
+of the handle box.
+</para>
+
+@handle_box: a #GtkHandleBox
+@type: the shadow type.
+
+
+<!-- ##### FUNCTION gtk_handle_box_set_handle_position ##### -->
+<para>
+Sets the side of the handlebox where the handle is drawn.
+</para>
+
+@handle_box: a #GtkHandleBox
+@position: the side of the handlebox where the handle should be drawn.
+
+
+<!-- ##### FUNCTION gtk_handle_box_set_snap_edge ##### -->
+<para>
+Sets the snap edge of a handlebox. The snap edge is
+the edge of the detached child that must be aligned
+with the corresponding edge of the "ghost" left
+behind when the child was detached to reattach
+the torn-off window. Usually, the snap edge should
+be chosen so that it stays in the same place on
+the screen when the handlebox is torn off.
+</para>
+<para>
+If the snap edge is not set, then an appropriate value
+will be guessed from the handle position. If the
+handle position is %GTK_POS_RIGHT or %GTK_POS_LEFT,
+then the snap edge will be %GTK_POS_TOP, otherwise
+it will be %GTK_POS_LEFT.
+</para>
+
+@handle_box: a #GtkHandleBox
+@edge: the snap edge, or -1 to unset the value; in which
+case GTK+ will try to guess an appropriate value
+in the future.
+
+
+<!-- ##### FUNCTION gtk_handle_box_get_handle_position ##### -->
+<para>
+
+</para>
+
+@handle_box: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_handle_box_get_shadow_type ##### -->
+<para>
+
+</para>
+
+@handle_box: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_handle_box_get_snap_edge ##### -->
+<para>
+
+</para>
+
+@handle_box: 
+@Returns: 
+
+

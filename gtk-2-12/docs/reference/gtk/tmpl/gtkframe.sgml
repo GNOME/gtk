@@ -1,0 +1,162 @@
+<!-- ##### SECTION Title ##### -->
+GtkFrame
+
+<!-- ##### SECTION Short_Description ##### -->
+A bin with a decorative frame and optional label
+
+<!-- ##### SECTION Long_Description ##### -->
+<para>
+The frame widget is a Bin that surrounds its child
+with a decorative frame and an optional label.
+If present, the label is drawn in a gap in the
+top side of the frame. The position of the
+label can be controlled with gtk_frame_set_label_align().
+</para>
+
+<refsect2 id="GtkFrame-BUILDER-UI">
+<title>GtkFrame as GtkBuildable</title>
+<para>
+The GtkFrame implementation of the GtkBuildable interface
+supports placing a child in the label position by specifying
+"label" as the "type" attribute of a &lt;child&gt; element.
+A normal content child can be specified without specifying 
+a &lt;child&gt; type attribute.
+</para> 
+<example>
+<title>A UI definition fragment with GtkFrame</title>
+<programlisting><![CDATA[
+<object class="GtkFrame">
+  <child type="label">
+    <object class="GtkLabel" id="frame-label"/>
+  </child>
+  <child>
+    <object class="GtkEntry" id="frame-content"/>
+  </child>
+</object>
+]]></programlisting>
+</example>
+</refsect2>
+
+<!-- ##### SECTION See_Also ##### -->
+<para>
+
+</para>
+
+<!-- ##### SECTION Stability_Level ##### -->
+
+
+<!-- ##### STRUCT GtkFrame ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### ARG GtkFrame:label ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkFrame:label-widget ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkFrame:label-xalign ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkFrame:label-yalign ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkFrame:shadow ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkFrame:shadow-type ##### -->
+<para>
+
+</para>
+
+<!-- ##### FUNCTION gtk_frame_new ##### -->
+<para>
+</para>
+
+@label: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_frame_set_label ##### -->
+<para>
+</para>
+
+@frame: 
+@label: 
+
+
+<!-- ##### FUNCTION gtk_frame_set_label_widget ##### -->
+<para>
+
+</para>
+
+@frame: 
+@label_widget: 
+
+
+<!-- ##### FUNCTION gtk_frame_set_label_align ##### -->
+<para>
+</para>
+
+@frame: 
+@xalign: 
+@yalign: 
+
+
+<!-- ##### FUNCTION gtk_frame_set_shadow_type ##### -->
+<para>
+</para>
+
+@frame: 
+@type: 
+
+
+<!-- ##### FUNCTION gtk_frame_get_label ##### -->
+<para>
+
+</para>
+
+@frame: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_frame_get_label_align ##### -->
+<para>
+
+</para>
+
+@frame: 
+@xalign: 
+@yalign: 
+
+
+<!-- ##### FUNCTION gtk_frame_get_label_widget ##### -->
+<para>
+
+</para>
+
+@frame: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_frame_get_shadow_type ##### -->
+<para>
+
+</para>
+
+@frame: 
+@Returns: 
+
+

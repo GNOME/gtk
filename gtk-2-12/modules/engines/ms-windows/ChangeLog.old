@@ -1,0 +1,426 @@
+2004-08-23  Raymond Penners  <raymond@dotsphinx.com>
+	
+	* === Released 0.6.2 ===
+
+	* src/msw_style.c: Applied patch from Matthew Mastracci that draws
+	scrollbars as disabled (and pretends to ignore mouse clicks by
+	forcing GTK_SHADOW_OUT) when the page length is greater than the
+	maximum range of the scrollbar.
+
+2004-08-23  Dom Lachowicz <cinamod@hotmail.com>
+
+	* configure.in: Bump version number
+
+2004-08-13  Dom Lachowicz <cinamod@hotmail.com>
+
+	* src/msw_style.c: Proper gripper drawing for handle boxes/toolbars
+	* src/Theme/gtk-2.0/gtkrc: HandleBoxes and Toolbars are etched-in now
+
+2004-07-02  Raymond Penners  <raymond@dotsphinx.com>
+
+	* === Released 0.6.1 ===
+	
+	* configure.in: Really bumped version number (0.6.1)
+	
+	* src/msw_style.c,src/Theme/gtk-2.0/gtkrc: Removed hard-coded icon
+	button blocking. It is now configurable from within the gtkrc
+	file, but still disabled by default.
+
+2004-06-02  Dom Lachowicz <cinamod@hotmail.com>
+
+	* src/msw_style.c: Disable icons in buttons
+
+2004-06-02  Dom Lachowicz <cinamod@hotmail.com>
+
+	* configure.in: Bump version number (0.6.1)
+	* src/msw_theme_main.c: Lower GTK+ requirements. We'll work fine on 2.0.x or better
+	* src/xp_theme_defs.h: Remove HAVE_LINES junk
+	* src/xp_theme.c: Disable application theming if XP asks us to
+	* src/msw_style.c: Return true for 'is_toolbar()' check if our parent
+	is a GtkHandleBox. This fixes Inkscape's toolbar icons.
+
+2004-05-21  Raymond Penners  <raymond@dotsphinx.com>
+
+	* === Released 0.6.0 ===
+	
+	* configure.in: Bump version number (0.6.0)
+	
+	* src/msw_style.c: Applied patch by John Ehresman that fixes a
+	memory leak.
+
+2004-05-21  Dom Lachowicz <cinamod@hotmail.com>
+
+	* src/Theme/gtk-2.0/gtkrc: Better icon sizes
+	* src/msw_theme_main.c: Enable XP theme switching
+	* src/Makefile.am:
+	* src/Makefile.msc:
+	* src/Theme/gtk-2.0/gtkrc: Rename DLL back to "wimp"
+	* src/wimp_style.c: Fix hilite around toolbar buttons in the Luna theme
+	
+2004-03-20  Raymond Penners  <raymond@dotsphinx.com>
+
+	* all: Renamed GTK-Wimp to MS-Windows Engine
+	
+2004-03-11  Raymond Penners  <raymond@dotsphinx.com>
+
+	* === Released 0.5.4 ===
+	
+2004-03-10  Dom Lachowicz <cinamod@hotmail.com>
+
+	* configure.in: Bump version number (0.5.4)
+
+2004-02-25  Dom Lachowicz <cinamod@hotmail.com>
+
+	* src/wimp_style.c: Fix 
+	http://bugzilla.gnome.org/show_bug.cgi?id=135098
+	http://sourceforge.net/tracker/index.php?func=detail&aid=895762&group_id=76416&atid=547655
+
+2004-01-25  Raymond Penners  <raymond@dotsphinx.com>
+
+	* === Released 0.5.3 ===
+	
+2004-01-20  Dom Lachowicz <cinamod@hotmail.com>
+
+	* src/wimp_style.c: Fix disappearing text in Gimp option menus.
+	Fix background color on XP menus.
+	
+2004-01-20  Dom Lachowicz <cinamod@hotmail.com>
+
+	* src/xp_theme.h
+	* src/xp_theme.c
+	* src/wimp_style.c: Remove UXTHEME_HAS_LINES stuff. I played around
+	with line drawing, and the results were absolutely dreadful.
+	
+2003-12-30  Dom Lachowicz <cinamod@hotmail.com>
+
+	* src/wimp_style.c
+	* src/xp_theme.c
+	* src/xp_theme.h
+	* src/xp_theme_defs.h: Toward 853775, get toolbar button borders correct
+	
+2003-12-30  Dom Lachowicz <cinamod@hotmail.com>
+
+	* src/wimp_style.c: Fix bug 852354 to my liking
+	
+2003-12-01  Dom Lachowicz <cinamod@hotmail.com>
+
+	* src/wimp_style.c: Fix coloration for the expander's +/- part. Was
+	the wrong color when selected or selected+insensitive
+	
+2003-11-26  Dom Lachowicz <cinamod@hotmail.com>
+
+	* src/wimp_style.c: Fix coloration for several GIMP widgets,
+	specifically their own OptionMenu-like widget.
+	
+2003-11-24  Dom Lachowicz <cinamod@hotmail.com>
+
+	* src/wimp_style.c: Get the coloration correct for menu bars (XP theme
+	was showing white foreground instead of gray)
+
+	* configure.in: Post-release version number bump
+	
+2003-11-19  Raymond Penners  <raymond@dotsphinx.com>
+
+	* === Released 0.5.2 ===
+
+2003-11-14  Dom Lachowicz <cinamod@hotmail.com>
+
+	* src/wimp_style.c: Protect against buffer overflows when grabbing
+	fonts and generating RC strings. Get the Progress and Status
+	widget backgrounds to behave properly on themes like "Brick".
+	
+2003-11-05  Dom Lachowicz <cinamod@hotmail.com>
+
+	* src/wimp_style.c: Toolbar steppers get drawn ETCHED_IN when
+	pressed now. More consistent with Win32 behavior.
+	
+	* src/Theme/gtk-2.0/gtkrc: Make menubars have shadow=NONE. More
+	consistent with Win32 behavior, though Win32 apps tend to differ
+	in this area. Setup menu and toolbar icon sizes to be compatible
+	with win32
+	
+2003-11-04  Dom Lachowicz <cinamod@hotmail.com>
+
+	* src/xp_theme.c: Move Raymond's scrollbar work into wimp_style.c
+	
+	* src/wimp_style.c: Get the colorations better for other windows
+	schemes, such as brick.  Based on some work by Jernej Simonèiè
+	<jernej.simoncic@guest.arnes.si>
+	
+2003-11-01  Raymond Penners  <raymond@dotsphinx.com>
+
+	* src/xp_theme.c: Do not display XP scrollbar grippers on tiny
+	scrollbars.
+
+2003-10-23  Raymond Penners  <raymond@dotsphinx.com>
+
+	* === Released 0.5.1 ===
+
+2003-10-23  Dom Lachowicz <cinamod@hotmail.com>
+
+	* src/xp_theme_defs.h: Update to include definitions for my latest
+	work.
+	
+2003-10-22  Raymond Penners  <raymond@dotsphinx.com>
+
+	* src/*.[ch]: Code formatting & XP constants renaming.
+
+2003-10-21  Dom Lachowicz <cinamod@hotmail.com>
+
+	* src/wimp_style.c: Use theme colors, use theme metrics
+	(disabled), use theme fonts, theme menu items, menu separators,
+	draw status bar resize grips.
+
+	* src/xp_theme.c: Ditto.
+	
+2003-10-20  Raymond Penners  <raymond@dotsphinx.com>
+
+	* src/wimp_style.c: Added grippers to XP scrollbars. 
+
+2003-10-20  Dom Lachowicz <cinamod@hotmail.com>
+
+	* configure.in: Bump version to the next release number (0.5.1)
+	
+2003-10-18  Raymond Penners  <raymond@dotsphinx.com>
+
+	* src/Theme/gtk-2.0/gtkrc: "GtkToolBar" should read "GtkToolbar"
+
+	* src/*: Attempted to fix the grippers for the GNAT Programming
+	System. Things behave a tiny bit better now. See #ifdef GNATS_HACK
+
+2003-10-17  Raymond Penners  <raymond@dotsphinx.com>
+
+	* src/wimp_style.c: Horizontal/vertical scrollbars were mixed up,
+	fixed.
+
+2003-04-15  Arnaud Charlet  <charlet@ACT-Europe.FR>
+
+	* src/*.c: The handling of selected radio button was broken.
+
+	* src/xp_theme_defs.h: When building with gcc, the tree expanders
+	were inverted.
+
+2003-10-08  Raymond Penners  <raymond@dotsphinx.com>
+
+	* === Released 0.5.0 ===
+	
+2003-10-07  Raymond Penners  <raymond@dotsphinx.com>
+
+	* src/wimp_style.c: Tabs not located on top of the notebook are
+	now (again) no longer rendered using XP theming.
+	
+	* src/xp_theme.c: Added a more lightweight method to cope with
+	theme changes. Added a crude theme switch detection scheme in the
+	case that GTK+ does not implement gdk_window_add_filter properly
+	(GTK+ 2.2.0?).
+	
+2003-10-07  Dom Lachowicz <cinamod@hotmail.com>
+
+	* Added new mingw based build system, tidied up other missing bits
+	
+	* src/xp_theme.c: Tidied up some return cases
+	
+2003-10-07  Raymond Penners  <raymond@dotsphinx.com>
+
+	* src/xp_theme.c: We now properly use IsThemeActive().
+	
+	* src/xp_theme_defs.h: Renamed from xp_theme_dfns.h
+
+2003-10-06  Dom Lachowicz <cinamod@hotmail.com>
+
+	* src/wimp_style_main.c: Catch system settings changes, disable
+	theme and color changes as they're too experimental
+	
+	* src/wimp_style.[ch]: Export some things, make them accept 0 args
+	
+	* src/xp_theme_dfns.h: New file. WinXP's UXTHEME constants, for
+	building on platforms without them
+	
+	* src/xp_theme.c: Should be able to build on Win32 != [WinXP,2k3]
+	now
+	
+2003-10-03  Dom Lachowicz <cinamod@hotmail.com>
+
+	* src/wimp_style.c wimp_style_main.c: Refactor how we're doing
+	styles. Much faster, lower memory consumption
+	
+2003-10-03  Dom Lachowicz <cinamod@hotmail.com>
+
+	* src/wimp_style_main.c: Catch theme and color changes. Needs more
+	testing and fine-tuning
+	
+2003-10-02  Dom Lachowicz <cinamod@hotmail.com>
+
+	* src/wimp_style.c: Deallocate used HDCs
+	
+2003-10-01  Dom Lachowicz <cinamod@hotmail.com>
+
+	* src/wimp_style.c: Only set the delays if the param is
+	installed. Silly gtk - installing those 3 params only in the
+	menus...
+
+2003-09-25  Dom Lachowicz <cinamod@hotmail.com>
+
+	* src/wimp_style.c: Set a delay on popdown menus
+	
+2003-09-22  Dom Lachowicz <cinamod@hotmail.com>
+
+	* src/xp_theme.c: Make a string array const
+	
+2003-09-20  Raymond Penners  <raymond@dotsphinx.com>
+
+	* === Released 0.4.3 ===
+
+	* src/wimp_style.c: The Gaim buddy icons were missing due to
+	recent tree expander changes, not the clipping area. Fixed.
+	
+	* src/xp_theme.c: Re-enabled clipping area, I am confident it
+	should not cause any problems now.
+	
+2003-09-18  Raymond Penners  <raymond@dotsphinx.com>
+
+	* === Released 0.4.2 ===
+	
+2003-09-16  Dom Lachowicz <cinamod@hotmail.com>
+
+	* src/xp_theme.c: Ignore cliprect for now
+	
+2003-09-15  Raymond Penners  <raymond@dotsphinx.com>
+
+	* === Released 0.4.1 ===
+	
+	* src/wimp_style.c: Fixed typ-o (gtk-double-cliNk-time), adjusted
+	cursor blink time to cope with Windows semantics (GTK+ uses cycle
+	time), fixed clipping area computation. Fixed XP tree expanders to
+	cope with clipping area, and made non-XP tree expanders look
+	pixel-perfect.
+	
+2003-09-15  Dom Lachowicz <cinamod@hotmail.com>
+
+	* src/wimp_style.c: Fix a few more console messages, implement
+	caret blinking
+	
+	* src/xp_theme.*: Stub out line drawing. Apparently, documented
+	bits are missing from MS's implementation. Go figure...
+	
+2003-09-14  Raymond Penners  <raymond@dotsphinx.com>
+
+	* src/wimp_style.c: Fixed console message complaining about
+	"default_border".
+	
+	* src/wimp_style.c: Due to a bug lots of console message
+	complaining about "unexpected keyword `fg'" occured, fixed.
+
+2003-09-11  Dom Lachowicz <cinamod@hotmail.com>
+
+	* src/Theme/gtk-2.0/gtkrc: Remove unused cruft wrt GtkScrollbars
+
+2003-09-11  Raymond Penners  <raymond@dotsphinx.com>
+
+	* === Released 0.4.0 ===
+	
+	* src/wimp_style.c: Notebook tabs were no longer properly drawn,
+	fixed.
+
+2003-09-08  Dom Lachowicz <cinamod@hotmail.com>
+
+	* src/wimp_style.c: Honor scrollbar sizes, radio/check button
+	sizes, paned sizes
+	
+2003-09-03  Dom Lachowicz <cinamod@hotmail.com>
+
+	* src/wimp_style.c: Honor tooltip color, font
+	
+2003-09-02  Dom Lachowicz <cinamod@hotmail.com>
+
+	* src/wimp_style.c: We now honor font preferences being bold or
+	italic
+	
+2003-08-29  Dom Lachowicz <cinamod@hotmail.com>
+
+	* src/*.c: Theme GTK toolbar arrows to XP chevrons, once my GTK
+	patch is committed.
+	
+	* src/wimp_style.c: Enable proper fonts/sizes for menus, status
+	bars. Tooltips are waiting for my GTK patches, though.
+
+2003-08-28  Dom Lachowicz <cinamod@hotmail.com>
+
+	* src/wimp_style.c: Change how we draw handle boxes in the non-XP
+	case. This does not yet apply to GtkHandleBoxes
+	
+2003-08-26  Dom Lachowicz <cinamod@hotmail.com>
+
+	* src/*.c: Tooltips should do XP-style theming. Handle Boxes/Panes
+	do XP style REBAR theming (TODO: non-XP version of the above for
+	handleboxes). Toolbars should draw the REBAR part
+	properly. Preparation for using the Toolbar class. Menubars and
+	Toolbars now are etched-in to mimic Windows'
+	behavior. HandleBoxes' shadow types should also be correct now,
+	compared to OfficeXP applications.
+	
+2003-08-26  Raymond Penners <raymond@dotsphinx.com>
+	
+	* === Released 0.3.0 ===
+	
+2003-08-23  Raymond Penners <raymond@dotsphinx.com>
+
+	* src/*.c: Merged Dom Lachowicz's patches, now tooltips and
+	progress bars nicely adhere to the system colors as well.
+
+	* src/xp_theme.c: There was a mixup in drawing the proper checkbox
+	state, fixed (Gaim bug #790305).
+
+2003-08-20  Raymond Penners <raymond@dotsphinx.com>
+
+	* src/Theme/gtk-2.0/gtkrc: Disabled the colored, alternating
+	rules for GtkTreeViews to match the Windows behaviour.
+
+	* */Makefile.msc: Provided MS-VC++ make files.
+	
+	* src/xp_theme.c: The open/close tree expander symbols were
+	accidentally switched, fixed (Gaim bug #790300).
+
+2003-08-11  Raymond Penners <raymond@dotsphinx.com>
+
+	* src/wimp_style.c: The menu background color now follows XP's
+	color scheme.
+
+2003-08-07  Raymond Penners <raymond@dotsphinx.com>
+
+	* === Released 0.2.0 ===
+
+2003-08-06  Raymond Penners <raymond@dotsphinx.com>
+
+	* src/*.c: Added XP theming support for progress bars.
+
+2003-08-05  Raymond Penners <raymond@dotsphinx.com>
+
+	* src/xp_theme.c: Internal redesign: extracted XP specific theming
+	from wimp_style.c, improved code.
+
+	* src/wimp_style.c: Added XP theming support for list headers, and
+	entry widgets.
+
+2003-08-03  Raymond Penners <raymond@dotsphinx.com>
+
+	* src/wimp_style.c: Improved system color handling, added XP
+	theming support for option menus.
+
+2003-04-15  Raymond Penners  <raymond@dotsphinx.com>
+
+	* src/wimp_style.c: Tabs not located on top of the notebook are
+	not rendered properly using XP theming. Added fallback to non-XP
+	theming behaviour if the tabs are not located on top (to be
+	removed when full notebook support is in).
+
+2003-04-15  Arnaud Charlet  <charlet@ACT-Europe.FR>
+
+	* src/wimp_style.c: Add handling of expander. Fix colors for combo
+	box items. Add native rendering of radio buttons. Fix handling of
+	default buttons. Add native rendering of tree expanders.
+
+2003-03-18  Raymond Penners  <raymond@dotsphinx.com>
+
+	* === Released 0.1.0 ===
+	

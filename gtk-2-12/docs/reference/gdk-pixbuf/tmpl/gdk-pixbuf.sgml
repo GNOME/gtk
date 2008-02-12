@@ -1,0 +1,291 @@
+<!-- ##### SECTION Title ##### -->
+The GdkPixbuf Structure
+
+<!-- ##### SECTION Short_Description ##### -->
+Information that describes an image.
+
+<!-- ##### SECTION Long_Description ##### -->
+
+  <para>
+    The <structname>GdkPixbuf</structname> structure contains
+    information that describes an image in memory.
+  </para>
+
+  <section id="image-data">
+    <title>Image Data</title>
+
+    <para>
+      Image data in a pixbuf is stored in memory in uncompressed,
+      packed format.  Rows in the image are stored top to bottom, and
+      in each row pixels are stored from left to right.  There may be
+      padding at the end of a row.  The "rowstride" value of a pixbuf,
+      as returned by gdk_pixbuf_get_rowstride(), indicates the number
+      of bytes between rows.
+    </para>
+
+    <example id="put-pixel">
+      <title>put_pixel(<!-- -->) example</title>
+
+      <para>
+	The following code illustrates a simple put_pixel(<!-- -->)
+	function for RGB pixbufs with 8 bits per channel with an alpha
+	channel.  It is not included in the gdk-pixbuf library for
+	performance reasons; rather than making several function calls
+	for each pixel, your own code can take shortcuts.
+      </para>
+
+      <programlisting>
+static void
+put_pixel (GdkPixbuf *pixbuf, int x, int y, guchar red, guchar green, guchar blue, guchar alpha)
+{
+  int width, height, rowstride, n_channels;
+  guchar *pixels, *p;
+
+  n_channels = gdk_pixbuf_get_n_channels (pixbuf);
+
+  g_assert (gdk_pixbuf_get_colorspace (pixbuf) == GDK_COLORSPACE_RGB);
+  g_assert (gdk_pixbuf_get_bits_per_sample (pixbuf) == 8);
+  g_assert (gdk_pixbuf_get_has_alpha (pixbuf));
+  g_assert (n_channels == 4);
+
+  width = gdk_pixbuf_get_width (pixbuf);
+  height = gdk_pixbuf_get_height (pixbuf);
+
+  g_assert (x &gt;= 0 &amp;&amp; x &lt; width);
+  g_assert (y &gt;= 0 &amp;&amp; y &lt; height);
+
+  rowstride = gdk_pixbuf_get_rowstride (pixbuf);
+  pixels = gdk_pixbuf_get_pixels (pixbuf);
+
+  p = pixels + y * rowstride + x * n_channels;
+  p[0] = red;
+  p[1] = green;
+  p[2] = blue;
+  p[3] = alpha;
+}
+      </programlisting>
+
+      <para>
+	This function will not work for pixbufs with images that are
+	other than 8 bits per sample or channel, but it will work for
+	most of the pixbufs that GTK+ uses.
+      </para>
+    </example>
+
+    <note>
+      <para>
+	If you are doing memcpy() of raw pixbuf data, note that the
+	last row in the pixbuf may not be as wide as the full
+	rowstride, but rather just as wide as the pixel data needs to
+	be.  That is, it is unsafe to do <literal>memcpy (dest,
+	pixels, rowstride * height)</literal> to copy a whole pixbuf.
+	Use gdk_pixbuf_copy() instead, or compute the width in bytes
+	of the last row as <literal>width * ((n_channels *
+	bits_per_sample + 7) / 8)</literal>.
+      </para>
+    </note>
+  </section>
+
+<!-- ##### SECTION See_Also ##### -->
+  <para>
+  </para>
+
+<!-- ##### SECTION Stability_Level ##### -->
+
+
+<!-- ##### ENUM GdkPixbufError ##### -->
+<para>
+An error code in the #GDK_PIXBUF_ERROR domain. Many &gdk-pixbuf;
+operations can cause errors in this domain, or in the #G_FILE_ERROR
+domain.
+</para>
+
+@GDK_PIXBUF_ERROR_CORRUPT_IMAGE: An image file was broken somehow.
+@GDK_PIXBUF_ERROR_INSUFFICIENT_MEMORY: Not enough memory.
+@GDK_PIXBUF_ERROR_BAD_OPTION: A bad option was passed to a pixbuf save module.
+@GDK_PIXBUF_ERROR_UNKNOWN_TYPE: Unknown image type.
+@GDK_PIXBUF_ERROR_UNSUPPORTED_OPERATION: Don't know how to perform the
+given operation on the type of image at hand.
+@GDK_PIXBUF_ERROR_FAILED: Generic failure code, something went wrong.
+
+<!-- ##### MACRO GDK_PIXBUF_ERROR ##### -->
+<para>
+Error domain used for pixbuf operations. Indicates that the error code
+will be in the #GdkPixbufError enumeration. See #GError for
+information on error domains and error codes.
+</para>
+
+
+
+<!-- ##### ENUM GdkColorspace ##### -->
+  <para>
+    This enumeration defines the color spaces that are supported by
+    the &gdk-pixbuf; library.  Currently only RGB is supported.
+  </para>
+
+@GDK_COLORSPACE_RGB: Indicates a red/green/blue additive color space.
+
+<!-- ##### ENUM GdkPixbufAlphaMode ##### -->
+  <para>
+    These values can be passed to
+    gdk_pixbuf_render_to_drawable_alpha() to control how the alpha
+    channel of an image should be handled.  This function can create a
+    bilevel clipping mask (black and white) and use it while painting
+    the image.  In the future, when the X Window System gets an alpha
+    channel extension, it will be possible to do full alpha
+    compositing onto arbitrary drawables.  For now both cases fall
+    back to a bilevel clipping mask.
+  </para>
+
+@GDK_PIXBUF_ALPHA_BILEVEL: A bilevel clipping mask (black and white)
+will be created and used to draw the image.  Pixels below 0.5 opacity
+will be considered fully transparent, and all others will be
+considered fully opaque.
+@GDK_PIXBUF_ALPHA_FULL: For now falls back to #GDK_PIXBUF_ALPHA_BILEVEL.
+In the future it will do full alpha compositing.
+
+<!-- ##### STRUCT GdkPixbuf ##### -->
+  <para>
+    This is the main structure in the &gdk-pixbuf; library.  It is
+    used to represent images.  It contains information about the
+    image's pixel data, its color space, bits per sample, width and
+    height, and the rowstride (the number of bytes between the start of
+    one row and the start of the next). 
+  </para>
+
+
+<!-- ##### ARG GdkPixbuf:bits-per-sample ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GdkPixbuf:colorspace ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GdkPixbuf:has-alpha ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GdkPixbuf:height ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GdkPixbuf:n-channels ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GdkPixbuf:pixels ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GdkPixbuf:rowstride ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GdkPixbuf:width ##### -->
+<para>
+
+</para>
+
+<!-- ##### FUNCTION gdk_pixbuf_get_colorspace ##### -->
+<para>
+
+</para>
+
+@pixbuf: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_pixbuf_get_n_channels ##### -->
+<para>
+
+</para>
+
+@pixbuf: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_pixbuf_get_has_alpha ##### -->
+<para>
+
+</para>
+
+@pixbuf: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_pixbuf_get_bits_per_sample ##### -->
+<para>
+
+</para>
+
+@pixbuf: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_pixbuf_get_pixels ##### -->
+<para>
+
+</para>
+
+@pixbuf: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_pixbuf_get_width ##### -->
+<para>
+
+</para>
+
+@pixbuf: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_pixbuf_get_height ##### -->
+<para>
+
+</para>
+
+@pixbuf: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_pixbuf_get_rowstride ##### -->
+<para>
+
+</para>
+
+@pixbuf: 
+@Returns: <!--
+Local variables:
+mode: sgml
+sgml-parent-document: ("../gdk-pixbuf.sgml" "book" "refsect2" "")
+End:
+-->
+
+
+<!-- ##### FUNCTION gdk_pixbuf_get_option ##### -->
+<para>
+
+</para>
+
+@pixbuf: 
+@key: 
+@Returns: 
+
+
+<!--
+Local variables:
+mode: sgml
+sgml-parent-document: ("../gdk-pixbuf.sgml" "book" "refsect2")
+End:
+-->
+
+

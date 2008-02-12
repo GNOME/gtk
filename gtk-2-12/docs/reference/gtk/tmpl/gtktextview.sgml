@@ -1,0 +1,838 @@
+<!-- ##### SECTION Title ##### -->
+GtkTextView
+
+<!-- ##### SECTION Short_Description ##### -->
+Widget that displays a GtkTextBuffer
+
+<!-- ##### SECTION Long_Description ##### -->
+<para>
+You may wish to begin by reading the <link linkend="TextWidget">text widget
+conceptual overview</link> which gives an overview of all the objects and data
+types related to the text widget and how they work together.
+</para>
+
+<para>
+
+</para>
+
+<!-- ##### SECTION See_Also ##### -->
+<para>
+#GtkTextBuffer, #GtkTextIter
+</para>
+
+<!-- ##### SECTION Stability_Level ##### -->
+
+
+<!-- ##### STRUCT GtkTextView ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### SIGNAL GtkTextView::backspace ##### -->
+<para>
+
+</para>
+
+@textview: the object which received the signal.
+
+<!-- ##### SIGNAL GtkTextView::copy-clipboard ##### -->
+<para>
+
+</para>
+
+@textview: the object which received the signal.
+
+<!-- ##### SIGNAL GtkTextView::cut-clipboard ##### -->
+<para>
+
+</para>
+
+@textview: the object which received the signal.
+
+<!-- ##### SIGNAL GtkTextView::delete-from-cursor ##### -->
+<para>
+
+</para>
+
+@textview: the object which received the signal.
+@arg1: 
+@arg2: 
+
+<!-- ##### SIGNAL GtkTextView::insert-at-cursor ##### -->
+<para>
+
+</para>
+
+@textview: the object which received the signal.
+@arg1: 
+
+<!-- ##### SIGNAL GtkTextView::move-cursor ##### -->
+<para>
+
+</para>
+
+@textview: the object which received the signal.
+@arg1: 
+@arg2: 
+@arg3: 
+
+<!-- ##### SIGNAL GtkTextView::move-viewport ##### -->
+<para>
+
+</para>
+
+@textview: the object which received the signal.
+@arg1: 
+@arg2: 
+
+<!-- ##### SIGNAL GtkTextView::page-horizontally ##### -->
+<para>
+
+</para>
+
+@textview: the object which received the signal.
+@arg1: 
+@arg2: 
+
+<!-- ##### SIGNAL GtkTextView::paste-clipboard ##### -->
+<para>
+
+</para>
+
+@textview: the object which received the signal.
+
+<!-- ##### SIGNAL GtkTextView::populate-popup ##### -->
+<para>
+
+</para>
+
+@textview: the object which received the signal.
+@arg1: 
+
+<!-- ##### SIGNAL GtkTextView::select-all ##### -->
+<para>
+
+</para>
+
+@textview: the object which received the signal.
+@arg1: 
+
+<!-- ##### SIGNAL GtkTextView::set-anchor ##### -->
+<para>
+
+</para>
+
+@textview: the object which received the signal.
+
+<!-- ##### SIGNAL GtkTextView::set-scroll-adjustments ##### -->
+<para>
+
+</para>
+
+@textview: the object which received the signal.
+@arg1: 
+@arg2: 
+
+<!-- ##### SIGNAL GtkTextView::toggle-cursor-visible ##### -->
+<para>
+
+</para>
+
+@textview: the object which received the signal.
+
+<!-- ##### SIGNAL GtkTextView::toggle-overwrite ##### -->
+<para>
+
+</para>
+
+@textview: the object which received the signal.
+
+<!-- ##### ARG GtkTextView:accepts-tab ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkTextView:buffer ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkTextView:cursor-visible ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkTextView:editable ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkTextView:indent ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkTextView:justification ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkTextView:left-margin ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkTextView:overwrite ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkTextView:pixels-above-lines ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkTextView:pixels-below-lines ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkTextView:pixels-inside-wrap ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkTextView:right-margin ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkTextView:tabs ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkTextView:wrap-mode ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkTextView:error-underline-color ##### -->
+<para>
+
+</para>
+
+<!-- ##### ENUM GtkTextWindowType ##### -->
+<para>
+
+</para>
+
+@GTK_TEXT_WINDOW_PRIVATE: 
+@GTK_TEXT_WINDOW_WIDGET: 
+@GTK_TEXT_WINDOW_TEXT: 
+@GTK_TEXT_WINDOW_LEFT: 
+@GTK_TEXT_WINDOW_RIGHT: 
+@GTK_TEXT_WINDOW_TOP: 
+@GTK_TEXT_WINDOW_BOTTOM: 
+
+<!-- ##### FUNCTION gtk_text_view_new ##### -->
+<para>
+
+</para>
+
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_text_view_new_with_buffer ##### -->
+<para>
+
+</para>
+
+@buffer: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_text_view_set_buffer ##### -->
+<para>
+
+</para>
+
+@text_view: 
+@buffer: 
+
+
+<!-- ##### FUNCTION gtk_text_view_get_buffer ##### -->
+<para>
+
+</para>
+
+@text_view: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_text_view_scroll_to_mark ##### -->
+<para>
+
+</para>
+
+@text_view: 
+@mark: 
+@within_margin: 
+@use_align: 
+@xalign: 
+@yalign: 
+
+
+<!-- ##### FUNCTION gtk_text_view_scroll_to_iter ##### -->
+<para>
+
+</para>
+
+@text_view: 
+@iter: 
+@within_margin: 
+@use_align: 
+@xalign: 
+@yalign: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_text_view_scroll_mark_onscreen ##### -->
+<para>
+
+</para>
+
+@text_view: 
+@mark: 
+
+
+<!-- ##### FUNCTION gtk_text_view_move_mark_onscreen ##### -->
+<para>
+
+</para>
+
+@text_view: 
+@mark: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_text_view_place_cursor_onscreen ##### -->
+<para>
+
+</para>
+
+@text_view: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_text_view_get_visible_rect ##### -->
+<para>
+
+</para>
+
+@text_view: 
+@visible_rect: 
+
+
+<!-- ##### FUNCTION gtk_text_view_get_iter_location ##### -->
+<para>
+
+</para>
+
+@text_view: 
+@iter: 
+@location: 
+
+
+<!-- ##### FUNCTION gtk_text_view_get_line_at_y ##### -->
+<para>
+
+</para>
+
+@text_view: 
+@target_iter: 
+@y: 
+@line_top: 
+
+
+<!-- ##### FUNCTION gtk_text_view_get_line_yrange ##### -->
+<para>
+
+</para>
+
+@text_view: 
+@iter: 
+@y: 
+@height: 
+
+
+<!-- ##### FUNCTION gtk_text_view_get_iter_at_location ##### -->
+<para>
+
+</para>
+
+@text_view: 
+@iter: 
+@x: 
+@y: 
+
+
+<!-- ##### FUNCTION gtk_text_view_get_iter_at_position ##### -->
+<para>
+
+</para>
+
+@text_view: 
+@iter: 
+@trailing: 
+@x: 
+@y: 
+
+
+<!-- ##### FUNCTION gtk_text_view_buffer_to_window_coords ##### -->
+<para>
+
+</para>
+
+@text_view: 
+@win: 
+@buffer_x: 
+@buffer_y: 
+@window_x: 
+@window_y: 
+
+
+<!-- ##### FUNCTION gtk_text_view_window_to_buffer_coords ##### -->
+<para>
+
+</para>
+
+@text_view: 
+@win: 
+@window_x: 
+@window_y: 
+@buffer_x: 
+@buffer_y: 
+
+
+<!-- ##### FUNCTION gtk_text_view_get_window ##### -->
+<para>
+
+</para>
+
+@text_view: 
+@win: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_text_view_get_window_type ##### -->
+<para>
+
+</para>
+
+@text_view: 
+@window: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_text_view_set_border_window_size ##### -->
+<para>
+
+</para>
+
+@text_view: 
+@type: 
+@size: 
+
+
+<!-- ##### FUNCTION gtk_text_view_get_border_window_size ##### -->
+<para>
+
+</para>
+
+@text_view: 
+@type: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_text_view_forward_display_line ##### -->
+<para>
+
+</para>
+
+@text_view: 
+@iter: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_text_view_backward_display_line ##### -->
+<para>
+
+</para>
+
+@text_view: 
+@iter: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_text_view_forward_display_line_end ##### -->
+<para>
+
+</para>
+
+@text_view: 
+@iter: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_text_view_backward_display_line_start ##### -->
+<para>
+
+</para>
+
+@text_view: 
+@iter: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_text_view_starts_display_line ##### -->
+<para>
+
+</para>
+
+@text_view: 
+@iter: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_text_view_move_visually ##### -->
+<para>
+
+</para>
+
+@text_view: 
+@iter: 
+@count: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_text_view_add_child_at_anchor ##### -->
+<para>
+
+</para>
+
+@text_view: 
+@child: 
+@anchor: 
+
+
+<!-- ##### STRUCT GtkTextChildAnchor ##### -->
+<para>
+A <structname>GtkTextChildAnchor</structname> is a spot in the buffer 
+where child widgets can be "anchored" (inserted inline, as if they were 
+characters). The anchor can have multiple widgets anchored, to allow for 
+multiple views.
+</para>
+
+
+<!-- ##### FUNCTION gtk_text_child_anchor_new ##### -->
+<para>
+
+</para>
+
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_text_child_anchor_get_widgets ##### -->
+<para>
+
+</para>
+
+@anchor: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_text_child_anchor_get_deleted ##### -->
+<para>
+
+</para>
+
+@anchor: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_text_view_add_child_in_window ##### -->
+<para>
+
+</para>
+
+@text_view: 
+@child: 
+@which_window: 
+@xpos: 
+@ypos: 
+
+
+<!-- ##### FUNCTION gtk_text_view_move_child ##### -->
+<para>
+
+</para>
+
+@text_view: 
+@child: 
+@xpos: 
+@ypos: 
+
+
+<!-- ##### FUNCTION gtk_text_view_set_wrap_mode ##### -->
+<para>
+
+</para>
+
+@text_view: 
+@wrap_mode: 
+
+
+<!-- ##### FUNCTION gtk_text_view_get_wrap_mode ##### -->
+<para>
+
+</para>
+
+@text_view: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_text_view_set_editable ##### -->
+<para>
+
+</para>
+
+@text_view: 
+@setting: 
+
+
+<!-- ##### FUNCTION gtk_text_view_get_editable ##### -->
+<para>
+
+</para>
+
+@text_view: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_text_view_set_cursor_visible ##### -->
+<para>
+
+</para>
+
+@text_view: 
+@setting: 
+
+
+<!-- ##### FUNCTION gtk_text_view_get_cursor_visible ##### -->
+<para>
+
+</para>
+
+@text_view: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_text_view_set_overwrite ##### -->
+<para>
+
+</para>
+
+@text_view: 
+@overwrite: 
+
+
+<!-- ##### FUNCTION gtk_text_view_get_overwrite ##### -->
+<para>
+
+</para>
+
+@text_view: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_text_view_set_pixels_above_lines ##### -->
+<para>
+
+</para>
+
+@text_view: 
+@pixels_above_lines: 
+
+
+<!-- ##### FUNCTION gtk_text_view_get_pixels_above_lines ##### -->
+<para>
+
+</para>
+
+@text_view: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_text_view_set_pixels_below_lines ##### -->
+<para>
+
+</para>
+
+@text_view: 
+@pixels_below_lines: 
+
+
+<!-- ##### FUNCTION gtk_text_view_get_pixels_below_lines ##### -->
+<para>
+
+</para>
+
+@text_view: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_text_view_set_pixels_inside_wrap ##### -->
+<para>
+
+</para>
+
+@text_view: 
+@pixels_inside_wrap: 
+
+
+<!-- ##### FUNCTION gtk_text_view_get_pixels_inside_wrap ##### -->
+<para>
+
+</para>
+
+@text_view: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_text_view_set_justification ##### -->
+<para>
+
+</para>
+
+@text_view: 
+@justification: 
+
+
+<!-- ##### FUNCTION gtk_text_view_get_justification ##### -->
+<para>
+
+</para>
+
+@text_view: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_text_view_set_left_margin ##### -->
+<para>
+
+</para>
+
+@text_view: 
+@left_margin: 
+
+
+<!-- ##### FUNCTION gtk_text_view_get_left_margin ##### -->
+<para>
+
+</para>
+
+@text_view: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_text_view_set_right_margin ##### -->
+<para>
+
+</para>
+
+@text_view: 
+@right_margin: 
+
+
+<!-- ##### FUNCTION gtk_text_view_get_right_margin ##### -->
+<para>
+
+</para>
+
+@text_view: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_text_view_set_indent ##### -->
+<para>
+
+</para>
+
+@text_view: 
+@indent: 
+
+
+<!-- ##### FUNCTION gtk_text_view_get_indent ##### -->
+<para>
+
+</para>
+
+@text_view: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_text_view_set_tabs ##### -->
+<para>
+
+</para>
+
+@text_view: 
+@tabs: 
+
+
+<!-- ##### FUNCTION gtk_text_view_get_tabs ##### -->
+<para>
+
+</para>
+
+@text_view: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_text_view_set_accepts_tab ##### -->
+<para>
+
+</para>
+
+@text_view: 
+@accepts_tab: 
+
+
+<!-- ##### FUNCTION gtk_text_view_get_accepts_tab ##### -->
+<para>
+
+</para>
+
+@text_view: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_text_view_get_default_attributes ##### -->
+<para>
+
+</para>
+
+@text_view: 
+@Returns: 
+
+
+<!-- ##### MACRO GTK_TEXT_VIEW_PRIORITY_VALIDATE ##### -->
+<para>
+The priority at which the text view validates onscreen lines
+in an idle job in the background.
+</para>
+
+
+

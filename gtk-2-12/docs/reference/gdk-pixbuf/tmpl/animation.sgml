@@ -1,0 +1,174 @@
+<!-- ##### SECTION Title ##### -->
+Animations
+
+<!-- ##### SECTION Short_Description ##### -->
+Animated images.
+
+<!-- ##### SECTION Long_Description ##### -->
+  <para>
+    The &gdk-pixbuf; library provides a simple mechanism to load and represent
+    animations. An animation is conceptually a series of frames to be displayed
+    over time. Each frame is the same size. The animation may not be represented
+    as a series of frames internally; for example, it may be stored as a 
+    sprite and instructions for moving the sprite around a background. To display 
+    an animation you don't need to understand its representation, however; you just
+    ask &gdk-pixbuf; what should be displayed at a given point in time. 
+  </para>
+
+<!-- ##### SECTION See_Also ##### -->
+  <para>
+    #GdkPixbufLoader
+  </para>
+
+<!-- ##### SECTION Stability_Level ##### -->
+
+
+<!-- ##### STRUCT GdkPixbufAnimation ##### -->
+<para>
+And opaque struct representing an animation.
+</para>
+
+
+<!-- ##### STRUCT GdkPixbufAnimationIter ##### -->
+<para>
+And opaque struct representing an iterator which points to a
+certain position in an animation.
+</para>
+
+
+<!-- ##### FUNCTION gdk_pixbuf_animation_new_from_file ##### -->
+<para>
+
+</para>
+
+@filename: 
+@error: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_pixbuf_animation_ref ##### -->
+<para>
+
+</para>
+
+@animation: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_pixbuf_animation_unref ##### -->
+<para>
+
+</para>
+
+@animation: 
+
+
+<!-- ##### FUNCTION gdk_pixbuf_animation_get_width ##### -->
+<para>
+
+</para>
+
+@animation: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_pixbuf_animation_get_height ##### -->
+<para>
+
+</para>
+
+@animation: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_pixbuf_animation_get_iter ##### -->
+<para>
+
+</para>
+
+@animation: 
+@start_time: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_pixbuf_animation_is_static_image ##### -->
+<para>
+
+</para>
+
+@animation: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_pixbuf_animation_get_static_image ##### -->
+<para>
+
+</para>
+
+@animation: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_pixbuf_animation_iter_advance ##### -->
+<para>
+
+</para>
+
+@iter: 
+@current_time: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_pixbuf_animation_iter_get_delay_time ##### -->
+<para>
+
+</para>
+
+@iter: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_pixbuf_animation_iter_on_currently_loading_frame ##### -->
+<para>
+
+</para>
+
+@iter: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_pixbuf_animation_iter_get_pixbuf ##### -->
+<para>
+
+</para>
+
+@iter: 
+@Returns: 
+
+
+<!-- ##### STRUCT GdkPixbufSimpleAnim ##### -->
+<para>
+An
+</para>
+
+
+<!-- ##### FUNCTION gdk_pixbuf_simple_anim_new ##### -->
+<para>
+
+</para>
+
+@width: 
+@height: 
+@rate: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_pixbuf_simple_anim_add_frame ##### -->
+<para>
+
+</para>
+
+@animation: 
+@pixbuf: 
+
+

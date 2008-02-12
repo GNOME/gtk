@@ -1,0 +1,84 @@
+<!-- ##### SECTION Title ##### -->
+Utilities
+
+<!-- ##### SECTION Short_Description ##### -->
+Utility and miscellaneous convenience functions.
+
+<!-- ##### SECTION Long_Description ##### -->
+  <para>
+    These functions provide miscellaneous utilities for manipulating
+    pixbufs.  The pixel data in pixbufs may of course be manipulated
+    directly by applications, but several common operations can be
+    performed by these functions instead.
+  </para>
+
+<!-- ##### SECTION See_Also ##### -->
+  <para>
+    #GdkPixbuf
+  </para>
+
+<!-- ##### SECTION Stability_Level ##### -->
+
+
+<!-- ##### FUNCTION gdk_pixbuf_add_alpha ##### -->
+<para>
+
+</para>
+
+@pixbuf: 
+@substitute_color: 
+@r: 
+@g: 
+@b: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_pixbuf_copy_area ##### -->
+<para>
+
+</para>
+
+@src_pixbuf: 
+@src_x: 
+@src_y: 
+@width: 
+@height: 
+@dest_pixbuf: 
+@dest_x: 
+@dest_y: <!--
+Local variables:
+mode: sgml
+sgml-parent-document: ("../gdk-pixbuf.sgml" "book" "refsect2" "")
+End:
+-->
+
+
+<!-- ##### FUNCTION gdk_pixbuf_saturate_and_pixelate ##### -->
+<para>
+
+</para>
+
+@src: 
+@dest: 
+@saturation: 
+@pixelate: 
+
+
+<!-- ##### FUNCTION gdk_pixbuf_apply_embedded_orientation ##### -->
+<para>
+
+</para>
+
+@src: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_pixbuf_fill ##### -->
+<para>
+
+</para>
+
+@pixbuf: 
+@pixel: 
+
+

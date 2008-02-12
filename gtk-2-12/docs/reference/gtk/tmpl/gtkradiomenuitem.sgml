@@ -1,0 +1,156 @@
+<!-- ##### SECTION Title ##### -->
+GtkRadioMenuItem
+
+<!-- ##### SECTION Short_Description ##### -->
+A choice from multiple check menu items
+
+<!-- ##### SECTION Long_Description ##### -->
+<para>
+A radio menu item is a check menu item that belongs to a group. At each
+instant exactly one of the radio menu items from a group is selected.
+</para>
+<para>
+The group list does not need to be freed, as each #GtkRadioMenuItem will 
+remove itself and its list item when it is destroyed.
+</para>
+<para>
+The correct way to create a group of radio menu items is approximatively
+this:
+</para>
+<example>
+<title>How to create a group of radio menu items.</title>
+<programlisting>
+GSList *group = NULL;
+GtkWidget *item;
+gint i;
+
+for (i = 0; i &lt; 5; i++)
+{
+  item = gtk_radio_menu_item_new_with_label (group, "This is an example");
+  group = gtk_radio_menu_item_get_group (GTK_RADIO_MENU_ITEM (item));
+  if (i == 1)
+    gtk_check_menu_item_set_active (GTK_CHECK_MENU_ITEM (item), TRUE);
+}
+</programlisting>
+</example>
+
+<!-- ##### SECTION See_Also ##### -->
+<para>
+<variablelist>
+<varlistentry>
+<term>#GtkMenuItem</term>
+<listitem><para>because a radio menu item is a menu item.</para></listitem>
+</varlistentry>
+<varlistentry>
+<term>#GtkCheckMenuItem</term>
+<listitem><para>to know how to handle the check.</para></listitem>
+</varlistentry>
+</variablelist>
+</para>
+
+<!-- ##### SECTION Stability_Level ##### -->
+
+
+<!-- ##### STRUCT GtkRadioMenuItem ##### -->
+<para>
+The structure contains only private data that must be accessed through
+the interface functions.
+</para>
+
+
+<!-- ##### SIGNAL GtkRadioMenuItem::group-changed ##### -->
+<para>
+
+</para>
+
+@radiomenuitem: the object which received the signal.
+
+<!-- ##### ARG GtkRadioMenuItem:group ##### -->
+<para>
+
+</para>
+
+<!-- ##### FUNCTION gtk_radio_menu_item_new ##### -->
+<para>
+Creates a new #GtkRadioMenuItem.
+</para>
+
+@group: the group to which the radio menu item is to be attached
+@Returns: a new #GtkRadioMenuItem
+
+
+<!-- ##### FUNCTION gtk_radio_menu_item_new_with_label ##### -->
+<para>
+Creates a new #GtkRadioMenuItem whose child is a simple #GtkLabel.
+</para>
+
+@group: the group to which the radio menu item is to be attached
+@label: the text for the label
+@Returns: a new #GtkRadioMenuItem
+
+
+<!-- ##### FUNCTION gtk_radio_menu_item_new_with_mnemonic ##### -->
+<para>
+
+</para>
+
+@group: 
+@label: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_radio_menu_item_new_from_widget ##### -->
+<para>
+
+</para>
+
+@group: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_radio_menu_item_new_with_label_from_widget ##### -->
+<para>
+
+</para>
+
+@group: 
+@label: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_radio_menu_item_new_with_mnemonic_from_widget ##### -->
+<para>
+
+</para>
+
+@group: 
+@label: 
+@Returns: 
+
+
+<!-- ##### MACRO gtk_radio_menu_item_group ##### -->
+<para>
+Deprecated compatibility macro. Use gtk_radio_menu_item_get_group() instead.
+</para>
+
+
+
+<!-- ##### FUNCTION gtk_radio_menu_item_set_group ##### -->
+<para>
+Sets the group of a radio menu item, or changes it.
+</para>
+
+@radio_menu_item: a #GtkRadioMenuItem.
+@group: the new group.
+
+
+<!-- ##### FUNCTION gtk_radio_menu_item_get_group ##### -->
+<para>
+Returns the group to which the radio menu item belongs, as a #GList of
+#GtkRadioMenuItem. The list belongs to GTK+ and should not be freed.
+</para>
+
+@radio_menu_item: a #GtkRadioMenuItem.
+@Returns: the group of @radio_menu_item.
+
+

@@ -1,0 +1,300 @@
+<!-- ##### SECTION Title ##### -->
+Colormaps and Colors
+
+<!-- ##### SECTION Short_Description ##### -->
+Manipulation of colors and colormaps
+
+<!-- ##### SECTION Long_Description ##### -->
+<para>
+These functions are used to modify colormaps.
+A colormap is an object that contains the mapping
+between the color values stored in memory and
+the RGB values that are used to display color
+values. In general, colormaps only contain
+significant information for pseudo-color visuals,
+but even for other visual types, a colormap object
+is required in some circumstances.
+</para>
+
+<para>
+There are a couple of special colormaps that can
+be retrieved. The system colormap (retrieved 
+with gdk_colormap_get_system()) is the default
+colormap of the system. If you are using GdkRGB,
+there is another colormap that is important - the
+colormap in which GdkRGB works, retrieved with
+gdk_rgb_get_colormap(). However, when using GdkRGB, 
+it is not generally necessary to allocate colors
+directly.
+</para>
+
+<para>
+In previous revisions of this interface, a number
+of functions that take a #GdkColormap parameter
+were replaced with functions whose names began
+with "gdk_colormap_". This process will probably
+be extended somewhat in the future - 
+gdk_color_white(), gdk_color_black(), and 
+gdk_color_change() will probably become aliases.
+</para>
+
+<!-- ##### SECTION See_Also ##### -->
+<para>
+
+</para>
+
+<!-- ##### SECTION Stability_Level ##### -->
+
+
+<!-- ##### STRUCT GdkColor ##### -->
+<para>
+The #GdkColor structure is used to describe an 
+allocated or unallocated color.
+</para>
+
+@pixel: For allocated colors, the value used to
+  draw this color on the screen.
+@red: The red component of the color. This is
+  a value between 0 and 65535, with 65535 indicating
+  full intensitiy.
+@green: The blue component of the color.
+@blue: The green component of the color.
+
+<!-- ##### STRUCT GdkColormap ##### -->
+<para>
+The colormap structure contains the following public fields.
+</para>
+
+@size: For pseudo-color colormaps, the number of colors
+  in the colormap.
+@colors: An array containing the current values in the
+  colormap. This can be used to map from pixel values
+  back to RGB values. This is only meaningful for
+  pseudo-color colormaps.
+
+<!-- ##### FUNCTION gdk_colormap_new ##### -->
+<para>
+</para>
+
+@visual: 
+@allocate: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_colormap_ref ##### -->
+<para>
+
+</para>
+
+@cmap: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_colormap_unref ##### -->
+<para>
+
+</para>
+
+@cmap: 
+
+
+<!-- ##### FUNCTION gdk_colormap_get_system ##### -->
+<para>
+</para>
+
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_colormap_get_system_size ##### -->
+<para>
+</para>
+
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_colormap_change ##### -->
+<para>
+</para>
+
+@colormap: 
+@ncolors: 
+
+
+<!-- ##### FUNCTION gdk_colormap_alloc_colors ##### -->
+<para>
+</para>
+
+@colormap: 
+@colors: 
+@ncolors: 
+@writeable: 
+@best_match: 
+@success: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_colormap_alloc_color ##### -->
+<para>
+</para>
+
+@colormap: 
+@color: 
+@writeable: 
+@best_match: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_colormap_free_colors ##### -->
+<para>
+</para>
+
+@colormap: 
+@colors: 
+@ncolors: 
+
+
+<!-- ##### FUNCTION gdk_colormap_query_color ##### -->
+<para>
+
+</para>
+
+@colormap: 
+@pixel: 
+@result: 
+
+
+<!-- ##### FUNCTION gdk_colormap_get_visual ##### -->
+<para>
+</para>
+
+@colormap: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_colormap_get_screen ##### -->
+<para>
+
+</para>
+
+@cmap: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_colors_store ##### -->
+<para>
+</para>
+
+@colormap: 
+@colors: 
+@ncolors: 
+
+
+<!-- ##### FUNCTION gdk_color_copy ##### -->
+<para>
+</para>
+
+@color: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_color_free ##### -->
+<para>
+</para>
+
+@color: 
+
+
+<!-- ##### FUNCTION gdk_colors_alloc ##### -->
+<para>
+</para>
+
+@colormap: 
+@contiguous: 
+@planes: 
+@nplanes: 
+@pixels: 
+@npixels: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_colors_free ##### -->
+<para>
+</para>
+
+@colormap: 
+@pixels: 
+@npixels: 
+@planes: 
+
+
+<!-- ##### FUNCTION gdk_color_white ##### -->
+<para>
+</para>
+
+@colormap: 
+@color: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_color_black ##### -->
+<para>
+</para>
+
+@colormap: 
+@color: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_color_parse ##### -->
+<para>
+</para>
+
+@spec: 
+@color: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_color_alloc ##### -->
+<para>
+</para>
+
+@colormap: 
+@color: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_color_change ##### -->
+<para>
+</para>
+
+@colormap: 
+@color: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_color_equal ##### -->
+<para>
+</para>
+
+@colora: 
+@colorb: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_color_hash ##### -->
+<para>
+</para>
+
+@colora: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_color_to_string ##### -->
+<para>
+
+</para>
+
+@color: 
+@Returns: 
+
+

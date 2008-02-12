@@ -1,0 +1,12 @@
+*.gmo
+*.mo
+*.pot
+Makefile
+Makefile.in
+POTFILES
+cat-id-tbl.c
+messages
+missing
+notexist
+stamp-cat-id
+po2tbl.sed

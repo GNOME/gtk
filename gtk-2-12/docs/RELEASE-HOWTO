@@ -1,0 +1,45 @@
+How to do a GTK+ release?
+=========================
+
+Make sure you have Owen's special autoconf and libtool RPMs, available at:
+http://people.redhat.com/otaylor/gtk/autotools/.
+
+Also make sure you have the following packages installed with all their
+dependencies (I used the RPM package names from RedHat 9):
+* gtk-doc
+* linuxdoc-tools
+* docbook-utils
+
+Without those packages make distcheck will *not* pass.
+
+
+0) Blow away your gtk+ directory, check a new version out
+1) autogen and build it, make sure to enable docs.
+2) Update NEWS based on the various ChangeLog files
+3) Verify that the version in configure.in has been bumped after the last
+release. (Note that this is critical, a slip-up here will cause the soname 
+to change).
+4) Make sure that make check is happy (If you don't do it here, make distcheck
+will also catch it, but it is kind of disheartening to see make distcheck fail
+due to an extraneous symbol after watching it build the docs for an hour...)
+5) Add === Released 2.x.y === at the top of all ChangeLog files
+6) make distcheck
+7) Fix broken stuff found by 5) repeat
+8) cvs commit; you'll have a bunch of po file changes, and maybe some
+doc changes too (NOTE: be sure to use cvs with compression, else you'll
+end up waiting for a long time :).
+9) If 7) fails because someone else committed inbetween, curse, cvs up,
+fix conflicts and go to 5)
+10) type 'cvs tag GTK_2_x_y' in the toplevel directory
+11) You now have the tarball, and the CVS tag, now upload the tarball to
+gnome.org and gtk.org
+12) Go to the gnome-announce list archives, find the last announce message,
+create a new message in the same form, replacing version numbers, commentary
+at the top about "what this release is about" and the Summary of changes.
+13) Send it to gnome-announce-list, gtk-list, gtk-app-devel-list and
+gtk-devel-list. Set reply-to to gnome-hackers.
+14) Bump the version number in configure.in. 
+15) Create a new milestone in bugzilla and move the remaining bugs from the
+2.x.y milestone over to the new one.
+16) Add a link to the release announcement to www.gtk.org which lives in
+the gtk-web cvs module.

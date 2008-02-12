@@ -1,0 +1,91 @@
+.TH GDK-PIXBUF-CSOURCE 1 "04 Sep 2001"
+.SH NAME
+gdk-pixbuf-csource \- C code generation utility for GdkPixbuf images
+.SH SYNOPSIS
+
+\fBgdk-pixbuf-csource\fP [\fIoptions\fP] [\fIimage\fP]
+.br
+\fBgdk-pixbuf-csource\fP [\fIoptions\fP] \fI--build-list\fP [[\fIname image\fP]...]
+
+.SH DESCRIPTION
+\fBgdk-pixbuf-csource\fP is a small utility that generates C code containing
+images, useful for compiling images directly into programs.
+
+.SH INVOCATION
+
+\fBgdk-pixbuf-csource\fP either takes as input one image file name to generate code
+for, or, using the \fI--build-list\fP option, a list of (\fIname\fP, \fIimage\fP)
+pairs to generate code for a list of images into named variables.
+
+.SS Options
+.TP
+\fI--stream
+Generate pixbuf data stream (a single string containing a serialized
+GdkPixdata structure in network byte order).
+
+.TP
+\fI--struct
+Generate GdkPixdata structure (needs the GdkPixdata structure definition from
+gdk-pixdata.h).
+
+.TP
+\fI--macros
+Generate *_ROWSTRIDE, *_WIDTH, *_HEIGHT, *_BYTES_PER_PIXEL and
+*_RLE_PIXEL_DATA or *_PIXEL_DATA macro definitions for the image.
+
+.TP
+\fI--rle
+Enables run-length encoding for the generated pixel data (default).
+
+.TP
+\fI--raw
+Disables run-length encoding for the generated pixel data.
+
+.TP
+\fI--extern
+Generate extern symbols.
+
+.TP
+\fI--static
+Generate static symbols (default).
+
+.TP
+\fI--decoder
+Provide a *_RUN_LENGTH_DECODE(image_buf, rle_data, size, bpp) macro definition
+to decode run-length encoded image data.
+
+.TP
+\fI--name=identifier
+Specifies the identifier name (prefix) for the generated variables or
+macros (useful only if \fI--build-list\fP was not specified).
+
+.TP
+\fI--build-list
+Enables (\fIname\fP, \fIimage\fP) pair parsing mode.
+
+.TP
+\fI-h, --help\fP 
+Print brief help and exit.
+
+.TP
+\fI-v, --version\fP
+Print version and exit.
+
+.TP
+\fI--g-fatal-warnings
+Make warnings fatal (causes the program to abort).
+
+.PP
+
+.SH SEE ALSO
+The \fIGdkPixbuf\fP documentation, shipped with the \fIGtk+\fP distribution,
+available from \fIhttp://www.gtk.org\fP.
+
+.SH BUGS 
+None known yet.
+
+.SH AUTHOR
+.B gdk-pixbuf-csource
+was written by Tim Janik <timj@gtk.org>.
+.PP
+This manual page was provided by Tim Janik <timj@gtk.org>.

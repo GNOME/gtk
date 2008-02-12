@@ -1,0 +1,43 @@
+.\"     Title: gtk-builder-convert
+.\"    Author: 
+.\" Generator: DocBook XSL Stylesheets v1.72.0 <http://docbook.sf.net/>
+.\"      Date: 07/10/2007
+.\"    Manual: 
+.\"    Source: 
+.\"
+.TH "GTK\-BUILDER\-CONVERT" "1" "07/10/2007" "" ""
+.\" disable hyphenation
+.nh
+.\" disable justification (adjust text to left margin only)
+.ad l
+.SH "NAME"
+gtk\-builder\-convert \- Glade file conversion utility
+.SH "SYNOPSIS"
+.HP 20
+\fBgtk\-builder\-convert\fR [\-\-skip\-windows] [\-\-root\ \fIname\fR] {input} {output}
+.SH "DESCRIPTION"
+.PP
+\fBgtk\-builder\-convert\fR
+converts glade files into XML files which can be loaded with #GtkBuilder.
+.PP
+It expects the name of a glade file as the first argument, and writes its output the file specified as the second argument.
+.SH "OPTIONS"
+.PP
+\-\-skip\-windows, \-w
+.RS 4
+Convert everything but GtkWindow subclasses.
+.RE
+.PP
+\-\-root, \-r
+.RS 4
+Convert only the widget named
+\fIname\fR
+and its children.
+.RE
+.SH "BUGS"
+.PP
+Toolbars are not handled.
+.PP
+Support for accessibility is not yet implemented.
+.PP
+The script requires a python interpreter to run.

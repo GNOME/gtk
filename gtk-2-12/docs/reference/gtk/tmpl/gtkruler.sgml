@@ -1,0 +1,122 @@
+<!-- ##### SECTION Title ##### -->
+GtkRuler
+
+<!-- ##### SECTION Short_Description ##### -->
+Base class for horizontal or vertical rulers
+
+<!-- ##### SECTION Long_Description ##### -->
+<note>
+<para>
+ This widget is considered too specialized/little-used for
+ GTK+, and will in the future be moved to some other package.  If
+ your application needs this widget, feel free to use it, as the
+ widget does work and is useful in some applications; it's just not
+ of general interest. However, we are not accepting new features for
+ the widget, and it will eventually move out of the GTK+
+ distribution.
+</para>
+</note>
+<para>
+The GTKRuler widget is a base class for horizontal and vertical rulers. Rulers
+are used to show the mouse pointer's location in a window. The ruler can either
+be horizontal or vertical on the window. Within the ruler a small triangle
+indicates the location of the mouse relative to the horizontal or vertical
+ruler. See #GtkHRuler to learn how to create a new horizontal ruler. See
+#GtkVRuler to learn how to create a new vertical ruler.
+</para>
+
+<!-- ##### SECTION See_Also ##### -->
+<para>
+#GtkHRuler, #GtkVRuler
+</para>
+
+<!-- ##### SECTION Stability_Level ##### -->
+
+
+<!-- ##### STRUCT GtkRuler ##### -->
+<para>
+All distances are in 1/72nd's of an inch. (According to Adobe thats a point, but
+points are really 1/72.27 in.)
+</para>
+
+
+<!-- ##### ARG GtkRuler:lower ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkRuler:max-size ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkRuler:metric ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkRuler:position ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkRuler:upper ##### -->
+<para>
+
+</para>
+
+<!-- ##### STRUCT GtkRulerMetric ##### -->
+<para>
+This should be points_per_unit. This is the size of the unit in 1/72nd's of an inch and has nothing to do with screen pixels. 
+</para>
+
+@metric_name: 
+@abbrev: 
+@pixels_per_unit: 
+@ruler_scale: 
+@subdivide: 
+
+<!-- ##### FUNCTION gtk_ruler_set_metric ##### -->
+<para>
+This calls the #GTKMetricType to set the ruler to units defined. Available units
+are GTK_PIXELS, GTK_INCHES, or GTK_CENTIMETERS. The default unit of measurement
+is GTK_PIXELS.
+</para>
+
+@ruler: the gtkruler
+@metric: the unit of measurement
+
+
+<!-- ##### FUNCTION gtk_ruler_set_range ##### -->
+<para>
+
+</para>
+
+@ruler: 
+@lower: 
+@upper: 
+@position: 
+@max_size: 
+
+
+<!-- ##### FUNCTION gtk_ruler_get_metric ##### -->
+<para>
+
+</para>
+
+@ruler: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_ruler_get_range ##### -->
+<para>
+
+</para>
+
+@ruler: 
+@lower: 
+@upper: 
+@position: 
+@max_size: 
+
+

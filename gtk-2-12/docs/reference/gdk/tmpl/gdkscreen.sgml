@@ -1,0 +1,401 @@
+<!-- ##### SECTION Title ##### -->
+GdkScreen
+
+<!-- ##### SECTION Short_Description ##### -->
+Object representing a physical screen
+
+<!-- ##### SECTION Long_Description ##### -->
+<para>
+  #GdkScreen objects are the GDK representation of a physical screen. It is used 
+  throughout GDK and GTK+ to specify which screen the top level windows
+  are to be displayed on. 
+  It is also used to query the screen specification and default settings such as 
+  the default colormap (gdk_screen_get_default_colormap()),
+  the screen width (gdk_screen_get_width()), etc.
+</para>
+<para>Note that a screen may consist of multiple monitors which are merged to
+form a large screen area. 
+</para>
+
+<!-- ##### SECTION See_Also ##### -->
+<para>
+
+</para>
+
+<!-- ##### SECTION Stability_Level ##### -->
+
+
+<!-- ##### STRUCT GdkScreen ##### -->
+<para>
+This is a currently just a placeholder typedef for the first argument of 
+the @window_at_pointer function in #GdkPointerHooks. It will be used
+when GDK gets multihead support. 
+</para>
+
+@Since: 2.2
+
+<!-- ##### SIGNAL GdkScreen::composited-changed ##### -->
+<para>
+
+</para>
+
+@gdkscreen: the object which received the signal.
+
+<!-- ##### SIGNAL GdkScreen::size-changed ##### -->
+<para>
+
+</para>
+
+@gdkscreen: the object which received the signal.
+
+<!-- ##### ARG GdkScreen:font-options ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GdkScreen:resolution ##### -->
+<para>
+
+</para>
+
+<!-- ##### FUNCTION gdk_screen_get_default ##### -->
+<para>
+
+</para>
+
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_screen_get_default_colormap ##### -->
+<para>
+
+</para>
+
+@screen: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_screen_set_default_colormap ##### -->
+<para>
+
+</para>
+
+@screen: 
+@colormap: 
+
+
+<!-- ##### FUNCTION gdk_screen_get_system_colormap ##### -->
+<para>
+
+</para>
+
+@screen: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_screen_get_system_visual ##### -->
+<para>
+
+</para>
+
+@screen: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_screen_get_rgb_colormap ##### -->
+<para>
+
+</para>
+
+@screen: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_screen_get_rgb_visual ##### -->
+<para>
+
+</para>
+
+@screen: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_screen_get_rgba_colormap ##### -->
+<para>
+
+</para>
+
+@screen: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_screen_get_rgba_visual ##### -->
+<para>
+
+</para>
+
+@screen: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_screen_is_composited ##### -->
+<para>
+
+</para>
+
+@screen: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_screen_get_root_window ##### -->
+<para>
+
+</para>
+
+@screen: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_screen_get_display ##### -->
+<para>
+
+</para>
+
+@screen: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_screen_get_number ##### -->
+<para>
+
+</para>
+
+@screen: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_screen_get_width ##### -->
+<para>
+
+</para>
+
+@screen: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_screen_get_height ##### -->
+<para>
+
+</para>
+
+@screen: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_screen_get_width_mm ##### -->
+<para>
+
+</para>
+
+@screen: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_screen_get_height_mm ##### -->
+<para>
+
+</para>
+
+@screen: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_screen_list_visuals ##### -->
+<para>
+
+</para>
+
+@screen: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_screen_get_toplevel_windows ##### -->
+<para>
+
+</para>
+
+@screen: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_screen_make_display_name ##### -->
+<para>
+
+</para>
+
+@screen: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_screen_get_n_monitors ##### -->
+<para>
+
+</para>
+
+@screen: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_screen_get_monitor_geometry ##### -->
+<para>
+
+</para>
+
+@screen: 
+@monitor_num: 
+@dest: 
+
+
+<!-- ##### FUNCTION gdk_screen_get_monitor_at_point ##### -->
+<para>
+
+</para>
+
+@screen: 
+@x: 
+@y: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_screen_get_monitor_at_window ##### -->
+<para>
+
+</para>
+
+@screen: 
+@window: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_screen_broadcast_client_message ##### -->
+<para>
+
+</para>
+
+@screen: 
+@event: 
+
+
+<!-- ##### FUNCTION gdk_screen_get_setting ##### -->
+<para>
+
+</para>
+
+@screen: 
+@name: 
+@value: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_screen_get_font_options ##### -->
+<para>
+
+</para>
+
+@screen: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_screen_set_font_options ##### -->
+<para>
+
+</para>
+
+@screen: 
+@options: 
+
+
+<!-- ##### FUNCTION gdk_screen_get_resolution ##### -->
+<para>
+
+</para>
+
+@screen: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_screen_set_resolution ##### -->
+<para>
+
+</para>
+
+@screen: 
+@dpi: 
+
+
+<!-- ##### FUNCTION gdk_screen_get_active_window ##### -->
+<para>
+
+</para>
+
+@screen: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_screen_get_window_stack ##### -->
+<para>
+
+</para>
+
+@screen: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_spawn_on_screen ##### -->
+<para>
+
+</para>
+
+@screen: 
+@working_directory: 
+@argv: 
+@envp: 
+@flags: 
+@child_setup: 
+@user_data: 
+@child_pid: 
+@error: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_spawn_on_screen_with_pipes ##### -->
+<para>
+
+</para>
+
+@screen: 
+@working_directory: 
+@argv: 
+@envp: 
+@flags: 
+@child_setup: 
+@user_data: 
+@child_pid: 
+@standard_input: 
+@standard_output: 
+@standard_error: 
+@error: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_spawn_command_line_on_screen ##### -->
+<para>
+
+</para>
+
+@screen: 
+@command_line: 
+@error: 
+@Returns: 
+
+

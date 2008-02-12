@@ -1,0 +1,81 @@
+Source: gtk+-cvs
+Priority: extra
+Section: libs
+Maintainer: Ben Gertzfield <che@debian.org>
+Standards-Version: 2.4.0.0
+
+Package: libgtk-cvs-1.1
+Architecture: any
+Section: libs
+Depends: ${shlibs:Depends}
+Conflicts: libgtk-dev (<< 1:1.0.2), libgtk1.1
+Description: CVS build of the GIMP Toolkit set of widgets for X
+ **THIS IS NOT AN OFFICIAL DEBIAN PACKAGE! THIS IS AN AUTOMATED CVS
+   BUILD OF THE GTK+ LIBRARIES! BEWARE! IT MAY NOT WORK!**
+ . 
+ The GIMP Toolkit is a freely available set of widgets for X.
+ GTK is easy to use, and has been implemented in such projects as
+ The GNU Image Manipulation Program (The GIMP), GNOME, a GNU
+ desktop set of utilities for X, and gzilla, a GNU web-browser.
+ .
+ This is the unstable 1.1 branch of GTK. It is not intended for use
+ with stable projects!
+
+Package: libgtk-cvs-dev
+Architecture: any
+Section: devel
+Depends: libgtk-cvs-1.1 (=${Source-Version}), libglib-cvs-dev
+Suggests: libgtk-cvs-doc
+Provides: libgtk1.1-dev
+Replaces: libgtk1.1-dev
+Conflicts: libgtk-dev, libgtk1 (<< 1:1.0.4), libgtk1.1-dev
+Description: CVS build of development files for the GIMP Toolkit
+ **THIS IS NOT AN OFFICIAL DEBIAN PACKAGE! THIS IS AN AUTOMATED CVS
+   BUILD OF THE GTK+ LIBRARIES! BEWARE! IT MAY NOT WORK!**
+ .
+ This package contains the header files and static libraries for the
+ GIMP Toolkit set of widgets for X. 
+ .
+ This is the unstable, 1.1 branch of GTK+. This is not intended for
+ use with stable releases of programs! 
+ .
+ Install this package if you wish to develop your own X programs using
+ the GIMP Toolkit 1.1, or if you wish to compile your own plug-ins for
+ The GIMP.
+
+Package: libgtk-cvs-doc
+Architecture: all
+Section: doc
+Conflicts: libgtk-dev (<< 1:0.99.4), libgtk-doc, libgtk1.1-doc
+Description: CVS build of documentation for the GIMP Toolkit
+ **THIS IS NOT AN OFFICIAL DEBIAN PACKAGE! THIS IS AN AUTOMATED CVS
+   BUILD OF THE GTK+ LIBRARIES! BEWARE! IT MAY NOT WORK!**
+ .
+ This package contains lots of info-files, HTML docs, FAQs, and
+ other handy documentation about the GIMP Toolkit set of widgets
+ for X. 
+ .
+ This package documents the unstable 1.1 release of the GIMP Toolkit.
+ . 
+ Install this package if you want to have lots of info about the
+ GIMP toolkit when you're programming.
+
+Package: libgtk-cvs-dbg
+Architecture: any
+Section: devel
+Depends: libgtk-cvs-1.1 (= ${Source-Version}), libgtk-cvs-dev (= ${Source-Version})
+Suggests: libgtk-cvs-doc
+Conflicts: libgtk1.1-dbg
+Description: CVS build of debugging files for the GIMP Toolkit
+ **THIS IS NOT AN OFFICIAL DEBIAN PACKAGE! THIS IS AN AUTOMATED CVS
+   BUILD OF THE GTK+ LIBRARIES! BEWARE! IT MAY NOT WORK!**
+ .
+ This package contains the debugging static libraries for the
+ GIMP Toolkit set of widgets for X. 
+ .
+ This is the unstable, 1.1 branch of GTK+. This is not intended for
+ use with stable releases of programs! 
+ .
+ Install this package if you wish to debug your own X programs using
+ the GIMP Toolkit 1.1, or if you wish to debug your own plug-ins for
+ The GIMP.

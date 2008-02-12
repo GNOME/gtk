@@ -1,0 +1,457 @@
+<!-- ##### SECTION Title ##### -->
+Selections
+
+<!-- ##### SECTION Short_Description ##### -->
+Functions for handling inter-process communication via selections
+
+<!-- ##### SECTION Long_Description ##### -->
+
+<para>
+The selection mechanism provides the basis for different types
+of communication between processes. In particular, drag and drop and
+#GtkClipboard work via selections. You will very seldom or
+never need to use most of the functions in this section directly;
+#GtkClipboard provides a nicer interface to the same functionality.
+</para>
+<para>
+Some of the datatypes defined this section are used in
+the #GtkClipboard and drag-and-drop API's as well. The
+#GtkTargetEntry structure and #GtkTargetList objects represent
+lists of data types that are supported when sending or
+receiving data. The #GtkSelectionData object is used to
+store a chunk of data along with the data type and other
+associated information.
+</para>
+
+<!-- ##### SECTION See_Also ##### -->
+<para>
+<variablelist>
+
+<varlistentry>
+<term>#GtkWidget</term>
+<listitem><para>Much of the operation of selections happens via
+             signals for #GtkWidget. In particular, if you are
+             using the functions in this section, you may need
+             to pay attention to ::selection_get,
+             ::selection_received,  and :selection_clear_event
+             signals.</para></listitem>
+</varlistentry>
+
+</variablelist>
+
+</para>
+
+<!-- ##### SECTION Stability_Level ##### -->
+
+
+<!-- ##### STRUCT GtkTargetEntry ##### -->
+<para>
+A #GtkTargetEntry structure represents a single type of
+data than can be supplied for by a widget for a selection
+or for supplied or received during drag-and-drop. It 
+contains a string representing the drag type, a flags
+field (used only for drag and drop - see #GtkTargetFlags),
+and an application assigned integer ID. The integer
+ID will later be passed as a signal parameter for signals
+like "selection_get". It allows the application to identify
+the target type without extensive string compares.
+</para>
+
+@target: 
+@flags: 
+@info: 
+
+<!-- ##### STRUCT GtkTargetList ##### -->
+<para>
+A #GtkTargetList structure is a reference counted list
+of #GtkTargetPair. It is used to represent the same
+information as a table of #GtkTargetEntry, but in
+an efficient form. This structure should be treated as
+opaque.
+</para>
+
+@list: 
+@ref_count: 
+
+<!-- ##### STRUCT GtkTargetPair ##### -->
+<para>
+Internally used structure in the drag-and-drop and 
+selection handling code.
+</para>
+
+@target: 
+@flags: 
+@info: 
+
+<!-- ##### FUNCTION gtk_target_list_new ##### -->
+<para>
+</para>
+
+@targets: 
+@ntargets: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_target_list_ref ##### -->
+<para>
+</para>
+
+@list: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_target_list_unref ##### -->
+<para>
+</para>
+
+@list: 
+
+
+<!-- ##### FUNCTION gtk_target_list_add ##### -->
+<para>
+</para>
+
+@list: 
+@target: 
+@flags: 
+@info: 
+
+
+<!-- ##### FUNCTION gtk_target_list_add_table ##### -->
+<para>
+</para>
+
+@list: 
+@targets: 
+@ntargets: 
+
+
+<!-- ##### FUNCTION gtk_target_list_add_text_targets ##### -->
+<para>
+
+</para>
+
+@list: 
+@info: 
+
+
+<!-- ##### FUNCTION gtk_target_list_add_image_targets ##### -->
+<para>
+
+</para>
+
+@list: 
+@info: 
+@writable: 
+
+
+<!-- ##### FUNCTION gtk_target_list_add_uri_targets ##### -->
+<para>
+
+</para>
+
+@list: 
+@info: 
+
+
+<!-- ##### FUNCTION gtk_target_list_add_rich_text_targets ##### -->
+<para>
+
+</para>
+
+@list: 
+@info: 
+@deserializable: 
+@buffer: 
+
+
+<!-- ##### FUNCTION gtk_target_list_remove ##### -->
+<para>
+</para>
+
+@list: 
+@target: 
+
+
+<!-- ##### FUNCTION gtk_target_list_find ##### -->
+<para>
+</para>
+
+@list: 
+@target: 
+@info: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_target_table_free ##### -->
+<para>
+
+</para>
+
+@targets: 
+@n_targets: 
+
+
+<!-- ##### FUNCTION gtk_target_table_new_from_list ##### -->
+<para>
+
+</para>
+
+@list: 
+@n_targets: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_selection_owner_set ##### -->
+<para>
+</para>
+
+@widget: 
+@selection: 
+@time_: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_selection_owner_set_for_display ##### -->
+<para>
+
+</para>
+
+@display: 
+@widget: 
+@selection: 
+@time_: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_selection_add_target ##### -->
+<para>
+</para>
+
+@widget: 
+@selection: 
+@target: 
+@info: 
+
+
+<!-- ##### FUNCTION gtk_selection_add_targets ##### -->
+<para>
+</para>
+
+@widget: 
+@selection: 
+@targets: 
+@ntargets: 
+
+
+<!-- ##### FUNCTION gtk_selection_clear_targets ##### -->
+<para>
+
+</para>
+
+@widget: 
+@selection: 
+
+
+<!-- ##### FUNCTION gtk_selection_convert ##### -->
+<para>
+</para>
+
+@widget: 
+@selection: 
+@target: 
+@time_: 
+@Returns: x
+
+
+<!-- ##### FUNCTION gtk_selection_data_set ##### -->
+<para>
+</para>
+
+@selection_data: 
+@type: 
+@format: 
+@data: 
+@length: 
+
+
+<!-- ##### FUNCTION gtk_selection_data_set_text ##### -->
+<para>
+
+</para>
+
+@selection_data: 
+@str: 
+@len: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_selection_data_get_text ##### -->
+<para>
+
+</para>
+
+@selection_data: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_selection_data_set_pixbuf ##### -->
+<para>
+
+</para>
+
+@selection_data: 
+@pixbuf: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_selection_data_get_pixbuf ##### -->
+<para>
+
+</para>
+
+@selection_data: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_selection_data_set_uris ##### -->
+<para>
+
+</para>
+
+@selection_data: 
+@uris: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_selection_data_get_uris ##### -->
+<para>
+
+</para>
+
+@selection_data: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_selection_data_get_targets ##### -->
+<para>
+
+</para>
+
+@selection_data: 
+@targets: 
+@n_atoms: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_selection_data_targets_include_image ##### -->
+<para>
+
+</para>
+
+@selection_data: 
+@writable: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_selection_data_targets_include_text ##### -->
+<para>
+
+</para>
+
+@selection_data: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_selection_data_targets_include_uri ##### -->
+<para>
+
+</para>
+
+@selection_data: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_selection_data_targets_include_rich_text ##### -->
+<para>
+
+</para>
+
+@selection_data: 
+@buffer: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_targets_include_image ##### -->
+<para>
+
+</para>
+
+@targets: 
+@n_targets: 
+@writable: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_targets_include_text ##### -->
+<para>
+
+</para>
+
+@targets: 
+@n_targets: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_targets_include_uri ##### -->
+<para>
+
+</para>
+
+@targets: 
+@n_targets: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_targets_include_rich_text ##### -->
+<para>
+
+</para>
+
+@targets: 
+@n_targets: 
+@buffer: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_selection_remove_all ##### -->
+<para>
+</para>
+
+@widget: 
+
+
+<!-- ##### FUNCTION gtk_selection_clear ##### -->
+<para>
+</para>
+
+@widget: 
+@event: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_selection_data_copy ##### -->
+<para>
+</para>
+
+@data: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_selection_data_free ##### -->
+<para>
+</para>
+
+@data: 
+
+

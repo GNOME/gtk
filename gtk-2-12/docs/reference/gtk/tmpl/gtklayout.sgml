@@ -1,0 +1,182 @@
+<!-- ##### SECTION Title ##### -->
+GtkLayout
+
+<!-- ##### SECTION Short_Description ##### -->
+
+Infinite scrollable area containing child widgets and/or custom drawing
+
+<!-- ##### SECTION Long_Description ##### -->
+<para>
+#GtkLayout is similar to #GtkDrawingArea in that it's a "blank slate"
+and doesn't do anything but paint a blank background by default. It's
+different in that it supports scrolling natively (you can add it to a
+#GtkScrolledWindow), and it can contain child widgets, since it's a
+#GtkContainer. However if you're just going to draw, a #GtkDrawingArea
+is a better choice since it has lower overhead.
+</para>
+
+<para>
+When handling expose events on a #GtkLayout, you must draw to 
+GTK_LAYOUT (layout)-&gt;bin_window, rather than to 
+GTK_WIDGET (layout)-&gt;window, as you would for a drawing
+area.
+</para>
+
+<!-- ##### SECTION See_Also ##### -->
+<para>
+#GtkDrawingArea, #GtkScrolledWindow
+</para>
+
+<!-- ##### SECTION Stability_Level ##### -->
+
+
+<!-- ##### STRUCT GtkLayout ##### -->
+<para>
+
+</para>
+
+@bin_window: 
+
+<!-- ##### SIGNAL GtkLayout::set-scroll-adjustments ##### -->
+<para>
+
+</para>
+
+@layout: the object which received the signal.
+@arg1: 
+@arg2: 
+
+<!-- ##### ARG GtkLayout:hadjustment ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkLayout:height ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkLayout:vadjustment ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkLayout:width ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkLayout:x ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkLayout:y ##### -->
+<para>
+
+</para>
+
+<!-- ##### FUNCTION gtk_layout_new ##### -->
+<para>
+
+</para>
+
+@hadjustment: 
+@vadjustment: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_layout_put ##### -->
+<para>
+
+</para>
+
+@layout: 
+@child_widget: 
+@x: 
+@y: 
+
+
+<!-- ##### FUNCTION gtk_layout_move ##### -->
+<para>
+
+</para>
+
+@layout: 
+@child_widget: 
+@x: 
+@y: 
+
+
+<!-- ##### FUNCTION gtk_layout_set_size ##### -->
+<para>
+
+</para>
+
+@layout: 
+@width: 
+@height: 
+
+
+<!-- ##### FUNCTION gtk_layout_get_size ##### -->
+<para>
+
+</para>
+
+@layout: 
+@width: 
+@height: 
+
+
+<!-- ##### FUNCTION gtk_layout_freeze ##### -->
+<para>
+
+</para>
+
+@layout: 
+
+
+<!-- ##### FUNCTION gtk_layout_thaw ##### -->
+<para>
+
+</para>
+
+@layout: 
+
+
+<!-- ##### FUNCTION gtk_layout_get_hadjustment ##### -->
+<para>
+
+</para>
+
+@layout: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_layout_get_vadjustment ##### -->
+<para>
+
+</para>
+
+@layout: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_layout_set_hadjustment ##### -->
+<para>
+
+</para>
+
+@layout: 
+@adjustment: 
+
+
+<!-- ##### FUNCTION gtk_layout_set_vadjustment ##### -->
+<para>
+
+</para>
+
+@layout: 
+@adjustment: 
+
+

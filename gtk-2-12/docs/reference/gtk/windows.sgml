@@ -1,0 +1,125 @@
+<refentry id="gtk-windows" revision="4 Feb 2001">
+<refmeta>
+<refentrytitle>Using GTK+ on Windows</refentrytitle>
+<manvolnum>3</manvolnum>
+<refmiscinfo>GTK Library</refmiscinfo>
+</refmeta>
+
+<refnamediv>
+<refname>Using GTK+ on Windows</refname>
+<refpurpose>
+Windows-specific aspects of using GTK+
+</refpurpose>
+</refnamediv>
+
+<refsect1>
+<title>Using GTK+ on Windows</title>
+
+<para>
+The Windows port of GTK+ is an implementation of GDK (and therefore GTK+) 
+on top of the Win32 API. 
+</para>
+
+<!-- 
+<refsect2><title>Build requirements</title>
+<para>
+FIXME: explain with-wintab, with-ie55
+</para>
+</refsect2>
+-->
+
+<refsect2 id="win32-cmdline">
+<title>Windows-specific commandline options</title>
+
+<para>
+The Windows GDK backend can be influenced with some
+additional command line arguments.
+</para>
+
+<formalpara>
+<title><systemitem>--sync</systemitem></title>
+
+<para>
+Don't batch GDI requests. This is a useful option for 
+debugging, but it will slow down the performance considerably.
+</para>
+</formalpara>
+
+<formalpara>
+<title><systemitem>--no-wintab</systemitem>, 
+       <systemitem>--ignore-wintab</systemitem></title>
+
+<para>
+Don't use the Wintab API for tablet support. This is the default.
+</para>
+</formalpara>
+
+<formalpara>
+<title><systemitem>--use-wintab</systemitem></title>
+
+<para>
+Use the Wintab API for tablet support, if GTK+ has been compiled 
+with the <option>--with-wintab</option> option.
+</para>
+</formalpara>
+
+<formalpara>
+<title><systemitem>--max-colors <replaceable>number</replaceable></systemitem></title>
+
+<para>
+In 256 color mode, restrict the size of the color palette to 
+the specified number of colors.
+</para>
+</formalpara>
+
+</refsect2>
+
+<refsect2 id="win32-envar">
+<title>Windows-specific environment variables</title>
+
+<para>
+The Win32 GDK backend can be influenced with some
+additional environment variables.
+</para>
+
+<formalpara>
+<title><envar>GDK_IGNORE_WINTAB</envar></title>
+
+<para>
+If this variable is set, GTK+ doesn't use 
+the Wintab API for tablet support. This is the default.
+</para>
+</formalpara>
+
+<formalpara>
+<title><envar>GDK_USE_WINTAB</envar></title>
+
+<para>
+If this variable is set, GTK+ uses the Wintab API for 
+tablet support, if GTK+ has been compiled with the 
+<option>--with-wintab</option> option.
+</para>
+</formalpara>
+
+<formalpara>
+<title><envar>GDK_WIN32_MAX_COLORS</envar></title>
+
+<para>
+Specifies the size of the color palette used
+in 256 color mode.
+</para>
+</formalpara>
+
+<formalpara>
+<title><envar>G_WIN32_PRETEND_WIN9X</envar></title>
+
+<para>
+Only use the Windows 9x API.
+</para>
+</formalpara>
+
+</refsect2>
+
+</refsect1>
+
+</refentry>

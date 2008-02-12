@@ -1,0 +1,61 @@
+<refentry id="gtk-builder-convert">
+
+<refmeta>
+<refentrytitle>gtk-builder-convert</refentrytitle>
+<manvolnum>1</manvolnum>
+</refmeta>
+
+<refnamediv>
+<refname>gtk-builder-convert</refname>
+<refpurpose>Glade file conversion utility</refpurpose>
+</refnamediv>
+
+<refsynopsisdiv>
+<cmdsynopsis>
+<command>gtk-builder-convert</command>
+<arg choice="opt">--skip-windows</arg>
+<arg choice="opt">--root <replaceable>name</replaceable></arg>
+<arg choice="req">input</arg>
+<arg choice="req">output</arg>
+</cmdsynopsis>
+</refsynopsisdiv>
+
+<refsect1><title>Description</title>
+<para><command>gtk-builder-convert</command> converts glade files
+into XML files which can be loaded with GtkBuilder.
+</para>
+<para>
+It expects the name of a glade file as the first argument, and writes
+its output the file specified as the second argument.
+</para>
+</refsect1>
+
+<refsect1><title>Options</title>
+<variablelist>
+  <varlistentry>
+    <term>--skip-windows</term>
+    <term>-w</term>
+    <listitem><para>Convert everything but GtkWindow subclasses.</para></listitem>
+  </varlistentry>
+  <varlistentry>
+    <term>--root</term>
+    <term>-r</term>
+    <listitem><para>Convert only the widget named <replaceable>name</replaceable> 
+       and its children.</para></listitem>
+  </varlistentry>
+</variablelist>
+</refsect1>
+
+<refsect1><title>Bugs</title>
+<para>
+Toolbars are not handled.
+</para>
+<para>
+Support for accessibility is not yet implemented.
+</para>
+<para>
+The script requires a python interpreter to run.
+</para>
+</refsect1>
+
+</refentry>

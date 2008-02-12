@@ -1,0 +1,481 @@
+<!-- ##### SECTION Title ##### -->
+GtkImage
+
+<!-- ##### SECTION Short_Description ##### -->
+A widget displaying an image
+
+<!-- ##### SECTION Long_Description ##### -->
+<para>
+The #GtkImage widget displays an image. Various kinds of object 
+can be displayed as an image; most typically, you would load a 
+#GdkPixbuf ("pixel buffer") from a file, and then display that. 
+There's a convenience function to do this, gtk_image_new_from_file(),
+used as follows:
+<informalexample><programlisting>
+  GtkWidget *image;
+  image = gtk_image_new_from_file ("myfile.png");
+</programlisting></informalexample>
+If the file isn't loaded successfully, the image will contain a
+"broken image" icon similar to that used in many web browsers.
+If you want to handle errors in loading the file yourself, 
+for example by displaying an error message, then load the image with
+gdk_pixbuf_new_from_file(), then create the #GtkImage with 
+gtk_image_new_from_pixbuf().
+</para>
+<para>
+The image file may contain an animation, if so the #GtkImage will 
+display an animation (#GdkPixbufAnimation) instead of a static image.
+</para>
+<para>
+#GtkImage is a subclass of #GtkMisc, which implies that you can 
+align it (center, left, right) and add padding to it, using 
+#GtkMisc methods.
+</para>
+<para>
+#GtkImage is a "no window" widget (has no #GdkWindow of its own), 
+so by default does not receive events. If you want to receive events
+on the image, such as button clicks, place the image inside a 
+#GtkEventBox, then connect to the event signals on the event box.
+<example>
+<title>Handling button press events on a 
+<structname>GtkImage</structname>.</title>
+<programlisting>
+  static gboolean
+  button_press_callback (GtkWidget      *event_box, 
+                         GdkEventButton *event,
+                         gpointer        data)
+  {
+    g_print ("Event box clicked at coordinates &percnt;f,&percnt;f\n", 
+             event->x, event->y);
+
+    /* Returning TRUE means we handled the event, so the signal 
+     * emission should be stopped (don't call any further 
+     * callbacks that may be connected). Return FALSE
+     * to continue invoking callbacks.
+     */
+    return TRUE;
+  }
+
+  static GtkWidget*
+  create_image (void)
+  {
+    GtkWidget *image;
+    GtkWidget *event_box;
+
+    image = gtk_image_new_from_file ("myfile.png");
+
+    event_box = gtk_event_box_new (<!-- -->);
+
+    gtk_container_add (GTK_CONTAINER (event_box), image);
+
+    g_signal_connect (G_OBJECT (event_box), 
+                      "button_press_event",
+                      G_CALLBACK (button_press_callback),
+                      image);
+
+    return image;
+  }
+</programlisting>
+</example>
+</para>
+<para>
+When handling events on the event box, keep in mind that coordinates
+in the image may be different from event box coordinates due to 
+the alignment and padding settings on the image (see #GtkMisc). 
+The simplest way to solve this is to set the alignment to 0.0
+(left/top), and set the padding to zero. Then the origin of 
+the image will be the same as the origin of the event box.
+</para>
+
+<para>
+Sometimes an application will want to avoid depending on external data
+files, such as image files. GTK+ comes with a program to avoid this,
+called <application>gdk-pixbuf-csource</application>. This program
+allows you to convert an image into a C variable declaration, which
+can then be loaded into a #GdkPixbuf using
+gdk_pixbuf_new_from_inline().
+</para>
+
+<!-- ##### SECTION See_Also ##### -->
+<para>
+#GdkPixbuf
+</para>
+
+<!-- ##### SECTION Stability_Level ##### -->
+
+
+<!-- ##### STRUCT GtkImage ##### -->
+<para>
+This struct contain private data only and should be accessed by the functions
+below.
+</para>
+
+
+<!-- ##### ARG GtkImage:file ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkImage:icon-name ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkImage:icon-set ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkImage:icon-size ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkImage:image ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkImage:mask ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkImage:pixbuf ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkImage:pixbuf-animation ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkImage:pixel-size ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkImage:pixmap ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkImage:stock ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkImage:storage-type ##### -->
+<para>
+
+</para>
+
+<!-- ##### ENUM GtkImageType ##### -->
+<para>
+Describes the image data representation used by a #GtkImage. If you
+want to get the image from the widget, you can only get the
+currently-stored representation. e.g.  if the
+gtk_image_get_storage_type() returns #GTK_IMAGE_PIXBUF, then you can
+call gtk_image_get_pixbuf() but not gtk_image_get_stock().  For empty
+images, you can request any storage type (call any of the "get"
+functions), but they will all return %NULL values.
+</para>
+
+@GTK_IMAGE_EMPTY: there is no image displayed by the widget
+@GTK_IMAGE_PIXMAP: the widget contains a #GdkPixmap
+@GTK_IMAGE_IMAGE: the widget contains a #GdkImage
+@GTK_IMAGE_PIXBUF: the widget contains a #GdkPixbuf
+@GTK_IMAGE_STOCK: the widget contains a stock icon name (see <xref linkend="gtk-Stock-Items"/>)
+@GTK_IMAGE_ICON_SET: the widget contains a #GtkIconSet
+@GTK_IMAGE_ANIMATION: the widget contains a #GdkPixbufAnimation
+@GTK_IMAGE_ICON_NAME: the widget contains a named icon. 
+  This image type was added in GTK+ 2.6
+
+<!-- ##### FUNCTION gtk_image_get_icon_set ##### -->
+<para>
+
+</para>
+
+@image: 
+@icon_set: 
+@size: 
+
+
+<!-- ##### FUNCTION gtk_image_get_image ##### -->
+<para>
+
+</para>
+
+@image: 
+@gdk_image: 
+@mask: 
+
+
+<!-- ##### FUNCTION gtk_image_get_pixbuf ##### -->
+<para>
+
+</para>
+
+@image: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_image_get_pixmap ##### -->
+<para>
+
+</para>
+
+@image: 
+@pixmap: 
+@mask: 
+
+
+<!-- ##### FUNCTION gtk_image_get_stock ##### -->
+<para>
+
+</para>
+
+@image: 
+@stock_id: 
+@size: 
+
+
+<!-- ##### FUNCTION gtk_image_get_animation ##### -->
+<para>
+
+</para>
+
+@image: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_image_get_icon_name ##### -->
+<para>
+
+</para>
+
+@image: 
+@icon_name: 
+@size: 
+
+
+<!-- ##### FUNCTION gtk_image_get_storage_type ##### -->
+<para>
+
+</para>
+
+@image: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_image_new_from_file ##### -->
+<para>
+
+</para>
+
+@filename: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_image_new_from_icon_set ##### -->
+<para>
+
+</para>
+
+@icon_set: 
+@size: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_image_new_from_image ##### -->
+<para>
+
+</para>
+
+@image: 
+@mask: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_image_new_from_pixbuf ##### -->
+<para>
+
+</para>
+
+@pixbuf: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_image_new_from_pixmap ##### -->
+<para>
+
+</para>
+
+@pixmap: 
+@mask: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_image_new_from_stock ##### -->
+<para>
+
+</para>
+
+@stock_id: 
+@size: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_image_new_from_animation ##### -->
+<para>
+
+</para>
+
+@animation: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_image_new_from_icon_name ##### -->
+<para>
+
+</para>
+
+@icon_name: 
+@size: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_image_set_from_file ##### -->
+<para>
+
+</para>
+
+@image: 
+@filename: 
+
+
+<!-- ##### FUNCTION gtk_image_set_from_icon_set ##### -->
+<para>
+
+</para>
+
+@image: 
+@icon_set: 
+@size: 
+
+
+<!-- ##### FUNCTION gtk_image_set_from_image ##### -->
+<para>
+
+</para>
+
+@image: 
+@gdk_image: 
+@mask: 
+
+
+<!-- ##### FUNCTION gtk_image_set_from_pixbuf ##### -->
+<para>
+
+</para>
+
+@image: 
+@pixbuf: 
+
+
+<!-- ##### FUNCTION gtk_image_set_from_pixmap ##### -->
+<para>
+
+</para>
+
+@image: 
+@pixmap: 
+@mask: 
+
+
+<!-- ##### FUNCTION gtk_image_set_from_stock ##### -->
+<para>
+
+</para>
+
+@image: 
+@stock_id: 
+@size: 
+
+
+<!-- ##### FUNCTION gtk_image_set_from_animation ##### -->
+<para>
+
+</para>
+
+@image: 
+@animation: 
+
+
+<!-- ##### FUNCTION gtk_image_set_from_icon_name ##### -->
+<para>
+
+</para>
+
+@image: 
+@icon_name: 
+@size: 
+
+
+<!-- ##### FUNCTION gtk_image_clear ##### -->
+<para>
+
+</para>
+
+@image: 
+
+
+<!-- ##### FUNCTION gtk_image_new ##### -->
+<para>
+
+</para>
+
+@Returns: the #GtkImage
+<!-- # Unused Parameters # -->
+@mask: a #GdkBitmap that indicates which parts of the image should be transparent.
+
+
+<!-- ##### FUNCTION gtk_image_set ##### -->
+<para>
+Sets the #GtkImage.
+</para>
+
+@image: a #GtkImage
+@val: a #GdkImage
+@mask: a #GdkBitmap that indicates which parts of the image should be transparent.
+
+
+<!-- ##### FUNCTION gtk_image_get ##### -->
+<para>
+Gets the #GtkImage.
+</para>
+
+@image: a #GtkImage
+@val: return location for a #GdkImage
+@mask: a #GdkBitmap that indicates which parts of the image should be transparent.
+
+
+<!-- ##### FUNCTION gtk_image_set_pixel_size ##### -->
+<para>
+
+</para>
+
+@image: 
+@pixel_size: 
+
+
+<!-- ##### FUNCTION gtk_image_get_pixel_size ##### -->
+<para>
+
+</para>
+
+@image: 
+@Returns: 
+
+

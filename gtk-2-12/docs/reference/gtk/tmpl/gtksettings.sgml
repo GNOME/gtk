@@ -1,0 +1,455 @@
+<!-- ##### SECTION Title ##### -->
+Settings
+
+<!-- ##### SECTION Short_Description ##### -->
+Sharing settings between applications
+
+<!-- ##### SECTION Long_Description ##### -->
+<para>
+
+</para>
+
+<!-- ##### SECTION See_Also ##### -->
+<para>
+
+</para>
+
+<!-- ##### SECTION Stability_Level ##### -->
+
+
+<!-- ##### STRUCT GtkSettings ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### ARG GtkSettings:color-hash ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkSettings:gtk-alternative-button-order ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkSettings:gtk-alternative-sort-arrows ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkSettings:gtk-button-images ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkSettings:gtk-can-change-accels ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkSettings:gtk-color-palette ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkSettings:gtk-color-scheme ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkSettings:gtk-cursor-blink ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkSettings:gtk-cursor-blink-time ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkSettings:gtk-cursor-blink-timeout ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkSettings:gtk-cursor-theme-name ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkSettings:gtk-cursor-theme-size ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkSettings:gtk-dnd-drag-threshold ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkSettings:gtk-double-click-distance ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkSettings:gtk-double-click-time ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkSettings:gtk-enable-accels ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkSettings:gtk-enable-animations ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkSettings:gtk-enable-mnemonics ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkSettings:gtk-entry-password-hint-timeout ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkSettings:gtk-entry-select-on-focus ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkSettings:gtk-error-bell ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkSettings:gtk-fallback-icon-theme ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkSettings:gtk-file-chooser-backend ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkSettings:gtk-font-name ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkSettings:gtk-icon-sizes ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkSettings:gtk-icon-theme-name ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkSettings:gtk-key-theme-name ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkSettings:gtk-keynav-cursor-only ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkSettings:gtk-keynav-wrap-around ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkSettings:gtk-label-select-on-focus ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkSettings:gtk-menu-bar-accel ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkSettings:gtk-menu-bar-popup-delay ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkSettings:gtk-menu-images ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkSettings:gtk-menu-popdown-delay ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkSettings:gtk-menu-popup-delay ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkSettings:gtk-modules ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkSettings:gtk-print-backends ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkSettings:gtk-print-preview-command ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkSettings:gtk-recent-files-limit ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkSettings:gtk-scrolled-window-placement ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkSettings:gtk-show-input-method-menu ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkSettings:gtk-show-unicode-menu ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkSettings:gtk-split-cursor ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkSettings:gtk-theme-name ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkSettings:gtk-timeout-expand ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkSettings:gtk-timeout-initial ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkSettings:gtk-timeout-repeat ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkSettings:gtk-toolbar-icon-size ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkSettings:gtk-toolbar-style ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkSettings:gtk-tooltip-browse-mode-timeout ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkSettings:gtk-tooltip-browse-timeout ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkSettings:gtk-tooltip-timeout ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkSettings:gtk-touchscreen-mode ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkSettings:gtk-xft-antialias ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkSettings:gtk-xft-dpi ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkSettings:gtk-xft-hinting ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkSettings:gtk-xft-hintstyle ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkSettings:gtk-xft-rgba ##### -->
+<para>
+
+</para>
+
+<!-- ##### STRUCT GtkSettingsValue ##### -->
+<para>
+
+</para>
+
+@origin: 
+@value: 
+
+<!-- ##### FUNCTION gtk_settings_get_default ##### -->
+<para>
+
+</para>
+
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_settings_get_for_screen ##### -->
+<para>
+
+</para>
+
+@screen: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_settings_install_property ##### -->
+<para>
+
+</para>
+
+@pspec: 
+
+
+<!-- ##### FUNCTION gtk_settings_install_property_parser ##### -->
+<para>
+
+</para>
+
+@pspec: 
+@parser: 
+
+
+<!-- ##### FUNCTION gtk_rc_property_parse_color ##### -->
+<para>
+
+</para>
+
+@pspec: 
+@gstring: 
+@property_value: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_rc_property_parse_enum ##### -->
+<para>
+
+</para>
+
+@pspec: 
+@gstring: 
+@property_value: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_rc_property_parse_flags ##### -->
+<para>
+
+</para>
+
+@pspec: 
+@gstring: 
+@property_value: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_rc_property_parse_requisition ##### -->
+<para>
+
+</para>
+
+@pspec: 
+@gstring: 
+@property_value: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_rc_property_parse_border ##### -->
+<para>
+
+</para>
+
+@pspec: 
+@gstring: 
+@property_value: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_settings_set_property_value ##### -->
+<para>
+
+</para>
+
+@settings: 
+@name: 
+@svalue: 
+
+
+<!-- ##### FUNCTION gtk_settings_set_string_property ##### -->
+<para>
+
+</para>
+
+@settings: 
+@name: 
+@v_string: 
+@origin: 
+
+
+<!-- ##### FUNCTION gtk_settings_set_long_property ##### -->
+<para>
+
+</para>
+
+@settings: 
+@name: 
+@v_long: 
+@origin: 
+
+
+<!-- ##### FUNCTION gtk_settings_set_double_property ##### -->
+<para>
+
+</para>
+
+@settings: 
+@name: 
+@v_double: 
+@origin: 
+
+

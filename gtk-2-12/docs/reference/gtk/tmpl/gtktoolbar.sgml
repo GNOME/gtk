@@ -1,0 +1,560 @@
+<!-- ##### SECTION Title ##### -->
+GtkToolbar
+
+<!-- ##### SECTION Short_Description ##### -->
+Create bars of buttons and other widgets
+
+<!-- ##### SECTION Long_Description ##### -->
+<para>
+A toolbar is created with a call to gtk_toolbar_new().
+</para>
+<para>
+A toolbar can contain instances of a subclass of #GtkToolItem. To add
+a #GtkToolItem to the a toolbar, use gtk_toolbar_insert(). To remove
+an item from the toolbar use gtk_container_remove(). To add a button
+to the toolbar, add an instance of #GtkToolButton.
+</para>
+<para>
+Toolbar items can be visually grouped by adding instances of
+#GtkSeparatorToolItem to the toolbar. If a #GtkSeparatorToolItem has
+the "expand" property set to #TRUE and the "draw" property set to
+#FALSE the effect is to force all following items to the end of the
+toolbar.
+</para>
+<para>
+Creating a context menu for the toolbar can be done by connecting to
+the #GtkToolbar::popup-context-menu signal.
+</para>
+
+<!-- ##### SECTION See_Also ##### -->
+<para>
+<variablelist>
+
+<varlistentry>
+<term>#GtkToolItem</term>
+<listitem><para>Base class of widgets that can be added to a toolbar.</para></listitem>
+</varlistentry>
+
+</variablelist>
+</para>
+
+<!-- ##### SECTION Stability_Level ##### -->
+
+
+<!-- ##### STRUCT GtkToolbar ##### -->
+<para>
+The #GtkToolbar struct only contains private data and should only be
+accessed through the function described below.
+</para>
+
+@num_children: 
+@children: 
+@orientation: 
+@style: 
+@icon_size: 
+@tooltips: 
+@_tooltips: 
+
+<!-- ##### SIGNAL GtkToolbar::focus-home-or-end ##### -->
+<para>
+
+</para>
+
+@toolbar: the object which received the signal.
+@arg1: 
+@Returns: 
+
+<!-- ##### SIGNAL GtkToolbar::orientation-changed ##### -->
+<para>
+
+</para>
+
+@toolbar: the object which received the signal.
+@orientation: the new #GtkOrientation of the toolbar.
+
+<!-- ##### SIGNAL GtkToolbar::popup-context-menu ##### -->
+<para>
+
+</para>
+
+@toolbar: the object which received the signal.
+@Returns: 
+@Returns: 
+@Returns: 
+@Returns: 
+
+<!-- ##### SIGNAL GtkToolbar::style-changed ##### -->
+<para>
+
+</para>
+
+@toolbar: 
+@style: 
+
+<!-- ##### ARG GtkToolbar:icon-size ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkToolbar:icon-size-set ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkToolbar:orientation ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkToolbar:show-arrow ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkToolbar:toolbar-style ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkToolbar:tooltips ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkToolbar:expand ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkToolbar:homogeneous ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkToolbar:button-relief ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkToolbar:internal-padding ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkToolbar:max-child-expand ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkToolbar:shadow-type ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkToolbar:space-size ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkToolbar:space-style ##### -->
+<para>
+
+</para>
+
+<!-- ##### ENUM GtkToolbarChildType ##### -->
+<para>
+#GtkToolbarChildType is used to set the type of new elements that are added 
+to a #GtkToolbar.
+</para>
+
+@GTK_TOOLBAR_CHILD_SPACE: a space in the style of the toolbar's #GtkToolbarSpaceStyle.
+@GTK_TOOLBAR_CHILD_BUTTON: a #GtkButton.
+@GTK_TOOLBAR_CHILD_TOGGLEBUTTON: a #GtkToggleButton.
+@GTK_TOOLBAR_CHILD_RADIOBUTTON: a #GtkRadioButton.
+@GTK_TOOLBAR_CHILD_WIDGET: a standard #GtkWidget.
+
+<!-- ##### ENUM GtkToolbarSpaceStyle ##### -->
+<para>
+
+</para>
+
+@GTK_TOOLBAR_SPACE_EMPTY: 
+@GTK_TOOLBAR_SPACE_LINE: 
+
+<!-- ##### STRUCT GtkToolbarChild ##### -->
+<para>
+
+</para>
+
+@type: 
+@widget: 
+@icon: 
+@label: 
+
+<!-- ##### FUNCTION gtk_toolbar_new ##### -->
+<para>
+
+</para>
+
+@Returns: the newly-created toolbar.
+
+
+<!-- ##### FUNCTION gtk_toolbar_insert ##### -->
+<para>
+
+</para>
+
+@toolbar: 
+@item: 
+@pos: 
+
+
+<!-- ##### FUNCTION gtk_toolbar_get_item_index ##### -->
+<para>
+
+</para>
+
+@toolbar: 
+@item: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_toolbar_get_n_items ##### -->
+<para>
+
+</para>
+
+@toolbar: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_toolbar_get_nth_item ##### -->
+<para>
+
+</para>
+
+@toolbar: 
+@n: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_toolbar_get_drop_index ##### -->
+<para>
+
+</para>
+
+@toolbar: 
+@x: 
+@y: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_toolbar_set_drop_highlight_item ##### -->
+<para>
+
+</para>
+
+@toolbar: 
+@tool_item: 
+@index_: 
+
+
+<!-- ##### FUNCTION gtk_toolbar_set_show_arrow ##### -->
+<para>
+
+</para>
+
+@toolbar: 
+@show_arrow: 
+
+
+<!-- ##### FUNCTION gtk_toolbar_set_orientation ##### -->
+<para>
+
+</para>
+
+@toolbar: 
+@orientation: 
+
+
+<!-- ##### FUNCTION gtk_toolbar_set_tooltips ##### -->
+<para>
+
+</para>
+
+@toolbar: 
+@enable: 
+
+
+<!-- ##### FUNCTION gtk_toolbar_unset_icon_size ##### -->
+<para>
+
+</para>
+
+@toolbar: 
+
+
+<!-- ##### FUNCTION gtk_toolbar_get_show_arrow ##### -->
+<para>
+
+</para>
+
+@toolbar: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_toolbar_get_orientation ##### -->
+<para>
+
+</para>
+
+@toolbar: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_toolbar_get_style ##### -->
+<para>
+
+</para>
+
+@toolbar: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_toolbar_get_icon_size ##### -->
+<para>
+
+</para>
+
+@toolbar: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_toolbar_get_tooltips ##### -->
+<para>
+
+</para>
+
+@toolbar: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_toolbar_get_relief_style ##### -->
+<para>
+
+</para>
+
+@toolbar: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_toolbar_append_item ##### -->
+<para>
+
+</para>
+
+@toolbar: 
+@text: 
+@tooltip_text: 
+@tooltip_private_text: 
+@icon: 
+@callback: 
+@user_data: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_toolbar_prepend_item ##### -->
+<para>
+
+</para>
+
+@toolbar: 
+@text: 
+@tooltip_text: 
+@tooltip_private_text: 
+@icon: 
+@callback: 
+@user_data: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_toolbar_insert_item ##### -->
+<para>
+
+</para>
+
+@toolbar: 
+@text: 
+@tooltip_text: 
+@tooltip_private_text: 
+@icon: 
+@callback: 
+@user_data: 
+@position: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_toolbar_append_space ##### -->
+<para>
+
+</para>
+
+@toolbar: 
+
+
+<!-- ##### FUNCTION gtk_toolbar_prepend_space ##### -->
+<para>
+
+</para>
+
+@toolbar: 
+
+
+<!-- ##### FUNCTION gtk_toolbar_insert_space ##### -->
+<para>
+
+</para>
+
+@toolbar: 
+@position: 
+
+
+<!-- ##### FUNCTION gtk_toolbar_append_element ##### -->
+<para>
+
+</para>
+<para>
+
+</para>
+
+@toolbar: 
+@type: 
+@widget: 
+@text: 
+@tooltip_text: 
+@tooltip_private_text: 
+@icon: 
+@callback: 
+@user_data: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_toolbar_prepend_element ##### -->
+<para>
+
+</para>
+
+@toolbar: 
+@type: 
+@widget: 
+@text: 
+@tooltip_text: 
+@tooltip_private_text: 
+@icon: 
+@callback: 
+@user_data: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_toolbar_insert_element ##### -->
+<para>
+
+</para>
+
+@toolbar: 
+@type: 
+@widget: 
+@text: 
+@tooltip_text: 
+@tooltip_private_text: 
+@icon: 
+@callback: 
+@user_data: 
+@position: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_toolbar_append_widget ##### -->
+<para>
+
+</para>
+
+@toolbar: 
+@widget: 
+@tooltip_text: 
+@tooltip_private_text: 
+
+
+<!-- ##### FUNCTION gtk_toolbar_prepend_widget ##### -->
+<para>
+
+</para>
+
+@toolbar: 
+@widget: 
+@tooltip_text: 
+@tooltip_private_text: 
+
+
+<!-- ##### FUNCTION gtk_toolbar_insert_widget ##### -->
+<para>
+
+</para>
+
+@toolbar: 
+@widget: 
+@tooltip_text: 
+@tooltip_private_text: 
+@position: 
+
+
+<!-- ##### FUNCTION gtk_toolbar_set_style ##### -->
+<para>
+
+</para>
+
+@toolbar: 
+@style: 
+
+
+<!-- ##### FUNCTION gtk_toolbar_insert_stock ##### -->
+<para>
+
+</para>
+
+@toolbar: 
+@stock_id: 
+@tooltip_text: 
+@tooltip_private_text: 
+@callback: 
+@user_data: 
+@position: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_toolbar_set_icon_size ##### -->
+<para>
+
+</para>
+
+@toolbar: 
+@icon_size: 
+
+
+<!-- ##### FUNCTION gtk_toolbar_remove_space ##### -->
+<para>
+
+</para>
+
+@toolbar: 
+@position: 
+
+
+<!-- ##### FUNCTION gtk_toolbar_unset_style ##### -->
+<para>
+
+</para>
+
+@toolbar: 
+
+

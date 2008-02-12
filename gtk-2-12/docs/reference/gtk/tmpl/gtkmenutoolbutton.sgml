@@ -1,0 +1,124 @@
+<!-- ##### SECTION Title ##### -->
+GtkMenuToolButton
+
+<!-- ##### SECTION Short_Description ##### -->
+A GtkToolItem containing a button with an additional dropdown menu
+
+<!-- ##### SECTION Long_Description ##### -->
+<para>
+  A #GtkMenuToolButton is a #GtkToolItem that contains a button and
+  a small additional button with an arrow. When clicked, the arrow
+  button pops up a dropdown menu.
+</para>
+
+<para>
+  Use gtk_menu_tool_button_new() to create a new
+  #GtkMenuToolButton. Use gtk_menu_tool_button_new_from_stock() to
+  create a new #GtkMenuToolButton containing a stock item.
+</para>
+
+<!-- ##### SECTION See_Also ##### -->
+<para>
+  <varlistentry>
+    <term>#GtkToolbar</term>
+    <listitem><para>The toolbar widget</para></listitem>
+    <term>#GtkToolButton</term>
+    <listitem>
+      <para>
+	The parent class of #GtkMenuToolButton. The properties
+	"label_widget", "label", "icon_widget", and "stock_id" on
+	#GtkToolButton determine the label and icon used on
+	#GtkMenuToolButton<!-- -->s.
+      </para>
+    </listitem>
+  </varlistentry>
+</para>
+
+<!-- ##### SECTION Stability_Level ##### -->
+
+
+<!-- ##### STRUCT GtkMenuToolButton ##### -->
+<para>
+  The #GtkMenuToolButton struct contains only private data and
+  should only be accessed through the functions described below.
+</para>
+
+
+<!-- ##### SIGNAL GtkMenuToolButton::show-menu ##### -->
+<para>
+
+</para>
+
+@menutoolbutton: the object which received the signal.
+
+<!-- ##### ARG GtkMenuToolButton:menu ##### -->
+<para>
+
+</para>
+
+<!-- ##### FUNCTION gtk_menu_tool_button_new ##### -->
+<para>
+
+</para>
+
+@icon_widget: 
+@label: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_menu_tool_button_new_from_stock ##### -->
+<para>
+
+</para>
+
+@stock_id: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_menu_tool_button_set_menu ##### -->
+<para>
+
+</para>
+
+@button: 
+@menu: 
+
+
+<!-- ##### FUNCTION gtk_menu_tool_button_get_menu ##### -->
+<para>
+
+</para>
+
+@button: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_menu_tool_button_set_arrow_tooltip ##### -->
+<para>
+
+</para>
+
+@button: 
+@tooltips: 
+@tip_text: 
+@tip_private: 
+
+
+<!-- ##### FUNCTION gtk_menu_tool_button_set_arrow_tooltip_text ##### -->
+<para>
+
+</para>
+
+@button: 
+@text: 
+
+
+<!-- ##### FUNCTION gtk_menu_tool_button_set_arrow_tooltip_markup ##### -->
+<para>
+
+</para>
+
+@button: 
+@markup: 
+
+

@@ -1,0 +1,164 @@
+<!-- ##### SECTION Title ##### -->
+GtkCurve
+
+<!-- ##### SECTION Short_Description ##### -->
+Allows direct editing of a curve
+
+<!-- ##### SECTION Long_Description ##### -->
+<note>
+<para>
+ This widget is considered too specialized/little-used for
+ GTK+, and will in the future be moved to some other package.  If
+ your application needs this widget, feel free to use it, as the
+ widget does work and is useful in some applications; it's just not
+ of general interest. However, we are not accepting new features for
+ the widget, and it will eventually move out of the GTK+
+ distribution.
+</para>
+</note>
+<para>
+The #GtkCurve widget allows the user to edit a curve covering a range of
+values. It is typically used to fine-tune color balances in graphics
+applications like the Gimp.
+</para>
+<para>
+The #GtkCurve widget has 3 modes of operation - spline, linear and free.
+In spline mode the user places points on the curve which are automatically
+connected together into a smooth curve. In linear mode the user places points
+on the curve which are connected by straight lines. In free mode the user can
+draw the points of the curve freely, and they are not connected at all.
+</para>
+
+<!-- ##### SECTION See_Also ##### -->
+<para>
+<variablelist>
+<varlistentry>
+<term>#GtkGammaCurve</term>
+<listitem><para>a subclass for editing gamma curves.</para>
+</listitem>
+</varlistentry>
+</variablelist>
+
+</para>
+
+<!-- ##### SECTION Stability_Level ##### -->
+
+
+<!-- ##### STRUCT GtkCurve ##### -->
+<para>
+The #GtkCurve-struct struct contains private data only, and
+should be accessed using the functions below.
+</para>
+
+
+<!-- ##### SIGNAL GtkCurve::curve-type-changed ##### -->
+<para>
+Emitted when the curve type has been changed.
+The curve type can be changed explicitly with a call to
+gtk_curve_set_curve_type(). It is also changed as a side-effect of
+calling gtk_curve_reset() or gtk_curve_set_gamma().
+</para>
+
+@curve: the object which received the signal.
+
+<!-- ##### ARG GtkCurve:curve-type ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkCurve:max-x ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkCurve:max-y ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkCurve:min-x ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkCurve:min-y ##### -->
+<para>
+
+</para>
+
+<!-- ##### FUNCTION gtk_curve_new ##### -->
+<para>
+Creates a new #GtkCurve.
+</para>
+
+@Returns: a new #GtkCurve.
+
+
+<!-- ##### FUNCTION gtk_curve_reset ##### -->
+<para>
+Resets the curve to a straight line from the minimum x and y values to the
+maximum x and y values (i.e. from the bottom-left to the top-right corners).
+The curve type is not changed.
+</para>
+
+@curve: a #GtkCurve.
+
+
+<!-- ##### FUNCTION gtk_curve_set_gamma ##### -->
+<para>
+Recomputes the entire curve using the given gamma value.
+A gamma value of 1 results in a straight line. Values greater than 1 result
+in a curve above the straight line. Values less than 1 result in a curve
+below the straight line. The curve type is changed to %GTK_CURVE_TYPE_FREE.
+FIXME: Needs a more precise definition of gamma.
+</para>
+
+@curve: a #GtkCurve.
+@gamma_: the gamma value.
+
+
+<!-- ##### FUNCTION gtk_curve_set_range ##### -->
+<para>
+Sets the minimum and maximum x and y values of the curve.
+The curve is also reset with a call to gtk_curve_reset().
+</para>
+
+@curve: a #GtkCurve.
+@min_x: the minimum x value.
+@max_x: the maximum x value.
+@min_y: the minimum y value.
+@max_y: the maximum y value.
+
+
+<!-- ##### FUNCTION gtk_curve_get_vector ##### -->
+<para>
+Returns a vector of points representing the curve.
+</para>
+
+@curve: a #GtkCurve.
+@veclen: the number of points to calculate.
+@vector: returns the points.
+
+
+<!-- ##### FUNCTION gtk_curve_set_vector ##### -->
+<para>
+Sets the vector of points on the curve.
+The curve type is set to %GTK_CURVE_TYPE_FREE.
+</para>
+
+@curve: a #GtkCurve.
+@veclen: the number of points.
+@vector: the points on the curve.
+
+
+<!-- ##### FUNCTION gtk_curve_set_curve_type ##### -->
+<para>
+Sets the type of the curve. The curve will remain unchanged except when
+changing from a free curve to a linear or spline curve, in which case the
+curve will be changed as little as possible.
+</para>
+
+@curve: a #GtkCurve.
+@type: the type of the curve.
+
+

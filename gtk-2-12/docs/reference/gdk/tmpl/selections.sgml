@@ -1,0 +1,306 @@
+<!-- ##### SECTION Title ##### -->
+Selections
+
+<!-- ##### SECTION Short_Description ##### -->
+Functions for transfering data via the X selection mechanism
+
+<!-- ##### SECTION Long_Description ##### -->
+<para>
+The X selection mechanism provides a way to transfer
+arbitrary chunks of data between programs. 
+A <firstterm>selection</firstterm> is a essentially 
+a named clipboard, identified by a string interned
+as a #GdkAtom. By claiming ownership of a selection,
+an application indicates that it will be responsible
+for supplying its contents. The most common 
+selections are <literal>PRIMARY</literal> and 
+<literal>CLIPBOARD</literal>.
+</para>
+<para>
+The contents of a selection can be represented in
+a number of formats, called <firstterm>targets</firstterm>.
+Each target is identified by an atom. A list of
+all possible targets supported by the selection owner
+can be retrieved by requesting the special target
+<literal>TARGETS</literal>. When a selection is 
+retrieved, the data is accompanied by a type
+(an atom), and a format (an integer, representing
+the number of bits per item).
+See <link linkend="gdk-Properties-and-Atoms">Properties and Atoms</link>
+for more information.
+</para>
+<para>
+The functions in this section only contain the lowlevel
+parts of the selection protocol. A considerably more
+complicated implementation is needed on top of this.
+GTK+ contains such an implementation in the functions
+in <literal>gtkselection.h</literal> and programmers
+should use those functions instead of the ones presented 
+here. If you plan to implement selection handling
+directly on top of the functions here, you should refer
+to the X Inter-client Communication Conventions Manual
+(ICCCM).
+</para>
+
+<!-- ##### SECTION See_Also ##### -->
+<para>
+
+</para>
+
+<!-- ##### SECTION Stability_Level ##### -->
+
+
+<!-- ##### TYPEDEF GdkSelection ##### -->
+<para>
+The #GdkSelection enumeration contains predefined 
+atom values for several common selections.
+</para>
+
+
+<!-- ##### TYPEDEF GdkSelectionType ##### -->
+<para>
+The #GdkSelectionType enumeration contains predefined
+atom values used to represent the types of data transferred
+in response to a request for a target. See the
+ICCCM for details about what data should be transferred
+for each of these types. Other atoms can be used,
+and the recommended practice for GTK+ is to to use mime 
+types for this purpose. However, supporting these types
+may be useful for compatibility with older programs.
+</para>
+
+
+<!-- ##### TYPEDEF GdkTarget ##### -->
+<para>
+The #GdkTarget enumeration contains predefined atom values which are
+used to describe possible targets for a selection. Other atoms can be
+used, and the recommended practice for GTK+ is to to use mime types
+for this purpose. However, supporting these types may be useful for
+compatibility with older programs.
+</para>
+
+
+<!-- ##### MACRO GDK_SELECTION_PRIMARY ##### -->
+<para>
+A #GdkAtom representing the <literal>PRIMARY</literal> selection.
+</para>
+
+
+
+<!-- ##### MACRO GDK_SELECTION_SECONDARY ##### -->
+<para>
+A #GdkAtom representing the <literal>SECONDARY</literal> selection.
+</para>
+
+
+
+<!-- ##### MACRO GDK_SELECTION_CLIPBOARD ##### -->
+<para>
+A #GdkAtom representing the <literal>CLIPBOARD</literal> selection.
+</para>
+
+
+
+<!-- ##### MACRO GDK_TARGET_BITMAP ##### -->
+<para>
+A #GdkAtom representing the <literal>BITMAP</literal> selection target.
+</para>
+
+
+
+<!-- ##### MACRO GDK_TARGET_COLORMAP ##### -->
+<para>
+A #GdkAtom representing the <literal>COLORMAP</literal> selection target.
+</para>
+
+
+
+<!-- ##### MACRO GDK_TARGET_DRAWABLE ##### -->
+<para>
+A #GdkAtom representing the <literal>DRAWABLE</literal> selection target.
+</para>
+
+
+
+<!-- ##### MACRO GDK_TARGET_PIXMAP ##### -->
+<para>
+A #GdkAtom representing the <literal>PIXMAP</literal> selection target.
+</para>
+
+
+
+<!-- ##### MACRO GDK_TARGET_STRING ##### -->
+<para>
+A #GdkAtom representing the <literal>STRING</literal> selection target.
+</para>
+
+
+
+<!-- ##### MACRO GDK_SELECTION_TYPE_ATOM ##### -->
+<para>
+A #GdkAtom representing the <literal>ATOM</literal> selection type.
+</para>
+
+
+
+<!-- ##### MACRO GDK_SELECTION_TYPE_BITMAP ##### -->
+<para>
+A #GdkAtom representing the <literal>BITMAP</literal> selection type.
+</para>
+
+
+
+<!-- ##### MACRO GDK_SELECTION_TYPE_COLORMAP ##### -->
+<para>
+A #GdkAtom representing the <literal>COLORMAP</literal> selection type.
+</para>
+
+
+
+<!-- ##### MACRO GDK_SELECTION_TYPE_DRAWABLE ##### -->
+<para>
+A #GdkAtom representing the <literal>DRAWABLE</literal> selection type.
+</para>
+
+
+
+<!-- ##### MACRO GDK_SELECTION_TYPE_INTEGER ##### -->
+<para>
+A #GdkAtom representing the <literal>INTEGER</literal> selection type.
+</para>
+
+
+
+<!-- ##### MACRO GDK_SELECTION_TYPE_PIXMAP ##### -->
+<para>
+A #GdkAtom representing the <literal>PIXMAP</literal> selection type.
+</para>
+
+
+
+<!-- ##### MACRO GDK_SELECTION_TYPE_WINDOW ##### -->
+<para>
+A #GdkAtom representing the <literal>WINDOW</literal> selection type.
+</para>
+
+
+
+<!-- ##### MACRO GDK_SELECTION_TYPE_STRING ##### -->
+<para>
+A #GdkAtom representing the <literal>STRING</literal> selection type.
+</para>
+
+
+
+<!-- ##### FUNCTION gdk_selection_owner_set ##### -->
+<para>
+Sets the owner of the given selection.
+</para>
+
+@owner: a #GdkWindow or %NULL to indicate that the
+        the owner for the given should be unset.
+@selection: an atom identifying a selection.
+@time_: timestamp to use when setting the selection.
+       If this is older than the timestamp given last
+       time the owner was set for the given selection, the 
+       request will be ignored.
+@send_event: if %TRUE, and the new owner is different
+             from the current owner, the current owner
+             will be sent a SelectionClear event.
+@Returns: %TRUE if the selection owner was successfully
+          changed to @owner, otherwise %FALSE.
+
+
+<!-- ##### FUNCTION gdk_selection_owner_set_for_display ##### -->
+<para>
+
+</para>
+
+@display: 
+@owner: 
+@selection: 
+@time_: 
+@send_event: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_selection_owner_get ##### -->
+<para>
+Determines the owner of the given selection.
+</para>
+
+@selection: an atom indentifying a selection.
+@Returns: if there is a selection owner for this window,
+          and it is a window known to the current process,
+          the #GdkWindow that owns the selection, otherwise
+          %NULL. Note that the return value may be owned
+          by a different process if a foreign window
+          was previously created for that window, but
+          a new foreign window will never be created by
+          this call.
+
+
+<!-- ##### FUNCTION gdk_selection_owner_get_for_display ##### -->
+<para>
+
+</para>
+
+@display: 
+@selection: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_selection_convert ##### -->
+<para>
+Retrieves the contents of a selection in a given
+form.
+</para>
+
+@requestor: a #GdkWindow.
+@selection: an atom identifying the selection to get the
+            contents of.
+@target: the form in which to retrieve the selection.
+@time_: the timestamp to use when retrieving the
+       selection. The selection owner may refuse the
+       request if it did not own the selection at 
+       the time indicated by the timestamp.
+
+
+<!-- ##### FUNCTION gdk_selection_property_get ##### -->
+<para>
+</para>
+
+@requestor: 
+@data: 
+@prop_type: 
+@prop_format: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_selection_send_notify ##### -->
+<para>
+Sends a response to SelectionRequest event.
+</para>
+
+@requestor: window to which to deliver response.
+@selection: selection that was requested.
+@target: target that was selected.
+@property: property in which the selection owner stored the
+           data, or %GDK_NONE to indicate that the request
+           was rejected.
+@time_: timestamp.
+
+
+<!-- ##### FUNCTION gdk_selection_send_notify_for_display ##### -->
+<para>
+
+</para>
+
+@display: 
+@requestor: 
+@selection: 
+@target: 
+@property: 
+@time_: 
+
+

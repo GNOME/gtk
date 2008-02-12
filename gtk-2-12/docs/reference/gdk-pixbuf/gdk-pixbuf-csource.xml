@@ -1,0 +1,173 @@
+<refentry id="gdk-pixbuf-csource">
+
+<refmeta>
+<refentrytitle>gdk-pixbuf-csource</refentrytitle>
+<manvolnum>1</manvolnum>
+</refmeta>
+
+<refnamediv>
+<refname>gdk-pixbuf-csource</refname>
+<refpurpose>C code generation utility for GdkPixbuf images</refpurpose>
+</refnamediv>
+
+<refsynopsisdiv>
+<cmdsynopsis>
+<command>gdk-pixbuf-csource</command>
+<arg choice="opt">options</arg>
+<arg choice="opt">image</arg>
+</cmdsynopsis>
+<cmdsynopsis>
+<command>gdk-pixbuf-csource</command>
+<arg choice="opt">options</arg>
+<arg choice="plain">--build-list</arg>
+<arg rep="repeat">
+  <arg>name</arg>
+  <arg>image</arg>
+</arg>
+</cmdsynopsis>
+</refsynopsisdiv>
+
+<refsect1><title>Description</title>
+<para>
+<command>gdk-pixbuf-csource</command> is a small utility that generates C code
+containing images, useful for compiling images directly into programs.
+</para>
+</refsect1>
+
+<refsect1><title>Invocation</title>
+<para>
+<command>gdk-pixbuf-csource</command> either takes as input one image file name
+to generate code for, or, using the <option>--build-list</option> option, a 
+list of (<replaceable>name</replaceable>, <replaceable>image</replaceable>)
+pairs to generate code for a list of images into named variables.
+</para>
+<refsect2><title>Options</title>
+<variablelist>
+
+<varlistentry>
+<term><option>--stream</option></term>
+<listitem><para>
+Generate pixbuf data stream (a single string containing a serialized
+<structname>GdkPixdata</structname> structure in network byte order).
+</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><option>--struct</option></term>
+<listitem><para>
+Generate GdkPixdata structure (needs the <structname>GdkPixdata</structname>
+structure definition from <filename>gdk-pixdata.h</filename>).
+</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><option>--macros</option></term>
+<listitem><para>
+Generate *_ROWSTRIDE, *_WIDTH, *_HEIGHT, *_BYTES_PER_PIXEL and
+*_RLE_PIXEL_DATA or *_PIXEL_DATA macro definitions for the image.
+</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><option>--rle</option></term>
+<listitem><para>
+Enables run-length encoding for the generated pixel data (default).
+</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><option>--raw</option></term>
+<listitem><para>
+Disables run-length encoding for the generated pixel data.
+</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><option>--extern</option></term>
+<listitem><para>
+Generate extern symbols.
+</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><option>--static</option></term>
+<listitem><para>
+Generate static symbols (default).
+</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><option>--decoder</option></term>
+<listitem><para>
+Provide a *_RUN_LENGTH_DECODE(image_buf, rle_data, size, bpp) macro definition
+to decode run-length encoded image data.
+</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><option>--name=identifier</option></term>
+<listitem><para>
+Specifies the identifier name (prefix) for the generated variables or
+macros (useful only if <option>--build-list</option> was not specified).
+</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><option>--build-list</option></term>
+<listitem><para>
+Enables (<replaceable>name</replaceable>, <replaceable>image</replaceable>)
+pair parsing mode.
+</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><option>-h</option>, <option>--help</option></term>
+<listitem><para>
+Print brief help and exit.
+</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><option>-v</option>, <option>--version</option></term>
+<listitem><para>
+Print version and exit.
+</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><option>--g-fatal-warnings</option></term>
+<listitem><para>
+Make warnings fatal (causes the program to abort).
+</para></listitem>
+</varlistentry>
+
+</variablelist>
+</refsect2>
+</refsect1>
+
+<refsect1><title>See also</title>
+<para>
+The <structname>GdkPixbuf</structname> documentation, shipped with the 
+Gtk+ distribution, available from <ulink url="http://www.gtk.org">www.gtk.org</ulink>.
+</para>
+</refsect1>
+
+<refsect1><title>Bugs</title>
+<para>
+The runlength encoder gets out of sync with the pixel boundaries, since
+it includes the rowstride padding in the encoded stream. Furthermore, it
+generates pixbufs with suboptimal rowstride in some cases.
+</para>
+</refsect1>
+
+<refsect1><title>Author</title>
+<para>
+<command>gdk-pixbuf-csource</command> was written by Tim Janik
+<email>timj@gtk.org</email>. 
+</para>
+<para>
+This manual page was provided by Tim Janik <email>timj@gtk.org</email>. 
+</para>
+</refsect1>
+</refentry>
+

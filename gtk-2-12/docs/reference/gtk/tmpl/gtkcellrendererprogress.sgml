@@ -1,0 +1,68 @@
+<!-- ##### SECTION Title ##### -->
+GtkCellRendererProgress
+
+<!-- ##### SECTION Short_Description ##### -->
+Renders numbers as progress bars
+
+<!-- ##### SECTION Long_Description ##### -->
+<para>
+#GtkCellRendererProgress renders a numeric value as a progress par in a cell.
+Additionally, it can display a text on top of the progress bar.
+</para>
+
+<para>
+The #GtkCellRendererProgress cell renderer was added in GTK+ 2.6.
+</para>
+
+<!-- ##### SECTION See_Also ##### -->
+<para>
+
+</para>
+
+<!-- ##### SECTION Stability_Level ##### -->
+
+
+<!-- ##### STRUCT GtkCellRendererProgress ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### ARG GtkCellRendererProgress:orientation ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkCellRendererProgress:pulse ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkCellRendererProgress:text ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkCellRendererProgress:text-xalign ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkCellRendererProgress:text-yalign ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkCellRendererProgress:value ##### -->
+<para>
+
+</para>
+
+<!-- ##### FUNCTION gtk_cell_renderer_progress_new ##### -->
+<para>
+
+</para>
+
+@Returns: 
+
+

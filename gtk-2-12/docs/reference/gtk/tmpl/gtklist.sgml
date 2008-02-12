@@ -1,0 +1,369 @@
+<!-- ##### SECTION Title ##### -->
+GtkList
+
+<!-- ##### SECTION Short_Description ##### -->
+Widget for packing a list of selectable items
+
+<!-- ##### SECTION Long_Description ##### -->
+<para>
+The #GtkList widget is a container whose children are displayed
+vertically in order, and can be selected.
+
+The list has many selection modes, which are programmer selective and
+depend on how many elements are able to be selected at the same time.
+</para>
+<para>
+GtkList has been deprecated since GTK+ 2.0 and should not be used
+in newly written code. Use #GtkTreeView instead.
+</para>
+
+<!-- ##### SECTION See_Also ##### -->
+<para>
+<variablelist>
+<varlistentry>
+<term>#GtkContainer</term>
+<listitem><para>For functions that apply to every #GtkContainer
+(like #GtkList).</para></listitem>
+</varlistentry>
+<varlistentry>
+<term>#GtkListitem</term>
+<listitem><para>Children of a #GtkList widget must be of this
+type.</para></listitem>
+</varlistentry>
+</variablelist>
+</para>
+
+<!-- ##### SECTION Stability_Level ##### -->
+
+
+<!-- ##### STRUCT GtkList ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### SIGNAL GtkList::select-child ##### -->
+<para>
+The child @widget has just been selected.
+</para>
+
+@list: the object which received the signal.
+@widget: the newly selected child.
+
+<!-- ##### SIGNAL GtkList::selection-changed ##### -->
+<para>
+The selection of the widget has just changed.
+</para>
+
+@list: the object which received the signal.
+
+<!-- ##### SIGNAL GtkList::unselect-child ##### -->
+<para>
+The child @widget has just been unselected.
+</para>
+
+@list: the object which received the signal.
+@widget: the newly unselected child.
+
+<!-- ##### ARG GtkList:selection-mode ##### -->
+<para>
+
+</para>
+
+<!-- ##### FUNCTION gtk_list_new ##### -->
+<para>
+Creates a new #GtkList.
+</para>
+
+@Returns: the newly-created #GtkList
+
+
+<!-- ##### FUNCTION gtk_list_insert_items ##### -->
+<para>
+Inserts @items into the @list at the position @position. The #GList items
+must not be freed after.
+</para>
+
+@list: the list widget.
+@items: the items.
+@position: the position to insert @items, starting at 0.
+
+
+<!-- ##### FUNCTION gtk_list_append_items ##### -->
+<para>
+Adds @items to the end of the @list.
+</para>
+
+@list: the list widget.
+@items: the items.
+
+
+<!-- ##### FUNCTION gtk_list_prepend_items ##### -->
+<para>
+Inserts @items at the beginning of the @list.
+</para>
+
+@list: the list widget.
+@items: the items.
+
+
+<!-- ##### FUNCTION gtk_list_remove_items ##### -->
+<para>
+Removes the @items from the @list.
+</para>
+
+@list: the list widget.
+@items: the items to remove.
+
+
+<!-- ##### FUNCTION gtk_list_remove_items_no_unref ##### -->
+<para>
+Removes the @items from the @list, without unreferencing them. It
+may be useful if you want to move the items from one list to another.
+</para>
+
+@list: the list widget.
+@items: the items.
+
+
+<!-- ##### FUNCTION gtk_list_clear_items ##### -->
+<para>
+Removes the items between index @start (included) and @end (excluded)
+from the @list. If @end is negative, or greater than the number of
+children of @list, it's assumed to be exactly the number of
+elements. If @start is greater than or equal to @end, nothing is
+done.
+</para>
+
+@list: the list widget.
+@start: the index of the first item to remove.
+@end: the index of the lest item to remove plus one.
+
+
+<!-- ##### FUNCTION gtk_list_select_item ##### -->
+<para>
+Selects the child number @item of the @list. Nothing happens if @item
+is out of bounds. The signal GtkList::select-child will be emitted.
+</para>
+
+@list: the list widget.
+@item: the index of the child to select.
+
+
+<!-- ##### FUNCTION gtk_list_unselect_item ##### -->
+<para>
+Unselects the child number @item of the @list. Nothing happens if
+@item is out of bounds. The signal GtkList::unselect-child will be
+emitted.
+</para>
+
+@list: the list widget.
+@item: the index of the child to unselect.
+
+
+<!-- ##### FUNCTION gtk_list_select_child ##### -->
+<para>
+Selects the given @child. The signal GtkList::select-child will be
+emitted.
+</para>
+
+@list: the list widget
+@child: the child to select.
+
+
+<!-- ##### FUNCTION gtk_list_unselect_child ##### -->
+<para>
+Unselects the given @child. The signal GtkList::unselect-child will be
+emitted.
+</para>
+
+@list: the list widget.
+@child: the child to unselect.
+
+
+<!-- ##### FUNCTION gtk_list_child_position ##### -->
+<para>
+Searches the children of @list for the index of @child.
+</para>
+
+@list: the list widget.
+@child: the child to look for.
+@Returns: the index of the child, -1 if not found.
+
+
+<!-- ##### FUNCTION gtk_list_set_selection_mode ##### -->
+<para>
+Set the list selection mode. The selection mode can be any value in
+#GtkSelectionMode:
+<variablelist>
+<varlistentry>
+<term>#GTK_SELECTION_SINGLE</term>
+<listitem><para>
+Zero or one element may be selected.
+</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term>#GTK_SELECTION_BROWSE</term>
+<listitem><para>
+Exactly one element is always selected (this can be false after you have
+changed the selection mode).
+</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term>#GTK_SELECTION_MULTIPLE</term>
+<listitem><para>
+Any number of elements may be selected. Clicks toggle the state of an
+item.
+</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term>#GTK_SELECTION_EXTENDED</term>
+<listitem><para>
+Any number of elements may be selected. Click-drag selects a range of
+elements; the Ctrl key may be used to enlarge the selection, and
+Shift key to select between the focus and the child pointed to.
+</para></listitem>
+</varlistentry>
+</variablelist>
+</para>
+
+@list: the list widget.
+@mode: the new selection mode.
+
+
+<!-- ##### FUNCTION gtk_list_extend_selection ##### -->
+<para>
+Extends the selection by moving the anchor according to @scroll_type. Only
+in #GTK_SELECTION_EXTENDED.
+</para>
+
+@list: the list widget.
+@scroll_type: the direction and length.
+@position: the position if @scroll_type is #GTK_SCROLL_JUMP.
+@auto_start_selection: if %TRUE, gtk_list_start_selection() is automatically
+carried out before extending the selection.
+
+
+<!-- ##### FUNCTION gtk_list_start_selection ##### -->
+<para>
+Starts a selection (or part of selection) at the focused child. Only in
+#GTK_SELECTION_EXTENDED mode.
+</para>
+
+@list: the list widget.
+
+
+<!-- ##### FUNCTION gtk_list_end_selection ##### -->
+<para>
+Ends the selection. Used with gtk_list_extend_selection() and
+gtk_list_start_selection(). Only in #GTK_SELECTION_EXTENDED mode.
+</para>
+
+@list: the list widget.
+
+
+<!-- ##### FUNCTION gtk_list_select_all ##### -->
+<para>
+Selects all children of @list. A signal will be emitted for each
+newly selected child.
+</para>
+
+@list: the list widget.
+
+
+<!-- ##### FUNCTION gtk_list_unselect_all ##### -->
+<para>
+Unselects all children of @list. A signal will be emitted for each
+newly unselected child.
+</para>
+
+@list: the list widget.
+
+
+<!-- ##### FUNCTION gtk_list_scroll_horizontal ##### -->
+<para>
+Scrolls @list horizontaly. This supposes that the list is packed into a
+scrolled window or something similar, and adjustments are well
+set. Step and page increment are those from the horizontal adjustment
+of @list. Backward means to the left, and forward to the
+right. Out of bounds values are truncated.
+@scroll_type may be any valid #GtkScrollType. If @scroll_type is
+#GTK_SCROLL_NONE, nothing is done. If it's #GTK_SCROLL_JUMP, the list
+scrolls to the ratio @position: 0 is full left, 1 is full right.
+</para>
+
+@list: the list widget.
+@scroll_type: the scrolling type.
+@position: the position if @scroll_type is #GTK_SCROLL_JUMP
+
+
+<!-- ##### FUNCTION gtk_list_scroll_vertical ##### -->
+<para>
+Scrolls @list vertically. This supposes that the list is packed into a
+scrolled window or something similar, and adjustments are well
+set. Step and page increment are those from the vertical adjustment
+of @list. Backward means up, and forward down. Out of bounds values are
+truncated.
+@scroll_type may be any valid #GtkScrollType. If @scroll_type is
+#GTK_SCROLL_NONE, nothing is done. If it's #GTK_SCROLL_JUMP, the list
+scrolls to the ratio @position: 0 is top, 1 is bottom.
+</para>
+
+@list: the list widget.
+@scroll_type: the scrolling type.
+@position: the position if @scroll_type is #GTK_SCROLL_JUMP
+
+
+<!-- ##### FUNCTION gtk_list_toggle_add_mode ##### -->
+<para>
+Toggles between adding to the selection and beginning a new selection. Only
+in #GTK_SELECTION_EXTENDED. Useful with gtk_list_extend_selection().
+</para>
+
+@list: the list widget.
+
+
+<!-- ##### FUNCTION gtk_list_toggle_focus_row ##### -->
+<para>
+Toggles the focus row. If the focus row is selected, it's
+unselected. If the focus row is unselected, it's selected. If the
+selection mode of @list is #GTK_SELECTION_BROWSE, this has no effect,
+as the selection is always at the focus row.
+</para>
+
+@list: the list widget.
+
+
+<!-- ##### FUNCTION gtk_list_toggle_row ##### -->
+<para>
+Toggles the child @item of list. If the selection mode of @list is
+#GTK_SELECTION_BROWSE, the item is selected, and the others are
+unselected.
+</para>
+
+@list: the list widget.
+@item: the child to toggle.
+
+
+<!-- ##### FUNCTION gtk_list_undo_selection ##### -->
+<para>
+Restores the selection in the last state, only if selection mode is
+#GTK_SELECTION_EXTENDED. If this function is called twice, the selection is
+cleared. This function sometimes gives stranges "last states".
+</para>
+
+@list: the list widget.
+
+
+<!-- ##### FUNCTION gtk_list_end_drag_selection ##### -->
+<para>
+Stops the drag selection mode and ungrabs the pointer. This has no
+effect if a drag selection is not active.
+</para>
+
+@list: the list widget.
+
+

@@ -1,0 +1,81 @@
+<!-- ##### SECTION Title ##### -->
+File Loading
+
+<!-- ##### SECTION Short_Description ##### -->
+Loading a pixbuf from a file.
+
+<!-- ##### SECTION Long_Description ##### -->
+  <para>
+    The &gdk-pixbuf; library provides a simple mechanism for loading
+    an image from a file in synchronous fashion.  This means that the
+    library takes control of the application while the file is being
+    loaded; from the user's point of view, the application will block
+    until the image is done loading.
+  </para>
+
+  <para>
+    This interface can be used by applications in which blocking is
+    acceptable while an image is being loaded.  It can also be used to
+    load small images in general.  Applications that need progressive
+    loading can use the #GdkPixbufLoader functionality instead.
+  </para>
+
+<!-- ##### SECTION See_Also ##### -->
+  <para>
+    #GdkPixbufLoader.
+  </para>
+
+<!-- ##### SECTION Stability_Level ##### -->
+
+
+<!-- ##### FUNCTION gdk_pixbuf_new_from_file ##### -->
+<para>
+
+</para>
+
+@filename: 
+@error: 
+@Returns: <!--
+Local variables:
+mode: sgml
+sgml-parent-document: ("../gdk-pixbuf.sgml" "book" "refsect2" "")
+End:
+-->
+
+
+<!-- ##### FUNCTION gdk_pixbuf_new_from_file_at_size ##### -->
+<para>
+
+</para>
+
+@filename: 
+@width: 
+@height: 
+@error: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_pixbuf_new_from_file_at_scale ##### -->
+<para>
+
+</para>
+
+@filename: 
+@width: 
+@height: 
+@preserve_aspect_ratio: 
+@error: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_pixbuf_get_file_info ##### -->
+<para>
+
+</para>
+
+@filename: 
+@width: 
+@height: 
+@Returns: 
+
+

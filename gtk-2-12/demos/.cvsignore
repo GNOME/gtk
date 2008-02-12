@@ -1,0 +1,11 @@
+Makefile
+Makefile.in
+.libs
+.deps
+testanimation
+test-inline-pixbufs.h
+testpixbuf-drawable
+testpixbuf-scale
+testpixbuf-save
+testpixbuf
+pixbuf-demo

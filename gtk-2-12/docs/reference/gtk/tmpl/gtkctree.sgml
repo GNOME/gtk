@@ -1,0 +1,1260 @@
+<!-- ##### SECTION Title ##### -->
+GtkCTree
+
+<!-- ##### SECTION Short_Description ##### -->
+A widget displaying a hierarchical tree
+
+<!-- ##### SECTION Long_Description ##### -->
+<para>
+The #GtkCTree widget is used for showing a hierarchical tree 
+to the user, for example a directory tree.
+</para>
+<para>
+The tree is internally represented as a set of #GtkCTreeNode structures.
+</para>
+<para>
+The interface has much in common with the #GtkCList widget: rows (nodes)
+can be selected by the user etc.
+</para>
+<para> 
+Positions in the tree are often indicated by two arguments, a
+parent and a sibling, both #GtkCTreeNode pointers. If the parent
+is %NULL, the position is at the root of the tree and if the sibling
+is %NULL, it will be the last child of parent, otherwise it will be
+inserted just before the sibling.
+</para>
+<para>
+GtkCTree has been deprecated since GTK+ 2.0 and should not be used
+in newly written code. Use #GtkTreeView instead.
+</para>
+
+<!-- ##### SECTION See_Also ##### -->
+<para>
+
+</para>
+
+<!-- ##### SECTION Stability_Level ##### -->
+
+
+<!-- ##### STRUCT GtkCTree ##### -->
+<para>
+The #GtkCTree-struct contains the following user-accessible fields.
+These fields should be considered read-only; to set the values,
+use the methods below.
+
+<informaltable pgwide="1" frame="none" role="struct">
+<tgroup cols="2"><colspec colwidth="2*"/><colspec colwidth="8*"/>
+<tbody>
+
+<row>
+<entry>#gint <structfield>tree_indent</structfield>;</entry>
+<entry>The number of pixels each successive level of the tree is
+indented in the display.</entry>
+</row>
+
+<row>
+<entry>#gint <structfield>tree_spacing</structfield>;</entry>
+<entry>The space in pixels between the graphical tree and the text in the
+node.</entry>
+</row>
+
+<row>
+<entry>#gint <structfield>tree_column</structfield>;</entry>
+<entry>The index of the column for which the tree graphics is drawn. </entry>
+</row>
+
+<row>
+<entry>#GtkCTreeLineStyle <structfield>line_style</structfield>;</entry>
+<entry>The style in which the lines in the tree graphics are drawn.</entry>
+</row>
+
+<row>
+<entry>#GtkCTreeExpanderStyle <structfield>expander_style</structfield>;</entry>
+<entry>The style in which the expander buttons are drawn.</entry>
+</row>
+
+<row>
+<entry>#GtkCTreeExpanderStyle <structfield>expander_style</structfield>;</entry>
+<entry>FIXME.</entry>
+</row>
+
+</tbody></tgroup></informaltable>
+</para>
+
+
+<!-- ##### SIGNAL GtkCTree::change-focus-row-expansion ##### -->
+<para>
+The row which has the focus is either collapsed or expanded
+or toggled.
+</para>
+
+@ctree: the object which received the signal.
+@expansion: What is being done.
+
+<!-- ##### SIGNAL GtkCTree::tree-collapse ##### -->
+<para>
+Emitted when a node is collapsed.
+</para>
+
+@ctree: the object which received the signal.
+@node: 
+
+<!-- ##### SIGNAL GtkCTree::tree-expand ##### -->
+<para>
+Emitted when a node is expanded.
+</para>
+
+@ctree: the object which received the signal.
+@node: 
+
+<!-- ##### SIGNAL GtkCTree::tree-move ##### -->
+<para>
+Emitted when a node is moved.
+</para>
+
+@ctree: the object which received the signal.
+@node: The node that is moved.
+@new_parent: The new parent of the node.
+@new_sibling: The new sibling of the node.
+
+<!-- ##### SIGNAL GtkCTree::tree-select-row ##### -->
+<para>
+Emitted when a row is selected.
+</para>
+
+@ctree: the object which received the signal.
+@node: The node corresponding to the selected row.
+@column: The column which was selected.
+
+<!-- ##### SIGNAL GtkCTree::tree-unselect-row ##### -->
+<para>
+Emitted when a node is unselected.
+</para>
+
+@ctree: the object which received the signal.
+@node: The node  corresponding to the selected row.
+@column: 
+
+<!-- ##### ARG GtkCTree:expander-style ##### -->
+<para>
+The style of the expander buttons.
+</para>
+
+<!-- ##### ARG GtkCTree:indent ##### -->
+<para>
+The number of pixels to indent the tree levels.
+</para>
+
+<!-- ##### ARG GtkCTree:line-style ##### -->
+<para>
+The style of the lines in the tree graphic.
+</para>
+
+<!-- ##### ARG GtkCTree:n-columns ##### -->
+<para>
+The number of columns in the tree.
+</para>
+
+<!-- ##### ARG GtkCTree:show-stub ##### -->
+<para>
+FIXME
+</para>
+
+<!-- ##### ARG GtkCTree:spacing ##### -->
+<para>
+The number of pixels between the tree and the columns.
+</para>
+
+<!-- ##### ARG GtkCTree:tree-column ##### -->
+<para>
+The column in which the actual tree graphic appears.
+</para>
+
+<!-- ##### MACRO GTK_CTREE_ROW ##### -->
+<para>
+Used to get the #GtkCTreeRow structure corresponding to the given #GtkCTreeNode.
+</para>
+
+@_node_: 
+
+
+<!-- ##### MACRO GTK_CTREE_NODE ##### -->
+<para>
+
+</para>
+
+@_node_: 
+
+
+<!-- ##### MACRO GTK_CTREE_NODE_NEXT ##### -->
+<para>
+FIXME
+</para>
+
+@_nnode_: 
+
+
+<!-- ##### MACRO GTK_CTREE_NODE_PREV ##### -->
+<para>
+FIXME
+</para>
+
+@_pnode_: 
+
+
+<!-- ##### MACRO GTK_CTREE_FUNC ##### -->
+<para>
+
+</para>
+
+@_func_: 
+
+
+<!-- ##### ENUM GtkCTreePos ##### -->
+<para>
+A value specifying the position of a new node relative to an old one.
+
+<informaltable pgwide="1" frame="none" role="enum">
+<tgroup cols="2"><colspec colwidth="2*"/><colspec colwidth="8*"/>
+<tbody>
+
+<row>
+<entry>GTK_CTREE_POS_BEFORE</entry>
+<entry>As a sibling, before the specified node.</entry>
+</row>
+
+<row>
+<entry>GTK_CTREE_POS_AS_CHILD</entry>
+<entry>As a child of the specified node.</entry>
+</row>
+
+<row>
+<entry>GTK_CTREE_POS_AFTER</entry>
+<entry>As a sibling, after the specified node.</entry>
+</row>
+
+</tbody></tgroup></informaltable>
+
+</para>
+
+@GTK_CTREE_POS_BEFORE: 
+@GTK_CTREE_POS_AS_CHILD: 
+@GTK_CTREE_POS_AFTER: 
+
+<!-- ##### ENUM GtkCTreeLineStyle ##### -->
+<para>
+The appearance of the lines in the tree graphics.
+
+<informaltable pgwide="1" frame="none" role="enum">
+<tgroup cols="2"><colspec colwidth="2*"/><colspec colwidth="8*"/>
+<tbody>
+
+<row>
+<entry>GTK_CTREE_LINES_NONE</entry>
+<entry>No lines.</entry>
+</row>
+
+<row>
+<entry>GTK_CTREE_LINES_SOLID</entry>
+<entry>Solid lines.</entry>
+</row>
+
+<row>
+<entry>GTK_CTREE_LINES_DOTTED</entry>
+<entry>Dotted lines.</entry>
+</row>
+
+<row>
+<entry>GTK_CTREE_LINES_TABBED</entry>
+<entry>FIXME.</entry>
+</row>
+
+</tbody></tgroup></informaltable>
+
+
+</para>
+
+@GTK_CTREE_LINES_NONE: 
+@GTK_CTREE_LINES_SOLID: 
+@GTK_CTREE_LINES_DOTTED: 
+@GTK_CTREE_LINES_TABBED: 
+
+<!-- ##### ENUM GtkCTreeExpanderStyle ##### -->
+<para>
+The appearance of the expander buttons, i.e. the small buttons
+which expand or contract parts of the tree when pressed.
+
+
+<informaltable pgwide="1" frame="none" role="enum">
+<tgroup cols="2"><colspec colwidth="2*"/><colspec colwidth="8*"/>
+<tbody>
+
+<row>
+<entry>GTK_CTREE_EXPANDER_NONE</entry>
+<entry>No expanders.</entry>
+</row>
+
+<row>
+<entry>GTK_CTREE_EXPANDER_SQUARE</entry>
+<entry>Square expanders.</entry>
+</row>
+
+<row>
+<entry>GTK_CTREE_EXPANDER_TRIANGLE</entry>
+<entry>Triangular expanders.</entry>
+</row>
+
+<row>
+<entry>GTK_CTREE_EXPANDER_CIRCULAR</entry>
+<entry>Round expanders.</entry>
+</row>
+
+</tbody></tgroup></informaltable>
+
+
+</para>
+
+@GTK_CTREE_EXPANDER_NONE: 
+@GTK_CTREE_EXPANDER_SQUARE: 
+@GTK_CTREE_EXPANDER_TRIANGLE: 
+@GTK_CTREE_EXPANDER_CIRCULAR: 
+
+<!-- ##### ENUM GtkCTreeExpansionType ##### -->
+<para>
+How to expand or collapse a part of a tree.
+
+<informaltable pgwide="1" frame="none" role="enum">
+<tgroup cols="2"><colspec colwidth="2*"/><colspec colwidth="8*"/>
+<tbody>
+
+<row>
+<entry>GTK_CTREE_EXPANSION_EXPAND</entry>
+<entry>Expand this node.</entry>
+</row>
+
+<row>
+<entry>GTK_CTREE_EXPANSION_EXPAND_RECURSIVE</entry>
+<entry>Expand this node and everything below it in the hierarchy.</entry>
+</row>
+
+<row>
+<entry>GTK_CTREE_EXPANSION_COLLAPSE</entry>
+<entry>Collapse this node.</entry>
+</row>
+
+<row>
+<entry>GTK_CTREE_EXPANSION_COLLAPSE_RECURSIVE</entry>
+<entry>Collapse this node and everything below it in the hierarchy.</entry>
+</row>
+
+<row>
+<entry>GTK_CTREE_EXPANSION_TOGGLE</entry>
+<entry>Toggle this node (i.e. expand if collapsed and vice versa).</entry>
+</row>
+
+<row>
+<entry>GTK_CTREE_EXPANSION_TOGGLE_RECURSIVE</entry>
+<entry>Toggle this node and everything below it in the hierarchy.</entry>
+</row>
+
+
+</tbody></tgroup></informaltable>
+
+
+</para>
+
+@GTK_CTREE_EXPANSION_EXPAND: 
+@GTK_CTREE_EXPANSION_EXPAND_RECURSIVE: 
+@GTK_CTREE_EXPANSION_COLLAPSE: 
+@GTK_CTREE_EXPANSION_COLLAPSE_RECURSIVE: 
+@GTK_CTREE_EXPANSION_TOGGLE: 
+@GTK_CTREE_EXPANSION_TOGGLE_RECURSIVE: 
+
+<!-- ##### USER_FUNCTION GtkCTreeFunc ##### -->
+<para>
+A generic callback type to do something with a particular node.
+</para>
+
+@ctree: The #GtkCTree object.
+@node: The #GtkCTreeNode in the tree.
+@data: The user data associated with the node.
+
+
+<!-- ##### USER_FUNCTION GtkCTreeGNodeFunc ##### -->
+<para>
+FIXME
+</para>
+
+@ctree: 
+@depth: 
+@gnode: 
+@cnode: 
+@data: 
+@Returns: 
+
+
+<!-- ##### USER_FUNCTION GtkCTreeCompareDragFunc ##### -->
+<para>
+FIXME
+</para>
+
+@ctree: 
+@source_node: 
+@new_parent: 
+@new_sibling: 
+@Returns: 
+
+
+<!-- ##### STRUCT GtkCTreeRow ##### -->
+<para>
+A structure representing a single row in the tree graph.
+The values inside the structure should be considered read-only.
+This structure is derived from the #GtkCListRow structure.
+
+<informaltable pgwide="1" frame="none" role="struct">
+<tgroup cols="2"><colspec colwidth="2*"/><colspec colwidth="8*"/>
+<tbody>
+
+<row>
+<entry>#GtkCTreeNode *<structfield>parent</structfield>;</entry>
+<entry>The parent node of the node corresponding to this row.
+</entry>
+</row>
+
+<row>
+<entry>#GtkCTreeNode *<structfield>sibling</structfield>;</entry>
+<entry>The next sibling node of the node corresponding to this row.
+</entry>
+</row>
+
+<row>
+<entry>#GtkCTreeNode *<structfield>children</structfield>;</entry>
+<entry>The first child node corresponding to this row; to access
+the other children, just use the siblings of that node.
+</entry>
+</row>
+
+<row>
+<entry>#GdkPixmap *<structfield>pixmap_closed</structfield>;</entry>
+<entry> The pixmap to be shown when the node is collapsed.
+</entry>
+</row>
+
+<row>
+<entry>#GdkBitmap *<structfield>mask_closed</structfield>;</entry>
+<entry> The mask for the above pixmap.
+</entry>
+</row>
+
+<row>
+<entry>#GdkPixmap *<structfield>pixmap_opened</structfield>;</entry>
+<entry> The pixmap to be shown when the node is expanded.
+</entry>
+</row>
+
+<row>
+<entry>#GdkBitmap *<structfield>mask_opened</structfield>;</entry>
+<entry> The mask for the above pixmap.
+</entry>
+</row>
+
+<row>
+<entry>#guint16 <structfield>level</structfield>;</entry>
+<entry>The level of this node in the tree.
+</entry>
+</row>
+
+
+<row>
+<entry>#guint <structfield>is_leaf</structfield> : 1;</entry>
+<entry>Whether this row is a leaf.
+</entry>
+</row>
+
+<row>
+<entry>#guint <structfield>expanded</structfield> : 1;</entry>
+<entry>Whether the children of this row are visible.
+</entry>
+</row>
+</tbody></tgroup></informaltable>
+
+</para>
+
+@row: 
+@parent: 
+@sibling: 
+@children: 
+@pixmap_closed: 
+@mask_closed: 
+@pixmap_opened: 
+@mask_opened: 
+@level: 
+@is_leaf: 
+@expanded: 
+
+<!-- ##### STRUCT GtkCTreeNode ##### -->
+<para>
+This structure is opaque - you should use the
+macros #GTK_CTREE_ROW, #GTK_CTREE_NODE_NEXT etc. as well
+as the functions below to access it.
+</para>
+
+@list: 
+
+<!-- ##### MACRO GTK_TYPE_CTREE_NODE ##### -->
+<para>
+
+</para>
+
+
+
+<!-- ##### FUNCTION gtk_ctree_new_with_titles ##### -->
+<para>
+Create a new #GtkCTree widget with the given titles for the columns.
+</para>
+
+@columns: Number of columns.
+@tree_column: Which column has the tree graphic; 0 = leftmost.
+@titles: The titles for the columns.
+@Returns: The #GtkCTree widget.
+
+
+<!-- ##### FUNCTION gtk_ctree_new ##### -->
+<para>
+Create a new #GtkCTree widget.
+</para>
+
+@columns: Number of columns.
+@tree_column: Which columns has the tree graphic.
+@Returns: The new #GtkCTree widget.
+
+
+<!-- ##### FUNCTION gtk_ctree_insert_node ##### -->
+<para>
+Insert a new node to the tree. The position is specified through
+the parent-sibling notation, as explained in the introduction above.
+</para>
+
+@ctree: The #GtkCTree widget.
+@parent: The parent node to be.
+@sibling: The sibling node to be.
+@text: The texts to be shown in each column.
+@spacing: The extra space between the pixmap and the text.
+@pixmap_closed: The pixmap to be used when the node is collapsed. Can be %NULL.
+@mask_closed: The mask for the above pixmap. Can be %NULL.
+@pixmap_opened: The pixmap to be used when the children are visible. Can be %NULL.
+@mask_opened: The mask for the above pixmap. Can be %NULL.
+@is_leaf: Whether this node is going to be a leaf.
+@expanded: Whether this node should start out expanded or not.
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_ctree_remove_node ##### -->
+<para>
+Remove the node and all nodes underneath it from the tree.
+</para>
+
+@ctree: The widget.
+@node: The node to be removed.
+
+
+<!-- ##### FUNCTION gtk_ctree_insert_gnode ##### -->
+<para>
+FIXME
+</para>
+
+@ctree: 
+@parent: 
+@sibling: 
+@gnode: 
+@func: 
+@data: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_ctree_export_to_gnode ##### -->
+<para>
+FIXME
+</para>
+
+@ctree: 
+@parent: 
+@sibling: 
+@node: 
+@func: 
+@data: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_ctree_post_recursive ##### -->
+<para>
+Recursively apply a function to all nodes of the tree at or below a certain
+node. 
+The function is called for each node after it has been called
+for that node's children.
+</para>
+
+@ctree: 
+@node: The node where to start. %NULL means to start at the root.
+@func: The function to apply to each node.
+@data: A closure argument given to each invocation of the function.
+
+
+<!-- ##### FUNCTION gtk_ctree_post_recursive_to_depth ##### -->
+<para>
+Recursively apply a function to nodes up to a certain depth.
+The function is called for each node after it has been called
+for that node's children.
+</para>
+
+@ctree: 
+@node: The node where to start.
+@depth: The maximum absolute depth for applying the function.  If depth is negative, this function just calls #gtk_ctree_post_recursive.
+@func: The function to apply to each node.
+@data: A closure argument given to each invocation of the function.
+
+
+<!-- ##### FUNCTION gtk_ctree_pre_recursive ##### -->
+<para>
+Recursively apply a function to all nodes of the tree at or below a certain
+node.
+The function is called for each node after it has been called
+for its parent.
+</para>
+
+@ctree: 
+@node: The node where to start. %NULL means to start at the root.
+@func: The function to apply to each node.
+@data: A closure argument given to each invocation of the function.
+
+
+<!-- ##### FUNCTION gtk_ctree_pre_recursive_to_depth ##### -->
+<para>
+Recursively apply a function to nodes up to a certain depth.
+The function is called for each node after it has been called
+for that node's children.
+</para>
+
+@ctree: 
+@node: The node where to start.
+@depth: The maximum absolute depth for applying the function.  If depth is negative, this function just calls #gtk_ctree_post_recursive.
+@func: The function to apply to each node.
+@data: A closure argument given to each invocation of the function.
+
+
+<!-- ##### FUNCTION gtk_ctree_is_viewable ##### -->
+<para>
+This function checks whether the given node is viewable i.e. so that
+all of its parent nodes are expanded.  This is different from being
+actually visible: the node can be viewable but outside the scrolling
+area of the window.
+</para>
+
+@ctree: 
+@node: 
+@Returns: Whether the node is viewable.
+
+
+<!-- ##### FUNCTION gtk_ctree_last ##### -->
+<para>
+Returns the last child of the last child of the last child...
+of the given node.
+</para>
+
+@ctree: 
+@node: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_ctree_find_node_ptr ##### -->
+<para>
+Finds the node pointer given a #GtkCTreeRow structure.
+</para>
+
+@ctree: 
+@ctree_row: 
+@Returns: The node pointer.
+
+
+<!-- ##### FUNCTION gtk_ctree_find ##### -->
+<para>
+
+</para>
+
+@ctree: 
+@node: The node to start searching from. May be %NULL.
+@child: 
+@Returns: True if @child is on some level a child (grandchild...) of the @node.
+
+
+<!-- ##### FUNCTION gtk_ctree_is_ancestor ##### -->
+<para>
+
+</para>
+
+@ctree: 
+@node: 
+@child: 
+@Returns: True is @node is an ancestor of @child.
+
+
+<!-- ##### FUNCTION gtk_ctree_find_by_row_data ##### -->
+<para>
+Finds a node in the tree under @node that has the given user data pointer.
+</para>
+
+@ctree: 
+@node: 
+@data: 
+@Returns: The node, or %NULL if not found.
+
+
+<!-- ##### FUNCTION gtk_ctree_find_all_by_row_data ##### -->
+<para>
+Finds all nodes in the tree under @node that have the given user data pointer.
+</para>
+
+@ctree: 
+@node: 
+@data: 
+@Returns: A list of nodes that have the given data pointer.
+
+
+<!-- ##### FUNCTION gtk_ctree_find_by_row_data_custom ##### -->
+<para>
+Find the first node under @node whose row data pointer fulfills 
+a custom criterion.
+</para>
+
+@ctree: 
+@node: The node where to start searching.
+@data: User data for the criterion function.
+@func: The criterion function.
+@Returns: The first node found.
+
+
+<!-- ##### FUNCTION gtk_ctree_find_all_by_row_data_custom ##### -->
+<para>
+Find all nodes under @node whose row data pointer fulfills 
+a custom criterion.
+
+</para>
+
+@ctree: 
+@node: The node where to start searching.
+@data: User data for the criterion function.
+@func: The criterion function.
+@Returns: A list of all nodes found.
+
+
+<!-- ##### FUNCTION gtk_ctree_is_hot_spot ##### -->
+<para>
+</para>
+
+@ctree: 
+@x: 
+@y: 
+@Returns: True if the given coordinates lie on an expander button.
+
+
+<!-- ##### FUNCTION gtk_ctree_move ##### -->
+<para>
+Move a node in the tree to another location.
+</para>
+
+@ctree: 
+@node: The node to be moved.
+@new_parent: The new parent-to-be of the node.
+@new_sibling: The new sibling-to-be of the node.
+
+
+<!-- ##### FUNCTION gtk_ctree_expand ##### -->
+<para>
+Expand one node.
+</para>
+
+@ctree: 
+@node: 
+
+
+<!-- ##### FUNCTION gtk_ctree_expand_recursive ##### -->
+<para>
+Expand one node and all nodes underneath.
+</para>
+
+@ctree: 
+@node: 
+
+
+<!-- ##### FUNCTION gtk_ctree_expand_to_depth ##### -->
+<para>
+Expand a node and its children up to the depth given.
+</para>
+
+@ctree: 
+@node: 
+@depth: The (absolute) depth up to which to expand nodes.
+
+
+<!-- ##### FUNCTION gtk_ctree_collapse ##### -->
+<para>
+Collapse one node.
+</para>
+
+@ctree: 
+@node: 
+
+
+<!-- ##### FUNCTION gtk_ctree_collapse_recursive ##### -->
+<para>
+Collapse one node and all its subnodes.
+</para>
+
+@ctree: 
+@node: 
+
+
+<!-- ##### FUNCTION gtk_ctree_collapse_to_depth ##### -->
+<para>
+Collapse a node and its children up to the depth given.
+</para>
+
+@ctree: 
+@node: 
+@depth: The (absolute) depth up to which to collapse nodes.
+
+
+<!-- ##### FUNCTION gtk_ctree_toggle_expansion ##### -->
+<para>
+Toggle a node, i.e. if it is collapsed, expand it and vice versa.
+</para>
+
+@ctree: 
+@node: 
+
+
+<!-- ##### FUNCTION gtk_ctree_toggle_expansion_recursive ##### -->
+<para>
+Toggle the expansion of a node and all its children.
+</para>
+
+@ctree: 
+@node: 
+
+
+<!-- ##### FUNCTION gtk_ctree_select ##### -->
+<para>
+Cause the given node to be selected and emit the appropriate signal.
+</para>
+
+@ctree: 
+@node: 
+
+
+<!-- ##### FUNCTION gtk_ctree_select_recursive ##### -->
+<para>
+Cause the given node and its subnodes to be selected and emit the appropriate signal(s).
+</para>
+
+@ctree: 
+@node: 
+
+
+<!-- ##### FUNCTION gtk_ctree_unselect ##### -->
+<para>
+Unselect the given node and emit the appropriate signal.
+</para>
+
+@ctree: 
+@node: 
+
+
+<!-- ##### FUNCTION gtk_ctree_unselect_recursive ##### -->
+<para>
+Unselect the given node and its subnodes and emit the appropriate signal(s).
+</para>
+
+@ctree: 
+@node: 
+
+
+<!-- ##### FUNCTION gtk_ctree_real_select_recursive ##### -->
+<para>
+The function that implements both #gtk_ctree_select_recursive and
+#gtk_ctree_unselect_recursive.
+</para>
+
+@ctree: 
+@node: 
+@state: True for selecting, false for unselecting.
+
+
+<!-- ##### FUNCTION gtk_ctree_node_set_text ##### -->
+<para>
+Set the text in a node.
+</para>
+
+@ctree: 
+@node: 
+@column: The column whose text to change.
+@text: The new text.
+
+
+<!-- ##### FUNCTION gtk_ctree_node_set_pixmap ##### -->
+<para>
+FIXME
+</para>
+
+@ctree: 
+@node: 
+@column: 
+@pixmap: 
+@mask: 
+
+
+<!-- ##### FUNCTION gtk_ctree_node_set_pixtext ##### -->
+<para>
+FIXME
+</para>
+
+@ctree: 
+@node: 
+@column: 
+@text: 
+@spacing: 
+@pixmap: 
+@mask: 
+
+
+<!-- ##### FUNCTION gtk_ctree_set_node_info ##### -->
+<para>
+Change the information. Most parameters correspond 
+to the parameters of #gtk_ctree_insert_node.
+</para>
+
+@ctree: 
+@node: 
+@text: The text to be in the tree column.
+@spacing: 
+@pixmap_closed: 
+@mask_closed: 
+@pixmap_opened: 
+@mask_opened: 
+@is_leaf: 
+@expanded: 
+
+
+<!-- ##### FUNCTION gtk_ctree_node_set_shift ##### -->
+<para>
+Shift the given cell the given amounts in pixels.
+</para>
+
+@ctree: 
+@node: 
+@column: 
+@vertical: 
+@horizontal: 
+
+
+<!-- ##### FUNCTION gtk_ctree_node_set_selectable ##### -->
+<para>
+
+</para>
+
+@ctree: 
+@node: 
+@selectable: Whether this node can be selected by the user.
+
+
+<!-- ##### FUNCTION gtk_ctree_node_get_selectable ##### -->
+<para>
+
+</para>
+
+@ctree: 
+@node: 
+@Returns: Whether this node can be selected by the user.
+
+
+<!-- ##### FUNCTION gtk_ctree_node_get_cell_type ##### -->
+<para>
+
+</para>
+
+@ctree: 
+@node: 
+@column: 
+@Returns: The type of the given cell.
+
+
+<!-- ##### FUNCTION gtk_ctree_node_get_text ##### -->
+<para>
+
+</para>
+
+@ctree: 
+@node: 
+@column: 
+@text: If nonnull, the pointer to the text string is assigned to *@text.
+@Returns: True if the given cell has text in it.
+
+
+<!-- ##### FUNCTION gtk_ctree_node_get_pixmap ##### -->
+<para>
+
+</para>
+
+@ctree: 
+@node: 
+@column: 
+@pixmap: If nonnull, the pointer to the pixmap is returned through this.
+@mask: If nonnull, the pointer to the mask is returned through this.
+@Returns: True if the given cell contains a pixmap.
+
+
+<!-- ##### FUNCTION gtk_ctree_node_get_pixtext ##### -->
+<para>
+Get the parameters of a cell containing both a pixmap and text.
+</para>
+
+@ctree: 
+@node: 
+@column: 
+@text: 
+@spacing: 
+@pixmap: 
+@mask: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_ctree_get_node_info ##### -->
+<para>
+Get information corresponding to a node.
+Any of the return parameters can be null. 
+</para>
+
+@ctree: 
+@node: 
+@text: 
+@spacing: 
+@pixmap_closed: 
+@mask_closed: 
+@pixmap_opened: 
+@mask_opened: 
+@is_leaf: 
+@expanded: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_ctree_node_set_row_style ##### -->
+<para>
+Set the style of a row.
+</para>
+
+@ctree: 
+@node: 
+@style: 
+
+
+<!-- ##### FUNCTION gtk_ctree_node_get_row_style ##### -->
+<para>
+Get the style of a row.
+</para>
+
+@ctree: 
+@node: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_ctree_node_set_cell_style ##### -->
+<para>
+Set the style of an individual cell.
+</para>
+
+@ctree: 
+@node: 
+@column: 
+@style: 
+
+
+<!-- ##### FUNCTION gtk_ctree_node_get_cell_style ##### -->
+<para>
+Get the style of an individual cell.
+</para>
+
+@ctree: 
+@node: 
+@column: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_ctree_node_set_foreground ##### -->
+<para>
+
+</para>
+
+@ctree: 
+@node: 
+@color: 
+
+
+<!-- ##### FUNCTION gtk_ctree_node_set_background ##### -->
+<para>
+
+</para>
+
+@ctree: 
+@node: 
+@color: 
+
+
+<!-- ##### FUNCTION gtk_ctree_node_set_row_data ##### -->
+<para>
+Set the custom data associated with a node.
+</para>
+
+@ctree: 
+@node: 
+@data: 
+
+
+<!-- ##### FUNCTION gtk_ctree_node_set_row_data_full ##### -->
+<para>
+This is the full interface to setting row data, so that a destructor
+can be given for the data.
+</para>
+
+@ctree: 
+@node: 
+@data: 
+@destroy: The routine to be called when @data is no longer needed.
+
+
+<!-- ##### FUNCTION gtk_ctree_node_get_row_data ##### -->
+<para>
+
+</para>
+
+@ctree: 
+@node: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_ctree_node_moveto ##### -->
+<para>
+This function makes the given column of the given node visible by
+scrolling.
+</para>
+
+@ctree: 
+@node: The node to be made visible.
+@column: The column to be made visible.
+@row_align: Where in the window the row should appear.
+@col_align: Where in the window the column should appear.
+
+
+<!-- ##### FUNCTION gtk_ctree_node_is_visible ##### -->
+<para>
+
+</para>
+
+@ctree: 
+@node: 
+@Returns: True if the node is currently inside the bounds of the window.
+Note that this function can return true even if the node is not
+viewable, if the node's ancestor is visible.
+
+
+<!-- ##### FUNCTION gtk_ctree_set_indent ##### -->
+<para>
+
+</para>
+
+@ctree: 
+@indent: The number of pixels to shift the levels of the tree.
+
+
+<!-- ##### FUNCTION gtk_ctree_set_spacing ##### -->
+<para>
+The spacing between the tree graphic and the actual node content.
+</para>
+
+@ctree: 
+@spacing: 
+
+
+<!-- ##### MACRO gtk_ctree_set_reorderable ##### -->
+<para>
+
+</para>
+
+@t: 
+@r: 
+
+
+<!-- ##### FUNCTION gtk_ctree_set_line_style ##### -->
+<para>
+
+</para>
+
+@ctree: 
+@line_style: 
+
+
+<!-- ##### FUNCTION gtk_ctree_set_expander_style ##### -->
+<para>
+
+</para>
+
+@ctree: 
+@expander_style: 
+
+
+<!-- ##### FUNCTION gtk_ctree_set_drag_compare_func ##### -->
+<para>
+FIXME
+</para>
+
+@ctree: 
+@cmp_func: 
+
+
+<!-- ##### FUNCTION gtk_ctree_sort_node ##### -->
+<para>
+Sort the children of a node. See #GtkCList for how to set the sorting
+criteria etc.
+</para>
+
+@ctree: 
+@node: 
+
+
+<!-- ##### FUNCTION gtk_ctree_sort_recursive ##### -->
+<para>
+Sort the descendants of a node. See #GtkCList for how to set the sorting
+criteria etc.
+</para>
+
+@ctree: 
+@node: 
+
+
+<!-- ##### FUNCTION gtk_ctree_node_nth ##### -->
+<para>
+
+</para>
+
+@ctree: 
+@row: 
+@Returns: The node corresponding to the @row th row.
+
+
+<!-- ##### FUNCTION gtk_ctree_set_show_stub ##### -->
+<para>
+
+</para>
+
+@ctree: 
+@show_stub: 
+
+

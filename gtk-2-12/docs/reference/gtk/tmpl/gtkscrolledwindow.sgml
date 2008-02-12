@@ -1,0 +1,318 @@
+<!-- ##### SECTION Title ##### -->
+GtkScrolledWindow
+
+<!-- ##### SECTION Short_Description ##### -->
+Adds scrollbars to its child widget
+
+<!-- ##### SECTION Long_Description ##### -->
+<para>
+#GtkScrolledWindow is a #GtkBin subclass: it's a container 
+the accepts a single child widget. #GtkScrolledWindow adds scrollbars
+to the child widget and optionally draws a beveled frame around the 
+child widget.
+</para>
+
+<para>
+The scrolled window can work in two ways. Some widgets have native
+scrolling support; these widgets have "slots" for #GtkAdjustment
+objects. 
+<footnote><para>The scrolled window installs #GtkAdjustment objects in
+the child window's slots using the set_scroll_adjustments_signal,
+found in #GtkWidgetClass. (Conceptually, these widgets implement a
+"Scrollable" interface; because GTK+ 1.2 lacked interface support in
+the object system, this interface is hackily implemented as a signal
+in #GtkWidgetClass. The GTK+ 2.0 object system would allow a clean
+implementation, but it wasn't worth breaking the
+API.)</para></footnote>
+Widgets with native scroll support include #GtkTreeView, #GtkTextView, 
+and #GtkLayout.
+</para>
+
+<para>
+For widgets that lack native scrolling support, the #GtkViewport
+widget acts as an adaptor class, implementing scrollability for child
+widgets that lack their own scrolling capabilities. Use #GtkViewport
+to scroll child widgets such as #GtkTable, #GtkBox, and so on.
+</para>
+
+<para>
+If a widget has native scrolling abilities, it can be added to the
+#GtkScrolledWindow with gtk_container_add(). If a widget does not, you
+must first add the widget to a #GtkViewport, then add the #GtkViewport
+to the scrolled window. The convenience function
+gtk_scrolled_window_add_with_viewport() does exactly this, so you can
+ignore the presence of the viewport.
+</para>
+
+<para>
+The position of the scrollbars is controlled by the scroll
+adjustments. See #GtkAdjustment for the fields in an adjustment - for
+#GtkScrollbar, used by #GtkScrolledWindow, the "value" field
+represents the position of the scrollbar, which must be between the
+"lower" field and "upper - page_size." The "page_size" field
+represents the size of the visible scrollable area. The
+"step_increment" and "page_increment" fields are used when the user
+asks to step down (using the small stepper arrows) or page down (using
+for example the PageDown key).
+</para>
+
+<para>
+If a #GtkScrolledWindow doesn't behave quite as you would like, or
+doesn't have exactly the right layout, it's very possible to set up
+your own scrolling with #GtkScrollbar and for example a #GtkTable.
+</para>
+
+<!-- ##### SECTION See_Also ##### -->
+<para>
+#GtkViewport, #GtkAdjustment, #GtkWidgetClass
+</para>
+
+<!-- ##### SECTION Stability_Level ##### -->
+
+
+<!-- ##### STRUCT GtkScrolledWindow ##### -->
+<para>
+There are no public fields in the #GtkScrolledWindow struct; it should 
+only be accessed using the functions below.
+</para>
+
+@hscrollbar: 
+@vscrollbar: 
+
+<!-- ##### SIGNAL GtkScrolledWindow::move-focus-out ##### -->
+<para>
+
+</para>
+
+@scrolledwindow: the object which received the signal.
+@arg1: 
+
+<!-- ##### SIGNAL GtkScrolledWindow::scroll-child ##### -->
+<para>
+
+</para>
+
+@scrolledwindow: the object which received the signal.
+@arg1: 
+@arg2: 
+@Returns: 
+
+<!-- ##### ARG GtkScrolledWindow:hadjustment ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkScrolledWindow:hscrollbar-policy ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkScrolledWindow:shadow-type ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkScrolledWindow:vadjustment ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkScrolledWindow:vscrollbar-policy ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkScrolledWindow:window-placement ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkScrolledWindow:window-placement-set ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkScrolledWindow:scrollbar-spacing ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkScrolledWindow:scrollbars-within-bevel ##### -->
+<para>
+
+</para>
+
+<!-- ##### FUNCTION gtk_scrolled_window_new ##### -->
+<para>
+Creates a new scrolled window. The two arguments are the scrolled
+window's adjustments; these will be shared with the scrollbars and the
+child widget to keep the bars in sync with the child. Usually you want
+to pass %NULL for the adjustments, which will cause the scrolled window
+to create them for you.
+</para>
+
+@hadjustment: Horizontal adjustment.
+@vadjustment: Vertical adjustment.
+@Returns: New scrolled window.
+
+
+<!-- ##### FUNCTION gtk_scrolled_window_get_hadjustment ##### -->
+<para>
+Returns the horizontal scrollbar's adjustment, used to connect the
+horizontal scrollbar to the child widget's horizontal scroll
+functionality.
+</para>
+
+@scrolled_window: A #GtkScrolledWindow.
+@Returns: The horizontal #GtkAdjustment.
+
+
+<!-- ##### FUNCTION gtk_scrolled_window_get_vadjustment ##### -->
+<para>
+Returns the vertical scrollbar's adjustment, used to connect the
+vertical scrollbar to the child widget's vertical scroll
+functionality.
+</para>
+
+@scrolled_window: A #GtkScrolledWindow.
+@Returns: The vertical #GtkAdjustment.
+
+
+<!-- ##### FUNCTION gtk_scrolled_window_get_hscrollbar ##### -->
+<para>
+
+</para>
+
+@scrolled_window: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_scrolled_window_get_vscrollbar ##### -->
+<para>
+
+</para>
+
+@scrolled_window: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_scrolled_window_set_policy ##### -->
+<para>
+Sets the scrollbar policy for the horizontal and vertical scrollbars. 
+The policy determines when the scrollbar should appear; it is a value
+from the #GtkPolicyType enumeration. If %GTK_POLICY_ALWAYS, the
+scrollbar is always present; if %GTK_POLICY_NEVER, the scrollbar is
+never present; if %GTK_POLICY_AUTOMATIC, the scrollbar is present only
+if needed (that is, if the slider part of the bar would be smaller
+than the trough - the display is larger than the page size).
+</para>
+
+@scrolled_window: A #GtkScrolledWindow.
+@hscrollbar_policy: Policy for horizontal bar.
+@vscrollbar_policy: Policy for vertical bar.
+
+
+<!-- ##### FUNCTION gtk_scrolled_window_add_with_viewport ##### -->
+<para>
+Used to add children without native scrolling capabilities. This is
+simply a convenience function; it is equivalent to adding the
+unscrollable child to a viewport, then adding the viewport to the
+scrolled window. If a child has native scrolling, use
+gtk_container_add() instead of this function.
+</para>
+
+<para>
+The viewport scrolls the child by moving its #GdkWindow, and takes the
+size of the child to be the size of its toplevel #GdkWindow. This will
+be very wrong for most widgets that support native scrolling; for
+example, if you add a widget such as #GtkTreeView with a viewport, the 
+whole widget will scroll, including the column headings. Thus, widgets
+with native scrolling support should not be used with the #GtkViewport proxy.
+</para>
+
+<para>
+A widget supports scrolling natively if the
+set_scroll_adjustments_signal field in #GtkWidgetClass is non-zero,
+i.e. has been filled in with a valid signal identifier.
+</para>
+
+@scrolled_window: A #GtkScrolledWindow.
+@child: Widget you want to scroll.
+
+
+<!-- ##### FUNCTION gtk_scrolled_window_set_placement ##### -->
+<para>
+Determines the location of the child widget with respect to the
+scrollbars. The default is %GTK_CORNER_TOP_LEFT, meaning the child is
+in the top left, with the scrollbars underneath and to the right.
+Other values in #GtkCornerType are %GTK_CORNER_TOP_RIGHT,
+%GTK_CORNER_BOTTOM_LEFT, and %GTK_CORNER_BOTTOM_RIGHT.
+</para>
+
+@scrolled_window: A #GtkScrolledWindow.
+@window_placement: Position of the child window.
+
+
+<!-- ##### FUNCTION gtk_scrolled_window_unset_placement ##### -->
+<para>
+
+</para>
+
+@scrolled_window: 
+
+
+<!-- ##### FUNCTION gtk_scrolled_window_set_shadow_type ##### -->
+<para>
+
+</para>
+
+@scrolled_window: 
+@type: 
+
+
+<!-- ##### FUNCTION gtk_scrolled_window_set_hadjustment ##### -->
+<para>
+Sets the #GtkAdjustment for the horizontal scrollbar.
+</para>
+
+@scrolled_window: A #GtkScrolledWindow.
+@hadjustment: Horizontal scroll adjustment.
+
+
+<!-- ##### FUNCTION gtk_scrolled_window_set_vadjustment ##### -->
+<para>
+Sets the #GtkAdjustment for the vertical scrollbar.
+</para>
+
+@scrolled_window: A #GtkScrolledWindow.
+@vadjustment: Vertical scroll adjustment.
+
+
+<!-- ##### FUNCTION gtk_scrolled_window_get_placement ##### -->
+<para>
+
+</para>
+
+@scrolled_window: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_scrolled_window_get_policy ##### -->
+<para>
+
+</para>
+
+@scrolled_window: 
+@hscrollbar_policy: 
+@vscrollbar_policy: 
+
+
+<!-- ##### FUNCTION gtk_scrolled_window_get_shadow_type ##### -->
+<para>
+
+</para>
+
+@scrolled_window: 
+@Returns: 
+
+

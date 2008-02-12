@@ -1,0 +1,338 @@
+
+The overall syntax is:
+
+     (type-of-thing-being-defined  name-used-to-refer-to-this-thing
+       (attribute-name  attribute-value-depending-on-the-attribute)
+       (attribute-name  attribute-value-depending-on-the-attribute)
+       (attribute-name  attribute-value-depending-on-the-attribute))
+
+Some definitions can have a c-declaration field that gives the C code
+we parsed to arrive at the definition. The c-declaration is a quoted
+string because it can contain parentheses and such.
+
+Defined types and their attributes:
+
+===
+(module module-name
+  (submodule-of module-name)) ;; submodule is optional
+
+Ex: (module Gtk)
+Ex: (module Rgb
+      (submodule-of Gdk))
+
+modules are later referred to with a list of module names, like 
+(Gdk Rgb) or (Gtk)
+
+Object and boxed type definitions automatically create a submodule.
+For example, GtkCList creates the module (module CList (submodule-of
+(Gtk))) which is referred to as module (Gtk CList).
+
+===
+
+(type
+ (alias some-unique-identifier)
+ (in-module module-name)   ;; optional, gchar* is not in a module
+ (gtk-type-id gtk-type-system-id) ;; optional, absent if this is not
+                                  ;; in the type system
+ (is-parametric boolean)          ;; optional default to #f
+ (in-c-name name-of-symbol-in-C)
+ (out-c-name name-of-symbol-in-C)
+ (inout-c-name name-of-symbol-in-C))
+
+Ex: (type
+     (alias string)
+     (gtk-type-id GTK_TYPE_STRING)
+     (in-c-name "const gchar*")
+     (out-c-name "gchar**")      ;; actually I'm not sure how strings work out/inout
+     (inout-c-name "gchar*"))
+
+ (type
+     (alias list)
+     (gtk-type-id GTK_TYPE_POINTER)
+     (is-parametric #t)
+     (in-c-name "GList*")
+     (out-c-name "GList**")
+     (inout-c-name "GList**"))
+
+
+ ;; This one would be implied by the (object) def for GtkWidget I
+ ;; think - (type) is only required for types that are not implied
+ ;; by other definitions, such as int/boolean/etc.
+ 
+    (type
+     (alias GtkWidget)
+     (in-module (Gtk))
+     (gtk-type-id GTK_TYPE_WIDGET)
+     (in-c-name "GtkWidget*")
+     (inout-c-name "GtkWidget*")
+     (out-c-name "GtkWidget**"))
+
+"Type" bindings are automatically assumed for objects, boxed types,
+etc. as defined below.
+
+The alias field is used to refer to the type later on.
+
+Whenever a type alias can be used, it is also possible to use the
+keyword "native", which implies that the type in question is too
+C-specific to represent. Then a c-declaration will typically be
+available for use.
+
+C types containing [] or () are function pointers or arrays. For
+arrays that don't specify a size, we just treat them as pointers. For
+function pointers, we need special (type) syntax/attributes of some
+kind, but since there basically aren't any of these right now in the
+libs we care about we can just ignore them. For arrays that specify a
+size ditto, you would handle them by adding an (array-size) attribute
+or something or using the "native" keyword and skipping the (type)
+stuff.
+
+===
+(object object-name
+   (in-module module-name-list)
+   (parent object-name optional-module-name-if-different)
+   (abstract boolean-is-abstract-class) ;; omit for default of #f
+   (c-name name-of-the-object-in-C)
+   (field (type-and-name type-alias-of-struct-field name-of-struct-field)
+          (access read-or-write-or-readwrite)))
+   
+
+Ex: (object Widget
+      (in-module (Gtk))
+      (parent Object)      ;; could say (parent Object (Gtk))
+      (abstract #t)
+      (c-name GtkWidget)
+      (field (type-and-name GdkWindow* window) (access read)))
+
+An "object" declaration automatically implies the type definition:
+
+(type
+  (alias concat-module-elements-and-object-name)
+  (in-c-name pointer-to-c-name)
+  (out-c-name pointer-to-pointer-to-c-name)
+  (inout-c-name pointer-to-c-name))
+
+Ex: 
+ (type (alias GtkWidget) 
+       (in-c-name GtkWidget*) 
+       (out-c-name GtkWidget**) 
+       (inout-c-name GtkWidget*))
+
+It also implies a module that is the name broken into parts:
+ (module CTree
+   (submodule-of Gtk))
+
+===
+
+(function function-name
+  (in-module module-name-list) ;; "static methods" go in their
+                               ;;  object's module
+  (is-constructor-of object-type-alias) ;; optional, marks a constructor
+  (c-name function-name)
+  (return-type return-value-type) ;; defaults to void
+  (caller-owns-return boolean-value) ;; defaults to #f
+  (can-return-null boolean-value) ;; defaults to #t
+  (parameter in-or-out-or-inout 
+      (type-and-name parameter-type-alias parameter-name)
+      (type-parameter name-of-contained-type) ;; optional, requires parametric type
+      (c-declaration "c-type-and-name")) ;; c-declaration only required
+                                         ;; if the type alias is "native"
+  (varargs #t) ;; has varargs at the end
+)
+
+Ex:
+  (function init
+    (in-module (Gdk Rgb)
+    (c-name gdk_rgb_init)))
+
+Ex: 
+  (function new
+    (in-module (Gdk Rgb Cmap))
+    (is-constructor-of GdkRgbCmap)
+    (c-name gdk_rgb_cmap_new)
+    (return-type GdkRgbCmap)
+    (caller-owns-return #t)   ;; perhaps this could be implied by is-constructor-of
+    (parameter in (type-and-name array-of-guint32 colors))
+    (parameter in (type-and-name gint n_colors)))
+
+Ex:
+  (function config_set_set_handler
+   (in-module (Gnome))
+   (c-name gnome_config_set_set_handler)
+   (parameter in (type-and-name native func)
+                 (c-declaration "void (*func)(void*)"))
+   (parameter in (type-and-name gpointer data)))  
+
+===
+(method method-name
+  (of-object object-name module-name)
+  ;; retval/arg attributes as for (function), but with first parameter
+  ;; omitted for non-constructors
+   )
+ 
+Ex:
+  (method set_text
+     (of-object Label (Gtk))
+     (parameter (type-and-name const-gchar* str)))
+
+===
+(object-argument arg-name
+   (of-object object-we-are-an-argument-of optional-objects-module)
+   (type-id argument-type)       ;; GTK_TYPE_OBJECT etc.
+   ;; flags all default to #f
+   (readable bool-value)
+   (writeable bool-value)
+   (construct-only bool-value))
+
+Ex:
+  (object-argument label
+     (of-object Label (Gtk))
+     (type GTK_TYPE_STRING)
+     (readable #t)
+     (writeable #t))
+
+=== 
+(signal signal-name
+  (run-action bool-value)
+  (run-first bool-value)
+  (run-last bool-value)
+  (of-object object-we-are-a-signal-of optional-objects-module)
+  ;; return value and parameters as for a function, omitting the object
+  ;; and user data parameters
+
+  ;; what other properties matter for a signal?
+)
+
+Ex:
+  (signal select_row
+     (of-object CList (Gtk))
+     (run-first #t)
+     ;; return type defaults to void
+     (parameter in (type-and-name gint row))
+     (parameter in (type-and-name gint column))
+     (parameter in (type-and-name GdkEvent* event)))
+
+=== 
+(enum enum-name
+  (in-module modname)
+  (c-name name-in-c)
+  (value (nick value-name-noprefixes-hyphen-lowercase) (c-name value-c-name)))
+
+Ex:
+
+  (enum DirectionType
+    (in-module Gtk)
+    (c-name GtkDirectionType)
+    (value (nick tab-forward) (c-name GTK_DIR_TAB_FORWARD))
+    (value (nick tab-backward) (c-name GTK_DIR_TAB_BACKWARD))
+    (value (nick up) (c-name GTK_DIR_UP))
+    (value (nick down) (c-name GTK_DIR_DOWN))
+    (value (nick left) (c-name GTK_DIR_LEFT))
+    (value (nick right) (c-name GTK_DIR_RIGHT)))
+
+  (enum Pos
+    (in-module (Gtk CTree))
+    (c-name GtkCTreePos)
+    (value (nick before) (c-name GTK_CTREE_POS_BEFORE))
+    (value (nick as-child) (c-name GTK_CTREE_POS_AS_CHILD))
+    (value (nick after) (c-name GTK_CTREE_POS_AFTER)))
+
+===
+(flags) is just like enum, but some bindings may wrap enums and flags differently.
+    
+===
+
+(boxed boxed-name
+  (in-module modname)
+  (c-name c-name)
+  (ref-func func-to-increase-refcount)
+  (copy-func func-to-copy)
+  (release-func func-to-destroy-or-decrement-refcount)
+  (field (type-and-name type-alias-of-struct-field name-of-struct-field) (access access-rule)))
+
+It is never OK to use memcpy() to copy a boxed type, or use
+malloc()/free() to alloc/free one.
+
+Ex:
+
+ (boxed Pixmap
+   (in-module (Gdk))
+   (c-name GdkPixmap)
+   (ref-func pixmap_ref)
+   (release-func pixmap_unref))
+
+An "object" declaration automatically implies the type definition:
+
+(type
+  (alias concat-module-elements-and-boxed-name)
+  (in-c-name pointer-to-c-name)
+  (out-c-name pointer-to-pointer-to-c-name)
+  (inout-c-name pointer-to-c-name))
+
+Ex: 
+ (type (alias GdkPixmap) 
+       (in-c-name GdkPixmap*) 
+       (out-c-name GdkPixmap**) 
+       (inout-c-name GdkPixmap*))
+
+
+===
+
+(struct struct-name
+  (in-module modname)
+  (c-name c-name)
+  (field (type-and-name type-alias-of-struct-field name-of-struct-field) (access access-rule)))
+
+Unlike a boxed type, a struct type can be copied with memcpy() and
+allocated on the stack or with g_malloc().
+
+Ex:
+ (struct Rectangle
+   (in-module (Gdk))
+   (c-name GdkRectangle)
+   (field (type-and-name gint16 x) (access readwrite))
+   (field (type-and-name gint16 y) (access readwrite))
+   (field (type-and-name guint16 width) (access readwrite))
+   (field (type-and-name guint16 height) (access readwrite)))
+
+Implies GdkRectangle type alias:
+
+ (type (alias GdkRectangle) 
+       (in-c-name GdkRectangle*) 
+       (out-c-name GdkRectangle*)    ;; note - not the same as boxed types 
+       (inout-c-name GdkRectangle*))
+
+===
+
+(user-function name
+  (in-module module)
+  (c-name c-typedef-name)
+  ;; return-type and parameters as for (function)
+)
+
+Ex:
+
+ (user-function PrintFunc
+    (in-module (Gtk))
+    (parameter in (type-and-name gpointer func_data))
+    (parameter in (type-and-name gchar* str)))
+
+===
+
+(typedef new-name
+  (in-module module)
+  (c-name c-full-name)
+  (orig-type alias-of-orig-type))
+
+Ex:
+
+ (typedef Type
+   (in-module (Gtk))
+   (c-name GtkType)
+   (orig-type guint))
+
+
+
+
+  
+   
+

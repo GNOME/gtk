@@ -1,0 +1,1475 @@
+<!-- ##### SECTION Title ##### -->
+GtkTreeView
+
+<!-- ##### SECTION Short_Description ##### -->
+A widget for displaying both trees and lists
+
+<!-- ##### SECTION Long_Description ##### -->
+<para>
+Widget that displays any object that implements the <link
+linkend="GtkTreeModel">GtkTreeModel</link> interface.
+</para>
+
+<para>
+Please refer to the <link linkend="TreeWidget">tree widget conceptual 
+overview</link> for an overview of all the objects and data types related 
+to the tree widget and how they work together.
+</para>
+
+<para>
+Several different coordinate systems are exposed in the GtkTreeView API.
+These are:
+
+<inlinegraphic fileref="tree-view-coordinates.png" format="PNG"></inlinegraphic>
+
+  <simplelist>
+    <member>Widget coordinates -- coordinates relative to the widget 
+    (usually <literal>widget-&gt;window</literal>.</member>
+    <member>Bin window coordinates -- coordinates relative to the window 
+    that GtkTreeView renders to.</member>
+    <member>Tree coordinates -- coordinates relative to the entire scrollable 
+    area of GtkTreeView.  These coordinates start at (0, 0) for row 0 of the 
+    tree.</member>
+  </simplelist>
+</para>
+
+<para>
+Several functions are available for converting between the different
+coordinate systems.  The most common translations are between widget and bin 
+window coordinates and between bin window and tree coordinates.  For the 
+former you can use gtk_tree_view_convert_widget_to_bin_window_coords()
+(and vice versa), for the latter gtk_tree_view_convert_bin_window_to_tree_coords() 
+(and vice versa).
+</para>
+
+<refsect2 id="GtkTreeView-BUILDER-UI">
+<title>GtkTreeView as GtkBuildable</title>
+<para>
+The GtkTreeView implementation of the GtkBuildable interface accepts
+GtkTreeViewColumn objects as &lt;child&gt; elements in UI definitions.
+</para>
+<example>
+<title>A UI definition fragment with GtkTreeView</title>
+<programlisting><![CDATA[
+<object class="GtkTreeView">
+  <property name="model">liststore1</property>
+  <child>
+    <object class="GtkTreeViewColumn">
+      <property name="title">Test</property>
+      <child>
+        <object class="GtkCellRendererText"/>
+        <attributes>"
+          <attribute name="text">1</attribute>
+        </attributes>
+      </child>
+    </object>
+  </child>
+</object>
+]]></programlisting>
+</example>
+</refsect2>
+
+<!-- ##### SECTION See_Also ##### -->
+<para>
+#GtkTreeViewColumn, #GtkTreeSelection, #GtkTreeDnd, #GtkTreeMode, #GtkTreeSortable, #GtkTreeModelSort, #GtkListStore, #GtkTreeStore, #GtkCellRenderer, #GtkCellEditable, #GtkCellRendererPixbuf, #GtkCellRendererText, #GtkCellRendererToggle
+</para>
+
+<!-- ##### SECTION Stability_Level ##### -->
+
+
+<!-- ##### STRUCT GtkTreeView ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### SIGNAL GtkTreeView::columns-changed ##### -->
+<para>
+
+</para>
+
+@tree_view: the object which received the signal.
+
+<!-- ##### SIGNAL GtkTreeView::cursor-changed ##### -->
+<para>
+
+</para>
+
+@tree_view: the object which received the signal.
+
+<!-- ##### SIGNAL GtkTreeView::expand-collapse-cursor-row ##### -->
+<para>
+
+</para>
+
+@tree_view: the object which received the signal.
+@arg1: 
+@arg2: 
+@arg3: 
+@Returns: 
+
+<!-- ##### SIGNAL GtkTreeView::move-cursor ##### -->
+<para>
+
+</para>
+
+@tree_view: the object which received the signal.
+@arg1: 
+@arg2: 
+@Returns: 
+
+<!-- ##### SIGNAL GtkTreeView::row-activated ##### -->
+<para>
+
+</para>
+
+@tree_view: the object which received the signal.
+@arg1: 
+@arg2: 
+
+<!-- ##### SIGNAL GtkTreeView::row-collapsed ##### -->
+<para>
+
+</para>
+
+@tree_view: the object which received the signal.
+@arg1: 
+@arg2: 
+
+<!-- ##### SIGNAL GtkTreeView::row-expanded ##### -->
+<para>
+
+</para>
+
+@tree_view: the object which received the signal.
+@arg1: 
+@arg2: 
+
+<!-- ##### SIGNAL GtkTreeView::select-all ##### -->
+<para>
+
+</para>
+
+@tree_view: the object which received the signal.
+@Returns: 
+
+<!-- ##### SIGNAL GtkTreeView::select-cursor-parent ##### -->
+<para>
+
+</para>
+
+@tree_view: the object which received the signal.
+@Returns: 
+
+<!-- ##### SIGNAL GtkTreeView::select-cursor-row ##### -->
+<para>
+
+</para>
+
+@tree_view: the object which received the signal.
+@arg1: 
+@Returns: 
+
+<!-- ##### SIGNAL GtkTreeView::set-scroll-adjustments ##### -->
+<para>
+
+</para>
+
+@tree_view: the object which received the signal.
+@arg1: 
+@arg2: 
+
+<!-- ##### SIGNAL GtkTreeView::start-interactive-search ##### -->
+<para>
+
+</para>
+
+@tree_view: the object which received the signal.
+@Returns: 
+
+<!-- ##### SIGNAL GtkTreeView::test-collapse-row ##### -->
+<para>
+
+</para>
+
+@tree_view: the object which received the signal.
+@arg1: 
+@arg2: 
+@Returns: 
+
+<!-- ##### SIGNAL GtkTreeView::test-expand-row ##### -->
+<para>
+
+</para>
+
+@tree_view: the object which received the signal.
+@arg1: 
+@arg2: 
+@Returns: 
+
+<!-- ##### SIGNAL GtkTreeView::toggle-cursor-row ##### -->
+<para>
+
+</para>
+
+@tree_view: the object which received the signal.
+@Returns: 
+
+<!-- ##### SIGNAL GtkTreeView::unselect-all ##### -->
+<para>
+
+</para>
+
+@tree_view: the object which received the signal.
+@Returns: 
+
+<!-- ##### ARG GtkTreeView:enable-grid-lines ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkTreeView:enable-search ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkTreeView:enable-tree-lines ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkTreeView:expander-column ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkTreeView:fixed-height-mode ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkTreeView:hadjustment ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkTreeView:headers-clickable ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkTreeView:headers-visible ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkTreeView:hover-expand ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkTreeView:hover-selection ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkTreeView:level-indentation ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkTreeView:model ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkTreeView:reorderable ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkTreeView:rubber-banding ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkTreeView:rules-hint ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkTreeView:search-column ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkTreeView:show-expanders ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkTreeView:tooltip-column ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkTreeView:vadjustment ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkTreeView:allow-rules ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkTreeView:even-row-color ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkTreeView:expander-size ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkTreeView:grid-line-pattern ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkTreeView:grid-line-width ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkTreeView:horizontal-separator ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkTreeView:indent-expanders ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkTreeView:odd-row-color ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkTreeView:row-ending-details ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkTreeView:tree-line-pattern ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkTreeView:tree-line-width ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkTreeView:vertical-separator ##### -->
+<para>
+
+</para>
+
+<!-- ##### ENUM GtkTreeViewDropPosition ##### -->
+<para>
+An enum for determining where a dropped row goes.
+</para>
+
+@GTK_TREE_VIEW_DROP_BEFORE: dropped row is inserted before
+@GTK_TREE_VIEW_DROP_AFTER: dropped row is inserted after
+@GTK_TREE_VIEW_DROP_INTO_OR_BEFORE: dropped row becomes a child or is inserted before
+@GTK_TREE_VIEW_DROP_INTO_OR_AFTER: dropped row becomes a child or is inserted after
+
+<!-- ##### STRUCT GtkTreeViewPrivate ##### -->
+<para>
+A private struct for internal use only.  The definition of this
+structure is not publically available.
+</para>
+
+
+<!-- ##### USER_FUNCTION GtkTreeViewColumnDropFunc ##### -->
+<para>
+Function type for determining whether @column can be dropped in a
+particular spot (as determined by @prev_column and @next_column).  In
+left to right locales, @prev_column is on the left of the potential drop
+spot, and @next_column is on the right.  In right to left mode, this is
+reversed.  This function should return %TRUE if the spot is a valid drop
+spot.  Please note that returning %TRUE does not actually indicate that
+the column drop was made, but is meant only to indicate a possible drop
+spot to the user.
+</para>
+
+@tree_view: A #GtkTreeView
+@column: The #GtkTreeViewColumn being dragged
+@prev_column: A #GtkTreeViewColumn on one side of @column
+@next_column: A #GtkTreeViewColumn on the other side of @column
+@data: user data
+@Returns: %TRUE, if #column can be dropped in this spot
+
+
+<!-- ##### USER_FUNCTION GtkTreeViewMappingFunc ##### -->
+<para>
+Function used for #gtk_tree_view_map_expanded_rows.
+</para>
+
+@tree_view: A #GtkTreeView
+@path: The path that's expanded
+@user_data: user data
+
+
+<!-- ##### USER_FUNCTION GtkTreeViewSearchEqualFunc ##### -->
+<para>
+A function used for checking whether a row in @model matches
+a search key string entered by the user. Note the return value
+is reversed from what you would normally expect, though it
+has some similarity to strcmp() returning 0 for equal strings.
+</para>
+
+@model: the #GtkTreeModel being searched
+@column: the search column set by gtk_tree_view_set_search_column()
+@key: the key string to compare with
+@iter: a #GtkTreeIter pointing the row of @model that should be compared
+  with @key.
+@search_data: user data from gtk_tree_view_set_search_equal_func()
+@Returns: %FALSE if the row matches, %TRUE otherwise.
+
+
+<!-- ##### FUNCTION gtk_tree_view_new ##### -->
+<para>
+
+</para>
+
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_tree_view_get_level_indentation ##### -->
+<para>
+
+</para>
+
+@tree_view: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_tree_view_get_show_expanders ##### -->
+<para>
+
+</para>
+
+@tree_view: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_tree_view_set_level_indentation ##### -->
+<para>
+
+</para>
+
+@tree_view: 
+@indentation: 
+
+
+<!-- ##### FUNCTION gtk_tree_view_set_show_expanders ##### -->
+<para>
+
+</para>
+
+@tree_view: 
+@enabled: 
+
+
+<!-- ##### FUNCTION gtk_tree_view_new_with_model ##### -->
+<para>
+
+</para>
+
+@model: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_tree_view_get_model ##### -->
+<para>
+
+</para>
+
+@tree_view: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_tree_view_set_model ##### -->
+<para>
+
+</para>
+
+@tree_view: 
+@model: 
+
+
+<!-- ##### FUNCTION gtk_tree_view_get_selection ##### -->
+<para>
+
+</para>
+
+@tree_view: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_tree_view_get_hadjustment ##### -->
+<para>
+
+</para>
+
+@tree_view: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_tree_view_set_hadjustment ##### -->
+<para>
+
+</para>
+
+@tree_view: 
+@adjustment: 
+
+
+<!-- ##### FUNCTION gtk_tree_view_get_vadjustment ##### -->
+<para>
+
+</para>
+
+@tree_view: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_tree_view_set_vadjustment ##### -->
+<para>
+
+</para>
+
+@tree_view: 
+@adjustment: 
+
+
+<!-- ##### FUNCTION gtk_tree_view_get_headers_visible ##### -->
+<para>
+
+</para>
+
+@tree_view: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_tree_view_set_headers_visible ##### -->
+<para>
+
+</para>
+
+@tree_view: 
+@headers_visible: 
+
+
+<!-- ##### FUNCTION gtk_tree_view_columns_autosize ##### -->
+<para>
+
+</para>
+
+@tree_view: 
+
+
+<!-- ##### FUNCTION gtk_tree_view_get_headers_clickable ##### -->
+<para>
+
+</para>
+
+@tree_view: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_tree_view_set_headers_clickable ##### -->
+<para>
+
+</para>
+
+@tree_view: 
+@setting: 
+
+
+<!-- ##### FUNCTION gtk_tree_view_set_rules_hint ##### -->
+<para>
+
+</para>
+
+@tree_view: 
+@setting: 
+
+
+<!-- ##### FUNCTION gtk_tree_view_get_rules_hint ##### -->
+<para>
+
+</para>
+
+@tree_view: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_tree_view_append_column ##### -->
+<para>
+
+</para>
+
+@tree_view: 
+@column: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_tree_view_remove_column ##### -->
+<para>
+
+</para>
+
+@tree_view: 
+@column: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_tree_view_insert_column ##### -->
+<para>
+
+</para>
+
+@tree_view: 
+@column: 
+@position: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_tree_view_insert_column_with_attributes ##### -->
+<para>
+
+</para>
+
+@tree_view: 
+@position: 
+@title: 
+@cell: 
+@Varargs: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_tree_view_insert_column_with_data_func ##### -->
+<para>
+
+</para>
+
+@tree_view: 
+@position: 
+@title: 
+@cell: 
+@func: 
+@data: 
+@dnotify: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_tree_view_get_column ##### -->
+<para>
+
+</para>
+
+@tree_view: 
+@n: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_tree_view_get_columns ##### -->
+<para>
+
+</para>
+
+@tree_view: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_tree_view_move_column_after ##### -->
+<para>
+
+</para>
+
+@tree_view: 
+@column: 
+@base_column: 
+
+
+<!-- ##### FUNCTION gtk_tree_view_set_expander_column ##### -->
+<para>
+
+</para>
+
+@tree_view: 
+@column: 
+
+
+<!-- ##### FUNCTION gtk_tree_view_get_expander_column ##### -->
+<para>
+
+</para>
+
+@tree_view: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_tree_view_set_column_drag_function ##### -->
+<para>
+
+</para>
+
+@tree_view: 
+@func: 
+@user_data: 
+@destroy: 
+
+
+<!-- ##### FUNCTION gtk_tree_view_scroll_to_point ##### -->
+<para>
+
+</para>
+
+@tree_view: 
+@tree_x: 
+@tree_y: 
+
+
+<!-- ##### FUNCTION gtk_tree_view_scroll_to_cell ##### -->
+<para>
+
+</para>
+
+@tree_view: 
+@path: 
+@column: 
+@use_align: 
+@row_align: 
+@col_align: 
+
+
+<!-- ##### FUNCTION gtk_tree_view_set_cursor ##### -->
+<para>
+
+</para>
+
+@tree_view: 
+@path: 
+@focus_column: 
+@start_editing: 
+
+
+<!-- ##### FUNCTION gtk_tree_view_set_cursor_on_cell ##### -->
+<para>
+
+</para>
+
+@tree_view: 
+@path: 
+@focus_column: 
+@focus_cell: 
+@start_editing: 
+
+
+<!-- ##### FUNCTION gtk_tree_view_get_cursor ##### -->
+<para>
+
+</para>
+
+@tree_view: 
+@path: 
+@focus_column: 
+
+
+<!-- ##### FUNCTION gtk_tree_view_row_activated ##### -->
+<para>
+
+</para>
+
+@tree_view: 
+@path: 
+@column: 
+
+
+<!-- ##### FUNCTION gtk_tree_view_expand_all ##### -->
+<para>
+
+</para>
+
+@tree_view: 
+
+
+<!-- ##### FUNCTION gtk_tree_view_collapse_all ##### -->
+<para>
+
+</para>
+
+@tree_view: 
+
+
+<!-- ##### FUNCTION gtk_tree_view_expand_to_path ##### -->
+<para>
+
+</para>
+
+@tree_view: 
+@path: 
+
+
+<!-- ##### FUNCTION gtk_tree_view_expand_row ##### -->
+<para>
+
+</para>
+
+@tree_view: 
+@path: 
+@open_all: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_tree_view_collapse_row ##### -->
+<para>
+
+</para>
+
+@tree_view: 
+@path: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_tree_view_map_expanded_rows ##### -->
+<para>
+
+</para>
+
+@tree_view: 
+@func: 
+@data: 
+
+
+<!-- ##### FUNCTION gtk_tree_view_row_expanded ##### -->
+<para>
+
+</para>
+
+@tree_view: 
+@path: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_tree_view_set_reorderable ##### -->
+<para>
+
+</para>
+
+@tree_view: 
+@reorderable: 
+
+
+<!-- ##### FUNCTION gtk_tree_view_get_reorderable ##### -->
+<para>
+
+</para>
+
+@tree_view: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_tree_view_get_path_at_pos ##### -->
+<para>
+
+</para>
+
+@tree_view: 
+@x: 
+@y: 
+@path: 
+@column: 
+@cell_x: 
+@cell_y: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_tree_view_get_cell_area ##### -->
+<para>
+
+</para>
+
+@tree_view: 
+@path: 
+@column: 
+@rect: 
+
+
+<!-- ##### FUNCTION gtk_tree_view_get_background_area ##### -->
+<para>
+
+</para>
+
+@tree_view: 
+@path: 
+@column: 
+@rect: 
+
+
+<!-- ##### FUNCTION gtk_tree_view_get_visible_rect ##### -->
+<para>
+
+</para>
+
+@tree_view: 
+@visible_rect: 
+
+
+<!-- ##### FUNCTION gtk_tree_view_get_visible_range ##### -->
+<para>
+
+</para>
+
+@tree_view: 
+@start_path: 
+@end_path: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_tree_view_get_bin_window ##### -->
+<para>
+
+</para>
+
+@tree_view: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_tree_view_widget_to_tree_coords ##### -->
+<para>
+
+</para>
+
+@tree_view: 
+@wx: 
+@wy: 
+@tx: 
+@ty: 
+
+
+<!-- ##### FUNCTION gtk_tree_view_tree_to_widget_coords ##### -->
+<para>
+
+</para>
+
+@tree_view: 
+@tx: 
+@ty: 
+@wx: 
+@wy: 
+
+
+<!-- ##### FUNCTION gtk_tree_view_convert_bin_window_to_tree_coords ##### -->
+<para>
+
+</para>
+
+@tree_view: 
+@bx: 
+@by: 
+@tx: 
+@ty: 
+
+
+<!-- ##### FUNCTION gtk_tree_view_convert_bin_window_to_widget_coords ##### -->
+<para>
+
+</para>
+
+@tree_view: 
+@bx: 
+@by: 
+@wx: 
+@wy: 
+
+
+<!-- ##### FUNCTION gtk_tree_view_convert_tree_to_bin_window_coords ##### -->
+<para>
+
+</para>
+
+@tree_view: 
+@tx: 
+@ty: 
+@bx: 
+@by: 
+
+
+<!-- ##### FUNCTION gtk_tree_view_convert_tree_to_widget_coords ##### -->
+<para>
+
+</para>
+
+@tree_view: 
+@tx: 
+@ty: 
+@wx: 
+@wy: 
+
+
+<!-- ##### FUNCTION gtk_tree_view_convert_widget_to_bin_window_coords ##### -->
+<para>
+
+</para>
+
+@tree_view: 
+@wx: 
+@wy: 
+@bx: 
+@by: 
+
+
+<!-- ##### FUNCTION gtk_tree_view_convert_widget_to_tree_coords ##### -->
+<para>
+
+</para>
+
+@tree_view: 
+@wx: 
+@wy: 
+@tx: 
+@ty: 
+
+
+<!-- ##### FUNCTION gtk_tree_view_enable_model_drag_dest ##### -->
+<para>
+
+</para>
+
+@tree_view: 
+@targets: 
+@n_targets: 
+@actions: 
+
+
+<!-- ##### FUNCTION gtk_tree_view_enable_model_drag_source ##### -->
+<para>
+
+</para>
+
+@tree_view: 
+@start_button_mask: 
+@targets: 
+@n_targets: 
+@actions: 
+
+
+<!-- ##### FUNCTION gtk_tree_view_unset_rows_drag_source ##### -->
+<para>
+
+</para>
+
+@tree_view: 
+
+
+<!-- ##### FUNCTION gtk_tree_view_unset_rows_drag_dest ##### -->
+<para>
+
+</para>
+
+@tree_view: 
+
+
+<!-- ##### FUNCTION gtk_tree_view_set_drag_dest_row ##### -->
+<para>
+
+</para>
+
+@tree_view: 
+@path: 
+@pos: 
+
+
+<!-- ##### FUNCTION gtk_tree_view_get_drag_dest_row ##### -->
+<para>
+
+</para>
+
+@tree_view: 
+@path: 
+@pos: 
+
+
+<!-- ##### FUNCTION gtk_tree_view_get_dest_row_at_pos ##### -->
+<para>
+
+</para>
+
+@tree_view: 
+@drag_x: 
+@drag_y: 
+@path: 
+@pos: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_tree_view_create_row_drag_icon ##### -->
+<para>
+
+</para>
+
+@tree_view: 
+@path: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_tree_view_set_enable_search ##### -->
+<para>
+
+</para>
+
+@tree_view: 
+@enable_search: 
+
+
+<!-- ##### FUNCTION gtk_tree_view_get_enable_search ##### -->
+<para>
+
+</para>
+
+@tree_view: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_tree_view_get_search_column ##### -->
+<para>
+
+</para>
+
+@tree_view: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_tree_view_set_search_column ##### -->
+<para>
+
+</para>
+
+@tree_view: 
+@column: 
+
+
+<!-- ##### FUNCTION gtk_tree_view_get_search_equal_func ##### -->
+<para>
+
+</para>
+
+@tree_view: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_tree_view_set_search_equal_func ##### -->
+<para>
+
+</para>
+
+@tree_view: 
+@search_equal_func: 
+@search_user_data: 
+@search_destroy: 
+
+
+<!-- ##### FUNCTION gtk_tree_view_get_search_entry ##### -->
+<para>
+
+</para>
+
+@tree_view: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_tree_view_set_search_entry ##### -->
+<para>
+
+</para>
+
+@tree_view: 
+@entry: 
+
+
+<!-- ##### USER_FUNCTION GtkTreeViewSearchPositionFunc ##### -->
+<para>
+
+</para>
+
+@tree_view: 
+@search_dialog: 
+@user_data: 
+
+
+<!-- ##### FUNCTION gtk_tree_view_get_search_position_func ##### -->
+<para>
+
+</para>
+
+@tree_view: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_tree_view_set_search_position_func ##### -->
+<para>
+
+</para>
+
+@tree_view: 
+@func: 
+@data: 
+@destroy: 
+
+
+<!-- ##### FUNCTION gtk_tree_view_get_fixed_height_mode ##### -->
+<para>
+
+</para>
+
+@tree_view: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_tree_view_set_fixed_height_mode ##### -->
+<para>
+
+</para>
+
+@tree_view: 
+@enable: 
+
+
+<!-- ##### FUNCTION gtk_tree_view_get_hover_selection ##### -->
+<para>
+
+</para>
+
+@tree_view: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_tree_view_set_hover_selection ##### -->
+<para>
+
+</para>
+
+@tree_view: 
+@hover: 
+
+
+<!-- ##### FUNCTION gtk_tree_view_get_hover_expand ##### -->
+<para>
+
+</para>
+
+@tree_view: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_tree_view_set_hover_expand ##### -->
+<para>
+
+</para>
+
+@tree_view: 
+@expand: 
+
+
+<!-- ##### USER_FUNCTION GtkTreeDestroyCountFunc ##### -->
+<para>
+
+</para>
+
+@tree_view: 
+@path: 
+@children: 
+@user_data: 
+
+
+<!-- ##### FUNCTION gtk_tree_view_set_destroy_count_func ##### -->
+<para>
+
+</para>
+
+@tree_view: 
+@func: 
+@data: 
+@destroy: 
+
+
+<!-- ##### USER_FUNCTION GtkTreeViewRowSeparatorFunc ##### -->
+<para>
+Function type for determining whether the row pointed to by @iter should
+be rendered as a separator. A common way to implement this is to have a
+boolean column in the model, whose values the #GtkTreeViewRowSeparatorFunc
+returns.
+</para>
+
+@model: the #GtkTreeModel
+@iter: a #GtkTreeIter pointing at a row in @model
+@data: user data
+@Returns: %TRUE if the row is a separator
+
+
+<!-- ##### FUNCTION gtk_tree_view_get_row_separator_func ##### -->
+<para>
+
+</para>
+
+@tree_view: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_tree_view_set_row_separator_func ##### -->
+<para>
+
+</para>
+
+@tree_view: 
+@func: 
+@data: 
+@destroy: 
+
+
+<!-- ##### FUNCTION gtk_tree_view_get_rubber_banding ##### -->
+<para>
+
+</para>
+
+@tree_view: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_tree_view_set_rubber_banding ##### -->
+<para>
+
+</para>
+
+@tree_view: 
+@enable: 
+
+
+<!-- ##### FUNCTION gtk_tree_view_is_rubber_banding_active ##### -->
+<para>
+
+</para>
+
+@tree_view: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_tree_view_get_enable_tree_lines ##### -->
+<para>
+
+</para>
+
+@tree_view: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_tree_view_set_enable_tree_lines ##### -->
+<para>
+
+</para>
+
+@tree_view: 
+@enabled: 
+
+
+<!-- ##### ENUM GtkTreeViewGridLines ##### -->
+<para>
+
+</para>
+
+@GTK_TREE_VIEW_GRID_LINES_NONE: 
+@GTK_TREE_VIEW_GRID_LINES_HORIZONTAL: 
+@GTK_TREE_VIEW_GRID_LINES_VERTICAL: 
+@GTK_TREE_VIEW_GRID_LINES_BOTH: 
+
+<!-- ##### FUNCTION gtk_tree_view_get_grid_lines ##### -->
+<para>
+
+</para>
+
+@tree_view: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_tree_view_set_grid_lines ##### -->
+<para>
+
+</para>
+
+@tree_view: 
+@grid_lines: 
+
+
+<!-- ##### FUNCTION gtk_tree_view_set_tooltip_row ##### -->
+<para>
+
+</para>
+
+@tree_view: 
+@tooltip: 
+@path: 
+
+
+<!-- ##### FUNCTION gtk_tree_view_set_tooltip_cell ##### -->
+<para>
+
+</para>
+
+@tree_view: 
+@tooltip: 
+@path: 
+@column: 
+@cell: 
+
+
+<!-- ##### FUNCTION gtk_tree_view_get_tooltip_context ##### -->
+<para>
+
+</para>
+
+@tree_view: 
+@x: 
+@y: 
+@keyboard_tip: 
+@model: 
+@path: 
+@iter: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_tree_view_get_tooltip_column ##### -->
+<para>
+
+</para>
+
+@tree_view: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_tree_view_set_tooltip_column ##### -->
+<para>
+
+</para>
+
+@tree_view: 
+@column: 
+
+

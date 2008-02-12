@@ -1,0 +1,66 @@
+<refentry id="gtk-compiling" revision="4 Feb 2001">
+<refmeta>
+<refentrytitle>Compiling GTK+ Applications</refentrytitle>
+<manvolnum>3</manvolnum>
+<refmiscinfo>GTK Library</refmiscinfo>
+</refmeta>
+
+<refnamediv>
+<refname>Compiling GTK+ Applications</refname>
+<refpurpose>
+How to compile your GTK+ application
+</refpurpose>
+</refnamediv>
+
+<refsect1>
+<title>Compiling GTK+ Applications on UNIX</title>
+
+<para>
+To compile a GTK+ application, you need to tell the compiler where to 
+find the GTK+ header files and libraries. This is done with the
+<literal>pkg-config</literal> utility.
+</para>
+<para>
+The following interactive shell session demonstrates how
+<literal>pkg-config</literal> is used (the actual output on 
+your system may be different):
+<programlisting>
+$ pkg-config --cflags gtk+-2.0
+ -I/usr/include/gtk-2.0 -I/usr/lib/gtk-2.0/include -I/usr/include/glib-2.0 -I/usr/lib/glib-2.0/include -I/usr/include/pango-1.0 -I/usr/X11R6/include -I/usr/include/freetype2 -I/usr/include/atk-1.0  
+$ pkg-config --libs gtk+-2.0
+ -L/usr/lib -L/usr/X11R6/lib -lgtk-x11-2.0 -lgdk-x11-2.0 -lXi -lgdk_pixbuf-2.0 -lm -lpangox -lpangoxft -lXft -lXrender -lXext -lX11 -lfreetype -lpango -latk -lgobject-2.0 -lgmodule-2.0 -ldl -lglib-2.0  
+</programlisting>
+</para>
+<para>
+The simplest way to compile a program is to use the "backticks"
+feature of the shell. If you enclose a command in backticks
+(<emphasis>not single quotes</emphasis>), then its output will be
+substituted into the command line before execution. So to compile 
+a GTK+ Hello, World, you would type the following:
+<programlisting>
+$ cc `pkg-config --cflags --libs gtk+-2.0` hello.c -o hello
+</programlisting>
+</para>
+
+<para>
+If you want to make sure that your program doesn't use any deprecated 
+functions, you can define the preprocessor symbol GTK_DISABLE_DEPRECATED
+by using the command line option <literal>-DGTK_DISABLE_DEPRECATED=1</literal>.
+There are similar symbols GDK_DISABLE_DEPRECATED, 
+GDK_PIXBUF_DISABLE_DEPRECATED and G_DISABLE_DEPRECATED for GDK, GdkPixbuf and
+GLib. 
+</para>
+
+<para>
+If you want to make sure that your program doesn't use any functions which 
+may be problematic in a multihead setting, you can define the preprocessor
+symbol GDK_MULTIHEAD_SAFE by using the command line option 
+<literal>-DGTK_MULTIHEAD_SAFE=1</literal>.
+</para>
+
+</refsect1>
+</refentry>
+
+
+
+

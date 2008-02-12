@@ -1,0 +1,803 @@
+<!-- ##### SECTION Title ##### -->
+X Window System Interaction
+
+<!-- ##### SECTION Short_Description ##### -->
+X backend-specific functions
+
+<!-- ##### SECTION Long_Description ##### -->
+<para>
+
+</para>
+
+<!-- ##### SECTION See_Also ##### -->
+<para>
+
+</para>
+
+<!-- ##### SECTION Stability_Level ##### -->
+
+
+<!-- ##### MACRO GDK_ROOT_WINDOW ##### -->
+<para>
+Obtains the Xlib window id of the root window of the current screen. 
+</para>
+
+
+
+<!-- ##### MACRO GDK_ROOT_PARENT ##### -->
+<para>
+Obtains the Xlib window id of the root window of the default screen.
+</para>
+
+
+
+<!-- ##### MACRO GDK_DISPLAY ##### -->
+<para>
+The current display.
+</para>
+
+@Returns: an Xlib <type>Display*</type>.
+
+
+<!-- ##### MACRO GDK_WINDOW_XDISPLAY ##### -->
+<para>
+Returns the display of a #GdkWindow.
+</para>
+
+@win: a #GdkWindow.
+@Returns: an Xlib <type>Display*</type>.
+
+
+<!-- ##### MACRO GDK_WINDOW_XID ##### -->
+<para>
+Returns the X window belonging to a #GdkWindow.
+</para>
+
+@win: a #GdkWindow.
+@Returns: the Xlib <type>Window</type> of @win.
+
+
+<!-- ##### MACRO GDK_PIXMAP_XDISPLAY ##### -->
+<para>
+Returns the display of a #GdkPixmap.
+</para>
+
+@pix: a #GdkPixmap.
+@Returns: an Xlib <type>Display*</type>.
+
+
+<!-- ##### MACRO GDK_PIXMAP_XID ##### -->
+<para>
+Returns the X pixmap belonging to a #GdkPixmap.
+</para>
+
+@pix: a #GdkPixmap.
+@Returns: the Xlib <type>XPixmap</type> of @win.
+
+
+<!-- ##### MACRO GDK_DISPLAY_XDISPLAY ##### -->
+<para>
+Returns the display of a #GdkDisplay.
+</para>
+
+@display: a #GdkDisplay.
+
+
+<!-- ##### MACRO GDK_DRAWABLE_XDISPLAY ##### -->
+<para>
+Returns the display of a #GdkDrawable.
+</para>
+
+@win: a #GdkDrawable.
+@Returns: an Xlib <type>Display*</type>.
+
+
+<!-- ##### MACRO GDK_DRAWABLE_XID ##### -->
+<para>
+Returns the X resource (window or pixmap) belonging to a #GdkDrawable.
+</para>
+
+@win: a #GdkDrawable.
+@Returns: the ID of @win's X resource.
+
+
+<!-- ##### MACRO GDK_IMAGE_XDISPLAY ##### -->
+<para>
+Returns the display of a #GdkImage.
+</para>
+
+@image: a #GdkImage.
+@Returns: an Xlib <type>Display*</type>.
+
+
+<!-- ##### MACRO GDK_IMAGE_XIMAGE ##### -->
+<para>
+Returns the X image belonging to a #GdkImage.
+</para>
+
+@image: a #GdkImage.
+@Returns: an <type>XImage*</type>.
+
+
+<!-- ##### MACRO GDK_GC_XDISPLAY ##### -->
+<para>
+Returns the display of a #GdkGC.
+</para>
+
+@gc: a #GdkGC.
+@Returns: an Xlib <type>Display*</type>.
+
+
+<!-- ##### MACRO GDK_COLORMAP_XDISPLAY ##### -->
+<para>
+Returns the display of a #GdkColormap.
+</para>
+
+@cmap: a #GdkColormap.
+@Returns: an Xlib <type>Display*</type>.
+
+
+<!-- ##### MACRO GDK_COLORMAP_XCOLORMAP ##### -->
+<para>
+Returns the X colormap belonging to a #GdkColormap.
+</para>
+
+@cmap: a #GdkColormap.
+@Returns: an Xlib <type>Colormap</type>.
+
+
+<!-- ##### MACRO GDK_SCREEN_XDISPLAY ##### -->
+<para>
+Returns the display of a #GdkScreen.
+</para>
+
+@screen: a #GdkScreen.
+@Returns: an Xlib <type>Display*</type>.
+
+
+<!-- ##### MACRO GDK_SCREEN_XNUMBER ##### -->
+<para>
+Returns the index of a #GdkScreen.
+</para>
+
+@screen: a #GdkScreen
+@Returns: the position of @screen among the screens of
+  its display.
+
+
+<!-- ##### MACRO GDK_SCREEN_XSCREEN ##### -->
+<para>
+Returns the screen of a #GdkScreen.
+</para>
+
+@screen: a #GdkScreen
+@Returns: an Xlib <type>Screen*</type>.
+
+
+<!-- ##### MACRO GDK_VISUAL_XVISUAL ##### -->
+<para>
+Returns the X visual belonging to a #GdkVisual.
+</para>
+
+@vis: a #GdkVisual.
+@Returns: an Xlib <type>Visual*</type>.
+
+
+<!-- ##### MACRO GDK_FONT_XDISPLAY ##### -->
+<para>
+Returns the display of a #GdkFont.
+</para>
+
+@font: a #GdkFont.
+@Returns: an Xlib <type>Display*</type>.
+
+
+<!-- ##### MACRO GDK_FONT_XFONT ##### -->
+<para>
+Returns the X font belonging to a #GdkFont.
+</para>
+
+@font: a #GdkFont.
+@Returns: an Xlib <type>XFontStruct*</type> or an <type>XFontSet</type>.
+
+
+<!-- ##### MACRO GDK_CURSOR_XCURSOR ##### -->
+<para>
+Returns the X cursor belonging to a #GdkCursor.
+</para>
+
+@cursor: a #GdkCursor.
+@Returns: an Xlib <type>Cursor</type>.
+
+
+<!-- ##### MACRO GDK_CURSOR_XDISPLAY ##### -->
+<para>
+Returns the display of a #GdkCursor.
+</para>
+
+@cursor: a #GdkCursor.
+@Returns: an Xlib <type>Display*</type>.
+
+
+<!-- ##### MACRO GDK_GC_XGC ##### -->
+<para>
+Returns the X GC of a #GdkGC.
+</para>
+
+@gc: a #GdkGC.
+@Returns: an Xlib <type>GC</type>.
+
+
+<!-- ##### MACRO GDK_GC_GET_XGC ##### -->
+<para>
+Returns the X GC of a #GdkGC.
+</para>
+
+@gc: a #GdkGC.
+@Returns: an Xlib <type>GC</type>.
+
+
+<!-- ##### MACRO GDK_WINDOW_XWINDOW ##### -->
+<para>
+Another name for GDK_DRAWABLE_XID(). 
+</para>
+
+
+
+<!-- ##### FUNCTION gdkx_visual_get ##### -->
+<para>
+
+</para>
+
+@xvisualid: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdkx_colormap_get ##### -->
+<para>
+</para>
+
+@xcolormap: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_pixmap_foreign_new ##### -->
+<para>
+
+</para>
+
+@anid: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_pixmap_foreign_new_for_display ##### -->
+<para>
+
+</para>
+
+@display: 
+@anid: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_pixmap_foreign_new_for_screen ##### -->
+<para>
+
+</para>
+
+@screen: 
+@anid: 
+@width: 
+@height: 
+@depth: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_window_foreign_new ##### -->
+<para>
+
+</para>
+
+@anid: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_window_foreign_new_for_display ##### -->
+<para>
+
+</para>
+
+@display: 
+@anid: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_xid_table_lookup ##### -->
+<para>
+
+</para>
+
+@xid: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_xid_table_lookup_for_display ##### -->
+<para>
+
+</para>
+
+@display: 
+@xid: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_window_lookup ##### -->
+<para>
+</para>
+
+@anid: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_window_lookup_for_display ##### -->
+<para>
+
+</para>
+
+@display: 
+@anid: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_pixmap_lookup ##### -->
+<para>
+</para>
+
+@anid: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_pixmap_lookup_for_display ##### -->
+<para>
+
+</para>
+
+@display: 
+@anid: 
+@Returns: 
+
+
+<!-- ##### MACRO gdk_font_lookup ##### -->
+<para>
+Obtains the #GdkFont for the given Xlib font ID, or %NULL if no #GdkFont has
+been created for @xid.
+</para>
+
+@xid: an Xlib font ID
+
+
+<!-- ##### MACRO gdk_font_lookup_for_display ##### -->
+<para>
+Obtains the #GdkFont for the given Xlib font ID on @display, or %NULL if no
+#GdkFont has been created for @xid.
+</para>
+
+@display: a #GdkDisplay
+@xid: an Xlib font ID
+Since: 2.2
+
+
+<!-- ##### FUNCTION gdk_x11_lookup_xdisplay ##### -->
+<para>
+
+</para>
+
+@xdisplay: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_x11_get_server_time ##### -->
+<para>
+
+</para>
+
+@window: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_net_wm_supports ##### -->
+<para>
+
+</para>
+
+@property: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_x11_screen_supports_net_wm_hint ##### -->
+<para>
+
+</para>
+
+@screen: 
+@property: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_x11_screen_get_window_manager_name ##### -->
+<para>
+
+</para>
+
+@screen: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_x11_screen_lookup_visual ##### -->
+<para>
+
+</para>
+
+@screen: 
+@xvisualid: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_x11_window_set_user_time ##### -->
+<para>
+
+</para>
+
+@window: 
+@timestamp: 
+
+
+<!-- ##### FUNCTION gdk_x11_window_move_to_current_desktop ##### -->
+<para>
+
+</para>
+
+@window: 
+
+
+<!-- ##### FUNCTION gdk_x11_display_get_user_time ##### -->
+<para>
+
+</para>
+
+@display: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_x11_colormap_foreign_new ##### -->
+<para>
+
+</para>
+
+@visual: 
+@xcolormap: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_x11_colormap_get_xcolormap ##### -->
+<para>
+
+</para>
+
+@colormap: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_x11_colormap_get_xdisplay ##### -->
+<para>
+
+</para>
+
+@colormap: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_x11_cursor_get_xcursor ##### -->
+<para>
+
+</para>
+
+@cursor: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_x11_cursor_get_xdisplay ##### -->
+<para>
+
+</para>
+
+@cursor: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_x11_display_broadcast_startup_message ##### -->
+<para>
+
+</para>
+
+@display: 
+@message_type: 
+@Varargs: 
+
+
+<!-- ##### FUNCTION gdk_x11_display_get_startup_notification_id ##### -->
+<para>
+
+</para>
+
+@display: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_x11_display_get_xdisplay ##### -->
+<para>
+
+</para>
+
+@display: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_x11_display_grab ##### -->
+<para>
+
+</para>
+
+@display: 
+
+
+<!-- ##### FUNCTION gdk_x11_display_ungrab ##### -->
+<para>
+
+</para>
+
+@display: 
+
+
+<!-- ##### FUNCTION gdk_x11_display_set_cursor_theme ##### -->
+<para>
+
+</para>
+
+@display: 
+@theme: 
+@size: 
+
+
+<!-- ##### FUNCTION gdk_x11_register_standard_event_type ##### -->
+<para>
+
+</para>
+
+@display: 
+@event_base: 
+@n_events: 
+
+
+<!-- ##### FUNCTION gdk_x11_drawable_get_xdisplay ##### -->
+<para>
+
+</para>
+
+@drawable: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_x11_drawable_get_xid ##### -->
+<para>
+
+</para>
+
+@drawable: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_x11_font_get_name ##### -->
+<para>
+
+</para>
+
+@font: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_x11_font_get_xdisplay ##### -->
+<para>
+
+</para>
+
+@font: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_x11_font_get_xfont ##### -->
+<para>
+
+</para>
+
+@font: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_x11_gc_get_xdisplay ##### -->
+<para>
+
+</para>
+
+@gc: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_x11_gc_get_xgc ##### -->
+<para>
+
+</para>
+
+@gc: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_x11_get_default_root_xwindow ##### -->
+<para>
+
+</para>
+
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_x11_get_default_screen ##### -->
+<para>
+
+</para>
+
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_x11_get_default_xdisplay ##### -->
+<para>
+
+</para>
+
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_x11_grab_server ##### -->
+<para>
+
+</para>
+
+
+
+<!-- ##### FUNCTION gdk_x11_image_get_xdisplay ##### -->
+<para>
+
+</para>
+
+@image: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_x11_image_get_ximage ##### -->
+<para>
+
+</para>
+
+@image: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_x11_screen_get_screen_number ##### -->
+<para>
+
+</para>
+
+@screen: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_x11_screen_get_xscreen ##### -->
+<para>
+
+</para>
+
+@screen: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_x11_ungrab_server ##### -->
+<para>
+
+</para>
+
+
+
+<!-- ##### FUNCTION gdk_x11_visual_get_xvisual ##### -->
+<para>
+
+</para>
+
+@visual: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_x11_atom_to_xatom ##### -->
+<para>
+
+</para>
+
+@atom: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_x11_atom_to_xatom_for_display ##### -->
+<para>
+
+</para>
+
+@display: 
+@atom: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_x11_xatom_to_atom ##### -->
+<para>
+
+</para>
+
+@xatom: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_x11_xatom_to_atom_for_display ##### -->
+<para>
+
+</para>
+
+@display: 
+@xatom: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_x11_get_xatom_by_name ##### -->
+<para>
+
+</para>
+
+@atom_name: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_x11_get_xatom_by_name_for_display ##### -->
+<para>
+
+</para>
+
+@display: 
+@atom_name: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_x11_get_xatom_name ##### -->
+<para>
+
+</para>
+
+@xatom: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_x11_get_xatom_name_for_display ##### -->
+<para>
+
+</para>
+
+@display: 
+@xatom: 
+@Returns: 
+
+

@@ -1,0 +1,169 @@
+<!-- ##### SECTION Title ##### -->
+Accelerator Maps
+
+<!-- ##### SECTION Short_Description ##### -->
+Loadable keyboard accelerator specifications
+
+<!-- ##### SECTION Long_Description ##### -->
+<para>
+
+</para>
+
+<!-- ##### SECTION See_Also ##### -->
+<para>
+
+</para>
+
+<!-- ##### SECTION Stability_Level ##### -->
+
+
+<!-- ##### STRUCT GtkAccelMap ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### SIGNAL GtkAccelMap::changed ##### -->
+<para>
+
+</para>
+
+@accelmap: the object which received the signal.
+@arg1: 
+@arg2: 
+@arg3: 
+
+<!-- ##### USER_FUNCTION GtkAccelMapForeach ##### -->
+<para>
+
+</para>
+
+@data: 
+@accel_path: 
+@accel_key: 
+@accel_mods: 
+@changed: 
+
+
+<!-- ##### FUNCTION gtk_accel_map_add_entry ##### -->
+<para>
+
+</para>
+
+@accel_path: 
+@accel_key: 
+@accel_mods: 
+
+
+<!-- ##### FUNCTION gtk_accel_map_lookup_entry ##### -->
+<para>
+
+</para>
+
+@accel_path: 
+@key: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_accel_map_change_entry ##### -->
+<para>
+
+</para>
+
+@accel_path: 
+@accel_key: 
+@accel_mods: 
+@replace: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_accel_map_load ##### -->
+<para>
+
+</para>
+
+@file_name: 
+
+
+<!-- ##### FUNCTION gtk_accel_map_save ##### -->
+<para>
+
+</para>
+
+@file_name: 
+
+
+<!-- ##### FUNCTION gtk_accel_map_foreach ##### -->
+<para>
+
+</para>
+
+@data: 
+@foreach_func: 
+
+
+<!-- ##### FUNCTION gtk_accel_map_load_fd ##### -->
+<para>
+
+</para>
+
+@fd: 
+
+
+<!-- ##### FUNCTION gtk_accel_map_save_fd ##### -->
+<para>
+
+</para>
+
+@fd: 
+
+
+<!-- ##### FUNCTION gtk_accel_map_load_scanner ##### -->
+<para>
+
+</para>
+
+@scanner: 
+
+
+<!-- ##### FUNCTION gtk_accel_map_add_filter ##### -->
+<para>
+
+</para>
+
+@filter_pattern: 
+
+
+<!-- ##### FUNCTION gtk_accel_map_foreach_unfiltered ##### -->
+<para>
+
+</para>
+
+@data: 
+@foreach_func: 
+
+
+<!-- ##### FUNCTION gtk_accel_map_get ##### -->
+<para>
+
+</para>
+
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_accel_map_lock_path ##### -->
+<para>
+
+</para>
+
+@accel_path: 
+
+
+<!-- ##### FUNCTION gtk_accel_map_unlock_path ##### -->
+<para>
+
+</para>
+
+@accel_path: 
+
+

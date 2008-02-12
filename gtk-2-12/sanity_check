@@ -1,0 +1,56 @@
+#!/bin/sh
+
+VERSION=$1
+
+if [ ! -f gtk+-$VERSION.tar.gz ]; then
+	echo "ERROR: gtk+-$VERSION.tar.gz does not exist..."
+	exit 1
+fi
+
+echo ""
+
+echo "Checking gtk+-$VERSION.tar.gz..."
+tar xfz gtk+-$VERSION.tar.gz
+
+
+echo -n "README..."
+if [ "x`grep $VERSION gtk+-$VERSION/README | wc -l | awk -F' ' '{print $1}'`" == "x4" ]; then 
+	echo "ok" 
+else
+	echo "failed."
+	exit 1
+fi
+
+echo -n "INSTALL..."
+if [ "x`grep $VERSION gtk+-$VERSION/INSTALL | wc -l | awk -F' ' '{print $1}'`" == "x3" ]; then 
+	echo "ok" 
+else
+	echo "failed."
+	exit 1
+fi
+
+echo -n "NEWS..."
+if [ "x`grep "GTK+ $VERSION" gtk+-$VERSION/NEWS | wc -l | awk -F' ' '{print $1}'`" == "x1" ]; then 
+	echo "ok" 
+else
+	echo "failed."
+	exit 1
+fi
+
+echo -n "configure.in..."
+if [ "x`grep $VERSION gtk+-$VERSION/configure.in | wc -l | awk -F' ' '{print $1}'`" == "x2" ]; then 
+	echo "ok" 
+else
+	echo "failed."
+	exit 1
+fi
+
+
+echo ""
+echo "Number of lines in created documentation files:"
+
+wc -l gtk+-$VERSION/docs/html/*.html | grep -v total
+wc -l gtk+-$VERSION/docs/text/*.txt | grep -v total
+wc -l gtk+-$VERSION/docs/*.info | grep -v total
+
+rm -rf gtk+-$VERSION

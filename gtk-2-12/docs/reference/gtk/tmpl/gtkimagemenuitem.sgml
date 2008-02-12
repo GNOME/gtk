@@ -1,0 +1,88 @@
+<!-- ##### SECTION Title ##### -->
+GtkImageMenuItem
+
+<!-- ##### SECTION Short_Description ##### -->
+A menu item with an icon
+
+<!-- ##### SECTION Long_Description ##### -->
+<para>
+A GtkImageMenuItem is a menu item which has an icon next to the text label.
+</para>
+<para>
+Note that the user can disable display of menu icons, so make sure to still
+fill in the text label.
+</para>
+
+<!-- ##### SECTION See_Also ##### -->
+<para>
+
+</para>
+
+<!-- ##### SECTION Stability_Level ##### -->
+
+
+<!-- ##### STRUCT GtkImageMenuItem ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### ARG GtkImageMenuItem:image ##### -->
+<para>
+
+</para>
+
+<!-- ##### FUNCTION gtk_image_menu_item_set_image ##### -->
+<para>
+
+</para>
+
+@image_menu_item: 
+@image: 
+
+
+<!-- ##### FUNCTION gtk_image_menu_item_get_image ##### -->
+<para>
+
+</para>
+
+@image_menu_item: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_image_menu_item_new ##### -->
+<para>
+
+</para>
+
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_image_menu_item_new_from_stock ##### -->
+<para>
+
+</para>
+
+@stock_id: 
+@accel_group: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_image_menu_item_new_with_label ##### -->
+<para>
+
+</para>
+
+@label: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_image_menu_item_new_with_mnemonic ##### -->
+<para>
+
+</para>
+
+@label: 
+@Returns: 
+
+

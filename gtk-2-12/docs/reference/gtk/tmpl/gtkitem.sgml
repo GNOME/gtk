@@ -1,0 +1,72 @@
+<!-- ##### SECTION Title ##### -->
+GtkItem
+
+<!-- ##### SECTION Short_Description ##### -->
+Abstract base class for GtkMenuItem, GtkListItem and GtkTreeItem
+
+<!-- ##### SECTION Long_Description ##### -->
+<para>
+The #GtkItem widget is an abstract base class for #GtkMenuItem, #GtkListItem
+and #GtkTreeItem.
+</para>
+
+<!-- ##### SECTION See_Also ##### -->
+<para>
+
+</para>
+
+<!-- ##### SECTION Stability_Level ##### -->
+
+
+<!-- ##### STRUCT GtkItem ##### -->
+<para>
+The #GtkItem-struct struct contains private data only, and
+should be accessed using the functions below.
+</para>
+
+
+<!-- ##### SIGNAL GtkItem::deselect ##### -->
+<para>
+Emitted when the item is deselected.
+</para>
+
+@item: the object which received the signal.
+
+<!-- ##### SIGNAL GtkItem::select ##### -->
+<para>
+Emitted when the item is selected.
+</para>
+
+@item: the object which received the signal.
+
+<!-- ##### SIGNAL GtkItem::toggle ##### -->
+<para>
+Emitted when the item is toggled.
+</para>
+
+@item: the object which received the signal.
+
+<!-- ##### FUNCTION gtk_item_select ##### -->
+<para>
+Emits the "select" signal on the given item.
+</para>
+
+@item: a #GtkItem.
+
+
+<!-- ##### FUNCTION gtk_item_deselect ##### -->
+<para>
+Emits the "deselect" signal on the given item.
+</para>
+
+@item: a #GtkItem.
+
+
+<!-- ##### FUNCTION gtk_item_toggle ##### -->
+<para>
+Emits the "toggle" signal on the given item.
+</para>
+
+@item: a #GtkItem.
+
+

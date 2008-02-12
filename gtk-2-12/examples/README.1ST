@@ -1,0 +1,41 @@
+GTK Example Code - Tony Gale <gale@gtk.org> 980623
+--------------------------------------------------
+
+I have written an awk script to automatically extract the code
+examples from the GTK Tutorial (in sgml), so they only have to be
+changed in one place.
+
+It's called 'extract.awk', and there is a shell wrapper to invoke
+it called 'extract.sh'
+
+It takes the following switches:
+ -c : Just do checking rather than output files
+ -f <filename> : Extract a specific file
+ -d : Extract file(s) to current directory
+
+Without the -d switch, the code will be placed in the appropriate
+sub-directory. Those sub-directories will be created if they do not
+exist.
+
+Without the -f switch, all code examples will be extracted.
+
+The shell wrapper assumes that the GTK Tutorial is in the 
+file "../docs/gtk_tut.sgml"
+
+It works by looking for sections of text in the tutorial surrounded
+by, for example:
+
+/* example-start helloworld helloworld.c */
+
+and
+
+/* example-end */
+
+Where "helloworld" is the directory into which the file will be
+placed (which can also be a directory spec like hello/hello1), and
+"helloworld.c" is the file name for the code.
+
+So, the code between these lines would be extracted to the file
+helloworld/helloworld.c
+
+It also handles replacing the sgml tag '&amp;' with '&'

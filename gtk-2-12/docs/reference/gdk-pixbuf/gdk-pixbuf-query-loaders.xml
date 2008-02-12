@@ -1,0 +1,51 @@
+<refentry id="gdk-pixbuf-query-loaders">
+
+<refmeta>
+<refentrytitle>gdk-pixbuf-query-loaders</refentrytitle>
+<manvolnum>1</manvolnum>
+</refmeta>
+
+<refnamediv>
+<refname>gdk-pixbuf-query-loaders</refname>
+<refpurpose>GdkPixbuf loader registration utility</refpurpose>
+</refnamediv>
+
+<refsynopsisdiv>
+<cmdsynopsis>
+<command>gdk-pixbuf-query-loaders</command>
+<arg choice="opt" rep="repeat">module</arg>
+</cmdsynopsis>
+</refsynopsisdiv>
+
+<refsect1><title>Description</title>
+<para>
+<command>gdk-pixbuf-query-loaders</command> collects information about loadable
+modules for <application>gdk-pixbuf</application> and writes it to <filename>stdout</filename>. 
+</para>
+<para>
+If called without arguments, it looks for modules in the
+<application>gdk-pixbuf</application> loader directory.  
+</para>
+<para>
+If called with arguments, it looks for the specified modules. The arguments
+may be absolute or relative paths.
+</para>
+</refsect1>
+
+<refsect1><title>Environment</title>
+<para>
+The environment variable <envar>GDK_PIXBUF_MODULEDIR</envar> can be used
+to specify a different loader directory. The default <application>gdk-pixbuf</application> loader
+directory is <filename><replaceable>libdir</replaceable>/gtk-2.0/<replaceable>version</replaceable>/loaders</filename>.
+</para>
+</refsect1>
+
+<refsect1><title>Bugs</title>
+<para>
+None known yet.
+</para>
+</refsect1>
+
+</refentry>
+
+

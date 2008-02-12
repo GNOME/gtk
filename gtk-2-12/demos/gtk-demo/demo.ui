@@ -1,0 +1,232 @@
+<?xml version="1.0" standalone="no"?> <!--*- mode: xml -*-->
+<interface>
+    <object class="GtkListStore" id="liststore1">
+      <columns>
+        <column type="gchararray"/>
+        <column type="gchararray"/>
+        <column type="gint"/>
+        <column type="gchararray"/>
+      </columns>
+      <data>
+        <row>
+          <col id="0">John</col>
+          <col id="1">Doe</col>
+          <col id="2">25</col>
+          <col id="3">This is the John Doe row</col>
+        </row>
+        <row>
+          <col id="0">Mary</col>
+          <col id="1">Dole</col>
+          <col id="2">50</col>
+          <col id="3">This is the Mary Dole row</col>
+        </row>
+      </data>
+    </object>
+    <object class="GtkUIManager" id="uimanager">
+        <child>
+            <object class="GtkActionGroup" id="DefaultActions">
+                <child>
+                    <object class="GtkAction" id="Copy">
+                        <property name="name">Copy</property>
+                        <property name="tooltip" translatable="yes">Copy selected object into the clipboard</property>
+                        <property name="stock_id">gtk-copy</property>
+                    </object>
+                </child>
+                <child>
+                    <object class="GtkAction" id="Cut">
+                        <property name="name">Cut</property>
+                        <property name="tooltip" translatable="yes">Cut selected object into the clipboard</property>
+                        <property name="stock_id">gtk-cut</property>
+                    </object>
+                </child>
+                <child>
+                    <object class="GtkAction" id="EditMenu">
+                        <property name="name">EditMenu</property>
+                        <property name="label" translatable="yes">_Edit</property>
+                    </object>
+                </child>
+                <child>
+                    <object class="GtkAction" id="FileMenu">
+                        <property name="name">FileMenu</property>
+                        <property name="label" translatable="yes">_File</property>
+                    </object>
+                </child>
+                <child>
+                    <object class="GtkAction" id="New">
+                        <property name="name">New</property>
+                        <property name="tooltip" translatable="yes">Create a new file</property>
+                        <property name="stock_id">gtk-new</property>
+                    </object>
+                </child>
+                <child>
+                    <object class="GtkAction" id="Open">
+                        <property name="name">Open</property>
+                        <property name="tooltip" translatable="yes">Open a file</property>
+                        <property name="stock_id">gtk-open</property>
+                    </object>
+                </child>
+                <child>
+                    <object class="GtkAction" id="Paste">
+                        <property name="name">Paste</property>
+                        <property name="tooltip" translatable="yes">Paste object from the Clipboard</property>
+                        <property name="stock_id">gtk-paste</property>
+                    </object>
+                </child>
+                <child>
+                    <object class="GtkAction" id="Quit">
+                        <property name="name">Quit</property>
+                        <property name="tooltip" translatable="yes">Quit the program</property>
+                        <property name="stock_id">gtk-quit</property>
+                        <signal handler="quit_activate" name="activate"/>
+                    </object>
+                </child>
+                <child>
+                    <object class="GtkAction" id="Save">
+                        <property name="name">Save</property>
+                        <property name="is_important">True</property>
+                        <property name="tooltip" translatable="yes">Save a file</property>
+                        <property name="stock_id">gtk-save</property>
+                    </object>
+                </child>
+                <child>
+                    <object class="GtkAction" id="SaveAs">
+                        <property name="name">SaveAs</property>
+                        <property name="tooltip" translatable="yes">Save with a different name</property>
+                        <property name="stock_id">gtk-save-as</property>
+                    </object>
+                </child>
+                <child>
+                    <object class="GtkAction" id="HelpMenu">
+                        <property name="name">HelpMenu</property>
+                        <property name="label" translatable="yes">_Help</property>
+                    </object>
+                </child>
+                <child>
+                    <object class="GtkAction" id="About">
+                        <property name="name">About</property>
+                        <property name="stock_id">gtk-about</property>
+                        <signal handler="about_activate" name="activate"/>
+                    </object>
+                    <accelerator key="F1"/>
+                </child>
+            </object>
+        </child>
+        <ui>
+          <menubar name="menubar1">
+            <menu action="FileMenu" name="FileMenu">
+              <menuitem action="New" name="New"/>
+              <menuitem action="Open" name="Open"/>
+              <menuitem action="Save" name="Save"/>
+              <menuitem action="SaveAs" name="SaveAs"/>
+              <separator/>
+              <menuitem action="Quit" name="Quit"/>
+            </menu>
+            <menu action="EditMenu">
+              <menuitem action="Copy" name="Copy"/>
+              <menuitem action="Cut" name="Cut"/>
+              <menuitem action="Paste" name="Paste"/>
+            </menu>
+            <menu action="HelpMenu" name="HelpMenu">
+              <menuitem action="About" name="About"/>
+            </menu>
+          </menubar>
+          <toolbar name="toolbar1">
+            <toolitem action="New" name="New"/>
+            <toolitem action="Open" name="Open"/>
+            <toolitem action="Save" name="Save"/>
+            <separator/>
+            <toolitem action="Copy" name="Copy"/>
+            <toolitem action="Cut" name="Cut"/>
+            <toolitem action="Paste" name="Paste"/>
+          </toolbar>
+        </ui>
+    </object>
+
+    <object class="GtkWindow" id="window1">
+        <property name="default_height">250</property>
+        <property name="default_width">440</property>
+        <property name="title">builder</property>
+        <child>
+            <object class="GtkVBox" id="vbox1">
+                <property name="visible">True</property>
+                <child>
+                    <object constructor="uimanager" class="GtkMenuBar" id="menubar1">
+                        <property name="visible">True</property>
+                    </object>
+                    <packing>
+                        <property name="expand">False</property>
+                    </packing>
+                </child>
+                <child>
+                    <object constructor="uimanager" class="GtkToolbar" id="toolbar1">
+                        <property name="visible">True</property>
+                    </object>
+                    <packing>
+                        <property name="expand">False</property>
+                        <property name="position">1</property>
+                    </packing>
+                </child>
+                <child>
+                    <object class="GtkScrolledWindow" id="scrolledwindow1">
+                      <property name="hscrollbar_policy">automatic</property>
+                      <property name="shadow_type">in</property>
+                      <property name="visible">True</property>
+                      <property name="vscrollbar_policy">automatic</property>
+                      <child>
+                        <object class="GtkTreeView" id="treeview1">
+                          <property name="visible">True</property>
+                          <property name="model">liststore1</property>
+                          <property name="tooltip-column">3</property>
+                          <child>
+                            <object class="GtkTreeViewColumn" id="column1">
+                              <property name="title">Name</property>
+                              <child>
+                                <object class="GtkCellRendererText" id="renderer1"/>
+                                <attributes>
+                                  <attribute name="text">0</attribute>
+                                </attributes>
+                              </child>
+                            </object>
+                          </child>
+                          <child>
+                            <object class="GtkTreeViewColumn" id="column2">
+                              <property name="title">Surname</property>
+                              <child>
+                                <object class="GtkCellRendererText" id="renderer2"/>
+                                <attributes>
+                                  <attribute name="text">1</attribute>
+                                </attributes>
+                              </child>
+                            </object>
+                          </child>
+                          <child>
+                            <object class="GtkTreeViewColumn" id="column3">
+                              <property name="title">Age</property>
+                              <child>
+                                <object class="GtkCellRendererText" id="renderer3"/>
+                                <attributes>
+                                  <attribute name="text">2</attribute>
+                                </attributes>
+                              </child>
+                            </object>
+                          </child>
+                        </object>
+                      </child>
+                    </object>
+                    <packing>
+                        <property name="position">2</property>
+                    </packing>
+                </child>
+                <child>
+                    <object class="GtkStatusbar" id="statusbar1">
+                        <property name="visible">True</property>
+                    </object>
+                    <packing>
+                        <property name="expand">False</property>
+                        <property name="position">3</property>
+                    </packing>
+                </child>
+            </object>
+        </child>
+    </object>
+</interface>

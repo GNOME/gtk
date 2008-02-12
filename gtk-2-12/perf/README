@@ -1,0 +1,220 @@
+README for gtk+/perf
+--------------------
+
+This is a framework for testing performance in GTK+.   For GTK+, being
+performant does not only mean "paint widgets fast".  It also means
+things like the time needed to set up widgets, to map and draw a
+window for the first time, and emitting/propagating signals.
+
+The following is accurate as of 2006/Jun/14.
+
+
+Background
+----------
+
+A widget's lifetime looks more or less like this:
+
+	1. Instantiation
+	2. Size request
+	3. Size allocate
+	5. Realize
+	4. Map
+	5. Expose
+	6. Destroy
+
+Some of these stages are particularly interesting:
+
+- Instantiation means creating the widget.  This may be as simple as a
+  few malloc()s and setting some fields.  It could also be a
+  complicated operation if the widget needs to contact an external
+  server to create itself, or if it needs to read data files.
+
+- Size requisition is when GTK+ asks the widget, "how big do you want
+  to be on the screen"?  This can be an expensive operation.  The
+  widget has to measure its text, measure its icons (and thus load its
+  icons), and generally run through its internal layout code.
+
+- Realization is when the widget creates its GDK resources, like its
+  GdkWindow and graphics contexts it may need.  This could be
+  expensive if the widget needs to load data files for cursors or
+  backgrounds.
+
+- Expose is when the widget gets repainted.  This will happen many
+  times throughout the lifetime of the widget:  every time you drag a
+  window on top of it, every time its data changes and it needs to
+  redraw, every time it gets resized.
+
+GtkWidgetProfiler is a mechanism to let you get individual timings for
+each of the stages in the lifetime of a widget.  It also lets you run
+some stages many times in a sequence, so that you can run a real
+profiler and get an adequate number of samples.  For example,
+GtkWidgetProfiler lets you say "repaint this widget 1000 times".
+
+Why is this not as simple as doing
+
+	start_timer ();
+	for (i = 0; i < 1000; i++) {
+		gtk_widget_queue_draw (widget);
+		while (gtk_events_pending ())
+			gtk_main_iteration ();
+	}
+	stop_timer ();
+
+Huh?
+
+Because X is an asynchronous window system.  So, when you send the
+"paint" commands, your program will regain control but it will take
+some time for the X server to actually process those commands.
+GtkWidgetProfiler has special code to wait for the X server and give
+you accurate timings.
+
+
+Using the framework
+-------------------
+
+Right now the framework is very simple; it just has utility functions
+to time widget creation, mapping, exposure, and destruction.  To run
+such a test, you use the GtkWidgetProfiler object in
+gtkwidgetprofiler.h.
+
+The gtk_widget_profiler_profile_boot() function will emit the
+"create-widget" signal so that you can create your widget for
+testing.  It will then take timings for the widget, and emit the
+"report" signal as appropriate.
+
+The "create-widget" signal:
+
+  The handler has this form:
+
+    GtkWidget *create_widget_callback (GtkWidgetProfiler *profiler, 
+				       gpointer user_data);
+
+  You need to create a widget in your handler, and return it.  Do not
+  show the widget; the profiler will do that by itself at the right
+  time, and will actually complain if you show the widget.
+
+
+The "report" signal:
+
+  This function will get called when the profiler wants to report that
+  it finished timing an important stage in the lifecycle of your
+  widget.  The handler has this form:
+
+    void report_callback (GtkWidgetProfiler      *profiler,
+			  GtkWidgetProfilerReport report,
+			  GtkWidget              *widget,
+			  gdouble                 elapsed,
+			  gpointer                user_data);
+
+  The "report" argument tells you what happened to your widget:
+
+    GTK_WIDGET_PROFILER_REPORT_CREATE.  A timer gets started right
+    before the profiler emits the "create-widget" signal,, and it gets
+    stopped when your callback returns with the new widget.  This
+    measures the time it takes to set up your widget, but not show it.
+
+    GTK_WIDGET_PROFILER_REPORT_MAP.  A timer gets started right before
+    the profiler calls gtk_widget_show_all() on your widget, and it
+    gets stopped when the the widget has been mapped.
+
+    GTK_WIDGET_PROFILER_REPORT_EXPOSE.  A timer gets started right before
+    the profiler starts waiting for GTK+ and the X server to finish
+    painting your widget, and it gets stopped when the widget is fully
+    painted to the screen.
+
+    GTK_WIDGET_PROFILER_REPORT_DESTROY.  A timer gets started right
+    before the profiler calls gtk_widget_destroy() on your widget, and
+    it gets stopped when gtk_widget_destroy() returns.
+
+As a very basic example of using GtkWidgetProfiler is this:
+
+----------------------------------------------------------------------
+#include <stdio.h>
+#include <gtk/gtk.h>
+#include "gtkwidgetprofiler.h"
+
+static GtkWidget *
+create_widget_cb (GtkWidgetProfiler *profiler, gpointer data)
+{
+  GtkWidget *window;
+
+  window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+  /* ... fill the window with widgets, and don't show them ... */
+
+  return window;
+}
+
+static void
+report_cb (GtkWidgetProfiler *profiler, GtkWidgetProfilerReport report, GtkWidget *widget, gdouble elapsed, gpointer data)
+{
+  const char *type;
+
+  switch (report) {
+  case GTK_WIDGET_PROFILER_REPORT_CREATE:
+    type = "widget creation";
+    break;
+
+  case GTK_WIDGET_PROFILER_REPORT_MAP:
+    type = "widget map";
+    break;
+
+  case GTK_WIDGET_PROFILER_REPORT_EXPOSE:
+    type = "widget expose";
+    break;
+
+  case GTK_WIDGET_PROFILER_REPORT_DESTROY:
+    type = "widget destruction";
+    break;
+
+  default:
+    g_assert_not_reached ();
+    type = NULL;
+  }
+
+  fprintf (stderr, "%s: %g sec\n", type, elapsed);
+
+  if (report == GTK_WIDGET_PROFILER_REPORT_DESTROY)
+    fputs ("\n", stderr);
+}
+
+int
+main (int argc, char **argv)
+{
+  GtkWidgetProfiler *profiler;
+
+  gtk_init (&argc, &argv);
+
+  profiler = gtk_widget_profiler_new ();
+  g_signal_connect (profiler, "create-widget",
+		    G_CALLBACK (create_widget_cb), NULL);
+  g_signal_connect (profiler, "report",
+		    G_CALLBACK (report_cb), NULL);
+
+  gtk_widget_profiler_set_num_iterations (profiler, 100);
+  gtk_widget_profiler_profile_boot (profiler);
+
+  gtk_widget_profiler_profile_expose (profiler);
+  
+  return 0;
+}
+
+----------------------------------------------------------------------
+
+
+Getting meaningful results
+--------------------------
+
+Getting times for widget creation/mapping/exposing/destruction is
+interesting, but how do you actually find the places that need
+optimizing?
+
+Why, you run the tests under a profiler, of course.
+
+FIXME: document how to do this.
+
+
+Feedback
+--------
+
+Please mail your feedback to Federico Mena-Quintero <federico@novell.com>.
+This performance framework is a work in progress.

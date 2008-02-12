@@ -1,0 +1,124 @@
+<refentry id="multihead" revision="1 May 2002">
+  <refmeta>
+    <refentrytitle>Multi-head Support Overview</refentrytitle>
+    <manvolnum>3</manvolnum>
+    <refmiscinfo>GDK Library</refmiscinfo>
+  </refmeta>
+
+  <refnamediv>
+    <refname>Multi-head Support Overview</refname>
+    <refpurpose>Overview of GdkDisplay and GdkScreen</refpurpose>
+  </refnamediv>
+
+  <refsect1>
+    <title>Overview</title>
+      <para>
+	Multihead support is based around two main object types:
+	<itemizedlist>
+	  <listitem><para>GdkDisplay</para></listitem>
+	  <listitem><para>GdkScreen</para></listitem>
+	</itemizedlist>
+      </para>
+      
+      <para>
+	<link linkend="gdk-GdkDisplay">GdkDisplay</link> objects are the GDK
+	representation of the X Display which can be described as <emphasis>a
+	workstation consisting of a keyboard a pointing device (such as a
+	  mouse) and one or more screens</emphasis>. 
+	It is used to open and keep track of various <link
+	  linkend="gdk-GdkScreen">GdkScreen</link> objects currently 
+	instanciated by the application. It is also used to grab and release
+	the keyboard and the mouse pointer.
+      </para>
+      <para>
+	<link linkend="gdk-GdkScreen">GdkScreen</link> objects are the GDK
+	representation of a physical screen. It is used throughout GDK and GTK+
+	to specify which screen the top level windows are to be displayed on. 
+	It is also used to query the screen specification and default settings such as 
+	the default colormap (<link linkend="gdk-screen-get-default-colormap">gdk_screen_get_default_colormap</link>()),
+	the screen width (<link linkend="gdk-screen-get-width">gdk_screen_get_width</link>()), etc.
+      </para>
+      <para> 
+	The following code samples demonstrate common usage of the objects described above.
+      </para>
+      
+      <example>
+	<title>Testing the number of screen on the current display</title>
+	<programlisting><!--
+-->gint num_screen = 0;
+gchar *displayname = NULL;
+GdkScreen **screen_list;
+GdkDisplay *display;
+
+gtk_init (&amp;argc, &amp;argv);
+
+display = gdk_display_get_default ();
+num_screen = gdk_display_get_n_screens (display);
+displayname = gdk_display_get_name (display);
+if (num_screen &lt;= 1)
+  {
+    printf ("This Xserver (%s) manages only one screen. exiting...\n",
+            displayname);
+    exit (1);
+  }
+else
+  {
+    printf ("This Xserver (%s) manages %d screens.\n", displayname,
+            num_screen);
+  }<!--
+
+-->     </programlisting>
+      </example>
+      <example>
+	<title>Opening a second display</title>
+	<programlisting><!--
+-->gchar *second_screen_name;
+GdkDisplay *second_display;
+GdkScreen *second_screen;
+GtkWidget *window;
+
+gtk_init (&amp;argc, &amp;argv);
+
+/* screen2_name needs to be initialized before calling 
+/* gdk_display_new() */
+second_display = gdk_display_new (&amp;argc, &amp;argv, second_screen_name);
+if (second_display)
+    second_screen = gdk_display_get_default_screen (second_display);
+else 
+  {
+	g_print ("Can't open display :\n\t%s\n\n",
+		  second_screen_name);
+    exit (1);	
+  }
+/* now GdkScreen can be assigned to GtkWindows */
+
+window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+gtk_window_set_screen (window, second_screen);<!--
+     --></programlisting>
+      </example>
+    </refsect1>
+    <refsect1>
+      <title>See Also</title>
+      <para>
+	<variablelist>
+	  <varlistentry>
+	    <term><link linkend="gdk-GdkDisplay">GdkDisplay</link></term>
+	    <listitem><para>the GDK Object used to represent and manipulate display
+		related data</para></listitem>
+	  </varlistentry>
+	  <varlistentry>
+	    <term><link linkend="gdk-GdkScreen">GdkScreen</link></term>
+	    <listitem><para>the GDK Object used to represent and query screen related
+		data</para></listitem>
+	  </varlistentry>
+	</variablelist>
+      </para>
+    </refsect1>
+  </refentry>
+  
+<!--
+Local variables:
+mode: sgml
+sgml-parent-document: ("gdk-docs.sgml" "book" "refentry" "")
+End:
+-->

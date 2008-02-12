@@ -1,0 +1,51 @@
+<!-- ##### SECTION Title ##### -->
+X Drawables to Pixbufs
+
+<!-- ##### SECTION Short_Description ##### -->
+Getting parts of an X drawable's image data into a pixbuf.
+
+<!-- ##### SECTION Long_Description ##### -->
+  <para>
+    The functions in this section allow you to take the image data
+    from an X drawable and dump it into a #GdkPixbuf.  This can be
+    used for screenshots and other special effects.  Note that these
+    operations can be expensive, since the image data has to be
+    transferred from the X server to the client program and converted.
+  </para>
+
+  <para>
+    These functions are analogous to those for the GDK version of
+    &gdk-pixbuf;.
+  </para>
+
+<!-- ##### SECTION See_Also ##### -->
+<para>
+
+</para>
+
+<!-- ##### SECTION Stability_Level ##### -->
+
+
+<!-- ##### FUNCTION gdk_pixbuf_xlib_get_from_drawable ##### -->
+<para>
+
+</para>
+
+@dest: 
+@src: 
+@cmap: 
+@visual: 
+@src_x: 
+@src_y: 
+@dest_x: 
+@dest_y: 
+@width: 
+@height: 
+@Returns: <!--
+Local variables:
+mode: sgml
+sgml-parent-document: ("../gdk-pixbuf.sgml" "book" "refsect2" "")
+End:
+-->
+
+

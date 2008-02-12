@@ -1,0 +1,265 @@
+<!-- ##### SECTION Title ##### -->
+GtkPreview
+
+<!-- ##### SECTION Short_Description ##### -->
+A widget to display RGB or grayscale data
+
+<!-- ##### SECTION Long_Description ##### -->
+<para>
+The #GtkPreview widget provides a simple interface 
+used to display images as RGB or grayscale data.
+It's deprecated; just use a #GdkPixbuf displayed by a #GtkImage, or
+perhaps a #GtkDrawingArea. #GtkPreview has no advantage over those 
+approaches.
+</para>
+
+<!-- ##### SECTION See_Also ##### -->
+<para>
+<variablelist>
+
+<varlistentry>
+<term>#GdkRGB</term>
+<listitem><para>the backend used by #GtkPreview.</para></listitem>
+</varlistentry>
+
+</variablelist>
+</para>
+
+<!-- ##### SECTION Stability_Level ##### -->
+
+
+<!-- ##### STRUCT GtkPreview ##### -->
+<para>
+The #GtkPreview-struct struct contains private data only, and
+should be accessed using the functions below.
+</para>
+
+
+<!-- ##### ARG GtkPreview:expand ##### -->
+<para>
+
+</para>
+
+<!-- ##### STRUCT GtkPreviewInfo ##### -->
+<para>
+Contains information about global properties
+of preview widgets.
+
+The #GtkPreviewInfo struct contains the following fields.
+(These fields should be considered read-only. They should never be set by
+an application.)
+
+<informaltable pgwide="1" frame="none" role="struct">
+<tgroup cols="2"><colspec colwidth="2*"/><colspec colwidth="8*"/>
+<tbody>
+
+<row>
+<entry>#GdkVisual *visual;</entry>
+<entry>the visual used by all previews.</entry>
+</row>
+
+<row>
+<entry>#GdkColormap *cmap;</entry>
+<entry>the colormap used by all previews.</entry>
+</row>
+
+<row>
+<entry>gdouble gamma;</entry>
+<entry>the gamma correction value used by all previews (See gtk_preview_set_gamma()).</entry>
+</row>
+
+</tbody>
+</tgroup>
+</informaltable>
+
+</para>
+
+@lookup: 
+@gamma: 
+
+<!-- ##### UNION GtkDitherInfo ##### -->
+<para>
+This union not used in GTK+.
+</para>
+
+
+<!-- ##### FUNCTION gtk_preview_uninit ##### -->
+<para>
+This function is deprecated and does nothing.
+</para>
+
+
+
+<!-- ##### FUNCTION gtk_preview_new ##### -->
+<para>
+Create a new preview widget.
+</para>
+
+@type: the type data contained by the widget. 
+(Grayscale or RGB)
+@Returns: a new #GtkPreview
+
+
+<!-- ##### FUNCTION gtk_preview_size ##### -->
+<para>
+Set the size that the preview widget will request
+in response to a "size_request" signal. The 
+drawing area may actually be allocated a size
+larger than this depending on how it is packed
+within the enclosing containers. The effect
+of this is determined by whether the preview
+is set to expand or not (see gtk_preview_expand())
+</para>
+
+@preview: a #GtkPreview.
+@width: the new width.
+@height: the new height.
+
+
+<!-- ##### FUNCTION gtk_preview_put ##### -->
+<para>
+Takes a portion of the contents of a preview widget
+and draws it onto the given drawable, @window.
+</para>
+
+@preview: a #GtkPreview.
+@window: a window or pixmap.
+@gc: The graphics context for the operation. Only the
+     clip mask for this GC matters.
+@srcx: the x coordinate of the upper left corner in the source image.
+@srcy: the y coordinate of the upper left corner in the source image.
+@destx: the x coordinate of the upper left corner in the destination image.
+@desty: the y coordinate of the upper left corner in the destination image.
+@width: the width of the rectangular portion to draw.
+@height: the height of the rectangular portion to draw.
+
+
+<!-- ##### FUNCTION gtk_preview_draw_row ##### -->
+<para>
+Sets the data for a portion of a row.
+</para>
+
+@preview: a #GtkPreview.
+@data: the new data for the portion. It should contain
+       @w bytes of data if the preview is of type
+       GTK_TYPE_GRAYSCALE, and 3*@w bytes of data
+       if the preview is of type GTK_TYPE_COLOR.
+@x: the starting value on the row to set.
+@y: the row to change.
+@w: the number of pixels in the row to change.
+
+
+<!-- ##### FUNCTION gtk_preview_set_expand ##### -->
+<para>
+Determines the way that the the preview widget behaves
+when the size it is allocated is larger than the requested
+size. If @expand is %FALSE, then the preview's window
+and buffer will be no larger than the size set with 
+gtk_preview_size(), and the data set will be centered
+in the allocation if it is larger. If @expand is %TRUE
+then the window and buffer will expand with the allocation;
+the application is responsible for catching
+the "size_allocate" signal and providing the data 
+appropriate for this size.
+</para>
+
+@preview: a #GtkPreview.
+@expand: whether the preview's window should expand or not.
+
+
+<!-- ##### FUNCTION gtk_preview_set_gamma ##### -->
+<para>
+Set the gamma-correction value for all preview widgets.
+(This function will eventually be replaced with a
+function that sets a per-preview-widget gamma value).
+The resulting intensity is given by:
+<literal>destination_value * pow (source_value/255, 1/gamma)</literal>.
+The gamma value is applied when the data is
+set with gtk_preview_draw_row() so changing this
+value will not affect existing data in preview
+widgets.
+</para>
+
+@gamma_: the new gamma value.
+
+
+<!-- ##### FUNCTION gtk_preview_set_color_cube ##### -->
+<para>
+This function is deprecated and does nothing. GdkRGB
+automatically picks an optimium color cube for the
+display.
+</para>
+
+@nred_shades: ignored
+@ngreen_shades: ignored
+@nblue_shades: ignored
+@ngray_shades: ignored
+
+
+<!-- ##### FUNCTION gtk_preview_set_install_cmap ##### -->
+<para>
+This function is deprecated
+and does nothing. GdkRGB will automatically pick
+a private colormap if it cannot allocate sufficient
+colors.
+</para>
+
+@install_cmap: ignored.
+
+
+<!-- ##### FUNCTION gtk_preview_set_reserved ##### -->
+<para>
+This function is deprecated and does nothing.
+</para>
+
+@nreserved: ignored.
+
+
+<!-- ##### FUNCTION gtk_preview_set_dither ##### -->
+<para>
+Set the dithering mode for the display. 
+</para>
+
+@preview: a #GtkPreview.
+@dither: the dithering mode.
+
+
+<!-- ##### FUNCTION gtk_preview_get_visual ##### -->
+<para>
+Returns the visual used by preview widgets. This
+function is deprecated, and you should use
+gdk_rgb_get_visual() instead.
+</para>
+
+@Returns: the visual for previews.
+
+
+<!-- ##### FUNCTION gtk_preview_get_cmap ##### -->
+<para>
+Returns the colormap used by preview widgets. This
+function is deprecated, and you should use
+gdk_rgb_get_cmap() instead.
+</para>
+
+@Returns: the colormap for previews.
+
+
+<!-- ##### FUNCTION gtk_preview_get_info ##### -->
+<para>
+Return a #GtkPreviewInfo structure containing 
+global information about preview widgets.
+</para>
+
+@Returns: a #GtkPreviewInfo structure. The return
+ value belongs to GTK+ and must not be modified
+ or freed.
+
+
+<!-- ##### FUNCTION gtk_preview_reset ##### -->
+<para>
+This function is deprecated and does nothing. It was
+once used for changing the colormap and visual on the fly.
+</para>
+
+
+

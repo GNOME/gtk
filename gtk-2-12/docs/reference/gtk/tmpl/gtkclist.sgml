@@ -1,0 +1,1312 @@
+<!-- ##### SECTION Title ##### -->
+GtkCList
+
+<!-- ##### SECTION Short_Description ##### -->
+A multi-columned scrolling list widget
+
+<!-- ##### SECTION Long_Description ##### -->
+<para>
+The #GtkCList widget is a very useful multi-columned scrolling list.  
+It can display data in nicely aligned vertical columns, with titles 
+at the top of the list.
+</para>
+<para>
+GtkCList has been deprecated since GTK+ 2.0 and should not be used
+in newly written code. Use #GtkTreeView instead.
+</para>
+
+<!-- ##### SECTION See_Also ##### -->
+<para>
+
+</para>
+
+<!-- ##### SECTION Stability_Level ##### -->
+
+
+<!-- ##### STRUCT GtkCList ##### -->
+<para>
+This is the embodiment of the #GtkCList widget.  This structure contains
+only private data, and should be accessed only via the CList API.
+</para>
+
+
+<!-- ##### SIGNAL GtkCList::abort-column-resize ##### -->
+<para>
+This signal is emitted when a column resize is aborted.
+</para>
+
+@clist: the object which received the signal.
+
+<!-- ##### SIGNAL GtkCList::click-column ##### -->
+<para>
+This signal is emitted when a column title is clicked.
+</para>
+
+@clist: The object which received the signal.
+@column: The number of the column.
+
+<!-- ##### SIGNAL GtkCList::end-selection ##### -->
+<para>
+This signal is emitted when a selection ends in a 
+multiple selection CList.
+</para>
+
+@clist: the object which received the signal.
+
+<!-- ##### SIGNAL GtkCList::extend-selection ##### -->
+<para>
+This signal is emitted when the selection is extended.
+</para>
+
+@clist: the object which received the signal.
+@scroll_type: A #GtkScrollType value of any scrolling operation the
+occured during the selection.
+@position: A value between 0.0 and 1.0.
+@auto_start_selection: %TRUE or %FALSE.
+
+<!-- ##### SIGNAL GtkCList::resize-column ##### -->
+<para>
+This signal is emitted when a column is resized.
+</para>
+
+@clist: The object which received the signal.
+@column: The number of the column
+@width: The new width of the column.
+
+<!-- ##### SIGNAL GtkCList::row-move ##### -->
+<para>
+This signal is emitted when a row is moved.
+</para>
+
+@clist: The object which received the signal.
+@arg1: The source position of the row.
+@arg2: The destination position of the row.
+
+<!-- ##### SIGNAL GtkCList::scroll-horizontal ##### -->
+<para>
+This signal is emitted when the CList is scrolled horizontally.
+</para>
+
+@clist: the object which received the signal.
+@scroll_type: A #GtkScrollType value of how the scroll operation occured.
+@position: a value between 0.0 and 1.0.
+
+<!-- ##### SIGNAL GtkCList::scroll-vertical ##### -->
+<para>
+This signal is emitted when the CList is scrolled vertically.
+</para>
+
+@clist: the object which received the signal.
+@scroll_type: A #GtkScrollType value of how the scroll operation occured.
+@position: A value between 0.0 and 1.0.
+
+<!-- ##### SIGNAL GtkCList::select-all ##### -->
+<para>
+This signal is emitted when all the rows are selected in a CList.
+</para>
+
+@clist: the object which received the signal.
+
+<!-- ##### SIGNAL GtkCList::select-row ##### -->
+<para>
+This signal is emitted when the user selects a row in the list.  
+It is emitted for every row that is selected in a multi-selection or
+by calling gtk_clist_select_all().
+</para>
+
+@clist: The object which received the signal.
+@row: The row selected.
+@column: The column where the selection occured.
+@event: A #GdkEvent structure for the selection.
+
+<!-- ##### SIGNAL GtkCList::set-scroll-adjustments ##### -->
+<para>
+
+</para>
+
+@clist: the object which received the signal.
+@arg1: 
+@arg2: 
+
+<!-- ##### SIGNAL GtkCList::start-selection ##### -->
+<para>
+This signal is emitted when a drag-selection is started in 
+a multiple-selection CList.
+</para>
+
+@clist: the object which received the signal.
+
+<!-- ##### SIGNAL GtkCList::toggle-add-mode ##### -->
+<para>
+This signal is emitted when "add mode" is toggled.
+</para>
+
+@clist: the object which received the signal.
+
+<!-- ##### SIGNAL GtkCList::toggle-focus-row ##### -->
+<para>
+
+</para>
+
+@clist: The object which received the signal.
+
+<!-- ##### SIGNAL GtkCList::undo-selection ##### -->
+<para>
+This signal is emitted when an undo selection occurs in the CList,
+probably via calling gtk_clist_undo_selection().
+</para>
+
+@clist: the object which received the signal.
+
+<!-- ##### SIGNAL GtkCList::unselect-all ##### -->
+<para>
+This signal is emitted when all rows are unselected in a CList.
+</para>
+
+@clist: the object which received the signal.
+
+<!-- ##### SIGNAL GtkCList::unselect-row ##### -->
+<para>
+This signal is emitted when the user unselects a row in the list.  
+It is emitted for every row that is unselected in a multi-selection or
+by calling gtk_clist_unselect_all().  It is also emitted for the
+previously selected row in a "single" or "browse" mode CList.
+</para>
+
+@clist: The object which received the signal.
+@row: The selected row
+@column: The column where the selection occured.
+@event: 
+
+<!-- ##### ARG GtkCList:n-columns ##### -->
+<para>
+An integer value for a column.
+</para>
+
+<!-- ##### ARG GtkCList:reorderable ##### -->
+<para>
+A boolean value for determining if the user can re-order the CList's
+columns.
+</para>
+
+<!-- ##### ARG GtkCList:row-height ##### -->
+<para>
+An integer value representing the height of a row in pixels.
+</para>
+
+<!-- ##### ARG GtkCList:selection-mode ##### -->
+<para>
+Sets the type of selection mode for the CList.
+</para>
+
+<!-- ##### ARG GtkCList:shadow-type ##### -->
+<para>
+Sets the shadowing for the CList.
+</para>
+
+<!-- ##### ARG GtkCList:sort-type ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkCList:titles-active ##### -->
+<para>
+A boolean value for setting whether the column titles can be
+clicked.
+</para>
+
+<!-- ##### ARG GtkCList:use-drag-icons ##### -->
+<para>
+A boolean value for setting whether to use icons during drag
+operations.
+</para>
+
+<!-- ##### ENUM GtkCellType ##### -->
+<para>
+Identifies the type of element in the current cell of the CList.  Cells can
+contain text, pixmaps, or both. Unfortunately support for %GTK_CELL_WIDGET
+was never completed.
+</para>
+
+@GTK_CELL_EMPTY: 
+@GTK_CELL_TEXT: 
+@GTK_CELL_PIXMAP: 
+@GTK_CELL_PIXTEXT: 
+@GTK_CELL_WIDGET: 
+
+<!-- ##### ENUM GtkButtonAction ##### -->
+<para>
+Values for specifying what mouse button events a CList will
+react to.
+</para>
+
+@GTK_BUTTON_IGNORED: 
+@GTK_BUTTON_SELECTS: 
+@GTK_BUTTON_DRAGS: 
+@GTK_BUTTON_EXPANDS: 
+
+<!-- ##### MACRO GTK_CLIST_FLAGS ##### -->
+<para>
+Reads the current flags of the specified CList.
+</para>
+
+@clist: The #GtkCList widget from which to get the flags
+
+
+<!-- ##### MACRO GTK_CLIST_SET_FLAG ##### -->
+<para>
+A macro to set a particular flag for the specified CList.
+</para>
+
+@clist: The #GtkCList widget to affect.
+@flag: A single #GtkCList flag to set.  NOTE: Do not add the GTK_ prefix.
+
+
+<!-- ##### MACRO GTK_CLIST_UNSET_FLAG ##### -->
+<para>
+A macro to clear a particular flag for the specified CList.
+</para>
+
+@clist: The #GtkCList widget to affect.
+@flag: A single #GtkCList flag to clear.  NOTE: Do not add the GTK_ prefix.
+
+
+<!-- ##### MACRO GTK_CLIST_IN_DRAG ##### -->
+<para>
+A macro to check whether the #GtkCList is in "drag mode."
+</para>
+
+@clist: The #GtkCList to check.
+
+
+<!-- ##### MACRO GTK_CLIST_ROW_HEIGHT_SET ##### -->
+<para>
+A macro to check whether the #GtkCList's row height is set.
+</para>
+
+@clist: The #GtkCList to check.
+
+
+<!-- ##### MACRO GTK_CLIST_SHOW_TITLES ##### -->
+<para>
+A macro to check whether the flag for showing the 
+widget's column titles is set.
+</para>
+
+@clist: The #GtkCList widget to check.
+
+
+<!-- ##### MACRO GTK_CLIST_ADD_MODE ##### -->
+<para>
+A macro to test whether the CList is in "add mode."
+</para>
+
+@clist: The #GtkCList widget to check.
+
+
+<!-- ##### MACRO GTK_CLIST_AUTO_SORT ##### -->
+<para>
+A macro to test whether the CList has automatic sorting
+switched on.
+</para>
+
+@clist: The #GtkCList widget to check.
+
+
+<!-- ##### MACRO GTK_CLIST_AUTO_RESIZE_BLOCKED ##### -->
+<para>
+A macro to check if automatic resizing of columns is blocked.
+</para>
+
+@clist: The #GtkCList widget to check.
+
+
+<!-- ##### MACRO GTK_CLIST_REORDERABLE ##### -->
+<para>
+A macro to test if the CList's columns are re-orderable
+</para>
+
+@clist: The #GtkCList widget to check.
+
+
+<!-- ##### MACRO GTK_CLIST_USE_DRAG_ICONS ##### -->
+<para>
+A macro to check if the USE_DRAG_ICONS property is enabled.
+</para>
+
+@clist: The #GtkCList widget to check.
+
+
+<!-- ##### MACRO GTK_CLIST_DRAW_DRAG_LINE ##### -->
+<para>
+A macro to check if the DRAW_DRAG_LINE property is enabled.
+</para>
+
+@clist: The #GtkCList widget to check.
+
+
+<!-- ##### MACRO GTK_CLIST_DRAW_DRAG_RECT ##### -->
+<para>
+A macro to check if the DRAW_DRAG_RECT property is enabled.
+</para>
+
+@clist: The #GtkCList widget to check.
+
+
+<!-- ##### MACRO GTK_CLIST_ROW ##### -->
+<para>
+A macro to cast a GList element to a CListRow pointer.
+</para>
+
+@_glist_: The GList element to convert.
+
+
+<!-- ##### MACRO GTK_CELL_TEXT ##### -->
+<para>
+A macro to cast a generic #GtkCList cell item to a GtkCellText pointer.
+</para>
+
+@cell: The #GtkCList cell item to convert.
+
+
+<!-- ##### MACRO GTK_CELL_PIXMAP ##### -->
+<para>
+A macro to cast a generic #GtkCList cell item to a GtkCellPixmap pointer.
+</para>
+
+@cell: The #GtkCList cell item to convert.
+
+
+<!-- ##### MACRO GTK_CELL_PIXTEXT ##### -->
+<para>
+A macro to cast a generic #GtkCList cell item to a GtkCellPixText pointer.
+</para>
+
+@cell: The #GtkCList cell item to convert.
+
+
+<!-- ##### MACRO GTK_CELL_WIDGET ##### -->
+<para>
+A macro to cast a generic #GtkCList cell item to a GtkCellWidget pointer.
+</para>
+
+@cell: The #GtkCList cell item to convert.
+
+
+<!-- ##### USER_FUNCTION GtkCListCompareFunc ##### -->
+<para>
+Function prototype for the compare function callback.
+</para>
+
+@clist: The #GtkCList that is affected.
+@ptr1: A #gconstpointer to the first node to compare.
+@ptr2: A #gconstpointer to the second node to compare.
+@Returns: 0 if the nodes are equal, less than 0 if the first node should
+come before the second, and greater than 1 if the second come before the
+first.
+
+
+<!-- ##### STRUCT GtkCListColumn ##### -->
+<para>
+A structure that the #GtkCList widget uses to keep track of information
+about its columns.
+</para>
+
+@title: 
+@area: 
+@button: 
+@window: 
+@width: 
+@min_width: 
+@max_width: 
+@justification: 
+@visible: 
+@width_set: 
+@resizeable: 
+@auto_resize: 
+@button_passive: 
+
+<!-- ##### STRUCT GtkCListRow ##### -->
+<para>
+A structure that the #GtkCList widget uses to keep track of information
+about its rows.
+</para>
+
+@cell: 
+@state: 
+@foreground: 
+@background: 
+@style: 
+@data: 
+@destroy: 
+@fg_set: 
+@bg_set: 
+@selectable: 
+
+<!-- ##### STRUCT GtkCellText ##### -->
+<para>
+A structure that the #GtkCList widget uses to keep track of #GtkCList cells
+that contain text.
+</para>
+
+@type: 
+@vertical: 
+@horizontal: 
+@style: 
+@text: 
+
+<!-- ##### STRUCT GtkCellPixmap ##### -->
+<para>
+A structure that the #GtkCList widget uses to keep track of #GtkCList cells
+that contain a GdkPixmap.
+</para>
+
+@type: 
+@vertical: 
+@horizontal: 
+@style: 
+@pixmap: 
+@mask: 
+
+<!-- ##### STRUCT GtkCellPixText ##### -->
+<para>
+A structure that the #GtkCList widget uses to keep track of #GtkCList cells
+that contain a combination of text and a GdkPixmap.
+</para>
+
+@type: 
+@vertical: 
+@horizontal: 
+@style: 
+@text: 
+@spacing: 
+@pixmap: 
+@mask: 
+
+<!-- ##### STRUCT GtkCellWidget ##### -->
+<para>
+A structure that the #GtkCList widget uses to keep track of #GtkCList cells
+that contain another widget.
+</para>
+
+@type: 
+@vertical: 
+@horizontal: 
+@style: 
+@widget: 
+
+<!-- ##### STRUCT GtkCell ##### -->
+<para>
+A generic structure that the #GtkCList widget uses to keep track of the
+contents of each of its cells.
+</para>
+
+@type: 
+@vertical: 
+@horizontal: 
+@style: 
+@widget: 
+
+<!-- ##### STRUCT GtkCListCellInfo ##### -->
+<para>
+A simple structure that the #GtkCList widget uses to keep track
+of the location of a cell.
+</para>
+
+@row: 
+@column: 
+
+<!-- ##### STRUCT GtkCListDestInfo ##### -->
+<para>
+A simple structure that the #GtkCList widget uses to track 
+a cell for a drag operation.
+</para>
+
+@cell: 
+@insert_pos: 
+
+<!-- ##### ENUM GtkCListDragPos ##### -->
+<para>
+An enumeration for drag operations.
+</para>
+
+@GTK_CLIST_DRAG_NONE: 
+@GTK_CLIST_DRAG_BEFORE: 
+@GTK_CLIST_DRAG_INTO: 
+@GTK_CLIST_DRAG_AFTER: 
+
+<!-- ##### FUNCTION gtk_clist_new ##### -->
+<para>
+Creates a new #GtkCList widget for use.
+</para>
+
+@columns: The number of columns the #GtkCList should have.
+@Returns: A pointer to a new GtkCList object.
+
+
+<!-- ##### FUNCTION gtk_clist_new_with_titles ##### -->
+<para>
+Creates a new #GtkCList widget with column titles for use.
+</para>
+
+@columns: The number of columns the #GtkCList should have.
+@titles: A string array of titles for the widget.  There should be
+enough strings in the array for the specified number of columns.
+@Returns: A pointer to a new GtkCList object.
+
+
+<!-- ##### FUNCTION gtk_clist_set_shadow_type ##### -->
+<para>
+Sets the shadow type for the specified CList.  Changing this value
+will cause the #GtkCList to update its visuals.
+</para>
+
+@clist: The #GtkCList to affect.
+@type: The GtkShadowType desired.
+
+
+<!-- ##### FUNCTION gtk_clist_set_selection_mode ##### -->
+<para>
+Sets the selection mode for the specified CList.  This allows you to
+set whether only one or more than one item can be selected at a time
+in the widget.  Note that setting the widget's selection mode to one
+of GTK_SELECTION_BROWSE or GTK_SELECTION_SINGLE will cause all the
+items in the #GtkCList to become deselected.
+</para>
+
+@clist: The #GtkCList to affect.
+@mode: The GtkSelectionMode type to set for this CList.
+
+
+<!-- ##### FUNCTION gtk_clist_freeze ##### -->
+<para>
+Causes the #GtkCList to stop updating its visuals until a matching call to
+gtk_clist_thaw() is made.  This function is useful if a lot of changes
+will be made to the widget that may cause a lot of visual updating to
+occur.  Note that calls to gtk_clist_freeze() can be nested.  
+</para>
+
+@clist: The #GtkCList to freeze.
+
+
+<!-- ##### FUNCTION gtk_clist_thaw ##### -->
+<para>
+Causes the specified #GtkCList to allow visual updates.
+</para>
+
+@clist: The #GtkCList to thaw.
+
+
+<!-- ##### FUNCTION gtk_clist_column_titles_show ##### -->
+<para>
+This function causes the #GtkCList to show its column titles, if
+they are not already showing.
+</para>
+
+@clist: The #GtkCList to affect.
+
+
+<!-- ##### FUNCTION gtk_clist_column_titles_hide ##### -->
+<para>
+Causes the #GtkCList to hide its column titles, if they are currently
+showing.
+</para>
+
+@clist: The #GtkCList to affect.
+
+
+<!-- ##### FUNCTION gtk_clist_column_title_active ##### -->
+<para>
+Sets the specified column in the #GtkCList to become selectable.  You can
+then respond to events from the user clicking on a title button, and take
+appropriate action.
+</para>
+
+@clist: The #GtkCList to affect.
+@column: The column to make active, counting from 0.
+
+
+<!-- ##### FUNCTION gtk_clist_column_title_passive ##### -->
+<para>
+Causes the specified column title button to become passive, i.e., does
+not respond to events, such as the user clicking on it.
+</para>
+
+@clist: The #GtkCList to affect.
+@column: The column to make passive, counting from 0.
+
+
+<!-- ##### FUNCTION gtk_clist_column_titles_active ##### -->
+<para>
+Causes all column title buttons to become active.  This is the same
+as calling gtk_clist_column_title_active() for each column.
+</para>
+
+@clist: The #GtkCList to affect.
+
+
+<!-- ##### FUNCTION gtk_clist_column_titles_passive ##### -->
+<para>
+Causes all column title buttons to become passive.  This is the same
+as calling gtk_clist_column_title_passive() for each column.
+</para>
+
+@clist: The #GtkCList to affect.
+
+
+<!-- ##### FUNCTION gtk_clist_set_column_title ##### -->
+<para>
+Sets the title for the specified column.
+</para>
+
+@clist: The #GtkCList to affect.
+@column: The column whose title should be changed.
+@title: A string to be the column's title.
+
+
+<!-- ##### FUNCTION gtk_clist_set_column_widget ##### -->
+<para>
+Sets a widget to be used as the specified column's title.  This
+can be used to place a pixmap or something else as the column
+title, instead of the standard text.
+</para>
+
+@clist: The #GtkCList to affect.
+@column: The column whose title should be a widget.
+@widget: A pointer to a previously create widget.
+
+
+<!-- ##### FUNCTION gtk_clist_set_column_justification ##### -->
+<para>
+Sets the justification to be used for all text in the specified
+column.
+</para>
+
+@clist: The #GtkCList to affect.
+@column: The column which should be affected.
+@justification: A GtkJustification value for the column.
+
+
+<!-- ##### FUNCTION gtk_clist_set_column_visibility ##### -->
+<para>
+Allows you to set whether a specified column in the #GtkCList should
+be hidden or shown.  Note that at least one column must always be
+showing, so attempting to hide the last visible column will be
+ignored.
+</para>
+
+@clist: The #GtkCList to affect.
+@column: The column to set visibility.
+@visible: %TRUE or %FALSE.
+
+
+<!-- ##### FUNCTION gtk_clist_set_column_resizeable ##### -->
+<para>
+Lets you specify whether a specified column should be resizeable
+by the user.  Note that turning on resizeability for the column will
+automatically shut off auto-resizing, but turning off resizeability
+will NOT turn on auto-resizing.  This must be done manually via a
+call to gtk_clist_set_column_auto_resize().
+</para>
+
+@clist: The #GtkCList to affect.
+@column: The column on which to set resizeability.
+@resizeable: %TRUE or %FALSE.
+
+
+<!-- ##### FUNCTION gtk_clist_set_column_auto_resize ##### -->
+<para>
+Lets you specify whether a column should be automatically resized
+by the widget when data is added or removed.  Enabling auto-resize
+on a column explicity disallows user-resizing of the column.
+</para>
+
+@clist: The #GtkCList to affect.
+@column: The column on which to set auto-resizing.
+@auto_resize: %TRUE or %FALSE.
+
+
+<!-- ##### FUNCTION gtk_clist_optimal_column_width ##### -->
+<para>
+Gets the required width in pixels that is needed to show
+everything in the specified column.
+</para>
+
+@clist: The #GtkCList to check.
+@column: The column to check.
+@Returns: The required width in pixels for the column.
+
+
+<!-- ##### FUNCTION gtk_clist_set_column_width ##### -->
+<para>
+Causes the column specified for the #GtkCList to be set to
+a specified width.
+</para>
+
+@clist: The #GtkCList to affect.
+@column: The column to set the width.
+@width: The width, in pixels.
+
+
+<!-- ##### FUNCTION gtk_clist_set_column_min_width ##### -->
+<para>
+Causes the column specified to have a minimum width, preventing
+the user from resizing it smaller than that specified.
+</para>
+
+@clist: The #GtkCList to affect.
+@column: The column to set the minimum width.
+@min_width: The width, in pixels.
+
+
+<!-- ##### FUNCTION gtk_clist_set_column_max_width ##### -->
+<para>
+Causes the column specified to have a maximum width, preventing
+the user from resizing it larger than that specified.
+</para>
+
+@clist: The #GtkCList to affect.
+@column: The column to set the maximum width.
+@max_width: The width, in pixels.
+
+
+<!-- ##### FUNCTION gtk_clist_set_row_height ##### -->
+<para>
+Causes the #GtkCList to have a specified height for its 
+rows.  Setting the row height to 0 allows the #GtkCList to adjust
+automatically to data in the row.
+</para>
+
+@clist: The #GtkCList to affect.
+@height: The height, in pixels.
+
+
+<!-- ##### FUNCTION gtk_clist_moveto ##### -->
+<para>
+Tells the CList widget to visually move to the specified 
+row and column.
+</para>
+
+@clist: The #GtkCList to affect.
+@row: The row to which to move.
+@column: The column to which to move.
+@row_align: A value between 0 and 1 that describes the positioning of 
+the row in relation to the viewable area of the CList's contents.
+@col_align: A value between 0 and 1 that describes the positioning of 
+the column in relation to the viewable area of the CList's contents.
+
+
+<!-- ##### FUNCTION gtk_clist_row_is_visible ##### -->
+<para>
+Checks how the specified row is visible.
+</para>
+
+@clist: The #GtkCList to affect.
+@row: The row to query.
+@Returns: A #GtkVisibility value that tells you how the row is visible.
+
+
+<!-- ##### FUNCTION gtk_clist_get_cell_type ##### -->
+<para>
+Checks the type of cell at the location specified.
+</para>
+
+@clist: The #GtkCList to affect.
+@row: The row of the cell.
+@column: The column of the cell.
+@Returns: A #GtkCellType value describing the cell.
+
+
+<!-- ##### FUNCTION gtk_clist_set_text ##### -->
+<para>
+Sets the displayed text in the specified cell.
+</para>
+
+@clist: The #GtkCList to affect.
+@row: The row of the cell.
+@column: The column of the cell.
+@text: The text to set in the cell.
+
+
+<!-- ##### FUNCTION gtk_clist_get_text ##### -->
+<para>
+Gets the text for the specified cell.
+</para>
+
+@clist: The #GtkCList to affect.
+@row: The row to query.
+@column: The column to query.
+@text: A pointer to a pointer to store the text.
+@Returns: 1 if the cell's text could be retrieved, 0 otherwise.
+
+
+<!-- ##### FUNCTION gtk_clist_set_pixmap ##### -->
+<para>
+Sets a pixmap for the specified cell.
+</para>
+
+@clist: The #GtkCList to affect.
+@row: The row of the cell.
+@column: The column of the cell.
+@pixmap: A pointer to a #GdkPixmap to place in the cell.
+@mask: A pointer to a #GdkBitmap mask for the cell.
+
+
+<!-- ##### FUNCTION gtk_clist_get_pixmap ##### -->
+<para>
+Gets the pixmap and bitmap mask of the specified cell.  The returned mask value can be NULL.
+</para>
+
+@clist: The #GtkCList to affect.
+@row: The row of the cell.
+@column: The column of the cell.
+@pixmap: A pointer to a pointer to store the cell's #GdkPixmap.
+@mask: A pointer to a pointer to store the cell's #GdkBitmap mask.
+@Returns: 1 if the cell's pixmap could be retrieved, 0 otherwise.
+
+
+<!-- ##### FUNCTION gtk_clist_set_pixtext ##### -->
+<para>
+Sets text and a pixmap/bitmap on the specified cell.
+</para>
+
+@clist: The #GtkCList to affect.
+@row: The row of the cell.
+@column: The column of the cell.
+@text: The text to set in the cell.
+@spacing: The spacing between the cell's text and pixmap.
+@pixmap: A pointer to a #GdkPixmap for the cell.
+@mask: A pointer to a #GdkBitmap mask for the cell.
+
+
+<!-- ##### FUNCTION gtk_clist_get_pixtext ##### -->
+<para>
+Gets the text, pixmap and bitmap mask for the specified cell.
+</para>
+
+@clist: The #GtkCList to affect.
+@row: The row to query.
+@column: The column to query.
+@text: A pointer to a pointer to store the text.
+@spacing: A pointer to a #guint8 to store the spacing.
+@pixmap: A pointer to a #GdkPixmap pointer to store the cell's pixmap.
+@mask: A pointer to a #GdkBitmap pointer to store the cell's bitmap mask.
+@Returns: 1 if the retrieval was successful, 0 otherwise.
+
+
+<!-- ##### FUNCTION gtk_clist_set_foreground ##### -->
+<para>
+Sets the foreground color for the specified row.
+</para>
+
+@clist: The #GtkCList to affect.
+@row: The row to affect.
+@color: A pointer to a #GdkColor structure.
+
+
+<!-- ##### FUNCTION gtk_clist_set_background ##### -->
+<para>
+Sets the background color for the specified row.
+</para>
+
+@clist: The #GtkCList to affect.
+@row: The row to affect.
+@color: A pointer to a #GdkColor structure.
+
+
+<!-- ##### FUNCTION gtk_clist_set_cell_style ##### -->
+<para>
+Sets the style for the specified cell.
+</para>
+
+@clist: The #GtkCList to affect.
+@row: The row of the cell.
+@column: The column of the cell.
+@style: A pointer to a #GtkStyle structure.
+
+
+<!-- ##### FUNCTION gtk_clist_get_cell_style ##### -->
+<para>
+Gets the current style of the specified cell.
+</para>
+
+@clist: The #GtkCList to affect.
+@row: The row of the cell.
+@column: The column of the cell.
+@Returns: A #GtkStyle object.
+
+
+<!-- ##### FUNCTION gtk_clist_set_row_style ##### -->
+<para>
+Sets the style for all cells in the specified row.
+</para>
+
+@clist: The #GtkCList to affect.
+@row: The row to affect.
+@style: A pointer to a #GtkStyle to set.
+
+
+<!-- ##### FUNCTION gtk_clist_get_row_style ##### -->
+<para>
+Gets the style set for the specified row.
+</para>
+
+@clist: The #GtkCList to affect.
+@row: The row to query.
+@Returns: The #GtkStyle of the row.
+
+
+<!-- ##### FUNCTION gtk_clist_set_shift ##### -->
+<para>
+Sets the vertical and horizontal shift of the specified cell.
+</para>
+
+@clist: The #GtkCList to affect.
+@row: The row of the cell.
+@column: The column of the cell.
+@vertical: The value to set for the vertical shift.
+@horizontal: The value to set for the vertical shift.
+
+
+<!-- ##### FUNCTION gtk_clist_set_selectable ##### -->
+<para>
+Sets whether the specified row is selectable or not.
+</para>
+
+@clist: The #GtkCList to affect.
+@row: The row to affect.
+@selectable: %TRUE or %FALSE.
+
+
+<!-- ##### FUNCTION gtk_clist_get_selectable ##### -->
+<para>
+Gets whether the specified row is selectable or not.
+</para>
+
+@clist: The #GtkCList to affect.
+@row: The row to query.
+@Returns: A #gboolean value.
+
+
+<!-- ##### FUNCTION gtk_clist_prepend ##### -->
+<para>
+Adds a row to the CList at the top.
+</para>
+
+@clist: The #GtkCList to affect.
+@text: An array of strings to add.
+@Returns: The number of the row added.
+
+
+<!-- ##### FUNCTION gtk_clist_append ##### -->
+<para>
+Adds a row to the CList at the bottom.
+</para>
+
+@clist: The #GtkCList to affect.
+@text: An array of strings to add.
+@Returns: The number of the row added.
+
+
+<!-- ##### FUNCTION gtk_clist_insert ##### -->
+<para>
+Adds a row of text to the CList at the specified position.
+</para>
+
+@clist: The #GtkCList to affect.
+@row: The row where the text should be inserted.
+@text: An array of string to add.
+@Returns: The number of the row added.
+
+
+<!-- ##### FUNCTION gtk_clist_remove ##### -->
+<para>
+Removes the specified row from the CList.
+</para>
+
+@clist: The #GtkCList to affect.
+@row: The row to remove.
+
+
+<!-- ##### FUNCTION gtk_clist_set_row_data ##### -->
+<para>
+Sets data for the specified row.  This is the same as calling gtk_clist_set_row_data_full(clist, row, data, NULL).
+</para>
+
+@clist: The #GtkCList to affect.
+@row: The row to affect.
+@data: The data to set for the row.
+
+
+<!-- ##### FUNCTION gtk_clist_set_row_data_full ##### -->
+<para>
+Sets the data for specified row, with a callback when the row is destroyed.
+</para>
+
+@clist: The #GtkCList to affect.
+@row: The row to affect.
+@data: The data to set for the row.
+@destroy: A #GtkDestroyNotify function to be called when the row is destroyed.
+
+
+<!-- ##### FUNCTION gtk_clist_get_row_data ##### -->
+<para>
+Gets the currently set data for the specified row.
+</para>
+
+@clist: The #GtkCList to affect.
+@row: The row to query.
+@Returns: The data set for the row.
+
+
+<!-- ##### FUNCTION gtk_clist_find_row_from_data ##### -->
+<para>
+Searches the CList for the row with the specified data.
+</para>
+
+@clist: The #GtkCList to search.
+@data: The data to search for a match.
+@Returns: The number of the matching row, or -1 if no match could be found.
+
+
+<!-- ##### FUNCTION gtk_clist_select_row ##### -->
+<para>
+Selects the specified row.  Causes the "select-row" signal to be emitted for the specified row and column.
+</para>
+
+@clist: The #GtkCList to affect.
+@row: The row to select.
+@column: The column to select.
+
+
+<!-- ##### FUNCTION gtk_clist_unselect_row ##### -->
+<para>
+Unselects the specified row.  Causes the "unselect-row" signal to be emitted for the specified row and column.
+</para>
+
+@clist: The #GtkCList to affect.
+@row: The row to select.
+@column: The column to select.
+
+
+<!-- ##### FUNCTION gtk_clist_undo_selection ##### -->
+<para>
+Undoes the last selection for an "extended selection mode" CList.
+</para>
+
+@clist: The #GtkCList to affect.
+
+
+<!-- ##### FUNCTION gtk_clist_clear ##### -->
+<para>
+Removes all the CList's rows.
+</para>
+
+@clist: The #GtkCList to affect.
+
+
+<!-- ##### FUNCTION gtk_clist_get_selection_info ##### -->
+<para>
+Gets the row and column at the specified pixel position in the CList.
+</para>
+
+@clist: The #GtkCList to affect.
+@x: The horizontal pixel position to check.
+@y: The vertical pixel position to check..
+@row: Pointer to a #gint to store the row value.
+@column: Pointer to a #gint to store the column value.
+@Returns: 1 if row/column is returned and in range, 0 otherwise.
+
+
+<!-- ##### FUNCTION gtk_clist_select_all ##### -->
+<para>
+Selects all rows in the CList.  This function has no affect for a
+CList in "single" or "browse" selection mode.
+</para>
+
+@clist: The #GtkCList to affect.
+
+
+<!-- ##### FUNCTION gtk_clist_unselect_all ##### -->
+<para>
+Unselects all rows in the CList.
+</para>
+
+@clist: The #GtkCList to affect.
+
+
+<!-- ##### FUNCTION gtk_clist_swap_rows ##### -->
+<para>
+Swaps the two specified rows with each other.
+</para>
+
+@clist: The #GtkCList to affect.
+@row1: Number of the first row.
+@row2: Number of the second row.
+
+
+<!-- ##### FUNCTION gtk_clist_set_compare_func ##### -->
+<para>
+Sets the compare function of the #GtkClist to @cmp_func. If @cmp_func is NULL,
+then the default compare function is used. The default compare function sorts
+ascending or with the type set by gtk_clist_set_sort_type() by the column set
+by gtk_clist_set_sort_column().
+</para>
+
+@clist: The #GtkCList to affect.
+@cmp_func: The #GtkCompareFunction to use.
+
+
+<!-- ##### FUNCTION gtk_clist_set_sort_column ##### -->
+<para>
+Sets the sort column of the clist. The sort column is used by the
+default compare function to determine which column to sort by. 
+</para>
+
+@clist: The #GtkCList to affect.
+@column: The column to sort by
+
+
+<!-- ##### FUNCTION gtk_clist_set_sort_type ##### -->
+<para>
+Sets the sort type of the #GtkClist. This is either GTK_SORT_ASCENDING for
+ascening sort or GTK_SORT_DESCENDING for descending sort.
+</para>
+
+@clist: The #GtkCList to affect.
+@sort_type: the #GtkSortType to use
+
+
+<!-- ##### FUNCTION gtk_clist_sort ##### -->
+<para>
+Sorts the #GtkClist according to the current compare function, which
+can be set with the gtk_clist_set_compare_func() function.
+</para>
+
+@clist: The #GtkCList to sort.
+
+
+<!-- ##### FUNCTION gtk_clist_set_auto_sort ##### -->
+<para>
+Turns on or off auto sort of the #GtkCList. If auto sort is on, then the CList will be resorted when a row is inserted into the CList.
+</para>
+
+@clist: The #GtkCList to affect.
+@auto_sort: whether auto sort should be on or off
+
+
+<!-- ##### FUNCTION gtk_clist_columns_autosize ##### -->
+<para>
+Auto-sizes all columns in the CList and returns the total width of the CList.
+</para>
+
+@clist: The #GtkCList to affect.
+@Returns: The total width of the CList.
+
+
+<!-- ##### FUNCTION gtk_clist_get_column_title ##### -->
+<para>
+Gets the current title of the specified column
+</para>
+
+@clist: The #GtkCList to affect.
+@column: The column to query.
+@Returns: The title of the column.
+
+
+<!-- ##### FUNCTION gtk_clist_get_column_widget ##### -->
+<para>
+Gets the widget in the column header for the specified column.
+</para>
+
+@clist: The #GtkCList to affect.
+@column: The column to query.
+@Returns: Pointer to a #GtkWidget for the column header.
+
+
+<!-- ##### FUNCTION gtk_clist_get_hadjustment ##### -->
+<para>
+Gets the #GtkAdjustment currently being used for the horizontal
+aspect.
+</para>
+
+@clist: The #GtkCList to check.
+@Returns: A #GtkAdjustment object, or NULL if none is currently
+being used.
+
+
+<!-- ##### FUNCTION gtk_clist_get_vadjustment ##### -->
+<para>
+Gets the #GtkAdjustment currently being used for the vertical
+aspect.
+</para>
+
+@clist: The #GtkCList to check.
+@Returns: A #GtkAdjustment object, or NULL if none is currently
+being used.
+
+
+<!-- ##### FUNCTION gtk_clist_row_move ##### -->
+<para>
+Allows you to move a row from one position to another in the
+list.
+</para>
+
+@clist: The #GtkCList to affect.
+@source_row: The original position of the row to move.
+@dest_row: The position to which the row should be moved.
+
+
+<!-- ##### FUNCTION gtk_clist_set_button_actions ##### -->
+<para>
+Sets the action(s) that the specified mouse button will have
+on the CList.
+</para>
+
+@clist: The #GtkCList to affect.
+@button: The mouse button to set. The values here, unlike in the
+         rest of GTK+ start from 0. For instance, the right mouse
+         button, which is 3 elsewhere, should be given as 2 here.
+@button_actions: A logically OR'd value of #GtkButtonAction values 
+for the button.
+
+
+<!-- ##### FUNCTION gtk_clist_set_hadjustment ##### -->
+<para>
+Allows you to set the #GtkAdjustment to be used for the horizontal
+aspect of the #GtkCList widget.
+</para>
+
+@clist: The #GtkCList to affect.
+@adjustment: A pointer to a #GtkAdjustment widget, or NULL.
+
+
+<!-- ##### FUNCTION gtk_clist_set_reorderable ##### -->
+<para>
+Sets whether the CList's rows are re-orderable using drag-and-drop.
+</para>
+
+@clist: The #GtkCList to affect.
+@reorderable: %TRUE or %FALSE.
+
+
+<!-- ##### FUNCTION gtk_clist_set_use_drag_icons ##### -->
+<para>
+Determines whether the #GtkClist should use icons when
+doing drag-and-drop operations.
+</para>
+
+@clist: The #GtkCList to affect.
+@use_icons: %TRUE or %FALSE.
+
+
+<!-- ##### FUNCTION gtk_clist_set_vadjustment ##### -->
+<para>
+Allows you to set the #GtkAdjustment to be used for the vertical
+aspect of the #GtkCList widget.
+</para>
+
+@clist: The #GtkCList to affect.
+@adjustment: A pointer to a #GtkAdjustment widget, or NULL.
+
+

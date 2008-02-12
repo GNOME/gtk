@@ -1,0 +1,134 @@
+%define binary_version @GTK_BINARY_VERSION@
+
+Name:		 gtk2
+Summary:	 The Gimp Toolkit
+Version:	 @VERSION@
+Release:	 1
+License:	 LGPL
+Group:		 X11/Libraries
+Source:		 ftp://ftp.gimp.org/pub/gtk/v2.3/gtk+-%{version}.tar.gz
+BuildRoot:	 /var/tmp/%{name}-%{version}-root
+URL:		 http://www.gtk.org
+Requires:	 glib2 >= %{version}
+Requires:        pango
+Requires:        atk
+BuildRequires:   glib2-devel
+BuildRequires:   pango-devel
+BuildRequires:   atk-devel
+
+%description
+The X libraries originally written for the GIMP, which are now used by
+several other programs as well.
+
+%package devel
+Summary:	GIMP Toolkit and GIMP Drawing Kit
+Group:		X11/Libraries
+Requires:	%{name} = %{version}
+
+%description devel
+Static libraries and header files for the GIMP's X libraries, which are
+available as public libraries.  GLIB includes generally useful data
+structures, GDK is a drawing toolkit which provides a thin layer over
+Xlib to help automate things like dealing with different color depths,
+and GTK is a widget set for creating user interfaces.
+
+  
+%prep
+%setup -q -n gtk+-%{version}
+
+%build
+%ifarch alpha
+    MYARCH_FLAGS="--host=alpha-redhat-linux"
+%endif
+
+# Needed for snapshot releases.
+MYCFLAGS="$RPM_OPT_FLAGS"
+if [ ! -f configure ]; then
+    CFLAGS="$MYCFLAGS" ./autogen.sh $MYARCH_FLAGS \
+        --prefix=%{_prefix} \
+	--localstatedir=%{_localstatedir} --sysconfdir=%{_sysconfdir} \
+	--mandir=%{_mandir} --libdir=%{_libdir} \
+	--includedir=%{_includedir}
+else
+   CFLAGS="$MYCFLAGS" ./configure $MYARCH_FLAGS \
+        --prefix=%{_prefix} --localstatedir=%{_localstatedir} \
+        --sysconfdir=%{_sysconfdir} --mandir=%{_mandir} \
+        --libdir=%{_libdir} --includedir=%{_includedir} --disable-gtk-doc
+fi
+
+if [ "$SMP" != "" ]; then
+  (make "MAKE=make -k -j $SMP"; exit 0)
+  make
+else
+  make
+fi
+
+%install
+rm -rf $RPM_BUILD_ROOT
+
+make -k sysconfdir=$RPM_BUILD_ROOT%{_sysconfdir} \
+    prefix=$RPM_BUILD_ROOT%{_prefix} mandir=$RPM_BUILD_ROOT%{_mandir} \
+    localstatedir=$RPM_BUILD_ROOT%{_localstatedir} \
+    libdir=$RPM_BUILD_ROOT%{_libdir} \
+    includedir=$RPM_BUILD_ROOT%{_includedir} install
+
+%clean
+rm -rf $RPM_BUILD_ROOT
+
+%post -p /sbin/ldconfig
+
+%postun -p /sbin/ldconfig
+
+%files
+%defattr(-, root, root)
+
+%doc AUTHORS COPYING ChangeLog NEWS README
+%{_bindir}/*
+%{_libdir}/libgtk*.so.*
+%{_libdir}/libgdk*.so.*
+%{_libdir}/gtk-2.0/%{binary_version}/*/*.so
+#%{_datadir}/locale/*/*/*
+%{_sysconfdir}/gtk-2.0/gtk.immodules
+
+%files devel
+%defattr(-, root, root)
+
+%{_libdir}/lib*.so
+%{_libdir}/*a
+%{_libdir}/gtk-2.0/%{binary_version}/*/*a
+%{_libdir}/gtk-2.0/include
+%{_libdir}/pkgconfig/*.pc
+%{_includedir}/gtk-2.0		
+%{_datadir}/gtk-2.0
+%{_datadir}/aclocal/*
+%{_datadir}/gtk-doc/html/*
+
+
+%changelog
+* Wed Sep 11 2002 Dennis Dementiev <denm@asplinux.ru>
+- modules and loaders should be installed in under binary version
+  dir instead version
+
+* Mon Aug 27 2001 Jens Finke <jens@gnome.org>
+- Renamed package to gtk2.
+- Updated source url.
+- glib2 package required.
+
+* Mon Aug 27 2001 Jens Finke <jens@gnome.org>
+- Updated spec file to match gpp standard and 
+  1.3.x files.
+- Removed all hardcoded paths, use rpm macros instead.
+- Added pango and atk Requires: and BuildRequires: statements.
+- Removed Docdir: statement.
+- Moved ChangeLog to the end of the file.
+- Truncated ChangeLog (Mar 12 1998 - Jun 1 1999)
+  Previous Authors:
+  Jose Mercado <jmercado@mit.edu>
+  Michael Fulbright <drmike@redhat.com>
+  Shawn T. Amundson <amundson@gtk.org>
+  Dick Porter <dick@cymru.net>
+  Marc Ewing <marc@redhat.com>
+  Owen Taylor <otaylor@gtk.org>
+  Trond Eivind Glomsrod <teg@pvv.ntnu.no>
+  Michael K. Johnson <johnsonm@redhat.com>
+  Otto Hammersmith <otto@redhat.com>

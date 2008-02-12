@@ -1,0 +1,407 @@
+<!-- ##### SECTION Title ##### -->
+GdkDisplay
+
+<!-- ##### SECTION Short_Description ##### -->
+Controls the keyboard/mouse pointer grabs and a set of <type>GdkScreen</type>s
+
+<!-- ##### SECTION Long_Description ##### -->
+<para>
+#GdkDisplay objects purpose are two fold:
+<itemizedlist>
+<listitem><para>To grab/ungrab keyboard focus and mouse pointer</para></listitem>
+<listitem><para>To manage and provide information about the #GdkScreen(s) 
+		available for this #GdkDisplay
+	  </para></listitem>
+</itemizedlist>
+</para>
+<para>
+  #GdkDisplay objects are the GDK representation of the X Display which can be 
+  described as <emphasis>a workstation consisting of a keyboard a pointing
+  device (such as a mouse) and one or more screens</emphasis>. 
+  It is used to open and keep track of various #GdkScreen objects currently 
+  instanciated by the application. It is also used to grab and release the keyboard 
+  and the mouse pointer.
+</para>
+
+<!-- ##### SECTION See_Also ##### -->
+<para>
+
+</para>
+
+<!-- ##### SECTION Stability_Level ##### -->
+
+
+<!-- ##### STRUCT GdkDisplay ##### -->
+<para>
+The <structname>GdkDisplay</structname> struct is the GDK representation
+of an X display. All its fields are private and should not be accessed directly. 
+</para>
+
+@Since: 2.2
+
+<!-- ##### SIGNAL GdkDisplay::closed ##### -->
+<para>
+
+</para>
+
+@gdkdisplay: the object which received the signal.
+@arg1: 
+
+<!-- ##### FUNCTION gdk_display_open ##### -->
+<para>
+
+</para>
+
+@display_name: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_display_get_default ##### -->
+<para>
+
+</para>
+
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_display_get_name ##### -->
+<para>
+
+</para>
+
+@display: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_display_get_n_screens ##### -->
+<para>
+
+</para>
+
+@display: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_display_get_screen ##### -->
+<para>
+
+</para>
+
+@display: 
+@screen_num: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_display_get_default_screen ##### -->
+<para>
+
+</para>
+
+@display: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_display_pointer_ungrab ##### -->
+<para>
+
+</para>
+
+@display: 
+@time_: 
+
+
+<!-- ##### FUNCTION gdk_display_keyboard_ungrab ##### -->
+<para>
+
+</para>
+
+@display: 
+@time_: 
+
+
+<!-- ##### FUNCTION gdk_display_pointer_is_grabbed ##### -->
+<para>
+
+</para>
+
+@display: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_display_beep ##### -->
+<para>
+
+</para>
+
+@display: 
+
+
+<!-- ##### FUNCTION gdk_display_sync ##### -->
+<para>
+
+</para>
+
+@display: 
+
+
+<!-- ##### FUNCTION gdk_display_flush ##### -->
+<para>
+
+</para>
+
+@display: 
+
+
+<!-- ##### FUNCTION gdk_display_close ##### -->
+<para>
+
+</para>
+
+@display: 
+
+
+<!-- ##### FUNCTION gdk_display_list_devices ##### -->
+<para>
+
+</para>
+
+@display: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_display_get_event ##### -->
+<para>
+
+</para>
+
+@display: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_display_peek_event ##### -->
+<para>
+
+</para>
+
+@display: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_display_put_event ##### -->
+<para>
+
+</para>
+
+@display: 
+@event: 
+
+
+<!-- ##### FUNCTION gdk_display_add_client_message_filter ##### -->
+<para>
+
+</para>
+
+@display: 
+@message_type: 
+@func: 
+@data: 
+
+
+<!-- ##### FUNCTION gdk_display_set_double_click_time ##### -->
+<para>
+
+</para>
+
+@display: 
+@msec: 
+
+
+<!-- ##### FUNCTION gdk_display_set_double_click_distance ##### -->
+<para>
+
+</para>
+
+@display: 
+@distance: 
+
+
+<!-- ##### FUNCTION gdk_display_get_pointer ##### -->
+<para>
+
+</para>
+
+@display: 
+@screen: 
+@x: 
+@y: 
+@mask: 
+
+
+<!-- ##### FUNCTION gdk_display_get_window_at_pointer ##### -->
+<para>
+
+</para>
+
+@display: 
+@win_x: 
+@win_y: 
+@Returns: 
+
+
+<!-- ##### STRUCT GdkDisplayPointerHooks ##### -->
+<para>
+A table of pointers to functions for getting quantities related to 
+the current pointer position. Each #GdkDisplay has a table of this type,
+which can be set using gdk_display_set_pointer_hooks().
+</para>
+<para>
+This is only useful for such low-level tools as an event recorder. 
+Applications should never have any reason to use this facility
+</para>
+
+@get_pointer: Obtains the current pointer position and modifier state.
+  The position is given in coordinates relative to the window containing 
+  the pointer, which is returned in @window.
+@window_get_pointer: Obtains the window underneath the mouse pointer.
+  Current pointer position and modifier state are returned in @x, @y and 
+  @mask. The position is given in coordinates relative to @window.
+@window_at_pointer: Obtains the window underneath the mouse pointer, 
+  returning the location of that window in @win_x, @win_y. Returns %NULL 
+  if the window under the mouse pointer is not known to GDK (for example, 
+  belongs to another application).
+@Since: 2.2
+
+<!-- ##### FUNCTION gdk_display_set_pointer_hooks ##### -->
+<para>
+
+</para>
+
+@display: 
+@new_hooks: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_display_warp_pointer ##### -->
+<para>
+
+</para>
+
+@display: 
+@screen: 
+@x: 
+@y: 
+
+
+<!-- ##### FUNCTION gdk_display_supports_cursor_color ##### -->
+<para>
+
+</para>
+
+@display: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_display_supports_cursor_alpha ##### -->
+<para>
+
+</para>
+
+@display: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_display_get_default_cursor_size ##### -->
+<para>
+
+</para>
+
+@display: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_display_get_maximal_cursor_size ##### -->
+<para>
+
+</para>
+
+@display: 
+@width: 
+@height: 
+
+
+<!-- ##### FUNCTION gdk_display_get_default_group ##### -->
+<para>
+
+</para>
+
+@display: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_display_supports_selection_notification ##### -->
+<para>
+
+</para>
+
+@display: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_display_request_selection_notification ##### -->
+<para>
+
+</para>
+
+@display: 
+@selection: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_display_supports_clipboard_persistence ##### -->
+<para>
+
+</para>
+
+@display: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_display_store_clipboard ##### -->
+<para>
+
+</para>
+
+@display: 
+@clipboard_window: 
+@time_: 
+@targets: 
+@n_targets: 
+
+
+<!-- ##### FUNCTION gdk_display_supports_shapes ##### -->
+<para>
+
+</para>
+
+@display: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_display_supports_input_shapes ##### -->
+<para>
+
+</para>
+
+@display: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_display_supports_composite ##### -->
+<para>
+
+</para>
+
+@display: 
+@Returns: 
+
+

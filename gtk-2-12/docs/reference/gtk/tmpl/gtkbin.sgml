@@ -1,0 +1,54 @@
+<!-- ##### SECTION Title ##### -->
+GtkBin
+
+<!-- ##### SECTION Short_Description ##### -->
+A container with just one child
+
+<!-- ##### SECTION Long_Description ##### -->
+<para>
+The #GtkBin widget is a container with just one child.
+It is not very useful itself, but it is useful for deriving subclasses,
+since it provides common code needed for handling a single child widget.
+</para>
+<para>
+Many GTK+ widgets are subclasses of #GtkBin, including #GtkWindow, #GtkButton,
+#GtkFrame, #GtkHandleBox, and #GtkScrolledWindow.
+</para>
+
+<!-- ##### SECTION See_Also ##### -->
+<para>
+
+</para>
+
+<!-- ##### SECTION Stability_Level ##### -->
+
+
+<!-- ##### STRUCT GtkBin ##### -->
+<para>
+The #GtkBin-struct struct contains the following fields.
+(These fields should be considered read-only. They should never be set by
+an application.)
+
+<informaltable pgwide="1" frame="none" role="struct">
+<tgroup cols="2"><colspec colwidth="2*"/><colspec colwidth="8*"/>
+<tbody>
+
+<row>
+<entry>#GtkWidget *child;</entry>
+<entry>the child widget.</entry>
+</row>
+
+</tbody></tgroup></informaltable>
+
+</para>
+
+
+<!-- ##### FUNCTION gtk_bin_get_child ##### -->
+<para>
+
+</para>
+
+@bin: 
+@Returns: 
+
+

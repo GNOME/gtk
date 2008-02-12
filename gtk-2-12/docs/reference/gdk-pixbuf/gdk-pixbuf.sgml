@@ -1,0 +1,189 @@
+<?xml version="1.0"?>
+<!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook XML V4.1.2//EN" 
+               "http://www.oasis-open.org/docbook/xml/4.1.2/docbookx.dtd" [
+<!ENTITY gdk-pixbuf-gdk-pixbuf SYSTEM "xml/gdk-pixbuf.xml">
+<!ENTITY gdk-pixbuf-refcounting SYSTEM "xml/refcounting.xml">
+<!ENTITY gdk-pixbuf-file-loading SYSTEM "xml/file-loading.xml">
+<!ENTITY gdk-pixbuf-file-saving SYSTEM "xml/file-saving.xml">
+<!ENTITY gdk-pixbuf-creating SYSTEM "xml/creating.xml">
+<!ENTITY gdk-pixbuf-inline SYSTEM "xml/inline.xml">
+<!ENTITY gdk-pixbuf-scaling SYSTEM "xml/scaling.xml">
+<!ENTITY gdk-pixbuf-rendering SYSTEM "gdk-pixbuf-rendering.sgml">
+<!ENTITY gdk-pixbuf-from-drawables SYSTEM "gdk-pixbuf-from-drawables.sgml">
+<!ENTITY gdk-pixbuf-util SYSTEM "xml/util.xml">
+<!ENTITY gdk-pixbuf-animation SYSTEM "xml/animation.xml">
+<!ENTITY GdkPixbufLoader SYSTEM "xml/gdk-pixbuf-loader.xml">
+<!ENTITY module-interface SYSTEM "xml/module_interface.xml">
+<!ENTITY initialization-versions SYSTEM "xml/initialization_versions.xml">
+<!ENTITY gdk-pixbuf-gdk-pixbuf-xlib-init SYSTEM "xml/gdk-pixbuf-xlib-init.xml">
+<!ENTITY gdk-pixbuf-gdk-pixbuf-xlib-rendering SYSTEM "xml/gdk-pixbuf-xlib-rendering.xml">
+<!ENTITY gdk-pixbuf-gdk-pixbuf-xlib-from-drawables SYSTEM "xml/gdk-pixbuf-xlib-from-drawables.xml">
+<!ENTITY gdk-pixbuf-gdk-pixbuf-xlib-rgb SYSTEM "xml/gdk-pixbuf-xlib-rgb.xml">
+
+<!ENTITY Porting-From-Imlib SYSTEM "porting-from-imlib.sgml">
+
+<!ENTITY gdk-pixbuf "<application>gdk-pixbuf</application>">
+<!ENTITY Imlib "<application>Imlib</application>">
+<!ENTITY version SYSTEM "version.xml">
+<!ENTITY gdk-pixbuf-csource SYSTEM "gdk-pixbuf-csource.xml">
+<!ENTITY gdk-pixbuf-query-loaders SYSTEM "gdk-pixbuf-query-loaders.xml">
+]>
+
+<book id="index">
+  <bookinfo>
+    <title>The &gdk-pixbuf; Library</title>
+    <releaseinfo>Version &version;</releaseinfo>
+    <authorgroup>
+      <author>
+	<firstname>Federico</firstname>
+	<surname>Mena Quintero</surname>
+	<affiliation>
+	  <address>
+	    <email>federico@gimp.org</email>
+	  </address>
+	</affiliation>
+      </author>
+    </authorgroup>
+
+    <copyright>
+      <year>2000</year>
+      <holder>The Free Software Foundation</holder>
+    </copyright>
+
+    <legalnotice>
+      <para>
+	Permission is granted to copy, distribute and/or modify this
+	document under the terms of the <citetitle>GNU Free
+	Documentation License</citetitle>, Version 1.1 or any later
+	version published by the Free Software Foundation with no
+	Invariant Sections, no Front-Cover Texts, and no Back-Cover
+	Texts. You may obtain a copy of the <citetitle>GNU Free
+	Documentation License</citetitle> from the Free Software
+	Foundation by visiting <ulink type="http"
+	url="http://www.fsf.org">their Web site</ulink> or by writing
+	to:
+
+	<address>
+	  The Free Software Foundation, Inc.,
+	  <street>59 Temple Place</street> - Suite 330,
+	  <city>Boston</city>, <state>MA</state> <postcode>02111-1307</postcode>,
+	  <country>USA</country>
+	</address>
+      </para>
+
+      <para>
+	Many of the names used by companies to distinguish their
+	products and services are claimed as trademarks. Where those
+	names appear in any GNOME documentation, and those trademarks
+	are made aware to the members of the GNOME Documentation
+	Project, the names have been printed in caps or initial caps.
+      </para>
+    </legalnotice>
+  </bookinfo>
+
+  <reference>
+    <title>API Reference</title>
+
+    <partintro>
+      <para>
+	This part presents the class and function reference for the
+	&gdk-pixbuf; library.  Classes are described together with
+	their methods; individual functions are grouped by functional
+	group.
+      </para>
+    </partintro>
+
+    &initialization-versions;
+
+    &gdk-pixbuf-gdk-pixbuf;
+    &gdk-pixbuf-refcounting;
+    &gdk-pixbuf-file-loading;
+    &gdk-pixbuf-file-saving;
+    &gdk-pixbuf-creating;
+    &gdk-pixbuf-inline;
+    &gdk-pixbuf-scaling;
+    &gdk-pixbuf-rendering;
+    &gdk-pixbuf-from-drawables;
+    &gdk-pixbuf-util;
+    &gdk-pixbuf-animation;
+
+    &GdkPixbufLoader;
+    &module-interface;
+
+    &gdk-pixbuf-gdk-pixbuf-xlib-init;
+    &gdk-pixbuf-gdk-pixbuf-xlib-rendering;
+    &gdk-pixbuf-gdk-pixbuf-xlib-from-drawables;
+    &gdk-pixbuf-gdk-pixbuf-xlib-rgb;
+  </reference>
+
+  <reference>
+    <title>Tools Reference</title>
+
+    <partintro>
+      <para>
+	This part presents the tools which are shipped with the
+	&gdk-pixbuf; library.  
+      </para>
+    </partintro>
+
+    &gdk-pixbuf-csource;
+    &gdk-pixbuf-query-loaders;
+  </reference>
+
+  <index>
+    <title>Index</title>
+  </index>
+  <index role="deprecated">
+    <title>Index of deprecated symbols</title>
+  </index>
+  <index role="2.2">
+    <title>Index of new symbols in 2.2</title>
+  </index>
+  <index role="2.4">
+    <title>Index of new symbols in 2.4</title>
+  </index>  
+  <index role="2.6">
+    <title>Index of new symbols in 2.6</title>
+  </index>  
+  <index role="2.8">
+    <title>Index of new symbols in 2.8</title>
+  </index>  
+
+  &Porting-From-Imlib;
+
+  <!-- License -->
+
+  <appendix id="license">
+    <title>License</title>
+	
+    <para>
+      This library is free software; you can redistribute it and/or
+      modify it under the terms of the <citetitle>GNU Library General
+      Public License</citetitle> as published by the Free Software
+      Foundation; either version 2 of the License, or (at your option)
+      any later version.
+    </para>
+
+    <para>
+      This library is distributed in the hope that it will be useful,
+      but WITHOUT ANY WARRANTY; without even the implied warranty of
+      MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+      <citetitle>GNU Library General Public License</citetitle> for
+      more details.
+    </para>
+
+    <para>
+      You may obtain a copy of the <citetitle>GNU Library General
+      Public License</citetitle> from the Free Software Foundation by
+      visiting <ulink type="http" url="http://www.fsf.org">their Web
+      site</ulink> or by writing to:
+
+      <address>
+	Free Software Foundation, Inc.
+	<street>59 Temple Place</street> - Suite 330
+	<city>Boston</city>, <state>MA</state> <postcode>02111-1307</postcode>
+	<country>USA</country>
+      </address>
+    </para>
+  </appendix>
+</book>

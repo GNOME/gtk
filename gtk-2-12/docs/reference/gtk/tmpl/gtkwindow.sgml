@@ -1,0 +1,1179 @@
+<!-- ##### SECTION Title ##### -->
+GtkWindow
+
+<!-- ##### SECTION Short_Description ##### -->
+Toplevel which can contain other widgets
+
+<!-- ##### SECTION Long_Description ##### -->
+<para>
+
+</para>
+
+<!-- ##### SECTION See_Also ##### -->
+<para>
+
+</para>
+
+<!-- ##### SECTION Stability_Level ##### -->
+
+
+<!-- ##### STRUCT GtkWindow ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### SIGNAL GtkWindow::activate-default ##### -->
+<para>
+
+</para>
+
+@window: the object which received the signal.
+
+<!-- ##### SIGNAL GtkWindow::activate-focus ##### -->
+<para>
+
+</para>
+
+@window: the object which received the signal.
+
+<!-- ##### SIGNAL GtkWindow::frame-event ##### -->
+<para>
+
+</para>
+
+@window: the object which received the signal.
+@event: 
+@Returns: 
+
+<!-- ##### SIGNAL GtkWindow::keys-changed ##### -->
+<para>
+
+</para>
+
+@window: the object which received the signal.
+
+<!-- ##### SIGNAL GtkWindow::set-focus ##### -->
+<para>
+
+</para>
+
+@window: the object which received the signal.
+@widget: 
+
+<!-- ##### ARG GtkWindow:accept-focus ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkWindow:allow-grow ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkWindow:allow-shrink ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkWindow:decorated ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkWindow:default-height ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkWindow:default-width ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkWindow:deletable ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkWindow:destroy-with-parent ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkWindow:focus-on-map ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkWindow:gravity ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkWindow:has-toplevel-focus ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkWindow:icon ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkWindow:icon-name ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkWindow:is-active ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkWindow:modal ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkWindow:opacity ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkWindow:resizable ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkWindow:role ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkWindow:screen ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkWindow:skip-pager-hint ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkWindow:skip-taskbar-hint ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkWindow:startup-id ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkWindow:title ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkWindow:transient-for ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkWindow:type ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkWindow:type-hint ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkWindow:urgency-hint ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkWindow:window-position ##### -->
+<para>
+
+</para>
+
+<!-- ##### FUNCTION gtk_window_new ##### -->
+<para>
+
+</para>
+
+@type: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_window_set_title ##### -->
+<para>
+
+</para>
+
+@window: 
+@title: 
+
+
+<!-- ##### FUNCTION gtk_window_set_wmclass ##### -->
+<para>
+
+</para>
+
+@window: 
+@wmclass_name: 
+@wmclass_class: 
+
+
+<!-- ##### FUNCTION gtk_window_set_policy ##### -->
+<para>
+Changes how a toplevel window deals with its size request and user resize
+attempts. There are really only two reasonable ways to call this function:
+<orderedlist>
+<listitem>
+<para>
+<literal>gtk_window_set_policy (GTK_WINDOW (window), FALSE, TRUE, FALSE)</literal> 
+means that the window is user-resizable.
+</para>
+</listitem>
+<listitem>
+<para>
+<literal>gtk_window_set_policy (GTK_WINDOW (window), FALSE, FALSE, TRUE)</literal> 
+means that the window's size is program-controlled, and should simply match 
+the current size request of the window's children.
+</para>
+</listitem>
+</orderedlist>
+The first policy is the default, that is, by default windows are designed to 
+be resized by users.
+</para>
+
+<para>
+The basic ugly truth of this function is that it should be simply:
+<literal>
+ void gtk_window_set_resizable (GtkWindow* window, gboolean setting);
+</literal>
+...which is why GTK+ 2.0 introduces gtk_window_set_resizable(), which you 
+should use instead of gtk_window_set_policy().
+</para>
+
+<para>
+If set to %TRUE, the @allow_grow parameter allows the user to expand the window
+beyond the size request of its child widgets. If @allow_grow is %TRUE, be sure to
+check that your child widgets work properly as the window is resized.
+</para>
+
+<para>
+A toplevel window will always change size to ensure its child widgets receive
+their requested size. This means that if you add child widgets, the toplevel
+window will expand to contain them. However, normally the toplevel will not
+shrink to fit the size request of its children if it's too large; the
+@auto_shrink parameter causes the window to shrink when child widgets have too
+much space. @auto_shrink is normally used with the second of the two window
+policies mentioned above.  That is, set @auto_shrink to %TRUE if you want the
+window to have a fixed, always-optimal size determined by your program.
+</para>
+
+<para>
+Note that @auto_shrink doesn't do anything if @allow_shrink and @allow_grow are
+both set to %FALSE.
+</para>
+
+<para>
+Neither of the two suggested window policies set the @allow_shrink parameter to
+%TRUE.  If @allow_shrink is %TRUE, the user can shrink the window so that its
+children do not receive their full size request; this is basically a bad thing,
+because most widgets will look wrong if this happens. Furthermore GTK+ has a
+tendency to re-expand the window if size is recalculated for any reason. The
+upshot is that @allow_shrink should always be set to %FALSE.
+</para>
+
+<para>
+Sometimes when you think you want to use @allow_shrink, the real problem is that
+some specific child widget is requesting too much space, so the user can't
+shrink the window sufficiently. Perhaps you are calling gtk_widget_set_size_request()
+on a child widget, and forcing its size request to be too large. Instead of
+setting the child's usize, consider using gtk_window_set_default_size() so that
+the child gets a larger allocation than it requests.
+</para>
+
+@window: the window
+@allow_shrink: whether the user can shrink the window below its size request
+@allow_grow: whether the user can grow the window larger than its size request
+@auto_shrink: whether the window automatically snaps back to its size request 
+              if it's larger
+@Deprecated: Use gtk_window_set_resizable() instead.
+
+
+<!-- ##### FUNCTION gtk_window_set_resizable ##### -->
+<para>
+
+</para>
+
+@window: 
+@resizable: 
+
+
+<!-- ##### FUNCTION gtk_window_get_resizable ##### -->
+<para>
+
+</para>
+
+@window: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_window_add_accel_group ##### -->
+<para>
+
+</para>
+
+@window: 
+@accel_group: 
+
+
+<!-- ##### FUNCTION gtk_window_remove_accel_group ##### -->
+<para>
+
+</para>
+
+@window: 
+@accel_group: 
+
+
+<!-- ##### MACRO gtk_window_position ##### -->
+<para>
+Deprecated alias for gtk_window_set_position().
+</para>
+
+
+
+<!-- ##### FUNCTION gtk_window_activate_focus ##### -->
+<para>
+
+</para>
+
+@window: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_window_activate_default ##### -->
+<para>
+
+</para>
+
+@window: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_window_set_modal ##### -->
+<para>
+
+</para>
+
+@window: 
+@modal: 
+
+
+<!-- ##### FUNCTION gtk_window_set_default_size ##### -->
+<para>
+
+</para>
+
+@window: 
+@width: 
+@height: 
+
+
+<!-- ##### FUNCTION gtk_window_set_geometry_hints ##### -->
+<para>
+
+</para>
+
+@window: 
+@geometry_widget: 
+@geometry: 
+@geom_mask: 
+
+
+<!-- ##### FUNCTION gtk_window_set_gravity ##### -->
+<para>
+
+</para>
+
+@window: 
+@gravity: 
+
+
+<!-- ##### FUNCTION gtk_window_get_gravity ##### -->
+<para>
+
+</para>
+
+@window: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_window_set_position ##### -->
+<para>
+
+</para>
+
+@window: 
+@position: 
+
+
+<!-- ##### FUNCTION gtk_window_set_transient_for ##### -->
+<para>
+
+</para>
+
+@window: 
+@parent: 
+
+
+<!-- ##### FUNCTION gtk_window_set_destroy_with_parent ##### -->
+<para>
+
+</para>
+
+@window: 
+@setting: 
+
+
+<!-- ##### FUNCTION gtk_window_set_screen ##### -->
+<para>
+
+</para>
+
+@window: 
+@screen: 
+
+
+<!-- ##### FUNCTION gtk_window_get_screen ##### -->
+<para>
+
+</para>
+
+@window: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_window_is_active ##### -->
+<para>
+
+</para>
+
+@window: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_window_has_toplevel_focus ##### -->
+<para>
+
+</para>
+
+@window: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_window_list_toplevels ##### -->
+<para>
+
+</para>
+
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_window_add_mnemonic ##### -->
+<para>
+
+</para>
+
+@window: 
+@keyval: 
+@target: 
+
+
+<!-- ##### FUNCTION gtk_window_remove_mnemonic ##### -->
+<para>
+
+</para>
+
+@window: 
+@keyval: 
+@target: 
+
+
+<!-- ##### FUNCTION gtk_window_mnemonic_activate ##### -->
+<para>
+
+</para>
+
+@window: 
+@keyval: 
+@modifier: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_window_activate_key ##### -->
+<para>
+
+</para>
+
+@window: 
+@event: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_window_propagate_key_event ##### -->
+<para>
+
+</para>
+
+@window: 
+@event: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_window_get_focus ##### -->
+<para>
+
+</para>
+
+@window: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_window_set_focus ##### -->
+<para>
+
+</para>
+
+@window: 
+@focus: 
+
+
+<!-- ##### FUNCTION gtk_window_set_default ##### -->
+<para>
+
+</para>
+
+@window: 
+@default_widget: 
+
+
+<!-- ##### FUNCTION gtk_window_present ##### -->
+<para>
+
+</para>
+
+@window: 
+
+
+<!-- ##### FUNCTION gtk_window_present_with_time ##### -->
+<para>
+
+</para>
+
+@window: 
+@timestamp: 
+
+
+<!-- ##### FUNCTION gtk_window_iconify ##### -->
+<para>
+
+</para>
+
+@window: 
+
+
+<!-- ##### FUNCTION gtk_window_deiconify ##### -->
+<para>
+
+</para>
+
+@window: 
+
+
+<!-- ##### FUNCTION gtk_window_stick ##### -->
+<para>
+
+</para>
+
+@window: 
+
+
+<!-- ##### FUNCTION gtk_window_unstick ##### -->
+<para>
+
+</para>
+
+@window: 
+
+
+<!-- ##### FUNCTION gtk_window_maximize ##### -->
+<para>
+
+</para>
+
+@window: 
+
+
+<!-- ##### FUNCTION gtk_window_unmaximize ##### -->
+<para>
+
+</para>
+
+@window: 
+
+
+<!-- ##### FUNCTION gtk_window_fullscreen ##### -->
+<para>
+
+</para>
+
+@window: 
+
+
+<!-- ##### FUNCTION gtk_window_unfullscreen ##### -->
+<para>
+
+</para>
+
+@window: 
+
+
+<!-- ##### FUNCTION gtk_window_set_keep_above ##### -->
+<para>
+
+</para>
+
+@window: 
+@setting: 
+
+
+<!-- ##### FUNCTION gtk_window_set_keep_below ##### -->
+<para>
+
+</para>
+
+@window: 
+@setting: 
+
+
+<!-- ##### FUNCTION gtk_window_begin_resize_drag ##### -->
+<para>
+
+</para>
+
+@window: 
+@edge: 
+@button: 
+@root_x: 
+@root_y: 
+@timestamp: 
+
+
+<!-- ##### FUNCTION gtk_window_begin_move_drag ##### -->
+<para>
+
+</para>
+
+@window: 
+@button: 
+@root_x: 
+@root_y: 
+@timestamp: 
+
+
+<!-- ##### FUNCTION gtk_window_set_decorated ##### -->
+<para>
+
+</para>
+
+@window: 
+@setting: 
+
+
+<!-- ##### FUNCTION gtk_window_set_deletable ##### -->
+<para>
+
+</para>
+
+@window: 
+@setting: 
+
+
+<!-- ##### FUNCTION gtk_window_set_frame_dimensions ##### -->
+<para>
+
+</para>
+
+@window: 
+@left: 
+@top: 
+@right: 
+@bottom: 
+
+
+<!-- ##### FUNCTION gtk_window_set_has_frame ##### -->
+<para>
+
+</para>
+
+@window: 
+@setting: 
+
+
+<!-- ##### FUNCTION gtk_window_set_mnemonic_modifier ##### -->
+<para>
+
+</para>
+
+@window: 
+@modifier: 
+
+
+<!-- ##### FUNCTION gtk_window_set_role ##### -->
+<para>
+
+</para>
+
+@window: 
+@role: 
+
+
+<!-- ##### FUNCTION gtk_window_set_type_hint ##### -->
+<para>
+
+</para>
+
+@window: 
+@hint: 
+
+
+<!-- ##### FUNCTION gtk_window_set_skip_taskbar_hint ##### -->
+<para>
+
+</para>
+
+@window: 
+@setting: 
+
+
+<!-- ##### FUNCTION gtk_window_set_skip_pager_hint ##### -->
+<para>
+
+</para>
+
+@window: 
+@setting: 
+
+
+<!-- ##### FUNCTION gtk_window_set_urgency_hint ##### -->
+<para>
+
+</para>
+
+@window: 
+@setting: 
+
+
+<!-- ##### FUNCTION gtk_window_set_accept_focus ##### -->
+<para>
+
+</para>
+
+@window: 
+@setting: 
+
+
+<!-- ##### FUNCTION gtk_window_set_focus_on_map ##### -->
+<para>
+
+</para>
+
+@window: 
+@setting: 
+
+
+<!-- ##### FUNCTION gtk_window_set_startup_id ##### -->
+<para>
+
+</para>
+
+@window: 
+@startup_id: 
+
+
+<!-- ##### FUNCTION gtk_window_set_role ##### -->
+<para>
+
+</para>
+
+@window: 
+@role: 
+
+
+<!-- ##### FUNCTION gtk_window_get_decorated ##### -->
+<para>
+
+</para>
+
+@window: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_window_get_deletable ##### -->
+<para>
+
+</para>
+
+@window: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_window_get_default_icon_list ##### -->
+<para>
+
+</para>
+
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_window_get_default_size ##### -->
+<para>
+
+</para>
+
+@window: 
+@width: 
+@height: 
+
+
+<!-- ##### FUNCTION gtk_window_get_destroy_with_parent ##### -->
+<para>
+
+</para>
+
+@window: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_window_get_frame_dimensions ##### -->
+<para>
+
+</para>
+
+@window: 
+@left: 
+@top: 
+@right: 
+@bottom: 
+
+
+<!-- ##### FUNCTION gtk_window_get_has_frame ##### -->
+<para>
+
+</para>
+
+@window: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_window_get_icon ##### -->
+<para>
+
+</para>
+
+@window: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_window_get_icon_list ##### -->
+<para>
+
+</para>
+
+@window: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_window_get_icon_name ##### -->
+<para>
+
+</para>
+
+@window: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_window_get_mnemonic_modifier ##### -->
+<para>
+
+</para>
+
+@window: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_window_get_modal ##### -->
+<para>
+
+</para>
+
+@window: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_window_get_position ##### -->
+<para>
+
+</para>
+
+@window: 
+@root_x: 
+@root_y: 
+
+
+<!-- ##### FUNCTION gtk_window_get_role ##### -->
+<para>
+
+</para>
+
+@window: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_window_get_size ##### -->
+<para>
+
+</para>
+
+@window: 
+@width: 
+@height: 
+
+
+<!-- ##### FUNCTION gtk_window_get_title ##### -->
+<para>
+
+</para>
+
+@window: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_window_get_transient_for ##### -->
+<para>
+
+</para>
+
+@window: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_window_get_type_hint ##### -->
+<para>
+
+</para>
+
+@window: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_window_get_skip_taskbar_hint ##### -->
+<para>
+
+</para>
+
+@window: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_window_get_skip_pager_hint ##### -->
+<para>
+
+</para>
+
+@window: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_window_get_urgency_hint ##### -->
+<para>
+
+</para>
+
+@window: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_window_get_accept_focus ##### -->
+<para>
+
+</para>
+
+@window: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_window_get_focus_on_map ##### -->
+<para>
+
+</para>
+
+@window: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_window_get_group ##### -->
+<para>
+
+</para>
+
+@window: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_window_move ##### -->
+<para>
+
+</para>
+
+@window: 
+@x: 
+@y: 
+
+
+<!-- ##### FUNCTION gtk_window_parse_geometry ##### -->
+<para>
+
+</para>
+
+@window: 
+@geometry: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_window_reshow_with_initial_size ##### -->
+<para>
+
+</para>
+
+@window: 
+
+
+<!-- ##### FUNCTION gtk_window_resize ##### -->
+<para>
+
+</para>
+
+@window: 
+@width: 
+@height: 
+
+
+<!-- ##### FUNCTION gtk_window_set_default_icon_list ##### -->
+<para>
+
+</para>
+
+@list: 
+
+
+<!-- ##### FUNCTION gtk_window_set_default_icon ##### -->
+<para>
+
+</para>
+
+@icon: 
+
+
+<!-- ##### FUNCTION gtk_window_set_default_icon_from_file ##### -->
+<para>
+
+</para>
+
+@filename: 
+@err: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_window_set_default_icon_name ##### -->
+<para>
+
+</para>
+
+@name: 
+
+
+<!-- ##### FUNCTION gtk_window_set_icon ##### -->
+<para>
+
+</para>
+
+@window: 
+@icon: 
+
+
+<!-- ##### FUNCTION gtk_window_set_icon_list ##### -->
+<para>
+
+</para>
+
+@window: 
+@list: 
+
+
+<!-- ##### FUNCTION gtk_window_set_icon_from_file ##### -->
+<para>
+
+</para>
+
+@window: 
+@filename: 
+@err: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_window_set_icon_name ##### -->
+<para>
+
+</para>
+
+@window: 
+@name: 
+
+
+<!-- ##### FUNCTION gtk_window_set_auto_startup_notification ##### -->
+<para>
+
+</para>
+
+@setting: 
+
+
+<!-- ##### FUNCTION gtk_window_get_opacity ##### -->
+<para>
+
+</para>
+
+@window: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_window_set_opacity ##### -->
+<para>
+
+</para>
+
+@window: 
+@opacity: 
+
+

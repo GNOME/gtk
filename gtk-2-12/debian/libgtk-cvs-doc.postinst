@@ -1,0 +1,11 @@
+#!/bin/sh
+
+set -e
+
+install-info --quiet --description="The GIMP Toolkit." \
+ --section "The GIMP" "The GIMP" /usr/info/gtk.info.gz
+
+install-info --quiet --description="The GIMP Drawing Kit." \
+ --section "The GIMP" "The GIMP" /usr/info/gdk.info.gz
+
+#DEBHELPER#

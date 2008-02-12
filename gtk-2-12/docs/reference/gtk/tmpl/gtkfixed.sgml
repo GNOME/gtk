@@ -1,0 +1,181 @@
+<!-- ##### SECTION Title ##### -->
+GtkFixed
+
+<!-- ##### SECTION Short_Description ##### -->
+A container which allows you to position widgets at fixed coordinates
+
+<!-- ##### SECTION Long_Description ##### -->
+<para>
+The #GtkFixed widget is a container which can place child widgets at fixed
+positions and with fixed sizes, given in pixels. #GtkFixed performs no
+automatic layout management.
+</para>
+
+<para>
+For most applications, you should not use this container! It keeps
+you from having to learn about the other GTK+ containers, but it
+results in broken applications.
+With #GtkFixed, the following things will result in truncated text, 
+overlapping widgets, and other display bugs:
+<itemizedlist>
+<listitem>
+<para>Themes, which may change widget sizes.
+</para>
+</listitem>
+<listitem>
+<para>Fonts other than the one you used to write the app will of
+course change the size of widgets containing text; keep in mind that
+users may use a larger font because of difficulty reading the default,
+or they may be using Windows or the framebuffer port of GTK+, where
+different fonts are available.
+</para>
+</listitem>
+<listitem>
+<para>
+Translation of text into other languages changes its size. Also,
+display of non-English text will use a different font in many cases.
+</para>
+</listitem>
+</itemizedlist>
+</para>
+
+<para>
+In addition, the fixed widget can't properly be mirrored in
+right-to-left languages such as Hebrew and Arabic. i.e. normally GTK+
+will flip the interface to put labels to the right of the thing they
+label, but it can't do that with #GtkFixed. So your application will 
+not be usable in right-to-left languages.
+</para>
+
+<para>
+Finally, fixed positioning makes it kind of annoying to add/remove GUI
+elements, since you have to reposition all the other elements. This is
+a long-term maintenance problem for your application.
+</para>
+
+<para>
+If you know none of these things are an issue for your application,
+and prefer the simplicity of #GtkFixed, by all means use the
+widget. But you should be aware of the tradeoffs.
+</para>
+
+<!-- ##### SECTION See_Also ##### -->
+<para>
+
+</para>
+
+<!-- ##### SECTION Stability_Level ##### -->
+
+
+<!-- ##### STRUCT GtkFixed ##### -->
+<para>
+The #GtkFixed-struct struct contains the following fields.
+(These fields should be considered read-only. They should never be set by
+an application.)
+
+<informaltable pgwide="1" frame="none" role="struct">
+<tgroup cols="2"><colspec colwidth="2*"/><colspec colwidth="8*"/>
+<tbody>
+
+<row>
+<entry>#GList *children;</entry>
+<entry>a list of #GtkFixedChild elements, containing the child widgets and
+their positions.</entry>
+</row>
+
+</tbody></tgroup></informaltable>
+</para>
+
+
+<!-- ##### ARG GtkFixed:x ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkFixed:y ##### -->
+<para>
+
+</para>
+
+<!-- ##### STRUCT GtkFixedChild ##### -->
+<para>
+The #GtkFixedChild-struct struct contains the following fields.
+(These fields should be considered read-only. They should never be set by
+an application.)
+
+<informaltable pgwide="1" frame="none" role="struct">
+<tgroup cols="2"><colspec colwidth="2*"/><colspec colwidth="8*"/>
+<tbody>
+
+<row>
+<entry>#GtkWidget *widget;</entry>
+<entry>the child #GtkWidget.</entry>
+</row>
+
+<row>
+<entry>#gint x;</entry>
+<entry>the horizontal position of the widget within the #GtkFixed
+container.</entry>
+</row>
+
+<row>
+<entry>#gint y;</entry>
+<entry>the vertical position of the widget within the #GtkFixed
+container.</entry>
+</row>
+
+</tbody></tgroup></informaltable>
+</para>
+
+@widget: 
+@x: 
+@y: 
+
+<!-- ##### FUNCTION gtk_fixed_new ##### -->
+<para>
+Creates a new #GtkFixed.
+</para>
+
+@Returns: a new #GtkFixed.
+
+
+<!-- ##### FUNCTION gtk_fixed_put ##### -->
+<para>
+Adds a widget to a #GtkFixed container at the given position.
+</para>
+
+@fixed: a #GtkFixed.
+@widget: the widget to add.
+@x: the horizontal position to place the widget at.
+@y: the vertical position to place the widget at.
+
+
+<!-- ##### FUNCTION gtk_fixed_move ##### -->
+<para>
+Moves a child of a #GtkFixed container to the given position.
+</para>
+
+@fixed: a #GtkFixed.
+@widget: the child widget.
+@x: the horizontal position to move the widget to.
+@y: the vertical position to move the widget to.
+
+
+<!-- ##### FUNCTION gtk_fixed_get_has_window ##### -->
+<para>
+
+</para>
+
+@fixed: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_fixed_set_has_window ##### -->
+<para>
+
+</para>
+
+@fixed: 
+@has_window: 
+
+

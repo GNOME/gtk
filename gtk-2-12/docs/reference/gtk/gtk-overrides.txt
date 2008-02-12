@@ -1,0 +1,15 @@
+# These are manually-edited to override or add declarations to those scanned
+# from the GTK header files.
+
+# GtkAllocation is the same as GtkRectangle
+
+<STRUCT>
+<NAME>GtkAllocation</NAME>
+struct GtkAllocation
+{
+  gint x;
+  gint y;
+  gint width;
+  gint height;
+};
+</STRUCT>

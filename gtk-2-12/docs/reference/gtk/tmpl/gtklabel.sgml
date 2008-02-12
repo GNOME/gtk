@@ -1,0 +1,674 @@
+<!-- ##### SECTION Title ##### -->
+GtkLabel
+
+<!-- ##### SECTION Short_Description ##### -->
+A widget that displays a small to medium amount of text
+
+<!-- ##### SECTION Long_Description ##### -->
+<para>
+The #GtkLabel widget displays a small amount of text. As the name
+implies, most labels are used to label another widget such as a
+#GtkButton, a #GtkMenuItem, or a #GtkOptionMenu.
+</para>
+
+<refsect2>
+<title>Mnemonics</title>
+
+<para>
+Labels may contain <firstterm>mnemonics</firstterm>. Mnemonics are
+underlined characters in the label, used for keyboard navigation.
+Mnemonics are created by providing a string with an underscore before
+the mnemonic character, such as <literal>"_File"</literal>, to the
+functions gtk_label_new_with_mnemonic() or
+gtk_label_set_text_with_mnemonic().
+</para>
+
+<para>
+Mnemonics automatically activate any activatable widget the label is
+inside, such as a #GtkButton; if the label is not inside the
+mnemonic's target widget, you have to tell the label about the target
+using gtk_label_set_mnemonic_widget(). Here's a simple example where
+the label is inside a button:
+
+<informalexample>
+<programlisting>
+  /* Pressing Alt+H will activate this button */
+  button = gtk_button_new (<!-- -->);
+  label = gtk_label_new_with_mnemonic ("_Hello");
+  gtk_container_add (GTK_CONTAINER (button), label);
+</programlisting>
+</informalexample>
+There's a convenience function to create buttons with a mnemonic label 
+already inside:
+
+<informalexample>
+<programlisting>
+  /* Pressing Alt+H will activate this button */
+  button = gtk_button_new_with_mnemonic ("_Hello");
+</programlisting>
+</informalexample>
+
+To create a mnemonic for a widget alongside the label, such as a 
+#GtkEntry, you have to point the label at the entry with 
+gtk_label_set_mnemonic_widget():
+<informalexample>
+<programlisting>
+  /* Pressing Alt+H will focus the entry */
+  entry = gtk_entry_new (<!-- -->);
+  label = gtk_label_new_with_mnemonic ("_Hello");
+  gtk_label_set_mnemonic_widget (GTK_LABEL (label), entry);
+</programlisting>
+</informalexample>
+
+</para>
+
+</refsect2>
+
+<refsect2>
+<title>Markup (styled text)</title>
+
+<para>
+To make it easy to format text in a label (changing colors, fonts,
+etc.), label text can be provided in a simple <link
+linkend="PangoMarkupFormat">markup format</link>.
+Here's how to create a label with a small font:
+<informalexample>
+<programlisting>
+  label = gtk_label_new (NULL);
+  gtk_label_set_markup (GTK_LABEL (label), "&lt;small&gt;Small text&lt;/small&gt;");
+</programlisting>
+</informalexample>
+(See <link
+linkend="PangoMarkupFormat">complete documentation</link> of available
+tags in the Pango manual.)
+</para>
+<para>
+The markup passed to gtk_label_set_markup() must be valid; for example,
+literal &lt;/&gt;/&amp; characters must be escaped as &amp;lt;,
+&amp;gt;, and &amp;amp;. If you pass text obtained from the user, file,
+or a network to gtk_label_set_markup(), you'll want to escape it with
+g_markup_escape_text() or g_markup_printf_escaped().
+</para>
+<para>
+Markup strings are just a convenient way to set the #PangoAttrList on
+a label; gtk_label_set_attributes() may be a simpler way to set
+attributes in some cases. Be careful though; #PangoAttrList tends to
+cause internationalization problems, unless you're applying attributes
+to the entire string (i.e. unless you set the range of each attribute
+to [0, G_MAXINT)). The reason is that specifying the start_index and
+end_index for a #PangoAttribute requires knowledge of the exact string
+being displayed, so translations will cause problems.
+</para>
+</refsect2>
+
+<refsect2>
+<title>Selectable labels</title>
+
+<para>
+Labels can be made selectable with gtk_label_set_selectable(). 
+Selectable labels allow the user to copy the label contents to 
+the clipboard. Only labels that contain useful-to-copy information
+&mdash; such as error messages &mdash; should be made selectable.
+</para>
+</refsect2>
+
+<refsect2>
+<title>Text layout</title>
+
+<para>
+A label can contain any number of paragraphs, but will have
+performance problems if it contains more than a small number.
+Paragraphs are separated by newlines or other paragraph separators
+understood by Pango.
+</para>
+<para>
+Labels can automatically wrap text if you call
+gtk_label_set_line_wrap().
+</para>
+<para>
+gtk_label_set_justify() sets how the lines in a label align 
+with one another. If you want to set how the label as a whole 
+aligns in its available space, see gtk_misc_set_alignment().
+</para>
+
+</refsect2>
+
+<!-- ##### SECTION See_Also ##### -->
+<para>
+
+</para>
+
+<!-- ##### SECTION Stability_Level ##### -->
+
+
+<!-- ##### STRUCT GtkLabel ##### -->
+<para>
+This should not be accessed directly.  Use the accessor functions as
+described below.
+</para>
+
+
+<!-- ##### SIGNAL GtkLabel::copy-clipboard ##### -->
+<para>
+
+</para>
+
+@label: the object which received the signal.
+
+<!-- ##### SIGNAL GtkLabel::move-cursor ##### -->
+<para>
+
+</para>
+
+@label: the object which received the signal.
+@arg1: 
+@arg2: 
+@arg3: 
+
+<!-- ##### SIGNAL GtkLabel::populate-popup ##### -->
+<para>
+
+</para>
+
+@label: the object which received the signal.
+@arg1: 
+
+<!-- ##### ARG GtkLabel:angle ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkLabel:attributes ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkLabel:cursor-position ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkLabel:ellipsize ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkLabel:justify ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkLabel:label ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkLabel:max-width-chars ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkLabel:mnemonic-keyval ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkLabel:mnemonic-widget ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkLabel:pattern ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkLabel:selectable ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkLabel:selection-bound ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkLabel:single-line-mode ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkLabel:use-markup ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkLabel:use-underline ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkLabel:width-chars ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkLabel:wrap ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkLabel:wrap-mode ##### -->
+<para>
+
+</para>
+
+<!-- ##### FUNCTION gtk_label_new ##### -->
+<para>
+
+</para>
+
+@str: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_label_set_text ##### -->
+<para>
+
+</para>
+
+@label: 
+@str: 
+
+
+<!-- ##### FUNCTION gtk_label_set_attributes ##### -->
+<para>
+
+</para>
+
+@label: 
+@attrs: 
+
+
+<!-- ##### FUNCTION gtk_label_set_markup ##### -->
+<para>
+
+</para>
+
+@label: 
+@str: 
+
+
+<!-- ##### FUNCTION gtk_label_set_markup_with_mnemonic ##### -->
+<para>
+
+</para>
+
+@label: 
+@str: 
+
+
+<!-- ##### FUNCTION gtk_label_set_pattern ##### -->
+<para>
+The pattern of underlines you want under the existing text within the
+#GtkLabel widget.  For example if the current text of the label says
+&quot;FooBarBaz&quot; passing a pattern of &quot;___   ___&quot; will underline
+&quot;Foo&quot; and &quot;Baz&quot; but not &quot;Bar&quot;.
+</para>
+
+@label: The #GtkLabel you want to set the pattern to.
+@pattern: The pattern as described above.
+
+
+<!-- ##### FUNCTION gtk_label_set_justify ##### -->
+<para>
+
+</para>
+
+@label: 
+@jtype: 
+
+
+<!-- ##### FUNCTION gtk_label_set_ellipsize ##### -->
+<para>
+
+</para>
+
+@label: 
+@mode: 
+
+
+<!-- ##### FUNCTION gtk_label_set_width_chars ##### -->
+<para>
+
+</para>
+
+@label: 
+@n_chars: 
+
+
+<!-- ##### FUNCTION gtk_label_set_max_width_chars ##### -->
+<para>
+
+</para>
+
+@label: 
+@n_chars: 
+
+
+<!-- ##### FUNCTION gtk_label_get ##### -->
+<para>
+Gets the current string of text within the #GtkLabel and writes it to
+the given @str argument.  It does not make a copy of this string so you
+must not write to it.
+</para>
+
+@label: The #GtkLabel widget you want to get the text from.
+@str: The reference to the pointer you want to point to the text.
+
+
+<!-- ##### FUNCTION gtk_label_parse_uline ##### -->
+<para>
+Parses the given string for underscores and converts the next
+character to an underlined character.  The last character that
+was underlined will have its lower-cased accelerator keyval returned  (i.e.
+&quot;_File&quot; would return the keyval for &quot;f&quot;.  This is
+probably only used within the GTK+ library itself for menu items and such.
+</para>
+
+@label: The #GtkLabel you want to affect.
+@string: The string you want to parse for underlines.
+@Returns: The lowercase keyval of the last character underlined.
+
+
+<!-- ##### FUNCTION gtk_label_set_line_wrap ##### -->
+<para>
+
+</para>
+
+@label: 
+@wrap: 
+
+
+<!-- ##### FUNCTION gtk_label_set_line_wrap_mode ##### -->
+<para>
+
+</para>
+
+@label: 
+@wrap_mode: 
+
+
+<!-- ##### MACRO gtk_label_set ##### -->
+<para>
+Aliases gtk_label_set_text().  Probably used for backward compatibility with
+GTK+ 1.0.x.
+</para>
+
+
+
+<!-- ##### FUNCTION gtk_label_get_layout_offsets ##### -->
+<para>
+
+</para>
+
+@label: 
+@x: 
+@y: 
+
+
+<!-- ##### FUNCTION gtk_label_get_mnemonic_keyval ##### -->
+<para>
+
+</para>
+
+@label: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_label_get_selectable ##### -->
+<para>
+
+</para>
+
+@label: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_label_get_text ##### -->
+<para>
+
+</para>
+
+@label: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_label_new_with_mnemonic ##### -->
+<para>
+
+</para>
+
+@str: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_label_select_region ##### -->
+<para>
+
+</para>
+
+@label: 
+@start_offset: 
+@end_offset: 
+
+
+<!-- ##### FUNCTION gtk_label_set_mnemonic_widget ##### -->
+<para>
+
+</para>
+
+@label: 
+@widget: 
+
+
+<!-- ##### FUNCTION gtk_label_set_selectable ##### -->
+<para>
+
+</para>
+
+@label: 
+@setting: 
+
+
+<!-- ##### FUNCTION gtk_label_set_text_with_mnemonic ##### -->
+<para>
+
+</para>
+
+@label: 
+@str: 
+
+
+<!-- ##### FUNCTION gtk_label_get_attributes ##### -->
+<para>
+
+</para>
+
+@label: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_label_get_justify ##### -->
+<para>
+
+</para>
+
+@label: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_label_get_ellipsize ##### -->
+<para>
+
+</para>
+
+@label: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_label_get_width_chars ##### -->
+<para>
+
+</para>
+
+@label: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_label_get_max_width_chars ##### -->
+<para>
+
+</para>
+
+@label: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_label_get_label ##### -->
+<para>
+
+</para>
+
+@label: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_label_get_layout ##### -->
+<para>
+
+</para>
+
+@label: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_label_get_line_wrap ##### -->
+<para>
+
+</para>
+
+@label: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_label_get_line_wrap_mode ##### -->
+<para>
+
+</para>
+
+@label: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_label_get_mnemonic_widget ##### -->
+<para>
+
+</para>
+
+@label: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_label_get_selection_bounds ##### -->
+<para>
+
+</para>
+
+@label: 
+@start: 
+@end: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_label_get_use_markup ##### -->
+<para>
+
+</para>
+
+@label: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_label_get_use_underline ##### -->
+<para>
+
+</para>
+
+@label: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_label_get_single_line_mode ##### -->
+<para>
+
+</para>
+
+@label: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_label_get_angle ##### -->
+<para>
+
+</para>
+
+@label: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_label_set_label ##### -->
+<para>
+
+</para>
+
+@label: 
+@str: 
+
+
+<!-- ##### FUNCTION gtk_label_set_use_markup ##### -->
+<para>
+
+</para>
+
+@label: 
+@setting: 
+
+
+<!-- ##### FUNCTION gtk_label_set_use_underline ##### -->
+<para>
+
+</para>
+
+@label: 
+@setting: 
+
+
+<!-- ##### FUNCTION gtk_label_set_single_line_mode ##### -->
+<para>
+
+</para>
+
+@label: 
+@single_line_mode: 
+
+
+<!-- ##### FUNCTION gtk_label_set_angle ##### -->
+<para>
+
+</para>
+
+@label: 
+@angle: 
+
+

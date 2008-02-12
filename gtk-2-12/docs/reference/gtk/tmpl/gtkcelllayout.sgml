@@ -1,0 +1,183 @@
+<!-- ##### SECTION Title ##### -->
+GtkCellLayout
+
+<!-- ##### SECTION Short_Description ##### -->
+An interface for packing cells
+
+<!-- ##### SECTION Long_Description ##### -->
+<para>
+#GtkCellLayout is an interface to be implemented by all objects which
+want to provide a #GtkTreeViewColumn-like API for packing cells, setting
+attributes and data funcs. 
+</para>
+
+<para>
+One of the notable features provided by implementations of GtkCellLayout
+are <emphasis>attributes</emphasis>. Attributes let you set the properties
+in flexible ways. They can just be set to constant values like regular
+properties. But they can also be mapped to a column of the underlying 
+tree model with gtk_cell_layout_set_attributes(), which means that the value 
+of the attribute can change from cell to cell as they are rendered by the 
+cell renderer. Finally, it is possible to specify a function with 
+gtk_cell_layout_set_cell_data_func() that is called to determine the value 
+of the attribute for each cell that is rendered.
+</para>
+
+<refsect2 id="GtkCellLayout-BUILDER-UI">
+<title>GtkCellLayouts as GtkBuildable</title>
+<para>
+Implementations of GtkCellLayout which also implement the GtkBuildable 
+interface (#GtkCellView, #GtkIconView, #GtkComboBox, #GtkComboBoxEntry, 
+#GtkEntryCompletion, #GtkTreeViewColumn) accept GtkCellRenderer objects
+as &lt;child&gt; elements in UI definitions. They support a custom 
+&lt;attributes&gt; element for their children, which can contain 
+multiple &lt;attribute&gt; elements. Each &lt;attribute&gt; element has 
+a name attribute which specifies a property of the cell renderer; the 
+content of the element is the attribute value.
+</para>
+<example>
+<title>A UI definition fragment specifying attributes</title>
+<programlisting><![CDATA[
+<object class="GtkCellView">
+  <child>
+    <object class="GtkCellRendererText"/>
+    <attributes>
+      <attribute name="text">0</attribute>
+    </attributes>
+  </child>"
+</object>
+]]></programlisting>
+</example>
+</refsect2>
+
+<!-- ##### SECTION See_Also ##### -->
+<para>
+
+</para>
+
+<!-- ##### SECTION Stability_Level ##### -->
+
+
+<!-- ##### STRUCT GtkCellLayout ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### STRUCT GtkCellLayoutIface ##### -->
+<para>
+
+</para>
+
+@g_iface: 
+@pack_start: 
+@pack_end: 
+@clear: 
+@add_attribute: 
+@set_cell_data_func: 
+@clear_attributes: 
+@reorder: 
+@get_cells: 
+
+<!-- ##### USER_FUNCTION GtkCellLayoutDataFunc ##### -->
+<para>
+A function which should set the value of @cell_layout's cell renderer(s)
+as appropriate. 
+</para>
+
+@cell_layout: a #GtkCellLayout
+@cell: the cell renderer whose value is to be set
+@tree_model: the model
+@iter: a #GtkTreeIter indicating the row to set the value for
+@data: user data passed to gtk_cell_layout_set_cell_data_func()
+
+
+<!-- ##### FUNCTION gtk_cell_layout_pack_start ##### -->
+<para>
+
+</para>
+
+@cell_layout: 
+@cell: 
+@expand: 
+
+
+<!-- ##### FUNCTION gtk_cell_layout_pack_end ##### -->
+<para>
+
+</para>
+
+@cell_layout: 
+@cell: 
+@expand: 
+
+
+<!-- ##### FUNCTION gtk_cell_layout_get_cells ##### -->
+<para>
+
+</para>
+
+@cell_layout: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_cell_layout_reorder ##### -->
+<para>
+
+</para>
+
+@cell_layout: 
+@cell: 
+@position: 
+
+
+<!-- ##### FUNCTION gtk_cell_layout_clear ##### -->
+<para>
+
+</para>
+
+@cell_layout: 
+
+
+<!-- ##### FUNCTION gtk_cell_layout_set_attributes ##### -->
+<para>
+
+</para>
+
+@cell_layout: 
+@cell: 
+@Varargs: 
+
+
+<!-- ##### FUNCTION gtk_cell_layout_add_attribute ##### -->
+<para>
+
+</para>
+
+@cell_layout: 
+@cell: 
+@attribute: 
+@column: 
+
+
+<!-- ##### FUNCTION gtk_cell_layout_set_cell_data_func ##### -->
+<para>
+
+</para>
+
+@cell_layout: 
+@cell: 
+@func: 
+@func_data: 
+@destroy: 
+
+
+<!-- ##### FUNCTION gtk_cell_layout_clear_attributes ##### -->
+<para>
+
+</para>
+
+@cell_layout: 
+@cell: 
+
+

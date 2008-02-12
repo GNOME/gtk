@@ -1,0 +1,88 @@
+<!-- ##### SECTION Title ##### -->
+GtkAspectFrame
+
+<!-- ##### SECTION Short_Description ##### -->
+A frame that constrains its child to a particular aspect ratio
+
+<!-- ##### SECTION Long_Description ##### -->
+<para>
+The #GtkAspectFrame is useful when you want
+pack a widget so that it can resize but always retains
+the same aspect ratio. For instance, one might be
+drawing a small preview of a larger image. #GtkAspectFrame
+derives from #GtkFrame, so it can draw a label and
+a frame around the child. The frame will be
+"shrink-wrapped" to the size of the child.
+</para>
+
+<!-- ##### SECTION See_Also ##### -->
+<para>
+
+</para>
+
+<!-- ##### SECTION Stability_Level ##### -->
+
+
+<!-- ##### STRUCT GtkAspectFrame ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### ARG GtkAspectFrame:obey-child ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkAspectFrame:ratio ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkAspectFrame:xalign ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkAspectFrame:yalign ##### -->
+<para>
+
+</para>
+
+<!-- ##### FUNCTION gtk_aspect_frame_new ##### -->
+<para>
+Create a new #GtkAspectFrame.
+</para>
+
+@label: Label text.
+@xalign: Horizontal alignment of the child within the allocation of
+the #GtkAspectFrame. This ranges from 0.0 (left aligned)
+to 1.0 (right aligned)
+@yalign: Vertical alignment of the child within the allocation of
+the #GtkAspectFrame. This ranges from 0.0 (left aligned)
+to 1.0 (right aligned)
+@ratio: The desired aspect ratio.
+@obey_child: If %TRUE, @ratio is ignored, and the aspect
+    ratio is taken from the requistion of the child.
+@Returns: the new #GtkAspectFrame.
+<!-- # Unused Parameters # -->
+@ratio: The desired aspect ratio.
+
+
+<!-- ##### FUNCTION gtk_aspect_frame_set ##### -->
+<para>
+Set parameters for an existing #GtkAspectFrame.
+</para>
+
+@aspect_frame: a #GtkAspectFrame
+@xalign: Horizontal alignment of the child within the allocation of
+the #GtkAspectFrame. This ranges from 0.0 (left aligned)
+to 1.0 (right aligned)
+@yalign: Vertical alignment of the child within the allocation of
+the #GtkAspectFrame. This ranges from 0.0 (left aligned)
+to 1.0 (right aligned)
+@ratio: The desired aspect ratio.
+@obey_child: If %TRUE, @ratio is ignored, and the aspect
+    ratio is taken from the requistion of the child.
+
+

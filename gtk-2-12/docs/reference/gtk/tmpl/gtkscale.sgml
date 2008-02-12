@@ -1,0 +1,182 @@
+<!-- ##### SECTION Title ##### -->
+GtkScale
+
+<!-- ##### SECTION Short_Description ##### -->
+Base class for GtkHScale and GtkVScale
+
+<!-- ##### SECTION Long_Description ##### -->
+<para>
+A #GtkScale is a slider control used to select a numeric value.
+To use it, you'll probably want to investigate the methods on 
+its base class, #GtkRange, in addition to the methods for #GtkScale itself.
+To set the value of a scale, you would normally use gtk_range_set_value(). 
+To detect changes to the value, you would normally use the "value_changed" 
+signal.
+</para>
+<para>
+The #GtkScale widget is an abstract class, used only for deriving the
+subclasses #GtkHScale and #GtkVScale. To create a scale widget, 
+call gtk_hscale_new_with_range() or gtk_vscale_new_with_range().
+</para>
+
+<!-- ##### SECTION See_Also ##### -->
+<para>
+
+</para>
+
+<!-- ##### SECTION Stability_Level ##### -->
+
+
+<!-- ##### STRUCT GtkScale ##### -->
+<para>
+The #GtkScale-struct struct contains the following fields.
+(These fields should be considered read-only. They should never be set by
+an application.)
+
+<informaltable pgwide="1" frame="none" role="struct">
+<tgroup cols="2"><colspec colwidth="2*"/><colspec colwidth="8*"/>
+<tbody>
+
+<row>
+<entry>#guint <structfield>draw_value</structfield>;</entry>
+<entry>non-zero if the scale's current value is displayed next to the
+slider.</entry>
+</row>
+
+<row>
+<entry>#guint <structfield>value_pos</structfield>;</entry>
+<entry>the position in which the textual value is displayed, selected from
+#GtkPositionType.</entry>
+</row>
+
+</tbody></tgroup></informaltable>
+</para>
+
+
+<!-- ##### SIGNAL GtkScale::format-value ##### -->
+<para>
+Signal which allows you to change how the scale value is displayed.  Connect a
+signal handler which returns an allocated string representing @value.
+That string will then be used to display the scale's value.
+Here's an example signal handler which displays a value 1.0 as
+with "--&gt;1.0&lt;--".
+<informalexample><programlisting>
+static gchar*
+format_value_callback (GtkScale *scale,
+                       gdouble   value)
+{
+  return g_strdup_printf ("--&gt;&percnt;0.*g&lt;--",
+                          gtk_scale_get_digits (scale), value);
+}
+</programlisting></informalexample>
+</para>
+
+@scale: the object which received the signal.
+@arg1: 
+@Returns: allocated string representing @value
+<!-- # Unused Parameters # -->
+@value: value to format
+
+<!-- ##### ARG GtkScale:digits ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkScale:draw-value ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkScale:value-pos ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkScale:slider-length ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkScale:value-spacing ##### -->
+<para>
+
+</para>
+
+<!-- ##### FUNCTION gtk_scale_set_digits ##### -->
+<para>
+Sets the number of decimal places that are displayed in the value.  Also causes
+the value of the adjustment to be rounded off to this number of digits, so the
+retrieved value matches the value the user saw.
+</para>
+
+@scale: a #GtkScale.
+@digits: the number of decimal places to display, e.g. use 1 to display 1.0,
+2 to display 1.00 etc.
+
+
+<!-- ##### FUNCTION gtk_scale_set_draw_value ##### -->
+<para>
+Specifies whether the current value is displayed as a string next to the
+slider.
+</para>
+
+@scale: a #GtkScale.
+@draw_value: a boolean.
+
+
+<!-- ##### FUNCTION gtk_scale_set_value_pos ##### -->
+<para>
+Sets the position in which the current value is displayed.
+</para>
+
+@scale: a #GtkScale.
+@pos: the position in which the current value is displayed.
+
+
+<!-- ##### FUNCTION gtk_scale_get_digits ##### -->
+<para>
+Gets the number of decimal places that are displayed in the value.
+</para>
+
+@scale: a #GtkScale.
+@Returns: the number of decimal places that are displayed.
+
+
+<!-- ##### FUNCTION gtk_scale_get_draw_value ##### -->
+<para>
+Returns whether the current value is displayed as a string next to the
+slider.
+</para>
+
+@scale: a #GtkScale.
+@Returns: whether the current value is displayed as a string.
+
+
+<!-- ##### FUNCTION gtk_scale_get_value_pos ##### -->
+<para>
+Gets the position in which the current value is displayed.
+</para>
+
+@scale: a #GtkScale.
+@Returns: the position in which the current value is displayed.
+
+
+<!-- ##### FUNCTION gtk_scale_get_layout ##### -->
+<para>
+
+</para>
+
+@scale: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_scale_get_layout_offsets ##### -->
+<para>
+
+</para>
+
+@scale: 
+@x: 
+@y: 
+
+

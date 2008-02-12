@@ -1,0 +1,343 @@
+<!-- ##### SECTION Title ##### -->
+GtkRange
+
+<!-- ##### SECTION Short_Description ##### -->
+Base class for widgets which visualize an adjustment
+
+<!-- ##### SECTION Long_Description ##### -->
+<para>
+#GtkRange is the common base class for widgets which visualize an
+adjustment, e.g scales or scrollbars. 
+</para>
+<para>
+Apart from signals for monitoring the parameters of the adjustment, 
+GtkRange provides properties and methods for influencing the sensitivity
+of the "steppers". It also provides properties and methods for setting a 
+"fill level" on range widgets. See gtk_range_set_fill_level().
+</para>
+
+<!-- ##### SECTION See_Also ##### -->
+<para>
+
+</para>
+
+<!-- ##### SECTION Stability_Level ##### -->
+
+
+<!-- ##### STRUCT GtkRange ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### SIGNAL GtkRange::adjust-bounds ##### -->
+<para>
+
+</para>
+
+@range: the object which received the signal.
+@arg1: 
+
+<!-- ##### SIGNAL GtkRange::change-value ##### -->
+<para>
+
+</para>
+
+@range: the object which received the signal.
+@arg1: 
+@arg2: 
+@Returns: 
+
+<!-- ##### SIGNAL GtkRange::move-slider ##### -->
+<para>
+
+</para>
+
+@range: 
+@step: 
+
+<!-- ##### SIGNAL GtkRange::value-changed ##### -->
+<para>
+
+</para>
+
+@range: 
+
+<!-- ##### ARG GtkRange:adjustment ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkRange:fill-level ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkRange:inverted ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkRange:lower-stepper-sensitivity ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkRange:restrict-to-fill-level ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkRange:show-fill-level ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkRange:update-policy ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkRange:upper-stepper-sensitivity ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkRange:activate-slider ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkRange:arrow-displacement-x ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkRange:arrow-displacement-y ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkRange:slider-width ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkRange:stepper-size ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkRange:stepper-spacing ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkRange:trough-border ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkRange:trough-side-details ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkRange:trough-under-steppers ##### -->
+<para>
+
+</para>
+
+<!-- ##### FUNCTION gtk_range_get_fill_level ##### -->
+<para>
+
+</para>
+
+@range: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_range_get_restrict_to_fill_level ##### -->
+<para>
+
+</para>
+
+@range: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_range_get_show_fill_level ##### -->
+<para>
+
+</para>
+
+@range: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_range_set_fill_level ##### -->
+<para>
+
+</para>
+
+@range: 
+@fill_level: 
+
+
+<!-- ##### FUNCTION gtk_range_set_restrict_to_fill_level ##### -->
+<para>
+
+</para>
+
+@range: 
+@restrict_to_fill_level: 
+
+
+<!-- ##### FUNCTION gtk_range_set_show_fill_level ##### -->
+<para>
+
+</para>
+
+@range: 
+@show_fill_level: 
+
+
+<!-- ##### FUNCTION gtk_range_get_adjustment ##### -->
+<para>
+
+</para>
+
+@range: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_range_set_update_policy ##### -->
+<para>
+
+</para>
+
+@range: 
+@policy: 
+
+
+<!-- ##### FUNCTION gtk_range_set_adjustment ##### -->
+<para>
+
+</para>
+
+@range: 
+@adjustment: 
+
+
+<!-- ##### FUNCTION gtk_range_get_inverted ##### -->
+<para>
+
+</para>
+
+@range: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_range_set_inverted ##### -->
+<para>
+
+</para>
+
+@range: 
+@setting: 
+
+
+<!-- ##### FUNCTION gtk_range_get_update_policy ##### -->
+<para>
+
+</para>
+
+@range: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_range_get_value ##### -->
+<para>
+
+</para>
+
+@range: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_range_set_increments ##### -->
+<para>
+
+</para>
+
+@range: 
+@step: 
+@page: 
+
+
+<!-- ##### FUNCTION gtk_range_set_range ##### -->
+<para>
+
+</para>
+
+@range: 
+@min: 
+@max: 
+
+
+<!-- ##### FUNCTION gtk_range_set_value ##### -->
+<para>
+
+</para>
+
+@range: 
+@value: 
+
+
+<!-- ##### ENUM GtkSensitivityType ##### -->
+<para>
+Determines how GTK+ handles the sensitivity of stepper arrows
+at the end of range widgets.
+</para>
+
+@GTK_SENSITIVITY_AUTO: The arrow is made insensitive if the
+   thumb is at the end
+@GTK_SENSITIVITY_ON: The arrow is always sensitive
+@GTK_SENSITIVITY_OFF: The arrow is always insensitive
+
+<!-- ##### FUNCTION gtk_range_set_lower_stepper_sensitivity ##### -->
+<para>
+
+</para>
+
+@range: 
+@sensitivity: 
+
+
+<!-- ##### FUNCTION gtk_range_get_lower_stepper_sensitivity ##### -->
+<para>
+
+</para>
+
+@range: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_range_set_upper_stepper_sensitivity ##### -->
+<para>
+
+</para>
+
+@range: 
+@sensitivity: 
+
+
+<!-- ##### FUNCTION gtk_range_get_upper_stepper_sensitivity ##### -->
+<para>
+
+</para>
+
+@range: 
+@Returns: 
+
+

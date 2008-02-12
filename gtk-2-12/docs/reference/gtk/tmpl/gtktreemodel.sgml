@@ -1,0 +1,871 @@
+<!-- ##### SECTION Title ##### -->
+GtkTreeModel
+
+<!-- ##### SECTION Short_Description ##### -->
+The tree interface used by GtkTreeView
+
+<!-- ##### SECTION Long_Description ##### -->
+<para>
+The #GtkTreeModel interface defines a generic tree interface for use by
+the #GtkTreeView widget.  It is an abstract interface, and is designed
+to be usable with any appropriate data structure.  The programmer just
+has to implement this interface on their own data type for it to be
+viewable by a #GtkTreeView widget.
+</para>
+
+<para>
+The model is represented as a hierarchical tree of strongly-typed,
+columned data.  In other words, the model can be seen as a tree where
+every node has different values depending on which column is being
+queried.  The type of data found in a column is determined by using the
+GType system (ie. #G_TYPE_INT, #GTK_TYPE_BUTTON, #G_TYPE_POINTER, etc.).
+The types are homogeneous per column across all nodes.  It is important
+to note that this interface only provides a way of examining a model and
+observing changes.  The implementation of each individual model decides
+how and if changes are made.
+</para>
+
+<para>
+In order to make life simpler for programmers who do not need to write
+their own specialized model, two generic models are provided &mdash; the
+#GtkTreeStore and the #GtkListStore.  To use these, the developer simply
+pushes data into these models as necessary.  These models provide the
+data structure as well as all appropriate tree interfaces.  As a result,
+implementing drag and drop, sorting, and storing data is trivial.  For
+the vast majority of trees and lists, these two models are sufficient.
+</para>
+
+<para>
+Models are accessed on a node/column level of granularity.  One can
+query for the value of a model at a certain node and a certain column
+on that node.  There are two structures used to reference a particular
+node in a model.  They are the #GtkTreePath and the #GtkTreeIter
+<footnote>
+<para>
+Here, <abbrev>iter</abbrev> is short for <quote>iterator</quote>
+</para>
+</footnote>
+Most of the interface consists of operations on a #GtkTreeIter.
+</para>
+
+<para>
+A path is essentially a potential node.  It is a location on a model
+that may or may not actually correspond to a node on a specific model.
+The #GtkTreePath struct can be converted into either an array of
+unsigned integers or a string.  The string form is a list of numbers
+separated by a colon.  Each number refers to the offset at that level.
+Thus, the path <quote>0</quote> refers to the root node and the path
+<quote>2:4</quote> refers to the fifth child of the third node.
+</para>
+
+<para>
+By contrast, a #GtkTreeIter is a reference to a specific node on a
+specific model.  It is a generic struct with an integer and three
+generic pointers.  These are filled in by the model in a model-specific
+way.  One can convert a path to an iterator by calling
+gtk_tree_model_get_iter().  These iterators are the primary way of
+accessing a model and are similar to the iterators used by
+#GtkTextBuffer.  They are generally statically allocated on the stack and
+only used for a short time.  The model interface defines a set of
+operations using them for navigating the model.
+</para>
+
+<para>
+It is expected that models fill in the iterator with private data.  For
+example, the #GtkListStore model, which is internally a simple linked
+list, stores a list node in one of the pointers.  The #GtkTreeModelSort
+stores an array and an offset in two of the pointers.  Additionally,
+there is an integer field.  This field is generally filled with a unique
+stamp per model.  This stamp is for catching errors resulting from using
+invalid iterators with a model.
+</para>
+
+<para>
+The lifecycle of an iterator can be a little confusing at first.
+Iterators are expected to always be valid for as long as the model is
+unchanged (and doesn't emit a signal).  The model is considered to own
+all outstanding iterators and nothing needs to be done to free them from
+the user's point of view.  Additionally, some models guarantee that an
+iterator is valid for as long as the node it refers to is valid (most
+notably the #GtkTreeStore and #GtkListStore).  Although generally
+uninteresting, as one always has to allow for the case where iterators
+do not persist beyond a signal, some very important performance
+enhancements were made in the sort model.  As a result, the
+#GTK_TREE_MODEL_ITERS_PERSIST flag was added to indicate this behavior.
+</para>
+
+<para>
+To help show some common operation of a model, some examples are
+provided.  The first example shows three ways of getting the iter at the
+location <quote>3:2:5</quote>.  While the first method shown is easier,
+the second is much more common, as you often get paths from callbacks.
+</para>
+<para>
+<example>
+<title>Acquiring a <structname>GtkTreeIter</structname></title>
+<programlisting>
+/* Three ways of getting the iter pointing to the location
+ */
+{
+  GtkTreePath *path;
+  GtkTreeIter iter;
+  GtkTreeIter parent_iter;
+
+  /* get the iterator from a string */
+  gtk_tree_model_get_iter_from_string (model, &amp;iter, "3:2:5");
+
+  /* get the iterator from a path */
+  path = gtk_tree_path_new_from_string ("3:2:5");
+  gtk_tree_model_get_iter (model, &amp;iter, path);
+  gtk_tree_path_free (path);
+
+
+  /* walk the tree to find the iterator */
+  gtk_tree_model_iter_nth_child (model, &amp;iter, NULL, 3);
+  parent_iter = iter;
+  gtk_tree_model_iter_nth_child (model, &amp;iter, &amp;parent_iter, 2);
+  parent_iter = iter;
+  gtk_tree_model_iter_nth_child (model, &amp;iter, &amp;parent_iter, 5);
+}
+</programlisting>
+</example>
+</para>
+
+<para>
+This second example shows a quick way of iterating through a list and
+getting a string and an integer from each row.  The
+<function>populate_model</function> function used below is not shown, as
+it is specific to the #GtkListStore.  For information on how to write
+such a function, see the #GtkListStore documentation.
+<example>
+<title>Reading data from a <structname>GtkTreeModel</structname></title>
+<programlisting>
+enum
+{
+  STRING_COLUMN,
+  INT_COLUMN,
+  N_COLUMNS
+};
+
+{
+  GtkTreeModel *list_store;
+  GtkTreeIter iter;
+  gboolean valid;
+  gint row_count = 0;
+
+  /* make a new list_store */
+  list_store = gtk_list_store_new (N_COLUMNS, G_TYPE_STRING, G_TYPE_INT);
+
+  /* Fill the list store with data */
+  populate_model (list_store);
+
+  /* Get the first iter in the list */
+  valid = gtk_tree_model_get_iter_first (list_store, &amp;iter);
+
+  while (valid)
+    {
+      /* Walk through the list, reading each row */
+      gchar *str_data;
+      gint   int_data;
+
+      /* Make sure you terminate calls to gtk_tree_model_get(<!-- -->)
+       * with a '-1' value
+       */
+      gtk_tree_model_get (list_store, &amp;iter, 
+                          STRING_COLUMN, &amp;str_data,
+                          INT_COLUMN, &amp;int_data,
+                          -1);
+
+      /* Do something with the data */
+      g_print ("Row &percnt;d: (&percnt;s,&percnt;d)\n", row_count, str_data, int_data);
+      g_free (str_data);
+
+      row_count ++;
+      valid = gtk_tree_model_iter_next (list_store, &amp;iter);
+    }
+}
+</programlisting>
+</example>
+</para>
+
+<!-- ##### SECTION See_Also ##### -->
+<para>
+#GtkTreeView, #GtkTreeStore, #GtkListStore, <link linkend="gtk-GtkTreeView-drag-and-drop">GtkTreeDnd</link>, #GtkTreeSortable
+</para>
+
+<!-- ##### SECTION Stability_Level ##### -->
+
+
+<!-- ##### STRUCT GtkTreeModel ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### SIGNAL GtkTreeModel::row-changed ##### -->
+<para>
+
+</para>
+
+@treemodel: the object which received the signal.
+@arg1: 
+@arg2: 
+
+<!-- ##### SIGNAL GtkTreeModel::row-deleted ##### -->
+<para>
+
+</para>
+
+@treemodel: the object which received the signal.
+@arg1: 
+
+<!-- ##### SIGNAL GtkTreeModel::row-has-child-toggled ##### -->
+<para>
+
+</para>
+
+@treemodel: the object which received the signal.
+@arg1: 
+@arg2: 
+
+<!-- ##### SIGNAL GtkTreeModel::row-inserted ##### -->
+<para>
+
+</para>
+
+@treemodel: the object which received the signal.
+@arg1: 
+@arg2: 
+
+<!-- ##### SIGNAL GtkTreeModel::rows-reordered ##### -->
+<para>
+
+</para>
+
+@treemodel: the object which received the signal.
+@arg1: 
+@arg2: 
+@arg3: 
+
+<!-- ##### STRUCT GtkTreeIter ##### -->
+<para>
+The <structname>GtkTreeIter</structname> is the primary structure for
+accessing a structure.  Models are expected to put a unique integer in
+the <structfield>stamp</structfield> member, and put model-specific
+data in the three <structfield>user_data</structfield> members.
+</para>
+
+@stamp: A unique stamp to catch invalid iterators
+@user_data: Model specific data
+@user_data2: Model specific data
+@user_data3: Model specific data
+
+<!-- ##### STRUCT GtkTreePath ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### STRUCT GtkTreeRowReference ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### STRUCT GtkTreeModelIface ##### -->
+<para>
+
+</para>
+
+@g_iface: 
+@row_changed: 
+@row_inserted: 
+@row_has_child_toggled: 
+@row_deleted: 
+@rows_reordered: 
+@get_flags: 
+@get_n_columns: 
+@get_column_type: 
+@get_iter: 
+@get_path: 
+@get_value: 
+@iter_next: 
+@iter_children: 
+@iter_has_child: 
+@iter_n_children: 
+@iter_nth_child: 
+@iter_parent: 
+@ref_node: 
+@unref_node: 
+
+<!-- ##### USER_FUNCTION GtkTreeModelForeachFunc ##### -->
+<para>
+
+</para>
+
+@model: The #GtkTreeModel currently being iterated
+@path: The current #GtkTreePath
+@iter: The current #GtkTreeIter
+@data: The user data passed to gtk_tree_model_foreach()
+@Returns: %TRUE to stop iterating, %FALSE to continue.
+
+
+<!-- ##### ENUM GtkTreeModelFlags ##### -->
+<para>
+These flags indicate various properties of a #GtkTreeModel.  They are
+returned by gtk_tree_model_get_flags(), and must be static for the
+lifetime of the object.  A more complete description of
+#GTK_TREE_MODEL_ITERS_PERSIST can be found in the overview of this
+section.
+</para>
+
+@GTK_TREE_MODEL_ITERS_PERSIST: Iterators survive all signals emitted by the tree.
+@GTK_TREE_MODEL_LIST_ONLY: The model is a list only, and never has children
+
+<!-- ##### FUNCTION gtk_tree_path_new ##### -->
+<para>
+
+</para>
+
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_tree_path_new_from_string ##### -->
+<para>
+
+</para>
+
+@path: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_tree_path_new_from_indices ##### -->
+<para>
+
+</para>
+
+@first_index: 
+@Varargs: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_tree_path_to_string ##### -->
+<para>
+
+</para>
+
+@path: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_tree_path_new_first ##### -->
+<para>
+
+</para>
+
+@Returns: 
+
+
+<!-- ##### MACRO gtk_tree_path_new_root ##### -->
+<para>
+An alternate name for gtk_tree_path_new_first() provided for
+compatibility reasons.
+</para>
+
+@Returns: A new #GtkTreePath.
+@Deprecated: Use gtk_tree_path_new_first() instead.
+
+
+<!-- ##### FUNCTION gtk_tree_path_append_index ##### -->
+<para>
+
+</para>
+
+@path: 
+@index_: 
+
+
+<!-- ##### FUNCTION gtk_tree_path_prepend_index ##### -->
+<para>
+
+</para>
+
+@path: 
+@index_: 
+
+
+<!-- ##### FUNCTION gtk_tree_path_get_depth ##### -->
+<para>
+
+</para>
+
+@path: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_tree_path_get_indices ##### -->
+<para>
+
+</para>
+
+@path: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_tree_path_free ##### -->
+<para>
+
+</para>
+
+@path: 
+
+
+<!-- ##### FUNCTION gtk_tree_path_copy ##### -->
+<para>
+
+</para>
+
+@path: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_tree_path_compare ##### -->
+<para>
+
+</para>
+
+@a: 
+@b: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_tree_path_next ##### -->
+<para>
+
+</para>
+
+@path: 
+
+
+<!-- ##### FUNCTION gtk_tree_path_prev ##### -->
+<para>
+
+</para>
+
+@path: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_tree_path_up ##### -->
+<para>
+
+</para>
+
+@path: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_tree_path_down ##### -->
+<para>
+
+</para>
+
+@path: 
+
+
+<!-- ##### FUNCTION gtk_tree_path_is_ancestor ##### -->
+<para>
+
+</para>
+
+@path: 
+@descendant: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_tree_path_is_descendant ##### -->
+<para>
+
+</para>
+
+@path: 
+@ancestor: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_tree_row_reference_new ##### -->
+<para>
+
+</para>
+
+@model: 
+@path: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_tree_row_reference_new_proxy ##### -->
+<para>
+
+</para>
+
+@proxy: 
+@model: 
+@path: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_tree_row_reference_get_model ##### -->
+<para>
+
+</para>
+
+@reference: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_tree_row_reference_get_path ##### -->
+<para>
+
+</para>
+
+@reference: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_tree_row_reference_valid ##### -->
+<para>
+
+</para>
+
+@reference: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_tree_row_reference_free ##### -->
+<para>
+
+</para>
+
+@reference: 
+
+
+<!-- ##### FUNCTION gtk_tree_row_reference_copy ##### -->
+<para>
+
+</para>
+
+@reference: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_tree_row_reference_inserted ##### -->
+<para>
+
+</para>
+
+@proxy: 
+@path: 
+
+
+<!-- ##### FUNCTION gtk_tree_row_reference_deleted ##### -->
+<para>
+
+</para>
+
+@proxy: 
+@path: 
+
+
+<!-- ##### FUNCTION gtk_tree_row_reference_reordered ##### -->
+<para>
+
+</para>
+
+@proxy: 
+@path: 
+@iter: 
+@new_order: 
+
+
+<!-- ##### FUNCTION gtk_tree_iter_copy ##### -->
+<para>
+
+</para>
+
+@iter: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_tree_iter_free ##### -->
+<para>
+
+</para>
+
+@iter: 
+
+
+<!-- ##### FUNCTION gtk_tree_model_get_flags ##### -->
+<para>
+
+</para>
+
+@tree_model: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_tree_model_get_n_columns ##### -->
+<para>
+
+</para>
+
+@tree_model: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_tree_model_get_column_type ##### -->
+<para>
+
+</para>
+
+@tree_model: 
+@index_: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_tree_model_get_iter ##### -->
+<para>
+
+</para>
+
+@tree_model: 
+@iter: 
+@path: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_tree_model_get_iter_from_string ##### -->
+<para>
+
+</para>
+
+@tree_model: 
+@iter: 
+@path_string: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_tree_model_get_iter_first ##### -->
+<para>
+
+</para>
+
+@tree_model: 
+@iter: 
+@Returns: 
+
+
+<!-- ##### MACRO gtk_tree_model_get_iter_root ##### -->
+<para>
+A alternate name for gtk_tree_model_get_iter_first() provided for
+compatibility reasons; this macro will be deprecated in future
+versions of GTK+.
+</para>
+
+@tree_model:  A #GtkTreeModel.
+@iter: uninitialized #GtkTreeIter.
+@Returns:  %TRUE, if @iter was set.
+
+
+<!-- ##### FUNCTION gtk_tree_model_get_path ##### -->
+<para>
+
+</para>
+
+@tree_model: 
+@iter: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_tree_model_get_value ##### -->
+<para>
+
+</para>
+
+@tree_model: 
+@iter: 
+@column: 
+@value: 
+
+
+<!-- ##### FUNCTION gtk_tree_model_iter_next ##### -->
+<para>
+
+</para>
+
+@tree_model: 
+@iter: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_tree_model_iter_children ##### -->
+<para>
+
+</para>
+
+@tree_model: 
+@iter: 
+@parent: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_tree_model_iter_has_child ##### -->
+<para>
+
+</para>
+
+@tree_model: 
+@iter: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_tree_model_iter_n_children ##### -->
+<para>
+
+</para>
+
+@tree_model: 
+@iter: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_tree_model_iter_nth_child ##### -->
+<para>
+
+</para>
+
+@tree_model: 
+@iter: 
+@parent: 
+@n: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_tree_model_iter_parent ##### -->
+<para>
+
+</para>
+
+@tree_model: 
+@iter: 
+@child: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_tree_model_get_string_from_iter ##### -->
+<para>
+
+</para>
+
+@tree_model: 
+@iter: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_tree_model_ref_node ##### -->
+<para>
+
+</para>
+
+@tree_model: 
+@iter: 
+
+
+<!-- ##### FUNCTION gtk_tree_model_unref_node ##### -->
+<para>
+
+</para>
+
+@tree_model: 
+@iter: 
+
+
+<!-- ##### FUNCTION gtk_tree_model_get ##### -->
+<para>
+
+</para>
+
+@tree_model: 
+@iter: 
+@Varargs: 
+
+
+<!-- ##### FUNCTION gtk_tree_model_get_valist ##### -->
+<para>
+
+</para>
+
+@tree_model: 
+@iter: 
+@var_args: 
+
+
+<!-- ##### FUNCTION gtk_tree_model_foreach ##### -->
+<para>
+
+</para>
+
+@model: 
+@func: 
+@user_data: 
+
+
+<!-- ##### FUNCTION gtk_tree_model_row_changed ##### -->
+<para>
+
+</para>
+
+@tree_model: 
+@path: 
+@iter: 
+
+
+<!-- ##### FUNCTION gtk_tree_model_row_inserted ##### -->
+<para>
+
+</para>
+
+@tree_model: 
+@path: 
+@iter: 
+
+
+<!-- ##### FUNCTION gtk_tree_model_row_has_child_toggled ##### -->
+<para>
+
+</para>
+
+@tree_model: 
+@path: 
+@iter: 
+
+
+<!-- ##### FUNCTION gtk_tree_model_row_deleted ##### -->
+<para>
+
+</para>
+
+@tree_model: 
+@path: 
+
+
+<!-- ##### FUNCTION gtk_tree_model_rows_reordered ##### -->
+<para>
+
+</para>
+
+@tree_model: 
+@path: 
+@iter: 
+@new_order: 
+
+

@@ -1,0 +1,583 @@
+<!-- ##### SECTION Title ##### -->
+Fonts
+
+<!-- ##### SECTION Short_Description ##### -->
+Loading and manipulating fonts
+
+<!-- ##### SECTION Long_Description ##### -->
+<para>
+The #GdkFont data type represents a font for drawing on
+the screen. These functions provide support for
+loading fonts, and also for determining the dimensions
+of characters and strings when drawn with a particular
+font.
+</para>
+
+<para>
+Fonts in X are specified by a
+<firstterm>X Logical Font Description</firstterm>. 
+The following description is considerably simplified.
+For definitive information about XLFD's see the 
+X reference documentation. A X Logical Font Description (XLFD)
+consists of a sequence of fields separated (and surrounded by) '-'
+characters. For example, Adobe Helvetica Bold 12 pt, has the
+full description: 
+<informalexample><programlisting>
+"-adobe-helvetica-bold-r-normal--12-120-75-75-p-70-iso8859-1"
+</programlisting></informalexample>
+</para>
+
+<para>
+The fields in the XLFD are:
+
+<informaltable pgwide="1" frame="none">
+<tgroup cols="2"><colspec colwidth="2*"/><colspec colwidth="8*"/>
+<tbody>
+
+<row>
+<entry>Foundry</entry>
+<entry>the company or organization where the font originated.</entry>
+</row>
+
+<row>
+<entry>Family</entry>
+<entry>the font family (a group of related font designs).</entry>
+</row>
+
+<row>
+<entry>Weight</entry>
+<entry>A name for the font's typographic weight
+For example, 'bold' or 'medium').</entry>
+</row>
+
+<row>
+<entry>Slant</entry>
+<entry>The slant of the font. Common values are 'R' for Roman,
+'I' for italoc, and 'O' for oblique.</entry>
+</row>
+
+<row>
+<entry>Set Width</entry>
+<entry>A name for the width of the font. For example,
+'normal' or 'condensed'.</entry>
+</row>
+
+<row>
+<entry>Add Style</entry>
+<entry>Additional information to distinguish a font from
+other fonts of the same family.</entry>
+</row>
+
+<row>
+<entry>Pixel Size</entry>
+<entry>The body size of the font in pixels.</entry>
+</row>
+
+<row>
+<entry>Point Size</entry>
+<entry>The body size of the font in 10ths of a point.
+(A <firstterm>point</firstterm> is 1/72.27 inch) </entry>
+</row>
+
+<row>
+<entry>Resolution X</entry>
+<entry>The horizontal resolution that the font was designed for.</entry>
+</row>
+
+<row>
+<entry>Resolution Y</entry>
+<entry>The vertical resolution that the font was designed for .</entry>
+</row>
+
+<row>
+<entry>Spacing</entry>
+<entry>The type of spacing for the font - can be 'p' for proportional,
+'m' for monospaced or 'c' for charcell.</entry>
+</row>
+
+<row>
+<entry>Average Width</entry>
+<entry>The average width of a glyph in the font. For monospaced
+and charcell fonts, all glyphs in the font have this width</entry>
+</row>
+
+<row>
+<entry>Charset Registry</entry>
+<entry>The registration authority that owns the encoding for
+the font. Together with the Charset Encoding field, this
+defines the character set for the font.</entry>
+</row>
+
+<row>
+<entry>Charset Encoding</entry>
+<entry>An identifier for the particular character set encoding.</entry>
+</row>
+
+</tbody></tgroup></informaltable>
+</para>
+
+<para>
+When specifying a font via a X logical Font Description,
+'*' can be used as a wildcard to match any portion of
+the XLFD. For instance, the above example could
+also be specified as
+<informalexample><programlisting>
+"-*-helvetica-bold-r-normal--*-120-*-*-*-*-iso8859-1"
+</programlisting></informalexample>
+
+It is generally a good idea to use wildcards for any
+portion of the XLFD that your program does not care
+about specifically, since that will improve the
+chances of finding a matching font.
+</para>
+
+<para>
+A <firstterm>fontset</firstterm> is a list of fonts
+that is used for drawing international text that may
+contain characters from a number of different character
+sets. It is represented by a list of XLFD's. 
+</para>
+
+<para>
+The font for a given character set is determined by going
+through the list of XLFD's in order. For each one, if
+the registry and and encoding fields match the desired
+character set, then that font is used, otherwise if
+the XLFD contains wild-cards for the registry and encoding
+fields, the registry and encoding for the desired character
+set are substituted in and a lookup is done. If a match is found
+that font is used. Otherwise, processing continues
+on to the next font in the list.
+</para>
+
+<para>
+The functions for determining the metrics of a string
+come in several varieties that can take a number
+of forms of string input:
+
+<variablelist>
+  <varlistentry>
+    <term>8-bit string</term>
+    <listitem><para>
+    When using functions like gdk_string_width() that
+    take a <type>gchar *</type>, if the font is of type
+    %GDK_FONT_FONT and is an 8-bit font, then each
+    <type>gchar</type> indexes the glyphs in the font directly.
+    </para></listitem>
+  </varlistentry>
+  <varlistentry>
+    <term>16-bit string</term>
+    <listitem><para>
+    For functions taking a <type>gchar *</type>, if the
+    font is of type %GDK_FONT_FONT, and is a 16-bit
+    font, then the <type>gchar *</type> argument is
+    interpreted as a <type>guint16 *</type> cast to
+    a <type>gchar *</type> and each <type>guint16</type>
+    indexes the glyphs in the font directly.
+    </para></listitem>
+  </varlistentry>
+  <varlistentry>
+    <term>Multibyte string</term>
+    <listitem><para>
+    For functions taking a <type>gchar *</type>, if the
+    font is of type %GDK_FONT_FONTSET, then the input
+    string is interpreted as a <firstterm>multibyte</firstterm>
+    encoded according to the current locale. (A multibyte
+    string is one in which each character may consist
+    of one or more bytes, with different lengths for different
+    characters in the string). They can be converted to and
+    from wide character strings (see below) using
+    gdk_wcstombs() and gdk_mbstowcs().) The string will
+    be rendered using one or more different fonts from
+    the fontset.
+    </para></listitem>
+  </varlistentry>
+  <varlistentry>
+    <term>Wide character string</term>
+    <listitem><para>
+    For a number of the text-measuring functions, GDK
+    provides a variant (such as gdk_text_width_wc()) which
+    takes a <type>GdkWChar *</type> instead of a 
+    <type>gchar *</type>. The input is then taken to
+    be a wide character string in the encoding of the
+    current locale. (A wide character string is a string
+    in which each character consists of several bytes,
+    and the width of each character in the string is 
+    constant.)
+    </para></listitem>
+  </varlistentry>
+</variablelist>
+</para>
+
+<para>
+GDK provides functions to determine a number of different
+measurements (metrics) for a given string. (Need diagram
+here).
+
+<variablelist>
+  <varlistentry>
+    <term>ascent</term>
+    <listitem><para>
+    The vertical distance from the origin of the drawing
+    opereration to the top of the drawn character.
+    </para></listitem>
+  </varlistentry>
+  <varlistentry>
+    <term>descent</term>
+    <listitem><para>
+    The vertical distance from the origin of the drawing
+    opereration to the bottom of the drawn character.
+    </para></listitem>
+  </varlistentry>
+  <varlistentry>
+    <term>left bearing</term>
+    <listitem><para>
+    The horizontal distance from the origin of the drawing
+    operation to the left-most part of the drawn character.
+    </para></listitem>
+  </varlistentry>
+  <varlistentry>
+    <term>right bearing</term>
+    <listitem><para>
+    The horizontal distance from the origin of the drawing
+    operation to the right-most part of the drawn character.
+    </para></listitem>
+  </varlistentry>
+  <varlistentry>
+    <term>width bearing</term>
+    <listitem><para>
+    The horizontal distance from the origin of the drawing
+    operation to the correct origin for drawing another
+    string to follow the current one. Depending on the
+    font, this could be greater than or less than the 
+    right bearing.
+    </para></listitem>
+  </varlistentry>
+</variablelist>
+</para>
+
+<!-- ##### SECTION See_Also ##### -->
+<para>
+
+</para>
+
+<!-- ##### SECTION Stability_Level ##### -->
+
+
+<!-- ##### STRUCT GdkFont ##### -->
+<para>
+The <structname>GdkFont</structname> structure represents a font or fontset. It
+contains the following public fields. A new <structname>GdkFont</structname>
+structure is returned by gdk_font_load() or gdk_fontset_load(),
+and is reference counted with gdk_font_ref() and gdk_font_unref()
+</para>
+
+@type: a value of type #GdkFontType which indicates
+  whether this font is a single font or a fontset.
+@ascent: the maximum distance that the font, when drawn,
+  ascends above the baseline.
+@descent: the maximum distance that the font, when drawn,
+descends below the baseline.
+
+<!-- ##### ENUM GdkFontType ##### -->
+<para>
+Indicates the type of a font. The possible values
+are currently:
+</para>
+
+@GDK_FONT_FONT: the font is a single font.
+@GDK_FONT_FONTSET: the font is a fontset.
+
+<!-- ##### FUNCTION gdk_font_load ##### -->
+<para>
+</para>
+
+@font_name: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_font_load_for_display ##### -->
+<para>
+
+</para>
+
+@display: 
+@font_name: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_fontset_load ##### -->
+<para>
+</para>
+
+@fontset_name: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_fontset_load_for_display ##### -->
+<para>
+
+</para>
+
+@display: 
+@fontset_name: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_font_from_description ##### -->
+<para>
+
+</para>
+
+@font_desc: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_font_from_description_for_display ##### -->
+<para>
+
+</para>
+
+@display: 
+@font_desc: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_font_get_display ##### -->
+<para>
+
+</para>
+
+@font: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_font_ref ##### -->
+<para>
+</para>
+
+@font: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_font_unref ##### -->
+<para>
+</para>
+
+@font: 
+
+
+<!-- ##### FUNCTION gdk_font_id ##### -->
+<para>
+</para>
+
+@font: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_font_equal ##### -->
+<para>
+</para>
+
+@fonta: 
+@fontb: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_string_extents ##### -->
+<para>
+</para>
+
+@font: 
+@string: 
+@lbearing: 
+@rbearing: 
+@width: 
+@ascent: 
+@descent: 
+
+
+<!-- ##### FUNCTION gdk_text_extents ##### -->
+<para>
+</para>
+
+@font: 
+@text: 
+@text_length: 
+@lbearing: 
+@rbearing: 
+@width: 
+@ascent: 
+@descent: 
+
+
+<!-- ##### FUNCTION gdk_text_extents_wc ##### -->
+<para>
+</para>
+
+@font: 
+@text: 
+@text_length: 
+@lbearing: 
+@rbearing: 
+@width: 
+@ascent: 
+@descent: 
+
+
+<!-- ##### FUNCTION gdk_string_width ##### -->
+<para>
+</para>
+
+@font: 
+@string: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_text_width ##### -->
+<para>
+</para>
+
+@font: 
+@text: 
+@text_length: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_text_width_wc ##### -->
+<para>
+</para>
+
+@font: 
+@text: 
+@text_length: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_char_width ##### -->
+<para>
+</para>
+
+@font: 
+@character: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_char_width_wc ##### -->
+<para>
+</para>
+
+@font: 
+@character: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_string_measure ##### -->
+<para>
+</para>
+
+@font: 
+@string: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_text_measure ##### -->
+<para>
+</para>
+
+@font: 
+@text: 
+@text_length: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_char_measure ##### -->
+<para>
+</para>
+
+@font: 
+@character: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_string_height ##### -->
+<para>
+</para>
+
+@font: 
+@string: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_text_height ##### -->
+<para>
+</para>
+
+@font: 
+@text: 
+@text_length: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_char_height ##### -->
+<para>
+</para>
+
+@font: 
+@character: 
+@Returns: 
+
+
+<!-- ##### TYPEDEF GdkWChar ##### -->
+<para>
+Specifies a wide character type, used to represent character codes.
+This is needed since some native languages have character sets which have
+more than 256 characters (Japanese and Chinese, for example).
+</para>
+<para>
+Wide character values between 0 and 127 are always identical in meaning to
+the ASCII character codes. The wide character value 0 is often used to
+terminate strings of wide characters in a similar way to normal strings
+using the char type.
+</para>
+<para>
+An alternative to wide characters is multi-byte characters, which extend
+normal char strings to cope with larger character sets. As the name suggests,
+multi-byte characters use a different number of bytes to store different
+character codes. For example codes 0-127 (i.e. the ASCII codes) often
+use just one byte of memory, while other codes may use 2, 3 or even 4 bytes.
+Multi-byte characters have the advantage that they can often be used in an
+application with little change, since strings are still represented as arrays
+of char values. However multi-byte strings are much easier to manipulate since
+the character are all of the same size.
+</para>
+<para>
+Applications typically use wide characters to represent character codes
+internally, and multi-byte strings when saving the characters to a file.
+The gdk_wcstombs() and gdk_mbstowcs() functions can be used to convert from
+one representation to the other.
+</para>
+<para>
+See the 'Extended Characters' section of the GNU C Library Reference Manual
+for more detailed information on wide and multi-byte characters.
+</para>
+
+
+<!-- ##### FUNCTION gdk_wcstombs ##### -->
+<para>
+</para>
+
+@src: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_mbstowcs ##### -->
+<para>
+</para>
+
+@dest: 
+@src: 
+@dest_max: 
+@Returns: 
+
+

@@ -1,0 +1,113 @@
+<!-- ##### SECTION Title ##### -->
+GtkViewport
+
+<!-- ##### SECTION Short_Description ##### -->
+An adapter which makes widgets scrollable
+
+<!-- ##### SECTION Long_Description ##### -->
+<para>
+
+</para>
+
+<!-- ##### SECTION See_Also ##### -->
+<para>
+
+</para>
+
+<!-- ##### SECTION Stability_Level ##### -->
+
+
+<!-- ##### STRUCT GtkViewport ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### SIGNAL GtkViewport::set-scroll-adjustments ##### -->
+<para>
+
+</para>
+
+@viewport: the object which received the signal.
+@arg1: 
+@arg2: 
+
+<!-- ##### ARG GtkViewport:hadjustment ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkViewport:shadow-type ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkViewport:vadjustment ##### -->
+<para>
+
+</para>
+
+<!-- ##### FUNCTION gtk_viewport_new ##### -->
+<para>
+
+</para>
+
+@hadjustment: 
+@vadjustment: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_viewport_get_hadjustment ##### -->
+<para>
+
+</para>
+
+@viewport: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_viewport_get_vadjustment ##### -->
+<para>
+
+</para>
+
+@viewport: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_viewport_set_hadjustment ##### -->
+<para>
+
+</para>
+
+@viewport: 
+@adjustment: 
+
+
+<!-- ##### FUNCTION gtk_viewport_set_vadjustment ##### -->
+<para>
+
+</para>
+
+@viewport: 
+@adjustment: 
+
+
+<!-- ##### FUNCTION gtk_viewport_set_shadow_type ##### -->
+<para>
+
+</para>
+
+@viewport: 
+@type: 
+
+
+<!-- ##### FUNCTION gtk_viewport_get_shadow_type ##### -->
+<para>
+
+</para>
+
+@viewport: 
+@Returns: 
+
+

@@ -1,0 +1,169 @@
+<!-- ##### SECTION Title ##### -->
+GtkOldEditable
+
+<!-- ##### SECTION Short_Description ##### -->
+Base class for text-editing widgets
+
+<!-- ##### SECTION Long_Description ##### -->
+<para>
+GtkOldEditable has been deprecated since GTK+ 2.0 and should not be used
+in newly written code. Use the #GtkEditable interface instead.
+</para>
+
+<!-- ##### SECTION See_Also ##### -->
+<para>
+
+</para>
+
+<!-- ##### SECTION Stability_Level ##### -->
+
+
+<!-- ##### STRUCT GtkOldEditable ##### -->
+<para>
+
+</para>
+
+@current_pos: 
+@selection_start_pos: 
+@selection_end_pos: 
+@has_selection: 
+
+<!-- ##### SIGNAL GtkOldEditable::activate ##### -->
+<para>
+
+</para>
+
+@oldeditable: the object which received the signal.
+
+<!-- ##### SIGNAL GtkOldEditable::copy-clipboard ##### -->
+<para>
+
+</para>
+
+@oldeditable: the object which received the signal.
+
+<!-- ##### SIGNAL GtkOldEditable::cut-clipboard ##### -->
+<para>
+
+</para>
+
+@oldeditable: the object which received the signal.
+
+<!-- ##### SIGNAL GtkOldEditable::kill-char ##### -->
+<para>
+
+</para>
+
+@oldeditable: the object which received the signal.
+@arg1: 
+
+<!-- ##### SIGNAL GtkOldEditable::kill-line ##### -->
+<para>
+
+</para>
+
+@oldeditable: the object which received the signal.
+@arg1: 
+
+<!-- ##### SIGNAL GtkOldEditable::kill-word ##### -->
+<para>
+
+</para>
+
+@oldeditable: the object which received the signal.
+@arg1: 
+
+<!-- ##### SIGNAL GtkOldEditable::move-cursor ##### -->
+<para>
+
+</para>
+
+@oldeditable: the object which received the signal.
+@arg1: 
+@arg2: 
+
+<!-- ##### SIGNAL GtkOldEditable::move-page ##### -->
+<para>
+
+</para>
+
+@oldeditable: the object which received the signal.
+@arg1: 
+@arg2: 
+
+<!-- ##### SIGNAL GtkOldEditable::move-to-column ##### -->
+<para>
+
+</para>
+
+@oldeditable: the object which received the signal.
+@arg1: 
+
+<!-- ##### SIGNAL GtkOldEditable::move-to-row ##### -->
+<para>
+
+</para>
+
+@oldeditable: the object which received the signal.
+@arg1: 
+
+<!-- ##### SIGNAL GtkOldEditable::move-word ##### -->
+<para>
+
+</para>
+
+@oldeditable: the object which received the signal.
+@arg1: 
+
+<!-- ##### SIGNAL GtkOldEditable::paste-clipboard ##### -->
+<para>
+
+</para>
+
+@oldeditable: the object which received the signal.
+
+<!-- ##### SIGNAL GtkOldEditable::set-editable ##### -->
+<para>
+
+</para>
+
+@oldeditable: the object which received the signal.
+@arg1: 
+
+<!-- ##### ARG GtkOldEditable:editable ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkOldEditable:text-position ##### -->
+<para>
+
+</para>
+
+<!-- ##### USER_FUNCTION GtkTextFunction ##### -->
+<para>
+
+</para>
+
+@editable: 
+@time_: 
+
+
+<!-- ##### FUNCTION gtk_old_editable_claim_selection ##### -->
+<para>
+
+</para>
+
+@old_editable: 
+@claim: 
+@time_: 
+
+
+<!-- ##### FUNCTION gtk_old_editable_changed ##### -->
+<para>
+
+</para>
+
+@old_editable: 
+
+

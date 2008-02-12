@@ -1,0 +1,500 @@
+2006-04-17  Matthias Clasen  <mclasen@redhat.com>
+
+	* docs/tools/widgets.c (get_all_widgets): Add print dialog
+	and page setup dialog.
+
+2006-04-11  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtkpapersize.c (gtk_paper_size_get_display_name):
+	Call gettext on the standard paper names. 
+
+2006-04-11  Alexander Larsson  <alexl@redhat.com>
+
+	* gdk/gdk.symbols:
+	* gdk/win32/gdkevents-win32.c:
+	* gdk/win32/gdkwin32.h:
+	Add gdk_win32_set_modal_dialog_libgtk_only that we
+	need for handling the mainloop in the print dialogs.
+
+	* gtk/gtkprintoperation-win32.c:
+	Pump the gtk+ mainloop when needed in the print dialogs.
+	This means gtk+ windows will redraw while the print dialogs
+	are up.
+
+2006-04-10  Alexander Larsson  <alexl@redhat.com>
+
+	* gtk/gtkprintoperation-win32.c: 
+	Better size handling.
+	Save win32-specific settings in additions to the generic ones
+	if the generic one is lossy.
+
+2006-04-10  Alexander Larsson  <alexl@redhat.com>
+
+	* gtk/gtkprintoperation-win32.c:
+	Finish implementing run_page_setup_dialog.
+
+	* gtk/gtkpagesetup.h:
+	* gtk/gtkpapersize.h:
+	* gtk/gtkprint-win32.h:
+	* gtk/gtkprintcontext.h:
+	* gtk/gtkprinter-private.h:
+	* gtk/gtkprintoperation-private.h:
+	* gtk/gtkprintoperation-unix.c:
+	* gtk/gtkprintoperation.h:
+	* gtk/gtkprintsettings.h:
+	s/EGG/GTK/
+
+2006-04-09  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk+-unix-print-2.0.pc.in: Fix a typo  (#337698)
+
+2006-04-07  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/paper_names_offsets.c: 
+	* gtk/gen-paper-names.c: Correct the suffix/duplicate optimizations.
+
+2006-04-07  Alexander Larsson  <alexl@redhat.com>
+
+	* gtk/gtkprintoperation-win32.c:
+	Initial work on gtk_print_run_page_setup_dialog.
+	Not reading margins yet.
+
+2006-04-07  Alexander Larsson  <alexl@redhat.com>
+
+	* gtk/Makefile.am:
+	Link to winspool
+	
+	* gtk/gtk.symbols:
+	* gtk/gtkprintoperation-private.h:
+	* gtk/gtkprintoperation-unix.c:
+	* gtk/gtkprintoperation.[ch]: 
+	Add gtk_print_operation_get_status_string() and status
+	string to _gtk_print_operation_set_status.
+	Rename GTK_PRINT_STATUS_PROCESSING to GTK_PRINT_STATUS_PRINTING.
+	
+	* gtk/gtkprintoperation-win32.c:
+	Poll for status updates
+	
+	* modules/printbackends/cups/gtkprintbackendcups.c:
+	Rename GTK_PRINT_STATUS_PROCESSING to GTK_PRINT_STATUS_PRINTING.
+	
+	* tests/print-editor.c:
+	Show print status string
+
+2006-04-06  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/paper_names_offsets.c: 
+	* gtk/gtkpapersize.c: Save 4K of .data by converting
+	the array of paper names to offsets. 
+
+	* gtk/gen-paper-names.c: Utility used to create
+	paper_names_offsets.c from paper_names.c.
+
+	* gtk/Makefile.am: Necessary glue.
+
+2006-04-06  Alexander Larsson  <alexl@redhat.com>
+
+	* gtk/gtkprintoperation-win32.c: 
+	Use glib base64 code.
+	Set up manual_* vars fully.
+
+2006-04-06  Alexander Larsson  <alexl@redhat.com>
+
+	* gtk/Makefile.am:
+	Add -lcomdlg32 on win32
+	
+	* gtk/gtkprint-win32.h:
+	Move WINVER define to .c files
+	
+	* gtk/gtk.symbols:
+	* gtk/gtkprintoperation-win32.c:
+	Add empty gtk_print_run_page_setup win implementation
+	Move WINVER define to this file
+	
+	* modules/Makefile.am:
+	Only build print backends on unix
+
+2006-04-05  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtkprintunixdialog.c:
+	* gtk/gtkprintoperation-unix.c: Use GTK_RESPONSE_CANCEL/OK
+	instead of GTK_RESPONSE_REJECT/ACCEPT, to make Esc close
+	the dialog, and to not use values which are documented
+	as reserved for apps.
+
+2006-04-05  Alexander Larsson  <alexl@redhat.com>
+
+	* modules/printbackends/lpr/gtkprintbackendlpr.c:
+	Don't hardcode lpr command, expose full commandline.
+
+2006-04-05  Alexander Larsson  <alexl@redhat.com>
+
+	* gtk/gtkpagesetupunixdialog.c:
+	* gtk/gtkprintunixdialog.c:
+	Don't check for printer changes after dialog is dead.
+	
+	* gtk/gtkprintbackend.c: (gtk_print_backend_load_modules):
+	Strip whitespace from backend strings
+	
+	* gtk/gtkprintbackend.h:
+	Add private printer functions
+	
+	* gtk/gtkprinter-private.h:
+	Move GtkPrinterPrivate into gtkprinter.c
+	
+	* gtk/gtkprinter.[ch]:
+	Move GtkPrinterPrivate into gtkprinter.c
+	Add new construct properties.
+	Add setter functions.
+	
+	* modules/printbackends/cups/gtkprintbackendcups.c:
+	* modules/printbackends/cups/gtkprintercups.[ch]:
+	Update to new APIs.
+	
+	* modules/printbackends/lpr/Makefile.am:
+	* modules/printbackends/lpr/gtkprintbackendlpr.c:
+	* modules/printbackends/lpr/gtkprinterlpr.[ch]
+	Update to new APIs.
+	Remove GtkPrinterLPR.
+	Read/Save command line option in settings
+	
+	* modules/printbackends/pdf/Makefile.am:
+	* modules/printbackends/pdf/gtkprintbackendpdf.c:
+	* modules/printbackends/pdf/gtkprinterpdf.[ch]:
+	Update to new APIs.
+	Remove GtkPrinterPDF.
+
+2006-04-04  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtkprintoperation.h: Add missing standard
+	GObject macros.  (#337277, Yevgen Muntyan)
+
+2006-04-04  Alexander Larsson  <alexl@redhat.com>
+
+	* gtk/gtkprinteroption.[ch]:
+	Add gtk_printer_option_has_choice.
+	
+	* gtk/gtkprintunixdialog.c:
+	* modules/printbackends/cups/gtkprintbackendcups.c:
+	Add support for "print at time".
+
+2006-04-04  Alexander Larsson  <alexl@redhat.com>
+
+	* gtk/gtkpapersize.c:
+	Handle ppd names with ".Transverse" suffix
+	Don't force width < height
+	
+	* gtk/gtkprinteroption.c:
+	Make sure that value is never NULL.
+	
+	* modules/printbackends/cups/gtkprintbackendcups.c:
+	Add some HP whitelist names
+	Remove spew from ignored options.
+
+2006-04-03  Alexander Larsson  <alexl@redhat.com>
+
+	* gtk/gtkpagesetupunixdialog.c:
+	Fix warnings
+	
+	* gtk/gtkprinter-private.h:
+	* gtk/gtkprinter.[ch]:
+	Add gtk_printer_is_default.
+	
+	* gtk/gtkprintunixdialog.c:
+	Use gtk_printer_is_default.
+	
+	* modules/printbackends/cups/gtkprintbackendcups.c:
+	Get default printer info
+	
+	* modules/printbackends/pdf/gtkprintbackendpdf.c:
+	Fix warning.
+
+2006-04-03  Alexander Larsson  <alexl@redhat.com>
+
+	* modules/printbackends/pdf/gtkprintbackendpdf.c:
+	* modules/printbackends/pdf/gtkprinterpdf.[ch]:
+	Correctly read/write/use the output filename setting.
+
+2006-04-03  Alexander Larsson  <alexl@redhat.com>
+
+	* gtk/gtkpagesetupunixdialog.c:
+	Disable margin from printers if there are no printers.
+	
+	* gtk/gtkpapersize.c:
+	Fix build.
+
+2006-04-01  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtk.symbols: protect unix-only symbols by 
+	G_OS_UNIX (#336819, Yevgen Muntyan)
+
+	* gtk/gtkpapersize.c: Win32 fixes.  (#336806, Yevgen Muntyan)
+
+2006-03-30  Alexander Larsson  <alexl@redhat.com>
+
+	* gtk/gtk.symbols:
+	Update
+	
+	* gtk/gtkprintbackend.[ch]:
+	Add dnotify to gtk_print_backend_print_stream
+	
+	* gtk/gtkprinter-private.h:
+	Declare gtk_print_job_set_status
+	
+	* gtk/gtkprinter.[ch]:
+	Remove gtk_printer_prepare_job.
+	
+	* gtk/gtkprintjob.[ch]:
+	Now you create print job directly with gtk_print_job_new() and
+	they'll be prepared automatically.
+	Add status_changed signal and get_status.
+	Add gtk_print_job_set_source_file to allow sending a file.
+	
+	* gtk/gtkprintoperation-private.h:
+	Add destroy notify for platform_data.
+	Declare _gtk_print_operation_set_status.
+	
+	* gtk/gtkprintoperation-unix.c:
+	Hook up status change handling.
+	Use the new way to get a print job.
+
+	* gtk/gtkprintoperation.[ch]:
+	Add status_changed signal and get_status/is_finished.
+
+	
+	* modules/printbackends/cups/gtkprintbackendcups.c:
+	* modules/printbackends/lpr/gtkprintbackendlpr.c:
+	* modules/printbackends/pdf/gtkprintbackendpdf.c:
+	Update to use new APIs and set status on the job.
+	Cups polls for the status.
+	
+	* tests/print-editor.c:
+	Track the print operations in the status bar.
+
+2006-03-30  Alexander Larsson  <alexl@redhat.com>
+
+	* gtk/Makefile.am:
+	* gtk/gtkprintbackend.c:
+	Default to "pdf,cups" if we found cups, and
+	"pdf,lpr" otherwise.
+
+2006-03-29  Matthias Clasen  <mclasen@redhat.com>
+
+	* modules/printbackends/Makefile.am: 
+	* configure.in: Don't build the cups backend 
+	if cups is not there.
+
+2006-03-29  Alexander Larsson  <alexl@redhat.com>
+
+	* gtk/gtk.symbols:
+	gtk_printer_prep_job -> gtk_printer_prepare_job
+	gtk_print_job_prep -> gtk_print_job_prepare
+	
+	* gtk/gtkprintbackend.h:
+	* gtk/gtkprinter-private.h:
+	* gtk/gtkprinter.[ch]:
+	Add print_job argument to printer_prepare_for_print
+	gtk_printer_prep_job -> gtk_printer_prepare_job
+	
+	* gtk/gtkprintjob.[ch]:
+	Add manual rendering settings to GtkPrintJob.
+	gtk_print_job_prep -> gtk_print_job_prepare
+	
+	* gtk/gtkprintoperation-private.h:
+	* gtk/gtkprintoperation-unix.c:
+	* gtk/gtkprintoperation.c:
+	Get more manual_* settings working.
+	Run mainloop after each printed page.
+
+	* gtk/gtkprintunixdialog.c:
+	Save page ranges.
+	
+	* modules/printbackends/cups/gtkprintbackendcups.c:
+	* modules/printbackends/lpr/gtkprintbackendlpr.c:
+	* modules/printbackends/pdf/gtkprintbackendpdf.c:
+	Now put the manual_* settings inside the PrintJob in
+	prepare_for_print.
+
+2006-03-29  Alexander Larsson  <alexl@redhat.com>
+
+	* gtk/gtkprintunixdialog.c:
+	Make sure we remember the format-for printer.
+	Also, use it as the default if set.
+
+2006-03-28  Alexander Larsson  <alexl@redhat.com>
+
+	* gtk/gtkprintunixdialog.c:
+	Remove unnecessary padding under list.
+	
+2006-03-28  Alexander Larsson  <alexl@redhat.com>
+
+	* gtk/gtkpagesetupunixdialog.c:
+	* gtk/gtkprintunixdialog.c:
+	More HIGy layout.
+
+2006-03-28  Alexander Larsson  <alexl@redhat.com>
+
+	* gtk/gtkpagesetupunixdialog.c:
+	HIG conformance of spacing and titles.
+	
+	* gtk/gtkprintunixdialog.c:
+	Use standard constructor form print button too.
+
+2006-03-27  Matthias Clasen  <mclasen@redhat.com>
+
+	* modules/printbackends/*/Makefile.am: Fix 
+	a problem with builddir != srcdir builds.
+	(#335915, Yevgen Muntyan)
+
+2006-03-27  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtkprintbackend.c: Simply the syntax
+	of the setting to "cups,pdf", and get rid
+	of the GScanner used to parse it.
+
+2006-03-27  Alexander Larsson  <alexl@redhat.com>
+
+	* gtk/gtkprintunixdialog.c:
+	Reorder print list so status is at the end.
+	Ellipsize the status column.
+
+2006-03-27  Alexander Larsson  <alexl@redhat.com>
+
+	* gtk/gtkpagesetupunixdialog.c:
+	Handle removed printers and status-changed.
+	Handle NULL printer location.
+
+2006-03-27  Alexander Larsson  <alexl@redhat.com>
+
+	* gtk/Makefile.am:
+	* gtk/stock-icons/24/gtk-orientation-landscape.png:
+	* gtk/stock-icons/24/gtk-orientation-portrait.png:
+	* gtk/stock-icons/24/gtk-orientation-reverse-landscape.png:
+	* gtk/gtkiconfactory.c: (get_default_icons):
+	* gtk/gtkstock.h:
+	Add orientation stock icons.
+	
+	* gtk/gtkpagesetupunixdialog.c:
+	Use the orientation icons.
+
+2006-03-27  Alexander Larsson  <alexl@redhat.com>
+
+	* gtk/gtkpagesetupunixdialog.c:
+	* gtk/gtkprintjob.c:
+	* gtk/gtkprintoperation-unix.c:
+	* gtk/gtkprintunixdialog.c:
+	s/impl/dialog/
+	Don't prefix static functions with _
+
+2006-03-26  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtkprintunixdialog.c: Don't use _(""). (#335898,
+	Christian Persch)
+
+	* modules/printbackends/*: Don't use G_DEFINE_TYPE
+	in modules.
+
+	* gtk/gtkprintbackend.c: Remove an unused static function.
+
+2006-03-25  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtk.symbols: Add printing symbols
+
+	* gtk/gtkpapersize.[hc]: 
+	* gtk/gtkpage*.[hc]: 
+	* gtk/gtkprint*.[hc]: Add aliasing, #include cleanups.
+
+	* gtk/gtkprintcontext.h:
+	* gtk/gtkprintoperation.h:
+	* gtk/gtkprintsettings.h: Make get_type function const.
+
+	* modules/printbackends/pdf/gtkprintbackendpdf.c: Remove
+	C99ism.
+
+	* modules/printbackends/cups/gtkcupsutils.c: Use unsigned
+	integers for bitfields.
+
+2006-03-24  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtknotebook.c: Fix docs
+
+	* gtk/Makefile.am (EXTRA_DIST): Add the stock icons here.
+
+	* gdk/directfb/Makefile.am (EXTRA_DIST): Remove ChangeLog,
+	to make make dist happier.
+
+2006-03-24  Alexander Larsson  <alexl@redhat.com>
+
+	* configure.in:
+	* gtk/gtkprintbackend.c:
+	* modules/printbackends/Makefile.am:
+	* modules/printbackends/cups/Makefile.am:
+	* modules/printbackends/lpr/Makefile.am:
+	* modules/printbackends/lpr/gtkprintbackendlpr.[ch]:
+	* modules/printbackends/lpr/gtkprinterlpr.[ch]:
+	* modules/printbackends/pdf/Makefile.am:
+	* modules/printbackends/pdf/gtkprintbackendpdf.[ch]:
+	* modules/printbackends/pdf/gtkprinterpdf.[ch]:
+	Import pdf and lpr backend
+
+2006-03-24  Alexander Larsson  <alexl@redhat.com>
+
+        Import print-operation into gtk+
+	
+	* .cvsignore:
+	* Makefile.am:
+	* gtk+-unix-print-2.0.pc.in:
+	Add gtk+-unix-print-2.0.pc
+	
+	* configure.in:
+	Look for cups
+	Look for various _NL_* extensions
+	Output new makefiles and .pc.in
+	
+	* gtk/Makefile.am:
+	Add new files
+	
+	* gtk/gtk.h:
+	Include gtkprintoperation.h
+	
+	* gtk/gtkenums.h:
+	Add printing enums
+	
+	* gtk/gtkmarshalers.list:
+	Add required new marshallers
+	
+	* gtk/gtkpagesetup.[ch]:
+	* gtk/gtkpagesetupunixdialog.[ch]:
+	* gtk/gtkpagesetupunixdialog.h:
+	* gtk/gtkpapersize.[ch]:
+	* gtk/gtkprint-win32.[ch]:
+	* gtk/gtkprintbackend.[ch]:
+	* gtk/gtkprintcontext.[ch]:
+	* gtk/gtkprinter-private.h:
+	* gtk/gtkprinter.[ch]:
+	* gtk/gtkprinteroption.[ch]:
+	* gtk/gtkprinteroptionset.[ch]:
+	* gtk/gtkprinteroptionwidget.[ch]:
+	* gtk/gtkprintjob.[ch]:
+	* gtk/gtkprintoperation-private.h:
+	* gtk/gtkprintoperation-unix.c:
+	* gtk/gtkprintoperation-win32.c:
+	* gtk/gtkprintoperation.[ch]:
+	* gtk/gtkprintsettings.[ch]:
+	* gtk/gtkprintunixdialog.[ch]:
+	* gtk/paper_names.c:
+	Generic printing support
+	
+	* modules/Makefile.am:
+	* modules/printbackends/Makefile.am:
+	* modules/printbackends/cups/Makefile.am:
+	* modules/printbackends/cups/gtkcupsutils.[ch]:
+	* modules/printbackends/cups/gtkprintbackendcups.[ch]:
+	* modules/printbackends/cups/gtkprintercups.[ch]:
+	Cups backend
+	
+	* tests/.cvsignore:
+	* tests/Makefile.am:
+	* tests/print-editor.c:
+	Add printing test app
+

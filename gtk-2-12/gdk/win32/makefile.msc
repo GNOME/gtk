@@ -1,0 +1,73 @@
+## Makefile for building the GDK DLL with Microsoft C
+## Use: nmake -f makefile.msc
+
+# Location of the Wintab toolkit. Downloadable from http://www.pointing.com.
+WTKIT = ..\..\..\wtkit126
+
+################################################################
+
+# Nothing much configurable below
+
+TOP = ../../..
+!INCLUDE $(TOP)/glib/build/win32/make.msc
+
+GTK_VER=2.0
+
+CFLAGS = -FImsvc_recommended_pragmas.h \
+	-I. -I.. -I..\.. $(GLIB_CFLAGS) $(PANGO_CFLAGS) $(CAIRO_CFLAGS) \
+	-I$(WTKIT)\include -I$(GLIB) \
+	$(G_DEBUGGING) -DHAVE_CONFIG_H -DINSIDE_GDK_WIN32 -DGDK_VERSION=\"$(GTK_VER)\"
+
+all: \
+	..\..\config.h	\
+	..\gdkconfig.h \
+	gdk-win32.lib \
+	gdk.res
+
+gdk_win32_OBJECTS = \
+	gdkcolor-win32.obj \
+	gdkcursor-win32.obj \
+	gdkdnd-win32.obj \
+	gdkdisplay-win32.obj \
+	gdkdrawable-win32.obj \
+	gdkevents-win32.obj \
+	gdkfont-win32.obj \
+	gdkgc-win32.obj \
+	gdkgeometry-win32.obj \
+	gdkglobals-win32.obj \
+	gdkim-win32.obj \
+	gdkimage-win32.obj \
+	gdkinput.obj \
+	gdkinput-win32.obj \
+	gdkkeys-win32.obj \
+	gdkmain-win32.obj \
+	gdkpixmap-win32.obj \
+	gdkproperty-win32.obj \
+#	gdkregion-win32.obj \
+	gdkscreen-win32.obj \
+	gdkselection-win32.obj \
+	gdkspawn-win32.obj \
+	gdkvisual-win32.obj \
+	gdkwin32id.obj \
+	gdkwindow-win32.obj
+
+..\..\config.h : ..\..\config.h.win32
+	copy ..\..\config.h.win32 ..\..\config.h
+
+..\gdkconfig.h : ..\gdkconfig.h.win32
+	copy ..\gdkconfig.h.win32 ..\gdkconfig.h
+
+gdk.res : rc\gdk.rc
+	rc -DBUILDNUMBER=0 -r -fo gdk.res rc\gdk.rc
+
+gdk-win32.lib : $(gdk_win32_OBJECTS)
+	lib -out:gdk-win32.lib $(gdk_win32_OBJECTS)
+
+.c.obj :
+	$(CC) $(CFLAGS) -GD -c -DGDK_COMPILATION -DG_LOG_DOMAIN=\"Gdk\" $<
+
+clean::
+	del *.obj
+	del *.lib
+	del *.err
+	del *.res

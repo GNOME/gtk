@@ -1,0 +1,49 @@
+<!-- ##### SECTION Title ##### -->
+GtkVBox
+
+<!-- ##### SECTION Short_Description ##### -->
+A vertical container box
+
+<!-- ##### SECTION Long_Description ##### -->
+<para>
+GtkVBox is a container that organizes child widgets into a single column.
+</para>
+
+<para>
+Use the #GtkBox packing interface to determine the arrangement,
+spacing, height, and alignment of GtkVBox children.
+</para>
+
+<para>
+All children are allocated the same width.
+</para>
+
+<!-- ##### SECTION See_Also ##### -->
+<para>
+<variablelist>
+
+<varlistentry>
+<term>#GtkHBox</term>
+<listitem><para>a sister class that organizes widgets into a row.</para></listitem>
+</varlistentry>
+
+</variablelist>
+</para>
+
+<!-- ##### SECTION Stability_Level ##### -->
+
+
+<!-- ##### STRUCT GtkVBox ##### -->
+
+
+
+<!-- ##### FUNCTION gtk_vbox_new ##### -->
+<para>
+Creates a new GtkVBox.
+</para>
+
+@homogeneous: %TRUE if all children are to be given equal space allotments.
+@spacing: the number of pixels to place by default between children.
+@Returns: a new GtkVBox.
+
+

@@ -1,0 +1,330 @@
+<!-- ##### SECTION Title ##### -->
+GtkItemFactory
+
+<!-- ##### SECTION Short_Description ##### -->
+A factory for menus
+
+<!-- ##### SECTION Long_Description ##### -->
+<para>
+As of GTK+ 2.4, #GtkItemFactory has been deprecated in favour of #GtkUIManager.
+</para>
+
+<!-- ##### SECTION See_Also ##### -->
+<para>
+
+</para>
+
+<!-- ##### SECTION Stability_Level ##### -->
+
+
+<!-- ##### STRUCT GtkItemFactory ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### USER_FUNCTION GtkPrintFunc ##### -->
+<para>
+
+</para>
+
+@func_data: 
+@str: 
+
+
+<!-- ##### USER_FUNCTION GtkTranslateFunc ##### -->
+<para>
+The function used to translate messages in e.g. #GtkIconFactory
+and #GtkActionGroup. 
+</para>
+
+@path: The id of the message. In #GtkItemFactory this will be a path
+  from a #GtkItemFactoryEntry, in #GtkActionGroup, it will be a label
+  or tooltip from a #GtkActionEntry.
+@func_data: user data passed in when registering the function
+@Returns: the translated message
+
+
+<!-- ##### USER_FUNCTION GtkItemFactoryCallback ##### -->
+<para>
+
+</para>
+
+
+
+<!-- ##### USER_FUNCTION GtkItemFactoryCallback1 ##### -->
+<para>
+
+</para>
+
+@callback_data: 
+@callback_action: 
+@widget: 
+
+
+<!-- ##### USER_FUNCTION GtkItemFactoryCallback2 ##### -->
+<para>
+
+</para>
+
+@widget: 
+@callback_data: 
+@callback_action: 
+
+
+<!-- ##### STRUCT GtkItemFactoryEntry ##### -->
+<para>
+
+</para>
+
+@path: 
+@accelerator: 
+@callback: 
+@callback_action: 
+@item_type: 
+@extra_data: 
+
+<!-- ##### STRUCT GtkItemFactoryItem ##### -->
+<para>
+
+</para>
+
+@path: 
+@widgets: 
+
+<!-- ##### FUNCTION gtk_item_factory_new ##### -->
+<para>
+
+</para>
+
+@container_type: 
+@path: 
+@accel_group: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_item_factory_construct ##### -->
+<para>
+
+</para>
+
+@ifactory: 
+@container_type: 
+@path: 
+@accel_group: 
+
+
+<!-- ##### FUNCTION gtk_item_factory_add_foreign ##### -->
+<para>
+
+</para>
+
+@accel_widget: 
+@full_path: 
+@accel_group: 
+@keyval: 
+@modifiers: 
+
+
+<!-- ##### FUNCTION gtk_item_factory_from_widget ##### -->
+<para>
+
+</para>
+
+@widget: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_item_factory_path_from_widget ##### -->
+<para>
+
+</para>
+
+@widget: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_item_factory_get_item ##### -->
+<para>
+
+</para>
+
+@ifactory: 
+@path: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_item_factory_get_widget ##### -->
+<para>
+
+</para>
+
+@ifactory: 
+@path: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_item_factory_get_widget_by_action ##### -->
+<para>
+
+</para>
+
+@ifactory: 
+@action: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_item_factory_get_item_by_action ##### -->
+<para>
+
+</para>
+
+@ifactory: 
+@action: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_item_factory_create_item ##### -->
+<para>
+
+</para>
+
+@ifactory: 
+@entry: 
+@callback_data: 
+@callback_type: 
+
+
+<!-- ##### FUNCTION gtk_item_factory_create_items ##### -->
+<para>
+
+</para>
+
+@ifactory: 
+@n_entries: 
+@entries: 
+@callback_data: 
+
+
+<!-- ##### FUNCTION gtk_item_factory_create_items_ac ##### -->
+<para>
+
+</para>
+
+@ifactory: 
+@n_entries: 
+@entries: 
+@callback_data: 
+@callback_type: 
+
+
+<!-- ##### FUNCTION gtk_item_factory_delete_item ##### -->
+<para>
+
+</para>
+
+@ifactory: 
+@path: 
+
+
+<!-- ##### FUNCTION gtk_item_factory_delete_entry ##### -->
+<para>
+
+</para>
+
+@ifactory: 
+@entry: 
+
+
+<!-- ##### FUNCTION gtk_item_factory_delete_entries ##### -->
+<para>
+
+</para>
+
+@ifactory: 
+@n_entries: 
+@entries: 
+
+
+<!-- ##### FUNCTION gtk_item_factory_popup ##### -->
+<para>
+
+</para>
+
+@ifactory: 
+@x: 
+@y: 
+@mouse_button: 
+@time_: 
+
+
+<!-- ##### FUNCTION gtk_item_factory_popup_with_data ##### -->
+<para>
+
+</para>
+
+@ifactory: 
+@popup_data: 
+@destroy: 
+@x: 
+@y: 
+@mouse_button: 
+@time_: 
+
+
+<!-- ##### FUNCTION gtk_item_factory_popup_data ##### -->
+<para>
+
+</para>
+
+@ifactory: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_item_factory_popup_data_from_widget ##### -->
+<para>
+
+</para>
+
+@widget: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_item_factory_from_path ##### -->
+<para>
+
+</para>
+
+@path: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_item_factory_create_menu_entries ##### -->
+<para>
+
+</para>
+
+@n_entries: 
+@entries: 
+
+
+<!-- ##### FUNCTION gtk_item_factories_path_delete ##### -->
+<para>
+
+</para>
+
+@ifactory_path: 
+@path: 
+
+
+<!-- ##### FUNCTION gtk_item_factory_set_translate_func ##### -->
+<para>
+
+</para>
+
+@ifactory: 
+@func: 
+@data: 
+@notify: 
+
+

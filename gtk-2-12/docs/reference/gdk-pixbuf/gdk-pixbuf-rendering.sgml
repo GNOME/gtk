@@ -1,0 +1,28 @@
+<refentry id="gdk-pixbuf-gdk-pixbuf-rendering">
+<refmeta>
+<refentrytitle>Rendering</refentrytitle>
+<manvolnum>3</manvolnum>
+<refmiscinfo>GDK-PIXBUF Library</refmiscinfo>
+</refmeta>
+
+<refnamediv>
+<refname>Rendering</refname><refpurpose>Rendering a pixbuf to a GDK drawable.</refpurpose>
+</refnamediv>
+
+
+<refsect1>
+<title>Description</title>
+  <para>
+    The functions to render pixbufs to GDK drawables are contained in 
+    GDK, see the <link linkend="gdk-Pixbufs">Pixbufs</link> section 
+    of the GDK documentation.
+  </para>
+</refsect1>
+
+
+
+
+</refentry>
+
+
+

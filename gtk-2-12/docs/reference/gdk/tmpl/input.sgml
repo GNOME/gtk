@@ -1,0 +1,112 @@
+<!-- ##### SECTION Title ##### -->
+Input
+
+<!-- ##### SECTION Short_Description ##### -->
+Callbacks on file descriptors
+
+<!-- ##### SECTION Long_Description ##### -->
+<para>
+The functions in this section are used to establish
+callbacks when some condition becomes true for
+a file descriptor. They are currently just wrappers around
+the <link linkend="glib-IO-Channels">IO Channel</link>
+facility.
+</para>
+
+<!-- ##### SECTION See_Also ##### -->
+<para>
+<variablelist>
+
+<varlistentry>
+<term><link linkend="glib-The-Main-Event-Loop">GLib Main Loop</link></term>
+<listitem><para>The main loop in which input callbacks run.</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><link linkend="glib-IO-Channels">IO Channels</link></term>
+<listitem><para>A newer and more flexible way of doing IO
+callbacks.</para></listitem>
+</varlistentry>
+
+</variablelist>
+</para>
+
+<!-- ##### SECTION Stability_Level ##### -->
+
+
+<!-- ##### FUNCTION gdk_input_add_full ##### -->
+<para>
+Establish a callback when a condition becomes true on
+a file descriptor.
+</para>
+
+@source: a file descriptor.
+@condition: the condition.
+@function: the callback function.
+@data: callback data passed to @function.
+@destroy: callback function to call with @data when the input
+  handler is removed.
+@Returns: a tag that can later be used as an argument to
+ gdk_input_remove().
+
+
+<!-- ##### ENUM GdkInputCondition ##### -->
+<para>
+A set of bit flags used to specify conditions for which
+an input callback will be triggered. The three members
+of this enumeration correspond to the @readfds, 
+@writefds, and @exceptfds arguments to the 
+<function>select</function> system call.
+</para>
+
+@GDK_INPUT_READ: the file descriptor has become available for reading.
+(Or, as is standard in Unix, a socket or pipe was closed
+at the other end; this is the case if a subsequent read
+on the file descriptor returns a count of zero.)
+@GDK_INPUT_WRITE: the file descriptor has become available for writing.
+@GDK_INPUT_EXCEPTION: an exception was raised on the file descriptor.
+
+<!-- ##### USER_FUNCTION GdkInputFunction ##### -->
+<para>
+A callback function that will be called when some condition
+occurs.
+</para>
+
+@data: the user data passed to gdk_input_add() or gdk_input_add_full().
+@source: the source where the condition occurred.
+@condition: the triggering condition.
+
+
+<!-- ##### USER_FUNCTION GdkDestroyNotify ##### -->
+<para>
+A callback function called when a piece of user data is 
+no longer being stored by GDK. Will typically free the
+structure or object that @data points to.
+</para>
+
+@data: the user data.
+
+
+<!-- ##### FUNCTION gdk_input_add ##### -->
+<para>
+Establish a callback when a condition becomes true on
+a file descriptor.
+</para>
+
+@source: a file descriptor.
+@condition: the condition.
+@function: the callback function.
+@data: callback data passed to @function.
+@Returns: a tag that can later be used as an argument to
+ gdk_input_remove().
+
+
+<!-- ##### FUNCTION gdk_input_remove ##### -->
+<para>
+Remove a callback added with gdk_input_add() or 
+gdk_input_add_full().
+</para>
+
+@tag: the tag returned when the callback was set up.
+
+

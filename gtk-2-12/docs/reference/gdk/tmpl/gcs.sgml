@@ -1,0 +1,461 @@
+<!-- ##### SECTION Title ##### -->
+Graphics Contexts
+
+<!-- ##### SECTION Short_Description ##### -->
+Objects to encapsulate drawing properties
+
+<!-- ##### SECTION Long_Description ##### -->
+<para>
+All drawing operations in GDK take a 
+<firstterm>graphics context</firstterm> (GC) argument. 
+A graphics context encapsulates information about
+the way things are drawn, such as the foreground
+color or line width. By using graphics contexts, 
+the number of arguments to each drawing call is
+greatly reduced, and communication overhead is
+minimized, since identical arguments do not need
+to be passed repeatedly.
+</para>
+<para>
+Most values of a graphics context can be set at
+creation time by using gdk_gc_new_with_values(),
+or can be set one-by-one using functions such
+as gdk_gc_set_foreground(). A few of the values
+in the GC, such as the dash pattern, can only
+be set by the latter method.
+</para>
+
+<!-- ##### SECTION See_Also ##### -->
+<para>
+
+</para>
+
+<!-- ##### SECTION Stability_Level ##### -->
+
+
+<!-- ##### STRUCT GdkGC ##### -->
+<para>
+The #GdkGC structure represents a graphics context.
+It is an opaque structure with no user-visible
+elements.
+</para>
+
+
+<!-- ##### STRUCT GdkGCValues ##### -->
+<para>
+The #GdkGCValues structure holds a set of values used
+to create or modify a graphics context.
+</para>
+
+@foreground: the foreground color. Note that gdk_gc_get_values()
+  only sets the pixel value.
+@background: the background color. Note that gdk_gc_get_values()
+  only sets the pixel value.
+@font: the default font.
+@function: the bitwise operation used when drawing.
+@fill: the fill style.
+@tile: the tile pixmap.
+@stipple: the stipple bitmap.
+@clip_mask: the clip mask bitmap.
+@subwindow_mode: the subwindow mode.
+@ts_x_origin: the x origin of the tile or stipple.
+@ts_y_origin: the y origin of the tile or stipple.
+@clip_x_origin: the x origin of the clip mask.
+@clip_y_origin: the y origin of the clip mask.
+@graphics_exposures: whether graphics exposures are enabled.
+@line_width: the line width.
+@line_style: the way dashed lines are drawn.
+@cap_style: the way the ends of lines are drawn.
+@join_style: the way joins between lines are drawn.
+
+<!-- ##### ENUM GdkGCValuesMask ##### -->
+<para>
+A set of bit flags used to indicate which fields
+#GdkGCValues structure are set.
+</para>
+
+@GDK_GC_FOREGROUND: the @foreground is set.
+@GDK_GC_BACKGROUND: the @background is set.
+@GDK_GC_FONT: the @font is set.
+@GDK_GC_FUNCTION: the @function is set.
+@GDK_GC_FILL: the @fill is set.
+@GDK_GC_TILE: the @tile is set.
+@GDK_GC_STIPPLE: the @stipple is set.
+@GDK_GC_CLIP_MASK: the @clip_mask is set.
+@GDK_GC_SUBWINDOW: the @subwindow_mode is set.
+@GDK_GC_TS_X_ORIGIN: the @ts_x_origin is set.
+@GDK_GC_TS_Y_ORIGIN: the @ts_y_origin is set.
+@GDK_GC_CLIP_X_ORIGIN: the @clip_x_origin is set.
+@GDK_GC_CLIP_Y_ORIGIN: the @clip_y_origin is set.
+@GDK_GC_EXPOSURES: the @graphics_exposures is set.
+@GDK_GC_LINE_WIDTH: the @line_width is set.
+@GDK_GC_LINE_STYLE: the @line_style is set.
+@GDK_GC_CAP_STYLE: the @cap_style is set.
+@GDK_GC_JOIN_STYLE: the @join_style is set.
+
+<!-- ##### ENUM GdkFunction ##### -->
+<para>
+Determines how the bit values for the source pixels are combined with
+the bit values for destination pixels to produce the final result. The
+sixteen values here correspond to the 16 different possible 2x2 truth
+tables.  Only a couple of these values are usually useful; for colored
+images, only %GDK_COPY, %GDK_XOR and %GDK_INVERT are generally
+useful. For bitmaps, %GDK_AND and %GDK_OR are also useful.
+</para>
+
+@GDK_COPY: <literal>dst = src</literal>
+@GDK_INVERT: <literal>dst = NOT dst</literal>
+@GDK_XOR: <literal>dst = src XOR dst</literal>
+@GDK_CLEAR: <literal>dst = 0</literal>
+@GDK_AND: <literal>dst = dst AND src</literal>
+@GDK_AND_REVERSE: <literal>dst = src AND (NOT dst)</literal>
+@GDK_AND_INVERT: <literal>dst = (NOT src) AND dst</literal>
+@GDK_NOOP: <literal>dst = dst</literal>
+@GDK_OR: <literal>dst = src OR dst</literal>
+@GDK_EQUIV: <literal>dst = (NOT src) XOR dst</literal>
+@GDK_OR_REVERSE: <literal>dst = src OR (NOT dst)</literal>
+@GDK_COPY_INVERT: <literal>dst = NOT src</literal>
+@GDK_OR_INVERT: <literal>dst = (NOT src) OR dst</literal>
+@GDK_NAND: <literal>dst = (NOT src) OR (NOT dst)</literal>
+@GDK_NOR: <literal>dst = (NOT src) AND (NOT dst)</literal>
+@GDK_SET: <literal>dst = 1</literal>
+
+<!-- ##### FUNCTION gdk_gc_new ##### -->
+<para>
+</para>
+
+@drawable: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_gc_new_with_values ##### -->
+<para>
+
+</para>
+
+@drawable: 
+@values: 
+@values_mask: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_gc_get_screen ##### -->
+<para>
+
+</para>
+
+@gc: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_gc_ref ##### -->
+<para>
+
+</para>
+
+@gc: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_gc_unref ##### -->
+<para>
+
+</para>
+
+@gc: 
+
+
+<!-- ##### MACRO gdk_gc_destroy ##### -->
+<para>
+This function is obsolete and should not be used.
+</para>
+
+@Deprecated: Use g_object_unref() instead
+<!-- # Unused Parameters # -->
+@gc: a #GdkGC.
+
+
+<!-- ##### FUNCTION gdk_gc_set_values ##### -->
+<para>
+
+</para>
+
+@gc: 
+@values: 
+@values_mask: 
+
+
+<!-- ##### FUNCTION gdk_gc_get_values ##### -->
+<para>
+
+</para>
+
+@gc: 
+@values: 
+
+
+<!-- ##### FUNCTION gdk_gc_set_foreground ##### -->
+<para>
+
+</para>
+
+@gc: 
+@color: 
+
+
+<!-- ##### FUNCTION gdk_gc_set_background ##### -->
+<para>
+
+</para>
+
+@gc: 
+@color: 
+
+
+<!-- ##### FUNCTION gdk_gc_set_rgb_fg_color ##### -->
+<para>
+
+</para>
+
+@gc: 
+@color: 
+
+
+<!-- ##### FUNCTION gdk_gc_set_rgb_bg_color ##### -->
+<para>
+
+</para>
+
+@gc: 
+@color: 
+
+
+<!-- ##### FUNCTION gdk_gc_set_font ##### -->
+<para>
+
+</para>
+
+@gc: 
+@font: 
+
+
+<!-- ##### FUNCTION gdk_gc_set_function ##### -->
+<para>
+
+</para>
+
+@gc: 
+@function: 
+
+
+<!-- ##### FUNCTION gdk_gc_set_fill ##### -->
+<para>
+
+</para>
+
+@gc: 
+@fill: 
+
+
+<!-- ##### ENUM GdkFill ##### -->
+<para>
+Determines how primitives are drawn.
+</para>
+
+@GDK_SOLID: draw with the foreground color.
+@GDK_TILED: draw with a tiled pixmap.
+@GDK_STIPPLED: draw using the stipple bitmap. Pixels corresponding
+  to bits in the stipple bitmap that are set will be drawn in the
+  foreground color; pixels corresponding to bits that are
+  not set will be left untouched.
+@GDK_OPAQUE_STIPPLED: draw using the stipple bitmap. Pixels corresponding
+  to bits in the stipple bitmap that are set will be drawn in the
+  foreground color; pixels corresponding to bits that are
+  not set will be drawn with the background color.
+
+<!-- ##### FUNCTION gdk_gc_set_tile ##### -->
+<para>
+
+</para>
+
+@gc: 
+@tile: 
+
+
+<!-- ##### FUNCTION gdk_gc_set_stipple ##### -->
+<para>
+
+</para>
+
+@gc: 
+@stipple: 
+
+
+<!-- ##### FUNCTION gdk_gc_set_ts_origin ##### -->
+<para>
+
+</para>
+
+@gc: 
+@x: 
+@y: 
+
+
+<!-- ##### FUNCTION gdk_gc_set_clip_origin ##### -->
+<para>
+
+</para>
+
+@gc: 
+@x: 
+@y: 
+
+
+<!-- ##### FUNCTION gdk_gc_set_clip_mask ##### -->
+<para>
+
+</para>
+
+@gc: 
+@mask: 
+
+
+<!-- ##### FUNCTION gdk_gc_set_clip_rectangle ##### -->
+<para>
+</para>
+
+@gc: 
+@rectangle: 
+
+
+<!-- ##### FUNCTION gdk_gc_set_clip_region ##### -->
+<para>
+
+</para>
+
+@gc: 
+@region: 
+
+
+<!-- ##### FUNCTION gdk_gc_set_subwindow ##### -->
+<para>
+
+</para>
+
+@gc: 
+@mode: 
+
+
+<!-- ##### ENUM GdkSubwindowMode ##### -->
+<para>
+Determines how drawing onto a window will affect child
+windows of that window. 
+</para>
+
+@GDK_CLIP_BY_CHILDREN: only draw onto the window itself.
+@GDK_INCLUDE_INFERIORS: draw onto the window and child windows.
+
+<!-- ##### FUNCTION gdk_gc_set_exposures ##### -->
+<para>
+
+</para>
+
+@gc: 
+@exposures: 
+
+
+<!-- ##### FUNCTION gdk_gc_set_line_attributes ##### -->
+<para>
+
+</para>
+
+@gc: 
+@line_width: 
+@line_style: 
+@cap_style: 
+@join_style: 
+
+
+<!-- ##### ENUM GdkLineStyle ##### -->
+<para>
+Determines how lines are drawn.
+</para>
+
+@GDK_LINE_SOLID: lines are drawn solid.
+@GDK_LINE_ON_OFF_DASH: even segments are drawn; odd segments are not drawn.
+@GDK_LINE_DOUBLE_DASH: even segments are normally. Odd segments are drawn
+  in the background color if the fill style is %GDK_SOLID, or in the background
+  color masked by the stipple if the fill style is %GDK_STIPPLED.
+
+<!-- ##### ENUM GdkCapStyle ##### -->
+<para>
+Determines how the end of lines are drawn.
+</para>
+
+@GDK_CAP_NOT_LAST: the same as %GDK_CAP_BUTT for lines of non-zero width.
+       for zero width lines, the final point on the line will not be drawn.
+@GDK_CAP_BUTT: the ends of the lines are drawn squared off and extending
+       to the coordinates of the end point.
+@GDK_CAP_ROUND: the ends of the lines are drawn as semicircles with the
+       diameter equal to the line width and centered at the end point.
+@GDK_CAP_PROJECTING: the ends of the lines are drawn squared off and extending
+       half the width of the line beyond the end point.
+
+<!-- ##### ENUM GdkJoinStyle ##### -->
+<para>
+Determines how the joins between segments of a polygon are drawn.
+</para>
+
+@GDK_JOIN_MITER: the sides of each line are extended to meet at an angle.
+@GDK_JOIN_ROUND: the sides of the two lines are joined by a circular arc.
+@GDK_JOIN_BEVEL: the sides of the two lines are joined by a straight line which
+       makes an equal angle with each line.
+
+<!-- ##### FUNCTION gdk_gc_set_dashes ##### -->
+<para>
+
+</para>
+
+@gc: 
+@dash_offset: 
+@dash_list: 
+@n: 
+
+
+<!-- ##### FUNCTION gdk_gc_copy ##### -->
+<para>
+
+</para>
+
+@dst_gc: 
+@src_gc: 
+
+
+<!-- ##### FUNCTION gdk_gc_set_colormap ##### -->
+<para>
+
+</para>
+
+@gc: 
+@colormap: 
+
+
+<!-- ##### FUNCTION gdk_gc_get_colormap ##### -->
+<para>
+
+</para>
+
+@gc: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_gc_offset ##### -->
+<para>
+
+</para>
+
+@gc: 
+@x_offset: 
+@y_offset: 
+
+

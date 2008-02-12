@@ -1,0 +1,133 @@
+<!-- ##### SECTION Title ##### -->
+Pixbufs
+
+<!-- ##### SECTION Short_Description ##### -->
+Functions for rendering pixbufs on drawables
+
+<!-- ##### SECTION Long_Description ##### -->
+<para>
+These functions allow to render pixbufs on drawables. Pixbufs are
+client-side images. For details on how to create and manipulate
+pixbufs, see the #GdkPixbuf API documentation.
+</para>
+
+<!-- ##### SECTION See_Also ##### -->
+<para>
+
+</para>
+
+<!-- ##### SECTION Stability_Level ##### -->
+
+
+<!-- ##### FUNCTION gdk_pixbuf_render_threshold_alpha ##### -->
+<para>
+
+</para>
+
+@pixbuf: 
+@bitmap: 
+@src_x: 
+@src_y: 
+@dest_x: 
+@dest_y: 
+@width: 
+@height: 
+@alpha_threshold: 
+
+
+<!-- ##### FUNCTION gdk_pixbuf_render_to_drawable ##### -->
+<para>
+
+</para>
+
+@pixbuf: 
+@drawable: 
+@gc: 
+@src_x: 
+@src_y: 
+@dest_x: 
+@dest_y: 
+@width: 
+@height: 
+@dither: 
+@x_dither: 
+@y_dither: 
+
+
+<!-- ##### FUNCTION gdk_pixbuf_render_to_drawable_alpha ##### -->
+<para>
+
+</para>
+
+@pixbuf: 
+@drawable: 
+@src_x: 
+@src_y: 
+@dest_x: 
+@dest_y: 
+@width: 
+@height: 
+@alpha_mode: 
+@alpha_threshold: 
+@dither: 
+@x_dither: 
+@y_dither: 
+
+
+<!-- ##### FUNCTION gdk_pixbuf_render_pixmap_and_mask ##### -->
+<para>
+
+</para>
+
+@pixbuf: 
+@pixmap_return: 
+@mask_return: 
+@alpha_threshold: 
+
+
+<!-- ##### FUNCTION gdk_pixbuf_render_pixmap_and_mask_for_colormap ##### -->
+<para>
+
+</para>
+
+@pixbuf: 
+@colormap: 
+@pixmap_return: 
+@mask_return: 
+@alpha_threshold: 
+
+
+<!-- ##### FUNCTION gdk_pixbuf_get_from_drawable ##### -->
+<para>
+
+</para>
+
+@dest: 
+@src: 
+@cmap: 
+@src_x: 
+@src_y: 
+@dest_x: 
+@dest_y: 
+@width: 
+@height: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_pixbuf_get_from_image ##### -->
+<para>
+
+</para>
+
+@dest: 
+@src: 
+@cmap: 
+@src_x: 
+@src_y: 
+@dest_x: 
+@dest_y: 
+@width: 
+@height: 
+@Returns: 
+
+

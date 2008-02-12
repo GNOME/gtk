@@ -1,0 +1,293 @@
+<!-- ##### SECTION Title ##### -->
+GtkTreeStore
+
+<!-- ##### SECTION Short_Description ##### -->
+A tree-like data structure that can be used with the GtkTreeView
+
+<!-- ##### SECTION Long_Description ##### -->
+<para>
+The #GtkTreeStore object is a list model for use with a #GtkTreeView
+widget.  It implements the #GtkTreeModel interface, and consequentialy,
+can use all of the methods available there.  It also implements the
+#GtkTreeSortable interface so it can be sorted by the view.  Finally,
+it also implements the tree <link linkend="gtktreednd">drag and
+drop</link> interfaces.
+</para>
+
+<refsect2 id="GtkTreeStore-BUILDER-UI">
+<title>GtkTreeStore as GtkBuildable</title>
+<para>
+The GtkTreeStore implementation of the GtkBuildable interface allows
+to specify the model columns with a &lt;columns&gt; element that may
+contain multiple &lt;column&gt; elements, each specifying one model
+column. The "type" attribute specifies the data type for the column.
+</para>
+<example>
+<title>A UI Definition fragment for a tree store</title>
+<programlisting><![CDATA[
+<object class="GtkTreeStore">
+  <columns>
+    <column type="gchararray"/>
+    <column type="gchararray"/>
+    <column type="gint"/>
+  </columns>
+</object>
+]]></programlisting>
+</example>
+</refsect2>
+
+<!-- ##### SECTION See_Also ##### -->
+<para>
+#GtkTreeModel, #GtkTreeStore
+</para>
+
+<!-- ##### SECTION Stability_Level ##### -->
+
+
+<!-- ##### STRUCT GtkTreeStore ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### FUNCTION gtk_tree_store_new ##### -->
+<para>
+
+</para>
+
+@n_columns: 
+@Varargs: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_tree_store_newv ##### -->
+<para>
+
+</para>
+
+@n_columns: 
+@types: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_tree_store_set_column_types ##### -->
+<para>
+
+</para>
+
+@tree_store: 
+@n_columns: 
+@types: 
+
+
+<!-- ##### FUNCTION gtk_tree_store_set_value ##### -->
+<para>
+
+</para>
+
+@tree_store: 
+@iter: 
+@column: 
+@value: 
+
+
+<!-- ##### FUNCTION gtk_tree_store_set ##### -->
+<para>
+
+</para>
+
+@tree_store: 
+@iter: 
+@Varargs: 
+
+
+<!-- ##### FUNCTION gtk_tree_store_set_valist ##### -->
+<para>
+
+</para>
+
+@tree_store: 
+@iter: 
+@var_args: 
+
+
+<!-- ##### FUNCTION gtk_tree_store_set_valuesv ##### -->
+<para>
+
+</para>
+
+@tree_store: 
+@iter: 
+@columns: 
+@values: 
+@n_values: 
+
+
+<!-- ##### FUNCTION gtk_tree_store_remove ##### -->
+<para>
+
+</para>
+
+@tree_store: 
+@iter: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_tree_store_insert ##### -->
+<para>
+
+</para>
+
+@tree_store: 
+@iter: 
+@parent: 
+@position: 
+
+
+<!-- ##### FUNCTION gtk_tree_store_insert_before ##### -->
+<para>
+
+</para>
+
+@tree_store: 
+@iter: 
+@parent: 
+@sibling: 
+
+
+<!-- ##### FUNCTION gtk_tree_store_insert_after ##### -->
+<para>
+
+</para>
+
+@tree_store: 
+@iter: 
+@parent: 
+@sibling: 
+
+
+<!-- ##### FUNCTION gtk_tree_store_insert_with_values ##### -->
+<para>
+
+</para>
+
+@tree_store: 
+@iter: 
+@parent: 
+@position: 
+@Varargs: 
+
+
+<!-- ##### FUNCTION gtk_tree_store_insert_with_valuesv ##### -->
+<para>
+
+</para>
+
+@tree_store: 
+@iter: 
+@parent: 
+@position: 
+@columns: 
+@values: 
+@n_values: 
+
+
+<!-- ##### FUNCTION gtk_tree_store_prepend ##### -->
+<para>
+
+</para>
+
+@tree_store: 
+@iter: 
+@parent: 
+
+
+<!-- ##### FUNCTION gtk_tree_store_append ##### -->
+<para>
+
+</para>
+
+@tree_store: 
+@iter: 
+@parent: 
+
+
+<!-- ##### FUNCTION gtk_tree_store_is_ancestor ##### -->
+<para>
+
+</para>
+
+@tree_store: 
+@iter: 
+@descendant: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_tree_store_iter_depth ##### -->
+<para>
+
+</para>
+
+@tree_store: 
+@iter: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_tree_store_clear ##### -->
+<para>
+
+</para>
+
+@tree_store: 
+
+
+<!-- ##### FUNCTION gtk_tree_store_iter_is_valid ##### -->
+<para>
+
+</para>
+
+@tree_store: 
+@iter: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_tree_store_reorder ##### -->
+<para>
+
+</para>
+
+@tree_store: 
+@parent: 
+@new_order: 
+
+
+<!-- ##### FUNCTION gtk_tree_store_swap ##### -->
+<para>
+
+</para>
+
+@tree_store: 
+@a: 
+@b: 
+
+
+<!-- ##### FUNCTION gtk_tree_store_move_before ##### -->
+<para>
+
+</para>
+
+@tree_store: 
+@iter: 
+@position: 
+
+
+<!-- ##### FUNCTION gtk_tree_store_move_after ##### -->
+<para>
+
+</para>
+
+@tree_store: 
+@iter: 
+@position: 
+
+

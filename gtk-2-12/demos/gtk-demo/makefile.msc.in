@@ -1,0 +1,94 @@
+## Makefile for building the gtk test apps with Microsoft C
+## Use: nmake -f makefile.msc
+
+## There is no install target, you have to decide where and 
+## how to install for yourself.
+
+TOP = ..\..\..
+!INCLUDE $(TOP)/glib/build/win32/make.msc
+
+!IFNDEF PERL
+PERL = perl
+!ENDIF
+
+################################################################
+
+# Possibly override versions from build/win32/module.defs
+GTK_VER = @GTK_MAJOR_VERSION@.@GTK_MINOR_VERSION@
+GDK_PIXBUF_VER = @GDK_PIXBUF_MAJOR@.@GDK_PIXBUF_MINOR@
+
+GDK_LIBS = ../../gdk/gdk-win32-$(GTK_VER).lib
+GTK_LIBS = ../../gtk/gtk-win32-$(GTK_VER).lib
+GDK_PIXBUF_LIBS = ../../gdk-pixbuf/gdk_pixbuf-$(GDK_PIXBUF_VER).lib
+
+INCLUDES = -FImsvc_recommended_pragmas.h -I . -I ../.. -I ../../gdk -I ../../gdk-pixbuf -I ../../gtk
+DEPCFLAGS = $(PANGO_CFLAGS) $(GLIB_CFLAGS) $(LIBICONV_CFLAGS) $(INTL_CFLAGS) $(ATK_CFLAGS)
+LDFLAGS = /link /machine:ix86 $(LINKDEBUG)
+DEFINES = -DG_LOG_DOMAIN=\"GtkDemo\" -DGTK_VERSION=\"$(GTK_VER)\" \
+	-DDEMOCODEDIR=\".\"
+
+TOUCH = copy makefile.msc+nul
+
+all :	\
+	demos.h \
+	gtk-demo.exe
+
+## These should be in the order you want them to appear in the 
+## demo app, which means alphabetized by demo title, not filename
+DEMOS = \
+	appwindow.c	\
+	button_box.c	\
+	clipboard.c	\
+	colorsel.c	\
+	dialog.c		\
+	drawingarea.c	\
+	editable_cells.c	\
+	entry_completion.c	\
+	expander.c	\
+	hypertext.c	\
+	iconview.c	\
+	images.c		\
+	list_store.c	\
+	menus.c		\
+	panes.c		\
+	pixbufs.c		\
+	rotated_text.c	\
+	sizegroup.c	\
+	stock_browser.c	\
+	textview.c	\
+	tree_store.c	\
+	ui_manager.c	\
+
+
+demos.h: $(DEMOS) geninclude.pl
+	$(PERL) geninclude.pl $(DEMOS) > demos.h
+
+OBJECTS = \
+	appwindow.obj	\
+	button_box.obj	\
+	changedisplay.obj	\
+	clipboard.obj	\
+	colorsel.obj	\
+	dialog.obj	\
+	drawingarea.obj	\
+	editable_cells.obj	\
+	entry_completion.obj	\
+	expander.obj	\
+	hypertext.obj	\
+	iconview.obj	\
+	images.obj	\
+	list_store.obj	\
+	menus.obj		\
+	panes.obj		\
+	pixbufs.obj	\
+	rotated_text.obj \
+	sizegroup.obj	\
+	stock_browser.obj	\
+	textview.obj	\
+	tree_store.obj	\
+	ui_manager.obj	\
+	main.obj \
+
+gtk-demo.exe : demos.h $(OBJECTS)
+	$(CC) $(CFLAGS) -Fegtk-demo.exe $(OBJECTS) $(GTK_LIBS) $(GDK_LIBS) $(GDK_PIXBUF_LIBS) $(PANGO_LIBS) $(GLIB_LIBS) $(LDFLAGS)
+

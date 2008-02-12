@@ -1,0 +1,424 @@
+<!-- ##### SECTION Title ##### -->
+GtkComboBox
+
+<!-- ##### SECTION Short_Description ##### -->
+A widget used to choose from a list of items
+
+<!-- ##### SECTION Long_Description ##### -->
+<para>
+A #GtkComboBox is a widget that allows the user to choose from a
+list of valid choices.  The #GtkComboBox displays the selected 
+choice.  When activated, the #GtkComboBox displays a popup 
+which allows the user to make a new choice. The style in which 
+the selected value is displayed, and the style of the popup is
+determined by the current theme. It may be similar to a #GtkOptionMenu,
+or similar to a Windows-style combo box.
+</para>
+
+<para>
+Unlike its predecessors #GtkCombo and #GtkOptionMenu, the #GtkComboBox
+uses the model-view pattern; the list of valid choices is specified in the
+form of a tree model, and the display of the choices can be adapted to
+the data in the model by using cell renderers, as you would in a tree view.
+This is possible since #GtkComboBox implements the #GtkCellLayout interface.
+The tree model holding the valid choices is not restricted to a flat list,
+it can be a real tree, and the popup will reflect the tree structure.
+</para>
+
+<para>
+In addition to the model-view API, #GtkComboBox offers a simple API which 
+is suitable for text-only combo boxes, and hides the complexity of managing
+the data in a model. It consists of the functions gtk_combo_box_new_text(), 
+gtk_combo_box_append_text(), gtk_combo_box_insert_text(), 
+gtk_combo_box_prepend_text(), gtk_combo_box_remove_text() and 
+gtk_combo_box_get_active_text().
+</para>
+
+<!-- ##### SECTION See_Also ##### -->
+<para>
+#GtkComboBoxEntry, #GtkTreeModel, #GtkCellRenderer
+</para>
+
+<!-- ##### SECTION Stability_Level ##### -->
+
+
+<!-- ##### STRUCT GtkComboBox ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### SIGNAL GtkComboBox::changed ##### -->
+<para>
+
+</para>
+
+@combobox: the object which received the signal.
+
+<!-- ##### SIGNAL GtkComboBox::move-active ##### -->
+<para>
+
+</para>
+
+@combobox: the object which received the signal.
+@arg1: 
+
+<!-- ##### SIGNAL GtkComboBox::popdown ##### -->
+<para>
+
+</para>
+
+@combobox: the object which received the signal.
+@Returns: 
+
+<!-- ##### SIGNAL GtkComboBox::popup ##### -->
+<para>
+
+</para>
+
+@combobox: the object which received the signal.
+
+<!-- ##### ARG GtkComboBox:active ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkComboBox:add-tearoffs ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkComboBox:column-span-column ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkComboBox:focus-on-click ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkComboBox:has-frame ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkComboBox:model ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkComboBox:popup-shown ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkComboBox:row-span-column ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkComboBox:tearoff-title ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkComboBox:wrap-width ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkComboBox:appears-as-list ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkComboBox:arrow-size ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkComboBox:shadow-type ##### -->
+<para>
+
+</para>
+
+<!-- ##### FUNCTION gtk_combo_box_new ##### -->
+<para>
+
+</para>
+
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_combo_box_new_with_model ##### -->
+<para>
+
+</para>
+
+@model: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_combo_box_get_wrap_width ##### -->
+<para>
+
+</para>
+
+@combo_box: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_combo_box_set_wrap_width ##### -->
+<para>
+
+</para>
+
+@combo_box: 
+@width: 
+
+
+<!-- ##### FUNCTION gtk_combo_box_get_row_span_column ##### -->
+<para>
+
+</para>
+
+@combo_box: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_combo_box_set_row_span_column ##### -->
+<para>
+
+</para>
+
+@combo_box: 
+@row_span: 
+
+
+<!-- ##### FUNCTION gtk_combo_box_get_column_span_column ##### -->
+<para>
+
+</para>
+
+@combo_box: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_combo_box_set_column_span_column ##### -->
+<para>
+
+</para>
+
+@combo_box: 
+@column_span: 
+
+
+<!-- ##### FUNCTION gtk_combo_box_get_active ##### -->
+<para>
+
+</para>
+
+@combo_box: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_combo_box_set_active ##### -->
+<para>
+
+</para>
+
+@combo_box: 
+@index_: 
+
+
+<!-- ##### FUNCTION gtk_combo_box_get_active_iter ##### -->
+<para>
+
+</para>
+
+@combo_box: 
+@iter: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_combo_box_set_active_iter ##### -->
+<para>
+
+</para>
+
+@combo_box: 
+@iter: 
+
+
+<!-- ##### FUNCTION gtk_combo_box_get_model ##### -->
+<para>
+
+</para>
+
+@combo_box: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_combo_box_set_model ##### -->
+<para>
+
+</para>
+
+@combo_box: 
+@model: 
+
+
+<!-- ##### FUNCTION gtk_combo_box_new_text ##### -->
+<para>
+
+</para>
+
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_combo_box_append_text ##### -->
+<para>
+
+</para>
+
+@combo_box: 
+@text: 
+
+
+<!-- ##### FUNCTION gtk_combo_box_insert_text ##### -->
+<para>
+
+</para>
+
+@combo_box: 
+@position: 
+@text: 
+
+
+<!-- ##### FUNCTION gtk_combo_box_prepend_text ##### -->
+<para>
+
+</para>
+
+@combo_box: 
+@text: 
+
+
+<!-- ##### FUNCTION gtk_combo_box_remove_text ##### -->
+<para>
+
+</para>
+
+@combo_box: 
+@position: 
+
+
+<!-- ##### FUNCTION gtk_combo_box_get_active_text ##### -->
+<para>
+
+</para>
+
+@combo_box: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_combo_box_popup ##### -->
+<para>
+
+</para>
+
+@combo_box: 
+
+
+<!-- ##### FUNCTION gtk_combo_box_popdown ##### -->
+<para>
+
+</para>
+
+@combo_box: 
+
+
+<!-- ##### FUNCTION gtk_combo_box_get_popup_accessible ##### -->
+<para>
+
+</para>
+
+@combo_box: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_combo_box_get_row_separator_func ##### -->
+<para>
+
+</para>
+
+@combo_box: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_combo_box_set_row_separator_func ##### -->
+<para>
+
+</para>
+
+@combo_box: 
+@func: 
+@data: 
+@destroy: 
+
+
+<!-- ##### FUNCTION gtk_combo_box_set_add_tearoffs ##### -->
+<para>
+
+</para>
+
+@combo_box: 
+@add_tearoffs: 
+
+
+<!-- ##### FUNCTION gtk_combo_box_get_add_tearoffs ##### -->
+<para>
+
+</para>
+
+@combo_box: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_combo_box_set_title ##### -->
+<para>
+
+</para>
+
+@combo_box: 
+@title: 
+
+
+<!-- ##### FUNCTION gtk_combo_box_get_title ##### -->
+<para>
+
+</para>
+
+@combo_box: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_combo_box_set_focus_on_click ##### -->
+<para>
+
+</para>
+
+@combo: 
+@focus_on_click: 
+
+
+<!-- ##### FUNCTION gtk_combo_box_get_focus_on_click ##### -->
+<para>
+
+</para>
+
+@combo: 
+@Returns: 
+
+

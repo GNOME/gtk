@@ -1,0 +1,58 @@
+A list of missing things and known bugs in the DirectFB GDK backend:
+
+- Implement more GDK drawing functions. The most important ones
+  (including XOR) do work now. Other drawing functions are rarely
+  used and would need support from DirectFB.
+- Implemenent extended input devices. Shouldn't be too hard.
+- Look into DND and selections. DND seems to work inside one
+  application at least.
+- Consider using the recently added glyph cache in PangoFT2 to
+  implement our glyph surface cache. Probably limit the number 
+  of cached glyphs or the size of the surface cache instead of
+  keeping all glyphs from a number of fonts in the cache.
+
+Some things that will probably never happen:
+
+- Line styles, joining and related stuff. We could use code from the
+  LinuxFB backend but it seems to be bloat for most applications.
+  Implementing dashed lines would probably make sense and shouldn't
+  be too hard.
+- Bitmaps (they are partly supported) and masks. This stuff should
+  be entirely deprecated. Use real alpha channels instead!
+
+
+This is a simple list of unimplemented function stubs and there file
+to see the implementation check the x11 dir.
+Its not started yet.
+
+gdkcolor-directfb.c
+gdkcursor-directfb.c
+gdkdisplay-directfb.c
+gdkdnd-directfb.c
+gdkdrawable-directfb.c
+gdkevents-directfb.c
+gdkfont-directfb.c
+gdkgc-directfb.c
+gdkgeometry-directfb.c
+gdkglobals-directfb.c
+gdkimage-directfb.c
+gdkim-directfb.c
+gdkinput-directfb.c
+gdkkeys-directfb.c
+	gdk_keymap_lookup_key 
+	gdk_keyval_convert_case
+gdkmain-directfb.c
+gdkpixmap-directfb.c
+gdkproperty-directfb.c
+gdkscreen-directfb.c
+gdkselection-directfb.c
+gdkspawn-directfb.c
+gdkvisual-directfb.c
+gdkwindow-directfb.c
+gdkwindowid.c
+glyphsurfacecache.c
+
+
+NOTES:
+event filter callbacks missing see the x11 impl
+

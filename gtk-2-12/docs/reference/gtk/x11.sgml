@@ -1,0 +1,208 @@
+<refentry id="gtk-x11" revision="17 Jan 2002">
+<refmeta>
+<refentrytitle>Using GTK+ on the X Window System</refentrytitle>
+<manvolnum>3</manvolnum>
+<refmiscinfo>GTK Library</refmiscinfo>
+</refmeta>
+
+<refnamediv>
+<refname>Using GTK+ on the X Window System</refname>
+<refpurpose>
+X11 aspects of using GTK+
+</refpurpose>
+</refnamediv>
+
+<refsect1>
+<title>GTK+ for the X Window System</title>
+
+<para>
+On UNIX, the X backend is the default build for GTK+. So 
+you don't need to do anything special when compiling it,
+and everything should "just work."
+</para>
+
+<para>
+To mix low-level Xlib routines into a GTK program, 
+see <link linkend="gdk-X-Window-System-Interaction">GDK X Window
+System interaction</link> in the GDK manual.
+</para>
+
+<refsect2 id="x11-cmdline">
+<title>X11-specific commandline options</title>
+
+<para>
+The X backend understands some additional command line 
+arguments.
+</para>
+
+<formalpara>
+<title><systemitem>--display <replaceable>display</replaceable></systemitem></title>
+
+<para>
+The name of the X display to open instead of the one specified
+in the <envar>DISPLAY</envar> environment variable. 
+</para>
+</formalpara>
+
+<formalpara>
+<title><systemitem>--screen <replaceable>screen_number</replaceable></systemitem></title>
+
+<para>
+  The number of the screen within the default display. This overrides
+  any screen number specified in the display name specified by
+  by he <systemitem>--display</systemitem> command line option or
+  the <envar>DISPLAY</envar> environment variable. If this screen
+  cannot be opened, then GTK+ will fall back to the screen
+  specified in the display name. This option is not useful
+  interactively; the intended purposes is that when a program
+  registers its command line with a <firstterm>session
+  manager</firstterm> for later restarting, it can save the
+  screen it is on, without having to worry if it might be
+  restarted on a different display.
+</para>
+</formalpara>
+
+<formalpara>
+<title><systemitem>--sync</systemitem></title>
+
+<para>
+Makes all X requests synchronously. This is a useful option for 
+debugging, but it will slow down the performance considerably.
+</para>
+</formalpara>
+
+<formalpara>
+<title><systemitem>--gxid-host <replaceable>host</replaceable></systemitem></title>
+
+<para>
+The host to contact the <application>gxid</application> daemon on; overrides 
+the <link linkend="GXID"><envar>GXID_HOST</envar></link> environment variable.
+</para>
+</formalpara>
+
+<formalpara>
+<title><systemitem>--gxid-port <replaceable>port</replaceable></systemitem></title>
+
+<para>
+The port for the connection to <application>gxid</application>; overrides 
+the <link linkend="GXID"><envar>GXID_PORT</envar></link> environment variable.
+This option is only available if GTK+ has been configured with
+<option>--gdk-target=x11</option>.
+</para>
+</formalpara>
+
+</refsect2>
+
+<refsect2 id="x11-envar">
+<title>X11-specific environment variables</title>
+
+<para>
+The X backend can be influenced with some
+additional environment variables.
+</para>
+
+<formalpara id="GXID">
+  <title><envar>GXID_HOST</envar>, <envar>GXID_PORT</envar></title>
+
+  <para>
+    The host and port to contact the <application>gxid</application> daemon 
+    on. <application>gxid</application> is only necessary on X servers which 
+    don't support using the pointer and extension devices at once, and is
+    only built if GTK+ is configured with <option>--with-xinput=gxi</option>. 
+    The <application>XFree86</application> and <application>Xorg</application>
+    X servers don't have this 
+    restriction.
+  </para>
+</formalpara>
+
+<formalpara>
+  <title><envar>GDK_USE_XFT</envar></title>
+
+  <para>
+    If this variable is set to 1, GTK+ will use the Pango Xft backend instead
+    of the X backend when possible (i.e. when the X server supports the XRender
+    extension and Pango has been built with Xft support). 
+  </para>
+</formalpara>
+
+</refsect2>
+
+</refsect1>
+
+<refsect1 id="gtk-X11-arch">
+<title>Understanding the X11 architecture</title>
+
+<para>
+People coming from a Windows or MacOS background often find certain
+aspects of the X Window System surprising. This section introduces
+some basic X concepts at a high level. For more details, the book most
+people use is called the <citetitle pubwork="book">Xlib Programming
+Manual</citetitle> by Adrian Nye; this book is volume one in the
+O'Reilly X Window System series.
+</para>
+<para>
+Standards are another important resource if you're poking in low-level
+X11 details, in particular the ICCCM and the Extended Window Manager
+Hints specifications. <ulink
+url="http://www.freedesktop.org/standards/">freedesktop.org</ulink>
+has links to many relevant specifications.
+</para>
+<para>
+The GDK manual covers <link
+linkend="gdk-X-Window-System-Interaction">using Xlib in a GTK
+program</link>.
+</para>
+
+<refsect2>
+<title>Server, client, window manager</title>
+
+<para>
+Other window systems typically put all their functionality in the
+application itself. With X, each application involves three different
+programs: the <firstterm>X server</firstterm>, the application (called
+a <firstterm>client</firstterm> because it's a client of the X
+server), and a special client called the <firstterm>window
+manager</firstterm>.
+</para>
+
+<para>
+The X server is in charge of managing resources, processing drawing
+requests, and dispatching events such as keyboard and mouse events to
+interested applications. So client applications can ask the X server
+to create a window, draw a circle, or move windows around.
+</para>
+
+<para>
+The window manager is in charge of rendering the frame or borders
+around windows; it also has final say on the size of each window,
+and window states such as minimized, maximized, and so forth.
+On Windows and MacOS the application handles most of this.
+On X11, if you wish to modify the window's state, or 
+change its frame, you must ask the window manager to do so on your
+behalf, using an established  <ulink
+url="http://www.freedesktop.org/standards/">convention</ulink>.
+</para>
+
+<para>
+GTK+ has functions for asking the window manager to do various things;
+see for example <link
+linkend="gtk-window-iconify">gtk_window_iconify()</link> or <link
+linkend="gtk-window-maximize">gtk_window_maximize()</link> or <link
+linkend="gtk-window-set-decorated">gtk_window_set_decorated()</link>.
+Keep in mind that <link
+linkend="gtk-window-move">gtk_window_move()</link> and window sizing
+are ultimately controlled by the window manager as well and most
+window managers <emphasis>will</emphasis> ignore certain requests from
+time to time, in the interests of good user interface.
+</para>
+
+<!--
+May also want to explain DESKTOP_STARTUP_ID here. 
+http://www.freedesktop.org/Standards/startup-notification-spec
+-->
+
+</refsect2>
+
+</refsect1>
+
+</refentry>

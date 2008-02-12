@@ -1,0 +1,204 @@
+<!-- ##### SECTION Title ##### -->
+GtkMessageDialog
+
+<!-- ##### SECTION Short_Description ##### -->
+A convenient message window
+
+<!-- ##### SECTION Long_Description ##### -->
+<para>
+#GtkMessageDialog presents a dialog with an image representing the type of 
+message (Error, Question, etc.) alongside some message text. It's simply a 
+convenience widget; you could construct the equivalent of #GtkMessageDialog 
+from #GtkDialog without too much effort, but #GtkMessageDialog saves typing.
+</para>
+
+<para>
+The easiest way to do a modal message dialog is to use gtk_dialog_run(), though
+you can also pass in the %GTK_DIALOG_MODAL flag, gtk_dialog_run() automatically
+makes the dialog modal and waits for the user to respond to it. gtk_dialog_run()
+returns when any dialog button is clicked.
+<example>
+<title>A modal dialog.</title>
+<programlisting>
+ dialog = gtk_message_dialog_new (main_application_window,
+                                  GTK_DIALOG_DESTROY_WITH_PARENT,
+                                  GTK_MESSAGE_ERROR,
+                                  GTK_BUTTONS_CLOSE,
+                                  "Error loading file '&percnt;s': &percnt;s",
+                                  filename, g_strerror (errno));
+ gtk_dialog_run (GTK_DIALOG (dialog));
+ gtk_widget_destroy (dialog);
+</programlisting>
+</example>
+</para>
+
+<para>
+You might do a non-modal #GtkMessageDialog as follows:
+<example>
+<title>A non-modal dialog.</title>
+<programlisting>
+ dialog = gtk_message_dialog_new (main_application_window,
+                                  GTK_DIALOG_DESTROY_WITH_PARENT,
+                                  GTK_MESSAGE_ERROR,
+                                  GTK_BUTTONS_CLOSE,
+                                  "Error loading file '&percnt;s': &percnt;s",
+                                  filename, g_strerror (errno));
+
+ /* Destroy the dialog when the user responds to it (e.g. clicks a button) */
+ g_signal_connect_swapped (dialog, "response",
+                           G_CALLBACK (gtk_widget_destroy),
+                           dialog);
+</programlisting>
+</example>
+</para>
+
+<!-- ##### SECTION See_Also ##### -->
+<para>
+#GtkDialog
+</para>
+
+<!-- ##### SECTION Stability_Level ##### -->
+
+
+<!-- ##### STRUCT GtkMessageDialog ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### ARG GtkMessageDialog:buttons ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkMessageDialog:image ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkMessageDialog:message-type ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkMessageDialog:secondary-text ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkMessageDialog:secondary-use-markup ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkMessageDialog:text ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkMessageDialog:use-markup ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkMessageDialog:message-border ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkMessageDialog:use-separator ##### -->
+<para>
+
+</para>
+
+<!-- ##### ENUM GtkMessageType ##### -->
+<para>
+The type of message being displayed in the dialog.
+</para>
+
+@GTK_MESSAGE_INFO: Informational message
+@GTK_MESSAGE_WARNING: Nonfatal warning message
+@GTK_MESSAGE_QUESTION: Question requiring a choice
+@GTK_MESSAGE_ERROR: Fatal error message
+@GTK_MESSAGE_OTHER: 
+
+<!-- ##### ENUM GtkButtonsType ##### -->
+<para>
+Prebuilt sets of buttons for the dialog. If 
+none of these choices are appropriate, simply use %GTK_BUTTONS_NONE
+then call gtk_dialog_add_buttons().
+</para>
+
+@GTK_BUTTONS_NONE: no buttons at all
+@GTK_BUTTONS_OK: an OK button
+@GTK_BUTTONS_CLOSE: a Close button
+@GTK_BUTTONS_CANCEL: a Cancel button
+@GTK_BUTTONS_YES_NO: Yes and No buttons
+@GTK_BUTTONS_OK_CANCEL: OK and Cancel buttons
+
+<!-- ##### FUNCTION gtk_message_dialog_new ##### -->
+<para>
+
+</para>
+
+@parent: 
+@flags: 
+@type: 
+@buttons: 
+@message_format: 
+@Varargs: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_message_dialog_new_with_markup ##### -->
+<para>
+
+</para>
+
+@parent: 
+@flags: 
+@type: 
+@buttons: 
+@message_format: 
+@Varargs: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_message_dialog_set_markup ##### -->
+<para>
+
+</para>
+
+@message_dialog: 
+@str: 
+
+
+<!-- ##### FUNCTION gtk_message_dialog_set_image ##### -->
+<para>
+
+</para>
+
+@dialog: 
+@image: 
+
+
+<!-- ##### FUNCTION gtk_message_dialog_format_secondary_text ##### -->
+<para>
+
+</para>
+
+@message_dialog: 
+@message_format: 
+@Varargs: 
+
+
+<!-- ##### FUNCTION gtk_message_dialog_format_secondary_markup ##### -->
+<para>
+
+</para>
+
+@message_dialog: 
+@message_format: 
+@Varargs: 
+
+

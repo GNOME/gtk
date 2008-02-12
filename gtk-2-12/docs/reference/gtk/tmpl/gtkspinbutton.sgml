@@ -1,0 +1,490 @@
+<!-- ##### SECTION Title ##### -->
+GtkSpinButton
+
+<!-- ##### SECTION Short_Description ##### -->
+Retrieve an integer or floating-point number from the user
+
+<!-- ##### SECTION Long_Description ##### -->
+<para>
+A #GtkSpinButton is an ideal way to allow the user to set the value of some 
+attribute. Rather than having to directly type a number into a #GtkEntry, 
+#GtkSpinButton allows the user to click on one of two arrows to increment or 
+decrement the displayed value. A value can still be typed in, with the bonus 
+that it can be checked to ensure it is in a given range.
+</para>
+<para>
+The main properties of a #GtkSpinButton are through a #GtkAdjustment. See the 
+#GtkAdjustment section for more details about an adjustment's properties.
+</para>
+<para>
+<example>
+<title>Using a <structname>GtkSpinButton</structname> to get an integer.</title>
+<programlisting>
+
+/* Provides a function to retrieve an integer value from a GtkSpinButton
+ * and creates a spin button to model percentage values.
+ */
+
+gint grab_int_value (GtkSpinButton *a_spinner, gpointer user_data) {
+   return gtk_spin_button_get_value_as_int (a_spinner);
+}
+
+void create_integer_spin_button (void) {
+
+   GtkWidget *window, *spinner;
+   GtkAdjustment *spinner_adj;
+
+   spinner_adj = (GtkAdjustment *) gtk_adjustment_new (50.0, 0.0, 100.0, 1.0, 5.0, 5.0);
+   
+   window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+   gtk_container_set_border_width (GTK_CONTAINER (window), 5);
+   
+   /* creates the spinner, with no decimal places */
+   spinner = gtk_spin_button_new (spinner_adj, 1.0, 0);
+   gtk_container_add (GTK_CONTAINER (window), spinner);
+   
+   gtk_widget_show_all (window);
+   return;
+}
+
+</programlisting>
+</example>
+</para>
+
+<para>
+<example>
+<title>Using a <structname>GtkSpinButton</structname> to get a floating point value.</title>
+<programlisting>
+
+/* Provides a function to retrieve a floating point value from a
+ * GtkSpinButton, and creates a high precision spin button.
+ */
+
+gfloat grab_int_value (GtkSpinButton *a_spinner, gpointer user_data) {
+   return gtk_spin_button_get_value (a_spinner);
+}
+
+void create_floating_spin_button (void) {
+
+   GtkWidget *window, *spinner;
+   GtkAdjustment *spinner_adj;
+
+   spinner_adj = (GtkAdjustment *) gtk_adjustment_new (2.500, 0.0, 5.0, 0.001, 0.1, 0.1);
+   
+   window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+   gtk_container_set_border_width (GTK_CONTAINER (window), 5);
+   
+   /* creates the spinner, with three decimal places */
+   spinner = gtk_spin_button_new (spinner_adj, 0.001, 3);
+   gtk_container_add (GTK_CONTAINER (window), spinner);
+   
+   gtk_widget_show_all (window);
+   return;
+}
+
+</programlisting>
+</example>
+</para>
+
+<!-- ##### SECTION See_Also ##### -->
+<para>
+<variablelist>
+<varlistentry>
+<term>#GtkEntry</term>
+<listitem><para>retrieve text rather than numbers.</para></listitem>
+</varlistentry>
+</variablelist>
+</para>
+
+<!-- ##### SECTION Stability_Level ##### -->
+
+
+<!-- ##### STRUCT GtkSpinButton ##### -->
+<para>
+<structfield>entry</structfield> is the #GtkEntry part of the #GtkSpinButton 
+widget, and can be used accordingly. All other fields contain private data 
+and should only be modified using the functions below.
+</para>
+
+
+<!-- ##### SIGNAL GtkSpinButton::change-value ##### -->
+<para>
+
+</para>
+
+@spinbutton: the object which received the signal.
+@arg1: 
+
+<!-- ##### SIGNAL GtkSpinButton::input ##### -->
+<para>
+
+</para>
+
+@spinbutton: the object which received the signal.
+@arg1: 
+@Returns: 
+
+<!-- ##### SIGNAL GtkSpinButton::output ##### -->
+<para>
+
+</para>
+
+@spinbutton: the object which received the signal.
+@Returns: 
+
+<!-- ##### SIGNAL GtkSpinButton::value-changed ##### -->
+<para>
+
+</para>
+
+@spinbutton: the object which received the signal.
+
+<!-- ##### SIGNAL GtkSpinButton::wrapped ##### -->
+<para>
+
+</para>
+
+@spinbutton: the object which received the signal.
+
+<!-- ##### ARG GtkSpinButton:adjustment ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkSpinButton:climb-rate ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkSpinButton:digits ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkSpinButton:numeric ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkSpinButton:snap-to-ticks ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkSpinButton:update-policy ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkSpinButton:value ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkSpinButton:wrap ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkSpinButton:shadow-type ##### -->
+<para>
+the type of border that surrounds the arrows of a spin button.
+</para>
+
+<!-- ##### ENUM GtkSpinButtonUpdatePolicy ##### -->
+<para>
+
+<informaltable pgwide="1" frame="none" role="enum">
+<tgroup cols="2"><colspec colwidth="2*"/><colspec colwidth="8*"/>
+<tbody>
+<row>
+<entry>GTK_UPDATE_ALWAYS</entry>
+<entry>When refreshing your #GtkSpinButton, the value is always displayed.</entry>
+</row>
+<row>
+<entry>GTK_UPDATE_IF_VALID</entry>
+<entry>When refreshing your #GtkSpinButton, the value is only displayed if it is valid within the bounds of the spin button's #GtkAdjustment.</entry>
+</row>
+</tbody></tgroup></informaltable>
+</para>
+
+@GTK_UPDATE_ALWAYS: 
+@GTK_UPDATE_IF_VALID: 
+
+<!-- ##### ENUM GtkSpinType ##### -->
+<para>
+
+<informaltable pgwide="1" frame="none" role="struct">
+<tgroup cols="2"><colspec colwidth="2*"/><colspec colwidth="8*"/>
+<tbody>
+<row>
+<entry>GTK_SPIN_STEP_FORWARD, 
+GTK_SPIN_STEP_BACKWARD, 
+GTK_SPIN_PAGE_FORWARD, 
+GTK_SPIN_PAGE_BACKWARD</entry>
+<entry>These values spin a #GtkSpinButton by the relevant values of the spin button's #GtkAdjustment.</entry>
+</row>
+<row>
+<entry>GTK_SPIN_HOME, 
+GTK_SPIN_END</entry>
+<entry>These set the spin button's value to the minimum or maxmimum possible values, (set by its #GtkAdjustment), respectively.</entry>
+</row>
+<row>
+<entry>GTK_SPIN_USER_DEFINED</entry>
+<entry>The programmer must specify the exact amount to spin the #GtkSpinButton.</entry>
+</row>
+</tbody></tgroup></informaltable>
+</para>
+
+@GTK_SPIN_STEP_FORWARD: 
+@GTK_SPIN_STEP_BACKWARD: 
+@GTK_SPIN_PAGE_FORWARD: 
+@GTK_SPIN_PAGE_BACKWARD: 
+@GTK_SPIN_HOME: 
+@GTK_SPIN_END: 
+@GTK_SPIN_USER_DEFINED: 
+
+<!-- ##### FUNCTION gtk_spin_button_configure ##### -->
+<para>
+Changes the properties of an existing spin button. The adjustment, climb rate, and number of decimal places are all changed accordingly, after this function call.
+</para>
+
+@spin_button: a #GtkSpinButton.
+@adjustment: a #GtkAdjustment.
+@climb_rate: the new climb rate.
+@digits: the number of decimal places to display in the spin button.
+
+
+<!-- ##### FUNCTION gtk_spin_button_new ##### -->
+<para>
+Creates a new #GtkSpinButton.
+</para>
+
+@adjustment: the #GtkAdjustment object that this spin button should use.
+@climb_rate: specifies how much the spin button changes when an arrow is clicked on.
+@digits: the number of decimal places to display.
+@Returns: The new spin button as a #GtkWidget.
+
+
+<!-- ##### FUNCTION gtk_spin_button_new_with_range ##### -->
+<para>
+
+</para>
+
+@min: 
+@max: 
+@step: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_spin_button_set_adjustment ##### -->
+<para>
+
+</para>
+
+@spin_button: 
+@adjustment: 
+
+
+<!-- ##### FUNCTION gtk_spin_button_get_adjustment ##### -->
+<para>
+
+</para>
+
+@spin_button: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_spin_button_set_digits ##### -->
+<para>
+
+</para>
+
+@spin_button: 
+@digits: 
+
+
+<!-- ##### FUNCTION gtk_spin_button_set_increments ##### -->
+<para>
+
+</para>
+
+@spin_button: 
+@step: 
+@page: 
+
+
+<!-- ##### FUNCTION gtk_spin_button_set_range ##### -->
+<para>
+
+</para>
+
+@spin_button: 
+@min: 
+@max: 
+
+
+<!-- ##### MACRO gtk_spin_button_get_value_as_float ##### -->
+<para>
+Gets the value in the @spin_button. This function is deprecated,
+use gtk_spin_button_get_value() instead.
+</para>
+
+@Returns: the value of @spin_button.
+<!-- # Unused Parameters # -->
+@spin_button: a #GtkSpinButton.
+
+
+<!-- ##### FUNCTION gtk_spin_button_get_value_as_int ##### -->
+<para>
+
+</para>
+
+@spin_button: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_spin_button_set_value ##### -->
+<para>
+
+</para>
+
+@spin_button: 
+@value: 
+
+
+<!-- ##### FUNCTION gtk_spin_button_set_update_policy ##### -->
+<para>
+
+</para>
+
+@spin_button: 
+@policy: 
+
+
+<!-- ##### FUNCTION gtk_spin_button_set_numeric ##### -->
+<para>
+
+</para>
+
+@spin_button: 
+@numeric: 
+
+
+<!-- ##### FUNCTION gtk_spin_button_spin ##### -->
+<para>
+
+</para>
+
+@spin_button: 
+@direction: 
+@increment: 
+
+
+<!-- ##### FUNCTION gtk_spin_button_set_wrap ##### -->
+<para>
+
+</para>
+
+@spin_button: 
+@wrap: 
+
+
+<!-- ##### FUNCTION gtk_spin_button_set_snap_to_ticks ##### -->
+<para>
+
+</para>
+
+@spin_button: 
+@snap_to_ticks: 
+
+
+<!-- ##### FUNCTION gtk_spin_button_update ##### -->
+<para>
+
+</para>
+
+@spin_button: 
+
+
+<!-- ##### FUNCTION gtk_spin_button_get_digits ##### -->
+<para>
+
+</para>
+
+@spin_button: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_spin_button_get_increments ##### -->
+<para>
+
+</para>
+
+@spin_button: 
+@step: 
+@page: 
+
+
+<!-- ##### FUNCTION gtk_spin_button_get_numeric ##### -->
+<para>
+
+</para>
+
+@spin_button: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_spin_button_get_range ##### -->
+<para>
+
+</para>
+
+@spin_button: 
+@min: 
+@max: 
+
+
+<!-- ##### FUNCTION gtk_spin_button_get_snap_to_ticks ##### -->
+<para>
+
+</para>
+
+@spin_button: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_spin_button_get_update_policy ##### -->
+<para>
+
+</para>
+
+@spin_button: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_spin_button_get_value ##### -->
+<para>
+
+</para>
+
+@spin_button: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_spin_button_get_wrap ##### -->
+<para>
+
+</para>
+
+@spin_button: 
+@Returns: 
+
+
+<!-- ##### MACRO GTK_INPUT_ERROR ##### -->
+<para>
+
+</para>
+
+
+

@@ -1,0 +1,314 @@
+<!-- ##### SECTION Title ##### -->
+GtkProgressBar
+
+<!-- ##### SECTION Short_Description ##### -->
+A widget which indicates progress visually
+
+<!-- ##### SECTION Long_Description ##### -->
+<para>
+The #GtkProgressBar is typically used to display the progress of a long
+running operation.  It provides a visual clue that processing
+is underway.  The #GtkProgressBar can be used in two different
+modes: percentage mode and activity mode.
+</para>
+
+<para>
+When an application can determine how much work needs to take place 
+(e.g. read a fixed number of bytes from a file) and can monitor its
+progress, it can use the #GtkProgressBar in percentage mode and the user
+sees a growing bar indicating the percentage of the work that has
+been completed.  In this mode, the application is required to call
+gtk_progress_bar_set_fraction() periodically to update the progress bar.
+</para>
+
+<para>
+When an application has no accurate way of knowing the amount of work
+to do, it can use the #GtkProgressBar in activity mode, which shows activity 
+by a block moving back and forth within the progress area. In this mode,
+the application is required to call gtk_progress_bar_pulse() perodically
+to update the progress bar.
+</para>
+
+<para>
+There is quite a bit of flexibility provided to control the appearance
+of the #GtkProgressBar.  Functions are provided to control the 
+orientation of the bar, optional text can be displayed along with
+the bar, and the step size used in activity mode can be set.
+</para>
+
+<note>
+<para>
+The #GtkProgressBar/#GtkProgress API in GTK 1.2 was bloated, needlessly complex
+and hard to use properly.  Therefore #GtkProgress has been deprecated
+completely and the #GtkProgressBar API has been reduced to the following 10
+functions: gtk_progress_bar_new(), gtk_progress_bar_pulse(), 
+gtk_progress_bar_set_text(), gtk_progress_bar_set_fraction(), 
+gtk_progress_bar_set_pulse_step(), gtk_progress_bar_set_orientation(), 
+gtk_progress_bar_get_text(), gtk_progress_bar_get_fraction(), 
+gtk_progress_bar_get_pulse_step(), gtk_progress_bar_get_orientation(). 
+These have been grouped at the beginning of this section, followed by 
+a large chunk of deprecated 1.2 compatibility functions.
+</para>
+</note>
+
+<!-- ##### SECTION See_Also ##### -->
+<para>
+
+</para>
+
+<!-- ##### SECTION Stability_Level ##### -->
+
+
+<!-- ##### STRUCT GtkProgressBar ##### -->
+<para>
+The #GtkProgressBar-struct struct contains private data only, 
+and should be accessed using the functions below.
+</para>
+
+
+<!-- ##### ARG GtkProgressBar:activity-blocks ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkProgressBar:activity-step ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkProgressBar:adjustment ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkProgressBar:bar-style ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkProgressBar:discrete-blocks ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkProgressBar:ellipsize ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkProgressBar:fraction ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkProgressBar:orientation ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkProgressBar:pulse-step ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkProgressBar:text ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkProgressBar:xspacing ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkProgressBar:yspacing ##### -->
+<para>
+
+</para>
+
+<!-- ##### FUNCTION gtk_progress_bar_new ##### -->
+<para>
+Creates a new #GtkProgressBar.
+</para>
+
+@Returns: a #GtkProgressBar.
+
+
+<!-- ##### FUNCTION gtk_progress_bar_pulse ##### -->
+<para>
+
+</para>
+
+@pbar: 
+
+
+<!-- ##### FUNCTION gtk_progress_bar_set_text ##### -->
+<para>
+
+</para>
+
+@pbar: 
+@text: 
+
+
+<!-- ##### FUNCTION gtk_progress_bar_set_fraction ##### -->
+<para>
+
+</para>
+
+@pbar: 
+@fraction: 
+
+
+<!-- ##### FUNCTION gtk_progress_bar_set_pulse_step ##### -->
+<para>
+
+</para>
+
+@pbar: 
+@fraction: 
+
+
+<!-- ##### FUNCTION gtk_progress_bar_set_orientation ##### -->
+<para>
+
+</para>
+
+@pbar: 
+@orientation: 
+
+
+<!-- ##### FUNCTION gtk_progress_bar_set_ellipsize ##### -->
+<para>
+
+</para>
+
+@pbar: 
+@mode: 
+
+
+<!-- ##### ENUM GtkProgressBarOrientation ##### -->
+<para>
+An enumeration representing possible orientations and growth
+directions for the visible progress bar.
+</para>
+
+@GTK_PROGRESS_LEFT_TO_RIGHT: A horizontal progress bar growing from left to right.
+@GTK_PROGRESS_RIGHT_TO_LEFT: A horizontal progress bar growing from right to left.
+@GTK_PROGRESS_BOTTOM_TO_TOP: A vertical progress bar growing from bottom to top.
+@GTK_PROGRESS_TOP_TO_BOTTOM: A vertical progress bar growing from top to bottom.
+
+<!-- ##### FUNCTION gtk_progress_bar_get_text ##### -->
+<para>
+
+</para>
+
+@pbar: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_progress_bar_get_fraction ##### -->
+<para>
+
+</para>
+
+@pbar: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_progress_bar_get_pulse_step ##### -->
+<para>
+
+</para>
+
+@pbar: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_progress_bar_get_orientation ##### -->
+<para>
+
+</para>
+
+@pbar: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_progress_bar_get_ellipsize ##### -->
+<para>
+
+</para>
+
+@pbar: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_progress_bar_new_with_adjustment ##### -->
+<para>
+Creates a new #GtkProgressBar with an associated #GtkAdjustment.
+</para>
+
+@adjustment: a #GtkAdjustment.
+@Returns: a #GtkProgressBar.
+
+
+<!-- ##### FUNCTION gtk_progress_bar_set_bar_style ##### -->
+<para>
+Sets the style of the #GtkProgressBar.  The default style is
+%GTK_PROGRESS_CONTINUOUS.
+</para>
+
+@pbar: a #GtkProgressBar.
+@style: a #GtkProgressBarStyle value indicating the desired style.
+
+
+<!-- ##### ENUM GtkProgressBarStyle ##### -->
+<para>
+An enumeration representing the styles for drawing the progress bar.
+</para>
+
+@GTK_PROGRESS_CONTINUOUS: The progress bar grows in a smooth, continuous manner.
+@GTK_PROGRESS_DISCRETE: The progress bar grows in discrete, visible blocks.
+
+<!-- ##### FUNCTION gtk_progress_bar_set_discrete_blocks ##### -->
+<para>
+Sets the number of blocks that the progress bar is divided into
+when the style is %GTK_PROGRESS_DISCRETE.
+</para>
+
+@pbar: a #GtkProgressBar.
+@blocks: number of individual blocks making up the bar.
+
+
+<!-- ##### FUNCTION gtk_progress_bar_set_activity_step ##### -->
+<para>
+Sets the step value used when the progress bar is in activity
+mode.  The step is the amount by which the progress is incremented
+each iteration.
+</para>
+
+@pbar: a #GtkProgressBar.
+@step: the amount which the progress is incremented in activity
+mode.
+
+
+<!-- ##### FUNCTION gtk_progress_bar_set_activity_blocks ##### -->
+<para>
+Sets the number of blocks used when the progress bar is in activity
+mode.  Larger numbers make the visible block smaller.
+</para>
+
+@pbar: a #GtkProgressBar.
+@blocks: number of blocks which can fit within the progress bar area.
+
+
+<!-- ##### FUNCTION gtk_progress_bar_update ##### -->
+<para>
+This function is deprecated.  Please use gtk_progress_set_value() or
+gtk_progress_set_percentage() instead.
+</para>
+
+@pbar: a #GtkProgressBar.
+@percentage: the new percent complete value.
+
+

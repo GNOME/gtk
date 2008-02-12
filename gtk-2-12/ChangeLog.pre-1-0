@@ -1,0 +1,4961 @@
+Mon Apr 13 19:16:22 PDT 1998 Shawn T. Amundson <amundson@gtk.org>
+
+	* Released GTK+ 1.0.0
+
+Mon Apr 13 21:40:14 1998  Owen Taylor  <owt1@cornell.edu>
+
+	* gtk/gtktext.c (find_char_width): Don't read the
+	character past the end of the text.
+
+	* gtk/gtkrange.c (gtk_real_range_timer): If the mouse
+	button has been released before the timer is activated,
+	don't keep on scrolling.
+
+	* gdk/gdk.c (gdk_event_translate): Filter subsequent configure
+	events after we discard the first. Removed obsolete and
+	sometimes very slow GdkOtherEvent. (Left in gdktypes.h
+	with signal in GTK)
+
+Mon Apr 13 18:03:54 PDT 1998 Shawn T. Amundson <amundson@gtk.org>
+
+	* README: update address info to gtk.org for ftp and web sites.
+
+1998-04-13  Federico Mena Quintero  <federico@nuclecu.unam.mx>
+
+	* gdk/gdkregion.c (gdk_region_polygon): New function; wrapper for
+	XPolygonRegion().
+
+	* gdk/gdk.h: Added prototype for gdk_region_polygon().
+
+	* gdk/gdktypes.h (GdkFillRule): New enum type of fill rule for polygons.
+
+Mon Apr 13 15:04:26 1998  Michael K. Johnson <johnsonm@redhat.com>
+
+	* gtk/testgtk.c (create_clist): removed duplicate call to
+	gtk_widget_set_policy.
+
+Mon Apr 13 05:03:11 1998  Tim Janik  <timj@gtk.org>
+
+	* gtk/gtkwindow.c (gtk_window_add_accelerator_table): check for
+	accelerator table to be != NULL.
+	(gtk_window_remove_accelerator_table): likewise.
+
+Sun Apr 12 19:35:09 PDT 1998 Shawn T. Amundson <amundson@gtk.org>
+
+	* INSTALL: typo, gtk-1.0.0 should be gtk+-1.0.0
+	* README: A little more intro on what gtk is...
+
+Sun Apr 12 22:43:22 1998  Owen Taylor  <owt1@cornell.edu>
+
+	* gtk/gtkmenuitem.c (gtk_menu_item_size_allocate):
+	An old allocation error.
+
+	* gtk/gtkviewport.c (gtk_viewport_add): Don't map
+	when adding a not-VISIBLE widget to a VISIBLE 
+	viewport.
+	
+Sun Apr 12 18:54:29 PDT 1998 Shawn T. Amundson <amundson@gtk.org>
+
+	* Changed LGPL address for FSF in all .h and .c files
+
+Sun Apr 12 20:09:40 1998  Owen Taylor  <owt1@cornell.edu>
+
+	* gtk/gtklabel.[ch] (gtk_label_expose): Set a flag so
+	instead of clearing the area in advance. That looked
+	_really_ bad.
+
+	* gtk/gtkcontainer.c (gtk_container_class_init): Changed
+	"focus" to RUN_LAST.
+
+	* gtk/gtkentry.c (gtk_entry_realize): Fixed place
+	where allocation was used where requisition was meant.
+	(Found by David J N Begley <david@avarice.nepean.uws.edu.au>)
+
+	* gtk/gtkwindow.c (gtk_window_set_default): Fixed
+	assertion in when setting default to NULL> 
+	("Damon Chaplin" <DAChaplin@email.msn.com>)
+
+	* gtk/gtkwidget.c (gtk_widget_unparent): Unset the
+	default widget on the toplevel, if necessary.
+
+Sun Apr 12 02:04:21 1998  Owen Taylor  <owt1@cornell.edu>
+
+	* gtk/gtkpreview.c: Removed unecessary and harmful
+	htons/ntohs when storing properties. (X does the byte
+	swapping itself)
+
+Sat Apr 11 02:01:31 1998  Owen Taylor  <owt1@cornell.edu>
+
+	* gtk/gtktext.c (scroll_down): Removed incorrect part of
+	assertion that was causing failures for scrolling a single
+	line very short text widget.
+
+Sat Apr 11 01:41:55 1998  Owen Taylor  <owt1@cornell.edu>
+
+	* gtk/gtktext.c (expose_text): Fixed a sign problem 
+	(typedef gint guint!). Added some checks to make sure things
+	are positive.
+
+Sat Apr 11 05:51:22 1998  Tim Janik  <timj@gtk.org>
+
+	* gtk/gtktooltips.c (gtk_tooltips_event_handler): don't shut down the
+	tooltip on expose events.
+
+	* gtk/testgtk.c (create_progress_bar): add an example tooltip.
+
+Fri Apr 10 00:10:16 1998  Owen Taylor  <owt1@cornell.edu>
+
+	* README/INSTALL: Extended for the 1.0 release.
+  	* TODO:           Eliminated the "before 1.0" section
+
+Thu Apr  9 19:31:51 PDT 1998 Shawn T. Amundson <amundson@gtk.org>
+
+	* AUTHORS NEWS README configure.in gtk+.spec glib/configure.in:
+	  changes for 1.0.0 release.
+
+Thu Apr  9 18:36:31 1998  Owen Taylor  <owt1@cornell.edu>
+
+	* gtk/gtkmisc.c gdk/gdkwindow gtk/gtkentry.c gtk/testgtk.c:
+	Picky --enable-ansi cleanups.
+
+	* gtk/gtkstatusbar.c (gtk_statusbar_pop): Pop top message
+	off _belonging_to_this_context_. (gtk-d4bjorn-980409-0)
+
+	From "Damon Chaplin" <DAChaplin@email.msn.com>
+	
+	* gtk/gtktable.c (gtk_table_size_request_pass3): Small fix to size
+	requisition code.
+
+	* gtk/gtknotebook.c: Make sure not to do things to page->tab_label
+	if it doesn't exist.
+
+Thu Apr  9 14:24:35 1998  Owen Taylor  <owt1@cornell.edu>
+
+	(Found by Mattias.Gronlund" <Mattias.Gronlund@sa.erisoft.se>)
+	
+	* gtk/gtkcurve.c (gtk_curve_interpolate): Added a
+	missing g_free.
+
+	* gtk/gtkcurve.c (gtk_curve_graph_events): Limits
+	were off by one, resulting in writing past array
+	bounds. Removed some unused code.
+
+	* gdk/gdk.c (gdk_dnd_drag_begin): The event structure
+	used for gdk_event_put should be a GdkEvent, not a 
+	subtype, since it will all be copied.
+
+	* gtk/gtkcolorsel.c: Added a unrealize handler that
+	unref's the GC's that were created.
+
+	* gtk/testgtk.c (clist_warning_test): ref and sink
+	child because it may never be added to anything.
+
+Wed Apr  8 20:50:02 1998  Owen Taylor  <owt1@cornell.edu>
+
+	* gtk/gtkwindow.c (gtk_window_set_hints): Removed unsed
+	variables (gtk-jbuhler-980408-0)
+
+Wed Apr  8 17:27:40 1998  Owen Taylor  <owt1@cornell.edu>
+
+	* gtk/gtkwidget.c (gtk_widget_unparent): Make sure
+	widgets get removed from the resize queue before the
+	connection between them and the resize queue is broken
+	by unparenting their parent.
+
+1998-04-08  Miguel de Icaza  <miguel@nuclecu.unam.mx>
+
+	* gdk/gdk.c (gdk_event_translate): During drag and drop, set the
+	event mask at ButtonPress time to include ButtonPressMask and
+	ButtonReleaseMask, otherwise, if the button is released, and we
+	get a LeaveNotify event, it still thinks we are doing a drag.
+
+Tue Apr  7 22:45:37 PDT 1998 Shawn T. Amundson <amundson@gtk.org>
+
+	* Released GTK+ 0.99.10
+
+Wed Apr  8 01:33:58 1998  Owen Taylor  <owt1@cornell.edu>
+
+	* gtk/gtkviewport.c (gtk_viewport_realize): Handle border
+	width correctly on realize after allocate.
+
+Tue Apr  7 23:06:00 1998  Owen Taylor  <owt1@cornell.edu>
+
+	* Changes for GTK+ 0.99.10
+	
+	* examples/find-examples.sh: Script to find all the
+	files we need to distribute from the examples directory.
+
+Tue Apr  7 19:14:03 1998  Owen Taylor  <owt1@cornell.edu>
+
+	* gdk/gdkpixmap.c: Added maximum field widths to prevent
+	possible '%s' scanf overflows. Replaced scanf("%c")
+	with getc(), Don't interpret /*/ as a full comment. Use
+	g_realloc/g_new.
+
+	* gtk/gtkwidget.h gtk/gtkprivate.h: Changed all flag
+	tests to check for ((GTK_WIDGET_FLAGS(widget) & FLAG) != 0)
+	instead of (GTK_WIDGET_FLAGS(widget) & FLAG)
+
+	* gtk/gtkfilesel.c: Use getwd() instead of getcwd() on  
+	SunOS, because getcwd() hangs up in a wait4().
+	(Found by David Monniaux <monniaux@clipper.ens.fr>)
+
+	- Check device/inode/mtime not just inode/mtime, when
+	caching scanned directories.
+	(From: scottk@ig.utexas.edu (Scott Kempf))
+	
+	* gdk/gdkpixmap.c: Check for 0 width/height when
+	creating pixmaps.
+
+	* gtk/*.c: Global substitution of recently introduced
+	"MAX (0," for allocations to "MAX (1,", since 
+	creating a backing pixmap with a zero width or height
+	fails.
+
+	* gdk/gdkwindow.c (gdk_window_new): Don't set all the
+	WM properties for child windows. Don't set the base
+	size, since the value we set will be taken as a minimum
+	size.
+
+Wed Apr  8 00:00:48 1998  Tim Janik  <timj@gtk.org>
+
+	* gtk/gtklabel.c (gtk_label_expose): don't take '\n' into account for
+	size computation (Damon Chaplin).
+
+	* gtk/gtkvscale.c (gtk_vscale_draw_value): adjusted static snprintf()
+	buffer size to 32 characters (Damon Chaplin).
+	* gtk/gtkhscale.c (gtk_hscale_draw_value): likewise.
+
+	* gtk/gtkmain.c (gtk_main_iteration_do): gdk_flush() the X-queue if
+ 	iteration_done==TRUE since we will most likely not get invoked again
+	(Marius Vollmer).
+
+Mon Apr  6 23:48:29 1998  Owen Taylor  <owt1@cornell.edu>
+
+	* gtk/gtkwindow.c (gtk_window_realize): Set the
+	window hints on every map so that GTK_WIN_POS_MOUSE
+	works correctly.
+
+1998-04-06  Federico Mena Quintero  <federico@nuclecu.unam.mx>
+
+	* gtk/gtktable.h: 
+	* gtk/gtktable.c (gtk_table_set_homogeneous): Added function to
+	set the homogeneous flag of the table (needed by derived widgets
+	and such).
+
+1998-04-03  Federico Mena Quintero  <federico@nuclecu.unam.mx>
+
+	* gtk/gtkradiobutton.h: Add prototype for gtk_radio_button_new_with_label_from_widget.
+
+Mon Apr  6 18:48:49 BST 1998 Tony Gale  <gale@gtk.org>
+
+	* docs/gtkfaq.sgml: more on GIMP (et al) configure
+	  problems.
+
+Mon Apr  6 08:05:23 1998  Owen Taylor  <owt1@cornell.edu>
+
+	* gtk/gtkbutton.c (gtk_button_paint): Take border in
+	account properly.
+
+	* gtk/gtktext.c (gtk_text_realize): Don't recompute
+	geometry when creating with initial 1x1 geometry,
+	since our calculations can't handle that. Leave
+	text->line_start_cache NULL as sign we don't have
+	a real geometry yet.
+
+	* gtk/gtkentry.c (gtk_entry_motion_notify): Use the x
+	value we get from gdk_window_get_pointer, not from
+	event->x - since we always specify OwnerGrabButtonMask
+	(why???), event->x can refer to another window.
+
+Mon Apr  6 08:08:49 BST 1998  Tony Gale <gale@gtk.org>
+
+	* docs/gtk_tut.sgml examples/helloworld/helloworld.c:
+	  Change a missed "delete_event" return value description
+	  from TRUE to FALSE.
+
+Mon Apr  6 00:28:28 1998  Owen Taylor  <owt1@cornell.edu>
+
+	* gtk/gtkcontainer.c (gtk_container_focus_tab): Make
+	tab key move in reading order (left-to-right top
+	to bottom) - which might have been the original intended 
+	behavior modulo sorting bugs.
+
+	* gtk-config.in: Never output -I/usr/include from --cflags
+
+Sun Apr  5 21:47:12 1998  Owen Taylor  <owt1@cornell.edu>
+
+	* gtk/gtkmenubar.c: Fixed bug where right justified
+	menu would overlap last left justified item.
+
+Sun Apr  5 19:30:23 1998  Owen Taylor  <owt1@cornell.edu>
+
+	* gtk/gtkclist.c: Fixed assignment of adjustment->value
+	to negative values. Moved a few other allocation type things
+	around in ways that may or may matter. Fixed some allocation
+	errors (scrollbars were overlapping main window).
+
+	* gtk/gtkbutton.c (gtk_real_button_released): Small hack to keep
+	button labels from vanishing when the invoked operation blocks.
+
+	* gtk/gtkbox.c (gtk_box_remove): Assigning GTK_WIDGET_VISIBLE (widget)
+	to a gboolean (char) is _bad_. GTK_VISIBLE == 256.
+
+Sun Apr  5 15:08:25 1998  Owen Taylor  <owt1@cornell.edu>
+
+	* gtk/gtkmain.c: Reverted broken implementation of removing
+	the current timeout/idle. Substituted a (hopefully) functional one.
+
+Sun Apr  5 09:35:55 1998  Tim Janik  <timj@gtk.org>
+
+	* gtk/gtkmain.c (gtk_events_pending): take expired timeouts into
+	account, otherwise things like e.g. spin-buttons don't work.
+	also, count gtk_main_quit() as an event.
+
+Sun Apr  5 08:03:01 1998  Tim Janik  <timj@gtk.org>
+
+	* gtk/gtkspinbutton.c: fixed panel allocation and stacking order,
+	fixed the base class realization.
+
+	* gtk/gtkmisc.c: implemented widget arguments. 
+
+	* gtk/gtkentry.c: fixes in _realize to behave similar to
+ 	_size_allocate.
+
+Sat Apr  4 12:23:23 BST 1998  Tony Gale  <gale@gtk.org>
+
+	* docs/gtk_tut.sgml: (gtk-crichton-980403-0) subsections on
+	  Aspect Frames and Paned widgets.
+
+	* examples/paned examples/aspectframe: new examples
+
+Fri Apr  3 23:15:55 1998  Owen Taylor  <owt1@cornell.edu>
+
+	* gtk/gtktext.c: Test for need to recompute geometry with
+	GTK_WIDGET_REALIZED(), not GTK_WIDGET_DRAWABLE().
+
+1998-04-03  Federico Mena Quintero  <federico@nuclecu.unam.mx>
+
+	* gtk/gtkhandlebox.c (draw_textured_frame): New function to draw a
+	nifty "textured metal" frame.  Could be useful in gtkstyle.c, maybe.
+	(gtk_handle_box_paint): Paint a handle that does not make you puke
+	when you look at it.
+
+Fri Apr  3 21:03:38 1998  Owen Taylor  <owt1@cornell.edu>
+
+	* gtk/gtktext.c (gtk_text_realize): Call recompute_geometry()
+	upon realization, since it can't be done in the previous
+	size_allocate.
+
+Fri Apr  3 20:36:52 1998  Owen Taylor  <owt1@cornell.edu>
+
+	* gdk/gdk.c gtk/gtkmain.c: Accept debug options 
+	in the form --g[td]k[-no]-debug=xxx as well
+
+Fri Apr  3 18:33:47 1998  Owen Taylor  <owt1@cornell.edu>
+
+	* gtk-config.in: Added flags --prefix[=dir] and
+	--exec-prefix[=DIR] which allow querying and overriding the
+	configured-in prefix and exec-prefix.
+
+	* gtk.m4: Added configure flags --with-gtk-prefix=
+	and --with-gtk-exec-prefix= to set the --prefix and
+	--exec-prefix argumetns to gtk.m4
+
+Fri Apr  3 17:14:55 1998  Owen Taylor  <owt1@cornell.edu>
+
+	* gdk/gdk.c: More extensive debugging output
+
+	* gtk/gtkalignment.c gtk/gtkbutton.c gtk/gtkcheckbutton.c
+	  gtk/gtkclist.c gtk/gtkeventbox.c gtk/gtkhandlebox.c
+	  gtk/gtk[hv]box.c gtk/gtk[hv]paned.c gtk/gtklist.c
+	  gtk/gtkmenu.c gtk/gtkmenubar.c gtk/gtkmenuitem.c
+	  gtk/gtknotebook.c gtk/gtktable.c gtk/gtktree.c 
+	  gtk/gtktreeitem.c gtk/gtkviewport.c
+
+	Avoid assigning negative values to unsigned allocation.width and
+	height
+
+	* gtk/gtkwindow.c:
+
+	Instead of realizing the widget, then size allocating, (resulting
+	in XMoveResizeWindows for all children, do the size allocation
+	first, then realize. 
+
+	In gtk_real_window_move_resize, combine move and resize
+	into a single GDK/X call when possible.
+
+	* gtk/gtkclist.c gtk/gtkdrawingarea.c: 
+
+	Remove assumption that the widget will be size allocated _after_
+	it is realized.
+	
+	* gtk/gtklist.c (gtk_list_motion_notify): Removed useless
+	debugging message.
+
+Wed Apr  1 21:51:37 1998  Owen Taylor  <owt1@cornell.edu>
+
+	* gtk/gtkmain.c: return NULL for gtk_get_event_widget (NULL)
+
+	* gtk/gtkentry.c: New algorithm to get more normal behavior
+	with scroll_offset when changing fonts.
+	
+Thu Apr  2 17:30:04 BST 1998 Tony Gale <gale@gtk.org>
+
+	* examples/gtkdial/Makefile,
+	  examples/menu/Makefile,
+	  examples/tictactoe/Makefile : add correct dependencies
+
+Thu Apr  2 13:04:37 BST 1998 Tony Gale <gale@gtk.org>
+
+	* docs/gtkfaq.sgml: add question on failing GIMP configure
+
+Tue Mar 31 15:41:57 PST 1998 Shawn T. Amundson
+
+	* Makefile.am:
+	* examples/*: added the rest of the tutorial examples
+
+Tue Mar 31 06:37:16 1998  Tim Janik  <timj@gtk.org>
+
+	* gtk/testgtk.c (create_cursors): forgot to set the initial `0' cursor.
+
+1998-03-30  Miguel de Icaza  <miguel@nuclecu.unam.mx>
+
+	* gdk/gdkdnd.c (gdk_dnd_display_drag_cursor): First fix: Move the
+	window first, display it after (this removes one of the annoying
+	flashing effects).
+
+Mon Mar 30 21:29:43 1998  Owen Taylor  <owt1@cornell.edu>
+
+	* gtk/gtkentry.c: Add a "style_set" callback, so the
+	font can be changed at run time. (needed for GIMP text
+	tool)
+
+Tue Mar 31 01:17:23 1998  Tim Janik  <timj@gtk.org>
+
+	* gtk/gtknotebook.c (gtk_notebook_menu_item_create): show the menu_label
+	unconditionally (even if it is not a default label).
+	(gtk_notebook_update_labels): if we have a tab_label, then use its label
+	as the default menu_label.
+
+Mon Mar 30 16:35:57 1998  Owen Taylor  <owt1@cornell.edu>
+
+	* gtk/testgtk.c: Improved main loop test. (Quits main
+	loop properly, makes it more obvious to the user
+	what is going on)
+
+	* gtk/gtkwidget.c (gtk_widget_unparent): Reset the
+	allocation _after_ clearing the window.
+
+	* configure.in: If can't find XShmAttach in Xext, check
+	in XextSam (for AIX).
+
+	* gtk/gtkmain.c (gtk_events_pending): Remember, small
+	numbers are _high_ priority for idle queues.
+
+	* gtk/gtkmain.c (gtk_handle_current_timeouts): Allow
+	removing the currently running timeout.
+
+	* gtk/testgtk.c (timeout_test): Use the right prototype
+	for callback.
+
+Mon Mar 30 21:40:21 1998  Tim Janik  <timj@gtk.org>
+
+	* gtk/gtkclist.c (gtk_clist_row_from_ypixel): removed this function,
+	it was unneeded and not exported.
+
+	* gtk/gtkwidget.c (gtk_widget_ref) (gtk_widget_unref): don't check-cast
+	the widgets to volatile GtkObjects (which was there for debugging
+ 	purposes only). these functions should probably be macros, but that
+ 	would break binary compatibility again, sigh.
+	(gtk_widget_destroy): removed superfluous check-casts, since the
+ 	neccessary checks are done in gtk_object_destroy anyways. this should
+	be a macro as well but stays as a function for the above reasoonings.
+
+Mon Mar 30 17:21:27 BST 1998 Tony Gale  <gale@gimp.org>
+
+	* docs/gtk_tut.sgml: reflect the change of meaning
+	  of the delete_event return value
+
+Sun Mar 29 22:25:22 BST 1998 Tony Gale  <gale@gimp.org>
+
+        * docs/gtk_tut.sgml: more on the Text widget,
+          update the tictactoe example to the current code
+ 
+Sun Mar 29 22:29:00 1998  Tim Janik  <timj@gtk.org>
+
+        * gtk/gtkspinbutton.[ch] gtk/testgtk.c (gtk_spin_button_set_wrap):
+	Added wrapping capabilities to GtkSpinButton. New function :
+	gtk_spin_button_set_wrap (Lars Hamann and Stefan Jeske).
+
+Sat Mar 28 21:18:42 1998  Owen Taylor  <owt1@cornell.edu>
+
+	* gtk/gtkcombo.c (gtk_combo_disable_activate): 
+	Disconnect from combo->entry, not combo.
+	(From: Daniel Skarda <0rfelyus@atrey.karlin.mff.cuni.cz>)
+
+	* gdk/gdkpixmap.c (gdk_pixmap_colormap_create_from_xpm): Deal
+	better with xpm's with bad colors in them.
+	
+Fri Mar 27 21:01:17 1998  Owen Taylor  <owt1@cornell.edu>
+
+	* gdk/gdk.c (gdk_event_translate): Don't call
+	XTranslateCoordinates on a destroyed window. (Why do we
+	do event processing at all on destroyed windows when we
+	throw out the results?)
+
+	* gtk/gtklabel.c: Clear the background when changing style/
+	state.
+
+Fri Mar 27 16:35:00 PST 1998 Shawn T. Amundson <amundson@gtk.org>
+
+	* Released GTK+ 0.99.9
+	
+	* examples: added a couple more, fixed some Makefiles
+
+Fri Mar 27 17:58:41 1998  Owen Taylor  <owt1@cornell.edu>
+
+	* gtk/gtkhandlebox.c (gtk_handle_box_paint): Don't clear
+	the window on an expose event. On draws, just clear the
+	portion we are redrawing.
+
+	* gdk/gdkfont.c (gdk_fontset_load): Corrected calculation
+	of fontset ascent/descent.
+
+	* gtk/gtkwidget.[ch]: Added new function to show a toplevel
+	window and wait for it to be mapped, gtk_window_show_now ()
+
+Fri Mar 27 08:51:17 PST 1998 Shawn T. Amundson <amundson@gtk.org>
+
+	* docs/Makefile.sgml: some stuff for doing plain text and
+	  postscript
+
+Fri Mar 27 00:13:18 1998  Owen Taylor  <owt1@cornell.edu>
+
+	* gtk/gtkmain.c (gtk_propagate_event): If the widget is _not_
+	a descendant of a Window widget, propagate key presses like
+	other events.
+
+	* gtk/gtkentry.c gtk/gtktext.c: Ignore multiple simultaneous
+	button presses instead of treating subsequent presses as
+	release/press pairs for tablet compatibility.
+
+	* configure.in config.h.in: Removed inline checks, because they
+	are duplicated in glib.
+
+	* gtk/gtkwidget.c (gtk_widget_draw): When gtk_widget_draw ()
+	occurs with queued draw already in place, redraw _entire_
+	widget. (Pointed out by Tim Janik)
+
+Thu Mar 26 23:12:54 1998  Tim Janik  <timj@gtk.org>
+
+	* gtk/gtkmain.c (gtk_propagate_event): make a clear distinction between
+	key press/release events, which will be sent to a widgets toplevel
+	ancestor and be forwarded from there, and all other events that need to
+ 	get propagated up the widget tree (pointed out by Owen Taylor).
+
+Thu Mar 26 21:37:57 1998  Tim Janik  <timj@gtk.org>
+
+	* gtk/gtkradiobutton.c (gtk_radio_button_draw_indicator): always
+	display the correct active state.
+
+	* gtk/gtkcheckbutton.c (gtk_real_check_button_draw_indicator): always
+	display the correct active state.
+
+	* gtk/gtkwidget.c (gtk_widget_set_arg): CAN_FOCUS and CAN_DEFAULT flag
+ 	changes need to queue a resize.
+
+	* gtk/gtkbutton.c (gtk_button_paint): take border_width into
+ 	consideration for restrict area.
+
+	* gtk/gtktogglebutton.c (gtk_toggle_button_class_init): enable the
+ 	draw_default member of GtkButton, otherwise the diplay is messed up
+	for CAN_DEFAULT toggles.
+	(gtk_toggle_button_draw_focus): always display whether the toggle button
+	is active or not.
+
+	* gtk/gtkwidget.c (gtk_widget_set_state): 
+	(gtk_widget_set_sensitive): 
+	(gtk_widget_set_parent): 
+	(gtk_widget_propagate_state): take into consideration, whether we really
+	want to change childrens states, or just restauration of old states.
+
+Thu Mar 26 15:33:50 1998  Owen Taylor  <owt1@cornell.edu>
+
+	* gtk/gtkwidget.c: When gtk_widget_draw() is called on a 
+	REDRAW_PENDING widget, draw it and remove it from the
+	queue instead of doing nothing.
+
+	* gtk/Makefile.am gdk/Makefile.am: Switch order of includes
+	directories, to make doubly sure that wrong glibconfig.h
+	isn't used. (See also glib/ChangeLog)
+
+	* gtk/gtkentry.c (gtk_entry_draw_focus): Don't draw the
+	cursor unless the entry is editable.
+
+	(From: Stefan Jeske <jeske@braunschweig.netsurf.de>)
+
+Thu Mar 26 08:31:58 1998  Tim Janik  <timj@gtk.org>
+
+	* gtk/gtkmain.c (gtk_propagate_event): do not propagate unhandled key
+ 	events on widgets with parent==NULL twice.
+
+Tue Mar 24 14:59:50 1998  Tim Janik  <timj@gtk.org>
+
+	* gtk/gtkhandlebox.h:
+	* gtk/gtkhandlebox.c: implemented new flag shrink_on_detach (TRUE by
+	default) which will cause the handle boxes requisition to collapse in
+	case the child is already detached.
+
+Tue Mar 24 00:17:42 1998  Owen Taylor  <owt1@cornell.edu>
+
+	* gtk/gtkcombo.c gtk/gtkmenu.c: Use reversed arrow for
+	menus ala Motif (and fix Options menus, which had X cursor
+	before), and show normal arrow when inside ComboBox.
+
+	* gtk/gtkfilesel.c: Various memory leaks removed, as
+	pointed out by Mattias.Gronlund" <Mattias.Gronlund@sa.erisoft.se>
+
+	* docs/gtk_tut.sgml: Change compiling explaination
+	to refer to gtk-config.
+	(From: johannes@nada.kth.se (Johannes Keukelaar))
+	
+1998-03-23  Federico Mena Quintero  <federico@nuclecu.unam.mx>
+
+	* gtk/gtkclist.c (gtk_clist_size_allocate): Fixed xthickness ->
+	ythickness typo.
+
+Tue Mar 24 03:53:18 1998  Tim Janik  <timj@gtk.org>
+
+	* gtk/gtkbox.c (gtk_box_remove): save the widgets visibility flag for
+	evaluation after the widget got destroyed, discovered by Johannes
+ 	Keukelaar <johannes@nada.kth.se>.
+
+1998-03-23  Federico Mena Quintero  <federico@nuclecu.unam.mx>
+
+	* gtk/gtkclist.c (gtk_clist_set_row_data_full): Select the row
+	which got its data changed, and not (0, 0).
+
+Mon Mar 23 18:19:42 1998  Owen Taylor  <owt1@cornell.edu>
+
+	* gtk/gtkmenu.c gtk/gtkmenushell.c: Instead of making
+	an X grab when the button is released, grab immediately.
+	This solves a problem where menus wouldn't pop down
+	if the caller didn't have the BUTTON_RELEASE mask on
+	their window, and and another where the X grab would
+	be released prematurely.
+
+	* gtk/gtklist.c gtk/gtktree.c: Do sanity checking on
+	button presses to make sure they occurred in a child item.
+	(From: "Damon Chaplin" <DAChaplin@email.msn.com>)
+
+	* gtk/gtkmenushell.c: Do sanity checking on button
+	press/releases. Handle button events on window widget
+	descendents of menu items correctly.
+	
+	* gtk/gtkclist.c gtk/gtkbutton.c gtk/gtkviewport.c 
+	  gtk/gtkeventbox.c:
+
+	Make the window size allocated in _realize() match that
+	in _size_allocate(). Take into account the border width
+	in the draw() handler.
+
+Mon Mar 23 15:26:25 1998  Tim Janik  <timj@gtk.org>
+
+	* gtk/gtkentry.c (gtk_entry_append_text): check for text!=NULL.
+	(gtk_entry_prepend_text): likewise.
+	some else picky indentation fixes.
+
+Mon Mar 23 12:03:03 CST 1998 Shawn T. Amundson <amundson@gtk.org>
+
+        * examples/: added this directory with stuff from
+          the tutorial, updated to compile and work with recent
+          changes
+
+Mon Mar 23 01:04:51 1998  Owen Taylor  <owt1@cornell.edu>
+
+	* gtk/gtktext.[ch] testgtk.c: Added optional word wrap, controlled
+	  by new function gtk_text_set_word_wrap; and a check button
+	  in the Text test.
+
+	* gtk/gtktext.c: First line wasn't getting updated
+	properly when selection was removed.
+
+Sun Mar 22 23:33:50 1998  Owen Taylor  <owt1@cornell.edu>
+
+	* gtk/gtkentry.c (gtk_entry_insert_text): Fixed some
+	  problems with !gtk_use_mb introduced in the last change.
+
+Sun Mar 22 21:00:43 1998  Owen Taylor  <owt1@cornell.edu>
+
+	* gtk/gtkpaned.c: Fix so children don't get bogus draws.
+
+Mon Mar 23 01:08:30 1998  Tim Janik  <timj@gtk.org>
+
+	* gtk/gtkclist.c (gtk_clist_class_init): leave container_class->add and
+	container_class->remove untouched if we don't implement them.
+
+	* gtk/gtkcontainer.c (gtk_container_class_init): add missing NULL
+	initialization for the class method (*foreach). implement a default
+	handler to output a warning for (*add) and (*remove).
+
+Sun Mar 22 19:01:36 1998  Owen Taylor  <owt1@cornell.edu>
+
+	* gdk/gdkcolor.c: Fixes to allow GTK to work with colormaps
+	  that aren't 256 entries long. (colormap->colors is
+	  now dynamically allocated)
+
+Sun Mar 22 16:25:46 1998  Owen Taylor  <owt1@cornell.edu>
+
+	* gtk/gtkmain.c (gtk_init): fixes to locale checks
+
+	* gtk/testgtk.c (create_dnd): Create the dnd icons separately
+	  to avoid strange interactions with shapes demo.
+
+	* gtk/gtkentry.[ch]: 
+	  - Limit the length of the text to 2048 to prevent long delays
+	  - Fix problems with buffer overruns
+	  - Draw only the onscreen portion of the text to prevent wrapping
+	    of shorts in the X drawing code.
+	  - Keep track of character positions and x-offsets to speed
+	    up algorithms.
+
+Sun Mar 22 11:37:51 CST 1998 Shawn T. Amundson <amundson@gtk.org>
+
+	* gtk/gtkcolorsel.c: 
+	* gtk/gtkfilesel.c: use button_box for buttons
+
+Sat Mar 21 19:07:01 1998  Owen Taylor  <owt1@cornell.edu>
+
+	* gtk/testgtk.c (dnd_drop): Don't respond to drops when
+	  grab is in effect. (workaround)
+
+	* gdk/gdkfont.c (gdk_fontset_load): More details on
+	  error messages.
+
+	* gdk/gdk.c: Translate va_list to XVaNestedList instead
+	  of just casting it.
+
+	* gtk/gtkmain.c: Make temporary copy of string returned by
+	  setlocale, since it may be changed by subsequent calls.
+
+Sat Mar 21 22:54:31 1998  Tim Janik  <timj@gtk.org>
+
+	* gtk/gtkhandlebox.h:
+	* gtk/gtkhandlebox.c: major overhaul of the code, fixed all
+	known bugs (hopefully ;).
+
+Sat Mar 20 15:33:17 1998  Tim Janik  <timj@gtk.org>
+
+	* gtk/gtkwidget.c (gtk_widget_real_show): queue the resize for the
+ 	parent.
+
+Thu Mar 19 02:00:50 1998  Tim Janik  <timj@gtk.org>
+
+	* gtk/gtkwidget.c (gtk_widget_unrealize): unset flags after emission,
+	especially GTK_MAPPED, since that might not have been taken care of
+	by an UNMAP emission.
+
+Sat Mar 21 10:39:02 CET 1998 Paolo Molaro <lupus@debian.org>
+
+	* gtk/gtkcombo.[ch] "activate" signal can be disabled now
+
+Fri Mar 20 20:49:33 1998  Radek Doulik  <rodo@aquarius>
+
+	* gtk/gtktoolbar.c (gtk_toolbar_insert_element): changed packing
+	in toolbar elements, so texts are always at the bottom
+
+Wed Mar 18 01:07:11 1998  Radek Doulik  <rodo@aquarius>
+
+	* gtk/gtkclist.c (gtk_clist_column_titles_show): test if
+	clist->title_window exists before showing it,
+	gtk_clist_column_titles_hide also fixed
+
+Thu Mar 19 16:40:47 PST 1998 Shawn T. Amundson <amundson@gimp.org>
+
+        * Released GTK+ 0.99.8
+
+Thu Mar 19 16:28:48 CST 1998 Shawn T. Amundson <amundson@gimp.org>
+
+        * the Solaris ltconfig patch from draco
+
+Wed Mar 18 17:03:02 PST 1998 Manish Singh <yosh@gimp.org>
+
+	* gtk/gtkcolorsel.c: #define M_PI if it isn't already
+	* gtk/testgtk.c: initialize transparent properly, to make purify
+	happy
+
+Thu Mar 19 00:37:44 1998  Tim Janik  <timj@gtk.org>
+
+	* gtk/gtkscrolledwindow.c (gtk_scrolled_window_construct): perform the
+ 	neccessary checks on funtion begin. use the scrolled_window that got
+	passed to this function, and not a new one.
+
+Wed Mar 18 11:09:10 1998  Owen Taylor  <owt1@cornell.edu>
+	( From: James Henstridge <james@daa.com.au> )
+
+	* gtk/gtkclist.c: Don't remove, then destroy labels in
+	  gtk_clist_set_column_[*], just remove them.
+	
+	* gtk/gtkmain.c (gtk_invoke_timeout_function): call
+	  marshal when appropriate, not function.
+
+Tue Mar 17 14:15:07 1998  Owen Taylor  <owt1@cornell.edu>
+
+	* gtk/testgtk.c (create_main_window): Alphabetize tests
+
+	* gtk/gtk[hv]paned.c: Change division on resize if
+	  necessary to keep handle visible.
+
+	* gtk/gtkgamma.c gtk/gtkcurve.c: Moved initialization into 
+	  _init() functions.
+
+	* gtk/gtkscrolledwindow.c: Added missing _construct()
+	  functions.
+
+Wed Mar 18 17:38:25 CET 1998	Paolo Molaro <lupus@debian.org>
+
+	* gtk/gtkentry.[ch]: checked in gtk_entry_set_max_length
+	(it truncates the texts if it's longer, now)
+
+Wed Mar 18 02:06:52 1998  Tim Janik  <timj@gtk.org>
+
+	* gtk/gtkcontainer.c (gtk_container_border_width): use the resize queue.
+
+	* gtk/gtkwindow.c (gtk_window_set_arg): gtk_window_set_hints() after
+ 	setting certain arguments, so they actually take affect.
+	(gtk_window_set_policy): likewise.
+
+Tue Mar 17 22:45:39 1998  Tim Janik  <timj@gtk.org>
+
+	* gtk/gtkwidget.c (gtk_widget_get_arg): return real boolean values
+	not just numbers.
+
+	* gtk/gtktogglebutton.c (gtk_toggle_button_set_state): check
+	state for != 0, otherwise we get strange results.
+
+Tue Mar 17 01:55:00 1998  Owen Taylor  <owt1@cornell.edu>
+
+	* gtk/gtkmain.c gtk/gtkentry.c: Try to guess if we can
+	  use the mb* functions safely. (For glibc, they do
+	  UTF-8). Heuristic is (X_LOCALE && locale != C/POSIX)
+	  || (mblen("\xc0", MB_CUR_MAX) == 1).
+       
+	(From: "Richard Lloyd" <rkl@csc.liv.ac.uk>)
+	
+	* gdk/gdk.c (gdk_ic_get_attr): Use an intermediate
+	  variable to avoid taking the address of the result
+	  of va_arg. 
+
+	* gtk/gtkentry.c gtk/gtkeditable.c gtkobject.c
+	  gtk/testselection.c: signedness fixups
+
+	* gtk/gtkcontainer.c: Fixed implicit cast between
+	  gpointer and func pointer by changing.
+
+	* gtk/gtkcombo.c, gtk/gtkentry.c, gtk/gtktext.c:
+	  static void forward declaration vs. void actual fixed
+
+	* gtk/testgtk.c: Limit total number of tree items to 10,000
+	
+Mon Mar 16 21:14:52 1998  Owen Taylor  <owt1@cornell.edu>
+
+	* gdk/gdkvisual.c: Put visual names into #ifdef G_ENABLE_DEBUG
+	    gtk-jbuhler-980315-0.patch
+
+	* gdk/gdkcc.c: Changed DEBUG => G_ENABLE_DEBUG, eliminate
+	  unused variable warnings.
+
+Tue Mar 17 16:19:47 1998  Tim Janik  <timj@gimp.org>
+
+	* gdk/gdk.c: 
+	* gdk/gdkvisual.c: changed some debugging messages to be prefixed
+	by "Gdk:".
+
+	* gtk/gtkwidget.c (gtk_widget_real_draw): applied
+ 	gtk-shige-980317-0.patch.gz to set all event fields, but modified
+	the event.send_event field to be set to TRUE, since the event is not
+	really comming from the server.
+
+	* gtk/gtkwindow.c (gtk_window_init): applied gtk-ograf-980317-1.patch.gz
+	which cares about an initial setting of program name and program class.
+
+	* gdk/gdk.c (gdk_init): applied gtk-ograf-980317-0.patch.gz, which
+	strips leading pathnames from gdk_progname.
+
+Tue Mar 17 12:36:35 1998  Tim Janik  <timj@gimp.org>
+
+	* gtk/gtkstyle.c (gtk_default_draw_arrow): fixed a bug about drawing
+	GTK_ARROW_LEFT, correction from Damon Chaplin <DAChaplin@email.msn.com>.
+
+Tue Mar 17 02:02:02 1998  Miguel de Icaza  <miguel@nuclecu.unam.mx>
+
+	* gdk/gdk.c (gdk_dnd_drag_leave): Use StructureNotifyMaskMask as
+	the mask, as this enables an application listening to those events
+	to catch the root events.  Thanks to Maciej for pointing us in the
+	right direction.
+	(gdk_dnd_drag_enter): Likewise.
+	(gdk_dnd_drag_leave): Likewise.
+	* gdk/gdkwindow.c (gdk_window_dnd_data_set): Likewise.
+
+Mon Mar 16 22:31:02 1998  Federico Mena  <federico@nuclecu.unam.mx>
+
+	* gdk/gdkwindow.c (gdk_window_xid_at): Use signed integers so that
+	testing will not fail for windows that are off-screen.  
+
+	(gdk_window_xid_at_coords): Only considers visible windows. 	
+
+Tue Mar 17 03:56:13 1998  Tim Janik  <timj@gimp.org>
+
+	* gtk/gtkspinbutton.h: exported gtk_spin_button_spin since it is
+	used in testgtk, and besides that.
+
+	* gtk/testgtk.c: created a new "test" cursors, which showes different
+	types of GdkCursors and is a very simple example at using the drawing
+	area.
+
+Mon Mar 16 18:19:31 GMT 1998 Tony Gale  <gale@gimp.org>
+	* docs/gtkfaq.sgml:
+	    - new question on modal windows
+	    - new question on updating progressbars
+	    - update all the links to gtk.org
+
+Mon Mar 16 09:15:03 GMT 1998 Tony Gale  <gale@gimp.org>
+
+	* docs/gtk_tut.sgml: 
+	    - New subsection on colourselection from Tom Bech <tomb@ii.uib.no>
+	    - Moved fileselection text to Miscallaneous Widgets section
+	    - Started new section on the Text widget
+	    - Removed Viewport, Paned, HPaned and VPaned from list of
+	      NO_WINDOW widgets.
+
+Mon Mar 16 01:33:36 1998  Owen Taylor  <owt1@cornell.edu>
+
+	* gtk-config.in: Added trailing newline, hopefully will
+	  fix the problem with esac disappearing.
+
+	* gtk/Makefile.am (test-debug): Improved test targets
+	  will work with --enable-shared
+    	    [From:  Raja R Harinath  <harinath@cs.umn.edu>]
+
+  	* gtk.m4: Not all shells understand $(...).  Use `...` instead.
+    	    [From:  Raja R Harinath  <harinath@cs.umn.edu>]
+	- use AM_PATH_PROG instead of AM_CHECK_PROG, so the user
+	  can specify programs not in their path.
+  
+	* Makefile.am: added gtk.m4 to EXTRA_DIST
+
+Sun Mar 15 23:44:10 1998  Tim Janik  <timj@gimp.org>
+
+	* gtk/gtkwidget.h:
+	* gtk/gtkmenushell.c: 
+	* gtk/gtkmenu.c: 
+	* gtk/gtkmain.c: removed EXCLUSIVE_GRAB again, just disable modal
+	event delivery for insensitive children.
+
+Sun Mar 15 22:44:33 1998  Tim Janik  <timj@gimp.org>
+
+	* gtk/gtkmenushell.c (gtk_menu_shell_button_release): for now reverted
+	the last change, since it broke click-select-click menus for gimp.
+
+Sun Mar 15 20:13:42 1998  Tim Janik  <timj@gimp.org>
+
+	* gtk/gtkmain.c (gtk_quit_destructor): removed the ugly check whether
+	we need gtk_widget_destroy or gtk_object_destroy. these functions are
+	by no means allowed to act differently!
+
+	* gtk/gtkmisc.c (gtk_misc_set_alignment): check for _DRAWABLE instead
+	of _VISIBLE to operate on widget->window.
+	(gtk_misc_set_padding): likewise.
+
+	* gtk/gtkwidget.c: slightly reordered object arguments.
+
+	* gtk/gtkobject.c (gtk_object_setv):
+	* gtk/gtkobject.c (gtk_object_getv):
+ 	operator `!' has precedence over `&'.
+
+Sun Mar 15 14:38:34 1998  Tim Janik  <timj@gimp.org>
+
+	* gtk/gtknotebook.c (gtk_notebook_pages_allocate): applied a fix from
+	lars against a segfault that i discovered.
+
+Sun Mar 15 13:25:28 1998  Tim Janik  <timj@gimp.org>
+
+	* gtk/gtkwidget.h: added new flag GTK_EXCLUSIVE_GRAB.
+	* gtk/gtkmain.c: allow exclusive grabs.
+
+	* gtk/gtkmenu.c: grab exclusively.
+	* gtk/gtkmenushell.c: grab exclusively.
+
+	* gtk/gtkmenushell.c: don't activate insensitive menu items when
+	in click-selects mode.
+
+	* gtk/gtkmenushell.c (gtk_menu_shell_enter_notify): activate submenus
+	on popup.
+
+	* gtk/gtkmenushell.c (gtk_menu_shell_button_release): don't take
+ 	*additional* button presses into account.
+
+	* gtk/gtkmenushell.c (gtk_menu_shell_button_press): don't take
+	foreign button releases into account.
+
+Sun Mar 15 08:27:06 1998  Tim Janik  <timj@gimp.org>
+
+	* gtk/gtktipsquery.c (gtk_tips_query_set_labels): changed run type
+	of GtkTipsQuery::widget_entered to GTK_RUN_LAST, so it can be overidden
+	by the user.
+
+	* gtk/gtkwindow.c (gtk_window_configure_event): small fix by
+	Assar Westerlund <assar@sics.se>.
+
+	* gtk/gtkmenu.c (gtk_menu_key_press): don't cast a NULL pointer.
+
+Sat Mar 14 19:36:16 PST 1998 Shawn T. Amundson <amundson@gimp.org>
+
+	* Released 0.99.7
+
+Sat Mar 14 20:07:45 1998  Owen Taylor  <owt1@cornell.edu>
+
+	* gtk.m4: Fixed reversed conditional, so checks against
+	  supplied version.
+
+Sat Mar 14 10:10:46 1998  Tim Janik  <timj@gimp.org>
+
+	* gtk/gtkmain.c (gtk_main): fixed a bug with invoking the quit handlers
+	that could cause them to be removed wihout being invoked.
+
+Sat Mar 14 14:36:40 PST 1998 Shawn T. Amundson <amundson@gimp.org>
+
+	* Released 0.99.6
+	
+	* gdk/gtk_tut.sgml:
+	* gdk/gtk_tut_it.sgml: fixed Ian Main's e-mail address
+
+Sat Mar 14 17:48:42 1998  Owen Taylor  <owt1@cornell.edu>
+
+	* gtk/Makefile.am: Don't refer to current directory as 
+	$(top_builddir)/gtk to avoid confusing non-gmakes. Made
+	Emacs-dependent maintainer-oonly
+
+Sat Mar 14 17:47:12 1998  Owen Taylor  <owt1@cornell.edu>
+
+	* gdk/gdkwindow.c: (gdk_window_set_group): Fixed use of
+	   unitialized variable.
+
+Sat Mar 14 13:26:09 1998  Owen Taylor  <owt1@cornell.edu>
+
+	* gtk/gtkentry.c gtk/gtktext.c: Some cleanups of signedness
+          warnings
+
+	* gtk/gtkhandlebox.h: Changed gint ... : 1 to guint ... : 1
+	 
+1998-03-14  Federico Mena Quintero  <federico@nuclecu.unam.mx>
+
+	* gtk/gtktoolbar.c (gtk_toolbar_insert_element): Moved the
+	gtk_signal_connect of the specified callback into the big switch()
+	for buttons.  We don't want to connect to the "clicked" signal of
+	a custom widget or a space element, because it may not have one.
+	(gtk_toolbar_insert_element): Extra sanity check; if the type is
+	GTK_TOOLBAR_CHILD_WIDGET, then the specified widget must not be NULL.
+
+Sat Mar 14 02:54:28 PST 1998 Manish Singh <yosh@gimp.org>
+
+        * gtk.m4: fixed a bashism in gtk tests
+
+Sat Mar 14 08:29:56 1998  Tim Janik  <timj@gimp.org>
+
+	* gtk/gtkhandlebox.c (gtk_handle_box_size_allocate): refuse to allocate
+	with a greater height than requested.
+	(gtk_handle_box_remove): clean up if the child is detached.
+
+	* gtk/gtktoolbar.c (gtk_toolbar_size_allocate): don't take invisible
+	children into account.
+
+Sat Mar 14 02:12:44 1998  Owen Taylor  <owt1@cornell.edu>
+
+	* gtk/gtkmain.c gdk/gdk.c: Don't leave NULL's in argv.
+
+Sat Mar 14 01:36:51 1998  Owen Taylor  <owt1@cornell.edu>
+
+	* gtk-config.in: Added -I $exec_prefix/glib/include to cflags
+
+Sat Mar 14 00:03:34 1998  Owen Taylor  <owt1@cornell.edu>
+
+	* gtk/gtkwindow.c:
+          Don't resize windows when request is rejected by WM.
+	  Only use the resize count to guess whether a Configure
+	  event was a rejection by the WM, or a move.
+
+	* gdk/gdk.c gdk/gdktypes.h: 
+	  - Don't XDestroyWindow foreign windows (If they're a child of
+	  one of our windows, reparent them to root and send them a WM 
+	  delete event, otherwise, just delete the GTK structure.) 
+	  Handle notification of their deletion properly.
+          (Made foreign windows a seperate window type to do this)
+	
+	* gtk/gtkobject.c (gtk_object_set_data_full): 
+	  Call the DestroyNotify when replacing the object data.
+
+Sat Mar 14 02:03:13 1998  Tim Janik  <timj@gimp.org>
+
+	* gtk/gtksignal.c: make use of *_by_id() functions for handler key.
+
+	* gtk/gtkwidget.c: make use of *_by_id() functions for a bunch of keys.
+ 	(gtk_widget_shutdown): new function to perform pre-destruction shutdown
+ 	of the widget.
+	(gtk_widget_unparent): call gtk_widget_set_parent_window(widget,NULL)
+
+	* gtk/gtkobject.h: 
+	* gtk/gtkobject.c: GtkObject destruction is now split into an internally
+	used shutdown class method and the usual GtkObject::destroy signal
+ 	emission. this allowes for class based shutdown functionality prior
+	to actuall object destruction.
+	added *_by_id() counterparts for gtk_object_data_* functions, meant for
+	internal use only.
+
+	* gtk/gtkmain.c (gtk_quit_add_destroy): new function which will destroy
+	a GtkObject once gtk_main() of a certain level finishes. it is save to
+	destroy the object prior to that, gtk_quit_add_destroy will only destroy
+	objects that are still existing.
+
+1998-03-13  Federico Mena Quintero  <federico@nuclecu.unam.mx>
+
+	* gtk/gtkclist.c (gtk_clist_row_is_visible): Now we return a
+	GtkVisibility value, instead of a simple boolean.  Also, changed
+	all the functions that expected a boolean value to use
+	"!= GTK_VISIBILITY_NONE".
+
+	* gtk/gtkclist.h: Changed prototype for gtk_clist_row_is_visible().
+
+	* gtk/gtkenums.h (enum): Added GtkVisibility enum.
+
+Fri Mar 13 11:23:55 PST 1998 Shawn T. Amundson <amundson@gimp.org>
+
+	* docs/gtk_tut.sgml:
+	* docs/gtk_tut_it.sgml:
+	* docs/gtk_tut_packbox1.gif:
+        * docs/gtk_tut_packbox2.gif:
+        * docs/gtk_tut_table.gif: added graphics, update tutorials
+          appropriately
+
+Fri Mar 13 18:25:07 1998  Tim Janik  <timj@gimp.org>
+
+	* gtk/gtkcombo.c: fix popup calculations (removal
+	of FIXMEs), changes from Lars Hamann.
+
+Fri Mar 13 10:25:16 1998  Tim Janik  <timj@gimp.org>
+
+	* gtk/gtkwidget.h: 
+	* gtk/gtkwidget.c: renamed gtk_widget_delete_hides to
+ 	gtk_widget_hide_on_delete at owens request, and because the
+	new name is much more descriptive.
+
+Fri Mar 13 17:33:56 GMT 1998 Tony Gale <gale@gimp.org>
+
+	docs/gtkfaq.sgml: fix the spelling of Helge Hess's name
+
+Fri Mar 13 09:40:17 GMT 199 Tony Gale  <gale@gimp.org>
+
+	* docs/gtkfaq.sgml: update links to documentation and
+	  remove question on what needs to be done before 1.0
+
+Fri Mar 13 01:17:44 1998  George Lebl  <jirka@5z.com>
+
+	* gtk/gtkfilesel.c: Set the column width of the clists
+	  to the longest string length so that the bottom scrollbar
+	  appears when you get some long files in the list
+
+1998-03-12  Federico Mena Quintero  <federico@nuclecu.unam.mx>
+
+	* docs/gtk_tut.sgml: fix one missing quote.
+
+Thu Mar 12 18:01:03 1998  Owen Taylor  <owt1@cornell.edu>
+
+	* gtk.m4 gtk-config.in Makefile.am configure.in: 
+	  Added a new mechanism for GTK-dependent programs to
+	  find out about the installed GTK. (Does not remove
+	  any current functionality)
+
+	* gtk+-xconfig.in: Was no longer used for anything.
+
+Thu Mar 12 20:17:47 1998  Tim Janik  <timj@gimp.org>
+
+	* gtk/gtkhandlebox.c (gtk_handle_box_delete_float): return TRUE for
+	GtkWidget::delete_event to avoid destruction of our float window.
+
+	* gtk/gtkmain.c (gtk_main_iteration_do): GDK_DELETE will destroy a
+	widget if the last handler returned FALSE or there was none connected.
+
+	* gtk/testgtk.c: adapted all delete_event/destroy case that were affected.
+
+	* gtk/gtkwidget.c (gtk_widget_delete_hides): new function that will hide
+	a widget and return TRUE to avoid window deletion if
+	connected to GtkWIdget::delete_event.
+
+Thu Mar 12 11:51:33 PST 1998 Shawn T. Amundson <amundson@gimp.org>
+
+	* docs/gtk.texi: Changed name of GTK to the GIMP Toolkit
+
+Wed Mar 11 22:52:57 1998  Russell Nelson <nelson@crynwr.com>
+
+	* gtk/gtktest.c: new_pixmap wasn't using its filename argument.
+	* docs/gtk.texi: Add descriptions
+
+Wed Mar 11 14:36:48 PST 1998 Shawn T. Amundson <amundson@gimp.org>
+
+	* gtk/docs/: added tutorial, changed some files around to
+          make more sense.
+
+Thu Mar 12 10:49:38 1998  Tim Janik  <timj@gimp.org>
+
+	* gtk/gtkmain.h: 
+	* gtk/gtkmain.c: changed handler tags to be of type guint, reflecting
+	the internal tag handling.
+
+	* gtk/gtkcurve.h: macro fixups.
+
+Thu Mar 12 08:55:34 1998  Tim Janik  <timj@gimp.org>
+
+	* gtkitem.c:
+ 	* gtktree.c:
+ 	* gtklist.c: fetch the inintial value of attributes.event_mask from
+	gtk_widget_get_events (widget) (pointed out by Damon Chaplin
+ 	<DAChaplin@email.msn.com>).
+
+Thu Mar 12 07:43:33 1998  Tim Janik  <timj@gimp.org>
+
+	* gdk/gdk.h:
+	* gdk/gdkvisual.c: applied gtk-shige-980311-0.patch.gz, which removes
+	the erronerous gdk_query_visuals() function in favour of
+	gdk_list_visuals() which does a correct job.
+
+	* gtk/gtkcontainer.h: applied gtk-draco-980311-0.patch.gz which fixes
+	a class cast check.
+
+	* gtk/gtkspinbutton.c: applied gtk-hamann_jeske-980312-0.patch.gz about
+	'+' sign acceptance.
+
+	* gtk/gtknotebook.c: applied gtk-hamann_jeske-980311-1.patch.gz which
+	cares about delayed tab label creation.
+
+Thu Mar 12 06:58:17 1998  Tim Janik  <timj@gimp.org>
+
+	* gtk/gtktree.c (gtk_tree_map): avoid warnings about NULL casts.
+
+	* gtk/gtkstatusbar.c (gtk_statusbar_destroy): don't leak the context
+ 	id key's slist.
+
+	* gtk/gtkobject.c (gtk_object_set_data_full): duplicate keys that get
+ 	inserted into the hashtable, otherwise this function *forces* the caller
+	to leak memory, for dynamically allocated keys (problem pinpointed by
+	Mattias Gronlund).
+
+Tue Mar 10 23:02:42 1998  Owen Taylor  <owt1@cornell.edu>
+
+	* gdk/gdkdnd.c gtk/gtkclist.c gtk/gtksignal.c gtk/testgtk.c:
+	  Various minor cleanups related to -W
+
+1998-03-11  Elliot Lee  <sopwith@bogus.circ.us.eu.org>
+
+	* gtk/gtkentry.h: Keep it consistent - 
+	don't list gtk_entry_set_max_length unless it's implemented.
+	(Someone make up their mind please ;-)
+
+Wed Mar 11 07:10:11 1998  Tim Janik  <timj@gimp.org>
+
+	* gtk/gtkspinbutton.h: 
+	* gtk/gtkspinbutton.c: applied gtk-hamann_jeske-980311-0.patch.gz,
+	to limit entered characters to numbers, '-' and '.'.
+
+Wed Mar 11 04:35:06 1998  Tim Janik  <timj@gimp.org>
+
+	* gtk/gtklist.c:
+	* gtk/gtktree.h: 
+	* gtk/gtktree.c:
+	* gtk/gtktreeitem.h: 
+	* gtk/gtktreeitem.c: applied gtk-bolliet-980310-0.patch.gz which adds
+	more checks and implements gtk_tree_clear_items. made a bunch of style
+	and indentation fixes.
+
+Wed Mar 11 03:35:17 1998  Tim Janik  <timj@gimp.org>
+
+	* gtk/gtktooltips.h:
+	* gtk/gtktooltips.c: code and structure clean ups. fixed the
+	tooltips flickering bug.
+
+Tue Mar 10 14:24:09 1998  Owen Taylor  <owt1@cornell.edu>
+
+	* gtk/gtkselection.c (gtk_selection_clear): Make the return
+	  result reflect whether the clear event was out of data.
+
+	* gtk/gtkeditable.c: Ignore out of date selection clear
+	  events.
+
+	* gtk/gtkentry.c gtk/gtktext.c: Don't synthesize releases
+	  on [2/3]BUTTON presses, since we get the normal click as well.
+
+	  Claim the selection when selecting words/lines.
+
+Tue Mar 10 13:34:29 1998  Owen Taylor  <owt1@cornell.edu>
+
+	* gtk/gtkrange.c (gtk_range_default_[vh]trough_click): 
+	  Take forward/back step arrows into account when computing
+	  position for middle button clicks.
+
+	* gtk/gtktext.c gtk/gtkentry.c:
+	  - Fixes for deleting characters (don't subtract guints and get
+	    negative numbers!)
+	  - Reset cursor_virtual_x when moving by words and lines
+	  - Extra sanity checks
+	  - Fix to gtk_text_get_chars 
+	         (from Tony Gale <gale@daedalus.dera.gov.uk>)
+
+1998-03-10  Federico Mena Quintero  <federico@nuclecu.unam.mx>
+
+	* gdk/gdkgc.c (gdk_gc_set_function): Replace GXor by GXxor.  Seems
+	to have been a typo.
+
+Tue Mar 10 00:49:18 EST 1998 The Rasterman <raster@redhat.com>
+        * gdk/gdkwindow.c: (gdk_window_xid_at) fixed minor memory leak and
+	minor buglet in tree search.
+		
+Mon Mar  9 21:21:19 PST 1998 Shawn T. Amundson <amundson@gimp.org>
+
+	* Released 0.99.5
+
+Mon Mar  9 23:24:42 1998  Miguel de Icaza  <miguel@nuclecu.unam.mx>
+
+	* gtk/gtkclist.c (gtk_clist_get_selection_info): Export
+	functionality.
+
+Tue Mar 10 05:42:34 1998  Tim Janik  <timj@gimp.org>
+
+        * configure.in: Bumped version number to 0.99.5.
+
+Tue Mar 10 05:30:05 1998  Tim Janik  <timj@gimp.org>
+
+	* gtk/gtkrange.h:
+	* gtk/gtkrange.c:
+ 	changed gtk_range_trough_click() to take an additional jump_perc arg,
+	class method and callers changed.
+
+	* gdk/gdk.c (gdk_ic_destroy): applied gtk-gronlund-980309-1.patch.gz
+	which fixes a memory leak.
+
+Mon Mar  9 20:38:15 1998  Owen Taylor  <owt1@cornell.edu>
+
+	* gtk/gtkentry.c gtk/gtkeditable.c gtk/gtkspinbutton.c: 
+	  Moved "activate" to editable class. Made the vfuncs in 
+	  gtkeditable just vfuncs not signals.
+
+	* gtkentry.[ch] gtktext.[ch]: Made behavior when pressing
+	  multiple buttons at once more rational.
+
+	* gtkentry.c gtktext.c: Unified and rationalized key
+	  bindings. (Now are basically emacs+CUA)
+	
+	* gtktext.c: 
+          - Last position now always shares the property of the preceding
+	    character
+	  - Freeze the widget when inserting large amounts of text.
+	  - Selecting lines now selects the _whole_ line.
+          - Fixed bug with displaying the cursor
+	  - Ctrl-Home/End now move the cursor to the _absolute home/end
+	
+	* gtkmenuitem.c: Remove necessary code out of a g_return_if_fail
+
+1998-03-09  Federico Mena Quintero  <federico@nuclecu.unam.mx>
+
+	* gtk/gtkclist.c (gtk_clist_set_foreground): We now accept the
+	color parameter to be NULL.  If it is NULL, it will mark the row
+	with "color not set", so it will be repainted with the default color.
+	(gtk_clist_set_background): Likewise.
+
+Mon Mar  9 15:48:10 1998  Tim Janik  <timj@gimp.org>
+
+	* Signal signedness and naming corrections, plus GtkType fixes:
+
+	* gtk/gtkadjustment.c: 
+	* gtk/gtkbutton.c:
+	* gtk/gtkcheckmenuitem.c:
+	* gtk/gtkclist.c: 
+	* gtk/gtkcolorsel.c: 
+	* gtk/gtkcontainer.c: 
+	* gtk/gtkcurve.c: 
+	* gtk/gtkdata.c: 
+	* gtk/gtkeditable.c: 
+	* gtk/gtkentry.c: 
+	* gtk/gtkhandlebox.c: 
+	* gtk/gtkinputdialog.c: 
+	* gtk/gtkitem.c: 
+	* gtk/gtklist.c: 
+	* gtk/gtkmenuitem.c: 
+	* gtk/gtkmenushell.c: 
+	* gtk/gtknotebook.c: 
+	* gtk/gtkstatusbar.c: 
+	* gtk/gtktoolbar.c: 
+	* gtk/gtktree.c: 
+	* gtk/gtktreeitem.c: 
+	* gtk/gtkwidget.c: 
+	* gtk/gtktogglebutton.c: 
+	* gtk/gtkwindow.c: 
+	made the <widget>_signals[] arrays of type guint rather than gint.
+
+	* gtk/gtkwidget.c (gtk_widget_get_ancestor): made widget_type a GtkType.
+
+	* gtk/gtkcombo.h:
+	handler ids need to be of type guint (entry_change_id, list_change_id).
+
+	* gtk/gtkaccelerator.c:
+	changed signal_num to signal_id and typed it guint.
+
+	* gtk/gtkmain.c: made gtk_ndebug_keys a guint.
+
+	* gtk/gtkmenu.h: 
+	* gtk/gtkmenu.c:
+	(gtk_menu_popup): made button a guint.
+	(gtk_menu_set_active): made index a guint.
+
+	* gtk/gtkmenuitem.h: 
+	* gtk/gtkmenuitem.c: 
+	made accelerator_signal a guint.
+
+	* gtk/gtkoptionmenu.h:
+	* gtk/gtkoptionmenu.c:
+	(gtk_option_menu_set_history): made index a guint.
+
+	* gtk/gtksignal.h: 
+	* gtk/gtksignal.c: 
+	* gtk/gtkobject.h: 
+	* gtk/gtkobject.c: changed a bunch of prototypes to take guints rather
+	than gints. also made some conversions from guint to GtkType, left over
+ 	from when the fundamental-types system was introduced.
+
+	* gtk/gtkobject.h: 
+	* gtk/gtkobject.c: made object_data_id_index and obj_count guints.
+	made *signals and nsignals guints in GtkObjectClass.
+
+Mon Mar  9 13:36:53 GMT 1998 Tony Gale  <gale@gimp.org>
+
+        * docs/gtkfaq.sgml:
+
+        - Use 'diff -ru' for patches
+        - Explained patch application/rejection
+        - Added information on CVS
+        - New question on right justified menus with menufactory
+
+        From Nathan:
+
+        - Information on Objective-C bindings
+        - Add missing variable in colour example.
+  
+Mon Mar  9 11:44:33 1998  Tim Janik  <timj@gimp.org>
+
+	* gtk/gtkfilesel.c (gtk_file_selection_update_history_menu): reverted
+	the changes ian introduced in r1.16 on Mar 06, since they broke the
+	history menu.
+
+Mon Mar  9 08:07:01 1998  Tim Janik  <timj@gimp.org>
+
+	* gtk/gtkspinbutton.h: 
+	* gtk/gtkspinbutton.c:
+	applied gtk-hamann_jeske-980308-0.patch.gz to have a
+ 	gtk_spin_button_construct() function
+
+Mon Mar  9 01:01:41 1998  Owen Taylor  <owt1@cornell.edu>
+
+	* gtk/gtkrc.c: No, you can't add a GtkStyle * to a
+	  list of GtkRcNode *. (Fixes huge performance problem)
+	  Plus, don't bother creating a new style unless style
+	  actually has bg pixmaps.
+
+Sun Mar  8 15:53:33 1998  Owen Taylor  <owt1@cornell.edu>
+
+	* gtk/gtktext.c: 
+
+	- Show selection correctly when starting selection with arrows
+
+	- Display pixmap background only when not editable
+
+	- Redraw focus area more carefully to prevent flashing (and
+	  make style of drawing consistent with Entry)
+
+	* gtk/gtktreeitem.c: ref colormaps for pixmap by colormap
+	  storage.
+	
+	* gtk/gtkrc.c: Store a separate style for each RcStyle for
+	  each colormap, so we can handle background pixmaps 
+	  correctly, which need to be per-colormap. (Leaks
+	  colormaps...)
+
+	  Parse text color style entries correctly.
+
+	* gtk/testgtk.c: insert text without fg color
+	  gtk/testgtkrc: move "*" after rest, so the other class styles
+	                 take effect
+
+        * gdk/gdkwindow.c gdk/gdk.c gdk/gdkprivate.h: Send DND events
+	  safely, in case drop window disappears. (Performance hit
+	  because XSync()'s are necessary)
+
+	* gdk/gdk.h gdk/gdkpixmap.c: Added 
+	  gdk_pixmap_colormap_create_from_xpm[_d] to allow creating
+	  pixmaps from xpm's before you have a GdkWindow.
+	
+Sun Mar  8 12:33:38 PST 1998 Jay Painter <jpaint@serv.net>
+	
+	* gtk/gtkclist.c: the GList clist->selection now contains row indexes
+	  in the data portion of the linked list structure instead of pointers,
+	  fixed several bugs with the different selection modes
+
+	* gtk/testgtk.c: displays information for unselect events, and prints the list
+	  of selected rows
+
+Sun Mar  8 13:03:22 1998  Tim Janik  <timj@gimp.org>
+
+	* gtk/gtkrange.h: removed gtk_range_calc_value().
+
+Sun Mar  8 04:22:36 1998  Tim Janik  <timj@gimp.org>
+
+	* gtk/gtkfilesel.c: applied gtk-gronlund-980307.patch.gz which
+	  fixes a memory leak by making use of gtk_clist_set_row_data_full.
+
+	* gtk/gtkclist.c: applied gtk-gronlund-980307.patch.gz which ads a
+	  gtk_clist_set_row_data_full () function. slightly modified to
+	  always invoke the destroy function regardless of the value of
+	  the row_data.
+	
+	* docs/gtk.texi: applied gtk-draco-980305-1.patch.gz, spelling fixes.
+	
+	* gdk/gdk.c (gdk_init):
+	  cleared up a tiny memory leak from not destroying a temporary copy
+	  of argv (gtk-gronlund-980307-02.patch.gz).
+
+Sun Mar  8 03:00:17 1998  Tim Janik  <timj@gimp.org>
+
+	* configure.in: define the version variables in config.h.
+
+	* gtk/gtkmain.h:
+	* gtk/gtkmain.c: added static version variables.
+
+	* gdk/gdkpixmap.c: fixed memory leaks (gtk-gronlund-980307-1.patch.gz)
+
+Sat Mar  7 18:46:57 1998  Owen Taylor  <owt1@cornell.edu>
+
+	* gtk/gtkpreview.[ch]: Added a new function, gtk_preview_reset(),
+	  that can be used (under highly controlled circumstances),
+	  to change the properties of the preview colormap after
+	  a preview has already been created and destroyed.
+
+Sun Mar  8 00:18:04 1998  Tim Janik  <timj@gimp.org>
+
+	* gtk/gtkobject.c: register living objects in a hashtable.
+
+Sat Mar  7 20:20:53 1998  Tim Janik  <timj@gimp.org>
+
+	* gtk/gtkobject.c:
+ 	(gtk_object_check_cast):
+	(gtk_object_check_class_cast): 
+ 	  made the object/class cast checks much more descriptive, based on
+ 	  gtk-draco-980305-2.patch.gz and gtk-draco-980306-1.patch.gz but
+	  optimized for common code path.
+
+	* gtk/gtkpreview.c: added a few extra checks for the visual
+ 	(gtk-draco-980305-0.patch.gz).
+
+	* gdk/gdk.c (gdk_signal): abort() on a signal if G_ENABLE_DEBUG
+ 	  is defined, so we dump core (gtk-draco-980305-0.patch.gz).
+
+Sat Mar  7 13:00:00 1998  The Rasterman <raster@redhat.com>
+
+	* gdk/gdkwindow.c (gdk_window_xid_at_coords),(gdk_window_xid_at):
+	  added these two calls, gdk_window_xid_at_coords beign the one
+	  to actually call to look up the current X Window ID at a particular
+	  x,y co-ordinate onscreen accounting for a list of windows to be 
+	  excluded from this search. Useful for DND support.
+	* gdk/gdkprivate.h added in above function calls.
+
+Sat Mar  7 01:07:24 1998  Owen Taylor  <owt1@cornell.edu>
+
+	* gtk/gtkrange.c (gtk_range_expose): Fixed the vscrollbar
+	  flickering problem, by checking the area on expose events.
+	  (There was a hscrollbar flickering problem as well, it
+	   just wasn't very noticeable)
+
+Fri Mar  6 21:30:05 1998  Owen Taylor  <owt1@cornell.edu>
+
+	* gtk/gtkeditable.c: Disallow pasting into non-editable
+	  widgets.
+
+	* gtk/gtktext.[ch]: 
+
+	  -Added scrolling when dragging the selection
+	   paste the top/bottom.
+
+	  -Fix some of the problems with displaying the selection
+	   state before mouse release.
+
+	  -Disallow pasting into non-editable widgets
+
+	  -Fixed segfault when changing window size
+
+	  -Update the cursor correctly when switching between
+	   editable and non-editable
+
+	* testgtk.c: Added a toggle button for editability for
+	  the text widget. 
+
+Fri Mar  6 14:47:33 PST 1998 Shawn T. Amundson <amundson@gimp.org>
+
+        * Applied gtk-matsu-980205-0 (oops, should be 980305)
+	  gdk/gdkinputcommon.h: return NULL if device is not ready
+          gtk/gtkwindow.c: check for GDK_ISO_Left_Tab
+
+Fri Mar  6 13:17:58 1998  Marc Ewing  <marc@.redhat.com>
+
+	* gtk/gtkclist.c (real_select_row, real_unselect_row): 
+	  fix selection bugs
+
+Thu Mar  5 20:41:27 1998  Ian Main  <imain@gnu.org>
+
+	* gtk/gtkfilesel.c: Added
+	  gtk_file_selection_show_fileop_buttons(GtkFileSelection *fs), and
+	  gtk_file_selection_hide_fileop_buttons(GtkFileSelection *fs).
+	  Changed pulldown to only contain current directory name instead of
+	  the full path.  Removed Help button (it can now be packed into the
+	  button_area if desired).
+		
+	* gtk/gtkfilesel.h: Added GtkWidget *button_area (the fileop
+	  buttons at the top are packed into this hbox), and GtkWidget
+	  action_area (hbox below clists) to GtkFileSelection structure.
+
+	* gtk/testgtk.c: Changed the filesel example to show off the hiding/
+	  showing of fileop buttons, and the packing area.
+
+1998-03-05  Federico Mena Quintero  <federico@nuclecu.unam.mx>
+
+	* gdk/gdkprivate.h: Changed the name of default_filters to
+	gdk_default_filters to avoid namespace pollution.  Yes, it just
+	happened to me.
+	* gdk/gdk.c (gdk_event_translate):
+	* gdk/gdkglobals.c: 
+	* gdk/gdkwindow.c (gdk_window_add_filter gdk_window_remove_filter): Likewise.
+
+Thu Mar  5 12:32:06 1998  Marc Ewing  <marc@redhat.com>
+
+	* gtk/gtkclist.c (select_row): emit UNselect on rows
+	  that are not selected.
+
+Thu Mar  5 01:22:06 1998  Owen Taylor  <owt1@cornell.edu>
+
+	* gtk/gtkwidget.c (gtk_widget_unparent): Unset allocation
+	  on unparent, to force reallocation if we get adding back
+	  to a new parent which is already size-allocated.
+
+	* gtk/gtktreeitem.[ch]: Keep track of separate +/- pixmaps
+	  for each colormap, removed the idle hack.
+
+	* gdk/gdk.c: Don't warn when unable to open XIM method,
+	  since X11R5 apparently has no default method.
+
+	* gtk/gtkwidget.c (gtk_widget_set_style_internal): Don't
+	  call size_request on initial emission - since the
+	  widget size isn't set yet, it can't change.
+
+	* gtk/Makefile.am: New rules 'test' and 'test-debug' to run
+	  testgtk with the correct working directory.
+
+	* gtk/gtkentry.c (gtk_move_forward_word): 
+	  Check for position at end of line.
+
+	* gtk/gtkinputdialog.h (struct _GtkInputDialogClass): 
+	  removed 'gpointer data' arguments from default handler
+	  structures.
+
+Wed Mar  4 20:06:47 1998  Miguel de Icaza  <miguel@nuclecu.unam.mx>
+
+	* gdk/gdk.c (gdk_event_translate): Drags can only be started with
+	the left button.
+
+Wed Mar  4 16:02:44 GMT 1998 Tony Gale  <gale@gimp.org>
+
+	* docs/gtkfaq.sgml: widget hierarchy update from Tim Janik
+
+Mon Mar  2 19:57:27 1998  Miguel de Icaza  <miguel@nuclecu.unam.mx>
+
+	* gdk/gdkproperty.c (gdk_atom_name): Initialize gdk_error_code to
+	zero before calling the X routine.
+
+Tue Mar  3 01:22:25 1998  Tim Janik  <timj@gimp.org>
+
+	* gtk/gtkspinbutton.c: applied patch from lars and steffan to proper
+ 	check for realized widgets.
+
+Mon Mar  2 18:27:09 CST 1998 Shawn T. Amundson <amundson@gimp.org>
+
+        * gtk/gtkstatusbar.h: fixed ifndef..define typo
+
+Mon Mar  2 17:48:38 1998  Owen Taylor  <owt1@cornell.edu>
+
+	Miscellaneous minor fixes to remove ANSI C incompatibilities
+
+	* gdk/gdkregion.c gtk/gtkclist.c: fix // comments
+
+	* gdk/gdkdnd.c gdk/gdkinputcommon.h: change types of
+	some arguments to ANSI functions
+
+	* gtk/gtkcombo.c gtk/gtktree.c: fix casts of function pointers
+	  to void *
+
+	* gtk/gtkmain.c: An actual bug! (in deprecated gtk_input_add_interp)
+
+	* gtk/gtknotebook.h: Bitfields must be gint or guint. (and should
+	  be guint)
+
+	* gtk/gtkstatusbar.c: trailing ';'
+
+	* gtk/testgtk.c: GList where there should have been GSList
+
+Mon Mar  2 12:26:59 1998  Owen Taylor  <owt1@cornell.edu>
+
+	* gtk/gtkentry.c: Changed 'entry != NULL' to 'editable != NULL'
+	  in three spots.
+
+Sun Mar  1 18:29:58 PST 1998 Shawn T. amundson <amundson@gimp.org>
+
+        * Released GTK+ 0.99.4.
+
+Sun Mar  1 16:47:29 PST 1998 Shawn T. Amundson <amundson@gimp.org>
+
+        * gtk/testgtk.c: small fix to notebook portion
+
+Sun Mar  1 15:18:38 PST 1998 Shawn T. Amundson <amundson@gimp.org>
+
+        * Required changes for version change to 0.99.4
+
+        * gtk/gtktree.[ch]: patch from J. Bolliet to correct some bugs
+        * gtk/testgtk.c: added test here from J. Bolliet, removed testtree
+
+        * gtk/clist: gtk-abilleira-981602-0, allows gtk_clist_set_pixmap 
+          and gtk_clist_set_pixtext to not require a mask
+        
+        * gdk/gdkdraw.c,gdk.h: gtk-trow-980217-0
+          adds gdk_draw_lines and fixes some things about 
+          gdk_draw_polygon         
+
+Sun Mar  1 17:40:58 1998  Owen Taylor  <owt1@cornell.edu>
+
+	* gdk/gdkpixmap.c: Make sure either the window or
+	the depth is given when creating a pixmap.
+
+Sun Mar  1 22:59:09 1998  Tim Janik  <timj@gimp.org>
+
+	* gtk/gtkstatusbar.h: 
+	* gtk/gtkstatusbar.c: complete api change to honour message contexts.
+	unfortunaltely this also involved argument changes on the signal
+ 	emissions which will not be caught by the compiler. your callbacks
+ 	should look like:
+  	void  message_text_popped (GtkStatusbar   *statusbar,
+				   guint           context_id,
+	                           const gchar    *text,
+				   gpointer        func_data);
+
+	* gtk/gtkwidget.c (gtk_widget_set_rc_style): eliminated bug about
+	initial signal emission.
+	(gtk_widget_set_parent): don't ensure style, just call
+	gtk_widget_set_style_recurse.
+	(gtk_widget_set_style_recurse): only change a widget's rc styles if
+	if there has already been a lookup.
+	
+	* gtk/testgtk.c: adaptions for statusbar widget.
+	substituted notebook pixmaps with pixmaps from fvwm, since
+	we don't know where the originals came from.
+	
+	* gtk/gtkobject.c (gtk_object_data_destroy): call the destroy
+	notifier with the objects data, not its internal structure.
+	
+	* gtk/gtkspinbutton.c (gtk_spin_button_button_press): small
+	fix from lars.
+
+Sun Mar  1 15:08:13 CST 1998 Shawn T. Amundson <amundson@gimp.org>
+
+	* docs/*.texi changes from Greg Mclean.
+
+Sun Mar  1 18:41:07 1998  Tim Janik  <timj@gimp.org>
+
+	* gtk/gtkwidget.c (gtk_widget_restore_default_style): hm if we save the
+	default style, we should also provide a function to restore it ;).
+
+	* gtk/main.[hc]: small fixups to idle handlers, added support for quit
+	handlers.
+
+Sun Mar  1 05:18:11 1998  Owen Taylor  <owt1@cornell.edu>
+
+	* gtk/gtkentry.c gtk/gtktext.c gtkeditable.[ch]
+
+	Changed interface to cut/copy/paste so it makes sense
+	when triggered by say, menu items.
+
+Sun Mar  1 03:20:39 1998  Owen Taylor  <owt1@cornell.edu>
+
+	* gtk/gtkentry.[ch] gtk/gtktext.[ch] gtkeditable.[ch]
+
+	Turned off debugging in gtktext.c
+
+	Bug fixes for cutting, pasting, deleting, etc. 
+
+	Some of the bugs that were there before have definitely
+	been fixed. 
+	
+	* gtk/testgtk.c gtk/testgtkrc: Removed my ugly orange backgrounds,
+	to make things look nicer. 
+	
+Sat Feb 28 23:58:54 1998  Owen Taylor  <owt1@cornell.edu>
+
+	* gtk/gtkentry.[ch] gtktext.[ch] gtkeditable.[ch]
+
+	Created a new base widget type Editable for the entry and
+	text widgets, which encapsulates most of the selection and
+	clipboard handling stuff, plus some common signals.
+
+	Changed the Entry widget extensively to support this, 
+	but the interface and appearance should be the same.
+
+	Changed the Text widget moderately to support this.
+
+	It now supports:
+
+	- Selection style cut and paste
+	- Clipboard style cut and paste
+	- Emacs style key bindings (~same as Entry)
+	- Word motion
+	- "changed" signal
+
+	There are definitely still some bugs in the new stuff.
+
+	Use style->base for the background and style->text for
+	the foreground.
+	
+	* gtkfilesel.c gtkspinbutton.c testgtk.c: small changes
+	to fit the new interface more exactly.
+	
+Sat Feb 28 19:29:09 1998  Tim Janik  <timj@gimp.org>
+
+	* gtk/gtkclist.c (gtk_clist_new_with_titles): retrive the clist widget
+	from gtk_type_new (gtk_clist_get_type ()), not gtk_clist_new(),
+ 	otherwise gtk_clist_construct() gets called twice.
+
+	* gtk/gtkhandlebox.h:
+	* gtk/gtkhandlebox.c: emit signals when the child is attached/detached.
+
+Sat Feb 28 15:18:36 1998  Tim Janik  <timj@gimp.org>
+
+	* gtk/gtkpreview.c: fix behavior of gtk_preview_put() with
+	srcx/srcy != 0, gtk-shige-980127-0.patch.gz by
+	AOSASA Shigeru <aozasa@sakuranet.or.jp>.
+
+	* gdk: applied gtk-roebling-980121-0.patch.gz, patch for region
+	support in Gdk, by Robert Roebling <roebling@ruf.uni-freiburg.de>.
+
+Fri Feb 27 15:31:55 1998  Tim Janik  <timj@gimp.org>
+
+	* gtk/gtktipsquery.c: we make an active server grab now, this way we
+	can change the cursor globally and don't need to tweak event masks
+	of other windows.
+
+	* gtk/gtkframe.c (gtk_frame_style_set): recompute label size.
+
+	* gtk/gtkwidget.h:
+	* gtk/gtkwidget.c:
+	New signal GtkWidget::style_set to be emitted when a widget's style
+ 	changed. New flag GTK_RC_STYLE to indicate whether an rc lookup has
+	been perfomed for the widget.
+	(gtk_widget_ensure_style): New function.
+	(gtk_widget_set_rc_style): New function.
+
+	* docs/styles.txt: new file.
+
+Fri Feb 27 01:11:55 1998  Owen Taylor  <owt1@cornell.edu>
+
+	* gtk/gtktext.c
+
+	- gtk_text_delete and gtk_text_insert now update caches
+	and refresh screen correctly if the text widget isn't frozen.
+       
+	- Fixed bug where text->first_line_start_index wasn't
+	being updated correctly on insertion and deletion.
+	
+	- Added new public macro GTK_TEXT_INDEX (text, ind), and 
+	function gtk_text_get_chars(text, index, nchars);
+	
+Thu Feb 26 22:36:46 1998  Owen Taylor  <owt1@cornell.edu>
+
+	* gdk/gdkwindow.c gdktypes.c gdk.h: 
+	new functions for setting WM hints
+
+	 gdk_window_set_icon()
+	 gdk_window_set_icon_name()
+	 gdk_window_set_group()
+	 gdk_window_set_decorations()
+	 gdk_window_set_functions()
+
+	* gdk/MwmUtil.h: new uninstalled header file from lesstif 
+	distribution, used for setting MWM hints.
+
+	* gdk/gdkdnd.c Makefile.am: renamed from gdk/gdk_dnd.c
+	
+	* gtk/gtkhandlebox.c (gtk_handle_box_realize): Use MWM hints
+	to undecorate window.
+
+	* gtk/testgtk.c gtk/circles.xbm: new test for WM hints.
+
+Wed Feb 25 22:56:42 1998  Tim Janik  <timj@gimp.org>
+
+	* gtk/gtkspinbutton.h: 
+	* gtk/gtkspinbutton.c:
+ 	new widget from Lars Hamann <hamann@braunschweig.netsurf.de> and
+	Stefan Jeske <jeske@braunschweig.netsurf.de>.
+
+	* gtk/gtknotebook.c: fixups from lars and stefan.
+
+Wed Feb 25 13:18:53 1998  Owen Taylor  <owt1@cornell.edu>
+
+	* gtk/gtkbbox.[ch] gtk/gtkhbox.[ch] gtk/gtkvbox.[ch] :
+
+	Move layout constants into an enumeration, split
+	GTK_BUTTONBOX_DEFAULT into GTK_BUTTONBOX_DEFAULT
+	and GTK_BUTTONBOX_DEFAULT_STYLE (enumeration member).
+	
+	* gtk/gtkclist.c:
+
+	Renamed gtk_clist_row_isvisable to .._is_visible
+
+	From: Maciej Stachowiak <mstachow@mit.edu>
+	
+Wed Feb 25 13:50:05 GMT 1998  Tony Gale <gale@gimp.org>
+
+	* docs/gtkfaq.sgml: added questions on:
+		- Why don't the contents of a button move when 
+		  the button is pressed?
+        	- How do I catch a double click event in 
+ 		  a list widget?         
+     		- When compiling GTK+ I get an error like: 
+		  make: file `Makefile' line 456: Syntax error 
+          Removed questions on menus which are covered in the
+	  tutorial.
+
+	  Added link to HTML versions of FAQ and Tutorial on my
+	  web site.
+
+Tue Feb 24 22:47:01 1998  Owen Taylor  <owt1@cornell.edu>
+
+	* gtk/gtktext.c: Added some support for i18n. The support 
+	for input methods, including preedit, is there, but input
+	is ignored unless it comes one byte at a time, so the
+	CJK locales won't really work. Fixing that would require
+	variable-width character support in the Text widget, which
+	is probably the wrong approach. Eventually we'll probably
+	want to go to UCS-4 internally.
+
+	Also, revised key press handling, which should improve
+	the forwarding of non-handled keypresses to the toplevel,
+	and make adding selection handling easier.
+
+	* gtk/gtkentry.c: Minor changes so that C-d, etc delete
+	the selection if there is one.
+
+	* gdk/gdk.c (gdk_ic_get_events): Check the result of
+	XGetICValues - it is failing for some reason, and 
+	causing some warnings to be printed.
+
+Mon Feb 23 15:41:13 1998  Owen Taylor  <owt1@cornell.edu>
+
+	* gtk/gtkwidget.c gtk/gtkmenu.c: Don't process configure events
+	that just move the window, and don't resize it. Because we need
+	to make sure that a widget gets redrawn after a size_allocate -
+	and that only happens when the configure event changes the size
+	of the window. Plus, it's inefficient.
+	
+Mon Feb 23 15:45:37 1998  Marc Ewing <marc@redhat.com>
+
+	* gtk/gtktoolbar.h:
+	* gtk/gtktoolbar.c:
+	Added gtk_toolbar_*_element() functions.  Rewrote others
+	to simply call gtk_toolbar_insert_element() to do the
+	work.
+	Added two new GtkToolbarChildType options: TOGGLEBUTTON and
+	RADIOBUTTON, available through the gtk_toolbar_*_element() functions.
+	
+Mon Feb 23 13:44:10 1998  Tim Janik  <timj@gimp.org>
+
+	* gtk/gtkstatusbar.h:
+	* gtk/gtkstatusbar.c:
+ 	(re-)implemented the statusbar widget. my first intend was to fix the
+ 	code, but then there was nothing to fix.
+
+Sun Feb 22 20:42:04 1998  Marc Ewing <marc@redhat.com>
+
+	* gtk/gtkclist.c (gtk_clist_insert): Allow inserts
+	on empty clists.
+	
+Sun Feb 22 14:28:43 1998  Owen Taylor  <owt1@cornell.edu>
+
+	* gtk/gtkmain.c (gtk_events_pending): Count idle handlers
+	at internal priority as pending events.
+
+Sun Feb 22 00:20:12 MET 1998  Eckehard Berns  <eb@berns.prima.de>
+
+	* gdk/gdkcc.c (gdk_color_context_query_colors): fixed a bug for mode
+	GDK_CC_MODE_TRUE, when on a 24-bit visual on a 32-bit mashine.
+
+Sat Feb 21 15:33:20 1998  Tim Janik  <timj@gimp.org>
+
+	* gtk/gtkwidget.h: 
+	* gtk/gtkwidget.c: renamed signal GtkWidget::set_parent to
+	GtkWidget::parent_set. since it's purpose is pure notification,
+	it should have been named this way in the first place.
+
+Sat Feb 21 12:06:11 1998  Scott Goehring  <scott@poverty.bloomington.in.us>
+
+	* gtk/gtkentry.c (gtk_entry_set_text): Added a test for passing a
+	NULL text pointer.
+
+Sat Feb 21 14:49:17 1998  Tim Janik  <timj@gimp.org>
+
+	* gtk/gtkobject.h:
+	* gtk/gtkobject.c: gtk_object_query_args takes an additional pointer
+ 	now which if supplied will point to an array holding the sequential
+	argument ids.
+
+	* gtk/gtktree.c: fix emission of selection_changed signal, supplied
+	by Bolliet Jerome.
+
+	* gtk/gtktreeitem.c: inline the plus and minus pixmaps, supplied by
+	Bolliet Jerome.
+
+	* gtk/gtknotebook.c: do a resize when a page is removed and don't
+	refer to the removed page on the switch signal, supplied by Lars Hamann
+	and Stefan Jeske.
+
+	* gtk/gtktoolbar.h:
+	* gtk/gtktoolbar.c:
+ 	gtk_toolbar_append_item, gtk_toolbar_prepend_item,
+ 	gtk_toolbar_insert_item, gtk_toolbar_append_widget,
+	gtk_toolbar_prepend_widget, gtk_toolbar_insert_widget: take an additional
+ 	gchar *tooltip_private_text as argument to fully support the underlying
+	call to gtk_tooltip_set_tip.
+
+Fri Feb 20 06:40:00 1998  Tim Janik  <timj@gimp.org>
+
+	* gtk/gtktipsquery.h: 
+	* gtk/gtktipsquery.c:
+ 	New widget GtkTipsQuery for letting the user query tooltips of widgets.
+
+	* gtk/testgtk.c: add example for GtkTipsQuery.
+
+	* gtk/gtk.h: include gtk/gtktipsquery.h.
+
+	* gtk/gtklabel.c: enable default constructing.
+	
+
+Thu Feb 19 18:53:51 1998  Larry Ewing  <lewing@discord.isc.tamu.edu>
+
+	* removed g_warnings from the common XShm failure cases in gdkimage.c
+
+1998-02-19  Federico Mena Quintero  <federico@nuclecu.unam.mx>
+
+	* gtk/gtkcombo.c (gtk_combo_entry_key_press): Added M-p and M-n
+	key equivalents for up and down keys.  Just for us Emacs weenies :-)
+
+Thu Feb 19 12:18:24 1998  Owen Taylor  <owt1@cornell.edu>
+
+	* gtk/testgtk.c : Use POINTER_MOTION_HINT when dragging
+	shapes around. 
+	(gtk-wille-980203-0 
+	 Stefan Wille  <1wille@vsys1.informatik.uni-hamburg.de>)
+
+	* gtk/gtktext.c : Fixes to inserting and deleting characters
+	on line breaks.
+	(gtk-magnus-980210-0 Magnus Hulthen <magnus@axiom.se>)
+
+	* glib/configure.in glib/glibconfig.h.in: the value of
+	---enable_debug is written into glibconfig.h so everything
+	is recompiled when it changes. (HACK)
+
+	* gtk/gtkmain.c gdk/gdk.c docs/debugging.txt:
+	Added --gdk-no-debug and --gtk-no-debug switches. Effect
+	of switches is no cumulative.
+
+Thu Feb 19 06:56:52 1998  Tim Janik  <timj@gimp.org>
+
+        * gtkbox.c:
+        * gtkbutton.c:
+        * gtkcontainer.c:
+        * gtkframe.c:
+        * gtklabel.c:
+        * gtkobject.c:
+        * gtkwidget.c:
+        * gtkwindow.c:
+        present the argument access masks on their announcement.
+
+        * gtk/gtkobject.h:
+        * gtk/gtkobject.c:
+        (gtk_object_add_arg_type): take an additional argument describing
+        the access mask of the new arg. this can be of GTK_ARG_READABLE,
+        GTK_ARG_WRITABLE or GTK_ARG_READWRITE (the latter is an alias for
+        the two previous ones).
+        (gtk_object_query_args): provide an access_mask array if desired.
+
+        * gtk/gtkwidget.c (gtk_widget_real_realize):
+        realized the assumtion that widget is a NO_WINDOW widget
+        in actuall code.
+
+        * gtkwindow.c:
+        slight changes to gtk_window_configure_event that will make
+        the resizing behaviour a little less odd.
+        sigh, for some (buggy) reason, there are still container resizes
+        triggered by manual resizing to very small window sizes.
+        the cointainer resizes will cause gtk_real_window_move_resize to
+        be invoked, which makes the app look like it wants to fight the users
+        resizing action. ;(
+
+Thu Feb 19 01:11:48 1998  Owen Taylor  <owt1@cornell.edu>
+
+	* configure.in         gdk/gdk.[ch]         gdk/gdkcc.c 
+	  gdk/gdkglobals.c     gdk/gdkinputcommon.h gdk/gdkprivate.h 
+	  gdk/gdkvisual.c      glib/configure.in    glib/glib.h
+	  glib/gutils.c        gtk/Makefile.am      gtk/gtkmain.c
+	  gtk/gtkobject.[ch]   gtk/gtkdebug.h       docs/debugging.txt   
+
+	New system for controlling debugging:
+
+	* --enable-debug=[no/yes/minimum]
+	* G_DISABLE_ASSERT and G_DISABLE_CHECKS for glib
+	* G_NO_CHECK_CASTS to control cast checking
+	* G_ENABLE_DEBUG enables run time checking which controls:
+	    Object tracing
+	    Showing events
+	    Miscellaneous g_print's in GDK
+	  And is controlled by --gdk-debug/GDK_DEBUG, --gtk-debug/GTK_DEBUG
+        * debug_level and show_events are gone from GTK
+
+	See docs/debugging.txt for details.
+	
+	And some fixups to the configure.in's so '-g' can be
+	overriden on the command line for --enable-debug
+	
+Thu Feb 19 05:40:51 1998  Tim Janik  <timj@gimp.org>
+
+	* gtk/gtknotebook.h:
+	* gtk/gtknotebook.c:
+	applied gtk-hamann_jeske-980218-0.patch.gz, a patch from
+	Lars Hamann and Stefan Jeske which introduces major
+	usability improvements.
+	fixed bugs are:
+	- container border_width>0 does now work correctly for show_tabs==TRUE
+	  and for tab_pos=GTK_POS_BOTTOM/GTK_POS_RIGHT.
+	- toggleing visibility of the tab labels works now.
+	- emission of GtkNotebook:switch_page and all page changes
+	also the signature for the GtkNotebook:switch_page signal changed,
+	callbacks should now look like:
+	gint notebook_switch_page (GtkWidget *widget,   GtkNotebookPage *page,
+                                   gint       page_num, gpointer         data);
+
+Wed Feb 18 01:09:56 PST 1998  Jay Painter <jpaint@serv.net>
+	* gdk/gdk.c: fixed ambigous else compiler warning
+	* gtk/gtkgamma.c: fixed ambigous else compiler warning
+	* gtk/gtkclist.h:
+	* gtk/gtkclist.c: new signals which break everything! (yeah!)
+	* gtk/gtkfilesel.c: fixed to use new clist signals
+
+Wed Feb 18 04:38:24 1998  Tim Janik  <timj@gimp.org>
+
+	* gtk/gtkwidget.h:
+	* gtk/gtkwidget.c:
+	  new signal GtkWidget::set_parent. this signal will be emitted once a
+ 	  widget gets a new/no parent assigned (i.e. from gtk_widget_unparent
+	  and gtk_widget_set_parent).
+
+Wed Feb 18 02:58:50 1998  Tim Janik  <timj@gimp.org>
+
+	* gtk/gtktooltips.h:
+ 	  new functions gtk_tooltips_data_get and
+	  gtk_tooltips_set_tip, gtk_tooltips_set_tips is discouraged now.
+	(_GtkTooltips): removed some fields that were never used.
+	  changed boolean fields to one bit size, to pack together with
+ 	  the delay field.
+ 	(_GtkTooltipsData): added tip_private, renamed tips_text to
+ 	  tip_text.
+	* gtk/gtktooltips.c:
+ 	  (gtk_tooltips_data_get): new function to retrive the
+ 	  _GtkTooltipsData structure of a widget.
+	(gtk_tooltips_set_tip): new function for more extensible tooltips
+	  settings than gtk_tooltips_set_tips which is discuraged now.
+	  removed a bug that caused a stale object_data key to a
+ 	  _GtkTooltipsData structure.
+ 	  removed a bug that caused tips falsly to come up for a grab widget
+ 	  on widgets where events were grabbed from.
+
+1998-02-17  Federico Mena Quintero  <federico@nuclecu.unam.mx>
+
+	* gdk/gdkcc.c: Added some missing newlines on debug messages.
+
+Tue Feb 17 05:41:31 1998  Tim Janik  <timj@gimp.org>
+
+	* gtk/gtkentry.c (gtk_entry_init): invoke gtk_entry_grow_text already
+	  in this place, so the application will never see entry->text==NULL.
+	  (see also ChangeLog entry from Tue Feb 11 1997 on this).
+
+        * gtk/gtkcheckbutton.c:
+        * gtk/gtkradiobutton.c:
+        * gtk/gtktogglebutton.c:
+          applied patch to fix draw_indicator behaviour from Lars Hamann
+          and Stefan Jeske.
+
+        * gtk/gtkmain.h:
+        * gtk/gtkmain.c (gtk_grab_get_current): new function
+          that returns the current grab widget or NULL.
+
+        * gdk/gdkwindow.c (gdk_window_shape_combine_mask): remove
+          shape mask if mask==NULL (provided by Stefan Wille).
+
+Tue Feb 17 00:06:26 1998  Owen Taylor  <owt1@cornell.edu>
+
+	* gtk/gtkpaned.c, gtk/gtk[hv]paned.c: (gtk-fortier-980215-0)
+	  From Patrice Fortier <Patrice.Fortier@aquarel.fr>
+
+	  Add a widget->window for paned windows, so they
+	  can be reparented properly.
+
+Mon Feb 16 23:47:09 1998  Owen Taylor  <owt1@cornell.edu>
+
+	* gtk/gtkviewport.c: (gtk-fortier-980130-0)
+	  From Patrice Fortier <Patrice.Fortier@aquarel.fr>
+	
+	  Eliminate some extra expose events for viewports.
+	  (To be conservative, I set the user's event mask for
+	   both widget->window, and viewport->bin_window  -owt)
+
+Mon Feb 16 23:12:14 1998  Owen Taylor  <owt1@cornell.edu>
+
+	* gtk/gtkmain.c: Make timeout and idle insertion code
+	  use g_list_insert_sorted().
+
+Mon Feb 16 17:35:17 1998  Owen Taylor  <owt1@cornell.edu>
+
+	* gtk/gtktreeitem.c: Use gtk_signal_default_marshaller,
+	  for expand/collapse signals.
+
+Fri Feb 13 19:08:51 1998  Tim Janik  <timj@gimp.org>
+
+	* gtk/gtkclist.c (check_exposures): check for clist !REALIZED.
+	(draw_rows): bail out if the widget isn't drawable.
+	(hadjustment_value_changed): 
+	(vadjustment_value_changed): bail out if clist isn't drawable.
+
+	* gdk/gdk.c (graphics_expose_predicate): check for private != NULL.
+	(gdk_event_get_graphics_expose): check for window != NULL.
+
+Fri Feb 13 00:33:26 1998  Owen Taylor  <owt1@cornell.edu>
+
+	* gtk/testgtk.c (shape_create_icon): Realize window before
+	  creating xpm so it gets the right colormap/visual,
+	  instead of the default one.
+
+Thu Feb 12 23:59:49 1998  Owen Taylor  <owt1@cornell.edu>
+
+	* gtk/gtksignal.[ch] gtk/gtkmain.[ch] gtk/gtkcontainer.[ch]
+	  gtk/gtkselection.[ch] gdk/gdk.[ch] gtktypeutils.h 
+	  
+ 	  Replaced all _interp functions with _full functions.
+	  (_interp functions left in for compatibility until 0.99.5). 
+	  Difference: _full functions take _both_ a C-language callback and a
+	  marshaller, and simply ignore the C-language callback
+	  if the marshaller is present. This allows the destroy notification
+	  to be used without marshalling.
+
+	  gtk_selection_add_handler[_full]() regularized to agree
+	  with other callbacks.
+	
+	  Also, added gtk_input_add_full() to the header file. 
+	  (gtk_input_add_interp() was never there)
+
+	* gtk/gtkmain.[ch] gtk/gtkwidget.c: Idle functions are now prioritized.
+	  Added new function gtk_idle_add_priority to create
+	  an idle with a specified priority (default is zero)
+	  constants #defined - GTK_PRIORITY_[HIGH/INTERNAL/DEFAULT/LOW]
+	  (redraws, resizes run at GTK_PRIORITY_INTERNAL)
+	
+	* gtk/gtkentry.c gtk/testselection.c: changes to keep up with change
+  	  to gtkselection.c. 
+
+	* gtk/gtkentry.c gtk/gtkinputdialog.c gtk/gtklist.c
+	  gtk/gtklistitem.c gtktree.c gtk/gtktreeitem.c testgtkrc:
+
+	  Change style->white to style->base[] where appropriate.
+	  Change the default style to make this apparent. (Yes, its
+	  ugly... it can be removed later)
+	
+Tue Feb 10 15:01:44 1998  Owen Taylor  <owt1@cornell.edu>
+
+	* gtk/gtkobject.c gtk/gtkobject.h: Add a DestroyNotify
+	field, and gtk_object_set_data_full() to match.
+
+	* gtk/gtkobject.c (gtk_object_finalize): ObjectData structures
+	were being added to a free list, then forgotten about. Just
+	rely on GMemChunk instead.
+
+2018-02-11  Federico Mena Quintero  <federico@nuclecu.unam.mx>
+
+	* gtk/gtkclist.c:
+	* gtk/gtkentry.c: 
+	* gtk/gtkfixed.c:
+	* gtk/gtkhandlebox.c:
+	* gtk/gtknotebook.c:
+	* gtk/gtkpaned.c:
+	* gtk/gtkpreview.c:
+	* gtk/gtkrange.c:
+	* gtk/gtkruler.c:
+	* gtk/gtktext.c:
+	* gtk/gtkviewport.c:
+	Fixed unrealize handler to comply with the
+	documentation (which mentions the right thing to do).
+
+Wed Feb 11 00:18:31 1998  Tim Janik  <timj@gimp.org>
+
+	* docs/refcounting.txt: backed out the section "Gnits to care about".
+	* docs/developers.txt: new file, kinda developers FAQ.
+
+	* gtk/gtksignal.c: new function gtk_signal_handler_pending() returning
+	  the id of the next handler pending for that signal or 0.
+	  put struct GtkHandler back into gtksignal.c along with
+ 	  gtk_signal_get_handlers.
+
+Tue Feb 10 07:12:07 1998  Tim Janik  <timj@gimp.org>
+
+        * gtk/gtksignal.h:
+        * gtk/gtksignal.c:
+        ok, there have been several severe bugs in the signal handler
+        referencing and ->next connection stuff. these bugs caused
+        invokations of handlers that are disconnected and - worse -
+        destroyed already. invokation of *destroyd* handlers mean:
+        anything can be executed , because the handler structure can just
+        as well be realocated.
+        at the cost of an extra ->prev field per handler we should have a
+        reasonable stable system now, because of the various places that
+        can cause a handler to be disconnected (*any* handler invokation can
+        cause *any* or *all* handlers to be disconnected, there is no way
+        around a doubly linked list, actually handler disconnection has never
+        worked correctly because of this.
+        handlers are connected together via a *doubly* linked list now, and it
+        is *not* valid to remove a handler out of this list untill all its
+        references have been droped, i.e. handler->ref_count==0.
+        to prevent emissions of disconnected but still referenced handlers,
+        disconnected handlers are simply marked as blocked and get an id of 0
+        which is an invalid signal handler id.
+        the handler->id has been changed to have 28 significant bits (using
+        alignment gaps), since 65536 (old range: guint16) signal connections
+        (as a total) can easily be reached by complex applications.
+        this whole handler thingy is at least as tedious as writing doubly
+        linked list implementations ;)
+
+Mon Feb  9 23:08:16 1998  Owen Taylor  <owt1@cornell.edu>
+
+	* gtk/gtkwidget.c (gtk_widget_unparent): Check for
+	  the RESIZE_NEEDED flag and remove the widget from the list.
+	  Remove the check from gtk_widget_destroy (no longer needed).
+
+	* Unrealize widget _before_ calling "destroy" signal, and
+	  unset VISIBLE flag.
+
+	* Unrealize child widgets _after_ unrealizing parent to improve
+	  visual appearance.
+
+Mon Feb  9 16:42:21 1998  Miguel de Icaza  <miguel@nuclecu.unam.mx>
+
+	* gtk/gtksignal.c (gtk_signal_get_handlers): no longer a private
+	routine;
+	gtksignal.h: export gtk_signal_get_handlers and GtkHandlers type. 
+
+Sun Feb  8 07:06:54 1998  Tim Janik  <timj@gimp.org>
+
+	* gtk/gtkmenu.c (gtk_menu_get_attach_widget): new function to return
+ 	  the widget that the menu is attached to.
+
+Sat Feb  7 11:33:08 1998  Owen Taylor  <owt1@cornell.edu>
+
+	* gdk/gdkgc.c (gdk_gc_copy): use a mask of 0xffffffff
+	  instead of 0xffff, since there are 22 flags currently
+	  defined. (From: Jon Trowbridge <trow@emccta.com>)
+
+	  Changed to something better. ~((~1) << GCLastBit)
+		   (From: from Daniel Stephens <daniel@cheeseplant.org>)
+	
+Sat Feb  7 02:29:01 1998  Tim Janik  <timj@gimp.org>
+
+	* gdk/gdk.c (gdk_event_translate): don't wipe out window_private's x
+	  and y coordinates if the configure notify is only about resizing,
+	  query the correct origin instead.
+
+Wed Feb  4 23:05:28 1998  Scott Goehring  <scott@poverty.bloomington.in.us>
+
+	* gtk/gtkmenufactory.c: menufactories now ref&sink the menus they
+  	create
+
+Thu Feb  5 02:13:08 1998  Tim Janik  <timj@gimp.org>
+
+	* gtk/gtklist.h:
+	* gtk/gtklist.c (gtk_list_remove_items_no_unref): new function
+	  to perform the same actions as gtk_list_remove_items, but
+	  supply the removed widgets with an additional reference count.
+
+	* gtk/gtkmain.c (gtk_main_iteration_do): ignore events
+	  with event_widget == NULL, since they are bogus events
+	  from destroyed GdkWindows, exept for the case where
+ 	  event->type==GDK_PROPERTY_NOTIFY. Always handle expired
+ 	  timeout functions when returning from this function.
+
+	* gtk/gtkwidget.c (gtk_widget_event): ignore GDK_EXPOSE events
+	  if event->window == NULL. Also, if this function couldn't handle
+	  the event for any reason (including failing assumptions), make
+	  the return value to look as if the event had been handled to
+	  avoid further processing (and warnings).
+	  
+	* gtk/gtkwidget.h:
+	* gtk/gtkwidget.c: remove gtk_widget_sink, because there is
+	  no point in providing such a function.
+
+	* gdk/gdk.c (gdk_init): changed options `-name' and `-class'
+	  to `--name' and `--class', because the old names would
+	  confuse getopt(). these arguments have been introduced in the
+	  changes from gtk+970916 to gtk+970925 without a ChangeLog entry,
+	  changing argument names is painful, it would be nice if people
+	  would care about compatibility and consistency in the first place!
+
+Tue Feb  3 15:09:55 1998  Tim Janik  <timj@gimp.org>
+	
+	* docs/widget_system.txt: new file containing notes about
+	  the inner workings of the widget system of GTK+, a widget
+	  flag description and certain invariants about widget states.
+	
+	* docs/refcounting.txt: moved file (previously REFCOUNTING)
+	  introducing The Reference Counting Scheme of GDK an GTK+.
+	  lots of additions/corrections.
+
+        * gtk/gtksignal.c (gtk_signal_real_emit): for the emission
+          of AFTER signals, fetch the objects signals via
+          gtk_signal_get_handlers again. some handlers might have
+          been removed or added. not doing this would mess up the
+          memchunk allocation of signal handlers (this had been
+          triggered by multiple *_while_alive connections), bad, bad, bad!
+          (gtk_handlers_run): do the referencing on signal handlers
+          unconditionally, the invokation of AFTER handlers will now take
+          care of modified lists.
+
+        * gtk/gtksignal.h: added gtk_signal_connect_while_alive.
+
+Tue Feb  3 15:34:27 1998  Owen Taylor  <owt1@cornell.edu>
+
+	* gdk/gdkcolor.c (gdk_colormap_get_system): Only query
+	  the colormap for GRAYSCALE and PSEUDOCOLOR visuals,
+	  and don't ask for more than 256 colors in any case.
+
+	* gdk/gdkwindow.c (gdk_window_internal_destroy): Remove
+	  the input window information when we destroy the window,
+	  not when we are notified of it.
+
+	* gdk/gdkinputcommon.h (gdk_input_device_new): Work around
+	  bug in XFree86 3.3.1's handling of Wacom macro buttons.
+	  by assumming no device will report exactly 25 buttons.
+
+	* gdk/gdkinputcommon.h (gdk_input_common_other_event): Fill
+	  in string translation for generated key press events,
+	  do sanity checking on received key codes.
+
+	* gdk/gdkcc.c (gdk_color_context_new): Allocate enough
+	  room for a GdkColorContextPrivate, not just for a 
+	  GdkColorContext.
+
+Tue Feb  3 15:09:55 1998  Tim Janik  <timj@gimp.org>
+
+	* gtk/testgtk.c: don't add the same menu to different menuitems/
+	  optionmenus.
+
+	* gtk/gtkmenuitem.h:
+	* gtk/gtkmenuitem.c: new function gtk_menu_item_remove_submenu ro
+	  be consistent with optionmenu. use gtk_menu_attach_to_widget/
+	  gtk_menu_detach for setting/removing the submenu.
+	  invoke gtk_widget_destroy(submenu) in destructor to be consistent
+	  with other destructors.
+
+	* gtk/gtkoptionmenu.h: 
+	* gtk/gtkoptionmenu.c: attach/detach to menu widget via
+	  gtk_menu_attach_to_widget/gtk_menu_detach.
+	  invoke gtk_widget_destroy(menu) in destructor to be consistent
+	  with other destructors.
+
+	* gtk/gtkmenu.h: 
+	* gtk/gtkmenu.c: new functions gtk_menu_attach_to_widget
+ 	  and gtk_menu_detach that correspond to the action of
+	  gtk_widget_set_parent and gtk_widget_unparent.
+
+	* gtk/widget.c: few fixups.
+
+Tue Feb  3 00:12:00 1998  Owen Taylor  <owt1@cornell.edu>
+	* gtk/gtktable.c 
+	  Fixed problem with division by zero in row/column-spanned
+	  tables. Also removed a bunch of conditionals by making
+	  the observation that x/1 == x.
+
+Mon Feb  2 04:15:08 1998  Tim Janik  <timj@gimp.org>
+
+	* gtk/gtkwindow.c:
+	* gtk/gtkwidget.c:
+	* gtk/gtkmain.c:
+	* gtk/gtkwidget.c:
+	* gtk/gtkcontainer.c:
+	* gtk/gtkprivate.h (GTK_PRIVATE_UNSET_FLAG) (GTK_PRIVATE_UNSET_FLAGS): 
+	  changed name to reflect that these macros in fact can't operate on
+	  multiple flags.
+
+	* gtk/gtktoolbar.c: fixed destroy handler, so it doesn't
+	  segfault with the new refcounting scheme anymore.
+
+	* gtk/gtkhandlebox.c:
+	* gtk/gtkclist.c:
+	* gtk/gtkentry.c:
+	* gtk/gtkrange.c:
+	* gtk/gtktext.c:
+	* gtk/gtkviewport.c:
+	  enforced
+       	  gdk_window_set_user_data (window, NULL);
+	  gdk_window_destroy (window);
+	  window = NULL;
+	  throughout the code.
+
+	* gtk/gtkmain.c (gtk_propagate_event): fixed a bad, bad referencing
+	  bug that could caused unreferencing of finalized objects.
+
+	* gtk/testgtk.c: destroy fileselection on "OK" (this triggered the
+	  above mentioned bug).
+
+	* gtk/gtkwidget.h:
+	* gtk/gtkwidget.c:
+	* gtk/gtkobject.h:
+	* gtk/gtkobject.c:
+	  implemented and object reference tracer (gtk_trace_referencing) which
+	  is activated if GTK_TRACE_OBJECTS is defined (currently per default).
+	  in gdb: set the static variable `gtk_trace_object' to point to the
+	  object that you want to have reference traced.
+
+	* gtk/gtkfileselection.c: few cleanups.
+
+	* gtk/gtkcolorsel.c:
+	* gtk/gtkcombo.c:
+	* gtk/gtkobject.c:
+	* gtk/gtkselection.c:
+	* gtk/gtkwidget.c:
+	* gtk/gtkwindow.c:
+	  cleanups with key name spaces.
+
+	* gtk/gtkcombo.c: fixed destruction bug with popwin.
+
+	* gtk/gtkcontainer.h: 
+	* gtk/gtkcontainer.c: GTK_RESIZE_NEEDED is a private flag now.
+	  (gtk_container_register_toplevel): new function.
+	  (gtk_container_unregister_toplevel): new function.
+
+	* gtk/gtkmain.c: GTK_LEAVE_PENDING is a private flag now.
+
+	* gtk/gtkmenu.c: call gtk_container_register_toplevel in
+	  gtk_menu_class_init instead of this dirty gtk_widget_set_parent(,NULL)
+	  hack. new default handler gtk_menu_destroy for calling
+ 	  gtk_container_unregister_toplevel. removed GTK_ANCHORED, GTK_UNMAPPED.
+
+	* gtk/gtkobject.h: macro cleanups, added GTK_DESTROYED flag.
+
+	* gtk/gtkobject.c: only emit DESTROY signal if !GTK_OBJECT_DESTROYED
+ 	  (object).
+
+	* gtk/gtkprivate.h: new file that will not be automatically included.
+	  it holds the private flags for GtkWidget along with it's SET/UNSET
+	  and examination macros.
+
+	* gtk/gtkwidget.c: private flags: GTK_RESIZE_NEEDED, GTK_REDRAW_PENDING,
+	  GTK_RESIZE_PENDING, GTK_IN_REPARENT, GTK_USER_STYLE. GTK_ANCHORED is
+ 	  replaced by GTK_TOPLEVEL. added missing UNSET for GTK_IN_REPARENT.
+ 	  removed the gtk_widget_set_parent(, NULL) hack for toplevels.
+	  upon destroy free memory for widgets with GTK_WIDGET_HAS_SHAPE_MASK.
+
+	* gtk/gtkwidget.h: split up the widget flags into a public and a private
+	  portion. added an extra field private_flags to GtkWidget without making
+	  it bigger by using an alignment gap of 16 bit. macro cleanups.
+
+	* gtk/gtkwindow.c: removed GTK_ANCHORED. new function gtk_window_destroy
+	  for calling gtk_container_unregister_toplevel. removed the
+ 	  gtk_widget_set_parent(,NULL), call gtk_container_register_toplevel
+	  instead. remove GTK_UNMAPPED. GTK_RESIZE_NEEDED is private now.
+
+	* gtk/gtksignal.c (gtk_signal_disconnect): removed a bug on
+	  removal that cut off the handler list -> living_objects == 0
+	  with testgtk. made some warnings more descriptive.
+	  new function gtk_signal_connect_object_while_alive, which
+	  will automatically destroy the connection once one of the objects
+	  is destroyed. didn't include this before removal of the above
+	  mentioned bug.
+
+Sat Jan 31 21:26:27 1998  Owen Taylor  <owt1@cornell.edu>
+
+	* gtk/gtkwidget.c: Added a new GTK_IN_REPARENT flag and revised
+	  gtk_widget_reparent so that the child would not be unrealized
+	  unnecessarily. Changed gtk_widget_unrealize () to recursively
+	  unrealize the children (since the child windows will be 
+	  destroyed too.)
+
+Sat Jan 31 00:05:34 PST 1998 Manish Singh <yosh@gimp.org>
+
+	* gtk/gtkcombo.c: changed to use g_strcasecmp
+	* gtk/gtkobject.c: #include <stdlib.h> for atexit
+
+Sat Jan 31 00:13:33 1998  Owen Taylor  <owt1@cornell.edu>
+
+	* gtk/gtkstyle.c: Backed out change to close polygons
+	  since it caused problems for the Notebook.
+
+Fri Jan 30 22:28:09 1998  Owen Taylor  <owt1@cornell.edu>
+
+	* gtk/gtkclist.{c,h}:
+	   - Conformity to new reference counting schemes
+	   - Font and color information is no-longer taken from
+	     the (possibly unitialized) style before the widget
+	     is realized, but is obtained when needed. (Fixes
+	     problems with non-default styles)
+	   - white_gc => base_gc where appropriate
+	   - Handle graphics expose events correctly (or as
+	     correctly as anywhere else) so that scrolling when
+	     overlapped works.
+
+Fri Jan 30 21:32:11 1998  Owen Taylor  <owt1@cornell.edu>
+
+	* gtk/gtkwidget.c (gtk_widget_init): Don't replace the object
+	flags, augment them. (Otherwise we'll clear the FLOATING flag)
+
+Fri Jan 30 23:55:03 1998  Tim Janik  <timj@gimp.org>
+
+	* Incorporation of Marius Vollmer's reference counting revolution,
+	  plus various fixups and additions from myself.
+
+	* gdk/gdk.h:
+ 	* gdk/gdkgc.c: new functions gdk_gc_ref/gdk_gc_unref.
+
+	* gdk/gdkprivate.h: cleanups on ref_count field sizes.
+
+	* gtk/gtkadjustment.c (gtk_adjustment_set_value): new function for
+ 	  emission of GtkAdjustment::value_changed signal.
+
+	* gtk/gtkbin.c:
+	* gtk/gtkcolorsel.c:
+	* gtk/gtkcurve.c:
+	* gtk/gtkentry.c:
+	* gtk/gtkframe.c:
+	* gtk/gtkinputdialog.c:
+	* gtk/gtklabel.c:
+	* gtk/gtkpixmap.c:
+	* gtk/gtkpreview.c:
+	* gtk/gtkrange.c:
+	* gtk/gtktable.c:
+	* gtk/gtkwindow.c:
+	  replaced functionality of gtk_*_destroy by gtk_*_finalize.
+
+	* gtk/gtkbox.c:
+	* gtk/gtkbutton.c:
+	* gtk/gtkfixed.c:
+	* gtk/gtkmenushell.c:
+	* gtk/gtknotebook.c:
+	* gtk/gtkpaned.c:
+	* gtk/gtkscale.c:
+ 	  removed default destroy handler.
+
+	* in general: reference parent->window for NO_WINDOW widgets.
+	  set user data of a GdkWindow to NULL before destruction.
+	
+	* gtk/gtkbutton.c: use gtk_widget_unparent instead of gtk_widget_destroy
+	  in *_set_arg.
+
+	* gtk/gtkcontainer.c: provide other containers with a default destroy
+	  handler that will destroy all children.
+	  new function gtk_container_foreach_interp.
+	  new field resize_widgets.
+
+	* gtk/gtklist.c: handle destruction of children in gtk_list_destroy.
+	  replaced occourances of gtk_widget_destroy with gtk_widget_unparent.
+	  reference children that are in the selection list.
+
+	* gtk/gtkmain.c: reference grab widgets.
+	  (gtk_get_event_widget): check for event.window != NULL. Note: this
+ 	  function may return NULL now!.
+	  (gtk_propagate_event): much simplified by using proper reference
+ 	  counting.
+
+	* gtk/gtkmenu.c: introduce GTK_TOPLEVEL, and gtk_widget_set_parent(,
+	  NULL) hack.
+
+	* gtk/gtkmenuitem.c: gtk_widget_(un)ref the submenu.
+
+	* gtk/gtkmenushell.c: check for return value of gtk_get_event_widget.
+
+	* gtk/gtknotebook.c: proper gtk_widget_unparent()ing.
+
+	* gtk/gtkobject.c: new functions gtk_object_finalize,
+ 	  gtk_object_notify_weaks, gtk_object_debug, gtk_object_sink,
+ 	  gtk_object_weakref, gtk_object_weakunref. implementation of the new
+	  reference counting scheme for gtkobjects (consult gtk+/REFCOUNTING).
+
+	* gtk/gtkoptionmenu.c: proper reference counting for option_menu->menu.
+
+	* gtk/gtkscrolledwindow.c: new finalize handler for proper referencing
+	  of the subwidgets.
+
+	* gtk/gtksignal.c: internal representation of signal_type is now 16 bit
+	  instead of 13 bits. this is needed because of user signals.
+	  new functions gtk_signal_handler_ref and gtk_signal_handler_unref
+ 	  (replacement for gtk_signal_handler_destroy).
+	  gtk_signal_emit, gtk_signal_emit_by_name, gtk_signal_real_emit used
+ 	  to return the existence of a GtkObject. this will always be TRUE now,
+	  therefore the return value is now void.
+
+	* gtk/gtktooltips.h:
+	* gtk/gtktooltips.c: GtkTooltips is now a descendant of GtkData and
+	  therefore a real GtkObject.
+
+	* gtk/gtktree.c: reference changes similar to thos in gtklist.c.
+
+	* gtk/gtktreeitem.c: reference th e pixmaps properly.
+
+	* gtk/gtktypeutils.h:
+	* gtk/gtktypeutils.c: new function gtk_arg_copy() to conform to
+	  the requirements of gtk_object_get().
+
+	* gtk/gtkviewport.c: finalize handler for proper referencing of the
+	  adjustments.
+
+	* gtk/gtkwidget.c: substituted VISIBILITY_NOTIFY_EVENT by NO_EXPOSE_EVENT.
+ 	  added finalize handler. added gtk_widget_ref/gtk_widget_unref.
+	  new functions gtk_widget_idle_draw and gtk_widget_idle_sizer, that
+	  will handle all widgets that are currently in either queue.
+	  referencing all over the place. changes because gtk_signal_emit
+ 	  returns void now. moved queue removal into the destroy handler.
+	  gtk_widget_real_unrealize propagates now down the tree. new flag
+	  GTK_TOPLEVEL. new function gtk_widget_destroyed for connection to the
+	  destroy signal of a widget. this function nullifies the widgets
+	  structure pointer, look at gtkmain.c for an example on this.
+
+	* gtk/gtkwindow.c: new functions gtk_window_activate_focus,
+	  gtk_window_activate_default. for activation of the appropriate
+	  children. changes to the resizing code because there is a new
+	  field resize_widgets in GtkContainer now.
+
+	* gtk/testgtk.c: some changes because of all the above ;)
+
+Fri Jan 30 17:41:06 1998  George Lebl  <jirka@5z.com>
+
+	* gtk/gtktable.c: fixed round-off error in calculation
+	  of tabels with a lot of cells
+
+Fri Jan 30 08:51:16 1998  Federico Mena  <federico@bananoid.nuclecu.unam.mx>
+
+	* gdk/gdkcc.c (gdk_color_context_get_pixel): red/green/blue
+ 	parameters are now expected to be in [0, 65535], to be consistent
+ 	with the rest of Gdk.
+	(gdk_color_context_get_pixels): Made it use 16-bit color values as
+ 	well.  Fixed mdist=1000000 buglet (it should start with at least
+ 	0x1000000).
+	(gdk_color_context_get_pixels_incremental): Same as
+	gdk_color_context_get_pixels().
+
+Thu Jan 29 22:57:39 1998  Owen Taylor  <owt1@cornell.edu>
+
+	* gtk/gtkstyle.c (gtk_default_draw_polygon): Close
+	  the polygon if it isn't already. (To match gtk_draw_polygon)
+	  Simplified logic. (Appearance could probably be
+	  improved for objects with gradual curves by adding in
+	  some intermediate edge coloration)
+
+Thu Jan 29 21:36:14 1998  Tim Janik  <timj@gimp.org>
+
+	* gtk/gtksignal.c (gtk_signal_query): new function to gather
+ 	  information about a certain signal.
+
+	* gtk/gtksignal.c (gtk_signal_newv): new function similar to
+ 	  gtk_signal_new().
+
+	* gtk/gtksignal.c (gtk_signal_real_emit): check for function_offset
+	  == 0.
+
+	* gtk/gtksignal.c (gtk_signal_connect_by_type): perform a signal
+	  id lookup on the parent as well.
+
+	* gtk/gtkobject.c (gtk_object_class_add_user_signal): new
+	  function for implementation of user defined signals.
+	* gtk/gtkobject.c (gtk_object_class_add_signals): free old
+	  signal id array.
+
+	* gtk/gtkobject.h: this holds the typedefs for GtkSignalFunc and
+	  GtkSignalMarshaller now, because they are used for
+	  gtk_object_class_add_user_signal.
+
+	* gtk/gtktypeutils.c (gtk_type_class_init): reset object_class->signals
+	  and object_class->nsignals for new object classes.
+
+Tue Jan 27 15:52:48 1998  Federico Mena  <federico@bananoid.nuclecu.unam.mx>
+
+	* gtk/gtkhandlebox.c (gtk_handle_box_realize): The auto_shrink
+	policy of the floating window is now set to TRUE.  This fixes the
+	problem of the floating window being too big when the handlebox
+	child is small.
+	(gtk_handle_box_motion): Now we use GDK_POINTER_MOTION_HINT_MASK
+	to improve movement.
+
+Tue Jan 27 14:15:50 CST 1998 Shawn T. Amundson <amundson@gimp.org>
+
+        * docs/gtkfaq.sgml: more additions/changes Tony Gale.
+
+Mon Jan 26 17:12:12 CST 1998 Shawn T. Amundson <amundson@gimp.org>
+
+	* docs/gtkfaq.sgml: additions/changes from new FAQ maintainers
+          Nathan Froyd and Tony Gale.
+
+Mon Jan 26 16:54:02 CST 1998 Shawn T. Amundson <amundson@gimp.org>
+
+	* docs/gtk.texi: additions/changes from Gregory A. McLean
+
+Mon Jan 26 02:15:29 1998  Tim Janik  <timj@gimp.org>
+
+	* gdk/gdkdraw.c:
+	* gdk/gdkgc.c:
+	* gdk/gdkimage.c:
+	* gdk/gdkinput.c:
+	* gdk/gdkpixmap.c:
+	* gdk/gdkproperty.c:
+	* gdk/gdkselection.c:
+	* gdk/gdkwindow.c: added a bunch of checks for window != NULL and
+	  private->destroyed.
+
+Sun Jan 25 19:15:32 1998  Tim Janik  <timj@gimp.org>
+
+	* gtk/gtkwidget.h (enum): added new widget flag GTK_LEAVE_PENDING.
+	* gtk/gtkmain.c (gtk_main_iteration_do): if a widget has
+ 	  GTK_LEAVE_PENDING set, send it its LEAVE_NOTIFY event, regardless
+ 	  of a grab or sensitivity.
+	  changed the compression code for enter/leave notify events to
+	  free *both* compressed event, and removed an unneccessary call
+	  to g_list_remove.
+
+	* ChangeLog: finally catched up with the recent changes on my part.
+
+	* gtk/gtkobject.h: new element n_args in GtkObjectClass.
+	* gtk/gtkobject.c (gtk_object_query_args): this function now returns
+ 	  the arguments in the correct order.
+
+        * gtk/gtkbox.c:
+ 	* gtk/gtkbutton.c:
+ 	* gtk/gtkcontainer.c:
+ 	* gtk/gtkframe.c:
+	* gtk/gtklabel.c:
+ 	* gtk/gtkobject.c:
+ 	* gtk/gtkwidget.c:
+ 	* gtk/gtkwindow.c: various fixes and additions to the gtk_*_set_arg
+ 	  and gtk_*_get_arg() functions.
+
+	* gdk/gdk.h:
+	* gdk/gdk.c (gdk_pointer_is_grabbed): new function.
+
+	* gtk/gtkmain.h:
+	* gtk/gtkmain.c: implementations of gtk_invoke_key_snoopers(),
+	  gtk_key_snooper_install() and gtk_key_snooper_remove(). this
+	  mechanism allowes applications to track global hot keys that need
+ 	  to bypass accelerator tables and else key processing stuff.
+
+Thu Jan 22 18:58:44 1998  Federico Mena  <federico@bananoid.nuclecu.unam.mx>
+
+	* gdk/gdkcc.c: Switched the file to GNU indentation, for consistency.
+
+	* gdk/gdktypes.h (struct _GdkColorContext): Picky, picky... fix
+	two lines with wrong indentation :-)
+
+Thu Jan 22 02:32:06 1998  Scott Goehring  <scott@poverty.bloomington.in.us>
+
+	* gtk/Makefile.am: Fixed the call to runelisp to use $(SHELL).
+  	  (Cannot rely on the script having execute permissions.)
+
+Wed Jan 21 17:29:54 CST 1998 Shawn T. Amundson <amundson@gimp.org>
+
+	* Released 0.99.3
+
+Wed Jan 21 01:32:21 1998  Tim Janik  <timj@psynet.net>
+
+	* gtk/gtkwidget.h:
+	* gtk/gtkwidget.c: changed the state_changed signal to take an
+ 	  extra argument `old_state'.
+	  removed `gtk_widget_restore_state'.
+	  changed `gtk_widget_set_state' and `gtk_widget_set_sensitive' to use
+	  only one function `gtk_widget_propagate_state' to iterate down the
+	  tree. this causes GtkWidget::state_changed to be invoked on state
+	  changes and on sensitivity changes. some comment cleanups.
+
+Tue Jan 20 16:38:52 1998  Owen Taylor  <owt1@cornell.edu>
+	* gtk/gtkcombobox.{c,h}: removed
+	  gtk/gtkcombo.{c,h}: added [Paolo Molaro's version]
+	  gtk/testgtk.c: changed to use new version
+	  gtk/Makefile.am gtk/gtk.h
+	
+Mon Jan 19 20:10:19 CST 1998 Shawn T. Amundson <amundson@gimp.org>
+
+	* gdk/gdk.h Fixed typo where strdup was used instead of g_strdup
+          (found by Frank Neumann)
+
+Mon Jan 19 16:21:00 1998  Federico Mena  <federico@bananoid.nuclecu.unam.mx>
+
+	* gtk/gtktoolbar.c (gtk_toolbar_class_init): Set
+	container_class->focus to NULL.  Widgets in the toolbar should not
+	get the focus via the normal key bindings (no toolkit does this,
+	and it makes sense).
+
+	* gtk/testgtk.c (create_toolbar): Removed the GTK_PIXMAP casts to
+	match Eckehard's new prototypes.
+
+	* gtk/gtktoolbar.h: Switched the order of the tooltip_text and
+	widget parameters to the gtk_toolbar_*_widget() functions, to be
+	friendlier to the C++ bindings.  This is per request of Guillaume
+	Laurent.
+
+Mon Jan 19 09:16:38 1998  Tim Janik  <timj@psynet.net>
+
+	* gtk/gtkmain.c (gtk_grab_add) (gtk_grab_remove): this is a stack
+ 	  of grabbing widgets now, having unique entries. the GTK_HAS_GRAB
+	  flag of a widget is set while it is on the stack (wasn't
+	  implemented before).
+
+Mon Jan 19 00:46:18 1998 MET  Eckehard Berns  <eb@berns.prima.de>
+
+	* gtk/gtktoolbar.[ch]: changed
+ 	  gtk_toolbar_{append,prepend,inser]_item to accept any GtkWidget
+ 	  as icon to allow more flexibility
+
+Sun Jan 18 16:54:55 CST 1998 Shawn T. Amundson <amundson@gimp.org>
+	* gtk/gtkstatusbar.[ch] added new widget, the statusbar
+
+Sun Jan 18 09:57:00 1998  Owen Taylor  <owt1@cornell.edu>
+
+	* gtk/gtkbutton.c gtk/gtkclist.c gtk/gtkdrawingarea.c
+	  gtk/gtkentry.c gtk/gtkeventbox.c gtk/gtkfixed.c
+	  gtk/gtkhandlebox.c gtk/gtkhscale.c gtk/gtkhscrollbar.c
+	  gtk/gtkitem.c gtk/gtklist.c gtk/gtkmenushell.c gtk/gtkmisc.c
+	  gtk/gtknotebook.c gtk/gtkpaned.c gtk/gtkpreview.c
+	  gtk/gtkprogressbar.c gtk/gtkruler.c gtk/gtktext.c gtk/gtktree.c
+	  gtk/gtkviewport.c gtk/gtkvscale.c gtk/gtkvscrollbar.c
+	  gtk/gtkwidget.{c,h}
+
+	Added gtk_widget_set_parent_window() and 
+	gtk_widget_get_parent_window(). All widgets should use:
+	
+	   gtk_widget_get_parent_window() instead of widget->parent->window.
+	
+	Any widget that wants to have children not in the parent window,
+	should use gtk_widget_set_parent() in their realize() and
+	add() routines. 
+
+	CList and Viewport widgets changed to do this. (Viewport
+	widget using code from gtk-fortier-980117-0.patch.)
+
+Sat Jan 17 23:56:02 1998  Owen Taylor  <owt1@cornell.edu>
+
+	* gtk/gtkobject.c:
+	   renamed g_string_equal => g_str_equal
+	   renamed g_string_hash => g_str_hash
+
+Sun Jan 18 03:57:52 1998  Tim Janik  <timj@psynet.net>
+
+	* gtk/gtkframe.c: gtk_*_get_arg() and gtk_*_set_arg() implementations.
+	* gtk/gtkobject.c: new arg `GtkObject::object_signal' similar to
+	  `GtkObject::signal'. check for class type in gtk_object_{setv|getv}.
+
+	* gtk/gtkobject.c:
+	* gtk/gtksignal.c:
+	* gtk/gtktypeutils.h:
+	* gtk/gtktypeutils.c: added GTK_TYPE_DOUBLE.
+
+	* gtk/gtkwidget.c: new args `has_focus' and `has_default'.
+	* gtk/gtkwindow.c: new arg `window_position'.
+
+	* gtk/gtkbox.h:
+	* gtk/gtkbox.c: new functions gtk_box_reorder_child,
+	gtk_box_query_child_packing and gtk_box_set_child_packing to
+	allow modification of the child linkage after the widget tree
+	is setup.
+
+	* gtk/gtkbox.c:
+        * gtk/gtklabel.c:
+        * gtk/gtkwindow.c:
+	* gtk/gtkwidget.c:
+        * gtk/gtkobject.c: gtk_*_get_arg() and gtk_*_set_arg() fixes
+          and implementations.
+	
+Sat Jan 17 18:06:35 1998  Owen Taylor  <owt1@cornell.edu>
+	* gdk/gdk.c (gdk_events_pending): Take putback events into
+	  account
+
+	* gdk/gdk.c (gdk_event_free): Handle dropdataavaible memory
+	  allocation correctly. (Incompatible change: client must
+	  _not_ fre event->data and event->data_type.)
+
+	* gdk/gdk.c (gdk_event_translate): Changed DND dragging
+	  so that we don't ungrab pointer when we reenter window
+	  to prevent extra Enter/Leave effects which had bad
+	  effects.
+          Changed drag zone handling to not send uncessary
+	  DragEnter events.
+          Fixed EnterNotify/LeaveNotify handling. (Only pay
+	  attention to events on window, don't specify these
+	  events to XGrabPointer - that isn't valid, and handle
+          reverse the sense of the handling of LeaveNotify.)
+
+	* gdk/gdkwindow.c (gdk_window_remove_filter): Free removed
+	  filter.
+
+	* gtk/gtk.defs (GdkFont): gdk_font_free => gdk_font_unref
+
+	* gtk/gtkmain.{c,h} (gtk_events_pending): new function - apps
+	  should use this instead of gdk_events_pending.
+
+	* gtk/gtkvbbox.h: Fixed a duplication in the headers.
+
+	* gtk/testgtk.c (dnd_drop): Don't free the drop data,
+	  it belongs to the event.
+
+Sat Jan 17 13:26:15 CST 1998 Shawn T. Amundson <amundson@gimp.org>
+
+	* gtk/gtkentry.[ch]:  Applied patch from <lupus@lettere.unipd.it> 
+          which adds gtk_entry_set_max_length function.  This was 
+          part of gtk-lupus-970112-0.
+
+	* gtk/testgtk.c: Applied gtk-wille-980113-0 which fixes 
+          a problem with a shaped widget keeping grab forever
+          when double clicked.
+     
+        * docs/gtk.texi: patch from Gregory McLean <gregm@randomc.com>
+          to add some on aspect_frame, button_box, and color_selection
+          widgets
+
+Sat Jan 17 06:24:05 1998  Tim Janik  <timj@psynet.net>
+
+	* gtk/gtktypeutils.h (gtk_type_get_arg): new function.
+	* gtk/gtkobject.h (gtk_object_query_args): new function.
+	* gtk/gtkobject.h (gtk_object_getv): new function.
+	* gtk/gtkwidget.h (gtk_widget_get): new function.
+
+Fri Jan 16 00:36:31 1998  Federico Mena  <federico@bananoid.nuclecu.unam.mx>
+
+	* gtk/gtkhandlebox.c: Now we use a GtkWindow of type
+	GTK_WINDOW_DIALOG as a destination for reparenting the child of
+	the handle box.  This solves the problem of having X calls in
+	Gtk.  It also makes the handle box work with KWM, OLVWM, 4Dwm (so
+	I expect mwm to work as well).  I hadn't noticed that previously
+	it only worked with fvwm and twm.
+
+	* gtk/gtkhandlebox.h (struct _GtkHandleBox): Removed the
+	real_parent field, as it is never used.
+	(struct _GtkHandleBox): Added a float_window field.  This is a
+	GtkWindow to where the child is now reparented.
+
+	* gtk/gtkhandlebox.c: Lots of changes all over the place.  Now the
+	widget has two windows.  The steady_window stays put in the parent
+	container, and the widget->window is the one that gets
+	reparented.  Now that window is transient, in compliance with the
+	ICCCM, instead of an OverrideRedirect window.
+
+	We have two windows so that we can properly receive Expose events
+	for the thin 3D line that marks the place where the handlebox is
+	docked.
+
+	* gtk/gtkhandlebox.h (struct _GtkHandleBox): Added fields for
+	dragging (mouse position information).  Added fleur_cursor so that
+	we look pretty.  Added steady_window field; it is the window that
+	actually stays on the parent (widget->window is the one that gets
+	reparented).
+
+Thu Jan 15 19:03:19 1998  Miguel de Icaza  <miguel@nuclecu.unam.mx>
+
+	* gtk/gtkclist.c (gtk_clist_set_column_width): Call
+	gtk_clist_size_allocate_columns every time the column
+	configuration changes. 
+
+Fri Jan 16 01:55:17 1998  Tim Janik  <timj@psynet.net>
+
+	* improved the gtk_widget_set handling. removed GtkArgFunc and added
+	  GtkArgSetFunc and GtkArgGetFunc in _GtkTypeInfo.
+	  performance consuming strcmp() calls are avoided in gtk_*_set_arg()
+	  now, it is passed an arg_id on which it can switch() now.
+
+	* gtk/gtkobject.h:
+	* gtk/gtkobject.c (gtk_object_add_arg_type): added parameter arg_id.
+
+	* gtk/gtktypeutils.h:
+	* gtk/gtktypeutils.c (gtk_type_set_arg): added parameter arg_id.
+
+	* gtk/gtkobject.c: bug fixes and changes in the assertion system for
+	  arg handling. changed g_print() warning calls to real g_warning()s.
+	  
+	* changed all *_get_type() functions to initialize GtkTypeInfo
+	  correctly with GtkArgSetFunc and GtkArgGetFunc fields.
+
+Thu Jan 15 00:44:27 PST 1998 Jay Painter <jpaint@serv.net>
+	* gtk/gtkentry.[ch]: Change window cursor to "I"
+	* gtk/gtkpane.[ch]: Cleared up a tiny memory leak from not destroying the
+	cursor
+
+Tue Jan 13 07:30:02 PST 1998 Jay Painter <jpaint@serv.net>
+	* gtk/gtkclist.c: minor updates
+	* gtk/gtktext.c: you can type in it!  It should also seg-fault *MUCH* less now,
+	because editing was never really turned off.  
+	* gtk/testgtk.c: changed the gtktext test a little
+	* gtk/testgtkrc: removed pixmap background for now, since I intend to break
+	that for a while
+
+1998-01-13  Federico Mena Quintero  <federico@nuclecu.unam.mx>
+
+	* gtk/gtktoolbar.c: (gtk_real_toolbar_style_changed): Fixed
+	child->icon and child->label == NULL bugs.
+
+	* gtk/gtktoolbar.h: Added some new functions:
+		gtk_toolbar_append_widget()
+		gtk_toolbar_prepend_widget()
+		gtk_toolbar_insert_widget()
+	These let the user insert any kind of widget in the toolbar.  Also
+	changed the gtk_toolbar_*_item() functions to return a
+	GtkWidget * so that the user can do things with the toolbar buttons.
+
+	* gtk/gtktoolbar.c: Now the toolbar supports its own buttons and
+	arbitrary widgets as well.  Geometry management has been changed
+	accordingly.  Added gtk_toolbar_remove() function, so container
+	functionality should be complete now.
+
+	* gtk/testgtk.c (create_toolbar): Added an entry widget to test
+	the new toolbar.
+
+	* Most of these changes are adapted from the
+	gtk-lupus-970112-0-patch (should be 970112... :-)
+
+Sat Jan  9 20:52:00 PST 1998 Ian Main <imain@gimp.org>
+	* gtk/gtkfilesel.c:  Changed a few tests in the path correcting
+		function.  Hopefully this helps the filesel stability.
+
+Fri Jan  8 00:55:00 PST 1998 Jay Painter <jpaint@serv.net>
+	* gtk/gtkclist.c:
+	* gtk/gtkclist.h: modifications to GtkCList so it's look and 
+	feel is the same as scrolled windows.
+
+Thu Jan  8 17:56:09 PST 1998 Manish Singh <yosh@gimp.org>
+
+	* glib/gscanner.c
+	* gtk/gtclist.c
+	* config.h.in
+	* configure.in: added test for inline and put the inline keywords
+	back in
+
+	* gtk/gtklabel.c: made the prototypes match the definitions
+
+	* gtk/fnmatch.c: minor change to make sure the right config.h
+	gets included
+	
+1998-01-07  Elliot Lee  <sopwith@localhost.cs.cuc.edu>
+
+	* gtk/gtkcombobox.c gtk/gtkcombobox.h: New widget, GtkComboBox
+	* gdk/gdkwindow.c: Make gdk_window_init set the width &
+		height of gdk_root_parent
+
+Wed Jan  7 18:06:17 PST 1998 Manish Singh <yosh@gimp.org>
+
+	* gtk/gtkentry.c:
+	* gtk/gtkentry.h: applied patch to use a backing pixmap for
+	drawing, which removes the bad flickering. (gtk-wille-980106-0)
+
+Wed Jan  7 02:14:30 PST 1998 Manish Singh <yosh@gimp.org>
+
+	* glib/glib.h
+	* glib/glist.c
+	* glib/gslist.c
+	* glib/testglib.c: Added g_[s]list_insert_sorted function
+	and appropriate tests in testglib
+
+Tue Jan  6 17:09:46 1998  Owen Taylor  <owt1@cornell.edu>
+	* gtk/gtknotebook.h gtk/gtknotebook.c
+	   Added "switch_page" signal. (gtk-hamann_jeske-971212-0.patch)
+
+Tue Jan  6 17:07:29 1998  Owen Taylor  <owt1@cornell.edu>
+	* gtk/gtkentry.c gtk/gtkentry.h gtk/testgtk.c : 
+	   Fixed problem with deleting while text is selected.
+	   Changed behavior so that motion keys remove selection.
+	   Added new gtk_entry_select_region () call.
+
+Sat Jan  3 20:23:25 1998  Owen Taylor  <owt1@cornell.edu>
+	* glib/glib.h: Changed guint32 -> guint for bitfields. 
+	  (Bitfields must be int or unsigned int?)
+
+Sat Jan  3 15:39:45 PST 1998 Jay Painter <jpaint@serv.net>
+	* gtk/testgtk.c: better CList test
+
+Sat Jan  3 11:09:51 CST 1998 Shawn T. Amundson <amundson@gimp.org>
+	* GTK+ 0.99.2 Released
+
+Sat Jan  3 11:09:51 CST 1998 Shawn T. Amundson <amundson@gimp.org>
+
+	* gtk/gtkscrolledwindow.c: initialize scrollbar_spacing
+	  (gtk-fortier-980103-0)
+
+Sat Jan  3 10:15:08 1998  Scott Goehring  <scott@poverty.bloomington.in.us>
+
+	* configure.in: fixed a typo (no_xext_lib, not no_ext_lib).
+
+Sat Jan  3 00:41:28 PST 1998 Manish Singh <yosh@gimp.org>
+
+	* gtk/gtkentry.c:
+	* gtk/gtkentry.h: applied Gordon Matzigkeit's patch to add
+	fixed-length entry fields (gtk_entry_new_with_max_length)
+	
+Fri Jay  2 23:52 PST 1998 Jay Painter <jpaint@serv.net>
+	* reverted glibconfig.h and glib.h files back to the
+	way they were before my ugly hack
+	* gtk/gtkclist.c:
+	* glib/gscanner.c: removed inlines from clist and gscanner
+
+Fri Jan  2 23:55:24 CST 1998 Shawn T. Amundson <amundson@gimp.org>
+
+	* Several portability fixes from Michael Callahan 
+          <callahan@xmission.com> including adding in missing
+ 	  #includes and adding void in function prototypes.
+
+Fri Jan  2 19:28:52 1988 Jay Painter <jpaint@serv.net>
+	* gtk/gtkclist.h:
+	* gtk/gtkclist.c:
+	* gtk/gtk.h:
+	* gtk/testgtk.c:
+	* gtk/testgtkrc: added GtkCList, column list widget, and a small test
+	to testgtk
+
+Fri Jan  2 15:42:51 1998  Federico Mena  <federico@bananoid.nuclecu.unam.mx>
+
+	* gtk/gtkmain.c (gtk_main_iteration): Make the big switch handle
+	GDK_NO_EXPOSE and GDK_VISIBILITY_NOTIFY events.
+
+Fri Jan  2 12:07:33 CST 1998 Shawn T. Amundson <amundson@gimp.org>
+
+	* gtk/gtkviewport.c: corrects a small resize bug in the 
+          viewport widget.  The viewport widget provides a _set_shadow 
+          function to draw its shadows. But if GTK_SHADOW_NONE is sent 
+          to this function, the viewport isn't resized correctly (it's 
+          still considered as a shadowed widget).  (gtk-fortier-971213-0)
+
+	* gtk/gtknotebook.c: this patch fixes the redraw problems of 
+          notebook tabs, without using gdk_gc_set_clip_rectangle.
+          (gtk-hamann_jeske-971218-0)
+ 
+	* add gtk_widget_(show/hide)_all (Stefan Wille)
+          (gtk-wille-301297-0)  Patch for testgtk not included
+          because it did not patch clean.  
+
+Thu Jan  1 21:21:56 PST 1998 Manish Singh <yosh@gimp.org>
+
+	* configure.in: fixed up the xinput test
+	* Miscellaneous portability fixes.
+
+Mon Dec 29 22:05:45 1997  Miguel de Icaza  <miguel@nuclecu.unam.mx>
+
+	* gdk/gdkgc.c (gdk_gc_copy): New function, used to copy the values
+	from one gc to another gc.
+
+Sat Dec 27 20:39:99 1997  Elliot Lee <sopwith@redhat.com>
+	* gtk/gtkhandlebox.c: It mostly works now, please test it and make
+	fixes as needed.
+
+Fri Dec 26 11:20:03 1997  Scott Goehring  <scott@poverty.bloomington.in.us>
+
+	* gtk/Makefile.am (gtkinclude_HEADERS): added gtkhandlebox.c
+
+	* gtk/gtkhandlebox.c (gtk_handle_box_reparent): eliminated a
+	compiler warning caused by not casting an argument in a debugging
+	message. :)
+
+Fri Dec 26 02:59:39 1997  Federico Mena  <federico@bananoid.nuclecu.unam.mx>
+
+	* gdk/gdktypes.h gdk/gdk.c gdk/gdkwindow.c: Added new
+ 	GDK_NO_EXPOSE and GDK_VISIBILITY_NOTIFY events.  They are needed
+ 	for Alan Cox's TV widget and for GtkXmHTML.  Only missing with
+ 	respect to their Xlib counterparts are the major_code and
+ 	minor_code fields from the GdkEventNoExpose structure.  Does
+ 	anyone need them?
+
+Tue Dec 23 03:03:17 1997  Tim Janik  <timj@psynet.net>
+
+	* gtk/gtkscrolledwindow.c (SCROLLBAR_SPACING): this macro computes
+	the spacing from klass->scrollbar_spacing now. adapted all functions
+	that used this macro (based on a patch from Patrice Fortier).
+	* gtk/gtkscrolledwindow.h (struct _GtkScrolledWindowClass): added
+	scrollbar_spacing to substitute a define (patch from Patrice Fortier).
+
+	* gtk/gtkrc.h (gtk_rc_parse_string): new function.
+	* gtk/gtkrc.c: many functions adapted to use GScanner for scanning.
+ 	(gtk_rc_parse): use gtk_rc_parse_any for parsing.
+	(gtk_rc_parse_string): new function to support parsing from
+	strings, just calls gtk_rc_parse_any.
+	(gtk_rc_parse_any): new function using GScanner as lexer.
+
+Thu Dec 18 23:46:11 CST 1997 Shawn T. Amundson <amundson@gimp.org>
+
+        * GDK support for 1 bpp depth screens.
+
+Thu Dec 18 23:46:11 CST 1997 Shawn T. Amundson <amundson@gimp.org>
+
+	* Changes from Bolliet Jerome <bolliet@in2p3.fr> to gtktree.
+          Corrects a bug in gtk_tree_remove_items and gtk_tree_item_destroy.
+          Adds the possibility to connect all items by lines. This is the 
+          default now.  You can overide this with the function 
+          gtk_tree_set_view_line which take a tree and a boolean.
+
+Thu Dec 18 23:26:49 CST 1997 Shawn T. Amundson <amundson@gimp.org>
+
+	* removed configure, Makefile.in, and aclocal.m4 files
+
+Wed Dec 17 23:36:57 1997  Scott Goehring  <scott@poverty.bloomington.in.us>
+
+	* gdk/gdkcc.c (gdk_color_context_free): Caught a stray
+	gdk_colormap_destroy that Owen missed (and Shawn found).
+
+Wed Dec 17 20:59:52 1997  Owen Taylor  <owt1@cornell.edu>
+	* gdk/gdkinput.c gdk/gdkinput.h gdk/gdkinputcommon.h
+	  gdk/gdkinputxfree.h gdk/gdkinputgxi.h gdk/gdkinputnone.h.
+	  gtk/gtkinputdialog.h gtk/testinput.c
+	Added support for device keys mapping to key events.
+	Fixed various bugs.
+
+Wed Dec 17 20:53:00 1997  Owen Taylor  <owt1@cornell.edu>
+	* gdk/gdk.c gdk/gdk.h: Changed gdk_get_event to remove
+	predicate filtering, and to allocate the events.
+	Added gdk_event_get_graphics_expose for scroll handling.
+	* gtk/gtkmain.c gtk/gtktext.c:
+	Use above changes. Interface change for gtk_get_current_event.
+	* testgtk.c
+	Added another test to test new scrolling mechanism.s
+	* gdk/gdk.c gdk/gdk.h gdk/gdkwindow.c gdk/gdkprivate.h: 
+	Added beginnings of event filtering. Removed obsolte
+	OtherEvent mechanism.
+	* gdk/gdk.c: Combined FocusIn/FocusOut events. Now ignore
+	focus events which aren't for window itself. (Only pay
+	attention to NotifyAncestor/Inferior/Nonlinear)
+	* gtk/gtkwindow.c gtk/gtkwindow.h: Virtualize set_focus 
+	function so it can be overridden.
+	* gtk/gtkwidget.c: Reparenting should now work for
+	containers. (Guillaume Laurent <glaurent@worldnet.fr>)
+	* gdk/gdkgc.c: By default, GraphicsExpose events are now
+	_not_ generated.
+	* gtk/testselection.c: Suppress a warning, fix a bug?
+
+Wed Dec 17 20:47:42 1997  Owen Taylor  <owt1@cornell.edu>
+	* configure.in, glib/configure.in: 
+	Remember if user set CFLAGS, so we can set it for --enable-debug
+	  only if they didn't. 
+	Added missing quotes. )Raphael.Quinet@eed.ericsson.se)
+	Only use -DX_LOCALE if setlocale doesn't work.
+	* gdk/gdki18n.h: Simplified system for trying to get iswalnum() -
+	include <wctype.h> if present, otherwise <wchar.h> if present.
+	
+Wed Dec 17 21:09:12 1997  Owen Taylor  <owt1@cornell.edu>
+  1997-10-13  Marius Vollmer  <mvo@zagadka.ping.de>
+
+    Bug fixes:
+	
+	* gtksignal.c (gtk_params_get): Initialize the GtkArg even when
+	the return type is GTK_TYPE_NONE.
+
+    Revamped reference counting, see the file REFCOUNTING.
+
+	* Makefile.am (EXTRA_DIST): Added REFCOUNTING.
+	* REFCOUNTING: New file.
+
+	* gdk/gdk.c (received_destroy_notify, window_to_destroy): Removed.
+	(gdk_event_get): Code that deals with the above removed.
+	(gdk_event_translate): Abort when the GdkWindow for the XEvent
+	cannot be found.  For DestroyNotify: Do not use
+	receive_destroy_notify and window_to_destroy but call
+	gdk_window_destroy_notify.
+
+	* gdk/gdk.h: (gdk_pixmap_destroy, gdk_colormap_destroy,
+	gdk_fontset_free): Removed.
+	(gdk_pixmap_ref, gdk_pixmap_unref, gdk_bitmap_ref,
+	gdk_bitmap_unref): New prototypes.
+	(gdk_font_free, gdk_font_unref): Renamed gdk_font_free to
+	gdk_font_unref.
+
+	* gdk/gdkcolor.c (gdk_colormap_real_destroy): Made static.
+	(gdk_colormap_destroy): Removed.
+
+	* gdk/gdkfont.c (gdk_font_free): Renamed to gdk_font_unref.
+	Handle fontsets as well.
+	(gdk_fontset_free): Removed.
+
+	* gdk/gdkpixmap.c (gdk_pixmap_destroy): Removed.
+	(gdk_pixmap_ref, gdk_pixmap_unref, gdk_bitmap_ref,
+	gdk_bitmap_ref): New functions.
+
+	* gdk/gdkwindow.c: (gdk_window_new, gdk_window_foreign_new): Call
+	gdk_window_ref for the pointer in the xid table.
+	(gdk_window_internal_destroy): Renamed from gdk_window_destroy.
+	New parameter XDESTROY that takes the role of `destroyed==2';
+	removed special casing of `destroyed==2'.  Free dnd_data only when
+	really destroying.  Do not touch the ref_count.  Calling
+	gdk_window_destroy on a Pixmap is now a real error, not just a
+	warning.
+	(gdk_window_destroy): Just call gdk_window_internal_destroy and
+	gdk_window_unref, as advertised in REFCOUNTING.
+	(gdk_window_destroy_notify): New function.
+	(gdk_window_unref): Print a warning when the ref_count is zero and
+	the window has not been destroyed.  Should never happen.  Do not
+	destroy the window, just free the memory.
+	
+	* gdk/gdkprivate.h (gdk_window_real_destroy): Removed.
+
+	* gtk/gtkaccelerator.c (gtk_accelerator_table_destroy): Removed.
+	(gtk_accelerator_table_unref): Do the job of
+	gtk_accelerator_table_destroy directly.
+	(gtk_accelerator_table_init): Init ref_count with 1.
+
+	* gtk/gtkaccelerator.h (gtk_accelerator_table_destroy): Removed.
+
+	* gtk/gtkcurve.c, gtk/gtkgamma.c: Replaced gdk_pixmap_destroy with
+	gdk_pixmap_unref.
+
+	* gtk/gtkhscrollbar.c (gtk_hscrollbar_realize): Reflect the fact
+	that the widget->window is used as the range->trough in the
+	ref_count.
+	* gtk/gtkvscrollbar.c (gtk_vscrollbar_realize): Likewise.
+
+	* gtk/gtkmain.c (gtk_main_iteration): Protect event_widget with
+	ref/unref while handling the GDK_DELETE and GDK_DESTROY events.
+
+	* gtk/gtkmenu.c (gtk_menu_set_accelerator_table): Don't do
+	anything when the new accel_table is the old one.
+
+	* gtk/gtkmenufactory.c (gtk_menu_factory_destroy): Unref
+	factory->table if there is one.
+	(gtk_menu_factory_create, gtk_menu_factory_create_widget): Don't
+	ref newly created accel_table, it is now created with a ref_count
+	of 1.
+
+	* gtk/gtkmenuitem.c (gtk_menu_item_set_submenu):  Don't do
+	anything when the new submenu is the old one.
+
+	* gtk/gtkpixmap.c (gtk_pixmap_destroy): New static function.
+	(parent_class): New global variable.
+	(gtk_pixmap_init): Set object_class->destroy.
+	(gtk_pixmap_set): Don't do anything about the pixmap when the new
+	pixmap is the old one.  Likewise for the mask.
+
+	* gtk/gtkprogressbar.c, gtk/gtkruler.c: Replaced
+	gdk_pixmap_destroy with gdk_pixmap_unref.
+
+	* gtk/gtkrange.c (gtk_range_set_adjustment):  Don't do
+	anything when the new adjustment is the old one.
+
+	* gtk/gtkrc.c: Replaced gdk_fontset_free/gdk_font_free with
+	gdk_font_unref.
+
+	* gtk/gtkstyle.c (gtk_style_new): Initialize ref_count with 1.
+	(gtk_styles_init): Replace gtk_style_destroy with gtk_style_unref
+	for the cache.
+	(gtk_style_new_from_key): Ref style before returning it when it
+	has not been newly created.
+	(gtk_style_destroy): Don't look at the ref_count, destroy always.
+	Free style-font with gdk_font_unref, regardless of font->type.
+
+	* gtk/gtktooltips.c (gtk_tooltips_real_destroy): Renamed from
+	gtk_tooltips_destroy and made static.  Don't look at ref_count,
+	destroy always.
+	(gtk_tooltips_new): Initialize ref_count with 1.
+	(gtk_tooltips_unref): Don't look at pending_destroy, destroy
+	always when ref_count is 0.
+	(gtk_tooltios_widget_remove): Use gtk_tooltips_destroy_data
+	instead of hand-coded destruction.
+
+	* gtk/gtktooltips.h (GtkTooltips::pending_destroy): Removed.
+	(gtk_tooltips_destroy): Removed.
+
+	* gtk/gtkviewport.c (gtk_viewport_set_hadjustment,
+	gtk_viewport_set_vadjustment): Don't do anything when the new
+	adjustment is the old one.
+
+	* gtk/gtkwidget.c (gtk_widget_reparent): Protect the reparented
+	widget with ref/unref while moving it.
+	(gtk_widget_set_default_colormap): Replace gdk_colormap_destroy
+	with the proper ref/unref spell.
+	(gtk_widget_set_default_style): Don't do anything when the new
+	style is the old one.
+
+	* gtk/testinput.c (configure_event): Replaced gdk_pixmap_destroy
+	with gdk_pixmap_unref.
+	
+    More Interpreter support:
+
+	* gdk/gdktypes.h (GdkDestroyNotify): New type.
+	
+	* gdk/gdk.c (struct _GdkInput::destroy): New field.
+	(gdk_input_add_interp): New version of gdk_input_add that follows
+	the interp conventions for callbacks.
+	(gdk_input_add): Implement in terms of gdk_input_add_interp.
+	(gdk_input_remove): Call destroy notify when appropriate.
+
+	* gdk/gdk.h (gdk_input_add_interp): New prototype.
+
+	* gtk.defs: Updated from guile-gtk.
+	* gtk/gtktypebuiltins.c, gtk/gtktypebuiltins.h: Regenerated.
+	
+	* gtk/gtkmain.c (GtkInputFunction, struct _GtkInputFunction): New
+	types.
+	(gtk_invoke_input_function, gtk_destroy_input_function,
+	gtk_input_add_interp, gtk_input_remove): New functions.
+
+Wed Dec 17 12:00:48 1997  Federico Mena  <federico@bananoid.nuclecu.unam.mx>
+
+	* gdk/gdkcc.c: New GdkColorContext functionality!  This should
+	eventually solve all of our color management problems.  Gdk still
+	needs to be modified to support visuals with less than 8 bpp.  Gtk
+	needs to be modified just a bit.
+
+Wed Dec 17 13:56:17 PST 1997 Manish Singh <yosh@gimp.org>
+
+	* a small patch by Lauri Alanko that allows Gimp to pass
+	on --display to it's plugins.
+
+Sun Dec 14 00:08:00 PST 1997 Raph Levien <raph@acm.org>
+	* a minor patch to make the file selection dialog not always
+	select the first file in a directory
+
+Sat Dec 13 Jay Painter <jpaint@serv.net>
+	* gtk/gtkvscrollbar.c: added focus flag so vertical scrollbars
+	can get keyboard focus
+
+Fri Dec 12 Owen Taylor <owt1@cornell.edu>
+	* Removed warning when XGetWindowProperty fails - this can
+	  be the desired behavior.
+	
+Fri Dec 12 Owen Taylor <owt1@cornell.edu>
+	* gdk/makecursor* gdk/makekeysym* gdk/Makefile.am
+	  Removed old sed/awk code and replaced it with a 
+	  spiffier awk-only code from Art_Haas@dril-quip.com
+	
+Fri Dec 12 Owen Taylor <owt1@cornell.edu>
+	* gdk/gdkgc.c: If gdk_gc_set_clip_rectangle is called with
+	  rectangle = NULL, remove clip mask, instead of segfaulting.
+	* gtk/gtknotebook.c: Set clip mask before redrawing, so that
+	  we don't overwrite things outside of exposed areas when
+	  drawing them shadows. (Based on a patch from 
+	  Lars Hamann <hamann@braunschweig.netsurf.de>, and Stefan Jeske)
+	
+Thu Dec 11 10:57:29 CST 1997 Shawn T. Amundson <amundson@gimp.org>
+	* Change to ltconfig to remove -z text for Solaris x86	
+	* Change to configure stuff so compile works on Solaris x86
+ 	* Added gdk/gdkkeysyms.h and gdk/gdkcursors.h back into the tree
+
+Thu Dec 11 09:44:03 1997  Tim Janik  <timj@psynet.net>
+
+	* gdk.c: added gdk_progclass==NULL patch by Oliver Graf <ograf@fga.de>.
+
+Wed Dec 10 23:40:03 1997  Tim Janik  <timj@psynet.net>
+
+	* fixed some compiler errors, because g_return_if_fail() wasn't used
+	with a trailing semicolon in some places. fixed few other warnings also.
+
+Tue Dec  9 Owen Taylor <owt1@cornell.edu>
+	* configure changes: (configure.in, glib/configure.in)
+	Change test ! `...` to test -z `...`
+	  (Harald Meland <Harald.Meland@usit.uio.no>)
+	Change $gtk_cv_x_locale to $need_x_locale so it isn't cached.
+	With --enable_debug, don't touch CFLAGS if they're already set.
+
+Tue Dec  9 Owen Taylor <owt1@cornell.edu>
+	* gdk/gdkpixmap.c: don't use gdk_black/white for pixmap mask.
+	 From Patrice Fortier <Patrice.Fortier@aquarel.fr>
+
+Mon Dec  8 Owen Taylor <owt1@cornell.edu>
+	* gtk/testselection.c (selection_received): foreward -> forward.
+	* gtk/gtktext.c (gtk_text_forward_delete): Renamed; changed all
+	callers.
+	* gtk/gtktext.h: foreward -> forward.
+          From Tom Tromey  <tromey@cygnus.com>
+
+Mon Dec  8 Owen Taylor <owt1@cornell.edu>
+	* gtk/gtkimage.c: Fixes to expose() handler
+	  From Rob Browning <rlb@cs.utexas.edu>
+	
+Mon Dec  8 21:09:43 PST 1997 Geoffrey T. Dairiki <dairiki@alumni.caltech.edu>
+	* gtk/gtklabel.h:
+	* gtk/gtklabel.c: Add support for GTK_JUSTIFY_FILL.  This support
+	is used by the new gtktooltips.c.
+	* gtk/testgtk.c (create_labels, create_main_window): A new test
+	window for labels (to test the new GTK_JUSTIFY_FILL'ed labels.)
+
+Mon Dec  8 21:09:43 PST 1997 Geoffrey T. Dairiki <dairiki@alumni.caltech.edu>
+	* gtk/gtklabel.h:
+	* gtk/gtklabel.c: Add support for GTK_JUSTIFY_FILL.  This support
+	is used by the new gtktooltips.c.
+	* gtk/testgtk.c (create_labels, create_main_window): A new test
+	window for labels (to test the new GTK_JUSTIFY_FILL'ed labels.)
+
+Sun Dec  7 Owen Taylor <owt1@cornell.edu>
+	* gdk/gdk.c, gdk/gdk.h, gdk/gdktypes.h: 
+	  Remove dependencies of interfaces on USE_XIM
+	* gdki18n.h: Attempt to make wchar handling more portable
+	* gdkwindow.c: Include config.h. (For gdkinput.h)
+	
+Sun Dec  7 Owen Taylor <owt1@cornell.edu>
+	* gtk/gtkentry.c, gtk/gtkentry.h: 
+	   Fixed word motion
+	   Added cut/copy/paste via X clipboard
+	   Generalized extending selection using <Shift> to work with all types
+             of motion, not just arrow keys.
+           Don't change length of GtkEntry structure because of USE_XIM
+
+Sun Dec  7 03:19:02 1997  Tim Janik  <timj@psynet.net>
+
+	* gtkfilesel.c: applied jamesa-971010-0 for stability.
+	* gtkrc.c: applied jamesa-971010-2 for a small optimization.
+	* gtkcheckmenuitem.h:
+	* gtkcheckmenuitem.c:
+	* gtkradiomenuitem.c:
+	* testgtk.c: applied johannes-971113-0 which adds
+ 	gtk_check_menu_item_set_show_toggle() to change the way check
+ 	menu items and radio menu items look.
+
+Fri Dec 5 1997 Elliot Lee <sopwith@cuc.edu>
+	* gdk/gdk.c: clean up warnings, remove some un-ifdef'd debugging
+	printing, DnD is Bug Free now, etc.
+	* gtk/gtkcolorsel.c: fix DnD support.
+	* gtk/gtkmain.c: DnD events go to the original window even if
+	there is a grab - if I drop on a window the data had better go
+	to it and not some other window :)
+	* gtk/testgtk.c: Replace (GtkSignalFunc) with GTK_SIGNAL_FUNC(),
+	and do a nicer DnD demo.
+	* My very first ChangeLog entry, seeing as people have
+	a fixation on them (what's wrong with "rcs2log" output?)
+
+Thu Dec 4 1997 Owen Taylor <owt1@cornell.edu>
+	* gdk/gdkgc.c: Ignore gdk_gc_set_font if font is a fontset.
+
+Wed Dec 3 1997 Jay Painter <jpaint@serv.net>
+	* gtk/gtkstyle.c: fixed a problem introduced recently in 
+	gtk_style_detach witch crashed script_fu.
+
+Wed Dec 3 1997 Owen Taylor <owt1@cornell.edu>
+	* gdk/Makefile.am: add a dependence for $(DEP_FILES) on
+	$(BUILT_SOURCES) to work around automake problem
+	
+Wed Dec 3 1997 Owen Taylor <owt1@cornell.edu>
+	* configure.in glib/configure.in glib/glibconfig.h.in gdk/gdk.h
+	gdk/gdk18n.h gdk.c gtk/gtkentry.c: Try to handle variations in 
+	<wchar.h> headers gracefully. Do not automatically include 
+	gdk/gdki18n.h.
+	
+Wed Dec 3 1997 Jay Painter <jpaint@serv.net>
+	* gtk/gtkoptionmenu.c: fixed a old bug where if you set a new 
+	menu for a optionmenu the widget would not get positioned correctly
+	inside of the optionmenu.
+
+Tue Dec 2 1997 Owen Taylor <owt1@cornell.edu>
+	* gdk/gdkpixmap.c: Include unistd.h to get SEEK_END
+	for SunOS (john_johns@credence.com)
+	
+Tue Dec 2 1997 Owen Taylor <owt1@cornell.edu>
+	* gtk+/fnmatch.c: Define _GNU_SOURCE before including
+	fnmatch.h to make sure all constants are defined.
+        (Yasuhiro SHIRASAKI <joke@awa.tohoku.ac.jp>)
+	
+Tue Dec 2 1997 Owen Taylor <owt1@cornell.edu>
+	* configure.in, glib/configure.in: Make the logic to add -Wall,
+	-ansi, -pedantic for GCC operational.
+
+Tue Dec 2 1997 Owen Taylor <owt1@cornell.edu>
+	* glib/glib.h, glib/configure.in. Disabled gldouble, since
+	it wasn't used anywhere and caused portability problems
+
+Tue Dec 2 1997 Owen Taylor <owt1@cornell.edu>
+	* glib/glib.h, glib/configure.in, glib/glibconfig.h.in: Added a
+	g_memmove function which is simply memmove if it exists, otherwise
+	bcopy.(Should really check if bcopy has the correct semantics, and
+	create our own memmove is necessary) 
+	* glib/gstring.c, glib/garray.c, gtk/gtktext.c:
+	memmove => g_memmove
+	
+Sun Nov 30 1997 Jay Painter <jpaint@serv.net>
+	* gtk/gtknotebook.c: fixed a old bug where all the notebook pages
+	which were not displayed when the notebook widget was realized were
+	never size allocated when they were realized.
+
+Thr Nov 28 1997 Jay Painter <jpaint@serv.net>
+	* gtk/gtklist.h: removed GtkSelectionMode
+	* gtk/gtkenums.h: added GtkSelectionMode
+
+Fri Nov 28 01:26:55 1997  Tim Janik  <timj@psynet.net>
+
+	* gtk/gtkwindow.c (gtk_window_show): propagate a size_request before
+	the initial window creations (prevents windows with size of -1x-1).
+
+	* gtk/gtkmain.c (gtk_main_level): new function to determine
+	the current recursion level of gtkmain().
+	(gtk_true) (gtk_false): new functions implemented as a convenience
+	for signals that just need a handler with the appropriate return value.
+
+Tue Nov 25 1997 Owen Taylor <owt1@cornell.edu>
+	gdk.c: Fix so that "other_events" are actually generated
+
+Tue Nov 25 1997 Owen Taylor <owt1@cornell.edu>
+	Patches to support internationalized input by:
+	  Takashi Matsuda <matsu@arch.comp.kyutech.ac.jp>
+	  TANAKA Shinya <shinya@race.u-tokyo.ac.jp>
+
+	From the README:
+	
+	Feature:
+	  Followings are the main feature of this patch.
+	    * support XIM protocol.
+	    * GtkEntry widget support Over-The-Spot and Root style input.
+	    * input style is configurable by command-line option.
+
+	Furthermore, this patch includes several changes which are useful 
+	  without XIM too.
+	
+	    * copy and paste with other clients by compound text.
+	    * Window title can be specified by multi byte string.
+
+	configure.in: 
+	  Added --with-locale and --enable-xim options
+	gdk/Makefile.am:
+	gdk/gdki18n.h [new file]
+	  Multibyte string manipulation functions
+	gdk/gdk.c
+	gdk/gdk.h
+	gdk/gdkprivate.h
+          Input method and context handling functions
+	  Command line options to control input methods
+	  Changes to KeyPress handling to support input methods
+	  Fixes to not return events for destroyed windows
+	gdk/gdkselection.c
+	  Text property handling functions
+	gdk/gdkwindow.c
+	  Set window title by multibyte string
+	gtk/gtkentry.c
+          Support for using an input context for XIM input.
+	  Cut and paste using compound text.
+	  Improvements to pasting (no longer replace the active selection
+	    with itself OWT)
+	gtk/gtkselection.c
+	  fix to send selection clear events to the right owner
+	gtk/testgtkrc
+	  Added a default fontset that will allow international characters
+	INSTALL
+	  Some rudimentary documentation about the new configuration options.
+	
+Mon Nov 24 1997 Owen Taylor <owt1@cornell.edu>
+	gtk/gtkaspectframe.c:
+	Some minor improvements to rounding in aspectframes.
+	Make sure that child allocation is always >= 0
+	Always trigger size allocation with gtk_widget_queue_resize
+	to prevent calling size_allocate before allocation done.
+
+Mon Nov 24 1997 Owen Taylor <owt1@cornell.edu>
+	gtk/gtkframe.c:
+	Changed tests for drawability to GTK_WIDGET_DRAWABLE
+	Always trigger size allocation with gtk_widget_queue_resize
+	to prevent calling size_allocate before allocation done.
+
+Mon Nov 24 1997 Jay Painter <jpaint@serv.net>
+	gtk-dairiki-971117-2.patch
+	gtk/gtkaspectframe.c (gtk_aspect_frame_size_allocate): When
+	computing new dimensions of the subwidget, round to nearest
+	integer rather than truncating.
+
+Mon Nov 24 1997 Jay Painter <jpaint@serv.net>
+	gtk-dairiki-971117-1.patch
+	* gtk/gtkvruler.c (gtk_vruler_draw_ticks):
+	* gtk/gtkhruler.c (gtk_hruler_draw_ticks): Ensure that subticks
+ 	always are drawn when they should be (sometimes they were getting
+ 	drawn with zero length --- invisible).  Also clear rectangle
+ 	behind text labels to ensure they don't touch or overlap ticks. 
+
+Mon Nov 24 1997 Jay Painter <jpaint@serv.net>
+	* gtk/gtkaspectframe.c (gtk_aspect_frame_set): 
+	gtk-dairiki-971117-0.patch
+	Clear window when aspect ratio or alignment is changed.
+
+Mon Nov 24 1997 Jay Painter <jpaint@serv.net>
+	* gtk/gtkobject.h: fixed GTK_OBJECT_NSIGNALS macro
+
+Mon Nov 24 1997 Jay Painter <jpaint@serv.net>
+	* gtk/gtklabel.h: modified gtklabel to clip its drawing to
+	its given area, now it will always draw in the area it's 
+	been given and clip accordingly.  Note: this may cause
+	the a label to disappear on widgets which don't give their
+	child labels proper area!
+
+Mon, 17 Nov 1997 Michael K. Johnson <johnsonm@redhat.com>
+	* gtkwidget.c: gtk_set_style_recurse was not allowing updated
+	widget names to cause new styles to be applied.
+	* gtkentry.c gtkentry.h: The entry widget now has invisible
+	attribute.  The cursor does not move to show you typing; this
+	is an intentional design decision but I'm not so attached to it
+	that I'll reverse any patches that change it...  :-)
+
+	This patch is a modified version of a patch to which I have
+	lost the attribution.  I modified it by packing the "visible"
+	flag into the structure more tightly (without damaging backwards
+	compatibility on sane systems) and by allowing entry timers
+	to run.
+
+Mon Nov 17 1997 Jay Painter <jpaint@serv.net>
+	* gtkviewport.c: Raph's Mon, 10 Nov 1997 patch to gtk-list 
+	to fix some viewport bugs
+
+Mon Nov 17 1997 Jay Painter <jpaint@serv.net>
+	* gtk/gtkwidget.c: gtk-ajaborsk-971016-2
+	A little patch again to prevent user to use gtk_widget_set_events()
+	when a widget is already realized.
+	In this case, the gtk_widget_set_events() doesn't work.
+
+Mon Nov 17 1997 Jay Painter <jpaint@serv.net>
+	* gtk/gtkwindow.c: gtk-ajaborsk-971016-1
+	This small patch correct position for GTK_WIN_POS_CENTER and
+	GTK_WIN_POS_MOUSE GtkWindow positions.
+
+Sat Nov 15 1997 Jay Painter <jpaint@serv.net>
+	* gdk/gdkgc.c: added function gdk_gc_set_clip_rectangle
+	* gdk/gdk.h: header for above
+
+Sat Nov 15 1997 Jay Painter <jpaint@serv.net>
+	* gdk/gdkgc.c: added function gdk_gc_set_clip_rectangle
+	* gdk/gdk.h: header for above
+
+Wed Nov 12 1997 Jay Painter <jpaint@serv.net>
+	* gdk/gdkpixmap.c: Patrice Fortier's patch for transparent pixmaps.
+	* gdk/gdk.h:
+	  gdk/gdkdraw.c: Patrice Fortier's patch to add pixel draw function.
+
+Sun Nov  9 1997 Jay Painter <jpaint@serv.net>
+	* Fixed problems with makefiles relating to the bug
+	which required glib to be installed.
+	* Fixed makefiles to incluce the xpm's in gtk+/gtk needed
+	for testgtk.
+	* Updated gtk+ and gtk+/glib to libtool-1.0f
+
+Fri Nov  7 1997 Jay Painter <jpaint@serv.net>
+	* gtk/gtktext.c: return char_widths[ch & 0xff]; in line 2152
+
+Thr Nov  5 1997 Jay Painter <jpaint@serv.net>
+	* gtk/testgtk.c: added drag and drop test, removed the test hack
+	from the button test
+
+Tue Nov  4 08:28:57 1997  Federico Mena  <federico@bananoid.nuclecu.unam.mx>
+
+	* gtk/gtkmain.c (gtk_handle_idle): Patch from David Mosberger to
+	avoid crashes when handling idle function (this manifested itself
+	in the Umax and Microtek backends in SANE.
+
+Sun Nov  2 07:34:56 1997  Tim Janik  <timj@psynet.net>
+
+	* gtk/gtkfilesel.c: Small fixes about a segmentation viaolation
+	cause by a double click in the directoy list (introduced by my
+	previous changes).
+	
+	* gtk/gtklist.c: Small fixes to gtk_list_add() and gtk_list_remove().
+	
+	* gtk/testgtk.c (list_add): Applied Stefan Wille's patch to make this
+	function do something ;).
+
+Fri Oct 31 Jay Painter <jpaint@serv.net>
+	*gdk/gdk.c: reformatted DND code for GTK coding standards
+	*gdk/gdkwindow.c: changed memory allocation for DND to q_mem stuff
+
+Thu Oct 30 Jay Painter <jpaint@serv.net>
+	* gdk/gdkwindow.c: 
+	* gdk/gdk/gdk.h:
+	* gtk/gtkwidget.h:
+	* gtk/gtkwidget.c: Applied Stephan Willie's shaped window patch
+
+	* gdk/gdkwindow: 
+	* gdk/gdk.h:
+	* gtk/gtkwidget.h:
+ 	* gtk/gtkwidget.c: reformatted the DND code to conform to GTK
+		coding standards
+
+	* gtk/testgtk: massive fixes, SW's shaped window example
+
+Thu Oct 30 07:33:27 1997  Tim Janik  <timj@psynet.net>
+
+	* gtk/gtklistitem.c (gtk_real_list_item_toggle): applied Johannes
+	Keukelaar's <johannes@nada.kth.se> patch for keyboard support in
+	GtkList widgets.
+
+	* gtk/gtkfilesel.c: adapted dir and file list selection
+	behaviour to deal with keyboard selections. this is a little
+	bit tricky: in the dir list it just changes the entrys value on a one
+	button press. but on a keyboard selection via gtk_widget_activate() it
+	does a new population (likewise on a double click) as this seems more
+	obvious.
+
+1997-10-25  Marius Vollmer  <mvo@zagadka.ping.de>
+
+	* gdk/gdkcolor.c (gdk_colormap_get_system): Initialize
+	private->ref_count.
+
+Wed Oct 22 09:47:43 1997  Tim Janik  <timj@psynet.net>
+
+	* gtk/gtkwindow.c (gtk_window_key_release_event): Fixed a stupid
+	bug that caused the key_release_event to be propagated twice.
+
+Sun Oct 12 11:01:43 1997  Tim Janik  <timj@psynet.net>
+
+        * acconfig.h:
+        * configure.in:
+	* gdk/gdkimage.c: Added configure check for IPC_RMID_DEFERRED_RELEASE,
+	because shmat() fails after a shmctl(..., IPC_RMID,...) for OSF1 V3.2,
+	SunOS 4.1.1, 5.5, 5.5.1, 5.6, IRIX 5.2 and 6.2.
+
+Mon Oct  6 11:59:07 1997  Federico Mena  <federico@bananoid.nuclecu.unam.mx>
+
+	* gdk/gdk.c (gdk_event_translate): In line 1693, fixed typo that
+	would cause motion notify events not to be delivered.
+
+Sun Oct  5 18:15:06 1997  Federico Mena  <federico@bananoid.nuclecu.unam.mx>
+
+	* gtk/gtkrc.c (gtk_rc_parse_bg_pixmap): Changed strdup() for
+ 	g_strdup().
+
+Wed Sep 24 17:16:34 1997  Peter Mattis  <pmattis@bjork.inktomi.com>
+
+	* configure.in: Fixed a stupid error in the test for libXext that
+	would cause it to fail if X_EXTRA_LIBS was not empty.
+
+	* gtk/gtkmain.h (gtk-timj-970919.patch):
+	* gtk/gtkmain.c (gtk-timj-970919.patch): new function
+ 	`gtk_idle_remove_by_data' to remove all idle callbacks that take a
+ 	specific piece of data as argument.  (gtk_get_current_event):
+ 	remove idles through gtk_idle_remove_by_data.
+        
+	* gtk/gtkwidget.c (gtk-timj-970919.patch):
+        (gtk_widget_destroy): remove pending idles for
+        widgets that have GTK_REDRAW_PENDING or GTK_RESIZE_PENDING and
+        GTK_ANCHORED set (only anchored widgets can have a resize queue
+        handler pending). widgets that have GTK_RESIZE_NEEDED will be removed
+        from their anchored toplevels `resize_widgets' list.
+        
+        (gtk_widget_queue_draw): let the widget remember the queue handler
+        tag (through `redraw_handler_key') for later call to `gtk_idle_remove'.
+        
+        (gtk_widget_queue_resize): let the widget remember the queue handler
+        tag (through `resize_handler_key') for later call to `gtk_idle_remove'.
+        corrected referencing the toplevel widget for which the handler is
+        pending. if a widget is added to the `resize_widgets' list of a
+        toplevel widget, GTK_RESIZE_NEEDED is set and it's referenced.
+        
+        (gtk_real_widget_queue_resize): on the deletion of the `resize_widgets'
+        list, unset GTK_RESIZE_NEEDED and unreference the removed widgets.
+        
+	* gtk/gtkwindow.c (gtk-timj-970919.patch):
+        (gtk_real_window_move_resize): move `resize_containers = NULL'
+        initialization out of if-statement.
+        while stepping through the `resize_widgets' list, unreference the
+        widgets and clear GTK_RESIZE_NEEDED. if a widget realy needs are
+        resize, they are flagged through GTK_RESIZE_NEEDED now (instead of
+        GTK_RESIZE_PENDING, as this is indicative for a pending handler).
+        added checks to provide segfaulting if a widgets parent pointer
+        is NULL (e.g. on toplevel widgets that have GTK_RESIZE_NEEDED set).
+
+Tue Sep 23 13:23:27 1997  Federico Mena  <federico@bananoid.nuclecu.unam.mx>
+
+	* gdk/gdkimage.c: Applied Tim Janik's patch to mark shm segments
+	as IPC_RMID so that they are automatically removed always.
+
+	* gdk/gdkfont.c: Removed casts from lvalues.
+
+	* gtk/gtkmain.c: Removed GTK_RETLOC_*() (which do a cast) from lvalues.
+
+	* gtk/gtkaccelerator.c (gtk_accelerator_table_remove): Added
+	"const" to the accelerator_key param to be consistent with the
+	declaration in gtkaccelerator.h.  The const is not useful in this
+	case, anyway.
+
+Tue Sep 16 13:11:06 1997  Peter Mattis  <pmattis@bjork.inktomi.com>
+
+	* gtkpreview.c: Andrew Logan Kieschnick's change to eliminate
+	round-off error when gamma is set to 1.0.
+
+	* gtkrange.c:
+	* gtkviewport.c: Jay Painter's changes to modify the way in which
+	viewports resize.
+
+	* gdkinput.c:
+	* gdkinputgxi.h:
+	* gdkinputxfree.h:
+	* gtk/Makefile.am:
+	* gtk.h:
+	* gtkeventbox.c:
+	* gtkeventbox.h: Owen Taylor's event box widget and fixes for X
+	input support (that I had broken).
+
+	* gdk.h:
+	* gdkwindow.c:
+	* gtksignal.h:
+	* gtksignal.c: Elliot Lee's changes to support Objective C. (id is
+	apparently a reserved word in Objective C).
+
+Sun Sep 14 22:33:15 1997  Peter Mattis  <pmattis@localhost>
+
+	* gtkwidget.c (gtk_widget_queue_resize): If the toplevel container
+	is invisible we simply call "gtk_container_need_resize" on
+	it. This fixes a bug with option menus not redrawing correctly.
+
+	* gtkmenuitem.c (gtk_menu_item_enter): (gtk_menu_item_leave):
+	These functions now simply pass the event on to their parent. This
+	is necessary for menus to work properly due to the change in how
+	grabs are dealts with.
+
+	* gtkwindow.c (gtk_real_window_move_resize): Fixed a bug that
+	caused the GTK_RESIZE_PENDING flag to not be unset in some cases.
+
+Fri Sep  5 20:49:37 1997  Marius Vollmer  <mvo@zagadka.ping.de>
+
+	Bug fixes:
+
+	* Makefile.am: Added PATCHES to EXTRA_DIST.
+	* gtk/gtkpixmap.c (gtk_pixmap_new): Move the "pixmap != NULL" test
+ 	after the allocation of the pixmap.
+
+	To shut up the compiler:
+
+	* gtk/gtkfilesel.c (get_pwdb): Initialize home_dir.
+	* gtk/gtkmain.c (gtk_init): Replace comments around calls to
+ 	g_set_*_handler with "if (0)".
+	* gtk/gtkrc.c (gtk_rc_get_token): Initialize hex_number and
+ 	float_number.
+	* gtk/gtkwindow.c (gtk_window_key_press_event): Initialize
+ 	direction.
+
+	Changes to the type system in gtk/:
+
+	* Makefile.am: Added gtktypebuiltins.h to gtkinclude_HEADERS.
+  	Added gtk.defs, runelisp, gentypeinfo.el and gtktypebuiltins.c to
+ 	EXTRA_DIST.  Added rules to generate gtktypebuiltins.* from
+ 	gtk.defs.
+
+	* runelisp, gentypeinfo.el, gtk.defs: New files.
+
+	* gtkaccelerator.c, gtkaccelerator.h (gtk_accelerator_table_ref):
+ 	Return the table so that this function can be used as the `copy'
+ 	function for GTK_TYPE_BOXED values.
+	* gtkstyle.c, gtkstyle.h (gtk_style_ref): Likewise.
+
+	* gtkenums.h: Removed GtkArgType enum.
+
+	* gtkmain.c (gtk_init): Call gtk_type_init to initialize the type
+ 	system.
+
+	* gtkobject.c (gtk_object_init_type): New function to take over
+ 	for gtk_object_get_type. (gtk_object_get_type): Just return the
+ 	constant GTK_TYPE_OBJECT. (gtk_object_collect_args): Do the right
+ 	thing for the new GTK_TYPE_* types.
+	* gtksignal.c (gtk_params_get): Likewise.
+
+	* gtktypeutils.c: (gtk_type_init_builtin_types): New
+ 	function. (gtk_type_init): Call it.  Also made non-static.
+	(gtk_type_unique): The allocation scheme for numerical ids has
+ 	changed: The low 8 bits hold the appropriate GtkFundamentalType of
+ 	a type, the rest is a globally unique sequence number.
+  	(gtk_type_hash): Use the sequence number of a key to hash it.
+  	(gtk_type_register_builtin): New function.
+
+	* gtktypeutils.h: (GtkFundamentalType): New enumeration of the
+ 	fundamental types. (GTK_TYPE_MAKE, GTK_FUNDAMENTAL_TYPE,
+ 	GTK_TYPE_SEQNO): New macros to work with the new id scheme.
+	(GtkArg): Added fields for new types and renamed old ones.  GtkArg
+ 	should now be a mostly opaque structure, except name and type.
+	(GTK_VALUE_*): New macros to access the values of a GtkArg.
+	(GTK_RETLOC_*): New macros to access the location of a return
+ 	value that is contained in a GtkArg.  * gtktypebuiltins.h: New
+ 	file to access the typeids of the builtin types.
+
+	* gtkwidget.h (GTK_TYPE_WIDGET): New macro to access the type id
+ 	of the widget class.
+
+	Thru out: Changed GTK_ARG_* to the appropriate GTK_TYPE_*.
+  	Changed access to GtkArg structure to the appropriate GTK_VALUE_*
+ 	or GTK_RETLOC_* macro.  Changed GtkArgType to GtkType.  Changed
+ 	some guints to GtkType.
+
+	General changes in gtk/ to support interpreters:
+
+	* gtkradiobutton.c (gtk_radio_button_new_from_widget,
+ 	gtk_radio_button_new_with_label_from_widget): New functions.
+
+	* gtksignal.c (gtk_signal_connect_no_marshal): New function.
+	(struct _GtkHandler): Added no_marshal and destroy_func fields.
+  	(gtk_signal_handler_new): Initialize them.
+	(gtk_signal_connect_by_type): Added no_marshal and destroy_func
+ 	arguments.  Changed all callers.
+	(gtk_signal_destroy): Invoke destroy_func if there is one and the
+ 	global destroy func does not apply.  (gtk_handlers_run): If the
+ 	handler has no_marshal set, call its function directly without
+ 	going thru the signal's marshaller.
+
+Wed Sep  3 09:56:22 1997  RHS Linux User  <pmattis@bjork.inktomi.com>
+
+	* gtkrange.c: Changed the way the range control focus was drawn so
+ 	that the range control is drawn correctly when it does not have
+	the focus.
+
+Tue Sep  2 17:41:17 1997  RHS Linux User  <pmattis@bjork.inktomi.com>
+
+	* gtkwidget.c: 'gtk_real_widget_queue_resize' should only remove
+	the "resize_widgets" if another resize is not pending.
+
+Mon Sep  1 18:28:08 1997  Peter Mattis  <pmattis@localhost>
+
+	* gtkmain.c: Changed the way GDK_DELETE events are handled. Only,
+	if 'gtk_widget_event' returns TRUE is the widget destroyed. By
+	default, 'gtk_widget_event' will return FALSE causing the window
+	to not be destroyed. This prevents segfaults in the GIMP and other
+	programs that do not correctly handle GDK_DELETE events.
+
+	* gtkmain.c: Added modal dialog support by allowing events
+	destined for a child of the grab widget to go to the child instead
+	of the grab widget. (Added 'gtk_widget_is_ancestor' to determine
+	the relationship between the grab widget and the event widget).
+
+	* *.[ch]: Incorprated a whole mess of patches. (Started keeping
+	the ChangeLog up to date again).
+
+Thu Jun  5 17:22:21 1997  Peter Mattis  <pmattis@localhost>
+
+	* gtkmenufactory.c:
+	* gtkmenufactory.h: Added 'gtk_menu_factory_remove_*'
+	calls. Removing entries/paths causes the associated widgets to be
+	destroyed.
+
+	* gtkwidget.c:
+	* gtkwidget.h: Calling 'gtk_widget_set_style' is used as an
+	indication that the programmer specifically wants that style to be
+	used. RC-style substitution is disabled for the widget after such
+	a call.
+
+	* gtkpixmap.c:
+	* gtkpixmap.h:
+	* gtkimage.c:
+	* gtkimage.h: Changed to use clip mask and a single pixmap (or
+	image) to deal with transparent areas.
+
+	* gdkpixmap.c: Modified xpm loading routines to optionally return
+	a clip mask.
+
+	* gdkgc.c:
+	* gdkdraw.c:
+	* gdktypes.h: Modifications to allow clip masks to be used with
+	gc's. Clip masks are bitmaps that specify drawable regions.
+
+Thu May  1 03:11:51 1997  Peter Mattis  <pmattis@localhost>
+
+	* gtkscrolledwindow.c: Scrolled windows need to have the
+	GTK_NO_WINDOW flag set. Not having it set caused an obscure
+	redrawing bug.
+
+Wed Apr 30 12:38:03 1997  Peter Mattis  <pmattis@localhost>
+
+	* gtkhruler.c:
+	* gtkvruler.c: Fixed a small bug that caused the indicator to be
+	positioned slightly off.
+
+Sun Apr 27 14:28:21 1997  Peter Mattis  <pmattis@localhost>
+
+	* gtkmenushell.c:
+	* gtkmenushell.h:
+	* gtkmenu.c:
+	* gtkmenu.h: Changes so that if a menu is popped up there is a
+	timeout period during which a menu item will not be activated and
+	if the mouse button is released in that period the menu will stay
+	popped up.
+
+	* gtkcurve.c:
+	* gtkcurve.h: Included curve widget courtesy of David
+	Mosberger-Tang (davidm@azstarnet.com).
+
+	* gtkentry.c:
+	* gtkentry.h: Changed "insert" and "delete" signals to
+	"insert_text" and "delete_text" respectively. (The symbol "delete"
+	cannot be used since it is a C++ reserved word).
+
+Sat Apr 19 01:43:49 1997  Peter Mattis  <pmattis@localhost>
+
+	* gtkmenufactory.c: A path which ends in "<nothing>" will cause an
+	invisible (hidden) menu entry to be created. This is useful for
+	setting an accelerator key for which a corresponding menu entry is
+	not desired.
+
+	* gtktooltips.c: Fixed some problems with destruction of the
+	active tip widget not properly updating the tooltips data
+	structures.
+
+Fri Apr 18 15:09:45 1997  Peter Mattis  <pmattis@localhost>
+
+	* gtkcontainer.c:
+	* gtklist.c:
+	* gtkwidget.c:
+	* gtkwidget.h: Patch from Owen Taylor (owt1@cornell.edu) which
+	fixes problems with destruction of objects and with destruction of
+	objects which hold the focus.
+
+Thu Apr 17 11:29:15 1997  Peter Mattis  <pmattis@localhost>
+
+	* gtkmenushell.c: Incorrect logic in
+	'gtk_menu_shell_button_release' for deciding when a menu should
+	stay popped up when the mouse button is released.
+
+	* *.c: Miscellaneous fixes from folks on the net.
+
+Tue Apr 15 02:43:17 1997  Peter Mattis  <pmattis@localhost>
+
+	* *.c:
+	* gtkwidget.h: Added GTK_BASIC widget flag which when set
+	specifies a widget as "basic". A "basic" widget is one which
+	doesn't take input events. For example, labels, pixmaps, boxes,
+	tables, alignments, etc.
+
+Sat Apr 12 15:23:08 1997  Peter Mattis  <pmattis@localhost>
+
+	* gtkcolorsel.c: Add "#include <math.h>" to define M_PI.
+
+	* gtksignal.c: Fixed a bug in 'gtk_signal_emit' which showed up
+	because of the new cast checking macros. The 'object' was being
+	accessed after it had been destroyed.
+
+	* gtkoptionmenu.c: Fixed bug with using 'GTK_BIN' instead of
+	'GTK_BUTTON' which showed up because of the new cast checking
+	macros.
+
+	* *.h: 'GTK_CHECK_CAST', 'GTK_CHECK_CLASS_CAST' and
+	'GTK_CHECK_TYPE' used by standard widget macros everywhere.
+
+Wed Apr  9 00:54:17 1997  Peter Mattis  <pmattis@localhost>
+
+	* docs/gtk.texi: Started further work on documentation. Major
+	changes and additions are being made.
+
+	* gtkarrow.c:
+	* gtkarrow.h: Removed function 'gtk_arrow_get'.
+
+	* gtkcontainer.c: 'gtk_container_check_resize' no performs
+ 	additional checking to account for the case where the containers
+ 	allocation is no longer sufficient because its parent (or its
+ 	parents parent, etc.) needs to resize its children.
+
+Tue Apr  8 21:15:50 1997  Peter Mattis  <pmattis@localhost>
+
+	* gtkstyle.c: Fixed a bug in 'gtk_style_init' in which the font
+ 	was not ref'd (via 'gdk_font_ref'), but was free'd (via in
+ 	'gdk_font_free') in 'gtk_style_destroy'. (David
+ 	Mosberger-Tang). Also cleaned up 'gtk_style_destroy' while I was
+ 	at it.
+
+	* gtkmain.c: Fixed a bug in 'gtk_propogate_event' which caused
+	entry widgets (and probably other widgets) not to be destroyed in
+	some instances.
+
+Mon Apr  7 01:20:38 1997  Peter Mattis  <pmattis@localhost>
+
+	* gtkentry.c:
+	* gtkentry.h: Changed the "insert_text", "delete_text" and
+	"changed_text" signals to "insert", "delete", and "changed"
+	respectively. They really should have been named this way
+	originally except the previous signal mechanism prevented
+	duplicate signal names. ("changed" is also used by adjustments).
+
+	* gtkradiomenuitem.c:
+	* gtkradiomenuitem.h: New widget.
+
+	* gtkcheckmenuitem.c:
+	* gtkcheckmenuitem.h: New widget.
+
+	* gtksignal.c: Modified 'gtk_signal_lookup' to require an object
+	type to be passed as a parameter. In addition, signals are now
+	only needed to be uniquely defined in their branch of the class
+	hierarchy. This allows the same signal name to be used in two
+	different branches of the class hierarchy. For instance, the
+	"changed" signal is used both by adjustments and entries...in
+	different ways!
+
+	* gtktypeutils.c: Added 'gtk_type_parent' which returns the parent
+	type for a given type.
+
+Sun Apr  6 22:08:35 1997  Peter Mattis  <pmattis@localhost>
+
+	* gtkwidget.c: If a widget is set insensitive it loses the focus
+	if it had it.
+
+	* gtkcontainer.c: Insensitive widgets no longer participate in tab
+	traversal.
+
+	* gtkscrolledwindow.c: The "viewport" child is now destroyed and a
+	container class "foreach" function was written (which fixes the
+	sensitivity bug).
+
+Sat Apr  5 14:25:38 1997  Peter Mattis  <pmattis@localhost>
+
+	* gtkhscrollbar.c:
+	* gtkvscrollbar.c: Fixed trough size allocation bug.
+
+	* gtkhscale.c:
+	* gtkvscale.c: Fixed trough size allocation and position bug that
+	showed up when scales were placed in notebooks.
+
+Thu Mar 27 17:45:54 1997  David Mosberger-Tang  <davidm@azstarnet.com>
+
+        * gtk/gtkmain.c (gtk_handle_idle): Fix appending pending_idles to
+        idle_functions so it works even when idle_functions is empty.
+
+Sat Mar 15 14:15:59 1997  Peter Mattis  <pmattis@localhost>
+
+	* *.[ch]: Moved '*_class_init' and '*_init' function declarations
+ 	for widgets into the source file as those functions no longer had
+	to be public.
+
+	* gtkcheckbutton.c: Fixed redrawing of check button.
+
+	* gtkframe.c: Fixed redrawing of frame when the shadow type is
+	changed.
+
+Sat Mar  8 15:19:23 1997  Peter Mattis  <pmattis@localhost>
+
+	* gdkimage.c: Fixed a stupid bug with 'gdk_image_new' which
+	potentially added a NULL image to "image_list" and caused problems
+	when 'gdk_image_exit' was called.
+
+Wed Mar  5 00:40:08 1997  Peter Mattis  <pmattis@localhost>
+
+	* gtkpreview.c: Massively changed the colormap handling used by
+	the preview widget. Gray previews are now dithered. A single
+	visual and colormap is shared by the color and gray previews. A
+	GTK_PREVIEW_INFO property is installed on the root window in
+	certain cases to allow multiple GTK programs to share the system
+	colormap.
+
+Sun Mar  2 05:43:06 1997  Peter Mattis  <pmattis@localhost>
+
+	* gtkcheckbutton.c: 'gtk_checkbutton_size_allocate' was allocating
+	too much space to its children and not leaving the check button
+	room for the focus border.
+
+	* gtknotebook.c: 'gtk_notebook_size_request' wasn't requesting
+	enough space when the notebook tabs are visible.
+
+Sat Mar  1 01:59:35 1997  Peter Mattis  <pmattis@localhost>
+
+	* gtkpreview.c: Fixed a problem with 'gtk_preview_put' when the
+	image byte order is GDK_MSB_FIRST.
+
+	* gtksignal.c:
+	* gtksignal.h: Added 'gtk_signal_connect_after' and
+	'gtk_signal_connect_object_after' functions. These connect signal
+	handlers which will run after the class function associated with
+	the signal.
+
+	* gtkstyle.c: Fixed a stupid bug in 'gtk_style_new_from_key' that
+	was causing twice as many styles to be created as necesary.
+
+	* gtkwidget.c: 'gtk_real_widget_size_allocate' erases the widgets
+	old allocation if it has the GTK_NO_WINDOW flag set.
+
+	* gtkwidget.c: 'gtk_real_widget_unmap' now erases the widget if it
+	has the GTK_NO_WINDOW flag set.
+
+	* gtklabel.c: Removed 'gtk_label_unmap' as similar functionality
+	was added to gtk_real_widget_unmap.
+
+	* gtkbin.c: Modified 'gtk_bin_map' and 'gtk_bin_unmap' so that it
+	erases and draws the widget if it has the GTK_NO_WINDOW flag set.
+
+	* gtkframe.c: Modified 'gtk_frame_size_allocate' so that it erases
+	the old allocation.
+
+Fri Feb 28 03:27:05 1997  Peter Mattis  <pmattis@localhost>
+
+	* gtkwindow.c: 'gtk_window_set_title' now changes the window title
+	if the window is already realized.
+
+	* gtkentry.c: 'gtk_entry_set_text' was emitting both a
+	"delete_text" and a "changed_text" signal. Modified so that it
+	only emits a "changed_text" signal.
+
+	* gtkpreview.c: Modified to work correctly on systems with MSB
+ 	byte order. The colormap for TRUE and DIRECT color displays is now
+ 	created if the default visual is not equal to the visual we are
+ 	using.
+
+	* gtkstyle.c: 'gtk_style_attach' and 'gtk_style_find' weren't
+	working properly in the presence of multiple colormaps are
+	different depth visuals.
+
+	* gtkcontainer.c: Massively improved focus traversal using tab and
+	arrow keys. It now uses the layout of the widgets to determine
+	where to move the focus to.
+
+Mon Feb 24 03:24:02 1997  Peter Mattis  <pmattis@localhost>
+
+	* gtkmenufactory.c: Set the accelerator table field for menus when
+	they are created.
+
+	* gtkmenu.c:
+	* gtkmenu.h: Added a default accelerator table field to menus so
+	that runtime modification of accelerator keys in menus can work
+	better.
+
+	* gtkrange.c: 'gtk_range_default_{h,v}motion' had faulty logic for
+	deciding what to do when the slider was at the edge of the
+	trough. They previously didn't update the adjustment value event
+	if the value wasn't what it should be when the slider was at the
+	edge of the trough.
+
+	* gtkviewport.c: 'gtk_viewport_size_allocate' and
+	'gtk_viewport_adjustment_value_changed' both had the potential for
+	performing a divide by 0. Checks are now in place to prevent this.
+
+	* gtkmenu.c: 'gtk_menu_map' now makes sure the menu lies on screen
+	if the position function is NULL.
+
+	* gtkentry.c: Modified selection handling. 'gtk_delete_selection'
+	actually removes the X selection now. 'gtk_entry_destroy' removes
+	the selection as well and relies on the change in "gdk.c" to make
+	sure the selection event will not be sent to a non-existant
+	window.
+
+	* gdk.c: Selection events are only passed on if the selection
+	owner is not NULL.
+
+	* gtkstyle.c: 'gtk_style_detach' and 'gtk_style_destroy' were not
+	destroying the black and white gc's.
+
+Sun Feb 23 19:17:56 1997  Peter Mattis  <pmattis@localhost>
+
+	* gtkwindow.c: 'gtk_window_size_request' was setting the window
+	hints. This was also being done in 'gtk_window_map', so the
+	instance being done in 'gtk_window_size_request' was removed.
+
+Fri Feb 21 01:04:01 1997  Peter Mattis  <pmattis@localhost>
+
+	* gtkwidget.c: 'gtk_widget_draw' has to use the widgets allocated
+	position for the drawing rectangle when the widget has the
+	GTK_NO_WINDOW flag set.
+
+	* gtkwidget.c: In 'gtk_widget_init' the visual and colormap were
+	being directly compared against 'default_visual' and
+	'default_colormap' instead of calling
+	'gtk_widget_get_default_{visual,colormap}'.
+
+	* gdkrectangle.c: Amazing! There was a bug in the
+	'gtk_rectangle_intersect' logic. Its been there for near eternity
+	and I never noticed.
+
+	* gtkpreview.c:
+	* gtkpreview.h: Created preview widget which allows drawing to an
+	rgb or grayscale buffer which is automatically displayed on the
+	screen. Performs dithering as necessary.
+
+Thu Feb 20 20:33:21 1997  Peter Mattis  <pmattis@localhost>
+
+	* gdkwindow.c: Modified the logic in 'gdk_window_new' which
+	determined when to add a window to the WM_COLORMAP_WINDOWS
+	property.
+
+Wed Feb 19 19:55:29 1997  Peter Mattis  <pmattis@localhost>
+
+	* gtkruler.c: 'gtk_ruler_make_pixmap' was always destroying the
+	old backing store and creating a new one even when it would create
+	a new one of exactly the same size as the old one.
+
+Tue Feb 18 18:32:10 1997  Peter Mattis  <pmattis@localhost>
+
+	* gmem.c: 'g_mem_chunk_alloc' was incorrectly modifying the mem
+	areas free mem field when reallocating a previously freed
+	atom. This caused a fairly severe memory leak.
+
+	* gtkmenushell.c: 'gtk_menu_shell_button_release' had a bug in the
+	logic for deciding whether to initiate an X pointer grab or not
+	when the mouse button was released. It now only initiates a grab
+	if the mouse is released within an active menu item.
+
+Fri Feb 14 00:57:40 1997  Peter Mattis  <pmattis@localhost>
+
+	* gtknotebook.c: Changed the look of notebook tabs slightly.
+
+	* gtkentry.c:
+	* gtkentry.h: Deleting an entry widget which is holding the X
+	selection presents some difficulties. The X selection must be
+	released, but the widget can't be destroyed until the
+	SELECTION_CLEAR event is received that the X server will send in
+	response to clearing the X selection. There are probably still
+	bugs in the current method of entry widget deletion when the X
+	selection is held.
+
+	* gtkmain.c: 'gtk_propagate_event' was not properly destroying the
+	toplevel window when receiving a key press event.
+
+	* gtkwidget.c: Setting a widget insensitive did not cause it to
+	redraw. It now does.
+
+Thu Feb 13 16:59:07 1997  Peter Mattis  <pmattis@localhost>
+
+	* gtkviewport.c: 'gtk_viewport_size_allocate' was allocating its
+	child widget an adjusted allocation. Since the actual scrolling
+	has handled by a subwindow this caused the child to be double
+	scrolled. Modified to always set the child allocations origin to
+	(0, 0).
+
+Wed Feb 12 01:06:48 1997  Peter Mattis  <pmattis@localhost>
+
+	* gtkentry.c: Text is now centered vertically. Previously it was
+	pushed up against the top. This problem was only evident when the
+	widget was allocated more vertical space than it requested.
+
+	* gtkfilesel.c: 'gtk_file_selection_key_press' was previously only
+	a stub for tab completion. The actual tab completion call had been
+	left out. (Oops!)
+
+Tue Feb 11 01:43:08 1997  Peter Mattis  <pmattis@localhost>
+
+	* gtksignal.c: 'gtk_signal_disconnect_by_data' was going into a
+	loop and crashing. Bad logic. Fixed.
+
+	* gtkmain.c: An idle function which returns FALSE will be removed
+	from the list of idle functions. This makes the functioning of
+	idle functions and timeouts more similar.
+
+	* gtkentry.c: 'gtk_entry_get_text' now returns an empty string
+	when the actual text is NULL. This allows "stupid" programs to use
+	the value returned by 'gtk_entry_get_text' blindly (without
+	checking to see if its NULL).
+
+	* gtkradiobutton.c: Modified 'gtk_radio_button_clicked' so that
+	'gtk_toggle_button_toggled' is called _after_ the widget state is
+	changed.
+
+	* gtksignal.c:
+	* gtksignal.h: Added 'gtk_signal_name' which returns the character
+	string name for a given signal number.
+
+	* gtkwidget.c: 'gtk_widget_set_parent' checks to see if the widget
+	is now "anchored" through the parent chain to a widget which is
+	GTK_ANCHORED. If it is, then it changes the widgets style using
+	'gtk_rc_get_style' and recursively performs the same operation on
+	the widgets children. This is necessary is 'gtk_rc_get_style' only
+	works properly on "anchored" widgets.
+
+	* gtkwindow.c: Modified GTK_WIN_POS logic so that it is only used
+	immediately after the window has been shown.
+
+	* gtkmenu.c: 'gtk_menu_key_press'. Can now change menu item
+ 	accelerator keys on the fly. Why? Why not. Cool/useless feature of
+ 	the day.
+
+	* gtkmenuitem.c: Accelerator key drawing. Somehow that never got
+	finished. (Oops!)
+
+	* gtkdrawingarea.c: 'gtk_drawing_area_size_allocate' was not
+	actually installed during 'gtk_drawing_area_class_init'. (Oops!)
+
+	* gtkframe.c: 'gtk_frame_size_request' fixed size requisition
+	problem caused by unsigned arithmetic.
+
+	* gtkwindow.c: Modified window widget so that it only uses the
+ 	widget uposition auxiliary information immediately after it has
+ 	been shown. This prevents the annoying bug which can cause a
+ 	uposition'ed window to jump back to its original position after
+ 	the user moves it.
+
+	* gtkwidget.c: Need to ref and unref style in
+	'gtk_widget_{push,pop}_style' to make sure that a style on the
+	style stack is not destroyed.
+
+	* gtktogglebutton.c: 'gtk_toggle_button_set_state' now calls
+	gtk_button_clicked to actually change the state of the
+	button. In this way, radio buttons can now perform the appropriate
+	actions when the toggle button state is set.
+
+Mon Feb 10 00:27:39 1997  Peter Mattis  <pmattis@localhost>
+
+	* gtklist.c: 'gtk_list_select_item' and 'gtk_list_unselect_item'
+	were casting a GList* variable to a a GtkWidget* variable. Bad bad
+	bad. (Tim Janik).
+
+	* gtksignal.c: Modified 'gtk_signal_connect' and
+	'gtk_signal_connect_object' to warn when a signal type cannot be
+	found.
+
+Sun Feb  9 00:15:30 1997  Peter Mattis  <pmattis@localhost>
+
+	* gtkoptionmenu.c:
+	* gtkoptionmenu.h: Changed option menus back to being derived from
+	buttons. This fixes up some screwiness with their user
+	interaction.
+
+	* gtkwindow.c: Modified key press handler to support focus
+	traversal.
+
+	* gtkcontainer.c:
+	* gtkcontainer.h: Added default focus traversal back in.
+
+Sat Feb  8 10:44:38 1997  Peter Mattis  <pmattis@localhost>
+
+	* gtkviewport.h:
+	* gtkviewport.c: Massively sped up viewport scrolling. Used to be
+	reallocating child's size (offset) each time a scrollbar
+	moved. Now a subwindow is moved. All the children are moved
+	automatically by moving the subwindow. Much much much faster.
+
+Tue Feb  4 00:20:44 1997  Peter Mattis  <pmattis@localhost>
+
+	* gtree.c: Changed 'g_tree_node_search' to use a loop instead of
+	recursion.
+
+Mon Feb  3 11:30:03 1997  Peter Mattis  <pmattis@localhost>
+
+	* gtkbutton.c: Removed 'parent_destroy' global and replaced it
+	with 'parent_class' global to reflect style used in other
+	widgets.
+
+	* gtknotebook.c: Tab labels were being allocated less than their
+	requested size.
+
+	* gtkrange.c:
+	* gtkrange.h: Moved the "digits" field of scales into the range
+	type. The adjustment value for scales is truncated to the number
+	of visible digits instead of being left untouched.
+
+	* gtree.c: Fixed a bug in the AVL tree implementation. Single
+	rotations were always being performed during insertion. It is
+	sometimes necessary to perform a double rotation.
+
+	* gtklabel.c: Modified 'gtk_label_expose' to only draw the label
+	when the allocated space is greater than or equal to the requested
+	space.
+
+	* gtklabel.c: Added call to 'gtk_widget_unmap' to
+ 	'gtk_label_destroy' in order for the label to redraw correctly
+ 	(erase itself) when destroyed.
+
+	* gtklabel.c: Added 'gtk_label_unmap' call which erases the labels
+	allocation when it gets unmapped.
+
+	* *.h: Removed a few remaining instances of using "class" as a
+	parameter name. (Causes problems for C++).
+
+Fri Jan 31 12:26:50 1997  Peter Mattis  <pmattis@localhost>
+
+	* gtkcontainer.c: 'gtk_container_enable_resize' needs to call
+	'gtk_container_check_resize' instead of
+	'gtk_container_need_resize'.
+
+	* gtkwidget.c: 'gtk_real_widget_show' now maps the widget if its
+	parent is mapped.
+
+	* gtkscrolledwindow.c: Fixed size allocation when the scrollbar
+	policy's are GTK_POLICY_AUTOMATIC. Doing it correctly is harder
+	than I originally thought.
+
+	* gtklist.c: Added 'gtk_list_child_position' to determine the
+	integer position in a list of a child. Filled in the
+	'gtk_list_item_select' and 'gtk_list_item_unselect' stubs.
+
+Thu Jan 30 16:08:06 1997  Peter Mattis  <pmattis@localhost>
+
+	* gmem.c: Changed the implementation of G_ALLOC_AND_FREE mem
+	chunks. They used to allocate SIZEOF_VOID_P extra bytes per atom
+	in order to keep track of which mem area they were allocated
+	from. Now the mem area is determined by searching through an AVL
+	tree of the mem areas for a mem chunk and comparing memory
+	locations. A little slower, but makes G_ALLOC_AND_FREE mem chunks
+	much more attractive.
+
+	* gtree.c: Added an AVL tree implementation to glib.
+
+	* gtksignal.c:
+	* gstring.c: va_arg (arg_list, {char, short}) is
+	invalid. Arguments passed in a variable argument list are
+	promoted. ({char, short}->int). Seemed to work ok before under
+	Linux. Crashed under FreeBSD.
+
+Tue Jan 28 02:27:51 1997  Peter Mattis  <pmattis@localhost>
+
+	* gdkwindow.c: Fixed a major slowdown apparent in the file
+	selection dialog which was caused by calling
+	'gtk_window_add_colormap_windows' way way way too often.
+
+	* *.c: Many widgets called 'gtk_container_need_resize' when
+	something internal changed which would cause the widget to grow or
+	shrink. The assumption was made that the widget would change size
+	and an expose event would be generated. This happens "most" of the
+	time. But its possible for certain widgets to change size without
+	generating expose events, or for its internal geometry to change
+	without a change of size which would mean no expose event was
+	generated. So a wrapper function called
+	'gtk_container_check_resize' was created and
+	'gtk_container_need_resize' was modified so that it returns FALSE
+	if a resize was actually generated and TRUE if nothing
+	changed. This allows 'gtk_container_check_resize' to initiate a
+	'gtk_widget_size_allocate' and 'gtk_widget_draw' to emulate the
+	expose event.
+
+Sat Jan 25 14:17:44 1997  Peter Mattis  <pmattis@localhost>
+
+	* gtkmain.c: Fixed a bug with propogating key press events. The
+	events were sent 2 times to the toplevel windows which caused the
+	focus widget to be activated twice when the space bar was pressed.
+
+	* */configure.in:
+	* */Makefile.am: Added support for libtool and removed the old
+	shared library configuration craziness.
+
+Fri Jan 24 12:59:22 1997  Peter Mattis  <pmattis@localhost>
+
+	* gtktext.c:
+	* gtktext.h: Josh's fixes and additions to the text widget.
+
+	* gtkfill.c:
+	* gtkfill.h: Filler widget useful for filling space in a
+	table. Can specify a minimum size. Used by the canvas widget.
+
+	* gtknotebook.c:
+	* gtknotebook.h: Made outline of notebook widget.
+
+	* gtkcanvas.c:
+	* gtkcanvas.h: Started canvas widget. A composite of 2 rulers (w/
+	an origin), 2 scrolllbars. Guides, grids, snap to.
+
+Sun Jan 19 18:26:45 1997  Peter Mattis  <pmattis@localhost>
+
+	* gtkdialog.c:
+	* gtkdialog.h: Created dialog widget which creates a standard
+	looking dialog with buttons along the button and a separator.
+
+	* gtkxid.c: Generalized the window table code for looking up a gdk
+	window based on an XID to work for any XID and a piece of
+	data. Can now look up gdk fonts based on their XID.
+
+	* gtkruler.c:
+	* gtkruler.h:
+	* gtkhruler.c:
+	* gtkhruler.h:
+	* gtkvruler.c:
+	* gtkvruler.h: Started conversion of the ruler widget.
+
+	* gtktext.c:
+	* gtktext.h: Started conversion of the text widget. Scrolling
+	doesn't work.
+
+	* gtkmain.c: Fixed a fairly major bug. The event widget needs to
+	be in a call for the entire duration of handling an event. Not
+	just for when the event widget itself is handling the event.
+
+	* gtkfilesel.c: Fixed up some bugs with resizing.
+
+Fri Jan 10 14:18:03 1997  Peter Mattis  <pmattis@localhost>
+
+	* gtkwidget.c:
+	* gtkwidget.h:
+	* gtkentry.c:
+	* gtkentry.h: Support for selections.
+
+	* gdkselection.c:
+	* gdk.c:
+	* gdktypes.h:
+	* gdk.h: Gdk support for X selections. Currently only text
+	selections are supported.
+
+	* gtksignal.c: Fixed a major bug which occurred when destroying an
+	object. Memory was being written to after it was freed.
+
+	* gtkfilesel.c:
+	* gtkfilesel.h: Hooked up more functionality to the file selection
+	dialog.
+
+Wed Jan  8 18:13:53 1997  Peter Mattis  <pmattis@localhost>
+
+	* gtkfilesel.c:
+	* gtkfilesel.h: Mostly converted old file selection dialog
+	widget. The widget is derived from the GtkWindow class and is
+	quite a bit simpler in the widget code.
+
+	* gtkwidget.c: Fixed 'gtk_widget_grab_focus' and
+	'gtk_widget_grab_default' to check that the toplevel widget is a
+	type of window (which includes classes derived from windows).
+
+Tue Jan  7 01:12:32 1997  Peter Mattis  <pmattis@localhost>
+
+	* gtkwindow.c: Was calling 'gtk_window_resize' twice in a
+ 	row...why?
+
+	* gtksignal.c:
+	* gtksignal.h:
+	* *.c: Changed 'gtk_signal_new' so that the class function that is
+	called when the signal is emitted can be called either before,
+	after or both before and after the calling of any signal
+	handlers.
+
+	* gtkobject.c:
+	* gtkobject.h: Added 'object_data' mechanism for storing data
+	associated with a character string key in objects. Removed
+	'user_data' field of objects and changed
+	'gtk_object_{get,set}_user_data' to use the object data
+	mechanism. Removed 'handlers' field of objects.
+
+	* gtkwidget.c:
+	* gtkwidget.h:
+	* gtkwindow.c: Modified aux info mechanism to use object data
+	mechanism.
+
+	* gtksignal.c: Modified signal mechanism to use object data
+	mechanism instead of 'handlers' field.
+
+
+Mon Jan  6 15:10:16 1997  Peter Mattis  <pmattis@localhost>
+
+	* gtkmenushell.c: Fixed up button press handling so as to conform
+	more closely to that used by Motif.
+
+Wed Jan  1 21:27:17 1997  Peter Mattis  <pmattis@localhost>
+
+	* gtkmenu.c:
+	* gtkmenu.h:
+	* gtkmenubar.c:
+	* gtkmenubar.h:
+	* gtkmenushell.c:
+	* gtkmenushell.h: Reorganization of menu-ing code so that code
+	duplication is reduced. The menu shell now contains most of the
+	code for menu-ing interaction while menus and menubars simply layout
+	their child menu items in the appropriate place.
+
+Sun Dec 29 17:48:18 1996  Peter Mattis  <pmattis@localhost>
+
+	* gtkmenu.c:
+	* gtkmenubar.c:
+	* gtkmenuitem.h:
+	* gtkmenuitem.c: Modifications so that menu item accelerators and
+	the submenu indicator are drawn correctly and the correct amount
+	of space is allocated.
+
+Sat Dec 28 00:32:13 1996  Peter Mattis  <pmattis@charnley.HIP.Berkeley.EDU>
+
+	* gtkmenufactory.h:
+	* gtkmenufactory.c: Started menu factories as an easy method to
+	create and manipulate menus.
+
+Fri Dec 27 13:17:34 1996  Peter Mattis  <pmattis@charnley.HIP.Berkeley.EDU>
+
+	* gtkmenu.c:
+	* gtkmenu.h:
+	* gtkmenubar.c:
+	* gtkmenubar.h:
+	* gtkmenuitem.c:
+	* gtkmenuitem.h:
+	* gtkmenushell.c:
+	* gtkmenushell.h: Implemented basic menu functionality. Menubars
+	and popup menus work. Submenus work. (Much left to be done).
+
+Wed Dec 18 15:27:05 1996  Peter Mattis  <pmattis@charnley.HIP.Berkeley.EDU>
+
+	* gtktypeutils.h:
+	* gtktypeutils.c: Added 'gtk_type_from_name' which returns a type
+	identifier given a type name. Implemented using a second hash
+	table keyed by type names.
+
+	* gtkbutton.c:
+	* gtktogglebutton.c: Fixed very small messed-up drawing bug when a
+	button loses its focus.
+
+	* gtkwidget.h:
+	* gtkwidget.c:
+	* gtkbutton.c:
+	* gtkwindow.c: Added default button handling. Default buttons now
+	draw correctly and pressing return or enter causes the default
+	button (if one exists) to be activated.
+
+Tue Dec 17 19:32:21 1996  Peter Mattis  <pmattis@charnley.HIP.Berkeley.EDU>
+
+	* gtkhscale.c:
+	* gtkvscale.c: Overrode 'draw_slider' method of ranges in order to
+	draw the slider of scales with a line in them so as to be closer
+	to the Motif look-and-feel.
+
+	* gtkwindow.c: Modified 'gtk_window_focus_in_event' so that focus
+	in events are only handled when the window is visible. Fixes a bug
+	where spurious focus in events get sent when a window is being
+	hidden.
+
+	* gtkwidget.h: Added 'activate_signal' field to the GtkWidgetClass
+	structure. Added 'gtk_widget_activate' call to emit the activate
+	signal for a widget if it is non-zero.
+
+Tue Dec 10 15:59:45 1996  Peter Mattis  <pmattis@charnley.HIP.Berkeley.EDU>
+
+	* gtkwidget.c: 'gtk_widget_set_name' oops in strdup'ing the old
+	"widget->name" instead of the new one we are setting.
+
+	* gtkrc.c: 'gtk_rc_widget_path' changed to use
+	'gtk_widget_get_name' instead of accessing the "widget->name"
+	field directly.
+
+	* gtkwidget.c: Added 'gtk_widget_get_name' function which returns
+	the widgets name if it exists and the widgets type name if it does
+	not.
+
+	* gtkcheckbutton.c: Added 'gtk_check_button_draw'
+	function. Modified 'gtk_check_button_expose' to pass an expose
+	event to child instead of callings its draw function.
+
+	* gtkentry.c: 'gtk_entry_draw_text' why was "+1" being added to
+	the font->ascent to calculate the font position? This was wrong
+	and caused some characters in fonts to be clipped. (Notably "g").
+
+	* gtkentry.c: 'gtk_entry_realize' specify GTK_BUTTON1_MOTION_MASK
+	and GTK_POINTER_MOTION_HINT_MASK for _both_ windows.
+
+	* gtkmain.c: 'gtk_propagate_event' needs to set the GTK_IN_CALL
+	flag for the object before calling 'gtk_widget_event' and needs to
+	destroy the object if necessary after 'gtk_widget_event' returns.
+
+	* gtkradiobutton.c: 'gtk_radio_button_clicked' needs to call
+	'gtk_toggle_button_toggled' when the currently active button is
+	toggled.
+
+	* gtkwidget.c: 'gtk_real_widget_hide' needs to call
+	'gtk_widget_unmap' if the widget is currently mapped.
+
+	* gtkwindow.c: Prevent automatic resizing after the user has
+	specified a new window size. Add 'handling_resize' flag to
+	windows.
+
+	* gtkscrolledwindow.c: Implement the GTK_POLICY_AUTOMATIC
+	scrollbar policy. Need to connect to the adjustments 'changed'
+	signal and notice when the scrollbars aren't in use.
+
+	* gtkcontainer.c: 'gtk_container_init' must set 'auto_resize' and
+	'need_resize' fields to TRUE and FALSE respectively.
+
+	* gtkwidget.c: 'gtk_widget_set_parent' must all set a widgets state
+	to its parents state.
+
+Sun Dec  1 01:31:01 1996  Peter Mattis  <pmattis@charnley.HIP.Berkeley.EDU>
+
+	* Started ChangeLog

@@ -1,0 +1,117 @@
+The Win32 backend in GTK+ is not as stable or correct as the X11 one.
+
+For prebuilt runtime and developer packages see
+http://ftp.gnome.org/pub/gnome/binaries/win32/
+
+Building GTK+ on Win32
+======================
+
+First you obviously need developer packages for the compile-time
+dependencies: Pango, atk, glib, gettext-runtime, libiconv, libpng,
+zlib, libtiff at least. See
+http://ftp.gnome.org/pub/gnome/binaries/win32/dependencies .
+
+After installing the dependencies, there are two ways to build GTK+
+for win32.
+
+1) GNU tools, ./configure && make install
+-----------------------------------------
+
+This requires you have mingw and MSYS.
+
+Use the configure script, and the resulting Makefiles (which use
+libtool and gcc to do the compilation). I use this myself, but it can
+be hard to setup correctly.
+
+The full script I run to build GTK+ 2.10 unpacked from a source
+distribution is as below. This is from bulding GTK+ 2.10.9, slightly
+edited to make it match this 2.11 development branch. Actually I don't
+use any script like this to build the development branch, as I don't
+distribute any binaries from development branches.
+
+MOD=gtk+
+VER=2.10.9
+THIS=$MOD-$VER
+HEX=`echo $THIS | md5sum | cut -d' ' -f1`
+TARGET=c:/devel/target/$HEX
+DEPS="`/devel/src/tml/latest.sh glib atk cairo pango`"
+sed -e 's/need_relink=yes/need_relink=no # no way --tml/' <ltmain.sh >ltmain.temp && mv ltmain.temp ltmain.sh
+usedev
+usemsvs6
+MY_PKG_CONFIG_PATH=""
+for D in $DEPS; do
+    PATH=/devel/dist/$D/bin:$PATH
+    MY_PKG_CONFIG_PATH=/devel/dist/$D/lib/pkgconfig:$MY_PKG_CONFIG_PATH
+done
+PKG_CONFIG_PATH=$MY_PKG_CONFIG_PATH:$PKG_CONFIG_PATH CC='gcc -mtune=pentium3 -mthreads' CPPFLAGS='-I/opt/gnu/include -I/opt/gnuwin32/include -I/opt/misc/include' LDFLAGS='-L/opt/gnu/lib -L/opt/gnuwin32/lib -L/opt/misc/lib -Wl,--enable-auto-image-base' LIBS=-lintl CFLAGS=-O2 ./configure --with-gdktarget=win32 --enable-debug=yes --disable-gtk-doc --disable-static --prefix=$TARGET &&
+libtoolcacheize &&
+unset MY_PKG_CONFIG_PATH &&
+PATH=/devel/target/$HEX/bin:.libs:$PATH make install &&
+(cd $TARGET/bin; strip --strip-unneeded *.dll *.exe) &&
+(cd $TARGET/lib/gtk-2.0/2.10.0/loaders; strip --strip-unneeded *.dll) &&
+(cd $TARGET/lib/gtk-2.0/2.10.0/immodules; strip --strip-unneeded *.dll) &&
+(cd $TARGET/lib/gtk-2.0/2.10.0/engines; strip --strip-unneeded *.dll) &&
+PATH=$TARGET/bin:$PATH gdk-pixbuf-query-loaders >$TARGET/etc/gtk-2.0/gdk-pixbuf.loaders &&
+grep -v -E 'Automatically generated|Created by|LoaderDir =' <$TARGET/etc/gtk-2.0/gdk-pixbuf.loaders >$TARGET/etc/gtk-2.0/gdk-pixbuf.loaders.temp &&
+mv $TARGET/etc/gtk-2.0/gdk-pixbuf.loaders.temp $TARGET/etc/gtk-2.0/gdk-pixbuf.loaders &&
+grep -v -E 'Automatically generated|Created by|ModulesPath =' <$TARGET/etc/gtk-2.0/gtk.immodules >$TARGET/etc/gtk-2.0/gtk.immodules.temp &&
+mv $TARGET/etc/gtk-2.0/gtk.immodules.temp $TARGET/etc/gtk-2.0/gtk.immodules &&
+./gtk-zip.sh &&
+(cd /devel/src/tml && zip /tmp/$MOD-dev-$VER.zip make/$THIS.make) &&
+manifestify /tmp/$MOD*-$VER.zip
+
+You should not just copy the above blindly. There are some things in
+the script that are very specific to *my* build setup on *my* current
+machine. For instance the "latest.sh" script, the "usedev" and
+"usemsvs6" shell functions, the /devel/dist folder. The above script
+is really just meant for reference, to give an idea. You really need
+to understand what things like PKG_CONFIG_PATH are and set them up
+properly after installing the dependencies before building GTK+.
+
+As you see above, after running configure, one can just say "make
+install", like on Unix. A post-build fix is needed, running
+gdk-pixbuf-query-loaders once more to get a correct gdk-pixbuf.loaders
+file.
+
+2) Microsoft's tools
+--------------------
+
+Use the Microsoft compiler, cl and Make, nmake. Say nmake -f
+makefile.msc in gdk and gtk. Be prepared to manually edit various
+makefile.msc files, and the makefile snippets in build/win32.
+
+Alternative 1 also generates Microsoft import libraries (.lib), if you
+have lib.exe available. It might also work for cross-compilation from
+Unix.
+
+I use method 1 myself. Hans Breuer has been taking care of the MSVC
+makefiles. At times, we disagree a bit about various issues, and for
+instance the makefile.msc files might not produce identically named
+DLLs and import libraries as the "autoconfiscated" makefiles and
+libtool do. If this bothers you, you will have to fix the makefiles.
+
+Using GTK+ on Win32
+===================
+
+To use GTK+ on Win32, you also need either one of the above mentioned
+compilers. Other compilers might work, but don't count on it. Look for
+prebuilt developer packages (DLLs, import libraries, headers) on the
+above website.
+
+Multi-threaded use of GTK+ on Win32
+===================================
+
+Multi-threaded GTK+ programs might work on Windows in special simple
+cases, but not in general. Sorry. If you have all GTK+ and GDK calls
+in the same thread, it might work. Otherwise, probably not at
+all. Possible ways to fix this are being investigated.
+
+Wintab
+======
+
+The tablet support uses the Wintab API. The Wintab development kit is
+no longer required. The wintab.h header file is bundled with GTK+
+sources. Unfortunately it seems that only Wacom tablets come with
+support for the Wintab API nowadays.
+
+--Tor Lillqvist <tml@iki.fi>, <tml@novell.com>

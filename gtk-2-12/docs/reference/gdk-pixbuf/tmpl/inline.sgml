@@ -1,0 +1,134 @@
+<!-- ##### SECTION Title ##### -->
+Inline data
+
+<!-- ##### SECTION Short_Description ##### -->
+Functions for inlined pixbuf handling.
+
+<!-- ##### SECTION Long_Description ##### -->
+<para>
+Using #GdkPixdata, images can be compiled into an application,
+making it unnecessary to refer to external image files at runtime.
+&gdk-pixbuf; includes a utility named gdk-pixbuf-csource, which 
+can be used to convert image files into #GdkPixdata structures suitable
+for inclusion in C sources. To convert the #GdkPixdata structures back 
+into #GdkPixbuf<!-- -->s, use gdk_pixbuf_from_pixdata.
+</para>
+
+<!-- ##### SECTION See_Also ##### -->
+  <para>
+
+  </para>
+
+<!-- ##### SECTION Stability_Level ##### -->
+
+
+<!-- ##### STRUCT GdkPixdata ##### -->
+  <para>
+
+  </para>
+
+@magic: 
+@length: 
+@pixdata_type: 
+@rowstride: 
+@width: 
+@height: 
+@pixel_data: 
+
+<!-- ##### ENUM GdkPixdataType ##### -->
+  <para>
+
+  </para>
+
+@GDK_PIXDATA_COLOR_TYPE_RGB: 
+@GDK_PIXDATA_COLOR_TYPE_RGBA: 
+@GDK_PIXDATA_COLOR_TYPE_MASK: 
+@GDK_PIXDATA_SAMPLE_WIDTH_8: 
+@GDK_PIXDATA_SAMPLE_WIDTH_MASK: 
+@GDK_PIXDATA_ENCODING_RAW: 
+@GDK_PIXDATA_ENCODING_RLE: 
+@GDK_PIXDATA_ENCODING_MASK: 
+
+<!-- ##### ENUM GdkPixdataDumpType ##### -->
+  <para>
+
+  </para>
+
+@GDK_PIXDATA_DUMP_PIXDATA_STREAM: 
+@GDK_PIXDATA_DUMP_PIXDATA_STRUCT: 
+@GDK_PIXDATA_DUMP_MACROS: 
+@GDK_PIXDATA_DUMP_GTYPES: 
+@GDK_PIXDATA_DUMP_CTYPES: 
+@GDK_PIXDATA_DUMP_STATIC: 
+@GDK_PIXDATA_DUMP_CONST: 
+@GDK_PIXDATA_DUMP_RLE_DECODER: 
+
+<!-- ##### MACRO GDK_PIXBUF_MAGIC_NUMBER ##### -->
+<para>
+
+</para>
+
+
+
+<!-- ##### MACRO GDK_PIXDATA_HEADER_LENGTH ##### -->
+<para>
+
+</para>
+
+
+
+<!-- ##### FUNCTION gdk_pixdata_from_pixbuf ##### -->
+<para>
+
+</para>
+
+@pixdata: 
+@pixbuf: 
+@use_rle: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_pixbuf_from_pixdata ##### -->
+<para>
+
+</para>
+
+@pixdata: 
+@copy_pixels: 
+@error: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_pixdata_serialize ##### -->
+<para>
+
+</para>
+
+@pixdata: 
+@stream_length_p: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_pixdata_deserialize ##### -->
+<para>
+
+</para>
+
+@pixdata: 
+@stream_length: 
+@stream: 
+@error: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_pixdata_to_csource ##### -->
+<para>
+
+</para>
+
+@pixdata: 
+@name: 
+@dump_type: 
+@Returns: 
+
+

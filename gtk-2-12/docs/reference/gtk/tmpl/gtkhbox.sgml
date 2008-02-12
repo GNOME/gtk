@@ -1,0 +1,49 @@
+<!-- ##### SECTION Title ##### -->
+GtkHBox
+
+<!-- ##### SECTION Short_Description ##### -->
+A horizontal container box
+
+<!-- ##### SECTION Long_Description ##### -->
+<para>
+GtkHBox is a container that organizes child widgets into a single row.
+</para>
+
+<para>
+Use the #GtkBox packing interface to determine the arrangement,
+spacing, width, and alignment of GtkHBox children.
+</para>
+
+<para>
+All children are allocated the same height.
+</para>
+
+<!-- ##### SECTION See_Also ##### -->
+<para>
+<variablelist>
+
+<varlistentry>
+<term>#GtkVBox</term>
+<listitem><para>a sister class that organizes widgets into a column.</para></listitem>
+</varlistentry>
+
+</variablelist>
+</para>
+
+<!-- ##### SECTION Stability_Level ##### -->
+
+
+<!-- ##### STRUCT GtkHBox ##### -->
+
+
+
+<!-- ##### FUNCTION gtk_hbox_new ##### -->
+<para>
+Creates a new GtkHBox.
+</para>
+
+@homogeneous: %TRUE if all children are to be given equal space allotments.
+@spacing: the number of pixels to place by default between children.
+@Returns: a new GtkHBox.
+
+

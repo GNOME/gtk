@@ -1,0 +1,81 @@
+<!-- ##### SECTION Title ##### -->
+Reference Counting and Memory Mangement
+
+<!-- ##### SECTION Short_Description ##### -->
+
+Functions for reference counting and memory management on pixbufs.
+
+<!-- ##### SECTION Long_Description ##### -->
+  <para>
+    #GdkPixbuf structures are reference counted.  This means that an
+    application can share a single pixbuf among many parts of the
+    code.  When a piece of the program needs to keep a pointer to a
+    pixbuf, it should add a reference to it by calling g_object_ref().
+    When it no longer needs the pixbuf, it should subtract a reference
+    by calling g_object_unref().  The pixbuf will be destroyed when
+    its reference count drops to zero.  Newly-created #GdkPixbuf
+    structures start with a reference count of one.
+  </para>
+
+  <note>
+    <para>
+      As #GdkPixbuf is derived from #GObject now, gdk_pixbuf_ref() and
+      gdk_pixbuf_unref() are deprecated in favour of g_object_ref()
+      and g_object_unref () resp.
+    </para>
+  </note>
+
+  <para>
+    <emphasis>Finalizing</emphasis> a pixbuf means to free its pixel
+    data and to free the #GdkPixbuf structure itself.  Most of the
+    library functions that create #GdkPixbuf structures create the
+    pixel data by themselves and define the way it should be freed;
+    you do not need to worry about those.  The only function that lets
+    you specify how to free the pixel data is
+    gdk_pixbuf_new_from_data().  Since you pass it a pre-allocated
+    pixel buffer, you must also specify a way to free that data.  This
+    is done with a function of type #GdkPixbufDestroyNotify.  When a
+    pixbuf created with gdk_pixbuf_new_from_data() is finalized, your
+    destroy notification function will be called, and it is its
+    responsibility to free the pixel array.
+  </para>
+
+<!-- ##### SECTION See_Also ##### -->
+  <para>
+    #GdkPixbuf, gdk_pixbuf_new_from_data().
+  </para>
+
+<!-- ##### SECTION Stability_Level ##### -->
+
+
+<!-- ##### FUNCTION gdk_pixbuf_ref ##### -->
+  <para>
+
+  </para>
+
+@pixbuf: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_pixbuf_unref ##### -->
+<para>
+
+</para>
+
+@pixbuf: 
+
+
+<!-- ##### USER_FUNCTION GdkPixbufDestroyNotify ##### -->
+  <para>
+    A function of this type is responsible for freeing the pixel array
+    of a pixbuf.  The gdk_pixbuf_new_from_data() function lets you
+    pass in a pre-allocated pixel array so that a pixbuf can be
+    created from it; in this case you will need to pass in a function
+    of #GdkPixbufDestroyNotify so that the pixel data can be freed
+    when the pixbuf is finalized.
+  </para>
+
+@pixels: The pixel array of the pixbuf that is being finalized.
+@data: User closure data.
+
+

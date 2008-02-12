@@ -1,0 +1,165 @@
+<refentry id="gtk-framebuffer" revision="1 Jan 2002">
+<refmeta>
+<refentrytitle>Using GTK+ on the Framebuffer</refentrytitle>
+<manvolnum>3</manvolnum>
+<refmiscinfo>GTK Library</refmiscinfo>
+</refmeta>
+
+<refnamediv>
+<refname>Using GTK+ on the Framebuffer</refname>
+<refpurpose>
+Linux framebuffer aspects of using GTK+
+</refpurpose>
+</refnamediv>
+
+<refsect1>
+<title>GTK+ for the Linux Framebuffer</title>
+
+<note><para>
+The linux-fb GDK target is unmaintained and may not work or even
+compile. The information below may still be helpful; also there are
+several patches in bugzilla which may help with making the linux-fb
+code compilable.
+</para></note>
+
+<para>
+The linux-fb port of GTK+, also known as GtkFB is an implementation of
+GDK (and therefore GTK+) that runs on the Linux framebuffer. It runs in
+a single process that doesn't need X. It should run most GTK+ programs
+without any changes to the source.
+</para>
+
+<refsect2><title>Build requirements</title>
+<para>
+You need GTK+ 2.0; the 1.2.x series does not have framebuffer support.
+To compile GTK+ with framebuffer support you will need FreeType 2; we
+recommend FreeType 2.0.1 or later, as there was some problems with
+<command>freetype-config</command> in 2.0.  Make sure that you install 
+FreeType before Pango, since Pango also needs it. FreeType can be found at
+<ulink url="ftp://ftp.freetype.org">ftp://ftp.freetype.org</ulink>.  You also
+need fontconfig in order to properly use the FreeType 2 backend in Pango.
+Fontconfig depends on FreeType as well. Fontconfig can be found at
+<ulink url="http://fontconfig.org">http://fontconfig.org</ulink>.
+</para>
+</refsect2>
+
+<refsect2><title>Hardware requirements</title>
+<para>
+You need a graphics card with an available framebuffer driver that can
+run in 8, 16, 24 or 32 bpp, such as matroxfb or vesafb.  You also need
+a supported mouse. GTK+ currently supports the ps2 mouse, ms serial
+mouse and fidmour touchscreen. Additional hardware support should 
+be simple to add.
+</para>
+</refsect2>
+
+<refsect2><title>Building and installing</title>
+<para>
+First build and install GLib, ATK and Pango as usual, in that order.
+
+Then configure GTK+ by running <command>configure</command> (or 
+<command>autogen.sh</command> if running from
+CVS) with <option>--with-gdktarget=linux-fb</option>.
+</para>
+
+<para>Then compile as usual: <command>make; make install</command></para>
+</refsect2>
+
+<refsect2><title>Fonts</title>
+<para>
+Since GtkFB uses FreeType 2 to render fonts it can render TrueType and
+Postscript type 1 antialiased fonts.
+</para>
+
+<para>
+GtkFB uses fontconfig for configuration of font information, including
+directories and aliases. Make sure that you have your fonts.conf file
+configured with where your TrueType and Type1 fonts are. Please refer to the
+fontconfig documentation for more information.
+</para>
+</refsect2>
+
+<refsect2><title>Running</title>
+<para>
+To run a program you should only need to start it, but there are some
+things that can cause problems, and some things that can be controlled
+by environment variables. Try <application>gtk-demo</application> distributed 
+with GTK+ to test if things work.
+</para>
+
+<para>
+If you use a ps2 mouse, make sure that <filename>/dev/psaux</filename> is 
+readable and writable.
+</para>
+
+<para>Make sure <command>gpm</command> is not running.</para>
+
+<para>If you don't specify anything GtkFB will start up in the current
+virtual console in the current resolution and bit-depth. This can be
+changed by specifying environment variables:
+</para>
+
+<para id="fb-envar">
+<programlisting>
+<envar>GDK_VT</envar>:
+ unset means open on the current VT.
+ 0-9: open on the specified VT. Make sure you have read/write rights
+      there.
+ new: Allocate a new VT after the last currently used one.
+
+<envar>GDK_DISPLAY_MODE</envar>:
+ Specifies the name of a mode in <filename>/etc/fb.modes</filename> that you 
+ want to use.
+
+<envar>GDK_DISPLAY_DEPTH</envar>:
+ Specify the desired bit depth of the framebuffer.
+ 
+<envar>GDK_DISPLAY_WIDTH</envar>:
+ Specify the desired width of the framebuffer.
+ 
+<envar>GDK_DISPLAY_HEIGHT</envar>:
+ Specify the desired height of the framebuffer.
+
+<envar>GDK_DISPLAY</envar>:
+ Specify the framebuffer device to use. Default is <filename>/dev/fb0</filename>.
+
+<envar>GDK_MOUSE_TYPE</envar>:
+ Specify mouse type. Currently supported is:
+  ps2 - PS/2 mouse
+  imps2 - PS/2 intellimouse (wheelmouse)
+  ms - Microsoft serial mouse
+  fidmour - touch screen
+ Default is ps2.
+
+<envar>GDK_KEYBOARD_TYPE</envar>:
+ Specify keyboard type. Currently supported is
+  xlate - normal tty mode keyboard.
+    Quite limited, cannot detect key up/key down events. Doesn't
+    handle ctrl/alt/shift for all keys. This is the default driver,
+    but should not be used in "production" use.
+  raw - read from the tty in RAW mode.
+    Sets the keyboard in RAW mode and handles all the keycodes. This
+    gives correct handling of modifiers and key up/down events. You
+    must be root to use this. If you use this for development or
+    debugging it is recommended to enable magic sysrq handling in the
+    kernel. Then you can use ALT-SysRQ-r to turn the keyboard back to
+    normal mode.
+ Default is xlate.
+</programlisting>
+</para>
+</refsect2>
+
+<refsect2><title>Debug features</title>
+<para>Pressing Ctrl-Alt-Return repaints the whole screen.
+Unfortunately this cannot be pressed when using the xlate keyboard
+driver, so instead you can use shift-F1 instead when using this
+driver.
+</para>
+
+<para>Pressing Ctrl-Alt-BackSpace kills the GtkFB program. (This can't be
+pressed in the xlate driver, so instead you can use shift-F8.)</para>
+</refsect2>
+
+</refsect1>
+
+</refentry>

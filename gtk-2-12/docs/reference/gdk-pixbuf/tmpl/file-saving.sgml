@@ -1,0 +1,126 @@
+<!-- ##### SECTION Title ##### -->
+File saving
+
+<!-- ##### SECTION Short_Description ##### -->
+Saving a pixbuf to a file.
+
+<!-- ##### SECTION Long_Description ##### -->
+<para>
+These functions allow to save a #GdkPixbuf in a number of 
+file formats. The formatted data can be written to a file
+or to a memory buffer. &gdk-pixbuf; can also call a user-defined
+callback on the data, which allows to e.g. write the image 
+to a socket or store it in a database.
+</para>
+
+<!-- ##### SECTION See_Also ##### -->
+<para>
+
+</para>
+
+<!-- ##### SECTION Stability_Level ##### -->
+
+
+<!-- ##### FUNCTION gdk_pixbuf_savev ##### -->
+<para>
+
+</para>
+
+@pixbuf: 
+@filename: 
+@type: 
+@option_keys: 
+@option_values: 
+@error: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_pixbuf_save ##### -->
+<para>
+
+</para>
+
+@pixbuf: 
+@filename: 
+@type: 
+@error: 
+@Varargs: 
+@Returns: 
+
+
+<!-- ##### USER_FUNCTION GdkPixbufSaveFunc ##### -->
+<para>
+Specifies the type of the function passed to
+gdk_pixbuf_save_to_callback().  It is called once for each block of
+bytes that is "written" by gdk_pixbuf_save_to_callback().  If
+successful it should return %TRUE.  If an error occurs it should set
+@error and return %FALSE, in which case gdk_pixbuf_save_to_callback()
+will fail with the same error.
+</para>
+
+@buf: bytes to be written.
+@count: number of bytes in @buf.
+@error: A location to return an error.
+@data: user data passed to gdk_pixbuf_save_to_callback().
+@Returns: %TRUE if successful, %FALSE (with @error set) if failed.
+@Since: 2.4
+
+
+<!-- ##### FUNCTION gdk_pixbuf_save_to_callback ##### -->
+<para>
+
+</para>
+
+@pixbuf: 
+@save_func: 
+@user_data: 
+@type: 
+@error: 
+@Varargs: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_pixbuf_save_to_callbackv ##### -->
+<para>
+
+</para>
+
+@pixbuf: 
+@save_func: 
+@user_data: 
+@type: 
+@option_keys: 
+@option_values: 
+@error: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_pixbuf_save_to_buffer ##### -->
+<para>
+
+</para>
+
+@pixbuf: 
+@buffer: 
+@buffer_size: 
+@type: 
+@error: 
+@Varargs: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_pixbuf_save_to_bufferv ##### -->
+<para>
+
+</para>
+
+@pixbuf: 
+@buffer: 
+@buffer_size: 
+@type: 
+@option_keys: 
+@option_values: 
+@error: 
+@Returns: 
+
+

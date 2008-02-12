@@ -1,0 +1,11 @@
+#include <gdk/gdk.h>
+
+gdk_display_get_type
+gdk_display_manager_get_type
+gdk_screen_get_type
+gdk_drawable_get_type
+gdk_window_object_get_type
+gdk_pango_renderer_get_type
+gdk_pixmap_get_type
+gdk_gc_get_type
+gdk_keymap_get_type

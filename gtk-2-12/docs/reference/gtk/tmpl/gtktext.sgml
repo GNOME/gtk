@@ -1,0 +1,238 @@
+<!-- ##### SECTION Title ##### -->
+GtkText
+
+<!-- ##### SECTION Short_Description ##### -->
+A text widget
+
+<!-- ##### SECTION Long_Description ##### -->
+<para>
+<warning>
+<para>
+#GtkText is deprecated and unsupported. It is known to be
+buggy. To use it, you must define the symbol %GTK_ENABLE_BROKEN
+prior to including the GTK+ header files. Use #GtkTextView instead.
+</para>
+</warning>
+A #GtkText widget allows one to display any given text and manipulate it
+by deleting from one point to another, selecting a region, and various
+other functions as outlined below.  It is inherited from #GtkEditable.
+</para>
+
+<!-- ##### SECTION See_Also ##### -->
+<para>
+
+</para>
+
+<!-- ##### SECTION Stability_Level ##### -->
+
+
+<!-- ##### STRUCT GtkText ##### -->
+<para>
+Most of the #GtkText-struct struct members should not be accessed directly.
+Listed below are a few exceptions and how to use them.
+</para>
+
+
+<!-- ##### SIGNAL GtkText::set-scroll-adjustments ##### -->
+<para>
+
+</para>
+
+@text: the object which received the signal.
+@arg1: 
+@arg2: 
+
+<!-- ##### ARG GtkText:hadjustment ##### -->
+<para>
+Used by the #GtkText widget to keep track of the size of its horizontal
+text.
+</para>
+
+<!-- ##### ARG GtkText:line-wrap ##### -->
+<para>
+Boolean value indicating whether line wrap is enabled or not.
+</para>
+
+<!-- ##### ARG GtkText:vadjustment ##### -->
+<para>
+Used by the #GtkText widget to keep track of the size of its vertical
+text.
+</para>
+
+<!-- ##### ARG GtkText:word-wrap ##### -->
+<para>
+Boolean value indicated whether word wrap is enabled or not.
+</para>
+
+<!-- ##### STRUCT GtkTextFont ##### -->
+<para>
+Internal #GtkText data type.
+<!-- Pretty sure.. declared in gtktext.c -->
+</para>
+
+
+<!-- ##### STRUCT GtkPropertyMark ##### -->
+<para>
+Internal #GtkText data type.  Should not be accessed directly.
+<!-- FIXME: unsure about this  -->
+</para>
+
+@property: 
+@offset: 
+@index: 
+
+<!-- ##### FUNCTION gtk_text_new ##### -->
+<para>
+Creates a new #GtkText widget, initialized with the given pointers to
+#GtkAdjustments.  These pointers can be used to track the viewing position
+of the #GtkText widget.  Passing %NULL to either or both of them will make
+the #GtkText create its own.  You can set these later with the function
+gtk_text_set_adjustment().
+</para>
+
+@hadj: horizontal adjustment.
+@vadj: vertical adjustment.
+@Returns: the new #GtkText widget.
+
+
+<!-- ##### FUNCTION gtk_text_set_editable ##### -->
+<para>
+Sets whether the #GtkText widget can be edited by the user or not.  This
+still allows you the programmer to make changes with the various #GtkText
+functions.
+</para>
+
+@text: the #GtkText widget
+@editable: %TRUE makes it editable, %FALSE makes it immutable by the user
+
+
+<!-- ##### FUNCTION gtk_text_set_word_wrap ##### -->
+<para>
+Sets whether the #GtkText widget wraps words down to the next line if it
+can't be completed on the current line.
+</para>
+
+@text: the #GtkText widget
+@word_wrap: %TRUE makes it word wrap, %FALSE disables word wrapping
+
+
+<!-- ##### FUNCTION gtk_text_set_line_wrap ##### -->
+<para>
+Controls how #GtkText handles long lines of continuous text.  If line wrap
+is on, the line is broken when it reaches the extent of the #GtkText widget
+viewing area and the rest is displayed on the next line.  If it is not set,
+the line continues regardless size of current viewing area.  Similar to word
+wrap but it disregards word boundaries.
+</para>
+
+@text: the #GtkText widget
+@line_wrap: %TRUE turns line wrap on, %FALSE turns it off
+
+
+<!-- ##### FUNCTION gtk_text_set_adjustments ##### -->
+<para>
+Allows you to set #GtkAdjustment pointers which in turn allows you to
+keep track of the viewing position of the #GtkText widget.
+</para>
+
+@text: the #GtkText widget
+@hadj: the horizontal adjustment
+@vadj: the vertical adjustment
+
+
+<!-- ##### FUNCTION gtk_text_set_point ##### -->
+<para>
+Sets the cursor at the given point.  In this case a point constitutes
+the number of characters from the extreme upper left corner of the #GtkText
+widget.
+</para>
+
+@text: the #GtkText widget
+@index: the number of characters from the upper left corner
+
+
+<!-- ##### FUNCTION gtk_text_get_point ##### -->
+<para>
+Gets the current position of the cursor as the number of characters from
+the upper left corner of the #GtkText widget.
+</para>
+
+@text: the #GtkText widget
+@Returns: the number of characters from the upper left corner
+
+
+<!-- ##### FUNCTION gtk_text_get_length ##### -->
+<para>
+Returns the length of the all the text contained within the #GtkText widget;
+disregards current point position.
+</para>
+
+@text: the #GtkText widget
+@Returns: the length of the text
+
+
+<!-- ##### FUNCTION gtk_text_freeze ##### -->
+<para>
+Freezes the #GtkText widget which disallows redrawing of the widget until
+it is thawed.  This is useful if a large number of changes are going to
+made to the text within the widget, reducing the amount of flicker seen
+by the user.
+</para>
+
+@text: the #GtkText widget
+
+
+<!-- ##### FUNCTION gtk_text_thaw ##### -->
+<para>
+Allows the #GtkText widget to be redrawn again by GTK.
+</para>
+
+@text: the #GtkText widget
+
+
+<!-- ##### FUNCTION gtk_text_insert ##### -->
+<para>
+Inserts given text into the #GtkText widget with the given properties as
+outlined below.
+</para>
+
+@text: the #GtkText widget
+@font: the #GdkFont to use
+@fore: the foreground color to insert with
+@back: the background color to insert with
+@chars: the actual text to be inserted
+@length: the length of the text to be inserted, passing -1 makes it insert
+all the text.
+
+
+<!-- ##### FUNCTION gtk_text_backward_delete ##### -->
+<para>
+Deletes from the current point position backward the given number of
+characters.
+</para>
+
+@text: the #GtkText widget
+@nchars: the number of characters to delete
+@Returns: %TRUE if the operation was successful, otherwise returns %FALSE
+
+
+<!-- ##### FUNCTION gtk_text_forward_delete ##### -->
+<para>
+Deletes from the current point position forward the given number of
+characters.
+</para>
+
+@text: the #GtkText widget
+@nchars: the number of characters to delete
+@Returns: %TRUE if the operation was successful, otherwise returns %FALSE
+
+
+<!-- ##### MACRO GTK_TEXT_INDEX ##### -->
+<para>
+Returns the character at the given index within the #GtkText widget.
+</para>
+
+@t: the #GtkText widget
+@index: the number of characters from the upper left corner
+
+

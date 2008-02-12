@@ -1,0 +1,41 @@
+<!-- ##### SECTION Title ##### -->
+GtkVSeparator
+
+<!-- ##### SECTION Short_Description ##### -->
+A vertical separator
+
+<!-- ##### SECTION Long_Description ##### -->
+<para>
+The #GtkVSeparator widget is a vertical separator, used to group the
+widgets within a window. It displays a vertical line with a shadow to
+make it appear sunken into the interface.
+</para>
+
+<!-- ##### SECTION See_Also ##### -->
+<para>
+<variablelist>
+<varlistentry>
+<term>#GtkHSeparator</term>
+<listitem><para>a horizontal separator.</para></listitem>
+</varlistentry>
+</variablelist>
+</para>
+
+<!-- ##### SECTION Stability_Level ##### -->
+
+
+<!-- ##### STRUCT GtkVSeparator ##### -->
+<para>
+The #GtkVSeparator-struct struct contains private data only, and
+should be accessed using the functions below.
+</para>
+
+
+<!-- ##### FUNCTION gtk_vseparator_new ##### -->
+<para>
+Creates a new #GtkVSeparator.
+</para>
+
+@Returns: a new #GtkVSeparator.
+
+

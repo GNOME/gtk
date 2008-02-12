@@ -1,0 +1,89 @@
+<!-- ##### SECTION Title ##### -->
+GtkScrollbar
+
+<!-- ##### SECTION Short_Description ##### -->
+Base class for GtkHScrollbar and GtkVScrollbar
+
+<!-- ##### SECTION Long_Description ##### -->
+<para>
+The #GtkScrollbar widget is an abstract base class for #GtkHScrollbar and
+#GtkVScrollbar. It is not very useful in itself.
+</para>
+
+<para>
+The position of the thumb in a scrollbar is controlled by the scroll
+adjustments. See #GtkAdjustment for the fields in an adjustment - for
+#GtkScrollbar, the "value" field represents the position of the
+scrollbar, which must be between the "lower" field and "upper -
+page_size." The "page_size" field represents the size of the visible
+scrollable area. The "step_increment" and "page_increment" fields are
+used when the user asks to step down (using the small stepper arrows)
+or page down (using for example the PageDown key).
+</para>
+
+<!-- ##### SECTION See_Also ##### -->
+<para>
+<variablelist>
+
+<varlistentry>
+<term>#GtkHScrollbar</term>
+<listitem><para>a horizontal scrollbar.</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term>#GtkVScrollbar</term>
+<listitem><para>a vertical scrollbar.</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term>#GtkAdjustment</term>
+<listitem><para>connects scrollbars to the widget being scrolled.</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term>#GtkScrolledWindow</term>
+<listitem><para>convenient widget for setting up scrolling.</para></listitem>
+</varlistentry>
+
+</variablelist>
+</para>
+
+<!-- ##### SECTION Stability_Level ##### -->
+
+
+<!-- ##### STRUCT GtkScrollbar ##### -->
+<para>
+The #GtkScrollbar struct does not contain any public data.
+</para>
+
+
+<!-- ##### ARG GtkScrollbar:fixed-slider-length ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkScrollbar:has-backward-stepper ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkScrollbar:has-forward-stepper ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkScrollbar:has-secondary-backward-stepper ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkScrollbar:has-secondary-forward-stepper ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkScrollbar:min-slider-length ##### -->
+<para>
+
+</para>
+

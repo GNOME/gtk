@@ -1,0 +1,158 @@
+<!-- ##### SECTION Title ##### -->
+GtkAccelLabel
+
+<!-- ##### SECTION Short_Description ##### -->
+A label which displays an accelerator key on the right of the text
+
+<!-- ##### SECTION Long_Description ##### -->
+<para>
+The #GtkAccelLabel widget is a subclass of #GtkLabel that also displays an
+accelerator key on the right of the label text, e.g. 'Ctl+S'.
+It is commonly used in menus to show the keyboard short-cuts for commands.
+</para>
+<para>
+The accelerator key to display is not set explicitly.
+Instead, the #GtkAccelLabel displays the accelerators which have been added to
+a particular widget. This widget is set by calling
+gtk_accel_label_set_accel_widget().
+</para>
+<para>
+For example, a #GtkMenuItem widget may have an accelerator added to emit the
+"activate" signal when the 'Ctl+S' key combination is pressed.
+A #GtkAccelLabel is created and added to the #GtkMenuItem, and
+gtk_accel_label_set_accel_widget() is called with the #GtkMenuItem as the
+second argument. The #GtkAccelLabel will now display 'Ctl+S' after its label.
+</para>
+<para>
+Note that creating a #GtkMenuItem with gtk_menu_item_new_with_label() (or
+one of the similar functions for #GtkCheckMenuItem and #GtkRadioMenuItem)
+automatically adds a #GtkAccelLabel to the #GtkMenuItem and calls
+gtk_accel_label_set_accel_widget() to set it up for you.
+</para>
+<para>
+A #GtkAccelLabel will only display accelerators which have %GTK_ACCEL_VISIBLE
+set (see #GtkAccelFlags).
+A #GtkAccelLabel can display multiple accelerators and even signal names,
+though it is almost always used to display just one accelerator key.
+</para>
+
+<example>
+<title>Creating a simple menu item with an accelerator key.</title>
+<programlisting>
+  GtkWidget *save_item;
+  GtkAccelGroup *accel_group;
+
+  /* Create a GtkAccelGroup and add it to the window. */
+  accel_group = gtk_accel_group_new (<!-- -->);
+  gtk_window_add_accel_group (GTK_WINDOW (window), accel_group);
+
+  /* Create the menu item using the convenience function. */
+  save_item = gtk_menu_item_new_with_label ("Save");
+  gtk_widget_show (save_item);
+  gtk_container_add (GTK_CONTAINER (menu), save_item);
+
+  /* Now add the accelerator to the GtkMenuItem. Note that since we called
+     gtk_menu_item_new_with_label(<!-- -->) to create the GtkMenuItem the
+     GtkAccelLabel is automatically set up to display the GtkMenuItem
+     accelerators. We just need to make sure we use GTK_ACCEL_VISIBLE here. */
+  gtk_widget_add_accelerator (save_item, "activate", accel_group,
+                              GDK_s, GDK_CONTROL_MASK, GTK_ACCEL_VISIBLE);
+</programlisting>
+</example>
+
+<!-- ##### SECTION See_Also ##### -->
+<para>
+<variablelist>
+
+<varlistentry>
+<term><link linkend="gtk-keyboard-accelerators">Keyboard Accelerators</link>
+</term>
+<listitem><para>installing and using keyboard short-cuts.</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term>#GtkItemFactory</term>
+<listitem><para>an easier way to create menus.</para></listitem>
+</varlistentry>
+
+</variablelist>
+</para>
+
+<!-- ##### SECTION Stability_Level ##### -->
+
+
+<!-- ##### STRUCT GtkAccelLabel ##### -->
+<para>
+The #GtkAccelLabel-struct struct contains private data only, and
+should be accessed using the functions below.
+</para>
+
+
+<!-- ##### ARG GtkAccelLabel:accel-closure ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkAccelLabel:accel-widget ##### -->
+<para>
+
+</para>
+
+<!-- ##### FUNCTION gtk_accel_label_new ##### -->
+<para>
+Creates a new #GtkAccelLabel.
+</para>
+
+@string: the label string. Must be non-%NULL.
+@Returns: a new #GtkAccelLabel.
+
+
+<!-- ##### FUNCTION gtk_accel_label_set_accel_closure ##### -->
+<para>
+
+</para>
+
+@accel_label: 
+@accel_closure: 
+
+
+<!-- ##### FUNCTION gtk_accel_label_get_accel_widget ##### -->
+<para>
+
+</para>
+
+@accel_label: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_accel_label_set_accel_widget ##### -->
+<para>
+
+</para>
+
+@accel_label: 
+@accel_widget: 
+
+
+<!-- ##### FUNCTION gtk_accel_label_get_accel_width ##### -->
+<para>
+Returns the width needed to display the accelerator key(s).
+This is used by menus to align all of the #GtkMenuItem widgets, and shouldn't
+be needed by applications.
+</para>
+
+@accel_label: a #GtkAccelLabel.
+@Returns: the width needed to display the accelerator key(s).
+
+
+<!-- ##### FUNCTION gtk_accel_label_refetch ##### -->
+<para>
+Recreates the string representing the accelerator keys.
+This should not be needed since the string is automatically updated whenever
+accelerators are added or removed from the associated widget.
+</para>
+
+@accel_label: a #GtkAccelLabel.
+@Returns: always returns %FALSE.
+
+

@@ -1,0 +1,143 @@
+<informaltable pgwide=1 frame="none">
+<tgroup cols="4">
+<colspec colwidth="1*">
+<colspec colwidth="1*">
+<colspec colwidth="1*">
+<colspec colwidth="1*">
+<tbody><row>
+<entry><literallayout>
+<emphasis>Windows &amp; Dialogs</emphasis>
+    <link linkend="GtkWindow">GtkWindow</link>
+    <link linkend="GtkDialog">GtkDialog</link>
+    <link linkend="GtkColorSelectionDialog">GtkColorSelectionDialog</link>
+    <link linkend="GtkFileSelection">GtkFileSelection</link>
+    <link linkend="GtkFontSelectionDialog">GtkFontSelectionDialog</link>
+    <link linkend="GtkInputDialog">GtkInputDialog</link>
+
+<emphasis>Containers</emphasis>
+    <link linkend="GtkHBox">GtkHBox</link>
+    <link linkend="GtkVBox">GtkVBox</link>
+    <link linkend="GtkTable">GtkTable</link>
+    <link linkend="GtkToolbar">GtkToolbar</link>
+    <link linkend="GtkHandleBox">GtkHandleBox</link>
+    <link linkend="GtkNotebook">GtkNotebook</link>
+    <link linkend="GtkFrame">GtkFrame</link>
+    <link linkend="GtkAspectFrame">GtkAspectFrame</link>
+    <link linkend="GtkFixed">GtkFixed</link>
+    <link linkend="GtkLayout">GtkLayout</link>
+    <link linkend="GtkScrolledWindow">GtkScrolledWindow</link>
+    <link linkend="GtkViewport">GtkViewport</link>
+    <link linkend="GtkEventBox">GtkEventBox</link>
+    <link linkend="GtkAlignment">GtkAlignment</link>
+    <link linkend="GtkHButtonBox">GtkHButtonBox</link>
+    <link linkend="GtkVButtonBox">GtkVButtonBox</link>
+    <link linkend="GtkHPaned">GtkHPaned</link>
+    <link linkend="GtkVPaned">GtkVPaned</link>
+</literallayout></entry>
+<entry><literallayout>
+<emphasis>Labels &amp; Buttons</emphasis>
+    <link linkend="GtkLabel">GtkLabel</link>
+    <link linkend="GtkAccelLabel">GtkAccelLabel</link>
+    <link linkend="GtkButton">GtkButton</link>
+    <link linkend="GtkCheckButton">GtkCheckButton</link>
+    <link linkend="GtkToggleButton">GtkToggleButton</link>
+    <link linkend="GtkRadioButton">GtkRadioButton</link>
+
+<emphasis>Data Entry Widgets</emphasis>
+    <link linkend="GtkEntry">GtkEntry</link>
+    <link linkend="GtkSpinButton">GtkSpinButton</link>
+    <link linkend="GtkTextView">GtkTextView</link>
+    <link linkend="GtkOptionMenu">GtkOptionMenu</link>
+    <link linkend="GtkCombo">GtkCombo</link>
+    <link linkend="GtkHScale">GtkHScale</link>
+    <link linkend="GtkVScale">GtkVScale</link>
+                    
+
+<emphasis>Lists &amp; Trees</emphasis>
+    <link linkend="GtkCList">GtkCList</link>
+    <link linkend="GtkCTree">GtkCTree</link>
+    <link linkend="GtkList">GtkList</link>
+    <link linkend="GtkListItem">GtkListItem</link>
+
+<emphasis>Text Widget Objects</emphasis>
+    <link linkend="GtkTextBuffer">GtkTextBuffer</link>
+    <link linkend="GtkTextTag">GtkTextTag</link>
+    <link linkend="GtkTextTagTable">GtkTextTagTable</link>
+    <link linkend="GtkTextView">GtkTextView</link>
+
+<emphasis>Tooltips</emphasis>
+    <link linkend="GtkTooltips">GtkTooltips</link>
+    <link linkend="GtkTipsQuery">GtkTipsQuery</link>
+</literallayout></entry>
+
+<entry><literallayout>
+<emphasis>Menus &amp; Menu Bars</emphasis>
+    <link linkend="GtkMenuBar">GtkMenuBar</link>
+    <link linkend="GtkMenu">GtkMenu</link>
+    <link linkend="GtkMenuItem">GtkMenuItem</link>
+    <link linkend="GtkCheckMenuItem">GtkCheckMenuItem</link>
+    <link linkend="GtkRadioMenuItem">GtkRadioMenuItem</link>
+    <link linkend="GtkTearoffMenuItem">GtkTearoffMenuItem</link>
+
+<emphasis>Graphical Widgets</emphasis>
+    <link linkend="GtkDrawingArea">GtkDrawingArea</link>
+    <link linkend="GtkImage">GtkImage</link>
+    <link linkend="GtkPixmap">GtkPixmap</link>
+    <link linkend="GtkPreview">GtkPreview</link>
+    <link linkend="GtkCurve">GtkCurve</link>
+    <link linkend="GtkGammaCurve">GtkGammaCurve</link>
+
+<emphasis>Misc. Widgets</emphasis>
+    <link linkend="GtkArrow">GtkArrow</link>
+    <link linkend="GtkCalendar">GtkCalendar</link>
+    <link linkend="GtkProgressBar">GtkProgressBar</link>
+    <link linkend="GtkStatusbar">GtkStatusbar</link>
+    <link linkend="GtkHRuler">GtkHRuler</link>
+    <link linkend="GtkVRuler">GtkVRuler</link>
+    <link linkend="GtkHScrollbar">GtkHScrollbar</link>
+    <link linkend="GtkVScrollbar">GtkVScrollbar</link>
+    <link linkend="GtkHSeparator">GtkHSeparator</link>
+    <link linkend="GtkVSeparator">GtkVSeparator</link>
+    <link linkend="GtkColorSelection">GtkColorSelection</link>
+    <link linkend="GtkFontSelection">GtkFontSelection</link>
+</literallayout></entry>
+
+<entry><literallayout>
+<emphasis>Abstract Base Classes</emphasis>
+    <link linkend="GtkWidget">GtkWidget</link>
+    <link linkend="GtkObject">GtkObject</link>
+    <link linkend="GtkContainer">GtkContainer</link>
+    <link linkend="GtkBin">GtkBin</link>
+    <link linkend="GtkBox">GtkBox</link>
+    <link linkend="GtkButtonBox">GtkButtonBox</link>
+    <link linkend="GtkData">GtkData</link>
+    <link linkend="GtkEditable">GtkEditable</link>
+    <link linkend="GtkItem">GtkItem</link>
+    <link linkend="GtkMenuShell">GtkMenuShell</link>
+    <link linkend="GtkMisc">GtkMisc</link>
+    <link linkend="GtkPaned">GtkPaned</link>
+    <link linkend="GtkProgress">GtkProgress</link>
+    <link linkend="GtkRange">GtkRange</link>
+    <link linkend="GtkRuler">GtkRuler</link>
+    <link linkend="GtkScale">GtkScale</link>
+    <link linkend="GtkScrollbar">GtkScrollbar</link>
+    <link linkend="GtkSeparator">GtkSeparator</link>
+
+<emphasis>Integrating with other X Applications</emphasis>
+    <link linkend="GtkPlug">GtkPlug</link>
+    <link linkend="GtkSocket">GtkSocket</link>
+
+<emphasis>Misc. Objects</emphasis>
+    <link linkend="GtkAdjustment">GtkAdjustment</link>
+    <link linkend="GtkItemFactory">GtkItemFactory</link>
+    <link linkend="GtkInvisible">GtkInvisible</link>
+</literallayout></entry>
+
+<entry><literallayout>
+<emphasis>Deprecated Objects</emphasis>
+    <link linkend="GtkText">GtkText</link>
+    <link linkend="GtkTree">GtkTree</link>
+    <link linkend="GtkTreeItem">GtkTreeItem</link>
+</literallayout></entry>
+</row>
+</tbody></tgroup></informaltable>

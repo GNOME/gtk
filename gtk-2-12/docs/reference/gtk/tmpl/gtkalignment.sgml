@@ -1,0 +1,141 @@
+<!-- ##### SECTION Title ##### -->
+GtkAlignment
+
+<!-- ##### SECTION Short_Description ##### -->
+A widget which controls the alignment and size of its child
+
+<!-- ##### SECTION Long_Description ##### -->
+<para>
+The #GtkAlignment widget controls the alignment and size of its child widget.
+It has four settings: xscale, yscale, xalign, and yalign.
+</para>
+<para>
+The scale settings are used to specify how much the child widget should
+expand to fill the space allocated to the #GtkAlignment.
+The values can range from 0 (meaning the child doesn't expand at all) to
+1 (meaning the child expands to fill all of the available space).
+</para>
+<para>
+The align settings are used to place the child widget within the available
+area. The values range from 0 (top or left) to 1 (bottom or right).
+Of course, if the scale settings are both set to 1, the alignment settings
+have no effect.
+</para>
+
+<!-- ##### SECTION See_Also ##### -->
+<para>
+
+</para>
+
+<!-- ##### SECTION Stability_Level ##### -->
+
+
+<!-- ##### STRUCT GtkAlignment ##### -->
+<para>
+The #GtkAlignment-struct struct contains private data only, and should
+be accessed using the functions below.
+</para>
+
+
+<!-- ##### ARG GtkAlignment:bottom-padding ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkAlignment:left-padding ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkAlignment:right-padding ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkAlignment:top-padding ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkAlignment:xalign ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkAlignment:xscale ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkAlignment:yalign ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkAlignment:yscale ##### -->
+<para>
+
+</para>
+
+<!-- ##### FUNCTION gtk_alignment_new ##### -->
+<para>
+Creates a new #GtkAlignment.
+</para>
+
+@xalign: the horizontal alignment of the child widget, from 0 (left) to 1
+(right).
+@yalign: the vertical alignment of the child widget, from 0 (top) to 1
+(bottom).
+@xscale: the amount that the child widget expands horizontally to fill up
+unused space, from 0 to 1.
+A value of 0 indicates that the child widget should never expand.
+A value of 1 indicates that the child widget will expand to fill all of the
+space allocated for the #GtkAlignment.
+@yscale: the amount that the child widget expands vertically to fill up
+unused space, from 0 to 1. The values are similar to @xscale.
+@Returns: the new #GtkAlignment.
+
+
+<!-- ##### FUNCTION gtk_alignment_set ##### -->
+<para>
+Sets the #GtkAlignment values.
+</para>
+
+@alignment: a #GtkAlignment.
+@xalign: the horizontal alignment of the child widget, from 0 (left) to 1
+(right).
+@yalign: the vertical alignment of the child widget, from 0 (top) to 1
+(bottom).
+@xscale: the amount that the child widget expands horizontally to fill up
+unused space, from 0 to 1.
+A value of 0 indicates that the child widget should never expand.
+A value of 1 indicates that the child widget will expand to fill all of the
+space allocated for the #GtkAlignment.
+@yscale: the amount that the child widget expands vertically to fill up
+unused space, from 0 to 1. The values are similar to @xscale.
+
+
+<!-- ##### FUNCTION gtk_alignment_get_padding ##### -->
+<para>
+
+</para>
+
+@alignment: 
+@padding_top: 
+@padding_bottom: 
+@padding_left: 
+@padding_right: 
+
+
+<!-- ##### FUNCTION gtk_alignment_set_padding ##### -->
+<para>
+
+</para>
+
+@alignment: 
+@padding_top: 
+@padding_bottom: 
+@padding_left: 
+@padding_right: 
+
+

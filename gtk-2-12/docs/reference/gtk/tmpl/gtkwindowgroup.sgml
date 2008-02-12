@@ -1,0 +1,51 @@
+<!-- ##### SECTION Title ##### -->
+GtkWindowGroup
+
+<!-- ##### SECTION Short_Description ##### -->
+Limit the effect of grabs
+
+<!-- ##### SECTION Long_Description ##### -->
+<para>
+
+</para>
+
+<!-- ##### SECTION See_Also ##### -->
+<para>
+
+</para>
+
+<!-- ##### SECTION Stability_Level ##### -->
+
+
+<!-- ##### STRUCT GtkWindowGroup ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### FUNCTION gtk_window_group_new ##### -->
+<para>
+
+</para>
+
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_window_group_add_window ##### -->
+<para>
+
+</para>
+
+@window_group: 
+@window: 
+
+
+<!-- ##### FUNCTION gtk_window_group_remove_window ##### -->
+<para>
+
+</para>
+
+@window_group: 
+@window: 
+
+

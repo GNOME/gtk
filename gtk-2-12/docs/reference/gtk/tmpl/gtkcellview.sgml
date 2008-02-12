@@ -1,0 +1,139 @@
+<!-- ##### SECTION Title ##### -->
+GtkCellView
+
+<!-- ##### SECTION Short_Description ##### -->
+A widget displaying a single row of a GtkTreeModel
+
+<!-- ##### SECTION Long_Description ##### -->
+<para>
+A #GtkCellView displays a single row of a #GtkTreeModel, using
+cell renderers just like #GtkTreeView. #GtkCellView doesn't support
+some of the more complex features of #GtkTreeView, like cell editing
+and drag and drop.
+</para>
+
+<!-- ##### SECTION See_Also ##### -->
+<para>
+
+</para>
+
+<!-- ##### SECTION Stability_Level ##### -->
+
+
+<!-- ##### STRUCT GtkCellView ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### ARG GtkCellView:background ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkCellView:background-gdk ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkCellView:background-set ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkCellView:model ##### -->
+<para>
+
+</para>
+
+<!-- ##### FUNCTION gtk_cell_view_new ##### -->
+<para>
+
+</para>
+
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_cell_view_new_with_text ##### -->
+<para>
+
+</para>
+
+@text: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_cell_view_new_with_markup ##### -->
+<para>
+
+</para>
+
+@markup: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_cell_view_new_with_pixbuf ##### -->
+<para>
+
+</para>
+
+@pixbuf: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_cell_view_set_model ##### -->
+<para>
+
+</para>
+
+@cell_view: 
+@model: 
+
+
+<!-- ##### FUNCTION gtk_cell_view_set_displayed_row ##### -->
+<para>
+
+</para>
+
+@cell_view: 
+@path: 
+
+
+<!-- ##### FUNCTION gtk_cell_view_get_displayed_row ##### -->
+<para>
+
+</para>
+
+@cell_view: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_cell_view_get_size_of_row ##### -->
+<para>
+
+</para>
+
+@cell_view: 
+@path: 
+@requisition: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_cell_view_set_background_color ##### -->
+<para>
+
+</para>
+
+@cell_view: 
+@color: 
+
+
+<!-- ##### FUNCTION gtk_cell_view_get_cell_renderers ##### -->
+<para>
+
+</para>
+
+@cell_view: 
+@Returns: 
+
+

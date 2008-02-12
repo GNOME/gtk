@@ -1,0 +1,291 @@
+<!-- ##### SECTION Title ##### -->
+GtkColorSelection
+
+<!-- ##### SECTION Short_Description ##### -->
+A widget used to select a color
+
+<!-- ##### SECTION Long_Description ##### -->
+<para>
+The #GtkColorSelection is a widget that is used to select 
+a color.  It consists of a color wheel and number of sliders
+and entry boxes for color parameters such as hue, saturation,
+value, red, green, blue, and opacity.  It is found on the standard 
+color selection dialog box #GtkColorSelectionDialog.
+</para>
+
+<!-- ##### SECTION See_Also ##### -->
+<para>
+
+</para>
+
+<!-- ##### SECTION Stability_Level ##### -->
+
+
+<!-- ##### STRUCT GtkColorSelection ##### -->
+<para>
+The #GtkColorSelection-struct struct contains private data only, 
+and should be accessed using the functions below.
+</para>
+
+
+<!-- ##### SIGNAL GtkColorSelection::color-changed ##### -->
+<para>
+This signal is emitted when the color changes in the #GtkColorSelection
+according to its update policy.
+</para>
+
+@colorselection: the object which received the signal.
+
+<!-- ##### ARG GtkColorSelection:current-alpha ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkColorSelection:current-color ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkColorSelection:has-opacity-control ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkColorSelection:has-palette ##### -->
+<para>
+
+</para>
+
+<!-- ##### FUNCTION gtk_color_selection_new ##### -->
+<para>
+
+</para>
+
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_color_selection_set_update_policy ##### -->
+<para>
+Sets the policy controlling when the color_changed signals are emitted.
+The available policies are:
+<itemizedlist>
+<listitem>
+<para>
+%GTK_UPDATE_CONTINUOUS - signals are sent continuously as the color
+selection changes.
+</para>
+</listitem>
+<listitem>
+<para>
+%GTK_UPDATE_DISCONTINUOUS - signals are sent only when the mouse 
+button is released.
+</para>
+</listitem>
+<listitem>
+<para>
+%GTK_UPDATE_DELAYED - signals are sent when the mouse button is
+released or when the mouse has been motionless for a period of
+time.
+</para>
+</listitem>
+</itemizedlist>
+</para>
+
+@colorsel: a #GtkColorSelection.
+@policy: a #GtkUpdateType value indicating the desired policy.
+
+
+<!-- ##### FUNCTION gtk_color_selection_set_has_opacity_control ##### -->
+<para>
+
+</para>
+
+@colorsel: 
+@has_opacity: 
+
+
+<!-- ##### FUNCTION gtk_color_selection_get_has_opacity_control ##### -->
+<para>
+
+</para>
+
+@colorsel: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_color_selection_set_has_palette ##### -->
+<para>
+
+</para>
+
+@colorsel: 
+@has_palette: 
+
+
+<!-- ##### FUNCTION gtk_color_selection_get_has_palette ##### -->
+<para>
+
+</para>
+
+@colorsel: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_color_selection_get_current_alpha ##### -->
+<para>
+
+</para>
+
+@colorsel: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_color_selection_set_current_alpha ##### -->
+<para>
+
+</para>
+
+@colorsel: 
+@alpha: 
+
+
+<!-- ##### FUNCTION gtk_color_selection_get_current_color ##### -->
+<para>
+
+</para>
+
+@colorsel: 
+@color: 
+
+
+<!-- ##### FUNCTION gtk_color_selection_set_current_color ##### -->
+<para>
+
+</para>
+
+@colorsel: 
+@color: 
+
+
+<!-- ##### FUNCTION gtk_color_selection_get_previous_alpha ##### -->
+<para>
+
+</para>
+
+@colorsel: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_color_selection_set_previous_alpha ##### -->
+<para>
+
+</para>
+
+@colorsel: 
+@alpha: 
+
+
+<!-- ##### FUNCTION gtk_color_selection_get_previous_color ##### -->
+<para>
+
+</para>
+
+@colorsel: 
+@color: 
+
+
+<!-- ##### FUNCTION gtk_color_selection_set_previous_color ##### -->
+<para>
+
+</para>
+
+@colorsel: 
+@color: 
+
+
+<!-- ##### FUNCTION gtk_color_selection_is_adjusting ##### -->
+<para>
+
+</para>
+
+@colorsel: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_color_selection_palette_from_string ##### -->
+<para>
+
+</para>
+
+@str: 
+@colors: 
+@n_colors: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_color_selection_palette_to_string ##### -->
+<para>
+
+</para>
+
+@colors: 
+@n_colors: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_color_selection_set_change_palette_hook ##### -->
+<para>
+
+</para>
+
+@func: 
+@Returns: 
+
+
+<!-- ##### USER_FUNCTION GtkColorSelectionChangePaletteFunc ##### -->
+<para>
+
+</para>
+
+@colors: 
+@n_colors: 
+
+
+<!-- ##### FUNCTION gtk_color_selection_set_change_palette_with_screen_hook ##### -->
+<para>
+
+</para>
+
+@func: 
+@Returns: 
+
+
+<!-- ##### USER_FUNCTION GtkColorSelectionChangePaletteWithScreenFunc ##### -->
+<para>
+
+</para>
+
+@screen: 
+@colors: 
+@n_colors: 
+@Since: 2.2
+
+
+<!-- ##### FUNCTION gtk_color_selection_set_color ##### -->
+<para>
+
+</para>
+
+@colorsel: 
+@color: 
+
+
+<!-- ##### FUNCTION gtk_color_selection_get_color ##### -->
+<para>
+
+</para>
+
+@colorsel: 
+@color: 
+
+

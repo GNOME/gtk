@@ -1,0 +1,744 @@
+<!-- ##### SECTION Title ##### -->
+GtkIconView
+
+<!-- ##### SECTION Short_Description ##### -->
+A widget which displays a list of icons in a grid
+
+<!-- ##### SECTION Long_Description ##### -->
+<para>
+#GtkIconView provides an alternative view on a list model. 
+It displays the model as a grid of icons with labels. Like 
+#GtkTreeView, it allows to select one or multiple items 
+(depending on the selection mode, see gtk_icon_view_set_selection_mode()).
+In addition to selection with the arrow keys, #GtkIconView supports
+rubberband selection, which is controlled by dragging the pointer.
+</para>
+
+<!-- ##### SECTION See_Also ##### -->
+<para>
+
+</para>
+
+<!-- ##### SECTION Stability_Level ##### -->
+
+
+<!-- ##### STRUCT GtkIconView ##### -->
+<para>
+The <structname>GtkIconView</structname> struct contains only
+private fields and should not be directly accessed.
+</para>
+
+
+<!-- ##### SIGNAL GtkIconView::activate-cursor-item ##### -->
+<para>
+
+</para>
+
+@iconview: the object which received the signal.
+@Returns: 
+
+<!-- ##### SIGNAL GtkIconView::item-activated ##### -->
+<para>
+
+</para>
+
+@iconview: the object which received the signal.
+@arg1: 
+
+<!-- ##### SIGNAL GtkIconView::move-cursor ##### -->
+<para>
+
+</para>
+
+@iconview: the object which received the signal.
+@arg1: 
+@arg2: 
+@Returns: 
+
+<!-- ##### SIGNAL GtkIconView::select-all ##### -->
+<para>
+
+</para>
+
+@iconview: the object which received the signal.
+
+<!-- ##### SIGNAL GtkIconView::select-cursor-item ##### -->
+<para>
+
+</para>
+
+@iconview: the object which received the signal.
+
+<!-- ##### SIGNAL GtkIconView::selection-changed ##### -->
+<para>
+
+</para>
+
+@iconview: the object which received the signal.
+
+<!-- ##### SIGNAL GtkIconView::set-scroll-adjustments ##### -->
+<para>
+
+</para>
+
+@iconview: the object which received the signal.
+@arg1: 
+@arg2: 
+
+<!-- ##### SIGNAL GtkIconView::toggle-cursor-item ##### -->
+<para>
+
+</para>
+
+@iconview: the object which received the signal.
+
+<!-- ##### SIGNAL GtkIconView::unselect-all ##### -->
+<para>
+
+</para>
+
+@iconview: the object which received the signal.
+
+<!-- ##### ARG GtkIconView:column-spacing ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkIconView:columns ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkIconView:item-width ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkIconView:margin ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkIconView:markup-column ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkIconView:model ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkIconView:orientation ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkIconView:pixbuf-column ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkIconView:reorderable ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkIconView:row-spacing ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkIconView:selection-mode ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkIconView:spacing ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkIconView:text-column ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkIconView:tooltip-column ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkIconView:selection-box-alpha ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkIconView:selection-box-color ##### -->
+<para>
+
+</para>
+
+<!-- ##### USER_FUNCTION GtkIconViewForeachFunc ##### -->
+<para>
+A function used by gtk_icon_view_selected_foreach() to map all
+selected rows.  It will be called on every selected row in the view.
+</para>
+
+@icon_view: a #GtkIconView
+@path: The #GtkTreePath of a selected row
+@data: user data
+
+
+<!-- ##### FUNCTION gtk_icon_view_new ##### -->
+<para>
+
+</para>
+
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_icon_view_new_with_model ##### -->
+<para>
+
+</para>
+
+@model: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_icon_view_set_model ##### -->
+<para>
+
+</para>
+
+@icon_view: 
+@model: 
+
+
+<!-- ##### FUNCTION gtk_icon_view_get_model ##### -->
+<para>
+
+</para>
+
+@icon_view: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_icon_view_set_text_column ##### -->
+<para>
+
+</para>
+
+@icon_view: 
+@column: 
+
+
+<!-- ##### FUNCTION gtk_icon_view_get_text_column ##### -->
+<para>
+
+</para>
+
+@icon_view: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_icon_view_set_markup_column ##### -->
+<para>
+
+</para>
+
+@icon_view: 
+@column: 
+
+
+<!-- ##### FUNCTION gtk_icon_view_get_markup_column ##### -->
+<para>
+
+</para>
+
+@icon_view: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_icon_view_set_pixbuf_column ##### -->
+<para>
+
+</para>
+
+@icon_view: 
+@column: 
+
+
+<!-- ##### FUNCTION gtk_icon_view_get_pixbuf_column ##### -->
+<para>
+
+</para>
+
+@icon_view: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_icon_view_get_path_at_pos ##### -->
+<para>
+
+</para>
+
+@icon_view: 
+@x: 
+@y: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_icon_view_get_item_at_pos ##### -->
+<para>
+
+</para>
+
+@icon_view: 
+@x: 
+@y: 
+@path: 
+@cell: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_icon_view_convert_widget_to_bin_window_coords ##### -->
+<para>
+
+</para>
+
+@icon_view: 
+@wx: 
+@wy: 
+@bx: 
+@by: 
+
+
+<!-- ##### FUNCTION gtk_icon_view_set_cursor ##### -->
+<para>
+
+</para>
+
+@icon_view: 
+@path: 
+@cell: 
+@start_editing: 
+
+
+<!-- ##### FUNCTION gtk_icon_view_get_cursor ##### -->
+<para>
+
+</para>
+
+@icon_view: 
+@path: 
+@cell: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_icon_view_selected_foreach ##### -->
+<para>
+
+</para>
+
+@icon_view: 
+@func: 
+@data: 
+
+
+<!-- ##### FUNCTION gtk_icon_view_set_selection_mode ##### -->
+<para>
+
+</para>
+
+@icon_view: 
+@mode: 
+
+
+<!-- ##### FUNCTION gtk_icon_view_get_selection_mode ##### -->
+<para>
+
+</para>
+
+@icon_view: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_icon_view_set_orientation ##### -->
+<para>
+
+</para>
+
+@icon_view: 
+@orientation: 
+
+
+<!-- ##### FUNCTION gtk_icon_view_get_orientation ##### -->
+<para>
+
+</para>
+
+@icon_view: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_icon_view_set_columns ##### -->
+<para>
+
+</para>
+
+@icon_view: 
+@columns: 
+
+
+<!-- ##### FUNCTION gtk_icon_view_get_columns ##### -->
+<para>
+
+</para>
+
+@icon_view: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_icon_view_set_item_width ##### -->
+<para>
+
+</para>
+
+@icon_view: 
+@item_width: 
+
+
+<!-- ##### FUNCTION gtk_icon_view_get_item_width ##### -->
+<para>
+
+</para>
+
+@icon_view: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_icon_view_set_spacing ##### -->
+<para>
+
+</para>
+
+@icon_view: 
+@spacing: 
+
+
+<!-- ##### FUNCTION gtk_icon_view_get_spacing ##### -->
+<para>
+
+</para>
+
+@icon_view: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_icon_view_set_row_spacing ##### -->
+<para>
+
+</para>
+
+@icon_view: 
+@row_spacing: 
+
+
+<!-- ##### FUNCTION gtk_icon_view_get_row_spacing ##### -->
+<para>
+
+</para>
+
+@icon_view: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_icon_view_set_column_spacing ##### -->
+<para>
+
+</para>
+
+@icon_view: 
+@column_spacing: 
+
+
+<!-- ##### FUNCTION gtk_icon_view_get_column_spacing ##### -->
+<para>
+
+</para>
+
+@icon_view: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_icon_view_set_margin ##### -->
+<para>
+
+</para>
+
+@icon_view: 
+@margin: 
+
+
+<!-- ##### FUNCTION gtk_icon_view_get_margin ##### -->
+<para>
+
+</para>
+
+@icon_view: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_icon_view_select_path ##### -->
+<para>
+
+</para>
+
+@icon_view: 
+@path: 
+
+
+<!-- ##### FUNCTION gtk_icon_view_unselect_path ##### -->
+<para>
+
+</para>
+
+@icon_view: 
+@path: 
+
+
+<!-- ##### FUNCTION gtk_icon_view_path_is_selected ##### -->
+<para>
+
+</para>
+
+@icon_view: 
+@path: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_icon_view_get_selected_items ##### -->
+<para>
+
+</para>
+
+@icon_view: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_icon_view_select_all ##### -->
+<para>
+
+</para>
+
+@icon_view: 
+
+
+<!-- ##### FUNCTION gtk_icon_view_unselect_all ##### -->
+<para>
+
+</para>
+
+@icon_view: 
+
+
+<!-- ##### FUNCTION gtk_icon_view_item_activated ##### -->
+<para>
+
+</para>
+
+@icon_view: 
+@path: 
+
+
+<!-- ##### FUNCTION gtk_icon_view_scroll_to_path ##### -->
+<para>
+
+</para>
+
+@icon_view: 
+@path: 
+@use_align: 
+@row_align: 
+@col_align: 
+
+
+<!-- ##### FUNCTION gtk_icon_view_get_visible_range ##### -->
+<para>
+
+</para>
+
+@icon_view: 
+@start_path: 
+@end_path: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_icon_view_set_tooltip_item ##### -->
+<para>
+
+</para>
+
+@icon_view: 
+@tooltip: 
+@path: 
+
+
+<!-- ##### FUNCTION gtk_icon_view_set_tooltip_cell ##### -->
+<para>
+
+</para>
+
+@icon_view: 
+@tooltip: 
+@path: 
+@cell: 
+
+
+<!-- ##### FUNCTION gtk_icon_view_get_tooltip_context ##### -->
+<para>
+
+</para>
+
+@icon_view: 
+@x: 
+@y: 
+@keyboard_tip: 
+@model: 
+@path: 
+@iter: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_icon_view_set_tooltip_column ##### -->
+<para>
+
+</para>
+
+@icon_view: 
+@column: 
+
+
+<!-- ##### FUNCTION gtk_icon_view_get_tooltip_column ##### -->
+<para>
+
+</para>
+
+@icon_view: 
+@Returns: 
+
+
+<!-- ##### ENUM GtkIconViewDropPosition ##### -->
+<para>
+An enum for determining where a dropped item goes.
+</para>
+
+@GTK_ICON_VIEW_NO_DROP: no drop possible
+@GTK_ICON_VIEW_DROP_INTO: dropped item replaces the item
+@GTK_ICON_VIEW_DROP_LEFT: droppped item is inserted to the left
+@GTK_ICON_VIEW_DROP_RIGHT: dropped item is inserted to the right
+@GTK_ICON_VIEW_DROP_ABOVE: dropped item is inserted above
+@GTK_ICON_VIEW_DROP_BELOW: dropped item is inserted below
+
+<!-- ##### FUNCTION gtk_icon_view_enable_model_drag_source ##### -->
+<para>
+
+</para>
+
+@icon_view: 
+@start_button_mask: 
+@targets: 
+@n_targets: 
+@actions: 
+
+
+<!-- ##### FUNCTION gtk_icon_view_enable_model_drag_dest ##### -->
+<para>
+
+</para>
+
+@icon_view: 
+@targets: 
+@n_targets: 
+@actions: 
+
+
+<!-- ##### FUNCTION gtk_icon_view_unset_model_drag_source ##### -->
+<para>
+
+</para>
+
+@icon_view: 
+
+
+<!-- ##### FUNCTION gtk_icon_view_unset_model_drag_dest ##### -->
+<para>
+
+</para>
+
+@icon_view: 
+
+
+<!-- ##### FUNCTION gtk_icon_view_set_reorderable ##### -->
+<para>
+
+</para>
+
+@icon_view: 
+@reorderable: 
+
+
+<!-- ##### FUNCTION gtk_icon_view_get_reorderable ##### -->
+<para>
+
+</para>
+
+@icon_view: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_icon_view_set_drag_dest_item ##### -->
+<para>
+
+</para>
+
+@icon_view: 
+@path: 
+@pos: 
+
+
+<!-- ##### FUNCTION gtk_icon_view_get_drag_dest_item ##### -->
+<para>
+
+</para>
+
+@icon_view: 
+@path: 
+@pos: 
+
+
+<!-- ##### FUNCTION gtk_icon_view_get_dest_item_at_pos ##### -->
+<para>
+
+</para>
+
+@icon_view: 
+@drag_x: 
+@drag_y: 
+@path: 
+@pos: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_icon_view_create_drag_icon ##### -->
+<para>
+
+</para>
+
+@icon_view: 
+@path: 
+@Returns: 
+
+

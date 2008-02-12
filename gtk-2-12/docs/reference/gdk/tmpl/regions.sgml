@@ -1,0 +1,302 @@
+<!-- ##### SECTION Title ##### -->
+Points, Rectangles and Regions
+
+<!-- ##### SECTION Short_Description ##### -->
+Simple graphical data types
+
+<!-- ##### SECTION Long_Description ##### -->
+<para>
+GDK provides the #GdkPoint, #GdkRectangle, #GdkRegion and #GdkSpan data types
+for representing pixels and sets of pixels on the screen.
+</para>
+<para>
+#GdkPoint is a simple structure containing an x and y coordinate of a point.
+</para>
+<para>
+#GdkRectangle is a structure holding the position and size of a rectangle.
+The intersection of two rectangles can be computed with
+gdk_rectangle_intersect(). To find the union of two rectangles use
+gdk_rectangle_union().
+</para>
+<para>
+#GdkRegion is an opaque data type holding a set of arbitrary pixels, and is
+usually used for clipping graphical operations (see gdk_gc_set_clip_region()).
+</para>
+<para>
+#GdkSpan is a structure holding a spanline. A spanline is a horizontal line that
+is one pixel wide. It is mainly used when rasterizing other graphics primitives.
+It can be intersected to regions by using gdk_region_spans_intersect_foreach().
+</para>
+
+<!-- ##### SECTION See_Also ##### -->
+<para>
+
+</para>
+
+<!-- ##### SECTION Stability_Level ##### -->
+
+
+<!-- ##### STRUCT GdkPoint ##### -->
+<para>
+Defines the x and y coordinates of a point.
+</para>
+
+@x: the x coordinate of the point.
+@y: the y coordinate of the point.
+
+<!-- ##### STRUCT GdkRectangle ##### -->
+<para>
+Defines the position and size of a rectangle.
+</para>
+
+@x: the x coordinate of the left edge of the rectangle.
+@y: the y coordinate of the top of the rectangle.
+@width: the width of the rectangle.
+@height: the height of the rectangle.
+
+<!-- ##### FUNCTION gdk_rectangle_intersect ##### -->
+<para>
+
+</para>
+
+@src1: 
+@src2: 
+@dest: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_rectangle_union ##### -->
+<para>
+
+</para>
+
+@src1: 
+@src2: 
+@dest: 
+
+
+<!-- ##### STRUCT GdkRegion ##### -->
+<para>
+A GdkRegion represents a set of pixels on the screen.
+</para>
+
+
+<!-- ##### FUNCTION gdk_region_new ##### -->
+<para>
+
+</para>
+
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_region_polygon ##### -->
+<para>
+
+</para>
+
+@points: 
+@npoints: 
+@fill_rule: 
+@Returns: 
+
+
+<!-- ##### ENUM GdkFillRule ##### -->
+<para>
+The method for determining which pixels are included in a region, when
+creating a #GdkRegion from a polygon.
+The fill rule is only relevant for polygons which overlap themselves.
+</para>
+
+@GDK_EVEN_ODD_RULE: areas which are overlapped an odd number of times are
+included in the region, while areas overlapped an even number of times are not.
+@GDK_WINDING_RULE: overlapping areas are always included.
+
+<!-- ##### FUNCTION gdk_region_copy ##### -->
+<para>
+
+</para>
+
+@region: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_region_rectangle ##### -->
+<para>
+
+</para>
+
+@rectangle: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_region_destroy ##### -->
+<para>
+
+</para>
+
+@region: 
+
+
+<!-- ##### FUNCTION gdk_region_get_clipbox ##### -->
+<para>
+
+</para>
+
+@region: 
+@rectangle: 
+
+
+<!-- ##### FUNCTION gdk_region_get_rectangles ##### -->
+<para>
+
+</para>
+
+@region: 
+@rectangles: 
+@n_rectangles: 
+
+
+<!-- ##### FUNCTION gdk_region_empty ##### -->
+<para>
+
+</para>
+
+@region: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_region_equal ##### -->
+<para>
+
+</para>
+
+@region1: 
+@region2: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_region_point_in ##### -->
+<para>
+
+</para>
+
+@region: 
+@x: 
+@y: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_region_rect_in ##### -->
+<para>
+
+</para>
+
+@region: 
+@rectangle: 
+@Returns: 
+
+
+<!-- ##### ENUM GdkOverlapType ##### -->
+<para>
+Specifies the possible values returned by gdk_region_rect_in().
+</para>
+
+@GDK_OVERLAP_RECTANGLE_IN: if the rectangle is inside the #GdkRegion.
+@GDK_OVERLAP_RECTANGLE_OUT: if the rectangle is outside the #GdkRegion.
+@GDK_OVERLAP_RECTANGLE_PART: if the rectangle is partly inside the #GdkRegion.
+
+<!-- ##### FUNCTION gdk_region_offset ##### -->
+<para>
+
+</para>
+
+@region: 
+@dx: 
+@dy: 
+
+
+<!-- ##### FUNCTION gdk_region_shrink ##### -->
+<para>
+
+</para>
+
+@region: 
+@dx: 
+@dy: 
+
+
+<!-- ##### FUNCTION gdk_region_union_with_rect ##### -->
+<para>
+
+</para>
+
+@region: 
+@rect: 
+
+
+<!-- ##### FUNCTION gdk_region_intersect ##### -->
+<para>
+</para>
+
+@source1: 
+@source2: 
+
+
+<!-- ##### FUNCTION gdk_region_union ##### -->
+<para>
+
+</para>
+
+@source1: 
+@source2: 
+
+
+<!-- ##### FUNCTION gdk_region_subtract ##### -->
+<para>
+</para>
+
+@source1: 
+@source2: 
+
+
+<!-- ##### FUNCTION gdk_region_xor ##### -->
+<para>
+</para>
+
+@source1: 
+@source2: 
+
+
+<!-- ##### STRUCT GdkSpan ##### -->
+<para>
+A GdkSpan represents a horizontal line of pixels starting
+at the pixel with coordinates @x, @y and ending before @x + @width, @y.
+</para>
+
+@x: x coordinate of the first pixel.
+@y: y coordinate of the first pixel.
+@width: number of pixels in the span.
+
+<!-- ##### USER_FUNCTION GdkSpanFunc ##### -->
+<para>
+This defines the type of the function passed to 
+gdk_region_spans_intersect_foreach(). 
+</para>
+
+@span: a #GdkSpan.
+@data: the user data passed to gdk_region_spans_intersect_foreach().
+
+
+<!-- ##### FUNCTION gdk_region_spans_intersect_foreach ##### -->
+<para>
+
+</para>
+
+@region: 
+@spans: 
+@n_spans: 
+@sorted: 
+@function: 
+@data: 
+
+

@@ -1,0 +1,185 @@
+<!-- ##### SECTION Title ##### -->
+GtkCheckMenuItem
+
+<!-- ##### SECTION Short_Description ##### -->
+A menu item with a check box
+
+<!-- ##### SECTION Long_Description ##### -->
+<para>
+A #GtkCheckMenuItem is a menu item that maintains the state of a boolean 
+value in addition to a #GtkMenuItem's usual role in activating application
+code.
+</para>
+
+<para>
+A check box indicating the state of the boolean value is displayed
+at the left side of the #GtkMenuItem.  Activating the #GtkMenuItem 
+toggles the value.
+</para>
+
+<!-- ##### SECTION See_Also ##### -->
+<para>
+
+</para>
+
+<!-- ##### SECTION Stability_Level ##### -->
+
+
+<!-- ##### STRUCT GtkCheckMenuItem ##### -->
+<para>
+The #GtkCheckMenuItem-struct struct contains the following fields.
+(These fields should be considered read-only. They should never be set by
+an application.)
+
+<informaltable pgwide="1" frame="none" role="struct">
+<tgroup cols="2"><colspec colwidth="2*"/><colspec colwidth="8*"/>
+<tbody>
+
+<row>
+<entry>#guint active;</entry>
+<entry>TRUE if the check box is active.</entry>
+</row>
+
+</tbody></tgroup></informaltable>
+</para>
+
+
+<!-- ##### SIGNAL GtkCheckMenuItem::toggled ##### -->
+<para>
+This signal is emitted when the state of the check box is changed.
+</para>
+
+<para>
+A signal handler can examine the <structfield>active</structfield> 
+field of the #GtkCheckMenuItem-struct struct to discover the new state.
+</para>
+
+@checkmenuitem: the object which received the signal.
+
+<!-- ##### ARG GtkCheckMenuItem:active ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkCheckMenuItem:draw-as-radio ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkCheckMenuItem:inconsistent ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkCheckMenuItem:indicator-size ##### -->
+<para>
+
+</para>
+
+<!-- ##### FUNCTION gtk_check_menu_item_new ##### -->
+<para>
+Creates a new #GtkCheckMenuItem.
+</para>
+
+@Returns: a new #GtkCheckMenuItem.
+
+
+<!-- ##### FUNCTION gtk_check_menu_item_new_with_label ##### -->
+<para>
+Creates a new #GtkCheckMenuItem with a label.
+</para>
+
+@label: the string to use for the label.
+@Returns: a new #GtkCheckMenuItem.
+
+
+<!-- ##### FUNCTION gtk_check_menu_item_new_with_mnemonic ##### -->
+<para>
+
+</para>
+
+@label: 
+@Returns: 
+
+
+<!-- ##### MACRO gtk_check_menu_item_set_state ##### -->
+<para>
+This macro is provided to preserve compatibility with older code.
+New code should use gtk_check_menu_item_set_active() function instead.
+</para>
+
+
+
+<!-- ##### FUNCTION gtk_check_menu_item_get_active ##### -->
+<para>
+
+</para>
+
+@check_menu_item: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_check_menu_item_set_active ##### -->
+<para>
+Sets the active state of the menu item's check box.
+</para>
+
+@check_menu_item: a #GtkCheckMenuItem.
+@is_active: boolean value indicating whether the check box is active.
+
+
+<!-- ##### FUNCTION gtk_check_menu_item_set_show_toggle ##### -->
+<para>
+Controls whether the check box is shown at all times.
+Normally the check box is shown only when it is active or while the 
+menu item is selected.
+</para>
+
+@menu_item: a #GtkCheckMenuItem.
+@always: boolean value indicating whether to always show the check box.
+
+
+<!-- ##### FUNCTION gtk_check_menu_item_toggled ##### -->
+<para>
+Emits the GtkCheckMenuItem::toggled signal.
+</para>
+
+@check_menu_item: a #GtkCheckMenuItem.
+
+
+<!-- ##### FUNCTION gtk_check_menu_item_get_inconsistent ##### -->
+<para>
+
+</para>
+
+@check_menu_item: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_check_menu_item_set_inconsistent ##### -->
+<para>
+
+</para>
+
+@check_menu_item: 
+@setting: 
+
+
+<!-- ##### FUNCTION gtk_check_menu_item_set_draw_as_radio ##### -->
+<para>
+
+</para>
+
+@check_menu_item: 
+@draw_as_radio: 
+
+
+<!-- ##### FUNCTION gtk_check_menu_item_get_draw_as_radio ##### -->
+<para>
+
+</para>
+
+@check_menu_item: 
+@Returns: 
+
+

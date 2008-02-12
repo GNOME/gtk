@@ -1,0 +1,83 @@
+<!-- ##### SECTION Title ##### -->
+GtkPixmap
+
+<!-- ##### SECTION Short_Description ##### -->
+A widget displaying a graphical image or icon
+
+<!-- ##### SECTION Long_Description ##### -->
+<para>
+The #GtkPixmap widget displays a graphical image or icon.
+The icon is typically created using gdk_pixmap_colormap_create_from_xpm()
+or gdk_pixmap_colormap_create_from_xpm_d().
+</para>
+<para>
+The pixels in a #GtkPixmap cannot be manipulated by the application after
+creation, since under the X Window system the pixel data is stored on the
+X server and so is not available to the client application.
+If you want to create graphical images which can be manipulated by the
+application, look at #GtkImage and #GdkRGB.
+</para>
+<para>
+GtkPixmap has been deprecated since GTK+ 2.0 and should not be used
+in newly written code. Use #GtkImage instead.
+</para>
+
+<!-- ##### SECTION See_Also ##### -->
+<para>
+
+</para>
+
+<!-- ##### SECTION Stability_Level ##### -->
+
+
+<!-- ##### STRUCT GtkPixmap ##### -->
+<para>
+The #GtkPixmap-struct struct contains private data only, and
+should be accessed using the functions below.
+</para>
+
+
+<!-- ##### FUNCTION gtk_pixmap_new ##### -->
+<para>
+Creates a new #GtkPixmap, using the given GDK pixmap and mask.
+</para>
+
+@pixmap: a #GDKPixmap.
+@mask: a #GDKBitmap which indicates which parts of the @pixmap should be
+transparent.
+@Returns: a new #GtkPixmap.
+
+
+<!-- ##### FUNCTION gtk_pixmap_set ##### -->
+<para>
+Sets the #GdkPixmap and #GdkBitmap mask.
+</para>
+
+@pixmap: a #GtkPixmap.
+@val: a #GdkPixmap.
+@mask: a #GdkBitmap, which indicates which parts of the @pixmap should be
+transparent. This can be NULL, in which case none of the @pixmap is
+transparent.
+
+
+<!-- ##### FUNCTION gtk_pixmap_get ##### -->
+<para>
+Gets the current #GdkPixmap and #GdkBitmap mask.
+</para>
+
+@pixmap: a #GtkPixmap.
+@val: returns the current #GdkPixmap.
+@mask: returns the current #GdkBitmap mask.
+
+
+<!-- ##### FUNCTION gtk_pixmap_set_build_insensitive ##### -->
+<para>
+Sets wether an extra pixmap should be automatically created and used
+when the pixmap is insensitive. The default value is %TRUE.
+</para>
+
+@pixmap: a #GtkPixmap.
+@build: set to %TRUE if an extra pixmap should be automatically created to use
+when the pixmap is insensitive.
+
+

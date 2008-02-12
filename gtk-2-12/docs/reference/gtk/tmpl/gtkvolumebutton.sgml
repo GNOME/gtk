@@ -1,0 +1,35 @@
+<!-- ##### SECTION Title ##### -->
+GtkVolumeButton
+
+<!-- ##### SECTION Short_Description ##### -->
+A button which pops up a volume control
+
+<!-- ##### SECTION Long_Description ##### -->
+<para>
+#GtkVolumeButton is a subclass of #GtkScaleButton that has
+been tailored for use as a volume control widget with suitable 
+icons, tooltips and accessible labels.
+</para>
+
+<!-- ##### SECTION See_Also ##### -->
+<para>
+
+</para>
+
+<!-- ##### SECTION Stability_Level ##### -->
+
+
+<!-- ##### STRUCT GtkVolumeButton ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### FUNCTION gtk_volume_button_new ##### -->
+<para>
+
+</para>
+
+@Returns: 
+
+

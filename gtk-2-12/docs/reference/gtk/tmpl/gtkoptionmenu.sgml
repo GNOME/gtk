@@ -1,0 +1,124 @@
+<!-- ##### SECTION Title ##### -->
+GtkOptionMenu
+
+<!-- ##### SECTION Short_Description ##### -->
+A widget used to choose from a list of valid choices
+
+<!-- ##### SECTION Long_Description ##### -->
+<para>
+A #GtkOptionMenu is a widget that allows the user to choose from a
+list of valid choices.  The #GtkOptionMenu displays the selected 
+choice.  When activated the #GtkOptionMenu displays a popup #GtkMenu 
+which allows the user to make a new choice.
+</para>
+
+<para>
+Using a #GtkOptionMenu is simple; build a #GtkMenu, by calling
+gtk_menu_new(), then appending menu items to it with 
+gtk_menu_shell_append(). Set that menu on the option menu 
+with gtk_option_menu_set_menu(). Set the selected menu item with
+gtk_option_menu_set_history(); connect to the "changed" signal on
+the option menu; in the "changed" signal, check the new selected 
+menu item with gtk_option_menu_get_history().
+</para>
+
+<para>
+As of GTK+ 2.4, #GtkOptionMenu has been deprecated in favor of #GtkComboBox.
+</para>
+
+<!-- ##### SECTION See_Also ##### -->
+
+
+<!-- ##### SECTION Stability_Level ##### -->
+
+
+<!-- ##### STRUCT GtkOptionMenu ##### -->
+<para>
+The #GtkOptionMenu-struct struct contains private data only, and 
+should be accessed using the functions below.
+</para>
+
+@Deprecated: 2.4: Use #GtkComboBox instead.
+
+<!-- ##### SIGNAL GtkOptionMenu::changed ##### -->
+<para>
+
+</para>
+
+@optionmenu: the object which received the signal.
+
+<!-- ##### ARG GtkOptionMenu:menu ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkOptionMenu:indicator-size ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkOptionMenu:indicator-spacing ##### -->
+<para>
+
+</para>
+
+<!-- ##### FUNCTION gtk_option_menu_new ##### -->
+<para>
+Creates a new #GtkOptionMenu.
+</para>
+
+@Returns: a new #GtkOptionMenu.
+@Deprecated: 2.4: Use #GtkComboBox instead.
+
+
+<!-- ##### FUNCTION gtk_option_menu_get_menu ##### -->
+<para>
+Returns the #GtkMenu associated with the #GtkOptionMenu.
+</para>
+
+@option_menu: a #GtkOptionMenu.
+@Returns: the #GtkMenu associated with the #GtkOptionMenu.
+@Deprecated: 2.4: Use #GtkComboBox instead.
+
+
+<!-- ##### FUNCTION gtk_option_menu_set_menu ##### -->
+<para>
+Provides the #GtkMenu that is popped up to allow the user to choose
+a new value.  You should provide a simple menu avoiding the
+use of tearoff menu items, submenus, and accelerators.
+</para>
+
+@option_menu: a #GtkOptionMenu.
+@menu: the #GtkMenu to associate with the #GtkOptionMenu.
+@Deprecated: 2.4: Use #GtkComboBox instead.
+
+
+<!-- ##### FUNCTION gtk_option_menu_remove_menu ##### -->
+<para>
+Removes the menu from the option menu.
+</para>
+
+@option_menu: a #GtkOptionMenu.
+@Deprecated: 2.4: Use #GtkComboBox instead.
+
+
+<!-- ##### FUNCTION gtk_option_menu_set_history ##### -->
+<para>
+Selects the menu item specified by @index_ making it the newly
+selected value for the option menu.
+</para>
+
+@option_menu: a #GtkOptionMenu.
+@index_: the index of the menu item to select.  Index values are from 0 to n-1.
+@Deprecated: 2.4: Use #GtkComboBox instead.
+
+
+<!-- ##### FUNCTION gtk_option_menu_get_history ##### -->
+<para>
+
+</para>
+
+@option_menu: 
+@Returns: 
+
+

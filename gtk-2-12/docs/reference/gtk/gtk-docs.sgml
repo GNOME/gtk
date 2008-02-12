@@ -1,0 +1,688 @@
+<?xml version="1.0"?>
+<!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook XML V4.1.2//EN" 
+               "http://www.oasis-open.org/docbook/xml/4.1.2/docbookx.dtd" [
+<!ENTITY GtkAboutDialog SYSTEM "xml/gtkaboutdialog.xml">
+<!ENTITY GtkAccelLabel SYSTEM "xml/gtkaccellabel.xml">
+<!ENTITY GtkAction SYSTEM "xml/gtkaction.xml">
+<!ENTITY GtkActionGroup SYSTEM "xml/gtkactiongroup.xml">
+<!ENTITY GtkAdjustment SYSTEM "xml/gtkadjustment.xml">
+<!ENTITY GtkAlignment SYSTEM "xml/gtkalignment.xml">
+<!ENTITY GtkArrow SYSTEM "xml/gtkarrow.xml">
+<!ENTITY GtkAspectFrame SYSTEM "xml/gtkaspectframe.xml">
+<!ENTITY GtkAssistant SYSTEM "xml/gtkassistant.xml">
+<!ENTITY GtkButtonBox SYSTEM "xml/gtkbbox.xml">
+<!ENTITY GtkBin SYSTEM "xml/gtkbin.xml">
+<!ENTITY GtkBox SYSTEM "xml/gtkbox.xml">
+<!ENTITY GtkButton SYSTEM "xml/gtkbutton.xml">
+<!ENTITY GtkBuildable SYSTEM "xml/gtkbuildable.xml">
+<!ENTITY GtkBuilder SYSTEM "xml/gtkbuilder.xml">
+<!ENTITY GtkCalendar SYSTEM "xml/gtkcalendar.xml">
+<!ENTITY GtkCheckButton SYSTEM "xml/gtkcheckbutton.xml">
+<!ENTITY GtkCheckMenuItem SYSTEM "xml/gtkcheckmenuitem.xml">
+<!ENTITY GtkCList SYSTEM "xml/gtkclist.xml">
+<!ENTITY GtkColorButton SYSTEM "xml/gtkcolorbutton.xml">
+<!ENTITY GtkColorSelection SYSTEM "xml/gtkcolorsel.xml">
+<!ENTITY GtkColorSelectionDialog SYSTEM "xml/gtkcolorseldlg.xml">
+<!ENTITY GtkCombo SYSTEM "xml/gtkcombo.xml">
+<!ENTITY GtkComboBox SYSTEM "xml/gtkcombobox.xml">
+<!ENTITY GtkComboBoxEntry SYSTEM "xml/gtkcomboboxentry.xml">
+<!ENTITY GtkContainer SYSTEM "xml/gtkcontainer.xml">
+<!ENTITY GtkCTree SYSTEM "xml/gtkctree.xml">
+<!ENTITY GtkCurve SYSTEM "xml/gtkcurve.xml">
+<!ENTITY GtkDialog SYSTEM "xml/gtkdialog.xml">
+<!ENTITY GtkDrawingArea SYSTEM "xml/gtkdrawingarea.xml">
+<!ENTITY GtkEditable SYSTEM "xml/gtkeditable.xml">
+<!ENTITY GtkOldEditable SYSTEM "xml/gtkoldeditable.xml">
+<!ENTITY GtkEntry SYSTEM "xml/gtkentry.xml">
+<!ENTITY GtkEntryCompletion SYSTEM "xml/gtkentrycompletion.xml">
+<!ENTITY GtkEventBox SYSTEM "xml/gtkeventbox.xml">
+<!ENTITY GtkExpander SYSTEM "xml/gtkexpander.xml">
+<!ENTITY GtkFileChooser SYSTEM "xml/gtkfilechooser.xml">
+<!ENTITY GtkFileChooserButton SYSTEM "xml/gtkfilechooserbutton.xml">
+<!ENTITY GtkFileChooserDialog SYSTEM "xml/gtkfilechooserdialog.xml">
+<!ENTITY GtkFileChooserWidget SYSTEM "xml/gtkfilechooserwidget.xml">
+<!ENTITY GtkFileFilter SYSTEM "xml/gtkfilefilter.xml">
+<!ENTITY GtkFileSelection SYSTEM "xml/gtkfilesel.xml">
+<!ENTITY GtkFixed SYSTEM "xml/gtkfixed.xml">
+<!ENTITY GtkFontButton SYSTEM "xml/gtkfontbutton.xml">
+<!ENTITY GtkFontSelection SYSTEM "xml/gtkfontsel.xml">
+<!ENTITY GtkFontSelectionDialog SYSTEM "xml/gtkfontseldlg.xml">
+<!ENTITY GtkFrame SYSTEM "xml/gtkframe.xml">
+<!ENTITY GtkGammaCurve SYSTEM "xml/gtkgamma.xml">
+<!ENTITY GtkHandleBox SYSTEM "xml/gtkhandlebox.xml">
+<!ENTITY GtkHButtonBox SYSTEM "xml/gtkhbbox.xml">
+<!ENTITY GtkHBox SYSTEM "xml/gtkhbox.xml">
+<!ENTITY GtkHPaned SYSTEM "xml/gtkhpaned.xml">
+<!ENTITY GtkHRuler SYSTEM "xml/gtkhruler.xml">
+<!ENTITY GtkHScale SYSTEM "xml/gtkhscale.xml">
+<!ENTITY GtkHScrollbar SYSTEM "xml/gtkhscrollbar.xml">
+<!ENTITY GtkHSeparator SYSTEM "xml/gtkhseparator.xml">
+<!ENTITY GtkIconView SYSTEM "xml/gtkiconview.xml">
+<!ENTITY GtkImage SYSTEM "xml/gtkimage.xml">
+<!ENTITY GtkImageMenuItem SYSTEM "xml/gtkimagemenuitem.xml">
+<!ENTITY GtkIMContext SYSTEM "xml/gtkimcontext.xml">
+<!ENTITY GtkIMContextSimple SYSTEM "xml/gtkimcontextsimple.xml">
+<!ENTITY GtkIMMulticontext SYSTEM "xml/gtkimmulticontext.xml">
+<!ENTITY GtkInputDialog SYSTEM "xml/gtkinputdialog.xml">
+<!ENTITY GtkInvisible SYSTEM "xml/gtkinvisible.xml">
+<!ENTITY GtkItem SYSTEM "xml/gtkitem.xml">
+<!ENTITY GtkItemFactory SYSTEM "xml/gtkitemfactory.xml">
+<!ENTITY GtkLabel SYSTEM "xml/gtklabel.xml">
+<!ENTITY GtkLayout SYSTEM "xml/gtklayout.xml">
+<!ENTITY GtkLinkButton SYSTEM "xml/gtklinkbutton.xml">
+<!ENTITY GtkList SYSTEM "xml/gtklist.xml">
+<!ENTITY GtkListItem SYSTEM "xml/gtklistitem.xml">
+<!ENTITY GtkMenu SYSTEM "xml/gtkmenu.xml">
+<!ENTITY GtkMenuBar SYSTEM "xml/gtkmenubar.xml">
+<!ENTITY GtkMenuItem SYSTEM "xml/gtkmenuitem.xml">
+<!ENTITY GtkMenuShell SYSTEM "xml/gtkmenushell.xml">
+<!ENTITY GtkMenuToolButton SYSTEM "xml/gtkmenutoolbutton.xml">
+<!ENTITY GtkMessageDialog SYSTEM "xml/gtkmessagedialog.xml">
+<!ENTITY GtkMisc SYSTEM "xml/gtkmisc.xml">
+<!ENTITY GtkNotebook SYSTEM "xml/gtknotebook.xml">
+<!ENTITY GtkObject SYSTEM "xml/gtkobject.xml">
+<!ENTITY GtkOptionMenu SYSTEM "xml/gtkoptionmenu.xml">
+<!ENTITY GtkPaned SYSTEM "xml/gtkpaned.xml">
+<!ENTITY GtkPixmap SYSTEM "xml/gtkpixmap.xml">
+<!ENTITY GtkPlug SYSTEM "xml/gtkplug.xml">
+<!ENTITY GtkPreview SYSTEM "xml/gtkpreview.xml">
+<!ENTITY GtkPrintOperation SYSTEM "xml/gtkprintoperation.xml">
+<!ENTITY GtkPrintContext SYSTEM "xml/gtkprintcontext.xml">
+<!ENTITY GtkPrintSettings SYSTEM "xml/gtkprintsettings.xml">
+<!ENTITY GtkPageSetup SYSTEM "xml/gtkpagesetup.xml">
+<!ENTITY GtkPaperSize SYSTEM "xml/gtkpapersize.xml">
+<!ENTITY GtkPrinter SYSTEM "xml/gtkprinter.xml">
+<!ENTITY GtkPrintJob SYSTEM "xml/gtkprintjob.xml">
+<!ENTITY GtkPrintUnixDialog SYSTEM "xml/gtkprintunixdialog.xml">
+<!ENTITY GtkPageSetupUnixDialog SYSTEM "xml/gtkpagesetupunixdialog.xml">
+<!ENTITY GtkProgress SYSTEM "xml/gtkprogress.xml">
+<!ENTITY GtkProgressBar SYSTEM "xml/gtkprogressbar.xml">
+<!ENTITY GtkRadioAction SYSTEM "xml/gtkradioaction.xml">
+<!ENTITY GtkRadioButton SYSTEM "xml/gtkradiobutton.xml">
+<!ENTITY GtkRadioMenuItem SYSTEM "xml/gtkradiomenuitem.xml">
+<!ENTITY GtkRadioToolButton SYSTEM "xml/gtkradiotoolbutton.xml">
+<!ENTITY GtkRange SYSTEM "xml/gtkrange.xml">
+<!ENTITY GtkRecentChooser SYSTEM "xml/gtkrecentchooser.xml">
+<!ENTITY GtkRecentChooserDialog SYSTEM "xml/gtkrecentchooserdialog.xml">
+<!ENTITY GtkRecentChooserMenu SYSTEM "xml/gtkrecentchoosermenu.xml">
+<!ENTITY GtkRecentChooserWidget SYSTEM "xml/gtkrecentchooserwidget.xml">
+<!ENTITY GtkRecentFilter SYSTEM "xml/gtkrecentfilter.xml">
+<!ENTITY GtkRecentManager SYSTEM "xml/gtkrecentmanager.xml">
+<!ENTITY GtkRecentAction SYSTEM "xml/gtkrecentaction.xml">
+<!ENTITY GtkRuler SYSTEM "xml/gtkruler.xml">
+<!ENTITY GtkScale SYSTEM "xml/gtkscale.xml">
+<!ENTITY GtkScaleButton SYSTEM "xml/gtkscalebutton.xml">
+<!ENTITY GtkScrollbar SYSTEM "xml/gtkscrollbar.xml">
+<!ENTITY GtkScrolledWindow SYSTEM "xml/gtkscrolledwindow.xml">
+<!ENTITY GtkSeparator SYSTEM "xml/gtkseparator.xml">
+<!ENTITY GtkSeparatorMenuItem SYSTEM "xml/gtkseparatormenuitem.xml">
+<!ENTITY GtkSeparatorToolItem SYSTEM "xml/gtkseparatortoolitem.xml">
+<!ENTITY GtkSizeGroup SYSTEM "xml/gtksizegroup.xml">
+<!ENTITY GtkSocket SYSTEM "xml/gtksocket.xml">
+<!ENTITY GtkSpinButton SYSTEM "xml/gtkspinbutton.xml">
+<!ENTITY GtkStatusbar SYSTEM "xml/gtkstatusbar.xml">
+<!ENTITY GtkStatusIcon SYSTEM "xml/gtkstatusicon.xml">
+<!ENTITY GtkTable SYSTEM "xml/gtktable.xml">
+<!ENTITY GtkTearoffMenuItem SYSTEM "xml/gtktearoffmenuitem.xml">
+<!ENTITY GtkText SYSTEM "xml/gtktext.xml">
+<!ENTITY GtkTextBuffer SYSTEM "xml/gtktextbuffer.xml">
+<!ENTITY GtkTextIter SYSTEM "xml/gtktextiter.xml">
+<!ENTITY GtkTextMark SYSTEM "xml/gtktextmark.xml">
+<!ENTITY GtkTextTag SYSTEM "xml/gtktexttag.xml">
+<!ENTITY GtkTextTagTable SYSTEM "xml/gtktexttagtable.xml">
+<!ENTITY GtkTextView SYSTEM "xml/gtktextview.xml">
+<!ENTITY GtkTipsQuery SYSTEM "xml/gtktipsquery.xml">
+<!ENTITY GtkToggleAction SYSTEM "xml/gtktoggleaction.xml">
+<!ENTITY GtkToggleButton SYSTEM "xml/gtktogglebutton.xml">
+<!ENTITY GtkToggleToolButton SYSTEM "xml/gtktoggletoolbutton.xml">
+<!ENTITY GtkToolbar SYSTEM "xml/gtktoolbar.xml">
+<!ENTITY GtkToolButton SYSTEM "xml/gtktoolbutton.xml">
+<!ENTITY GtkToolItem SYSTEM "xml/gtktoolitem.xml">
+<!ENTITY GtkTooltips SYSTEM "xml/gtktooltips.xml">
+<!ENTITY GtkTooltip SYSTEM "xml/gtktooltip.xml">
+<!ENTITY GtkTree SYSTEM "xml/gtktree.xml">
+<!ENTITY GtkTreeItem SYSTEM "xml/gtktreeitem.xml">
+<!ENTITY GtkTreeModel SYSTEM "xml/gtktreemodel.xml">
+<!ENTITY GtkTreeSortable SYSTEM "xml/gtktreesortable.xml">
+<!ENTITY GtkTreeModelSort SYSTEM "xml/gtktreemodelsort.xml">
+<!ENTITY GtkTreeModelFilter SYSTEM "xml/gtktreemodelfilter.xml">
+<!ENTITY GtkTreeSelection SYSTEM "xml/gtktreeselection.xml">
+<!ENTITY GtkTreeStore SYSTEM "xml/gtktreestore.xml">
+<!ENTITY GtkTreeViewColumn SYSTEM "xml/gtktreeviewcolumn.xml">
+<!ENTITY GtkTreeView SYSTEM "xml/gtktreeview.xml">
+<!ENTITY GtkUIManager SYSTEM "xml/gtkuimanager.xml">
+<!ENTITY GtkCellEditable SYSTEM "xml/gtkcelleditable.xml">
+<!ENTITY GtkCellLayout SYSTEM "xml/gtkcelllayout.xml">
+<!ENTITY GtkCellRenderer SYSTEM "xml/gtkcellrenderer.xml">
+<!ENTITY GtkCellRendererAccel SYSTEM "xml/gtkcellrendereraccel.xml">
+<!ENTITY GtkCellRendererCombo SYSTEM "xml/gtkcellrenderercombo.xml">
+<!ENTITY GtkCellRendererPixbuf SYSTEM "xml/gtkcellrendererpixbuf.xml">
+<!ENTITY GtkCellRendererProgress SYSTEM "xml/gtkcellrendererprogress.xml">
+<!ENTITY GtkCellRendererSpin SYSTEM "xml/gtkcellrendererspin.xml">
+<!ENTITY GtkCellRendererText SYSTEM "xml/gtkcellrenderertext.xml">
+<!ENTITY GtkCellRendererToggle SYSTEM "xml/gtkcellrenderertoggle.xml">
+<!ENTITY GtkCellView SYSTEM "xml/gtkcellview.xml">
+<!ENTITY GtkListStore SYSTEM "xml/gtkliststore.xml">
+<!ENTITY GtkTreeDND SYSTEM "xml/gtktreednd.xml">
+<!ENTITY GtkVButtonBox SYSTEM "xml/gtkvbbox.xml">
+<!ENTITY GtkVBox SYSTEM "xml/gtkvbox.xml">
+<!ENTITY GtkViewport SYSTEM "xml/gtkviewport.xml">
+<!ENTITY GtkVolumeButton SYSTEM "xml/gtkvolumebutton.xml">
+<!ENTITY GtkVPaned SYSTEM "xml/gtkvpaned.xml">
+<!ENTITY GtkVRuler SYSTEM "xml/gtkvruler.xml">
+<!ENTITY GtkVScale SYSTEM "xml/gtkvscale.xml">
+<!ENTITY GtkVScrollbar SYSTEM "xml/gtkvscrollbar.xml">
+<!ENTITY GtkVSeparator SYSTEM "xml/gtkvseparator.xml">
+<!ENTITY GtkWidget SYSTEM "xml/gtkwidget.xml">
+<!ENTITY GtkWindow SYSTEM "xml/gtkwindow.xml">
+<!ENTITY GtkWindowGroup SYSTEM "xml/gtkwindowgroup.xml">
+<!ENTITY GtkAccessible SYSTEM "xml/gtkaccessible.xml">
+<!ENTITY gtk-General SYSTEM "xml/gtkmain.xml">
+<!ENTITY gtk-Feature-Test-Macros SYSTEM "xml/gtkfeatures.xml">
+<!ENTITY gtk-Graphics-Contexts SYSTEM "xml/gtkgc.xml">
+<!ENTITY gtk-Styles SYSTEM "xml/gtkstyle.xml">
+<!ENTITY gtk-Themes SYSTEM "xml/gtkthemes.xml">
+<!ENTITY gtk-Resource-Files SYSTEM "xml/gtkrc.xml">
+<!ENTITY GtkAccelGroup SYSTEM "xml/gtkaccelgroup.xml">
+<!ENTITY gtk-accel-map SYSTEM "xml/gtkaccelmap.xml">
+<!ENTITY gtk-Selections SYSTEM "xml/gtkselection.xml">
+<!ENTITY gtk-Clipboards SYSTEM "xml/gtkclipboard.xml">
+<!ENTITY gtk-Drag-and-Drop SYSTEM "xml/gtkdnd.xml">
+<!ENTITY gtk-Signals SYSTEM "xml/gtksignal.xml">
+<!ENTITY gtk-Types SYSTEM "xml/gtktypeutils.xml">
+<!ENTITY gtk-Bindings SYSTEM "xml/gtkbindings.xml">
+<!ENTITY gtk-Standard-Enumerations SYSTEM "xml/gtkenums.xml">
+<!ENTITY gtk-Named-Icons SYSTEM "xml/gtkicontheme.xml">
+<!ENTITY gtk-Stock-Items SYSTEM "xml/gtkstock.xml">
+<!ENTITY gtk-Themeable-Stock-Images SYSTEM "xml/gtkiconfactory.xml">
+<!ENTITY gtk-Settings SYSTEM "xml/gtksettings.xml">
+
+<!ENTITY index-Object-Tree SYSTEM "xml/tree_index.sgml">
+<!ENTITY visual-index SYSTEM "visual_index.xml">
+
+<!ENTITY index-Objects-Grouped SYSTEM "objects_grouped.sgml">
+<!ENTITY gtk-TextWidget SYSTEM "xml/text_widget.sgml">
+<!ENTITY gtk-TreeWidget SYSTEM "xml/tree_widget.sgml">
+<!ENTITY gtk-Compiling SYSTEM "compiling.sgml">
+<!ENTITY gtk-Building SYSTEM "building.sgml">
+<!ENTITY gtk-Running SYSTEM "running.sgml">
+<!ENTITY gtk-Resources SYSTEM "resources.sgml">
+<!ENTITY gtk-Windows SYSTEM "windows.sgml">
+<!ENTITY gtk-X11 SYSTEM "x11.sgml">
+<!ENTITY gtk-OSX SYSTEM "osx.sgml">
+<!ENTITY gtk-DirectFB SYSTEM "directfb.sgml">
+<!ENTITY gtk-Questions SYSTEM "xml/question_index.sgml">
+<!ENTITY gtk-Changes-1-2 SYSTEM "changes-1.2.sgml">
+<!ENTITY gtk-Changes-2-0 SYSTEM "changes-2.0.sgml">
+<!ENTITY gtk-migrating-checklist SYSTEM "xml/migrating-checklist.sgml">
+<!ENTITY gtk-migrating-Cairo SYSTEM "xml/migrating-Cairo.sgml">
+<!ENTITY gtk-migrating-GtkFileChooser SYSTEM "xml/migrating-GtkFileChooser.sgml">
+<!ENTITY gtk-migrating-GtkAction SYSTEM "xml/migrating-GtkAction.sgml">
+<!ENTITY gtk-migrating-GtkComboBox SYSTEM "xml/migrating-GtkComboBox.sgml">
+<!ENTITY gtk-migrating-GtkIconView SYSTEM "xml/migrating-GtkIconView.sgml">
+<!ENTITY gtk-migrating-GtkAboutDialog SYSTEM "xml/migrating-GtkAboutDialog.sgml">
+<!ENTITY gtk-migrating-GtkColorButton SYSTEM "xml/migrating-GtkColorButton.sgml">
+<!ENTITY gtk-migrating-GtkAssistant SYSTEM "xml/migrating-GtkAssistant.sgml">
+<!ENTITY gtk-migrating-GtkRecentChooser SYSTEM "xml/migrating-GtkRecentChooser.sgml">
+<!ENTITY gtk-migrating-GtkLinkButton SYSTEM "xml/migrating-GtkLinkButton.sgml">
+<!ENTITY gtk-migrating-GtkBuilder SYSTEM "xml/migrating-GtkBuilder.sgml">
+<!ENTITY gtk-migrating-GtkTooltip SYSTEM "xml/migrating-GtkTooltip.sgml">
+<!ENTITY version SYSTEM "version.xml">
+<!ENTITY gtk-query-immodules SYSTEM "gtk-query-immodules-2.0.xml">
+<!ENTITY gtk-update-icon-cache SYSTEM "gtk-update-icon-cache.xml">
+<!ENTITY gtk-builder-convert SYSTEM "gtk-builder-convert.xml">
+<!ENTITY gtk-glossary SYSTEM "xml/glossary.xml">
+]>
+<book id="index">
+  <bookinfo>
+    <title>GTK+ Reference Manual</title>
+    <releaseinfo>for GTK+ &version;</releaseinfo>
+  </bookinfo>
+
+  <part id="gtk">
+    <title>GTK+ Overview</title>
+    <partintro>
+    <para>
+GTK+ is a library for creating graphical user interfaces. It
+works on many UNIX-like platforms, Windows, and on framebuffer
+devices. GTK+ is released under the GNU Library General Public License
+(GNU LGPL), which allows for flexible licensing of client
+applications. GTK+ has a C-based object-oriented architecture that
+allows for maximum flexibility.  Bindings for other languages have
+been written, including C++, Objective-C, Guile/Scheme, Perl, Python,
+TOM, Ada95, Free Pascal, and Eiffel.
+    </para>
+    <para>
+GTK+ depends on the following libraries:
+<variablelist>
+
+<varlistentry>
+<term>GLib</term>
+<listitem><para>
+A general-purpose utility library, not specific to graphical user interfaces.
+GLib provides many useful data types, macros, type conversions,
+string utilities, file utilities, a main loop abstraction, and so on.
+</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term>Pango</term>
+<listitem><para>
+Pango is a library for internationalized text handling. It centers
+around the #PangoLayout object, representing a paragraph of text. 
+Pango provides the engine for #GtkTextView, #GtkLabel, #GtkEntry, and
+other widgets that display text.
+</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term>ATK</term>
+<listitem><para>
+ATK is the Accessibility Toolkit. It provides a set of generic
+interfaces allowing accessibility technologies to interact with a
+graphical user interface. For example, a screen reader uses ATK to
+discover the text in an interface and read it to blind users.  GTK+
+widgets have built-in support for accessibility using the ATK
+framework.
+</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term>GdkPixbuf</term>
+<listitem><para>
+This is a small library which allows you to create #GdkPixbuf
+("pixel buffer") objects from image data or image files. 
+Use a #GdkPixbuf in combination with #GtkImage to display images.
+</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term>GDK</term>
+<listitem><para>
+GDK is the abstraction layer that allows GTK+ to support multiple
+windowing systems. GDK provides drawing and window system facilities
+on X11, Windows, and the Linux framebuffer device.
+</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term>GTK+</term>
+<listitem><para>
+The GTK+ library itself contains <firstterm>widgets</firstterm>, 
+that is, GUI components such as #GtkButton or #GtkTextView.
+</para></listitem>
+</varlistentry>
+</variablelist>
+    </para>
+</partintro>
+    &gtk-Building;
+    &gtk-Compiling;
+    &gtk-Running;
+    &gtk-X11;
+    &gtk-Windows;
+    &gtk-OSX;
+    &gtk-DirectFB;
+    &gtk-Resources;
+    &gtk-Questions;
+  </part>
+
+
+  <part  id="gtkbase">
+    <title>GTK+ Core Reference</title>
+    &gtk-General;
+    &GtkAccelGroup;
+    &gtk-accel-map;
+    &gtk-Clipboards;
+    &gtk-Drag-and-Drop;
+    &gtk-Named-Icons;
+    &gtk-Stock-Items;
+    &gtk-Themeable-Stock-Images;
+    &gtk-Resource-Files;   
+    &gtk-Settings;
+    &gtk-Bindings;
+    &gtk-Standard-Enumerations;
+    &gtk-Graphics-Contexts;
+    &gtk-Styles;
+    &gtk-Selections;
+    &gtk-Feature-Test-Macros;
+    &gtk-Signals;
+    &gtk-Types;
+  </part>
+
+  <part id="gtkobjects">
+    <title>GTK+ Widgets and Objects</title>
+
+    <chapter>
+      <title>Object Hierarchy</title>
+    &index-Object-Tree;
+    </chapter>
+
+    <chapter>
+      <title>Widget Gallery</title>
+    &visual-index;
+    </chapter>
+
+    <chapter id="WindowWidgets">
+      <title>Windows</title>
+        &GtkDialog;
+        &GtkInvisible;
+        &GtkMessageDialog;
+        &GtkWindow;
+        &GtkWindowGroup;
+        &GtkAboutDialog;
+        &GtkAssistant;
+    </chapter>
+
+    <chapter id="DisplayWidgets">
+      <title>Display Widgets</title>
+        &GtkAccelLabel;
+        &GtkImage;
+        &GtkLabel;
+        &GtkProgressBar;
+        &GtkStatusbar;
+        &GtkStatusIcon;
+    </chapter>
+
+    <chapter id="ButtonWidgets">
+      <title>Buttons and Toggles</title>
+        &GtkButton;
+        &GtkCheckButton;
+        &GtkRadioButton;
+        &GtkToggleButton;
+        &GtkLinkButton;
+        &GtkScaleButton;
+	&GtkVolumeButton;
+    </chapter>
+
+    <chapter id="NumericEntry">
+      <title>Numeric/Text Data Entry</title>
+        &GtkEntry;
+        &GtkEntryCompletion;
+        &GtkHScale;      
+        &GtkVScale;
+        &GtkSpinButton;
+        &GtkEditable;
+    </chapter>
+
+    <chapter id="TextWidgetObjects">
+      <title>Multiline Text Editor</title>
+        &gtk-TextWidget;
+        &GtkTextIter;
+        &GtkTextMark;
+        &GtkTextBuffer;
+        &GtkTextTag;
+        &GtkTextTagTable;
+        &GtkTextView;
+    </chapter>
+
+    <chapter id="TreeWidgetObjects">
+      <title>Tree, List and Icon Grid Widgets</title>
+        &gtk-TreeWidget;
+        &GtkTreeModel;
+        &GtkTreeSelection;
+        &GtkTreeViewColumn;
+        &GtkTreeView;
+        &GtkTreeDND;
+        &GtkCellView;
+        &GtkIconView;
+	&GtkTreeSortable;
+        &GtkTreeModelSort;
+        &GtkTreeModelFilter;
+        &GtkCellLayout;
+        &GtkCellRenderer;
+        &GtkCellEditable;
+        &GtkCellRendererAccel;
+        &GtkCellRendererCombo;
+        &GtkCellRendererPixbuf;
+        &GtkCellRendererProgress;
+        &GtkCellRendererSpin;
+        &GtkCellRendererText;
+        &GtkCellRendererToggle;
+        &GtkListStore;
+        &GtkTreeStore;
+    </chapter>
+
+    <chapter id="MenusAndCombos">
+      <title>Menus, Combo Box, Toolbar</title>
+	&GtkComboBox;
+	&GtkComboBoxEntry;
+        &GtkMenu;
+        &GtkMenuBar;
+        &GtkMenuItem;
+	&GtkImageMenuItem;
+        &GtkRadioMenuItem;
+        &GtkCheckMenuItem;      
+        &GtkSeparatorMenuItem;
+        &GtkTearoffMenuItem;
+        &GtkToolbar;
+        &GtkToolItem;
+        &GtkSeparatorToolItem;
+        &GtkToolButton;
+	&GtkMenuToolButton;
+        &GtkToggleToolButton;
+        &GtkRadioToolButton;
+    </chapter>
+ 
+    <chapter id="Actions">
+      <title>Action-based menus and toolbars</title>
+        &GtkUIManager;
+        &GtkActionGroup;
+        &GtkAction;
+        &GtkToggleAction;
+        &GtkRadioAction;
+        &GtkRecentAction;
+    </chapter>
+
+    <chapter id="SelectorWidgets">
+      <title>Selectors (File/Font/Color/Input Devices)</title>
+        &GtkColorButton;
+        &GtkColorSelection;
+        &GtkColorSelectionDialog;
+	&GtkFileChooser;
+	&GtkFileChooserButton;
+	&GtkFileChooserDialog;
+	&GtkFileChooserWidget;
+	&GtkFileFilter;
+        &GtkFontButton;
+        &GtkFontSelection;
+        &GtkFontSelectionDialog;
+        &GtkInputDialog;
+    </chapter>
+    
+    <chapter id="LayoutContainers">
+      <title>Layout Containers</title>
+        &GtkAlignment;
+        &GtkAspectFrame;
+        &GtkHBox;
+        &GtkVBox;
+        &GtkHButtonBox;
+        &GtkVButtonBox;
+        &GtkFixed;
+        &GtkHPaned;
+        &GtkVPaned;
+        &GtkLayout;
+        &GtkNotebook;
+        &GtkTable;
+        &GtkExpander;
+    </chapter>
+
+    <chapter id="Ornaments">
+      <title>Ornaments</title>
+        &GtkFrame;
+        &GtkHSeparator;
+        &GtkVSeparator;
+    </chapter>
+
+    <chapter id="ScrollingWidgets">
+      <title>Scrolling</title>
+        &GtkHScrollbar;
+        &GtkVScrollbar;
+        &GtkScrolledWindow;
+    </chapter>
+
+    <chapter id="Printing">
+      <title>Printing</title>
+      &GtkPrintOperation;
+      &GtkPrintContext;
+      &GtkPrintSettings;
+      &GtkPageSetup;
+      &GtkPaperSize;
+      &GtkPrinter;
+      &GtkPrintJob; 
+      &GtkPrintUnixDialog;
+      &GtkPageSetupUnixDialog;
+    </chapter>
+
+    <chapter id="MiscObjects">
+      <title>Miscellaneous</title>
+        &GtkAdjustment;
+        &GtkArrow;
+        &GtkCalendar;
+        &GtkDrawingArea;
+        &GtkEventBox;
+        &GtkHandleBox;
+        &GtkIMContextSimple;
+        &GtkIMMulticontext;
+        &GtkSizeGroup;
+        &GtkTooltip;
+        &GtkViewport;
+        &GtkAccessible;
+    </chapter>
+
+    <chapter id="AbstractObjects">
+      <title>Abstract Base Classes</title>
+        &GtkBin;
+        &GtkBox;
+        &GtkButtonBox;
+        &GtkContainer;
+        &GtkItem;
+        &GtkMenuShell;
+        &GtkMisc;
+        &GtkObject;
+        &GtkPaned;
+        &GtkRange;
+        &GtkScale;
+        &GtkScrollbar;
+        &GtkSeparator;
+        &GtkWidget;
+        &GtkIMContext;
+    </chapter>    
+
+    <chapter id="PlugSocket">
+      <title>Cross-process Embedding</title>
+        &GtkPlug;
+        &GtkSocket;
+    </chapter>
+
+    <chapter id="SpecialObjects">
+      <title>Special-purpose features</title>
+        &GtkCurve;
+        &GtkGammaCurve;
+        &GtkRuler;
+        &GtkHRuler;
+        &GtkVRuler;
+    </chapter>
+
+    <chapter id="RecentDocuments">
+      <title>Recently Used Documents</title>
+      &GtkRecentManager;
+      &GtkRecentChooser;
+      &GtkRecentChooserDialog;
+      &GtkRecentChooserMenu;
+      &GtkRecentChooserWidget;
+      &GtkRecentFilter;
+    </chapter>
+
+    <chapter id="Builder">
+      <title>Interface builder</title>
+      &GtkBuildable;
+      &GtkBuilder;
+    </chapter>
+
+    <chapter id="DeprecatedObjects">
+      <title>Deprecated</title>
+        &GtkCList;      
+        &GtkCTree;
+        &GtkCombo;
+        &GtkFileSelection;
+        &GtkItemFactory;
+        &GtkList;
+        &GtkListItem;
+        &GtkOldEditable;
+        &GtkOptionMenu;
+        &GtkPixmap;
+        &GtkPreview;
+        &GtkProgress;
+        &GtkText;
+        &GtkTooltips;
+        &GtkTipsQuery;
+        &GtkTree;
+        &GtkTreeItem;
+    </chapter>
+  </part>
+
+  <part id="migrating">
+    <title>Migrating from Previous Versions of GTK+</title>
+
+    <partintro>
+      <para>
+	This part describes what you need to change in programs use
+	older versions of GTK+ so that they can use the new features.
+        It also mentions how to convert applications using widgets
+        found in the libgnomeui library to use their counterparts
+        in GTK+.
+      </para>
+    </partintro>
+
+    &gtk-migrating-checklist;
+    &gtk-Changes-1-2;
+    &gtk-Changes-2-0;
+    &gtk-migrating-GtkFileChooser;
+    &gtk-migrating-GtkAction;
+    &gtk-migrating-GtkComboBox;
+    &gtk-migrating-GtkIconView;
+    &gtk-migrating-GtkAboutDialog;
+    &gtk-migrating-GtkColorButton;
+    &gtk-migrating-GtkAssistant;
+    &gtk-migrating-GtkRecentChooser;
+    &gtk-migrating-GtkLinkButton;
+    &gtk-migrating-GtkBuilder;
+    &gtk-migrating-GtkTooltip;
+  </part>
+
+  <part>
+    <title>GTK+ Tools</title>
+
+     &gtk-query-immodules;
+     &gtk-update-icon-cache;
+     &gtk-builder-convert;
+  </part>
+
+  &gtk-glossary;
+
+  <index>
+    <title>Index</title>
+  </index>
+  <index role="deprecated">
+    <title>Index of deprecated symbols</title>
+  </index>
+  <index role="2.2">
+    <title>Index of new symbols in 2.2</title>
+  </index>
+  <index role="2.4">
+    <title>Index of new symbols in 2.4</title>
+  </index>  
+  <index role="2.6">
+    <title>Index of new symbols in 2.6</title>
+  </index>  
+  <index role="2.8">
+    <title>Index of new symbols in 2.8</title>
+  </index>  
+  <index role="2.10">
+    <title>Index of new symbols in 2.10</title>
+  </index>  
+  <index role="2.12">
+    <title>Index of new symbols in 2.12</title>
+  </index>  
+
+</book>

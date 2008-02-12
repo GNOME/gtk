@@ -1,0 +1,306 @@
+<!-- ##### SECTION Title ##### -->
+GtkTree
+
+<!-- ##### SECTION Short_Description ##### -->
+A tree widget
+
+<!-- ##### SECTION Long_Description ##### -->
+<para>
+<warning>
+<para>
+#GtkTree is deprecated and unsupported. It is known to be
+buggy. To use it, you must define the symbol %GTK_ENABLE_BROKEN
+prior to including the GTK+ header files. Use #GtkTreeView instead.
+</para>
+</warning>
+The #GtkTree widget is a container that shows users a list of items, in a tree format complete with branches and leafnodes. Branches can be expanded to show their child items, or collapsed to hide them.
+</para>
+
+<!-- ##### SECTION See_Also ##### -->
+<para>
+#GtkTreeList for the items to put into a #GtkTree.
+</para>
+<para>
+#GtkScrolledWindow for details on how to scroll around a #GtkTree.
+</para>
+
+<!-- ##### SECTION Stability_Level ##### -->
+
+
+<!-- ##### STRUCT GtkTree ##### -->
+<para>
+<programlisting>
+struct _GtkTree
+{
+  GtkContainer container;
+  GList *children;
+  GtkTree* root_tree; /* owner of selection list */
+  GtkWidget* tree_owner;
+  GList *selection;
+  guint level;
+  guint indent_value;
+  guint current_indent;
+  guint selection_mode : 2;
+  guint view_mode : 1;
+  guint view_line : 1;
+};
+</programlisting>
+</para>
+
+
+<!-- ##### SIGNAL GtkTree::select-child ##### -->
+<para>
+This signal is emitted by @tree whenever @widget is about to be selected.
+</para>
+
+@tree: the object which received the signal.
+@widget: The child that is about to be selected.
+
+<!-- ##### SIGNAL GtkTree::selection-changed ##### -->
+<para>
+This signal is emitted by the root tree whenever the selection changes.
+</para>
+
+@tree: the object which received the signal.
+
+<!-- ##### SIGNAL GtkTree::unselect-child ##### -->
+<para>
+This signal is emitted by @tree whenever @widget is about to be unselected.
+</para>
+
+@tree: the object which received the signal.
+@widget: The child that is about to be unselected.
+
+<!-- ##### MACRO GTK_IS_ROOT_TREE ##### -->
+<para>
+A macro that returns a boolean value which indicates if @obj is a root tree or not.
+</para>
+
+@obj: A pointer to the #GtkTree. @obj will accept any pointer, but if the pointer does not point to a #GtkTree, the results are undefined.
+
+
+<!-- ##### MACRO GTK_TREE_ROOT_TREE ##### -->
+<para>
+A macro that returns the root tree of @obj.
+</para>
+<para>
+If @obj is already a root tree, @obj is cast to #GtkTree and returned.
+</para>
+
+@obj: A pointer to the #GtkTree. @obj will accept any pointer, but if the pointer does not point to a #GtkTree, the results are undefined.
+
+
+<!-- ##### MACRO GTK_TREE_SELECTION_OLD ##### -->
+<para>
+
+</para>
+
+@obj: 
+
+
+<!-- ##### ENUM GtkTreeViewMode ##### -->
+<para>
+
+</para>
+
+@GTK_TREE_VIEW_LINE: 
+@GTK_TREE_VIEW_ITEM: 
+
+<!-- ##### FUNCTION gtk_tree_new ##### -->
+<para>
+Creates a new #GtkTree.
+</para>
+
+@Returns: A pointer to the newly allocated widget.
+
+
+<!-- ##### FUNCTION gtk_tree_append ##### -->
+<para>
+Adds the #GtkTreeItem in @tree_item to the end of the items in @tree.
+</para>
+
+@tree: A pointer to a #GtkTree.
+@tree_item: A pointer to the #GtkWidget that is to be appended to the tree.
+
+
+<!-- ##### FUNCTION gtk_tree_prepend ##### -->
+<para>
+Adds the #GtkTreeItem in @tree_item to the start of the items in @tree.
+</para>
+
+@tree: A pointer to a #GtkTree.
+@tree_item: A pointer to the #GtkWidget that is to be prepended to the tree.
+
+
+<!-- ##### FUNCTION gtk_tree_insert ##### -->
+<para>
+Adds the #GtkTreeItem in @tree_item to the list of items in @tree at the position indicated by @position.
+</para>
+
+@tree: A pointer to a #GtkTree.
+@tree_item: A pointer to the #GtkWidget that is to be added to the tree.
+@position: A #gint that indicates the position in the tree, that the @tree_item is to be added at.
+
+
+<!-- ##### FUNCTION gtk_tree_remove_items ##### -->
+<para>
+Removes a list of items from the #GtkTree in @tree.
+</para>
+<para>
+If only one item is to be removed from the #GtkTree, gtk_container_remove() can be used instead.
+</para>
+<para>
+Removing an item from a #GtkTree dereferences the item, and thus usually destroys the item and any subtrees it may contain. If the item is not to be destroyed, use g_object_ref() before removing it.
+</para>
+
+@tree: A pointer to a #GtkTree.
+@items: A pointer to a #GList that contains the items to be removed.
+
+
+<!-- ##### FUNCTION gtk_tree_clear_items ##### -->
+<para>
+Removes the items at positions between @start and @end from the #GtkTree @tree.
+</para>
+<para>
+Removing an item from a #GtkTree dereferences the item, and thus usually destroys the item and any subtrees it may contain. If the item is not to be destroyed, use g_object_ref() before removing it.
+</para>
+
+@tree: A pointer to a #GtkTree.
+@start: A #gint.
+@end: A #gint.
+
+
+<!-- ##### FUNCTION gtk_tree_select_item ##### -->
+<para>
+Emits the #select_item signal for the child at position @item, and thus selects it (unless it is unselected in a signal handler).
+</para>
+
+@tree: A pointer to a #GtkTree.
+@item: A #gint.
+
+
+<!-- ##### FUNCTION gtk_tree_unselect_item ##### -->
+<para>
+Emits the #unselect_item for the child at position @item, and thus unselects it.
+</para>
+
+@tree: A pointer to a #GtkTree.
+@item: A #gint.
+
+
+<!-- ##### FUNCTION gtk_tree_select_child ##### -->
+<para>
+Emits the #select_item signal for the child @tree_item, and thus selects it (unless it is unselected in a signal handler).
+</para>
+
+@tree: A pointer to a #GtkTree.
+@tree_item: A pointer to the #GtkWidget that is to be selected.
+
+
+<!-- ##### FUNCTION gtk_tree_unselect_child ##### -->
+<para>
+Emits the #unselect_item signal for the child @tree_item, and thus unselects it.
+</para>
+
+@tree: A pointer to a #GtkTree.
+@tree_item: A pointer to the #GtkWidget that is to be selected.
+
+
+<!-- ##### FUNCTION gtk_tree_child_position ##### -->
+<para>
+Returns the position of @child in the #GtkTree @tree.
+</para>
+<para>
+If @child is not a child of @tree, then -1 is returned.
+</para>
+
+@tree: A pointer to a #GtkTree.
+@child: A pointer to a #GtkWidget.
+@Returns: A #gint.
+
+
+<!-- ##### FUNCTION gtk_tree_set_selection_mode ##### -->
+<para>
+Sets the selection mode for the #GtkTree @tree.
+</para>
+<para>
+@mode can be one of
+</para>
+<itemizedlist>
+<listitem>
+<para>
+%GTK_SELECTION_SINGLE for when only one item can be selected at a time.
+</para>
+</listitem>
+<listitem>
+<para>
+%GTK_SELECTION_BROWSE for when one item must be selected.
+</para>
+</listitem>
+<listitem>
+<para>
+%GTK_SELECTION_MULTIPLE for when many items can be selected at once.
+</para>
+</listitem>
+<listitem>
+<para>
+%GTK_SELECTION_EXTENDED Reserved for later use.
+</para>
+</listitem>
+</itemizedlist>
+<para>
+The selection mode is only defined for a root tree, as the root tree "owns" the selection.
+</para>
+<para>
+The default mode is %GTK_SELECTION_SINGLE.
+</para>
+
+@tree: A pointer to a #GtkTree.
+@mode: A #GtkSelectionMode.
+
+
+<!-- ##### FUNCTION gtk_tree_set_view_mode ##### -->
+<para>
+Sets the 'viewmode' for the #GtkTree in @tree. The 'viewmode' defines how the tree looks when an item is selected.
+</para>
+<para>
+@mode can be one of:
+</para>
+<itemizedlist>
+<listitem>
+<para>
+%GTK_TREE_VIEW_LINE : When an item is selected the entire #GtkTreeItem is highlighted.
+</para>
+</listitem>
+<listitem>
+<para>
+%GTK_TREE_VIEW_ITEM : When an item is selected only the selected item's child widget is highlighted.
+</para>
+</listitem>
+</itemizedlist>
+<para>
+The default mode is %GTK_TREE_VIEW_LINE.
+</para>
+
+@tree: A pointer to a #GtkTree.
+@mode: A #GtkTreeViewMode.
+
+
+<!-- ##### FUNCTION gtk_tree_set_view_lines ##### -->
+<para>
+Sets whether or not the connecting lines between branches and children are drawn.
+</para>
+
+@tree: A pointer to a #GtkTree.
+@flag: A #guint, indicating %TRUE, or %FALSE.
+
+
+<!-- ##### FUNCTION gtk_tree_remove_item ##### -->
+<para>
+Removes the item @child from the #GtkTree @tree.
+</para>
+
+@tree: A pointer to a #GtkTree.
+@child: A pointer to the #GtkWidget that is to be removed from the tree.
+
+

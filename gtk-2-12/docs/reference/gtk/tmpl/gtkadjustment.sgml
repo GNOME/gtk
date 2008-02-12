@@ -1,0 +1,203 @@
+<!-- ##### SECTION Title ##### -->
+GtkAdjustment
+
+<!-- ##### SECTION Short_Description ##### -->
+A GtkObject representing an adjustable bounded value
+
+<!-- ##### SECTION Long_Description ##### -->
+<para>
+The #GtkAdjustment object represents a value which has an associated lower
+and upper bound, together with step and page increments, and a page size.
+It is used within several GTK+ widgets, including
+#GtkSpinButton, #GtkViewport, and #GtkRange (which is a base class for
+#GtkHScrollbar, #GtkVScrollbar, #GtkHScale, and #GtkVScale).
+</para>
+<para>
+The #GtkAdjustment object does not update the value itself. Instead
+it is left up to the owner of the #GtkAdjustment to control the value.
+</para>
+<para>
+The owner of the #GtkAdjustment typically calls the
+gtk_adjustment_value_changed() and gtk_adjustment_changed() functions
+after changing the value and its bounds. This results in the emission of the
+&quot;value_changed&quot; or &quot;changed&quot; signal respectively.
+</para>
+
+<!-- ##### SECTION See_Also ##### -->
+<para>
+
+</para>
+
+<!-- ##### SECTION Stability_Level ##### -->
+
+
+<!-- ##### STRUCT GtkAdjustment ##### -->
+<para>
+The #GtkAdjustment-struct struct contains the following fields.
+
+<informaltable pgwide="1" frame="none" role="struct">
+<tgroup cols="2"><colspec colwidth="2*"/><colspec colwidth="8*"/>
+<tbody>
+
+<row>
+<entry>#gdouble lower;</entry>
+<entry>the minimum value.</entry>
+</row>
+
+<row>
+<entry>#gdouble upper;</entry>
+<entry>the maximum value.</entry>
+</row>
+
+<row>
+<entry>#gdouble value;</entry>
+<entry>the current value.</entry>
+</row>
+
+<row>
+<entry>#gdouble step_increment;</entry>
+<entry>the increment to use to make minor changes to the value.
+In a #GtkScrollbar this increment is used when the mouse is clicked on the
+arrows at the top and bottom of the scrollbar, to scroll by a small amount.
+</entry>
+</row>
+
+<row>
+<entry>#gdouble page_increment;</entry>
+<entry>the increment to use to make major changes to the value.
+In a #GtkScrollbar this increment is used when the mouse is clicked in the
+trough, to scroll by a large amount.
+</entry>
+</row>
+
+<row>
+<entry>#gdouble page_size;</entry>
+<entry>the page size.
+In a #GtkScrollbar this is the size of the area which is currently visible.
+</entry>
+</row>
+
+</tbody></tgroup></informaltable>
+
+</para>
+
+
+<!-- ##### SIGNAL GtkAdjustment::changed ##### -->
+<para>
+Emitted when one or more of the #GtkAdjustment fields have been changed,
+other than the value field.
+</para>
+
+@adjustment: the object which received the signal.
+
+<!-- ##### SIGNAL GtkAdjustment::value-changed ##### -->
+<para>
+Emitted when the #GtkAdjustment value field has been changed.
+</para>
+
+@adjustment: the object which received the signal.
+
+<!-- ##### ARG GtkAdjustment:lower ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkAdjustment:page-increment ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkAdjustment:page-size ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkAdjustment:step-increment ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkAdjustment:upper ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkAdjustment:value ##### -->
+<para>
+
+</para>
+
+<!-- ##### FUNCTION gtk_adjustment_new ##### -->
+<para>
+Creates a new #GtkAdjustment.
+</para>
+
+@value: the initial value.
+@lower: the minimum value.
+@upper: the maximum value.
+@step_increment: the step increment.
+@page_increment: the page increment.
+@page_size: the page size.
+@Returns: a new #GtkAdjustment.
+
+
+<!-- ##### FUNCTION gtk_adjustment_get_value ##### -->
+<para>
+
+</para>
+
+@adjustment: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_adjustment_set_value ##### -->
+<para>
+Sets the #GtkAdjustment value. The value is clamped to lie between
+<literal>adjustment-&gt;lower</literal> and
+<literal>adjustment-&gt;upper</literal>.
+</para>
+<para>
+Note that for adjustments which are used in a #GtkScrollbar, the effective
+range of allowed values goes from <literal>adjustment-&gt;lower</literal> to
+<literal>adjustment-&gt;upper - adjustment-&gt;page_size</literal>.
+</para>
+
+@adjustment: a #GtkAdjustment.
+@value: the new value.
+
+
+<!-- ##### FUNCTION gtk_adjustment_clamp_page ##### -->
+<para>
+Updates the #GtkAdjustment @value to ensure that the range between @lower
+and @upper is in the current page (i.e. between @value and @value +
+@page_size).
+If the range is larger than the page size, then only the start of it will
+be in the current page.
+A &quot;changed&quot; signal will be emitted if the value is changed.
+</para>
+
+@adjustment: a #GtkAdjustment.
+@lower: the lower value.
+@upper: the upper value.
+
+
+<!-- ##### FUNCTION gtk_adjustment_changed ##### -->
+<para>
+Emits a &quot;changed&quot; signal from the #GtkAdjustment.
+This is typically called by the owner of the #GtkAdjustment after it has
+changed any of the #GtkAdjustment fields other than the value.
+</para>
+
+@adjustment: a #GtkAdjustment
+
+
+<!-- ##### FUNCTION gtk_adjustment_value_changed ##### -->
+<para>
+Emits a &quot;value_changed&quot; signal from the #GtkAdjustment.
+This is typically called by the owner of the #GtkAdjustment after it has
+changed the #GtkAdjustment value field.
+</para>
+
+@adjustment: a #GtkAdjustment
+
+

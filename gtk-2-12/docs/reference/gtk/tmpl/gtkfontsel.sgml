@@ -1,0 +1,115 @@
+<!-- ##### SECTION Title ##### -->
+GtkFontSelection
+
+<!-- ##### SECTION Short_Description ##### -->
+A widget for selecting fonts
+
+<!-- ##### SECTION Long_Description ##### -->
+<para>
+The #GtkFontSelection widget lists the available fonts, styles and sizes,
+allowing the user to select a font.
+It is used in the #GtkFontSelectionDialog widget to provide a dialog box for
+selecting fonts.
+</para>
+<para>
+To set the font which is initially selected, use
+gtk_font_selection_set_font_name().
+</para>
+<para>
+To get the selected font use gtk_font_selection_get_font_name().
+</para>
+<para>
+To change the text which is shown in the preview area, use
+gtk_font_selection_set_preview_text().
+</para>
+
+<!-- ##### SECTION See_Also ##### -->
+<para>
+<variablelist>
+
+<varlistentry>
+<term>#GtkFontSelectionDialog</term>
+<listitem><para>a dialog box which uses #GtkFontSelection.</para></listitem>
+</varlistentry>
+
+</variablelist>
+</para>
+
+<!-- ##### SECTION Stability_Level ##### -->
+
+
+<!-- ##### STRUCT GtkFontSelection ##### -->
+<para>
+The #GtkFontSelection struct contains private data only, and should
+only be accessed using the functions below.
+</para>
+
+
+<!-- ##### ARG GtkFontSelection:font ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkFontSelection:font-name ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkFontSelection:preview-text ##### -->
+<para>
+
+</para>
+
+<!-- ##### FUNCTION gtk_font_selection_new ##### -->
+<para>
+Creates a new #GtkFontSelection.
+</para>
+
+@Returns: a new #GtkFontSelection.
+
+
+<!-- ##### FUNCTION gtk_font_selection_get_font ##### -->
+<para>
+Gets the currently-selected font.
+</para>
+
+@fontsel: a #GtkFontSelection.
+@Returns: the currently-selected font, or NULL if no font is selected.
+
+
+<!-- ##### FUNCTION gtk_font_selection_get_font_name ##### -->
+<para>
+</para>
+
+@fontsel: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_font_selection_set_font_name ##### -->
+<para>
+</para>
+
+@fontsel: 
+@fontname: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_font_selection_get_preview_text ##### -->
+<para>
+Gets the text displayed in the preview area.
+</para>
+
+@fontsel: a #GtkFontSelection.
+@Returns: the text displayed in the preview area. This string is
+ owned by the widget and should not be modified or freed.
+
+
+<!-- ##### FUNCTION gtk_font_selection_set_preview_text ##### -->
+<para>
+Sets the text displayed in the preview area.
+</para>
+
+@fontsel: a #GtkFontSelection.
+@text: the text to display in the preview area.
+
+

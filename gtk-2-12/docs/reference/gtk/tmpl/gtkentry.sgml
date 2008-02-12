@@ -1,0 +1,491 @@
+<!-- ##### SECTION Title ##### -->
+GtkEntry
+
+<!-- ##### SECTION Short_Description ##### -->
+A single line text entry field
+
+<!-- ##### SECTION Long_Description ##### -->
+<para>
+The #GtkEntry widget is a single line text entry
+widget. A fairly large set of key bindings are supported
+by default. If the entered text is longer than the allocation
+of the widget, the widget will scroll so that the cursor
+position is visible. 
+</para>
+
+<!-- ##### SECTION See_Also ##### -->
+<para>
+<variablelist>
+
+<varlistentry>
+<term>#GtkTextView</term>
+<listitem><para>a widget for handling multi-line text entry.</para></listitem>
+</varlistentry>
+
+</variablelist>
+</para>
+
+<!-- ##### SECTION Stability_Level ##### -->
+
+
+<!-- ##### STRUCT GtkEntry ##### -->
+<para>
+The #GtkEntry-struct struct contains only private data.
+</para>
+
+
+<!-- ##### SIGNAL GtkEntry::activate ##### -->
+<para>
+
+</para>
+
+@entry: the object which received the signal.
+
+<!-- ##### SIGNAL GtkEntry::backspace ##### -->
+<para>
+
+</para>
+
+@entry: the object which received the signal.
+
+<!-- ##### SIGNAL GtkEntry::copy-clipboard ##### -->
+<para>
+
+</para>
+
+@entry: the object which received the signal.
+
+<!-- ##### SIGNAL GtkEntry::cut-clipboard ##### -->
+<para>
+
+</para>
+
+@entry: the object which received the signal.
+
+<!-- ##### SIGNAL GtkEntry::delete-from-cursor ##### -->
+<para>
+
+</para>
+
+@entry: the object which received the signal.
+@arg1: 
+@arg2: 
+
+<!-- ##### SIGNAL GtkEntry::insert-at-cursor ##### -->
+<para>
+
+</para>
+
+@entry: the object which received the signal.
+@arg1: 
+
+<!-- ##### SIGNAL GtkEntry::move-cursor ##### -->
+<para>
+
+</para>
+
+@entry: the object which received the signal.
+@arg1: 
+@arg2: 
+@arg3: 
+
+<!-- ##### SIGNAL GtkEntry::paste-clipboard ##### -->
+<para>
+
+</para>
+
+@entry: the object which received the signal.
+
+<!-- ##### SIGNAL GtkEntry::populate-popup ##### -->
+<para>
+
+</para>
+
+@entry: the object which received the signal.
+@arg1: 
+
+<!-- ##### SIGNAL GtkEntry::toggle-overwrite ##### -->
+<para>
+
+</para>
+
+@entry: the object which received the signal.
+
+<!-- ##### ARG GtkEntry:activates-default ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkEntry:cursor-position ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkEntry:editable ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkEntry:has-frame ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkEntry:inner-border ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkEntry:invisible-char ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkEntry:max-length ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkEntry:scroll-offset ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkEntry:selection-bound ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkEntry:shadow-type ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkEntry:text ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkEntry:truncate-multiline ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkEntry:visibility ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkEntry:width-chars ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkEntry:xalign ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkEntry:inner-border ##### -->
+<para>
+
+</para>
+
+<!-- ##### FUNCTION gtk_entry_new ##### -->
+<para>
+
+</para>
+
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_entry_new_with_max_length ##### -->
+<para>
+</para>
+
+@max: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_entry_set_text ##### -->
+<para>
+
+</para>
+
+@entry: 
+@text: 
+
+
+<!-- ##### FUNCTION gtk_entry_append_text ##### -->
+<para>
+
+</para>
+
+@entry: 
+@text: 
+
+
+<!-- ##### FUNCTION gtk_entry_prepend_text ##### -->
+<para>
+
+</para>
+
+@entry: 
+@text: 
+
+
+<!-- ##### FUNCTION gtk_entry_set_position ##### -->
+<para>
+
+</para>
+
+@entry: 
+@position: 
+
+
+<!-- ##### FUNCTION gtk_entry_get_text ##### -->
+<para>
+
+</para>
+
+@entry: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_entry_select_region ##### -->
+<para>
+
+</para>
+
+@entry: 
+@start: 
+@end: 
+
+
+<!-- ##### FUNCTION gtk_entry_set_visibility ##### -->
+<para>
+
+</para>
+
+@entry: 
+@visible: 
+
+
+<!-- ##### FUNCTION gtk_entry_set_invisible_char ##### -->
+<para>
+
+</para>
+
+@entry: 
+@ch: 
+
+
+<!-- ##### FUNCTION gtk_entry_set_editable ##### -->
+<para>
+
+</para>
+
+@entry: 
+@editable: 
+
+
+<!-- ##### FUNCTION gtk_entry_set_max_length ##### -->
+<para>
+</para>
+
+@entry: 
+@max: 
+
+
+<!-- ##### FUNCTION gtk_entry_get_activates_default ##### -->
+<para>
+
+</para>
+
+@entry: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_entry_get_has_frame ##### -->
+<para>
+
+</para>
+
+@entry: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_entry_get_inner_border ##### -->
+<para>
+
+</para>
+
+@entry: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_entry_get_width_chars ##### -->
+<para>
+
+</para>
+
+@entry: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_entry_set_activates_default ##### -->
+<para>
+
+</para>
+
+@entry: 
+@setting: 
+
+
+<!-- ##### FUNCTION gtk_entry_set_has_frame ##### -->
+<para>
+
+</para>
+
+@entry: 
+@setting: 
+
+
+<!-- ##### FUNCTION gtk_entry_set_inner_border ##### -->
+<para>
+
+</para>
+
+@entry: 
+@border: 
+
+
+<!-- ##### FUNCTION gtk_entry_set_width_chars ##### -->
+<para>
+
+</para>
+
+@entry: 
+@n_chars: 
+
+
+<!-- ##### FUNCTION gtk_entry_get_invisible_char ##### -->
+<para>
+
+</para>
+
+@entry: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_entry_set_alignment ##### -->
+<para>
+
+</para>
+
+@entry: 
+@xalign: 
+
+
+<!-- ##### FUNCTION gtk_entry_get_alignment ##### -->
+<para>
+
+</para>
+
+@entry: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_entry_get_layout ##### -->
+<para>
+
+</para>
+
+@entry: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_entry_get_layout_offsets ##### -->
+<para>
+
+</para>
+
+@entry: 
+@x: 
+@y: 
+
+
+<!-- ##### FUNCTION gtk_entry_layout_index_to_text_index ##### -->
+<para>
+
+</para>
+
+@entry: 
+@layout_index: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_entry_text_index_to_layout_index ##### -->
+<para>
+
+</para>
+
+@entry: 
+@text_index: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_entry_get_max_length ##### -->
+<para>
+
+</para>
+
+@entry: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_entry_get_visibility ##### -->
+<para>
+
+</para>
+
+@entry: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_entry_set_completion ##### -->
+<para>
+
+</para>
+
+@entry: 
+@completion: 
+
+
+<!-- ##### FUNCTION gtk_entry_get_completion ##### -->
+<para>
+
+</para>
+
+@entry: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_entry_set_cursor_hadjustment ##### -->
+<para>
+
+</para>
+
+@entry: 
+@adjustment: 
+
+
+<!-- ##### FUNCTION gtk_entry_get_cursor_hadjustment ##### -->
+<para>
+
+</para>
+
+@entry: 
+@Returns: 
+
+

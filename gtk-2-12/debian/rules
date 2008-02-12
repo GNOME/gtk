@@ -1,0 +1,160 @@
+#!/usr/bin/make -f
+
+# debian/rules file for gtk+ Debian package
+# written April 1998 by Ben Gertzfield <che@debian.org
+
+build: build-stamp
+build-stamp:
+	dh_testdir
+	./autogen.sh --prefix=/usr --with-xinput=xfree
+	$(MAKE)
+	cd docs && make distdocs
+	cd ..
+	touch build-stamp
+
+build-dbg: build-dbg-stamp
+build-dbg-stamp:
+	dh_testdir
+	./configure --prefix=/usr --with-xinput=xfree --enable-debug=yes
+	$(MAKE)
+	touch build-dbg-stamp
+
+clean:
+	dh_testdir
+	dh_testroot
+	rm -f build-stamp build-dbg-stamp install-stamp install-dbg-stamp
+	# Add here commands to clean up after the build process.
+	-$(MAKE) clean
+	cd docs 
+	-$(MAKE) maintainer-clean
+	cd ..
+	-$(MAKE) distclean
+	find . -name '*.o' -o -name '_libs' -o -name '*.lo' -o -name '*.a' -o -name '.deps' | xargs rm -rf
+	dh_clean
+
+clean-dbg:
+	dh_testdir
+	dh_testroot
+	rm -f build-stamp build-dbg-stamp install-stamp install-dbg-stamp
+	# Add here commands to clean up after the build process.
+	-$(MAKE) clean
+	cd docs
+	-$(MAKE) maintainer-clean
+	cd ..
+	-$(MAKE) distclean
+	find . -name '*.o' -o -name '_libs' -o -name '*.lo' -o -name '*.a' -o -name '.deps' | xargs rm -rf
+	dh_clean -k
+
+install: install-stamp
+install-stamp: build
+	dh_testdir
+	dh_testroot
+	dh_clean
+	$(MAKE) prefix=`pwd`/debian/tmp/usr install
+	touch install-stamp
+
+install-dbg: install-dbg-stamp
+install-dbg-stamp: build-dbg
+	dh_testdir
+	dh_testroot
+	dh_clean -k
+	$(MAKE) prefix=`pwd`/debian/libgtk-cvs-dbg/usr install
+	touch install-dbg-stamp
+
+# Build architecture-independent files here.
+binary-indep: build install libgtk-cvs-doc
+# We have nothing to do by default.
+
+# Build architecture-dependent files here.
+binary-arch: build install libgtk-cvs-dev libgtk-cvs-1.1 libgtk-cvs-dbg
+
+libgtk-cvs-1.1: build
+	dh_testdir -plibgtk-cvs-1.1 
+	dh_testroot -plibgtk-cvs-1.1
+	dh_installdirs -plibgtk-cvs-1.1
+	# Add here commands to install the files into debian/tmp
+	rm -rf debian/tmp/usr/bin debian/tmp/usr/include debian/tmp/usr/info debian/tmp/usr/lib/glib debian/tmp/usr/share/aclocal debian/tmp/usr/man debian/tmp/usr/lib/*.la
+	dh_installdocs -plibgtk-cvs-1.1
+	dh_installchangelogs -plibgtk-cvs-1.1
+	dh_strip -plibgtk-cvs-1.1
+	dh_compress -plibgtk-cvs-1.1
+	dh_fixperms -plibgtk-cvs-1.1
+	dh_installdeb -plibgtk-cvs-1.1
+	dh_shlibdeps -plibgtk-cvs-1.1
+	dh_gencontrol -plibgtk-cvs-1.1
+	dh_makeshlibs -plibgtk-cvs-1.1 -V 'libgtk-cvs-1.1 (='`cat debian/version`')'
+	dh_md5sums -plibgtk-cvs-1.1
+	dh_builddeb -plibgtk-cvs-1.1
+
+libgtk-cvs-dev: build
+	dh_testdir -plibgtk-cvs-dev
+	dh_testroot -plibgtk-cvs-dev
+	dh_clean -plibgtk-cvs-dev -k
+	dh_installdirs -plibgtk-cvs-dev
+	# Add here commands to install the files into debian/tmp
+	dh_movefiles -plibgtk-cvs-dev
+	cp gtk-config debian/tmp/usr/bin
+	dh_installdocs -plibgtk-cvs-dev 
+	dh_installchangelogs -plibgtk-cvs-dev
+	dh_strip -plibgtk-cvs-dev
+	dh_compress -plibgtk-cvs-dev
+	dh_fixperms -plibgtk-cvs-dev
+	dh_installdeb -plibgtk-cvs-dev
+	dh_shlibdeps -plibgtk-cvs-dev
+	dh_gencontrol -plibgtk-cvs-dev
+	dh_md5sums -plibgtk-cvs-dev
+	dh_builddeb -plibgtk-cvs-dev
+
+libgtk-cvs-doc:
+	dh_testdir -plibgtk-cvs-doc
+	dh_testroot -plibgtk-cvs-doc
+	dh_clean -plibgtk-cvs-doc -k
+	dh_installdirs -plibgtk-cvs-doc usr/doc/libgtk-cvs-doc/faq-html \
+	  usr/doc/libgtk-cvs-doc/tutorial-html usr/doc/libgtk-cvs-doc/italian-tutorial-html usr/doc/libgtk-cvs-doc/french-tutorial-html usr/doc/libgtk-cvs-doc/gdk-html
+	dh_movefiles -plibgtk-cvs-doc
+	cp docs/html/gtkfaq*.html debian/libgtk-cvs-doc/usr/doc/libgtk-cvs-doc/faq-html
+	cp docs/html/gtk_tut-*.html debian/libgtk-cvs-doc/usr/doc/libgtk-cvs-doc/tutorial-html
+	cp docs/html/*.gif debian/libgtk-cvs-doc/usr/doc/libgtk-cvs-doc/tutorial-html
+	cp docs/html/gtk_tut.html debian/libgtk-cvs-doc/usr/doc/libgtk-cvs-doc/tutorial-html
+	cp docs/html/gtk_tut_it*.html debian/libgtk-cvs-doc/usr/doc/libgtk-cvs-doc/italian-tutorial-html
+	cp docs/html/*.gif debian/libgtk-cvs-doc/usr/doc/libgtk-cvs-doc/italian-tutorial-html
+	cp docs/html/gtk_tut_fr*.html debian/libgtk-cvs-doc/usr/doc/libgtk-cvs-doc/french-tutorial-html
+	cp docs/html/*.gif debian/libgtk-cvs-doc/usr/doc/libgtk-cvs-doc/french-tutorial-html
+	cp docs/html/gdk* debian/libgtk-cvs-doc/usr/doc/libgtk-cvs-doc/gdk-html
+	cp docs/text/*.txt debian/libgtk-cvs-doc/usr/doc/libgtk-cvs-doc/
+
+	dh_installdocs -plibgtk-cvs-doc docs/{debugging,developers,styles,text_widget,widget_system,gtk-config,refcounting}.txt TODO NEWS
+	dh_installchangelogs -plibgtk-cvs-doc
+	dh_strip -plibgtk-cvs-doc
+	dh_compress -plibgtk-cvs-doc
+	dh_fixperms -plibgtk-cvs-doc
+	dh_installdeb -plibgtk-cvs-doc
+	dh_shlibdeps -plibgtk-cvs-doc
+	dh_gencontrol -plibgtk-cvs-doc
+	dh_md5sums -plibgtk-cvs-doc
+	dh_builddeb -plibgtk-cvs-doc
+
+libgtk-cvs-dbg: clean-dbg install-dbg
+	dh_testdir -plibgtk-cvs-dbg
+	dh_testroot -plibgtk-cvs-dbg
+	dh_installdirs -plibgtk-cvs-dbg
+	# Add here commands to install the files into debian/libgtk-cvs-dbg
+	rm -rf debian/libgtk-cvs-dbg/usr/bin debian/libgtk-cvs-dbg/usr/include debian/libgtk-cvs-dbg/usr/info debian/libgtk-cvs-dbg/usr/lib/glib debian/libgtk-cvs-dbg/usr/man debian/libgtk-cvs-dbg/usr/share debian/libgtk-cvs-dbg/usr/lib/*.{la,so*}
+	for file in `find debian/libgtk-cvs-dbg/usr/lib -name '*.a'` ; do \
+	  mv $$file debian/libgtk-cvs-dbg/usr/lib/`basename $$file .a`_g.a; \
+        done
+	dh_installdocs -plibgtk-cvs-dbg
+	dh_installchangelogs -plibgtk-cvs-dbg
+	dh_compress -plibgtk-cvs-dbg
+	dh_fixperms -plibgtk-cvs-dbg
+	dh_installdeb -plibgtk-cvs-dbg
+	dh_shlibdeps -plibgtk-cvs-dbg
+	dh_gencontrol -plibgtk-cvs-dbg
+	dh_md5sums -plibgtk-cvs-dbg
+	dh_builddeb -plibgtk-cvs-dbg
+
+source diff:                                                                  
+	@echo >&2 'source and diff are obsolete - use dpkg-source -b'; false
+
+binary: binary-indep binary-arch
+.PHONY: build clean binary-indep binary-arch binary

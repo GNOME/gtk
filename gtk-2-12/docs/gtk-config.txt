@@ -1,0 +1,236 @@
+CONFIGURING PACKAGES TO WORK WITH GTK
+-------------------------------------
+
+Compiling a program successfully against the GTK, GDK, and GLIB
+libraries can require a large number of command line options
+to your compiler and linker that are hard to guess correctly.
+The additional libraries required may, for example, depend on the
+manner which GTK was configured
+
+Several tools are included in this package to make process
+easier.
+
+First, there is the shell script 'gtk-config' (installed in
+$exec_prefix/bin):
+
+Invoking gtk-config
+-------------------
+
+gtk-config takes the following flags:
+
+  --version
+     Prints out the version of GTK installed
+
+  --cflags
+     Prints '-I' flags pointing to the installed header files.
+
+  --libs
+     Prints out the linker flags necessary to link a program against GTK
+   
+  --prefix[=PREFIX]
+     If PREFIX is specified, overrides the configured value of $prefix.
+     (And of exec-prefix, unless --exec-prefix is also specified)
+     Otherwise, prints out the configured value of $prefix
+
+  --exec-prefix[=PREFIX]
+     If PREFIX is specified, overrides the configured value of $exec_prefix.
+     Otherwise, prints out the configured value of $exec_prefix
+ 
+You may also add to the command line a list of additional
+libraries that gtk-config should supply the CFLAGS and LIBS
+for. The only currently supported library is 'gthread'.
+
+As an example of this latter usage, you can get the
+appropriate cflags for a threaded program with:
+
+ gtk-config --cflags gthread
+
+
+Example of using gtk-config
+---------------------------
+
+Typically, gtk-config will be used within a configure script,
+as described below. It, however, can also be used directly
+from the command line to compile a simple program. For example:
+
+  cc -o simple `gtk-config --cflags` simple.c `gtk-config --libs`
+
+This command line might expand to (for example):
+
+  cc -o simple -I/usr/local/lib/glib/include -I/usr/local/include \
+    -I/usr/X11R6/include simple.c -L/usr/local/lib -L/usr/X11R6/lib \
+    -lgtk -lgdk -lglib -lXi -lXext -lX11 -lm
+
+Not only is the form using gtk-config easier to type, it will
+work on any system, no matter how GTK was configured.
+
+
+AM_PATH_GTK
+-----------
+
+For packages configured using GNU automake, GTK also provides
+a macro to automate the process of running GTK.
+
+ AM_PATH_GTK([MINIMUM-VERSION, [ACTION-IF-FOUND [, ACTION-IF-NOT-FOUND]]])
+
+This macro:
+
+ * Determines the location of GTK using gtk-config, which is either
+   found in the user's path, or from the environment variable
+   GTK_CONFIG
+
+ * Tests the installed libraries to make sure that there version
+   is later than MINIMUM-VERSION. (A default version will be used
+   if not specified)
+
+ * If the required version was found, sets the GTK_CFLAGS variable to
+   the output of `gtk-config --cflags` and the GTK_LIBS variable to
+   the output of `gtk-config --libs`, and calls AC_SUBST() for these
+   variables so they can be used in generated makefiles, and then
+   executes ACTION-IF-FOUND.
+
+ * If the required version was not found, sets GTK_CFLAGS and GTK_LIBS
+   to empty strings, and executes ACTION-IF-NOT-FOUND.
+
+This macro is in file 'gtk.m4' which is installed in $datadir/aclocal.
+Note that if automake was installed with a different --prefix than
+GTK, you will either have to manually move gtk.m4 to automake's
+$datadir/aclocal, or give aclocal the -I option when running it.
+
+
+Configuring a package that uses AM_PATH_GTK
+-------------------------------------------
+
+Simply make sure that gtk-config is in your path, and run
+the configure script.
+
+Notes:
+
+* The directory where the GTK libraries are installed needs
+  to be found by your system's dynamic linker.
+  
+  This is generally done by
+
+    editing /etc/ld.so.conf and running ldconfig
+
+  Or by:
+   
+    setting the environment variable LD_LIBRARY_PATH, 
+
+  or, as a last resort, 
+ 
+    Giving a -R or -rpath flag (depending on your linker) when
+    running configure, for instance:
+
+      LDFLAGS=-R/usr/home/owen/lib ./configure
+
+* You can also specify a gtk-config not in your path by
+  setting the GTK_CONFIG environment variable to the
+  name of the executable
+
+* If you move the GTK package from its installed location,
+  you will need either need to modify gtk-config script
+  manually to point to the new location or rebuild GTK.
+
+Advanced note:
+
+* configure flags
+  
+  --with-gtk-prefix=PREFIX
+  --with-gtk-exec-prefix=PREFIX 
+
+  are provided to override the prefix and exec-prefix that were stored
+  in the gtk-config shell script by GTK's configure. You are generally
+  better off configuring GTK with the right path to begin with.
+
+Example of a package using AM_PATH_GTK
+--------------------------------------
+
+The following shows how to build a simple package using automake
+and the AM_PATH_GTK macro. The program used here is the testinput.c
+
+You should first read the introductory portions of the automake
+Manual, if you are not already familiar with it.
+
+Two files are needed, 'configure.in', which is used to build the
+configure script:
+
+==configure.in===
+dnl Process this file with autoconf to produce a configure script.
+AC_INIT(testinput.c)
+
+AM_INIT_AUTOMAKE(testinput.c, 1.0.0)
+
+AC_PROG_CC
+AM_PROG_CC_STDC
+AC_PROG_INSTALL
+
+AM_PATH_GTK(0.99.5,
+          [LIBS="$LIBS $GTK_LIBS"
+           CFLAGS="$CFLAGS $GTK_CFLAGS"],
+ 	  AC_MSG_ERROR(Cannot find GTK: Is gtk-config in path?))
+
+AC_OUTPUT(Makefile)
+=================
+
+The only command in this which is not standard for automake
+is the AM_PATH_GTK() macro.
+
+That command does the following:
+
+ If a GTK version greater than 0.99.5 is found, adds $GTK_LIBS to 
+ $LIBS and $GTK_CFLAGS to $CFLAGS. Otherwise, dies with the error
+ message "Cannot find GTK: Is gtk-config in path?"
+
+And the 'Makefile.am', which will be used to build the Makefile.
+
+== Makefile.am ==
+bin_PROGRAMS = testinput
+testinput_SOURCES = testinput.c
+=================
+
+This Makefile.am, says that we are building a single executable,
+from a single sourcefile 'testinput.c'. Since every program
+we are building uses GTK we simply added the GTK options
+to $LIBS and $CFLAGS, but in other circumstances, we might
+want to specify them on a per-program basis: for instance by
+adding the lines:
+
+  testinput_LDADD = $(GTK_LIBS)
+  INCLUDES = $(GTK_CFLAGS)
+
+to the Makefile.am.
+
+To try this example out, create a new directory, add the two
+files above two it, and copy the testinput.c file from 
+the gtk/ subdirectory to the new directory. Edit the line:
+
+  #include "gtk.h"
+
+in testgtk.c, to read:
+
+  #include <gtk/gtk.h>
+
+
+Now execute the following commands:
+
+  automake --add-missing
+  aclocal
+  autoconf
+  
+You now have a package that can be built in the normal fashion
+
+  ./configure
+  make
+  make install
+
+
+Notes:
+
+* If you are converting a package that used a pre-1.0 version of
+  GTK, you should remove the autoconf tests for X. The results
+  of these tests are included in gtk-config and will be added
+  to GTK_LIBS and GTK_CFLAGS by the AM_PATH_GTK macro.
+
+                                        Owen Taylor
+                                        14 Mar 1997

@@ -1,0 +1,222 @@
+<!-- ##### SECTION Title ##### -->
+GtkCombo
+
+<!-- ##### SECTION Short_Description ##### -->
+A text entry field with a dropdown list
+
+<!-- ##### SECTION Long_Description ##### -->
+<para>
+The #GtkCombo widget consists of a single-line text entry field and a drop-down
+list. The drop-down list is displayed when the user clicks on a small arrow
+button to the right of the entry field.
+</para>
+<para>
+The drop-down list is a #GtkList widget and can be accessed using the
+<structfield>list</structfield> member of the #GtkCombo-struct.
+List elements can contain arbitrary widgets, but if an element is not a
+plain label, then you must use the gtk_list_set_item_string() function.
+This sets the string which will be placed in the text entry field when the
+item is selected.
+</para>
+<para>
+By default, the user can step through the items in the list using the
+arrow (cursor) keys, though this behaviour can be turned off with
+gtk_combo_set_use_arrows().
+</para>
+<para>
+As of GTK+ 2.4, #GtkCombo has been deprecated in favor of #GtkComboBox.
+</para>
+
+<example id="gtkcombo-simple-example">
+<title>Creating a <structname>GtkCombo</structname> widget with simple text 
+items.</title>
+<programlisting>
+  GtkWidget *combo;
+  GList *items = NULL;
+
+  items = g_list_append (items, "First Item");
+  items = g_list_append (items, "Second Item");
+  items = g_list_append (items, "Third Item");
+  items = g_list_append (items, "Fourth Item");
+  items = g_list_append (items, "Fifth Item");
+
+  combo = gtk_combo_new (<!-- -->);
+  gtk_combo_set_popdown_strings (GTK_COMBO (combo), items);
+</programlisting>
+</example>
+
+<example>
+<title>Creating a <structname>GtkCombo</structname> widget with a complex item.</title>
+<programlisting>
+  GtkWidget *combo, *item, *hbox, *arrow, *label;
+
+  combo = gtk_combo_new (<!-- -->);
+
+  item = gtk_list_item_new (<!-- -->);
+  gtk_widget_show (item);
+
+  /* You can put almost anything into the GtkListItem widget. Here we will use
+     a horizontal box with an arrow and a label in it. */
+  hbox = gtk_hbox_new (FALSE, 3);
+  gtk_container_add (GTK_CONTAINER (item), hbox);
+  gtk_widget_show (hbox);
+
+  arrow = gtk_arrow_new (GTK_ARROW_RIGHT, GTK_SHADOW_OUT);
+  gtk_widget_show (arrow);
+  gtk_box_pack_start (GTK_BOX (hbox), arrow, FALSE, FALSE, 0);
+
+  label = gtk_label_new ("First Item");
+  gtk_widget_show (label);
+  gtk_box_pack_start (GTK_BOX (hbox), label, FALSE, FALSE, 0);
+
+  /* You must set the string to display in the entry field when the item is
+     selected. */
+  gtk_combo_set_item_string (GTK_COMBO (combo), GTK_ITEM (item), "1st Item");
+
+  /* Now we simply add the item to the combo's list. */
+  gtk_container_add (GTK_CONTAINER (GTK_COMBO (combo)->list), item);
+</programlisting>
+</example>
+
+<!-- ##### SECTION See_Also ##### -->
+<para>
+
+</para>
+
+<!-- ##### SECTION Stability_Level ##### -->
+
+
+<!-- ##### STRUCT GtkCombo ##### -->
+<para>
+The #GtkFixedChild-struct struct contains the following fields.
+(These fields should be considered read-only. They should never be set by
+an application.)
+</para>
+
+@entry: the text entry field.
+@list: the list shown in the drop-down window.
+@Deprecated: 2.4: Use #GtkComboBox instead.
+
+<!-- ##### ARG GtkCombo:allow-empty ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkCombo:case-sensitive ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkCombo:enable-arrow-keys ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkCombo:enable-arrows-always ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkCombo:value-in-list ##### -->
+<para>
+
+</para>
+
+<!-- ##### FUNCTION gtk_combo_new ##### -->
+<para>
+Creates a new #GtkCombo.
+</para>
+
+@Returns: a new #GtkCombo.
+@Deprecated: 2.4: Use #GtkComboBox instead.
+
+
+<!-- ##### FUNCTION gtk_combo_set_popdown_strings ##### -->
+<para>
+Convenience function to set all of the items in the popup list.
+(See the <link linkend="gtkcombo-simple-example">example</link> above.)
+</para>
+
+@combo: a #GtkCombo.
+@strings: a list of strings, or %NULL to clear the popup list
+@Deprecated: 2.4: Use #GtkComboBox instead.
+
+
+<!-- ##### FUNCTION gtk_combo_set_value_in_list ##### -->
+<para>
+Specifies whether the value entered in the text entry field must match one of
+the values in the list. If this is set then the user will not be able to
+perform any other action until a valid value has been entered.
+</para>
+<para>
+If an empty field is acceptable, the @ok_if_empty parameter should be %TRUE.
+</para>
+
+@combo: a #GtkCombo.
+@val: %TRUE if the value entered must match one of the values in the list.
+@ok_if_empty: %TRUE if an empty value is considered valid.
+@Deprecated: 2.4: Use #GtkComboBox instead.
+
+
+<!-- ##### FUNCTION gtk_combo_set_use_arrows ##### -->
+<para>
+Specifies if the arrow (cursor) keys can be used to step through the items in
+the list. This is on by default.
+</para>
+
+@combo: a #GtkCombo.
+@val: %TRUE if the arrow keys can be used to step through the items in 
+     the list.
+@Deprecated: 2.4: Use #GtkComboBox instead.
+
+
+<!-- ##### FUNCTION gtk_combo_set_use_arrows_always ##### -->
+<para>
+Obsolete function, does nothing.
+</para>
+
+@combo: a #GtkCombo.
+@val: unused
+@Deprecated: 2.4: Use #GtkComboBox instead.
+
+
+<!-- ##### FUNCTION gtk_combo_set_case_sensitive ##### -->
+<para>
+Specifies whether the text entered into the #GtkEntry field and the text in
+the list items is case sensitive.
+</para>
+<para>
+This may be useful, for example, when you have called
+gtk_combo_set_value_in_list() to limit the values entered, but you are not
+worried about differences in case.
+</para>
+
+@combo: a #GtkCombo.
+@val: %TRUE if the text in the list items is case sensitive.
+@Deprecated: 2.4: Use #GtkComboBox instead.
+
+
+<!-- ##### FUNCTION gtk_combo_set_item_string ##### -->
+<para>
+Sets the string to place in the #GtkEntry field when a particular list item is
+selected. This is needed if the list item is not a simple label.
+</para>
+
+@combo: a #GtkCombo.
+@item: a #GtkItem.
+@item_value: the string to place in the #GtkEntry when @item is selected.
+@Deprecated: 2.4: Use #GtkComboBox instead.
+
+
+<!-- ##### FUNCTION gtk_combo_disable_activate ##### -->
+<para>
+Stops the #GtkCombo widget from showing the popup list when the #GtkEntry
+emits the "activate" signal, i.e. when the Return key is pressed.
+This may be useful if, for example, you want the Return key to close a dialog
+instead.
+</para>
+
+@combo: a #GtkCombo.
+@Deprecated: 2.4: Use #GtkComboBox instead.
+
+

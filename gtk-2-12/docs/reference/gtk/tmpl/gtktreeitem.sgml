@@ -1,0 +1,119 @@
+<!-- ##### SECTION Title ##### -->
+GtkTreeItem
+
+<!-- ##### SECTION Short_Description ##### -->
+The widget used for items in a GtkTree
+
+<!-- ##### SECTION Long_Description ##### -->
+<para>
+<warning>
+<para>
+#GtkTree is deprecated and unsupported. It is known to be
+buggy. To use it, you must define the symbol %GTK_ENABLE_BROKEN
+prior to including the GTK+ header files. Use #GtkTreeView instead.
+</para>
+</warning>
+</para>
+
+<!-- ##### SECTION See_Also ##### -->
+<para>
+
+</para>
+
+<!-- ##### SECTION Stability_Level ##### -->
+
+
+<!-- ##### STRUCT GtkTreeItem ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### SIGNAL GtkTreeItem::collapse ##### -->
+<para>
+
+</para>
+
+@treeitem: the object which received the signal.
+
+<!-- ##### SIGNAL GtkTreeItem::expand ##### -->
+<para>
+
+</para>
+
+@treeitem: the object which received the signal.
+
+<!-- ##### MACRO GTK_TREE_ITEM_SUBTREE ##### -->
+<para>
+
+</para>
+
+@obj: 
+
+
+<!-- ##### FUNCTION gtk_tree_item_new ##### -->
+<para>
+
+</para>
+
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_tree_item_new_with_label ##### -->
+<para>
+
+</para>
+
+@label: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_tree_item_set_subtree ##### -->
+<para>
+
+</para>
+
+@tree_item: 
+@subtree: 
+
+
+<!-- ##### FUNCTION gtk_tree_item_remove_subtree ##### -->
+<para>
+
+</para>
+
+@tree_item: 
+
+
+<!-- ##### FUNCTION gtk_tree_item_select ##### -->
+<para>
+
+</para>
+
+@tree_item: 
+
+
+<!-- ##### FUNCTION gtk_tree_item_deselect ##### -->
+<para>
+
+</para>
+
+@tree_item: 
+
+
+<!-- ##### FUNCTION gtk_tree_item_expand ##### -->
+<para>
+
+</para>
+
+@tree_item: 
+
+
+<!-- ##### FUNCTION gtk_tree_item_collapse ##### -->
+<para>
+
+</para>
+
+@tree_item: 
+
+

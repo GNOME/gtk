@@ -1,0 +1,452 @@
+<!-- ##### SECTION Title ##### -->
+GdkRGB
+
+<!-- ##### SECTION Short_Description ##### -->
+Renders RGB, grayscale, or indexed image data to a GdkDrawable
+
+<!-- ##### SECTION Long_Description ##### -->
+
+<para>
+GdkRGB is a low-level module which renders RGB, grayscale, and indexed
+colormap images to a #GdkDrawable. It does this as efficiently as
+possible, handling issues such as colormaps, visuals, dithering,
+temporary buffers, and so on. Most code should use the higher-level
+#GdkPixbuf features in place of this module; for example,
+gdk_draw_pixbuf() uses GdkRGB in its implementation.
+</para>
+
+<para>
+GdkRGB allocates a color cube to use when rendering images.  You can
+set the threshold for installing colormaps with
+gdk_rgb_set_min_colors(). The default is 5x5x5 (125). If a colorcube
+of this size or larger can be allocated in the default colormap, then
+that's done. Otherwise, GdkRGB creates its own private colormap.
+Setting it to 0 means that it always tries to use the default
+colormap, and setting it to 216 means that it always creates a private
+one if it cannot allocate the 6x6x6 colormap in the default. If you
+always want a private colormap (to avoid consuming too many colormap
+entries for other apps, say), you can use 
+<literal>gdk_rgb_set_install(TRUE)</literal>.
+Setting the value greater than 216 exercises a bug in older versions
+of GdkRGB. Note, however, that setting it to 0 doesn't let you get
+away with ignoring the colormap and visual - a colormap is always
+created in grayscale and direct color modes, and the visual is changed
+in cases where a "better" visual than the default is available.
+</para>
+
+<para>
+If GDK is built with the Sun mediaLib library, the GdkRGB functions are
+accelerated using mediaLib, which provides hardware acceleration on Intel,
+AMD, and Sparc chipsets.  If desired, mediaLib support can be turned off
+by setting the GDK_DISABLE_MEDIALIB environment variable.
+</para>
+
+<example>
+<title>A simple example program using GdkRGB</title>
+<programlisting>
+&num;include &lt;gtk/gtk.h&gt;
+
+&num;define IMAGE_WIDTH	256
+&num;define IMAGE_HEIGHT	256
+
+guchar rgbbuf[IMAGE_WIDTH * IMAGE_HEIGHT * 3];
+
+gboolean on_darea_expose (GtkWidget *widget,
+			  GdkEventExpose *event,
+			  gpointer user_data);
+
+int
+main (int argc, char *argv[])
+{
+  GtkWidget *window, *darea;
+  gint x, y;
+  guchar *pos;
+
+  gtk_init (&amp;argc, &amp;argv);
+
+  window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+  darea = gtk_drawing_area_new (<!-- -->);
+  gtk_widget_set_size_request (darea, IMAGE_WIDTH, IMAGE_HEIGHT);
+  gtk_container_add (GTK_CONTAINER (window), darea);
+  gtk_signal_connect (GTK_OBJECT (darea), "expose-event",
+                      GTK_SIGNAL_FUNC (on_darea_expose), NULL);
+  gtk_widget_show_all (window);
+
+  /* Set up the RGB buffer. */
+  pos = rgbbuf;
+  for (y = 0; y &lt; IMAGE_HEIGHT; y++)
+    {
+      for (x = 0; x &lt; IMAGE_WIDTH; x++)
+	{
+	  *pos++ = x - x % 32;			/* Red. */
+	  *pos++ = (x / 32) * 4 + y - y % 32;	/* Green. */
+	  *pos++ = y - y % 32;			/* Blue. */
+	}
+    }
+
+  gtk_main (<!-- -->);
+  return 0;
+}
+
+
+gboolean
+on_darea_expose (GtkWidget *widget,
+		 GdkEventExpose *event,
+		 gpointer user_data)
+{
+  gdk_draw_rgb_image (widget->window, widget->style->fg_gc[GTK_STATE_NORMAL],
+		      0, 0, IMAGE_WIDTH, IMAGE_HEIGHT,
+		      GDK_RGB_DITHER_MAX, rgbbuf, IMAGE_WIDTH * 3);
+
+  return TRUE;
+}
+</programlisting>
+</example>
+
+<!-- ##### SECTION See_Also ##### -->
+<para>
+<variablelist>
+
+<varlistentry>
+<term>#GdkColor</term>
+<listitem><para>The underlying GDK mechanism for allocating
+colors.</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term>#GdkPixbuf and gdk_draw_pixbuf()</term>
+<listitem><para>Higher-level image handling.</para></listitem>
+</varlistentry>
+
+</variablelist>
+
+</para>
+
+<!-- ##### SECTION Stability_Level ##### -->
+
+
+<!-- ##### FUNCTION gdk_rgb_init ##### -->
+<para>
+This function no longer does anything at all. It's completely useless
+(and harmless).
+</para>
+
+
+
+<!-- ##### FUNCTION gdk_draw_rgb_image ##### -->
+<para>
+Draws an RGB image in the drawable. This is the core GdkRGB
+function, and likely the only one you will need to use.
+</para>
+
+<para>
+The @rowstride parameter allows for lines to be aligned more flexibly.
+For example, lines may be allocated to begin on 32-bit boundaries,
+even if the width of the rectangle is odd. Rowstride is also useful
+when drawing a subrectangle of a larger image in memory. Finally, to
+replicate the same line a number of times, the trick of setting
+@rowstride to 0 is allowed.
+</para>
+
+<para>
+In general, for 0 &lt;= i &lt; @width and 0 &lt;= j &lt; height,
+the pixel (x + i, y + j) is colored with red value @rgb_buf[@j *
+@rowstride + @i * 3], green value @rgb_buf[@j * @rowstride + @i * 3 +
+1], and blue value @rgb_buf[@j * @rowstride + @i * 3 + 2].
+</para>
+
+@drawable: The #GdkDrawable to draw in (usually a #GdkWindow).
+@gc: The graphics context (all GDK drawing operations require one; its
+contents are ignored).
+@x: The x coordinate of the top-left corner in the drawable.
+@y: The y coordinate of the top-left corner in the drawable.
+@width: The width of the rectangle to be drawn.
+@height: The height of the rectangle to be drawn.
+@dith: A #GdkRgbDither value, selecting the desired dither mode.
+@rgb_buf: The pixel data, represented as packed 24-bit data.
+@rowstride: The number of bytes from the start of one row in @rgb_buf to the
+start of the next.
+
+
+<!-- ##### FUNCTION gdk_draw_rgb_image_dithalign ##### -->
+<para>
+Draws an RGB image in the drawable, with an adjustment for dither alignment.
+</para>
+
+<para>
+This function is useful when drawing dithered images into a window
+that may be scrolled. Pixel (x, y) will be drawn dithered as if its
+actual location is (x + @xdith, y + @ydith). Thus, if you draw an
+image into a window using zero dither alignment, then scroll up one
+pixel, subsequent draws to the window should have @ydith = 1.
+</para>
+
+<para>
+Setting the dither alignment correctly allows updating of small parts
+of the screen while avoiding visible "seams" between the different
+dither textures.
+</para>
+
+@drawable: The #GdkDrawable to draw in (usually a #GdkWindow).
+@gc: The graphics context.
+@x: The x coordinate of the top-left corner in the drawable.
+@y: The y coordinate of the top-left corner in the drawable.
+@width: The width of the rectangle to be drawn.
+@height: The height of the rectangle to be drawn.
+@dith: A #GdkRgbDither value, selecting the desired dither mode.
+@rgb_buf: The pixel data, represented as packed 24-bit data.
+@rowstride: The number of bytes from the start of one row in @rgb_buf to the
+start of the next.
+@xdith: An x offset for dither alignment.
+@ydith: A y offset for dither alignment.
+
+
+<!-- ##### FUNCTION gdk_draw_indexed_image ##### -->
+<para>
+Draws an indexed image in the drawable, using a #GdkRgbCmap to assign
+actual colors to the color indices.
+</para>
+
+@drawable: The #GdkDrawable to draw in (usually a #GdkWindow).
+@gc: The graphics context.
+@x: The x coordinate of the top-left corner in the drawable.
+@y: The y coordinate of the top-left corner in the drawable.
+@width: The width of the rectangle to be drawn.
+@height: The height of the rectangle to be drawn.
+@dith: A #GdkRgbDither value, selecting the desired dither mode.
+@buf: The pixel data, represented as 8-bit color indices.
+@rowstride: The number of bytes from the start of one row in @buf to the
+start of the next.
+@cmap: The #GdkRgbCmap used to assign colors to the color indices.
+
+
+<!-- ##### FUNCTION gdk_draw_gray_image ##### -->
+<para>
+Draws a grayscale image in the drawable.
+
+</para>
+
+@drawable: The #GdkDrawable to draw in (usually a #GdkWindow).
+@gc: The graphics context.
+@x: The x coordinate of the top-left corner in the drawable.
+@y: The y coordinate of the top-left corner in the drawable.
+@width: The width of the rectangle to be drawn.
+@height: The height of the rectangle to be drawn.
+@dith: A #GdkRgbDither value, selecting the desired dither mode.
+@buf: The pixel data, represented as 8-bit gray values.
+@rowstride: The number of bytes from the start of one row in @buf to the
+start of the next.
+
+
+<!-- ##### FUNCTION gdk_draw_rgb_32_image ##### -->
+<para>
+Draws a padded RGB image in the drawable. The image is stored as one
+pixel per 32-bit word. It is laid out as a red byte, a green byte, a
+blue byte, and a padding byte.
+</para>
+
+<para>
+It's unlikely that this function will give significant performance
+gains in practice. In my experience, the performance gain from having
+pixels aligned to 32-bit boundaries is cancelled out by the increased
+memory bandwidth.
+</para>
+
+@drawable: The #GdkDrawable to draw in (usually a #GdkWindow).
+@gc: The graphics context.
+@x: The x coordinate of the top-left corner in the drawable.
+@y: The y coordinate of the top-left corner in the drawable.
+@width: The width of the rectangle to be drawn.
+@height: The height of the rectangle to be drawn.
+@dith: A #GdkRgbDither value, selecting the desired dither mode.
+@buf: The pixel data, represented as padded 32-bit data.
+@rowstride: The number of bytes from the start of one row in @buf to the
+start of the next.
+
+
+<!-- ##### FUNCTION gdk_draw_rgb_32_image_dithalign ##### -->
+<para>
+
+</para>
+
+@drawable: 
+@gc: 
+@x: 
+@y: 
+@width: 
+@height: 
+@dith: 
+@buf: 
+@rowstride: 
+@xdith: 
+@ydith: 
+
+
+<!-- ##### ENUM GdkRgbDither ##### -->
+<para>
+Selects whether or not GdkRGB applies dithering
+to the image on display. 
+</para>
+
+<para>
+Since GdkRGB currently only handles images with 8 bits per component,
+dithering on 24 bit per pixel displays is a moot point.
+</para>
+
+@GDK_RGB_DITHER_NONE: Never use dithering.
+@GDK_RGB_DITHER_NORMAL: Use dithering in 8 bits per pixel (and below)
+only.
+@GDK_RGB_DITHER_MAX: Use dithering in 16 bits per pixel and below.
+
+<!-- ##### FUNCTION gdk_rgb_cmap_new ##### -->
+<para>
+Creates a new #GdkRgbCmap structure. The cmap maps color indexes to
+RGB colors. If @n_colors is less than 256, then images containing
+color values greater than or equal to @n_colors will produce undefined
+results, including possibly segfaults.
+</para>
+
+@colors: The colors, represented as 0xRRGGBB integer values.
+@n_colors: The number of colors in the cmap.
+@Returns: The newly created #GdkRgbCmap
+
+
+<!-- ##### FUNCTION gdk_rgb_cmap_free ##### -->
+<para>
+Frees the memory associated with a #GdkRgbCmap created by gdk_rgb_cmap_new().
+</para>
+
+@cmap: The #GdkRgbCmap to free.
+
+
+<!-- ##### STRUCT GdkRgbCmap ##### -->
+<para>
+A private data structure which maps color indices to actual RGB
+colors. This is used only for gdk_draw_indexed_image().
+</para>
+
+@colors: The colors, represented as 0xRRGGBB integer values.
+@n_colors: The number of colors in the cmap.
+
+<!-- ##### FUNCTION gdk_rgb_gc_set_foreground ##### -->
+<para>
+Sets the foreground color in @gc to the specified color (or the
+closest approximation, in the case of limited visuals).
+</para>
+
+@gc: The #GdkGC to modify.
+@rgb: The color, represented as a 0xRRGGBB integer value.
+
+
+<!-- ##### FUNCTION gdk_rgb_gc_set_background ##### -->
+<para>
+Sets the background color in @gc to the specified color (or the
+closest approximation, in the case of limited visuals).
+</para>
+
+@gc: The #GdkGC to modify.
+@rgb: The color, represented as a 0xRRGGBB integer value.
+
+
+<!-- ##### FUNCTION gdk_rgb_xpixel_from_rgb ##### -->
+<para>
+Finds the X pixel closest in color to the @rgb color specified. This
+value may be used to set the <structfield>pixel</structfield> field of
+a #GdkColor struct.
+</para>
+
+@rgb: The color, represented as a 0xRRGGBB integer value.
+@Returns: The X pixel value.
+
+
+<!-- ##### FUNCTION gdk_rgb_find_color ##### -->
+<para>
+
+</para>
+
+@colormap: 
+@color: 
+
+
+<!-- ##### FUNCTION gdk_rgb_set_install ##### -->
+<para>
+If @install is %TRUE, directs GdkRGB to always install a new "private"
+colormap rather than trying to find a best fit with the colors already
+allocated. Ordinarily, GdkRGB will install a colormap only if a
+sufficient cube cannot be allocated.
+</para>
+
+<para>
+A private colormap has more colors, leading to better quality display,
+but also leads to the dreaded "colormap flashing" effect.
+</para>
+
+@install: %TRUE to set install mode.
+
+
+<!-- ##### FUNCTION gdk_rgb_set_min_colors ##### -->
+<para>
+Sets the minimum number of colors for the color cube. Generally,
+GdkRGB tries to allocate the largest color cube it can. If it can't
+allocate a color cube at least as large as @min_colors, it installs a
+private colormap.
+</para>
+
+@min_colors: The minimum number of colors accepted.
+
+
+<!-- ##### FUNCTION gdk_rgb_get_visual ##### -->
+<para>
+</para>
+
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_rgb_get_colormap ##### -->
+<para>
+
+</para>
+
+@Returns: 
+
+
+<!-- ##### MACRO gdk_rgb_get_cmap ##### -->
+<para>
+Gets the colormap set by GdkRGB. This colormap and the corresponding
+visual should be used when creating windows that will be drawn in by GdkRGB.
+</para>
+
+@Returns: The #GdkColormap set by GdkRGB.
+
+
+<!-- ##### FUNCTION gdk_rgb_ditherable ##### -->
+<para>
+Determines whether the preferred visual is ditherable. This function may be
+useful for presenting a user interface choice to the user about which
+dither mode is desired; if the display is not ditherable, it may make
+sense to gray out or hide the corresponding UI widget.
+</para>
+
+@Returns: %TRUE if the preferred visual is ditherable.
+
+
+<!-- ##### FUNCTION gdk_rgb_colormap_ditherable ##### -->
+<para>
+Determines whether the visual associated with @cmap is ditherable. This 
+function may be useful for presenting a user interface choice to the user 
+about which dither mode is desired; if the display is not ditherable, it may 
+make sense to gray out or hide the corresponding UI widget.
+</para>
+
+@cmap: a #GdkColormap
+@Returns: %TRUE if the visual associated with @cmap is ditherable.
+
+
+<!-- ##### FUNCTION gdk_rgb_set_verbose ##### -->
+<para>
+Sets the "verbose" flag. This is generally only useful for debugging.
+</para>
+
+@verbose: %TRUE if verbose messages are desired.
+
+

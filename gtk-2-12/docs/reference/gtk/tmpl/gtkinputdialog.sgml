@@ -1,0 +1,76 @@
+<!-- ##### SECTION Title ##### -->
+GtkInputDialog
+
+<!-- ##### SECTION Short_Description ##### -->
+Configure devices for the XInput extension
+
+<!-- ##### SECTION Long_Description ##### -->
+<para>
+ NOTE this widget is considered too specialized/little-used for
+ GTK+, and will in the future be moved to some other package.  If
+ your application needs this widget, feel free to use it, as the
+ widget does work and is useful in some applications; it's just not
+ of general interest. However, we are not accepting new features for
+ the widget, and it will eventually move out of the GTK+
+ distribution.
+</para>
+
+<para>
+#GtkInputDialog displays a dialog which allows the user
+to configure XInput extension devices. For each
+device, they can control the mode of the device
+(disabled, screen-relative, or window-relative), 
+the mapping of axes to coordinates, and the
+mapping of the devices macro keys to key press
+events.
+</para>
+<para>
+#GtkInputDialog contains two buttons to which
+the application can connect; one for closing
+the dialog, and one for saving the changes.
+No actions are bound to these by default.
+The changes that the user makes take effect
+immediately. 
+</para>
+
+<!-- ##### SECTION See_Also ##### -->
+<para>
+
+</para>
+
+<!-- ##### SECTION Stability_Level ##### -->
+
+
+<!-- ##### STRUCT GtkInputDialog ##### -->
+<para>
+</para>
+
+
+<!-- ##### SIGNAL GtkInputDialog::disable-device ##### -->
+<para>
+This signal is emitted when the user changes the 
+mode of a device from a #GDK_MODE_SCREEN or #GDK_MODE_WINDOW
+to #GDK_MODE_ENABLED.
+</para>
+
+@inputdialog: the object which received the signal.
+@deviceid: The ID of the newly disabled device.
+
+<!-- ##### SIGNAL GtkInputDialog::enable-device ##### -->
+<para>
+This signal is emitted when the user changes the 
+mode of a device from #GDK_MODE_DISABLED to a 
+#GDK_MODE_SCREEN or #GDK_MODE_WINDOW.
+</para>
+
+@inputdialog: the object which received the signal.
+@deviceid: The ID of the newly enabled device.
+
+<!-- ##### FUNCTION gtk_input_dialog_new ##### -->
+<para>
+Creates a new #GtkInputDialog.
+</para>
+
+@Returns: the new #GtkInputDialog.
+
+

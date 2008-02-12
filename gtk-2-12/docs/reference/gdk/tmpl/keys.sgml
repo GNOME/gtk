@@ -1,0 +1,305 @@
+<!-- ##### SECTION Title ##### -->
+Key Values
+
+<!-- ##### SECTION Short_Description ##### -->
+Functions for manipulating keyboard codes
+
+<!-- ##### SECTION Long_Description ##### -->
+<para>
+Key values are the codes which are sent whenever a key is pressed or released.
+They appear in the <structfield>keyval</structfield> field of the
+#GdkEventKey structure, which is passed to signal handlers for the
+"key-press-event" and "key-release-event" signals.
+The complete list of key values can be found in the <filename>&lt;gdk/gdkkeysyms.h&gt;</filename>
+header file. <filename>&lt;gdk/gdkkeysyms.h&gt;</filename> is not included in <filename>&lt;gtk/gtk.h&gt;</filename>, 
+it must be included independently, because the file is quite large.
+</para>
+<para>
+Key values can be converted into a string representation using
+gdk_keyval_name(). The reverse function, converting a string to a key value,
+is provided by gdk_keyval_from_name().
+</para>
+<para>
+The case of key values can be determined using gdk_keyval_is_upper() and
+gdk_keyval_is_lower(). Key values can be converted to upper or lower case
+using gdk_keyval_to_upper() and gdk_keyval_to_lower().
+</para>
+<para>
+When it makes sense, key values can be converted to and from 
+Unicode characters with gdk_keyval_to_unicode() and gdk_unicode_to_keyval().
+</para>
+
+<para>
+One #GdkKeymap object exists for each user display. gdk_keymap_get_default() 
+returns the #GdkKeymap for the default display; to obtain keymaps for other 
+displays, use gdk_keymap_get_for_display(). A keymap
+is a mapping from #GdkKeymapKey to key values. You can think of a #GdkKeymapKey
+as a representation of a symbol printed on a physical keyboard key. That is, it
+contains three pieces of information. First, it contains the hardware keycode;
+this is an identifying number for a physical key. Second, it contains the
+<firstterm>level</firstterm> of the key. The level indicates which symbol on the
+key will be used, in a vertical direction. So on a standard US keyboard, the key
+with the number "1" on it also has the exclamation point ("!") character on
+it. The level indicates whether to use the "1" or the "!" symbol.  The letter
+keys are considered to have a lowercase letter at level 0, and an uppercase
+letter at level 1, though only the uppercase letter is printed.  Third, the
+#GdkKeymapKey contains a group; groups are not used on standard US keyboards,
+but are used in many other countries. On a keyboard with groups, there can be 3
+or 4 symbols printed on a single key. The group indicates movement in a
+horizontal direction. Usually groups are used for two different languages.  In
+group 0, a key might have two English characters, and in group 1 it might have
+two Hebrew characters. The Hebrew characters will be printed on the key next to
+the English characters.
+</para>
+
+<para>
+In order to use a keymap to interpret a key event, it's necessary to first
+convert the keyboard state into an effective group and level. This is done via a
+set of rules that varies widely according to type of keyboard and user
+configuration. The function gdk_keymap_translate_keyboard_state() accepts a
+keyboard state -- consisting of hardware keycode pressed, active modifiers, and
+active group -- applies the appropriate rules, and returns the group/level to be
+used to index the keymap, along with the modifiers which did not affect the
+group and level. i.e. it returns "unconsumed modifiers." The keyboard group may
+differ from the effective group used for keymap lookups because some keys don't
+have multiple groups - e.g. the Enter key is always in group 0 regardless of
+keyboard state.
+</para>
+
+<para>
+Note that gdk_keymap_translate_keyboard_state() also returns the keyval, i.e. it
+goes ahead and performs the keymap lookup in addition to telling you which
+effective group/level values were used for the lookup.  #GdkEventKey already
+contains this keyval, however, so you don't normally need to call
+gdk_keymap_translate_keyboard_state() just to get the keyval.
+
+</para>
+
+<!-- ##### SECTION See_Also ##### -->
+<para>
+
+</para>
+
+<!-- ##### SECTION Stability_Level ##### -->
+
+
+<!-- ##### STRUCT GdkKeymap ##### -->
+<para>
+A <structname>GdkKeymap</structname> defines the translation from keyboard state
+(including a hardware key, a modifier mask, and active keyboard group)
+to a keyval. This translation has two phases. The first phase is
+to determine the effective keyboard group and level for the keyboard
+state; the second phase is to look up the keycode/group/level triplet
+in the keymap and see what keyval it corresponds to.
+</para>
+
+
+<!-- ##### SIGNAL GdkKeymap::direction-changed ##### -->
+<para>
+
+</para>
+
+@keymap: the object which received the signal.
+
+<!-- ##### SIGNAL GdkKeymap::keys-changed ##### -->
+<para>
+
+</para>
+
+@keymap: the object which received the signal.
+
+<!-- ##### STRUCT GdkKeymapKey ##### -->
+<para>
+A <structname>GdkKeymapKey</structname> is a hardware key that can 
+be mapped to a keyval.
+</para>
+
+@keycode: the hardware keycode. This is an identifying number for a 
+  physical key.
+@group: indicates movement in a horizontal direction. Usually groups are used 
+  for two different languages. In group 0, a key might have two English 
+  characters, and in group 1 it might have two Hebrew characters. The Hebrew 
+  characters will be printed on the key next to the English characters.
+@level: indicates which symbol on the key will be used, in a vertical direction.  So on a standard US keyboard, the key with the number "1" on it also has the 
+  exclamation point ("!") character on it. The level indicates whether to use 
+  the "1" or the "!" symbol. The letter keys are considered to have a lowercase
+  letter at level 0, and an uppercase letter at level 1, though only the 
+  uppercase letter is printed.
+
+<!-- ##### FUNCTION gdk_keymap_get_default ##### -->
+<para>
+
+</para>
+
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_keymap_get_for_display ##### -->
+<para>
+
+</para>
+
+@display: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_keymap_lookup_key ##### -->
+<para>
+
+</para>
+
+@keymap: 
+@key: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_keymap_translate_keyboard_state ##### -->
+<para>
+
+</para>
+
+@keymap: 
+@hardware_keycode: 
+@state: 
+@group: 
+@keyval: 
+@effective_group: 
+@level: 
+@consumed_modifiers: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_keymap_get_entries_for_keyval ##### -->
+<para>
+
+</para>
+
+@keymap: 
+@keyval: 
+@keys: 
+@n_keys: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_keymap_get_entries_for_keycode ##### -->
+<para>
+
+</para>
+
+@keymap: 
+@hardware_keycode: 
+@keys: 
+@keyvals: 
+@n_entries: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_keymap_get_direction ##### -->
+<para>
+Returns the direction of the keymap. 
+</para>
+
+@keymap: a #GdkKeymap or %NULL to use the default keymap.
+Returns: %PANGO_DIRECTION_LTR or %PANGO_DIRECTION_RTL.
+@Returns: the direction of the keymap.
+
+
+<!-- ##### FUNCTION gdk_keymap_have_bidi_layouts ##### -->
+<para>
+
+</para>
+
+@keymap: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_keyval_name ##### -->
+<para>
+Converts a key value into a symbolic name.
+The names are the same as those in the <filename>&lt;gdk/gdkkeysyms.h&gt;</filename> header file
+but without the leading "GDK_".
+</para>
+
+@keyval: a key value.
+@Returns: a string containing the name of the key, or %NULL if @keyval is not
+a valid key. The string should not be modified.
+
+
+<!-- ##### FUNCTION gdk_keyval_from_name ##### -->
+<para>
+Converts a key name to a key value.
+</para>
+
+@keyval_name: a key name.
+@Returns: the corresponding key value, or %GDK_VoidSymbol if the key name is
+not a valid key.
+
+
+<!-- ##### FUNCTION gdk_keyval_convert_case ##### -->
+<para>
+
+</para>
+
+@symbol: 
+@lower: 
+@upper: 
+
+
+<!-- ##### FUNCTION gdk_keyval_to_upper ##### -->
+<para>
+Converts a key value to upper case, if applicable.
+</para>
+
+@keyval: a key value.
+@Returns: the upper case form of @keyval, or @keyval itself if it is already
+in upper case or it is not subject to case conversion.
+
+
+<!-- ##### FUNCTION gdk_keyval_to_lower ##### -->
+<para>
+Converts a key value to lower case, if applicable.
+</para>
+
+@keyval: a key value.
+@Returns: the lower case form of @keyval, or @keyval itself if it is already
+in lower case or it is not subject to case conversion.
+
+
+<!-- ##### FUNCTION gdk_keyval_is_upper ##### -->
+<para>
+Returns %TRUE if the given key value is in upper case.
+</para>
+
+@keyval: a key value.
+@Returns: %TRUE if @keyval is in upper case, or if @keyval is not subject to
+case conversion.
+
+
+<!-- ##### FUNCTION gdk_keyval_is_lower ##### -->
+<para>
+Returns %TRUE if the given key value is in lower case.
+</para>
+
+@keyval: a key value.
+@Returns: %TRUE if @keyval is in lower case, or if @keyval is not subject to
+case conversion.
+
+
+<!-- ##### FUNCTION gdk_keyval_to_unicode ##### -->
+<para>
+
+</para>
+
+@keyval: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_unicode_to_keyval ##### -->
+<para>
+
+</para>
+
+@wc: 
+@Returns: 
+
+

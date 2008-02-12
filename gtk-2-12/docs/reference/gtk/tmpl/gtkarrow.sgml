@@ -1,0 +1,82 @@
+<!-- ##### SECTION Title ##### -->
+GtkArrow
+
+<!-- ##### SECTION Short_Description ##### -->
+Displays an arrow
+
+<!-- ##### SECTION Long_Description ##### -->
+<para>
+GtkArrow should be used to draw simple arrows that need to point in
+one of the four cardinal directions (up, down, left, or right).  The
+style of the arrow can be one of shadow in, shadow out, etched in, or
+etched out.  Note that these directions and style types may be
+ammended in versions of Gtk to come.
+</para>
+<para>
+GtkArrow will fill any space alloted to it, but since it is inherited
+from #GtkMisc, it can be padded and/or aligned, to fill exactly the
+space the programmer desires.
+</para>
+<para>
+Arrows are created with a call to gtk_arrow_new().  The direction or
+style of an arrow can be changed after creation by using gtk_arrow_set().
+</para>
+
+<!-- ##### SECTION See_Also ##### -->
+<para>
+<variablelist>
+
+<varlistentry>
+<term>gtk_paint_arrow()</term>
+<listitem><para>the function used internally to paint the arrow.</para></listitem>
+</varlistentry>
+
+</variablelist>
+</para>
+
+<!-- ##### SECTION Stability_Level ##### -->
+
+
+<!-- ##### STRUCT GtkArrow ##### -->
+<para>
+The #GtkArrow struct containes the following fields.
+(These fields should be considered read-only. They should never be set by
+an application.)
+</para>
+
+
+<!-- ##### ARG GtkArrow:arrow-type ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkArrow:shadow-type ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkArrow:arrow-scaling ##### -->
+<para>
+
+</para>
+
+<!-- ##### FUNCTION gtk_arrow_new ##### -->
+<para>
+Creates a new arrow widget.
+</para>
+
+@arrow_type: a valid #GtkArrowType.
+@shadow_type: a valid #GtkShadowType.
+@Returns: the new #GtkArrow widget.
+
+
+<!-- ##### FUNCTION gtk_arrow_set ##### -->
+<para>
+Sets the direction and style of the #GtkArrow, @arrow.
+</para>
+
+@arrow: a widget of type #GtkArrow.
+@arrow_type: a valid #GtkArrowType.
+@shadow_type: a valid #GtkShadowType.
+
+

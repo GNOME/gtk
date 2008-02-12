@@ -1,0 +1,114 @@
+<?xml version="1.0"?>
+<!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook XML V4.1.2//EN" 
+               "http://www.oasis-open.org/docbook/xml/4.1.2/docbookx.dtd" [
+<!ENTITY gdk-General SYSTEM "xml/general.xml">
+<!ENTITY gdk-Bitmaps-and-Pixmaps SYSTEM "xml/pixmaps.xml">
+<!ENTITY gdk-Images SYSTEM "xml/images.xml">
+<!ENTITY gdk-GdkRGB SYSTEM "xml/rgb.xml">
+<!ENTITY gdk-Pixbufs SYSTEM "xml/pixbufs.xml">
+<!ENTITY gdk-Colormaps-and-Colors SYSTEM "xml/colors.xml">
+<!ENTITY gdk-Fonts SYSTEM "xml/fonts.xml">
+<!ENTITY gdk-Drawing-Primitives SYSTEM "xml/drawing.xml">
+<!ENTITY gdk-Graphics-Contexts SYSTEM "xml/gcs.xml">
+<!ENTITY gdk-Visuals SYSTEM "xml/visuals.xml">
+<!ENTITY gdk-Windows SYSTEM "xml/windows.xml">
+<!ENTITY gdk-Selections SYSTEM "xml/selections.xml">
+<!ENTITY gdk-Properties-and-Atoms SYSTEM "xml/properties.xml">
+<!ENTITY gdk-Pango-Interaction SYSTEM "xml/pango_interaction.xml">
+<!ENTITY gdk-Cairo-Interaction SYSTEM "xml/cairo_interaction.xml">
+<!ENTITY gdk-Points-Rectangles-and-Regions SYSTEM "xml/regions.xml">
+<!ENTITY gdk-Threads SYSTEM "xml/threads.xml">
+<!ENTITY gdk-Keys SYSTEM "xml/keys.xml">
+<!ENTITY gdk-Input-Devices SYSTEM "xml/input_devices.xml">
+<!ENTITY gdk-Events SYSTEM "xml/events.xml">
+<!ENTITY gdk-Event-Structures SYSTEM "xml/event_structs.xml">
+<!ENTITY gdk-Cursors SYSTEM "xml/cursors.xml">
+<!ENTITY gdk-Input SYSTEM "xml/input.xml">
+<!ENTITY gdk-Drag-and-Drop SYSTEM "xml/dnd.xml">
+<!ENTITY gdk-X-Window-System-Interaction SYSTEM "xml/x_interaction.xml">
+<!ENTITY gdk-Screen SYSTEM "xml/gdkscreen.xml">
+<!ENTITY gdk-Display SYSTEM "xml/gdkdisplay.xml">
+<!ENTITY gdk-DisplayManager SYSTEM "xml/gdkdisplaymanager.xml">
+<!ENTITY gdk-Multihead SYSTEM "multihead.sgml">
+<!ENTITY version SYSTEM "version.xml">
+]>
+
+<book id="index">
+  <bookinfo>
+    <title>GDK Reference Manual</title>
+    <releaseinfo>for GDK &version;</releaseinfo>
+  </bookinfo>
+
+  <reference id="reference">
+    <title>API Reference</title>
+    &gdk-General;
+
+    &gdk-Multihead;
+    &gdk-Display;
+    &gdk-DisplayManager;
+    &gdk-Screen;
+
+    &gdk-Points-Rectangles-and-Regions;
+    &gdk-Graphics-Contexts;
+    &gdk-Drawing-Primitives;
+
+    &gdk-Bitmaps-and-Pixmaps;
+    &gdk-GdkRGB;
+    &gdk-Images;
+    &gdk-Pixbufs;
+
+    &gdk-Colormaps-and-Colors;
+    &gdk-Visuals;
+
+    &gdk-Fonts;
+    &gdk-Cursors;
+
+    &gdk-Windows;
+
+    &gdk-Events;
+    &gdk-Event-Structures;
+
+    &gdk-Keys;
+
+    &gdk-Selections;
+    &gdk-Drag-and-Drop;
+
+    &gdk-Properties-and-Atoms;
+
+    &gdk-Threads;
+
+    &gdk-Input;
+
+    &gdk-Input-Devices;
+
+    &gdk-Pango-Interaction;
+    &gdk-Cairo-Interaction;
+    &gdk-X-Window-System-Interaction;
+  </reference>
+
+  <index>
+    <title>Index</title>
+  </index>
+  <index role="deprecated">
+    <title>Index of deprecated symbols</title>
+  </index>
+  <index role="2.2">
+    <title>Index of new symbols in 2.2</title>
+  </index>
+  <index role="2.4">
+    <title>Index of new symbols in 2.4</title>
+  </index>  
+  <index role="2.6">
+    <title>Index of new symbols in 2.6</title>
+  </index>  
+  <index role="2.8">
+    <title>Index of new symbols in 2.8</title>
+  </index>  
+  <index role="2.10">
+    <title>Index of new symbols in 2.10</title>
+  </index>  
+  <index role="2.12">
+    <title>Index of new symbols in 2.12</title>
+  </index>  
+
+</book>

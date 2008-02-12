@@ -1,0 +1,170 @@
+<!-- ##### SECTION Title ##### -->
+GtkFileChooserButton
+
+<!-- ##### SECTION Short_Description ##### -->
+A button to launch a file selection dialog
+
+<!-- ##### SECTION Long_Description ##### -->
+<para>
+The #GtkFileChooserButton is a widget that lets the user select a
+file.  It implements the #GtkFileChooser interface.  Visually, it is a
+file name with a button to bring up a #GtkFileChooserDialog.
+The user can then use that dialog to change the file associated with
+that button.  This widget does not support setting the "select-multiple"
+property to %TRUE.
+</para>
+
+<example>
+<title>Create a button to let the user select a file in /etc</title>
+<programlisting>
+{
+  GtkWidget *button;
+
+  button = gtk_file_chooser_button_new (_("Select a file"),
+                                        GTK_FILE_CHOOSER_ACTION_OPEN);
+  gtk_file_chooser_set_current_folder (GTK_FILE_CHOOSER (button),
+                                       "/etc");
+}
+</programlisting>
+</example>
+
+<para>
+The #GtkFileChooserButton supports the #GtkFileChooserAction<!--
+-->s %GTK_FILE_CHOOSER_ACTION_OPEN and %GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER.
+</para>
+
+<important>
+<para>
+The #GtkFileChooserButton will ellipsize the label,
+and thus will thus request little horizontal space.  To give the button
+more space, you should call gtk_widget_size_request(),
+gtk_file_chooser_button_set_width_chars(), or pack the button in
+such a way that other interface elements give space to the widget.
+</para>
+</important>
+
+<!-- ##### SECTION See_Also ##### -->
+<para>
+#GtkFileChooserDialog
+</para>
+
+<!-- ##### SECTION Stability_Level ##### -->
+
+
+<!-- ##### STRUCT GtkFileChooserButton ##### -->
+<para>
+This should not be accessed directly.  Use the accessor functions below. 
+</para>
+
+
+<!-- ##### SIGNAL GtkFileChooserButton::file-set ##### -->
+<para>
+
+</para>
+
+@filechooserbutton: the object which received the signal.
+
+<!-- ##### ARG GtkFileChooserButton:dialog ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkFileChooserButton:focus-on-click ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkFileChooserButton:title ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkFileChooserButton:width-chars ##### -->
+<para>
+
+</para>
+
+<!-- ##### FUNCTION gtk_file_chooser_button_new ##### -->
+<para>
+
+</para>
+
+@title: 
+@action: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_file_chooser_button_new_with_backend ##### -->
+<para>
+
+</para>
+
+@title: 
+@action: 
+@backend: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_file_chooser_button_new_with_dialog ##### -->
+<para>
+
+</para>
+
+@dialog: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_file_chooser_button_get_title ##### -->
+<para>
+
+</para>
+
+@button: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_file_chooser_button_set_title ##### -->
+<para>
+
+</para>
+
+@button: 
+@title: 
+
+
+<!-- ##### FUNCTION gtk_file_chooser_button_get_width_chars ##### -->
+<para>
+
+</para>
+
+@button: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_file_chooser_button_set_width_chars ##### -->
+<para>
+
+</para>
+
+@button: 
+@n_chars: 
+
+
+<!-- ##### FUNCTION gtk_file_chooser_button_get_focus_on_click ##### -->
+<para>
+
+</para>
+
+@button: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_file_chooser_button_set_focus_on_click ##### -->
+<para>
+
+</para>
+
+@button: 
+@focus_on_click: 
+
+

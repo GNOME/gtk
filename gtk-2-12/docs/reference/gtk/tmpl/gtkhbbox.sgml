@@ -1,0 +1,98 @@
+<!-- ##### SECTION Title ##### -->
+GtkHButtonBox
+
+<!-- ##### SECTION Short_Description ##### -->
+A container for arranging buttons horizontally
+
+<!-- ##### SECTION Long_Description ##### -->
+<para>
+A button box should be used to provide a consistent layout of buttons
+throughout your application. The layout/spacing can be altered by the
+programmer, or if desired, by the user to alter the 'feel' of a
+program to a small degree.
+</para>
+<para>
+A #GtkHButtonBox is created with gtk_hbutton_box_new(). Buttons are
+packed into a button box the same way widgets are added to any other
+container, using gtk_container_add(). You can also use
+gtk_box_pack_start() or gtk_box_pack_end(), but for button boxes both
+these functions work just like gtk_container_add(), ie., they pack the
+button in a way that depends on the current layout style and on
+whether the button has had gtk_button_box_set_child_secondary() called
+on it.
+</para>
+
+<para>
+The spacing between buttons can be set with gtk_box_set_spacing(). The
+arrangement and layout of the buttons can be changed with
+gtk_button_box_set_layout().
+</para>
+
+<!-- ##### SECTION See_Also ##### -->
+<para>
+<variablelist>
+<varlistentry>
+<term>#GtkBox</term>
+<listitem><para>Used to pack widgets into button boxes.</para></listitem>
+</varlistentry><varlistentry>
+<term>#GtkButtonBox</term>
+<listitem><para>Provides functions for controlling button boxes.</para></listitem>
+</varlistentry>
+<varlistentry>
+<term>#GtkVButtonBox</term>
+<listitem><para>Pack buttons vertically</para></listitem>
+</varlistentry>
+</variablelist>
+</para>
+
+<!-- ##### SECTION Stability_Level ##### -->
+
+
+<!-- ##### STRUCT GtkHButtonBox ##### -->
+<para>
+GtkHButtonBox does not contain any public fields.
+</para>
+
+
+<!-- ##### FUNCTION gtk_hbutton_box_new ##### -->
+<para>
+Creates a new horizontal button box.
+</para>
+
+@Returns: a new button box #GtkWidget.
+
+
+<!-- ##### FUNCTION gtk_hbutton_box_get_spacing_default ##### -->
+<para>
+Retrieves the current default spacing for horizontal button boxes. This is the number of pixels 
+to be placed between the buttons when they are arranged.
+</para>
+
+@Returns: the default number of pixels between buttons.
+
+
+<!-- ##### FUNCTION gtk_hbutton_box_get_layout_default ##### -->
+<para>
+Retrieves the current layout used to arrange buttons in button box widgets.
+</para>
+
+@Returns: the current #GtkButtonBoxStyle.
+
+
+<!-- ##### FUNCTION gtk_hbutton_box_set_spacing_default ##### -->
+<para>
+Changes the default spacing that is placed between widgets in an
+horizontal button box.
+</para>
+
+@spacing: an integer value.
+
+
+<!-- ##### FUNCTION gtk_hbutton_box_set_layout_default ##### -->
+<para>
+Sets a new layout mode that will be used by all button boxes.
+</para>
+
+@layout: a new #GtkButtonBoxStyle.
+
+

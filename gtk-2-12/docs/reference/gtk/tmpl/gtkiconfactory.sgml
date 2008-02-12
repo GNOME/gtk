@@ -1,0 +1,454 @@
+<!-- ##### SECTION Title ##### -->
+Themeable Stock Images
+
+<!-- ##### SECTION Short_Description ##### -->
+
+Manipulating stock icons
+
+<!-- ##### SECTION Long_Description ##### -->
+
+
+<para>
+Browse the available stock icons in the list of stock IDs found <link
+linkend="gtk-Stock-Items">here</link>. You can also use 
+the <application>gtk-demo</application> application for this purpose.
+</para>
+
+<para>
+ An icon factory manages a collection of #GtkIconSet; a #GtkIconSet manages a
+ set of variants of a particular icon (i.e. a #GtkIconSet contains variants for
+ different sizes and widget states). Icons in an icon factory are named by a
+ stock ID, which is a simple string identifying the icon. Each #GtkStyle has a
+ list of #GtkIconFactory derived from the current theme; those icon factories
+ are consulted first when searching for an icon. If the theme doesn't set a
+ particular icon, GTK+ looks for the icon in a list of default icon factories,
+ maintained by gtk_icon_factory_add_default() and
+ gtk_icon_factory_remove_default(). Applications with icons should add a default
+ icon factory with their icons, which will allow themes to override the icons
+ for the application.
+</para>
+
+<para>
+To display an icon, always use gtk_style_lookup_icon_set() on the widget that
+will display the icon, or the convenience function
+gtk_widget_render_icon(). These functions take the theme into account when
+looking up the icon to use for a given stock ID.
+</para>
+
+<!-- ##### SECTION See_Also ##### -->
+<para>
+
+</para>
+
+<!-- ##### SECTION Stability_Level ##### -->
+
+
+<!-- ##### STRUCT GtkIconSource ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### STRUCT GtkIconFactory ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### STRUCT GtkIconSet ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### ENUM GtkIconSize ##### -->
+<para>
+
+</para>
+
+@GTK_ICON_SIZE_INVALID: 
+@GTK_ICON_SIZE_MENU: 
+@GTK_ICON_SIZE_SMALL_TOOLBAR: 
+@GTK_ICON_SIZE_LARGE_TOOLBAR: 
+@GTK_ICON_SIZE_BUTTON: 
+@GTK_ICON_SIZE_DND: 
+@GTK_ICON_SIZE_DIALOG: 
+
+<!-- ##### FUNCTION gtk_icon_source_copy ##### -->
+<para>
+
+</para>
+
+@source: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_icon_source_free ##### -->
+<para>
+
+</para>
+
+@source: 
+
+
+<!-- ##### FUNCTION gtk_icon_factory_add ##### -->
+<para>
+
+</para>
+
+@factory: 
+@stock_id: 
+@icon_set: 
+
+
+<!-- ##### FUNCTION gtk_icon_factory_add_default ##### -->
+<para>
+
+</para>
+
+@factory: 
+
+
+<!-- ##### FUNCTION gtk_icon_factory_lookup ##### -->
+<para>
+
+</para>
+
+@factory: 
+@stock_id: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_icon_factory_lookup_default ##### -->
+<para>
+
+</para>
+
+@stock_id: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_icon_factory_new ##### -->
+<para>
+
+</para>
+
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_icon_factory_remove_default ##### -->
+<para>
+
+</para>
+
+@factory: 
+
+
+<!-- ##### FUNCTION gtk_icon_set_add_source ##### -->
+<para>
+
+</para>
+
+@icon_set: 
+@source: 
+
+
+<!-- ##### FUNCTION gtk_icon_set_copy ##### -->
+<para>
+
+</para>
+
+@icon_set: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_icon_set_new ##### -->
+<para>
+
+</para>
+
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_icon_set_new_from_pixbuf ##### -->
+<para>
+
+</para>
+
+@pixbuf: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_icon_set_ref ##### -->
+<para>
+
+</para>
+
+@icon_set: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_icon_set_render_icon ##### -->
+<para>
+
+</para>
+
+@icon_set: 
+@style: 
+@direction: 
+@state: 
+@size: 
+@widget: 
+@detail: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_icon_set_unref ##### -->
+<para>
+
+</para>
+
+@icon_set: 
+
+
+<!-- ##### FUNCTION gtk_icon_size_lookup ##### -->
+<para>
+
+</para>
+
+@size: 
+@width: 
+@height: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_icon_size_lookup_for_settings ##### -->
+<para>
+
+</para>
+
+@settings: 
+@size: 
+@width: 
+@height: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_icon_size_register ##### -->
+<para>
+
+</para>
+
+@name: 
+@width: 
+@height: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_icon_size_register_alias ##### -->
+<para>
+
+</para>
+
+@alias: 
+@target: 
+
+
+<!-- ##### FUNCTION gtk_icon_size_from_name ##### -->
+<para>
+
+</para>
+
+@name: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_icon_size_get_name ##### -->
+<para>
+
+</para>
+
+@size: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_icon_set_get_sizes ##### -->
+<para>
+
+</para>
+
+@icon_set: 
+@sizes: 
+@n_sizes: 
+
+
+<!-- ##### FUNCTION gtk_icon_source_get_direction ##### -->
+<para>
+
+</para>
+
+@source: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_icon_source_get_direction_wildcarded ##### -->
+<para>
+
+</para>
+
+@source: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_icon_source_get_filename ##### -->
+<para>
+
+</para>
+
+@source: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_icon_source_get_pixbuf ##### -->
+<para>
+
+</para>
+
+@source: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_icon_source_get_icon_name ##### -->
+<para>
+
+</para>
+
+@source: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_icon_source_get_size ##### -->
+<para>
+
+</para>
+
+@source: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_icon_source_get_size_wildcarded ##### -->
+<para>
+
+</para>
+
+@source: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_icon_source_get_state ##### -->
+<para>
+
+</para>
+
+@source: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_icon_source_get_state_wildcarded ##### -->
+<para>
+
+</para>
+
+@source: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_icon_source_new ##### -->
+<para>
+
+</para>
+
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_icon_source_set_direction ##### -->
+<para>
+
+</para>
+
+@source: 
+@direction: 
+
+
+<!-- ##### FUNCTION gtk_icon_source_set_direction_wildcarded ##### -->
+<para>
+
+</para>
+
+@source: 
+@setting: 
+
+
+<!-- ##### FUNCTION gtk_icon_source_set_filename ##### -->
+<para>
+
+</para>
+
+@source: 
+@filename: 
+
+
+<!-- ##### FUNCTION gtk_icon_source_set_pixbuf ##### -->
+<para>
+
+</para>
+
+@source: 
+@pixbuf: 
+
+
+<!-- ##### FUNCTION gtk_icon_source_set_icon_name ##### -->
+<para>
+
+</para>
+
+@source: 
+@icon_name: 
+
+
+<!-- ##### FUNCTION gtk_icon_source_set_size ##### -->
+<para>
+
+</para>
+
+@source: 
+@size: 
+
+
+<!-- ##### FUNCTION gtk_icon_source_set_size_wildcarded ##### -->
+<para>
+
+</para>
+
+@source: 
+@setting: 
+
+
+<!-- ##### FUNCTION gtk_icon_source_set_state ##### -->
+<para>
+
+</para>
+
+@source: 
+@state: 
+
+
+<!-- ##### FUNCTION gtk_icon_source_set_state_wildcarded ##### -->
+<para>
+
+</para>
+
+@source: 
+@setting: 
+
+

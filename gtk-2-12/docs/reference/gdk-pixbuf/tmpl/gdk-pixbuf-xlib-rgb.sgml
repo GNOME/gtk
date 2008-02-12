@@ -1,0 +1,280 @@
+<!-- ##### SECTION Title ##### -->
+XlibRGB
+
+<!-- ##### SECTION Short_Description ##### -->
+Rendering RGB buffers to X drawables.
+
+<!-- ##### SECTION Long_Description ##### -->
+  <para>
+    The XlibRGB set of functions is a port of the #GdkRGB library to
+    use plain Xlib and X drawables.  You can use these functions to
+    render RGB buffers into drawables very quickly with high-quality
+    dithering.
+  </para>
+
+<!-- ##### SECTION See_Also ##### -->
+  <para>
+    GdkRGB
+  </para>
+
+<!-- ##### SECTION Stability_Level ##### -->
+
+
+<!-- ##### STRUCT XlibRgbCmap ##### -->
+  <para>
+    FIXME: Describe this.
+  </para>
+
+@colors: FIXME.
+@lut: FIXME.
+
+<!-- ##### ENUM XlibRgbDither ##### -->
+  <para>
+    These values are used to specify which dithering method should be
+    used.  <symbol>XLIB_RGB_DITHER_NONE</symbol> will use no dithering
+    and simply map the colors in an RGB buffer to the closest colors
+    that the display can provide.
+    <symbol>XLIB_RGB_DITHER_NORMAL</symbol> will provide dithering
+    only on pseudocolor displays.
+    <symbol>XLIB_RGB_DITHER_MAX</symbol> will provide dithering on
+    pseudocolor and 16-bit truecolor or &ldquo;high color&rdquo;
+    displays.
+  </para>
+
+@XLIB_RGB_DITHER_NONE: Specifies no dithering.
+@XLIB_RGB_DITHER_NORMAL: Specifies dithering only on pseudocolor
+displays.
+@XLIB_RGB_DITHER_MAX: Specifies dithering on high color displays.
+
+<!-- ##### FUNCTION xlib_rgb_init ##### -->
+<para>
+
+</para>
+
+@display: 
+@screen: 
+
+
+<!-- ##### FUNCTION xlib_rgb_init_with_depth ##### -->
+<para>
+
+</para>
+
+@display: 
+@screen: 
+@prefDepth: 
+
+
+<!-- ##### FUNCTION xlib_rgb_xpixel_from_rgb ##### -->
+<para>
+
+</para>
+
+@rgb: 
+@Returns: 
+
+
+<!-- ##### FUNCTION xlib_rgb_gc_set_foreground ##### -->
+<para>
+
+</para>
+
+@gc: 
+@rgb: 
+
+
+<!-- ##### FUNCTION xlib_rgb_gc_set_background ##### -->
+<para>
+
+</para>
+
+@gc: 
+@rgb: 
+
+
+<!-- ##### FUNCTION xlib_draw_rgb_image ##### -->
+<para>
+
+</para>
+
+@drawable: 
+@gc: 
+@x: 
+@y: 
+@width: 
+@height: 
+@dith: 
+@rgb_buf: 
+@rowstride: 
+
+
+<!-- ##### FUNCTION xlib_draw_rgb_image_dithalign ##### -->
+<para>
+
+</para>
+
+@drawable: 
+@gc: 
+@x: 
+@y: 
+@width: 
+@height: 
+@dith: 
+@rgb_buf: 
+@rowstride: 
+@xdith: 
+@ydith: 
+
+
+<!-- ##### FUNCTION xlib_draw_rgb_32_image ##### -->
+<para>
+
+</para>
+
+@drawable: 
+@gc: 
+@x: 
+@y: 
+@width: 
+@height: 
+@dith: 
+@buf: 
+@rowstride: 
+
+
+<!-- ##### FUNCTION xlib_draw_gray_image ##### -->
+<para>
+
+</para>
+
+@drawable: 
+@gc: 
+@x: 
+@y: 
+@width: 
+@height: 
+@dith: 
+@buf: 
+@rowstride: 
+
+
+<!-- ##### FUNCTION xlib_rgb_cmap_new ##### -->
+<para>
+
+</para>
+
+@colors: 
+@n_colors: 
+@Returns: 
+
+
+<!-- ##### FUNCTION xlib_rgb_cmap_free ##### -->
+<para>
+
+</para>
+
+@cmap: 
+
+
+<!-- ##### FUNCTION xlib_draw_indexed_image ##### -->
+<para>
+
+</para>
+
+@drawable: 
+@gc: 
+@x: 
+@y: 
+@width: 
+@height: 
+@dith: 
+@buf: 
+@rowstride: 
+@cmap: 
+
+
+<!-- ##### FUNCTION xlib_rgb_ditherable ##### -->
+<para>
+
+</para>
+
+@Returns: 
+
+
+<!-- ##### FUNCTION xlib_rgb_set_verbose ##### -->
+<para>
+
+</para>
+
+@verbose: 
+
+
+<!-- ##### FUNCTION xlib_rgb_set_install ##### -->
+<para>
+
+</para>
+
+@install: 
+
+
+<!-- ##### FUNCTION xlib_rgb_set_min_colors ##### -->
+<para>
+
+</para>
+
+@min_colors: 
+
+
+<!-- ##### FUNCTION xlib_rgb_get_cmap ##### -->
+<para>
+
+</para>
+
+@Returns: 
+
+
+<!-- ##### FUNCTION xlib_rgb_get_visual ##### -->
+<para>
+
+</para>
+
+@Returns: 
+
+
+<!-- ##### FUNCTION xlib_rgb_get_visual_info ##### -->
+<para>
+
+</para>
+
+@Returns: 
+
+
+<!-- ##### FUNCTION xlib_rgb_get_depth ##### -->
+<para>
+
+</para>
+
+@Returns: 
+
+
+<!-- ##### FUNCTION xlib_rgb_get_display ##### -->
+<para>
+
+</para>
+
+@Returns: 
+
+
+<!-- ##### FUNCTION xlib_rgb_get_screen ##### -->
+<para>
+
+</para>
+
+@Returns: <!--
+Local variables:
+mode: sgml
+sgml-parent-document: ("../gdk-pixbuf.sgml" "book" "refsect2" "")
+End:
+-->
+
+

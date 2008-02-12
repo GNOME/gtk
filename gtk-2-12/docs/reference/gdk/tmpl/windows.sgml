@@ -1,0 +1,1669 @@
+<!-- ##### SECTION Title ##### -->
+Windows
+
+<!-- ##### SECTION Short_Description ##### -->
+Onscreen display areas in the target window system
+
+<!-- ##### SECTION Long_Description ##### -->
+<para>
+A #GdkWindow is a rectangular region on the screen. It's a low-level object,
+used to implement high-level objects such as #GtkWidget and #GtkWindow on the
+GTK+ level. A #GtkWindow is a toplevel window, the thing a user might think of 
+as a "window" with a titlebar and so on; a #GtkWindow may contain many #GdkWindow. 
+For example, each #GtkButton has a #GdkWindow associated with it.
+</para>
+<example id="composited-window-example"><title>Composited windows</title>
+<programlisting><![CDATA[
+#include <gtk/gtk.h>
+
+/* The expose event handler for the event box.
+ *
+ * This function simply draws a transparency onto a widget on the area
+ * for which it receives expose events.  This is intended to give the
+ * event box a "transparent" background.
+ *
+ * In order for this to work properly, the widget must have an RGBA
+ * colourmap.  The widget should also be set as app-paintable since it
+ * doesn't make sense for GTK+ to draw a background if we are drawing it
+ * (and because GTK+ might actually replace our transparency with its
+ * default background colour).
+ */
+static gboolean
+transparent_expose (GtkWidget      *widget,
+                    GdkEventExpose *event)
+{
+  cairo_t *cr;
+
+  cr = gdk_cairo_create (widget->window);
+  cairo_set_operator (cr, CAIRO_OPERATOR_CLEAR);
+  gdk_cairo_region (cr, event->region);
+  cairo_fill (cr);
+  cairo_destroy (cr);
+
+  return FALSE;
+}
+
+/* The expose event handler for the window.
+ *
+ * This function performs the actual compositing of the event box onto
+ * the already-existing background of the window at 50% normal opacity.
+ *
+ * In this case we do not want app-paintable to be set on the widget
+ * since we want it to draw its own (red) background. Because of this,
+ * however, we must ensure that we use g_signal_register_after so that
+ * this handler is called after the red has been drawn. If it was
+ * called before then GTK would just blindly paint over our work.
+ *
+ * Note: if the child window has children, then you need a cairo 1.16
+ * feature to make this work correctly.
+ */
+static gboolean
+window_expose_event (GtkWidget      *widget,
+                     GdkEventExpose *event)
+{
+  GdkRegion *region;
+  GtkWidget *child;
+  cairo_t *cr;
+
+  /* get our child (in this case, the event box) */ 
+  child = gtk_bin_get_child (GTK_BIN (widget));
+
+  /* create a cairo context to draw to the window */
+  cr = gdk_cairo_create (widget->window);
+
+  /* the source data is the (composited) event box */
+  gdk_cairo_set_source_pixmap (cr, child->window,
+                               child->allocation.x,
+                               child->allocation.y);
+
+  /* draw no more than our expose event intersects our child */
+  region = gdk_region_rectangle (&child->allocation);
+  gdk_region_intersect (region, event->region);
+  gdk_cairo_region (cr, region);
+  cairo_clip (cr);
+
+  /* composite, with a 50% opacity */
+  cairo_set_operator (cr, CAIRO_OPERATOR_OVER);
+  cairo_paint_with_alpha (cr, 0.5);
+
+  /* we're done */
+  cairo_destroy (cr);
+
+  return FALSE;
+}
+
+int
+main (int argc, char **argv)
+{
+  GtkWidget *window, *event, *button;
+  GdkScreen *screen;
+  GdkColormap *rgba;
+  GdkColor red;
+
+  gtk_init (&argc, &argv);
+
+  /* Make the widgets */
+  button = gtk_button_new_with_label ("A Button");
+  event = gtk_event_box_new ();
+  window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+
+  /* Put a red background on the window */
+  gdk_color_parse ("red", &red);
+  gtk_widget_modify_bg (window, GTK_STATE_NORMAL, &red);
+
+  /* Set the colourmap for the event box.
+   * Must be done before the event box is realised.
+   */
+  screen = gtk_widget_get_screen (event);
+  rgba = gdk_screen_get_rgba_colormap (screen);
+  gtk_widget_set_colormap (event, rgba);
+
+  /* Set our event box to have a fully-transparent background
+   * drawn on it. Currently there is no way to simply tell GTK+
+   * that "transparency" is the background colour for a widget.
+   */
+  gtk_widget_set_app_paintable (GTK_WIDGET (event), TRUE);
+  g_signal_connect (event, "expose-event",
+                    G_CALLBACK (transparent_expose), NULL);
+
+  /* Put them inside one another */
+  gtk_container_set_border_width (GTK_CONTAINER (window), 10);
+  gtk_container_add (GTK_CONTAINER (window), event);
+  gtk_container_add (GTK_CONTAINER (event), button);
+
+  /* Realise and show everything */
+  gtk_widget_show_all (window);
+
+  /* Set the event box GdkWindow to be composited.
+   * Obviously must be performed after event box is realised.
+   */
+  gdk_window_set_composited (event->window, TRUE);
+
+  /* Set up the compositing handler.
+   * Note that we do _after_ so that the normal (red) background is drawn
+   * by gtk before our compositing occurs.
+   */
+  g_signal_connect_after (window, "expose-event",
+                          G_CALLBACK (window_expose_event), NULL);
+
+  gtk_main (<!-- -->);
+
+  return 0;
+}
+]]>
+</programlisting></example>
+<para>
+In the example <xref linkend="composited-window-example"/>, a button is 
+placed inside of an event box inside of a window. The event box is 
+set as composited and therefore is no longer automatically drawn to 
+the screen. 
+</para>
+<para>
+When the contents of the event box change, an expose event is
+generated on its parent window (which, in this case, belongs to
+the toplevel #GtkWindow). The expose handler for this widget is
+responsible for merging the changes back on the screen in the way
+that it wishes.
+</para>
+<para>
+In our case, we merge the contents with a 50% transparency. We
+also set the background colour of the window to red. The effect is
+that the background shows through the button. 
+</para>
+
+<!-- ##### SECTION See_Also ##### -->
+<para>
+
+</para>
+
+<!-- ##### SECTION Stability_Level ##### -->
+
+
+<!-- ##### STRUCT GdkWindow ##### -->
+<para>
+An opaque structure representing an onscreen drawable.
+Pointers to structures of type #GdkPixmap, #GdkBitmap,
+and #GdkWindow, can often be used interchangeably.
+The type #GdkDrawable refers generically to any of
+these types.
+</para>
+
+
+<!-- ##### ENUM GdkWindowType ##### -->
+<para>
+Describes the kind of window.
+</para>
+
+@GDK_WINDOW_ROOT: root window; this window has no parent, covers the entire screen, and is created by the window system
+@GDK_WINDOW_TOPLEVEL: toplevel window (used to implement #GtkWindow)
+@GDK_WINDOW_CHILD: child window (used to implement e.g. #GtkEntry)
+@GDK_WINDOW_DIALOG: useless/deprecated compatibility type
+@GDK_WINDOW_TEMP: override redirect temporary window (used to implement #GtkMenu)
+@GDK_WINDOW_FOREIGN: foreign window (see gdk_window_foreign_new())
+
+<!-- ##### ENUM GdkWindowClass ##### -->
+<para>
+@GDK_INPUT_OUTPUT windows are the standard kind of window you might expect. 
+@GDK_INPUT_ONLY windows are invisible; they are used to trap events, but 
+you can't draw on them.
+</para>
+
+@GDK_INPUT_OUTPUT: window for graphics and events
+@GDK_INPUT_ONLY: window for events only
+
+<!-- ##### ENUM GdkWindowHints ##### -->
+<para>
+Used to indicate which fields of a #GdkGeometry struct should be paid attention
+to. Also, the presence/absence of @GDK_HINT_POS, @GDK_HINT_USER_POS, and
+@GDK_HINT_USER_SIZE is significant, though they don't directly refer to
+#GdkGeometry fields.  @GDK_HINT_USER_POS will be set automatically by #GtkWindow
+if you call gtk_window_move(). @GDK_HINT_USER_POS and @GDK_HINT_USER_SIZE 
+should be set if the user specified a size/position using a --geometry 
+command-line argument; gtk_window_parse_geometry() automatically sets these
+flags.
+</para>
+
+@GDK_HINT_POS: indicates that the program has positioned the window
+@GDK_HINT_MIN_SIZE: min size fields are set
+@GDK_HINT_MAX_SIZE: max size fields are set
+@GDK_HINT_BASE_SIZE: base size fields are set
+@GDK_HINT_ASPECT: aspect ratio fields are set
+@GDK_HINT_RESIZE_INC: resize increment fields are set
+@GDK_HINT_WIN_GRAVITY: window gravity field is set
+@GDK_HINT_USER_POS: indicates that the window's position was explicitly set by the user
+@GDK_HINT_USER_SIZE: indicates that the window's size was explicitly set by the user
+
+<!-- ##### STRUCT GdkGeometry ##### -->
+<para>
+The #GdkGeometry struct gives the window manager information about 
+a window's geometry constraints. Normally you would set these on 
+the GTK+ level using gtk_window_set_geometry_hints(). #GtkWindow 
+then sets the hints on the #GdkWindow it creates.
+</para>
+
+<para>
+gdk_window_set_geometry_hints() expects the hints to be fully valid already and
+simply passes them to the window manager; in contrast,
+gtk_window_set_geometry_hints() performs some interpretation. For example,
+#GtkWindow will apply the hints to the geometry widget instead of the toplevel
+window, if you set a geometry widget. Also, the
+@min_width/@min_height/@max_width/@max_height fields may be set to -1, and
+#GtkWindow will substitute the size request of the window or geometry widget. If
+the minimum size hint is not provided, #GtkWindow will use its requisition as
+the minimum size.  If the minimum size is provided and a geometry widget is set,
+#GtkWindow will take the minimum size as the minimum size of the geometry widget
+rather than the entire window. The base size is treated similarly.
+</para>
+
+<para>
+The canonical use-case for gtk_window_set_geometry_hints() is to get a terminal
+widget to resize properly. Here, the terminal text area should be the geometry
+widget; #GtkWindow will then automatically set the base size to the size of
+other widgets in the terminal window, such as the menubar and scrollbar.  Then,
+the @width_inc and @height_inc fields should be set to the size of one character
+in the terminal. Finally, the base size should be set to the size of one
+character. The net effect is that the minimum size of the terminal 
+will have a 1x1 character terminal area, and only terminal sizes on 
+the "character grid" will be allowed.
+</para>
+
+<para>
+Here's an example of how the terminal example would be implemented, assuming 
+a terminal area widget called "terminal" and a toplevel window "toplevel":
+<informalexample><programlisting>
+	GdkGeometry hints;
+
+	hints.base_width = terminal->char_width;
+        hints.base_height = terminal->char_height;
+        hints.min_width = terminal->char_width;
+        hints.min_height = terminal->char_height;
+        hints.width_inc = terminal->char_width;
+        hints.height_inc = terminal->char_height;
+
+	gtk_window_set_geometry_hints (GTK_WINDOW (toplevel),
+				       GTK_WIDGET (terminal),
+ 				       &amp;hints,
+				       GDK_HINT_RESIZE_INC |
+                                       GDK_HINT_MIN_SIZE |
+                                       GDK_HINT_BASE_SIZE);
+</programlisting></informalexample>
+</para>
+
+<para>
+The other useful fields are the @min_aspect and @max_aspect fields; these
+contain a width/height ratio as a floating point number. If a geometry widget is
+set, the aspect applies to the geometry widget rather than the entire window.
+The most common use of these hints is probably to set @min_aspect and
+@max_aspect to the same value, thus forcing the window to keep a constant aspect
+ratio.
+</para>
+
+@min_width: minimum width of window (or -1 to use requisition, with #GtkWindow only)
+@min_height: minimum height of window (or -1 to use requisition, with #GtkWindow only)
+@max_width: maximum width of window (or -1 to use requisition, with #GtkWindow only)
+@max_height: maximum height of window (or -1 to use requisition, with #GtkWindow only)
+@base_width: allowed window widths are @base_width + @width_inc * N where N is any integer (-1 allowed with #GtkWindow)
+@base_height: allowed window widths are @base_height + @height_inc * N where N is any integer (-1 allowed with #GtkWindow)
+@width_inc: width resize increment
+@height_inc: height resize increment
+@min_aspect: minimum width/height ratio
+@max_aspect: maximum width/height ratio
+@win_gravity: window gravity, see gtk_window_set_gravity()
+
+<!-- ##### ENUM GdkGravity ##### -->
+<para>
+Defines the reference point of a window and the meaning of coordinates
+passed to gtk_window_move(). See gtk_window_move() and the "implementation 
+notes" section of the 
+<ulink url="http://www.freedesktop.org/Standards/wm-spec">Extended 
+Window Manager Hints</ulink> specification for more details.
+</para>
+
+@GDK_GRAVITY_NORTH_WEST: the reference point is at the top left corner.
+@GDK_GRAVITY_NORTH: the reference point is in the middle of the top edge.
+@GDK_GRAVITY_NORTH_EAST: the reference point is at the top right corner.
+@GDK_GRAVITY_WEST: the reference point is at the middle of the left edge.
+@GDK_GRAVITY_CENTER: the reference point is at the center of the window.
+@GDK_GRAVITY_EAST: the reference point is at the middle of the right edge.
+@GDK_GRAVITY_SOUTH_WEST: the reference point is at the lower left corner.
+@GDK_GRAVITY_SOUTH: the reference point is at the middle of the lower edge.
+@GDK_GRAVITY_SOUTH_EAST: the reference point is at the lower right corner.
+@GDK_GRAVITY_STATIC: the reference point is at the top left corner of the 
+   window itself, ignoring window manager decorations.
+
+<!-- ##### ENUM GdkWindowEdge ##### -->
+<para>
+Determines a window edge or corner. 
+</para>
+
+@GDK_WINDOW_EDGE_NORTH_WEST: the top left corner.
+@GDK_WINDOW_EDGE_NORTH: the top edge.
+@GDK_WINDOW_EDGE_NORTH_EAST: the top right corner.
+@GDK_WINDOW_EDGE_WEST: the left edge.
+@GDK_WINDOW_EDGE_EAST: the right edge.
+@GDK_WINDOW_EDGE_SOUTH_WEST: the lower left corner.
+@GDK_WINDOW_EDGE_SOUTH: the lower edge.
+@GDK_WINDOW_EDGE_SOUTH_EAST: the lower right corner.
+
+<!-- ##### ENUM GdkWindowTypeHint ##### -->
+<para>
+These are hints for the window manager that indicate what type of function 
+the window has. The window manager can use this when determining decoration 
+and behaviour of the window. The hint must be set before mapping the window.
+</para>
+<para>
+See the
+<ulink url="http://www.freedesktop.org/Standards/wm-spec">Extended 
+Window Manager Hints</ulink> specification for more details about 
+window types.
+</para>
+
+@GDK_WINDOW_TYPE_HINT_NORMAL: Normal toplevel window.
+@GDK_WINDOW_TYPE_HINT_DIALOG: Dialog window.
+@GDK_WINDOW_TYPE_HINT_MENU: Window used to implement a menu; GTK+ uses 
+  this hint only for torn-off menus, see #GtkTearoffMenuItem.
+@GDK_WINDOW_TYPE_HINT_TOOLBAR: Window used to implement toolbars.
+@GDK_WINDOW_TYPE_HINT_SPLASHSCREEN: Window used to display a splash 
+  screen during application startup.
+@GDK_WINDOW_TYPE_HINT_UTILITY: Utility windows which are not detached 
+  toolbars or dialogs.
+@GDK_WINDOW_TYPE_HINT_DOCK: Used for creating dock or panel windows.
+@GDK_WINDOW_TYPE_HINT_DESKTOP: Used for creating the desktop background 
+window.
+@GDK_WINDOW_TYPE_HINT_DROPDOWN_MENU: A menu that belongs to a menubar.
+@GDK_WINDOW_TYPE_HINT_POPUP_MENU: A menu that does not belong to a menubar, 
+  e.g. a context menu.
+@GDK_WINDOW_TYPE_HINT_TOOLTIP: A tooltip.
+@GDK_WINDOW_TYPE_HINT_NOTIFICATION: A notification - typically a "bubble" 
+  that belongs to a status icon.
+@GDK_WINDOW_TYPE_HINT_COMBO: A popup from a combo box.
+@GDK_WINDOW_TYPE_HINT_DND: A window that is used to implement a DND cursor.
+
+<!-- ##### STRUCT GdkWindowAttr ##### -->
+<para>
+Attributes to use for a newly-created window.
+</para>
+
+@title: title of the window (for toplevel windows)
+@event_mask: event mask (see gdk_window_set_events())
+@x: X coordinate relative to parent window (see gdk_window_move())
+@y: Y coordinate relative to parent window (see gdk_window_move())
+@width: width of window
+@height: height of window
+@wclass: #GDK_INPUT_OUTPUT (normal window) or #GDK_INPUT_ONLY (invisible window that receives events)
+@visual: #GdkVisual for window
+@colormap: #GdkColormap for window
+@window_type: type of window
+@cursor: cursor for the window (see gdk_window_set_cursor())
+@wmclass_name: don't use (see gtk_window_set_wmclass())
+@wmclass_class: don't use (see gtk_window_set_wmclass())
+@override_redirect: %TRUE to bypass the window manager
+@type_hint: a hint of the function of the window
+
+<!-- ##### ENUM GdkWindowAttributesType ##### -->
+<para>
+Used to indicate which fields in the #GdkWindowAttr struct should be
+honored. For example, if you filled in the "cursor" and "x" fields of
+#GdkWindowAttr, pass "@GDK_WA_X | @GDK_WA_CURSOR" to gdk_window_new().  Fields
+in #GdkWindowAttr not covered by a bit in this enum are required; for example,
+the @width/@height, @wclass, and @window_type fields are required, they have no
+corresponding flag in #GdkWindowAttributesType.
+</para>
+
+@GDK_WA_TITLE: Honor the title field
+@GDK_WA_X: Honor the X coordinate field
+@GDK_WA_Y: Honor the Y coordinate field
+@GDK_WA_CURSOR: Honor the cursor field
+@GDK_WA_COLORMAP: Honor the colormap field
+@GDK_WA_VISUAL: Honor the visual field
+@GDK_WA_WMCLASS: Honor the wmclass_class and wmclass_name fields
+@GDK_WA_NOREDIR: Honor the override_redirect field
+@GDK_WA_TYPE_HINT: Honor the type_hint field
+
+<!-- ##### FUNCTION gdk_window_new ##### -->
+<para>
+
+</para>
+
+@parent: 
+@attributes: 
+@attributes_mask: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_window_destroy ##### -->
+<para>
+
+</para>
+
+@window: 
+
+
+<!-- ##### MACRO gdk_window_ref ##### -->
+<para>
+Deprecated equivalent of g_object_ref()
+</para>
+
+@Returns: the window
+
+
+<!-- ##### MACRO gdk_window_unref ##### -->
+<para>
+Deprecated equivalent of g_object_unref()
+</para>
+
+
+
+<!-- ##### FUNCTION gdk_window_get_window_type ##### -->
+<para>
+
+</para>
+
+@window: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_window_at_pointer ##### -->
+<para>
+
+</para>
+
+@win_x: 
+@win_y: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_window_show ##### -->
+<para>
+
+</para>
+
+@window: 
+
+
+<!-- ##### FUNCTION gdk_window_show_unraised ##### -->
+<para>
+
+</para>
+
+@window: 
+
+
+<!-- ##### FUNCTION gdk_window_hide ##### -->
+<para>
+
+</para>
+
+@window: 
+
+
+<!-- ##### FUNCTION gdk_window_is_visible ##### -->
+<para>
+
+</para>
+
+@window: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_window_is_viewable ##### -->
+<para>
+
+</para>
+
+@window: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_window_get_state ##### -->
+<para>
+
+</para>
+
+@window: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_window_withdraw ##### -->
+<para>
+
+</para>
+
+@window: 
+
+
+<!-- ##### FUNCTION gdk_window_iconify ##### -->
+<para>
+
+</para>
+
+@window: 
+
+
+<!-- ##### FUNCTION gdk_window_deiconify ##### -->
+<para>
+
+</para>
+
+@window: 
+
+
+<!-- ##### FUNCTION gdk_window_stick ##### -->
+<para>
+
+</para>
+
+@window: 
+
+
+<!-- ##### FUNCTION gdk_window_unstick ##### -->
+<para>
+
+</para>
+
+@window: 
+
+
+<!-- ##### FUNCTION gdk_window_maximize ##### -->
+<para>
+
+</para>
+
+@window: 
+
+
+<!-- ##### FUNCTION gdk_window_unmaximize ##### -->
+<para>
+
+</para>
+
+@window: 
+
+
+<!-- ##### FUNCTION gdk_window_fullscreen ##### -->
+<para>
+
+</para>
+
+@window: 
+
+
+<!-- ##### FUNCTION gdk_window_unfullscreen ##### -->
+<para>
+
+</para>
+
+@window: 
+
+
+<!-- ##### FUNCTION gdk_window_set_keep_above ##### -->
+<para>
+
+</para>
+
+@window: 
+@setting: 
+
+
+<!-- ##### FUNCTION gdk_window_set_keep_below ##### -->
+<para>
+
+</para>
+
+@window: 
+@setting: 
+
+
+<!-- ##### FUNCTION gdk_window_set_opacity ##### -->
+<para>
+
+</para>
+
+@window: 
+@opacity: 
+
+
+<!-- ##### FUNCTION gdk_window_set_composited ##### -->
+<para>
+
+</para>
+
+@window: 
+@composited: 
+
+
+<!-- ##### FUNCTION gdk_window_move ##### -->
+<para>
+
+</para>
+
+@window: 
+@x: 
+@y: 
+
+
+<!-- ##### FUNCTION gdk_window_resize ##### -->
+<para>
+
+</para>
+
+@window: 
+@width: 
+@height: 
+
+
+<!-- ##### FUNCTION gdk_window_move_resize ##### -->
+<para>
+
+</para>
+
+@window: 
+@x: 
+@y: 
+@width: 
+@height: 
+
+
+<!-- ##### FUNCTION gdk_window_scroll ##### -->
+<para>
+
+</para>
+
+@window: 
+@dx: 
+@dy: 
+
+
+<!-- ##### FUNCTION gdk_window_move_region ##### -->
+<para>
+
+</para>
+
+@window: 
+@region: 
+@dx: 
+@dy: 
+
+
+<!-- ##### FUNCTION gdk_window_reparent ##### -->
+<para>
+
+</para>
+
+@window: 
+@new_parent: 
+@x: 
+@y: 
+
+
+<!-- ##### FUNCTION gdk_window_clear ##### -->
+<para>
+
+</para>
+
+@window: 
+
+
+<!-- ##### FUNCTION gdk_window_clear_area ##### -->
+<para>
+
+</para>
+
+@window: 
+@x: 
+@y: 
+@width: 
+@height: 
+
+
+<!-- ##### FUNCTION gdk_window_clear_area_e ##### -->
+<para>
+
+</para>
+
+@window: 
+@x: 
+@y: 
+@width: 
+@height: 
+
+
+<!-- ##### MACRO gdk_window_copy_area ##### -->
+<para>
+Deprecated equivalent to gdk_draw_drawable(), see that function for docs
+</para>
+
+@drawable: a #GdkDrawable
+@gc: a #GdkGC sharing the drawable's visual and colormap
+@x: X position in @drawable where the rectangle should be drawn
+@y: Y position in @drawable where the rectangle should be drawn
+@source_drawable: the source #GdkDrawable, which may be the same as @drawable
+@source_x: X position in @src of rectangle to draw
+@source_y: Y position in @src of rectangle to draw
+@width: width of rectangle to draw, or -1 for entire @src width
+@height: height of rectangle to draw, or -1 for entire @src height
+<!-- # Unused Parameters # -->
+@drawable: a #GdkDrawable
+@xdest: X position in @drawable where the rectangle should be drawn
+@ydest: Y position in @drawable where the rectangle should be drawn
+
+
+<!-- ##### FUNCTION gdk_window_raise ##### -->
+<para>
+
+</para>
+
+@window: 
+
+
+<!-- ##### FUNCTION gdk_window_lower ##### -->
+<para>
+
+</para>
+
+@window: 
+
+
+<!-- ##### FUNCTION gdk_window_focus ##### -->
+<para>
+
+</para>
+
+@window: 
+@timestamp: 
+
+
+<!-- ##### FUNCTION gdk_window_register_dnd ##### -->
+<para>
+Registers a window as a potential drop destination.
+</para>
+
+@window: a #GdkWindow.
+
+
+<!-- ##### FUNCTION gdk_window_begin_resize_drag ##### -->
+<para>
+
+</para>
+
+@window: 
+@edge: 
+@button: 
+@root_x: 
+@root_y: 
+@timestamp: 
+
+
+<!-- ##### FUNCTION gdk_window_begin_move_drag ##### -->
+<para>
+
+</para>
+
+@window: 
+@button: 
+@root_x: 
+@root_y: 
+@timestamp: 
+
+
+<!-- ##### FUNCTION gdk_window_constrain_size ##### -->
+<para>
+
+</para>
+
+@geometry: 
+@flags: 
+@width: 
+@height: 
+@new_width: 
+@new_height: 
+
+
+<!-- ##### FUNCTION gdk_window_beep ##### -->
+<para>
+
+</para>
+
+@window: 
+
+
+<!-- ##### FUNCTION gdk_window_begin_paint_rect ##### -->
+<para>
+
+</para>
+
+@window: 
+@rectangle: 
+
+
+<!-- ##### FUNCTION gdk_window_begin_paint_region ##### -->
+<para>
+
+</para>
+
+@window: 
+@region: 
+
+
+<!-- ##### FUNCTION gdk_window_end_paint ##### -->
+<para>
+
+</para>
+
+@window: 
+
+
+<!-- ##### FUNCTION gdk_window_invalidate_rect ##### -->
+<para>
+
+</para>
+
+@window: 
+@rect: 
+@invalidate_children: 
+
+
+<!-- ##### FUNCTION gdk_window_invalidate_region ##### -->
+<para>
+
+</para>
+
+@window: 
+@region: 
+@invalidate_children: 
+
+
+<!-- ##### FUNCTION gdk_window_invalidate_maybe_recurse ##### -->
+<para>
+
+</para>
+
+@window: 
+@region: 
+@child_func: 
+@user_data: 
+
+
+<!-- ##### FUNCTION gdk_window_get_update_area ##### -->
+<para>
+
+</para>
+
+@window: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_window_freeze_updates ##### -->
+<para>
+
+</para>
+
+@window: 
+
+
+<!-- ##### FUNCTION gdk_window_thaw_updates ##### -->
+<para>
+
+</para>
+
+@window: 
+
+
+<!-- ##### FUNCTION gdk_window_process_all_updates ##### -->
+<para>
+
+</para>
+
+
+
+<!-- ##### FUNCTION gdk_window_process_updates ##### -->
+<para>
+
+</para>
+
+@window: 
+@update_children: 
+
+
+<!-- ##### FUNCTION gdk_window_set_debug_updates ##### -->
+<para>
+
+</para>
+
+@setting: 
+
+
+<!-- ##### FUNCTION gdk_window_get_internal_paint_info ##### -->
+<para>
+
+</para>
+
+@window: 
+@real_drawable: 
+@x_offset: 
+@y_offset: 
+
+
+<!-- ##### FUNCTION gdk_window_enable_synchronized_configure ##### -->
+<para>
+
+</para>
+
+@window: 
+
+
+<!-- ##### FUNCTION gdk_window_configure_finished ##### -->
+<para>
+
+</para>
+
+@window: 
+
+
+<!-- ##### FUNCTION gdk_window_set_user_data ##### -->
+<para>
+
+</para>
+
+@window: 
+@user_data: 
+
+
+<!-- ##### FUNCTION gdk_window_set_override_redirect ##### -->
+<para>
+
+</para>
+
+@window: 
+@override_redirect: 
+
+
+<!-- ##### FUNCTION gdk_window_set_accept_focus ##### -->
+<para>
+
+</para>
+
+@window: 
+@accept_focus: 
+
+
+<!-- ##### FUNCTION gdk_window_set_focus_on_map ##### -->
+<para>
+
+</para>
+
+@window: 
+@focus_on_map: 
+
+
+<!-- ##### FUNCTION gdk_window_add_filter ##### -->
+<para>
+
+</para>
+
+@window: 
+@function: 
+@data: 
+
+
+<!-- ##### FUNCTION gdk_window_remove_filter ##### -->
+<para>
+
+</para>
+
+@window: 
+@function: 
+@data: 
+
+
+<!-- ##### USER_FUNCTION GdkFilterFunc ##### -->
+<para>
+Specifies the type of function used to filter native events before they are
+converted to GDK events. 
+</para>
+
+<para>
+When a filter is called, @event is unpopulated, except for
+<literal>event-&gt;window</literal>. The filter may translate the native
+event to a GDK event and store the result in @event, or handle it without
+translation. If the filter translates the event and processing should
+continue, it should return <literal>GDK_FILTER_TRANSLATE</literal>.
+</para>
+
+@xevent: the native event to filter.
+@event: the GDK event to which the X event will be translated.
+@data: user data set when the filter was installed.
+@Returns: a #GdkFilterReturn value.
+
+
+<!-- ##### ENUM GdkFilterReturn ##### -->
+<para>
+Specifies the result of applying a #GdkFilterFunc to a native event.
+</para>
+
+@GDK_FILTER_CONTINUE: event not handled, continue processing.
+@GDK_FILTER_TRANSLATE: native event translated into a GDK event and stored
+                       in the <literal>event</literal> structure that was passed in.
+@GDK_FILTER_REMOVE: event handled, terminate processing.
+
+<!-- ##### TYPEDEF GdkXEvent ##### -->
+<para>
+Used to represent native events (<type>XEvent</type>s for the X11 
+backend, <type>MSG</type>s for Win32).
+</para>
+
+
+<!-- ##### FUNCTION gdk_window_shape_combine_mask ##### -->
+<para>
+
+</para>
+
+@window: 
+@mask: 
+@x: 
+@y: 
+
+
+<!-- ##### FUNCTION gdk_window_shape_combine_region ##### -->
+<para>
+
+</para>
+
+@window: 
+@shape_region: 
+@offset_x: 
+@offset_y: 
+
+
+<!-- ##### FUNCTION gdk_window_set_child_shapes ##### -->
+<para>
+
+</para>
+
+@window: 
+
+
+<!-- ##### FUNCTION gdk_window_merge_child_shapes ##### -->
+<para>
+
+</para>
+
+@window: 
+
+
+<!-- ##### FUNCTION gdk_window_input_shape_combine_mask ##### -->
+<para>
+
+</para>
+
+@window: 
+@mask: 
+@x: 
+@y: 
+
+
+<!-- ##### FUNCTION gdk_window_input_shape_combine_region ##### -->
+<para>
+
+</para>
+
+@window: 
+@shape_region: 
+@offset_x: 
+@offset_y: 
+
+
+<!-- ##### FUNCTION gdk_window_set_child_input_shapes ##### -->
+<para>
+
+</para>
+
+@window: 
+
+
+<!-- ##### FUNCTION gdk_window_merge_child_input_shapes ##### -->
+<para>
+
+</para>
+
+@window: 
+
+
+<!-- ##### FUNCTION gdk_window_set_static_gravities ##### -->
+<para>
+
+</para>
+
+@window: 
+@use_static: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_window_set_hints ##### -->
+<para>
+
+</para>
+
+@window: 
+@x: 
+@y: 
+@min_width: 
+@min_height: 
+@max_width: 
+@max_height: 
+@flags: 
+
+
+<!-- ##### FUNCTION gdk_window_set_title ##### -->
+<para>
+
+</para>
+
+@window: 
+@title: 
+
+
+<!-- ##### FUNCTION gdk_window_set_background ##### -->
+<para>
+
+</para>
+
+@window: 
+@color: 
+
+
+<!-- ##### FUNCTION gdk_window_set_back_pixmap ##### -->
+<para>
+
+</para>
+
+@window: 
+@pixmap: 
+@parent_relative: 
+
+
+<!-- ##### MACRO GDK_PARENT_RELATIVE ##### -->
+<para>
+A special value for <literal>GdkPixmap*</literal> variables, indicating
+that the background pixmap for a window should be inherited from the parent
+window.
+</para>
+
+
+
+<!-- ##### FUNCTION gdk_window_set_cursor ##### -->
+<para>
+
+</para>
+
+@window: 
+@cursor: 
+
+
+<!-- ##### MACRO gdk_window_set_colormap ##### -->
+<para>
+Deprecated equivalent to gdk_drawable_set_colormap()
+</para>
+
+
+
+<!-- ##### FUNCTION gdk_window_get_user_data ##### -->
+<para>
+
+</para>
+
+@window: 
+@data: 
+
+
+<!-- ##### FUNCTION gdk_window_get_geometry ##### -->
+<para>
+
+</para>
+
+@window: 
+@x: 
+@y: 
+@width: 
+@height: 
+@depth: 
+
+
+<!-- ##### FUNCTION gdk_window_set_geometry_hints ##### -->
+<para>
+
+</para>
+
+@window: 
+@geometry: 
+@geom_mask: 
+
+
+<!-- ##### FUNCTION gdk_window_set_icon_list ##### -->
+<para>
+
+</para>
+
+@window: 
+@pixbufs: 
+
+
+<!-- ##### FUNCTION gdk_window_set_modal_hint ##### -->
+<para>
+
+</para>
+
+@window: 
+@modal: 
+
+
+<!-- ##### FUNCTION gdk_window_set_type_hint ##### -->
+<para>
+
+</para>
+
+@window: 
+@hint: 
+
+
+<!-- ##### FUNCTION gdk_window_get_type_hint ##### -->
+<para>
+
+</para>
+
+@window: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_window_set_skip_taskbar_hint ##### -->
+<para>
+
+</para>
+
+@window: 
+@skips_taskbar: 
+
+
+<!-- ##### FUNCTION gdk_window_set_skip_pager_hint ##### -->
+<para>
+
+</para>
+
+@window: 
+@skips_pager: 
+
+
+<!-- ##### FUNCTION gdk_window_set_urgency_hint ##### -->
+<para>
+
+</para>
+
+@window: 
+@urgent: 
+
+
+<!-- ##### FUNCTION gdk_window_get_position ##### -->
+<para>
+
+</para>
+
+@window: 
+@x: 
+@y: 
+
+
+<!-- ##### FUNCTION gdk_window_get_root_origin ##### -->
+<para>
+
+</para>
+
+@window: 
+@x: 
+@y: 
+
+
+<!-- ##### FUNCTION gdk_window_get_frame_extents ##### -->
+<para>
+
+</para>
+
+@window: 
+@rect: 
+
+
+<!-- ##### MACRO gdk_window_get_size ##### -->
+<para>
+Deprecated equivalent of gdk_drawable_get_size().
+</para>
+
+
+
+<!-- ##### MACRO gdk_window_get_visual ##### -->
+<para>
+Deprecated equivalent of gdk_drawable_get_visual().
+</para>
+
+@Returns: the #GdkVisual of the window
+
+
+<!-- ##### MACRO gdk_window_get_colormap ##### -->
+<para>
+Deprecated equivalent of gdk_drawable_get_colormap().
+</para>
+
+@Returns: colormap for the window
+
+
+<!-- ##### MACRO gdk_window_get_type ##### -->
+<para>
+Deprecated equivalent of gdk_drawable_get_type().
+</para>
+
+@Returns: type of drawable
+
+
+<!-- ##### FUNCTION gdk_window_get_origin ##### -->
+<para>
+
+</para>
+
+@window: 
+@x: 
+@y: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_window_get_deskrelative_origin ##### -->
+<para>
+
+</para>
+
+@window: 
+@x: 
+@y: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_window_get_pointer ##### -->
+<para>
+
+</para>
+
+@window: 
+@x: 
+@y: 
+@mask: 
+@Returns: 
+
+
+<!-- ##### ENUM GdkModifierType ##### -->
+<para>
+A set of bit-flags to indicate the state of modifier keys and mouse buttons 
+in various event types. Typical modifier keys are Shift, Control, Meta, Super,
+Hyper, Alt, Compose, Apple, CapsLock or ShiftLock. 
+</para>
+<para>
+Like the X Window System, GDK supports 8 modifier keys and 5 mouse buttons.
+</para>
+<para>
+Since 2.10, GDK recognizes which of the Meta, Super or Hyper keys are mapped 
+to Mod2 - Mod5, and indicates this by setting %GDK_SUPER_MASK, %GDK_HYPER_MASK
+or %GDK_META_MASK in the state field of key events.
+</para>
+
+@GDK_SHIFT_MASK: the Shift key.
+@GDK_LOCK_MASK: a Lock key (depending on the modifier mapping of the 
+  X server this may either be CapsLock or ShiftLock).
+@GDK_CONTROL_MASK: the Control key.
+@GDK_MOD1_MASK: the fourth modifier key (it depends on the modifier 
+  mapping of the X server which key is interpreted as this modifier, but 
+  normally it is the Alt key).
+@GDK_MOD2_MASK: the fifth modifier key (it depends on the modifier 
+  mapping of the X server which key is interpreted as this modifier).
+@GDK_MOD3_MASK: the sixth modifier key (it depends on the modifier 
+  mapping of the X server which key is interpreted as this modifier).
+@GDK_MOD4_MASK: the seventh modifier key (it depends on the modifier 
+  mapping of the X server which key is interpreted as this modifier).
+@GDK_MOD5_MASK: the eighth modifier key (it depends on the modifier 
+  mapping of the X server which key is interpreted as this modifier).
+@GDK_BUTTON1_MASK: the first mouse button.
+@GDK_BUTTON2_MASK: the second mouse button.
+@GDK_BUTTON3_MASK: the third mouse button.
+@GDK_BUTTON4_MASK: the fourth mouse button.
+@GDK_BUTTON5_MASK: the fifth mouse button.
+@GDK_SUPER_MASK: the Super modifier. Since 2.10
+@GDK_HYPER_MASK: the Hyper modifier. Since 2.10
+@GDK_META_MASK: the Meta modifier. Since 2.10
+@GDK_RELEASE_MASK: not used in GDK itself. GTK+ uses it to differentiate 
+  between (keyval, modifiers) pairs from key press and release events.
+@GDK_MODIFIER_MASK: a mask covering all modifier types.
+
+<!-- ##### FUNCTION gdk_window_get_parent ##### -->
+<para>
+
+</para>
+
+@window: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_window_get_toplevel ##### -->
+<para>
+
+</para>
+
+@window: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_window_get_children ##### -->
+<para>
+
+</para>
+
+@window: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_window_peek_children ##### -->
+<para>
+
+</para>
+
+@window: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_window_get_events ##### -->
+<para>
+
+</para>
+
+@window: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_window_set_events ##### -->
+<para>
+
+</para>
+
+@window: 
+@event_mask: 
+
+
+<!-- ##### FUNCTION gdk_window_set_icon ##### -->
+<para>
+
+</para>
+
+@window: 
+@icon_window: 
+@pixmap: 
+@mask: 
+
+
+<!-- ##### FUNCTION gdk_window_set_icon_name ##### -->
+<para>
+
+</para>
+
+@window: 
+@name: 
+
+
+<!-- ##### FUNCTION gdk_window_set_transient_for ##### -->
+<para>
+
+</para>
+
+@window: 
+@parent: 
+
+
+<!-- ##### FUNCTION gdk_window_set_role ##### -->
+<para>
+
+</para>
+
+@window: 
+@role: 
+
+
+<!-- ##### FUNCTION gdk_window_set_startup_id ##### -->
+<para>
+
+</para>
+
+@window: 
+@startup_id: 
+
+
+<!-- ##### FUNCTION gdk_window_set_group ##### -->
+<para>
+
+</para>
+
+@window: 
+@leader: 
+
+
+<!-- ##### FUNCTION gdk_window_get_group ##### -->
+<para>
+
+</para>
+
+@window: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_window_set_decorations ##### -->
+<para>
+
+</para>
+
+@window: 
+@decorations: 
+
+
+<!-- ##### FUNCTION gdk_window_get_decorations ##### -->
+<para>
+
+</para>
+
+@window: The window to get the decorations from
+@decorations: The window decorations will be written here
+@Returns: %TRUE if the window has decorations set, %FALSE otherwise.
+
+
+<!-- ##### ENUM GdkWMDecoration ##### -->
+<para>
+These are hints originally defined by the Motif toolkit.
+The window manager can use them when determining how to decorate
+the window. The hint must be set before mapping the window.
+</para>
+
+@GDK_DECOR_ALL: all decorations should be applied.
+@GDK_DECOR_BORDER: a frame should be drawn around the window.
+@GDK_DECOR_RESIZEH: the frame should have resize handles.
+@GDK_DECOR_TITLE: a titlebar should be placed above the window.
+@GDK_DECOR_MENU: a button for opening a menu should be included.
+@GDK_DECOR_MINIMIZE: a minimize button should be included.
+@GDK_DECOR_MAXIMIZE: a maximize button should be included.
+
+<!-- ##### FUNCTION gdk_window_set_functions ##### -->
+<para>
+
+</para>
+
+@window: 
+@functions: 
+
+
+<!-- ##### ENUM GdkWMFunction ##### -->
+<para>
+These are hints originally defined by the Motif toolkit.
+The window manager can use them when determining the functions 
+to offer for the window. 
+The hint must be set before mapping the window.
+</para>
+
+@GDK_FUNC_ALL: all functions should be offered.
+@GDK_FUNC_RESIZE: the window should be resizable.
+@GDK_FUNC_MOVE: the window should be movable.
+@GDK_FUNC_MINIMIZE: the window should be minimizable.
+@GDK_FUNC_MAXIMIZE: the window should be maximizable.
+@GDK_FUNC_CLOSE: the window should be closable.
+
+<!-- ##### FUNCTION gdk_window_get_toplevels ##### -->
+<para>
+
+</para>
+
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_get_default_root_window ##### -->
+<para>
+
+</para>
+
+@Returns: 
+
+
+<!-- ##### STRUCT GdkPointerHooks ##### -->
+<para>
+A table of pointers to functions for getting quantities related to 
+the current pointer position. GDK has one global table of this type,
+which can be set using gdk_set_pointer_hooks().
+</para>
+<para>
+This is only useful for such low-level tools as an event recorder. 
+Applications should never have any reason to use this facility
+</para>
+
+@get_pointer: Obtains the current pointer position and modifier state.
+  The position is given in coordinates relative to the window containing 
+  the pointer, which is returned in @window.
+@window_at_pointer: Obtains the window underneath the mouse pointer, 
+  returning the location of that window in @win_x, @win_y. Returns %NULL 
+  if the window under the mouse pointer is not known to GDK (for example, 
+  belongs to another application).
+
+<!-- ##### FUNCTION gdk_set_pointer_hooks ##### -->
+<para>
+
+</para>
+
+@new_hooks: 
+@Returns: 
+
+
+<!--
+Local variables:
+mode: sgml
+sgml-parent-document: ("../gdk-docs.sgml" "book" "refsect2" "")
+End:
+-->
+
+

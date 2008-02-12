@@ -1,0 +1,495 @@
+<!-- ##### SECTION Title ##### -->
+GtkRecentManager
+
+<!-- ##### SECTION Short_Description ##### -->
+Managing Recently Used Files
+
+<!-- ##### SECTION Long_Description ##### -->
+<para>
+#GtkRecentManager provides a facility for adding, removing and
+looking up recently used files.  Each recently used file is
+identified by its URI, and has meta-data associated to it, like
+the names and command lines of the applications that have
+registered it, the number of time each application has registered
+the same file, the mime type of the file and whether the file
+should be displayed only by the applications that have
+registered it.
+</para>
+
+<para>
+The #GtkRecentManager acts like a database of all the recently
+used files.  You can create new #GtkRecentManager objects, but
+it is more efficient to use the standard recent manager for
+the #GdkScreen so that informations about the recently used
+files is shared with other people using them.  In case the
+default screen is being used, adding a new recently used
+file is as simple as:
+</para>
+
+<informalexample>
+  <programlisting>
+GtkRecentManager *manager;
+
+manager = gtk_recent_manager_get_default ();
+gtk_recent_manager_add_item (manager, file_uri);
+  </programlisting>
+</informalexample>
+
+While looking up a recently used file is as simple as:
+
+<informalexample>
+  <programlisting>
+GtkRecentManager *manager;
+GtkRecentInfo *info;
+GError *error = NULL;
+
+manager = gtk_recent_manager_get_default ();
+info = gtk_recent_manager_lookup_item (manager, file_uri, &amp;error);
+if (error)
+  {
+    g_warning ("Could not find the file: &percnt;s", error-&gt;message);
+    g_error_free (error);
+  }
+else
+  {
+    /* Use the info object */
+    gtk_recent_info_unref (info);
+  }
+  </programlisting>
+</informalexample>
+
+<para>
+Recently used files are supported since GTK+ 2.10.
+</para>
+
+<!-- ##### SECTION See_Also ##### -->
+<para>
+
+</para>
+
+<!-- ##### SECTION Stability_Level ##### -->
+
+
+<!-- ##### STRUCT GtkRecentManager ##### -->
+<para>
+Acts as a database of information about the list of recently
+used files.  Normally, you retrieve the recent manager for a
+particular screen using gtk_recent_manager_get_for_screen()
+and it will contain information about current recent manager
+for that screen.</para>
+
+
+<!-- ##### SIGNAL GtkRecentManager::changed ##### -->
+<para>
+
+</para>
+
+@recentmanager: the object which received the signal.
+
+<!-- ##### ARG GtkRecentManager:filename ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkRecentManager:limit ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkRecentManager:size ##### -->
+<para>
+
+</para>
+
+<!-- ##### STRUCT GtkRecentInfo ##### -->
+<para>
+Contains informations found when looking up an entry of the
+recently used files list.
+</para>
+
+
+<!-- ##### STRUCT GtkRecentData ##### -->
+<para>
+
+</para>
+
+@display_name: 
+@description: 
+@mime_type: 
+@app_name: 
+@app_exec: 
+@groups: 
+@is_private: 
+
+<!-- ##### MACRO GTK_RECENT_MANAGER_ERROR ##### -->
+<para>
+The #GQuark used for #GtkRecentManagerError errors.
+</para>
+
+
+
+<!-- ##### ENUM GtkRecentManagerError ##### -->
+<para>
+
+</para>
+
+@GTK_RECENT_MANAGER_ERROR_NOT_FOUND: 
+@GTK_RECENT_MANAGER_ERROR_INVALID_URI: 
+@GTK_RECENT_MANAGER_ERROR_INVALID_ENCODING: 
+@GTK_RECENT_MANAGER_ERROR_NOT_REGISTERED: 
+@GTK_RECENT_MANAGER_ERROR_READ: 
+@GTK_RECENT_MANAGER_ERROR_WRITE: 
+@GTK_RECENT_MANAGER_ERROR_UNKNOWN: 
+
+<!-- ##### FUNCTION gtk_recent_manager_new ##### -->
+<para>
+
+</para>
+
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_recent_manager_get_default ##### -->
+<para>
+
+</para>
+
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_recent_manager_get_for_screen ##### -->
+<para>
+
+</para>
+
+@screen: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_recent_manager_set_screen ##### -->
+<para>
+
+</para>
+
+@manager: 
+@screen: 
+
+
+<!-- ##### FUNCTION gtk_recent_manager_add_item ##### -->
+<para>
+
+</para>
+
+@manager: 
+@uri: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_recent_manager_add_full ##### -->
+<para>
+
+</para>
+
+@manager: 
+@uri: 
+@recent_data: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_recent_manager_remove_item ##### -->
+<para>
+
+</para>
+
+@manager: 
+@uri: 
+@error: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_recent_manager_lookup_item ##### -->
+<para>
+
+</para>
+
+@manager: 
+@uri: 
+@error: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_recent_manager_has_item ##### -->
+<para>
+
+</para>
+
+@manager: 
+@uri: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_recent_manager_move_item ##### -->
+<para>
+
+</para>
+
+@manager: 
+@uri: 
+@new_uri: 
+@error: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_recent_manager_get_limit ##### -->
+<para>
+
+</para>
+
+@manager: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_recent_manager_set_limit ##### -->
+<para>
+
+</para>
+
+@manager: 
+@limit: 
+
+
+<!-- ##### FUNCTION gtk_recent_manager_get_items ##### -->
+<para>
+
+</para>
+
+@manager: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_recent_manager_purge_items ##### -->
+<para>
+
+</para>
+
+@manager: 
+@error: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_recent_info_ref ##### -->
+<para>
+
+</para>
+
+@info: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_recent_info_unref ##### -->
+<para>
+
+</para>
+
+@info: 
+
+
+<!-- ##### FUNCTION gtk_recent_info_get_uri ##### -->
+<para>
+
+</para>
+
+@info: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_recent_info_get_display_name ##### -->
+<para>
+
+</para>
+
+@info: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_recent_info_get_description ##### -->
+<para>
+
+</para>
+
+@info: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_recent_info_get_mime_type ##### -->
+<para>
+
+</para>
+
+@info: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_recent_info_get_added ##### -->
+<para>
+
+</para>
+
+@info: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_recent_info_get_modified ##### -->
+<para>
+
+</para>
+
+@info: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_recent_info_get_visited ##### -->
+<para>
+
+</para>
+
+@info: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_recent_info_get_private_hint ##### -->
+<para>
+
+</para>
+
+@info: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_recent_info_get_application_info ##### -->
+<para>
+
+</para>
+
+@info: 
+@app_name: 
+@app_exec: 
+@count: 
+@time_: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_recent_info_get_applications ##### -->
+<para>
+
+</para>
+
+@info: 
+@length: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_recent_info_last_application ##### -->
+<para>
+
+</para>
+
+@info: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_recent_info_get_groups ##### -->
+<para>
+
+</para>
+
+@info: 
+@length: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_recent_info_has_group ##### -->
+<para>
+
+</para>
+
+@info: 
+@group_name: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_recent_info_has_application ##### -->
+<para>
+
+</para>
+
+@info: 
+@app_name: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_recent_info_get_icon ##### -->
+<para>
+
+</para>
+
+@info: 
+@size: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_recent_info_get_short_name ##### -->
+<para>
+
+</para>
+
+@info: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_recent_info_get_uri_display ##### -->
+<para>
+
+</para>
+
+@info: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_recent_info_get_age ##### -->
+<para>
+
+</para>
+
+@info: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_recent_info_is_local ##### -->
+<para>
+
+</para>
+
+@info: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_recent_info_exists ##### -->
+<para>
+
+</para>
+
+@info: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_recent_info_match ##### -->
+<para>
+
+</para>
+
+@info_a: 
+@info_b: 
+@Returns: 
+
+

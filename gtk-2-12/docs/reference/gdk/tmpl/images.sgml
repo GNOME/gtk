@@ -1,0 +1,196 @@
+<!-- ##### SECTION Title ##### -->
+Images
+
+<!-- ##### SECTION Short_Description ##### -->
+A client-side area for bit-mapped graphics
+
+<!-- ##### SECTION Long_Description ##### -->
+<para>
+The #GdkImage type represents an area for drawing graphics.
+It has now been superceded to a large extent by the much more flexible
+<link linkend="gdk-GdkRGB">GdkRGB</link> functions.
+</para>
+<para>
+To create an empty #GdkImage use gdk_image_new().
+To create a #GdkImage from bitmap data use gdk_image_new_bitmap().
+To create an image from part of a #GdkWindow use gdk_drawable_get_image().
+</para>
+<para>
+The image can be manipulated with gdk_image_get_pixel() and
+gdk_image_put_pixel(), or alternatively by changing the actual pixel data.
+Though manipulating the pixel data requires complicated code to cope with
+the different formats that may be used.
+</para>
+<para>
+To draw a #GdkImage in a #GdkWindow or #GdkPixmap use gdk_draw_image().
+</para>
+<para>
+To destroy a #GdkImage use gdk_image_destroy().
+</para>
+
+<!-- ##### SECTION See_Also ##### -->
+<para>
+<variablelist>
+
+<varlistentry>
+<term><link linkend="gdk-Bitmaps-and-Pixmaps">Bitmaps and Pixmaps</link></term>
+<listitem><para>
+Graphics which are stored on the X Windows server.
+Since these are stored on the server they can be drawn very quickly, and all
+of the <link linkend="gdk-Drawing-Primitives">Drawing Primitives</link> can be
+used to draw on them. Their main disadvantage is that manipulating individual
+pixels can be very slow.
+</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><link linkend="gdk-GdkRGB">GdkRGB</link></term>
+<listitem><para>
+Built on top of #GdkImage, this provides much more functionality,
+including the dithering of colors to produce better output on low-color
+displays.
+</para></listitem>
+</varlistentry>
+
+</variablelist>
+</para>
+
+<!-- ##### SECTION Stability_Level ##### -->
+
+
+<!-- ##### STRUCT GdkImage ##### -->
+<para>
+The #GdkImage struct contains information on the image and the pixel data.
+</para>
+
+@parent_instance: the parent instance
+@type: the type of the image.
+@visual: the visual.
+@byte_order: the byte order.
+@width: the width of the image in pixels.
+@height: the height of the image in pixels.
+@depth: the depth of the image, i.e. the number of bits per pixel.
+@bpp: the number of bytes per pixel.
+@bpl: the number of bytes per line of the image.
+@bits_per_pixel: the number of bits per pixel.
+@mem: the pixel data.
+@colormap: the #GdkColormap associated with the image
+
+<!-- ##### FUNCTION gdk_image_new ##### -->
+<para>
+Creates a new #GdkImage.
+</para>
+
+@type: the type of the #GdkImage, one of %GDK_IMAGE_NORMAL, %GDK_IMAGE_SHARED
+and %GDK_IMAGE_FASTEST. %GDK_IMAGE_FASTEST is probably the best choice, since
+it will try creating a %GDK_IMAGE_SHARED image first and if that fails it will
+then use %GDK_IMAGE_NORMAL.
+@visual: the #GdkVisual to use for the image.
+@width: the width of the image in pixels.
+@height: the height of the image in pixels.
+@Returns: a new #GdkImage, or %NULL if the image could not be created.
+
+
+<!-- ##### ENUM GdkImageType ##### -->
+<para>
+Specifies the type of a #GdkImage.
+</para>
+
+@GDK_IMAGE_NORMAL: The original X image type, which is quite slow since the
+image has to be transferred from the client to the server to display it.
+@GDK_IMAGE_SHARED: A faster image type, which uses shared memory to transfer
+the image data between client and server. However this will only be available
+if client and server are on the same machine and the shared memory extension
+is supported by the server.
+@GDK_IMAGE_FASTEST: Specifies that %GDK_IMAGE_SHARED should be tried first,
+and if that fails then %GDK_IMAGE_NORMAL will be used.
+
+<!-- ##### FUNCTION gdk_image_new_bitmap ##### -->
+<para>
+</para>
+
+@visual: 
+@data: 
+@width: 
+@height: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_image_get ##### -->
+<para>
+</para>
+
+@drawable: 
+@x: 
+@y: 
+@width: 
+@height: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_image_ref ##### -->
+<para>
+
+</para>
+
+@image: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_image_unref ##### -->
+<para>
+
+</para>
+
+@image: 
+
+
+<!-- ##### MACRO gdk_image_destroy ##### -->
+<para>
+Destroys a #GdkImage, freeing any resources allocated for it.
+</para>
+
+<!-- # Unused Parameters # -->
+@image: a #GdkImage.
+
+
+<!-- ##### FUNCTION gdk_image_get_colormap ##### -->
+<para>
+
+</para>
+
+@image: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_image_set_colormap ##### -->
+<para>
+
+</para>
+
+@image: 
+@colormap: 
+
+
+<!-- ##### FUNCTION gdk_image_put_pixel ##### -->
+<para>
+Sets a pixel in a #GdkImage to a given pixel value.
+</para>
+
+@image: a #GdkImage.
+@x: the x coordinate of the pixel to set.
+@y: the y coordinate of the pixel to set.
+@pixel: the pixel value to set.
+
+
+<!-- ##### FUNCTION gdk_image_get_pixel ##### -->
+<para>
+Gets a pixel value at a specified position in a #GdkImage.
+</para>
+
+@image: a #GdkImage.
+@x: the x coordinate of the pixel to get.
+@y: the y coordinate of the pixel to get.
+@Returns: the pixel value at the given position.
+
+
