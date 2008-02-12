@@ -53,6 +53,8 @@
 #include "gtklabel.h"
 #endif	
 
+#include "gdkkeysyms.h"
+
 #include "gtkalias.h"
 
 #define BLINK_TIMEOUT 500
