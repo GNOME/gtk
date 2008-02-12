@@ -1,5 +1,9 @@
 2008-02-12  Matthias Clasen  <mclasne@redhat.com>
 
+	* NEWS: Updates
+
+2008-02-12  Matthias Clasen  <mclasne@redhat.com>
+
 	* gtk/gtkpapersize.c:
 	* gtk/gtkprintoperation.c:
 	* gtk/gtkvolumebutton.c:

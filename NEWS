@@ -1,3 +1,46 @@
+Overview of Changes from GTK+ 2.12.7 to 2.12.8
+==============================================
+
+ * Make the directfb backend build with GLib 2.15
+
+ * Improve the handling of modal windows on win32
+
+ * GtkFileChooser: 
+  - Activate bookmarks on single-click
+  - Improve some focus handling issues
+  - Don't select filename extensions in the save dialog
+
+ * Bugs fixed:
+  499835  No "object:state-changed:selected" event when [un]selecti...
+  516024  filechooser critical warning when loading thumbnail pixbufs
+  144269  GtkHPaned flickers and leaves widgets in child panels unr...
+  419737  File save dialog deletes/empties filename when changing d...
+  148828  Side Pane in File Selector requires double-click
+  455627  Keyboard input gets confused with modal windows
+  473786  Needs keyboard navigation for gtkstatusicon
+  494515  GdkPixbufLoader does not always return an image at the si...
+  499940  Focus shouldn't go to file list when selecting a bookmark
+  503569  Leak in GtkTreeViewColumn
+  505928  Right-clicking taskbar entry for minimized window causes ...
+  511111  [Win32] Modal dialogs should affect the entire applicatio...
+  511987  filter is not working
+  514621  Crash when changing model while handling GtkTreeSelection...
+  514643  Hiding a modal window still causes its parents to be blocked
+  514789  Clicking a menu in a maximized windowcauses it to restore...
+  515047  check for all return/space keys consistently
+  515667  gtk_file_chooser_get_current_folder_uri does not check fo...
+  362516  File extensions should not be selected by default  
+
+ * Updated translations:
+  Greek (el)
+  Spanish (es)
+  Galician (gl)
+  Hebrew (he)
+  Brazilian Portugese (pt_BR)
+  Slovak (sk)
+  Swedish (sv)
+
+
 Overview of Changes from GTK+ 2.12.5 to 2.12.6
 ==============================================
 
