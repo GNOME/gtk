@@ -1,3 +1,31 @@
+2008-02-12  Federico Mena Quintero  <federico@novell.com>
+
+	Merged from gtk-2-12:
+
+	Don't focus the file list when shortcuts get activated.  This
+	removes a lot of ambiguity in when the file selection should
+	change, and makes the overall code flow simpler.
+
+	This fixes http://bugzilla.gnome.org/show_bug.cgi?id=419737 -
+	file/save dialog clears the filename entry when changing
+	directories.
+
+	Also fixes http://bugzilla.gnome.org/show_bug.cgi?id=499940 -
+	focus should not go to the file list when a shortcut is activated.
+
+	* gtk/gtkfilechooserdefault.c
+	(shortcuts_activate_volume_mount_cb): Don't focus the file list
+	(shortcuts_activate_get_info_cb): Likewise.
+
+	* gtk/gtkfilechooserdefault.c (switch_to_shortcut): Don't focus
+	the file list (this was the last place where we would focus the
+	file list explicitly).  If you are in the location entry, for
+	example, you don't want Alt-Home to take you to the file list; you
+	just want the current folder to change.  Thanks to Olle Bergkvist
+	<olle.bergkvist@yahoo.se> for pointing this out in
+	http://bugzilla.gnome.org/show_bug.cgi?id=419737#c51.
+	(focus_browse_tree_view_if_possible): Removed.
+
 2008-02-12  Matthias Clasen  <mclasen@redhat.com>
 
 	Skip exensions when selecting filenames in the save-as dialog.
