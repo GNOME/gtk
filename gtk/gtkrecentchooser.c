@@ -177,7 +177,7 @@ gtk_recent_chooser_class_init (gpointer g_iface)
   				       g_param_spec_boolean ("show-not-found",
   				       			     P_("Show Not Found"),
   				       			     P_("Whether the items pointing to unavailable resources should be displayed"),
-  				       			     FALSE,
+  				       			     TRUE,
   				       			     GTK_PARAM_READWRITE));
   /**
    * GtkRecentChooser:select-multiple:

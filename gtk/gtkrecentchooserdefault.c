@@ -345,7 +345,7 @@ _gtk_recent_chooser_default_init (GtkRecentChooserDefault *impl)
   impl->show_icons = TRUE;
   impl->show_private = FALSE;
   impl->show_not_found = TRUE;
-  impl->show_tips = TRUE;
+  impl->show_tips = FALSE;
   impl->select_multiple = FALSE;
   impl->local_only = TRUE;
   

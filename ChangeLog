@@ -1,3 +1,14 @@
+2008-02-12  Emmanuele Bassi  <ebassi@gnome.org>
+
+	* gtk/gtkrecentchooser.c:
+	(gtk_recent_chooser_class_init): Set the default value of the
+	:show-not-found property to TRUE, as every implementation sets
+	it to TRUE already.
+
+	* gtk/gtkrecentchooserdefault.c:
+	(_gtk_recent_chooser_default_init): Sync show_tips to the
+	default value of the :show-tips property.
+
 2008-02-12  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtkclipboard-quartz.c:
