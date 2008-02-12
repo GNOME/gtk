@@ -3,13 +3,14 @@
 # This file is distributed under the same license as the PACKAGE package.
 #
 # Danishka Navin <snavin@redhat.com>, 2007.
+# Danishka Navin <danishka@gmail.com>, 2008.
 msgid ""
 msgstr ""
 "Project-Id-Version: si\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2007-05-31 03:35+0100\n"
-"PO-Revision-Date: 2007-08-16 16:02+0530\n"
-"Last-Translator: Danishka Navin <snavin@redhat.com>\n"
+"PO-Revision-Date: 2008-02-12 15:03+0530\n"
+"Last-Translator: Danishka Navin <danishka@gmail.com>\n"
 "Language-Team: Sinhala <en@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -137,15 +138,15 @@ msgstr "වැඩ සටහනේ වෙළුම"
 
 #: ../gtk/gtkaboutdialog.c:227
 msgid "Copyright string"
-msgstr ""
+msgstr "කතු හිමිකම"
 
 #: ../gtk/gtkaboutdialog.c:228
 msgid "Copyright information for the program"
-msgstr ""
+msgstr "වැඩසටහන පිළිබඳ කතු හිමිකම් වැකිය"
 
 #: ../gtk/gtkaboutdialog.c:245
 msgid "Comments string"
-msgstr ""
+msgstr "සටහන් වැකිය"
 
 #: ../gtk/gtkaboutdialog.c:246
 msgid "Comments about the program"
@@ -167,7 +168,7 @@ msgstr "වියුණු අඩවි ලේබලය"
 msgid ""
 "The label for the link to the website of the program. If this is not set, it "
 "defaults to the URL"
-msgstr ""
+msgstr "වැඩසටහනේ වියුණු අඩවි පුරුක සඳහා ලේබලය. සකසා නොමැතිවිට URL එක පෙරනිමිය වේ"
 
 #: ../gtk/gtkaboutdialog.c:314
 msgid "Authors"
@@ -306,7 +307,7 @@ msgstr ""
 msgid ""
 "Whether the toolbar item is visible when the toolbar is in a horizontal "
 "orientation."
-msgstr ""
+msgstr "මෙවලම් තීරුව තිරස් පිහිටීමක ඇතිවිට මෙවලම් අයිතම වල දෘෂ්‍ය බව"
 
 #: ../gtk/gtkaction.c:272
 msgid "Visible when overflown"
@@ -316,17 +317,17 @@ msgstr ""
 msgid ""
 "When TRUE, toolitem proxies for this action are represented in the toolbar "
 "overflow menu."
-msgstr ""
+msgstr "සත්‍ය නම්, මෙම ක්‍රියාවට අදාල මෙවලම් අයිතම proxies මෙවලම් තීරුවේ, overflow මෙනුවේ නිරූපණය වේ"
 
 #: ../gtk/gtkaction.c:280 ../gtk/gtktoolitem.c:137
 msgid "Visible when vertical"
-msgstr ""
+msgstr "සිරස් පිහිටීමේදී දෘෂ්‍යයි"
 
 #: ../gtk/gtkaction.c:281 ../gtk/gtktoolitem.c:138
 msgid ""
 "Whether the toolbar item is visible when the toolbar is in a vertical "
 "orientation."
-msgstr ""
+msgstr "මෙවලම් තීරුව සිරස් පිහිටීමක ඇතිවිට මෙවලම් තීරු අයිතමය දෘෂ්‍යද යන වග"
 
 #: ../gtk/gtkaction.c:288 ../gtk/gtktoolitem.c:144
 msgid "Is important"
@@ -337,6 +338,8 @@ msgid ""
 "Whether the action is considered important. When TRUE, toolitem proxies for "
 "this action show text in GTK_TOOLBAR_BOTH_HORIZ mode."
 msgstr ""
+"ක්‍රියාව වැදගත්ද යන්න. සත්‍ය නම්, මෙවලම් අයිතමයේ proxy එක,"
+" මෙම ක්‍රියාව අකුරු දිස්වන්නේ GTK_TOOLBAR_BOTH_HORIZ ආකාරයටයි යන්න වේ"
 
 #: ../gtk/gtkaction.c:297
 msgid "Hide if empty"
@@ -344,7 +347,7 @@ msgstr "හිස් නම් සඟවන්න"
 
 #: ../gtk/gtkaction.c:298
 msgid "When TRUE, empty menu proxies for this action are hidden."
-msgstr ""
+msgstr "සත්‍ය විට, මෙම ක්‍රියාව සඳහා සකසා නොමැති proxy  "
 
 #: ../gtk/gtkaction.c:304 ../gtk/gtkactiongroup.c:144
 #: ../gtk/gtkcellrenderer.c:193 ../gtk/gtkwidget.c:480
@@ -353,7 +356,7 @@ msgstr "සංවේදී"
 
 #: ../gtk/gtkaction.c:305
 msgid "Whether the action is enabled."
-msgstr ""
+msgstr "මෙම ක්‍රියාව සක්‍රීයද යන්න"
 
 #: ../gtk/gtkaction.c:311 ../gtk/gtkactiongroup.c:151
 #: ../gtk/gtkstatusicon.c:243 ../gtk/gtktreeviewcolumn.c:186
@@ -363,7 +366,7 @@ msgstr "දෘශ්‍ය"
 
 #: ../gtk/gtkaction.c:312
 msgid "Whether the action is visible."
-msgstr ""
+msgstr "මෙම ක්‍රියාව දෘෂ්‍යද යන්න"
 
 #: ../gtk/gtkaction.c:318
 msgid "Action Group"
@@ -444,7 +447,7 @@ msgstr "තිරස් පෙළ ගැස්ම"
 msgid ""
 "Horizontal position of child in available space. 0.0 is left aligned, 1.0 is "
 "right aligned"
-msgstr ""
+msgstr "ලැබී ඇති ඉඩකඩ තුල child හි තිරස් පිහිටුම. 0.0 යනු වමෙන් එකෙලි කිරීමයි, 1.0 යනු දකුණින් එකෙලි කිරීමයි."
 
 #: ../gtk/gtkalignment.c:102
 msgid "Vertical alignment"
@@ -454,7 +457,7 @@ msgstr "සිරස් පෙළ ගැස්ම"
 msgid ""
 "Vertical position of child in available space. 0.0 is top aligned, 1.0 is "
 "bottom aligned"
-msgstr ""
+msgstr "ලැබී ඇති ඉඩකඩ තුල child හි සිරස් පිහිටුම. 0.0 යනු ඉහලින් එකෙලි කිරීමයි, 1.0 යනු පහලින් එකෙලි කිරීමයි."
 
 #: ../gtk/gtkalignment.c:111
 msgid "Horizontal scale"
@@ -465,6 +468,8 @@ msgid ""
 "If available horizontal space is bigger than needed for the child, how much "
 "of it to use for the child. 0.0 means none, 1.0 means all"
 msgstr ""
+"ලැබී ඇති තිරස් ඉඩකඩ child සඳහා අවශ්‍ය ප්‍රමාණයට වඩා වැඩිනම්,"
+"ඉඩකඩෙන් කෙතරම් ප්‍රමාණයක් child සඳහා යොදාගනීද? 0.0 යනු කිසිවක් නැත, 1.0 යනු සියල්ලමයි."
 
 #: ../gtk/gtkalignment.c:120
 msgid "Vertical scale"
@@ -475,6 +480,8 @@ msgid ""
 "If available vertical space is bigger than needed for the child, how much of "
 "it to use for the child. 0.0 means none, 1.0 means all"
 msgstr ""
+"ලැබී ඇති සිරස් ඉඩකඩ child සඳහා අවශ්‍ය ප්‍රමාණයට වඩා වැඩිනම්,"
+"ඉඩකඩෙන් කෙතරම් ප්‍රමාණයක් child සඳහා යොදාගනීද? 0.0 යනු කිසිවක් නැත, 1.0 යනු සියල්ලමයි."
 
 #: ../gtk/gtkalignment.c:138
 msgid "Top Padding"
@@ -482,7 +489,7 @@ msgstr "ඉහළ පිරවුම"
 
 #: ../gtk/gtkalignment.c:139
 msgid "The padding to insert at the top of the widget."
-msgstr ""
+msgstr "ආයිත්තමට ඉහලින් ඇතුල් කරන පිරවුම"
 
 #: ../gtk/gtkalignment.c:155
 msgid "Bottom Padding"
@@ -490,7 +497,7 @@ msgstr "පහළ පිරවුම"
 
 #: ../gtk/gtkalignment.c:156
 msgid "The padding to insert at the bottom of the widget."
-msgstr ""
+msgstr "ආයිත්තමට පහලින් ඇතුල් කරන පිරවුම"
 
 #: ../gtk/gtkalignment.c:172
 msgid "Left Padding"
@@ -498,7 +505,7 @@ msgstr "වම් පිරවුම"
 
 #: ../gtk/gtkalignment.c:173
 msgid "The padding to insert at the left of the widget."
-msgstr ""
+msgstr "ආයිත්තමට වමෙන් ඇතුල් කරන පිරවුම"
 
 #: ../gtk/gtkalignment.c:189
 msgid "Right Padding"
@@ -506,31 +513,31 @@ msgstr "දකුණු පිරවුම"
 
 #: ../gtk/gtkalignment.c:190
 msgid "The padding to insert at the right of the widget."
-msgstr ""
+msgstr "ආයිත්තමට දකුණින් ඇතුල් කරන පිරවුම"
 
 #: ../gtk/gtkarrow.c:76
 msgid "Arrow direction"
-msgstr ""
+msgstr "ඊතලයේ දිශාව"
 
 #: ../gtk/gtkarrow.c:77
 msgid "The direction the arrow should point"
-msgstr ""
+msgstr "ඊතලය දිස්විය යුතු දිශාව"
 
 #: ../gtk/gtkarrow.c:84
 msgid "Arrow shadow"
-msgstr ""
+msgstr "ඊතලයේ සෙවනැල්ල"
 
 #: ../gtk/gtkarrow.c:85
 msgid "Appearance of the shadow surrounding the arrow"
-msgstr ""
+msgstr "ඊතලය වටා ඇති සෙවනැල්ලෙහි පෙනුම"
 
 #: ../gtk/gtkarrow.c:91
 msgid "Arrow Scaling"
-msgstr ""
+msgstr "ඊතලයේ විශාලනය"
 
 #: ../gtk/gtkarrow.c:92
 msgid "Amount of space used up by arrow"
-msgstr ""
+msgstr "ඊතලය භාවිතා කරන ඉඩකඩ"
 
 #: ../gtk/gtkaspectframe.c:79
 msgid "Horizontal Alignment"
@@ -554,15 +561,15 @@ msgstr "අනුපාතය"
 
 #: ../gtk/gtkaspectframe.c:94
 msgid "Aspect ratio if obey_child is FALSE"
-msgstr ""
+msgstr "obey_child FALSE විට දර්ශන අනුපාතය"
 
 #: ../gtk/gtkaspectframe.c:100
 msgid "Obey child"
-msgstr ""
+msgstr "child අනුව යන්න"
 
 #: ../gtk/gtkaspectframe.c:101
 msgid "Force aspect ratio to match that of the frame's child"
-msgstr ""
+msgstr "දර්ශන අනුපාතය, රාමුවේ child හි දර්ශන අනුපාතයට සම කරන්න"
 
 #: ../gtk/gtkassistant.c:261
 msgid "Header Padding"
@@ -618,11 +625,11 @@ msgstr "සම්පූර්ණ පිටුව"
 
 #: ../gtk/gtkassistant.c:355
 msgid "Whether all required fields on the page have been filled out"
-msgstr ""
+msgstr "පිටුවේ අවශ්‍ය සියළුම ක්‍ෂේත්‍ර පුරවා ඇතිද යන්න"
 
 #: ../gtk/gtkbbox.c:92
 msgid "Minimum child width"
-msgstr ""
+msgstr "child හි අවම පළල"
 
 #: ../gtk/gtkbbox.c:93
 msgid "Minimum width of buttons inside the box"
@@ -630,7 +637,7 @@ msgstr "කොටුව තුළ බොත්තම් වල අවම පළ�
 
 #: ../gtk/gtkbbox.c:101
 msgid "Minimum child height"
-msgstr ""
+msgstr "child හි අවම උස"
 
 #: ../gtk/gtkbbox.c:102
 msgid "Minimum height of buttons inside the box"
@@ -638,19 +645,19 @@ msgstr "කොටුව තුළ බොත්තම් වල අවම උස"
 
 #: ../gtk/gtkbbox.c:110
 msgid "Child internal width padding"
-msgstr ""
+msgstr "child හි ඇතුළු පළල සඳහා පිරවුම"
 
 #: ../gtk/gtkbbox.c:111
 msgid "Amount to increase child's size on either side"
-msgstr ""
+msgstr "child හි විශාලත්වය එහි දෙපැත්තෙන්ම වැඩි කල යුතු ප්‍රමාණය"
 
 #: ../gtk/gtkbbox.c:119
 msgid "Child internal height padding"
-msgstr ""
+msgstr "child හි ඇතුළු උස සඳහා පිරවුම"
 
 #: ../gtk/gtkbbox.c:120
 msgid "Amount to increase child's size on the top and bottom"
-msgstr ""
+msgstr "child හි විශාලත්වය එහි ඉහලින් හා පහලින් වැඩි කල යුතු ප්‍රමාණය"
 
 #: ../gtk/gtkbbox.c:128
 msgid "Layout style"
@@ -661,6 +668,8 @@ msgid ""
 "How to layout the buttons in the box. Possible values are default, spread, "
 "edge, start and end"
 msgstr ""
+"පෙට්ටිය තුල බොත්තම් පිහිටුවිය යුතු ආකාරය. default, spread, "
+"edge, start සහ end යන අගයන් යොදාගත හැකියි "
 
 #: ../gtk/gtkbbox.c:137
 msgid "Secondary"
@@ -670,7 +679,7 @@ msgstr "ද්විතීය"
 msgid ""
 "If TRUE, the child appears in a secondary group of children, suitable for, e."
 "g., help buttons"
-msgstr ""
+msgstr "සත්‍ය නම්, child දිස්වන්නේ ද්විතීයික child කාණ්ඩයකයි. උදව් ගෙනදෙන බොත්තම් සඳහා යෝග්‍යයයි."
 
 #: ../gtk/gtkbox.c:98 ../gtk/gtkexpander.c:209 ../gtk/gtkiconview.c:643
 #: ../gtk/gtktreeviewcolumn.c:211
@@ -679,7 +688,7 @@ msgstr "ඉඩ තැබීම"
 
 #: ../gtk/gtkbox.c:99
 msgid "The amount of space between children"
-msgstr ""
+msgstr "child අතර ඇති අවකාශය"
 
 #: ../gtk/gtkbox.c:108 ../gtk/gtknotebook.c:602 ../gtk/gtktable.c:165
 #: ../gtk/gtktoolbar.c:572
@@ -688,7 +697,7 @@ msgstr "සමජාතීය"
 
 #: ../gtk/gtkbox.c:109
 msgid "Whether the children should all be the same size"
-msgstr ""
+msgstr "සියළුම child වස්තූන් එකම විශාලත්වය ගත යුතුද යන්න"
 
 #: ../gtk/gtkbox.c:116 ../gtk/gtkpreview.c:105 ../gtk/gtktoolbar.c:564
 #: ../gtk/gtktreeviewcolumn.c:267
@@ -697,7 +706,7 @@ msgstr "ව්‍යප්තිය"
 
 #: ../gtk/gtkbox.c:117
 msgid "Whether the child should receive extra space when the parent grows"
-msgstr ""
+msgstr "parent හි විශාලත්වය වැඩි වන විට child සඳහා අමතර ඉඩකඩ ලබාදෙනවාද යන්න"
 
 #: ../gtk/gtkbox.c:123
 msgid "Fill"
@@ -708,6 +717,8 @@ msgid ""
 "Whether extra space given to the child should be allocated to the child or "
 "used as padding"
 msgstr ""
+"child සඳහා ලබා දුන් අමතර ඉඩකඩ child සඳහාම යොදාගනෙනවාද? නැතහොත් පිරවුමක් ලෙස"
+" යොදාගැනෙනවාද යන්න"
 
 #: ../gtk/gtkbox.c:130
 msgid "Padding"
@@ -715,7 +726,7 @@ msgstr "පිරවුම"
 
 #: ../gtk/gtkbox.c:131
 msgid "Extra space to put between the child and its neighbors, in pixels"
-msgstr ""
+msgstr "child හා එහි අසල්වැසියන් අතර තබන අමතර ඉඩකඩ, pixels වලින්"
 
 #: ../gtk/gtkbox.c:137
 msgid "Pack type"
@@ -734,13 +745,13 @@ msgstr "පිහිටීම"
 
 #: ../gtk/gtkbox.c:145 ../gtk/gtknotebook.c:640
 msgid "The index of the child in the parent"
-msgstr ""
+msgstr "parent හි child සඳහා වූ අනුක්‍රමික අංකය"
 
 #: ../gtk/gtkbutton.c:200
 msgid ""
 "Text of the label widget inside the button, if the button contains a label "
 "widget"
-msgstr ""
+msgstr "බොත්තම තුල ලෙබල් ඇයිත්තමක් ඇත්නම්, බොත්තම තුල ඇති ලේබල් ආයිත්තමේ පදවැල"
 
 #: ../gtk/gtkbutton.c:207 ../gtk/gtkexpander.c:193 ../gtk/gtklabel.c:318
 #: ../gtk/gtktoolbutton.c:187
@@ -764,35 +775,35 @@ msgstr ""
 #: ../gtk/gtkbutton.c:223 ../gtk/gtkcombobox.c:738
 #: ../gtk/gtkfilechooserbutton.c:401
 msgid "Focus on click"
-msgstr ""
+msgstr "ක්ලික් කල විට අවධානය ලබා දෙන්න"
 
 #: ../gtk/gtkbutton.c:224 ../gtk/gtkfilechooserbutton.c:402
 msgid "Whether the button grabs focus when it is clicked with the mouse"
-msgstr ""
+msgstr "බොත්තම මත මූසිකය එබූ විට එය තමාට අවධානය ලබා ගන්නවාද යන්න"
 
 #: ../gtk/gtkbutton.c:231
 msgid "Border relief"
-msgstr ""
+msgstr "මායිම් සහනය"
 
 #: ../gtk/gtkbutton.c:232
 msgid "The border relief style"
-msgstr ""
+msgstr "මායිම් සහනයේ ආකාරය"
 
 #: ../gtk/gtkbutton.c:249
 msgid "Horizontal alignment for child"
-msgstr ""
+msgstr "child සඳහා වූ තිරස් එකෙලිය"
 
 #: ../gtk/gtkbutton.c:268
 msgid "Vertical alignment for child"
-msgstr ""
+msgstr "child සඳහා වූ සිරස් එකෙලිය"
 
 #: ../gtk/gtkbutton.c:285 ../gtk/gtkimagemenuitem.c:101
 msgid "Image widget"
-msgstr ""
+msgstr "චිත්‍රක ආයිත්තම"
 
 #: ../gtk/gtkbutton.c:286
 msgid "Child widget to appear next to the button text"
-msgstr ""
+msgstr "බොත්තමේ පදවැල අසලින් දිස්විය යුතු child ආයිත්තම"
 
 #: ../gtk/gtkbutton.c:300
 msgid "Image position"
@@ -800,51 +811,51 @@ msgstr "පිළිඹිබුවේ පිහිටීම"
 
 #: ../gtk/gtkbutton.c:301
 msgid "The position of the image relative to the text"
-msgstr ""
+msgstr "පදවැලට සාපේක්ෂව රූපයේ පිහිටුම"
 
 #: ../gtk/gtkbutton.c:410
 msgid "Default Spacing"
-msgstr ""
+msgstr "පෙරනිමි ඉඩකඩ"
 
 #: ../gtk/gtkbutton.c:411
 msgid "Extra space to add for CAN_DEFAULT buttons"
-msgstr ""
+msgstr "CAN_DEFAULT බොත්තම් සඳහා එක්කල යුතු අමතර ඉඩකඩ"
 
 #: ../gtk/gtkbutton.c:417
 msgid "Default Outside Spacing"
-msgstr ""
+msgstr "පෙරනිමියෙන් ඇති බාහිර ඉඩකඩ"
 
 #: ../gtk/gtkbutton.c:418
 msgid ""
 "Extra space to add for CAN_DEFAULT buttons that is always drawn outside the "
 "border"
-msgstr ""
+msgstr "සැමවිටම මායිමට පිටතින් ඇඳෙන CAN_DEFAULT බොත්තම් සඳහා එක්කල යුතු අමතර ඉඩක"
 
 #: ../gtk/gtkbutton.c:423
 msgid "Child X Displacement"
-msgstr ""
+msgstr "child හි X-විස්ථාපනය"
 
 #: ../gtk/gtkbutton.c:424
 msgid "How far in the x direction to move the child when the button is depressed"
-msgstr ""
+msgstr "බොත්තම එබූ විට, x-දිශාව ඔස්සේ, child චලනය විය යුතු දුර"
 
 #: ../gtk/gtkbutton.c:431
 msgid "Child Y Displacement"
-msgstr ""
+msgstr "child හි Y-විස්ථාපනය"
 
 #: ../gtk/gtkbutton.c:432
 msgid "How far in the y direction to move the child when the button is depressed"
-msgstr ""
+msgstr "බොත්තම එබූ විට, y-දිශාව ඔස්සේ, child චලනය විය යුතු දුර"
 
 #: ../gtk/gtkbutton.c:448
 msgid "Displace focus"
-msgstr ""
+msgstr "විස්ථාපිත අවධානය"
 
 #: ../gtk/gtkbutton.c:449
 msgid ""
 "Whether the child_displacement_x/_y properties should also affect the focus "
 "rectangle"
-msgstr ""
+msgstr "child_displacement_x/_y පරාමිතීන් අවධාන-සෘජුකෝණාස්‍රයටත් බලපෑම් ඇතිකරයිද යන්න"
 
 #: ../gtk/gtkbutton.c:462 ../gtk/gtkentry.c:530 ../gtk/gtkentry.c:890
 msgid "Inner Border"
@@ -852,19 +863,19 @@ msgstr "ඇතුළත බොඩරය"
 
 #: ../gtk/gtkbutton.c:463
 msgid "Border between button edges and child."
-msgstr ""
+msgstr "බොත්තමේ පැති සහ child අතර මායිම"
 
 #: ../gtk/gtkbutton.c:476
 msgid "Image spacing"
-msgstr ""
+msgstr "රූප පරතරය"
 
 #: ../gtk/gtkbutton.c:477
 msgid "Spacing in pixels between the image and label"
-msgstr ""
+msgstr "රූපය සහ ලේබලය අතර පරතරය pixel වලින්"
 
 #: ../gtk/gtkbutton.c:485
 msgid "Show button images"
-msgstr ""
+msgstr "බොත්තමේ රූප පෙන්වන්න"
 
 #: ../gtk/gtkbutton.c:486
 msgid "Whether stock icons should be shown in buttons"
@@ -1518,7 +1529,7 @@ msgstr ""
 
 #: ../gtk/gtkcellrenderertext.c:548 ../gtk/gtktexttag.c:656
 msgid "Underline set"
-msgstr ""
+msgstr "යටිඉරි එකතුව"
 
 #: ../gtk/gtkcellrenderertext.c:549 ../gtk/gtktexttag.c:657
 msgid "Whether this tag affects underlining"
@@ -1600,12 +1611,12 @@ msgstr ""
 #: ../gtk/gtkcheckbutton.c:69 ../gtk/gtkcheckmenuitem.c:110
 #: ../gtk/gtkoptionmenu.c:168
 msgid "Indicator Size"
-msgstr ""
+msgstr "දර්ශකයේ ප්‍රමාණය"
 
 #: ../gtk/gtkcheckbutton.c:77 ../gtk/gtkexpander.c:235
 #: ../gtk/gtkoptionmenu.c:174
 msgid "Indicator Spacing"
-msgstr ""
+msgstr "දර්ශකයේ පරතරය"
 
 #: ../gtk/gtkcheckbutton.c:78
 msgid "Spacing around check or radio indicator"
@@ -2218,7 +2229,7 @@ msgstr ""
 
 #: ../gtk/gtkfilechooser.c:216
 msgid "Local Only"
-msgstr ""
+msgstr "පෙදෙසි පමණි"
 
 #: ../gtk/gtkfilechooser.c:217
 msgid "Whether the selected file(s) should be limited to local file: URLs"
@@ -2637,7 +2648,7 @@ msgstr ""
 
 #: ../gtk/gtkimage.c:187 ../gtk/gtktoolbar.c:539
 msgid "Icon size"
-msgstr ""
+msgstr "නිරූපකයේ ප්‍රමාණය"
 
 #: ../gtk/gtkimage.c:188
 msgid "Symbolic size to use for stock icon, icon set or named icon"
@@ -2653,7 +2664,7 @@ msgstr ""
 
 #: ../gtk/gtkimage.c:213
 msgid "Animation"
-msgstr ""
+msgstr "සජීවිකරණය"
 
 #: ../gtk/gtkimage.c:214
 msgid "GdkPixbufAnimation to display"
@@ -2972,7 +2983,7 @@ msgstr ""
 
 #: ../gtk/gtkmenutoolbutton.c:236 ../gtk/gtkoptionmenu.c:161
 msgid "Menu"
-msgstr ""
+msgstr "මෙනුව"
 
 #: ../gtk/gtkmenutoolbutton.c:237
 msgid "The dropdown menu"
@@ -3072,7 +3083,7 @@ msgstr "පිටුව"
 
 #: ../gtk/gtknotebook.c:531
 msgid "The index of the current page"
-msgstr ""
+msgstr "දැන් පවත්නා පිටුවෙහි සුචිය"
 
 #: ../gtk/gtknotebook.c:539
 msgid "Tab Position"
@@ -3319,7 +3330,7 @@ msgstr ""
 
 #: ../gtk/gtkpaned.c:288
 msgid "Resize"
-msgstr ""
+msgstr "ප්‍රති ප්‍රමාණය"
 
 #: ../gtk/gtkpaned.c:289
 msgid "If TRUE, the child expands and shrinks along with the paned widget"
@@ -3327,7 +3338,7 @@ msgstr ""
 
 #: ../gtk/gtkpaned.c:304
 msgid "Shrink"
-msgstr ""
+msgstr "හැකිලෙනවා "
 
 #: ../gtk/gtkpaned.c:305
 msgid "If TRUE, the child can be made smaller than its requisition"
