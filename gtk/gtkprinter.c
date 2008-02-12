@@ -292,7 +292,7 @@ gtk_printer_get_property (GObject    *object,
       if (priv->name)
 	g_value_set_string (value, priv->name);
       else
-	g_value_set_string (value, "");
+	g_value_set_static_string (value, "");
       break;
     case PROP_BACKEND:
       g_value_set_object (value, priv->backend);
@@ -301,19 +301,19 @@ gtk_printer_get_property (GObject    *object,
       if (priv->state_message)
 	g_value_set_string (value, priv->state_message);
       else
-	g_value_set_string (value, "");
+	g_value_set_static_string (value, "");
       break;
     case PROP_LOCATION:
       if (priv->location)
 	g_value_set_string (value, priv->location);
       else
-	g_value_set_string (value, "");
+	g_value_set_static_string (value, "");
       break;
     case PROP_ICON_NAME:
       if (priv->icon_name)
 	g_value_set_string (value, priv->icon_name);
       else
-	g_value_set_string (value, "");
+	g_value_set_static_string (value, "");
       break;
     case PROP_JOB_COUNT:
       g_value_set_int (value, priv->job_count);

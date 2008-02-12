@@ -1,5 +1,12 @@
 2008-02-12  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkfilesystemmodel.c:
+	* gtk/gtkprinter.c:
+	* gtk/gtkwidget.c: Use g_value_set_static_string() where 
+	appropriate.  (#515042, Christian Persch)
+
+2008-02-12  Matthias Clasen  <mclasen@redhat.com>
+
 	* tests/prop-editor.c: Fix a memory leak (#515039, Christian Persch)
 	
 2008-02-12  Matthias Clasen  <mclasen@redhat.com>

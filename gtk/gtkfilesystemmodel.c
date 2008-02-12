@@ -376,7 +376,7 @@ gtk_file_system_model_get_value (GtkTreeModel *tree_model,
 	g_value_init (value, G_TYPE_STRING);
 
 	if (model->has_editable && node == model->roots)
-	  g_value_set_string (value, "");
+	  g_value_set_static_string (value, "");
 	else
 	  {
 	    const GtkFileInfo *info = file_model_node_get_info (model, node);

@@ -2478,7 +2478,7 @@ gtk_widget_get_property (GObject         *object,
       if (widget->name)
 	g_value_set_string (value, widget->name);
       else
-	g_value_set_string (value, "");
+	g_value_set_static_string (value, "");
       break;
     case PROP_PARENT:
       if (widget->parent)
