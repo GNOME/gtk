@@ -1,3 +1,15 @@
+2008-02-11  Matthias Clasen  <mclasen@redhat.com>
+
+	Merged from trunk:
+
+	Support keynav in status icons.  (#473786, Li Yuan)
+
+	* gtk/gtkstatusicon.c: Handle keynav, make the tray icon
+	focusable.
+
+	* gtk/gtktrayicon-x11.c: Draw a focus rectangle when
+	focused.
+
 2008-02-11  Kristian Rietveld  <kris@imendio.com>
 
 	Merge from trunk:
