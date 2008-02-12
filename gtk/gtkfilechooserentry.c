@@ -75,6 +75,7 @@ static void     gtk_file_chooser_entry_iface_init     (GtkEditableClass *iface);
 
 static void     gtk_file_chooser_entry_finalize       (GObject          *object);
 static void     gtk_file_chooser_entry_dispose        (GObject          *object);
+static void     gtk_file_chooser_entry_grab_focus     (GtkWidget        *widget);
 static gboolean gtk_file_chooser_entry_focus          (GtkWidget        *widget,
 						       GtkDirectionType  direction);
 static void     gtk_file_chooser_entry_activate       (GtkEntry         *entry);
@@ -120,6 +121,7 @@ _gtk_file_chooser_entry_class_init (GtkFileChooserEntryClass *class)
   gobject_class->finalize = gtk_file_chooser_entry_finalize;
   gobject_class->dispose = gtk_file_chooser_entry_dispose;
 
+  widget_class->grab_focus = gtk_file_chooser_entry_grab_focus;
   widget_class->focus = gtk_file_chooser_entry_focus;
 
   entry_class->activate = gtk_file_chooser_entry_activate;
@@ -696,6 +698,13 @@ gtk_file_chooser_entry_do_insert_text (GtkEditable *editable,
     add_completion_idle (GTK_FILE_CHOOSER_ENTRY (editable));
 }
 
+static void
+gtk_file_chooser_entry_grab_focus (GtkWidget *widget)
+{
+  GTK_WIDGET_CLASS (_gtk_file_chooser_entry_parent_class)->grab_focus (widget);
+  _gtk_file_chooser_entry_select_filename (GTK_FILE_CHOOSER_ENTRY (widget));
+}
+
 static gboolean
 gtk_file_chooser_entry_focus (GtkWidget        *widget,
 			      GtkDirectionType  direction)
@@ -929,7 +938,7 @@ _gtk_file_chooser_entry_set_base_folder (GtkFileChooserEntry *chooser_entry,
   chooser_entry->base_folder = gtk_file_path_copy (path);
 
   gtk_file_chooser_entry_changed (GTK_EDITABLE (chooser_entry));
-  gtk_editable_select_region (GTK_EDITABLE (chooser_entry), 0, -1);
+  _gtk_file_chooser_entry_select_filename (chooser_entry);
 }
 
 /**
@@ -1074,3 +1083,29 @@ _gtk_file_chooser_entry_get_is_folder (GtkFileChooserEntry *chooser_entry,
 
   return retval;
 }
+
+
+/*
+ * _gtk_file_chooser_entry_select_filename:
+ * @chooser_entry: a #GtkFileChooserEntry
+ *
+ * Selects the filename (without the extension) for user edition.
+ */
+void
+_gtk_file_chooser_entry_select_filename (GtkFileChooserEntry *chooser_entry)
+{
+  const gchar *str, *ext;
+  glong len = -1;
+
+  if (chooser_entry->action == GTK_FILE_CHOOSER_ACTION_SAVE)
+    {
+      str = gtk_entry_get_text (GTK_ENTRY (chooser_entry));
+      ext = g_strrstr (str, ".");
+
+      if (ext)
+       len = g_utf8_pointer_to_offset (str, ext);
+    }
+
+  gtk_editable_select_region (GTK_EDITABLE (chooser_entry), 0, (gint) len);
+}
+

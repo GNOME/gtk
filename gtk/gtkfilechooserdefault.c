@@ -6860,8 +6860,12 @@ update_chooser_entry (GtkFileChooserDefault *impl)
 	    change_entry = TRUE;                                /* ... unless we are in one of the folder modes */
 
           if (change_entry)
-	    _gtk_file_chooser_entry_set_file_part (GTK_FILE_CHOOSER_ENTRY (impl->location_entry),
-                                                   impl->browse_files_last_selected_name);
+            {
+              _gtk_file_chooser_entry_set_file_part (GTK_FILE_CHOOSER_ENTRY (impl->location_entry), impl->browse_files_last_selected_name);
+
+              if (impl->action == GTK_FILE_CHOOSER_ACTION_SAVE)
+                _gtk_file_chooser_entry_select_filename (GTK_FILE_CHOOSER_ENTRY (impl->location_entry));
+            }
 
           return;
         }
