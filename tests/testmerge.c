@@ -428,6 +428,8 @@ create_tree_view (GtkUIManager *merge)
 	  gtk_list_store_append (store, &iter);
 	  gtk_list_store_set (store, &iter, 0, l->data, -1);
 	}
+
+      g_list_free (actions);
     }
   
   tree_view = gtk_tree_view_new_with_model (GTK_TREE_MODEL (store));

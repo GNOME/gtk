@@ -1,5 +1,9 @@
 2008-02-12  Matthias Clasen  <mclasen@redhat.com>
 
+	* tests/testmerge.c: Fix a memory leak (#515038, Christian Persch)
+
+2008-02-12  Matthias Clasen  <mclasen@redhat.com>
+
 	* gtk/gtkfilechooserdefault.c (recent_model_sort_drag_data_get):
 	(recent_model_sort_drag_data_get):
 	(search_model_sort_drag_data_get):
