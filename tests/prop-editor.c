@@ -919,8 +919,10 @@ properties_from_type (GObject     *object,
       specs = g_object_class_list_properties (class, &n_specs);
     }
         
-  if (n_specs == 0)
+  if (n_specs == 0) {
+    g_free (specs);
     return NULL;
+  }
   
   table = gtk_table_new (n_specs, 2, FALSE);
   gtk_table_set_col_spacing (GTK_TABLE (table), 0, 10);
