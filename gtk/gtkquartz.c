@@ -156,7 +156,7 @@ _gtk_quartz_get_selection_data_from_pasteboard (NSPasteboard *pasteboard,
 {
   GtkSelectionData *selection_data = NULL;
 
-  selection_data = g_new0 (GtkSelectionData, 1);
+  selection_data = g_slice_new0 (GtkSelectionData);
   selection_data->selection = selection;
   selection_data->target = target;
 

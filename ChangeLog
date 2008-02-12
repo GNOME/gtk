@@ -1,3 +1,10 @@
+2008-02-12  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtkclipboard-quartz.c:
+	* gtkquartz.c:
+	* gtkselection.c: Use GSlice for GtkSelectionData.  (#515060,
+	Christian Persch)
+
 2008-02-12  Kristian Rietveld  <kris@imendio.com>
 
 	* gtk/gtktreeview.c (gtk_tree_view_real_select_cursor_row),

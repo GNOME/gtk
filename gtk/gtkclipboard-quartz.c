@@ -858,7 +858,7 @@ gtk_clipboard_wait_for_contents (GtkClipboard *clipboard,
       count = [types count];
       atom_list = _gtk_quartz_pasteboard_types_to_atom_list (types);
       
-      selection_data = g_new (GtkSelectionData, 1);
+      selection_data = g_slice_new (GtkSelectionData);
       selection_data->selection = clipboard->selection;
       selection_data->target = target;
       selection_data->type = GDK_SELECTION_TYPE_ATOM;
