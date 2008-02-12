@@ -1,3 +1,10 @@
+2008-02-12  Kristian Rietveld  <kris@imendio.com>
+
+	* gtk/gtktreeview.c (gtk_tree_view_real_select_cursor_row),
+	(gtk_tree_view_real_toggle_cursor_row): guard against people
+	deleting the row in question in the selection-changed callback.
+	(#514621, Andreas Koehler).
+
 2008-02-12  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/*.c: Unify the handling of various "Enter" keysyms

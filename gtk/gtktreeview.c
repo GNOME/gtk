@@ -10081,6 +10081,8 @@ static gboolean
 gtk_tree_view_real_select_cursor_row (GtkTreeView *tree_view,
 				      gboolean     start_editing)
 {
+  GtkRBTree *new_tree = NULL;
+  GtkRBNode *new_node = NULL;
   GtkRBTree *cursor_tree = NULL;
   GtkRBNode *cursor_node = NULL;
   GtkTreePath *cursor_path = NULL;
@@ -10126,6 +10128,15 @@ gtk_tree_view_real_select_cursor_row (GtkTreeView *tree_view,
                                             mode,
 					    FALSE);
 
+  /* We bail out if the original (tree, node) don't exist anymore after
+   * handling the selection-changed callback.  We do return TRUE because
+   * the key press has been handled at this point.
+   */
+  _gtk_tree_view_find_node (tree_view, cursor_path, &new_tree, &new_node);
+
+  if (cursor_tree != new_tree || cursor_node != new_node)
+    return FALSE;
+
   gtk_tree_view_clamp_node_visible (tree_view, cursor_tree, cursor_node);
 
   gtk_widget_grab_focus (GTK_WIDGET (tree_view));
@@ -10143,6 +10154,8 @@ gtk_tree_view_real_select_cursor_row (GtkTreeView *tree_view,
 static gboolean
 gtk_tree_view_real_toggle_cursor_row (GtkTreeView *tree_view)
 {
+  GtkRBTree *new_tree = NULL;
+  GtkRBNode *new_node = NULL;
   GtkRBTree *cursor_tree = NULL;
   GtkRBNode *cursor_node = NULL;
   GtkTreePath *cursor_path = NULL;
@@ -10171,6 +10184,15 @@ gtk_tree_view_real_toggle_cursor_row (GtkTreeView *tree_view)
 					    cursor_path,
                                             GTK_TREE_SELECT_MODE_TOGGLE,
 					    FALSE);
+
+  /* We bail out if the original (tree, node) don't exist anymore after
+   * handling the selection-changed callback.  We do return TRUE because
+   * the key press has been handled at this point.
+   */
+  _gtk_tree_view_find_node (tree_view, cursor_path, &new_tree, &new_node);
+
+  if (cursor_tree != new_tree || cursor_node != new_node)
+    return FALSE;
 
   gtk_tree_view_clamp_node_visible (tree_view, cursor_tree, cursor_node);
 
