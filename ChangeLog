@@ -1,3 +1,10 @@
+2008-02-12  Michael Natterer  <mitch@imendio.com>
+
+	* gtk/gtkwindow.c (gtk_window_activate_key): simply use
+	gtk_window_get_key_hash() to get the hash instead of manually
+	fiddling with quarks and gtk_window_keys_changed(). Also add
+	g_return_if_fail() to this public function.
+
 2008-02-11  Matthias Clasen  <mclasen@redhat.com>
 
 	Support keynav in status icons.  (#473786, Li Yuan)

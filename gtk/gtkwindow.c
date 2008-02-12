@@ -7942,22 +7942,21 @@ gtk_window_free_key_hash (GtkWindow *window)
  * called by the default ::key_press_event handler for toplevel windows,
  * however in some cases it may be useful to call this directly when
  * overriding the standard key handling for a toplevel window.
- * 
+ *
  * Return value: %TRUE if a mnemonic or accelerator was found and activated.
  **/
 gboolean
 gtk_window_activate_key (GtkWindow   *window,
 			 GdkEventKey *event)
 {
-  GtkKeyHash *key_hash = g_object_get_qdata (G_OBJECT (window), quark_gtk_window_key_hash);
+  GtkKeyHash *key_hash;
   GtkWindowKeyEntry *found_entry = NULL;
 
-  if (!key_hash)
-    {
-      gtk_window_keys_changed (window);
-      key_hash = g_object_get_qdata (G_OBJECT (window), quark_gtk_window_key_hash);
-    }
-  
+  g_return_val_if_fail (GTK_IS_WINDOW (window), FALSE);
+  g_return_val_if_fail (event != NULL, FALSE);
+
+  key_hash = gtk_window_get_key_hash (window);
+
   if (key_hash)
     {
       GSList *entries = _gtk_key_hash_lookup (key_hash,
