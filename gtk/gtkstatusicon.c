@@ -150,6 +150,9 @@ static void     gtk_status_icon_embedded_changed (GtkStatusIcon *status_icon);
 static void     gtk_status_icon_orientation_changed (GtkStatusIcon *status_icon);
 
 #endif
+static gboolean gtk_status_icon_key_press        (GtkStatusIcon  *status_icon,
+						  GdkEventKey    *event);
+static void     gtk_status_icon_popup_menu       (GtkStatusIcon  *status_icon);
 static gboolean gtk_status_icon_button_press     (GtkStatusIcon  *status_icon,
 						  GdkEventButton *event);
 static void     gtk_status_icon_disable_blinking (GtkStatusIcon  *status_icon);
@@ -488,6 +491,10 @@ gtk_status_icon_init (GtkStatusIcon *status_icon)
   gtk_widget_add_events (GTK_WIDGET (priv->tray_icon),
 			 GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK);
 
+  g_signal_connect_swapped (priv->tray_icon, "key-press-event",
+			    G_CALLBACK (gtk_status_icon_key_press), status_icon);
+  g_signal_connect_swapped (priv->tray_icon, "popup-menu",
+			    G_CALLBACK (gtk_status_icon_popup_menu), status_icon);
   g_signal_connect_swapped (priv->tray_icon, "notify::embedded",
 			    G_CALLBACK (gtk_status_icon_embedded_changed), status_icon);
   g_signal_connect_swapped (priv->tray_icon, "notify::orientation",
@@ -497,6 +504,7 @@ gtk_status_icon_init (GtkStatusIcon *status_icon)
   g_signal_connect_swapped (priv->tray_icon, "screen-changed",
 		    	    G_CALLBACK (gtk_status_icon_screen_changed), status_icon);
   priv->image = gtk_image_new ();
+  GTK_WIDGET_SET_FLAGS (priv->image, GTK_CAN_FOCUS);
   gtk_container_add (GTK_CONTAINER (priv->tray_icon), priv->image);
   gtk_widget_show (priv->image);
 
@@ -1199,6 +1207,34 @@ gtk_status_icon_orientation_changed (GtkStatusIcon *status_icon)
 }
 
 #endif
+
+static gboolean
+gtk_status_icon_key_press (GtkStatusIcon  *status_icon,
+			   GdkEventKey    *event)
+{
+  guint state, keyval;
+
+  state = event->state & gtk_accelerator_get_default_mod_mask ();
+  keyval = event->keyval;
+  if (state == 0 &&
+      (keyval == GDK_Return ||
+       keyval == GDK_KP_Enter ||
+       keyval == GDK_ISO_Enter ||
+       keyval == GDK_space ||
+       keyval == GDK_KP_Space))
+    {
+      emit_activate_signal (status_icon);
+      return TRUE;
+    }
+
+  return FALSE;
+}
+
+static void
+gtk_status_icon_popup_menu (GtkStatusIcon  *status_icon)
+{
+  emit_popup_menu_signal (status_icon, 0, gtk_get_current_event_time ());
+}
 
 static gboolean
 gtk_status_icon_button_press (GtkStatusIcon  *status_icon,
