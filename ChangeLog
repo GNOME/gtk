@@ -1,3 +1,14 @@
+2008-02-12  Federico Mena Quintero  <federico@novell.com>
+
+	* gtk/gtkfilechooserdefault.c (switch_to_shortcut): Don't focus
+	the file list (this was the last place where we would focus the
+	file list explicitly).  If you are in the location entry, for
+	example, you don't want Alt-Home to take you to the file list; you
+	just want the current folder to change.  Thanks to Olle Bergkvist
+	<olle.bergkvist@yahoo.se> for pointing this out in
+	http://bugzilla.gnome.org/show_bug.cgi?id=419737#c51.
+	(focus_browse_tree_view_if_possible): Removed.
+
 2008-02-12  Matthias Clasen  <mclasen@redhat.com>
 
 	Merged from trunk:

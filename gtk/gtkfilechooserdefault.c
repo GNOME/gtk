@@ -8200,23 +8200,6 @@ should_respond_after_confirm_overwrite (GtkFileChooserDefault *impl,
     }
 }
 
-/* Gives the focus to the browse tree view only if it is visible */
-static void
-focus_browse_tree_view_if_possible (GtkFileChooserDefault *impl)
-{
-  gboolean do_focus;
-
-  if ((impl->action == GTK_FILE_CHOOSER_ACTION_SAVE ||
-       impl->action == GTK_FILE_CHOOSER_ACTION_CREATE_FOLDER)
-      && !gtk_expander_get_expanded (GTK_EXPANDER (impl->save_expander)))
-    do_focus = FALSE;
-  else
-    do_focus = TRUE;
-
-  if (do_focus)
-    gtk_widget_grab_focus (impl->browse_files_tree_view);
-}
-
 static void
 action_create_folder_cb (GtkFileSystemHandle *handle,
 			 const GtkFilePath   *path,
@@ -11243,7 +11226,6 @@ switch_to_shortcut (GtkFileChooserDefault *impl,
     g_assert_not_reached ();
 
   shortcuts_activate_iter (impl, &iter);
-  focus_browse_tree_view_if_possible (impl);
 }
 
 /* Handler for the "home-folder" keybinding signal */
