@@ -137,9 +137,7 @@ gdk_colormap_free_colors (GdkColormap *colormap,
 			  GdkColor    *colors,
 			  gint         ncolors)
 {
-  /* This function shouldn't do anything since
-   * colors are neve allocated.
-   */
+  /* This function shouldn't do anything since colors are never allocated. */
 }
 
 gint
@@ -151,18 +149,28 @@ gdk_colormap_alloc_colors (GdkColormap *colormap,
 			   gboolean    *success)
 {
   int i;
+  int alpha;
+
+  g_return_val_if_fail (GDK_IS_COLORMAP (colormap), ncolors);
+  g_return_val_if_fail (colors != NULL, ncolors);
+  g_return_val_if_fail (success != NULL, ncolors);
+
+  if (gdk_colormap_get_visual (colormap)->depth == 32)
+    alpha = 0xff;
+  else
+    alpha = 0;
 
   for (i = 0; i < ncolors; i++)
     {
-      colors[i].pixel = ((colors[i].red >> 8) & 0xff) << 16 |
-	                ((colors[i].green >> 8) & 0xff) << 8 |
-	                ((colors[i].blue >> 8) & 0xff);
+      colors[i].pixel = alpha << 24 |
+        ((colors[i].red >> 8) & 0xff) << 16 |
+        ((colors[i].green >> 8) & 0xff) << 8 |
+        ((colors[i].blue >> 8) & 0xff);
     }
 
-  if (success)
-    *success = TRUE;
+  *success = TRUE;
 
-  return ncolors;
+  return 0;
 }
 
 void
