@@ -156,7 +156,7 @@ struct _GtkCList
 
   guint freeze_count;
   
-  /* allocation rectangle after the conatiner_border_width
+  /* allocation rectangle after the container_border_width
    * and the width of the shadow border */
   GdkRectangle internal_allocation;
   
