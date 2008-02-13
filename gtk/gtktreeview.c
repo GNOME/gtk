@@ -3675,11 +3675,11 @@ gtk_tree_view_stop_rubber_band (GtkTreeView *tree_view)
   remove_scroll_timeout (tree_view);
   gtk_grab_remove (GTK_WIDGET (tree_view));
 
-  gtk_widget_queue_draw (GTK_WIDGET (tree_view));
-
   if (tree_view->priv->rubber_band_status == RUBBER_BAND_ACTIVE)
     {
       GtkTreePath *tmp_path;
+
+      gtk_widget_queue_draw (GTK_WIDGET (tree_view));
 
       /* The anchor path should be set to the start path */
       tmp_path = _gtk_tree_view_find_path (tree_view,
