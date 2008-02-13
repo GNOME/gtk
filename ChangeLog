@@ -2,6 +2,17 @@
 
 	Merged from trunk:
 
+	* gtk/gtkclipboard-quartz.c: (gtk_clipboard_wait_for_contents):
+	Remove unused variables.
+	(gtk_clipboard_set_contents),
+	(gtk_clipboard_get_owner), (clipboard_unset),
+	(gtk_clipboard_request_targets): Notify the previous clipboard
+	owner when the owner changes. Fixes bug #493406.
+
+2008-02-13  Richard Hult  <richard@imendio.com>
+
+	Merged from trunk:
+
 	* gdk/quartz/gdkcolor-quartz.c: (gdk_colormap_alloc_colors): Fix
 	the return value (return number of colors that failed), and handle
 	RGBA colormap.
