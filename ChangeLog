@@ -1,3 +1,12 @@
+2008-02-13  Emmanuele Bassi  <ebassi@gnome.org>
+
+	Merge from trunk:
+
+	* gtk/gtkrecentchoosermenu.c:
+	(idle_populate_func), (idle_populate_clean_up): Fix possible
+	recursion by resetting the idle source id. (#507605, William
+	Pitcock)
+
 2008-02-12  Matthias Clasen  <mclasne@redhat.com>
 
 	* configure.in: Bump version

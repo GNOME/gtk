@@ -927,8 +927,6 @@ idle_populate_func (gpointer data)
   pdata = (MenuPopulateData *) data;
   priv = pdata->menu->priv;
 
-  priv->populate_id = 0;
-
   if (!pdata->items)
     {
       pdata->items = gtk_recent_chooser_get_items (GTK_RECENT_CHOOSER (pdata->menu));
@@ -937,6 +935,7 @@ idle_populate_func (gpointer data)
           /* show the placeholder here */
           gtk_widget_show (pdata->placeholder);
           pdata->displayed_items = 1;
+          priv->populate_id = 0;
 
 	  return FALSE;
 	}
@@ -978,6 +977,7 @@ check_and_return:
     {
       g_list_foreach (pdata->items, (GFunc) gtk_recent_info_unref, NULL);
       g_list_free (pdata->items);
+      priv->populate_id = 0;
 
       retval = FALSE;
     }
@@ -992,14 +992,18 @@ idle_populate_clean_up (gpointer data)
 {
   MenuPopulateData *pdata = data;
 
-  /* show the placeholder in case no item survived
-   * the filtering process in the idle loop
-   */
-  if (!pdata->displayed_items)
-    gtk_widget_show (pdata->placeholder);
-  g_object_unref (pdata->placeholder);
+  if (pdata->menu->priv->populate_id == 0)
+    {
+      /* show the placeholder in case no item survived
+       * the filtering process in the idle loop
+       */
+      if (!pdata->displayed_items)
+        gtk_widget_show (pdata->placeholder);
 
-  g_slice_free (MenuPopulateData, data);
+      g_object_unref (pdata->placeholder);
+
+      g_slice_free (MenuPopulateData, data);
+    }
 }
 
 static void
