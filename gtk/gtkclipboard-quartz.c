@@ -1,7 +1,7 @@
 /* GTK - The GIMP Toolkit
  * Copyright (C) 2000 Red Hat, Inc.
  * Copyright (C) 2004 Nokia Corporation
- * Copyright (C) 2006 Imendio AB
+ * Copyright (C) 2006-2008 Imendio AB
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -94,26 +94,27 @@ struct _GtkClipboardClass
   GtkSelectionData selection_data;
   guint info;
 
-  selection_data.selection = clipboard->selection;
-  selection_data.data = NULL;
-  selection_data.target = _gtk_quartz_pasteboard_type_to_atom (type);
+  if (!clipboard->target_list)
+    return;
 
-  if (clipboard->target_list &&
-      gtk_target_list_find (clipboard->target_list, selection_data.target, &info))
+  memset (&selection_data, 0, sizeof (GtkSelectionData));
+
+  selection_data.selection = clipboard->selection;
+  selection_data.target = _gtk_quartz_pasteboard_type_to_atom (type);
+  selection_data.display = gdk_display_get_default ();
+  selection_data.length = -1;
+
+  if (gtk_target_list_find (clipboard->target_list, selection_data.target, &info))
     {
       clipboard->get_func (clipboard, &selection_data,
                            info,
                            clipboard->user_data);
-    }
-  else
-    {
-      selection_data.length = -1;
-    }
+ 
+      _gtk_quartz_set_selection_data_for_pasteboard (clipboard->pasteboard,
+                                                     &selection_data);
 
-  _gtk_quartz_set_selection_data_for_pasteboard (clipboard->pasteboard,
-                                                 &selection_data);
-
-  g_free (selection_data.data);
+      g_free (selection_data.data);
+    }
 }
 
 - (void)pasteboardChangedOwner:(NSPasteboard *)sender
@@ -393,6 +394,27 @@ gtk_clipboard_set_contents (GtkClipboard         *clipboard,
 
   types = _gtk_quartz_target_entries_to_pasteboard_types (targets, n_targets);
 
+  if (!(clipboard->have_owner && have_owner) ||
+      clipboard->user_data != user_data)
+    {
+      clipboard_unset (clipboard);
+
+      if (clipboard->get_func)
+        {
+          /* Calling unset() caused the clipboard contents to be reset!
+           * Avoid leaking and return
+           */
+          if (!(clipboard->have_owner && have_owner) ||
+              clipboard->user_data != user_data)
+            {
+              (*clear_func) (clipboard, user_data);
+              return FALSE;
+            }
+          else
+            return TRUE;
+        }
+    }
+
   clipboard->user_data = user_data;
   clipboard->have_owner = have_owner;
   if (have_owner)
@@ -526,6 +548,7 @@ clipboard_unset (GtkClipboard *clipboard)
   
   if (old_have_owner)
     {
+      clipboard_remove_owner_notify (clipboard);
       clipboard->have_owner = FALSE;
     }
 
@@ -844,8 +867,6 @@ gtk_clipboard_wait_for_contents (GtkClipboard *clipboard,
 				 GdkAtom       target)
 {
   NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
-  gchar *name;
-  NSData *data;
   GtkSelectionData *selection_data = NULL;
 
   if (target == gdk_atom_intern_static_string ("TARGETS")) 
