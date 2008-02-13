@@ -20,14 +20,6 @@ The Windows port of GTK+ is an implementation of GDK (and therefore GTK+)
 on top of the Win32 API. 
 </para>
 
-<!-- 
-<refsect2><title>Build requirements</title>
-<para>
-FIXME: explain with-wintab, with-ie55
-</para>
-</refsect2>
--->
-
 <refsect2 id="win32-cmdline">
 <title>Windows-specific commandline options</title>
 
@@ -40,8 +32,8 @@ additional command line arguments.
 <title><systemitem>--sync</systemitem></title>
 
 <para>
-Don't batch GDI requests. This is a useful option for 
-debugging, but it will slow down the performance considerably.
+Don't batch GDI requests. This might be a marginally useful option for 
+debugging.
 </para>
 </formalpara>
 
@@ -50,7 +42,7 @@ debugging, but it will slow down the performance considerably.
        <systemitem>--ignore-wintab</systemitem></title>
 
 <para>
-Don't use the Wintab API for tablet support. This is the default.
+Don't use the Wintab API for tablet support.
 </para>
 </formalpara>
 
@@ -58,8 +50,7 @@ Don't use the Wintab API for tablet support. This is the default.
 <title><systemitem>--use-wintab</systemitem></title>
 
 <para>
-Use the Wintab API for tablet support, if GTK+ has been compiled 
-with the <option>--with-wintab</option> option.
+Use the Wintab API for tablet support.  This is the default.
 </para>
 </formalpara>
 
@@ -68,7 +59,7 @@ with the <option>--with-wintab</option> option.
 
 <para>
 In 256 color mode, restrict the size of the color palette to 
-the specified number of colors.
+the specified number of colors. This option is obsolete.
 </para>
 </formalpara>
 
@@ -87,7 +78,7 @@ additional environment variables.
 
 <para>
 If this variable is set, GTK+ doesn't use 
-the Wintab API for tablet support. This is the default.
+the Wintab API for tablet support.
 </para>
 </formalpara>
 
@@ -96,8 +87,7 @@ the Wintab API for tablet support. This is the default.
 
 <para>
 If this variable is set, GTK+ uses the Wintab API for 
-tablet support, if GTK+ has been compiled with the 
-<option>--with-wintab</option> option.
+tablet support.  This is the default.
 </para>
 </formalpara>
 
@@ -107,14 +97,6 @@ tablet support, if GTK+ has been compiled with the
 <para>
 Specifies the size of the color palette used
 in 256 color mode.
-</para>
-</formalpara>
-
-<formalpara>
-<title><envar>G_WIN32_PRETEND_WIN9X</envar></title>
-
-<para>
-Only use the Windows 9x API.
 </para>
 </formalpara>
 

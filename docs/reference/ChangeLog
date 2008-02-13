@@ -1,3 +1,8 @@
+2008-02-13  Tor Lillqvist  <tml@novell.com>
+
+	* gtk/windows.sgml: Correct description of the Wintab and max
+	palette size options. Drop obsolete Win9x stuff.
+
 2008-02-11  Benjamin Otte  <otte@gnome.org>
 
 	* gdk/tmpl/windows.sgml:
