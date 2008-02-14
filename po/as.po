@@ -1,21 +1,22 @@
-# translation of gtk+.gtk-2-10.po to Assamese
+# translation of as.po to Assamese
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
 #
-# Amitakhya Phukan <aphukan@redhat.com>, 2006.
+# Amitakhya Phukan <aphukan@redhat.com>, 2006, 2008.
+# Amitakhya Phukan <amitakhya@svn.gnome.org>, 2008.
 msgid ""
 msgstr ""
-"Project-Id-Version: gtk+.gtk-2-10\n"
+"Project-Id-Version: as\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2007-10-16 23:54-0400\n"
-"PO-Revision-Date: 2006-12-14 05:01+0530\n"
-"Last-Translator: Amitakhya Phukan <aphukan@redhat.com>\n"
-"Language-Team: Assamese <assam@mm.assam-glug.org>\n"
+"PO-Revision-Date: 2008-02-14 11:52+0530\n"
+"Last-Translator: Amitakhya Phukan <amitakhya@svn.gnome.org>\n"
+"Language-Team: Assamese\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: KBabel 1.11.4\n"
-"Plural-Forms: Plural-Forms: nplurals=2; plural=(n!=1);\n"
+"Plural-Forms: nplurals=2; plural=(n!=1)\n"
 
 #: gdk/directfb/gdkdisplay-directfb.c:55
 msgid "directfb arg"
@@ -120,24 +121,20 @@ msgid "keyboard label|Home"
 msgstr "Home"
 
 #: gdk/keyname-table.h:3949
-#, fuzzy
 msgid "keyboard label|Left"
-msgstr "KP_Left"
+msgstr "keyboard label|Left"
 
 #: gdk/keyname-table.h:3950
-#, fuzzy
 msgid "keyboard label|Up"
-msgstr "KP_Up"
+msgstr "keyboard label|Up"
 
 #: gdk/keyname-table.h:3951
-#, fuzzy
 msgid "keyboard label|Right"
-msgstr "KP_Right"
+msgstr "keyboard label|Right"
 
 #: gdk/keyname-table.h:3952
-#, fuzzy
 msgid "keyboard label|Down"
-msgstr "KP_Down"
+msgstr "keyboard label|Down"
 
 #: gdk/keyname-table.h:3953
 msgid "keyboard label|Page_Up"
@@ -249,18 +246,15 @@ msgstr "প্ৰতিমুৰ্তিৰ নথিপত্ৰ '%s' ত ক�
 #: gdk-pixbuf/gdk-pixbuf-animation.c:209 gdk-pixbuf/gdk-pixbuf-io.c:896
 #: gdk-pixbuf/gdk-pixbuf-io.c:1153 tests/testfilechooser.c:263
 #, c-format
-msgid ""
-"Failed to load image '%s': reason not known, probably a corrupt image file"
-msgstr ""
-"'%s' প্ৰতিমুৰ্তি তুলি লোৱাত অক্ষম: কাৰণ অজ্ঞাত, খুব সম্ভৱ এটা প্ৰদূষিত প্ৰতিমুৰ্তিৰ নথিপত্ৰ"
+msgid "Failed to load image '%s': reason not known, probably a corrupt image file"
+msgstr "'%s' প্ৰতিমুৰ্তি তুলি লোৱাত অক্ষম: কাৰণ অজ্ঞাত, খুব সম্ভৱ এটা প্ৰদূষিত প্ৰতিমুৰ্তিৰ নথিপত্ৰ"
 
 #: gdk-pixbuf/gdk-pixbuf-animation.c:242
 #, c-format
 msgid ""
 "Failed to load animation '%s': reason not known, probably a corrupt "
 "animation file"
-msgstr ""
-"'%s' সঞ্জীবন তুলি লোৱাত অক্ষম: কাৰণ অজ্ঞাত, খুব সম্ভৱ এটা প্ৰদূষিত সঞ্জীবন নথিপত্ৰ"
+msgstr "'%s' সঞ্জীবন তুলি লোৱাত অক্ষম: কাৰণ অজ্ঞাত, খুব সম্ভৱ এটা প্ৰদূষিত সঞ্জীবন নথিপত্ৰ"
 
 #: gdk-pixbuf/gdk-pixbuf-io.c:527
 #, c-format
@@ -600,22 +594,20 @@ msgid "Couldn't allocate memory for loading JPEG file"
 msgstr "JPEG নথিপত্ৰ তুলিব'লৈ স্মৃতিশক্তি বিতৰণ কৰিব নোৱাৰিলো"
 
 #: gdk-pixbuf/io-jpeg.c:896
-#, fuzzy, c-format
+#, c-format
 msgid "Transformed JPEG has zero width or height."
-msgstr "পৰিবৰ্ত্তিত PNG ৰ শুণ্য বহল বা উচ্চতা ।"
+msgstr "পৰিবৰ্ত্তিত JPEG ৰ শুণ্য বহল বা উচ্চতা ।"
 
 #: gdk-pixbuf/io-jpeg.c:1109
 #, c-format
 msgid ""
 "JPEG quality must be a value between 0 and 100; value '%s' could not be "
 "parsed."
-msgstr ""
-"JPEG গুণৰ মান ০ আৰু ১০০ ৰ মাজৰ হ'ব লাগিব; '%s' মানৰ বিশ্লেষণ কৰিব পৰা ন'গ'ল ।"
+msgstr "JPEG গুণৰ মান ০ আৰু ১০০ ৰ মাজৰ হ'ব লাগিব; '%s' মানৰ বিশ্লেষণ কৰিব পৰা ন'গ'ল ।"
 
 #: gdk-pixbuf/io-jpeg.c:1124
 #, c-format
-msgid ""
-"JPEG quality must be a value between 0 and 100; value '%d' is not allowed."
+msgid "JPEG quality must be a value between 0 and 100; value '%d' is not allowed."
 msgstr "JPEG গুণৰ মান ০ আৰু ১০০ ৰ মাজৰ হ'ব লাগিব; '%d' মানৰ অনুমতি নাই ।"
 
 #: gdk-pixbuf/io-jpeg.c:1287
@@ -732,8 +724,7 @@ msgstr "PNG প্ৰতিমুৰ্তিৰ নথিপত্ৰ পঢ়ো
 
 #: gdk-pixbuf/io-png.c:825
 #, c-format
-msgid ""
-"Keys for PNG text chunks must have at least 1 and at most 79 characters."
+msgid "Keys for PNG text chunks must have at least 1 and at most 79 characters."
 msgstr "PNG লিপি খণ্ডৰ চাবিত অতি কমেও ১টা আৰু অতি বেচি ৭৯টা আখৰ হ'ব লাগিব ।"
 
 #: gdk-pixbuf/io-png.c:833
@@ -1239,19 +1230,19 @@ msgid "keyboard label|Backslash"
 msgstr "Backslash"
 
 #: gtk/gtkbuilderparser.c:289
-#, fuzzy, c-format
+#, c-format
 msgid "Invalid type function: `%s'"
-msgstr "অবৈধ নথিপত্ৰৰ নাম: %s"
+msgstr "অবৈধ টাইপ আপেক্ষক: %s"
 
 #: gtk/gtkbuilderparser.c:729
-#, fuzzy, c-format
+#, c-format
 msgid "Invalid root element: '%s'"
-msgstr "অবৈধ নথিপত্ৰৰ নাম: %s"
+msgstr "অবৈধ ৰূট পদাৰ্থ: %s"
 
 #: gtk/gtkbuilderparser.c:761
 #, c-format
 msgid "Unhandled tag: '%s'"
-msgstr ""
+msgstr "অপৰিচালিত টেগ: '%s'"
 
 #. Translate to calendar:YM if you want years to be displayed
 #. * before months; otherwise translate to calendar:MY.
@@ -1264,7 +1255,7 @@ msgstr ""
 #.
 #: gtk/gtkcalendar.c:670
 msgid "calendar:MY"
-msgstr "পঞ্জিকা:MY"
+msgstr "calendar:MY"
 
 #. Translate to calendar:week_start:0 if you want Sunday to be the
 #. * first day of the week to calendar:week_start:1 if you want Monday
@@ -1272,7 +1263,7 @@ msgstr "পঞ্জিকা:MY"
 #.
 #: gtk/gtkcalendar.c:708
 msgid "calendar:week_start:0"
-msgstr "পঞ্জিকা:সপ্তাহ আৰম্ভ(_s):0"
+msgstr "calendar:week_start:0"
 
 #. Translators:  This is a text measurement template.
 #. * Translate it to the widest year text.
@@ -1284,7 +1275,7 @@ msgstr "পঞ্জিকা:সপ্তাহ আৰম্ভ(_s):0"
 #.
 #: gtk/gtkcalendar.c:1595
 msgid "year measurement template|2000"
-msgstr "২০০০"
+msgstr "2000"
 
 #. Translators: this defines whether the day numbers should use
 #. * localized digits or the ones used in English (0123...).
@@ -1564,11 +1555,11 @@ msgstr "%1$s %2$s ত"
 
 #: gtk/gtkfilechooserdefault.c:1909
 msgid "Search"
-msgstr ""
+msgstr "বিচাৰক"
 
 #: gtk/gtkfilechooserdefault.c:1933
 msgid "Recently Used"
-msgstr ""
+msgstr "অলপতে ব্যৱহাৰ কৰা"
 
 #: gtk/gtkfilechooserdefault.c:2597
 msgid "Select which types of files are shown"
@@ -1718,8 +1709,7 @@ msgstr "নথিপত্ৰৰ নাম \"%s\" ইতিমধ্যে আ�
 
 #: gtk/gtkfilechooserdefault.c:8083
 #, c-format
-msgid ""
-"The file already exists in \"%s\".  Replacing it will overwrite its contents."
+msgid "The file already exists in \"%s\".  Replacing it will overwrite its contents."
 msgstr "নথিপত্ৰ ইতিমধ্যে \"%s\" ত আছে । প্ৰতিস্থাপন কৰিলে বিষয়বস্তু পুনঃ লিখা যাব ।"
 
 #: gtk/gtkfilechooserdefault.c:8088
@@ -1727,25 +1717,23 @@ msgid "_Replace"
 msgstr "প্ৰতিস্থাপন কৰক (_R)"
 
 #: gtk/gtkfilechooserdefault.c:8922
-#, fuzzy
 msgid "Could not start the search process"
-msgstr "অৱশিষ্ট ৰক্ষা কৰিব নোৱাৰিলো"
+msgstr "বিচৰা প্ৰক্ৰিয়া আৰম্ভ কৰিব পৰা ন'গ'ল"
 
 #: gtk/gtkfilechooserdefault.c:8923
 msgid ""
 "The program was not able to create a connection to the indexer daemon.  "
 "Please make sure it is running."
-msgstr ""
+msgstr "indexer ডেমনলৈ অনুপ্ৰয়োগে সংযোগ সৃষ্টি কৰিব নোৱাৰিলে । সেইটো চলি থকাটো নিশ্চিত কৰক ।"
 
 #: gtk/gtkfilechooserdefault.c:8937
-#, fuzzy
 msgid "Could not send the search request"
-msgstr "অৱশিষ্ট ৰক্ষা কৰিব নোৱাৰিলো"
+msgstr "বিচৰাৰ অনুৰোধ পঠিয়াব নোৱাৰিলো"
 
 #. Label
 #: gtk/gtkfilechooserdefault.c:9365
 msgid "_Search:"
-msgstr ""
+msgstr "বিচাৰক (_S):"
 
 #: gtk/gtkfilechooserdefault.c:10318
 #, c-format
@@ -1785,17 +1773,16 @@ msgstr "অজ্ঞাত"
 
 #: gtk/gtkfilechooserdefault.c:11136
 msgid "Today at %H:%M"
-msgstr ""
+msgstr "আজি %H:%M ত"
 
 #: gtk/gtkfilechooserdefault.c:11138
-#, fuzzy
 msgid "Yesterday at %H:%M"
-msgstr "যোৱাকালি"
+msgstr "যোৱাকালি %H:%M ত"
 
 #: gtk/gtkfilechoosersettings.c:262 gtk/gtkfilesel.c:1408
 #: gtk/gtkfilesel.c:1417 gtk/gtkfilesystemunix.c:1047
 #: gtk/gtkfilesystemwin32.c:1167
-#, fuzzy, c-format
+#, c-format
 msgid "Error creating folder '%s': %s"
 msgstr "'%s' পঞ্জিকা সৃষ্টি কৰোঁতে ভুল: %s"
 
@@ -1841,8 +1828,7 @@ msgstr "নথিপত্ৰ পুনঃনামকৰণ কৰক (_R)"
 
 #: gtk/gtkfilesel.c:1406
 #, c-format
-msgid ""
-"The folder name \"%s\" contains symbols that are not allowed in filenames"
+msgid "The folder name \"%s\" contains symbols that are not allowed in filenames"
 msgstr "ফোল্ডাৰৰ নাম \"%s\" ত এনে চিহ্ন আছে যিবোৰৰ নথিপত্ৰৰ নামত অনুমতি নাই"
 
 #: gtk/gtkfilesel.c:1451
@@ -2073,9 +2059,9 @@ msgid "Icon '%s' not present in theme"
 msgstr "'%s'প্ৰতিমুৰ্তি আলোকচিত্ৰত নাই"
 
 #: gtk/gtkicontheme.c:2915
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to load icon"
-msgstr "TIFF প্ৰতিমুৰ্তি তোলাত বিফল"
+msgstr "আইকণ তোলাত বিফল"
 
 #: gtk/gtkimmodule.c:421
 msgid "Default"
@@ -2234,7 +2220,7 @@ msgstr "পৃষ্ঠা %u"
 #: gtk/gtkpagesetup.c:570 gtk/gtkpapersize.c:825 gtk/gtkpapersize.c:865
 #, c-format
 msgid "Not a valid page setup file"
-msgstr ""
+msgstr "বৈধ পৃষ্ঠা প্ৰতিষ্ঠাৰ নথিপত্ৰ নহয়"
 
 #. Translate to the default units to use for presenting
 #. * lengths to the user. Translate to default:inch if you
@@ -2344,16 +2330,15 @@ msgstr "কাগজৰ প্ৰান্তিক অংশ"
 
 #: gtk/gtkpathbar.c:148
 msgid "Up Path"
-msgstr ""
+msgstr "ওপৰলৈ যোৱা পথ"
 
 #: gtk/gtkpathbar.c:150
 msgid "Down Path"
-msgstr ""
+msgstr "তললৈ যোৱা পথ"
 
 #: gtk/gtkpathbar.c:1377
-#, fuzzy
 msgid "File System Root"
-msgstr "নথিপত্ৰৰপ্ৰণালী"
+msgstr "নথিপত্ৰপ্ৰণালী ৰূট"
 
 #: gtk/gtkprinteroptionwidget.c:685
 msgid "Not available"
@@ -2370,7 +2355,7 @@ msgstr "ফোল্ডাৰত ৰক্ষা কৰক (_S):"
 #: gtk/gtkprintoperation.c:171
 #, c-format
 msgid "%s job #%d"
-msgstr ""
+msgstr "%s কাৰ্য্য #%d"
 
 #. translators, strip the prefix up to and including the first |
 #: gtk/gtkprintoperation.c:1497
@@ -2522,7 +2507,6 @@ msgid "C_urrent"
 msgstr "ৰ্ত্তমানৰ (_u)"
 
 #: gtk/gtkprintunixdialog.c:1563
-#, fuzzy
 msgid "Ra_nge"
 msgstr "পৰিসৰ (_n): "
 
@@ -2531,6 +2515,8 @@ msgid ""
 "Specify one or more page ranges,\n"
 " e.g. 1-3,7,11"
 msgstr ""
+"একাধিক পৃষ্ঠাৰ পৰিসৰ,\n"
+" যেনে ১-৩,৭,১১"
 
 #: gtk/gtkprintunixdialog.c:1583
 msgid "Copies"
@@ -2558,9 +2544,8 @@ msgid "Layout"
 msgstr "পৰিকল্পনা"
 
 #: gtk/gtkprintunixdialog.c:2035
-#, fuzzy
 msgid "Pages per _side:"
-msgstr "প্ৰতিটো পাতৰ পৃষ্ঠা(_s):"
+msgstr "প্ৰতিটো ফালৰ পৃষ্ঠা(_s):"
 
 #: gtk/gtkprintunixdialog.c:2051
 msgid "T_wo-sided:"
@@ -2706,7 +2691,7 @@ msgstr "URI '%s' ৰ বাবে কোনো বস্তু পোৱা ন'
 
 #: gtk/gtkrecentchooserdefault.c:1271
 msgid "Untitled filter"
-msgstr ""
+msgstr "শিৰোনাম নোহোৱা ফিল্টাৰ"
 
 #: gtk/gtkrecentchooserdefault.c:1626
 msgid "Could not remove item"
@@ -2770,7 +2755,7 @@ msgstr "অজ্ঞাত বস্তু"
 #: gtk/gtkrecentchoosermenu.c:783
 #, c-format
 msgid "recent menu label|_%d. %s"
-msgstr ""
+msgstr "_%d. %s"
 
 #. This is the format that is used for items in a recent files menu.
 #. * The %d is the number of the item, the %s is the name of the item.
@@ -2780,7 +2765,7 @@ msgstr ""
 #: gtk/gtkrecentchoosermenu.c:790
 #, c-format
 msgid "recent menu label|%d. %s"
-msgstr ""
+msgstr "%d. %s"
 
 #: gtk/gtkrecentmanager.c:1041 gtk/gtkrecentmanager.c:1187
 #: gtk/gtkrecentmanager.c:1197 gtk/gtkrecentmanager.c:1250
@@ -2857,9 +2842,8 @@ msgid "_Delete"
 msgstr "গুচাওক (_D)"
 
 #: gtk/gtkstock.c:309
-#, fuzzy
 msgid "_Discard"
-msgstr "নিষ্কৰীয়"
+msgstr "এৰি যাওক (_D)"
 
 #: gtk/gtkstock.c:310
 msgid "_Disconnect"
@@ -3245,8 +3229,7 @@ msgstr "\"%s\" এটা বৈধ গুণৰ নাম নহয়"
 
 #: gtk/gtktextbufferserialize.c:1193
 #, c-format
-msgid ""
-"\"%s\" could not be converted to a value of type \"%s\" for attribute \"%s\""
+msgid "\"%s\" could not be converted to a value of type \"%s\" for attribute \"%s\""
 msgstr "\"%s\" ক \"%s\" ধৰণৰ মানলৈ সলনি কৰিব পৰা ন'গ'ল \"%s\" গুণৰ বাবে"
 
 #: gtk/gtktextbufferserialize.c:1202
@@ -3285,8 +3268,7 @@ msgstr "ধাৰাবাহিক তথ্য বিকৃত"
 
 #: gtk/gtktextbufferserialize.c:1866
 #, c-format
-msgid ""
-"Serialized data is malformed. First section isn't GTKTEXTBUFFERCONTENTS-0001"
+msgid "Serialized data is malformed. First section isn't GTKTEXTBUFFERCONTENTS-0001"
 msgstr "ধাৰাবাহিক তথ্য বিকৃত । প্ৰথম খণ্ড GTKTEXTBUFFERCONTENTS-0001 নহয়"
 
 #: gtk/gtktextutil.c:60
@@ -3358,25 +3340,24 @@ msgid "Empty"
 msgstr "ৰিক্ত"
 
 #: gtk/gtkvolumebutton.c:81
-#, fuzzy
 msgid "Volume"
-msgstr "মান (_V):"
+msgstr "আয়তন (_V):"
 
 #: gtk/gtkvolumebutton.c:83
 msgid "Volume Down"
-msgstr ""
+msgstr "ধ্বনি কমাওক"
 
 #: gtk/gtkvolumebutton.c:85
 msgid "Volume Up"
-msgstr ""
+msgstr "ধ্বনি বঢ়াওক"
 
 #: gtk/gtkvolumebutton.c:139
 msgid "Muted"
-msgstr ""
+msgstr "শব্দ বন্ধ কৰক"
 
 #: gtk/gtkvolumebutton.c:143
 msgid "Full Volume"
-msgstr ""
+msgstr "সম্পূৰ্ণ ধ্বনি"
 
 #. Translators: this is the percentage of the current volume,
 #. * as used in the tooltip, eg. "49 %".
@@ -3388,7 +3369,7 @@ msgstr ""
 #: gtk/gtkvolumebutton.c:158
 #, c-format
 msgid "volume percentage|%d %%"
-msgstr ""
+msgstr "%d %%"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:5
@@ -4221,7 +4202,7 @@ msgid "Failed to write hash table\n"
 msgstr "হেশ তালিকা লিখিব'লৈ অক্ষম\n"
 
 #: gtk/updateiconcache.c:1380
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to write folder index\n"
 msgstr "পঞ্জীকাৰ বেটুপাত লিখাত অক্ষম\n"
 
@@ -4238,7 +4219,7 @@ msgstr "ভাণ্ডাৰৰ নথিপত্ৰ লিখিব পৰা
 #: gtk/updateiconcache.c:1475
 #, c-format
 msgid "The generated cache was invalid.\n"
-msgstr ""
+msgstr "সৃষ্টি কৰা ভাণ্ডাৰ অবৈধ ।\n"
 
 #: gtk/updateiconcache.c:1489
 #, c-format
@@ -4261,7 +4242,6 @@ msgid "Cache file created successfully.\n"
 msgstr "ভাণ্ডাৰৰ নথিপত্ৰ সফলভাবে সৃষ্টি কৰা হ'ল ।\n"
 
 #: gtk/updateiconcache.c:1569
-#, fuzzy
 msgid "Overwrite an existing cache, even if up to date"
 msgstr "এটা বিদ্যমান ভাণ্ডাৰ পুনঃ লিখক, নতুন হোৱা স্বত্বেও"
 
@@ -4283,17 +4263,17 @@ msgstr "শব্দবহুল নিৰ্গম বন্ধ কৰক"
 
 #: gtk/updateiconcache.c:1574
 msgid "Validate existing icon cache"
-msgstr ""
+msgstr "বৰ্ত্তমানৰ আইকণ ভাণ্ডাৰৰ প্ৰমাণীকৰণ কৰক"
 
 #: gtk/updateiconcache.c:1609
-#, fuzzy, c-format
+#, c-format
 msgid "File not found: %s\n"
-msgstr "%s তুলি ল'ব পৰা ন'গ'ল"
+msgstr "নথিপত্ৰ পোৱা ন'গ'ল: %s\n"
 
 #: gtk/updateiconcache.c:1615
 #, c-format
 msgid "Not a valid icon cache: %s\n"
-msgstr ""
+msgstr "বৈধ আইকণ ভাণ্ডাৰ নহয়: %s\n"
 
 #: gtk/updateiconcache.c:1626
 #, c-format
@@ -4333,7 +4313,7 @@ msgstr "IPA"
 #. ID
 #: modules/input/immultipress.c:31
 msgid "Multipress"
-msgstr ""
+msgstr "মাল্টিপ্ৰেছ"
 
 #. ID
 #: modules/input/imthai.c:35
@@ -4440,7 +4420,7 @@ msgstr "শ্ৰেণীভুক্ত নকৰা"
 #: modules/printbackends/cups/gtkprintbackendcups.c:2302
 #, c-format
 msgid "Custom %.2fx%.2f"
-msgstr ""
+msgstr "নিজৰ পছন্দৰ %.2fx%.2f"
 
 #. default filename used for print-to-file
 #: modules/printbackends/file/gtkprintbackendfile.c:236
@@ -4487,48 +4467,16 @@ msgstr "আদেশ শাৰী"
 
 #. default filename used for print-to-test
 #: modules/printbackends/test/gtkprintbackendtest.c:235
-#, fuzzy, c-format
+#, c-format
 msgid "test-output.%s"
-msgstr "নিৰ্গম । %s"
+msgstr "test-output.%s"
 
 #: modules/printbackends/test/gtkprintbackendtest.c:465
-#, fuzzy
 msgid "Print to Test Printer"
-msgstr "নথিপত্ৰলৈ মুদ্ৰণ কৰক"
+msgstr "পৰীক্ষণ মূদ্ৰকলৈ মূদ্ৰণ কৰক"
 
 #: tests/testfilechooser.c:205
 #, c-format
 msgid "Could not get information for file '%s': %s"
 msgstr "'%s' নথিপত্ৰৰ বাবে তথ্য পোৱা ন'গ'ল: %s"
 
-#~ msgid "Today"
-#~ msgstr "আজি"
-
-#~ msgid "Line %d, column %d: missing attribute \"%s\""
-#~ msgstr "শাৰী %d, স্তম্ভ %d: সন্ধানহীন গুণ \"%s\""
-
-#~ msgid "Line %d, column %d: unexpected element \"%s\""
-#~ msgstr "শাৰী %d, স্তম্ভ %d: অপ্ৰত্যাশিত পদাৰ্থ \"%s\""
-
-#~ msgid ""
-#~ "Line %d, column %d: expected end of element \"%s\", but got element for "
-#~ "\"%s\" instead"
-#~ msgstr ""
-#~ "শাৰী %d, স্তম্ভ %d: প্ৰত্যাশিত পদাৰ্থ \"%s\" ৰ অন্ত, কিন্তু ইয়াৰ সলনি পোৱা গ'ল \"%"
-#~ "s\" পদাৰ্থহে"
-
-#~ msgid ""
-#~ "Line %d, column %d: expected \"%s\" at the toplevel, but found \"%s\" "
-#~ "instead"
-#~ msgstr ""
-#~ "শাৰী %d, স্তম্ভ %d: প্ৰত্যাশিত \"%s\" উচ্চস্তৰত, কিন্তু ইয়াৰ সলনি পোৱা গ'ল \"%s\" "
-#~ "হে"
-
-#~ msgid ""
-#~ "Line %d, column %d: expected \"%s\" or \"%s\", but found \"%s\" instead"
-#~ msgstr ""
-#~ "শাৰী %d, স্তম্ভ %d: প্ৰত্যাশিত \"%s\" বা \"%s\", কিন্তু ইয়াৰ সলনি পোৱা গ'ল \"%s"
-#~ "\" হে"
-
-#~ msgid "Could not create directory: %s"
-#~ msgstr "পঞ্জিকা সৃষ্টি কৰিব পৰা ন'গ'ল: %s"
