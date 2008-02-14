@@ -169,7 +169,7 @@
   impl->width = content_rect.size.width;
   impl->height = content_rect.size.height;
 
-  [[self contentView] setBounds:NSMakeRect (0, 0, impl->width, impl->height)];
+  [[self contentView] setFrame:NSMakeRect (0, 0, impl->width, impl->height)];
 
   /* Synthesize a configure event */
   event = gdk_event_new (GDK_CONFIGURE);

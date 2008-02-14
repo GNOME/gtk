@@ -1,3 +1,11 @@
+2008-02-14  Richard Hult  <richard@imendio.com>
+
+	Merged from trunk:
+
+	* gdk/quartz/GdkQuartzWindow.c: Set frame, not bounds when
+	resizing to be consistent and to avoid introducing an internal
+	transform in the view.
+
 2008-02-13  Richard Hult  <richard@imendio.com>
 
 	Merged from trunk:
