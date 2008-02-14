@@ -23,7 +23,7 @@
 #include <gtk/gtkwidget.h>
 #include <gtk/gtkspinbutton.h>
 
-G_BEGIN_DECLS;
+G_BEGIN_DECLS
 
 /* --- Gtk+ Test Utility API --- */
 void            gtk_test_init                   (int            *argcp,
@@ -64,6 +64,6 @@ GtkWidget*      gtk_test_find_sibling           (GtkWidget      *base_widget,
                                                  GType           widget_type);
 GtkWidget*      gtk_test_find_label             (GtkWidget      *widget,
                                                  const gchar    *label_pattern);
-G_END_DECLS;
+G_END_DECLS
 
 #endif /* __GTK_TEST_UTILS_H__ */

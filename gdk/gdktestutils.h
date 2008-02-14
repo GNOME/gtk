@@ -22,7 +22,7 @@
 
 #include <gdk/gdkwindow.h>
 
-G_BEGIN_DECLS;
+G_BEGIN_DECLS
 
 /* --- Gdk Test Utility API --- */
 void            gdk_test_render_sync            (GdkWindow      *window);
@@ -38,6 +38,6 @@ gboolean        gdk_test_simulate_button        (GdkWindow      *window,
                                                  guint           button, /*1..3*/
                                                  GdkModifierType modifiers,
                                                  GdkEventType    button_pressrelease);
-G_END_DECLS;
+G_END_DECLS
 
 #endif /* __GDK_TEST_UTILS_H__ */

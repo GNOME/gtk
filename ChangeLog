@@ -1,3 +1,8 @@
+2008-02-14  Johan Dahlin  <johan@gnome.org>
+
+	* gdk/gdktestutils.h
+	* gtk/gtktestutils.h: Remove ; trailing G_BEGIN/END_DECLS
+
 2008-02-13  Richard Hult  <richard@imendio.com>
 
 	* gtk/gtkclipboard-quartz.c: (gtk_clipboard_wait_for_contents):
