@@ -1,3 +1,8 @@
+2008-02-14  Richard Hult  <richard@imendio.com>
+
+	* gdk/quartz/gdkdisplay-quartz.c: (gdk_display_open): Coding style
+	fix.
+
 2008-02-14  Johan Dahlin  <johan@gnome.org>
 
 	* gdk/gdktestutils.h

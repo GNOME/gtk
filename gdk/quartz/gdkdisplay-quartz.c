@@ -42,6 +42,8 @@ _gdk_windowing_set_default_display (GdkDisplay *display)
 GdkDisplay *
 gdk_display_open (const gchar *display_name)
 {
+  NSScreen *nsscreen;
+
   if (_gdk_display != NULL)
     return NULL;
 
@@ -51,7 +53,6 @@ gdk_display_open (const gchar *display_name)
   _gdk_display = g_object_new (GDK_TYPE_DISPLAY, NULL);
   _gdk_screen = g_object_new (GDK_TYPE_SCREEN, NULL);
 
-  NSScreen *nsscreen;
   nsscreen = [[NSScreen screens] objectAtIndex:0];
   gdk_screen_set_resolution (_gdk_screen, 72.0 * [nsscreen userSpaceScaleFactor]);
 
