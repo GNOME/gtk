@@ -32,8 +32,20 @@ static guint   update_idle;
 
 static GSList *main_window_stack;
 
+#define FULLSCREEN_DATA "fullscreen-data"
+
+typedef struct
+{
+  gint            x, y;
+  gint            width, height;
+  GdkWMDecoration decor;
+} FullscreenSavedGeometry;
+
+
 static void update_toplevel_order (void);
-static void clear_toplevel_order (void);
+static void clear_toplevel_order  (void);
+
+static FullscreenSavedGeometry *get_fullscreen_geometry (GdkWindow *window);
 
 #define WINDOW_IS_TOPLEVEL(window)		   \
   (GDK_WINDOW_TYPE (window) != GDK_WINDOW_CHILD && \
@@ -1064,6 +1076,10 @@ gdk_window_hide (GdkWindow *window)
   GdkWindow *mouse_window;
 
   g_return_if_fail (GDK_IS_WINDOW (window));
+
+  /* Make sure we're not stuck in fullscreen mode. */
+  if (get_fullscreen_geometry (window))
+    ShowMenuBar ();
 
   if (GDK_WINDOW_DESTROYED (window))
     return;
@@ -2700,14 +2716,11 @@ gdk_window_deiconify (GdkWindow *window)
     }
 }
 
-#define FULLSCREEN_DATA "fullscreen-data"
-
-typedef struct
+static FullscreenSavedGeometry *
+get_fullscreen_geometry (GdkWindow *window)
 {
-  gint            x, y;
-  gint            width, height;
-  GdkWMDecoration decor;
-} FullscreenSavedGeometry;
+  return g_object_get_data (G_OBJECT (window), FULLSCREEN_DATA);
+}
 
 void
 gdk_window_fullscreen (GdkWindow *window)
@@ -2720,28 +2733,32 @@ gdk_window_fullscreen (GdkWindow *window)
   g_return_if_fail (GDK_IS_WINDOW (window));
   g_return_if_fail (WINDOW_IS_TOPLEVEL (window));
 
-  geometry = g_new (FullscreenSavedGeometry, 1);
+  geometry = get_fullscreen_geometry (window);
+  if (!geometry)
+    {
+      geometry = g_new (FullscreenSavedGeometry, 1);
 
-  geometry->x = private->x;
-  geometry->y = private->y;
-  geometry->width = impl->width;
-  geometry->height = impl->height;
-  
-  if (!gdk_window_get_decorations (window, &geometry->decor))
-    geometry->decor = GDK_DECOR_ALL;
+      geometry->x = private->x;
+      geometry->y = private->y;
+      geometry->width = impl->width;
+      geometry->height = impl->height;
 
-  g_object_set_data_full (G_OBJECT (window),
-                          FULLSCREEN_DATA, geometry, 
-                          g_free);
+      if (!gdk_window_get_decorations (window, &geometry->decor))
+        geometry->decor = GDK_DECOR_ALL;
+
+      g_object_set_data_full (G_OBJECT (window),
+                              FULLSCREEN_DATA, geometry, 
+                              g_free);
+
+      gdk_window_set_decorations (window, 0);
+
+      frame = [[NSScreen mainScreen] frame];
+      move_resize_window_internal (window,
+                                   0, 0, 
+                                   frame.size.width, frame.size.height);
+    }
 
   HideMenuBar ();
-
-  gdk_window_set_decorations (window, 0);
-
-  frame = [[NSScreen mainScreen] frame];
-  move_resize_window_internal (window,
-                               0, 0, 
-                               frame.size.width, frame.size.height);
 
   gdk_synthesize_window_state (window, 0, GDK_WINDOW_STATE_FULLSCREEN);
 }
@@ -2754,8 +2771,7 @@ gdk_window_unfullscreen (GdkWindow *window)
   g_return_if_fail (GDK_IS_WINDOW (window));
   g_return_if_fail (WINDOW_IS_TOPLEVEL (window));
 
-  geometry = g_object_get_data (G_OBJECT (window), FULLSCREEN_DATA);
-
+  geometry = get_fullscreen_geometry (window);
   if (geometry)
     {
       ShowMenuBar ();
