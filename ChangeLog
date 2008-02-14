@@ -2,6 +2,14 @@
 
 	Merged from trunk:
 
+	* gdk/quartz/gdkwindow-quartz.c: (gdk_window_focus): Using
+	makeKeyWindow unfortunately doesn't work in all cases, we must use
+	makeKeyAndOrderFront.
+
+2008-02-14  Richard Hult  <richard@imendio.com>
+
+	Merged from trunk:
+
 	* gdk/quartz/gdkwindow-quartz.c: (get_fullscreen_geometry),
 	(gdk_window_hide), (gdk_window_fullscreen),
 	(gdk_window_unfullscreen): Make sure we leave fullscreen mode if

@@ -2218,7 +2218,7 @@ gdk_window_focus (GdkWindow *window,
       if (private->accept_focus && private->window_type != GDK_WINDOW_TEMP) 
         {
           GDK_QUARTZ_ALLOC_POOL;
-          [impl->toplevel makeKeyWindow];
+          [impl->toplevel makeKeyAndOrderFront:impl->toplevel];
           GDK_QUARTZ_RELEASE_POOL;
         }
     }
