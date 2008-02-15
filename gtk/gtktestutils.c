@@ -17,6 +17,10 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330,
  * Boston, MA 02111-1307, USA.
  */
+
+/* need to get the prototypes of all get_type functions */
+#define GTK_ENABLE_BROKEN
+
 #include "gtktestutils.h"
 #include <gtk/gtk.h>
 #include <gdk/gdktestutils.h>
