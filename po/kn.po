@@ -1,14 +1,14 @@
-# translation of gtk+.HEAD.po to Kannada
+# translation of gtk+.gtk-2-12.kn.po to Kannada
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
 #
-# Shankar Prasad <svenkate@redhat.com>, 2007.
+# Shankar Prasad <svenkate@redhat.com>, 2007, 2008.
 msgid ""
 msgstr ""
-"Project-Id-Version: gtk+.HEAD\n"
+"Project-Id-Version: gtk+.gtk-2-12.kn\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2008-02-12 17:51-0500\n"
-"PO-Revision-Date: 2007-09-11 10:38+0530\n"
+"PO-Revision-Date: 2008-02-12 11:05+0530\n"
 "Last-Translator: Shankar Prasad <svenkate@redhat.com>\n"
 "Language-Team: Kannada <en@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -1248,19 +1248,19 @@ msgid "keyboard label|Backslash"
 msgstr "Backslash"
 
 #: gtk/gtkbuilderparser.c:265
-#, fuzzy, c-format
+#, c-format
 msgid "Invalid type function: `%s'"
-msgstr "ಅಮಾನ್ಯ ಕಡತದ ಹೆಸರು:%s"
+msgstr "ಅಮಾನ್ಯ ಬಗೆಯ ಕ್ರಿಯೆ:%s"
 
 #: gtk/gtkbuilderparser.c:714
-#, fuzzy, c-format
+#, c-format
 msgid "Invalid root element: '%s'"
-msgstr "ಅಮಾನ್ಯ ಕಡತದ ಹೆಸರು:%s"
+msgstr "ಅಮಾನ್ಯ ಮೂಲ ಘಟಕ:%s"
 
 #: gtk/gtkbuilderparser.c:746
 #, c-format
 msgid "Unhandled tag: '%s'"
-msgstr ""
+msgstr "ನಿಭಾಯಿಸದ ಟ್ಯಾಗ್: '%s'"
 
 #. Translate to calendar:YM if you want years to be displayed
 #. * before months; otherwise translate to calendar:MY.
@@ -2220,7 +2220,7 @@ msgstr "ಹೊಂದಿಸದೆ ಇರಲು GTK+ ದೋಷ ನಿವಾರಕ 
 #.
 #: gtk/gtkmain.c:672
 msgid "default:LTR"
-msgstr "ಪೂರ್ವನಿಯೋಜಿತ:LTR"
+msgstr "default:LTR"
 
 #: gtk/gtkmain.c:768
 msgid "GTK+ Options"
@@ -2256,7 +2256,7 @@ msgstr "ಒಂದು ಮಾನ್ಯ ಪುಟ ಸಂಯೋಜನೆ ಕಡತ�
 #.
 #: gtk/gtkpagesetupunixdialog.c:152
 msgid "default:mm"
-msgstr "ಪೂರ್ವನಿಯೋಜಿತ:mm"
+msgstr "default:mm"
 
 #: gtk/gtkpagesetupunixdialog.c:308
 msgid ""
