@@ -31,6 +31,7 @@
 <!ENTITY gdk-DisplayManager SYSTEM "xml/gdkdisplaymanager.xml">
 <!ENTITY gdk-Multihead SYSTEM "multihead.sgml">
 <!ENTITY gdk-AppLaunchContext SYSTEM "xml/gdkapplaunchcontext.xml">
+<!ENTITY gdk-Testing SYSTEM "xml/gdktesting.xml">
 <!ENTITY version SYSTEM "version.xml">
 ]>
 
@@ -87,6 +88,8 @@
     &gdk-X-Window-System-Interaction;
 
     &gdk-AppLaunchContext;
+
+    &gdk-Testing;
   </reference>
 
   <index>

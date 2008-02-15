@@ -30,6 +30,7 @@ gdk_screen_height
 gdk_screen_width_mm
 gdk_screen_height_mm
 
+
 <SUBSECTION>
 gdk_pointer_grab
 GdkGrabStatus
@@ -217,6 +218,9 @@ gdk_screen_get_n_monitors
 gdk_screen_get_monitor_geometry
 gdk_screen_get_monitor_at_point
 gdk_screen_get_monitor_at_window
+gdk_screen_get_monitor_height_mm
+gdk_screen_get_monitor_width_mm
+gdk_screen_get_monitor_plug_name
 gdk_screen_broadcast_client_message
 gdk_screen_get_setting
 gdk_screen_get_font_options
@@ -788,6 +792,8 @@ gdk_window_object_get_type
 gdk_drawable_get_type
 GdkWindowObject
 GdkWindowObjectClass
+gdk_window_freeze_toplevel_updates_libgtk_only
+gdk_window_thaw_toplevel_updates_libgtk_only
 </SECTION>
 
 <SECTION>
@@ -1285,6 +1291,7 @@ gdk_x11_get_server_time
 gdk_net_wm_supports
 gdk_x11_screen_supports_net_wm_hint
 gdk_x11_screen_get_window_manager_name
+gdk_x11_screen_get_monitor_output
 gdk_x11_screen_lookup_visual
 gdk_x11_window_set_user_time
 gdk_x11_window_move_to_current_desktop
@@ -1336,9 +1343,9 @@ gdk_iswspace
 </SECTION>
 
 <SECTION>
-<INCLUDE>gdk/gdkapplaunchcontext.h</INCLUDE>
 <TITLE>Application launching</TITLE>
 <FILE>gdkapplaunchcontext</FILE>
+GdkAppLaunchContext
 gdk_app_launch_context_new
 gdk_app_launch_context_set_display
 gdk_app_launch_context_set_screen
@@ -1346,4 +1353,23 @@ gdk_app_launch_context_set_desktop
 gdk_app_launch_context_set_timestamp
 gdk_app_launch_context_set_icon
 gdk_app_launch_context_set_icon_name
+<SUBSECTION Standard>
+GDK_APP_LAUNCH_CONTEXT
+GDK_APP_LAUNCH_CONTEXT_CLASS
+GDK_APP_LAUNCH_CONTEXT_GET_CLASS
+GDK_IS_APP_LAUNCH_CONTEXT
+GDK_IS_APP_LAUNCH_CONTEXT_CLASS
+GDK_TYPE_APP_LAUNCH_CONTEXT
+GdkAppLaunchContextClass
+GdkAppLaunchContextPrivate
+<SUBSECTION Private>
+gdk_app_launch_context_get_type
+</SECTION>
+
+<SECTION>
+<TITLE>Testing</TITLE>
+<FILE>gdktesting</FILE>
+gdk_test_render_sync
+gdk_test_simulate_button
+gdk_test_simulate_key
 </SECTION>
