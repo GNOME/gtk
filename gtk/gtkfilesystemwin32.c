@@ -346,33 +346,47 @@ static guint32
 get_viewable_logical_drives (void)
 {
   guint viewable_drives = GetLogicalDrives ();
-  HKEY my_key;
+  HKEY key;
 
   DWORD var_type = REG_DWORD; //the value's a REG_DWORD type
   DWORD no_drives_size = 4;
   DWORD no_drives;
   gboolean hklm_present = FALSE;
 
-  RegOpenKeyEx (HKEY_LOCAL_MACHINE, "Software\\Microsoft\\Windows\\CurrentVersion\\Policies\\Explorer", 0, KEY_READ, &my_key);
-  if (RegQueryValueEx (my_key, "NoDrives", NULL, &var_type, &no_drives, &no_drives_size) == ERROR_SUCCESS)
+  if (RegOpenKeyEx (HKEY_LOCAL_MACHINE,
+		    "Software\\Microsoft\\Windows\\"
+		    "CurrentVersion\\Policies\\Explorer",
+		    0, KEY_READ, &key) == ERROR_SUCCESS)
     {
-      // We need the bits that are set in viewable_drives, and unset in no_drives.
-      viewable_drives = viewable_drives & ~no_drives;
-      hklm_present = TRUE;
+      if (RegQueryValueEx (key, "NoDrives", NULL, &var_type,
+			   (LPBYTE) &no_drives, &no_drives_size) == ERROR_SUCCESS)
+	{
+	  /* We need the bits that are set in viewable_drives, and
+	   * unset in no_drives.
+	   */
+	  viewable_drives = viewable_drives & ~no_drives;
+	  hklm_present = TRUE;
+	}
+      RegCloseKey (key);
     }
 
-  // If the key is present in HKLM then the one in HKCU should be ignored
+  /* If the key is present in HKLM then the one in HKCU should be ignored */
   if (!hklm_present)
     {
-      RegOpenKeyEx (HKEY_CURRENT_USER, "Software\\Microsoft\\Windows\\CurrentVersion\\Policies\\Explorer", 0, KEY_READ, &my_key);
-    if (RegQueryValueEx (my_key, "NoDrives", NULL, &var_type, &no_drives, &no_drives_size) == ERROR_SUCCESS)
-      {
-	// We need the bits that are set in viewable_drives, and unset in no_drives.
-	viewable_drives = viewable_drives & ~no_drives;
-      }
-  }
+      if (RegOpenKeyEx (HKEY_CURRENT_USER,
+			"Software\\Microsoft\\Windows\\"
+			"CurrentVersion\\Policies\\Explorer",
+			0, KEY_READ, &key) == ERROR_SUCCESS)
+	{
+	  if (RegQueryValueEx (key, "NoDrives", NULL, &var_type,
+			       (LPBYTE) &no_drives, &no_drives_size) == ERROR_SUCCESS)
+	    {
+	      viewable_drives = viewable_drives & ~no_drives;
+	    }
+	  RegCloseKey (key);
+	}
+    }
 
-  RegCloseKey (my_key);
   return viewable_drives; 
 }
 

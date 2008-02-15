@@ -1,3 +1,8 @@
+2008-02-15  Tor Lillqvist  <tml@novell.com>
+
+	* gtk/gtkfilesystemwin32.c (get_viewable_logical_drives): Don't
+	leak Registry key handles. (#516578)
+
 2008-02-14  Richard Hult  <richard@imendio.com>
 
 	Merged from trunk:
