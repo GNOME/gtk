@@ -79,3 +79,28 @@ End:
 @Returns: 
 
 
+<!-- ##### FUNCTION gdk_pixbuf_new_from_stream ##### -->
+<para>
+
+</para>
+
+@stream: 
+@cancellable: 
+@error: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_pixbuf_new_from_stream_at_scale ##### -->
+<para>
+
+</para>
+
+@stream: 
+@width: 
+@height: 
+@preserve_aspect_ratio: 
+@cancellable: 
+@error: 
+@Returns: 
+
+

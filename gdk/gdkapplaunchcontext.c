@@ -111,7 +111,7 @@ gdk_app_launch_context_init (GdkAppLaunchContext *context)
  * Sets the display on which applications will be launched when
  * using this context. See also gdk_app_launch_context_set_screen().
  *
- * Since: 2.16
+ * Since: 2.14
  */
 void
 gdk_app_launch_context_set_display (GdkAppLaunchContext *context,
@@ -136,7 +136,7 @@ gdk_app_launch_context_set_display (GdkAppLaunchContext *context,
  * using this context. See also gdk_app_launch_context_set_display().
  * If both @screen and @display are set, the @screen takes priority.
  *
- * Since: 2.16
+ * Since: 2.14
  */
 void
 gdk_app_launch_context_set_screen (GdkAppLaunchContext *context,
@@ -163,7 +163,7 @@ gdk_app_launch_context_set_screen (GdkAppLaunchContext *context,
  * <ulink url="http://www.freedesktop.org/Standards/wm-spec">Extended 
  * Window Manager Hints</ulink>. 
  *
- * Since: 2.16
+ * Since: 2.14
  */
 void
 gdk_app_launch_context_set_desktop (GdkAppLaunchContext *context,
@@ -180,7 +180,7 @@ gdk_app_launch_context_set_desktop (GdkAppLaunchContext *context,
  * Sets the timestamp of @context. The timestamp should ideally
  * be taken from the event that triggered the launch.
  *
- * Since: 2.16
+ * Since: 2.14
  */
 void
 gdk_app_launch_context_set_timestamp (GdkAppLaunchContext *context,
@@ -197,7 +197,7 @@ gdk_app_launch_context_set_timestamp (GdkAppLaunchContext *context,
  * Sets the icon for applications that are launched with this
  * context. See also gdk_app_launch_context_set_icon_name().
  *
- * Since: 2.16
+ * Since: 2.14
  */
 void
 gdk_app_launch_context_set_icon (GdkAppLaunchContext *context, 
@@ -224,7 +224,7 @@ gdk_app_launch_context_set_icon (GdkAppLaunchContext *context,
  * See also gdk_app_launch_context_set_icon(). If both @icon 
  * and @icon_name are set, the @icon_name takes priority.
  * 
- * Since: 2.16
+ * Since: 2.14
  */
 void
 gdk_app_launch_context_set_icon_name (GdkAppLaunchContext *context,
@@ -241,7 +241,7 @@ gdk_app_launch_context_set_icon_name (GdkAppLaunchContext *context,
  *
  * Returns: a new #GdkAppLaunchContext
  *
- * Since: 2.16
+ * Since: 2.14
  */
 GdkAppLaunchContext *
 gdk_app_launch_context_new (void)

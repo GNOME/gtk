@@ -78,6 +78,11 @@ submenu. For normal applications, the relevant signal is "activate".
 
 </para>
 
+<!-- ##### ARG GtkMenuItem:arrow-scaling ##### -->
+<para>
+
+</para>
+
 <!-- ##### ARG GtkMenuItem:arrow-spacing ##### -->
 <para>
 

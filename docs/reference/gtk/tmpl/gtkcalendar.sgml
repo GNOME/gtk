@@ -118,6 +118,16 @@ calendar.
 
 </para>
 
+<!-- ##### ARG GtkCalendar:detail-height-rows ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkCalendar:detail-width-chars ##### -->
+<para>
+
+</para>
+
 <!-- ##### ARG GtkCalendar:month ##### -->
 <para>
 
@@ -129,6 +139,11 @@ calendar.
 </para>
 
 <!-- ##### ARG GtkCalendar:show-day-names ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkCalendar:show-details ##### -->
 <para>
 
 </para>
@@ -148,9 +163,29 @@ calendar.
 
 </para>
 
+<!-- ##### USER_FUNCTION GtkCalendarDetailFunc ##### -->
+<para>
+
+</para>
+
+@calendar: 
+@year: 
+@month: 
+@day: 
+@user_data: 
+@Returns: 
+
+
 <!-- ##### ENUM GtkCalendarDisplayOptions ##### -->
 <para>
 </para>
+
+@GTK_CALENDAR_SHOW_HEADING: 
+@GTK_CALENDAR_SHOW_DAY_NAMES: 
+@GTK_CALENDAR_NO_MONTH_CHANGE: 
+@GTK_CALENDAR_SHOW_WEEK_NUMBERS: 
+@GTK_CALENDAR_WEEK_START_MONDAY: 
+@GTK_CALENDAR_SHOW_DETAILS: 
 
 <!-- ##### FUNCTION gtk_calendar_new ##### -->
 <para>
@@ -220,15 +255,6 @@ calendar.
 @flags: 
 
 
-<!-- ##### FUNCTION gtk_calendar_display_options ##### -->
-<para>
-</para>
-
-@calendar: 
-@flags: 
-@Deprecated: 
-
-
 <!-- ##### FUNCTION gtk_calendar_get_date ##### -->
 <para>
 </para>
@@ -237,6 +263,62 @@ calendar.
 @year: 
 @month: 
 @day: 
+
+
+<!-- ##### FUNCTION gtk_calendar_set_detail_func ##### -->
+<para>
+
+</para>
+
+@calendar: 
+@func: 
+@data: 
+@destroy: 
+
+
+<!-- ##### FUNCTION gtk_calendar_get_detail_width_chars ##### -->
+<para>
+
+</para>
+
+@calendar: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_calendar_set_detail_width_chars ##### -->
+<para>
+
+</para>
+
+@calendar: 
+@chars: 
+
+
+<!-- ##### FUNCTION gtk_calendar_get_detail_height_rows ##### -->
+<para>
+
+</para>
+
+@calendar: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_calendar_set_detail_height_rows ##### -->
+<para>
+
+</para>
+
+@calendar: 
+@rows: 
+
+
+<!-- ##### FUNCTION gtk_calendar_display_options ##### -->
+<para>
+</para>
+
+@calendar: 
+@flags: 
+@Deprecated: 
 
 
 <!-- ##### FUNCTION gtk_calendar_freeze ##### -->

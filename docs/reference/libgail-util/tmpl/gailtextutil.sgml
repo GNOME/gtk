@@ -20,6 +20,9 @@ GtkLabel, GtkCellRendererText and GtkTextview.
 
 </para>
 
+<!-- ##### SECTION Stability_Level ##### -->
+
+
 <!-- ##### STRUCT GailTextUtil ##### -->
 <para>
 The GailTextCell structure should not be accessed directly.

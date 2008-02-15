@@ -193,8 +193,8 @@ as any other #GtkHButtonBox.
 
 </para>
 
-@dialog:
-@arg1:
+@dialog: 
+@arg1: 
 
 <!-- ##### ARG GtkDialog:has-separator ##### -->
 <para>

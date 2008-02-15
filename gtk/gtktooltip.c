@@ -312,7 +312,7 @@ gtk_tooltip_set_icon_from_stock (GtkTooltip  *tooltip,
  * the icon indicated by @icon_name with the size indicated
  * by @size.  If @icon_name is %NULL, the image will be hidden.
  *
- * Since: 2.16
+ * Since: 2.14
  */
 void
 gtk_tooltip_set_icon_from_icon_name(GtkTooltip  *tooltip,

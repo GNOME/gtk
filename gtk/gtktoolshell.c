@@ -67,7 +67,7 @@ gtk_tool_shell_get_type (void)
  *
  * Return value: the current size for icons of @shell
  *
- * Since: 2.16
+ * Since: 2.14
  **/
 GtkIconSize
 gtk_tool_shell_get_icon_size (GtkToolShell *shell)
@@ -85,7 +85,7 @@ gtk_tool_shell_get_icon_size (GtkToolShell *shell)
  *
  * Return value: the current orientation of @shell
  *
- * Since: 2.16
+ * Since: 2.14
  **/
 GtkOrientation
 gtk_tool_shell_get_orientation (GtkToolShell *shell)
@@ -103,7 +103,7 @@ gtk_tool_shell_get_orientation (GtkToolShell *shell)
  *
  * Return value: the current style of @shell
  *
- * Since: 2.16
+ * Since: 2.14
  **/
 GtkToolbarStyle
 gtk_tool_shell_get_style (GtkToolShell *shell)
@@ -120,7 +120,7 @@ gtk_tool_shell_get_style (GtkToolShell *shell)
  *
  * Return value: The relief style of buttons on @shell.
  *
- * Since: 2.16
+ * Since: 2.14
  **/
 GtkReliefStyle
 gtk_tool_shell_get_relief_style (GtkToolShell *shell)
@@ -144,7 +144,7 @@ gtk_tool_shell_get_relief_style (GtkToolShell *shell)
  * Tool items must not call this function directly, but rely on
  * gtk_tool_item_rebuild_menu() instead.
  *
- * Since: 2.16
+ * Since: 2.14
  **/
 void
 gtk_tool_shell_rebuild_menu (GtkToolShell *shell)

@@ -482,7 +482,7 @@ gtk_page_setup_get_page_height (GtkPageSetup *setup,
  *
  * Return value: %TRUE on success
  *
- * Since: 2.16
+ * Since: 2.14
  */
 gboolean
 gtk_page_setup_load_file (GtkPageSetup *setup,
@@ -568,7 +568,7 @@ string_to_enum (GType type,
  * 
  * Return value: %TRUE on success
  *
- * Since: 2.16
+ * Since: 2.14
  */
 gboolean
 gtk_page_setup_load_key_file (GtkPageSetup *setup,

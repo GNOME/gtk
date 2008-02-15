@@ -179,7 +179,7 @@ or a #GdkWindow.
 @drawable: 
 @gc: 
 @points: 
-@npoints: 
+@n_points: 
 
 
 <!-- ##### FUNCTION gdk_draw_line ##### -->
@@ -202,7 +202,7 @@ or a #GdkWindow.
 @gc: 
 @points: 
 lines.
-@npoints: 
+@n_points: 
 
 
 <!-- ##### FUNCTION gdk_draw_pixbuf ##### -->
@@ -231,7 +231,7 @@ lines.
 @drawable: 
 @gc: 
 @segs: 
-@nsegs: 
+@n_segs: 
 
 
 <!-- ##### STRUCT GdkSegment ##### -->
@@ -285,7 +285,7 @@ function.
 @gc: 
 @filled: 
 @points: 
-@npoints: 
+@n_points: 
 
 
 <!-- ##### FUNCTION gdk_draw_trapezoids ##### -->

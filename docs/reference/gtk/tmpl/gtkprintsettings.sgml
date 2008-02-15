@@ -882,6 +882,29 @@ only "file://" URIs.
 @Returns: 
 
 
+<!-- ##### FUNCTION gtk_print_settings_load_file ##### -->
+<para>
+
+</para>
+
+@settings: 
+@file_name: 
+@error: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_print_settings_load_key_file ##### -->
+<para>
+
+</para>
+
+@settings: 
+@key_file: 
+@group_name: 
+@error: 
+@Returns: 
+
+
 <!-- ##### FUNCTION gtk_print_settings_to_file ##### -->
 <para>
 

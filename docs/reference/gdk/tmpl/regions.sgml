@@ -95,7 +95,7 @@ A GdkRegion represents a set of pixels on the screen.
 </para>
 
 @points: 
-@npoints: 
+@n_points: 
 @fill_rule: 
 @Returns: 
 

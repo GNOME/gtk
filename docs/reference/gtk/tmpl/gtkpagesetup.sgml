@@ -270,6 +270,29 @@ Printing support was added in GTK+ 2.10.
 @Returns: 
 
 
+<!-- ##### FUNCTION gtk_page_setup_load_file ##### -->
+<para>
+
+</para>
+
+@setup: 
+@file_name: 
+@error: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_page_setup_load_key_file ##### -->
+<para>
+
+</para>
+
+@setup: 
+@key_file: 
+@group_name: 
+@error: 
+@Returns: 
+
+
 <!-- ##### FUNCTION gtk_page_setup_to_file ##### -->
 <para>
 

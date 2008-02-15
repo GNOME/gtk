@@ -6441,9 +6441,10 @@ gtk_paint_resize_grip (GtkStyle           *style,
  *
  * Allocates a new #GtkBorder structure and initializes its elements to zero.
  * 
- * Returns: a new empty #GtkBorder. The newly allocated #GtkBorder should be freed
- * with gtk_border_free()
- * Since: 2.16
+ * Returns: a new empty #GtkBorder. The newly allocated #GtkBorder should be 
+ *     freed with gtk_border_free()
+ *
+ * Since: 2.14
  **/
 GtkBorder *
 gtk_border_new (void)

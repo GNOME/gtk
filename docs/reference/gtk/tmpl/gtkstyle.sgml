@@ -745,7 +745,7 @@ Deprecated alias for gtk_style_apply_default_background().
 @widget: 
 @detail: 
 @points: 
-@npoints: 
+@n_points: 
 @fill: 
 
 
@@ -931,6 +931,14 @@ Deprecated alias for gtk_style_apply_default_background().
 @right: 
 @top: 
 @bottom: 
+
+<!-- ##### FUNCTION gtk_border_new ##### -->
+<para>
+
+</para>
+
+@Returns: 
+
 
 <!-- ##### FUNCTION gtk_border_copy ##### -->
 <para>

@@ -1290,7 +1290,7 @@ load_from_stream (GdkPixbufLoader  *loader,
  * not supported, there was not enough memory to allocate the image buffer, 
  * the stream contained invalid data, or the operation was cancelled.
  *
- * Since: 2.16
+ * Since: 2.14
  */
 GdkPixbuf *
 gdk_pixbuf_new_from_stream_at_scale (GInputStream  *stream,
@@ -1340,7 +1340,7 @@ gdk_pixbuf_new_from_stream_at_scale (GInputStream  *stream,
  * not supported, there was not enough memory to allocate the image buffer, 
  * the stream contained invalid data, or the operation was cancelled.
  *
- * Since: 2.16
+ * Since: 2.14
  **/
 GdkPixbuf *
 gdk_pixbuf_new_from_stream (GInputStream  *stream,
@@ -2274,7 +2274,7 @@ save_to_stream (const gchar  *buffer,
  * Returns: %TRUE if the pixbuf was saved successfully, %FALSE if an
  *     error was set.
  *
- * Since: 2.16
+ * Since: 2.14
  */
 gboolean
 gdk_pixbuf_save_to_stream (GdkPixbuf      *pixbuf,

@@ -41,6 +41,13 @@ when GDK gets multihead support.
 
 @gdkscreen: the object which received the signal.
 
+<!-- ##### SIGNAL GdkScreen::monitors-changed ##### -->
+<para>
+
+</para>
+
+@gdkscreen: the object which received the signal.
+
 <!-- ##### SIGNAL GdkScreen::size-changed ##### -->
 <para>
 
@@ -274,6 +281,36 @@ when GDK gets multihead support.
 
 @screen: 
 @window: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_screen_get_monitor_height_mm ##### -->
+<para>
+
+</para>
+
+@screen: 
+@monitor_num: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_screen_get_monitor_width_mm ##### -->
+<para>
+
+</para>
+
+@screen: 
+@monitor_num: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_screen_get_monitor_plug_name ##### -->
+<para>
+
+</para>
+
+@screen: 
+@monitor_num: 
 @Returns: 
 
 

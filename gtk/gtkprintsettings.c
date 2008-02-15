@@ -1511,7 +1511,7 @@ gtk_print_settings_set_output_bin (GtkPrintSettings *settings,
  *
  * Return value: %TRUE on success
  *
- * Since: 2.16
+ * Since: 2.14
  */
 gboolean
 gtk_print_settings_load_file (GtkPrintSettings *settings,
@@ -1574,7 +1574,7 @@ gtk_print_settings_new_from_file (const gchar  *file_name,
  *
  * Return value: %TRUE on success
  * 
- * Since: 2.16
+ * Since: 2.14
  */
 gboolean
 gtk_print_settings_load_key_file (GtkPrintSettings *settings,

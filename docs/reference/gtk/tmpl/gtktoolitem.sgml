@@ -3,6 +3,7 @@ GtkToolItem
 
 <!-- ##### SECTION Short_Description ##### -->
 
+
 <!-- ##### SECTION Long_Description ##### -->
 <para>
 
@@ -291,6 +292,14 @@ GtkToolItem
 
 
 <!-- ##### FUNCTION gtk_tool_item_rebuild_menu ##### -->
+<para>
+
+</para>
+
+@tool_item: 
+
+
+<!-- ##### FUNCTION gtk_tool_item_toolbar_reconfigured ##### -->
 <para>
 
 </para>

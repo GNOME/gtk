@@ -126,7 +126,7 @@ The colormap structure contains the following public fields.
 
 @colormap: 
 @colors: 
-@ncolors: 
+@n_colors: 
 @writeable: 
 @best_match: 
 @success: 
@@ -150,7 +150,7 @@ The colormap structure contains the following public fields.
 
 @colormap: 
 @colors: 
-@ncolors: 
+@n_colors: 
 
 
 <!-- ##### FUNCTION gdk_colormap_query_color ##### -->

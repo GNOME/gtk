@@ -1174,7 +1174,7 @@ gtk_tool_item_set_proxy_menu_item (GtkToolItem *tool_item,
  * #GtkToolbar and other #GtkToolShell implementations use this function
  * to notify children, when some aspect of their configuration changes.
  *
- * Since: 2.16
+ * Since: 2.14
  **/
 void
 gtk_tool_item_toolbar_reconfigured (GtkToolItem *tool_item)

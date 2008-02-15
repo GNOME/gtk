@@ -1,5 +1,12 @@
 2008-02-15  Matthias Clasen  <mclasen@redhat.com>
 
+	* configure.in: Go back to 2.13.0 as version for now,
+	as there was no consensus to do the jump.
+
+	* many other places: Update Since: tags.
+
+2008-02-15  Matthias Clasen  <mclasen@redhat.com>
+
 	* gtk/gtk.symbols: Add gtk_tool_shell_get_type
 
 	* gtk/gtktestutils.c: Don't generate unnecessary PLT entries

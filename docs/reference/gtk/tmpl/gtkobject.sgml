@@ -134,6 +134,8 @@ Tells about the state of the object.
 
 @GTK_IN_DESTRUCTION: the object is currently being destroyed. This is used 
   internally by GTK+ to prevent reinvokations during destruction.
+@GTK_FLOATING: 
+@GTK_RESERVED_1: 
 @GTK_RESERVED_2: reserved for future use
 
 <!-- ##### MACRO GTK_OBJECT_FLAGS ##### -->
