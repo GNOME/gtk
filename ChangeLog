@@ -1,3 +1,8 @@
+2008-02-15  Matthias Clasen <mclasen@redhat.com>
+
+	* gdk/x11/gdktestutils-x11.c:
+	* gdk/x11/gdkscreen-x11.c: Documentation fixes.
+
 2008-02-15  Tor Lillqvist  <tml@novell.com>
 
 	* gtk/gtkfilesystemwin32.c (get_viewable_logical_drives): Don't
