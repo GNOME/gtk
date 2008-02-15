@@ -17,7 +17,7 @@ msgstr ""
 "Project-Id-Version: gtk+ 2.10.7\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2008-02-12 17:51-0500\n"
-"PO-Revision-Date: 2008-01-25 09:04+0100\n"
+"PO-Revision-Date: 2008-02-15 22:08+0100\n"
 "Last-Translator: Stéphane Raimbault <stephane.raimbault@gmail.com>\n"
 "Language-Team: GNOME French Team <gnomefr@traduc.org>\n"
 "MIME-Version: 1.0\n"
@@ -2883,7 +2883,7 @@ msgstr "_Fermer"
 
 #: gtk/gtkstock.c:304
 msgid "C_onnect"
-msgstr "_Connecter"
+msgstr "Se _connecter"
 
 #: gtk/gtkstock.c:305
 msgid "_Convert"
