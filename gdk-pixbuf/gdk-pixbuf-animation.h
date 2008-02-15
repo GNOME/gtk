@@ -138,6 +138,7 @@ struct _GdkPixbufAnimationIterClass {
 };
       
 
+GType               gdk_pixbuf_non_anim_get_type (void) G_GNUC_CONST;
 GdkPixbufAnimation* gdk_pixbuf_non_anim_new (GdkPixbuf *pixbuf);
 
 #endif /* GDK_PIXBUF_ENABLE_BACKEND */

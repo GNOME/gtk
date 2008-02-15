@@ -123,6 +123,7 @@ gdk_pixbuf_animation_ref
 gdk_pixbuf_animation_unref
 #endif
 gdk_pixbuf_non_anim_new
+gdk_pixbuf_non_anim_get_type G_GNUC_CONST
 #endif
 #endif
 
