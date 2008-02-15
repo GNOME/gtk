@@ -719,7 +719,7 @@ _gdk_keymap_keys_changed (GdkDisplay *display)
  *
  * Returns the direction of effective layout of the keymap.
  *
- * @Returns: %PANGO_DIRECTION_LTR or %PANGO_DIRECTION_RTL 
+ * Returns: %PANGO_DIRECTION_LTR or %PANGO_DIRECTION_RTL 
  *   if it can determine the direction. %PANGO_DIRECTION_NEUTRAL 
  *   otherwise.
  **/

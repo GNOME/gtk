@@ -450,7 +450,7 @@ PtsToRegion (int         numFullPtBlocks,
 /**
  * gdk_region_polygon:
  * @points: an array of #GdkPoint structs
- * @npoints: the number of elements in the @points array
+ * @n_points: the number of elements in the @points array
  * @fill_rule: specifies which pixels are included in the region when the 
  *     polygon overlaps itself.
  * 
@@ -460,9 +460,9 @@ PtsToRegion (int         numFullPtBlocks,
  * Returns: a new #GdkRegion based on the given polygon
  */
 GdkRegion *
-gdk_region_polygon (const GdkPoint *Pts,
-                    gint            Count,
-                    GdkFillRule     rule)
+gdk_region_polygon (const GdkPoint *points,
+                    gint            n_points,
+                    GdkFillRule     fill_rule)
 {
     GdkRegion *region;
     EdgeTableEntry *pAET;   /* Active Edge Table       */
@@ -484,20 +484,20 @@ gdk_region_polygon (const GdkPoint *Pts,
     region = gdk_region_new ();
 
     /* special case a rectangle */
-    if (((Count == 4) ||
-	 ((Count == 5) && (Pts[4].x == Pts[0].x) && (Pts[4].y == Pts[0].y))) &&
-	(((Pts[0].y == Pts[1].y) &&
-	  (Pts[1].x == Pts[2].x) &&
-	  (Pts[2].y == Pts[3].y) &&
-	  (Pts[3].x == Pts[0].x)) ||
-	 ((Pts[0].x == Pts[1].x) &&
-	  (Pts[1].y == Pts[2].y) &&
-	  (Pts[2].x == Pts[3].x) &&
-	  (Pts[3].y == Pts[0].y)))) {
-	region->extents.x1 = MIN(Pts[0].x, Pts[2].x);
-	region->extents.y1 = MIN(Pts[0].y, Pts[2].y);
-	region->extents.x2 = MAX(Pts[0].x, Pts[2].x);
-	region->extents.y2 = MAX(Pts[0].y, Pts[2].y);
+    if (((n_points == 4) ||
+	 ((n_points == 5) && (points[4].x == points[0].x) && (points[4].y == points[0].y))) &&
+	(((points[0].y == points[1].y) &&
+	  (points[1].x == points[2].x) &&
+	  (points[2].y == points[3].y) &&
+	  (points[3].x == points[0].x)) ||
+	 ((points[0].x == points[1].x) &&
+	  (points[1].y == points[2].y) &&
+	  (points[2].x == points[3].x) &&
+	  (points[3].y == points[0].y)))) {
+	region->extents.x1 = MIN(points[0].x, points[2].x);
+	region->extents.y1 = MIN(points[0].y, points[2].y);
+	region->extents.x2 = MAX(points[0].x, points[2].x);
+	region->extents.y2 = MAX(points[0].y, points[2].y);
 	if ((region->extents.x1 != region->extents.x2) &&
 	    (region->extents.y1 != region->extents.y2)) {
 	    region->numRects = 1;
@@ -506,14 +506,14 @@ gdk_region_polygon (const GdkPoint *Pts,
 	return(region);
     }
 
-    pETEs = g_new (EdgeTableEntry, Count);
+    pETEs = g_new (EdgeTableEntry, n_points);
 
     pts = FirstPtBlock.pts;
-    CreateETandAET(Count, Pts, &ET, &AET, pETEs, &SLLBlock);
+    CreateETandAET(n_points, points, &ET, &AET, pETEs, &SLLBlock);
     pSLL = ET.scanlines.next;
     curPtBlock = &FirstPtBlock;
  
-    if (rule == GDK_EVEN_ODD_RULE) {
+    if (fill_rule == GDK_EVEN_ODD_RULE) {
         /*
          *  for each scanline
          */

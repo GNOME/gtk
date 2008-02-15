@@ -644,14 +644,14 @@ gdk_colors_free (GdkColormap *colormap,
  * gdk_colormap_free_colors:
  * @colormap: a #GdkColormap.
  * @colors: the colors to free.
- * @ncolors: the number of colors in @colors.
+ * @n_colors: the number of colors in @colors.
  * 
  * Frees previously allocated colors.
  **/
 void
 gdk_colormap_free_colors (GdkColormap    *colormap,
 			  const GdkColor *colors,
-			  gint            ncolors)
+			  gint            n_colors)
 {
   GdkColormapPrivateX11 *private;
   gulong *pixels;
@@ -667,9 +667,9 @@ gdk_colormap_free_colors (GdkColormap    *colormap,
       (colormap->visual->type != GDK_VISUAL_GRAYSCALE))
     return;
 
-  pixels = g_new (gulong, ncolors);
+  pixels = g_new (gulong, n_colors);
 
-  for (i = 0; i < ncolors; i++)
+  for (i = 0; i < n_colors; i++)
     {
       gulong pixel = colors[i].pixel;
       
@@ -1038,7 +1038,7 @@ gdk_colormap_alloc_colors_pseudocolor (GdkColormap *colormap,
  * @colormap: a #GdkColormap.
  * @colors: The color values to allocate. On return, the pixel
  *    values for allocated colors will be filled in.
- * @ncolors: The number of colors in @colors.
+ * @n_colors: The number of colors in @colors.
  * @writeable: If %TRUE, the colors are allocated writeable
  *    (their values can later be changed using gdk_color_change()).
  *    Writeable colors cannot be shared between applications.
@@ -1056,7 +1056,7 @@ gdk_colormap_alloc_colors_pseudocolor (GdkColormap *colormap,
 gint
 gdk_colormap_alloc_colors (GdkColormap *colormap,
 			   GdkColor    *colors,
-			   gint         ncolors,
+			   gint         n_colors,
 			   gboolean     writeable,
 			   gboolean     best_match,
 			   gboolean    *success)
@@ -1067,16 +1067,16 @@ gdk_colormap_alloc_colors (GdkColormap *colormap,
   gint nremaining = 0;
   XColor xcolor;
 
-  g_return_val_if_fail (GDK_IS_COLORMAP (colormap), ncolors);
-  g_return_val_if_fail (colors != NULL, ncolors);
-  g_return_val_if_fail (success != NULL, ncolors);
+  g_return_val_if_fail (GDK_IS_COLORMAP (colormap), n_colors);
+  g_return_val_if_fail (colors != NULL, n_colors);
+  g_return_val_if_fail (success != NULL, n_colors);
 
   private = GDK_COLORMAP_PRIVATE_DATA (colormap);
 
   if (private->screen->closed)
-    return ncolors;
+    return n_colors;
 
-  for (i = 0; i < ncolors; i++)
+  for (i = 0; i < n_colors; i++)
     success[i] = FALSE;
 
   switch (colormap->visual->type)
@@ -1084,10 +1084,10 @@ gdk_colormap_alloc_colors (GdkColormap *colormap,
     case GDK_VISUAL_PSEUDO_COLOR:
     case GDK_VISUAL_GRAYSCALE:
       if (writeable)
-	return gdk_colormap_alloc_colors_writeable (colormap, colors, ncolors,
+	return gdk_colormap_alloc_colors_writeable (colormap, colors, n_colors,
 						    writeable, best_match, success);
       else
-	return gdk_colormap_alloc_colors_pseudocolor (colormap, colors, ncolors,
+	return gdk_colormap_alloc_colors_pseudocolor (colormap, colors, n_colors,
 						    writeable, best_match, success);
       break;
 
@@ -1095,7 +1095,7 @@ gdk_colormap_alloc_colors (GdkColormap *colormap,
     case GDK_VISUAL_TRUE_COLOR:
       visual = colormap->visual;
 
-      for (i = 0; i < ncolors; i++)
+      for (i = 0; i < n_colors; i++)
 	{
 	  /* If bits not used for color are used for something other than padding,
 	   * it's likely alpha, so we set them to 1s.
@@ -1119,7 +1119,7 @@ gdk_colormap_alloc_colors (GdkColormap *colormap,
       break;
     case GDK_VISUAL_STATIC_GRAY:
     case GDK_VISUAL_STATIC_COLOR:
-      for (i = 0; i < ncolors; i++)
+      for (i = 0; i < n_colors; i++)
 	{
 	  xcolor.red = colors[i].red;
 	  xcolor.green = colors[i].green;
