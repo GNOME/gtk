@@ -1,6 +1,8 @@
 2008-02-15  Matthias Clasen  <mclasen@redhat.com>
 
-	* gdk/gdk-docs.xml:
+	* gtk/gtk-docs.sgml:
+	* gtk/gtk-sections.txt:
+	* gdk/gdk-docs.sgml:
 	* gdk/gdk-sections.txt: Updates
 
 2008-02-13  Tor Lillqvist  <tml@novell.com>

@@ -3952,6 +3952,12 @@ gtk_tool_shell_get_relief_style
 gtk_tool_shell_get_style
 gtk_tool_shell_rebuild_menu
 
+<SUBSECTION Standard>
+GTK_IS_TOOL_SHELL
+GTK_TOOL_SHELL
+GTK_TOOL_SHELL_GET_IFACE
+GTK_TYPE_TOOL_SHELL
+
 <SUBSECTION Private>
 gtk_tool_shell_get_type
 </SECTION>
@@ -4039,6 +4045,7 @@ gtk_tool_item_retrieve_proxy_menu_item
 gtk_tool_item_get_proxy_menu_item
 gtk_tool_item_set_proxy_menu_item
 gtk_tool_item_rebuild_menu
+gtk_tool_item_toolbar_reconfigured
 
 <SUBSECTION Standard>
 GTK_TYPE_TOOL_ITEM
@@ -6547,6 +6554,8 @@ GTK_PRINT_SETTINGS_WIN32_DRIVER_VERSION
 <SUBSECTION Serialization>
 gtk_print_settings_new_from_file
 gtk_print_settings_new_from_key_file
+gtk_print_settings_load_file
+gtk_print_settings_load_key_file
 gtk_print_settings_to_file
 gtk_print_settings_to_key_file
 
@@ -6630,9 +6639,10 @@ gtk_page_setup_get_page_height
 <SUBSECTION Serialization>
 gtk_page_setup_new_from_file
 gtk_page_setup_new_from_key_file
+gtk_page_setup_load_file
+gtk_page_setup_load_key_file
 gtk_page_setup_to_file
 gtk_page_setup_to_key_file
-
 <SUBSECTION Standard>
 GTK_TYPE_PAGE_SETUP
 GTK_PAGE_SETUP
@@ -6723,3 +6733,23 @@ GtkPageSetupUnixDialogPrivate
 gtk_page_setup_unix_dialog_get_type
 </SECTION>
 
+<SECTION>
+<FILE>gtktesting</FILE>
+<TITLE>Testing</TITLE>
+gtk_test_create_simple_window
+gtk_test_create_widget
+gtk_test_display_button_window
+gtk_test_find_label
+gtk_test_find_sibling
+gtk_test_find_widget
+gtk_test_init
+gtk_test_list_all_types
+gtk_test_register_all_types
+gtk_test_slider_get_value
+gtk_test_slider_set_perc
+gtk_test_spin_button_click
+gtk_test_text_get
+gtk_test_text_set
+gtk_test_widget_click
+gtk_test_widget_send_key
+</SECTION>

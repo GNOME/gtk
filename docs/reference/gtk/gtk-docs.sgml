@@ -233,6 +233,7 @@
 <!ENTITY gtk-update-icon-cache SYSTEM "gtk-update-icon-cache.xml">
 <!ENTITY gtk-builder-convert SYSTEM "gtk-builder-convert.xml">
 <!ENTITY gtk-glossary SYSTEM "xml/glossary.xml">
+<!ENTITY gtk-Testing SYSTEM "xml/gtktesting.xml">
 ]>
 <book id="index">
   <bookinfo>
@@ -348,6 +349,7 @@ that is, GUI components such as #GtkButton or #GtkTextView.
     &gtk-Feature-Test-Macros;
     &gtk-Signals;
     &gtk-Types;
+    &gtk-Testing;
   </part>
 
   <part id="gtkobjects">
