@@ -1,5 +1,9 @@
 2008-02-16  Matthias Clasen  <mclasen@redhat.com>
 
+	* NEWS: Updates
+
+2008-02-16  Matthias Clasen  <mclasen@redhat.com>
+
 	* gtk/gtklinkbutton.c: Show the URI in a tooltip.  (#505480,
 	Teppo Turtiainen)
 
