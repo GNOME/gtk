@@ -338,7 +338,8 @@ gtk_target_list_add_text_targets (GtkTargetList *list,
   gtk_target_list_add (list, text_atom, 0, info);  
   gtk_target_list_add (list, GDK_TARGET_STRING, 0, info);  
   gtk_target_list_add (list, text_plain_utf8_atom, 0, info);  
-  gtk_target_list_add (list, text_plain_locale_atom, 0, info);  
+  if (!g_get_charset (NULL))
+    gtk_target_list_add (list, text_plain_locale_atom, 0, info);  
   gtk_target_list_add (list, text_plain_atom, 0, info);  
 }
 

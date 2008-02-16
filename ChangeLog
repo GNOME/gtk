@@ -1,5 +1,10 @@
 2008-02-15  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkselection.c (gtk_target_list_add_text_targets): Don't
+	add the same target atom twice.  (#516087, Christian Persch)
+
+2008-02-15  Matthias Clasen  <mclasen@redhat.com>
+
 	* tests/testfilechooser.c: Add a --backend option.
 	(#516073, Christian Persch)
 
