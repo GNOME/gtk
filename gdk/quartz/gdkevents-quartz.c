@@ -1439,6 +1439,7 @@ create_scroll_event (GdkWindow          *window,
   point = [nsevent locationInWindow];
   event->scroll.x = point.x;
   event->scroll.y = point.y;
+  event->scroll.state = get_keyboard_modifiers_from_ns_event (nsevent);
   convert_window_coordinates_to_root (window, event->scroll.x, event->scroll.y, 
 				      &event->scroll.x_root,
 				      &event->scroll.y_root);
