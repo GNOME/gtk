@@ -144,6 +144,7 @@ void       _gdk_quartz_window_attach_to_parent      (GdkWindow *window);
 void       _gdk_quartz_window_detach_from_parent    (GdkWindow *window);
 void       _gdk_quartz_window_did_become_main       (GdkWindow *window);
 void       _gdk_quartz_window_did_resign_main       (GdkWindow *window);
+void       _gdk_quartz_window_debug_highlight       (GdkWindow *window);
 
 /* Events */
 void         _gdk_quartz_events_update_focus_window    (GdkWindow *new_window,

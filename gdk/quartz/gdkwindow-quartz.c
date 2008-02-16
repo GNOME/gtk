@@ -478,6 +478,87 @@ get_default_title (void)
   return title;
 }
 
+static void
+get_ancestor_coordinates_from_child (GdkWindow *child_window,
+				     gint       child_x,
+				     gint       child_y,
+				     GdkWindow *ancestor_window, 
+				     gint      *ancestor_x, 
+				     gint      *ancestor_y)
+{
+  GdkWindowObject *child_private = GDK_WINDOW_OBJECT (child_window);
+  GdkWindowObject *ancestor_private = GDK_WINDOW_OBJECT (ancestor_window);
+
+  while (child_private != ancestor_private)
+    {
+      child_x += child_private->x;
+      child_y += child_private->y;
+
+      child_private = child_private->parent;
+    }
+
+  *ancestor_x = child_x;
+  *ancestor_y = child_y;
+}
+
+void
+_gdk_quartz_window_debug_highlight (GdkWindow *window)
+{
+  GdkWindowObject *private = GDK_WINDOW_OBJECT (window);
+  GdkWindowImplQuartz *impl = GDK_WINDOW_IMPL_QUARTZ (private->impl);
+  gint x, y;
+  GdkWindow *toplevel;
+  gint tx, ty;
+  static NSWindow *debug_window;
+  static NSRect old_rect;
+  NSRect rect;
+
+  if (window == _gdk_root)
+    return;
+
+  if (window == NULL)
+    return;
+
+  toplevel = gdk_window_get_toplevel (window);
+  get_ancestor_coordinates_from_child (window, 0, 0, toplevel, &x, &y);
+
+  gdk_window_get_origin (toplevel, &tx, &ty);
+  x += tx;
+  y += ty;
+
+  rect =  NSMakeRect (x,
+                      _gdk_quartz_window_get_inverted_screen_y (y + impl->height),
+                      impl->width, impl->height);
+
+  if (debug_window &&
+      rect.origin.x == old_rect.origin.x &&
+      rect.origin.y == old_rect.origin.y &&
+      rect.size.width == old_rect.size.width &&
+      rect.size.height == old_rect.size.height)
+    {
+      return;
+    }
+
+  old_rect = rect;
+
+  if (debug_window)
+    [debug_window close];
+
+  debug_window = [[NSWindow alloc] initWithContentRect:rect
+                                             styleMask:NSBorderlessWindowMask
+			                       backing:NSBackingStoreBuffered
+			                         defer:NO];
+
+  [debug_window setBackgroundColor:[NSColor redColor]];
+  [debug_window setAlphaValue:0.4];
+  [debug_window setOpaque:NO];
+  [debug_window setReleasedWhenClosed:YES];
+  [debug_window setIgnoresMouseEvents:YES];
+  [debug_window setLevel:NSFloatingWindowLevel];
+
+  [debug_window orderFront:nil];
+}
+
 gboolean
 _gdk_quartz_window_is_ancestor (GdkWindow *ancestor,
                                 GdkWindow *window)
@@ -2525,6 +2606,7 @@ gdk_window_set_decorations (GdkWindow       *window,
           new_mask != NSBorderlessWindowMask)
         {
           rect = [NSWindow frameRectForContentRect:rect styleMask:new_mask];
+
         }
       else if (old_mask != NSBorderlessWindowMask &&
                new_mask == NSBorderlessWindowMask)

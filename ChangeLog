@@ -1,3 +1,9 @@
+2008-02-16  Richard Hult  <richard@imendio.com>
+
+	* gdk/quartz/gdkprivate-quartz.h:
+	* gdk/quartz/gdkwindow-quartz.c: Add debugging code to highlight a
+	gdkwindow.
+
 2008-02-15  Matthias Clasen  <mclasen@redhat.com>
 
 	* configure.in: Go back to 2.13.0 as version for now,
