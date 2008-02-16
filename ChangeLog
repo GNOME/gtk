@@ -1,3 +1,10 @@
+2008-02-16  Richard Hult  <richard@imendio.com>
+
+	Merged from trunk:
+
+	* gdk/quartz/gdkevents-quartz.c (create_scroll_event): Add state
+	to the scroll event (bug #516757, Paul Davis).
+
 2008-02-15  Matthias Clasen  <mclasen@redhat.com>
 
 	Merged from trunk:
