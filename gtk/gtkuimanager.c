@@ -696,10 +696,31 @@ gtk_ui_manager_insert_action_group (GtkUIManager   *self,
 				    GtkActionGroup *action_group, 
 				    gint            pos)
 {
+#ifdef G_ENABLE_DEBUG
+  GList *l;
+  const char *group_name;
+#endif 
+
   g_return_if_fail (GTK_IS_UI_MANAGER (self));
   g_return_if_fail (GTK_IS_ACTION_GROUP (action_group));
   g_return_if_fail (g_list_find (self->private_data->action_groups, 
 				 action_group) == NULL);
+
+#ifdef G_ENABLE_DEBUG
+  group_name  = gtk_action_group_get_name (action_group);
+
+  for (l = self->private_data->action_groups; l; l = l->next) 
+    {
+      GtkActionGroup *group = l->data;
+
+      if (strcmp (gtk_action_group_get_name (group), group_name) == 0)
+        {
+          g_warning ("Inserting action group '%s' into UI manager which "
+		     "already has a group with this name\n", group_name);
+          break;
+        }
+    }
+#endif /* G_ENABLE_DEBUG */
 
   g_object_ref (action_group);
   self->private_data->action_groups = 
