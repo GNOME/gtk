@@ -1,5 +1,11 @@
 2008-02-15  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtknotebook.c (gtk_notebook_stop_reorder): Prevent
+	a crash with hidden, reorderable tabs.  (#513230, 
+	Mike Massonnet, patch by Carlos Garnacho)
+
+2008-02-15  Matthias Clasen  <mclasen@redhat.com>
+
 	* gtk/gtkuimanager.c (gtk_ui_manager_insert_action_group):
 	Warn on duplicate action group names.  (#501746, Christian
 	Persch)
