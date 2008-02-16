@@ -1,5 +1,13 @@
 2008-02-15  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkentry.c:
+	* gtk/gtkfilesel.c:
+	* gtk/gtklabel.c:
+	* gtk/gtkpathbar.c: Use gtk_drag_*_add_{text,uri}_targets 
+	instead of hardcoded target tables.  (#516092, Christian Persch)
+
+2008-02-15  Matthias Clasen  <mclasen@redhat.com>
+
 	* gtk/gtkselection.c (gtk_target_list_add_text_targets): Don't
 	add the same target atom twice.  (#516087, Christian Persch)
 

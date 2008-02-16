@@ -3413,13 +3413,6 @@ gtk_label_select_region_index (GtkLabel *label,
                                gint      anchor_index,
                                gint      end_index)
 {
-  static const GtkTargetEntry targets[] = {
-    { "STRING", 0, 0 },
-    { "TEXT",   0, 0 }, 
-    { "COMPOUND_TEXT", 0, 0 },
-    { "UTF8_STRING", 0, 0 }
-  };
-
   g_return_if_fail (GTK_IS_LABEL (label));
   
   if (label->select_info)
@@ -3438,12 +3431,22 @@ gtk_label_select_region_index (GtkLabel *label,
       
       if (anchor_index != end_index)
         {
+          GtkTargetList *list;
+          GtkTargetEntry *targets;
+          gint n_targets;
+
+          list = gtk_target_list_new (NULL, 0);
+          gtk_target_list_add_text_targets (list, 0);
+          targets = gtk_target_table_new_from_list (list, &n_targets);
+
           gtk_clipboard_set_with_owner (clipboard,
-                                        targets,
-                                        G_N_ELEMENTS (targets),
+                                        targets, n_targets,
                                         get_text_callback,
                                         clear_text_callback,
                                         G_OBJECT (label));
+
+          gtk_target_table_free (targets, n_targets);
+          gtk_target_list_unref (list);
         }
       else
         {

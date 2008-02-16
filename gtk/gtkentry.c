@@ -4276,35 +4276,25 @@ primary_clear_cb (GtkClipboard *clipboard,
 static void
 gtk_entry_update_primary_selection (GtkEntry *entry)
 {
-  static GtkTargetEntry targets[] = {
-    { "UTF8_STRING", 0, 0 },
-    { "STRING", 0, 0 },
-    { "TEXT",   0, 0 }, 
-    { "COMPOUND_TEXT", 0, 0 },
-    { "text/plain;charset=utf-8",   0, 0 }, 
-    { NULL,   0, 0 },
-    { "text/plain", 0, 0 }
-  };
-  
+  GtkTargetList *list;
+  GtkTargetEntry *targets;
   GtkClipboard *clipboard;
   gint start, end;
-
-  if (targets[5].target == NULL)
-    {
-      const gchar *charset;
-
-      g_get_charset (&charset);
-      targets[5].target = g_strdup_printf ("text/plain;charset=%s", charset);
-    }
+  gint n_targets;
 
   if (!GTK_WIDGET_REALIZED (entry))
     return;
+
+  list = gtk_target_list_new (NULL, 0);
+  gtk_target_list_add_text_targets (list, 0);
+
+  targets = gtk_target_table_new_from_list (list, &n_targets);
 
   clipboard = gtk_widget_get_clipboard (GTK_WIDGET (entry), GDK_SELECTION_PRIMARY);
   
   if (gtk_editable_get_selection_bounds (GTK_EDITABLE (entry), &start, &end))
     {
-      if (!gtk_clipboard_set_with_owner (clipboard, targets, G_N_ELEMENTS (targets),
+      if (!gtk_clipboard_set_with_owner (clipboard, targets, n_targets,
 					 primary_get_cb, primary_clear_cb, G_OBJECT (entry)))
 	primary_clear_cb (clipboard, entry);
     }
@@ -4313,6 +4303,9 @@ gtk_entry_update_primary_selection (GtkEntry *entry)
       if (gtk_clipboard_get_owner (clipboard) == G_OBJECT (entry))
 	gtk_clipboard_clear (clipboard);
     }
+
+  gtk_target_table_free (targets, n_targets);
+  gtk_target_list_unref (list);
 }
 
 /* Public API
@@ -5201,7 +5194,7 @@ popup_targets_received (GtkClipboard     *clipboard,
       gboolean show_input_method_menu;
       gboolean show_unicode_menu;
       
-        clipboard_contains_text = gtk_selection_data_targets_include_text (data);
+      clipboard_contains_text = gtk_selection_data_targets_include_text (data);
       if (entry->popup_menu)
 	gtk_widget_destroy (entry->popup_menu);
       

@@ -1344,10 +1344,6 @@ make_directory_button (GtkPathBar  *path_bar,
 		       gboolean     current_dir,
 		       gboolean     file_is_hidden)
 {
-  const GtkTargetEntry targets[] = {
-    { "text/uri-list", 0, 0 }
-  };
-
   AtkObject *atk_obj;
   GtkWidget *child = NULL;
   GtkWidget *label_alignment = NULL;
@@ -1414,9 +1410,9 @@ make_directory_button (GtkPathBar  *path_bar,
 
   gtk_drag_source_set (button_data->button,
 		       GDK_BUTTON1_MASK,
-		       targets,
-		       G_N_ELEMENTS (targets),
+		       NULL, 0,
 		       GDK_ACTION_COPY);
+  gtk_drag_source_add_uri_targets (button_data->button);
   g_signal_connect (button_data->button, "drag_data_get",
 		    G_CALLBACK (button_drag_data_get_cb), button_data);
 

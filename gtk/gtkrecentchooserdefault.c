@@ -153,15 +153,6 @@ enum {
   LOAD_FINISHED  /* the model is fully loaded and inserted */
 };
 
-enum {
-  TEXT_URI_LIST
-};
-
-/* Target types for DnD from the file list */
-static const GtkTargetEntry recent_list_source_targets[] = {
-  { "text/uri-list", 0, TEXT_URI_LIST }
-};
-
 /* Icon size for if we can't get it from the theme */
 #define FALLBACK_ICON_SIZE  48
 #define FALLBACK_ITEM_LIMIT 20
@@ -451,9 +442,9 @@ gtk_recent_chooser_default_constructor (GType                  type,
   /* drag and drop */
   gtk_drag_source_set (impl->recent_view,
 		       GDK_BUTTON1_MASK,
-		       recent_list_source_targets,
-		       G_N_ELEMENTS (recent_list_source_targets),
+		       NULL, 0,
 		       GDK_ACTION_COPY);
+  gtk_drag_source_add_uri_targets (impl->recent_view);
 
   impl->filter_combo_hbox = gtk_hbox_new (FALSE, 12);
   
@@ -1535,25 +1526,23 @@ recent_view_drag_data_get_cb (GtkWidget        *widget,
 			      gpointer          data)
 {
   GtkRecentChooserDefault *impl = GTK_RECENT_CHOOSER_DEFAULT (data);
-  DragData *drag_data;
+  DragData drag_data;
   gsize n_uris;
   
   n_uris = gtk_tree_selection_count_selected_rows (impl->selection);
   if (n_uris == 0)
-	  return;
+    return;
 
-  drag_data = g_new (DragData, 1);
-  drag_data->uri_list = g_new0 (gchar *, n_uris + 1);
-  drag_data->next_pos = 0;
+  drag_data.uri_list = g_new0 (gchar *, n_uris + 1);
+  drag_data.next_pos = 0;
   
   gtk_tree_selection_selected_foreach (impl->selection,
       				       append_uri_to_urilist,
-      				       drag_data);
+      				       &drag_data);
   
-  gtk_selection_data_set_uris (selection_data, drag_data->uri_list);
+  gtk_selection_data_set_uris (selection_data, drag_data.uri_list);
 
-  g_strfreev (drag_data->uri_list);
-  g_free (drag_data);
+  g_strfreev (drag_data.uri_list);
 }
 
 static gboolean
