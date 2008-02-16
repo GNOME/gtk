@@ -35,9 +35,6 @@
 #include <gdk/gdkregion.h>
 #include <gdk/gdkvisual.h>
 #include <gdk/gdkwindow.h>
-#ifdef USE_MEDIALIB
-#include <gdk/gdkmedialib.h>
-#endif
 
 G_BEGIN_DECLS
 

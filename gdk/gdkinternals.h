@@ -26,13 +26,16 @@
 
 /* Uninstalled header defining types and functions internal to GDK */
 
+#ifndef __GDK_INTERNALS_H__
+#define __GDK_INTERNALS_H__
+
 #include <gio/gio.h>
 #include <gdk/gdktypes.h>
 #include <gdk/gdkwindow.h>
 #include <gdk/gdkprivate.h>
-
-#ifndef __GDK_INTERNALS_H__
-#define __GDK_INTERNALS_H__
+#ifdef USE_MEDIALIB
+#include <gdk/gdkmedialib.h>
+#endif
 
 G_BEGIN_DECLS
 

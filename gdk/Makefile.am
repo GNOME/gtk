@@ -17,7 +17,6 @@ EXTRA_DIST +=			\
 	makefile.msc		\
 	gdk.symbols		\
 	makegdkalias.pl		\
-	gdkaliasdef.c		\
 	gdkenumtypes.c.template	\
 	gdkenumtypes.h.template	\
 	abicheck.sh		\
@@ -83,6 +82,7 @@ gdk_public_h_sources =				\
 	gdkpango.h				\
 	gdkpixbuf.h				\
 	gdkpixmap.h				\
+	gdkprivate.h				\
 	gdkproperty.h				\
 	gdkregion.h				\
 	gdkrgb.h				\
@@ -94,10 +94,10 @@ gdk_public_h_sources =				\
 	gdkvisual.h				\
 	gdkwindow.h
 
-gdk_headers =                     \
-	$(gdk_public_h_sources)   \
-	gdkenumtypes.h		  \
-	gdkprivate.h		  \
+gdk_built_public_sources =			\
+	gdkenumtypes.h
+
+gdk_built_private_headers =			\
 	gdkalias.h
 
 gdk_c_sources =                 \
@@ -135,12 +135,20 @@ gdk_c_sources =                 \
 	gdkvisual.c		\
 	gdkwindow.c
 
+gdk_built_sources =				\
+	gdkaliasdef.c				\
+	gdkenumtypes.c				\
+	gdkmarshalers.h 			\
+	gdkmarshalers.c				\
+	$(gdk_built_public_sources)		\
+	$(gdk_built_private_headers)
+
 #
 # setup GDK sources and their dependencies
 #
 
 gdkincludedir = $(includedir)/gtk-2.0/gdk
-gdkinclude_HEADERS = $(gdk_headers)
+gdkinclude_HEADERS = $(gdk_public_h_sources) $(gdk_built_public_sources)
 
 # gdkmarshalers.c is not here because it is currently an empty file
 common_sources =                \
@@ -213,8 +221,8 @@ lib_LTLIBRARIES = $(gdktargetlib)
 
 EXTRA_LTLIBRARIES = libgdk-x11-2.0.la libgdk-win32-2.0.la libgdk-quartz-2.0.la libgdk-directfb-2.0.la
 
-MAINTAINERCLEANFILES = gdkenumtypes.h stamp-gdkenumtypes.h gdkenumtypes.c \
-  gdkmarshalers.h gdkmarshalers.c
+MAINTAINERCLEANFILES = $(gdk_built_sources) stamp-gdkenumtypes.h
+EXTRA_DIST += $(gdk_built_sources)
 EXTRA_HEADERS =
 
 #
@@ -235,13 +243,8 @@ if DISABLE_EXPLICIT_DEPS
 endif
 
 #note: not gdkconfig.h
-BUILT_SOURCES =					\
-	gdkalias.h				\
-	gdkaliasdef.c				\
-	gdkenumtypes.h				\
-	gdkenumtypes.c				\
-	gdkmarshalers.h 			\
-	gdkmarshalers.c				\
+BUILT_SOURCES = \
+	$(gdk_built_sources)			\
 	gdkconfig.h
 
 gdkenumtypes.h: stamp-gdkenumtypes.h
