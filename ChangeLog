@@ -1,5 +1,13 @@
 2008-02-15  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/Makefile.am:
+	* modules/other/gail/tests/Makefile.am:
+	* modules/other/gail/libgail-util/Makefile.am:
+	* modules/other/gail/Makefile.am: Fix builddir!=srcdir
+	builds.  (#516254,  Yevgen Muntyan)
+
+2008-02-15  Matthias Clasen  <mclasen@redhat.com>
+
 	* gtk/gtkentry.c:
 	* gtk/gtkfilesel.c:
 	* gtk/gtklabel.c:

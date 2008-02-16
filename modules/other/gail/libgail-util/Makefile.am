@@ -47,6 +47,7 @@ libgailutilinclude_HEADERS =	\
 	$(util_public_h_sources)
 
 libgailutil_la_CPPFLAGS = \
+	-I$(top_srcdir)		\
 	-I$(top_srcdir)/gdk	\
 	-I$(top_builddir)/gdk	\
 	-I$(top_srcdir)/gtk	\
