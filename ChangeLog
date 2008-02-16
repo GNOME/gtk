@@ -1,3 +1,8 @@
+2008-02-15  Matthias Clasen  <mclasen@redhat.com>
+
+	* tests/testfilechooser.c: Add a --backend option.
+	(#516073, Christian Persch)
+
 2008-02-16  Richard Hult  <richard@imendio.com>
 
 	* gdk/quartz/gdkprivate-quartz.h:

@@ -481,37 +481,56 @@ main (int argc, char **argv)
   GtkWidget *extra;
   GtkFileFilter *filter;
   GtkWidget *preview_vbox;
-  int i;
+  gboolean force_rtl = FALSE;
   gboolean multiple = FALSE;
+  char *action_arg = NULL;
+  char *backend = NULL;
+  GError *error = NULL;
+  GOptionEntry options[] = {
+    { "action", 'a', 0, G_OPTION_ARG_STRING, &action, "Filechooser action", "ACTION" },
+    { "backend", 'b', 0, G_OPTION_ARG_STRING, &backend, "Filechooser backend (default: gtk+)", "BACKEND" },
+    { "multiple", 'm', 0, G_OPTION_ARG_NONE, &multiple, "Select-multiple", NULL },
+    { "right-to-left", 'r', 0, G_OPTION_ARG_NONE, &force_rtl, "Force right-to-left layout.", NULL },
+    { NULL }
+  };
 
-  gtk_init (&argc, &argv);
+  if (!gtk_init_with_args (&argc, &argv, "", options, NULL, &error))
+    {
+      g_print ("Failed to parse args: %s\n", error->message);
+      g_error_free (error);
+      return 1;
+    }
 
-  /* to test rtl layout, set RTL=1 in the environment */
-  if (g_getenv ("RTL"))
+  if (force_rtl)
     gtk_widget_set_default_direction (GTK_TEXT_DIR_RTL);
 
   action = GTK_FILE_CHOOSER_ACTION_OPEN;
 
-  /* lame-o arg parsing */
-  for (i = 1; i < argc; i++)
+  if (action_arg != NULL)
     {
-      if (! strcmp ("--action=open", argv[i]))
+      if (! strcmp ("open", action_arg))
 	action = GTK_FILE_CHOOSER_ACTION_OPEN;
-      else if (! strcmp ("--action=save", argv[i]))
+      else if (! strcmp ("save", action_arg))
 	action = GTK_FILE_CHOOSER_ACTION_SAVE;
-      else if (! strcmp ("--action=select_folder", argv[i]))
+      else if (! strcmp ("select_folder", action_arg))
 	action = GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER;
-      else if (! strcmp ("--action=create_folder", argv[i]))
+      else if (! strcmp ("create_folder", action_arg))
 	action = GTK_FILE_CHOOSER_ACTION_CREATE_FOLDER;
-      else if (! strcmp ("--multiple", argv[i]))
-	multiple = TRUE;
+
+      g_free (action_arg);
     }
+
+  if (backend == NULL)
+    backend = g_strdup ("gtk+");
 
   dialog = g_object_new (GTK_TYPE_FILE_CHOOSER_DIALOG,
 			 "action", action,
-			 "file-system-backend", "gtk+",
+			 "file-system-backend", backend,
 			 "select-multiple", multiple,
 			 NULL);
+
+  g_free (backend);
+
   switch (action)
     {
     case GTK_FILE_CHOOSER_ACTION_OPEN:
