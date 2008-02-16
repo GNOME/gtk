@@ -2752,7 +2752,7 @@ gtk_notebook_stop_reorder (GtkNotebook *notebook)
   else
     page = notebook->cur_page;
 
-  if (!page)
+  if (!page || !page->tab_label)
     return;
 
   priv->pressed_button = -1;
