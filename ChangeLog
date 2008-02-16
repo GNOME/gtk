@@ -1,3 +1,10 @@
+2008-02-15  Richard Hult  <richard@imendio.com>
+
+	Merged from trunk:
+
+	* gdk/quartz/GdkQuartzView.c: Adapt to the change to use frame
+	instead of bounds when resizing windows.
+
 2008-02-16  Richard Hult  <richard@imendio.com>
 
 	Merged from trunk:

@@ -165,9 +165,9 @@
     }
 }
 
--(void)setBounds:(NSRect)bounds
+-(void)setFrame:(NSRect)frame
 {
-  [super setBounds:bounds];
+  [super setFrame:frame];
   [self updateTrackingRect];
 }
 
