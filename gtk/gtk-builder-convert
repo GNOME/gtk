@@ -421,15 +421,14 @@ class GtkBuilderConverter(object):
             raise NotImplementedError(object_class)
 
         if get_property(node, 'use_stock') == 'True':
-            child = get_property_node(node, 'label')
-            if child:
+            if 'label' in properties:
                 properties['stock_id'] = child
+                del properties['label']
 
         properties['name'] = object_id
         action = self._create_object(name,
                                      object_id,
                                      properties=properties)
-
         for signal in get_signal_nodes(node):
             signal_name = signal.getAttribute('name')
             if signal_name in ['activate', 'toggled']:
