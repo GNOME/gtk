@@ -1,5 +1,11 @@
 2008-02-17  Richard Hult  <richard@imendio.com>
 
+	* gdk/quartz/GdkQuartzWindow.c: (showAndMakeKey): Update the
+	position after showing the window since the window manager might
+	not place it where we requested in the first places.
+
+2008-02-17  Richard Hult  <richard@imendio.com>
+
 	* gdk/quartz/gdkwindow-quartz.c: (show_window_internal),
 	(_gdk_quartz_window_detach_from_parent),
 	(_gdk_quartz_window_attach_to_parent), (gdk_window_focus): Clear
