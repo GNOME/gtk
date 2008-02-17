@@ -1,5 +1,14 @@
 2008-02-17  Richard Hult  <richard@imendio.com>
 
+	* gdk/quartz/gdkwindow-quartz.c: (show_window_internal),
+	(_gdk_quartz_window_detach_from_parent),
+	(_gdk_quartz_window_attach_to_parent), (gdk_window_focus): Clear
+	the toplevel ordering list in all places where the order is
+	potentially changed. Fixes mouse focus issues for windows with
+	a transient parent set.
+
+2008-02-17  Richard Hult  <richard@imendio.com>
+
 	* gdk/quartz/gdkevents-quartz.c
 	(_gdk_quartz_events_update_mouse_window): Highlight the mouse
 	window when event debugging is enabled.

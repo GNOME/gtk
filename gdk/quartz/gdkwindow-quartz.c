@@ -1078,6 +1078,7 @@ show_window_internal (GdkWindow *window,
                   private->window_type != GDK_WINDOW_TEMP);
 
       [(GdkQuartzWindow*)impl->toplevel showAndMakeKey:make_key];
+      clear_toplevel_order ();
     }
   else
     {
@@ -1123,6 +1124,7 @@ _gdk_quartz_window_detach_from_parent (GdkWindow *window)
 
       parent_impl = GDK_WINDOW_IMPL_QUARTZ (GDK_WINDOW_OBJECT (impl->transient_for)->impl);
       [parent_impl->toplevel removeChildWindow:impl->toplevel];
+      clear_toplevel_order ();
     }
 }
 
@@ -1144,6 +1146,7 @@ _gdk_quartz_window_attach_to_parent (GdkWindow *window)
 
       parent_impl = GDK_WINDOW_IMPL_QUARTZ (GDK_WINDOW_OBJECT (impl->transient_for)->impl);
       [parent_impl->toplevel addChildWindow:impl->toplevel ordered:NSWindowAbove];
+      clear_toplevel_order ();
     }
 }
 
@@ -2311,6 +2314,7 @@ gdk_window_focus (GdkWindow *window,
         {
           GDK_QUARTZ_ALLOC_POOL;
           [impl->toplevel makeKeyAndOrderFront:impl->toplevel];
+          clear_toplevel_order ();
           GDK_QUARTZ_RELEASE_POOL;
         }
     }
