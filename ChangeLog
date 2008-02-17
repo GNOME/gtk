@@ -1,3 +1,10 @@
+2008-02-17  Johan Dahlin  <johan@gnome.org>
+
+	Merged from trunk:
+
+	* gtk/gtk-builder-convert (GtkBuilderConverter._add_action_from_menuitem): 
+	When converting a stock item based on the label, remove the label property.
+
 2008-02-15  Richard Hult  <richard@imendio.com>
 
 	Merged from trunk:
