@@ -885,6 +885,11 @@ _gdk_quartz_events_update_mouse_window (GdkWindow *window)
   if (window == current_mouse_window)
     return;
 
+#ifdef G_ENABLE_DEBUG
+  if (_gdk_debug_flags & GDK_DEBUG_EVENTS)
+    _gdk_quartz_window_debug_highlight (window);
+#endif /* G_ENABLE_DEBUG */  
+
   if (window)
     g_object_ref (window);
   if (current_mouse_window)

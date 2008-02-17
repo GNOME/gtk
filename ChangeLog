@@ -1,3 +1,9 @@
+2008-02-17  Richard Hult  <richard@imendio.com>
+
+	* gdk/quartz/gdkevents-quartz.c
+	(_gdk_quartz_events_update_mouse_window): Highlight the mouse
+	window when event debugging is enabled.
+
 2008-02-16  Richard Hult  <richard@imendio.com>
 
 	* gdk/quartz/gdkevents-quartz.c (create_scroll_event): Add state
