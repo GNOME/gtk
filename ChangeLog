@@ -1,3 +1,7 @@
+2008-02-18  Runa Bhattacharjee <runabh@gmail.com>
+
+	* configure.in: Added Kannada (kn) to ALL_LINGUAS
+
 2008-02-17  Johan Dahlin  <johan@gnome.org>
 
 	* gtk/gtk-builder-convert (GtkBuilderConverter._add_action_from_menuitem): 
