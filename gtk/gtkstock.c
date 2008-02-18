@@ -374,6 +374,7 @@ static const GtkStockItem builtin_items [] =
   { GTK_STOCK_ORIENTATION_PORTRAIT, N_("Portrait"), 0, 0, GETTEXT_PACKAGE },
   { GTK_STOCK_ORIENTATION_REVERSE_LANDSCAPE, N_("Reverse landscape"), 0, 0, GETTEXT_PACKAGE },
   { GTK_STOCK_ORIENTATION_REVERSE_PORTRAIT, N_("Reverse portrait"), 0, 0, GETTEXT_PACKAGE },
+  { GTK_STOCK_PAGE_SETUP, N_("Page Set_up"), 0, 0, GETTEXT_PACKAGE },
   { GTK_STOCK_PASTE, N_("_Paste"), GDK_CONTROL_MASK, 'v', GETTEXT_PACKAGE },
   { GTK_STOCK_PREFERENCES, N_("_Preferences"), 0, 0, GETTEXT_PACKAGE },
   { GTK_STOCK_PRINT, N_("_Print"), 0, 0, GETTEXT_PACKAGE },

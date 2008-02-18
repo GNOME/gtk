@@ -972,6 +972,7 @@ STOCK_ICONS = \
 	stock-icons/16/gtk-network.png        		\
 	stock-icons/16/gtk-new.png    			\
 	stock-icons/16/gtk-open.png   			\
+	stock-icons/16/gtk-page-setup.png 		\
 	stock-icons/16/gtk-paste.png  			\
 	stock-icons/16/gtk-preferences.png    		\
 	stock-icons/16/gtk-print.png  			\
@@ -1073,6 +1074,7 @@ STOCK_ICONS = \
 	stock-icons/24/gtk-orientation-landscape.png	\
 	stock-icons/24/gtk-orientation-reverse-portrait.png	\
 	stock-icons/24/gtk-orientation-portrait.png	\
+	stock-icons/24/gtk-page-setup.png 		\
 	stock-icons/24/gtk-paste.png  			\
 	stock-icons/24/gtk-preferences.png    		\
 	stock-icons/24/gtk-print.png  			\

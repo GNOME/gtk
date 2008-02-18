@@ -1,3 +1,12 @@
+2008-02-18  Sven Neumann  <sven@gimp.org>
+
+	* gtk/Makefile.am (STOCK_ICONS)
+	* gtk/stock-icons/16/gtk-page-setup.png
+	* gtk/stock-icons/24/gtk-page-setup.png: added page-setup icons
+	taken from GNOME icon theme.
+
+	* gtk/gtkstock.[ch]: added GTK_STOCK_PAGE_SETUP. Closes bug #514410.
+
 2008-02-18  Runa Bhattacharjee <runabh@gmail.com>
 
 	* configure.in: Added Kannada (kn) to ALL_LINGUAS
