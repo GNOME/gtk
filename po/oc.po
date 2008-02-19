@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: oc\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-02-02 21:54+0100\n"
+"POT-Creation-Date: 2008-02-19 20:24+0100\n"
 "PO-Revision-Date: 2007-12-27 15:24+0100\n"
 "Last-Translator: Yannig Marchegay (Kokoyaya) <yannig@marchegay.org>\n"
 "Language-Team: Occitan <ubuntu-l10n-oci@lists.ubuntu.com>\n"
@@ -232,7 +232,7 @@ msgid "keyboard label|Delete"
 msgstr "Supr"
 
 #: ../gdk-pixbuf/gdk-pixbuf-animation.c:133 ../gdk-pixbuf/gdk-pixbuf-io.c:858
-#: ../gdk-pixbuf/gdk-pixbuf-io.c:1111 ../tests/testfilechooser.c:218
+#: ../gdk-pixbuf/gdk-pixbuf-io.c:1114 ../tests/testfilechooser.c:218
 #, c-format
 msgid "Failed to open file '%s': %s"
 msgstr "Impossible de dobrir le fichièr '%s' : %s"
@@ -243,7 +243,7 @@ msgid "Image file '%s' contains no data"
 msgstr "Lo fichièr imatge '%s' conten pas de donadas"
 
 #: ../gdk-pixbuf/gdk-pixbuf-animation.c:188 ../gdk-pixbuf/gdk-pixbuf-io.c:907
-#: ../gdk-pixbuf/gdk-pixbuf-io.c:1163 ../tests/testfilechooser.c:263
+#: ../gdk-pixbuf/gdk-pixbuf-io.c:1166 ../tests/testfilechooser.c:263
 #, c-format
 msgid ""
 "Failed to load image '%s': reason not known, probably a corrupt image file"
@@ -294,52 +294,52 @@ msgstr "Format d'imatge pas reconegut"
 msgid "Failed to load image '%s': %s"
 msgstr "Impossible de cargar l'imatge '%s' : %s"
 
-#: ../gdk-pixbuf/gdk-pixbuf-io.c:1542
+#: ../gdk-pixbuf/gdk-pixbuf-io.c:1545
 #, c-format
 msgid "Error writing to image file: %s"
 msgstr "Error al moment d'escriure lo fichièr d'imatge : %s"
 
-#: ../gdk-pixbuf/gdk-pixbuf-io.c:1588 ../gdk-pixbuf/gdk-pixbuf-io.c:1719
+#: ../gdk-pixbuf/gdk-pixbuf-io.c:1591 ../gdk-pixbuf/gdk-pixbuf-io.c:1722
 #, c-format
 msgid "This build of gdk-pixbuf does not support saving the image format: %s"
 msgstr ""
 
-#: ../gdk-pixbuf/gdk-pixbuf-io.c:1622
+#: ../gdk-pixbuf/gdk-pixbuf-io.c:1625
 #, c-format
 msgid "Insufficient memory to save image to callback"
 msgstr ""
 
-#: ../gdk-pixbuf/gdk-pixbuf-io.c:1635
+#: ../gdk-pixbuf/gdk-pixbuf-io.c:1638
 #, c-format
 msgid "Failed to open temporary file"
 msgstr "Impossible de dobrir lo fichièr temporari"
 
-#: ../gdk-pixbuf/gdk-pixbuf-io.c:1661
+#: ../gdk-pixbuf/gdk-pixbuf-io.c:1664
 #, c-format
 msgid "Failed to read from temporary file"
 msgstr "Lectura impossibla a partir del fichièr temporari"
 
-#: ../gdk-pixbuf/gdk-pixbuf-io.c:1896
+#: ../gdk-pixbuf/gdk-pixbuf-io.c:1899
 #, c-format
 msgid "Failed to open '%s' for writing: %s"
 msgstr "La dobèrtura de '%s' en escritura a pas capitat : %s"
 
-#: ../gdk-pixbuf/gdk-pixbuf-io.c:1921
+#: ../gdk-pixbuf/gdk-pixbuf-io.c:1924
 #, c-format
 msgid ""
 "Failed to close '%s' while writing image, all data may not have been saved: %"
 "s"
 msgstr ""
 
-#: ../gdk-pixbuf/gdk-pixbuf-io.c:2141 ../gdk-pixbuf/gdk-pixbuf-io.c:2192
+#: ../gdk-pixbuf/gdk-pixbuf-io.c:2144 ../gdk-pixbuf/gdk-pixbuf-io.c:2195
 #, c-format
 msgid "Insufficient memory to save image into a buffer"
 msgstr ""
 
-#: ../gdk-pixbuf/gdk-pixbuf-io.c:2238
-#, fuzzy, c-format
+#: ../gdk-pixbuf/gdk-pixbuf-io.c:2241
+#, c-format
 msgid "Error writing to image stream"
-msgstr "Error al moment d'escriure lo fichièr d'imatge : %s"
+msgstr ""
 
 #: ../gdk-pixbuf/gdk-pixbuf-loader.c:330
 #, c-format
@@ -1190,7 +1190,7 @@ msgstr "COLORS"
 msgid "Make X calls synchronous"
 msgstr ""
 
-#: ../gtk/gtkaboutdialog.c:264 ../gtk/gtkaboutdialog.c:2105
+#: ../gtk/gtkaboutdialog.c:264 ../gtk/gtkaboutdialog.c:2106
 msgid "License"
 msgstr "Licéncia"
 
@@ -1213,23 +1213,23 @@ msgstr "_Licéncia"
 msgid "About %s"
 msgstr "A prepaus de %s"
 
-#: ../gtk/gtkaboutdialog.c:2029
+#: ../gtk/gtkaboutdialog.c:2030
 msgid "Credits"
 msgstr "Mercejaments"
 
-#: ../gtk/gtkaboutdialog.c:2058
+#: ../gtk/gtkaboutdialog.c:2059
 msgid "Written by"
 msgstr "Desvolopat per"
 
-#: ../gtk/gtkaboutdialog.c:2061
+#: ../gtk/gtkaboutdialog.c:2062
 msgid "Documented by"
 msgstr "Documentat per"
 
-#: ../gtk/gtkaboutdialog.c:2073
+#: ../gtk/gtkaboutdialog.c:2074
 msgid "Translated by"
 msgstr "Revirat per"
 
-#: ../gtk/gtkaboutdialog.c:2077
+#: ../gtk/gtkaboutdialog.c:2078
 msgid "Artwork by"
 msgstr "Grafisme per"
 
@@ -1306,17 +1306,17 @@ msgstr "Espaci"
 msgid "keyboard label|Backslash"
 msgstr ""
 
-#: ../gtk/gtkbuilderparser.c:269
+#: ../gtk/gtkbuilderparser.c:265
 #, c-format
 msgid "Invalid type function: `%s'"
 msgstr ""
 
-#: ../gtk/gtkbuilderparser.c:719
+#: ../gtk/gtkbuilderparser.c:715
 #, c-format
 msgid "Invalid root element: '%s'"
 msgstr ""
 
-#: ../gtk/gtkbuilderparser.c:751
+#: ../gtk/gtkbuilderparser.c:747
 #, c-format
 msgid "Unhandled tag: '%s'"
 msgstr ""
@@ -1350,7 +1350,7 @@ msgstr "calendar:week_start:1"
 #. *
 #. * If you don't understand this, leave it as "2000"
 #.
-#: ../gtk/gtkcalendar.c:1807
+#: ../gtk/gtkcalendar.c:1799
 msgid "year measurement template|2000"
 msgstr "2000"
 
@@ -1365,7 +1365,7 @@ msgstr "2000"
 #. * digits.  That needs support from your system and locale definition
 #. * too.
 #.
-#: ../gtk/gtkcalendar.c:1838 ../gtk/gtkcalendar.c:2499
+#: ../gtk/gtkcalendar.c:1830 ../gtk/gtkcalendar.c:2491
 #, c-format
 msgid "calendar:day:digits|%d"
 msgstr "%d"
@@ -1381,7 +1381,7 @@ msgstr "%d"
 #. * digits.  That needs support from your system and locale definition
 #. * too.
 #.
-#: ../gtk/gtkcalendar.c:1870 ../gtk/gtkcalendar.c:2361
+#: ../gtk/gtkcalendar.c:1862 ../gtk/gtkcalendar.c:2353
 #, c-format
 msgid "calendar:week:digits|%d"
 msgstr "%d"
@@ -1397,7 +1397,7 @@ msgstr "%d"
 #. * Don't include the prefix "calendar year format|" in the
 #. * translation. "%Y" is appropriate for most locales.
 #.
-#: ../gtk/gtkcalendar.c:2151
+#: ../gtk/gtkcalendar.c:2143
 msgid "calendar year format|%Y"
 msgstr "%Y"
 
@@ -1448,95 +1448,95 @@ msgstr ""
 msgid "_Save color here"
 msgstr "_Enregistrar la color aicí"
 
-#: ../gtk/gtkcolorsel.c:1146
+#: ../gtk/gtkcolorsel.c:1147
 msgid ""
 "Click this palette entry to make it the current color. To change this entry, "
 "drag a color swatch here or right-click it and select \"Save color here.\""
 msgstr ""
 
-#: ../gtk/gtkcolorsel.c:1919
+#: ../gtk/gtkcolorsel.c:1921
 msgid ""
 "Select the color you want from the outer ring. Select the darkness or "
 "lightness of that color using the inner triangle."
 msgstr ""
 
-#: ../gtk/gtkcolorsel.c:1943
+#: ../gtk/gtkcolorsel.c:1945
 msgid ""
 "Click the eyedropper, then click a color anywhere on your screen to select "
 "that color."
 msgstr ""
 
-#: ../gtk/gtkcolorsel.c:1952
+#: ../gtk/gtkcolorsel.c:1954
 msgid "_Hue:"
 msgstr "_Blau :"
 
-#: ../gtk/gtkcolorsel.c:1953
+#: ../gtk/gtkcolorsel.c:1955
 msgid "Position on the color wheel."
 msgstr ""
 
-#: ../gtk/gtkcolorsel.c:1955
+#: ../gtk/gtkcolorsel.c:1957
 msgid "_Saturation:"
 msgstr "_Saturacion :"
 
-#: ../gtk/gtkcolorsel.c:1956
+#: ../gtk/gtkcolorsel.c:1958
 msgid "\"Deepness\" of the color."
 msgstr "\"Prigondor\" de la color."
 
-#: ../gtk/gtkcolorsel.c:1957
+#: ../gtk/gtkcolorsel.c:1959
 msgid "_Value:"
 msgstr "_Valor :"
 
-#: ../gtk/gtkcolorsel.c:1958
+#: ../gtk/gtkcolorsel.c:1960
 msgid "Brightness of the color."
 msgstr "Luminositat de la color."
 
-#: ../gtk/gtkcolorsel.c:1959
+#: ../gtk/gtkcolorsel.c:1961
 msgid "_Red:"
 msgstr "_Roge :"
 
-#: ../gtk/gtkcolorsel.c:1960
+#: ../gtk/gtkcolorsel.c:1962
 msgid "Amount of red light in the color."
 msgstr "Quantitat de roge dins la color."
 
-#: ../gtk/gtkcolorsel.c:1961
+#: ../gtk/gtkcolorsel.c:1963
 msgid "_Green:"
 msgstr "_Vèrd :"
 
-#: ../gtk/gtkcolorsel.c:1962
+#: ../gtk/gtkcolorsel.c:1964
 msgid "Amount of green light in the color."
 msgstr "Quantitat de vèrd dins la color."
 
-#: ../gtk/gtkcolorsel.c:1963
+#: ../gtk/gtkcolorsel.c:1965
 msgid "_Blue:"
 msgstr "_Blau :"
 
-#: ../gtk/gtkcolorsel.c:1964
+#: ../gtk/gtkcolorsel.c:1966
 msgid "Amount of blue light in the color."
 msgstr "Quantitat de blau dins la color."
 
-#: ../gtk/gtkcolorsel.c:1967
+#: ../gtk/gtkcolorsel.c:1969
 msgid "Op_acity:"
 msgstr "Op_acitat :"
 
-#: ../gtk/gtkcolorsel.c:1974 ../gtk/gtkcolorsel.c:1984
+#: ../gtk/gtkcolorsel.c:1976 ../gtk/gtkcolorsel.c:1986
 msgid "Transparency of the color."
 msgstr "Transparéncia de la color."
 
-#: ../gtk/gtkcolorsel.c:1991
+#: ../gtk/gtkcolorsel.c:1993
 msgid "Color _name:"
 msgstr "_Nom de la color :"
 
-#: ../gtk/gtkcolorsel.c:2005
+#: ../gtk/gtkcolorsel.c:2007
 msgid ""
 "You can enter an HTML-style hexadecimal color value, or simply a color name "
 "such as 'orange' in this entry."
 msgstr ""
 
-#: ../gtk/gtkcolorsel.c:2035
+#: ../gtk/gtkcolorsel.c:2037
 msgid "_Palette:"
 msgstr "_Paleta :"
 
-#: ../gtk/gtkcolorsel.c:2064
+#: ../gtk/gtkcolorsel.c:2066
 msgid "Color Wheel"
 msgstr ""
 
@@ -1544,11 +1544,11 @@ msgstr ""
 msgid "Color Selection"
 msgstr "Seleccion de la color"
 
-#: ../gtk/gtkentry.c:5253 ../gtk/gtktextview.c:7652
+#: ../gtk/gtkentry.c:5248 ../gtk/gtktextview.c:7653
 msgid "Input _Methods"
 msgstr ""
 
-#: ../gtk/gtkentry.c:5267 ../gtk/gtktextview.c:7666
+#: ../gtk/gtkentry.c:5262 ../gtk/gtktextview.c:7667
 msgid "_Insert Unicode Control Character"
 msgstr ""
 
@@ -1568,8 +1568,8 @@ msgstr "(Pas cap)"
 msgid "Other..."
 msgstr "Autre..."
 
-#: ../gtk/gtkfilechooser.c:1694 ../gtk/gtkfilechooser.c:1738
-#: ../gtk/gtkfilechooser.c:1813 ../gtk/gtkfilechooser.c:1857
+#: ../gtk/gtkfilechooser.c:1697 ../gtk/gtkfilechooser.c:1741
+#: ../gtk/gtkfilechooser.c:1816 ../gtk/gtkfilechooser.c:1860
 #, c-format
 msgid "Invalid filename: %s"
 msgstr "Nom de fichièr invalid : %s"
@@ -1676,7 +1676,7 @@ msgstr "_Apondre"
 msgid "Add the selected folder to the Bookmarks"
 msgstr "Apondre lo repertòri seleccionat als favorits"
 
-#: ../gtk/gtkfilechooserdefault.c:4039 ../gtk/gtkstock.c:385
+#: ../gtk/gtkfilechooserdefault.c:4039 ../gtk/gtkstock.c:386
 msgid "_Remove"
 msgstr "_Suprimir"
 
@@ -1684,165 +1684,165 @@ msgstr "_Suprimir"
 msgid "Remove the selected bookmark"
 msgstr "Suprimir lo favorit seleccionat"
 
-#: ../gtk/gtkfilechooserdefault.c:4142
+#: ../gtk/gtkfilechooserdefault.c:4143
 msgid "Could not select file"
 msgstr "Impossible de seleccionar lo fichièr"
 
-#: ../gtk/gtkfilechooserdefault.c:4279
+#: ../gtk/gtkfilechooserdefault.c:4280
 #, c-format
 msgid "Could not select file '%s' because it is an invalid path name."
 msgstr ""
 
-#: ../gtk/gtkfilechooserdefault.c:4336
+#: ../gtk/gtkfilechooserdefault.c:4337
 msgid "_Add to Bookmarks"
 msgstr "_Apondre als favorits"
 
-#: ../gtk/gtkfilechooserdefault.c:4350
+#: ../gtk/gtkfilechooserdefault.c:4351
 msgid "Show _Hidden Files"
 msgstr "Visualizar los fichièrs _aganits"
 
-#: ../gtk/gtkfilechooserdefault.c:4594 ../gtk/gtkfilesel.c:729
+#: ../gtk/gtkfilechooserdefault.c:4595 ../gtk/gtkfilesel.c:729
 msgid "Files"
 msgstr "Fichièrs"
 
-#: ../gtk/gtkfilechooserdefault.c:4643
+#: ../gtk/gtkfilechooserdefault.c:4644
 msgid "Name"
 msgstr "Nom"
 
-#: ../gtk/gtkfilechooserdefault.c:4668
+#: ../gtk/gtkfilechooserdefault.c:4669
 msgid "Size"
 msgstr "Talha"
 
-#: ../gtk/gtkfilechooserdefault.c:4682
+#: ../gtk/gtkfilechooserdefault.c:4683
 msgid "Modified"
 msgstr "Modificat"
 
 #. Label
-#: ../gtk/gtkfilechooserdefault.c:4902 ../gtk/gtkprinteroptionwidget.c:786
+#: ../gtk/gtkfilechooserdefault.c:4903 ../gtk/gtkprinteroptionwidget.c:786
 msgid "_Name:"
 msgstr "_Nom :"
 
-#: ../gtk/gtkfilechooserdefault.c:4944
+#: ../gtk/gtkfilechooserdefault.c:4945
 msgid "_Browse for other folders"
 msgstr "_Examinar d'autres repertòris"
 
-#: ../gtk/gtkfilechooserdefault.c:5210
+#: ../gtk/gtkfilechooserdefault.c:5211
 msgid "Type a file name"
 msgstr "Picatz un nom de fichièr"
 
 #. Create Folder
-#: ../gtk/gtkfilechooserdefault.c:5247
+#: ../gtk/gtkfilechooserdefault.c:5248
 msgid "Create Fo_lder"
 msgstr "Crear un _repertòri"
 
-#: ../gtk/gtkfilechooserdefault.c:5257
+#: ../gtk/gtkfilechooserdefault.c:5258
 msgid "_Location:"
 msgstr "_Emplaçament :"
 
-#: ../gtk/gtkfilechooserdefault.c:5495
+#: ../gtk/gtkfilechooserdefault.c:5496
 msgid "Save in _folder:"
 msgstr "Enregistrar dins lo _repertòri :"
 
-#: ../gtk/gtkfilechooserdefault.c:5497
+#: ../gtk/gtkfilechooserdefault.c:5498
 msgid "Create in _folder:"
 msgstr "Crear dins lo repertòri :"
 
-#: ../gtk/gtkfilechooserdefault.c:7100
+#: ../gtk/gtkfilechooserdefault.c:7105
 #, c-format
 msgid "Cannot change to folder because it is not local"
 msgstr ""
 
-#: ../gtk/gtkfilechooserdefault.c:7716 ../gtk/gtkfilechooserdefault.c:7737
+#: ../gtk/gtkfilechooserdefault.c:7721 ../gtk/gtkfilechooserdefault.c:7742
 #, c-format
 msgid "Shortcut %s already exists"
 msgstr "L'acorchi %s existís ja"
 
-#: ../gtk/gtkfilechooserdefault.c:7827
+#: ../gtk/gtkfilechooserdefault.c:7832
 #, c-format
 msgid "Shortcut %s does not exist"
 msgstr "L'acorchi %s existís pas"
 
-#: ../gtk/gtkfilechooserdefault.c:8082
+#: ../gtk/gtkfilechooserdefault.c:8087
 #, c-format
 msgid "A file named \"%s\" already exists.  Do you want to replace it?"
 msgstr "Lo fichièr \"%s\" existís ja, lo volètz remplaçar ?"
 
-#: ../gtk/gtkfilechooserdefault.c:8085
+#: ../gtk/gtkfilechooserdefault.c:8090
 #, c-format
 msgid ""
 "The file already exists in \"%s\".  Replacing it will overwrite its contents."
 msgstr ""
 
-#: ../gtk/gtkfilechooserdefault.c:8090
+#: ../gtk/gtkfilechooserdefault.c:8095
 msgid "_Replace"
 msgstr "_Remplaçar"
 
-#: ../gtk/gtkfilechooserdefault.c:8905
+#: ../gtk/gtkfilechooserdefault.c:8893
 msgid "Could not start the search process"
 msgstr ""
 
-#: ../gtk/gtkfilechooserdefault.c:8906
+#: ../gtk/gtkfilechooserdefault.c:8894
 msgid ""
 "The program was not able to create a connection to the indexer daemon.  "
 "Please make sure it is running."
 msgstr ""
 
-#: ../gtk/gtkfilechooserdefault.c:8920
+#: ../gtk/gtkfilechooserdefault.c:8908
 msgid "Could not send the search request"
 msgstr ""
 
 #. Label
-#: ../gtk/gtkfilechooserdefault.c:9348
+#: ../gtk/gtkfilechooserdefault.c:9336
 msgid "_Search:"
 msgstr "_Recercar :"
 
-#: ../gtk/gtkfilechooserdefault.c:10301
+#: ../gtk/gtkfilechooserdefault.c:10289
 #, c-format
 msgid "Could not mount %s"
 msgstr "Impossible de montar %s"
 
-#: ../gtk/gtkfilechooserdefault.c:10910
+#: ../gtk/gtkfilechooserdefault.c:10894
 msgid "Type name of new folder"
 msgstr "Picatz lo nom del repertòri novèl"
 
-#: ../gtk/gtkfilechooserdefault.c:10958
+#: ../gtk/gtkfilechooserdefault.c:10942
 #, c-format
 msgid "%d byte"
 msgid_plural "%d bytes"
 msgstr[0] "%d octet"
 msgstr[1] "%d octets"
 
-#: ../gtk/gtkfilechooserdefault.c:10960
+#: ../gtk/gtkfilechooserdefault.c:10944
 #, c-format
 msgid "%.1f KB"
 msgstr "%.1f ko"
 
-#: ../gtk/gtkfilechooserdefault.c:10962
+#: ../gtk/gtkfilechooserdefault.c:10946
 #, c-format
 msgid "%.1f MB"
 msgstr "%.1f Mo"
 
-#: ../gtk/gtkfilechooserdefault.c:10964
+#: ../gtk/gtkfilechooserdefault.c:10948
 #, c-format
 msgid "%.1f GB"
 msgstr "%.1f Go"
 
-#: ../gtk/gtkfilechooserdefault.c:11060 ../gtk/gtkfilechooserdefault.c:11082
-#: ../gtk/gtkfilechooserdefault.c:11116
+#: ../gtk/gtkfilechooserdefault.c:11044 ../gtk/gtkfilechooserdefault.c:11066
+#: ../gtk/gtkfilechooserdefault.c:11100
 msgid "Unknown"
 msgstr "Desconegut"
 
-#: ../gtk/gtkfilechooserdefault.c:11100
+#: ../gtk/gtkfilechooserdefault.c:11084
 msgid "Today at %H:%M"
 msgstr ""
 
-#: ../gtk/gtkfilechooserdefault.c:11102
+#: ../gtk/gtkfilechooserdefault.c:11086
 msgid "Yesterday at %H:%M"
 msgstr ""
 
-#: ../gtk/gtkfilechoosersettings.c:262 ../gtk/gtkfilesel.c:1408
-#: ../gtk/gtkfilesel.c:1417 ../gtk/gtkfilesystemunix.c:1047
-#: ../gtk/gtkfilesystemwin32.c:1213
+#: ../gtk/gtkfilechoosersettings.c:262 ../gtk/gtkfilesel.c:1348
+#: ../gtk/gtkfilesel.c:1357 ../gtk/gtkfilesystemunix.c:1047
+#: ../gtk/gtkfilesystemwin32.c:1227
 #, c-format
 msgid "Error creating folder '%s': %s"
 msgstr ""
@@ -1859,12 +1859,12 @@ msgstr "_Repertòris"
 msgid "_Files"
 msgstr "_Fichièrs"
 
-#: ../gtk/gtkfilesel.c:820 ../gtk/gtkfilesel.c:2207
+#: ../gtk/gtkfilesel.c:820 ../gtk/gtkfilesel.c:2147
 #, c-format
 msgid "Folder unreadable: %s"
 msgstr "Repertòri illegible : %s"
 
-#: ../gtk/gtkfilesel.c:949
+#: ../gtk/gtkfilesel.c:904
 #, c-format
 msgid ""
 "The file \"%s\" resides on another machine (called %s) and may not be "
@@ -1872,103 +1872,103 @@ msgid ""
 "Are you sure that you want to select it?"
 msgstr ""
 
-#: ../gtk/gtkfilesel.c:1079
+#: ../gtk/gtkfilesel.c:1019
 msgid "_New Folder"
 msgstr "Repertòri _novèl"
 
-#: ../gtk/gtkfilesel.c:1090
+#: ../gtk/gtkfilesel.c:1030
 msgid "De_lete File"
 msgstr "_Suprimir lo fichièr"
 
-#: ../gtk/gtkfilesel.c:1101
+#: ../gtk/gtkfilesel.c:1041
 msgid "_Rename File"
 msgstr ""
 
-#: ../gtk/gtkfilesel.c:1406
+#: ../gtk/gtkfilesel.c:1346
 #, c-format
 msgid ""
 "The folder name \"%s\" contains symbols that are not allowed in filenames"
 msgstr ""
 
-#: ../gtk/gtkfilesel.c:1451
+#: ../gtk/gtkfilesel.c:1391
 msgid "New Folder"
 msgstr "Repertòri novèl"
 
-#: ../gtk/gtkfilesel.c:1466
+#: ../gtk/gtkfilesel.c:1406
 msgid "_Folder name:"
 msgstr "Nom del repertòri :"
 
-#: ../gtk/gtkfilesel.c:1490
+#: ../gtk/gtkfilesel.c:1430
 msgid "C_reate"
 msgstr "C_rear"
 
-#: ../gtk/gtkfilesel.c:1533 ../gtk/gtkfilesel.c:1640 ../gtk/gtkfilesel.c:1653
+#: ../gtk/gtkfilesel.c:1473 ../gtk/gtkfilesel.c:1580 ../gtk/gtkfilesel.c:1593
 #, c-format
 msgid "The filename \"%s\" contains symbols that are not allowed in filenames"
 msgstr ""
 
-#: ../gtk/gtkfilesel.c:1536 ../gtk/gtkfilesel.c:1546
+#: ../gtk/gtkfilesel.c:1476 ../gtk/gtkfilesel.c:1486
 #, c-format
 msgid "Error deleting file '%s': %s"
 msgstr ""
 
-#: ../gtk/gtkfilesel.c:1589
+#: ../gtk/gtkfilesel.c:1529
 #, c-format
 msgid "Really delete file \"%s\"?"
 msgstr "Volètz realament suprimir lo fichièr '%s' ?"
 
-#: ../gtk/gtkfilesel.c:1594
+#: ../gtk/gtkfilesel.c:1534
 msgid "Delete File"
 msgstr "Suprimir lo fichièr"
 
-#: ../gtk/gtkfilesel.c:1642
+#: ../gtk/gtkfilesel.c:1582
 #, c-format
 msgid "Error renaming file to \"%s\": %s"
 msgstr ""
 
-#: ../gtk/gtkfilesel.c:1655
+#: ../gtk/gtkfilesel.c:1595
 #, c-format
 msgid "Error renaming file \"%s\": %s"
 msgstr ""
 
-#: ../gtk/gtkfilesel.c:1664
+#: ../gtk/gtkfilesel.c:1604
 #, c-format
 msgid "Error renaming file \"%s\" to \"%s\": %s"
 msgstr ""
 
-#: ../gtk/gtkfilesel.c:1711
+#: ../gtk/gtkfilesel.c:1651
 msgid "Rename File"
 msgstr ""
 
-#: ../gtk/gtkfilesel.c:1726
+#: ../gtk/gtkfilesel.c:1666
 #, c-format
 msgid "Rename file \"%s\" to:"
 msgstr ""
 
-#: ../gtk/gtkfilesel.c:1755
+#: ../gtk/gtkfilesel.c:1695
 msgid "_Rename"
 msgstr "_Renommar"
 
-#: ../gtk/gtkfilesel.c:2187
+#: ../gtk/gtkfilesel.c:2127
 msgid "_Selection: "
 msgstr "_Seleccion : "
 
-#: ../gtk/gtkfilesel.c:3107
+#: ../gtk/gtkfilesel.c:3047
 #, c-format
 msgid ""
 "The filename \"%s\" couldn't be converted to UTF-8. (try setting the "
 "environment variable G_FILENAME_ENCODING): %s"
 msgstr ""
 
-#: ../gtk/gtkfilesel.c:3110
+#: ../gtk/gtkfilesel.c:3050
 msgid "Invalid UTF-8"
 msgstr "UTF-8 invalid"
 
-#: ../gtk/gtkfilesel.c:3984
+#: ../gtk/gtkfilesel.c:3924
 msgid "Name too long"
 msgstr "Nom tròp long"
 
-#: ../gtk/gtkfilesel.c:3986
+#: ../gtk/gtkfilesel.c:3926
 msgid "Couldn't convert filename"
 msgstr "Impossible de convertir le nom del fichièr"
 
@@ -1977,23 +1977,23 @@ msgstr "Impossible de convertir le nom del fichièr"
 msgid "Could not get a stock icon for %s\n"
 msgstr ""
 
-#: ../gtk/gtkfilesystemmodel.c:743
+#: ../gtk/gtkfilesystemmodel.c:737
 #, c-format
 msgid "Could not obtain root folder"
 msgstr ""
 
-#: ../gtk/gtkfilesystemmodel.c:1336
+#: ../gtk/gtkfilesystemmodel.c:1330
 msgid "(Empty)"
 msgstr "(Void)"
 
 #: ../gtk/gtkfilesystemunix.c:960 ../gtk/gtkfilesystemunix.c:1208
 #: ../gtk/gtkfilesystemunix.c:2196 ../gtk/gtkfilesystemunix.c:2236
-#: ../gtk/gtkfilesystemwin32.c:2291 ../gtk/gtkfilesystemwin32.c:2341
+#: ../gtk/gtkfilesystemwin32.c:2305 ../gtk/gtkfilesystemwin32.c:2355
 #, c-format
 msgid "Error getting information for '%s': %s"
 msgstr "Error al moment d'obténer las entresenhas de '%s' : %s"
 
-#: ../gtk/gtkfilesystemunix.c:1153 ../gtk/gtkfilesystemwin32.c:1320
+#: ../gtk/gtkfilesystemunix.c:1153 ../gtk/gtkfilesystemwin32.c:1334
 #, c-format
 msgid "This file system does not support mounting"
 msgstr ""
@@ -2002,39 +2002,39 @@ msgstr ""
 msgid "File System"
 msgstr "Sistèma de fichièrs"
 
-#: ../gtk/gtkfilesystemunix.c:1329 ../gtk/gtkfilesystemwin32.c:1630
+#: ../gtk/gtkfilesystemunix.c:1329 ../gtk/gtkfilesystemwin32.c:1644
 #, c-format
 msgid ""
 "The name \"%s\" is not valid because it contains the character \"%s\". "
 "Please use a different name."
 msgstr ""
 
-#: ../gtk/gtkfilesystemunix.c:1878 ../gtk/gtkfilesystemwin32.c:1971
+#: ../gtk/gtkfilesystemunix.c:1878 ../gtk/gtkfilesystemwin32.c:1985
 #, c-format
 msgid "Bookmark saving failed: %s"
 msgstr "Impossible d'enregistrar lo favorit : %s"
 
-#: ../gtk/gtkfilesystemunix.c:1933 ../gtk/gtkfilesystemwin32.c:2026
+#: ../gtk/gtkfilesystemunix.c:1933 ../gtk/gtkfilesystemwin32.c:2040
 #, c-format
 msgid "'%s' already exists in the bookmarks list"
 msgstr "'%s' existís ja dins la tièra dels favorits"
 
-#: ../gtk/gtkfilesystemunix.c:2005 ../gtk/gtkfilesystemwin32.c:2098
+#: ../gtk/gtkfilesystemunix.c:2005 ../gtk/gtkfilesystemwin32.c:2112
 #, c-format
 msgid "'%s' does not exist in the bookmarks list"
 msgstr "'%s' existís pas dins la tièra dels favorits"
 
-#: ../gtk/gtkfilesystemwin32.c:1136
+#: ../gtk/gtkfilesystemwin32.c:1150
 #, c-format
 msgid "Path is not a folder: '%s'"
 msgstr ""
 
-#: ../gtk/gtkfilesystemwin32.c:1338
+#: ../gtk/gtkfilesystemwin32.c:1352
 #, c-format
 msgid "Network Drive (%s)"
 msgstr "Legidor ret (%s)"
 
-#: ../gtk/gtkfilesystemwin32.c:1360
+#: ../gtk/gtkfilesystemwin32.c:1374
 #, c-format
 msgid "%s (%s)"
 msgstr "%s (%s)"
@@ -2201,19 +2201,19 @@ msgstr "(desconegut)"
 msgid "Cl_ear"
 msgstr "_Netejar"
 
-#: ../gtk/gtklinkbutton.c:141
+#: ../gtk/gtklinkbutton.c:148
 msgid "URI"
 msgstr "URL"
 
-#: ../gtk/gtklinkbutton.c:142
+#: ../gtk/gtklinkbutton.c:149
 msgid "The URI bound to this button"
 msgstr ""
 
-#: ../gtk/gtklinkbutton.c:396
+#: ../gtk/gtklinkbutton.c:406
 msgid "Copy URL"
 msgstr "Copiar l'URL"
 
-#: ../gtk/gtklinkbutton.c:536
+#: ../gtk/gtklinkbutton.c:546
 msgid "Invalid URI"
 msgstr ""
 
@@ -2385,7 +2385,7 @@ msgstr ""
 msgid "Down Path"
 msgstr ""
 
-#: ../gtk/gtkpathbar.c:1377
+#: ../gtk/gtkpathbar.c:1367
 msgid "File System Root"
 msgstr ""
 
@@ -2451,16 +2451,16 @@ msgstr "Terminat"
 msgid "print operation status|Finished with error"
 msgstr ""
 
-#: ../gtk/gtkprintoperation.c:1987
+#: ../gtk/gtkprintoperation.c:1986
 #, c-format
 msgid "Preparing %d"
 msgstr "Preparacion de %d"
 
-#: ../gtk/gtkprintoperation.c:1989 ../gtk/gtkprintoperation.c:2243
+#: ../gtk/gtkprintoperation.c:1988 ../gtk/gtkprintoperation.c:2242
 msgid "Preparing"
 msgstr "Preparacion"
 
-#: ../gtk/gtkprintoperation.c:1992
+#: ../gtk/gtkprintoperation.c:1991
 #, c-format
 msgid "Printing %d"
 msgstr "Estampatge de %d"
@@ -2719,45 +2719,45 @@ msgid "Unable to locate image file in pixmap_path: \"%s\""
 msgstr ""
 
 #: ../gtk/gtkrecentaction.c:155 ../gtk/gtkrecentaction.c:163
-#: ../gtk/gtkrecentchoosermenu.c:553 ../gtk/gtkrecentchoosermenu.c:561
+#: ../gtk/gtkrecentchoosermenu.c:554 ../gtk/gtkrecentchoosermenu.c:562
 #, c-format
 msgid "This function is not implemented for widgets of class '%s'"
 msgstr ""
 
-#: ../gtk/gtkrecentchooserdefault.c:465
+#: ../gtk/gtkrecentchooserdefault.c:456
 msgid "Select which type of documents are shown"
 msgstr ""
 
-#: ../gtk/gtkrecentchooserdefault.c:1107 ../gtk/gtkrecentchooserdefault.c:1144
+#: ../gtk/gtkrecentchooserdefault.c:1098 ../gtk/gtkrecentchooserdefault.c:1135
 #, c-format
 msgid "No item for URI '%s' found"
 msgstr ""
 
-#: ../gtk/gtkrecentchooserdefault.c:1271
+#: ../gtk/gtkrecentchooserdefault.c:1262
 msgid "Untitled filter"
 msgstr ""
 
-#: ../gtk/gtkrecentchooserdefault.c:1626
+#: ../gtk/gtkrecentchooserdefault.c:1615
 msgid "Could not remove item"
 msgstr "Impossible de suprimir l'element"
 
-#: ../gtk/gtkrecentchooserdefault.c:1669
+#: ../gtk/gtkrecentchooserdefault.c:1658
 msgid "Could not clear list"
 msgstr ""
 
-#: ../gtk/gtkrecentchooserdefault.c:1753
+#: ../gtk/gtkrecentchooserdefault.c:1742
 msgid "Copy _Location"
 msgstr ""
 
-#: ../gtk/gtkrecentchooserdefault.c:1766
+#: ../gtk/gtkrecentchooserdefault.c:1755
 msgid "_Remove From List"
 msgstr "_Suprimir de la tièra"
 
-#: ../gtk/gtkrecentchooserdefault.c:1775
+#: ../gtk/gtkrecentchooserdefault.c:1764
 msgid "_Clear List"
 msgstr "_Netejar la tièra"
 
-#: ../gtk/gtkrecentchooserdefault.c:1789
+#: ../gtk/gtkrecentchooserdefault.c:1778
 msgid "Show _Private Resources"
 msgstr ""
 
@@ -2775,17 +2775,17 @@ msgstr ""
 msgid "No items found"
 msgstr ""
 
-#: ../gtk/gtkrecentchoosermenu.c:473 ../gtk/gtkrecentchoosermenu.c:529
+#: ../gtk/gtkrecentchoosermenu.c:474 ../gtk/gtkrecentchoosermenu.c:530
 #, c-format
 msgid "No recently used resource found with URI `%s'"
 msgstr ""
 
-#: ../gtk/gtkrecentchoosermenu.c:740
+#: ../gtk/gtkrecentchoosermenu.c:741
 #, c-format
 msgid "Open '%s'"
 msgstr "Dobrir '%s'"
 
-#: ../gtk/gtkrecentchoosermenu.c:770
+#: ../gtk/gtkrecentchoosermenu.c:771
 msgid "Unknown item"
 msgstr "Element desconegut"
 
@@ -2796,7 +2796,7 @@ msgstr "Element desconegut"
 #. *
 #. * Don't include the prefix "recent menu label|" in the translation.
 #.
-#: ../gtk/gtkrecentchoosermenu.c:783
+#: ../gtk/gtkrecentchoosermenu.c:784
 #, c-format
 msgid "recent menu label|_%d. %s"
 msgstr ""
@@ -2806,7 +2806,7 @@ msgstr ""
 #. *
 #. * Don't include the prefix "recent menu label|" in the translation.
 #.
-#: ../gtk/gtkrecentchoosermenu.c:790
+#: ../gtk/gtkrecentchoosermenu.c:791
 #, c-format
 msgid "recent menu label|%d. %s"
 msgstr ""
@@ -3094,110 +3094,115 @@ msgid "Reverse portrait"
 msgstr ""
 
 #: ../gtk/gtkstock.c:377
+#
+msgid "Page Set_up"
+msgstr "_Configuracion de la pagina"
+
+#: ../gtk/gtkstock.c:378
 msgid "_Paste"
 msgstr "_Pegar"
 
-#: ../gtk/gtkstock.c:378
+#: ../gtk/gtkstock.c:379
 msgid "_Preferences"
 msgstr "_Preferéncias"
 
-#: ../gtk/gtkstock.c:379
+#: ../gtk/gtkstock.c:380
 msgid "_Print"
 msgstr "_Estampar"
 
-#: ../gtk/gtkstock.c:380
+#: ../gtk/gtkstock.c:381
 msgid "Print Pre_view"
 msgstr ""
 
-#: ../gtk/gtkstock.c:381
+#: ../gtk/gtkstock.c:382
 msgid "_Properties"
 msgstr "_Propietats"
 
-#: ../gtk/gtkstock.c:382
+#: ../gtk/gtkstock.c:383
 msgid "_Quit"
 msgstr "_Sortir"
 
-#: ../gtk/gtkstock.c:383
+#: ../gtk/gtkstock.c:384
 msgid "_Redo"
 msgstr "_Tornar far"
 
-#: ../gtk/gtkstock.c:384
+#: ../gtk/gtkstock.c:385
 msgid "_Refresh"
 msgstr "_Actualisar"
 
-#: ../gtk/gtkstock.c:386
+#: ../gtk/gtkstock.c:387
 msgid "_Revert"
 msgstr "_Restablir"
 
-#: ../gtk/gtkstock.c:387
+#: ../gtk/gtkstock.c:388
 msgid "_Save"
 msgstr "_Enregistrar"
 
-#: ../gtk/gtkstock.c:388
+#: ../gtk/gtkstock.c:389
 msgid "Save _As"
 msgstr "Enregistrar _coma"
 
-#: ../gtk/gtkstock.c:389
+#: ../gtk/gtkstock.c:390
 msgid "Select _All"
 msgstr "Seleccionar un fichièr"
 
-#: ../gtk/gtkstock.c:390
+#: ../gtk/gtkstock.c:391
 msgid "_Color"
 msgstr "_Color"
 
-#: ../gtk/gtkstock.c:391
+#: ../gtk/gtkstock.c:392
 msgid "_Font"
 msgstr "_Poliça"
 
-#: ../gtk/gtkstock.c:392
+#: ../gtk/gtkstock.c:393
 msgid "_Ascending"
 msgstr "_Cressent"
 
-#: ../gtk/gtkstock.c:393
+#: ../gtk/gtkstock.c:394
 msgid "_Descending"
 msgstr "_Descreissent"
 
-#: ../gtk/gtkstock.c:394
+#: ../gtk/gtkstock.c:395
 msgid "_Spell Check"
 msgstr ""
 
-#: ../gtk/gtkstock.c:395
+#: ../gtk/gtkstock.c:396
 msgid "_Stop"
 msgstr "_Arrestar"
 
-#: ../gtk/gtkstock.c:396
+#: ../gtk/gtkstock.c:397
 msgid "_Strikethrough"
 msgstr ""
 
-#: ../gtk/gtkstock.c:397
+#: ../gtk/gtkstock.c:398
 msgid "_Undelete"
 msgstr ""
 
-#: ../gtk/gtkstock.c:398
+#: ../gtk/gtkstock.c:399
 msgid "_Underline"
 msgstr "_Soslinhar"
 
-#: ../gtk/gtkstock.c:399
+#: ../gtk/gtkstock.c:400
 msgid "_Undo"
 msgstr "_Anullar"
 
-#: ../gtk/gtkstock.c:400
+#: ../gtk/gtkstock.c:401
 msgid "_Yes"
 msgstr "_Òc"
 
-#: ../gtk/gtkstock.c:401
+#: ../gtk/gtkstock.c:402
 msgid "_Normal Size"
 msgstr "Talha _normala"
 
-#: ../gtk/gtkstock.c:402
+#: ../gtk/gtkstock.c:403
 msgid "Best _Fit"
 msgstr ""
 
-#: ../gtk/gtkstock.c:403
+#: ../gtk/gtkstock.c:404
 msgid "Zoom _In"
 msgstr ""
 
-#: ../gtk/gtkstock.c:404
+#: ../gtk/gtkstock.c:405
 msgid "Zoom _Out"
 msgstr ""
 
@@ -3366,22 +3371,22 @@ msgstr ""
 msgid "--- No Tip ---"
 msgstr "--- Pas d'astúcia ---"
 
-#: ../gtk/gtkuimanager.c:1226
+#: ../gtk/gtkuimanager.c:1247
 #, c-format
 msgid "Unknown attribute '%s' on line %d char %d"
 msgstr ""
 
-#: ../gtk/gtkuimanager.c:1443
+#: ../gtk/gtkuimanager.c:1464
 #, c-format
 msgid "Unexpected start tag '%s' on line %d char %d"
 msgstr ""
 
-#: ../gtk/gtkuimanager.c:1533
+#: ../gtk/gtkuimanager.c:1554
 #, c-format
 msgid "Unexpected character data on line %d char %d"
 msgstr ""
 
-#: ../gtk/gtkuimanager.c:2356
+#: ../gtk/gtkuimanager.c:2377
 msgid "Empty"
 msgstr "Void"
 
@@ -4237,91 +4242,91 @@ msgstr "ROC 8k"
 msgid "different idatas found for symlinked '%s' and '%s'\n"
 msgstr ""
 
-#: ../gtk/updateiconcache.c:1368
+#: ../gtk/updateiconcache.c:1372
 #, c-format
 msgid "Failed to write header\n"
 msgstr ""
 
-#: ../gtk/updateiconcache.c:1374
+#: ../gtk/updateiconcache.c:1378
 #, c-format
 msgid "Failed to write hash table\n"
 msgstr ""
 
-#: ../gtk/updateiconcache.c:1380
+#: ../gtk/updateiconcache.c:1384
 #, c-format
 msgid "Failed to write folder index\n"
 msgstr ""
 
-#: ../gtk/updateiconcache.c:1388
+#: ../gtk/updateiconcache.c:1392
 #, c-format
 msgid "Failed to rewrite header\n"
 msgstr ""
 
-#: ../gtk/updateiconcache.c:1440
+#: ../gtk/updateiconcache.c:1444
 #, c-format
 msgid "Failed to write cache file: %s\n"
 msgstr ""
 
-#: ../gtk/updateiconcache.c:1475
+#: ../gtk/updateiconcache.c:1479
 #, c-format
 msgid "The generated cache was invalid.\n"
 msgstr ""
 
-#: ../gtk/updateiconcache.c:1489
+#: ../gtk/updateiconcache.c:1493
 #, c-format
 msgid "Could not rename %s to %s: %s, removing %s then.\n"
 msgstr ""
 
-#: ../gtk/updateiconcache.c:1501
+#: ../gtk/updateiconcache.c:1505
 #, c-format
 msgid "Could not rename %s to %s: %s\n"
 msgstr ""
 
-#: ../gtk/updateiconcache.c:1508
+#: ../gtk/updateiconcache.c:1512
 #, c-format
 msgid "Could not rename %s back to %s: %s.\n"
 msgstr ""
 
-#: ../gtk/updateiconcache.c:1530
+#: ../gtk/updateiconcache.c:1534
 #, c-format
 msgid "Cache file created successfully.\n"
 msgstr ""
 
-#: ../gtk/updateiconcache.c:1569
+#: ../gtk/updateiconcache.c:1573
 msgid "Overwrite an existing cache, even if up to date"
 msgstr ""
 
-#: ../gtk/updateiconcache.c:1570
+#: ../gtk/updateiconcache.c:1574
 msgid "Don't check for the existence of index.theme"
 msgstr ""
 
-#: ../gtk/updateiconcache.c:1571
+#: ../gtk/updateiconcache.c:1575
 msgid "Don't include image data in the cache"
 msgstr ""
 
-#: ../gtk/updateiconcache.c:1572
+#: ../gtk/updateiconcache.c:1576
 msgid "Output a C header file"
 msgstr ""
 
-#: ../gtk/updateiconcache.c:1573
+#: ../gtk/updateiconcache.c:1577
 msgid "Turn off verbose output"
 msgstr ""
 
-#: ../gtk/updateiconcache.c:1574
+#: ../gtk/updateiconcache.c:1578
 msgid "Validate existing icon cache"
 msgstr ""
 
-#: ../gtk/updateiconcache.c:1609
+#: ../gtk/updateiconcache.c:1641
 #, c-format
 msgid "File not found: %s\n"
 msgstr ""
 
-#: ../gtk/updateiconcache.c:1615
+#: ../gtk/updateiconcache.c:1647
 #, c-format
 msgid "Not a valid icon cache: %s\n"
 msgstr ""
 
-#: ../gtk/updateiconcache.c:1626
+#: ../gtk/updateiconcache.c:1658
 #, c-format
 msgid ""
 "No theme index file in '%s'.\n"
