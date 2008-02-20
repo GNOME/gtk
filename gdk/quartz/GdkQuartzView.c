@@ -116,6 +116,12 @@
 
   gdk_region_destroy (region);
 
+  /* Invalidate the window shadow for non-opaque views that have shadow
+   * enabled, otherwise the shadow doesn't get updated to what we draw.
+   */
+  if (![self isOpaque] && [[self window] hasShadow])
+    [[self window] invalidateShadow];
+
   GDK_QUARTZ_RELEASE_POOL;
 }
 
