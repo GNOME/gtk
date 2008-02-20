@@ -270,13 +270,18 @@
   GdkWindow *window = [[self contentView] gdkWindow];
   GdkWindowObject *private = (GdkWindowObject *)window;
   GdkWindowImplQuartz *impl = GDK_WINDOW_IMPL_QUARTZ (private->impl);
+  gboolean was_hidden;
+  int requested_x = 0, requested_y = 0;
 
   inShowOrHide = YES;
+  was_hidden = FALSE;
 
   if (!GDK_WINDOW_IS_MAPPED (window))
     {
       NSRect content_rect;
       NSRect frame_rect;
+
+      was_hidden = TRUE;
 
       /* We move the window in place if it's not mapped. See comment in
        * hide().
@@ -287,6 +292,9 @@
                     impl->width, impl->height);
       frame_rect = [impl->toplevel frameRectForContentRect:content_rect];
       [impl->toplevel setFrame:frame_rect display:NO];
+
+      requested_x = frame_rect.origin.x;
+      requested_y = frame_rect.origin.y;
     }
 
   if (makeKey)
@@ -295,6 +303,20 @@
     [impl->toplevel orderFront:nil];
 
   inShowOrHide = NO;
+
+  /* When the window manager didn't allow our request, update the position
+   * to what it really ended up as.
+   */
+  if (was_hidden)
+    {
+      NSRect frame_rect;
+
+      frame_rect = [impl->toplevel frame];
+      if (requested_x != frame_rect.origin.x || requested_y != frame_rect.origin.y)
+        {
+          [self windowDidMove:nil];
+        }
+    }
 }
 
 - (void)hide
