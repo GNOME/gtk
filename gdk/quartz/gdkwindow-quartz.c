@@ -2530,6 +2530,9 @@ gdk_window_set_decorations (GdkWindow       *window,
                                                    backing:NSBackingStoreBuffered
                                                      defer:NO];
 
+      [impl->toplevel setHasShadow: window_type_hint_to_shadow (impl->type_hint)];
+      [impl->toplevel setLevel: window_type_hint_to_level (impl->type_hint)];
+
       [impl->toplevel setContentView:old_view];
       [impl->toplevel setFrame:rect display:YES];
     }

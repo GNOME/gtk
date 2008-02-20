@@ -2,6 +2,16 @@
 
 	Merged from trunk:
 
+	* gdk/quartz/gdkwindow-quartz.c: (gdk_window_set_decorations): Set
+	the right window level and shadow after recreating the window.
+
+	* gdk/quartz/GdkQuartzView.c: (drawRect): Invalidate the shadow if
+	necessary after drawing (bug #517338).
+
+2008-02-20  Richard Hult  <richard@imendio.com>
+
+	Merged from trunk:
+
 	* gdk/quartz/GdkQuartzWindow.c: (showAndMakeKey): Update the
 	position after showing the window since the window manager might
 	not place it where we requested in the first place.
