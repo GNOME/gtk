@@ -1265,10 +1265,13 @@ _gtk_builder_enum_from_string (GType         type,
   GEnumValue *ev;
   gchar *endptr;
   gint value;
+  gboolean ret;
   
-  g_return_val_if_fail (G_TYPE_IS_ENUM (type), 0);
-  g_return_val_if_fail (string != NULL, 0);
+  g_return_val_if_fail (G_TYPE_IS_ENUM (type), FALSE);
+  g_return_val_if_fail (string != NULL, FALSE);
   
+  ret = TRUE;
+
   value = strtoul (string, &endptr, 0);
   if (endptr != string) /* parsed a number */
     *enum_value = value;
@@ -1288,13 +1291,13 @@ _gtk_builder_enum_from_string (GType         type,
 		       GTK_BUILDER_ERROR_INVALID_VALUE,
 		       "Could not parse enum: `%s'",
 		       string);
-	  return FALSE;
+	  ret = FALSE;
 	}
       
       g_type_class_unref (eclass);
     }
   
-  return TRUE;
+  return ret;
 }
 
 gboolean
@@ -1305,15 +1308,15 @@ _gtk_builder_flags_from_string (GType         type,
 {
   GFlagsClass *fclass;
   gchar *endptr, *prevptr;
-  guint i, j, ret, value;
+  guint i, j, value;
   gchar *flagstr;
   GFlagsValue *fv;
   const gchar *flag;
   gunichar ch;
-  gboolean eos;
+  gboolean eos, ret;
 
-  g_return_val_if_fail (G_TYPE_IS_FLAGS (type), 0);
-  g_return_val_if_fail (string != 0, 0);
+  g_return_val_if_fail (G_TYPE_IS_FLAGS (type), FALSE);
+  g_return_val_if_fail (string != 0, FALSE);
 
   ret = TRUE;
   

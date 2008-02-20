@@ -1,3 +1,8 @@
+2008-02-20  Marc-Andre Lureau  <marcandre.lureau@gmail.com>
+
+	* gtk/gtkbuilder.c (_gtk_builder_enum_from_string): fix missing
+	call to g_type_class_unref in case of error. (#517563)
+
 2008-02-18  Sven Neumann  <sven@gimp.org>
 
 	* gtk/Makefile.am (STOCK_ICONS)
