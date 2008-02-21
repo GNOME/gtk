@@ -1,3 +1,10 @@
+2008-02-21  Tor Lillqvist  <tml@novell.com>
+
+	* gtk/gtkfilechooserdefault.c (list_mtime_data_func) [Win32]: Must
+	pass the format string to strftime in the C library's locale's
+	charset, not the system's. Correspondingly, the return value from
+	strftime() is in the C library's locale's charset. (#509885)
+
 2008-02-20  Richard Hult  <richard@imendio.com>
 
 	Merged from trunk:
