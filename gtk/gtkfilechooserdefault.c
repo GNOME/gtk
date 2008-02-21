@@ -11137,7 +11137,8 @@ list_mtime_data_func (GtkTreeViewColumn *tree_column,
 	  date_str = g_locale_to_utf8 (buf, -1, NULL, NULL, NULL);
 #endif
 	}
-      else
+
+      if (date_str == NULL)
 	date_str = g_strdup (_("Unknown"));
 
       g_free (locale_format);
