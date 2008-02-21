@@ -1,3 +1,68 @@
+Overview of Changes from GTK+ 2.12.x to 2.13.0
+==============================================
+
+ * gdk-pixbuf:
+  - Support loading the OS X icns format
+  - Support loading of JPEG2000 images
+  - Support loading from and saving to GIO streams
+
+ * GDK:
+  - Add GdkAppLaunchContext, to provide startup notification
+    with g_app_info_launch()
+  - Use RandR 1.2 instead of Xinerama when available, and expose
+    more monitor information
+
+ * Accessibility:
+  - The gail module is now shipped as part of GTK+
+  - GtkStatusIcon supports keyboard navigation 
+
+ * GtkCalendar:
+  - Support displaying details for each day
+
+ * GtkBuilder:
+  - gtk-builder-convert has been improved
+  - Translation-domain works properly
+  - Support accessibility
+
+ * Testing support:
+  - Add utilities for testing GTK+ applications
+  - Add some unit tests for GTK+ 
+
+ * New settings:
+  - for disabling display of accelerators and mnemonics
+  - for position of vertical scrollbars in scrolled windows
+  - for the default input method 
+
+ * GtkToolShell: new interface for containers of GtkToolItems
+
+ * Bug fixes:
+ - too many to list here
+
+ * Updated translations:
+  Arabic (ar)
+  Assamese (as)
+  Belarusian (be)
+  Belarusian Latin (be@latin)
+  Czech (cs)
+  German (de)
+  Greek (el)
+  Estonian (et)
+  Finnish (fi)
+  French (fr)
+  Irish (ga)
+  Hebrew (he)
+  Indonesian (id)
+  Kurdish (ku)
+  Marathi (mr)
+  Norwegian bokmål (nb)
+  Occitan (oc)
+  Brazilian Portugese (pt_BR)
+  Slovenian (sl)
+  Swedish (sv)
+  Telugu (te)
+  Russian (ru)
+
+
 Overview of Changes from GTK+ 2.12.0 to 2.12.1
 ==============================================
 

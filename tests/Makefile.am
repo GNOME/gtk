@@ -29,26 +29,29 @@ TEST_PROGS			+= floatingtest
 floatingtest_DEPENDENCIES	 = $(TEST_DEPS)
 floatingtest_LDADD		 = $(LDADDS)
 TEST_PROGS                      += objecttests
-objecttests_SOURCES              = objecttests.c
+objecttests_SOURCES              = objecttests.c pixbuf-init.c
 objecttests_LDADD                = $(LDADDS)
 objecttests_DEPENDENCIES         = $(TEST_DEPS)
-TEST_PROGS                      += autotestfilechooser
+# this doesn't work in make distcheck, since it doesn't
+# find file-chooser-test-dir 
+# TEST_PROGS                      += autotestfilechooser
 autotestfilechooser_DEPENDENCIES = $(TEST_DEPS)
 autotestfilechooser_LDADD        = $(LDADDS)
-autotestfilechooser_SOURCES      = autotestfilechooser.c
+autotestfilechooser_SOURCES      = autotestfilechooser.c pixbuf-init.c
 TEST_PROGS                      += buildertest
 buildertest_DEPENDENCIES 	 = $(TEST_DEPS)
 buildertest_LDADD 		 = $(LDADDS)
 buildertest_LDFLAGS 		 = -export-dynamic
 if OS_UNIX
-TEST_PROGS                      += defaultvaluetest
+TEST_PROGS                      += defaultvaluetest 
 endif
 defaultvaluetest_DEPENDENCIES 	 = $(TEST_DEPS)
 defaultvaluetest_LDADD 		 = $(LDADDS)
+defaultvaluetest_SOURCES   	 = defaultvaluetest.c pixbuf-init.c	
 TEST_PROGS                      += textbuffertest
 textbuffertest_DEPENDENCIES 	 = $(TEST_DEPS)
 textbuffertest_LDADD 		 = $(LDADDS)
-textbuffertest_SOURCES           = textbuffertest.c
+textbuffertest_SOURCES           = textbuffertest.c pixbuf-init.c
 
 noinst_PROGRAMS =  $(TEST_PROGS)	\
 	autotestkeywords		\
@@ -345,5 +348,7 @@ EXTRA_DIST += 			\
 	merge-2.ui		\
 	merge-3.ui		\
 	gnome-textfile.png	\
-	makefile.msc
+	makefile.msc		\
+	file-chooser-test-dir/empty \
+	file-chooser-test-dir/text.txt
 

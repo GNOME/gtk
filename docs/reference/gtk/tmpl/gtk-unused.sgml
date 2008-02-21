@@ -408,6 +408,14 @@ Turns off certain object flags.  (Private)
 </para>
 
 
+<!-- ##### MACRO GTK_STOCK_PAGE_SETUP ##### -->
+<para>
+The "Page Setup" item.
+<inlinegraphic fileref="gtk-page-setup.png" format="PNG"></inlinegraphic>
+</para>
+
+@Since: 2.14
+
 <!-- ##### MACRO GTK_TIPS_QUERY ##### -->
 <para>
 

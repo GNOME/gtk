@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: GTK+\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-10-16 23:54-0400\n"
+"POT-Creation-Date: 2008-02-21 12:23-0500\n"
 "PO-Revision-Date: 2006-07-27 00:37+0400\n"
 "Last-Translator: Albert Fazlí <tatarish.l10n@gmail.com>\n"
 "Language-Team: Tatarish <tatarish.l10n@gmail.com>\n"
@@ -70,7 +70,7 @@ msgstr ""
 #. Placeholder in --gdk-no-debug=FLAGS in --help output
 #. Placeholder in --gtk-debug=FLAGS in --help output
 #. Placeholder in --gtk-no-debug=FLAGS in --help output
-#: gdk/gdk.c:140 gdk/gdk.c:143 gtk/gtkmain.c:416 gtk/gtkmain.c:419
+#: gdk/gdk.c:140 gdk/gdk.c:143 gtk/gtkmain.c:434 gtk/gtkmain.c:437
 msgid "FLAGS"
 msgstr "BAYIRAQ"
 
@@ -231,104 +231,109 @@ msgstr "KT_Delete"
 msgid "keyboard label|Delete"
 msgstr "Delete"
 
-#: gdk-pixbuf/gdk-pixbuf-animation.c:154 gdk-pixbuf/gdk-pixbuf-io.c:847
-#: gdk-pixbuf/gdk-pixbuf-io.c:1102 tests/testfilechooser.c:218
+#: gdk-pixbuf/gdk-pixbuf-animation.c:133 gdk-pixbuf/gdk-pixbuf-io.c:858
+#: gdk-pixbuf/gdk-pixbuf-io.c:1114 tests/testfilechooser.c:218
 #, c-format
 msgid "Failed to open file '%s': %s"
 msgstr "'%s' biremen açıp bulmadı: %s"
 
-#: gdk-pixbuf/gdk-pixbuf-animation.c:167 gdk-pixbuf/gdk-pixbuf-io.c:859
+#: gdk-pixbuf/gdk-pixbuf-animation.c:146 gdk-pixbuf/gdk-pixbuf-io.c:870
 #, c-format
 msgid "Image file '%s' contains no data"
 msgstr "'%s' digän sürät bireme eçtäleksez"
 
-#: gdk-pixbuf/gdk-pixbuf-animation.c:209 gdk-pixbuf/gdk-pixbuf-io.c:896
-#: gdk-pixbuf/gdk-pixbuf-io.c:1153 tests/testfilechooser.c:263
+#: gdk-pixbuf/gdk-pixbuf-animation.c:188 gdk-pixbuf/gdk-pixbuf-io.c:907
+#: gdk-pixbuf/gdk-pixbuf-io.c:1166 tests/testfilechooser.c:263
 #, c-format
 msgid ""
 "Failed to load image '%s': reason not known, probably a corrupt image file"
 msgstr ""
 
-#: gdk-pixbuf/gdk-pixbuf-animation.c:242
+#: gdk-pixbuf/gdk-pixbuf-animation.c:221
 #, c-format
 msgid ""
 "Failed to load animation '%s': reason not known, probably a corrupt "
 "animation file"
 msgstr ""
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:527
+#: gdk-pixbuf/gdk-pixbuf-io.c:538
 #, c-format
 msgid "Unable to load image-loading module: %s: %s"
 msgstr ""
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:542
+#: gdk-pixbuf/gdk-pixbuf-io.c:553
 #, c-format
 msgid ""
 "Image-loading module %s does not export the proper interface; perhaps it's "
 "from a different GTK version?"
 msgstr ""
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:659 gdk-pixbuf/gdk-pixbuf-io.c:688
+#: gdk-pixbuf/gdk-pixbuf-io.c:670 gdk-pixbuf/gdk-pixbuf-io.c:699
 #, c-format
 msgid "Image type '%s' is not supported"
 msgstr ""
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:728
+#: gdk-pixbuf/gdk-pixbuf-io.c:739
 #, c-format
 msgid "Couldn't recognize the image file format for file '%s'"
 msgstr ""
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:736
+#: gdk-pixbuf/gdk-pixbuf-io.c:747
 #, c-format
 msgid "Unrecognized image file format"
 msgstr ""
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:905
+#: gdk-pixbuf/gdk-pixbuf-io.c:916
 #, c-format
 msgid "Failed to load image '%s': %s"
 msgstr "'%s' süräten yökläp bulmadı: %s"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:1381
+#: gdk-pixbuf/gdk-pixbuf-io.c:1545
 #, c-format
 msgid "Error writing to image file: %s"
 msgstr ""
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:1427 gdk-pixbuf/gdk-pixbuf-io.c:1558
+#: gdk-pixbuf/gdk-pixbuf-io.c:1591 gdk-pixbuf/gdk-pixbuf-io.c:1722
 #, c-format
 msgid "This build of gdk-pixbuf does not support saving the image format: %s"
 msgstr ""
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:1461
+#: gdk-pixbuf/gdk-pixbuf-io.c:1625
 #, c-format
 msgid "Insufficient memory to save image to callback"
 msgstr "Eşkärtkeçkä sürät yazarlıq xäter citmi"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:1474
+#: gdk-pixbuf/gdk-pixbuf-io.c:1638
 #, c-format
 msgid "Failed to open temporary file"
 msgstr "Çaqlı birem açıp bulmadı"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:1500
+#: gdk-pixbuf/gdk-pixbuf-io.c:1664
 #, c-format
 msgid "Failed to read from temporary file"
 msgstr "Çaqlı biremnän uqıp bulmadı"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:1735
+#: gdk-pixbuf/gdk-pixbuf-io.c:1899
 #, c-format
 msgid "Failed to open '%s' for writing: %s"
 msgstr ""
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:1760
+#: gdk-pixbuf/gdk-pixbuf-io.c:1924
 #, c-format
 msgid ""
 "Failed to close '%s' while writing image, all data may not have been saved: %"
 "s"
 msgstr ""
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:1980 gdk-pixbuf/gdk-pixbuf-io.c:2030
+#: gdk-pixbuf/gdk-pixbuf-io.c:2144 gdk-pixbuf/gdk-pixbuf-io.c:2195
 #, c-format
 msgid "Insufficient memory to save image into a buffer"
 msgstr "Eşxätergä sürät yazarlıq xäter citmi"
+
+#: gdk-pixbuf/gdk-pixbuf-io.c:2241
+#, c-format
+msgid "Error writing to image stream"
+msgstr ""
 
 #: gdk-pixbuf/gdk-pixbuf-loader.c:330
 #, c-format
@@ -561,12 +566,67 @@ msgstr ""
 msgid "The ICO image format"
 msgstr "ICO-sürät tözeleşendä"
 
+#: gdk-pixbuf/io-icns.c:345
+#, fuzzy, c-format
+msgid "Error reading ICNS image: %s"
+msgstr "PNG-sürät biremen uqığanda ütmäslek xata: %s"
+
+#: gdk-pixbuf/io-icns.c:362
+#, fuzzy, c-format
+msgid "Could not decode ICNS file"
+msgstr "Birem saylap bulmadı"
+
+#: gdk-pixbuf/io-icns.c:391
+#, fuzzy
+msgid "The ICNS image format"
+msgstr "ICO-sürät tözeleşendä"
+
+#: gdk-pixbuf/io-jasper.c:74
+#, c-format
+msgid "Couldn't allocate memory for stream"
+msgstr ""
+
+#: gdk-pixbuf/io-jasper.c:103
+#, fuzzy, c-format
+msgid "Couldn't decode image"
+msgstr "Birem adın äyländerep bulmadı"
+
+#: gdk-pixbuf/io-jasper.c:121
+#, c-format
+msgid "Transformed JPEG2000 has zero width or height"
+msgstr ""
+
+#: gdk-pixbuf/io-jasper.c:134
+#, c-format
+msgid "Image type currently not supported"
+msgstr ""
+
+#: gdk-pixbuf/io-jasper.c:145 gdk-pixbuf/io-jasper.c:152
+#, c-format
+msgid "Couldn't allocate memory for color profile"
+msgstr ""
+
+#: gdk-pixbuf/io-jasper.c:177
+#, fuzzy, c-format
+msgid "Insufficient memory to open JPEG 2000 file"
+msgstr "TIFF-sürät açarlıq xäter citmi"
+
+#: gdk-pixbuf/io-jasper.c:258
+#, c-format
+msgid "Couldn't allocate memory to buffer image data"
+msgstr ""
+
+#: gdk-pixbuf/io-jasper.c:298
+#, fuzzy
+msgid "The JPEG 2000 image format"
+msgstr "JPEG-sürät tözeleşendä"
+
 #: gdk-pixbuf/io-jpeg.c:117
 #, c-format
 msgid "Error interpreting JPEG image file (%s)"
 msgstr "JPEG-sürät biremen añlap bulmadı (%s)"
 
-#: gdk-pixbuf/io-jpeg.c:509
+#: gdk-pixbuf/io-jpeg.c:529
 #, c-format
 msgid ""
 "Insufficient memory to load image, try exiting some applications to free "
@@ -574,36 +634,36 @@ msgid ""
 msgstr ""
 "Sürät yöklärlek xäter citmi, berär yazılım tuqtatıp xäter buşatıp qarísı"
 
-#: gdk-pixbuf/io-jpeg.c:550 gdk-pixbuf/io-jpeg.c:756
+#: gdk-pixbuf/io-jpeg.c:570 gdk-pixbuf/io-jpeg.c:776
 #, c-format
 msgid "Unsupported JPEG color space (%s)"
 msgstr ""
 
-#: gdk-pixbuf/io-jpeg.c:648 gdk-pixbuf/io-jpeg.c:920 gdk-pixbuf/io-jpeg.c:1153
-#: gdk-pixbuf/io-jpeg.c:1162
+#: gdk-pixbuf/io-jpeg.c:668 gdk-pixbuf/io-jpeg.c:944 gdk-pixbuf/io-jpeg.c:1177
+#: gdk-pixbuf/io-jpeg.c:1186
 #, c-format
 msgid "Couldn't allocate memory for loading JPEG file"
 msgstr ""
 
-#: gdk-pixbuf/io-jpeg.c:896
+#: gdk-pixbuf/io-jpeg.c:920
 #, c-format
 msgid "Transformed JPEG has zero width or height."
 msgstr ""
 
-#: gdk-pixbuf/io-jpeg.c:1109
+#: gdk-pixbuf/io-jpeg.c:1133
 #, c-format
 msgid ""
 "JPEG quality must be a value between 0 and 100; value '%s' could not be "
 "parsed."
 msgstr ""
 
-#: gdk-pixbuf/io-jpeg.c:1124
+#: gdk-pixbuf/io-jpeg.c:1148
 #, c-format
 msgid ""
 "JPEG quality must be a value between 0 and 100; value '%d' is not allowed."
 msgstr ""
 
-#: gdk-pixbuf/io-jpeg.c:1287
+#: gdk-pixbuf/io-jpeg.c:1311
 msgid "The JPEG image format"
 msgstr "JPEG-sürät tözeleşendä"
 
@@ -1105,7 +1165,7 @@ msgstr "TÖSLÄR"
 msgid "Make X calls synchronous"
 msgstr ""
 
-#: gtk/gtkaboutdialog.c:264 gtk/gtkaboutdialog.c:2100
+#: gtk/gtkaboutdialog.c:264 gtk/gtkaboutdialog.c:2106
 msgid "License"
 msgstr "Şartnämä"
 
@@ -1128,23 +1188,23 @@ msgstr "Şart_nämä"
 msgid "About %s"
 msgstr "%s Turında"
 
-#: gtk/gtkaboutdialog.c:2024
+#: gtk/gtkaboutdialog.c:2030
 msgid "Credits"
 msgstr "Qatnaşqanı"
 
-#: gtk/gtkaboutdialog.c:2053
+#: gtk/gtkaboutdialog.c:2059
 msgid "Written by"
 msgstr "Yazuçı"
 
-#: gtk/gtkaboutdialog.c:2056
+#: gtk/gtkaboutdialog.c:2062
 msgid "Documented by"
 msgstr "Qullanma"
 
-#: gtk/gtkaboutdialog.c:2068
+#: gtk/gtkaboutdialog.c:2074
 msgid "Translated by"
 msgstr "Tärcemä"
 
-#: gtk/gtkaboutdialog.c:2072
+#: gtk/gtkaboutdialog.c:2078
 msgid "Artwork by"
 msgstr ""
 
@@ -1221,17 +1281,17 @@ msgstr "Space"
 msgid "keyboard label|Backslash"
 msgstr "Backslash"
 
-#: gtk/gtkbuilderparser.c:289
+#: gtk/gtkbuilderparser.c:265
 #, fuzzy, c-format
 msgid "Invalid type function: `%s'"
 msgstr "Birem adı yaraqsız: %s"
 
-#: gtk/gtkbuilderparser.c:729
+#: gtk/gtkbuilderparser.c:715
 #, fuzzy, c-format
 msgid "Invalid root element: '%s'"
 msgstr "Birem adı yaraqsız: %s"
 
-#: gtk/gtkbuilderparser.c:761
+#: gtk/gtkbuilderparser.c:747
 #, c-format
 msgid "Unhandled tag: '%s'"
 msgstr ""
@@ -1245,7 +1305,7 @@ msgstr ""
 #. * so if you have a default text direction of RTL and YM, then
 #. * the year will appear on the right.
 #.
-#: gtk/gtkcalendar.c:670
+#: gtk/gtkcalendar.c:761
 msgid "calendar:MY"
 msgstr "calendar:MY"
 
@@ -1253,7 +1313,7 @@ msgstr "calendar:MY"
 #. * first day of the week to calendar:week_start:1 if you want Monday
 #. * to be the first day of the week, and so on.
 #.
-#: gtk/gtkcalendar.c:708
+#: gtk/gtkcalendar.c:799
 msgid "calendar:week_start:0"
 msgstr "calendar:week_start:1"
 
@@ -1265,7 +1325,7 @@ msgstr "calendar:week_start:1"
 #. *
 #. * If you don't understand this, leave it as "2000"
 #.
-#: gtk/gtkcalendar.c:1595
+#: gtk/gtkcalendar.c:1799
 msgid "year measurement template|2000"
 msgstr "2000"
 
@@ -1280,7 +1340,7 @@ msgstr "2000"
 #. * digits.  That needs support from your system and locale definition
 #. * too.
 #.
-#: gtk/gtkcalendar.c:1626 gtk/gtkcalendar.c:2204
+#: gtk/gtkcalendar.c:1830 gtk/gtkcalendar.c:2491
 #, c-format
 msgid "calendar:day:digits|%d"
 msgstr ""
@@ -1296,7 +1356,7 @@ msgstr ""
 #. * digits.  That needs support from your system and locale definition
 #. * too.
 #.
-#: gtk/gtkcalendar.c:1660 gtk/gtkcalendar.c:2078
+#: gtk/gtkcalendar.c:1862 gtk/gtkcalendar.c:2353
 #, fuzzy, c-format
 msgid "calendar:week:digits|%d"
 msgstr "calendar:week_start:1"
@@ -1312,7 +1372,7 @@ msgstr "calendar:week_start:1"
 #. * Don't include the prefix "calendar year format|" in the
 #. * translation. "%Y" is appropriate for most locales.
 #.
-#: gtk/gtkcalendar.c:1869
+#: gtk/gtkcalendar.c:2143
 msgid "calendar year format|%Y"
 msgstr "%Y"
 
@@ -1363,98 +1423,98 @@ msgstr ""
 msgid "_Save color here"
 msgstr ""
 
-#: gtk/gtkcolorsel.c:1146
+#: gtk/gtkcolorsel.c:1147
 msgid ""
 "Click this palette entry to make it the current color. To change this entry, "
 "drag a color swatch here or right-click it and select \"Save color here.\""
 msgstr ""
 
-#: gtk/gtkcolorsel.c:1920
+#: gtk/gtkcolorsel.c:1921
 msgid ""
 "Select the color you want from the outer ring. Select the darkness or "
 "lightness of that color using the inner triangle."
 msgstr ""
 
-#: gtk/gtkcolorsel.c:1944
+#: gtk/gtkcolorsel.c:1945
 msgid ""
 "Click the eyedropper, then click a color anywhere on your screen to select "
 "that color."
 msgstr ""
 
-#: gtk/gtkcolorsel.c:1953
+#: gtk/gtkcolorsel.c:1954
 msgid "_Hue:"
 msgstr "_Tösmer:"
 
-#: gtk/gtkcolorsel.c:1954
+#: gtk/gtkcolorsel.c:1955
 msgid "Position on the color wheel."
 msgstr "Tös tägärmäçendä alğan urın."
 
-#: gtk/gtkcolorsel.c:1956
+#: gtk/gtkcolorsel.c:1957
 msgid "_Saturation:"
 msgstr "_Quyılıq:"
 
-#: gtk/gtkcolorsel.c:1957
+#: gtk/gtkcolorsel.c:1958
 msgid "\"Deepness\" of the color."
 msgstr ""
 
-#: gtk/gtkcolorsel.c:1958
+#: gtk/gtkcolorsel.c:1959
 msgid "_Value:"
 msgstr "_Bäyä:"
 
-#: gtk/gtkcolorsel.c:1959
+#: gtk/gtkcolorsel.c:1960
 msgid "Brightness of the color."
 msgstr "Tösneñ yaqtılığı."
 
-#: gtk/gtkcolorsel.c:1960
+#: gtk/gtkcolorsel.c:1961
 msgid "_Red:"
 msgstr "_Qızıl:"
 
-#: gtk/gtkcolorsel.c:1961
+#: gtk/gtkcolorsel.c:1962
 msgid "Amount of red light in the color."
 msgstr ""
 
-#: gtk/gtkcolorsel.c:1962
+#: gtk/gtkcolorsel.c:1963
 msgid "_Green:"
 msgstr "_Yäşel:"
 
-#: gtk/gtkcolorsel.c:1963
+#: gtk/gtkcolorsel.c:1964
 msgid "Amount of green light in the color."
 msgstr ""
 
-#: gtk/gtkcolorsel.c:1964
+#: gtk/gtkcolorsel.c:1965
 msgid "_Blue:"
 msgstr "_Kük:"
 
-#: gtk/gtkcolorsel.c:1965
+#: gtk/gtkcolorsel.c:1966
 msgid "Amount of blue light in the color."
 msgstr ""
 
-#: gtk/gtkcolorsel.c:1968
+#: gtk/gtkcolorsel.c:1969
 #, fuzzy
 msgid "Op_acity:"
 msgstr "_Tonıqlıq:"
 
-#: gtk/gtkcolorsel.c:1975 gtk/gtkcolorsel.c:1985
+#: gtk/gtkcolorsel.c:1976 gtk/gtkcolorsel.c:1986
 msgid "Transparency of the color."
 msgstr "Bu tös tonıqlığı."
 
-#: gtk/gtkcolorsel.c:1992
+#: gtk/gtkcolorsel.c:1993
 #, fuzzy
 msgid "Color _name:"
 msgstr "Tös _Adı:"
 
-#: gtk/gtkcolorsel.c:2006
+#: gtk/gtkcolorsel.c:2007
 msgid ""
 "You can enter an HTML-style hexadecimal color value, or simply a color name "
 "such as 'orange' in this entry."
 msgstr ""
 
-#: gtk/gtkcolorsel.c:2036
+#: gtk/gtkcolorsel.c:2037
 #, fuzzy
 msgid "_Palette:"
 msgstr "_Töstüşäw"
 
-#: gtk/gtkcolorsel.c:2065
+#: gtk/gtkcolorsel.c:2066
 msgid "Color Wheel"
 msgstr "Tös Tägärmäçe"
 
@@ -1462,11 +1522,11 @@ msgstr "Tös Tägärmäçe"
 msgid "Color Selection"
 msgstr "Tös Saylaw"
 
-#: gtk/gtkentry.c:5253 gtk/gtktextview.c:7617
+#: gtk/gtkentry.c:5248 gtk/gtktextview.c:7653
 msgid "Input _Methods"
 msgstr "Kertü _Isulları"
 
-#: gtk/gtkentry.c:5267 gtk/gtktextview.c:7631
+#: gtk/gtkentry.c:5262 gtk/gtktextview.c:7667
 msgid "_Insert Unicode Control Character"
 msgstr ""
 
@@ -1474,7 +1534,7 @@ msgstr ""
 msgid "Select A File"
 msgstr "Birem Saylaw"
 
-#: gtk/gtkfilechooserbutton.c:69 gtk/gtkfilechooserdefault.c:1982
+#: gtk/gtkfilechooserbutton.c:69 gtk/gtkfilechooserdefault.c:1973
 msgid "Desktop"
 msgstr "Östälös"
 
@@ -1486,39 +1546,39 @@ msgstr "(Buş)"
 msgid "Other..."
 msgstr "Başqa..."
 
-#: gtk/gtkfilechooser.c:1694 gtk/gtkfilechooser.c:1738
-#: gtk/gtkfilechooser.c:1813 gtk/gtkfilechooser.c:1857
+#: gtk/gtkfilechooser.c:1697 gtk/gtkfilechooser.c:1741
+#: gtk/gtkfilechooser.c:1816 gtk/gtkfilechooser.c:1860
 #, c-format
 msgid "Invalid filename: %s"
 msgstr "Birem adı yaraqsız: %s"
 
-#: gtk/gtkfilechooserdefault.c:1103
+#: gtk/gtkfilechooserdefault.c:1100
 msgid "Could not retrieve information about the file"
 msgstr "Bu birem turında beleşmä alıp bulmadı"
 
-#: gtk/gtkfilechooserdefault.c:1114
+#: gtk/gtkfilechooserdefault.c:1111
 msgid "Could not add a bookmark"
 msgstr "Bitbilge östäp bulmadı"
 
-#: gtk/gtkfilechooserdefault.c:1125
+#: gtk/gtkfilechooserdefault.c:1122
 msgid "Could not remove bookmark"
 msgstr "Bitbilge beterep bulmadı"
 
-#: gtk/gtkfilechooserdefault.c:1136
+#: gtk/gtkfilechooserdefault.c:1133
 msgid "The folder could not be created"
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:1149
+#: gtk/gtkfilechooserdefault.c:1146
 msgid ""
 "The folder could not be created, as a file with the same name already "
 "exists.  Try using a different name for the folder, or rename the file first."
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:1162
+#: gtk/gtkfilechooserdefault.c:1159
 msgid "Invalid file name"
 msgstr "Birem adı yaraqsız"
 
-#: gtk/gtkfilechooserdefault.c:1172
+#: gtk/gtkfilechooserdefault.c:1169
 msgid "The folder contents could not be displayed"
 msgstr ""
 
@@ -1526,244 +1586,244 @@ msgstr ""
 #. * is a hostname. Nautilus and the panel contain the same string
 #. * to translate.
 #.
-#: gtk/gtkfilechooserdefault.c:1731
+#: gtk/gtkfilechooserdefault.c:1722
 #, c-format
 msgid "%1$s on %2$s"
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:1909
+#: gtk/gtkfilechooserdefault.c:1900
 msgid "Search"
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:1933
+#: gtk/gtkfilechooserdefault.c:1924
 msgid "Recently Used"
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:2597
+#: gtk/gtkfilechooserdefault.c:2589
 msgid "Select which types of files are shown"
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:3025
+#: gtk/gtkfilechooserdefault.c:3017
 #, c-format
 msgid "Add the folder '%s' to the bookmarks"
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:3066
+#: gtk/gtkfilechooserdefault.c:3058
 #, c-format
 msgid "Add the current folder to the bookmarks"
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:3068
+#: gtk/gtkfilechooserdefault.c:3060
 #, c-format
 msgid "Add the selected folders to the bookmarks"
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:3108
+#: gtk/gtkfilechooserdefault.c:3100
 #, c-format
 msgid "Remove the bookmark '%s'"
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:3540
+#: gtk/gtkfilechooserdefault.c:3532
 #, c-format
 msgid "Could not add a bookmark for '%s' because it is an invalid path name."
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:3765
+#: gtk/gtkfilechooserdefault.c:3771
 msgid "Remove"
 msgstr "Töşer"
 
-#: gtk/gtkfilechooserdefault.c:3774
+#: gtk/gtkfilechooserdefault.c:3780
 msgid "Rename..."
 msgstr "Adın üzgärtü..."
 
 #. Accessible object name for the file chooser's shortcuts pane
-#: gtk/gtkfilechooserdefault.c:3916
+#: gtk/gtkfilechooserdefault.c:3922
 msgid "Places"
 msgstr ""
 
 #. Column header for the file chooser's shortcuts pane
-#: gtk/gtkfilechooserdefault.c:3970
+#: gtk/gtkfilechooserdefault.c:3973
 #, fuzzy
 msgid "_Places"
 msgstr "_Almaştır"
 
-#: gtk/gtkfilechooserdefault.c:4025 gtk/gtkstock.c:297
+#: gtk/gtkfilechooserdefault.c:4028 gtk/gtkstock.c:297
 msgid "_Add"
 msgstr "Ö_stä"
 
-#: gtk/gtkfilechooserdefault.c:4032
+#: gtk/gtkfilechooserdefault.c:4035
 msgid "Add the selected folder to the Bookmarks"
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:4037 gtk/gtkstock.c:385
+#: gtk/gtkfilechooserdefault.c:4040 gtk/gtkstock.c:386
 msgid "_Remove"
 msgstr "_Töşer"
 
-#: gtk/gtkfilechooserdefault.c:4044
+#: gtk/gtkfilechooserdefault.c:4047
 msgid "Remove the selected bookmark"
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:4140
+#: gtk/gtkfilechooserdefault.c:4144
 msgid "Could not select file"
 msgstr "Birem saylap bulmadı"
 
-#: gtk/gtkfilechooserdefault.c:4277
+#: gtk/gtkfilechooserdefault.c:4281
 #, c-format
 msgid "Could not select file '%s' because it is an invalid path name."
 msgstr "Yulı yaraqsız bulğaç, '%s' biremen saylap bulmadı."
 
-#: gtk/gtkfilechooserdefault.c:4334
+#: gtk/gtkfilechooserdefault.c:4338
 msgid "_Add to Bookmarks"
 msgstr "_Bitbilgelärgä Östä"
 
-#: gtk/gtkfilechooserdefault.c:4348
+#: gtk/gtkfilechooserdefault.c:4352
 msgid "Show _Hidden Files"
 msgstr "_Yäşeren Birem Kürsätäse"
 
-#: gtk/gtkfilechooserdefault.c:4592 gtk/gtkfilesel.c:729
+#: gtk/gtkfilechooserdefault.c:4596 gtk/gtkfilesel.c:729
 msgid "Files"
 msgstr "Biremnär"
 
-#: gtk/gtkfilechooserdefault.c:4641
+#: gtk/gtkfilechooserdefault.c:4645
 msgid "Name"
 msgstr "İsem"
 
-#: gtk/gtkfilechooserdefault.c:4666
+#: gtk/gtkfilechooserdefault.c:4670
 msgid "Size"
 msgstr "Olılıq"
 
-#: gtk/gtkfilechooserdefault.c:4680
+#: gtk/gtkfilechooserdefault.c:4684
 msgid "Modified"
 msgstr "Üzgärelde"
 
 #. Label
-#: gtk/gtkfilechooserdefault.c:4900 gtk/gtkprinteroptionwidget.c:786
+#: gtk/gtkfilechooserdefault.c:4904 gtk/gtkprinteroptionwidget.c:786
 msgid "_Name:"
 msgstr "_Adı:"
 
-#: gtk/gtkfilechooserdefault.c:4942
+#: gtk/gtkfilechooserdefault.c:4946
 msgid "_Browse for other folders"
 msgstr "&Başqa törgäk saylaw"
 
-#: gtk/gtkfilechooserdefault.c:5208
+#: gtk/gtkfilechooserdefault.c:5212
 #, fuzzy
 msgid "Type a file name"
 msgstr "Birem adı yaraqsız"
 
 #. Create Folder
-#: gtk/gtkfilechooserdefault.c:5245
+#: gtk/gtkfilechooserdefault.c:5249
 msgid "Create Fo_lder"
 msgstr "_Törgäk Yasaw"
 
-#: gtk/gtkfilechooserdefault.c:5255
+#: gtk/gtkfilechooserdefault.c:5259
 msgid "_Location:"
 msgstr "_Urnaşılu:"
 
-#: gtk/gtkfilechooserdefault.c:5493
+#: gtk/gtkfilechooserdefault.c:5497
 msgid "Save in _folder:"
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:5495
+#: gtk/gtkfilechooserdefault.c:5499
 msgid "Create in _folder:"
 msgstr "_Törgäktä yasísı:"
 
-#: gtk/gtkfilechooserdefault.c:7098
+#: gtk/gtkfilechooserdefault.c:7106
 #, c-format
 msgid "Cannot change to folder because it is not local"
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:7714 gtk/gtkfilechooserdefault.c:7735
+#: gtk/gtkfilechooserdefault.c:7722 gtk/gtkfilechooserdefault.c:7743
 #, c-format
 msgid "Shortcut %s already exists"
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:7825
+#: gtk/gtkfilechooserdefault.c:7833
 #, c-format
 msgid "Shortcut %s does not exist"
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:8080
+#: gtk/gtkfilechooserdefault.c:8088
 #, c-format
 msgid "A file named \"%s\" already exists.  Do you want to replace it?"
 msgstr "\"%s\" digän birem bar inde.  Anı almaştırası kiläme?"
 
-#: gtk/gtkfilechooserdefault.c:8083
+#: gtk/gtkfilechooserdefault.c:8091
 #, c-format
 msgid ""
 "The file already exists in \"%s\".  Replacing it will overwrite its contents."
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:8088
+#: gtk/gtkfilechooserdefault.c:8096
 msgid "_Replace"
 msgstr "_Almaştır"
 
-#: gtk/gtkfilechooserdefault.c:8922
+#: gtk/gtkfilechooserdefault.c:8894
 msgid "Could not start the search process"
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:8923
+#: gtk/gtkfilechooserdefault.c:8895
 msgid ""
 "The program was not able to create a connection to the indexer daemon.  "
 "Please make sure it is running."
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:8937
+#: gtk/gtkfilechooserdefault.c:8909
 #, fuzzy
 msgid "Could not send the search request"
 msgstr "Kerem saylap bulmadı"
 
 #. Label
-#: gtk/gtkfilechooserdefault.c:9365
+#: gtk/gtkfilechooserdefault.c:9337
 msgid "_Search:"
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:10318
+#: gtk/gtkfilechooserdefault.c:10290
 #, c-format
 msgid "Could not mount %s"
 msgstr "%s tağıp bulmadı"
 
-#: gtk/gtkfilechooserdefault.c:10946
+#: gtk/gtkfilechooserdefault.c:10895
 msgid "Type name of new folder"
 msgstr "Yaña törgäk adın kertäse"
 
-#: gtk/gtkfilechooserdefault.c:10994
+#: gtk/gtkfilechooserdefault.c:10943
 #, c-format
 msgid "%d byte"
 msgid_plural "%d bytes"
 msgstr[0] "%d bayt"
 
-#: gtk/gtkfilechooserdefault.c:10996
+#: gtk/gtkfilechooserdefault.c:10945
 #, fuzzy, c-format
 msgid "%.1f KB"
 msgstr "%.1f K"
 
-#: gtk/gtkfilechooserdefault.c:10998
+#: gtk/gtkfilechooserdefault.c:10947
 #, fuzzy, c-format
 msgid "%.1f MB"
 msgstr "%.1f M"
 
-#: gtk/gtkfilechooserdefault.c:11000
+#: gtk/gtkfilechooserdefault.c:10949
 #, fuzzy, c-format
 msgid "%.1f GB"
 msgstr "%.1f G"
 
-#: gtk/gtkfilechooserdefault.c:11096 gtk/gtkfilechooserdefault.c:11118
-#: gtk/gtkfilechooserdefault.c:11152
+#: gtk/gtkfilechooserdefault.c:11050 gtk/gtkfilechooserdefault.c:11072
+#: gtk/gtkfilechooserdefault.c:11143
 msgid "Unknown"
 msgstr "Bilgesez"
 
-#: gtk/gtkfilechooserdefault.c:11136
+#: gtk/gtkfilechooserdefault.c:11090
 msgid "Today at %H:%M"
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:11138
+#: gtk/gtkfilechooserdefault.c:11092
 #, fuzzy
 msgid "Yesterday at %H:%M"
 msgstr "Kiçä"
 
-#: gtk/gtkfilechoosersettings.c:262 gtk/gtkfilesel.c:1408
-#: gtk/gtkfilesel.c:1417 gtk/gtkfilesystemunix.c:1047
-#: gtk/gtkfilesystemwin32.c:1167
+#: gtk/gtkfilechoosersettings.c:262 gtk/gtkfilesel.c:1348
+#: gtk/gtkfilesel.c:1357 gtk/gtkfilesystemunix.c:1047
+#: gtk/gtkfilesystemwin32.c:1227
 #, fuzzy, c-format
 msgid "Error creating folder '%s': %s"
 msgstr "'%s' törgägen yasağanda xata: %s"
@@ -1780,12 +1840,12 @@ msgstr "_Törgäk"
 msgid "_Files"
 msgstr "_Birem"
 
-#: gtk/gtkfilesel.c:820 gtk/gtkfilesel.c:2207
+#: gtk/gtkfilesel.c:820 gtk/gtkfilesel.c:2147
 #, c-format
 msgid "Folder unreadable: %s"
 msgstr "Uqımaslıq törgäk: %s"
 
-#: gtk/gtkfilesel.c:949
+#: gtk/gtkfilesel.c:904
 #, c-format
 msgid ""
 "The file \"%s\" resides on another machine (called %s) and may not be "
@@ -1793,103 +1853,103 @@ msgid ""
 "Are you sure that you want to select it?"
 msgstr ""
 
-#: gtk/gtkfilesel.c:1079
+#: gtk/gtkfilesel.c:1019
 msgid "_New Folder"
 msgstr "_Yaña törgäk"
 
-#: gtk/gtkfilesel.c:1090
+#: gtk/gtkfilesel.c:1030
 msgid "De_lete File"
 msgstr "_Biremne Beter"
 
-#: gtk/gtkfilesel.c:1101
+#: gtk/gtkfilesel.c:1041
 msgid "_Rename File"
 msgstr ""
 
-#: gtk/gtkfilesel.c:1406
+#: gtk/gtkfilesel.c:1346
 #, c-format
 msgid ""
 "The folder name \"%s\" contains symbols that are not allowed in filenames"
 msgstr ""
 
-#: gtk/gtkfilesel.c:1451
+#: gtk/gtkfilesel.c:1391
 msgid "New Folder"
 msgstr "Yaña Törgäk"
 
-#: gtk/gtkfilesel.c:1466
+#: gtk/gtkfilesel.c:1406
 msgid "_Folder name:"
 msgstr "_Törgäk adı:"
 
-#: gtk/gtkfilesel.c:1490
+#: gtk/gtkfilesel.c:1430
 msgid "C_reate"
 msgstr "_Yasa"
 
-#: gtk/gtkfilesel.c:1533 gtk/gtkfilesel.c:1640 gtk/gtkfilesel.c:1653
+#: gtk/gtkfilesel.c:1473 gtk/gtkfilesel.c:1580 gtk/gtkfilesel.c:1593
 #, c-format
 msgid "The filename \"%s\" contains symbols that are not allowed in filenames"
 msgstr ""
 
-#: gtk/gtkfilesel.c:1536 gtk/gtkfilesel.c:1546
+#: gtk/gtkfilesel.c:1476 gtk/gtkfilesel.c:1486
 #, fuzzy, c-format
 msgid "Error deleting file '%s': %s"
 msgstr "'%s' törgägen yasağanda xata: %s"
 
-#: gtk/gtkfilesel.c:1589
+#: gtk/gtkfilesel.c:1529
 #, c-format
 msgid "Really delete file \"%s\"?"
 msgstr ""
 
-#: gtk/gtkfilesel.c:1594
+#: gtk/gtkfilesel.c:1534
 msgid "Delete File"
 msgstr "Biremne Beter"
 
-#: gtk/gtkfilesel.c:1642
+#: gtk/gtkfilesel.c:1582
 #, fuzzy, c-format
 msgid "Error renaming file to \"%s\": %s"
 msgstr "'%s' törgägen yasağanda xata: %s"
 
-#: gtk/gtkfilesel.c:1655
+#: gtk/gtkfilesel.c:1595
 #, fuzzy, c-format
 msgid "Error renaming file \"%s\": %s"
 msgstr "'%s' törgägen yasağanda xata: %s"
 
-#: gtk/gtkfilesel.c:1664
+#: gtk/gtkfilesel.c:1604
 #, c-format
 msgid "Error renaming file \"%s\" to \"%s\": %s"
 msgstr ""
 
-#: gtk/gtkfilesel.c:1711
+#: gtk/gtkfilesel.c:1651
 msgid "Rename File"
 msgstr ""
 
-#: gtk/gtkfilesel.c:1726
+#: gtk/gtkfilesel.c:1666
 #, c-format
 msgid "Rename file \"%s\" to:"
 msgstr ""
 
-#: gtk/gtkfilesel.c:1755
+#: gtk/gtkfilesel.c:1695
 msgid "_Rename"
 msgstr "_Ataw"
 
-#: gtk/gtkfilesel.c:2187
+#: gtk/gtkfilesel.c:2127
 msgid "_Selection: "
 msgstr "_Saylanu: "
 
-#: gtk/gtkfilesel.c:3107
+#: gtk/gtkfilesel.c:3047
 #, c-format
 msgid ""
 "The filename \"%s\" couldn't be converted to UTF-8. (try setting the "
 "environment variable G_FILENAME_ENCODING): %s"
 msgstr ""
 
-#: gtk/gtkfilesel.c:3110
+#: gtk/gtkfilesel.c:3050
 msgid "Invalid UTF-8"
 msgstr "Yaraqsız UTF-8"
 
-#: gtk/gtkfilesel.c:3984
+#: gtk/gtkfilesel.c:3924
 msgid "Name too long"
 msgstr "Artıq ozın atama"
 
-#: gtk/gtkfilesel.c:3986
+#: gtk/gtkfilesel.c:3926
 msgid "Couldn't convert filename"
 msgstr "Birem adın äyländerep bulmadı"
 
@@ -1898,23 +1958,23 @@ msgstr "Birem adın äyländerep bulmadı"
 msgid "Could not get a stock icon for %s\n"
 msgstr ""
 
-#: gtk/gtkfilesystemmodel.c:743
+#: gtk/gtkfilesystemmodel.c:737
 #, fuzzy, c-format
 msgid "Could not obtain root folder"
 msgstr "Birem saylap bulmadı"
 
-#: gtk/gtkfilesystemmodel.c:1336
+#: gtk/gtkfilesystemmodel.c:1330
 msgid "(Empty)"
 msgstr "(Buş)"
 
 #: gtk/gtkfilesystemunix.c:960 gtk/gtkfilesystemunix.c:1208
 #: gtk/gtkfilesystemunix.c:2196 gtk/gtkfilesystemunix.c:2236
-#: gtk/gtkfilesystemwin32.c:2245 gtk/gtkfilesystemwin32.c:2295
+#: gtk/gtkfilesystemwin32.c:2305 gtk/gtkfilesystemwin32.c:2355
 #, c-format
 msgid "Error getting information for '%s': %s"
 msgstr ""
 
-#: gtk/gtkfilesystemunix.c:1153 gtk/gtkfilesystemwin32.c:1274
+#: gtk/gtkfilesystemunix.c:1153 gtk/gtkfilesystemwin32.c:1334
 #, c-format
 msgid "This file system does not support mounting"
 msgstr ""
@@ -1923,39 +1983,39 @@ msgstr ""
 msgid "File System"
 msgstr "Birem Sisteme"
 
-#: gtk/gtkfilesystemunix.c:1329 gtk/gtkfilesystemwin32.c:1584
+#: gtk/gtkfilesystemunix.c:1329 gtk/gtkfilesystemwin32.c:1644
 #, c-format
 msgid ""
 "The name \"%s\" is not valid because it contains the character \"%s\". "
 "Please use a different name."
 msgstr ""
 
-#: gtk/gtkfilesystemunix.c:1878 gtk/gtkfilesystemwin32.c:1925
+#: gtk/gtkfilesystemunix.c:1878 gtk/gtkfilesystemwin32.c:1985
 #, c-format
 msgid "Bookmark saving failed: %s"
 msgstr ""
 
-#: gtk/gtkfilesystemunix.c:1933 gtk/gtkfilesystemwin32.c:1980
+#: gtk/gtkfilesystemunix.c:1933 gtk/gtkfilesystemwin32.c:2040
 #, c-format
 msgid "'%s' already exists in the bookmarks list"
 msgstr ""
 
-#: gtk/gtkfilesystemunix.c:2005 gtk/gtkfilesystemwin32.c:2052
+#: gtk/gtkfilesystemunix.c:2005 gtk/gtkfilesystemwin32.c:2112
 #, c-format
 msgid "'%s' does not exist in the bookmarks list"
 msgstr "Bitbilge tezmäsendä '%s' digäne barlıqta yuq"
 
-#: gtk/gtkfilesystemwin32.c:1090
+#: gtk/gtkfilesystemwin32.c:1150
 #, c-format
 msgid "Path is not a folder: '%s'"
 msgstr ""
 
-#: gtk/gtkfilesystemwin32.c:1292
+#: gtk/gtkfilesystemwin32.c:1352
 #, c-format
 msgid "Network Drive (%s)"
 msgstr "Çeltärle Cıhaz (%s)"
 
-#: gtk/gtkfilesystemwin32.c:1314
+#: gtk/gtkfilesystemwin32.c:1374
 #, c-format
 msgid "%s (%s)"
 msgstr "%s (%s)"
@@ -1979,24 +2039,24 @@ msgstr "Yazu"
 msgid "abcdefghijk ABCDEFGHIJK"
 msgstr "abcçdefgğiı ABCÇDEFGĞİIJK"
 
-#: gtk/gtkfontsel.c:326
+#: gtk/gtkfontsel.c:328
 msgid "_Family:"
 msgstr "Ğäi_lä:"
 
-#: gtk/gtkfontsel.c:332
+#: gtk/gtkfontsel.c:334
 msgid "_Style:"
 msgstr "_Bizeş:"
 
-#: gtk/gtkfontsel.c:338
+#: gtk/gtkfontsel.c:340
 msgid "Si_ze:"
 msgstr "Ülçä_m:"
 
 #. create the text entry widget
-#: gtk/gtkfontsel.c:515
+#: gtk/gtkfontsel.c:517
 msgid "_Preview:"
 msgstr "_Küzläp alu:"
 
-#: gtk/gtkfontsel.c:1359
+#: gtk/gtkfontsel.c:1362
 msgid "Font Selection"
 msgstr "Yazu Saylaw"
 
@@ -2016,7 +2076,7 @@ msgstr "_Tösmer bäyäse"
 msgid "Error loading icon: %s"
 msgstr "Tamğa yökläw xatası: %s"
 
-#: gtk/gtkicontheme.c:1321
+#: gtk/gtkicontheme.c:1323
 #, c-format
 msgid ""
 "Could not find the icon '%s'. The '%s' theme\n"
@@ -2025,19 +2085,24 @@ msgid ""
 "\t%s"
 msgstr ""
 
-#: gtk/gtkicontheme.c:1501
+#: gtk/gtkicontheme.c:1503
 #, c-format
 msgid "Icon '%s' not present in theme"
 msgstr ""
 
-#: gtk/gtkicontheme.c:2915
+#: gtk/gtkicontheme.c:2927
 #, fuzzy, c-format
 msgid "Failed to load icon"
 msgstr "TIFF-sürät yökläp bulmadı"
 
-#: gtk/gtkimmodule.c:421
-msgid "Default"
-msgstr "Töpcay"
+#: gtk/gtkimmodule.c:423
+#, fuzzy
+msgid "Simple"
+msgstr "Olılıq"
+
+#: gtk/gtkimmulticontext.c:542
+msgid "input method menu|System"
+msgstr ""
 
 #: gtk/gtkinputdialog.c:190
 msgid "Input"
@@ -2124,46 +2189,46 @@ msgstr "(bilgesez)"
 msgid "Cl_ear"
 msgstr "_Buşat"
 
-#: gtk/gtklinkbutton.c:141
+#: gtk/gtklinkbutton.c:148
 msgid "URI"
 msgstr ""
 
-#: gtk/gtklinkbutton.c:142
+#: gtk/gtklinkbutton.c:149
 msgid "The URI bound to this button"
 msgstr ""
 
-#: gtk/gtklinkbutton.c:396
+#: gtk/gtklinkbutton.c:406
 #, fuzzy
 msgid "Copy URL"
 msgstr "_İskä al"
 
-#: gtk/gtklinkbutton.c:536
+#: gtk/gtklinkbutton.c:546
 #, fuzzy
 msgid "Invalid URI"
 msgstr "Yaraqsız UTF-8"
 
 #. Description of --gtk-module=MODULES in --help output
-#: gtk/gtkmain.c:409
+#: gtk/gtkmain.c:427
 msgid "Load additional GTK+ modules"
 msgstr "GTK+ quşılmaların yökläw"
 
 #. Placeholder in --gtk-module=MODULES in --help output
-#: gtk/gtkmain.c:410
+#: gtk/gtkmain.c:428
 msgid "MODULES"
 msgstr "QUŞILMA"
 
 #. Description of --g-fatal-warnings in --help output
-#: gtk/gtkmain.c:412
+#: gtk/gtkmain.c:430
 msgid "Make all warnings fatal"
 msgstr ""
 
 #. Description of --gtk-debug=FLAGS in --help output
-#: gtk/gtkmain.c:415
+#: gtk/gtkmain.c:433
 msgid "GTK+ debugging flags to set"
 msgstr ""
 
 #. Description of --gtk-no-debug=FLAGS in --help output
-#: gtk/gtkmain.c:418
+#: gtk/gtkmain.c:436
 msgid "GTK+ debugging flags to unset"
 msgstr ""
 
@@ -2172,32 +2237,32 @@ msgstr ""
 #. * Do *not* translate it to "predefinito:LTR", if it
 #. * it isn't default:LTR or default:RTL it will not work
 #.
-#: gtk/gtkmain.c:654
+#: gtk/gtkmain.c:672
 msgid "default:LTR"
 msgstr "default:LTR"
 
-#: gtk/gtkmain.c:751
+#: gtk/gtkmain.c:768
 msgid "GTK+ Options"
 msgstr "GTK+ Caylaw"
 
-#: gtk/gtkmain.c:751
+#: gtk/gtkmain.c:768
 msgid "Show GTK+ Options"
 msgstr "GTK+ Caylawın Kürsätü"
 
-#: gtk/gtknotebook.c:824
+#: gtk/gtknotebook.c:828
 msgid "Arrow spacing"
 msgstr ""
 
-#: gtk/gtknotebook.c:825
+#: gtk/gtknotebook.c:829
 msgid "Scroll arrow spacing"
 msgstr ""
 
-#: gtk/gtknotebook.c:4388 gtk/gtknotebook.c:6894
+#: gtk/gtknotebook.c:4406 gtk/gtknotebook.c:6912
 #, c-format
 msgid "Page %u"
 msgstr "%u. Bit"
 
-#: gtk/gtkpagesetup.c:570 gtk/gtkpapersize.c:825 gtk/gtkpapersize.c:865
+#: gtk/gtkpagesetup.c:596 gtk/gtkpapersize.c:825 gtk/gtkpapersize.c:865
 #, c-format
 msgid "Not a valid page setup file"
 msgstr ""
@@ -2219,15 +2284,15 @@ msgid ""
 "For portable documents"
 msgstr ""
 
-#: gtk/gtkpagesetupunixdialog.c:883 gtk/gtkpagesetupunixdialog.c:1395
+#: gtk/gtkpagesetupunixdialog.c:887 gtk/gtkpagesetupunixdialog.c:1396
 msgid "mm"
 msgstr ""
 
-#: gtk/gtkpagesetupunixdialog.c:885 gtk/gtkpagesetupunixdialog.c:1393
+#: gtk/gtkpagesetupunixdialog.c:889 gtk/gtkpagesetupunixdialog.c:1394
 msgid "inch"
 msgstr ""
 
-#: gtk/gtkpagesetupunixdialog.c:904
+#: gtk/gtkpagesetupunixdialog.c:908
 #, c-format
 msgid ""
 "Margins:\n"
@@ -2237,15 +2302,15 @@ msgid ""
 " Bottom: %s %s"
 msgstr ""
 
-#: gtk/gtkpagesetupunixdialog.c:953
+#: gtk/gtkpagesetupunixdialog.c:957
 msgid "Manage Custom Sizes..."
 msgstr ""
 
-#: gtk/gtkpagesetupunixdialog.c:1001
+#: gtk/gtkpagesetupunixdialog.c:1005
 msgid "_Format for:"
 msgstr ""
 
-#: gtk/gtkpagesetupunixdialog.c:1022
+#: gtk/gtkpagesetupunixdialog.c:1027
 #, fuzzy
 msgid "_Paper size:"
 msgstr "Ü_zençälege"
@@ -2255,55 +2320,55 @@ msgstr "Ü_zençälege"
 msgid "_Orientation:"
 msgstr "_Quyılıq:"
 
-#: gtk/gtkpagesetupunixdialog.c:1121 gtk/gtkprintunixdialog.c:2175
+#: gtk/gtkpagesetupunixdialog.c:1122 gtk/gtkprintunixdialog.c:2182
 #, fuzzy
 msgid "Page Setup"
 msgstr "%u. Bit"
 
-#: gtk/gtkpagesetupunixdialog.c:1440
+#: gtk/gtkpagesetupunixdialog.c:1441
 msgid "Margins from Printer..."
 msgstr ""
 
-#: gtk/gtkpagesetupunixdialog.c:1600
+#: gtk/gtkpagesetupunixdialog.c:1601
 #, c-format
 msgid "Custom Size %d"
 msgstr ""
 
-#: gtk/gtkpagesetupunixdialog.c:1829
+#: gtk/gtkpagesetupunixdialog.c:1830
 msgid "Manage Custom Sizes"
 msgstr ""
 
-#: gtk/gtkpagesetupunixdialog.c:1925
+#: gtk/gtkpagesetupunixdialog.c:1926
 msgid "_Width:"
 msgstr ""
 
-#: gtk/gtkpagesetupunixdialog.c:1937
+#: gtk/gtkpagesetupunixdialog.c:1938
 #, fuzzy
 msgid "_Height:"
 msgstr "_Tösmer:"
 
-#: gtk/gtkpagesetupunixdialog.c:1949
+#: gtk/gtkpagesetupunixdialog.c:1950
 msgid "Paper Size"
 msgstr ""
 
-#: gtk/gtkpagesetupunixdialog.c:1959
+#: gtk/gtkpagesetupunixdialog.c:1960
 #, fuzzy
 msgid "_Top:"
 msgstr "_Tuqta"
 
-#: gtk/gtkpagesetupunixdialog.c:1971
+#: gtk/gtkpagesetupunixdialog.c:1972
 msgid "_Bottom:"
 msgstr ""
 
-#: gtk/gtkpagesetupunixdialog.c:1983
+#: gtk/gtkpagesetupunixdialog.c:1984
 msgid "_Left:"
 msgstr ""
 
-#: gtk/gtkpagesetupunixdialog.c:1995
+#: gtk/gtkpagesetupunixdialog.c:1996
 msgid "_Right:"
 msgstr ""
 
-#: gtk/gtkpagesetupunixdialog.c:2036
+#: gtk/gtkpagesetupunixdialog.c:2037
 msgid "Paper Margins"
 msgstr ""
 
@@ -2315,7 +2380,7 @@ msgstr ""
 msgid "Down Path"
 msgstr ""
 
-#: gtk/gtkpathbar.c:1377
+#: gtk/gtkpathbar.c:1367
 #, fuzzy
 msgid "File System Root"
 msgstr "Birem Sisteme"
@@ -2333,53 +2398,53 @@ msgstr "_Törgäktä yasísı:"
 #. * jobs. %s gets replaced by the application name, %d gets replaced
 #. * by the job number.
 #.
-#: gtk/gtkprintoperation.c:171
+#: gtk/gtkprintoperation.c:173
 #, c-format
 msgid "%s job #%d"
 msgstr ""
 
 #. translators, strip the prefix up to and including the first |
-#: gtk/gtkprintoperation.c:1497
+#: gtk/gtkprintoperation.c:1498
 msgid "print operation status|Initial state"
 msgstr ""
 
 #. translators, strip the prefix up to and including the first |
-#: gtk/gtkprintoperation.c:1499
+#: gtk/gtkprintoperation.c:1500
 msgid "print operation status|Preparing to print"
 msgstr ""
 
 #. translators, strip the prefix up to and including the first |
-#: gtk/gtkprintoperation.c:1501
+#: gtk/gtkprintoperation.c:1502
 msgid "print operation status|Generating data"
 msgstr ""
 
 #. translators, strip the prefix up to and including the first |
-#: gtk/gtkprintoperation.c:1503
+#: gtk/gtkprintoperation.c:1504
 msgid "print operation status|Sending data"
 msgstr ""
 
 #. translators, strip the prefix up to and including the first |
-#: gtk/gtkprintoperation.c:1505
+#: gtk/gtkprintoperation.c:1506
 msgid "print operation status|Waiting"
 msgstr ""
 
 #. translators, strip the prefix up to and including the first |
-#: gtk/gtkprintoperation.c:1507
+#: gtk/gtkprintoperation.c:1508
 msgid "print operation status|Blocking on issue"
 msgstr ""
 
 #. translators, strip the prefix up to and including the first |
-#: gtk/gtkprintoperation.c:1509
+#: gtk/gtkprintoperation.c:1510
 msgid "print operation status|Printing"
 msgstr ""
 
 #. translators, strip the prefix up to and including the first |
-#: gtk/gtkprintoperation.c:1511
+#: gtk/gtkprintoperation.c:1512
 msgid "print operation status|Finished"
 msgstr ""
 
 #. translators, strip the prefix up to and including the first |
-#: gtk/gtkprintoperation.c:1513
+#: gtk/gtkprintoperation.c:1514
 msgid "print operation status|Finished with error"
 msgstr ""
 
@@ -2464,187 +2529,185 @@ msgstr ""
 msgid "Error from StartDoc"
 msgstr ""
 
-#: gtk/gtkprintunixdialog.c:1504
+#: gtk/gtkprintunixdialog.c:1510
 #, fuzzy
 msgid "Printer"
 msgstr "_Bastıru"
 
-#: gtk/gtkprintunixdialog.c:1512
+#: gtk/gtkprintunixdialog.c:1518
 #, fuzzy
 msgid "Location"
 msgstr "_Urnaşılu:"
 
-#: gtk/gtkprintunixdialog.c:1521
+#: gtk/gtkprintunixdialog.c:1527
 msgid "Status"
 msgstr ""
 
-#: gtk/gtkprintunixdialog.c:1543
-#, fuzzy
-msgid "Print Pages"
-msgstr "Bas_ma Küreneşe"
-
-#: gtk/gtkprintunixdialog.c:1547
-#, fuzzy
-msgid "_All"
-msgstr "_Aşır"
-
-#: gtk/gtkprintunixdialog.c:1554
-#, fuzzy
-msgid "C_urrent"
-msgstr "_Yasa"
-
-#: gtk/gtkprintunixdialog.c:1563
-msgid "Ra_nge"
+#: gtk/gtkprintunixdialog.c:1549
+msgid "Range"
 msgstr ""
 
-#: gtk/gtkprintunixdialog.c:1564
+#: gtk/gtkprintunixdialog.c:1553
+msgid "_All Pages"
+msgstr ""
+
+#: gtk/gtkprintunixdialog.c:1560
+#, fuzzy
+msgid "C_urrent Page"
+msgstr "_Yasa"
+
+#: gtk/gtkprintunixdialog.c:1569
+msgid "Pag_es:"
+msgstr ""
+
+#: gtk/gtkprintunixdialog.c:1570
 msgid ""
 "Specify one or more page ranges,\n"
 " e.g. 1-3,7,11"
 msgstr ""
 
-#: gtk/gtkprintunixdialog.c:1583
+#: gtk/gtkprintunixdialog.c:1589
 msgid "Copies"
 msgstr ""
 
 #. FIXME chpe: too much space between Copies and spinbutton, put those 2 in a hbox and make it span 2 columns
-#: gtk/gtkprintunixdialog.c:1588
+#: gtk/gtkprintunixdialog.c:1594
 msgid "Copie_s:"
 msgstr ""
 
-#: gtk/gtkprintunixdialog.c:1606
+#: gtk/gtkprintunixdialog.c:1612
 #, fuzzy
 msgid "C_ollate"
 msgstr "_Yasa"
 
-#: gtk/gtkprintunixdialog.c:1614
+#: gtk/gtkprintunixdialog.c:1620
 #, fuzzy
 msgid "_Reverse"
 msgstr "_Qaytart"
 
-#: gtk/gtkprintunixdialog.c:1631
+#: gtk/gtkprintunixdialog.c:1637
 msgid "General"
 msgstr ""
 
-#: gtk/gtkprintunixdialog.c:2031
+#: gtk/gtkprintunixdialog.c:2038
 msgid "Layout"
 msgstr ""
 
-#: gtk/gtkprintunixdialog.c:2035
+#: gtk/gtkprintunixdialog.c:2042
 #, fuzzy
 msgid "Pages per _side:"
 msgstr "Ü_zençälege"
 
-#: gtk/gtkprintunixdialog.c:2051
+#: gtk/gtkprintunixdialog.c:2058
 msgid "T_wo-sided:"
 msgstr ""
 
-#: gtk/gtkprintunixdialog.c:2066
+#: gtk/gtkprintunixdialog.c:2073
 msgid "_Only print:"
 msgstr ""
 
 #. In enum order
-#: gtk/gtkprintunixdialog.c:2081
+#: gtk/gtkprintunixdialog.c:2088
 msgid "All sheets"
 msgstr ""
 
-#: gtk/gtkprintunixdialog.c:2082
+#: gtk/gtkprintunixdialog.c:2089
 msgid "Even sheets"
 msgstr ""
 
-#: gtk/gtkprintunixdialog.c:2083
+#: gtk/gtkprintunixdialog.c:2090
 msgid "Odd sheets"
 msgstr ""
 
-#: gtk/gtkprintunixdialog.c:2086
+#: gtk/gtkprintunixdialog.c:2093
 #, fuzzy
 msgid "Sc_ale:"
 msgstr "_Bäyä:"
 
-#: gtk/gtkprintunixdialog.c:2113
+#: gtk/gtkprintunixdialog.c:2120
 msgid "Paper"
 msgstr ""
 
-#: gtk/gtkprintunixdialog.c:2117
+#: gtk/gtkprintunixdialog.c:2124
 msgid "Paper _type:"
 msgstr ""
 
-#: gtk/gtkprintunixdialog.c:2132
+#: gtk/gtkprintunixdialog.c:2139
 msgid "Paper _source:"
 msgstr ""
 
-#: gtk/gtkprintunixdialog.c:2147
+#: gtk/gtkprintunixdialog.c:2154
 msgid "Output t_ray:"
 msgstr ""
 
-#: gtk/gtkprintunixdialog.c:2198
+#: gtk/gtkprintunixdialog.c:2205
 msgid "Job Details"
 msgstr ""
 
-#: gtk/gtkprintunixdialog.c:2204
+#: gtk/gtkprintunixdialog.c:2211
 msgid "Pri_ority:"
 msgstr ""
 
-#: gtk/gtkprintunixdialog.c:2219
+#: gtk/gtkprintunixdialog.c:2226
 msgid "_Billing info:"
 msgstr ""
 
-#: gtk/gtkprintunixdialog.c:2237
+#: gtk/gtkprintunixdialog.c:2244
 msgid "Print Document"
 msgstr ""
 
-#: gtk/gtkprintunixdialog.c:2243
+#: gtk/gtkprintunixdialog.c:2250
 #, fuzzy
 msgid "_Now"
 msgstr "Yu_q"
 
-#: gtk/gtkprintunixdialog.c:2250
+#: gtk/gtkprintunixdialog.c:2257
 msgid "A_t:"
 msgstr ""
 
-#: gtk/gtkprintunixdialog.c:2265
+#: gtk/gtkprintunixdialog.c:2272
 #, fuzzy
 msgid "On _hold"
 msgstr "_Qalın"
 
-#: gtk/gtkprintunixdialog.c:2284
+#: gtk/gtkprintunixdialog.c:2291
 msgid "Add Cover Page"
 msgstr ""
 
-#: gtk/gtkprintunixdialog.c:2290
+#: gtk/gtkprintunixdialog.c:2297
 msgid "Be_fore:"
 msgstr ""
 
-#: gtk/gtkprintunixdialog.c:2305
+#: gtk/gtkprintunixdialog.c:2312
 msgid "_After:"
 msgstr ""
 
-#: gtk/gtkprintunixdialog.c:2320
+#: gtk/gtkprintunixdialog.c:2327
 msgid "Job"
 msgstr ""
 
-#: gtk/gtkprintunixdialog.c:2386
+#: gtk/gtkprintunixdialog.c:2393
 msgid "Advanced"
 msgstr ""
 
-#: gtk/gtkprintunixdialog.c:2421
+#: gtk/gtkprintunixdialog.c:2428
 msgid "Image Quality"
 msgstr ""
 
-#: gtk/gtkprintunixdialog.c:2424
+#: gtk/gtkprintunixdialog.c:2431
 #, fuzzy
 msgid "Color"
 msgstr "_Tös"
 
-#: gtk/gtkprintunixdialog.c:2427
+#: gtk/gtkprintunixdialog.c:2434
 msgid "Finishing"
 msgstr ""
 
-#: gtk/gtkprintunixdialog.c:2437
+#: gtk/gtkprintunixdialog.c:2444
 msgid "Some of the settings in the dialog conflict"
 msgstr ""
 
-#: gtk/gtkprintunixdialog.c:2460
+#: gtk/gtkprintunixdialog.c:2467
 #, fuzzy
 msgid "Print"
 msgstr "_Bastıru"
@@ -2657,60 +2720,60 @@ msgstr "Törkem"
 msgid "The radio tool button whose group this button belongs to."
 msgstr ""
 
-#: gtk/gtkrc.c:2866
+#: gtk/gtkrc.c:2872
 #, c-format
 msgid "Unable to find include file: \"%s\""
 msgstr ""
 
-#: gtk/gtkrc.c:3494 gtk/gtkrc.c:3497
+#: gtk/gtkrc.c:3500 gtk/gtkrc.c:3503
 #, c-format
 msgid "Unable to locate image file in pixmap_path: \"%s\""
 msgstr ""
 
 #: gtk/gtkrecentaction.c:155 gtk/gtkrecentaction.c:163
-#: gtk/gtkrecentchoosermenu.c:553 gtk/gtkrecentchoosermenu.c:561
+#: gtk/gtkrecentchoosermenu.c:554 gtk/gtkrecentchoosermenu.c:562
 #, c-format
 msgid "This function is not implemented for widgets of class '%s'"
 msgstr ""
 
-#: gtk/gtkrecentchooserdefault.c:465
+#: gtk/gtkrecentchooserdefault.c:456
 msgid "Select which type of documents are shown"
 msgstr ""
 
-#: gtk/gtkrecentchooserdefault.c:1107 gtk/gtkrecentchooserdefault.c:1144
+#: gtk/gtkrecentchooserdefault.c:1098 gtk/gtkrecentchooserdefault.c:1135
 #, c-format
 msgid "No item for URI '%s' found"
 msgstr ""
 
-#: gtk/gtkrecentchooserdefault.c:1271
+#: gtk/gtkrecentchooserdefault.c:1262
 msgid "Untitled filter"
 msgstr ""
 
-#: gtk/gtkrecentchooserdefault.c:1626
+#: gtk/gtkrecentchooserdefault.c:1615
 #, fuzzy
 msgid "Could not remove item"
 msgstr "Kerem saylap bulmadı"
 
-#: gtk/gtkrecentchooserdefault.c:1669
+#: gtk/gtkrecentchooserdefault.c:1658
 #, fuzzy
 msgid "Could not clear list"
 msgstr "Kerem saylap bulmadı"
 
-#: gtk/gtkrecentchooserdefault.c:1753
+#: gtk/gtkrecentchooserdefault.c:1742
 #, fuzzy
 msgid "Copy _Location"
 msgstr "_Urınlaşu Açu"
 
-#: gtk/gtkrecentchooserdefault.c:1766
+#: gtk/gtkrecentchooserdefault.c:1755
 msgid "_Remove From List"
 msgstr ""
 
-#: gtk/gtkrecentchooserdefault.c:1775
+#: gtk/gtkrecentchooserdefault.c:1764
 #, fuzzy
 msgid "_Clear List"
 msgstr "_Buşat"
 
-#: gtk/gtkrecentchooserdefault.c:1789
+#: gtk/gtkrecentchooserdefault.c:1778
 msgid "Show _Private Resources"
 msgstr ""
 
@@ -2729,17 +2792,17 @@ msgstr ""
 msgid "No items found"
 msgstr "XPM başlığı tabılmadı"
 
-#: gtk/gtkrecentchoosermenu.c:473 gtk/gtkrecentchoosermenu.c:529
+#: gtk/gtkrecentchoosermenu.c:474 gtk/gtkrecentchoosermenu.c:530
 #, c-format
 msgid "No recently used resource found with URI `%s'"
 msgstr ""
 
-#: gtk/gtkrecentchoosermenu.c:740
+#: gtk/gtkrecentchoosermenu.c:741
 #, c-format
 msgid "Open '%s'"
 msgstr ""
 
-#: gtk/gtkrecentchoosermenu.c:770
+#: gtk/gtkrecentchoosermenu.c:771
 #, fuzzy
 msgid "Unknown item"
 msgstr "Bilgesez"
@@ -2751,7 +2814,7 @@ msgstr "Bilgesez"
 #. *
 #. * Don't include the prefix "recent menu label|" in the translation.
 #.
-#: gtk/gtkrecentchoosermenu.c:783
+#: gtk/gtkrecentchoosermenu.c:784
 #, c-format
 msgid "recent menu label|_%d. %s"
 msgstr ""
@@ -2761,7 +2824,7 @@ msgstr ""
 #. *
 #. * Don't include the prefix "recent menu label|" in the translation.
 #.
-#: gtk/gtkrecentchoosermenu.c:790
+#: gtk/gtkrecentchoosermenu.c:791
 #, c-format
 msgid "recent menu label|%d. %s"
 msgstr ""
@@ -3050,110 +3113,115 @@ msgid "Reverse portrait"
 msgstr ""
 
 #: gtk/gtkstock.c:377
+#, fuzzy
+msgid "Page Set_up"
+msgstr "%u. Bit"
+
+#: gtk/gtkstock.c:378
 msgid "_Paste"
 msgstr "Ös_täp quy"
 
-#: gtk/gtkstock.c:378
+#: gtk/gtkstock.c:379
 msgid "_Preferences"
 msgstr "_Caylaw"
 
-#: gtk/gtkstock.c:379
+#: gtk/gtkstock.c:380
 msgid "_Print"
 msgstr "_Bastıru"
 
-#: gtk/gtkstock.c:380
+#: gtk/gtkstock.c:381
 msgid "Print Pre_view"
 msgstr "Bas_ma Küreneşe"
 
-#: gtk/gtkstock.c:381
+#: gtk/gtkstock.c:382
 msgid "_Properties"
 msgstr "Ü_zençälege"
 
-#: gtk/gtkstock.c:382
+#: gtk/gtkstock.c:383
 msgid "_Quit"
 msgstr "_Çığış"
 
-#: gtk/gtkstock.c:383
+#: gtk/gtkstock.c:384
 msgid "_Redo"
 msgstr "Kire qu_y"
 
-#: gtk/gtkstock.c:384
+#: gtk/gtkstock.c:385
 msgid "_Refresh"
 msgstr "_Yañart"
 
-#: gtk/gtkstock.c:386
+#: gtk/gtkstock.c:387
 msgid "_Revert"
 msgstr "_Qaytart"
 
-#: gtk/gtkstock.c:387
+#: gtk/gtkstock.c:388
 msgid "_Save"
 msgstr "_Saqla"
 
-#: gtk/gtkstock.c:388
+#: gtk/gtkstock.c:389
 msgid "Save _As"
 msgstr "Y_añaça Saqlaw"
 
-#: gtk/gtkstock.c:389
+#: gtk/gtkstock.c:390
 msgid "Select _All"
 msgstr "_Barısın Sayla"
 
-#: gtk/gtkstock.c:390
+#: gtk/gtkstock.c:391
 msgid "_Color"
 msgstr "_Tös"
 
-#: gtk/gtkstock.c:391
+#: gtk/gtkstock.c:392
 msgid "_Font"
 msgstr "_Yazu"
 
-#: gtk/gtkstock.c:392
+#: gtk/gtkstock.c:393
 msgid "_Ascending"
 msgstr "_Arttırıp"
 
-#: gtk/gtkstock.c:393
+#: gtk/gtkstock.c:394
 msgid "_Descending"
 msgstr "_Kimep"
 
-#: gtk/gtkstock.c:394
+#: gtk/gtkstock.c:395
 msgid "_Spell Check"
 msgstr "Yazu _Tikşerü"
 
-#: gtk/gtkstock.c:395
+#: gtk/gtkstock.c:396
 msgid "_Stop"
 msgstr "_Tuqta"
 
-#: gtk/gtkstock.c:396
+#: gtk/gtkstock.c:397
 msgid "_Strikethrough"
 msgstr ""
 
-#: gtk/gtkstock.c:397
+#: gtk/gtkstock.c:398
 msgid "_Undelete"
 msgstr "_Torğız"
 
-#: gtk/gtkstock.c:398
+#: gtk/gtkstock.c:399
 msgid "_Underline"
 msgstr "_Sızdırıp"
 
-#: gtk/gtkstock.c:399
+#: gtk/gtkstock.c:400
 msgid "_Undo"
 msgstr "Kire a_l"
 
-#: gtk/gtkstock.c:400
+#: gtk/gtkstock.c:401
 msgid "_Yes"
 msgstr "Ä_ye"
 
-#: gtk/gtkstock.c:401
+#: gtk/gtkstock.c:402
 msgid "_Normal Size"
 msgstr "_Çın Ülçäm"
 
-#: gtk/gtkstock.c:402
+#: gtk/gtkstock.c:403
 msgid "Best _Fit"
 msgstr ""
 
-#: gtk/gtkstock.c:403
+#: gtk/gtkstock.c:404
 msgid "Zoom _In"
 msgstr "_Ereräyt"
 
-#: gtk/gtkstock.c:404
+#: gtk/gtkstock.c:405
 msgid "Zoom _Out"
 msgstr "_Keçeräyt"
 
@@ -3322,22 +3390,22 @@ msgstr ""
 msgid "--- No Tip ---"
 msgstr "--- Kiñäşlär Yuq ---"
 
-#: gtk/gtkuimanager.c:1226
+#: gtk/gtkuimanager.c:1247
 #, c-format
 msgid "Unknown attribute '%s' on line %d char %d"
 msgstr ""
 
-#: gtk/gtkuimanager.c:1443
+#: gtk/gtkuimanager.c:1464
 #, c-format
 msgid "Unexpected start tag '%s' on line %d char %d"
 msgstr ""
 
-#: gtk/gtkuimanager.c:1533
+#: gtk/gtkuimanager.c:1554
 #, c-format
 msgid "Unexpected character data on line %d char %d"
 msgstr ""
 
-#: gtk/gtkuimanager.c:2354
+#: gtk/gtkuimanager.c:2377
 msgid "Empty"
 msgstr "Buş"
 
@@ -4194,91 +4262,91 @@ msgstr ""
 msgid "different idatas found for symlinked '%s' and '%s'\n"
 msgstr ""
 
-#: gtk/updateiconcache.c:1368
+#: gtk/updateiconcache.c:1372
 #, c-format
 msgid "Failed to write header\n"
 msgstr ""
 
-#: gtk/updateiconcache.c:1374
+#: gtk/updateiconcache.c:1378
 #, c-format
 msgid "Failed to write hash table\n"
 msgstr ""
 
-#: gtk/updateiconcache.c:1380
+#: gtk/updateiconcache.c:1384
 #, fuzzy, c-format
 msgid "Failed to write folder index\n"
 msgstr "Çaqlı biremnän uqıp bulmadı"
 
-#: gtk/updateiconcache.c:1388
+#: gtk/updateiconcache.c:1392
 #, c-format
 msgid "Failed to rewrite header\n"
 msgstr ""
 
-#: gtk/updateiconcache.c:1440
+#: gtk/updateiconcache.c:1444
 #, fuzzy, c-format
 msgid "Failed to write cache file: %s\n"
 msgstr "'%s' biremen açıp bulmadı: %s"
 
-#: gtk/updateiconcache.c:1475
+#: gtk/updateiconcache.c:1479
 #, c-format
 msgid "The generated cache was invalid.\n"
 msgstr ""
 
-#: gtk/updateiconcache.c:1489
+#: gtk/updateiconcache.c:1493
 #, c-format
 msgid "Could not rename %s to %s: %s, removing %s then.\n"
 msgstr ""
 
-#: gtk/updateiconcache.c:1501
+#: gtk/updateiconcache.c:1505
 #, fuzzy, c-format
 msgid "Could not rename %s to %s: %s\n"
 msgstr "%s tağıp bulmadı"
 
-#: gtk/updateiconcache.c:1508
+#: gtk/updateiconcache.c:1512
 #, c-format
 msgid "Could not rename %s back to %s: %s.\n"
 msgstr ""
 
-#: gtk/updateiconcache.c:1530
+#: gtk/updateiconcache.c:1534
 #, c-format
 msgid "Cache file created successfully.\n"
 msgstr ""
 
-#: gtk/updateiconcache.c:1569
+#: gtk/updateiconcache.c:1573
 msgid "Overwrite an existing cache, even if up to date"
 msgstr ""
 
-#: gtk/updateiconcache.c:1570
+#: gtk/updateiconcache.c:1574
 msgid "Don't check for the existence of index.theme"
 msgstr ""
 
-#: gtk/updateiconcache.c:1571
+#: gtk/updateiconcache.c:1575
 msgid "Don't include image data in the cache"
 msgstr ""
 
-#: gtk/updateiconcache.c:1572
+#: gtk/updateiconcache.c:1576
 msgid "Output a C header file"
 msgstr ""
 
-#: gtk/updateiconcache.c:1573
+#: gtk/updateiconcache.c:1577
 msgid "Turn off verbose output"
 msgstr ""
 
-#: gtk/updateiconcache.c:1574
+#: gtk/updateiconcache.c:1578
 msgid "Validate existing icon cache"
 msgstr ""
 
-#: gtk/updateiconcache.c:1609
+#: gtk/updateiconcache.c:1641
 #, fuzzy, c-format
 msgid "File not found: %s\n"
 msgstr "%s tağıp bulmadı"
 
-#: gtk/updateiconcache.c:1615
+#: gtk/updateiconcache.c:1647
 #, c-format
 msgid "Not a valid icon cache: %s\n"
 msgstr ""
 
-#: gtk/updateiconcache.c:1626
+#: gtk/updateiconcache.c:1658
 #, c-format
 msgid ""
 "No theme index file in '%s'.\n"
@@ -4485,6 +4553,17 @@ msgstr ""
 #, c-format
 msgid "Could not get information for file '%s': %s"
 msgstr ""
+
+#~ msgid "Default"
+#~ msgstr "Töpcay"
+
+#, fuzzy
+#~ msgid "Print Pages"
+#~ msgstr "Bas_ma Küreneşe"
+
+#, fuzzy
+#~ msgid "_All"
+#~ msgstr "_Aşır"
 
 #~ msgid "Today"
 #~ msgstr "Bügen"

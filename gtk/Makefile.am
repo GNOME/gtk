@@ -9,7 +9,7 @@ GTK_PRINT_PREVIEW_COMMAND="evince --unlink-tempfile --preview --print-settings %
 endif
 
 SUBDIRS = theme-bits $(xdgmimedir) . tests
-DIST_SUBDIRS=theme-bits xdgmime
+DIST_SUBDIRS=theme-bits xdgmime tests
 
 if HAVE_CUPS
 GTK_PRINT_BACKENDS=file,cups

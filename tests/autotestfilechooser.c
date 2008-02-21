@@ -1064,10 +1064,13 @@ test_folder_switch_and_filters (void)
   log_test (passed, "test_folder_switch_and_filters(): all filter tests");
 }
 
+extern void pixbuf_init (void);
+
 int
 main (int    argc,
       char **argv)
 {
+  pixbuf_init ();
   /* initialize test program */
   gtk_test_init (&argc, &argv);
 

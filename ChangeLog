@@ -1,3 +1,9 @@
+2008-02-16  Matthias Clasen  <mclasen@redhat.com>
+
+	* === Released 2.13.0 ===
+
+	* Makefile.decl: Start Xvfb at depth 16 so cairo doesn't choke.
+
 2008-02-21  Tor Lillqvist  <tml@novell.com>
 
 	* gtk/gtkfilechooserdefault.c (list_mtime_data_func) [Win32]: Must
