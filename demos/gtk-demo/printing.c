@@ -161,6 +161,9 @@ do_printing (GtkWidget *do_widget)
   g_signal_connect (G_OBJECT (operation), "end-print", 
 		    G_CALLBACK (end_print), data);
 
+  gtk_print_operation_set_use_full_page (operation, FALSE);
+  gtk_print_operation_set_unit (operation, GTK_UNIT_POINTS);
+
   gtk_print_operation_run (operation, GTK_PRINT_OPERATION_ACTION_PRINT_DIALOG, GTK_WINDOW (do_widget), &error);
 
   g_object_unref (operation);

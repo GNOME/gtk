@@ -1,3 +1,10 @@
+2008-02-22  Dominic Lachowicz  <domlachowicz@gmail.com>
+
+	* demos/gtk-demo/printing.c (do_printing): gtk-demo printing gives 
+	wrong results on win32 because it doesn't set the printing units, 
+	which affect the transformation of the cairo context 
+	(#347125, Erik van Pienbroek)
+	
 2008-02-22  Tor Lillqvist  <tml@novell.com>
 
 	* tests/pixbuf-init.c: Add file missing from SVN, from the tarball.
