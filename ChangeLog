@@ -1,3 +1,9 @@
+2008-02-22  Dominic Lachowicz  <domlachowicz@gmail.com>
+
+	* gdk-pixbuf/queryloaders.c (loader_sanity_check): It's perfectly acceptable
+	for a module to only support the save_to_callback() method if it marks itself
+	as WRITABLE
+	
 2008-02-16  Matthias Clasen  <mclasen@redhat.com>
 	
 	* configure.in: Bump version

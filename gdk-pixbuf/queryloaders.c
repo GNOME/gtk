@@ -104,7 +104,7 @@ loader_sanity_check (const char *path, GdkPixbufFormat *info, GdkPixbufModule *v
 		goto error;
 	}
 
-	if ((info->flags & GDK_PIXBUF_FORMAT_WRITABLE) && !vtable->save) 
+	if ((info->flags & GDK_PIXBUF_FORMAT_WRITABLE) && !(vtable->save || vtable->save_to_callback)) 
 	{
 		error = "loader claims to support saving but doesn't implement save";
 		goto error;
