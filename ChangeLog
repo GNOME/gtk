@@ -1,3 +1,7 @@
+2008-02-22  Tor Lillqvist  <tml@novell.com>
+
+	* tests/pixbuf-init.c: Add file missing from SVN, from the tarball.
+
 2008-02-22  Dominic Lachowicz  <domlachowicz@gmail.com>
 
 	* gdk-pixbuf/queryloaders.c (loader_sanity_check): It's perfectly acceptable
