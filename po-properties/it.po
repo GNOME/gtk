@@ -35,7 +35,7 @@ msgstr ""
 "Project-Id-Version: gtk+-properties\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2008-02-12 17:52-0500\n"
-"PO-Revision-Date: 2007-10-04 16:05+0200\n"
+"PO-Revision-Date: 2008-02-22 17:45+0100\n"
 "Last-Translator: Luca Ferretti <elle.uca@libero.it>\n"
 "Language-Team: Italian <tp@lists.linux.it>\n"
 "MIME-Version: 1.0\n"
@@ -1707,7 +1707,7 @@ msgstr "Imposta la variante del carattere"
 
 #: gtk/gtkcellrenderertext.c:521 gtk/gtktexttag.c:597
 msgid "Whether this tag affects the font variant"
-msgstr "Indica se questo elemento ha effetto sulla variante del carattere"
+msgstr "Indica se questo tag ha effetto sulla variante del carattere"
 
 #: gtk/gtkcellrenderertext.c:524 gtk/gtktexttag.c:600
 msgid "Font weight set"
@@ -1723,7 +1723,7 @@ msgstr "Imposta l'estensione del carattere"
 
 #: gtk/gtkcellrenderertext.c:529 gtk/gtktexttag.c:605
 msgid "Whether this tag affects the font stretch"
-msgstr "Indica se questo elemento ha effetto sull'estensione del carattere"
+msgstr "Indica se questo tag ha effetto sull'estensione del carattere"
 
 #: gtk/gtkcellrenderertext.c:532 gtk/gtktexttag.c:608
 msgid "Font size set"
@@ -1747,7 +1747,7 @@ msgstr "Imposta elevazione"
 
 #: gtk/gtkcellrenderertext.c:541 gtk/gtktexttag.c:633
 msgid "Whether this tag affects the rise"
-msgstr "Indica se questo elemento ha effetto sull'elevazione del testo"
+msgstr "Indica se questo tag ha effetto sull'elevazione del testo"
 
 #: gtk/gtkcellrenderertext.c:544 gtk/gtktexttag.c:648
 msgid "Strikethrough set"
@@ -1781,7 +1781,7 @@ msgstr "Imposta elisione"
 
 #: gtk/gtkcellrenderertext.c:557
 msgid "Whether this tag affects the ellipsize mode"
-msgstr "Indica se questo elemento ha effetto sulla modalità elisione"
+msgstr "Indica se questo tag ha effetto sulla modalità elisione"
 
 # GTK-2-12
 #: gtk/gtkcellrenderertext.c:560
@@ -1791,7 +1791,7 @@ msgstr "Imposta allineamento"
 # GTK-2-12
 #: gtk/gtkcellrenderertext.c:561
 msgid "Whether this tag affects the alignment mode"
-msgstr "Indica se questo elemento ha effetto sulla modalità allinieamento"
+msgstr "Indica se questo tag ha effetto sulla modalità allinieamento"
 
 #: gtk/gtkcellrenderertoggle.c:126
 msgid "Toggle state"
@@ -2460,7 +2460,7 @@ msgstr "Usa i marcatori"
 
 #: gtk/gtkexpander.c:212 gtk/gtklabel.c:312
 msgid "The text of the label includes XML markup. See pango_parse_markup()"
-msgstr "Il testo dell'etichetta include tag XML. Vedere pango_parse_markup()"
+msgstr "Il testo dell'etichetta include markup XML. Vedere pango_parse_markup()"
 
 #: gtk/gtkexpander.c:220
 msgid "Space to put between the label and the child"
@@ -4662,13 +4662,10 @@ msgstr "Durata doppio clic"
 # GTK-2-12
 # reso + simile a originale e a successivo
 #: gtk/gtksettings.c:205
-#, fuzzy
 msgid ""
 "Maximum time allowed between two clicks for them to be considered a double "
 "click (in milliseconds)"
-msgstr ""
-"Massimo tempo consentita tra due clic affinché siano considerati doppio clic "
-"(in millisecondi)"
+msgstr "Massimo tempo consentita tra due clic affinché siano considerati un doppio clic (in millisecondi)"
 
 #: gtk/gtksettings.c:212
 msgid "Double Click Distance"
@@ -4678,9 +4675,7 @@ msgstr "Distanza doppio clic"
 msgid ""
 "Maximum distance allowed between two clicks for them to be considered a "
 "double click (in pixels)"
-msgstr ""
-"Massima distanza consentita tra due clic affinché siano considerati doppio "
-"clic (in pixel)"
+msgstr "Massima distanza consentita tra due clic affinché siano considerati un doppio clic (in pixel)"
 
 #: gtk/gtksettings.c:229
 msgid "Cursor Blink"
@@ -5030,13 +5025,15 @@ msgid "When TRUE, there are only cursor keys available to navigate widgets"
 msgstr ""
 "Quando TRUE, sono disponibili solo i tasti cursore per spostarsi tra i widget"
 
+# GTK-2-12
 #: gtk/gtksettings.c:659
 msgid "Keynav Wrap Around"
-msgstr ""
+msgstr "Navigazione da tastiera ciclica"
 
+# GTK-2-12
 #: gtk/gtksettings.c:660
 msgid "Whether to wrap around when keyboard-navigating widgets"
-msgstr ""
+msgstr "Indica se riprendere in modo ciclico la navigazione da tastiera dei widget"
 
 # GTK-2-12
 #: gtk/gtksettings.c:680
@@ -5368,11 +5365,11 @@ msgstr "Indica se le parole saranno mandate a capo alla fine del widget"
 
 #: gtk/gtktextbuffer.c:179
 msgid "Tag Table"
-msgstr "Tabella dei marcatori"
+msgstr "Tabella dei tag"
 
 #: gtk/gtktextbuffer.c:180
 msgid "Text Tag Table"
-msgstr "Tabella dei marcatori di testo"
+msgstr "Tabella dei tag di testo"
 
 #: gtk/gtktextbuffer.c:198
 msgid "Current text of the buffer"
@@ -5419,27 +5416,26 @@ msgstr ""
 "DND"
 
 #: gtk/gtktextmark.c:90
-#, fuzzy
 msgid "Mark name"
 msgstr "Nome del marcatore"
 
+# GTK-2-12
 #: gtk/gtktextmark.c:97
-#, fuzzy
 msgid "Left gravity"
-msgstr "Gravità"
+msgstr "Gravità sinistra"
 
+# GTK-2-12
 #: gtk/gtktextmark.c:98
 msgid "Whether the mark has left gravity"
-msgstr ""
+msgstr "Indica se il marcatore ha la gravità a sinistra"
 
 #: gtk/gtktexttag.c:173
 msgid "Tag name"
-msgstr "Nome del marcatore"
+msgstr "Nome del tag"
 
 #: gtk/gtktexttag.c:174
 msgid "Name used to refer to the text tag. NULL for anonymous tags"
-msgstr ""
-"Nome usato per riferirsi al marcatore del testo. NULL per marcatori anonimi"
+msgstr "Nome usato per riferirsi al tag del testo. NULL per tag anonimi"
 
 #: gtk/gtktexttag.c:192
 msgid "Background color as a (possibly unallocated) GdkColor"
@@ -5637,13 +5633,17 @@ msgstr ""
 "Il colore di sfondo del paragrafo come GdkColor (possibilmente non "
 "utilizzato)"
 
+# GTK-2-12
+# da rivedere, confrontando meglio con la spiegazione nelle API Ref...
 #: gtk/gtktexttag.c:554
 msgid "Margin Accumulates"
-msgstr ""
+msgstr "Margini cumulativi"
 
+# GTK-2-12
+# da rivedere, confrontando meglio con la spiegazione nelle API Ref...
 #: gtk/gtktexttag.c:555
 msgid "Whether left and right margins accumulate."
-msgstr ""
+msgstr "Indica se i margini destro e sinistro si accumulano."
 
 #: gtk/gtktexttag.c:568
 msgid "Background full height set"
@@ -6578,7 +6578,6 @@ msgstr "Il contenuto del suggerimento per questo widget"
 
 # GTK-2-12
 #: gtk/gtkwidget.c:670
-#, fuzzy
 msgid "Tooltip markup"
 msgstr "Markup suggerimento"
 
