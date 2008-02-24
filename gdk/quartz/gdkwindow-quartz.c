@@ -1006,6 +1006,9 @@ show_window_internal (GdkWindow *window,
   if (impl->transient_for && !GDK_WINDOW_DESTROYED (impl->transient_for))
     _gdk_quartz_window_attach_to_parent (window);
 
+  if (impl->toplevel)
+    _gdk_quartz_events_trigger_crossing_events ();
+
   GDK_QUARTZ_RELEASE_POOL;
 }
 
@@ -1103,9 +1106,6 @@ gdk_window_hide (GdkWindow *window)
 
   if (impl->toplevel) 
     {
-      NSRect content_rect;
-      NSRect frame_rect;
-
      /* Update main window. */
       main_window_stack = g_slist_remove (main_window_stack, window);
       if ([NSApp mainWindow] == impl->toplevel)

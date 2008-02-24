@@ -1,3 +1,18 @@
+2008-02-24  Richard Hult  <richard@imendio.com>
+
+	Merged from trunk:
+
+	* gdk/quartz/gdkprivate-quartz.h:
+	* gdk/quartz/gdkeventloop-quartz.c: (got_fd_activity), (poll_func):
+	Use the subtype field for the custom event that is used to wake up
+	the mainloop so we can have other custom event types.
+
+	* gdk/quartz/gdkevents-quartz.c:
+	(_gdk_quartz_events_trigger_crossing_events):
+	* gdk/quartz/gdkwindow-quartz.c: (show_window_internal): Create
+	crossing events after showing a window if necessary, to work
+	around problems with the tracking rect API.
+
 2008-02-21  Tor Lillqvist  <tml@novell.com>
 
 	* gtk/gtkfilechooserdefault.c (list_mtime_data_func) [Win32]: Must
