@@ -139,7 +139,7 @@ got_fd_activity (void *info)
 	                    timestamp: 0
 	                 windowNumber: 0
 	                      context: nil
-	                      subtype: 0
+                              subtype: GDK_QUARTZ_EVENT_SUBTYPE_EVENTLOOP
 	                        data1: 0 
 	                        data2: 0];
 
@@ -253,7 +253,8 @@ poll_func (GPollFD *ufds, guint nfds, gint timeout_)
   
   if (event)
     {
-      if ([event type] == NSApplicationDefined)
+      if ([event type] == NSApplicationDefined &&
+          [event subtype] == GDK_QUARTZ_EVENT_SUBTYPE_EVENTLOOP)
         {
           pthread_mutex_lock (&pollfd_mutex);
 

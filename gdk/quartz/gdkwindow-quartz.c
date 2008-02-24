@@ -1101,6 +1101,9 @@ show_window_internal (GdkWindow *window,
   if (impl->transient_for && !GDK_WINDOW_DESTROYED (impl->transient_for))
     _gdk_quartz_window_attach_to_parent (window);
 
+  if (impl->toplevel)
+    _gdk_quartz_events_trigger_crossing_events ();
+
   GDK_QUARTZ_RELEASE_POOL;
 }
 

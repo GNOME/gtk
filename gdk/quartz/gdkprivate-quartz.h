@@ -147,6 +147,11 @@ void       _gdk_quartz_window_did_resign_main       (GdkWindow *window);
 void       _gdk_quartz_window_debug_highlight       (GdkWindow *window);
 
 /* Events */
+typedef enum {
+  GDK_QUARTZ_EVENT_SUBTYPE_EVENTLOOP,
+  GDK_QUARTZ_EVENT_SUBTYPE_FAKE_CROSSING
+} GdkQuartzEventSubType;
+
 void         _gdk_quartz_events_update_focus_window    (GdkWindow *new_window,
                                                         gboolean   got_focus);
 GdkWindow *  _gdk_quartz_events_get_mouse_window       (gboolean   consider_grabs);
@@ -154,6 +159,7 @@ void         _gdk_quartz_events_update_mouse_window    (GdkWindow *window);
 void         _gdk_quartz_events_update_cursor          (GdkWindow *window);
 void         _gdk_quartz_events_send_map_events        (GdkWindow *window);
 GdkEventMask _gdk_quartz_events_get_current_event_mask (void);
+void         _gdk_quartz_events_trigger_crossing_events(void);
 
 extern GdkWindow *_gdk_quartz_keyboard_grab_window;
 extern GdkWindow *_gdk_quartz_pointer_grab_window;

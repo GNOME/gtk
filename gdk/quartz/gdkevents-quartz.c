@@ -650,6 +650,7 @@ create_crossing_event (GdkWindow      *window,
     point = [nsevent locationInWindow];
 
     toplevel = [(GdkQuartzView *)[nswindow contentView] gdkWindow];
+
     impl = GDK_WINDOW_IMPL_QUARTZ (GDK_WINDOW_OBJECT (toplevel)->impl);
 
     x_tmp = point.x;
@@ -1082,6 +1083,68 @@ find_mouse_window_for_ns_event (NSEvent *nsevent,
   *y_ret = y_tmp;
 
   return mouse_window;
+}
+
+/* Trigger crossing events if necessary. This is used when showing a new
+ * window, since the tracking rect API doesn't work reliably when a window
+ * shows up under the mouse cursor. It's done by finding the topmost window
+ * under the mouse pointer and synthesizing crossing events into that
+ * window.
+ */
+void
+_gdk_quartz_events_trigger_crossing_events (void)
+{
+  NSPoint point;
+  gint x; 
+  gint y;
+  GdkWindow *mouse_window;
+  GdkWindowImplQuartz *impl;
+  NSUInteger flags = 0;
+  NSTimeInterval timestamp = 0;
+  NSEvent *current_event;
+  NSEvent *nsevent;
+
+  point = [NSEvent mouseLocation];
+  x = point.x;
+  y = _gdk_quartz_window_get_inverted_screen_y (point.y);
+
+  mouse_window = _gdk_quartz_window_find_child (_gdk_root, x, y);
+  if (mouse_window == _gdk_root)
+    return;
+
+  /* NSMouseEntered always happens on the toplevel. */
+  mouse_window = gdk_window_get_toplevel (mouse_window);
+
+  get_converted_window_coordinates (_gdk_root,
+                                    x, y,
+                                    mouse_window,
+                                    &x, &y);
+
+  impl = GDK_WINDOW_IMPL_QUARTZ (GDK_WINDOW_OBJECT (mouse_window)->impl);
+
+  /* Fix up the event to be less fake if possible. */
+  current_event = [NSApp currentEvent];
+  if (current_event)
+    {
+      flags = [current_event modifierFlags];
+      timestamp = [current_event timestamp];
+    }
+
+  nsevent = [NSEvent otherEventWithType:NSApplicationDefined
+                               location:NSMakePoint(x, impl->height - y)
+                          modifierFlags:flags
+                              timestamp:timestamp
+                           windowNumber:[impl->toplevel windowNumber]
+                                context:nil
+                                subtype:GDK_QUARTZ_EVENT_SUBTYPE_FAKE_CROSSING
+                                  data1:0
+                                  data2:0];
+
+#ifdef G_ENABLE_DEBUG
+  /*_gdk_quartz_window_debug_highlight (mouse_window);*/
+#endif
+
+  synthesize_crossing_events (mouse_window, GDK_CROSSING_NORMAL, nsevent, x, y);
 }
 
 /* Synthesizes crossing events if necessary, based on the passed in
