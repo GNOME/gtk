@@ -1,3 +1,9 @@
+2008-02-24  Cody Russell  <bratsche@gnome.org>
+
+	* gdk/win32/gdkwindow-win32.c: Fixed declaration in the middle of
+	a block that was causing compile problems on old compilers.
+	(#518398, reported by Kazuki IWAMOTO)
+
 2008-02-24  Richard Hult  <richard@imendio.com>
 
 	Merged from trunk:
