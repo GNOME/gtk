@@ -2,6 +2,13 @@
 
 	Merged from trunk:
 
+	* gdk/quartz/GdkQuartzWindow.c: Prevent hidden windows from being
+	shown without gdk's control when clicking the dock icon.
+
+2008-02-24  Richard Hult  <richard@imendio.com>
+
+	Merged from trunk:
+
 	* gdk/quartz/gdkprivate-quartz.h:
 	* gdk/quartz/gdkeventloop-quartz.c: (got_fd_activity), (poll_func):
 	Use the subtype field for the custom event that is used to wake up

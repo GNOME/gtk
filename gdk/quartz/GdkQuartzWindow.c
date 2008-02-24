@@ -79,9 +79,18 @@
 
 -(void)windowDidBecomeMain:(NSNotification *)aNotification
 {
-  GdkWindow *window;
+  GdkWindow *window = [[self contentView] gdkWindow];
 
-  window = [[self contentView] gdkWindow];
+  if (![self isVisible])
+    {
+      /* Note: This is a hack needed because for unknown reasons, hidden
+       * windows get shown when clicking the dock icon when the application
+       * is not already active.
+       */
+      [self orderOut:nil];
+      return;
+    }
+
   _gdk_quartz_window_did_become_main (window);
 }
 
