@@ -298,7 +298,7 @@ gtk_search_engine_beagle_start (GtkSearchEngine *engine)
   /* We only want files */
   
  
-  text = _gtk_query_get_text (beagle->priv->query))
+  text = _gtk_query_get_text (beagle->priv->query);
   query = g_strconcat (text, " type:File", NULL);
                           
   beagle_query_set_max_hits (beagle->priv->current_query, 1000);
