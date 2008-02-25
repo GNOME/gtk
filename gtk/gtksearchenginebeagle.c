@@ -69,8 +69,6 @@ static GSList *(*beagle_hits_subtracted_response_get_uris) (BeagleHitsSubtracted
 static BeagleQuery *(*beagle_query_new) (void) = NULL;
 static void (*beagle_query_add_text) (BeagleQuery     *query,
 				      const char      *str) = NULL;
-static void (*beagle_query_add_hit_type) (BeagleQuery *query,
-					  const char  *hit_type) = NULL;
 static void (*beagle_query_set_max_hits) (BeagleQuery *query,
 					  gint         max_hits) = NULL;
 static BeagleQueryPartProperty *(*beagle_query_part_property_new) (void) = NULL;
@@ -102,7 +100,6 @@ static struct BeagleDlMapping
   MAP (beagle_hits_subtracted_response_get_uris),
   MAP (beagle_query_new),
   MAP (beagle_query_add_text),
-  MAP (beagle_query_add_hit_type),
   MAP (beagle_query_set_max_hits),
   MAP (beagle_query_part_property_new),
   MAP (beagle_query_part_set_logic),
@@ -277,6 +274,7 @@ gtk_search_engine_beagle_start (GtkSearchEngine *engine)
   GtkSearchEngineBeagle *beagle;
   GError *error;
   gchar *text;
+  gchar *query;
 
   error = NULL;
   beagle = GTK_SEARCH_ENGINE_BEAGLE (engine);
@@ -298,11 +296,13 @@ gtk_search_engine_beagle_start (GtkSearchEngine *engine)
 		    "error", G_CALLBACK (beagle_error), engine);
   
   /* We only want files */
-  beagle_query_add_hit_type (beagle->priv->current_query, "File");
-  beagle_query_set_max_hits (beagle->priv->current_query, 1000);
   
-  text = _gtk_query_get_text (beagle->priv->query);
-  beagle_query_add_text (beagle->priv->current_query, text);
+ 
+  text = _gtk_query_get_text (beagle->priv->query))
+  query = g_strconcat (text, " type:File", NULL);
+                          
+  beagle_query_set_max_hits (beagle->priv->current_query, 1000);
+  beagle_query_add_text (beagle->priv->current_query, query);
   
   beagle->priv->current_query_uri_prefix = _gtk_query_get_location (beagle->priv->query);
   
@@ -315,6 +315,7 @@ gtk_search_engine_beagle_start (GtkSearchEngine *engine)
 
   /* These must live during the lifetime of the query */
   g_free (text);
+  g_free (query);
 }
 
 static void

@@ -1,6 +1,7 @@
 2008-02-25  Matthias Clasen  <mclasen@redhat.com>
 
-	* gtk/gtksearchenginebeagle.c: Look for libbeagle.so.1
+	* gtk/gtksearchenginebeagle.c: Look for libbeagle.so.1, and
+	don't use beagle_query_add_hit_type.
 	
 2008-02-25  Richard Hult  <richard@imendio.com>
 
