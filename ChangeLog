@@ -1,3 +1,8 @@
+2008-02-25  Richard Hult  <richard@imendio.com>
+
+	* gdk/quartz/gdkevents-quartz.c
+	(_gdk_quartz_events_trigger_crossing_events): Fix build on tiger.
+
 2008-02-24  Richard Hult  <richard@imendio.com>
 
 	* gdk/quartz/GdkQuartzWindow.c: Prevent hidden windows from being
