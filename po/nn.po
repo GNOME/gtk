@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: nn\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-02-24 20:59+0100\n"
-"PO-Revision-Date: 2008-02-24 20:58+0100\n"
+"POT-Creation-Date: 2008-02-25 22:24+0100\n"
+"PO-Revision-Date: 2008-02-25 22:24+0100\n"
 "Last-Translator: Åsmund Skjæveland <aasmunds@ulrik.uio.no>\n"
 "Language-Team: Norwegian Nynorsk <i18n-nn@lister.ping.uio.no>\n"
 "MIME-Version: 1.0\n"
@@ -1147,7 +1147,7 @@ msgstr "Gjer X-kall synkrone"
 
 #: ../gtk/gtkaboutdialog.c:264 ../gtk/gtkaboutdialog.c:2101
 msgid "License"
-msgstr ""
+msgstr "Lisens"
 
 #: ../gtk/gtkaboutdialog.c:265
 msgid "The license of the program"
@@ -2005,24 +2005,24 @@ msgid "Bookmark saving failed: %s"
 msgstr "Klarte ikkje lagra bokmerke: %s"
 
 #: ../gtk/gtkfilesystemunix.c:1933 ../gtk/gtkfilesystemwin32.c:2040
-#, fuzzy, c-format
+#, c-format
 msgid "'%s' already exists in the bookmarks list"
-msgstr "finst tm liste"
+msgstr "«%s» finst frå før i bokmerkelista"
 
 #: ../gtk/gtkfilesystemunix.c:2005 ../gtk/gtkfilesystemwin32.c:2112
-#, fuzzy, c-format
+#, c-format
 msgid "'%s' does not exist in the bookmarks list"
-msgstr "ikkje tm liste"
+msgstr "«%s» står ikkje i bokmerkelista"
 
 #: ../gtk/gtkfilesystemwin32.c:1150
-#, fuzzy, c-format
+#, c-format
 msgid "Path is not a folder: '%s'"
-msgstr "Sti er lik ikkje a"
+msgstr "Stien er ikkje ei mappe: «%s»"
 
 #: ../gtk/gtkfilesystemwin32.c:1352
-#, fuzzy, c-format
+#, c-format
 msgid "Network Drive (%s)"
-msgstr "Nettverk Stasjon"
+msgstr "Nettverksstasjon (%s)"
 
 #: ../gtk/gtkfilesystemwin32.c:1374
 #, c-format
@@ -2104,9 +2104,9 @@ msgid "Icon '%s' not present in theme"
 msgstr "Ikonet «%s» er ikkje med i drakta"
 
 #: ../gtk/gtkicontheme.c:2915
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to load icon"
-msgstr "Slo feil ikon"
+msgstr "Klarte ikkje å lasta ikon"
 
 #: ../gtk/gtkimmodule.c:421
 msgid "Default"
@@ -2151,12 +2151,10 @@ msgid "Keys"
 msgstr "Tastar"
 
 #: ../gtk/gtkinputdialog.c:522
-#, fuzzy
 msgid "_X:"
 msgstr "_X:"
 
 #: ../gtk/gtkinputdialog.c:523
-#, fuzzy
 msgid "_Y:"
 msgstr "_Y:"
 
@@ -2211,18 +2209,16 @@ msgstr "Ugyldig URI"
 
 #. Description of --gtk-module=MODULES in --help output
 #: ../gtk/gtkmain.c:427
-#, fuzzy
 msgid "Load additional GTK+ modules"
-msgstr "Last"
+msgstr "Last tilleggsmodular til GTK+"
 
 #. Placeholder in --gtk-module=MODULES in --help output
 #: ../gtk/gtkmain.c:428
 msgid "MODULES"
-msgstr ""
+msgstr "MODULAR"
 
 #. Description of --g-fatal-warnings in --help output
 #: ../gtk/gtkmain.c:430
-#, fuzzy
 msgid "Make all warnings fatal"
 msgstr "Gjer alle åtvaringar fatale"
 
@@ -2246,24 +2242,20 @@ msgid "default:LTR"
 msgstr "default:LTR"
 
 #: ../gtk/gtkmain.c:768
-#, fuzzy
 msgid "GTK+ Options"
-msgstr "Val"
+msgstr "GTK+-innstillingar"
 
 #: ../gtk/gtkmain.c:768
-#, fuzzy
 msgid "Show GTK+ Options"
-msgstr "Vis Val"
+msgstr "Vis GTK+-innstillingar"
 
 #: ../gtk/gtknotebook.c:828
-#, fuzzy
 msgid "Arrow spacing"
-msgstr "Pil"
+msgstr "Luft rundt piler"
 
 #: ../gtk/gtknotebook.c:829
-#, fuzzy
 msgid "Scroll arrow spacing"
-msgstr "pil"
+msgstr "Luft rundt rullepil"
 
 #: ../gtk/gtknotebook.c:4405 ../gtk/gtknotebook.c:6911
 #, c-format
@@ -2272,9 +2264,9 @@ msgstr "Side %u"
 
 #: ../gtk/gtkpagesetup.c:570 ../gtk/gtkpapersize.c:825
 #: ../gtk/gtkpapersize.c:865
-#, fuzzy, c-format
+#, c-format
 msgid "Not a valid page setup file"
-msgstr "a side fil"
+msgstr "Ikkje ei gyldig sideoppsettfil"
 
 #. Translate to the default units to use for presenting
 #. * lengths to the user. Translate to default:inch if you
@@ -2287,14 +2279,14 @@ msgid "default:mm"
 msgstr "standard: mm"
 
 #: ../gtk/gtkpagesetupunixdialog.c:308
-#, fuzzy
 msgid ""
 "<b>Any Printer</b>\n"
 "For portable documents"
-msgstr "<b> Kva som helst Skrivar</b>"
+msgstr ""
+"<b> Kva som helst skrivar</b>\n"
+"for portable dokument"
 
 #: ../gtk/gtkpagesetupunixdialog.c:883 ../gtk/gtkpagesetupunixdialog.c:1395
-#, fuzzy
 msgid "mm"
 msgstr "mm"
 
@@ -2303,7 +2295,7 @@ msgid "inch"
 msgstr ""
 
 #: ../gtk/gtkpagesetupunixdialog.c:904
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Margins:\n"
 " Left: %s %s\n"
@@ -2311,21 +2303,19 @@ msgid ""
 " Top: %s %s\n"
 " Bottom: %s %s"
 msgstr ""
-"Margar\n"
-" Venstre\n"
-" Høgre\n"
-" Topp\n"
-" Botn"
+"Margar:\n"
+" Venstre: %s %s\n"
+" Høgre: %s %s\n"
+" Topp: %s %s\n"
+" Botn: %s %s"
 
 #: ../gtk/gtkpagesetupunixdialog.c:953
-#, fuzzy
 msgid "Manage Custom Sizes..."
-msgstr "Sjølvvald."
+msgstr "Handsama sjølvvalde storleikar ..."
 
 #: ../gtk/gtkpagesetupunixdialog.c:1001
-#, fuzzy
 msgid "_Format for:"
-msgstr "_Format i:"
+msgstr "_Formater for:"
 
 #: ../gtk/gtkpagesetupunixdialog.c:1022
 msgid "_Paper size:"
@@ -2340,22 +2330,19 @@ msgid "Page Setup"
 msgstr "Sideoppsett"
 
 #: ../gtk/gtkpagesetupunixdialog.c:1440
-#, fuzzy
 msgid "Margins from Printer..."
-msgstr "Margar Skrivar."
+msgstr "Margar frå skrivar ..."
 
 #: ../gtk/gtkpagesetupunixdialog.c:1600
-#, fuzzy, c-format
+#, c-format
 msgid "Custom Size %d"
-msgstr "Sjølvvald Storleik"
+msgstr "Sjølvvald storleik %d"
 
 #: ../gtk/gtkpagesetupunixdialog.c:1829
-#, fuzzy
 msgid "Manage Custom Sizes"
-msgstr "Sjølvvald"
+msgstr "Handsama sjølvvalde storleikar"
 
 #: ../gtk/gtkpagesetupunixdialog.c:1925
-#, fuzzy
 msgid "_Width:"
 msgstr "_Breidde:"
 
@@ -2364,9 +2351,8 @@ msgid "_Height:"
 msgstr "_Høgd:"
 
 #: ../gtk/gtkpagesetupunixdialog.c:1949
-#, fuzzy
 msgid "Paper Size"
-msgstr "Papir Storleik"
+msgstr "Papirstorleik"
 
 #: ../gtk/gtkpagesetupunixdialog.c:1959
 msgid "_Top:"
@@ -2385,9 +2371,8 @@ msgid "_Right:"
 msgstr "_Høgre:"
 
 #: ../gtk/gtkpagesetupunixdialog.c:2036
-#, fuzzy
 msgid "Paper Margins"
-msgstr "Papir Margar"
+msgstr "Papirmargar"
 
 #: ../gtk/gtkpathbar.c:148
 #, fuzzy
@@ -2427,9 +2412,8 @@ msgstr ""
 
 #. translators, strip the prefix up to and including the first |
 #: ../gtk/gtkprintoperation.c:1499
-#, fuzzy
 msgid "print operation status|Preparing to print"
-msgstr "Gjer klar"
+msgstr "Gjer klar utskrift"
 
 #. translators, strip the prefix up to and including the first |
 #: ../gtk/gtkprintoperation.c:1501
@@ -2438,25 +2422,21 @@ msgstr ""
 
 #. translators, strip the prefix up to and including the first |
 #: ../gtk/gtkprintoperation.c:1503
-#, fuzzy
 msgid "print operation status|Sending data"
-msgstr "Sender"
+msgstr "Sender data"
 
 #. translators, strip the prefix up to and including the first |
 #: ../gtk/gtkprintoperation.c:1505
-#, fuzzy
 msgid "print operation status|Waiting"
 msgstr "Ventar"
 
 #. translators, strip the prefix up to and including the first |
 #: ../gtk/gtkprintoperation.c:1507
-#, fuzzy
 msgid "print operation status|Blocking on issue"
-msgstr "på"
+msgstr "Stoppa pga. problem"
 
 #. translators, strip the prefix up to and including the first |
 #: ../gtk/gtkprintoperation.c:1509
-#, fuzzy
 msgid "print operation status|Printing"
 msgstr "Skriv ut"
 
@@ -2471,9 +2451,9 @@ msgid "print operation status|Finished with error"
 msgstr ""
 
 #: ../gtk/gtkprintoperation.c:1985
-#, fuzzy, c-format
+#, c-format
 msgid "Preparing %d"
-msgstr "Gjer klar"
+msgstr "Gjer klar %d"
 
 #: ../gtk/gtkprintoperation.c:1987 ../gtk/gtkprintoperation.c:2241
 msgid "Preparing"
@@ -2485,28 +2465,24 @@ msgid "Printing %d"
 msgstr "Skriv ut %d"
 
 #: ../gtk/gtkprintoperation-unix.c:243
-#, fuzzy
 msgid "Error launching preview"
-msgstr "Feil"
+msgstr "Klarte ikkje opna førehandsvising"
 
 #: ../gtk/gtkprintoperation-unix.c:281
-#, fuzzy
 msgid "Error printing"
-msgstr "Feil"
+msgstr "Feil under utskrift"
 
 #: ../gtk/gtkprintoperation-unix.c:388 ../gtk/gtkprintoperation-win32.c:1395
 msgid "Application"
 msgstr "Program"
 
 #: ../gtk/gtkprintoperation-win32.c:564
-#, fuzzy
 msgid "Printer offline"
-msgstr "Skrivar"
+msgstr "Skrivar er fråkopla"
 
 #: ../gtk/gtkprintoperation-win32.c:566
-#, fuzzy
 msgid "Out of paper"
-msgstr "Ut av"
+msgstr "Tom for papir"
 
 #: ../gtk/gtkprintoperation-win32.c:568
 msgid "Paused"
