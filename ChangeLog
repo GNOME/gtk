@@ -1,3 +1,10 @@
+2008-02-25  Richard Hult  <richard@imendio.com>
+
+	Merged from trunk:
+
+	* gdk/quartz/gdkevents-quartz.c
+	(_gdk_quartz_events_trigger_crossing_events): Fix build on tiger.
+
 2008-02-24  Cody Russell  <bratsche@gnome.org>
 
 	* gdk/win32/gdkwindow-win32.c: Fixed declaration in the middle of

@@ -1093,7 +1093,7 @@ _gdk_quartz_events_trigger_crossing_events (void)
   gint y;
   GdkWindow *mouse_window;
   GdkWindowImplQuartz *impl;
-  NSUInteger flags = 0;
+  guint flags = 0;
   NSTimeInterval timestamp = 0;
   NSEvent *current_event;
   NSEvent *nsevent;
