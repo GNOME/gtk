@@ -129,7 +129,10 @@ open_libbeagle (void)
       
       done = TRUE;
  
-      beagle = g_module_open ("libbeagle.so.0", G_MODULE_BIND_LAZY | G_MODULE_BIND_LOCAL);
+      beagle = g_module_open ("libbeagle.so.1", G_MODULE_BIND_LAZY | G_MODULE_BIND_LOCAL);
+      if (!beagle)
+        beagle = g_module_open ("libbeagle.so.0", G_MODULE_BIND_LAZY | G_MODULE_BIND_LOCAL);
+
       if (!beagle)
 	return;
       

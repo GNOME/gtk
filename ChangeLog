@@ -1,3 +1,7 @@
+2008-02-25  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtksearchenginebeagle.c: Look for libbeagle.so.1
+
 2008-02-25  Richard Hult  <richard@imendio.com>
 
 	* gdk/quartz/gdkevents-quartz.c
