@@ -12,7 +12,7 @@ msgstr ""
 "Project-Id-Version: gtk+.HEAD.hu\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2008-02-12 17:51-0500\n"
-"PO-Revision-Date: 2008-02-25 23:53+0100\n"
+"PO-Revision-Date: 2008-02-26 00:01+0100\n"
 "Last-Translator: Gabor Kelemen <kelemeng@gnome.hu>\n"
 "Language-Team: Hungarian <gnome@fsf.hu>\n"
 "MIME-Version: 1.0\n"
@@ -1765,7 +1765,7 @@ msgstr "_Keresés:"
 #: gtk/gtkfilechooserdefault.c:10289
 #, c-format
 msgid "Could not mount %s"
-msgstr "Nem lehet csatlakoztatni a(z) %s-t"
+msgstr "%s nem csatolható"
 
 #: gtk/gtkfilechooserdefault.c:10893
 msgid "Type name of new folder"
@@ -1966,7 +1966,7 @@ msgstr "Hiba a(z) „%s” számára való információszerzés közben: %s"
 #: gtk/gtkfilesystemunix.c:1153 gtk/gtkfilesystemwin32.c:1320
 #, c-format
 msgid "This file system does not support mounting"
-msgstr "A fájlrendszer nem támogatja a csatlakoztatást"
+msgstr "A fájlrendszer nem támogatja a csatolást"
 
 #: gtk/gtkfilesystemunix.c:1165
 msgid "File System"
