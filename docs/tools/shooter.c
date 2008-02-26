@@ -29,7 +29,7 @@ static Window
 find_toplevel_window (Window xid)
 {
   Window root, parent, *children;
-  int nchildren;
+  guint nchildren;
 
   do
     {

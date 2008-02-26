@@ -1,3 +1,9 @@
+2008-02-26  Sven Neumann  <sven@gimp.org>
+
+	* docs/tools/shooter.c (find_toplevel_window)
+	* docs/tools/widgets.c (find_toplevel_window): fixed signedness of
+	argument passed to XQueryTree().
+
 2008-02-25  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtksearchenginebeagle.c: Look for libbeagle.so.1 and
