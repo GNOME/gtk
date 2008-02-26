@@ -1,3 +1,9 @@
+2008-02-26  Michael Natterer  <mitch@imendio.com>
+
+	* gtk/gtktextbufferserialize.c (parse_info_free): don't g_free()
+	the members of info->tag_stack since they are a) gobjects and b)
+	not even owned by us, ugh... Fixes crash when deserializing fails.
+
 2008-02-26  Sven Neumann  <sven@gimp.org>
 
 	* docs/tools/shooter.c (find_toplevel_window)
@@ -45,10 +51,10 @@
 
 2008-02-22  Dominic Lachowicz  <domlachowicz@gmail.com>
 
-	* gdk-pixbuf/queryloaders.c (loader_sanity_check): It's perfectly acceptable
-	for a module to only support the save_to_callback() method if it marks itself
-	as WRITABLE
-	
+	* gdk-pixbuf/queryloaders.c (loader_sanity_check): It's perfectly
+	acceptable for a module to only support the save_to_callback()
+	method if it marks itself as WRITABLE
+
 2008-02-16  Matthias Clasen  <mclasen@redhat.com>
 	
 	* configure.in: Bump version
