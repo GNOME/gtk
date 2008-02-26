@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: nn\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-02-26 19:00+0100\n"
-"PO-Revision-Date: 2008-02-26 19:54+0100\n"
+"POT-Creation-Date: 2008-02-26 20:04+0100\n"
+"PO-Revision-Date: 2008-02-26 20:04+0100\n"
 "Last-Translator: Åsmund Skjæveland <aasmunds@ulrik.uio.no>\n"
 "Language-Team: Norwegian Nynorsk <i18n-nn@lister.ping.uio.no>\n"
 "MIME-Version: 1.0\n"
@@ -248,7 +248,8 @@ msgstr "Biletefila «%s» inneheld ikkje data"
 #: ../gdk-pixbuf/gdk-pixbuf-animation.c:209 ../gdk-pixbuf/gdk-pixbuf-io.c:896
 #: ../gdk-pixbuf/gdk-pixbuf-io.c:1156 ../tests/testfilechooser.c:263
 #, c-format
-msgid "Failed to load image '%s': reason not known, probably a corrupt image file"
+msgid ""
+"Failed to load image '%s': reason not known, probably a corrupt image file"
 msgstr ""
 "Klarte ikkje å lasta biletet «%s». Årsaken er ukjent, men truleg ei øydelagt "
 "biletefil"
@@ -624,8 +625,10 @@ msgstr ""
 
 #: ../gdk-pixbuf/io-jpeg.c:1148
 #, c-format
-msgid "JPEG quality must be a value between 0 and 100; value '%d' is not allowed."
-msgstr "JPEG-kvalitet må vera eit tal mellom 0 og 100. Verdien «%d» er ikkje tillate."
+msgid ""
+"JPEG quality must be a value between 0 and 100; value '%d' is not allowed."
+msgstr ""
+"JPEG-kvalitet må vera eit tal mellom 0 og 100. Verdien «%d» er ikkje tillate."
 
 #: ../gdk-pixbuf/io-jpeg.c:1311
 msgid "The JPEG image format"
@@ -744,7 +747,8 @@ msgstr "Fatal feil under lesing av PNG-biletefil: %s"
 
 #: ../gdk-pixbuf/io-png.c:825
 #, c-format
-msgid "Keys for PNG text chunks must have at least 1 and at most 79 characters."
+msgid ""
+"Keys for PNG text chunks must have at least 1 and at most 79 characters."
 msgstr "Nøklane til PNG-tekstbitar må ha mellom 1 og 79 teikn."
 
 #: ../gdk-pixbuf/io-png.c:833
@@ -1270,7 +1274,7 @@ msgstr "Ugyldig rotelement: «%s»"
 #: ../gtk/gtkbuilderparser.c:746
 #, c-format
 msgid "Unhandled tag: '%s'"
-msgstr ""
+msgstr "Ikkje handsama tagg: «%s»"
 
 #. Translate to calendar:YM if you want years to be displayed
 #. * before months; otherwise translate to calendar:MY.
@@ -1623,7 +1627,8 @@ msgstr "Fjern bokmerket «%s»"
 #: ../gtk/gtkfilechooserdefault.c:3532
 #, c-format
 msgid "Could not add a bookmark for '%s' because it is an invalid path name."
-msgstr "Klarte ikkje å leggja til bokmerke for «%s» fordi det er eit ugyldig stinamn."
+msgstr ""
+"Klarte ikkje å leggja til bokmerke for «%s» fordi det er eit ugyldig stinamn."
 
 #: ../gtk/gtkfilechooserdefault.c:3771
 msgid "Remove"
@@ -1744,7 +1749,8 @@ msgstr "Ei fil med namnet «%s» finst frå før. Vil du byta henne ut?"
 
 #: ../gtk/gtkfilechooserdefault.c:8091
 #, c-format
-msgid "The file already exists in \"%s\".  Replacing it will overwrite its contents."
+msgid ""
+"The file already exists in \"%s\".  Replacing it will overwrite its contents."
 msgstr "Fila finst frå før i «%s». Å byta henne ut vil skriva over innhaldet."
 
 #: ../gtk/gtkfilechooserdefault.c:8096
@@ -1865,7 +1871,8 @@ msgstr "_Gje fila nytt namn"
 
 #: ../gtk/gtkfilesel.c:1406
 #, c-format
-msgid "The folder name \"%s\" contains symbols that are not allowed in filenames"
+msgid ""
+"The folder name \"%s\" contains symbols that are not allowed in filenames"
 msgstr "Mappenamnet «%s» inneheld symbol som ikkje er tillatne i filnamn"
 
 #: ../gtk/gtkfilesel.c:1451
@@ -2186,11 +2193,11 @@ msgstr "_Tøm"
 
 #: ../gtk/gtklinkbutton.c:141
 msgid "URI"
-msgstr ""
+msgstr "URI"
 
 #: ../gtk/gtklinkbutton.c:142
 msgid "The URI bound to this button"
-msgstr ""
+msgstr "URI-en bunden til denne knappen"
 
 #: ../gtk/gtklinkbutton.c:396
 msgid "Copy URL"
@@ -2218,12 +2225,12 @@ msgstr "Gjer alle åtvaringar fatale"
 #. Description of --gtk-debug=FLAGS in --help output
 #: ../gtk/gtkmain.c:433
 msgid "GTK+ debugging flags to set"
-msgstr ""
+msgstr "GTK+-feilsøkingsflagg å slå på"
 
 #. Description of --gtk-no-debug=FLAGS in --help output
 #: ../gtk/gtkmain.c:436
 msgid "GTK+ debugging flags to unset"
-msgstr ""
+msgstr "GTK+-feilsøkingsflagg å slå av"
 
 #. Translate to default:RTL if you want your widgets
 #. * to be RTL, otherwise translate to default:LTR.
@@ -2285,7 +2292,7 @@ msgstr "mm"
 
 #: ../gtk/gtkpagesetupunixdialog.c:885 ../gtk/gtkpagesetupunixdialog.c:1393
 msgid "inch"
-msgstr ""
+msgstr "tomme"
 
 #: ../gtk/gtkpagesetupunixdialog.c:904
 #, c-format
@@ -2381,7 +2388,7 @@ msgstr "Filsystemrot"
 
 #: ../gtk/gtkprinteroptionwidget.c:685
 msgid "Not available"
-msgstr ""
+msgstr "Ikkje tilgjengeleg"
 
 #: ../gtk/gtkprinteroptionwidget.c:798
 msgid "_Save in folder:"
@@ -2394,12 +2401,12 @@ msgstr "Lagra i _mappe:"
 #: ../gtk/gtkprintoperation.c:171
 #, c-format
 msgid "%s job #%d"
-msgstr ""
+msgstr "%s, jobb %d"
 
 #. translators, strip the prefix up to and including the first |
 #: ../gtk/gtkprintoperation.c:1497
 msgid "print operation status|Initial state"
-msgstr ""
+msgstr "Status ved start"
 
 #. translators, strip the prefix up to and including the first |
 #: ../gtk/gtkprintoperation.c:1499
@@ -2409,7 +2416,7 @@ msgstr "Gjer klar utskrift"
 #. translators, strip the prefix up to and including the first |
 #: ../gtk/gtkprintoperation.c:1501
 msgid "print operation status|Generating data"
-msgstr ""
+msgstr "Genererer data"
 
 #. translators, strip the prefix up to and including the first |
 #: ../gtk/gtkprintoperation.c:1503
@@ -2434,12 +2441,12 @@ msgstr "Skriv ut"
 #. translators, strip the prefix up to and including the first |
 #: ../gtk/gtkprintoperation.c:1511
 msgid "print operation status|Finished"
-msgstr ""
+msgstr "Ferdig"
 
 #. translators, strip the prefix up to and including the first |
 #: ../gtk/gtkprintoperation.c:1513
 msgid "print operation status|Finished with error"
-msgstr ""
+msgstr "Ferdig, men med feil"
 
 #: ../gtk/gtkprintoperation.c:1985
 #, c-format
@@ -2481,7 +2488,7 @@ msgstr "Pausa"
 
 #: ../gtk/gtkprintoperation-win32.c:570
 msgid "Need user intervention"
-msgstr ""
+msgstr "Treng inngrep frå brukar"
 
 #: ../gtk/gtkprintoperation-win32.c:670
 msgid "Custom size"
@@ -2622,7 +2629,7 @@ msgstr "Papir_kjelde:"
 
 #: ../gtk/gtkprintunixdialog.c:2149
 msgid "Output t_ray:"
-msgstr ""
+msgstr "Utsk_uff:"
 
 #: ../gtk/gtkprintunixdialog.c:2200
 msgid "Job Details"
@@ -2634,7 +2641,7 @@ msgstr "Pri_oritet:"
 
 #: ../gtk/gtkprintunixdialog.c:2221
 msgid "_Billing info:"
-msgstr ""
+msgstr "_Fakturainfo:"
 
 #: ../gtk/gtkprintunixdialog.c:2239
 msgid "Print Document"
@@ -2646,7 +2653,7 @@ msgstr "_No"
 
 #: ../gtk/gtkprintunixdialog.c:2252
 msgid "A_t:"
-msgstr ""
+msgstr "_Klokka:"
 
 #: ../gtk/gtkprintunixdialog.c:2267
 msgid "On _hold"
@@ -2682,7 +2689,7 @@ msgstr "Farge"
 
 #: ../gtk/gtkprintunixdialog.c:2429
 msgid "Finishing"
-msgstr ""
+msgstr "Avsluttar"
 
 #: ../gtk/gtkprintunixdialog.c:2439
 msgid "Some of the settings in the dialog conflict"
@@ -2911,7 +2918,7 @@ msgstr "_Fullskjerm"
 
 #: ../gtk/gtkstock.c:317
 msgid "_Leave Fullscreen"
-msgstr ""
+msgstr "_Gå ut av fullskjerm"
 
 #. translators, strip the prefix up to and including the first |
 #: ../gtk/gtkstock.c:319
@@ -2936,7 +2943,7 @@ msgstr "_Topp"
 #. translators, strip the prefix up to and including the first |
 #: ../gtk/gtkstock.c:327
 msgid "Navigation|_Back"
-msgstr ""
+msgstr "_Tilbake"
 
 #. translators, strip the prefix up to and including the first |
 #: ../gtk/gtkstock.c:329
@@ -3075,15 +3082,15 @@ msgstr "Liggjande"
 
 #: ../gtk/gtkstock.c:374
 msgid "Portrait"
-msgstr "Portrett"
+msgstr "Ståande"
 
 #: ../gtk/gtkstock.c:375
 msgid "Reverse landscape"
-msgstr ""
+msgstr "Omvendt ståande"
 
 #: ../gtk/gtkstock.c:376
 msgid "Reverse portrait"
-msgstr ""
+msgstr "Omvent "
 
 #: ../gtk/gtkstock.c:377
 msgid "_Paste"
@@ -3221,7 +3228,8 @@ msgstr "Elementet <%s> har ugyldig id «%s»"
 #: ../gtk/gtktextbufferserialize.c:856
 #, c-format
 msgid "<%s> element has neither a \"name\" nor an \"id\" attribute"
-msgstr "Elementet <%s> har korkje ein «name»-attributt eller ein «id»-attributt"
+msgstr ""
+"Elementet <%s> har korkje ein «name»-attributt eller ein «id»-attributt"
 
 #: ../gtk/gtktextbufferserialize.c:943
 #, c-format
@@ -3265,8 +3273,10 @@ msgstr "«%s» er ikkje eit gyldig attributtnamn"
 
 #: ../gtk/gtktextbufferserialize.c:1193
 #, c-format
-msgid "\"%s\" could not be converted to a value of type \"%s\" for attribute \"%s\""
-msgstr "«%s« kunne ikkje konverterast til ein verdi av type «%s» for attributten «%s»"
+msgid ""
+"\"%s\" could not be converted to a value of type \"%s\" for attribute \"%s\""
+msgstr ""
+"«%s« kunne ikkje konverterast til ein verdi av type «%s» for attributten «%s»"
 
 #: ../gtk/gtktextbufferserialize.c:1202
 #, c-format
@@ -3304,8 +3314,10 @@ msgstr "Serialiserte data er ugyldige"
 
 #: ../gtk/gtktextbufferserialize.c:1857
 #, c-format
-msgid "Serialized data is malformed. First section isn't GTKTEXTBUFFERCONTENTS-0001"
-msgstr "Serialiserte data er ugyldige. Fyrste del er ikkje GTKTEXTBUFFERCONTENTS-0001"
+msgid ""
+"Serialized data is malformed. First section isn't GTKTEXTBUFFERCONTENTS-0001"
+msgstr ""
+"Serialiserte data er ugyldige. Fyrste del er ikkje GTKTEXTBUFFERCONTENTS-0001"
 
 #: ../gtk/gtktextutil.c:60
 msgid "LRM _Left-to-right mark"
@@ -3389,7 +3401,7 @@ msgstr "Høgare lyd"
 
 #: ../gtk/gtkvolumebutton.c:139
 msgid "Muted"
-msgstr ""
+msgstr "Dempa"
 
 #: ../gtk/gtkvolumebutton.c:143
 msgid "Full Volume"
@@ -3410,12 +3422,12 @@ msgstr "%d %%"
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:5
 msgid "paper size|asme_f"
-msgstr ""
+msgstr "asme_f"
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:7
 msgid "paper size|A0x2"
-msgstr ""
+msgstr "A0x2"
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:9
@@ -3425,7 +3437,7 @@ msgstr "A0"
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:11
 msgid "paper size|A0x3"
-msgstr ""
+msgstr "A0×3"
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:13
@@ -3440,12 +3452,12 @@ msgstr "A10"
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:17
 msgid "paper size|A1x3"
-msgstr ""
+msgstr "A1×3"
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:19
 msgid "paper size|A1x4"
-msgstr ""
+msgstr "A1×4"
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:21
@@ -3455,17 +3467,17 @@ msgstr "A2"
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:23
 msgid "paper size|A2x3"
-msgstr ""
+msgstr "A2×3"
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:25
 msgid "paper size|A2x4"
-msgstr ""
+msgstr "A2×4"
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:27
 msgid "paper size|A2x5"
-msgstr ""
+msgstr "A2×5"
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:29
@@ -3480,27 +3492,27 @@ msgstr "A3 ekstra"
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:33
 msgid "paper size|A3x3"
-msgstr ""
+msgstr "A3×3"
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:35
 msgid "paper size|A3x4"
-msgstr ""
+msgstr "A3×4"
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:37
 msgid "paper size|A3x5"
-msgstr ""
+msgstr "A3×5"
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:39
 msgid "paper size|A3x6"
-msgstr ""
+msgstr "A3×6"
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:41
 msgid "paper size|A3x7"
-msgstr ""
+msgstr "A3×7"
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:43
@@ -3520,37 +3532,37 @@ msgstr "A4 tab"
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:49
 msgid "paper size|A4x3"
-msgstr ""
+msgstr "A4×3"
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:51
 msgid "paper size|A4x4"
-msgstr ""
+msgstr "A4×4"
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:53
 msgid "paper size|A4x5"
-msgstr ""
+msgstr "A4×5"
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:55
 msgid "paper size|A4x6"
-msgstr ""
+msgstr "A4×6"
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:57
 msgid "paper size|A4x7"
-msgstr ""
+msgstr "A4×7"
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:59
 msgid "paper size|A4x8"
-msgstr ""
+msgstr "A4×8"
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:61
 msgid "paper size|A4x9"
-msgstr ""
+msgstr "A4×9"
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:63
@@ -3715,147 +3727,147 @@ msgstr "C9"
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:127
 msgid "paper size|DL Envelope"
-msgstr ""
+msgstr "DL Envelope"
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:129
 msgid "paper size|RA0"
-msgstr ""
+msgstr "RA0"
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:131
 msgid "paper size|RA1"
-msgstr ""
+msgstr "RA1"
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:133
 msgid "paper size|RA2"
-msgstr ""
+msgstr "RA2"
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:135
 msgid "paper size|SRA0"
-msgstr ""
+msgstr "SRA0"
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:137
 msgid "paper size|SRA1"
-msgstr ""
+msgstr "SRA1"
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:139
 msgid "paper size|SRA2"
-msgstr ""
+msgstr "SRA2"
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:141
 msgid "paper size|JB0"
-msgstr ""
+msgstr "JB0"
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:143
 msgid "paper size|JB1"
-msgstr ""
+msgstr "JB1"
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:145
 msgid "paper size|JB10"
-msgstr ""
+msgstr "JB10"
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:147
 msgid "paper size|JB2"
-msgstr ""
+msgstr "JB2"
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:149
 msgid "paper size|JB3"
-msgstr ""
+msgstr "JB3"
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:151
 msgid "paper size|JB4"
-msgstr ""
+msgstr "JB4"
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:153
 msgid "paper size|JB5"
-msgstr ""
+msgstr "JB5"
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:155
 msgid "paper size|JB6"
-msgstr ""
+msgstr "JB6"
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:157
 msgid "paper size|JB7"
-msgstr ""
+msgstr "JB7"
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:159
 msgid "paper size|JB8"
-msgstr ""
+msgstr "JB8"
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:161
 msgid "paper size|JB9"
-msgstr ""
+msgstr "JB9"
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:163
 msgid "paper size|jis exec"
-msgstr ""
+msgstr "jis exec"
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:165
 msgid "paper size|Choukei 2 Envelope"
-msgstr ""
+msgstr "Choukei 2 Envelope"
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:167
 msgid "paper size|Choukei 3 Envelope"
-msgstr ""
+msgstr "Choukei 3 Envelope"
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:169
 msgid "paper size|Choukei 4 Envelope"
-msgstr ""
+msgstr "Choukei 4 Envelope"
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:171
 msgid "paper size|hagaki (postcard)"
-msgstr ""
+msgstr "hagaki (postkort)"
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:173
 msgid "paper size|kahu Envelope"
-msgstr ""
+msgstr "kahu Envelope"
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:175
 msgid "paper size|kaku2 Envelope"
-msgstr ""
+msgstr "kaku2 Envelope"
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:177
 msgid "paper size|oufuku (reply postcard)"
-msgstr ""
+msgstr "oufuku (svarpostkort)"
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:179
 msgid "paper size|you4 Envelope"
-msgstr ""
+msgstr "you4 Envelope"
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:181
 msgid "paper size|10x11"
-msgstr ""
+msgstr "10×11"
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:183
 msgid "paper size|10x13"
-msgstr ""
+msgstr "10×13"
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:185
@@ -3865,47 +3877,47 @@ msgstr "10×14"
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:187 ../gtk/paper_names_offsets.c:189
 msgid "paper size|10x15"
-msgstr ""
+msgstr "10×15"
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:191
 msgid "paper size|11x12"
-msgstr ""
+msgstr "11×12"
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:193
 msgid "paper size|11x15"
-msgstr ""
+msgstr "11×15"
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:195
 msgid "paper size|12x19"
-msgstr ""
+msgstr "12×19"
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:197
 msgid "paper size|5x7"
-msgstr ""
+msgstr "5×7"
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:199
 msgid "paper size|6x9 Envelope"
-msgstr ""
+msgstr "6×9 Envelope"
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:201
 msgid "paper size|7x9 Envelope"
-msgstr ""
+msgstr "7×9 Envelope"
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:203
 msgid "paper size|9x11 Envelope"
-msgstr ""
+msgstr "9×11 Envelope"
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:205
 msgid "paper size|a2 Envelope"
-msgstr ""
+msgstr "a2 Envelope"
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:207
@@ -3940,17 +3952,17 @@ msgstr "b-plus"
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:219
 msgid "paper size|c"
-msgstr ""
+msgstr "c"
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:221
 msgid "paper size|c5 Envelope"
-msgstr ""
+msgstr "c5 Envelope"
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:223
 msgid "paper size|d"
-msgstr ""
+msgstr "d"
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:225
@@ -3960,12 +3972,12 @@ msgstr "e"
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:227
 msgid "paper size|edp"
-msgstr ""
+msgstr "edp"
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:229
 msgid "paper size|European edp"
-msgstr ""
+msgstr "European edp"
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:231
@@ -3975,17 +3987,17 @@ msgstr "Executive"
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:233
 msgid "paper size|f"
-msgstr ""
+msgstr "f"
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:235
 msgid "paper size|FanFold European"
-msgstr ""
+msgstr "FanFold European"
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:237
 msgid "paper size|FanFold US"
-msgstr ""
+msgstr "FanFold US"
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:239
@@ -4025,7 +4037,7 @@ msgstr "Index 5×8"
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:253
 msgid "paper size|Invoice"
-msgstr ""
+msgstr "Invoice"
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:255
@@ -4060,32 +4072,32 @@ msgstr "US Letter Plus"
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:267
 msgid "paper size|Monarch Envelope"
-msgstr ""
+msgstr "Monarch Envelope"
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:269
 msgid "paper size|#10 Envelope"
-msgstr ""
+msgstr "#10 Envelope"
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:271
 msgid "paper size|#11 Envelope"
-msgstr ""
+msgstr "#11 Envelope"
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:273
 msgid "paper size|#12 Envelope"
-msgstr ""
+msgstr "#12 Envelope"
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:275
 msgid "paper size|#14 Envelope"
-msgstr ""
+msgstr "#14 Envelope"
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:277
 msgid "paper size|#9 Envelope"
-msgstr ""
+msgstr "#9 Envelope"
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:279
@@ -4115,7 +4127,7 @@ msgstr "Wide Format"
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:289
 msgid "paper size|Dai-pa-kai"
-msgstr ""
+msgstr "Dai-pa-kai"
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:291
@@ -4130,7 +4142,7 @@ msgstr "Folio sp"
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:295
 msgid "paper size|Invite Envelope"
-msgstr ""
+msgstr "Invite Envelope"
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:297
@@ -4140,17 +4152,17 @@ msgstr "Italian Envelope"
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:299
 msgid "paper size|juuro-ku-kai"
-msgstr ""
+msgstr "juuro-ku-kai"
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:301
 msgid "paper size|pa-kai"
-msgstr ""
+msgstr "pa-kai"
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:303
 msgid "paper size|Postfix Envelope"
-msgstr ""
+msgstr "Postfix Envelope"
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:305
@@ -4160,57 +4172,57 @@ msgstr "Small Photo"
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:307
 msgid "paper size|prc1 Envelope"
-msgstr ""
+msgstr "prc1 Envelope"
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:309
 msgid "paper size|prc10 Envelope"
-msgstr ""
+msgstr "prc10 Envelope"
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:311
 msgid "paper size|prc 16k"
-msgstr ""
+msgstr "prc 16k"
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:313
 msgid "paper size|prc2 Envelope"
-msgstr ""
+msgstr "prc2 Envelope"
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:315
 msgid "paper size|prc3 Envelope"
-msgstr ""
+msgstr "prc3 Envelope"
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:317
 msgid "paper size|prc 32k"
-msgstr ""
+msgstr "prc 32k"
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:319
 msgid "paper size|prc4 Envelope"
-msgstr ""
+msgstr "prc4 Envelope"
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:321
 msgid "paper size|prc5 Envelope"
-msgstr ""
+msgstr "prc5 Envelope"
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:323
 msgid "paper size|prc6 Envelope"
-msgstr ""
+msgstr "prc6 Envelope"
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:325
 msgid "paper size|prc7 Envelope"
-msgstr ""
+msgstr "prc7 Envelope"
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:327
 msgid "paper size|prc8 Envelope"
-msgstr ""
+msgstr "prc8 Envelope"
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:329
@@ -4295,7 +4307,7 @@ msgstr "Lag ei C-topptekstfil"
 
 #: ../gtk/updateiconcache.c:1577
 msgid "Turn off verbose output"
-msgstr ""
+msgstr "Slå av ordrik utskrift"
 
 #: ../gtk/updateiconcache.c:1578
 msgid "Validate existing icon cache"
@@ -4318,7 +4330,8 @@ msgid ""
 "If you really want to create an icon cache here, use --ignore-theme-index.\n"
 msgstr ""
 "Ingen draktindeksfiler i «%s».\n"
-"Viss du verkeleg vil laga eit ikonbuffer her, må du bruka «--ignore-theme-index».\n"
+"Viss du verkeleg vil laga eit ikonbuffer her, må du bruka «--ignore-theme-"
+"index».\n"
 
 #. ID
 #: ../modules/input/imam-et.c:454
@@ -4348,7 +4361,7 @@ msgstr "IPA"
 #. ID
 #: ../modules/input/immultipress.c:31
 msgid "Multipress"
-msgstr ""
+msgstr "Multipress"
 
 #. ID
 #: ../modules/input/imthai.c:35
@@ -4377,7 +4390,7 @@ msgstr "X-inndatametode"
 
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:1533
 msgid "Two Sided"
-msgstr ""
+msgstr "Dobbeltsidig"
 
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:1534
 msgid "Paper Type"
@@ -4389,7 +4402,7 @@ msgstr "Papirkjelde"
 
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:1536
 msgid "Output Tray"
-msgstr ""
+msgstr "Utskuff"
 
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:1545
 msgid "One Sided"
@@ -4430,7 +4443,7 @@ msgstr "Ingen"
 
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:2216
 msgid "Classified"
-msgstr ""
+msgstr "Begrensa"
 
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:2216
 msgid "Confidential"
@@ -4442,7 +4455,7 @@ msgstr "Hemmeleg"
 
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:2216
 msgid "Standard"
-msgstr ""
+msgstr "Standard"
 
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:2216
 msgid "Top Secret"
@@ -4450,7 +4463,7 @@ msgstr "Topphemmeleg"
 
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:2216
 msgid "Unclassified"
-msgstr ""
+msgstr "Ikkje begrensa"
 
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:2302
 #, c-format
@@ -4461,7 +4474,7 @@ msgstr "Sjølvvald %.2fx%.2f"
 #: ../modules/printbackends/file/gtkprintbackendfile.c:236
 #, c-format
 msgid "output.%s"
-msgstr ""
+msgstr "utdata.%s"
 
 #: ../modules/printbackends/file/gtkprintbackendfile.c:465
 msgid "Print to File"
@@ -4469,7 +4482,7 @@ msgstr "Skriv til fil"
 
 #: ../modules/printbackends/file/gtkprintbackendfile.c:542
 msgid "PDF"
-msgstr ""
+msgstr "PDF"
 
 #: ../modules/printbackends/file/gtkprintbackendfile.c:542
 msgid "Postscript"
@@ -4486,7 +4499,7 @@ msgstr "Fil"
 
 #: ../modules/printbackends/file/gtkprintbackendfile.c:609
 msgid "_Output format"
-msgstr ""
+msgstr "_Utdataformat"
 
 #: ../modules/printbackends/lpr/gtkprintbackendlpr.c:399
 msgid "Print to LPR"
@@ -4504,7 +4517,7 @@ msgstr "Kommandolinje"
 #: ../modules/printbackends/test/gtkprintbackendtest.c:235
 #, c-format
 msgid "test-output.%s"
-msgstr ""
+msgstr "test-utdata.%s"
 
 #: ../modules/printbackends/test/gtkprintbackendtest.c:465
 msgid "Print to Test Printer"
@@ -4514,4 +4527,3 @@ msgstr "Skriv til testskrivar"
 #, c-format
 msgid "Could not get information for file '%s': %s"
 msgstr "Klarte ikkje å henta informasjon om fila «%s»: %s"
-
