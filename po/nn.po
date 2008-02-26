@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: nn\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-02-25 22:24+0100\n"
-"PO-Revision-Date: 2008-02-25 22:24+0100\n"
+"POT-Creation-Date: 2008-02-26 19:00+0100\n"
+"PO-Revision-Date: 2008-02-26 19:54+0100\n"
 "Last-Translator: Åsmund Skjæveland <aasmunds@ulrik.uio.no>\n"
 "Language-Team: Norwegian Nynorsk <i18n-nn@lister.ping.uio.no>\n"
 "MIME-Version: 1.0\n"
@@ -248,8 +248,7 @@ msgstr "Biletefila «%s» inneheld ikkje data"
 #: ../gdk-pixbuf/gdk-pixbuf-animation.c:209 ../gdk-pixbuf/gdk-pixbuf-io.c:896
 #: ../gdk-pixbuf/gdk-pixbuf-io.c:1156 ../tests/testfilechooser.c:263
 #, c-format
-msgid ""
-"Failed to load image '%s': reason not known, probably a corrupt image file"
+msgid "Failed to load image '%s': reason not known, probably a corrupt image file"
 msgstr ""
 "Klarte ikkje å lasta biletet «%s». Årsaken er ukjent, men truleg ei øydelagt "
 "biletefil"
@@ -625,10 +624,8 @@ msgstr ""
 
 #: ../gdk-pixbuf/io-jpeg.c:1148
 #, c-format
-msgid ""
-"JPEG quality must be a value between 0 and 100; value '%d' is not allowed."
-msgstr ""
-"JPEG-kvalitet må vera eit tal mellom 0 og 100. Verdien «%d» er ikkje tillate."
+msgid "JPEG quality must be a value between 0 and 100; value '%d' is not allowed."
+msgstr "JPEG-kvalitet må vera eit tal mellom 0 og 100. Verdien «%d» er ikkje tillate."
 
 #: ../gdk-pixbuf/io-jpeg.c:1311
 msgid "The JPEG image format"
@@ -747,8 +744,7 @@ msgstr "Fatal feil under lesing av PNG-biletefil: %s"
 
 #: ../gdk-pixbuf/io-png.c:825
 #, c-format
-msgid ""
-"Keys for PNG text chunks must have at least 1 and at most 79 characters."
+msgid "Keys for PNG text chunks must have at least 1 and at most 79 characters."
 msgstr "Nøklane til PNG-tekstbitar må ha mellom 1 og 79 teikn."
 
 #: ../gdk-pixbuf/io-png.c:833
@@ -1161,7 +1157,7 @@ msgstr "_Heider og ære"
 #. Add the license button
 #: ../gtk/gtkaboutdialog.c:513
 msgid "_License"
-msgstr ""
+msgstr "_Lisens"
 
 #: ../gtk/gtkaboutdialog.c:742
 #, c-format
@@ -1627,8 +1623,7 @@ msgstr "Fjern bokmerket «%s»"
 #: ../gtk/gtkfilechooserdefault.c:3532
 #, c-format
 msgid "Could not add a bookmark for '%s' because it is an invalid path name."
-msgstr ""
-"Klarte ikkje å leggja til bokmerke for «%s» fordi det er eit ugyldig stinamn."
+msgstr "Klarte ikkje å leggja til bokmerke for «%s» fordi det er eit ugyldig stinamn."
 
 #: ../gtk/gtkfilechooserdefault.c:3771
 msgid "Remove"
@@ -1749,8 +1744,7 @@ msgstr "Ei fil med namnet «%s» finst frå før. Vil du byta henne ut?"
 
 #: ../gtk/gtkfilechooserdefault.c:8091
 #, c-format
-msgid ""
-"The file already exists in \"%s\".  Replacing it will overwrite its contents."
+msgid "The file already exists in \"%s\".  Replacing it will overwrite its contents."
 msgstr "Fila finst frå før i «%s». Å byta henne ut vil skriva over innhaldet."
 
 #: ../gtk/gtkfilechooserdefault.c:8096
@@ -1871,8 +1865,7 @@ msgstr "_Gje fila nytt namn"
 
 #: ../gtk/gtkfilesel.c:1406
 #, c-format
-msgid ""
-"The folder name \"%s\" contains symbols that are not allowed in filenames"
+msgid "The folder name \"%s\" contains symbols that are not allowed in filenames"
 msgstr "Mappenamnet «%s» inneheld symbol som ikkje er tillatne i filnamn"
 
 #: ../gtk/gtkfilesel.c:1451
@@ -2375,14 +2368,12 @@ msgid "Paper Margins"
 msgstr "Papirmargar"
 
 #: ../gtk/gtkpathbar.c:148
-#, fuzzy
 msgid "Up Path"
-msgstr "Opp Sti"
+msgstr "Opp stien"
 
 #: ../gtk/gtkpathbar.c:150
-#, fuzzy
 msgid "Down Path"
-msgstr "Ned Sti"
+msgstr "Ned stien"
 
 #: ../gtk/gtkpathbar.c:1377
 msgid "File System Root"
@@ -2493,9 +2484,8 @@ msgid "Need user intervention"
 msgstr ""
 
 #: ../gtk/gtkprintoperation-win32.c:670
-#, fuzzy
 msgid "Custom size"
-msgstr "Sjølvvald"
+msgstr "Sjølvvald storleik"
 
 #: ../gtk/gtkprintoperation-win32.c:1485 ../gtk/gtkprintoperation-win32.c:1508
 #: ../gtk/gtkprintoperation-win32.c:1556
@@ -2504,29 +2494,29 @@ msgid "Not enough free memory"
 msgstr "Ikkje nok ledig minne"
 
 #: ../gtk/gtkprintoperation-win32.c:1561
-#, fuzzy, c-format
+#, c-format
 msgid "Invalid argument to PrintDlgEx"
-msgstr "Ugyldig"
+msgstr "Ugyldig argument til PrintDlgEx"
 
 #: ../gtk/gtkprintoperation-win32.c:1566
-#, fuzzy, c-format
+#, c-format
 msgid "Invalid pointer to PrintDlgEx"
-msgstr "Ugyldig"
+msgstr "Ugyldig peikar til PrintDlgEx"
 
 #: ../gtk/gtkprintoperation-win32.c:1571
-#, fuzzy, c-format
+#, c-format
 msgid "Invalid handle to PrintDlgEx"
-msgstr "Ugyldig"
+msgstr "Ugyldig handtak til PrintDlgEx"
 
 #: ../gtk/gtkprintoperation-win32.c:1576
 #, c-format
 msgid "Unspecified error"
-msgstr ""
+msgstr "Uspesifisert feil"
 
 #: ../gtk/gtkprintoperation-win32.c:1627
-#, fuzzy, c-format
+#, c-format
 msgid "Error from StartDoc"
-msgstr "Feil"
+msgstr "Feil frå StartDoc"
 
 #: ../gtk/gtkprintunixdialog.c:1505
 msgid "Printer"
@@ -2537,7 +2527,6 @@ msgid "Location"
 msgstr "Adresse"
 
 #: ../gtk/gtkprintunixdialog.c:1522
-#, fuzzy
 msgid "Status"
 msgstr "Status"
 
@@ -2554,29 +2543,25 @@ msgid "C_urrent"
 msgstr "D_enne"
 
 #: ../gtk/gtkprintunixdialog.c:1564
-#, fuzzy
 msgid "Ra_nge"
-msgstr "Område"
+msgstr "Om_råde"
 
 #: ../gtk/gtkprintunixdialog.c:1565
-#, fuzzy
 msgid ""
 "Specify one or more page ranges,\n"
 " e.g. 1-3,7,11"
 msgstr ""
-"side\n"
-" e"
+"Oppgje eitt eller fleire sideområde,\n"
+"t.d. 1-3,7,11"
 
 #: ../gtk/gtkprintunixdialog.c:1584
-#, fuzzy
 msgid "Copies"
 msgstr "Kopiar"
 
 #. FIXME chpe: too much space between Copies and spinbutton, put those 2 in a hbox and make it span 2 columns
 #: ../gtk/gtkprintunixdialog.c:1589
-#, fuzzy
 msgid "Copie_s:"
-msgstr "Kopiar:"
+msgstr "Kopi_ar:"
 
 #: ../gtk/gtkprintunixdialog.c:1607
 msgid "C_ollate"
@@ -2587,14 +2572,12 @@ msgid "_Reverse"
 msgstr "_Baklengs"
 
 #: ../gtk/gtkprintunixdialog.c:1632
-#, fuzzy
 msgid "General"
-msgstr "Allmennt"
+msgstr "Allment"
 
 #: ../gtk/gtkprintunixdialog.c:2033
-#, fuzzy
 msgid "Layout"
-msgstr "Stil"
+msgstr "Utforming"
 
 #: ../gtk/gtkprintunixdialog.c:2037
 msgid "Pages per _side:"
@@ -2610,24 +2593,22 @@ msgstr "B_erre skriv ut:"
 
 #. In enum order
 #: ../gtk/gtkprintunixdialog.c:2083
-#, fuzzy
 msgid "All sheets"
-msgstr "Alle"
+msgstr "Alle arka"
 
 #: ../gtk/gtkprintunixdialog.c:2084
 msgid "Even sheets"
-msgstr ""
+msgstr "Partalsarka"
 
 #: ../gtk/gtkprintunixdialog.c:2085
 msgid "Odd sheets"
-msgstr ""
+msgstr "Oddetalsarka"
 
 #: ../gtk/gtkprintunixdialog.c:2088
 msgid "Sc_ale:"
 msgstr "S_kala:"
 
 #: ../gtk/gtkprintunixdialog.c:2115
-#, fuzzy
 msgid "Paper"
 msgstr "Papir"
 
@@ -2644,12 +2625,10 @@ msgid "Output t_ray:"
 msgstr ""
 
 #: ../gtk/gtkprintunixdialog.c:2200
-#, fuzzy
 msgid "Job Details"
-msgstr "Jobb Detaljar"
+msgstr "Utskriftsdetaljar"
 
 #: ../gtk/gtkprintunixdialog.c:2206
-#, fuzzy
 msgid "Pri_ority:"
 msgstr "Pri_oritet:"
 
@@ -2658,9 +2637,8 @@ msgid "_Billing info:"
 msgstr ""
 
 #: ../gtk/gtkprintunixdialog.c:2239
-#, fuzzy
 msgid "Print Document"
-msgstr "Skriv ut Dokument"
+msgstr "Skriv ut dokumentet"
 
 #: ../gtk/gtkprintunixdialog.c:2245
 msgid "_Now"
@@ -2695,9 +2673,8 @@ msgid "Advanced"
 msgstr "Avansert"
 
 #: ../gtk/gtkprintunixdialog.c:2423
-#, fuzzy
 msgid "Image Quality"
-msgstr "Bilete"
+msgstr "Biletekvalitet"
 
 #: ../gtk/gtkprintunixdialog.c:2426
 msgid "Color"
@@ -2708,9 +2685,8 @@ msgid "Finishing"
 msgstr ""
 
 #: ../gtk/gtkprintunixdialog.c:2439
-#, fuzzy
 msgid "Some of the settings in the dialog conflict"
-msgstr "Litt av tm dialog"
+msgstr "Somme av innstillingane i dialogkonflikta"
 
 #: ../gtk/gtkprintunixdialog.c:2462
 msgid "Print"
@@ -2736,52 +2712,46 @@ msgstr "Kan ikkje finna biletefila i pixmap_path: «%s»"
 
 #: ../gtk/gtkrecentaction.c:155 ../gtk/gtkrecentaction.c:163
 #: ../gtk/gtkrecentchoosermenu.c:554 ../gtk/gtkrecentchoosermenu.c:562
-#, fuzzy, c-format
+#, c-format
 msgid "This function is not implemented for widgets of class '%s'"
-msgstr "er lik ikkje i av"
+msgstr "Denne funksjonen er ikkje implementert i skjermelement av klassen «%s»"
 
 #: ../gtk/gtkrecentchooserdefault.c:465
-#, fuzzy
 msgid "Select which type of documents are shown"
-msgstr "Vel av"
+msgstr "Vel kva slags dokument som vert viste"
 
 #: ../gtk/gtkrecentchooserdefault.c:1107 ../gtk/gtkrecentchooserdefault.c:1144
-#, fuzzy, c-format
+#, c-format
 msgid "No item for URI '%s' found"
-msgstr "Nei i"
+msgstr "Fann ikkje noko element for URI-en «%s»"
 
 #: ../gtk/gtkrecentchooserdefault.c:1271
-#, fuzzy
 msgid "Untitled filter"
-msgstr "Utan namn"
+msgstr "Filter utan namn"
 
 #: ../gtk/gtkrecentchooserdefault.c:1626
-#, fuzzy
 msgid "Could not remove item"
-msgstr "ikkje fjern"
+msgstr "Klarte ikkje å fjerna elementet"
 
 #: ../gtk/gtkrecentchooserdefault.c:1669
-#, fuzzy
 msgid "Could not clear list"
-msgstr "ikkje liste"
+msgstr "Klarte ikkje å tøma lista"
 
 #: ../gtk/gtkrecentchooserdefault.c:1753
 msgid "Copy _Location"
 msgstr "Kopi_er adresse"
 
 #: ../gtk/gtkrecentchooserdefault.c:1766
-#, fuzzy
 msgid "_Remove From List"
-msgstr "Fje_rn Frå Liste"
+msgstr "Fje_rn frå lista"
 
 #: ../gtk/gtkrecentchooserdefault.c:1775
 msgid "_Clear List"
 msgstr "_Tøm lista"
 
 #: ../gtk/gtkrecentchooserdefault.c:1789
-#, fuzzy
 msgid "Show _Private Resources"
-msgstr "Vis _Privat Ressursar"
+msgstr "Vis _private ressursar"
 
 #. we create a placeholder menuitem, to be used in case
 #. * the menu is empty. this placeholder will stay around
@@ -2798,12 +2768,12 @@ msgid "No items found"
 msgstr "Fann ikkje nokon element"
 
 #: ../gtk/gtkrecentchoosermenu.c:474 ../gtk/gtkrecentchoosermenu.c:530
-#, fuzzy, c-format
+#, c-format
 msgid "No recently used resource found with URI `%s'"
-msgstr "Nei"
+msgstr "Fann ikkje nokon nyleg brukte ressursar med URI «%s»"
 
 #: ../gtk/gtkrecentchoosermenu.c:741
-#, fuzzy, c-format
+#, c-format
 msgid "Open '%s'"
 msgstr "Opna «%s»"
 
@@ -2819,9 +2789,9 @@ msgstr "Ukjent element"
 #. * Don't include the prefix "recent menu label|" in the translation.
 #.
 #: ../gtk/gtkrecentchoosermenu.c:784
-#, fuzzy, c-format
+#, c-format
 msgid "recent menu label|_%d. %s"
-msgstr "meny merkelapp"
+msgstr "_%d: %s"
 
 #. This is the format that is used for items in a recent files menu.
 #. * The %d is the number of the item, the %s is the name of the item.
@@ -2829,15 +2799,15 @@ msgstr "meny merkelapp"
 #. * Don't include the prefix "recent menu label|" in the translation.
 #.
 #: ../gtk/gtkrecentchoosermenu.c:791
-#, fuzzy, c-format
+#, c-format
 msgid "recent menu label|%d. %s"
-msgstr "meny merkelapp"
+msgstr "%d: %s"
 
 #: ../gtk/gtkrecentmanager.c:1041 ../gtk/gtkrecentmanager.c:1187
 #: ../gtk/gtkrecentmanager.c:1197 ../gtk/gtkrecentmanager.c:1250
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to find an item with URI '%s'"
-msgstr "finn"
+msgstr "Klarte ikkje å finna eit element med URI «%s»"
 
 #. KEEP IN SYNC with gtkiconfactory.c stock icons, when appropriate
 #: ../gtk/gtkstock.c:288
@@ -2860,7 +2830,6 @@ msgstr "Spørsmål"
 #. * need the mnemonics to be rationalized
 #.
 #: ../gtk/gtkstock.c:296
-#, fuzzy
 msgid "_About"
 msgstr "_Om"
 
@@ -2889,7 +2858,6 @@ msgid "_Close"
 msgstr "L_ukk"
 
 #: ../gtk/gtkstock.c:304
-#, fuzzy
 msgid "C_onnect"
 msgstr "K_opla til"
 
@@ -2910,12 +2878,10 @@ msgid "_Delete"
 msgstr "_Slett"
 
 #: ../gtk/gtkstock.c:309
-#, fuzzy
 msgid "_Discard"
 msgstr "_Forkast"
 
 #: ../gtk/gtkstock.c:310
-#, fuzzy
 msgid "_Disconnect"
 msgstr "_Kopla frå"
 
@@ -2924,7 +2890,6 @@ msgid "_Execute"
 msgstr "_Køyr"
 
 #: ../gtk/gtkstock.c:312
-#, fuzzy
 msgid "_Edit"
 msgstr "R_ediger"
 
@@ -2941,7 +2906,6 @@ msgid "_Floppy"
 msgstr "_Diskett"
 
 #: ../gtk/gtkstock.c:316
-#, fuzzy
 msgid "_Fullscreen"
 msgstr "_Fullskjerm"
 
@@ -2951,25 +2915,21 @@ msgstr ""
 
 #. translators, strip the prefix up to and including the first |
 #: ../gtk/gtkstock.c:319
-#, fuzzy
 msgid "Navigation|_Bottom"
 msgstr "_Botn"
 
 #. translators, strip the prefix up to and including the first |
 #: ../gtk/gtkstock.c:321
-#, fuzzy
 msgid "Navigation|_First"
 msgstr "_Fyrste"
 
 #. translators, strip the prefix up to and including the first |
 #: ../gtk/gtkstock.c:323
-#, fuzzy
 msgid "Navigation|_Last"
-msgstr "Siste"
+msgstr "_Siste"
 
 #. translators, strip the prefix up to and including the first |
 #: ../gtk/gtkstock.c:325
-#, fuzzy
 msgid "Navigation|_Top"
 msgstr "_Topp"
 
@@ -2980,21 +2940,18 @@ msgstr ""
 
 #. translators, strip the prefix up to and including the first |
 #: ../gtk/gtkstock.c:329
-#, fuzzy
 msgid "Navigation|_Down"
 msgstr "Ne_d"
 
 #. translators, strip the prefix up to and including the first |
 #: ../gtk/gtkstock.c:331
-#, fuzzy
 msgid "Navigation|_Forward"
-msgstr "Vidaresend"
+msgstr "Send _vidare"
 
 #. translators, strip the prefix up to and including the first |
 #: ../gtk/gtkstock.c:333
-#, fuzzy
 msgid "Navigation|_Up"
-msgstr "Opp"
+msgstr "_Opp"
 
 #: ../gtk/gtkstock.c:334
 msgid "_Harddisk"
@@ -3069,15 +3026,13 @@ msgstr "P_ause"
 
 #. translators, strip the prefix up to and including the first |
 #: ../gtk/gtkstock.c:359
-#, fuzzy
 msgid "Media|_Play"
 msgstr "S_pel"
 
 #. translators, strip the prefix up to and including the first |
 #: ../gtk/gtkstock.c:361
-#, fuzzy
 msgid "Media|Pre_vious"
-msgstr "Førre"
+msgstr "_Førre"
 
 #. translators, strip the prefix up to and including the first |
 #: ../gtk/gtkstock.c:363
@@ -3115,7 +3070,6 @@ msgid "_Open"
 msgstr "_Opna"
 
 #: ../gtk/gtkstock.c:373
-#, fuzzy
 msgid "Landscape"
 msgstr "Liggjande"
 
@@ -3240,122 +3194,118 @@ msgid "Zoom _Out"
 msgstr "For_minsk"
 
 #: ../gtk/gtktextbufferrichtext.c:651
-#, fuzzy, c-format
+#, c-format
 msgid "Unknown error when trying to deserialize %s"
-msgstr "Ukjend"
+msgstr "Ukjend feil under freistnad på å deserialisera %s"
 
 #: ../gtk/gtktextbufferrichtext.c:710
-#, fuzzy, c-format
+#, c-format
 msgid "No deserialize function found for format %s"
-msgstr "Nei i"
+msgstr "Fann ingen deserialiseringsfunksjon for formatet %s"
 
 #: ../gtk/gtktextbufferserialize.c:796 ../gtk/gtktextbufferserialize.c:822
-#, fuzzy, c-format
+#, c-format
 msgid "Both \"id\" and \"name\" were found on the <%s> element"
-msgstr "namn på"
+msgstr "Både «id» og «namn» vart funne i elementet <%s>"
 
 #: ../gtk/gtktextbufferserialize.c:806 ../gtk/gtktextbufferserialize.c:832
-#, fuzzy, c-format
+#, c-format
 msgid "The attribute \"%s\" was found twice on the <%s> element"
-msgstr "attributt på"
+msgstr "Attributten «%s» vart funnen to gongar i elementet <%s>"
 
 #: ../gtk/gtktextbufferserialize.c:846
-#, fuzzy, c-format
+#, c-format
 msgid "<%s> element has invalid id \"%s\""
-msgstr "ugyldig"
+msgstr "Elementet <%s> har ugyldig id «%s»"
 
 #: ../gtk/gtktextbufferserialize.c:856
-#, fuzzy, c-format
+#, c-format
 msgid "<%s> element has neither a \"name\" nor an \"id\" attribute"
-msgstr "a namn attributt"
+msgstr "Elementet <%s> har korkje ein «name»-attributt eller ein «id»-attributt"
 
 #: ../gtk/gtktextbufferserialize.c:943
-#, fuzzy, c-format
+#, c-format
 msgid "Attribute \"%s\" repeated twice on the same <%s> element"
 msgstr "Attributten «%s» gjenteken to gongar på det same elementet <%s>"
 
 #: ../gtk/gtktextbufferserialize.c:961 ../gtk/gtktextbufferserialize.c:986
-#, fuzzy, c-format
+#, c-format
 msgid "Attribute \"%s\" is invalid on <%s> element in this context"
 msgstr "Attributten «%s» er ugyldig på elementet <%s> i denne konteksten"
 
 #: ../gtk/gtktextbufferserialize.c:1022
-#, fuzzy, c-format
+#, c-format
 msgid "Tag \"%s\" has not been defined."
-msgstr "Merke ikkje."
+msgstr "Taggen «%s» er ikkje definert."
 
 #: ../gtk/gtktextbufferserialize.c:1034
-#, fuzzy
 msgid "Anonymous tag found and tags can not be created."
-msgstr "Anonym ikkje."
+msgstr "Anonym tagg funnen, og taggar kan ikkje opprettast."
 
 #: ../gtk/gtktextbufferserialize.c:1045
-#, fuzzy, c-format
+#, c-format
 msgid "Tag \"%s\" does not exist in buffer and tags can not be created."
-msgstr "Merke ikkje tm ikkje."
+msgstr "Taggen «%s» finst ikkje i bufferet, og taggar kan ikkje opprettast."
 
 #: ../gtk/gtktextbufferserialize.c:1144 ../gtk/gtktextbufferserialize.c:1219
 #: ../gtk/gtktextbufferserialize.c:1320 ../gtk/gtktextbufferserialize.c:1394
-#, fuzzy, c-format
+#, c-format
 msgid "Element <%s> is not allowed below <%s>"
-msgstr "Elementet <%s> er ikkje tillatt under <%s>"
+msgstr "Elementet <%s> er ikkje tillate under <%s>"
 
 #: ../gtk/gtktextbufferserialize.c:1175
-#, fuzzy, c-format
+#, c-format
 msgid "\"%s\" is not a valid attribute type"
-msgstr "er lik ikkje a attributt"
+msgstr "«%s» er ikkje ein gyldig attributtype"
 
 #: ../gtk/gtktextbufferserialize.c:1183
-#, fuzzy, c-format
+#, c-format
 msgid "\"%s\" is not a valid attribute name"
-msgstr "er lik ikkje a attributt namn"
+msgstr "«%s» er ikkje eit gyldig attributtnamn"
 
 #: ../gtk/gtktextbufferserialize.c:1193
-#, fuzzy, c-format
-msgid ""
-"\"%s\" could not be converted to a value of type \"%s\" for attribute \"%s\""
-msgstr "ikkje a av i attributt"
+#, c-format
+msgid "\"%s\" could not be converted to a value of type \"%s\" for attribute \"%s\""
+msgstr "«%s« kunne ikkje konverterast til ein verdi av type «%s» for attributten «%s»"
 
 #: ../gtk/gtktextbufferserialize.c:1202
-#, fuzzy, c-format
+#, c-format
 msgid "\"%s\" is not a valid value for attribute \"%s\""
-msgstr "er lik ikkje a i attributt"
+msgstr "«%s» er ikkje ein gyldig verdi for attributten «%s»"
 
 #: ../gtk/gtktextbufferserialize.c:1285
-#, fuzzy, c-format
+#, c-format
 msgid "Tag \"%s\" already defined"
-msgstr "Merke"
+msgstr "Taggen «%s» er alt definert"
 
 #: ../gtk/gtktextbufferserialize.c:1296
-#, fuzzy, c-format
+#, c-format
 msgid "Tag \"%s\" has invalid priority \"%s\""
-msgstr "Merke ugyldig"
+msgstr "Taggen «%s» har ugyldig prioritet «%s»"
 
 #: ../gtk/gtktextbufferserialize.c:1349
-#, fuzzy, c-format
+#, c-format
 msgid "Outermost element in text must be <text_view_markup> not <%s>"
-msgstr "tm tekst<text_view_markup> ikkje"
+msgstr "Det ytste elementet i teksten må vera <text_view_markup>, ikkje <%s>"
 
 #: ../gtk/gtktextbufferserialize.c:1358 ../gtk/gtktextbufferserialize.c:1374
-#, fuzzy, c-format
+#, c-format
 msgid "A <%s> element has already been specified"
-msgstr "A"
+msgstr "Eit <%s>-element har alt vorte spesifisert"
 
 #: ../gtk/gtktextbufferserialize.c:1380
-#, fuzzy
 msgid "A <text> element can't occur before a <tags> element"
-msgstr "A<text> før a<tags>"
+msgstr "Eit <text>-element kan ikkje koma før eit <tags>-element"
 
-#: ../gtk/gtktextbufferserialize.c:1788
-#, fuzzy, c-format
+#: ../gtk/gtktextbufferserialize.c:1779
+#, c-format
 msgid "Serialized data is malformed"
-msgstr "er lik"
+msgstr "Serialiserte data er ugyldige"
 
-#: ../gtk/gtktextbufferserialize.c:1866
-#, fuzzy, c-format
-msgid ""
-"Serialized data is malformed. First section isn't GTKTEXTBUFFERCONTENTS-0001"
-msgstr "er lik Fyrste del"
+#: ../gtk/gtktextbufferserialize.c:1857
+#, c-format
+msgid "Serialized data is malformed. First section isn't GTKTEXTBUFFERCONTENTS-0001"
+msgstr "Serialiserte data er ugyldige. Fyrste del er ikkje GTKTEXTBUFFERCONTENTS-0001"
 
 #: ../gtk/gtktextutil.c:60
 msgid "LRM _Left-to-right mark"
@@ -3430,12 +3380,10 @@ msgid "Volume"
 msgstr "Volum"
 
 #: ../gtk/gtkvolumebutton.c:83
-#, fuzzy
 msgid "Volume Down"
 msgstr "Lågare lyd"
 
 #: ../gtk/gtkvolumebutton.c:85
-#, fuzzy
 msgid "Volume Up"
 msgstr "Høgare lyd"
 
@@ -3444,9 +3392,8 @@ msgid "Muted"
 msgstr ""
 
 #: ../gtk/gtkvolumebutton.c:143
-#, fuzzy
 msgid "Full Volume"
-msgstr "Full Volum"
+msgstr "Full lyd"
 
 #. Translators: this is the percentage of the current volume,
 #. * as used in the tooltip, eg. "49 %".
@@ -3456,9 +3403,9 @@ msgstr "Full Volum"
 #. * part in the translation!
 #.
 #: ../gtk/gtkvolumebutton.c:158
-#, fuzzy, c-format
+#, c-format
 msgid "volume percentage|%d %%"
-msgstr "lydstyrke"
+msgstr "%d %%"
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:5
@@ -3472,7 +3419,6 @@ msgstr ""
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:9
-#, fuzzy
 msgid "paper size|A0"
 msgstr "A0"
 
@@ -3483,13 +3429,11 @@ msgstr ""
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:13
-#, fuzzy
 msgid "paper size|A1"
 msgstr "A1"
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:15
-#, fuzzy
 msgid "paper size|A10"
 msgstr "A10"
 
@@ -3505,7 +3449,6 @@ msgstr ""
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:21
-#, fuzzy
 msgid "paper size|A2"
 msgstr "A2"
 
@@ -3526,15 +3469,13 @@ msgstr ""
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:29
-#, fuzzy
 msgid "paper size|A3"
 msgstr "A3"
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:31
-#, fuzzy
 msgid "paper size|A3 Extra"
-msgstr "A3"
+msgstr "A3 ekstra"
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:33
@@ -3563,21 +3504,18 @@ msgstr ""
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:43
-#, fuzzy
 msgid "paper size|A4"
 msgstr "A4"
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:45
-#, fuzzy
 msgid "paper size|A4 Extra"
-msgstr "A4"
+msgstr "A4 ekstra"
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:47
-#, fuzzy
 msgid "paper size|A4 Tab"
-msgstr "A4"
+msgstr "A4 tab"
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:49
@@ -3616,193 +3554,161 @@ msgstr ""
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:63
-#, fuzzy
 msgid "paper size|A5"
 msgstr "A5"
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:65
-#, fuzzy
 msgid "paper size|A5 Extra"
-msgstr "A5"
+msgstr "A5 ekstra"
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:67
-#, fuzzy
 msgid "paper size|A6"
 msgstr "A6"
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:69
-#, fuzzy
 msgid "paper size|A7"
 msgstr "A7"
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:71
-#, fuzzy
 msgid "paper size|A8"
 msgstr "A8"
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:73
-#, fuzzy
 msgid "paper size|A9"
 msgstr "A9"
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:75
-#, fuzzy
 msgid "paper size|B0"
 msgstr "B0"
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:77
-#, fuzzy
 msgid "paper size|B1"
 msgstr "B1"
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:79
-#, fuzzy
 msgid "paper size|B10"
 msgstr "B10"
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:81
-#, fuzzy
 msgid "paper size|B2"
 msgstr "B2"
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:83
-#, fuzzy
 msgid "paper size|B3"
 msgstr "B3"
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:85
-#, fuzzy
 msgid "paper size|B4"
 msgstr "B4"
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:87
-#, fuzzy
 msgid "paper size|B5"
 msgstr "B5"
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:89
-#, fuzzy
 msgid "paper size|B5 Extra"
-msgstr "B5"
+msgstr "B5 ekstra"
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:91
-#, fuzzy
 msgid "paper size|B6"
 msgstr "B6"
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:93
-#, fuzzy
 msgid "paper size|B6/C4"
-msgstr "B6 C4"
+msgstr "B6/C4"
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:95
-#, fuzzy
 msgid "paper size|B7"
 msgstr "B7"
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:97
-#, fuzzy
 msgid "paper size|B8"
 msgstr "B8"
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:99
-#, fuzzy
 msgid "paper size|B9"
 msgstr "B9"
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:101
-#, fuzzy
 msgid "paper size|C0"
 msgstr "C0"
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:103
-#, fuzzy
 msgid "paper size|C1"
 msgstr "C1"
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:105
-#, fuzzy
 msgid "paper size|C10"
 msgstr "C10"
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:107
-#, fuzzy
 msgid "paper size|C2"
 msgstr "C2"
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:109
-#, fuzzy
 msgid "paper size|C3"
 msgstr "C3"
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:111
-#, fuzzy
 msgid "paper size|C4"
 msgstr "C4"
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:113
-#, fuzzy
 msgid "paper size|C5"
 msgstr "C5"
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:115
-#, fuzzy
 msgid "paper size|C6"
 msgstr "C6"
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:117
-#, fuzzy
 msgid "paper size|C6/C5"
-msgstr "C6 C5"
+msgstr "C6/C5"
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:119
-#, fuzzy
 msgid "paper size|C7"
 msgstr "C7"
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:121
-#, fuzzy
 msgid "paper size|C7/C6"
-msgstr "C7 C6"
+msgstr "C7/C6"
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:123
-#, fuzzy
 msgid "paper size|C8"
 msgstr "C8"
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:125
-#, fuzzy
 msgid "paper size|C9"
 msgstr "C9"
 
@@ -3953,9 +3859,8 @@ msgstr ""
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:185
-#, fuzzy
 msgid "paper size|10x14"
-msgstr "10x14"
+msgstr "10×14"
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:187 ../gtk/paper_names_offsets.c:189
@@ -4004,38 +3909,33 @@ msgstr ""
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:207
-#, fuzzy
 msgid "paper size|Arch A"
-msgstr "A"
+msgstr "Arch A"
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:209
-#, fuzzy
 msgid "paper size|Arch B"
-msgstr "B"
+msgstr "Arch B"
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:211
-#, fuzzy
 msgid "paper size|Arch C"
-msgstr "C"
+msgstr "Arch C"
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:213
-#, fuzzy
 msgid "paper size|Arch D"
-msgstr "D"
+msgstr "Arch D"
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:215
-#, fuzzy
 msgid "paper size|Arch E"
-msgstr "E"
+msgstr "Arch E"
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:217
 msgid "paper size|b-plus"
-msgstr ""
+msgstr "b-plus"
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:219
@@ -4054,7 +3954,6 @@ msgstr ""
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:225
-#, fuzzy
 msgid "paper size|e"
 msgstr "e"
 
@@ -4070,7 +3969,6 @@ msgstr ""
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:231
-#, fuzzy
 msgid "paper size|Executive"
 msgstr "Executive"
 
@@ -4091,45 +3989,38 @@ msgstr ""
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:239
-#, fuzzy
 msgid "paper size|FanFold German Legal"
-msgstr "Tysk Legal"
+msgstr "FanFold German Legal"
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:241
-#, fuzzy
 msgid "paper size|Government Legal"
-msgstr "Legal"
+msgstr "Government Legal"
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:243
-#, fuzzy
 msgid "paper size|Government Letter"
-msgstr "Letter"
+msgstr "Government Letter"
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:245
-#, fuzzy
 msgid "paper size|Index 3x5"
-msgstr "Indeks"
+msgstr "Index 3×5"
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:247
-#, fuzzy
 msgid "paper size|Index 4x6 (postcard)"
-msgstr "Indeks"
+msgstr "Index 4×6 (postkort)"
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:249
-#, fuzzy
 msgid "paper size|Index 4x6 ext"
-msgstr "Indeks"
+msgstr "Index 4×6 ext"
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:251
-#, fuzzy
 msgid "paper size|Index 5x8"
-msgstr "Indeks"
+msgstr "Index 5×8"
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:253
@@ -4138,39 +4029,33 @@ msgstr ""
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:255
-#, fuzzy
 msgid "paper size|Tabloid"
 msgstr "Tabloid"
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:257
-#, fuzzy
 msgid "paper size|US Legal"
-msgstr "Legal"
+msgstr "US Legal"
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:259
-#, fuzzy
 msgid "paper size|US Legal Extra"
-msgstr "Legal"
+msgstr "US Legal Extra"
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:261
-#, fuzzy
 msgid "paper size|US Letter"
-msgstr "Letter"
+msgstr "US Letter"
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:263
-#, fuzzy
 msgid "paper size|US Letter Extra"
-msgstr "Letter"
+msgstr "US Letter Extra"
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:265
-#, fuzzy
 msgid "paper size|US Letter Plus"
-msgstr "Letter"
+msgstr "US Letter Plus"
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:267
@@ -4204,33 +4089,28 @@ msgstr ""
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:279
-#, fuzzy
 msgid "paper size|Personal Envelope"
-msgstr "Personleg"
+msgstr "Personal Envelope"
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:281
-#, fuzzy
 msgid "paper size|Quarto"
 msgstr "Quarto"
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:283
-#, fuzzy
 msgid "paper size|Super A"
 msgstr "Super A"
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:285
-#, fuzzy
 msgid "paper size|Super B"
 msgstr "Super B"
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:287
-#, fuzzy
 msgid "paper size|Wide Format"
-msgstr "Format"
+msgstr "Wide Format"
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:289
@@ -4239,15 +4119,13 @@ msgstr ""
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:291
-#, fuzzy
 msgid "paper size|Folio"
 msgstr "Folio"
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:293
-#, fuzzy
 msgid "paper size|Folio sp"
-msgstr "Folio"
+msgstr "Folio sp"
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:295
@@ -4256,9 +4134,8 @@ msgstr ""
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:297
-#, fuzzy
 msgid "paper size|Italian Envelope"
-msgstr "italiensk"
+msgstr "Italian Envelope"
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:299
@@ -4277,9 +4154,8 @@ msgstr ""
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:305
-#, fuzzy
 msgid "paper size|Small Photo"
-msgstr "Liten Fotografi"
+msgstr "Small Photo"
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:307
@@ -4338,116 +4214,111 @@ msgstr ""
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:329
-#, fuzzy
 msgid "paper size|ROC 16k"
-msgstr "ROC"
+msgstr "ROC 16k"
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:331
-#, fuzzy
 msgid "paper size|ROC 8k"
-msgstr "ROC"
+msgstr "ROC 8k"
 
 #: ../gtk/updateiconcache.c:490 ../gtk/updateiconcache.c:550
-#, fuzzy, c-format
+#, c-format
 msgid "different idatas found for symlinked '%s' and '%s'\n"
-msgstr "i n"
+msgstr "fann ulike idata for symbolsk lenkja «%s» og «%s»\n"
 
 #: ../gtk/updateiconcache.c:1372
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to write header\n"
-msgstr "Slo feil topptekst n"
+msgstr "Klarte ikkje å skriva hovud\n"
 
 #: ../gtk/updateiconcache.c:1378
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to write hash table\n"
-msgstr "Slo feil tabell n"
+msgstr "Klarte ikkje å skriva nøkkeltabell\n"
 
 #: ../gtk/updateiconcache.c:1384
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to write folder index\n"
-msgstr "Klarte ikkje å lesa frå mellombels fil"
+msgstr "Klarte ikkje å skriva mappeindeks\n"
 
 #: ../gtk/updateiconcache.c:1392
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to rewrite header\n"
-msgstr "Slo feil topptekst n"
+msgstr "Klarte ikkje å skriva hovud på nytt\n"
 
 #: ../gtk/updateiconcache.c:1444
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to write cache file: %s\n"
-msgstr "Slo feil fil n"
+msgstr "Klarte ikkje å skriva bufferfil: %s\n"
 
 #: ../gtk/updateiconcache.c:1479
-#, fuzzy, c-format
+#, c-format
 msgid "The generated cache was invalid.\n"
-msgstr "ugyldig n"
+msgstr "Det genererte bufferet var ugyldig.\n"
 
 #: ../gtk/updateiconcache.c:1493
-#, fuzzy, c-format
+#, c-format
 msgid "Could not rename %s to %s: %s, removing %s then.\n"
-msgstr "ikkje n"
+msgstr "Klarte ikkje å endra namnet på %s til %s: %s, fjernar %s.\n"
 
 #: ../gtk/updateiconcache.c:1505
-#, fuzzy, c-format
+#, c-format
 msgid "Could not rename %s to %s: %s\n"
-msgstr "ikkje n"
+msgstr "Klarte ikkje å endra namnet på %s til %s: %s\n"
 
 #: ../gtk/updateiconcache.c:1512
-#, fuzzy, c-format
+#, c-format
 msgid "Could not rename %s back to %s: %s.\n"
-msgstr "ikkje n"
+msgstr "Klarte ikkje å endra namnet på %s tilbake til %s: %s.\n"
 
 #: ../gtk/updateiconcache.c:1534
-#, fuzzy, c-format
+#, c-format
 msgid "Cache file created successfully.\n"
-msgstr "fil n"
+msgstr "Bufferfila oppretta.\n"
 
 #: ../gtk/updateiconcache.c:1573
-#, fuzzy
 msgid "Overwrite an existing cache, even if up to date"
-msgstr "Skriv over"
+msgstr "Skriv over det lagra bufferet, sjølv om det er oppdatert"
 
 #: ../gtk/updateiconcache.c:1574
-#, fuzzy
 msgid "Don't check for the existence of index.theme"
-msgstr "i av indeks"
+msgstr "Ikkje sjå etter om index.theme finst"
 
 #: ../gtk/updateiconcache.c:1575
-#, fuzzy
 msgid "Don't include image data in the cache"
-msgstr "bilete tm"
+msgstr "Ikkje ta med biletedata i bufferet"
 
 #: ../gtk/updateiconcache.c:1576
-#, fuzzy
 msgid "Output a C header file"
-msgstr "a C topptekst fil"
+msgstr "Lag ei C-topptekstfil"
 
 #: ../gtk/updateiconcache.c:1577
 msgid "Turn off verbose output"
 msgstr ""
 
 #: ../gtk/updateiconcache.c:1578
-#, fuzzy
 msgid "Validate existing icon cache"
-msgstr "ikon"
+msgstr "Kontroller ikonbufferet"
 
 #: ../gtk/updateiconcache.c:1641
-#, fuzzy, c-format
+#, c-format
 msgid "File not found: %s\n"
-msgstr "Fil ikkje n"
+msgstr "Fann ikkje fila: %s\n"
 
 #: ../gtk/updateiconcache.c:1647
-#, fuzzy, c-format
+#, c-format
 msgid "Not a valid icon cache: %s\n"
-msgstr "a ikon n"
+msgstr "Ikkje eit gyldig ikonbuffer: %s\n"
 
 #: ../gtk/updateiconcache.c:1658
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "No theme index file in '%s'.\n"
 "If you really want to create an icon cache here, use --ignore-theme-index.\n"
-msgstr "Nei indeks fil tm ikon indeks n"
+msgstr ""
+"Ingen draktindeksfiler i «%s».\n"
+"Viss du verkeleg vil laga eit ikonbuffer her, må du bruka «--ignore-theme-index».\n"
 
 #. ID
 #: ../modules/input/imam-et.c:454
@@ -4481,9 +4352,8 @@ msgstr ""
 
 #. ID
 #: ../modules/input/imthai.c:35
-#, fuzzy
 msgid "Thai-Lao"
-msgstr "Thai Lao"
+msgstr "Thai-lao"
 
 #. ID
 #: ../modules/input/imti-er.c:453
@@ -4510,56 +4380,47 @@ msgid "Two Sided"
 msgstr ""
 
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:1534
-#, fuzzy
 msgid "Paper Type"
-msgstr "Papir Type"
+msgstr "Papirtype"
 
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:1535
-#, fuzzy
 msgid "Paper Source"
-msgstr "Papir Kjelde"
+msgstr "Papirkjelde"
 
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:1536
 msgid "Output Tray"
 msgstr ""
 
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:1545
-#, fuzzy
 msgid "One Sided"
-msgstr "Eitt"
+msgstr "Enkeltsidig"
 
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:1546
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:1547
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:1551
-#, fuzzy
 msgid "Auto Select"
-msgstr "Auto Vel"
+msgstr "Vel automatisk"
 
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:1548
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:1549
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:1550
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:2020
-#, fuzzy
 msgid "Printer Default"
-msgstr "Skrivar Standard"
+msgstr "Standard for skrivar"
 
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:2214
-#, fuzzy
 msgid "Urgent"
 msgstr "Hastar"
 
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:2214
-#, fuzzy
 msgid "High"
 msgstr "Høg"
 
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:2214
-#, fuzzy
 msgid "Medium"
 msgstr "Middels"
 
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:2214
-#, fuzzy
 msgid "Low"
 msgstr "Låg"
 
@@ -4572,7 +4433,6 @@ msgid "Classified"
 msgstr ""
 
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:2216
-#, fuzzy
 msgid "Confidential"
 msgstr "Konfidensiell"
 
@@ -4585,18 +4445,17 @@ msgid "Standard"
 msgstr ""
 
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:2216
-#, fuzzy
 msgid "Top Secret"
-msgstr "Topp Løyndom"
+msgstr "Topphemmeleg"
 
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:2216
 msgid "Unclassified"
 msgstr ""
 
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:2302
-#, fuzzy, c-format
+#, c-format
 msgid "Custom %.2fx%.2f"
-msgstr "Sjølvvald"
+msgstr "Sjølvvald %.2fx%.2f"
 
 #. default filename used for print-to-file
 #: ../modules/printbackends/file/gtkprintbackendfile.c:236
@@ -4618,9 +4477,8 @@ msgstr "PostScript"
 
 #: ../modules/printbackends/file/gtkprintbackendfile.c:554
 #: ../modules/printbackends/test/gtkprintbackendtest.c:501
-#, fuzzy
 msgid "Pages per _sheet:"
-msgstr "_Sider:"
+msgstr "_Sider per ark:"
 
 #: ../modules/printbackends/file/gtkprintbackendfile.c:600
 msgid "File"
@@ -4631,17 +4489,14 @@ msgid "_Output format"
 msgstr ""
 
 #: ../modules/printbackends/lpr/gtkprintbackendlpr.c:399
-#, fuzzy
 msgid "Print to LPR"
-msgstr "Skriv ut"
+msgstr "Skriv ut til LPR"
 
 #: ../modules/printbackends/lpr/gtkprintbackendlpr.c:425
-#, fuzzy
 msgid "Pages Per Sheet"
-msgstr "Sider"
+msgstr "Sider per ark"
 
 #: ../modules/printbackends/lpr/gtkprintbackendlpr.c:432
-#, fuzzy
 msgid "Command Line"
 msgstr "Kommandolinje"
 
@@ -4659,3 +4514,4 @@ msgstr "Skriv til testskrivar"
 #, c-format
 msgid "Could not get information for file '%s': %s"
 msgstr "Klarte ikkje å henta informasjon om fila «%s»: %s"
+
