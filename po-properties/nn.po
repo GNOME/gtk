@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: nn\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2008-02-26 20:04+0100\n"
-"PO-Revision-Date: 2008-02-26 23:01+0100\n"
+"PO-Revision-Date: 2008-02-26 23:57+0100\n"
 "Last-Translator: Åsmund Skjæveland <aasmunds@ulrik.uio.no>\n"
 "Language-Team: Norwegian Nynorsk <i18n-nn@lister.ping.uio.no>\n"
 "MIME-Version: 1.0\n"
@@ -535,9 +535,8 @@ msgid "Appearance of the shadow surrounding the arrow"
 msgstr "Utsjånaden til skuggen rundt pila"
 
 #: ../gtk/gtkarrow.c:91
-#, fuzzy
 msgid "Arrow Scaling"
-msgstr "Radmellomrom"
+msgstr "Pilskalering"
 
 #: ../gtk/gtkarrow.c:92
 msgid "Amount of space used up by arrow"
@@ -576,67 +575,56 @@ msgid "Force aspect ratio to match that of the frame's child"
 msgstr ""
 
 #: ../gtk/gtkassistant.c:261
-#, fuzzy
 msgid "Header Padding"
-msgstr "Polstring til venstre"
+msgstr "Polstring rundt hovudet"
 
 #: ../gtk/gtkassistant.c:262
-#, fuzzy
 msgid "Number of pixels around the header."
-msgstr "Stil på kanten rundt menylinja"
+msgstr "Tal på pikslar rundt hovudet."
 
 #: ../gtk/gtkassistant.c:269
-#, fuzzy
 msgid "Content Padding"
-msgstr "Polstring nedst"
+msgstr "Polstring rundt innhaldet"
 
 #: ../gtk/gtkassistant.c:270
-#, fuzzy
 msgid "Number of pixels around the content pages."
-msgstr "Tal på rader i tabellen"
+msgstr "Tal på pikslar rundt innhaldssidene."
 
 #: ../gtk/gtkassistant.c:286
-#, fuzzy
 msgid "Page type"
-msgstr "Type pakking"
+msgstr "Sidetype"
 
 #: ../gtk/gtkassistant.c:287
-#, fuzzy
 msgid "The type of the assistant page"
-msgstr "Typen melding"
+msgstr "Typen assistentside"
 
 #: ../gtk/gtkassistant.c:304
-#, fuzzy
 msgid "Page title"
-msgstr "Største storleik"
+msgstr "Sidetittel"
 
 #: ../gtk/gtkassistant.c:305
-#, fuzzy
 msgid "The title of the assistant page"
-msgstr "Tittelen på vindauget"
+msgstr "Tittelen på assistentsida"
 
 #: ../gtk/gtkassistant.c:321
-#, fuzzy
 msgid "Header image"
-msgstr "Tabellhovuda kan klikkast"
+msgstr "Bilete i hovudet"
 
 #: ../gtk/gtkassistant.c:322
 msgid "Header image for the assistant page"
 msgstr ""
 
 #: ../gtk/gtkassistant.c:338
-#, fuzzy
 msgid "Sidebar image"
-msgstr "Verdien"
+msgstr "Bilet i sidestolpen"
 
 #: ../gtk/gtkassistant.c:339
 msgid "Sidebar image for the assistant page"
 msgstr ""
 
 #: ../gtk/gtkassistant.c:354
-#, fuzzy
 msgid "Page complete"
-msgstr "Største storleik"
+msgstr "Sida ferdig"
 
 #: ../gtk/gtkassistant.c:355
 msgid "Whether all required fields on the page have been filled out"
@@ -834,19 +822,16 @@ msgid "Image widget"
 msgstr "Bilete-skjermelement"
 
 #: ../gtk/gtkbutton.c:286
-#, fuzzy
 msgid "Child widget to appear next to the button text"
-msgstr "Barne-skjermelement som skal visast attmed menyteksten"
+msgstr "Barne-skjermelement som skal visast attmed knappteksten"
 
 #: ../gtk/gtkbutton.c:300
-#, fuzzy
 msgid "Image position"
-msgstr "Plassering av handtak"
+msgstr "Plassering av bilete"
 
 #: ../gtk/gtkbutton.c:301
-#, fuzzy
 msgid "The position of the image relative to the text"
-msgstr "Plassering av handtaket relativt til barneskjermelementet"
+msgstr "Plassering av biletet i høve til teksten"
 
 #: ../gtk/gtkbutton.c:410
 msgid "Default Spacing"
@@ -885,9 +870,8 @@ msgid "How far in the y direction to move the child when the button is depressed
 msgstr "Kor langt i Y-retninga barnet skal flytta seg når knappen vert trykt ned"
 
 #: ../gtk/gtkbutton.c:448
-#, fuzzy
 msgid "Displace focus"
-msgstr "Er fokus"
+msgstr "Flytt fokus"
 
 #: ../gtk/gtkbutton.c:449
 msgid ""
