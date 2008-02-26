@@ -1625,16 +1625,7 @@ text_span_free (TextSpan *span)
 static void
 parse_info_free (ParseInfo *info)
 {
-  GSList *slist;
   GList *list;
-
-  slist = info->tag_stack;
-  while (slist)
-    {
-      g_free (slist->data);
-
-      slist = slist->next;
-    }
 
   g_slist_free (info->tag_stack);
   g_slist_free (info->states);
