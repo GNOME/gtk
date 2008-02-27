@@ -2631,6 +2631,12 @@ gdk_window_set_decorations (GdkWindow       *window,
 
       [impl->toplevel setContentView:old_view];
       [impl->toplevel setFrame:rect display:YES];
+
+      /* Invalidate the window shadow for non-opaque views that have shadow
+       * enabled, to get the shadow shape updated.
+       */
+      if (![old_view isOpaque] && [impl->toplevel hasShadow])
+        [(GdkQuartzView*)old_view setNeedsInvalidateShadow:YES];
     }
 
   GDK_QUARTZ_RELEASE_POOL;
