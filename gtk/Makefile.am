@@ -5,7 +5,11 @@ xdgmimedir =
 
 if OS_UNIX
 xdgmimedir += xdgmime
+if USE_QUARTZ
+GTK_PRINT_PREVIEW_COMMAND="/Applications/Preview.app/Contents/MacOS/Preview %f"
+else
 GTK_PRINT_PREVIEW_COMMAND="evince --unlink-tempfile --preview --print-settings %s %f"
+endif
 endif
 
 SUBDIRS = theme-bits $(xdgmimedir) . tests
