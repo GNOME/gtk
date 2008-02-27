@@ -1,3 +1,7 @@
+2008-02-27  Emmanuele Bassi  <ebassi@gnome.org>
+
+	* tests/testgtk.c: Revert back to r19454.
+
 2008-02-27  Sven Neumann  <sven@gimp.org>
 
 	* gtk/Makefile.am (GTK_PRINT_PREVIEW_COMMAND): when building the
@@ -50,7 +54,7 @@
 	wrong results on win32 because it doesn't set the printing units, 
 	which affect the transformation of the cairo context 
 	(#347125, Erik van Pienbroek)
-	
+
 2008-02-22  Tor Lillqvist  <tml@novell.com>
 
 	* tests/pixbuf-init.c: Add file missing from SVN, from the tarball.
