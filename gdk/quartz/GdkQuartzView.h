@@ -24,10 +24,12 @@
 @interface GdkQuartzView : NSView {
   GdkWindow *gdk_window;
   NSTrackingRectTag trackingRect;
+  BOOL needsInvalidateShadow;
 }
 
 -(void)setGdkWindow:(GdkWindow *)window;
 -(GdkWindow *)gdkWindow;
+-(void)setNeedsInvalidateShadow:(BOOL)invalidate;
 
 @end
 
