@@ -645,14 +645,9 @@ static void
 gtk_viewport_paint (GtkWidget    *widget,
 		    GdkRectangle *area)
 {
-  GtkViewport *viewport;
-
-  g_return_if_fail (GTK_IS_VIEWPORT (widget));
-  g_return_if_fail (area != NULL);
-
   if (GTK_WIDGET_DRAWABLE (widget))
     {
-      viewport = GTK_VIEWPORT (widget);
+      GtkViewport *viewport = GTK_VIEWPORT (widget);
 
       gtk_paint_shadow (widget->style, widget->window,
 			GTK_STATE_NORMAL, viewport->shadow_type,
@@ -691,11 +686,8 @@ static void
 gtk_viewport_add (GtkContainer *container,
 		  GtkWidget    *child)
 {
-  GtkBin *bin;
+  GtkBin *bin = GTK_BIN (container);
 
-  g_return_if_fail (GTK_IS_WIDGET (child));
-
-  bin = GTK_BIN (container);
   g_return_if_fail (bin->child == NULL);
 
   gtk_widget_set_parent_window (child, GTK_VIEWPORT (bin)->bin_window);
@@ -707,10 +699,8 @@ static void
 gtk_viewport_size_request (GtkWidget      *widget,
 			   GtkRequisition *requisition)
 {
-  GtkBin *bin;
+  GtkBin *bin = GTK_BIN (widget);
   GtkRequisition child_requisition;
-
-  bin = GTK_BIN (widget);
 
   requisition->width = GTK_CONTAINER (widget)->border_width;
 
@@ -796,14 +786,8 @@ static void
 gtk_viewport_adjustment_value_changed (GtkAdjustment *adjustment,
 				       gpointer       data)
 {
-  GtkViewport *viewport;
-  GtkBin *bin;
-
-  g_return_if_fail (GTK_IS_ADJUSTMENT (adjustment));
-  g_return_if_fail (GTK_IS_VIEWPORT (data));
-
-  viewport = GTK_VIEWPORT (data);
-  bin = GTK_BIN (data);
+  GtkViewport *viewport = GTK_VIEWPORT (data);
+  GtkBin *bin = GTK_BIN (data);
 
   if (bin->child && GTK_WIDGET_VISIBLE (bin->child)  &&
       GTK_WIDGET_REALIZED (viewport))
@@ -829,13 +813,11 @@ static void
 gtk_viewport_style_set (GtkWidget *widget,
 			GtkStyle  *previous_style)
 {
-   GtkViewport *viewport;
-   
    if (GTK_WIDGET_REALIZED (widget) &&
        !GTK_WIDGET_NO_WINDOW (widget))
      {
-	viewport = GTK_VIEWPORT (widget);
-	
+	GtkViewport *viewport = GTK_VIEWPORT (widget);
+
 	gtk_style_set_background (widget->style, viewport->bin_window, GTK_STATE_NORMAL);
 	gtk_style_set_background (widget->style, widget->window, widget->state);
      }

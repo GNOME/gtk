@@ -252,11 +252,7 @@ gtk_tips_query_get_arg (GtkObject             *object,
 static void
 gtk_tips_query_destroy (GtkObject	*object)
 {
-  GtkTipsQuery *tips_query;
-
-  g_return_if_fail (GTK_IS_TIPS_QUERY (object));
-
-  tips_query = GTK_TIPS_QUERY (object);
+  GtkTipsQuery *tips_query = GTK_TIPS_QUERY (object);
 
   if (tips_query->in_query)
     gtk_tips_query_stop_query (tips_query);

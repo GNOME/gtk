@@ -798,12 +798,8 @@ gtk_table_get_homogeneous (GtkTable *table)
 static void
 gtk_table_finalize (GObject *object)
 {
-  GtkTable *table;
-  
-  g_return_if_fail (GTK_IS_TABLE (object));
-  
-  table = GTK_TABLE (object);
-  
+  GtkTable *table = GTK_TABLE (object);
+
   g_free (table->rows);
   g_free (table->cols);
   
@@ -814,14 +810,9 @@ static void
 gtk_table_size_request (GtkWidget      *widget,
 			GtkRequisition *requisition)
 {
-  GtkTable *table;
+  GtkTable *table = GTK_TABLE (widget);
   gint row, col;
-  
-  g_return_if_fail (GTK_IS_TABLE (widget));
-  g_return_if_fail (requisition != NULL);
-  
-  table = GTK_TABLE (widget);
-  
+
   requisition->width = 0;
   requisition->height = 0;
   
@@ -849,14 +840,10 @@ static void
 gtk_table_size_allocate (GtkWidget     *widget,
 			 GtkAllocation *allocation)
 {
-  GtkTable *table;
-  
-  g_return_if_fail (GTK_IS_TABLE (widget));
-  g_return_if_fail (allocation != NULL);
-  
+  GtkTable *table = GTK_TABLE (widget);
+
   widget->allocation = *allocation;
-  table = GTK_TABLE (widget);
-  
+
   gtk_table_size_allocate_init (table);
   gtk_table_size_allocate_pass1 (table);
   gtk_table_size_allocate_pass2 (table);
@@ -866,9 +853,6 @@ static void
 gtk_table_add (GtkContainer *container,
 	       GtkWidget    *widget)
 {
-  g_return_if_fail (GTK_IS_TABLE (container));
-  g_return_if_fail (widget != NULL);
-  
   gtk_table_attach_defaults (GTK_TABLE (container), widget, 0, 1, 0, 1);
 }
 
@@ -876,14 +860,10 @@ static void
 gtk_table_remove (GtkContainer *container,
 		  GtkWidget    *widget)
 {
-  GtkTable *table;
+  GtkTable *table = GTK_TABLE (container);
   GtkTableChild *child;
   GList *children;
-  
-  g_return_if_fail (GTK_IS_TABLE (container));
-  g_return_if_fail (widget != NULL);
-  
-  table = GTK_TABLE (container);
+
   children = table->children;
   
   while (children)
@@ -913,14 +893,10 @@ gtk_table_forall (GtkContainer *container,
 		  GtkCallback	callback,
 		  gpointer	callback_data)
 {
-  GtkTable *table;
+  GtkTable *table = GTK_TABLE (container);
   GtkTableChild *child;
   GList *children;
-  
-  g_return_if_fail (GTK_IS_TABLE (container));
-  g_return_if_fail (callback != NULL);
-  
-  table = GTK_TABLE (container);
+
   children = table->children;
   
   while (children)

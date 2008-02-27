@@ -128,11 +128,7 @@ _gtk_win32_embed_widget_dialog_procedure (GtkWin32EmbedWidget *embed_widget,
 static void
 gtk_win32_embed_widget_unrealize (GtkWidget *widget)
 {
-  GtkWin32EmbedWidget *embed_widget;
-
-  g_return_if_fail (GTK_IS_WIN32_EMBED_WIDGET (widget));
-
-  embed_widget = GTK_WIN32_EMBED_WIDGET (widget);
+  GtkWin32EmbedWidget *embed_widget = GTK_WIN32_EMBED_WIDGET (widget);
 
   embed_widget->old_window_procedure = NULL;
   
@@ -176,17 +172,12 @@ gtk_win32_embed_widget_window_process (HWND hwnd, UINT msg, WPARAM wparam, LPARA
 static void
 gtk_win32_embed_widget_realize (GtkWidget *widget)
 {
-  GtkWindow *window;
-  GtkWin32EmbedWidget *embed_widget;
+  GtkWindow *window = GTK_WINDOW (widget);
+  GtkWin32EmbedWidget *embed_widget = GTK_WIN32_EMBED_WIDGET (widget);
   GdkWindowAttr attributes;
   gint attributes_mask;
   LONG_PTR styles;
 
-  g_return_if_fail (GTK_IS_WIN32_EMBED_WIDGET (widget));
-
-  window = GTK_WINDOW (widget);
-  embed_widget = GTK_WIN32_EMBED_WIDGET (widget);
-  
   /* ensure widget tree is properly size allocated */
   if (widget->allocation.x == -1 &&
       widget->allocation.y == -1 &&

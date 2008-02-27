@@ -506,8 +506,6 @@ gtk_menu_shell_realize (GtkWidget *widget)
   GdkWindowAttr attributes;
   gint attributes_mask;
 
-  g_return_if_fail (GTK_IS_MENU_SHELL (widget));
-
   GTK_WIDGET_SET_FLAGS (widget, GTK_REALIZED);
 
   attributes.x = widget->allocation.x;
@@ -773,13 +771,8 @@ static gint
 gtk_menu_shell_key_press (GtkWidget   *widget,
 			  GdkEventKey *event)
 {
-  GtkMenuShell *menu_shell;
+  GtkMenuShell *menu_shell = GTK_MENU_SHELL (widget);
   gboolean enable_mnemonics;
-  
-  g_return_val_if_fail (GTK_IS_MENU_SHELL (widget), FALSE);
-  g_return_val_if_fail (event != NULL, FALSE);
-      
-  menu_shell = GTK_MENU_SHELL (widget);
 
   if (!menu_shell->active_menu_item && menu_shell->parent_menu_shell)
     return gtk_widget_event (menu_shell->parent_menu_shell, (GdkEvent *)event);
@@ -801,12 +794,7 @@ static gint
 gtk_menu_shell_enter_notify (GtkWidget        *widget,
 			     GdkEventCrossing *event)
 {
-  GtkMenuShell *menu_shell;
-
-  g_return_val_if_fail (GTK_IS_MENU_SHELL (widget), FALSE);
-  g_return_val_if_fail (event != NULL, FALSE);
-
-  menu_shell = GTK_MENU_SHELL (widget);
+  GtkMenuShell *menu_shell = GTK_MENU_SHELL (widget);
 
   if (menu_shell->active)
     {
@@ -873,17 +861,11 @@ static gint
 gtk_menu_shell_leave_notify (GtkWidget        *widget,
 			     GdkEventCrossing *event)
 {
-  GtkMenuShell *menu_shell;
-  GtkMenuItem *menu_item;
-  GtkWidget *event_widget;
-
-  g_return_val_if_fail (GTK_IS_MENU_SHELL (widget), FALSE);
-  g_return_val_if_fail (event != NULL, FALSE);
-
   if (GTK_WIDGET_VISIBLE (widget))
     {
-      menu_shell = GTK_MENU_SHELL (widget);
-      event_widget = gtk_get_event_widget ((GdkEvent*) event);
+      GtkMenuShell *menu_shell = GTK_MENU_SHELL (widget);
+      GtkWidget *event_widget = gtk_get_event_widget ((GdkEvent*) event);
+      GtkMenuItem *menu_item;
 
       if (!event_widget || !GTK_IS_MENU_ITEM (event_widget))
 	return TRUE;
@@ -929,14 +911,10 @@ static void
 gtk_menu_shell_remove (GtkContainer *container,
 		       GtkWidget    *widget)
 {
-  GtkMenuShell *menu_shell;
+  GtkMenuShell *menu_shell = GTK_MENU_SHELL (container);
   gint was_visible;
-  
-  g_return_if_fail (GTK_IS_MENU_SHELL (container));
-  g_return_if_fail (GTK_IS_MENU_ITEM (widget));
-  
+
   was_visible = GTK_WIDGET_VISIBLE (widget);
-  menu_shell = GTK_MENU_SHELL (container);
   menu_shell->children = g_list_remove (menu_shell->children, widget);
   
   if (widget == menu_shell->active_menu_item)
@@ -960,14 +938,9 @@ gtk_menu_shell_forall (GtkContainer *container,
 		       GtkCallback   callback,
 		       gpointer      callback_data)
 {
-  GtkMenuShell *menu_shell;
+  GtkMenuShell *menu_shell = GTK_MENU_SHELL (container);
   GtkWidget *child;
   GList *children;
-
-  g_return_if_fail (GTK_IS_MENU_SHELL (container));
-  g_return_if_fail (callback != NULL);
-
-  menu_shell = GTK_MENU_SHELL (container);
 
   children = menu_shell->children;
   while (children)

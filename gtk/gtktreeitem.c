@@ -220,8 +220,6 @@ static void
 gtk_tree_item_init (GtkTreeItem *tree_item)
 {
   GtkWidget *eventbox, *pixmapwid;
-  
-  g_return_if_fail (GTK_IS_TREE_ITEM (tree_item));
 
   tree_item->expanded = FALSE;
   tree_item->subtree = NULL;
@@ -441,9 +439,7 @@ gtk_tree_item_remove_pixmaps (GtkTreeItem *tree_item)
 
 static void
 gtk_tree_item_realize (GtkWidget *widget)
-{    
-  g_return_if_fail (GTK_IS_TREE_ITEM (widget));
-
+{
   if (GTK_WIDGET_CLASS (parent_class)->realize)
     (* GTK_WIDGET_CLASS (parent_class)->realize) (widget);
   
@@ -457,15 +453,9 @@ static void
 gtk_tree_item_size_request (GtkWidget      *widget,
 			    GtkRequisition *requisition)
 {
-  GtkBin *bin;
-  GtkTreeItem* item;
+  GtkBin *bin = GTK_BIN (widget);
+  GtkTreeItem *item = GTK_TREE_ITEM (widget);
   GtkRequisition child_requisition;
-
-  g_return_if_fail (GTK_IS_TREE_ITEM (widget));
-  g_return_if_fail (requisition != NULL);
-
-  bin = GTK_BIN (widget);
-  item = GTK_TREE_ITEM(widget);
 
   requisition->width = (GTK_CONTAINER (widget)->border_width +
 			widget->style->xthickness) * 2;
@@ -493,23 +483,17 @@ static void
 gtk_tree_item_size_allocate (GtkWidget     *widget,
 			     GtkAllocation *allocation)
 {
-  GtkBin *bin;
-  GtkTreeItem* item;
+  GtkBin *bin = GTK_BIN (widget);
+  GtkTreeItem *item = GTK_TREE_ITEM (widget);
   GtkAllocation child_allocation;
   gint border_width;
   int temp;
-
-  g_return_if_fail (GTK_IS_TREE_ITEM (widget));
-  g_return_if_fail (allocation != NULL);
 
   widget->allocation = *allocation;
   if (GTK_WIDGET_REALIZED (widget))
     gdk_window_move_resize (widget->window,
 			    allocation->x, allocation->y,
 			    allocation->width, allocation->height);
-
-  bin = GTK_BIN (widget);
-  item = GTK_TREE_ITEM(widget);
 
   if (bin->child)
     {
@@ -612,9 +596,6 @@ gtk_tree_item_paint (GtkWidget    *widget,
   GdkRectangle child_area, item_area;
   GtkTreeItem* tree_item;
 
-  g_return_if_fail (GTK_IS_TREE_ITEM (widget));
-  g_return_if_fail (area != NULL);
-
   /* FIXME: We should honor tree->view_mode, here - I think
    * the desired effect is that when the mode is VIEW_ITEM,
    * only the subitem is drawn as selected, not the entire
@@ -677,10 +658,6 @@ static gint
 gtk_tree_item_button_press (GtkWidget      *widget,
 			    GdkEventButton *event)
 {
-
-  g_return_val_if_fail (GTK_IS_TREE_ITEM (widget), FALSE);
-  g_return_val_if_fail (event != NULL, FALSE);
-
   if (event->type == GDK_BUTTON_PRESS
 	&& GTK_WIDGET_IS_SENSITIVE(widget)
      	&& !GTK_WIDGET_HAS_FOCUS (widget))
@@ -725,9 +702,6 @@ gtk_tree_item_expose (GtkWidget      *widget,
     GtkWidget *container;
     GdkEventExpose *event;
   } data;
-  
-  g_return_val_if_fail (GTK_IS_TREE_ITEM (widget), FALSE);
-  g_return_val_if_fail (event != NULL, FALSE);
 
   if (GTK_WIDGET_DRAWABLE (widget))
     {
@@ -746,7 +720,7 @@ gtk_tree_item_expose (GtkWidget      *widget,
 
 static void
 gtk_real_tree_item_select (GtkItem *item)
-{    
+{
   GtkWidget *widget;
 
   g_return_if_fail (GTK_IS_TREE_ITEM (item));
@@ -860,16 +834,12 @@ gtk_real_tree_item_collapse (GtkTreeItem *tree_item)
 static void
 gtk_tree_item_destroy (GtkObject *object)
 {
-  GtkTreeItem* item;
+  GtkTreeItem* item = GTK_TREE_ITEM(object);
   GtkWidget* child;
-
-  g_return_if_fail (GTK_IS_TREE_ITEM (object));
 
 #ifdef TREE_DEBUG
   g_message("+ gtk_tree_item_destroy [object %#x]\n", (int)object);
 #endif /* TREE_DEBUG */
-
-  item = GTK_TREE_ITEM(object);
 
   /* free sub tree if it exist */
   child = item->subtree;
@@ -964,13 +934,8 @@ gtk_tree_item_remove_subtree (GtkTreeItem* item)
 static void
 gtk_tree_item_map (GtkWidget *widget)
 {
-  GtkBin *bin;
-  GtkTreeItem* item;
-
-  g_return_if_fail (GTK_IS_TREE_ITEM (widget));
-
-  bin = GTK_BIN (widget);
-  item = GTK_TREE_ITEM(widget);
+  GtkBin *bin = GTK_BIN (widget);
+  GtkTreeItem* item = GTK_TREE_ITEM(widget);
 
   GTK_WIDGET_SET_FLAGS (widget, GTK_MAPPED);
 
@@ -990,14 +955,10 @@ gtk_tree_item_map (GtkWidget *widget)
 static void
 gtk_tree_item_unmap (GtkWidget *widget)
 {
-  GtkBin *bin;
-  GtkTreeItem* item;
-
-  g_return_if_fail (GTK_IS_TREE_ITEM (widget));
+  GtkBin *bin = GTK_BIN (widget);
+  GtkTreeItem* item = GTK_TREE_ITEM(widget);
 
   GTK_WIDGET_UNSET_FLAGS (widget, GTK_MAPPED);
-  bin = GTK_BIN (widget);
-  item = GTK_TREE_ITEM(widget);
 
   gdk_window_hide (widget->window);
 
@@ -1018,14 +979,8 @@ gtk_tree_item_forall (GtkContainer *container,
 		      GtkCallback   callback,
 		      gpointer      callback_data)
 {
-  GtkBin *bin;
-  GtkTreeItem *tree_item;
-
-  g_return_if_fail (GTK_IS_TREE_ITEM (container));
-  g_return_if_fail (callback != NULL);
-
-  bin = GTK_BIN (container);
-  tree_item = GTK_TREE_ITEM (container);
+  GtkBin *bin = GTK_BIN (container);
+  GtkTreeItem *tree_item = GTK_TREE_ITEM (container);
 
   if (bin->child)
     (* callback) (bin->child, callback_data);

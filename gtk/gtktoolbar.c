@@ -2475,13 +2475,8 @@ static void
 gtk_toolbar_add (GtkContainer *container,
 		 GtkWidget    *widget)
 {
-  GtkToolbar *toolbar;
-  
-  g_return_if_fail (GTK_IS_TOOLBAR (container));
-  g_return_if_fail (widget != NULL);
-  
-  toolbar = GTK_TOOLBAR (container);
-  
+  GtkToolbar *toolbar = GTK_TOOLBAR (container);
+
   if (GTK_IS_TOOL_ITEM (widget))
     gtk_toolbar_insert (toolbar, GTK_TOOL_ITEM (widget), -1);
   else
@@ -2492,17 +2487,11 @@ static void
 gtk_toolbar_remove (GtkContainer *container,
 		    GtkWidget    *widget)
 {
-  GtkToolbar *toolbar;
-  GtkToolbarPrivate *priv;
+  GtkToolbar *toolbar = GTK_TOOLBAR (container);
+  GtkToolbarPrivate *priv = GTK_TOOLBAR_GET_PRIVATE (toolbar);
   ToolbarContent *content_to_remove;
   GList *list;
-  
-  g_return_if_fail (GTK_IS_TOOLBAR (container));
-  g_return_if_fail (GTK_IS_WIDGET (widget));
-  
-  toolbar = GTK_TOOLBAR (container);
-  priv = GTK_TOOLBAR_GET_PRIVATE (toolbar);
-  
+
   content_to_remove = NULL;
   for (list = priv->content; list != NULL; list = list->next)
     {

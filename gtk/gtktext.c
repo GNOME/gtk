@@ -1165,11 +1165,7 @@ gtk_text_get_chars (GtkOldEditable *old_editable,
 static void
 gtk_text_destroy (GtkObject *object)
 {
-  GtkText *text;
-  
-  g_return_if_fail (GTK_IS_TEXT (object));
-  
-  text = GTK_TEXT (object);
+  GtkText *text = GTK_TEXT (object);
 
   if (text->hadj)
     {
@@ -1196,12 +1192,8 @@ gtk_text_destroy (GtkObject *object)
 static void
 gtk_text_finalize (GObject *object)
 {
-  GtkText *text;
+  GtkText *text = GTK_TEXT (object);
   GList *tmp_list;
-  
-  g_return_if_fail (GTK_IS_TEXT (object));
-  
-  text = GTK_TEXT (object);
 
   /* Clean up the internal structures */
   if (text->use_wchar)
@@ -1238,15 +1230,11 @@ gtk_text_finalize (GObject *object)
 static void
 gtk_text_realize (GtkWidget *widget)
 {
-  GtkText *text;
-  GtkOldEditable *old_editable;
+  GtkText *text = GTK_TEXT (widget);
+  GtkOldEditable *old_editable = GTK_OLD_EDITABLE (widget);
   GdkWindowAttr attributes;
   gint attributes_mask;
-  
-  g_return_if_fail (GTK_IS_TEXT (widget));
-  
-  text = GTK_TEXT (widget);
-  old_editable = GTK_OLD_EDITABLE (widget);
+
   GTK_WIDGET_SET_FLAGS (text, GTK_REALIZED);
   
   attributes.window_type = GDK_WINDOW_CHILD;
@@ -1360,11 +1348,7 @@ gtk_text_state_changed (GtkWidget   *widget,
 static void
 gtk_text_unrealize (GtkWidget *widget)
 {
-  GtkText *text;
-  
-  g_return_if_fail (GTK_IS_TEXT (widget));
-  
-  text = GTK_TEXT (widget);
+  GtkText *text = GTK_TEXT (widget);
 
   gdk_window_set_user_data (text->text_area, NULL);
   gdk_window_destroy (text->text_area);
@@ -1498,10 +1482,7 @@ gtk_text_size_request (GtkWidget      *widget,
   gint ythickness;
   gint char_height;
   gint char_width;
-  
-  g_return_if_fail (GTK_IS_TEXT (widget));
-  g_return_if_fail (requisition != NULL);
-  
+
   xthickness = widget->style->xthickness + TEXT_BORDER_ROOM;
   ythickness = widget->style->ythickness + TEXT_BORDER_ROOM;
 
@@ -1523,13 +1504,8 @@ static void
 gtk_text_size_allocate (GtkWidget     *widget,
 			GtkAllocation *allocation)
 {
-  GtkText *text;
-  
-  g_return_if_fail (GTK_IS_TEXT (widget));
-  g_return_if_fail (allocation != NULL);
-  
-  text = GTK_TEXT (widget);
-  
+  GtkText *text = GTK_TEXT (widget);
+
   widget->allocation = *allocation;
   if (GTK_WIDGET_REALIZED (widget))
     {
@@ -1553,9 +1529,6 @@ static gint
 gtk_text_expose (GtkWidget      *widget,
 		 GdkEventExpose *event)
 {
-  g_return_val_if_fail (GTK_IS_TEXT (widget), FALSE);
-  g_return_val_if_fail (event != NULL, FALSE);
-  
   if (event->window == GTK_TEXT (widget)->text_area)
     {
       TDEBUG (("in gtk_text_expose (expose)\n"));
@@ -1603,14 +1576,8 @@ static gint
 gtk_text_button_press (GtkWidget      *widget,
 		       GdkEventButton *event)
 {
-  GtkText *text;
-  GtkOldEditable *old_editable;
-  
-  g_return_val_if_fail (GTK_IS_TEXT (widget), FALSE);
-  g_return_val_if_fail (event != NULL, FALSE);
-  
-  text = GTK_TEXT (widget);
-  old_editable = GTK_OLD_EDITABLE (widget);
+  GtkText *text = GTK_TEXT (widget);
+  GtkOldEditable *old_editable = GTK_OLD_EDITABLE (widget);
   
   if (text->button && (event->button != text->button))
     return FALSE;
@@ -1700,15 +1667,10 @@ static gint
 gtk_text_button_release (GtkWidget      *widget,
 			 GdkEventButton *event)
 {
-  GtkText *text;
+  GtkText *text = GTK_TEXT (widget);
   GtkOldEditable *old_editable;
   GdkDisplay *display;
 
-  g_return_val_if_fail (GTK_IS_TEXT (widget), FALSE);
-  g_return_val_if_fail (event != NULL, FALSE);
-  
-  text = GTK_TEXT (widget);
-  
   gtk_grab_remove (widget);
   
   if (text->button != event->button)
@@ -1768,16 +1730,11 @@ static gint
 gtk_text_motion_notify (GtkWidget      *widget,
 			GdkEventMotion *event)
 {
-  GtkText *text;
+  GtkText *text = GTK_TEXT (widget);
   gint x, y;
   gint height;
   GdkModifierType mask;
-  
-  g_return_val_if_fail (GTK_IS_TEXT (widget), FALSE);
-  g_return_val_if_fail (event != NULL, FALSE);
-  
-  text = GTK_TEXT (widget);
-  
+
   x = event->x;
   y = event->y;
   mask = event->state;
@@ -1849,12 +1806,10 @@ gtk_text_delete_text    (GtkEditable       *editable,
 			 gint               start_pos,
 			 gint               end_pos)
 {
-  GtkText *text;
+  GtkText *text = GTK_TEXT (editable);
   
   g_return_if_fail (start_pos >= 0);
-  
-  text = GTK_TEXT (editable);
-  
+
   gtk_text_set_point (text, start_pos);
   if (end_pos < 0)
     end_pos = TEXT_LENGTH (text);
@@ -1867,18 +1822,12 @@ static gint
 gtk_text_key_press (GtkWidget   *widget,
 		    GdkEventKey *event)
 {
-  GtkText *text;
-  GtkOldEditable *old_editable;
+  GtkText *text = GTK_TEXT (widget);
+  GtkOldEditable *old_editable = GTK_OLD_EDITABLE (widget);
   gchar key;
   gint return_val;
   gint position;
-  
-  g_return_val_if_fail (GTK_IS_TEXT (widget), FALSE);
-  g_return_val_if_fail (event != NULL, FALSE);
-  
-  text = GTK_TEXT (widget);
-  old_editable = GTK_OLD_EDITABLE (widget);
-  
+
   key = event->keyval;
   return_val = TRUE;
   
