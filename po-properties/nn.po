@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: nn\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2008-02-26 20:04+0100\n"
-"PO-Revision-Date: 2008-02-27 22:53+0100\n"
+"PO-Revision-Date: 2008-02-27 23:46+0100\n"
 "Last-Translator: Åsmund Skjæveland <aasmunds@ulrik.uio.no>\n"
 "Language-Team: Norwegian Nynorsk <i18n-nn@lister.ping.uio.no>\n"
 "MIME-Version: 1.0\n"
@@ -33,7 +33,7 @@ msgstr "Fargerom"
 
 #: ../gdk-pixbuf/gdk-pixbuf.c:100
 msgid "The colorspace in which the samples are interpreted"
-msgstr ""
+msgstr "Fargerommet samplingane er tolka i"
 
 # TRN: «Alpha» eller «alfa»?
 #: ../gdk-pixbuf/gdk-pixbuf.c:108
@@ -42,15 +42,15 @@ msgstr "Har alfa"
 
 #: ../gdk-pixbuf/gdk-pixbuf.c:109
 msgid "Whether the pixbuf has an alpha channel"
-msgstr ""
+msgstr "Om pixbuf-et har ein alfakanal"
 
 #: ../gdk-pixbuf/gdk-pixbuf.c:122
 msgid "Bits per Sample"
-msgstr ""
+msgstr "Bits per sampling"
 
 #: ../gdk-pixbuf/gdk-pixbuf.c:123
 msgid "The number of bits per sample"
-msgstr ""
+msgstr "Talet på bits per sampling"
 
 #: ../gdk-pixbuf/gdk-pixbuf.c:132 ../gtk/gtklayout.c:618
 #: ../gtk/gtktreeviewcolumn.c:207
@@ -83,7 +83,7 @@ msgstr "Pikslar"
 
 #: ../gdk-pixbuf/gdk-pixbuf.c:170
 msgid "A pointer to the pixel data of the pixbuf"
-msgstr ""
+msgstr "Ein peikar til pikseldata til pixbuf-et"
 
 #: ../gdk/gdkdisplaymanager.c:103
 msgid "Default Display"
@@ -126,7 +126,7 @@ msgstr "Programnamn"
 msgid ""
 "The name of the program. If this is not set, it defaults to "
 "g_get_application_name()"
-msgstr ""
+msgstr "Namnet på programmet. Dersom ikkje definert, vert g_get_application_name() brukt"
 
 #: ../gtk/gtkaboutdialog.c:212
 msgid "Program version"
@@ -154,11 +154,11 @@ msgstr "Merknader om programmet"
 
 #: ../gtk/gtkaboutdialog.c:280
 msgid "Website URL"
-msgstr ""
+msgstr "URL til nettsida"
 
 #: ../gtk/gtkaboutdialog.c:281
 msgid "The URL for the link to the website of the program"
-msgstr ""
+msgstr "URL-en til nettsida til programmet"
 
 #: ../gtk/gtkaboutdialog.c:297
 msgid "Website label"
@@ -168,7 +168,7 @@ msgstr "Merkelapp for nettsida"
 msgid ""
 "The label for the link to the website of the program. If this is not set, it "
 "defaults to the URL"
-msgstr ""
+msgstr "Merkelappen til lenkja til nettsida. Dersom ikkje definert, vert URL-en brukt"
 
 #: ../gtk/gtkaboutdialog.c:314
 msgid "Authors"
@@ -210,7 +210,7 @@ msgstr "Logo"
 msgid ""
 "A logo for the about box. If this is not set, it defaults to "
 "gtk_window_get_default_icon_list()"
-msgstr ""
+msgstr "Ein logo til Om-boksen. Dersom ikkje definert, vert gtk_window_get_default_icon_list() brukt"
 
 #: ../gtk/gtkaboutdialog.c:398
 msgid "Logo Icon Name"
@@ -218,7 +218,7 @@ msgstr "Namn på logoikonet"
 
 #: ../gtk/gtkaboutdialog.c:399
 msgid "A named icon to use as the logo for the about box."
-msgstr ""
+msgstr "Eit namngjeve ikon å bruka som logo i Om-boksen."
 
 #: ../gtk/gtkaboutdialog.c:412
 msgid "Wrap license"
@@ -317,7 +317,7 @@ msgstr "Synleg når overflytande"
 msgid ""
 "When TRUE, toolitem proxies for this action are represented in the toolbar "
 "overflow menu."
-msgstr ""
+msgstr "Når sann, vil toolitem-proxiar til denne handlinga visast i overfly-menyen til verktøylinja."
 
 #: ../gtk/gtkaction.c:289 ../gtk/gtktoolitem.c:137
 msgid "Visible when vertical"
@@ -4607,19 +4607,16 @@ msgid "Default file chooser backend"
 msgstr ""
 
 #: ../gtk/gtksettings.c:708
-#, fuzzy
 msgid "Name of the GtkFileChooser backend to use by default"
-msgstr "Namn på ikondrakta som skal brukast"
+msgstr "Namn på GtkFileChooser-motor å bruka som standard"
 
 #: ../gtk/gtksettings.c:725
-#, fuzzy
 msgid "Default print backend"
-msgstr "Standard mellomrom"
+msgstr "Standard utskriftsmotor"
 
 #: ../gtk/gtksettings.c:726
-#, fuzzy
 msgid "List of the GtkPrintBackend backends to use by default"
-msgstr "Namn på ikondrakta som skal brukast"
+msgstr "Liste over GtkPrintBackend-motorar å bruka som standard"
 
 #: ../gtk/gtksettings.c:749
 msgid "Default command to run when displaying a print preview"
@@ -4630,48 +4627,42 @@ msgid "Command to run when displaying a print preview"
 msgstr ""
 
 #: ../gtk/gtksettings.c:766
-#, fuzzy
 msgid "Enable Mnemonics"
-msgstr "Animasjon"
+msgstr "Bruk hugsehjelp"
 
 #: ../gtk/gtksettings.c:767
-#, fuzzy
 msgid "Whether labels should have mnemonics"
-msgstr "Om arkfanene skal vera like store"
+msgstr "Om merkelappar skal ha hugsehjelp"
 
 #: ../gtk/gtksettings.c:783
-#, fuzzy
 msgid "Enable Accelerators"
-msgstr "Kan endra snøggtastar"
+msgstr "Bruk snøggtastar"
 
 #: ../gtk/gtksettings.c:784
-#, fuzzy
 msgid "Whether menu items should have accelerators"
-msgstr "Om menyane skal utstyrast med linjer som gjer det mogleg å riva laus menyane"
+msgstr "Om menyelementa skal ha snøggtastar"
 
 #: ../gtk/gtksettings.c:801
 msgid "Recent Files Limit"
 msgstr ""
 
 #: ../gtk/gtksettings.c:802
-#, fuzzy
 msgid "Number of recently used files"
-msgstr "Tal på kolonner i tabellen"
+msgstr "Tal på nyleg brukte filer"
 
 #: ../gtk/gtksizegroup.c:293
 msgid "Mode"
 msgstr "Modus"
 
 #: ../gtk/gtksizegroup.c:294
-#, fuzzy
 msgid ""
 "The directions in which the size group affects the requested sizes of its "
 "component widgets"
-msgstr "Retningen som storleikgruppa påvirkar storleiken til komponentane sine i"
+msgstr "Retningane som storleikgruppa påvirkar dei ynskte storleikane til komponentane sine i"
 
 #: ../gtk/gtksizegroup.c:310
 msgid "Ignore hidden"
-msgstr ""
+msgstr "Ignorer gøymte"
 
 #: ../gtk/gtksizegroup.c:311
 msgid "If TRUE, unmapped widgets are ignored when determining the size of the group"
@@ -4742,38 +4733,32 @@ msgid "Style of bevel around the statusbar text"
 msgstr "Stil på kanten rundt statuslinjeteksten"
 
 #: ../gtk/gtkstatusicon.c:222
-#, fuzzy
 msgid "The size of the icon"
-msgstr "Tittelen på vindauget"
+msgstr "Storleiken på ikonet"
 
 #: ../gtk/gtkstatusicon.c:232
-#, fuzzy
 msgid "The screen where this status icon will be displayed"
-msgstr "Skjermen kor dette vindauget vert vist"
+msgstr "Skjermen der dette statusikonet vert vist"
 
 #: ../gtk/gtkstatusicon.c:239
 msgid "Blinking"
-msgstr ""
+msgstr "Blinkar"
 
 #: ../gtk/gtkstatusicon.c:240
-#, fuzzy
 msgid "Whether or not the status icon is blinking"
-msgstr "Om handlinga er synleg"
+msgstr "Om statusikonet blinkar"
 
 #: ../gtk/gtkstatusicon.c:248
-#, fuzzy
 msgid "Whether or not the status icon is visible"
-msgstr "Om handlinga er synleg"
+msgstr "Om statusikonet er synleg"
 
 #: ../gtk/gtkstatusicon.c:264
-#, fuzzy
 msgid "Whether or not the status icon is embedded"
-msgstr "Om handlinga er synleg"
+msgstr "Om statusikonet er innbakt"
 
 #: ../gtk/gtkstatusicon.c:280 ../gtk/gtktrayicon-x11.c:97
-#, fuzzy
 msgid "The orientation of the tray"
-msgstr "Retning på verktøylinja"
+msgstr "Retninga på trauet"
 
 #: ../gtk/gtktable.c:129
 msgid "Rows"
@@ -4808,9 +4793,8 @@ msgid "The amount of space between two consecutive columns"
 msgstr "Kor mykje avstand det er mellom to nabokolonner"
 
 #: ../gtk/gtktable.c:166
-#, fuzzy
 msgid "If TRUE, the table cells are all the same width/height"
-msgstr "Dersom denne er sann, har alle tabellcellene same breidde og høgde."
+msgstr "Dersom denne er sann, har alle tabellcellene same breidde og høgde"
 
 #: ../gtk/gtktable.c:173
 msgid "Left attachment"
@@ -4908,24 +4892,20 @@ msgid "Text Tag Table"
 msgstr ""
 
 #: ../gtk/gtktextbuffer.c:198
-#, fuzzy
 msgid "Current text of the buffer"
-msgstr "Tekst på merkelappen"
+msgstr "Teksten i bufferet"
 
 #: ../gtk/gtktextbuffer.c:212
-#, fuzzy
 msgid "Has selection"
-msgstr "Det valde året"
+msgstr "Har merka"
 
 #: ../gtk/gtktextbuffer.c:213
-#, fuzzy
 msgid "Whether the buffer has some text currently selected"
-msgstr "GdkFont som er vald no"
+msgstr "Om bufferet har tekst som er merka"
 
 #: ../gtk/gtktextbuffer.c:229
-#, fuzzy
 msgid "Cursor position"
-msgstr "Markørplassering"
+msgstr "Skrivemerkeplassering"
 
 #: ../gtk/gtktextbuffer.c:230
 msgid "The position of the insert mark (as offset from the beginning of the buffer)"
@@ -4954,14 +4934,12 @@ msgid "Mark name"
 msgstr ""
 
 #: ../gtk/gtktextmark.c:97
-#, fuzzy
 msgid "Left gravity"
-msgstr "Tyngde"
+msgstr "Venstretyngde"
 
 #: ../gtk/gtktextmark.c:98
-#, fuzzy
 msgid "Whether the mark has left gravity"
-msgstr "Om denne merkinga påvirkar skriftfamilien"
+msgstr "Om merket har venstretyngde"
 
 #: ../gtk/gtktexttag.c:173
 msgid "Tag name"
@@ -5054,14 +5032,12 @@ msgid "Left, right, or center justification"
 msgstr "Venstre-, høgre- eller senterjustering"
 
 #: ../gtk/gtktexttag.c:379
-#, fuzzy
 msgid ""
 "The language this text is in, as an ISO code. Pango can use this as a hint "
 "when rendering the text. If not set, an appropriate default will be used."
 msgstr ""
 "Språket denne teksten er i, som ein ISO-kode. Pango kan bruka dette som eit "
-"hint når teksten vert teikna. Dersom du ikkje skjønar denne parameteren, "
-"treng du han truleg ikkje"
+"hint når teksten vert teikna. Dersom ingenting er satt, vert ein høveleg standardverdi brukt."
 
 #: ../gtk/gtktexttag.c:386
 msgid "Left margin"
@@ -5088,12 +5064,11 @@ msgid "Amount to indent the paragraph, in pixels"
 msgstr "Kor mykje avsnittet skal rykkast inn, i pikslar"
 
 #: ../gtk/gtktexttag.c:419
-#, fuzzy
 msgid ""
 "Offset of text above the baseline (below the baseline if rise is negative) "
 "in Pango units"
 msgstr ""
-"Kor mykje over grunnlinja teksten skal stå, i pikslar (teksten kjem under "
+"Kor mykje over grunnlinja teksten skal stå, i Pango-einingar (teksten kjem under "
 "grunnlinja dersom denne er negativ)"
 
 #: ../gtk/gtktexttag.c:428
@@ -5137,29 +5112,24 @@ msgid "Invisible"
 msgstr "Usynleg"
 
 #: ../gtk/gtktexttag.c:505
-#, fuzzy
 msgid "Whether this text is hidden."
-msgstr "Om denne merkinga påvirkar hevinga"
+msgstr "Om denne teksten er gøymt."
 
 #: ../gtk/gtktexttag.c:519
-#, fuzzy
 msgid "Paragraph background color name"
-msgstr "Namn på bakgrunnsfargen til cella"
+msgstr "Namn på bakgrunnsfargen til avsnittet"
 
 #: ../gtk/gtktexttag.c:520
-#, fuzzy
 msgid "Paragraph background color as a string"
-msgstr "Bakgrunnsfarge, som ein streng"
+msgstr "Bakgrunnsfargen til avsnittet, som ein streng"
 
 #: ../gtk/gtktexttag.c:535
-#, fuzzy
 msgid "Paragraph background color"
-msgstr "Bakgrunnsfargen til cella"
+msgstr "Bakgrunnsfargen til avsnittet"
 
 #: ../gtk/gtktexttag.c:536
-#, fuzzy
 msgid "Paragraph background color as a (possibly unallocated) GdkColor"
-msgstr "Bakgrunnsfarge som ein GdkColor (treng ikkje vera allokert)"
+msgstr "Bakgrunnsfarge i avsnittet som ein GdkColor (treng ikkje vera allokert)"
 
 #: ../gtk/gtktexttag.c:554
 msgid "Margin Accumulates"
@@ -5271,14 +5241,12 @@ msgid "Whether this tag affects text visibility"
 msgstr "Om denne merkinga påvirkar om tekst er synleg eller ikkje"
 
 #: ../gtk/gtktexttag.c:672
-#, fuzzy
 msgid "Paragraph background set"
-msgstr "Bakgrunnsfargen til cella er satt"
+msgstr "Bakgrunnsfargen til avsnittet er satt"
 
 #: ../gtk/gtktexttag.c:673
-#, fuzzy
 msgid "Whether this tag affects the paragraph background color"
-msgstr "Om denne merkinga påvirkar bakgrunnsfargen"
+msgstr "Om denne taggen påvirkar bakgrunnsfargen til avsnittet"
 
 #: ../gtk/gtktextview.c:541
 msgid "Pixels Above Lines"
@@ -5337,14 +5305,12 @@ msgid "Whether Tab will result in a tab character being entered"
 msgstr "Om eit tabulatorteikn vert vist når Tab vert trykt"
 
 #: ../gtk/gtktextview.c:669
-#, fuzzy
 msgid "Error underline color"
-msgstr "Framgrunnsfarge"
+msgstr "Feilunderstrekingsfarge"
 
 #: ../gtk/gtktextview.c:670
-#, fuzzy
 msgid "Color with which to draw error-indication underlines"
-msgstr "Fargen som innsetjingsmarkøren skal teiknast med"
+msgstr "Fargen understreking som framhever feil skal teiknast med"
 
 #: ../gtk/gtktoggleaction.c:103
 msgid "Create the same proxies as a radio action"
@@ -5355,13 +5321,12 @@ msgid "Whether the proxies for this action look like radio action proxies"
 msgstr ""
 
 #: ../gtk/gtktoggleaction.c:119
-#, fuzzy
 msgid "If the toggle action should be active in or not"
-msgstr "Om knappen skal vera trykt inn eller ikkje"
+msgstr "Om vekslingshandlinga skal vera aktiv eller ikkje"
 
 #: ../gtk/gtktogglebutton.c:103 ../gtk/gtktoggletoolbutton.c:102
 msgid "If the toggle button should be pressed in or not"
-msgstr "Om knappen skal vera trykt inn eller ikkje"
+msgstr "Om vekslingsknappen skal vera trykt inn eller ikkje"
 
 #: ../gtk/gtktogglebutton.c:111
 msgid "If the toggle button is in an \"in between\" state"
@@ -5396,29 +5361,24 @@ msgid "If an arrow should be shown if the toolbar doesn't fit"
 msgstr "Om ei pil skal visast dersom det ikkje er plass til heile verktøylinja"
 
 #: ../gtk/gtktoolbar.c:508
-#, fuzzy
 msgid "Tooltips"
 msgstr "Verktøytips"
 
 #: ../gtk/gtktoolbar.c:509
-#, fuzzy
 msgid "If the tooltips of the toolbar should be active or not"
-msgstr "Om knappen skal vera trykt inn eller ikkje"
+msgstr "Om verktøytipsa på verktøylinga skal vera aktiv eller ikkje"
 
 #: ../gtk/gtktoolbar.c:531
-#, fuzzy
 msgid "Size of icons in this toolbar"
-msgstr "Storleiken på ikona i standardverktøylinjer"
+msgstr "Storleiken på ikona i denne verktøylinja"
 
 #: ../gtk/gtktoolbar.c:546
-#, fuzzy
 msgid "Icon size set"
-msgstr "Skriftstorleik satt"
+msgstr "Ikonstorleik satt"
 
 #: ../gtk/gtktoolbar.c:547
-#, fuzzy
 msgid "Whether the icon-size property has been set"
-msgstr "Om handlinga er tilgjengeleg"
+msgstr "Om eigenskapen icon-size er sett"
 
 #: ../gtk/gtktoolbar.c:556
 msgid "Whether the item should receive extra space when the toolbar grows"
@@ -5441,9 +5401,8 @@ msgid "Amount of border space between the toolbar shadow and the buttons"
 msgstr "Kantområde mellom skuggen til verktøylinja og knappane"
 
 #: ../gtk/gtktoolbar.c:589
-#, fuzzy
 msgid "Maximum child expand"
-msgstr "Minste breidde på barnet"
+msgstr "Minste utviding av barnet"
 
 #: ../gtk/gtktoolbar.c:590
 msgid "Maximum amount of space an expandable item will be given"
@@ -5511,14 +5470,12 @@ msgid "The stock icon displayed on the item"
 msgstr "Standardikonet som vert vist på elementet"
 
 #: ../gtk/gtktoolbutton.c:218
-#, fuzzy
 msgid "Icon name"
-msgstr "Skriftnamn"
+msgstr "Ikonnamn"
 
 #: ../gtk/gtktoolbutton.c:219
-#, fuzzy
 msgid "The name of the themed icon displayed on the item"
-msgstr "Standardikonet som vert vist på elementet"
+msgstr "Namn på draktikonet som vert vist på elementet"
 
 #: ../gtk/gtktoolbutton.c:225
 msgid "Icon widget"
@@ -5529,14 +5486,12 @@ msgid "Icon widget to display in the item"
 msgstr "Ikon-skjermelement som skal visast på elementet"
 
 #: ../gtk/gtktoolbutton.c:239
-#, fuzzy
 msgid "Icon spacing"
-msgstr "Radmellomrom"
+msgstr "Ikonmellomrom"
 
 #: ../gtk/gtktoolbutton.c:240
-#, fuzzy
 msgid "Spacing in pixels between the icon and label"
-msgstr "Ekstra mellomrom å setja mellom barnet og merkelappen"
+msgstr "Mellomrom i pikslar mellom ikonet og merkelappen"
 
 #: ../gtk/gtktoolitem.c:145
 msgid ""
@@ -5571,9 +5526,8 @@ msgid "Vertical Adjustment for the widget"
 msgstr "Loddrett justering for skjermelementet"
 
 #: ../gtk/gtktreeview.c:588
-#, fuzzy
 msgid "Headers Visible"
-msgstr "Tabellhovuda kan klikkast"
+msgstr "Hovud synlege"
 
 #: ../gtk/gtktreeview.c:589
 msgid "Show the column header buttons"
@@ -5634,29 +5588,24 @@ msgid "Hover Selection"
 msgstr ""
 
 #: ../gtk/gtktreeview.c:679
-#, fuzzy
 msgid "Whether the selection should follow the pointer"
-msgstr "Om fargeveljaren skal tillata å velja kor ugjennomsiktig fargen er"
+msgstr "Om merkinga skal følgja peikaren"
 
 #: ../gtk/gtktreeview.c:698
-#, fuzzy
 msgid "Hover Expand"
-msgstr "Utvid"
+msgstr "Utvid når svevande"
 
 #: ../gtk/gtktreeview.c:699
-#, fuzzy
 msgid "Whether rows should be expanded/collapsed when the pointer moves over them"
-msgstr "Om vindauget skal pyntast av vindaugshandsamaren"
+msgstr "Om rader skal utvidast/kollapsast når peikaren går over dei"
 
 #: ../gtk/gtktreeview.c:713
-#, fuzzy
 msgid "Show Expanders"
-msgstr "Er utvidar"
+msgstr "Vis utvidarar"
 
 #: ../gtk/gtktreeview.c:714
-#, fuzzy
 msgid "View has expanders"
-msgstr "Er utvidar"
+msgstr "Framsyninga har utvidarar"
 
 #: ../gtk/gtktreeview.c:728
 msgid "Level Indentation"
@@ -5671,34 +5620,28 @@ msgid "Rubber Banding"
 msgstr ""
 
 #: ../gtk/gtktreeview.c:739
-#, fuzzy
 msgid "Whether to enable selection of multiple items by dragging the mouse pointer"
-msgstr "Om det kan veljast fleire filer om gongen"
+msgstr "Om det kan veljast fleire element om gongen ved å dra muspeikaren"
 
 #: ../gtk/gtktreeview.c:746
-#, fuzzy
 msgid "Enable Grid Lines"
-msgstr "Bruk piltastar"
+msgstr "Bruk rutenett"
 
 #: ../gtk/gtktreeview.c:747
-#, fuzzy
 msgid "Whether grid lines should be drawn in the tree view"
-msgstr "Om kanten skal visast eller ikkje"
+msgstr "Om rutenett skal teiknast i treframsyning"
 
 #: ../gtk/gtktreeview.c:755
-#, fuzzy
 msgid "Enable Tree Lines"
-msgstr "Bruk piltastar"
+msgstr "Bruk trelinjer"
 
 #: ../gtk/gtktreeview.c:756
-#, fuzzy
 msgid "Whether tree lines should be drawn in the tree view"
-msgstr "Om kanten skal visast eller ikkje"
+msgstr "Om trelinjer skal teiknast i treframsyninga"
 
 #: ../gtk/gtktreeview.c:764
-#, fuzzy
 msgid "The column in the model containing the tooltip texts for the rows"
-msgstr "Ei kolonne som strengane skal hentast frå i datakjeldemodellen"
+msgstr "Kolonne i modellen som inneheld verktøytipsa for radene"
 
 #: ../gtk/gtktreeview.c:786
 msgid "Vertical Separator Width"
@@ -5757,44 +5700,36 @@ msgid "Enable extended row background theming"
 msgstr ""
 
 #: ../gtk/gtktreeview.c:839
-#, fuzzy
 msgid "Grid line width"
-msgstr "Fokuslinjebreidde"
+msgstr "Rutenettbreidde"
 
 #: ../gtk/gtktreeview.c:840
-#, fuzzy
 msgid "Width, in pixels, of the tree view grid lines"
-msgstr "Breidda, i pikslar, på fokusindikatorlinja"
+msgstr "Breidde, i pikslar, på rutenettlinjene i treframsyninga"
 
 #: ../gtk/gtktreeview.c:846
-#, fuzzy
 msgid "Tree line width"
-msgstr "Den faste breidda"
+msgstr "Trelinjebreidde"
 
 #: ../gtk/gtktreeview.c:847
-#, fuzzy
 msgid "Width, in pixels, of the tree view lines"
-msgstr "Breidda, i pikslar, på fokusindikatorlinja"
+msgstr "Breidde, i pikslar, på treframsyningslinjene"
 
 #: ../gtk/gtktreeview.c:853
-#, fuzzy
 msgid "Grid line pattern"
-msgstr "Prikkemønster på fokuslinja"
+msgstr "Rutenetmønster"
 
 #: ../gtk/gtktreeview.c:854
-#, fuzzy
 msgid "Dash pattern used to draw the tree view grid lines"
-msgstr "Prikkemønster som vert brukt til å teikna fokusindikatoren"
+msgstr "Prikkemønster som vert brukt til å teikna rutenettet"
 
 #: ../gtk/gtktreeview.c:860
-#, fuzzy
 msgid "Tree line pattern"
-msgstr "Prikkemønster på fokuslinja"
+msgstr "Trelinjemønster"
 
 #: ../gtk/gtktreeview.c:861
-#, fuzzy
 msgid "Dash pattern used to draw the tree view lines"
-msgstr "Prikkemønster som vert brukt til å teikna fokusindikatoren"
+msgstr "Prikkemønster som vert brukt til å teikna treframsyningslinjene"
 
 #: ../gtk/gtktreeviewcolumn.c:192
 msgid "Whether to display the column"
@@ -6079,29 +6014,24 @@ msgid "Whether gtk_widget_show_all() should not affect this widget"
 msgstr "Om gtk_widget_show_all() <b>ikkje</b> skal påvirka dette skjermelementet"
 
 #: ../gtk/gtkwidget.c:628
-#, fuzzy
 msgid "Has tooltip"
-msgstr "Verktøytips"
+msgstr "Har verktøytips"
 
 #: ../gtk/gtkwidget.c:629
-#, fuzzy
 msgid "Whether this widget has a tooltip"
-msgstr "Om skjermelementet har inndatafokus"
+msgstr "Om skjermelementet har verktøytips"
 
 #: ../gtk/gtkwidget.c:649
-#, fuzzy
 msgid "Tooltip Text"
-msgstr "Verktøytips"
+msgstr "Tekst i verktøytips"
 
 #: ../gtk/gtkwidget.c:650 ../gtk/gtkwidget.c:671
-#, fuzzy
 msgid "The contents of the tooltip for this widget"
-msgstr "Innhaldet i oppføringa"
+msgstr "Innhaldet i verktøytipset til dette skjermelementet"
 
 #: ../gtk/gtkwidget.c:670
-#, fuzzy
 msgid "Tooltip markup"
-msgstr "Verktøytips"
+msgstr "Verktøytips-merking"
 
 #: ../gtk/gtkwidget.c:2163
 msgid "Interior Focus"
@@ -6164,38 +6094,32 @@ msgid "Aspect ratio with which to draw insertion cursor"
 msgstr "Tilhøvetalet som innsetjingsmarkøren skal teiknast med"
 
 #: ../gtk/gtkwidget.c:2216
-#, fuzzy
 msgid "Draw Border"
-msgstr "Arkfanekant"
+msgstr "Teikn ramme"
 
 #: ../gtk/gtkwidget.c:2217
 msgid "Size of areas outside the widget's allocation to draw"
 msgstr ""
 
 #: ../gtk/gtkwidget.c:2230
-#, fuzzy
 msgid "Unvisited Link Color"
-msgstr "Noverande farge"
+msgstr "Farge på uvitja lenkje"
 
 #: ../gtk/gtkwidget.c:2231
-#, fuzzy
 msgid "Color of unvisited links"
-msgstr "Tittelen på skrifttypeveljardialogen"
+msgstr "Farge på uvitja lenkjer"
 
 #: ../gtk/gtkwidget.c:2244
-#, fuzzy
 msgid "Visited Link Color"
-msgstr "Noverande farge"
+msgstr "Farge på vitja lenkje"
 
 #: ../gtk/gtkwidget.c:2245
-#, fuzzy
 msgid "Color of visited links"
-msgstr "Tittelen på skrifttypeveljardialogen"
+msgstr "Farge på vitja linje"
 
 #: ../gtk/gtkwidget.c:2259
-#, fuzzy
 msgid "Wide Separators"
-msgstr "Har skiljelinje"
+msgstr "Breie skiljelinjer"
 
 #: ../gtk/gtkwidget.c:2260
 msgid ""
@@ -6204,42 +6128,36 @@ msgid ""
 msgstr ""
 
 #: ../gtk/gtkwidget.c:2274
-#, fuzzy
 msgid "Separator Width"
-msgstr "Breidde på loddrett skilje"
+msgstr "Skiljelinjebreidde"
 
 #: ../gtk/gtkwidget.c:2275
 msgid "The width of separators if wide-separators is TRUE"
 msgstr ""
 
 #: ../gtk/gtkwidget.c:2289
-#, fuzzy
 msgid "Separator Height"
-msgstr "Standardhøgde"
+msgstr "Skiljelinjehøgde"
 
 #: ../gtk/gtkwidget.c:2290
 msgid "The height of separators if \"wide-separators\" is TRUE"
 msgstr ""
 
 #: ../gtk/gtkwidget.c:2304
-#, fuzzy
 msgid "Horizontal Scroll Arrow Length"
-msgstr "Åtferda til vassrett rullefelt"
+msgstr "Lengd på vassrett rullepil"
 
 #: ../gtk/gtkwidget.c:2305
-#, fuzzy
 msgid "The length of horizontal scroll arrows"
-msgstr "Når vassrett rullefelt skal visast"
+msgstr "Lengd på vassrett rullepil"
 
 #: ../gtk/gtkwidget.c:2319
-#, fuzzy
 msgid "Vertical Scroll Arrow Length"
-msgstr "Åtferda til loddrett rullefelt"
+msgstr "Lengd på loddrett rullepil"
 
 #: ../gtk/gtkwidget.c:2320
-#, fuzzy
 msgid "The length of vertical scroll arrows"
-msgstr "Når loddrett rullefelt skal visast"
+msgstr "Lengd på loddrett rullepil"
 
 #: ../gtk/gtkwindow.c:464
 msgid "Window Type"
@@ -6266,14 +6184,12 @@ msgid "Unique identifier for the window to be used when restoring a session"
 msgstr "Unikt kjenneteikn på vindauget, brukt når ei økt vert gjenoppretta"
 
 #: ../gtk/gtkwindow.c:498
-#, fuzzy
 msgid "Startup ID"
-msgstr "Gruppe"
+msgstr "Oppstarts-ID"
 
 #: ../gtk/gtkwindow.c:499
-#, fuzzy
 msgid "Unique startup identifier for the window used by startup-notification"
-msgstr "Unikt kjenneteikn på vindauget, brukt når ei økt vert gjenoppretta"
+msgstr "Unikt kjenneteikn på vindauget, brukt av startup-notification"
 
 #: ../gtk/gtkwindow.c:506
 msgid "Allow Shrink"
@@ -6353,9 +6269,8 @@ msgid "Icon for this window"
 msgstr "Ikonet til dette vindauget"
 
 #: ../gtk/gtkwindow.c:593
-#, fuzzy
 msgid "Name of the themed icon for this window"
-msgstr "Ikonet til dette vindauget"
+msgstr "Namn på draktikonet til dette vindauget"
 
 #: ../gtk/gtkwindow.c:608
 msgid "Is Active"
@@ -6402,14 +6317,12 @@ msgid "TRUE if the window should not be in the pager."
 msgstr "SANN dersom vinduet ikkje skal vera i vindaugelista."
 
 #: ../gtk/gtkwindow.c:649
-#, fuzzy
 msgid "Urgent"
 msgstr "Hastar"
 
 #: ../gtk/gtkwindow.c:650
-#, fuzzy
 msgid "TRUE if the window should be brought to the user's attention."
-msgstr "SANN dersom vinduet ikkje skal vera i vindaugelista."
+msgstr "SANN dersom vindauget skal påkalla merksemda til brukaren."
 
 #: ../gtk/gtkwindow.c:664
 msgid "Accept focus"
@@ -6420,14 +6333,12 @@ msgid "TRUE if the window should receive the input focus."
 msgstr "Sann dersom vinduet skal ta imot inndata-fokus."
 
 #: ../gtk/gtkwindow.c:679
-#, fuzzy
 msgid "Focus on map"
-msgstr "Fokuser ved klikk"
+msgstr "Fokuser ved tilordning"
 
 #: ../gtk/gtkwindow.c:680
-#, fuzzy
 msgid "TRUE if the window should receive the input focus when mapped."
-msgstr "Sann dersom vinduet skal ta imot inndata-fokus."
+msgstr "Sann dersom vinduet skal ta imot inndata-fokus ved tilordning."
 
 #: ../gtk/gtkwindow.c:694
 msgid "Decorated"
@@ -6438,14 +6349,12 @@ msgid "Whether the window should be decorated by the window manager"
 msgstr "Om vindauget skal pyntast av vindaugshandsamaren"
 
 #: ../gtk/gtkwindow.c:709
-#, fuzzy
 msgid "Deletable"
-msgstr "Valgbar"
+msgstr "Slettbar"
 
 #: ../gtk/gtkwindow.c:710
-#, fuzzy
 msgid "Whether the window frame should have a close button"
-msgstr "Om vindauget skal pyntast av vindaugshandsamaren"
+msgstr "Om vindaugeramma skal ha ein lukkeknapp"
 
 #: ../gtk/gtkwindow.c:726
 msgid "Gravity"
@@ -6460,18 +6369,16 @@ msgid "Transient for Window"
 msgstr ""
 
 #: ../gtk/gtkwindow.c:745
-#, fuzzy
 msgid "The transient parent of the dialog"
-msgstr "Knappane som vert viste i meldingsdialogen"
+msgstr "Kortvarig forelder for dialogen"
 
 #: ../gtk/gtkwindow.c:759
 msgid "Opacity for Window"
 msgstr ""
 
 #: ../gtk/gtkwindow.c:760
-#, fuzzy
 msgid "The opacity of the window, from 0 to 1"
-msgstr "Vindaugetype"
+msgstr "Uklårleiken til vindauget, frå 0 til 1"
 
 #: ../modules/input/gtkimcontextxim.c:336
 msgid "IM Preedit style"
