@@ -1,3 +1,11 @@
+2008-02-27  Sven Neumann  <sven@gimp.org>
+
+	Merged from trunk:
+
+	* gtk/Makefile.am (GTK_PRINT_PREVIEW_COMMAND): when building the
+	Quartz backend, use a native Mac OS X application for the print
+	preview (bug #518624).
+
 2008-02-26  Michael Natterer  <mitch@imendio.com>
 
 	Merged from trunk:
