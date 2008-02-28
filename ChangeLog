@@ -1,3 +1,8 @@
+2008-02-28  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtkcalendar.h: Remove trailing comma from enum to
+	make the compiler happy.  (#517295, Sylvain Pasche)
+
 2008-02-27  Michael Natterer  <mitch@imendio.com>
 
 	* gtk/gtkmenushell.c
