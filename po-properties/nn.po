@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: nn\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2008-02-26 20:04+0100\n"
-"PO-Revision-Date: 2008-02-27 23:46+0100\n"
+"PO-Revision-Date: 2008-02-28 22:25+0100\n"
 "Last-Translator: Åsmund Skjæveland <aasmunds@ulrik.uio.no>\n"
 "Language-Team: Norwegian Nynorsk <i18n-nn@lister.ping.uio.no>\n"
 "MIME-Version: 1.0\n"
@@ -345,7 +345,7 @@ msgstr "Gøym dersom tom"
 
 #: ../gtk/gtkaction.c:307
 msgid "When TRUE, empty menu proxies for this action are hidden."
-msgstr ""
+msgstr "Når denne er sann, er tomme menymellommenn for denne handlinga gøymte."
 
 #: ../gtk/gtkaction.c:313 ../gtk/gtkactiongroup.c:177
 #: ../gtk/gtkcellrenderer.c:193 ../gtk/gtkwidget.c:519
@@ -354,7 +354,7 @@ msgstr "Kjenslevart"
 
 #: ../gtk/gtkaction.c:314
 msgid "Whether the action is enabled."
-msgstr "Om handlinga er tilgjengeleg"
+msgstr "Om handlinga er slått på."
 
 #: ../gtk/gtkaction.c:320 ../gtk/gtkactiongroup.c:184
 #: ../gtk/gtkstatusicon.c:247 ../gtk/gtktreeviewcolumn.c:191
@@ -374,7 +374,7 @@ msgstr "Handlingsgruppe"
 msgid ""
 "The GtkActionGroup this GtkAction is associated with, or NULL (for internal "
 "use)."
-msgstr ""
+msgstr "GtkActionGroup som denne GtkAction-en er tilknytta, eller NULL (for intern bruk)."
 
 #: ../gtk/gtkactiongroup.c:171
 msgid "A name for the action group."
@@ -540,7 +540,7 @@ msgstr "Pilskalering"
 
 #: ../gtk/gtkarrow.c:92
 msgid "Amount of space used up by arrow"
-msgstr ""
+msgstr "Kor mykje plass pila brukar"
 
 #: ../gtk/gtkaspectframe.c:79
 msgid "Horizontal Alignment"
@@ -564,15 +564,15 @@ msgstr "Tilhøve"
 
 #: ../gtk/gtkaspectframe.c:94
 msgid "Aspect ratio if obey_child is FALSE"
-msgstr ""
+msgstr "Høgd/breidd-tilhøve dersom obey_child er usann"
 
 #: ../gtk/gtkaspectframe.c:100
 msgid "Obey child"
-msgstr ""
+msgstr "Adlyd barn"
 
 #: ../gtk/gtkaspectframe.c:101
 msgid "Force aspect ratio to match that of the frame's child"
-msgstr ""
+msgstr "Tving høgd/breidd-tilhøvet til å samsvara med det til barnet til ramma"
 
 #: ../gtk/gtkassistant.c:261
 msgid "Header Padding"
@@ -612,7 +612,7 @@ msgstr "Bilete i hovudet"
 
 #: ../gtk/gtkassistant.c:322
 msgid "Header image for the assistant page"
-msgstr ""
+msgstr "Topptekstbilete på assistentsida"
 
 #: ../gtk/gtkassistant.c:338
 msgid "Sidebar image"
@@ -620,7 +620,7 @@ msgstr "Bilet i sidestolpen"
 
 #: ../gtk/gtkassistant.c:339
 msgid "Sidebar image for the assistant page"
-msgstr ""
+msgstr "Sidestolpebilete på assistentsida"
 
 #: ../gtk/gtkassistant.c:354
 msgid "Page complete"
@@ -628,7 +628,7 @@ msgstr "Sida ferdig"
 
 #: ../gtk/gtkassistant.c:355
 msgid "Whether all required fields on the page have been filled out"
-msgstr ""
+msgstr "Om alle dei naudsynte felta på sida er fylte ut"
 
 #: ../gtk/gtkbbox.c:92
 msgid "Minimum child width"
@@ -757,11 +757,11 @@ msgstr "Indeksen til barnet i forelderen"
 
 #: ../gtk/gtkbuilder.c:101
 msgid "Translation Domain"
-msgstr ""
+msgstr "Omsetjingsdomene"
 
 #: ../gtk/gtkbuilder.c:102
 msgid "The translation domain used by gettext"
-msgstr ""
+msgstr "Omsetjingsdomenet brukt av gettext"
 
 #: ../gtk/gtkbutton.c:200
 msgid ""
@@ -877,7 +877,7 @@ msgstr "Flytt fokus"
 msgid ""
 "Whether the child_displacement_x/_y properties should also affect the focus "
 "rectangle"
-msgstr ""
+msgstr "Om eigenskapane child_displacement_x/_y også skal påverka fokusrektangelet"
 
 #: ../gtk/gtkbutton.c:462 ../gtk/gtkentry.c:530 ../gtk/gtkentry.c:892
 msgid "Inner Border"
@@ -897,7 +897,7 @@ msgstr "Mellomrom, i pikslar, mellom biletet og merkelappen"
 
 #: ../gtk/gtkbutton.c:485
 msgid "Show button images"
-msgstr ""
+msgstr "Vis knappebilete"
 
 #: ../gtk/gtkbutton.c:486
 msgid "Whether stock icons should be shown in buttons"
@@ -1093,15 +1093,15 @@ msgstr "Tastekodar for snarvegstastar"
 
 #: ../gtk/gtkcellrendereraccel.c:140
 msgid "The hardware keycode of the accelerator"
-msgstr ""
+msgstr "Maskinvaretastekoden til snøggtasten"
 
 #: ../gtk/gtkcellrendereraccel.c:159
 msgid "Accelerator Mode"
-msgstr "Snarvegstastmodus"
+msgstr "Snøggstastmodus"
 
 #: ../gtk/gtkcellrendereraccel.c:160
 msgid "The type of accelerators"
-msgstr "Typen snarvegar"
+msgstr "Typen snøggtastar"
 
 #: ../gtk/gtkcellrenderercombo.c:89
 msgid "Model"
@@ -1121,11 +1121,11 @@ msgstr "Ei kolonne som strengane skal hentast frå i datakjeldemodellen"
 
 #: ../gtk/gtkcellrenderercombo.c:130
 msgid "Has Entry"
-msgstr ""
+msgstr "Har innskriving"
 
 #: ../gtk/gtkcellrenderercombo.c:131
 msgid "If FALSE, don't allow to enter strings other than the chosen ones"
-msgstr ""
+msgstr "Dersom usann er det ikkje mogleg å skriva inn andre strengar enn dei valde"
 
 #: ../gtk/gtkcellrendererpixbuf.c:112
 msgid "Pixbuf Object"
@@ -1179,7 +1179,7 @@ msgstr "Teikningsdetalj som skal sendast til draktmotoren"
 
 #: ../gtk/gtkcellrendererpixbuf.c:188
 msgid "Follow State"
-msgstr ""
+msgstr "Følg tilstand"
 
 #: ../gtk/gtkcellrendererpixbuf.c:189
 msgid "Whether the rendered pixbuf should be colorized according to the state"
@@ -1207,7 +1207,7 @@ msgstr "Puls"
 msgid ""
 "Set this to positive values to indicate that some progress is made, but you "
 "don't know how much."
-msgstr ""
+msgstr "Sett til positiv verdi for å visa at det er framdrift, men du veit ikkje kor mykje."
 
 #: ../gtk/gtkcellrendererprogress.c:187 ../gtk/gtkprogress.c:115
 msgid "Text x alignment"
@@ -1443,13 +1443,13 @@ msgstr ""
 #: ../gtk/gtkcellrenderertext.c:409 ../gtk/gtklabel.c:429
 #: ../gtk/gtkprogressbar.c:210
 msgid "Ellipsize"
-msgstr ""
+msgstr "Forkort"
 
 #: ../gtk/gtkcellrenderertext.c:410
 msgid ""
 "The preferred place to ellipsize the string, if the cell renderer does not "
 "have enough room to display the entire string"
-msgstr ""
+msgstr "Den føretrukne staden å forkorta strengen, dersom celleteiknaren ikkje har plass nok til heile"
 
 #: ../gtk/gtkcellrenderertext.c:429 ../gtk/gtkfilechooserbutton.c:426
 #: ../gtk/gtklabel.c:449
@@ -1458,7 +1458,7 @@ msgstr "Breidde i teikn"
 
 #: ../gtk/gtkcellrenderertext.c:430 ../gtk/gtklabel.c:450
 msgid "The desired width of the label, in characters"
-msgstr ""
+msgstr "Ynskt breidde på merkelappen, i teikn"
 
 #: ../gtk/gtkcellrenderertext.c:448 ../gtk/gtktexttag.c:475
 msgid "Wrap mode"
@@ -1468,7 +1468,7 @@ msgstr "Tekstbrytingsmåte"
 msgid ""
 "How to break the string into multiple lines, if the cell renderer does not "
 "have enough room to display the entire string"
-msgstr ""
+msgstr "Korleis strengen skal brytast opp i fleire linjer dersom celleteiknaren ikkje har nok plass til å visa heile strengen"
 
 #: ../gtk/gtkcellrenderertext.c:468 ../gtk/gtkcombobox.c:674
 msgid "Wrap width"
@@ -1832,19 +1832,19 @@ msgstr "Brytingsbreidde når elementa vert plasserte i eit rutenett"
 
 #: ../gtk/gtkcombobox.c:697
 msgid "Row span column"
-msgstr ""
+msgstr "Radspennkolonne"
 
 #: ../gtk/gtkcombobox.c:698
 msgid "TreeModel column containing the row span values"
-msgstr ""
+msgstr "TreeModel-kolonne som inneheld radspennverdiane"
 
 #: ../gtk/gtkcombobox.c:719
 msgid "Column span column"
-msgstr ""
+msgstr "Kolonnespennkolonne"
 
 #: ../gtk/gtkcombobox.c:720
 msgid "TreeModel column containing the column span values"
-msgstr ""
+msgstr "TreeModel-kolonne som inneheld kolonnespennverdiane"
 
 #: ../gtk/gtkcombobox.c:741
 msgid "Active item"
@@ -1894,7 +1894,7 @@ msgstr "Om rullegardina til komboen vert vist"
 
 #: ../gtk/gtkcombobox.c:826
 msgid "Appears as list"
-msgstr ""
+msgstr "Vis som liste"
 
 #: ../gtk/gtkcombobox.c:827
 msgid "Whether dropdowns should look like lists rather than menus"
@@ -1948,7 +1948,7 @@ msgstr "Kurve type"
 
 #: ../gtk/gtkcurve.c:125
 msgid "Is this curve linear, spline interpolated, or free-form"
-msgstr ""
+msgstr "Er dette kurvelineært, spline-interpolert eller friform"
 
 #: ../gtk/gtkcurve.c:132
 msgid "Minimum X"
@@ -2016,11 +2016,11 @@ msgstr "Breidde på kanten rundt knappeområdet i botnen av dialogen"
 
 #: ../gtk/gtkentry.c:477 ../gtk/gtklabel.c:392
 msgid "Cursor Position"
-msgstr "Markørplassering"
+msgstr "Skrivemerkeplassering"
 
 #: ../gtk/gtkentry.c:478 ../gtk/gtklabel.c:393
 msgid "The current position of the insertion cursor in chars"
-msgstr "Den noverande plasseringa til innsetjingsmarkøren, i teikn"
+msgstr "Den noverande plasseringa til innsetjingsskrivemerket, i teikn"
 
 #: ../gtk/gtkentry.c:487 ../gtk/gtklabel.c:402
 msgid "Selection Bound"
@@ -2028,7 +2028,7 @@ msgstr "Utvalsgrense"
 
 #: ../gtk/gtkentry.c:488 ../gtk/gtklabel.c:403
 msgid "The position of the opposite end of the selection from the cursor in chars"
-msgstr "Posisjonen til den andre enden av utvalet, målt i teikn frå markøren"
+msgstr "Posisjonen til den andre enden av utvalet, målt i teikn frå skrivemerket"
 
 #: ../gtk/gtkentry.c:498
 msgid "Whether the entry contents can be edited"
@@ -2062,7 +2062,7 @@ msgstr "Dersom usann, vert den ytre kanten fjerna frå oppføringa"
 
 #: ../gtk/gtkentry.c:531
 msgid "Border between text and frame. Overrides the inner-border style property"
-msgstr ""
+msgstr "Kant mellom tekst og ramme. Overstyrer stileigenskapen inner-border"
 
 #: ../gtk/gtkentry.c:538
 msgid "Invisible character"
@@ -2128,7 +2128,7 @@ msgstr "Kva slags skugge skal teiknast rundt feltet når has-frame er sett"
 
 #: ../gtk/gtkentry.c:893
 msgid "Border between text and frame."
-msgstr ""
+msgstr "Kant mellom tekst og ramme."
 
 #: ../gtk/gtkentry.c:898 ../gtk/gtklabel.c:625
 msgid "Select on focus"
@@ -2140,11 +2140,11 @@ msgstr "Om innhaldet i ei oppføring skal merkast når oppføringa vert fokusert
 
 #: ../gtk/gtkentry.c:913
 msgid "Password Hint Timeout"
-msgstr ""
+msgstr "Tidsavbrot for passordhint"
 
 #: ../gtk/gtkentry.c:914
 msgid "How long to show the last input character in hidden entries"
-msgstr ""
+msgstr "Kor lenge det siste skrivne teiknet skal visast i skjulte skriveboksar"
 
 #: ../gtk/gtkentrycompletion.c:279
 msgid "Completion Model"
@@ -2172,7 +2172,7 @@ msgstr "Ei kolonne som strengane skal hentast frå i modellen."
 
 #: ../gtk/gtkentrycompletion.c:323
 msgid "Inline completion"
-msgstr ""
+msgstr "Innbygd fullføring"
 
 #: ../gtk/gtkentrycompletion.c:324
 msgid "Whether the common prefix should be inserted automatically"
@@ -2180,7 +2180,7 @@ msgstr "Om felles prefiks skal setjast inn automatisk"
 
 #: ../gtk/gtkentrycompletion.c:338
 msgid "Popup completion"
-msgstr ""
+msgstr "Sprettoppfullføring"
 
 #: ../gtk/gtkentrycompletion.c:339
 msgid "Whether the completions should be shown in a popup window"
@@ -2332,7 +2332,7 @@ msgstr "Bruk førehandsvising-etikett"
 
 #: ../gtk/gtkfilechooser.c:235
 msgid "Whether to display a stock label with the name of the previewed file."
-msgstr ""
+msgstr "Om ein standardmerkelapp med namnet på den førehandsviste fila skal visast."
 
 #: ../gtk/gtkfilechooser.c:240
 msgid "Extra widget"
@@ -2361,21 +2361,21 @@ msgstr "Om skjulte filer og mapper skal visast"
 
 #: ../gtk/gtkfilechooser.c:269
 msgid "Do overwrite confirmation"
-msgstr ""
+msgstr "Utfør overskrivingsstadfesting"
 
 #: ../gtk/gtkfilechooser.c:270
 msgid ""
 "Whether a file chooser in save mode will present an overwrite confirmation "
 "dialog if necessary."
-msgstr ""
+msgstr "Om ein filveljar i lagringsmodus vil be om stadfesting av overskriving om nødvendig."
 
 #: ../gtk/gtkfilechooserbutton.c:381
 msgid "Dialog"
-msgstr ""
+msgstr "Dialog"
 
 #: ../gtk/gtkfilechooserbutton.c:382
 msgid "The file chooser dialog to use."
-msgstr ""
+msgstr "Filveljardialog å bruka."
 
 #: ../gtk/gtkfilechooserbutton.c:413
 msgid "The title of the file chooser dialog."
@@ -2383,7 +2383,7 @@ msgstr "Tittelen på filveljardialogen."
 
 #: ../gtk/gtkfilechooserbutton.c:427
 msgid "The desired width of the button widget, in characters."
-msgstr ""
+msgstr "Ynskt breidde på knappeelementet, i teikn."
 
 #: ../gtk/gtkfilesel.c:525 ../gtk/gtkimage.c:162 ../gtk/gtkrecentmanager.c:250
 #: ../gtk/gtkstatusicon.c:188
@@ -2404,11 +2404,11 @@ msgstr "Om knappane for å oppretta og endra filer skal visast"
 
 #: ../gtk/gtkfilesystem.c:382
 msgid "Cancelled"
-msgstr ""
+msgstr "Avbroten"
 
 #: ../gtk/gtkfilesystem.c:383
 msgid "Whether or not the operation has been successfully cancelled"
-msgstr ""
+msgstr "Om operasjonen var mogleg å avbryta"
 
 #: ../gtk/gtkfixed.c:90 ../gtk/gtklayout.c:582
 msgid "X position"
@@ -2576,11 +2576,11 @@ msgstr "Pixbuf-kolonne"
 
 #: ../gtk/gtkiconview.c:571
 msgid "Model column used to retrieve the icon pixbuf from"
-msgstr ""
+msgstr "Modellkolonne brukt til å henta ikon-pixbuf frå"
 
 #: ../gtk/gtkiconview.c:589
 msgid "Model column used to retrieve the text from"
-msgstr ""
+msgstr "Modellkolonne brukt til å henta teksten frå"
 
 #: ../gtk/gtkiconview.c:608
 msgid "Markup column"
@@ -2588,7 +2588,7 @@ msgstr "Merkingskolonne"
 
 #: ../gtk/gtkiconview.c:609
 msgid "Model column used to retrieve the text if using Pango markup"
-msgstr ""
+msgstr "Modellkolonne brukt til å henta teksten frå dersom Pango-merking vert brukt"
 
 #: ../gtk/gtkiconview.c:616
 msgid "Icon View Model"
@@ -2612,11 +2612,11 @@ msgstr "Breidde på kvart element"
 
 #: ../gtk/gtkiconview.c:652
 msgid "The width used for each item"
-msgstr ""
+msgstr "Breidda brukt til kvart element"
 
 #: ../gtk/gtkiconview.c:668
 msgid "Space which is inserted between cells of an item"
-msgstr ""
+msgstr "Luft som vert sett inn mellom cellene i eit element"
 
 #: ../gtk/gtkiconview.c:683
 msgid "Row Spacing"
@@ -2624,7 +2624,7 @@ msgstr "Radmellomrom"
 
 #: ../gtk/gtkiconview.c:684
 msgid "Space which is inserted between grid rows"
-msgstr ""
+msgstr "Luft som vert sett inn mellom radene i rutenettet"
 
 #: ../gtk/gtkiconview.c:699
 msgid "Column Spacing"
@@ -2632,7 +2632,7 @@ msgstr "Kolonnemellomrom"
 
 #: ../gtk/gtkiconview.c:700
 msgid "Space which is inserted between grid columns"
-msgstr ""
+msgstr "Luft som vert sett inn mellom kolonnene i rutenettet"
 
 #: ../gtk/gtkiconview.c:715
 msgid "Margin"
@@ -2640,11 +2640,11 @@ msgstr "Marg"
 
 #: ../gtk/gtkiconview.c:716
 msgid "Space which is inserted at the edges of the icon view"
-msgstr ""
+msgstr "Luft som vert sett inn i kantane av ikonvisinga"
 
 #: ../gtk/gtkiconview.c:733
 msgid "How the text and icon of each item are positioned relative to each other"
-msgstr ""
+msgstr "Korleis teksten og ikonet til kvart element er plassert i høve til kvarandre"
 
 #: ../gtk/gtkiconview.c:749 ../gtk/gtktreeview.c:612
 #: ../gtk/gtktreeviewcolumn.c:307
@@ -2823,7 +2823,7 @@ msgstr "Linjebrekkingsmodus"
 
 #: ../gtk/gtklabel.c:360
 msgid "If wrap is set, controls how linewrapping is done"
-msgstr ""
+msgstr "Kontrollerer korleis radbrekking vert gjort, dersom radbrekking er vald"
 
 #: ../gtk/gtklabel.c:367
 msgid "Selectable"
@@ -2855,7 +2855,7 @@ msgstr ""
 msgid ""
 "The preferred place to ellipsize the string, if the label does not have "
 "enough room to display the entire string"
-msgstr ""
+msgstr "Den valde staden å forkorta strengen, dersom merkelappen ikkje har nok plass til å visa heile strengen"
 
 #: ../gtk/gtklabel.c:470
 msgid "Single Line Mode"
@@ -2867,11 +2867,11 @@ msgstr "Om merkelappen er i enkeltlinjemodus"
 
 #: ../gtk/gtklabel.c:488
 msgid "Angle"
-msgstr ""
+msgstr "Vinkel"
 
 #: ../gtk/gtklabel.c:489
 msgid "Angle at which the label is rotated"
-msgstr ""
+msgstr "Vinkel som merkelappen er rotert"
 
 #: ../gtk/gtklabel.c:509
 msgid "Maximum Width In Characters"
@@ -2879,7 +2879,7 @@ msgstr "Største breidde i teikn"
 
 #: ../gtk/gtklabel.c:510
 msgid "The desired maximum width of the label, in characters"
-msgstr ""
+msgstr "Ynskt største breidde på merkelappen, i teikn"
 
 #: ../gtk/gtklabel.c:626
 msgid "Whether to select the contents of a selectable label when it is focused"
@@ -2967,7 +2967,7 @@ msgstr "Doble piler"
 
 #: ../gtk/gtkmenu.c:543
 msgid "When scrolling, always show both arrows."
-msgstr ""
+msgstr "Alltid vis begge pilene under rulling."
 
 #: ../gtk/gtkmenu.c:551
 msgid "Left Attach"
@@ -3041,7 +3041,7 @@ msgstr "Pakkeretninga på menylinja"
 
 #: ../gtk/gtkmenubar.c:185
 msgid "Child Pack direction"
-msgstr ""
+msgstr "Barnepakkeretning"
 
 #: ../gtk/gtkmenubar.c:186
 msgid "The child pack direction of the menubar"
@@ -3071,11 +3071,11 @@ msgstr "Pause før undermenyane i ei menylinje vert viste"
 
 #: ../gtk/gtkmenuitem.c:204
 msgid "Submenu"
-msgstr ""
+msgstr "Undermeny"
 
 #: ../gtk/gtkmenuitem.c:205
 msgid "The submenu attached to the menu item, or NULL if it has none"
-msgstr ""
+msgstr "Undermenyen kopla til menyelementet, eller NULL om ingen"
 
 #: ../gtk/gtkmenushell.c:368
 msgid "Take Focus"
@@ -3091,7 +3091,7 @@ msgstr "Meny"
 
 #: ../gtk/gtkmenutoolbutton.c:231
 msgid "The dropdown menu"
-msgstr ""
+msgstr "Rullegardinmenyen"
 
 #: ../gtk/gtkmessagedialog.c:98
 msgid "Image/label border"
@@ -3107,7 +3107,7 @@ msgstr "Bruk skiljelinje"
 
 #: ../gtk/gtkmessagedialog.c:115
 msgid "Whether to put a separator between the message dialog's text and the buttons"
-msgstr ""
+msgstr "Om det skal vera eit skiljeteikn mellom dialogteksten og knappane i meldinga"
 
 #: ../gtk/gtkmessagedialog.c:128
 msgid "Message Type"
@@ -3147,11 +3147,11 @@ msgstr "Sekundærteksten i meldingsdialogen"
 
 #: ../gtk/gtkmessagedialog.c:200
 msgid "Use Markup in secondary"
-msgstr ""
+msgstr "Bruk merking i sekundær"
 
 #: ../gtk/gtkmessagedialog.c:201
 msgid "The secondary text includes Pango markup."
-msgstr ""
+msgstr "Den sekundære teksten brukar Pango-merking."
 
 #: ../gtk/gtkmessagedialog.c:216
 msgid "The image"
@@ -3274,7 +3274,7 @@ msgstr "Gruppe-ID"
 
 #: ../gtk/gtknotebook.c:646
 msgid "Group ID for tabs drag and drop"
-msgstr ""
+msgstr "Gruppe-ID for dra-og-slepp av faner"
 
 #: ../gtk/gtknotebook.c:662 ../gtk/gtkradioaction.c:128
 #: ../gtk/gtkradiobutton.c:82 ../gtk/gtkradiomenuitem.c:342
@@ -3283,7 +3283,7 @@ msgstr "Gruppe"
 
 #: ../gtk/gtknotebook.c:663
 msgid "Group for tabs drag and drop"
-msgstr ""
+msgstr "Grupper for dra-og-slepp av faner"
 
 #: ../gtk/gtknotebook.c:669
 msgid "Tab label"
@@ -3379,7 +3379,7 @@ msgstr "Storleiken på faneoverlappområdet"
 
 #: ../gtk/gtknotebook.c:811
 msgid "Tab curvature"
-msgstr ""
+msgstr "Fanekrumming"
 
 #: ../gtk/gtknotebook.c:812
 msgid "Size of tab curvature"
@@ -3392,7 +3392,7 @@ msgstr "Brukardata"
 
 #: ../gtk/gtkobject.c:368
 msgid "Anonymous User Data Pointer"
-msgstr ""
+msgstr "Anonym brukardatapeikar"
 
 #: ../gtk/gtkoptionmenu.c:162
 msgid "The menu of options"
@@ -3408,7 +3408,7 @@ msgstr "Plass rundt indikatoren"
 
 #: ../gtk/gtkpaned.c:220
 msgid "Position of paned separator in pixels (0 means all the way to the left/top)"
-msgstr ""
+msgstr "Plasseringa til panelskiljar i pikslar (0 er heilt til venstre/øvst)"
 
 #: ../gtk/gtkpaned.c:228
 msgid "Position Set"
@@ -3448,7 +3448,7 @@ msgstr "Endra storleik"
 
 #: ../gtk/gtkpaned.c:289
 msgid "If TRUE, the child expands and shrinks along with the paned widget"
-msgstr ""
+msgstr "Dersom sann, vil barnet utvida og krympa i lag med elementet i panelet"
 
 #: ../gtk/gtkpaned.c:304
 msgid "Shrink"
@@ -3478,7 +3478,7 @@ msgstr "Namn på skrivaren"
 
 #: ../gtk/gtkprinter.c:126
 msgid "Backend"
-msgstr ""
+msgstr "Motor"
 
 #: ../gtk/gtkprinter.c:127
 msgid "Backend for the printer"
@@ -3490,7 +3490,7 @@ msgstr "Er virtuell"
 
 #: ../gtk/gtkprinter.c:134
 msgid "FALSE if this represents a real hardware printer"
-msgstr ""
+msgstr "Usann dersom dette representerer ein verkeleg skrivar"
 
 #: ../gtk/gtkprinter.c:140
 msgid "Accepts PDF"
@@ -3498,7 +3498,7 @@ msgstr "Tek imot PDF"
 
 #: ../gtk/gtkprinter.c:141
 msgid "TRUE if this printer can accept PDF"
-msgstr ""
+msgstr "Sann om denne skrivaren kan ta imot PDF"
 
 #: ../gtk/gtkprinter.c:147
 msgid "Accepts PostScript"
@@ -3506,15 +3506,15 @@ msgstr "Tek imot PostScript"
 
 #: ../gtk/gtkprinter.c:148
 msgid "TRUE if this printer can accept PostScript"
-msgstr ""
+msgstr "Sann om denne skrivaren kan ta imot PostScript"
 
 #: ../gtk/gtkprinter.c:154
 msgid "State Message"
-msgstr ""
+msgstr "Tilstandsmelding"
 
 #: ../gtk/gtkprinter.c:155
 msgid "String giving the current state of the printer"
-msgstr ""
+msgstr "Streng som opplyser om den noverande tilstanden til skrivaren"
 
 #: ../gtk/gtkprinter.c:161
 msgid "Location"
@@ -3530,7 +3530,7 @@ msgstr "Ikonnamn å bruka på skrivaren"
 
 #: ../gtk/gtkprinter.c:175
 msgid "Job Count"
-msgstr ""
+msgstr "Jobbteljing"
 
 #: ../gtk/gtkprinter.c:176
 msgid "Number of jobs queued in the printer"
@@ -3542,7 +3542,7 @@ msgstr "Kjeldeval"
 
 #: ../gtk/gtkprinteroptionwidget.c:124
 msgid "The PrinterOption backing this widget"
-msgstr ""
+msgstr "PrinterOption som står bak dette elementet"
 
 #: ../gtk/gtkprintjob.c:117
 msgid "Title of the print job"
@@ -3554,7 +3554,7 @@ msgstr "Skrivar"
 
 #: ../gtk/gtkprintjob.c:126
 msgid "Printer to print the job to"
-msgstr ""
+msgstr "Skrivar jobben skal gå til"
 
 #: ../gtk/gtkprintjob.c:134
 msgid "Settings"
@@ -3562,7 +3562,7 @@ msgstr "Innstillingar"
 
 #: ../gtk/gtkprintjob.c:135
 msgid "Printer settings"
-msgstr ""
+msgstr "Skrivarinnstillingar"
 
 #: ../gtk/gtkprintjob.c:143 ../gtk/gtkprintjob.c:144
 #: ../gtk/gtkprintunixdialog.c:241
@@ -3571,13 +3571,13 @@ msgstr "Sideoppsett"
 
 #: ../gtk/gtkprintjob.c:152 ../gtk/gtkprintoperation.c:1005
 msgid "Track Print Status"
-msgstr ""
+msgstr "Spor utskriftsstatus"
 
 #: ../gtk/gtkprintjob.c:153
 msgid ""
 "TRUE if the print job will continue to emit status-changed signals after the "
 "print data has been sent to the printer or print server."
-msgstr ""
+msgstr "Sann dersom utskriftsjobben vil halda fram med å senda statusendringssignal etter at utskriftsdata har vorte sendt til skrivaren eller utskriftstenaren."
 
 #: ../gtk/gtkprintoperation.c:877
 msgid "Default Page Setup"
@@ -3585,15 +3585,15 @@ msgstr "Standard sideoppsett"
 
 #: ../gtk/gtkprintoperation.c:878
 msgid "The GtkPageSetup used by default"
-msgstr ""
+msgstr "GtkPageSetup brukt som standard"
 
 #: ../gtk/gtkprintoperation.c:896 ../gtk/gtkprintunixdialog.c:259
 msgid "Print Settings"
-msgstr ""
+msgstr "Utskriftsinnstillingar"
 
 #: ../gtk/gtkprintoperation.c:897 ../gtk/gtkprintunixdialog.c:260
 msgid "The GtkPrintSettings used for initializing the dialog"
-msgstr ""
+msgstr "GtkPrintSettings brukt til å initialisera dialogen"
 
 #: ../gtk/gtkprintoperation.c:915
 msgid "Job Name"
@@ -3601,7 +3601,7 @@ msgstr "Jobbnamn"
 
 #: ../gtk/gtkprintoperation.c:916
 msgid "A string used for identifying the print job."
-msgstr ""
+msgstr "Ein streng som identifiserer jobben."
 
 #: ../gtk/gtkprintoperation.c:940
 msgid "Number of Pages"
@@ -3628,13 +3628,13 @@ msgstr "Bruk heile arket"
 msgid ""
 "TRUE if the origin of the context should be at the corner of the page and "
 "not the corner of the imageable area"
-msgstr ""
+msgstr "Sann dersom origo på konteksten skal vera i hjørnet av arket og ikkje i hjørnet av det brukbare området"
 
 #: ../gtk/gtkprintoperation.c:1006
 msgid ""
 "TRUE if the print operation will continue to report on the print job status "
 "after the print data has been sent to the printer or print server."
-msgstr ""
+msgstr "Sann dersom utskriftshandlinga skal halda fram med å rapportera status på utskriftsjobben etter at utskriftsdata har vorte sendt til skrivaren eller utskriftstenaren."
 
 #: ../gtk/gtkprintoperation.c:1023
 msgid "Unit"
@@ -3642,7 +3642,7 @@ msgstr "Eining"
 
 #: ../gtk/gtkprintoperation.c:1024
 msgid "The unit in which distances can be measured in the context"
-msgstr ""
+msgstr "Eininga som avstandar vert målte i i konteksten"
 
 #: ../gtk/gtkprintoperation.c:1041
 msgid "Show Dialog"
@@ -3650,7 +3650,7 @@ msgstr "Vis dialog"
 
 #: ../gtk/gtkprintoperation.c:1042
 msgid "TRUE if a progress dialog is shown while printing."
-msgstr ""
+msgstr "Sann dersom ein prosessdialog vert brukt under utskrift."
 
 #: ../gtk/gtkprintoperation.c:1065
 msgid "Allow Async"
@@ -3658,7 +3658,7 @@ msgstr "Tillat asynkront"
 
 #: ../gtk/gtkprintoperation.c:1066
 msgid "TRUE if print process may run asynchronous."
-msgstr ""
+msgstr "Sann dersom utskriftsprosessen kan køyra asynkront."
 
 #: ../gtk/gtkprintoperation.c:1089 ../gtk/gtkprintoperation.c:1090
 msgid "Export filename"
@@ -3674,23 +3674,23 @@ msgstr "Status på utskriftshandlinga"
 
 #: ../gtk/gtkprintoperation.c:1125
 msgid "Status String"
-msgstr ""
+msgstr "Statusstreng"
 
 #: ../gtk/gtkprintoperation.c:1126
 msgid "A human-readable description of the status"
-msgstr ""
+msgstr "Ei leseleg skildring av statusen"
 
 #: ../gtk/gtkprintoperation.c:1144
 msgid "Custom tab label"
-msgstr "Sjølvvald fliketikett"
+msgstr "Sjølvvald faneetikett"
 
 #: ../gtk/gtkprintoperation.c:1145
 msgid "Label for the tab containing custom widgets."
-msgstr ""
+msgstr "Merkelapp på fana som inneheld sjølvvalde element."
 
 #: ../gtk/gtkprintunixdialog.c:242
 msgid "The GtkPageSetup to use"
-msgstr ""
+msgstr "GtkPageSetup å bruka"
 
 #: ../gtk/gtkprintunixdialog.c:267
 msgid "Selected Printer"
@@ -3790,7 +3790,7 @@ msgstr "Tekst som skal visast i framdriftsvisaren"
 msgid ""
 "The preferred place to ellipsize the string, if the progress bar does not "
 "have enough room to display the entire string, if at all."
-msgstr ""
+msgstr "Den foretrukne staden å forkorta strengen, dersom framdriftslinja ikkje har nok plass til å visa heile strengen, om i det heile."
 
 #: ../gtk/gtkprogressbar.c:218
 msgid "XSpacing"
@@ -3798,7 +3798,7 @@ msgstr "X-mellomrom"
 
 #: ../gtk/gtkprogressbar.c:219
 msgid "Extra spacing applied to the width of a progress bar."
-msgstr ""
+msgstr "Ekstra luft lagt til i breidda av framdriftslinja."
 
 #: ../gtk/gtkradioaction.c:111
 msgid "The value"
@@ -3824,7 +3824,7 @@ msgstr "Den noverande verdien"
 msgid ""
 "The value property of the currently active member of the group to which this "
 "action belongs."
-msgstr ""
+msgstr "Verdieigenskapen den aktive gruppemedlemmen som denne handlinga tilhøyrer."
 
 #: ../gtk/gtkradiobutton.c:83
 msgid "The radio button whose group this widget belongs to."
@@ -3856,13 +3856,13 @@ msgstr "Snu retningen glidaren går for å auka verdien i området"
 
 #: ../gtk/gtkrange.c:362
 msgid "Lower stepper sensitivity"
-msgstr ""
+msgstr "Minska stegkjensle"
 
 #: ../gtk/gtkrange.c:363
 msgid ""
 "The sensitivity policy for the stepper that points to the adjustment's lower "
 "side"
-msgstr ""
+msgstr "Kjenslereglane for stegelementet som peikar på den nedre kanten av justeringa"
 
 #: ../gtk/gtkrange.c:371
 msgid "Upper stepper sensitivity"
@@ -4298,38 +4298,38 @@ msgstr ""
 
 #: ../gtk/gtksettings.c:229
 msgid "Cursor Blink"
-msgstr "Markørblinking"
+msgstr "Skrivemerkeblinking"
 
 #: ../gtk/gtksettings.c:230
 msgid "Whether the cursor should blink"
-msgstr "Om markøren skal blinka"
+msgstr "Om skrivemerket skal blinka"
 
 #: ../gtk/gtksettings.c:237
 msgid "Cursor Blink Time"
-msgstr "Markørblinking tid"
+msgstr "Skrivmerkeblinking tid"
 
 #: ../gtk/gtksettings.c:238
 msgid "Length of the cursor blink cycle, in milliseconds"
-msgstr "Kor lenge kvart markørblink varar, i millisekund"
+msgstr "Kor lenge kvart skrivemerkeblink varar, i millisekund"
 
 #: ../gtk/gtksettings.c:257
 msgid "Cursor Blink Timeout"
-msgstr "Tidsstyrt markørblinking"
+msgstr "Tidsstyrt skrivemerkeblinking"
 
 #: ../gtk/gtksettings.c:258
 msgid "Time after which the cursor stops blinking, in seconds"
-msgstr "Kor lang tid det tek før markøren sluttar å blinka, i sekund"
+msgstr "Kor lang tid det tek før skrivemerket sluttar å blinka, i sekund"
 
 #: ../gtk/gtksettings.c:265
 msgid "Split Cursor"
-msgstr "Delt markør"
+msgstr "Delt skrivemerke"
 
 #: ../gtk/gtksettings.c:266
 msgid ""
 "Whether two cursors should be displayed for mixed left-to-right and right-to-"
 "left text"
 msgstr ""
-"Om det skal visast to markørar i blanda venstre-til-høgre-tekst og høgre-til-"
+"Om det skal visast to skrivemerke i blanda venstre-til-høgre-tekst og høgre-til-"
 "venstre-tekst"
 
 #: ../gtk/gtksettings.c:273
@@ -4378,7 +4378,7 @@ msgstr "Grense for draing"
 
 #: ../gtk/gtksettings.c:319
 msgid "Number of pixels the cursor can move before dragging"
-msgstr "Kor mange pikslar markøren skal flytta seg før det vert rekna som å dra"
+msgstr "Kor mange pikslar peikaren skal flytta seg før det vert rekna som å dra"
 
 #: ../gtk/gtksettings.c:327
 msgid "Font Name"
@@ -4446,19 +4446,19 @@ msgstr ""
 
 #: ../gtk/gtksettings.c:405
 msgid "Cursor theme name"
-msgstr "Namn på markørdrakt"
+msgstr "Namn på peikardrakt"
 
 #: ../gtk/gtksettings.c:406
 msgid "Name of the cursor theme to use, or NULL to use the default theme"
-msgstr "Namn på markørdrakta, eller NULL for å bruka standarddrakta"
+msgstr "Namn på peikardrakta, eller NULL for å bruka standarddrakta"
 
 #: ../gtk/gtksettings.c:414
 msgid "Cursor theme size"
-msgstr "Storleik på skrivemerkedrakta"
+msgstr "Storleik på peikardrakta"
 
 #: ../gtk/gtksettings.c:415
 msgid "Size to use for cursors, or 0 to use the default size"
-msgstr "Storleik på skrivmerket, eller 0 for standard storleik"
+msgstr "Storleik på peikaren, eller 0 for standard storleik"
 
 #: ../gtk/gtksettings.c:425
 msgid "Alternative button order"
@@ -5278,7 +5278,7 @@ msgstr "Skrivemerke synleg"
 
 #: ../gtk/gtktextview.c:636
 msgid "If the insertion cursor is shown"
-msgstr "Om innsetjingsmarkøren vert vist eller ikkje"
+msgstr "Om innsetjingsskrivemerket vert vist eller ikkje"
 
 #: ../gtk/gtktextview.c:643
 msgid "Buffer"
@@ -6067,31 +6067,31 @@ msgstr "Breidda, i pikslar, mellom fokusindikatoren og elementboksen"
 
 #: ../gtk/gtkwidget.c:2189
 msgid "Cursor color"
-msgstr "Markørfarge"
+msgstr "Skrivemerkefarge"
 
 #: ../gtk/gtkwidget.c:2190
 msgid "Color with which to draw insertion cursor"
-msgstr "Fargen som innsetjingsmarkøren skal teiknast med"
+msgstr "Fargen som innsetjingsskrivemerket skal teiknast med"
 
 #: ../gtk/gtkwidget.c:2195
 msgid "Secondary cursor color"
-msgstr "Sekundær markørfarge"
+msgstr "Sekundær skrivemerkefarge"
 
 #: ../gtk/gtkwidget.c:2196
 msgid ""
 "Color with which to draw the secondary insertion cursor when editing mixed "
 "right-to-left and left-to-right text"
 msgstr ""
-"Fargen som den sekundære innsetjingsmarkøren skal teiknast med under "
+"Fargen som det sekundære innsetjingsskrivemerket skal teiknast med under "
 "redigering av blanda venstre-til-høgre- og høgre-til-venstre-tekst"
 
 #: ../gtk/gtkwidget.c:2201
 msgid "Cursor line aspect ratio"
-msgstr "Tilhøvetalet for markørlinja"
+msgstr "Tilhøvetalet for skrivemerkelinja"
 
 #: ../gtk/gtkwidget.c:2202
 msgid "Aspect ratio with which to draw insertion cursor"
-msgstr "Tilhøvetalet som innsetjingsmarkøren skal teiknast med"
+msgstr "Tilhøvetalet som innsetjingsskrivemerket skal teiknast med"
 
 #: ../gtk/gtkwidget.c:2216
 msgid "Draw Border"
