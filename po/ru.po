@@ -3033,27 +3033,27 @@ msgstr "_Вперёд"
 #. translators, strip the prefix up to and including the first |
 #: gtk/gtkstock.c:355
 msgid "Media|_Next"
-msgstr "_След."
+msgstr "_Следующая"
 
 #. translators, strip the prefix up to and including the first |
 #: gtk/gtkstock.c:357
 msgid "Media|P_ause"
-msgstr "П_ауза"
+msgstr "_Приостановить"
 
 #. translators, strip the prefix up to and including the first |
 #: gtk/gtkstock.c:359
 msgid "Media|_Play"
-msgstr "_Воспр."
+msgstr "_Воспроизвести"
 
 #. translators, strip the prefix up to and including the first |
 #: gtk/gtkstock.c:361
 msgid "Media|Pre_vious"
-msgstr "Пре_д."
+msgstr "П_редыдущая"
 
 #. translators, strip the prefix up to and including the first |
 #: gtk/gtkstock.c:363
 msgid "Media|_Record"
-msgstr "_Запись"
+msgstr "_Записать"
 
 #. translators, strip the prefix up to and including the first |
 #: gtk/gtkstock.c:365
@@ -3063,7 +3063,7 @@ msgstr "_Назад"
 #. translators, strip the prefix up to and including the first |
 #: gtk/gtkstock.c:367
 msgid "Media|_Stop"
-msgstr "_Стоп"
+msgstr "_Остановить"
 
 #: gtk/gtkstock.c:368
 msgid "_Network"
