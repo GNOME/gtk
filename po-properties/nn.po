@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: nn\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-02-26 20:04+0100\n"
-"PO-Revision-Date: 2008-02-28 22:25+0100\n"
+"POT-Creation-Date: 2008-02-29 13:11+0100\n"
+"PO-Revision-Date: 2008-02-29 14:30+0100\n"
 "Last-Translator: Åsmund Skjæveland <aasmunds@ulrik.uio.no>\n"
 "Language-Team: Norwegian Nynorsk <i18n-nn@lister.ping.uio.no>\n"
 "MIME-Version: 1.0\n"
@@ -126,7 +126,9 @@ msgstr "Programnamn"
 msgid ""
 "The name of the program. If this is not set, it defaults to "
 "g_get_application_name()"
-msgstr "Namnet på programmet. Dersom ikkje definert, vert g_get_application_name() brukt"
+msgstr ""
+"Namnet på programmet. Dersom ikkje definert, vert g_get_application_name() "
+"brukt"
 
 #: ../gtk/gtkaboutdialog.c:212
 msgid "Program version"
@@ -210,7 +212,9 @@ msgstr "Logo"
 msgid ""
 "A logo for the about box. If this is not set, it defaults to "
 "gtk_window_get_default_icon_list()"
-msgstr "Ein logo til Om-boksen. Dersom ikkje definert, vert gtk_window_get_default_icon_list() brukt"
+msgstr ""
+"Ein logo til Om-boksen. Dersom ikkje definert, vert "
+"gtk_window_get_default_icon_list() brukt"
 
 #: ../gtk/gtkaboutdialog.c:398
 msgid "Logo Icon Name"
@@ -317,7 +321,9 @@ msgstr "Synleg når overflytande"
 msgid ""
 "When TRUE, toolitem proxies for this action are represented in the toolbar "
 "overflow menu."
-msgstr "Når sann, vil toolitem-proxiar til denne handlinga visast i overfly-menyen til verktøylinja."
+msgstr ""
+"Når sann, vil toolitem-proxiar til denne handlinga visast i overfly-menyen "
+"til verktøylinja."
 
 #: ../gtk/gtkaction.c:289 ../gtk/gtktoolitem.c:137
 msgid "Visible when vertical"
@@ -337,7 +343,9 @@ msgstr "Er viktig"
 msgid ""
 "Whether the action is considered important. When TRUE, toolitem proxies for "
 "this action show text in GTK_TOOLBAR_BOTH_HORIZ mode."
-msgstr "Om handlinga vert rekna for viktig. Når TRUE vil toolitem-proxiar for denne handlingar visa tekst i GTK_TOOLBAR_BOTH_HORIZ-modus."
+msgstr ""
+"Om handlinga vert rekna for viktig. Når TRUE vil toolitem-proxiar for denne "
+"handlingar visa tekst i GTK_TOOLBAR_BOTH_HORIZ-modus."
 
 #: ../gtk/gtkaction.c:306
 msgid "Hide if empty"
@@ -374,7 +382,9 @@ msgstr "Handlingsgruppe"
 msgid ""
 "The GtkActionGroup this GtkAction is associated with, or NULL (for internal "
 "use)."
-msgstr "GtkActionGroup som denne GtkAction-en er tilknytta, eller NULL (for intern bruk)."
+msgstr ""
+"GtkActionGroup som denne GtkAction-en er tilknytta, eller NULL (for intern "
+"bruk)."
 
 #: ../gtk/gtkactiongroup.c:171
 msgid "A name for the action group."
@@ -1207,7 +1217,9 @@ msgstr "Puls"
 msgid ""
 "Set this to positive values to indicate that some progress is made, but you "
 "don't know how much."
-msgstr "Sett til positiv verdi for å visa at det er framdrift, men du veit ikkje kor mykje."
+msgstr ""
+"Sett til positiv verdi for å visa at det er framdrift, men du veit ikkje kor "
+"mykje."
 
 #: ../gtk/gtkcellrendererprogress.c:187 ../gtk/gtkprogress.c:115
 msgid "Text x alignment"
@@ -1217,7 +1229,9 @@ msgstr "X-justering av tekst"
 msgid ""
 "The horizontal text alignment, from 0 (left) to 1 (right). Reversed for RTL "
 "layouts."
-msgstr "Den vassrette justeringa, frå 0 (venstre) til 1 (høgre). Omvendt for høgre-til-venstre-utformingar."
+msgstr ""
+"Den vassrette justeringa, frå 0 (venstre) til 1 (høgre). Omvendt for høgre-"
+"til-venstre-utformingar."
 
 #: ../gtk/gtkcellrendererprogress.c:204 ../gtk/gtkprogress.c:122
 msgid "Text y alignment"
@@ -1449,7 +1463,9 @@ msgstr "Forkort"
 msgid ""
 "The preferred place to ellipsize the string, if the cell renderer does not "
 "have enough room to display the entire string"
-msgstr "Den føretrukne staden å forkorta strengen, dersom celleteiknaren ikkje har plass nok til heile"
+msgstr ""
+"Den føretrukne staden å forkorta strengen, dersom celleteiknaren ikkje har "
+"plass nok til heile"
 
 #: ../gtk/gtkcellrenderertext.c:429 ../gtk/gtkfilechooserbutton.c:426
 #: ../gtk/gtklabel.c:449
@@ -1468,7 +1484,9 @@ msgstr "Tekstbrytingsmåte"
 msgid ""
 "How to break the string into multiple lines, if the cell renderer does not "
 "have enough room to display the entire string"
-msgstr "Korleis strengen skal brytast opp i fleire linjer dersom celleteiknaren ikkje har nok plass til å visa heile strengen"
+msgstr ""
+"Korleis strengen skal brytast opp i fleire linjer dersom celleteiknaren "
+"ikkje har nok plass til å visa heile strengen"
 
 #: ../gtk/gtkcellrenderertext.c:468 ../gtk/gtkcombobox.c:674
 msgid "Wrap width"
@@ -1882,7 +1900,9 @@ msgstr "Tittel på avriven meny"
 msgid ""
 "A title that may be displayed by the window manager when the popup is torn-"
 "off"
-msgstr "Ein tittel som kan visast av vindaugehandsamaren når sprettoppvindauget er rive av"
+msgstr ""
+"Ein tittel som kan visast av vindaugehandsamaren når sprettoppvindauget er "
+"rive av"
 
 #: ../gtk/gtkcombobox.c:819
 msgid "Popup shown"
@@ -2032,7 +2052,7 @@ msgstr "Posisjonen til den andre enden av utvalet, målt i teikn frå skrivemerk
 
 #: ../gtk/gtkentry.c:498
 msgid "Whether the entry contents can be edited"
-msgstr "Om innhaldet i oppføringa kan redigerast"
+msgstr "Om innhaldet i tekstfeltet kan redigerast"
 
 #: ../gtk/gtkentry.c:505
 msgid "Maximum length"
@@ -2041,7 +2061,7 @@ msgstr "Største lengde"
 #: ../gtk/gtkentry.c:506
 msgid "Maximum number of characters for this entry. Zero if no maximum"
 msgstr ""
-"Øvre grense for tal på teikn for denne oppføringa. Null dersom ikkje noko "
+"Øvre grense for tal på teikn i dette tekstfeltet. Null dersom ikkje noko "
 "øvre grense"
 
 #: ../gtk/gtkentry.c:514
@@ -2058,7 +2078,7 @@ msgstr ""
 
 #: ../gtk/gtkentry.c:523
 msgid "FALSE removes outside bevel from entry"
-msgstr "Dersom usann, vert den ytre kanten fjerna frå oppføringa"
+msgstr "Dersom usann, vert den ytre kanten fjerna frå tekstfeltet"
 
 #: ../gtk/gtkentry.c:531
 msgid "Border between text and frame. Overrides the inner-border style property"
@@ -2070,7 +2090,7 @@ msgstr "Usynleg teikn"
 
 #: ../gtk/gtkentry.c:539
 msgid "The character to use when masking entry contents (in \"password mode\")"
-msgstr "Teiknet som skal brukast til å gøyma innhaldet i felt (i passordmodus)"
+msgstr "Teiknet som skal brukast til å gøyma innhaldet i tekstfelt (i passordmodus)"
 
 #: ../gtk/gtkentry.c:546
 msgid "Activates default"
@@ -2090,7 +2110,7 @@ msgstr "Breidde i teikn"
 
 #: ../gtk/gtkentry.c:554
 msgid "Number of characters to leave space for in the entry"
-msgstr "Tal på teikn som det skal setjast av plass til i feltet"
+msgstr "Tal på teikn som det skal setjast av plass til i tekstfeltet"
 
 #: ../gtk/gtkentry.c:563
 msgid "Scroll offset"
@@ -2098,11 +2118,11 @@ msgstr "Utrulla"
 
 #: ../gtk/gtkentry.c:564
 msgid "Number of pixels of the entry scrolled off the screen to the left"
-msgstr "Kor mange pikslar av oppføringa som har rulla av venstre sida av skjermen"
+msgstr "Kor mange pikslar av tekstfeltet som har rulla av venstre sida av skjermen"
 
 #: ../gtk/gtkentry.c:574
 msgid "The contents of the entry"
-msgstr "Innhaldet i oppføringa"
+msgstr "Innhaldet i tekstfeltet"
 
 #: ../gtk/gtkentry.c:589 ../gtk/gtkmisc.c:73
 msgid "X align"
@@ -2112,7 +2132,9 @@ msgstr "X-justering"
 msgid ""
 "The horizontal alignment, from 0 (left) to 1 (right). Reversed for RTL "
 "layouts."
-msgstr "Den vassrette justeringa, frå 0 (venstre) til 1 (høgre). Omvendt for høgre-til-venstre-utformingar."
+msgstr ""
+"Den vassrette justeringa, frå 0 (venstre) til 1 (høgre). Omvendt for høgre-"
+"til-venstre-utformingar."
 
 #: ../gtk/gtkentry.c:606
 msgid "Truncate multiline"
@@ -2124,7 +2146,7 @@ msgstr "Om fleirlinjers innlimingar skal brekkast om til ei linje."
 
 #: ../gtk/gtkentry.c:623
 msgid "Which kind of shadow to draw around the entry when has-frame is set"
-msgstr "Kva slags skugge skal teiknast rundt feltet når has-frame er sett"
+msgstr "Kva slags skugge skal teiknast rundt tekstfeltet når has-frame er sett"
 
 #: ../gtk/gtkentry.c:893
 msgid "Border between text and frame."
@@ -2136,7 +2158,7 @@ msgstr "Vel når fokusert"
 
 #: ../gtk/gtkentry.c:899
 msgid "Whether to select the contents of an entry when it is focused"
-msgstr "Om innhaldet i ei oppføring skal merkast når oppføringa vert fokusert"
+msgstr "Om innhaldet i eit tekstfelt skal merkast når tekstfeltet vert fokusert"
 
 #: ../gtk/gtkentry.c:913
 msgid "Password Hint Timeout"
@@ -2144,7 +2166,7 @@ msgstr "Tidsavbrot for passordhint"
 
 #: ../gtk/gtkentry.c:914
 msgid "How long to show the last input character in hidden entries"
-msgstr "Kor lenge det siste skrivne teiknet skal visast i skjulte skriveboksar"
+msgstr "Kor lenge det siste skrivne teiknet skal visast i skjulte tekstfelt"
 
 #: ../gtk/gtkentrycompletion.c:279
 msgid "Completion Model"
@@ -2192,7 +2214,7 @@ msgstr "Sprettopp med fast breidde"
 
 #: ../gtk/gtkentrycompletion.c:355
 msgid "If TRUE, the popup window will have the same size as the entry"
-msgstr "Dersom sann, vil sprettoppvindauget ha same storleik som oppføringa"
+msgstr "Dersom sann, vil sprettoppvindauget ha same storleik som tekstfeltet"
 
 #: ../gtk/gtkentrycompletion.c:373
 msgid "Popup single match"
@@ -2367,7 +2389,9 @@ msgstr "Utfør overskrivingsstadfesting"
 msgid ""
 "Whether a file chooser in save mode will present an overwrite confirmation "
 "dialog if necessary."
-msgstr "Om ein filveljar i lagringsmodus vil be om stadfesting av overskriving om nødvendig."
+msgstr ""
+"Om ein filveljar i lagringsmodus vil be om stadfesting av overskriving om "
+"nødvendig."
 
 #: ../gtk/gtkfilechooserbutton.c:381
 msgid "Dialog"
@@ -2733,7 +2757,9 @@ msgstr "Ikonstorleik"
 
 #: ../gtk/gtkimage.c:188
 msgid "Symbolic size to use for stock icon, icon set or named icon"
-msgstr "Symbolsk storleik som skal brukast på standardikon, ikonsett eller namngjeve ikon"
+msgstr ""
+"Symbolsk storleik som skal brukast på standardikon, ikonsett eller namngjeve "
+"ikon"
 
 #: ../gtk/gtkimage.c:204
 msgid "Pixel size"
@@ -2855,7 +2881,9 @@ msgstr ""
 msgid ""
 "The preferred place to ellipsize the string, if the label does not have "
 "enough room to display the entire string"
-msgstr "Den valde staden å forkorta strengen, dersom merkelappen ikkje har nok plass til å visa heile strengen"
+msgstr ""
+"Den valde staden å forkorta strengen, dersom merkelappen ikkje har nok plass "
+"til å visa heile strengen"
 
 #: ../gtk/gtklabel.c:470
 msgid "Single Line Mode"
@@ -3299,7 +3327,7 @@ msgstr "Menymerkelapp"
 
 #: ../gtk/gtknotebook.c:677
 msgid "The string displayed in the child's menu entry"
-msgstr "Strengen som vert vist i menyoppføringa til barnet"
+msgstr "Strengen som vert vist i menytekstfeltet til barnet"
 
 #: ../gtk/gtknotebook.c:690
 msgid "Tab expand"
@@ -3577,7 +3605,9 @@ msgstr "Spor utskriftsstatus"
 msgid ""
 "TRUE if the print job will continue to emit status-changed signals after the "
 "print data has been sent to the printer or print server."
-msgstr "Sann dersom utskriftsjobben vil halda fram med å senda statusendringssignal etter at utskriftsdata har vorte sendt til skrivaren eller utskriftstenaren."
+msgstr ""
+"Sann dersom utskriftsjobben vil halda fram med å senda statusendringssignal "
+"etter at utskriftsdata har vorte sendt til skrivaren eller utskriftstenaren."
 
 #: ../gtk/gtkprintoperation.c:877
 msgid "Default Page Setup"
@@ -3628,13 +3658,18 @@ msgstr "Bruk heile arket"
 msgid ""
 "TRUE if the origin of the context should be at the corner of the page and "
 "not the corner of the imageable area"
-msgstr "Sann dersom origo på konteksten skal vera i hjørnet av arket og ikkje i hjørnet av det brukbare området"
+msgstr ""
+"Sann dersom origo på konteksten skal vera i hjørnet av arket og ikkje i "
+"hjørnet av det brukbare området"
 
 #: ../gtk/gtkprintoperation.c:1006
 msgid ""
 "TRUE if the print operation will continue to report on the print job status "
 "after the print data has been sent to the printer or print server."
-msgstr "Sann dersom utskriftshandlinga skal halda fram med å rapportera status på utskriftsjobben etter at utskriftsdata har vorte sendt til skrivaren eller utskriftstenaren."
+msgstr ""
+"Sann dersom utskriftshandlinga skal halda fram med å rapportera status på "
+"utskriftsjobben etter at utskriftsdata har vorte sendt til skrivaren eller "
+"utskriftstenaren."
 
 #: ../gtk/gtkprintoperation.c:1023
 msgid "Unit"
@@ -3790,7 +3825,9 @@ msgstr "Tekst som skal visast i framdriftsvisaren"
 msgid ""
 "The preferred place to ellipsize the string, if the progress bar does not "
 "have enough room to display the entire string, if at all."
-msgstr "Den foretrukne staden å forkorta strengen, dersom framdriftslinja ikkje har nok plass til å visa heile strengen, om i det heile."
+msgstr ""
+"Den foretrukne staden å forkorta strengen, dersom framdriftslinja ikkje har "
+"nok plass til å visa heile strengen, om i det heile."
 
 #: ../gtk/gtkprogressbar.c:218
 msgid "XSpacing"
@@ -3856,7 +3893,7 @@ msgstr "Snu retningen glidaren går for å auka verdien i området"
 
 #: ../gtk/gtkrange.c:362
 msgid "Lower stepper sensitivity"
-msgstr "Minska stegkjensle"
+msgstr "Nedre stegkjensle"
 
 #: ../gtk/gtkrange.c:363
 msgid ""
@@ -3866,37 +3903,37 @@ msgstr "Kjenslereglane for stegelementet som peikar på den nedre kanten av just
 
 #: ../gtk/gtkrange.c:371
 msgid "Upper stepper sensitivity"
-msgstr ""
+msgstr "Øvre stegkjensle"
 
 #: ../gtk/gtkrange.c:372
 msgid ""
 "The sensitivity policy for the stepper that points to the adjustment's upper "
 "side"
-msgstr ""
+msgstr "Kjenslereglane for stegelementet som peikar på den øvre kanten av justeringa"
 
 #: ../gtk/gtkrange.c:389
 msgid "Show Fill Level"
-msgstr ""
+msgstr "Vis fyllingsgrad"
 
 #: ../gtk/gtkrange.c:390
 msgid "Whether to display a fill level indicator graphics on trough."
-msgstr ""
+msgstr "Om det skal visast ein fyllingsgradsvisar på trauet."
 
 #: ../gtk/gtkrange.c:406
 msgid "Restrict to Fill Level"
-msgstr ""
+msgstr "Avgrens til fyllingsgrad"
 
 #: ../gtk/gtkrange.c:407
 msgid "Whether to restrict the upper boundary to the fill level."
-msgstr ""
+msgstr "Om den øvre grensa skal avgrensast til fyllingsgraden."
 
 #: ../gtk/gtkrange.c:422
 msgid "Fill Level"
-msgstr ""
+msgstr "Fyllingsgrad"
 
 #: ../gtk/gtkrange.c:423
 msgid "The fill level."
-msgstr ""
+msgstr "Fyllingsgraden."
 
 #: ../gtk/gtkrange.c:431
 msgid "Slider Width"
@@ -3912,11 +3949,11 @@ msgstr "Traukant"
 
 #: ../gtk/gtkrange.c:440
 msgid "Spacing between thumb/steppers and outer trough bevel"
-msgstr ""
+msgstr "Luft mellomg tomlar/steg og ytre trauavrunding"
 
 #: ../gtk/gtkrange.c:447
 msgid "Stepper Size"
-msgstr ""
+msgstr "Steglengde"
 
 #: ../gtk/gtkrange.c:448
 msgid "Length of step buttons at ends"
@@ -3924,11 +3961,11 @@ msgstr "Lengde på stegknappane på endane"
 
 #: ../gtk/gtkrange.c:463
 msgid "Stepper Spacing"
-msgstr ""
+msgstr "Stegarrom"
 
 #: ../gtk/gtkrange.c:464
 msgid "Spacing between step buttons and thumb"
-msgstr ""
+msgstr "Luft mellom stegknappar og tommel"
 
 #: ../gtk/gtkrange.c:471
 msgid "Arrow X Displacement"
@@ -3948,33 +3985,33 @@ msgstr "Kor langt i Y-retningen pila skal flyttast når knappen vert trykt ned"
 
 #: ../gtk/gtkrange.c:488
 msgid "Draw slider ACTIVE during drag"
-msgstr ""
+msgstr "Dra-glidar AKTIV under draging"
 
 #: ../gtk/gtkrange.c:489
 msgid ""
 "With this option set to TRUE, sliders will be drawn ACTIVE and with shadow "
 "IN while they are dragged"
-msgstr ""
+msgstr "Når denne er sann, vil glidarar teiknast som AKTIV og med skugge I når dei vert dregne"
 
 #: ../gtk/gtkrange.c:503
 msgid "Trough Side Details"
-msgstr ""
+msgstr "Traukantdetaljar"
 
 #: ../gtk/gtkrange.c:504
 msgid ""
 "When TRUE, the parts of the trough on the two sides of the slider are drawn "
 "with different details"
-msgstr ""
+msgstr "Når sann vil traudelane på dei to kantane av glidaren teiknast med ulike detaljar"
 
 #: ../gtk/gtkrange.c:520
 msgid "Trough Under Steppers"
-msgstr ""
+msgstr "Trau under stegarar"
 
 #: ../gtk/gtkrange.c:521
 msgid ""
 "Whether to draw trough for full length of range or exclude the steppers and "
 "spacing"
-msgstr ""
+msgstr "Om trauet skal teiknast i heile lengda eller ikkje ta med stegarar og luft"
 
 #: ../gtk/gtkrecentaction.c:679 ../gtk/gtkrecentchoosermenu.c:209
 msgid "Show Numbers"
@@ -3986,7 +4023,7 @@ msgstr "Om elementa skal visast med eit nummer"
 
 #: ../gtk/gtkrecentchooser.c:120
 msgid "Recent Manager"
-msgstr ""
+msgstr "Nyleg-handsamar"
 
 #: ../gtk/gtkrecentchooser.c:121
 msgid "The RecentManager object to use"
@@ -4018,7 +4055,7 @@ msgstr "Om det skal vera eit ikon nær elementet"
 
 #: ../gtk/gtkrecentchooser.c:178
 msgid "Show Not Found"
-msgstr ""
+msgstr "Vis ikkje funne"
 
 #: ../gtk/gtkrecentchooser.c:179
 msgid "Whether the items pointing to unavailable resources should be displayed"
@@ -4038,7 +4075,7 @@ msgstr "Om dei valde ressursane skal avgrensast til lokale fil-URI-ar"
 
 #: ../gtk/gtkrecentchooser.c:222 ../gtk/gtkrecentmanager.c:265
 msgid "Limit"
-msgstr ""
+msgstr "Grense"
 
 #: ../gtk/gtkrecentchooser.c:223
 msgid "The maximum number of items to be displayed"
@@ -4062,11 +4099,11 @@ msgstr "Den fulle stien til fila som vert brukt til å lagra og lesa lista"
 
 #: ../gtk/gtkrecentmanager.c:266
 msgid "The maximum number of items to be returned by gtk_recent_manager_get_items()"
-msgstr ""
+msgstr "Det største talet som skal returnerast av gtk_recent_manager_get_items()"
 
 #: ../gtk/gtkrecentmanager.c:282
 msgid "The size of the recently used resources list"
-msgstr ""
+msgstr "Storleiken på lista over nyleg brukte ressursar"
 
 #: ../gtk/gtkruler.c:90
 msgid "Lower"
@@ -4150,7 +4187,9 @@ msgstr "Ikonstorleik"
 
 #: ../gtk/gtkscalebutton.c:201
 msgid "The GtkAdjustment that contains the current value of this scale button object"
-msgstr "GtkAdjustment som inneheld den noverande verdien til dette skaleringsknappobjektet"
+msgstr ""
+"GtkAdjustment som inneheld den noverande verdien til dette "
+"skaleringsknappobjektet"
 
 #: ../gtk/gtkscalebutton.c:229
 msgid "Icons"
@@ -4218,9 +4257,11 @@ msgstr "Plassering av vindauge"
 msgid ""
 "Where the contents are located with respect to the scrollbars. This property "
 "only takes effect if \"window-placement-set\" is TRUE."
-msgstr "Kor innhaldet skal plasserast med omsyn til rullefelta. Denne eigenskapen vert berre aktiv om «window-placement-set» er sann."
+msgstr ""
+"Kor innhaldet skal plasserast med omsyn til rullefelta. Denne eigenskapen "
+"vert berre aktiv om «window-placement-set» er sann."
 
-#: ../gtk/gtkscro edwindow.c:270
+#: ../gtk/gtkscrolledwindow.c:270
 msgid "Window Placement Set"
 msgstr "Plassering av vindauge"
 
@@ -4228,7 +4269,9 @@ msgstr "Plassering av vindauge"
 msgid ""
 "Whether \"window-placement\" should be used to determine the location of the "
 "contents with respect to the scrollbars."
-msgstr "Om «window-placement» skal brukast til å styra plasseringa av innhaldet med omsyn til rullefeltet."
+msgstr ""
+"Om «window-placement» skal brukast til å styra plasseringa av innhaldet med "
+"omsyn til rullefeltet."
 
 #: ../gtk/gtkscrolledwindow.c:277
 msgid "Shadow Type"
@@ -4236,7 +4279,7 @@ msgstr "Skuggetype"
 
 #: ../gtk/gtkscrolledwindow.c:278
 msgid "Style of bevel around the contents"
-msgstr ""
+msgstr "Styl på avrunding rundt innhald"
 
 #: ../gtk/gtkscrolledwindow.c:292
 msgid "Scrollbars within bevel"
@@ -4262,7 +4305,9 @@ msgstr "Plassering av rullande vindauge"
 msgid ""
 "Where the contents of scrolled windows are located with respect to the "
 "scrollbars, if not overridden by the scrolled window's own placement."
-msgstr "Kor innhaldet av rullande vindauge er plassert med omsyn til rullefelta, om ikkje overstyrt av det rulla vindauget si plassering."
+msgstr ""
+"Kor innhaldet av rullande vindauge er plassert med omsyn til rullefelta, om "
+"ikkje overstyrt av det rulla vindauget si plassering."
 
 #: ../gtk/gtkseparatortoolitem.c:107
 msgid "Draw"
@@ -4329,8 +4374,8 @@ msgid ""
 "Whether two cursors should be displayed for mixed left-to-right and right-to-"
 "left text"
 msgstr ""
-"Om det skal visast to skrivemerke i blanda venstre-til-høgre-tekst og høgre-til-"
-"venstre-tekst"
+"Om det skal visast to skrivemerke i blanda venstre-til-høgre-tekst og høgre-"
+"til-venstre-tekst"
 
 #: ../gtk/gtksettings.c:273
 msgid "Theme Name"
@@ -4398,51 +4443,51 @@ msgstr "Liste over ikonstorleikar (gtk-menu=16,16;gtk-button=20,20 ..."
 
 #: ../gtk/gtksettings.c:345
 msgid "GTK Modules"
-msgstr ""
+msgstr "GTK-modular"
 
 #: ../gtk/gtksettings.c:346
 msgid "List of currently active GTK modules"
-msgstr ""
+msgstr "Liste over aktive GTK-modular"
 
 #: ../gtk/gtksettings.c:355
 msgid "Xft Antialias"
-msgstr ""
+msgstr "Xft-kantutjamning"
 
 #: ../gtk/gtksettings.c:356
 msgid "Whether to antialias Xft fonts; 0=no, 1=yes, -1=default"
-msgstr ""
+msgstr "Om Xft-skrifttypar skal bruka kantutjamning. 0=nei, 1=ja, -1=bruk standard"
 
 #: ../gtk/gtksettings.c:365
 msgid "Xft Hinting"
-msgstr ""
+msgstr "Xft-hinting"
 
 #: ../gtk/gtksettings.c:366
 msgid "Whether to hint Xft fonts; 0=no, 1=yes, -1=default"
-msgstr ""
+msgstr "Om Xft-skrifttypar skal bruka hinting. 0=nei, 1=ja, -1=bruk standard"
 
 #: ../gtk/gtksettings.c:375
 msgid "Xft Hint Style"
-msgstr ""
+msgstr "Xft-hintestil"
 
 #: ../gtk/gtksettings.c:376
 msgid "What degree of hinting to use; hintnone, hintslight, hintmedium, or hintfull"
-msgstr ""
+msgstr "Kor mykje hinting som skal brukast: hintnone, hintslight, hintmedium eller hintfull"
 
 #: ../gtk/gtksettings.c:385
 msgid "Xft RGBA"
-msgstr ""
+msgstr "Xft RGBA"
 
 #: ../gtk/gtksettings.c:386
 msgid "Type of subpixel antialiasing; none, rgb, bgr, vrgb, vbgr"
-msgstr ""
+msgstr "Typen underpikselutjamning: ingen, rgb, bgr, vrgb, vbgr"
 
 #: ../gtk/gtksettings.c:395
 msgid "Xft DPI"
-msgstr ""
+msgstr "Xft PPT"
 
 #: ../gtk/gtksettings.c:396
 msgid "Resolution for Xft, in 1024 * dots/inch. -1 to use default value"
-msgstr ""
+msgstr "Oppløysinga i Xft, 1024 × punkt/tomme. -1 for å bruka standardverdien"
 
 #: ../gtk/gtksettings.c:405
 msgid "Cursor theme name"
@@ -4462,7 +4507,7 @@ msgstr "Storleik på peikaren, eller 0 for standard storleik"
 
 #: ../gtk/gtksettings.c:425
 msgid "Alternative button order"
-msgstr ""
+msgstr "Alternativ knapperekkefølgje"
 
 #: ../gtk/gtksettings.c:426
 msgid "Whether buttons in dialogs should use the alternative button order"
@@ -4470,13 +4515,13 @@ msgstr "Om knappar i dialogar skal visast i alternativ rekkefølgje"
 
 #: ../gtk/gtksettings.c:443
 msgid "Alternative sort indicator direction"
-msgstr ""
+msgstr "Alternativ sorteringsindikatorretning"
 
 #: ../gtk/gtksettings.c:444
 msgid ""
 "Whether the direction of the sort indicators in list and tree views is "
 "inverted compared to the default (where down means ascending)"
-msgstr ""
+msgstr "Om retninga på sorteringsindikatorane i liste- og trevisinga er omvendte jamført med standard (der ned betyr stigande)"
 
 #: ../gtk/gtksettings.c:452
 msgid "Show the 'Input Methods' menu"
@@ -4486,33 +4531,33 @@ msgstr "Vis inndatametode-menyen"
 msgid ""
 "Whether the context menus of entries and text views should offer to change "
 "the input method"
-msgstr ""
+msgstr "Om sprettoppmenyane til tekstfelt og tekstvisingar skal tilby å endra inndatametoden"
 
 #: ../gtk/gtksettings.c:461
 msgid "Show the 'Insert Unicode Control Character' menu"
-msgstr ""
+msgstr "Vis «Sett inn unicode-kontrollteikn»-menyen"
 
 #: ../gtk/gtksettings.c:462
 msgid ""
 "Whether the context menus of entries and text views should offer to insert "
 "control characters"
-msgstr ""
+msgstr "Om sprettoppmenyane til tekstfelt og tekstvisingar skal tilby å setja inn kontrollteikn"
 
 #: ../gtk/gtksettings.c:470
 msgid "Start timeout"
-msgstr ""
+msgstr "Tidsgrensestart"
 
 #: ../gtk/gtksettings.c:471
 msgid "Starting value for timeouts, when button is pressed"
-msgstr ""
+msgstr "Startverdi for tidsgrenser når knappen vert trykt"
 
 #: ../gtk/gtksettings.c:480
 msgid "Repeat timeout"
-msgstr ""
+msgstr "Gjentaking av tidsavbrot"
 
 #: ../gtk/gtksettings.c:481
 msgid "Repeat value for timeouts, when button is pressed"
-msgstr ""
+msgstr "Gjentaking av tidsavbrot, når ein knapp vert tryke"
 
 #: ../gtk/gtksettings.c:490
 msgid "Expand timeout"
@@ -4536,15 +4581,15 @@ msgstr "Bruk animasjonar"
 
 #: ../gtk/gtksettings.c:537
 msgid "Whether to enable toolkit-wide animations."
-msgstr ""
+msgstr "Om animasjonar skal brukast over heile verktøysettet."
 
 #: ../gtk/gtksettings.c:555
 msgid "Enable Touchscreen Mode"
-msgstr ""
+msgstr "Bruk trykkskjermmodus"
 
 #: ../gtk/gtksettings.c:556
 msgid "When TRUE, there are no motion notify events delivered on this screen"
-msgstr ""
+msgstr "Når sann vert ikkje varslingar om rørsle viste på denne skjermen"
 
 #: ../gtk/gtksettings.c:573
 msgid "Tooltip timeout"
@@ -4552,19 +4597,19 @@ msgstr "Tidsavbrot for verktøytips"
 
 #: ../gtk/gtksettings.c:574
 msgid "Timeout before tooltip is shown"
-msgstr ""
+msgstr "Tidsgrense før verktøytips vert vist"
 
 #: ../gtk/gtksettings.c:599
 msgid "Tooltip browse timeout"
-msgstr ""
+msgstr "Tidsavbrot for verktøytips i bla-modus"
 
 #: ../gtk/gtksettings.c:600
 msgid "Timeout before tooltip is shown when browse mode is enabled"
-msgstr ""
+msgstr "Tidsgrense før verktøytips vert vist når bla-modus er i bruk"
 
 #: ../gtk/gtksettings.c:621
 msgid "Tooltip browse mode timeout"
-msgstr ""
+msgstr "Tidsavbrot for bla-modus med verktøytips"
 
 #: ../gtk/gtksettings.c:622
 msgid "Timeout after which browse mode is disabled"
@@ -4572,27 +4617,27 @@ msgstr "Tidsavbrot som koplar ut bla-modus"
 
 #: ../gtk/gtksettings.c:641
 msgid "Keynav Cursor Only"
-msgstr ""
+msgstr "Berre tastestyring av peikaren"
 
 #: ../gtk/gtksettings.c:642
 msgid "When TRUE, there are only cursor keys available to navigate widgets"
-msgstr ""
+msgstr "Når sann, er det berre mogleg å bruka peikartastane til å navigera skjermelement"
 
 #: ../gtk/gtksettings.c:659
 msgid "Keynav Wrap Around"
-msgstr ""
+msgstr "Tastaturnavigering går rundt"
 
 #: ../gtk/gtksettings.c:660
 msgid "Whether to wrap around when keyboard-navigating widgets"
-msgstr "Om fokus skal gå rundt når tastaturet vert brukt til å navigera skjermelement"
+msgstr "Om peikaren skal gå rundt skjermen når tastaturet vert brukt til å navigera skjermelement"
 
 #: ../gtk/gtksettings.c:680
 msgid "Error Bell"
-msgstr ""
+msgstr "Feilsignal"
 
 #: ../gtk/gtksettings.c:681
 msgid "When TRUE, keyboard navigation and other errors will cause a beep"
-msgstr ""
+msgstr "Når sann, vil tastaturnavigeringsfeil og andre feil føra til eit signal"
 
 #: ../gtk/gtksettings.c:698
 msgid "Color Hash"
@@ -4600,11 +4645,11 @@ msgstr "Fargenøkkel"
 
 #: ../gtk/gtksettings.c:699
 msgid "A hash table representation of the color scheme."
-msgstr ""
+msgstr "Ein nøkkeltabellrepresentasjon av fargeskjemaet."
 
 #: ../gtk/gtksettings.c:707
 msgid "Default file chooser backend"
-msgstr ""
+msgstr "Standard filveljarmotor"
 
 #: ../gtk/gtksettings.c:708
 msgid "Name of the GtkFileChooser backend to use by default"
@@ -4620,11 +4665,11 @@ msgstr "Liste over GtkPrintBackend-motorar å bruka som standard"
 
 #: ../gtk/gtksettings.c:749
 msgid "Default command to run when displaying a print preview"
-msgstr ""
+msgstr "Standardkommando å køyra når ei førehandsvising av utskrift vert vist"
 
 #: ../gtk/gtksettings.c:750
 msgid "Command to run when displaying a print preview"
-msgstr ""
+msgstr "Kommando å køyra når ei førehandsvising av utskrift vert vist"
 
 #: ../gtk/gtksettings.c:766
 msgid "Enable Mnemonics"
@@ -4644,7 +4689,7 @@ msgstr "Om menyelementa skal ha snøggtastar"
 
 #: ../gtk/gtksettings.c:801
 msgid "Recent Files Limit"
-msgstr ""
+msgstr "Grense for nyleg brukte filer"
 
 #: ../gtk/gtksettings.c:802
 msgid "Number of recently used files"
@@ -4658,7 +4703,9 @@ msgstr "Modus"
 msgid ""
 "The directions in which the size group affects the requested sizes of its "
 "component widgets"
-msgstr "Retningane som storleikgruppa påvirkar dei ynskte storleikane til komponentane sine i"
+msgstr ""
+"Retningane som storleikgruppa påvirkar dei ynskte storleikane til "
+"komponentane sine i"
 
 #: ../gtk/gtksizegroup.c:310
 msgid "Ignore hidden"
@@ -4666,7 +4713,7 @@ msgstr "Ignorer gøymte"
 
 #: ../gtk/gtksizegroup.c:311
 msgid "If TRUE, unmapped widgets are ignored when determining the size of the group"
-msgstr ""
+msgstr "Når sann, vert gøymte skjermelement oversett når storleiken på gruppa vert talt opp"
 
 #: ../gtk/gtkspinbutton.c:208
 msgid "The adjustment that holds the value of the spinbutton"
@@ -4726,7 +4773,7 @@ msgstr "Har handtak til å endra storleik"
 
 #: ../gtk/gtkstatusbar.c:142
 msgid "Whether the statusbar has a grip for resizing the toplevel"
-msgstr ""
+msgstr "Om statuslinja har eit grep for å endra storleik på vindauget"
 
 #: ../gtk/gtkstatusbar.c:187
 msgid "Style of bevel around the statusbar text"
@@ -4885,11 +4932,11 @@ msgstr "Om ord vert delte på kanten av skjermelementet"
 
 #: ../gtk/gtktextbuffer.c:179
 msgid "Tag Table"
-msgstr ""
+msgstr "Taggtabell"
 
 #: ../gtk/gtktextbuffer.c:180
 msgid "Text Tag Table"
-msgstr ""
+msgstr "Teksttaggtabell"
 
 #: ../gtk/gtktextbuffer.c:198
 msgid "Current text of the buffer"
@@ -4909,29 +4956,29 @@ msgstr "Skrivemerkeplassering"
 
 #: ../gtk/gtktextbuffer.c:230
 msgid "The position of the insert mark (as offset from the beginning of the buffer)"
-msgstr ""
+msgstr "Plasseringa av innsetjingsmerket (telt frå starten av bufferet)"
 
 #: ../gtk/gtktextbuffer.c:245
 msgid "Copy target list"
-msgstr ""
+msgstr "Kopieringsmålliste"
 
 #: ../gtk/gtktextbuffer.c:246
 msgid "The list of targets this buffer supports for clipboard copying and DND source"
-msgstr ""
+msgstr "Lista over mål dette bufferet støttar for utklippstavlekopiering og dra-og-slepp-kjelde"
 
 #: ../gtk/gtktextbuffer.c:261
 msgid "Paste target list"
-msgstr ""
+msgstr "Lim inn-målliste"
 
 #: ../gtk/gtktextbuffer.c:262
 msgid ""
 "The list of targets this buffer supports for clipboard pasting and DND "
 "destination"
-msgstr ""
+msgstr "Lista over mål dette bufferet støttar for utklippstavleliming og dra-og-slepp-mål"
 
 #: ../gtk/gtktextmark.c:90
 msgid "Mark name"
-msgstr ""
+msgstr "Merkenamn"
 
 #: ../gtk/gtktextmark.c:97
 msgid "Left gravity"
@@ -4943,11 +4990,11 @@ msgstr "Om merket har venstretyngde"
 
 #: ../gtk/gtktexttag.c:173
 msgid "Tag name"
-msgstr ""
+msgstr "Taggnamn"
 
 #: ../gtk/gtktexttag.c:174
 msgid "Name used to refer to the text tag. NULL for anonymous tags"
-msgstr ""
+msgstr "Namn brukt til å peika på teksttaggen. NULL for anonyme taggar"
 
 #: ../gtk/gtktexttag.c:192
 msgid "Background color as a (possibly unallocated) GdkColor"
@@ -4967,7 +5014,7 @@ msgstr ""
 
 #: ../gtk/gtktexttag.c:208
 msgid "Background stipple mask"
-msgstr ""
+msgstr "Bakgrunnsstiplingsmaske"
 
 #: ../gtk/gtktexttag.c:209
 msgid "Bitmap to use as a mask when drawing the text background"
@@ -4979,7 +5026,7 @@ msgstr "Framgrunnsfarge som ein GdkColor (treng ikkje vera allokert)"
 
 #: ../gtk/gtktexttag.c:234
 msgid "Foreground stipple mask"
-msgstr ""
+msgstr "Framgrunnsstiplingsmaske"
 
 #: ../gtk/gtktexttag.c:235
 msgid "Bitmap to use as a mask when drawing the text foreground"
@@ -5037,7 +5084,8 @@ msgid ""
 "when rendering the text. If not set, an appropriate default will be used."
 msgstr ""
 "Språket denne teksten er i, som ein ISO-kode. Pango kan bruka dette som eit "
-"hint når teksten vert teikna. Dersom ingenting er satt, vert ein høveleg standardverdi brukt."
+"hint når teksten vert teikna. Dersom ingenting er satt, vert ein høveleg "
+"standardverdi brukt."
 
 #: ../gtk/gtktexttag.c:386
 msgid "Left margin"
@@ -5068,8 +5116,8 @@ msgid ""
 "Offset of text above the baseline (below the baseline if rise is negative) "
 "in Pango units"
 msgstr ""
-"Kor mykje over grunnlinja teksten skal stå, i Pango-einingar (teksten kjem under "
-"grunnlinja dersom denne er negativ)"
+"Kor mykje over grunnlinja teksten skal stå, i Pango-einingar (teksten kjem "
+"under grunnlinja dersom denne er negativ)"
 
 #: ../gtk/gtktexttag.c:428
 msgid "Pixels above lines"
@@ -5133,11 +5181,11 @@ msgstr "Bakgrunnsfarge i avsnittet som ein GdkColor (treng ikkje vera allokert)"
 
 #: ../gtk/gtktexttag.c:554
 msgid "Margin Accumulates"
-msgstr ""
+msgstr "Margakkumulasjon"
 
 #: ../gtk/gtktexttag.c:555
 msgid "Whether left and right margins accumulate."
-msgstr ""
+msgstr "Om venstre- og høgremargane vert akkumulerte."
 
 #: ../gtk/gtktexttag.c:568
 msgid "Background full height set"
@@ -5150,19 +5198,19 @@ msgstr "Om denne merkinga påvirkar bakgrunnshøgda"
 
 #: ../gtk/gtktexttag.c:572
 msgid "Background stipple set"
-msgstr ""
+msgstr "Bakgrunnsstipling sett"
 
 #: ../gtk/gtktexttag.c:573
 msgid "Whether this tag affects the background stipple"
-msgstr ""
+msgstr "Om denne taggen påverkar bakgrunnsstiplinga"
 
 #: ../gtk/gtktexttag.c:580
 msgid "Foreground stipple set"
-msgstr ""
+msgstr "Framgrunnsstipling sett"
 
 #: ../gtk/gtktexttag.c:581
 msgid "Whether this tag affects the foreground stipple"
-msgstr ""
+msgstr "Om denne taggen påverkar framgrunnsstiplinga"
 
 #: ../gtk/gtktexttag.c:616
 msgid "Justification set"
@@ -5314,11 +5362,11 @@ msgstr "Fargen understreking som framhever feil skal teiknast med"
 
 #: ../gtk/gtktoggleaction.c:103
 msgid "Create the same proxies as a radio action"
-msgstr ""
+msgstr "Lag dei same proksiane som ei radiohandling"
 
 #: ../gtk/gtktoggleaction.c:104
 msgid "Whether the proxies for this action look like radio action proxies"
-msgstr ""
+msgstr "Om proksiane for denne handlinga ser ut som radiohandlingproksiar"
 
 #: ../gtk/gtktoggleaction.c:119
 msgid "If the toggle action should be active in or not"
@@ -5406,7 +5454,7 @@ msgstr "Minste utviding av barnet"
 
 #: ../gtk/gtktoolbar.c:590
 msgid "Maximum amount of space an expandable item will be given"
-msgstr ""
+msgstr "Minste mengde luft eit utvidbart element vil få"
 
 #: ../gtk/gtktoolbar.c:598
 msgid "Space style"
@@ -5585,7 +5633,7 @@ msgstr ""
 
 #: ../gtk/gtktreeview.c:678
 msgid "Hover Selection"
-msgstr ""
+msgstr "Svevande merking"
 
 #: ../gtk/gtktreeview.c:679
 msgid "Whether the selection should follow the pointer"
@@ -5609,15 +5657,15 @@ msgstr "Framsyninga har utvidarar"
 
 #: ../gtk/gtktreeview.c:728
 msgid "Level Indentation"
-msgstr ""
+msgstr "Nivåindentering"
 
 #: ../gtk/gtktreeview.c:729
 msgid "Extra indentation for each level"
-msgstr ""
+msgstr "Ekstra indentering av kvart nivå"
 
 #: ../gtk/gtktreeview.c:738
 msgid "Rubber Banding"
-msgstr ""
+msgstr "Gummistrikk"
 
 #: ../gtk/gtktreeview.c:739
 msgid "Whether to enable selection of multiple items by dragging the mouse pointer"
@@ -5693,11 +5741,11 @@ msgstr "Fargen som skal brukast på oddetalsrader"
 
 #: ../gtk/gtktreeview.c:832
 msgid "Row Ending details"
-msgstr ""
+msgstr "Detaljar på linjeenden"
 
 #: ../gtk/gtktreeview.c:833
 msgid "Enable extended row background theming"
-msgstr ""
+msgstr "Tillat utvida draktendring i radbakgrunnen"
 
 #: ../gtk/gtktreeview.c:839
 msgid "Grid line width"
@@ -5749,7 +5797,7 @@ msgstr "Noverande breidde på kolonna"
 
 #: ../gtk/gtktreeviewcolumn.c:217
 msgid "Space which is inserted between cells"
-msgstr ""
+msgstr "Luft som vert sett inn mellom celler"
 
 #: ../gtk/gtktreeviewcolumn.c:225
 msgid "Sizing"
@@ -5839,7 +5887,7 @@ msgstr "Om menyane skal utstyrast med linjer som gjer det mogleg å riva laus me
 
 #: ../gtk/gtkuimanager.c:228
 msgid "Merged UI definition"
-msgstr ""
+msgstr "Samanslått grensesnittdefinisjon"
 
 #: ../gtk/gtkuimanager.c:229
 msgid "An XML string describing the merged UI"
@@ -6011,7 +6059,7 @@ msgstr "Ingen «vis alt»"
 
 #: ../gtk/gtkwidget.c:606
 msgid "Whether gtk_widget_show_all() should not affect this widget"
-msgstr "Om gtk_widget_show_all() <b>ikkje</b> skal påvirka dette skjermelementet"
+msgstr "Om gtk_widget_show_all() ikkje skal påvirka dette skjermelementet"
 
 #: ../gtk/gtkwidget.c:628
 msgid "Has tooltip"
@@ -6099,7 +6147,7 @@ msgstr "Teikn ramme"
 
 #: ../gtk/gtkwidget.c:2217
 msgid "Size of areas outside the widget's allocation to draw"
-msgstr ""
+msgstr "Storleik på områder utanfor skjermelementet sitt reserverte teikneområde"
 
 #: ../gtk/gtkwidget.c:2230
 msgid "Unvisited Link Color"
@@ -6125,7 +6173,7 @@ msgstr "Breie skiljelinjer"
 msgid ""
 "Whether separators have configurable width and should be drawn using a box "
 "instead of a line"
-msgstr ""
+msgstr "Om skiljeteikn har justerbar breidde og skal teiknast som ein boks i staden for som ei linje"
 
 #: ../gtk/gtkwidget.c:2274
 msgid "Separator Width"
@@ -6133,7 +6181,7 @@ msgstr "Skiljelinjebreidde"
 
 #: ../gtk/gtkwidget.c:2275
 msgid "The width of separators if wide-separators is TRUE"
-msgstr ""
+msgstr "Breidda på skiljeteikn dersom «wide-separators» er sann"
 
 #: ../gtk/gtkwidget.c:2289
 msgid "Separator Height"
@@ -6141,7 +6189,7 @@ msgstr "Skiljelinjehøgde"
 
 #: ../gtk/gtkwidget.c:2290
 msgid "The height of separators if \"wide-separators\" is TRUE"
-msgstr ""
+msgstr "Høgda på skiljeteikn dersom «wide-separators» er sann"
 
 #: ../gtk/gtkwidget.c:2304
 msgid "Horizontal Scroll Arrow Length"
@@ -6366,7 +6414,7 @@ msgstr "Tyngda til vindauget"
 
 #: ../gtk/gtkwindow.c:744
 msgid "Transient for Window"
-msgstr ""
+msgstr "Kortvarig for vindauget"
 
 #: ../gtk/gtkwindow.c:745
 msgid "The transient parent of the dialog"
@@ -6374,7 +6422,7 @@ msgstr "Kortvarig forelder for dialogen"
 
 #: ../gtk/gtkwindow.c:759
 msgid "Opacity for Window"
-msgstr ""
+msgstr "Uklårleik for vindauget"
 
 #: ../gtk/gtkwindow.c:760
 msgid "The opacity of the window, from 0 to 1"
