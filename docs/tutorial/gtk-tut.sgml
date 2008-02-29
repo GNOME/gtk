@@ -921,7 +921,7 @@ events come.</para>
     gtk_main ();
 </programlisting>
 
-<para>And the final return. Control returns here after gtk_quit() is called.</para>
+<para>And the final return. Control returns here after gtk_main_quit() is called.</para>
 
 <programlisting role="C">
     return 0;
