@@ -334,7 +334,8 @@ gtk_builder_get_parameters (GtkBuilder  *builder,
 static GObject *
 gtk_builder_get_internal_child (GtkBuilder  *builder,
                                 ObjectInfo  *info,
-                                const gchar *childname)
+                                const gchar *childname,
+				GError      **error)
 {
   GObject *obj = NULL;
 
@@ -359,14 +360,19 @@ gtk_builder_get_internal_child (GtkBuilder  *builder,
     };
 
   if (!obj)
-    g_error ("Unknown internal child: %s\n", childname);
-
+    {
+      g_set_error (error,
+		   GTK_BUILDER_ERROR,
+		   GTK_BUILDER_ERROR_INVALID_VALUE,
+		   "Unknown internal child: %s", childname);
+    }
   return obj;
 }
 
 GObject *
 _gtk_builder_construct (GtkBuilder *builder,
-                        ObjectInfo *info)
+                        ObjectInfo *info,
+			GError **error)
 {
   GArray *parameters, *construct_parameters;
   GType object_type;
@@ -379,7 +385,14 @@ _gtk_builder_construct (GtkBuilder *builder,
   g_assert (info->class_name != NULL);
   object_type = gtk_builder_get_type_from_name (builder, info->class_name);
   if (object_type == G_TYPE_INVALID)
-    g_error ("Invalid type: %s", info->class_name);
+    {
+      g_set_error (error,
+		   GTK_BUILDER_ERROR,
+		   GTK_BUILDER_ERROR_INVALID_VALUE,
+		   "Invalid object type `%s'",
+		   info->class_name);
+      return NULL;
+    }
 
   gtk_builder_get_parameters (builder, object_type,
                               info->id,
@@ -393,9 +406,17 @@ _gtk_builder_construct (GtkBuilder *builder,
 
       constructor = gtk_builder_get_object (builder, info->constructor);
       if (constructor == NULL)
-        g_error ("Unknown constructor for %s: %s\n", info->id,
-                 info->constructor);
-
+	{
+	  g_set_error (error,
+		       GTK_BUILDER_ERROR,
+		       GTK_BUILDER_ERROR_INVALID_VALUE,
+		       "Unknown object constructor for %s: %s",
+		       info->id,
+		       info->constructor);
+	  g_array_free (parameters, TRUE);
+	  g_array_free (construct_parameters, TRUE);
+	  return NULL;
+	}
       obj = gtk_buildable_construct_child (GTK_BUILDABLE (constructor),
                                            builder,
                                            info->id);
@@ -406,7 +427,13 @@ _gtk_builder_construct (GtkBuilder *builder,
   else if (info->parent && ((ChildInfo*)info->parent)->internal_child != NULL)
     {
       gchar *childname = ((ChildInfo*)info->parent)->internal_child;
-      obj = gtk_builder_get_internal_child (builder, info, childname);
+      obj = gtk_builder_get_internal_child (builder, info, childname, error);
+      if (!obj)
+	{
+	  g_array_free (parameters, TRUE);
+	  g_array_free (construct_parameters, TRUE);
+	  return NULL;
+	}
       if (construct_parameters->len)
         g_warning ("Can't pass in construct-only parameters to %s", childname);
       g_object_ref (obj);

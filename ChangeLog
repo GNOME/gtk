@@ -1,3 +1,14 @@
+2008-02-29  Johan Dahlin  <johan@gnome.org>
+
+	* gtk/gtkbuilder.c:
+	* gtk/gtkbuilderparser.c:
+	* gtk/gtkbuilderprivate.h:
+	Do not use g_error for a few more errors, instead set
+	the GError sent in through add_from_file/add_from_string.
+	* tests/buildertest.c:
+	Add a couple of new parsing tests.
+	(#519199, Pavel Syomin)
+
 2008-02-29  Federico Mena Quintero  <federico@novell.com>
 
 	* gtk/gtkfilesystemunix.c (gtk_file_system_unix_get_folder): When

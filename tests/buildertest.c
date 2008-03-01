@@ -77,6 +77,27 @@ test_parser (void)
   g_assert (error->code == GTK_BUILDER_ERROR_INVALID_TAG);
   g_error_free (error);
 
+  error = NULL;
+  gtk_builder_add_from_string (builder, "<interface><object class=\"Unknown\" id=\"a\"></object></interface>", -1, &error);
+  g_assert (error != NULL);
+  g_assert (error->domain == GTK_BUILDER_ERROR);
+  g_assert (error->code == GTK_BUILDER_ERROR_INVALID_VALUE);
+  g_error_free (error);
+
+  error = NULL;
+  gtk_builder_add_from_string (builder, "<interface><object class=\"GtkWidget\" id=\"a\" constructor=\"none\"></object></interface>", -1, &error);
+  g_assert (error != NULL);
+  g_assert (error->domain == GTK_BUILDER_ERROR);
+  g_assert (error->code == GTK_BUILDER_ERROR_INVALID_VALUE);
+  g_error_free (error);
+
+  error = NULL;
+  gtk_builder_add_from_string (builder, "<interface><object class=\"GtkButton\" id=\"a\"><child internal-child=\"foobar\"><object class=\"GtkButton\" id=\"int\"/></child></object></interface>", -1, &error);
+  g_assert (error != NULL);
+  g_assert (error->domain == GTK_BUILDER_ERROR);
+  g_assert (error->code == GTK_BUILDER_ERROR_INVALID_VALUE);
+  g_error_free (error);
+
   g_object_unref (builder);
 }
 
@@ -1853,6 +1874,5 @@ main (int argc, char **argv)
   g_test_add_func ("/Builder/Value From String", test_value_from_string);
   g_test_add_func ("/Builder/Reference Counting", test_reference_counting);
   g_test_add_func ("/Builder/Window", test_window);
-
   return g_test_run();
 }
