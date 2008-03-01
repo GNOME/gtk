@@ -1,3 +1,13 @@
+2008-02-29  Federico Mena Quintero  <federico@novell.com>
+
+	Merged from trunk:
+
+	* gtk/gtkfilesystemunix.c (gtk_file_system_unix_get_folder): When
+	refreshing an existing folder (i.e. when we are about to reload
+	its file list), turn off the folder's is_finished_loading flag.
+	Otherwise callers which do ::is_finished_loading() followed by
+	::list_children() will get nothing.
+
 2008-02-27  Richard Hult  <richard@imendio.com>
 
 	Merged from trunk:
