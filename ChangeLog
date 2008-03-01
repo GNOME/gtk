@@ -1,3 +1,11 @@
+2008-03-01  Richard Hult  <richard@imendio.com>
+
+	Merged from trunk:
+
+	* gdk/quartz/gdkprivate-quartz.h:
+	* gdk/quartz/gdkwindow-quartz.c: Add debugging code to highlight a
+	gdkwindow.
+
 2008-02-29  Johan Dahlin  <johan@gnome.org>
 
 	Merged from trunk:
