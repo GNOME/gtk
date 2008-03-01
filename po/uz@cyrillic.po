@@ -1,27 +1,28 @@
-# translation of gtk+.gtk-2-4.po to Uzbek
-# Copyright (C) 1998-2003, 2004 Free Software Foundation, Inc.
-# Mashrab Kuvatov <kmashrab@uni-bremen.de>, 2003, 2004.
+# translation of uz@cyrillic.po to uzbek
+# Copyright (C) 1998-2003, 2004, 2008 Free Software Foundation, Inc.
 #
+# Mashrab Kuvatov <kmashrab@uni-bremen.de>, 2003, 2004.
+# Nurali Abdurahmonov <mavnur@gmail.com>, 2008.
 msgid ""
 msgstr ""
-"Project-Id-Version: gtk+.gtk-2-4\n"
+"Project-Id-Version: uz@cyrillic\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2008-02-12 17:51-0500\n"
-"PO-Revision-Date: 2004-07-19 18:54+0200\n"
-"Last-Translator: Mashrab Kuvatov <kmashrab@uni-bremen.de>\n"
-"Language-Team: Uzbek <kmashrab@uni-bremen.de>\n"
+"PO-Revision-Date: 2008-03-01 10:44+0500\n"
+"Last-Translator: Nurali Abdurahmonov <mavnur@gmail.com>\n"
+"Language-Team: uzbek\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: KBabel 1.0.2\n"
+"X-Generator: KBabel 1.11.4\n"
 
 #: gdk/directfb/gdkdisplay-directfb.c:55
 msgid "directfb arg"
-msgstr ""
+msgstr "directfb arg"
 
 #: gdk/directfb/gdkdisplay-directfb.c:55
 msgid "sdl|system"
-msgstr ""
+msgstr "тизим"
 
 #. Description of --class=CLASS in --help output
 #: gdk/gdk.c:126
@@ -31,7 +32,7 @@ msgstr ""
 #. Placeholder in --class=CLASS in --help output
 #: gdk/gdk.c:127
 msgid "CLASS"
-msgstr ""
+msgstr "СИНФ"
 
 #. Description of --name=NAME in --help output
 #: gdk/gdk.c:129
@@ -41,27 +42,27 @@ msgstr ""
 #. Placeholder in --name=NAME in --help output
 #: gdk/gdk.c:130
 msgid "NAME"
-msgstr ""
+msgstr "НОМИ"
 
 #. Description of --display=DISPLAY in --help output
 #: gdk/gdk.c:132
 msgid "X display to use"
-msgstr ""
+msgstr "Фойдаланиладиган X-дисплейи"
 
 #. Placeholder in --display=DISPLAY in --help output
 #: gdk/gdk.c:133
 msgid "DISPLAY"
-msgstr ""
+msgstr "ДИСПЛЕЙ"
 
 #. Description of --screen=SCREEN in --help output
 #: gdk/gdk.c:135
 msgid "X screen to use"
-msgstr ""
+msgstr "Фойдаланиладиган X-экрани"
 
 #. Placeholder in --screen=SCREEN in --help output
 #: gdk/gdk.c:136
 msgid "SCREEN"
-msgstr ""
+msgstr "ЭКРАН"
 
 #. Description of --gdk-debug=FLAGS in --help output
 #: gdk/gdk.c:139
@@ -83,39 +84,39 @@ msgstr ""
 
 #: gdk/keyname-table.h:3940
 msgid "keyboard label|BackSpace"
-msgstr ""
+msgstr "BackSpace"
 
 #: gdk/keyname-table.h:3941
 msgid "keyboard label|Tab"
-msgstr ""
+msgstr "Tab"
 
 #: gdk/keyname-table.h:3942
 msgid "keyboard label|Return"
-msgstr ""
+msgstr "Return"
 
 #: gdk/keyname-table.h:3943
 msgid "keyboard label|Pause"
-msgstr ""
+msgstr "Pause"
 
 #: gdk/keyname-table.h:3944
 msgid "keyboard label|Scroll_Lock"
-msgstr ""
+msgstr "Scroll_Lock"
 
 #: gdk/keyname-table.h:3945
 msgid "keyboard label|Sys_Req"
-msgstr ""
+msgstr "Sys_Req"
 
 #: gdk/keyname-table.h:3946
 msgid "keyboard label|Escape"
-msgstr ""
+msgstr "Escape"
 
 #: gdk/keyname-table.h:3947
 msgid "keyboard label|Multi_key"
-msgstr ""
+msgstr "Multi_key"
 
 #: gdk/keyname-table.h:3948
 msgid "keyboard label|Home"
-msgstr ""
+msgstr "Home"
 
 #: gdk/keyname-table.h:3949
 msgid "keyboard label|Left"
@@ -243,8 +244,7 @@ msgstr ""
 #: gdk-pixbuf/gdk-pixbuf-animation.c:209 gdk-pixbuf/gdk-pixbuf-io.c:896
 #: gdk-pixbuf/gdk-pixbuf-io.c:1156 tests/testfilechooser.c:263
 #, c-format
-msgid ""
-"Failed to load image '%s': reason not known, probably a corrupt image file"
+msgid "Failed to load image '%s': reason not known, probably a corrupt image file"
 msgstr ""
 
 #: gdk-pixbuf/gdk-pixbuf-animation.c:242
@@ -597,8 +597,7 @@ msgstr ""
 
 #: gdk-pixbuf/io-jpeg.c:1148
 #, c-format
-msgid ""
-"JPEG quality must be a value between 0 and 100; value '%d' is not allowed."
+msgid "JPEG quality must be a value between 0 and 100; value '%d' is not allowed."
 msgstr ""
 
 #: gdk-pixbuf/io-jpeg.c:1311
@@ -713,8 +712,7 @@ msgstr ""
 
 #: gdk-pixbuf/io-png.c:825
 #, c-format
-msgid ""
-"Keys for PNG text chunks must have at least 1 and at most 79 characters."
+msgid "Keys for PNG text chunks must have at least 1 and at most 79 characters."
 msgstr ""
 
 #: gdk-pixbuf/io-png.c:833
@@ -1690,8 +1688,7 @@ msgstr ""
 
 #: gtk/gtkfilechooserdefault.c:8090
 #, c-format
-msgid ""
-"The file already exists in \"%s\".  Replacing it will overwrite its contents."
+msgid "The file already exists in \"%s\".  Replacing it will overwrite its contents."
 msgstr ""
 
 #: gtk/gtkfilechooserdefault.c:8095
@@ -1808,8 +1805,7 @@ msgstr "Файлнинг но_мини ўзгартириш"
 
 #: gtk/gtkfilesel.c:1406
 #, c-format
-msgid ""
-"The folder name \"%s\" contains symbols that are not allowed in filenames"
+msgid "The folder name \"%s\" contains symbols that are not allowed in filenames"
 msgstr ""
 
 #: gtk/gtkfilesel.c:1451
@@ -2778,14 +2774,14 @@ msgstr "Хато"
 
 #: gtk/gtkstock.c:291
 msgid "Question"
-msgstr "Сўроқ"
+msgstr "Савол"
 
 #. FIXME these need accelerators when appropriate, and
 #. * need the mnemonics to be rationalized
 #.
 #: gtk/gtkstock.c:296
 msgid "_About"
-msgstr ""
+msgstr "Дастур _ҳақида"
 
 #: gtk/gtkstock.c:298
 msgid "_Apply"
@@ -2812,9 +2808,8 @@ msgid "_Close"
 msgstr "_Ёпиш"
 
 #: gtk/gtkstock.c:304
-#, fuzzy
 msgid "C_onnect"
-msgstr "Ай_лантириш"
+msgstr "У_лаш"
 
 #: gtk/gtkstock.c:305
 msgid "_Convert"
@@ -2830,24 +2825,23 @@ msgstr "_Кесиш"
 
 #: gtk/gtkstock.c:308
 msgid "_Delete"
-msgstr "Ў_чириш"
+msgstr "_Олиб ташлаш"
 
 #: gtk/gtkstock.c:309
 msgid "_Discard"
-msgstr ""
+msgstr "_Воз кечиш"
 
 #: gtk/gtkstock.c:310
 msgid "_Disconnect"
-msgstr ""
+msgstr "_Узиш"
 
 #: gtk/gtkstock.c:311
 msgid "_Execute"
 msgstr "Ба_жариш"
 
 #: gtk/gtkstock.c:312
-#, fuzzy
 msgid "_Edit"
-msgstr "_Чиқиш"
+msgstr "_Таҳрирлаш"
 
 #: gtk/gtkstock.c:313
 msgid "_Find"
@@ -2863,41 +2857,41 @@ msgstr "_Дискет"
 
 #: gtk/gtkstock.c:316
 msgid "_Fullscreen"
-msgstr ""
+msgstr "_Бутун экранга"
 
 #: gtk/gtkstock.c:317
 msgid "_Leave Fullscreen"
-msgstr ""
+msgstr "Бутун экрандан чиқиш"
 
 #. translators, strip the prefix up to and including the first |
 #: gtk/gtkstock.c:319
 msgid "Navigation|_Bottom"
-msgstr ""
+msgstr "_Энг пастга"
 
 #. translators, strip the prefix up to and including the first |
 #: gtk/gtkstock.c:321
 msgid "Navigation|_First"
-msgstr ""
+msgstr "_Биринчисига"
 
 #. translators, strip the prefix up to and including the first |
 #: gtk/gtkstock.c:323
 msgid "Navigation|_Last"
-msgstr ""
+msgstr "_Охирига"
 
 #. translators, strip the prefix up to and including the first |
 #: gtk/gtkstock.c:325
 msgid "Navigation|_Top"
-msgstr ""
+msgstr "_Энг юқорига"
 
 #. translators, strip the prefix up to and including the first |
 #: gtk/gtkstock.c:327
 msgid "Navigation|_Back"
-msgstr ""
+msgstr "_Орқага"
 
 #. translators, strip the prefix up to and including the first |
 #: gtk/gtkstock.c:329
 msgid "Navigation|_Down"
-msgstr ""
+msgstr "_Пастга"
 
 #. translators, strip the prefix up to and including the first |
 #: gtk/gtkstock.c:331
@@ -2907,11 +2901,11 @@ msgstr ""
 #. translators, strip the prefix up to and including the first |
 #: gtk/gtkstock.c:333
 msgid "Navigation|_Up"
-msgstr ""
+msgstr "_Юқорига"
 
 #: gtk/gtkstock.c:334
 msgid "_Harddisk"
-msgstr ""
+msgstr "_Қаттиқ диск"
 
 #: gtk/gtkstock.c:335
 msgid "_Help"
@@ -2923,20 +2917,19 @@ msgstr "_Уй"
 
 #: gtk/gtkstock.c:337
 msgid "Increase Indent"
-msgstr ""
+msgstr "Чекинишни кўпайтириш"
 
 #: gtk/gtkstock.c:338
 msgid "Decrease Indent"
-msgstr ""
+msgstr "Чекинишни қисқартириш"
 
 #: gtk/gtkstock.c:339
 msgid "_Index"
 msgstr "_Индекс"
 
 #: gtk/gtkstock.c:340
-#, fuzzy
 msgid "_Information"
-msgstr "Маълумот"
+msgstr "_Маълумот"
 
 #: gtk/gtkstock.c:341
 msgid "_Italic"
@@ -2948,9 +2941,8 @@ msgstr "Ў_тиш"
 
 #. translators, strip the prefix up to and including the first |
 #: gtk/gtkstock.c:344
-#, fuzzy
 msgid "Justify|_Center"
-msgstr "_Марказ"
+msgstr "_Марказда"
 
 #. translators, strip the prefix up to and including the first |
 #: gtk/gtkstock.c:346
@@ -2960,57 +2952,50 @@ msgstr ""
 #. translators, strip the prefix up to and including the first |
 #: gtk/gtkstock.c:348
 msgid "Justify|_Left"
-msgstr ""
+msgstr "_Чапга"
 
 #. translators, strip the prefix up to and including the first |
 #: gtk/gtkstock.c:350
-#, fuzzy
 msgid "Justify|_Right"
-msgstr "Ў_нг"
+msgstr "Ў_нгга"
 
 #. translators, strip the prefix up to and including the first |
 #: gtk/gtkstock.c:353
-#, fuzzy
 msgid "Media|_Forward"
 msgstr "_Олдинга"
 
 #. translators, strip the prefix up to and including the first |
 #: gtk/gtkstock.c:355
-#, fuzzy
 msgid "Media|_Next"
-msgstr "_Янги"
+msgstr "_Кейинги"
 
 #. translators, strip the prefix up to and including the first |
 #: gtk/gtkstock.c:357
-#, fuzzy
 msgid "Media|P_ause"
-msgstr "Қўй_иш"
+msgstr "В._тўхтатиш"
 
 #. translators, strip the prefix up to and including the first |
 #: gtk/gtkstock.c:359
 msgid "Media|_Play"
-msgstr ""
+msgstr "_Ўйнаш"
 
 #. translators, strip the prefix up to and including the first |
 #: gtk/gtkstock.c:361
 msgid "Media|Pre_vious"
-msgstr ""
+msgstr "Ол_динги"
 
 #. translators, strip the prefix up to and including the first |
 #: gtk/gtkstock.c:363
-#, fuzzy
 msgid "Media|_Record"
-msgstr "Қ_айтариш"
+msgstr "_Ёзиш"
 
 #. translators, strip the prefix up to and including the first |
 #: gtk/gtkstock.c:365
-#, fuzzy
 msgid "Media|R_ewind"
-msgstr "Қ_идириш"
+msgstr "_Орқага"
 
 #. translators, strip the prefix up to and including the first |
 #: gtk/gtkstock.c:367
-#, fuzzy
 msgid "Media|_Stop"
 msgstr "_Тўхтатиш"
 
@@ -3036,20 +3021,19 @@ msgstr "_Очиш"
 
 #: gtk/gtkstock.c:373
 msgid "Landscape"
-msgstr ""
+msgstr "Энига"
 
 #: gtk/gtkstock.c:374
-#, fuzzy
 msgid "Portrait"
-msgstr "_Босиб чиқариш"
+msgstr "Узунасига"
 
 #: gtk/gtkstock.c:375
 msgid "Reverse landscape"
-msgstr ""
+msgstr "Тескари энига"
 
 #: gtk/gtkstock.c:376
 msgid "Reverse portrait"
-msgstr ""
+msgstr "Тескари узунасига"
 
 #: gtk/gtkstock.c:377
 msgid "_Paste"
@@ -3065,7 +3049,7 @@ msgstr "_Босиб чиқариш"
 
 #: gtk/gtkstock.c:380
 msgid "Print Pre_view"
-msgstr ""
+msgstr "Кўриб _чиқиш"
 
 #: gtk/gtkstock.c:381
 msgid "_Properties"
@@ -3085,7 +3069,7 @@ msgstr "_Янгилаш"
 
 #: gtk/gtkstock.c:386
 msgid "_Revert"
-msgstr ""
+msgstr "_Тиклаш"
 
 #: gtk/gtkstock.c:387
 msgid "_Save"
@@ -3097,7 +3081,7 @@ msgstr "...сиф_атида сақлаш"
 
 #: gtk/gtkstock.c:389
 msgid "Select _All"
-msgstr ""
+msgstr "_Ҳаммасини танлаш"
 
 #: gtk/gtkstock.c:390
 msgid "_Color"
@@ -3109,11 +3093,11 @@ msgstr "_Шрифт"
 
 #: gtk/gtkstock.c:392
 msgid "_Ascending"
-msgstr ""
+msgstr "_Кўпайиш бўйича"
 
 #: gtk/gtkstock.c:393
 msgid "_Descending"
-msgstr ""
+msgstr "_Камайиш бўйича"
 
 #: gtk/gtkstock.c:394
 msgid "_Spell Check"
@@ -3125,15 +3109,15 @@ msgstr "_Тўхтатиш"
 
 #: gtk/gtkstock.c:396
 msgid "_Strikethrough"
-msgstr ""
+msgstr "_Устидан чизиш:"
 
 #: gtk/gtkstock.c:397
 msgid "_Undelete"
-msgstr ""
+msgstr "Олиб ташланганни _тиклаш"
 
 #: gtk/gtkstock.c:398
 msgid "_Underline"
-msgstr ""
+msgstr "_Таги чизилган"
 
 #: gtk/gtkstock.c:399
 msgid "_Undo"
@@ -3145,7 +3129,7 @@ msgstr "Ҳ_а"
 
 #: gtk/gtkstock.c:401
 msgid "_Normal Size"
-msgstr ""
+msgstr "_Оддий ўлчамда"
 
 #: gtk/gtkstock.c:402
 msgid "Best _Fit"
@@ -3231,8 +3215,7 @@ msgstr ""
 
 #: gtk/gtktextbufferserialize.c:1193
 #, c-format
-msgid ""
-"\"%s\" could not be converted to a value of type \"%s\" for attribute \"%s\""
+msgid "\"%s\" could not be converted to a value of type \"%s\" for attribute \"%s\""
 msgstr ""
 
 #: gtk/gtktextbufferserialize.c:1202
@@ -3271,8 +3254,7 @@ msgstr ""
 
 #: gtk/gtktextbufferserialize.c:1866
 #, c-format
-msgid ""
-"Serialized data is malformed. First section isn't GTKTEXTBUFFERCONTENTS-0001"
+msgid "Serialized data is malformed. First section isn't GTKTEXTBUFFERCONTENTS-0001"
 msgstr ""
 
 #: gtk/gtktextutil.c:60
@@ -3341,12 +3323,11 @@ msgstr ""
 
 #: gtk/gtkuimanager.c:2356
 msgid "Empty"
-msgstr ""
+msgstr "Бўш"
 
 #: gtk/gtkvolumebutton.c:81
-#, fuzzy
 msgid "Volume"
-msgstr "Уй"
+msgstr "Товуш"
 
 #: gtk/gtkvolumebutton.c:83
 msgid "Volume Down"
@@ -3358,11 +3339,11 @@ msgstr ""
 
 #: gtk/gtkvolumebutton.c:139
 msgid "Muted"
-msgstr ""
+msgstr "Товушсиз"
 
 #: gtk/gtkvolumebutton.c:143
 msgid "Full Volume"
-msgstr ""
+msgstr "Тўлиқ товуш"
 
 #. Translators: this is the percentage of the current volume,
 #. * as used in the tooltip, eg. "49 %".
@@ -3374,422 +3355,422 @@ msgstr ""
 #: gtk/gtkvolumebutton.c:158
 #, c-format
 msgid "volume percentage|%d %%"
-msgstr ""
+msgstr "%d %%"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:5
 msgid "paper size|asme_f"
-msgstr ""
+msgstr "asme_f"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:7
 msgid "paper size|A0x2"
-msgstr ""
+msgstr "A0x2"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:9
 msgid "paper size|A0"
-msgstr ""
+msgstr "A0"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:11
 msgid "paper size|A0x3"
-msgstr ""
+msgstr "A0x3"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:13
 msgid "paper size|A1"
-msgstr ""
+msgstr "A1"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:15
 msgid "paper size|A10"
-msgstr ""
+msgstr "A10"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:17
 msgid "paper size|A1x3"
-msgstr ""
+msgstr "A1x3"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:19
 msgid "paper size|A1x4"
-msgstr ""
+msgstr "A1x4"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:21
 msgid "paper size|A2"
-msgstr ""
+msgstr "A2"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:23
 msgid "paper size|A2x3"
-msgstr ""
+msgstr "A2x3"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:25
 msgid "paper size|A2x4"
-msgstr ""
+msgstr "A2x4"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:27
 msgid "paper size|A2x5"
-msgstr ""
+msgstr "A2x5"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:29
 msgid "paper size|A3"
-msgstr ""
+msgstr "A3"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:31
 msgid "paper size|A3 Extra"
-msgstr ""
+msgstr "A3 Extra"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:33
 msgid "paper size|A3x3"
-msgstr ""
+msgstr "A3x3"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:35
 msgid "paper size|A3x4"
-msgstr ""
+msgstr "A3x4"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:37
 msgid "paper size|A3x5"
-msgstr ""
+msgstr "A3x5"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:39
 msgid "paper size|A3x6"
-msgstr ""
+msgstr "A3x6"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:41
 msgid "paper size|A3x7"
-msgstr ""
+msgstr "A3x7"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:43
 msgid "paper size|A4"
-msgstr ""
+msgstr "A4"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:45
 msgid "paper size|A4 Extra"
-msgstr ""
+msgstr "A4 Extra"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:47
 msgid "paper size|A4 Tab"
-msgstr ""
+msgstr "A4 Tab"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:49
 msgid "paper size|A4x3"
-msgstr ""
+msgstr "A4x3"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:51
 msgid "paper size|A4x4"
-msgstr ""
+msgstr "A4x4"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:53
 msgid "paper size|A4x5"
-msgstr ""
+msgstr "A4x5"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:55
 msgid "paper size|A4x6"
-msgstr ""
+msgstr "A4x6"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:57
 msgid "paper size|A4x7"
-msgstr ""
+msgstr "A4x7"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:59
 msgid "paper size|A4x8"
-msgstr ""
+msgstr "A4x8"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:61
 msgid "paper size|A4x9"
-msgstr ""
+msgstr "A4x9"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:63
 msgid "paper size|A5"
-msgstr ""
+msgstr "A5"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:65
 msgid "paper size|A5 Extra"
-msgstr ""
+msgstr "A5 Extra"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:67
 msgid "paper size|A6"
-msgstr ""
+msgstr "A6"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:69
 msgid "paper size|A7"
-msgstr ""
+msgstr "A7"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:71
 msgid "paper size|A8"
-msgstr ""
+msgstr "A8"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:73
 msgid "paper size|A9"
-msgstr ""
+msgstr "A9"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:75
 msgid "paper size|B0"
-msgstr ""
+msgstr "B0"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:77
 msgid "paper size|B1"
-msgstr ""
+msgstr "B1"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:79
 msgid "paper size|B10"
-msgstr ""
+msgstr "B10"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:81
 msgid "paper size|B2"
-msgstr ""
+msgstr "B2"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:83
 msgid "paper size|B3"
-msgstr ""
+msgstr "B3"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:85
 msgid "paper size|B4"
-msgstr ""
+msgstr "B4"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:87
 msgid "paper size|B5"
-msgstr ""
+msgstr "B5"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:89
 msgid "paper size|B5 Extra"
-msgstr ""
+msgstr "B5 Extra"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:91
 msgid "paper size|B6"
-msgstr ""
+msgstr "B6"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:93
 msgid "paper size|B6/C4"
-msgstr ""
+msgstr "B6/C4"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:95
 msgid "paper size|B7"
-msgstr ""
+msgstr "B7"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:97
 msgid "paper size|B8"
-msgstr ""
+msgstr "B8"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:99
 msgid "paper size|B9"
-msgstr ""
+msgstr "B9"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:101
 msgid "paper size|C0"
-msgstr ""
+msgstr "C0"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:103
 msgid "paper size|C1"
-msgstr ""
+msgstr "C1"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:105
 msgid "paper size|C10"
-msgstr ""
+msgstr "C10"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:107
 msgid "paper size|C2"
-msgstr ""
+msgstr "C2"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:109
 msgid "paper size|C3"
-msgstr ""
+msgstr "C3"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:111
 msgid "paper size|C4"
-msgstr ""
+msgstr "C4"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:113
 msgid "paper size|C5"
-msgstr ""
+msgstr "C5"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:115
 msgid "paper size|C6"
-msgstr ""
+msgstr "C6"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:117
 msgid "paper size|C6/C5"
-msgstr ""
+msgstr "C6/C5"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:119
 msgid "paper size|C7"
-msgstr ""
+msgstr "C7"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:121
 msgid "paper size|C7/C6"
-msgstr ""
+msgstr "C7/C6"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:123
 msgid "paper size|C8"
-msgstr ""
+msgstr "C8"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:125
 msgid "paper size|C9"
-msgstr ""
+msgstr "C9"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:127
 msgid "paper size|DL Envelope"
-msgstr ""
+msgstr "Конверт DL"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:129
 msgid "paper size|RA0"
-msgstr ""
+msgstr "RA0"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:131
 msgid "paper size|RA1"
-msgstr ""
+msgstr "RA1"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:133
 msgid "paper size|RA2"
-msgstr ""
+msgstr "RA2"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:135
 msgid "paper size|SRA0"
-msgstr ""
+msgstr "SRA0"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:137
 msgid "paper size|SRA1"
-msgstr ""
+msgstr "SRA1"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:139
 msgid "paper size|SRA2"
-msgstr ""
+msgstr "SRA2"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:141
 msgid "paper size|JB0"
-msgstr ""
+msgstr "JB0"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:143
 msgid "paper size|JB1"
-msgstr ""
+msgstr "JB1"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:145
 msgid "paper size|JB10"
-msgstr ""
+msgstr "JB10"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:147
 msgid "paper size|JB2"
-msgstr ""
+msgstr "JB2"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:149
 msgid "paper size|JB3"
-msgstr ""
+msgstr "JB3"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:151
 msgid "paper size|JB4"
-msgstr ""
+msgstr "JB4"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:153
 msgid "paper size|JB5"
-msgstr ""
+msgstr "JB5"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:155
 msgid "paper size|JB6"
-msgstr ""
+msgstr "JB6"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:157
 msgid "paper size|JB7"
-msgstr ""
+msgstr "JB7"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:159
 msgid "paper size|JB8"
-msgstr ""
+msgstr "JB8"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:161
 msgid "paper size|JB9"
-msgstr ""
+msgstr "JB9"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:163
 msgid "paper size|jis exec"
-msgstr ""
+msgstr "jis exec"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:165
 msgid "paper size|Choukei 2 Envelope"
-msgstr ""
+msgstr "Конверт Choukei 2"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:167
 msgid "paper size|Choukei 3 Envelope"
-msgstr ""
+msgstr "Конверт Choukei 3"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:169
 msgid "paper size|Choukei 4 Envelope"
-msgstr ""
+msgstr "Конверт Choukei 4"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:171
@@ -3799,12 +3780,12 @@ msgstr ""
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:173
 msgid "paper size|kahu Envelope"
-msgstr ""
+msgstr "Конверт hahu"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:175
 msgid "paper size|kaku2 Envelope"
-msgstr ""
+msgstr "Конверт kaku2"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:177
@@ -3814,147 +3795,147 @@ msgstr ""
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:179
 msgid "paper size|you4 Envelope"
-msgstr ""
+msgstr "Конверт you4"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:181
 msgid "paper size|10x11"
-msgstr ""
+msgstr "10x11"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:183
 msgid "paper size|10x13"
-msgstr ""
+msgstr "10x13"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:185
 msgid "paper size|10x14"
-msgstr ""
+msgstr "10x14"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:187 gtk/paper_names_offsets.c:189
 msgid "paper size|10x15"
-msgstr ""
+msgstr "10x15"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:191
 msgid "paper size|11x12"
-msgstr ""
+msgstr "11x12"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:193
 msgid "paper size|11x15"
-msgstr ""
+msgstr "11x15"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:195
 msgid "paper size|12x19"
-msgstr ""
+msgstr "12x19"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:197
 msgid "paper size|5x7"
-msgstr ""
+msgstr "Конверт 5x7"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:199
 msgid "paper size|6x9 Envelope"
-msgstr ""
+msgstr "Конверт 6x9"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:201
 msgid "paper size|7x9 Envelope"
-msgstr ""
+msgstr "Конверт 7x9"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:203
 msgid "paper size|9x11 Envelope"
-msgstr ""
+msgstr "Конверт 9x11"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:205
 msgid "paper size|a2 Envelope"
-msgstr ""
+msgstr "Конверт a2"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:207
 msgid "paper size|Arch A"
-msgstr ""
+msgstr "Arch A"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:209
 msgid "paper size|Arch B"
-msgstr ""
+msgstr "Arch B"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:211
 msgid "paper size|Arch C"
-msgstr ""
+msgstr "Arch C"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:213
 msgid "paper size|Arch D"
-msgstr ""
+msgstr "Arch D"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:215
 msgid "paper size|Arch E"
-msgstr ""
+msgstr "Arch E"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:217
 msgid "paper size|b-plus"
-msgstr ""
+msgstr "b-plus"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:219
 msgid "paper size|c"
-msgstr ""
+msgstr "c"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:221
 msgid "paper size|c5 Envelope"
-msgstr ""
+msgstr "Конверт c5"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:223
 msgid "paper size|d"
-msgstr ""
+msgstr "d"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:225
 msgid "paper size|e"
-msgstr ""
+msgstr "e"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:227
 msgid "paper size|edp"
-msgstr ""
+msgstr "edp"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:229
 msgid "paper size|European edp"
-msgstr ""
+msgstr "Европача edp"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:231
 msgid "paper size|Executive"
-msgstr ""
+msgstr "Executive"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:233
 msgid "paper size|f"
-msgstr ""
+msgstr "f"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:235
 msgid "paper size|FanFold European"
-msgstr ""
+msgstr "FanFold европача"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:237
 msgid "paper size|FanFold US"
-msgstr ""
+msgstr "FanFold US"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:239
@@ -3974,7 +3955,7 @@ msgstr ""
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:245
 msgid "paper size|Index 3x5"
-msgstr ""
+msgstr "Index 3x5"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:247
@@ -3984,12 +3965,12 @@ msgstr ""
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:249
 msgid "paper size|Index 4x6 ext"
-msgstr ""
+msgstr "Index 4x6 ext"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:251
 msgid "paper size|Index 5x8"
-msgstr ""
+msgstr "Index 5x8"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:253
@@ -3999,7 +3980,7 @@ msgstr ""
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:255
 msgid "paper size|Tabloid"
-msgstr ""
+msgstr "Tabloid"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:257
@@ -4029,72 +4010,72 @@ msgstr ""
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:267
 msgid "paper size|Monarch Envelope"
-msgstr ""
+msgstr "Конверт \"Monarch\""
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:269
 msgid "paper size|#10 Envelope"
-msgstr ""
+msgstr "Конверт №10"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:271
 msgid "paper size|#11 Envelope"
-msgstr ""
+msgstr "Конверт №11"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:273
 msgid "paper size|#12 Envelope"
-msgstr ""
+msgstr "Конверт №12"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:275
 msgid "paper size|#14 Envelope"
-msgstr ""
+msgstr "Конверт №14"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:277
 msgid "paper size|#9 Envelope"
-msgstr ""
+msgstr "Конверт №9"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:279
 msgid "paper size|Personal Envelope"
-msgstr ""
+msgstr "Шахсий конверт"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:281
 msgid "paper size|Quarto"
-msgstr ""
+msgstr "Quarto"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:283
 msgid "paper size|Super A"
-msgstr ""
+msgstr "Super A"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:285
 msgid "paper size|Super B"
-msgstr ""
+msgstr "Super B"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:287
 msgid "paper size|Wide Format"
-msgstr ""
+msgstr "Кенг форматли"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:289
 msgid "paper size|Dai-pa-kai"
-msgstr ""
+msgstr "Dai-pa-kai"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:291
 msgid "paper size|Folio"
-msgstr ""
+msgstr "Folio"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:293
 msgid "paper size|Folio sp"
-msgstr ""
+msgstr "Folio sp"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:295
@@ -4104,92 +4085,92 @@ msgstr ""
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:297
 msgid "paper size|Italian Envelope"
-msgstr ""
+msgstr "Италянча конверт"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:299
 msgid "paper size|juuro-ku-kai"
-msgstr ""
+msgstr "juuro-ku-kai"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:301
 msgid "paper size|pa-kai"
-msgstr ""
+msgstr "pa-kai"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:303
 msgid "paper size|Postfix Envelope"
-msgstr ""
+msgstr "\"Postfix\" коверти"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:305
 msgid "paper size|Small Photo"
-msgstr ""
+msgstr "Кичик расм"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:307
 msgid "paper size|prc1 Envelope"
-msgstr ""
+msgstr "Конверт prc1"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:309
 msgid "paper size|prc10 Envelope"
-msgstr ""
+msgstr "Конверт prc10"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:311
 msgid "paper size|prc 16k"
-msgstr ""
+msgstr "prc 16k"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:313
 msgid "paper size|prc2 Envelope"
-msgstr ""
+msgstr "prc2 конверт"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:315
 msgid "paper size|prc3 Envelope"
-msgstr ""
+msgstr "prc3 конверт"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:317
 msgid "paper size|prc 32k"
-msgstr ""
+msgstr "prc 32k"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:319
 msgid "paper size|prc4 Envelope"
-msgstr ""
+msgstr "Конверт prc4"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:321
 msgid "paper size|prc5 Envelope"
-msgstr ""
+msgstr "Конверт prc5"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:323
 msgid "paper size|prc6 Envelope"
-msgstr ""
+msgstr "Конверт prc6"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:325
 msgid "paper size|prc7 Envelope"
-msgstr ""
+msgstr "Конверт prc7"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:327
 msgid "paper size|prc8 Envelope"
-msgstr ""
+msgstr "Конверт prc8"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:329
 msgid "paper size|ROC 16k"
-msgstr ""
+msgstr "ROC 16k"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:331
 msgid "paper size|ROC 8k"
-msgstr ""
+msgstr "ROC 8k"
 
 #: gtk/updateiconcache.c:490 gtk/updateiconcache.c:550
 #, c-format
@@ -4204,12 +4185,12 @@ msgstr ""
 #: gtk/updateiconcache.c:1378
 #, c-format
 msgid "Failed to write hash table\n"
-msgstr ""
+msgstr "Хеш-жадвалини ёзишда хатолик юз берди\n"
 
 #: gtk/updateiconcache.c:1384
 #, c-format
 msgid "Failed to write folder index\n"
-msgstr ""
+msgstr "Жилд индексини ёзишда хатолик юз берди\n"
 
 #: gtk/updateiconcache.c:1392
 #, c-format
@@ -4219,12 +4200,12 @@ msgstr ""
 #: gtk/updateiconcache.c:1444
 #, c-format
 msgid "Failed to write cache file: %s\n"
-msgstr ""
+msgstr "Кэш файлига ёзиб бўлмади: %s\n"
 
 #: gtk/updateiconcache.c:1479
 #, c-format
 msgid "The generated cache was invalid.\n"
-msgstr ""
+msgstr "Яратилган кэш хато.\n"
 
 #: gtk/updateiconcache.c:1493
 #, c-format
@@ -4234,17 +4215,17 @@ msgstr ""
 #: gtk/updateiconcache.c:1505
 #, c-format
 msgid "Could not rename %s to %s: %s\n"
-msgstr ""
+msgstr "%s файли %s сифатида қайта номланмади: %s\n"
 
 #: gtk/updateiconcache.c:1512
 #, c-format
 msgid "Could not rename %s back to %s: %s.\n"
-msgstr ""
+msgstr "%s файлини %s сифатида қайта номлаб бўлмади: %s\n"
 
 #: gtk/updateiconcache.c:1534
 #, c-format
 msgid "Cache file created successfully.\n"
-msgstr ""
+msgstr "Кэш файли муваффақиятли яратилди.\n"
 
 #: gtk/updateiconcache.c:1573
 msgid "Overwrite an existing cache, even if up to date"
@@ -4264,21 +4245,21 @@ msgstr ""
 
 #: gtk/updateiconcache.c:1577
 msgid "Turn off verbose output"
-msgstr ""
+msgstr "Кенгайтирилган киритишни ўчириш"
 
 #: gtk/updateiconcache.c:1578
 msgid "Validate existing icon cache"
-msgstr ""
+msgstr "Мавжуд нишонча кэшини текшириш"
 
 #: gtk/updateiconcache.c:1641
 #, c-format
 msgid "File not found: %s\n"
-msgstr ""
+msgstr "Файл топилмади: %s\n"
 
 #: gtk/updateiconcache.c:1647
 #, c-format
 msgid "Not a valid icon cache: %s\n"
-msgstr ""
+msgstr "Яроқсиз нишонча кэши: %s\n"
 
 #: gtk/updateiconcache.c:1658
 #, c-format
@@ -4295,22 +4276,22 @@ msgstr ""
 #. ID
 #: modules/input/imcedilla.c:91
 msgid "Cedilla"
-msgstr ""
+msgstr "Седилла"
 
 #. ID
 #: modules/input/imcyrillic-translit.c:217
 msgid "Cyrillic (Transliterated)"
-msgstr ""
+msgstr "Кириллица (транслитерация)"
 
 #. ID
 #: modules/input/iminuktitut.c:127
 msgid "Inuktitut (Transliterated)"
-msgstr ""
+msgstr "Инуктитут (транслитерация)"
 
 #. ID
 #: modules/input/imipa.c:145
 msgid "IPA"
-msgstr ""
+msgstr "IPA"
 
 #. ID
 #: modules/input/immultipress.c:31
@@ -4320,39 +4301,39 @@ msgstr ""
 #. ID
 #: modules/input/imthai.c:35
 msgid "Thai-Lao"
-msgstr ""
+msgstr "Тай-Лаос"
 
 #. ID
 #: modules/input/imti-er.c:453
 msgid "Tigrigna-Eritrean (EZ+)"
-msgstr ""
+msgstr "Тигринья-Эритрея (EZ+)"
 
 #. ID
 #: modules/input/imti-et.c:453
 msgid "Tigrigna-Ethiopian (EZ+)"
-msgstr ""
+msgstr "Тигринья-Эфиопия (EZ+)"
 
 #. ID
 #: modules/input/imviqr.c:244
 msgid "Vietnamese (VIQR)"
-msgstr ""
+msgstr "Вьетнамча (VIQR)"
 
 #. ID
 #: modules/input/imxim.c:28
 msgid "X Input Method"
-msgstr ""
+msgstr "X киритиш усули"
 
 #: modules/printbackends/cups/gtkprintbackendcups.c:1533
 msgid "Two Sided"
-msgstr ""
+msgstr "Икки томонли"
 
 #: modules/printbackends/cups/gtkprintbackendcups.c:1534
 msgid "Paper Type"
-msgstr ""
+msgstr "Қоғоз тури"
 
 #: modules/printbackends/cups/gtkprintbackendcups.c:1535
 msgid "Paper Source"
-msgstr ""
+msgstr "Қоғоз манбаси"
 
 #: modules/printbackends/cups/gtkprintbackendcups.c:1536
 msgid "Output Tray"
@@ -4360,20 +4341,20 @@ msgstr ""
 
 #: modules/printbackends/cups/gtkprintbackendcups.c:1545
 msgid "One Sided"
-msgstr ""
+msgstr "Бир томонли"
 
 #: modules/printbackends/cups/gtkprintbackendcups.c:1546
 #: modules/printbackends/cups/gtkprintbackendcups.c:1547
 #: modules/printbackends/cups/gtkprintbackendcups.c:1551
 msgid "Auto Select"
-msgstr ""
+msgstr "Авто-танлаш"
 
 #: modules/printbackends/cups/gtkprintbackendcups.c:1548
 #: modules/printbackends/cups/gtkprintbackendcups.c:1549
 #: modules/printbackends/cups/gtkprintbackendcups.c:1550
 #: modules/printbackends/cups/gtkprintbackendcups.c:2020
 msgid "Printer Default"
-msgstr ""
+msgstr "Принтер андозаси"
 
 #: modules/printbackends/cups/gtkprintbackendcups.c:2214
 msgid "Urgent"
@@ -4381,19 +4362,19 @@ msgstr ""
 
 #: modules/printbackends/cups/gtkprintbackendcups.c:2214
 msgid "High"
-msgstr ""
+msgstr "Юқори"
 
 #: modules/printbackends/cups/gtkprintbackendcups.c:2214
 msgid "Medium"
-msgstr ""
+msgstr "Ўртача"
 
 #: modules/printbackends/cups/gtkprintbackendcups.c:2214
 msgid "Low"
-msgstr ""
+msgstr "Паст"
 
 #: modules/printbackends/cups/gtkprintbackendcups.c:2216
 msgid "None"
-msgstr ""
+msgstr "Йўқ"
 
 #: modules/printbackends/cups/gtkprintbackendcups.c:2216
 msgid "Classified"
@@ -4405,15 +4386,15 @@ msgstr ""
 
 #: modules/printbackends/cups/gtkprintbackendcups.c:2216
 msgid "Secret"
-msgstr ""
+msgstr "Махфий"
 
 #: modules/printbackends/cups/gtkprintbackendcups.c:2216
 msgid "Standard"
-msgstr ""
+msgstr "Андоза"
 
 #: modules/printbackends/cups/gtkprintbackendcups.c:2216
 msgid "Top Secret"
-msgstr ""
+msgstr "Ўта махфий"
 
 #: modules/printbackends/cups/gtkprintbackendcups.c:2216
 msgid "Unclassified"
@@ -4422,7 +4403,7 @@ msgstr ""
 #: modules/printbackends/cups/gtkprintbackendcups.c:2302
 #, c-format
 msgid "Custom %.2fx%.2f"
-msgstr ""
+msgstr "Бошқа %.2fx%.2f"
 
 #. default filename used for print-to-file
 #: modules/printbackends/file/gtkprintbackendfile.c:236
@@ -4431,18 +4412,16 @@ msgid "output.%s"
 msgstr ""
 
 #: modules/printbackends/file/gtkprintbackendfile.c:465
-#, fuzzy
 msgid "Print to File"
-msgstr "_Босиб чиқариш"
+msgstr "Файлга босиб чиқариш"
 
 #: modules/printbackends/file/gtkprintbackendfile.c:542
 msgid "PDF"
-msgstr ""
+msgstr "PDF"
 
 #: modules/printbackends/file/gtkprintbackendfile.c:542
-#, fuzzy
 msgid "Postscript"
-msgstr "_Босиб чиқариш"
+msgstr "Postscript"
 
 #: modules/printbackends/file/gtkprintbackendfile.c:554
 #: modules/printbackends/test/gtkprintbackendtest.c:501
@@ -4450,9 +4429,8 @@ msgid "Pages per _sheet:"
 msgstr ""
 
 #: modules/printbackends/file/gtkprintbackendfile.c:600
-#, fuzzy
 msgid "File"
-msgstr "Файллар"
+msgstr "Файл"
 
 #: modules/printbackends/file/gtkprintbackendfile.c:609
 msgid "_Output format"
@@ -4460,7 +4438,7 @@ msgstr ""
 
 #: modules/printbackends/lpr/gtkprintbackendlpr.c:399
 msgid "Print to LPR"
-msgstr ""
+msgstr "LPR'да босиб чиқариш"
 
 #: modules/printbackends/lpr/gtkprintbackendlpr.c:425
 msgid "Pages Per Sheet"
@@ -4468,73 +4446,20 @@ msgstr ""
 
 #: modules/printbackends/lpr/gtkprintbackendlpr.c:432
 msgid "Command Line"
-msgstr ""
+msgstr "Буйруқлар сатри"
 
 #. default filename used for print-to-test
 #: modules/printbackends/test/gtkprintbackendtest.c:235
 #, c-format
 msgid "test-output.%s"
-msgstr ""
+msgstr "тест-босиб чиқариш.%s"
 
 #: modules/printbackends/test/gtkprintbackendtest.c:465
-#, fuzzy
 msgid "Print to Test Printer"
-msgstr "_Босиб чиқариш"
+msgstr "Принтерни синаш учун босиб чиқариш"
 
 #: tests/testfilechooser.c:205
 #, c-format
 msgid "Could not get information for file '%s': %s"
-msgstr ""
+msgstr "'%s' файли учун маълумот тўплаб бўлмади: %s"
 
-#, fuzzy
-#~ msgid "Location:"
-#~ msgstr "Маълумот"
-
-#, fuzzy
-#~ msgid "asme_f"
-#~ msgstr "Номи"
-
-#, fuzzy
-#~ msgid "Executive"
-#~ msgstr "Ба_жариш"
-
-#, fuzzy
-#~ msgid "Index 3x5"
-#~ msgstr "_Индекс"
-
-#, fuzzy
-#~ msgid "Index 5x8"
-#~ msgstr "_Индекс"
-
-#~ msgid "Folder"
-#~ msgstr "Жилд"
-
-#, fuzzy
-#~ msgid "Cannot change folder"
-#~ msgstr "Ж_илдда яратиш:"
-
-#~ msgid "clear"
-#~ msgstr "тозалаш"
-
-#~ msgid "_First"
-#~ msgstr "_Биринчи"
-
-#~ msgid "_Last"
-#~ msgstr "_Охирги"
-
-#~ msgid "_Back"
-#~ msgstr "_Орқага"
-
-#~ msgid "_Down"
-#~ msgstr "_Пастга"
-
-#~ msgid "_Up"
-#~ msgstr "_Юқорига"
-
-#, fuzzy
-#~ msgid "Add"
-#~ msgstr "_Qo'shish"
-
-#, fuzzy
-#~ msgid "Up"
-#~ msgstr "_Yuqoriga"
