@@ -76,6 +76,27 @@ gboolean test_parser (void)
   g_return_val_if_fail (error->code == GTK_BUILDER_ERROR_INVALID_TAG, FALSE);
   g_error_free (error);
 
+  error = NULL;
+  gtk_builder_add_from_string (builder, "<interface><object class=\"Unknown\" id=\"a\"></object></interface>", -1, &error);
+  g_assert (error != NULL);
+  g_assert (error->domain == GTK_BUILDER_ERROR);
+  g_assert (error->code == GTK_BUILDER_ERROR_INVALID_VALUE);
+  g_error_free (error);
+
+  error = NULL;
+  gtk_builder_add_from_string (builder, "<interface><object class=\"GtkWidget\" id=\"a\" constructor=\"none\"></object></interface>", -1, &error);
+  g_assert (error != NULL);
+  g_assert (error->domain == GTK_BUILDER_ERROR);
+  g_assert (error->code == GTK_BUILDER_ERROR_INVALID_VALUE);
+  g_error_free (error);
+
+  error = NULL;
+  gtk_builder_add_from_string (builder, "<interface><object class=\"GtkButton\" id=\"a\"><child internal-child=\"foobar\"><object class=\"GtkButton\" id=\"int\"/></child></object></interface>", -1, &error);
+  g_assert (error != NULL);
+  g_assert (error->domain == GTK_BUILDER_ERROR);
+  g_assert (error->code == GTK_BUILDER_ERROR_INVALID_VALUE);
+  g_error_free (error);
+
   g_object_unref (builder);
   
   return TRUE;
@@ -1858,7 +1879,6 @@ main (int argc, char **argv)
   g_print ("Testing parser\n");
   if (!test_parser ())
     g_error ("test_parser failed");
-
   g_print ("Testing types\n");
   if (!test_types ())
     g_error ("test_types failed");

@@ -182,8 +182,9 @@ _gtk_builder_boolean_from_string (const gchar  *string,
 }
 
 static GObject *
-builder_construct (ParserData *data,
-                   ObjectInfo *object_info)
+builder_construct (ParserData  *data,
+                   ObjectInfo  *object_info,
+		   GError     **error)
 {
   GObject *object;
 
@@ -194,7 +195,10 @@ builder_construct (ParserData *data,
 
   object_info->properties = g_slist_reverse (object_info->properties);
 
-  object = _gtk_builder_construct (data->builder, object_info);
+  object = _gtk_builder_construct (data->builder, object_info, error);
+  if (!object)
+    return NULL;
+
   g_assert (G_IS_OBJECT (object));
 
   object_info->object = object;
@@ -345,7 +349,7 @@ parse_child (ParserData   *data,
 
   child_info->parent = (CommonInfo*)object_info;
 
-  object_info->object = builder_construct (data, object_info);
+  object_info->object = builder_construct (data, object_info, error);
 }
 
 static void
@@ -643,8 +647,13 @@ parse_custom (GMarkupParseContext *context,
     {
       ObjectInfo* object_info = (ObjectInfo*)parent_info;
       if (!object_info->object)
-	object_info->object = _gtk_builder_construct (data->builder,
-						      object_info);
+	{
+	  object_info->object = _gtk_builder_construct (data->builder,
+							object_info,
+							error);
+	  if (!object_info->object)
+	    return TRUE; /* A GError is already set */
+	}
       g_assert (object_info->object);
       object = object_info->object;
       child = NULL;
@@ -803,8 +812,12 @@ end_element (GMarkupParseContext *context,
       ObjectInfo *object_info = state_pop_info (data, ObjectInfo);
       ChildInfo* child_info = state_peek_info (data, ChildInfo);
 
-      object_info->object = builder_construct (data, object_info);
-
+      object_info->object = builder_construct (data, object_info, error);
+      if (!object_info->object)
+	{
+	  free_object_info (object_info);
+	  return;
+	}
       if (child_info)
         child_info->object = object_info->object;
 
