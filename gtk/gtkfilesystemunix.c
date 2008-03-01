@@ -914,6 +914,7 @@ gtk_file_system_unix_get_folder (GtkFileSystem                  *file_system,
 	  folder_unix->have_mime_type = FALSE;
 	  folder_unix->have_stat = FALSE;
 	  folder_unix->have_hidden = FALSE;
+	  folder_unix->is_finished_loading = FALSE;
 	  set_asof = TRUE;
 	}
 
