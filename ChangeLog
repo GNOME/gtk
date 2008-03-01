@@ -1,6 +1,8 @@
 2008-02-29  Johan Dahlin  <johan@gnome.org>
 
 	* gtk/gtkbuilder.c:
+	Add missing g_return_val_if_fail checks for public API.
+
 	* gtk/gtkbuilderparser.c:
 	* gtk/gtkbuilderprivate.h:
 	Do not use g_error for a few more errors, instead set

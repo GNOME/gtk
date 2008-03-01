@@ -663,6 +663,7 @@ gtk_builder_add_from_file (GtkBuilder   *builder,
 
   g_return_val_if_fail (GTK_IS_BUILDER (builder), 0);
   g_return_val_if_fail (filename != NULL, 0);
+  g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
 
   tmp_error = NULL;
 
@@ -714,6 +715,7 @@ gtk_builder_add_from_string (GtkBuilder   *builder,
 
   g_return_val_if_fail (GTK_IS_BUILDER (builder), 0);
   g_return_val_if_fail (buffer != NULL, 0);
+  g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
 
   tmp_error = NULL;
 
@@ -1015,6 +1017,12 @@ gtk_builder_value_from_string (GtkBuilder   *builder,
                                GValue       *value,
 			       GError      **error)
 {
+  g_return_val_if_fail (GTK_IS_BUILDER (builder), FALSE);
+  g_return_val_if_fail (G_IS_PARAM_SPEC (pspec), FALSE);
+  g_return_val_if_fail (string != NULL, FALSE);
+  g_return_val_if_fail (value != NULL, FALSE);
+  g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
+
   /*
    * GParamSpecUnichar has the internal type G_TYPE_UINT,
    * so we cannot handle this in the switch, do it separately
@@ -1062,6 +1070,7 @@ gtk_builder_value_from_string_type (GtkBuilder   *builder,
 
   g_return_val_if_fail (type != G_TYPE_INVALID, FALSE);
   g_return_val_if_fail (string != NULL, FALSE);
+  g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
 
   g_value_init (value, type);
 
