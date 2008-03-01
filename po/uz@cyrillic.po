@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: uz@cyrillic\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2008-02-12 17:51-0500\n"
-"PO-Revision-Date: 2008-03-01 10:44+0500\n"
+"PO-Revision-Date: 2008-03-01 10:57+0500\n"
 "Last-Translator: Nurali Abdurahmonov <mavnur@gmail.com>\n"
 "Language-Team: uzbek\n"
 "MIME-Version: 1.0\n"
@@ -2741,7 +2741,7 @@ msgstr ""
 #: gtk/gtkrecentchoosermenu.c:784
 #, c-format
 msgid "recent menu label|_%d. %s"
-msgstr ""
+msgstr "_%d. %s"
 
 #. This is the format that is used for items in a recent files menu.
 #. * The %d is the number of the item, the %s is the name of the item.
@@ -2751,7 +2751,7 @@ msgstr ""
 #: gtk/gtkrecentchoosermenu.c:791
 #, c-format
 msgid "recent menu label|%d. %s"
-msgstr ""
+msgstr "%d. %s"
 
 #: gtk/gtkrecentmanager.c:1041 gtk/gtkrecentmanager.c:1187
 #: gtk/gtkrecentmanager.c:1197 gtk/gtkrecentmanager.c:1250
