@@ -156,7 +156,7 @@ AM_CONDITIONAL(HAVE_CXX, test "$CXX" != "")
 gtk_save_cxxflags="$CXXFLAGS"
 CXXFLAGS="$CXXFLAGS -x objective-c++"
 AC_TRY_COMPILE([@interface Foo @end],,OBJC=yes,OBJC=no)
-AM_CONDITIONAL(HAVE_OBJC, test "$OBJC" == "yes")
+AM_CONDITIONAL(HAVE_OBJC, test "$OBJC" = "yes")
 CXXFLAGS="$gtk_save_cxxflags"
 AC_LANG_RESTORE
 
