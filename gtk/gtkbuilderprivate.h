@@ -97,6 +97,7 @@ typedef struct {
 
 typedef GType (*GTypeGetFunc) (void);
 
+/* Things only GtkBuilder should use */
 void _gtk_builder_parser_parse_buffer (GtkBuilder *builder,
                                        const gchar *filename,
                                        const gchar *buffer,
@@ -112,6 +113,8 @@ void      _gtk_builder_add_signals (GtkBuilder *builder,
 void      _gtk_builder_finish (GtkBuilder *builder);
 void _free_signal_info (SignalInfo *info,
                         gpointer user_data);
+
+/* Internal API which might be made public at some point */
 gboolean _gtk_builder_boolean_from_string (const gchar  *string,
 					   gboolean     *value,
 					   GError      **error);
@@ -119,5 +122,8 @@ gboolean  _gtk_builder_flags_from_string (GType       type,
 					  const char *string,
 					  guint      *value,
 					  GError    **error);
+gchar * _gtk_builder_parser_translate (const gchar *domain,
+				       const gchar *context,
+				       const gchar *text);
 
 #endif /* __GTK_BUILDER_PRIVATE_H__ */

@@ -791,6 +791,21 @@ dpgettext (const char *domain,
   return translation;
 }
 
+gchar *
+_gtk_builder_parser_translate (const gchar *domain,
+			       const gchar *context,
+			       const gchar *text)
+{
+  const char *s;
+
+  if (context)
+    s = dpgettext (domain, context, text);
+  else
+    s = dgettext (domain, text);
+
+  return g_strdup (s);
+}
+
 /* Called for close tags </foo> */
 static void
 end_element (GMarkupParseContext *context,
@@ -841,22 +856,15 @@ end_element (GMarkupParseContext *context,
 
           if (prop_info->translatable && prop_info->text->len)
             {
-              const char *text;
-
-              if (prop_info->context)
-                text = dpgettext (data->domain,
-                                  prop_info->context,
-                                  prop_info->text->str);
-              else
-                text = dgettext (data->domain, prop_info->text->str);
-
-              prop_info->data = g_strdup (text);
+	      prop_info->data = _gtk_builder_parser_translate (data->domain,
+							       prop_info->context,
+							       prop_info->text->str);
               g_string_free (prop_info->text, TRUE);
             }
           else
             {
-              prop_info->data = prop_info->text->str;
-              g_string_free (prop_info->text, FALSE);
+              prop_info->data = g_string_free (prop_info->text, FALSE);
+              
             }
 
           object_info->properties =

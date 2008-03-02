@@ -1,5 +1,5 @@
 <?xml version="1.0" standalone="no"?> <!--*- mode: xml -*-->
-<interface>
+<interface domain="gtk20">
     <object class="GtkListStore" id="liststore1">
       <columns>
         <column type="gchararray"/>
@@ -9,16 +9,16 @@
       </columns>
       <data>
         <row>
-          <col id="0">John</col>
-          <col id="1">Doe</col>
+          <col id="0" translatable="yes">John</col>
+          <col id="1" translatable="yes">Doe</col>
           <col id="2">25</col>
-          <col id="3">This is the John Doe row</col>
+          <col id="3" translatable="yes">This is the John Doe row</col>
         </row>
         <row>
-          <col id="0">Mary</col>
-          <col id="1">Dole</col>
+          <col id="0" translatable="yes">Mary</col>
+          <col id="1" translatable="yes">Unknown</col>
           <col id="2">50</col>
-          <col id="3">This is the Mary Dole row</col>
+          <col id="3" translatable="yes">This is the Mary Unknown row</col>
         </row>
       </data>
     </object>

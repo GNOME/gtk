@@ -1,5 +1,18 @@
 2008-02-29  Johan Dahlin  <johan@gnome.org>
 
+	* demos/gtk-demo/demo.ui:
+	* gtk/gtkbuilderparser.c:
+	* gtk/gtkbuilderprivate.h:
+	* gtk/gtkliststore.c:
+	* tests/buildertest.c:
+	Add translatable/context and comment attributes on
+	<col> tags under a GtkListStore. Refactor parts of the
+	translation api and make it available inside gtk+ itself.
+	Update tests and example.
+	Fixes a part of #518642
+
+2008-02-29  Johan Dahlin  <johan@gnome.org>
+
 	* gtk/gtkbuilder.c:
 	Add missing g_return_val_if_fail checks for public API.
 
