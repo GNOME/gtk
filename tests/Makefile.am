@@ -54,7 +54,6 @@ textbuffertest_LDADD 		 = $(LDADDS)
 textbuffertest_SOURCES           = textbuffertest.c pixbuf-init.c
 
 noinst_PROGRAMS =  $(TEST_PROGS)	\
-	autotestkeywords		\
 	simple				\
 	print-editor			\
 	testaccel			\

@@ -1,3 +1,9 @@
+2008-03-02  Johan Dahlin  <johan@gnome.org>
+
+	* tests/Makefile.am (noinst_PROGRAMS): Remove autotestkeywords, it's added later,
+	fixes non-C++ build.
+	(#496032, Nelson Benitez)
+
 2008-02-29  Johan Dahlin  <johan@gnome.org>
 
 	* demos/gtk-demo/demo.ui:
