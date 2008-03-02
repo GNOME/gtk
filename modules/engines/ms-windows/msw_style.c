@@ -2017,8 +2017,8 @@ draw_box (GtkStyle *style,
 	    }
 	}
       else if (is_toolbar_child (widget->parent)
-	       || (GTK_RELIEF_NONE ==
-		   gtk_button_get_relief (GTK_BUTTON (widget))))
+	       || (!GTK_IS_BUTTON (widget) ||
+		   (GTK_RELIEF_NONE == gtk_button_get_relief (GTK_BUTTON (widget)))))
 	{
 	  if (draw_tool_button (window, widget, style, x, y,
 				width, height, state_type, area))

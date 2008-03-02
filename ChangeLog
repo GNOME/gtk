@@ -1,3 +1,8 @@
+2008-03-03  Tor Lillqvist  <tml@novell.com>
+
+	* modules/engines/ms-windows/msw_style.c (draw_box): Check that
+	the widget is a GtkButton before casting.
+
 2008-03-02  Johan Dahlin  <johan@gnome.org>
 
 	* configure.in: Compare using = instead of ==, which is portable.
