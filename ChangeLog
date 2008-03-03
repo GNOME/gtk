@@ -1,3 +1,11 @@
+2008-03-03  Sven Neumann  <sven@gimp.org>
+
+	Merged from trunk:
+
+	* gtk/gtkfilechooserbutton.c (G_DEFINE_TYPE_WITH_CODE): fixed a
+	typo in the documentation of the GtkFileChooserButtons::file-set
+	signal (see bug #353196).
+
 2008-03-01  Richard Hult  <richard@imendio.com>
 
 	Merged from trunk:
