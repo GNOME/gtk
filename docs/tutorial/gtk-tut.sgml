@@ -4768,7 +4768,7 @@ buttons. Lets look at how to create a Spin Button:</para>
 
 <programlisting role="C">
 GtkWidget *gtk_spin_button_new( GtkAdjustment *adjustment,
-                                gdouble         climb_rate,
+                                gdouble        climb_rate,
                                 guint          digits );
 </programlisting>
 
@@ -4913,7 +4913,7 @@ void gtk_spin_button_set_update_policy( GtkSpinButton  *spin_button,
 inserted text and syncing its value with the values of the
 Adjustment.</para>
 
-<para>In the case of <literal>GTK_UPDATE_IF_VALID</literal> the Spin Button only value
+<para>In the case of <literal>GTK_UPDATE_IF_VALID</literal> the Spin Button value only
 gets changed if the text input is a numeric value that is within the
 range specified by the Adjustment. Otherwise the text is reset to the
 current value.</para>

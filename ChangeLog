@@ -1,5 +1,10 @@
 2008-03-02  Johan Dahlin  <johan@gnome.org>
 
+	* docs/tutorial/gtk-tut.sgml: Remove an extra space and swap word order
+	(#518166, Matt Kraai)
+
+2008-03-02  Johan Dahlin  <johan@gnome.org>
+
 	* docs/tutorial/gtk-tut.sgml: Add a missing space
 	(#517954, Matt Kraai)
 
