@@ -1,3 +1,8 @@
+2008-03-03  Tor Lillqvist  <tml@novell.com>
+
+	* gtk-zip.sh.in: Add gail bits. Simplify check for message catalog
+	location.
+
 2008-03-02  Johan Dahlin  <johan@gnome.org>
 
 	* gtk/gtkitemfactory.h: Use void instead of empty arguments.
