@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-03-03 21:12+0000\n"
+"POT-Creation-Date: 2008-03-03 22:57+0000\n"
 "PO-Revision-Date: 2008-03-03 21:11+0000\n"
 "Last-Translator: David Lodge <dave@cirt.net>\n"
 "Language-Team: English/GB <en@li.org>\n"
@@ -2359,15 +2359,15 @@ msgstr "_Right:"
 msgid "Paper Margins"
 msgstr "Paper Margins"
 
-#: ../gtk/gtkpathbar.c:148
+#: ../gtk/gtkpathbar.c:151
 msgid "Up Path"
 msgstr "Up Path"
 
-#: ../gtk/gtkpathbar.c:150
+#: ../gtk/gtkpathbar.c:153
 msgid "Down Path"
 msgstr "Down Path"
 
-#: ../gtk/gtkpathbar.c:1377
+#: ../gtk/gtkpathbar.c:1475
 msgid "File System Root"
 msgstr "File System Root"
 
