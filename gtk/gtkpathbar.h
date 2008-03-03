@@ -51,6 +51,8 @@ struct _GtkPathBar
   GdkPixbuf *home_icon;
   GdkPixbuf *desktop_icon;
 
+  GdkWindow *event_window;
+
   GList *button_list;
   GList *first_scrolled_button;
   GList *fake_root;

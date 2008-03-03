@@ -1,3 +1,16 @@
+2008-03-03  Carlos Garnacho  <carlos@imendio.com>
+
+	Fix http://bugzilla.gnome.org/show_bug.cgi?id=417389 - Make the
+	scrollwheel work in GtkPathBar.
+
+	* gtk/gtkpathbar.h (struct _GtkPathBar): New field event_window.
+
+	* gtk/gtkpathbar.c (gtk_path_bar_realize): New function.  Create
+	an input-only window, event_window, which we'll use to capture
+	scroll events.
+	(gtk_path_bar_map): Show the event_window under the rest of the
+	windows, so it will be a catch-all for unhandled events.
+
 2008-03-03  Sven Neumann  <sven@gimp.org>
 
 	* gtk/gtkfilechooserbutton.c (G_DEFINE_TYPE_WITH_CODE): fixed a
