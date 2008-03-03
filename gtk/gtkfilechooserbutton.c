@@ -348,15 +348,15 @@ gtk_file_chooser_button_class_init (GtkFileChooserButtonClass * class)
   widget_class->style_set = gtk_file_chooser_button_style_set;
   widget_class->screen_changed = gtk_file_chooser_button_screen_changed;
   widget_class->mnemonic_activate = gtk_file_chooser_button_mnemonic_activate;
-  
+
   /**
-   * GtkFileChooserButtons::file-set:
+   * GtkFileChooserButton::file-set:
    * @widget: the object which received the signal.
    *
    * The ::file-set signal is emitted when the user selects a file.
-   * 
+   *
    * Note that this signal is only emitted when the <emphasis>user</emphasis>
-   * changes the file. 
+   * changes the file.
    *
    * Since: 2.12
    */

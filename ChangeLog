@@ -1,3 +1,9 @@
+2008-03-03  Sven Neumann  <sven@gimp.org>
+
+	* gtk/gtkfilechooserbutton.c (G_DEFINE_TYPE_WITH_CODE): fixed a
+	typo in the documentation of the GtkFileChooserButtons::file-set
+	signal (see bug #353196).
+
 2008-03-03  Tor Lillqvist  <tml@novell.com>
 
 	* gtk-zip.sh.in: Add gail bits. Simplify check for message catalog
