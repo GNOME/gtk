@@ -1,3 +1,8 @@
+2008-03-02  Johan Dahlin  <johan@gnome.org>
+
+	* docs/tutorial/gtk-tut.sgml: Add a missing space
+	(#517954, Matt Kraai)
+
 2008-03-03  Tor Lillqvist  <tml@novell.com>
 
 	* modules/engines/ms-windows/msw_style.c (draw_box): Check that

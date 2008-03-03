@@ -4204,7 +4204,7 @@ GtkWidget *gtk_vruler_new( void );    /* vertical ruler   */
 </programlisting>
 
 <para>Once a ruler is created, we can define the unit of measurement. Units
-of measure for rulers can be<literal>GTK_PIXELS</literal>, <literal>GTK_INCHES</literal> or
+of measure for rulers can be <literal>GTK_PIXELS</literal>, <literal>GTK_INCHES</literal> or
 <literal>GTK_CENTIMETERS</literal>. This is set using</para>
 
 <programlisting role="C">
