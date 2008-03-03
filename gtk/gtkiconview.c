@@ -2976,7 +2976,7 @@ gtk_icon_view_paint_item (GtkIconView     *icon_view,
 			  gint             y,
 			  gboolean         draw_focus)
 {
-  gint focus_width, focus_pad;
+  gint focus_width;
   gint padding;
   GdkRectangle cell_area, box;
   GList *l;
@@ -2991,7 +2991,6 @@ gtk_icon_view_paint_item (GtkIconView     *icon_view,
 
   gtk_widget_style_get (GTK_WIDGET (icon_view),
 			"focus-line-width", &focus_width,
-			"focus-padding", &focus_pad,
 			NULL);
   
   padding = focus_width; 

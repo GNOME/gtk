@@ -1,5 +1,9 @@
 2008-03-02  Johan Dahlin  <johan@gnome.org>
 
+	* gtk/gtkiconview.c (gtk_icon_view_paint_item): 
+	Remove left-over focus_pad variable.
+	(#490892, Claudio Saavedra)
+
 	* docs/tutorial/gtk-tut.sgml: Remove an extra space and swap word order
 	(#518166, Matt Kraai)
 
