@@ -49,7 +49,7 @@
 	* configure.in: Compare using = instead of ==, which is portable.
 	(#490787, Thomas Klausner)
 
-d2008-03-02  Johan Dahlin  <johan@gnome.org>
+2008-03-02  Johan Dahlin  <johan@gnome.org>
 
 	* tests/Makefile.am (noinst_PROGRAMS): Remove autotestkeywords, it's added later,
 	fixes non-C++ build.
