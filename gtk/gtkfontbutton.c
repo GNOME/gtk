@@ -30,7 +30,6 @@
 
 #include "gtkfontbutton.h"
 
-#include "gtksignal.h"
 #include "gtkmain.h"
 #include "gtkalignment.h"
 #include "gtkhbox.h"

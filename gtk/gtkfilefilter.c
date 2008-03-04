@@ -22,7 +22,6 @@
 #include <string.h>
 
 #include "gtkfilefilter.h"
-#include "gtkobject.h"
 #include "gtkintl.h"
 #include "gtkprivate.h"
 

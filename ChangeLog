@@ -1,3 +1,19 @@
+2008-03-04  Michael Natterer  <mitch@imendio.com>
+
+	* gtk/gtkcellview.c
+	* gtk/gtkcolorbutton.c
+	* gtk/gtkentrycompletion.c
+	* gtk/gtkfontbutton.c
+	* gtk/gtkiconview.c
+	* gtk/gtkobject.c
+	* gtk/gtkpaned.c
+	* gtk/gtkpreview.c: don't include "gtksignal.h".
+
+	* gtk/gtkfilefilter.c
+	* gtk/gtkrecentchoosermenu.c
+	* gtk/gtkrecentfilter.c
+	* gtk/gtktext.c: don't include "gtkobject.h".
+
 2008-03-04  Simos Xenitellis  <simos@gnome.org>
 
         Patch from http://bugzilla.gnome.org/show_bug.cgi?id=321896

@@ -28,7 +28,6 @@
 #include "gtkintl.h"
 #include "gtkpaned.h"
 #include "gtkbindings.h"
-#include "gtksignal.h"
 #include "gdk/gdkkeysyms.h"
 #include "gtkwindow.h"
 #include "gtkmain.h"

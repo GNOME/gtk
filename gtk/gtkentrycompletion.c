@@ -32,7 +32,6 @@
 #include "gtkwindow.h"
 #include "gtkentry.h"
 #include "gtkmain.h"
-#include "gtksignal.h"
 #include "gtkmarshalers.h"
 
 #include "gtkprivate.h"

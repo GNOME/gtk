@@ -33,7 +33,6 @@
 #include "gtkbindings.h"
 #include "gtkdnd.h"
 #include "gtkmain.h"
-#include "gtksignal.h"
 #include "gtkintl.h"
 #include "gtkaccessible.h"
 #include "gtkwindow.h"

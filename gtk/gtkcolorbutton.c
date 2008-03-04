@@ -41,7 +41,6 @@
 #include "gtkdnd.h"
 #include "gtkdrawingarea.h"
 #include "gtkframe.h"
-#include "gtksignal.h"
 #include "gtkmarshalers.h"
 #include "gtkprivate.h"
 #include "gtkintl.h"

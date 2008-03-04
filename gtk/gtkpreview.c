@@ -37,7 +37,6 @@
 #endif
 #include "gdk/gdkrgb.h"
 #include "gtkpreview.h"
-#include "gtksignal.h"
 #include "gtkprivate.h"
 #include "gtkintl.h"
 #include "gtkalias.h"

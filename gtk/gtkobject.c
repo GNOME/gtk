@@ -31,7 +31,6 @@
 #include "gtkobject.h"
 #include "gtkintl.h"
 #include "gtkmarshalers.h"
-#include "gtksignal.h"
 #include "gtkprivate.h"
 #include "gtkalias.h"
 

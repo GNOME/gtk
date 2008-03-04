@@ -43,7 +43,6 @@
 #include "gtkmenu.h"
 #include "gtkimage.h"
 #include "gtklabel.h"
-#include "gtkobject.h"
 #include "gtktooltip.h"
 #include "gtktypebuiltins.h"
 #include "gtkprivate.h"

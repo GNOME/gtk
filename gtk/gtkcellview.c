@@ -22,7 +22,6 @@
 #include "gtkcellview.h"
 #include "gtkcelllayout.h"
 #include "gtkintl.h"
-#include "gtksignal.h"
 #include "gtkcellrenderertext.h"
 #include "gtkcellrendererpixbuf.h"
 #include "gtkprivate.h"

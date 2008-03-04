@@ -37,7 +37,6 @@
 #include "gtkselection.h"
 #include "gtksignal.h"
 #include "gtkstyle.h"
-#include "gtkobject.h"
 #define GTK_ENABLE_BROKEN
 #include "gtktext.h"
 #include "line-wrap.xbm"
