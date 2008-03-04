@@ -1,3 +1,25 @@
+2008-03-04  Simos Xenitellis  <simos@gnome.org>
+
+        Patch from http://bugzilla.gnome.org/show_bug.cgi?id=321896
+	- Synch gdkkeysyms.h/gtkimcontextsimple.c with X.org 6.9/7.0
+	
+	* gdk/gdkkeysyms.h: Updated file from upstream (using script from 
+	same directory).
+	
+	* gtk/gtkimcontextsimpleseqs.h (gtk_compose_seqs_compact[]): New 
+	file, contains compose sequences that used to exist in 
+	gtk/gtkimcontextsimple.c
+
+	* gtk/compose-parse.py: Script to generate compose 
+	sequences from upstream (Xorg).
+
+	* gtk/gtkimcontextsimple.c (compare_seq_index, check_compact_table, 
+	check_algorithmically): New functions. First two search in
+	gtk_compose_seqs_compact[] for matching compose sequence, third
+	tries NFC normalisation on incoming compose sequence.
+	(gtk_im_context_simple_filter_keypress): 
+	Adds searching with check_compact_table(), check_algorithmically().
+
 2008-03-03  Carlos Garnacho  <carlos@imendio.com>
 
 	Fix http://bugzilla.gnome.org/show_bug.cgi?id=417389 - Make the
