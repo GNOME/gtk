@@ -1,3 +1,11 @@
+2008-03-04  Matthias Clasen  <mclasen@redhat.com>
+
+	Merged from trunk:
+
+	* modules/printbackends/cups/gtkprintbackendcups.c:
+	Honor cups user default options from ~/.cups/lpoptions
+	(#469210, Stijn Hoop)
+
 2008-03-03  Carlos Garnacho  <carlos@imendio.com>
 
 	Merged from trunk:
