@@ -168,15 +168,12 @@ gtk_public_h_sources =          \
 	gtkcheckbutton.h	\
 	gtkcheckmenuitem.h	\
 	gtkclipboard.h		\
-	gtkclist.h		\
 	gtkcolorbutton.h	\
 	gtkcolorsel.h		\
 	gtkcolorseldialog.h	\
-	gtkcombo.h		\
 	gtkcombobox.h		\
 	gtkcomboboxentry.h	\
 	gtkcontainer.h		\
-	gtkctree.h		\
 	gtkcurve.h		\
 	gtkdebug.h              \
 	gtkdialog.h		\
@@ -193,7 +190,6 @@ gtk_public_h_sources =          \
 	gtkfilechooserdialog.h  \
 	gtkfilechooserwidget.h  \
 	gtkfilefilter.h		\
-	gtkfilesel.h		\
 	gtkfixed.h		\
 	gtkfontbutton.h		\
 	gtkfontsel.h		\
@@ -224,8 +220,6 @@ gtk_public_h_sources =          \
 	gtklabel.h		\
 	gtklayout.h             \
 	gtklinkbutton.h		\
-	gtklist.h		\
-	gtklistitem.h		\
 	gtkliststore.h		\
 	gtkmain.h		\
 	gtkmenu.h		\
@@ -238,8 +232,6 @@ gtk_public_h_sources =          \
 	gtkmodules.h		\
 	gtknotebook.h		\
 	gtkobject.h		\
-	gtkoldeditable.h	\
-	gtkoptionmenu.h		\
 	gtkpagesetup.h		\
 	gtkpaned.h		\
 	gtkpapersize.h		\
@@ -276,7 +268,6 @@ gtk_public_h_sources =          \
 	gtkseparatormenuitem.h	\
 	gtkseparatortoolitem.h	\
 	gtksettings.h		\
-	gtksignal.h		\
 	gtksizegroup.h		\
 	gtksocket.h		\
 	gtkspinbutton.h		\
@@ -287,7 +278,6 @@ gtk_public_h_sources =          \
 	gtktable.h		\
 	gtktearoffmenuitem.h    \
 	gtktestutils.h		\
-	gtktext.h		\
 	gtktextbuffer.h		\
 	gtktextbufferrichtext.h	\
 	gtktextchild.h		\
@@ -307,9 +297,7 @@ gtk_public_h_sources =          \
 	gtktoolshell.h		\
 	gtktooltip.h		\
 	gtktooltips.h		\
-	gtktree.h		\
 	gtktreednd.h		\
-	gtktreeitem.h		\
 	gtktreemodel.h		\
 	gtktreemodelfilter.h	\
 	gtktreemodelsort.h	\
@@ -435,15 +423,12 @@ gtk_base_c_sources =            \
 	gtkcellview.c		\
 	gtkcheckbutton.c	\
 	gtkcheckmenuitem.c	\
-	gtkclist.c		\
 	gtkcolorbutton.c	\
 	gtkcolorsel.c		\
 	gtkcolorseldialog.c	\
-	gtkcombo.c		\
 	gtkcombobox.c		\
 	gtkcomboboxentry.c	\
 	gtkcontainer.c		\
-	gtkctree.c		\
 	gtkcurve.c		\
 	gtkdialog.c		\
 	gtkdrawingarea.c	\
@@ -462,7 +447,6 @@ gtk_base_c_sources =            \
 	gtkfilechooserutils.c	\
 	gtkfilechooserwidget.c	\
 	gtkfilefilter.c		\
-	gtkfilesel.c		\
 	gtkfilesystem.c		\
 	gtkfilesystemmodel.c	\
 	gtkfixed.c		\
@@ -499,8 +483,6 @@ gtk_base_c_sources =            \
 	gtklabel.c		\
 	gtklayout.c		\
 	gtklinkbutton.c		\
-	gtklist.c		\
-	gtklistitem.c		\
 	gtkliststore.c		\
 	gtkmain.c		\
 	gtkmarshal.c		\
@@ -516,8 +498,6 @@ gtk_base_c_sources =            \
 	gtkmodules.c		\
 	gtknotebook.c		\
 	gtkobject.c		\
-	gtkoldeditable.c	\
-	gtkoptionmenu.c		\
 	gtkpagesetup.c		\
 	gtkpaned.c		\
 	gtkpapersize.c		\
@@ -558,7 +538,6 @@ gtk_base_c_sources =            \
 	gtkseparatormenuitem.c	\
 	gtkseparatortoolitem.c	\
 	gtksettings.c		\
-	gtksignal.c		\
 	gtksizegroup.c		\
 	gtksocket.c		\
 	gtkspinbutton.c		\
@@ -569,7 +548,6 @@ gtk_base_c_sources =            \
 	gtktable.c		\
 	gtktearoffmenuitem.c    \
 	gtktestutils.c		\
-	gtktext.c		\
 	gtktextbtree.c		\
 	gtktextbuffer.c		\
 	gtktextbufferrichtext.c	\
@@ -596,10 +574,8 @@ gtk_base_c_sources =            \
 	gtktoolshell.c		\
 	gtktooltip.c		\
 	gtktooltips.c		\
-	gtktree.c		\
 	gtktreedatalist.c	\
 	gtktreednd.c		\
-	gtktreeitem.c		\
 	gtktreemodel.c		\
 	gtktreemodelfilter.c	\
 	gtktreemodelsort.c	\
@@ -624,6 +600,39 @@ gtk_base_c_sources =            \
 	gtkwindow-decorate.c    \
 	gtkwindow.c		\
 	$(gtk_clipboard_dnd_c_sources)
+
+# Broken
+gtk_public_h_sources +=         \
+        gtktext.h               \
+        gtktree.h               \
+        gtktreeitem.h
+gtk_base_c_sources +=           \
+        gtktext.c               \
+        gtktree.c               \
+        gtktreeitem.c
+
+# Deprecated
+gtk_public_h_sources +=         \
+        gtkclist.h              \
+        gtkcombo.h              \
+        gtkctree.h              \
+        gtkfilesel.h            \
+        gtklist.h               \
+        gtklistitem.h           \
+        gtkoldeditable.h        \
+        gtkoptionmenu.h         \
+        gtksignal.h
+gtk_base_c_sources +=           \
+        gtkclist.c              \
+        gtkcombo.c              \
+        gtkctree.c              \
+        gtkfilesel.c            \
+        gtklist.c               \
+        gtklistitem.c           \
+        gtkoldeditable.c        \
+        gtkoptionmenu.c         \
+        gtksignal.c
+
 gtk_c_sources = $(gtk_base_c_sources)
 gtk_all_c_sources = $(gtk_base_c_sources)
 

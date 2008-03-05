@@ -1,5 +1,9 @@
 2008-03-05  Johan Dahlin  <johan@gnome.org>
 
+	* gtk/gtk.h: 
+	* gtk/Makefile.am:
+	Separate broken and deprecated sources and headers into different sections
+
 	* tests/buildertest.c (test_list_store): Restore accidentally broken test.
 
 2008-03-05  Kristian Rietveld  <kris@imendio.com>
