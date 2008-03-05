@@ -1,3 +1,7 @@
+2008-03-04  Alberto Ruiz  <aruiz@gnome.org>
+	* configure.in: Add --disable-cups option.
+		(#513826, Alberto Ruiz)
+
 2008-03-04  Matthias Clasen  <mclasen@redhat.com>
 
 	Merged from trunk:
