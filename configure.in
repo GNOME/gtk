@@ -1596,42 +1596,53 @@ LIBS="$old_LIBS"
 # Printing system checks
 ################################################################
 
-AC_PATH_PROG(CUPS_CONFIG, cups-config, no)
-if test "x$CUPS_CONFIG" != "xno"; then
-  CUPS_CFLAGS=`$CUPS_CONFIG --cflags | sed 's/-O[0-9]*//' | sed 's/-m[^\t]*//g'`
-  CUPS_LIBS=`$CUPS_CONFIG --libs`
+AC_ARG_ENABLE(cups,
+              [AC_HELP_STRING([--disable-cups]
+                              [disable cups print backend])],,
+              [enable_cups=auto])
 
-  CUPS_API_VERSION=`$CUPS_CONFIG --api-version`
-  CUPS_API_MAJOR=`echo $ECHO_N $CUPS_API_VERSION | awk -F. '{print $1}'`
-  CUPS_API_MINOR=`echo $ECHO_N $CUPS_API_VERSION | awk -F. '{print $2}'`
+if test "x$enable_cups" = "xauto"
+then
+  AC_PATH_PROG(CUPS_CONFIG, cups-config, no)
+  if test "x$CUPS_CONFIG" != "xno"; then
+    CUPS_CFLAGS=`$CUPS_CONFIG --cflags | sed 's/-O[0-9]*//' | sed 's/-m[^\t]*//g'`
+    CUPS_LIBS=`$CUPS_CONFIG --libs`
 
-  if test $CUPS_API_MAJOR -gt 1 -o \
-          $CUPS_API_MAJOR -eq 1 -a $CUPS_API_MINOR -ge 2; then
-    AC_DEFINE(HAVE_CUPS_API_1_2)
+    CUPS_API_VERSION=`$CUPS_CONFIG --api-version`
+    CUPS_API_MAJOR=`echo $ECHO_N $CUPS_API_VERSION | awk -F. '{print $1}'`
+    CUPS_API_MINOR=`echo $ECHO_N $CUPS_API_VERSION | awk -F. '{print $2}'`
+
+    if test $CUPS_API_MAJOR -gt 1 -o \
+            $CUPS_API_MAJOR -eq 1 -a $CUPS_API_MINOR -ge 2; then
+      AC_DEFINE(HAVE_CUPS_API_1_2)
+    fi
+
+    AC_SUBST(CUPS_API_MAJOR)
+    AC_SUBST(CUPS_API_MINOR)
+    AC_SUBST(CUPS_CFLAGS)
+    AC_SUBST(CUPS_LIBS)
+
+    AC_CHECK_HEADER(cups/cups.h,,AC_MSG_ERROR([[*** Sorry, cups-config present but cups/cups.h missing.]]))
   fi
+  AM_CONDITIONAL(HAVE_CUPS, test "x$CUPS_CONFIG" != "xno")
 
-  AC_SUBST(CUPS_API_MAJOR)
-  AC_SUBST(CUPS_API_MINOR)
-  AC_SUBST(CUPS_CFLAGS)
-  AC_SUBST(CUPS_LIBS)
+  gtk_save_cflags="$CFLAGS"
+  CFLAGS="$CUPS_CFLAGS"
+  AC_TRY_COMPILE([#include <cups/http.h>],
+                 [http_t http; char *s = http.authstring;],
+                 [AC_DEFINE(HAVE_HTTP_AUTHSTRING,[],[Define if cups http_t authstring field is accessible])],)
+  CFLAGS="$gtk_save_cflags"
 
-  AC_CHECK_HEADER(cups/cups.h,,AC_MSG_ERROR([[*** Sorry, cups-config present but cups/cups.h missing.]]))
+  AC_SUBST(HAVE_HTTP_AUTHSTRING)
+
+  gtk_save_libs="$LIBS"
+  LIBS="$CUPS_LIBS"
+  AC_CHECK_FUNCS(httpGetAuthString)
+  LIBS="$gtk_save_libs"
+
+else
+  AM_CONDITIONAL(HAVE_CUPS, false)
 fi
-AM_CONDITIONAL(HAVE_CUPS, test "x$CUPS_CONFIG" != "xno")
-
-gtk_save_cflags="$CFLAGS"
-CFLAGS="$CUPS_CFLAGS"
-AC_TRY_COMPILE([#include <cups/http.h>],
-               [http_t http; char *s = http.authstring;],
-               [AC_DEFINE(HAVE_HTTP_AUTHSTRING,[],[Define if cups http_t authstring field is accessible])],)
-CFLAGS="$gtk_save_cflags"
-
-AC_SUBST(HAVE_HTTP_AUTHSTRING)
-
-gtk_save_libs="$LIBS"
-LIBS="$CUPS_LIBS"
-AC_CHECK_FUNCS(httpGetAuthString)
-LIBS="$gtk_save_libs"
 
 gtk_save_cppflags="$CPPFLAGS"
 CPPFLAGS="$CPPFLAGS $GTK_DEP_CFLAGS"

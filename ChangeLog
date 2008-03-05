@@ -1,5 +1,8 @@
 2008-03-05  Johan Dahlin  <johan@gnome.org>
 
+	* configure.in: Add --disable-cups option.
+	(#513826, Alberto Ruiz)
+
 	* gtk/gtk.h: 
 	* gtk/Makefile.am:
 	Separate broken and deprecated sources and headers into different sections
