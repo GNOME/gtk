@@ -1,3 +1,7 @@
+2008-03-05  Johan Dahlin  <johan@gnome.org>
+
+	* tests/buildertest.c (test_list_store): Restore accidentally broken test.
+
 2008-03-05  Kristian Rietveld  <kris@imendio.com>
 
 	* gtk/gtktreemodelfilter.c (gtk_tree_model_filter_row_inserted):

@@ -527,7 +527,7 @@ test_list_store (void)
     "    </columns>"
     "    <data>"
     "      <row>"
-    "        <col id=\"0\" translatable=\"yes\">_Quit</col>"
+    "        <col id=\"0\" translatable=\"yes\">John</col>"
     "        <col id=\"1\" context=\"foo\">Doe</col>"
     "        <col id=\"2\" comment=\"foobar\">25</col>"
     "      </row>"
