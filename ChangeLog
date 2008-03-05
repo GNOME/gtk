@@ -1,3 +1,9 @@
+2008-03-05  Kristian Rietveld  <kris@imendio.com>
+
+	* gtk/gtktreemodelfilter.c (gtk_tree_model_filter_row_inserted):
+	short-circuit in case an empty root level would be build (and thus
+	directly destroyed) if no virtual root has been set.
+
 2008-03-04  Matthias Clasen  <mclasen@redhat.com>
 
 	* modules/printbackends/cups/gtkprintbackendcups.c: 

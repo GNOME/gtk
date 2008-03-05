@@ -1373,6 +1373,11 @@ gtk_tree_model_filter_row_inserted (GtkTreeModel *c_model,
 
   if (!filter->priv->root)
     {
+      /* No point in building the level if this node is not visible. */
+      if (!filter->priv->virtual_root
+          && !gtk_tree_model_filter_visible (filter, c_iter))
+        goto done;
+
       /* build level will pull in the new child */
       gtk_tree_model_filter_build_level (filter, NULL, NULL, FALSE);
 
