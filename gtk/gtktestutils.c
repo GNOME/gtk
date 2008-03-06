@@ -34,9 +34,9 @@
 /* --- test utilities --- */
 /**
  * gtk_test_init:
- * @argc: Address of the <parameter>argc</parameter> parameter of the
+ * @argcp: Address of the <parameter>argc</parameter> parameter of the
  *        main() function. Changed if any arguments were handled.
- * @argv: Address of the <parameter>argv</parameter> parameter of main().
+ * @argvp: Address of the <parameter>argv</parameter> parameter of main().
  *        Any parameters understood by g_test_init() or gtk_init() are
  *        stripped before return.
  *

@@ -45,7 +45,7 @@ GtkWidget*      gtk_test_display_button_window  (const gchar    *window_title,
 void            gtk_test_slider_set_perc        (GtkWidget      *widget, /* GtkRange-alike */
                                                  double          percentage);
 double          gtk_test_slider_get_value       (GtkWidget      *widget);
-gboolean        gtk_test_spin_button_click      (GtkSpinButton  *widget,
+gboolean        gtk_test_spin_button_click      (GtkSpinButton  *spinner,
                                                  guint           button,
                                                  gboolean        upwards);
 gboolean        gtk_test_widget_click           (GtkWidget      *widget,

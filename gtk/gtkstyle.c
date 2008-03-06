@@ -5711,7 +5711,7 @@ gtk_paint_shadow (GtkStyle           *style,
  * @widget: the widget (may be %NULL)
  * @detail: a style detail (may be %NULL)
  * @points: an array of #GdkPoint<!-- -->s
- * @npoints: length of @points
+ * @n_points: length of @points
  * @fill: %TRUE if the polygon should be filled
  * 
  * Draws a polygon on @window with the given parameters.
