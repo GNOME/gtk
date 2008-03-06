@@ -1,3 +1,7 @@
+2008-03-06  Xan Lopez  <xan@gnome.org>
+
+	* gtk/gtkfixed.c: fix typo in documentation.
+
 2008-03-06  Johan Dahlin  <jdahlin@async.com.br>
 
 	* gtk/gtkitemfactory.h:
