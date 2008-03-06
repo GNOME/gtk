@@ -31,7 +31,7 @@
 #define __GTK_ACTION_GROUP_H__
 
 #include <gtk/gtkaction.h>
-#include <gtk/gtkitemfactory.h> /* for GtkTranslateFunc */
+#include <gtk/gtktypeutils.h> /* for GtkTranslateFunc */
 
 G_BEGIN_DECLS
 

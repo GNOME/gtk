@@ -29,7 +29,7 @@
 
 
 #include <gdk/gdk.h>
-#include <gtk/gtkitemfactory.h> /* for GtkTranslateFunc */
+#include <gtk/gtktypeutils.h> /* for GtkTranslateFunc */
 
 G_BEGIN_DECLS
 

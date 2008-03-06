@@ -122,6 +122,13 @@ typedef void (*GtkCallbackMarshal)  (GtkObject    *object,
 				     guint         n_args,
 				     GtkArg       *args);
 typedef void (*GtkSignalFunc)       (void);
+
+/* This used to be defined in gtkitemfactory.h, but moved over here after
+ * the complete deprecation of that header
+ */
+typedef gchar * (*GtkTranslateFunc) (const gchar  *path,
+				     gpointer      func_data);
+
 #define GTK_SIGNAL_FUNC(f)	    ((GtkSignalFunc) (f))
 
 #ifndef GTK_DISABLE_DEPRECATED

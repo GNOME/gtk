@@ -27,6 +27,8 @@
  * GTK+ at ftp://ftp.gtk.org/pub/gtk/. 
  */
 
+#ifndef GTK_DISABLE_DEPRECATED
+
 #ifndef __GTK_ITEM_FACTORY_H__
 #define	__GTK_ITEM_FACTORY_H__
 
@@ -34,11 +36,6 @@
 #include <gtk/gtkwidget.h>
 
 G_BEGIN_DECLS
-
-typedef gchar * (*GtkTranslateFunc)	   (const gchar		*path,
-					    gpointer             func_data);
-
-#if !defined (GTK_DISABLE_DEPRECATED)
 
 typedef void	(*GtkPrintFunc)		   (gpointer		 func_data,
 					    const gchar		*str);
