@@ -106,7 +106,6 @@
 #include <gtk/gtkinputdialog.h>
 #include <gtk/gtkinvisible.h>
 #include <gtk/gtkitem.h>
-#include <gtk/gtkitemfactory.h>
 #include <gtk/gtklabel.h>
 #include <gtk/gtklayout.h>
 #include <gtk/gtklinkbutton.h>
@@ -123,11 +122,8 @@
 #include <gtk/gtknotebook.h>
 #include <gtk/gtkobject.h>
 #include <gtk/gtkpaned.h>
-#include <gtk/gtkpixmap.h>
 #include <gtk/gtkplug.h>
-#include <gtk/gtkpreview.h>
 #include <gtk/gtkprintoperation.h>
-#include <gtk/gtkprogress.h>
 #include <gtk/gtkprogressbar.h>
 #include <gtk/gtkradioaction.h>
 #include <gtk/gtkradiobutton.h>
@@ -164,7 +160,6 @@
 #include <gtk/gtktextbuffer.h>
 #include <gtk/gtktextbufferrichtext.h>
 #include <gtk/gtktextview.h>
-#include <gtk/gtktipsquery.h>
 #include <gtk/gtktoggleaction.h>
 #include <gtk/gtktogglebutton.h>
 #include <gtk/gtktoggletoolbutton.h>
@@ -173,7 +168,6 @@
 #include <gtk/gtktoolitem.h>
 #include <gtk/gtktoolshell.h>
 #include <gtk/gtktooltip.h>
-#include <gtk/gtktooltips.h>
 #include <gtk/gtktestutils.h>
 #include <gtk/gtktreednd.h>
 #include <gtk/gtktreemodel.h>
@@ -208,10 +202,17 @@
 #include <gtk/gtkcombo.h>
 #include <gtk/gtkctree.h>
 #include <gtk/gtkfilesel.h>
+#include <gtk/gtkitemfactory.h>
 #include <gtk/gtklist.h>
 #include <gtk/gtklistitem.h>
 #include <gtk/gtkoldeditable.h>
 #include <gtk/gtkoptionmenu.h>
+#include <gtk/gtkpixmap.h>
+#include <gtk/gtkpreview.h>
+#include <gtk/gtkprogress.h>
 #include <gtk/gtksignal.h>
+#include <gtk/gtktipsquery.h>
+#include <gtk/gtktooltips.h>
+
 
 #endif /* __GTK_H__ */

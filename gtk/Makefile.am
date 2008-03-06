@@ -216,7 +216,6 @@ gtk_public_h_sources =          \
 	gtkinputdialog.h	\
 	gtkinvisible.h		\
 	gtkitem.h		\
-	gtkitemfactory.h	\
 	gtklabel.h		\
 	gtklayout.h             \
 	gtklinkbutton.h		\
@@ -235,15 +234,12 @@ gtk_public_h_sources =          \
 	gtkpagesetup.h		\
 	gtkpaned.h		\
 	gtkpapersize.h		\
-	gtkpixmap.h		\
 	gtkplug.h		\
-	gtkpreview.h		\
 	gtkprintcontext.h	\
 	gtkprintoperation.h	\
 	gtkprintoperationpreview.h	\
 	gtkprintsettings.h	\
 	gtkprivate.h		\
-	gtkprogress.h		\
 	gtkprogressbar.h	\
 	gtkradioaction.h	\
 	gtkradiobutton.h	\
@@ -287,7 +283,6 @@ gtk_public_h_sources =          \
 	gtktexttag.h		\
 	gtktexttagtable.h	\
 	gtktextview.h		\
-	gtktipsquery.h		\
 	gtktoggleaction.h	\
 	gtktogglebutton.h	\
 	gtktoggletoolbutton.h	\
@@ -296,7 +291,6 @@ gtk_public_h_sources =          \
 	gtktoolitem.h		\
 	gtktoolshell.h		\
 	gtktooltip.h		\
-	gtktooltips.h		\
 	gtktreednd.h		\
 	gtktreemodel.h		\
 	gtktreemodelfilter.h	\
@@ -478,7 +472,6 @@ gtk_base_c_sources =            \
 	gtkinputdialog.c	\
 	gtkinvisible.c		\
 	gtkitem.c		\
-	gtkitemfactory.c	\
 	gtkkeyhash.c		\
 	gtklabel.c		\
 	gtklayout.c		\
@@ -502,15 +495,12 @@ gtk_base_c_sources =            \
 	gtkpaned.c		\
 	gtkpapersize.c		\
 	gtkpathbar.c		\
-	gtkpixmap.c		\
 	gtkplug.c		\
-	gtkpreview.c		\
 	gtkprintcontext.c	\
 	gtkprintoperation.c	\
 	gtkprintoperationpreview.c	\
 	gtkprintsettings.c	\
 	gtkprintutils.c		\
-	gtkprogress.c		\
 	gtkprogressbar.c	\
 	gtkradioaction.c	\
 	gtkradiobutton.c	\
@@ -564,7 +554,6 @@ gtk_base_c_sources =            \
 	gtktextutil.c		\
 	gtktextview.c		\
 	gtkthemes.c		\
-	gtktipsquery.c		\
 	gtktoggleaction.c	\
 	gtktogglebutton.c	\
 	gtktoggletoolbutton.c	\
@@ -573,7 +562,6 @@ gtk_base_c_sources =            \
 	gtktoolitem.c		\
 	gtktoolshell.c		\
 	gtktooltip.c		\
-	gtktooltips.c		\
 	gtktreedatalist.c	\
 	gtktreednd.c		\
 	gtktreemodel.c		\
@@ -602,36 +590,48 @@ gtk_base_c_sources =            \
 	$(gtk_clipboard_dnd_c_sources)
 
 # Broken
-gtk_public_h_sources +=         \
-        gtktext.h               \
-        gtktree.h               \
-        gtktreeitem.h
-gtk_base_c_sources +=           \
-        gtktext.c               \
-        gtktree.c               \
-        gtktreeitem.c
+gtk_public_h_sources += \
+	gtktext.h		\
+	gtktree.h		\
+	gtktreeitem.h
+gtk_base_c_sources += \
+	gtktext.c		\
+	gtktree.c		\
+	gtktreeitem.c
 
 # Deprecated
-gtk_public_h_sources +=         \
-        gtkclist.h              \
-        gtkcombo.h              \
-        gtkctree.h              \
-        gtkfilesel.h            \
-        gtklist.h               \
-        gtklistitem.h           \
-        gtkoldeditable.h        \
-        gtkoptionmenu.h         \
-        gtksignal.h
-gtk_base_c_sources +=           \
-        gtkclist.c              \
-        gtkcombo.c              \
-        gtkctree.c              \
-        gtkfilesel.c            \
-        gtklist.c               \
-        gtklistitem.c           \
-        gtkoldeditable.c        \
-        gtkoptionmenu.c         \
-        gtksignal.c
+gtk_public_h_sources += \
+	gtkclist.h		\
+	gtkcombo.h		\
+	gtkctree.h		\
+	gtkfilesel.h		\
+	gtkitemfactory.h	\
+	gtklist.h		\
+	gtklistitem.h		\
+	gtkoldeditable.h	\
+	gtkoptionmenu.h		\
+	gtkpixmap.h		\
+	gtkpreview.h		\
+	gtkprogress.h		\
+	gtksignal.h		\
+	gtktipsquery.h		\
+	gtktooltips.h
+gtk_base_c_sources += \
+	gtkclist.c		\
+	gtkcombo.c		\
+	gtkctree.c		\
+	gtkfilesel.c		\
+	gtkitemfactory.c	\
+	gtklist.c		\
+	gtklistitem.c		\
+	gtkoldeditable.c	\
+	gtkoptionmenu.c		\
+	gtkpixmap.c		\
+	gtkpreview.c		\
+	gtkprogress.c		\
+	gtksignal.c		\
+	gtktipsquery.c		\
+	gtktooltips.c
 
 gtk_c_sources = $(gtk_base_c_sources)
 gtk_all_c_sources = $(gtk_base_c_sources)

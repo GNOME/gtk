@@ -1,3 +1,9 @@
+2008-03-06  Michael Natterer  <mitch@imendio.com>
+
+	* gtk/gtk.h
+	* gtk/Makefile.am: move the remaining deprecated widgets to the
+	separate sections and replaced spaces by tabs in Makefile.am
+
 2008-03-05  Johan Dahlin  <johan@gnome.org>
 
 	* configure.in: Add --disable-cups option.
