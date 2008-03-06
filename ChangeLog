@@ -1,3 +1,8 @@
+2008-03-06  William Lachance <wrlach@gmail.com>
+
+	* gtk/gtkfilechooserdefault.c: Don't print "Today at" in front of
+	the time for today's date. It's redudant. (see bug #410517).
+
 2008-03-06  Xan Lopez  <xan@gnome.org>
 
 	* gtk/gtkfixed.c: fix typo in documentation.

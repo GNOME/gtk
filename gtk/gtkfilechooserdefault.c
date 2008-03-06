@@ -11087,7 +11087,7 @@ list_mtime_data_func (GtkTreeViewColumn *tree_column,
 
       /* Translators: %H means "hours" and %M means "minutes" */
       if (days_diff == 0)
-        format = _("Today at %H:%M");
+        format = "%H:%M";
       else if (days_diff == 1)
 	format = _("Yesterday at %H:%M");
       else
