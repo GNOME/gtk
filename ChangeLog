@@ -1,5 +1,10 @@
 2008-03-06  William Lachance <wrlach@gmail.com>
 
+	* gtk/gtkfilechooserdefault.c: Oops, forgot to make the raw "%H:%M" 
+	string localizable (as it should be). 
+
+2008-03-06  William Lachance <wrlach@gmail.com>
+
 	* gtk/gtkfilechooserdefault.c: Don't print "Today at" in front of
 	the time for today's date. It's redudant. (see bug #410517).
 
