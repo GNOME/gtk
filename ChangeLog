@@ -1,3 +1,16 @@
+2008-03-07  Johan Dahlin  <johan@gnome.org>
+
+	* gtk/gtkbuilder.c:
+	* gtk/gtkbuilderparser.c:
+	* gtk/gtkbuilderprivate.h:
+	* gtk/gtkiconfactory.c:
+	* tests/buildertest.c:
+	- Treat enums like enums and not values
+	- Avoid invalid free, in case of more than two sources
+	- Add better error messages
+	- Add much improved tests
+	(#520979, Christian Persch)
+
 2008-03-07  Carlos Garnacho  <carlos@imendio.com>
 
 	* gtk/gtkiconfactory.c (gtk_icon_factory_buildable_custom_tag_end):

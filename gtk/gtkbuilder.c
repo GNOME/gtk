@@ -50,11 +50,6 @@ static void gtk_builder_get_property   (GObject         *object,
                                         GParamSpec      *pspec);
 static GType gtk_builder_real_get_type_from_name (GtkBuilder  *builder,
                                                   const gchar *type_name);
-static gboolean _gtk_builder_enum_from_string (GType         type, 
-					       const gchar  *string,
-					       gint         *enum_value,
-					       GError      **error);
-
 
 enum {
   PROP_0,
@@ -1280,7 +1275,7 @@ gtk_builder_value_from_string_type (GtkBuilder   *builder,
   return ret;
 }
 
-static gboolean
+gboolean
 _gtk_builder_enum_from_string (GType         type, 
                                const gchar  *string,
 			       gint         *enum_value,

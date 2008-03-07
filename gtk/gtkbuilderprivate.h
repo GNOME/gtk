@@ -118,6 +118,10 @@ void _free_signal_info (SignalInfo *info,
 gboolean _gtk_builder_boolean_from_string (const gchar  *string,
 					   gboolean     *value,
 					   GError      **error);
+gboolean _gtk_builder_enum_from_string (GType         type,
+                                        const gchar  *string,
+                                        gint         *enum_value,
+                                        GError      **error);
 gboolean  _gtk_builder_flags_from_string (GType       type,
 					  const char *string,
 					  guint      *value,

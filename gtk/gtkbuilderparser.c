@@ -915,9 +915,13 @@ text (GMarkupParseContext *context,
 
   if (data->subparser && data->subparser->start)
     {
+      GError *tmp_error = NULL;
+      
       if (data->subparser->parser->text)
         data->subparser->parser->text (context, text, text_len,
-                                       data->subparser->data, error);
+                                       data->subparser->data, &tmp_error);
+      if (tmp_error)
+	g_propagate_error (error, tmp_error);
       return;
     }
 

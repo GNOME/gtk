@@ -2752,20 +2752,23 @@ icon_source_start_element (GMarkupParseContext *context,
   gchar *stock_id = NULL;
   gchar *filename = NULL;
   gchar *icon_name = NULL;
-  GtkIconSize size = -1;
-  GtkTextDirection direction = -1;
-  GtkStateType state = -1;
+  gint size = -1;
+  gint direction = -1;
+  gint state = -1;
   IconFactoryParserData *parser_data;
   IconSourceParserData *source_data;
-
+  gchar *error_msg;
+  GQuark error_domain;
+  
   parser_data = (IconFactoryParserData*)user_data;
 
   if (!parser_data->in_source)
     {
       if (strcmp (element_name, "sources") != 0)
 	{
-	  g_warning ("Unexpected element %s, expected <sources>", element_name);
-	  return;
+	  error_msg = g_strdup_printf ("Unexpected element %s, expected <sources>", element_name);
+	  error_domain = GTK_BUILDER_ERROR_INVALID_TAG;
+	  goto error;
 	}
       parser_data->in_source = TRUE;
       return;
@@ -2774,8 +2777,9 @@ icon_source_start_element (GMarkupParseContext *context,
     {
       if (strcmp (element_name, "source") != 0)
 	{
-	  g_warning ("Unexpected element %s, expected <source>", element_name);
-	  return;
+	  error_msg = g_strdup_printf ("Unexpected element %s, expected <source>", element_name);
+	  error_domain = GTK_BUILDER_ERROR_INVALID_TAG;
+	  goto error;
 	}
     }
   
@@ -2789,34 +2793,42 @@ icon_source_start_element (GMarkupParseContext *context,
 	icon_name = g_strdup (values[i]);
       else if (strcmp (names[i], "size") == 0)
 	{
-	  if (!_gtk_builder_flags_from_string (GTK_TYPE_ICON_SIZE,
-					       values[i],
-					       &size,
-					       error))
+          if (!_gtk_builder_enum_from_string (GTK_TYPE_ICON_SIZE,
+                                              values[i],
+                                              &size,
+                                              error))
 	      return;
 	}
       else if (strcmp (names[i], "direction") == 0)
 	{
-	  if (!_gtk_builder_flags_from_string (GTK_TYPE_TEXT_DIRECTION,
-					       values[i],
-					       &direction,
-					       error))
+          if (!_gtk_builder_enum_from_string (GTK_TYPE_TEXT_DIRECTION,
+                                              values[i],
+                                              &direction,
+                                              error))
 	      return;
 	}
       else if (strcmp (names[i], "state") == 0)
 	{
-	  if (!_gtk_builder_flags_from_string (GTK_TYPE_STATE_TYPE,
-					       values[i],
-					       &state,
-					       error))
+          if (!_gtk_builder_enum_from_string (GTK_TYPE_STATE_TYPE,
+                                              values[i],
+                                              &state,
+                                              error))
 	      return;
+	}
+      else
+	{
+	  error_msg = g_strdup_printf ("'%s' is not a valid attribute of <%s>",
+				       names[i], "source");
+	  error_domain = GTK_BUILDER_ERROR_INVALID_ATTRIBUTE;
+	  goto error;
 	}
     }
 
   if (!stock_id || !filename)
     {
-      g_warning ("<source> requires a stock_id and a filename");
-      return;
+      error_msg = g_strdup_printf ("<source> requires a stock_id and a filename");
+      error_domain = GTK_BUILDER_ERROR_MISSING_ATTRIBUTE;
+      goto error;
     }
 
   source_data = g_slice_new (IconSourceParserData);
@@ -2828,6 +2840,33 @@ icon_source_start_element (GMarkupParseContext *context,
   source_data->state = state;
 
   parser_data->sources = g_slist_prepend (parser_data->sources, source_data);
+  return;
+
+ error:
+  {
+    gchar *tmp;
+    gint line_number, char_number;
+    
+    g_markup_parse_context_get_position (context,
+					 &line_number,
+					 &char_number);
+
+    tmp = g_strdup_printf ("%s:%d:%d %s", "input",
+			   line_number, char_number, error_msg);
+#if 0
+    g_set_error (error,
+		 GTK_BUILDER_ERROR,
+		 error_domain,
+		 tmp);
+#else
+    g_warning (tmp);
+#endif    
+    g_free (tmp);
+    g_free (stock_id);
+    g_free (filename);
+    g_free (icon_name);
+    return;
+  }
 }
 
 static const GMarkupParser icon_source_parser =
@@ -2886,6 +2925,7 @@ gtk_icon_factory_buildable_custom_tag_end (GtkBuildable *buildable,
 	    {
 	      icon_set = gtk_icon_set_new ();
 	      gtk_icon_factory_add (icon_factory, source_data->stock_id, icon_set);
+              gtk_icon_set_unref (icon_set);
 	    }
 
 	  icon_source = gtk_icon_source_new ();
@@ -2900,18 +2940,26 @@ gtk_icon_factory_buildable_custom_tag_end (GtkBuildable *buildable,
 	  if (source_data->icon_name)
 	    gtk_icon_source_set_icon_name (icon_source, source_data->icon_name);
 	  if (source_data->size != -1)
-	    gtk_icon_source_set_size (icon_source, source_data->size);
+            {
+              gtk_icon_source_set_size (icon_source, source_data->size);
+              gtk_icon_source_set_size_wildcarded (icon_source, FALSE);
+            }
 	  if (source_data->direction != -1)
-	    gtk_icon_source_set_direction (icon_source, source_data->direction);
+            {
+              gtk_icon_source_set_direction (icon_source, source_data->direction);
+              gtk_icon_source_set_direction_wildcarded (icon_source, FALSE);
+            }
 	  if (source_data->state != -1)
-	    gtk_icon_source_set_state (icon_source, source_data->state);
+            {
+              gtk_icon_source_set_state (icon_source, source_data->state);
+              gtk_icon_source_set_state_wildcarded (icon_source, FALSE);
+            }
 
 	  /* Inline source_add() to avoid creating a copy */
 	  g_assert (icon_source->type != GTK_ICON_SOURCE_EMPTY);
 	  icon_set->sources = g_slist_insert_sorted (icon_set->sources,
 						     icon_source,
 						     icon_source_compare);
-	  gtk_icon_set_unref (icon_set);
 
 	  g_free (source_data->stock_id);
 	  g_free (source_data->filename);
@@ -2920,6 +2968,11 @@ gtk_icon_factory_buildable_custom_tag_end (GtkBuildable *buildable,
 	}
       g_slist_free (parser_data->sources);
       g_slice_free (IconFactoryParserData, parser_data);
+
+      /* TODO: Add an attribute/tag to prevent this.
+       * Usually it's the right thing to do though.
+       */
+      gtk_icon_factory_add_default (icon_factory);
     }
 }
 

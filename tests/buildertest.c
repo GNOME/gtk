@@ -28,6 +28,17 @@
 #include <gdk/gdkkeysyms.h>
 #include <gtk/gtkprintjob.h>
 
+/* Copied from gtkiconfactory.c; keep in sync! */
+struct _GtkIconSet
+{
+  guint ref_count;
+  GSList *sources;
+  GSList *cache;
+  guint cache_size;
+  guint cache_serial;
+};
+
+
 static GtkBuilder *
 builder_new_from_string (const gchar *buffer,
                          gsize length,
@@ -1805,8 +1816,45 @@ test_icon_factory (void)
     "    </sources>"
     "  </object>"
     "</interface>";
+  const gchar buffer2[] =
+    "<interface>"
+    "  <object class=\"GtkIconFactory\" id=\"iconfactory1\">"
+    "    <sources>"
+    "      <source stock-id=\"sliff\" direction=\"rtl\" state=\"active\""
+    "              size=\"menu\" filename=\"sloff.png\"/>"
+    "      <source stock-id=\"sliff\" direction=\"ltr\" state=\"selected\""
+    "              size=\"dnd\" filename=\"slurf.png\"/>"
+    "    </sources>"
+    "  </object>"
+    "</interface>";
+#if 0
+  const gchar buffer3[] =
+    "<interface>"
+    "  <object class=\"GtkIconFactory\" id=\"iconfactory1\">"
+    "    <invalid/>"
+    "  </object>"
+    "</interface>";
+  const gchar buffer4[] =
+    "<interface>"
+    "  <object class=\"GtkIconFactory\" id=\"iconfactory1\">"
+    "    <sources>"
+    "      <invalid/>"
+    "    </sources>"
+    "  </object>"
+    "</interface>";
+  const gchar buffer5[] =
+    "<interface>"
+    "  <object class=\"GtkIconFactory\" id=\"iconfactory1\">"
+    "    <sources>"
+    "      <source/>"
+    "    </sources>"
+    "  </object>"
+    "</interface>";
+  GError *error = NULL;
+#endif  
   GObject *factory;
   GtkIconSet *icon_set;
+  GtkIconSource *icon_source;
   GtkWidget *image;
   
   builder = builder_new_from_string (buffer1, -1, NULL);
@@ -1815,10 +1863,55 @@ test_icon_factory (void)
 
   icon_set = gtk_icon_factory_lookup (GTK_ICON_FACTORY (factory), "apple-red");
   g_assert (icon_set != NULL);
-
   gtk_icon_factory_add_default (GTK_ICON_FACTORY (factory));
   image = gtk_image_new_from_stock ("apple-red", GTK_ICON_SIZE_BUTTON);
   g_assert (image != NULL);
+
+  builder = builder_new_from_string (buffer2, -1, NULL);
+  factory = gtk_builder_get_object (builder, "iconfactory1");
+  g_assert (factory != NULL);
+
+  icon_set = gtk_icon_factory_lookup (GTK_ICON_FACTORY (factory), "sliff");
+  g_assert (icon_set != NULL);
+  g_assert (g_slist_length (icon_set->sources) == 2);
+
+  icon_source = icon_set->sources->data;
+  g_assert (gtk_icon_source_get_direction (icon_source) == GTK_TEXT_DIR_RTL);
+  g_assert (gtk_icon_source_get_state (icon_source) == GTK_STATE_ACTIVE);
+  g_assert (gtk_icon_source_get_size (icon_source) == GTK_ICON_SIZE_MENU);
+  g_assert (g_str_has_suffix (gtk_icon_source_get_filename (icon_source), "sloff.png"));
+  
+  icon_source = icon_set->sources->next->data;
+  g_assert (gtk_icon_source_get_direction (icon_source) == GTK_TEXT_DIR_LTR);
+  g_assert (gtk_icon_source_get_state (icon_source) == GTK_STATE_SELECTED);
+  g_assert (gtk_icon_source_get_size (icon_source) == GTK_ICON_SIZE_DND);
+  g_assert (g_str_has_suffix (gtk_icon_source_get_filename (icon_source), "slurf.png"));
+
+  g_object_unref (builder);
+
+#if 0
+  error = NULL;
+  gtk_builder_add_from_string (builder, buffer3, -1, &error);
+  g_assert (error != NULL);
+  g_assert (error->domain == GTK_BUILDER_ERROR);
+  g_assert (error->code == GTK_BUILDER_ERROR_INVALID_TAG);
+  g_error_free (error);
+
+  error = NULL;
+  gtk_builder_add_from_string (builder, buffer4, -1, &error);
+  g_assert (error != NULL);
+  g_assert (error->domain == GTK_BUILDER_ERROR);
+  g_assert (error->code == GTK_BUILDER_ERROR_INVALID_TAG);
+  g_error_free (error);
+
+  error = NULL;
+  gtk_builder_add_from_string (builder, buffer5, -1, &error);
+  g_assert (error != NULL);
+  g_assert (error->domain == GTK_BUILDER_ERROR);
+  g_assert (error->code == GTK_BUILDER_ERROR_INVALID_ATTRIBUTE);
+  g_error_free (error);
+#endif
+
 }
 
 static void 
