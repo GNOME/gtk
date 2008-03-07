@@ -1,3 +1,17 @@
+2008-03-06  Federico Mena Quintero  <federico@novell.com>
+
+	Merged from trunk:
+
+	Fix http://bugzilla.gnome.org/show_bug.cgi?id=505857 -
+	GtkFileChooserDialog should set a default response button if the
+	app doesn't set it.  Based on a patch by Chris Wang <chris.wang@sun.com>.
+
+	* gtk/gtkfilechooserdialog.c (is_stock_accept_response_id): New
+	function, refactor from where there was duplicated code.
+	(gtk_file_chooser_dialog_new_valist): If the response ID for the
+	button is one of the stock ones, make it the default response
+	button.
+
 2008-03-04  Alberto Ruiz  <aruiz@gnome.org>
 	* configure.in: Add --disable-cups option.
 		(#513826, Alberto Ruiz)
