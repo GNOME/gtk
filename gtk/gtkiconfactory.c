@@ -2907,7 +2907,7 @@ gtk_icon_factory_buildable_custom_tag_end (GtkBuildable *buildable,
 	    gtk_icon_source_set_state (icon_source, source_data->state);
 
 	  /* Inline source_add() to avoid creating a copy */
-	  g_assert (source->type != GTK_ICON_SOURCE_EMPTY);
+	  g_assert (icon_source->type != GTK_ICON_SOURCE_EMPTY);
 	  icon_set->sources = g_slist_insert_sorted (icon_set->sources,
 						     icon_source,
 						     icon_source_compare);
