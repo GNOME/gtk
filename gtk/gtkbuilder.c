@@ -1234,18 +1234,7 @@ gtk_builder_value_from_string_type (GtkBuilder   *builder,
               return FALSE;
             }
 
-          if (g_path_is_absolute (string))
-            filename = g_strdup (string);
-          else
-            {
-              gchar *dirname;
-
-              dirname = g_path_get_dirname (builder->priv->filename);
-              filename = g_build_filename (dirname, string, NULL);
-
-              g_free (dirname);
-            }
-
+	  filename = _gtk_builder_get_absolute_filename (builder, string);
           pixbuf = gdk_pixbuf_new_from_file (filename, &tmp_error);
 
           if (pixbuf == NULL)
@@ -1466,6 +1455,26 @@ gtk_builder_error_quark (void)
   return g_quark_from_static_string ("gtk-builder-error-quark");
 }
 
+gchar *
+_gtk_builder_get_absolute_filename (GtkBuilder *builder, const gchar *string)
+{
+  gchar *filename;
+  gchar *dirname = NULL;
+  
+  if (g_path_is_absolute (string))
+    return g_strdup (string);
+
+  if (builder->priv->filename &&
+      strcmp (builder->priv->filename, ".") != 0)
+    dirname = g_path_get_dirname (builder->priv->filename);
+  else
+    dirname = g_get_current_dir ();
+    
+  filename = g_build_filename (dirname, string, NULL);
+  g_free (dirname);
+  
+  return filename;
+}
 
 #define __GTK_BUILDER_C__
 #include "gtkaliasdef.c"

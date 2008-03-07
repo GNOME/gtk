@@ -1793,6 +1793,34 @@ test_reference_counting (void)
   g_object_unref (builder);
 }
 
+static void
+test_icon_factory (void)
+{
+  GtkBuilder *builder;
+  const gchar buffer1[] =
+    "<interface>"
+    "  <object class=\"GtkIconFactory\" id=\"iconfactory1\">"
+    "    <sources>"
+    "      <source stock-id=\"apple-red\" filename=\"apple-red.png\"/>"
+    "    </sources>"
+    "  </object>"
+    "</interface>";
+  GObject *factory;
+  GtkIconSet *icon_set;
+  GtkWidget *image;
+  
+  builder = builder_new_from_string (buffer1, -1, NULL);
+  factory = gtk_builder_get_object (builder, "iconfactory1");
+  g_assert (factory != NULL);
+
+  icon_set = gtk_icon_factory_lookup (GTK_ICON_FACTORY (factory), "apple-red");
+  g_assert (icon_set != NULL);
+
+  gtk_icon_factory_add_default (GTK_ICON_FACTORY (factory));
+  image = gtk_image_new_from_stock ("apple-red", GTK_ICON_SIZE_BUTTON);
+  g_assert (image != NULL);
+}
+
 static void 
 test_file (const gchar *filename)
 {
@@ -1874,5 +1902,7 @@ main (int argc, char **argv)
   g_test_add_func ("/Builder/Value From String", test_value_from_string);
   g_test_add_func ("/Builder/Reference Counting", test_reference_counting);
   g_test_add_func ("/Builder/Window", test_window);
+  g_test_add_func ("/Builder/IconFactory", test_icon_factory);
+
   return g_test_run();
 }
