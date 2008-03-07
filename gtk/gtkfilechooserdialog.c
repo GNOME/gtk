@@ -112,6 +112,15 @@ gtk_file_chooser_dialog_finalize (GObject *object)
   G_OBJECT_CLASS (gtk_file_chooser_dialog_parent_class)->finalize (object);  
 }
 
+static gboolean
+is_stock_accept_response_id (int response_id)
+{
+  return (response_id == GTK_RESPONSE_ACCEPT
+	  || response_id == GTK_RESPONSE_OK
+	  || response_id == GTK_RESPONSE_YES
+	  || response_id == GTK_RESPONSE_APPLY);
+}
+
 /* Callback used when the user activates a file in the file chooser widget */
 static void
 file_chooser_widget_file_activated (GtkFileChooser       *chooser,
@@ -135,10 +144,7 @@ file_chooser_widget_file_activated (GtkFileChooser       *chooser,
 
       widget = GTK_WIDGET (l->data);
       response_id = gtk_dialog_get_response_for_widget (GTK_DIALOG (dialog), widget);
-      if (response_id == GTK_RESPONSE_ACCEPT
-	  || response_id == GTK_RESPONSE_OK
-	  || response_id == GTK_RESPONSE_YES
-	  || response_id == GTK_RESPONSE_APPLY)
+      if (is_stock_accept_response_id (response_id))
 	{
 	  gtk_widget_activate (widget); /* Should we gtk_dialog_response (dialog, response_id) instead? */
 	  break;
@@ -244,10 +250,7 @@ file_chooser_widget_response_requested (GtkWidget            *widget,
 
       widget = GTK_WIDGET (l->data);
       response_id = gtk_dialog_get_response_for_widget (GTK_DIALOG (dialog), widget);
-      if (response_id == GTK_RESPONSE_ACCEPT
-	  || response_id == GTK_RESPONSE_OK
-	  || response_id == GTK_RESPONSE_YES
-	  || response_id == GTK_RESPONSE_APPLY)
+      if (is_stock_accept_response_id (response_id))
 	{
 	  dialog->priv->response_requested = TRUE;
 	  gtk_widget_activate (widget); /* Should we gtk_dialog_response (dialog, response_id) instead? */
@@ -383,12 +386,34 @@ set_default_size (GtkFileChooserDialog *dialog)
 }
 #endif
 
+static void
+foreach_ensure_default_response_cb (GtkWidget *widget,
+				    gpointer   data)
+{
+  GtkFileChooserDialog *dialog = GTK_FILE_CHOOSER_DIALOG (data);
+  int response_id;
+
+  response_id = gtk_dialog_get_response_for_widget (GTK_DIALOG (dialog), widget);
+  if (is_stock_accept_response_id (response_id))
+    gtk_dialog_set_default_response (GTK_DIALOG (dialog), response_id);
+}
+
+static void
+ensure_default_response (GtkFileChooserDialog *dialog)
+{
+  gtk_container_foreach (GTK_CONTAINER (GTK_DIALOG (dialog)->action_area),
+			 foreach_ensure_default_response_cb,
+			 dialog);
+}
+
 /* GtkWidget::map handler */
 static void
 gtk_file_chooser_dialog_map (GtkWidget *widget)
 {
   GtkFileChooserDialog *dialog = GTK_FILE_CHOOSER_DIALOG (widget);
   GtkFileChooserDialogPrivate *priv = GTK_FILE_CHOOSER_DIALOG_GET_PRIVATE (dialog);
+
+  ensure_default_response (dialog);
 
   if (!GTK_WIDGET_MAPPED (priv->widget))
     gtk_widget_map (priv->widget);
@@ -427,12 +452,9 @@ response_cb (GtkDialog *dialog,
   priv = GTK_FILE_CHOOSER_DIALOG_GET_PRIVATE (dialog);
 
   /* Act only on response IDs we recognize */
-  if ((response_id == GTK_RESPONSE_ACCEPT ||
-       response_id == GTK_RESPONSE_OK     ||
-       response_id == GTK_RESPONSE_YES    ||
-       response_id == GTK_RESPONSE_APPLY) &&
-      !priv->response_requested &&
-      !_gtk_file_chooser_embed_should_respond (GTK_FILE_CHOOSER_EMBED (priv->widget)))
+  if (is_stock_accept_response_id (response_id)
+      && !priv->response_requested
+      && !_gtk_file_chooser_embed_should_respond (GTK_FILE_CHOOSER_EMBED (priv->widget)))
     {
       g_signal_stop_emission_by_name (dialog, "response");
     }
