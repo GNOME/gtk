@@ -8,9 +8,9 @@
 
 	* gtk/gtkfilechooserdialog.c (is_stock_accept_response_id): New
 	function, refactor from where there was duplicated code.
-	(gtk_file_chooser_dialog_new_valist): If the response ID for the
-	button is one of the stock ones, make it the default response
-	button.
+	(gtk_file_chooser_dialog_map): Look at the buttons in our
+	action_area.  If the response ID for a button is one of the stock
+	ones, make it the default response button.
 
 2008-03-04  Alberto Ruiz  <aruiz@gnome.org>
 	* configure.in: Add --disable-cups option.
