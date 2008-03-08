@@ -1980,7 +1980,7 @@ draw_box (GtkStyle *style,
       FillRect (dc, &rect, GetSysColorBrush (COLOR_WINDOW));
       release_window_dc (style, window, state_type);
 
-      cx = 2 * GetSystemMetrics (SM_CXEDGE) + 16;	/* TODO evaluate arrow width */
+      cx = GetSystemMetrics(SM_CXVSCROLL);
       x += width - cx;
       width = cx;
 
@@ -2946,8 +2946,13 @@ draw_shadow (GtkStyle *style,
 
   if (detail && !strcmp (detail, "frame"))
     {
+ 
       HDC dc;
       RECT rect;
+
+      if (is_combo_box_child (widget))
+        return; 
+
       dc = get_window_dc (style, window, state_type, x, y, width, height, &rect);
 
       if (is_popup_window_child (widget))
