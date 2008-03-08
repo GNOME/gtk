@@ -1,3 +1,13 @@
+2008-03-07  Alberto Ruiz  <aruiz@gnome.org>
+
+	Merged from trunk:
+
+	* modules/engines/ms-windows/msw_style.c (draw_shadow):
+	Do not draw frame if parent if combobox.
+	(draw_box):
+	Uses scrollbar width system metrics for combobox button.
+	Fixes #461805 for XP theme engine.
+
 2008-03-06  Federico Mena Quintero  <federico@novell.com>
 
 	Merged from trunk:
