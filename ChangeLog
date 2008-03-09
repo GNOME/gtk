@@ -180,9 +180,6 @@
 
 2008-03-02  Johan Dahlin  <johan@gnome.org>
 
-	* gtk/gtkitemfactory.h: Use void instead of empty arguments.
-	(#508760, Philip Van Hoof)
-
 	* gtk/gtkiconview.c (gtk_icon_view_paint_item): 
 	Remove left-over focus_pad variable.
 	(#490892, Claudio Saavedra)

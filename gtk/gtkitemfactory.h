@@ -44,7 +44,7 @@ typedef void	(*GtkPrintFunc)		   (gpointer		 func_data,
  * (Note that if we are included from a C++ program () will mean
  * (void) so an explicit cast will be needed.)
  */
-typedef	void	(*GtkItemFactoryCallback)  (void);
+typedef	void	(*GtkItemFactoryCallback)  ();
 typedef	void	(*GtkItemFactoryCallback1) (gpointer		 callback_data,
 					    guint		 callback_action,
 					    GtkWidget		*widget);
