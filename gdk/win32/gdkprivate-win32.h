@@ -296,6 +296,7 @@ gchar *_gdk_win32_join_style_to_string (GdkJoinStyle join_style);
 gchar *_gdk_win32_line_style_to_string (GdkLineStyle line_style);
 gchar *_gdk_win32_gcvalues_mask_to_string (GdkGCValuesMask mask);
 gchar *_gdk_win32_window_state_to_string (GdkWindowState state);
+gchar *_gdk_win32_window_style_to_string (LONG style);
 gchar *_gdk_win32_drawable_description (GdkDrawable *d);
 
 gchar *_gdk_win32_rop2_to_string       (int          rop2);

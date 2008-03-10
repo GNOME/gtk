@@ -544,6 +544,48 @@ _gdk_win32_window_state_to_string (GdkWindowState state)
 }
 
 gchar *
+_gdk_win32_window_style_to_string (LONG style)
+{
+  gchar buf[1000];
+  gchar *bufp = buf;
+  gchar *s = "";
+
+  buf[0] = '\0';
+
+#define BIT(x)						\
+  if (style & WS_ ## x)			\
+    (bufp += sprintf (bufp, "%s" #x, s), s = "|")
+
+  /* Note that many of the WS_* macros are in face several bits.
+   * Handle just the individual bits here. Sort as in w32api's
+   * winuser.h.
+   */
+  BIT (BORDER);
+  BIT (CHILD);
+  BIT (CLIPCHILDREN);
+  BIT (CLIPSIBLINGS);
+  BIT (DISABLED);
+  BIT (DLGFRAME);
+  BIT (GROUP);
+  BIT (HSCROLL);
+  BIT (ICONIC);
+  BIT (MAXIMIZE);
+  BIT (MAXIMIZEBOX);
+  BIT (MINIMIZE);
+  BIT (MINIMIZEBOX);
+  BIT (POPUP);
+  BIT (SIZEBOX);
+  BIT (SYSMENU);
+  BIT (TABSTOP);
+  BIT (THICKFRAME);
+  BIT (VISIBLE);
+  BIT (VSCROLL);
+#undef BIT
+
+  return static_printf ("%s", buf);  
+}
+
+gchar *
 _gdk_win32_rop2_to_string (int rop2)
 {
   switch (rop2)
