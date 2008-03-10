@@ -1,3 +1,15 @@
+2008-03-10  Wouter Bolsterlee  <wbolster@svn.gnome.org>
+
+	reviewed by: Matthias Clasen  <mclasen@redhat.com>
+
+	* modules/printbackends/cups/gtkprintbackendcups.c
+	(cups_get_user_options):
+
+	Bug 469210 – Honor CUPS user default options for GtkPrint
+
+	Correctly iterate over filename list, avoiding a
+	critical warning/crash.
+
 2008-03-07  Alberto Ruiz  <aruiz@gnome.org>
 
 	Merged from trunk:
