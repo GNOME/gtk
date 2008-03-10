@@ -1,5 +1,9 @@
 2008-03-10  Tor Lillqvist  <tml@novell.com>
 
+	* gtk/gtktrayicon-win32.c: Remove from SVN, finally.
+
+2008-03-10  Tor Lillqvist  <tml@novell.com>
+
 	Bug 520286 - Non-deletable window has no minimize / maximize buttons
 
 	* gdk/win32/gdkmain-win32.c (_gdk_win32_window_style_to_string):
