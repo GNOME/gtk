@@ -31,9 +31,10 @@ Release notes for 2.14
 ======================
 
 * gtkitemfactory.h is now completely deprecated.
-  gtkactiongroup.h and gtkstock.h is no longer included it's header,
-  this might break application using gtk_item_factory_* symbols without
-  including gtkitemfactory.h which has never been supported.
+  As gtkactiongroup.h and gtkstock.h no longer include the gtkitemfactory.h
+  header, this might break application using gtk_item_factory_* symbols
+  without including gtkitemfactory.h - even though this behaviour has never
+  been supported in the first place.
 
 Release notes for 2.12
 ======================
