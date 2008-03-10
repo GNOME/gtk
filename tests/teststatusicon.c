@@ -22,6 +22,8 @@
  */
 
 #include <gtk/gtk.h>
+#include <stdlib.h>
+
 #include "prop-editor.h"
 
 typedef enum
@@ -256,6 +258,12 @@ do_quit (GtkMenuItem *item)
   gtk_main_quit ();
 }
 
+static void
+do_exit (GtkMenuItem *item)
+{
+  exit (0);
+}
+
 static void 
 popup_menu (GtkStatusIcon *icon,
 	    guint          button,
@@ -286,6 +294,13 @@ popup_menu (GtkStatusIcon *icon,
 
   menuitem = gtk_menu_item_new_with_label ("Quit");
   g_signal_connect (menuitem, "activate", G_CALLBACK (do_quit), NULL);
+
+  gtk_menu_shell_append (GTK_MENU_SHELL (menu), menuitem);
+
+  gtk_widget_show (menuitem);
+
+  menuitem = gtk_menu_item_new_with_label ("Exit abruptly");
+  g_signal_connect (menuitem, "activate", G_CALLBACK (do_exit), NULL);
 
   gtk_menu_shell_append (GTK_MENU_SHELL (menu), menuitem);
 
