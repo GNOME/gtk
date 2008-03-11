@@ -258,6 +258,17 @@ static gboolean DecodeHeader(unsigned char *BFH, unsigned char *BIH,
 {
 	gint clrUsed;
 
+	/* First check for the two first bytes content. A sane
+	   BMP file must start with bytes 0x42 0x4D.  */
+	if (*BFH != 0x42 || *(BFH + 1) != 0x4D) {
+		g_set_error (error,
+			     GDK_PIXBUF_ERROR,
+			     GDK_PIXBUF_ERROR_CORRUPT_IMAGE,
+			     _("BMP image has bogus header data"));
+		State->read_state = READ_STATE_ERROR;
+		return FALSE;
+	}
+
         /* FIXME this is totally unrobust against bogus image data. */
 	if (State->BufferSize < lsb_32 (&BIH[0]) + 14) {
 		State->BufferSize = lsb_32 (&BIH[0]) + 14;
