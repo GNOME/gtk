@@ -30,8 +30,6 @@ IGNORE_HFILES=			\
 	gdkpoly-generic.h	\
 	gdkregion-generic.h	\
 	keyname-table.h		\
-	linux-fb 		\
-	nanox 			\
 	win32 			\
 	directfb		\
 	x11			\
