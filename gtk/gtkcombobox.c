@@ -2320,8 +2320,14 @@ gtk_combo_box_size_allocate (GtkWidget     *widget,
 	    }
         }
       
+      child.x += shadow_width;
+      child.y += shadow_height;
+      child.width -= shadow_width * 2;
+      child.height -= shadow_height * 2;
+      
       child.width = MAX (1, child.width);
       child.height = MAX (1, child.height);
+      
       gtk_widget_size_allocate (GTK_BIN (combo_box)->child, &child);
     }
 }

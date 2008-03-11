@@ -1,3 +1,10 @@
+2008-03-11  Alberto Ruiz  <aruiz@gnome.org>
+
+	* gtk/gtkcombobox.c (gtk_combo_box_size_allocate):
+	Take thickness into account in the size allocation of the child widgets in
+	list mode.
+	Fixes #521442
+
 2008-03-11  Richard Hult  <richard@imendio.com>
 
 	* gdk/quartz/gdkwindow-quartz.c: Implement gdk_window_reparent.
