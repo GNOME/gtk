@@ -223,7 +223,7 @@ msgstr "Nom de la icona del logotip"
 
 #: gtk/gtkaboutdialog.c:399
 msgid "A named icon to use as the logo for the about box."
-msgstr "Una icona amb nom per a usar com a logotip a la caixa d'informació"
+msgstr "Una icona amb nom per a emprar com a logotip a la caixa d'informació"
 
 #: gtk/gtkaboutdialog.c:412
 msgid "Wrap license"
@@ -2125,7 +2125,7 @@ msgstr "Caràcter invisible"
 #: gtk/gtkentry.c:539
 msgid "The character to use when masking entry contents (in \"password mode\")"
 msgstr ""
-"El caràcter a usar quan s'emmascara el contingut de l'entrada (en «mode "
+"El caràcter a emprar quan s'emmascara el contingut de l'entrada (en «mode "
 "contrasenya»)"
 
 #: gtk/gtkentry.c:546
@@ -4599,7 +4599,7 @@ msgstr "Estil de transformació Xft"
 msgid ""
 "What degree of hinting to use; hintnone, hintslight, hintmedium, or hintfull"
 msgstr ""
-"Quin grau de transformació a usar; hintnone, hintslight, hintmedium, o "
+"Quin grau de transformació a emprar; hintnone, hintslight, hintmedium, o "
 "hintfull"
 
 #: gtk/gtksettings.c:386
@@ -4922,7 +4922,7 @@ msgstr ""
 
 #: gtk/gtkspinbutton.c:269
 msgid "Reads the current value, or sets a new value"
-msgstr "Llegeix el valor actual, o fixa un nou valor"
+msgstr "Llegeix el valor actual, o fixa'n un de nou"
 
 #: gtk/gtkspinbutton.c:278
 msgid "Style of bevel around the spin button"
@@ -5260,7 +5260,7 @@ msgid ""
 "when rendering the text. If not set, an appropriate default will be used."
 msgstr ""
 "El codi ISO de l'idioma del text. El Pango ho pot utilitzar com a pista en "
-"representar el text. Si no s'estableix, s'usarà el determinat més apropiat."
+"representar el text. Si no s'estableix, s'emprarà el determinat més apropiat."
 
 #: gtk/gtktexttag.c:386
 msgid "Left margin"
