@@ -26,15 +26,11 @@
 #include "gtkwindow.h"
 #include "gtkmain.h"
 #include "gtkwindow-decorate.h"
+#include "gtkintl.h"
 #include "gtkalias.h"
 
 
-#ifdef GDK_WINDOWING_FB
-#define DECORATE_WINDOWS
-#endif
-
 #ifdef DECORATE_WINDOWS
-#include "linux-fb/gdkfb.h"
 
 typedef enum
 {
@@ -283,7 +279,11 @@ gtk_decorated_window_realize (GtkWindow   *window)
   font_desc = pango_font_description_from_string(DECORATION_TITLE_FONT);
   pango_layout_set_font_description (deco->title_layout, font_desc);
   pango_font_description_free (font_desc);
-  
+
+#if 0
+  /* What is this code exactly doing? I remember we were using the
+     decorated windows with the DirectFB port and it did just work,
+     and there was definitely no code in linux-fb involved. */
   gdk_fb_window_set_child_handler (window->frame,
 				   gtk_decorated_window_inner_change,
 				   gtk_decorated_window_inner_get_pos,
@@ -292,6 +292,7 @@ gtk_decorated_window_realize (GtkWindow   *window)
   /* This is a huge hack to make frames have the same shape as
      the window they wrap */
   gdk_window_shape_combine_mask (window->frame, GDK_FB_USE_CHILD_SHAPE, 0, 0);
+#endif
 }
 
 
