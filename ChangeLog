@@ -1,3 +1,12 @@
+2008-03-11  Alberto Ruiz  <aruiz@gnome.org>
+
+	Merged from trunk:
+
+  * gtk/gtkcombobox.c (gtk_combo_box_size_allocate):
+	Take thickness into account in the size allocation of the child widgets in
+	list mode.
+	Fixes #521442
+
 2008-03-10  Wouter Bolsterlee  <wbolster@svn.gnome.org>
 
 	reviewed by: Matthias Clasen  <mclasen@redhat.com>
