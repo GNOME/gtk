@@ -1,3 +1,17 @@
+2008-03-11  Tor Lillqvist  <tml@novell.com>
+
+	Bug 469868 - Filenames with colon ":" are not saved correctly
+
+	* gtk/gtkfilechooserentry.c (insert_text_callback)
+	(delete_text_callback) [Win32]: New functions to make sure that
+	colons used otherwise than as a separator after a drive letter, or
+	characters that are always illegal in file names, are rejected on
+	input. This means that the GTK+ file chooser can't be used to
+	input full names of alternate data streams, but oh well. There are
+	still more checks that could be done on the file names, see the
+	bug report. But this will do for now.
+	(_gtk_file_chooser_entry_init) [Win32]: Connect above functions.
+
 2008-03-11  Jordi Mallach  <jordi@sindominio.net>
 
 	* configure.in (ALL_LINGUAS): Add ca@valencia (Valencian-Catalan).
