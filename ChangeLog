@@ -1,3 +1,7 @@
+2008-03-11  Jordi Mallach  <jordi@sindominio.net>
+
+	* configure.in (ALL_LINGUAS): Add ca@valencia (Valencian-Catalan).
+
 2008-03-11  Michael Natterer  <mitch@imendio.com>
 
 	* gdk/linux-fb/*: removed linux-fb backend files.
