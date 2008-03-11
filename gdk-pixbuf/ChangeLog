@@ -1,5 +1,11 @@
 2008-03-11  Claudio Saavedra  <csaavedra@alumnos.utalca.cl>
 
+	* io-bmp.c: (gdk_pixbuf__bmp_image_stop_load): Set a
+	GDK_ERROR_CORRUPT_IMAGE error if the loader is closed while
+	still reading the headers.  (#505085)
+
+2008-03-11  Claudio Saavedra  <csaavedra@alumnos.utalca.cl>
+
         * io-bmp.c: (DecodeHeader): Check for the BMP header magic numbers
         before decoding it.  (#505085)
 
