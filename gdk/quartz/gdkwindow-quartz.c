@@ -1437,14 +1437,51 @@ gdk_window_move_resize (GdkWindow *window,
 
 void
 gdk_window_reparent (GdkWindow *window,
-		     GdkWindow *new_parent,
-		     gint       x,
-		     gint       y)
+                     GdkWindow *new_parent,
+                     gint       x,
+                     gint       y)
 {
-  g_warning ("gdk_window_reparent: %p %p (%d, %d)", 
-	     window, new_parent, x, y);
+  GdkWindowObject *private, *old_parent_private, *new_parent_private;
+  GdkWindowImplQuartz *impl, *old_parent_impl, *new_parent_impl;
+  NSView *view, *new_parent_view;
 
-  /* FIXME: Implement */
+  if (!new_parent || new_parent == _gdk_root)
+    {
+      /* Could be added, just needs implementing. */
+      g_warning ("Reparenting to root window is not supported yet in the Mac OS X backend");
+      return;
+    }
+
+  private = GDK_WINDOW_OBJECT (window);
+  impl = GDK_WINDOW_IMPL_QUARTZ (private->impl);
+  view = impl->view;
+
+  new_parent_private = GDK_WINDOW_OBJECT (new_parent);
+  new_parent_impl = GDK_WINDOW_IMPL_QUARTZ (new_parent_private->impl);
+  new_parent_view = new_parent_impl->view;
+
+  old_parent_private = GDK_WINDOW_OBJECT (private->parent);
+  old_parent_impl = GDK_WINDOW_IMPL_QUARTZ (old_parent_private->impl);
+
+  [view retain];
+
+  [view removeFromSuperview];
+  [new_parent_view addSubview:view];
+
+  [view release];
+
+  private->x = x;
+  private->y = y;
+  private->parent = (GdkWindowObject *)new_parent;
+
+  if (old_parent_private)
+    {
+      old_parent_private->children = g_list_remove (old_parent_private->children, window);
+      old_parent_impl->sorted_children = g_list_remove (old_parent_impl->sorted_children, window);
+    }
+
+  new_parent_private->children = g_list_prepend (new_parent_private->children, window);
+  new_parent_impl->sorted_children = g_list_prepend (new_parent_impl->sorted_children, window);
 }
 
 void

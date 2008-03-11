@@ -1,3 +1,7 @@
+2008-03-11  Richard Hult  <richard@imendio.com>
+
+	* gdk/quartz/gdkwindow-quartz.c: Implement gdk_window_reparent.
+
 2008-03-10  Tor Lillqvist  <tml@novell.com>
 
 	* tests/teststatusicon.c (do_exit, popup_menu): Add the
