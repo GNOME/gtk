@@ -1,3 +1,10 @@
+2008-03-12  Matthias Clasen  <mclasen@redhat.com>
+
+	Merged from trunk:
+
+	* gtk/gtkprintunixdialog.c: Add an overwrite confirmation
+	dialog for print-to-file.  (#474302, Marek Kašík)
+
 2008-03-12  Sebastian Dröge  <slomo@circular-chaos.org>
 
 	Merged from trunk:
