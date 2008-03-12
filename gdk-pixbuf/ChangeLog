@@ -1,3 +1,7 @@
+2008-03-12  Matthias Clasen  <mclasen@redhat.com>
+
+	* === Released 2.12.9 ===
+
 2008-03-11  Claudio Saavedra  <csaavedra@alumnos.utalca.cl>
 
 	* io-bmp.c: (gdk_pixbuf__bmp_image_stop_load): Set a

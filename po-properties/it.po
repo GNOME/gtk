@@ -34,7 +34,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-properties\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-02-12 17:52-0500\n"
+"POT-Creation-Date: 2008-03-12 01:41-0400\n"
 "PO-Revision-Date: 2008-02-22 17:45+0100\n"
 "Last-Translator: Luca Ferretti <elle.uca@libero.it>\n"
 "Language-Team: Italian <tp@lists.linux.it>\n"
@@ -2460,7 +2460,8 @@ msgstr "Usa i marcatori"
 
 #: gtk/gtkexpander.c:212 gtk/gtklabel.c:312
 msgid "The text of the label includes XML markup. See pango_parse_markup()"
-msgstr "Il testo dell'etichetta include markup XML. Vedere pango_parse_markup()"
+msgstr ""
+"Il testo dell'etichetta include markup XML. Vedere pango_parse_markup()"
 
 #: gtk/gtkexpander.c:220
 msgid "Space to put between the label and the child"
@@ -4665,7 +4666,9 @@ msgstr "Durata doppio clic"
 msgid ""
 "Maximum time allowed between two clicks for them to be considered a double "
 "click (in milliseconds)"
-msgstr "Massimo tempo consentita tra due clic affinché siano considerati un doppio clic (in millisecondi)"
+msgstr ""
+"Massimo tempo consentita tra due clic affinché siano considerati un doppio "
+"clic (in millisecondi)"
 
 #: gtk/gtksettings.c:212
 msgid "Double Click Distance"
@@ -4675,7 +4678,9 @@ msgstr "Distanza doppio clic"
 msgid ""
 "Maximum distance allowed between two clicks for them to be considered a "
 "double click (in pixels)"
-msgstr "Massima distanza consentita tra due clic affinché siano considerati un doppio clic (in pixel)"
+msgstr ""
+"Massima distanza consentita tra due clic affinché siano considerati un "
+"doppio clic (in pixel)"
 
 #: gtk/gtksettings.c:229
 msgid "Cursor Blink"
@@ -5033,7 +5038,8 @@ msgstr "Navigazione da tastiera ciclica"
 # GTK-2-12
 #: gtk/gtksettings.c:660
 msgid "Whether to wrap around when keyboard-navigating widgets"
-msgstr "Indica se riprendere in modo ciclico la navigazione da tastiera dei widget"
+msgstr ""
+"Indica se riprendere in modo ciclico la navigazione da tastiera dei widget"
 
 # GTK-2-12
 #: gtk/gtksettings.c:680
