@@ -1,3 +1,10 @@
+2008-03-12  Matthias Clasen  <mclasen@redhat.com>
+
+	Merged from tunk:
+
+	* gtk/gtkpagesetup.c (gtk_page_setup_copy): Don't leak
+	paper_size here.  (#488820, Morten Welinder)
+
 2008-03-12  Tor Lillqvist  <tml@novell.com>
 
 	Bug 520286 - Non-deletable window has no minimize / maximize buttons
