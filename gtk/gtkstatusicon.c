@@ -152,15 +152,15 @@ static void     gtk_status_icon_screen_changed   (GtkStatusIcon  *status_icon,
 static void     gtk_status_icon_embedded_changed (GtkStatusIcon *status_icon);
 static void     gtk_status_icon_orientation_changed (GtkStatusIcon *status_icon);
 
-#endif
 static gboolean gtk_status_icon_key_press        (GtkStatusIcon  *status_icon,
 						  GdkEventKey    *event);
 static void     gtk_status_icon_popup_menu       (GtkStatusIcon  *status_icon);
+#endif
 static gboolean gtk_status_icon_button_press     (GtkStatusIcon  *status_icon,
 						  GdkEventButton *event);
 static void     gtk_status_icon_disable_blinking (GtkStatusIcon  *status_icon);
 static void     gtk_status_icon_reset_image_data (GtkStatusIcon  *status_icon);
-					   
+static void      gtk_status_icon_update_image    (GtkStatusIcon *status_icon);
 
 G_DEFINE_TYPE (GtkStatusIcon, gtk_status_icon, G_TYPE_OBJECT)
 
@@ -406,12 +406,41 @@ button_callback (gpointer data)
   return FALSE;
 }
 
+static UINT taskbar_created_msg = 0;
+static GSList *status_icons = NULL;
+
 static LRESULT CALLBACK
 wndproc (HWND   hwnd,
 	 UINT   message,
 	 WPARAM wparam,
 	 LPARAM lparam)
 {
+  if (message == taskbar_created_msg)
+    {
+      GSList *rover;
+
+      for (rover = status_icons; rover != NULL; rover = rover->next)
+	{
+	  GtkStatusIcon *status_icon = GTK_STATUS_ICON (rover->data);
+	  GtkStatusIconPrivate *priv = status_icon->priv;
+
+	  priv->nid.hWnd = hwnd;
+	  priv->nid.uID = GPOINTER_TO_UINT (status_icon);
+	  priv->nid.uCallbackMessage = WM_GTK_TRAY_NOTIFICATION;
+	  priv->nid.uFlags = NIF_MESSAGE;
+
+	  if (!Shell_NotifyIconW (NIM_ADD, &priv->nid))
+	    {
+	      g_warning ("%s:%d:Shell_NotifyIcon(NIM_ADD) failed", __FILE__, __LINE__-2);
+	      priv->nid.hWnd = NULL;
+	      continue;
+	    }
+
+	  gtk_status_icon_update_image (status_icon);
+	}
+      return 0;
+    }
+
   if (message == WM_GTK_TRAY_NOTIFICATION)
     {
       ButtonCallbackData *bc;
@@ -448,6 +477,8 @@ create_tray_observer (void)
   if (hwnd)
     return hwnd;
 
+  taskbar_created_msg = RegisterWindowMessage("TaskbarCreated");
+
   memset (&wclass, 0, sizeof(WNDCLASS));
   wclass.lpszClassName = "gtkstatusicon-observer";
   wclass.lpfnWndProc   = wndproc;
@@ -457,7 +488,7 @@ create_tray_observer (void)
   if (!klass)
     return NULL;
 
-  hwnd = CreateWindow (MAKEINTRESOURCE(klass),
+  hwnd = CreateWindow (MAKEINTRESOURCE (klass),
                        NULL, WS_POPUP,
                        0, 0, 1, 1, NULL, NULL,
                        hmodule, NULL);
@@ -551,6 +582,9 @@ gtk_status_icon_init (GtkStatusIcon *status_icon)
       g_warning ("%s:%d:Shell_NotifyIcon(NIM_ADD) failed", __FILE__, __LINE__-2);
       priv->nid.hWnd = NULL;
     }
+
+  status_icons = g_slist_append (status_icons, status_icon);
+
 #endif
 	
 #ifdef GDK_WINDOWING_QUARTZ
@@ -574,9 +608,11 @@ gtk_status_icon_constructor (GType                  type,
                              GObjectConstructParam *construct_params)
 {
   GObject *object;
+#ifdef GDK_WINDOWING_X11
   GtkStatusIcon *status_icon;
   GtkStatusIconPrivate *priv;
-  
+#endif
+
   object = G_OBJECT_CLASS (gtk_status_icon_parent_class)->constructor (type,
                                                                        n_construct_properties,
                                                                        construct_params);
@@ -617,6 +653,8 @@ gtk_status_icon_finalize (GObject *object)
     DestroyIcon (priv->nid.hIcon);
 
   gtk_widget_destroy (priv->dummy_widget);
+
+  status_icons = g_slist_remove (status_icons, status_icon);
 #endif
 	
 #ifdef GDK_WINDOWING_QUARTZ
@@ -1209,8 +1247,6 @@ gtk_status_icon_orientation_changed (GtkStatusIcon *status_icon)
   g_object_notify (G_OBJECT (status_icon), "orientation");
 }
 
-#endif
-
 static gboolean
 gtk_status_icon_key_press (GtkStatusIcon  *status_icon,
 			   GdkEventKey    *event)
@@ -1238,6 +1274,8 @@ gtk_status_icon_popup_menu (GtkStatusIcon  *status_icon)
 {
   emit_popup_menu_signal (status_icon, 0, gtk_get_current_event_time ());
 }
+
+#endif
 
 static gboolean
 gtk_status_icon_button_press (GtkStatusIcon  *status_icon,

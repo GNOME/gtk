@@ -1,5 +1,18 @@
 2008-03-12  Tor Lillqvist  <tml@novell.com>
 
+	Bug 510000 - GtkStatusIcon doesn't reshow after explorer.exe crash
+
+	* gtk/gtkstatusicon.c [Win32]: Keep a list of status icons. Check
+	for the TaskbarCreated message in the window procedure for the
+	dummy "tray observer" window we create. When we get a
+	TaskbarCreated message, iterate over the status icons and re-add
+	them to the task bar, and update them by calling
+	gtk_status_icon_update_image().
+
+	Move some ifdefs around to avoid unused functions.
+
+2008-03-12  Tor Lillqvist  <tml@novell.com>
+
 	* config.h.win32.in: Update to match what configure produces.
 
 2008-03-12  Jens Granseuer  <jensgr@gmx.net>
