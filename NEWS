@@ -1,3 +1,48 @@
+Overview of Changes from GTK+ 2.12.8 to 2.12.9
+==============================================
+
+* Bugs fixed:
+  505085 crash in Image Viewer: I opened file name.bmp, ...
+  469210 Honor CUPS user default options for GtkPrint
+  507605 [patch] gtk_recent_files_menu_populate() does not guard p...
+  513230 Crash when using _set_tab_reorderable but tabs are hidden
+  519199 Segmentation fault on unknown widget in UI-file
+  521548 printing does not work for Custom PageSize
+  461805 The combo cell renderer is broken theme wise
+  493406 GtkEntry doesn't get unselected when tabbing out of it
+  509885 crash when browsing for other folders
+  513826 configure script has no option to override cups check
+  516578 gtkfilesystemwin32 leaks registry key handles
+  516757 gdk/quartz scroll events don't send state
+  517338 Borderless non-opaque windows get incorrectly drawn shadow
+  518398 gdkwindow-win32.c: variable is declared at middle of block
+  518624 bad default for GTK_PRINT_PREVIEW_COMMAND on Mac OS X
+  521442 x/y thickness is being overriden by the combobox realize ...
+  417389 Scrollwheel on path bar
+  469868 Filenames with colon ":" are not saved correctly
+  505857 filepath entered in location bar should be loaded after u...
+  353196 Add a file-set signal to GtkFileChooserButton 
+
+* Updated translations:
+  Arabic (ar)
+  Assamese (as)
+  British English (en_GB)
+  Spanish (es)
+  French (fr)
+  Hungarian (hu)
+  Italian (it)
+  Kannada (kn)
+  Norwegian bokmål (nb)
+  Nepali (ne)
+  Norwegian Nynorsk (nn)
+  Brazilian Portugese (pt_BR)
+  Russian (ru)
+  Tamil (ta)
+  Telugu (te)
+  Turkish (tr)
+  Uzbek (uz@cyrillic)
+
+
 Overview of Changes from GTK+ 2.12.7 to 2.12.8
 ==============================================
 
