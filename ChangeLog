@@ -1,5 +1,10 @@
 2008-03-12  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkprintunixdialog.c: Add an overwrite confirmation 
+	dialog for print-to-file.  (#474302, Marek Kašík)
+
+2008-03-12  Matthias Clasen  <mclasen@redhat.com>
+
 	* modules/printbackends/cups/gtkprintbackendcups.c: Fix a crash
 	(#469210, Wouter Bolsterlee)
 
