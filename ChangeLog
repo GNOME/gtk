@@ -1,5 +1,12 @@
 2008-03-12  Michael Natterer  <mitch@imendio.com>
 
+	* acconfig.h: remove this deprecated file.
+
+	* configure.in: added comments to all instances of AC_DEFINE() so
+	config.h can be completely generated from configure.in.
+
+2008-03-12  Michael Natterer  <mitch@imendio.com>
+
 	* modules/printbackends/cups/gtkprintbackendcups.c: include
 	<glib/gstdio.h> for g_fopen().
 

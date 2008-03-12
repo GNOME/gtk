@@ -116,7 +116,8 @@ AC_SUBST(GDK_PIXBUF_VERSION)
 
 GETTEXT_PACKAGE=gtk20
 AC_SUBST(GETTEXT_PACKAGE)
-AC_DEFINE_UNQUOTED(GETTEXT_PACKAGE,"$GETTEXT_PACKAGE")
+AC_DEFINE_UNQUOTED(GETTEXT_PACKAGE, "$GETTEXT_PACKAGE",
+                   [The prefix for our gettext translation domains.])
 
 AC_CANONICAL_HOST
 
@@ -278,7 +279,8 @@ if test "x$enable_visibility" = "xno"; then
 fi
 
 
-AC_DEFINE_UNQUOTED(GTK_COMPILED_WITH_DEBUGGING, "${enable_debug}")
+AC_DEFINE_UNQUOTED(GTK_COMPILED_WITH_DEBUGGING, "${enable_debug}",
+                   [Define if debugging is enabled])
 
 			
 # Build time sanity check...
@@ -475,7 +477,8 @@ sigsetjmp(env, 0);
 ], gtk_ok=yes, gtk_ok=no)
 AC_MSG_RESULT($gtk_ok)
 if test "$gtk_ok" = "yes"; then
-  AC_DEFINE(HAVE_SIGSETJMP)
+  AC_DEFINE(HAVE_SIGSETJMP, 1,
+            [Define to 1 if sigsetjmp is available])
 fi
 
 # i18n stuff
@@ -582,10 +585,18 @@ LIBS="$LIBS $GLIB_LIBS"
 AC_CHECK_FUNCS(bind_textdomain_codeset)
 LIBS=$gtk_save_LIBS
 
-AC_CHECK_HEADERS(pwd.h, AC_DEFINE(HAVE_PWD_H))
-AC_CHECK_HEADERS(sys/time.h, AC_DEFINE(HAVE_SYS_TIME_H))
-AC_CHECK_HEADERS(unistd.h, AC_DEFINE(HAVE_UNISTD_H))
-AC_CHECK_HEADERS(ftw.h, AC_DEFINE(HAVE_FTW_H))
+AC_CHECK_HEADERS(pwd.h,
+                 AC_DEFINE(HAVE_PWD_H, 1,
+                           [Define to 1 if pwd.h is available]))
+AC_CHECK_HEADERS(sys/time.h,
+                 AC_DEFINE(HAVE_SYS_TIME_H, 1,
+                           [Define to 1 if time.h is available]))
+AC_CHECK_HEADERS(unistd.h,
+                 AC_DEFINE(HAVE_UNISTD_H, 1,
+                           [Define to 1 if unistd.h is available]))
+AC_CHECK_HEADERS(ftw.h,
+                 AC_DEFINE(HAVE_FTW_H, 1,
+                           [Define to 1 if ftw.h is available]))
 
 AC_MSG_CHECKING([for GNU ftw extensions])
 AC_TRY_COMPILE([#define _XOPEN_SOURCE 500
@@ -593,7 +604,7 @@ AC_TRY_COMPILE([#define _XOPEN_SOURCE 500
 #include <ftw.h>], [int flags = FTW_ACTIONRETVAL;], gtk_ok=yes, gtk_ok=no)
 if test $gtk_ok = yes; then
     AC_MSG_RESULT([yes])
-    AC_DEFINE(HAVE_GNU_FTW,1,[Have GNU ftw])
+    AC_DEFINE(HAVE_GNU_FTW, 1, [Have GNU ftw])
 else
     AC_MSG_RESULT([no])
 fi
@@ -625,10 +636,12 @@ if test $gtk_ok = yes; then
 else
     AC_HEADER_EGREP(fd_mask, sys/select.h, gtk_ok=yes)
     if test $gtk_ok = yes; then
-        AC_DEFINE(HAVE_SYS_SELECT_H)
+        AC_DEFINE(HAVE_SYS_SELECT_H, 1,
+                  [Define to 1 if sys/select.h is available])
         AC_MSG_RESULT([yes, found in sys/select.h])
     else
-	AC_DEFINE(NO_FD_SET)
+	AC_DEFINE(NO_FD_SET, 1,
+                  [Define to 1 if fd_set is not available])
 	AC_MSG_RESULT(no)
     fi
 fi
@@ -637,7 +650,7 @@ fi
 AC_MSG_CHECKING(for wchar.h)
 AC_TRY_CPP([#include <wchar.h>], gdk_wchar_h=yes, gdk_wchar_h=no)
 if test $gdk_wchar_h = yes; then
-   AC_DEFINE(HAVE_WCHAR_H,1,[Have wchar.h include file])
+   AC_DEFINE(HAVE_WCHAR_H, 1, [Have wchar.h include file])
 fi
 AC_MSG_RESULT($gdk_wchar_h)
 
@@ -645,7 +658,7 @@ AC_MSG_RESULT($gdk_wchar_h)
 AC_MSG_CHECKING(for wctype.h)
 AC_TRY_CPP([#include <wctype.h>], gdk_wctype_h=yes, gdk_wctype_h=no)
 if test $gdk_wctype_h = yes; then
-   AC_DEFINE(HAVE_WCTYPE_H,1,[Have wctype.h include file])
+   AC_DEFINE(HAVE_WCTYPE_H, 1, [Have wctype.h include file])
 fi
 AC_MSG_RESULT($gdk_wctype_h)
 
@@ -674,7 +687,7 @@ iswalnum((wchar_t) 0);
 LIBS="$oLIBS"
 
 if test $gdk_working_wctype = no; then
-   AC_DEFINE(HAVE_BROKEN_WCTYPE,1,[Is the wctype implementation broken])
+   AC_DEFINE(HAVE_BROKEN_WCTYPE, 1, [Is the wctype implementation broken])
    GDK_WLIBS=
 fi
 AC_MSG_RESULT($gdk_working_wctype)
@@ -684,7 +697,7 @@ AC_SUBST(GDK_WLIBS)
 AC_MSG_CHECKING(for uxtheme.h)
 AC_TRY_CPP([#include <uxtheme.h>], gtk_uxtheme_h=yes, gtk_uxtheme_h=no)
 if test $gtk_uxtheme_h = yes; then
-   AC_DEFINE(HAVE_UXTHEME_H,1,[Have uxtheme.h include file])
+   AC_DEFINE(HAVE_UXTHEME_H, 1, [Have uxtheme.h include file])
 fi
 AC_MSG_RESULT($gtk_uxtheme_h)
 
@@ -707,7 +720,8 @@ case $host in
 esac
 
 if $use_la_modules ; then
-   AC_DEFINE(USE_LA_MODULES, 1, [Whether to load modules via .la files rather than directly])
+   AC_DEFINE(USE_LA_MODULES, 1,
+             [Whether to load modules via .la files rather than directly])
 fi
 
 
@@ -745,7 +759,8 @@ else
     fi
 
     if $dynworks; then
-        AC_DEFINE(USE_GMODULE)
+        AC_DEFINE(USE_GMODULE, 1,
+                  [Define to 1 if gmodule works and should be used])
         AC_MSG_RESULT(yes)
     else
         AC_MSG_RESULT(no)
@@ -812,7 +827,8 @@ dnl Test for libjpeg
       if test "$jpeg_ok" = yes; then
         LIBJPEG='-ljpeg'
         AC_CHECK_LIB(jpeg, jpeg_simple_progression,     
-          AC_DEFINE(HAVE_PROGRESSIVE_JPEG),
+          AC_DEFINE(HAVE_PROGRESSIVE_JPEG, 1,
+                    [Define to 1 is libjpeg supports progressive JPEG]),
           AC_MSG_WARN(JPEG library does not support progressive saving.))
       else
           AC_MSG_WARN(*** JPEG loader will not be built (JPEG header file not found) ***)
@@ -985,8 +1001,12 @@ fi
 # Checks to see whether we should include mediaLib
 # support.
 #
-AC_CHECK_HEADER(sys/systeminfo.h, AC_DEFINE(HAVE_SYS_SYSTEMINFO_H))
-AC_CHECK_HEADER(sys/sysinfo.h, AC_DEFINE(HAVE_SYS_SYSINFO_H))
+AC_CHECK_HEADER(sys/systeminfo.h,
+                AC_DEFINE(HAVE_SYS_SYSTEMINFO_H, 1, 
+                          [Define to 1 if sys/systeminfo.h is available]))
+AC_CHECK_HEADER(sys/sysinfo.h,
+                AC_DEFINE(HAVE_SYS_SYSINFO_H, 1,
+                          [Define to 1 if sys/sysinfo.h is available]))
 
 AC_MSG_CHECKING(for mediaLib 2.3)
 use_mlib25=no
@@ -994,7 +1014,8 @@ use_mlib25=no
 # patch requires.
 AC_CHECK_LIB(mlib, mlib_ImageSetStruct, use_mlib=yes, use_mlib=no)
 if test $use_mlib = yes; then
-    AC_DEFINE(USE_MEDIALIB)
+    AC_DEFINE(USE_MEDIALIB, 1,
+              [Define to 1 if medialib is available and should be used])
     MEDIA_LIB=-lmlib
 
     AC_MSG_CHECKING(for mediaLib 2.5)
@@ -1002,7 +1023,8 @@ if test $use_mlib = yes; then
     # gdk_rgb_convert integration.
     AC_CHECK_LIB(mlib, mlib_VideoColorRGBint_to_BGRAint, use_mlib25=yes, use_mlib25=no)
     if test $use_mlib25 = yes; then
-        AC_DEFINE(USE_MEDIALIB25)
+        AC_DEFINE(USE_MEDIALIB25, 1,
+                  [Define to 1 if medialib 2.5 is available])
     fi
 fi
 AM_CONDITIONAL(USE_MEDIALIB, test $use_mlib = yes)
@@ -1039,7 +1061,8 @@ if test $use_x86_asm = yes; then
 
     ac_ext=$save_ac_ext
     if test $use_mmx_asm = yes; then
-      AC_DEFINE(USE_MMX)
+      AC_DEFINE(USE_MMX, 1,
+                [Define to 1 if XXM is available and should be used])
       AC_MSG_RESULT(yes)
     else
       AC_MSG_RESULT(no)
@@ -1173,7 +1196,7 @@ if test "x$gdktarget" = "xx11"; then
            [xReply *rep;],
            [AC_MSG_RESULT([yes])
             AC_DEFINE([NEED_XIPROTO_H_FOR_XREPLY], 1,
-                [Define if <X11/extensions/XIproto.h> needed for xReply])],
+                      [Define if <X11/extensions/XIproto.h> needed for xReply])],
            [AC_MSG_RESULT([unknown])
             AC_MSG_ERROR([xReply type unavailable. X11 is too old])])])
 
@@ -1191,7 +1214,7 @@ if test "x$gdktarget" = "xx11"; then
       have_x11r6=true)
 
   if $have_x11r6; then
-    AC_DEFINE(HAVE_X11R6,1,[Define if we have X11R6])
+    AC_DEFINE(HAVE_X11R6, 1, [Define if we have X11R6])
   fi
   AM_CONDITIONAL(HAVE_X11R6, $have_x11r6)
 
@@ -1199,10 +1222,10 @@ if test "x$gdktarget" = "xx11"; then
 
   if test "x$enable_xkb" = "xyes"; then
         AC_MSG_WARN(XKB support explicitly enabled)
-        AC_DEFINE(HAVE_XKB)
+        AC_DEFINE(HAVE_XKB, 1, [Define to use XKB extension])
   elif test "x$enable_xkb" = "xmaybe"; then
         AC_CHECK_FUNC(XkbQueryExtension,
-                      AC_DEFINE(HAVE_XKB))
+                      AC_DEFINE(HAVE_XKB, 1, [Define to use XKB extension]))
   else
         AC_MSG_WARN(XKB support explicitly disabled)
   fi
@@ -1210,7 +1233,8 @@ if test "x$gdktarget" = "xx11"; then
   # Check for shaped window extension
 
   AC_CHECK_FUNC(XShapeCombineMask,
-      AC_DEFINE(HAVE_SHAPE_EXT))
+      AC_DEFINE(HAVE_SHAPE_EXT, 1,
+                [Define to 1 if the XShape extension is available]))
 
   # X SYNC check
   gtk_save_CFLAGS="$CFLAGS"
@@ -1218,7 +1242,7 @@ if test "x$gdktarget" = "xx11"; then
   
   AC_CHECK_FUNC(XSyncQueryExtension,
       [AC_CHECK_HEADER(X11/extensions/sync.h,
-	  AC_DEFINE(HAVE_XSYNC, 1, Have the SYNC extension library),
+	  AC_DEFINE(HAVE_XSYNC, 1, [Have the SYNC extension library]),
 	  :, [#include <X11/Xlib.h>])])
 
   CFLAGS="$gtk_save_CFLAGS"
@@ -1236,8 +1260,14 @@ if test "x$gdktarget" = "xx11"; then
 
   if test "x$enable_shm" = "xyes"; then
     # Check for shared memory
-    AC_CHECK_HEADER(sys/ipc.h, AC_DEFINE(HAVE_IPC_H), no_sys_ipc=yes)
-    AC_CHECK_HEADER(sys/shm.h, AC_DEFINE(HAVE_SHM_H), no_sys_shm=yes)
+    AC_CHECK_HEADER(sys/ipc.h,
+                    AC_DEFINE(HAVE_IPC_H, 1,
+                              [Define to 1 if ipc.h is available]),
+                    no_sys_ipc=yes)
+    AC_CHECK_HEADER(sys/shm.h,
+                    AC_DEFINE(HAVE_SHM_H, 1,
+                              [Define to 1 if shm.h is available]),
+                    no_sys_shm=yes)
 
     # Check for the X shared memory extension header file
     have_xshm=no 
@@ -1260,7 +1290,8 @@ if test "x$gdktarget" = "xx11"; then
     fi
     AC_MSG_RESULT($have_xshm)
     if test $have_xshm = yes ; then
-      AC_DEFINE(HAVE_XSHM_H)
+      AC_DEFINE(HAVE_XSHM_H, 1,
+                [Define to 1 if xshm.h is available])
     fi
   fi
 
@@ -1281,8 +1312,10 @@ if test "x$gdktarget" = "xx11"; then
 		  [#include <X11/Xlib.h>])])
 		
           if $have_solaris_xinerama ; then
-            AC_DEFINE(HAVE_SOLARIS_XINERAMA)
-	    AC_DEFINE(HAVE_XINERAMA) 
+            AC_DEFINE(HAVE_SOLARIS_XINERAMA, 1,
+                      [Define to 1 if solaris xinerama is available])
+	    AC_DEFINE(HAVE_XINERAMA, 1,
+                      [Define to 1 if xinerama is available])
             AC_MSG_RESULT(yes)
           else
             AC_MSG_RESULT(no)
@@ -1305,8 +1338,10 @@ if test "x$gdktarget" = "xx11"; then
           fi
 
           if $have_xfree_xinerama ; then
-            AC_DEFINE(HAVE_XFREE_XINERAMA)
-	    AC_DEFINE(HAVE_XINERAMA) 
+            AC_DEFINE(HAVE_XFREE_XINERAMA, 1,
+                      [Define to 1 if XFree Xinerama is available])
+	    AC_DEFINE(HAVE_XINERAMA, 1,
+                      [Define to 1 is Xinerama is available])
             AC_MSG_RESULT(yes)
          else
             AC_MSG_RESULT(no)
@@ -1318,7 +1353,8 @@ if test "x$gdktarget" = "xx11"; then
   # set up things for XInput
 
   if test "x$with_xinput" = "xxfree" || test "x$with_xinput" = "xyes"; then
-    AC_DEFINE(XINPUT_XFREE)
+    AC_DEFINE(XINPUT_XFREE, 1,
+              [Define to 1 if XFree XInput should be used])
     
     if $PKG_CONFIG --exists xi ; then
       X_PACKAGES="$X_PACKAGES xi"
@@ -1326,14 +1362,15 @@ if test "x$gdktarget" = "xx11"; then
       GTK_ADD_LIB(x_extra_libs, Xi)
     fi
   else
-    AC_DEFINE(XINPUT_NONE)
+    AC_DEFINE(XINPUT_NONE, 1,
+              [Define to 1 if no XInput should be used])
   fi
 
   AM_CONDITIONAL(XINPUT_XFREE, test x$with_xinput = xxfree || test x$with_xinput = xyes)
 
   # Check for the RANDR extension
   if $PKG_CONFIG --exists "xrandr >= 1.2" ; then
-     AC_DEFINE(HAVE_RANDR, 1, Have the Xrandr extension library)
+     AC_DEFINE(HAVE_RANDR, 1, [Have the Xrandr extension library])
 
      X_PACKAGES="$X_PACKAGES xrandr"
   fi
@@ -1341,7 +1378,7 @@ if test "x$gdktarget" = "xx11"; then
   # Checks for Xcursor library
   
   if $PKG_CONFIG --exists xcursor ; then
-    AC_DEFINE(HAVE_XCURSOR, 1, Have the Xcursor library)
+    AC_DEFINE(HAVE_XCURSOR, 1, [Have the Xcursor library])
     
     X_PACKAGES="$X_PACKAGES xcursor"
   fi
@@ -1349,7 +1386,7 @@ if test "x$gdktarget" = "xx11"; then
   # Checks for XFixes extension
   
   if $PKG_CONFIG --exists xfixes ; then
-    AC_DEFINE(HAVE_XFIXES, 1, Have the XFIXES X extension)
+    AC_DEFINE(HAVE_XFIXES, 1, [Have the XFIXES X extension])
     
     X_PACKAGES="$X_PACKAGES xfixes"
     GTK_PACKAGES_FOR_X="$GTK_PACKAGES_FOR_X xfixes"
@@ -1358,7 +1395,7 @@ if test "x$gdktarget" = "xx11"; then
   # Checks for Xcomposite extension
 
   if $PKG_CONFIG --exists xcomposite ; then
-    AC_DEFINE(HAVE_XCOMPOSITE, 1, Have the XCOMPOSITE X extension)
+    AC_DEFINE(HAVE_XCOMPOSITE, 1, [Have the XCOMPOSITE X extension])
 
     X_PACKAGES="$X_PACKAGES xcomposite"
     GTK_PACKAGES_FOR_X="$GTK_PACKAGES_FOR_X xcomposite"
@@ -1367,7 +1404,7 @@ if test "x$gdktarget" = "xx11"; then
   # Checks for Xdamage extension
 
   if $PKG_CONFIG --exists xdamage ; then
-    AC_DEFINE(HAVE_XDAMAGE, 1, Have the XDAMAGE X extension)
+    AC_DEFINE(HAVE_XDAMAGE, 1, [Have the XDAMAGE X extension])
 
     X_PACKAGES="$X_PACKAGES xdamage"
     GTK_PACKAGES_FOR_X="$GTK_PACKAGES_FOR_X xdamage"
@@ -1581,7 +1618,8 @@ AC_CHECK_MEMBER([struct sockaddr_un.sun_len],
 		)
 case $struct_sockaddr_un_sun_len in 
 	true)
-		AC_DEFINE_UNQUOTED(HAVE_SOCKADDR_UN_SUN_LEN, 1, Have the sockaddr_un.sun_len member.)
+		AC_DEFINE_UNQUOTED(HAVE_SOCKADDR_UN_SUN_LEN, 1,
+		                   [Have the sockaddr_un.sun_len member])
 		;;
 	*)
 		;;
@@ -1614,7 +1652,8 @@ then
 
     if test $CUPS_API_MAJOR -gt 1 -o \
             $CUPS_API_MAJOR -eq 1 -a $CUPS_API_MINOR -ge 2; then
-      AC_DEFINE(HAVE_CUPS_API_1_2)
+      AC_DEFINE(HAVE_CUPS_API_1_2, 1, 
+                [Define to 1 if CUPS 1.2 API is available])
     fi
 
     AC_SUBST(CUPS_API_MAJOR)
@@ -1630,7 +1669,8 @@ then
   CFLAGS="$CUPS_CFLAGS"
   AC_TRY_COMPILE([#include <cups/http.h>],
                  [http_t http; char *s = http.authstring;],
-                 [AC_DEFINE(HAVE_HTTP_AUTHSTRING,[],[Define if cups http_t authstring field is accessible])],)
+                 [AC_DEFINE(HAVE_HTTP_AUTHSTRING, [],
+                            [Define if cups http_t authstring field is accessible])],)
   CFLAGS="$gtk_save_cflags"
 
   AC_SUBST(HAVE_HTTP_AUTHSTRING)
