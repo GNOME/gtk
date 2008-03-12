@@ -1,3 +1,9 @@
+2008-03-12  Jens Granseuer  <jensgr@gmx.net>
+
+	* modules/printbackends/cups/gtkprintbackendcups.c:
+	(cups_printer_prepare_for_print): Don't define variables in the
+	middle of a block. (#522067)
+
 2008-03-12  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtkprintunixdialog.c: Add an overwrite confirmation 
