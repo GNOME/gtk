@@ -1,19 +1,19 @@
+# translation of ka.po to Georgian
 # Georgian translation for GTK+.
 # Copyright © 2006 The GTK Team
 # This file is distributed under the same license as the GTK package.
 #
-# Gia Shervashidze <giasher@telenet.ge>, 2005.
-# Vladimer Sichinava ვლადიმერ სიჭინავა <vsichi@gnome.org>, 2007.
 #
+# Gia Shervashidze <giasher@telenet.ge>, 2005.
+# Vladimer Sichinava ვლადიმერ სიჭინავა <vsichi@gnome.org>, 2008.
 msgid ""
 msgstr ""
 "Project-Id-Version: ka\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2008-03-12 02:21+0100\n"
-"PO-Revision-Date: 2007-09-14 14:00+0200\n"
+"PO-Revision-Date: 2008-03-12 03:31+0100\n"
 "Last-Translator: Vladimer Sichinava ვლადიმერ სიჭინავა <vsichi@gnome.org>\n"
-"Language-Team: Georgian <http://mail.gnome.org/mailman/listinfo/gnome-ge-"
-"list>\n"
+"Language-Team: Georgian <http://mail.gnome.org/mailman/listinfo/gnome-ge-list>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -248,8 +248,7 @@ msgstr "ნახატის ფაილი \"%s\" არ შეიცავ�
 #: ../gdk-pixbuf/gdk-pixbuf-animation.c:209 ../gdk-pixbuf/gdk-pixbuf-io.c:896
 #: ../gdk-pixbuf/gdk-pixbuf-io.c:1156 ../tests/testfilechooser.c:263
 #, c-format
-msgid ""
-"Failed to load image '%s': reason not known, probably a corrupt image file"
+msgid "Failed to load image '%s': reason not known, probably a corrupt image file"
 msgstr ""
 "ნახატი \"%s\" ვერ ჩამოიტვირთა: მიზეზი უცნობია, შესაძლოა ნახატის ფაილია "
 "დაზიანებული"
@@ -305,8 +304,7 @@ msgstr "ნახატის ფაილის ჩაწერის შეც
 #: ../gdk-pixbuf/gdk-pixbuf-io.c:1430 ../gdk-pixbuf/gdk-pixbuf-io.c:1561
 #, c-format
 msgid "This build of gdk-pixbuf does not support saving the image format: %s"
-msgstr ""
-"ეს ქვესისტემა \"gdk-pixbuf\" ვერ უზრუნველყოფს ფაილის შენახვას ფორმატით: %s"
+msgstr "ეს ქვესისტემა \"gdk-pixbuf\" ვერ უზრუნველყოფს ფაილის შენახვას ფორმატით: %s"
 
 #: ../gdk-pixbuf/gdk-pixbuf-io.c:1464
 #, c-format
@@ -446,7 +444,7 @@ msgstr "ვერ ვიყენებ მეხსიერებას BMP �
 #: ../gdk-pixbuf/io-bmp.c:1370
 #, c-format
 msgid "Couldn't write to BMP file"
-msgstr "ვერ ვწერ BMP ფაილს"
+msgstr "ვერ ვწერ BMP ფორმატში"
 
 #: ../gdk-pixbuf/io-bmp.c:1425
 msgid "The BMP image format"
@@ -455,7 +453,7 @@ msgstr "ნახატის BMP ფორმატი"
 #: ../gdk-pixbuf/io-gif.c:222
 #, c-format
 msgid "Failure reading GIF: %s"
-msgstr "ვერ იკითხება GIF: %s"
+msgstr "დაიშვა შეცდომა GIF ფორმატის წაკითხვისას: %s"
 
 #: ../gdk-pixbuf/io-gif.c:496 ../gdk-pixbuf/io-gif.c:1477
 #: ../gdk-pixbuf/io-gif.c:1638
@@ -481,7 +479,7 @@ msgstr "GIF ნახატის ჩამტვირთავმა ეს �
 #: ../gdk-pixbuf/io-gif.c:668
 #, c-format
 msgid "Bad code encountered"
-msgstr "მცდარი კოდი"
+msgstr "აღმოჩენილია მცდარი კოდი"
 
 #: ../gdk-pixbuf/io-gif.c:678
 #, c-format
@@ -628,8 +626,7 @@ msgstr ""
 
 #: ../gdk-pixbuf/io-jpeg.c:1148
 #, c-format
-msgid ""
-"JPEG quality must be a value between 0 and 100; value '%d' is not allowed."
+msgid "JPEG quality must be a value between 0 and 100; value '%d' is not allowed."
 msgstr ""
 "JPEG ხარისხის მნიშვნელობა უნდა იყოს 0–დან 100–მდე; მნიშვნელობა '%"
 "d'დაუშვებელია."
@@ -748,8 +745,7 @@ msgstr "PNG ნახატის ფაილის კითხვის კ�
 
 #: ../gdk-pixbuf/io-png.c:825
 #, c-format
-msgid ""
-"Keys for PNG text chunks must have at least 1 and at most 79 characters."
+msgid "Keys for PNG text chunks must have at least 1 and at most 79 characters."
 msgstr "PNG ტექსტური ბლოკი უნდა შეიცავდეს 1–დან 79 სიმბოლომდე."
 
 #: ../gdk-pixbuf/io-png.c:833
@@ -762,16 +758,14 @@ msgstr "PNG ტექსტური ბლოკის კოდი ASCII ს�
 msgid ""
 "PNG compression level must be a value between 0 and 9; value '%s' could not "
 "be parsed."
-msgstr ""
-"PNG შეკუმშვის ხარისხი 0-დან 9-მდე უნდა იყოს; მნიშვნელობა '%s' ვერ დამუშავდება"
+msgstr "PNG შეკუმშვის ხარისხი 0-დან 9-მდე უნდა იყოს; მნიშვნელობა '%s' ვერ დამუშავდება"
 
 #: ../gdk-pixbuf/io-png.c:858
 #, c-format
 msgid ""
 "PNG compression level must be a value between 0 and 9; value '%d' is not "
 "allowed."
-msgstr ""
-"PNG შეკუმშვის ხარისხი 0-დან 9-მდე უნდა იყოს; მნიშვნელობა '%d' არ დაიშვება"
+msgstr "PNG შეკუმშვის ხარისხი 0-დან 9-მდე უნდა იყოს; მნიშვნელობა '%d' არ დაიშვება"
 
 #: ../gdk-pixbuf/io-png.c:896
 #, c-format
@@ -1221,7 +1215,7 @@ msgstr "Alt"
 #.
 #: ../gtk/gtkaccellabel.c:580
 msgid "keyboard label|Super"
-msgstr "კლავიატურა წარწერა|Super"
+msgstr "Super"
 
 #. This is the text that should appear next to menu accelerators
 #. * that use the hyper key. If the text on this key isn't typically
@@ -1231,7 +1225,7 @@ msgstr "კლავიატურა წარწერა|Super"
 #.
 #: ../gtk/gtkaccellabel.c:594
 msgid "keyboard label|Hyper"
-msgstr "კლავიატურა წარწერა|Hyper"
+msgstr "Hyper"
 
 #. This is the text that should appear next to menu accelerators
 #. * that use the meta key. If the text on this key isn't typically
@@ -1241,7 +1235,7 @@ msgstr "კლავიატურა წარწერა|Hyper"
 #.
 #: ../gtk/gtkaccellabel.c:608
 msgid "keyboard label|Meta"
-msgstr "კლავიატურა წარწერა|Meta"
+msgstr "Meta"
 
 #. do not translate the part before the |
 #: ../gtk/gtkaccellabel.c:622
@@ -1299,7 +1293,7 @@ msgstr "calendar:week_start:1"
 #.
 #: ../gtk/gtkcalendar.c:1595
 msgid "year measurement template|2000"
-msgstr "2000%d"
+msgstr "2000"
 
 #. Translators: this defines whether the day numbers should use
 #. * localized digits or the ones used in English (0123...).
@@ -1420,8 +1414,7 @@ msgstr ""
 msgid ""
 "Click the eyedropper, then click a color anywhere on your screen to select "
 "that color."
-msgstr ""
-"დაწკაპეთ პიპეტი და შემდეგ ფერი ეკრანის ნებისმიერ ადგილზე ამ ფერის ასარჩევად."
+msgstr "დაწკაპეთ პიპეტი და შემდეგ ფერი ეკრანის ნებისმიერ ადგილზე ამ ფერის ასარჩევად."
 
 #: ../gtk/gtkcolorsel.c:1955
 msgid "_Hue:"
@@ -1730,8 +1723,7 @@ msgstr "ფაილი სახელით \"%s\" უკვე არსე�
 
 #: ../gtk/gtkfilechooserdefault.c:8091
 #, c-format
-msgid ""
-"The file already exists in \"%s\".  Replacing it will overwrite its contents."
+msgid "The file already exists in \"%s\".  Replacing it will overwrite its contents."
 msgstr ""
 "ფაილი უკვე არსებობს საქაღალდეში \"%s\".  მისი ზემოდან გადაწერით შიგთავსი "
 "შეიცვლება"
@@ -1853,8 +1845,7 @@ msgstr "ფაილის _გადარქმევა"
 
 #: ../gtk/gtkfilesel.c:1406
 #, c-format
-msgid ""
-"The folder name \"%s\" contains symbols that are not allowed in filenames"
+msgid "The folder name \"%s\" contains symbols that are not allowed in filenames"
 msgstr "საქაღალდეს სახელი \"%s\" შეიცავს დაუშვებელ სიმბოლოებს"
 
 #: ../gtk/gtkfilesel.c:1451
@@ -3253,8 +3244,7 @@ msgstr "\"%s\" ატრიბუტის უმართებლო სახ
 
 #: ../gtk/gtktextbufferserialize.c:1193
 #, c-format
-msgid ""
-"\"%s\" could not be converted to a value of type \"%s\" for attribute \"%s\""
+msgid "\"%s\" could not be converted to a value of type \"%s\" for attribute \"%s\""
 msgstr "\"%s\" ვერ გარდაიქმნება \"%s\" ტიპის მნიშვნელობად \"%s\" ატრიბუტისთვის"
 
 #: ../gtk/gtktextbufferserialize.c:1202
@@ -3293,8 +3283,7 @@ msgstr "სერიალიზებული მონაცემები �
 
 #: ../gtk/gtktextbufferserialize.c:1857
 #, c-format
-msgid ""
-"Serialized data is malformed. First section isn't GTKTEXTBUFFERCONTENTS-0001"
+msgid "Serialized data is malformed. First section isn't GTKTEXTBUFFERCONTENTS-0001"
 msgstr ""
 "სერიალიზებული მონაცემები მცდარია. პირველი სექცია GTKTEXTBUFFERCONTENTS-0001 "
 "არაა"
@@ -4506,3 +4495,4 @@ msgstr "ტესტირებად პრინტერზე ბეჭდ�
 #, c-format
 msgid "Could not get information for file '%s': %s"
 msgstr "ვერ მივიღე ინფორმაცია ფაილზე \"%s\": %s"
+
