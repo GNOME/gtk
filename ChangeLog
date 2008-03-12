@@ -1,3 +1,11 @@
+2008-03-11  Matthias Clasen  <mclasen@redhat.com>
+
+	Merged from trunk:
+
+	* modules/printbackends/cups/gtkprintbackendcups.c: Use
+	g_ascii_formatd when formatting custom paper sizes, since
+	cups doesn't handle , as decimal separator.  (#521548)
+
 2008-03-11  Tor Lillqvist  <tml@novell.com>
 
 	Bug 469868 - Filenames with colon ":" are not saved correctly

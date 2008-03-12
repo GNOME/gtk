@@ -2464,10 +2464,12 @@ cups_printer_get_options (GtkPrinter           *printer,
       else
         {
           gchar *custom_name;
+	  char width[G_ASCII_DTOSTR_BUF_SIZE];
+	  char height[G_ASCII_DTOSTR_BUF_SIZE];
 
-	  custom_name = g_strdup_printf (_("Custom %.2fx%.2f"),
-					 gtk_paper_size_get_width (paper_size, GTK_UNIT_POINTS),
-					 gtk_paper_size_get_height (paper_size, GTK_UNIT_POINTS));
+	  g_ascii_formatd (width, sizeof (width), "%.2f", gtk_paper_size_get_width (paper_size, GTK_UNIT_POINTS));
+	  g_ascii_formatd (height, sizeof (height), "%.2f", gtk_paper_size_get_height (paper_size, GTK_UNIT_POINTS));
+	  custom_name = g_strdup_printf (_("Custom %sx%s"), width, height);
           strncpy (option->defchoice, custom_name, PPD_MAX_NAME);
           g_free (custom_name);
         }
@@ -2977,9 +2979,12 @@ cups_printer_prepare_for_print (GtkPrinter       *printer,
     gtk_print_settings_set (settings, "cups-PageSize", ppd_paper_name);
   else
     {
-      char *custom_name = g_strdup_printf ("Custom.%2fx%.2f",
-					   gtk_paper_size_get_width (paper_size, GTK_UNIT_POINTS),
-					   gtk_paper_size_get_height (paper_size, GTK_UNIT_POINTS));
+      char width[G_ASCII_DTOSTR_BUF_SIZE];
+      char height[G_ASCII_DTOSTR_BUF_SIZE];
+
+      g_ascii_formatd (width, sizeof (width), "%.2f", gtk_paper_size_get_width (paper_size, GTK_UNIT_POINTS));
+      g_ascii_formatd (height, sizeof (height), "%.2f", gtk_paper_size_get_height (paper_size, GTK_UNIT_POINTS));
+      char *custom_name = g_strdup_printf (("Custom.%sx%s"), width, height);
       gtk_print_settings_set (settings, "cups-PageSize", custom_name);
       g_free (custom_name);
     }
