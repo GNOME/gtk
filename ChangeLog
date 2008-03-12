@@ -1,3 +1,8 @@
+2008-03-12  Michael Natterer  <mitch@imendio.com>
+
+	* modules/printbackends/cups/gtkprintbackendcups.c: include
+	<glib/gstdio.h> for g_fopen().
+
 2008-03-11  Matthias Clasen  <mclasen@redhat.com>
 
 	* modules/printbackends/cups/gtkprintbackendcups.c: Use
