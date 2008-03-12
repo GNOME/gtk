@@ -113,6 +113,7 @@ gtk_page_setup_copy (GtkPageSetup *other)
 
   copy = gtk_page_setup_new ();
   copy->orientation = other->orientation;
+  gtk_paper_size_free (copy->paper_size);
   copy->paper_size = gtk_paper_size_copy (other->paper_size);
   copy->top_margin = other->top_margin;
   copy->bottom_margin = other->bottom_margin;

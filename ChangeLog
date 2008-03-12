@@ -1,3 +1,8 @@
+2008-03-12  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtkpagesetup.c (gtk_page_setup_copy): Don't leak 
+	paper_size here.  (#488820, Morten Welinder)
+
 2008-03-12  Michael Natterer  <mitch@imendio.com>
 
 	* acconfig.h: remove this deprecated file.
