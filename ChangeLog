@@ -1,3 +1,28 @@
+2008-03-12  Tor Lillqvist  <tml@novell.com>
+
+	Bug 520286 - Non-deletable window has no minimize / maximize buttons
+
+	* gdk/win32/gdkmain-win32.c (_gdk_win32_window_style_to_string):
+	New debugging output function that decodes a set of WS_* bits.
+
+	* gdk/win32/gdkprivate-win32.h: Declare it.
+
+	* gdk/win32/gdkwindow-win32.c (update_single_system_menu_entry):
+	New function that enables or disables one menu entry in the system
+	menu of a top-level window. (The corresponding decoration will
+	then also be enabled or disabled (grayed).)
+
+	(update_style_bits): Do as the comment says and don't try to
+	update the window style based on the GdkWMFunctions set for the
+	window.
+		   
+	(update_system_menu): New function that enables or disables the
+	system menu entries based on a window's stored set of
+	GdkWMFunctions.
+
+	(gdk_window_set_functions): Call update_system_menu() instead of
+	update_style_bits().
+
 2008-03-12  Matthias Clasen  <mclasen@redhat.com>
 
 	* configure.in: Bump version
