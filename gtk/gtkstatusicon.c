@@ -160,7 +160,7 @@ static gboolean gtk_status_icon_button_press     (GtkStatusIcon  *status_icon,
 						  GdkEventButton *event);
 static void     gtk_status_icon_disable_blinking (GtkStatusIcon  *status_icon);
 static void     gtk_status_icon_reset_image_data (GtkStatusIcon  *status_icon);
-static void      gtk_status_icon_update_image    (GtkStatusIcon *status_icon);
+static void     gtk_status_icon_update_image    (GtkStatusIcon *status_icon);
 
 G_DEFINE_TYPE (GtkStatusIcon, gtk_status_icon, G_TYPE_OBJECT)
 
