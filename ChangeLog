@@ -1,3 +1,10 @@
+2008-03-12  Sebastian Dröge  <slomo@circular-chaos.org>
+
+	Merged from trunk:
+
+	* modules/printbackends/cups/gtkprintbackendcups.c: Include
+	<glib/gstdio.h> for g_fopen().
+
 2008-03-12  Matthias Clasen  <mclasen@redhat.com>
 
 	Merged from tunk:

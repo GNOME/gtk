@@ -35,6 +35,7 @@
 #include <cairo-pdf.h>
 #include <cairo-ps.h>
 
+#include <glib/gstdio.h>
 #include <glib/gi18n-lib.h>
 #include <gmodule.h>
 
