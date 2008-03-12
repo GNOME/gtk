@@ -1,5 +1,10 @@
 2008-03-12  Matthias Clasen  <mclasen@redhat.com>
 
+	* modules/printbackends/cups/gtkprintbackendcups.c: Fix a crash
+	(#469210, Wouter Bolsterlee)
+
+2008-03-12  Matthias Clasen  <mclasen@redhat.com>
+
 	* gtk/gtkpagesetup.c (gtk_page_setup_copy): Don't leak 
 	paper_size here.  (#488820, Morten Welinder)
 

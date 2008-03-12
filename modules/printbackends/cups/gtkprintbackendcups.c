@@ -1534,7 +1534,7 @@ cups_get_user_options (const char     *printer_name,
 {
   int i;
 
-  for (i = 0; i < sizeof (lpoptions_locations); i++)
+  for (i = 0; i < G_N_ELEMENTS (lpoptions_locations); i++)
     {
       if (g_path_is_absolute (lpoptions_locations[i]))
         { 
