@@ -74,6 +74,7 @@ struct _GtkFileChooserEntry
 
   GtkWidget *completion_feedback_window;
   GtkWidget *completion_feedback_label;
+  guint completion_feedback_timeout_id;
 
   guint has_completion : 1;
   guint in_change      : 1;
@@ -86,6 +87,8 @@ enum
   PATH_COLUMN,
   N_COLUMNS
 };
+
+#define COMPLETION_FEEDBACK_TIMEOUT_MS 2000
 
 static void     gtk_file_chooser_entry_iface_init     (GtkEditableClass *iface);
 
@@ -828,6 +831,27 @@ create_completion_feedback_window (GtkFileChooserEntry *chooser_entry)
   gtk_widget_show (chooser_entry->completion_feedback_label);
 }
 
+static gboolean
+completion_feedback_timeout_cb (gpointer data)
+{
+  GtkFileChooserEntry *chooser_entry = GTK_FILE_CHOOSER_ENTRY (data);
+
+  chooser_entry->completion_feedback_timeout_id = 0;
+
+  remove_completion_feedback (chooser_entry);
+  return FALSE;
+}
+
+static void
+install_completion_feedback_timer (GtkFileChooserEntry *chooser_entry)
+{
+  g_assert (chooser_entry->completion_feedback_timeout_id == 0);
+
+  chooser_entry->completion_feedback_timeout_id = gdk_threads_add_timeout (COMPLETION_FEEDBACK_TIMEOUT_MS,
+									   completion_feedback_timeout_cb,
+									   chooser_entry);
+}
+
 static void
 show_completion_feedback_window (GtkFileChooserEntry *chooser_entry)
 {
@@ -854,7 +878,7 @@ show_completion_feedback_window (GtkFileChooserEntry *chooser_entry)
   gtk_window_move (GTK_WINDOW (chooser_entry->completion_feedback_window), feedback_x, feedback_y);
   gtk_widget_show (chooser_entry->completion_feedback_window);
 
-  /* FIXME: install timer */
+  install_completion_feedback_timer (chooser_entry);
 }
 
 static void
@@ -879,7 +903,11 @@ remove_completion_feedback (GtkFileChooserEntry *chooser_entry)
   chooser_entry->completion_feedback_window = NULL;
   chooser_entry->completion_feedback_label = NULL;
 
-  /* FIXME: remove timer */
+  if (chooser_entry->completion_feedback_timeout_id != 0)
+    {
+      g_source_remove (chooser_entry->completion_feedback_timeout_id);
+      chooser_entry->completion_feedback_timeout_id = 0;
+    }
 }
 
 static void
