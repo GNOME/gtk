@@ -934,7 +934,7 @@ autocomplete (GtkFileChooserEntry *chooser_entry)
 
   printf ("Doing autocompletion since our folder is finished loading\n");
 
-  /* FIXME */
+  append_common_prefix (chooser_entry, TRUE);
 }
 
 static void
