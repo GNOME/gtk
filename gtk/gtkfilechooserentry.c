@@ -750,10 +750,7 @@ populate_completion_store (GtkFileChooserEntry *chooser_entry)
   printf ("Populating completion store\n");
 
   if (!gtk_file_folder_list_children (chooser_entry->current_folder, &paths, NULL)) /* NULL-GError */
-    {
-      printf ("No children in the folder!  Leaving an empty completion store.\n");
-      return;
-    }
+    return;
 
   discard_completion_store (chooser_entry);
 
@@ -767,8 +764,6 @@ populate_completion_store (GtkFileChooserEntry *chooser_entry)
       GtkFilePath *path;
 
       path = tmp_list->data;
-
-      printf ("Getting info for %s\n", (char *) path);
 
       info = gtk_file_folder_get_info (chooser_entry->current_folder,
 				       path,
@@ -786,8 +781,6 @@ populate_completion_store (GtkFileChooserEntry *chooser_entry)
 			      PATH_COLUMN, path,
 			      -1);
 
-	  printf ("Completion store += \"%s\"\n", display_name);
-
 	  gtk_file_info_free (info);
           g_free (display_name);
 	}
@@ -800,8 +793,6 @@ populate_completion_store (GtkFileChooserEntry *chooser_entry)
 
   gtk_entry_completion_set_model (gtk_entry_get_completion (GTK_ENTRY (chooser_entry)),
 				  GTK_TREE_MODEL (chooser_entry->completion_store));
-
-  printf ("Finished populating completion store\n");
 }
 
 /* When we finish loading the current folder, this function should get called to
