@@ -21,6 +21,7 @@
 #include <config.h>
 #include <string.h>
 
+#include "gtkalignment.h"
 #include "gtkcelllayout.h"
 #include "gtkcellrenderertext.h"
 #include "gtkentry.h"
@@ -768,8 +769,6 @@ completion_feedback_window_expose_event_cb (GtkWidget      *widget,
 
   GtkFileChooserEntry *chooser_entry = GTK_FILE_CHOOSER_ENTRY (data);
 
-  printf ("exposing completion feedback window!\n");
-
   gtk_paint_flat_box (chooser_entry->completion_feedback_window->style,
 		      chooser_entry->completion_feedback_window->window,
 		      GTK_STATE_NORMAL,
@@ -789,6 +788,8 @@ create_completion_feedback_window (GtkFileChooserEntry *chooser_entry)
 {
   /* Stolen from gtk_tooltip_init() */
 
+  GtkWidget *alignment;
+
   chooser_entry->completion_feedback_window = gtk_window_new (GTK_WINDOW_POPUP);
   gtk_window_set_type_hint (GTK_WINDOW (chooser_entry->completion_feedback_window),
 			    GDK_WINDOW_TYPE_HINT_TOOLTIP);
@@ -796,11 +797,21 @@ create_completion_feedback_window (GtkFileChooserEntry *chooser_entry)
   gtk_window_set_resizable (GTK_WINDOW (chooser_entry->completion_feedback_window), FALSE);
   gtk_widget_set_name (chooser_entry->completion_feedback_window, "gtk-tooltip");
 
+  alignment = gtk_alignment_new (0.5, 0.5, 1.0, 1.0);
+  gtk_alignment_set_padding (GTK_ALIGNMENT (alignment),
+			     chooser_entry->completion_feedback_window->style->ythickness,
+			     chooser_entry->completion_feedback_window->style->ythickness,
+			     chooser_entry->completion_feedback_window->style->xthickness,
+			     chooser_entry->completion_feedback_window->style->xthickness);
+  gtk_container_add (GTK_CONTAINER (chooser_entry->completion_feedback_window), alignment);
+  gtk_widget_show (alignment);
+
   g_signal_connect (chooser_entry->completion_feedback_window, "expose_event",
 		    G_CALLBACK (completion_feedback_window_expose_event_cb), chooser_entry);
 
   chooser_entry->completion_feedback_label = gtk_label_new (NULL);
-  gtk_container_add (GTK_CONTAINER (chooser_entry->completion_feedback_window), chooser_entry->completion_feedback_label);
+  gtk_container_add (GTK_CONTAINER (alignment), chooser_entry->completion_feedback_label);
+  gtk_widget_show (chooser_entry->completion_feedback_label);
 }
 
 static void
@@ -827,7 +838,7 @@ show_completion_feedback_window (GtkFileChooserEntry *chooser_entry)
   printf ("showing completion feedback window at (%d, %d)\n", feedback_x, feedback_y);
 
   gtk_window_move (GTK_WINDOW (chooser_entry->completion_feedback_window), feedback_x, feedback_y);
-  gtk_widget_show_all (chooser_entry->completion_feedback_window);
+  gtk_widget_show (chooser_entry->completion_feedback_window);
 
   /* FIXME: install timer */
 }
