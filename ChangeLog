@@ -1,3 +1,9 @@
+2008-03-13  Sven Neumann  <sven@gimp.org>
+
+	* gtk/gtkprintunixdialog.c (add_custom_button_to_dialog)
+	(overwrite_confirmation_dialog): added some line-breaks for
+	readability.
+
 2008-03-12  Federico Mena Quintero  <federico@novell.com>
 
 	Rework the way completion works in GtkFileChooserEntry.  Fixes
