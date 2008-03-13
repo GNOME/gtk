@@ -595,6 +595,13 @@ gtk_file_chooser_entry_do_insert_text (GtkEditable *editable,
 }
 
 static void
+clear_completions (GtkFileChooserEntry *chooser_entry)
+{
+  chooser_entry->has_completion = FALSE;
+  chooser_entry->load_complete_action = LOAD_COMPLETE_NOTHING;
+}
+
+static void
 gtk_file_chooser_entry_do_delete_text (GtkEditable *editable,
 				       gint         start_pos,
 				       gint         end_pos)
@@ -606,7 +613,7 @@ gtk_file_chooser_entry_do_delete_text (GtkEditable *editable,
   if (chooser_entry->in_change)
     return;
 
-  chooser_entry->load_complete_action = LOAD_COMPLETE_NOTHING;
+  clear_completions (chooser_entry);
 }
 
 static void
@@ -620,7 +627,7 @@ gtk_file_chooser_entry_set_position (GtkEditable *editable,
   if (chooser_entry->in_change)
     return;
 
-  chooser_entry->load_complete_action = LOAD_COMPLETE_NOTHING;
+  clear_completions (chooser_entry);
 }
 
 static void
@@ -635,7 +642,7 @@ gtk_file_chooser_entry_set_selection_bounds (GtkEditable *editable,
   if (chooser_entry->in_change)
     return;
 
-  chooser_entry->load_complete_action = LOAD_COMPLETE_NOTHING;
+  clear_completions (chooser_entry);
 }
 
 static void
@@ -680,10 +687,13 @@ gtk_file_chooser_entry_focus (GtkWidget        *widget,
 
       if (chooser_entry->has_completion)
 	{
+	  gboolean has_selection;
 	  gint sel_end;
 
-	  if (gtk_editable_get_selection_bounds (editable, NULL, &sel_end))
-	    gtk_editable_set_position (editable, sel_end);
+	  has_selection = gtk_editable_get_selection_bounds (editable, NULL, &sel_end);
+	  g_assert (has_selection && sel_end == GTK_ENTRY (entry)->text_length);
+
+	  gtk_editable_set_position (editable, sel_end);
 	}
       else
 	{
