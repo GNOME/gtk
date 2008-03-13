@@ -372,6 +372,13 @@ completion_match_func (GtkEntryCompletion *comp,
   return result;
 }
 
+static void
+clear_completions (GtkFileChooserEntry *chooser_entry)
+{
+  chooser_entry->has_completion = FALSE;
+  chooser_entry->load_complete_action = LOAD_COMPLETE_NOTHING;
+}
+
 /* This function will append a directory separator to paths to
  * display_name iff the path associated with it is a directory.
  * maybe_append_separator_to_path will g_free the display_name and
@@ -513,6 +520,8 @@ append_common_prefix (GtkFileChooserEntry *chooser_entry,
   gchar *common_prefix;
   GtkFilePath *unique_path;
 
+  clear_completions (chooser_entry);
+
   find_common_prefix (chooser_entry, &common_prefix, &unique_path);
 
   if (unique_path)
@@ -584,13 +593,6 @@ gtk_file_chooser_entry_do_insert_text (GtkEditable *editable,
        || chooser_entry->action == GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER)
       && insert_pos == old_text_len)
     install_start_autocompletion_idle (chooser_entry);
-}
-
-static void
-clear_completions (GtkFileChooserEntry *chooser_entry)
-{
-  chooser_entry->has_completion = FALSE;
-  chooser_entry->load_complete_action = LOAD_COMPLETE_NOTHING;
 }
 
 static void
