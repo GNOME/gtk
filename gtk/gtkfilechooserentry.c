@@ -528,10 +528,11 @@ find_common_prefix (GtkFileChooserEntry *chooser_entry,
 }
 
 typedef enum {
-  PREFIX_APPENDED,
-  UNIQUE_PREFIX_APPENDED,
   INVALID_INPUT,
-  NO_COMMON_PREFIX
+  NO_MATCH,
+  COMPLETED,
+  COMPLETED_UNIQUE,
+  COMPLETE_BUT_NOT_UNIQUE
 } CommonPrefixResult;
 
 /* Finds a common prefix based on the contents of the entry and mandatorily appends it */
@@ -577,6 +578,13 @@ append_common_prefix (GtkFileChooserEntry *chooser_entry,
 	result = INVALID_INPUT;
 
       have_result = TRUE;
+    }
+  else
+    {
+      /* FIXME:  if there was no unique_path, but there was a common_prefix,
+       * then we *may* have "complete but not unique".  find_common_prefix()
+       * needs to say if the match was a complete entry, or a partial one.
+       */
     }
 
   printf ("common prefix: \"%s\"\n",
