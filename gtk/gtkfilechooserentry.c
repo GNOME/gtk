@@ -437,6 +437,7 @@ static gboolean
 find_common_prefix (GtkFileChooserEntry *chooser_entry,
 		    gchar               **common_prefix_ret,
 		    GtkFilePath         **unique_path_ret,
+		    gboolean             *is_complete_not_unique_ret,
 		    GError              **error)
 {
   GtkEditable *editable;
@@ -449,9 +450,7 @@ find_common_prefix (GtkFileChooserEntry *chooser_entry,
 
   *common_prefix_ret = NULL;
   *unique_path_ret = NULL;
-
-  if (chooser_entry->completion_store == NULL)
-    return;
+  *is_complete_not_unique_ret = FALSE;
 
   editable = GTK_EDITABLE (chooser_entry);
 
@@ -508,7 +507,10 @@ find_common_prefix (GtkFileChooserEntry *chooser_entry,
 		  p++;
 		  q++;
 		}
-		  
+
+	      if (*p == '\0' || *q == '\0')
+		*is_complete_not_unique_ret = TRUE;
+
 	      *p = '\0';
 
 	      gtk_file_path_free (*unique_path_ret);
@@ -543,14 +545,18 @@ append_common_prefix (GtkFileChooserEntry *chooser_entry,
 {
   gchar *common_prefix;
   GtkFilePath *unique_path;
+  gboolean is_complete_not_unique;
   GError *error;
   CommonPrefixResult result;
   gboolean have_result;
 
   clear_completions (chooser_entry);
 
+  if (chooser_entry->completion_store == NULL)
+    return NO_MATCH;
+
   error = NULL;
-  if (!find_common_prefix (chooser_entry, &common_prefix, &unique_path, &error))
+  if (!find_common_prefix (chooser_entry, &common_prefix, &unique_path, &is_complete_not_unique, &error))
     {
       if (show_errors)
 	{
@@ -573,7 +579,7 @@ append_common_prefix (GtkFileChooserEntry *chooser_entry,
       gtk_file_path_free (unique_path);
 
       if (common_prefix)
-	result = UNIQUE_PREFIX_APPENDED;
+	result = COMPLETED_UNIQUE;
       else
 	result = INVALID_INPUT;
 
@@ -581,10 +587,11 @@ append_common_prefix (GtkFileChooserEntry *chooser_entry,
     }
   else
     {
-      /* FIXME:  if there was no unique_path, but there was a common_prefix,
-       * then we *may* have "complete but not unique".  find_common_prefix()
-       * needs to say if the match was a complete entry, or a partial one.
-       */
+      if (is_complete_not_unique)
+	{
+	  result = COMPLETE_BUT_NOT_UNIQUE;
+	  have_result = TRUE;
+	}
     }
 
   printf ("common prefix: \"%s\"\n",
@@ -627,14 +634,14 @@ append_common_prefix (GtkFileChooserEntry *chooser_entry,
       if (have_result)
 	return result;
       else
-	return PREFIX_APPENDED;
+	return COMPLETED;
     }
   else
     {
       if (have_result)
 	return result;
       else
-	return NO_COMMON_PREFIX;
+	return NO_MATCH;
     }
 }
 
@@ -714,6 +721,14 @@ gtk_file_chooser_entry_grab_focus (GtkWidget *widget)
 }
 
 static void
+pop_up_completion_feedback (GtkFileChooserEntry *chooser_entry,
+			    const gchar         *feedback)
+{
+  /* FIXME: use a popup window of some sort */
+  printf ("COMPLETION: %s\n", feedback);
+}
+
+static void
 explicitly_complete (GtkFileChooserEntry *chooser_entry)
 {
   CommonPrefixResult result;
@@ -732,18 +747,25 @@ explicitly_complete (GtkFileChooserEntry *chooser_entry)
 
   switch (result)
     {
-    case PREFIX_APPENDED:
-      break;
-
-    case UNIQUE_PREFIX_APPENDED:
-      break;
-
     case INVALID_INPUT:
+      /* We already beeped in append_common_prefix(); do nothing here */
       break;
 
-    case NO_COMMON_PREFIX:
+    case NO_MATCH:
+      pop_up_completion_feedback (chooser_entry, _("No match"));
+      break;
+
+    case COMPLETED:
+      /* Nothing to do */
+      break;
+
+    case COMPLETED_UNIQUE:
+      /* Nothing to do */
+      break;
+
+    case COMPLETE_BUT_NOT_UNIQUE:
       /* FIXME: pop up the suggestion window */
-      /* FIXME: we need to distinguish between "no match" and "many matches" */
+      pop_up_completion_feedback (chooser_entry, _("Complete, but not unique"));
       break;
 
     default:
