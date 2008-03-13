@@ -781,6 +781,7 @@ explicitly_complete (GtkFileChooserEntry *chooser_entry)
       break;
 
     case NO_MATCH:
+      beep (chooser_entry);
       pop_up_completion_feedback (chooser_entry, _("No match"));
       break;
 
