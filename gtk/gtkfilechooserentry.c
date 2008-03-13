@@ -413,13 +413,34 @@ find_common_prefix (GtkFileChooserEntry *chooser_entry,
 		    gchar               **common_prefix_ret,
 		    GtkFilePath         **unique_path_ret)
 {
+  GtkEditable *editable;
   GtkTreeIter iter;
+  gboolean parsed;
   gboolean valid;
+  char *text_up_to_cursor;
+  GtkFilePath *parsed_folder_path;
+  char *parsed_file_part;
 
   *common_prefix_ret = NULL;
   *unique_path_ret = NULL;
 
   if (chooser_entry->completion_store == NULL)
+    return;
+
+  editable = GTK_EDITABLE (chooser_entry);
+
+  text_up_to_cursor = gtk_editable_get_chars (editable, 0, gtk_editable_get_position (editable));
+
+  parsed = gtk_file_system_parse (chooser_entry->file_system,
+				  chooser_entry->base_folder,
+				  text_up_to_cursor,
+				  &parsed_folder_path,
+				  &parsed_file_part,
+				  NULL); /* NULL-GError */
+
+  g_free (text_up_to_cursor);
+
+  if (!parsed)
     return;
 
   valid = gtk_tree_model_get_iter_first (GTK_TREE_MODEL (chooser_entry->completion_store), &iter);
@@ -435,7 +456,7 @@ find_common_prefix (GtkFileChooserEntry *chooser_entry,
 			  PATH_COLUMN, &path,
 			  -1);
 
-      if (g_str_has_prefix (display_name, chooser_entry->file_part))
+      if (g_str_has_prefix (display_name, parsed_file_part))
 	{
 	  if (!*common_prefix_ret)
 	    {
@@ -464,6 +485,9 @@ find_common_prefix (GtkFileChooserEntry *chooser_entry,
       gtk_file_path_free (path);
       valid = gtk_tree_model_iter_next (GTK_TREE_MODEL (chooser_entry->completion_store), &iter);
     }
+
+  gtk_file_path_free (parsed_folder_path);
+  g_free (parsed_file_part);
 }
 
 /* Finds a common prefix based on the contents of the entry and mandatorily appends it */
