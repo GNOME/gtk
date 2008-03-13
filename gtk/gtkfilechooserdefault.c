@@ -8093,9 +8093,14 @@ confirm_dialog_should_accept_filename (GtkFileChooserDefault *impl,
 					    folder_display_name);
 
   gtk_dialog_add_button (GTK_DIALOG (dialog), GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL);
-  add_custom_button_to_dialog (GTK_DIALOG (dialog), _("_Replace"), GTK_STOCK_SAVE_AS, GTK_RESPONSE_ACCEPT);
+  add_custom_button_to_dialog (GTK_DIALOG (dialog), _("_Replace"),
+                               GTK_STOCK_SAVE_AS, GTK_RESPONSE_ACCEPT);
+  gtk_dialog_set_alternative_button_order (GTK_DIALOG (dialog),
+                                           GTK_RESPONSE_ACCEPT,
+                                           GTK_RESPONSE_CANCEL,
+                                           -1);
   gtk_dialog_set_default_response (GTK_DIALOG (dialog), GTK_RESPONSE_ACCEPT);
-  
+
   if (toplevel->group)
     gtk_window_group_add_window (toplevel->group, GTK_WINDOW (dialog));
 

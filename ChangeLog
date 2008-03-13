@@ -1,5 +1,11 @@
 2008-03-13  Sven Neumann  <sven@gimp.org>
 
+	* gtk/gtkfilechooserdefault.c
+	* gtk/gtkprintunixdialog.c: set alternative button order for
+	overwrite confirmation dialogs (bug #522191).
+
+2008-03-13  Sven Neumann  <sven@gimp.org>
+
 	* gtk/gtkprintunixdialog.c (add_custom_button_to_dialog)
 	(overwrite_confirmation_dialog): added some line-breaks for
 	readability.
