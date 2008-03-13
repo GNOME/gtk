@@ -1041,6 +1041,13 @@ gtk_file_chooser_entry_changed (GtkEditable *editable)
    * When the entry is activated, cancel the load_complete_action.
    * In general, cancel the load_complete_action when the entry loses the focus.
    */
+
+  /* FIXME: is ::changed too coarse?  We need
+   *
+   *    if insert_text, start autocompletion if the cursor is at the end
+   *    if delete_text, don't do anything
+   *    if cursor moves, don't do anything
+   */
 }
 
 static void
@@ -1244,6 +1251,8 @@ _gtk_file_chooser_entry_set_file_part (GtkFileChooserEntry *chooser_entry,
 				       const gchar         *file_part)
 {
   g_return_if_fail (GTK_IS_FILE_CHOOSER_ENTRY (chooser_entry));
+
+  /* FIXME: this may need to turn on in_change, since we don't want autocompletion to start */
 
   gtk_entry_set_text (GTK_ENTRY (chooser_entry), file_part);
 }
