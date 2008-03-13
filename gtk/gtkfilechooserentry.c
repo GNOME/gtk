@@ -456,6 +456,7 @@ find_common_prefix (GtkFileChooserEntry *chooser_entry,
 		    gchar               **common_prefix_ret,
 		    GtkFilePath         **unique_path_ret,
 		    gboolean             *is_complete_not_unique_ret,
+		    gboolean             *prefix_expands_the_file_part_ret,
 		    GError              **error)
 {
   GtkEditable *editable;
@@ -469,6 +470,7 @@ find_common_prefix (GtkFileChooserEntry *chooser_entry,
   *common_prefix_ret = NULL;
   *unique_path_ret = NULL;
   *is_complete_not_unique_ret = FALSE;
+  *prefix_expands_the_file_part_ret = FALSE;
 
   editable = GTK_EDITABLE (chooser_entry);
 
@@ -569,6 +571,10 @@ find_common_prefix (GtkFileChooserEntry *chooser_entry,
 	  g_free (display_name);
 	  valid = gtk_tree_model_iter_next (GTK_TREE_MODEL (chooser_entry->completion_store), &iter);
 	}
+
+      /* Finally:  Did we generate a new completion, or was the user's input already completed as far as it could go? */
+
+      *prefix_expands_the_file_part_ret = g_utf8_strlen (*common_prefix_ret, -1) > g_utf8_strlen (parsed_file_part, -1);
     }
 
   g_free (parsed_file_part);
@@ -577,11 +583,12 @@ find_common_prefix (GtkFileChooserEntry *chooser_entry,
 }
 
 typedef enum {
-  INVALID_INPUT,
-  NO_MATCH,
-  COMPLETED,
-  COMPLETED_UNIQUE,
-  COMPLETE_BUT_NOT_UNIQUE
+  INVALID_INPUT,		/* what the user typed is bogus */
+  NO_MATCH,			/* no matches based on what the user typed */
+  NOTHING_INSERTED_COMPLETE,	/* what the user typed is already completed as far as it will go */
+  COMPLETED,			/* completion inserted (ambiguous suffix) */
+  COMPLETED_UNIQUE,		/* completion inserted, and it is a complete name and a unique match */
+  COMPLETE_BUT_NOT_UNIQUE	/* completion inserted, it is a complete name but not unique */
 } CommonPrefixResult;
 
 /* Finds a common prefix based on the contents of the entry and mandatorily appends it */
@@ -593,6 +600,7 @@ append_common_prefix (GtkFileChooserEntry *chooser_entry,
   gchar *common_prefix;
   GtkFilePath *unique_path;
   gboolean is_complete_not_unique;
+  gboolean prefix_expands_the_file_part;
   GError *error;
   CommonPrefixResult result;
   gboolean have_result;
@@ -603,7 +611,7 @@ append_common_prefix (GtkFileChooserEntry *chooser_entry,
     return NO_MATCH;
 
   error = NULL;
-  if (!find_common_prefix (chooser_entry, &common_prefix, &unique_path, &is_complete_not_unique, &error))
+  if (!find_common_prefix (chooser_entry, &common_prefix, &unique_path, &is_complete_not_unique, &prefix_expands_the_file_part, &error))
     {
       if (show_errors)
 	{
@@ -656,30 +664,38 @@ append_common_prefix (GtkFileChooserEntry *chooser_entry,
 
       pos = chooser_entry->file_part_pos;
 
-      chooser_entry->in_change = TRUE;
-
-      tmp = gtk_editable_get_chars (GTK_EDITABLE (chooser_entry), pos, cursor_pos);
-      printf ("Deleting range (%d, %d): \"%s\"\n", pos, cursor_pos, tmp);
-      g_free (tmp);
-      gtk_editable_delete_text (GTK_EDITABLE (chooser_entry),
-				pos, cursor_pos);
-
-      printf ("Inserting common prefix at %d: \"%s\"\n", pos, common_prefix);
-      gtk_editable_insert_text (GTK_EDITABLE (chooser_entry),
-				common_prefix, -1, 
-				&pos);
-      chooser_entry->in_change = FALSE;
-
-      if (highlight)
+      if (prefix_expands_the_file_part)
 	{
-	  printf ("Selecting range (%d, %d)\n", cursor_pos, pos);
-	  gtk_editable_select_region (GTK_EDITABLE (chooser_entry),
-				      cursor_pos,
-				      pos); /* cursor_pos + common_prefix_len); */
-	  chooser_entry->has_completion = TRUE;
+	  chooser_entry->in_change = TRUE;
+
+	  tmp = gtk_editable_get_chars (GTK_EDITABLE (chooser_entry), pos, cursor_pos);
+	  printf ("Deleting range (%d, %d): \"%s\"\n", pos, cursor_pos, tmp);
+	  g_free (tmp);
+	  gtk_editable_delete_text (GTK_EDITABLE (chooser_entry),
+				    pos, cursor_pos);
+
+	  printf ("Inserting common prefix at %d: \"%s\"\n", pos, common_prefix);
+	  gtk_editable_insert_text (GTK_EDITABLE (chooser_entry),
+				    common_prefix, -1, 
+				    &pos);
+	  chooser_entry->in_change = FALSE;
+
+	  if (highlight)
+	    {
+	      printf ("Selecting range (%d, %d)\n", cursor_pos, pos);
+	      gtk_editable_select_region (GTK_EDITABLE (chooser_entry),
+					  cursor_pos,
+					  pos); /* cursor_pos + common_prefix_len); */
+	      chooser_entry->has_completion = TRUE;
+	    }
+	  else
+	    gtk_editable_set_position (GTK_EDITABLE (chooser_entry), pos);
 	}
       else
-	gtk_editable_set_position (GTK_EDITABLE (chooser_entry), pos);
+	{
+	  result = NOTHING_INSERTED_COMPLETE;
+	  have_result = TRUE;
+	}
 
       g_free (common_prefix);
 
@@ -972,11 +988,18 @@ explicitly_complete (GtkFileChooserEntry *chooser_entry)
       pop_up_completion_feedback (chooser_entry, _("No match"));
       break;
 
+    case NOTHING_INSERTED_COMPLETE:
+      printf ("nothing inserted\n");
+      /* FIXME: pop up the suggestion window or scroll it */
+      break;
+
     case COMPLETED:
+      printf ("completed\n");
       /* Nothing to do */
       break;
 
     case COMPLETED_UNIQUE:
+      printf ("completed a unique match\n");
       /* FIXME: if the user keeps hitting Tab after completing a unique match, present feedback with "Sole completion") */
       /* Nothing to do */
       break;
