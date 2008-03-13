@@ -510,35 +510,32 @@ append_common_prefix (GtkFileChooserEntry *chooser_entry,
 
   if (common_prefix)
     {
-      gint file_part_len;
+      gint cursor_pos;
       gint common_prefix_len;
       gint pos;
 
-      file_part_len = g_utf8_strlen (chooser_entry->file_part, -1);
+      cursor_pos = gtk_editable_get_position (GTK_EDITABLE (chooser_entry));
       common_prefix_len = g_utf8_strlen (common_prefix, -1);
 
-      if (common_prefix_len > file_part_len)
+      pos = chooser_entry->file_part_pos;
+
+      chooser_entry->in_change = TRUE;
+      gtk_editable_delete_text (GTK_EDITABLE (chooser_entry),
+				pos, cursor_pos);
+      gtk_editable_insert_text (GTK_EDITABLE (chooser_entry),
+				common_prefix, -1, 
+				&pos);
+      chooser_entry->in_change = FALSE;
+
+      if (highlight)
 	{
-	  pos = chooser_entry->file_part_pos;
-
-	  chooser_entry->in_change = TRUE;
-	  gtk_editable_delete_text (GTK_EDITABLE (chooser_entry),
-				    pos, -1);
-	  gtk_editable_insert_text (GTK_EDITABLE (chooser_entry),
-				    common_prefix, -1, 
-				    &pos);
-	  chooser_entry->in_change = FALSE;
-
-	  if (highlight)
-	    {
-	      gtk_editable_select_region (GTK_EDITABLE (chooser_entry),
-					  chooser_entry->file_part_pos + file_part_len,
-					  chooser_entry->file_part_pos + common_prefix_len);
-	      chooser_entry->has_completion = TRUE;
-	    }
-	  else
-	    gtk_editable_set_position (GTK_EDITABLE (chooser_entry), GTK_ENTRY (chooser_entry)->text_length);
+	  gtk_editable_select_region (GTK_EDITABLE (chooser_entry),
+				      cursor_pos,
+				      pos); /* cursor_pos + common_prefix_len); */
+	  chooser_entry->has_completion = TRUE;
 	}
+      else
+	gtk_editable_set_position (GTK_EDITABLE (chooser_entry), pos);
 
       g_free (common_prefix);
     }
