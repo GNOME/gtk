@@ -845,6 +845,8 @@ finished_loading_cb (GtkFileFolder *folder,
 {
   GtkFileChooserEntry *chooser_entry = GTK_FILE_CHOOSER_ENTRY (data);
 
+  printf ("Folder finished loading asynchronously!  Will populate the completion store\n");
+
   finish_folder_load (chooser_entry);
 }
 
@@ -869,13 +871,21 @@ load_directory_get_folder_callback (GtkFileSystemHandle *handle,
   g_assert (folder != NULL);
   chooser_entry->current_folder = folder;
 
+  printf ("Got folder asynchronously!\n");
+
   discard_completion_store (chooser_entry);
 
   if (gtk_file_folder_is_finished_loading (chooser_entry->current_folder))
-    finish_folder_load (chooser_entry);
+    {
+      printf ("And the folder is already finished loading.  Will populate the completion store.\n");
+      finish_folder_load (chooser_entry);
+    }
   else
-    g_signal_connect (chooser_entry->current_folder, "finished-loading",
-		      G_CALLBACK (finished_loading_cb), chooser_entry);
+    {
+      printf ("Folder is not yet completely loaded.  Will load it asynchronously...\n");
+      g_signal_connect (chooser_entry->current_folder, "finished-loading",
+			G_CALLBACK (finished_loading_cb), chooser_entry);
+    }
 
 out:
   g_object_unref (chooser_entry);
