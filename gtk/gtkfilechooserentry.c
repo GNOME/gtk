@@ -406,7 +406,7 @@ clear_completions (GtkFileChooserEntry *chooser_entry)
 static void
 beep (GtkFileChooserEntry *chooser_entry)
 {
-  gdk_display_beep (gtk_widget_get_display (GTK_WIDGET (chooser_entry)));
+  gtk_widget_error_bell (GTK_WIDGET (chooser_entry));
 }
 
 /* This function will append a directory separator to paths to
