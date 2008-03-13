@@ -785,7 +785,14 @@ gtk_file_chooser_entry_focus (GtkWidget        *widget,
     {
       gint pos = 0;
 
-      if (!chooser_entry->has_completion)
+      if (chooser_entry->has_completion)
+	{
+	  gint sel_end;
+
+	  if (gtk_editable_get_selection_bounds (editable, NULL, &sel_end))
+	    gtk_editable_set_position (editable, sel_end);
+	}
+      else
 	append_common_prefix (chooser_entry, FALSE);
 
       /* Trigger the completion window to pop up again by a 
