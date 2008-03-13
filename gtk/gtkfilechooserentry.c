@@ -447,6 +447,18 @@ maybe_append_separator_to_path (GtkFileChooserEntry *chooser_entry,
   return display_name;
 }
 
+static char *
+trim_dir_separator_suffix (const char *str)
+{
+  int len;
+
+  len = strlen (str);
+  if (len > 0 && G_IS_DIR_SEPARATOR (str[len - 1]))
+    return g_strndup (str, len - 1);
+  else
+    return g_strdup (str);
+}
+
 /* Determines if the completion model has entries with a common prefix relative
  * to the current contents of the entry.  Also, if there's one and only one such
  * path, stores it in unique_path_ret.
@@ -513,7 +525,7 @@ find_common_prefix (GtkFileChooserEntry *chooser_entry,
 	{
 	  if (!*common_prefix_ret)
 	    {
-	      *common_prefix_ret = g_strdup (display_name);
+	      *common_prefix_ret = trim_dir_separator_suffix (display_name);
 	      *unique_path_ret = gtk_file_path_copy (path);
 	    }
 	  else
@@ -577,6 +589,29 @@ find_common_prefix (GtkFileChooserEntry *chooser_entry,
   return TRUE;
 }
 
+static gboolean
+char_after_cursor_is_directory_separator (GtkFileChooserEntry *chooser_entry)
+{
+  int cursor_pos;
+  gboolean result;
+
+  result = FALSE;
+
+  cursor_pos = gtk_editable_get_position (GTK_EDITABLE (chooser_entry));
+  if (cursor_pos < GTK_ENTRY (chooser_entry)->text_length)
+    {
+      char *next_char_str;
+
+      next_char_str = gtk_editable_get_chars (GTK_EDITABLE (chooser_entry), cursor_pos, cursor_pos + 1);
+      if (G_IS_DIR_SEPARATOR (*next_char_str))
+	result = TRUE;
+
+      g_free (next_char_str);
+    }
+
+  return result;
+}
+
 typedef enum {
   INVALID_INPUT,		/* what the user typed is bogus */
   NO_MATCH,			/* no matches based on what the user typed */
@@ -623,9 +658,11 @@ append_common_prefix (GtkFileChooserEntry *chooser_entry,
 
   if (unique_path)
     {
-      common_prefix = maybe_append_separator_to_path (chooser_entry,
-						      unique_path,
-						      common_prefix);
+      if (!char_after_cursor_is_directory_separator (chooser_entry))
+	common_prefix = maybe_append_separator_to_path (chooser_entry,
+							unique_path,
+							common_prefix);
+
       gtk_file_path_free (unique_path);
 
       if (common_prefix)
