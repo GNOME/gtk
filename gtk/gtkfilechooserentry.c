@@ -40,6 +40,13 @@ struct _GtkFileChooserEntryClass
   GtkEntryClass parent_class;
 };
 
+/* Action to take when the current folder finishes loading (for explicit or automatic completion) */
+typedef enum {
+  LOAD_COMPLETE_NOTHING,
+  LOAD_COMPLETE_AUTOCOMPLETE,
+  LOAD_COMPLETE_INSERT_PREFIX
+} LoadCompleteAction;
+
 struct _GtkFileChooserEntry
 {
   GtkEntry parent_instance;
@@ -51,12 +58,13 @@ struct _GtkFileChooserEntry
   gchar *file_part;
   gint file_part_pos;
   guint check_completion_idle;
-  guint load_directory_idle;
 
   /* Folder being loaded or already loaded */
   GtkFilePath *current_folder_path;
   GtkFileFolder *current_folder;
   GtkFileSystemHandle *load_folder_handle;
+
+  LoadCompleteAction load_complete_action;
 
   GtkListStore *completion_store;
 
@@ -241,12 +249,6 @@ gtk_file_chooser_entry_dispose (GObject *object)
     {
       g_source_remove (chooser_entry->check_completion_idle);
       chooser_entry->check_completion_idle = 0;
-    }
-
-  if (chooser_entry->load_directory_idle)
-    {
-      g_source_remove (chooser_entry->load_directory_idle);
-      chooser_entry->load_directory_idle = 0;
     }
 
   G_OBJECT_CLASS (_gtk_file_chooser_entry_parent_class)->dispose (object);
@@ -658,78 +660,6 @@ files_deleted_cb (GtkFileSystem       *file_system,
 }
 
 static void
-load_directory_get_folder_callback (GtkFileSystemHandle *handle,
-				    GtkFileFolder       *folder,
-				    const GError        *error,
-				    gpointer             data)
-{
-  gboolean cancelled = handle->cancelled;
-  GtkFileChooserEntry *chooser_entry = data;
-
-  if (handle != chooser_entry->load_folder_handle)
-    goto out;
-
-  chooser_entry->load_folder_handle = NULL;
-
-  if (cancelled || error)
-    goto out;
-
-  chooser_entry->current_folder = folder;
-  g_signal_connect (chooser_entry->current_folder, "files-added",
-		    G_CALLBACK (files_added_cb), chooser_entry);
-  g_signal_connect (chooser_entry->current_folder, "files-removed",
-		    G_CALLBACK (files_deleted_cb), chooser_entry);
-  
-  chooser_entry->completion_store = gtk_list_store_new (N_COLUMNS,
-							G_TYPE_STRING,
-							GTK_TYPE_FILE_PATH);
-
-  gtk_entry_completion_set_model (gtk_entry_get_completion (GTK_ENTRY (chooser_entry)),
-				  GTK_TREE_MODEL (chooser_entry->completion_store));
-
-out:
-  g_object_unref (chooser_entry);
-  g_object_unref (handle);
-}
-
-static gboolean
-load_directory_callback (GtkFileChooserEntry *chooser_entry)
-{
-  GDK_THREADS_ENTER ();
-
-  chooser_entry->load_directory_idle = 0;
-
-  /* guard against bogus settings*/
-  if (chooser_entry->current_folder_path == NULL ||
-      chooser_entry->file_system == NULL)
-    goto done;
-
-  if (chooser_entry->current_folder != NULL)
-    {
-      g_warning ("idle activate multiple times without clearing the folder object first.");
-      goto done;
-    }
-  g_assert (chooser_entry->completion_store == NULL);
-
-  /* Load the folder */
-  if (chooser_entry->load_folder_handle)
-    gtk_file_system_cancel_operation (chooser_entry->load_folder_handle);
-
-  chooser_entry->load_folder_handle =
-    gtk_file_system_get_folder (chooser_entry->file_system,
-			        chooser_entry->current_folder_path,
-			        GTK_FILE_INFO_DISPLAY_NAME | GTK_FILE_INFO_IS_FOLDER,
-			        load_directory_get_folder_callback,
-			        g_object_ref (chooser_entry));
-
- done:
-  
-  GDK_THREADS_LEAVE ();
-
-  return FALSE;
-}
-
-static void
 gtk_file_chooser_entry_do_insert_text (GtkEditable *editable,
 				       const gchar *new_text,
 				       gint         new_text_length,
@@ -818,20 +748,81 @@ gtk_file_chooser_entry_activate (GtkEntry *entry)
   GTK_ENTRY_CLASS (_gtk_file_chooser_entry_parent_class)->activate (entry);
 }
 
-/* This will see if a path typed by the user is new, and installs the loading
- * idle if it is.
- */
 static void
-gtk_file_chooser_entry_maybe_update_directory (GtkFileChooserEntry *chooser_entry,
-					       GtkFilePath         *folder_path,
-					       gboolean             force_reload)
+load_directory_get_folder_callback (GtkFileSystemHandle *handle,
+				    GtkFileFolder       *folder,
+				    const GError        *error,
+				    gpointer             data)
 {
-  gboolean queue_idle = FALSE;
+  gboolean cancelled = handle->cancelled;
+  GtkFileChooserEntry *chooser_entry = data;
+
+  if (handle != chooser_entry->load_folder_handle)
+    goto out;
+
+  chooser_entry->load_folder_handle = NULL;
+
+  if (cancelled || error)
+    goto out;
+
+  /* FIXME: connect to "finished-loading".  In that callback, see our
+   * load_complete_action and do the appropriate thing.
+   *
+   * Do we need to populate the completion store here?  (O(n^2))
+   * Maybe we should wait until the folder is finished loading.
+   */
+
+  chooser_entry->current_folder = folder;
+  g_signal_connect (chooser_entry->current_folder, "files-added",
+		    G_CALLBACK (files_added_cb), chooser_entry);
+  g_signal_connect (chooser_entry->current_folder, "files-removed",
+		    G_CALLBACK (files_deleted_cb), chooser_entry);
+
+  chooser_entry->completion_store = gtk_list_store_new (N_COLUMNS,
+							G_TYPE_STRING,
+							GTK_TYPE_FILE_PATH);
+
+  gtk_entry_completion_set_model (gtk_entry_get_completion (GTK_ENTRY (chooser_entry)),
+				  GTK_TREE_MODEL (chooser_entry->completion_store));
+
+out:
+  g_object_unref (chooser_entry);
+  g_object_unref (handle);
+}
+
+static void
+load_current_folder (GtkFileChooserEntry *chooser_entry)
+{
+  if (chooser_entry->current_folder_path == NULL ||
+      chooser_entry->file_system == NULL)
+    return;
+
+  g_assert (chooser_entry->current_folder == NULL);
+  g_assert (chooser_entry->completion_store == NULL);
+  g_assert (chooser_entry->load_folder_handle == NULL);
+
+  chooser_entry->load_folder_handle =
+    gtk_file_system_get_folder (chooser_entry->file_system,
+			        chooser_entry->current_folder_path,
+			        GTK_FILE_INFO_DISPLAY_NAME | GTK_FILE_INFO_IS_FOLDER,
+			        load_directory_get_folder_callback,
+			        g_object_ref (chooser_entry));
+}
+
+static void
+reload_current_folder (GtkFileChooserEntry *chooser_entry,
+		       GtkFilePath         *folder_path,
+		       gboolean             force_reload)
+{
+  gboolean reload = FALSE;
 
   if (chooser_entry->current_folder_path)
     {
-      if (gtk_file_path_compare (folder_path, chooser_entry->current_folder_path) != 0 || force_reload)
+      if ((folder_path && gtk_file_path_compare (folder_path, chooser_entry->current_folder_path) != 0)
+	  || force_reload)
 	{
+	  reload = TRUE;
+
 	  /* We changed our current directory.  We need to clear out the old
 	   * directory information.
 	   */
@@ -842,9 +833,16 @@ gtk_file_chooser_entry_maybe_update_directory (GtkFileChooserEntry *chooser_entr
 	      g_signal_handlers_disconnect_by_func (chooser_entry->current_folder,
 						    G_CALLBACK (files_deleted_cb), chooser_entry);
 
+	      if (chooser_entry->load_folder_handle)
+		{
+		  gtk_file_system_cancel_operation (chooser_entry->load_folder_handle);
+		  chooser_entry->load_folder_handle = NULL;
+		}
+
 	      g_object_unref (chooser_entry->current_folder);
 	      chooser_entry->current_folder = NULL;
 	    }
+
 	  if (chooser_entry->completion_store)
 	    {
 	      gtk_entry_completion_set_model (gtk_entry_get_completion (GTK_ENTRY (chooser_entry)), NULL);
@@ -852,37 +850,28 @@ gtk_file_chooser_entry_maybe_update_directory (GtkFileChooserEntry *chooser_entr
 	      chooser_entry->completion_store = NULL;
 	    }
 
-	  queue_idle = TRUE;
+	  gtk_file_path_free (chooser_entry->current_folder_path);
+	  chooser_entry->current_folder_path = gtk_file_path_copy (folder_path);
 	}
-
-      gtk_file_path_free (chooser_entry->current_folder_path);
     }
   else
-    {
-      queue_idle = TRUE;
-    }
+    reload = TRUE;
 
-  chooser_entry->current_folder_path = folder_path;
-
-  if (queue_idle && chooser_entry->load_directory_idle == 0)
-    chooser_entry->load_directory_idle =
-      idle_add (chooser_entry, G_CALLBACK (load_directory_callback));
+  if (reload)
+    load_current_folder (chooser_entry);
 }
 
-
-
 static void
-gtk_file_chooser_entry_changed (GtkEditable *editable)
+refresh_current_folder_and_file_part (GtkFileChooserEntry *chooser_entry)
 {
-  GtkFileChooserEntry *chooser_entry = GTK_FILE_CHOOSER_ENTRY (editable);
-  const gchar *text_up_to_cursor;
+  GtkEditable *editable;
+  gchar *text_up_to_cursor;
   GtkFilePath *folder_path;
   gchar *file_part;
   gsize total_len, file_part_len;
   gint file_part_pos;
 
-  if (chooser_entry->in_change)
-    return;
+  editable = GTK_EDITABLE (chooser_entry);
 
   text_up_to_cursor = gtk_editable_get_chars (editable, 0, gtk_editable_get_position (editable));
   
@@ -913,7 +902,56 @@ gtk_file_chooser_entry_changed (GtkEditable *editable)
   chooser_entry->file_part = file_part;
   chooser_entry->file_part_pos = file_part_pos;
 
-  gtk_file_chooser_entry_maybe_update_directory (chooser_entry, folder_path, file_part_pos == -1);
+  reload_current_folder (chooser_entry, folder_path, file_part_pos == -1);
+  gtk_file_path_free (folder_path);
+}
+
+static void
+autocomplete (GtkFileChooserEntry *chooser_entry)
+{
+  g_assert (chooser_entry->current_folder != NULL);
+  g_assert (gtk_file_folder_is_finished_loading (chooser_entry->current_folder));
+
+  /* FIXME */
+}
+
+static void
+start_autocompletion (GtkFileChooserEntry *chooser_entry)
+{
+  refresh_current_folder_and_file_part (chooser_entry);
+
+  if (!chooser_entry->current_folder)
+    {
+      /* We don't beep or anything, since this is autocompletion - the user
+       * didn't request any action explicitly.
+       */
+      return;
+    }
+
+  if (gtk_file_folder_is_finished_loading (chooser_entry->current_folder))
+    autocomplete (chooser_entry);
+  else
+    chooser_entry->load_complete_action = LOAD_COMPLETE_AUTOCOMPLETE;
+}
+
+static void
+gtk_file_chooser_entry_changed (GtkEditable *editable)
+{
+  GtkFileChooserEntry *chooser_entry = GTK_FILE_CHOOSER_ENTRY (editable);
+
+  if (chooser_entry->in_change)
+    return;
+
+  chooser_entry->load_complete_action = LOAD_COMPLETE_NOTHING;
+
+  if ((chooser_entry->action == GTK_FILE_CHOOSER_ACTION_OPEN
+       || chooser_entry->action == GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER)
+      && gtk_editable_get_position (GTK_EDITABLE (chooser_entry)) == GTK_ENTRY (chooser_entry)->text_length)
+    start_autocompletion (chooser_entry);
+
+  /* FIXME: see when the cursor changes (see GtkEditable::set_position and GtkEntry::move_cursor).
+   * When the cursor changes, cancel the load_complete_action.
+   */
 }
 
 static void
