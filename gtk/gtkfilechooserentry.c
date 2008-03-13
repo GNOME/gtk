@@ -768,6 +768,8 @@ completion_feedback_window_expose_event_cb (GtkWidget      *widget,
 
   GtkFileChooserEntry *chooser_entry = GTK_FILE_CHOOSER_ENTRY (data);
 
+  printf ("exposing completion feedback window!\n");
+
   gtk_paint_flat_box (chooser_entry->completion_feedback_window->style,
 		      chooser_entry->completion_feedback_window->window,
 		      GTK_STATE_NORMAL,
@@ -824,8 +826,8 @@ show_completion_feedback_window (GtkFileChooserEntry *chooser_entry)
 
   printf ("showing completion feedback window at (%d, %d)\n", feedback_x, feedback_y);
 
-  gtk_window_move (GTK_WINDOW (chooser_entry->completion_feedback_window), feedback_x, feedback_y); 
-  gtk_widget_show (chooser_entry->completion_feedback_window);
+  gtk_window_move (GTK_WINDOW (chooser_entry->completion_feedback_window), feedback_x, feedback_y);
+  gtk_widget_show_all (chooser_entry->completion_feedback_window);
 
   /* FIXME: install timer */
 }
