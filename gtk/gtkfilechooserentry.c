@@ -1283,6 +1283,9 @@ load_directory_get_folder_callback (GtkFileSystemHandle *handle,
 	  pop_up_completion_feedback (chooser_entry, msg);
 	  g_free (msg);
 	}
+
+      gtk_file_path_free (chooser_entry->current_folder_path);
+      chooser_entry->current_folder_path = NULL;
     }
 
   if (cancelled || error)
