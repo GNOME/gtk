@@ -1036,7 +1036,7 @@ start_explicit_completion (GtkFileChooserEntry *chooser_entry)
 
       beep (chooser_entry);
       pop_up_completion_feedback (chooser_entry, _("Invalid path"));
-      /* FIXME: present a tooltip to tell the user that his folder is invalid */
+      /* FIXME: make refresh_up_to_cursor_position() return a GError, and show that instead of "invalid path" */
 
       chooser_entry->load_complete_action = LOAD_COMPLETE_NOTHING;
       return;
@@ -1727,6 +1727,8 @@ _gtk_file_chooser_entry_set_action (GtkFileChooserEntry *chooser_entry,
       chooser_entry->action = action;
 
       comp = gtk_entry_get_completion (GTK_ENTRY (chooser_entry));
+
+      /* FIXME: do we need to actually set the following? */
 
       switch (action)
 	{
