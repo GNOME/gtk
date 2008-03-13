@@ -1062,15 +1062,9 @@ gtk_file_chooser_entry_focus (GtkWidget        *widget,
     {
       if (chooser_entry->has_completion)
 	{
-	  gboolean has_selection;
-	  gint sel_end;
-
 	  printf ("Hit Tab, and we have a completion!  Will unselect it\n");
 
-	  has_selection = gtk_editable_get_selection_bounds (editable, NULL, &sel_end);
-	  g_assert (has_selection && sel_end == GTK_ENTRY (entry)->text_length);
-
-	  gtk_editable_set_position (editable, sel_end);
+	  gtk_editable_set_position (editable, entry->text_length);
 	}
       else
 	{
