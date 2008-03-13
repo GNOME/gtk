@@ -649,6 +649,7 @@ append_common_prefix (GtkFileChooserEntry *chooser_entry,
       gint cursor_pos;
       gint common_prefix_len;
       gint pos;
+      char *tmp;
 
       cursor_pos = gtk_editable_get_position (GTK_EDITABLE (chooser_entry));
       common_prefix_len = g_utf8_strlen (common_prefix, -1);
@@ -656,10 +657,14 @@ append_common_prefix (GtkFileChooserEntry *chooser_entry,
       pos = chooser_entry->file_part_pos;
 
       chooser_entry->in_change = TRUE;
-      printf ("Deleting range (%d, %d)\n", pos, cursor_pos);
+
+      tmp = gtk_editable_get_chars (GTK_EDITABLE (chooser_entry), pos, cursor_pos);
+      printf ("Deleting range (%d, %d): \"%s\"\n", pos, cursor_pos, tmp);
+      g_free (tmp);
       gtk_editable_delete_text (GTK_EDITABLE (chooser_entry),
 				pos, cursor_pos);
-      printf ("Inserting common prefix at %d\n", pos);
+
+      printf ("Inserting common prefix at %d: \"%s\"\n", pos, common_prefix);
       gtk_editable_insert_text (GTK_EDITABLE (chooser_entry),
 				common_prefix, -1, 
 				&pos);
