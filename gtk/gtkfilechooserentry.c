@@ -128,7 +128,13 @@ static char    *maybe_append_separator_to_path (GtkFileChooserEntry *chooser_ent
 						GtkFilePath         *path,
 						gchar               *display_name);
 
-static void refresh_current_folder_and_file_part (GtkFileChooserEntry *chooser_entry);
+typedef enum {
+  REFRESH_UP_TO_CURSOR_POSITION,
+  REFRESH_WHOLE_TEXT
+} RefreshMode;
+
+static void refresh_current_folder_and_file_part (GtkFileChooserEntry *chooser_entry,
+						  RefreshMode refresh_mode);
 static void finished_loading_cb (GtkFileFolder *folder,
 				 gpointer       data);
 static void autocomplete (GtkFileChooserEntry *chooser_entry);
@@ -675,7 +681,7 @@ start_explicit_completion (GtkFileChooserEntry *chooser_entry)
 {
   printf ("Starting explicit completion - refreshing current folder\n");
 
-  refresh_current_folder_and_file_part (chooser_entry);
+  refresh_current_folder_and_file_part (chooser_entry, REFRESH_UP_TO_CURSOR_POSITION);
 
   if (!chooser_entry->current_folder_path)
     {
@@ -734,8 +740,6 @@ gtk_file_chooser_entry_focus (GtkWidget        *widget,
       (GTK_WIDGET_HAS_FOCUS (widget)) &&
       (! control_pressed))
     {
-      gint pos = 0;
-
       if (chooser_entry->has_completion)
 	{
 	  gboolean has_selection;
@@ -782,7 +786,9 @@ gtk_file_chooser_entry_activate (GtkEntry *entry)
       gtk_editable_set_position (GTK_EDITABLE (entry),
 				 entry->text_length);
     }
-  
+
+  refresh_current_folder_and_file_part (chooser_entry, REFRESH_WHOLE_TEXT);
+
   GTK_ENTRY_CLASS (_gtk_file_chooser_entry_parent_class)->activate (entry);
 }
 
@@ -1010,10 +1016,12 @@ reload_current_folder (GtkFileChooserEntry *chooser_entry,
 }
 
 static void
-refresh_current_folder_and_file_part (GtkFileChooserEntry *chooser_entry)
+refresh_current_folder_and_file_part (GtkFileChooserEntry *chooser_entry,
+				      RefreshMode          refresh_mode)
 {
   GtkEditable *editable;
-  gchar *text_up_to_cursor;
+  gint end_pos;
+  gchar *text;
   GtkFilePath *folder_path;
   gchar *file_part;
   gsize total_len, file_part_len;
@@ -1021,12 +1029,27 @@ refresh_current_folder_and_file_part (GtkFileChooserEntry *chooser_entry)
 
   editable = GTK_EDITABLE (chooser_entry);
 
-  text_up_to_cursor = gtk_editable_get_chars (editable, 0, gtk_editable_get_position (editable));
+  switch (refresh_mode)
+    {
+    case REFRESH_UP_TO_CURSOR_POSITION:
+      end_pos = gtk_editable_get_position (editable);
+      break;
+
+    case REFRESH_WHOLE_TEXT:
+      end_pos = GTK_ENTRY (chooser_entry)->text_length;
+      break;
+
+    default:
+      g_assert_not_reached ();
+      return;
+    }
+
+  text = gtk_editable_get_chars (editable, 0, end_pos);
   
   if (!chooser_entry->file_system ||
       !chooser_entry->base_folder ||
       !gtk_file_system_parse (chooser_entry->file_system,
-			      chooser_entry->base_folder, text_up_to_cursor,
+			      chooser_entry->base_folder, text,
 			      &folder_path, &file_part, NULL)) /* NULL-GError */
     {
       folder_path = gtk_file_path_copy (chooser_entry->base_folder);
@@ -1036,20 +1059,20 @@ refresh_current_folder_and_file_part (GtkFileChooserEntry *chooser_entry)
   else
     {
       file_part_len = strlen (file_part);
-      total_len = strlen (text_up_to_cursor);
+      total_len = strlen (text);
       if (total_len > file_part_len)
-	file_part_pos = g_utf8_strlen (text_up_to_cursor, total_len - file_part_len);
+	file_part_pos = g_utf8_strlen (text, total_len - file_part_len);
       else
 	file_part_pos = 0;
     }
 
   printf ("Parsed text \"%s\", file_part=\"%s\", file_part_pos=%d, folder_path=\"%s\"\n",
-	  text_up_to_cursor,
+	  text,
 	  file_part,
 	  file_part_pos,
 	  folder_path ? (char *) folder_path : "(NULL)");
 
-  g_free (text_up_to_cursor);
+  g_free (text);
 
   g_free (chooser_entry->file_part);
 
@@ -1077,7 +1100,7 @@ start_autocompletion (GtkFileChooserEntry *chooser_entry)
 {
   printf ("Starting autocompletion\n");
 
-  refresh_current_folder_and_file_part (chooser_entry);
+  refresh_current_folder_and_file_part (chooser_entry, REFRESH_UP_TO_CURSOR_POSITION);
 
   if (!chooser_entry->current_folder)
     {
@@ -1296,6 +1319,9 @@ _gtk_file_chooser_entry_get_file_part (GtkFileChooserEntry *chooser_entry)
       gtk_editable_set_position (GTK_EDITABLE (chooser_entry),
 				 GTK_ENTRY (chooser_entry)->text_length);
     }
+
+  refresh_current_folder_and_file_part (chooser_entry, REFRESH_WHOLE_TEXT);
+
   return chooser_entry->file_part;
 }
 
