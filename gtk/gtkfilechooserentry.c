@@ -594,6 +594,15 @@ clear_completions (GtkFileChooserEntry *chooser_entry)
 }
 
 static void
+clear_completions_if_not_in_change (GtkFileChooserEntry *chooser_entry)
+{
+  if (chooser_entry->in_change)
+    return;
+
+  clear_completions (chooser_entry);
+}
+
+static void
 gtk_file_chooser_entry_do_delete_text (GtkEditable *editable,
 				       gint         start_pos,
 				       gint         end_pos)
@@ -602,10 +611,7 @@ gtk_file_chooser_entry_do_delete_text (GtkEditable *editable,
 
   parent_editable_iface->do_delete_text (editable, start_pos, end_pos);
 
-  if (chooser_entry->in_change)
-    return;
-
-  clear_completions (chooser_entry);
+  clear_completions_if_not_in_change (chooser_entry);
 }
 
 static void
@@ -616,10 +622,7 @@ gtk_file_chooser_entry_set_position (GtkEditable *editable,
 
   parent_editable_iface->set_position (editable, position);
 
-  if (chooser_entry->in_change)
-    return;
-
-  clear_completions (chooser_entry);
+  clear_completions_if_not_in_change (chooser_entry);
 }
 
 static void
@@ -631,10 +634,7 @@ gtk_file_chooser_entry_set_selection_bounds (GtkEditable *editable,
 
   parent_editable_iface->set_selection_bounds (editable, start_pos, end_pos);
 
-  if (chooser_entry->in_change)
-    return;
-
-  clear_completions (chooser_entry);
+  clear_completions_if_not_in_change (chooser_entry);
 }
 
 static void
