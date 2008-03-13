@@ -1264,11 +1264,26 @@ load_directory_get_folder_callback (GtkFileSystemHandle *handle,
 
   chooser_entry->load_folder_handle = NULL;
 
-  /* FIXME: if there was an error *AND* we had a pending explicit completion, beep and pop up a
-   * tooltip to say that the folder could not be loaded.
-   */
+  if (error)
+    {
+      LoadCompleteAction old_load_complete_action;
 
-  /* FIXME: if error, remove the current tooltip ("making completion list") */
+      old_load_complete_action = chooser_entry->load_complete_action;
+
+      clear_completions (chooser_entry);
+
+      if (old_load_complete_action == LOAD_COMPLETE_EXPLICIT_COMPLETION)
+	{
+	  /* Since this came from explicit user action (Tab completion), we'll present errors visually */
+	  char *msg;
+
+	  beep (chooser_entry);
+
+	  msg = g_strdup_printf (_("Could not load folder: %s"), error->message);
+	  pop_up_completion_feedback (chooser_entry, msg);
+	  g_free (msg);
+	}
+    }
 
   if (cancelled || error)
     goto out;
