@@ -852,6 +852,33 @@ install_completion_feedback_timer (GtkFileChooserEntry *chooser_entry)
 									   chooser_entry);
 }
 
+/* Gets the (x, y) position of the text cursor in the entry, in widget coordinates */
+static void
+get_entry_cursor_x (GtkFileChooserEntry *chooser_entry,
+		    gint                *x_ret)
+{
+  /* FIXME: see the docs for gtk_entry_get_layout_offsets().  As an exercise for
+   * the reader, you have to implement support for the entry's scroll offset and
+   * RTL layouts and all the fancy Pango stuff.
+   */
+
+  PangoLayout *layout;
+  gint layout_x, layout_y;
+  gint layout_index;
+  PangoRectangle strong_pos;
+
+  layout = gtk_entry_get_layout (GTK_ENTRY (chooser_entry));
+
+  gtk_entry_get_layout_offsets (GTK_ENTRY (chooser_entry), &layout_x, &layout_y);
+
+  layout_index = gtk_entry_text_index_to_layout_index (GTK_ENTRY (chooser_entry),
+						       GTK_ENTRY (chooser_entry)->current_pos);
+
+  pango_layout_get_cursor_pos (layout, layout_index, &strong_pos, NULL);
+
+  *x_ret = layout_x + strong_pos.x / PANGO_SCALE;
+}
+
 static void
 show_completion_feedback_window (GtkFileChooserEntry *chooser_entry)
 {
@@ -859,6 +886,7 @@ show_completion_feedback_window (GtkFileChooserEntry *chooser_entry)
 
   GtkRequisition feedback_req;
   gint entry_x, entry_y;
+  gint cursor_x;
   GtkAllocation *entry_allocation;
   int feedback_x, feedback_y;
 
@@ -867,10 +895,9 @@ show_completion_feedback_window (GtkFileChooserEntry *chooser_entry)
   gdk_window_get_origin (GTK_WIDGET (chooser_entry)->window, &entry_x, &entry_y);
   entry_allocation = &(GTK_WIDGET (chooser_entry)->allocation);
 
-  /* FIXME: find text cursor position in the screen, adjust the window to that */
-  /* FIXME: handle RTL positioning */
+  get_entry_cursor_x (chooser_entry, &cursor_x);
 
-  feedback_x = entry_x + entry_allocation->width - feedback_req.width;
+  feedback_x = entry_x + cursor_x + 2; /* FIXME: fit to the screen if we bump on the screen's edge */
   feedback_y = entry_y + (entry_allocation->height - feedback_req.height) / 2;
 
   printf ("showing completion feedback window at (%d, %d)\n", feedback_x, feedback_y);
