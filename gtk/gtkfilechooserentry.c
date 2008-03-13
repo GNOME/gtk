@@ -150,6 +150,8 @@ static void finished_loading_cb (GtkFileFolder *folder,
 static void autocomplete (GtkFileChooserEntry *chooser_entry);
 static void install_start_autocompletion_idle (GtkFileChooserEntry *chooser_entry);
 static void remove_completion_feedback (GtkFileChooserEntry *chooser_entry);
+static void pop_up_completion_feedback (GtkFileChooserEntry *chooser_entry,
+					const gchar         *feedback);
 
 static GtkEditableClass *parent_editable_iface;
 
@@ -606,7 +608,7 @@ append_common_prefix (GtkFileChooserEntry *chooser_entry,
       if (show_errors)
 	{
 	  beep (chooser_entry);
-	  /* FIXME: display the error somehow */
+	  pop_up_completion_feedback (chooser_entry, _("Invalid path"));
 	}
 
       g_error_free (error);
@@ -974,7 +976,6 @@ explicitly_complete (GtkFileChooserEntry *chooser_entry)
       break;
 
     case COMPLETE_BUT_NOT_UNIQUE:
-      /* FIXME: pop up the suggestion window */
       pop_up_completion_feedback (chooser_entry, _("Complete, but not unique"));
       break;
 
@@ -1005,6 +1006,7 @@ start_explicit_completion (GtkFileChooserEntry *chooser_entry)
       printf ("We don't have a current_folder_path - means the user typed something bogus\n");
 
       beep (chooser_entry);
+      pop_up_completion_feedback (chooser_entry, _("Invalid path"));
       /* FIXME: present a tooltip to tell the user that his folder is invalid */
 
       chooser_entry->load_complete_action = LOAD_COMPLETE_NOTHING;
@@ -1022,7 +1024,7 @@ start_explicit_completion (GtkFileChooserEntry *chooser_entry)
       printf ("File folder is not yet loaded; will do explicit completion later\n");
       chooser_entry->load_complete_action = LOAD_COMPLETE_EXPLICIT_COMPLETION;
 
-      /* FIXME: here, Emacs would say, "Making completion list..." */
+      pop_up_completion_feedback (chooser_entry, _("Completing..."));
     }
 }
 
