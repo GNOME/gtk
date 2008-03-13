@@ -809,6 +809,8 @@ load_current_folder (GtkFileChooserEntry *chooser_entry)
   g_assert (chooser_entry->completion_store == NULL);
   g_assert (chooser_entry->load_folder_handle == NULL);
 
+  printf ("Starting async load of folder %s\n", (char *) chooser_entry->current_folder_path);
+
   chooser_entry->load_folder_handle =
     gtk_file_system_get_folder (chooser_entry->file_system,
 			        chooser_entry->current_folder_path,
@@ -843,6 +845,7 @@ reload_current_folder (GtkFileChooserEntry *chooser_entry,
 
 	      if (chooser_entry->load_folder_handle)
 		{
+		  printf ("Cancelling folder load\n");
 		  gtk_file_system_cancel_operation (chooser_entry->load_folder_handle);
 		  chooser_entry->load_folder_handle = NULL;
 		}
@@ -906,6 +909,12 @@ refresh_current_folder_and_file_part (GtkFileChooserEntry *chooser_entry)
 	file_part_pos = 0;
     }
 
+  printf ("Parsed text \"%s\", file_part=\"%s\", file_part_pos=%d, folder_path=\"%s\"\n",
+	  text_up_to_cursor,
+	  file_part,
+	  file_part_pos,
+	  folder_path ? (char *) folder_path : "(NULL)");
+
   g_free (text_up_to_cursor);
 
   g_free (chooser_entry->file_part);
@@ -923,12 +932,16 @@ autocomplete (GtkFileChooserEntry *chooser_entry)
   g_assert (chooser_entry->current_folder != NULL);
   g_assert (gtk_file_folder_is_finished_loading (chooser_entry->current_folder));
 
+  printf ("Doing autocompletion since our folder is finished loading\n");
+
   /* FIXME */
 }
 
 static void
 start_autocompletion (GtkFileChooserEntry *chooser_entry)
 {
+  printf ("Starting autocompletion\n");
+
   refresh_current_folder_and_file_part (chooser_entry);
 
   if (!chooser_entry->current_folder)
@@ -936,13 +949,20 @@ start_autocompletion (GtkFileChooserEntry *chooser_entry)
       /* We don't beep or anything, since this is autocompletion - the user
        * didn't request any action explicitly.
        */
+      printf ("No current_folder; not doing autocompletion after all\n");
       return;
     }
 
   if (gtk_file_folder_is_finished_loading (chooser_entry->current_folder))
-    autocomplete (chooser_entry);
+    {
+      printf ("File folder is finished loading; doing autocompletion immediately\n");
+      autocomplete (chooser_entry);
+    }
   else
-    chooser_entry->load_complete_action = LOAD_COMPLETE_AUTOCOMPLETE;
+    {
+      printf ("File folder is not yet loaded; will do autocompletion later\n");
+      chooser_entry->load_complete_action = LOAD_COMPLETE_AUTOCOMPLETE;
+    }
 }
 
 static gboolean
