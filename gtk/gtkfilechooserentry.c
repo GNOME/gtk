@@ -483,11 +483,6 @@ find_common_prefix (GtkFileChooserEntry *chooser_entry,
 				  &parsed_file_part,
 				  error);
 
-  printf ("Text up to cursor: \"%s\"\n", text_up_to_cursor);
-  printf ("parsed_folder_path: \"%s\"\nparsed_file_part: \"%s\"\n",
-	  parsed_folder_path ? (char *) parsed_folder_path : "<NONE>",
-	  parsed_file_part ? parsed_file_part : "<NONE>");
-
   g_free (text_up_to_cursor);
 
   if (!parsed)
@@ -649,15 +644,11 @@ append_common_prefix (GtkFileChooserEntry *chooser_entry,
 	}
     }
 
-  printf ("common prefix: \"%s\"\n",
-	  common_prefix ? common_prefix : "<NONE>");
-
   if (common_prefix)
     {
       gint cursor_pos;
       gint common_prefix_len;
       gint pos;
-      char *tmp;
 
       cursor_pos = gtk_editable_get_position (GTK_EDITABLE (chooser_entry));
       common_prefix_len = g_utf8_strlen (common_prefix, -1);
@@ -667,14 +658,8 @@ append_common_prefix (GtkFileChooserEntry *chooser_entry,
       if (prefix_expands_the_file_part)
 	{
 	  chooser_entry->in_change = TRUE;
-
-	  tmp = gtk_editable_get_chars (GTK_EDITABLE (chooser_entry), pos, cursor_pos);
-	  printf ("Deleting range (%d, %d): \"%s\"\n", pos, cursor_pos, tmp);
-	  g_free (tmp);
 	  gtk_editable_delete_text (GTK_EDITABLE (chooser_entry),
 				    pos, cursor_pos);
-
-	  printf ("Inserting common prefix at %d: \"%s\"\n", pos, common_prefix);
 	  gtk_editable_insert_text (GTK_EDITABLE (chooser_entry),
 				    common_prefix, -1, 
 				    &pos);
@@ -682,10 +667,9 @@ append_common_prefix (GtkFileChooserEntry *chooser_entry,
 
 	  if (highlight)
 	    {
-	      printf ("Selecting range (%d, %d)\n", cursor_pos, pos);
 	      gtk_editable_select_region (GTK_EDITABLE (chooser_entry),
 					  cursor_pos,
-					  pos); /* cursor_pos + common_prefix_len); */
+					  pos); /* equivalent to cursor_pos + common_prefix_len); */
 	      chooser_entry->has_completion = TRUE;
 	    }
 	  else
@@ -923,8 +907,6 @@ show_completion_feedback_window (GtkFileChooserEntry *chooser_entry)
   feedback_x = entry_x + cursor_x + 2; /* FIXME: fit to the screen if we bump on the screen's edge */
   feedback_y = entry_y + (entry_allocation->height - feedback_req.height) / 2;
 
-  printf ("showing completion feedback window at (%d, %d)\n", feedback_x, feedback_y);
-
   gtk_window_move (GTK_WINDOW (chooser_entry->completion_feedback_window), feedback_x, feedback_y);
   gtk_widget_show (chooser_entry->completion_feedback_window);
 
@@ -941,7 +923,6 @@ pop_up_completion_feedback (GtkFileChooserEntry *chooser_entry,
   gtk_label_set_text (GTK_LABEL (chooser_entry->completion_feedback_label), feedback);
 
   show_completion_feedback_window (chooser_entry);
-  printf ("COMPLETION: %s\n", feedback);
 }
 
 static void
@@ -989,19 +970,16 @@ explicitly_complete (GtkFileChooserEntry *chooser_entry)
       break;
 
     case NOTHING_INSERTED_COMPLETE:
-      printf ("nothing inserted\n");
       /* FIXME: pop up the suggestion window or scroll it */
       break;
 
     case COMPLETED:
-      printf ("completed\n");
       /* Nothing to do */
       break;
 
     case COMPLETED_UNIQUE:
-      printf ("completed a unique match\n");
+      pop_up_completion_feedback (chooser_entry, _("Sole completion"));
       /* FIXME: if the user keeps hitting Tab after completing a unique match, present feedback with "Sole completion") */
-      /* Nothing to do */
       break;
 
     case COMPLETE_BUT_NOT_UNIQUE:
@@ -1024,15 +1002,11 @@ explicitly_complete (GtkFileChooserEntry *chooser_entry)
 static void
 start_explicit_completion (GtkFileChooserEntry *chooser_entry)
 {
-  printf ("Starting explicit completion - refreshing current folder\n");
-
   refresh_current_folder_and_file_part (chooser_entry, REFRESH_UP_TO_CURSOR_POSITION);
 
   if (!chooser_entry->current_folder_path)
     {
       /* Here, no folder path means we couldn't parse what the user typed. */
-
-      printf ("We don't have a current_folder_path - means the user typed something bogus\n");
 
       beep (chooser_entry);
       pop_up_completion_feedback (chooser_entry, _("Invalid path"));
@@ -1045,12 +1019,10 @@ start_explicit_completion (GtkFileChooserEntry *chooser_entry)
   if (chooser_entry->current_folder
       && gtk_file_folder_is_finished_loading (chooser_entry->current_folder))
     {
-      printf ("File folder is finished loading, doing explicit completion immediately\n");
       explicitly_complete (chooser_entry);
     }
   else
     {
-      printf ("File folder is not yet loaded; will do explicit completion later\n");
       chooser_entry->load_complete_action = LOAD_COMPLETE_EXPLICIT_COMPLETION;
 
       pop_up_completion_feedback (chooser_entry, _("Completing..."));
@@ -1089,17 +1061,9 @@ gtk_file_chooser_entry_focus (GtkWidget        *widget,
       (! control_pressed))
     {
       if (chooser_entry->has_completion)
-	{
-	  printf ("Hit Tab, and we have a completion!  Will unselect it\n");
-
-	  gtk_editable_set_position (editable, entry->text_length);
-	}
+	gtk_editable_set_position (editable, entry->text_length);
       else
-	{
-	  printf ("Hit Tab, we don't have a selected completion.  Will start explicit completion\n");
-
-	  start_explicit_completion (chooser_entry);
-	}
+	start_explicit_completion (chooser_entry);
 
       return TRUE;
     }
@@ -1152,12 +1116,10 @@ populate_completion_store (GtkFileChooserEntry *chooser_entry)
   GSList *paths;
   GSList *tmp_list;
 
-  printf ("Populating completion store\n");
+  discard_completion_store (chooser_entry);
 
   if (!gtk_file_folder_list_children (chooser_entry->current_folder, &paths, NULL)) /* NULL-GError */
     return;
-
-  discard_completion_store (chooser_entry);
 
   chooser_entry->completion_store = gtk_list_store_new (N_COLUMNS,
 							G_TYPE_STRING,
@@ -1212,12 +1174,10 @@ perform_load_complete_action (GtkFileChooserEntry *chooser_entry)
       break;
 
     case LOAD_COMPLETE_AUTOCOMPLETE:
-      printf ("Load is complete; will autocomplete immediately\n");
       autocomplete (chooser_entry);
       break;
 
     case LOAD_COMPLETE_EXPLICIT_COMPLETION:
-      printf ("Load is  complete; will do explicit completion\n");
       explicitly_complete (chooser_entry);
       break;
 
@@ -1243,8 +1203,6 @@ finished_loading_cb (GtkFileFolder *folder,
 		     gpointer       data)
 {
   GtkFileChooserEntry *chooser_entry = GTK_FILE_CHOOSER_ENTRY (data);
-
-  printf ("Folder finished loading asynchronously!  Will populate the completion store\n");
 
   finish_folder_load (chooser_entry);
 }
@@ -1290,21 +1248,13 @@ load_directory_get_folder_callback (GtkFileSystemHandle *handle,
   g_assert (folder != NULL);
   chooser_entry->current_folder = folder;
 
-  printf ("Got folder asynchronously!\n");
-
   discard_completion_store (chooser_entry);
 
   if (gtk_file_folder_is_finished_loading (chooser_entry->current_folder))
-    {
-      printf ("And the folder is already finished loading.  Will populate the completion store.\n");
-      finish_folder_load (chooser_entry);
-    }
+    finish_folder_load (chooser_entry);
   else
-    {
-      printf ("Folder is not yet completely loaded.  Will load it asynchronously...\n");
-      g_signal_connect (chooser_entry->current_folder, "finished-loading",
-			G_CALLBACK (finished_loading_cb), chooser_entry);
-    }
+    g_signal_connect (chooser_entry->current_folder, "finished-loading",
+		      G_CALLBACK (finished_loading_cb), chooser_entry);
 
 out:
   g_object_unref (chooser_entry);
@@ -1320,8 +1270,6 @@ start_loading_current_folder (GtkFileChooserEntry *chooser_entry)
 
   g_assert (chooser_entry->current_folder == NULL);
   g_assert (chooser_entry->load_folder_handle == NULL);
-
-  printf ("Starting async load of folder %s\n", (char *) chooser_entry->current_folder_path);
 
   chooser_entry->load_folder_handle =
     gtk_file_system_get_folder (chooser_entry->file_system,
@@ -1352,7 +1300,6 @@ reload_current_folder (GtkFileChooserEntry *chooser_entry,
 	    {
 	      if (chooser_entry->load_folder_handle)
 		{
-		  printf ("Cancelling folder load\n");
 		  gtk_file_system_cancel_operation (chooser_entry->load_folder_handle);
 		  chooser_entry->load_folder_handle = NULL;
 		}
@@ -1426,12 +1373,6 @@ refresh_current_folder_and_file_part (GtkFileChooserEntry *chooser_entry,
 	file_part_pos = 0;
     }
 
-  printf ("Parsed text \"%s\", file_part=\"%s\", file_part_pos=%d, folder_path=\"%s\"\n",
-	  text,
-	  file_part,
-	  file_part_pos,
-	  folder_path ? (char *) folder_path : "(NULL)");
-
   g_free (text);
 
   g_free (chooser_entry->file_part);
@@ -1450,16 +1391,12 @@ autocomplete (GtkFileChooserEntry *chooser_entry)
   g_assert (gtk_file_folder_is_finished_loading (chooser_entry->current_folder));
   g_assert (gtk_editable_get_position (GTK_EDITABLE (chooser_entry)) == GTK_ENTRY (chooser_entry)->text_length);
 
-  printf ("Doing autocompletion since our folder is finished loading\n");
-
   append_common_prefix (chooser_entry, TRUE, FALSE);
 }
 
 static void
 start_autocompletion (GtkFileChooserEntry *chooser_entry)
 {
-  printf ("Starting autocompletion\n");
-
   refresh_current_folder_and_file_part (chooser_entry, REFRESH_UP_TO_CURSOR_POSITION);
 
   if (!chooser_entry->current_folder)
@@ -1467,20 +1404,13 @@ start_autocompletion (GtkFileChooserEntry *chooser_entry)
       /* We don't beep or anything, since this is autocompletion - the user
        * didn't request any action explicitly.
        */
-      printf ("No current_folder; not doing autocompletion after all\n");
       return;
     }
 
   if (gtk_file_folder_is_finished_loading (chooser_entry->current_folder))
-    {
-      printf ("File folder is finished loading; doing autocompletion immediately\n");
-      autocomplete (chooser_entry);
-    }
+    autocomplete (chooser_entry);
   else
-    {
-      printf ("File folder is not yet loaded; will do autocompletion later\n");
-      chooser_entry->load_complete_action = LOAD_COMPLETE_AUTOCOMPLETE;
-    }
+    chooser_entry->load_complete_action = LOAD_COMPLETE_AUTOCOMPLETE;
 }
 
 static gboolean
