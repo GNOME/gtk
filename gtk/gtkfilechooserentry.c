@@ -92,6 +92,7 @@ static void     gtk_file_chooser_entry_iface_init     (GtkEditableClass *iface);
 static void     gtk_file_chooser_entry_finalize       (GObject          *object);
 static void     gtk_file_chooser_entry_dispose        (GObject          *object);
 static void     gtk_file_chooser_entry_grab_focus     (GtkWidget        *widget);
+static void     gtk_file_chooser_entry_unmap          (GtkWidget        *widget);
 static gboolean gtk_file_chooser_entry_focus          (GtkWidget        *widget,
 						       GtkDirectionType  direction);
 static gboolean gtk_file_chooser_entry_focus_out_event (GtkWidget       *widget,
@@ -164,6 +165,7 @@ _gtk_file_chooser_entry_class_init (GtkFileChooserEntryClass *class)
   gobject_class->dispose = gtk_file_chooser_entry_dispose;
 
   widget_class->grab_focus = gtk_file_chooser_entry_grab_focus;
+  widget_class->unmap = gtk_file_chooser_entry_unmap;
   widget_class->focus = gtk_file_chooser_entry_focus;
   widget_class->focus_out_event = gtk_file_chooser_entry_focus_out_event;
 
@@ -234,6 +236,8 @@ static void
 gtk_file_chooser_entry_dispose (GObject *object)
 {
   GtkFileChooserEntry *chooser_entry = GTK_FILE_CHOOSER_ENTRY (object);
+
+  remove_completion_feedback (chooser_entry);
 
   if (chooser_entry->start_autocompletion_idle_id != 0)
     {
@@ -760,6 +764,16 @@ gtk_file_chooser_entry_grab_focus (GtkWidget *widget)
   _gtk_file_chooser_entry_select_filename (GTK_FILE_CHOOSER_ENTRY (widget));
 }
 
+static void
+gtk_file_chooser_entry_unmap (GtkWidget *widget)
+{
+  GtkFileChooserEntry *chooser_entry = GTK_FILE_CHOOSER_ENTRY (widget);
+
+  remove_completion_feedback (chooser_entry);
+
+  GTK_WIDGET_CLASS (_gtk_file_chooser_entry_parent_class)->unmap (widget);
+}
+
 static gboolean
 completion_feedback_window_expose_event_cb (GtkWidget      *widget,
 					    GdkEventExpose *event,
@@ -859,9 +873,13 @@ pop_up_completion_feedback (GtkFileChooserEntry *chooser_entry,
 static void
 remove_completion_feedback (GtkFileChooserEntry *chooser_entry)
 {
-  /* FIXME */
+  if (chooser_entry->completion_feedback_window)
+    gtk_widget_destroy (chooser_entry->completion_feedback_window);
+
   chooser_entry->completion_feedback_window = NULL;
   chooser_entry->completion_feedback_label = NULL;
+
+  /* FIXME: remove timer */
 }
 
 static void
