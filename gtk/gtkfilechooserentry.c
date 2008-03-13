@@ -558,8 +558,9 @@ check_completion_callback (GtkFileChooserEntry *chooser_entry)
    * the "open" modes.  For "save" modes, the user must hit Tab to cause the prefix
    * to be inserted.  That happens in gtk_file_chooser_entry_focus().
    */
-  if (chooser_entry->action == GTK_FILE_CHOOSER_ACTION_OPEN
-      || chooser_entry->action == GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER)
+  if ((chooser_entry->action == GTK_FILE_CHOOSER_ACTION_OPEN
+       || chooser_entry->action == GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER)
+      && gtk_editable_get_position (GTK_EDITABLE (chooser_entry)) == GTK_ENTRY (chooser_entry)->text_length)
     append_common_prefix (chooser_entry, TRUE);
 
  done:
