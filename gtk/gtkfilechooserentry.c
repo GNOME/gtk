@@ -44,7 +44,7 @@ struct _GtkFileChooserEntryClass
 typedef enum {
   LOAD_COMPLETE_NOTHING,
   LOAD_COMPLETE_AUTOCOMPLETE,
-  LOAD_COMPLETE_INSERT_PREFIX
+  LOAD_COMPLETE_EXPLICIT_COMPLETION
 } LoadCompleteAction;
 
 struct _GtkFileChooserEntry
@@ -128,6 +128,7 @@ static char    *maybe_append_separator_to_path (GtkFileChooserEntry *chooser_ent
 						GtkFilePath         *path,
 						gchar               *display_name);
 
+static void refresh_current_folder_and_file_part (GtkFileChooserEntry *chooser_entry);
 static void finished_loading_cb (GtkFileFolder *folder,
 				 gpointer       data);
 static void autocomplete (GtkFileChooserEntry *chooser_entry);
@@ -448,15 +449,6 @@ find_common_prefix (GtkFileChooserEntry *chooser_entry,
 	  parsed_folder_path ? (char *) parsed_folder_path : "<NONE>",
 	  parsed_file_part ? parsed_file_part : "<NONE>");
 
-  /* FIXME: the old check_completion_callback() did this:
-
-     if (strcmp (chooser_entry->file_part, "") == 0)
-       goto done;
-
-       Don't do completion if the file part is empty!
-  */
-     
-
   g_free (text_up_to_cursor);
 
   if (!parsed)
@@ -652,6 +644,63 @@ gtk_file_chooser_entry_grab_focus (GtkWidget *widget)
   _gtk_file_chooser_entry_select_filename (GTK_FILE_CHOOSER_ENTRY (widget));
 }
 
+static void
+explicitly_complete (GtkFileChooserEntry *chooser_entry)
+{
+  g_assert (chooser_entry->current_folder != NULL);
+  g_assert (gtk_file_folder_is_finished_loading (chooser_entry->current_folder));
+
+  /* FIXME: see what Emacs does in case there is no common prefix, or there is more than one match:
+   *
+   * - If there is a common prefix, insert it
+   * - If there is no common prefix, pop up the suggestion window
+   * - If there are no matches at all, beep and bring up a tooltip
+   * - If the suggestion window is already up, scroll it
+   */
+  append_common_prefix (chooser_entry, FALSE);
+
+  /* FIXME: this bit of code is commented out for reference; this is how we used to force the suggestion window to pop up
+   *
+   * Trigger the completion window to pop up again by a 
+   * zero-length insertion, a bit of a hack.
+   *
+   * gtk_editable_insert_text (editable, "", -1, &pos);
+   */
+}
+
+static void
+start_explicit_completion (GtkFileChooserEntry *chooser_entry)
+{
+  printf ("Starting explicit completion - refreshing current folder\n");
+
+  refresh_current_folder_and_file_part (chooser_entry);
+
+  if (!chooser_entry->current_folder_path)
+    {
+      /* Here, no folder path means we couldn't parse what the user typed. */
+
+      printf ("We don't have a current_folder_path - means the user typed something bogus\n");
+
+      gdk_display_beep (gtk_widget_get_display (GTK_WIDGET (chooser_entry)));
+      /* FIXME: present a tooltip to tell the user that his folder is invalid */
+
+      chooser_entry->load_complete_action = LOAD_COMPLETE_NOTHING;
+      return;
+    }
+
+  if (chooser_entry->current_folder
+      && gtk_file_folder_is_finished_loading (chooser_entry->current_folder))
+    {
+      printf ("File folder is finished loading, doing explicit completion immediately\n");
+      explicitly_complete (chooser_entry);
+    }
+  else
+    {
+      printf ("File folder is not yet loaded; will do explicit completion later\n");
+      chooser_entry->load_complete_action = LOAD_COMPLETE_EXPLICIT_COMPLETION;
+    }
+}
+
 static gboolean
 gtk_file_chooser_entry_focus (GtkWidget        *widget,
 			      GtkDirectionType  direction)
@@ -690,6 +739,8 @@ gtk_file_chooser_entry_focus (GtkWidget        *widget,
 	  gboolean has_selection;
 	  gint sel_end;
 
+	  printf ("Hit Tab, and we have a completion!  Will unselect it\n");
+
 	  has_selection = gtk_editable_get_selection_bounds (editable, NULL, &sel_end);
 	  g_assert (has_selection && sel_end == GTK_ENTRY (entry)->text_length);
 
@@ -697,16 +748,10 @@ gtk_file_chooser_entry_focus (GtkWidget        *widget,
 	}
       else
 	{
-	  /* FIXME: append the common prefix, *or* pop up the suggestion window if there is no prefix */
-	  append_common_prefix (chooser_entry, FALSE);
-	}
+	  printf ("Hit Tab, we don't have a selected completion.  Will start explicit completion\n");
 
-      /* Trigger the completion window to pop up again by a 
-       * zero-length insertion, a bit of a hack.
-       *
-       * FIXME: this should be removed here, as it is contemplated by the case above.
-       */
-      gtk_editable_insert_text (editable, "", -1, &pos);
+	  start_explicit_completion (chooser_entry);
+	}
 
       return TRUE;
     }
@@ -821,8 +866,9 @@ perform_load_complete_action (GtkFileChooserEntry *chooser_entry)
       autocomplete (chooser_entry);
       break;
 
-    case LOAD_COMPLETE_INSERT_PREFIX:
-      /* FIXME */
+    case LOAD_COMPLETE_EXPLICIT_COMPLETION:
+      printf ("Load is  complete; will do explicit completion\n");
+      explicitly_complete (chooser_entry);
       break;
 
     default:
@@ -1069,27 +1115,6 @@ install_start_autocompletion_idle (GtkFileChooserEntry *chooser_entry)
   chooser_entry->start_autocompletion_idle_id = g_idle_add (start_autocompletion_idle_handler, chooser_entry);
 }
 
-#if 0
-/* FIXME: what does has_completion mean?   After you figure that out and fix it, remove this unused function. */
-static void
-clear_completion_callback (GtkFileChooserEntry *chooser_entry,
-			   GParamSpec          *pspec)
-{
-  /* FIXME: this was in the constructor for the chooser entry.  In those vmethods, we have to clear has_completion or something.
-  g_signal_connect (chooser_entry, "notify::cursor-position",
-		    G_CALLBACK (clear_completion_callback), NULL);
-  g_signal_connect (chooser_entry, "notify::selection-bound",
-		    G_CALLBACK (clear_completion_callback), NULL);
-  */
-  if (chooser_entry->has_completion)
-    {
-      chooser_entry->has_completion = FALSE;
-      gtk_file_chooser_entry_changed (GTK_EDITABLE (chooser_entry));
-
-    }
-}
-#endif
-
 #ifdef G_OS_WIN32
 static gint
 insert_text_callback (GtkFileChooserEntry *chooser_entry,
@@ -1215,9 +1240,7 @@ _gtk_file_chooser_entry_set_base_folder (GtkFileChooserEntry *chooser_entry,
 
   chooser_entry->base_folder = gtk_file_path_copy (path);
 
-  /* FIXME: the base folder changes.  Do we need to restart completion or something, to reload the folder if needed?
-  gtk_file_chooser_entry_changed (GTK_EDITABLE (chooser_entry));
-  */
+  clear_completions (chooser_entry);
   _gtk_file_chooser_entry_select_filename (chooser_entry);
 }
 
@@ -1284,6 +1307,7 @@ _gtk_file_chooser_entry_set_file_part (GtkFileChooserEntry *chooser_entry,
   g_return_if_fail (GTK_IS_FILE_CHOOSER_ENTRY (chooser_entry));
 
   chooser_entry->in_change = TRUE;
+  clear_completions (chooser_entry);
   gtk_entry_set_text (GTK_ENTRY (chooser_entry), file_part);
   chooser_entry->in_change = FALSE;
 }
