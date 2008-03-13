@@ -972,6 +972,7 @@ explicitly_complete (GtkFileChooserEntry *chooser_entry)
       break;
 
     case COMPLETED_UNIQUE:
+      /* FIXME: if the user keeps hitting Tab after completing a unique match, present feedback with "Sole completion") */
       /* Nothing to do */
       break;
 
