@@ -536,6 +536,8 @@ append_common_prefix (GtkFileChooserEntry *chooser_entry,
 					  chooser_entry->file_part_pos + common_prefix_len);
 	      chooser_entry->has_completion = TRUE;
 	    }
+	  else
+	    gtk_editable_set_position (GTK_EDITABLE (chooser_entry), GTK_ENTRY (chooser_entry)->text_length);
 	}
 
       g_free (common_prefix);
@@ -785,8 +787,6 @@ gtk_file_chooser_entry_focus (GtkWidget        *widget,
 
       if (!chooser_entry->has_completion)
 	append_common_prefix (chooser_entry, FALSE);
-
-      gtk_editable_set_position (editable, entry->text_length);
 
       /* Trigger the completion window to pop up again by a 
        * zero-length insertion, a bit of a hack.
