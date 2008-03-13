@@ -1,3 +1,41 @@
+2008-03-12  Federico Mena Quintero  <federico@novell.com>
+
+	Rework the way completion works in GtkFileChooserEntry.  Fixes
+	http://bugzilla.gnome.org/attachment.cgi?bugid=314873 - 
+	Tab completion should work even if the cursor is not at the end of
+	the entry.
+
+	* gtk/gtkfilechooserentry.c: Change the strategy by which we do
+	completion.
+
+	We distinguish between two cases:
+
+		- autocompletion - happens only in the Open modes by
+		  inserting and selecting the common prefix as you type.
+
+		- explicit completion - happens when you hit Tab.
+
+	When some type of completion needs to happen, the entry first
+	parses its input and sees if it needs to initiate a folder load.
+	Completion will not happen until the folder finishes loading.
+
+	If the folder is already completely loaded, then completion is
+	performed immediately.  Otherwise, the entry queues a pending
+	completion and starts loading the new folder (or waits until the
+	current folder is completely loaded).
+
+	Tab completion is allowed to happen even if the cursor is not at
+	the end of the entry.
+
+	There is a new feedback mechanism for explicit completion, so that
+	you will get an Emacs-like tip whenever there are ambiguities in
+	completion, no matches, etc.  (This needs to be polished so that
+	we support RTL entries and all the fancy Pango layout in GtkEntry).
+
+	The only remaining thing to fix is the popup suggestion window.
+	Unfortunately, GtkEntryCompletion does not let us do what we want,
+	and will need further changes.
+
 2008-03-12  Tor Lillqvist  <tml@novell.com>
 
 	Bug 510000 - GtkStatusIcon doesn't reshow after explorer.exe crash
