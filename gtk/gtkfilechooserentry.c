@@ -68,6 +68,8 @@ struct _GtkFileChooserEntry
 
   GtkListStore *completion_store;
 
+  guint start_autocompletion_idle_id;
+
   guint has_completion : 1;
   guint in_change      : 1;
   guint eat_tabs       : 1;
@@ -216,6 +218,12 @@ static void
 gtk_file_chooser_entry_dispose (GObject *object)
 {
   GtkFileChooserEntry *chooser_entry = GTK_FILE_CHOOSER_ENTRY (object);
+
+  if (chooser_entry->start_autocompletion_idle_id != 0)
+    {
+      g_source_remove (chooser_entry->start_autocompletion_idle_id);
+      chooser_entry->start_autocompletion_idle_id = 0;
+    }
 
   if (chooser_entry->completion_store)
     {
@@ -855,7 +863,10 @@ reload_current_folder (GtkFileChooserEntry *chooser_entry,
 	}
     }
   else
-    reload = TRUE;
+    {
+      chooser_entry->current_folder_path = gtk_file_path_copy (folder_path);
+      reload = TRUE;
+    }
 
   if (reload)
     load_current_folder (chooser_entry);
@@ -934,6 +945,34 @@ start_autocompletion (GtkFileChooserEntry *chooser_entry)
     chooser_entry->load_complete_action = LOAD_COMPLETE_AUTOCOMPLETE;
 }
 
+static gboolean
+start_autocompletion_idle_handler (gpointer data)
+{
+  GtkFileChooserEntry *chooser_entry;
+
+  chooser_entry = GTK_FILE_CHOOSER_ENTRY (data);
+
+  if (gtk_editable_get_position (GTK_EDITABLE (chooser_entry)) == GTK_ENTRY (chooser_entry)->text_length)
+    start_autocompletion (chooser_entry);
+
+  chooser_entry->start_autocompletion_idle_id = 0;
+
+  return FALSE;
+}
+
+static void
+install_start_autocompletion_idle (GtkFileChooserEntry *chooser_entry)
+{
+  /* We set up an idle handler because we must test the cursor position.  However,
+   * the cursor is not updated in GtkEntry::changed, so we wait for the idle loop.
+   */
+
+  if (chooser_entry->start_autocompletion_idle_id != 0)
+    return;
+
+  chooser_entry->start_autocompletion_idle_id = g_idle_add (start_autocompletion_idle_handler, chooser_entry);
+}
+
 static void
 gtk_file_chooser_entry_changed (GtkEditable *editable)
 {
@@ -945,12 +984,13 @@ gtk_file_chooser_entry_changed (GtkEditable *editable)
   chooser_entry->load_complete_action = LOAD_COMPLETE_NOTHING;
 
   if ((chooser_entry->action == GTK_FILE_CHOOSER_ACTION_OPEN
-       || chooser_entry->action == GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER)
-      && gtk_editable_get_position (GTK_EDITABLE (chooser_entry)) == GTK_ENTRY (chooser_entry)->text_length)
-    start_autocompletion (chooser_entry);
+       || chooser_entry->action == GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER))
+    install_start_autocompletion_idle (chooser_entry);
 
-  /* FIXME: see when the cursor changes (see GtkEditable::set_position and GtkEntry::move_cursor).
+  /* FIXME: see when the cursor changes (see GtkEntry's cursor_position property, or GtkEditable::set_position and GtkEntry::move_cursor).
    * When the cursor changes, cancel the load_complete_action.
+   * When the entry is activated, cancel the load_complete_action.
+   * In general, cancel the load_complete_action when the entry loses the focus.
    */
 }
 
