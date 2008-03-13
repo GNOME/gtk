@@ -477,6 +477,10 @@ find_common_prefix (GtkFileChooserEntry *chooser_entry,
 	    && chooser_entry->current_folder_path != NULL
 	    && gtk_file_path_compare (parsed_folder_path, chooser_entry->current_folder_path) == 0);
 
+  gtk_file_path_free (parsed_folder_path);
+
+  /* First pass: find the common prefix */
+
   valid = gtk_tree_model_get_iter_first (GTK_TREE_MODEL (chooser_entry->completion_store), &iter);
 
   while (valid)
@@ -501,15 +505,12 @@ find_common_prefix (GtkFileChooserEntry *chooser_entry,
 	    {
 	      gchar *p = *common_prefix_ret;
 	      const gchar *q = display_name;
-		  
+
 	      while (*p && *p == *q)
 		{
 		  p++;
 		  q++;
 		}
-
-	      if (*p == '\0' || *q == '\0')
-		*is_complete_not_unique_ret = TRUE;
 
 	      *p = '\0';
 
@@ -523,7 +524,35 @@ find_common_prefix (GtkFileChooserEntry *chooser_entry,
       valid = gtk_tree_model_iter_next (GTK_TREE_MODEL (chooser_entry->completion_store), &iter);
     }
 
-  gtk_file_path_free (parsed_folder_path);
+  /* Second pass: see if the prefix we found is a complete match */
+
+  if (*common_prefix_ret != NULL)
+    {
+      valid = gtk_tree_model_get_iter_first (GTK_TREE_MODEL (chooser_entry->completion_store), &iter);
+
+      while (valid)
+	{
+	  gchar *display_name;
+	  int len;
+
+	  gtk_tree_model_get (GTK_TREE_MODEL (chooser_entry->completion_store),
+			      &iter,
+			      DISPLAY_NAME_COLUMN, &display_name,
+			      -1);
+	  len = strlen (display_name);
+	  g_assert (len > 0);
+
+	  if (G_IS_DIR_SEPARATOR (display_name[len - 1]))
+	    len--;
+
+	  if (strncmp (*common_prefix_ret, display_name, len) == 0)
+	    *is_complete_not_unique_ret = TRUE;
+
+	  g_free (display_name);
+	  valid = gtk_tree_model_iter_next (GTK_TREE_MODEL (chooser_entry->completion_store), &iter);
+	}
+    }
+
   g_free (parsed_file_part);
 
   return TRUE;
