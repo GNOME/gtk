@@ -747,8 +747,13 @@ populate_completion_store (GtkFileChooserEntry *chooser_entry)
   GSList *paths;
   GSList *tmp_list;
 
+  printf ("Populating completion store\n");
+
   if (!gtk_file_folder_list_children (chooser_entry->current_folder, &paths, NULL)) /* NULL-GError */
-    return;
+    {
+      printf ("No children in the folder!  Leaving an empty completion store.\n");
+      return;
+    }
 
   discard_completion_store (chooser_entry);
 
@@ -778,6 +783,8 @@ populate_completion_store (GtkFileChooserEntry *chooser_entry)
 			      DISPLAY_NAME_COLUMN, display_name,
 			      PATH_COLUMN, path,
 			      -1);
+
+	  printf ("Completion store += \"%s\"\n", display_name);
 
 	  gtk_file_info_free (info);
           g_free (display_name);
