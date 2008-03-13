@@ -783,8 +783,7 @@ gtk_file_chooser_entry_focus (GtkWidget        *widget,
     {
       gint pos = 0;
 
-      if (!chooser_entry->has_completion
-	  && gtk_editable_get_position (editable) == entry->text_length)
+      if (!chooser_entry->has_completion)
 	append_common_prefix (chooser_entry, FALSE);
 
       gtk_editable_set_position (editable, entry->text_length);
