@@ -684,10 +684,15 @@ gtk_file_chooser_entry_focus (GtkWidget        *widget,
 	    gtk_editable_set_position (editable, sel_end);
 	}
       else
-	append_common_prefix (chooser_entry, FALSE);
+	{
+	  /* FIXME: append the common prefix, *or* pop up the suggestion window if there is no prefix */
+	  append_common_prefix (chooser_entry, FALSE);
+	}
 
       /* Trigger the completion window to pop up again by a 
        * zero-length insertion, a bit of a hack.
+       *
+       * FIXME: this should be removed here, as it is contemplated by the case above.
        */
       gtk_editable_insert_text (editable, "", -1, &pos);
 
