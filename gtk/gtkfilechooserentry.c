@@ -449,6 +449,11 @@ find_common_prefix (GtkFileChooserEntry *chooser_entry,
 				  &parsed_file_part,
 				  NULL); /* NULL-GError */
 
+  printf ("Text up to cursor: \"%s\"\n", text_up_to_cursor);
+  printf ("parsed_folder_path: \"%s\"\nparsed_file_part: \"%s\"\n",
+	  parsed_folder_path ? (char *) parsed_folder_path : "<NONE>",
+	  parsed_file_part ? parsed_file_part : "<NONE>");
+
   g_free (text_up_to_cursor);
 
   if (!parsed)
