@@ -385,6 +385,12 @@ clear_completions (GtkFileChooserEntry *chooser_entry)
   chooser_entry->load_complete_action = LOAD_COMPLETE_NOTHING;
 }
 
+static void
+beep (GtkFileChooserEntry *chooser_entry)
+{
+  gdk_display_beep (gtk_widget_get_display (GTK_WIDGET (chooser_entry)));
+}
+
 /* This function will append a directory separator to paths to
  * display_name iff the path associated with it is a directory.
  * maybe_append_separator_to_path will g_free the display_name and
@@ -427,10 +433,11 @@ maybe_append_separator_to_path (GtkFileChooserEntry *chooser_entry,
  * to the current contents of the entry.  Also, if there's one and only one such
  * path, stores it in unique_path_ret.
  */
-static void
+static gboolean
 find_common_prefix (GtkFileChooserEntry *chooser_entry,
 		    gchar               **common_prefix_ret,
-		    GtkFilePath         **unique_path_ret)
+		    GtkFilePath         **unique_path_ret,
+		    GError              **error)
 {
   GtkEditable *editable;
   GtkTreeIter iter;
@@ -455,7 +462,7 @@ find_common_prefix (GtkFileChooserEntry *chooser_entry,
 				  text_up_to_cursor,
 				  &parsed_folder_path,
 				  &parsed_file_part,
-				  NULL); /* NULL-GError */
+				  error);
 
   printf ("Text up to cursor: \"%s\"\n", text_up_to_cursor);
   printf ("parsed_folder_path: \"%s\"\nparsed_file_part: \"%s\"\n",
@@ -465,7 +472,7 @@ find_common_prefix (GtkFileChooserEntry *chooser_entry,
   g_free (text_up_to_cursor);
 
   if (!parsed)
-    return;
+    return FALSE;
 
   g_assert (parsed_folder_path != NULL
 	    && chooser_entry->current_folder_path != NULL
@@ -516,19 +523,46 @@ find_common_prefix (GtkFileChooserEntry *chooser_entry,
 
   gtk_file_path_free (parsed_folder_path);
   g_free (parsed_file_part);
+
+  return TRUE;
 }
 
+typedef enum {
+  PREFIX_APPENDED,
+  UNIQUE_PREFIX_APPENDED,
+  INVALID_INPUT,
+  NO_COMMON_PREFIX
+} CommonPrefixResult;
+
 /* Finds a common prefix based on the contents of the entry and mandatorily appends it */
-static void
+static CommonPrefixResult
 append_common_prefix (GtkFileChooserEntry *chooser_entry,
-		      gboolean             highlight)
+		      gboolean             highlight,
+		      gboolean             show_errors)
 {
   gchar *common_prefix;
   GtkFilePath *unique_path;
+  GError *error;
+  CommonPrefixResult result;
+  gboolean have_result;
 
   clear_completions (chooser_entry);
 
-  find_common_prefix (chooser_entry, &common_prefix, &unique_path);
+  error = NULL;
+  if (!find_common_prefix (chooser_entry, &common_prefix, &unique_path, &error))
+    {
+      if (show_errors)
+	{
+	  beep (chooser_entry);
+	  /* FIXME: display the error somehow */
+	}
+
+      g_error_free (error);
+
+      return INVALID_INPUT;
+    }
+
+  have_result = FALSE;
 
   if (unique_path)
     {
@@ -536,6 +570,13 @@ append_common_prefix (GtkFileChooserEntry *chooser_entry,
 						      unique_path,
 						      common_prefix);
       gtk_file_path_free (unique_path);
+
+      if (common_prefix)
+	result = UNIQUE_PREFIX_APPENDED;
+      else
+	result = INVALID_INPUT;
+
+      have_result = TRUE;
     }
 
   printf ("common prefix: \"%s\"\n",
@@ -574,6 +615,18 @@ append_common_prefix (GtkFileChooserEntry *chooser_entry,
 	gtk_editable_set_position (GTK_EDITABLE (chooser_entry), pos);
 
       g_free (common_prefix);
+
+      if (have_result)
+	return result;
+      else
+	return PREFIX_APPENDED;
+    }
+  else
+    {
+      if (have_result)
+	return result;
+      else
+	return NO_COMMON_PREFIX;
     }
 }
 
@@ -655,6 +708,8 @@ gtk_file_chooser_entry_grab_focus (GtkWidget *widget)
 static void
 explicitly_complete (GtkFileChooserEntry *chooser_entry)
 {
+  CommonPrefixResult result;
+
   g_assert (chooser_entry->current_folder != NULL);
   g_assert (gtk_file_folder_is_finished_loading (chooser_entry->current_folder));
 
@@ -665,7 +720,27 @@ explicitly_complete (GtkFileChooserEntry *chooser_entry)
    * - If there are no matches at all, beep and bring up a tooltip
    * - If the suggestion window is already up, scroll it
    */
-  append_common_prefix (chooser_entry, FALSE);
+  result = append_common_prefix (chooser_entry, FALSE, TRUE);
+
+  switch (result)
+    {
+    case PREFIX_APPENDED:
+      break;
+
+    case UNIQUE_PREFIX_APPENDED:
+      break;
+
+    case INVALID_INPUT:
+      break;
+
+    case NO_COMMON_PREFIX:
+      /* FIXME: pop up the suggestion window */
+      /* FIXME: we need to distinguish between "no match" and "many matches" */
+      break;
+
+    default:
+      g_assert_not_reached ();
+    }
 
   /* FIXME: this bit of code is commented out for reference; this is how we used to force the suggestion window to pop up
    *
@@ -689,7 +764,7 @@ start_explicit_completion (GtkFileChooserEntry *chooser_entry)
 
       printf ("We don't have a current_folder_path - means the user typed something bogus\n");
 
-      gdk_display_beep (gtk_widget_get_display (GTK_WIDGET (chooser_entry)));
+      beep (chooser_entry);
       /* FIXME: present a tooltip to tell the user that his folder is invalid */
 
       chooser_entry->load_complete_action = LOAD_COMPLETE_NOTHING;
@@ -706,6 +781,8 @@ start_explicit_completion (GtkFileChooserEntry *chooser_entry)
     {
       printf ("File folder is not yet loaded; will do explicit completion later\n");
       chooser_entry->load_complete_action = LOAD_COMPLETE_EXPLICIT_COMPLETION;
+
+      /* FIXME: here, Emacs would say, "Making completion list..." */
     }
 }
 
@@ -891,6 +968,8 @@ finish_folder_load (GtkFileChooserEntry *chooser_entry)
 {
   populate_completion_store (chooser_entry);
   perform_load_complete_action (chooser_entry);
+
+  gtk_widget_set_tooltip_text (GTK_WIDGET (chooser_entry), NULL);
 }
 
 /* Callback when the current folder finishes loading */
@@ -923,6 +1002,8 @@ load_directory_get_folder_callback (GtkFileSystemHandle *handle,
   /* FIXME: if there was an error *AND* we had a pending explicit completion, beep and pop up a
    * tooltip to say that the folder could not be loaded.
    */
+
+  /* FIXME: if error, remove the current tooltip ("making completion list") */
 
   if (cancelled || error)
     goto out;
@@ -1092,7 +1173,7 @@ autocomplete (GtkFileChooserEntry *chooser_entry)
 
   printf ("Doing autocompletion since our folder is finished loading\n");
 
-  append_common_prefix (chooser_entry, TRUE);
+  append_common_prefix (chooser_entry, TRUE, FALSE);
 }
 
 static void
