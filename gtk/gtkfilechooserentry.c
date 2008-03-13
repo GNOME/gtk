@@ -48,12 +48,13 @@ struct _GtkFileChooserEntry
 
   GtkFileSystem *file_system;
   GtkFilePath *base_folder;
-  GtkFilePath *current_folder_path;
   gchar *file_part;
   gint file_part_pos;
   guint check_completion_idle;
   guint load_directory_idle;
 
+  /* Folder being loaded or already loaded */
+  GtkFilePath *current_folder_path;
   GtkFileFolder *current_folder;
   GtkFileSystemHandle *load_folder_handle;
 
@@ -874,7 +875,7 @@ static void
 gtk_file_chooser_entry_changed (GtkEditable *editable)
 {
   GtkFileChooserEntry *chooser_entry = GTK_FILE_CHOOSER_ENTRY (editable);
-  const gchar *text;
+  const gchar *text_up_to_cursor;
   GtkFilePath *folder_path;
   gchar *file_part;
   gsize total_len, file_part_len;
@@ -883,12 +884,12 @@ gtk_file_chooser_entry_changed (GtkEditable *editable)
   if (chooser_entry->in_change)
     return;
 
-  text = gtk_entry_get_text (GTK_ENTRY (editable));
+  text_up_to_cursor = gtk_editable_get_chars (editable, 0, gtk_editable_get_position (editable));
   
   if (!chooser_entry->file_system ||
       !chooser_entry->base_folder ||
       !gtk_file_system_parse (chooser_entry->file_system,
-			      chooser_entry->base_folder, text,
+			      chooser_entry->base_folder, text_up_to_cursor,
 			      &folder_path, &file_part, NULL)) /* NULL-GError */
     {
       folder_path = gtk_file_path_copy (chooser_entry->base_folder);
@@ -898,12 +899,14 @@ gtk_file_chooser_entry_changed (GtkEditable *editable)
   else
     {
       file_part_len = strlen (file_part);
-      total_len = strlen (text);
+      total_len = strlen (text_up_to_cursor);
       if (total_len > file_part_len)
-	file_part_pos = g_utf8_strlen (text, total_len - file_part_len);
+	file_part_pos = g_utf8_strlen (text_up_to_cursor, total_len - file_part_len);
       else
 	file_part_pos = 0;
     }
+
+  g_free (text_up_to_cursor);
 
   g_free (chooser_entry->file_part);
 
