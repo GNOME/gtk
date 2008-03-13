@@ -768,6 +768,8 @@ populate_completion_store (GtkFileChooserEntry *chooser_entry)
 
       path = tmp_list->data;
 
+      printf ("Getting info for %s\n", (char *) path);
+
       info = gtk_file_folder_get_info (chooser_entry->current_folder,
 				       path,
 				       NULL); /* NULL-GError */
@@ -798,6 +800,8 @@ populate_completion_store (GtkFileChooserEntry *chooser_entry)
 
   gtk_entry_completion_set_model (gtk_entry_get_completion (GTK_ENTRY (chooser_entry)),
 				  GTK_TREE_MODEL (chooser_entry->completion_store));
+
+  printf ("Finished populating completion store\n");
 }
 
 /* When we finish loading the current folder, this function should get called to
