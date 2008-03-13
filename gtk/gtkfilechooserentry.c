@@ -123,6 +123,10 @@ static char    *maybe_append_separator_to_path (GtkFileChooserEntry *chooser_ent
 						GtkFilePath         *path,
 						gchar               *display_name);
 
+static void finished_loading_cb (GtkFileFolder *folder,
+				 gpointer       data);
+static void autocomplete (GtkFileChooserEntry *chooser_entry);
+
 static GtkEditableClass *parent_editable_iface;
 
 G_DEFINE_TYPE_WITH_CODE (GtkFileChooserEntry, _gtk_file_chooser_entry, GTK_TYPE_ENTRY,
@@ -611,51 +615,6 @@ add_completion_idle (GtkFileChooserEntry *chooser_entry)
       idle_add (chooser_entry, G_CALLBACK (check_completion_callback));
 }
 
-
-static void
-update_current_folder_files (GtkFileChooserEntry *chooser_entry,
-			     GSList              *added_uris)
-{
-  GSList *tmp_list;
-
-  g_assert (chooser_entry->completion_store != NULL);
-
-  /* Bah.  Need to turn off sorting */
-  for (tmp_list = added_uris; tmp_list; tmp_list = tmp_list->next)
-    {
-      GtkFileInfo *info;
-      GtkFilePath *path;
-
-      path = tmp_list->data;
-
-      info = gtk_file_folder_get_info (chooser_entry->current_folder,
-				       path,
-				       NULL); /* NULL-GError */
-      if (info)
-	{
-	  gchar *display_name = g_strdup (gtk_file_info_get_display_name (info));
-	  GtkTreeIter iter;
-
-          display_name = maybe_append_separator_to_path (chooser_entry, path, display_name);
-
-	  gtk_list_store_append (chooser_entry->completion_store, &iter);
-	  gtk_list_store_set (chooser_entry->completion_store, &iter,
-			      DISPLAY_NAME_COLUMN, display_name,
-			      PATH_COLUMN, path,
-			      -1);
-
-	  gtk_file_info_free (info);
-          g_free (display_name);
-	}
-    }
-
-  /* FIXME: we want to turn off sorting temporarily.  I suck... */
-  gtk_tree_sortable_set_sort_column_id (GTK_TREE_SORTABLE (chooser_entry->completion_store),
-					DISPLAY_NAME_COLUMN, GTK_SORT_ASCENDING);
-
-  add_completion_idle (chooser_entry);
-}
-
 static void
 gtk_file_chooser_entry_do_insert_text (GtkEditable *editable,
 				       const gchar *new_text,
@@ -749,7 +708,48 @@ gtk_file_chooser_entry_activate (GtkEntry *entry)
 static void
 populate_completion_store (GtkFileChooserEntry *chooser_entry)
 {
-  /* FIXME */
+  GSList *paths;
+  GSList *tmp_list;
+
+  if (!gtk_file_folder_list_children (chooser_entry->current_folder, &paths, NULL)) /* NULL-GError */
+    return;
+
+  g_assert (chooser_entry->completion_store != NULL);
+
+  /* Bah.  Need to turn off sorting */
+  for (tmp_list = paths; tmp_list; tmp_list = tmp_list->next)
+    {
+      GtkFileInfo *info;
+      GtkFilePath *path;
+
+      path = tmp_list->data;
+
+      info = gtk_file_folder_get_info (chooser_entry->current_folder,
+				       path,
+				       NULL); /* NULL-GError */
+      if (info)
+	{
+	  gchar *display_name = g_strdup (gtk_file_info_get_display_name (info));
+	  GtkTreeIter iter;
+
+          display_name = maybe_append_separator_to_path (chooser_entry, path, display_name);
+
+	  gtk_list_store_append (chooser_entry->completion_store, &iter);
+	  gtk_list_store_set (chooser_entry->completion_store, &iter,
+			      DISPLAY_NAME_COLUMN, display_name,
+			      PATH_COLUMN, path,
+			      -1);
+
+	  gtk_file_info_free (info);
+          g_free (display_name);
+	}
+    }
+
+  gtk_file_paths_free (paths);
+
+  /* FIXME: we want to turn off sorting temporarily.  I suck... */
+  gtk_tree_sortable_set_sort_column_id (GTK_TREE_SORTABLE (chooser_entry->completion_store),
+					DISPLAY_NAME_COLUMN, GTK_SORT_ASCENDING);
 }
 
 /* When we finish loading the current folder, this function should get called to
@@ -779,6 +779,13 @@ perform_load_complete_action (GtkFileChooserEntry *chooser_entry)
   chooser_entry->load_complete_action = LOAD_COMPLETE_NOTHING;
 }
 
+static void
+finish_folder_load (GtkFileChooserEntry *chooser_entry)
+{
+  populate_completion_store (chooser_entry);
+  perform_load_complete_action (chooser_entry);
+}
+
 /* Callback when the current folder finishes loading */
 static void
 finished_loading_cb (GtkFileFolder *folder,
@@ -786,7 +793,7 @@ finished_loading_cb (GtkFileFolder *folder,
 {
   GtkFileChooserEntry *chooser_entry = GTK_FILE_CHOOSER_ENTRY (data);
 
-  perform_load_complete_action (chooser_entry);
+  finish_folder_load (chooser_entry);
 }
 
 /* Callback when the current folder's handle gets obtained (not necessarily loaded completely) */
@@ -811,10 +818,7 @@ load_directory_get_folder_callback (GtkFileSystemHandle *handle,
   chooser_entry->current_folder = folder;
 
   if (gtk_file_folder_is_finished_loading (chooser_entry->current_folder))
-    {
-      populate_completion_store (chooser_entry);
-      perform_load_complete_action (chooser_entry);
-    }
+    finish_folder_load (chooser_entry);
   else
     g_signal_connect (chooser_entry->current_folder, "finished-loading",
 		      G_CALLBACK (finished_loading_cb), chooser_entry);
@@ -834,7 +838,7 @@ out:
 }
 
 static void
-load_current_folder (GtkFileChooserEntry *chooser_entry)
+start_loading_current_folder (GtkFileChooserEntry *chooser_entry)
 {
   if (chooser_entry->current_folder_path == NULL ||
       chooser_entry->file_system == NULL)
@@ -902,7 +906,7 @@ reload_current_folder (GtkFileChooserEntry *chooser_entry,
     }
 
   if (reload)
-    load_current_folder (chooser_entry);
+    start_loading_current_folder (chooser_entry);
 }
 
 static void
