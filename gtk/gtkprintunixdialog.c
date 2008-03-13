@@ -365,6 +365,10 @@ overwrite_confirmation_dialog (GtkPrintUnixDialog *print_dialog,
                                                _("_Replace"),
                                                GTK_STOCK_PRINT,
                                                GTK_RESPONSE_ACCEPT);
+                  gtk_dialog_set_alternative_button_order (GTK_DIALOG (dialog),
+                                                           GTK_RESPONSE_ACCEPT,
+                                                           GTK_RESPONSE_CANCEL,
+                                                           -1);
                   gtk_dialog_set_default_response (GTK_DIALOG (dialog),
                                                    GTK_RESPONSE_ACCEPT);
 
