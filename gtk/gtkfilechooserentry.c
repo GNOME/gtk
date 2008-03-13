@@ -742,7 +742,6 @@ populate_completion_store (GtkFileChooserEntry *chooser_entry)
 							G_TYPE_STRING,
 							GTK_TYPE_FILE_PATH);
 
-  /* Bah.  Need to turn off sorting */
   for (tmp_list = paths; tmp_list; tmp_list = tmp_list->next)
     {
       GtkFileInfo *info;
@@ -773,7 +772,6 @@ populate_completion_store (GtkFileChooserEntry *chooser_entry)
 
   gtk_file_paths_free (paths);
 
-  /* FIXME: we want to turn off sorting temporarily.  I suck... */
   gtk_tree_sortable_set_sort_column_id (GTK_TREE_SORTABLE (chooser_entry->completion_store),
 					DISPLAY_NAME_COLUMN, GTK_SORT_ASCENDING);
 
