@@ -519,6 +519,9 @@ append_common_prefix (GtkFileChooserEntry *chooser_entry,
       gtk_file_path_free (unique_path);
     }
 
+  printf ("common prefix: \"%s\"\n",
+	  common_prefix ? common_prefix : "<NONE>");
+
   if (common_prefix)
     {
       gint cursor_pos;
@@ -531,8 +534,10 @@ append_common_prefix (GtkFileChooserEntry *chooser_entry,
       pos = chooser_entry->file_part_pos;
 
       chooser_entry->in_change = TRUE;
+      printf ("Deleting range (%d, %d)\n", pos, cursor_pos);
       gtk_editable_delete_text (GTK_EDITABLE (chooser_entry),
 				pos, cursor_pos);
+      printf ("Inserting common prefix at %d\n", pos);
       gtk_editable_insert_text (GTK_EDITABLE (chooser_entry),
 				common_prefix, -1, 
 				&pos);
@@ -540,6 +545,7 @@ append_common_prefix (GtkFileChooserEntry *chooser_entry,
 
       if (highlight)
 	{
+	  printf ("Selecting range (%d, %d)\n", cursor_pos, pos);
 	  gtk_editable_select_region (GTK_EDITABLE (chooser_entry),
 				      cursor_pos,
 				      pos); /* cursor_pos + common_prefix_len); */
@@ -931,6 +937,7 @@ autocomplete (GtkFileChooserEntry *chooser_entry)
 {
   g_assert (chooser_entry->current_folder != NULL);
   g_assert (gtk_file_folder_is_finished_loading (chooser_entry->current_folder));
+  g_assert (gtk_editable_get_position (GTK_EDITABLE (chooser_entry)) == GTK_ENTRY (chooser_entry)->text_length);
 
   printf ("Doing autocompletion since our folder is finished loading\n");
 
