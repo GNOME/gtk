@@ -727,6 +727,17 @@ gtk_file_chooser_entry_activate (GtkEntry *entry)
   GTK_ENTRY_CLASS (_gtk_file_chooser_entry_parent_class)->activate (entry);
 }
 
+static void
+discard_completion_store (GtkFileChooserEntry *chooser_entry)
+{
+  if (!chooser_entry->completion_store)
+    return;
+
+  gtk_entry_completion_set_model (gtk_entry_get_completion (GTK_ENTRY (chooser_entry)), NULL);
+  g_object_unref (chooser_entry->completion_store);
+  chooser_entry->completion_store = NULL;
+}
+
 /* Fills the completion store from the contents of the current folder */
 static void
 populate_completion_store (GtkFileChooserEntry *chooser_entry)
@@ -737,11 +748,7 @@ populate_completion_store (GtkFileChooserEntry *chooser_entry)
   if (!gtk_file_folder_list_children (chooser_entry->current_folder, &paths, NULL)) /* NULL-GError */
     return;
 
-  if (chooser_entry->completion_store)
-    {
-      gtk_entry_completion_set_model (gtk_entry_get_completion (GTK_ENTRY (chooser_entry)), NULL);
-      g_object_unref (chooser_entry->completion_store);
-    }
+  discard_completion_store (chooser_entry);
 
   chooser_entry->completion_store = gtk_list_store_new (N_COLUMNS,
 							G_TYPE_STRING,
@@ -848,6 +855,8 @@ load_directory_get_folder_callback (GtkFileSystemHandle *handle,
 
   g_assert (folder != NULL);
   chooser_entry->current_folder = folder;
+
+  discard_completion_store (chooser_entry);
 
   if (gtk_file_folder_is_finished_loading (chooser_entry->current_folder))
     finish_folder_load (chooser_entry);
