@@ -714,7 +714,15 @@ populate_completion_store (GtkFileChooserEntry *chooser_entry)
   if (!gtk_file_folder_list_children (chooser_entry->current_folder, &paths, NULL)) /* NULL-GError */
     return;
 
-  g_assert (chooser_entry->completion_store != NULL);
+  if (chooser_entry->completion_store)
+    {
+      gtk_entry_completion_set_model (gtk_entry_get_completion (GTK_ENTRY (chooser_entry)), NULL);
+      g_object_unref (chooser_entry->completion_store);
+    }
+
+  chooser_entry->completion_store = gtk_list_store_new (N_COLUMNS,
+							G_TYPE_STRING,
+							GTK_TYPE_FILE_PATH);
 
   /* Bah.  Need to turn off sorting */
   for (tmp_list = paths; tmp_list; tmp_list = tmp_list->next)
@@ -750,6 +758,9 @@ populate_completion_store (GtkFileChooserEntry *chooser_entry)
   /* FIXME: we want to turn off sorting temporarily.  I suck... */
   gtk_tree_sortable_set_sort_column_id (GTK_TREE_SORTABLE (chooser_entry->completion_store),
 					DISPLAY_NAME_COLUMN, GTK_SORT_ASCENDING);
+
+  gtk_entry_completion_set_model (gtk_entry_get_completion (GTK_ENTRY (chooser_entry)),
+				  GTK_TREE_MODEL (chooser_entry->completion_store));
 }
 
 /* When we finish loading the current folder, this function should get called to
@@ -823,15 +834,6 @@ load_directory_get_folder_callback (GtkFileSystemHandle *handle,
     g_signal_connect (chooser_entry->current_folder, "finished-loading",
 		      G_CALLBACK (finished_loading_cb), chooser_entry);
 
-  /* FIXME: connect to the following two signals?  Create the completion store here, or wait until the folder is loaded? */
-  
-  chooser_entry->completion_store = gtk_list_store_new (N_COLUMNS,
-							G_TYPE_STRING,
-							GTK_TYPE_FILE_PATH);
-
-  gtk_entry_completion_set_model (gtk_entry_get_completion (GTK_ENTRY (chooser_entry)),
-				  GTK_TREE_MODEL (chooser_entry->completion_store));
-
 out:
   g_object_unref (chooser_entry);
   g_object_unref (handle);
@@ -845,7 +847,6 @@ start_loading_current_folder (GtkFileChooserEntry *chooser_entry)
     return;
 
   g_assert (chooser_entry->current_folder == NULL);
-  g_assert (chooser_entry->completion_store == NULL);
   g_assert (chooser_entry->load_folder_handle == NULL);
 
   printf ("Starting async load of folder %s\n", (char *) chooser_entry->current_folder_path);
@@ -886,13 +887,6 @@ reload_current_folder (GtkFileChooserEntry *chooser_entry,
 
 	      g_object_unref (chooser_entry->current_folder);
 	      chooser_entry->current_folder = NULL;
-	    }
-
-	  if (chooser_entry->completion_store)
-	    {
-	      gtk_entry_completion_set_model (gtk_entry_get_completion (GTK_ENTRY (chooser_entry)), NULL);
-	      g_object_unref (chooser_entry->completion_store);
-	      chooser_entry->completion_store = NULL;
 	    }
 
 	  gtk_file_path_free (chooser_entry->current_folder_path);
