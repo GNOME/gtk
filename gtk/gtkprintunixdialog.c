@@ -300,7 +300,8 @@ add_custom_button_to_dialog (GtkDialog   *dialog,
   button = gtk_button_new_with_mnemonic (mnemonic_label);
   GTK_WIDGET_SET_FLAGS (button, GTK_CAN_DEFAULT);
   gtk_button_set_image (GTK_BUTTON (button),
-                        gtk_image_new_from_stock (stock_id, GTK_ICON_SIZE_BUTTON));
+                        gtk_image_new_from_stock (stock_id,
+                                                  GTK_ICON_SIZE_BUTTON));
   gtk_widget_show (button);
 
   gtk_dialog_add_action_widget (GTK_DIALOG (dialog), button, response_id);
@@ -329,13 +330,16 @@ overwrite_confirmation_dialog (GtkPrintUnixDialog *print_dialog,
 
       if (printer != NULL && gtk_printer_is_virtual (printer))
         {
-          option = gtk_printer_option_set_lookup (priv->options, "gtk-main-page-custom-input");
+          option = gtk_printer_option_set_lookup (priv->options,
+                                                  "gtk-main-page-custom-input");
 
-          if (option != NULL && option->type == GTK_PRINTER_OPTION_TYPE_FILESAVE)
+          if (option != NULL &&
+              option->type == GTK_PRINTER_OPTION_TYPE_FILESAVE)
             {
               filename = g_filename_from_uri (option->value, NULL, NULL);
 
-              if (filename != NULL && g_file_test (filename, G_FILE_TEST_EXISTS))
+              if (filename != NULL &&
+                  g_file_test (filename, G_FILE_TEST_EXISTS))
                 {
                   toplevel = get_toplevel (GTK_WIDGET (print_dialog));
 
@@ -343,7 +347,8 @@ overwrite_confirmation_dialog (GtkPrintUnixDialog *print_dialog,
                   dirname = g_path_get_dirname (filename);
 
                   dialog = gtk_message_dialog_new (toplevel,
-                                                   GTK_DIALOG_MODAL | GTK_DIALOG_DESTROY_WITH_PARENT,
+                                                   GTK_DIALOG_MODAL |
+                                                   GTK_DIALOG_DESTROY_WITH_PARENT,
                                                    GTK_MESSAGE_QUESTION,
                                                    GTK_BUTTONS_NONE,
                                                    _("A file named \"%s\" already exists.  Do you want to replace it?"),
@@ -354,12 +359,18 @@ overwrite_confirmation_dialog (GtkPrintUnixDialog *print_dialog,
                                                             "overwrite its contents."),
                                                             dirname);
 
-                  gtk_dialog_add_button (GTK_DIALOG (dialog), GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL);
-                  add_custom_button_to_dialog (GTK_DIALOG (dialog), _("_Replace"), GTK_STOCK_PRINT, GTK_RESPONSE_ACCEPT);
-                  gtk_dialog_set_default_response (GTK_DIALOG (dialog), GTK_RESPONSE_ACCEPT);
+                  gtk_dialog_add_button (GTK_DIALOG (dialog),
+                                         GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL);
+                  add_custom_button_to_dialog (GTK_DIALOG (dialog),
+                                               _("_Replace"),
+                                               GTK_STOCK_PRINT,
+                                               GTK_RESPONSE_ACCEPT);
+                  gtk_dialog_set_default_response (GTK_DIALOG (dialog),
+                                                   GTK_RESPONSE_ACCEPT);
 
                   if (toplevel->group)
-                    gtk_window_group_add_window (toplevel->group, GTK_WINDOW (dialog));
+                    gtk_window_group_add_window (toplevel->group,
+                                                 GTK_WINDOW (dialog));
 
                   response = gtk_dialog_run (GTK_DIALOG (dialog));
 
