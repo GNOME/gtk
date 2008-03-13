@@ -1053,7 +1053,7 @@ static void
 clear_completion_callback (GtkFileChooserEntry *chooser_entry,
 			   GParamSpec          *pspec)
 {
-  /* FIXME: this was in the constructor for the chooser entry
+  /* FIXME: this was in the constructor for the chooser entry.  In those vmethods, we have to clear has_completion or something.
   g_signal_connect (chooser_entry, "notify::cursor-position",
 		    G_CALLBACK (clear_completion_callback), NULL);
   g_signal_connect (chooser_entry, "notify::selection-bound",
