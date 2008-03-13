@@ -616,6 +616,7 @@ typedef enum {
   INVALID_INPUT,		/* what the user typed is bogus */
   NO_MATCH,			/* no matches based on what the user typed */
   NOTHING_INSERTED_COMPLETE,	/* what the user typed is already completed as far as it will go */
+  NOTHING_INSERTED_UNIQUE,	/* what the user typed is already completed, and is a unique match */
   COMPLETED,			/* completion inserted (ambiguous suffix) */
   COMPLETED_UNIQUE,		/* completion inserted, and it is a complete name and a unique match */
   COMPLETE_BUT_NOT_UNIQUE	/* completion inserted, it is a complete name but not unique */
@@ -666,7 +667,12 @@ append_common_prefix (GtkFileChooserEntry *chooser_entry,
       gtk_file_path_free (unique_path);
 
       if (common_prefix)
-	result = COMPLETED_UNIQUE;
+	{
+	  if (prefix_expands_the_file_part)
+	    result = COMPLETED_UNIQUE;
+	  else
+	    result = NOTHING_INSERTED_UNIQUE;
+	}
       else
 	result = INVALID_INPUT;
 
@@ -712,7 +718,7 @@ append_common_prefix (GtkFileChooserEntry *chooser_entry,
 	  else
 	    gtk_editable_set_position (GTK_EDITABLE (chooser_entry), pos);
 	}
-      else
+      else if (!have_result)
 	{
 	  result = NOTHING_INSERTED_COMPLETE;
 	  have_result = TRUE;
@@ -1010,13 +1016,16 @@ explicitly_complete (GtkFileChooserEntry *chooser_entry)
       /* FIXME: pop up the suggestion window or scroll it */
       break;
 
+    case NOTHING_INSERTED_UNIQUE:
+      pop_up_completion_feedback (chooser_entry, _("Sole completion"));
+      break;
+
     case COMPLETED:
       /* Nothing to do */
       break;
 
     case COMPLETED_UNIQUE:
-      pop_up_completion_feedback (chooser_entry, _("Sole completion"));
-      /* FIXME: if the user keeps hitting Tab after completing a unique match, present feedback with "Sole completion") */
+      /* Nothing to do */
       break;
 
     case COMPLETE_BUT_NOT_UNIQUE:
