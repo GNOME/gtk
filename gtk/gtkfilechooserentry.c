@@ -122,9 +122,6 @@ static gboolean completion_match_func     (GtkEntryCompletion  *comp,
 static void     files_added_cb            (GtkFileSystem       *file_system,
 					   GSList              *added_uris,
 					   GtkFileChooserEntry *chooser_entry);
-static void     files_deleted_cb          (GtkFileSystem       *file_system,
-					   GSList              *deleted_uris,
-					   GtkFileChooserEntry *chooser_entry);
 static char    *maybe_append_separator_to_path (GtkFileChooserEntry *chooser_entry,
 						GtkFilePath         *path,
 						gchar               *display_name);
@@ -241,8 +238,6 @@ gtk_file_chooser_entry_dispose (GObject *object)
     {
       g_signal_handlers_disconnect_by_func (chooser_entry->current_folder,
 					    G_CALLBACK (files_added_cb), chooser_entry);
-      g_signal_handlers_disconnect_by_func (chooser_entry->current_folder,
-					    G_CALLBACK (files_deleted_cb), chooser_entry);
       g_object_unref (chooser_entry->current_folder);
       chooser_entry->current_folder = NULL;
     }
@@ -673,14 +668,6 @@ files_added_cb (GtkFileSystem       *file_system,
 }
 
 static void
-files_deleted_cb (GtkFileSystem       *file_system,
-		  GSList              *deleted_uris,
-		  GtkFileChooserEntry *chooser_entry)
-{
-  /* FIXME: gravy... */
-}
-
-static void
 gtk_file_chooser_entry_do_insert_text (GtkEditable *editable,
 				       const gchar *new_text,
 				       gint         new_text_length,
@@ -847,8 +834,6 @@ load_directory_get_folder_callback (GtkFileSystemHandle *handle,
   
   g_signal_connect (chooser_entry->current_folder, "files-added",
 		    G_CALLBACK (files_added_cb), chooser_entry);
-  g_signal_connect (chooser_entry->current_folder, "files-removed",
-		    G_CALLBACK (files_deleted_cb), chooser_entry);
 
   chooser_entry->completion_store = gtk_list_store_new (N_COLUMNS,
 							G_TYPE_STRING,
@@ -904,8 +889,6 @@ reload_current_folder (GtkFileChooserEntry *chooser_entry,
 	    {
 	      g_signal_handlers_disconnect_by_func (chooser_entry->current_folder,
 						    G_CALLBACK (files_added_cb), chooser_entry);
-	      g_signal_handlers_disconnect_by_func (chooser_entry->current_folder,
-						    G_CALLBACK (files_deleted_cb), chooser_entry);
 
 	      if (chooser_entry->load_folder_handle)
 		{
