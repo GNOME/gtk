@@ -1275,13 +1275,9 @@ load_directory_get_folder_callback (GtkFileSystemHandle *handle,
       if (old_load_complete_action == LOAD_COMPLETE_EXPLICIT_COMPLETION)
 	{
 	  /* Since this came from explicit user action (Tab completion), we'll present errors visually */
-	  char *msg;
 
 	  beep (chooser_entry);
-
-	  msg = g_strdup_printf (_("Could not load folder: %s"), error->message);
-	  pop_up_completion_feedback (chooser_entry, msg);
-	  g_free (msg);
+	  pop_up_completion_feedback (chooser_entry, error->message);
 	}
 
       gtk_file_path_free (chooser_entry->current_folder_path);
