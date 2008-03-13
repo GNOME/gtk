@@ -459,6 +459,8 @@ find_common_prefix (GtkFileChooserEntry *chooser_entry,
   if (!parsed)
     return;
 
+  /* FIXME: assert that the current folder path is the same as the parsed path? */
+
   valid = gtk_tree_model_get_iter_first (GTK_TREE_MODEL (chooser_entry->completion_store), &iter);
 
   while (valid)
@@ -767,6 +769,51 @@ gtk_file_chooser_entry_activate (GtkEntry *entry)
   GTK_ENTRY_CLASS (_gtk_file_chooser_entry_parent_class)->activate (entry);
 }
 
+/* Fills the completion store from the contents of the current folder */
+static void
+populate_completion_store (GtkFileChooserEntry *chooser_entry)
+{
+  /* FIXME */
+}
+
+/* When we finish loading the current folder, this function should get called to
+ * perform the deferred autocompletion or explicit completion.
+ */
+static void
+perform_load_complete_action (GtkFileChooserEntry *chooser_entry)
+{
+  switch (chooser_entry->load_complete_action)
+    {
+    case LOAD_COMPLETE_NOTHING:
+      break;
+
+    case LOAD_COMPLETE_AUTOCOMPLETE:
+      printf ("Load is complete; will autocomplete immediately\n");
+      autocomplete (chooser_entry);
+      break;
+
+    case LOAD_COMPLETE_INSERT_PREFIX:
+      /* FIXME */
+      break;
+
+    default:
+      g_assert_not_reached ();
+    }
+
+  chooser_entry->load_complete_action = LOAD_COMPLETE_NOTHING;
+}
+
+/* Callback when the current folder finishes loading */
+static void
+finished_loading_cb (GtkFileFolder *folder,
+		     gpointer       data)
+{
+  GtkFileChooserEntry *chooser_entry = GTK_FILE_CHOOSER_ENTRY (data);
+
+  perform_load_complete_action (chooser_entry);
+}
+
+/* Callback when the current folder's handle gets obtained (not necessarily loaded completely) */
 static void
 load_directory_get_folder_callback (GtkFileSystemHandle *handle,
 				    GtkFileFolder       *folder,
@@ -784,14 +831,20 @@ load_directory_get_folder_callback (GtkFileSystemHandle *handle,
   if (cancelled || error)
     goto out;
 
-  /* FIXME: connect to "finished-loading".  In that callback, see our
-   * load_complete_action and do the appropriate thing.
-   *
-   * Do we need to populate the completion store here?  (O(n^2))
-   * Maybe we should wait until the folder is finished loading.
-   */
-
+  g_assert (folder != NULL);
   chooser_entry->current_folder = folder;
+
+  if (gtk_file_folder_is_finished_loading (chooser_entry->current_folder))
+    {
+      populate_completion_store (chooser_entry);
+      perform_load_complete_action (chooser_entry);
+    }
+  else
+    g_signal_connect (chooser_entry->current_folder, "finished-loading",
+		      G_CALLBACK (finished_loading_cb), chooser_entry);
+
+  /* FIXME: connect to the following two signals?  Create the completion store here, or wait until the folder is loaded? */
+  
   g_signal_connect (chooser_entry->current_folder, "files-added",
 		    G_CALLBACK (files_added_cb), chooser_entry);
   g_signal_connect (chooser_entry->current_folder, "files-removed",
