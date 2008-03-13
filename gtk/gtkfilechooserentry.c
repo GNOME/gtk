@@ -57,7 +57,6 @@ struct _GtkFileChooserEntry
   GtkFilePath *base_folder;
   gchar *file_part;
   gint file_part_pos;
-  guint check_completion_idle;
 
   /* Folder being loaded or already loaded */
   GtkFilePath *current_folder_path;
@@ -89,15 +88,21 @@ static void     gtk_file_chooser_entry_dispose        (GObject          *object)
 static void     gtk_file_chooser_entry_grab_focus     (GtkWidget        *widget);
 static gboolean gtk_file_chooser_entry_focus          (GtkWidget        *widget,
 						       GtkDirectionType  direction);
+static gboolean gtk_file_chooser_entry_focus_out_event (GtkWidget       *widget,
+							GdkEventFocus   *event);
 static void     gtk_file_chooser_entry_activate       (GtkEntry         *entry);
-static void     gtk_file_chooser_entry_changed        (GtkEditable      *editable);
 static void     gtk_file_chooser_entry_do_insert_text (GtkEditable *editable,
 						       const gchar *new_text,
 						       gint         new_text_length,
 						       gint        *position);
-
-static void     clear_completion_callback (GtkFileChooserEntry *chooser_entry,
-					   GParamSpec          *pspec);
+static void     gtk_file_chooser_entry_do_delete_text (GtkEditable *editable,
+						       gint         start_pos,
+						       gint         end_pos);
+static void     gtk_file_chooser_entry_set_position (GtkEditable *editable,
+						     gint         position);
+static void     gtk_file_chooser_entry_set_selection_bounds (GtkEditable *editable,
+							     gint         start_pos,
+							     gint         end_pos);
 
 #ifdef G_OS_WIN32
 static gint     insert_text_callback      (GtkFileChooserEntry *widget,
@@ -126,6 +131,7 @@ static char    *maybe_append_separator_to_path (GtkFileChooserEntry *chooser_ent
 static void finished_loading_cb (GtkFileFolder *folder,
 				 gpointer       data);
 static void autocomplete (GtkFileChooserEntry *chooser_entry);
+static void install_start_autocompletion_idle (GtkFileChooserEntry *chooser_entry);
 
 static GtkEditableClass *parent_editable_iface;
 
@@ -145,6 +151,7 @@ _gtk_file_chooser_entry_class_init (GtkFileChooserEntryClass *class)
 
   widget_class->grab_focus = gtk_file_chooser_entry_grab_focus;
   widget_class->focus = gtk_file_chooser_entry_focus;
+  widget_class->focus_out_event = gtk_file_chooser_entry_focus_out_event;
 
   entry_class->activate = gtk_file_chooser_entry_activate;
 }
@@ -155,7 +162,9 @@ gtk_file_chooser_entry_iface_init (GtkEditableClass *iface)
   parent_editable_iface = g_type_interface_peek_parent (iface);
 
   iface->do_insert_text = gtk_file_chooser_entry_do_insert_text;
-  iface->changed = gtk_file_chooser_entry_changed;
+  iface->do_delete_text = gtk_file_chooser_entry_do_delete_text;
+  iface->set_position = gtk_file_chooser_entry_set_position;
+  iface->set_selection_bounds = gtk_file_chooser_entry_set_selection_bounds;
 }
 
 static void
@@ -186,11 +195,6 @@ _gtk_file_chooser_entry_init (GtkFileChooserEntry *chooser_entry)
 
   gtk_entry_set_completion (GTK_ENTRY (chooser_entry), comp);
   g_object_unref (comp);
-
-  g_signal_connect (chooser_entry, "notify::cursor-position",
-		    G_CALLBACK (clear_completion_callback), NULL);
-  g_signal_connect (chooser_entry, "notify::selection-bound",
-		    G_CALLBACK (clear_completion_callback), NULL);
 
 #ifdef G_OS_WIN32
   g_signal_connect (chooser_entry, "insert_text",
@@ -247,12 +251,6 @@ gtk_file_chooser_entry_dispose (GObject *object)
     {
       g_object_unref (chooser_entry->file_system);
       chooser_entry->file_system = NULL;
-    }
-
-  if (chooser_entry->check_completion_idle)
-    {
-      g_source_remove (chooser_entry->check_completion_idle);
-      chooser_entry->check_completion_idle = 0;
     }
 
   G_OBJECT_CLASS (_gtk_file_chooser_entry_parent_class)->dispose (object);
@@ -450,6 +448,15 @@ find_common_prefix (GtkFileChooserEntry *chooser_entry,
 	  parsed_folder_path ? (char *) parsed_folder_path : "<NONE>",
 	  parsed_file_part ? parsed_file_part : "<NONE>");
 
+  /* FIXME: the old check_completion_callback() did this:
+
+     if (strcmp (chooser_entry->file_part, "") == 0)
+       goto done;
+
+       Don't do completion if the file part is empty!
+  */
+     
+
   g_free (text_up_to_cursor);
 
   if (!parsed)
@@ -561,60 +568,6 @@ append_common_prefix (GtkFileChooserEntry *chooser_entry,
     }
 }
 
-static gboolean
-check_completion_callback (GtkFileChooserEntry *chooser_entry)
-{
-  GDK_THREADS_ENTER ();
-
-  g_assert (chooser_entry->file_part);
-
-  chooser_entry->check_completion_idle = 0;
-
-  if (strcmp (chooser_entry->file_part, "") == 0)
-    goto done;
-
-  /* We only insert the common prefix without requiring the user to hit Tab in
-   * the "open" modes.  For "save" modes, the user must hit Tab to cause the prefix
-   * to be inserted.  That happens in gtk_file_chooser_entry_focus().
-   */
-  if ((chooser_entry->action == GTK_FILE_CHOOSER_ACTION_OPEN
-       || chooser_entry->action == GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER)
-      && gtk_editable_get_position (GTK_EDITABLE (chooser_entry)) == GTK_ENTRY (chooser_entry)->text_length)
-    append_common_prefix (chooser_entry, TRUE);
-
- done:
-
-  GDK_THREADS_LEAVE ();
-
-  return FALSE;
-}
-
-static guint
-idle_add (GtkFileChooserEntry *chooser_entry, 
-	  GCallback            cb)
-{
-  GSource *source;
-  guint id;
-
-  source = g_idle_source_new ();
-  g_source_set_priority (source, G_PRIORITY_HIGH);
-  g_source_set_closure (source,
-			g_cclosure_new_object (cb, G_OBJECT (chooser_entry)));
-  id = g_source_attach (source, NULL);
-  g_source_unref (source);
-
-  return id;
-}
-
-static void
-add_completion_idle (GtkFileChooserEntry *chooser_entry)
-{
-  /* idle to update the selection based on the file list */
-  if (chooser_entry->check_completion_idle == 0)
-    chooser_entry->check_completion_idle = 
-      idle_add (chooser_entry, G_CALLBACK (check_completion_callback));
-}
-
 static void
 gtk_file_chooser_entry_do_insert_text (GtkEditable *editable,
 				       const gchar *new_text,
@@ -622,11 +575,65 @@ gtk_file_chooser_entry_do_insert_text (GtkEditable *editable,
 				       gint        *position)
 {
   GtkFileChooserEntry *chooser_entry = GTK_FILE_CHOOSER_ENTRY (editable);
+  gint old_text_len;
+  gint insert_pos;
+
+  old_text_len = GTK_ENTRY (chooser_entry)->text_length;
+  insert_pos = *position;
 
   parent_editable_iface->do_insert_text (editable, new_text, new_text_length, position);
 
-  if (! chooser_entry->in_change)
-    add_completion_idle (GTK_FILE_CHOOSER_ENTRY (editable));
+  if (chooser_entry->in_change)
+    return;
+
+  if ((chooser_entry->action == GTK_FILE_CHOOSER_ACTION_OPEN
+       || chooser_entry->action == GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER)
+      && insert_pos == old_text_len)
+    install_start_autocompletion_idle (chooser_entry);
+}
+
+static void
+gtk_file_chooser_entry_do_delete_text (GtkEditable *editable,
+				       gint         start_pos,
+				       gint         end_pos)
+{
+  GtkFileChooserEntry *chooser_entry = GTK_FILE_CHOOSER_ENTRY (editable);
+
+  parent_editable_iface->do_delete_text (editable, start_pos, end_pos);
+
+  if (chooser_entry->in_change)
+    return;
+
+  chooser_entry->load_complete_action = LOAD_COMPLETE_NOTHING;
+}
+
+static void
+gtk_file_chooser_entry_set_position (GtkEditable *editable,
+				     gint         position)
+{
+  GtkFileChooserEntry *chooser_entry = GTK_FILE_CHOOSER_ENTRY (editable);
+
+  parent_editable_iface->set_position (editable, position);
+
+  if (chooser_entry->in_change)
+    return;
+
+  chooser_entry->load_complete_action = LOAD_COMPLETE_NOTHING;
+}
+
+static void
+gtk_file_chooser_entry_set_selection_bounds (GtkEditable *editable,
+					     gint         start_pos,
+					     gint         end_pos)
+{
+  GtkFileChooserEntry *chooser_entry = GTK_FILE_CHOOSER_ENTRY (editable);
+
+  parent_editable_iface->set_selection_bounds (editable, start_pos, end_pos);
+
+  if (chooser_entry->in_change)
+    return;
+
+  chooser_entry->load_complete_action = LOAD_COMPLETE_NOTHING;
 }
 
 static void
@@ -688,6 +695,17 @@ gtk_file_chooser_entry_focus (GtkWidget        *widget,
     }
   else
     return GTK_WIDGET_CLASS (_gtk_file_chooser_entry_parent_class)->focus (widget, direction);
+}
+
+static gboolean
+gtk_file_chooser_entry_focus_out_event (GtkWidget     *widget,
+					GdkEventFocus *event)
+{
+  GtkFileChooserEntry *chooser_entry = GTK_FILE_CHOOSER_ENTRY (widget);
+
+  chooser_entry->load_complete_action = LOAD_COMPLETE_NOTHING;
+ 
+  return GTK_WIDGET_CLASS (_gtk_file_chooser_entry_parent_class)->focus_out_event (widget, event);
 }
 
 static void
@@ -997,12 +1015,9 @@ start_autocompletion (GtkFileChooserEntry *chooser_entry)
 static gboolean
 start_autocompletion_idle_handler (gpointer data)
 {
-  GtkFileChooserEntry *chooser_entry;
+  GtkFileChooserEntry *chooser_entry = GTK_FILE_CHOOSER_ENTRY (data);
 
-  chooser_entry = GTK_FILE_CHOOSER_ENTRY (data);
-
-  if (gtk_editable_get_position (GTK_EDITABLE (chooser_entry)) == GTK_ENTRY (chooser_entry)->text_length)
-    start_autocompletion (chooser_entry);
+  start_autocompletion (chooser_entry);
 
   chooser_entry->start_autocompletion_idle_id = 0;
 
@@ -1012,54 +1027,32 @@ start_autocompletion_idle_handler (gpointer data)
 static void
 install_start_autocompletion_idle (GtkFileChooserEntry *chooser_entry)
 {
-  /* We set up an idle handler because we must test the cursor position.  However,
-   * the cursor is not updated in GtkEntry::changed, so we wait for the idle loop.
-   */
-
   if (chooser_entry->start_autocompletion_idle_id != 0)
     return;
 
   chooser_entry->start_autocompletion_idle_id = g_idle_add (start_autocompletion_idle_handler, chooser_entry);
 }
 
-static void
-gtk_file_chooser_entry_changed (GtkEditable *editable)
-{
-  GtkFileChooserEntry *chooser_entry = GTK_FILE_CHOOSER_ENTRY (editable);
-
-  if (chooser_entry->in_change)
-    return;
-
-  chooser_entry->load_complete_action = LOAD_COMPLETE_NOTHING;
-
-  if ((chooser_entry->action == GTK_FILE_CHOOSER_ACTION_OPEN
-       || chooser_entry->action == GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER))
-    install_start_autocompletion_idle (chooser_entry);
-
-  /* FIXME: see when the cursor changes (see GtkEntry's cursor_position property, or GtkEditable::set_position and GtkEntry::move_cursor).
-   * When the cursor changes, cancel the load_complete_action.
-   * When the entry is activated, cancel the load_complete_action.
-   * In general, cancel the load_complete_action when the entry loses the focus.
-   */
-
-  /* FIXME: is ::changed too coarse?  We need
-   *
-   *    if insert_text, start autocompletion if the cursor is at the end
-   *    if delete_text, don't do anything
-   *    if cursor moves, don't do anything
-   */
-}
-
+#if 0
+/* FIXME: what does has_completion mean?   After you figure that out and fix it, remove this unused function. */
 static void
 clear_completion_callback (GtkFileChooserEntry *chooser_entry,
 			   GParamSpec          *pspec)
 {
+  /* FIXME: this was in the constructor for the chooser entry
+  g_signal_connect (chooser_entry, "notify::cursor-position",
+		    G_CALLBACK (clear_completion_callback), NULL);
+  g_signal_connect (chooser_entry, "notify::selection-bound",
+		    G_CALLBACK (clear_completion_callback), NULL);
+  */
   if (chooser_entry->has_completion)
     {
       chooser_entry->has_completion = FALSE;
       gtk_file_chooser_entry_changed (GTK_EDITABLE (chooser_entry));
+
     }
 }
+#endif
 
 #ifdef G_OS_WIN32
 static gint
@@ -1186,7 +1179,9 @@ _gtk_file_chooser_entry_set_base_folder (GtkFileChooserEntry *chooser_entry,
 
   chooser_entry->base_folder = gtk_file_path_copy (path);
 
+  /* FIXME: the base folder changes.  Do we need to restart completion or something, to reload the folder if needed?
   gtk_file_chooser_entry_changed (GTK_EDITABLE (chooser_entry));
+  */
   _gtk_file_chooser_entry_select_filename (chooser_entry);
 }
 
