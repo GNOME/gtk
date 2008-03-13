@@ -859,7 +859,7 @@ install_completion_feedback_timer (GtkFileChooserEntry *chooser_entry)
 									   chooser_entry);
 }
 
-/* Gets the (x, y) position of the text cursor in the entry, in widget coordinates */
+/* Gets the x position of the text cursor in the entry, in widget coordinates */
 static void
 get_entry_cursor_x (GtkFileChooserEntry *chooser_entry,
 		    gint                *x_ret)
@@ -951,9 +951,9 @@ explicitly_complete (GtkFileChooserEntry *chooser_entry)
 
   /* FIXME: see what Emacs does in case there is no common prefix, or there is more than one match:
    *
-   * - If there is a common prefix, insert it
+   * - If there is a common prefix, insert it (done)
    * - If there is no common prefix, pop up the suggestion window
-   * - If there are no matches at all, beep and bring up a tooltip
+   * - If there are no matches at all, beep and bring up a tooltip (done)
    * - If the suggestion window is already up, scroll it
    */
   result = append_common_prefix (chooser_entry, FALSE, TRUE);
@@ -989,14 +989,6 @@ explicitly_complete (GtkFileChooserEntry *chooser_entry)
     default:
       g_assert_not_reached ();
     }
-
-  /* FIXME: this bit of code is commented out for reference; this is how we used to force the suggestion window to pop up
-   *
-   * Trigger the completion window to pop up again by a 
-   * zero-length insertion, a bit of a hack.
-   *
-   * gtk_editable_insert_text (editable, "", -1, &pos);
-   */
 }
 
 static void
@@ -1010,7 +1002,6 @@ start_explicit_completion (GtkFileChooserEntry *chooser_entry)
 
       beep (chooser_entry);
       pop_up_completion_feedback (chooser_entry, _("Invalid path"));
-      /* FIXME: make refresh_up_to_cursor_position() return a GError, and show that instead of "invalid path" */
 
       chooser_entry->load_complete_action = LOAD_COMPLETE_NOTHING;
       return;
