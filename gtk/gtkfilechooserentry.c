@@ -462,7 +462,9 @@ find_common_prefix (GtkFileChooserEntry *chooser_entry,
   if (!parsed)
     return;
 
-  /* FIXME: assert that the current folder path is the same as the parsed path? */
+  g_assert (parsed_folder_path != NULL
+	    && chooser_entry->current_folder_path != NULL
+	    && gtk_file_path_compare (parsed_folder_path, chooser_entry->current_folder_path) == 0);
 
   valid = gtk_tree_model_get_iter_first (GTK_TREE_MODEL (chooser_entry->completion_store), &iter);
 
