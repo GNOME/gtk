@@ -809,6 +809,7 @@ show_completion_feedback_window (GtkFileChooserEntry *chooser_entry)
   GtkRequisition feedback_req;
   gint entry_x, entry_y;
   GtkAllocation *entry_allocation;
+  int feedback_x, feedback_y;
 
   gtk_widget_size_request (chooser_entry->completion_feedback_window, &feedback_req);
 
@@ -818,9 +819,12 @@ show_completion_feedback_window (GtkFileChooserEntry *chooser_entry)
   /* FIXME: find text cursor position in the screen, adjust the window to that */
   /* FIXME: handle RTL positioning */
 
-  gtk_window_move (GTK_WINDOW (chooser_entry->completion_feedback_window),
-		   entry_x + entry_allocation->width - feedback_req.width,
-		   entry_y + (entry_allocation->height - feedback_req.height) / 2);
+  feedback_x = entry_x + entry_allocation->width - feedback_req.width;
+  feedback_y = entry_y + (entry_allocation->height - feedback_req.height) / 2;
+
+  printf ("showing completion feedback window at (%d, %d)\n", feedback_x, feedback_y);
+
+  gtk_window_move (GTK_WINDOW (chooser_entry->completion_feedback_window), feedback_x, feedback_y); 
   gtk_widget_show (chooser_entry->completion_feedback_window);
 
   /* FIXME: install timer */
@@ -836,6 +840,7 @@ pop_up_completion_feedback (GtkFileChooserEntry *chooser_entry,
   gtk_label_set_text (GTK_LABEL (chooser_entry->completion_feedback_label), feedback);
 
   show_completion_feedback_window (chooser_entry);
+  printf ("COMPLETION: %s\n", feedback);
 }
 
 static void
