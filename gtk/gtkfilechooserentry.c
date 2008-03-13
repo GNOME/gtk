@@ -25,7 +25,9 @@
 #include "gtkcellrenderertext.h"
 #include "gtkentry.h"
 #include "gtkfilechooserentry.h"
+#include "gtklabel.h"
 #include "gtkmain.h"
+#include "gtkwindow.h"
 #include "gtkintl.h"
 #include "gtkalias.h"
 
@@ -68,6 +70,9 @@ struct _GtkFileChooserEntry
   GtkListStore *completion_store;
 
   guint start_autocompletion_idle_id;
+
+  GtkWidget *completion_feedback_window;
+  GtkWidget *completion_feedback_label;
 
   guint has_completion : 1;
   guint in_change      : 1;
@@ -139,6 +144,7 @@ static void finished_loading_cb (GtkFileFolder *folder,
 				 gpointer       data);
 static void autocomplete (GtkFileChooserEntry *chooser_entry);
 static void install_start_autocompletion_idle (GtkFileChooserEntry *chooser_entry);
+static void remove_completion_feedback (GtkFileChooserEntry *chooser_entry);
 
 static GtkEditableClass *parent_editable_iface;
 
@@ -383,6 +389,8 @@ clear_completions (GtkFileChooserEntry *chooser_entry)
 {
   chooser_entry->has_completion = FALSE;
   chooser_entry->load_complete_action = LOAD_COMPLETE_NOTHING;
+
+  remove_completion_feedback (chooser_entry);
 }
 
 static void
@@ -692,6 +700,8 @@ gtk_file_chooser_entry_do_insert_text (GtkEditable *editable,
   if (chooser_entry->in_change)
     return;
 
+  remove_completion_feedback (chooser_entry);
+
   if ((chooser_entry->action == GTK_FILE_CHOOSER_ACTION_OPEN
        || chooser_entry->action == GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER)
       && insert_pos == old_text_len)
@@ -749,12 +759,91 @@ gtk_file_chooser_entry_grab_focus (GtkWidget *widget)
   _gtk_file_chooser_entry_select_filename (GTK_FILE_CHOOSER_ENTRY (widget));
 }
 
+static gboolean
+completion_feedback_window_expose_event_cb (GtkWidget      *widget,
+					    GdkEventExpose *event,
+					    gpointer        data)
+{
+  /* Stolen from gtk_tooltip_paint_window() */
+
+  GtkFileChooserEntry *chooser_entry = GTK_FILE_CHOOSER_ENTRY (data);
+
+  gtk_paint_flat_box (chooser_entry->completion_feedback_window->style,
+		      chooser_entry->completion_feedback_window->window,
+		      GTK_STATE_NORMAL,
+		      GTK_SHADOW_OUT,
+		      NULL,
+		      chooser_entry->completion_feedback_window,
+		      "tooltip",
+		      0, 0,
+		      chooser_entry->completion_feedback_window->allocation.width,
+		      chooser_entry->completion_feedback_window->allocation.height);
+
+  return FALSE;
+}
+
+static void
+create_completion_feedback_window (GtkFileChooserEntry *chooser_entry)
+{
+  /* Stolen from gtk_tooltip_init() */
+
+  chooser_entry->completion_feedback_window = gtk_window_new (GTK_WINDOW_POPUP);
+  gtk_window_set_type_hint (GTK_WINDOW (chooser_entry->completion_feedback_window),
+			    GDK_WINDOW_TYPE_HINT_TOOLTIP);
+  gtk_widget_set_app_paintable (chooser_entry->completion_feedback_window, TRUE);
+  gtk_window_set_resizable (GTK_WINDOW (chooser_entry->completion_feedback_window), FALSE);
+  gtk_widget_set_name (chooser_entry->completion_feedback_window, "gtk-tooltip");
+
+  g_signal_connect (chooser_entry->completion_feedback_window, "expose_event",
+		    G_CALLBACK (completion_feedback_window_expose_event_cb), chooser_entry);
+
+  chooser_entry->completion_feedback_label = gtk_label_new (NULL);
+  gtk_container_add (GTK_CONTAINER (chooser_entry->completion_feedback_window), chooser_entry->completion_feedback_label);
+}
+
+static void
+show_completion_feedback_window (GtkFileChooserEntry *chooser_entry)
+{
+  /* More or less stolen from gtk_tooltip_position() */
+
+  GtkRequisition feedback_req;
+  gint entry_x, entry_y;
+  GtkAllocation *entry_allocation;
+
+  gtk_widget_size_request (chooser_entry->completion_feedback_window, &feedback_req);
+
+  gdk_window_get_origin (GTK_WIDGET (chooser_entry)->window, &entry_x, &entry_y);
+  entry_allocation = &(GTK_WIDGET (chooser_entry)->allocation);
+
+  /* FIXME: find text cursor position in the screen, adjust the window to that */
+  /* FIXME: handle RTL positioning */
+
+  gtk_window_move (GTK_WINDOW (chooser_entry->completion_feedback_window),
+		   entry_x + entry_allocation->width - feedback_req.width,
+		   entry_y + (entry_allocation->height - feedback_req.height) / 2);
+  gtk_widget_show (chooser_entry->completion_feedback_window);
+
+  /* FIXME: install timer */
+}
+
 static void
 pop_up_completion_feedback (GtkFileChooserEntry *chooser_entry,
 			    const gchar         *feedback)
 {
-  /* FIXME: use a popup window of some sort */
-  printf ("COMPLETION: %s\n", feedback);
+  if (chooser_entry->completion_feedback_window == NULL)
+    create_completion_feedback_window (chooser_entry);
+
+  gtk_label_set_text (GTK_LABEL (chooser_entry->completion_feedback_label), feedback);
+
+  show_completion_feedback_window (chooser_entry);
+}
+
+static void
+remove_completion_feedback (GtkFileChooserEntry *chooser_entry)
+{
+  /* FIXME */
+  chooser_entry->completion_feedback_window = NULL;
+  chooser_entry->completion_feedback_label = NULL;
 }
 
 static void
