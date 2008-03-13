@@ -912,6 +912,10 @@ load_directory_get_folder_callback (GtkFileSystemHandle *handle,
 
   chooser_entry->load_folder_handle = NULL;
 
+  /* FIXME: if there was an error *AND* we had a pending explicit completion, beep and pop up a
+   * tooltip to say that the folder could not be loaded.
+   */
+
   if (cancelled || error)
     goto out;
 
