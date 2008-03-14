@@ -1,5 +1,11 @@
 2008-03-13  Federico Mena Quintero  <federico@novell.com>
 
+	* gtk/gtkfilechooserentry.c (create_completion_feedback_window):
+	Set the mouse cursor of the feedback window to invisible, so that
+	we respect GtkEntry's invisible cursor while typing.
+
+2008-03-13  Federico Mena Quintero  <federico@novell.com>
+
 	* gtk/gtkfilechooserentry.c (show_completion_feedback_window): Put
 	the feedback window at entry_height/2 pixels to the right of the
 	cursor, for a cheap "M-width / 2" spacing.

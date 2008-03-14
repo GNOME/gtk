@@ -851,6 +851,47 @@ completion_feedback_window_expose_event_cb (GtkWidget      *widget,
 }
 
 static void
+set_invisible_mouse_cursor (GdkWindow *window)
+{
+  /* Stolen from gtkentry.c:set_invisible_cursor() */
+  /* FIXME: implement a stupid public gdk_window_set_invisible_mouse_cursor() */
+
+  GdkBitmap *empty_bitmap;
+  GdkCursor *cursor;
+  GdkColor useless;
+  char invisible_cursor_bits[] = { 0x0 };
+
+  useless.red = useless.green = useless.blue = 0;
+  useless.pixel = 0;
+
+  empty_bitmap = gdk_bitmap_create_from_data (window,
+					      invisible_cursor_bits,
+					      1, 1);
+
+  cursor = gdk_cursor_new_from_pixmap (empty_bitmap,
+				       empty_bitmap,
+				       &useless,
+				       &useless, 0, 0);
+
+  gdk_window_set_cursor (window, cursor);
+
+  gdk_cursor_unref (cursor);
+
+  g_object_unref (empty_bitmap);
+}
+
+static void
+completion_feedback_window_realize_cb (GtkWidget *widget,
+				       gpointer data)
+{
+  /* We hide the mouse cursor inside the completion feedback window, since
+   * GtkEntry hides the cursor when the user types.  We don't want the cursor to
+   * come back if the completion feedback ends up where the mouse is.
+   */
+  set_invisible_mouse_cursor (widget->window);
+}
+
+static void
 create_completion_feedback_window (GtkFileChooserEntry *chooser_entry)
 {
   /* Stolen from gtk_tooltip_init() */
@@ -875,6 +916,9 @@ create_completion_feedback_window (GtkFileChooserEntry *chooser_entry)
 
   g_signal_connect (chooser_entry->completion_feedback_window, "expose_event",
 		    G_CALLBACK (completion_feedback_window_expose_event_cb), chooser_entry);
+  g_signal_connect (chooser_entry->completion_feedback_window, "realize",
+		    G_CALLBACK (completion_feedback_window_realize_cb), chooser_entry);
+  /* FIXME: connect to motion-notify-event, and *show* the cursor when the mouse moves */
 
   chooser_entry->completion_feedback_label = gtk_label_new (NULL);
   gtk_container_add (GTK_CONTAINER (alignment), chooser_entry->completion_feedback_label);
