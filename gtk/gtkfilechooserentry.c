@@ -947,7 +947,8 @@ show_completion_feedback_window (GtkFileChooserEntry *chooser_entry)
 
   get_entry_cursor_x (chooser_entry, &cursor_x);
 
-  feedback_x = entry_x + cursor_x + 2; /* FIXME: fit to the screen if we bump on the screen's edge */
+  /* FIXME: fit to the screen if we bump on the screen's edge */
+  feedback_x = entry_x + cursor_x + entry_allocation->height / 2; /* cheap "half M-width" */
   feedback_y = entry_y + (entry_allocation->height - feedback_req.height) / 2;
 
   gtk_window_move (GTK_WINDOW (chooser_entry->completion_feedback_window), feedback_x, feedback_y);
