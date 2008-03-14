@@ -333,9 +333,11 @@ gdk_window_quartz_process_all_updates (void)
 {
   GSList *old_update_windows = update_windows;
   GSList *tmp_list = update_windows;
+  GSList *nswindows;
 
   update_idle = 0;
   update_windows = NULL;
+  nswindows = NULL;
 
   g_slist_foreach (old_update_windows, (GFunc) g_object_ref, NULL);
   
@@ -343,15 +345,43 @@ gdk_window_quartz_process_all_updates (void)
 
   while (tmp_list)
     {
+      GdkWindow *window = tmp_list->data;
+      GdkWindow *toplevel;
+      NSWindow *nswindow;
+      GdkWindowObject *private;
+      GdkWindowImplQuartz *impl;
+
+      toplevel = gdk_window_get_toplevel (window);
+      private = (GdkWindowObject *) toplevel;
+      impl = (GdkWindowImplQuartz *) private->impl;
+      nswindow = impl->toplevel;
+
+      if (nswindow && ![nswindow isFlushWindowDisabled]) 
+        {
+          [nswindow disableFlushWindow];
+          nswindows = g_slist_prepend (nswindows, nswindow);
+        }
+
       gdk_window_quartz_process_updates_internal (tmp_list->data);
 
       g_object_unref (tmp_list->data);
       tmp_list = tmp_list->next;
     }
 
+  while (nswindows) 
+    {
+      NSWindow *nswindow = nswindows->data;
+
+      [nswindow enableFlushWindow];
+      [nswindow flushWindow];
+
+      nswindows = nswindows->next;
+    }
+		    
   GDK_QUARTZ_RELEASE_POOL;
 
   g_slist_free (old_update_windows);
+  g_slist_free (nswindows);
 }
 
 static gboolean
