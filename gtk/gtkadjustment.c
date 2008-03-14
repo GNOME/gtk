@@ -42,21 +42,25 @@ enum
   PROP_PAGE_SIZE
 };
 
-enum {
+enum
+{
   CHANGED,
   VALUE_CHANGED,
   LAST_SIGNAL
 };
 
 
-static void gtk_adjustment_get_property (GObject      *object,
-                                         guint         prop_id,
-                                         GValue       *value,
-                                         GParamSpec   *pspec);
-static void gtk_adjustment_set_property (GObject      *object,
-                                         guint         prop_id,
-                                         const GValue *value,
-                                         GParamSpec   *pspec);
+static void gtk_adjustment_get_property                (GObject      *object,
+                                                        guint         prop_id,
+                                                        GValue       *value,
+                                                        GParamSpec   *pspec);
+static void gtk_adjustment_set_property                (GObject      *object,
+                                                        guint         prop_id,
+                                                        const GValue *value,
+                                                        GParamSpec   *pspec);
+static void gtk_adjustment_dispatch_properties_changed (GObject      *object,
+                                                        guint         n_pspecs,
+                                                        GParamSpec  **pspecs);
 
 static guint adjustment_signals[LAST_SIGNAL] = { 0 };
 
@@ -67,8 +71,9 @@ gtk_adjustment_class_init (GtkAdjustmentClass *class)
 {
   GObjectClass *gobject_class = G_OBJECT_CLASS (class);
 
-  gobject_class->set_property = gtk_adjustment_set_property;
-  gobject_class->get_property = gtk_adjustment_get_property;
+  gobject_class->set_property                = gtk_adjustment_set_property;
+  gobject_class->get_property                = gtk_adjustment_get_property;
+  gobject_class->dispatch_properties_changed = gtk_adjustment_dispatch_properties_changed;
 
   class->changed = NULL;
   class->value_changed = NULL;
@@ -180,7 +185,6 @@ gtk_adjustment_class_init (GtkAdjustmentClass *class)
 							G_MAXDOUBLE, 
 							0.0, 
 							GTK_PARAM_READWRITE));
-  
 
   adjustment_signals[CHANGED] =
     g_signal_new (I_("changed"),
@@ -190,6 +194,7 @@ gtk_adjustment_class_init (GtkAdjustmentClass *class)
 		  NULL, NULL,
 		  _gtk_marshal_VOID__VOID,
 		  G_TYPE_NONE, 0);
+
   adjustment_signals[VALUE_CHANGED] =
     g_signal_new (I_("value_changed"),
 		  G_OBJECT_CLASS_TYPE (class),
@@ -212,8 +217,10 @@ gtk_adjustment_init (GtkAdjustment *adjustment)
 }
 
 static void
-gtk_adjustment_get_property (GObject *object, guint prop_id, GValue *value, 
-	                     GParamSpec *pspec)
+gtk_adjustment_get_property (GObject    *object,
+                             guint       prop_id,
+                             GValue     *value,
+                             GParamSpec *pspec)
 {
   GtkAdjustment *adjustment = GTK_ADJUSTMENT (object);
 
@@ -244,8 +251,10 @@ gtk_adjustment_get_property (GObject *object, guint prop_id, GValue *value,
 }
 
 static void
-gtk_adjustment_set_property (GObject * object, guint prop_id, 
-	                     const GValue * value, GParamSpec * pspec)
+gtk_adjustment_set_property (GObject      *object,
+                             guint         prop_id,
+                             const GValue *value,
+                             GParamSpec   *pspec)
 {
   GtkAdjustment *adjustment = GTK_ADJUSTMENT (object);
   gdouble double_value = g_value_get_double (value);
@@ -253,42 +262,22 @@ gtk_adjustment_set_property (GObject * object, guint prop_id,
   switch (prop_id)
     {
     case PROP_VALUE:
-      gtk_adjustment_set_value (GTK_ADJUSTMENT (object), double_value);
+      gtk_adjustment_set_value (adjustment, double_value);
       break;
     case PROP_LOWER:
-      if (adjustment->lower != double_value)
-        {
-          adjustment->lower = double_value;
-          g_object_notify (G_OBJECT (adjustment), "lower");
-        }
+      adjustment->lower = double_value;
       break;
     case PROP_UPPER:
-      if (adjustment->upper != double_value)
-        {
-          adjustment->upper = double_value;
-          g_object_notify (G_OBJECT (adjustment), "upper");
-        }
+      adjustment->upper = double_value;
       break;
     case PROP_STEP_INCREMENT:
-      if (adjustment->step_increment != double_value)
-        {
-          adjustment->step_increment = double_value;
-          g_object_notify (G_OBJECT (adjustment), "step-increment");
-        }
+      adjustment->step_increment = double_value;
       break;
     case PROP_PAGE_INCREMENT:
-      if (adjustment->page_increment != double_value)
-        {
-          adjustment->page_increment = double_value;
-          g_object_notify (G_OBJECT (adjustment), "page-increment");
-        }
+      adjustment->page_increment = double_value;
       break;
     case PROP_PAGE_SIZE:
-      if (adjustment->page_size != double_value)
-        {
-          adjustment->page_size = double_value;
-          g_object_notify (G_OBJECT (adjustment), "page-size");
-        }
+      adjustment->page_size = double_value;
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -296,7 +285,35 @@ gtk_adjustment_set_property (GObject * object, guint prop_id,
     }
 }
 
-GtkObject*
+static void
+gtk_adjustment_dispatch_properties_changed (GObject     *object,
+                                            guint        n_pspecs,
+                                            GParamSpec **pspecs)
+{
+  gboolean changed = FALSE;
+  gint i;
+
+  G_OBJECT_CLASS (gtk_adjustment_parent_class)->dispatch_properties_changed (object, n_pspecs, pspecs);
+
+  for (i = 0; i < n_pspecs; i++)
+    switch (pspecs[i]->param_id)
+      {
+      case PROP_LOWER:
+      case PROP_UPPER:
+      case PROP_STEP_INCREMENT:
+      case PROP_PAGE_INCREMENT:
+      case PROP_PAGE_SIZE:
+        changed = TRUE;
+        break;
+      default:
+        break;
+      }
+
+  if (changed)
+    gtk_adjustment_changed (GTK_ADJUSTMENT (object));
+}
+
+GtkObject *
 gtk_adjustment_new (gdouble value,
 		    gdouble lower,
 		    gdouble upper,
@@ -326,14 +343,14 @@ gtk_adjustment_new (gdouble value,
 gdouble
 gtk_adjustment_get_value (GtkAdjustment *adjustment)
 {
-  g_return_val_if_fail (GTK_IS_ADJUSTMENT (adjustment), 0.);
+  g_return_val_if_fail (GTK_IS_ADJUSTMENT (adjustment), 0.0);
 
   return adjustment->value;
 }
 
 void
-gtk_adjustment_set_value (GtkAdjustment        *adjustment,
-			  gdouble               value)
+gtk_adjustment_set_value (GtkAdjustment *adjustment,
+			  gdouble        value)
 {
   g_return_if_fail (GTK_IS_ADJUSTMENT (adjustment));
 
@@ -348,7 +365,7 @@ gtk_adjustment_set_value (GtkAdjustment        *adjustment,
 }
 
 void
-gtk_adjustment_changed (GtkAdjustment        *adjustment)
+gtk_adjustment_changed (GtkAdjustment *adjustment)
 {
   g_return_if_fail (GTK_IS_ADJUSTMENT (adjustment));
 
@@ -356,7 +373,7 @@ gtk_adjustment_changed (GtkAdjustment        *adjustment)
 }
 
 void
-gtk_adjustment_value_changed (GtkAdjustment        *adjustment)
+gtk_adjustment_value_changed (GtkAdjustment *adjustment)
 {
   g_return_if_fail (GTK_IS_ADJUSTMENT (adjustment));
 

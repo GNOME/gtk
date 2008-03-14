@@ -1,3 +1,13 @@
+2008-03-14  Michael Natterer  <mitch@imendio.com>
+
+	* gtk/gtkadjustment.c: coding style cleanup.
+
+	(gtk_adjustment_set_property): no need to call g_object_notify()
+	on the set properties.
+
+	Implement GObject::dispatch_properties_changed() and make sure we
+	emit "changed" when anything but the "value" property changes.
+
 2008-03-14  Tor Lillqvist  <tml@novell.com>
 
 	* gdk/win32/gdkevents-win32.c: Drop the support for the
