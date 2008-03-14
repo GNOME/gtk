@@ -23,7 +23,6 @@
 #define __GDK_SPAWN_H__
 
 #include <gdk/gdkscreen.h>
-#include <glib/gspawn.h>
 
 G_BEGIN_DECLS
 

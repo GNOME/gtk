@@ -25,7 +25,6 @@
  *  - Needs analysis with the code coverage tool once it is there.
  */
 
-#include <glib/gtestutils.h>
 #include <gtk/gtk.h>
 
 static inline gboolean

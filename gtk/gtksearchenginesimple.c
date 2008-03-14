@@ -39,8 +39,6 @@
 
 #include <string.h>
 
-#include <glib/gstrfuncs.h>
-
 #define BATCH_SIZE 500
 
 typedef struct 

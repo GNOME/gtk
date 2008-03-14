@@ -1,5 +1,15 @@
 2008-03-14  Michael Natterer  <mitch@imendio.com>
 
+	* gdk/gdkspawn.h
+	* gtk/gtkbuilderprivate.h
+	* gtk/gtkfilechoosersettings.c
+	* gtk/gtksearchenginesimple.c
+	* gtk/tests/liststore.c
+	* gtk/tests/treestore.c: remove single-file includes of GLib
+	headers or replace them by <glib.h> where needed.
+
+2008-03-14  Michael Natterer  <mitch@imendio.com>
+
 	* gtk/gtkadjustment.c: coding style cleanup.
 
 	(gtk_adjustment_set_property): no need to call g_object_notify()

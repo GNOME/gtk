@@ -21,9 +21,6 @@
 #ifndef __GTK_BUILDER_PRIVATE_H__
 #define __GTK_BUILDER_PRIVATE_H__
 
-#include <glib/gmarkup.h>
-#include <glib/gslist.h>
-
 #include <glib-object.h>
 #include "gtkbuilder.h"
 
