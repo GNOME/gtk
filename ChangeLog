@@ -1,3 +1,8 @@
+2008-03-14  Cody Russell  <bratsche@gnome.org>
+
+	* examples/scribble-xinput/scribble-xinput.c: Changed
+	'void int main()' to 'int main()'. (#522211, Liqing Huang)
+	
 2008-03-14  Richard Hult  <richard@imendio.com>
 
 	* gdk/quartz/gdkwindow-quartz.c:
