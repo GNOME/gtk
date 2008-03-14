@@ -128,7 +128,6 @@ GPollFD event_poll_fd;
 static GdkWindow *current_window = NULL;
 static gint current_x, current_y;
 static gint current_root_x, current_root_y;
-static UINT msh_mousewheel;
 static UINT client_message;
 
 static UINT got_gdk_events_message;
@@ -344,13 +343,6 @@ _gdk_events_init (void)
 #endif
   };
 #endif
-
-  /* This is the string MSH_MOUSEWHEEL from zmouse.h,
-   * http://www.microsoft.com/mouse/intellimouse/sdk/zmouse.h
-   * This message is used by mouse drivers than cannot generate WM_MOUSEWHEEL
-   * or on Win95.
-   */
-  msh_mousewheel = RegisterWindowMessage ("MSWHEEL_ROLLMSG");
 
   client_message = RegisterWindowMessage ("GDK_WIN32_CLIENT_MESSAGE");
   got_gdk_events_message = RegisterWindowMessage ("GDK_WIN32_GOT_EVENTS");
@@ -2182,54 +2174,7 @@ gdk_event_translate (MSG  *msg,
 	}
     }
 
-  if (msg->message == msh_mousewheel)
-    {
-      GDK_NOTE (EVENTS, g_print (" (MSH_MOUSEWHEEL)"));
-      
-      /* MSH_MOUSEWHEEL is delivered to the foreground window.  Work
-       * around that. Also, the position is in screen coordinates, not
-       * client coordinates as with the button messages.
-       */
-      point.x = GET_X_LPARAM (msg->lParam);
-      point.y = GET_Y_LPARAM (msg->lParam);
-      if ((hwnd = WindowFromPoint (point)) == NULL)
-	goto done;
-
-      msg->hwnd = hwnd;
-      if ((new_window = gdk_win32_handle_table_lookup ((GdkNativeWindow) msg->hwnd)) == NULL)
-	goto done;
-
-      assign_object (&window, new_window);
-
-      if (!propagate (&window, msg,
-		      p_grab_window, p_grab_owner_events, p_grab_mask,
-		      doesnt_want_scroll, TRUE))
-	goto done;
-
-      if (GDK_WINDOW_DESTROYED (window))
-	goto done;
-
-      ScreenToClient (msg->hwnd, &point);
-
-      event = gdk_event_new (GDK_SCROLL);
-      event->scroll.window = window;
-      event->scroll.direction = ((int) msg->wParam > 0) ?
-	GDK_SCROLL_UP : GDK_SCROLL_DOWN;
-      event->scroll.time = _gdk_win32_get_next_tick (msg->time);
-      _gdk_windowing_window_get_offsets (window, &xoffset, &yoffset);
-      event->scroll.x = (gint16) point.x + xoffset;
-      event->scroll.y = (gint16) point.y + yoffset;
-      event->scroll.x_root = (gint16) GET_X_LPARAM (msg->lParam) + _gdk_offset_x;
-      event->scroll.y_root = (gint16) GET_Y_LPARAM (msg->lParam) + _gdk_offset_y;
-      event->scroll.state = 0;	/* No state information with MSH_MOUSEWHEEL */
-      event->scroll.device = _gdk_display->core_pointer;
-
-      append_event (event);
-
-      return_val = TRUE;
-      goto done;
-    }
-  else if (msg->message == client_message)
+  if (msg->message == client_message)
     {
       GList *tmp_list;
       GdkFilterReturn result = GDK_FILTER_CONTINUE;

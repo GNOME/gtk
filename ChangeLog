@@ -1,3 +1,9 @@
+2008-03-14  Tor Lillqvist  <tml@novell.com>
+
+	* gdk/win32/gdkevents-win32.c: Drop the support for the
+	MSH_MOUSEWHEEL message that MSDN says is used only on NT 3.51 and
+	Win95. Thanks to mitch for noticing this obsolete code.
+
 2008-03-14  Cody Russell  <bratsche@gnome.org>
 
 	* examples/scribble-xinput/scribble-xinput.c: Changed
