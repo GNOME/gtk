@@ -10358,6 +10358,8 @@ gtk_tree_view_ensure_interactive_directory (GtkTreeView *tree_view)
     gtk_window_group_add_window (GTK_WINDOW (toplevel)->group,
 				 GTK_WINDOW (tree_view->priv->search_window));
 
+  gtk_window_set_type_hint (GTK_WINDOW (tree_view->priv->search_window),
+			    GDK_WINDOW_TYPE_HINT_UTILITY);
   gtk_window_set_modal (GTK_WINDOW (tree_view->priv->search_window), TRUE);
   g_signal_connect (tree_view->priv->search_window, "delete_event",
 		    G_CALLBACK (gtk_tree_view_search_delete_event),
