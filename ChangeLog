@@ -1,5 +1,10 @@
 2008-03-15  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtktreeview.c (gtk_tree_view_ensure_interactive_directory):
+	Set window type hint on the search popup.  (#522279, Danny Baumann)
+
+2008-03-15  Matthias Clasen  <mclasen@redhat.com>
+
 	* gtk/gtkimcontextsimple.c: Emit preedit_start/_end as
 	appropriate.  (#521934, Huang Peng)
 
