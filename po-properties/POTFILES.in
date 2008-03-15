@@ -9,7 +9,9 @@ gdk-pixbuf/gdk-pixdata.c
 gdk-pixbuf/io-ani.c
 gdk-pixbuf/io-bmp.c
 gdk-pixbuf/io-gif.c
+gdk-pixbuf/io-icns.c
 gdk-pixbuf/io-ico.c
+gdk-pixbuf/io-jasper.c
 gdk-pixbuf/io-jpeg.c
 gdk-pixbuf/io-pcx.c
 gdk-pixbuf/io-png.c
@@ -27,6 +29,7 @@ gdk/gdkpango.c
 gdk/gdkscreen.c
 gdk/keyname-table.h
 gdk/win32/gdkmain-win32.c
+gdk/x11/gdkapplaunchcontext-x11.c
 gdk/x11/gdkmain-x11.c
 gtk/gtkaboutdialog.c
 gtk/gtkaccelgroup.c
@@ -213,6 +216,7 @@ gtk/gtktoggletoolbutton.c
 gtk/gtktoolbar.c
 gtk/gtktoolbutton.c
 gtk/gtktoolitem.c
+gtk/gtktoolshell.c
 gtk/gtktooltips.c
 gtk/gtktrayicon-x11.c
 gtk/gtktree.c
