@@ -1,3 +1,7 @@
+2008-03-15  Andre Klapper  <a9016009@gmx.de>
+
+	* POTFILES.in: Added missing files.
+
 2008-03-14  Andre Klapper  <a9016009@gmx.de>
 
 	* de.po: Added missing mnemonic to German version.

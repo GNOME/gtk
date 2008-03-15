@@ -30,6 +30,7 @@ gdk-pixbuf/io-xbm.c
 gdk-pixbuf/io-xpm.c
 gdk/win32/gdkmain-win32.c
 gdk/x11/gdkmain-x11.c
+gdk/x11/gdkapplaunchcontext-x11.c
 gtk/gtkaboutdialog.c
 gtk/gtkaccelgroup.c
 gtk/gtkaccellabel.c
@@ -215,6 +216,7 @@ gtk/gtktoggletoolbutton.c
 gtk/gtktoolbar.c
 gtk/gtktoolbutton.c
 gtk/gtktoolitem.c
+gtk/gtktoolshell.c
 gtk/gtktooltips.c
 gtk/gtktrayicon-x11.c
 gtk/gtktree.c
