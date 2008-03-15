@@ -161,6 +161,7 @@ gtk_im_context_simple_commit_char (GtkIMContext *context,
       context_simple->tentative_match = 0;
       context_simple->tentative_match_len = 0;
       g_signal_emit_by_name (context_simple, "preedit_changed");
+      g_signal_emit_by_name (context_simple, "preedit_end");
     }
 
   g_signal_emit_by_name (context, "commit", &buf);
@@ -724,6 +725,7 @@ gtk_im_context_simple_filter_keypress (GtkIMContext *context,
 	      context_simple->compose_buffer[0] = 0;
 	      
 	      g_signal_emit_by_name (context_simple, "preedit_changed");
+	      g_signal_emit_by_name (context_simple, "preedit_end");
 	    }
 
 	  return TRUE;
@@ -733,7 +735,7 @@ gtk_im_context_simple_filter_keypress (GtkIMContext *context,
     }
 
   /* Ignore modifier key presses */
-  for (i=0; i < G_N_ELEMENTS (gtk_compose_ignore); i++)
+  for (i = 0; i < G_N_ELEMENTS (gtk_compose_ignore); i++)
     if (event->keyval == gtk_compose_ignore[i])
       return FALSE;
 
@@ -786,6 +788,9 @@ gtk_im_context_simple_filter_keypress (GtkIMContext *context,
 	}
 
       g_signal_emit_by_name (context_simple, "preedit_changed");
+
+      if (!context_simple->in_hex_sequence)
+        g_signal_emit_by_name (context_simple, "preedit_end");
       
       return TRUE;
     }
@@ -819,6 +824,7 @@ gtk_im_context_simple_filter_keypress (GtkIMContext *context,
       context_simple->modifiers_dropped = FALSE;
       context_simple->tentative_match = 0;
 
+      g_signal_emit_by_name (context_simple, "preedit_start");
       g_signal_emit_by_name (context_simple, "preedit_changed");
   
       return TRUE;
@@ -877,6 +883,9 @@ gtk_im_context_simple_filter_keypress (GtkIMContext *context,
 	  
 	  g_signal_emit_by_name (context_simple, "preedit_changed");
 
+	  if (!context_simple->in_hex_sequence)
+	    g_signal_emit_by_name (context_simple, "preedit_end");
+
 	  return TRUE;
         }
     }
@@ -914,6 +923,7 @@ gtk_im_context_simple_reset (GtkIMContext *context)
       context_simple->tentative_match = 0;
       context_simple->tentative_match_len = 0;
       g_signal_emit_by_name (context_simple, "preedit_changed");
+      g_signal_emit_by_name (context_simple, "preedit_end");
     }
 }
 
