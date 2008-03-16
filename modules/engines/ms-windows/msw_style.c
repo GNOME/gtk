@@ -902,24 +902,25 @@ setup_msw_rc_style (void)
 	      "ythickness = %d\n"
 	      "}\n"
 	      "class \"GtkComboBox\" style \"msw-combobox\"\n",
-	      GetSystemMetrics (SM_CXEDGE), GetSystemMetrics (SM_CYEDGE));
+        xp_theme_is_active()? 1 : GetSystemMetrics (SM_CXEDGE),
+        xp_theme_is_active()? 1 : GetSystemMetrics (SM_CYEDGE));
   gtk_rc_parse_string (buf);
 
   /* size of tree view header */
   g_snprintf (buf, sizeof (buf),
 	      "style \"msw-header-button\" = \"msw-default\"\n"
 	      "{\n"
-	      "xthickness = 4\n"
-	      "ythickness = %d\n"
-	      "GtkButton::default-border = { 0, 0, 0, 0 }\n"
+	      "xthickness = 0\n"
+	      "ythickness = 0\n"
+	      "GtkWidget::draw-border = {0, 0, 0, 0}\n"
+        "GtkButton::default-border = { 0, 0, 0, 0 }\n"
 	      "GtkButton::default-outside-border = { 0, 0, 0, 0 }\n"
-	      "GtkButton::child-displacement-x = 1\n"
-	      "GtkButton::child-displacement-y = 1\n"
+	      "GtkButton::child-displacement-x = 0\n"
+	      "GtkButton::child-displacement-y = 0\n"
 	      "GtkWidget::focus-padding = 0\n"
 	      "GtkWidget::focus-line-width = 0\n"
 	      "}\n"
-	      "widget_class \"*TreeView*Button*\" style \"msw-header-button\"\n",
-	      xp_theme_is_active ()? 2 : 0);
+	      "widget_class \"*TreeView*Button*\" style \"msw-header-button\"\n");
   gtk_rc_parse_string (buf);
 
   /* FIXME: This should be enabled once gtk+ support GtkNotebok::prelight-tab */
@@ -1078,7 +1079,8 @@ is_combo_box_child (GtkWidget *w)
   return FALSE;
 }
 
-static gboolean
+/* This function is not needed anymore */
+/* static gboolean
 combo_box_draw_arrow (GtkStyle *style,
 		      GdkWindow *window,
 		      GtkStateType state,
@@ -1107,7 +1109,7 @@ combo_box_draw_arrow (GtkStyle *style,
     }
 
   return FALSE;
-}
+}*/
 
 static void
 draw_part (GdkDrawable *drawable,
@@ -1494,13 +1496,8 @@ draw_arrow (GtkStyle *style,
 
   sanitize_size (window, &width, &height);
 
-  if (GTK_IS_ARROW (widget) && is_combo_box_child (widget))
-    {
-      if (combo_box_draw_arrow (style, window, state, area, widget))
-	{
-	  return;
-	}
-    }
+  if (GTK_IS_ARROW (widget) && is_combo_box_child (widget) && xp_theme_is_active ())
+    return;
 
   if (detail && strcmp (detail, "spinbutton") == 0)
     {
@@ -1973,22 +1970,29 @@ draw_box (GtkStyle *style,
   if (is_combo_box_child (widget) && detail && !strcmp (detail, "button"))
     {
       RECT rect;
+      DWORD border;
       HDC dc;
       int cx;
 
-      dc = get_window_dc (style, window, state_type, x, y, width - cx, height, &rect);
-      FillRect (dc, &rect, GetSysColorBrush (COLOR_WINDOW));
-      release_window_dc (style, window, state_type);
+      border = (GTK_TOGGLE_BUTTON (widget)->active ? DFCS_PUSHED | DFCS_FLAT : 0);
 
-      cx = GetSystemMetrics(SM_CXVSCROLL);
-      x += width - cx;
-      width = cx;
+      dc = get_window_dc (style, window, state_type, x, y, width, height, &rect);
+      DrawFrameControl (dc, &rect, DFC_SCROLL, DFCS_SCROLLDOWN | border);
+      release_window_dc (style, window, state_type);
 
       if (xp_theme_is_active ()
 	  && xp_theme_draw (window, XP_THEME_ELEMENT_COMBOBUTTON, style, x, y,
 			    width, height, state_type, area))
 	{
-	  return;
+      cx = GetSystemMetrics(SM_CXVSCROLL);
+      x += width - cx;
+      width = cx;
+
+
+      dc = get_window_dc (style, window, state_type, x, y, width - cx, height, &rect);
+      FillRect (dc, &rect, GetSysColorBrush (COLOR_WINDOW));
+      release_window_dc (style, window, state_type);
+      return;
 	}
     }
 
@@ -1996,8 +2000,8 @@ draw_box (GtkStyle *style,
       (!strcmp (detail, "button") || !strcmp (detail, "buttondefault")))
     {
       if (GTK_IS_TREE_VIEW (widget->parent) || GTK_IS_CLIST (widget->parent))
-	{
-	  if (xp_theme_draw
+      {
+        if (xp_theme_draw
 	      (window, XP_THEME_ELEMENT_LIST_HEADER, style, x, y,
 	       width, height, state_type, area))
 	    {
@@ -2950,12 +2954,14 @@ draw_shadow (GtkStyle *style,
       HDC dc;
       RECT rect;
 
-      if (is_combo_box_child (widget))
-        return; 
+
 
       dc = get_window_dc (style, window, state_type, x, y, width, height, &rect);
-
-      if (is_popup_window_child (widget))
+      if (is_combo_box_child (widget))
+        {
+          FillRect (dc, &rect, GetSysColorBrush (COLOR_WINDOW));
+        }
+      else if (is_popup_window_child (widget))
 	{
 	  FrameRect (dc, &rect, GetSysColorBrush (COLOR_WINDOWFRAME));
 	}

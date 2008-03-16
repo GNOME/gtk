@@ -1,6 +1,17 @@
-2008-16-03  Alberto Ruiz <aruiz@gnome.org>
+2008-03-16  Alberto Ruiz <aruiz@gnome.org>
 
-	* gtl/gtkcombobox.c: (gtk_combo_box_size_allocate) The child is now aware of
+	* modules/engines/ms-windows/Theme/gtk-2.0/gtkrc:
+	* modules/engines/ms-windows/msw_style.c (draw_box) (draw_arrow)
+	(combo_box_draw_arrow) (setup_msw_rc_style): draw box does more intelligent
+	separation for the xp theming engine and the classic theme while drawing the
+	GtkComboBox button.
+	combobox_draw_arrow is not used anymore, commented.
+	The style has been updated to fix border/thickness glitches in the combobox
+	according to the fixes commited regarding bug #521442. (bug #461805)
+
+2008-03-16  Alberto Ruiz <aruiz@gnome.org>
+
+	* gtk/gtkcombobox.c: (gtk_combo_box_size_allocate) The child is now aware of
 	both the combobox and frame (if has-frame is set) thickness and border. (bug #521442)
 
 2008-03-15  Andre Klapper  <a9016009@gmx.de>
