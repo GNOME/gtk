@@ -1,3 +1,8 @@
+2008-16-03  Alberto Ruiz <aruiz@gnome.org>
+
+	* gtl/gtkcombobox.c: (gtk_combo_box_size_allocate) The child is now aware of
+	both the combobox and frame (if has-frame is set) thickness and border. (bug #521442)
+
 2008-03-15  Andre Klapper  <a9016009@gmx.de>
 
 	* configure.in: Added "si" to ALL_LINGUAS.
