@@ -1,3 +1,8 @@
+2008-03-17  Emmanuele Bassi  <ebassi@gnome.org>
+
+	* gtk/gtkcontainer.c: Properly document
+	gtk_container_set_focus_child(). (#521739, Andrew Cowie)
+
 2008-03-16  Alberto Ruiz <aruiz@gnome.org>
 
 	* modules/engines/ms-windows/Theme/gtk-2.0/gtkrc: more descriptive

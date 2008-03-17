@@ -1537,6 +1537,17 @@ gtk_container_foreach_full (GtkContainer       *container,
     notify (callback_data);
 }
 
+/**
+ * gtk_container_set_focus_child:
+ * @container: a #GtkContainer
+ * @widget: a #GtkWidget, or %NULL
+ *
+ * Sets, or unsets if @widget is %NULL, the focused child of @container.
+ *
+ * This function emits the GtkContainer::set_focus_child signal of
+ * @container. Implementations of #GtkContainer can override the
+ * default behaviour by overriding the class closure of this signal.
+ */
 void
 gtk_container_set_focus_child (GtkContainer *container,
 			       GtkWidget    *widget)
