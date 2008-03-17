@@ -52,6 +52,9 @@ TEST_PROGS                      += textbuffertest
 textbuffertest_DEPENDENCIES 	 = $(TEST_DEPS)
 textbuffertest_LDADD 		 = $(LDADDS)
 textbuffertest_SOURCES           = textbuffertest.c pixbuf-init.c
+if OS_UNIX
+TEST_PROGS                      += testmountoperation
+endif
 
 noinst_PROGRAMS =  $(TEST_PROGS)	\
 	simple				\
@@ -77,7 +80,6 @@ noinst_PROGRAMS =  $(TEST_PROGS)	\
 	testinput			\
 	testmenus			\
 	testmenubars			\
-	testmountoperation              \
 	testmultidisplay		\
 	testmultiscreen			\
 	testnotebookdnd			\

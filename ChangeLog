@@ -1,3 +1,7 @@
+2008-03-18  Tor Lillqvist  <tml@novell.com>
+
+	* tests/Makefile.am: Build testmountoperation only on Unix for now.
+
 2008-03-17  Christian Kellner  <gicmo@gnome.org>
 
 	Implement GtkMountOperation, a subclass of GMountOperation
