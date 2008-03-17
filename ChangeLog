@@ -1,22 +1,24 @@
 2008-03-16  Alberto Ruiz <aruiz@gnome.org>
-	* modules/engines/ms-windows/Theme/gtk-2.0/gtkrc: more descriptive style
-	names for the ComboBox thickness style
+
+	* modules/engines/ms-windows/Theme/gtk-2.0/gtkrc: more descriptive
+	style names for the ComboBox thickness style
 
 2008-03-16  Alberto Ruiz <aruiz@gnome.org>
 
 	* modules/engines/ms-windows/Theme/gtk-2.0/gtkrc:
 	* modules/engines/ms-windows/msw_style.c (draw_box) (draw_arrow)
-	(combo_box_draw_arrow) (setup_msw_rc_style): draw box does more intelligent
-	separation for the xp theming engine and the classic theme while drawing the
-	GtkComboBox button.
-	combobox_draw_arrow is not used anymore, commented.
-	The style has been updated to fix border/thickness glitches in the combobox
-	according to the fixes commited regarding bug #521442. (bug #461805)
+	(combo_box_draw_arrow) (setup_msw_rc_style): draw box does more
+	intelligent separation for the xp theming engine and the classic
+	theme while drawing the GtkComboBox button.  combobox_draw_arrow
+	is not used anymore, commented.  The style has been updated to fix
+	border/thickness glitches in the combobox according to the fixes
+	commited regarding bug #521442. (bug #461805)
 
 2008-03-16  Alberto Ruiz <aruiz@gnome.org>
 
-	* gtk/gtkcombobox.c: (gtk_combo_box_size_allocate) The child is now aware of
-	both the combobox and frame (if has-frame is set) thickness and border. (bug #521442)
+	* gtk/gtkcombobox.c: (gtk_combo_box_size_allocate) The child is
+	now aware of both the combobox and frame (if has-frame is set)
+	thickness and border. (bug #521442)
 
 2008-03-15  Andre Klapper  <a9016009@gmx.de>
 
@@ -2880,11 +2882,11 @@ Tue Nov 20 15:19:42 2007 +0100 Tim Janik
 
 	* gdk/gdk.h: added gdktestutils.h to public includes.
 
-	* gdk/gdk.symbols: added gdk_test_simulate_button, gdk_test_simulate_key,
-	gdk_test_render_sync.
-
-	* gdk/gdktestutils.h: new file, added prototypes for gdk_test_simulate_button,
+	* gdk/gdk.symbols: added gdk_test_simulate_button,
 	gdk_test_simulate_key, gdk_test_render_sync.
+
+	* gdk/gdktestutils.h: new file, added prototypes for
+	gdk_test_simulate_button, gdk_test_simulate_key, gdk_test_render_sync.
 
 	* gdk/x11/Makefile.am: build gdktestutils-x11.c.
 
@@ -2907,12 +2909,13 @@ Thu Nov 15 13:11:39 2007 +0100 Tim Janik
 	to be enabled once Gtk+ depends on a new glib with the GLib testing
 	framework integrated.
 
-	* gtk/tests/Makefile.am: new subdirectory to include quick Gtk+ tests.
-	added exemplary test rules to run tests inside Xvfb. this needs to depend
-	on gtester for full fledged testing.
+	* gtk/tests/Makefile.am: new subdirectory to include quick Gtk+
+	tests.  added exemplary test rules to run tests inside Xvfb. this
+	needs to depend on gtester for full fledged testing.
 
-	* gtk/Makefile.am: build gtk+/gtk/tests, define -DGTK_ENABLE_BROKEN when
-	collecting _get_type functions to catch e.g. gtk_text_get_type().
+	* gtk/Makefile.am: build gtk+/gtk/tests, define
+	-DGTK_ENABLE_BROKEN when collecting _get_type functions to catch
+	e.g. gtk_text_get_type().
 
 	* configure.in: create gtk/tests/Makefile.in and gtk/tests/Makefile.
 
@@ -2920,18 +2923,19 @@ Thu Nov 15 11:55:34 2007 +0100 Tim Janik
 
 	Added Gtk+ testing utilities.
 
-	* gtk/gtktestutils.h, gtk/gtktestutils.c: added unit test utility functions.
-	for the most part, the functions herein involve navigating and interacting
-	with dialog elements programatically, to automate user interaction tests of
-	dialogs and widgets.
+	* gtk/gtktestutils.h, gtk/gtktestutils.c: added unit test utility
+	functions.  for the most part, the functions herein involve
+	navigating and interacting with dialog elements programatically,
+	to automate user interaction tests of dialogs and widgets.
 
 	* gtk/gtk.h: include gtk/gtktestutils.h as public API.
 
 	* gtk/gtk.symbols: added gtk_test_* symbols.
 
-	* gtk/Makefile.am: include gtktestutils.h and gtktestutils.c into the build.
-	generate gtktypefuncs.c which contains a list of all _get_type functions in
-	Gtk+ and Gdk.
+	* gtk/Makefile.am: include gtktestutils.h and gtktestutils.c into
+	the build.  generate gtktypefuncs.c which contains a list of all
+	_get_type functions in Gtk+ and Gdk.
+
 2007-11-20  Bastien Nocera  <hadess@hadess.net>
 
 	* configure.in: add support for conditional icns gdk-pixbuf loader
