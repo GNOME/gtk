@@ -1,5 +1,30 @@
 2008-03-18  Tor Lillqvist  <tml@novell.com>
 
+	Bug 99192 - Add --with-include-input-modules
+
+	* configure.in: Add --with-included-immodules switch. Handled in a
+	similar way as the --with-included-loaders switch. For each input
+	method module foo: Collect the list of input modules to be built
+	into libgtk into INCLUDED_IMMODULE_OBJ. Collect a list of
+	-DINCLUDE_IM_foo definitions into INCLUDED_IMMODULE_DEFINE.
+	Define Automake conditionals INCLUDE_IM_FOO.
+
+	* modules/input/Makefile.am: For modules to be included in libgtk,
+	build a static library.
+	
+	* modules/input/im*.c: Use MODULE_ENTRY macros much like in
+	gdk-pixbuf to get unique names for the functions called by libgtk
+	in the included case. Use G_MODULE_EXPORT in the non-included case
+	so that we don't unnecessarily export unneeded random global
+	symbols on Windows.
+
+	* gtk/Makefile.am: Build the included modules and link them into libgtk.
+
+	* gtk/gtkimmodule.c: Handle the built-in modules. Remove
+	copy/paste leftover mentions of "themes" in comments.
+
+2008-03-18  Tor Lillqvist  <tml@novell.com>
+
 	* tests/Makefile.am: Build testmountoperation only on Unix for now.
 
 2008-03-17  Christian Kellner  <gicmo@gnome.org>

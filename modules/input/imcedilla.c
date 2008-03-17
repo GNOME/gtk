@@ -98,27 +98,33 @@ static const GtkIMContextInfo *info_list[] = {
   &cedilla_info
 };
 
+#ifndef INCLUDE_IM_cedilla
+#define MODULE_ENTRY(function) G_MODULE_EXPORT im_module_ ## function
+#else
+#define MODULE_ENTRY(function) _gtk_immodule_cedilla_ ## function
+#endif
+
 void
-im_module_init (GTypeModule *module)
+MODULE_ENTRY (init) (GTypeModule *module)
 {
   cedilla_register_type (module);
 }
 
 void 
-im_module_exit (void)
+MODULE_ENTRY (exit) (void)
 {
 }
 
 void 
-im_module_list (const GtkIMContextInfo ***contexts,
-		int                      *n_contexts)
+MODULE_ENTRY (list) (const GtkIMContextInfo ***contexts,
+		     int                      *n_contexts)
 {
   *contexts = info_list;
   *n_contexts = G_N_ELEMENTS (info_list);
 }
 
 GtkIMContext *
-im_module_create (const gchar *context_id)
+MODULE_ENTRY (create) (const gchar *context_id)
 {
   if (strcmp (context_id, "cedilla") == 0)
     return g_object_new (type_cedilla, NULL);

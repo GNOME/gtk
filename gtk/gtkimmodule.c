@@ -1,8 +1,6 @@
 /* GTK - The GIMP Toolkit
  * Copyright (C) 1995-1997 Peter Mattis, Spencer Kimball and Josh MacDonald
  *
- * Themes added by The Rasterman <raster@redhat.com>
- * 
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
  * License as published by the Free Software Foundation; either
@@ -65,6 +63,8 @@ struct _GtkIMModule
 {
   GTypeModule parent_instance;
   
+  gboolean builtin;
+
   GModule *library;
 
   void          (*list)   (const GtkIMContextInfo ***contexts,
@@ -97,30 +97,33 @@ gtk_im_module_load (GTypeModule *module)
 {
   GtkIMModule *im_module = GTK_IM_MODULE (module);
   
-  im_module->library = g_module_open (im_module->path, G_MODULE_BIND_LAZY | G_MODULE_BIND_LOCAL);
-  if (!im_module->library)
+  if (!im_module->builtin)
     {
-      g_warning (g_module_error());
-      return FALSE;
-    }
+      im_module->library = g_module_open (im_module->path, G_MODULE_BIND_LAZY | G_MODULE_BIND_LOCAL);
+      if (!im_module->library)
+	{
+	  g_warning (g_module_error());
+	  return FALSE;
+	}
   
-  /* extract symbols from the lib */
-  if (!g_module_symbol (im_module->library, "im_module_init",
-			(gpointer *)&im_module->init) ||
-      !g_module_symbol (im_module->library, "im_module_exit", 
-			(gpointer *)&im_module->exit) ||
-      !g_module_symbol (im_module->library, "im_module_list", 
-			(gpointer *)&im_module->list) ||
-      !g_module_symbol (im_module->library, "im_module_create", 
-			(gpointer *)&im_module->create))
-    {
-      g_warning (g_module_error());
-      g_module_close (im_module->library);
-      
-      return FALSE;
+      /* extract symbols from the lib */
+      if (!g_module_symbol (im_module->library, "im_module_init",
+			    (gpointer *)&im_module->init) ||
+	  !g_module_symbol (im_module->library, "im_module_exit", 
+			    (gpointer *)&im_module->exit) ||
+	  !g_module_symbol (im_module->library, "im_module_list", 
+			    (gpointer *)&im_module->list) ||
+	  !g_module_symbol (im_module->library, "im_module_create", 
+			    (gpointer *)&im_module->create))
+	{
+	  g_warning (g_module_error());
+	  g_module_close (im_module->library);
+	  
+	  return FALSE;
+	}
     }
 	    
-  /* call the theme's init (theme_init) function to let it */
+  /* call the module's init function to let it */
   /* setup anything it needs to set up. */
   im_module->init (module);
 
@@ -134,13 +137,16 @@ gtk_im_module_unload (GTypeModule *module)
   
   im_module->exit();
 
-  g_module_close (im_module->library);
-  im_module->library = NULL;
+  if (!im_module->builtin)
+    {
+      g_module_close (im_module->library);
+      im_module->library = NULL;
 
-  im_module->init = NULL;
-  im_module->exit = NULL;
-  im_module->list = NULL;
-  im_module->create = NULL;
+      im_module->init = NULL;
+      im_module->exit = NULL;
+      im_module->list = NULL;
+      im_module->create = NULL;
+    }
 }
 
 /* This only will ever be called if an error occurs during
@@ -262,6 +268,36 @@ correct_localedir_prefix (gchar **path)
 #endif
 
 
+static GtkIMModule *
+add_builtin_module (const gchar             *module_name,
+		    const GtkIMContextInfo **contexts,
+		    int                      n_contexts)
+{
+  GtkIMModule *module = g_object_new (GTK_TYPE_IM_MODULE, NULL);
+  GSList *infos = NULL;
+  int i;
+
+  for (i = 0; i < n_contexts; i++)
+    {
+      GtkIMContextInfo *info = g_new (GtkIMContextInfo, 1);
+      info->context_id = g_strdup (contexts[i]->context_id);
+      info->context_name = g_strdup (contexts[i]->context_name);
+      info->domain = g_strdup (contexts[i]->domain);
+      info->domain_dirname = g_strdup (contexts[i]->domain_dirname);
+#ifdef G_OS_WIN32
+      correct_localedir_prefix ((char **) &info->domain_dirname);
+#endif
+      info->default_locales = g_strdup (contexts[i]->default_locales);
+      infos = g_slist_prepend (infos, info);
+    }
+
+  module->builtin = TRUE;
+  g_type_module_set_name (G_TYPE_MODULE (module), module_name);
+  add_module (module, infos);
+
+  return module;
+}
+
 static void
 gtk_im_module_initialize (void)
 {
@@ -275,6 +311,63 @@ gtk_im_module_initialize (void)
   GSList *infos = NULL;
 
   contexts_hash = g_hash_table_new (g_str_hash, g_str_equal);
+
+#define do_builtin(m)							\
+  {									\
+    const GtkIMContextInfo **contexts;					\
+    int n_contexts;							\
+    extern void _gtk_immodule_ ## m ## _list (const GtkIMContextInfo ***contexts, \
+					      guint                    *n_contexts); \
+    extern void _gtk_immodule_ ## m ## _init (GTypeModule *module);	\
+    extern void _gtk_immodule_ ## m ## _exit (void);			\
+    extern GtkIMContext *_gtk_immodule_ ## m ## _create (const gchar *context_id); \
+									\
+    _gtk_immodule_ ## m ## _list (&contexts, &n_contexts);		\
+    module = add_builtin_module (#m, contexts, n_contexts);		\
+    module->init = _gtk_immodule_ ## m ## _init;			\
+    module->exit = _gtk_immodule_ ## m ## _exit;			\
+    module->create = _gtk_immodule_ ## m ## _create;			\
+    module = NULL;							\
+  }
+
+#ifdef INCLUDE_IM_am_et
+  do_builtin (am_et);
+#endif
+#ifdef INCLUDE_IM_cedilla
+  do_builtin (cedilla);
+#endif
+#ifdef INCLUDE_IM_cyrillic_translit
+  do_builtin (cyrillic_translit);
+#endif
+#ifdef INCLUDE_IM_ime
+  do_builtin (ime);
+#endif
+#ifdef INCLUDE_IM_inuktitut
+  do_builtin (inuktitut);
+#endif
+#ifdef INCLUDE_IM_ipa
+  do_builtin (ipa);
+#endif
+#ifdef INCLUDE_IM_multipress
+  do_builtin (multipress);
+#endif
+#ifdef INCLUDE_IM_thai
+  do_builtin (thai);
+#endif
+#ifdef INCLUDE_IM_ti_er
+  do_builtin (ti_er);
+#endif
+#ifdef INCLUDE_IM_ti_et
+  do_builtin (ti_et);
+#endif
+#ifdef INCLUDE_IM_viqr
+  do_builtin (viqr);
+#endif
+#ifdef INCLUDE_IM_xim
+  do_builtin (xim);
+#endif
+
+#undef do_builtin
 
   file = g_fopen (filename, "r");
   if (!file)

@@ -974,6 +974,81 @@ AM_CONDITIONAL(INCLUDE_PCX, [test x"$INCLUDE_pcx" = xyes])
 AM_CONDITIONAL(INCLUDE_ICNS, [test x"$INCLUDE_icns" = xyes])
 AM_CONDITIONAL(INCLUDE_JASPER, [test x"$INCLUDE_jasper" = xyes])
 
+#
+# Allow building some or all immodules included
+#
+AC_MSG_CHECKING(immodules to build)
+
+dnl due to an autoconf bug, commas in the first arg to
+dnl AC_HELP_STRING cause problems.
+dnl AC_HELP_STRING([--with-included-immodules=MODULE1 MODULE2 ...],
+dnl                [build the specified input method modules into gtk])
+AC_ARG_WITH(included_immodules,
+[  --with-included-immodules=MODULE1,MODULE2,...
+                          build the specified input methods into gtk])
+
+if $dynworks; then 
+   :
+else
+   ## if the option was specified, leave it; otherwise disable included immodules
+   if test x$with_included_immodules = xno; then
+           with_included_immodules=yes
+   fi
+fi
+
+all_immodules="am-et,cedilla,cyrillic-translit"
+if test "$gdktarget" = "win32"; then
+   all_immodules="${all_immodules},ime"
+fi
+all_immodules="${all_immodules},inuktitut,ipa,multipress,thai,ti-er,ti-et,viqr"
+if test "$gdktarget" = "x11"; then
+   all_immodules="${all_immodules},xim"
+fi
+
+included_immodules=""
+# If the switch specified without listing any specific ones, include all
+if test "x$with_included_immodules" = xyes ; then
+  included_immodules="$all_immodules"
+else
+  included_immodules="$with_included_immodules"
+fi
+
+AC_MSG_RESULT($included_immodules)
+AM_CONDITIONAL(HAVE_INCLUDED_IMMMODULES, test "x$included_immodules" != x)
+
+INCLUDED_IMMODULE_OBJ=
+INCLUDED_IMMODULE_DEFINE=
+
+IFS="${IFS= 	}"; gtk_save_ifs="$IFS"; IFS=","
+for immodule in $included_immodules; do
+ immodule_underscores=`echo $immodule | sed -e 's/-/_/g'`
+ if echo "$all_immodules" | egrep "(^|,)$immodule(\$|,)" > /dev/null; then
+   :
+ else
+   AC_MSG_ERROR([the specified input method $immodule does not exist])
+ fi
+
+ INCLUDED_IMMODULE_OBJ="$INCLUDED_IMMODULE_OBJ ../modules/input/libstatic-im-$immodule.la"
+ INCLUDED_IMMODULE_DEFINE="$INCLUDED_IMMODULE_DEFINE -DINCLUDE_IM_$immodule_underscores"
+ eval INCLUDE_$immodule_underscores=yes
+done
+IFS="$gtk_save_ifs"
+AC_SUBST(INCLUDED_IMMODULE_OBJ)
+AC_SUBST(INCLUDED_IMMODULE_DEFINE)
+
+AM_CONDITIONAL(INCLUDE_IM_AM_ET, [test x"$INCLUDE_am_et" = xyes])
+AM_CONDITIONAL(INCLUDE_IM_CEDILLA, [test x"$INCLUDE_cedilla" = xyes])
+AM_CONDITIONAL(INCLUDE_IM_CYRILLIC_TRANSLIT, [test x"$INCLUDE_cyrillic_translit" = xyes])
+AM_CONDITIONAL(INCLUDE_IM_IME, [test x"$INCLUDE_ime" = xyes])
+AM_CONDITIONAL(INCLUDE_IM_INUKTITUT, [test x"$INCLUDE_inuktitut" = xyes])
+AM_CONDITIONAL(INCLUDE_IM_IPA, [test x"$INCLUDE_ipa" = xyes])
+AM_CONDITIONAL(INCLUDE_IM_MULTIPRESS, [test x"$INCLUDE_multipress" = xyes])
+AM_CONDITIONAL(INCLUDE_IM_THAI, [test x"$INCLUDE_thai" = xyes])
+AM_CONDITIONAL(INCLUDE_IM_TI_ER, [test x"$INCLUDE_ti_er" = xyes])
+AM_CONDITIONAL(INCLUDE_IM_TI_ET, [test x"$INCLUDE_ti_et" = xyes])
+AM_CONDITIONAL(INCLUDE_IM_VIQR, [test x"$INCLUDE_viqr" = xyes])
+AM_CONDITIONAL(INCLUDE_IM_XIM, [test x"$INCLUDE_xim" = xyes])
+
 AC_HEADER_SYS_WAIT
 
 AC_TYPE_SIGNAL

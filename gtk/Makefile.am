@@ -44,7 +44,8 @@ INCLUDES =						\
 	-DGTK_PRINT_BACKEND_ENABLE_UNSUPPORTED		\
 	$(GTK_DEBUG_FLAGS)				\
 	$(GTK_DEP_CFLAGS)				\
-	$(gtk_clipboard_dnd_c_sources_CFLAGS)
+	$(gtk_clipboard_dnd_c_sources_CFLAGS)		\
+	$(INCLUDED_IMMODULE_DEFINE)
 
 gtarget=$(gdktarget)
 
@@ -106,25 +107,38 @@ if OS_LINUX
 TESTS += abicheck.sh pltcheck.sh
 endif
 
-# libtool stuff: set version and export symbols for resolving
-# since automake doesn't support conditionalized libsomething_la_LDFLAGS
-# we use the general approach here
 libgtkincludedir = $(includedir)/gtk-2.0/gtk
 libadd =								\
 	$(top_builddir)/gdk-pixbuf/libgdk_pixbuf-$(GTK_API_VERSION).la	\
 	$(top_builddir)/gdk/$(gdktargetlib)				\
 	$(GTK_DEP_LIBS)
+deps =
 
 if OS_UNIX
 libadd += xdgmime/libxdgmime.la
 endif
 
-# common options for the various packages.
+# libtool stuff: set version and export symbols for resolving
+# since automake doesn't support conditionalized libsomething_la_LDFLAGS
+# we use the general approach here
 libtool_opts =							\
   -version-info $(LT_VERSION_INFO)				\
   -export-dynamic $(no_undefined) $(LIBTOOL_EXPORT_OPTIONS)	\
   -rpath $(libdir) $(libgtk_target_ldflags)
 
+
+included-modules:
+if HAVE_INCLUDED_IMMMODULES
+	@cd $(top_builddir)/modules/input && $(MAKE) $(AM_MAKEFLAGS) included-modules
+
+libadd += $(INCLUDED_IMMODULE_OBJ)
+deps += $(INCLUDED_IMMODULE_OBJ)
+
+$(INCLUDED_IMMODULE_OBJ): included-modules
+	@true
+endif
+
+.PHONY: included-modules
 
 #
 # setup source file variables
@@ -833,7 +847,8 @@ gtktypebuiltins.c: @REBUILD@ $(gtk_public_h_sources) gtktypebuiltins.c.template
 gtktypefuncs.c: @REBUILD@ $(top_srcdir)/gtk/*.h $(top_srcdir)/gdk/*.h Makefile
 	echo '#include <gtk/gtk.h>' > xgen-gtfsrc.c && \
 	  ${CPP} $(DEFS) $(INCLUDES) -DGTK_ENABLE_BROKEN $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) xgen-gtfsrc.c | \
-	  grep -o '\bg[td]k_[a-zA-Z0-9_]*_get_type\b' | \
+	  egrep '\<g[td]k_[a-zA-Z0-9_]+_get_type\>' | \
+	  sed -e 's/.*\(\<g[td]k_[a-zA-Z0-9_]\+_get_type\>\).*/\1/' | \
 	  sort | uniq | \
 	  sed '{ s/^/*tp++ = /; s/$$/();/; }' > xgen-gtf \
 	&& cp xgen-gtf $@ && rm -f xgen-gtf
@@ -860,9 +875,13 @@ libgtk_directfb_2_0_la_LDFLAGS = $(libtool_opts)
 
 libgtk_x11_2_0_la_LIBADD = $(libadd)
 libgtk_win32_2_0_la_LIBADD = $(libadd) -lole32 -lgdi32 -lcomdlg32 -lwinspool -lcomctl32
-libgtk_win32_2_0_la_DEPENDENCIES = $(gtk_def) $(gtk_win32_res)
 libgtk_quartz_2_0_la_LIBADD = $(libadd)
 libgtk_directfb_2_0_la_LIBADD = $(libadd)
+
+libgtk_x11_2_0_la_DEPENDENCIES = $(deps)
+libgtk_win32_2_0_la_DEPENDENCIES = $(gtk_def) $(gtk_win32_res) $(deps)
+libgtk_quartz_2_0_la_DEPENDENCIES = $(deps)
+libgtk_directfb_2_0_la_DEPENDENCIES = $(deps)
 
 if USE_WIN32
 libgtk_target_ldflags = $(gtk_win32_res_ldflag) $(gtk_win32_symbols)
