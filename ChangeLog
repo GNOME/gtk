@@ -1,3 +1,20 @@
+2008-03-17  Christian Kellner  <gicmo@gnome.org>
+
+	Implement GtkMountOperation, a subclass of GMountOperation
+	to be used with gio wherever there is the need to ask the
+	user for credentials or questions while mounting a volume.
+	This is bug #522245
+
+	* gtk/gtkmountoperation.c:
+	* gtk/gtkmountoperation.h:
+	Implement GtkMountOperation.
+	
+	* gtk/gtk.h: Add gtkmountoperation.h
+	* gtk/Makefile.am: Add gtkmountoperation.[hc]
+	* gtk/gtk.symbols: Add symbols of GtkMountOperation.
+	* tests/testmountoperation.c: Test program for it.
+	* tests/Makefile.am: Add testmountoperation.
+
 2008-03-17  Emmanuele Bassi  <ebassi@gnome.org>
 
 	* gtk/gtkcontainer.c: Properly document

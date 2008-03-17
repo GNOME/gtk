@@ -77,6 +77,7 @@ noinst_PROGRAMS =  $(TEST_PROGS)	\
 	testinput			\
 	testmenus			\
 	testmenubars			\
+	testmountoperation              \
 	testmultidisplay		\
 	testmultiscreen			\
 	testnotebookdnd			\
@@ -150,6 +151,7 @@ testinput_DEPENDENCIES = $(TEST_DEPS)
 testimage_DEPENDENCIES = $(TEST_DEPS)
 testmenus_DEPENDENCIES = $(TEST_DEPS)
 testmenubars_DEPENDENCIES = $(TEST_DEPS)
+testmountoperation_DEPENDENCIES = $(TEST_DEPS)
 testmultidisplay_DEPENDENCIES = $(TEST_DEPS)
 testmultiscreen_DEPENDENCIES = $(TEST_DEPS)
 testnotebookdnd_DEPENDENCIES = $(TEST_DEPS)
@@ -203,6 +205,7 @@ testinput_LDADD = $(LDADDS)
 testimage_LDADD = $(LDADDS)
 testmenus_LDADD = $(LDADDS)
 testmenubars_LDADD = $(LDADDS)
+testmountoperation_LDADD = $(LDADDS)
 testmultidisplay_LDADD = $(LDADDS)
 testmultiscreen_LDADD = $(LDADDS)
 testnotebookdnd_LDADD = $(LDADDS)

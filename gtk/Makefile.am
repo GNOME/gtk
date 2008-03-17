@@ -229,6 +229,7 @@ gtk_public_h_sources =          \
 	gtkmessagedialog.h	\
 	gtkmisc.h		\
 	gtkmodules.h		\
+	gtkmountoperation.h     \
 	gtknotebook.h		\
 	gtkobject.h		\
 	gtkpagesetup.h		\
@@ -489,6 +490,7 @@ gtk_base_c_sources =            \
 	gtkmisc.c		\
 	gtkmnemonichash.c	\
 	gtkmodules.c		\
+	gtkmountoperation.c     \
 	gtknotebook.c		\
 	gtkobject.c		\
 	gtkpagesetup.c		\
