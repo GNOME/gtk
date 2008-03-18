@@ -1,3 +1,10 @@
+2008-03-18  Tor Lillqvist  <tml@novell.com>
+
+	Bug 523225 - modules/input/im*.c: MODULE_ENTRY macros make illegal code
+	
+	* modules/input/im*.c: Modify the MODULE_ENTRY macro so the
+	G_MODULE_ENTRY decoration can be put in a more correct place.
+
 2008-03-18  Sven Neumann  <sven@gimp.org>
 
 	* gtk/gtkmountoperation.c (gtk_mount_operation_ask_password): set

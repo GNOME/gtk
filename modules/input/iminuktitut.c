@@ -135,32 +135,28 @@ static const GtkIMContextInfo *info_list[] = {
 };
 
 #ifndef INCLUDE_IM_inuktitut
-#define MODULE_ENTRY(function) G_MODULE_EXPORT im_module_ ## function
+#define MODULE_ENTRY(type, function) G_MODULE_EXPORT type im_module_ ## function
 #else
-#define MODULE_ENTRY(function) _gtk_immodule_inuktitut_ ## function
+#define MODULE_ENTRY(type, function) type _gtk_immodule_inuktitut_ ## function
 #endif
 
-void
-MODULE_ENTRY (init) (GTypeModule *module)
+MODULE_ENTRY (void, init) (GTypeModule *module)
 {
   inuktitut_register_type (module);
 }
 
-void 
-MODULE_ENTRY (exit) (void)
+MODULE_ENTRY (void, exit) (void)
 {
 }
 
-void 
-MODULE_ENTRY (list) (const GtkIMContextInfo ***contexts,
-		     int                      *n_contexts)
+MODULE_ENTRY (void, list) (const GtkIMContextInfo ***contexts,
+			   int                      *n_contexts)
 {
   *contexts = info_list;
   *n_contexts = G_N_ELEMENTS (info_list);
 }
 
-GtkIMContext *
-MODULE_ENTRY (create) (const gchar *context_id)
+MODULE_ENTRY (GtkIMContext *, create) (const gchar *context_id)
 {
   if (strcmp (context_id, "inuktitut") == 0)
     return g_object_new (type_inuktitut_translit, NULL);

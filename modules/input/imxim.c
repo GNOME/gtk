@@ -36,33 +36,29 @@ static const GtkIMContextInfo *info_list[] = {
 };
 
 #ifndef INCLUDE_IM_xim
-#define MODULE_ENTRY(function) G_MODULE_EXPORT im_module_ ## function
+#define MODULE_ENTRY(type, function) G_MODULE_EXPORT type im_module_ ## function
 #else
-#define MODULE_ENTRY(function) _gtk_immodule_xim_ ## function
+#define MODULE_ENTRY(type, function) type _gtk_immodule_xim_ ## function
 #endif
 
-void
-MODULE_ENTRY (init) (GTypeModule *type_module)
+MODULE_ENTRY (void, init) (GTypeModule *type_module)
 {
   gtk_im_context_xim_register_type (type_module);
 }
 
-void 
-MODULE_ENTRY (exit) (void)
+MODULE_ENTRY (void, exit) (void)
 {
   gtk_im_context_xim_shutdown ();
 }
 
-void 
-MODULE_ENTRY (list) (const GtkIMContextInfo ***contexts,
-		     int                      *n_contexts)
+MODULE_ENTRY (void, list) (const GtkIMContextInfo ***contexts,
+			   int                      *n_contexts)
 {
   *contexts = info_list;
   *n_contexts = G_N_ELEMENTS (info_list);
 }
 
-GtkIMContext *
-MODULE_ENTRY (create) (const gchar *context_id)
+MODULE_ENTRY (GtkIMContext *, create) (const gchar *context_id)
 {
   if (strcmp (context_id, "xim") == 0)
     return gtk_im_context_xim_new ();
