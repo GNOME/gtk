@@ -1,3 +1,8 @@
+2008-03-18  Sven Neumann  <sven@gimp.org>
+
+	* gtk/gtkmountoperation.c (gtk_mount_operation_ask_password): set
+	alternative button order on the password dialog.
+
 2008-03-18  Tor Lillqvist  <tml@novell.com>
 
 	Bug 99192 - Add --with-include-input-modules

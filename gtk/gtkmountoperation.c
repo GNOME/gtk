@@ -455,6 +455,11 @@ gtk_mount_operation_ask_password (GMountOperation   *mount_op,
                           NULL);
   gtk_dialog_set_default_response (dialog, GTK_RESPONSE_OK);
 
+  gtk_dialog_set_alternative_button_order (dialog,
+                                           GTK_RESPONSE_OK,
+                                           GTK_RESPONSE_CANCEL,
+                                           -1);
+
   /* Build contents */
   hbox = gtk_hbox_new (FALSE, 12);
   gtk_container_set_border_width (GTK_CONTAINER (hbox), 5);
@@ -620,7 +625,7 @@ question_dialog_button_clicked (GtkDialog       *dialog,
     }
   else
     g_mount_operation_reply (op, G_MOUNT_OPERATION_ABORTED);
- 
+
   priv->dialog = NULL;
   g_object_notify (G_OBJECT (operation), "is-showing");
   gtk_widget_destroy (GTK_WIDGET (dialog));
