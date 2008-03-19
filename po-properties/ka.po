@@ -1,17 +1,15 @@
 # translation of ka.po to Georgian
+# Vladimer Sichinava ვლადიმერ სიჭინავა <vsichi@gnome.org>, 2008.
 # gtk+-properties Georgian translation
 # Copyright (C) 2006, Gia Shervashidze <giasher@telenet.ge>
 # This file is distributed under the same license as the GTK+-PROPERTIES package.
-#
-# Giasher <www.gia.ge>, 2006.
-# Vladimer Sichinava <vsichi@gnome.org>, 2007.
 msgid ""
 msgstr ""
 "Project-Id-Version: ka\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2008-03-12 01:41-0400\n"
-"PO-Revision-Date: 2007-02-19 03:50+0100\n"
-"Last-Translator: Vladimer Sichinava <vsichi@gnome.org>\n"
+"PO-Revision-Date: 2008-03-19 16:31+0100\n"
+"Last-Translator: Vladimer Sichinava ვლადიმერ სიჭინავა <vsichi@gnome.org>\n"
 "Language-Team: Georgian <http://mail.gnome.org/mailman/listinfo/gnome-ge-"
 "list>\n"
 "MIME-Version: 1.0\n"
@@ -544,9 +542,8 @@ msgid "Appearance of the shadow surrounding the arrow"
 msgstr "ისრის ჩრდილის გამოსახულება"
 
 #: gtk/gtkarrow.c:91
-#, fuzzy
 msgid "Arrow Scaling"
-msgstr "მწკრივებსშორისი ინტერვალი"
+msgstr "ისრის წელვადობა"
 
 #: gtk/gtkarrow.c:92
 msgid "Amount of space used up by arrow"
@@ -585,67 +582,56 @@ msgid "Force aspect ratio to match that of the frame's child"
 msgstr "პროპორციის კოეფიციენტის მითითება ბლოკის ქვეელემენტის შესაბამისად"
 
 #: gtk/gtkassistant.c:261
-#, fuzzy
 msgid "Header Padding"
-msgstr "დამატება მარცხნიდან"
+msgstr "თავსართის ზომა"
 
 #: gtk/gtkassistant.c:262
-#, fuzzy
 msgid "Number of pixels around the header."
-msgstr "დახრის სტილი მენიუს პანელის გარშემო"
+msgstr "თავსართის გარშემო ცარიელი პიქსელების რაოდენობა."
 
 #: gtk/gtkassistant.c:269
-#, fuzzy
 msgid "Content Padding"
-msgstr "დამატება ქვემოდან"
+msgstr "შიგთავსის ზომა"
 
 #: gtk/gtkassistant.c:270
-#, fuzzy
 msgid "Number of pixels around the content pages."
-msgstr "შიგთავსის გარშემო დახრის სტილი"
+msgstr "შიგთავსის გარშემო ცარიელი პიქსელების რაოდენობა."
 
 #: gtk/gtkassistant.c:286
-#, fuzzy
 msgid "Page type"
-msgstr "შეფუთვის ტიპი"
+msgstr "გვერდის ტიპი"
 
 #: gtk/gtkassistant.c:287
-#, fuzzy
 msgid "The type of the assistant page"
-msgstr "შეტყობინების ტიპი"
+msgstr "დამხმარეს ფანჯრის ტიპი"
 
 #: gtk/gtkassistant.c:304
-#, fuzzy
 msgid "Page title"
-msgstr "გვერდის ზომა"
+msgstr "გვერდის სათაური"
 
 #: gtk/gtkassistant.c:305
-#, fuzzy
 msgid "The title of the assistant page"
-msgstr "ფანჯრის სათაური"
+msgstr "დამხმარე გვერდის სათაური"
 
 #: gtk/gtkassistant.c:321
-#, fuzzy
 msgid "Header image"
-msgstr "დაწკაპვადი თავსართები"
+msgstr "თავსართის გამოსახულება"
 
 #: gtk/gtkassistant.c:322
 msgid "Header image for the assistant page"
 msgstr ""
 
 #: gtk/gtkassistant.c:338
-#, fuzzy
 msgid "Sidebar image"
-msgstr "მნიშვნელობა"
+msgstr "გვერდითა პანელის გამოსახულება"
 
 #: gtk/gtkassistant.c:339
 msgid "Sidebar image for the assistant page"
 msgstr ""
 
 #: gtk/gtkassistant.c:354
-#, fuzzy
 msgid "Page complete"
-msgstr "გვერდის ნამატი"
+msgstr "გვერდი შევსებულია"
 
 #: gtk/gtkassistant.c:355
 msgid "Whether all required fields on the page have been filled out"
@@ -777,9 +763,8 @@ msgid "The index of the child in the parent"
 msgstr "ქვეელემენტის ინდექსი ძირეულ ელემენტში"
 
 #: gtk/gtkbuilder.c:101
-#, fuzzy
 msgid "Translation Domain"
-msgstr "მთარგმნელები"
+msgstr "თარგმნის არე"
 
 #: gtk/gtkbuilder.c:102
 msgid "The translation domain used by gettext"
@@ -905,9 +890,8 @@ msgstr ""
 "მართკუთხედზე"
 
 #: gtk/gtkbutton.c:462 gtk/gtkentry.c:530 gtk/gtkentry.c:892
-#, fuzzy
 msgid "Inner Border"
-msgstr "კონტურის დახაზვა"
+msgstr "შიდა კონტური"
 
 #: gtk/gtkbutton.c:463
 msgid "Border between button edges and child."
@@ -1096,42 +1080,36 @@ msgid "Whether this tag affects the cell background color"
 msgstr "ჭდის გავლენა უჯრის ფონის ფერზე"
 
 #: gtk/gtkcellrendereraccel.c:104
-#, fuzzy
 msgid "Accelerator key"
-msgstr "მართვის ელემენტი \"სხარტულა\""
+msgstr "სხარტულა"
 
 #: gtk/gtkcellrendereraccel.c:105
-#, fuzzy
 msgid "The keyval of the accelerator"
-msgstr "მნიშვნელობა მორგება"
+msgstr "სხარტულას მნიშვნელობა"
 
 #: gtk/gtkcellrendereraccel.c:121
-#, fuzzy
 msgid "Accelerator modifiers"
-msgstr "მართვის ელემენტი \"სხარტულა\""
+msgstr "სხარტულად მოდიფიკატორი"
 
 #: gtk/gtkcellrendereraccel.c:122
 msgid "The modifier mask of the accelerator"
-msgstr ""
+msgstr "სხარტულას მოდიფიკატორის ნიღაბი"
 
 #: gtk/gtkcellrendereraccel.c:139
-#, fuzzy
 msgid "Accelerator keycode"
-msgstr "მართვის ელემენტი \"სხარტულა\""
+msgstr "სხარტულას მნიშვნელობა"
 
 #: gtk/gtkcellrendereraccel.c:140
 msgid "The hardware keycode of the accelerator"
-msgstr ""
+msgstr "სხარტულას კოდი"
 
 #: gtk/gtkcellrendereraccel.c:159
-#, fuzzy
 msgid "Accelerator Mode"
-msgstr "მართვის ელემენტი \"სხარტულა\""
+msgstr "სხარტულას რეჟიმი"
 
 #: gtk/gtkcellrendereraccel.c:160
-#, fuzzy
 msgid "The type of accelerators"
-msgstr "შეტყობინების ტიპი"
+msgstr "სხარტულების ტიპი"
 
 #: gtk/gtkcellrenderercombo.c:89
 msgid "Model"
@@ -1229,9 +1207,8 @@ msgid "Text on the progress bar"
 msgstr "მომდინარეობის ტექსტი"
 
 #: gtk/gtkcellrendererprogress.c:170
-#, fuzzy
 msgid "Pulse"
-msgstr "ნამატის ბიჯი"
+msgstr "პულსი"
 
 #: gtk/gtkcellrendererprogress.c:171
 msgid ""
@@ -1244,22 +1221,20 @@ msgid "Text x alignment"
 msgstr "ტექსტის X განთავსება"
 
 #: gtk/gtkcellrendererprogress.c:188 gtk/gtkprogress.c:116
-#, fuzzy
 msgid ""
 "The horizontal text alignment, from 0 (left) to 1 (right). Reversed for RTL "
 "layouts."
 msgstr ""
-"განივი განთავსება 0-დან (მარცხნიდან) 1-მდ (მარჯვნივ). RTL ფორმატისთვის - "
-"პირიქით."
+"ტექსტის ჰორიზონტალური განთავსება 0-დან (მარცხნიდან) 1-მდე(მარჯვნივ). RTL "
+"ფორმატისთვის - პირიქით."
 
 #: gtk/gtkcellrendererprogress.c:204 gtk/gtkprogress.c:122
 msgid "Text y alignment"
 msgstr "ტექსტის Y განთავსება"
 
 #: gtk/gtkcellrendererprogress.c:205 gtk/gtkprogress.c:123
-#, fuzzy
 msgid "The vertical text alignment, from 0 (top) to 1 (bottom)."
-msgstr "ვერტიკალური განთავსება 0 (ზემოდან) - 1 (ქვევით)"
+msgstr "ტექსტის ვერტიკალური განთავსება, 0 (ზემოდან) - 1 (ქვევით)."
 
 #: gtk/gtkcellrendererprogress.c:221 gtk/gtkiconview.c:732
 #: gtk/gtkprogressbar.c:130 gtk/gtkstatusicon.c:279 gtk/gtktoolbar.c:475
@@ -1277,12 +1252,10 @@ msgid "Adjustment"
 msgstr "მორგება"
 
 #: gtk/gtkcellrendererspin.c:94
-#, fuzzy
 msgid "The adjustment that holds the value of the spinbutton."
-msgstr "მთვლელი ღილაკის მნიშვნელობების მორგება"
+msgstr ""
 
 #: gtk/gtkcellrendererspin.c:109
-#, fuzzy
 msgid "Climb rate"
 msgstr "აჩქარება"
 
@@ -1474,13 +1447,12 @@ msgid "Ellipsize"
 msgstr "გადანაცვლება"
 
 #: gtk/gtkcellrenderertext.c:410
-#, fuzzy
 msgid ""
 "The preferred place to ellipsize the string, if the cell renderer does not "
 "have enough room to display the entire string"
 msgstr ""
-"ტექსტის გადანაცვლების სასურველი ადგილი, თუ ეკრანულ გარდამსახველს არ აქვს "
-"საკმარისი ადგილი ტექსტის სრულად საჩვენებლად, თუ სულაც"
+"ტექსტის ელიფსიზაციის სასურველი ადგილი, თუ ეკრანულ გარდამსახველს არ შეუძლია "
+"ტექსტის სრულად ჩვენება."
 
 #: gtk/gtkcellrenderertext.c:429 gtk/gtkfilechooserbutton.c:426
 #: gtk/gtklabel.c:449
@@ -1516,9 +1488,8 @@ msgid "Alignment"
 msgstr "განთავსება"
 
 #: gtk/gtkcellrenderertext.c:490
-#, fuzzy
 msgid "How to align the lines"
-msgstr "ხელსაწყოთა პანელის ასახვა"
+msgstr "თუ როგორ გავასწოროთ ხაზზე"
 
 #: gtk/gtkcellrenderertext.c:500 gtk/gtkcellview.c:191 gtk/gtktexttag.c:564
 msgid "Background set"
@@ -1638,17 +1609,15 @@ msgstr "გადანაცვლება მიეთითა"
 
 #: gtk/gtkcellrenderertext.c:557
 msgid "Whether this tag affects the ellipsize mode"
-msgstr "ჭდის გავლენა გადანაცვლებაზე"
+msgstr "ჭდის გავლენა ელიფსიზაციაზე"
 
 #: gtk/gtkcellrenderertext.c:560
-#, fuzzy
 msgid "Align set"
-msgstr "განთავსება"
+msgstr "გასწორება"
 
 #: gtk/gtkcellrenderertext.c:561
-#, fuzzy
 msgid "Whether this tag affects the alignment mode"
-msgstr "ჭდის გავლენა გადანაცვლებაზე"
+msgstr "ჭდის გავლენა გასწორებაზე"
 
 #: gtk/gtkcellrenderertoggle.c:126
 msgid "Toggle state"
@@ -1683,7 +1652,6 @@ msgid "Draw the toggle button as a radio button"
 msgstr "გადამრთველის ღილაკის ინდიკატორის სახით წარმოდგენა"
 
 #: gtk/gtkcellrenderertoggle.c:158
-#, fuzzy
 msgid "Indicator size"
 msgstr "მაჩვენებლის ზომა"
 
@@ -1693,14 +1661,12 @@ msgid "Size of check or radio indicator"
 msgstr "ალმის ან ინდიკატორის ზომა"
 
 #: gtk/gtkcellview.c:183
-#, fuzzy
 msgid "CellView model"
-msgstr "TreeView მოდელი"
+msgstr "CellView მოდელი"
 
 #: gtk/gtkcellview.c:184
-#, fuzzy
 msgid "The model for cell view"
-msgstr "მოდელი ხატულების საჩვენებლად"
+msgstr "ელემენტების უჯრებში გამოსახვის ნიმუში"
 
 #: gtk/gtkcheckbutton.c:69 gtk/gtkcheckmenuitem.c:110 gtk/gtkoptionmenu.c:168
 msgid "Indicator Size"
@@ -1857,9 +1823,8 @@ msgid "The model for the combo box"
 msgstr "ჩამოშლადი სიის მოდელი"
 
 #: gtk/gtkcombobox.c:675
-#, fuzzy
 msgid "Wrap width for laying out the items in a grid"
-msgstr "გადატანის სიგანე ცხრილში ელემენტების განთავსებისათვის"
+msgstr "ბადეში ელემენტების განთავსების სიგანე"
 
 #: gtk/gtkcombobox.c:697
 msgid "Row span column"
@@ -1910,23 +1875,20 @@ msgid "Tearoff Title"
 msgstr "მენიუს გამყოფის სათაური"
 
 #: gtk/gtkcombobox.c:802
-#, fuzzy
 msgid ""
 "A title that may be displayed by the window manager when the popup is torn-"
 "off"
 msgstr ""
-"სათაური, რომელსაც ფანჯრის მმართველი აჩვენებს ამ მენიუსთვის მისი ცალკე "
+"სათაური, რომელსაც ფანჯრის მმართველი გამოიყენებს ამ მენიუსთვის მისი ცალკე "
 "გამოყოფის შემდეგ"
 
 #: gtk/gtkcombobox.c:819
-#, fuzzy
 msgid "Popup shown"
-msgstr "ჩამოშლადი სიის სიგანე"
+msgstr "ჩამოშლადი მენიუს ჩვენება"
 
 #: gtk/gtkcombobox.c:820
-#, fuzzy
 msgid "Whether the combo's dropdown is shown"
-msgstr "კონტურის ჩვენება"
+msgstr "ჩამოშლადი სიის ჩვენება"
 
 #: gtk/gtkcombobox.c:826
 msgid "Appears as list"
@@ -1937,14 +1899,12 @@ msgid "Whether dropdowns should look like lists rather than menus"
 msgstr "ჩამოშლადი სიების ჩვენება სიის და არა მენიუს სახით"
 
 #: gtk/gtkcombobox.c:843
-#, fuzzy
 msgid "Arrow Size"
-msgstr "ისრის მიმართულება"
+msgstr "ისრის ზომა"
 
 #: gtk/gtkcombobox.c:844
-#, fuzzy
 msgid "The minimum size of the arrow in the combo box"
-msgstr "ჩამოშლადი სიის მოდელი"
+msgstr "ჩამოშლადი სიის ისრის მინიმალური ზომა"
 
 #: gtk/gtkcombobox.c:859 gtk/gtkentry.c:622 gtk/gtkhandlebox.c:176
 #: gtk/gtkmenubar.c:194 gtk/gtkstatusbar.c:186 gtk/gtktoolbar.c:613
@@ -1953,9 +1913,8 @@ msgid "Shadow type"
 msgstr "ჩრდილის ტიპი"
 
 #: gtk/gtkcombobox.c:860
-#, fuzzy
 msgid "Which kind of shadow to draw around the combo box"
-msgstr "დაფის წარწერების კონტურის სიგანე"
+msgstr "ჩამოშლადი სიის აჩრდილი"
 
 #: gtk/gtkcontainer.c:237
 msgid "Resize mode"
@@ -2158,14 +2117,12 @@ msgstr ""
 "პირიქით."
 
 #: gtk/gtkentry.c:606
-#, fuzzy
 msgid "Truncate multiline"
-msgstr "მრავლის შერჩევა"
+msgstr "მრავლხაზიანი ტექსტის მოჭრა"
 
 #: gtk/gtkentry.c:607
-#, fuzzy
 msgid "Whether to truncate multiline pastes to one line."
-msgstr "მრავალი ფაილის არჩევის დაშვება"
+msgstr "მრავლხაზიანი ტექსტის ერთ ხაზამდე მოჭრა."
 
 #: gtk/gtkentry.c:623
 msgid "Which kind of shadow to draw around the entry when has-frame is set"
@@ -2249,9 +2206,8 @@ msgid "If TRUE, the popup window will appear for a single match."
 msgstr "თუ \"ჭეშმარიტია\", ჩამოშლადი სარკმელიგამოჩნდება ერთეული ელემენტისთვის."
 
 #: gtk/gtkentrycompletion.c:388
-#, fuzzy
 msgid "Inline selection"
-msgstr "თვითშევსება"
+msgstr "შიგთავსის შერჩევა"
 
 #: gtk/gtkentrycompletion.c:389
 msgid "Your description here"
@@ -2410,13 +2366,10 @@ msgid "Do overwrite confirmation"
 msgstr "ზემოდან გადაწერის დასტური"
 
 #: gtk/gtkfilechooser.c:270
-#, fuzzy
 msgid ""
 "Whether a file chooser in save mode will present an overwrite confirmation "
 "dialog if necessary."
 msgstr ""
-"ფაილის ამომრჩევის GTK_FILE_CHOOSER_ACTION_SAVE მიერ ზემოდან გადაწერის "
-"დასტურის დიალოგის ჩვენება მომხმარებლის მიერ უკვე არსებული სახელის შერჩევისას."
 
 #: gtk/gtkfilechooserbutton.c:381
 msgid "Dialog"
@@ -2524,8 +2477,9 @@ msgid "Whether selected font size is shown in the label"
 msgstr "წარწერის შრიფტის შერჩეული ზომის ჩვენება"
 
 #: gtk/gtkfontsel.c:180
+#, fuzzy
 msgid "The X string that represents this font"
-msgstr "ტექსტი ნიმუში მოცემული შრიფტით"
+msgstr "ტექსტი რომელიც წარმოადგენს ამ შრიფტს"
 
 #: gtk/gtkfontsel.c:187
 msgid "The GdkFont that is currently selected"
@@ -2704,14 +2658,12 @@ msgid "View is reorderable"
 msgstr "ჩვენების ელემენტების გადაწყობადობა"
 
 #: gtk/gtkiconview.c:757 gtk/gtktreeview.c:763
-#, fuzzy
 msgid "Tooltip Column"
-msgstr "ტექსტური სვეტი"
+msgstr "კარნახის სვეტი"
 
 #: gtk/gtkiconview.c:758
-#, fuzzy
 msgid "The column in the model containing the tooltip texts for the items"
-msgstr "ტექსტის შემცველი სვეტი მონაცემთა მოდელში."
+msgstr "კარნახის შემცველი სვეტი მონაცემთა მოდელში."
 
 #: gtk/gtkiconview.c:769
 msgid "Selection Box Color"
@@ -2898,13 +2850,12 @@ msgid "The widget to be activated when the label's mnemonic key is pressed"
 msgstr "მართვის ელემენტი, რომელიც მნემონური ღილაკის დაჭერით აქტივირდება"
 
 #: gtk/gtklabel.c:430
-#, fuzzy
 msgid ""
 "The preferred place to ellipsize the string, if the label does not have "
 "enough room to display the entire string"
 msgstr ""
-"ტექსტის წანაცვლების სასურველი ადგილი, თუ წარწერას ტექსტის სრულად საჩვენებლად "
-"საკმარისი ან სულაც არ აქვს ადგილი"
+"ტექსტის ელიფსიზაციის სასურველი წერტილი, წარწერის ტექსტის სრული ჩვენებისთვის "
+"არასაკმარისი ადგილის შემთხვევაში "
 
 #: gtk/gtklabel.c:470
 msgid "Single Line Mode"
@@ -2931,7 +2882,6 @@ msgid "The desired maximum width of the label, in characters"
 msgstr "წარწერის სასურველი მაქსიმალური სიგანე სიმბოლოებში"
 
 #: gtk/gtklabel.c:626
-#, fuzzy
 msgid "Whether to select the contents of a selectable label when it is focused"
 msgstr "ველის შიგთავსის მონიშვნა ფოკუსირებისას"
 
@@ -2984,14 +2934,12 @@ msgid "Extra space at the top and bottom of the menu"
 msgstr "მენიუს ზედა და ქვედა დამატებითი ველი"
 
 #: gtk/gtkmenu.c:515
-#, fuzzy
 msgid "Horizontal Padding"
 msgstr "განივი შევსება"
 
 #: gtk/gtkmenu.c:516
-#, fuzzy
 msgid "Extra space at the left and right edges of the menu"
-msgstr "მენიუს ზედა და ქვედა დამატებითი ველი"
+msgstr "მენიუს მარჯვნივ და მარცხნივ დამატებითი ველი"
 
 #: gtk/gtkmenu.c:524
 msgid "Vertical Offset"
@@ -3014,9 +2962,8 @@ msgid ""
 msgstr "ქვემენიუს განივი წანაცვლების სიდიდე პიქსელებში"
 
 #: gtk/gtkmenu.c:542
-#, fuzzy
 msgid "Double Arrows"
-msgstr "ისრის ჩვენება"
+msgstr "ორმაგი ისარი"
 
 #: gtk/gtkmenu.c:543
 msgid "When scrolling, always show both arrows."
@@ -3180,42 +3127,37 @@ msgid "The buttons shown in the message dialog"
 msgstr "შეტყობინების დიალოგში ნაჩვენები ღილაკები"
 
 #: gtk/gtkmessagedialog.c:154
-#, fuzzy
 msgid "The primary text of the message dialog"
-msgstr "შეტყობინების დიალოგში ნაჩვენები ღილაკები"
+msgstr "შეტყობინების დიალოგის მთავარი ტექსტი"
 
 #: gtk/gtkmessagedialog.c:169
-#, fuzzy
 msgid "Use Markup"
 msgstr "მარკირების გამოყენება"
 
 #: gtk/gtkmessagedialog.c:170
-#, fuzzy
 msgid "The primary text of the title includes Pango markup."
-msgstr "ჭდის ტექსტი XML მარკირებას შეიცავს.  იხ. ფუნქცია pango_parse_markup()"
+msgstr ""
+"შეტყობინების დიალოგის მთავარი ტექსტის მიერ პანგოს მარკირების გამოყენება"
 
 #: gtk/gtkmessagedialog.c:184
-#, fuzzy
 msgid "Secondary Text"
-msgstr "მეორადი"
+msgstr "მეორადი ტექსტი"
 
 #: gtk/gtkmessagedialog.c:185
-#, fuzzy
 msgid "The secondary text of the message dialog"
-msgstr "შეტყობინების დიალოგში ნაჩვენები ღილაკები"
+msgstr "შეტყობინების დიალოგის მეორადი ტექსტი"
 
 #: gtk/gtkmessagedialog.c:200
 msgid "Use Markup in secondary"
-msgstr ""
+msgstr "მეორადში მარკირების გამოყენება"
 
 #: gtk/gtkmessagedialog.c:201
 msgid "The secondary text includes Pango markup."
 msgstr ""
 
 #: gtk/gtkmessagedialog.c:216
-#, fuzzy
 msgid "The image"
-msgstr "მნიშვნელობა"
+msgstr "გამოსახულება"
 
 #: gtk/gtkmisc.c:83
 msgid "Y align"
@@ -3326,9 +3268,8 @@ msgid "Whether tabs should have homogeneous sizes"
 msgstr "დაფების ერთიდაიგივე ზომის მითითება"
 
 #: gtk/gtknotebook.c:645
-#, fuzzy
 msgid "Group ID"
-msgstr "ჯგუფი"
+msgstr "ჯგუფი ID"
 
 #: gtk/gtknotebook.c:646
 msgid "Group ID for tabs drag and drop"
@@ -3380,24 +3321,20 @@ msgid "Tab pack type"
 msgstr "დაფის შეფუთვის ტიპი"
 
 #: gtk/gtknotebook.c:711
-#, fuzzy
 msgid "Tab reorderable"
-msgstr "გადაწყობადი"
+msgstr "გადაწყობადი ჩანართი"
 
 #: gtk/gtknotebook.c:712
-#, fuzzy
 msgid "Whether the tab is reorderable by user action or not"
-msgstr "კონტურის ჩვენება"
+msgstr "გადაწყობადი ჩანართების მართვა მომხმარებლის მიერ"
 
 #: gtk/gtknotebook.c:718
-#, fuzzy
 msgid "Tab detachable"
-msgstr "დაფის წარწერა"
+msgstr "მოხსნადი ჩანართი"
 
 #: gtk/gtknotebook.c:719
-#, fuzzy
 msgid "Whether the tab is detachable"
-msgstr "ქმედების ჩართვა/ამორთვა"
+msgstr "ჩანართის მოხსნადობა"
 
 #: gtk/gtknotebook.c:734 gtk/gtkscrollbar.c:83
 msgid "Secondary backward stepper"
@@ -3434,28 +3371,24 @@ msgid "Display the standard forward arrow button"
 msgstr "წინსვლის ისრის სტანდარტული ღილაკის ჩვენება"
 
 #: gtk/gtknotebook.c:795
-#, fuzzy
 msgid "Tab overlap"
-msgstr "დაფის კონტური"
+msgstr "ჩანართის გადაფარვა"
 
 #: gtk/gtknotebook.c:796
-#, fuzzy
 msgid "Size of tab overlap area"
-msgstr "გამფართოებლის ისრის ზომა"
+msgstr "ჩანართების გადაფარვის არის ზომა"
 
 #: gtk/gtknotebook.c:811
 msgid "Tab curvature"
-msgstr ""
+msgstr "ჩანართის გამრუდება"
 
 #: gtk/gtknotebook.c:812
-#, fuzzy
 msgid "Size of tab curvature"
-msgstr "გამყოფების ზომები"
+msgstr "ჩანართის გამრუდების ზომა"
 
 #: gtk/gtkobject.c:367
-#, fuzzy
 msgid "User Data"
-msgstr "გამჭვირვალობა"
+msgstr "მომხმარებლის მონაცემები"
 
 #: gtk/gtkobject.c:368
 msgid "Anonymous User Data Pointer"
@@ -3531,9 +3464,8 @@ msgid "Embedded"
 msgstr ""
 
 #: gtk/gtkplug.c:147
-#, fuzzy
 msgid "Whether or not the plug is embedded"
-msgstr "ქმედების ხილულობა"
+msgstr ""
 
 #: gtk/gtkpreview.c:106
 msgid ""
@@ -3541,41 +3473,36 @@ msgid ""
 msgstr "ესკიზის მართვის ელემენტის მიერ მისთვის გამოყოფილი მთელი არის დაკავება"
 
 #: gtk/gtkprinter.c:120
-#, fuzzy
 msgid "Name of the printer"
-msgstr "ხატულების გამოსაყენებელი თემის სახელი"
+msgstr "საბეჭდი მანქანის სახელწოდება"
 
 #: gtk/gtkprinter.c:126
 msgid "Backend"
-msgstr ""
+msgstr "საბეჭდი სისტემა"
 
 #: gtk/gtkprinter.c:127
-#, fuzzy
 msgid "Backend for the printer"
-msgstr "GdkScreen გარდასახვისთვის"
+msgstr "საბეჭდის ბეჭდვის სისტემა"
 
 #: gtk/gtkprinter.c:133
-#, fuzzy
 msgid "Is Virtual"
-msgstr "მნიშვნელოვანია"
+msgstr "ვირტუალური"
 
 #: gtk/gtkprinter.c:134
 msgid "FALSE if this represents a real hardware printer"
 msgstr ""
 
 #: gtk/gtkprinter.c:140
-#, fuzzy
 msgid "Accepts PDF"
-msgstr "ტაბულაციის მიღება"
+msgstr "PDF დაშვებულია"
 
 #: gtk/gtkprinter.c:141
 msgid "TRUE if this printer can accept PDF"
 msgstr ""
 
 #: gtk/gtkprinter.c:147
-#, fuzzy
 msgid "Accepts PostScript"
-msgstr "ტაბულაციის მიღება"
+msgstr "PostScript დაშვებულია"
 
 #: gtk/gtkprinter.c:148
 msgid "TRUE if this printer can accept PostScript"
@@ -3590,64 +3517,56 @@ msgid "String giving the current state of the printer"
 msgstr ""
 
 #: gtk/gtkprinter.c:161
-#, fuzzy
 msgid "Location"
-msgstr "ქმედება"
+msgstr "მდებარეობა"
 
 #: gtk/gtkprinter.c:162
-#, fuzzy
 msgid "The location of the printer"
-msgstr "ხელსაწყოთა პანელის ორიენტაცია"
+msgstr "საბეჭდის მდებარეობა"
 
 #: gtk/gtkprinter.c:169
-#, fuzzy
 msgid "The icon name to use for the printer"
-msgstr "სახაზავის შკალა"
+msgstr "საბეჭდი მანქანის აღმნიშვნელი ხატულა"
 
 #: gtk/gtkprinter.c:175
 msgid "Job Count"
 msgstr ""
 
 #: gtk/gtkprinter.c:176
-#, fuzzy
 msgid "Number of jobs queued in the printer"
-msgstr "მწკრივების რაოდენობა ცხრილში"
+msgstr "საბეჭდის მიერ ჩასატარებელი სამუშაოს ზომა"
 
 #: gtk/gtkprinteroptionwidget.c:123
-#, fuzzy
 msgid "Source option"
-msgstr "ჩამოშლადი თვითშევსება"
+msgstr "საბეჭდის პარამეტრები"
 
 #: gtk/gtkprinteroptionwidget.c:124
 msgid "The PrinterOption backing this widget"
 msgstr ""
 
 #: gtk/gtkprintjob.c:117
-#, fuzzy
 msgid "Title of the print job"
-msgstr "ფანჯრის სათაური"
+msgstr "საბეჭდი სამუშაოს სათაური"
 
 #: gtk/gtkprintjob.c:125
-#, fuzzy
 msgid "Printer"
-msgstr "ფილტრი"
+msgstr "საბეჭდი მანქანა"
 
 #: gtk/gtkprintjob.c:126
 msgid "Printer to print the job to"
-msgstr ""
+msgstr "საბეჭდი ამ სამუშაოს დასაბეჭდად"
 
 #: gtk/gtkprintjob.c:134
 msgid "Settings"
-msgstr ""
+msgstr "პარამეტრები"
 
 #: gtk/gtkprintjob.c:135
 msgid "Printer settings"
-msgstr ""
+msgstr "საბეჭდის პარამეტრები"
 
 #: gtk/gtkprintjob.c:143 gtk/gtkprintjob.c:144 gtk/gtkprintunixdialog.c:241
-#, fuzzy
 msgid "Page Setup"
-msgstr "გვერდის ზომა"
+msgstr "გვერდის გამართვა"
 
 #: gtk/gtkprintjob.c:152 gtk/gtkprintoperation.c:1005
 msgid "Track Print Status"
@@ -3660,9 +3579,8 @@ msgid ""
 msgstr ""
 
 #: gtk/gtkprintoperation.c:877
-#, fuzzy
 msgid "Default Page Setup"
-msgstr "ნაგულისხმები სიმაღლე"
+msgstr "ნაგულისხმები გვერდის პარამეტრები"
 
 #: gtk/gtkprintoperation.c:878
 msgid "The GtkPageSetup used by default"
@@ -3670,45 +3588,39 @@ msgstr ""
 
 #: gtk/gtkprintoperation.c:896 gtk/gtkprintunixdialog.c:259
 msgid "Print Settings"
-msgstr ""
+msgstr "ბეჭდვის პარამეტრები"
 
 #: gtk/gtkprintoperation.c:897 gtk/gtkprintunixdialog.c:260
 msgid "The GtkPrintSettings used for initializing the dialog"
 msgstr ""
 
 #: gtk/gtkprintoperation.c:915
-#, fuzzy
 msgid "Job Name"
-msgstr "ხატულას სახელი"
+msgstr "სამუშაოს სახელი"
 
 #: gtk/gtkprintoperation.c:916
 msgid "A string used for identifying the print job."
 msgstr ""
 
 #: gtk/gtkprintoperation.c:940
-#, fuzzy
 msgid "Number of Pages"
-msgstr "არხების რაოდენობა"
+msgstr "გვერდების რაოდენობა"
 
 #: gtk/gtkprintoperation.c:941
-#, fuzzy
 msgid "The number of pages in the document."
-msgstr "მწკრივების რაოდენობა ცხრილში"
+msgstr "დოკუმენტში გვერდების რაოდენობა."
 
 #: gtk/gtkprintoperation.c:962 gtk/gtkprintunixdialog.c:249
-#, fuzzy
 msgid "Current Page"
-msgstr "გამჭვირვალობის მიმდინარე სიდიდე"
+msgstr "მიმდინარე გვერდი"
 
 #: gtk/gtkprintoperation.c:963 gtk/gtkprintunixdialog.c:250
-#, fuzzy
 msgid "The current page in the document"
-msgstr "გვერდის ზომა მორგებისთვის"
+msgstr "დოკუმენტის მიმდინარე გვერდი"
 
 #: gtk/gtkprintoperation.c:984
-#, fuzzy
 msgid "Use full page"
-msgstr "გამჭვირვალობა"
+msgstr "გვერდის მთლიანად გამოყენება"
 
 #: gtk/gtkprintoperation.c:985
 msgid ""
@@ -3723,45 +3635,40 @@ msgid ""
 msgstr ""
 
 #: gtk/gtkprintoperation.c:1023
-#, fuzzy
 msgid "Unit"
-msgstr "სასწრაფო"
+msgstr "ერთეული"
 
 #: gtk/gtkprintoperation.c:1024
 msgid "The unit in which distances can be measured in the context"
 msgstr ""
 
 #: gtk/gtkprintoperation.c:1041
-#, fuzzy
 msgid "Show Dialog"
-msgstr "დიალოგი"
+msgstr "დიალოგის ჩვენება"
 
 #: gtk/gtkprintoperation.c:1042
 msgid "TRUE if a progress dialog is shown while printing."
 msgstr ""
 
 #: gtk/gtkprintoperation.c:1065
-#, fuzzy
 msgid "Allow Async"
-msgstr "წესების ნებადართვა"
+msgstr "ასინქრონულად ნების დართვა"
 
 #: gtk/gtkprintoperation.c:1066
 msgid "TRUE if print process may run asynchronous."
 msgstr ""
 
 #: gtk/gtkprintoperation.c:1089 gtk/gtkprintoperation.c:1090
-#, fuzzy
 msgid "Export filename"
-msgstr "ფაილის სახელი"
+msgstr "ფაილის სახელწოდება"
 
 #: gtk/gtkprintoperation.c:1104
 msgid "Status"
 msgstr ""
 
 #: gtk/gtkprintoperation.c:1105
-#, fuzzy
 msgid "The status of the print operation"
-msgstr "გადამრთველი ღილაკის სტატუსი"
+msgstr "ბეჭდვის ოპერაციის მდგომარეობა"
 
 #: gtk/gtkprintoperation.c:1125
 msgid "Status String"
@@ -3772,9 +3679,8 @@ msgid "A human-readable description of the status"
 msgstr ""
 
 #: gtk/gtkprintoperation.c:1144
-#, fuzzy
 msgid "Custom tab label"
-msgstr "თქვენი პალიტრა"
+msgstr "ჩასართის ჩასწორებადი წარწერა"
 
 #: gtk/gtkprintoperation.c:1145
 msgid "Label for the tab containing custom widgets."
@@ -3785,39 +3691,35 @@ msgid "The GtkPageSetup to use"
 msgstr ""
 
 #: gtk/gtkprintunixdialog.c:267
-#, fuzzy
 msgid "Selected Printer"
-msgstr "მონიშნული წელი"
+msgstr "ამორჩეული საბეჭდი"
 
 #: gtk/gtkprintunixdialog.c:268
-#, fuzzy
 msgid "The GtkPrinter which is selected"
-msgstr "მიმდინარე აქტიური ელემენტი"
+msgstr "ამორჩეული GtkPrinter"
 
 #: gtk/gtkprogress.c:99
 msgid "Activity mode"
 msgstr "აქტივობის რეჟიმი"
 
 #: gtk/gtkprogress.c:100
-#, fuzzy
 msgid ""
 "If TRUE, the GtkProgress is in activity mode, meaning that it signals "
 "something is happening, but not how much of the activity is finished. This "
 "is used when you're doing something but don't know how long it will take."
 msgstr ""
 "თუ მითითებულია, GtkProgress ობიექტი ე.წ. \"აქტივობის რეჟიმშია\".  იგი "
-"გვაცნობებს ამა თუ იმ მოვლენის მიმდინარეობის შესახებ თუმცა არ იძლევა "
-"ინფორმაციას თუ როდის დასრულდება.  გამოიყენება ხანგრძლივი პროცესების "
-"შემთხვევაში, როცა დასრულების დრო უცნობია."
+"გვაცნობებს ამა თუ იმ მოვლენის მიმდინარეობის შესახებ, თუმცა არ იძლევა "
+"დასრულების ინფორმაციას.  გამოიყენება ხანგრძლივი პროცესების შემთხვევაში, როცა "
+"დასრულების დრო უცნობია."
 
 #: gtk/gtkprogress.c:108
 msgid "Show text"
 msgstr "ტექსტის ჩვენება"
 
 #: gtk/gtkprogress.c:109
-#, fuzzy
 msgid "Whether the progress is shown as text."
-msgstr "პროცესის მიმდინარეობის ტექსტის სახით ჩვენება"
+msgstr "პროცესის მიმდინარეობის ტექსტის სახით ჩვენება."
 
 #: gtk/gtkprogressbar.c:123
 msgid "The GtkAdjustment connected to the progress bar (Deprecated)"
@@ -3885,18 +3787,16 @@ msgid "Text to be displayed in the progress bar"
 msgstr "მიმდინარეობის მაჩვენებლის ტექსტი"
 
 #: gtk/gtkprogressbar.c:211
-#, fuzzy
 msgid ""
 "The preferred place to ellipsize the string, if the progress bar does not "
 "have enough room to display the entire string, if at all."
 msgstr ""
-"ტექსტის წანაცვლების სასურველი ადგილი, თუ მიმდინარეობის პანელს არ აქვს "
-"საკმარისი ადგილი ტექსტის სრულად საჩვენებლად, თუ სულაც"
+"ტექსტის ელიფსიზაციის სასურველი ადგილი, თუ მიმდინარეობის მაჩვენებელს ტექსტის "
+"სრულად ჩვენებისთვის არ გააჩნია საკმარისი ადგილი."
 
 #: gtk/gtkprogressbar.c:218
-#, fuzzy
 msgid "XSpacing"
-msgstr "ინტერვალი"
+msgstr "XSpacing"
 
 #: gtk/gtkprogressbar.c:219
 msgid "Extra spacing applied to the width of a progress bar."
@@ -3919,9 +3819,8 @@ msgid "The radio action whose group this action belongs to."
 msgstr "ინდიკატორის ქმედება ჯგუფისთვის, რომელსაც ეს ქმედება ეკუთვნის."
 
 #: gtk/gtkradioaction.c:144
-#, fuzzy
 msgid "The current value"
-msgstr "მიმდინარე ფერი"
+msgstr "მიმდინარე მნიშვნელობა"
 
 #: gtk/gtkradioaction.c:145
 msgid ""
@@ -3934,9 +3833,8 @@ msgid "The radio button whose group this widget belongs to."
 msgstr "ინდიკატორის ღილაკი ჯგუფისთვის, რომელსაც მართვის ეს ელემენტი ეკუთვნის."
 
 #: gtk/gtkradiomenuitem.c:343
-#, fuzzy
 msgid "The radio menu item whose group this widget belongs to."
-msgstr "ინდიკატორის ღილაკი ჯგუფისთვის, რომელსაც მართვის ეს ელემენტი ეკუთვნის."
+msgstr "მენიუს რადიო ელემენტი, ჯგუფი რომელსაც ეს ელემენტი მიეკუთვნება."
 
 #: gtk/gtkrange.c:337
 msgid "Update policy"
@@ -4085,69 +3983,58 @@ msgid ""
 msgstr ""
 
 #: gtk/gtkrecentaction.c:679 gtk/gtkrecentchoosermenu.c:209
-#, fuzzy
 msgid "Show Numbers"
-msgstr "კვირის ნომრების ჩვენება"
+msgstr "ციფრების ჩვენება"
 
 #: gtk/gtkrecentaction.c:680 gtk/gtkrecentchoosermenu.c:210
-#, fuzzy
 msgid "Whether the items should be displayed with a number"
-msgstr "ქვემენიუს ელემენტების მენიუში დამტების შესაძლებლობა"
+msgstr "ელემენტების ნომრებთან ერთად ჩვენება"
 
 #: gtk/gtkrecentchooser.c:120
 msgid "Recent Manager"
-msgstr ""
+msgstr "ბოლოს დამუშავებული ელემენტების მართვა"
 
 #: gtk/gtkrecentchooser.c:121
 msgid "The RecentManager object to use"
 msgstr ""
 
 #: gtk/gtkrecentchooser.c:135
-#, fuzzy
 msgid "Show Private"
-msgstr "ტექსტის ჩვენება"
+msgstr "პირადის ჩვენება"
 
 #: gtk/gtkrecentchooser.c:136
-#, fuzzy
 msgid "Whether the private items should be displayed"
-msgstr "დამალული დასტების ან ფაილების ჩვენების ნებართვა"
+msgstr "პირადი ელემენტების ჩვენება"
 
 #: gtk/gtkrecentchooser.c:149
-#, fuzzy
 msgid "Show Tooltips"
-msgstr "მინიშნებები"
+msgstr "კარნახის ჩვენება"
 
 #: gtk/gtkrecentchooser.c:150
-#, fuzzy
 msgid "Whether there should be a tooltip on the item"
-msgstr "კონტურის ჩვენება"
+msgstr "ყოველი ელემენტისთვის კარნახის ჩვენება"
 
 #: gtk/gtkrecentchooser.c:162
-#, fuzzy
 msgid "Show Icons"
-msgstr "ჩაკერებული ხატულა"
+msgstr "ხატულების ჩვენება"
 
 #: gtk/gtkrecentchooser.c:163
-#, fuzzy
 msgid "Whether there should be an icon near the item"
-msgstr "კონტურის ჩვენება"
+msgstr "ელემენტთან ხატულას ჩვენება"
 
 #: gtk/gtkrecentchooser.c:178
 msgid "Show Not Found"
-msgstr ""
+msgstr "ვერ მოძებნილის ჩვენება"
 
 #: gtk/gtkrecentchooser.c:179
-#, fuzzy
 msgid "Whether the items pointing to unavailable resources should be displayed"
-msgstr "დამალული დასტების ან ფაილების ჩვენების ნებართვა"
+msgstr ""
 
 #: gtk/gtkrecentchooser.c:192
-#, fuzzy
 msgid "Whether to allow multiple items to be selected"
-msgstr "მრავალი ფაილის არჩევის დაშვება"
+msgstr "რამდენიმე ელემენტის ამორჩევის შესაძლებლობის ნების დართვა"
 
 #: gtk/gtkrecentchooser.c:205
-#, fuzzy
 msgid "Local only"
 msgstr "მხოლოდ ლოკალურები"
 
@@ -4166,9 +4053,8 @@ msgid "The maximum number of items to be displayed"
 msgstr "მეათედების რაოდენობა საჩვენებლად"
 
 #: gtk/gtkrecentchooser.c:237
-#, fuzzy
 msgid "Sort Type"
-msgstr "ჩრდილის ტიპი"
+msgstr "დახარისხების ტიპი"
 
 #: gtk/gtkrecentchooser.c:238
 #, fuzzy
@@ -4286,9 +4172,8 @@ msgstr ""
 "მნიშვნელობა ინახება"
 
 #: gtk/gtkscalebutton.c:229
-#, fuzzy
 msgid "Icons"
-msgstr "ხატულა"
+msgstr "ხატულები"
 
 #: gtk/gtkscalebutton.c:230
 #, fuzzy
@@ -4396,9 +4281,8 @@ msgid "Number of pixels between the scrollbars and the scrolled window"
 msgstr "რასტრული წერტილების რაოდენობა გადახვევის ზოლსა და ფანჯარას შორის"
 
 #: gtk/gtkscrolledwindow.c:315
-#, fuzzy
 msgid "Scrolled Window Placement"
-msgstr "ფანჯრის განთავსება"
+msgstr "გადახვევის ფანჯრის განთავსება"
 
 #: gtk/gtkscrolledwindow.c:316
 #, fuzzy
@@ -4919,7 +4803,7 @@ msgstr "ეკრანი, რომელზეც ეს ფანჯარ�
 
 #: gtk/gtkstatusicon.c:239
 msgid "Blinking"
-msgstr ""
+msgstr "ციმციმი"
 
 #: gtk/gtkstatusicon.c:240
 #, fuzzy
@@ -5032,7 +4916,7 @@ msgstr ""
 
 #: gtk/gtktable.c:222
 msgid "Vertical padding"
-msgstr "მართობული შევსება"
+msgstr "ვერტიკალური შევსება"
 
 #: gtk/gtktable.c:223
 msgid ""
@@ -5078,9 +4962,8 @@ msgid "Current text of the buffer"
 msgstr "მიმდინარე ტექსტი ბუფერში"
 
 #: gtk/gtktextbuffer.c:212
-#, fuzzy
 msgid "Has selection"
-msgstr "თავისუფალი შერჩევა"
+msgstr "გააჩნია მონიშნული"
 
 #: gtk/gtktextbuffer.c:213
 #, fuzzy
@@ -5088,7 +4971,6 @@ msgid "Whether the buffer has some text currently selected"
 msgstr "მიმდინარე არჩეული GdkFont შრიფტი"
 
 #: gtk/gtktextbuffer.c:229
-#, fuzzy
 msgid "Cursor position"
 msgstr "კურსორის პოზიცია"
 
@@ -5118,14 +5000,12 @@ msgid ""
 msgstr ""
 
 #: gtk/gtktextmark.c:90
-#, fuzzy
 msgid "Mark name"
 msgstr "ჭდის სახელი"
 
 #: gtk/gtktextmark.c:97
-#, fuzzy
 msgid "Left gravity"
-msgstr "მიმართება"
+msgstr "სასურველია მარცხნივ"
 
 #: gtk/gtktextmark.c:98
 #, fuzzy
@@ -5569,9 +5449,8 @@ msgid "Size of icons in this toolbar"
 msgstr "საწყის ხელსაწყოთა პანელის ხატულების ზომა"
 
 #: gtk/gtktoolbar.c:546
-#, fuzzy
 msgid "Icon size set"
-msgstr "შრიფტის ზომა მიეთითა"
+msgstr "ხატულას ზომის მინიჭება"
 
 #: gtk/gtktoolbar.c:547
 #, fuzzy
@@ -5687,9 +5566,8 @@ msgid "Icon widget to display in the item"
 msgstr "ხატულას მართვის ელემენტი ჩვენებისას"
 
 #: gtk/gtktoolbutton.c:239
-#, fuzzy
 msgid "Icon spacing"
-msgstr "მწკრივთშორისი ინტერვალი"
+msgstr "ხატულებს შორისი ინტერვალი"
 
 #: gtk/gtktoolbutton.c:240
 #, fuzzy
@@ -5804,9 +5682,8 @@ msgid ""
 msgstr "სტრიქონების გაშლა/შეკუმშვა მასზე მაჩვენებელი ისრის გადატარებისას"
 
 #: gtk/gtktreeview.c:713
-#, fuzzy
 msgid "Show Expanders"
-msgstr "გაფართოებადი"
+msgstr "გაფართოების ელემენტების ჩვენება"
 
 #: gtk/gtktreeview.c:714
 #, fuzzy
@@ -6644,16 +6521,42 @@ msgstr "შეტანის მეთოდის სტატუსის ს
 msgid "How to draw the input method statusbar"
 msgstr "შეტანის მეთოდის სტატუსის გრაფიკული გამოსახულება"
 
-#~ msgid ""
-#~ "A number between 0.0 and 1.0 specifying the horizontal alignment of the "
-#~ "text in the progress widget"
-#~ msgstr ""
-#~ "მნიშვნელობა 0.0 და 1.0 შორის, რომელიც მიმდინარეობის მაჩვენებლის მართვის "
-#~ "ელემენტში განივ განთავსებას მიუთითებს"
+msgid ""
+"A number between 0.0 and 1.0 specifying the horizontal alignment of the text "
+"in the progress widget"
+msgstr ""
+"მნიშვნელობა 0.0 და 1.0 შორის, რომელიც მიმდინარეობის მაჩვენებლის მართვის "
+"ელემენტში განივ განთავსებას მიუთითებს"
 
-#~ msgid ""
-#~ "A number between 0.0 and 1.0 specifying the vertical alignment of the "
-#~ "text in the progress widget"
-#~ msgstr ""
-#~ "მნიშვნელობა 0.0 და 1.0 შორის, რომელიც მიმდინარეობის მაჩვენებლის მართვის "
-#~ "ელემენტში ვერტიკალურ განთავსებას მიუთითებს"
+msgid ""
+"A number between 0.0 and 1.0 specifying the vertical alignment of the text "
+"in the progress widget"
+msgstr ""
+"მნიშვნელობა 0.0 და 1.0 შორის, რომელიც მიმდინარეობის მაჩვენებლის მართვის "
+"ელემენტში ვერტიკალურ განთავსებას მიუთითებს"
+
+#~ msgid "Details Width"
+#~ msgstr "დეტალების სიგანე"
+
+#~ msgid "Details width in characters"
+#~ msgstr "დეტალების სიგანე სიმბოლოების მიხედვით"
+
+#~ msgid "Details Height"
+#~ msgstr "დეტალების სიმაღლე"
+
+#~ msgid "Details height in rows"
+#~ msgstr "დეტალების სიმაღლე რიგების მიხედვით"
+
+#~ msgid "Show Details"
+#~ msgstr "დეტალების ჩვენება"
+
+#~ msgid "If TRUE, details are shown"
+#~ msgstr "თუ მონიშნულია, დეტალები ნაჩვენებია"
+
+#, fuzzy
+#~ msgid "Default IM module"
+#~ msgstr "ნაგულისხმები სიგანე"
+
+#, fuzzy
+#~ msgid "Which IM module should be used by default"
+#~ msgstr "პალიტრის გამოყენება"
