@@ -1,5 +1,11 @@
 2008-03-20  Tor Lillqvist  <tml@novell.com>
 
+	* gtk/Makefile.am: Revert accidental change that went in as part
+	of the commit on 2008-03-18. Do use grep -o. Unbreaks build on
+	Darwin.
+
+2008-03-20  Tor Lillqvist  <tml@novell.com>
+
 	* tests/testfilechooserbutton.c (chooser_update_preview_cb): Don't
 	pass NULL for %s to g_message().
 	(main): Drop unnecessary call to gtk_widget_destroy().
