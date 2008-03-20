@@ -34,6 +34,209 @@
 	* gdk-pixbuf-io.c: Add the bits and pieces for built-in GDI+
 	loaders.
 
+	== ChangeLog from gdip-pixbuf-loaders follows: ==
+
+2008-03-19  Tor Lillqvist  <tml@novell.com>
+
+	* src/io-gdip-utils.c: Drop misleading old comment.
+
+	* src/io-gdip-native.h: Fix typo: s/WINGDIAPI/WINGDIPAPI/.
+
+2008-03-17  Tor Lillqvist  <tml@novell.com>
+
+	* src/io-gdip-utils.h (MODULE_ENTRY): Use the more descriptive
+	INCLUDE_gdiplus instead of INCLUDE_gdi. (Will be used when this is
+	moved to GTK+ and the gdip loaders are built-in in libgdk-pixbuf.)
+	Use G_MODULE_EXPORT so that only fill_info and fill_vtable get
+	exported in the separate loader DLLs case.
+
+	* src/io-gdip-emf.c
+	* src/io-gdip-ico.c
+	* src/io-gdip-wmf.c: Use unique type parameters to MODULE_ENTRY so
+	that we won't get clashes when building all the gdip loaders in to
+	libgdk-pixbuf.
+
+2008-03-17  Tor Lillqvist  <tml@novell.com>
+
+	* src/Makefile.am: Remove libpixbufloader-gdip.la, and add missing
+	loaders to loader_LTLIBRARIES. Set loaderdir to use proper GTK+
+	binary version using pkg-config. Add final newline.
+
+2008-03-15  Dominic Lachowicz <domlachowicz@gmail.com>
+
+	* io-gdip.c: Remove
+	* io-gdip-ico.c:
+	* io-gdip-wmf.c:
+	* io-gdip-emf.c: Separate these into their own loaders, so that existing
+	code that calls "gdk_pixbuf_loader_for_type()" and friends continues
+	to work as expected.
+	* Makefile.test:
+	* Makefile.am: Reflect the above changes
+	* io-gdip-native.h:
+	* io-gdip-utils.c: Better error reporting; handle metafiles properly
+	(loading them as bitmaps doesn't work; you have to load them as a
+	generic image or metafile and then draw them onto a bitmap)
+	
+2008-03-06  Alberto Ruiz <aruiz@gnome.org>
+
+	* configure.ac: Use the .exe version of the gdk query loaders if the build
+	is for a windows target.
+
+2008-03-04  Dominic Lachowicz <domlachowicz@gmail.com>
+
+	* src/io-gdip-utils.c: More informative error codes, taken from the COM HRESULT
+	
+2008-03-03  Dominic Lachowicz <domlachowicz@gmail.com>
+
+	* src/io-gdip-native.h:
+	* src/io-gdip-jpeg.c: Support setting the JPEG's quality, just like GdkPixbuf's 
+	built-in JPEG encoder
+	* src/io-gdip-png.c: Support setting the PNG's compression level, just like
+	 GdkPixbuf's built-in PNG encoder
+	
+2008-02-25  Tor Lillqvist  <tml@novell.com>
+
+	* configure.ac: Move AC_DISABLE_STATIC before AC_PROG_LIBTOOL so
+	that it works better.
+
+2008-02-24  Dom Lachowicz <domlachowicz@gmail.com>
+
+	* src/io-gdip-animation.[ch]: Animation class and interator
+	* src/io-gdip-utils.c: Use animation iter. GDI+ animations now work.
+	
+2008-02-24  Dom Lachowicz <domlachowicz@gmail.com>
+
+	* src/io-gdip-utils.c: Simple animation working; need to use a more sophisticated
+	animation class
+	
+2008-02-24  Dom Lachowicz <domlachowicz@gmail.com>
+
+	* src/*.c: Change to GTK+-style indentation; stub out some stuff
+	for animation support
+	
+2008-02-22  Dom Lachowicz <domlachowicz@gmail.com>
+
+	* src/Makefile.am: Build those other libraries using automake too;
+	track dependencies properly
+	
+2008-02-22  Dom Lachowicz <domlachowicz@gmail.com>
+
+	* src/*.[ch]: Separate out formats that are writable into their
+	own plugins. The GDI+ loader can now save as BMP, GIF, JPEG, PNG,
+	or TIFF. Also, some tweaks so that the format plugins can be
+	statically compiled into GTK+ if we choose to do so.
+	
+2008-02-22  Dom Lachowicz <domlachowicz@gmail.com>
+
+	* src/io-gdip-utils.c (GetEncoderClsid): Add support for BMP,
+	JPEG, GIF, and TIFF
+	
+2008-02-22  Dom Lachowicz <domlachowicz@gmail.com>
+
+	* src/*.[ch]: Saving images to PNG now works. Conditionally compiled
+	until I get GdkPixbuf's saving architecture straightened out.
+	
+2008-02-21  Dom Lachowicz <domlachowicz@gmail.com>
+
+	* src/io-gdip-utils.c (io_gdip_init): Make this idempotent
+	* src/io-gdip.c: Function that fills the GdkPixbufIO vtable. To be used across
+	various GDI+-based plugins
+	
+2008-02-21  Dom Lachowicz <domlachowicz@gmail.com>
+	
+	* src/*.[ch]: If you #define GDIP_TEST_SAVING, you should be able
+	to save a pixbuf to a PNG via GDI+. WARNING: UNTESTED CODE
+	
+2008-02-21  Dom Lachowicz <domlachowicz@gmail.com>
+
+	* src/*.[ch]: Infrastructure for saving GdkPixbufs to GdkPixbufSaveFunc callbacks.
+	Should be trivial to write a PNG or JPEG saver now.
+	
+2008-02-20  Tor Lillqvist  <tml@novell.com>
+
+	* src/io-gdip-utils.c: Drop the wrapper functions that each call
+	GetProcAddress(). Instead just use a bunch of function pointers
+	and initialise them at the same time in io_gdip_init().
+
+2008-02-19  Dom Lachowicz <domlachowicz@gmail.com>
+
+	* src/*.[ch]: ARGB isn't pre-multiplied; first stab @ metadata
+	
+2008-02-19  Tor Lillqvist  <tml@novell.com>
+
+	* src/io-gdip.c
+	* src/io-gdip-utils.c
+	* src/test.c: Use spaces instead of tabs. Use 2-column indentation
+	offset which was the original intent. Remove trailing whitespace.
+
+2008-02-19  Tor Lillqvist  <tml@novell.com>
+
+	* configure.ac: Use AC_DISABLE_STATIC. It makes no sense to build
+	a static library of this.
+
+	* autogen.sh: Take ACLOCAL_FLAGS into consideration.
+
+2008-02-18  Dominic Lachowicz <domlachowicz@gmail.com>
+
+	* src/*.[ch]: Fix image size (don't need to add + 1); framework
+	for supporting animations or multi- paged TIFFs
+	
+2008-02-18  Dominic Lachowicz <domlachowicz@gmail.com>
+
+	* src/*.[ch]: If the source image doesn't have alpha, don't create
+	an opaque alpha channel in the pixbuf
+	
+2008-02-18  Dominic Lachowicz <domlachowicz@gmail.com>
+
+	* src/*.c: Whitespace fixes
+	
+2008-02-18  Dominic Lachowicz <domlachowicz@gmail.com>	
+
+	* src/io-gdip.c: Support pixbuf scaling
+	
+2008-02-18  Dominic Lachowicz <domlachowicz@gmail.com>
+
+	* src/io-gdip.c: Fill pixbuf properly; propegate errors. Plugin
+	now works for non-animations
+	
+2008-02-18  Dominic Lachowicz <domlachowicz@gmail.com>
+
+	* src/io-gdip.c: Move initialization to fill_vtable
+	* src/io-gdip-utils.c: GDI+ functions return Status, not HRESULT,
+	so we can't use SUCCEEDED() to test if they worked or not
+	
+2008-02-18  Dominic Lachowicz <domlachowicz@gmail.com>
+
+	* src/io-gdip.c (gdk_pixbuf__gdip_image_stop_load): Un-premultiply alpha
+	
+2008-02-18  Dominic Lachowicz <domlachowicz@gmail.com>
+	
+	* src/io-gdip.c (gdk_pixbuf__gdip_image_stop_load): Destroy the
+	context
+	* src/io-gdip.c (fill_info): Add support for PNG, GIF, WMF, EMF, TIFF
+	
+2008-02-18  Dominic Lachowicz <domlachowicz@gmail.com>
+
+	* src/io-gdip-utils.c (io_gdip_buffer_to_bitmap): Release the IStream
+	* src/io-gdip.c: Move the init() call to fill_vtable, so that it's
+	only called once
+	
+2008-02-18  Dominic Lachowicz <domlachowicz@gmail.com>	
+
+	* src/io-gdip-utils.c: Make GDI+ function pointers static so that
+	we only load them once
+	
+2008-02-18  Dominic Lachowicz <domlachowicz@gmail.com>
+
+	* src/test.c: Dispose of the bitmap
+	* src/io-gdip-utils.[ch]: Add bitmap dispose function
+	
+2008-02-18  Dominic Lachowicz <domlachowicz@gmail.com>
+
+	* src/io-gdip-native.h: The GpImage and GpBitmap structs should be anonymous
+	
+	== End of ChangeLog from gdip-pixbuf-loaders ==
+	
 2008-03-11  Claudio Saavedra  <csaavedra@alumnos.utalca.cl>
 
 	* io-bmp.c: (gdk_pixbuf__bmp_image_stop_load): Set a
