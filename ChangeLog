@@ -21,7 +21,9 @@
 
 	* gtk/Makefile.am: Revert accidental change that went in as part
 	of the commit on 2008-03-18. Do use grep -o. Unbreaks build on
-	Darwin.
+	Darwin. On Windows one has to use a newer GNU grep that has -o,
+	for instance the one from gnuwin32, instead of the oldish one in
+	MSYS that doesn't have -o.
 
 2008-03-20  Tor Lillqvist  <tml@novell.com>
 
