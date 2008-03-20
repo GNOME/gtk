@@ -3,14 +3,14 @@
 # This file is distributed under the same license as the gtk+ package.
 #
 #
-# Besnik Bleta <besnikbleta@hotmail.com>, 2003.
-# Laurent Dhima <laurenti@alblinux.net>, 2003, 2004, 2005, 2006, 2007, 2008.
+# Besnik Bleta	<besnikbleta@hotmail.com>,	2003.
+# Laurent Dhima	<laurenti@alblinux.net>,	2003, 2004, 2005, 2006, 2007, 2008.
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ HEAD\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-03-18 17:37+0100\n"
-"PO-Revision-Date: 2008-03-18 17:27+0100\n"
+"POT-Creation-Date: 2008-03-18 16:37+0100\n"
+"PO-Revision-Date: 2008-03-20 11:50+0100\n"
 "Last-Translator: Laurent Dhima <laurenti@alblinux.net>\n"
 "Language-Team: albanian <gnome-albanian-perkthyesit@lists.sourceforge.net>\n"
 "MIME-Version: 1.0\n"
@@ -293,10 +293,8 @@ msgstr "File '%s' nuk përmban të dhëna"
 #: ../gdk-pixbuf/gdk-pixbuf-animation.c:188 ../gdk-pixbuf/gdk-pixbuf-io.c:907
 #: ../gdk-pixbuf/gdk-pixbuf-io.c:1166 ../tests/testfilechooser.c:263
 #, c-format
-msgid ""
-"Failed to load image '%s': reason not known, probably a corrupt image file"
-msgstr ""
-"Hapja e figurës '%s' dështoi: shkaku nuk njihet, ndoshta file është i dëmtuar"
+msgid "Failed to load image '%s': reason not known, probably a corrupt image file"
+msgstr "Hapja e figurës '%s' dështoi: shkaku nuk njihet, ndoshta file është i dëmtuar"
 
 #: ../gdk-pixbuf/gdk-pixbuf-animation.c:221
 #, c-format
@@ -349,8 +347,7 @@ msgstr "Gabim gjatë shkrimit tek file i figurës: %s"
 #: ../gdk-pixbuf/gdk-pixbuf-io.c:1591 ../gdk-pixbuf/gdk-pixbuf-io.c:1722
 #, c-format
 msgid "This build of gdk-pixbuf does not support saving the image format: %s"
-msgstr ""
-"Ky variant i gdk-pixbuf nuk suporton ruajtjen e figurës në formatin: %s"
+msgstr "Ky variant i gdk-pixbuf nuk suporton ruajtjen e figurës në formatin: %s"
 
 #: ../gdk-pixbuf/gdk-pixbuf-io.c:1625
 #, c-format
@@ -734,10 +731,8 @@ msgstr ""
 
 #: ../gdk-pixbuf/io-jpeg.c:1148
 #, c-format
-msgid ""
-"JPEG quality must be a value between 0 and 100; value '%d' is not allowed."
-msgstr ""
-"Cilësia JPEG duhet të jetë një vlerë midis 0 dhe 100; vlera '%d' nuk lejohet."
+msgid "JPEG quality must be a value between 0 and 100; value '%d' is not allowed."
+msgstr "Cilësia JPEG duhet të jetë një vlerë midis 0 dhe 100; vlera '%d' nuk lejohet."
 
 #: ../gdk-pixbuf/io-jpeg.c:1311
 msgid "The JPEG image format"
@@ -812,8 +807,7 @@ msgstr "Figura e transformuar në PNG ka gjerësi apo lartësi zero."
 #: ../gdk-pixbuf/io-png.c:144
 #, c-format
 msgid "Bits per channel of transformed PNG is not 8."
-msgstr ""
-"Numri i bit-eve për kanal të figurës së transformuar në PNG nuk është 8."
+msgstr "Numri i bit-eve për kanal të figurës së transformuar në PNG nuk është 8."
 
 #: ../gdk-pixbuf/io-png.c:153
 #, c-format
@@ -858,8 +852,7 @@ msgstr "Gabim fatal gjatë leximit të file PNG: %s"
 
 #: ../gdk-pixbuf/io-png.c:825
 #, c-format
-msgid ""
-"Keys for PNG text chunks must have at least 1 and at most 79 characters."
+msgid "Keys for PNG text chunks must have at least 1 and at most 79 characters."
 msgstr ""
 "Kyçet për segmentet e tekstit PNG duhet të kenë të paktën 1 dhe në maksimum "
 "79 simbole."
@@ -1167,8 +1160,7 @@ msgstr "Kujtesë e pamjaftueshme për ngarkimin e file XBM"
 #: ../gdk-pixbuf/io-xbm.c:453
 #, c-format
 msgid "Failed to write to temporary file when loading XBM image"
-msgstr ""
-"Dështova në shkrimin e file të përkohshëm gjatë ngarkimit të figurës XBM"
+msgstr "Dështova në shkrimin e file të përkohshëm gjatë ngarkimit të figurës XBM"
 
 #: ../gdk-pixbuf/io-xbm.c:494
 msgid "The XBM image format"
@@ -1218,8 +1210,7 @@ msgstr "I pamundur leximi i hartës së ngjyrave XPM"
 #: ../gdk-pixbuf/io-xpm.c:777
 #, c-format
 msgid "Failed to write to temporary file when loading XPM image"
-msgstr ""
-"Dështova në shkrimin e file të përkohshëm gjatë ngarkimit të figurës XPM"
+msgstr "Dështova në shkrimin e file të përkohshëm gjatë ngarkimit të figurës XPM"
 
 #: ../gdk-pixbuf/io-xpm.c:818
 msgid "The XPM image format"
@@ -1815,8 +1806,7 @@ msgstr "E pamundur zgjedhja e file"
 #: ../gtk/gtkfilechooserdefault.c:4281
 #, c-format
 msgid "Could not select file '%s' because it is an invalid path name."
-msgstr ""
-"E pamundur zgjedhja e file '%s' pasi është një emër i pavlefshëm pozicioni."
+msgstr "E pamundur zgjedhja e file '%s' pasi është një emër i pavlefshëm pozicioni."
 
 #: ../gtk/gtkfilechooserdefault.c:4338
 msgid "_Add to Bookmarks"
@@ -1895,10 +1885,8 @@ msgstr "Një file i quajtur \"%s\" ekziston.  Dëshiron t'a zëvendësosh?"
 
 #: ../gtk/gtkfilechooserdefault.c:8091 ../gtk/gtkprintunixdialog.c:358
 #, c-format
-msgid ""
-"The file already exists in \"%s\".  Replacing it will overwrite its contents."
-msgstr ""
-"File ekziston në \"%s\".  Zëvendësimi do të mbishkruaj përmbajtjen e tij."
+msgid "The file already exists in \"%s\".  Replacing it will overwrite its contents."
+msgstr "File ekziston në \"%s\".  Zëvendësimi do të mbishkruaj përmbajtjen e tij."
 
 #: ../gtk/gtkfilechooserdefault.c:8096 ../gtk/gtkprintunixdialog.c:365
 msgid "_Replace"
@@ -1990,7 +1978,7 @@ msgstr "Zgjedhja e ngjyrës"
 
 #: ../gtk/gtkfilechooserentry.c:1077
 msgid "Complete, but not unique"
-msgstr ""
+msgstr "Plotësuar, por jo e vetme"
 
 #: ../gtk/gtkfilechooserentry.c:1110
 msgid "Completing..."
@@ -2046,8 +2034,7 @@ msgstr "_Riemërto File"
 
 #: ../gtk/gtkfilesel.c:1346
 #, c-format
-msgid ""
-"The folder name \"%s\" contains symbols that are not allowed in filenames"
+msgid "The folder name \"%s\" contains symbols that are not allowed in filenames"
 msgstr "Emri i kartelës \"%s\" përmban simbole që nuk lejohen në emrat e files"
 
 #: ../gtk/gtkfilesel.c:1391
@@ -2786,7 +2773,7 @@ msgstr "Të përgjithshme"
 
 #: ../gtk/gtkprintunixdialog.c:2167
 msgid "Layout"
-msgstr "Vendosja"
+msgstr "Faqosja"
 
 #: ../gtk/gtkprintunixdialog.c:2171
 msgid "Pages per _side:"
@@ -3026,7 +3013,7 @@ msgstr "Informacione"
 
 #: ../gtk/gtkstock.c:289
 msgid "Warning"
-msgstr "Kujdes"
+msgstr "Paralajmërim"
 
 #: ../gtk/gtkstock.c:290
 msgid "Error"
@@ -3359,11 +3346,11 @@ msgstr "_Gërmat"
 
 #: ../gtk/gtkstock.c:393
 msgid "_Ascending"
-msgstr "_Rritës"
+msgstr "_Në ngjitje"
 
 #: ../gtk/gtkstock.c:394
 msgid "_Descending"
-msgstr "_Zbritës"
+msgstr "_Në zbritje"
 
 #: ../gtk/gtkstock.c:395
 msgid "_Spell Check"
@@ -3395,7 +3382,7 @@ msgstr "_Po"
 
 #: ../gtk/gtkstock.c:402
 msgid "_Normal Size"
-msgstr "Madhësia _Normale"
+msgstr "Madhësi _normale"
 
 #: ../gtk/gtkstock.c:403
 msgid "Best _Fit"
@@ -3489,8 +3476,7 @@ msgstr "\"%s\" nuk është një emër i vlefshëm atributi"
 
 #: ../gtk/gtktextbufferserialize.c:1193
 #, c-format
-msgid ""
-"\"%s\" could not be converted to a value of type \"%s\" for attribute \"%s\""
+msgid "\"%s\" could not be converted to a value of type \"%s\" for attribute \"%s\""
 msgstr ""
 "\"%s\" nuk mund të konvertohet në një vlerë të llojit \"%s\" për atributin "
 "\"%s\""
@@ -3513,8 +3499,7 @@ msgstr "Tag \"%s\" ka prioritet \"%s\" të pavlefshëm"
 #: ../gtk/gtktextbufferserialize.c:1349
 #, c-format
 msgid "Outermost element in text must be <text_view_markup> not <%s>"
-msgstr ""
-"Elementi më i jashtëm në tekst duhet të jetë <text_view_markup> e jo <%s>"
+msgstr "Elementi më i jashtëm në tekst duhet të jetë <text_view_markup> e jo <%s>"
 
 #: ../gtk/gtktextbufferserialize.c:1358 ../gtk/gtktextbufferserialize.c:1374
 #, c-format
@@ -3532,8 +3517,7 @@ msgstr "Të dhënat e serializuara janë të keqformuara"
 
 #: ../gtk/gtktextbufferserialize.c:1857
 #, c-format
-msgid ""
-"Serialized data is malformed. First section isn't GTKTEXTBUFFERCONTENTS-0001"
+msgid "Serialized data is malformed. First section isn't GTKTEXTBUFFERCONTENTS-0001"
 msgstr ""
 "Të dhënat e serializuara janë të keqformuara. Seksioni i parë nuk është "
 "GTKTEXTBUFFERCONTENTS-0001"
@@ -4916,3 +4900,4 @@ msgstr "Printo në Test Printer"
 #, c-format
 msgid "Could not get information for file '%s': %s"
 msgstr "E pamundur marrja e informacioneve për file '%s': %s"
+
