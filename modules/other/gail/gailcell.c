@@ -146,7 +146,11 @@ gail_cell_object_finalize (GObject *obj)
 
   if (cell->state_set)
     g_object_unref (cell->state_set);
-  g_list_free (cell->action_list);
+  if (cell->action_list)
+    {
+      g_list_foreach (cell->action_list, _gail_cell_destroy_action_info, NULL);
+      g_list_free (cell->action_list);
+    }
   if (cell->action_idle_handler)
     {
       g_source_remove (cell->action_idle_handler);

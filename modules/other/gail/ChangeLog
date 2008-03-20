@@ -1,3 +1,8 @@
+2008-03-20  Li Yuan  <li.yuan@sun.com>
+
+	* gailcell.c: (gail_cell_object_finalize):
+	Bug #498079. Free cell's action info before free the action_list.
+
 2008-01-11  Li Yuan  <li.yuan@sun.com>
 
 	* gailtreeview.c: (gail_tree_view_real_initialize), (focus_in),
