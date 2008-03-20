@@ -7,9 +7,10 @@
 	* configure.in: Add switch --disable-gdiplus-loaders that disables
 	building of the GDI+ loaders.
 
-	When including loaders in the gdk-pixbuf library, either build in
-	all the GDI+ ones or none of them. Use just -DINCLUDE_gdiplus in
-	$INCLUDED_LOADER_DEFINE to signal building them in.
+	When including loaders in the gdk-pixbuf library, and building
+	GDI+ loaders, either build in all the GDI+ loaders or none of
+	them. Use just -DINCLUDE_gdiplus in $INCLUDED_LOADER_DEFINE to
+	signal building them in.
 
 	Add Automake conditionals BUILD_GDIPLUS_LOADERS to indicate
 	whether the GDI+ loaders should be built and INCLUDE_GDIPLUS to
