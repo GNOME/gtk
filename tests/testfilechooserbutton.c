@@ -237,9 +237,12 @@ chooser_update_preview_cb (GtkFileChooser *chooser,
   gchar *filename;
 
   filename = gtk_file_chooser_get_preview_uri (chooser);
-  g_message ("%s::update-preview\n\tPreview Filename: `%s'\nDone.\n",
-	     G_OBJECT_TYPE_NAME (chooser), filename);
-  g_free (filename);
+  if (filename != NULL)
+    {
+      g_message ("%s::update-preview\n\tPreview Filename: `%s'\nDone.\n",
+		 G_OBJECT_TYPE_NAME (chooser), filename);
+      g_free (filename);
+    }
 }
 
 
@@ -357,8 +360,6 @@ main (int   argc,
   gtk_window_present (GTK_WINDOW (win));
 
   gtk_main ();
-
-  gtk_widget_destroy (win);
 
   return 0;
 }

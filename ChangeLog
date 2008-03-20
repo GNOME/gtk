@@ -1,5 +1,11 @@
 2008-03-20  Tor Lillqvist  <tml@novell.com>
 
+	* tests/testfilechooserbutton.c (chooser_update_preview_cb): Don't
+	pass NULL for %s to g_message().
+	(main): Drop unnecessary call to gtk_widget_destroy().
+
+2008-03-20  Tor Lillqvist  <tml@novell.com>
+
 	Bug 314084 - GTK+ dialogs should not be placed partially offscreen
 
 	* gtk/gtkwindow.c (clamp): New function. Clamps a window position
