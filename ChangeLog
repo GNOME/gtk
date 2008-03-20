@@ -1,3 +1,22 @@
+2008-03-21  Tor Lillqvist  <tml@novell.com>
+
+	Import the GDI+ gdk-pixbuf loaders for Windows by Dominic
+	Lachowicz and Alberto Ruiz into the GTK+ tree, from the
+	gdip-pixbuf-loader module.
+
+	* configure.in: Add switch --disable-gdiplus-loaders that disables
+	building of the GDI+ loaders.
+
+	When including loaders in the gdk-pixbuf library, either build in
+	abll the GDI+ ones or none of them. Use just -DINCLUDE_gdiplus in
+	$INCLUDED_LOADER_DEFINE to signal building them in.
+
+	Add Automake conditionals BUILD_GDIPLUS_LOADERS to indicate
+	whether the GDI+ loaders should be built and INCLUDE_GDIPLUS to
+	indicate whether they should be built-in.
+	
+	For the rest of the changes, see gdk-pixbuf/ChangeLog.
+	
 2008-03-20  Tor Lillqvist  <tml@novell.com>
 
 	* gtk/Makefile.am: Revert accidental change that went in as part

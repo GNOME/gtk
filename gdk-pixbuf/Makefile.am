@@ -13,6 +13,8 @@ gdk_pixbuf_symbols = -export-symbols gdk_pixbuf.def
 gdk_pixbuf_win32_res = gdk_pixbuf-win32-res.o
 gdk_pixbuf_win32_res_ldflag = -Wl,gdk_pixbuf-win32-res.o
 
+libole32 = -lole32
+
 gdk_pixbuf-win32-res.o : gdk_pixbuf.rc
 	$(WINDRES) gdk_pixbuf.rc $@
 
@@ -64,10 +66,10 @@ module_libs = libgdk_pixbuf-$(GTK_API_VERSION).la $(GDK_PIXBUF_DEP_LIBS)
 #
 # The PNG loader
 #
+libstatic_pixbufloader_png_la_SOURCES = io-png.c
 libpixbufloader_png_la_SOURCES = io-png.c
 libpixbufloader_png_la_LDFLAGS = -avoid-version -module $(no_undefined)
 libpixbufloader_png_la_LIBADD = $(LIBPNG) $(module_libs)
-libstatic_pixbufloader_png_la_SOURCES = io-png.c
 
 #
 # The BMP loader
@@ -189,24 +191,161 @@ libpixbufloader_jasper_la_SOURCES = io-jasper.c
 libpixbufloader_jasper_la_LDFLAGS = -avoid-version -module $(no_undefined)
 libpixbufloader_jasper_la_LIBADD = $(LIBJASPER) $(module_libs)
 
-if HAVE_PNG
-if INCLUDE_PNG
-STATIC_PNG_LIB = libstatic-pixbufloader-png.la
+if BUILD_GDIPLUS_LOADERS
+
+if INCLUDE_GDIPLUS
+
+# When building the GDI+ loader statically, we put the "common" objects
+# only in one of the archives to avoid duplicate definitions
+
+STATIC_GDIPLUS_LIBS = \
+	libstatic-pixbufloader-gdip-ico.la \
+	libstatic-pixbufloader-gdip-wmf.la \
+	libstatic-pixbufloader-gdip-emf.la \
+	libstatic-pixbufloader-gdip-bmp.la \
+	libstatic-pixbufloader-gdip-gif.la \
+	libstatic-pixbufloader-gdip-jpeg.la \
+	libstatic-pixbufloader-gdip-tiff.la
+
+libstatic_pixbufloader_gdip_ico_la_SOURCES = 	\
+	io-gdip-native.h		\
+	io-gdip-propertytags.h		\
+	io-gdip-utils.h			\
+	io-gdip-utils.c			\
+	io-gdip-animation.c		\
+	io-gdip-animation.h		\
+	io-gdip-ico.c
+
+libstatic_pixbufloader_gdip_wmf_la_SOURCES = 	\
+	io-gdip-wmf.c
+
+libstatic_pixbufloader_gdip_emf_la_SOURCES = 	\
+	io-gdip-emf.c
+
+libstatic_pixbufloader_gdip_bmp_la_SOURCES = 	\
+	io-gdip-bmp.c
+
+libstatic_pixbufloader_gdip_gif_la_SOURCES = 	\
+	io-gdip-gif.c
+
+libstatic_pixbufloader_gdip_jpeg_la_SOURCES = 	\
+	io-gdip-jpeg.c
+
+libstatic_pixbufloader_gdip_png_la_SOURCES = 	\
+	io-gdip-png.c
+
+libstatic_pixbufloader_gdip_tiff_la_SOURCES = 	\
+	io-gdip-tiff.c
+
 else
-PNG_LIB = libpixbufloader-png.la
+
+GDIPLUS_LIBS = \
+	libpixbufloader-gdip-ico.la \
+	libpixbufloader-gdip-wmf.la \
+	libpixbufloader-gdip-emf.la \
+	libpixbufloader-gdip-bmp.la \
+	libpixbufloader-gdip-gif.la \
+	libpixbufloader-gdip-jpeg.la \
+	libpixbufloader-gdip-tiff.la
+
+libpixbufloader_gdip_ico_la_LDFLAGS = -avoid-version -module -no-undefined
+libpixbufloader_gdip_ico_la_SOURCES = 	\
+	io-gdip-native.h		\
+	io-gdip-propertytags.h		\
+	io-gdip-utils.h			\
+	io-gdip-utils.c			\
+	io-gdip-animation.c		\
+	io-gdip-animation.h		\
+	io-gdip-ico.c
+libpixbufloader_gdip_ico_la_LIBADD = $(module_libs) $(libole32)
+
+libpixbufloader_gdip_wmf_la_LDFLAGS = -avoid-version -module -no-undefined
+libpixbufloader_gdip_wmf_la_SOURCES = 	\
+	io-gdip-native.h		\
+	io-gdip-propertytags.h		\
+	io-gdip-utils.h			\
+	io-gdip-utils.c			\
+	io-gdip-animation.c		\
+	io-gdip-animation.h		\
+	io-gdip-wmf.c
+libpixbufloader_gdip_wmf_la_LIBADD = $(module_libs) $(libole32)
+
+libpixbufloader_gdip_emf_la_LDFLAGS = -avoid-version -module -no-undefined
+libpixbufloader_gdip_emf_la_SOURCES = 	\
+	io-gdip-native.h		\
+	io-gdip-propertytags.h		\
+	io-gdip-utils.h			\
+	io-gdip-utils.c			\
+	io-gdip-animation.c		\
+	io-gdip-animation.h		\
+	io-gdip-emf.c
+libpixbufloader_gdip_emf_la_LIBADD = $(module_libs) $(libole32)
+
+libpixbufloader_gdip_bmp_la_LDFLAGS = -avoid-version -module -no-undefined
+libpixbufloader_gdip_bmp_la_SOURCES = 	\
+	io-gdip-native.h		\
+	io-gdip-propertytags.h		\
+	io-gdip-utils.h			\
+	io-gdip-utils.c			\
+	io-gdip-animation.c		\
+	io-gdip-animation.h		\
+	io-gdip-bmp.c
+libpixbufloader_gdip_bmp_la_LIBADD = $(module_libs) $(libole32)
+
+libpixbufloader_gdip_gif_la_LDFLAGS = -avoid-version -module -no-undefined
+libpixbufloader_gdip_gif_la_SOURCES = 	\
+	io-gdip-native.h		\
+	io-gdip-propertytags.h		\
+	io-gdip-utils.h			\
+	io-gdip-utils.c			\
+	io-gdip-animation.c		\
+	io-gdip-animation.h		\
+	io-gdip-gif.c
+libpixbufloader_gdip_gif_la_LIBADD = $(module_libs) $(libole32)
+
+libpixbufloader_gdip_jpeg_la_LDFLAGS = -avoid-version -module -no-undefined
+libpixbufloader_gdip_jpeg_la_SOURCES = 	\
+	io-gdip-native.h		\
+	io-gdip-propertytags.h		\
+	io-gdip-utils.h			\
+	io-gdip-utils.c			\
+	io-gdip-animation.c		\
+	io-gdip-animation.h		\
+	io-gdip-jpeg.c
+libpixbufloader_gdip_jpeg_la_LIBADD = $(module_libs) $(libole32)
+
+libpixbufloader_gdip_png_la_LDFLAGS = -avoid-version -module -no-undefined
+libpixbufloader_gdip_png_la_SOURCES = 	\
+	io-gdip-native.h		\
+	io-gdip-propertytags.h		\
+	io-gdip-utils.h			\
+	io-gdip-utils.c			\
+	io-gdip-animation.c		\
+	io-gdip-animation.h		\
+	io-gdip-png.c
+libpixbufloader_gdip_png_la_LIBADD = $(module_libs) $(libole32)
+
+libpixbufloader_gdip_tiff_la_LDFLAGS = -avoid-version -module -no-undefined
+libpixbufloader_gdip_tiff_la_SOURCES = 	\
+	io-gdip-native.h		\
+	io-gdip-propertytags.h		\
+	io-gdip-utils.h			\
+	io-gdip-utils.c			\
+	io-gdip-animation.c		\
+	io-gdip-animation.h		\
+	io-gdip-tiff.c
+libpixbufloader_gdip_tiff_la_LIBADD = $(module_libs) $(libole32)
+
 endif
-endif
+
+else
+
+# Loaders that aren't built if we build the GDI+ loader
 
 if INCLUDE_BMP
 STATIC_BMP_LIB = libstatic-pixbufloader-bmp.la
 else
 BMP_LIB = libpixbufloader-bmp.la
-endif
-
-if INCLUDE_WBMP
-STATIC_WBMP_LIB = libstatic-pixbufloader-wbmp.la
-else
-WBMP_LIB = libpixbufloader-wbmp.la
 endif
 
 if INCLUDE_GIF
@@ -221,18 +360,43 @@ else
 ICO_LIB = libpixbufloader-ico.la
 endif
 
-if INCLUDE_ANI
-STATIC_ANI_LIB = libstatic-pixbufloader-ani.la
-else
-ANI_LIB = libpixbufloader-ani.la
-endif
-
 if HAVE_JPEG
 if INCLUDE_JPEG
 STATIC_JPEG_LIB = libstatic-pixbufloader-jpeg.la
 else
 JPEG_LIB = libpixbufloader-jpeg.la
 endif
+endif
+
+if HAVE_TIFF
+if INCLUDE_TIFF
+STATIC_TIFF_LIB = libstatic-pixbufloader-tiff.la
+else
+TIFF_LIB = libpixbufloader-tiff.la
+endif
+endif
+
+# End of loaders not built if building GDI+ loader
+endif
+
+if HAVE_PNG
+if INCLUDE_PNG
+STATIC_PNG_LIB = libstatic-pixbufloader-png.la
+else
+PNG_LIB = libpixbufloader-png.la
+endif
+endif
+
+if INCLUDE_WBMP
+STATIC_WBMP_LIB = libstatic-pixbufloader-wbmp.la
+else
+WBMP_LIB = libpixbufloader-wbmp.la
+endif
+
+if INCLUDE_ANI
+STATIC_ANI_LIB = libstatic-pixbufloader-ani.la
+else
+ANI_LIB = libpixbufloader-ani.la
 endif
 
 if INCLUDE_PNM
@@ -245,14 +409,6 @@ if INCLUDE_RAS
 STATIC_RAS_LIB = libstatic-pixbufloader-ras.la
 else
 RAS_LIB = libpixbufloader-ras.la
-endif
-
-if HAVE_TIFF
-if INCLUDE_TIFF
-STATIC_TIFF_LIB = libstatic-pixbufloader-tiff.la
-else
-TIFF_LIB = libpixbufloader-tiff.la
-endif
 endif
 
 if INCLUDE_XPM
@@ -311,7 +467,8 @@ loader_LTLIBRARIES = 	\
 	$(TGA_LIB)	\
 	$(ICNS_LIB)	\
 	$(PCX_LIB)	\
-	$(JASPER_LIB)
+	$(JASPER_LIB)	\
+	$(GDIPLUS_LIBS)
 
 
 endif
@@ -332,7 +489,8 @@ noinst_LTLIBRARIES =		\
 	$(STATIC_TGA_LIB)	\
 	$(STATIC_ICNS_LIB)	\
 	$(STATIC_PCX_LIB)	\
-	$(STATIC_JASPER_LIB)
+	$(STATIC_JASPER_LIB)	\
+	$(STATIC_GDIPLUS_LIBS)
 
 builtin_objs = @INCLUDED_LOADER_OBJ@
 
@@ -394,7 +552,7 @@ libgdk_pixbuf_2_0_la_LDFLAGS = \
 	$(gdk_pixbuf_symbols)
 
 
-libgdk_pixbuf_2_0_la_LIBADD = pixops/libpixops.la $(builtin_objs) $(GDK_PIXBUF_DEP_LIBS)
+libgdk_pixbuf_2_0_la_LIBADD = pixops/libpixops.la $(builtin_objs) $(GDK_PIXBUF_DEP_LIBS) $(libole32)
 libgdk_pixbuf_2_0_la_DEPENDENCIES = pixops/libpixops.la $(builtin_objs) $(gdk_pixbuf_def) $(gdk_pixbuf_win32_res)
 
 gdk_pixbuf_headers = 			\

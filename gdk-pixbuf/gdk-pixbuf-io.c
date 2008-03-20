@@ -363,6 +363,22 @@ gdk_pixbuf_io_init (void)
 #ifdef INCLUDE_pcx
 	load_one_builtin_module (pcx);
 #endif
+#ifdef INCLUDE_gdiplus
+	/* We don't bother having the GDI+ loaders individually selectable
+	 * for building in or not.
+	 */
+	load_one_builtin_module (ico);
+	load_one_builtin_module (wmf);
+	load_one_builtin_module (emf);
+	load_one_builtin_module (bmp);
+	load_one_builtin_module (gif);
+	load_one_builtin_module (jpeg);
+	load_one_builtin_module (tiff);
+#endif
+#ifdef INCLUDE_gdip_png
+	/* Except the gdip-png loader which normally isn't built at all even */
+	load_one_builtin_module (png);
+#endif
 
 #undef load_one_builtin_module
 
@@ -576,6 +592,14 @@ module (wbmp);
 module (xbm);
 module (tga);
 module (pcx);
+module (gdip_ico);
+module (gdip_wmf);
+module (gdip_emf);
+module (gdip_bmp);
+module (gdip_gif);
+module (gdip_jpeg);
+module (gdip_png);
+module (gdip_tiff);
 
 #undef module
 
@@ -588,53 +612,65 @@ _gdk_pixbuf_load_module (GdkPixbufModule *image_module,
 	GdkPixbufModuleFillInfoFunc fill_info = NULL;
         GdkPixbufModuleFillVtableFunc fill_vtable = NULL;
 
-#define try_module(format)						\
+#define try_module(format,id)						\
 	if (fill_info == NULL &&					\
 	    strcmp (image_module->module_name, #format) == 0) {		\
-                fill_info = _gdk_pixbuf__##format##_fill_info;		\
-                fill_vtable = _gdk_pixbuf__##format##_fill_vtable;	\
+                fill_info = _gdk_pixbuf__##id##_fill_info;		\
+                fill_vtable = _gdk_pixbuf__##id##_fill_vtable;	\
 	}
 #ifdef INCLUDE_png	
-	try_module (png);
+	try_module (png,png);
 #endif
 #ifdef INCLUDE_bmp
-	try_module (bmp);
+	try_module (bmp,bmp);
 #endif
 #ifdef INCLUDE_wbmp
-	try_module (wbmp);
+	try_module (wbmp,wbmp);
 #endif
 #ifdef INCLUDE_gif
-	try_module (gif);
+	try_module (gif,gif);
 #endif
 #ifdef INCLUDE_ico
-	try_module (ico);
+	try_module (ico,ico);
 #endif
 #ifdef INCLUDE_ani
-	try_module (ani);
+	try_module (ani,ani);
 #endif
 #ifdef INCLUDE_jpeg
-	try_module (jpeg);
+	try_module (jpeg,jpeg);
 #endif
 #ifdef INCLUDE_pnm
-	try_module (pnm);
+	try_module (pnm,pnm);
 #endif
 #ifdef INCLUDE_ras
-	try_module (ras);
+	try_module (ras,ras);
 #endif
 #ifdef INCLUDE_tiff
-	try_module (tiff);
+	try_module (tiff,tiff);
 #endif
 #ifdef INCLUDE_xpm
-	try_module (xpm);
+	try_module (xpm,xpm);
 #endif
 #ifdef INCLUDE_xbm
-	try_module (xbm);
+	try_module (xbm,xbm);
 #endif
 #ifdef INCLUDE_tga
-	try_module (tga);
+	try_module (tga,tga);
 #endif
 #ifdef INCLUDE_pcx
-	try_module (pcx);
+	try_module (pcx,pcx);
+#endif
+#ifdef INCLUDE_gdiplus
+	try_module (ico,gdip_ico);
+	try_module (wmf,gdip_wmf);
+	try_module (emf,gdip_emf);
+	try_module (bmp,gdip_bmp);
+	try_module (gif,gdip_gif);
+	try_module (jpeg,gdip_jpeg);
+	try_module (tiff,gdip_tiff);
+#endif
+#ifdef INCLUDE_gdip_png
+	try_module (png,gdip_png);
 #endif
 
 #undef try_module

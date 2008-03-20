@@ -1,3 +1,39 @@
+2008-03-21  Tor Lillqvist  <tml@novell.com>
+
+	Import the GDI+ gdk-pixbuf loaders for Windows by Dominic
+	Lachowicz and Alberto Ruiz into the GTK+ tree, from the
+	gdip-pixbuf-loader module.
+
+	* Makefile.am: Add the bits and pieces for the GDI+ loaders. When
+	building GDI+ loaders don't build the traditional ones for the
+	same formats. Always build the traditional PNG loader, though, as
+	it isn't possible to read and write PNG tEXt chunks through GDI+,
+	and GIMP at least needs that functionality in the gdk-pixbuf PNG
+	loader. 
+
+	Either build all the GDI+ loaders (except the PNG one) into
+	libgdk-pixbuf, or build them all as DLLs. I don't see any reason
+	to enable cherry-picking among them whether to build in or not.
+
+	* io-gdip-animation.c
+	* io-gdip-animation.h
+	* io-gdip-bmp.c
+	* io-gdip-emf.c
+	* io-gdip-gif.c
+	* io-gdip-ico.c
+	* io-gdip-jpeg.c
+	* io-gdip-native.h
+	* io-gdip-png.c
+	* io-gdip-propertytags.h
+	* io-gdip-tiff.c
+	* io-gdip-utils.c
+	* io-gdip-utils.h
+	* io-gdip-wmf.c: New files. Note that io-gdip-png.c is not
+	currently used.
+
+	* gdk-pixbuf-io.c: Add the bits and pieces for built-in GDI+
+	loaders.
+
 2008-03-11  Claudio Saavedra  <csaavedra@alumnos.utalca.cl>
 
 	* io-bmp.c: (gdk_pixbuf__bmp_image_stop_load): Set a
