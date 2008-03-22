@@ -1,3 +1,8 @@
+2008-03-22  Matthew Barnes  <mbarnes@redhat.com>
+
+	* gtk/gtkentrycompletion.c (gtk_entry_completion_get_cells):
+	New function implements GtkCellLayoutClass::get_cells.  (#523787)
+
 2008-03-22  Tor Lillqvist  <tml@novell.com>
 
 	Bug 523782 - Leftover call to GDK_THREADS_LEAVE() in gtktoolbar.c
