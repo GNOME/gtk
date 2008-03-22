@@ -1181,7 +1181,6 @@ slide_idle_handler (gpointer data)
 	{
 	  gtk_widget_queue_resize_no_redraw (GTK_WIDGET (toolbar));
 	  
-	  GDK_THREADS_LEAVE ();
 	  return TRUE;
 	}
     }
