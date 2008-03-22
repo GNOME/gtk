@@ -1,3 +1,9 @@
+2008-03-22  Björn Lindqvist  <bjourne@gmail.com>
+
+	* gtk/gtkexpander.c (gtk_expander_get_label):
+	gtk_label_get_label() should be used instead of
+	gtk_label_get_text(). (#353088, Xan Lopez)
+
 2008-03-21  Tor Lillqvist  <tml@novell.com>
 
 	Import the GDI+ gdk-pixbuf loaders for Windows by Dominic

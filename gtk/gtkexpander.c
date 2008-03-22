@@ -1532,11 +1532,11 @@ gtk_expander_set_label (GtkExpander *expander,
  * gtk_expander_get_label:
  * @expander: a #GtkExpander
  *
- * Fetches the text from the label of the expander, as set by
- * gtk_expander_set_label(). If the label text has not
- * been set the return value will be %NULL. This will be the
- * case if you create an empty button with gtk_button_new() to
- * use as a container.
+ * Fetches the text from a label widget including any embedded
+ * underlines indicating mnemonics and Pango markup, as set by
+ * gtk_expander_set_label(). If the label text has not been set the
+ * return value will be %NULL. This will be the case if you create an
+ * empty button with gtk_button_new() to use as a container.
  *
  * Return value: The text of the label widget. This string is owned
  * by the widget and must not be modified or freed.
@@ -1553,7 +1553,7 @@ gtk_expander_get_label (GtkExpander *expander)
   priv = expander->priv;
 
   if (GTK_IS_LABEL (priv->label_widget))
-    return gtk_label_get_text (GTK_LABEL (priv->label_widget));
+    return gtk_label_get_label (GTK_LABEL (priv->label_widget));
   else
     return NULL;
 }
