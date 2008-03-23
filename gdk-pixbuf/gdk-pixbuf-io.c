@@ -1497,6 +1497,8 @@ gdk_pixbuf_new_from_xpm_data (const char **data)
 	GdkPixbufModule *xpm_module;
 	gboolean locked;
 
+	g_return_val_if_fail (data != NULL, NULL);
+
 	xpm_module = _gdk_pixbuf_get_named_module ("xpm", &error);
 	if (xpm_module == NULL) {
 		g_warning ("Error loading XPM image loader: %s", error->message);

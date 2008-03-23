@@ -1,3 +1,8 @@
+2008-03-23  Björn Lindqvist  <bjourne@gmail.com>
+
+	* gdk-pixbuf/gdk-pixbuf-io.c (gdk_pixbuf_new_from_xpm_data): Guard
+	against NULL pointer. (#467051, Gian Mario Tagliaretti)
+
 2008-03-23  Cody Russell  <bratsche@gnome.org>
 
 	* gdk/win32/gdkevents-win32.c (show_window_recurse):
