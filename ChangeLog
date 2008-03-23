@@ -1,3 +1,12 @@
+2008-03-23  Johan Dahlin  <johan@gnome.org>
+
+	Merged from trunk:
+
+	* gtk/gtk-builder-convert:
+	Properly convert GtkImageMenuItems which use stock labels but don't
+	have any children.
+	(#523932, Brian Pepple)
+	
 2008-03-22  Tor Lillqvist  <tml@novell.com>
 
 	Bug 523782 - Leftover call to GDK_THREADS_LEAVE() in gtktoolbar.c
@@ -7,7 +16,7 @@
 
 2008-03-15  Matthias Clasen  <mclasen@redhat.com>
 
-	Merged from trunk:
+	merged from trunk:
 
 	* gtk/gtktreeview.c (gtk_tree_view_ensure_interactive_directory):
 	Set window type hint on the search popup.  (#522279, Danny Baumann)
