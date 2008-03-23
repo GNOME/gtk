@@ -1,3 +1,13 @@
+2008-03-23  Cody Russell  <bratsche@gnome.org>
+
+	Merge from trunk:
+
+	* gdk/win32/gdkevents-win32.c (show_window_recurse):
+	Check window state for GDK_WINDOW_STATE_ICONIFIED before doing
+	ShowWindow (SW_RESTORE).  This fixes a problem where tearing off
+	menus from a maximized window would force the window to restore
+	its size. (#518846)
+
 2008-02-07  Cody Russell  <bratsche@gnome.org>
 
 	Merge from trunk:
