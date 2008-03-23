@@ -422,7 +422,7 @@ class GtkBuilderConverter(object):
 
         if get_property(node, 'use_stock') == 'True':
             if 'label' in properties:
-                properties['stock_id'] = child
+                properties['stock_id'] = properties['label']
                 del properties['label']
 
         properties['name'] = object_id

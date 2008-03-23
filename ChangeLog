@@ -1,3 +1,10 @@
+2008-03-23  Johan Dahlin  <johan@gnome.org>
+
+	* gtk/gtk-builder-convert:
+	Properly convert GtkImageMenuItems which use stock labels but don't
+	have any children.
+	(#523932, Brian Pepple)
+	
 2008-03-22  Matthew Barnes  <mbarnes@redhat.com>
 
 	* gtk/gtkentrycompletion.c (gtk_entry_completion_get_cells):
