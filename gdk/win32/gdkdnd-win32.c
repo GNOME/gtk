@@ -851,14 +851,23 @@ enum_formats_new (void)
 
 /* From MS Knowledge Base article Q130698 */
 
-static HRESULT 
+static gboolean
 resolve_link (HWND     hWnd,
-	      guchar  *lpszLinkName,
+	      wchar_t *link,
 	      guchar **lpszPath)
 {
+  WIN32_FILE_ATTRIBUTE_DATA wfad;
   HRESULT hres;
   IShellLinkW *pslW = NULL;
   IPersistFile *ppf = NULL;
+
+  /* Check if the file is empty first because IShellLink::Resolve for
+   * some reason succeeds with an empty file and returns an empty
+   * "link target". (#524151)
+   */
+    if (!GetFileAttributesExW (link, GetFileExInfoStandard, &wfad) ||
+	(wfad.nFileSizeHigh == 0 && wfad.nFileSizeLow == 0))
+      return FALSE;
 
   /* Assume failure to start with: */
   *lpszPath = 0;
@@ -887,12 +896,8 @@ resolve_link (HWND     hWnd,
 
   if (SUCCEEDED (hres))
     {
-      /* Convert the given link name string to wide character string. */
-      wchar_t *wsz = g_utf8_to_utf16 (lpszLinkName, -1, NULL, NULL, NULL);
-
       /* Load the file. */
-      hres = ppf->lpVtbl->Load (ppf, wsz, STGM_READ);
-      g_free (wsz);
+      hres = ppf->lpVtbl->Load (ppf, link, STGM_READ);
     }
   
   if (SUCCEEDED (hres))
@@ -977,7 +982,7 @@ gdk_dropfiles_filter (GdkXEvent *xev,
 	  fileName = g_utf16_to_utf8 (wfn, -1, NULL, NULL, NULL);
 
 	  /* Resolve shortcuts */
-	  if (resolve_link (msg->hwnd, fileName, &linkedFile))
+	  if (resolve_link (msg->hwnd, wfn, &linkedFile))
 	    {
 	      uri = g_filename_to_uri (linkedFile, NULL, NULL);
 	      g_free (linkedFile);

@@ -1,3 +1,17 @@
+2008-03-24  Tor Lillqvist  <tml@novell.com>
+
+	Bug 524151 - Dragging of 0-byte files results in an empty filename
+	on Windows XP and above
+
+	* gdk/win32/gdkdnd-win32.c (resolve_link): Check for the file
+	being empty first. For some reason ISHellLink and IPersistFile
+	succeeds in interpreting empty files as shortcuts, claiming the
+	target of the shortcut is an empty path.
+
+	Change the function to take the wide character file name that the
+	caller already has anyway, to avoid a superfluous conversion from
+	UTF-8 to UTF-16.
+
 2008-03-23  Björn Lindqvist  <bjourne@gmail.com>
 
 	* gdk-pixbuf/gdk-pixbuf-io.c (gdk_pixbuf_new_from_xpm_data): Guard
