@@ -3107,18 +3107,12 @@ gtk_range_scroll_event (GtkWidget      *widget,
 {
   GtkRange *range = GTK_RANGE (widget);
   GtkRangePrivate *priv = range->priv;
+  double delta = _gtk_range_get_wheel_delta (range, event);
+  gboolean handled;
 
-  if (gtk_widget_get_realized (widget))
-    {
-      gdouble delta;
-      gboolean handled;
-
-      delta = _gtk_range_get_wheel_delta (range, event);
-
-      g_signal_emit (range, signals[CHANGE_VALUE], 0,
-                     GTK_SCROLL_JUMP, gtk_adjustment_get_value (priv->adjustment) + delta,
-                     &handled);
-    }
+  g_signal_emit (range, signals[CHANGE_VALUE], 0,
+                 GTK_SCROLL_JUMP, gtk_adjustment_get_value (priv->adjustment) + delta,
+                 &handled);
 
   return GDK_EVENT_STOP;
 }
