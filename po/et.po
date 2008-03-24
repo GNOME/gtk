@@ -15,7 +15,7 @@ msgstr ""
 "Project-Id-Version: gtk+ HEAD\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2007-11-26 04:01+0000\n"
-"PO-Revision-Date: 2008-03-01 16:44+0200\n"
+"PO-Revision-Date: 2008-03-24 13:46+0200\n"
 "Last-Translator: Ivar Smolin <okul@linux.ee>\n"
 "Language-Team: Estonian <gnome-et@linux.ee>\n"
 "MIME-Version: 1.0\n"
@@ -3139,7 +3139,7 @@ msgstr "Silti \"%s\" pole puhvris ja silte pole võimalik luua."
 #: ../gtk/gtktextbufferserialize.c:1320 ../gtk/gtktextbufferserialize.c:1394
 #, c-format
 msgid "Element <%s> is not allowed below <%s>"
-msgstr ""
+msgstr "Elemen <%s> pole <%s> sees lubatud"
 
 #: ../gtk/gtktextbufferserialize.c:1175
 #, c-format
@@ -3407,7 +3407,7 @@ msgstr "A4 lisa"
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:47
 msgid "paper size|A4 Tab"
-msgstr ""
+msgstr "A4 Tab"
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:49
@@ -4402,3 +4402,7 @@ msgstr "Printimine testprinterisse"
 #, c-format
 msgid "Could not get information for file '%s': %s"
 msgstr "Faili '%s' kohta pole võimalik andmeid hankida: %s"
+
+#, c-format
+msgid "Custom %sx%s"
+msgstr "Kohandatud %sx%s"
