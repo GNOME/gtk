@@ -1,3 +1,19 @@
+2008-03-25  Richard Hult  <richard@imendio.com>
+
+	Merged from trunk:
+
+	* gdk/quartz/gdkwindow-quartz.c:
+	(gdk_window_quartz_process_all_updates): Plug a leak and add a
+	check that we have a toplevel before accessing it.
+
+2008-03-25  Richard Hult  <richard@imendio.com>
+
+	Merged from trunk:
+
+	* gdk/quartz/gdkwindow-quartz.c:
+	(gdk_window_quartz_process_all_updates): Patch from Paul Davis,
+	only flush the toplevel once per update.
+
 2008-03-24  Tor Lillqvist  <tml@novell.com>
 
 	Bug 524151 - Dragging of 0-byte files results in an empty filename
