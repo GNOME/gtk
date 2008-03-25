@@ -347,19 +347,24 @@ gdk_window_quartz_process_all_updates (void)
     {
       GdkWindow *window = tmp_list->data;
       GdkWindow *toplevel;
-      NSWindow *nswindow;
-      GdkWindowObject *private;
-      GdkWindowImplQuartz *impl;
 
+      /* Only flush each toplevel at most once. */
       toplevel = gdk_window_get_toplevel (window);
-      private = (GdkWindowObject *) toplevel;
-      impl = (GdkWindowImplQuartz *) private->impl;
-      nswindow = impl->toplevel;
-
-      if (nswindow && ![nswindow isFlushWindowDisabled]) 
+      if (toplevel)
         {
-          [nswindow disableFlushWindow];
-          nswindows = g_slist_prepend (nswindows, nswindow);
+          GdkWindowObject *private;
+          GdkWindowImplQuartz *impl;
+          NSWindow *nswindow;
+
+          private = (GdkWindowObject *) toplevel;
+          impl = (GdkWindowImplQuartz *) private->impl;
+          nswindow = impl->toplevel;
+
+          if (nswindow && ![nswindow isFlushWindowDisabled]) 
+            {
+              [nswindow disableFlushWindow];
+              nswindows = g_slist_prepend (nswindows, nswindow);
+            }
         }
 
       gdk_window_quartz_process_updates_internal (tmp_list->data);
@@ -368,14 +373,15 @@ gdk_window_quartz_process_all_updates (void)
       tmp_list = tmp_list->next;
     }
 
-  while (nswindows) 
+  tmp_list = nswindows;
+  while (tmp_list) 
     {
-      NSWindow *nswindow = nswindows->data;
+      NSWindow *nswindow = tmp_list->data;
 
       [nswindow enableFlushWindow];
       [nswindow flushWindow];
 
-      nswindows = nswindows->next;
+      tmp_list = tmp_list->next;
     }
 		    
   GDK_QUARTZ_RELEASE_POOL;
