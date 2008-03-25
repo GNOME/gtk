@@ -1137,7 +1137,10 @@ show_window_internal (GdkWindow *window,
   if (impl->transient_for && !GDK_WINDOW_DESTROYED (impl->transient_for))
     _gdk_quartz_window_attach_to_parent (window);
 
-  if (impl->toplevel)
+  /* Create a crossing event for managed windows that pop up under the
+   * mouse. Part of the workarounds for problems with the tracking rect API.
+   */
+  if (impl->toplevel && private->window_type != GDK_WINDOW_TEMP)
     _gdk_quartz_events_trigger_crossing_events ();
 
   GDK_QUARTZ_RELEASE_POOL;
