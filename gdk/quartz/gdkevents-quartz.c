@@ -1103,7 +1103,7 @@ _gdk_quartz_events_trigger_crossing_events (void)
   y = _gdk_quartz_window_get_inverted_screen_y (point.y);
 
   mouse_window = _gdk_quartz_window_find_child (_gdk_root, x, y);
-  if (mouse_window == _gdk_root)
+  if (!mouse_window || mouse_window == _gdk_root)
     return;
 
   /* NSMouseEntered always happens on the toplevel. */

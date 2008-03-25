@@ -2,6 +2,19 @@
 
 	Merged from trunk:
 
+	* gdk/quartz/gdkevents-quartz.c:
+	(_gdk_quartz_events_trigger_crossing_events): Bail out early if we
+	can't find a matching window.
+
+	* gdk/quartz/gdkwindow-quartz.c: (show_window_internal): Add a
+	comment, and only trigger an event for non-temp windows, fixes
+	problems for tooltips caused by the workarounds for the
+	problematic tracking rect API.
+
+2008-03-25  Richard Hult  <richard@imendio.com>
+
+	Merged from trunk:
+
 	* gdk/quartz/gdkwindow-quartz.c:
 	(gdk_window_quartz_process_all_updates): Plug a leak and add a
 	check that we have a toplevel before accessing it.
