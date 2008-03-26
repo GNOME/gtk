@@ -1169,8 +1169,8 @@ commit_completion_and_refresh (GtkFileChooserEntry *chooser_entry)
 {
   if (chooser_entry->has_completion)
     {
-      gtk_editable_set_position (GTK_EDITABLE (entry),
-				 entry->text_length);
+      gtk_editable_set_position (GTK_EDITABLE (chooser_entry),
+				 GTK_ENTRY (chooser_entry)->text_length);
     }
 
   refresh_current_folder_and_file_part (chooser_entry, REFRESH_WHOLE_TEXT);
