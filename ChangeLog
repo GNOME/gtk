@@ -1,3 +1,15 @@
+2008-03-26  Federico Mena Quintero  <federico@novell.com>
+
+	* gtk/gtkfilechooserentry.c (commit_completion_and_refresh): New
+	helper function; factored out from the functions that commit the
+	current suggested autocompletion and that refresh the entry's paths.
+	(gtk_file_chooser_entry_activate): Use commit_completion_and_refresh().
+	(_gtk_file_chooser_entry_get_file_part): Likewise.
+	(_gtk_file_chooser_entry_get_current_folder): Likewise.  This
+	makes the entry have the correct paths when *not* using any form
+	of completion (and makes the file chooser work when clicking the
+	OK button).
+
 2008-03-25  Richard Hult  <richard@imendio.com>
 
 	* gdk/quartz/gdkevents-quartz.c:

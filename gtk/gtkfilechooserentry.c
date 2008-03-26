@@ -1165,10 +1165,8 @@ gtk_file_chooser_entry_focus_out_event (GtkWidget     *widget,
 }
 
 static void
-gtk_file_chooser_entry_activate (GtkEntry *entry)
+commit_completion_and_refresh (GtkFileChooserEntry *chooser_entry)
 {
-  GtkFileChooserEntry *chooser_entry = GTK_FILE_CHOOSER_ENTRY (entry);
-
   if (chooser_entry->has_completion)
     {
       gtk_editable_set_position (GTK_EDITABLE (entry),
@@ -1176,7 +1174,14 @@ gtk_file_chooser_entry_activate (GtkEntry *entry)
     }
 
   refresh_current_folder_and_file_part (chooser_entry, REFRESH_WHOLE_TEXT);
+}
 
+static void
+gtk_file_chooser_entry_activate (GtkEntry *entry)
+{
+  GtkFileChooserEntry *chooser_entry = GTK_FILE_CHOOSER_ENTRY (entry);
+
+  commit_completion_and_refresh (chooser_entry);
   GTK_ENTRY_CLASS (_gtk_file_chooser_entry_parent_class)->activate (entry);
 }
 
@@ -1663,11 +1668,7 @@ _gtk_file_chooser_entry_set_base_folder (GtkFileChooserEntry *chooser_entry,
 const GtkFilePath *
 _gtk_file_chooser_entry_get_current_folder (GtkFileChooserEntry *chooser_entry)
 {
-  if (chooser_entry->has_completion)
-    {
-      gtk_editable_set_position (GTK_EDITABLE (chooser_entry),
-				 GTK_ENTRY (chooser_entry)->text_length);
-    }
+  commit_completion_and_refresh (chooser_entry);
   return chooser_entry->current_folder_path;
 }
 
@@ -1686,14 +1687,7 @@ _gtk_file_chooser_entry_get_current_folder (GtkFileChooserEntry *chooser_entry)
 const gchar *
 _gtk_file_chooser_entry_get_file_part (GtkFileChooserEntry *chooser_entry)
 {
-  if (chooser_entry->has_completion)
-    {
-      gtk_editable_set_position (GTK_EDITABLE (chooser_entry),
-				 GTK_ENTRY (chooser_entry)->text_length);
-    }
-
-  refresh_current_folder_and_file_part (chooser_entry, REFRESH_WHOLE_TEXT);
-
+  commit_completion_and_refresh (chooser_entry);
   return chooser_entry->file_part;
 }
 
