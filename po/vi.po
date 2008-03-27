@@ -2,7 +2,7 @@
 # Copyright © 2007 Gnome i18n Project for Vietnamese.
 # Hoang Ngoc Tu <hntu@gmx.de>, 2000-2002.
 # Joern v. Kattchee <kattchee@cs.tu-berlin.de>, 2000-2002.
-# Nguyễn Thái Ngọc Duy <pclouds@gmail.com>, 2002-2004,2007.
+# Nguyễn Thái Ngọc Duy <pclouds@gmail.com>, 2002-2004,2007-2008.
 # Clytie Siddall <clytie@riverland.net.au>, 2005-2007.
 #
 msgid ""
@@ -10,11 +10,11 @@ msgstr ""
 "Project-Id-Version: Gtk+ 2.11.4\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2008-03-12 01:40-0400\n"
-"PO-Revision-Date: 2007-09-03 23:10+0930\n"
+"PO-Revision-Date: 2008-03-27 20:12+0700\n"
 "Last-Translator: Clytie Siddall <clytie@riverland.net.au>\n"
 "Language-Team: Vietnamese <gnomevi-list@lists.sourceforge.net>\n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=utf-8\n"
+"Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 "X-Generator: LocFactoryEditor 1.7b1\n"
@@ -764,8 +764,8 @@ msgid ""
 "PNG compression level must be a value between 0 and 9; value '%d' is not "
 "allowed."
 msgstr ""
-"Mức nén PNG phải là giá trị nằm trong khoảng 0 và 9; không cho phép giá trị « "
-"%d »."
+"Mức nén PNG phải là giá trị nằm trong khoảng 0 và 9; không cho phép giá trị "
+"« %d »."
 
 #: gdk-pixbuf/io-png.c:896
 #, c-format
@@ -3253,7 +3253,8 @@ msgstr "« %s » không phải là tên thuộc tính hợp lệ"
 msgid ""
 "\"%s\" could not be converted to a value of type \"%s\" for attribute \"%s\""
 msgstr ""
-"« %s » không thể được chuyển đổi sang giá trị kiểu « %s » cho thuộc tính « %s »"
+"« %s » không thể được chuyển đổi sang giá trị kiểu « %s » cho thuộc tính « %"
+"s »"
 
 #: gtk/gtktextbufferserialize.c:1202
 #, c-format
@@ -3343,8 +3344,8 @@ msgstr "ZW_NJ Bộ không nối kết có độ dài bằng không"
 #, c-format
 msgid "Unable to locate theme engine in module_path: \"%s\","
 msgstr ""
-"Không thể định vị cơ chế sắc thái tại « module_path » (đường dẫn mô-đun): « %s "
-"»,"
+"Không thể định vị cơ chế sắc thái tại « module_path » (đường dẫn mô-đun): « %"
+"s »,"
 
 #: gtk/gtktipsquery.c:187
 msgid "--- No Tip ---"
@@ -4450,9 +4451,9 @@ msgid "Unclassified"
 msgstr "Xem chung"
 
 #: modules/printbackends/cups/gtkprintbackendcups.c:2472
-#, fuzzy, c-format
+#, c-format
 msgid "Custom %sx%s"
-msgstr "Tự chọn  %.2fx%.2f"
+msgstr "Tự chọn  %sx%s"
 
 #. default filename used for print-to-file
 #: modules/printbackends/file/gtkprintbackendfile.c:236
