@@ -2,7 +2,7 @@
 # Copyright © 2007 Gnome i18n Project for Vietnamese.
 # Hoang Ngoc Tu <hntu@gmx.de>, 2000-2002.
 # Joern v. Kattchee <kattchee@cs.tu-berlin.de>, 2000-2002.
-# Nguyễn Thái Ngọc Duy <pclouds@gmail.com>, 2002-2004,2007.
+# Nguyễn Thái Ngọc Duy <pclouds@gmail.com>, 2002-2004,2007-2008.
 # Clytie Siddall <clytie@riverland.net.au>, 2005-2007.
 #
 msgid ""
@@ -10,11 +10,11 @@ msgstr ""
 "Project-Id-Version: Gtk+ 2.11.4\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2008-02-21 12:23-0500\n"
-"PO-Revision-Date: 2007-09-03 23:10+0930\n"
+"PO-Revision-Date: 2008-03-27 20:45+0700\n"
 "Last-Translator: Clytie Siddall <clytie@riverland.net.au>\n"
 "Language-Team: Vietnamese <gnomevi-list@lists.sourceforge.net>\n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=utf-8\n"
+"Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 "X-Generator: LocFactoryEditor 1.7b1\n"
@@ -337,9 +337,9 @@ msgid "Insufficient memory to save image into a buffer"
 msgstr "Không đủ bộ nhớ để lưu ảnh vào bộ đệm"
 
 #: gdk-pixbuf/gdk-pixbuf-io.c:2241
-#, fuzzy, c-format
+#, c-format
 msgid "Error writing to image stream"
-msgstr "Gặp lỗi khi ghi vào tập tin ảnh: %s"
+msgstr "Gặp lỗi khi ghi vào luồng ảnh"
 
 #: gdk-pixbuf/gdk-pixbuf-loader.c:330
 #, c-format
@@ -579,59 +579,57 @@ msgid "The ICO image format"
 msgstr "Dạng thức ảnh ICO"
 
 #: gdk-pixbuf/io-icns.c:345
-#, fuzzy, c-format
+#, c-format
 msgid "Error reading ICNS image: %s"
-msgstr "Lỗi nghiêm trọng khi đọc tập tin ảnh PNG: %s"
+msgstr "Lỗi đọc ảnh ICNS: %s"
 
 #: gdk-pixbuf/io-icns.c:362
-#, fuzzy, c-format
+#, c-format
 msgid "Could not decode ICNS file"
-msgstr "Không thể chọn tập tin đó"
+msgstr "Không thể giải mã tập tin ICNS"
 
 #: gdk-pixbuf/io-icns.c:391
-#, fuzzy
 msgid "The ICNS image format"
-msgstr "Dạng thức ảnh ICO"
+msgstr "Dạng thức ảnh ICNS"
 
 #: gdk-pixbuf/io-jasper.c:74
-#, fuzzy, c-format
+#, c-format
 msgid "Couldn't allocate memory for stream"
-msgstr "Không thể cấp phát bộ nhớ cho phần đầu"
+msgstr "Không thể cấp phát bộ nhớ cho luồng"
 
 #: gdk-pixbuf/io-jasper.c:103
-#, fuzzy, c-format
+#, c-format
 msgid "Couldn't decode image"
-msgstr "Không thể chuyển đổi tên tập tin"
+msgstr "Không thể giải mã ảnh"
 
 #: gdk-pixbuf/io-jasper.c:121
-#, fuzzy, c-format
+#, c-format
 msgid "Transformed JPEG2000 has zero width or height"
-msgstr "Ảnh JPEG đã được chuyển đổi có chiều rộng/cao bằng không."
+msgstr "Ảnh JPEG2000 đã được chuyển đổi có chiều rộng/cao bằng không"
 
 #: gdk-pixbuf/io-jasper.c:134
-#, fuzzy, c-format
+#, c-format
 msgid "Image type currently not supported"
-msgstr "Không hỗ trợ kiểu ảnh « %s »"
+msgstr "Loại ảnh hiện thời không hỗ trợ"
 
 #: gdk-pixbuf/io-jasper.c:145 gdk-pixbuf/io-jasper.c:152
-#, fuzzy, c-format
+#, c-format
 msgid "Couldn't allocate memory for color profile"
-msgstr "Không thể cấp phát bộ nhớ để tải tập tin JPEG"
+msgstr "Không thể cấp phát bộ nhớ cho hồ sơ màu"
 
 #: gdk-pixbuf/io-jasper.c:177
-#, fuzzy, c-format
+#, c-format
 msgid "Insufficient memory to open JPEG 2000 file"
-msgstr "Không đủ bộ nhớ để mở tập tin TIFF"
+msgstr "Không đủ bộ nhớ để mở tập tin JPEG 2000"
 
 #: gdk-pixbuf/io-jasper.c:258
-#, fuzzy, c-format
+#, c-format
 msgid "Couldn't allocate memory to buffer image data"
-msgstr "Không thể cấp phát bộ nhớ cho dữ liệu dòng"
+msgstr "Không thể cấp phát bộ nhớ cho dữ liệu ảnh"
 
 #: gdk-pixbuf/io-jasper.c:298
-#, fuzzy
 msgid "The JPEG 2000 image format"
-msgstr "Dạng thức ảnh JPEG"
+msgstr "Dạng thức ảnh JPEG 2000"
 
 #: gdk-pixbuf/io-jpeg.c:117
 #, c-format
@@ -819,8 +817,8 @@ msgid ""
 "PNG compression level must be a value between 0 and 9; value '%d' is not "
 "allowed."
 msgstr ""
-"Mức nén PNG phải là giá trị nằm trong khoảng 0 và 9; không cho phép giá trị « "
-"%d »."
+"Mức nén PNG phải là giá trị nằm trong khoảng 0 và 9; không cho phép giá trị "
+"« %d »."
 
 #: gdk-pixbuf/io-png.c:896
 #, c-format
@@ -2143,13 +2141,12 @@ msgid "Failed to load icon"
 msgstr "Lỗi nạp biểu tượng"
 
 #: gtk/gtkimmodule.c:423
-#, fuzzy
 msgid "Simple"
-msgstr "Cỡ"
+msgstr "Đơn giản"
 
 #: gtk/gtkimmulticontext.c:542
 msgid "input method menu|System"
-msgstr ""
+msgstr "Hệ thống"
 
 #: gtk/gtkinputdialog.c:190
 msgid "Input"
@@ -2579,24 +2576,20 @@ msgid "Status"
 msgstr "Trạng thái"
 
 #: gtk/gtkprintunixdialog.c:1549
-#, fuzzy
 msgid "Range"
-msgstr "Phạm _vi "
+msgstr "Phạm vi"
 
 #: gtk/gtkprintunixdialog.c:1553
-#, fuzzy
 msgid "_All Pages"
-msgstr "Mọi tờ"
+msgstr "_Mọi trang"
 
 #: gtk/gtkprintunixdialog.c:1560
-#, fuzzy
 msgid "C_urrent Page"
-msgstr "_Hiện có"
+msgstr "Trang _hiện thời"
 
 #: gtk/gtkprintunixdialog.c:1569
-#, fuzzy
 msgid "Pag_es:"
-msgstr "Nơi"
+msgstr "T_rang:"
 
 #: gtk/gtkprintunixdialog.c:1570
 msgid ""
@@ -3138,9 +3131,8 @@ msgid "Reverse portrait"
 msgstr "Đảo thẳng đứng"
 
 #: gtk/gtkstock.c:377
-#, fuzzy
 msgid "Page Set_up"
-msgstr "Thiết lập trang"
+msgstr "T_hiết lập trang"
 
 #: gtk/gtkstock.c:378
 msgid "_Paste"
@@ -3327,7 +3319,8 @@ msgstr "« %s » không phải là tên thuộc tính hợp lệ"
 msgid ""
 "\"%s\" could not be converted to a value of type \"%s\" for attribute \"%s\""
 msgstr ""
-"« %s » không thể được chuyển đổi sang giá trị kiểu « %s » cho thuộc tính « %s »"
+"« %s » không thể được chuyển đổi sang giá trị kiểu « %s » cho thuộc tính « %"
+"s »"
 
 #: gtk/gtktextbufferserialize.c:1202
 #, c-format
@@ -3417,8 +3410,8 @@ msgstr "ZW_NJ Bộ không nối kết có độ dài bằng không"
 #, c-format
 msgid "Unable to locate theme engine in module_path: \"%s\","
 msgstr ""
-"Không thể định vị cơ chế sắc thái tại « module_path » (đường dẫn mô-đun): « %s "
-"»,"
+"Không thể định vị cơ chế sắc thái tại « module_path » (đường dẫn mô-đun): « %"
+"s »,"
 
 #: gtk/gtktipsquery.c:187
 msgid "--- No Tip ---"
@@ -4588,11 +4581,20 @@ msgstr "In vào máy in thử ra"
 msgid "Could not get information for file '%s': %s"
 msgstr "Không thể lấy thông tin cho tập tin « %s »: %s"
 
-#~ msgid "Default"
-#~ msgstr "Mặc định"
+msgid "Default"
+msgstr "Mặc định"
 
-#~ msgid "Print Pages"
-#~ msgstr "In trang"
+msgid "Print Pages"
+msgstr "In trang"
 
-#~ msgid "_All"
-#~ msgstr "Tất _cả"
+msgid "_All"
+msgstr "Tất _cả"
+
+#~ msgid "C_urrent"
+#~ msgstr "_Hiện có"
+
+#~ msgid "Ra_nge"
+#~ msgstr "Phạm _vi "
+
+#~ msgid "Custom %sx%s"
+#~ msgstr "Tự chọn  %sx%s"
