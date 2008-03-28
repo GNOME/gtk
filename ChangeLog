@@ -1,3 +1,11 @@
+2008-03-28  Tor Lillqvist  <tml@novell.com>
+
+	Bug 524422 - assertion when filechooser current name set to string
+	containing disallowed characters
+
+	* gtk/gtkfilechooserentry.c (check_completion_callback): Patch by
+	Daniel Atallah.
+
 2008-03-25  Richard Hult  <richard@imendio.com>
 
 	Merged from trunk:

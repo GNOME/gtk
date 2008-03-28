@@ -523,11 +523,9 @@ check_completion_callback (GtkFileChooserEntry *chooser_entry)
 {
   GDK_THREADS_ENTER ();
 
-  g_assert (chooser_entry->file_part);
-
   chooser_entry->check_completion_idle = 0;
 
-  if (strcmp (chooser_entry->file_part, "") == 0)
+  if (chooser_entry->file_part == NULL || strcmp (chooser_entry->file_part, "") == 0)
     goto done;
 
   /* We only insert the common prefix without requiring the user to hit Tab in
