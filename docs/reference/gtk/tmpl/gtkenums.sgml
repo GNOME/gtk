@@ -442,7 +442,9 @@ Used by #GtkCList and #GtkCTree to indicate whether a row is visible.
 
 <!-- ##### ENUM GtkWindowPosition ##### -->
 <para>
-Window placement can be influenced using this enumeration.
+Window placement can be influenced using this enumeration. Note that
+using #GTK_WIN_POS_CENTER_ALWAYS is almost always a bad idea. 
+It won't necessarily work well with all window managers or on all windowing systems.
 </para>
 
 @GTK_WIN_POS_NONE: No influence is made on placement.
