@@ -1,3 +1,9 @@
+2008-03-31  Li Yuan  <li.yuan@sun.com>
+
+	* gailbutton.c: (gail_button_ref_state_set):
+	Bug #433324. add/remove selectable state depand on if the button can
+	be focused.
+
 2008-03-20  Li Yuan  <li.yuan@sun.com>
 
 	* gailcell.c: (gail_cell_object_finalize):
