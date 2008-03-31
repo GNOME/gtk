@@ -1,3 +1,23 @@
+2008-03-28  Richard Hult  <richard@imendio.com>
+
+	* gdk/quartz/gdkevents-quartz.c: (gdk_event_translate),
+	(_gdk_quartz_events_trigger_crossing_events): Defer the generated
+	event to the mainloop and don't generate one at all if the
+	toplevel didn't change. Use the actual window and not the toplevel
+	as event window. These changes make the generated crossing events
+	match the X11 behavior and fixes issues with e.g. tooltips,
+	comboboxes and menus.
+
+	* gdk/quartz/GdkQuartzView.c: Don't update the tracking rect if
+	the view has no window, it will be updated as soon as it's put
+	inside a window.
+
+	* gdk/quartz/gdkwindow-quartz.c:
+	(_gdk_quartz_window_debug_highlight): Make it possible to track
+	multiple windows with debug highlighting.
+	(show_window_internal): Remove workaround for tooltips and popups
+	that is no longer needed with the above changes.
+
 2008-03-26  Federico Mena Quintero  <federico@novell.com>
 
 	* gtk/gtkfilechooserentry.c (commit_completion_and_refresh): New

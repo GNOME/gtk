@@ -538,22 +538,31 @@ get_ancestor_coordinates_from_child (GdkWindow *child_window,
 }
 
 void
-_gdk_quartz_window_debug_highlight (GdkWindow *window)
+_gdk_quartz_window_debug_highlight (GdkWindow *window, gint number)
 {
   GdkWindowObject *private = GDK_WINDOW_OBJECT (window);
   GdkWindowImplQuartz *impl = GDK_WINDOW_IMPL_QUARTZ (private->impl);
   gint x, y;
   GdkWindow *toplevel;
   gint tx, ty;
-  static NSWindow *debug_window;
-  static NSRect old_rect;
+  static NSWindow *debug_window[10];
+  static NSRect old_rect[10];
   NSRect rect;
+  NSColor *color;
+
+  g_return_if_fail (number >= 0 && number <= 9);
 
   if (window == _gdk_root)
     return;
 
   if (window == NULL)
-    return;
+    {
+      if (debug_window[number])
+        [debug_window[number] close];
+      debug_window[number] = NULL;
+
+      return;
+    }
 
   toplevel = gdk_window_get_toplevel (window);
   get_ancestor_coordinates_from_child (window, 0, 0, toplevel, &x, &y);
@@ -562,37 +571,56 @@ _gdk_quartz_window_debug_highlight (GdkWindow *window)
   x += tx;
   y += ty;
 
-  rect =  NSMakeRect (x,
-                      _gdk_quartz_window_get_inverted_screen_y (y + impl->height),
-                      impl->width, impl->height);
+  rect = NSMakeRect (x,
+                     _gdk_quartz_window_get_inverted_screen_y (y + impl->height),
+                     impl->width, impl->height);
 
-  if (debug_window &&
-      rect.origin.x == old_rect.origin.x &&
-      rect.origin.y == old_rect.origin.y &&
-      rect.size.width == old_rect.size.width &&
-      rect.size.height == old_rect.size.height)
+  if (debug_window[number] && NSEqualRects (rect, old_rect[number]))
+    return;
+
+  old_rect[number] = rect;
+
+  if (debug_window[number])
+    [debug_window[number] close];
+
+  debug_window[number] = [[NSWindow alloc] initWithContentRect:rect
+                                                     styleMask:NSBorderlessWindowMask
+			                               backing:NSBackingStoreBuffered
+			                                 defer:NO];
+
+  switch (number)
     {
-      return;
+    case 0:
+      color = [NSColor redColor];
+      break;
+    case 1:
+      color = [NSColor blueColor];
+      break;
+    case 2:
+      color = [NSColor greenColor];
+      break;
+    case 3:
+      color = [NSColor yellowColor];
+      break;
+    case 4:
+      color = [NSColor brownColor];
+      break;
+    case 5:
+      color = [NSColor purpleColor];
+      break;
+    default:
+      color = [NSColor blackColor];
+      break;
     }
 
-  old_rect = rect;
+  [debug_window[number] setBackgroundColor:color];
+  [debug_window[number] setAlphaValue:0.4];
+  [debug_window[number] setOpaque:NO];
+  [debug_window[number] setReleasedWhenClosed:YES];
+  [debug_window[number] setIgnoresMouseEvents:YES];
+  [debug_window[number] setLevel:NSFloatingWindowLevel];
 
-  if (debug_window)
-    [debug_window close];
-
-  debug_window = [[NSWindow alloc] initWithContentRect:rect
-                                             styleMask:NSBorderlessWindowMask
-			                       backing:NSBackingStoreBuffered
-			                         defer:NO];
-
-  [debug_window setBackgroundColor:[NSColor redColor]];
-  [debug_window setAlphaValue:0.4];
-  [debug_window setOpaque:NO];
-  [debug_window setReleasedWhenClosed:YES];
-  [debug_window setIgnoresMouseEvents:YES];
-  [debug_window setLevel:NSFloatingWindowLevel];
-
-  [debug_window orderFront:nil];
+  [debug_window[number] orderFront:nil];
 }
 
 gboolean
@@ -1137,11 +1165,11 @@ show_window_internal (GdkWindow *window,
   if (impl->transient_for && !GDK_WINDOW_DESTROYED (impl->transient_for))
     _gdk_quartz_window_attach_to_parent (window);
 
-  /* Create a crossing event for managed windows that pop up under the
-   * mouse. Part of the workarounds for problems with the tracking rect API.
+  /* Create a crossing event for windows that pop up under the mouse. Part
+   * of the workarounds for problems with the tracking rect API.
    */
-  if (impl->toplevel && private->window_type != GDK_WINDOW_TEMP)
-    _gdk_quartz_events_trigger_crossing_events ();
+  if (impl->toplevel)
+    _gdk_quartz_events_trigger_crossing_events (TRUE);
 
   GDK_QUARTZ_RELEASE_POOL;
 }

@@ -888,7 +888,7 @@ _gdk_quartz_events_update_mouse_window (GdkWindow *window)
 
 #ifdef G_ENABLE_DEBUG
   if (_gdk_debug_flags & GDK_DEBUG_EVENTS)
-    _gdk_quartz_window_debug_highlight (window);
+    _gdk_quartz_window_debug_highlight (window, 0);
 #endif /* G_ENABLE_DEBUG */  
 
   if (window)
@@ -1092,17 +1092,33 @@ find_mouse_window_for_ns_event (NSEvent *nsevent,
  * window.
  */
 void
-_gdk_quartz_events_trigger_crossing_events (void)
+_gdk_quartz_events_trigger_crossing_events (gboolean defer_to_mainloop)
 {
   NSPoint point;
-  gint x; 
-  gint y;
+  gint x, y; 
+  gint x_toplevel, y_toplevel;
   GdkWindow *mouse_window;
+  GdkWindow *toplevel;
   GdkWindowImplQuartz *impl;
   guint flags = 0;
   NSTimeInterval timestamp = 0;
   NSEvent *current_event;
   NSEvent *nsevent;
+
+  if (defer_to_mainloop)
+    {
+      nsevent = [NSEvent otherEventWithType:NSApplicationDefined
+                                   location:NSZeroPoint
+                              modifierFlags:0
+                                  timestamp:0
+                               windowNumber:0
+                                    context:nil
+                                    subtype:GDK_QUARTZ_EVENT_SUBTYPE_FAKE_CROSSING
+                                      data1:0
+                                      data2:0];
+      [NSApp postEvent:nsevent atStart:NO];
+      return;
+    }
 
   point = [NSEvent mouseLocation];
   x = point.x;
@@ -1112,15 +1128,23 @@ _gdk_quartz_events_trigger_crossing_events (void)
   if (!mouse_window || mouse_window == _gdk_root)
     return;
 
-  /* NSMouseEntered always happens on the toplevel. */
-  mouse_window = gdk_window_get_toplevel (mouse_window);
+  toplevel = gdk_window_get_toplevel (mouse_window);
+
+  /* We ignore crossing within the same toplevel since that is already
+   * handled elsewhere.
+   */
+  if (toplevel == gdk_window_get_toplevel (current_mouse_window))
+    return;
+
+  get_converted_window_coordinates (_gdk_root,
+                                    x, y,
+                                    toplevel,
+                                    &x_toplevel, &y_toplevel);
 
   get_converted_window_coordinates (_gdk_root,
                                     x, y,
                                     mouse_window,
                                     &x, &y);
-
-  impl = GDK_WINDOW_IMPL_QUARTZ (GDK_WINDOW_OBJECT (mouse_window)->impl);
 
   /* Fix up the event to be less fake if possible. */
   current_event = [NSApp currentEvent];
@@ -1130,8 +1154,12 @@ _gdk_quartz_events_trigger_crossing_events (void)
       timestamp = [current_event timestamp];
     }
 
+  if (timestamp == 0)
+    timestamp = GetCurrentEventTime ();
+
+  impl = GDK_WINDOW_IMPL_QUARTZ (GDK_WINDOW_OBJECT (toplevel)->impl);
   nsevent = [NSEvent otherEventWithType:NSApplicationDefined
-                               location:NSMakePoint(x, impl->height - y)
+                               location:NSMakePoint (x_toplevel, impl->height - y_toplevel)
                           modifierFlags:flags
                               timestamp:timestamp
                            windowNumber:[impl->toplevel windowNumber]
@@ -1141,7 +1169,7 @@ _gdk_quartz_events_trigger_crossing_events (void)
                                   data2:0];
 
 #ifdef G_ENABLE_DEBUG
-  /*_gdk_quartz_window_debug_highlight (mouse_window);*/
+  /*_gdk_quartz_window_debug_highlight (mouse_window, 0);*/
 #endif
 
   synthesize_crossing_events (mouse_window, GDK_CROSSING_NORMAL, nsevent, x, y);
@@ -1700,6 +1728,14 @@ gdk_event_translate (NSEvent *nsevent)
 
           return TRUE;
         }
+    }
+
+  /* Handle our generated "fake" crossing events. */
+  if ([nsevent type] == NSApplicationDefined && 
+      [nsevent subtype] == GDK_QUARTZ_EVENT_SUBTYPE_FAKE_CROSSING)
+    {
+      _gdk_quartz_events_trigger_crossing_events (FALSE);
+      return TRUE;
     }
 
   /* Keep track of button state, since we don't get that information
