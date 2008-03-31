@@ -49,6 +49,7 @@ begin_print (GtkPrintOperation *operation,
   
   data->num_lines = i;
   data->num_pages = (data->num_lines - 1) / data->lines_per_page + 1;
+
   gtk_print_operation_set_n_pages (operation, data->num_pages);
 }
 
@@ -122,7 +123,7 @@ draw_page (GtkPrintOperation *operation,
     {
       pango_layout_set_text (layout, data->lines[line], -1);
       pango_cairo_show_layout (cr, layout);
-      cairo_rel_move_to (cr, 0, data->font_size);
+      cairo_rel_move_to (cr, 0, text_height);
       line++;
     }
 

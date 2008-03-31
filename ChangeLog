@@ -1,3 +1,9 @@
+2008-03-31  Cody Russell  <bratsche@gnome.org>
+
+        * demos/gtk-demo/printing.c (draw_page): Move down each line in         
+        units of text_height rather than in units of data->font_size.
+        (totally awesome catch by Dom Lachowicz)
+
 2008-03-28  Richard Hult  <richard@imendio.com>
 
 	* gdk/quartz/gdkevents-quartz.c: (gdk_event_translate),
