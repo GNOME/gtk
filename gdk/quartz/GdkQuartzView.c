@@ -179,7 +179,9 @@
 -(void)setFrame:(NSRect)frame
 {
   [super setFrame:frame];
-  [self updateTrackingRect];
+
+  if ([self window])
+    [self updateTrackingRect];
 }
 
 @end

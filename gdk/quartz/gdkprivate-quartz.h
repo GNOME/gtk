@@ -144,7 +144,8 @@ void       _gdk_quartz_window_attach_to_parent      (GdkWindow *window);
 void       _gdk_quartz_window_detach_from_parent    (GdkWindow *window);
 void       _gdk_quartz_window_did_become_main       (GdkWindow *window);
 void       _gdk_quartz_window_did_resign_main       (GdkWindow *window);
-void       _gdk_quartz_window_debug_highlight       (GdkWindow *window);
+void       _gdk_quartz_window_debug_highlight       (GdkWindow *window,
+                                                     gint       number);
 
 /* Events */
 typedef enum {
@@ -159,7 +160,7 @@ void         _gdk_quartz_events_update_mouse_window    (GdkWindow *window);
 void         _gdk_quartz_events_update_cursor          (GdkWindow *window);
 void         _gdk_quartz_events_send_map_events        (GdkWindow *window);
 GdkEventMask _gdk_quartz_events_get_current_event_mask (void);
-void         _gdk_quartz_events_trigger_crossing_events(void);
+void         _gdk_quartz_events_trigger_crossing_events(gboolean   defer_to_mainloop);
 
 extern GdkWindow *_gdk_quartz_keyboard_grab_window;
 extern GdkWindow *_gdk_quartz_pointer_grab_window;
