@@ -1,3 +1,10 @@
+2008-04-01  Cody Russell  <bratsche@gnome.org>
+
+	* configure.in: Bump required Cairo to 1.5.2.
+
+	* gtk/gtkprintoperation-win32.c: Add support for using the new
+	cairo_win32_printing_surface for printing. (#488833)
+
 2008-03-31  Cody Russell  <bratsche@gnome.org>
 
         * demos/gtk-demo/printing.c (draw_page): Move down each line in         

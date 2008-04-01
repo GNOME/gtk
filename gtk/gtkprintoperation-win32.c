@@ -455,6 +455,9 @@ win32_end_page (GtkPrintOperation *op,
 		GtkPrintContext *print_context)
 {
   GtkPrintOperationWin32 *op_win32 = op->priv->platform_data;
+
+  cairo_surface_show_page (op_win32->surface);
+
   EndPage (op_win32->hdc);
 }
 
@@ -486,6 +489,8 @@ win32_end_run (GtkPrintOperation *op,
   GtkPrintOperationWin32 *op_win32 = op->priv->platform_data;
   LPDEVNAMES devnames;
   HANDLE printerHandle = 0;
+
+  cairo_surface_finish (op_win32->surface);
   
   EndDoc (op_win32->hdc);
 
@@ -501,7 +506,6 @@ win32_end_run (GtkPrintOperation *op,
   GlobalFree(op_win32->devmode);
   GlobalFree(op_win32->devnames);
 
-  cairo_surface_finish (op_win32->surface);
   cairo_surface_destroy (op_win32->surface);
   op_win32->surface = NULL;
 
@@ -1601,7 +1605,8 @@ _gtk_print_operation_platform_backend_run_dialog (GtkPrintOperation *op,
       
       *do_print = TRUE;
 
-      op_win32->surface = cairo_win32_surface_create (printdlgex->hDC);
+      op_win32->surface = cairo_win32_printing_surface_create (printdlgex->hDC);
+
       dpi_x = (double)GetDeviceCaps (printdlgex->hDC, LOGPIXELSX);
       dpi_y = (double)GetDeviceCaps (printdlgex->hDC, LOGPIXELSY);
 
@@ -1619,7 +1624,7 @@ _gtk_print_operation_platform_backend_run_dialog (GtkPrintOperation *op,
       job_id = StartDocW(printdlgex->hDC, &docinfo); 
       g_free ((void *)docinfo.lpszDocName);
       if (job_id <= 0) 
-	{ 
+	{
 	  result = GTK_PRINT_OPERATION_RESULT_ERROR;
 	  g_set_error (&priv->error,
 		       GTK_PRINT_ERROR,
@@ -1703,8 +1708,9 @@ _gtk_print_operation_platform_backend_preview_end_page (GtkPrintOperation *op,
 							cairo_surface_t *surface,
 							cairo_t *cr)
 {
-  /* TODO: This doesn't actually seem to work.
-   * Do enhanced metafiles really support multiple pages?
+  cairo_surface_show_page (cr);
+
+  /* TODO: Enhanced metafiles don't support multiple pages.
    */
   HDC dc = cairo_win32_surface_get_dc (surface);
   EndPage (dc);
@@ -1758,7 +1764,7 @@ _gtk_print_operation_platform_backend_create_preview_surface (GtkPrintOperation 
   *dpi_x = (double)GetDeviceCaps (metafile_dc, LOGPIXELSX);
   *dpi_y = (double)GetDeviceCaps (metafile_dc, LOGPIXELSY);
 
-  return cairo_win32_surface_create (metafile_dc);
+  return cairo_win32_printing_surface_create (metafile_dc);
 }
 
 void
