@@ -1470,10 +1470,11 @@ expand_tilde (const char *filename)
       home = passwd->pw_dir;
     }
 
+  /* We put G_DIR_SEPARATOR_S so that empty basenames will make the resulting path end in a slash */
   if (slash)
     return g_build_filename (home, G_DIR_SEPARATOR_S, slash + 1, NULL);
   else
-    return g_strdup (home);
+    return g_build_filename (home, G_DIR_SEPARATOR_S, NULL);
 }
 
 static gboolean
