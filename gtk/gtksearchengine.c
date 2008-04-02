@@ -29,8 +29,14 @@
 
 #include <gdk/gdkconfig.h> /* for GDK_WINDOWING_QUARTZ */
 
+#ifndef G_OS_WIN32		/* Beagle and tracker are not ported
+				 * to Windows, as far as I know.
+				 */
+
 #define HAVE_BEAGLE  1 
 #define HAVE_TRACKER 1
+
+#endif
 
 enum 
 {

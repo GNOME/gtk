@@ -1,3 +1,11 @@
+2008-04-02  Tor Lillqvist  <tml@novell.com>
+
+	* gtk/Makefile.am: Don't bother compiling gtksearchenginebeagle.c
+	and gtksearchenginetracker.c on Windows.
+
+	* gtk/gtksearchengine.c: Don't define HAVE_BEAGLE and HAVE_TRACKER
+	on Windows.
+
 2008-04-01  Cody Russell  <bratsche@gnome.org>
 
 	* configure.in: Bump required Cairo to 1.5.2.
