@@ -522,7 +522,28 @@ idle_do_action (gpointer data)
       switch (action_number)
 	{
 	case 0:
-	  gtk_widget_activate (widget);
+	  /* first a press */ 
+
+	  button->in_button = TRUE;
+	  gtk_button_enter (button);
+	  /*
+	   * Simulate a button press event. calling gtk_button_pressed() does
+	   * not get the job done for a GtkOptionMenu.  
+	   */
+	  tmp_event.button.type = GDK_BUTTON_PRESS;
+	  tmp_event.button.window = widget->window;
+	  tmp_event.button.button = 1;
+	  tmp_event.button.send_event = TRUE;
+	  tmp_event.button.time = GDK_CURRENT_TIME;
+	  tmp_event.button.axes = NULL;
+	  
+	  gtk_widget_event (widget, &tmp_event);
+
+	  /* then a release */
+	  tmp_event.button.type = GDK_BUTTON_RELEASE;
+	  gtk_widget_event (widget, &tmp_event);
+	  button->in_button = FALSE;
+	  gtk_button_leave (button); 
 	  break;
 	case 1:
 	  button->in_button = TRUE;

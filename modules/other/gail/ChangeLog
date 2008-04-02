@@ -1,3 +1,10 @@
+2008-04-02  Li Yuan  <li.yuan@.sun.com>
+
+	* gailbutton.c: (idle_do_action):
+	Patch from Alejandro Piñeiro Iglesias <apinheiro@igalia.com>.
+	Bug #496167. Synthesize press and release GdkEvent in button's click
+	action.
+
 2008-03-31  Li Yuan  <li.yuan@sun.com>
 
 	* gailbutton.c: (gail_button_ref_state_set):
