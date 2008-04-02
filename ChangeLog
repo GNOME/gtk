@@ -1,3 +1,9 @@
+2008-04-02  Björn Lindqvist  <bjourne@gmail.com>
+
+	* tests/autotestfilechooser.c: Cover
+	GTK_FILE_CHOOSER_ACTION_CREATE_FOLDER action in tests for current
+	name. (#346058, Joe Halliwell)
+
 2008-04-02  Federico Mena Quintero  <federico@novell.com>
 
 	Fix http://bugzilla.gnome.org/show_bug.cgi?id=492134 - The file

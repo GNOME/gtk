@@ -221,7 +221,7 @@ compare_current_name_cb (GtkFileChooser *chooser, gpointer data)
 }
 
 static gboolean
-test_black_box_set_current_name (const char *path, const char *current_name, gboolean focus_button)
+test_black_box_set_current_name (GtkFileChooserAction action, const char *path, const char *current_name, gboolean focus_button)
 {
   struct current_name_closure closure;
   gboolean passed;
@@ -229,7 +229,7 @@ test_black_box_set_current_name (const char *path, const char *current_name, gbo
   closure.path = path;
   closure.current_name = current_name;
 
-  passed = test_set_filename (GTK_FILE_CHOOSER_ACTION_SAVE, focus_button,
+  passed = test_set_filename (action, focus_button,
 			      set_current_name_cb, compare_current_name_cb, &closure);
 
   log_test (passed, "set_current_name, focus_button=%s", focus_button ? "TRUE" : "FALSE");
@@ -248,9 +248,11 @@ test_black_box_set_current_name (const char *path, const char *current_name, gbo
 #endif
 
 #define CURRENT_NAME "parangaricutirimicuaro.txt"
+#define CURRENT_NAME_FOLDER "parangaricutirimicuaro"
 
 /* https://bugzilla.novell.com/show_bug.cgi?id=184875
  * http://bugzilla.gnome.org/show_bug.cgi?id=347066
+ * http://bugzilla.gnome.org/show_bug.cgi?id=346058
  */
 static void
 test_black_box (void)
@@ -279,9 +281,13 @@ test_black_box (void)
 
   cwd = g_get_current_dir ();
 
-  passed = passed && test_black_box_set_current_name (cwd, CURRENT_NAME, FALSE);
+  passed = passed && test_black_box_set_current_name (GTK_FILE_CHOOSER_ACTION_SAVE, cwd, CURRENT_NAME, FALSE);
   g_assert (passed);
-  passed = passed && test_black_box_set_current_name (cwd, CURRENT_NAME, TRUE);
+  passed = passed && test_black_box_set_current_name (GTK_FILE_CHOOSER_ACTION_SAVE, cwd, CURRENT_NAME, TRUE);
+  g_assert (passed);
+  passed = passed && test_black_box_set_current_name (GTK_FILE_CHOOSER_ACTION_CREATE_FOLDER, cwd, CURRENT_NAME_FOLDER, FALSE);
+  g_assert (passed);
+  passed = passed && test_black_box_set_current_name (GTK_FILE_CHOOSER_ACTION_CREATE_FOLDER, cwd, CURRENT_NAME_FOLDER, TRUE);
   g_assert (passed);
 
   g_free (cwd);
