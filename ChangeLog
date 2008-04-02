@@ -1,3 +1,18 @@
+2008-04-02  Federico Mena Quintero  <federico@novell.com>
+
+	Merged from trunk:
+
+	Fix http://bugzilla.gnome.org/show_bug.cgi?id=492134 - The file
+	chooser incorrectly substitutes and expands a ~ when you type it
+	in the filename entry.
+
+	* gtk/gtkfilesystemunix.c (expand_tilde): Ensure that empty
+	basenames result in a slash-terminated pathname.
+	gtk_file_system_unix_parse() is correct, but it was splitting
+	"/home/username" into path="/home" and file_part="username", which
+	is not what the caller wants when the entry has just "~" or
+	"~username".
+
 2008-04-02  Tor Lillqvist  <tml@novell.com>
 
 	* gtk/Makefile.am: Don't bother compiling gtksearchenginebeagle.c
