@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: GTK+ 1.4.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2008-03-12 06:10+0000\n"
-"PO-Revision-Date: 2008-04-02 18:52+0100\n"
+"PO-Revision-Date: 2008-04-02 19:01+0100\n"
 "Last-Translator: Matej Urbančič <mateju@svn.gnome.org>\n"
 "Language-Team: slovenian <sl@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -3604,7 +3604,7 @@ msgstr "Nastavitve tiskalnika"
 
 #: ../gtk/gtkprintjob.c:143
 #: ../gtk/gtkprintjob.c:144
-#: ../gtk/gtkprintunixdialog.c:241
+#: ../gtk/gtkprintunixdialog.c:244
 msgid "Page Setup"
 msgstr "Nastavitev strani"
 
@@ -3626,12 +3626,12 @@ msgid "The GtkPageSetup used by default"
 msgstr "Privzeto uporabljeni GtkPageSetup"
 
 #: ../gtk/gtkprintoperation.c:896
-#: ../gtk/gtkprintunixdialog.c:259
+#: ../gtk/gtkprintunixdialog.c:262
 msgid "Print Settings"
 msgstr "Nastavitve tiskanja"
 
 #: ../gtk/gtkprintoperation.c:897
-#: ../gtk/gtkprintunixdialog.c:260
+#: ../gtk/gtkprintunixdialog.c:263
 msgid "The GtkPrintSettings used for initializing the dialog"
 msgstr "GtkPrintSettings za zagon okna"
 
@@ -3652,12 +3652,12 @@ msgid "The number of pages in the document."
 msgstr "Število strani v dokumentu."
 
 #: ../gtk/gtkprintoperation.c:962
-#: ../gtk/gtkprintunixdialog.c:249
+#: ../gtk/gtkprintunixdialog.c:252
 msgid "Current Page"
 msgstr "Trenutna stran"
 
 #: ../gtk/gtkprintoperation.c:963
-#: ../gtk/gtkprintunixdialog.c:250
+#: ../gtk/gtkprintunixdialog.c:253
 msgid "The current page in the document"
 msgstr "Trenutna stran v dokumentu"
 
@@ -3726,15 +3726,15 @@ msgstr "Poljubna oznaka zavihka"
 msgid "Label for the tab containing custom widgets."
 msgstr "Oznaka za zavihek, ki vsebuje gradnike po meri"
 
-#: ../gtk/gtkprintunixdialog.c:242
+#: ../gtk/gtkprintunixdialog.c:245
 msgid "The GtkPageSetup to use"
 msgstr "GtkPageSetup, ki naj bo uporabljen"
 
-#: ../gtk/gtkprintunixdialog.c:267
+#: ../gtk/gtkprintunixdialog.c:270
 msgid "Selected Printer"
 msgstr "Izbrani tiskalnik"
 
-#: ../gtk/gtkprintunixdialog.c:268
+#: ../gtk/gtkprintunixdialog.c:271
 msgid "The GtkPrinter which is selected"
 msgstr "GtkPrinter, ki je izbran"
 
@@ -3994,7 +3994,7 @@ msgstr "Ali naj bodo elementi prikazani s številkami"
 
 #: ../gtk/gtkrecentchooser.c:120
 msgid "Recent Manager"
-msgstr ""
+msgstr "Nedavni upravljavec"
 
 #: ../gtk/gtkrecentchooser.c:121
 msgid "The RecentManager object to use"
@@ -4190,6 +4190,9 @@ msgid "Display a second backward arrow button on the opposite end of the scrollb
 msgstr "Pokaži gumb za drugotni korak nazaj na drugem koncu drsnika"
 
 #: ../gtk/gtkscrollbar.c:92
+msgid "Display a second forward arrow button on the opposite end of the scrollbar"
+msgstr "Pokaži gumb za drugi korak nazaj na nasprotnem koncu drsnika"
+
 #: ../gtk/gtkscrolledwindow.c:221
 #: ../gtk/gtktext.c:541
 #: ../gtk/gtktreeview.c:572
