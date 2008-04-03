@@ -1,3 +1,10 @@
+2008-04-02  Matthias Clasen  <mclasen@redhat.com>
+
+	Merged from trunk:
+
+	* gdk/x11/gdkcolor-x11.c: Don't call XFreeColormap on foreign
+	colormaps.  Found by Daniel Berrange.
+
 2008-04-02  Federico Mena Quintero  <federico@novell.com>
 
 	Merged from trunk:
