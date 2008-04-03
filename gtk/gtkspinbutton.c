@@ -1453,6 +1453,26 @@ gtk_spin_button_insert_text (GtkEditable *editable,
       else 
 	pos_sign = '+';
 
+#ifdef G_OS_WIN32
+      /* Workaround for bug caused by some Windows application messing
+       * up the positive sign of the current locale, more specifically
+       * HKEY_CURRENT_USER\Control Panel\International\sPositiveSign.
+       * See bug #330743 and for instance
+       * http://www.msnewsgroups.net/group/microsoft.public.dotnet.languages.csharp/topic36024.aspx
+       *
+       * I don't know if the positive sign always gets bogusly set to
+       * a digit when the above Registry value is corrupted as
+       * described. (In my test case, it got set to "8", and in the
+       * bug report above it presumably was set ot "0".) Probably it
+       * might get set to almost anything? So how to distinguish a
+       * bogus value from some correct one for some locale? That is
+       * probably hard, but at least we should filter out the
+       * digits...
+       */
+      if (pos_sign >= '0' && pos_sign <= '9')
+	pos_sign = '+';
+#endif
+
       for (sign=0, i=0; i<entry_length; i++)
 	if ((entry->text[i] == neg_sign) ||
 	    (entry->text[i] == pos_sign))
