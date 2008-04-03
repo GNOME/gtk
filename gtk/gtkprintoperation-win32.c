@@ -1708,11 +1708,13 @@ _gtk_print_operation_platform_backend_preview_end_page (GtkPrintOperation *op,
 							cairo_surface_t *surface,
 							cairo_t *cr)
 {
+  HDC dc;
+
   cairo_surface_show_page (cr);
 
   /* TODO: Enhanced metafiles don't support multiple pages.
    */
-  HDC dc = cairo_win32_surface_get_dc (surface);
+  dc = cairo_win32_surface_get_dc (surface);
   EndPage (dc);
 }
 

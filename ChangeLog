@@ -1,3 +1,8 @@
+2008-04-03  Cody Russell  <bratsche@gnome.org>
+
+	* gtk/gtkprintoperation-win32.c: Fix variable declared in the middle
+	of the block. (#526021, reported by Kazuki IWAMOTO)
+
 2008-04-03  Tor Lillqvist  <tml@novell.com>
 
 	Bug 330743 - Up/down spinbuttons won't take zeros and exhibit very
