@@ -1618,7 +1618,7 @@ msgid ""
 "The folder could not be created, as a file with the same name already "
 "exists.  Try using a different name for the folder, or rename the file first."
 msgstr ""
-"No s'ha pogut crear la carpeta, perquè ja existix un fitxer amb el maitex "
+"No s'ha pogut crear la carpeta, perquè ja existix un fitxer amb el mateix "
 "nom. Proveu utilitzant un nom diferent per a la carpeta, o canvieu el nom "
 "del fitxer abans."
 
@@ -3196,7 +3196,7 @@ msgstr "_Propietats"
 
 #: gtk/gtkstock.c:383
 msgid "_Quit"
-msgstr "_Surt"
+msgstr "I_x"
 
 #: gtk/gtkstock.c:384
 msgid "_Redo"
@@ -3212,7 +3212,7 @@ msgstr "_Restaura"
 
 #: gtk/gtkstock.c:388
 msgid "_Save"
-msgstr "_Desa"
+msgstr "A_lça"
 
 #: gtk/gtkstock.c:389
 msgid "Save _As"
@@ -3337,8 +3337,7 @@ msgstr "S'han trobat etiquetes anònimes, i no se n'han pogut crear."
 #, c-format
 msgid "Tag \"%s\" does not exist in buffer and tags can not be created."
 msgstr ""
-"L'etiqueta «%s» no existix a la memòria intermèdia, i no es poden crear "
-"etiquetes."
+"L'etiqueta «%s» no existix a la memòria intermèdia, i no se'n poden crear."
 
 #: gtk/gtktextbufferserialize.c:1144 gtk/gtktextbufferserialize.c:1219
 #: gtk/gtktextbufferserialize.c:1320 gtk/gtktextbufferserialize.c:1394
