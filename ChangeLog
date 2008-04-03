@@ -1,3 +1,11 @@
+2008-04-03  Tor Lillqvist  <tml@novell.com>
+
+	Bug 330743 - Up/down spinbuttons won't take zeros and exhibit very
+	strange behavior
+
+	* gtk/gtkspinbutton.c (gtk_spin_button_insert_text) [Win32]: Add
+	workaround for a specific kind of screwed up locale setting.
+
 2008-04-03  Jordi Mallach  <jordi@sindominio.net>
 
 	* configure.in (ALL_LINGUAS): Add Valencian-Catalan (ca@valencia).
