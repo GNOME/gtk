@@ -46,7 +46,7 @@ struct _GdkColormapPrivateX11
   GdkColorInfo *info;
   time_t last_sync_time;
 
-  guint foreign : 1;
+  gboolean foreign;
 };
 
 #define GDK_COLORMAP_PRIVATE_DATA(cmap) ((GdkColormapPrivateX11 *) GDK_COLORMAP (cmap)->windowing_data)
@@ -107,7 +107,7 @@ gdk_colormap_finalize (GObject *object)
 
   gdk_colormap_remove (colormap);
 
-  if (!private->screen->closed)
+  if (!private->screen->closed && !private->foreign)
     XFreeColormap (GDK_SCREEN_XDISPLAY (private->screen), private->xcolormap);
 
   if (private->hash)
@@ -1292,6 +1292,7 @@ gdk_x11_colormap_foreign_new (GdkVisual *visual,
   private->screen = screen;
   private->xcolormap = xcolormap;
   private->private_val = FALSE;
+  private->foreign = TRUE;
 
   colormap->size = visual->colormap_size;
 
