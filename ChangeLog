@@ -1,3 +1,8 @@
+2008-04-06  Tristan Van Berkom <tvb@gnome.org>
+
+	* gtk/gtkwidget.c: Clarified a g_warning message regarding
+	parsing accelerators from builder files.
+
 2008-04-03  Cody Russell  <bratsche@gnome.org>
 
 	* gtk/gtkprintoperation-win32.c: Fix variable declared in the middle

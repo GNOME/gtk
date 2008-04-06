@@ -9105,7 +9105,7 @@ accel_group_start_element (GMarkupParseContext *context,
 
   if (key == 0 || signal == NULL)
     {
-      g_warning ("<accelerator> requires a key or signal attribute");
+      g_warning ("<accelerator> requires key and signal attributes");
       return;
     }
   parser_data->key = key;
