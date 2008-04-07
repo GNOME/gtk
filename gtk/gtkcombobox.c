@@ -2273,6 +2273,10 @@ gtk_combo_box_size_allocate (GtkWidget     *widget,
     {
       /* list mode */
 
+      /* Combobox thickness + border-width */
+      int delta_x = shadow_width + GTK_CONTAINER (widget)->border_width;
+      int delta_y = shadow_height + GTK_CONTAINER (widget)->border_width;
+
       /* button */
       GTK_COMBO_BOX_SIZE_ALLOCATE_BUTTON
 
@@ -2281,38 +2285,40 @@ gtk_combo_box_size_allocate (GtkWidget     *widget,
         child.x = allocation->x + req.width;
       else
         child.x = allocation->x;
+
       child.y = allocation->y;
       child.width = allocation->width - req.width;
       child.height = allocation->height;
 
       if (combo_box->priv->cell_view_frame)
         {
-	  child.width = MAX (1, child.width);
-	  child.height = MAX (1, child.height);
+          child.x += delta_x;
+          child.y += delta_y;
+          child.width = MAX (1, child.width - delta_x * 2);
+          child.height = MAX (1, child.height - delta_y * 2);
           gtk_widget_size_allocate (combo_box->priv->cell_view_frame, &child);
 
           /* the sample */
-	  if (combo_box->priv->has_frame)
-	    {
-	      child.x +=
-		GTK_CONTAINER (combo_box->priv->cell_view_frame)->border_width +
-		GTK_WIDGET (combo_box->priv->cell_view_frame)->style->xthickness;
-	      child.y +=
-		GTK_CONTAINER (combo_box->priv->cell_view_frame)->border_width +
-		GTK_WIDGET (combo_box->priv->cell_view_frame)->style->ythickness;
-	      child.width -= 2 * (
-				  GTK_CONTAINER (combo_box->priv->cell_view_frame)->border_width +
-				  GTK_WIDGET (combo_box->priv->cell_view_frame)->style->xthickness);
-	      child.height -= 2 * (
-				   GTK_CONTAINER (combo_box->priv->cell_view_frame)->border_width +
-				   GTK_WIDGET (combo_box->priv->cell_view_frame)->style->ythickness);
-	    }
+          if (combo_box->priv->has_frame)
+            {
+              delta_x = GTK_CONTAINER (combo_box->priv->cell_view_frame)->border_width +
+                GTK_WIDGET (combo_box->priv->cell_view_frame)->style->xthickness;
+              delta_y = GTK_CONTAINER (combo_box->priv->cell_view_frame)->border_width +
+                GTK_WIDGET (combo_box->priv->cell_view_frame)->style->ythickness;
+
+              child.x += delta_x;
+              child.y += delta_y;
+              child.width -= delta_x * 2;
+              child.height -= delta_y * 2;
+	          }
         }
-      
-      child.x += shadow_width;
-      child.y += shadow_height;
-      child.width -= shadow_width * 2;
-      child.height -= shadow_height * 2;
+      else
+        {
+          child.x += delta_x;
+          child.y += delta_y;
+          child.width -= delta_x * 2;
+          child.height -= delta_y * 2;
+        }
       
       child.width = MAX (1, child.width);
       child.height = MAX (1, child.height);

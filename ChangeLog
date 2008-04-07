@@ -2,6 +2,15 @@
 
 	Merged from trunk:
 
+	* gtk/gtkcombobox.c: (gtk_combo_box_size_allocate) The child is now aware of
+	both the combobox and frame (if has-frame is set) thickness andd border.
+	(bug #521442)
+
+
+2008-04-07  Alberto Ruiz  <aruiz@gnome.org>
+
+	Merged from trunk:
+
 	* modules/engines/ms-windows/Theme/gtk-2.0/gtkrc:
 	* modules/engines/ms-windows/msw_style.c (draw_box) (draw_arrow)
 	(combo_box_draw_arrow) (setup_msw_rc_style): draw box does more intelligent
