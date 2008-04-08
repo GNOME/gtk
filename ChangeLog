@@ -1,3 +1,9 @@
+2008-04-08  Tomas Bzatek  <tbzatek@redhat.com> 
+
+        * gtk/gtkfilesystem.c: (gtk_file_info_render_icon),
+        (gtk_file_system_volume_render_icon):
+        Fix fallback icon rendering size
+
 2008-04-07  Alberto Ruiz  <aruiz@gnome.org>
 
 	Merged from trunk:
