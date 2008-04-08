@@ -306,7 +306,7 @@ gtk_file_info_render_icon (const GtkFileInfo  *info,
       pixbuf = gtk_widget_render_icon (widget,
                                        gtk_file_info_get_is_folder (info)
                                         ? GTK_STOCK_DIRECTORY : GTK_STOCK_FILE,
-                                       GTK_ICON_SIZE_SMALL_TOOLBAR,
+                                       GTK_ICON_SIZE_MENU,
                                        NULL);
       if (!pixbuf && error)
         g_set_error (error,
@@ -670,7 +670,7 @@ gtk_file_system_volume_render_icon (GtkFileSystem        *file_system,
   if (!pixbuf)
     pixbuf = gtk_widget_render_icon (widget,
                                      GTK_STOCK_HARDDISK,
-                                     GTK_ICON_SIZE_SMALL_TOOLBAR,
+                                     GTK_ICON_SIZE_MENU,
                                      NULL);
 
   return pixbuf;
