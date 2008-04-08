@@ -1,3 +1,10 @@
+2008-04-08  Michael Natterer  <mitch@imendio.com>
+
+	* gtk/gtkmenushell.c (gtk_real_menu_shell_move_current): fix a
+	touchscreen-mode keynav corner case: when navigating to the parent
+	menu, make sure we don't close two menus at the same time in case
+	the deepest open menu has no selectable items.
+
 2008-04-06  Tristan Van Berkom <tvb@gnome.org>
 
 	* gtk/gtkwidget.c: Clarified a g_warning message regarding

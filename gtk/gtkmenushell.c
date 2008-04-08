@@ -1298,8 +1298,13 @@ gtk_real_menu_shell_move_current (GtkMenuShell         *menu_shell,
 {
   GtkMenuShell *parent_menu_shell = NULL;
   gboolean had_selection;
+  gboolean touchscreen_mode;
 
   had_selection = menu_shell->active_menu_item != NULL;
+
+  g_object_get (gtk_widget_get_settings (GTK_WIDGET (menu_shell)),
+                "gtk-touchscreen-mode", &touchscreen_mode,
+                NULL);
 
   if (menu_shell->parent_menu_shell)
     parent_menu_shell = GTK_MENU_SHELL (menu_shell->parent_menu_shell);
@@ -1307,14 +1312,21 @@ gtk_real_menu_shell_move_current (GtkMenuShell         *menu_shell,
   switch (direction)
     {
     case GTK_MENU_DIR_PARENT:
-      if (parent_menu_shell)
+      if (touchscreen_mode &&
+          menu_shell->active_menu_item &&
+          GTK_MENU_ITEM (menu_shell->active_menu_item)->submenu &&
+          GTK_WIDGET_VISIBLE (GTK_MENU_ITEM (menu_shell->active_menu_item)->submenu))
+        {
+          /* if we are on a menu item that has an open submenu but the
+           * focus is not in that submenu (e.g. because it's empty or
+           * has only insensitive items), close that submenu instead
+           * of running into the code below which would close *this*
+           * menu.
+           */
+          _gtk_menu_item_popdown_submenu (menu_shell->active_menu_item);
+        }
+      else if (parent_menu_shell)
 	{
-          gboolean touchscreen_mode;
-
-          g_object_get (gtk_widget_get_settings (GTK_WIDGET (menu_shell)),
-                        "gtk-touchscreen-mode", &touchscreen_mode,
-                        NULL);
-
           if (touchscreen_mode)
             {
               /* close menu when returning from submenu. */
