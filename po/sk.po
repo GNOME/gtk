@@ -11,8 +11,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-03-12 21:46+0100\n"
-"PO-Revision-Date: 2008-01-30 09:25+0100\n"
+"POT-Creation-Date: 2008-04-08 16:03+0200\n"
+"PO-Revision-Date: 2008-04-08 10:27+0200\n"
 "Last-Translator: Pavol Šimo <palo.simo@gmail.com>\n"
 "Language-Team: Slovak <sk-i18n@lists.linux.sk>\n"
 "MIME-Version: 1.0\n"
@@ -1729,26 +1729,26 @@ msgstr "Skratka %s už existuje"
 msgid "Shortcut %s does not exist"
 msgstr "Skratka %s neexistuje"
 
-#: ../gtk/gtkfilechooserdefault.c:8088 ../gtk/gtkprintunixdialog.c:349
+#: ../gtk/gtkfilechooserdefault.c:8088 ../gtk/gtkprintunixdialog.c:354
 #, c-format
 msgid "A file named \"%s\" already exists.  Do you want to replace it?"
 msgstr "Súbor s názvom \"%s\" už existuje. Chcete ho nahradiť?"
 
-#: ../gtk/gtkfilechooserdefault.c:8091 ../gtk/gtkprintunixdialog.c:353
+#: ../gtk/gtkfilechooserdefault.c:8091 ../gtk/gtkprintunixdialog.c:358
 #, c-format
 msgid ""
 "The file already exists in \"%s\".  Replacing it will overwrite its contents."
 msgstr "Súbor už existuje v \"%s\". Nahradením prepíšete jeho obsah."
 
-#: ../gtk/gtkfilechooserdefault.c:8096 ../gtk/gtkprintunixdialog.c:358
+#: ../gtk/gtkfilechooserdefault.c:8096 ../gtk/gtkprintunixdialog.c:365
 msgid "_Replace"
 msgstr "_Nahradiť"
 
-#: ../gtk/gtkfilechooserdefault.c:8894
+#: ../gtk/gtkfilechooserdefault.c:8899
 msgid "Could not start the search process"
 msgstr "Nepodarilo sa naštartovať proces hľadania"
 
-#: ../gtk/gtkfilechooserdefault.c:8895
+#: ../gtk/gtkfilechooserdefault.c:8900
 msgid ""
 "The program was not able to create a connection to the indexer daemon.  "
 "Please make sure it is running."
@@ -1756,25 +1756,25 @@ msgstr ""
 "Program sa nedokázal pripojiť k indexovaciemu démonu.  Uistite sa, že je "
 "naštartovaný."
 
-#: ../gtk/gtkfilechooserdefault.c:8909
+#: ../gtk/gtkfilechooserdefault.c:8914
 msgid "Could not send the search request"
 msgstr "Nepodarilo sa odoslať požiadavku na hľadanie"
 
 #. Label
-#: ../gtk/gtkfilechooserdefault.c:9337
+#: ../gtk/gtkfilechooserdefault.c:9342
 msgid "_Search:"
 msgstr "_Hľadať:"
 
-#: ../gtk/gtkfilechooserdefault.c:10290
+#: ../gtk/gtkfilechooserdefault.c:10295
 #, c-format
 msgid "Could not mount %s"
 msgstr "Nepodarilo sa pripojiť %s"
 
-#: ../gtk/gtkfilechooserdefault.c:10894
+#: ../gtk/gtkfilechooserdefault.c:10899
 msgid "Type name of new folder"
 msgstr "Zadajte názov nového priečinka"
 
-#: ../gtk/gtkfilechooserdefault.c:10942
+#: ../gtk/gtkfilechooserdefault.c:10947
 #, c-format
 msgid "%d byte"
 msgid_plural "%d bytes"
@@ -1782,31 +1782,31 @@ msgstr[0] "%d bajtov"
 msgstr[1] "%d bajt"
 msgstr[2] "%d bajty"
 
-#: ../gtk/gtkfilechooserdefault.c:10944
+#: ../gtk/gtkfilechooserdefault.c:10949
 #, c-format
 msgid "%.1f KB"
 msgstr "%.1f KiB"
 
-#: ../gtk/gtkfilechooserdefault.c:10946
+#: ../gtk/gtkfilechooserdefault.c:10951
 #, c-format
 msgid "%.1f MB"
 msgstr "%.1f MiB"
 
-#: ../gtk/gtkfilechooserdefault.c:10948
+#: ../gtk/gtkfilechooserdefault.c:10953
 #, c-format
 msgid "%.1f GB"
 msgstr "%.1f GiB"
 
-#: ../gtk/gtkfilechooserdefault.c:11049 ../gtk/gtkfilechooserdefault.c:11071
-#: ../gtk/gtkfilechooserdefault.c:11142
+#: ../gtk/gtkfilechooserdefault.c:11054 ../gtk/gtkfilechooserdefault.c:11076
+#: ../gtk/gtkfilechooserdefault.c:11147
 msgid "Unknown"
 msgstr "Neznáme"
 
-#: ../gtk/gtkfilechooserdefault.c:11089
+#: ../gtk/gtkfilechooserdefault.c:11094
 msgid "Today at %H:%M"
 msgstr "Dnes o %H:%M"
 
-#: ../gtk/gtkfilechooserdefault.c:11091
+#: ../gtk/gtkfilechooserdefault.c:11096
 msgid "Yesterday at %H:%M"
 msgstr "Včera o %H:%M"
 
@@ -1962,7 +1962,7 @@ msgid "(Empty)"
 msgstr "(Prázdne)"
 
 #: ../gtk/gtkfilesystemunix.c:961 ../gtk/gtkfilesystemunix.c:1209
-#: ../gtk/gtkfilesystemunix.c:2197 ../gtk/gtkfilesystemunix.c:2237
+#: ../gtk/gtkfilesystemunix.c:2198 ../gtk/gtkfilesystemunix.c:2238
 #: ../gtk/gtkfilesystemwin32.c:2305 ../gtk/gtkfilesystemwin32.c:2355
 #, c-format
 msgid "Error getting information for '%s': %s"
@@ -1986,17 +1986,17 @@ msgstr ""
 "Názov \"%s\" nie je platný, pretože obsahuje znak \"%s\". Prosím, použite "
 "iný názov."
 
-#: ../gtk/gtkfilesystemunix.c:1879 ../gtk/gtkfilesystemwin32.c:1985
+#: ../gtk/gtkfilesystemunix.c:1880 ../gtk/gtkfilesystemwin32.c:1985
 #, c-format
 msgid "Bookmark saving failed: %s"
 msgstr "Uloženie záložky zlyhalo: %s"
 
-#: ../gtk/gtkfilesystemunix.c:1934 ../gtk/gtkfilesystemwin32.c:2040
+#: ../gtk/gtkfilesystemunix.c:1935 ../gtk/gtkfilesystemwin32.c:2040
 #, c-format
 msgid "'%s' already exists in the bookmarks list"
 msgstr "\"%s\" už v zozname záložiek existuje"
 
-#: ../gtk/gtkfilesystemunix.c:2006 ../gtk/gtkfilesystemwin32.c:2112
+#: ../gtk/gtkfilesystemunix.c:2007 ../gtk/gtkfilesystemwin32.c:2112
 #, c-format
 msgid "'%s' does not exist in the bookmarks list"
 msgstr "\"%s\" neexistuje v zozname záložiek"
@@ -2298,7 +2298,7 @@ msgstr ""
 
 #: ../gtk/gtkpagesetupunixdialog.c:953
 msgid "Manage Custom Sizes..."
-msgstr "Spravuj užívateľské veľkosti..."
+msgstr "Spravuj vlastné veľkosti..."
 
 #: ../gtk/gtkpagesetupunixdialog.c:1001
 msgid "_Format for:"
@@ -2312,7 +2312,7 @@ msgstr "_Veľkosť papiera:"
 msgid "_Orientation:"
 msgstr "_Orientácia:"
 
-#: ../gtk/gtkpagesetupunixdialog.c:1121 ../gtk/gtkprintunixdialog.c:2291
+#: ../gtk/gtkpagesetupunixdialog.c:1121 ../gtk/gtkprintunixdialog.c:2306
 msgid "Page Setup"
 msgstr "Nastavenie stránky"
 
@@ -2323,11 +2323,11 @@ msgstr "Okraje z tlačiarne..."
 #: ../gtk/gtkpagesetupunixdialog.c:1600
 #, c-format
 msgid "Custom Size %d"
-msgstr "Užívateľská veľkosť %d"
+msgstr "Vlastná veľkosť %d"
 
 #: ../gtk/gtkpagesetupunixdialog.c:1829
 msgid "Manage Custom Sizes"
-msgstr "Správa užívateľských veľkostí"
+msgstr "Správa vlastných veľkostí"
 
 #: ../gtk/gtkpagesetupunixdialog.c:1925
 msgid "_Width:"
@@ -2475,11 +2475,11 @@ msgstr "Pozastavený"
 
 #: ../gtk/gtkprintoperation-win32.c:570
 msgid "Need user intervention"
-msgstr "Vyžaduje zásah užívateľa"
+msgstr "Vyžaduje zásah používateľa"
 
 #: ../gtk/gtkprintoperation-win32.c:670
 msgid "Custom size"
-msgstr "Užívateľská veľkosť"
+msgstr "Vlastná veľkosť"
 
 #: ../gtk/gtkprintoperation-win32.c:1485 ../gtk/gtkprintoperation-win32.c:1508
 #: ../gtk/gtkprintoperation-win32.c:1556
@@ -2512,35 +2512,35 @@ msgstr "Nešpecifikovaná chyba"
 msgid "Error from StartDoc"
 msgstr "Chyba zo StartDoc"
 
-#: ../gtk/gtkprintunixdialog.c:1619
+#: ../gtk/gtkprintunixdialog.c:1634
 msgid "Printer"
 msgstr "Tlačiareň"
 
-#: ../gtk/gtkprintunixdialog.c:1627
+#: ../gtk/gtkprintunixdialog.c:1642
 msgid "Location"
 msgstr "Umiestnenie"
 
-#: ../gtk/gtkprintunixdialog.c:1636
+#: ../gtk/gtkprintunixdialog.c:1651
 msgid "Status"
 msgstr "Stav"
 
-#: ../gtk/gtkprintunixdialog.c:1658
+#: ../gtk/gtkprintunixdialog.c:1673
 msgid "Print Pages"
 msgstr "Tlačiť strany"
 
-#: ../gtk/gtkprintunixdialog.c:1662
+#: ../gtk/gtkprintunixdialog.c:1677
 msgid "_All"
 msgstr "_Všetky"
 
-#: ../gtk/gtkprintunixdialog.c:1669
+#: ../gtk/gtkprintunixdialog.c:1684
 msgid "C_urrent"
 msgstr "_Aktuálnu"
 
-#: ../gtk/gtkprintunixdialog.c:1678
+#: ../gtk/gtkprintunixdialog.c:1693
 msgid "Ra_nge"
 msgstr "_Rozsah"
 
-#: ../gtk/gtkprintunixdialog.c:1679
+#: ../gtk/gtkprintunixdialog.c:1694
 msgid ""
 "Specify one or more page ranges,\n"
 " e.g. 1-3,7,11"
@@ -2548,141 +2548,141 @@ msgstr ""
 "Uveďte jeden alebo viac rozsahov strán,\n"
 " napr. 1-3,7,11"
 
-#: ../gtk/gtkprintunixdialog.c:1698
+#: ../gtk/gtkprintunixdialog.c:1713
 msgid "Copies"
 msgstr "Kópií"
 
 #. FIXME chpe: too much space between Copies and spinbutton, put those 2 in a hbox and make it span 2 columns
-#: ../gtk/gtkprintunixdialog.c:1703
+#: ../gtk/gtkprintunixdialog.c:1718
 msgid "Copie_s:"
 msgstr "Kópi_e:"
 
-#: ../gtk/gtkprintunixdialog.c:1721
+#: ../gtk/gtkprintunixdialog.c:1736
 msgid "C_ollate"
 msgstr "_Zhromažďovať"
 
-#: ../gtk/gtkprintunixdialog.c:1729
+#: ../gtk/gtkprintunixdialog.c:1744
 msgid "_Reverse"
 msgstr "_Opačné"
 
-#: ../gtk/gtkprintunixdialog.c:1746
+#: ../gtk/gtkprintunixdialog.c:1761
 msgid "General"
 msgstr "Všeobecné"
 
-#: ../gtk/gtkprintunixdialog.c:2147
+#: ../gtk/gtkprintunixdialog.c:2162
 msgid "Layout"
 msgstr "Rozloženie"
 
-#: ../gtk/gtkprintunixdialog.c:2151
+#: ../gtk/gtkprintunixdialog.c:2166
 msgid "Pages per _side:"
 msgstr "Stránok na _stranu:"
 
-#: ../gtk/gtkprintunixdialog.c:2167
+#: ../gtk/gtkprintunixdialog.c:2182
 msgid "T_wo-sided:"
 msgstr "O_bojstranne:"
 
-#: ../gtk/gtkprintunixdialog.c:2182
+#: ../gtk/gtkprintunixdialog.c:2197
 msgid "_Only print:"
 msgstr "Tlačiť _len:"
 
 #. In enum order
-#: ../gtk/gtkprintunixdialog.c:2197
+#: ../gtk/gtkprintunixdialog.c:2212
 msgid "All sheets"
 msgstr "Všetky stránky"
 
-#: ../gtk/gtkprintunixdialog.c:2198
+#: ../gtk/gtkprintunixdialog.c:2213
 msgid "Even sheets"
 msgstr "Párne stránky"
 
-#: ../gtk/gtkprintunixdialog.c:2199
+#: ../gtk/gtkprintunixdialog.c:2214
 msgid "Odd sheets"
 msgstr "Nepárne stránky"
 
-#: ../gtk/gtkprintunixdialog.c:2202
+#: ../gtk/gtkprintunixdialog.c:2217
 msgid "Sc_ale:"
 msgstr "Z_väčšenie:"
 
-#: ../gtk/gtkprintunixdialog.c:2229
+#: ../gtk/gtkprintunixdialog.c:2244
 msgid "Paper"
 msgstr "Papier"
 
-#: ../gtk/gtkprintunixdialog.c:2233
+#: ../gtk/gtkprintunixdialog.c:2248
 msgid "Paper _type:"
 msgstr "_Typ papiera:"
 
-#: ../gtk/gtkprintunixdialog.c:2248
+#: ../gtk/gtkprintunixdialog.c:2263
 msgid "Paper _source:"
 msgstr "_Zdroj papiera:"
 
-#: ../gtk/gtkprintunixdialog.c:2263
+#: ../gtk/gtkprintunixdialog.c:2278
 msgid "Output t_ray:"
 msgstr "Výstupný _zberač:"
 
-#: ../gtk/gtkprintunixdialog.c:2314
+#: ../gtk/gtkprintunixdialog.c:2329
 msgid "Job Details"
 msgstr "Detaily úlohy"
 
-#: ../gtk/gtkprintunixdialog.c:2320
+#: ../gtk/gtkprintunixdialog.c:2335
 msgid "Pri_ority:"
 msgstr "Pri_orita:"
 
-#: ../gtk/gtkprintunixdialog.c:2335
+#: ../gtk/gtkprintunixdialog.c:2350
 msgid "_Billing info:"
 msgstr "_Zúčtovacie info:"
 
-#: ../gtk/gtkprintunixdialog.c:2353
+#: ../gtk/gtkprintunixdialog.c:2368
 msgid "Print Document"
 msgstr "Tlačiť dokument"
 
-#: ../gtk/gtkprintunixdialog.c:2359
+#: ../gtk/gtkprintunixdialog.c:2374
 msgid "_Now"
 msgstr "_Teraz"
 
-#: ../gtk/gtkprintunixdialog.c:2366
+#: ../gtk/gtkprintunixdialog.c:2381
 msgid "A_t:"
 msgstr "V č_ase:"
 
-#: ../gtk/gtkprintunixdialog.c:2381
+#: ../gtk/gtkprintunixdialog.c:2396
 msgid "On _hold"
 msgstr "Po_zdržané"
 
-#: ../gtk/gtkprintunixdialog.c:2400
+#: ../gtk/gtkprintunixdialog.c:2415
 msgid "Add Cover Page"
 msgstr "Pridať titulnú stránku"
 
-#: ../gtk/gtkprintunixdialog.c:2406
+#: ../gtk/gtkprintunixdialog.c:2421
 msgid "Be_fore:"
 msgstr "P_red:"
 
-#: ../gtk/gtkprintunixdialog.c:2421
+#: ../gtk/gtkprintunixdialog.c:2436
 msgid "_After:"
 msgstr "_Za:"
 
-#: ../gtk/gtkprintunixdialog.c:2436
+#: ../gtk/gtkprintunixdialog.c:2451
 msgid "Job"
 msgstr "Úloha"
 
-#: ../gtk/gtkprintunixdialog.c:2502
+#: ../gtk/gtkprintunixdialog.c:2517
 msgid "Advanced"
 msgstr "Pokročilé"
 
-#: ../gtk/gtkprintunixdialog.c:2537
+#: ../gtk/gtkprintunixdialog.c:2552
 msgid "Image Quality"
 msgstr "Kvalita obrazu"
 
-#: ../gtk/gtkprintunixdialog.c:2540
+#: ../gtk/gtkprintunixdialog.c:2555
 msgid "Color"
 msgstr "Farba"
 
-#: ../gtk/gtkprintunixdialog.c:2543
+#: ../gtk/gtkprintunixdialog.c:2558
 msgid "Finishing"
 msgstr "Konečná úprava"
 
-#: ../gtk/gtkprintunixdialog.c:2553
+#: ../gtk/gtkprintunixdialog.c:2568
 msgid "Some of the settings in the dialog conflict"
 msgstr "Niektoré nastavenia v dialógu si odporujú"
 
-#: ../gtk/gtkprintunixdialog.c:2576
+#: ../gtk/gtkprintunixdialog.c:2591
 msgid "Print"
 msgstr "Tlačiť"
 
@@ -2829,7 +2829,7 @@ msgstr "_O programe"
 
 #: ../gtk/gtkstock.c:298
 msgid "_Apply"
-msgstr "_Použiť"
+msgstr "Po_užiť"
 
 #: ../gtk/gtkstock.c:299
 msgid "_Bold"
@@ -3169,7 +3169,7 @@ msgstr "Vrátiť _späť"
 
 #: ../gtk/gtkstock.c:400
 msgid "_Yes"
-msgstr "_Ano"
+msgstr "Án_o"
 
 #: ../gtk/gtkstock.c:401
 msgid "_Normal Size"
@@ -4398,7 +4398,7 @@ msgstr "Jednostranne"
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:1711
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:1715
 msgid "Auto Select"
-msgstr "Automatický Výber"
+msgstr "Automatický výber"
 
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:1712
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:1713
