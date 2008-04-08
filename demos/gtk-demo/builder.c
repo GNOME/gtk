@@ -8,7 +8,7 @@
 
 static GtkBuilder *builder;
 
-void
+G_MODULE_EXPORT void
 quit_activate (GtkAction *action)
 {
   GtkWidget *window;
@@ -17,7 +17,7 @@ quit_activate (GtkAction *action)
   gtk_widget_destroy (window);
 }
 
-void
+G_MODULE_EXPORT void
 about_activate (GtkAction *action)
 {
   GtkWidget *about_dlg;
