@@ -1,3 +1,8 @@
+2008-04-08  Tor Lillqvist  <tml@novell.com>
+
+	* demos/gtk-demo/builder.c (quit_activate, about_activate): Mark
+	these functions with G_MODULE_EXPORT.
+
 2008-04-08  Tomas Bzatek  <tbzatek@redhat.com> 
 
         * gtk/gtkfilesystem.c: (gtk_file_info_render_icon),

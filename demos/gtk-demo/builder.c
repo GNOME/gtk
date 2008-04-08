@@ -6,12 +6,12 @@
 #include <gtk/gtk.h>
 #include "demo-common.h"
 
-void
+G_MODULE_EXPORT void
 quit_activate (GtkAction *action)
 {
 }
 
-void
+G_MODULE_EXPORT void
 about_activate (GtkAction *action)
 {
   GtkWidget *about_dlg;
