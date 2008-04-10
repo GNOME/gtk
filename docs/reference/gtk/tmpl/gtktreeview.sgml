@@ -58,7 +58,7 @@ GtkTreeViewColumn objects as &lt;child&gt; elements in UI definitions.
       <property name="title">Test</property>
       <child>
         <object class="GtkCellRendererText"/>
-        <attributes>"
+        <attributes>
           <attribute name="text">1</attribute>
         </attributes>
       </child>
