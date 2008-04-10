@@ -1,3 +1,10 @@
+2008-04-10  Carlos Garnacho  <carlos@imendio.com>
+
+	* gtk/gtknotebook.c (hide_drag_window): Do not call
+	gtk_widget_set_parent_window(), using widget->window instead of NULL
+	to unset is the wrong thing, and gtk_widget_unparent() will already 
+	take care of this (#467698, patch by Sébastien Granjoux)
+
 2008-04-08  Tor Lillqvist  <tml@novell.com>
 
 	* demos/gtk-demo/builder.c (quit_activate, about_activate): Mark
