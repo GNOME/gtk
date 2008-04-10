@@ -2729,7 +2729,6 @@ hide_drag_window (GtkNotebook        *notebook,
       else
 	gtk_widget_unparent (page->tab_label);
 
-      gtk_widget_set_parent_window (page->tab_label, widget->window);
       gtk_widget_set_parent (page->tab_label, widget);
       g_object_unref (page->tab_label);
     }
