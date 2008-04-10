@@ -50,7 +50,7 @@ transparent_expose (GtkWidget      *widget,
  *
  * In this case we do not want app-paintable to be set on the widget
  * since we want it to draw its own (red) background. Because of this,
- * however, we must ensure that we use g_signal_register_after so that
+ * however, we must ensure that we use g_signal_connect_after so that
  * this handler is called after the red has been drawn. If it was
  * called before then GTK would just blindly paint over our work.
  *
