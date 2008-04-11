@@ -1,3 +1,11 @@
+2008-04-11  Tristan Van Berkom <tvb@gnome.org>
+
+	* gtk/gtklabel.c: Added <attributes> / <attribute>
+	custom tags to parse pango attributes into labels.
+
+	* tests/buildertest.c: Added tests for GtkLabel custom
+	tag parsing.
+
 2008-04-10  Carlos Garnacho  <carlos@imendio.com>
 
 	* gtk/gtknotebook.c (hide_drag_window): Do not call

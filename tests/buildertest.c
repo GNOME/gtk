@@ -1914,6 +1914,118 @@ test_icon_factory (void)
 
 }
 
+typedef struct {
+  gboolean weight;
+  gboolean foreground;
+  gboolean underline;
+  gboolean size;
+  gboolean font_desc;
+  gboolean language;
+} FoundAttrs;
+
+static gboolean 
+filter_pango_attrs (PangoAttribute *attr, 
+		    gpointer        data)
+{
+  FoundAttrs *found = (FoundAttrs *)data;
+
+  if (attr->klass->type == PANGO_ATTR_WEIGHT)
+    found->weight = TRUE;
+  else if (attr->klass->type == PANGO_ATTR_FOREGROUND)
+    found->foreground = TRUE;
+  else if (attr->klass->type == PANGO_ATTR_UNDERLINE)
+    found->underline = TRUE;
+  /* Make sure optional start/end properties are working */
+  else if (attr->klass->type == PANGO_ATTR_SIZE && 
+	   attr->start_index == 5 &&
+	   attr->end_index   == 10)
+    found->size = TRUE;
+  else if (attr->klass->type == PANGO_ATTR_FONT_DESC)
+    found->font_desc = TRUE;
+  else if (attr->klass->type == PANGO_ATTR_LANGUAGE)
+    found->language = TRUE;
+
+  return TRUE;
+}
+
+static void
+test_pango_attributes (void)
+{
+  GtkBuilder *builder;
+  FoundAttrs found = { 0, };
+  const gchar buffer[] =
+    "<interface>"
+    "  <object class=\"GtkLabel\" id=\"label1\">"
+    "    <attributes>"
+    "      <attribute name=\"weight\" value=\"PANGO_WEIGHT_BOLD\"/>"
+    "      <attribute name=\"foreground\" value=\"DarkSlateGray\"/>"
+    "      <attribute name=\"underline\" value=\"True\"/>"
+    "      <attribute name=\"size\" value=\"4\" start=\"5\" end=\"10\"/>"
+    "      <attribute name=\"font-desc\" value=\"Sans Italic 22\"/>"
+    "      <attribute name=\"language\" value=\"pt_BR\"/>"
+    "    </attributes>"
+    "  </object>"
+    "</interface>";
+  const gchar err_buffer1[] =
+    "<interface>"
+    "  <object class=\"GtkLabel\" id=\"label1\">"
+    "    <attributes>"
+    "      <attribute name=\"weight\"/>"
+    "    </attributes>"
+    "  </object>"
+    "</interface>";
+  const gchar err_buffer2[] =
+    "<interface>"
+    "  <object class=\"GtkLabel\" id=\"label1\">"
+    "    <attributes>"
+    "      <attribute name=\"weight\" value=\"PANGO_WEIGHT_BOLD\" unrecognized=\"True\"/>"
+    "    </attributes>"
+    "  </object>"
+    "</interface>";
+
+  GObject *label;
+  GError  *error = NULL;
+  PangoAttrList *attrs, *filtered;
+  
+  /* Test attributes are set */
+  builder = builder_new_from_string (buffer, -1, NULL);
+  label = gtk_builder_get_object (builder, "label1");
+  g_assert (label != NULL);
+
+  attrs = gtk_label_get_attributes (GTK_LABEL (label));
+  g_assert (attrs != NULL);
+
+  filtered = pango_attr_list_filter (attrs, filter_pango_attrs, &found);
+  g_assert (filtered);
+  pango_attr_list_unref (filtered);
+
+  g_assert (found.weight);
+  g_assert (found.foreground);
+  g_assert (found.underline);
+  g_assert (found.size);
+  g_assert (found.language);
+  g_assert (found.font_desc);
+
+  g_object_unref (builder);
+
+  /* Test errors are set */
+  builder = gtk_builder_new ();
+  gtk_builder_add_from_string (builder, err_buffer1, -1, &error);
+  label = gtk_builder_get_object (builder, "label1");
+  g_assert (error);
+  g_object_unref (builder);
+  g_error_free (error);
+  error = NULL;
+
+  builder = gtk_builder_new ();
+  gtk_builder_add_from_string (builder, err_buffer2, -1, &error);
+  label = gtk_builder_get_object (builder, "label1");
+  g_assert (error);
+  g_object_unref (builder);
+  g_error_free (error);
+
+}
+
 static void 
 test_file (const gchar *filename)
 {
@@ -1996,6 +2108,7 @@ main (int argc, char **argv)
   g_test_add_func ("/Builder/Reference Counting", test_reference_counting);
   g_test_add_func ("/Builder/Window", test_window);
   g_test_add_func ("/Builder/IconFactory", test_icon_factory);
+  g_test_add_func ("/Builder/PangoAttributes", test_pango_attributes);
 
   return g_test_run();
 }

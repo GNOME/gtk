@@ -33,6 +33,7 @@ G_BEGIN_DECLS
 #define GTK_IS_BUILDABLE(obj)         (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GTK_TYPE_BUILDABLE))
 #define GTK_BUILDABLE_GET_IFACE(obj)  (G_TYPE_INSTANCE_GET_INTERFACE ((obj), GTK_TYPE_BUILDABLE, GtkBuildableIface))
 
+
 typedef struct _GtkBuildable      GtkBuildable; /* Dummy typedef */
 typedef struct _GtkBuildableIface GtkBuildableIface;
 
