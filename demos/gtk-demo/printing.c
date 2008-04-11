@@ -68,6 +68,8 @@ draw_page (GtkPrintOperation *operation,
   PangoFontDescription *desc;
   gchar *page_str;
 
+  g_print ("************** Create print context....\n");
+
   cr = gtk_print_context_get_cairo_context (context);
   width = gtk_print_context_get_width (context);
 
