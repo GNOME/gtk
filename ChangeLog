@@ -1,14 +1,3 @@
-2008-04-10  Cody Russell  <bratsche@gnome.org>
-
-	* docs/reference/gdk/tmpl/windows.sgml: Fix to say
-	g_signal_connect_after rather than g_signal_register_after.
-	(reported by Guillaume Cottenceau)
-
-2008-04-10  Cody Russell  <bratsche@gnome.org>
-
-	* docs/reference/gtk/tmpl/gtktreeview.sgml: Fix a typo
-	in the markup. (reported by kraai -at- ftbfs.org)
-
 2008-04-10  Carlos Garnacho  <carlos@imendio.com>
 
 	* gtk/gtknotebook.c (hide_drag_window): Do not call
