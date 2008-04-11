@@ -1518,7 +1518,8 @@ gtk_assistant_set_current_page (GtkAssistant *assistant,
    * initial page is != to 0
    */
   if (GTK_WIDGET_MAPPED (assistant))
-    priv->visited_pages = g_slist_prepend (priv->visited_pages, page);
+    priv->visited_pages = g_slist_prepend (priv->visited_pages,
+					   priv->current_page);
 
   set_current_page (assistant, page);
 }

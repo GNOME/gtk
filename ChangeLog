@@ -1,3 +1,9 @@
+2008-04-11  Carlos Garnacho  <carlos@imendio.com>D:ChangeLog
+
+	* gtk/gtkassistant.c (gtk_assistant_set_current_page): Add current
+	page to visited page list instead of next current page. (#527466,
+	patch by Marcus Brinkmann)
+
 2008-04-11  Tristan Van Berkom <tvb@gnome.org>
 
 	* gtk/gtklabel.c: Added <attributes> / <attribute>
