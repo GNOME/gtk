@@ -401,6 +401,13 @@ gtk_recent_manager_real_changed (GtkRecentManager *manager)
           g_object_get (G_OBJECT (settings), "gtk-recent-files-max-age", &age, NULL);
           if (age > 0)
             gtk_recent_manager_clamp_to_age (manager, age);
+          else if (age == 0)
+            {
+              g_bookmark_file_free (priv->recent_items);
+              priv->recent_items = NULL;
+
+              priv->recent_items = g_bookmark_file_new ();
+            }
         }
 
       write_error = NULL;

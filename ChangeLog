@@ -1,5 +1,12 @@
 2008-04-15  Emmanuele Bassi  <ebassi@gnome.org>
 
+	* gtk/gtkrecentmanager.c:
+	(gtk_recent_manager_real_changed): Fix last commit, and
+	complete the gtk-recent-files-max-age semantics: if the
+	property is set to 0 then purge the list.
+
+2008-04-15  Emmanuele Bassi  <ebassi@gnome.org>
+
 	Bug 488507 – boundless growth of .recently-used.xbel file
 	slows down applications
 
