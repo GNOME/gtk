@@ -49,21 +49,11 @@
 /* the file where we store the recently used items */
 #define GTK_RECENTLY_USED_FILE	".recently-used.xbel"
 
-/* a poll approximately every five seconds */
-#define POLL_DELTA      5
-
 /* return all items by default */
 #define DEFAULT_LIMIT	-1
 
 /* keep in sync with xdgmime */
 #define GTK_RECENT_DEFAULT_MIME	"application/octet-stream"
-
-typedef struct
-{
-  GSourceFunc func;
-  gpointer data;
-  GDestroyNotify notify;
-} ThreadsDispatch;
 
 typedef struct
 {
@@ -100,21 +90,20 @@ struct _GtkRecentInfo
   gint ref_count;
 };
 
+#define GTK_RECENT_MANAGER_GET_PRIVATE(obj)     (G_TYPE_INSTANCE_GET_PRIVATE ((obj), GTK_TYPE_RECENT_MANAGER, GtkRecentManagerPrivate))
+
 struct _GtkRecentManagerPrivate
 {
   gchar *filename;
 
   guint is_dirty : 1;
-  guint write_in_progress : 1;
-  guint read_in_progress : 1;
   
   gint limit;
   gint size;
 
   GBookmarkFile *recent_items;
-  
-  time_t last_mtime;
-  guint poll_timeout;
+
+  GFileMonitor *monitor;
 };
 
 enum
@@ -126,36 +115,38 @@ enum
   PROP_SIZE
 };
 
-static void           gtk_recent_manager_dispose      (GObject               *object);
-static void           gtk_recent_manager_finalize     (GObject               *object);
+static void     gtk_recent_manager_dispose                (GObject           *object);
+static void     gtk_recent_manager_finalize               (GObject           *object);
+static void     gtk_recent_manager_set_property           (GObject           *object,
+						           guint              prop_id,
+						           const GValue      *value,
+						           GParamSpec        *pspec);
+static void     gtk_recent_manager_get_property           (GObject           *object,
+						           guint              prop_id,
+						           GValue            *value,
+						           GParamSpec        *pspec);
+static void     gtk_recent_manager_add_item_query_info_cb (GObject           *source_object,
+                                                           GAsyncResult      *res,
+                                                           gpointer           user_data);
+static void     gtk_recent_manager_monitor_changed        (GFileMonitor      *monitor,
+                                                           GFile             *file,
+                                                           GFile             *other_file,
+                                                           GFileMonitorEvent  event_type,
+                                                           gpointer           user_data);
+static void     gtk_recent_manager_changed                (GtkRecentManager  *manager);
+static void     gtk_recent_manager_real_changed           (GtkRecentManager  *manager);
+static void     gtk_recent_manager_set_filename           (GtkRecentManager  *manager,
+                                                           const gchar       *filename);
 
-static void           gtk_recent_manager_set_property (GObject               *object,
-						       guint                  prop_id,
-						       const GValue          *value,
-						       GParamSpec            *pspec);
-static void           gtk_recent_manager_get_property (GObject               *object,
-						       guint                  prop_id,
-						       GValue                *value,
-						       GParamSpec            *pspec);
-static void gtk_recent_manager_add_item_query_info_cb (GObject              *source_object,
-                                                       GAsyncResult         *res,
-                                                       gpointer             user_data);
-static void           gtk_recent_manager_changed      (GtkRecentManager      *manager);
+static void build_recent_items_list (GtkRecentManager  *manager);
+static void purge_recent_items_list (GtkRecentManager  *manager,
+                                     GError           **error);
 
-static void           gtk_recent_manager_real_changed (GtkRecentManager      *manager);
-static gboolean       gtk_recent_manager_poll_timeout (gpointer               data);
-static void           gtk_recent_manager_set_filename (GtkRecentManager      *manager,
-						       const gchar           *filename);
+static RecentAppInfo *recent_app_info_new  (const gchar   *app_name);
+static void           recent_app_info_free (RecentAppInfo *app_info);
 
-static void           build_recent_items_list         (GtkRecentManager      *manager);
-static void           purge_recent_items_list         (GtkRecentManager      *manager,
-						       GError               **error);
-
-static RecentAppInfo *recent_app_info_new             (const gchar           *app_name);
-static void           recent_app_info_free            (RecentAppInfo         *app_info);
-
-static GtkRecentInfo *gtk_recent_info_new             (const gchar           *uri);
-static void           gtk_recent_info_free            (GtkRecentInfo         *recent_info);
+static GtkRecentInfo *gtk_recent_info_new  (const gchar   *uri);
+static void           gtk_recent_info_free (GtkRecentInfo *recent_info);
 
 static guint signal_changed = 0;
 
@@ -201,39 +192,10 @@ gtk_recent_manager_error_quark (void)
   return g_quark_from_static_string ("gtk-recent-manager-error-quark");
 }
 
-static gboolean
-threads_dispatch (gpointer data)
-{
-  ThreadsDispatch *dispatch = data;
-  gboolean res = FALSE;
-
-  GDK_THREADS_ENTER ();
-
-  if (!g_source_is_destroyed (g_main_current_source ()))
-    res = dispatch->func (dispatch->data);
-
-  GDK_THREADS_LEAVE ();
-
-  return res;
-}
-
-static void
-threads_free (gpointer data)
-{
-  ThreadsDispatch *dispatch = data;
-
-  if (dispatch->notify)
-    dispatch->notify (dispatch->data);
-
-  g_slice_free (ThreadsDispatch, dispatch);
-}
-
 static void
 gtk_recent_manager_class_init (GtkRecentManagerClass *klass)
 {
   GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
-  
-  gtk_recent_manager_parent_class = g_type_class_peek_parent (klass);
   
   gobject_class->set_property = gtk_recent_manager_set_property;
   gobject_class->get_property = gtk_recent_manager_get_property;
@@ -254,7 +216,7 @@ gtk_recent_manager_class_init (GtkRecentManagerClass *klass)
 					   		P_("Filename"),
 							P_("The full path to the file to be used to store and read the list"),
 							NULL,
-							(G_PARAM_CONSTRUCT_ONLY | G_PARAM_READABLE | G_PARAM_WRITABLE)));
+							(G_PARAM_CONSTRUCT_ONLY | G_PARAM_READWRITE)));
   /**
    * GtkRecentManager:limit
    *
@@ -316,34 +278,19 @@ static void
 gtk_recent_manager_init (GtkRecentManager *manager)
 {
   GtkRecentManagerPrivate *priv;
-  ThreadsDispatch *dispatch;
-  
-  priv = g_type_instance_get_private ((GTypeInstance *) manager,
-  				      GTK_TYPE_RECENT_MANAGER);
-  manager->priv = priv;
+  gchar *filename;
+
+  manager->priv = priv = GTK_RECENT_MANAGER_GET_PRIVATE (manager);
   
   priv->limit = DEFAULT_LIMIT;
   priv->size = 0;
-  
-  priv->is_dirty = FALSE;
-  priv->write_in_progress = FALSE;
-  priv->read_in_progress = FALSE;
 
-  priv->filename = g_build_filename (g_get_home_dir (),
-				     GTK_RECENTLY_USED_FILE,
-				     NULL);
-  
-  dispatch = g_slice_new (ThreadsDispatch);
-  dispatch->func = gtk_recent_manager_poll_timeout;
-  dispatch->data = manager;
-  dispatch->notify = NULL;
-  priv->poll_timeout = g_timeout_add_seconds_full (G_PRIORITY_DEFAULT + 30,
-                                                   POLL_DELTA,
-                                                   threads_dispatch,
-                                                   dispatch,
-                                                   threads_free);
-
-  build_recent_items_list (manager);
+  /* this will take care of building the files list */
+  filename = g_build_filename (g_get_home_dir (),
+                               GTK_RECENTLY_USED_FILE,
+                               NULL);
+  gtk_recent_manager_set_filename (manager, filename);
+  g_free (filename);
 }
 
 static void
@@ -399,10 +346,13 @@ gtk_recent_manager_dispose (GObject *object)
   GtkRecentManager *manager = GTK_RECENT_MANAGER (object);
   GtkRecentManagerPrivate *priv = manager->priv;
 
-  if (priv->poll_timeout)
+  if (priv->monitor)
     {
-      g_source_remove (priv->poll_timeout);
-      priv->poll_timeout = 0;
+      g_signal_handlers_disconnect_by_func (priv->monitor,
+                                            G_CALLBACK (gtk_recent_manager_monitor_changed),
+                                            manager);
+      g_object_unref (priv->monitor);
+      priv->monitor = NULL;
     }
 
   G_OBJECT_CLASS (gtk_recent_manager_parent_class)->dispose (object);
@@ -432,14 +382,11 @@ gtk_recent_manager_real_changed (GtkRecentManager *manager)
   if (priv->is_dirty)
     {
       GError *write_error;
-      struct stat stat_buf;
       
       /* we are marked as dirty, so we dump the content of our
        * recently used items list
        */
       g_assert (priv->filename != NULL);
-
-      priv->write_in_progress = TRUE;
 
       /* if no container object has been defined, we create a new
        * empty container, and dump it
@@ -461,26 +408,6 @@ gtk_recent_manager_real_changed (GtkRecentManager *manager)
 	  g_error_free (write_error);
 	}
 
-      priv->write_in_progress = FALSE;
-	  
-      /* we have sync'ed our list with the storage file, so we
-       * update the file mtime in order to skip the timed check
-       * and spare us from a re-read.
-       */
-      if (g_stat (priv->filename, &stat_buf) < 0)
-	{
-          filename_warning ("Unable to stat() the recently used resources file "
-			    "at `%s': %s.",
-			    priv->filename,
-			    g_strerror (errno));
-
-	  g_object_thaw_notify (G_OBJECT (manager));
-
-	  return;
-	}
-      
-      priv->last_mtime = stat_buf.st_mtime;
-      
       /* mark us as clean */
       priv->is_dirty = FALSE;
     }
@@ -496,44 +423,28 @@ gtk_recent_manager_real_changed (GtkRecentManager *manager)
   g_object_thaw_notify (G_OBJECT (manager));
 }
 
-/* timed poll()-ing of the recently used resources file.
- * an event-based system would be more efficient.
- */
-static gboolean
-gtk_recent_manager_poll_timeout (gpointer data)
+static void
+gtk_recent_manager_monitor_changed (GFileMonitor      *monitor,
+                                    GFile             *file,
+                                    GFile             *other_file,
+                                    GFileMonitorEvent  event_type,
+                                    gpointer           user_data)
 {
-  GtkRecentManager *manager = GTK_RECENT_MANAGER (data);
-  GtkRecentManagerPrivate *priv = manager->priv;
-  struct stat stat_buf;
-  int stat_res;
+  GtkRecentManager *manager = user_data;
 
-  /* wait for the next timeout if we have a read/write in progress */
-  if (priv->write_in_progress || priv->read_in_progress)
-    return TRUE;
-
-  stat_res = g_stat (priv->filename, &stat_buf);
-  if (stat_res < 0)
+  switch (event_type)
     {
-      /* the file does not exist, yet, so we wait */
-      if (errno == ENOENT)
-        return TRUE;
-      
-      filename_warning ("Unable to stat() the recently used resources file "
-			"at `%s': %s.",
-			priv->filename,
-			g_strerror (errno));
-      
-      return TRUE;
+    case G_FILE_MONITOR_EVENT_CHANGED:
+    case G_FILE_MONITOR_EVENT_CREATED:
+      gtk_recent_manager_changed (manager);
+      break;
+
+    case G_FILE_MONITOR_EVENT_DELETED:
+      break;
+
+    default:
+      break;
     }
-
-  /* the file didn't change from the last poll, so we bail out */
-  if (stat_buf.st_mtime == priv->last_mtime)
-    return TRUE;
-
-  /* the file has been changed, hence we emit the "changed" signal */
-  gtk_recent_manager_changed (manager);
-
-  return TRUE;
 }
 
 static void
@@ -541,37 +452,48 @@ gtk_recent_manager_set_filename (GtkRecentManager *manager,
 				 const gchar      *filename)
 {
   GtkRecentManagerPrivate *priv;
-  ThreadsDispatch *dispatch;
+  GFile *file;
+  GError *error;
   
   g_assert (GTK_IS_RECENT_MANAGER (manager));
+
   priv = manager->priv;
   
+  g_free (priv->filename);
+
+  if (priv->monitor)
+    {
+      g_signal_handlers_disconnect_by_func (priv->monitor,
+                                            G_CALLBACK (gtk_recent_manager_monitor_changed),
+                                            manager);
+      g_object_unref (priv->monitor);
+      priv->monitor = NULL;
+    }
+
   if (!filename || filename[0] == '\0')
     return;
   
-  g_free (manager->priv->filename);
-
-  if (manager->priv->poll_timeout)
-    {
-      g_source_remove (manager->priv->poll_timeout);
-      manager->priv->poll_timeout = 0;
-    }
-
   priv->filename = g_strdup (filename);
+  file = g_file_new_for_path (priv->filename);
 
-  dispatch = g_slice_new (ThreadsDispatch);
-  dispatch->func = gtk_recent_manager_poll_timeout;
-  dispatch->data = manager;
-  dispatch->notify = NULL;
-  priv->poll_timeout = g_timeout_add_seconds_full (G_PRIORITY_DEFAULT + 30,
-                                                   POLL_DELTA,
-                                                   threads_dispatch,
-                                                   dispatch,
-                                                   threads_free);
+  error = NULL;
+  priv->monitor = g_file_monitor_file (file, G_FILE_MONITOR_NONE, NULL, &error);
+  if (error)
+    {
+      filename_warning ("Unable to monitor `%s': %s\n"
+                        "The GtkRecentManager will not update its contents "
+                        "if the file is changed from other instances",
+                        priv->filename,
+                        error->message);
+      g_error_free (error);
+    }
+  else
+    g_signal_connect (priv->monitor, "changed",
+                      G_CALLBACK (gtk_recent_manager_monitor_changed),
+                      manager);
 
-  /* mark us clean, so that we can re-read the list
-   * of recently used resources
-   */
+  g_object_unref (file);
+
   priv->is_dirty = FALSE;
   build_recent_items_list (manager);
 }
@@ -584,14 +506,10 @@ gtk_recent_manager_set_filename (GtkRecentManager *manager,
 static void
 build_recent_items_list (GtkRecentManager *manager)
 {
-  GtkRecentManagerPrivate *priv;
-  struct stat stat_buf;
-  int stat_res;
-  gboolean res;
+  GtkRecentManagerPrivate *priv = manager->priv;
   GError *read_error;
   gint size;
 
-  priv = manager->priv;
   g_assert (priv->filename != NULL);
   
   if (!priv->recent_items)
@@ -600,60 +518,41 @@ build_recent_items_list (GtkRecentManager *manager)
       priv->size = 0;
     }
 
-  stat_res = g_stat (priv->filename, &stat_buf);
-  if (stat_res < 0)
-    {
-      /* the file doesn't exists, so we bail out and wait for the first
-       * write operation
-       */
-
-      if (errno == ENOENT)
-        return;
-      else
-        {
-          filename_warning ("Attempting to read the recently used resources file "
-			    "at `%s', but an error occurred: %s. Aborting.",
-			    priv->filename,
-			    g_strerror (errno));
-
-          return;
-        }
-    }
-
-  /* record the last mtime, for later use */
-  priv->last_mtime = stat_buf.st_mtime;
-  
-  priv->read_in_progress = TRUE;
-
   /* the file exists, and it's valid (we hope); if not, destroy the container
    * object and hope for a better result when the next "changed" signal is
    * fired. */
   read_error = NULL;
-  res = g_bookmark_file_load_from_file (priv->recent_items,
-		  			priv->filename,
-					&read_error);
+  g_bookmark_file_load_from_file (priv->recent_items, priv->filename, &read_error);
   if (read_error)
     {
-      filename_warning ("Attempting to read the recently used resources file "
-			"at `%s', but the parser failed: %s.",
-			priv->filename,
-			read_error->message);
+      /* if the file does not exist we just wait for the first write
+       * operation on this recent manager instance, to avoid creating
+       * empty files and leading to spurious file system events (Sabayon
+       * will not be happy about those)
+       */
+      if (read_error->domain == G_FILE_ERROR &&
+          read_error->code != G_FILE_ERROR_NOENT)
+        filename_warning ("Attempting to read the recently used resources "
+                          "file at `%s', but the parser failed: %s.",
+                          priv->filename,
+                          read_error->message);
 
       g_bookmark_file_free (priv->recent_items);
       priv->recent_items = NULL;
 
       g_error_free (read_error);
     }
-
-  size = g_bookmark_file_get_size (priv->recent_items);
-  if (priv->size != size)
+  else
     {
-      priv->size = size;
-      
-      g_object_notify (G_OBJECT (manager), "size");
+      size = g_bookmark_file_get_size (priv->recent_items);
+      if (priv->size != size)
+        {
+          priv->size = size;
+
+          g_object_notify (G_OBJECT (manager), "size");
+        }
     }
 
-  priv->read_in_progress = FALSE;
   priv->is_dirty = FALSE;
 }
 

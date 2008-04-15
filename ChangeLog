@@ -1,5 +1,17 @@
 2008-04-15  Emmanuele Bassi  <ebassi@gnome.org>
 
+	Bug 487375 – gtkrecent apps poll ~/.recently-used.xbel
+	every 5 seconds
+
+	* gtk/gtkrecentmanager.c: Use GFileMonitor to check for
+	changes in the recently used resources storage file, and
+	drop the timeout-based poll.
+
+	* ChangeLog: Fix attribution of the patch of the previous
+	commit.
+
+2008-04-15  Emmanuele Bassi  <ebassi@gnome.org>
+
 	Bug 506062 – gtk_recent_manager_add_item does not detect mime
 	type on Windows
 
@@ -7,8 +19,9 @@
 
 	* gtk/gtkrecentmanager.c:
 	(gtk_recent_manager_add_item_query_info_cb),
-	(gtk_recent_manager_add_item): Use GIO to (asynchronously) query
-	the MIME type of the passed URI.
+	(gtk_recent_manager_add_item): Use GIO to (asynchronously)
+	query the MIME type of the passed URI (based on a patch by
+	Armin Burgmeier)
 
 2008-04-11  Carlos Garnacho  <carlos@imendio.com>D:ChangeLog
 
