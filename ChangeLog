@@ -1,5 +1,23 @@
 2008-04-15  Emmanuele Bassi  <ebassi@gnome.org>
 
+	Bug 488507 – boundless growth of .recently-used.xbel file
+	slows down applications
+
+	* gtk/gtkrecentmanager.c:
+	(gtk_recent_manager_init),
+	(gtk_recent_manager_real_changed),
+	(gtk_recent_manager_set_filename),
+	(gtk_recent_manager_clamp_to_age): Clamp the recently
+	used resources list by the age of its items, using
+	the newly added GtkSettings property.
+
+	* gtk/gtksettings.c (gtk_settings_class_init): Add the
+	gtk-recent-files-max-age property, controlling the
+	maximum age of the items in the recently used resources
+	list.
+
+2008-04-15  Emmanuele Bassi  <ebassi@gnome.org>
+
 	* gtk/gtkrecentmanager.c:
 	(gtk_recent_manager_add_item_query_info),
 	(gtk_recent_manager_add_item): Emit the ::changed signal

@@ -107,7 +107,8 @@ enum {
   PROP_ENABLE_MNEMONICS,
   PROP_ENABLE_ACCELS,
   PROP_RECENT_FILES_LIMIT,
-  PROP_IM_MODULE
+  PROP_IM_MODULE,
+  PROP_RECENT_FILES_MAX_AGE
 };
 
 
@@ -820,6 +821,26 @@ gtk_settings_class_init (GtkSettingsClass *class)
 								  GTK_PARAM_READWRITE),
 					     NULL);
   g_assert (result == PROP_IM_MODULE);
+
+  /**
+   * GtkSettings:gtk-recent-files-max-age:
+   *
+   * The maximum age, in days, of the items inside the recently used
+   * resources list. Items older than this setting will be excised
+   * from the list. If set to 0, the list will always be empty; if
+   * set to -1, no item will be removed.
+   *
+   * Since: 2.14
+   */
+  result = settings_install_property_parser (class,
+					     g_param_spec_int ("gtk-recent-files-max-age",
+ 							       P_("Recent Files Max Age"),
+ 							       P_("Maximum age of recently used files, in days"),
+ 							       -1, G_MAXINT,
+							       30,
+ 							       GTK_PARAM_READWRITE),
+					     NULL);
+  g_assert (result == PROP_RECENT_FILES_MAX_AGE);
 }
 
 static void

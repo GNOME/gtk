@@ -137,6 +137,9 @@ static void     gtk_recent_manager_changed             (GtkRecentManager  *manag
 static void     gtk_recent_manager_real_changed        (GtkRecentManager  *manager);
 static void     gtk_recent_manager_set_filename        (GtkRecentManager  *manager,
                                                         const gchar       *filename);
+static void     gtk_recent_manager_clamp_to_age        (GtkRecentManager  *manager,
+                                                        gint               age);
+
 
 static void build_recent_items_list (GtkRecentManager  *manager);
 static void purge_recent_items_list (GtkRecentManager  *manager,
@@ -278,19 +281,13 @@ static void
 gtk_recent_manager_init (GtkRecentManager *manager)
 {
   GtkRecentManagerPrivate *priv;
-  gchar *filename;
 
   manager->priv = priv = GTK_RECENT_MANAGER_GET_PRIVATE (manager);
   
   priv->limit = DEFAULT_LIMIT;
   priv->size = 0;
 
-  /* this will take care of building the files list */
-  filename = g_build_filename (g_get_home_dir (),
-                               GTK_RECENTLY_USED_FILE,
-                               NULL);
-  gtk_recent_manager_set_filename (manager, filename);
-  g_free (filename);
+  priv->filename = NULL;
 }
 
 static void
@@ -388,14 +385,23 @@ gtk_recent_manager_real_changed (GtkRecentManager *manager)
        */
       g_assert (priv->filename != NULL);
 
-      /* if no container object has been defined, we create a new
-       * empty container, and dump it
-       */
       if (!priv->recent_items)
         {
+          /* if no container object has been defined, we create a new
+           * empty container, and dump it
+           */
           priv->recent_items = g_bookmark_file_new ();
 	  priv->size = 0;
 	}
+      else
+        {
+          GtkSettings *settings = gtk_settings_get_default ();
+          gint age = 30;
+
+          g_object_get (G_OBJECT (settings), "gtk-recent-files-max-age", &age, NULL);
+          if (age > 0)
+            gtk_recent_manager_clamp_to_age (manager, age);
+        }
 
       write_error = NULL;
       g_bookmark_file_to_file (priv->recent_items, priv->filename, &write_error);
@@ -458,22 +464,43 @@ gtk_recent_manager_set_filename (GtkRecentManager *manager,
   g_assert (GTK_IS_RECENT_MANAGER (manager));
 
   priv = manager->priv;
-  
-  g_free (priv->filename);
 
-  if (priv->monitor)
+  /* if a filename is already set and filename is not NULL, then copy
+   * it and reset the monitor; otherwise, if it's NULL we're being
+   * called from the finalization sequence, so we simply disconnect the
+   * monitoring and return.
+   *
+   * if no filename is set and filename is NULL, use the default.
+   */
+  if (priv->filename)
     {
-      g_signal_handlers_disconnect_by_func (priv->monitor,
-                                            G_CALLBACK (gtk_recent_manager_monitor_changed),
-                                            manager);
-      g_object_unref (priv->monitor);
-      priv->monitor = NULL;
+      g_free (priv->filename);
+
+      if (priv->monitor)
+        {
+          g_signal_handlers_disconnect_by_func (priv->monitor,
+                                                G_CALLBACK (gtk_recent_manager_monitor_changed),
+                                                manager);
+          g_object_unref (priv->monitor);
+          priv->monitor = NULL;
+        }
+
+      if (!filename || *filename == '\0')
+        return;
+      else
+        priv->filename = g_strdup (filename);
+    }
+  else
+    {
+      if (!filename || *filename == '\0')
+        priv->filename = g_build_filename (g_get_user_data_dir (),
+                                           GTK_RECENTLY_USED_FILE,
+                                           NULL);
+      else
+        priv->filename = g_strdup (filename);
     }
 
-  if (!filename || filename[0] == '\0')
-    return;
-  
-  priv->filename = g_strdup (filename);
+  g_assert (priv->filename != NULL);
   file = g_file_new_for_path (priv->filename);
 
   error = NULL;
@@ -1310,6 +1337,34 @@ static void
 gtk_recent_manager_changed (GtkRecentManager *recent_manager)
 {
   g_signal_emit (recent_manager, signal_changed, 0);
+}
+
+static void
+gtk_recent_manager_clamp_to_age (GtkRecentManager *manager,
+                                 gint              age)
+{
+  GtkRecentManagerPrivate *priv = manager->priv;
+  gchar **uris;
+  gsize n_uris, i;
+  time_t now;
+
+  if (G_UNLIKELY (!priv->recent_items))
+    return;
+
+  now = time (NULL);
+
+  uris = g_bookmark_file_get_uris (priv->recent_items, &n_uris);
+  for (i = 0; i < n_uris; i++)
+    {
+      const gchar *uri = uris[i];
+      time_t modified;
+      gint item_age;
+
+      modified = g_bookmark_file_get_modified (priv->recent_items, uri, NULL);
+      item_age = (gint) ((now - modified) / (60 * 60 * 24));
+      if (item_age > age)
+        g_bookmark_file_remove_item (priv->recent_items, uri, NULL);
+    }
 }
 
 /*****************
