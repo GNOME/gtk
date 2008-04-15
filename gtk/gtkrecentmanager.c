@@ -115,28 +115,28 @@ enum
   PROP_SIZE
 };
 
-static void     gtk_recent_manager_dispose                (GObject           *object);
-static void     gtk_recent_manager_finalize               (GObject           *object);
-static void     gtk_recent_manager_set_property           (GObject           *object,
-						           guint              prop_id,
-						           const GValue      *value,
-						           GParamSpec        *pspec);
-static void     gtk_recent_manager_get_property           (GObject           *object,
-						           guint              prop_id,
-						           GValue            *value,
-						           GParamSpec        *pspec);
-static void     gtk_recent_manager_add_item_query_info_cb (GObject           *source_object,
-                                                           GAsyncResult      *res,
-                                                           gpointer           user_data);
-static void     gtk_recent_manager_monitor_changed        (GFileMonitor      *monitor,
-                                                           GFile             *file,
-                                                           GFile             *other_file,
-                                                           GFileMonitorEvent  event_type,
-                                                           gpointer           user_data);
-static void     gtk_recent_manager_changed                (GtkRecentManager  *manager);
-static void     gtk_recent_manager_real_changed           (GtkRecentManager  *manager);
-static void     gtk_recent_manager_set_filename           (GtkRecentManager  *manager,
-                                                           const gchar       *filename);
+static void     gtk_recent_manager_dispose             (GObject           *object);
+static void     gtk_recent_manager_finalize            (GObject           *object);
+static void     gtk_recent_manager_set_property        (GObject           *object,
+						        guint              prop_id,
+						        const GValue      *value,
+						        GParamSpec        *pspec);
+static void     gtk_recent_manager_get_property        (GObject           *object,
+						        guint              prop_id,
+						        GValue            *value,
+						        GParamSpec        *pspec);
+static void     gtk_recent_manager_add_item_query_info (GObject           *source_object,
+                                                        GAsyncResult      *res,
+                                                        gpointer           user_data);
+static void     gtk_recent_manager_monitor_changed     (GFileMonitor      *monitor,
+                                                        GFile             *file,
+                                                        GFile             *other_file,
+                                                        GFileMonitorEvent  event_type,
+                                                        gpointer           user_data);
+static void     gtk_recent_manager_changed             (GtkRecentManager  *manager);
+static void     gtk_recent_manager_real_changed        (GtkRecentManager  *manager);
+static void     gtk_recent_manager_set_filename        (GtkRecentManager  *manager,
+                                                        const gchar       *filename);
 
 static void build_recent_items_list (GtkRecentManager  *manager);
 static void purge_recent_items_list (GtkRecentManager  *manager,
@@ -701,9 +701,9 @@ gtk_recent_manager_get_limit (GtkRecentManager *manager)
 }
 
 static void
-gtk_recent_manager_add_item_query_info_cb (GObject      *source_object,
-                                           GAsyncResult *res,
-                                           gpointer      user_data)
+gtk_recent_manager_add_item_query_info (GObject      *source_object,
+                                        GAsyncResult *res,
+                                        gpointer      user_data)
 {
   GFile *file = G_FILE (source_object);
   GtkRecentManager *manager = user_data;
@@ -744,6 +744,9 @@ gtk_recent_manager_add_item_query_info_cb (GObject      *source_object,
   /* Ignore return value, this can't fail anyway since all required
    * fields are set */
   gtk_recent_manager_add_full (manager, uri, &recent_data);
+
+  manager->priv->is_dirty = TRUE;
+  gtk_recent_manager_changed (manager);
 
   g_free (recent_data.mime_type);
   g_free (recent_data.app_name);
@@ -790,7 +793,7 @@ gtk_recent_manager_add_item (GtkRecentManager  *manager,
                            G_PRIORITY_DEFAULT,
                            G_FILE_QUERY_INFO_NONE,
                            NULL,
-                           gtk_recent_manager_add_item_query_info_cb,
+                           gtk_recent_manager_add_item_query_info,
                            g_object_ref (manager));
 
   g_object_unref (file);

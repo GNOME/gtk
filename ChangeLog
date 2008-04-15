@@ -1,5 +1,12 @@
 2008-04-15  Emmanuele Bassi  <ebassi@gnome.org>
 
+	* gtk/gtkrecentmanager.c:
+	(gtk_recent_manager_add_item_query_info),
+	(gtk_recent_manager_add_item): Emit the ::changed signal
+	at the end of the asynchronous MIME type query.
+
+2008-04-15  Emmanuele Bassi  <ebassi@gnome.org>
+
 	Bug 487375 – gtkrecent apps poll ~/.recently-used.xbel
 	every 5 seconds
 
