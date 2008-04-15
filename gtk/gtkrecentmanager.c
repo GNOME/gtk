@@ -30,6 +30,7 @@
 #include <stdlib.h>
 #include <glib.h>
 #include <glib/gstdio.h>
+#include <gio/gio.h>
 
 #include "gtkrecentmanager.h"
 #include "gtkintl.h"
@@ -136,6 +137,9 @@ static void           gtk_recent_manager_get_property (GObject               *ob
 						       guint                  prop_id,
 						       GValue                *value,
 						       GParamSpec            *pspec);
+static void gtk_recent_manager_add_item_query_info_cb (GObject              *source_object,
+                                                       GAsyncResult         *res,
+                                                       gpointer             user_data);
 static void           gtk_recent_manager_changed      (GtkRecentManager      *manager);
 
 static void           gtk_recent_manager_real_changed (GtkRecentManager      *manager);
@@ -797,6 +801,60 @@ gtk_recent_manager_get_limit (GtkRecentManager *manager)
   return priv->limit;
 }
 
+static void
+gtk_recent_manager_add_item_query_info_cb (GObject      *source_object,
+                                           GAsyncResult *res,
+                                           gpointer      user_data)
+{
+  GFile *file = G_FILE (source_object);
+  GtkRecentManager *manager = user_data;
+  GtkRecentData recent_data;
+  GFileInfo *file_info;
+  gchar *uri;
+  GError *error;
+
+  uri = g_file_get_uri (file);
+
+  error = NULL;
+  file_info = g_file_query_info_finish (file, res, &error);
+  if (error)
+    {
+      g_warning ("Unable to retrieve the file info for `%s': %s",
+                 uri,
+                 error->message);
+      g_error_free (error);
+      goto out;
+    }
+
+  recent_data.display_name = NULL;
+  recent_data.description = NULL;
+
+  if (file_info)
+    {
+      recent_data.mime_type = g_content_type_get_mime_type (g_file_info_get_content_type (file_info));
+      g_object_unref (file_info);
+    }
+  else
+    recent_data.mime_type = g_strdup (GTK_RECENT_DEFAULT_MIME);
+
+  recent_data.app_name = g_strdup (g_get_application_name ());
+  recent_data.app_exec = g_strjoin (" ", g_get_prgname (), "%u", NULL);
+  recent_data.groups = NULL;
+  recent_data.is_private = FALSE;
+
+  /* Ignore return value, this can't fail anyway since all required
+   * fields are set */
+  gtk_recent_manager_add_full (manager, uri, &recent_data);
+
+  g_free (recent_data.mime_type);
+  g_free (recent_data.app_name);
+  g_free (recent_data.app_exec);
+
+out:
+  g_object_unref (manager);
+  g_free (uri);
+}
+
 /**
  * gtk_recent_manager_add_item:
  * @manager: a #GtkRecentManager
@@ -808,7 +866,7 @@ gtk_recent_manager_get_limit (GtkRecentManager *manager)
  * This function automatically retrieves some of the needed
  * metadata and setting other metadata to common default values; it
  * then feeds the data to gtk_recent_manager_add_full().
- *
+ * 
  * See gtk_recent_manager_add_full() if you want to explicitly
  * define the metadata for the resource pointed by @uri.
  *
@@ -821,51 +879,24 @@ gboolean
 gtk_recent_manager_add_item (GtkRecentManager  *manager,
 			     const gchar       *uri)
 {
-  GtkRecentData recent_data;
-  gboolean retval;
+  GFile* file;
   
   g_return_val_if_fail (GTK_IS_RECENT_MANAGER (manager), FALSE);
   g_return_val_if_fail (uri != NULL, FALSE);
 
-  recent_data.display_name = NULL;
-  recent_data.description = NULL;
-  recent_data.mime_type = NULL;
+  file = g_file_new_for_uri (uri);
 
-#ifdef G_OS_UNIX
-  if (has_case_prefix (uri, "file:/"))
-    {
-      gchar *filename;
-      const gchar *mime_type;
-      
-      filename = g_filename_from_uri (uri, NULL, NULL);
-      if (filename)
-        {
-          mime_type = xdg_mime_get_mime_type_for_file (filename, NULL);
-          if (mime_type)
-            recent_data.mime_type = g_strdup (mime_type);
-      
-          g_free (filename);
-        }
+  g_file_query_info_async (file,
+                           G_FILE_ATTRIBUTE_STANDARD_FAST_CONTENT_TYPE,
+                           G_PRIORITY_DEFAULT,
+                           G_FILE_QUERY_INFO_NONE,
+                           NULL,
+                           gtk_recent_manager_add_item_query_info_cb,
+                           g_object_ref (manager));
 
-      if (!recent_data.mime_type)
-        recent_data.mime_type = g_strdup (GTK_RECENT_DEFAULT_MIME);
-    }
-  else
-#endif
-    recent_data.mime_type = g_strdup (GTK_RECENT_DEFAULT_MIME);
-  
-  recent_data.app_name = g_strdup (g_get_application_name ());
-  recent_data.app_exec = g_strjoin (" ", g_get_prgname (), "%u", NULL);
-  recent_data.groups = NULL;
-  recent_data.is_private = FALSE;
-  
-  retval = gtk_recent_manager_add_full (manager, uri, &recent_data);
-  
-  g_free (recent_data.mime_type);
-  g_free (recent_data.app_name);
-  g_free (recent_data.app_exec);
+  g_object_unref (file);
 
-  return retval;
+  return TRUE;
 }
 
 /**
