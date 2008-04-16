@@ -203,6 +203,7 @@ gets parsed by the custom tag handler of the object.
 These XML fragments are explained in the documentation of the
 respective objects, see 
 <link linkend="GtkWidget-BUILDER-UI">GtkWidget</link>,
+<link linkend="GtkLabel-BUILDER-UI">GtkLabel</link>,
 <link linkend="GtkContainer-BUILDER-UI">GtkContainer</link>,
 <link linkend="GtkDialog-BUILDER-UI">GtkDialog</link>,
 <link linkend="GtkCellLayout-BUILDER-UI">GtkCellLayout</link>,

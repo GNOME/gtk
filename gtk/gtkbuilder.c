@@ -1460,8 +1460,16 @@ _gtk_builder_get_absolute_filename (GtkBuilder *builder, const gchar *string)
     return g_strdup (string);
 
   if (builder->priv->filename &&
-      strcmp (builder->priv->filename, ".") != 0)
-    dirname = g_path_get_dirname (builder->priv->filename);
+      strcmp (builder->priv->filename, ".") != 0) 
+    {
+      dirname = g_path_get_dirname (builder->priv->filename);
+
+      if (strcmp (dirname, ".") == 0)
+	{
+	  g_free (dirname);
+	  dirname = g_get_current_dir ();
+	}
+    }
   else
     dirname = g_get_current_dir ();
     

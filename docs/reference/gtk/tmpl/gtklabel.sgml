@@ -11,6 +11,27 @@ implies, most labels are used to label another widget such as a
 #GtkButton, a #GtkMenuItem, or a #GtkOptionMenu.
 </para>
 
+<refsect2 id="GtkLabel-BUILDER-UI">
+<title>GtkLabel as GtkBuildable</title>
+<para>
+The GtkLabel implementation of the GtkBuildable interface supports a 
+custom &lt;attributes&gt; element, which supports any number of &lt;attribute&gt;
+elements. the &lt;attribute&gt; element has attributes named name, value,
+start and end and allows you to specify #PangoAttributs for this label.
+</para>
+<example>
+<title>A UI definition fragment specifying pango attributes</title>
+<programlisting><![CDATA[
+<object class="GtkLabel">
+  <attributes>
+    <attribute name=\"weight\" value=\"PANGO_WEIGHT_BOLD\"/>
+  </attributes>
+</object>
+]]></programlisting>
+</example>
+</refsect2>
+
+
 <refsect2>
 <title>Mnemonics</title>
 

@@ -1162,6 +1162,8 @@ gtk_window_buildable_parser_finished (GtkBuildable *buildable,
 
   if (priv->builder_visible)
     gtk_widget_show (GTK_WIDGET (buildable));
+
+    parent_buildable_iface->parser_finished (buildable, builder);
 }
 
 /**
