@@ -144,8 +144,6 @@ gtk_tooltips_destroy (GtkObject *object)
   GtkTooltips *tooltips = GTK_TOOLTIPS (object);
   GtkTooltipsPrivate *private = GTK_TOOLTIPS_GET_PRIVATE (tooltips);
 
-  g_return_if_fail (tooltips != NULL);
-
   if (tooltips->tip_window)
     {
       gtk_widget_destroy (tooltips->tip_window);
