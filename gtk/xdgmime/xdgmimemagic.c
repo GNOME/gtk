@@ -656,21 +656,24 @@ const char *
 _xdg_mime_magic_lookup_data (XdgMimeMagic *mime_magic,
 			     const void   *data,
 			     size_t        len,
+			     int           *result_prio,
                              const char   *mime_types[],
                              int           n_mime_types)
 {
   XdgMimeMagicMatch *match;
   const char *mime_type;
   int n;
+  int prio;
 
+  prio = 0;
   mime_type = NULL;
   for (match = mime_magic->match_list; match; match = match->next)
     {
       if (_xdg_mime_magic_match_compare_to_data (match, data, len))
 	{
-	  if ((mime_type == NULL) || (_xdg_mime_mime_type_subclass (match->mime_type, mime_type))) {
-	    mime_type = match->mime_type;
-	  }
+	  prio = match->priority;
+	  mime_type = match->mime_type;
+	  break;
 	}
       else 
 	{
@@ -691,6 +694,9 @@ _xdg_mime_magic_lookup_data (XdgMimeMagic *mime_magic,
 	    mime_type = mime_types[n];
 	}
     }
+  
+  if (result_prio)
+    *result_prio = prio;
 
   return mime_type;
 }

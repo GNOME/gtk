@@ -50,6 +50,7 @@ int           _xdg_mime_magic_get_buffer_extents (XdgMimeMagic *mime_magic);
 const char   *_xdg_mime_magic_lookup_data        (XdgMimeMagic *mime_magic,
 						  const void   *data,
 						  size_t        len,
+						  int          *result_prio,
 						  const char   *mime_types[],
 						  int           n_mime_types);
 
