@@ -1,5 +1,10 @@
 2008-04-17  Michael Natterer  <mitch@imendio.com>
 
+	* gtk/gtkiconfactory.c (get_default_icons): register the
+	GTK_STOCK_PAGE_SETUP icon.
+
+2008-04-17  Michael Natterer  <mitch@imendio.com>
+
 	* gtk/gtktooltips.c (gtk_tooltips_destroy): no need to
 	g_return_if_fail(tooltips != NULL);
 

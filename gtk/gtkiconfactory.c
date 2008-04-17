@@ -448,6 +448,7 @@ get_default_icons (GtkIconFactory *factory)
   register_stock_icon (factory, GTK_STOCK_ORIENTATION_LANDSCAPE);
   register_stock_icon (factory, GTK_STOCK_ORIENTATION_REVERSE_PORTRAIT);
   register_stock_icon (factory, GTK_STOCK_ORIENTATION_REVERSE_LANDSCAPE);
+  register_stock_icon (factory, GTK_STOCK_PAGE_SETUP);
   register_stock_icon (factory, GTK_STOCK_PASTE);
   register_stock_icon (factory, GTK_STOCK_PREFERENCES);
   register_stock_icon (factory, GTK_STOCK_PRINT);
