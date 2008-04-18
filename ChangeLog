@@ -1,5 +1,10 @@
 2008-04-18  Michael Natterer  <mitch@imendio.com>
 
+	* gtk/gtkenums.h: move a few '{' to their own lines so all enums
+	here have the same style.
+
+2008-04-18  Michael Natterer  <mitch@imendio.com>
+
 	* gtk/gtkicontheme.h
 	* gtk/gtkrecentmanager.h: include <gdk/gdk.h> instead of
 	<gdk/gdkscreen.h>.
