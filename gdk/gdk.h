@@ -21,7 +21,7 @@
  * Modified by the GTK+ Team and others 1997-2000.  See the AUTHORS
  * file for a list of people on the GTK+ Team.  See the ChangeLog
  * files for a list of changes.  These files are distributed with
- * GTK+ at ftp://ftp.gtk.org/pub/gtk/. 
+ * GTK+ at ftp://ftp.gtk.org/pub/gtk/.
  */
 
 #ifndef __GDK_H__
@@ -32,6 +32,7 @@
 #include <gdk/gdkcolor.h>
 #include <gdk/gdkcursor.h>
 #include <gdk/gdkdisplay.h>
+#include <gdk/gdkdisplaymanager.h>
 #include <gdk/gdkdnd.h>
 #include <gdk/gdkdrawable.h>
 #include <gdk/gdkenumtypes.h>
@@ -41,7 +42,6 @@
 #include <gdk/gdkimage.h>
 #include <gdk/gdkinput.h>
 #include <gdk/gdkkeys.h>
-#include <gdk/gdkdisplaymanager.h>
 #include <gdk/gdkpango.h>
 #include <gdk/gdkpixbuf.h>
 #include <gdk/gdkpixmap.h>

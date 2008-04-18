@@ -1,5 +1,9 @@
 2008-04-18  Michael Natterer  <mitch@imendio.com>
 
+	* gdk/gdk.h: reorder one include so they are all alphabetical.
+
+2008-04-18  Michael Natterer  <mitch@imendio.com>
+
 	* modules/printbackends/cups/gtkprintercups.[ch]
 	(gtk_printer_cups_get_ppd_name): change return value and local
 	variable to const gchar* to fix warning about discarding const
