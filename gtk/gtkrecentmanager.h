@@ -22,8 +22,8 @@
 #define __GTK_RECENT_MANAGER_H__
 
 #include <glib-object.h>
-#include <gdk/gdkscreen.h>
 #include <gdk-pixbuf/gdk-pixbuf.h>
+#include <gdk/gdk.h>
 #include <time.h>
 
 G_BEGIN_DECLS

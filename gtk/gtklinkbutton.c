@@ -26,10 +26,6 @@
 
 #include <string.h>
 
-#include <gdk/gdkcolor.h>
-#include <gdk/gdkcursor.h>
-#include <gdk/gdkdisplay.h>
-
 #include "gtkclipboard.h"
 #include "gtkdnd.h"
 #include "gtkimagemenuitem.h"
@@ -58,7 +54,7 @@ struct _GtkLinkButtonPrivate
 enum
 {
   PROP_0,
-  
+
   PROP_URI
 };
 

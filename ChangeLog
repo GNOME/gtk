@@ -1,5 +1,19 @@
 2008-04-18  Michael Natterer  <mitch@imendio.com>
 
+	* gtk/gtkicontheme.h
+	* gtk/gtkrecentmanager.h: include <gdk/gdk.h> instead of
+	<gdk/gdkscreen.h>.
+
+	* gtk/gtkbuilderparser.c
+	* gtk/gtklinkbutton.c
+	* gtk/gtkpreview.c
+	* gtk/gtkrecentchooserdefault.c
+	* gtk/gtkrecentchoosermenu.c
+	* modules/input/gtkimcontextthai.c: remove inclusion of single
+	files from gdk, none of the includes was actually needed.
+
+2008-04-18  Michael Natterer  <mitch@imendio.com>
+
 	* gdk/gdk.h: reorder one include so they are all alphabetical.
 
 2008-04-18  Michael Natterer  <mitch@imendio.com>

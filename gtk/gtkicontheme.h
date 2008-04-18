@@ -22,7 +22,7 @@
 
 #include <glib-object.h>
 #include <gdk-pixbuf/gdk-pixbuf.h>
-#include <gdk/gdkscreen.h>
+#include <gdk/gdk.h>
 
 G_BEGIN_DECLS
 

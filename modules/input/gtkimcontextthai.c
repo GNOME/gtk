@@ -22,7 +22,6 @@
 #include <string.h>
 
 #include <gdk/gdkkeysyms.h>
-#include <gdk/gdkkeys.h>
 #include "gtkimcontextthai.h"
 #include "thai-charprop.h"
 

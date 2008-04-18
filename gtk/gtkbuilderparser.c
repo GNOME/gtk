@@ -23,8 +23,6 @@
 #include <string.h>
 #include <gmodule.h>
 
-#include <gdk/gdkenumtypes.h>
-#include <gdk/gdkkeys.h>
 #include "gtktypeutils.h"
 #include "gtkbuilderprivate.h"
 #include "gtkbuilder.h"

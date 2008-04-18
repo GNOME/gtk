@@ -35,7 +35,6 @@
 #ifdef HAVE_SYS_PARAM_H
 #include <sys/param.h>
 #endif
-#include "gdk/gdkrgb.h"
 #include "gtkpreview.h"
 #include "gtkprivate.h"
 #include "gtkintl.h"

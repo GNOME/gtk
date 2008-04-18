@@ -22,8 +22,6 @@
 
 #include <string.h>
 
-#include <gdk/gdkscreen.h>
-
 #include "gtkrecentmanager.h"
 #include "gtkrecentfilter.h"
 #include "gtkrecentchooser.h"

@@ -29,8 +29,6 @@
 #include <unistd.h>
 #endif
 
-#include <gdk/gdkscreen.h>
-
 #include "gtkstock.h"
 #include "gtkicontheme.h"
 #include "gtkiconfactory.h"
