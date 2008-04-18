@@ -500,7 +500,7 @@ gtk_recent_manager_set_filename (GtkRecentManager *manager,
   else
     {
       if (!filename || *filename == '\0')
-        priv->filename = g_build_filename (g_get_user_data_dir (),
+        priv->filename = g_build_filename (g_get_home_dir (),
                                            GTK_RECENTLY_USED_FILE,
                                            NULL);
       else
