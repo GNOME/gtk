@@ -16,10 +16,10 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330,
  * Boston, MA 02111-1307, USA.
  */
+
 #ifndef __GTK_PRINTER_CUPS_H__
 #define __GTK_PRINTER_CUPS_H__
 
-#include <glib.h>
 #include <glib-object.h>
 #include <cups/cups.h>
 #include <cups/ppd.h>
@@ -65,7 +65,7 @@ void                     gtk_printer_cups_register_type (GTypeModule     *module
 GtkPrinterCups          *gtk_printer_cups_new           (const char      *name,
 							 GtkPrintBackend *backend);
 ppd_file_t 		*gtk_printer_cups_get_ppd       (GtkPrinterCups  *printer);
-char			*gtk_printer_cups_get_ppd_name  (GtkPrinterCups  *printer);
+const gchar		*gtk_printer_cups_get_ppd_name  (GtkPrinterCups  *printer);
 
 G_END_DECLS
 

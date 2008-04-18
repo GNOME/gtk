@@ -127,10 +127,10 @@ gtk_printer_cups_get_ppd (GtkPrinterCups *printer)
   return printer->ppd_file;
 }
 
-char *
+const gchar *
 gtk_printer_cups_get_ppd_name (GtkPrinterCups  *printer)
 {
-  gchar *result;
+  const gchar *result;
 
   result = printer->ppd_name;
 
@@ -139,4 +139,3 @@ gtk_printer_cups_get_ppd_name (GtkPrinterCups  *printer)
 
   return result;
 }
-
