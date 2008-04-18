@@ -1,3 +1,8 @@
+2008-04-18  Michael Natterer  <mitch@imendio.com>
+
+	* gtk/gtkrecentmanager.c (gtk_recent_manager_clamp_to_age):
+	g_strfreev() the uris returned by g_bookmark_file_get_uris().
+
 2008-04-17  Michael Natterer  <mitch@imendio.com>
 
 	* gtk/gtkiconfactory.c (get_default_icons): register the

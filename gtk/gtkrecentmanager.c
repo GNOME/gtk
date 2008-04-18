@@ -1361,6 +1361,7 @@ gtk_recent_manager_clamp_to_age (GtkRecentManager *manager,
   now = time (NULL);
 
   uris = g_bookmark_file_get_uris (priv->recent_items, &n_uris);
+
   for (i = 0; i < n_uris; i++)
     {
       const gchar *uri = uris[i];
@@ -1372,6 +1373,8 @@ gtk_recent_manager_clamp_to_age (GtkRecentManager *manager,
       if (item_age > age)
         g_bookmark_file_remove_item (priv->recent_items, uri, NULL);
     }
+
+  g_strfreev (uris);
 }
 
 /*****************
