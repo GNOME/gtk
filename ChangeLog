@@ -1,3 +1,12 @@
+2008-04-20  Hans Breuer  <hans@breuer.org>
+
+	* demos/gtk-demo/printing.c gtk/gtkprintoperation-win32.c
+	  tests/simple.c : reverted unintentional commit from revision 19994
+
+	* gdk/makefile.msc : define WTKIT if not done before
+
+	* gtk/gtkfilechooserdefault.c : #include <locale.h> for LC_ALL
+
 2008-04-11  Carlos Garnacho  <carlos@imendio.com>
 
 	* gtk/gtkassistant.c (gtk_assistant_set_current_page): Add current

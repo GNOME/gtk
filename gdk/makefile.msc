@@ -11,7 +11,9 @@ TOP = ..\..
 
 # Location of the Wintab toolkit. Downloadable from http://www.pointing.com.
 # definition should possibly go to build/win32/module.def, too.
-WTKIT = ..\..\wtkit126
+!IFNDEF WTKIT
+WTKIT = $(TOP)\wtkit126
+!ENDIF
 
 ###############################################################
 

@@ -84,7 +84,7 @@
 #include <time.h>
 #include <sys/stat.h>
 #include <sys/types.h>
-
+#include <locale.h> /* LC_ALL */
 
 #ifdef HAVE_UNISTD_H
 #include <unistd.h>
