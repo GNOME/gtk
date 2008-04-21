@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+2.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-02-21 12:23-0500\n"
+"POT-Creation-Date: 2008-04-21 23:10+0300\n"
 "PO-Revision-Date: 2007-02-26 02:54+0200\n"
 "Last-Translator: Antono Vasiljev <antono.vasiljev@gmail.com>\n"
 "Language-Team: Eo-tradukado <http://eo-tradukado.tuxfamily.org>\n"
@@ -73,7 +73,7 @@ msgstr "Gdk malcimaj flagoj por marki"
 #. Placeholder in --gdk-no-debug=FLAGS in --help output
 #. Placeholder in --gtk-debug=FLAGS in --help output
 #. Placeholder in --gtk-no-debug=FLAGS in --help output
-#: gdk/gdk.c:140 gdk/gdk.c:143 gtk/gtkmain.c:434 gtk/gtkmain.c:437
+#: gdk/gdk.c:140 gdk/gdk.c:143 gtk/gtkmain.c:435 gtk/gtkmain.c:438
 msgid "FLAGS"
 msgstr "FLAGOJ"
 
@@ -230,19 +230,19 @@ msgstr "KP_Forigu"
 msgid "keyboard label|Delete"
 msgstr "Forigu"
 
-#: gdk-pixbuf/gdk-pixbuf-animation.c:133 gdk-pixbuf/gdk-pixbuf-io.c:858
-#: gdk-pixbuf/gdk-pixbuf-io.c:1114 tests/testfilechooser.c:218
+#: gdk-pixbuf/gdk-pixbuf-animation.c:133 gdk-pixbuf/gdk-pixbuf-io.c:894
+#: gdk-pixbuf/gdk-pixbuf-io.c:1150 tests/testfilechooser.c:218
 #, c-format
 msgid "Failed to open file '%s': %s"
 msgstr "Malsukcesis malfermi la dosieron \"%s\": %s"
 
-#: gdk-pixbuf/gdk-pixbuf-animation.c:146 gdk-pixbuf/gdk-pixbuf-io.c:870
+#: gdk-pixbuf/gdk-pixbuf-animation.c:146 gdk-pixbuf/gdk-pixbuf-io.c:906
 #, c-format
 msgid "Image file '%s' contains no data"
 msgstr "Bilda dosiero \"%s\" enhavas neniun datumon"
 
-#: gdk-pixbuf/gdk-pixbuf-animation.c:188 gdk-pixbuf/gdk-pixbuf-io.c:907
-#: gdk-pixbuf/gdk-pixbuf-io.c:1166 tests/testfilechooser.c:263
+#: gdk-pixbuf/gdk-pixbuf-animation.c:188 gdk-pixbuf/gdk-pixbuf-io.c:943
+#: gdk-pixbuf/gdk-pixbuf-io.c:1202 tests/testfilechooser.c:263
 #, c-format
 msgid ""
 "Failed to load image '%s': reason not known, probably a corrupt image file"
@@ -258,12 +258,12 @@ msgstr ""
 "Malsukcesis ŝargi animacion \"%s\": kialo nekonata, eble korupta animacia "
 "dosiero"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:538
+#: gdk-pixbuf/gdk-pixbuf-io.c:554
 #, c-format
 msgid "Unable to load image-loading module: %s: %s"
 msgstr "Ne eblas ŝargi la modulon por bildoŝargo: %s: %s"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:553
+#: gdk-pixbuf/gdk-pixbuf-io.c:569
 #, c-format
 msgid ""
 "Image-loading module %s does not export the proper interface; perhaps it's "
@@ -272,58 +272,58 @@ msgstr ""
 "Bildoŝarga modulo %s ne eksportas la taŭgan interfacon; eble ĝi apartenas al "
 "alia versio de GTK?"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:670 gdk-pixbuf/gdk-pixbuf-io.c:699
+#: gdk-pixbuf/gdk-pixbuf-io.c:706 gdk-pixbuf/gdk-pixbuf-io.c:735
 #, c-format
 msgid "Image type '%s' is not supported"
 msgstr "Bildotipo \"%s\" ne estas subtenata"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:739
+#: gdk-pixbuf/gdk-pixbuf-io.c:775
 #, c-format
 msgid "Couldn't recognize the image file format for file '%s'"
 msgstr "Ne povis rekoni la bildan dosierformaton por dosiero \"%s\""
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:747
+#: gdk-pixbuf/gdk-pixbuf-io.c:783
 #, c-format
 msgid "Unrecognized image file format"
 msgstr "Nerekonata bilda dosierformato"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:916
+#: gdk-pixbuf/gdk-pixbuf-io.c:952
 #, c-format
 msgid "Failed to load image '%s': %s"
 msgstr "Malsukcesis ŝargi la bildon \"%s\": %s"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:1545
+#: gdk-pixbuf/gdk-pixbuf-io.c:1583
 #, c-format
 msgid "Error writing to image file: %s"
 msgstr "Eraro dum skribado de la bilda dosiero: %s"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:1591 gdk-pixbuf/gdk-pixbuf-io.c:1722
+#: gdk-pixbuf/gdk-pixbuf-io.c:1629 gdk-pixbuf/gdk-pixbuf-io.c:1760
 #, c-format
 msgid "This build of gdk-pixbuf does not support saving the image format: %s"
 msgstr ""
 "Ĉi tiu konstruo de gdk-pixbuf ne subtenas konservadon de la bildformato: %s"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:1625
+#: gdk-pixbuf/gdk-pixbuf-io.c:1663
 #, c-format
 msgid "Insufficient memory to save image to callback"
 msgstr "Nesufiĉa memoro por konservi bildon al revokato"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:1638
+#: gdk-pixbuf/gdk-pixbuf-io.c:1676
 #, c-format
 msgid "Failed to open temporary file"
 msgstr "Malsukcesis malfermi dumtempan dosieron"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:1664
+#: gdk-pixbuf/gdk-pixbuf-io.c:1702
 #, c-format
 msgid "Failed to read from temporary file"
 msgstr "Malsukcesis legi dumtempan dosieron"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:1899
+#: gdk-pixbuf/gdk-pixbuf-io.c:1937
 #, c-format
 msgid "Failed to open '%s' for writing: %s"
 msgstr "Malsukcesis malfermi \"%s\" por skribado: %s"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:1924
+#: gdk-pixbuf/gdk-pixbuf-io.c:1962
 #, c-format
 msgid ""
 "Failed to close '%s' while writing image, all data may not have been saved: %"
@@ -332,12 +332,12 @@ msgstr ""
 "Malsukcesis fermi \"%s\" dum skribado de bildo, eble ne ĉiuj datumoj estis "
 "konservitaj: %s"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:2144 gdk-pixbuf/gdk-pixbuf-io.c:2195
+#: gdk-pixbuf/gdk-pixbuf-io.c:2182 gdk-pixbuf/gdk-pixbuf-io.c:2233
 #, c-format
 msgid "Insufficient memory to save image into a buffer"
 msgstr "Nesufiĉa memoro por konservi bildon en bufron"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:2241
+#: gdk-pixbuf/gdk-pixbuf-io.c:2279
 #, fuzzy, c-format
 msgid "Error writing to image stream"
 msgstr "Eraro dum skribado de la bilda dosiero: %s"
@@ -409,38 +409,43 @@ msgstr "Misformita bloko en animacio"
 msgid "The ANI image format"
 msgstr "La ANI-bildformato"
 
-#: gdk-pixbuf/io-bmp.c:230 gdk-pixbuf/io-bmp.c:327 gdk-pixbuf/io-bmp.c:359
-#: gdk-pixbuf/io-bmp.c:382 gdk-pixbuf/io-bmp.c:485
+#: gdk-pixbuf/io-bmp.c:230 gdk-pixbuf/io-bmp.c:267 gdk-pixbuf/io-bmp.c:338
+#: gdk-pixbuf/io-bmp.c:370 gdk-pixbuf/io-bmp.c:393 gdk-pixbuf/io-bmp.c:496
 #, c-format
 msgid "BMP image has bogus header data"
 msgstr "BMP-bildo havas falsajn kapdatumojn"
 
-#: gdk-pixbuf/io-bmp.c:241 gdk-pixbuf/io-bmp.c:422
+#: gdk-pixbuf/io-bmp.c:241 gdk-pixbuf/io-bmp.c:433
 #, c-format
 msgid "Not enough memory to load bitmap image"
 msgstr "Ne sufiĉa memoro por ŝargi rastruman bildon"
 
-#: gdk-pixbuf/io-bmp.c:308
+#: gdk-pixbuf/io-bmp.c:319
 #, c-format
 msgid "BMP image has unsupported header size"
 msgstr "BMP-bildo havas nesubtenatan kapgrandon"
 
-#: gdk-pixbuf/io-bmp.c:346
+#: gdk-pixbuf/io-bmp.c:357
 #, c-format
 msgid "Topdown BMP images cannot be compressed"
 msgstr "Supremalsuprenaj BMP-bildoj ne kunpremeblas"
 
-#: gdk-pixbuf/io-bmp.c:1306
+#: gdk-pixbuf/io-bmp.c:717 gdk-pixbuf/io-pnm.c:709
+#, c-format
+msgid "Premature end-of-file encountered"
+msgstr "Renkontis tro fruan dosierfinon"
+
+#: gdk-pixbuf/io-bmp.c:1329
 #, c-format
 msgid "Couldn't allocate memory for saving BMP file"
 msgstr "Ne povis krei memoron por konservi BMP-dosieron"
 
-#: gdk-pixbuf/io-bmp.c:1347
+#: gdk-pixbuf/io-bmp.c:1370
 #, c-format
 msgid "Couldn't write to BMP file"
 msgstr "Ne eblis skribi en BMP-dosiero"
 
-#: gdk-pixbuf/io-bmp.c:1402
+#: gdk-pixbuf/io-bmp.c:1425
 msgid "The BMP image format"
 msgstr "La bilda formato BMP"
 
@@ -877,11 +882,6 @@ msgstr "Kruda PNM-bildtipo estas nevalida"
 msgid "PNM image loader does not support this PNM subformat"
 msgstr "PNM-bildŝargilo ne subtenas ĉi tiun PNM-subformaton"
 
-#: gdk-pixbuf/io-pnm.c:709
-#, c-format
-msgid "Premature end-of-file encountered"
-msgstr "Renkontis tro fruan dosierfinon"
-
 #: gdk-pixbuf/io-pnm.c:741 gdk-pixbuf/io-pnm.c:968
 #, c-format
 msgid "Raw PNM formats require exactly one whitespace before sample data"
@@ -1189,6 +1189,23 @@ msgstr "KOLOROJ"
 msgid "Make X calls synchronous"
 msgstr "Faru X-vokojn sinkrone"
 
+#: gdk/x11/gdkapplaunchcontext-x11.c:303
+#, fuzzy, c-format
+msgid "Starting %s"
+msgstr "Printas %d"
+
+#: gdk/x11/gdkapplaunchcontext-x11.c:305
+#, fuzzy, c-format
+msgid "Opening %s"
+msgstr "Melfermu \"%s\""
+
+#: gdk/x11/gdkapplaunchcontext-x11.c:308
+#, c-format
+msgid "Opening %d Item"
+msgid_plural "Opening %d Items"
+msgstr[0] ""
+msgstr[1] ""
+
 #: gtk/gtkaboutdialog.c:264 gtk/gtkaboutdialog.c:2106
 msgid "License"
 msgstr "Licenco"
@@ -1305,17 +1322,17 @@ msgstr "Spaceto"
 msgid "keyboard label|Backslash"
 msgstr "Deklivo"
 
-#: gtk/gtkbuilderparser.c:265
+#: gtk/gtkbuilderparser.c:267
 #, fuzzy, c-format
 msgid "Invalid type function: `%s'"
 msgstr "Nevalida Dosiernomo: %s"
 
-#: gtk/gtkbuilderparser.c:715
+#: gtk/gtkbuilderparser.c:722
 #, fuzzy, c-format
 msgid "Invalid root element: '%s'"
 msgstr "Nevalida Dosiernomo: %s"
 
-#: gtk/gtkbuilderparser.c:747
+#: gtk/gtkbuilderparser.c:754
 #, c-format
 msgid "Unhandled tag: '%s'"
 msgstr ""
@@ -1422,11 +1439,11 @@ msgstr "Nova rapidigilo..."
 msgid "progress bar label|%d %%"
 msgstr "%d %%"
 
-#: gtk/gtkcolorbutton.c:189 gtk/gtkcolorbutton.c:560
+#: gtk/gtkcolorbutton.c:188 gtk/gtkcolorbutton.c:559
 msgid "Pick a Color"
 msgstr "Elektu koloron"
 
-#: gtk/gtkcolorbutton.c:449
+#: gtk/gtkcolorbutton.c:448
 msgid "Received invalid color data\n"
 msgstr "Ricevis nevalidajn kolordatumojn\n"
 
@@ -1779,90 +1796,112 @@ msgstr "Fulmoklavo %s jam ekzistas"
 msgid "Shortcut %s does not exist"
 msgstr "Fulmoklavo %s ne ekzistas"
 
-#: gtk/gtkfilechooserdefault.c:8088
+#: gtk/gtkfilechooserdefault.c:8088 gtk/gtkprintunixdialog.c:354
 #, c-format
 msgid "A file named \"%s\" already exists.  Do you want to replace it?"
 msgstr "Dosiero nomita \"%s\" jam ekzistas. Ĉu vi volas anstataŭigi ĝin?"
 
-#: gtk/gtkfilechooserdefault.c:8091
+#: gtk/gtkfilechooserdefault.c:8091 gtk/gtkprintunixdialog.c:358
 #, c-format
 msgid ""
 "The file already exists in \"%s\".  Replacing it will overwrite its contents."
 msgstr ""
 "La dosiero jam ekzistas en \"%s\". Anstataŭigi ĝin ŝanĝos ĝian enhavon."
 
-#: gtk/gtkfilechooserdefault.c:8096
+#: gtk/gtkfilechooserdefault.c:8096 gtk/gtkprintunixdialog.c:365
 msgid "_Replace"
 msgstr "Anstataŭigi"
 
-#: gtk/gtkfilechooserdefault.c:8894
+#: gtk/gtkfilechooserdefault.c:8899
 #, fuzzy
 msgid "Could not start the search process"
 msgstr "Ne povis esti konservita la ceteron"
 
-#: gtk/gtkfilechooserdefault.c:8895
+#: gtk/gtkfilechooserdefault.c:8900
 msgid ""
 "The program was not able to create a connection to the indexer daemon.  "
 "Please make sure it is running."
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:8909
+#: gtk/gtkfilechooserdefault.c:8914
 #, fuzzy
 msgid "Could not send the search request"
 msgstr "Ne povis esti konservita la ceteron"
 
 #. Label
-#: gtk/gtkfilechooserdefault.c:9337
+#: gtk/gtkfilechooserdefault.c:9342
 msgid "_Search:"
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:10290
+#: gtk/gtkfilechooserdefault.c:10295
 #, c-format
 msgid "Could not mount %s"
 msgstr "Ne povis surmeti de %s"
 
-#: gtk/gtkfilechooserdefault.c:10895
+#: gtk/gtkfilechooserdefault.c:10900
 msgid "Type name of new folder"
 msgstr "Entajpu nomon de nova dosierujo"
 
-#: gtk/gtkfilechooserdefault.c:10943
+#: gtk/gtkfilechooserdefault.c:10948
 #, c-format
 msgid "%d byte"
 msgid_plural "%d bytes"
 msgstr[0] "%d bajto"
 msgstr[1] "%d bajtoj"
 
-#: gtk/gtkfilechooserdefault.c:10945
+#: gtk/gtkfilechooserdefault.c:10950
 #, c-format
 msgid "%.1f KB"
 msgstr "%.1f KB"
 
-#: gtk/gtkfilechooserdefault.c:10947
+#: gtk/gtkfilechooserdefault.c:10952
 #, c-format
 msgid "%.1f MB"
 msgstr "%.1f MB"
 
-#: gtk/gtkfilechooserdefault.c:10949
+#: gtk/gtkfilechooserdefault.c:10954
 #, c-format
 msgid "%.1f GB"
 msgstr "%.1f GB"
 
-#: gtk/gtkfilechooserdefault.c:11050 gtk/gtkfilechooserdefault.c:11072
-#: gtk/gtkfilechooserdefault.c:11143
+#: gtk/gtkfilechooserdefault.c:11055 gtk/gtkfilechooserdefault.c:11077
+#: gtk/gtkfilechooserdefault.c:11148
 msgid "Unknown"
 msgstr "Nekonata"
 
-#: gtk/gtkfilechooserdefault.c:11090
-msgid "Today at %H:%M"
+#: gtk/gtkfilechooserdefault.c:11095
+msgid "%H:%M"
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:11092
+#: gtk/gtkfilechooserdefault.c:11097
 #, fuzzy
 msgid "Yesterday at %H:%M"
 msgstr "Hieraŭ"
 
+#: gtk/gtkfilechooserentry.c:650 gtk/gtkfilechooserentry.c:1095
+#, fuzzy
+msgid "Invalid path"
+msgstr "Nevalida URI"
+
+#: gtk/gtkfilechooserentry.c:1057
+msgid "No match"
+msgstr ""
+
+#: gtk/gtkfilechooserentry.c:1065
+#, fuzzy
+msgid "Sole completion"
+msgstr "Elekto de koloro"
+
+#: gtk/gtkfilechooserentry.c:1077
+msgid "Complete, but not unique"
+msgstr ""
+
+#: gtk/gtkfilechooserentry.c:1110
+msgid "Completing..."
+msgstr ""
+
 #: gtk/gtkfilechoosersettings.c:262 gtk/gtkfilesel.c:1348
-#: gtk/gtkfilesel.c:1357 gtk/gtkfilesystemunix.c:1047
+#: gtk/gtkfilesel.c:1357 gtk/gtkfilesystemunix.c:1048
 #: gtk/gtkfilesystemwin32.c:1227
 #, c-format
 msgid "Error creating folder '%s': %s"
@@ -2013,23 +2052,23 @@ msgstr "Ne povis ricevi la radikan dosierujon"
 msgid "(Empty)"
 msgstr "(Malplena)"
 
-#: gtk/gtkfilesystemunix.c:960 gtk/gtkfilesystemunix.c:1208
-#: gtk/gtkfilesystemunix.c:2196 gtk/gtkfilesystemunix.c:2236
+#: gtk/gtkfilesystemunix.c:961 gtk/gtkfilesystemunix.c:1209
+#: gtk/gtkfilesystemunix.c:2198 gtk/gtkfilesystemunix.c:2238
 #: gtk/gtkfilesystemwin32.c:2305 gtk/gtkfilesystemwin32.c:2355
 #, c-format
 msgid "Error getting information for '%s': %s"
 msgstr "Eraro dum akiro de informoj pri \"%s\": %s"
 
-#: gtk/gtkfilesystemunix.c:1153 gtk/gtkfilesystemwin32.c:1334
+#: gtk/gtkfilesystemunix.c:1154 gtk/gtkfilesystemwin32.c:1334
 #, c-format
 msgid "This file system does not support mounting"
 msgstr "Ĉi tiu dosiersistemo ne subtenas surmetadon"
 
-#: gtk/gtkfilesystemunix.c:1165
+#: gtk/gtkfilesystemunix.c:1166
 msgid "File System"
 msgstr "Dosiersistemo"
 
-#: gtk/gtkfilesystemunix.c:1329 gtk/gtkfilesystemwin32.c:1644
+#: gtk/gtkfilesystemunix.c:1330 gtk/gtkfilesystemwin32.c:1644
 #, c-format
 msgid ""
 "The name \"%s\" is not valid because it contains the character \"%s\". "
@@ -2038,17 +2077,17 @@ msgstr ""
 "La nomo \"%s\" ne estas valida ĉar ĝi kontenas la signon \"%s\". Bonvolu uzu "
 "alian nomon."
 
-#: gtk/gtkfilesystemunix.c:1878 gtk/gtkfilesystemwin32.c:1985
+#: gtk/gtkfilesystemunix.c:1880 gtk/gtkfilesystemwin32.c:1985
 #, c-format
 msgid "Bookmark saving failed: %s"
 msgstr "Malsukcesa konservado de Legosigno: %s"
 
-#: gtk/gtkfilesystemunix.c:1933 gtk/gtkfilesystemwin32.c:2040
+#: gtk/gtkfilesystemunix.c:1935 gtk/gtkfilesystemwin32.c:2040
 #, c-format
 msgid "'%s' already exists in the bookmarks list"
 msgstr "\"%s\" jam ekzistas en legosigna listo"
 
-#: gtk/gtkfilesystemunix.c:2005 gtk/gtkfilesystemwin32.c:2112
+#: gtk/gtkfilesystemunix.c:2007 gtk/gtkfilesystemwin32.c:2112
 #, c-format
 msgid "'%s' does not exist in the bookmarks list"
 msgstr "\"%s\" ne ekzistas en legosigna listo"
@@ -2068,16 +2107,16 @@ msgstr "Reta diskingo (%s)"
 msgid "%s (%s)"
 msgstr "%s (%s)"
 
-#: gtk/gtkfontbutton.c:145 gtk/gtkfontbutton.c:267
+#: gtk/gtkfontbutton.c:144 gtk/gtkfontbutton.c:266
 msgid "Pick a Font"
 msgstr "Elektu tiparon"
 
 #. Initialize fields
-#: gtk/gtkfontbutton.c:261
+#: gtk/gtkfontbutton.c:260
 msgid "Sans 12"
 msgstr "Sans 12"
 
-#: gtk/gtkfontbutton.c:781
+#: gtk/gtkfontbutton.c:780
 msgid "Font"
 msgstr "Tiparo"
 
@@ -2119,7 +2158,7 @@ msgstr "Gama valoro"
 #. Remove this icon source so we don't keep trying to
 #. * load it.
 #.
-#: gtk/gtkiconfactory.c:1374
+#: gtk/gtkiconfactory.c:1400
 #, c-format
 msgid "Error loading icon: %s"
 msgstr "Eraro dum ŝargado de piktogramo: %s"
@@ -2147,7 +2186,7 @@ msgstr "Piktogramo \"%s\" ne ĉeestas en etoso"
 msgid "Failed to load icon"
 msgstr "Malsukcesis ŝargi TIFF-bildon"
 
-#: gtk/gtkimmodule.c:423
+#: gtk/gtkimmodule.c:516
 #, fuzzy
 msgid "Simple"
 msgstr "Grando"
@@ -2235,44 +2274,44 @@ msgstr "(nekonata)"
 msgid "Cl_ear"
 msgstr "Vakigi"
 
-#: gtk/gtklinkbutton.c:148
+#: gtk/gtklinkbutton.c:144
 msgid "URI"
 msgstr "URI"
 
-#: gtk/gtklinkbutton.c:149
+#: gtk/gtklinkbutton.c:145
 msgid "The URI bound to this button"
 msgstr ""
 
-#: gtk/gtklinkbutton.c:406
+#: gtk/gtklinkbutton.c:402
 msgid "Copy URL"
 msgstr "Kopiu URL-on"
 
-#: gtk/gtklinkbutton.c:546
+#: gtk/gtklinkbutton.c:542
 msgid "Invalid URI"
 msgstr "Nevalida URI"
 
 #. Description of --gtk-module=MODULES in --help output
-#: gtk/gtkmain.c:427
+#: gtk/gtkmain.c:428
 msgid "Load additional GTK+ modules"
 msgstr "Ŝargu aldonaj GTK+ modjulojn"
 
 #. Placeholder in --gtk-module=MODULES in --help output
-#: gtk/gtkmain.c:428
+#: gtk/gtkmain.c:429
 msgid "MODULES"
 msgstr "MODJULOJ"
 
 #. Description of --g-fatal-warnings in --help output
-#: gtk/gtkmain.c:430
+#: gtk/gtkmain.c:431
 msgid "Make all warnings fatal"
 msgstr "Faru ĉiujn avertojn fatalaj"
 
 #. Description of --gtk-debug=FLAGS in --help output
-#: gtk/gtkmain.c:433
+#: gtk/gtkmain.c:434
 msgid "GTK+ debugging flags to set"
 msgstr "GTK+ cimo-flagoj por marki"
 
 #. Description of --gtk-no-debug=FLAGS in --help output
-#: gtk/gtkmain.c:436
+#: gtk/gtkmain.c:437
 msgid "GTK+ debugging flags to unset"
 msgstr "GTK+ cimo-flagoj por malmarki"
 
@@ -2281,15 +2320,15 @@ msgstr "GTK+ cimo-flagoj por malmarki"
 #. * Do *not* translate it to "predefinito:LTR", if it
 #. * it isn't default:LTR or default:RTL it will not work
 #.
-#: gtk/gtkmain.c:672
+#: gtk/gtkmain.c:678
 msgid "default:LTR"
 msgstr "default:LTR"
 
-#: gtk/gtkmain.c:768
+#: gtk/gtkmain.c:774
 msgid "GTK+ Options"
 msgstr "Agordoj de GTK+"
 
-#: gtk/gtkmain.c:768
+#: gtk/gtkmain.c:774
 msgid "Show GTK+ Options"
 msgstr "Montru agordojn de GTK+"
 
@@ -2301,12 +2340,12 @@ msgstr "Spaco inter sagetoj"
 msgid "Scroll arrow spacing"
 msgstr "Spaco inter rulsagetoj"
 
-#: gtk/gtknotebook.c:4406 gtk/gtknotebook.c:6912
+#: gtk/gtknotebook.c:4405 gtk/gtknotebook.c:6911
 #, c-format
 msgid "Page %u"
 msgstr "Paĝo %u"
 
-#: gtk/gtkpagesetup.c:596 gtk/gtkpapersize.c:825 gtk/gtkpapersize.c:865
+#: gtk/gtkpagesetup.c:597 gtk/gtkpapersize.c:825 gtk/gtkpapersize.c:865
 #, c-format
 msgid "Not a valid page setup file"
 msgstr ""
@@ -2368,7 +2407,7 @@ msgstr "Dimensioj de _papero:"
 msgid "_Orientation:"
 msgstr "P_ozicio:"
 
-#: gtk/gtkpagesetupunixdialog.c:1122 gtk/gtkprintunixdialog.c:2182
+#: gtk/gtkpagesetupunixdialog.c:1122 gtk/gtkprintunixdialog.c:2311
 msgid "Page Setup"
 msgstr "Agordoj de paĝo"
 
@@ -2417,15 +2456,15 @@ msgstr "Dekst_ra:"
 msgid "Paper Margins"
 msgstr "Marĝenoj de papero"
 
-#: gtk/gtkpathbar.c:148
+#: gtk/gtkpathbar.c:151
 msgid "Up Path"
 msgstr ""
 
-#: gtk/gtkpathbar.c:150
+#: gtk/gtkpathbar.c:153
 msgid "Down Path"
 msgstr ""
 
-#: gtk/gtkpathbar.c:1367
+#: gtk/gtkpathbar.c:1465
 #, fuzzy
 msgid "File System Root"
 msgstr "Dosiersistemo"
@@ -2517,234 +2556,234 @@ msgstr "Eraro dum lanĉo de antaŭvidilo"
 msgid "Error printing"
 msgstr "Eraro dum printado"
 
-#: gtk/gtkprintoperation-unix.c:388 gtk/gtkprintoperation-win32.c:1395
+#: gtk/gtkprintoperation-unix.c:388 gtk/gtkprintoperation-win32.c:1399
 msgid "Application"
 msgstr "Aplikaĵo"
 
-#: gtk/gtkprintoperation-win32.c:564
+#: gtk/gtkprintoperation-win32.c:568
 msgid "Printer offline"
 msgstr "Printilo estas senkonekta"
 
-#: gtk/gtkprintoperation-win32.c:566
+#: gtk/gtkprintoperation-win32.c:570
 msgid "Out of paper"
 msgstr "Papero finiĝis"
 
-#: gtk/gtkprintoperation-win32.c:568
+#: gtk/gtkprintoperation-win32.c:572
 msgid "Paused"
 msgstr "Paŭzita"
 
-#: gtk/gtkprintoperation-win32.c:570
+#: gtk/gtkprintoperation-win32.c:574
 msgid "Need user intervention"
 msgstr "Bezonas agojn de uzanto"
 
-#: gtk/gtkprintoperation-win32.c:670
+#: gtk/gtkprintoperation-win32.c:674
 msgid "Custom size"
 msgstr "Difinita grando"
 
-#: gtk/gtkprintoperation-win32.c:1485 gtk/gtkprintoperation-win32.c:1508
-#: gtk/gtkprintoperation-win32.c:1556
+#: gtk/gtkprintoperation-win32.c:1489 gtk/gtkprintoperation-win32.c:1512
+#: gtk/gtkprintoperation-win32.c:1560
 #, c-format
 msgid "Not enough free memory"
 msgstr "Ne sufiĉas da libera memoro"
 
-#: gtk/gtkprintoperation-win32.c:1561
+#: gtk/gtkprintoperation-win32.c:1565
 #, c-format
 msgid "Invalid argument to PrintDlgEx"
 msgstr "Ne valida argumento por PrintDlgEx"
 
-#: gtk/gtkprintoperation-win32.c:1566
+#: gtk/gtkprintoperation-win32.c:1570
 #, c-format
 msgid "Invalid pointer to PrintDlgEx"
 msgstr "Ne valida montrilo al PrinDlgEx"
 
-#: gtk/gtkprintoperation-win32.c:1571
+#: gtk/gtkprintoperation-win32.c:1575
 #, c-format
 msgid "Invalid handle to PrintDlgEx"
 msgstr "Malvalida traktilo por PrintDlgEx"
 
-#: gtk/gtkprintoperation-win32.c:1576
+#: gtk/gtkprintoperation-win32.c:1580
 #, c-format
 msgid "Unspecified error"
 msgstr "Nekonata eraro"
 
-#: gtk/gtkprintoperation-win32.c:1627
+#: gtk/gtkprintoperation-win32.c:1632
 #, c-format
 msgid "Error from StartDoc"
 msgstr "Eraro el StartDoc"
 
-#: gtk/gtkprintunixdialog.c:1510
+#: gtk/gtkprintunixdialog.c:1639
 msgid "Printer"
 msgstr "Printilo"
 
-#: gtk/gtkprintunixdialog.c:1518
+#: gtk/gtkprintunixdialog.c:1647
 msgid "Location"
 msgstr "Loko"
 
-#: gtk/gtkprintunixdialog.c:1527
+#: gtk/gtkprintunixdialog.c:1656
 msgid "Status"
 msgstr "Stato"
 
-#: gtk/gtkprintunixdialog.c:1549
+#: gtk/gtkprintunixdialog.c:1678
 #, fuzzy
 msgid "Range"
 msgstr "I_ntervalo"
 
-#: gtk/gtkprintunixdialog.c:1553
+#: gtk/gtkprintunixdialog.c:1682
 #, fuzzy
 msgid "_All Pages"
 msgstr "Ĉiuj folioj"
 
-#: gtk/gtkprintunixdialog.c:1560
+#: gtk/gtkprintunixdialog.c:1689
 #, fuzzy
 msgid "C_urrent Page"
 msgstr "Kuranta"
 
-#: gtk/gtkprintunixdialog.c:1569
+#: gtk/gtkprintunixdialog.c:1698
 #, fuzzy
 msgid "Pag_es:"
 msgstr "Lokoj"
 
-#: gtk/gtkprintunixdialog.c:1570
+#: gtk/gtkprintunixdialog.c:1699
 msgid ""
 "Specify one or more page ranges,\n"
 " e.g. 1-3,7,11"
 msgstr ""
 
-#: gtk/gtkprintunixdialog.c:1589
+#: gtk/gtkprintunixdialog.c:1718
 msgid "Copies"
 msgstr "Kopioj"
 
 #. FIXME chpe: too much space between Copies and spinbutton, put those 2 in a hbox and make it span 2 columns
-#: gtk/gtkprintunixdialog.c:1594
+#: gtk/gtkprintunixdialog.c:1723
 msgid "Copie_s:"
 msgstr "Popioj:"
 
-#: gtk/gtkprintunixdialog.c:1612
+#: gtk/gtkprintunixdialog.c:1741
 msgid "C_ollate"
 msgstr "Kunigu"
 
-#: gtk/gtkprintunixdialog.c:1620
+#: gtk/gtkprintunixdialog.c:1749
 msgid "_Reverse"
 msgstr "_Retroigu"
 
-#: gtk/gtkprintunixdialog.c:1637
+#: gtk/gtkprintunixdialog.c:1766
 msgid "General"
 msgstr "Ĝenerala"
 
-#: gtk/gtkprintunixdialog.c:2038
+#: gtk/gtkprintunixdialog.c:2167
 msgid "Layout"
 msgstr "Aranĝo"
 
-#: gtk/gtkprintunixdialog.c:2042
+#: gtk/gtkprintunixdialog.c:2171
 msgid "Pages per _side:"
 msgstr "Paĝoj per flanko:"
 
-#: gtk/gtkprintunixdialog.c:2058
+#: gtk/gtkprintunixdialog.c:2187
 msgid "T_wo-sided:"
 msgstr "Ambaŭ-flanke:"
 
-#: gtk/gtkprintunixdialog.c:2073
+#: gtk/gtkprintunixdialog.c:2202
 msgid "_Only print:"
 msgstr "Nur printu:"
 
 #. In enum order
-#: gtk/gtkprintunixdialog.c:2088
+#: gtk/gtkprintunixdialog.c:2217
 msgid "All sheets"
 msgstr "Ĉiuj folioj"
 
-#: gtk/gtkprintunixdialog.c:2089
+#: gtk/gtkprintunixdialog.c:2218
 msgid "Even sheets"
 msgstr "Paraj folioj"
 
-#: gtk/gtkprintunixdialog.c:2090
+#: gtk/gtkprintunixdialog.c:2219
 msgid "Odd sheets"
 msgstr "Neparaj folioj"
 
-#: gtk/gtkprintunixdialog.c:2093
+#: gtk/gtkprintunixdialog.c:2222
 msgid "Sc_ale:"
 msgstr "Sk_alo:"
 
-#: gtk/gtkprintunixdialog.c:2120
+#: gtk/gtkprintunixdialog.c:2249
 msgid "Paper"
 msgstr "Papero"
 
-#: gtk/gtkprintunixdialog.c:2124
+#: gtk/gtkprintunixdialog.c:2253
 msgid "Paper _type:"
 msgstr "Tipo de papero:"
 
-#: gtk/gtkprintunixdialog.c:2139
+#: gtk/gtkprintunixdialog.c:2268
 msgid "Paper _source:"
 msgstr "Fonto de papero:"
 
-#: gtk/gtkprintunixdialog.c:2154
+#: gtk/gtkprintunixdialog.c:2283
 msgid "Output t_ray:"
 msgstr ""
 
-#: gtk/gtkprintunixdialog.c:2205
+#: gtk/gtkprintunixdialog.c:2334
 msgid "Job Details"
 msgstr "Detaloj de ago"
 
-#: gtk/gtkprintunixdialog.c:2211
+#: gtk/gtkprintunixdialog.c:2340
 msgid "Pri_ority:"
 msgstr "Pri_oritato:"
 
-#: gtk/gtkprintunixdialog.c:2226
+#: gtk/gtkprintunixdialog.c:2355
 msgid "_Billing info:"
 msgstr ""
 
-#: gtk/gtkprintunixdialog.c:2244
+#: gtk/gtkprintunixdialog.c:2373
 msgid "Print Document"
 msgstr "Printu dokumenton"
 
-#: gtk/gtkprintunixdialog.c:2250
+#: gtk/gtkprintunixdialog.c:2379
 msgid "_Now"
 msgstr "_Nun"
 
-#: gtk/gtkprintunixdialog.c:2257
+#: gtk/gtkprintunixdialog.c:2386
 msgid "A_t:"
 msgstr "Ĉe:"
 
-#: gtk/gtkprintunixdialog.c:2272
+#: gtk/gtkprintunixdialog.c:2401
 msgid "On _hold"
 msgstr ""
 
-#: gtk/gtkprintunixdialog.c:2291
+#: gtk/gtkprintunixdialog.c:2420
 msgid "Add Cover Page"
 msgstr "Aldonu kovrilan paĝon"
 
-#: gtk/gtkprintunixdialog.c:2297
+#: gtk/gtkprintunixdialog.c:2426
 msgid "Be_fore:"
 msgstr "Antaŭ:"
 
-#: gtk/gtkprintunixdialog.c:2312
+#: gtk/gtkprintunixdialog.c:2441
 msgid "_After:"
 msgstr "Post:"
 
-#: gtk/gtkprintunixdialog.c:2327
+#: gtk/gtkprintunixdialog.c:2456
 msgid "Job"
 msgstr "Laboro"
 
-#: gtk/gtkprintunixdialog.c:2393
+#: gtk/gtkprintunixdialog.c:2522
 msgid "Advanced"
 msgstr ""
 
-#: gtk/gtkprintunixdialog.c:2428
+#: gtk/gtkprintunixdialog.c:2557
 msgid "Image Quality"
 msgstr "Kvalito de bildo"
 
-#: gtk/gtkprintunixdialog.c:2431
+#: gtk/gtkprintunixdialog.c:2560
 msgid "Color"
 msgstr "_Koloro"
 
-#: gtk/gtkprintunixdialog.c:2434
+#: gtk/gtkprintunixdialog.c:2563
 msgid "Finishing"
 msgstr "Finiĝas"
 
-#: gtk/gtkprintunixdialog.c:2444
+#: gtk/gtkprintunixdialog.c:2573
 msgid "Some of the settings in the dialog conflict"
 msgstr "Kelkaj agordoj en dialogo konfliktas"
 
-#: gtk/gtkprintunixdialog.c:2467
+#: gtk/gtkprintunixdialog.c:2596
 msgid "Print"
 msgstr "Printi"
 
@@ -2767,45 +2806,45 @@ msgid "Unable to locate image file in pixmap_path: \"%s\""
 msgstr "Ne eblas trovi bilddosieron en bildermapa vojindiko: \"%s\""
 
 #: gtk/gtkrecentaction.c:155 gtk/gtkrecentaction.c:163
-#: gtk/gtkrecentchoosermenu.c:554 gtk/gtkrecentchoosermenu.c:562
+#: gtk/gtkrecentchoosermenu.c:551 gtk/gtkrecentchoosermenu.c:559
 #, c-format
 msgid "This function is not implemented for widgets of class '%s'"
 msgstr "Tiu funkcio ne ekzistas por fenestraĵo de klaso \"%s\""
 
-#: gtk/gtkrecentchooserdefault.c:456
+#: gtk/gtkrecentchooserdefault.c:454
 msgid "Select which type of documents are shown"
 msgstr "Elektu kiajn dosier-tipojn estos montrataj"
 
-#: gtk/gtkrecentchooserdefault.c:1098 gtk/gtkrecentchooserdefault.c:1135
+#: gtk/gtkrecentchooserdefault.c:1096 gtk/gtkrecentchooserdefault.c:1133
 #, c-format
 msgid "No item for URI '%s' found"
 msgstr "Ne trovita elemento por URI \"%s\""
 
-#: gtk/gtkrecentchooserdefault.c:1262
+#: gtk/gtkrecentchooserdefault.c:1260
 msgid "Untitled filter"
 msgstr ""
 
-#: gtk/gtkrecentchooserdefault.c:1615
+#: gtk/gtkrecentchooserdefault.c:1613
 msgid "Could not remove item"
 msgstr "Ne povis forviŝi elementon"
 
-#: gtk/gtkrecentchooserdefault.c:1658
+#: gtk/gtkrecentchooserdefault.c:1656
 msgid "Could not clear list"
 msgstr "Ne povis vakigi liston"
 
-#: gtk/gtkrecentchooserdefault.c:1742
+#: gtk/gtkrecentchooserdefault.c:1740
 msgid "Copy _Location"
 msgstr "Kopiu lokon"
 
-#: gtk/gtkrecentchooserdefault.c:1755
+#: gtk/gtkrecentchooserdefault.c:1753
 msgid "_Remove From List"
 msgstr "Forviŝu el la listo"
 
-#: gtk/gtkrecentchooserdefault.c:1764
+#: gtk/gtkrecentchooserdefault.c:1762
 msgid "_Clear List"
 msgstr "Vakigu liston"
 
-#: gtk/gtkrecentchooserdefault.c:1778
+#: gtk/gtkrecentchooserdefault.c:1776
 msgid "Show _Private Resources"
 msgstr "Montru _privatajn risurcojn"
 
@@ -2819,21 +2858,21 @@ msgstr "Montru _privatajn risurcojn"
 #. * user appended or prepended custom menu items to the
 #. * recent chooser menu widget.
 #.
-#: gtk/gtkrecentchoosermenu.c:320
+#: gtk/gtkrecentchoosermenu.c:317
 msgid "No items found"
 msgstr "Neniu elemento estas trovita"
 
-#: gtk/gtkrecentchoosermenu.c:474 gtk/gtkrecentchoosermenu.c:530
+#: gtk/gtkrecentchoosermenu.c:471 gtk/gtkrecentchoosermenu.c:527
 #, c-format
 msgid "No recently used resource found with URI `%s'"
 msgstr "Ne troviĝis antaŭ uzita risurco por URI \"%s\""
 
-#: gtk/gtkrecentchoosermenu.c:741
+#: gtk/gtkrecentchoosermenu.c:738
 #, c-format
 msgid "Open '%s'"
 msgstr "Melfermu \"%s\""
 
-#: gtk/gtkrecentchoosermenu.c:771
+#: gtk/gtkrecentchoosermenu.c:768
 msgid "Unknown item"
 msgstr "Nekonata elemento"
 
@@ -2844,7 +2883,7 @@ msgstr "Nekonata elemento"
 #. *
 #. * Don't include the prefix "recent menu label|" in the translation.
 #.
-#: gtk/gtkrecentchoosermenu.c:784
+#: gtk/gtkrecentchoosermenu.c:781
 #, c-format
 msgid "recent menu label|_%d. %s"
 msgstr ""
@@ -2854,13 +2893,13 @@ msgstr ""
 #. *
 #. * Don't include the prefix "recent menu label|" in the translation.
 #.
-#: gtk/gtkrecentchoosermenu.c:791
+#: gtk/gtkrecentchoosermenu.c:788
 #, c-format
 msgid "recent menu label|%d. %s"
 msgstr ""
 
-#: gtk/gtkrecentmanager.c:1041 gtk/gtkrecentmanager.c:1187
-#: gtk/gtkrecentmanager.c:1197 gtk/gtkrecentmanager.c:1250
+#: gtk/gtkrecentmanager.c:1008 gtk/gtkrecentmanager.c:1154
+#: gtk/gtkrecentmanager.c:1164 gtk/gtkrecentmanager.c:1217
 #, c-format
 msgid "Unable to find an item with URI '%s'"
 msgstr "Ne eblas trovi elementon kun URI \"%s\""
@@ -3361,12 +3400,12 @@ msgstr ""
 msgid "A <text> element can't occur before a <tags> element"
 msgstr ""
 
-#: gtk/gtktextbufferserialize.c:1788
+#: gtk/gtktextbufferserialize.c:1779
 #, c-format
 msgid "Serialized data is malformed"
 msgstr ""
 
-#: gtk/gtktextbufferserialize.c:1866
+#: gtk/gtktextbufferserialize.c:1857
 #, c-format
 msgid ""
 "Serialized data is malformed. First section isn't GTKTEXTBUFFERCONTENTS-0001"
@@ -4439,87 +4478,87 @@ msgstr "Vjetnama (VIQR)"
 msgid "X Input Method"
 msgstr "X Eniga metodo"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1533
+#: modules/printbackends/cups/gtkprintbackendcups.c:1697
 msgid "Two Sided"
 msgstr "Du flankoj"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1534
+#: modules/printbackends/cups/gtkprintbackendcups.c:1698
 msgid "Paper Type"
 msgstr "Tipo de papero"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1535
+#: modules/printbackends/cups/gtkprintbackendcups.c:1699
 msgid "Paper Source"
 msgstr "Fonto de papero"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1536
+#: modules/printbackends/cups/gtkprintbackendcups.c:1700
 msgid "Output Tray"
 msgstr ""
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1545
+#: modules/printbackends/cups/gtkprintbackendcups.c:1709
 msgid "One Sided"
 msgstr "Unu flanko"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1546
-#: modules/printbackends/cups/gtkprintbackendcups.c:1547
-#: modules/printbackends/cups/gtkprintbackendcups.c:1551
+#: modules/printbackends/cups/gtkprintbackendcups.c:1710
+#: modules/printbackends/cups/gtkprintbackendcups.c:1711
+#: modules/printbackends/cups/gtkprintbackendcups.c:1715
 msgid "Auto Select"
 msgstr "Elektu aŭtomate"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1548
-#: modules/printbackends/cups/gtkprintbackendcups.c:1549
-#: modules/printbackends/cups/gtkprintbackendcups.c:1550
-#: modules/printbackends/cups/gtkprintbackendcups.c:2020
+#: modules/printbackends/cups/gtkprintbackendcups.c:1712
+#: modules/printbackends/cups/gtkprintbackendcups.c:1713
+#: modules/printbackends/cups/gtkprintbackendcups.c:1714
+#: modules/printbackends/cups/gtkprintbackendcups.c:2184
 msgid "Printer Default"
 msgstr "Defaŭlto"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2214
+#: modules/printbackends/cups/gtkprintbackendcups.c:2378
 msgid "Urgent"
 msgstr "Urĝa"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2214
+#: modules/printbackends/cups/gtkprintbackendcups.c:2378
 msgid "High"
 msgstr "Alta"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2214
+#: modules/printbackends/cups/gtkprintbackendcups.c:2378
 msgid "Medium"
 msgstr "Meza"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2214
+#: modules/printbackends/cups/gtkprintbackendcups.c:2378
 msgid "Low"
 msgstr "Malalta"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2216
+#: modules/printbackends/cups/gtkprintbackendcups.c:2380
 msgid "None"
 msgstr "Neniu"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2216
+#: modules/printbackends/cups/gtkprintbackendcups.c:2380
 msgid "Classified"
 msgstr "Klasifikita"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2216
+#: modules/printbackends/cups/gtkprintbackendcups.c:2380
 msgid "Confidential"
 msgstr "Konfidenca"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2216
+#: modules/printbackends/cups/gtkprintbackendcups.c:2380
 msgid "Secret"
 msgstr "Sekreto"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2216
+#: modules/printbackends/cups/gtkprintbackendcups.c:2380
 msgid "Standard"
 msgstr ""
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2216
+#: modules/printbackends/cups/gtkprintbackendcups.c:2380
 msgid "Top Secret"
 msgstr "Alta sekreto"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2216
+#: modules/printbackends/cups/gtkprintbackendcups.c:2380
 msgid "Unclassified"
 msgstr "Neklasifikita"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2302
-#, c-format
-msgid "Custom %.2fx%.2f"
-msgstr ""
+#: modules/printbackends/cups/gtkprintbackendcups.c:2473
+#, fuzzy, c-format
+msgid "Custom %sx%s"
+msgstr "Difinita grando"
 
 #. default filename used for print-to-file
 #: modules/printbackends/file/gtkprintbackendfile.c:236

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-02-21 12:23-0500\n"
+"POT-Creation-Date: 2008-04-21 23:10+0300\n"
 "PO-Revision-Date: 2003-01-14 11:02+EDT\n"
 "Last-Translator: Ge'ez Frontier Foundation <locales@geez.org>\n"
 "Language-Team: Amharic <locales@geez.org>\n"
@@ -74,7 +74,7 @@ msgstr ""
 #. Placeholder in --gdk-no-debug=FLAGS in --help output
 #. Placeholder in --gtk-debug=FLAGS in --help output
 #. Placeholder in --gtk-no-debug=FLAGS in --help output
-#: gdk/gdk.c:140 gdk/gdk.c:143 gtk/gtkmain.c:434 gtk/gtkmain.c:437
+#: gdk/gdk.c:140 gdk/gdk.c:143 gtk/gtkmain.c:435 gtk/gtkmain.c:438
 msgid "FLAGS"
 msgstr ""
 
@@ -231,19 +231,19 @@ msgstr ""
 msgid "keyboard label|Delete"
 msgstr ""
 
-#: gdk-pixbuf/gdk-pixbuf-animation.c:133 gdk-pixbuf/gdk-pixbuf-io.c:858
-#: gdk-pixbuf/gdk-pixbuf-io.c:1114 tests/testfilechooser.c:218
+#: gdk-pixbuf/gdk-pixbuf-animation.c:133 gdk-pixbuf/gdk-pixbuf-io.c:894
+#: gdk-pixbuf/gdk-pixbuf-io.c:1150 tests/testfilechooser.c:218
 #, c-format
 msgid "Failed to open file '%s': %s"
 msgstr ""
 
-#: gdk-pixbuf/gdk-pixbuf-animation.c:146 gdk-pixbuf/gdk-pixbuf-io.c:870
+#: gdk-pixbuf/gdk-pixbuf-animation.c:146 gdk-pixbuf/gdk-pixbuf-io.c:906
 #, c-format
 msgid "Image file '%s' contains no data"
 msgstr ""
 
-#: gdk-pixbuf/gdk-pixbuf-animation.c:188 gdk-pixbuf/gdk-pixbuf-io.c:907
-#: gdk-pixbuf/gdk-pixbuf-io.c:1166 tests/testfilechooser.c:263
+#: gdk-pixbuf/gdk-pixbuf-animation.c:188 gdk-pixbuf/gdk-pixbuf-io.c:943
+#: gdk-pixbuf/gdk-pixbuf-io.c:1202 tests/testfilechooser.c:263
 #, c-format
 msgid ""
 "Failed to load image '%s': reason not known, probably a corrupt image file"
@@ -256,81 +256,81 @@ msgid ""
 "animation file"
 msgstr ""
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:538
+#: gdk-pixbuf/gdk-pixbuf-io.c:554
 #, c-format
 msgid "Unable to load image-loading module: %s: %s"
 msgstr ""
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:553
+#: gdk-pixbuf/gdk-pixbuf-io.c:569
 #, c-format
 msgid ""
 "Image-loading module %s does not export the proper interface; perhaps it's "
 "from a different GTK version?"
 msgstr ""
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:670 gdk-pixbuf/gdk-pixbuf-io.c:699
+#: gdk-pixbuf/gdk-pixbuf-io.c:706 gdk-pixbuf/gdk-pixbuf-io.c:735
 #, c-format
 msgid "Image type '%s' is not supported"
 msgstr ""
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:739
+#: gdk-pixbuf/gdk-pixbuf-io.c:775
 #, c-format
 msgid "Couldn't recognize the image file format for file '%s'"
 msgstr ""
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:747
+#: gdk-pixbuf/gdk-pixbuf-io.c:783
 #, c-format
 msgid "Unrecognized image file format"
 msgstr ""
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:916
+#: gdk-pixbuf/gdk-pixbuf-io.c:952
 #, c-format
 msgid "Failed to load image '%s': %s"
 msgstr ""
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:1545
+#: gdk-pixbuf/gdk-pixbuf-io.c:1583
 #, c-format
 msgid "Error writing to image file: %s"
 msgstr ""
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:1591 gdk-pixbuf/gdk-pixbuf-io.c:1722
+#: gdk-pixbuf/gdk-pixbuf-io.c:1629 gdk-pixbuf/gdk-pixbuf-io.c:1760
 #, c-format
 msgid "This build of gdk-pixbuf does not support saving the image format: %s"
 msgstr ""
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:1625
+#: gdk-pixbuf/gdk-pixbuf-io.c:1663
 #, c-format
 msgid "Insufficient memory to save image to callback"
 msgstr ""
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:1638
+#: gdk-pixbuf/gdk-pixbuf-io.c:1676
 #, c-format
 msgid "Failed to open temporary file"
 msgstr ""
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:1664
+#: gdk-pixbuf/gdk-pixbuf-io.c:1702
 #, c-format
 msgid "Failed to read from temporary file"
 msgstr ""
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:1899
+#: gdk-pixbuf/gdk-pixbuf-io.c:1937
 #, c-format
 msgid "Failed to open '%s' for writing: %s"
 msgstr ""
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:1924
+#: gdk-pixbuf/gdk-pixbuf-io.c:1962
 #, c-format
 msgid ""
 "Failed to close '%s' while writing image, all data may not have been saved: %"
 "s"
 msgstr ""
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:2144 gdk-pixbuf/gdk-pixbuf-io.c:2195
+#: gdk-pixbuf/gdk-pixbuf-io.c:2182 gdk-pixbuf/gdk-pixbuf-io.c:2233
 #, c-format
 msgid "Insufficient memory to save image into a buffer"
 msgstr ""
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:2241
+#: gdk-pixbuf/gdk-pixbuf-io.c:2279
 #, c-format
 msgid "Error writing to image stream"
 msgstr ""
@@ -400,38 +400,43 @@ msgstr ""
 msgid "The ANI image format"
 msgstr ""
 
-#: gdk-pixbuf/io-bmp.c:230 gdk-pixbuf/io-bmp.c:327 gdk-pixbuf/io-bmp.c:359
-#: gdk-pixbuf/io-bmp.c:382 gdk-pixbuf/io-bmp.c:485
+#: gdk-pixbuf/io-bmp.c:230 gdk-pixbuf/io-bmp.c:267 gdk-pixbuf/io-bmp.c:338
+#: gdk-pixbuf/io-bmp.c:370 gdk-pixbuf/io-bmp.c:393 gdk-pixbuf/io-bmp.c:496
 #, c-format
 msgid "BMP image has bogus header data"
 msgstr ""
 
-#: gdk-pixbuf/io-bmp.c:241 gdk-pixbuf/io-bmp.c:422
+#: gdk-pixbuf/io-bmp.c:241 gdk-pixbuf/io-bmp.c:433
 #, c-format
 msgid "Not enough memory to load bitmap image"
 msgstr ""
 
-#: gdk-pixbuf/io-bmp.c:308
+#: gdk-pixbuf/io-bmp.c:319
 #, c-format
 msgid "BMP image has unsupported header size"
 msgstr ""
 
-#: gdk-pixbuf/io-bmp.c:346
+#: gdk-pixbuf/io-bmp.c:357
 #, c-format
 msgid "Topdown BMP images cannot be compressed"
 msgstr ""
 
-#: gdk-pixbuf/io-bmp.c:1306
+#: gdk-pixbuf/io-bmp.c:717 gdk-pixbuf/io-pnm.c:709
+#, c-format
+msgid "Premature end-of-file encountered"
+msgstr ""
+
+#: gdk-pixbuf/io-bmp.c:1329
 #, c-format
 msgid "Couldn't allocate memory for saving BMP file"
 msgstr ""
 
-#: gdk-pixbuf/io-bmp.c:1347
+#: gdk-pixbuf/io-bmp.c:1370
 #, c-format
 msgid "Couldn't write to BMP file"
 msgstr ""
 
-#: gdk-pixbuf/io-bmp.c:1402
+#: gdk-pixbuf/io-bmp.c:1425
 msgid "The BMP image format"
 msgstr ""
 
@@ -850,11 +855,6 @@ msgstr ""
 msgid "PNM image loader does not support this PNM subformat"
 msgstr ""
 
-#: gdk-pixbuf/io-pnm.c:709
-#, c-format
-msgid "Premature end-of-file encountered"
-msgstr ""
-
 #: gdk-pixbuf/io-pnm.c:741 gdk-pixbuf/io-pnm.c:968
 #, c-format
 msgid "Raw PNM formats require exactly one whitespace before sample data"
@@ -1161,6 +1161,23 @@ msgstr ""
 msgid "Make X calls synchronous"
 msgstr ""
 
+#: gdk/x11/gdkapplaunchcontext-x11.c:303
+#, fuzzy, c-format
+msgid "Starting %s"
+msgstr "አትም (_P)"
+
+#: gdk/x11/gdkapplaunchcontext-x11.c:305
+#, c-format
+msgid "Opening %s"
+msgstr ""
+
+#: gdk/x11/gdkapplaunchcontext-x11.c:308
+#, c-format
+msgid "Opening %d Item"
+msgid_plural "Opening %d Items"
+msgstr[0] ""
+msgstr[1] ""
+
 #: gtk/gtkaboutdialog.c:264 gtk/gtkaboutdialog.c:2106
 msgid "License"
 msgstr ""
@@ -1278,17 +1295,17 @@ msgstr ""
 msgid "keyboard label|Backslash"
 msgstr ""
 
-#: gtk/gtkbuilderparser.c:265
+#: gtk/gtkbuilderparser.c:267
 #, c-format
 msgid "Invalid type function: `%s'"
 msgstr ""
 
-#: gtk/gtkbuilderparser.c:715
+#: gtk/gtkbuilderparser.c:722
 #, c-format
 msgid "Invalid root element: '%s'"
 msgstr ""
 
-#: gtk/gtkbuilderparser.c:747
+#: gtk/gtkbuilderparser.c:754
 #, c-format
 msgid "Unhandled tag: '%s'"
 msgstr ""
@@ -1396,11 +1413,11 @@ msgstr ""
 msgid "progress bar label|%d %%"
 msgstr ""
 
-#: gtk/gtkcolorbutton.c:189 gtk/gtkcolorbutton.c:560
+#: gtk/gtkcolorbutton.c:188 gtk/gtkcolorbutton.c:559
 msgid "Pick a Color"
 msgstr ""
 
-#: gtk/gtkcolorbutton.c:449
+#: gtk/gtkcolorbutton.c:448
 msgid "Received invalid color data\n"
 msgstr ""
 
@@ -1754,89 +1771,111 @@ msgstr ""
 msgid "Shortcut %s does not exist"
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:8088
+#: gtk/gtkfilechooserdefault.c:8088 gtk/gtkprintunixdialog.c:354
 #, c-format
 msgid "A file named \"%s\" already exists.  Do you want to replace it?"
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:8091
+#: gtk/gtkfilechooserdefault.c:8091 gtk/gtkprintunixdialog.c:358
 #, c-format
 msgid ""
 "The file already exists in \"%s\".  Replacing it will overwrite its contents."
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:8096
+#: gtk/gtkfilechooserdefault.c:8096 gtk/gtkprintunixdialog.c:365
 #, fuzzy
 msgid "_Replace"
 msgstr "እንደገና _ሰይም"
 
-#: gtk/gtkfilechooserdefault.c:8894
+#: gtk/gtkfilechooserdefault.c:8899
 msgid "Could not start the search process"
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:8895
+#: gtk/gtkfilechooserdefault.c:8900
 msgid ""
 "The program was not able to create a connection to the indexer daemon.  "
 "Please make sure it is running."
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:8909
+#: gtk/gtkfilechooserdefault.c:8914
 #, fuzzy
 msgid "Could not send the search request"
 msgstr "የአሁኑን ቀለም"
 
 #. Label
-#: gtk/gtkfilechooserdefault.c:9337
+#: gtk/gtkfilechooserdefault.c:9342
 msgid "_Search:"
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:10290
+#: gtk/gtkfilechooserdefault.c:10295
 #, fuzzy, c-format
 msgid "Could not mount %s"
 msgstr "የአሁኑን ቀለም"
 
-#: gtk/gtkfilechooserdefault.c:10895
+#: gtk/gtkfilechooserdefault.c:10900
 msgid "Type name of new folder"
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:10943
+#: gtk/gtkfilechooserdefault.c:10948
 #, c-format
 msgid "%d byte"
 msgid_plural "%d bytes"
 msgstr[0] ""
 msgstr[1] ""
 
-#: gtk/gtkfilechooserdefault.c:10945
+#: gtk/gtkfilechooserdefault.c:10950
 #, c-format
 msgid "%.1f KB"
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:10947
+#: gtk/gtkfilechooserdefault.c:10952
 #, c-format
 msgid "%.1f MB"
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:10949
+#: gtk/gtkfilechooserdefault.c:10954
 #, c-format
 msgid "%.1f GB"
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:11050 gtk/gtkfilechooserdefault.c:11072
-#: gtk/gtkfilechooserdefault.c:11143
+#: gtk/gtkfilechooserdefault.c:11055 gtk/gtkfilechooserdefault.c:11077
+#: gtk/gtkfilechooserdefault.c:11148
 #, fuzzy
 msgid "Unknown"
 msgstr "(ያልታወቀ)"
 
-#: gtk/gtkfilechooserdefault.c:11090
-msgid "Today at %H:%M"
+#: gtk/gtkfilechooserdefault.c:11095
+msgid "%H:%M"
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:11092
+#: gtk/gtkfilechooserdefault.c:11097
 msgid "Yesterday at %H:%M"
 msgstr ""
 
+#: gtk/gtkfilechooserentry.c:650 gtk/gtkfilechooserentry.c:1095
+#, fuzzy
+msgid "Invalid path"
+msgstr "Utf-8 ተቀብሏል"
+
+#: gtk/gtkfilechooserentry.c:1057
+msgid "No match"
+msgstr ""
+
+#: gtk/gtkfilechooserentry.c:1065
+#, fuzzy
+msgid "Sole completion"
+msgstr "የፊደል ቅርጽ ምርጫ"
+
+#: gtk/gtkfilechooserentry.c:1077
+msgid "Complete, but not unique"
+msgstr ""
+
+#: gtk/gtkfilechooserentry.c:1110
+msgid "Completing..."
+msgstr ""
+
 #: gtk/gtkfilechoosersettings.c:262 gtk/gtkfilesel.c:1348
-#: gtk/gtkfilesel.c:1357 gtk/gtkfilesystemunix.c:1047
+#: gtk/gtkfilesel.c:1357 gtk/gtkfilesystemunix.c:1048
 #: gtk/gtkfilesystemwin32.c:1227
 #, fuzzy, c-format
 msgid "Error creating folder '%s': %s"
@@ -1982,41 +2021,41 @@ msgstr "የአሁኑን ቀለም"
 msgid "(Empty)"
 msgstr ""
 
-#: gtk/gtkfilesystemunix.c:960 gtk/gtkfilesystemunix.c:1208
-#: gtk/gtkfilesystemunix.c:2196 gtk/gtkfilesystemunix.c:2236
+#: gtk/gtkfilesystemunix.c:961 gtk/gtkfilesystemunix.c:1209
+#: gtk/gtkfilesystemunix.c:2198 gtk/gtkfilesystemunix.c:2238
 #: gtk/gtkfilesystemwin32.c:2305 gtk/gtkfilesystemwin32.c:2355
 #, c-format
 msgid "Error getting information for '%s': %s"
 msgstr ""
 
-#: gtk/gtkfilesystemunix.c:1153 gtk/gtkfilesystemwin32.c:1334
+#: gtk/gtkfilesystemunix.c:1154 gtk/gtkfilesystemwin32.c:1334
 #, c-format
 msgid "This file system does not support mounting"
 msgstr ""
 
-#: gtk/gtkfilesystemunix.c:1165
+#: gtk/gtkfilesystemunix.c:1166
 #, fuzzy
 msgid "File System"
 msgstr "ፋይሎች"
 
-#: gtk/gtkfilesystemunix.c:1329 gtk/gtkfilesystemwin32.c:1644
+#: gtk/gtkfilesystemunix.c:1330 gtk/gtkfilesystemwin32.c:1644
 #, c-format
 msgid ""
 "The name \"%s\" is not valid because it contains the character \"%s\". "
 "Please use a different name."
 msgstr ""
 
-#: gtk/gtkfilesystemunix.c:1878 gtk/gtkfilesystemwin32.c:1985
+#: gtk/gtkfilesystemunix.c:1880 gtk/gtkfilesystemwin32.c:1985
 #, c-format
 msgid "Bookmark saving failed: %s"
 msgstr ""
 
-#: gtk/gtkfilesystemunix.c:1933 gtk/gtkfilesystemwin32.c:2040
+#: gtk/gtkfilesystemunix.c:1935 gtk/gtkfilesystemwin32.c:2040
 #, c-format
 msgid "'%s' already exists in the bookmarks list"
 msgstr ""
 
-#: gtk/gtkfilesystemunix.c:2005 gtk/gtkfilesystemwin32.c:2112
+#: gtk/gtkfilesystemunix.c:2007 gtk/gtkfilesystemwin32.c:2112
 #, c-format
 msgid "'%s' does not exist in the bookmarks list"
 msgstr ""
@@ -2036,16 +2075,16 @@ msgstr ""
 msgid "%s (%s)"
 msgstr ""
 
-#: gtk/gtkfontbutton.c:145 gtk/gtkfontbutton.c:267
+#: gtk/gtkfontbutton.c:144 gtk/gtkfontbutton.c:266
 msgid "Pick a Font"
 msgstr ""
 
 #. Initialize fields
-#: gtk/gtkfontbutton.c:261
+#: gtk/gtkfontbutton.c:260
 msgid "Sans 12"
 msgstr ""
 
-#: gtk/gtkfontbutton.c:781
+#: gtk/gtkfontbutton.c:780
 msgid "Font"
 msgstr "የፊደል ቅርጽ"
 
@@ -2087,7 +2126,7 @@ msgstr "የ_ጋማ ዕሴት"
 #. Remove this icon source so we don't keep trying to
 #. * load it.
 #.
-#: gtk/gtkiconfactory.c:1374
+#: gtk/gtkiconfactory.c:1400
 #, c-format
 msgid "Error loading icon: %s"
 msgstr ""
@@ -2111,7 +2150,7 @@ msgstr ""
 msgid "Failed to load icon"
 msgstr "የአሁኑን ቀለም"
 
-#: gtk/gtkimmodule.c:423
+#: gtk/gtkimmodule.c:516
 #, fuzzy
 msgid "Simple"
 msgstr "መጠን"
@@ -2202,46 +2241,46 @@ msgstr "(ያልታወቀ)"
 msgid "Cl_ear"
 msgstr "ሰርዝ (_C)"
 
-#: gtk/gtklinkbutton.c:148
+#: gtk/gtklinkbutton.c:144
 msgid "URI"
 msgstr ""
 
-#: gtk/gtklinkbutton.c:149
+#: gtk/gtklinkbutton.c:145
 msgid "The URI bound to this button"
 msgstr ""
 
-#: gtk/gtklinkbutton.c:406
+#: gtk/gtklinkbutton.c:402
 #, fuzzy
 msgid "Copy URL"
 msgstr "ቅጂ (_C)"
 
-#: gtk/gtklinkbutton.c:546
+#: gtk/gtklinkbutton.c:542
 #, fuzzy
 msgid "Invalid URI"
 msgstr "Utf-8 ተቀብሏል"
 
 #. Description of --gtk-module=MODULES in --help output
-#: gtk/gtkmain.c:427
+#: gtk/gtkmain.c:428
 msgid "Load additional GTK+ modules"
 msgstr ""
 
 #. Placeholder in --gtk-module=MODULES in --help output
-#: gtk/gtkmain.c:428
+#: gtk/gtkmain.c:429
 msgid "MODULES"
 msgstr ""
 
 #. Description of --g-fatal-warnings in --help output
-#: gtk/gtkmain.c:430
+#: gtk/gtkmain.c:431
 msgid "Make all warnings fatal"
 msgstr ""
 
 #. Description of --gtk-debug=FLAGS in --help output
-#: gtk/gtkmain.c:433
+#: gtk/gtkmain.c:434
 msgid "GTK+ debugging flags to set"
 msgstr ""
 
 #. Description of --gtk-no-debug=FLAGS in --help output
-#: gtk/gtkmain.c:436
+#: gtk/gtkmain.c:437
 msgid "GTK+ debugging flags to unset"
 msgstr ""
 
@@ -2250,15 +2289,15 @@ msgstr ""
 #. * Do *not* translate it to "predefinito:LTR", if it
 #. * it isn't default:LTR or default:RTL it will not work
 #.
-#: gtk/gtkmain.c:672
+#: gtk/gtkmain.c:678
 msgid "default:LTR"
 msgstr "default:LTR"
 
-#: gtk/gtkmain.c:768
+#: gtk/gtkmain.c:774
 msgid "GTK+ Options"
 msgstr ""
 
-#: gtk/gtkmain.c:768
+#: gtk/gtkmain.c:774
 msgid "Show GTK+ Options"
 msgstr ""
 
@@ -2270,12 +2309,12 @@ msgstr ""
 msgid "Scroll arrow spacing"
 msgstr ""
 
-#: gtk/gtknotebook.c:4406 gtk/gtknotebook.c:6912
+#: gtk/gtknotebook.c:4405 gtk/gtknotebook.c:6911
 #, c-format
 msgid "Page %u"
 msgstr "ገጽ %u"
 
-#: gtk/gtkpagesetup.c:596 gtk/gtkpapersize.c:825 gtk/gtkpapersize.c:865
+#: gtk/gtkpagesetup.c:597 gtk/gtkpapersize.c:825 gtk/gtkpapersize.c:865
 #, c-format
 msgid "Not a valid page setup file"
 msgstr ""
@@ -2333,7 +2372,7 @@ msgstr "ምርጫዎች (_P)"
 msgid "_Orientation:"
 msgstr "_ምርጫ፦ "
 
-#: gtk/gtkpagesetupunixdialog.c:1122 gtk/gtkprintunixdialog.c:2182
+#: gtk/gtkpagesetupunixdialog.c:1122 gtk/gtkprintunixdialog.c:2311
 #, fuzzy
 msgid "Page Setup"
 msgstr "ገጽ %u"
@@ -2386,15 +2425,15 @@ msgstr ""
 msgid "Paper Margins"
 msgstr ""
 
-#: gtk/gtkpathbar.c:148
+#: gtk/gtkpathbar.c:151
 msgid "Up Path"
 msgstr ""
 
-#: gtk/gtkpathbar.c:150
+#: gtk/gtkpathbar.c:153
 msgid "Down Path"
 msgstr ""
 
-#: gtk/gtkpathbar.c:1367
+#: gtk/gtkpathbar.c:1465
 #, fuzzy
 msgid "File System Root"
 msgstr "ፋይሎች"
@@ -2487,245 +2526,245 @@ msgstr ""
 msgid "Error printing"
 msgstr ""
 
-#: gtk/gtkprintoperation-unix.c:388 gtk/gtkprintoperation-win32.c:1395
+#: gtk/gtkprintoperation-unix.c:388 gtk/gtkprintoperation-win32.c:1399
 #, fuzzy
 msgid "Application"
 msgstr "_ምርጫ፦ "
 
-#: gtk/gtkprintoperation-win32.c:564
+#: gtk/gtkprintoperation-win32.c:568
 msgid "Printer offline"
 msgstr ""
 
-#: gtk/gtkprintoperation-win32.c:566
+#: gtk/gtkprintoperation-win32.c:570
 msgid "Out of paper"
 msgstr ""
 
-#: gtk/gtkprintoperation-win32.c:568
+#: gtk/gtkprintoperation-win32.c:572
 #, fuzzy
 msgid "Paused"
 msgstr "ለጥፍ (_P)"
 
-#: gtk/gtkprintoperation-win32.c:570
+#: gtk/gtkprintoperation-win32.c:574
 msgid "Need user intervention"
 msgstr ""
 
-#: gtk/gtkprintoperation-win32.c:670
+#: gtk/gtkprintoperation-win32.c:674
 msgid "Custom size"
 msgstr ""
 
-#: gtk/gtkprintoperation-win32.c:1485 gtk/gtkprintoperation-win32.c:1508
-#: gtk/gtkprintoperation-win32.c:1556
+#: gtk/gtkprintoperation-win32.c:1489 gtk/gtkprintoperation-win32.c:1512
+#: gtk/gtkprintoperation-win32.c:1560
 #, c-format
 msgid "Not enough free memory"
 msgstr ""
 
-#: gtk/gtkprintoperation-win32.c:1561
+#: gtk/gtkprintoperation-win32.c:1565
 #, c-format
 msgid "Invalid argument to PrintDlgEx"
 msgstr ""
 
-#: gtk/gtkprintoperation-win32.c:1566
+#: gtk/gtkprintoperation-win32.c:1570
 #, c-format
 msgid "Invalid pointer to PrintDlgEx"
 msgstr ""
 
-#: gtk/gtkprintoperation-win32.c:1571
+#: gtk/gtkprintoperation-win32.c:1575
 #, c-format
 msgid "Invalid handle to PrintDlgEx"
 msgstr ""
 
-#: gtk/gtkprintoperation-win32.c:1576
+#: gtk/gtkprintoperation-win32.c:1580
 #, c-format
 msgid "Unspecified error"
 msgstr ""
 
-#: gtk/gtkprintoperation-win32.c:1627
+#: gtk/gtkprintoperation-win32.c:1632
 #, c-format
 msgid "Error from StartDoc"
 msgstr ""
 
-#: gtk/gtkprintunixdialog.c:1510
+#: gtk/gtkprintunixdialog.c:1639
 #, fuzzy
 msgid "Printer"
 msgstr "አትም (_P)"
 
-#: gtk/gtkprintunixdialog.c:1518
+#: gtk/gtkprintunixdialog.c:1647
 #, fuzzy
 msgid "Location"
 msgstr "_ምርጫ፦ "
 
-#: gtk/gtkprintunixdialog.c:1527
+#: gtk/gtkprintunixdialog.c:1656
 msgid "Status"
 msgstr ""
 
-#: gtk/gtkprintunixdialog.c:1549
+#: gtk/gtkprintunixdialog.c:1678
 msgid "Range"
 msgstr ""
 
-#: gtk/gtkprintunixdialog.c:1553
+#: gtk/gtkprintunixdialog.c:1682
 msgid "_All Pages"
 msgstr ""
 
-#: gtk/gtkprintunixdialog.c:1560
+#: gtk/gtkprintunixdialog.c:1689
 #, fuzzy
 msgid "C_urrent Page"
 msgstr "_ፍጠር"
 
-#: gtk/gtkprintunixdialog.c:1569
+#: gtk/gtkprintunixdialog.c:1698
 msgid "Pag_es:"
 msgstr ""
 
-#: gtk/gtkprintunixdialog.c:1570
+#: gtk/gtkprintunixdialog.c:1699
 msgid ""
 "Specify one or more page ranges,\n"
 " e.g. 1-3,7,11"
 msgstr ""
 
-#: gtk/gtkprintunixdialog.c:1589
+#: gtk/gtkprintunixdialog.c:1718
 msgid "Copies"
 msgstr ""
 
 #. FIXME chpe: too much space between Copies and spinbutton, put those 2 in a hbox and make it span 2 columns
-#: gtk/gtkprintunixdialog.c:1594
+#: gtk/gtkprintunixdialog.c:1723
 msgid "Copie_s:"
 msgstr ""
 
-#: gtk/gtkprintunixdialog.c:1612
+#: gtk/gtkprintunixdialog.c:1741
 #, fuzzy
 msgid "C_ollate"
 msgstr "_ፍጠር"
 
-#: gtk/gtkprintunixdialog.c:1620
+#: gtk/gtkprintunixdialog.c:1749
 #, fuzzy
 msgid "_Reverse"
 msgstr "ወደ ነበረበት መልስ (_R)"
 
-#: gtk/gtkprintunixdialog.c:1637
+#: gtk/gtkprintunixdialog.c:1766
 msgid "General"
 msgstr ""
 
-#: gtk/gtkprintunixdialog.c:2038
+#: gtk/gtkprintunixdialog.c:2167
 msgid "Layout"
 msgstr ""
 
-#: gtk/gtkprintunixdialog.c:2042
+#: gtk/gtkprintunixdialog.c:2171
 #, fuzzy
 msgid "Pages per _side:"
 msgstr "ምርጫዎች (_P)"
 
-#: gtk/gtkprintunixdialog.c:2058
+#: gtk/gtkprintunixdialog.c:2187
 msgid "T_wo-sided:"
 msgstr ""
 
-#: gtk/gtkprintunixdialog.c:2073
+#: gtk/gtkprintunixdialog.c:2202
 #, fuzzy
 msgid "_Only print:"
 msgstr "አትም (_P)"
 
 #. In enum order
-#: gtk/gtkprintunixdialog.c:2088
+#: gtk/gtkprintunixdialog.c:2217
 msgid "All sheets"
 msgstr ""
 
-#: gtk/gtkprintunixdialog.c:2089
+#: gtk/gtkprintunixdialog.c:2218
 msgid "Even sheets"
 msgstr ""
 
-#: gtk/gtkprintunixdialog.c:2090
+#: gtk/gtkprintunixdialog.c:2219
 msgid "Odd sheets"
 msgstr ""
 
-#: gtk/gtkprintunixdialog.c:2093
+#: gtk/gtkprintunixdialog.c:2222
 #, fuzzy
 msgid "Sc_ale:"
 msgstr "_ዕሴት፦"
 
-#: gtk/gtkprintunixdialog.c:2120
+#: gtk/gtkprintunixdialog.c:2249
 msgid "Paper"
 msgstr ""
 
-#: gtk/gtkprintunixdialog.c:2124
+#: gtk/gtkprintunixdialog.c:2253
 #, fuzzy
 msgid "Paper _type:"
 msgstr "ምርጫዎች (_P)"
 
-#: gtk/gtkprintunixdialog.c:2139
+#: gtk/gtkprintunixdialog.c:2268
 #, fuzzy
 msgid "Paper _source:"
 msgstr "ምርጫዎች (_P)"
 
-#: gtk/gtkprintunixdialog.c:2154
+#: gtk/gtkprintunixdialog.c:2283
 msgid "Output t_ray:"
 msgstr ""
 
-#: gtk/gtkprintunixdialog.c:2205
+#: gtk/gtkprintunixdialog.c:2334
 msgid "Job Details"
 msgstr ""
 
-#: gtk/gtkprintunixdialog.c:2211
+#: gtk/gtkprintunixdialog.c:2340
 msgid "Pri_ority:"
 msgstr ""
 
-#: gtk/gtkprintunixdialog.c:2226
+#: gtk/gtkprintunixdialog.c:2355
 msgid "_Billing info:"
 msgstr ""
 
-#: gtk/gtkprintunixdialog.c:2244
+#: gtk/gtkprintunixdialog.c:2373
 msgid "Print Document"
 msgstr ""
 
-#: gtk/gtkprintunixdialog.c:2250
+#: gtk/gtkprintunixdialog.c:2379
 #, fuzzy
 msgid "_Now"
 msgstr "አይ (_N)"
 
-#: gtk/gtkprintunixdialog.c:2257
+#: gtk/gtkprintunixdialog.c:2386
 msgid "A_t:"
 msgstr ""
 
-#: gtk/gtkprintunixdialog.c:2272
+#: gtk/gtkprintunixdialog.c:2401
 #, fuzzy
 msgid "On _hold"
 msgstr "ደማቅ (_B)"
 
-#: gtk/gtkprintunixdialog.c:2291
+#: gtk/gtkprintunixdialog.c:2420
 msgid "Add Cover Page"
 msgstr ""
 
-#: gtk/gtkprintunixdialog.c:2297
+#: gtk/gtkprintunixdialog.c:2426
 msgid "Be_fore:"
 msgstr ""
 
-#: gtk/gtkprintunixdialog.c:2312
+#: gtk/gtkprintunixdialog.c:2441
 msgid "_After:"
 msgstr ""
 
-#: gtk/gtkprintunixdialog.c:2327
+#: gtk/gtkprintunixdialog.c:2456
 msgid "Job"
 msgstr ""
 
-#: gtk/gtkprintunixdialog.c:2393
+#: gtk/gtkprintunixdialog.c:2522
 msgid "Advanced"
 msgstr ""
 
-#: gtk/gtkprintunixdialog.c:2428
+#: gtk/gtkprintunixdialog.c:2557
 msgid "Image Quality"
 msgstr ""
 
-#: gtk/gtkprintunixdialog.c:2431
+#: gtk/gtkprintunixdialog.c:2560
 #, fuzzy
 msgid "Color"
 msgstr "ቀለም (_C)"
 
-#: gtk/gtkprintunixdialog.c:2434
+#: gtk/gtkprintunixdialog.c:2563
 msgid "Finishing"
 msgstr ""
 
-#: gtk/gtkprintunixdialog.c:2444
+#: gtk/gtkprintunixdialog.c:2573
 msgid "Some of the settings in the dialog conflict"
 msgstr ""
 
-#: gtk/gtkprintunixdialog.c:2467
+#: gtk/gtkprintunixdialog.c:2596
 #, fuzzy
 msgid "Print"
 msgstr "አትም (_P)"
@@ -2749,49 +2788,49 @@ msgid "Unable to locate image file in pixmap_path: \"%s\""
 msgstr ""
 
 #: gtk/gtkrecentaction.c:155 gtk/gtkrecentaction.c:163
-#: gtk/gtkrecentchoosermenu.c:554 gtk/gtkrecentchoosermenu.c:562
+#: gtk/gtkrecentchoosermenu.c:551 gtk/gtkrecentchoosermenu.c:559
 #, c-format
 msgid "This function is not implemented for widgets of class '%s'"
 msgstr ""
 
-#: gtk/gtkrecentchooserdefault.c:456
+#: gtk/gtkrecentchooserdefault.c:454
 msgid "Select which type of documents are shown"
 msgstr ""
 
-#: gtk/gtkrecentchooserdefault.c:1098 gtk/gtkrecentchooserdefault.c:1135
+#: gtk/gtkrecentchooserdefault.c:1096 gtk/gtkrecentchooserdefault.c:1133
 #, c-format
 msgid "No item for URI '%s' found"
 msgstr ""
 
-#: gtk/gtkrecentchooserdefault.c:1262
+#: gtk/gtkrecentchooserdefault.c:1260
 msgid "Untitled filter"
 msgstr ""
 
-#: gtk/gtkrecentchooserdefault.c:1615
+#: gtk/gtkrecentchooserdefault.c:1613
 #, fuzzy
 msgid "Could not remove item"
 msgstr "የአሁኑን ቀለም"
 
-#: gtk/gtkrecentchooserdefault.c:1658
+#: gtk/gtkrecentchooserdefault.c:1656
 #, fuzzy
 msgid "Could not clear list"
 msgstr "የአሁኑን ቀለም"
 
-#: gtk/gtkrecentchooserdefault.c:1742
+#: gtk/gtkrecentchooserdefault.c:1740
 #, fuzzy
 msgid "Copy _Location"
 msgstr "_ምርጫ፦ "
 
-#: gtk/gtkrecentchooserdefault.c:1755
+#: gtk/gtkrecentchooserdefault.c:1753
 msgid "_Remove From List"
 msgstr ""
 
-#: gtk/gtkrecentchooserdefault.c:1764
+#: gtk/gtkrecentchooserdefault.c:1762
 #, fuzzy
 msgid "_Clear List"
 msgstr "ሰርዝ (_C)"
 
-#: gtk/gtkrecentchooserdefault.c:1778
+#: gtk/gtkrecentchooserdefault.c:1776
 msgid "Show _Private Resources"
 msgstr ""
 
@@ -2805,21 +2844,21 @@ msgstr ""
 #. * user appended or prepended custom menu items to the
 #. * recent chooser menu widget.
 #.
-#: gtk/gtkrecentchoosermenu.c:320
+#: gtk/gtkrecentchoosermenu.c:317
 msgid "No items found"
 msgstr ""
 
-#: gtk/gtkrecentchoosermenu.c:474 gtk/gtkrecentchoosermenu.c:530
+#: gtk/gtkrecentchoosermenu.c:471 gtk/gtkrecentchoosermenu.c:527
 #, c-format
 msgid "No recently used resource found with URI `%s'"
 msgstr ""
 
-#: gtk/gtkrecentchoosermenu.c:741
+#: gtk/gtkrecentchoosermenu.c:738
 #, c-format
 msgid "Open '%s'"
 msgstr ""
 
-#: gtk/gtkrecentchoosermenu.c:771
+#: gtk/gtkrecentchoosermenu.c:768
 #, fuzzy
 msgid "Unknown item"
 msgstr "(ያልታወቀ)"
@@ -2831,7 +2870,7 @@ msgstr "(ያልታወቀ)"
 #. *
 #. * Don't include the prefix "recent menu label|" in the translation.
 #.
-#: gtk/gtkrecentchoosermenu.c:784
+#: gtk/gtkrecentchoosermenu.c:781
 #, c-format
 msgid "recent menu label|_%d. %s"
 msgstr ""
@@ -2841,13 +2880,13 @@ msgstr ""
 #. *
 #. * Don't include the prefix "recent menu label|" in the translation.
 #.
-#: gtk/gtkrecentchoosermenu.c:791
+#: gtk/gtkrecentchoosermenu.c:788
 #, c-format
 msgid "recent menu label|%d. %s"
 msgstr ""
 
-#: gtk/gtkrecentmanager.c:1041 gtk/gtkrecentmanager.c:1187
-#: gtk/gtkrecentmanager.c:1197 gtk/gtkrecentmanager.c:1250
+#: gtk/gtkrecentmanager.c:1008 gtk/gtkrecentmanager.c:1154
+#: gtk/gtkrecentmanager.c:1164 gtk/gtkrecentmanager.c:1217
 #, c-format
 msgid "Unable to find an item with URI '%s'"
 msgstr ""
@@ -3361,12 +3400,12 @@ msgstr ""
 msgid "A <text> element can't occur before a <tags> element"
 msgstr ""
 
-#: gtk/gtktextbufferserialize.c:1788
+#: gtk/gtktextbufferserialize.c:1779
 #, c-format
 msgid "Serialized data is malformed"
 msgstr ""
 
-#: gtk/gtktextbufferserialize.c:1866
+#: gtk/gtktextbufferserialize.c:1857
 #, c-format
 msgid ""
 "Serialized data is malformed. First section isn't GTKTEXTBUFFERCONTENTS-0001"
@@ -4439,90 +4478,90 @@ msgstr "ቪትናምኛ (VIQR)"
 msgid "X Input Method"
 msgstr "የX ዘገባ የማስትገባት ዘዴ"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1533
+#: modules/printbackends/cups/gtkprintbackendcups.c:1697
 msgid "Two Sided"
 msgstr ""
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1534
+#: modules/printbackends/cups/gtkprintbackendcups.c:1698
 msgid "Paper Type"
 msgstr ""
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1535
+#: modules/printbackends/cups/gtkprintbackendcups.c:1699
 msgid "Paper Source"
 msgstr ""
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1536
+#: modules/printbackends/cups/gtkprintbackendcups.c:1700
 msgid "Output Tray"
 msgstr ""
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1545
+#: modules/printbackends/cups/gtkprintbackendcups.c:1709
 msgid "One Sided"
 msgstr ""
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1546
-#: modules/printbackends/cups/gtkprintbackendcups.c:1547
-#: modules/printbackends/cups/gtkprintbackendcups.c:1551
+#: modules/printbackends/cups/gtkprintbackendcups.c:1710
+#: modules/printbackends/cups/gtkprintbackendcups.c:1711
+#: modules/printbackends/cups/gtkprintbackendcups.c:1715
 #, fuzzy
 msgid "Auto Select"
 msgstr "የፊደል ቅርጽ ምርጫ"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1548
-#: modules/printbackends/cups/gtkprintbackendcups.c:1549
-#: modules/printbackends/cups/gtkprintbackendcups.c:1550
-#: modules/printbackends/cups/gtkprintbackendcups.c:2020
+#: modules/printbackends/cups/gtkprintbackendcups.c:1712
+#: modules/printbackends/cups/gtkprintbackendcups.c:1713
+#: modules/printbackends/cups/gtkprintbackendcups.c:1714
+#: modules/printbackends/cups/gtkprintbackendcups.c:2184
 #, fuzzy
 msgid "Printer Default"
 msgstr "የነበረው ስፋት"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2214
+#: modules/printbackends/cups/gtkprintbackendcups.c:2378
 msgid "Urgent"
 msgstr ""
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2214
+#: modules/printbackends/cups/gtkprintbackendcups.c:2378
 msgid "High"
 msgstr ""
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2214
+#: modules/printbackends/cups/gtkprintbackendcups.c:2378
 msgid "Medium"
 msgstr ""
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2214
+#: modules/printbackends/cups/gtkprintbackendcups.c:2378
 msgid "Low"
 msgstr ""
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2216
+#: modules/printbackends/cups/gtkprintbackendcups.c:2380
 #, fuzzy
 msgid "None"
 msgstr "ምንም"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2216
+#: modules/printbackends/cups/gtkprintbackendcups.c:2380
 msgid "Classified"
 msgstr ""
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2216
+#: modules/printbackends/cups/gtkprintbackendcups.c:2380
 msgid "Confidential"
 msgstr ""
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2216
+#: modules/printbackends/cups/gtkprintbackendcups.c:2380
 #, fuzzy
 msgid "Secret"
 msgstr "እስክሪን"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2216
+#: modules/printbackends/cups/gtkprintbackendcups.c:2380
 msgid "Standard"
 msgstr ""
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2216
+#: modules/printbackends/cups/gtkprintbackendcups.c:2380
 msgid "Top Secret"
 msgstr ""
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2216
+#: modules/printbackends/cups/gtkprintbackendcups.c:2380
 msgid "Unclassified"
 msgstr ""
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2302
+#: modules/printbackends/cups/gtkprintbackendcups.c:2473
 #, c-format
-msgid "Custom %.2fx%.2f"
+msgid "Custom %sx%s"
 msgstr ""
 
 #. default filename used for print-to-file
