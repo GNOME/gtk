@@ -1,3 +1,7 @@
+2008-04-22  Kjartan Maraas  <kmaraas@gnome.org>
+
+	* POTFILES.in: Add gtkmountoperation.c
+
 2008-04-22  Adam Weinberger  <adamw@gnome.org>
 
 	* en_CA.po: Updated Canadian English translation.

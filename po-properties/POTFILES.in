@@ -143,6 +143,7 @@ gtk/gtkmenutoolbutton.c
 gtk/gtkmessagedialog.c
 gtk/gtkmisc.c
 gtk/gtkmodules.c
+gtk/gtkmountoperation.c
 gtk/gtknotebook.c
 gtk/gtkobject.c
 gtk/gtkoldeditable.c
