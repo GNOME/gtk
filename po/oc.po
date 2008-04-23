@@ -8,14 +8,14 @@ msgid ""
 msgstr ""
 "Project-Id-Version: oc\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-04-23 09:56+0200\n"
+"POT-Creation-Date: 2008-04-23 15:17+0200\n"
 "PO-Revision-Date: 2008-04-23 10:46+0200\n"
 "Last-Translator: Yannig Marchegay (Kokoyaya) <yannig@marchegay.org>\n"
 "Language-Team: Occitan <ubuntu-l10n-oci@lists.ubuntu.com>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=(n > 1);"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
 
 #: ../gdk/directfb/gdkdisplay-directfb.c:55
 msgid "directfb arg"
@@ -294,7 +294,7 @@ msgstr "Format d'imatge pas reconegut"
 msgid "Failed to load image '%s': %s"
 msgstr "Impossible de cargar l'imatge '%s' : %s"
 
-#: ../gdk-pixbuf/gdk-pixbuf-io.c:1583
+#: ../gdk-pixbuf/gdk-pixbuf-io.c:1583 ../gdk-pixbuf/io-gdip-utils.c:935
 #, c-format
 msgid "Error writing to image file: %s"
 msgstr "Error al moment d'escriure lo fichièr d'imatge : %s"
@@ -339,7 +339,7 @@ msgstr ""
 #: ../gdk-pixbuf/gdk-pixbuf-io.c:2279
 #, c-format
 msgid "Error writing to image stream"
-msgstr "Error al moment d'escriure lo fichièr d'imatge : %s"
+msgstr "Error al moment d'escriure lo fichièr d'imatge"
 
 #: ../gdk-pixbuf/gdk-pixbuf-loader.c:330
 #, c-format
@@ -371,7 +371,9 @@ msgstr "Donadas dels pixels de l'imatge corrompudas"
 #: ../gdk-pixbuf/gdk-pixdata.c:431
 #, c-format
 msgid "failed to allocate image buffer of %u byte"
-msgstr ""
+msgid_plural "failed to allocate image buffer of %u bytes"
+msgstr[0] ""
+msgstr[1] ""
 
 #: ../gdk-pixbuf/io-ani.c:244
 #, c-format
@@ -444,7 +446,7 @@ msgstr ""
 msgid "Couldn't write to BMP file"
 msgstr "Impossible d'escriure lo fichièr BMP"
 
-#: ../gdk-pixbuf/io-bmp.c:1425
+#: ../gdk-pixbuf/io-bmp.c:1425 ../gdk-pixbuf/io-gdip-bmp.c:82
 msgid "The BMP image format"
 msgstr "Lo format d'imatge BMP"
 
@@ -522,7 +524,7 @@ msgstr ""
 msgid "GIF image was truncated or incomplete."
 msgstr "L'imatge GIF èra troncat o incomplet."
 
-#: ../gdk-pixbuf/io-gif.c:1691
+#: ../gdk-pixbuf/io-gif.c:1691 ../gdk-pixbuf/io-gdip-gif.c:80
 msgid "The GIF image format"
 msgstr "Lo format d'imatge GIF"
 
@@ -579,7 +581,7 @@ msgstr ""
 msgid "Unsupported depth for ICO file: %d"
 msgstr ""
 
-#: ../gdk-pixbuf/io-ico.c:1223
+#: ../gdk-pixbuf/io-ico.c:1223 ../gdk-pixbuf/io-gdip-ico.c:59
 msgid "The ICO image format"
 msgstr "Lo format d'imatge ICO"
 
@@ -666,7 +668,7 @@ msgstr ""
 msgid "Transformed JPEG has zero width or height."
 msgstr ""
 
-#: ../gdk-pixbuf/io-jpeg.c:1133
+#: ../gdk-pixbuf/io-jpeg.c:1133 ../gdk-pixbuf/io-gdip-jpeg.c:53
 #, c-format
 msgid ""
 "JPEG quality must be a value between 0 and 100; value '%s' could not be "
@@ -675,7 +677,7 @@ msgstr ""
 "La qualitat de JPEG deu èsser una valor entre 0 e 100 ; la valor '%s' se pòt "
 "pas interpretar."
 
-#: ../gdk-pixbuf/io-jpeg.c:1148
+#: ../gdk-pixbuf/io-jpeg.c:1148 ../gdk-pixbuf/io-gdip-jpeg.c:68
 #, c-format
 msgid ""
 "JPEG quality must be a value between 0 and 100; value '%d' is not allowed."
@@ -683,7 +685,7 @@ msgstr ""
 "La qualitat de JPEG deu èsser una valor entre 0 e 100 ; la valor '%d' es pas "
 "autorisada."
 
-#: ../gdk-pixbuf/io-jpeg.c:1311
+#: ../gdk-pixbuf/io-jpeg.c:1311 ../gdk-pixbuf/io-gdip-jpeg.c:136
 msgid "The JPEG image format"
 msgstr "Lo format d'imatge JPEG"
 
@@ -804,14 +806,14 @@ msgstr ""
 msgid "Keys for PNG text chunks must be ASCII characters."
 msgstr ""
 
-#: ../gdk-pixbuf/io-png.c:846
+#: ../gdk-pixbuf/io-png.c:846 ../gdk-pixbuf/io-gdip-png.c:56
 #, c-format
 msgid ""
 "PNG compression level must be a value between 0 and 9; value '%s' could not "
 "be parsed."
 msgstr ""
 
-#: ../gdk-pixbuf/io-png.c:858
+#: ../gdk-pixbuf/io-png.c:858 ../gdk-pixbuf/io-gdip-png.c:68
 #, c-format
 msgid ""
 "PNG compression level must be a value between 0 and 9; value '%d' is not "
@@ -825,7 +827,7 @@ msgstr ""
 msgid "Value for PNG text chunk %s cannot be converted to ISO-8859-1 encoding."
 msgstr ""
 
-#: ../gdk-pixbuf/io-png.c:1047
+#: ../gdk-pixbuf/io-png.c:1047 ../gdk-pixbuf/io-gdip-png.c:133
 msgid "The PNG image format"
 msgstr "Lo format d'imatge PNG"
 
@@ -1153,6 +1155,62 @@ msgstr ""
 msgid "The XPM image format"
 msgstr "Lo format d'imatge XPM"
 
+#: ../gdk-pixbuf/io-gdip-emf.c:59
+#, fuzzy
+msgid "The EMF image format"
+msgstr "Lo format d'imatge BMP"
+
+#: ../gdk-pixbuf/io-gdip-utils.c:212
+#, fuzzy, c-format
+msgid "Could not allocate memory: %s"
+msgstr "Impossible de montar %s"
+
+#: ../gdk-pixbuf/io-gdip-utils.c:237 ../gdk-pixbuf/io-gdip-utils.c:350
+#: ../gdk-pixbuf/io-gdip-utils.c:383
+#, fuzzy, c-format
+msgid "Could not create stream: %s"
+msgstr "Impossible de suprimir l'element"
+
+#: ../gdk-pixbuf/io-gdip-utils.c:251
+#, fuzzy, c-format
+msgid "Could not seek stream: %s"
+msgstr "Impossible de suprimir l'element"
+
+#: ../gdk-pixbuf/io-gdip-utils.c:263
+#, fuzzy, c-format
+msgid "Could not read from stream: %s"
+msgstr "Impossible de suprimir l'element"
+
+#: ../gdk-pixbuf/io-gdip-utils.c:736
+#, fuzzy, c-format
+msgid "Couldn't create pixbuf"
+msgstr "Impossible de suprimir l'element"
+
+#: ../gdk-pixbuf/io-gdip-utils.c:798
+#, fuzzy, c-format
+msgid "Couldn't load bitmap"
+msgstr "Impossible d'apondre lo favorit"
+
+#: ../gdk-pixbuf/io-gdip-utils.c:821
+#, fuzzy, c-format
+msgid "Couldn't load metafile"
+msgstr "Impossible de seleccionar lo fichièr"
+
+#: ../gdk-pixbuf/io-gdip-utils.c:980
+#, fuzzy, c-format
+msgid "Unsupported image format for GDI+"
+msgstr "Tipe d'animacion pas compatible"
+
+#: ../gdk-pixbuf/io-gdip-utils.c:987
+#, c-format
+msgid "Couldn't save"
+msgstr ""
+
+#: ../gdk-pixbuf/io-gdip-wmf.c:58
+#, fuzzy
+msgid "The WMF image format"
+msgstr "Lo format d'imatge WBMP"
+
 #. Description of --sync in --help output
 #: ../gdk/win32/gdkmain-win32.c:54
 msgid "Don't batch GDI requests"
@@ -1203,6 +1261,7 @@ msgstr "Dobertura de %s"
 msgid "Opening %d Item"
 msgid_plural "Opening %d Items"
 msgstr[0] "Dobertura de %d element"
+msgstr[1] "Dobertura de %d elementes"
 
 #: ../gtk/gtkaboutdialog.c:264 ../gtk/gtkaboutdialog.c:2106
 msgid "License"
@@ -2292,6 +2351,45 @@ msgstr "Opcions GTK+"
 #: ../gtk/gtkmain.c:768
 msgid "Show GTK+ Options"
 msgstr "Visualizar las opcions GTK+"
+
+#: ../gtk/gtkmountoperation.c:454
+#, fuzzy
+msgid "Co_nnect"
+msgstr "Se _connectar"
+
+#: ../gtk/gtkmountoperation.c:498
+msgid "Connect _anonymously"
+msgstr ""
+
+#: ../gtk/gtkmountoperation.c:507
+msgid "Connect as u_ser:"
+msgstr ""
+
+#: ../gtk/gtkmountoperation.c:544
+#, fuzzy
+msgid "_Username:"
+msgstr "_Renommar"
+
+#: ../gtk/gtkmountoperation.c:548
+#, fuzzy
+msgid "_Domain:"
+msgstr "_Emplaçament :"
+
+#: ../gtk/gtkmountoperation.c:553
+msgid "_Password:"
+msgstr ""
+
+#: ../gtk/gtkmountoperation.c:568
+msgid "_Forget password immediately"
+msgstr ""
+
+#: ../gtk/gtkmountoperation.c:576
+msgid "_Remember password until you logout"
+msgstr ""
+
+#: ../gtk/gtkmountoperation.c:584
+msgid "_Remember forever"
+msgstr ""
 
 #: ../gtk/gtknotebook.c:828
 msgid "Arrow spacing"

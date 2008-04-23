@@ -1,3 +1,8 @@
+2008-04-23  Kjartan Maraas  <kmaraas@gnome.org>
+
+	* oc.po: Fix build. Please fix the translation if this
+	isn't the right way to fix it :-)
+
 2008-04-23  Yannig Marchegay  <yannig@marchegay.org>
 
 	* oc.po: Updated Occitan translation.
