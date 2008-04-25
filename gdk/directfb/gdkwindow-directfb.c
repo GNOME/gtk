@@ -2684,7 +2684,7 @@ gdk_window_get_frame_extents (GdkWindow    *window,
   impl = GDK_DRAWABLE_IMPL_DIRECTFB (private->impl);
 
   rect->x      = impl->abs_x;
-  rect->y      = impl->abs_x;
+  rect->y      = impl->abs_y;
   rect->width  = impl->width;
   rect->height = impl->height;
 }

@@ -1,3 +1,9 @@
+2008-04-25  Michael Emmel  <mike.emmel@gmail.com>
+
+	Bug 529841 – incorrect position in directfb 
+
+	* gdk/directfb/gdkwindow-directfb.c: fix y = abs_x 
+
 2008-04-25  Johan Dahlin  <jdahlin@async.com.br>
 
 	* gtk/gtkwidget.h: include <atk/atk.h> instead of <atk/atkobject.h>
