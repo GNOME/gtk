@@ -1,3 +1,9 @@
+2008-04-25  Björn Lindqvist  <bjourne@gmail.com>
+
+	* gtk/gtkentry.c: (gtk_entry_expose) Use existing window size when
+	painting the flat box instead of recalculating it. (#437493,
+	Ricardo Cruz)
+
 2008-04-25  Michael Emmel  <mike.emmel@gmail.com>
 
 	Bug 529841 – incorrect position in directfb 

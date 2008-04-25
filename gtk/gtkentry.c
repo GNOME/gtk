@@ -1575,8 +1575,7 @@ gtk_entry_expose (GtkWidget      *widget,
   else if (entry->text_area == event->window)
     {
       gint area_width, area_height;
-
-      get_text_area_size (entry, NULL, NULL, &area_width, &area_height);
+      gdk_drawable_get_size (entry->text_area, &area_width, &area_height);
 
       gtk_paint_flat_box (widget->style, entry->text_area, 
 			  GTK_WIDGET_STATE(widget), GTK_SHADOW_NONE,
