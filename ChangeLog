@@ -1,3 +1,8 @@
+2008-04-25  Michael Natterer  <mitch@imendio.com>
+
+	* gtk/gtkmountoperation.h: include <gdk/gdk.h> instead of
+	<gdk/gdkscreen.h>.
+
 2008-04-21  Michael Natterer  <mitch@imendio.com>
 
 	* gtk/gtkselection.c: add tons of g_return_if_fail() instead of
