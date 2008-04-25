@@ -1,5 +1,20 @@
 2008-04-25  Michael Natterer  <mitch@imendio.com>
 
+	* gtk/gtkprintcontext.h: include <pango/pango.h> instead of
+	<pango/pango-layout.h>.
+
+	* gtk/gtkiconfactory.c
+	* gtk/gtkimmodule.c
+	* gtk/gtkmain.c
+	* gtk/gtkmodules.c
+	* gtk/queryimmodules.c: remove inclusion of single files from
+	pango, none of them was actually needed.
+
+	* modules/input/gtkimcontextime.c: include <pango/pango.h> instead of
+	<pango/pango-utils.h>.
+
+2008-04-25  Michael Natterer  <mitch@imendio.com>
+
 	* gdk/gdkfont.h: include <pango/pango.h> instead of
 	<pango/pango-font.h>.
 

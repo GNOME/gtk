@@ -30,7 +30,6 @@
 #include "gtkalias.h"
 
 #include <gmodule.h>
-#include <pango/pango-utils.h>	/* For pango_split_file_list */
 
 typedef struct _GtkModuleInfo GtkModuleInfo;
 struct _GtkModuleInfo

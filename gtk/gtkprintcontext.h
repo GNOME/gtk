@@ -22,7 +22,7 @@
 #define __GTK_PRINT_CONTEXT_H__
 
 #include <glib-object.h>
-#include <pango/pango-layout.h>
+#include <pango/pango.h>
 #include "gtkenums.h"
 #include "gtkpagesetup.h"
 

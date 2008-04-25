@@ -28,7 +28,6 @@
 #include <stdlib.h>
 #include <errno.h>
 #include <string.h>
-#include <pango/pango-utils.h>	/* For pango_scan_* */
 #include "gtkiconfactory.h"
 #include "gtkiconcache.h"
 #include "gtkdebug.h"

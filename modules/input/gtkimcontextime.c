@@ -33,7 +33,7 @@
 #include "gdk/gdkkeysyms.h"
 #include "gtk/gtkwidget.h"
 
-#include <pango/pango-utils.h>
+#include <pango/pango.h>
 
 /* avoid warning */
 #ifdef STRICT

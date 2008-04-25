@@ -49,8 +49,6 @@
 #undef STRICT
 #endif
 
-#include <pango/pango-types.h>	/* For pango_language_from_string */
-
 #include "gtkintl.h"
 
 #include "gtkaccelmap.h"

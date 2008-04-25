@@ -32,7 +32,6 @@
 
 #include <glib/gstdio.h>
 #include <gmodule.h>
-#include <pango/pango-utils.h>
 #include "gtkimmodule.h"
 #include "gtkimcontextsimple.h"
 #include "gtksettings.h"

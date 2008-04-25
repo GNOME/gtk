@@ -37,7 +37,6 @@
 #define SOEXT ("." G_MODULE_SUFFIX)
 #endif
 
-#include <pango/pango-utils.h>
 #include "gtk/gtkrc.h"
 #include "gtk/gtkimmodule.h"
 #include "gtk/gtkversion.h"
