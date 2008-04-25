@@ -1,5 +1,10 @@
 2008-04-25  Michael Natterer  <mitch@imendio.com>
 
+	* gdk/gdkfont.h: include <pango/pango.h> instead of
+	<pango/pango-font.h>.
+
+2008-04-25  Michael Natterer  <mitch@imendio.com>
+
 	* gtk/gtkmountoperation.h: include <gdk/gdk.h> instead of
 	<gdk/gdkscreen.h>.
 
