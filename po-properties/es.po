@@ -15,8 +15,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-properties.HEAD\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-04-15 23:37+0100\n"
-"PO-Revision-Date: 2008-04-17 20:30+0200\n"
+"POT-Creation-Date: 2008-04-22 19:55+0000\n"
+"PO-Revision-Date: 2008-04-26 12:56+0200\n"
 "Last-Translator: Jorge González <jorgegonz@svn.gnome.org>\n"
 "Language-Team: Español <gnome-es-list@gnome.org>\n"
 "MIME-Version: 1.0\n"
@@ -98,7 +98,8 @@ msgstr "Visor predeterminado"
 msgid "The default display for GDK"
 msgstr "El visor predeterminado para GDK"
 
-#: ../gdk/gdkpango.c:490 ../gtk/gtkinvisible.c:86 ../gtk/gtkstatusicon.c:231
+#: ../gdk/gdkpango.c:490 ../gtk/gtkinvisible.c:86
+#: ../gtk/gtkmountoperation.c:154 ../gtk/gtkstatusicon.c:231
 #: ../gtk/gtkwindow.c:600
 msgid "Screen"
 msgstr "Pantalla"
@@ -729,7 +730,7 @@ msgstr "Homogéneo"
 msgid "Whether the children should all be the same size"
 msgstr "Indica si todos los hijos deben ser del mismo tamaño"
 
-#: ../gtk/gtkbox.c:116 ../gtk/gtkpreview.c:104 ../gtk/gtktoolbar.c:574
+#: ../gtk/gtkbox.c:116 ../gtk/gtkpreview.c:103 ../gtk/gtktoolbar.c:574
 #: ../gtk/gtktreeviewcolumn.c:272
 msgid "Expand"
 msgstr "Expandir"
@@ -3287,6 +3288,26 @@ msgstr ""
 "El número de espacio a añadir en la parte superior e inferior del widget, en "
 "píxeles"
 
+#: ../gtk/gtkmountoperation.c:138
+msgid "Parent"
+msgstr "Padre"
+
+#: ../gtk/gtkmountoperation.c:139
+msgid "The parent window"
+msgstr "La ventana padre"
+
+#: ../gtk/gtkmountoperation.c:146
+msgid "Is Showing"
+msgstr "Está mostrando"
+
+#: ../gtk/gtkmountoperation.c:147
+msgid "Are we showing a dialog"
+msgstr "Estamos mostrando un diálogo"
+
+#: ../gtk/gtkmountoperation.c:155
+msgid "The screen where this window will be displayed."
+msgstr "La pantalla donde se mostrará esta ventana."
+
 #: ../gtk/gtknotebook.c:566
 msgid "Page"
 msgstr "Página"
@@ -3572,7 +3593,7 @@ msgstr "Empotrado"
 msgid "Whether or not the plug is embedded"
 msgstr "Indica si el conector está empotrado"
 
-#: ../gtk/gtkpreview.c:105
+#: ../gtk/gtkpreview.c:104
 msgid "Whether the preview widget should take up the entire space it is allocated"
 msgstr ""
 "Indica si el widget de vista previa debe tomar el espacio entero adonde se "
@@ -4110,11 +4131,11 @@ msgstr ""
 "Indica si se debe dibujar para la longitud completa del rango o excluir las "
 "flechas de desplazamiento y el espaciado"
 
-#: ../gtk/gtkrecentaction.c:679 ../gtk/gtkrecentchoosermenu.c:208
+#: ../gtk/gtkrecentaction.c:679 ../gtk/gtkrecentchoosermenu.c:206
 msgid "Show Numbers"
 msgstr "Mostrar números"
 
-#: ../gtk/gtkrecentaction.c:680 ../gtk/gtkrecentchoosermenu.c:209
+#: ../gtk/gtkrecentaction.c:680 ../gtk/gtkrecentchoosermenu.c:207
 msgid "Whether the items should be displayed with a number"
 msgstr "Indica si los elementos deben mostrarse con un número"
 
