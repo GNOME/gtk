@@ -19,7 +19,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+.HEAD.he\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-04-15 23:37+0100\n"
+"POT-Creation-Date: 2008-04-22 19:55+0000\n"
 "PO-Revision-Date: 2002-12-07 10:05+0200\n"
 "Last-Translator: Yair Hershkovitz <yairhr@gmail.com>\n"
 "Language-Team: Hebrew <he@li.org>\n"
@@ -103,7 +103,8 @@ msgstr "Default Display"
 msgid "The default display for GDK"
 msgstr "The default display for GDK"
 
-#: ../gdk/gdkpango.c:490 ../gtk/gtkinvisible.c:86 ../gtk/gtkstatusicon.c:231
+#: ../gdk/gdkpango.c:490 ../gtk/gtkinvisible.c:86
+#: ../gtk/gtkmountoperation.c:154 ../gtk/gtkstatusicon.c:231
 #: ../gtk/gtkwindow.c:600
 msgid "Screen"
 msgstr "Screen"
@@ -729,7 +730,7 @@ msgstr "Homogeneous"
 msgid "Whether the children should all be the same size"
 msgstr "Whether the children should all be the same size"
 
-#: ../gtk/gtkbox.c:116 ../gtk/gtkpreview.c:104 ../gtk/gtktoolbar.c:574
+#: ../gtk/gtkbox.c:116 ../gtk/gtkpreview.c:103 ../gtk/gtktoolbar.c:574
 #: ../gtk/gtktreeviewcolumn.c:272
 msgid "Expand"
 msgstr "Expand"
@@ -3152,7 +3153,8 @@ msgstr "The submenu attached to the menu item, or NULL if it has none"
 
 #: ../gtk/gtkmenuitem.c:248
 msgid "Amount of space used up by arrow, relative to the menu item's font size"
-msgstr "Amount of space used up by arrow, relative to the menu item's font size"
+msgstr ""
+"Amount of space used up by arrow, relative to the menu item's font size"
 
 #: ../gtk/gtkmenushell.c:368
 msgid "Take Focus"
@@ -3263,6 +3265,26 @@ msgid ""
 "The amount of space to add on the top and bottom of the widget, in pixels"
 msgstr ""
 "The amount of space to add on the top and bottom of the widget, in pixels"
+
+#: ../gtk/gtkmountoperation.c:138
+msgid "Parent"
+msgstr "Parent"
+
+#: ../gtk/gtkmountoperation.c:139
+msgid "The parent window"
+msgstr "The parent window"
+
+#: ../gtk/gtkmountoperation.c:146
+msgid "Is Showing"
+msgstr "Is Showing"
+
+#: ../gtk/gtkmountoperation.c:147
+msgid "Are we showing a dialog"
+msgstr "Are we showing a dialog"
+
+#: ../gtk/gtkmountoperation.c:155
+msgid "The screen where this window will be displayed."
+msgstr "The screen where this window will be displayed."
 
 #: ../gtk/gtknotebook.c:566
 msgid "Page"
@@ -3547,7 +3569,7 @@ msgstr "Embedded"
 msgid "Whether or not the plug is embedded"
 msgstr "Whether or not the plug is embedded"
 
-#: ../gtk/gtkpreview.c:105
+#: ../gtk/gtkpreview.c:104
 msgid ""
 "Whether the preview widget should take up the entire space it is allocated"
 msgstr ""
@@ -4080,11 +4102,11 @@ msgstr ""
 "Whether to draw trough for full length of range or exclude the steppers and "
 "spacing"
 
-#: ../gtk/gtkrecentaction.c:679 ../gtk/gtkrecentchoosermenu.c:208
+#: ../gtk/gtkrecentaction.c:679 ../gtk/gtkrecentchoosermenu.c:206
 msgid "Show Numbers"
 msgstr "Show Numbers"
 
-#: ../gtk/gtkrecentaction.c:680 ../gtk/gtkrecentchoosermenu.c:209
+#: ../gtk/gtkrecentaction.c:680 ../gtk/gtkrecentchoosermenu.c:207
 msgid "Whether the items should be displayed with a number"
 msgstr "Whether the items should be displayed with a number"
 
