@@ -17,8 +17,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gl\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-04-14 11:33+0200\n"
-"PO-Revision-Date: 2008-04-14 11:32+0200\n"
+"POT-Creation-Date: 2008-04-29 23:31+0200\n"
+"PO-Revision-Date: 2008-04-29 23:33+0200\n"
 "Last-Translator: Ignacio Casal Quinteiro <icq@svn.gnome.org>\n"
 "Language-Team: Galego <proxecto@trasno.net>\n"
 "MIME-Version: 1.0\n"
@@ -101,7 +101,8 @@ msgstr "Pantalla predeterminada"
 msgid "The default display for GDK"
 msgstr "Pantalla predeterminada para o GDK"
 
-#: ../gdk/gdkpango.c:490 ../gtk/gtkinvisible.c:86 ../gtk/gtkstatusicon.c:231
+#: ../gdk/gdkpango.c:490 ../gtk/gtkinvisible.c:86
+#: ../gtk/gtkmountoperation.c:154 ../gtk/gtkstatusicon.c:231
 #: ../gtk/gtkwindow.c:600
 msgid "Screen"
 msgstr "Pantalla"
@@ -732,7 +733,7 @@ msgstr "Homoxéneo"
 msgid "Whether the children should all be the same size"
 msgstr "Se todos os fillos deben ser do mesmo tamaño"
 
-#: ../gtk/gtkbox.c:116 ../gtk/gtkpreview.c:104 ../gtk/gtktoolbar.c:574
+#: ../gtk/gtkbox.c:116 ../gtk/gtkpreview.c:103 ../gtk/gtktoolbar.c:574
 #: ../gtk/gtktreeviewcolumn.c:272
 msgid "Expand"
 msgstr "Expandir"
@@ -1221,7 +1222,7 @@ msgstr "ID de inventario"
 msgid "The stock ID of the stock icon to render"
 msgstr "O ID de inventario da icona de inventario para renderizar"
 
-#: ../gtk/gtkcellrendererpixbuf.c:144 ../gtk/gtkrecentmanager.c:281
+#: ../gtk/gtkcellrendererpixbuf.c:144 ../gtk/gtkrecentmanager.c:250
 #: ../gtk/gtkstatusicon.c:221
 msgid "Size"
 msgstr "Tamaño"
@@ -2483,7 +2484,7 @@ msgstr "O título do diálogo de selección de ficheiros."
 msgid "The desired width of the button widget, in characters."
 msgstr "A largura desexada do widget do botón, en caracteres."
 
-#: ../gtk/gtkfilesel.c:525 ../gtk/gtkimage.c:162 ../gtk/gtkrecentmanager.c:250
+#: ../gtk/gtkfilesel.c:525 ../gtk/gtkimage.c:162 ../gtk/gtkrecentmanager.c:219
 #: ../gtk/gtkstatusicon.c:188
 msgid "Filename"
 msgstr "Nome do ficheiro"
@@ -3311,6 +3312,26 @@ msgstr ""
 "A cantidade de espazos, en píxeles, para engadir na parte superior e "
 "inferior do widget"
 
+#: ../gtk/gtkmountoperation.c:138
+msgid "Parent"
+msgstr "Pai"
+
+#: ../gtk/gtkmountoperation.c:139
+msgid "The parent window"
+msgstr "O pai da ventá"
+
+#: ../gtk/gtkmountoperation.c:146
+msgid "Is Showing"
+msgstr "Estase mostrando"
+
+#: ../gtk/gtkmountoperation.c:147
+msgid "Are we showing a dialog"
+msgstr "Estase mostrando un diálogo"
+
+#: ../gtk/gtkmountoperation.c:155
+msgid "The screen where this window will be displayed."
+msgstr "A pantalla onde se mostrará esta ventá."
+
 #: ../gtk/gtknotebook.c:566
 msgid "Page"
 msgstr "Páxina"
@@ -3600,7 +3621,7 @@ msgstr "Empotrado"
 msgid "Whether or not the plug is embedded"
 msgstr "Indica se o conector está empotrado"
 
-#: ../gtk/gtkpreview.c:105
+#: ../gtk/gtkpreview.c:104
 msgid ""
 "Whether the preview widget should take up the entire space it is allocated"
 msgstr ""
@@ -4143,11 +4164,11 @@ msgstr ""
 "Indica se se debuxa para toda a lonxitude do intervalo ou excluír os pasos e "
 "o espazamento"
 
-#: ../gtk/gtkrecentaction.c:679 ../gtk/gtkrecentchoosermenu.c:208
+#: ../gtk/gtkrecentaction.c:679 ../gtk/gtkrecentchoosermenu.c:206
 msgid "Show Numbers"
 msgstr "Mostrar números"
 
-#: ../gtk/gtkrecentaction.c:680 ../gtk/gtkrecentchoosermenu.c:209
+#: ../gtk/gtkrecentaction.c:680 ../gtk/gtkrecentchoosermenu.c:207
 msgid "Whether the items should be displayed with a number"
 msgstr "Indica se os elementos deberían mostrarse cun número"
 
@@ -4207,7 +4228,7 @@ msgstr ""
 "Indica se os recursos seleccionados deberían limitarse a URIs de tipo "
 "'file:' locais"
 
-#: ../gtk/gtkrecentchooser.c:222 ../gtk/gtkrecentmanager.c:265
+#: ../gtk/gtkrecentchooser.c:222 ../gtk/gtkrecentmanager.c:234
 msgid "Limit"
 msgstr "Límite"
 
@@ -4227,19 +4248,19 @@ msgstr "A orde de clasificación dos elementos mostrados"
 msgid "The current filter for selecting which resources are displayed"
 msgstr "O filtro actual para seleccionar que recursos se mostran"
 
-#: ../gtk/gtkrecentmanager.c:251
+#: ../gtk/gtkrecentmanager.c:220
 msgid "The full path to the file to be used to store and read the list"
 msgstr ""
 "O camiño completo ao ficheiro que se vai usar para almacenar e ler a lista"
 
-#: ../gtk/gtkrecentmanager.c:266
+#: ../gtk/gtkrecentmanager.c:235
 msgid ""
 "The maximum number of items to be returned by gtk_recent_manager_get_items()"
 msgstr ""
 "O número máximo de elementos que serán devoltos polo "
 "gtk_recent_manager_get_items()"
 
-#: ../gtk/gtkrecentmanager.c:282
+#: ../gtk/gtkrecentmanager.c:251
 msgid "The size of the recently used resources list"
 msgstr "O tamaño da lista de recursos usados recentemente"
 
@@ -4471,11 +4492,11 @@ msgstr "Debuxar"
 msgid "Whether the separator is drawn, or just blank"
 msgstr "Indica se se debuxa o separador ou se se deixa en branco"
 
-#: ../gtk/gtksettings.c:205
+#: ../gtk/gtksettings.c:206
 msgid "Double Click Time"
 msgstr "Tempo do duplo clic"
 
-#: ../gtk/gtksettings.c:206
+#: ../gtk/gtksettings.c:207
 msgid ""
 "Maximum time allowed between two clicks for them to be considered a double "
 "click (in milliseconds)"
@@ -4483,11 +4504,11 @@ msgstr ""
 "Tempo máximo permitido entre dous clics para ser considerados como un clic "
 "duplo (en milisegundos)"
 
-#: ../gtk/gtksettings.c:213
+#: ../gtk/gtksettings.c:214
 msgid "Double Click Distance"
 msgstr "Distancia do duplo clic"
 
-#: ../gtk/gtksettings.c:214
+#: ../gtk/gtksettings.c:215
 msgid ""
 "Maximum distance allowed between two clicks for them to be considered a "
 "double click (in pixels)"
@@ -4495,36 +4516,36 @@ msgstr ""
 "Distancia máxima permitida entre dous clics para ser considerados como un "
 "duplo clic (en píxeles)"
 
-#: ../gtk/gtksettings.c:230
+#: ../gtk/gtksettings.c:231
 msgid "Cursor Blink"
 msgstr "Intermitencia do cursor"
 
-#: ../gtk/gtksettings.c:231
+#: ../gtk/gtksettings.c:232
 msgid "Whether the cursor should blink"
 msgstr "Indica se o cursor debe pestanexar"
 
-#: ../gtk/gtksettings.c:238
+#: ../gtk/gtksettings.c:239
 msgid "Cursor Blink Time"
 msgstr "Tempo de intermitencia do cursor"
 
-#: ../gtk/gtksettings.c:239
+#: ../gtk/gtksettings.c:240
 msgid "Length of the cursor blink cycle, in milliseconds"
 msgstr "Duración do ciclo de intermitencia do cursor, en milisegundos"
 
-#: ../gtk/gtksettings.c:258
+#: ../gtk/gtksettings.c:259
 msgid "Cursor Blink Timeout"
 msgstr "Tempo de intermitencia do cursor"
 
-#: ../gtk/gtksettings.c:259
+#: ../gtk/gtksettings.c:260
 msgid "Time after which the cursor stops blinking, in seconds"
 msgstr ""
 "Duración a partir de que se detén a intermitencia do cursor, en segundos"
 
-#: ../gtk/gtksettings.c:266
+#: ../gtk/gtksettings.c:267
 msgid "Split Cursor"
 msgstr "Cursor dividido"
 
-#: ../gtk/gtksettings.c:267
+#: ../gtk/gtksettings.c:268
 msgid ""
 "Whether two cursors should be displayed for mixed left-to-right and right-to-"
 "left text"
@@ -4532,158 +4553,158 @@ msgstr ""
 "Indica se se deben mostrar dous cursores para o texto mesturado de esquerda "
 "a dereita e de dereita a esquerda"
 
-#: ../gtk/gtksettings.c:274
+#: ../gtk/gtksettings.c:275
 msgid "Theme Name"
 msgstr "Nome do tema"
 
-#: ../gtk/gtksettings.c:275
+#: ../gtk/gtksettings.c:276
 msgid "Name of theme RC file to load"
 msgstr "Nome do ficheiro de tema RC para cargar"
 
-#: ../gtk/gtksettings.c:283
+#: ../gtk/gtksettings.c:284
 msgid "Icon Theme Name"
 msgstr "Nome do tema de iconas"
 
-#: ../gtk/gtksettings.c:284
+#: ../gtk/gtksettings.c:285
 msgid "Name of icon theme to use"
 msgstr "Nome do tema de iconas que usar"
 
-#: ../gtk/gtksettings.c:292
+#: ../gtk/gtksettings.c:293
 msgid "Fallback Icon Theme Name"
 msgstr "Nome do tema de iconas do modo de emerxencia"
 
-#: ../gtk/gtksettings.c:293
+#: ../gtk/gtksettings.c:294
 msgid "Name of a icon theme to fall back to"
 msgstr "Nome do tema de iconas que usar cando o escollido falle"
 
-#: ../gtk/gtksettings.c:301
+#: ../gtk/gtksettings.c:302
 msgid "Key Theme Name"
 msgstr "Nome do tema principal"
 
-#: ../gtk/gtksettings.c:302
+#: ../gtk/gtksettings.c:303
 msgid "Name of key theme RC file to load"
 msgstr "Nome do ficheiro de tema RC principal para cargar"
 
-#: ../gtk/gtksettings.c:310
+#: ../gtk/gtksettings.c:311
 msgid "Menu bar accelerator"
 msgstr "Tecla rápida da barra de menús"
 
-#: ../gtk/gtksettings.c:311
+#: ../gtk/gtksettings.c:312
 msgid "Keybinding to activate the menu bar"
 msgstr "Combinación de teclas para activar a barra de menús"
 
-#: ../gtk/gtksettings.c:319
+#: ../gtk/gtksettings.c:320
 msgid "Drag threshold"
 msgstr "Límite de arrastre"
 
-#: ../gtk/gtksettings.c:320
+#: ../gtk/gtksettings.c:321
 msgid "Number of pixels the cursor can move before dragging"
 msgstr "Número de píxeles que o cursor pode mover antes de iniciar o arrastre"
 
-#: ../gtk/gtksettings.c:328
+#: ../gtk/gtksettings.c:329
 msgid "Font Name"
 msgstr "Nome do tipo de letra"
 
-#: ../gtk/gtksettings.c:329
+#: ../gtk/gtksettings.c:330
 msgid "Name of default font to use"
 msgstr "Nome do tipo de letra predeterminado que usar"
 
-#: ../gtk/gtksettings.c:337
+#: ../gtk/gtksettings.c:338
 msgid "Icon Sizes"
 msgstr "Tamaño das iconas"
 
-#: ../gtk/gtksettings.c:338
+#: ../gtk/gtksettings.c:339
 msgid "List of icon sizes (gtk-menu=16,16:gtk-button=20,20..."
 msgstr "Lista dos tamaños das iconas (gtk-menu=16,16:gtk-button=20,20..."
 
-#: ../gtk/gtksettings.c:346
+#: ../gtk/gtksettings.c:347
 msgid "GTK Modules"
 msgstr "Módulos GTK"
 
-#: ../gtk/gtksettings.c:347
+#: ../gtk/gtksettings.c:348
 msgid "List of currently active GTK modules"
 msgstr "Lista dos módulos GTK actualmente activos"
 
-#: ../gtk/gtksettings.c:356
+#: ../gtk/gtksettings.c:357
 msgid "Xft Antialias"
 msgstr "Suavizado Xft"
 
-#: ../gtk/gtksettings.c:357
+#: ../gtk/gtksettings.c:358
 msgid "Whether to antialias Xft fonts; 0=no, 1=yes, -1=default"
 msgstr ""
 "Indica se se suavizan os bordos dos tipo de letra Xft, 0=non, 1=si, -"
 "1=predeterminado"
 
-#: ../gtk/gtksettings.c:366
+#: ../gtk/gtksettings.c:367
 msgid "Xft Hinting"
 msgstr "Indicación Xft"
 
-#: ../gtk/gtksettings.c:367
+#: ../gtk/gtksettings.c:368
 msgid "Whether to hint Xft fonts; 0=no, 1=yes, -1=default"
 msgstr ""
 "Indica se se usa a indicación dos tipo de letra Xft; 0=non, 1=si, -"
 "1=predeterminado"
 
-#: ../gtk/gtksettings.c:376
+#: ../gtk/gtksettings.c:377
 msgid "Xft Hint Style"
 msgstr "Estilo de indicación Xft"
 
-#: ../gtk/gtksettings.c:377
+#: ../gtk/gtksettings.c:378
 msgid ""
 "What degree of hinting to use; hintnone, hintslight, hintmedium, or hintfull"
 msgstr ""
 "Que grao de indicación hai que usar: ningunha, lixeira, media ou completa"
 
-#: ../gtk/gtksettings.c:386
+#: ../gtk/gtksettings.c:387
 msgid "Xft RGBA"
 msgstr "Xft RGBA"
 
-#: ../gtk/gtksettings.c:387
+#: ../gtk/gtksettings.c:388
 msgid "Type of subpixel antialiasing; none, rgb, bgr, vrgb, vbgr"
 msgstr "Tipo de suavizado de subpíxel: ningún, rgb, vrgb, vbgr"
 
-#: ../gtk/gtksettings.c:396
+#: ../gtk/gtksettings.c:397
 msgid "Xft DPI"
 msgstr "Xft DPI"
 
-#: ../gtk/gtksettings.c:397
+#: ../gtk/gtksettings.c:398
 msgid "Resolution for Xft, in 1024 * dots/inch. -1 to use default value"
 msgstr ""
 "Resolución para Xft, en 1024 * puntos por polgada. -1 para usar o valor "
 "predeterminado"
 
-#: ../gtk/gtksettings.c:406
+#: ../gtk/gtksettings.c:407
 msgid "Cursor theme name"
 msgstr "Nome do tema de cursor"
 
-#: ../gtk/gtksettings.c:407
+#: ../gtk/gtksettings.c:408
 msgid "Name of the cursor theme to use, or NULL to use the default theme"
 msgstr "Nome do tema de cursor que usar ou NULL para usar o tema por defecto"
 
-#: ../gtk/gtksettings.c:415
+#: ../gtk/gtksettings.c:416
 msgid "Cursor theme size"
 msgstr "Tamaño do tema de cursor"
 
-#: ../gtk/gtksettings.c:416
+#: ../gtk/gtksettings.c:417
 msgid "Size to use for cursors, or 0 to use the default size"
 msgstr ""
 "Tamaño que se vai usar para os cursores ou 0 para usar o tamaño "
 "predeterminado"
 
-#: ../gtk/gtksettings.c:426
+#: ../gtk/gtksettings.c:427
 msgid "Alternative button order"
 msgstr "Orde alternativa dos botóns"
 
-#: ../gtk/gtksettings.c:427
+#: ../gtk/gtksettings.c:428
 msgid "Whether buttons in dialogs should use the alternative button order"
 msgstr ""
 "Indica se os botóns nos diálogos deben usar a orde alternativa de botóns"
 
-#: ../gtk/gtksettings.c:444
+#: ../gtk/gtksettings.c:445
 msgid "Alternative sort indicator direction"
 msgstr "Dirección alternativa do indicador de orde"
 
-#: ../gtk/gtksettings.c:445
+#: ../gtk/gtksettings.c:446
 msgid ""
 "Whether the direction of the sort indicators in list and tree views is "
 "inverted compared to the default (where down means ascending)"
@@ -4692,11 +4713,11 @@ msgstr ""
 "está invertida en comparación coa predeterminada (onde abaixo significa "
 "ascendente)"
 
-#: ../gtk/gtksettings.c:453
+#: ../gtk/gtksettings.c:454
 msgid "Show the 'Input Methods' menu"
 msgstr "Mostrar o menú 'Métodos de entrada'"
 
-#: ../gtk/gtksettings.c:454
+#: ../gtk/gtksettings.c:455
 msgid ""
 "Whether the context menus of entries and text views should offer to change "
 "the input method"
@@ -4704,11 +4725,11 @@ msgstr ""
 "Indica se os menús de contexto das entradas e as visualizacións de texto "
 "deben ofrecer modificar o método de entrada"
 
-#: ../gtk/gtksettings.c:462
+#: ../gtk/gtksettings.c:463
 msgid "Show the 'Insert Unicode Control Character' menu"
 msgstr "Mostrar o menú 'Inserir carácter de control Unicode'"
 
-#: ../gtk/gtksettings.c:463
+#: ../gtk/gtksettings.c:464
 msgid ""
 "Whether the context menus of entries and text views should offer to insert "
 "control characters"
@@ -4716,175 +4737,183 @@ msgstr ""
 "Indica se os menús de contexto das entradas e as visualizacións de texto "
 "deben ofrecer inserir caracteres de control"
 
-#: ../gtk/gtksettings.c:471
+#: ../gtk/gtksettings.c:472
 msgid "Start timeout"
 msgstr "Comezar o tempo de espera"
 
-#: ../gtk/gtksettings.c:472
+#: ../gtk/gtksettings.c:473
 msgid "Starting value for timeouts, when button is pressed"
 msgstr "Valor de inicio para o tempo de espera, cando se prema o botón"
 
-#: ../gtk/gtksettings.c:481
+#: ../gtk/gtksettings.c:482
 msgid "Repeat timeout"
 msgstr "Repetir o tempo de espera"
 
-#: ../gtk/gtksettings.c:482
+#: ../gtk/gtksettings.c:483
 msgid "Repeat value for timeouts, when button is pressed"
 msgstr "Valor de repetición para o tempo de espera, cando o botón se prema"
 
-#: ../gtk/gtksettings.c:491
+#: ../gtk/gtksettings.c:492
 msgid "Expand timeout"
 msgstr "Ampliar o tempo de espera"
 
-#: ../gtk/gtksettings.c:492
+#: ../gtk/gtksettings.c:493
 msgid "Expand value for timeouts, when a widget is expanding a new region"
 msgstr ""
 "Valor de ampliación para os tempos de espera, cando un widget está "
 "expandindo unha nova rexión"
 
-#: ../gtk/gtksettings.c:527
+#: ../gtk/gtksettings.c:528
 msgid "Color scheme"
 msgstr "Esquema de cor"
 
-#: ../gtk/gtksettings.c:528
+#: ../gtk/gtksettings.c:529
 msgid "A palette of named colors for use in themes"
 msgstr "Unha paleta de cores con nome para usar nos temas"
 
-#: ../gtk/gtksettings.c:537
+#: ../gtk/gtksettings.c:538
 msgid "Enable Animations"
 msgstr "Activar animacións"
 
-#: ../gtk/gtksettings.c:538
+#: ../gtk/gtksettings.c:539
 msgid "Whether to enable toolkit-wide animations."
 msgstr "Indica se se activan as animacións para todo o toolkit."
 
-#: ../gtk/gtksettings.c:556
+#: ../gtk/gtksettings.c:557
 msgid "Enable Touchscreen Mode"
 msgstr "Activar o modo de pantalla táctil"
 
-#: ../gtk/gtksettings.c:557
+#: ../gtk/gtksettings.c:558
 msgid "When TRUE, there are no motion notify events delivered on this screen"
 msgstr ""
 "Cando é TRUE, non se envían eventos de notificación de movemento a esta "
 "pantalla"
 
-#: ../gtk/gtksettings.c:574
+#: ../gtk/gtksettings.c:575
 msgid "Tooltip timeout"
 msgstr "Tempo de expiración do consello"
 
-#: ../gtk/gtksettings.c:575
+#: ../gtk/gtksettings.c:576
 msgid "Timeout before tooltip is shown"
 msgstr "Tempo antes de que se mostre o consello"
 
-#: ../gtk/gtksettings.c:600
+#: ../gtk/gtksettings.c:601
 msgid "Tooltip browse timeout"
 msgstr "Tempo dos consellos de navegación"
 
-#: ../gtk/gtksettings.c:601
+#: ../gtk/gtksettings.c:602
 msgid "Timeout before tooltip is shown when browse mode is enabled"
 msgstr ""
 "Tempo antes de que se mostre o consello cando o modo de navegación está "
 "activo"
 
-#: ../gtk/gtksettings.c:622
+#: ../gtk/gtksettings.c:623
 msgid "Tooltip browse mode timeout"
 msgstr "Tempo dos consellos en modo navegación"
 
-#: ../gtk/gtksettings.c:623
+#: ../gtk/gtksettings.c:624
 msgid "Timeout after which browse mode is disabled"
 msgstr "Tempo despois do cal se desactiva o modo de navegación"
 
-#: ../gtk/gtksettings.c:642
+#: ../gtk/gtksettings.c:643
 msgid "Keynav Cursor Only"
 msgstr "Só cursor para navegar con teclas"
 
-#: ../gtk/gtksettings.c:643
+#: ../gtk/gtksettings.c:644
 msgid "When TRUE, there are only cursor keys available to navigate widgets"
 msgstr ""
 "Cando sexa TRUE, só hai teclas de cursor dispoñibles para navegar polos "
 "widgets"
 
-#: ../gtk/gtksettings.c:660
+#: ../gtk/gtksettings.c:661
 msgid "Keynav Wrap Around"
 msgstr "Saltar ao navegar co teclado"
 
-#: ../gtk/gtksettings.c:661
+#: ../gtk/gtksettings.c:662
 msgid "Whether to wrap around when keyboard-navigating widgets"
 msgstr "Indica se se salta arredor cando se navegue cos widgets co teclado"
 
-#: ../gtk/gtksettings.c:681
+#: ../gtk/gtksettings.c:682
 msgid "Error Bell"
 msgstr "Son de erro"
 
-#: ../gtk/gtksettings.c:682
+#: ../gtk/gtksettings.c:683
 msgid "When TRUE, keyboard navigation and other errors will cause a beep"
 msgstr ""
 "Cando sexa TRUE, a navegación co teclado e outros erros emitirán un son"
 
-#: ../gtk/gtksettings.c:699
+#: ../gtk/gtksettings.c:700
 msgid "Color Hash"
 msgstr "Hash da cor"
 
-#: ../gtk/gtksettings.c:700
+#: ../gtk/gtksettings.c:701
 msgid "A hash table representation of the color scheme."
 msgstr "Unha representación en táboa hash do esquema de cor."
 
-#: ../gtk/gtksettings.c:708
+#: ../gtk/gtksettings.c:709
 msgid "Default file chooser backend"
 msgstr "Backend predeterminado do selector de ficheiros"
 
-#: ../gtk/gtksettings.c:709
+#: ../gtk/gtksettings.c:710
 msgid "Name of the GtkFileChooser backend to use by default"
 msgstr "Nome do backend do GtkFileChooser para usar por defecto"
 
-#: ../gtk/gtksettings.c:726
+#: ../gtk/gtksettings.c:727
 msgid "Default print backend"
 msgstr "Backend de impresión predeterminado"
 
-#: ../gtk/gtksettings.c:727
+#: ../gtk/gtksettings.c:728
 msgid "List of the GtkPrintBackend backends to use by default"
 msgstr "Lista dos backends do GtkPrintBackend para usar por defecto"
 
-#: ../gtk/gtksettings.c:750
+#: ../gtk/gtksettings.c:751
 msgid "Default command to run when displaying a print preview"
 msgstr ""
 "Comando predeterminado a executar ao mostrar unha vista previa de impresión"
 
-#: ../gtk/gtksettings.c:751
+#: ../gtk/gtksettings.c:752
 msgid "Command to run when displaying a print preview"
 msgstr "Comando a executar ao mostrar unha vista previa de impresión"
 
-#: ../gtk/gtksettings.c:767
+#: ../gtk/gtksettings.c:768
 msgid "Enable Mnemonics"
 msgstr "Activar mnemónicos"
 
-#: ../gtk/gtksettings.c:768
+#: ../gtk/gtksettings.c:769
 msgid "Whether labels should have mnemonics"
 msgstr "Indica se as etiquetas deben ser mnemónicas"
 
-#: ../gtk/gtksettings.c:784
+#: ../gtk/gtksettings.c:785
 msgid "Enable Accelerators"
 msgstr "Activar aceleradores"
 
-#: ../gtk/gtksettings.c:785
+#: ../gtk/gtksettings.c:786
 msgid "Whether menu items should have accelerators"
 msgstr "Indica cando os elementos de menús deben ter aceleradores"
 
-#: ../gtk/gtksettings.c:802
+#: ../gtk/gtksettings.c:803
 msgid "Recent Files Limit"
 msgstr "Límite de ficheiros recentes"
 
-#: ../gtk/gtksettings.c:803
+#: ../gtk/gtksettings.c:804
 msgid "Number of recently used files"
 msgstr "Número de ficheiros usados recentemente"
 
-#: ../gtk/gtksettings.c:817
+#: ../gtk/gtksettings.c:818
 msgid "Default IM module"
 msgstr "Módulo IM predeterminado"
 
-#: ../gtk/gtksettings.c:818
+#: ../gtk/gtksettings.c:819
 msgid "Which IM module should be used by default"
 msgstr "O tipo de módulo IM que se debería usar por defecto"
+
+#: ../gtk/gtksettings.c:837
+msgid "Recent Files Max Age"
+msgstr "Límite de tempo de ficheiros recentes"
+
+#: ../gtk/gtksettings.c:838
+msgid "Maximum age of recently used files, in days"
+msgstr "Máximo número de tempo dos ficheiros usados recentemente, en días"
 
 #: ../gtk/gtksizegroup.c:293
 msgid "Mode"
