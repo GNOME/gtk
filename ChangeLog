@@ -1,3 +1,10 @@
+2008-04-30  Richard Hult  <richard@imendio.com>
+
+	* gdk/quartz/gdkevents-quartz.c:
+	(get_keyboard_modifiers_from_ns_event), (create_key_event): Map
+	Alt to Alt and Cmd to Meta. This is not only more logical but also
+	makes it easier to have Mac-like behavior.
+
 2008-04-25  Björn Lindqvist  <bjourne@gmail.com>
 
 	* gtk/gtkentry.c: (gtk_entry_expose) Use existing window size when
