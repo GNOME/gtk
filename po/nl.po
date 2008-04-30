@@ -4,21 +4,25 @@
 # Ronald Hummelink <ronald@hummelink.xs4all.nl>, 2002.
 # Tino Meinen <a.t.meinen@chelo.nl>, 2002, 2003, 2004, 2005, 2006, 2007, 2008.
 # --------------
-# expander -> samenvouwer/openvouwen
-# render -> render/weergeven/tonen/opmaken
-# spinbutton -> spinknop
-# tag -> markering/etiket/label
-# tooltip -> tooltip/werktip/tip
-# separator -> scheiding/scheidingslijn/scheidingsteken
-# selected -> geselecteerde/gekozen
-# standard display -> standaard display
+# expander - samenvouwer/openvouwen
+# image format - bestandsformaat
+# image file - afbeelding
+# image file format - afbeeldingstype
+# image type - afbeeldingstype
+# render - render/weergeven/tonen/opmaken
+# spinbutton - spinknop/teller
+# tag - markering/etiket/label/trefwoord
+# tooltip - tooltip/werktip/tip
+# separator - scheiding/scheidingslijn/scheidingsteken
+# selected - geselecteerde/gekozen
+# standard display - standaard display
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-03-15 16:56+0000\n"
-"PO-Revision-Date: 2008-04-10 16:53+0200\n"
+"POT-Creation-Date: 2008-04-27 13:21+0000\n"
+"PO-Revision-Date: 2008-04-30 18:44+0200\n"
 "Last-Translator: Tino Meinen <a.t.meinen@chello.nl>\n"
 "Language-Team: Dutch <vertaling@vrijschrift.org>\n"
 "MIME-Version: 1.0\n"
@@ -84,7 +88,7 @@ msgstr "In te stellen Gdk debug-vlaggen"
 #. Placeholder in --gdk-no-debug=FLAGS in --help output
 #. Placeholder in --gtk-debug=FLAGS in --help output
 #. Placeholder in --gtk-no-debug=FLAGS in --help output
-#: ../gdk/gdk.c:140 ../gdk/gdk.c:143 ../gtk/gtkmain.c:434 ../gtk/gtkmain.c:437
+#: ../gdk/gdk.c:140 ../gdk/gdk.c:143 ../gtk/gtkmain.c:432 ../gtk/gtkmain.c:435
 msgid "FLAGS"
 msgstr "VLAGGEN"
 
@@ -251,19 +255,19 @@ msgstr "NUM_Delete"
 msgid "keyboard label|Delete"
 msgstr "Delete"
 
-#: ../gdk-pixbuf/gdk-pixbuf-animation.c:133 ../gdk-pixbuf/gdk-pixbuf-io.c:858
-#: ../gdk-pixbuf/gdk-pixbuf-io.c:1114 ../tests/testfilechooser.c:218
+#: ../gdk-pixbuf/gdk-pixbuf-animation.c:133 ../gdk-pixbuf/gdk-pixbuf-io.c:894
+#: ../gdk-pixbuf/gdk-pixbuf-io.c:1150 ../tests/testfilechooser.c:218
 #, c-format
 msgid "Failed to open file '%s': %s"
 msgstr "Openen van bestand ‘%s’ mislukt: %s"
 
-#: ../gdk-pixbuf/gdk-pixbuf-animation.c:146 ../gdk-pixbuf/gdk-pixbuf-io.c:870
+#: ../gdk-pixbuf/gdk-pixbuf-animation.c:146 ../gdk-pixbuf/gdk-pixbuf-io.c:906
 #, c-format
 msgid "Image file '%s' contains no data"
 msgstr "Afbeelding ‘%s’ bevat geen data"
 
-#: ../gdk-pixbuf/gdk-pixbuf-animation.c:188 ../gdk-pixbuf/gdk-pixbuf-io.c:907
-#: ../gdk-pixbuf/gdk-pixbuf-io.c:1166 ../tests/testfilechooser.c:263
+#: ../gdk-pixbuf/gdk-pixbuf-animation.c:188 ../gdk-pixbuf/gdk-pixbuf-io.c:943
+#: ../gdk-pixbuf/gdk-pixbuf-io.c:1202 ../tests/testfilechooser.c:263
 #, c-format
 msgid ""
 "Failed to load image '%s': reason not known, probably a corrupt image file"
@@ -280,12 +284,12 @@ msgstr ""
 "Laden van animatie ‘%s’ mislukt: reden onbekend, waarschijnlijk een "
 "beschadigde animatie"
 
-#: ../gdk-pixbuf/gdk-pixbuf-io.c:538
+#: ../gdk-pixbuf/gdk-pixbuf-io.c:554
 #, c-format
 msgid "Unable to load image-loading module: %s: %s"
 msgstr "Laden van afbeeldingslader %s mislukt: %s"
 
-#: ../gdk-pixbuf/gdk-pixbuf-io.c:553
+#: ../gdk-pixbuf/gdk-pixbuf-io.c:569
 #, c-format
 msgid ""
 "Image-loading module %s does not export the proper interface; perhaps it's "
@@ -294,59 +298,59 @@ msgstr ""
 "Afbeeldingslader %s geeft de verkeerde interface door; misschien is het de "
 "lader van een andere GTK-versie?"
 
-#: ../gdk-pixbuf/gdk-pixbuf-io.c:670 ../gdk-pixbuf/gdk-pixbuf-io.c:699
+#: ../gdk-pixbuf/gdk-pixbuf-io.c:706 ../gdk-pixbuf/gdk-pixbuf-io.c:735
 #, c-format
 msgid "Image type '%s' is not supported"
 msgstr "Afbeeldingstype ‘%s’ wordt niet ondersteund"
 
-#: ../gdk-pixbuf/gdk-pixbuf-io.c:739
+#: ../gdk-pixbuf/gdk-pixbuf-io.c:775
 #, c-format
 msgid "Couldn't recognize the image file format for file '%s'"
 msgstr "Afbeeldingstype van bestand ‘%s’ werd niet herkend"
 
-#: ../gdk-pixbuf/gdk-pixbuf-io.c:747
+#: ../gdk-pixbuf/gdk-pixbuf-io.c:783
 #, c-format
 msgid "Unrecognized image file format"
 msgstr "Onbekend afbeeldingstype"
 
-#: ../gdk-pixbuf/gdk-pixbuf-io.c:916
+#: ../gdk-pixbuf/gdk-pixbuf-io.c:952
 #, c-format
 msgid "Failed to load image '%s': %s"
 msgstr "Laden van afbeelding ‘%s’ mislukt: %s"
 
-#: ../gdk-pixbuf/gdk-pixbuf-io.c:1545
+#: ../gdk-pixbuf/gdk-pixbuf-io.c:1583 ../gdk-pixbuf/io-gdip-utils.c:935
 #, c-format
 msgid "Error writing to image file: %s"
 msgstr "Fout bij het schrijven naar afbeelding: %s"
 
-#: ../gdk-pixbuf/gdk-pixbuf-io.c:1591 ../gdk-pixbuf/gdk-pixbuf-io.c:1722
+#: ../gdk-pixbuf/gdk-pixbuf-io.c:1629 ../gdk-pixbuf/gdk-pixbuf-io.c:1760
 #, c-format
 msgid "This build of gdk-pixbuf does not support saving the image format: %s"
 msgstr ""
 "Deze versie van gdk-pixbuf heeft geen ondersteuning voor het opslaan van het "
 "bestandsformaat: %s"
 
-#: ../gdk-pixbuf/gdk-pixbuf-io.c:1625
+#: ../gdk-pixbuf/gdk-pixbuf-io.c:1663
 #, c-format
 msgid "Insufficient memory to save image to callback"
 msgstr "Onvoldoende geheugen om de afbeelding op te slaan naar de callback"
 
-#: ../gdk-pixbuf/gdk-pixbuf-io.c:1638
+#: ../gdk-pixbuf/gdk-pixbuf-io.c:1676
 #, c-format
 msgid "Failed to open temporary file"
 msgstr "Openen van tijdelijk bestand is mislukt"
 
-#: ../gdk-pixbuf/gdk-pixbuf-io.c:1664
+#: ../gdk-pixbuf/gdk-pixbuf-io.c:1702
 #, c-format
 msgid "Failed to read from temporary file"
 msgstr "Lezen van tijdelijk bestand is mislukt"
 
-#: ../gdk-pixbuf/gdk-pixbuf-io.c:1899
+#: ../gdk-pixbuf/gdk-pixbuf-io.c:1937
 #, c-format
 msgid "Failed to open '%s' for writing: %s"
 msgstr "Openen van ‘%s’ voor schrijven is mislukt: %s"
 
-#: ../gdk-pixbuf/gdk-pixbuf-io.c:1924
+#: ../gdk-pixbuf/gdk-pixbuf-io.c:1962
 #, c-format
 msgid ""
 "Failed to close '%s' while writing image, all data may not have been saved: %"
@@ -355,12 +359,12 @@ msgstr ""
 "Sluiten van ‘%s’ tijdens het schrijven is mislukt; er kan data verloren zijn "
 "gegaan: %s"
 
-#: ../gdk-pixbuf/gdk-pixbuf-io.c:2144 ../gdk-pixbuf/gdk-pixbuf-io.c:2195
+#: ../gdk-pixbuf/gdk-pixbuf-io.c:2182 ../gdk-pixbuf/gdk-pixbuf-io.c:2233
 #, c-format
 msgid "Insufficient memory to save image into a buffer"
 msgstr "Onvoldoende geheugen om afbeelding in een buffer op te slaan"
 
-#: ../gdk-pixbuf/gdk-pixbuf-io.c:2241
+#: ../gdk-pixbuf/gdk-pixbuf-io.c:2279
 #, c-format
 msgid "Error writing to image stream"
 msgstr "Fout bij het schrijven naar afbeeldingstroom"
@@ -388,6 +392,7 @@ msgstr "Deelsgewijs laden van afbeeldingstype ‘%s’ wordt niet ondersteund"
 msgid "Image header corrupt"
 msgstr "Afbeeldingsheader beschadigd"
 
+# afbeeldingstype
 #: ../gdk-pixbuf/gdk-pixdata.c:152
 #, c-format
 msgid "Image format unknown"
@@ -481,7 +486,7 @@ msgstr "Kon geen geheugenruimte reserveren voor opslaan van BMP-bestand"
 msgid "Couldn't write to BMP file"
 msgstr "Kon niet naar BMP-bestand schrijven"
 
-#: ../gdk-pixbuf/io-bmp.c:1425
+#: ../gdk-pixbuf/io-bmp.c:1425 ../gdk-pixbuf/io-gdip-bmp.c:82
 msgid "The BMP image format"
 msgstr "Het BMP-bestandsformaat"
 
@@ -568,7 +573,7 @@ msgstr ""
 msgid "GIF image was truncated or incomplete."
 msgstr "GIF-bestand is afgebroken of onvolledig"
 
-#: ../gdk-pixbuf/io-gif.c:1691
+#: ../gdk-pixbuf/io-gif.c:1691 ../gdk-pixbuf/io-gdip-gif.c:80
 msgid "The GIF image format"
 msgstr "Het GIF-bestandsformaat"
 
@@ -625,7 +630,7 @@ msgstr "Cursor hotspot valt buiten de afbeelding"
 msgid "Unsupported depth for ICO file: %d"
 msgstr "Niet ondersteunde diepte voor ICO-bestand: %d"
 
-#: ../gdk-pixbuf/io-ico.c:1223
+#: ../gdk-pixbuf/io-ico.c:1223 ../gdk-pixbuf/io-gdip-ico.c:59
 msgid "The ICO image format"
 msgstr "Het ICO-bestandsformaat"
 
@@ -713,7 +718,7 @@ msgstr "Kon geen geheugenruimte reserveren voor laden van JPEG-bestand"
 msgid "Transformed JPEG has zero width or height."
 msgstr "Getransformeerde JPEG heeft nul breedte of hoogte."
 
-#: ../gdk-pixbuf/io-jpeg.c:1133
+#: ../gdk-pixbuf/io-jpeg.c:1133 ../gdk-pixbuf/io-gdip-jpeg.c:53
 #, c-format
 msgid ""
 "JPEG quality must be a value between 0 and 100; value '%s' could not be "
@@ -722,14 +727,14 @@ msgstr ""
 "JPEG-kwaliteit moet een waarde tussen 0 en 100 zijn: waarde ‘%s’ kan niet "
 "verwerkt worden."
 
-#: ../gdk-pixbuf/io-jpeg.c:1148
+#: ../gdk-pixbuf/io-jpeg.c:1148 ../gdk-pixbuf/io-gdip-jpeg.c:68
 #, c-format
 msgid ""
 "JPEG quality must be a value between 0 and 100; value '%d' is not allowed."
 msgstr ""
 "JPEG-kwaliteit moet tussen 0 en 100 liggen; waarde '%d' is niet toegestaan."
 
-#: ../gdk-pixbuf/io-jpeg.c:1311
+#: ../gdk-pixbuf/io-jpeg.c:1311 ../gdk-pixbuf/io-gdip-jpeg.c:136
 msgid "The JPEG image format"
 msgstr "Het JPEG-bestandsformaat"
 
@@ -857,7 +862,7 @@ msgid "Keys for PNG text chunks must be ASCII characters."
 msgstr "Sleutels voor PNG-tekstblokken moeten uit ASCII tekens bestaan"
 
 # moet tussen 0 en 9 liggen
-#: ../gdk-pixbuf/io-png.c:846
+#: ../gdk-pixbuf/io-png.c:846 ../gdk-pixbuf/io-gdip-png.c:56
 #, c-format
 msgid ""
 "PNG compression level must be a value between 0 and 9; value '%s' could not "
@@ -867,7 +872,7 @@ msgstr ""
 "verwerkt worden."
 
 # moet tussen 0 en 9 liggen
-#: ../gdk-pixbuf/io-png.c:858
+#: ../gdk-pixbuf/io-png.c:858 ../gdk-pixbuf/io-gdip-png.c:68
 #, c-format
 msgid ""
 "PNG compression level must be a value between 0 and 9; value '%d' is not "
@@ -883,7 +888,7 @@ msgstr ""
 "Waarde voor PNG-tekstblok %s kan niet naar tekenset ISO-8859-1 worden "
 "omgezet."
 
-#: ../gdk-pixbuf/io-png.c:1047
+#: ../gdk-pixbuf/io-png.c:1047 ../gdk-pixbuf/io-gdip-png.c:133
 msgid "The PNG image format"
 msgstr "Het PNG-bestandsformaat"
 
@@ -1217,6 +1222,62 @@ msgstr ""
 msgid "The XPM image format"
 msgstr "Het XPM-bestandsformaat"
 
+#: ../gdk-pixbuf/io-gdip-emf.c:59
+msgid "The EMF image format"
+msgstr "Het EMF-bestandsformaat"
+
+#: ../gdk-pixbuf/io-gdip-utils.c:212
+#, c-format
+msgid "Could not allocate memory: %s"
+msgstr "Kon geen geheugenruimte reserveren: %s"
+
+#: ../gdk-pixbuf/io-gdip-utils.c:237 ../gdk-pixbuf/io-gdip-utils.c:350
+#: ../gdk-pixbuf/io-gdip-utils.c:383
+#, c-format
+msgid "Could not create stream: %s"
+msgstr " Kon stroom niet aanmaken: %s"
+
+#: ../gdk-pixbuf/io-gdip-utils.c:251
+#, c-format
+msgid "Could not seek stream: %s"
+msgstr "Kon stroom niet doorzoeken: %s"
+
+#: ../gdk-pixbuf/io-gdip-utils.c:263
+#, c-format
+msgid "Could not read from stream: %s"
+msgstr "Kon niet van stroom lezen: %s"
+
+#: ../gdk-pixbuf/io-gdip-utils.c:736
+#, c-format
+msgid "Couldn't create pixbuf"
+msgstr "Kon geen pixbuf aanmaken"
+
+#: ../gdk-pixbuf/io-gdip-utils.c:798
+#, c-format
+msgid "Couldn't load bitmap"
+msgstr "Kon bitmap niet laden"
+
+#: ../gdk-pixbuf/io-gdip-utils.c:821
+#, c-format
+msgid "Couldn't load metafile"
+msgstr "Kon metabestand niet laden"
+
+# bestandsformaat/afbeeldingsformat/bestandsindeling
+#: ../gdk-pixbuf/io-gdip-utils.c:980
+#, c-format
+msgid "Unsupported image format for GDI+"
+msgstr "Niet ondersteund afbeeldingsformaat voor GDI+"
+
+# telegramstijl...
+#: ../gdk-pixbuf/io-gdip-utils.c:987
+#, c-format
+msgid "Couldn't save"
+msgstr "Kon niet opslaan"
+
+#: ../gdk-pixbuf/io-gdip-wmf.c:58
+msgid "The WMF image format"
+msgstr "Het WMF-bestandsformaat"
+
 #. Description of --sync in --help output
 #: ../gdk/win32/gdkmain-win32.c:54
 msgid "Don't batch GDI requests"
@@ -1390,19 +1451,19 @@ msgstr "Spatie"
 msgid "keyboard label|Backslash"
 msgstr "Backslash"
 
-#: ../gtk/gtkbuilderparser.c:269
+#: ../gtk/gtkbuilderparser.c:267
 #, c-format
 msgid "Invalid type function: `%s'"
 msgstr "Ongeldige type functie: ‘%s’"
 
 # basiselement/rootelement
-#: ../gtk/gtkbuilderparser.c:724
+#: ../gtk/gtkbuilderparser.c:722
 #, c-format
 msgid "Invalid root element: '%s'"
 msgstr "Ongeldig rootelement: ‘%s’"
 
 # onbegrepen/genegeerd/overgeslagen/onverwerkt
-#: ../gtk/gtkbuilderparser.c:756
+#: ../gtk/gtkbuilderparser.c:754
 #, c-format
 msgid "Unhandled tag: '%s'"
 msgstr "Onverwerkte tag: ‘%s’"
@@ -1656,11 +1717,11 @@ msgstr "Kleurenwiel"
 msgid "Color Selection"
 msgstr "Kleurselectie"
 
-#: ../gtk/gtkentry.c:5248 ../gtk/gtktextview.c:7653
+#: ../gtk/gtkentry.c:5247 ../gtk/gtktextview.c:7653
 msgid "Input _Methods"
 msgstr "Invoer_methoden"
 
-#: ../gtk/gtkentry.c:5262 ../gtk/gtktextview.c:7667
+#: ../gtk/gtkentry.c:5261 ../gtk/gtktextview.c:7667
 msgid "_Insert Unicode Control Character"
 msgstr "_Unicode controleteken invoegen "
 
@@ -2176,7 +2237,7 @@ msgid "(Empty)"
 msgstr "(Leeg)"
 
 #: ../gtk/gtkfilesystemunix.c:961 ../gtk/gtkfilesystemunix.c:1209
-#: ../gtk/gtkfilesystemunix.c:2197 ../gtk/gtkfilesystemunix.c:2237
+#: ../gtk/gtkfilesystemunix.c:2198 ../gtk/gtkfilesystemunix.c:2238
 #: ../gtk/gtkfilesystemwin32.c:2305 ../gtk/gtkfilesystemwin32.c:2355
 #, c-format
 msgid "Error getting information for '%s': %s"
@@ -2203,17 +2264,17 @@ msgstr ""
 "De naam ‘%s’ is ongeldig omdat deze het teken ‘%s’ bevat. Gebruik een andere "
 "naam."
 
-#: ../gtk/gtkfilesystemunix.c:1879 ../gtk/gtkfilesystemwin32.c:1985
+#: ../gtk/gtkfilesystemunix.c:1880 ../gtk/gtkfilesystemwin32.c:1985
 #, c-format
 msgid "Bookmark saving failed: %s"
 msgstr "Opslaan bladwijzers mislukt %s"
 
-#: ../gtk/gtkfilesystemunix.c:1934 ../gtk/gtkfilesystemwin32.c:2040
+#: ../gtk/gtkfilesystemunix.c:1935 ../gtk/gtkfilesystemwin32.c:2040
 #, c-format
 msgid "'%s' already exists in the bookmarks list"
 msgstr "‘%s’ staat al in de lijst met bladwijzers"
 
-#: ../gtk/gtkfilesystemunix.c:2006 ../gtk/gtkfilesystemwin32.c:2112
+#: ../gtk/gtkfilesystemunix.c:2007 ../gtk/gtkfilesystemwin32.c:2112
 #, c-format
 msgid "'%s' does not exist in the bookmarks list"
 msgstr "‘%s’ staat niet in de lijst met bladwijzers"
@@ -2313,7 +2374,7 @@ msgstr "Pictogram ‘%s’ niet beschikbaar in dit thema"
 msgid "Failed to load icon"
 msgstr "Kon het pictogram niet laden"
 
-#: ../gtk/gtkimmodule.c:423
+#: ../gtk/gtkimmodule.c:515
 msgid "Simple"
 msgstr "Eenvoudig"
 
@@ -2401,44 +2462,44 @@ msgstr "(onbekend)"
 msgid "Cl_ear"
 msgstr "_Wissen"
 
-#: ../gtk/gtklinkbutton.c:148
+#: ../gtk/gtklinkbutton.c:144
 msgid "URI"
 msgstr "URI"
 
-#: ../gtk/gtklinkbutton.c:149
+#: ../gtk/gtklinkbutton.c:145
 msgid "The URI bound to this button"
 msgstr "De URI die bij deze knop hoort"
 
-#: ../gtk/gtklinkbutton.c:406
+#: ../gtk/gtklinkbutton.c:402
 msgid "Copy URL"
 msgstr "URL kopiëren"
 
-#: ../gtk/gtklinkbutton.c:546
+#: ../gtk/gtklinkbutton.c:542
 msgid "Invalid URI"
 msgstr "Ongeldige URI"
 
 #. Description of --gtk-module=MODULES in --help output
-#: ../gtk/gtkmain.c:427
+#: ../gtk/gtkmain.c:425
 msgid "Load additional GTK+ modules"
 msgstr "Extra GTK+ modules laden"
 
 #. Placeholder in --gtk-module=MODULES in --help output
-#: ../gtk/gtkmain.c:428
+#: ../gtk/gtkmain.c:426
 msgid "MODULES"
 msgstr "MODULES"
 
 #. Description of --g-fatal-warnings in --help output
-#: ../gtk/gtkmain.c:430
+#: ../gtk/gtkmain.c:428
 msgid "Make all warnings fatal"
 msgstr "Alle waarschuwing fataal laten zijn"
 
 #. Description of --gtk-debug=FLAGS in --help output
-#: ../gtk/gtkmain.c:433
+#: ../gtk/gtkmain.c:431
 msgid "GTK+ debugging flags to set"
 msgstr "In te stellen GTK+ debug-vlaggen"
 
 #. Description of --gtk-no-debug=FLAGS in --help output
-#: ../gtk/gtkmain.c:436
+#: ../gtk/gtkmain.c:434
 msgid "GTK+ debugging flags to unset"
 msgstr "Uit te zetten GTK+ debug-vlaggen"
 
@@ -2447,17 +2508,56 @@ msgstr "Uit te zetten GTK+ debug-vlaggen"
 #. * Do *not* translate it to "predefinito:LTR", if it
 #. * it isn't default:LTR or default:RTL it will not work
 #.
-#: ../gtk/gtkmain.c:672
+#: ../gtk/gtkmain.c:670
 msgid "default:LTR"
 msgstr "default:LTR"
 
-#: ../gtk/gtkmain.c:768
+#: ../gtk/gtkmain.c:766
 msgid "GTK+ Options"
 msgstr "GTK+-opties"
 
-#: ../gtk/gtkmain.c:768
+#: ../gtk/gtkmain.c:766
 msgid "Show GTK+ Options"
 msgstr "GTK+-options tonen"
+
+# mount: verbinden? aankoppelen?
+#: ../gtk/gtkmountoperation.c:454
+msgid "Co_nnect"
+msgstr "_Verbinden"
+
+#: ../gtk/gtkmountoperation.c:498
+msgid "Connect _anonymously"
+msgstr "A_noniem verbinden"
+
+#: ../gtk/gtkmountoperation.c:507
+msgid "Connect as u_ser:"
+msgstr "Verbinden als ge_bruiker:"
+
+# naam wijzigen
+#: ../gtk/gtkmountoperation.c:544
+msgid "_Username:"
+msgstr "_Gebruikersnaam:"
+
+#: ../gtk/gtkmountoperation.c:548
+msgid "_Domain:"
+msgstr "_Domein:"
+
+# dit is ws voor een wacom-tablet
+#: ../gtk/gtkmountoperation.c:553
+msgid "_Password:"
+msgstr "_Wachtwoord:"
+
+#: ../gtk/gtkmountoperation.c:568
+msgid "_Forget password immediately"
+msgstr "Wa_chtwoord onmiddelijk weer vergeten"
+
+#: ../gtk/gtkmountoperation.c:576
+msgid "_Remember password until you logout"
+msgstr "Wachtwoord _onthouden totdat u zich afmeldt"
+
+#: ../gtk/gtkmountoperation.c:584
+msgid "_Remember forever"
+msgstr "_Voor altijd onthouden"
 
 # wijzer/pijl
 # ruimte bij pijl
@@ -2469,7 +2569,7 @@ msgstr "Ruimte bij pijlen"
 msgid "Scroll arrow spacing"
 msgstr "De ruimte bij de schuifpijlen"
 
-#: ../gtk/gtknotebook.c:4406 ../gtk/gtknotebook.c:6912
+#: ../gtk/gtknotebook.c:4405 ../gtk/gtknotebook.c:6911
 #, c-format
 msgid "Page %u"
 msgstr "Pagina %u"
@@ -2703,60 +2803,60 @@ msgstr "Fout bij maken van het voorbeeld"
 msgid "Error printing"
 msgstr "Fout bij afdrukken"
 
-#: ../gtk/gtkprintoperation-unix.c:388 ../gtk/gtkprintoperation-win32.c:1395
+#: ../gtk/gtkprintoperation-unix.c:388 ../gtk/gtkprintoperation-win32.c:1399
 msgid "Application"
 msgstr "Toepassing"
 
-#: ../gtk/gtkprintoperation-win32.c:564
+#: ../gtk/gtkprintoperation-win32.c:568
 msgid "Printer offline"
 msgstr "Printer is offline"
 
-#: ../gtk/gtkprintoperation-win32.c:566
+#: ../gtk/gtkprintoperation-win32.c:570
 msgid "Out of paper"
 msgstr "Papier is op"
 
-#: ../gtk/gtkprintoperation-win32.c:568
+#: ../gtk/gtkprintoperation-win32.c:572
 msgid "Paused"
 msgstr "Gepauzeerd"
 
 # handmatig oplossen/handmatige oplossing nodig
 # (is dit de juiste betekenis?)
-#: ../gtk/gtkprintoperation-win32.c:570
+#: ../gtk/gtkprintoperation-win32.c:574
 msgid "Need user intervention"
 msgstr "Handmatig oplossen"
 
 # zelfgekozen/aangepaste
-#: ../gtk/gtkprintoperation-win32.c:670
+#: ../gtk/gtkprintoperation-win32.c:674
 msgid "Custom size"
 msgstr "Aangepaste grootte"
 
-#: ../gtk/gtkprintoperation-win32.c:1485 ../gtk/gtkprintoperation-win32.c:1508
-#: ../gtk/gtkprintoperation-win32.c:1556
+#: ../gtk/gtkprintoperation-win32.c:1489 ../gtk/gtkprintoperation-win32.c:1512
+#: ../gtk/gtkprintoperation-win32.c:1560
 #, c-format
 msgid "Not enough free memory"
 msgstr "Onvoldoende vrij geheugen"
 
-#: ../gtk/gtkprintoperation-win32.c:1561
+#: ../gtk/gtkprintoperation-win32.c:1565
 #, c-format
 msgid "Invalid argument to PrintDlgEx"
 msgstr "Ongeldig argument voor PrintDlgEx"
 
-#: ../gtk/gtkprintoperation-win32.c:1566
+#: ../gtk/gtkprintoperation-win32.c:1570
 #, c-format
 msgid "Invalid pointer to PrintDlgEx"
 msgstr "Ongeldige pointer naar PrintDlgEx"
 
-#: ../gtk/gtkprintoperation-win32.c:1571
+#: ../gtk/gtkprintoperation-win32.c:1575
 #, c-format
 msgid "Invalid handle to PrintDlgEx"
 msgstr "Ongeldige hendel naar PrintDlgEx"
 
-#: ../gtk/gtkprintoperation-win32.c:1576
+#: ../gtk/gtkprintoperation-win32.c:1580
 #, c-format
 msgid "Unspecified error"
 msgstr "Ongespecificeerde fout"
 
-#: ../gtk/gtkprintoperation-win32.c:1627
+#: ../gtk/gtkprintoperation-win32.c:1632
 #, c-format
 msgid "Error from StartDoc"
 msgstr "Fout van StartDoc"
@@ -2968,7 +3068,7 @@ msgid "Unable to locate image file in pixmap_path: \"%s\""
 msgstr "Kan afbeelding in pixmap_pad: ‘%s’ niet vinden"
 
 #: ../gtk/gtkrecentaction.c:155 ../gtk/gtkrecentaction.c:163
-#: ../gtk/gtkrecentchoosermenu.c:553 ../gtk/gtkrecentchoosermenu.c:561
+#: ../gtk/gtkrecentchoosermenu.c:551 ../gtk/gtkrecentchoosermenu.c:559
 #, c-format
 msgid "This function is not implemented for widgets of class '%s'"
 msgstr "Deze functie is niet geïmplementeerd voor widgets van klasse ‘%s’"
@@ -2978,41 +3078,41 @@ msgstr "Deze functie is niet geïmplementeerd voor widgets van klasse ‘%s’"
 #                             wordt weergegeven
 #                   bestand  
 #             type
-#: ../gtk/gtkrecentchooserdefault.c:456
+#: ../gtk/gtkrecentchooserdefault.c:454
 msgid "Select which type of documents are shown"
 msgstr "Kiezen welk soort bestanden getoond worden"
 
-#: ../gtk/gtkrecentchooserdefault.c:1098 ../gtk/gtkrecentchooserdefault.c:1135
+#: ../gtk/gtkrecentchooserdefault.c:1096 ../gtk/gtkrecentchooserdefault.c:1133
 #, c-format
 msgid "No item for URI '%s' found"
 msgstr "Geen item voor URI ‘%s’ gevonden"
 
-#: ../gtk/gtkrecentchooserdefault.c:1262
+#: ../gtk/gtkrecentchooserdefault.c:1260
 msgid "Untitled filter"
 msgstr "Naamloos filter"
 
-#: ../gtk/gtkrecentchooserdefault.c:1615
+#: ../gtk/gtkrecentchooserdefault.c:1613
 msgid "Could not remove item"
 msgstr "Kon item niet verwijderen"
 
-#: ../gtk/gtkrecentchooserdefault.c:1658
+#: ../gtk/gtkrecentchooserdefault.c:1656
 msgid "Could not clear list"
 msgstr "Kon de lijst niet wissen"
 
-#: ../gtk/gtkrecentchooserdefault.c:1742
+#: ../gtk/gtkrecentchooserdefault.c:1740
 msgid "Copy _Location"
 msgstr "_Locatie kopiëren"
 
-#: ../gtk/gtkrecentchooserdefault.c:1755
+#: ../gtk/gtkrecentchooserdefault.c:1753
 msgid "_Remove From List"
 msgstr "_Verwijderen uit lijst"
 
-#: ../gtk/gtkrecentchooserdefault.c:1764
+#: ../gtk/gtkrecentchooserdefault.c:1762
 msgid "_Clear List"
 msgstr "Lijst _wissen"
 
 # privebronnen tonen
-#: ../gtk/gtkrecentchooserdefault.c:1778
+#: ../gtk/gtkrecentchooserdefault.c:1776
 msgid "Show _Private Resources"
 msgstr "Privé-bronnen tonen"
 
@@ -3026,21 +3126,21 @@ msgstr "Privé-bronnen tonen"
 #. * user appended or prepended custom menu items to the
 #. * recent chooser menu widget.
 #.
-#: ../gtk/gtkrecentchoosermenu.c:319
+#: ../gtk/gtkrecentchoosermenu.c:317
 msgid "No items found"
 msgstr "Geen items gevonden"
 
-#: ../gtk/gtkrecentchoosermenu.c:473 ../gtk/gtkrecentchoosermenu.c:529
+#: ../gtk/gtkrecentchoosermenu.c:471 ../gtk/gtkrecentchoosermenu.c:527
 #, c-format
 msgid "No recently used resource found with URI `%s'"
 msgstr "Geen recentelijk gebruikte bron gevonden met URI ‘%s’"
 
-#: ../gtk/gtkrecentchoosermenu.c:740
+#: ../gtk/gtkrecentchoosermenu.c:738
 #, c-format
 msgid "Open '%s'"
 msgstr "‘%s’ openen"
 
-#: ../gtk/gtkrecentchoosermenu.c:770
+#: ../gtk/gtkrecentchoosermenu.c:768
 msgid "Unknown item"
 msgstr "Onbekend item"
 
@@ -3051,7 +3151,7 @@ msgstr "Onbekend item"
 #. *
 #. * Don't include the prefix "recent menu label|" in the translation.
 #.
-#: ../gtk/gtkrecentchoosermenu.c:783
+#: ../gtk/gtkrecentchoosermenu.c:781
 #, c-format
 msgid "recent menu label|_%d. %s"
 msgstr "_%d. %s"
@@ -3061,13 +3161,13 @@ msgstr "_%d. %s"
 #. *
 #. * Don't include the prefix "recent menu label|" in the translation.
 #.
-#: ../gtk/gtkrecentchoosermenu.c:790
+#: ../gtk/gtkrecentchoosermenu.c:788
 #, c-format
 msgid "recent menu label|%d. %s"
 msgstr "%d. %s"
 
-#: ../gtk/gtkrecentmanager.c:1041 ../gtk/gtkrecentmanager.c:1187
-#: ../gtk/gtkrecentmanager.c:1197 ../gtk/gtkrecentmanager.c:1250
+#: ../gtk/gtkrecentmanager.c:1008 ../gtk/gtkrecentmanager.c:1154
+#: ../gtk/gtkrecentmanager.c:1164 ../gtk/gtkrecentmanager.c:1217
 #, c-format
 msgid "Unable to find an item with URI '%s'"
 msgstr "Kan geen item vinden met URI ‘%s’"
@@ -4892,9 +4992,6 @@ msgstr "Kon geen informatie verkrijgen over bestand ‘%s’: %s"
 #~ "Regel %d, kolom %d: ‘%s’ of ‘%s’ verwacht, maar in plaats daavan ‘%s’ "
 #~ "gevonden"
 
-#~ msgid "Could not create directory: %s"
-#~ msgstr "Kon map niet aanmaken: %s"
-
 #~ msgid "Error creating directory '%s': %s"
 #~ msgstr "Fout bij aanmaken van map ‘%s’: %s"
 
@@ -5457,9 +5554,6 @@ msgstr "Kon geen informatie verkrijgen over bestand ‘%s’: %s"
 
 #~ msgid "Could not build file name from '%s' and '%s'"
 #~ msgstr "Kon geen bestandnaam maken van ‘%s’ en ‘%s’"
-
-#~ msgid "Could not select item"
-#~ msgstr "Kon item niet selecteren"
 
 #~ msgid "Open Location"
 #~ msgstr "Locatie openen"
