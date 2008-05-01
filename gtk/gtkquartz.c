@@ -283,7 +283,7 @@ _gtk_quartz_set_selection_data_for_pasteboard (NSPasteboard *pasteboard,
     }
   else if ([type isEqualTo:NSURLPboardType])
     {
-      gchar **list;
+      gchar **list = NULL;
       gchar **result = NULL;
       NSURL *url;
 

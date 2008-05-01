@@ -2,6 +2,13 @@
 
 	Merged from trunk:
 
+	* gtk/gtkquartz.c (_gtk_quartz_set_selection_data_for_pasteboard):
+	Prevent crash, fixes bug #530153. Patch from Yevgen Muntyan.
+
+2008-05-01  Richard Hult  <richard@imendio.com>
+
+	Merged from trunk:
+
 	* gdk/quartz/gdkevents-quartz.c: (_gdk_events_queue): Don't send
 	nsevents with the gdk lock held, fixes deadlock when doing manual
 	window resizing with threading enabled.
