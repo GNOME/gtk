@@ -1,3 +1,11 @@
+2008-04-30  Matthias Clasen  <mclasen@redhat.com>
+
+	Bug 529386 – Printing options hidden by blacklisted option
+
+	* modules/printbackend/cups/gtkprintbackendcups.c
+	(cups_printer_get_options): Fix the blacklist handling. 
+	Patch by Marek Kašík.
+	
 2008-04-30  Richard Hult  <richard@imendio.com>
 
 	* gdk/quartz/GdkQuartzView.c: Simplify check for zero sized expose

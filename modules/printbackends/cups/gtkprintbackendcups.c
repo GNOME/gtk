@@ -2484,7 +2484,7 @@ cups_printer_get_options (GtkPrinter           *printer,
 
   for (i = 0; i < num_opts; i++)
     {
-      if (STRING_IN_TABLE (opts->name, cups_option_blacklist))
+      if (STRING_IN_TABLE (opts[i].name, cups_option_blacklist))
         continue;
 
       name = get_option_name (opts[i].name);
