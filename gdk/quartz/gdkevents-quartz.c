@@ -1938,7 +1938,11 @@ _gdk_events_queue (GdkDisplay *display)
   if (event)
     {
       if (!gdk_event_translate (event))
-        [NSApp sendEvent:event];
+        {
+          GDK_THREADS_LEAVE ();
+          [NSApp sendEvent:event];
+          GDK_THREADS_ENTER ();
+        }
 
       _gdk_quartz_event_loop_release_event (event);
     }

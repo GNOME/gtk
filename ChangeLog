@@ -2,6 +2,14 @@
 
 	Merged from trunk:
 
+	* gdk/quartz/gdkevents-quartz.c: (_gdk_events_queue): Don't send
+	nsevents with the gdk lock held, fixes deadlock when doing manual
+	window resizing with threading enabled.
+
+2008-05-01  Richard Hult  <richard@imendio.com>
+
+	Merged from trunk:
+
 	* gdk/quartz/gdkevents-quartz.c:
 	(get_keyboard_modifiers_from_ns_event), (create_key_event): Map
 	Alt to Alt and Cmd to Meta. This is not only more logical but also
