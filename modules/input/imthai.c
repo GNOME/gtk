@@ -33,7 +33,7 @@ GType type_thai = 0;
 static const GtkIMContextInfo thai_info = { 
   "thai",	   /* ID */
   N_("Thai-Lao"),  /* Human readable name */
-  "gtk+",	   /* Translation domain */
+  "gtk20",	   /* Translation domain */
    GTK_LOCALEDIR,  /* Dir for bindtextdomain (not strictly needed for "gtk+") */
   "lo:th"	   /* Languages for which this module is the default */
 };
