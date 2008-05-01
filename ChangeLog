@@ -1,3 +1,8 @@
+2008-05-01  Richard Hult  <richard@imendio.com>
+
+	* gtk/gtkquartz.c (_gtk_quartz_set_selection_data_for_pasteboard):
+	Prevent crash, fixes bug #530153. Patch from Yevgen Muntyan.
+
 2008-05-01  Matthias Clasen  <mclasen@redhat.com>
 
 	* modules/imput/imthai.c: Register the right translation domain.
