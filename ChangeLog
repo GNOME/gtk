@@ -1,3 +1,7 @@
+2008-05-01  Matthias Clasen  <mclasen@redhat.com>
+
+	* modules/imput/imthai.c: Register the right translation domain.
+
 2008-04-30  Matthias Clasen  <mclasen@redhat.com>
 
 	Bug 529386 – Printing options hidden by blacklisted option
