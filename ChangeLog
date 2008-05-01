@@ -1,3 +1,12 @@
+2008-05-01  Richard Hult  <richard@imendio.com>
+
+	Merged from trunk:
+
+	* gdk/quartz/gdkevents-quartz.c:
+	(get_keyboard_modifiers_from_ns_event), (create_key_event): Map
+	Alt to Alt and Cmd to Meta. This is not only more logical but also
+	makes it easier to have Mac-like behavior.
+
 2008-05-01  Matthias Clasen  <mclasen@redhat.com>
 
 	* modules/imput/imthai.c: Register the right translation domain.
