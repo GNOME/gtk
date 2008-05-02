@@ -1,3 +1,9 @@
+2008-05-02  Michael Natterer  <mitch@imendio.com>
+
+	* Makefile.am (stamp-gdk-pixbuf-marshal.h): deprecate the entire
+	gdk-pixbuf-marshal.h since it's installed by accident only and
+	shouldn't be used by anybody.
+
 2008-03-21  Tor Lillqvist  <tml@novell.com>
 
 	Import the GDI+ gdk-pixbuf loaders for Windows by Dominic
