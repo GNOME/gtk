@@ -1,3 +1,7 @@
+2008-05-02  Michael Natterer  <mitch@imendio.com>
+
+	* modules/input/imthai.c: use GETTEXT_PACKAGE instead of "gtk20".
+
 2008-05-01  Richard Hult  <richard@imendio.com>
 
 	* gtk/gtkquartz.c (_gtk_quartz_set_selection_data_for_pasteboard):
