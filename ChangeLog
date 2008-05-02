@@ -1,5 +1,11 @@
 2008-05-02  Michael Natterer  <mitch@imendio.com>
 
+	* gtk/gtk.h: add 15 files that were missing (they all got included
+	indirectly by including gtk.h, so should have been here in the
+	first place).
+
+2008-05-02  Michael Natterer  <mitch@imendio.com>
+
 	* modules/input/imthai.c: use GETTEXT_PACKAGE instead of "gtk20".
 
 2008-05-01  Richard Hult  <richard@imendio.com>

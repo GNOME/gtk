@@ -21,7 +21,7 @@
  * Modified by the GTK+ Team and others 1997-2000.  See the AUTHORS
  * file for a list of people on the GTK+ Team.  See the ChangeLog
  * files for a list of changes.  These files are distributed with
- * GTK+ at ftp://ftp.gtk.org/pub/gtk/. 
+ * GTK+ at ftp://ftp.gtk.org/pub/gtk/.
  */
 
 #ifndef __GTK_H__
@@ -49,6 +49,7 @@
 #include <gtk/gtkbuilder.h>
 #include <gtk/gtkbutton.h>
 #include <gtk/gtkcalendar.h>
+#include <gtk/gtkcelleditable.h>
 #include <gtk/gtkcelllayout.h>
 #include <gtk/gtkcellrenderer.h>
 #include <gtk/gtkcellrendereraccel.h>
@@ -69,6 +70,7 @@
 #include <gtk/gtkcomboboxentry.h>
 #include <gtk/gtkcontainer.h>
 #include <gtk/gtkcurve.h>
+#include <gtk/gtkdebug.h>
 #include <gtk/gtkdialog.h>
 #include <gtk/gtkdnd.h>
 #include <gtk/gtkdrawingarea.h>
@@ -79,9 +81,11 @@
 #include <gtk/gtkeventbox.h>
 #include <gtk/gtkexpander.h>
 #include <gtk/gtkfixed.h>
+#include <gtk/gtkfilechooser.h>
 #include <gtk/gtkfilechooserbutton.h>
 #include <gtk/gtkfilechooserdialog.h>
 #include <gtk/gtkfilechooserwidget.h>
+#include <gtk/gtkfilefilter.h>
 #include <gtk/gtkfontbutton.h>
 #include <gtk/gtkfontsel.h>
 #include <gtk/gtkframe.h>
@@ -122,9 +126,14 @@
 #include <gtk/gtkmountoperation.h>
 #include <gtk/gtknotebook.h>
 #include <gtk/gtkobject.h>
+#include <gtk/gtkpagesetup.h>
+#include <gtk/gtkpapersize.h>
 #include <gtk/gtkpaned.h>
 #include <gtk/gtkplug.h>
+#include <gtk/gtkprintcontext.h>
 #include <gtk/gtkprintoperation.h>
+#include <gtk/gtkprintoperationpreview.h>
+#include <gtk/gtkprintsettings.h>
 #include <gtk/gtkprogressbar.h>
 #include <gtk/gtkradioaction.h>
 #include <gtk/gtkradiobutton.h>
@@ -160,6 +169,11 @@
 #include <gtk/gtktearoffmenuitem.h>
 #include <gtk/gtktextbuffer.h>
 #include <gtk/gtktextbufferrichtext.h>
+#include <gtk/gtktextchild.h>
+#include <gtk/gtktextiter.h>
+#include <gtk/gtktextmark.h>
+#include <gtk/gtktexttag.h>
+#include <gtk/gtktexttagtable.h>
 #include <gtk/gtktextview.h>
 #include <gtk/gtktoggleaction.h>
 #include <gtk/gtktogglebutton.h>
@@ -175,6 +189,7 @@
 #include <gtk/gtktreemodelfilter.h>
 #include <gtk/gtktreemodelsort.h>
 #include <gtk/gtktreeselection.h>
+#include <gtk/gtktreesortable.h>
 #include <gtk/gtktreestore.h>
 #include <gtk/gtktreeview.h>
 #include <gtk/gtktreeviewcolumn.h>
