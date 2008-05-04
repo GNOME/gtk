@@ -128,7 +128,8 @@ const static struct {
   { 111, GDK_F12, 0 },
   { 105, GDK_F13, 0 },
   { 107, GDK_F14, 0 },
-  { 113, GDK_F15, 0 }
+  { 113, GDK_F15, 0 },
+  { 106, GDK_F16, 0 }
 };
 
 const static struct {
@@ -255,7 +256,15 @@ maybe_update_keymap (void)
 			p[j] = GDK_ISO_Left_Tab;
 
 		      if (!found)
-			p[j] = gdk_unicode_to_keyval (uc);
+                        {
+                          guint tmp;
+                          
+                          tmp = gdk_unicode_to_keyval (uc);
+                          if (tmp != (uc | 0x01000000))
+                            p[j] = tmp;
+                          else
+                            p[j] = 0;
+                        }
 		    }
 		}
 	      
@@ -330,7 +339,15 @@ maybe_update_keymap (void)
 			p[j] = GDK_ISO_Left_Tab;
 		      
 		      if (!found)
-			p[j] = gdk_unicode_to_keyval (uc);
+                        {
+                          guint tmp;
+                          
+                          tmp = gdk_unicode_to_keyval (uc);
+                          if (tmp != (uc | 0x01000000))
+                            p[j] = tmp;
+                          else
+                            p[j] = 0;
+                        }
 		    }
 		}
 	      
