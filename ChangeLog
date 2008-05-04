@@ -1,3 +1,11 @@
+2008-05-04  Richard Hult  <richard@imendio.com>
+
+	Merged from trunk:
+
+	* gdk/quartz/gdkkeys-quartz.c (maybe_update_keymap): Remove stray
+	semicolon after if statement. Fixes bug #530963, patch from Yevgen
+	Muntyan.
+
 2008-05-01  Richard Hult  <richard@imendio.com>
 
 	Merged from trunk:
