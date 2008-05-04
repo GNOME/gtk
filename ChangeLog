@@ -1,5 +1,15 @@
 2008-05-04  Richard Hult  <richard@imendio.com>
 
+	Revert this commit from 2008-05-01, as it requires more changes to
+	work completely:
+
+	* gdk/quartz/gdkevents-quartz.c:
+	(get_keyboard_modifiers_from_ns_event), (create_key_event): Map
+	Alt to Alt and Cmd to Meta. This is not only more logical but also
+	makes it easier to have Mac-like behavior.
+
+2008-05-04  Richard Hult  <richard@imendio.com>
+
 	Merged from trunk:
 
 	* gdk/quartz/gdkkeys-quartz.c (maybe_update_keymap): Check if
