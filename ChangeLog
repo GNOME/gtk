@@ -2,6 +2,15 @@
 
 	Merged from trunk:
 
+	* gdk/quartz/gdkkeys-quartz.c (maybe_update_keymap): Check if
+	gdk_unicode_to_keyval() worked before using the result. Makes
+	function keys work, bug #530156. Also add F16 to the function key
+	map.
+
+2008-05-04  Richard Hult  <richard@imendio.com>
+
+	Merged from trunk:
+
 	* gdk/quartz/gdkkeys-quartz.c (maybe_update_keymap): Remove stray
 	semicolon after if statement. Fixes bug #530963, patch from Yevgen
 	Muntyan.
