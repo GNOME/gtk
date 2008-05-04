@@ -364,8 +364,8 @@ maybe_update_keymap (void)
 	{
 	  p = keyval_array + known_numeric_keys[i].keycode * KEYVALS_PER_KEYCODE;
 
-	  if (p[0] == known_numeric_keys[i].normal_keyval);
-	      p[0] = known_numeric_keys[i].keypad_keyval;
+	  if (p[0] == known_numeric_keys[i].normal_keyval)
+            p[0] = known_numeric_keys[i].keypad_keyval;
 	}
       
       if (current_layout)
@@ -543,8 +543,8 @@ translate_keysym (guint           hardware_keycode,
   if (state & GDK_LOCK_MASK)
     {
       guint upper = gdk_keyval_to_upper (tmp_keyval);
-	if (upper != tmp_keyval)
-	  tmp_keyval = upper;
+      if (upper != tmp_keyval)
+        tmp_keyval = upper;
     }
 
   return tmp_keyval;
