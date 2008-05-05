@@ -1016,6 +1016,45 @@ cups_request_printer_list_cb (GtkPrintBackendCups *cups_backend,
       gint job_count = 0;
       gboolean status_changed = FALSE;
       GList *node;
+      gint i,j;
+      const gchar *reason_msg = NULL;
+      gchar *reason_msg_desc = NULL;
+      gchar *tmp_msg = NULL;
+      gint printer_state_reason_level = 0; /* 0 - none, 1 - report, 2 - warning, 3 - error */
+      gboolean interested_in = FALSE;
+      gboolean found = FALSE;
+      static const char * const reasons[] =	/* Reasons we're interested in */
+        {
+          "toner-low",
+          "toner-empty",
+          "developer-low",
+          "developer-empty",
+          "marker-supply-low",
+          "marker-supply-empty",
+          "cover-open",
+          "door-open",
+          "media-low",
+          "media-empty",
+          "offline",
+          "connecting-to-device",
+          "other"
+        };
+      static const char * reasons_descs[] =
+        {
+          N_("Printer '%s' is low on toner."),
+          N_("Printer '%s' has no toner left."),
+          N_("Printer '%s' is low on developer."),
+          N_("Printer '%s' is out of developer."),
+          N_("Printer '%s' is low on at least one marker supply."),
+          N_("Printer '%s' is out of at least one marker supply."),
+          N_("The cover is open on printer '%s'."),
+          N_("The door is open on printer '%s'."),
+          N_("Printer '%s' is low on paper."),
+          N_("Printer '%s' is out of paper."),
+          N_("Printer '%s' is currently off-line."),
+          N_("Printer '%s' may not be connected."),
+          N_("There is a problem on printer '%s'.")
+        };
       
       /* Skip leading attributes until we hit a printer...
        */
@@ -1042,6 +1081,49 @@ cups_request_printer_list_cb (GtkPrintBackendCups *cups_backend,
           description = attr->values[0].string.text;
         else if (strcmp (attr->name, "printer-state-message") == 0)
           state_msg = attr->values[0].string.text;
+        else if (strcmp (attr->name, "printer-state-reasons") == 0)
+          /* Store most important reason to reason_msg and set
+             its importance at printer_state_reason_level */
+          {
+            for (i = 0; i < attr->num_values; i++)
+              {
+                if (strcmp (attr->values[i].string.text, "none") != 0)
+                  {
+                    interested_in = FALSE;
+                    for (j = 0; j < G_N_ELEMENTS (reasons); j++)
+                        if (strncmp (attr->values[i].string.text, reasons[j], strlen (reasons[j])) == 0)
+                          {
+                            interested_in = TRUE;
+                            break;
+                          }
+
+                    if (interested_in)
+                      {
+                        if (g_str_has_suffix (attr->values[i].string.text, "-report"))
+                          {
+                            if (printer_state_reason_level <= 1)
+                              {
+                                reason_msg = attr->values[i].string.text;
+                                printer_state_reason_level = 1;
+                              }
+                          }
+                        else if (g_str_has_suffix (attr->values[i].string.text, "-warning"))
+                          {
+                            if (printer_state_reason_level <= 2)
+                              {
+                                reason_msg = attr->values[i].string.text;
+                                printer_state_reason_level = 2;
+                              }
+                          }
+                        else  /* It is error in the case of no suffix. */
+                          {
+                            reason_msg = attr->values[i].string.text;
+                            printer_state_reason_level = 3;
+                          }
+                      }
+                  }
+              }
+          }
         else if (strcmp (attr->name, "printer-state") == 0)
           state = attr->values[0].integer;
         else if (strcmp (attr->name, "queued-job-count") == 0)
@@ -1167,7 +1249,51 @@ cups_request_printer_list_cb (GtkPrintBackendCups *cups_backend,
       status_changed = gtk_printer_set_job_count (printer, job_count);
       status_changed |= gtk_printer_set_location (printer, location);
       status_changed |= gtk_printer_set_description (printer, description);
+
+      /* Set description of the reason and combine it with printer-state-message. */
+      if ( (reason_msg != NULL))
+        {
+          for (i = 0; i < G_N_ELEMENTS (reasons); i++)
+            {
+              if (strncmp (reason_msg, reasons[i], strlen (reasons[i])) == 0)
+                {
+                  reason_msg_desc = g_strdup_printf (reasons_descs[i], printer_name);
+                  found = TRUE;
+                  break;
+                }
+            }
+
+          if (!found)
+            printer_state_reason_level = 0;
+
+          if (printer_state_reason_level >= 2)
+            {
+              if (strlen (state_msg) == 0)
+                state_msg = reason_msg_desc;
+              else
+                {
+                  tmp_msg = g_strjoin (" ; ", state_msg, reason_msg_desc, NULL);
+                  state_msg = tmp_msg;
+                }
+            }
+        }
+
       status_changed |= gtk_printer_set_state_message (printer, state_msg);
+
+      if (tmp_msg != NULL)
+        g_free (tmp_msg);
+
+      if (reason_msg_desc != NULL)
+        g_free (reason_msg_desc);
+
+      /* Set printer icon according to importance
+         (none, report, warning, error - report is omitted). */
+      if (printer_state_reason_level == 3)
+        gtk_printer_set_icon_name (printer, "gtk-print-error");
+      else if (printer_state_reason_level == 2)
+        gtk_printer_set_icon_name (printer, "gtk-print-warning");
+      else
+        gtk_printer_set_icon_name (printer, "gtk-print");
 
       if (status_changed)
         g_signal_emit_by_name (GTK_PRINT_BACKEND (backend),
@@ -1210,6 +1336,7 @@ cups_request_printer_list (GtkPrintBackendCups *cups_backend)
       "printer-location",
       "printer-info",
       "printer-state-message",
+      "printer-state-reasons",
       "printer-state",
       "queued-job-count"
     };

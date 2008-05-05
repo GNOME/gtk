@@ -238,7 +238,10 @@ HTML_IMAGES = \
 	$(top_srcdir)/gtk/stock-icons/24/gtk-paste.png			\
 	$(top_srcdir)/gtk/stock-icons/24/gtk-preferences.png		\
 	$(top_srcdir)/gtk/stock-icons/24/gtk-print.png			\
+	$(top_srcdir)/gtk/stock-icons/24/gtk-print-error.png		\
 	$(top_srcdir)/gtk/stock-icons/24/gtk-print-preview.png		\
+	$(top_srcdir)/gtk/stock-icons/24/gtk-print-report.png		\
+	$(top_srcdir)/gtk/stock-icons/24/gtk-print-warning.png		\
 	$(top_srcdir)/gtk/stock-icons/24/gtk-properties.png		\
 	$(top_srcdir)/gtk/stock-icons/24/gtk-quit.png			\
 	$(top_srcdir)/gtk/stock-icons/24/gtk-redo-ltr.png		\

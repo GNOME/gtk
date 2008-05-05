@@ -742,6 +742,15 @@ The "Print" item.
 <inlinegraphic fileref="gtk-print.png" format="PNG"></inlinegraphic>
 </para>
 
+ 
+
+<!-- ##### MACRO GTK_STOCK_PRINT_ERROR ##### -->
+<para>
+The "Print Error" item.
+<inlinegraphic fileref="gtk-print-error.png" format="PNG"></inlinegraphic>
+</para>
+
+@Since: 2.14
 
 
 <!-- ##### MACRO GTK_STOCK_PRINT_PREVIEW ##### -->
@@ -750,6 +759,24 @@ The "Print Preview" item.
 <inlinegraphic fileref="gtk-print-preview.png" format="PNG"></inlinegraphic>
 </para>
 
+
+
+<!-- ##### MACRO GTK_STOCK_PRINT_REPORT ##### -->
+<para>
+The "Print Report" item.
+<inlinegraphic fileref="gtk-print-report.png" format="PNG"></inlinegraphic>
+</para>
+
+@Since: 2.14
+
+
+<!-- ##### MACRO GTK_STOCK_PRINT_WARNING ##### -->
+<para>
+The "Print Warning" item.
+<inlinegraphic fileref="gtk-print-warning.png" format="PNG"></inlinegraphic>
+</para>
+
+@Since: 2.14
 
 
 <!-- ##### MACRO GTK_STOCK_PROPERTIES ##### -->
