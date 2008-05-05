@@ -1,3 +1,15 @@
+2008-05-05  Michael Natterer  <mitch@imendio.com>
+
+	* gtk/gtkcellrenderercombo.h
+	* gtk/gtkcellrendererspin.h
+	* gtk/gtkfilechooserbutton.h: style cleanups for the sake of
+	consistency.
+
+	* gtk/gtkfilechooserdialog.h
+	* gtk/gtkfilechooserwidget.h
+	* gtk/gtkscalebutton.h: reorder instance and class structs to be
+	in canonical order.
+
 2008-05-04  Richard Hult  <richard@imendio.com>
 
 	* gdk/quartz/gdkkeys-quartz.c (maybe_update_keymap): Check if
