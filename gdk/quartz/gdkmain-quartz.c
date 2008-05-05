@@ -19,6 +19,7 @@
  */
 
 #include <config.h>
+#include <dlfcn.h>
 
 #include "gdk.h"
 #include <ApplicationServices/ApplicationServices.h>
@@ -31,11 +32,17 @@ void
 _gdk_windowing_init (void)
 {
   ProcessSerialNumber psn = { 0, kCurrentProcess };
+  void (*_gtk_quartz_framework_init_ptr) (void);
 
   /* Make the current process a foreground application, i.e. an app
    * with a user interface, in case we're not running from a .app bundle
    */
   TransformProcessType (&psn, kProcessTransformToForegroundApplication);
+
+  /* Initialize GTK+ framework if there is one. */
+  _gtk_quartz_framework_init_ptr = dlsym (RTLD_DEFAULT, "_gtk_quartz_framework_init");
+  if (_gtk_quartz_framework_init_ptr)
+    _gtk_quartz_framework_init_ptr ();
 }
 
 void

@@ -1,3 +1,8 @@
+2008-05-05  Richard Hult  <richard@imendio.com>
+
+	* gdk/quartz/gdkmain-quartz.c (_gdk_windowing_init): Initalize
+	framework if there is one.
+
 2008-05-05  Michael Natterer  <mitch@imendio.com>
 
 	* gtk/gtkcellrenderercombo.h
