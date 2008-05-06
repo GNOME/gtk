@@ -1,3 +1,17 @@
+2008-05-06  Richard Hult  <richard@imendio.com>
+
+	* gdk/gdkevents.c: (gdk_event_copy), (gdk_event_free):
+	* gdk/gdkinternals.h: Add private backend data to events, and
+	handle it when copying/freeing events. Currently only needed in
+	the quartz backend.
+
+	* gdk/directfb/gdkevents-directfb.c:
+	* gdk/quartz/gdkevents-quartz.c:
+	* gdk/win32/gdkevents-win32.c:
+	* gdk/x11/gdkevents-x11.c: (_gdk_windowing_event_data_copy)
+	(_gdk_windowing_event_data_free): Add stubs for X11, win32 and
+	directfb. Implement for quartz. Part of fixing bug #473822.
+
 2008-05-05  Richard Hult  <richard@imendio.com>
 
 	* gdk/quartz/gdkmain-quartz.c (_gdk_windowing_init): Initalize

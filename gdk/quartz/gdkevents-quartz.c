@@ -1554,10 +1554,15 @@ create_key_event (GdkWindow    *window,
                   GdkEventType  type)
 {
   GdkEvent *event;
+  GdkEventPrivate *priv;
   gchar buf[7];
   gunichar c = 0;
 
   event = gdk_event_new (type);
+
+  priv = (GdkEventPrivate *) event;
+  priv->windowing_data = [nsevent retain];
+
   event->key.window = window;
   event->key.time = get_time_from_ns_event (nsevent);
   event->key.state = get_keyboard_modifiers_from_ns_event (nsevent);
@@ -2037,4 +2042,30 @@ gdk_screen_get_setting (GdkScreen   *screen,
   /* FIXME: Add more settings */
 
   return FALSE;
+}
+
+void
+_gdk_windowing_event_data_copy (GdkEvent *dst,
+                                GdkEvent *src)
+{
+  GdkEventPrivate *priv_dst = (GdkEventPrivate *) dst;
+  GdkEventPrivate *priv_src = (GdkEventPrivate *) src;
+
+  if (priv_src->windowing_data)
+    {
+      priv_dst->windowing_data = priv_src->windowing_data;
+      [(NSEvent *)priv_dst->windowing_data retain];
+    }
+}
+
+void
+_gdk_windowing_event_data_free (GdkEvent *event)
+{
+  GdkEventPrivate *priv = (GdkEventPrivate *) event;
+
+  if (priv->windowing_data)
+    {
+      [(NSEvent *)priv->windowing_data release];
+      priv->windowing_data = NULL;
+    }
 }

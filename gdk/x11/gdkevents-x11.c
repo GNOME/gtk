@@ -3085,5 +3085,16 @@ gdk_xsettings_watch_cb (Window   window,
   return True;
 }
 
+void
+_gdk_windowing_event_data_copy (GdkEvent *dst,
+                                GdkEvent *src)
+{
+}
+
+void
+_gdk_windowing_event_data_free (GdkEvent *event)
+{
+}
+
 #define __GDK_EVENTS_X11_C__
 #include "gdkaliasdef.c"

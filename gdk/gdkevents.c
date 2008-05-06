@@ -420,6 +420,9 @@ gdk_event_copy (const GdkEvent *event)
     default:
       break;
     }
+
+  if (gdk_event_is_allocated (event))
+    _gdk_windowing_event_data_copy (new_event, event);
   
   return new_event;
 }
@@ -484,6 +487,8 @@ gdk_event_free (GdkEvent *event)
     default:
       break;
     }
+
+  _gdk_windowing_event_data_free (event);
 
   g_hash_table_remove (event_hash, event);
   g_slice_free (GdkEventPrivate, (GdkEventPrivate*) event);

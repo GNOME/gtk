@@ -961,5 +961,16 @@ gdk_net_wm_supports (GdkAtom property)
    return FALSE;
 }
 
+void
+_gdk_windowing_event_data_copy (GdkEvent *dst,
+                                GdkEvent *src)
+{
+}
+
+void
+_gdk_windowing_event_data_free (GdkEvent *event)
+{
+}
+
 #define __GDK_EVENTS_X11_C__
 #include "gdkaliasdef.c"
