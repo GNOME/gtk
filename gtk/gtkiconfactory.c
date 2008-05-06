@@ -451,7 +451,10 @@ get_default_icons (GtkIconFactory *factory)
   register_stock_icon (factory, GTK_STOCK_PASTE);
   register_stock_icon (factory, GTK_STOCK_PREFERENCES);
   register_stock_icon (factory, GTK_STOCK_PRINT);
+  register_stock_icon (factory, GTK_STOCK_PRINT_ERROR);
   register_stock_icon (factory, GTK_STOCK_PRINT_PREVIEW);
+  register_stock_icon (factory, GTK_STOCK_PRINT_REPORT);
+  register_stock_icon (factory, GTK_STOCK_PRINT_WARNING);
   register_stock_icon (factory, GTK_STOCK_PROPERTIES);
   register_bidi_stock_icon (factory, 
 			    GTK_STOCK_REDO,
