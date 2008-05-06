@@ -1,3 +1,13 @@
+2008-05-07  Michael Natterer  <mitch@imendio.com>
+
+	* gdk/gdkinternals.h
+	* gdk/gdkevents.c
+	* gdk/directfb/gdkevents-directfb.c
+	* gdk/quartz/gdkevents-quartz.c
+	* gdk/win32/gdkevents-win32.c
+	* gdk/x11/gdkevents-x11.c (_gdk_windowing_event_data_copy):
+	order parameters src,dest and make src const.
+
 2008-05-06  Richard Hult  <richard@imendio.com>
 
 	* gdk/gdkevents.c: (gdk_event_copy), (gdk_event_free):

@@ -2045,11 +2045,11 @@ gdk_screen_get_setting (GdkScreen   *screen,
 }
 
 void
-_gdk_windowing_event_data_copy (GdkEvent *dst,
-                                GdkEvent *src)
+_gdk_windowing_event_data_copy (const GdkEvent *src,
+                                GdkEvent       *dst)
 {
-  GdkEventPrivate *priv_dst = (GdkEventPrivate *) dst;
   GdkEventPrivate *priv_src = (GdkEventPrivate *) src;
+  GdkEventPrivate *priv_dst = (GdkEventPrivate *) dst;
 
   if (priv_src->windowing_data)
     {

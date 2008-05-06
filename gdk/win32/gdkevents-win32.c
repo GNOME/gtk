@@ -3654,8 +3654,8 @@ gdk_net_wm_supports (GdkAtom property)
 }
 
 void
-_gdk_windowing_event_data_copy (GdkEvent *dst,
-                                GdkEvent *src)
+_gdk_windowing_event_data_copy (const GdkEvent *src,
+                                GdkEvent       *dst)
 {
 }
 

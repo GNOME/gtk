@@ -3086,8 +3086,8 @@ gdk_xsettings_watch_cb (Window   window,
 }
 
 void
-_gdk_windowing_event_data_copy (GdkEvent *dst,
-                                GdkEvent *src)
+_gdk_windowing_event_data_copy (const GdkEvent *src,
+                                GdkEvent       *dst)
 {
 }
 

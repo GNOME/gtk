@@ -422,7 +422,7 @@ gdk_event_copy (const GdkEvent *event)
     }
 
   if (gdk_event_is_allocated (event))
-    _gdk_windowing_event_data_copy (new_event, event);
+    _gdk_windowing_event_data_copy (event, new_event);
   
   return new_event;
 }

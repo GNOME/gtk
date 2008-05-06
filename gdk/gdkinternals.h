@@ -189,9 +189,9 @@ GList*  _gdk_event_queue_append     (GdkDisplay *display,
 void _gdk_event_button_generate     (GdkDisplay *display,
 				     GdkEvent   *event);
 
-void _gdk_windowing_event_data_copy (GdkEvent   *dst,
-                                     GdkEvent   *src);
-void _gdk_windowing_event_data_free (GdkEvent   *event);
+void _gdk_windowing_event_data_copy (const GdkEvent *src,
+                                     GdkEvent       *dst);
+void _gdk_windowing_event_data_free (GdkEvent       *event);
 
 void gdk_synthesize_window_state (GdkWindow     *window,
                                   GdkWindowState unset_flags,
