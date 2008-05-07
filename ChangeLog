@@ -1,3 +1,7 @@
+2008-05-07  Tor Lillqvist  <tml@novell.com>
+
+	* gtk-zip.sh.in: Add gtk-update-icon-cache.exe to the dev zipfile.
+
 2008-05-04  Richard Hult  <richard@imendio.com>
 
 	Revert this commit from 2008-05-01, as it requires more changes to
