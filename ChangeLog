@@ -1,3 +1,8 @@
+2008-05-07  Tor Lillqvist  <tml@novell.com>
+
+	* gtk-zip.sh.in: Add gtk-update-icon-cache.exe and more man pages
+	to the dev zipfile.
+
 2008-05-05  Matthias Clasen  <mclasen@redhat.com>
 
 	Apply a patch by Marek Kasik <mkasik@redhat.com> to display
