@@ -1,5 +1,11 @@
 2008-05-08  Richard Hult  <richard@imendio.com>
 
+	* gdk/quartz/gdkgeometry-quartz.c (gdk_window_scroll): Move the
+	currently invalidated region. Fixes bug #532048, patch by Yevgen
+	Muntyan.
+
+2008-05-08  Richard Hult  <richard@imendio.com>
+
 	* gdk/quartz/gdkeventloop-quartz.c (poll_func): Only set the fake
 	fd's revents, not the first one. Fixes bug #531056, spotted by
 	Yevgen Muntyan.
