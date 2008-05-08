@@ -21,8 +21,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-04-27 13:21+0000\n"
-"PO-Revision-Date: 2008-04-30 18:44+0200\n"
+"POT-Creation-Date: 2008-05-06 04:02+0000\n"
+"PO-Revision-Date: 2008-05-07 19:15+0200\n"
 "Last-Translator: Tino Meinen <a.t.meinen@chello.nl>\n"
 "Language-Team: Dutch <vertaling@vrijschrift.org>\n"
 "MIME-Version: 1.0\n"
@@ -4798,88 +4798,155 @@ msgstr "Viëtnamees (VIQR)"
 msgid "X Input Method"
 msgstr "X Invoer-Methode"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1697
+# een bijna lege toner/toner is bijna leeg/bijna op
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1044
+#, c-format
+msgid "Printer '%s' is low on toner."
+msgstr "De toner van printer ‘%s’  is bijna op."
+
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1045
+#, c-format
+msgid "Printer '%s' has no toner left."
+msgstr "De toner van printer ‘%s’ is op."
+
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1046
+#, c-format
+msgid "Printer '%s' is low on developer."
+msgstr "De ontwikkelvloeistof van printer ‘%s’ is bijna op."
+
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1047
+#, c-format
+msgid "Printer '%s' is out of developer."
+msgstr "De ontwikkelvloeistof van printer ‘%s’ is op."
+
+# printerkleur/kleur
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1048
+#, c-format
+msgid "Printer '%s' is low on at least one marker supply."
+msgstr "Minstens één kleur van printer ‘%s’ is bijna op."
+
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1049
+#, c-format
+msgid "Printer '%s' is out of at least one marker supply."
+msgstr "Minstens één kleur van printer ‘%s’ is op."
+
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1050
+#, c-format
+msgid "The cover is open on printer '%s'."
+msgstr "Het deksel van printer ‘%s’ is open."
+
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1051
+#, c-format
+msgid "The door is open on printer '%s'."
+msgstr "De deur van printer ‘%s’ is open."
+
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1052
+#, c-format
+msgid "Printer '%s' is low on paper."
+msgstr "Het papier van printer ‘%s’ is bijna op."
+
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1053
+#, c-format
+msgid "Printer '%s' is out of paper."
+msgstr "Het papier van printer ‘%s’ is op."
+
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1054
+#, c-format
+msgid "Printer '%s' is currently off-line."
+msgstr "Printer ‘%s’ is momenteel offline."
+
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1055
+#, c-format
+msgid "Printer '%s' may not be connected."
+msgstr "Printer ‘%s’ is mogelijk niet verbonden."
+
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1056
+#, c-format
+msgid "There is a problem on printer '%s'."
+msgstr "Er is een probleem met printer ‘%s’."
+
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1824
 msgid "Two Sided"
 msgstr "Tweezijdig"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1698
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1825
 msgid "Paper Type"
 msgstr "Papiersoort"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1699
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1826
 msgid "Paper Source"
 msgstr "Papierbron"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1700
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1827
 msgid "Output Tray"
 msgstr "Uitvoerlade"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1709
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1836
 msgid "One Sided"
 msgstr "Eenzijdig"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1710
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1711
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1715
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1837
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1838
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1842
 msgid "Auto Select"
 msgstr "Automatisch selecteren"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1712
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1713
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1714
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2184
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1839
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1840
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1841
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2311
 msgid "Printer Default"
 msgstr "Standaard printer"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2378
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2505
 msgid "Urgent"
 msgstr "Urgent"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2378
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2505
 msgid "High"
 msgstr "Hoog"
 
 # gemiddeld/medium
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2378
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2505
 msgid "Medium"
 msgstr "Medium"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2378
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2505
 msgid "Low"
 msgstr "Laag"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2380
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2507
 msgid "None"
 msgstr "Geen"
 
 # Gevoelige informatie
 # Classified-Confidential-Secret-Top Secret
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2380
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2507
 msgid "Classified"
 msgstr "Gevoelig"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2380
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2507
 msgid "Confidential"
 msgstr "Vertrouwelijk"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2380
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2507
 msgid "Secret"
 msgstr "Geheim"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2380
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2507
 msgid "Standard"
 msgstr "Standaard"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2380
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2507
 msgid "Top Secret"
 msgstr "Topgeheim"
 
 # niet geheim/niet gevoelig/niet vertrouwelijk/openbaar
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2380
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2507
 msgid "Unclassified"
 msgstr "Openbaar"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2473
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2600
 #, c-format
 msgid "Custom %sx%s"
 msgstr "Aangepast %sx%s"
