@@ -1,3 +1,9 @@
+2008-05-08  Richard Hult  <richard@imendio.com>
+
+	* gdk/quartz/gdkeventloop-quartz.c (poll_func): Only set the fake
+	fd's revents, not the first one. Fixes bug #531056, spotted by
+	Yevgen Muntyan.
+
 2008-05-07  Tor Lillqvist  <tml@novell.com>
 
 	* gtk-zip.sh.in: Add gtk-update-icon-cache.exe and more man pages

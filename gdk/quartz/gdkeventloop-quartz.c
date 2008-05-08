@@ -295,7 +295,14 @@ poll_func (GPollFD *ufds, guint nfds, gint timeout_)
 
   if (event) 
     {
-      ufds[0].revents = G_IO_IN;
+      for (i = 0; i < nfds; i++)
+        {
+          if (ufds[i].fd == -1)
+            {
+              ufds[i].revents = G_IO_IN;
+              break;
+            }
+        }
 
       current_event = [event retain];
 
