@@ -1,20 +1,21 @@
-# translation of gtk+.gtk-2-12.kn.po to Kannada
+# translation of kn.po to Kannada
+# translation of kn.po to
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
 #
 # Shankar Prasad <svenkate@redhat.com>, 2007, 2008.
 msgid ""
 msgstr ""
-"Project-Id-Version: gtk+.gtk-2-12.kn\n"
+"Project-Id-Version: kn\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2008-04-21 23:10+0300\n"
-"PO-Revision-Date: 2008-02-12 11:05+0530\n"
+"PO-Revision-Date: 2008-05-08 13:25+0530\n"
 "Last-Translator: Shankar Prasad <svenkate@redhat.com>\n"
 "Language-Team: Kannada <en@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms:  nplurals=2; plural=(n != 1);\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n\n"
 "X-Generator: KBabel 1.11.4\n"
 
 #: gdk/directfb/gdkdisplay-directfb.c:55
@@ -245,8 +246,7 @@ msgstr "ಚಿತ್ರ ಕಡತ '%s' ದಲ್ಲಿ ಯಾವುದೇ ದತ
 #: gdk-pixbuf/gdk-pixbuf-animation.c:188 gdk-pixbuf/gdk-pixbuf-io.c:943
 #: gdk-pixbuf/gdk-pixbuf-io.c:1202 tests/testfilechooser.c:263
 #, c-format
-msgid ""
-"Failed to load image '%s': reason not known, probably a corrupt image file"
+msgid "Failed to load image '%s': reason not known, probably a corrupt image file"
 msgstr ""
 "ಚಿತ್ರ '%s'ವನ್ನು ಲೋಡ್ ಮಾಡುವಲ್ಲಿ ವಿಫಲತೆ: ಕಾರಣ ತಿಳಿದಿಲ್ಲ, ಬಹುಷಃ ಒಂದು ಭ್ರಷ್ಟಗೊಂಡ ಚಿತ್ರ "
 "ಕಡತದಿಂದಾಗಿರಬಹುದು"
@@ -302,8 +302,7 @@ msgstr "ಚಿತ್ರ ಕಡತಕ್ಕೆ ಬರೆಯುವಲ್ಲಿ ವ
 #: gdk-pixbuf/gdk-pixbuf-io.c:1629 gdk-pixbuf/gdk-pixbuf-io.c:1760
 #, c-format
 msgid "This build of gdk-pixbuf does not support saving the image format: %s"
-msgstr ""
-"gdk-pixbuf ನ ಈ ನಿರ್ಮಿತಿಯು ಚಿತ್ರ ವಿನ್ಯಾಸವನ್ನು ಉಳಿಸುವುದನ್ನು ಬೆಂಬಲಿಸುವುದಿಲ್ಲ: %s"
+msgstr "gdk-pixbuf ನ ಈ ನಿರ್ಮಿತಿಯು ಚಿತ್ರ ವಿನ್ಯಾಸವನ್ನು ಉಳಿಸುವುದನ್ನು ಬೆಂಬಲಿಸುವುದಿಲ್ಲ: %s"
 
 #: gdk-pixbuf/gdk-pixbuf-io.c:1663
 #, c-format
@@ -340,9 +339,9 @@ msgid "Insufficient memory to save image into a buffer"
 msgstr "ಚಿತ್ರವನ್ನು ಬಫರಿಗೆ ಉಳಿಸಲು ಸಾಕಷ್ಟು ಮೆಮೊರಿ ಇಲ್ಲ"
 
 #: gdk-pixbuf/gdk-pixbuf-io.c:2279
-#, fuzzy, c-format
+#, c-format
 msgid "Error writing to image stream"
-msgstr "ಚಿತ್ರ ಕಡತಕ್ಕೆ ಬರೆಯುವಲ್ಲಿ ವಿಫಲತೆ: %s"
+msgstr "ಚಿತ್ರ ಸ್ಟ್ರೀಮ್‍ಗೆ ಬರೆಯುವಲ್ಲಿ ವಿಫಲತೆ:"
 
 #: gdk-pixbuf/gdk-pixbuf-loader.c:330
 #, c-format
@@ -497,8 +496,7 @@ msgstr "GIF ಕಡತವನ್ನು ಲೋಡ್ ಮಾಡಲು ಸಾಕಷ�
 #: gdk-pixbuf/io-gif.c:956
 #, c-format
 msgid "Not enough memory to composite a frame in GIF file"
-msgstr ""
-"GIF ಕಡತದಲ್ಲಿನ ಒಂದು ಚೌಕಟ್ಟನ್ನು ಸಂಯುಕ್ತಗೊಳಿಸಲು (composite) ಸಾಕಷ್ಟು ಮೆಮೊರಿ ಲಭ್ಯವಿಲ್ಲ"
+msgstr "GIF ಕಡತದಲ್ಲಿನ ಒಂದು ಚೌಕಟ್ಟನ್ನು ಸಂಯುಕ್ತಗೊಳಿಸಲು (composite) ಸಾಕಷ್ಟು ಮೆಮೊರಿ ಲಭ್ಯವಿಲ್ಲ"
 
 #: gdk-pixbuf/io-gif.c:1128
 #, c-format
@@ -589,59 +587,57 @@ msgid "The ICO image format"
 msgstr "ICO ಚಿತ್ರ ವಿನ್ಯಾಸ"
 
 #: gdk-pixbuf/io-icns.c:345
-#, fuzzy, c-format
+#, c-format
 msgid "Error reading ICNS image: %s"
-msgstr "PNG ಚಿತ್ರ ಕಡತವನ್ನು ಓದುವಲ್ಲಿ ಮಾರಕ ದೋಷ: %s"
+msgstr "ICNS ಚಿತ್ರ ಕಡತವನ್ನು ಓದುವಲ್ಲಿ ದೋಷ: %s"
 
 #: gdk-pixbuf/io-icns.c:362
-#, fuzzy, c-format
+#, c-format
 msgid "Could not decode ICNS file"
-msgstr "ಕಡತವನ್ನು ಆರಿಸಲಾಗಿಲ್ಲ"
+msgstr "ICNS ಕಡತವನ್ನು ಡೀಕೋಡ್ ಮಾಡಲಾಗಿಲ್ಲ"
 
 #: gdk-pixbuf/io-icns.c:391
-#, fuzzy
 msgid "The ICNS image format"
-msgstr "ICO ಚಿತ್ರ ವಿನ್ಯಾಸ"
+msgstr "ICNS ಚಿತ್ರ ವಿನ್ಯಾಸ"
 
 #: gdk-pixbuf/io-jasper.c:74
-#, fuzzy, c-format
+#, c-format
 msgid "Couldn't allocate memory for stream"
-msgstr "ಶೀರ್ಷಿಕೆಗೆ ಮೆಮೊರಿಯನ್ನು ನಿಯೋಜಿಸಲಾಗಿಲ್ಲ"
+msgstr "ಸ್ಟ್ರೀಮ್‍ಗೆ ಮೆಮೊರಿಯನ್ನು ನಿಯೋಜಿಸಲಾಗಿಲ್ಲ"
 
 #: gdk-pixbuf/io-jasper.c:103
-#, fuzzy, c-format
+#, c-format
 msgid "Couldn't decode image"
-msgstr "ಕಡತದ ಹೆಸರನ್ನು ಮಾರ್ಪಡಿಸಲಾಗಿಲ್ಲ"
+msgstr "ಚಿತ್ರವನ್ನು ಡೀಕೊಡ್ ಮಾಡಲಾಗಿಲ್ಲ"
 
 #: gdk-pixbuf/io-jasper.c:121
-#, fuzzy, c-format
+#, c-format
 msgid "Transformed JPEG2000 has zero width or height"
-msgstr "ರೂಪಾಂತರಗೊಂಡ JPEGಯು ಶೂನ್ಯ ಅಗಲ ಅಥವ ಎತ್ತರವನ್ನು ಹೊಂದಿದೆ"
+msgstr "ರೂಪಾಂತರಗೊಂಡ JPEG2000 ವು ಶೂನ್ಯ ಅಗಲ ಅಥವ ಎತ್ತರವನ್ನು ಹೊಂದಿದೆ"
 
 #: gdk-pixbuf/io-jasper.c:134
-#, fuzzy, c-format
+#, c-format
 msgid "Image type currently not supported"
-msgstr "ಚಿತ್ರ '%s'ವು ರೀತಿಯು ಬೆಂಬಲಿತವಾಗಿಲ್ಲ"
+msgstr "ಈ ಬಗೆಯ ಚಿತ್ರ ವಿನ್ಯಾಸವು ಪ್ರಸಕ್ತ ಬೆಂಬಲಿತವಾಗಿಲ್ಲ"
 
 #: gdk-pixbuf/io-jasper.c:145 gdk-pixbuf/io-jasper.c:152
-#, fuzzy, c-format
+#, c-format
 msgid "Couldn't allocate memory for color profile"
-msgstr "JPEG ಕಡತವನ್ನು ಲೋಡ್ ಮಾಡಲು ಮೆಮೊರಿಯನ್ನು ನಿಯೋಜಿಸಲಾಗಿಲ್ಲ"
+msgstr "ಬಣ್ಣದ ಪ್ರೊಫೈಲ್‍ಗೆ ಮೆಮೊರಿಯನ್ನು ನಿಯೋಜಿಸಲಾಗಿಲ್ಲ"
 
 #: gdk-pixbuf/io-jasper.c:177
-#, fuzzy, c-format
+#, c-format
 msgid "Insufficient memory to open JPEG 2000 file"
-msgstr "TIFF ಕಡತವನ್ನು ತೆರೆಯಲು ಸಾಕಷ್ಟು ಮೆಮೊರಿ ಇಲ್ಲ"
+msgstr "JPEG 2000 ಕಡತವನ್ನು ತೆರೆಯಲು ಸಾಕಷ್ಟು ಮೆಮೊರಿ ಇಲ್ಲ"
 
 #: gdk-pixbuf/io-jasper.c:258
-#, fuzzy, c-format
+#, c-format
 msgid "Couldn't allocate memory to buffer image data"
-msgstr "ಸಾಲು ದತ್ತಾಂಶಕ್ಕೆ ಮೆಮೊರಿಯನ್ನು ನಿಯೋಜಿಸಲಾಗಿಲ್ಲ"
+msgstr "ಬಫರ್ ಚಿತ್ರ ದತ್ತಾಂಶಕ್ಕೆ ಮೆಮೊರಿಯನ್ನು ನಿಯೋಜಿಸಲಾಗಿಲ್ಲ"
 
 #: gdk-pixbuf/io-jasper.c:298
-#, fuzzy
 msgid "The JPEG 2000 image format"
-msgstr "JPEG ಚಿತ್ರ ವಿನ್ಯಾಸ"
+msgstr "JPEG 2000 ಚಿತ್ರ ವಿನ್ಯಾಸ"
 
 #: gdk-pixbuf/io-jpeg.c:117
 #, c-format
@@ -682,8 +678,7 @@ msgstr "JPEG ಗುಣ ಮಟ್ಟವು ೦ ಹಾಗು ೧೦೦; ಮೌಲ�
 
 #: gdk-pixbuf/io-jpeg.c:1148
 #, c-format
-msgid ""
-"JPEG quality must be a value between 0 and 100; value '%d' is not allowed."
+msgid "JPEG quality must be a value between 0 and 100; value '%d' is not allowed."
 msgstr "JPEG ಗುಣ ಮಟ್ತವು ೦ ಹಾಗು ೧೦೦; ಮಾಲ್ಯ '%d' ವು ಬೆಂಬಲಿತವಾಗಿಲ್ಲ."
 
 #: gdk-pixbuf/io-jpeg.c:1311
@@ -767,8 +762,7 @@ msgstr "ರೂಪಾಂತರಗೊಂಡ PNG ಯು RGB ಅಥವ RGBA ಆಗ�
 #: gdk-pixbuf/io-png.c:162
 #, c-format
 msgid "Transformed PNG has unsupported number of channels, must be 3 or 4."
-msgstr ""
-"ರೂಪಾಂತರಗೊಂಡ PNG ಯು ಬೆಂಬಲವಿಲ್ಲದ ಸಂಖ್ಯೆಯ ಚಾನಲ್ಲುಗಳನ್ನು ಹೊಂದಿದೆ, ೩ ಅಥವ ೪ ಆಗಿರಬೇಕು."
+msgstr "ರೂಪಾಂತರಗೊಂಡ PNG ಯು ಬೆಂಬಲವಿಲ್ಲದ ಸಂಖ್ಯೆಯ ಚಾನಲ್ಲುಗಳನ್ನು ಹೊಂದಿದೆ, ೩ ಅಥವ ೪ ಆಗಿರಬೇಕು."
 
 #: gdk-pixbuf/io-png.c:183
 #, c-format
@@ -801,8 +795,7 @@ msgstr "PNG ಚಿತ್ರ ಕಡತವನ್ನು ಓದುವಲ್ಲಿ �
 
 #: gdk-pixbuf/io-png.c:825
 #, c-format
-msgid ""
-"Keys for PNG text chunks must have at least 1 and at most 79 characters."
+msgid "Keys for PNG text chunks must have at least 1 and at most 79 characters."
 msgstr "PNG ಪಠ್ಯದ ತುಣುಕುಗಳ ಕೀಲಿಗಳು ಕನಿಷ್ಠ ೧ ಹಾಗು ಗರಿಷ್ಟ ೭೮ ಅಕ್ಷರಗಳನ್ನು ಹೊಂದಿರಬೇಕು."
 
 #: gdk-pixbuf/io-png.c:833
@@ -831,8 +824,7 @@ msgstr ""
 #: gdk-pixbuf/io-png.c:896
 #, c-format
 msgid "Value for PNG text chunk %s cannot be converted to ISO-8859-1 encoding."
-msgstr ""
-"PNG ಪಠ್ಯ ತುಣುಕು %s ನ ಮೌಲ್ಯವನ್ನು ISO-8859-1 ಸಂಕೇತಿಕರಣಕ್ಕೆ(encoding) ಬದಲಾಯಿಸಲಾಗಿಲ್ಲ."
+msgstr "PNG ಪಠ್ಯ ತುಣುಕು %s ನ ಮೌಲ್ಯವನ್ನು ISO-8859-1 ಸಂಕೇತಿಕರಣಕ್ಕೆ(encoding) ಬದಲಾಯಿಸಲಾಗಿಲ್ಲ."
 
 #: gdk-pixbuf/io-png.c:1047
 msgid "The PNG image format"
@@ -1192,21 +1184,21 @@ msgid "Make X calls synchronous"
 msgstr "X ಕರೆಗಳನ್ನು ಏಕಕಾಲೀಯಗೊಳಿಸು"
 
 #: gdk/x11/gdkapplaunchcontext-x11.c:303
-#, fuzzy, c-format
+#, c-format
 msgid "Starting %s"
-msgstr "%d ದ ಮುದ್ರಣ"
+msgstr "%s ಅನ್ನು ಆರಂಭಿಸಲಾಗುತ್ತಿದೆ"
 
 #: gdk/x11/gdkapplaunchcontext-x11.c:305
-#, fuzzy, c-format
+#, c-format
 msgid "Opening %s"
-msgstr "'%s' ಅನ್ನು ತೆರೆ"
+msgstr "'%s' ಅನ್ನು ತೆರೆಯಲಾಗುತ್ತಿದೆ"
 
 #: gdk/x11/gdkapplaunchcontext-x11.c:308
 #, c-format
 msgid "Opening %d Item"
 msgid_plural "Opening %d Items"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%d ಅಂಶವನ್ನು ತೆಗೆಯಲಾಗುತ್ತಿದೆ"
+msgstr[1] "%d ಅಂಶಗಳನ್ನು ತೆಗೆಯಲಾಗುತ್ತಿದೆ"
 
 #: gtk/gtkaboutdialog.c:264 gtk/gtkaboutdialog.c:2106
 msgid "License"
@@ -1683,8 +1675,7 @@ msgstr "ಬುಕ್ ಮಾರ್ಕ್ '%s' ಅನ್ನು ತೆಗೆದು 
 #: gtk/gtkfilechooserdefault.c:3532
 #, c-format
 msgid "Could not add a bookmark for '%s' because it is an invalid path name."
-msgstr ""
-"'%s' ಗೆ ಒಂದು ಬುಕ್-ಮಾರ್ಕನ್ನು ಸೇರಿಸಲಾಗಿಲ್ಲ, ಏಕೆಂದರೆ ಅದು ಒಂದು ಅಮಾನ್ಯ ಪಥದ ಹೆಸರಾಗಿದೆ."
+msgstr "'%s' ಗೆ ಒಂದು ಬುಕ್-ಮಾರ್ಕನ್ನು ಸೇರಿಸಲಾಗಿಲ್ಲ, ಏಕೆಂದರೆ ಅದು ಒಂದು ಅಮಾನ್ಯ ಪಥದ ಹೆಸರಾಗಿದೆ."
 
 #: gtk/gtkfilechooserdefault.c:3771
 msgid "Remove"
@@ -1801,13 +1792,11 @@ msgstr "ಶೀಘ್ರಮಾರ್ಗ (ಶಾರ್ಟ್ ಕಟ್) %s ಅಸ�
 #: gtk/gtkfilechooserdefault.c:8088 gtk/gtkprintunixdialog.c:354
 #, c-format
 msgid "A file named \"%s\" already exists.  Do you want to replace it?"
-msgstr ""
-"\"%s\" ಹೆಸರಿನ ಒಂದು ಕಡತವು ಈಗಾಗಲೆ ಅಸ್ತಿತ್ವದಲ್ಲಿದೆ.  ನೀವದನ್ನು ಬದಲಿ ಮಾಡಲು ಬಯಸುತ್ತಿರೆ?"
+msgstr "\"%s\" ಹೆಸರಿನ ಒಂದು ಕಡತವು ಈಗಾಗಲೆ ಅಸ್ತಿತ್ವದಲ್ಲಿದೆ.  ನೀವದನ್ನು ಬದಲಿ ಮಾಡಲು ಬಯಸುತ್ತಿರೆ?"
 
 #: gtk/gtkfilechooserdefault.c:8091 gtk/gtkprintunixdialog.c:358
 #, c-format
-msgid ""
-"The file already exists in \"%s\".  Replacing it will overwrite its contents."
+msgid "The file already exists in \"%s\".  Replacing it will overwrite its contents."
 msgstr ""
 "\"%s\" ಹೆಸರಿನ ಒಂದು ಕಡತವು ಈಗಾಗಲೆ ಅಸ್ತಿತ್ವದಲ್ಲಿದೆ.  ನೀವದನ್ನು ಬದಲಿ ಮಾಡಿದರೆ ಅದು "
 "ತಿದ್ದಿಬರೆಯಲ್ಪಡುತ್ತದೆ."
@@ -1875,33 +1864,31 @@ msgstr "ಗೊತ್ತಿರದ"
 
 #: gtk/gtkfilechooserdefault.c:11095
 msgid "%H:%M"
-msgstr ""
+msgstr "%H:%M"
 
 #: gtk/gtkfilechooserdefault.c:11097
 msgid "Yesterday at %H:%M"
 msgstr "ನಿನ್ನೆ %H:%M ಗೆ"
 
 #: gtk/gtkfilechooserentry.c:650 gtk/gtkfilechooserentry.c:1095
-#, fuzzy
 msgid "Invalid path"
-msgstr "ಅಮಾನ್ಯ URI"
+msgstr "ಅಮಾನ್ಯ ಮಾರ್ಗ"
 
 #: gtk/gtkfilechooserentry.c:1057
 msgid "No match"
-msgstr ""
+msgstr "ಯಾವುದೂ ತಾಳೆಯಾಗುತ್ತಿಲ್ಲ"
 
 #: gtk/gtkfilechooserentry.c:1065
-#, fuzzy
 msgid "Sole completion"
-msgstr "ಬಣ್ಣದ ಆಯ್ಕೆ"
+msgstr "ಕೇವಲ ಒಂದರ ಪೂರ್ಣಗೊಳಿಕೆ"
 
 #: gtk/gtkfilechooserentry.c:1077
 msgid "Complete, but not unique"
-msgstr ""
+msgstr "ಪೂರ್ಣಗೊಂಡಿದೆ, ಆದರೆ ವಿಶಿಷ್ಟವಾಗಿಲ್ಲ"
 
 #: gtk/gtkfilechooserentry.c:1110
 msgid "Completing..."
-msgstr ""
+msgstr "ಪೂರ್ಣಗೊಳಿಸಲಾಗುತ್ತಿದೆ..."
 
 #: gtk/gtkfilechoosersettings.c:262 gtk/gtkfilesel.c:1348
 #: gtk/gtkfilesel.c:1357 gtk/gtkfilesystemunix.c:1048
@@ -1952,8 +1939,7 @@ msgstr "ಕಡತವನ್ನು ಪುನರ್ ಹೆಸರಿಸು(_R)"
 
 #: gtk/gtkfilesel.c:1346
 #, c-format
-msgid ""
-"The folder name \"%s\" contains symbols that are not allowed in filenames"
+msgid "The folder name \"%s\" contains symbols that are not allowed in filenames"
 msgstr "\"%s\" ಕಡತದ ಹೆಸರಿನಲ್ಲಿ ಅನುಮತಿ ಇರದೆ ಇರುವಂತಹ ಸಂಕೇತಗಳು ಇವೆ."
 
 #: gtk/gtkfilesel.c:1391
@@ -2189,13 +2175,12 @@ msgid "Failed to load icon"
 msgstr "ಲಾಂಛನವನ್ನು ಲೋಡ್ ಮಾಡುವಲ್ಲಿ ವಿಫಲವಾಯಿತು"
 
 #: gtk/gtkimmodule.c:516
-#, fuzzy
 msgid "Simple"
-msgstr "ಕಡತ"
+msgstr "ಸರಳ"
 
 #: gtk/gtkimmulticontext.c:542
 msgid "input method menu|System"
-msgstr ""
+msgstr "ಗಣಕ"
 
 #: gtk/gtkinputdialog.c:190
 msgid "Input"
@@ -2625,24 +2610,20 @@ msgid "Status"
 msgstr "ಸ್ಥಿತಿ"
 
 #: gtk/gtkprintunixdialog.c:1678
-#, fuzzy
 msgid "Range"
-msgstr "ವ್ಯಾಪ್ತಿ(_n)"
+msgstr "ವ್ಯಾಪ್ತಿ"
 
 #: gtk/gtkprintunixdialog.c:1682
-#, fuzzy
 msgid "_All Pages"
-msgstr "ಎಲ್ಲಾ ಹಾಳೆಗಳು"
+msgstr "ಎಲ್ಲಾ ಹಾಳೆಗಳು(_A)"
 
 #: gtk/gtkprintunixdialog.c:1689
-#, fuzzy
 msgid "C_urrent Page"
-msgstr "ಚಾಲ್ತಿಯಲ್ಲಿರುವ(_u)"
+msgstr "ಈಗಿನ ಪುಟ(_u)"
 
 #: gtk/gtkprintunixdialog.c:1698
-#, fuzzy
 msgid "Pag_es:"
-msgstr "ಸ್ಥಳಗಳು"
+msgstr "ಪುಟಗಳು(_e):"
 
 #: gtk/gtkprintunixdialog.c:1699
 msgid ""
@@ -3184,9 +3165,8 @@ msgid "Reverse portrait"
 msgstr "ತಿರುಗು ಮುರುಗಾದ ಭಾವಚಿತ್ರ"
 
 #: gtk/gtkstock.c:377
-#, fuzzy
 msgid "Page Set_up"
-msgstr "ಪುಟದ ಸಂಯೋಜನೆ"
+msgstr "ಪುಟದ ಸಂಯೋಜನೆ(_u)"
 
 #: gtk/gtkstock.c:378
 msgid "_Paste"
@@ -3348,8 +3328,7 @@ msgstr "ಅನಾಮಿಕ ತಲೆಚೀಟಿಗಳು (Tag) ಕಂಡು ಬ
 #: gtk/gtktextbufferserialize.c:1045
 #, c-format
 msgid "Tag \"%s\" does not exist in buffer and tags can not be created."
-msgstr ""
-"ತಲೆಚೀಟಿ \"%s\" ವು ಬಫರಿನಲ್ಲಿ ಅಸ್ತಿತ್ವದಲ್ಲಿಲ್ಲ ಹಾಗು ತಲೆಚೀಟಿಗಳನ್ನು ರಚಿಸಲಾಗುವುದಿಲ್ಲ."
+msgstr "ತಲೆಚೀಟಿ \"%s\" ವು ಬಫರಿನಲ್ಲಿ ಅಸ್ತಿತ್ವದಲ್ಲಿಲ್ಲ ಹಾಗು ತಲೆಚೀಟಿಗಳನ್ನು ರಚಿಸಲಾಗುವುದಿಲ್ಲ."
 
 #: gtk/gtktextbufferserialize.c:1144 gtk/gtktextbufferserialize.c:1219
 #: gtk/gtktextbufferserialize.c:1320 gtk/gtktextbufferserialize.c:1394
@@ -3369,8 +3348,7 @@ msgstr "\"%s\" ವು ಒಂದು ಮಾನ್ಯ ವೈಶಿಷ್ಟ್ಯ�
 
 #: gtk/gtktextbufferserialize.c:1193
 #, c-format
-msgid ""
-"\"%s\" could not be converted to a value of type \"%s\" for attribute \"%s\""
+msgid "\"%s\" could not be converted to a value of type \"%s\" for attribute \"%s\""
 msgstr "\"%s\" ವನ್ನು \"%s\" ಬಗೆಯ ಮೌಲ್ಯವಾಗಿ ವೈಶಿಷ್ಟ್ಯ \"%s\" ಕ್ಕೆ ಬದಲಾಯಿಸಲಾಗಿಲ್ಲ"
 
 #: gtk/gtktextbufferserialize.c:1202
@@ -3409,10 +3387,8 @@ msgstr "ಅನುಕ್ರಮಿತ ದತ್ತಾಂಶವು ವಿರೂಪ�
 
 #: gtk/gtktextbufferserialize.c:1857
 #, c-format
-msgid ""
-"Serialized data is malformed. First section isn't GTKTEXTBUFFERCONTENTS-0001"
-msgstr ""
-"ಅನುಕ್ರಮಿತ ದತ್ತಾಂಶವು ವಿರೂಪಗೊಂಡಿದೆ. ಪ್ರಥಮ ವಿಭಾಗವು GTKTEXTBUFFERCONTENTS-0001 ಆಗಿಲ್ಲ"
+msgid "Serialized data is malformed. First section isn't GTKTEXTBUFFERCONTENTS-0001"
+msgstr "ಅನುಕ್ರಮಿತ ದತ್ತಾಂಶವು ವಿರೂಪಗೊಂಡಿದೆ. ಪ್ರಥಮ ವಿಭಾಗವು GTKTEXTBUFFERCONTENTS-0001 ಆಗಿಲ್ಲ"
 
 #: gtk/gtktextutil.c:60
 msgid "LRM _Left-to-right mark"
@@ -4561,9 +4537,9 @@ msgid "Unclassified"
 msgstr "ವರ್ಗೀಕೃತಗೊಳ್ಳದ್ದು"
 
 #: modules/printbackends/cups/gtkprintbackendcups.c:2473
-#, fuzzy, c-format
+#, c-format
 msgid "Custom %sx%s"
-msgstr "ಗ್ರಾಹಕೀಯ %.2fx%.2f"
+msgstr "ಕಸ್ಟಮ್ %sx%s"
 
 #. default filename used for print-to-file
 #: modules/printbackends/file/gtkprintbackendfile.c:236
@@ -4623,14 +4599,3 @@ msgstr "ಮುದ್ರಕವನ್ನು ಪರೀಕ್ಷಿಸಲು ಮು�
 msgid "Could not get information for file '%s': %s"
 msgstr "'%s' ಕಡತಕ್ಕೆ ಮಾಹಿತಿಯನ್ನು ಪಡೆಯಲಾಗಿಲ್ಲ: %s"
 
-#~ msgid "Today at %H:%M"
-#~ msgstr "ಈ ದಿನ %H:%M ಗೆ"
-
-#~ msgid "Default"
-#~ msgstr "ಡಿಫಾಲ್ಟ್"
-
-#~ msgid "Print Pages"
-#~ msgstr "ಮುದ್ರಣಾ ಪುಟಗಳು"
-
-#~ msgid "_All"
-#~ msgstr "ಎಲ್ಲಾ(_A)"
