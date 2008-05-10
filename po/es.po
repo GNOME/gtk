@@ -14,8 +14,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+.HEAD\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-04-22 19:56+0000\n"
-"PO-Revision-Date: 2008-04-26 13:02+0200\n"
+"POT-Creation-Date: 2008-05-06 04:02+0000\n"
+"PO-Revision-Date: 2008-05-10 14:52+0200\n"
 "Last-Translator: Jorge González <jorgegonz@svn.gnome.org>\n"
 "Language-Team: Español <gnome-es-list@gnome.org>\n"
 "MIME-Version: 1.0\n"
@@ -81,7 +81,7 @@ msgstr "Opciones de depuración Gdk que establecer"
 #. Placeholder in --gdk-no-debug=FLAGS in --help output
 #. Placeholder in --gtk-debug=FLAGS in --help output
 #. Placeholder in --gtk-no-debug=FLAGS in --help output
-#: ../gdk/gdk.c:140 ../gdk/gdk.c:143 ../gtk/gtkmain.c:434 ../gtk/gtkmain.c:437
+#: ../gdk/gdk.c:140 ../gdk/gdk.c:143 ../gtk/gtkmain.c:432 ../gtk/gtkmain.c:435
 msgid "FLAGS"
 msgstr "OPCIONES"
 
@@ -832,8 +832,8 @@ msgid ""
 "PNG compression level must be a value between 0 and 9; value '%s' could not "
 "be parsed."
 msgstr ""
-"El nivel de compresión PNG debe ser un valor entre 0 y 9; el valor «%s» no "
-"se puede interpretar."
+"El nivel de compresión PNG debe ser un valor entre 0 y 9; el valor «%s» no se "
+"puede interpretar."
 
 #: ../gdk-pixbuf/io-png.c:858 ../gdk-pixbuf/io-gdip-png.c:68
 #, c-format
@@ -1654,11 +1654,11 @@ msgstr "Rueda de color"
 msgid "Color Selection"
 msgstr "Selección de color"
 
-#: ../gtk/gtkentry.c:5248 ../gtk/gtktextview.c:7653
+#: ../gtk/gtkentry.c:5247 ../gtk/gtktextview.c:7653
 msgid "Input _Methods"
 msgstr "_Métodos de entrada"
 
-#: ../gtk/gtkentry.c:5262 ../gtk/gtktextview.c:7667
+#: ../gtk/gtkentry.c:5261 ../gtk/gtktextview.c:7667
 msgid "_Insert Unicode Control Character"
 msgstr "_Insertar un carácter de control Unicode"
 
@@ -2027,8 +2027,8 @@ msgstr "_Renombrar archivo"
 #, c-format
 msgid "The folder name \"%s\" contains symbols that are not allowed in filenames"
 msgstr ""
-"El nombre de la carpeta «%s» contiene símbolos que no están permitidos en "
-"los nombres de archivos"
+"El nombre de la carpeta «%s» contiene símbolos que no están permitidos en los "
+"nombres de archivos"
 
 #: ../gtk/gtkfilesel.c:1391
 msgid "New Folder"
@@ -2152,8 +2152,8 @@ msgid ""
 "The name \"%s\" is not valid because it contains the character \"%s\". "
 "Please use a different name."
 msgstr ""
-"El nombre «%s» no es válido debido a que contiene el carácter «%s». Por "
-"favor, use un nombre diferente."
+"El nombre «%s» no es válido debido a que contiene el carácter «%s». Por favor, "
+"use un nombre diferente."
 
 #: ../gtk/gtkfilesystemunix.c:1880 ../gtk/gtkfilesystemwin32.c:1985
 #, c-format
@@ -2238,7 +2238,7 @@ msgstr "Valor _gamma"
 #. Remove this icon source so we don't keep trying to
 #. * load it.
 #.
-#: ../gtk/gtkiconfactory.c:1400
+#: ../gtk/gtkiconfactory.c:1399
 #, c-format
 msgid "Error loading icon: %s"
 msgstr "Ocurrió un error al cargar el icono: %s"
@@ -2266,7 +2266,7 @@ msgstr "El icono «%s» no está presente en el tema"
 msgid "Failed to load icon"
 msgstr "No se pudo cargar el icono"
 
-#: ../gtk/gtkimmodule.c:516
+#: ../gtk/gtkimmodule.c:515
 msgid "Simple"
 msgstr "Simple"
 
@@ -2371,27 +2371,27 @@ msgid "Invalid URI"
 msgstr "URI inválida"
 
 #. Description of --gtk-module=MODULES in --help output
-#: ../gtk/gtkmain.c:427
+#: ../gtk/gtkmain.c:425
 msgid "Load additional GTK+ modules"
 msgstr "Cargar módulos adicionales GTK+"
 
 #. Placeholder in --gtk-module=MODULES in --help output
-#: ../gtk/gtkmain.c:428
+#: ../gtk/gtkmain.c:426
 msgid "MODULES"
 msgstr "MÓDULOS"
 
 #. Description of --g-fatal-warnings in --help output
-#: ../gtk/gtkmain.c:430
+#: ../gtk/gtkmain.c:428
 msgid "Make all warnings fatal"
 msgstr "Hacer todas las advertencias fatales"
 
 #. Description of --gtk-debug=FLAGS in --help output
-#: ../gtk/gtkmain.c:433
+#: ../gtk/gtkmain.c:431
 msgid "GTK+ debugging flags to set"
 msgstr "Opciones de depuración GTK+ a poner"
 
 #. Description of --gtk-no-debug=FLAGS in --help output
-#: ../gtk/gtkmain.c:436
+#: ../gtk/gtkmain.c:434
 msgid "GTK+ debugging flags to unset"
 msgstr "Opciones de depuración GTK+ a quitar"
 
@@ -2400,15 +2400,15 @@ msgstr "Opciones de depuración GTK+ a quitar"
 #. * Do *not* translate it to "predefinito:LTR", if it
 #. * it isn't default:LTR or default:RTL it will not work
 #.
-#: ../gtk/gtkmain.c:672
+#: ../gtk/gtkmain.c:670
 msgid "default:LTR"
 msgstr "default:LTR"
 
-#: ../gtk/gtkmain.c:768
+#: ../gtk/gtkmain.c:766
 msgid "GTK+ Options"
 msgstr "Opciones GTK+"
 
-#: ../gtk/gtkmain.c:768
+#: ../gtk/gtkmain.c:766
 msgid "Show GTK+ Options"
 msgstr "Mostrar opciones GTK+"
 
@@ -4439,9 +4439,7 @@ msgstr "ROC 8k"
 #: ../gtk/updateiconcache.c:490 ../gtk/updateiconcache.c:550
 #, c-format
 msgid "different idatas found for symlinked '%s' and '%s'\n"
-msgstr ""
-"se encontraron diferentes idatas para el «%s» enlazado simbólicamente y «%"
-"s»\n"
+msgstr "se encontraron diferentes idatas para el «%s» enlazado simbólicamente y «%s»\n"
 
 #: ../gtk/updateiconcache.c:1372
 #, c-format
@@ -4592,85 +4590,150 @@ msgstr "Vietnamita (VIQR)"
 msgid "X Input Method"
 msgstr "Método de entrada X"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1697
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1044
+#, c-format
+msgid "Printer '%s' is low on toner."
+msgstr "A la impresora «%s» le queda poco tóner."
+
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1045
+#, c-format
+msgid "Printer '%s' has no toner left."
+msgstr "A la impresora «%s» no le queda tóner."
+
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1046
+#, c-format
+msgid "Printer '%s' is low on developer."
+msgstr ""
+
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1047
+#, c-format
+msgid "Printer '%s' is out of developer."
+msgstr ""
+
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1048
+#, c-format
+msgid "Printer '%s' is low on at least one marker supply."
+msgstr ""
+
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1049
+#, c-format
+msgid "Printer '%s' is out of at least one marker supply."
+msgstr ""
+
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1050
+#, c-format
+msgid "The cover is open on printer '%s'."
+msgstr "La tapa de la impresora «%s» está abierta."
+
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1051
+#, c-format
+msgid "The door is open on printer '%s'."
+msgstr "La puerta de la impresora «%s» está abierta."
+
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1052
+#, c-format
+msgid "Printer '%s' is low on paper."
+msgstr "La impresora «%s» tiene poco papel."
+
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1053
+#, c-format
+msgid "Printer '%s' is out of paper."
+msgstr "La impresora «%s» no tiene papel."
+
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1054
+#, c-format
+msgid "Printer '%s' is currently off-line."
+msgstr "La impresora «%s» está actualmente desconectada."
+
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1055
+#, c-format
+msgid "Printer '%s' may not be connected."
+msgstr "La impresora «%s» parece no estar conectada."
+
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1056
+#, c-format
+msgid "There is a problem on printer '%s'."
+msgstr "Existe un problema con la impresora «%s»."
+
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1824
 msgid "Two Sided"
 msgstr "Dos caras"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1698
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1825
 msgid "Paper Type"
 msgstr "Tipo de papel"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1699
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1826
 msgid "Paper Source"
 msgstr "Fuente de papel"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1700
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1827
 msgid "Output Tray"
 msgstr "Bandeja de salida"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1709
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1836
 msgid "One Sided"
 msgstr "Una cara"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1710
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1711
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1715
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1837
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1838
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1842
 msgid "Auto Select"
 msgstr "Autoseleccionar"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1712
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1713
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1714
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2184
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1839
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1840
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1841
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2311
 msgid "Printer Default"
 msgstr "Predeterminado de la impresora"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2378
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2505
 msgid "Urgent"
 msgstr "Urgente"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2378
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2505
 msgid "High"
 msgstr "Alta"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2378
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2505
 msgid "Medium"
 msgstr "Media"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2378
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2505
 msgid "Low"
 msgstr "Baja"
 
 # src/file-manager/fm-icon-text-window.c:85
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2380
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2507
 msgid "None"
 msgstr "Ninguna"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2380
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2507
 msgid "Classified"
 msgstr "Clasificado"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2380
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2507
 msgid "Confidential"
 msgstr "Confidencial"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2380
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2507
 msgid "Secret"
 msgstr "Secreto"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2380
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2507
 msgid "Standard"
 msgstr "Estándar"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2380
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2507
 msgid "Top Secret"
 msgstr "Alto secreto"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2380
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2507
 msgid "Unclassified"
 msgstr "Desclasificado"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2473
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2600
 #, c-format
 msgid "Custom %sx%s"
 msgstr "Personalizado %sx%s"
