@@ -176,7 +176,7 @@ gtk_stock_lookup (const gchar  *stock_id,
 	  if (translate != NULL && translate->func != NULL)
 	    item->label = (* translate->func) (item->label, translate->data);
 	  else
-	    item->label = dgettext (item->translation_domain, item->label);
+	    item->label = g_dgettext (item->translation_domain, item->label);
 	}
     }
 
@@ -457,7 +457,7 @@ sgettext_swapped (const gchar *msgid,
 {
   gchar *domainname = data;
 
-  return (gchar *)g_strip_context (msgid, dgettext (domainname, msgid));
+  return (gchar *)g_strip_context (msgid, g_dgettext (domainname, msgid));
 }
 
 

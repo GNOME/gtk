@@ -1,3 +1,18 @@
+2008-05-11  Yair Hershkovitz  <yairhr@gmail.com>
+
+	* gtk/gtkmain.c: call g_i18n_init() in gettext_initialization(). do
+	gettext_initialization only once.
+
+	*  gtk/gtkbuilderparser.c: use glib i18n api. removed dpgettext() as it
+	duplicates g_dpgettext() and added _g_dpgettext() to wrap g_dpgettext 
+	with the extended functionality that was in the removed dpgettext().
+
+	* gtk/gtkaccellabelc:
+	* gtk/gtkstock.c:
+	* gtk/gtkimmulticontext.c:
+	* gtk/gtkactiongroup.c:
+	* gtk/gtkintl.h: use glib i18n api.
+
 2008-05-08  Richard Hult  <richard@imendio.com>
 
 	* gdk/quartz/gdkgeometry-quartz.c (gdk_window_scroll): Move the

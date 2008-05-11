@@ -4,7 +4,7 @@
 #include <glib/gi18n-lib.h>
 
 #ifdef ENABLE_NLS
-#define P_(String) dgettext(GETTEXT_PACKAGE "-properties",String)
+#define P_(String) g_dgettext(GETTEXT_PACKAGE "-properties",String)
 #else 
 #define P_(String) (String)
 #endif
