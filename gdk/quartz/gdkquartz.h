@@ -26,10 +26,11 @@
 
 G_BEGIN_DECLS
 
-NSWindow*gdk_quartz_window_get_nswindow                        (GdkWindow      *window);
-NSView  *gdk_quartz_window_get_nsview                          (GdkWindow      *window);
-NSImage *gdk_quartz_pixbuf_to_ns_image_libgtk_only             (GdkPixbuf      *pixbuf);
-id       gdk_quartz_drag_context_get_dragging_info_libgtk_only (GdkDragContext *context);
+NSWindow *gdk_quartz_window_get_nswindow                        (GdkWindow      *window);
+NSView   *gdk_quartz_window_get_nsview                          (GdkWindow      *window);
+NSImage  *gdk_quartz_pixbuf_to_ns_image_libgtk_only             (GdkPixbuf      *pixbuf);
+id        gdk_quartz_drag_context_get_dragging_info_libgtk_only (GdkDragContext *context);
+NSEvent  *gdk_quartz_event_get_nsevent                          (GdkEvent       *event);
 
 G_END_DECLS
 
