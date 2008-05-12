@@ -2,7 +2,7 @@
  *
  * Copyright (C) 1995-1997 Peter Mattis, Spencer Kimball and Josh MacDonald
  * Copyright (C) 1998-2002 Tor Lillqvist
- * Copyright (C) 2005-2007 Imendio AB
+ * Copyright (C) 2005-2008 Imendio AB
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -105,17 +105,12 @@ which_window_is_this (GdkWindow *window)
   return buf;
 }
 
-/* A category that exposes the protected carbon event for an NSEvent. */
-@interface NSEvent (GdkQuartzNSEvent)
-- (void *)gdk_quartz_event_ref;
-@end 
-
-@implementation NSEvent (GdkQuartzNSEvent)
-- (void *)gdk_quartz_event_ref
+NSEvent *
+gdk_quartz_event_get_nsevent (GdkEvent *event)
 {
-  return _eventRef;
+  /* FIXME: If the event here is unallocated, we crash. */
+  return ((GdkEventPrivate *) event)->windowing_data;
 }
-@end
 
 void 
 _gdk_events_init (void)
@@ -1697,46 +1692,6 @@ gdk_event_translate (NSEvent *nsevent)
        */
     }
 
-  /* Special-case menu shortcut events. We create command events for
-   * those and forward to the corresponding menu.
-   */
-  if ((!_gdk_quartz_keyboard_grab_window ||
-       (_gdk_quartz_keyboard_grab_window && keyboard_grab_owner_events)) &&
-      [nsevent type] == NSKeyDown)
-    {
-      EventRef event_ref;
-      MenuRef menu_ref;
-      MenuItemIndex index;
-
-      event_ref = [nsevent gdk_quartz_event_ref];
-      if (IsMenuKeyEvent (NULL, event_ref,
-                          kMenuEventQueryOnly, 
-                          &menu_ref, &index))
-        {
-          MenuCommand menu_command;
-          HICommand hi_command;
-
-          if (GetMenuItemCommandID (menu_ref, index, &menu_command) != noErr)
-            return FALSE;
-   
-          hi_command.commandID = menu_command;
-          hi_command.menu.menuRef = menu_ref;
-          hi_command.menu.menuItemIndex = index;
-
-          CreateEvent (NULL, kEventClassCommand, kEventCommandProcess, 
-                       0, kEventAttributeUserEvent, &event_ref);
-          SetEventParameter (event_ref, kEventParamDirectObject, 
-                             typeHICommand, 
-                             sizeof (HICommand), &hi_command);
-
-          SendEventToEventTarget (event_ref, GetMenuEventTarget (menu_ref));
-
-          ReleaseEvent (event_ref);
-
-          return TRUE;
-        }
-    }
-
   /* Handle our generated "fake" crossing events. */
   if ([nsevent type] == NSApplicationDefined && 
       [nsevent subtype] == GDK_QUARTZ_EVENT_SUBTYPE_FAKE_CROSSING)
@@ -1766,6 +1721,19 @@ gdk_event_translate (NSEvent *nsevent)
 
   nswindow = [nsevent window];
 
+  /* Apply any global filters. */
+  if (_gdk_default_filters)
+    {
+      result = apply_filters (NULL, nsevent, _gdk_default_filters);
+
+      /* If result is GDK_FILTER_CONTINUE, we continue as if nothing
+       * happened. If it is GDK_FILTER_REMOVE,
+       * we return TRUE and won't send the message to Quartz.
+       */
+      if (result == GDK_FILTER_REMOVE)
+	return TRUE;
+    }
+
   /* Ignore events for no window or ones not created by GDK. */
   if (!nswindow || ![[nswindow contentView] isKindOfClass:[GdkQuartzView class]])
     return FALSE;
@@ -1778,19 +1746,6 @@ gdk_event_translate (NSEvent *nsevent)
     {
       break_all_grabs ();
       return FALSE;
-    }
-
-  /* Apply any global filters. */
-  if (_gdk_default_filters)
-    {
-      result = apply_filters (NULL, nsevent, _gdk_default_filters);
-
-      /* If result is GDK_FILTER_CONTINUE, we continue as if nothing
-       * happened. If it is GDK_FILTER_REMOVE,
-       * we return TRUE and won't send the message to Quartz.
-       */
-      if (result == GDK_FILTER_REMOVE)
-	return TRUE;
     }
 
   /* Take care of NSMouseEntered/Exited events and mouse movements

@@ -1,3 +1,11 @@
+2008-05-12  Richard Hult  <richard@imendio.com>
+
+	* gdk/quartz/gdkevents-quartz.c:
+	* gdk/quartz/gdkquartz.h: Remove special casing of menu key events
+	as it's no longer necessary; instead the added quartz API to get
+	the nsevent from an event should be used. Also move the global
+	filter up so it's done before the check for window-less events.
+
 2008-05-12  Tor Lillqvist  <tml@novell.com>
 
 	Bug 532558 - Cannot build dll when using separate builddir
