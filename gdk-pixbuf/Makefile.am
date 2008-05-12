@@ -8,7 +8,7 @@ endif
 
 if OS_WIN32
 gdk_pixbuf_def = gdk_pixbuf.def
-gdk_pixbuf_symbols = -export-symbols gdk_pixbuf.def
+gdk_pixbuf_symbols = -export-symbols $(srcdir)/gdk_pixbuf.def
 
 gdk_pixbuf_win32_res = gdk_pixbuf-win32-res.o
 gdk_pixbuf_win32_res_ldflag = -Wl,gdk_pixbuf-win32-res.o
@@ -19,7 +19,7 @@ gdk_pixbuf-win32-res.o : gdk_pixbuf.rc
 	$(WINDRES) gdk_pixbuf.rc $@
 
 install-def-file:
-	$(INSTALL) gdk_pixbuf.def $(DESTDIR)$(libdir)/gdk_pixbuf-$(GTK_API_VERSION).def
+	$(INSTALL) $(srcdir)/gdk_pixbuf.def $(DESTDIR)$(libdir)/gdk_pixbuf-$(GTK_API_VERSION).def
 uninstall-def-file:
 	-rm $(DESTDIR)$(libdir)/gdk_pixbuf-$(GTK_API_VERSION).def
 else
@@ -43,8 +43,10 @@ install-ms-lib:
 uninstall-ms-lib:
 endif
 
+# This places the generated .def in srcdir, since it is expected to be there.
+# (The one from a tarball is)
 gdk_pixbuf.def: gdk-pixbuf.symbols
-	(echo -e EXPORTS; $(CPP) -P -DINCLUDE_VARIABLES -DG_OS_WIN32 -DALL_FILES - <$(srcdir)/gdk-pixbuf.symbols | sed -e '/^$$/d' -e 's/^/	/' -e 's/G_GNUC_[^ ]*//g') > gdk_pixbuf.def
+	(echo -e EXPORTS; $(CPP) -P -DINCLUDE_VARIABLES -DG_OS_WIN32 -DALL_FILES - <$(srcdir)/gdk-pixbuf.symbols | sed -e '/^$$/d' -e 's/^/	/' -e 's/G_GNUC_[^ ]*//g') > $(srcdir)/gdk_pixbuf.def
 
 gdk-pixbuf-alias.h: gdk-pixbuf.symbols
 	 $(PERL) $(srcdir)/makegdkpixbufalias.pl < $(srcdir)/gdk-pixbuf.symbols > gdk-pixbuf-alias.h

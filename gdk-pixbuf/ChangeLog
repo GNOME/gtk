@@ -1,3 +1,10 @@
+2008-05-12  Tor Lillqvist  <tml@novell.com>
+
+	Bug 532558 - Cannot build dll when using separate builddir
+
+	* Makefile.am: .def file belongs in $(srcdir). Patch by Marko
+	Lindqvist.
+
 2008-05-02  Michael Natterer  <mitch@imendio.com>
 
 	* Makefile.am (stamp-gdk-pixbuf-marshal.h): deprecate the entire
