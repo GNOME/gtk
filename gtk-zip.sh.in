@@ -56,7 +56,11 @@ bin/gdk-pixbuf-csource.exe
 bin/gtk-builder-convert
 bin/gtk-demo.exe
 bin/gtk-update-icon-cache.exe
+man/man1/gdk-builder-convert.1
 man/man1/gdk-pixbuf-csource.1
+man/man1/gdk-update-icon-cache.1
+man/man1/gtk-pixbuf-query-loaders.1
+man/man1/gtk-query-immodules-2.0.1
 lib/libgdk_pixbuf-@GTK_API_VERSION@.dll.a
 lib/gdk_pixbuf-@GTK_API_VERSION@.lib
 lib/libgdk-win32-@GTK_API_VERSION@.dll.a

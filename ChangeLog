@@ -1,6 +1,7 @@
 2008-05-07  Tor Lillqvist  <tml@novell.com>
 
-	* gtk-zip.sh.in: Add gtk-update-icon-cache.exe to the dev zipfile.
+	* gtk-zip.sh.in: Add gtk-update-icon-cache.exe and more man pages
+	to the dev zipfile.
 
 2008-05-04  Richard Hult  <richard@imendio.com>
 
