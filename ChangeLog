@@ -1,3 +1,11 @@
+2008-05-12  Tor Lillqvist  <tml@novell.com>
+
+	Bug 532059 - Leak in win32 clipboard manipulation
+
+	* gdk/win32/gdkselection-win32.c
+	(gdk_win32_selection_add_targets): Plug memory leak. Patch by
+	Daniel Atallah.
+
 2008-05-11  Yair Hershkovitz  <yairhr@gmail.com>
 
 	* gtk/gtkmain.c: call g_i18n_init() in gettext_initialization(). do
