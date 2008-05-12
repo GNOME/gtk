@@ -1,3 +1,10 @@
+2008-05-12  Tor Lillqvist  <tml@novell.com>
+
+	Bug 532558 - Cannot build dll when using separate builddir
+
+	* Makefile.am: .def file belongs in $(srcdir). Patch by Marko
+	Lindqvist.
+
 2008-03-12  Matthias Clasen  <mclasen@redhat.com>
 
 	* === Released 2.12.9 ===
