@@ -1121,10 +1121,11 @@ gdk_win32_selection_add_targets (GdkWindow  *owner,
 	{
 	  gchar **mime_types =
 	    gdk_pixbuf_format_get_mime_types ((GdkPixbufFormat *) format->data);
+	  gchar **mime_type;
 
-	  for (; *mime_types; ++mime_types)
+	  for (mime_type = mime_types; *mime_type; ++mime_type)
 	    {
-	      if (!strcmp (target_name, *mime_types))
+	      if (!strcmp (target_name, *mime_type))
 	        {
 		  g_hash_table_replace (_format_atom_table,
 					GINT_TO_POINTER (CF_DIB),
@@ -1135,6 +1136,7 @@ gdk_win32_selection_add_targets (GdkWindow  *owner,
 		  break;
 		}
 	    }
+	    g_strfreev(mime_types);
 	}
       g_free (target_name);
     }
