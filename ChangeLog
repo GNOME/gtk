@@ -1,5 +1,13 @@
 2008-05-12  Tor Lillqvist  <tml@novell.com>
 
+	Bug 532558 - Cannot build dll when using separate builddir
+
+	* gdk/Makefile.am
+	* gtk/Makefile.am: .def file belongs in $(srcdir). Patch by Marko
+	Lindqvist.
+
+2008-05-12  Tor Lillqvist  <tml@novell.com>
+
 	Bug 532059 - Leak in win32 clipboard manipulation
 
 	* gdk/win32/gdkselection-win32.c
