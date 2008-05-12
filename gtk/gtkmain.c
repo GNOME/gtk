@@ -642,7 +642,7 @@ gettext_initialization (void)
   bind_textdomain_codeset (GETTEXT_PACKAGE, "UTF-8");
   bind_textdomain_codeset (GETTEXT_PACKAGE "-properties", "UTF-8");
 #    endif
-  g_i18n_init();
+  g_i18n_init ();
 #endif  
 }
 

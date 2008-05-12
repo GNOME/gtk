@@ -1,3 +1,7 @@
+2008-05-12  Yair Hershkovitz  <yairhr@gmail.com>
+
+	* gtk/gtkmain.c: g_i18n_init(); -> g_i18n_init ();
+
 2008-05-12  Tor Lillqvist  <tml@novell.com>
 
 	Bug 532059 - Leak in win32 clipboard manipulation
