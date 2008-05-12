@@ -1,3 +1,11 @@
+2008-05-12  Tor Lillqvist  <tml@novell.com>
+
+	Bug 532558 - Cannot build dll when using separate builddir
+
+	* gdk/Makefile.am
+	* gtk/Makefile.am: .def file belongs in $(srcdir). Patch by Marko
+	Lindqvist.
+
 2008-05-12  Yair Hershkovitz  <yairhr@gmail.com>
 
 	* gtk/gtkmain.c: g_i18n_init(); -> g_i18n_init ();
