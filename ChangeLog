@@ -4,8 +4,8 @@
 
 	* gdk/win32/gdkinput-win32.c (_gdk_input_wintab_init_check): Set
 	the "packet rate" of devices to zero instead of 50. This is
-	reported to help significantly with tablet Wacom behaviour in GIMP
-	and Inkscape.
+	reported to help significantly with Wacom tablet behaviour in GIMP
+	and Inkscape. Patch from Thomas Bleeker.
 
 2008-05-12  Tor Lillqvist  <tml@novell.com>
 
