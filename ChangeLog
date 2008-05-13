@@ -1,3 +1,12 @@
+2008-05-13  Tor Lillqvist  <tml@novell.com>
+
+	Bug 496958 - Wacom Bamboo Doesn't Function with GTK apps in Win32
+
+	* gdk/win32/gdkinput-win32.c (_gdk_input_wintab_init_check): Set
+	the "packet rate" of devices to zero instead of 50. This is
+	reported to help significantly with Wacom tablet behaviour in GIMP
+	and Inkscape. Patch from Thomas Bleeker.
+
 2008-05-12  Richard Hult  <richard@imendio.com>
 
 	* gdk/quartz/gdkevents-quartz.c:

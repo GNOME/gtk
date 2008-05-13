@@ -433,7 +433,7 @@ _gdk_input_wintab_init_check (void)
       lc.lcOptions |= CXO_MESSAGES;
       lc.lcStatus = 0;
       lc.lcMsgBase = WT_DEFBASE;
-      lc.lcPktRate = 50;
+      lc.lcPktRate = 0;
       lc.lcPktData = PACKETDATA;
       lc.lcPktMode = PACKETMODE;
       lc.lcMoveMask = PACKETDATA;
