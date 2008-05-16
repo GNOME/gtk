@@ -374,6 +374,8 @@ gtk_disable_setlocale (void)
     g_warning ("gtk_disable_setlocale() must be called before gtk_init()");
     
   do_setlocale = FALSE;
+
+  g_disable_setlocale ();
 }
 
 #ifdef G_PLATFORM_WIN32
