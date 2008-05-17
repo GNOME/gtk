@@ -1,3 +1,12 @@
+2008-05-17  Richard Hult  <richard@imendio.com>
+
+	* gdk/quartz/gdkwindow-quartz.c:
+	(gdk_window_impl_quartz_invalidate_maybe_recurse):
+	(gdk_window_quartz_update_idle): Use gdk_threads_add_idle instead
+	of g_idle_add. Add a temporary check if the window is already in
+	the updates list, since update_area currently doesn't always match
+	the backend's state, see bug #530801.
+
 2008-05-13  Tor Lillqvist  <tml@novell.com>
 
 	Bug 496958 - Wacom Bamboo doesn't function with GTK apps in Win32

@@ -393,9 +393,7 @@ gdk_window_quartz_process_all_updates (void)
 static gboolean
 gdk_window_quartz_update_idle (gpointer data)
 {
-  GDK_THREADS_ENTER ();
   gdk_window_quartz_process_all_updates ();
-  GDK_THREADS_LEAVE ();
 
   return FALSE;
 }
@@ -422,12 +420,17 @@ gdk_window_impl_quartz_invalidate_maybe_recurse (GdkPaintable    *paintable,
     }
   else
     {
-      update_windows = g_slist_prepend (update_windows, window);
+      /* FIXME: When the update_window/update_area handling is abstracted in
+       * some way, we can remove this check. Currently it might be cleared
+       * in the generic code without us knowing, see bug #530801.
+       */
+      if (!g_slist_find (update_windows, window))
+        update_windows = g_slist_prepend (update_windows, window);
       private->update_area = visible_region;
 
       if (update_idle == 0)
-	update_idle = g_idle_add_full (GDK_PRIORITY_REDRAW,
-				       gdk_window_quartz_update_idle, NULL, NULL);
+        update_idle = gdk_threads_add_idle_full (GDK_PRIORITY_REDRAW,
+                                                 gdk_window_quartz_update_idle, NULL, NULL);
     }
 }
 
