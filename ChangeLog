@@ -1,3 +1,9 @@
+2008-05-19  Richard Hult  <richard@imendio.com>
+
+	* gdk/quartz/gdkwindow-quartz.c: (gdk_window_hide),
+	(gdk_window_fullscreen), (gdk_window_unfullscreen): Use
+	SetSystemUIMode instead of hiding and showing the menubar.
+
 2008-05-19  Federico Mena Quintero  <federico@novell.com>
 
 	http://bugzilla.gnome.org/show_bug.cgi?id=322298 - Save dialog

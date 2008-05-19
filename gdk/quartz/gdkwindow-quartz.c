@@ -1250,7 +1250,7 @@ gdk_window_hide (GdkWindow *window)
 
   /* Make sure we're not stuck in fullscreen mode. */
   if (get_fullscreen_geometry (window))
-    ShowMenuBar ();
+    SetSystemUIMode (kUIModeNormal, 0);
 
   if (GDK_WINDOW_DESTROYED (window))
     return;
@@ -2974,7 +2974,7 @@ gdk_window_fullscreen (GdkWindow *window)
                                    frame.size.width, frame.size.height);
     }
 
-  HideMenuBar ();
+  SetSystemUIMode (kUIModeAllHidden, kUIOptionAutoShowMenuBar);
 
   gdk_synthesize_window_state (window, 0, GDK_WINDOW_STATE_FULLSCREEN);
 }
@@ -2990,7 +2990,7 @@ gdk_window_unfullscreen (GdkWindow *window)
   geometry = get_fullscreen_geometry (window);
   if (geometry)
     {
-      ShowMenuBar ();
+      SetSystemUIMode (kUIModeNormal, 0);
 
       move_resize_window_internal (window,
                                    geometry->x,
