@@ -1,3 +1,21 @@
+2008-05-19  Federico Mena Quintero  <federico@novell.com>
+
+	http://bugzilla.gnome.org/show_bug.cgi?id=322298 - Save dialog
+	can't be resized until you expand the "Browse for other folders"
+	section.
+
+	* gtk/gtkfilechooserembed.h (struct _GtkFileChooserEmbedIface):
+	Removed the "get_resizable" method.
+	(_gtk_file_chooser_embed_get_resizable): Removed.
+
+	* gtk/gtkfilechooserembed.c: Removed the _get_resizable() machinery.
+
+	* gtk/gtkfilechooserdefault.c: Likewise.
+
+	* gtk/gtkfilechooserdialog.c
+	(file_chooser_widget_default_size_changed): Act as if the dialog
+	were always resizable.
+
 2008-05-19  Michael Natterer  <mitch@imendio.com>
 
 	* gtk/gtkcellrenderer.c

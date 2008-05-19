@@ -43,7 +43,6 @@ struct _GtkFileChooserEmbedIface
   void (*get_default_size)        (GtkFileChooserEmbed *chooser_embed,
 				   gint                *default_width,
 				   gint                *default_height);
-  gboolean (*get_resizable)       (GtkFileChooserEmbed *chooser_embed);
 
   gboolean (*should_respond)      (GtkFileChooserEmbed *chooser_embed);
 
@@ -59,7 +58,6 @@ GType _gtk_file_chooser_embed_get_type (void) G_GNUC_CONST;
 void  _gtk_file_chooser_embed_get_default_size    (GtkFileChooserEmbed *chooser_embed,
 						   gint                *default_width,
 						   gint                *default_height);
-gboolean _gtk_file_chooser_embed_get_resizable  (GtkFileChooserEmbed *chooser_embed);
 gboolean _gtk_file_chooser_embed_should_respond (GtkFileChooserEmbed *chooser_embed);
 
 void _gtk_file_chooser_embed_initial_focus (GtkFileChooserEmbed *chooser_embed);

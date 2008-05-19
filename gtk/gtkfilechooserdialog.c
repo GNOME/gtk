@@ -185,7 +185,6 @@ file_chooser_widget_default_size_changed (GtkWidget            *widget,
   gint width, height;
   gint default_width, default_height;
   GtkRequisition req, widget_req;
-  gboolean resizable;
 
   priv = GTK_FILE_CHOOSER_DIALOG_GET_PRIVATE (dialog);
 
@@ -208,7 +207,6 @@ file_chooser_widget_default_size_changed (GtkWidget            *widget,
       height = GTK_WIDGET (dialog)->allocation.height - widget->allocation.height;
     }
 
-  resizable = _gtk_file_chooser_embed_get_resizable (GTK_FILE_CHOOSER_EMBED (priv->widget));
   _gtk_file_chooser_embed_get_default_size (GTK_FILE_CHOOSER_EMBED (priv->widget),
 					    &default_width, &default_height);
 
@@ -219,16 +217,7 @@ file_chooser_widget_default_size_changed (GtkWidget            *widget,
   if (GTK_WIDGET_REALIZED (dialog))
     clamp_to_screen (GTK_WIDGET (dialog), &width, &height);
 
-  if (resizable)
-    {
-      gtk_window_set_resizable (GTK_WINDOW (dialog), resizable);
-      gtk_window_resize (GTK_WINDOW (dialog), width, height);
-    }
-  else
-    {
-      gtk_widget_set_size_request (GTK_WIDGET (dialog), width, -1);
-      gtk_window_set_resizable (GTK_WINDOW (dialog), resizable);
-    }
+  gtk_window_resize (GTK_WINDOW (dialog), width, height);
 }
 
 static void

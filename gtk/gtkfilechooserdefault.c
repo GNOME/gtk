@@ -366,7 +366,6 @@ static GSList *       gtk_file_chooser_default_list_shortcut_folders  (GtkFileCh
 static void           gtk_file_chooser_default_get_default_size       (GtkFileChooserEmbed *chooser_embed,
 								       gint                *default_width,
 								       gint                *default_height);
-static gboolean       gtk_file_chooser_default_get_resizable          (GtkFileChooserEmbed *chooser_embed);
 static gboolean       gtk_file_chooser_default_should_respond         (GtkFileChooserEmbed *chooser_embed);
 static void           gtk_file_chooser_default_initial_focus          (GtkFileChooserEmbed *chooser_embed);
 
@@ -811,7 +810,6 @@ static void
 gtk_file_chooser_embed_default_iface_init (GtkFileChooserEmbedIface *iface)
 {
   iface->get_default_size = gtk_file_chooser_default_get_default_size;
-  iface->get_resizable = gtk_file_chooser_default_get_resizable;
   iface->should_respond = gtk_file_chooser_default_should_respond;
   iface->initial_focus = gtk_file_chooser_default_initial_focus;
 }
@@ -6032,14 +6030,6 @@ gtk_file_chooser_default_size_allocate (GtkWidget     *widget,
 
   GTK_WIDGET_CLASS (_gtk_file_chooser_default_parent_class)->size_allocate (widget, allocation);
 
-  if (!gtk_file_chooser_default_get_resizable (GTK_FILE_CHOOSER_EMBED (impl)))
-    {
-      /* The dialog is not resizable, we shouldn't
-       * trust in the size it has in this stage
-       */
-      return;
-    }
-
   impl->default_width = allocation->width;
   impl->default_height = allocation->height;
 
@@ -7944,18 +7934,6 @@ gtk_file_chooser_default_get_default_size (GtkFileChooserEmbed *chooser_embed,
       gtk_widget_size_request (impl->extra_align, &req);
       *default_height += GTK_BOX (chooser_embed)->spacing + req.height;
     }
-}
-
-static gboolean
-gtk_file_chooser_default_get_resizable (GtkFileChooserEmbed *chooser_embed)
-{
-  GtkFileChooserDefault *impl;
-
-  impl = GTK_FILE_CHOOSER_DEFAULT (chooser_embed);
-
-  return (impl->action == GTK_FILE_CHOOSER_ACTION_OPEN ||
-	  impl->action == GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER ||
-	  gtk_expander_get_expanded (GTK_EXPANDER (impl->save_expander)));
 }
 
 struct switch_folder_closure {
