@@ -109,8 +109,7 @@ enum
 enum
 {
   PROP_0,
-  PROP_MENU,
-  LAST_PROP
+  PROP_MENU
 };
 
 static guint signals[LAST_SIGNAL] = { 0 };

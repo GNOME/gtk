@@ -156,8 +156,7 @@ enum
   PROP_CURSOR_VISIBLE,
   PROP_BUFFER,
   PROP_OVERWRITE,
-  PROP_ACCEPTS_TAB,
-  LAST_PROP
+  PROP_ACCEPTS_TAB
 };
 
 static void gtk_text_view_destroy              (GtkObject        *object);

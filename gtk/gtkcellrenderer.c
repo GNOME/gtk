@@ -47,7 +47,7 @@ struct _GtkCellRendererPrivate
 
 
 enum {
-  PROP_ZERO,
+  PROP_0,
   PROP_MODE,
   PROP_VISIBLE,
   PROP_SENSITIVE,

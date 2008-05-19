@@ -57,8 +57,7 @@ enum
 enum
 {
   PROP_0,
-  PROP_MENU,
-  LAST_PROP
+  PROP_MENU
 };
 
 static gint signals[LAST_SIGNAL];

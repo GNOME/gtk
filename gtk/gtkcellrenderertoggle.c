@@ -63,7 +63,7 @@ enum {
 };
 
 enum {
-  PROP_ZERO,
+  PROP_0,
   PROP_ACTIVATABLE,
   PROP_ACTIVE,
   PROP_RADIO,

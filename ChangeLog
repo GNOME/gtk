@@ -1,3 +1,14 @@
+2008-05-19  Michael Natterer  <mitch@imendio.com>
+
+	* gtk/gtkcellrenderer.c
+	* gtk/gtkcellrendererpixbuf.c
+	* gtk/gtkcellrenderertoggle.c
+	* gtk/gtkimagemenuitem.c
+	* gtk/gtkmenutoolbutton.c
+	* gtk/gtkoptionmenu.c
+	* gtk/gtkstatusbar.c
+	* gtk/gtktextview.c: s/PROP_ZERO/PROP_0/g, remove LAST_PROP.
+
 2008-05-17  Yair Hershkovitz  <yairhr@gmail.com>
 
 	* gtk/gtkmain.c: gtk_disable_setlocale() - Added a call to
