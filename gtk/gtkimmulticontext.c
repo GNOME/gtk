@@ -590,7 +590,7 @@ gtk_im_multicontext_append_menuitems (GtkIMMulticontext *context,
 #ifdef HAVE_BIND_TEXTDOMAIN_CODESET
 	      bind_textdomain_codeset (contexts[i]->domain, "UTF-8");
 #endif
-	      translated_name = g_dgettext (contexts[i]->domain, contexts[i]->context_name);
+	      translated_name = dgettext (contexts[i]->domain, contexts[i]->context_name);
 	    }
 	  else
 	    {

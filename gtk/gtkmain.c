@@ -177,7 +177,6 @@ const guint gtk_interface_age = GTK_INTERFACE_AGE;
 static guint gtk_main_loop_level = 0;
 static gint pre_initialized = FALSE;
 static gint gtk_initialized = FALSE;
-static gint gettext_initialized = FALSE;
 static GList *current_events = NULL;
 
 static GSList *main_loops = NULL;      /* stack of currently executing main loops */
@@ -374,8 +373,6 @@ gtk_disable_setlocale (void)
     g_warning ("gtk_disable_setlocale() must be called before gtk_init()");
     
   do_setlocale = FALSE;
-
-  g_disable_setlocale ();
 }
 
 #ifdef G_PLATFORM_WIN32
@@ -633,10 +630,6 @@ do_pre_parse_initialization (int    *argc,
 static void
 gettext_initialization (void)
 {
-  if (gettext_initialized)
-    return;
-  gettext_initialized = TRUE;
-
 #ifdef ENABLE_NLS
   bindtextdomain (GETTEXT_PACKAGE, GTK_LOCALEDIR);
   bindtextdomain (GETTEXT_PACKAGE "-properties", GTK_LOCALEDIR);
@@ -644,7 +637,6 @@ gettext_initialization (void)
   bind_textdomain_codeset (GETTEXT_PACKAGE, "UTF-8");
   bind_textdomain_codeset (GETTEXT_PACKAGE "-properties", "UTF-8");
 #    endif
-  g_i18n_init ();
 #endif  
 }
 

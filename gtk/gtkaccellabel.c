@@ -646,7 +646,7 @@ _gtk_accel_label_class_get_accelerator_label (GtkAccelLabelClass *klass,
 	      
 	      strcpy (msg, "keyboard label|");
 	      g_strlcat (msg, tmp, 128);
-	      str = g_dgettext (GETTEXT_PACKAGE, msg);
+	      str = dgettext (GETTEXT_PACKAGE, msg);
 	      if (str == msg)
 		{
 		  g_string_append (gstring, tmp);

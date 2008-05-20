@@ -1280,7 +1280,7 @@ dgettext_swapped (const gchar *msgid,
 {
   /* Pass through dgettext if and only if msgid is nonempty. */
   if (msgid && *msgid) 
-    return g_dgettext (domainname, msgid); 
+    return dgettext (domainname, msgid); 
   else
     return (gchar*) msgid;
 }
