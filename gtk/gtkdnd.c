@@ -3095,7 +3095,7 @@ gtk_drag_set_icon_stock  (GdkDragContext *context,
  *            with a  context for the source side of a drag)
  * @colormap: the colormap of the icon 
  * @pixmap: the image data for the icon 
- * @mask: the transparency mask for the icon
+ * @mask: the transparency mask for the icon or %NULL for none.
  * @hot_x: the X offset within @pixmap of the hotspot.
  * @hot_y: the Y offset within @pixmap of the hotspot.
  * 

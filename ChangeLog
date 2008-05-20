@@ -1,3 +1,8 @@
+2008-05-20  Gian Mario Tagliaretti  <gianmt@gnome.org>
+
+	* gtk/gtkdnd.c: (gtk_drag_set_icon_pixmap): Fix the docs, the mask param
+	can accept NULL for none. Fixes bug #533920.
+
 2008-05-20  Björn Lindqvist  <bjourne@gmail.com>
 
 	* gtk/gtkspinbutton.c: (gtk_spin_button_snap,
