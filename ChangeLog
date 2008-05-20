@@ -1,3 +1,9 @@
+2008-05-20  Björn Lindqvist  <bjourne@gmail.com>
+
+	* gtk/gtkspinbutton.c: (gtk_spin_button_snap,
+	gtk_spin_button_update): Remove two chunks of duplicated
+	code (#533733).
+
 2008-05-20 14:27:34  Tim Janik  <timj@imendio.com>
 
 	* reverted recent unapproved changes by Yair Hershkovitz, regarding:

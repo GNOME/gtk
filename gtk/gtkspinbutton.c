@@ -1398,15 +1398,7 @@ gtk_spin_button_snap (GtkSpinButton *spin_button,
   else
     val = spin_button->adjustment->lower + ceil (tmp) * inc;
 
-  if (fabs (val - spin_button->adjustment->value) > EPSILON)
-    gtk_adjustment_set_value (spin_button->adjustment, val);
-  else
-    {
-      gint return_val = FALSE;
-      g_signal_emit (spin_button, spinbutton_signals[OUTPUT], 0, &return_val);
-      if (return_val == FALSE)
-	gtk_spin_button_default_output (spin_button);
-    }
+  gtk_spin_button_set_value (spin_button, val);
 }
 
 static void
@@ -2291,18 +2283,7 @@ gtk_spin_button_update (GtkSpinButton *spin_button)
   if (spin_button->snap_to_ticks)
     gtk_spin_button_snap (spin_button, val);
   else
-    {
-      if (fabs (val - spin_button->adjustment->value) > EPSILON)
-	gtk_adjustment_set_value (spin_button->adjustment, val);
-      else
-	{
-	  return_val = FALSE;
-	  g_signal_emit (spin_button, spinbutton_signals[OUTPUT], 0,
-			 &return_val);
-	  if (return_val == FALSE)
-	    gtk_spin_button_default_output (spin_button);
-	}
-    }
+    gtk_spin_button_set_value (spin_button, val);
 }
 
 static void
