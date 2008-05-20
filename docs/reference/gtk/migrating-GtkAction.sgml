@@ -256,7 +256,7 @@ static GnomeUIInfo menubar[] = {
 	the <link linkend="gnomeuiinfo-example">previous
 	example</link>.  Note that the toggle and radio entries are
 	separate from normal actions.  Also, note that #GtkActionEntry 
-        structures take key names in the format of gdk_accelerator_parse() 
+        structures take key names in the format of gtk_accelerator_parse() 
         rather than key values plus modifiers; you will have to convert these
 	values by hand.  For example, %GDK_F11 with no modifiers is equivalent 
         to a key name of <literal>"F11"</literal>.  Likewise, <literal>"o"</literal>

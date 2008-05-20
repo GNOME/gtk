@@ -1,3 +1,11 @@
+2008-05-20  Matthias Clasen  <mclasen@redhat.com>
+
+	Bug 533761 - gdk_accelerator_parse() does not exist, should be
+	gtk_accelerator_parse()
+
+	* gtk/migrating-GtkAction.sgml: Fix a typo. 
+	Pointed out by Matthias Warkus
+
 2008-05-05  Matthias Clasen  <mclasen@redhat.com>
 
 	* docs/reference/gtk/Makefile.am:
