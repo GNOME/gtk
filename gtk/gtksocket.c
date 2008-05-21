@@ -334,8 +334,6 @@ gtk_socket_realize (GtkWidget *widget)
 			 _gtk_socket_windowing_filter_func,
 			 widget);
 
-  GTK_WIDGET_SET_FLAGS (widget, GTK_REALIZED);
-
   /* We sync here so that we make sure that if the XID for
    * our window is passed to another application, SubstructureRedirectMask
    * will be set by the time the other app creates its window.

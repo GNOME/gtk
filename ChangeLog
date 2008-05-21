@@ -1,3 +1,8 @@
+2008-05-22  Hiroyuki Ikezoe  <poincare@ikezoe.net>
+
+	* gtk/gtksockget.c: (gtk_socket_realize): Remove second call of
+	GTK_WIDGET_SET_FLAGS (widget, GTK_REALIZED).
+
 2008-05-21  Richard Hult  <richard@imendio.com>
 
 	* gdk/quartz/gdkwindow-quartz.c:
