@@ -36,6 +36,7 @@ G_BEGIN_DECLS
 typedef struct _GdkGeometry           GdkGeometry;
 typedef struct _GdkWindowAttr	      GdkWindowAttr;
 typedef struct _GdkPointerHooks	      GdkPointerHooks;
+typedef struct _GdkWindowRedirect     GdkWindowRedirect;
 
 /* Classes of windows.
  *   InputOutput: Almost every window should be of this type. Such windows
@@ -300,6 +301,8 @@ struct _GdkWindowObject
   GdkEventMask event_mask;
 
   guint update_and_descendants_freeze_count;
+
+  GdkWindowRedirect *redirect;
 };
 
 struct _GdkWindowObjectClass
@@ -637,6 +640,13 @@ GdkPointerHooks *gdk_set_pointer_hooks (const GdkPointerHooks *new_hooks);
 #endif /* GDK_MULTIHEAD_SAFE */
 
 GdkWindow *gdk_get_default_root_window (void);
+
+void gdk_window_redirect_to_drawable (GdkWindow *window,
+				      GdkDrawable *drawable,
+				      gint src_x, gint src_y,
+				      gint dest_x, gint dest_y,
+				      gint width, gint height);
+void gdk_window_remove_redirection   (GdkWindow *window);
 
 #ifndef GDK_DISABLE_DEPRECATED
 #define GDK_ROOT_PARENT()             (gdk_get_default_root_window ())

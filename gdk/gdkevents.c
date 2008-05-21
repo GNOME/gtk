@@ -79,6 +79,25 @@ _gdk_event_queue_find_first (GdkDisplay *display)
 }
 
 /**
+ * _gdk_event_queue_prepend:
+ * @display: a #GdkDisplay
+ * @event: Event to prepend.
+ *
+ * Prepends an event before the head of the event queue.
+ *
+ * Returns: the newly prepended list node.
+ **/
+GList*
+_gdk_event_queue_prepend (GdkDisplay *display,
+			  GdkEvent   *event)
+{
+  display->queued_events = g_list_prepend (display->queued_events, event);
+  if (!display->queued_tail)
+    display->queued_tail = display->queued_events;
+  return display->queued_events;
+}
+
+/**
  * _gdk_event_queue_append:
  * @display: a #GdkDisplay
  * @event: Event to append.
@@ -546,6 +565,7 @@ gdk_event_get_time (const GdkEvent *event)
       case GDK_CONFIGURE:
       case GDK_FOCUS_CHANGE:
       case GDK_NOTHING:
+      case GDK_DAMAGE:
       case GDK_DELETE:
       case GDK_DESTROY:
       case GDK_EXPOSE:
@@ -616,6 +636,7 @@ gdk_event_get_state (const GdkEvent        *event,
       case GDK_SELECTION_NOTIFY:
       case GDK_PROXIMITY_IN:
       case GDK_PROXIMITY_OUT:
+      case GDK_DAMAGE:
       case GDK_DRAG_ENTER:
       case GDK_DRAG_LEAVE:
       case GDK_DRAG_MOTION:

@@ -1,3 +1,69 @@
+2008-03-18 10:49:20  Tim Janik  <timj@imendio.com>
+
+	* Applied pixmap redirection patch by Alexander Larsson with
+	various updates from:
+	Bug 318807 – Offscreen windows and window redirection.
+
+
+	Updates:
+
+	* updated docs to mention "Since 2.16".
+
+	* tests/testgtk.c: fixed snapshooting pixmap leak.
+	convert pixmap to pixbuf after snapshooting, to compensate for different
+	bit depths (occurs when snapshooting ARGB visuals and displaying the
+	pixmap in an RGB visual).
+
+	* gdk/gdkwindow.[hc]: made GdkWindowRedirect private.
+
+	* gdk/gdkwindow.c: removed damage idle handler, there's no aparent
+	need for it. enqueue damage notification as GDK_DAMAGE events
+	for each painting redirection at the start of the event queue.
+	consider windows with a redirection fully visible when invalidating,
+	and when updating from backing store. cleaned up stale variables.
+
+	* gdk/gdkevents.c: added _gdk_event_queue_prepend().
+
+	* gtk/gtkwidget.c: fixed coordinates for !NO_WINDOW widgets in
+	gtk_widget_get_snapshot; this fixes garbage snap offsets for gammacurve,
+	tree, drawingarea, text, handlebox, etc.
+	clip the redirected window hierarchy to window sizes, the visible
+	rectangles don't need to be taken into account here.
+	extended snapshooting docs to recommend gdk_pixbuf_get_from_drawable()
+	in case pixmap visuals could mismatch.
+
+	* gdk/x11/gdkwindow-x11.c: removed _gdk_windowing_window_get_visible_rect().
+
+
+	Base patch:
+
+	* tests/testgtk.c: add a "Snapshot" test to demonstrate snapshooting
+	of possibly obscured widgets into an offscreen pixmap.
+
+	* gtk/gtkwidget.[hc]: add GtkWidget::damage-event signal, add
+	gtk_widget_get_snapshot() to render a widget's contents to a GdkPixmap.
+
+	* gtk/gtkmain.c: dispatch GDK_DAMAGE events.
+
+	* gdk/gdkwindow.c: moved outer gdk_window_new() and gdk_window_reparent()
+	implementations here, adapted them to propagate redirects to child windows.
+	gdk_window_end_paint(): copy repainted window contents to redirection pixmap,
+	clipped to visible region. queue GDK_DAMAGE event delivery.
+	gdk_window_redirect_to_drawable(): install window painting redirection.
+	gdk_window_remove_redirection(): remove previously installed redirection.
+
+	* gdk/x11/gdkwindow-x11.c: added _gdk_windowing_window_get_visible_rect(),
+	renamed _gdk_window_new() and _gdk_window_reparent().
+
+	* gdk/gdkwindow.h: added GdkWindowRedirect* to GdkWindowObject, export
+	gdk_window_redirect_to_drawable() and gdk_window_remove_redirection().
+
+	* gdk/gdkevents.h: added GDK_DAMAGE event type.
+
+	* gdk/gdkevents.c: extract time and state from GDK_DAMAGE events.
+
+	* gdk/gdkinternals.h: added internal prototypes.
+
 2008-05-21  Michael Natterer  <mitch@imendio.com>
 
 	* gtk/gtkalignment.c

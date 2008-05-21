@@ -127,6 +127,7 @@ enum {
   QUERY_TOOLTIP,
   KEYNAV_FAILED,
   DRAG_FAILED,
+  DAMAGE_EVENT,
   LAST_SIGNAL
 };
 
@@ -1994,6 +1995,28 @@ gtk_widget_class_init (GtkWidgetClass *klass)
 		  GDK_TYPE_EVENT | G_SIGNAL_TYPE_STATIC_SCOPE);
 
   /**
+   * GtkWidget::damage-event:
+   * @widget: the object which received the signal
+   * @event: the #GdkEventExpose event
+   *
+   * Emitted when a redirected window belonging to @widget gets drawn into.
+   * The region/area members of the event shows what area of the redirected
+   * drawable was drawn into.
+   *
+   * Returns: %TRUE to stop other handlers from being invoked for the event.
+   *   %FALSE to propagate the event further.
+   *
+   * Since: 2.16
+   */
+  widget_signals[DAMAGE_EVENT] =
+    g_signal_new ("damage_event",
+		  G_TYPE_FROM_CLASS (gobject_class),
+		  G_SIGNAL_RUN_LAST, 0,
+		  _gtk_boolean_handled_accumulator, NULL,
+		  _gtk_marshal_BOOLEAN__BOXED,
+		  G_TYPE_BOOLEAN, 1,
+		  GDK_TYPE_EVENT | G_SIGNAL_TYPE_STATIC_SCOPE);
+/**
    * GtkWidget::grab-broken-event:
    * @widget: the object which received the signal
    * @event: the #GdkEventGrabBroken event
@@ -4666,6 +4689,9 @@ gtk_widget_event_internal (GtkWidget *widget,
 	  break;
 	case GDK_GRAB_BROKEN:
 	  signal_num = GRAB_BROKEN;
+	  break;
+	case GDK_DAMAGE:
+	  signal_num = DAMAGE_EVENT;
 	  break;
 	default:
 	  g_warning ("gtk_widget_event(): unhandled event type: %d", event->type);
@@ -8285,6 +8311,53 @@ gtk_widget_unref (GtkWidget *widget)
   g_object_unref ((GObject*) widget);
 }
 
+/**
+ * gtk_widget_get_snapshot:
+ * @widget: a #GtkWidget
+ *
+ * Creates a #GdkPixmap of the contents of the widget and its
+ * children. Works even if the widget is obscured.
+ * Note that the depth and visual of the resulting pixmap is dependent
+ * on the widget being snapshot and likely differs from those of a target
+ * widget displaying the pixmap. Use gdk_pixbuf_get_from_drawable()
+ * to convert the pixmap to a visual independant representation.
+ *
+ * Return value: #GdkPixmap of the widget
+ * Since: 2.16
+ **/
+GdkPixmap*
+gtk_widget_get_snapshot (GtkWidget *widget)
+{
+  GdkPixmap *pixmap;
+  int x, y;
+
+  if (!GTK_WIDGET_REALIZED (widget))
+    gtk_widget_realize (widget);
+
+  pixmap = gdk_pixmap_new (widget->window,
+			   widget->allocation.width,
+			   widget->allocation.height,
+			   gdk_drawable_get_depth (widget->window));
+  if (GTK_WIDGET_NO_WINDOW (widget))
+    {
+      x = widget->allocation.x;
+      y = widget->allocation.y;
+    }
+  else
+    x = y = 0;
+
+  gdk_window_redirect_to_drawable (widget->window,
+				   pixmap,
+				   x, y,
+				   0, 0,
+				   widget->allocation.width,
+				   widget->allocation.height);
+  gtk_widget_queue_draw (widget);
+  gdk_window_process_updates (widget->window, TRUE);
+  gdk_window_remove_redirection (widget->window);
+
+  return pixmap;
+}
 
 /* style properties
  */

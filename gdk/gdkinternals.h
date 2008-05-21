@@ -184,6 +184,8 @@ GdkEvent* _gdk_event_unqueue (GdkDisplay *display);
 GList* _gdk_event_queue_find_first  (GdkDisplay *display);
 void   _gdk_event_queue_remove_link (GdkDisplay *display,
 				     GList      *node);
+GList*  _gdk_event_queue_prepend    (GdkDisplay *display,
+				     GdkEvent   *event);
 GList*  _gdk_event_queue_append     (GdkDisplay *display,
 				     GdkEvent   *event);
 void _gdk_event_button_generate     (GdkDisplay *display,
@@ -309,6 +311,14 @@ GdkWindow* _gdk_windowing_window_at_pointer  (GdkDisplay       *display,
 /* Return the number of bits-per-pixel for images of the specified depth. */
 gint _gdk_windowing_get_bits_for_depth (GdkDisplay *display,
 					gint        depth);
+
+GdkWindow* _gdk_window_new                        (GdkWindow     *parent,
+						   GdkWindowAttr *attributes,
+						   gint           attributes_mask);
+void       _gdk_window_reparent                   (GdkWindow     *window,
+						   GdkWindow     *new_parent,
+						   gint           x,
+						   gint           y);
 
 #define GDK_WINDOW_IS_MAPPED(window) ((((GdkWindowObject*)window)->state & GDK_WINDOW_STATE_WITHDRAWN) == 0)
 

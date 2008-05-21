@@ -1529,6 +1529,7 @@ gtk_main_do_event (GdkEvent *event)
     case GDK_VISIBILITY_NOTIFY:
     case GDK_WINDOW_STATE:
     case GDK_GRAB_BROKEN:
+    case GDK_DAMAGE:
       gtk_widget_event (event_widget, event);
       break;
 

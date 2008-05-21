@@ -646,6 +646,8 @@ gdk_window_impl_x11_get_type G_GNUC_CONST
 #if IN_HEADER(__GDK_WINDOW_H__)
 #if IN_FILE(__GDK_WINDOW_C__)
 gdk_get_default_root_window
+gdk_window_new
+gdk_window_reparent
 gdk_window_add_filter
 gdk_window_at_pointer
 gdk_window_begin_paint_rect
@@ -703,7 +705,6 @@ gdk_window_move_region
 
 #if IN_HEADER(__GDK_WINDOW_H__)
 #if IN_FILE(__GDK_WINDOW_X11_C__)
-gdk_window_new
 gdk_window_foreign_new_for_display
 gdk_window_lookup
 gdk_window_lookup_for_display
@@ -714,7 +715,6 @@ gdk_window_withdraw
 gdk_window_move
 gdk_window_resize
 gdk_window_move_resize
-gdk_window_reparent
 gdk_window_raise
 gdk_window_lower
 gdk_window_focus

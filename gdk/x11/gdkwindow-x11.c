@@ -647,24 +647,10 @@ setup_toplevel_window (GdkWindow *window,
   ensure_sync_counter (window);
 }
 
-/**
- * gdk_window_new:
- * @parent: a #GdkWindow, or %NULL to create the window as a child of
- *   the default root window for the default display.
- * @attributes: attributes of the new window
- * @attributes_mask: mask indicating which fields in @attributes are valid
- * 
- * Creates a new #GdkWindow using the attributes from
- * @attributes. See #GdkWindowAttr and #GdkWindowAttributesType for
- * more details.  Note: to use this on displays other than the default
- * display, @parent must be specified.
- * 
- * Return value: the new #GdkWindow
- **/
 GdkWindow*
-gdk_window_new (GdkWindow     *parent,
-		GdkWindowAttr *attributes,
-		gint           attributes_mask)
+_gdk_window_new (GdkWindow     *parent,
+		 GdkWindowAttr *attributes,
+		 gint           attributes_mask)
 {
   GdkWindow *window;
   GdkWindowObject *private;
@@ -1843,38 +1829,17 @@ gdk_window_move_resize (GdkWindow *window,
     }
 }
 
-/**
- * gdk_window_reparent:
- * @window: a #GdkWindow
- * @new_parent: new parent to move @window into
- * @x: X location inside the new parent
- * @y: Y location inside the new parent
- *
- * Reparents @window into the given @new_parent. The window being
- * reparented will be unmapped as a side effect.
- * 
- **/
 void
-gdk_window_reparent (GdkWindow *window,
-		     GdkWindow *new_parent,
-		     gint       x,
-		     gint       y)
+_gdk_window_reparent (GdkWindow *window,
+		      GdkWindow *new_parent,
+		      gint       x,
+		      gint       y)
 {
   GdkWindowObject *window_private;
   GdkWindowObject *parent_private;
   GdkWindowObject *old_parent_private;
   GdkWindowImplX11 *impl;
   gboolean was_toplevel;
-  
-  g_return_if_fail (GDK_IS_WINDOW (window));
-  g_return_if_fail (new_parent == NULL || GDK_IS_WINDOW (new_parent));
-  g_return_if_fail (GDK_WINDOW_TYPE (window) != GDK_WINDOW_ROOT);
-
-  if (GDK_WINDOW_DESTROYED (window) ||
-      (new_parent && GDK_WINDOW_DESTROYED (new_parent)))
-    {
-      return;
-    }
   
   if (!new_parent)
     new_parent = gdk_screen_get_root_window (GDK_WINDOW_SCREEN (window));

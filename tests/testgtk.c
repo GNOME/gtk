@@ -12206,6 +12206,171 @@ create_properties (GtkWidget *widget)
   
 }
 
+struct SnapshotData {
+  GtkWidget *toplevel_button;
+  GtkWidget **window;
+  GdkCursor *cursor;
+  gboolean in_query;
+  gboolean is_toplevel;
+  gint handler;
+};
+
+static void
+destroy_snapshot_data (GtkWidget             *widget,
+		       struct SnapshotData *data)
+{
+  if (*data->window)
+    *data->window = NULL;
+  
+  if (data->cursor)
+    {
+      gdk_cursor_unref (data->cursor);
+      data->cursor = NULL;
+    }
+
+  if (data->handler)
+    {
+      g_signal_handler_disconnect (widget, data->handler);
+      data->handler = 0;
+    }
+
+  g_free (data);
+}
+
+static gint
+snapshot_widget_event (GtkWidget	       *widget,
+		       GdkEvent	       *event,
+		       struct SnapshotData *data)
+{
+  GtkWidget *res_widget = NULL;
+
+  if (!data->in_query)
+    return FALSE;
+  
+  if (event->type == GDK_BUTTON_RELEASE)
+    {
+      gtk_grab_remove (widget);
+      gdk_display_pointer_ungrab (gtk_widget_get_display (widget),
+				  GDK_CURRENT_TIME);
+      
+      res_widget = find_widget_at_pointer (gtk_widget_get_display (widget));
+      if (data->is_toplevel && res_widget)
+	res_widget = gtk_widget_get_toplevel (res_widget);
+      if (res_widget)
+	{
+	  GdkPixmap *pixmap;
+          GdkPixbuf *pixbuf = NULL;
+	  GtkWidget *window, *image;
+
+	  window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+	  pixmap = gtk_widget_get_snapshot (res_widget);
+          gtk_widget_realize (window);
+          if (gdk_drawable_get_depth (window->window) != gdk_drawable_get_depth (pixmap))
+            {
+              /* this branch is needed to convert ARGB -> RGB */
+              int width, height;
+              gdk_drawable_get_size (pixmap, &width, &height);
+              pixbuf = gdk_pixbuf_get_from_drawable (NULL, pixmap,
+                                                     gtk_widget_get_colormap (res_widget),
+                                                     0, 0,
+                                                     0, 0,
+                                                     width, height);
+              image = gtk_image_new_from_pixbuf (pixbuf);
+            }
+          else
+            image = gtk_image_new_from_pixmap (pixmap, NULL);
+          g_object_unref (pixbuf);
+	  gtk_container_add (GTK_CONTAINER (window), image);
+          g_object_unref (pixmap);
+	  gtk_widget_show_all (window);
+	}
+
+      data->in_query = FALSE;
+    }
+  return FALSE;
+}
+
+
+static void
+snapshot_widget (GtkButton *button,
+		 struct SnapshotData *data)
+{
+  gint failure;
+
+  g_signal_connect (button, "event",
+		    G_CALLBACK (snapshot_widget_event), data);
+
+  data->is_toplevel = GTK_WIDGET (button) == data->toplevel_button;
+  
+  if (!data->cursor)
+    data->cursor = gdk_cursor_new_for_display (gtk_widget_get_display (GTK_WIDGET (button)),
+					       GDK_TARGET);
+  
+  failure = gdk_pointer_grab (GTK_WIDGET (button)->window,
+			      TRUE,
+			      GDK_BUTTON_RELEASE_MASK,
+			      NULL,
+			      data->cursor,
+			      GDK_CURRENT_TIME);
+
+  gtk_grab_add (GTK_WIDGET (button));
+
+  data->in_query = TRUE;
+}
+
+static void
+create_snapshot (GtkWidget *widget)
+{
+  static GtkWidget *window = NULL;
+  GtkWidget *button;
+  GtkWidget *vbox;
+  struct SnapshotData *data;
+
+  data = g_new (struct SnapshotData, 1);
+  data->window = &window;
+  data->in_query = FALSE;
+  data->cursor = NULL;
+  data->handler = 0;
+
+  if (!window)
+    {
+      window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+
+      gtk_window_set_screen (GTK_WINDOW (window),
+			     gtk_widget_get_screen (widget));      
+
+      data->handler = g_signal_connect (window, "destroy",
+					G_CALLBACK (destroy_snapshot_data),
+					data);
+
+      gtk_window_set_title (GTK_WINDOW (window), "test snapshot");
+      gtk_container_set_border_width (GTK_CONTAINER (window), 10);
+
+      vbox = gtk_vbox_new (FALSE, 1);
+      gtk_container_add (GTK_CONTAINER (window), vbox);
+            
+      button = gtk_button_new_with_label ("Snapshot widget");
+      gtk_box_pack_start (GTK_BOX (vbox), button, TRUE, TRUE, 0);
+      g_signal_connect (button, "clicked",
+			G_CALLBACK (snapshot_widget),
+			data);
+      
+      button = gtk_button_new_with_label ("Snapshot toplevel");
+      data->toplevel_button = button;
+      gtk_box_pack_start (GTK_BOX (vbox), button, TRUE, TRUE, 0);
+      g_signal_connect (button, "clicked",
+			G_CALLBACK (snapshot_widget),
+			data);
+    }
+
+  if (!GTK_WIDGET_VISIBLE (window))
+    gtk_widget_show_all (window);
+  else
+    gtk_widget_destroy (window);
+  
+}
+
+
 
 /*
  * Color Preview
@@ -13489,6 +13654,7 @@ struct {
   { "scrolled windows", create_scrolled_windows },
   { "shapes", create_shapes },
   { "size groups", create_size_groups },
+  { "snapshot", create_snapshot },
   { "spinbutton", create_spins },
   { "statusbar", create_statusbar },
   { "styles", create_styles },
@@ -13524,7 +13690,7 @@ create_main_window (void)
 
   window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
   gtk_widget_set_name (window, "main window");
-  gtk_widget_set_uposition (window, 20, 20);
+  gtk_widget_set_uposition (window, 50, 20);
   gtk_window_set_default_size (GTK_WINDOW (window), -1, 400);
 
   geometry.min_width = -1;

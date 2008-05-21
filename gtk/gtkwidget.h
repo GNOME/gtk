@@ -416,6 +416,10 @@ struct _GtkWidgetClass
 				       gint        y,
 				       gboolean    keyboard_tooltip,
 				       GtkTooltip *tooltip);
+  /* Signals without a C default handler class slot:
+   * gboolean	(*damage_event)	(GtkWidget      *widget,
+   *                             GdkEventExpose *event);
+   */
 
   /* Padding for future expansion */
   void (*_gtk_reserved5) (void);
@@ -610,6 +614,7 @@ GdkWindow *   gtk_widget_get_root_window (GtkWidget *widget);
 GtkSettings*  gtk_widget_get_settings    (GtkWidget *widget);
 GtkClipboard *gtk_widget_get_clipboard   (GtkWidget *widget,
 					  GdkAtom    selection);
+GdkPixmap *   gtk_widget_get_snapshot    (GtkWidget *widget);
 
 #ifndef GTK_DISABLE_DEPRECATED
 #define gtk_widget_set_visual(widget,visual)  ((void) 0)

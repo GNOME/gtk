@@ -47,6 +47,26 @@ struct _GdkWindowPaint
   cairo_surface_t *surface;
 };
 
+typedef struct {
+  GdkRegion *old_region;
+  gint old_clip_x_origin;
+  gint old_clip_y_origin;
+  gint x_offset;
+  gint y_offset;
+} GdkWindowClipData;
+
+struct _GdkWindowRedirect
+{
+  GdkWindowObject *redirected;
+  GdkDrawable *pixmap;
+  gint src_x;
+  gint src_y;
+  gint dest_x;
+  gint dest_y;
+  gint width;
+  gint height;
+};
+
 static GdkGC *gdk_window_create_gc      (GdkDrawable     *drawable,
                                          GdkGCValues     *values,
                                          GdkGCValuesMask  mask);
@@ -191,6 +211,23 @@ static void gdk_window_clear_backing_rect (GdkWindow *window,
 					   gint       y,
 					   gint       width,
 					   gint       height);
+static void setup_redirect_clip           (GdkWindow         *window,
+					   GdkGC             *gc,
+					   GdkWindowClipData *data);
+static void reset_redirect_clip           (GdkWindow         *offscreen,
+					   GdkGC             *gc,
+					   GdkWindowClipData *data);
+static void gdk_window_redirect_free      (GdkWindowRedirect *redirect);
+static void apply_redirect_to_children    (GdkWindowObject   *private,
+					   GdkWindowRedirect *redirect);
+static void remove_redirect_from_children (GdkWindowObject   *private,
+					   GdkWindowRedirect *redirect);
+static GdkRegion *_gdk_window_calculate_full_clip_region (GdkWindow *window,
+							  GdkWindow *base_window,
+							  GdkGC *gc,
+							  gboolean do_children,
+							  gint *base_x_offset,
+							  gint *base_y_offset);
 
 static gpointer parent_class = NULL;
 
@@ -309,6 +346,91 @@ gdk_window_finalize (GObject *object)
   obj->impl = NULL;
   
   G_OBJECT_CLASS (parent_class)->finalize (object);
+}
+
+/**
+ * gdk_window_new:
+ * @parent: a #GdkWindow, or %NULL to create the window as a child of
+ *   the default root window for the default display.
+ * @attributes: attributes of the new window
+ * @attributes_mask: mask indicating which fields in @attributes are valid
+ * 
+ * Creates a new #GdkWindow using the attributes from
+ * @attributes. See #GdkWindowAttr and #GdkWindowAttributesType for
+ * more details.  Note: to use this on displays other than the default
+ * display, @parent must be specified.
+ * 
+ * Return value: the new #GdkWindow
+ **/
+GdkWindow*
+gdk_window_new (GdkWindow     *parent,
+		GdkWindowAttr *attributes,
+		gint           attributes_mask)
+{
+  GdkWindow *window;
+  GdkWindowObject *private, *parent_private;
+  
+  g_return_val_if_fail (attributes != NULL, NULL);
+
+  window = _gdk_window_new (parent, attributes, attributes_mask);
+
+  /* Inherit redirection from parent */
+  if (parent != NULL)
+    {
+      parent_private = GDK_WINDOW_OBJECT (parent);
+      private = GDK_WINDOW_OBJECT (window);
+      private->redirect = parent_private->redirect;
+    }
+  
+  return window;
+}
+
+/**
+ * gdk_window_reparent:
+ * @window: a #GdkWindow
+ * @new_parent: new parent to move @window into
+ * @x: X location inside the new parent
+ * @y: Y location inside the new parent
+ *
+ * Reparents @window into the given @new_parent. The window being
+ * reparented will be unmapped as a side effect.
+ * 
+ **/
+void
+gdk_window_reparent (GdkWindow *window,
+		     GdkWindow *new_parent,
+		     gint       x,
+		     gint       y)
+{
+  GdkWindowObject *private;
+  
+  g_return_if_fail (GDK_IS_WINDOW (window));
+  g_return_if_fail (new_parent == NULL || GDK_IS_WINDOW (new_parent));
+  g_return_if_fail (GDK_WINDOW_TYPE (window) != GDK_WINDOW_ROOT);
+
+  if (GDK_WINDOW_DESTROYED (window) ||
+      (new_parent && GDK_WINDOW_DESTROYED (new_parent)))
+    {
+      return;
+    }
+
+  private = (GdkWindowObject *) window;
+
+  /* Break up redirection if inherited */
+  if (private->redirect && private->redirect->redirected != private)
+    {
+      remove_redirect_from_children (private, private->redirect);
+      private->redirect = NULL;
+    }
+  
+  _gdk_window_reparent (window, new_parent, x, y);
+
+  /* Inherit parent redirect if we don't have our own */
+  if (private->parent && private->redirect == NULL)
+    {
+      private->redirect = private->parent->redirect;
+      apply_redirect_to_children (private, private->redirect);
+    }
 }
 
 static void
@@ -446,6 +568,11 @@ _gdk_window_destroy_hierarchy (GdkWindow *window,
 	  window_remove_filters (window);
 
           gdk_drawable_set_colormap (GDK_DRAWABLE (window), NULL);
+
+	  /* If we own the redirect, free it */
+	  if (private->redirect && private->redirect->redirected == private)
+	    gdk_window_redirect_free (private->redirect);
+	  private->redirect = NULL;
 	}
       break;
     }
@@ -1089,6 +1216,20 @@ gdk_window_end_paint (GdkWindow *window)
                      clip_box.x - x_offset, clip_box.y - y_offset,
                      clip_box.width, clip_box.height);
 
+  if (private->redirect)
+    {
+      GdkWindowClipData data;
+      
+      setup_redirect_clip (window, tmp_gc, &data);
+      gdk_draw_drawable (private->redirect->pixmap, tmp_gc, paint->pixmap,
+			 clip_box.x - paint->x_offset,
+			 clip_box.y - paint->y_offset,
+			 clip_box.x + data.x_offset,
+			 clip_box.y + data.y_offset,
+			 clip_box.width, clip_box.height);
+      reset_redirect_clip (window, tmp_gc, &data);
+    }
+  
   /* Reset clip region of the cached GdkGC */
   gdk_gc_set_clip_region (tmp_gc, NULL);
 
@@ -1946,6 +2087,65 @@ gdk_window_clear_backing_rect (GdkWindow *window,
 #endif
 }
 
+static void
+gdk_window_clear_backing_rect_redirect (GdkWindow *window,
+					gint       x,
+					gint       y,
+					gint       width,
+					gint       height)
+{
+  GdkWindowObject *private = (GdkWindowObject *)window;
+  GdkWindowRedirect *redirect = private->redirect;
+  GdkRegion *clip_region;
+  gint x_offset, y_offset;
+  BackingRectMethod method;
+  GdkWindowPaint paint;
+  
+  if (GDK_WINDOW_DESTROYED (window))
+    return;
+
+  paint.x_offset = x_offset;
+  paint.y_offset = y_offset;
+  paint.pixmap = redirect->pixmap;
+  paint.surface = _gdk_drawable_ref_cairo_surface (redirect->pixmap);
+  
+  clip_region = _gdk_window_calculate_full_clip_region (window,
+							GDK_WINDOW (redirect->redirected),
+							NULL, TRUE,
+							&x_offset, &y_offset);
+  
+
+  method.cr = NULL;
+  method.gc = NULL;
+  setup_backing_rect_method (&method, window, &paint, 0, 0);
+
+  if (method.cr)
+    {
+      g_assert (method.gc == NULL);
+
+      cairo_rectangle (method.cr, x, y, width, height);
+      cairo_clip (method.cr);
+
+      gdk_cairo_region (method.cr, clip_region);
+      cairo_fill (method.cr);
+
+      cairo_destroy (method.cr);
+    }
+  else
+    {
+      g_assert (method.gc != NULL);
+
+      gdk_gc_set_clip_region (method.gc, clip_region);
+      gdk_draw_rectangle (window, method.gc, TRUE, x, y, width, height);
+      g_object_unref (method.gc);
+
+    }
+
+  gdk_region_destroy (clip_region);
+  cairo_surface_destroy (paint.surface);
+}
+
+
 /**
  * gdk_window_clear:
  * @window: a #GdkWindow
@@ -1992,7 +2192,12 @@ gdk_window_clear_area (GdkWindow *window,
   if (private->paint_stack)
     gdk_window_clear_backing_rect (window, x, y, width, height);
   else
-    _gdk_windowing_window_clear_area (window, x, y, width, height);
+    {
+      if (private->redirect)
+	gdk_window_clear_backing_rect_redirect (window, x, y, width, height);
+	
+      _gdk_windowing_window_clear_area (window, x, y, width, height);
+    }
 }
 
 /**
@@ -2025,6 +2230,9 @@ gdk_window_clear_area_e (GdkWindow *window,
   if (private->paint_stack)
     gdk_window_clear_backing_rect (window, x, y, width, height);
 
+  if (private->redirect)
+    gdk_window_clear_backing_rect_redirect (window, x, y, width, height);
+  
   _gdk_windowing_window_clear_area_e (window, x, y, width, height);
 }
 
@@ -2629,7 +2837,18 @@ gdk_window_invalidate_maybe_recurse (GdkWindow       *window,
       return;
     }
 
-  visible_region = gdk_drawable_get_visible_region (window);
+  /* windows that a redirection has ben setup for need to be considered
+   * fully visible, in order to avoid missing redirected paint ops
+   * anywhere in the window area.
+   */
+  if (private->redirect && private->redirect->redirected == private)
+    {
+      GdkRectangle visible_rect = { 0, 0, 0, 0 };
+      gdk_drawable_get_size (GDK_DRAWABLE (window), &visible_rect.width, &visible_rect.height);
+      visible_region = gdk_region_rectangle (&visible_rect);
+    }
+  else
+    visible_region = gdk_drawable_get_visible_region (window);
   gdk_region_intersect (visible_region, region);
 
   tmp_list = private->children;
@@ -2678,7 +2897,7 @@ gdk_window_invalidate_maybe_recurse (GdkWindow       *window,
     {
       if (debug_updates)
         draw_ugly_color (window, region);
-      
+
       if (private->update_area)
 	{
 	  gdk_region_union (private->update_area, visible_region);
@@ -3221,6 +3440,349 @@ gdk_window_set_composited (GdkWindow *window,
   _gdk_windowing_window_set_composited (window, composited);
 
   private->composited = composited;
+}
+
+
+static void
+remove_redirect_from_children (GdkWindowObject *private, GdkWindowRedirect *redirect)
+{
+  GList *l;
+  GdkWindowObject *child;
+
+  for (l = private->children; l != NULL; l = l->next)
+    {
+      child = l->data;
+
+      /* Don't redirect this child if it already has another redirect */
+      if (child->redirect == redirect)
+	{
+	  child->redirect = NULL;
+	  remove_redirect_from_children (child, redirect);
+	}
+    }
+}
+
+/**
+ * gdk_window_remove_redirection:
+ * @window: a #GdkWindow
+ *
+ * Removes and active redirection started by
+ * gdk_window_redirect_to_drawable().
+ **/
+void
+gdk_window_remove_redirection (GdkWindow *window)
+{
+  GdkWindowObject *private;
+  
+  g_return_if_fail (GDK_IS_WINDOW (window));
+
+  private = (GdkWindowObject *) window;
+
+  if (private->redirect &&
+      private->redirect->redirected == private)
+    {
+      remove_redirect_from_children (private, private->redirect);
+      gdk_window_redirect_free (private->redirect);
+      private->redirect = NULL;
+    }
+}
+
+static void
+apply_redirect_to_children (GdkWindowObject *private, GdkWindowRedirect *redirect)
+{
+  GList *l;
+  GdkWindowObject *child;
+
+  for (l = private->children; l != NULL; l = l->next)
+    {
+      child = l->data;
+
+      /* Don't redirect this child if it already has another redirect */
+      if (!child->redirect)
+	{
+	  child->redirect = redirect;
+	  apply_redirect_to_children (child, redirect);
+	}
+    }
+}
+
+/**
+ * gdk_window_redirect_to_drawable:
+ * @window: a #GdkWindow
+ * @drawable: a #GdkDrawable
+ * src_x: x position in @window
+ * src_y: y position in @window
+ * dest_x: x position in @drawable
+ * dest_y: y position in @drawable
+ * width: width of redirection
+ * height: height of redirection
+ *
+ * Redirects drawing into @windows so that drawing to the
+ * window in the rectangle specified by @src_x, @src_y,
+ * @width and @height is also drawn into @drawable at
+ * @dest_x, @dest_y.
+ *
+ * Only drawing between gdk_window_begin_paint_region() and
+ * gdk_window_end_paint() is redirected.
+ *
+ * Redirection is active until gdk_window_remove_redirection()
+ * is called.
+ *
+ * This function should not be used on windows created by
+ * gdk_window_new_offscreen(), as that is implemented using
+ * redirection.
+ **/
+void
+gdk_window_redirect_to_drawable (GdkWindow *window,
+				 GdkDrawable *drawable,
+				 gint src_x, gint src_y,
+				 gint dest_x, gint dest_y,
+				 gint width, gint height)
+{
+  GdkWindowObject *private;
+  
+  g_return_if_fail (GDK_IS_WINDOW (window));
+  g_return_if_fail (GDK_IS_DRAWABLE (drawable));
+  g_return_if_fail (GDK_WINDOW_TYPE (window) != GDK_WINDOW_ROOT);
+
+  private = (GdkWindowObject *) window;
+
+  if (private->redirect)
+    gdk_window_remove_redirection (window);
+
+  if (width == -1 || height == -1)
+    {
+      gint w, h;
+      gdk_drawable_get_size (GDK_DRAWABLE (window), &w, &h);
+      if (width == -1)
+	width = w;
+      if (height == -1)
+	height = h;
+    }
+  
+  private->redirect = g_new0 (GdkWindowRedirect, 1);
+  private->redirect->redirected = private;
+  private->redirect->pixmap = g_object_ref (drawable);
+  private->redirect->src_x = src_x;
+  private->redirect->src_y = src_y;
+  private->redirect->dest_x = dest_x;
+  private->redirect->dest_y = dest_y;
+  private->redirect->width = width;
+  private->redirect->height = height;
+
+  apply_redirect_to_children (private, private->redirect);
+}
+
+static void
+window_get_size_rectangle (GdkWindow    *window,
+                           GdkRectangle *rect)
+{
+  rect->x = rect->y = 0;
+  gdk_drawable_get_size (GDK_DRAWABLE (window), &rect->width, &rect->height);
+}
+
+/* Calculates the real clipping region for a window, in window coordinates,
+ * taking into account other windows, gc clip region and gc clip mask.
+ */
+static GdkRegion *
+_gdk_window_calculate_full_clip_region (GdkWindow *window,
+					GdkWindow *base_window,
+					GdkGC *gc,
+					gboolean do_children,
+					gint *base_x_offset,
+					gint *base_y_offset)
+{
+  GdkWindowObject *private = GDK_WINDOW_OBJECT (window);
+  GdkRectangle visible_rect;
+  GdkRegion *real_clip_region, *tmpreg;
+  gint x_offset, y_offset;
+  GdkWindowObject *parentwin, *lastwin;
+
+  if (base_x_offset)
+    *base_x_offset = 0;
+  if (base_y_offset)
+    *base_y_offset = 0;
+  
+  if (!GDK_WINDOW_IS_MAPPED (window) || private->input_only)
+    return gdk_region_new ();
+
+  window_get_size_rectangle (window, &visible_rect);
+
+  /* windows that a redirection has ben setup for need to be considered
+   * fully visible, in order to avoid missing redirected paint ops
+   * anywhere in the window area.
+   */
+  if (private->redirect && private->redirect->redirected == private)
+    return gdk_region_rectangle (&visible_rect);
+
+  /* real_clip_region is in window coordinates */
+  real_clip_region = gdk_region_rectangle (&visible_rect);
+
+  x_offset = y_offset = 0;
+
+  lastwin = private;
+  if (do_children)
+    parentwin = lastwin;
+  else
+    parentwin = lastwin->parent;
+  
+  /* Remove the areas of all overlapping windows above parentwin in the hiearachy */
+  for (; parentwin != NULL && (parentwin == private || lastwin != (GdkWindowObject *)base_window);
+       lastwin = parentwin, parentwin = lastwin->parent)
+    {
+      GList *cur;
+      GdkRectangle real_clip_rect;
+      
+      if (parentwin != private)
+	{
+	  x_offset += GDK_WINDOW_OBJECT (lastwin)->x;
+	  y_offset += GDK_WINDOW_OBJECT (lastwin)->y;
+	}
+      
+      /* children is ordered in reverse stack order */
+      for (cur = GDK_WINDOW_OBJECT (parentwin)->children; cur && cur->data != lastwin; cur = cur->next)
+	{
+	  GdkWindow *child = cur->data;
+	  GdkWindowObject *child_private = (GdkWindowObject *)child;
+	  
+	  if (!GDK_WINDOW_IS_MAPPED (child) || child_private->input_only)
+	    continue;
+	  
+	  window_get_size_rectangle (child, &visible_rect);
+	  
+	  /* Convert rect to "window" coords */
+	  visible_rect.x += child_private->x - x_offset;
+	  visible_rect.y += child_private->y - y_offset;
+	  
+	  /* This shortcut is really necessary for performance when there are a lot of windows */
+	  gdk_region_get_clipbox (real_clip_region, &real_clip_rect);
+	  if (visible_rect.x >= real_clip_rect.x + real_clip_rect.width ||
+	      visible_rect.x + visible_rect.width <= real_clip_rect.x ||
+	      visible_rect.y >= real_clip_rect.y + real_clip_rect.height ||
+	      visible_rect.y + visible_rect.height <= real_clip_rect.y)
+	    continue;
+	  
+	  tmpreg = gdk_region_rectangle (&visible_rect);
+	  gdk_region_subtract (real_clip_region, tmpreg);
+	  gdk_region_destroy (tmpreg);
+	}
+      
+    }
+
+  if (gc)
+    {
+      GdkRegion *clip_region = _gdk_gc_get_clip_region (gc);
+      
+      if (clip_region)
+	{
+	  /* clip_region is relative to gc clip origin which is relative to the window */
+	  /* offset it to window relative: */
+	  tmpreg = gdk_region_copy (clip_region);
+	  gdk_region_offset (real_clip_region,
+			     gc->clip_x_origin,
+			     gc->clip_y_origin);
+	  /* Intersect it with window hierarchy cliprect: */
+	  gdk_region_intersect (real_clip_region, tmpreg);
+	  gdk_region_destroy (tmpreg);
+	}
+    }
+
+  if (base_x_offset)
+    *base_x_offset = x_offset;
+  if (base_y_offset)
+    *base_y_offset = y_offset;
+
+  return real_clip_region;
+}
+
+static void
+gdk_window_add_damage (GdkWindow *toplevel,
+		       GdkRegion *damaged_region)
+{
+  GdkDisplay *display;
+  GdkEvent event = { 0, };
+  event.expose.type = GDK_DAMAGE;
+  event.expose.window = toplevel;
+  event.expose.send_event = FALSE;
+  event.expose.region = damaged_region;
+  gdk_region_get_clipbox (event.expose.region, &event.expose.area);
+  display = gdk_drawable_get_display (event.expose.window);
+  _gdk_event_queue_append (display, gdk_event_copy (&event));
+}
+
+static void
+setup_redirect_clip (GdkWindow         *window,
+		     GdkGC             *gc,
+		     GdkWindowClipData *data)
+{
+  GdkWindowObject *private = (GdkWindowObject *)window;
+  GdkRegion *visible_region;
+  GdkRectangle dest_rect;
+  GdkRegion *tmpreg;
+  GdkWindow *toplevel;
+
+  data->old_region = _gdk_gc_get_clip_region (gc);
+  if (data->old_region) 
+    data->old_region = gdk_region_copy (data->old_region);
+
+  data->old_clip_x_origin = gc->clip_x_origin;
+  data->old_clip_y_origin = gc->clip_y_origin;
+
+  toplevel = GDK_WINDOW (private->redirect->redirected);
+  
+  /* Get the clip region for gc clip rect + window hierarchy in
+     window relative coords */
+  visible_region =
+    _gdk_window_calculate_full_clip_region (window, toplevel,
+					    gc, TRUE,
+					    &data->x_offset, 
+					    &data->y_offset);
+
+  /* Compensate for the source pos/size */
+  data->x_offset -= private->redirect->src_x;
+  data->y_offset -= private->redirect->src_y;
+  dest_rect.x = -data->x_offset;
+  dest_rect.y = -data->y_offset;
+  dest_rect.width = private->redirect->width;
+  dest_rect.height = private->redirect->height;
+  tmpreg = gdk_region_rectangle (&dest_rect);
+  gdk_region_intersect (visible_region, tmpreg);
+  gdk_region_destroy (tmpreg);
+
+  /* Compensate for the dest pos */
+  data->x_offset += private->redirect->dest_x;
+  data->y_offset += private->redirect->dest_y;
+
+  gdk_gc_set_clip_region (gc, visible_region); /* This resets clip origin! */
+
+  /* offset clip and tiles from window coords to pixmaps coords */
+  gdk_gc_offset (gc, -data->x_offset, -data->y_offset);
+
+  /* Offset region to abs coords and add to damage */
+  gdk_region_offset (visible_region, data->x_offset, data->y_offset);
+  gdk_window_add_damage (toplevel, visible_region);
+  
+  gdk_region_destroy (visible_region);
+}
+
+static void
+reset_redirect_clip (GdkWindow *offscreen, GdkGC *gc, GdkWindowClipData *data)
+{
+  /* offset back */
+  gdk_gc_offset (gc, data->x_offset, data->y_offset);
+
+  /* reset old clip */
+  gdk_gc_set_clip_region (gc, data->old_region);
+  if (data->old_region)
+    gdk_region_destroy (data->old_region);
+  gdk_gc_set_clip_origin (gc, data->old_clip_x_origin, data->old_clip_y_origin);
+}
+
+static void
+gdk_window_redirect_free (GdkWindowRedirect *redirect)
+{
+  g_object_unref (redirect->pixmap);
+  g_free (redirect);
 }
 
 #define __GDK_WINDOW_C__
