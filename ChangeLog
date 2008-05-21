@@ -1,3 +1,9 @@
+2008-05-21  Richard Hult  <richard@imendio.com>
+
+	* gdk/quartz/gdkwindow-quartz.c:
+	(_gdk_window_new), (_gdk_window_reparent): Renamed to adapt to the
+	offscreen rendering changes, fixes build.
+
 2008-05-21 21:10:15  Tim Janik  <timj@imendio.com>
 
 	* gtk/gtkwidget.h: added GdkRectangle *clip_rect to gtk_widget_get_snapshot().
