@@ -1,3 +1,11 @@
+2008-05-21  Michael Natterer  <mitch@imendio.com>
+
+	* gtk/gtkalignment.c
+	* gtk/gtkarrow.c
+	* gtk/gtkbbox.c
+	* gtk/gtkcalendar.c
+	* gtk/gtkscrolledwindow.c: remove PROP_LAST enum values.
+
 2008-05-20  Matthias Clasen  <mclasen@redhat.com>
 
 	RH bug 204621 - "GtkPrint" asks for "Letter" size paper when "A4" size

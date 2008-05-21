@@ -35,11 +35,8 @@
 
 enum {
   PROP_0,
-
   PROP_ARROW_TYPE,
-  PROP_SHADOW_TYPE,
-  
-  PROP_LAST
+  PROP_SHADOW_TYPE
 };
 
 

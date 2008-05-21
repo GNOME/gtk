@@ -32,8 +32,7 @@
 
 enum {
   PROP_0,
-  PROP_LAYOUT_STYLE,
-  PROP_LAST
+  PROP_LAYOUT_STYLE
 };
 
 enum {
