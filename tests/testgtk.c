@@ -12259,16 +12259,16 @@ snapshot_widget_event (GtkWidget	       *widget,
       if (res_widget)
 	{
 	  GdkPixmap *pixmap;
-          GdkPixbuf *pixbuf = NULL;
 	  GtkWidget *window, *image;
 
 	  window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
-	  pixmap = gtk_widget_get_snapshot (res_widget);
+	  pixmap = gtk_widget_get_snapshot (res_widget, NULL);
           gtk_widget_realize (window);
           if (gdk_drawable_get_depth (window->window) != gdk_drawable_get_depth (pixmap))
             {
               /* this branch is needed to convert ARGB -> RGB */
               int width, height;
+              GdkPixbuf *pixbuf;
               gdk_drawable_get_size (pixmap, &width, &height);
               pixbuf = gdk_pixbuf_get_from_drawable (NULL, pixmap,
                                                      gtk_widget_get_colormap (res_widget),
@@ -12276,10 +12276,10 @@ snapshot_widget_event (GtkWidget	       *widget,
                                                      0, 0,
                                                      width, height);
               image = gtk_image_new_from_pixbuf (pixbuf);
+              g_object_unref (pixbuf);
             }
           else
             image = gtk_image_new_from_pixmap (pixmap, NULL);
-          g_object_unref (pixbuf);
 	  gtk_container_add (GTK_CONTAINER (window), image);
           g_object_unref (pixmap);
 	  gtk_widget_show_all (window);

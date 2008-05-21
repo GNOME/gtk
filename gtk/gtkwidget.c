@@ -8313,31 +8313,50 @@ gtk_widget_unref (GtkWidget *widget)
 
 /**
  * gtk_widget_get_snapshot:
- * @widget: a #GtkWidget
+ * @widget:    a #GtkWidget
+ * @clip_rect: a #GdkRectangle or %NULL
  *
- * Creates a #GdkPixmap of the contents of the widget and its
- * children. Works even if the widget is obscured.
- * Note that the depth and visual of the resulting pixmap is dependent
- * on the widget being snapshot and likely differs from those of a target
- * widget displaying the pixmap. Use gdk_pixbuf_get_from_drawable()
- * to convert the pixmap to a visual independant representation.
+ * Create a #GdkPixmap of the contents of the widget and its children.
+ * Works even if the widget is obscured. The depth and visual of the
+ * resulting pixmap is dependent on the widget being snapshot and likely
+ * differs from those of a target widget displaying the pixmap.
+ * The function gdk_pixbuf_get_from_drawable() can be used to convert
+ * the pixmap to a visual independant representation.
+ * The snapshot area used by this function is the @widget's allocation plus
+ * any extra space occupied by additional windows belonging to this widget
+ * (such as the arrows of a spin button).
+ * Thus, the resulting snapshot pixmap is possibly larger than the allocation.
+ * If @clip_rect is non NULL, the resulting pixmap is shrunken to
+ * match the specified clip_rect. The (x,y) coordinates of @clip_rect are
+ * interpreted widget relative. If width or height of @clip_rect are 0 or
+ * negative, the width or height of the resulting pixmap will be shrunken
+ * by the respective amount.
+ * For instance a @clip_rect <literal>{ +5, +5, -10, -10 }</literal> will
+ * chop off 5 pixel at each side of the snapshot pixmap.
+ * If non-%NULL, clip_rect will contain the exact widget relative snapshot
+ * coordinates upon return. A @clip_rect of <literal>{ -1, -1, 0, 0 }</literal>
+ * can be used to preserve the auto-grown snapshot area and use @clip_rect
+ * as a pure output parameter.
+ * The returned pixmap can be %NULL, if the resulting clip_area was empty.
  *
- * Return value: #GdkPixmap of the widget
+ * Return value: #GdkPixmap snapshot of the widget
  * Since: 2.16
  **/
 GdkPixmap*
-gtk_widget_get_snapshot (GtkWidget *widget)
+gtk_widget_get_snapshot (GtkWidget    *widget,
+                         GdkRectangle *clip_rect)
 {
   int x, y, width, height;
   GdkWindow *parent_window = NULL;
   GdkPixmap *pixmap;
 
+  /* the widget (and parent_window) must be realized to be drawable */
   if (widget->parent && !GTK_WIDGET_REALIZED (widget->parent))
     gtk_widget_realize (widget->parent);
   if (!GTK_WIDGET_REALIZED (widget))
     gtk_widget_realize (widget);
 
-  /* figure snapshot rectangle */
+  /* determine snapshot rectangle */
   x = widget->allocation.x;
   y = widget->allocation.y;
   width = widget->allocation.width;
@@ -8345,6 +8364,7 @@ gtk_widget_get_snapshot (GtkWidget *widget)
   GList *windows = NULL, *list;
   if (widget->parent && !GTK_WIDGET_NO_WINDOW (widget))
     {
+      /* grow snapshot rectangle to cover all widget windows */
       parent_window = gtk_widget_get_parent_window (widget);
       for (list = gdk_window_peek_children (parent_window); list; list = list->next)
         {
@@ -8377,18 +8397,50 @@ gtk_widget_get_snapshot (GtkWidget *widget)
   else if (!widget->parent)
     x = y = 0; /* toplevel */
 
+  /* at this point, (x,y,width,height) is the parent_window relative
+   * snapshot area covering all of widget's windows.
+   */
+
+  /* shrink snapshot size by clip_rectangle */
+  if (clip_rect)
+    {
+      GdkRectangle snap = { x, y, width, height }, clip = *clip_rect;
+      clip.x = clip.x < 0 ? x : clip.x;
+      clip.y = clip.y < 0 ? y : clip.y;
+      clip.width = clip.width <= 0 ? MAX (0, width + clip.width) : clip.width;
+      clip.height = clip.height <= 0 ? MAX (0, height + clip.height) : clip.height;
+      if (widget->parent)
+        {
+          /* offset clip_rect, so it's parent_window relative */
+          if (clip_rect->x >= 0)
+            clip.x += widget->allocation.x;
+          if (clip_rect->y >= 0)
+            clip.y += widget->allocation.y;
+        }
+      if (!gdk_rectangle_intersect (&snap, &clip, &snap))
+        {
+          g_list_free (windows);
+          clip_rect->width = clip_rect->height = 0;
+          return NULL; /* empty snapshot area */
+        }
+      x = snap.x;
+      y = snap.y;
+      width = snap.width;
+      height = snap.height;
+    }
+
   /* render snapshot */
   pixmap = gdk_pixmap_new (widget->window, width, height, gdk_drawable_get_depth (widget->window));
-  for (list = windows; list; list = list->next)
+  for (list = windows; list; list = list->next) /* !NO_WINDOW widgets */
     {
       GdkWindow *subwin = list->data;
       int wx, wy;
       gdk_window_get_position (subwin, &wx, &wy);
       gdk_window_redirect_to_drawable (subwin, pixmap, MAX (0, x - wx), MAX (0, y - wy),
-                                       wx - x, wy - y, width, height);
+                                       MAX (0, wx - x), MAX (0, wy - y), width, height);
       gdk_window_invalidate_rect (subwin, NULL, TRUE);
     }
-  if (!windows) /* NO_WINDOW || toplevel */
+  if (!windows) /* NO_WINDOW || toplevel => parent_window == NULL || parent_window == widget->window */
     {
       gdk_window_redirect_to_drawable (widget->window, pixmap, x, y, 0, 0, width, height);
       gdk_window_invalidate_rect (widget->window, NULL, TRUE);
@@ -8404,6 +8456,25 @@ gtk_widget_get_snapshot (GtkWidget *widget)
   if (!windows) /* NO_WINDOW || toplevel */
     gdk_window_remove_redirection (widget->window);
   g_list_free (windows);
+
+  /* return pixmap and snapshot rectangle coordinates */
+  if (clip_rect)
+    {
+      clip_rect->x = x;
+      clip_rect->y = y;
+      clip_rect->width = width;
+      clip_rect->height = height;
+      if (widget->parent)
+        {
+          /* offset clip_rect from parent_window so it's widget relative */
+          clip_rect->x -= widget->allocation.x;
+          clip_rect->y -= widget->allocation.y;
+        }
+      if (0)
+        g_printerr ("gtk_widget_get_snapshot: %s (%d,%d, %dx%d)\n",
+                    G_OBJECT_TYPE_NAME (widget),
+                    clip_rect->x, clip_rect->y, clip_rect->width, clip_rect->height);
+    }
   return pixmap;
 }
 

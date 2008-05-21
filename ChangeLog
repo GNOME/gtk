@@ -1,3 +1,12 @@
+2008-05-21 21:10:15  Tim Janik  <timj@imendio.com>
+
+	* gtk/gtkwidget.h: added GdkRectangle *clip_rect to gtk_widget_get_snapshot().
+
+	* gtk/gtkwidget.c: clip the returned snapshot pixmap to clip_rect.
+	return snapshot pixmap coordinates widget relative in *clip_rect.
+
+	* tests/testgtk.c: fixed bogus NULL pointer unref.
+
 2008-05-21 21:04:28  Tim Janik  <timj@imendio.com>
 
 	* gtk/gtkwidget.c gtk_widget_get_snapshot(): grow snapshot area from

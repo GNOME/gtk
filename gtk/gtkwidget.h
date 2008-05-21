@@ -614,7 +614,8 @@ GdkWindow *   gtk_widget_get_root_window (GtkWidget *widget);
 GtkSettings*  gtk_widget_get_settings    (GtkWidget *widget);
 GtkClipboard *gtk_widget_get_clipboard   (GtkWidget *widget,
 					  GdkAtom    selection);
-GdkPixmap *   gtk_widget_get_snapshot    (GtkWidget *widget);
+GdkPixmap *   gtk_widget_get_snapshot    (GtkWidget    *widget,
+                                          GdkRectangle *clip_rect);
 
 #ifndef GTK_DISABLE_DEPRECATED
 #define gtk_widget_set_visual(widget,visual)  ((void) 0)
