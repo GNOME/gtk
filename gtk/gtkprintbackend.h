@@ -99,6 +99,7 @@ struct _GtkPrintBackendClass
 							      GtkPrintSettings    *settings,
 							      GtkPageSetup        *page_setup);
   GList  *              (*printer_list_papers)               (GtkPrinter          *printer);
+  GtkPageSetup *        (*printer_get_default_page_size)     (GtkPrinter          *printer);
   void                  (*printer_get_hard_margins)          (GtkPrinter          *printer,
 							      double              *top,
 							      double              *bottom,
@@ -123,7 +124,6 @@ struct _GtkPrintBackendClass
   void (*_gtk_reserved4) (void);
   void (*_gtk_reserved5) (void);
   void (*_gtk_reserved6) (void);
-  void (*_gtk_reserved7) (void);
 };
 
 GType   gtk_print_backend_get_type       (void) G_GNUC_CONST;

@@ -133,6 +133,7 @@ struct GtkPrintUnixDialogPrivate
   GtkTreeModelFilter *printer_list_filter;
 
   GtkPageSetup *page_setup;
+  gboolean page_setup_set;
 
   GtkWidget *all_pages_radio;
   GtkWidget *current_page_radio;
@@ -407,6 +408,7 @@ gtk_print_unix_dialog_init (GtkPrintUnixDialog *dialog)
   priv->current_page = -1;
 
   priv->page_setup = gtk_page_setup_new ();
+  priv->page_setup_set = FALSE;
 
   g_signal_connect (dialog, 
                     "destroy", 
@@ -1440,6 +1442,20 @@ selected_printer_changed (GtkTreeSelection   *selection,
 
   if (printer != NULL)
     {
+      if (!priv->page_setup_set)
+	{
+	  /* if no explicit page setup has been set, use the printer default */	  
+  	  GtkPageSetup *page_setup;
+
+	  page_setup = gtk_printer_get_default_page_size (printer);
+
+	  if (!page_setup)
+	    page_setup = gtk_page_setup_new ();
+
+	  g_object_unref (priv->page_setup);
+	  priv->page_setup = page_setup;
+	}
+
       priv->printer_capabilities = gtk_printer_get_capabilities (printer);
       priv->options = _gtk_printer_get_options (printer, 
 						priv->initial_settings,
@@ -2649,6 +2665,8 @@ gtk_print_unix_dialog_set_page_setup (GtkPrintUnixDialog *dialog,
     {
       g_object_unref (priv->page_setup);
       priv->page_setup = g_object_ref (page_setup);
+
+      priv->page_setup_set = TRUE;
 
       g_object_notify (G_OBJECT (dialog), "page-setup");
     }

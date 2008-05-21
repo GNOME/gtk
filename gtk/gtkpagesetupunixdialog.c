@@ -681,8 +681,6 @@ fill_paper_sizes_from_printer (GtkPageSetupUnixDialog *dialog,
   GtkTreeIter iter;
   gint i;
 
-  current_page_setup = get_current_page_setup (dialog);
-  
   gtk_list_store_clear (priv->page_setup_list);
 
   if (printer == NULL)
@@ -720,6 +718,15 @@ fill_paper_sizes_from_printer (GtkPageSetupUnixDialog *dialog,
 
   fill_custom_paper_sizes (dialog);
   
+  current_page_setup = NULL;
+
+  /* When selecting a different printer, select its default paper size */
+  if (printer != NULL)
+    current_page_setup = gtk_printer_get_default_page_size (printer);
+
+  if (current_page_setup == NULL)
+    current_page_setup = get_current_page_setup (dialog);
+
   if (!set_paper_size (dialog, current_page_setup, FALSE, FALSE))
     set_paper_size (dialog, current_page_setup, TRUE, TRUE);
   

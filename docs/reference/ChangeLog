@@ -1,5 +1,9 @@
 2008-05-20  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtk-sections.txt: Add gtk_printer_get_default_page_size
+
+2008-05-20  Matthias Clasen  <mclasen@redhat.com>
+
 	Bug 533761 - gdk_accelerator_parse() does not exist, should be
 	gtk_accelerator_parse()
 

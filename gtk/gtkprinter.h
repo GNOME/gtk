@@ -83,28 +83,29 @@ struct _GtkPrinterClass
   void (*_gtk_reserved7) (void);
 };
 
-GType                    gtk_printer_get_type          (void) G_GNUC_CONST;
-GtkPrinter              *gtk_printer_new               (const gchar     *name,
-							GtkPrintBackend *backend,
-							gboolean         virtual_);
-GtkPrintBackend         *gtk_printer_get_backend       (GtkPrinter      *printer);
-G_CONST_RETURN gchar    *gtk_printer_get_name          (GtkPrinter      *printer);
-G_CONST_RETURN gchar    *gtk_printer_get_state_message (GtkPrinter      *printer);
-G_CONST_RETURN gchar    *gtk_printer_get_description   (GtkPrinter      *printer);
-G_CONST_RETURN gchar    *gtk_printer_get_location      (GtkPrinter      *printer);
-G_CONST_RETURN gchar    *gtk_printer_get_icon_name     (GtkPrinter      *printer);
-gint                     gtk_printer_get_job_count     (GtkPrinter      *printer);
-gboolean                 gtk_printer_is_active         (GtkPrinter      *printer);
-gboolean                 gtk_printer_is_virtual        (GtkPrinter      *printer);
-gboolean                 gtk_printer_is_default        (GtkPrinter      *printer);
-gboolean                 gtk_printer_accepts_pdf       (GtkPrinter      *printer);
-gboolean                 gtk_printer_accepts_ps        (GtkPrinter      *printer);
-GList                   *gtk_printer_list_papers       (GtkPrinter      *printer);
-gint                     gtk_printer_compare           (GtkPrinter *a,
-							GtkPrinter *b);
-gboolean                 gtk_printer_has_details       (GtkPrinter       *printer);
-void                     gtk_printer_request_details   (GtkPrinter       *printer);
-GtkPrintCapabilities     gtk_printer_get_capabilities  (GtkPrinter       *printer);
+GType                    gtk_printer_get_type              (void) G_GNUC_CONST;
+GtkPrinter              *gtk_printer_new                   (const gchar     *name,
+							    GtkPrintBackend *backend,
+							    gboolean         virtual_);
+GtkPrintBackend         *gtk_printer_get_backend           (GtkPrinter      *printer);
+G_CONST_RETURN gchar    *gtk_printer_get_name              (GtkPrinter      *printer);
+G_CONST_RETURN gchar    *gtk_printer_get_state_message     (GtkPrinter      *printer);
+G_CONST_RETURN gchar    *gtk_printer_get_description       (GtkPrinter      *printer);
+G_CONST_RETURN gchar    *gtk_printer_get_location          (GtkPrinter      *printer);
+G_CONST_RETURN gchar    *gtk_printer_get_icon_name         (GtkPrinter      *printer);
+gint                     gtk_printer_get_job_count         (GtkPrinter      *printer);
+gboolean                 gtk_printer_is_active             (GtkPrinter      *printer);
+gboolean                 gtk_printer_is_virtual            (GtkPrinter      *printer);
+gboolean                 gtk_printer_is_default            (GtkPrinter      *printer);
+gboolean                 gtk_printer_accepts_pdf           (GtkPrinter      *printer);
+gboolean                 gtk_printer_accepts_ps            (GtkPrinter      *printer);
+GList                   *gtk_printer_list_papers           (GtkPrinter      *printer);
+GtkPageSetup            *gtk_printer_get_default_page_size (GtkPrinter      *printer);
+gint                     gtk_printer_compare               (GtkPrinter *a,
+						    	    GtkPrinter *b);
+gboolean                 gtk_printer_has_details           (GtkPrinter       *printer);
+void                     gtk_printer_request_details       (GtkPrinter       *printer);
+GtkPrintCapabilities     gtk_printer_get_capabilities      (GtkPrinter       *printer);
 
 typedef gboolean (*GtkPrinterFunc) (GtkPrinter *printer,
 				    gpointer    data);

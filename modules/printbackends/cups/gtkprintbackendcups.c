@@ -136,6 +136,7 @@ static void                 cups_printer_prepare_for_print         (GtkPrinter  
 								    GtkPrintSettings                  *settings,
 								    GtkPageSetup                      *page_setup);
 static GList *              cups_printer_list_papers               (GtkPrinter                        *printer);
+static GtkPageSetup *       cups_printer_get_default_page_size     (GtkPrinter                        *printer);
 static void                 cups_printer_request_details           (GtkPrinter                        *printer);
 static void                 cups_request_default_printer           (GtkPrintBackendCups               *print_backend);
 static void                 cups_request_ppd                       (GtkPrinter                        *printer);
@@ -255,6 +256,7 @@ gtk_print_backend_cups_class_init (GtkPrintBackendCupsClass *class)
   backend_class->printer_get_settings_from_options = cups_printer_get_settings_from_options;
   backend_class->printer_prepare_for_print = cups_printer_prepare_for_print;
   backend_class->printer_list_papers = cups_printer_list_papers;
+  backend_class->printer_get_default_page_size = cups_printer_get_default_page_size;
   backend_class->printer_get_hard_margins = cups_printer_get_hard_margins;
   backend_class->printer_get_capabilities = cups_printer_get_capabilities;
 }
@@ -1437,6 +1439,8 @@ cups_request_ppd_cb (GtkPrintBackendCups *print_backend,
   /* let ppdOpenFd take over the ownership of the open file */
   g_io_channel_seek_position (data->ppd_io, 0, G_SEEK_SET, NULL);
   data->printer->ppd_file = ppdOpenFd (dup (g_io_channel_unix_get_fd (data->ppd_io)));
+
+  ppdMarkDefaults (data->printer->ppd_file);
   
   gtk_printer_set_has_details (printer, TRUE);
   g_signal_emit_by_name (printer, "details-acquired", TRUE);
@@ -3121,16 +3125,52 @@ cups_printer_prepare_for_print (GtkPrinter       *printer,
   print_job->rotate_to_orientation = TRUE;
 }
 
+static GtkPageSetup *
+create_page_setup (ppd_file_t *ppd_file,
+		   ppd_size_t *size)
+ {
+   char *display_name;
+   GtkPageSetup *page_setup;
+   GtkPaperSize *paper_size;
+   ppd_option_t *option;
+   ppd_choice_t *choice;
+
+  display_name = NULL;
+  option = ppdFindOption (ppd_file, "PageSize");
+  if (option)
+    {
+      choice = ppdFindChoice (option, size->name);
+      if (choice)
+	display_name = ppd_text_to_utf8 (ppd_file, choice->text);
+    }
+
+  if (display_name == NULL)
+    display_name = g_strdup (size->name);
+  
+  page_setup = gtk_page_setup_new ();
+  paper_size = gtk_paper_size_new_from_ppd (size->name,
+					    display_name,
+					    size->width,
+					    size->length);
+  gtk_page_setup_set_paper_size (page_setup, paper_size);
+  gtk_paper_size_free (paper_size);
+  
+  gtk_page_setup_set_top_margin (page_setup, size->length - size->top, GTK_UNIT_POINTS);
+  gtk_page_setup_set_bottom_margin (page_setup, size->bottom, GTK_UNIT_POINTS);
+  gtk_page_setup_set_left_margin (page_setup, size->left, GTK_UNIT_POINTS);
+  gtk_page_setup_set_right_margin (page_setup, size->width - size->right, GTK_UNIT_POINTS);
+  
+  g_free (display_name);
+
+  return page_setup;
+}
+
 static GList *
 cups_printer_list_papers (GtkPrinter *printer)
 {
   ppd_file_t *ppd_file;
   ppd_size_t *size;
-  char *display_name;
   GtkPageSetup *page_setup;
-  GtkPaperSize *paper_size;
-  ppd_option_t *option;
-  ppd_choice_t *choice;
   GList *l;
   int i;
 
@@ -3142,38 +3182,32 @@ cups_printer_list_papers (GtkPrinter *printer)
   
   for (i = 0; i < ppd_file->num_sizes; i++)
     {
-      size = &ppd_file->sizes[i];
+      size = &ppd_file->sizes[i];      
 
-      display_name = NULL;
-      option = ppdFindOption (ppd_file, "PageSize");
-      if (option)
-	{
-	  choice = ppdFindChoice (option, size->name);
-	  if (choice)
-	    display_name = ppd_text_to_utf8 (ppd_file, choice->text);
-	}
-      if (display_name == NULL)
-	display_name = g_strdup (size->name);
-
-      page_setup = gtk_page_setup_new ();
-      paper_size = gtk_paper_size_new_from_ppd (size->name,
-						display_name,
-						size->width,
-						size->length);
-      gtk_page_setup_set_paper_size (page_setup, paper_size);
-      gtk_paper_size_free (paper_size);
-
-      gtk_page_setup_set_top_margin (page_setup, size->length - size->top, GTK_UNIT_POINTS);
-      gtk_page_setup_set_bottom_margin (page_setup, size->bottom, GTK_UNIT_POINTS);
-      gtk_page_setup_set_left_margin (page_setup, size->left, GTK_UNIT_POINTS);
-      gtk_page_setup_set_right_margin (page_setup, size->width - size->right, GTK_UNIT_POINTS);
-	
-      g_free (display_name);
+      page_setup = create_page_setup (ppd_file, size);
 
       l = g_list_prepend (l, page_setup);
     }
 
   return g_list_reverse (l);
+}
+
+static GtkPageSetup *
+cups_printer_get_default_page_size (GtkPrinter *printer)
+{
+  ppd_file_t *ppd_file;
+  ppd_size_t *size;
+  ppd_option_t *option;
+
+
+  ppd_file = gtk_printer_cups_get_ppd (GTK_PRINTER_CUPS (printer));
+  if (ppd_file == NULL)
+    return NULL;
+
+  option = ppdFindOption (ppd_file, "PageSize");
+  size = ppdPageSize (ppd_file, option->defchoice); 
+
+  return create_page_setup (ppd_file, size);
 }
 
 static void

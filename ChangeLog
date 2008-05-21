@@ -1,3 +1,28 @@
+2008-05-20  Matthias Clasen  <mclasen@redhat.com>
+
+	RH bug 204621 - "GtkPrint" asks for "Letter" size paper when "A4" size
+	was chosen
+
+	Patch by Marek Kasik.
+
+	* gtk/gtk.symbols:
+	* gtk/gtkprinter.[hc]: Add gtk_printer_get_default_page_size.
+	
+	* gtk/gtkprintbackend.[hc]: Add fallback implementation.
+
+	* modules/printbackends/file/gtkprintbackendfile.c:
+	* modules/printbackends/cups/gtkprintbackendcups.c: Implement
+	get_default_page_size.
+
+	* gtk/gtkpagesetupunixdialog.c: When selecting a different printer,
+	select its default paper size.
+
+	* gtk/gtkprintunixdialog.c: If no explicit page setup has been set,
+	use the printer default.
+
+	* gtk/gtkprintoperation-unix.c: Don't create an empty page setup
+	if we don't have a default page setup.
+
 2008-05-20  Gian Mario Tagliaretti  <gianmt@gnome.org>
 
 	* gtk/gtkdnd.c: (gtk_drag_set_icon_pixmap): Fix the docs, the mask param

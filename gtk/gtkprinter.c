@@ -832,6 +832,27 @@ gtk_printer_list_papers (GtkPrinter *printer)
   return backend_class->printer_list_papers (printer);
 }
 
+/**
+ * gtk_printer_get_default_page_size:
+ * @printer: a #GtkPrinter
+ * 
+ * Returns default page size of @printer.
+ * 
+ * Return value: a newly allocated #GtkPageSetup with default page size of the printer.
+ *
+ * Since: 2.13
+ */
+GtkPageSetup  *
+gtk_printer_get_default_page_size (GtkPrinter *printer)
+{
+  GtkPrintBackendClass *backend_class;
+
+  g_return_val_if_fail (GTK_IS_PRINTER (printer), NULL);
+
+  backend_class = GTK_PRINT_BACKEND_GET_CLASS (printer->priv->backend);
+  return backend_class->printer_get_default_page_size (printer);
+}
+
 void
 _gtk_printer_get_hard_margins (GtkPrinter *printer,
 			       gdouble    *top,

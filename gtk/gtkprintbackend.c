@@ -283,16 +283,17 @@ gtk_print_backend_load_modules (void)
 
 G_DEFINE_TYPE (GtkPrintBackend, gtk_print_backend, G_TYPE_OBJECT)
 
-static void                 fallback_printer_request_details  (GtkPrinter          *printer);
-static gboolean             fallback_printer_mark_conflicts   (GtkPrinter          *printer,
-							       GtkPrinterOptionSet *options);
-static void                 fallback_printer_get_hard_margins (GtkPrinter          *printer,
-							       gdouble             *top,
-							       gdouble             *bottom,
-							       gdouble             *left,
-							       gdouble             *right);
-static GList *              fallback_printer_list_papers      (GtkPrinter          *printer);
-static GtkPrintCapabilities fallback_printer_get_capabilities (GtkPrinter          *printer);
+static void                 fallback_printer_request_details       (GtkPrinter          *printer);
+static gboolean             fallback_printer_mark_conflicts        (GtkPrinter          *printer,
+								    GtkPrinterOptionSet *options);
+static void                 fallback_printer_get_hard_margins      (GtkPrinter          *printer,
+								    gdouble             *top,
+								    gdouble             *bottom,
+								    gdouble             *left,
+								    gdouble             *right);
+static GList *              fallback_printer_list_papers           (GtkPrinter          *printer);
+static GtkPageSetup *       fallback_printer_get_default_page_size (GtkPrinter          *printer);
+static GtkPrintCapabilities fallback_printer_get_capabilities      (GtkPrinter          *printer);
   
 static void
 gtk_print_backend_class_init (GtkPrintBackendClass *class)
@@ -308,6 +309,7 @@ gtk_print_backend_class_init (GtkPrintBackendClass *class)
   class->printer_mark_conflicts = fallback_printer_mark_conflicts;
   class->printer_get_hard_margins = fallback_printer_get_hard_margins;
   class->printer_list_papers = fallback_printer_list_papers;
+  class->printer_get_default_page_size = fallback_printer_get_default_page_size;
   class->printer_get_capabilities = fallback_printer_get_capabilities;
   
   g_type_class_add_private (class, sizeof (GtkPrintBackendPrivate));
@@ -415,6 +417,12 @@ fallback_printer_get_hard_margins (GtkPrinter *printer,
 
 static GList *
 fallback_printer_list_papers (GtkPrinter *printer)
+{
+  return NULL;
+}
+
+static GtkPageSetup *
+fallback_printer_get_default_page_size (GtkPrinter *printer)
 {
   return NULL;
 }

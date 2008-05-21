@@ -6435,6 +6435,7 @@ gtk_printer_compare
 gtk_printer_has_details
 gtk_printer_request_details
 gtk_printer_get_capabilities
+gtk_printer_get_default_page_size
 GtkPrinterFunc
 gtk_enumerate_printers
 

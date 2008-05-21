@@ -349,7 +349,6 @@ get_print_dialog (GtkPrintOperation *op,
 {
   GtkPrintOperationPrivate *priv = op->priv;
   GtkWidget *pd, *label;
-  GtkPageSetup *page_setup;
   const gchar *custom_tab_label;
 
   pd = gtk_print_unix_dialog_new (NULL, parent);
@@ -366,13 +365,8 @@ get_print_dialog (GtkPrintOperation *op,
     gtk_print_unix_dialog_set_settings (GTK_PRINT_UNIX_DIALOG (pd),
 					priv->print_settings);
   if (priv->default_page_setup)
-    page_setup = gtk_page_setup_copy (priv->default_page_setup);
-  else
-    page_setup = gtk_page_setup_new ();
-
-  gtk_print_unix_dialog_set_page_setup (GTK_PRINT_UNIX_DIALOG (pd), 
-                                        page_setup);
-  g_object_unref (page_setup);
+    gtk_print_unix_dialog_set_page_setup (GTK_PRINT_UNIX_DIALOG (pd), 
+                                          priv->default_page_setup);
 
   g_signal_emit_by_name (op, "create-custom-widget",
 			 &priv->custom_widget);
@@ -432,6 +426,10 @@ finish_print (PrintResponseData *rdata,
     {
       gtk_print_operation_set_print_settings (op, settings);
       priv->print_context = _gtk_print_context_new (op);
+
+      if ( (page_setup != NULL) && (gtk_print_operation_get_default_page_setup (op) == NULL))
+        gtk_print_operation_set_default_page_setup (op, page_setup);
+
       _gtk_print_context_set_page_setup (priv->print_context, page_setup);
 
       if (!rdata->do_preview)

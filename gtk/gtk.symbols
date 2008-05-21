@@ -2704,6 +2704,7 @@ gtk_printer_get_type G_GNUC_CONST
 gtk_printer_get_backend
 gtk_printer_get_name
 gtk_printer_get_description
+gtk_printer_get_default_page_size
 gtk_printer_get_state_message
 gtk_printer_get_location
 gtk_printer_get_icon_name

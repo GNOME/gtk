@@ -104,6 +104,7 @@ static cairo_surface_t *    file_printer_create_cairo_surface      (GtkPrinter  
 								    GIOChannel              *cache_io);
 
 static GList *              file_printer_list_papers               (GtkPrinter              *printer);
+static GtkPageSetup *       file_printer_get_default_page_size     (GtkPrinter              *printer);
 
 static void
 gtk_print_backend_file_register_type (GTypeModule *module)
@@ -182,6 +183,7 @@ gtk_print_backend_file_class_init (GtkPrintBackendFileClass *class)
   backend_class->printer_get_settings_from_options = file_printer_get_settings_from_options;
   backend_class->printer_prepare_for_print = file_printer_prepare_for_print;
   backend_class->printer_list_papers = file_printer_list_papers;
+  backend_class->printer_get_default_page_size = file_printer_get_default_page_size;
 }
 
 /* return N_FORMATS if no explicit format in the settings */
@@ -696,4 +698,12 @@ file_printer_list_papers (GtkPrinter *printer)
   g_list_free (papers);
 
   return g_list_reverse (result);
+}
+
+static GtkPageSetup *
+file_printer_get_default_page_size (GtkPrinter *printer)
+{
+  GtkPageSetup *result = NULL;
+
+  return result;
 }
