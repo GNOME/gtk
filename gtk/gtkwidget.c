@@ -8328,34 +8328,82 @@ gtk_widget_unref (GtkWidget *widget)
 GdkPixmap*
 gtk_widget_get_snapshot (GtkWidget *widget)
 {
+  int x, y, width, height;
+  GdkWindow *parent_window = NULL;
   GdkPixmap *pixmap;
-  int x, y;
 
+  if (widget->parent && !GTK_WIDGET_REALIZED (widget->parent))
+    gtk_widget_realize (widget->parent);
   if (!GTK_WIDGET_REALIZED (widget))
     gtk_widget_realize (widget);
 
-  pixmap = gdk_pixmap_new (widget->window,
-			   widget->allocation.width,
-			   widget->allocation.height,
-			   gdk_drawable_get_depth (widget->window));
-  if (GTK_WIDGET_NO_WINDOW (widget))
+  /* figure snapshot rectangle */
+  x = widget->allocation.x;
+  y = widget->allocation.y;
+  width = widget->allocation.width;
+  height = widget->allocation.height;
+  GList *windows = NULL, *list;
+  if (widget->parent && !GTK_WIDGET_NO_WINDOW (widget))
     {
-      x = widget->allocation.x;
-      y = widget->allocation.y;
+      parent_window = gtk_widget_get_parent_window (widget);
+      for (list = gdk_window_peek_children (parent_window); list; list = list->next)
+        {
+          GdkWindow *subwin = list->data;
+          gpointer windata;
+          int wx, wy, ww, wh;
+          gdk_window_get_user_data (subwin, &windata);
+          if (windata != widget)
+            continue;
+          windows = g_list_prepend (windows, subwin);
+          gdk_window_get_position (subwin, &wx, &wy);
+          gdk_drawable_get_size (subwin, &ww, &wh);
+          /* grow snapshot rectangle by extra widget sub window */
+          if (wx < x)
+            {
+              width += x - wx;
+              x = wx;
+            }
+          if (wy < y)
+            {
+              height += y - wy;
+              y = wy;
+            }
+          if (x + width < wx + ww)
+            width += wx + ww - (x + width);
+          if (y + height < wy + wh)
+            height += wy + wh - (y + height);
+        }
     }
-  else
-    x = y = 0;
+  else if (!widget->parent)
+    x = y = 0; /* toplevel */
 
-  gdk_window_redirect_to_drawable (widget->window,
-				   pixmap,
-				   x, y,
-				   0, 0,
-				   widget->allocation.width,
-				   widget->allocation.height);
+  /* render snapshot */
+  pixmap = gdk_pixmap_new (widget->window, width, height, gdk_drawable_get_depth (widget->window));
+  for (list = windows; list; list = list->next)
+    {
+      GdkWindow *subwin = list->data;
+      int wx, wy;
+      gdk_window_get_position (subwin, &wx, &wy);
+      gdk_window_redirect_to_drawable (subwin, pixmap, MAX (0, x - wx), MAX (0, y - wy),
+                                       wx - x, wy - y, width, height);
+      gdk_window_invalidate_rect (subwin, NULL, TRUE);
+    }
+  if (!windows) /* NO_WINDOW || toplevel */
+    {
+      gdk_window_redirect_to_drawable (widget->window, pixmap, x, y, 0, 0, width, height);
+      gdk_window_invalidate_rect (widget->window, NULL, TRUE);
+    }
   gtk_widget_queue_draw (widget);
+  if (parent_window)
+    gdk_window_process_updates (parent_window, TRUE);
+  for (list = windows; list; list = list->next)
+    gdk_window_process_updates (list->data, TRUE);
   gdk_window_process_updates (widget->window, TRUE);
-  gdk_window_remove_redirection (widget->window);
-
+  for (list = windows; list; list = list->next)
+    gdk_window_remove_redirection (list->data);
+  if (!windows) /* NO_WINDOW || toplevel */
+    gdk_window_remove_redirection (widget->window);
+  g_list_free (windows);
   return pixmap;
 }
 

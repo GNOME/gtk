@@ -1,3 +1,9 @@
+2008-05-21 21:04:28  Tim Janik  <timj@imendio.com>
+
+	* gtk/gtkwidget.c gtk_widget_get_snapshot(): grow snapshot area from
+	widget's allocation to cover extra widget windows placed outside the
+	widget allocation (spinbutton arrows are the prime example for this).
+
 2008-03-18 10:49:20  Tim Janik  <timj@imendio.com>
 
 	* Applied pixmap redirection patch by Alexander Larsson with
