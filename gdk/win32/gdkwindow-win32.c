@@ -508,7 +508,7 @@ gdk_window_new_internal (GdkWindow     *parent,
   orig_parent = parent;
 
   GDK_NOTE (MISC,
-	    g_print ("gdk_window_new: %s\n",
+	    g_print ("gdk_window_new_internal: %s\n",
 		     (attributes->window_type == GDK_WINDOW_TOPLEVEL ? "TOPLEVEL" :
 		      (attributes->window_type == GDK_WINDOW_CHILD ? "CHILD" :
 		       (attributes->window_type == GDK_WINDOW_DIALOG ? "DIALOG" :
@@ -757,9 +757,9 @@ gdk_window_new_internal (GdkWindow     *parent,
 }
 
 GdkWindow*
-gdk_window_new (GdkWindow     *parent,
-		GdkWindowAttr *attributes,
-		gint           attributes_mask)
+_gdk_window_new (GdkWindow     *parent,
+		 GdkWindowAttr *attributes,
+		 gint           attributes_mask)
 {
   return gdk_window_new_internal (parent, attributes, attributes_mask, FALSE);
 }
@@ -1350,10 +1350,10 @@ gdk_window_move_resize (GdkWindow *window,
 }
 
 void
-gdk_window_reparent (GdkWindow *window,
-		     GdkWindow *new_parent,
-		     gint       x,
-		     gint       y)
+_gdk_window_reparent (GdkWindow *window,
+		      GdkWindow *new_parent,
+		      gint       x,
+		      gint       y)
 {
   GdkWindowObject *window_private;
   GdkWindowObject *parent_private;
@@ -1361,16 +1361,6 @@ gdk_window_reparent (GdkWindow *window,
   GdkWindowImplWin32 *impl;
   gboolean was_toplevel;
   LONG style;
-
-  g_return_if_fail (GDK_IS_WINDOW (window));
-  g_return_if_fail (new_parent == NULL || GDK_IS_WINDOW (new_parent));
-  g_return_if_fail (window != _gdk_root);
-
-  if (GDK_WINDOW_DESTROYED (window) ||
-      (new_parent && GDK_WINDOW_DESTROYED (new_parent)))
-    {
-      return;
-    }
 
   if (!new_parent)
     new_parent = _gdk_root;
@@ -1380,7 +1370,7 @@ gdk_window_reparent (GdkWindow *window,
   parent_private = (GdkWindowObject*) new_parent;
   impl = GDK_WINDOW_IMPL_WIN32 (window_private->impl);
 
-  GDK_NOTE (MISC, g_print ("gdk_window_reparent: %p: %p\n",
+  GDK_NOTE (MISC, g_print ("_gdk_window_reparent: %p: %p\n",
 			   GDK_WINDOW_HWND (window),
 			   GDK_WINDOW_HWND (new_parent)));
 

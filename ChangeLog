@@ -1,5 +1,17 @@
 2008-05-23  Tor Lillqvist  <tml@novell.com>
 
+	* gdk/gdk.symbols: Add gdk_window_redirect_to_drawable and
+	gdk_window_remove_redirection.
+
+	* gdk/win32/gdkwindow-win32.c (_gdk_window_new)
+	(_gdk_window_reparent): Rename to adapt to the offscreen rendering
+	changes. Remove now unnecessary parameter checks as the caller
+	does that already.
+
+	* gtk/gtk.symbols: Add gtk_widget_get_snapshot.
+
+2008-05-23  Tor Lillqvist  <tml@novell.com>
+
 	* gdk/win32/gdkwindow-win32.c (update_style_bits): Don't do
 	anything if style doesn't change. Improve debugging output.
 
