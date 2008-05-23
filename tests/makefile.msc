@@ -55,7 +55,7 @@ TESTAPPS = \
 	testprint \
 	testrecentchooser testrecentchoosermenu testrgb testrichtext \
 	testselection testspinbutton \
-	testtext testtextbuffer testtoolbar testtooltips \
+	testtext textbuffertest testtoolbar testtooltips \
 	testtreecolumns testtreeedit testtreeflow testtreefocus \
 	testtreemodel testtreesort testtreeview treestoretest \
 	testsocket testsocket_child teststatusicon \
@@ -76,6 +76,9 @@ one-test-app:
 
 EXTRA_OBJETCS = prop-editor.obj
 
+!IFDEF EXTRA_buildertest
+EXTRA_LIBS = $(ATK_LIBS)
+!ENDIF
 
 !IFDEF EXTRA_testprint
 EXTRA_OBJETCS = testprintfileoperation.obj

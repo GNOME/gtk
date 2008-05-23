@@ -1,3 +1,12 @@
+2008-05-23  Hans Breuer  <hans@breuer.org>
+
+	* **/makefile.msc gtk/makefile.msc.in : updated
+	* gtk/gtkwidget.c : fix c99ism (variable at start of block
+	* gdk/gdk.symbols gtk/gtk.symbols : export functions for window 
+	redirection
+	* gtk/gtkfilechooserdefault.c : #include <locale.h> for 
+	setlocale(LC_ALL, ...)
+
 2008-05-23  Tor Lillqvist  <tml@novell.com>
 
 	* gdk/gdk.symbols: Add gdk_window_redirect_to_drawable and

@@ -1,15 +1,18 @@
 ## Makefile for building the GDK DLL with Microsoft C
 ## Use: nmake -f makefile.msc
 
-# Location of the Wintab toolkit. Downloadable from http://www.pointing.com.
-WTKIT = ..\..\..\wtkit126
-
 ################################################################
 
 # Nothing much configurable below
 
 TOP = ../../..
 !INCLUDE $(TOP)/glib/build/win32/make.msc
+
+# Location of the Wintab toolkit. Downloadable from http://www.pointing.com.
+# definition should possibly go to build/win32/module.def, too.
+!IFNDEF WTKIT
+WTKIT = $(TOP)\wtkit126
+!ENDIF
 
 GTK_VER=2.0
 
@@ -25,6 +28,7 @@ all: \
 	gdk.res
 
 gdk_win32_OBJECTS = \
+	gdkapplaunchcontext-win32.obj \
 	gdkcolor-win32.obj \
 	gdkcursor-win32.obj \
 	gdkdnd-win32.obj \
@@ -47,6 +51,7 @@ gdk_win32_OBJECTS = \
 	gdkscreen-win32.obj \
 	gdkselection-win32.obj \
 	gdkspawn-win32.obj \
+	gdktestutils-win32.obj \
 	gdkvisual-win32.obj \
 	gdkwin32id.obj \
 	gdkwindow-win32.obj

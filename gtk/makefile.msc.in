@@ -73,7 +73,7 @@ gtkbuiltincache.h: gtk-update-icon-cache.exe
 GENERATED = \
 	gtktypebuiltins.h gtktypebuiltins.c \
 	gtkmarshal.h gtkmarshal.c gtkmarshalers.h gtkmarshalers.c \
-	gtk.def gtkalias.h gtkaliasdef.c
+	gtk.def gtkalias.h gtkaliasdef.c gtktypefuncs.c
 
 all :						\
 	..\config.h				\
@@ -85,242 +85,256 @@ all :						\
 #	gtk-win32-$(GTK_VER)s.lib \
 #	gtk-x11-$(GTK_VER).dll
 
-gtk_OBJECTS = 					\
-	fnmatch.obj				\
-	gtkaboutdialog.obj	\
-	gtkaccelgroup.obj			\
-	gtkaccellabel.obj			\
-	gtkaccelmap.obj	\
-	gtkaccessible.obj \
-	gtkaction.obj	\
-	gtkactiongroup.obj	\
-	gtkadjustment.obj			\
-	gtkalignment.obj			\
-	gtkarrow.obj				\
-	gtkaspectframe.obj			\
-	gtkassistant.obj	\
-	gtkbin.obj				\
-	gtkbindings.obj				\
-	gtkbbox.obj				\
-	gtkbox.obj				\
-	gtkbuildable.obj	\
-	gtkbuilder.obj		\
-	gtkbuilderparser.obj	\
-	gtkbutton.obj				\
-	gtkcalendar.obj				\
-	gtkcelleditable.obj			\
-	gtkcelllayout.obj			\
-	gtkcellrenderer.obj			\
+gtk_OBJECTS_deprecated = \
+	gtkcombo.obj \
+	gtkclist.obj \
+	gtkctree.obj \
+	gtkfilesel.obj \
+	gtktext.obj \
+	gtktoolbar.obj \
+	gtklist.obj \
+	gtkitemfactory.obj \
+	gtkoptionmenu.obj \
+	gtktree.obj \
+	gtktreeitem.obj \
+	gtkoldeditable.obj \
+	gtklistitem.obj \
+	gtkprogress.obj \
+	gtktipsquery.obj \
+	gtksignal.obj \
+	gtkpixmap.obj \
+	gtkpreview.obj \
+	gtkseparatortoolitem.obj \
+	gtktypeutils.obj \
+	gtktooltips.obj \
+
+gtk_OBJECTS_cell = \
+	gtkcelleditable.obj \
+	gtkcelllayout.obj \
+	gtkcellrenderer.obj \
 	gtkcellrendereraccel.obj \
 	gtkcellrenderercombo.obj \
-	gtkcellrenderertext.obj			\
-	gtkcellrenderertoggle.obj		\
-	gtkcellrendererpixbuf.obj		\
-	gtkcellrendererprogress.obj		\
+	gtkcellrenderertext.obj \
+	gtkcellrenderertoggle.obj \
+	gtkcellrendererpixbuf.obj \
+	gtkcellrendererprogress.obj \
 	gtkcellrendererspin.obj	\
-	gtkcellview.obj		\
-	gtkcheckbutton.obj			\
-	gtkcheckmenuitem.obj			\
-	gtkclipboard.obj			\
-	gtkclist.obj				\
-	gtkcolorbutton.obj				\
-	gtkcolorsel.obj				\
-	gtkcolorseldialog.obj			\
-	gtkcombo.obj				\
-	gtkcombobox.obj			\
-	gtkcomboboxentry.obj		\
-	gtkcontainer.obj			\
-	gtkctree.obj				\
-	gtkcurve.obj				\
-	gtkdialog.obj				\
-	gtkdnd.obj				\
-	gtkdrawingarea.obj			\
-	gtkeditable.obj				\
-	gtkentry.obj				\
-	gtkentrycompletion.obj		\
-	gtkeventbox.obj				\
-	gtkexpander.obj			\
-	gtkfilechooser.obj			\
-	gtkfilechooserbutton.obj	\
-	gtkfilechooserdefault.obj			\
-	gtkfilechooserdialog.obj			\
-	gtkfilechooserembed.obj		\
-	gtkfilechooserentry.obj			\
-	gtkfilechoosersettings.obj	\
-	gtkfilechooserutils.obj			\
-	gtkfilechooserwidget.obj			\
-	gtkfilefilter.obj			\
-	gtkfilesel.obj				\
-	gtkfilesystem.obj				\
-	gtkfilesystemmodel.obj				\
-	gtkfilesystemwin32.obj				\
-	gtkfixed.obj				\
-	gtkfontsel.obj				\
-	gtkfontbutton.obj				\
-	gtkframe.obj				\
-	gtkgamma.obj				\
-	gtkgc.obj				\
-	gtkhandlebox.obj			\
-	gtkhbbox.obj				\
-	gtkhbox.obj				\
-	gtkhpaned.obj				\
-	gtkhruler.obj				\
-	gtkhscale.obj				\
-	gtkhscrollbar.obj			\
-	gtkhseparator.obj			\
-	gtkhsv.obj				\
-	gtkiconcache.obj			\
-	gtkiconcachevalidator.obj	\
-	gtkiconfactory.obj			\
-	gtkicontheme.obj			\
-	gtkiconview.obj			\
-	gtkimage.obj				\
-	gtkimagemenuitem.obj	\
-	gtkimcontext.obj			\
-	gtkimcontextsimple.obj			\
-	gtkimmodule.obj				\
-	gtkimmulticontext.obj			\
-	gtkinputdialog.obj			\
-	gtkinvisible.obj			\
-	gtkitem.obj				\
-	gtkitemfactory.obj			\
-	gtkkeyhash.obj	\
-	gtklabel.obj				\
-	gtklayout.obj				\
-	gtklinkbutton.obj	\
-	gtklist.obj				\
-	gtklistitem.obj				\
-	gtkliststore.obj				\
-	gtkmain.obj				\
-	gtkmarshalers.obj		\
-	gtkmarshal.obj		\
-	gtkmenu.obj				\
-	gtkmenubar.obj				\
-	gtkmenuitem.obj				\
-	gtkmenushell.obj			\
-	gtkmenutoolbutton.obj	\
-	gtkmessagedialog.obj			\
-	gtkmisc.obj				\
-	gtkmnemonichash.obj	\
-	gtkmodules.obj	\
-	gtknotebook.obj				\
-	gtkobject.obj				\
-	gtkoldeditable.obj			\
-	gtkoptionmenu.obj			\
-	gtkpagesetup.obj	\
-	gtkpaned.obj				\
-	gtkpapersize.obj	\
-	gtkpathbar.obj				\
-	gtkpixmap.obj				\
-	gtkplug.obj				\
-	gtkplug-win32.obj				\
-	gtkpreview.obj	\
-	gtkprint-win32.obj	\
-	gtkprintcontext.obj	\
-	gtkprintoperation.obj	\
-	gtkprintoperationpreview.obj	\
-	gtkprintoperation-win32.obj	\
-	gtkprintsettings.obj	\
-	gtkprintutils.obj	\
-	gtkprogress.obj				\
-	gtkprogressbar.obj			\
-	gtkquery.obj	\
-	gtkradioaction.obj			\
-	gtkradiobutton.obj			\
-	gtkradiotoolbutton.obj			\
-	gtkradiomenuitem.obj			\
-	gtkrange.obj				\
-	gtkrbtree.obj	\
-	gtkrc.obj				\
+	gtkcellview.obj \
+	gtkliststore.obj \
+	gtktreednd.obj \
+	gtktreemodel.obj \
+	gtktreemodelfilter.obj \
+	gtktreemodelsort.obj \
+	gtktreeselection.obj \
+	gtktreesortable.obj \
+	gtktreestore.obj \
+	gtktreeview.obj \
+	gtktreeviewcolumn.obj \
+
+gtk_OBJECTS_file = \
+	gtkfilechooser.obj \
+	gtkfilechooserbutton.obj \
+	gtkfilechooserdefault.obj \
+	gtkfilechooserdialog.obj \
+	gtkfilechooserembed.obj \
+	gtkfilechooserentry.obj \
+	gtkfilechoosersettings.obj \
+	gtkfilechooserutils.obj \
+	gtkfilechooserwidget.obj \
+	gtkfilefilter.obj \
+	gtkfilesystem.obj \
+	gtkfilesystemmodel.obj \
+	gtkfilesystemwin32.obj \
+
+gtk_OBJECTS_print = \
+	gtkprint-win32.obj \
+	gtkprintcontext.obj \
+	gtkprintoperation.obj \
+	gtkprintoperationpreview.obj \
+	gtkprintoperation-win32.obj \
+	gtkprintsettings.obj \
+	gtkprintutils.obj \
+
+gtk_OBJECTS_text = \
+	gtktestutils.obj \
+	gtktextbtree.obj \
+	gtktextbuffer.obj \
+	gtktextbufferrichtext.obj \
+	gtktextbufferserialize.obj \
+	gtktextchild.obj \
+	gtktextdisplay.obj \
+	gtktextiter.obj \
+	gtktextlayout.obj \
+	gtktextmark.obj \
+	gtktextsegment.obj \
+	gtktexttag.obj \
+	gtktexttagtable.obj \
+	gtktexttypes.obj \
+	gtktextutil.obj	\
+	gtktextview.obj \
+
+gtk_OBJECTS_recent = \
 	gtkrecentaction.obj \
 	gtkrecentchooserdefault.obj \
 	gtkrecentchooserdialog.obj \
-	gtkrecentchoosermenu.obj 	\
+	gtkrecentchoosermenu.obj \
 	gtkrecentchooserwidget.obj \
 	gtkrecentchooserutils.obj \
-	gtkrecentchooser.obj 	\
-	gtkrecentfilter.obj 	\
-	gtkrecentmanager.obj 	\
-	gtkruler.obj				\
-	gtkscale.obj				\
-	gtkscalebutton.obj	\
-	gtkscrollbar.obj			\
-	gtkscrolledwindow.obj			\
-	gtksearchengine.obj	\
-	gtksearchenginebeagle.obj	\
-	gtksearchenginesimple.obj	\
-	gtksearchenginetracker.obj	\
-	gtkselection.obj			\
-	gtkseparator.obj			\
+	gtkrecentchooser.obj \
+	gtkrecentfilter.obj \
+	gtkrecentmanager.obj \
+
+gtk_OBJECTS = \
+	fnmatch.obj \
+	gtkaboutdialog.obj \
+	gtkaccelgroup.obj \
+	gtkaccellabel.obj \
+	gtkaccelmap.obj	\
+	gtkaccessible.obj \
+	gtkaction.obj \
+	gtkactiongroup.obj \
+	gtkadjustment.obj \
+	gtkalignment.obj \
+	gtkarrow.obj \
+	gtkaspectframe.obj \
+	gtkassistant.obj \
+	gtkbin.obj \
+	gtkbindings.obj \
+	gtkbbox.obj \
+	gtkbox.obj \
+	gtkbuildable.obj \
+	gtkbuilder.obj \
+	gtkbuilderparser.obj \
+	gtkbutton.obj \
+	gtkcalendar.obj \
+	gtkcheckbutton.obj \
+	gtkcheckmenuitem.obj \
+	gtkclipboard.obj \
+	gtkcolorbutton.obj \
+	gtkcolorsel.obj \
+	gtkcolorseldialog.obj \
+	gtkcombobox.obj	\
+	gtkcomboboxentry.obj \
+	gtkcontainer.obj \
+	gtkcurve.obj \
+	gtkdialog.obj \
+	gtkdnd.obj \
+	gtkdrawingarea.obj \
+	gtkeditable.obj \
+	gtkentry.obj \
+	gtkentrycompletion.obj \
+	gtkeventbox.obj \
+	gtkexpander.obj \
+	gtkfixed.obj \
+	gtkfontsel.obj \
+	gtkfontbutton.obj \
+	gtkframe.obj \
+	gtkgamma.obj \
+	gtkgc.obj \
+	gtkhandlebox.obj \
+	gtkhbbox.obj \
+	gtkhbox.obj \
+	gtkhpaned.obj \
+	gtkhruler.obj \
+	gtkhscale.obj \
+	gtkhscrollbar.obj \
+	gtkhseparator.obj \
+	gtkhsv.obj \
+	gtkiconcache.obj \
+	gtkiconcachevalidator.obj \
+	gtkiconfactory.obj \
+	gtkicontheme.obj \
+	gtkiconview.obj \
+	gtkimage.obj \
+	gtkimagemenuitem.obj \
+	gtkimcontext.obj \
+	gtkimcontextsimple.obj \
+	gtkimmodule.obj	\
+	gtkimmulticontext.obj \
+	gtkinputdialog.obj \
+	gtkinvisible.obj \
+	gtkitem.obj \
+	gtkkeyhash.obj	\
+	gtklabel.obj \
+	gtklayout.obj \
+	gtklinkbutton.obj \
+	gtkmain.obj \
+	gtkmarshalers.obj \
+	gtkmarshal.obj \
+	gtkmenu.obj \
+	gtkmenubar.obj \
+	gtkmenuitem.obj \
+	gtkmenushell.obj \
+	gtkmenutoolbutton.obj \
+	gtkmessagedialog.obj \
+	gtkmisc.obj \
+	gtkmnemonichash.obj \
+	gtkmodules.obj \
+	gtkmountoperation.obj \
+	gtknotebook.obj \
+	gtkobject.obj \
+	gtkpagesetup.obj \
+	gtkpaned.obj \
+	gtkpapersize.obj \
+	gtkpathbar.obj \
+	gtkplug.obj \
+	gtkplug-win32.obj \
+	gtkprogressbar.obj \
+	gtkquery.obj \
+	gtkradioaction.obj \
+	gtkradiobutton.obj \
+	gtkradiotoolbutton.obj \
+	gtkradiomenuitem.obj \
+	gtkrange.obj \
+	gtkrbtree.obj \
+	gtkrc.obj \
+	gtkruler.obj \
+	gtkscale.obj \
+	gtkscalebutton.obj \
+	gtkscrollbar.obj \
+	gtkscrolledwindow.obj \
+	gtksearchengine.obj \
+	gtksearchenginebeagle.obj \
+	gtksearchenginesimple.obj \
+	gtksearchenginetracker.obj \
+	gtkselection.obj \
+	gtkseparator.obj \
 	gtkseparatormenuitem.obj \
-	gtkseparatortoolitem.obj \
 	gtksettings.obj \
-	gtksignal.obj				\
 	gtksizegroup.obj \
-	gtksocket.obj				\
-	gtksocket-win32.obj				\
-	gtkspinbutton.obj			\
-	gtkstatusicon.obj	\
-	gtkstyle.obj				\
-	gtkstatusbar.obj			\
-	gtkstock.obj				\
-	gtktable.obj				\
-	gtktearoffmenuitem.obj			\
-	gtktext.obj				\
-	gtktextbtree.obj			\
-	gtktextbuffer.obj			\
-	gtktextbufferrichtext.obj	\
-	gtktextbufferserialize.obj	\
-	gtktextchild.obj			\
-	gtktextdisplay.obj			\
-	gtktextiter.obj				\
-	gtktextlayout.obj			\
-	gtktextmark.obj				\
-	gtktextsegment.obj			\
-	gtktexttag.obj				\
-	gtktexttagtable.obj			\
-	gtktexttypes.obj			\
-	gtktextutil.obj	\
-	gtktextview.obj				\
-	gtkthemes.obj				\
-	gtktipsquery.obj			\
-	gtktoggleaction.obj			\
-	gtktogglebutton.obj			\
-	gtktoggletoolbutton.obj			\
-	gtktoolbar.obj				\
-	gtktoolbutton.obj				\
-	gtktoolitem.obj				\
-	gtktooltip.obj				\
-	gtktooltips.obj				\
-	gtktrayicon-win32.obj	\
-	gtktree.obj				\
-	gtktreedatalist.obj	\
-	gtktreednd.obj				\
-	gtktreeitem.obj				\
-	gtktreemodel.obj			\
-	gtktreemodelfilter.obj			\
-	gtktreemodelsort.obj			\
-	gtktreeselection.obj			\
-	gtktreesortable.obj \
-	gtktreestore.obj			\
-	gtktreeview.obj			\
-	gtktreeviewcolumn.obj			\
-	gtktypeutils.obj			\
+	gtksocket.obj \
+	gtksocket-win32.obj \
+	gtkspinbutton.obj \
+	gtkstatusicon.obj \
+	gtkstyle.obj \
+	gtkstatusbar.obj \
+	gtkstock.obj \
+	gtktable.obj \
+	gtktearoffmenuitem.obj \
+	gtkthemes.obj \
+	gtktoggleaction.obj \
+	gtktogglebutton.obj \
+	gtktoggletoolbutton.obj \
+	gtktoolbutton.obj \
+	gtktoolitem.obj \
+	gtktoolshell.obj \
+	gtktooltip.obj \
+	gtktreedatalist.obj \
 	gtktypebuiltins.obj \
-	gtkuimanager.obj	\
-	gtkvbbox.obj				\
-	gtkvbox.obj				\
-	gtkviewport.obj				\
-	gtkvolumebutton.obj	\
-	gtkvpaned.obj				\
-	gtkvruler.obj				\
-	gtkvscale.obj				\
-	gtkvscrollbar.obj			\
-	gtkvseparator.obj			\
-	gtkwidget.obj				\
-	gtkwin32embed.obj			\
-	gtkwin32embedwidget.obj			\
-	gtkwindow.obj				\
+	gtkuimanager.obj \
+	gtkvbbox.obj \
+	gtkvbox.obj \
+	gtkviewport.obj \
+	gtkvolumebutton.obj \
+	gtkvpaned.obj \
+	gtkvruler.obj \
+	gtkvscale.obj \
+	gtkvscrollbar.obj \
+	gtkvseparator.obj \
+	gtkwidget.obj \
+	gtkwin32embed.obj \
+	gtkwin32embedwidget.obj \
+	gtkwindow.obj \
 	gtkwindow-decorate.obj
 
 # Source headers which are non-autogenerated headers
@@ -428,6 +442,7 @@ gtk_public_h_sources =		\
 	gtkmessagedialog.h	\
 	gtkmisc.h		\
 	gtkmodules.h		\
+	gtkmountoperation.h	\
 	gtknotebook.h		\
 	gtkobject.h		\
 	gtkoldeditable.h	\
@@ -582,17 +597,51 @@ gtkmarshal.h : gtkmarshal.list
 gtkmarshal.c : gtkmarshal.list
 	$(GLIB)\gobject\glib-genmarshal --prefix=gtk_marshal gtkmarshal.list --body >gtkmarshal.c
 
+gtktypefuncs.c : makefile.msc
+	echo /*none*/ > gtktypefuncs.c
 gtksignal.obj : gtksignal.c gtkmarshal.c gtkmarshal.h
 	$(CC) $(CFLAGS) -GD -c -DGTK_COMPILATION -DG_LOG_DOMAIN=\"Gtk\" gtksignal.c
 
 gtk-win32.res : gtk-win32.rc
 	rc -DBUILDNUMBER=0 -r -fo gtk-win32.res gtk-win32.rc
 
+# build some static limits to covercome command line too long
+# may also speed up the build
+gtk-deprecated.lib : $(gtk_OBJECTS_deprecated)
+	lib /out:gtk-deprecated.lib $(gtk_OBJECTS_deprecated)
+
+gtk-cell.lib : $(gtk_OBJECTS_cell)
+	lib /out:gtk-cell.lib $(gtk_OBJECTS_cell)
+
+gtk-file.lib : $(gtk_OBJECTS_file)
+	lib /out:gtk-file.lib $(gtk_OBJECTS_file)
+
+gtk-print.lib : $(gtk_OBJECTS_print)
+	lib /out:gtk-print.lib $(gtk_OBJECTS_print)
+
+gtk-recent.lib : $(gtk_OBJECTS_recent)
+	lib /out:gtk-recent.lib $(gtk_OBJECTS_recent)
+
+gtk-text.lib : $(gtk_OBJECTS_text)
+	lib /out:gtk-text.lib $(gtk_OBJECTS_text)
+
+gtk-core.lib : $(gtk_OBJECTS) 
+	lib /out:gtk-core.lib $(gtk_OBJECTS)
+
+gtk_SUBLIBS = \
+	gtk-deprecated.lib \
+	gtk-cell.lib \
+	gtk-file.lib \
+	gtk-print.lib \
+	gtk-recent.lib \
+	gtk-text.lib \
+	gtk-core.lib
+
 #
 # Linking:
 #
-libgtk-win32-$(GTK_VER)-0.dll : $(gtk_OBJECTS) gtk.def gtk-win32.res
-	$(CC) $(CFLAGS) -LD -Fm -Fe$@ $(gtk_OBJECTS) gtk-win32.res \
+libgtk-win32-$(GTK_VER)-0.dll : $(gtk_SUBLIBS) gtk.def gtk-win32.res
+	$(CC) $(CFLAGS) -LD -Fm -Fe$@ $(gtk_SUBLIBS) gtk-win32.res \
 	$(GDK_LIBS) $(GDK_PIXBUF_LIBS) $(PANGO_LIBS) $(INTL_LIBS) $(GLIB_LIBS) $(GMODULE_LIBS) \
 	$(CAIRO_LIBS) $(PANGOCAIRO_LIBS) \
 	gdi32.lib user32.lib advapi32.lib wsock32.lib shell32.lib ole32.lib comdlg32.lib winspool.lib comctl32.lib \

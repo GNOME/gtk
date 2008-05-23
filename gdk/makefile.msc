@@ -11,7 +11,9 @@ TOP = ..\..
 
 # Location of the Wintab toolkit. Downloadable from http://www.pointing.com.
 # definition should possibly go to build/win32/module.def, too.
-WTKIT = ..\..\wtkit126
+!IFNDEF WTKIT
+WTKIT = $(TOP)\wtkit126
+!ENDIF
 
 ###############################################################
 
@@ -46,10 +48,12 @@ CFLAGS = -FImsvc_recommended_pragmas.h -I . -I .. \
 	-DGDK_VERSION=\"$(GTK_VER)\" \
 	-DG_LOG_DOMAIN=\"Gdk\"
 
-EXTRALIBS = $(WTKIT)\lib\i386\wntab32x.lib $(GLIB_LIBS) \
-		..\gdk-pixbuf\gdk_pixbuf-$(GDK_PIXBUF_VER).lib \
-		$(PANGOWIN32_LIBS) $(INTL_LIBS) $(CAIRO_LIBS) \
-		$(PANGOCAIRO_LIBS)
+EXTRALIBS = \
+	$(WTKIT)\lib\i386\wntab32x.lib \
+	$(GLIB_LIBS) \
+	..\gdk-pixbuf\gdk_pixbuf-$(GDK_PIXBUF_VER).lib \
+	$(PANGOWIN32_LIBS) $(INTL_LIBS) $(CAIRO_LIBS) \
+	$(PANGOCAIRO_LIBS)
 
 gdk-win32-backend :
 	cd win32
@@ -73,6 +77,7 @@ all: \
 
 gdk_OBJECTS = \
 	gdk.obj \
+	gdkapplaunchcontext.obj \
 	gdkcairo.obj \
 	gdkcolor.obj \
 	gdkcursor.obj \
@@ -134,11 +139,13 @@ gdkmarshalers.h : gdkmarshalers.list
 gdkmarshalers.c : gdkmarshalers.list
 	$(GLIB)\gobject\glib-genmarshal --prefix=gdk_marshal gdkmarshalers.list --body >gdkmarshalers.c
 
-gdkenumtypes.h: $(gdk_public_h_sources) makeenums.pl
-	$(PERL) makeenums.pl include $(gdk_public_h_sources) > gdkenumtypes.h
+gdkenumtypes.h: $(gdk_public_h_sources) gdkenumtypes.h.template
+	$(PERL) $(GLIB)\gobject\glib-mkenums --template gdkenumtypes.h.template \
+		$(gdk_public_h_sources) > gdkenumtypes.h
 
-gdkenumtypes.c: $(gdk_public_h_sources) makeenums.pl
-	$(PERL) makeenums.pl cfile $(gdk_public_h_sources) > gdkenumtypes.c
+gdkenumtypes.c: $(gdk_public_h_sources) gdkenumtypes.c.template
+	$(PERL) $(GLIB)\gobject\glib-mkenums --template gdkenumtypes.c.template \
+		$(gdk_public_h_sources) > gdkenumtypes.c
 
 ..\config.h : ..\config.h.win32
 	copy ..\config.h.win32 ..\config.h

@@ -8349,6 +8349,7 @@ gtk_widget_get_snapshot (GtkWidget    *widget,
   int x, y, width, height;
   GdkWindow *parent_window = NULL;
   GdkPixmap *pixmap;
+  GList *windows = NULL, *list;
 
   /* the widget (and parent_window) must be realized to be drawable */
   if (widget->parent && !GTK_WIDGET_REALIZED (widget->parent))
@@ -8361,7 +8362,7 @@ gtk_widget_get_snapshot (GtkWidget    *widget,
   y = widget->allocation.y;
   width = widget->allocation.width;
   height = widget->allocation.height;
-  GList *windows = NULL, *list;
+
   if (widget->parent && !GTK_WIDGET_NO_WINDOW (widget))
     {
       /* grow snapshot rectangle to cover all widget windows */
