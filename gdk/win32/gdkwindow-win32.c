@@ -2886,35 +2886,44 @@ static void
 update_style_bits (GdkWindow *window)
 {
   GdkWMDecoration decorations;
-  LONG style, exstyle;
+  LONG old_style, new_style, exstyle;
   gboolean all;
   RECT rect, before, after;
 
-  style = GetWindowLong (GDK_WINDOW_HWND (window), GWL_STYLE);
+  old_style = GetWindowLong (GDK_WINDOW_HWND (window), GWL_STYLE);
   exstyle = GetWindowLong (GDK_WINDOW_HWND (window), GWL_EXSTYLE);
 
   GetClientRect (GDK_WINDOW_HWND (window), &before);
   after = before;
-  AdjustWindowRectEx (&before, style, FALSE, exstyle);
+  AdjustWindowRectEx (&before, old_style, FALSE, exstyle);
 
-  GDK_NOTE (MISC, g_print ("update_style_bits: style: %s", _gdk_win32_window_style_to_string (style)));
-
+  new_style = old_style;
   if (get_effective_window_decorations (window, &decorations))
     {
       all = (decorations & GDK_DECOR_ALL);
-      update_single_bit (&style, all, decorations & GDK_DECOR_BORDER, WS_BORDER);
-      update_single_bit (&style, all, decorations & GDK_DECOR_RESIZEH, WS_THICKFRAME);
-      update_single_bit (&style, all, decorations & GDK_DECOR_TITLE, WS_CAPTION);
-      update_single_bit (&style, all, decorations & GDK_DECOR_MENU, WS_SYSMENU);
-      update_single_bit (&style, all, decorations & GDK_DECOR_MINIMIZE, WS_MINIMIZEBOX);
-      update_single_bit (&style, all, decorations & GDK_DECOR_MAXIMIZE, WS_MAXIMIZEBOX);
+      update_single_bit (&new_style, all, decorations & GDK_DECOR_BORDER, WS_BORDER);
+      update_single_bit (&new_style, all, decorations & GDK_DECOR_RESIZEH, WS_THICKFRAME);
+      update_single_bit (&new_style, all, decorations & GDK_DECOR_TITLE, WS_CAPTION);
+      update_single_bit (&new_style, all, decorations & GDK_DECOR_MENU, WS_SYSMENU);
+      update_single_bit (&new_style, all, decorations & GDK_DECOR_MINIMIZE, WS_MINIMIZEBOX);
+      update_single_bit (&new_style, all, decorations & GDK_DECOR_MAXIMIZE, WS_MAXIMIZEBOX);
     }
 
-  GDK_NOTE (MISC, g_print (" => %s\n", _gdk_win32_window_style_to_string (style)));
+  if (old_style == new_style)
+    {
+      GDK_NOTE (MISC, g_print ("update_style_bits: %p: no change\n",
+			       GDK_WINDOW_HWND (window)));
+      return;
+    }
 
-  SetWindowLong (GDK_WINDOW_HWND (window), GWL_STYLE, style);
+  GDK_NOTE (MISC, g_print ("update_style_bits: %p: %s => %s\n",
+			   GDK_WINDOW_HWND (window),
+			   _gdk_win32_window_style_to_string (old_style),
+			   _gdk_win32_window_style_to_string (new_style)));
 
-  AdjustWindowRectEx (&after, style, FALSE, exstyle);
+  SetWindowLong (GDK_WINDOW_HWND (window), GWL_STYLE, new_style);
+
+  AdjustWindowRectEx (&after, new_style, FALSE, exstyle);
 
   GetWindowRect (GDK_WINDOW_HWND (window), &rect);
   rect.left += after.left - before.left;
