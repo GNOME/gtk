@@ -20,7 +20,6 @@
 
 #include <config.h>
 #include <gtk/gtk.h>
-#include <gtk/gtkmountoperation.h>
 
 static gboolean ask_question = FALSE;
 static gboolean anonymous = FALSE;

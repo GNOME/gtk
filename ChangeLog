@@ -1,3 +1,17 @@
+2008-05-23  Michael Natterer  <mitch@gimp.org>
+
+	* perf/widgets.h
+	* tests/print-editor.c
+	* tests/prop-editor.h
+	* tests/testmountoperation.c
+	* tests/testmultidisplay.c
+	* tests/testnouiprint.c
+	* tests/testprint.c
+	* tests/testprintfileoperation.h
+	* tests/testtreesort.c
+	* tests/textbuffertest.c: include <gtk/gtk.h> instead of single
+	files. Remove some redundant includes.
+
 2008-05-22  Hiroyuki Ikezoe  <poincare@ikezoe.net>
 
 	* gtk/gtksockget.c: (gtk_socket_realize): Remove second call of

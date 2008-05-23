@@ -1,4 +1,4 @@
-#include <gtk/gtkwidget.h>
+#include <gtk/gtk.h>
 
 GtkWidget *appwindow_new (void);
 

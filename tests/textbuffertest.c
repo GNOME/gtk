@@ -23,7 +23,7 @@
 #include <string.h>
 
 #include <gtk/gtk.h>
-#include "../gtk/gtktexttypes.h" /* Private header, for UNKNOWN_CHAR */
+#include "gtk/gtktexttypes.h" /* Private header, for UNKNOWN_CHAR */
 
 static void
 gtk_text_iter_spew (const GtkTextIter *iter, const gchar *desc)

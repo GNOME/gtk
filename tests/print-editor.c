@@ -1,7 +1,6 @@
 #include <math.h>
 #include <pango/pangocairo.h>
 #include <gtk/gtk.h>
-#include <gtk/gtkprintoperation.h>
 
 static GtkWidget *main_window;
 static char *filename = NULL;
