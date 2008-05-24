@@ -1,3 +1,9 @@
+2008-05-24  James Sharpe <jsharpe@gnome.org>
+
+	* gdk/gdk.symbols: Remove duplicate
+	gdk_window_redirect_to_drawable and gdk_window_remove_redirection
+	* gtk/gtk.symbols: Remove duplicate gtk_widget_get_snapshot
+	
 2008-05-23  Hans Breuer  <hans@breuer.org>
 
 	* **/makefile.msc gtk/makefile.msc.in : updated
