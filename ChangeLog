@@ -1,3 +1,10 @@
+2008-05-24  Matthias Clasen  <mclasen@redhat.com>
+
+	Bug 387972 – gtkassistant drawing problem
+
+	* gtk/gtkassistant.c (gtk_assistant_size_allocate): Make 
+	GtkAssistant work better in glade. 
+
 2008-05-24  Jan Arne Petersen  <jpetersen@jpetersen.org>
 
 	* gtk/gtktoolbar.c: (gtk_toolbar_class_init): Change defaults of child
