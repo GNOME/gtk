@@ -316,17 +316,18 @@ gdk_color_get_type (void)
  * @spec: the string specifying the color.
  * @color: the #GdkColor to fill in
  * 
- * Parses a textual specification of a color and fill in
- * the <structfield>red</structfield>,
- * <structfield>green</structfield>, and 
- * <structfield>blue</structfield> fields of a 
- * #GdkColor structure. The color is <emphasis>not</emphasis> 
- * allocated, you must call gdk_colormap_alloc_color() yourself.
- * The text string can be in any of the forms accepted
- * by <function>XParseColor</function>; these include
- * name for a color from <filename>rgb.txt</filename>, such as
- * <literal>DarkSlateGray</literal>, or a hex specification
- * such as <literal>&num;3050b2</literal> or <literal>&num;35b</literal>.
+ * Parses a textual specification of a color and fill in the
+ * <structfield>red</structfield>, <structfield>green</structfield>,
+ * and <structfield>blue</structfield> fields of a #GdkColor
+ * structure. The color is <emphasis>not</emphasis> allocated, you
+ * must call gdk_colormap_alloc_color() yourself. The string can
+ * either one of a large set of standard names. (Taken from the X11
+ * <filename>rgb.txt</filename> file), or it can be a hex value in the
+ * form '&num;rgb' '&num;rrggbb' '&num;rrrgggbbb' or
+ * '&num;rrrrggggbbbb' where 'r', 'g' and 'b' are hex digits of the
+ * red, green, and blue components of the color, respectively. (White
+ * in the four forms is '&num;fff' '&num;ffffff' '&num;fffffffff' and
+ * '&num;ffffffffffff')
  * 
  * Return value: %TRUE if the parsing succeeded.
  **/

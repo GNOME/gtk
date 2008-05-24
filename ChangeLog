@@ -1,3 +1,8 @@
+2008-05-24  Björn Lindqvist  <bjourne@gmail.com>
+
+	* gdk/gdkcolor.c (gdk_color_parse): Update docstring to match
+	pango_color_parse, do not reference XParseColor forms (#434991).
+
 2008-05-24  James Sharpe <jsharpe@gnome.org>
 
 	* gdk/gdk.symbols: Remove duplicate
