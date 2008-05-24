@@ -1,3 +1,9 @@
+2008-05-24  Jan Arne Petersen  <jpetersen@jpetersen.org>
+
+	* gtk/gtkfilechooserdefault.c: (shortcuts_query_tooltip_cb),
+	(shortcuts_list_create): Show parse name as tooltip for path
+	shortcuts (#137503).
+
 2008-05-24  Björn Lindqvist  <bjourne@gmail.com>
 
 	* gdk/gdkcolor.c (gdk_color_parse): Update docstring to match

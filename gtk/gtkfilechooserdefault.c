@@ -3642,6 +3642,71 @@ shortcuts_drag_data_received_cb (GtkWidget          *widget,
   g_signal_stop_emission_by_name (widget, "drag_data_received");
 }
 
+/* Callback used to display a tooltip in the shortcuts tree */
+static gboolean
+shortcuts_query_tooltip_cb (GtkWidget             *widget,
+			    gint                   x,
+			    gint                   y,
+			    gboolean               keyboard_mode,
+			    GtkTooltip            *tooltip,
+			    GtkFileChooserDefault *impl)
+{
+  GtkTreeModel *model;
+  GtkTreeIter iter;
+
+  if (gtk_tree_view_get_tooltip_context (GTK_TREE_VIEW (widget),
+					 &x, &y,
+					 keyboard_mode,
+					 &model,
+					 NULL,
+					 &iter))
+    {
+      gpointer col_data;
+      ShortcutType shortcut_type;
+
+      gtk_tree_model_get (model, &iter,
+			  SHORTCUTS_COL_DATA, &col_data,
+			  SHORTCUTS_COL_TYPE, &shortcut_type,
+			  -1);
+
+      if (shortcut_type == SHORTCUT_TYPE_SEPARATOR)
+	return FALSE;
+      else if (shortcut_type == SHORTCUT_TYPE_VOLUME)
+	{
+	  return FALSE;
+	}
+      else if (shortcut_type == SHORTCUT_TYPE_PATH)
+	{
+	  GFile *file;
+	  char *uri;
+	  char *parse_name;
+
+	  uri = gtk_file_system_path_to_uri (impl->file_system, (GtkFilePath *) col_data);
+	  file = g_file_new_for_uri (uri);
+	  parse_name = g_file_get_parse_name (file);
+
+	  gtk_tooltip_set_text (tooltip, parse_name);
+
+	  g_free (uri);
+	  g_free (parse_name);
+	  g_object_unref (file);
+
+	  return TRUE;
+	}
+      else if (shortcut_type == SHORTCUT_TYPE_SEARCH)
+	{
+	  return FALSE;
+	}
+      else if (shortcut_type == SHORTCUT_TYPE_RECENT)
+	{
+	  return FALSE;
+	}
+    }
+
+  return FALSE;
+}
+
+
 /* Callback used when the selection in the shortcuts tree changes */
 static void
 shortcuts_selection_changed_cb (GtkTreeSelection      *selection,
@@ -3960,6 +4025,11 @@ shortcuts_list_create (GtkFileChooserDefault *impl)
 		    G_CALLBACK (shortcuts_drag_drop_cb), impl);
   g_signal_connect (impl->browse_shortcuts_tree_view, "drag_data_received",
 		    G_CALLBACK (shortcuts_drag_data_received_cb), impl);
+
+  /* Support tooltips */
+  gtk_widget_set_has_tooltip (impl->browse_shortcuts_tree_view, TRUE);
+  g_signal_connect (impl->browse_shortcuts_tree_view, "query-tooltip",
+		    G_CALLBACK (shortcuts_query_tooltip_cb), impl);
 
   gtk_container_add (GTK_CONTAINER (swin), impl->browse_shortcuts_tree_view);
   gtk_widget_show (impl->browse_shortcuts_tree_view);
