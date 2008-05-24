@@ -1736,7 +1736,7 @@ static GIOChannel*       gail_streamable_content_get_stream       (AtkStreamable
 	    else g_message (err->message);
 	    if (err) {
 		g_message ("<error writing to stream [%s]>", tname);
-		g_free (err);
+		g_error_free (err);
 	    }
 	    /* make sure the file is removed on unref of the giochannel */
 	    else {

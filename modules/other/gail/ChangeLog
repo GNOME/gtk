@@ -1,3 +1,9 @@
+2008-05-24  Matthias Clasen  <mclasen@redhat.com>
+
+	Bug 504706 – wrong deallocator used for GError in gailtextview.c
+
+	* gailtextview.c: Don't use g_free on a GError.
+
 2008-04-02  Li Yuan  <li.yuan@.sun.com>
 
 	* gailbutton.c: (idle_do_action):
