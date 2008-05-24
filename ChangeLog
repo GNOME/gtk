@@ -1,3 +1,9 @@
+2008-05-25  Jan Arne Petersen  <jpetersen@jpetersen.org>
+
+	* gtk/gtkliststore.c: (list_store_text): Use type of the correct
+	column (#529535).
+	* tests/buildertest.c: (test_list_store): Add test.
+
 2008-05-24  Matthias Clasen  <mclasen@redhat.com>
 
 	Bug 520989 – icon factory buildable too strict
