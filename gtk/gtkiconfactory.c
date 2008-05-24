@@ -2827,9 +2827,9 @@ icon_source_start_element (GMarkupParseContext *context,
 	}
     }
 
-  if (!stock_id || !filename)
+  if (!stock_id)
     {
-      error_msg = g_strdup_printf ("<source> requires a stock_id and a filename");
+      error_msg = g_strdup_printf ("<source> requires a stock_id");
       error_domain = GTK_BUILDER_ERROR_MISSING_ATTRIBUTE;
       goto error;
     }

@@ -51,7 +51,7 @@ This attribute is mandatory</para></listitem>
 <varlistentry>
 <term>filename</term>
 <listitem><para>The filename of the source, a string.
-This attribute is mandatory</para>
+This attribute is optional</para>
 </listitem>
 </varlistentry>
 
