@@ -1,8 +1,14 @@
 2008-05-24  Jan Arne Petersen  <jpetersen@jpetersen.org>
 
+	* gtk/gtktoolbar.c: (gtk_toolbar_class_init): Change defaults of child
+	properties "expand" and "homogeneous" from TRUE to FALSE (as they are
+	used in GtkToolItem) (#532787).
+
+2008-05-24  Jan Arne Petersen  <jpetersen@jpetersen.org>
+
 	* gtk/gtkfilechooserdefault.c: (location_toggle_popup_handler): Don't
 	try to toggle the visibility of the location entry field in search and
-	recent mode (#526422)
+	recent mode (#526422).
 
 2008-05-24  Jan Arne Petersen  <jpetersen@jpetersen.org>
 

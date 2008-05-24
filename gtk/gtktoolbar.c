@@ -573,7 +573,7 @@ gtk_toolbar_class_init (GtkToolbarClass *klass)
 					      g_param_spec_boolean ("expand", 
 								    P_("Expand"), 
 								    P_("Whether the item should receive extra space when the toolbar grows"),
-								    TRUE,
+								    FALSE,
 								    GTK_PARAM_READWRITE));
   
   gtk_container_class_install_child_property (container_class,
@@ -581,7 +581,7 @@ gtk_toolbar_class_init (GtkToolbarClass *klass)
 					      g_param_spec_boolean ("homogeneous", 
 								    P_("Homogeneous"), 
 								    P_("Whether the item should be the same size as other homogeneous items"),
-								    TRUE,
+								    FALSE,
 								    GTK_PARAM_READWRITE));
   
   /* style properties */
