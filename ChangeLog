@@ -1,3 +1,11 @@
+2008-05-25  Cody Russell  <bratsche@gnome.org>
+
+	Bug 534463 - non-editable GtkTextView should not call
+	gtk_im_context_focus_in in focus event
+
+	* gtk/gtktextview.c: Add checks to see if the textview is
+	editable.  Patch by Wang Diancheng.
+
 2008-05-25  Matthias Clasen  <mclasen@redhat.com>
 
 	Bug 501730 – use GSlice for small allocs
