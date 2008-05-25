@@ -1,3 +1,10 @@
+2008-05-25  Matthias Clasen  <mclasen@redhat.com>
+
+	Bug 532497 – Configure problem when cross-compiling
+
+	* configure.in: Use AC_CHECK_TOOLS to find C++ compiler, 
+	pointed out by Marko Lindqvist.
+
 2008-05-25  Richard Hult  <richard@imendio.com>
 
 	* gtk/gtkquartz.c: (_gtk_quartz_set_selection_data_for_pasteboard):
