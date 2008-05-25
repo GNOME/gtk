@@ -731,7 +731,7 @@ _gdk_window_move_resize_child (GdkWindow *window,
       impl->position_info = new_info;
     }
 
-  if (GDK_WINDOW_IS_MAPPED (obj) && obj->parent)
+  if (GDK_WINDOW_IS_MAPPED (obj) && obj->parent && !obj->input_only)
     gdk_window_invalidate_rect ((GdkWindow *)obj->parent, &old_pos, FALSE);
 }
 

@@ -1,5 +1,13 @@
 2008-05-25  Cody Russell  <bratsche@gnome.org>
 
+	Bug 525461 - Don't invalidate under an input-only child
+
+	* gdk/x11/gdkgeometry-x11.c (_gdk_window_move_resize_child):
+	Check that the window is not input-only before invalidating.
+	Report and patch by Owen Taylor.
+
+2008-05-25  Cody Russell  <bratsche@gnome.org>
+
 	Bug 524110 - Gdk should not assume reparenting WMs when retrieving
 	window frame extents
 
