@@ -4700,7 +4700,7 @@ create_file_list (GtkFileChooserDefault *impl)
 					  GDK_BUTTON1_MASK,
 					  file_list_source_targets,
 					  num_file_list_source_targets,
-					  GDK_ACTION_COPY);
+					  GDK_ACTION_COPY | GDK_ACTION_MOVE);
 
   g_signal_connect (selection, "changed",
 		    G_CALLBACK (list_selection_changed), impl);
