@@ -1314,6 +1314,7 @@ set_initial_hints (GdkWindow *window)
       atoms[i] = gdk_x11_get_xatom_by_name_for_display (display,
 							"_NET_WM_STATE_MAXIMIZED_HORZ");
       ++i;
+      toplevel->have_maxhorz = toplevel->have_maxvert = TRUE;
     }
 
   if (private->state & GDK_WINDOW_STATE_ABOVE)
@@ -1335,6 +1336,7 @@ set_initial_hints (GdkWindow *window)
       atoms[i] = gdk_x11_get_xatom_by_name_for_display (display,
 							"_NET_WM_STATE_STICKY");
       ++i;
+      toplevel->have_sticky = TRUE;
     }
 
   if (private->state & GDK_WINDOW_STATE_FULLSCREEN)
@@ -1342,6 +1344,7 @@ set_initial_hints (GdkWindow *window)
       atoms[i] = gdk_x11_get_xatom_by_name_for_display (display,
 							"_NET_WM_STATE_FULLSCREEN");
       ++i;
+      toplevel->have_fullscreen = TRUE;
     }
 
   if (private->modal_hint)
@@ -1388,6 +1391,7 @@ set_initial_hints (GdkWindow *window)
 		       gdk_x11_get_xatom_by_name_for_display (display, "_NET_WM_DESKTOP"),
                        XA_CARDINAL, 32, PropModeReplace,
                        (guchar*) atoms, 1);
+      toplevel->on_all_desktops = TRUE;
     }
   else
     {
