@@ -6680,6 +6680,7 @@ gtk_print_context_get_type
 
 
 <SECTION>
+<INCLUDE>gtk/gtkprintjob.h</INCLUDE>
 <FILE>gtkprintjob</FILE>
 <TITLE>GtkPrintJob</TITLE>
 GtkPrintJob

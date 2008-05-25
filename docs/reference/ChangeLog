@@ -1,3 +1,10 @@
+2008-05-25  Matthias Clasen  <mclasen@redhat.com>
+
+	Bug 465144 - gtkprintjob.h is not included with gtk.h
+
+	* gtk/gtk-sections.txt: Fix include for gtkprintjob.h, pointed
+	out by Étienne Bersac.
+
 2008-05-20  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtk-sections.txt: Add gtk_printer_get_default_page_size
