@@ -72,6 +72,13 @@ typedef struct {
 } SignalInfo;
 
 typedef struct {
+  TagInfo  tag;
+  gchar   *library;
+  gint     major;
+  gint     minor;
+} RequiresInfo;
+
+typedef struct {
   GMarkupParser *parser;
   gchar *tagname;
   const gchar *start;

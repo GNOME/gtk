@@ -50,10 +50,11 @@ which are more limited in scope.
 </para>
 <para>
 <programlisting><![CDATA[
-<!ELEMENT interface object* >
+<!ELEMENT interface (requires|object)* >
 <!ELEMENT object    (property|signal|child|ANY)* >
 <!ELEMENT property  PCDATA >
 <!ELEMENT signal    EMPTY >
+<!ELEMENT requires  EMPTY >
 <!ELEMENT child     (object|ANY*) >
 
 <!ATTLIST interface  domain         	    #IMPLIED >
@@ -61,6 +62,8 @@ which are more limited in scope.
                      class          	    #REQUIRED
                      type-func      	    #IMPLIED
                      constructor    	    #IMPLIED >
+<!ATTLIST requires   lib             	    #REQUIRED
+                     version          	    #REQUIRED >
 <!ATTLIST property   name           	    #REQUIRED
                      translatable   	    #IMPLIED 
                      comments               #IMPLIED
@@ -88,6 +91,11 @@ elements, which describe child objects (most often widgets
 inside a container, but also e.g. actions in an action group,
 or columns in a tree model). A &lt;child&gt; element contains
 an &lt;object&gt; element which describes the child object.
+The target toolkit version(s) are described by &lt;requires&gt;
+elements, the "lib" attribute specifies the widget library in
+question (currently the only supported value is "gtk+") and the "version" 
+attribute specifies the target version in the form "&lt;major&gt;.&lt;minor&gt;".
+The builder will error out if the version requirements are not met.
 </para>
 <para>
 Typically, the specific kind of object represented by an
@@ -258,6 +266,7 @@ respective objects, see
 
 </para>
 
+@GTK_BUILDER_ERROR_VERSION_MISMATCH: 
 @GTK_BUILDER_ERROR_INVALID_TYPE_FUNCTION: 
 @GTK_BUILDER_ERROR_UNHANDLED_TAG: 
 @GTK_BUILDER_ERROR_MISSING_ATTRIBUTE: 

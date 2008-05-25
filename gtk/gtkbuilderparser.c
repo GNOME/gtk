@@ -28,6 +28,7 @@
 #include "gtkbuilder.h"
 #include "gtkbuildable.h"
 #include "gtkdebug.h"
+#include "gtkversion.h"
 #include "gtktypeutils.h"
 #include "gtkintl.h"
 #include "gtkalias.h"
@@ -222,6 +223,63 @@ _get_type_by_symbol (const gchar* symbol)
     return NULL;
 
   return g_strdup (g_type_name (type));
+}
+
+static void
+parse_requires (ParserData   *data,
+		const gchar  *element_name,
+		const gchar **names,
+		const gchar **values,
+		GError      **error)
+{
+  RequiresInfo *req_info;
+  const gchar  *library = NULL;
+  const gchar  *version = NULL;
+  gchar       **split;
+  gint          i, version_major = 0, version_minor = 0;
+  gint          line_number, char_number;
+
+  g_markup_parse_context_get_position (data->ctx,
+                                       &line_number,
+                                       &char_number);
+
+  for (i = 0; names[i] != NULL; i++)
+    {
+      if (strcmp (names[i], "lib") == 0)
+        library = values[i];
+      else if (strcmp (names[i], "version") == 0)
+	version = values[i];
+      else
+	error_invalid_attribute (data, element_name, names[i], error);
+    }
+
+  if (!library || !version)
+    {
+      error_missing_attribute (data, element_name, 
+			       version ? "lib" : "version", error);
+      return;
+    }
+
+  if (!(split = g_strsplit (version, ".", 2)) || !split[0] || !split[1])
+    {
+      g_set_error (error,
+		   GTK_BUILDER_ERROR,
+		   GTK_BUILDER_ERROR_INVALID_VALUE,
+		   "%s:%d:%d <%s> attribute has malformed value \"%s\"",
+		   data->filename,
+		   line_number, char_number, "version", version);
+      return;
+    }
+  version_major = g_ascii_strtoll (split[0], NULL, 10);
+  version_minor = g_ascii_strtoll (split[1], NULL, 10);
+  g_strfreev (split);
+
+  req_info = g_slice_new0 (RequiresInfo);
+  req_info->library = g_strdup (library);
+  req_info->major   = version_major;
+  req_info->minor   = version_minor;
+  state_push (data, req_info);
+  req_info->tag.name = element_name;
 }
 
 static void
@@ -521,6 +579,14 @@ _free_signal_info (SignalInfo *info,
   g_slice_free (SignalInfo, info);
 }
 
+void
+_free_requires_info (RequiresInfo *info,
+		     gpointer user_data)
+{
+  g_free (info->library);
+  g_slice_free (RequiresInfo, info);
+}
+
 static void
 parse_interface (ParserData   *data,
 		 const gchar  *element_name,
@@ -729,8 +795,10 @@ start_element (GMarkupParseContext *context,
     if (!subparser_start (context, element_name, names, values,
 			  data, error))
       return;
-  
-  if (strcmp (element_name, "object") == 0)
+
+  if (strcmp (element_name, "requires") == 0)
+    parse_requires (data, element_name, names, values, error);
+  else if (strcmp (element_name, "object") == 0)
     parse_object (data, element_name, names, values, error);
   else if (strcmp (element_name, "child") == 0)
     parse_child (data, element_name, names, values, error);
@@ -821,7 +889,27 @@ end_element (GMarkupParseContext *context,
       return;
     }
 
-  if (strcmp (element_name, "object") == 0)
+  if (strcmp (element_name, "requires") == 0)
+    {
+      RequiresInfo *req_info = state_pop_info (data, RequiresInfo);
+
+      /* TODO: Allow third party widget developers to check thier
+       * required versions, possibly throw a signal allowing them
+       * to check thier library versions here.
+       */
+      if (!strcmp (req_info->library, "gtk+"))
+	{
+	  if (!GTK_CHECK_VERSION (req_info->major, req_info->minor, 0))
+	    g_set_error (error,
+			 GTK_BUILDER_ERROR,
+			 GTK_BUILDER_ERROR_VERSION_MISMATCH,
+			 "%s: required %s version %d.%d, current version is %d.%d",
+			 data->filename, req_info->library, 
+			 req_info->major, req_info->minor,
+			 GTK_MAJOR_VERSION, GTK_MINOR_VERSION);
+	}
+    }
+  else if (strcmp (element_name, "object") == 0)
     {
       ObjectInfo *object_info = state_pop_info (data, ObjectInfo);
       ChildInfo* child_info = state_peek_info (data, ChildInfo);
@@ -948,6 +1036,8 @@ free_info (CommonInfo *info)
     free_property_info ((PropertyInfo *)info);
   else if (strcmp (info->tag.name, "signal") == 0) 
     _free_signal_info ((SignalInfo *)info, NULL);
+  else if (strcmp (info->tag.name, "requires") == 0) 
+    _free_requires_info ((RequiresInfo *)info, NULL);
   else 
     g_assert_not_reached ();
 }

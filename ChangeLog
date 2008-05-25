@@ -1,3 +1,12 @@
+2008-05-25  Tristan Van Berkom <tvb@gnome.org>
+
+	* gtk/gtkbuilderprivate.h, gtk/gtkbuilder.h, gtk/gtkbuilderparser.c:
+	Added support for parsing required toolkit versions (so that ui descriptions
+	can target specific versions of the backend widget libraries) bug 527612.
+
+	* gtk/docs/reference/gtk/tmpl/gtkbuilder.sgml: Added documentation
+	for the added xml tags to the ui description.
+
 2008-05-25  Richard Hult  <richard@imendio.com>
 
 	* gtk/gtkdnd-quartz.c: (gtk_drag_drop_finished): Run
