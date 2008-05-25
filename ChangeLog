@@ -1,5 +1,12 @@
 2008-05-25  Matthias Clasen  <mclasen@redhat.com>
 
+	Bug 523930 – sort -> search in gtktreeview.c
+
+	* gtk/gtktreeview.c (gtk_tree_view_set_search_column): Fix a doc
+	glitch, pointed out by Björn Lindqvist.
+
+2008-05-25  Matthias Clasen  <mclasen@redhat.com>
+
 	Bug 479384 – gtk_selection_data_targets_include_uri docs buglet
 
 	* gtk/gtkselection.c (gtk_selection_data_targets_include_uri): Fix
