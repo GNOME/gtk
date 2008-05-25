@@ -1,5 +1,14 @@
 2008-05-25  Cody Russell  <bratsche@gnome.org>
 
+	Bug 526635 - _gdk_window_get_toplevel handles FOREIGN windows
+
+	* gdk/x11/gdkwindow-x11.c (_gdk_window_get_toplevel): Check
+	!WINDOW_IS_TOPLEVEL instead of checking for GDK_WINDOW_CHILD,
+	so that we also take into account for foreign windows.
+	Report and patch by Nathaniel Smith.
+
+2008-05-25  Cody Russell  <bratsche@gnome.org>
+
 	Bug 525461 - Don't invalidate under an input-only child
 
 	* gdk/x11/gdkgeometry-x11.c (_gdk_window_move_resize_child):
