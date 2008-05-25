@@ -265,6 +265,12 @@ menu_queue_resize (GtkMenu *menu)
   gtk_widget_queue_resize (GTK_WIDGET (menu));
 }
 
+static void
+attach_info_free (AttachInfo *info)
+{
+  g_slice_free (AttachInfo, info);
+}
+
 static AttachInfo *
 get_attach_info (GtkWidget *child)
 {
@@ -273,8 +279,8 @@ get_attach_info (GtkWidget *child)
 
   if (!ai)
     {
-      ai = g_new0 (AttachInfo, 1);
-      g_object_set_data_full (object, I_(ATTACH_INFO_KEY), ai, g_free);
+      ai = g_slice_new0 (AttachInfo);
+      g_object_set_data_full (object, I_(ATTACH_INFO_KEY), ai, attach_info_free);
     }
 
   return ai;
@@ -1024,7 +1030,7 @@ gtk_menu_attach_to_widget (GtkMenu	       *menu,
   
   g_object_ref_sink (menu);
   
-  data = g_new (GtkMenuAttachData, 1);
+  data = g_slice_new (GtkMenuAttachData);
   data->attach_widget = attach_widget;
   
   g_signal_connect (attach_widget, "screen_changed",
@@ -1098,7 +1104,7 @@ gtk_menu_detach (GtkMenu *menu)
   if (GTK_WIDGET_REALIZED (menu))
     gtk_widget_unrealize (GTK_WIDGET (menu));
   
-  g_free (data);
+  g_slice_free (GtkMenuAttachData, data);
   
   /* Fallback title for menu comes from attach widget */
   gtk_menu_update_title (menu);
@@ -1644,12 +1650,15 @@ void
 gtk_menu_set_accel_path (GtkMenu     *menu,
 			 const gchar *accel_path)
 {
+  gchar *old_accel_path;
+
   g_return_if_fail (GTK_IS_MENU (menu));
   if (accel_path)
     g_return_if_fail (accel_path[0] == '<' && strchr (accel_path, '/')); /* simplistic check */
 
-  g_free (menu->accel_path);
+  old_accel_path = menu->accel_path;
   menu->accel_path = g_strdup (accel_path);
+  g_free (old_accel_path);
   if (menu->accel_path)
     _gtk_menu_refresh_accel_paths (menu, FALSE);
 }

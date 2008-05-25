@@ -1,5 +1,13 @@
 2008-05-25  Matthias Clasen  <mclasen@redhat.com>
 
+	Bug 501730 – use GSlice for small allocs
+
+	* gtk/gtkmenuitem.c:
+	* gtk/gtkmenu.c: Use the slice allocator for small allocations.
+	Patch by Christian Persch.
+	
+2008-05-25  Matthias Clasen  <mclasen@redhat.com>
+
 	Bug 523930 – sort -> search in gtktreeview.c
 
 	* gtk/gtktreeview.c (gtk_tree_view_set_search_column): Fix a doc

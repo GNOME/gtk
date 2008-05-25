@@ -1077,6 +1077,12 @@ gtk_real_menu_item_toggle_size_allocate (GtkMenuItem *menu_item,
 }
 
 static void
+free_timeval (GTimeVal *val)
+{
+  g_slice_free (GTimeVal, val);
+}
+
+static void
 gtk_menu_item_real_popup_submenu (GtkWidget *widget,
                                   gboolean   remember_exact_time)
 {
@@ -1092,13 +1098,13 @@ gtk_menu_item_real_popup_submenu (GtkWidget *widget,
 
       if (remember_exact_time)
         {
-          GTimeVal *popup_time = g_new0 (GTimeVal, 1);
+          GTimeVal *popup_time = g_slice_new0 (GTimeVal);
 
           g_get_current_time (popup_time);
 
           g_object_set_data_full (G_OBJECT (menu_item->submenu),
                                   "gtk-menu-exact-popup-time", popup_time,
-                                  (GDestroyNotify) g_free);
+                                  (GDestroyNotify) free_timeval);
         }
       else
         {
@@ -1603,6 +1609,7 @@ gtk_menu_item_set_accel_path (GtkMenuItem *menu_item,
 			      const gchar *accel_path)
 {
   GtkWidget *widget;
+  gchar *old_accel_path;
 
   g_return_if_fail (GTK_IS_MENU_ITEM (menu_item));
   g_return_if_fail (accel_path == NULL ||
@@ -1611,8 +1618,9 @@ gtk_menu_item_set_accel_path (GtkMenuItem *menu_item,
   widget = GTK_WIDGET (menu_item);
 
   /* store new path */
-  g_free (menu_item->accel_path);
+  old_accel_path = menu_item->accel_path;
   menu_item->accel_path = g_strdup (accel_path);
+  g_free (old_accel_path);
 
   /* forget accelerators associated with old path */
   gtk_widget_set_accel_path (widget, NULL, NULL);
