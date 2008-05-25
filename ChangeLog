@@ -1,5 +1,12 @@
 2008-05-25  Cody Russell  <bratsche@gnome.org>
 
+	Bug 507389 – use gslice for gtksettings
+
+	* gtk/gtksettings.c: Change from g_new0/g_free to use GSlice.
+	Report and patch by Christian Persch.
+
+2008-05-25  Cody Russell  <bratsche@gnome.org>
+
 	Bug 523562 - gtk-update-icon-cache core dumps when run concurrently and
 	when options are missing
 

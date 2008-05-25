@@ -1286,7 +1286,7 @@ free_value (gpointer data)
   
   g_value_unset (&qvalue->public.value);
   g_free (qvalue->public.origin);
-  g_free (qvalue);
+  g_slice_free (GtkSettingsValuePrivate, qvalue);
 }
 
 static void
@@ -1317,7 +1317,7 @@ gtk_settings_set_property_value_internal (GtkSettings            *settings,
   qvalue = g_datalist_id_get_data (&settings->queued_settings, name_quark);
   if (!qvalue)
     {
-      qvalue = g_new0 (GtkSettingsValuePrivate, 1);
+      qvalue = g_slice_new0 (GtkSettingsValuePrivate);
       g_datalist_id_set_data_full (&settings->queued_settings, name_quark, qvalue, free_value);
     }
   else
@@ -1990,7 +1990,7 @@ color_scheme_data_free (ColorSchemeData *data)
       g_free (data->lastentry[i]);
     }
 
-  g_free (data);
+  g_slice_free (ColorSchemeData, data);
 }
 
 static void
@@ -2001,7 +2001,7 @@ settings_update_color_scheme (GtkSettings *settings)
       ColorSchemeData *data;
       GValue value = { 0, };
 
-      data = g_new0 (ColorSchemeData, 1);
+      data = g_slice_new0 (ColorSchemeData);
       data->color_hash = g_hash_table_new_full (g_str_hash, g_str_equal, g_free,
 					        (GDestroyNotify) gdk_color_free);
       g_object_set_data_full (G_OBJECT (settings), "gtk-color-scheme",
