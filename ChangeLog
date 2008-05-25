@@ -1,3 +1,9 @@
+2008-05-25  Jan Arne Petersen  <jpetersen@jpetersen.org>
+
+	* gtk/gtkfilechooserdefault.c:
+	(shortcuts_activate_volume_mount_cb): Ignore G_IO_ERROR_FAILED_HANDLED
+	errors (#532262).
+
 2008-05-25  Björn Lindqvist  <bjourne@gmail.com>
 
 	* tests/pixbuf-lowmem.c
