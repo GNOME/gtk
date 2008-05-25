@@ -222,6 +222,7 @@ _gtk_quartz_get_selection_data_from_pasteboard (NSPasteboard *pasteboard,
           selection_data->target = gdk_atom_intern_static_string ("text/uri-list");
 
           uris[0] = (gchar *) [[url description] UTF8String];
+
           uris[1] = NULL;
           gtk_selection_data_set_uris (selection_data, uris);
         }
@@ -263,7 +264,7 @@ _gtk_quartz_set_selection_data_for_pasteboard (NSPasteboard *pasteboard,
 
   type = target_to_pasteboard_type (target);
   g_free (target);
-  
+
   if ([type isEqualTo:NSStringPboardType]) 
     [pasteboard setString:[NSString stringWithUTF8String:(const char *)selection_data->data]
                   forType:type];
@@ -271,31 +272,33 @@ _gtk_quartz_set_selection_data_for_pasteboard (NSPasteboard *pasteboard,
     {
       guint16 *color = (guint16 *)selection_data->data;
       float red, green, blue, alpha;
+      NSColor *nscolor;
 
       red   = (float)color[0] / 0xffff;
       green = (float)color[1] / 0xffff;
       blue  = (float)color[2] / 0xffff;
       alpha = (float)color[3] / 0xffff;
       
-      NSColor *nscolor = [NSColor colorWithDeviceRed:red green:green blue:blue alpha:alpha];
-
+      nscolor = [NSColor colorWithDeviceRed:red green:green blue:blue alpha:alpha];
       [nscolor writeToPasteboard:pasteboard];
     }
   else if ([type isEqualTo:NSURLPboardType])
     {
       gchar **list = NULL;
-      gchar **result = NULL;
-      NSURL *url;
+      int count;
 
-      int count = gdk_text_property_to_utf8_list_for_display (selection_data->display,
-							      gdk_atom_intern_static_string ("UTF8_STRING"),
-							      selection_data->format,
-							      selection_data->data,
-							      selection_data->length,
-							      &list);
+      count = gdk_text_property_to_utf8_list_for_display (selection_data->display,
+                                                          gdk_atom_intern_static_string ("UTF8_STRING"),
+                                                          selection_data->format,
+                                                          selection_data->data,
+                                                          selection_data->length,
+                                                          &list);
 
       if (count > 0)
         {
+          gchar **result;
+          NSURL *url;
+
           result = g_uri_list_extract_uris (list[0]);
 
           url = [NSURL URLWithString:[NSString stringWithUTF8String:result[0]]];

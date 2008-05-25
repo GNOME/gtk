@@ -1,3 +1,8 @@
+2008-05-25  Richard Hult  <richard@imendio.com>
+
+	* gtk/gtkquartz.c: (_gtk_quartz_set_selection_data_for_pasteboard):
+	Slight coding style cleanup.
+
 2008-05-25  Tristan Van Berkom <tvb@gnome.org>
 
 	* gtk/gtkbuilderprivate.h, gtk/gtkbuilder.h, gtk/gtkbuilderparser.c:
