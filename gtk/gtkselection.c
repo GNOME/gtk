@@ -2002,7 +2002,7 @@ gtk_targets_include_uri (GdkAtom *targets,
  * provide a list or URIs.
  * 
  * Return value: %TRUE if @selection_data holds a list of targets,
- *   and a suitable target for text is included, otherwise %FALSE.
+ *   and a suitable target for URI lists is included, otherwise %FALSE.
  *
  * Since: 2.10
  **/

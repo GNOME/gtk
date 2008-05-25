@@ -1,5 +1,12 @@
 2008-05-25  Matthias Clasen  <mclasen@redhat.com>
 
+	Bug 479384 – gtk_selection_data_targets_include_uri docs buglet
+
+	* gtk/gtkselection.c (gtk_selection_data_targets_include_uri): Fix
+	doc glitch, pointed out by Christian Persch.
+
+2008-05-25  Matthias Clasen  <mclasen@redhat.com>
+
 	Bug 534694 – Col id in GtkListStore could be out of range
 
 	* gtk/gtkliststore.c (list_store_start_element): Fix up error handling
