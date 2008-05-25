@@ -1,3 +1,11 @@
+2008-05-25  Josselin Mouette  <joss@malsain.org>
+
+	reviewed by: Matthias Clasen
+
+	* gtk/gtksearchenginetracker.c: (_gtk_search_engine_tracker_new):
+        check that tracker is actually working before using it. Fixes
+        bug #479197.
+
 2008-05-25  Sven Neumann  <sven@gimp.org>
 
 	* gtk/gtkdrawingarea.c (gtk_drawing_area_realize)
