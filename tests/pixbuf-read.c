@@ -74,7 +74,7 @@ main (int argc, char **argv)
 	{
 	  err = NULL;
 
-	  if (test_loader (contents, size, &err))
+	  if (test_loader ((guchar *) contents, size, &err))
 	    g_print ("success\n");
 	  else
 	    g_print ("error: %s\n", err->message);

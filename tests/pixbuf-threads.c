@@ -33,7 +33,7 @@ load_image (gpointer  data,
   gchar *filename = data;
   FILE *file;
   int nbytes;
-  char buf[1024];
+  guchar buf[1024];
   size_t bufsize = 1024;
   GdkPixbufLoader *loader;
   GError *error = NULL;

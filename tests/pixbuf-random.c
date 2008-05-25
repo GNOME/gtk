@@ -26,7 +26,7 @@
 #include <string.h>
 
 static void
-assault (const gchar *header, gsize header_size, int n_images)
+assault (const guchar *header, gsize header_size, int n_images)
 {
   FILE *f;
   enum { N_CHARACTERS = 10000 };

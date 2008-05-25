@@ -133,7 +133,7 @@ static GMemVTable limited_table = {
 };
 
 static void
-mem_test (const guchar *bytes, gsize len)
+mem_test (const gchar *bytes, gsize len)
 {
   gboolean did_fail = FALSE;
   GError *err = NULL;
@@ -143,7 +143,7 @@ mem_test (const guchar *bytes, gsize len)
   
   do {
     loader = gdk_pixbuf_loader_new ();
-    gdk_pixbuf_loader_write (loader, bytes, len, &err);
+    gdk_pixbuf_loader_write (loader, (guchar *) bytes, len, &err);
     if (err)
       {
 	g_error_free (err);

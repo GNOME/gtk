@@ -1,3 +1,14 @@
+2008-05-25  Björn Lindqvist  <bjourne@gmail.com>
+
+	* tests/pixbuf-lowmem.c
+	* tests/pixbuf-random.c
+	* tests/pixbuf-randomly-modified.c
+	* tests/pixbuf-read.c
+	* tests/pixbuf-threads.c
+	* tests/testgtk.c
+	* tests/testtreeview.c: Fix remaining compiler warnings in these
+	files (#523751).
+
 2008-05-25  Jaap A. Haitsma  <jaap@haitsma.org>
 
 	reviewed by: Matthias Clasen

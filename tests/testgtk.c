@@ -6761,15 +6761,8 @@ insert_row_clist (GtkWidget *widget, gpointer data)
 
   if (!style1)
     {
-      GdkColor col1 = { 0, };
-      GdkColor col2 = { 0, };
-
-      col1.red   = 0;
-      col1.green = 56000;
-      col1.blue  = 0;
-      col2.red   = 32000;
-      col2.green = 0;
-      col2.blue  = 56000;
+      GdkColor col1 = { 0, 0, 56000, 0};
+      GdkColor col2 = { 0, 32000, 0, 56000};
 
       style1 = gtk_style_copy (GTK_WIDGET (data)->style);
       style1->base[GTK_STATE_NORMAL] = col1;
@@ -6887,8 +6880,8 @@ create_clist (GtkWidget *widget)
   GtkWidget *label;
 
   GtkStyle *style;
-  GdkColor col1 = { 0, };
-  GdkColor col2 = { 0, };
+  GdkColor red_col = { 0, 56000, 0, 0};
+  GdkColor light_green_col = { 0, 0, 56000, 32000};
 
   if (!window)
     {
@@ -7019,16 +7012,9 @@ create_clist (GtkWidget *widget)
       sprintf (text[1], "Right");
       sprintf (text[2], "Center");
 
-      col1.red   = 56000;
-      col1.green = 0;
-      col1.blue  = 0;
-      col2.red   = 0;
-      col2.green = 56000;
-      col2.blue  = 32000;
-
       style = gtk_style_new ();
-      style->fg[GTK_STATE_NORMAL] = col1;
-      style->base[GTK_STATE_NORMAL] = col2;
+      style->fg[GTK_STATE_NORMAL] = red_col;
+      style->base[GTK_STATE_NORMAL] = light_green_col;
 
       pango_font_description_set_size (style->font_desc, 14 * PANGO_SCALE);
       pango_font_description_set_weight (style->font_desc, PANGO_WEIGHT_BOLD);
@@ -7204,8 +7190,8 @@ void change_style (GtkWidget *widget, GtkCTree *ctree)
   static GtkStyle *style2 = NULL;
 
   GtkCTreeNode *node;
-  GdkColor col1 = { 0, };
-  GdkColor col2 = { 0, };
+  GdkColor green_col = { 0, 0, 56000, 0};
+  GdkColor purple_col = { 0, 32000, 0, 56000};
 
   if (GTK_CLIST (ctree)->focus_row >= 0)
     node = GTK_CTREE_NODE
@@ -7218,21 +7204,14 @@ void change_style (GtkWidget *widget, GtkCTree *ctree)
 
   if (!style1)
     {
-      col1.red   = 0;
-      col1.green = 56000;
-      col1.blue  = 0;
-      col2.red   = 32000;
-      col2.green = 0;
-      col2.blue  = 56000;
-
       style1 = gtk_style_new ();
-      style1->base[GTK_STATE_NORMAL] = col1;
-      style1->fg[GTK_STATE_SELECTED] = col2;
+      style1->base[GTK_STATE_NORMAL] = green_col;
+      style1->fg[GTK_STATE_SELECTED] = purple_col;
 
       style2 = gtk_style_new ();
-      style2->base[GTK_STATE_SELECTED] = col2;
-      style2->fg[GTK_STATE_NORMAL] = col1;
-      style2->base[GTK_STATE_NORMAL] = col2;
+      style2->base[GTK_STATE_SELECTED] = purple_col;
+      style2->fg[GTK_STATE_NORMAL] = green_col;
+      style2->base[GTK_STATE_NORMAL] = purple_col;
       pango_font_description_free (style2->font_desc);
       style2->font_desc = pango_font_description_from_string ("courier 30");
     }
@@ -10448,7 +10427,7 @@ create_wmhints (GtkWidget *widget)
       gtk_widget_realize (window);
       
       circles = gdk_bitmap_create_from_data (window->window,
-					     circles_bits,
+					     (gchar *) circles_bits,
 					     circles_width,
 					     circles_height);
       gdk_window_set_icon (window->window, NULL,

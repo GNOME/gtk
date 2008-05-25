@@ -34,7 +34,7 @@ disaster (const char *what)
 }
 
 static void
-randomly_modify (const guchar *image, guint size)
+randomly_modify (const gchar *image, guint size)
 {
   int i;
 
