@@ -1,5 +1,21 @@
 2008-05-25  Jan Arne Petersen  <jpetersen@jpetersen.org>
 
+	* gtk/gtkentry.c: (gtk_entry_class_init), (get_text_area_size),
+	(gtk_entry_get_text_area_size), (gtk_entry_draw_frame):
+	* gtk/gtkentry.h:
+	* gtk/gtkspinbutton.c: (gtk_spin_button_class_init),
+	(gtk_spin_button_realize), (gtk_spin_button_size_allocate),
+	(gtk_spin_button_expose), (gtk_spin_button_draw_arrow),
+	(gtk_spin_button_enter_notify), (gtk_spin_button_leave_notify),
+	(gtk_spin_button_grab_notify), (gtk_spin_button_state_changed),
+	(start_spinning), (gtk_spin_button_button_release),
+	(gtk_spin_button_motion_notify), (gtk_spin_button_value_changed),
+	(gtk_spin_button_get_text_area_size), (gtk_spin_button_real_spin),
+	(gtk_spin_button_update): Reorder strange window hierarchy of the
+	GtkSpinButton (#466000).
+
+2008-05-25  Jan Arne Petersen  <jpetersen@jpetersen.org>
+
 	* gtk/gtklabel.c: (get_layout_location): Subtract logical.x from x to
 	fix the wrong position for right and center justified labels with
 	logical.x > 0 (#530255).

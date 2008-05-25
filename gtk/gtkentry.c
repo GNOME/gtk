@@ -348,6 +348,11 @@ static void         get_text_area_size                 (GtkEntry       *entry,
 							gint           *y,
 							gint           *width,
 							gint           *height);
+static void         gtk_entry_get_text_area_size       (GtkEntry       *entry,
+							gint           *x,
+							gint           *y,
+							gint           *width,
+							gint           *height);
 static void         get_widget_window_size             (GtkEntry       *entry,
 							gint           *x,
 							gint           *y,
@@ -466,6 +471,7 @@ gtk_entry_class_init (GtkEntryClass *class)
   class->paste_clipboard = gtk_entry_paste_clipboard;
   class->toggle_overwrite = gtk_entry_toggle_overwrite;
   class->activate = gtk_entry_real_activate;
+  class->get_text_area_size = gtk_entry_get_text_area_size;
   
   quark_inner_border = g_quark_from_static_string ("gtk-entry-inner-border");
   quark_password_hint = g_quark_from_static_string ("gtk-entry-password-hint");
@@ -1409,6 +1415,23 @@ get_text_area_size (GtkEntry *entry,
                     gint     *width,
                     gint     *height)
 {
+  GtkEntryClass *class;
+
+  g_return_if_fail (GTK_IS_ENTRY (entry));
+
+  class = GTK_ENTRY_GET_CLASS (entry);
+
+  if (class->get_text_area_size)
+    class->get_text_area_size (entry, x, y, width, height);
+}
+
+static void
+gtk_entry_get_text_area_size (GtkEntry *entry,
+                              gint     *x,
+			      gint     *y,
+			      gint     *width,
+			      gint     *height)
+{
   gint frame_height;
   gint xborder, yborder;
   GtkRequisition requisition;
@@ -1535,10 +1558,17 @@ gtk_entry_draw_frame (GtkWidget    *widget,
                       GdkRectangle *area)
 {
   GtkEntryPrivate *priv = GTK_ENTRY_GET_PRIVATE (widget);
-  gint x = 0, y = 0, width, height;
+  gint x, y, width, height;
+  gint xborder, yborder;
   
-  gdk_drawable_get_size (widget->window, &width, &height);
-  
+  get_text_area_size (GTK_ENTRY (widget), &x, &y, &width, &height);
+  _gtk_entry_get_borders (GTK_ENTRY (widget), &xborder, &yborder);
+
+  x -= xborder;
+  y -= yborder;
+  width += xborder * 2;
+  height += yborder * 2;
+
   if (GTK_WIDGET_HAS_FOCUS (widget) && !priv->interior_focus)
     {
       x += priv->focus_width;

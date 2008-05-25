@@ -135,8 +135,14 @@ struct _GtkEntryClass
   void (* paste_clipboard)    (GtkEntry       *entry);
   void (* toggle_overwrite)   (GtkEntry       *entry);
 
+  /* hook to add other objects beside the entry (like in GtkSpinButton) */
+  void (* get_text_area_size) (GtkEntry       *entry,
+			       gint           *x,
+			       gint           *y,
+			       gint           *width,
+			       gint           *height);
+
   /* Padding for future expansion */
-  void (*_gtk_reserved1) (void);
   void (*_gtk_reserved2) (void);
   void (*_gtk_reserved3) (void);
 };
