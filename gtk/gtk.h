@@ -158,6 +158,7 @@
 #include <gtk/gtkseparatormenuitem.h>
 #include <gtk/gtkseparatortoolitem.h>
 #include <gtk/gtksettings.h>
+#include <gtk/gtkshow.h>
 #include <gtk/gtksizegroup.h>
 #include <gtk/gtksocket.h>
 #include <gtk/gtkspinbutton.h>

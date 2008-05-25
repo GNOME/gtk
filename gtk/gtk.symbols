@@ -3498,6 +3498,11 @@ gtk_size_group_set_mode
 #endif
 #endif
 
+#if IN_HEADER(__GTK_SHOW_H__)
+#if IN_FILE(__GTK_SHOW_C__)
+gtk_show_uri
+#endif
+#endif
 
 #if IN_HEADER(__GTK_SOCKET_H__)
 #if IN_FILE(__GTK_SOCKET_C__)

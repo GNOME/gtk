@@ -280,6 +280,7 @@ gtk_public_h_sources =          \
 	gtkseparator.h		\
 	gtkseparatormenuitem.h	\
 	gtkseparatortoolitem.h	\
+ 	gtkshow.h		\
 	gtksettings.h		\
 	gtksizegroup.h		\
 	gtksocket.h		\
@@ -543,6 +544,7 @@ gtk_base_c_sources =            \
 	gtkseparatortoolitem.c	\
 	gtksettings.c		\
 	gtksizegroup.c		\
+	gtkshow.c		\
 	gtksocket.c		\
 	gtkspinbutton.c		\
 	gtkstatusbar.c		\

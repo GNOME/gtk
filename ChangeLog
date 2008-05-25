@@ -1,3 +1,14 @@
+2008-05-25  Jaap A. Haitsma  <jaap@haitsma.org>
+
+	reviewed by: Matthias Clasen
+
+	* gtk/Makefile.am:
+	* gtk/gtk.h:
+	* gtk/gtk.symbols:
+	* gtk/gtkshow.c: (gtk_show_uri):
+	* gtk/gtkshow.h:
+	Add gtk_show_uri to make showing uris really easy. Fixes bug #514396
+
 2008-05-25  Jan Arne Petersen  <jpetersen@jpetersen.org>
 
 	* gtk/gtkliststore.c: (list_store_text): Use type of the correct
