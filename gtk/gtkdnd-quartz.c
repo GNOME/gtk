@@ -143,6 +143,7 @@ struct _GtkDragFindData
 
   selection_data.selection = GDK_NONE;
   selection_data.data = NULL;
+  selection_data.length = -1;
   selection_data.target = _gtk_quartz_pasteboard_type_to_atom (type);
 
   if (gtk_target_list_find (info->target_list, 
@@ -155,7 +156,8 @@ struct _GtkDragFindData
 			     target_info,
 			     time);
 
-      _gtk_quartz_set_selection_data_for_pasteboard (sender, &selection_data);
+      if (selection_data.length >= 0)
+        _gtk_quartz_set_selection_data_for_pasteboard (sender, &selection_data);
       
       g_free (selection_data.data);
     }
@@ -1769,10 +1771,21 @@ gtk_drag_source_info_destroy (GtkDragSourceInfo *info)
   g_free (info);
 }
 
+static gboolean
+drag_drop_finished_idle_cb (gpointer data)
+{
+  gtk_drag_source_info_destroy (data);
+  return FALSE;
+}
+
 static void
 gtk_drag_drop_finished (GtkDragSourceInfo *info)
 {
-  gtk_drag_source_info_destroy (info);
+  /* Workaround for the fact that the NS API blocks until the drag is
+   * over. This way the context is still valid when returning from
+   * drag_begin, even if it will still be quite useless. See bug #501588.
+  */
+  g_idle_add (drag_drop_finished_idle_cb, info);
 }
 
 /*************************************************************
