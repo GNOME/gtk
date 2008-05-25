@@ -1,3 +1,12 @@
+2008-05-25  Sven Neumann  <sven@gimp.org>
+
+	* gtk/gtkdrawingarea.c (gtk_drawing_area_realize)
+	(gtk_drawing_area_size_allocate): respect the GTK_NO_WINDOW flag
+	and don't create an output window if it is set.
+
+	* gtk/gtkprintunixdialog.c: set the GTK_NO_WINDOW flag for the
+	drawing areas. Fixes bug #519317.
+
 2008-05-25  Jan Arne Petersen  <jpetersen@jpetersen.org>
 
 	* gtk/gtkentry.c: (gtk_entry_class_init), (get_text_area_size),

@@ -1546,6 +1546,8 @@ draw_collate_cb (GtkWidget	    *widget,
 
   cr = gdk_cairo_create (widget->window);
 
+  cairo_translate (cr, widget->allocation.x, widget->allocation.y);
+
   if (copies == 1)
     {
       paint_page (widget, cr, scale, rtl ? 40: 15, 5, reverse ? "1" : "2", text_x);
@@ -1771,13 +1773,16 @@ create_main_page (GtkPrintUnixDialog *dialog)
 		    0, 0);
 
   image = gtk_drawing_area_new ();
+  GTK_WIDGET_SET_FLAGS (image, GTK_NO_WINDOW);
+
   priv->collate_image = image;
   gtk_widget_show (image);
   gtk_widget_set_size_request (image, 70, 90);
   gtk_table_attach (GTK_TABLE (table), image,
 		    1, 2, 1, 3, GTK_FILL, 0,
 		    0, 0);
-  g_signal_connect (image, "expose-event", G_CALLBACK (draw_collate_cb), dialog);
+  g_signal_connect (image, "expose-event",
+                    G_CALLBACK (draw_collate_cb), dialog);
 
   label = gtk_label_new (_("General"));
   gtk_widget_show (label);
@@ -2054,6 +2059,8 @@ draw_page_cb (GtkWidget	         *widget,
   
   cr = gdk_cairo_create (widget->window);
   
+  cairo_translate (cr, widget->allocation.x, widget->allocation.y);
+
   ratio = G_SQRT2;
 
   w = (EXAMPLE_PAGE_AREA_SIZE - 3) / ratio;
@@ -2317,6 +2324,7 @@ create_page_setup_page (GtkPrintUnixDialog *dialog)
   gtk_box_pack_start (GTK_BOX (main_vbox), hbox2, TRUE, TRUE, 0);
 
   draw = gtk_drawing_area_new ();
+  GTK_WIDGET_SET_FLAGS (draw, GTK_NO_WINDOW);
   priv->page_layout_preview = draw;
   gtk_widget_set_size_request (draw, 200, 200);
   g_signal_connect (draw, "expose-event", G_CALLBACK (draw_page_cb), dialog);

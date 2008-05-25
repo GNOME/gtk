@@ -79,25 +79,33 @@ gtk_drawing_area_realize (GtkWidget *widget)
   GdkWindowAttr attributes;
   gint attributes_mask;
 
-  GTK_WIDGET_SET_FLAGS (widget, GTK_REALIZED);
+  if (GTK_WIDGET_NO_WINDOW (widget))
+    {
+      GTK_WIDGET_CLASS (gtk_drawing_area_parent_class)->realize (widget);
+    }
+  else
+    {
+      GTK_WIDGET_SET_FLAGS (widget, GTK_REALIZED);
 
-  attributes.window_type = GDK_WINDOW_CHILD;
-  attributes.x = widget->allocation.x;
-  attributes.y = widget->allocation.y;
-  attributes.width = widget->allocation.width;
-  attributes.height = widget->allocation.height;
-  attributes.wclass = GDK_INPUT_OUTPUT;
-  attributes.visual = gtk_widget_get_visual (widget);
-  attributes.colormap = gtk_widget_get_colormap (widget);
-  attributes.event_mask = gtk_widget_get_events (widget) | GDK_EXPOSURE_MASK;
+      attributes.window_type = GDK_WINDOW_CHILD;
+      attributes.x = widget->allocation.x;
+      attributes.y = widget->allocation.y;
+      attributes.width = widget->allocation.width;
+      attributes.height = widget->allocation.height;
+      attributes.wclass = GDK_INPUT_OUTPUT;
+      attributes.visual = gtk_widget_get_visual (widget);
+      attributes.colormap = gtk_widget_get_colormap (widget);
+      attributes.event_mask = gtk_widget_get_events (widget) | GDK_EXPOSURE_MASK;
 
-  attributes_mask = GDK_WA_X | GDK_WA_Y | GDK_WA_VISUAL | GDK_WA_COLORMAP;
+      attributes_mask = GDK_WA_X | GDK_WA_Y | GDK_WA_VISUAL | GDK_WA_COLORMAP;
 
-  widget->window = gdk_window_new (gtk_widget_get_parent_window (widget), &attributes, attributes_mask);
-  gdk_window_set_user_data (widget->window, darea);
+      widget->window = gdk_window_new (gtk_widget_get_parent_window (widget),
+                                       &attributes, attributes_mask);
+      gdk_window_set_user_data (widget->window, darea);
 
-  widget->style = gtk_style_attach (widget->style, widget->window);
-  gtk_style_set_background (widget->style, widget->window, GTK_STATE_NORMAL);
+      widget->style = gtk_style_attach (widget->style, widget->window);
+      gtk_style_set_background (widget->style, widget->window, GTK_STATE_NORMAL);
+    }
 
   gtk_drawing_area_send_configure (GTK_DRAWING_AREA (widget));
 }
@@ -113,9 +121,10 @@ gtk_drawing_area_size_allocate (GtkWidget     *widget,
 
   if (GTK_WIDGET_REALIZED (widget))
     {
-      gdk_window_move_resize (widget->window,
-			      allocation->x, allocation->y,
-			      allocation->width, allocation->height);
+      if (!GTK_WIDGET_NO_WINDOW (widget))
+        gdk_window_move_resize (widget->window,
+                                allocation->x, allocation->y,
+                                allocation->width, allocation->height);
 
       gtk_drawing_area_send_configure (GTK_DRAWING_AREA (widget));
     }
