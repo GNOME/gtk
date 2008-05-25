@@ -1,5 +1,11 @@
 2008-05-25  Jan Arne Petersen  <jpetersen@jpetersen.org>
 
+	* gtk/gtklabel.c: (get_layout_location): Subtract logical.x from x to
+	fix the wrong position for right and center justified labels with
+	logical.x > 0 (#530255).
+
+2008-05-25  Jan Arne Petersen  <jpetersen@jpetersen.org>
+
 	* gtk/gtkfilechooserdefault.c:
 	(shortcuts_activate_volume_mount_cb): Ignore G_IO_ERROR_FAILED_HANDLED
 	errors (#532262).

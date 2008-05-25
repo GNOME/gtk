@@ -2661,6 +2661,7 @@ get_layout_location (GtkLabel  *label,
   GtkLabelPrivate *priv;
   gfloat xalign;
   gint req_width, x, y;
+  PangoRectangle logical;
   
   misc = GTK_MISC (label);
   widget = GTK_WIDGET (label);
@@ -2671,13 +2672,13 @@ get_layout_location (GtkLabel  *label,
   else
     xalign = 1.0 - misc->xalign;
 
+  pango_layout_get_pixel_extents (label->layout, NULL, &logical);
+
   if (label->ellipsize || priv->width_chars > 0)
     {
       int width;
-      PangoRectangle logical;
 
       width = pango_layout_get_width (label->layout);
-      pango_layout_get_pixel_extents (label->layout, NULL, &logical);
 
       req_width = logical.width;
       if (width != -1)
@@ -2694,6 +2695,7 @@ get_layout_location (GtkLabel  *label,
     x = MAX (x, widget->allocation.x + misc->xpad);
   else
     x = MIN (x, widget->allocation.x + widget->allocation.width - misc->xpad);
+  x -= logical.x;
 
   y = floor (widget->allocation.y + (gint)misc->ypad 
              + MAX (((widget->allocation.height - widget->requisition.height) * misc->yalign),
