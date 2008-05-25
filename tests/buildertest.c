@@ -2084,6 +2084,8 @@ test_pango_attributes (void)
   gtk_builder_add_from_string (builder, err_buffer1, -1, &error);
   label = gtk_builder_get_object (builder, "label1");
   g_assert (error);
+  g_assert (error->domain == GTK_BUILDER_ERROR);
+  g_assert (error->code == GTK_BUILDER_ERROR_MISSING_ATTRIBUTE);
   g_object_unref (builder);
   g_error_free (error);
   error = NULL;
@@ -2091,11 +2093,37 @@ test_pango_attributes (void)
   builder = gtk_builder_new ();
   gtk_builder_add_from_string (builder, err_buffer2, -1, &error);
   label = gtk_builder_get_object (builder, "label1");
+
   g_assert (error);
+  g_assert (error->domain == GTK_BUILDER_ERROR);
+  g_assert (error->code == GTK_BUILDER_ERROR_INVALID_ATTRIBUTE);
   g_object_unref (builder);
   g_error_free (error);
 
 }
+
+
+static void
+test_requires (void)
+{
+  GtkBuilder *builder;
+  GError     *error = NULL;
+  gchar      *buffer;
+  const gchar buffer_fmt[] =
+    "<interface>"
+    "  <requires lib=\"gtk+\" version=\"%d.%d\"/>"
+    "</interface>";
+
+  buffer = g_strdup_printf (buffer_fmt, GTK_MAJOR_VERSION, GTK_MINOR_VERSION + 1);
+  builder = gtk_builder_new ();
+  gtk_builder_add_from_string (builder, buffer, -1, &error);
+  g_assert (error);
+  g_assert (error->domain == GTK_BUILDER_ERROR);
+  g_assert (error->code == GTK_BUILDER_ERROR_VERSION_MISMATCH);
+  g_object_unref (builder);
+  g_error_free (error);
+}
+
 
 static void 
 test_file (const gchar *filename)
@@ -2180,6 +2208,7 @@ main (int argc, char **argv)
   g_test_add_func ("/Builder/Window", test_window);
   g_test_add_func ("/Builder/IconFactory", test_icon_factory);
   g_test_add_func ("/Builder/PangoAttributes", test_pango_attributes);
+  g_test_add_func ("/Builder/Requires", test_requires);
 
   return g_test_run();
 }

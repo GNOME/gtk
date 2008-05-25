@@ -12,6 +12,9 @@
 	* gtk/docs/reference/gtk/tmpl/gtkbuilder.sgml: Added documentation
 	for the added xml tags to the ui description.
 
+	* tests/buildertest.c: Enhanced pango attribute tests, Added tests
+	for requires tag handling.
+
 2008-05-25  Richard Hult  <richard@imendio.com>
 
 	* gtk/gtkdnd-quartz.c: (gtk_drag_drop_finished): Run
