@@ -1,3 +1,11 @@
+2008-05-26  Michael Natterer  <mitch@imendio.com>
+
+	* gtk/gtkshow.h: include "gdk/gdk.h" instead of "gdk/gdkscreen.h"
+
+	* gtk/gtkshow.c: remove inclusion of single files from gdk/
+
+	Removed trailing whitespace in both files.
+
 2008-05-26  Richard Hult  <richard@imendio.com>
 
 	Bug 530353 – Mac-like gtk_accelerator_get_label()

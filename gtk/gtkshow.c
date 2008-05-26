@@ -1,4 +1,4 @@
-/* 
+/*
  * GTK - The GIMP Toolkit
  * Copyright (C) 2008  Jaap Haitsma <jaap@haitsma.org>
  *
@@ -24,8 +24,6 @@
 
 #include <glib.h>
 #include <gio/gio.h>
-#include "gdk/gdkscreen.h"
-#include "gdk/gdkapplaunchcontext.h"
 
 #include "gtkshow.h"
 
@@ -36,22 +34,22 @@
  * gtk_show_uri:
  * @screen: screen to show the uri on or %NULL for the default screen
  * @uri: the uri to show
- * @timestamp: a timestamp to prevent focus stealing. 
+ * @timestamp: a timestamp to prevent focus stealing.
  * @error: a #GError that is returned in case of errors
  *
- * This is a convenience function for launching the default application 
+ * This is a convenience function for launching the default application
  * to show the uri. The uri must be of a form understood by GIO. Typical
- * examples are 
+ * examples are
  * <simplelist>
  *   <member><filename>file:///home/gnome/pict.jpg</filename></member>
  *   <member><filename>http://www.gnome.org</filename></member>
  *   <member><filename>mailto:me&commat;gnome.org</filename></member>
  * </simplelist>
- * Ideally the timestamp is taken from the event triggering 
- * the gtk_show_uri() call. If timestamp is not known you can take 
+ * Ideally the timestamp is taken from the event triggering
+ * the gtk_show_uri() call. If timestamp is not known you can take
  * %GDK_CURRENT_TIME.
  *
- * This function can be used as a replacement for gnome_vfs_url_show() 
+ * This function can be used as a replacement for gnome_vfs_url_show()
  * and gnome_url_show().
  *
  * Returns: %TRUE on success, %FALSE on error.
@@ -59,9 +57,9 @@
  * Since: 2.14
  */
 gboolean
-gtk_show_uri (GdkScreen    *screen, 
-              const gchar  *uri, 
-              guint32       timestamp, 
+gtk_show_uri (GdkScreen    *screen,
+              const gchar  *uri,
+              guint32       timestamp,
               GError      **error)
 {
   GdkAppLaunchContext *context;
