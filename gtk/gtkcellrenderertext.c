@@ -1539,8 +1539,7 @@ get_size (GtkCellRenderer *cell,
   else
     layout = get_layout (celltext, widget, FALSE, 0);
 
-  pango_layout_get_extents (layout, NULL, &rect);
-  pango_extents_to_pixels (&rect, NULL);
+  pango_layout_get_pixel_extents (layout, NULL, &rect);
 
   if (height)
     *height = cell->ypad * 2 + rect.height;

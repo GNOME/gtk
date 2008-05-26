@@ -1,5 +1,16 @@
 2008-05-26  Matthias Clasen  <mclasen@redhat.com>
 
+	Bug 511163 – Remove pango_extents_to_pixels() calls
+
+	* gtk/gtkcellrenderertext.c (get_size): Use
+	pango_layout_get_pixel_extents.
+
+	* configure.in: Bump Pango requirement to 1.20
+
+	* INSTALL.in: Update required versions
+
+2008-05-26  Matthias Clasen  <mclasen@redhat.com>
+
 	Bug 513811 – Use cairo_format_stride_for_width()
 
 	* gtk/gtkhsv.c (paint_ring, paint_triangle):
