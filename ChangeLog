@@ -1,5 +1,17 @@
 2008-05-26  Matthias Clasen  <mclasen@redhat.com>
 
+	Bug 513811 – Use cairo_format_stride_for_width()
+
+	* gtk/gtkhsv.c (paint_ring, paint_triangle):
+	* gdk/gdkcairo.c (gdk_cairo_set_source_pixbuf): Use
+	cairo_format_stride_for_width, proposed by Behdad Esfahbod.
+
+	* configure.in: Bump cairo requirement to 1.6.0
+
+	* INSTALL.in: Update required versions
+
+2008-05-26  Matthias Clasen  <mclasen@redhat.com>
+
 	* gtk/gtkshow.[hc]: Formatting fixes
 
 	* gtk/gtkmountoperation.c: Add docs

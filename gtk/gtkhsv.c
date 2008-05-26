@@ -897,6 +897,7 @@ paint_ring (GtkHSV      *hsv,
   gdouble r, g, b;
   cairo_surface_t *source;
   cairo_t *source_cr;
+  gint stride;
   gint focus_width;
   gint focus_pad;
 
@@ -914,7 +915,8 @@ paint_ring (GtkHSV      *hsv,
   
   /* Create an image initialized with the ring colors */
   
-  buf = g_new (guint32, width * height);
+  stride = cairo_format_stride_for_width (CAIRO_FORMAT_RGB24, width);
+  buf = g_new (guint32, height * stride / 4);
   
   for (yy = 0; yy < height; yy++)
     {
@@ -952,7 +954,7 @@ paint_ring (GtkHSV      *hsv,
 
   source = cairo_image_surface_create_for_data ((char *)buf,
 						CAIRO_FORMAT_RGB24,
-						width, height, 4 * width);
+						width, height, stride);
 
   /* Now draw the value marker onto the source image, so that it
    * will get properly clipped at the edges of the ring
@@ -1047,6 +1049,7 @@ paint_triangle (GtkHSV      *hsv,
   cairo_surface_t *source;
   gdouble r, g, b;
   gchar *detail;
+  gint stride;
   
   priv = hsv->priv;
   
@@ -1094,8 +1097,9 @@ paint_triangle (GtkHSV      *hsv,
     }
   
   /* Shade the triangle */
-  
-  buf = g_new (guint32, width * height);
+
+  stride = cairo_format_stride_for_width (CAIRO_FORMAT_RGB24, width);
+  buf = g_new (guint32, height * stride / 4);
   
   for (yy = 0; yy < height; yy++)
     {
@@ -1162,7 +1166,7 @@ paint_triangle (GtkHSV      *hsv,
 
   source = cairo_image_surface_create_for_data ((char *)buf,
 						CAIRO_FORMAT_RGB24,
-						width, height, 4 * width);
+						width, height, stride);
   
   /* Draw a triangle with the image as a source */
 

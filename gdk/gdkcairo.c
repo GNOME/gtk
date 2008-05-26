@@ -146,6 +146,7 @@ gdk_cairo_set_source_pixbuf (cairo_t         *cr,
   guchar *gdk_pixels = gdk_pixbuf_get_pixels (pixbuf);
   int gdk_rowstride = gdk_pixbuf_get_rowstride (pixbuf);
   int n_channels = gdk_pixbuf_get_n_channels (pixbuf);
+  int cairo_stride;
   guchar *cairo_pixels;
   cairo_format_t format;
   cairo_surface_t *surface;
@@ -157,10 +158,12 @@ gdk_cairo_set_source_pixbuf (cairo_t         *cr,
   else
     format = CAIRO_FORMAT_ARGB32;
 
-  cairo_pixels = g_malloc (4 * width * height);
+  cairo_stride = cairo_format_stride_for_width (format, width);
+  cairo_pixels = g_malloc (height * cairo_stride);
   surface = cairo_image_surface_create_for_data ((unsigned char *)cairo_pixels,
-						 format,
-						 width, height, 4 * width);
+                                                 format,
+                                                 width, height, cairo_stride);
+
   cairo_surface_set_user_data (surface, &key,
 			       cairo_pixels, (cairo_destroy_func_t)g_free);
 
@@ -217,7 +220,7 @@ gdk_cairo_set_source_pixbuf (cairo_t         *cr,
 	}
 
       gdk_pixels += gdk_rowstride;
-      cairo_pixels += 4 * width;
+      cairo_pixels += cairo_stride;
     }
 
   cairo_set_source_surface (cr, surface, pixbuf_x, pixbuf_y);
