@@ -1976,10 +1976,12 @@ gdk_screen_get_setting (GdkScreen   *screen,
 {
   if (strcmp (name, "gtk-double-click-time") == 0)
     {
-      NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+      NSUserDefaults *defaults;
       float t;
 
       GDK_QUARTZ_ALLOC_POOL;
+
+      defaults = [NSUserDefaults standardUserDefaults];
             
       t = [defaults floatForKey:@"com.apple.mouse.doubleClickThreshold"];
       if (t == 0.0)
@@ -1991,6 +1993,33 @@ gdk_screen_get_setting (GdkScreen   *screen,
       GDK_QUARTZ_RELEASE_POOL;
 
       g_value_set_int (value, t * 1000);
+
+      return TRUE;
+    }
+  else if (strcmp (name, "gtk-font-name") == 0)
+    {
+      NSString *name;
+      char *str;
+
+      GDK_QUARTZ_ALLOC_POOL;
+
+      name = [[NSFont systemFontOfSize:0] familyName];
+
+      /* Let's try to use the "views" font size (12pt) by default. This is
+       * used for lists/text/other "content" which is the largest parts of
+       * apps, using the "regular control" size (13pt) looks a bit out of
+       * place. We might have to tweak this.
+       */
+
+      /* The size has to be hardcoded as there doesn't seem to be a way to
+       * get the views font size programmatically.
+       */
+      str = g_strdup_printf ("%s 12", [name UTF8String]);
+      g_value_set_string (value, str);
+      g_free (str);
+
+      GDK_QUARTZ_RELEASE_POOL;
+
       return TRUE;
     }
   

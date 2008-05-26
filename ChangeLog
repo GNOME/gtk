@@ -1,3 +1,8 @@
+2008-05-26  Richard Hult  <richard@imendio.com>
+
+	* gdk/quartz/gdkevents-quartz.c: (gdk_screen_get_setting): Try
+	setting the default font, might need to tweak this.
+
 2008-05-26  Michael Natterer  <mitch@imendio.com>
 
 	* examples/gtkdial/gtkdial.h
