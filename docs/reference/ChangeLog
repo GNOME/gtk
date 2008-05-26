@@ -1,3 +1,8 @@
+2008-05-26  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtk-sections.txt: 
+	* gtk/gtk-docs.sgml: Add a section for GtkMountOperation
+	
 2008-05-25  Matthias Clasen  <mclasen@redhat.com>
 
 	Bug 465144 - gtkprintjob.h is not included with gtk.h

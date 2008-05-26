@@ -1,3 +1,9 @@
+2008-05-26  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtkshow.[hc]: Formatting fixes
+
+	* gtk/gtkmountoperation.c: Add docs
+
 2008-05-25  Cody Russell  <bratsche@gnome.org>
 
 	Bug 507389 – use gslice for gtksettings

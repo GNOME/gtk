@@ -46,6 +46,28 @@
 #include "gtkwindow.h"
 #include "gtkalias.h"
 
+/**
+ * SECTION:filesystem
+ * @short_description: Functions for working with GIO
+ *
+ * The functions and objects described here make working with GTK+ and
+ * GIO more convenient. #GtkMountOperation is needed when mounting volumes
+ * and gtk_show_uri() is a convenient way to launch applications for URIs.
+ * Another object that is worth mentioning in this context is 
+ * #GdkAppLaunchContext, which provides visual feedback when lauching
+ * applications.
+ */
+
+/** 
+ * GtkMountOperation:
+ *
+ * #GtkMountOperation is an implementation of #GMountOperation that 
+ * can be used with GIO functions for mounting volumes such as
+ * g_file_mount_enclosing_volume() or g_file_mount_mountable().
+ *
+ * When necessary, #GtkMountOperation shows dialogs to ask for passwords.
+ */
+
 /* GObject, GtkObject methods
  */
 static void   gtk_mount_operation_set_property (GObject          *object,
@@ -160,10 +182,10 @@ gtk_mount_operation_class_init (GtkMountOperationClass *klass)
 
 
 static void
-gtk_mount_operation_set_property (GObject         *object,
-                                  guint            prop_id,
-                                  const GValue    *value,
-                                  GParamSpec      *pspec)
+gtk_mount_operation_set_property (GObject      *object,
+                                  guint         prop_id,
+                                  const GValue *value,
+                                  GParamSpec   *pspec)
 {
   GtkMountOperation *operation;
   gpointer tmp;
@@ -190,10 +212,10 @@ gtk_mount_operation_set_property (GObject         *object,
 }
 
 static void
-gtk_mount_operation_get_property (GObject         *object,
-                                  guint            prop_id,
-                                  GValue          *value,
-                                  GParamSpec      *pspec)
+gtk_mount_operation_get_property (GObject    *object,
+                                  guint       prop_id,
+                                  GValue     *value,
+                                  GParamSpec *pspec)
 {
   GtkMountOperationPrivate *priv;
   GtkMountOperation *operation;
@@ -688,6 +710,16 @@ gtk_mount_operation_ask_question (GMountOperation *op,
   g_object_ref (op);
 }
 
+/**
+ * gtk_mount_operation_new:
+ * @parent: transient parent of the window, or %NULL
+ *
+ * Creates a new #GtkMountOperation
+ *
+ * Returns: a new #GtkMountOperation
+ *
+ * Since: 2.14
+ */
 GMountOperation *
 gtk_mount_operation_new (GtkWindow *parent)
 {
@@ -699,6 +731,17 @@ gtk_mount_operation_new (GtkWindow *parent)
   return mount_operation;
 }
 
+/**
+ * gtk_mount_operation_is_showing:
+ * @op: a #GtkMountOperation
+ *
+ * Returns whether the #GtkMountOperation is currently displaying
+ * a window.
+ *
+ * Returns: %TRUE if @op is currently displaying a window
+ *
+ * Since: 2.14
+ */
 gboolean
 gtk_mount_operation_is_showing (GtkMountOperation *op)
 {
@@ -707,6 +750,14 @@ gtk_mount_operation_is_showing (GtkMountOperation *op)
   return op->priv->dialog != NULL;
 }
 
+/**
+ * gtk_mount_operation_set_parent:
+ * @op: a #GtkMountOperation
+ * @parent: transient parent of the window, or %NULL
+ *
+ * Sets the transient parent for windows shown by the
+ * #GtkMountOperation.
+ */
 void
 gtk_mount_operation_set_parent (GtkMountOperation *op,
                                 GtkWindow         *parent)
@@ -744,6 +795,16 @@ gtk_mount_operation_set_parent (GtkMountOperation *op,
   g_object_notify (G_OBJECT (op), "parent");
 }
 
+/**
+ * gtk_mount_operation_get_parent:
+ * @op: a #GtkMountOperation
+ *
+ * Gets the transient parent used by the #GtkMountOperation
+ *
+ * Returns: the transient parent for windows shown by @op
+ *
+ * Since: 2.14
+ */
 GtkWindow *
 gtk_mount_operation_get_parent (GtkMountOperation *op)
 {
@@ -752,6 +813,15 @@ gtk_mount_operation_get_parent (GtkMountOperation *op)
   return op->priv->parent_window;
 }
 
+/**
+ * gtk_mount_operation_set_screen:
+ * @op: a #GtkMountOperation
+ * @screen: a #GdkScreen
+ *
+ * Sets the screen to show windows of the #GtkMountOperation on.
+ *
+ * Since: 2.14
+ */
 void
 gtk_mount_operation_set_screen (GtkMountOperation *op,
                                 GdkScreen         *screen)
@@ -777,6 +847,17 @@ gtk_mount_operation_set_screen (GtkMountOperation *op,
   g_object_notify (G_OBJECT (op), "screen");
 }
 
+/**
+ * gtk_mount_operation_get_screen:
+ * @op: a #GtkMountOperation
+ *
+ * Gets the screen on which windows of the #GtkMountOperation 
+ * will be shown.
+ *
+ * Returns: the screen on which windows of @op are shown
+ *
+ * Since: 2.14
+ */
 GdkScreen *
 gtk_mount_operation_get_screen (GtkMountOperation *op)
 {

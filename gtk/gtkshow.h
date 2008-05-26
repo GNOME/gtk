@@ -27,10 +27,10 @@
 
 G_BEGIN_DECLS
 
-gboolean gtk_show_uri  (GdkScreen *screen, 
-                        const char* uri, 
-                        guint32 timestamp, 
-                        GError **error);
+gboolean gtk_show_uri  (GdkScreen   *screen, 
+                        const gchar *uri, 
+                        guint32      timestamp, 
+                        GError     **error);
 
 G_END_DECLS
 
