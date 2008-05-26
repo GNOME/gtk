@@ -166,12 +166,12 @@ _gtk_quartz_get_selection_data_from_pasteboard (NSPasteboard *pasteboard,
 
       if (s)
 	{
-          int len = [s length];
+          const char *utf8_string = [s UTF8String];
 
           selection_data->type = target;
 	  selection_data->format = 8;
-	  selection_data->length = len;
-	  selection_data->data = g_memdup ([s UTF8String], len + 1);
+	  selection_data->length = strlen (utf8_string);
+	  selection_data->data = (guchar*) g_strdup (utf8_string);
 	}
     }
   else if (target == gdk_atom_intern_static_string ("application/x-color"))
