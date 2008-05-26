@@ -20,14 +20,13 @@
 #ifndef __GTK_IM_MODULE_H__
 #define __GTK_IM_MODULE_H__
 
-
 #include <gtk/gtkimcontext.h>
 
 G_BEGIN_DECLS
 
 typedef struct _GtkIMContextInfo GtkIMContextInfo;
 
-struct _GtkIMContextInfo 
+struct _GtkIMContextInfo
 {
   const gchar *context_id;
   const gchar *context_name;
@@ -49,13 +48,11 @@ const gchar  * _gtk_im_module_get_default_context_id (GdkWindow                *
 /*
 void          im_module_list   (const GtkIMContextInfo ***contexts,
 				guint                    *n_contexts);
-void          im_module_init   (GtkModule             *module);
+void          im_module_init   (GtkModule                *module);
 void          im_module_exit   (void);
-GtkIMContext *im_module_create (const gchar             *context_id);
+GtkIMContext *im_module_create (const gchar              *context_id);
 */
 
-
 G_END_DECLS
-
 
 #endif /* __GTK_IM_MODULE_H__ */

@@ -1,5 +1,9 @@
 2008-05-26  Michael Natterer  <mitch@imendio.com>
 
+	* gtk/gtkimmodule.h: fix indentation.
+
+2008-05-26  Michael Natterer  <mitch@imendio.com>
+
 	* gtk/gtkshow.h: include "gdk/gdk.h" instead of "gdk/gdkscreen.h"
 
 	* gtk/gtkshow.c: remove inclusion of single files from gdk/
