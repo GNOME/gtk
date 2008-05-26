@@ -1,5 +1,9 @@
 2008-05-26  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtk-sections.txt: Additions
+
+2008-05-26  Matthias Clasen  <mclasen@redhat.com>
+
 	* gtk/gtk-sections.txt: 
 	* gtk/gtk-docs.sgml: Add a section for GtkMountOperation
 	
