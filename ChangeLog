@@ -1,5 +1,15 @@
 2008-05-26  Richard Hult  <richard@imendio.com>
 
+	Bug 530353 – Mac-like gtk_accelerator_get_label()
+
+	* gtk/gtkaccellabel.c: (gtk_accel_label_class_init),
+	(append_keyval_symbol), (_gtk_accel_label_class_get_accelerator_label):
+	On quartz, make gtk_accelerator_get_label() format a Mac-like
+	string, using unicode characters for modifier keys, arrows, delete
+	etc. Patch from Yevgen Muntyan.
+
+2008-05-26  Richard Hult  <richard@imendio.com>
+
 	Bug 534869 – Length miscalculation in
 	_gtk_quartz_get_selection_data_from_pasteboard
 
