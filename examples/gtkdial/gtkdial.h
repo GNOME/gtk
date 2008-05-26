@@ -1,4 +1,3 @@
-
 /* GTK - The GIMP Toolkit
  * Copyright (C) 1995-1997 Peter Mattis, Spencer Kimball and Josh MacDonald
  *
@@ -17,6 +16,7 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330,
  * Boston, MA 02111-1307, USA.
  */
+
 #ifndef __GTK_DIAL_H__
 #define __GTK_DIAL_H__
 
@@ -26,9 +26,7 @@
 #include <gtk/gtkwidget.h>
 
 
-#ifdef __cplusplus
-extern "C" {
-#endif /* __cplusplus */
+G_BEGIN_DECLS
 
 
 #define GTK_DIAL(obj)          GTK_CHECK_CAST (obj, gtk_dial_get_type (), GtkDial)
@@ -83,9 +81,9 @@ void           gtk_dial_set_update_policy      (GtkDial      *dial,
 
 void           gtk_dial_set_adjustment         (GtkDial      *dial,
 						GtkAdjustment *adjustment);
-#ifdef __cplusplus
-}
-#endif /* __cplusplus */
+
+
+G_END_DECLS
 
 
 #endif /* __GTK_DIAL_H__ */

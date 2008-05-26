@@ -24,9 +24,7 @@
 
 #include <gtk/gtkimcontext.h>
 
-#ifdef __cplusplus
-extern "C" {
-#endif /* __cplusplus */
+G_BEGIN_DECLS
 
 extern GType gtk_type_im_context_thai;
 
@@ -74,9 +72,6 @@ GtkIMContextThaiISCMode
   gtk_im_context_thai_set_isc_mode (GtkIMContextThai *context_thai,
                                     GtkIMContextThaiISCMode mode);
 
-#ifdef __cplusplus
-}
-#endif /* __cplusplus */
-
+G_END_DECLS
 
 #endif /* __GTK_IM_CONTEXT_THAI_H__ */
