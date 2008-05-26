@@ -20,12 +20,10 @@
 #ifndef __GAIL_TEXT_UTIL_H__
 #define __GAIL_TEXT_UTIL_H__
 
-#ifdef __cplusplus
-extern "C" {
-#endif /*__cplusplus */
-
 #include <glib-object.h>
 #include <gtk/gtk.h>
+
+G_BEGIN_DECLS
 
 #define GAIL_TYPE_TEXT_UTIL                  (gail_text_util_get_type ())
 #define GAIL_TEXT_UTIL(obj)                  (G_TYPE_CHECK_INSTANCE_CAST ((obj), GAIL_TYPE_TEXT_UTIL, GailTextUtil))
@@ -84,8 +82,6 @@ gchar*        gail_text_util_get_substring (GailTextUtil    *textutil,
                                             gint            start_pos,
                                             gint            end_pos);
 
-#ifdef __cplusplus 
-}
-#endif /*cplusplus */
+G_END_DECLS
 
 #endif /*__GAIL_TEXT_UTIL_H__ */

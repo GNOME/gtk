@@ -1,3 +1,8 @@
+2008-05-26  Michael Natterer  <mitch@imendio.com>
+
+	* libgail-util/gailmisc.h
+	* libgail-util/gailtextutil.h: use G_BEGIN/END_DECLS.
+
 2008-05-24  Matthias Clasen  <mclasen@redhat.com>
 
 	Bug 504706 – wrong deallocator used for GError in gailtextview.c

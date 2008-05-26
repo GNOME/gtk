@@ -20,13 +20,11 @@
 #ifndef __GAIL_MISC_H__
 #define __GAIL_MISC_H__
 
-#ifdef __cplusplus
-extern "C" {
-#endif /*__cplusplus */
-
 #include <glib-object.h>
 #include <gtk/gtk.h>
 #include <pango/pango.h>
+
+G_BEGIN_DECLS
 
 AtkAttributeSet* gail_misc_add_attribute          (AtkAttributeSet   *attrib_set,
                                                    AtkTextAttribute   attr,
@@ -79,8 +77,6 @@ AtkAttributeSet* gail_misc_buffer_get_run_attributes
                                                    gint              *start_offset,
                                                    gint              *end_offset);
 
-#ifdef __cplusplus 
-}
-#endif /*cplusplus */
+G_END_DECLS
 
 #endif /*__GAIL_MISC_H__ */
