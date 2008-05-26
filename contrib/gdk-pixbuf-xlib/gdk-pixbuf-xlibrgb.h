@@ -51,14 +51,12 @@
 #ifndef __XLIB_RGB_H__
 #define __XLIB_RGB_H__
 
-#ifdef __cplusplus
-extern "C" {
-#endif /* __cplusplus */
+#include <glib.h>
+
+G_BEGIN_DECLS
 
 #include <X11/Xlib.h>
 #include <X11/Xutil.h>
-
-#include <glib.h>
 
 typedef struct _XlibRgbCmap XlibRgbCmap;
 
@@ -185,9 +183,6 @@ xlib_rgb_get_display (void);
 Screen *
 xlib_rgb_get_screen (void);
 
-#ifdef __cplusplus
-}
-#endif /* __cplusplus */
-
+G_END_DECLS
 
 #endif /* __XLIB_RGB_H__ */

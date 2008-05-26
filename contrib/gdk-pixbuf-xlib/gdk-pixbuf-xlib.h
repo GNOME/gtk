@@ -21,12 +21,11 @@
 #ifndef GDK_PIXBUF_XLIB_H
 #define GDK_PIXBUF_XLIB_H
 
-#ifdef __cplusplus
-extern "C" {
-#endif /* __cplusplus */
-
 #include <gdk-pixbuf/gdk-pixbuf.h>
 #include <gdk-pixbuf-xlib/gdk-pixbuf-xlibrgb.h>
+
+G_BEGIN_DECLS
+
 #include <X11/Xlib.h>
 
 
@@ -83,9 +82,6 @@ GdkPixbuf *gdk_pixbuf_xlib_get_from_drawable (GdkPixbuf *dest,
 					      int dest_x, int dest_y,
 					      int width, int height);
 
-#ifdef __cplusplus
-}
-#endif /* __cplusplus */
-
+G_END_DECLS
 
 #endif /* GDK_PIXBUF_XLIB_H */

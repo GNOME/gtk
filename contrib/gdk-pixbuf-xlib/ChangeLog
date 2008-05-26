@@ -1,3 +1,8 @@
+2008-05-26  Michael Natterer  <mitch@imendio.com>
+
+	* gdk-pixbuf-xlib.h
+	* gdk-pixbuf-xlibrgb.h: use G_BEGIN/END_DECLS.
+
 2008-02-16  Matthias Clasen  <mclasen@redhat.com>
 
 	* === Released 2.13.0 ===
