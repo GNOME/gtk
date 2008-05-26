@@ -1,5 +1,9 @@
 2008-05-26  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkwidget.c: Some doc formatting fixes.
+
+2008-05-26  Matthias Clasen  <mclasen@redhat.com>
+
 	Bug 511163 – Remove pango_extents_to_pixels() calls
 
 	* gtk/gtkcellrenderertext.c (get_size): Use
