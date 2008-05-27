@@ -427,7 +427,7 @@ gtk_print_backend_cups_print_stream (GtkPrintBackend         *print_backend,
                                   GTK_CUPS_POST,
                                   IPP_PRINT_JOB,
 				  data_io,
-				  NULL,
+				  cups_printer->hostname, 
 				  cups_printer->device_uri);
 
   gtk_cups_request_ipp_add_string (request, IPP_TAG_OPERATION, 

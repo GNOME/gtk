@@ -1,3 +1,10 @@
+2008-05-27  Matthias Clasen  <mclasen@redhat.com>
+
+	RH bug 248245: cups client printing from gnome applications fail
+
+	* modules/printbackends/cups/gtkprintbackendcups.c
+	(gtk_print_backend_cups_print_stream): Specify the right server.
+
 2008-05-27  Carlos Garnacho  <carlos@imendio.com>
 
 	* gtk/gtkfilechooserdefault.c (set_select_multiple): Enable
