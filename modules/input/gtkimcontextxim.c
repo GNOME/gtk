@@ -22,11 +22,9 @@
 #include <string.h>
 #include <stdlib.h>
 
-#include "gtk/gtkintl.h"
-#include "gtk/gtklabel.h"
-#include "gtk/gtksignal.h"
-#include "gtk/gtkwindow.h"
 #include "gtkimcontextxim.h"
+
+#include "gtk/gtkintl.h"
 
 typedef struct _StatusWindow StatusWindow;
 typedef struct _GtkXIMInfo GtkXIMInfo;

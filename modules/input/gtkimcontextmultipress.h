@@ -19,7 +19,7 @@
 #ifndef __GTK_IM_CONTEXT_MULTIPRESS_H
 #define __GTK_IM_CONTEXT_MULTIPRESS_H
 
-#include <gtk/gtkimcontext.h>
+#include <gtk/gtk.h>
 
 G_BEGIN_DECLS
 

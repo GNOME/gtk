@@ -26,11 +26,11 @@
 #include <config.h>
 #include <string.h>
 
-#include <gdk/gdkkeysyms.h>
+#include "gtk/gtk.h"
+#include "gdk/gdkkeysyms.h"
 
-#include "gtk/gtkintl.h"
-#include "gtk/gtkimcontextsimple.h"
 #include "gtk/gtkimmodule.h"
+#include "gtk/gtkintl.h"
 
 GType type_viqr_translit = 0;
 

@@ -29,11 +29,11 @@
 #include <stdio.h>
 #include <string.h>
 
-#include <gdk/gdkkeysyms.h>
+#include "gtk/gtk.h"
+#include "gdk/gdkkeysyms.h"
 
-#include "gtk/gtkintl.h"
-#include "gtk/gtkimcontextsimple.h"
 #include "gtk/gtkimmodule.h"
+#include "gtk/gtkintl.h"
 
 GType type_ti_et_translit = 0;
 

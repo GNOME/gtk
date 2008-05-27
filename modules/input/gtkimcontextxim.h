@@ -20,7 +20,7 @@
 #ifndef __GTK_IM_CONTEXT_XIM_H__
 #define __GTK_IM_CONTEXT_XIM_H__
 
-#include <gtk/gtkimcontext.h>
+#include <gtk/gtk.h>
 #include "x11/gdkx.h"
 
 G_BEGIN_DECLS

@@ -1,5 +1,26 @@
 2008-05-28  Michael Natterer  <mitch@imendio.com>
 
+	* modules/input/gtkimcontextime.h
+	* modules/input/gtkimcontextmultipress.h
+	* modules/input/gtkimcontextthai.h
+	* modules/input/gtkimcontextxim.h: include <gtk/gtk.h> instead of
+	individual files.
+
+	* modules/input/gtkimcontextime.c
+	* modules/input/gtkimcontextmultipress.c
+	* modules/input/gtkimcontextxim.c
+	* modules/input/imam-et.c
+	* modules/input/imcedilla.c
+	* modules/input/imcyrillic-translit.c
+	* modules/input/iminuktitut.c
+	* modules/input/imipa.c
+	* modules/input/imti-er.c
+	* modules/input/imti-et.c
+	* modules/input/imviqr.c: ditto. Some minor cleanups like moving
+	"gtk/gtkintl.h" to the end of includes.
+
+2008-05-28  Michael Natterer  <mitch@imendio.com>
+
 	* modules/engines/pixbuf/pixbuf-style.h
 	* modules/engines/pixbuf/pixbuf-rc-style.h: include <gtk/gtk.h>
 	instead of individual files.

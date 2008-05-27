@@ -16,17 +16,15 @@
  * Boston, MA 02111-1307, USA.
  */
 
+#include "config.h"
+
+#include <string.h>
+
+#include "gtk/gtk.h"
+#include "gdk/gdkkeysyms.h"
+
+#include "gtk/gtkimmodule.h"
 #include "gtkimcontextmultipress.h"
-#include <gtk/gtkimcontext.h>
-#include <gtk/gtkimmodule.h>
-#include <gtk/gtkimcontext.h>
-#include <gtk/gtkwidget.h>
-#include <gtk/gtkwindow.h>
-#include <gdk/gdkwindow.h>
-#include <gdk/gdkkeysyms.h> /* For GDK_A, etc. */
-#include <glib.h> /* For GKeyFile */
-#include <glib-object.h>
-#include <string.h> /* For memset() */
 
 #define AUTOMATIC_COMPOSE_TIMEOUT 1 /* seconds */
 

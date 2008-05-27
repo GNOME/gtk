@@ -31,7 +31,6 @@
 
 #include "gdk/win32/gdkwin32.h"
 #include "gdk/gdkkeysyms.h"
-#include "gtk/gtkwidget.h"
 
 #include <pango/pango.h>
 
