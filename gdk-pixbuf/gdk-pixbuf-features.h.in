@@ -13,15 +13,15 @@
 #  ifdef GDK_PIXBUF_STATIC_COMPILATION
 #    define GDK_PIXBUF_VAR extern
 #  else /* !GDK_PIXBUF_STATIC_COMPILATION */
-#    ifdef GDK_PIXBUF_COMPILATION
+#    ifdef GDK_PIXBUF_C_COMPILATION
 #      ifdef DLL_EXPORT
 #        define GDK_PIXBUF_VAR __declspec(dllexport)
 #      else /* !DLL_EXPORT */
 #        define GDK_PIXBUF_VAR extern
 #      endif /* !DLL_EXPORT */
-#    else /* !GDK_PIXBUF_COMPILATION */
+#    else /* !GDK_PIXBUF_C_COMPILATION */
 #      define GDK_PIXBUF_VAR extern __declspec(dllimport)
-#    endif /* !GDK_PIXBUF_COMPILATION */
+#    endif /* !GDK_PIXBUF_C_COMPILATION */
 #  endif /* !GDK_PIXBUF_STATIC_COMPILATION */
 #else /* !G_PLATFORM_WIN32 */
 #  define GDK_PIXBUF_VAR extern

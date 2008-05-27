@@ -27,6 +27,7 @@
 #include <math.h>
 #include <stdlib.h>
 #include <string.h>
+#define GDK_PIXBUF_C_COMPILATION
 #include "gdk-pixbuf.h"
 #include "gdk-pixbuf-private.h"
 /* Include the marshallers */
