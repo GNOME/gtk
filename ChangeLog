@@ -1,5 +1,10 @@
 2008-05-27  Carlos Garnacho  <carlos@imendio.com>
 
+	* gtk/gtkfilechooserdefault.c (set_select_multiple): Enable
+	rubberbanding when "select-multiple" is TRUE. Bug #446068.
+
+2008-05-27  Carlos Garnacho  <carlos@imendio.com>
+
 	* gtk/gtkmountoperation.c (gtk_mount_operation_ask_password): Enable
 	correctly dialog buttons sensitivity when the anonymous option is
 	enabled by default. Bug #531865.
