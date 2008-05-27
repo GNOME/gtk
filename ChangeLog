@@ -1,3 +1,11 @@
+2008-05-27  Matthias Clasen  <mclasen@redhat.com>
+
+	106574 - Inconsistent increment behavior for gtkspinbutton
+
+	* gtk/gtkspinbutton.c (gtk_spin_button_real_value_change):
+	Commit the entry text before doing an increment. Patch by
+	Björn Lindqvist.
+
 2008-05-27  Federico Mena Quintero  <federico@novell.com>
 
 	http://bugzilla.gnome.org/show_bug.cgi?id=533891 - Don't allow
