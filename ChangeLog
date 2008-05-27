@@ -1,3 +1,9 @@
+2008-05-27  Michael Natterer  <mitch@imendio.com>
+
+	* gtk/gtksignal.h: move deprecated guards around everything,
+	including includes and include guards (just as in all other
+	deprecated files).
+
 2008-05-27  Tor Lillqvist  <tml@novell.com>
 
 	* gtk/updateiconcache.c (build_cache): Use simpler mode for open()
