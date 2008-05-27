@@ -1,3 +1,17 @@
+2008-05-27  Michael Natterer  <mitch@imendio.com>
+
+	Fix and simplify definition of GDK_PIXBUF_VAR:
+
+	* Makefile.am: add -DGDK_PIXBUF_COMPILATION to INCLUDES.
+
+	* gdk-pixbuf.c: don't #define it here. Remove GDK_PIXBUF_VAR from
+	the definition of the version variables.
+
+	* gdk-pixbuf-features.h.in: in the !G_PLATFORM_WIN32 case, always
+	define GDK_PIXBUF_VAR to "extern". Remove redundant #ifndef
+	GDK_PIXBUF_VAR around the whole block, the header itself already
+	has include guards.
+
 2008-05-12  Tor Lillqvist  <tml@novell.com>
 
 	Bug 532558 - Cannot build dll when using separate builddir

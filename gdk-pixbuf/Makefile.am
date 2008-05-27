@@ -500,6 +500,7 @@ builtin_objs = @INCLUDED_LOADER_OBJ@
 DEPS = libgdk_pixbuf-$(GTK_API_VERSION).la
 INCLUDES = \
 	-DG_LOG_DOMAIN=\"GdkPixbuf\"		\
+	-DGDK_PIXBUF_COMPILATION		\
 	-I$(top_srcdir) -I$(top_builddir) 	\
 	-I$(top_srcdir)/gdk-pixbuf 		\
 	-I$(top_builddir)/gdk-pixbuf 		\

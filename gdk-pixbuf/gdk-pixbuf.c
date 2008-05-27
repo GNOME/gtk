@@ -27,7 +27,6 @@
 #include <math.h>
 #include <stdlib.h>
 #include <string.h>
-#define GDK_PIXBUF_COMPILATION
 #include "gdk-pixbuf.h"
 #include "gdk-pixbuf-private.h"
 /* Include the marshallers */
@@ -508,11 +507,11 @@ gdk_pixbuf_get_rowstride (const GdkPixbuf *pixbuf)
 
 
 /* General initialization hooks */
-GDK_PIXBUF_VAR const guint gdk_pixbuf_major_version = GDK_PIXBUF_MAJOR;
-GDK_PIXBUF_VAR const guint gdk_pixbuf_minor_version = GDK_PIXBUF_MINOR;
-GDK_PIXBUF_VAR const guint gdk_pixbuf_micro_version = GDK_PIXBUF_MICRO;
+const guint gdk_pixbuf_major_version = GDK_PIXBUF_MAJOR;
+const guint gdk_pixbuf_minor_version = GDK_PIXBUF_MINOR;
+const guint gdk_pixbuf_micro_version = GDK_PIXBUF_MICRO;
 
-GDK_PIXBUF_VAR const char *gdk_pixbuf_version = GDK_PIXBUF_VERSION;
+const char *gdk_pixbuf_version = GDK_PIXBUF_VERSION;
 
 /* Error quark */
 GQuark
