@@ -1437,11 +1437,18 @@ build_cache (const gchar *path)
   struct utimbuf utime_buf;
   GList *directories = NULL;
   int fd;
+#ifndef G_OS_WIN32
   mode_t mode = S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH;
-  
+#else
+  int mode = _S_IWRITE | _S_IREAD;
+#endif
+#ifndef _O_BINARY
+#define _O_BINARY 0
+#endif
+
   tmp_cache_path = g_build_filename (path, "."CACHE_NAME, NULL);
 
-  if ((fd = open (tmp_cache_path, O_WRONLY | O_CREAT | O_EXCL | O_TRUNC, mode)) == -1)
+  if ((fd = open (tmp_cache_path, O_WRONLY | O_CREAT | O_EXCL | O_TRUNC | _O_BINARY, mode)) == -1)
     {
       g_printerr (_("Failed to open file %s : %s\n"), tmp_cache_path, g_strerror (errno));
       exit (1);
