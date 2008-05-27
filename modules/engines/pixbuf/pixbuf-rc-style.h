@@ -20,7 +20,7 @@
  * Carsten Haitzler <raster@rasterman.com>
  */
 
-#include <gtk/gtkrc.h>
+#include <gtk/gtk.h>
 
 typedef struct _PixbufRcStyle PixbufRcStyle;
 typedef struct _PixbufRcStyleClass PixbufRcStyleClass;

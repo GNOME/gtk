@@ -1,3 +1,9 @@
+2008-05-28  Michael Natterer  <mitch@imendio.com>
+
+	* modules/engines/pixbuf/pixbuf-style.h
+	* modules/engines/pixbuf/pixbuf-rc-style.h: include <gtk/gtk.h>
+	instead of individual files.
+
 2008-05-27  Matthias Clasen  <mclasen@redhat.com>
 
 	Bug 485218 - Strange warning encountered
