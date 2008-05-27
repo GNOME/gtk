@@ -1,3 +1,8 @@
+2008-05-27 10:33:41  Tim Janik  <timj@imendio.com>
+
+	* gtk/gtkwidget.c: guard gtk_widget_get_snapshot() against
+	invalid or invisible widgets.
+
 2008-05-27  Matthias Clasen  <mclasen@redhat.com>
 
 	Bug 531008 – Crash in gtkprintunixdialog.c

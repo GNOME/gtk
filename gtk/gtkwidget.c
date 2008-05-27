@@ -8356,6 +8356,10 @@ gtk_widget_get_snapshot (GtkWidget    *widget,
   GdkPixmap *pixmap;
   GList *windows = NULL, *list;
 
+  g_return_val_if_fail (GTK_IS_WIDGET (widget), NULL);
+  if (!GTK_WIDGET_VISIBLE (widget))
+    return NULL;
+
   /* the widget (and parent_window) must be realized to be drawable */
   if (widget->parent && !GTK_WIDGET_REALIZED (widget->parent))
     gtk_widget_realize (widget->parent);
