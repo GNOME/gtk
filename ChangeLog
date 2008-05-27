@@ -1,5 +1,11 @@
 2008-05-27  Carlos Garnacho  <carlos@imendio.com>
 
+	* gtk/gtkmountoperation.c (gtk_mount_operation_ask_password): Enable
+	correctly dialog buttons sensitivity when the anonymous option is
+	enabled by default. Bug #531865.
+
+2008-05-27  Carlos Garnacho  <carlos@imendio.com>
+
 	* gtk/gtkmountoperation.c (gtk_mount_operation_ask_password): Set
 	password dialog modal and transient for the parent window also if it
 	was specified in the constructor. Bug #531864.
