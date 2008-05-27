@@ -621,7 +621,12 @@ gtk_mount_operation_ask_password (GMountOperation   *mount_op,
 
   g_object_notify (G_OBJECT (operation), "is-showing");
 
-  if (priv->parent_window == NULL && priv->screen)
+  if (priv->parent_window)
+    {
+      gtk_window_set_transient_for (window, priv->parent_window);
+      gtk_window_set_modal (window, TRUE);
+    }
+  else if (priv->screen)
     gtk_window_set_screen (GTK_WINDOW (dialog), priv->screen);
 
   gtk_widget_show_all (GTK_WIDGET (dialog));
