@@ -1,3 +1,15 @@
+2008-05-27  Federico Mena Quintero  <federico@novell.com>
+
+	Merged from trunk:
+
+	http://bugzilla.gnome.org/show_bug.cgi?id=533891 - Don't allow
+	drag and drop from the file list into itself, as it doesn't make
+	sense (it would just change the current folder).
+
+	* gtk/gtkfilechooserdefault.c (file_list_dest_targets): Use
+	GTK_TARGET_OTHER_WIDGET so we don't DnD from the file list into
+	itself.
+
 2008-05-13  Tor Lillqvist  <tml@novell.com>
 
 	Bug 496958 - Wacom Bamboo doesn't function with GTK apps in Win32

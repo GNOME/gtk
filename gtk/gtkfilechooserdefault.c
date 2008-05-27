@@ -258,7 +258,7 @@ static const int num_file_list_source_targets = G_N_ELEMENTS (file_list_source_t
 
 /* Target types for dropping into the file list */
 static const GtkTargetEntry file_list_dest_targets[] = {
-  { "text/uri-list", 0, TEXT_URI_LIST }
+  { "text/uri-list", GTK_TARGET_OTHER_WIDGET, TEXT_URI_LIST }
 };
 
 static const int num_file_list_dest_targets = G_N_ELEMENTS (file_list_dest_targets); 
