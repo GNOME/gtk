@@ -1184,14 +1184,13 @@ gdk_pixbuf__ico_image_save (FILE          *f,
 	return TRUE;
 }
 
-#ifndef INCLUDE_ico
-#define MODULE_ENTRY(type,function) function
+#ifndef INCLUDE_png
+#define MODULE_ENTRY(function) G_MODULE_EXPORT void function
 #else
-#define MODULE_ENTRY(type,function) _gdk_pixbuf__ ## type ## _ ## function
+#define MODULE_ENTRY(function) void _gdk_pixbuf__ico_ ## function
 #endif
 
-void
-MODULE_ENTRY (ico, fill_vtable) (GdkPixbufModule *module)
+MODULE_ENTRY (fill_vtable) (GdkPixbufModule *module)
 {
 	module->begin_load = gdk_pixbuf__ico_image_begin_load;
 	module->stop_load = gdk_pixbuf__ico_image_stop_load;
@@ -1199,8 +1198,7 @@ MODULE_ENTRY (ico, fill_vtable) (GdkPixbufModule *module)
         module->save = gdk_pixbuf__ico_image_save;
 }
 
-void
-MODULE_ENTRY (ico, fill_info) (GdkPixbufFormat *info)
+MODULE_ENTRY (fill_info) (GdkPixbufFormat *info)
 {
 	static GdkPixbufModulePattern signature[] = {
 		{ "  \x1   ", "zz znz", 100 }, 

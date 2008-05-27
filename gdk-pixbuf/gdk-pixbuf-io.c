@@ -363,6 +363,12 @@ gdk_pixbuf_io_init (void)
 #ifdef INCLUDE_pcx
 	load_one_builtin_module (pcx);
 #endif
+#ifdef INCLUDE_icns
+	load_one_builtin_module (icns);
+#endif
+#ifdef INCLUDE_jasper
+	load_one_builtin_module (jasper);
+#endif
 #ifdef INCLUDE_gdiplus
 	/* We don't bother having the GDI+ loaders individually selectable
 	 * for building in or not.
@@ -592,6 +598,8 @@ module (wbmp);
 module (xbm);
 module (tga);
 module (pcx);
+module (icns);
+module (jasper);
 module (gdip_ico);
 module (gdip_wmf);
 module (gdip_emf);
@@ -659,6 +667,12 @@ _gdk_pixbuf_load_module (GdkPixbufModule *image_module,
 #endif
 #ifdef INCLUDE_pcx
 	try_module (pcx,pcx);
+#endif
+#ifdef INCLUDE_icns
+	try_module (icns,icns);
+#endif
+#ifdef INCLUDE_jasper
+	try_module (jasper,jasper);
 #endif
 #ifdef INCLUDE_gdiplus
 	try_module (ico,gdip_ico);

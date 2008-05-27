@@ -720,21 +720,19 @@ gdk_pixbuf__pcx_stop_load(gpointer data, GError **error)
 }
 
 #ifndef INCLUDE_pcx
-#define MODULE_ENTRY(type,function) function
+#define MODULE_ENTRY(function) G_MODULE_EXPORT void function
 #else
-#define MODULE_ENTRY(type,function) _gdk_pixbuf__ ## type ## _ ## function
+#define MODULE_ENTRY(function) void _gdk_pixbuf__pcx_ ## function
 #endif
 
-void
-MODULE_ENTRY (pcx, fill_vtable) (GdkPixbufModule *module)
+MODULE_ENTRY (fill_vtable) (GdkPixbufModule *module)
 {
 	module->begin_load = gdk_pixbuf__pcx_begin_load;
 	module->stop_load = gdk_pixbuf__pcx_stop_load;
 	module->load_increment = gdk_pixbuf__pcx_load_increment;
 }
 
-void
-MODULE_ENTRY (pcx, fill_info) (GdkPixbufFormat *info)
+MODULE_ENTRY (fill_info) (GdkPixbufFormat *info)
 {
 	static GdkPixbufModulePattern signature[] = {
 		{ "\x0a \x01", NULL, 100 },

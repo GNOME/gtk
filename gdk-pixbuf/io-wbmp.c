@@ -340,21 +340,19 @@ static gboolean gdk_pixbuf__wbmp_image_load_increment(gpointer data,
 }
 
 #ifndef INCLUDE_wbmp
-#define MODULE_ENTRY(type,function) function
+#define MODULE_ENTRY(function) G_MODULE_EXPORT void function
 #else
-#define MODULE_ENTRY(type,function) _gdk_pixbuf__ ## type ## _ ## function
+#define MODULE_ENTRY(function) void _gdk_pixbuf__wbmp_ ## function
 #endif
 
-void
-MODULE_ENTRY (wbmp, fill_vtable) (GdkPixbufModule *module)
+MODULE_ENTRY (fill_vtable) (GdkPixbufModule *module)
 {
 	module->begin_load = gdk_pixbuf__wbmp_image_begin_load;
 	module->stop_load = gdk_pixbuf__wbmp_image_stop_load;
 	module->load_increment = gdk_pixbuf__wbmp_image_load_increment;
 }
 
-void
-MODULE_ENTRY (wbmp, fill_info) (GdkPixbufFormat *info)
+MODULE_ENTRY (fill_info) (GdkPixbufFormat *info)
 {
 	static GdkPixbufModulePattern signature[] = {
 		{ "  ",    "zz", 1 }, 

@@ -512,21 +512,19 @@ gdk_pixbuf__ras_image_load_increment(gpointer data,
 }
 
 #ifndef INCLUDE_ras
-#define MODULE_ENTRY(type,function) function
+#define MODULE_ENTRY(function) G_MODULE_EXPORT void function
 #else
-#define MODULE_ENTRY(type,function) _gdk_pixbuf__ ## type ## _ ## function
+#define MODULE_ENTRY(function) void _gdk_pixbuf__ras_ ## function
 #endif
 
-void
-MODULE_ENTRY (ras, fill_vtable) (GdkPixbufModule *module)
+MODULE_ENTRY (fill_vtable) (GdkPixbufModule *module)
 {
 	module->begin_load = gdk_pixbuf__ras_image_begin_load;
 	module->stop_load = gdk_pixbuf__ras_image_stop_load;
 	module->load_increment = gdk_pixbuf__ras_image_load_increment;
 }
 
-void
-MODULE_ENTRY (ras, fill_info) (GdkPixbufFormat *info)
+MODULE_ENTRY (fill_info) (GdkPixbufFormat *info)
 {
 	static GdkPixbufModulePattern signature[] = {
 		{ "\x59\xa6\x6a\x95", NULL, 100 },

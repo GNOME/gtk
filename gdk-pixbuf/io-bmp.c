@@ -1387,13 +1387,12 @@ gdk_pixbuf__bmp_image_save (FILE          *f,
 }
 
 #ifndef INCLUDE_bmp
-#define MODULE_ENTRY(type,function) function
+#define MODULE_ENTRY(function) G_MODULE_EXPORT void function
 #else
-#define MODULE_ENTRY(type,function) _gdk_pixbuf__ ## type ## _ ## function
+#define MODULE_ENTRY(function) void _gdk_pixbuf__bmp_ ## function
 #endif
 
-void
-MODULE_ENTRY (bmp, fill_vtable) (GdkPixbufModule *module)
+MODULE_ENTRY (fill_vtable) (GdkPixbufModule *module)
 {
 	module->begin_load = gdk_pixbuf__bmp_image_begin_load;
 	module->stop_load = gdk_pixbuf__bmp_image_stop_load;
@@ -1402,8 +1401,7 @@ MODULE_ENTRY (bmp, fill_vtable) (GdkPixbufModule *module)
 	module->save_to_callback = gdk_pixbuf__bmp_image_save_to_callback;
 }
 
-void
-MODULE_ENTRY (bmp, fill_info) (GdkPixbufFormat *info)
+MODULE_ENTRY (fill_info) (GdkPixbufFormat *info)
 {
 	static GdkPixbufModulePattern signature[] = {
 		{ "BM", NULL, 100 },

@@ -1272,13 +1272,12 @@ gdk_pixbuf__jpeg_image_save_to_callback (GdkPixbufSaveFunc   save_func,
 }
 
 #ifndef INCLUDE_jpeg
-#define MODULE_ENTRY(type,function) function
+#define MODULE_ENTRY(function) G_MODULE_EXPORT void function
 #else
-#define MODULE_ENTRY(type,function) _gdk_pixbuf__ ## type ## _ ## function
+#define MODULE_ENTRY(function) void _gdk_pixbuf__jpeg_ ## function
 #endif
 
-void
-MODULE_ENTRY (jpeg, fill_vtable) (GdkPixbufModule *module)
+MODULE_ENTRY (fill_vtable) (GdkPixbufModule *module)
 {
 	module->load = gdk_pixbuf__jpeg_image_load;
 	module->begin_load = gdk_pixbuf__jpeg_image_begin_load;
@@ -1288,8 +1287,7 @@ MODULE_ENTRY (jpeg, fill_vtable) (GdkPixbufModule *module)
 	module->save_to_callback = gdk_pixbuf__jpeg_image_save_to_callback;
 }
 
-void
-MODULE_ENTRY (jpeg, fill_info) (GdkPixbufFormat *info)
+MODULE_ENTRY (fill_info) (GdkPixbufFormat *info)
 {
 	static GdkPixbufModulePattern signature[] = {
 		{ "\xff\xd8", NULL, 100 },

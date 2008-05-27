@@ -1655,13 +1655,12 @@ gdk_pixbuf__gif_image_load_animation (FILE *file,
 }
 
 #ifndef INCLUDE_gif
-#define MODULE_ENTRY(type,function) function
+#define MODULE_ENTRY(function) G_MODULE_EXPORT void function
 #else
-#define MODULE_ENTRY(type,function) _gdk_pixbuf__ ## type ## _ ## function
+#define MODULE_ENTRY(function) void _gdk_pixbuf__gif_ ## function
 #endif
 
-void
-MODULE_ENTRY (gif, fill_vtable) (GdkPixbufModule *module)
+MODULE_ENTRY (fill_vtable) (GdkPixbufModule *module)
 {
         module->load = gdk_pixbuf__gif_image_load;
         module->begin_load = gdk_pixbuf__gif_image_begin_load;
@@ -1670,8 +1669,7 @@ MODULE_ENTRY (gif, fill_vtable) (GdkPixbufModule *module)
         module->load_animation = gdk_pixbuf__gif_image_load_animation;
 }
 
-void
-MODULE_ENTRY (gif, fill_info) (GdkPixbufFormat *info)
+MODULE_ENTRY (fill_info) (GdkPixbufFormat *info)
 {
         static GdkPixbufModulePattern signature[] = {
                 { "GIF8", NULL, 100 },

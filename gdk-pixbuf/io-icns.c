@@ -364,14 +364,18 @@ icns_image_load (FILE *f, GError ** error)
   return pixbuf;
 }
 
-void
-fill_vtable (GdkPixbufModule * module)
+#ifndef INCLUDE_png
+#define MODULE_ENTRY(function) G_MODULE_EXPORT void function
+#else
+#define MODULE_ENTRY(function) void _gdk_pixbuf__icns_ ## function
+#endif
+
+MODULE_ENTRY (fill_vtable) (GdkPixbufModule * module)
 {
   module->load = icns_image_load;
 }
 
-void
-fill_info (GdkPixbufFormat * info)
+MODULE_ENTRY (fill_info) (GdkPixbufFormat * info)
 {
   static GdkPixbufModulePattern signature[] = {
     {"icns", NULL, 100},	/* file begins with 'icns' */

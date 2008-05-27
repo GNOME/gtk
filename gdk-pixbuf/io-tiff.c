@@ -777,13 +777,12 @@ gdk_pixbuf__tiff_image_save (FILE          *f,
 }
 
 #ifndef INCLUDE_tiff
-#define MODULE_ENTRY(type,function) function
+#define MODULE_ENTRY(function) G_MODULE_EXPORT void function
 #else
-#define MODULE_ENTRY(type,function) _gdk_pixbuf__ ## type ## _ ## function
+#define MODULE_ENTRY(function) void _gdk_pixbuf__tiff_ ## function
 #endif
 
-void
-MODULE_ENTRY (tiff, fill_vtable) (GdkPixbufModule *module)
+MODULE_ENTRY (fill_vtable) (GdkPixbufModule *module)
 {
         module->load = gdk_pixbuf__tiff_image_load;
         module->begin_load = gdk_pixbuf__tiff_image_begin_load;
@@ -793,8 +792,7 @@ MODULE_ENTRY (tiff, fill_vtable) (GdkPixbufModule *module)
         module->save_to_callback = gdk_pixbuf__tiff_image_save_to_callback;
 }
 
-void
-MODULE_ENTRY (tiff, fill_info) (GdkPixbufFormat *info)
+MODULE_ENTRY (fill_info) (GdkPixbufFormat *info)
 {
         static GdkPixbufModulePattern signature[] = {
                 { "MM \x2a", "  z ", 100 },

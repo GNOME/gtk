@@ -262,16 +262,20 @@ jasper_image_load_increment (gpointer data, const guchar *buf, guint size, GErro
 	return TRUE;
 }
 
-void
-fill_vtable (GdkPixbufModule * module)
+#ifndef INCLUDE_png
+#define MODULE_ENTRY(function) G_MODULE_EXPORT void function
+#else
+#define MODULE_ENTRY(function) void _gdk_pixbuf__jasper_ ## function
+#endif
+
+MODULE_ENTRY (fill_vtable) (GdkPixbufModule * module)
 {
 	module->begin_load = jasper_image_begin_load;
 	module->stop_load = jasper_image_stop_load;
 	module->load_increment = jasper_image_load_increment;
 }
 
-void
-fill_info (GdkPixbufFormat * info)
+MODULE_ENTRY (fill_info) (GdkPixbufFormat * info)
 {
 	static GdkPixbufModulePattern signature[] = {
 		{ "    jP", "!!!!  ", 100 },		/* file begins with 'jP' at offset 4 */

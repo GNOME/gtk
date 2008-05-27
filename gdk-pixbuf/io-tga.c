@@ -962,21 +962,19 @@ static gboolean gdk_pixbuf__tga_stop_load(gpointer data, GError **err)
 }
 
 #ifndef INCLUDE_tga
-#define MODULE_ENTRY(type,function) function
+#define MODULE_ENTRY(function) G_MODULE_EXPORT void function
 #else
-#define MODULE_ENTRY(type,function) _gdk_pixbuf__ ## type ## _ ## function
+#define MODULE_ENTRY(function) void _gdk_pixbuf__tga_ ## function
 #endif
 
-void
-MODULE_ENTRY (tga, fill_vtable) (GdkPixbufModule *module)
+MODULE_ENTRY (fill_vtable) (GdkPixbufModule *module)
 {
 	module->begin_load = gdk_pixbuf__tga_begin_load;
 	module->stop_load = gdk_pixbuf__tga_stop_load;
 	module->load_increment = gdk_pixbuf__tga_load_increment;
 }
 
-void
-MODULE_ENTRY (tga, fill_info) (GdkPixbufFormat *info)
+MODULE_ENTRY (fill_info) (GdkPixbufFormat *info)
 {
 	static GdkPixbufModulePattern signature[] = {
 		{ " \x1\x1", "x  ", 100 },

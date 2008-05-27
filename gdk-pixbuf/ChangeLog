@@ -1,3 +1,11 @@
+2008-05-27  Tor Lillqvist  <tml@novell.com>
+
+	* io-*.c: Use explicit G_MODULE_EXPORT decoration when building
+	the loader in question as a module.
+
+	* gdk-pixbuf-io.c: Enable included build of the icns and jasper
+	loaders.
+
 2008-05-27  Michael Natterer  <mitch@imendio.com>
 
 	* gdk-pixbuf.c: put back the #define, but call it

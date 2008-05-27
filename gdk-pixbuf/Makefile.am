@@ -43,7 +43,7 @@ install-ms-lib:
 uninstall-ms-lib:
 endif
 
-# This places the generated .def in srcdir, since it is expected to be there.
+# This places the generated .def file in srcdir, since it is expected to be there.
 # (The one from a tarball is)
 gdk_pixbuf.def: gdk-pixbuf.symbols
 	(echo -e EXPORTS; $(CPP) -P -DINCLUDE_VARIABLES -DG_OS_WIN32 -DALL_FILES - <$(srcdir)/gdk-pixbuf.symbols | sed -e '/^$$/d' -e 's/^/	/' -e 's/G_GNUC_[^ ]*//g') > $(srcdir)/gdk_pixbuf.def

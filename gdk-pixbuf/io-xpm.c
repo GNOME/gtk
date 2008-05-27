@@ -782,13 +782,12 @@ gdk_pixbuf__xpm_image_load_increment (gpointer data,
 }
 
 #ifndef INCLUDE_xpm
-#define MODULE_ENTRY(type,function) function
+#define MODULE_ENTRY(function) G_MODULE_EXPORT void function
 #else
-#define MODULE_ENTRY(type,function) _gdk_pixbuf__ ## type ## _ ## function
+#define MODULE_ENTRY(function) void _gdk_pixbuf__xpm_ ## function
 #endif
 
-void
-MODULE_ENTRY (xpm, fill_vtable) (GdkPixbufModule *module)
+MODULE_ENTRY (fill_vtable) (GdkPixbufModule *module)
 {
 	module->load = gdk_pixbuf__xpm_image_load;
 	module->load_xpm_data = gdk_pixbuf__xpm_image_load_xpm_data;
@@ -797,8 +796,7 @@ MODULE_ENTRY (xpm, fill_vtable) (GdkPixbufModule *module)
 	module->load_increment = gdk_pixbuf__xpm_image_load_increment;
 }
 
-void
-MODULE_ENTRY (xpm, fill_info) (GdkPixbufFormat *info)
+MODULE_ENTRY (fill_info) (GdkPixbufFormat *info)
 {
 	static GdkPixbufModulePattern signature[] = {
 		{ "/* XPM */", NULL, 100 },
