@@ -1,5 +1,12 @@
 2008-05-27  Matthias Clasen  <mclasen@redhat.com>
 
+	Bug 531008 – Crash in gtkprintunixdialog.c
+
+	* gtk/gtkprintunixdialog.c: Disconnect signal handlers when
+	the dialog closes. Patch by Yevgen Muntyan.
+
+2008-05-27  Matthias Clasen  <mclasen@redhat.com>
+
 	RH bug 248245: cups client printing from gnome applications fail
 
 	* modules/printbackends/cups/gtkprintbackendcups.c

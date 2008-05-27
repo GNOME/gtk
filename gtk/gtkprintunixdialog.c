@@ -195,6 +195,7 @@ struct GtkPrintUnixDialogPrivate
   GList *print_backends;
   
   GtkPrinter *current_printer;
+  GtkPrinter *request_details_printer;
   guint request_details_tag;
   GtkPrinterOptionSet *options;
   gulong options_changed_handler;
@@ -450,6 +451,21 @@ gtk_print_unix_dialog_destroy (GtkPrintUnixDialog *dialog)
 }
 
 static void
+disconnect_printer_details_request (GtkPrintUnixDialog *dialog)
+{
+  GtkPrintUnixDialogPrivate *priv = dialog->priv;
+
+  if (priv->request_details_tag)
+    {
+      g_signal_handler_disconnect (priv->request_details_printer,
+                                   priv->request_details_tag);
+      priv->request_details_tag = 0;
+      g_object_unref (priv->request_details_printer);
+      priv->request_details_printer = NULL;
+    }
+}
+
+static void
 gtk_print_unix_dialog_finalize (GObject *object)
 {
   GtkPrintUnixDialog *dialog = GTK_PRINT_UNIX_DIALOG (object);
@@ -458,13 +474,8 @@ gtk_print_unix_dialog_finalize (GObject *object)
   GList *node;
 
   unschedule_idle_mark_conflicts (dialog);
+  disconnect_printer_details_request (dialog);
 
-  if (priv->request_details_tag)
-    {
-      g_source_remove (priv->request_details_tag);
-      priv->request_details_tag = 0;
-    }
-  
   if (priv->current_printer)
     {
       g_object_unref (priv->current_printer);
@@ -1358,7 +1369,7 @@ printer_details_acquired (GtkPrinter         *printer,
 {
   GtkPrintUnixDialogPrivate *priv = dialog->priv;
 
-  priv->request_details_tag = 0;
+  disconnect_printer_details_request (dialog);
   
   if (success)
     {
@@ -1385,13 +1396,9 @@ selected_printer_changed (GtkTreeSelection   *selection,
       g_free (priv->waiting_for_printer);
       priv->waiting_for_printer = NULL;
     }
-  
-  if (priv->request_details_tag)
-    {
-      g_source_remove (priv->request_details_tag);
-      priv->request_details_tag = 0;
-    }
-  
+
+  disconnect_printer_details_request (dialog);
+
   printer = NULL;
   if (gtk_tree_selection_get_selected (selection, NULL, &filter_iter))
     {
@@ -1410,8 +1417,9 @@ selected_printer_changed (GtkTreeSelection   *selection,
       priv->request_details_tag =
 	g_signal_connect (printer, "details-acquired",
 			  G_CALLBACK (printer_details_acquired), dialog);
+      /* take the reference */
+      priv->request_details_printer = printer;
       gtk_printer_request_details (printer);
-      g_object_unref (printer);
       return;
     }
   
