@@ -1,3 +1,9 @@
+2008-05-27  Matthias Clasen  <mclasen@redhat.com>
+
+	Bug 531887 - GtkTooltips is deprecated, but what should I use?
+
+	* gtk/tmpl/gtktooltips.sgml: Add a hint for what to use instead
+
 2008-05-26  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtk-sections.txt: Additions

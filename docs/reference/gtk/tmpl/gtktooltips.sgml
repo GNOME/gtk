@@ -6,6 +6,10 @@ Add tips to your widgets
 
 <!-- ##### SECTION Long_Description ##### -->
 <para>
+<link linkend="GtkToolTips"><type>GtkTooltips</type></link> has been deprecated in GTK+ 2.12, in favor of the new
+<link linkend="GtkToolTip"><type>GtkTooltip</type></link> API.
+</para>
+<para>
 Tooltips are the messages that appear next to a widget when the mouse pointer is held over it for a short amount of time. They are especially helpful for adding more verbose descriptions of things such as buttons in a toolbar.
 </para>
 <para>
