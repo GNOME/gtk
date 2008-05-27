@@ -630,9 +630,10 @@ gtk_tree_model_sort_row_inserted (GtkTreeModel          *s_model,
 
       if (level->array->len < gtk_tree_path_get_indices (s_path)[i])
 	{
-	  g_warning ("A node was inserted with a parent that's not in the tree.\n"
+	  g_warning ("%s: A node was inserted with a parent that's not in the tree.\n"
 		     "This possibly means that a GtkTreeModel inserted a child node\n"
-		     "before the parent was inserted.");
+		     "before the parent was inserted.",
+		     G_STRLOC);
 	  goto done;
 	}
 
@@ -2080,7 +2081,12 @@ gtk_tree_model_sort_convert_child_iter_to_iter (GtkTreeModelSort *tree_model_sor
 
   path = gtk_tree_model_sort_convert_child_path_to_path (tree_model_sort, child_path);
   gtk_tree_path_free (child_path);
-  g_return_if_fail (path != NULL);
+
+  if (!path)
+    {
+      g_warning ("%s: The conversion of the child path to a GtkTreeModel sort path failed", G_STRLOC);
+      return;
+    }
 
   gtk_tree_model_get_iter (GTK_TREE_MODEL (tree_model_sort), sort_iter, path);
   gtk_tree_path_free (path);
@@ -2259,7 +2265,30 @@ gtk_tree_model_sort_build_level (GtkTreeModelSort *tree_model_sort,
 	  if (gtk_tree_model_iter_next (tree_model_sort->child_model, &iter) == FALSE &&
 	      i < length - 1)
 	    {
-	      g_warning ("There is a discrepancy between the sort model and the child model.");
+	      if (parent_level)
+	        {
+	          GtkTreePath *level;
+		  gchar *str;
+
+		  level = gtk_tree_model_sort_elt_get_path (parent_level,
+							    parent_elt);
+		  str = gtk_tree_path_to_string (level);
+		  gtk_tree_path_free (level);
+
+		  g_warning ("%s: There is a discrepancy between the sort model "
+			     "and the child model.  The child model is "
+			     "advertising a wrong length for level %s:.",
+			     G_STRLOC, str);
+		  g_free (str);
+		}
+	      else
+	        {
+		  g_warning ("%s: There is a discrepancy between the sort model "
+			     "and the child model.  The child model is "
+			     "advertising a wrong length for the root level.",
+			     G_STRLOC);
+		}
+
 	      return;
 	    }
 	}

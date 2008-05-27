@@ -1,6 +1,15 @@
 2008-05-27  Matthias Clasen  <mclasen@redhat.com>
 
-	Bug 351910 – Search column setting lost
+	Bug 485218 - Strange warning encountered
+
+	* gtk/gtktreemodelsort.c (gtk_tree_model_sort_row_inserted):
+	(gtk_tree_model_sort_convert_child_iter_to_iter):
+	(gtk_tree_model_sort_build_level): Better warnings. Patch
+	by Kristian Rietveld.
+
+2008-05-27  Matthias Clasen  <mclasen@redhat.com>
+
+	Bug 351910 - Search column setting lost
 
 	* gtk/gtktreeview.c (gtk_tree_view_set_search_column): Clarify
 	the docs. Patch by Matt Barnes.
