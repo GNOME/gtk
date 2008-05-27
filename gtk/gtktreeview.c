@@ -13889,13 +13889,14 @@ gtk_tree_view_get_search_column (GtkTreeView *tree_view)
  * @column: the column of the model to search in, or -1 to disable searching
  *
  * Sets @column as the column where the interactive search code should
- * search in. 
+ * search in for the current model. 
  * 
  * If the search column is set, users can use the "start-interactive-search"
  * key binding to bring up search popup. The enable-search property controls
  * whether simply typing text will also start an interactive search.
  *
- * Note that @column refers to a column of the model. 
+ * Note that @column refers to a column of the current model. The search 
+ * column is reset to -1 when the model is changed.
  */
 void
 gtk_tree_view_set_search_column (GtkTreeView *tree_view,

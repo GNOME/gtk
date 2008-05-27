@@ -1,6 +1,21 @@
 2008-05-27  Matthias Clasen  <mclasen@redhat.com>
 
-	106574 - Inconsistent increment behavior for gtkspinbutton
+	Bug 351910 – Search column setting lost
+
+	* gtk/gtktreeview.c (gtk_tree_view_set_search_column): Clarify
+	the docs. Patch by Matt Barnes.
+
+2008-05-27  Matthias Clasen  <mclasen@redhat.com>
+
+	Bug 477278 - avoid unnecessary pointer subtraction
+
+	* gtk/gtkaccelgroup.c (quick_accel_remove): Avoid pointer 
+	subtraction that sparse complains about. Patch by Christian
+	Persch.
+
+2008-05-27  Matthias Clasen  <mclasen@redhat.com>
+
+	Bug 106574 - Inconsistent increment behavior for gtkspinbutton
 
 	* gtk/gtkspinbutton.c (gtk_spin_button_real_value_change):
 	Commit the entry text before doing an increment. Patch by

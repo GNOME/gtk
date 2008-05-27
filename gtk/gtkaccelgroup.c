@@ -397,10 +397,10 @@ quick_accel_add (GtkAccelGroup  *accel_group,
 
 static void
 quick_accel_remove (GtkAccelGroup      *accel_group,
-		    GtkAccelGroupEntry *entry)
+                    guint               pos)
 {
-  guint pos = entry - accel_group->priv_accels;
   GQuark accel_quark = 0;
+  GtkAccelGroupEntry *entry = accel_group->priv_accels + pos;
   guint accel_key = entry->key.accel_key;
   GdkModifierType accel_mods = entry->key.accel_mods;
   GClosure *closure = entry->closure;
@@ -577,7 +577,7 @@ gtk_accel_group_disconnect (GtkAccelGroup *accel_group,
     if (accel_group->priv_accels[i].closure == closure)
       {
 	g_object_ref (accel_group);
-	quick_accel_remove (accel_group, accel_group->priv_accels + i);
+	quick_accel_remove (accel_group, i);
 	g_object_unref (accel_group);
 	return TRUE;
       }
