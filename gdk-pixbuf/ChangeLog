@@ -1,3 +1,24 @@
+2008-05-28  Michael Natterer  <mitch@imendio.com>
+
+	* gdk-pixbuf.h: define GDK_PIXBUF_H_INSIDE around including all
+	other headers.
+
+	* gdk-pixbuf-animation.h
+	* gdk-pixbuf-core.h
+	* gdk-pixbuf-enum-types.h.template
+	* gdk-pixbuf-features.h.in
+	* gdk-pixbuf-io.h
+	* gdk-pixbuf-loader.h
+	* gdk-pixbuf-simple-anim.h
+	* gdk-pixbuf-transform.h: add single-include guards that #error
+	out if GDK_PIXBUF_DISABLE_SINGLE_INCLUDES is defined and any of
+	these files is included individually.
+
+	* gdk-pixbuf-private.h: don't incude "gdk-pixbuf-io.h".
+
+	* gdk-pixbuf-csource.c: #define __GTK_H_INSIDE__ around including
+	"../gtk/gtkversion.h". Ugly but needed in this special case.
+
 2008-05-27  Tor Lillqvist  <tml@novell.com>
 
 	* io-*.c: Use explicit G_MODULE_EXPORT decoration when building

@@ -26,6 +26,8 @@
 #ifndef GDK_PIXBUF_H
 #define GDK_PIXBUF_H
 
+#define GDK_PIXBUF_H_INSIDE
+
 #include <glib.h>
 #include <gdk-pixbuf/gdk-pixbuf-features.h>
 #include <glib-object.h>
@@ -38,5 +40,6 @@
 #include <gdk-pixbuf/gdk-pixbuf-loader.h>
 #include <gdk-pixbuf/gdk-pixbuf-enum-types.h>
 
+#undef GDK_PIXBUF_H_INSIDE
 
 #endif  /* GDK_PIXBUF_H */
