@@ -12613,6 +12613,7 @@ gtk_tree_view_set_cursor_on_cell (GtkTreeView       *tree_view,
 				  gboolean           start_editing)
 {
   g_return_if_fail (GTK_IS_TREE_VIEW (tree_view));
+  g_return_if_fail (tree_view->priv->tree != NULL);
   g_return_if_fail (path != NULL);
   if (focus_column)
     g_return_if_fail (GTK_IS_TREE_VIEW_COLUMN (focus_column));

@@ -1,5 +1,12 @@
 2008-05-28  Kristian Rietveld  <kris@imendio.com>
 
+	Bug 498010 - gtk_tree_view_set_cursor fails if model!=NULL.
+
+	* gtk/gtktreeview.c (gtk_tree_view_set_cursor_on_cell): return if fail
+	->priv->tree != NULL.  Suggestion from Stefan Kost.
+
+2008-05-28  Kristian Rietveld  <kris@imendio.com>
+
 	Bug 324282 - add selected signal to cell renderer combo.
 
 	* gtk/gtkcellrenderercombo.c (gtk_cell_renderer_combo_class_init),
