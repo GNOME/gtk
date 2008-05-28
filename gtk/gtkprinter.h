@@ -1,4 +1,4 @@
-/* GtkPrinter 
+/* GtkPrinter
  * Copyright (C) 2006 John (J5) Palmieri <johnp@redhat.com>
  *
  * This library is free software; you can redistribute it and/or
@@ -70,8 +70,9 @@ struct _GtkPrinterClass
 {
   GObjectClass parent_class;
 
-  void (*details_acquired) (GtkPrinter *printer, gboolean success);
-  
+  void (*details_acquired) (GtkPrinter *printer,
+                            gboolean    success);
+
   /* Padding for future expansion */
   void (*_gtk_reserved1) (void);
   void (*_gtk_reserved2) (void);

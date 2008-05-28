@@ -1,5 +1,9 @@
 2008-05-28  Michael Natterer  <mitch@imendio.com>
 
+	* gtk/gtkprinter.h: fix formatting of details_acquired() signal.
+
+2008-05-28  Michael Natterer  <mitch@imendio.com>
+
 	* gtk/gtkcolorbutton.h: fix comment: the widget is called
 	GtkColorButton, not GtkColorSelectButton. Remove trailing
 	whitespace and excess newlines.
