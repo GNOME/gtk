@@ -1,4 +1,10 @@
-2008-05-28  Michael Natterer  <mitch@gimp.org>
+2008-05-28  Michael Natterer  <mitch@imendio.com>
+
+	* gtk/gtkcolorbutton.h: fix comment: the widget is called
+	GtkColorButton, not GtkColorSelectButton. Remove trailing
+	whitespace and excess newlines.
+
+2008-05-28  Michael Natterer  <mitch@imendio.com>
 
 	* configure.in: last but not least, add G_DISABLE_SINGLE_INCLUDES,
 	GDK_PIXBUF_DISABLE_SINGLE_INCLUDES and GTK_DISABLE_SINGLE_INCLUDES
