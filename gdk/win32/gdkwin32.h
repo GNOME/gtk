@@ -28,7 +28,6 @@
 #define __GDK_WIN32_H__
 
 #include <gdk/gdkprivate.h>
-#include <gdk/gdkcursor.h>
 
 #ifndef STRICT
 #define STRICT			/* We want strict type checks */

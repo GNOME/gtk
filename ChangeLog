@@ -1,3 +1,22 @@
+2008-05-28  Michael Natterer  <mitch@imendio.com>
+
+	* gdk/gdk.h: define __GDK_H_INSIDE__ around including all other
+	headers.
+
+	* gdk/gdkenumtypes.h.template
+	* gdk/gdk*.h: add single-include guards that #error out if
+	GTK_DISABLE_SINGLE_INCLUDES is defined and any of these files is
+	included individually. Also removed some redundant includes and
+	did some tiny trailing whitespace removal that's not worth to
+	commit separately.
+
+	* gdk/gdkprivate.h: include <gdk/gdk.h> instead of individual
+	files.
+
+	* gdk/win32/gdkwin32.h
+	* gdk/x11/gdkx.h: only include <gdk/gdkprivate.h> and remove all
+	other includes.
+
 2008-05-28  Kristian Rietveld  <kris@imendio.com>
 
 	Bug 504087 - make gtk_tooltip_set_custom a no-op for setting the

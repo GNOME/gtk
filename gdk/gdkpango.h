@@ -17,6 +17,10 @@
  * Boston, MA 02111-1307, USA.
  */
 
+#if defined(GTK_DISABLE_SINGLE_INCLUDES) && !defined (__GDK_H_INSIDE__) && !defined (GDK_COMPILATION)
+#error "Only <gdk/gdk.h> can be included directly."
+#endif
+
 #ifndef __GDK_PANGO_H__
 #define __GDK_PANGO_H__
 

@@ -17,6 +17,11 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330,
  * Boston, MA 02111-1307, USA.
  */
+
+#if defined(GTK_DISABLE_SINGLE_INCLUDES) && !defined (__GDK_H_INSIDE__) && !defined (GDK_COMPILATION)
+#error "Only <gdk/gdk.h> can be included directly."
+#endif
+
 #ifndef __GDK_TEST_UTILS_H__
 #define __GDK_TEST_UTILS_H__
 
@@ -38,6 +43,7 @@ gboolean        gdk_test_simulate_button        (GdkWindow      *window,
                                                  guint           button, /*1..3*/
                                                  GdkModifierType modifiers,
                                                  GdkEventType    button_pressrelease);
+
 G_END_DECLS
 
 #endif /* __GDK_TEST_UTILS_H__ */

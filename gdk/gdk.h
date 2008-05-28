@@ -27,6 +27,8 @@
 #ifndef __GDK_H__
 #define __GDK_H__
 
+#define __GDK_H_INSIDE__
+
 #include <gdk/gdkapplaunchcontext.h>
 #include <gdk/gdkcairo.h>
 #include <gdk/gdkcolor.h>
@@ -55,6 +57,8 @@
 #include <gdk/gdktypes.h>
 #include <gdk/gdkvisual.h>
 #include <gdk/gdkwindow.h>
+
+#undef __GDK_H_INSIDE__
 
 G_BEGIN_DECLS
 

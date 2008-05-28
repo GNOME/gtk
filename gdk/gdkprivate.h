@@ -27,14 +27,7 @@
 #ifndef __GDK_PRIVATE_H__
 #define __GDK_PRIVATE_H__
 
-#include <gdk/gdktypes.h>
-#include <gdk/gdkevents.h>
-#include <gdk/gdkfont.h>
-#include <gdk/gdkgc.h>
-#include <gdk/gdkimage.h>
-#include <gdk/gdkregion.h>
-#include <gdk/gdkvisual.h>
-#include <gdk/gdkwindow.h>
+#include <gdk/gdk.h>
 
 G_BEGIN_DECLS
 
