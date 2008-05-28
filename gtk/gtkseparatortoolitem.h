@@ -44,7 +44,7 @@ typedef struct _GtkSeparatorToolItemPrivate GtkSeparatorToolItemPrivate;
 struct _GtkSeparatorToolItem
 {
   GtkToolItem parent;
-  
+
   /*< private >*/
   GtkSeparatorToolItemPrivate *priv;
 };

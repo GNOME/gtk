@@ -42,13 +42,13 @@ typedef struct _GtkIMContextSimple       GtkIMContextSimple;
 typedef struct _GtkIMContextSimpleClass  GtkIMContextSimpleClass;
 
 #define GTK_MAX_COMPOSE_LEN 7
-  
+
 struct _GtkIMContextSimple
 {
   GtkIMContext object;
 
   GSList *tables;
-  
+
   guint compose_buffer[GTK_MAX_COMPOSE_LEN + 1];
   gunichar tentative_match;
   gint tentative_match_len;

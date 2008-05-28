@@ -67,7 +67,7 @@ struct _GtkStatusIconClass
   void (*__gtk_reserved3);
   void (*__gtk_reserved4);
   void (*__gtk_reserved5);
-  void (*__gtk_reserved6);  
+  void (*__gtk_reserved6);
 };
 
 GType                 gtk_status_icon_get_type           (void) G_GNUC_CONST;

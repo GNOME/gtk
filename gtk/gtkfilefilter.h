@@ -49,7 +49,7 @@ typedef gboolean (*GtkFileFilterFunc) (const GtkFileFilterInfo *filter_info,
 struct _GtkFileFilterInfo
 {
   GtkFileFilterFlags contains;
-  
+
   const gchar *filename;
   const gchar *uri;
   const gchar *display_name;

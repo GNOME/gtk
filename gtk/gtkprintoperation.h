@@ -78,19 +78,19 @@ typedef enum {
 struct _GtkPrintOperation
 {
   GObject parent_instance;
-  
+
   GtkPrintOperationPrivate *priv;
 };
 
 struct _GtkPrintOperationClass
 {
   GObjectClass parent_class;
-  
+
   void     (*done)               (GtkPrintOperation *operation,
 				  GtkPrintOperationResult result);
-  void     (*begin_print)        (GtkPrintOperation *operation, 
+  void     (*begin_print)        (GtkPrintOperation *operation,
 				  GtkPrintContext   *context);
-  gboolean (*paginate)           (GtkPrintOperation *operation, 
+  gboolean (*paginate)           (GtkPrintOperation *operation,
 				  GtkPrintContext   *context);
   void     (*request_page_setup) (GtkPrintOperation *operation,
 				  GtkPrintContext   *context,
@@ -107,11 +107,10 @@ struct _GtkPrintOperationClass
   void       (*custom_widget_apply)  (GtkPrintOperation *operation,
 				      GtkWidget *widget);
 
-  
   gboolean (*preview)	     (GtkPrintOperation        *operation,
-			      GtkPrintOperationPreview *preview, 
+			      GtkPrintOperationPreview *preview,
 			      GtkPrintContext          *context,
-			      GtkWindow                *parent);  
+			      GtkWindow                *parent);
 
   /* Padding for future expansion */
   void (*_gtk_reserved1) (void);
@@ -178,7 +177,7 @@ GtkPageSetup           *gtk_print_run_page_setup_dialog            (GtkWindow   
 								    GtkPageSetup       *page_setup,
 								    GtkPrintSettings   *settings);
 
-typedef void  (* GtkPageSetupDoneFunc) (GtkPageSetup *page_setup, 
+typedef void  (* GtkPageSetupDoneFunc) (GtkPageSetup *page_setup,
 					gpointer      data);
 
 void                    gtk_print_run_page_setup_dialog_async      (GtkWindow            *parent,

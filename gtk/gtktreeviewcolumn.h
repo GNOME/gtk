@@ -59,14 +59,14 @@ typedef void (* GtkTreeCellDataFunc) (GtkTreeViewColumn *tree_column,
 				      GtkTreeIter       *iter,
 				      gpointer           data);
 
-  
+
 struct _GtkTreeViewColumn
 {
   GtkObject parent;
 
   GtkWidget *tree_view;
   GtkWidget *button;
-  GtkWidget *child;  
+  GtkWidget *child;
   GtkWidget *arrow;
   GtkWidget *alignment;
   GdkWindow *window;
@@ -242,4 +242,3 @@ G_END_DECLS
 
 
 #endif /* __GTK_TREE_VIEW_COLUMN_H__ */
-

@@ -1,5 +1,5 @@
 /* GTK - The GIMP Toolkit
- * gtksizegroup.h: 
+ * gtksizegroup.h:
  * Copyright (C) 2000 Red Hat Software
  *
  * This library is free software; you can redistribute it and/or
@@ -48,7 +48,7 @@ struct _GtkSizeGroup
   GSList *widgets;
 
   guint8 mode;
-  
+
   guint have_width : 1;
   guint have_height : 1;
   guint ignore_hidden : 1;
@@ -69,11 +69,11 @@ struct _GtkSizeGroupClass
 
 /**
  * GtkSizeGroupMode:
- * @GTK_SIZE_GROUP_NONE: group has no effect  
+ * @GTK_SIZE_GROUP_NONE: group has no effect
  * @GTK_SIZE_GROUP_HORIZONTAL: group affects horizontal requisition
  * @GTK_SIZE_GROUP_VERTICAL: group affects vertical requisition
  * @GTK_SIZE_GROUP_BOTH: group affects both horizontal and vertical requisition
- * 
+ *
  * The mode of the size group determines the directions in which the size
  * group affects the requested sizes of its component widgets.
  **/

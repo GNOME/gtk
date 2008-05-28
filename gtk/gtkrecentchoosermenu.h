@@ -1,7 +1,7 @@
 /* GTK - The GIMP Toolkit
  * gtkrecentchoosermenu.h - Recently used items menu widget
  * Copyright (C) 2006, Emmanuele Bassi
- * 
+ *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
  * License as published by the Free Software Foundation; either
@@ -52,7 +52,7 @@ struct _GtkRecentChooserMenu
 struct _GtkRecentChooserMenuClass
 {
   GtkMenuClass parent_class;
-  
+
   /* padding for future expansion */
   void (* gtk_recent1) (void);
   void (* gtk_recent2) (void);

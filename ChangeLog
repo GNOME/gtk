@@ -1,5 +1,11 @@
 2008-05-28  Michael Natterer  <mitch@imendio.com>
 
+	* gtk/gtk*.h: whitespace cleanup: remove trailing whitespace and
+	excess newlines and sprinkled some newlines where needed. Zero
+	code or formatting changes included.
+
+2008-05-28  Michael Natterer  <mitch@imendio.com>
+
 	* gtk/gtkprinter.h: fix formatting of details_acquired() signal.
 
 2008-05-28  Michael Natterer  <mitch@imendio.com>

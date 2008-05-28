@@ -21,7 +21,7 @@
  * Modified by the GTK+ Team and others 1997-2001.  See the AUTHORS
  * file for a list of people on the GTK+ Team.  See the ChangeLog
  * files for a list of changes.  These files are distributed with
- * GTK+ at ftp://ftp.gtk.org/pub/gtk/. 
+ * GTK+ at ftp://ftp.gtk.org/pub/gtk/.
  */
 
 #if defined(GTK_DISABLE_SINGLE_INCLUDES) && !defined (__GTK_H_INSIDE__) && !defined (GTK_COMPILATION)
@@ -52,7 +52,7 @@ typedef struct _GtkCheckMenuItemClass  GtkCheckMenuItemClass;
 struct _GtkCheckMenuItem
 {
   GtkMenuItem menu_item;
-  
+
   guint active : 1;
   guint always_show_toggle : 1;
   guint inconsistent : 1;
@@ -62,7 +62,7 @@ struct _GtkCheckMenuItem
 struct _GtkCheckMenuItemClass
 {
   GtkMenuItemClass parent_class;
-  
+
   void (* toggled)	  (GtkCheckMenuItem *check_menu_item);
   void (* draw_indicator) (GtkCheckMenuItem *check_menu_item,
 			   GdkRectangle	    *area);
@@ -90,7 +90,7 @@ gboolean   gtk_check_menu_item_get_inconsistent  (GtkCheckMenuItem *check_menu_i
 void       gtk_check_menu_item_set_draw_as_radio (GtkCheckMenuItem *check_menu_item,
 						  gboolean          draw_as_radio);
 gboolean   gtk_check_menu_item_get_draw_as_radio (GtkCheckMenuItem *check_menu_item);
-    
+
 
 #ifndef GTK_DISABLE_DEPRECATED
 void	   gtk_check_menu_item_set_show_toggle (GtkCheckMenuItem *menu_item,

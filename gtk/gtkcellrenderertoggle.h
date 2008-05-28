@@ -78,5 +78,4 @@ void            gtk_cell_renderer_toggle_set_active (GtkCellRendererToggle *togg
 
 G_END_DECLS
 
-
 #endif /* __GTK_CELL_RENDERER_TOGGLE_H__ */

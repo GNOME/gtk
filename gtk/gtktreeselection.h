@@ -53,7 +53,7 @@ struct _GtkTreeSelection
   GObject parent;
 
   /*< private >*/
-  
+
   GtkTreeView *tree_view;
   GtkSelectionMode type;
   GtkTreeSelectionFunc user_func;
@@ -124,4 +124,3 @@ G_END_DECLS
 
 
 #endif /* __GTK_TREE_SELECTION_H__ */
-

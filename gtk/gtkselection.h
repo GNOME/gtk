@@ -21,7 +21,7 @@
  * Modified by the GTK+ Team and others 1997-2000.  See the AUTHORS
  * file for a list of people on the GTK+ Team.  See the ChangeLog
  * files for a list of changes.  These files are distributed with
- * GTK+ at ftp://ftp.gtk.org/pub/gtk/. 
+ * GTK+ at ftp://ftp.gtk.org/pub/gtk/.
  */
 
 #if defined(GTK_DISABLE_SINGLE_INCLUDES) && !defined (__GTK_H_INSIDE__) && !defined (GTK_COMPILATION)
@@ -62,7 +62,7 @@ struct _GtkSelectionData
   GdkAtom	target;
   GdkAtom	type;
   gint		format;
-  guchar       *data;  
+  guchar       *data;
   gint		length;
   GdkDisplay   *display;
 };
@@ -74,7 +74,7 @@ struct _GtkTargetEntry {
 };
 
 /* These structures not public, and are here only for the convenience of
- * gtkdnd.c 
+ * gtkdnd.c
  */
 
 typedef struct _GtkTargetPair GtkTargetPair;

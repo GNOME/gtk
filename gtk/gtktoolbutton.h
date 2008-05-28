@@ -53,7 +53,7 @@ struct _GtkToolButton
 struct _GtkToolButtonClass
 {
   GtkToolItemClass parent_class;
- 
+
   GType button_type;
 
   /* signal */
@@ -90,7 +90,7 @@ void                  gtk_tool_button_set_label_widget  (GtkToolButton *button,
 							 GtkWidget     *label_widget);
 GtkWidget *           gtk_tool_button_get_label_widget  (GtkToolButton *button);
 
-								   
+
 /* internal function */
 GtkWidget *_gtk_tool_button_get_button (GtkToolButton *button);
 

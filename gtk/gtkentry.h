@@ -21,7 +21,7 @@
  * Modified by the GTK+ Team and others 1997-2000.  See the AUTHORS
  * file for a list of people on the GTK+ Team.  See the ChangeLog
  * files for a list of changes.  These files are distributed with
- * GTK+ at ftp://ftp.gtk.org/pub/gtk/. 
+ * GTK+ at ftp://ftp.gtk.org/pub/gtk/.
  */
 
 #if defined(GTK_DISABLE_SINGLE_INCLUDES) && !defined (__GTK_H_INSIDE__) && !defined (GTK_COMPILATION)
@@ -70,10 +70,10 @@ struct _GtkEntry
   GdkWindow *text_area;
   GtkIMContext *im_context;
   GtkWidget   *popup_menu;
-  
+
   gint         current_pos;
   gint         selection_bound;
-  
+
   PangoLayout *cached_layout;
 
   guint        cache_includes_preedit : 1;
@@ -96,7 +96,7 @@ struct _GtkEntry
   gint    scroll_offset;
   gint    ascent;	/* font ascent, in pango units  */
   gint    descent;	/* font descent, in pango units  */
-  
+
   guint16 text_size;	/* allocated size, in bytes */
   guint16 n_bytes;	/* length in use, in bytes */
 
@@ -107,7 +107,7 @@ struct _GtkEntry
 
   gint drag_start_x;
   gint drag_start_y;
-  
+
   gunichar invisible_char;
 
   gint width_chars;
@@ -120,7 +120,7 @@ struct _GtkEntryClass
   /* Hook to customize right-click popup */
   void (* populate_popup)   (GtkEntry       *entry,
                              GtkMenu        *menu);
-  
+
   /* Action signals
    */
   void (* activate)           (GtkEntry       *entry);
@@ -201,7 +201,7 @@ gint       gtk_entry_layout_index_to_text_index (GtkEntry      *entry,
 gint       gtk_entry_text_index_to_layout_index (GtkEntry      *entry,
                                                  gint           text_index);
 
-/* For scrolling cursor appropriately 
+/* For scrolling cursor appropriately
  */
 void           gtk_entry_set_cursor_hadjustment (GtkEntry      *entry,
                                                  GtkAdjustment *adjustment);

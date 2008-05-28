@@ -16,7 +16,7 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330,
  * Boston, MA 02111-1307, USA.
  *
- * Global clipboard abstraction. 
+ * Global clipboard abstraction.
  */
 
 #if defined(GTK_DISABLE_SINGLE_INCLUDES) && !defined (__GTK_H_INSIDE__) && !defined (GTK_COMPILATION)
@@ -138,12 +138,12 @@ void gtk_clipboard_set_can_store (GtkClipboard         *clipboard,
 				  gint                  n_targets);
 
 void gtk_clipboard_store         (GtkClipboard   *clipboard);
-  
+
 /* private */
 void     _gtk_clipboard_handle_event    (GdkEventOwnerChange *event);
 
 void     _gtk_clipboard_store_all       (void);
-  
+
 G_END_DECLS
 
 #endif /* __GTK_CLIPBOARD_H__ */

@@ -2,7 +2,7 @@
  * Copyright (C) 1998 David Abilleira Freijeiro <odaf@nexo.es>
  * All rights reserved
  * Based on gnome-color-picker by Federico Mena <federico@nuclecu.unam.mx>
- * 
+ *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
  * License as published by the Free Software Foundation; either
@@ -21,7 +21,7 @@
  * Modified by the GTK+ Team and others 2003.  See the AUTHORS
  * file for a list of people on the GTK+ Team.  See the ChangeLog
  * files for a list of changes.  These files are distributed with
- * GTK+ at ftp://ftp.gtk.org/pub/gtk/. 
+ * GTK+ at ftp://ftp.gtk.org/pub/gtk/.
  */
 
 #if defined(GTK_DISABLE_SINGLE_INCLUDES) && !defined (__GTK_H_INSIDE__) && !defined (GTK_COMPILATION)
@@ -96,9 +96,5 @@ void                  gtk_font_button_set_show_size  (GtkFontButton *font_button
 
 G_END_DECLS
 
-    
+
 #endif /* __GTK_FONT_BUTTON_H__ */
-
-
-
-

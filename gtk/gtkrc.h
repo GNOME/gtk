@@ -21,7 +21,7 @@
  * Modified by the GTK+ Team and others 1997-2000.  See the AUTHORS
  * file for a list of people on the GTK+ Team.  See the ChangeLog
  * files for a list of changes.  These files are distributed with
- * GTK+ at ftp://ftp.gtk.org/pub/gtk/. 
+ * GTK+ at ftp://ftp.gtk.org/pub/gtk/.
  */
 
 #if defined(GTK_DISABLE_SINGLE_INCLUDES) && !defined (__GTK_H_INSIDE__) && !defined (GTK_COMPILATION)
@@ -62,7 +62,7 @@ struct _GtkRcStyle
   GObject parent_instance;
 
   /*< public >*/
-  
+
   gchar *name;
   gchar *bg_pixmap_name[5];
   PangoFontDescription *font_desc;
@@ -78,7 +78,7 @@ struct _GtkRcStyle
 
   /*< private >*/
   GArray *rc_properties;
-  
+
   /* list of RC style lists including this RC style */
   GSList *rc_style_lists;
 
@@ -105,7 +105,7 @@ struct _GtkRcStyleClass
   guint     (*parse)  (GtkRcStyle   *rc_style,
 		       GtkSettings  *settings,
 		       GScanner     *scanner);
-  
+
   /* Combine RC style data from src into dest. If overridden, this
    * function should chain to the parent.
    */

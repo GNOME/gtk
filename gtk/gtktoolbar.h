@@ -5,7 +5,7 @@
  * Copyright (C) 2002 Anders Carlsson <andersca@gnome.org>
  * Copyright (C) 2002 James Henstridge <james@daa.com.au>
  * Copyright (C) 2003 Soeren Sandmann <sandmann@daimi.au.dk>
- * 
+ *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
  * License as published by the Free Software Foundation; either
@@ -26,7 +26,7 @@
  * Modified by the GTK+ Team and others 1997-2000.  See the AUTHORS
  * file for a list of people on the GTK+ Team.  See the ChangeLog
  * files for a list of changes.  These files are distributed with
- * GTK+ at ftp://ftp.gtk.org/pub/gtk/. 
+ * GTK+ at ftp://ftp.gtk.org/pub/gtk/.
  */
 
 #if defined(GTK_DISABLE_SINGLE_INCLUDES) && !defined (__GTK_H_INSIDE__) && !defined (GTK_COMPILATION)
@@ -102,13 +102,13 @@ struct _GtkToolbar
   GtkOrientation   orientation;
   GtkToolbarStyle  style;
   GtkIconSize      icon_size;
-  
+
 #ifndef GTK_DISABLE_DEPRECATED
   GtkTooltips     *tooltips;
 #else
   gpointer         _tooltips;
 #endif
-  
+
   /*< private >*/
   gint             button_maxw;		/* maximum width of homogeneous children */
   gint             button_maxh;		/* maximum height of homogeneous children */
@@ -123,7 +123,7 @@ struct _GtkToolbar
 struct _GtkToolbarClass
 {
   GtkContainerClass parent_class;
-  
+
   /* signals */
   void     (* orientation_changed) (GtkToolbar       *toolbar,
 				    GtkOrientation    orientation);
@@ -133,7 +133,7 @@ struct _GtkToolbarClass
 				    gint              x,
 				    gint              y,
 				    gint              button_number);
-  
+
   /* Padding for future expansion */
   void (*_gtk_reserved1) (void);
   void (*_gtk_reserved2) (void);

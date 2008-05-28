@@ -23,7 +23,7 @@
 #ifndef __GTK_SETTINGS_H__
 #define __GTK_SETTINGS_H__
 
-#include	<gtk/gtkrc.h>
+#include <gtk/gtkrc.h>
 
 G_BEGIN_DECLS
 
@@ -54,11 +54,12 @@ struct _GtkSettings
   GtkRcContext *rc_context;
   GdkScreen    *screen;
 };
+
 struct _GtkSettingsClass
 {
   GObjectClass parent_class;
-  
 };
+
 struct _GtkSettingsValue
 {
   /* origin should be something like "filename:linenumber" for rc files,
@@ -79,7 +80,7 @@ GType		gtk_settings_get_type		     (void) G_GNUC_CONST;
 GtkSettings*	gtk_settings_get_default	     (void);
 #endif
 GtkSettings*	gtk_settings_get_for_screen	     (GdkScreen *screen);
-  
+
 void		gtk_settings_install_property	     (GParamSpec         *pspec);
 void		gtk_settings_install_property_parser (GParamSpec         *pspec,
 						      GtkRcPropertyParser parser);

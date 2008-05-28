@@ -1,4 +1,4 @@
-/* GtkPrintUnixDialog 
+/* GtkPrintUnixDialog
  * Copyright (C) 2006 John (J5) Palmieri <johnp@redhat.com>
  *
  * This library is free software; you can redistribute it and/or

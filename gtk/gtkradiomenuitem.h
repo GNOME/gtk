@@ -21,7 +21,7 @@
  * Modified by the GTK+ Team and others 1997-2000.  See the AUTHORS
  * file for a list of people on the GTK+ Team.  See the ChangeLog
  * files for a list of changes.  These files are distributed with
- * GTK+ at ftp://ftp.gtk.org/pub/gtk/. 
+ * GTK+ at ftp://ftp.gtk.org/pub/gtk/.
  */
 
 #if defined(GTK_DISABLE_SINGLE_INCLUDES) && !defined (__GTK_H_INSIDE__) && !defined (GTK_COMPILATION)
@@ -51,14 +51,14 @@ typedef struct _GtkRadioMenuItemClass  GtkRadioMenuItemClass;
 struct _GtkRadioMenuItem
 {
   GtkCheckMenuItem check_menu_item;
-  
+
   GSList *group;
 };
 
 struct _GtkRadioMenuItemClass
 {
   GtkCheckMenuItemClass parent_class;
-  
+
   /* Signals */
   void (*group_changed) (GtkRadioMenuItem *radio_menu_item);
 
@@ -70,7 +70,7 @@ struct _GtkRadioMenuItemClass
 
 
 GType      gtk_radio_menu_item_get_type	         (void) G_GNUC_CONST;
-							
+
 GtkWidget* gtk_radio_menu_item_new                           (GSList           *group);
 GtkWidget* gtk_radio_menu_item_new_with_label                (GSList           *group,
 							      const gchar      *label);

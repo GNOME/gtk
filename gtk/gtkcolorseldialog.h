@@ -21,7 +21,7 @@
  * Modified by the GTK+ Team and others 1997-2000.  See the AUTHORS
  * file for a list of people on the GTK+ Team.  See the ChangeLog
  * files for a list of changes.  These files are distributed with
- * GTK+ at ftp://ftp.gtk.org/pub/gtk/. 
+ * GTK+ at ftp://ftp.gtk.org/pub/gtk/.
  */
 
 #if defined(GTK_DISABLE_SINGLE_INCLUDES) && !defined (__GTK_H_INSIDE__) && !defined (GTK_COMPILATION)
@@ -71,9 +71,9 @@ struct _GtkColorSelectionDialogClass
 };
 
 
-/* ColorSelectionDialog */ 
+/* ColorSelectionDialog */
 GType      gtk_color_selection_dialog_get_type (void) G_GNUC_CONST;
-GtkWidget* gtk_color_selection_dialog_new      (const gchar *title); 
+GtkWidget* gtk_color_selection_dialog_new      (const gchar *title);
 
 
 G_END_DECLS

@@ -22,7 +22,7 @@
  * Modified by the GTK+ Team and others 1997-2000.  See the AUTHORS
  * file for a list of people on the GTK+ Team.  See the ChangeLog
  * files for a list of changes.  These files are distributed with
- * GTK+ at ftp://ftp.gtk.org/pub/gtk/. 
+ * GTK+ at ftp://ftp.gtk.org/pub/gtk/.
  */
 
 #if defined(GTK_DISABLE_SINGLE_INCLUDES) && !defined (__GTK_H_INSIDE__) && !defined (GTK_COMPILATION)
@@ -59,20 +59,20 @@ typedef struct _GtkNotebookPage   GtkNotebookPage;
 struct _GtkNotebook
 {
   GtkContainer container;
-  
+
   GtkNotebookPage *cur_page;
   GList *children;
   GList *first_tab;		/* The first tab visible (for scrolling notebooks) */
   GList *focus_tab;
-  
+
   GtkWidget *menu;
   GdkWindow *event_window;
-  
+
   guint32 timer;
-  
+
   guint16 tab_hborder;
   guint16 tab_vborder;
-  
+
   guint show_tabs          : 1;
   guint homogeneous        : 1;
   guint show_border        : 1;
@@ -95,7 +95,7 @@ struct _GtkNotebook
 struct _GtkNotebookClass
 {
   GtkContainerClass parent_class;
-  
+
   void (* switch_page)       (GtkNotebook     *notebook,
                               GtkNotebookPage *page,
 			      guint            page_num);

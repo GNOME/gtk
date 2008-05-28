@@ -22,7 +22,7 @@
  * Modified by the GTK+ Team and others 1997-2000.  See the AUTHORS
  * file for a list of people on the GTK+ Team.  See the ChangeLog
  * files for a list of changes.  These files are distributed with
- * GTK+ at ftp://ftp.gtk.org/pub/gtk/. 
+ * GTK+ at ftp://ftp.gtk.org/pub/gtk/.
  */
 
 #if defined(GTK_DISABLE_SINGLE_INCLUDES) && !defined (__GTK_H_INSIDE__) && !defined (GTK_COMPILATION)
@@ -47,18 +47,18 @@ G_BEGIN_DECLS
 typedef struct _GtkPaned        GtkPaned;
 typedef struct _GtkPanedClass   GtkPanedClass;
 typedef struct _GtkPanedPrivate GtkPanedPrivate;
-	
+
 struct _GtkPaned
 {
   GtkContainer container;
-  
+
   GtkWidget *child1;
   GtkWidget *child2;
-  
+
   GdkWindow *handle;
   GdkGC *xor_gc;
   GdkCursorType cursor_type;
-  
+
   /*< private >*/
   GdkRectangle handle_pos;
 
@@ -84,13 +84,13 @@ struct _GtkPaned
   gint drag_pos;
   gint original_position;
 };
- 
+
 struct _GtkPanedClass
 {
   GtkContainerClass parent_class;
-  
+
   gboolean (* cycle_child_focus)   (GtkPaned      *paned,
-				    gboolean       reverse); 
+				    gboolean       reverse);
   gboolean (* toggle_handle_focus) (GtkPaned      *paned);
   gboolean (* move_handle)         (GtkPaned      *paned,
 				    GtkScrollType  scroll);

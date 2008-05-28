@@ -1,7 +1,7 @@
 /* GTK - The GIMP Toolkit
  * gtkrecentchooserdialog.h: Recent files selector dialog
  * Copyright (C) 2006 Emmanuele Bassi
- * 
+ *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
  * License as published by the Free Software Foundation; either
@@ -47,7 +47,7 @@ struct _GtkRecentChooserDialog
 {
   /*< private >*/
   GtkDialog parent_instance;
-  
+
   GtkRecentChooserDialogPrivate *priv;
 };
 

@@ -22,7 +22,7 @@
  * Modified by the GTK+ Team and others 1997-2000.  See the AUTHORS
  * file for a list of people on the GTK+ Team.  See the ChangeLog
  * files for a list of changes.  These files are distributed with
- * GTK+ at ftp://ftp.gtk.org/pub/gtk/. 
+ * GTK+ at ftp://ftp.gtk.org/pub/gtk/.
  */
 
 #if defined(GTK_DISABLE_SINGLE_INCLUDES) && !defined (__GTK_H_INSIDE__) && !defined (GTK_COMPILATION)
@@ -46,7 +46,7 @@ typedef enum {
   GTK_DEST_DEFAULT_ALL        = 0x07
 } GtkDestDefaults;
 
-/* Flags for the GtkTargetEntry on the destination side 
+/* Flags for the GtkTargetEntry on the destination side
  */
 typedef enum {
   GTK_TARGET_SAME_APP = 1 << 0,    /*< nick=same-app >*/
@@ -186,6 +186,3 @@ void gtk_drag_set_default_icon (GdkColormap   *colormap,
 G_END_DECLS
 
 #endif /* __GTK_DND_H__ */
-
-
-

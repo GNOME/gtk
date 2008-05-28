@@ -1,4 +1,4 @@
-/* GtkPageSetupUnixDialog 
+/* GtkPageSetupUnixDialog
  * Copyright (C) 2006 Alexander Larsson <alexl@redhat.com>
  *
  * This library is free software; you can redistribute it and/or

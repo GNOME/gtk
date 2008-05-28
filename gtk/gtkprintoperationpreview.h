@@ -28,7 +28,7 @@
 #include <glib-object.h>
 #include <cairo.h>
 
-#include "gtkprintcontext.h" 
+#include "gtkprintcontext.h"
 
 G_BEGIN_DECLS
 
@@ -46,20 +46,18 @@ struct _GtkPrintOperationPreviewIface
   GTypeInterface g_iface;
 
   /* signals */
-  void              (*ready)          (GtkPrintOperationPreview *preview, 
+  void              (*ready)          (GtkPrintOperationPreview *preview,
 				       GtkPrintContext          *context);
-  void              (*got_page_size)  (GtkPrintOperationPreview *preview, 
+  void              (*got_page_size)  (GtkPrintOperationPreview *preview,
 				       GtkPrintContext          *context,
 				       GtkPageSetup             *page_setup);
-  
- 
+
   /* methods */
   void              (*render_page)    (GtkPrintOperationPreview *preview,
 				       gint                      page_nr);
   gboolean          (*is_selected)    (GtkPrintOperationPreview *preview,
 				       gint                      page_nr);
   void              (*end_preview)    (GtkPrintOperationPreview *preview);
-  
 
   /* Padding for future expansion */
   void (*_gtk_reserved1) (void);

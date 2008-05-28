@@ -49,7 +49,7 @@ struct _GtkListStore
   gint stamp;
   gpointer seq;		/* head of the list */
   gpointer _gtk_reserved1;
-  GList *sort_list;	
+  GList *sort_list;
   gint n_columns;
   gint sort_column_id;
   GtkSortType order;
@@ -93,7 +93,7 @@ void          gtk_list_store_set              (GtkListStore *list_store,
 					       ...);
 void          gtk_list_store_set_valuesv      (GtkListStore *list_store,
 					       GtkTreeIter  *iter,
-					       gint         *columns, 
+					       gint         *columns,
 					       GValue       *values,
 					       gint          n_values);
 void          gtk_list_store_set_valist       (GtkListStore *list_store,
@@ -117,7 +117,7 @@ void          gtk_list_store_insert_with_values  (GtkListStore *list_store,
 void          gtk_list_store_insert_with_valuesv (GtkListStore *list_store,
 						  GtkTreeIter  *iter,
 						  gint          position,
-						  gint         *columns, 
+						  gint         *columns,
 						  GValue       *values,
 						  gint          n_values);
 void          gtk_list_store_prepend          (GtkListStore *list_store,

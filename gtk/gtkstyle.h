@@ -21,7 +21,7 @@
  * Modified by the GTK+ Team and others 1997-2000.  See the AUTHORS
  * file for a list of people on the GTK+ Team.  See the ChangeLog
  * files for a list of changes.  These files are distributed with
- * GTK+ at ftp://ftp.gtk.org/pub/gtk/. 
+ * GTK+ at ftp://ftp.gtk.org/pub/gtk/.
  */
 
 #if defined(GTK_DISABLE_SINGLE_INCLUDES) && !defined (__GTK_H_INSIDE__) && !defined (GTK_COMPILATION)
@@ -75,7 +75,7 @@ struct _GtkStyle
   GObject parent_instance;
 
   /*< public >*/
-  
+
   GdkColor fg[5];
   GdkColor bg[5];
   GdkColor light[5];
@@ -84,14 +84,14 @@ struct _GtkStyle
   GdkColor text[5];
   GdkColor base[5];
   GdkColor text_aa[5];		/* Halfway between text/base */
-  
+
   GdkColor black;
   GdkColor white;
   PangoFontDescription *font_desc;
-  
+
   gint xthickness;
   gint ythickness;
-  
+
   GdkGC *fg_gc[5];
   GdkGC *bg_gc[5];
   GdkGC *light_gc[5];
@@ -102,18 +102,18 @@ struct _GtkStyle
   GdkGC *text_aa_gc[5];
   GdkGC *black_gc;
   GdkGC *white_gc;
-  
+
   GdkPixmap *bg_pixmap[5];
 
   /*< private >*/
-  
+
   gint attach_count;
-  
+
   gint depth;
   GdkColormap *colormap;
   GdkFont *private_font;
   PangoFontDescription *private_font_desc; /* Font description for style->private_font or %NULL */
-  
+
   /* the RcStyle from which this style was created */
   GtkRcStyle	 *rc_style;
 
@@ -167,10 +167,10 @@ struct _GtkStyleClass
                                  GtkIconSize             size,
                                  GtkWidget              *widget,
                                  const gchar            *detail);
-  
+
   /* Drawing functions
    */
-  
+
   void (*draw_hline)		(GtkStyle		*style,
 				 GdkWindow		*window,
 				 GtkStateType		 state_type,
@@ -297,7 +297,7 @@ struct _GtkStyleClass
 				 gint			 x,
 				 gint			 y,
 				 gint			 width,
-				 gint			 height); 
+				 gint			 height);
   void (*draw_shadow_gap)	(GtkStyle		*style,
 				 GdkWindow		*window,
 				 GtkStateType		 state_type,
@@ -449,11 +449,11 @@ void	  gtk_style_set_background	     (GtkStyle	   *style,
 void	  gtk_style_apply_default_background (GtkStyle	   *style,
 					      GdkWindow	   *window,
 					      gboolean	    set_bg,
-					      GtkStateType  state_type, 
+					      GtkStateType  state_type,
 					      const GdkRectangle *area,
-					      gint	    x, 
-					      gint	    y, 
-					      gint	    width, 
+					      gint	    x,
+					      gint	    y,
+					      gint	    width,
 					      gint	    height);
 
 GtkIconSet* gtk_style_lookup_icon_set        (GtkStyle     *style,

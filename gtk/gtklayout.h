@@ -25,7 +25,7 @@
  * Modified by the GTK+ Team and others 1997-2000.  See the AUTHORS
  * file for a list of people on the GTK+ Team.  See the ChangeLog
  * files for a list of changes.  These files are distributed with
- * GTK+ at ftp://ftp.gtk.org/pub/gtk/. 
+ * GTK+ at ftp://ftp.gtk.org/pub/gtk/.
  */
 
 #if defined(GTK_DISABLE_SINGLE_INCLUDES) && !defined (__GTK_H_INSIDE__) && !defined (GTK_COMPILATION)
@@ -93,17 +93,17 @@ struct _GtkLayoutClass
 GType          gtk_layout_get_type        (void) G_GNUC_CONST;
 GtkWidget*     gtk_layout_new             (GtkAdjustment *hadjustment,
 				           GtkAdjustment *vadjustment);
-void           gtk_layout_put             (GtkLayout     *layout, 
-		                           GtkWidget     *child_widget, 
-		                           gint           x, 
+void           gtk_layout_put             (GtkLayout     *layout,
+		                           GtkWidget     *child_widget,
+		                           gint           x,
 		                           gint           y);
-  
-void           gtk_layout_move            (GtkLayout     *layout, 
-		                           GtkWidget     *child_widget, 
-		                           gint           x, 
+
+void           gtk_layout_move            (GtkLayout     *layout,
+		                           GtkWidget     *child_widget,
+		                           gint           x,
 		                           gint           y);
-  
-void           gtk_layout_set_size        (GtkLayout     *layout, 
+
+void           gtk_layout_set_size        (GtkLayout     *layout,
 			                   guint          width,
 			                   guint          height);
 void           gtk_layout_get_size        (GtkLayout     *layout,

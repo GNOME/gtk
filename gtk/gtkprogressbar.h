@@ -21,7 +21,7 @@
  * Modified by the GTK+ Team and others 1997-2000.  See the AUTHORS
  * file for a list of people on the GTK+ Team.  See the ChangeLog
  * files for a list of changes.  These files are distributed with
- * GTK+ at ftp://ftp.gtk.org/pub/gtk/. 
+ * GTK+ at ftp://ftp.gtk.org/pub/gtk/.
  */
 
 #if defined(GTK_DISABLE_SINGLE_INCLUDES) && !defined (__GTK_H_INSIDE__) && !defined (GTK_COMPILATION)
@@ -78,7 +78,7 @@ struct _GtkProgressBar
   guint activity_blocks;
 
   gdouble pulse_fraction;
-  
+
   guint activity_dir : 1;
   guint ellipsize : 3;
   guint dirty : 1;
@@ -101,30 +101,30 @@ GtkWidget* gtk_progress_bar_new                  (void);
 
 /*
  * GtkProgress/GtkProgressBar had serious problems in GTK 1.2.
- * 
- *  - Only 3 or 4 functions are really needed for 95% of progress  
- *    interfaces; GtkProgress[Bar] had about 25 functions, and 
+ *
+ *  - Only 3 or 4 functions are really needed for 95% of progress
+ *    interfaces; GtkProgress[Bar] had about 25 functions, and
  *    didn't even include these 3 or 4.
- *  - In activity mode, the API involves setting the adjustment 
- *    to any random value, just to have the side effect of 
+ *  - In activity mode, the API involves setting the adjustment
+ *    to any random value, just to have the side effect of
  *    calling the progress bar update function - the adjustment
  *    is totally ignored in activity mode
- *  - You set the activity step as a pixel value, which means to 
- *    set the activity step you basically need to connect to 
+ *  - You set the activity step as a pixel value, which means to
+ *    set the activity step you basically need to connect to
  *    size_allocate
- *  - There are ctree_set_expander_style()-functions, to randomly 
+ *  - There are ctree_set_expander_style()-functions, to randomly
  *    change look-and-feel for no good reason
- *  - The split between GtkProgress and GtkProgressBar makes no sense 
+ *  - The split between GtkProgress and GtkProgressBar makes no sense
  *    to me whatsoever.
- *  
+ *
  * This was a big wart on GTK and made people waste lots of time,
  * both learning and using the interface.
- * 
+ *
  * So, I have added what I feel is the correct API, and marked all the
  * rest deprecated. However, the changes are 100% backward-compatible and
  * should break no existing code.
  *
- * The following 9 functions are the new programming interface. 
+ * The following 9 functions are the new programming interface.
  */
 void       gtk_progress_bar_pulse                (GtkProgressBar *pbar);
 void       gtk_progress_bar_set_text             (GtkProgressBar *pbar,

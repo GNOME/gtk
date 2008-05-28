@@ -21,7 +21,7 @@
  * Modified by the GTK+ Team and others 1997-2000.  See the AUTHORS
  * file for a list of people on the GTK+ Team.  See the ChangeLog
  * files for a list of changes.  These files are distributed with
- * GTK+ at ftp://ftp.gtk.org/pub/gtk/. 
+ * GTK+ at ftp://ftp.gtk.org/pub/gtk/.
  */
 
 #if defined(GTK_DISABLE_SINGLE_INCLUDES) && !defined (__GTK_H_INSIDE__) && !defined (GTK_COMPILATION)
@@ -148,7 +148,7 @@ struct _GtkArg
 {
   GtkType type;
   gchar *name;
-  
+
   /* this union only defines the required storage types for
    * the possibile values, thus there is no gint enum_data field,
    * because that would just be a mere alias for gint int_data.
@@ -169,7 +169,7 @@ struct _GtkArg
     gchar *string_data;
     GtkObject *object_data;
     gpointer pointer_data;
-    
+
     /* structured values */
     struct {
       GtkSignalFunc f;

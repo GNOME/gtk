@@ -68,7 +68,7 @@ struct _GtkEntryCompletionClass
   void     (* action_activated) (GtkEntryCompletion *completion,
                                  gint                index_);
   gboolean (* insert_prefix)    (GtkEntryCompletion *completion,
-				 const gchar        *prefix); 
+				 const gchar        *prefix);
   gboolean (* cursor_on_match)  (GtkEntryCompletion *completion,
 				 GtkTreeModel       *model,
 				 GtkTreeIter        *iter);

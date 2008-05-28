@@ -1,5 +1,5 @@
-/* GtkPrintJob 
- * Copyright (C) 2006 Red Hat,Inc. 
+/* GtkPrintJob
+ * Copyright (C) 2006 Red Hat,Inc.
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -39,7 +39,7 @@ typedef struct _GtkPrintJobClass     GtkPrintJobClass;
 typedef struct _GtkPrintJobPrivate   GtkPrintJobPrivate;
 
 typedef void (*GtkPrintJobCompleteFunc) (GtkPrintJob *print_job,
-                                         gpointer     user_data, 
+                                         gpointer     user_data,
                                          GError      *error);
 
 struct _GtkPrinter;

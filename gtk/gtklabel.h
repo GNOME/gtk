@@ -20,7 +20,7 @@
  * Modified by the GTK+ Team and others 1997-2000.  See the AUTHORS
  * file for a list of people on the GTK+ Team.  See the ChangeLog
  * files for a list of changes.  These files are distributed with
- * GTK+ at ftp://ftp.gtk.org/pub/gtk/. 
+ * GTK+ at ftp://ftp.gtk.org/pub/gtk/.
  */
 
 #if defined(GTK_DISABLE_SINGLE_INCLUDES) && !defined (__GTK_H_INSIDE__) && !defined (GTK_COMPILATION)
@@ -44,7 +44,7 @@ G_BEGIN_DECLS
 #define GTK_IS_LABEL(obj)	  (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GTK_TYPE_LABEL))
 #define GTK_IS_LABEL_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), GTK_TYPE_LABEL))
 #define GTK_LABEL_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS ((obj), GTK_TYPE_LABEL, GtkLabelClass))
-       
+
 
 typedef struct _GtkLabel       GtkLabel;
 typedef struct _GtkLabelClass  GtkLabelClass;
@@ -69,16 +69,16 @@ struct _GtkLabel
   guint   pattern_set      : 1;
 
   guint   mnemonic_keyval;
-  
-  gchar  *text; 
+
+  gchar  *text;
   PangoAttrList *attrs;
   PangoAttrList *effective_attrs;
-  
+
   PangoLayout *layout;
 
   GtkWidget *mnemonic_widget;
   GtkWindow *mnemonic_window;
-  
+
   GtkLabelSelectionInfo *select_info;
 };
 
@@ -91,7 +91,7 @@ struct _GtkLabelClass
 			    gint            count,
 			    gboolean        extend_selection);
   void (* copy_clipboard)  (GtkLabel       *label);
-  
+
   /* Hook to customize right-click popup for selectable labels */
   void (* populate_popup)   (GtkLabel       *label,
                              GtkMenu        *menu);

@@ -1,7 +1,7 @@
 /* GTK - The GIMP Toolkit
  * gtkrecentfilter.h - Filter object for recently used resources
  * Copyright (C) 2006, Emmanuele Bassi
- * 
+ *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
  * License as published by the Free Software Foundation; either
@@ -57,7 +57,7 @@ struct _GtkRecentFilterInfo
   const gchar *mime_type;
   const gchar **applications;
   const gchar **groups;
-  
+
   gint age;
 };
 

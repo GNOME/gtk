@@ -2,7 +2,7 @@
  * Recent chooser action for GtkUIManager
  *
  * Copyright (C) 2007, Emmanuele Bassi
- * 
+ *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
  * License as published by the Free Software Foundation; either
@@ -45,7 +45,7 @@ typedef struct _GtkRecentActionClass    GtkRecentActionClass;
 struct _GtkRecentAction
 {
   GtkAction parent_instance;
-  
+
   /*< private >*/
   GtkRecentActionPrivate *priv;
 };

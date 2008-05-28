@@ -431,4 +431,3 @@ G_END_DECLS
 
 
 #endif /* __GTK_TREE_VIEW_H__ */
-

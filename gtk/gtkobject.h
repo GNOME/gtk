@@ -21,7 +21,7 @@
  * Modified by the GTK+ Team and others 1997-2000.  See the AUTHORS
  * file for a list of people on the GTK+ Team.  See the ChangeLog
  * files for a list of changes.  These files are distributed with
- * GTK+ at ftp://ftp.gtk.org/pub/gtk/. 
+ * GTK+ at ftp://ftp.gtk.org/pub/gtk/.
  */
 
 #if defined(GTK_DISABLE_SINGLE_INCLUDES) && !defined (__GTK_H_INSIDE__) && !defined (GTK_COMPILATION)
@@ -87,7 +87,7 @@ typedef struct _GtkObjectClass	GtkObjectClass;
 struct _GtkObject
 {
   GInitiallyUnowned parent_instance;
-  
+
   /* 32 bits of flags. GtkObject only uses 4 of these bits and
    *  GtkWidget uses the rest. This is done because structs are
    *  aligned on 4 or 8 byte boundaries. If a new bitfield were
@@ -99,7 +99,7 @@ struct _GtkObject
 struct _GtkObjectClass
 {
   GInitiallyUnownedClass parent_class;
-  
+
   /* Non overridable class methods to set and get per class arguments */
   void (*set_arg) (GtkObject *object,
 		   GtkArg    *arg,
@@ -107,7 +107,7 @@ struct _GtkObjectClass
   void (*get_arg) (GtkObject *object,
 		   GtkArg    *arg,
 		   guint      arg_id);
-  
+
   /* Default signal handler for the ::destroy signal, which is
    *  invoked to request that references to the widget be dropped.
    *  If an object class overrides destroy() in order to perform class
@@ -132,7 +132,7 @@ void gtk_object_destroy	  (GtkObject *object);
 
 /****************************************************************/
 
-#ifndef GTK_DISABLE_DEPRECATED 
+#ifndef GTK_DISABLE_DEPRECATED
 
 GtkObject*	gtk_object_new		  (GtkType	       type,
 					   const gchar	      *first_property_name,
