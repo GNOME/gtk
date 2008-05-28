@@ -9748,7 +9748,7 @@ gtk_tree_view_move_cursor_page_up_down (GtkTreeView *tree_view,
     _gtk_rbtree_find_offset (tree_view->priv->tree, y,
 			     &cursor_tree, &cursor_node);
 
-  if (tree_view->priv->cursor_offset >= BACKGROUND_HEIGHT (cursor_node))
+  if (tree_view->priv->cursor_offset > BACKGROUND_HEIGHT (cursor_node))
     {
       _gtk_rbtree_next_full (cursor_tree, cursor_node,
 			     &cursor_tree, &cursor_node);
