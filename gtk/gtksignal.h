@@ -29,9 +29,7 @@
 #ifndef __GTK_SIGNAL_H__
 #define __GTK_SIGNAL_H__
 
-#include <gtk/gtkenums.h>
-#include <gtk/gtkobject.h>
-#include <gtk/gtkmarshal.h>
+#include <gtk/gtk.h>
 
 G_BEGIN_DECLS
 

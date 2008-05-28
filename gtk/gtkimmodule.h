@@ -20,7 +20,7 @@
 #ifndef __GTK_IM_MODULE_H__
 #define __GTK_IM_MODULE_H__
 
-#include <gtk/gtkimcontext.h>
+#include <gtk/gtk.h>
 
 G_BEGIN_DECLS
 

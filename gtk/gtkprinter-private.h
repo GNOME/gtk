@@ -21,11 +21,9 @@
 #ifndef __GTK_PRINTER_PRIVATE_H__
 #define __GTK_PRINTER_PRIVATE_H__
 
-#include <glib.h>
+#include <gtk/gtk.h>
 #include "gtkprinter.h"
-#include "gtkprintoperation.h"
 #include "gtkprinteroptionset.h"
-#include "gtkpagesetup.h"
 #include "gtkprintjob.h"
 
 G_BEGIN_DECLS

@@ -16,14 +16,13 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330,
  * Boston, MA 02111-1307, USA.
  */
+
 #ifndef __GTK_PRINT_UNIX_DIALOG_H__
 #define __GTK_PRINT_UNIX_DIALOG_H__
 
-#include <gtk/gtkdialog.h>
+#include <gtk/gtk.h>
 #include <gtk/gtkprinter.h>
 #include <gtk/gtkprintjob.h>
-#include <gtk/gtkprintsettings.h>
-#include <gtk/gtkpagesetup.h>
 
 G_BEGIN_DECLS
 

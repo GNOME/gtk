@@ -27,6 +27,7 @@
 #ifndef __GTK_H__
 #define __GTK_H__
 
+#define __GTK_H_INSIDE__
 
 #include <gdk/gdk.h>
 #include <gtk/gtkaboutdialog.h>
@@ -231,5 +232,6 @@
 #include <gtk/gtktipsquery.h>
 #include <gtk/gtktooltips.h>
 
+#undef __GTK_H_INSIDE__
 
 #endif /* __GTK_H__ */

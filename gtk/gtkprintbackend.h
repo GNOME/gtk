@@ -29,10 +29,9 @@
 #error "GtkPrintBackend is not supported API for general use"
 #endif
 
-#include <glib-object.h>
 #include <cairo.h>
+#include <gtk/gtk.h>
 
-#include "gtkprintsettings.h"
 #include "gtkprinteroptionset.h"
 #include "gtkprintjob.h"
 

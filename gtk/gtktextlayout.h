@@ -89,8 +89,7 @@
 #error "You are not supposed to be including this file; the equivalent public API is in gtktextview.h"
 #endif
 
-#include <gtk/gtktextbuffer.h>
-#include <gtk/gtktextiter.h>
+#include <gtk/gtk.h>
 
 G_BEGIN_DECLS
 

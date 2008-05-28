@@ -33,7 +33,7 @@
 #ifndef __GTK_CTREE_H__
 #define __GTK_CTREE_H__
 
-#include <gtk/gtkclist.h>
+#include <gtk/gtk.h>
 
 G_BEGIN_DECLS
 

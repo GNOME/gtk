@@ -29,8 +29,7 @@
 #ifndef __GTK_PREVIEW_H__
 #define __GTK_PREVIEW_H__
 
-
-#include <gtk/gtkwidget.h>
+#include <gtk/gtk.h>
 
 
 G_BEGIN_DECLS

@@ -32,8 +32,7 @@
 #ifndef __GTK_TIPS_QUERY_H__
 #define __GTK_TIPS_QUERY_H__
 
-
-#include <gtk/gtklabel.h>
+#include <gtk/gtk.h>
 
 
 G_BEGIN_DECLS

@@ -29,9 +29,7 @@
 #ifndef __GTK_PIXMAP_H__
 #define __GTK_PIXMAP_H__
 
-
-#include <gdk/gdk.h>
-#include <gtk/gtkmisc.h>
+#include <gtk/gtk.h>
 
 
 G_BEGIN_DECLS

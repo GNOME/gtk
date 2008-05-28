@@ -16,13 +16,12 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330,
  * Boston, MA 02111-1307, USA.
  */
+
 #ifndef __GTK_PRINTER_H__
 #define __GTK_PRINTER_H__
 
-#include <glib-object.h>
 #include <cairo.h>
-#include <gtk/gtkprintsettings.h>
-#include <gtk/gtkpagesetup.h>
+#include <gtk/gtk.h>
 
 G_BEGIN_DECLS
 

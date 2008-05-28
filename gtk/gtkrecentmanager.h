@@ -18,6 +18,10 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330,
  */
 
+#if defined(GTK_DISABLE_SINGLE_INCLUDES) && !defined (__GTK_H_INSIDE__) && !defined (GTK_COMPILATION)
+#error "Only <gtk/gtk.h> can be included directly."
+#endif
+
 #ifndef __GTK_RECENT_MANAGER_H__
 #define __GTK_RECENT_MANAGER_H__
 

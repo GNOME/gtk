@@ -29,9 +29,7 @@
 #ifndef __GTK_OPTION_MENU_H__
 #define __GTK_OPTION_MENU_H__
 
-
-#include <gdk/gdk.h>
-#include <gtk/gtkbutton.h>
+#include <gtk/gtk.h>
 
 
 G_BEGIN_DECLS

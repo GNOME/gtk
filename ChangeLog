@@ -1,3 +1,50 @@
+2008-05-28  Michael Natterer  <mitch@imendio.com>
+
+	* gtk/gtk.h: define __GTK_H_INSIDE__ around including all other
+	headers.
+
+	* gtk/gtktypebuiltins.h.template
+	* gtk/gtkversion.h.in
+	* gtk/gtk*.h: add single-include guards that #error out if
+	GTK_DISABLE_SINGLE_INCLUDES is defined and any of these files is
+	included individually.
+
+	* gtk/gtkprintbackend.h
+	* gtk/gtkprinter-private.h
+	* gtk/gtktextlayout.h
+	* gtk/gtktexttagprivate.h
+	* gtk/gtktexttypes.h
+	* gtk/gtktreedatalist.h: include <gtk/gtk.h> instead of individual
+	headers in these private or semi-private headers.
+
+	* gtk/gtkimmodule.h: also here because it's not in gtk.h.
+
+	* gtk/gtkpagesetupunixdialog.h
+	* gtk/gtkprinter.h
+	* gtk/gtkprintjob.h
+	* gtk/gtkprintunixdialog.h: likewise in the gtkunixprint headers.
+
+	* gtk/gtkclist.h
+	* gtk/gtkcombo.h
+	* gtk/gtkctree.h
+	* gtk/gtkfilesel.h
+	* gtk/gtkitemfactory.h
+	* gtk/gtklist.h
+	* gtk/gtklistitem.h
+	* gtk/gtkoldeditable.h
+	* gtk/gtkoptionmenu.h
+	* gtk/gtkpixmap.h
+	* gtk/gtkpreview.h
+	* gtk/gtksignal.h
+	* gtk/gtktipsquery.h: whenever possible, include only <gtk/gtk.h>
+	instead of individual headers in these deprecated headers. They
+	don't get included at all when GTK_DISABLE_DEPRECATED is defined,
+	so if an app needs them anyway, it must undef GTK_DISABLE_DEPRECATED
+	and include them individually, which should continue to work.
+
+	* gtk/gtkclist.c: include "gtkctree.h" because of the change
+	above.
+
 2008-05-28  Kristian Rietveld  <kris@imendio.com>
 
 	Bug 449625 - crash in gtk_tree_view_real_move_cursor at

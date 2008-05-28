@@ -17,13 +17,10 @@
  * Boston, MA 02111-1307, USA.
  */
 
-
 #ifndef __GTK_TREE_DATA_LIST_H__
 #define __GTK_TREE_DATA_LIST_H__
 
-#include <glib.h>
-#include <glib-object.h>
-#include "gtktreesortable.h"
+#include <gtk/gtk.h>
 
 typedef struct _GtkTreeDataList GtkTreeDataList;
 struct _GtkTreeDataList

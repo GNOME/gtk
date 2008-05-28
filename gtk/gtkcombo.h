@@ -29,8 +29,8 @@
 #ifndef __GTK_SMART_COMBO_H__
 #define __GTK_SMART_COMBO_H__
 
-#include <gtk/gtkhbox.h>
-#include <gtk/gtkitem.h>
+#include <gtk/gtk.h>
+
 
 G_BEGIN_DECLS
 

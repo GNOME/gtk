@@ -27,9 +27,7 @@
 #ifndef __GTK_TEXT_TYPES_H__
 #define __GTK_TEXT_TYPES_H__
 
-#include <glib.h>
-
-#include <gtk/gtktextbuffer.h>
+#include <gtk/gtk.h>
 #include <gtk/gtktexttagprivate.h>
 
 G_BEGIN_DECLS

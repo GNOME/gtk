@@ -27,7 +27,7 @@
 #ifndef __GTK_TEXT_TAG_PRIVATE_H__
 #define __GTK_TEXT_TAG_PRIVATE_H__
 
-#include <gtk/gtktexttag.h>
+#include <gtk/gtk.h>
 
 typedef struct _GtkTextBTreeNode GtkTextBTreeNode;
 

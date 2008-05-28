@@ -29,11 +29,7 @@
 #ifndef __GTK_LIST_H__
 #define __GTK_LIST_H__
 
-
-#include <gdk/gdk.h>
-#include <gtk/gtkenums.h>
-#include <gtk/gtkcontainer.h>
-#include <gtk/gtklistitem.h>
+#include <gtk/gtk.h>
 
 G_BEGIN_DECLS
 

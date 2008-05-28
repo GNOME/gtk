@@ -17,6 +17,10 @@
  * Boston, MA 02111-1307, USA.
  */
 
+#if defined(GTK_DISABLE_SINGLE_INCLUDES) && !defined (__GTK_H_INSIDE__) && !defined (GTK_COMPILATION)
+#error "Only <gtk/gtk.h> can be included directly."
+#endif
+
 #ifndef __GTK_CELL_RENDERER_TEXT_H__
 #define __GTK_CELL_RENDERER_TEXT_H__
 
@@ -97,6 +101,5 @@ void             gtk_cell_renderer_text_set_fixed_height_from_font (GtkCellRende
 
 
 G_END_DECLS
-
 
 #endif /* __GTK_CELL_RENDERER_TEXT_H__ */

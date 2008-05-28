@@ -29,9 +29,7 @@
 #ifndef __GTK_FILESEL_H__
 #define __GTK_FILESEL_H__
 
-
-#include <gdk/gdk.h>
-#include <gtk/gtkdialog.h>
+#include <gtk/gtk.h>
 
 
 G_BEGIN_DECLS

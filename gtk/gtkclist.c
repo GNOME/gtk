@@ -35,6 +35,7 @@
 
 #include "gtkmain.h"
 #include "gtkobject.h"
+#include "gtkctree.h"
 #include "gtkclist.h"
 #include "gtkbindings.h"
 #include "gtkdnd.h"
