@@ -2060,24 +2060,29 @@ gtk_tree_model_sort_convert_child_path_to_path (GtkTreeModelSort *tree_model_sor
  * @child_iter: A valid #GtkTreeIter pointing to a row on the child model
  * 
  * Sets @sort_iter to point to the row in @tree_model_sort that corresponds to
- * the row pointed at by @child_iter.
+ * the row pointed at by @child_iter.  If @sort_iter was not set, %FALSE
+ * is returned.  Note: a boolean is only returned since 2.14.
+ *
+ * Return value: %TRUE, if @sort_iter was set, i.e. if @sort_iter is a
+ * valid iterator pointer to a visible row in the child model.
  **/
-void
+gboolean
 gtk_tree_model_sort_convert_child_iter_to_iter (GtkTreeModelSort *tree_model_sort,
 						GtkTreeIter      *sort_iter,
 						GtkTreeIter      *child_iter)
 {
+  gboolean ret;
   GtkTreePath *child_path, *path;
 
-  g_return_if_fail (GTK_IS_TREE_MODEL_SORT (tree_model_sort));
-  g_return_if_fail (tree_model_sort->child_model != NULL);
-  g_return_if_fail (sort_iter != NULL);
-  g_return_if_fail (child_iter != NULL);
+  g_return_val_if_fail (GTK_IS_TREE_MODEL_SORT (tree_model_sort), FALSE);
+  g_return_val_if_fail (tree_model_sort->child_model != NULL, FALSE);
+  g_return_val_if_fail (sort_iter != NULL, FALSE);
+  g_return_val_if_fail (child_iter != NULL, FALSE);
 
   sort_iter->stamp = 0;
 
   child_path = gtk_tree_model_get_path (tree_model_sort->child_model, child_iter);
-  g_return_if_fail (child_path != NULL);
+  g_return_val_if_fail (child_path != NULL, FALSE);
 
   path = gtk_tree_model_sort_convert_child_path_to_path (tree_model_sort, child_path);
   gtk_tree_path_free (child_path);
@@ -2085,11 +2090,14 @@ gtk_tree_model_sort_convert_child_iter_to_iter (GtkTreeModelSort *tree_model_sor
   if (!path)
     {
       g_warning ("%s: The conversion of the child path to a GtkTreeModel sort path failed", G_STRLOC);
-      return;
+      return FALSE;
     }
 
-  gtk_tree_model_get_iter (GTK_TREE_MODEL (tree_model_sort), sort_iter, path);
+  ret = gtk_tree_model_get_iter (GTK_TREE_MODEL (tree_model_sort),
+                                 sort_iter, path);
   gtk_tree_path_free (path);
+
+  return ret;
 }
 
 /**

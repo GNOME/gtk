@@ -1,3 +1,11 @@
+2008-05-28  Kristian Rietveld  <kris@imendio.com>
+
+	Amendment of bug 485218 - Strange warning encountered.
+
+	* gtk/gtktreemodelsort.[ch]
+	(gtk_tree_model_sort_convert_child_iter_to_iter): return a boolean
+	indication whether or not the conversion had succeeded.
+
 2008-05-27  Matthias Clasen  <mclasen@redhat.com>
 
 	Bug 509788 - GTK+ should use CUPS to set Postscript level of PS output
