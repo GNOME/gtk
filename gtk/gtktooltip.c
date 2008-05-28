@@ -71,6 +71,7 @@ struct _GtkTooltip
   guint browse_mode_enabled : 1;
   guint keyboard_mode_enabled : 1;
   guint tip_area_set : 1;
+  guint custom_was_reset : 1;
 };
 
 struct _GtkTooltipClass
@@ -349,6 +350,15 @@ gtk_tooltip_set_custom (GtkTooltip *tooltip,
   if (custom_widget)
     g_return_if_fail (GTK_IS_WIDGET (custom_widget));
 
+  /* The custom widget has been updated from the query-tooltip
+   * callback, so we do not want to reset the custom widget later on.
+   */
+  tooltip->custom_was_reset = TRUE;
+
+  /* No need to do anything if the custom widget stays the same */
+  if (tooltip->custom_widget == custom_widget)
+    return;
+
   if (tooltip->custom_widget)
     {
       GtkWidget *custom = tooltip->custom_widget;
@@ -440,8 +450,12 @@ gtk_tooltip_reset (GtkTooltip *tooltip)
 {
   gtk_tooltip_set_markup (tooltip, NULL);
   gtk_tooltip_set_icon (tooltip, NULL);
-  gtk_tooltip_set_custom (tooltip, NULL);
   gtk_tooltip_set_tip_area (tooltip, NULL);
+
+  /* See if the custom widget is again set from the query-tooltip
+   * callback.
+   */
+  tooltip->custom_was_reset = FALSE;
 }
 
 static void
@@ -791,6 +805,12 @@ gtk_tooltip_run_requery (GtkWidget  **widget,
 	break;
     }
   while (*widget);
+
+  /* If the custom widget was not reset in the query-tooltip
+   * callback, we clear it here.
+   */
+  if (!tooltip->custom_was_reset)
+    gtk_tooltip_set_custom (tooltip, NULL);
 
   return return_value;
 }

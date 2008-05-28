@@ -1,3 +1,15 @@
+2008-05-28  Kristian Rietveld  <kris@imendio.com>
+
+	Bug 504087 - make gtk_tooltip_set_custom a no-op for setting the
+	current widget again.
+
+	* gtk/gtktooltip.c (gtk_tooltip_set_custom),
+	(gtk_tooltip_reset), (gtk_tooltip_run_requery): use a
+	custom_was_reset field to check if the custom widget is set again in
+	the query-tooltip callback; if not, we set it to NULL.  Based on a
+	patch by Xavier Claessens, insightful comments from Jean-Yves Lefort
+	and Christian Persch.
+
 2008-05-28  Michael Natterer  <mitch@imendio.com>
 
 	* modules/printbackends/cups/gtkcupsutils.c
