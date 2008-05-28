@@ -23,7 +23,7 @@
 #include <unistd.h>
 #include <string.h>
 #include <gtk/gtk.h>
-#include <gdk-pixbuf/gdk-pixbuf-loader.h>
+#include <gdk-pixbuf/gdk-pixbuf.h>
 
 #include "test-inline-pixbufs.h"
 
