@@ -1,3 +1,10 @@
+2008-05-28  Michael Natterer  <mitch@gimp.org>
+
+	* configure.in: last but not least, add G_DISABLE_SINGLE_INCLUDES,
+	GDK_PIXBUF_DISABLE_SINGLE_INCLUDES and GTK_DISABLE_SINGLE_INCLUDES
+	to CPPFLAGS so it's impossible to commit code that would break
+	apps which use DISABLE_INCLUDE defines.
+
 2008-05-28  Michael Natterer  <mitch@imendio.com>
 
 	* gtk/gtk.h: define __GTK_H_INSIDE__ around including all other
