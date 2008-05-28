@@ -8473,6 +8473,9 @@ cancel_arrow_animation (GtkTreeView *tree_view)
 
       g_source_remove (tree_view->priv->expand_collapse_timeout);
       tree_view->priv->expand_collapse_timeout = 0;
+
+      /* Reset node */
+      tree_view->priv->expanded_collapsed_node = NULL;
     }
 }
 
