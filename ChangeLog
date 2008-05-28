@@ -1,21 +1,5 @@
 2008-05-28  Michael Natterer  <mitch@imendio.com>
 
-	* modules/other/gail/gailwidget.h: include <gtk/gtk.h> instead of
-	<gtk/gtkaccessible.h>
-
-	* modules/other/gail/*.h: don't include anyting from gtk since all
-	headers indirectly include gailwidget.h.
-
-	* modules/other/gail/gailcellparent.c: include <gtk/gtk.h> instead
-	of individual files.
-
-	* modules/other/gail/gailcheckmenuitem.c
-	* modules/other/gail/gailmenu.c
-	* modules/other/gail/gailtreeview.c: remove all gtk includes since
-	it's always included by including any gail header.
-
-2008-05-28  Michael Natterer  <mitch@imendio.com>
-
 	* modules/printbackends/cups/gtkcupsutils.c
 	* modules/printbackends/cups/gtkprintbackendcups.c
 	* modules/printbackends/file/gtkprintbackendfile.c

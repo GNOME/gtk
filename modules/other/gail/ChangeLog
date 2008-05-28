@@ -1,3 +1,19 @@
+2008-05-28  Michael Natterer  <mitch@imendio.com>
+
+	* gailwidget.h: include <gtk/gtk.h> instead of
+	<gtk/gtkaccessible.h>
+
+	* *.h: don't include anyting from gtk since all headers indirectly
+	include gailwidget.h.
+
+	* gailcellparent.c: include <gtk/gtk.h> instead of individual
+	files.
+
+	* gailcheckmenuitem.c
+	* gailmenu.c
+	* gailtreeview.c: remove all gtk includes since it's always
+	included by including any gail header.
+
 2008-05-26  Michael Natterer  <mitch@imendio.com>
 
 	* libgail-util/gailmisc.h
