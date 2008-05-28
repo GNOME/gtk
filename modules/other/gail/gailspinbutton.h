@@ -20,7 +20,6 @@
 #ifndef __GAIL_SPIN_BUTTON_H__
 #define __GAIL_SPIN_BUTTON_H__
 
-#include <gtk/gtkaccessible.h>
 #include <gail/gailentry.h>
 
 G_BEGIN_DECLS

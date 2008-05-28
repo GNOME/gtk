@@ -19,10 +19,6 @@
 
 #include <config.h>
 
-#include <gtk/gtkmenu.h>
-#include <gtk/gtkmenuitem.h>
-#include <gtk/gtkoptionmenu.h>
-#include <gtk/gtkcombobox.h>
 #include "gailmenu.h"
 
 static void gail_menu_class_init (GailMenuClass *klass);

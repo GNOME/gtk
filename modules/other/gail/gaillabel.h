@@ -20,7 +20,6 @@
 #ifndef __GAIL_LABEL_H__
 #define __GAIL_LABEL_H__
 
-#include <gtk/gtkaccessible.h>
 #include <gail/gailwidget.h>
 #include <libgail-util/gailtextutil.h>
 

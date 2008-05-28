@@ -20,7 +20,6 @@
 #ifndef __GAIL_SCALE_H__
 #define __GAIL_SCALE_H__
 
-#include <gtk/gtkaccessible.h>
 #include <gail/gailrange.h>
 #include <libgail-util/gailtextutil.h>
 

@@ -20,7 +20,6 @@
 #ifndef __GAIL_NOTEBOOK_H__
 #define __GAIL_NOTEBOOK_H__
 
-#include <gtk/gtkaccessible.h>
 #include <gail/gailcontainer.h>
 
 G_BEGIN_DECLS
@@ -38,7 +37,7 @@ typedef struct _GailNotebookClass         GailNotebookClass;
 struct _GailNotebook
 {
   GailContainer parent;
-  
+
   /*
    * page_cache maintains a list of pre-ref'd Notebook Pages.
    * This cache is queried by gail_notebook_ref_child().

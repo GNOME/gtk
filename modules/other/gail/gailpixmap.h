@@ -20,7 +20,6 @@
 #ifndef __GAIL_PIXMAP_H__
 #define __GAIL_PIXMAP_H__
 
-#include <gtk/gtkaccessible.h>
 #include <gail/gailwidget.h>
 
 G_BEGIN_DECLS

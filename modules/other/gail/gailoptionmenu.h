@@ -20,7 +20,6 @@
 #ifndef __GAIL_OPTION_MENU_H__
 #define __GAIL_OPTION_MENU_H__
 
-#include <gtk/gtkaccessible.h>
 #include <gail/gailbutton.h>
 
 G_BEGIN_DECLS

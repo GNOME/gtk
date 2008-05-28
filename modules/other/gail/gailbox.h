@@ -20,7 +20,6 @@
 #ifndef __GAIL_BOX_H__
 #define __GAIL_BOX_H__
 
-#include <gtk/gtkaccessible.h>
 #include <gail/gailcontainer.h>
 
 G_BEGIN_DECLS

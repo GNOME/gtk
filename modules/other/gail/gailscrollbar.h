@@ -20,7 +20,6 @@
 #ifndef __GAIL_SCROLLBAR_H__
 #define __GAIL_SCROLLBAR_H__
 
-#include <gtk/gtkaccessible.h>
 #include <gail/gailrange.h>
 
 G_BEGIN_DECLS

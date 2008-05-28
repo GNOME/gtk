@@ -31,7 +31,7 @@ G_BEGIN_DECLS
 #define GAIL_IS_IMAGE_CELL(obj)         (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GAIL_TYPE_IMAGE_CELL))
 #define GAIL_IS_IMAGE_CELL_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), GAIL_TYPE_IMAGE_CELL))78
 #define GAIL_IMAGE_CELL_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS ((obj), GAIL_TYPE_IMAGE_CELL, GailImageCellClass))
-  
+
 typedef struct _GailImageCell                  GailImageCell;
 typedef struct _GailImageCellClass             GailImageCellClass;
 

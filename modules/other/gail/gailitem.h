@@ -20,7 +20,6 @@
 #ifndef __GAIL_ITEM_H__
 #define __GAIL_ITEM_H__
 
-#include <gtk/gtkaccessible.h>
 #include <gail/gailcontainer.h>
 #include <libgail-util/gailtextutil.h>
 

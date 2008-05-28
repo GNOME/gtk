@@ -20,8 +20,6 @@
 #ifndef __GAIL_NOTEBOOK_PAGE_H__
 #define __GAIL_NOTEBOOK_PAGE_H__
 
-#include <atk/atk.h>
-#include <gtk/gtknotebook.h>
 #include <gail/gailnotebook.h>
 #include <libgail-util/gailtextutil.h>
 

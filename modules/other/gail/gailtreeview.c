@@ -24,7 +24,6 @@
 #ifdef GDK_WINDOWING_X11
 #include <gdk/x11/gdkx.h>
 #endif
-#include <gtk/gtktreeviewcolumn.h>
 #include "gailtreeview.h"
 #include "gailrenderercell.h"
 #include "gailbooleancell.h"

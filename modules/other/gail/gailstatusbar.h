@@ -20,7 +20,6 @@
 #ifndef __GAIL_STATUSBAR_H__
 #define __GAIL_STATUSBAR_H__
 
-#include <gtk/gtkaccessible.h>
 #include <gail/gailcontainer.h>
 #include <libgail-util/gailtextutil.h>
 

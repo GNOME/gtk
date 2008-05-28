@@ -20,7 +20,7 @@
 #ifndef __GAIL_WIDGET_H__
 #define __GAIL_WIDGET_H__
 
-#include <gtk/gtkaccessible.h>
+#include <gtk/gtk.h>
 
 G_BEGIN_DECLS
 

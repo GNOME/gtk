@@ -20,7 +20,6 @@
 #ifndef __GAIL_RADIO_MENU_ITEM_H__
 #define __GAIL_RADIO_MENU_ITEM_H__
 
-#include <gtk/gtkaccessible.h>
 #include <gail/gailcheckmenuitem.h>
 
 G_BEGIN_DECLS

@@ -20,7 +20,6 @@
 #ifndef __GAIL_CHECK_SUB_MENU_ITEM_H__
 #define __GAIL_CHECK_SUB_MENU_ITEM_H__
 
-#include <gtk/gtkaccessible.h>
 #include <gail/gailsubmenuitem.h>
 
 G_BEGIN_DECLS
