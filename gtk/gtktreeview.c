@@ -391,6 +391,12 @@ static void     column_sizing_notify                         (GObject           
                                                               GParamSpec         *pspec,
                                                               gpointer            data);
 static gboolean expand_collapse_timeout                      (gpointer            data);
+static void     add_expand_collapse_timeout                  (GtkTreeView        *tree_view,
+                                                              GtkRBTree          *tree,
+                                                              GtkRBNode          *node,
+                                                              gboolean            expand);
+static void     remove_expand_collapse_timeout               (GtkTreeView        *tree_view);
+static void     cancel_arrow_animation                       (GtkTreeView        *tree_view);
 static gboolean do_expand_collapse                           (GtkTreeView        *tree_view);
 static void     gtk_tree_view_stop_rubber_band               (GtkTreeView        *tree_view);
 
@@ -1868,11 +1874,7 @@ gtk_tree_view_unrealize (GtkWidget *widget)
       priv->open_dest_timeout = 0;
     }
 
-  if (priv->expand_collapse_timeout != 0)
-    {
-      g_source_remove (priv->expand_collapse_timeout);
-      priv->expand_collapse_timeout = 0;
-    }
+  remove_expand_collapse_timeout (tree_view);
   
   if (priv->presize_handler_timer != 0)
     {
@@ -8419,16 +8421,7 @@ gtk_tree_view_row_deleted (GtkTreeModel *model,
   gtk_tree_view_stop_editing (tree_view, TRUE);
 
   /* If we have a node expanded/collapsed timeout, remove it */
-  if (tree_view->priv->expand_collapse_timeout != 0)
-    {
-      g_source_remove (tree_view->priv->expand_collapse_timeout);
-      tree_view->priv->expand_collapse_timeout = 0;
-
-      /* Reset node */
-      GTK_RBNODE_UNSET_FLAG (tree_view->priv->expanded_collapsed_node, GTK_RBNODE_IS_SEMI_COLLAPSED);
-      GTK_RBNODE_UNSET_FLAG (tree_view->priv->expanded_collapsed_node, GTK_RBNODE_IS_SEMI_EXPANDED);
-      tree_view->priv->expanded_collapsed_node = NULL;
-    }
+  remove_expand_collapse_timeout (tree_view);
 
   if (tree_view->priv->destroy_count_func)
     {
@@ -8462,21 +8455,6 @@ gtk_tree_view_row_deleted (GtkTreeModel *model,
 
   if (selection_changed)
     g_signal_emit_by_name (tree_view->priv->selection, "changed");
-}
-
-static void
-cancel_arrow_animation (GtkTreeView *tree_view)
-{
-  if (tree_view->priv->expand_collapse_timeout)
-    {
-      while (do_expand_collapse (tree_view));
-
-      g_source_remove (tree_view->priv->expand_collapse_timeout);
-      tree_view->priv->expand_collapse_timeout = 0;
-
-      /* Reset node */
-      tree_view->priv->expanded_collapsed_node = NULL;
-    }
 }
 
 static void
@@ -10676,11 +10654,7 @@ gtk_tree_view_set_model (GtkTreeView  *tree_view,
       gtk_tree_view_unref_and_check_selection_tree (tree_view, tree_view->priv->tree);
       gtk_tree_view_stop_editing (tree_view, TRUE);
 
-      if (tree_view->priv->expand_collapse_timeout)
-        {
-          g_source_remove (tree_view->priv->expand_collapse_timeout);
-          tree_view->priv->expand_collapse_timeout = 0;
-	}
+      remove_expand_collapse_timeout (tree_view);
 
       g_signal_handlers_disconnect_by_func (tree_view->priv->model,
 					    gtk_tree_view_row_changed,
@@ -11755,6 +11729,7 @@ gtk_tree_view_expand_all_emission_helper (GtkRBTree *tree,
                           gtk_tree_view_expand_all_emission_helper,
                           tree_view);
 }
+
 /**
  * gtk_tree_view_expand_all:
  * @tree_view: A #GtkTreeView.
@@ -11791,6 +11766,55 @@ static gboolean
 expand_collapse_timeout (gpointer data)
 {
   return do_expand_collapse (data);
+}
+
+static void
+add_expand_collapse_timeout (GtkTreeView *tree_view,
+                             GtkRBTree   *tree,
+                             GtkRBNode   *node,
+                             gboolean     expand)
+{
+  if (tree_view->priv->expand_collapse_timeout != 0)
+    return;
+
+  tree_view->priv->expand_collapse_timeout =
+      gdk_threads_add_timeout (50, expand_collapse_timeout, tree_view);
+  tree_view->priv->expanded_collapsed_tree = tree;
+  tree_view->priv->expanded_collapsed_node = node;
+
+  if (expand)
+    GTK_RBNODE_SET_FLAG (node, GTK_RBNODE_IS_SEMI_COLLAPSED);
+  else
+    GTK_RBNODE_SET_FLAG (node, GTK_RBNODE_IS_SEMI_EXPANDED);
+}
+
+static void
+remove_expand_collapse_timeout (GtkTreeView *tree_view)
+{
+  if (tree_view->priv->expand_collapse_timeout)
+    {
+      g_source_remove (tree_view->priv->expand_collapse_timeout);
+      tree_view->priv->expand_collapse_timeout = 0;
+    }
+
+  if (tree_view->priv->expanded_collapsed_node != NULL)
+    {
+      GTK_RBNODE_UNSET_FLAG (tree_view->priv->expanded_collapsed_node, GTK_RBNODE_IS_SEMI_EXPANDED);
+      GTK_RBNODE_UNSET_FLAG (tree_view->priv->expanded_collapsed_node, GTK_RBNODE_IS_SEMI_COLLAPSED);
+
+      tree_view->priv->expanded_collapsed_node = NULL;
+    }
+}
+
+static void
+cancel_arrow_animation (GtkTreeView *tree_view)
+{
+  if (tree_view->priv->expand_collapse_timeout)
+    {
+      while (do_expand_collapse (tree_view));
+
+      remove_expand_collapse_timeout (tree_view);
+    }
 }
 
 static gboolean
@@ -12015,28 +12039,10 @@ gtk_tree_view_real_expand_row (GtkTreeView *tree_view,
 			    gtk_tree_path_get_depth (path) + 1,
 			    open_all);
 
-  if (tree_view->priv->expand_collapse_timeout)
-    {
-      g_source_remove (tree_view->priv->expand_collapse_timeout);
-      tree_view->priv->expand_collapse_timeout = 0;
-    }
-
-  if (tree_view->priv->expanded_collapsed_node != NULL)
-    {
-      GTK_RBNODE_UNSET_FLAG (tree_view->priv->expanded_collapsed_node, GTK_RBNODE_IS_SEMI_EXPANDED);
-      GTK_RBNODE_UNSET_FLAG (tree_view->priv->expanded_collapsed_node, GTK_RBNODE_IS_SEMI_COLLAPSED);
-
-      tree_view->priv->expanded_collapsed_node = NULL;
-    }
+  remove_expand_collapse_timeout (tree_view);
 
   if (animate)
-    {
-      tree_view->priv->expand_collapse_timeout = gdk_threads_add_timeout (50, expand_collapse_timeout, tree_view);
-      tree_view->priv->expanded_collapsed_node = node;
-      tree_view->priv->expanded_collapsed_tree = tree;
-
-      GTK_RBNODE_SET_FLAG (node, GTK_RBNODE_IS_SEMI_COLLAPSED);
-    }
+    add_expand_collapse_timeout (tree_view, tree, node, TRUE);
 
   install_presize_handler (tree_view);
 
@@ -12211,14 +12217,6 @@ gtk_tree_view_real_collapse_row (GtkTreeView *tree_view,
       gtk_tree_path_free (lsc);
     }
 
-  if (tree_view->priv->expanded_collapsed_node != NULL)
-    {
-      GTK_RBNODE_UNSET_FLAG (tree_view->priv->expanded_collapsed_node, GTK_RBNODE_IS_SEMI_EXPANDED);
-      GTK_RBNODE_UNSET_FLAG (tree_view->priv->expanded_collapsed_node, GTK_RBNODE_IS_SEMI_COLLAPSED);
-      
-      tree_view->priv->expanded_collapsed_node = NULL;
-    }
-
   if (gtk_tree_view_unref_and_check_selection_tree (tree_view, node->children))
     {
       _gtk_rbtree_remove (node->children);
@@ -12227,20 +12225,10 @@ gtk_tree_view_real_collapse_row (GtkTreeView *tree_view,
   else
     _gtk_rbtree_remove (node->children);
 
-  if (tree_view->priv->expand_collapse_timeout)
-    {
-      g_source_remove (tree_view->priv->expand_collapse_timeout);
-      tree_view->priv->expand_collapse_timeout = 0;
-    }
+  remove_expand_collapse_timeout (tree_view);
   
   if (animate)
-    {
-      tree_view->priv->expand_collapse_timeout = gdk_threads_add_timeout (50, expand_collapse_timeout, tree_view);
-      tree_view->priv->expanded_collapsed_node = node;
-      tree_view->priv->expanded_collapsed_tree = tree;
-
-      GTK_RBNODE_SET_FLAG (node, GTK_RBNODE_IS_SEMI_EXPANDED);
-    }
+    add_expand_collapse_timeout (tree_view, tree, node, FALSE);
   
   if (GTK_WIDGET_MAPPED (tree_view))
     {

@@ -1,5 +1,21 @@
 2008-05-28  Kristian Rietveld  <kris@imendio.com>
 
+	Refactor expand/collapse timeout handling (amendment to bug 511217).
+
+	* gtk/gtktreeview.c (add_expand_collapse_timeout),
+	(remove_expand_collapse_timeout): new functions, the remove function
+	also clears expanded_collapsed_node,
+	(cancel_arrow_animation): moved to be next to the add/remove timeout
+	functions,
+	(gtk_tree_view_unrealize),
+	(gtk_tree_view_row_deleted),
+	(gtk_tree_view_set_model),
+	(cancel_arrow_animation),
+	(gtk_tree_view_real_expand_row),
+	(gtk_tree_view_real_collapse_row): use the new add/remove functions.
+
+2008-05-28  Kristian Rietveld  <kris@imendio.com>
+
 	Amendment of bug 485218 - Strange warning encountered.
 
 	* gtk/gtktreemodelsort.[ch]
