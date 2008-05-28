@@ -1,5 +1,14 @@
 2008-05-27  Matthias Clasen  <mclasen@redhat.com>
 
+	Bug 404571 – Scroll arrow backgrounds should be painted with different
+	detail
+
+	* gtk/gtkmenu.c (gtk_menu_paint): Use "menu_scroll_arrow_up/down" 
+	as detail when drawing scroll arrow backgrounds. Proposed by
+	Tommi Komulainen.
+	
+2008-05-27  Matthias Clasen  <mclasen@redhat.com>
+
 	Bug 511217 - potential memory corruption after refreshing a tree_view
 
 	* gtk/gtktreeview.c (cancel_arrow_animation): Reset
