@@ -2,6 +2,18 @@
 
 	Merge from trunk:
 
+	Bug 449625 - crash in gtk_tree_view_real_move_cursor at
+	gtktreeview.c:9641
+
+	* gtk/gtktreeview.c (gtk_tree_view_move_cursor_page_up_down):
+	cursor_offset *must* be larger than background height of the cursor
+	node, not just equal otherwise there is no guarantee there is a next
+	node.
+
+2008-05-28  Kristian Rietveld  <kris@imendio.com>
+
+	Merge from trunk:
+
 	Bug 504087 - make gtk_tooltip_set_custom a no-op for setting the
 	current widget again.
 
