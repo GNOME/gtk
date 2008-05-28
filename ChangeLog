@@ -1,3 +1,16 @@
+2006-05-28  Kristian Rietveld  <kris@imendio.com>
+
+	Bug 324282 - add selected signal to cell renderer combo.
+
+	* gtk/gtkcellrenderercombo.c (gtk_cell_renderer_combo_class_init),
+	(gtk_cell_renderer_combo_changed),
+	(gtk_cell_renderer_combo_start_editing): add a new "changed" signal
+	that will be emitted as soon as the combo box emitted changed and has
+	an active iterator.  (Modified patch based on work by James
+	Pelletier).
+
+	* gtk/gtkmarshalers.list: add marshaler.
+
 2008-05-28  Kristian Rietveld  <kris@imendio.com>
 
 	Refactor expand/collapse timeout handling (amendment to bug 511217).

@@ -28,6 +28,7 @@
 #include "gtkcellrenderertext.h"
 #include "gtkcombobox.h"
 #include "gtkcomboboxentry.h"
+#include "gtkmarshalers.h"
 #include "gtkprivate.h"
 #include "gtkalias.h"
 
@@ -58,6 +59,13 @@ enum {
   PROP_TEXT_COLUMN,
   PROP_HAS_ENTRY
 };
+
+enum {
+  CHANGED,
+  LAST_SIGNAL
+};
+
+static guint cell_renderer_combo_signals[LAST_SIGNAL] = { 0, };
 
 #define GTK_CELL_RENDERER_COMBO_PATH "gtk-cell-renderer-combo-path"
 
@@ -132,6 +140,39 @@ gtk_cell_renderer_combo_class_init (GtkCellRendererComboClass *klass)
 							 TRUE,
 							 GTK_PARAM_READWRITE));
 
+
+  /**
+   * GtkCellRendererCombo::changed:
+   * @combo: the object on which the signal is emitted
+   * @path_string: a string of the path identifying the edited cell
+   *               (relative to the tree view model)
+   * @new_iter: the new iter selected in the combo box
+   *            (relative to the combo box model)
+   *
+   * This signal is emitted each time after the user selected an item in
+   * the combo box, either by using the mouse or the arrow keys.  Contrary
+   * to GtkComboBox, GtkCellRendererCombo::changed is not emitted for
+   * changes made to a selected item in the entry.  The argument @new_iter
+   * corresponds to the newly selected item in the combo box and it is relative
+   * to the GtkTreeModel set via the model property on GtkCellRendererCombo.
+   *
+   * Note that as soon as you change the model displayed in the tree view,
+   * the tree view will immediately cease the editing operating.  This
+   * means that you most probably want to refrain from changing the model
+   * until the combo cell renderer emits the edited or editing_canceled signal.
+   *
+   * Since: 2.14
+   */
+  cell_renderer_combo_signals[CHANGED] =
+    g_signal_new (I_("changed"),
+		  G_TYPE_FROM_CLASS (object_class),
+		  G_SIGNAL_RUN_LAST,
+		  0,
+		  NULL, NULL,
+		  _gtk_marshal_VOID__STRING_BOXED,
+		  G_TYPE_NONE, 2,
+		  G_TYPE_STRING,
+		  GTK_TYPE_TREE_ITER);
 }
 
 static void
@@ -238,6 +279,25 @@ gtk_cell_renderer_combo_set_property (GObject      *object,
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
+    }
+}
+
+static void
+gtk_cell_renderer_combo_changed (GtkComboBox *combo,
+				 gpointer     data)
+{
+  GtkTreeIter iter;
+  GtkCellRendererCombo *cell;
+
+  cell = GTK_CELL_RENDERER_COMBO (data);
+
+  if (gtk_combo_box_get_active_iter (combo, &iter))
+    {
+      const char *path;
+
+      path = g_object_get_data (G_OBJECT (combo), GTK_CELL_RENDERER_COMBO_PATH);
+      g_signal_emit (cell, cell_renderer_combo_signals[CHANGED], 0,
+		     path, &iter);
     }
 }
 
@@ -381,6 +441,9 @@ gtk_cell_renderer_combo_start_editing (GtkCellRenderer     *cell,
 
   g_signal_connect (GTK_CELL_EDITABLE (combo), "editing_done",
 		    G_CALLBACK (gtk_cell_renderer_combo_editing_done),
+		    cell_combo);
+  g_signal_connect (GTK_CELL_EDITABLE (combo), "changed",
+		    G_CALLBACK (gtk_cell_renderer_combo_changed),
 		    cell_combo);
   cell_combo->focus_out_id = 
     g_signal_connect (combo, "focus_out_event",
