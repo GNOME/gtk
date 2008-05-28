@@ -1,6 +1,14 @@
 2008-05-27  Matthias Clasen  <mclasen@redhat.com>
 
-	Bug 404571 – Scroll arrow backgrounds should be painted with different
+	Bug 509788 - GTK+ should use CUPS to set Postscript level of PS output
+
+	* modules/printbackends/cups/gtkprintbackendcups.c
+	(cups_printer_create_cairo_surface): Fall back to PostScript level 2
+	if the printer does not support level 3. Patch by Marek Kašík.
+
+2008-05-27  Matthias Clasen  <mclasen@redhat.com>
+
+	Bug 404571 - Scroll arrow backgrounds should be painted with different
 	detail
 
 	* gtk/gtkmenu.c (gtk_menu_paint): Use "menu_scroll_arrow_up/down" 

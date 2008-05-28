@@ -307,10 +307,29 @@ cups_printer_create_cairo_surface (GtkPrinter       *printer,
 				   GIOChannel       *cache_io)
 {
   cairo_surface_t *surface; 
+  ppd_file_t      *ppd_file = NULL;
+  ppd_attr_t      *ppd_attr = NULL;
+  int              level = 2;
  
   /* TODO: check if it is a ps or pdf printer */
   
   surface = cairo_ps_surface_create_for_stream  (_cairo_write_to_cups, cache_io, width, height);
+
+  ppd_file = gtk_printer_cups_get_ppd (GTK_PRINTER_CUPS (printer));
+
+  if (ppd_file != NULL)
+    {
+      ppd_attr = ppdFindAttr (ppd_file, "LanguageLevel", NULL);
+
+      if (ppd_attr != NULL)
+        level = atoi (ppd_attr->value);
+    }
+
+  if (level == 2)
+    cairo_ps_surface_restrict_to_level (surface, CAIRO_PS_LEVEL_2);
+
+  if (level == 3)
+    cairo_ps_surface_restrict_to_level (surface, CAIRO_PS_LEVEL_3);
 
   /* TODO: DPI from settings object? */
   cairo_surface_set_fallback_resolution (surface, 300, 300);
