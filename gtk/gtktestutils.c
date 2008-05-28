@@ -23,7 +23,6 @@
 
 #include "gtktestutils.h"
 #include <gtk/gtk.h>
-#include <gdk/gdktestutils.h>
 #include "gtkalias.h"
 
 #include <locale.h>

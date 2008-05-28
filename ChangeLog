@@ -1,5 +1,9 @@
 2008-05-28  Michael Natterer  <mitch@imendio.com>
 
+	* gtk/gtktestutils.c: don't include <gdk/gdktestutils.h>.
+
+2008-05-28  Michael Natterer  <mitch@imendio.com>
+
 	* gdk/gdk.h: define __GDK_H_INSIDE__ around including all other
 	headers.
 
