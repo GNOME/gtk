@@ -39,8 +39,7 @@
 #include <glib/gi18n-lib.h>
 #include <gmodule.h>
 
-#include <gtk/gtkprintoperation.h>
-#include <gtk/gtkprintsettings.h>
+#include <gtk/gtk.h>
 #include <gtk/gtkprintbackend.h>
 #include <gtk/gtkprinter.h>
 #include <gtk/gtkprinter-private.h>
@@ -49,7 +48,6 @@
 #include "gtkprintercups.h"
 
 #include "gtkcupsutils.h"
-#include "gtkdebug.h"
 
 
 typedef struct _GtkPrintBackendCupsClass GtkPrintBackendCupsClass;

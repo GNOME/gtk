@@ -33,11 +33,11 @@
 
 #include <glib/gi18n-lib.h>
 
-#include "gtkdebug.h"
-#include "gtkprintoperation.h"
-#include "gtkprintbackendlpr.h"
+#include <gtk/gtk.h>
 #include "gtkprinter.h"
 #include "gtkprinter-private.h"
+
+#include "gtkprintbackendlpr.h"
 
 typedef struct _GtkPrintBackendLprClass GtkPrintBackendLprClass;
 

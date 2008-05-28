@@ -35,13 +35,10 @@
 
 #include <glib/gi18n-lib.h>
 
-#include "gtkprintoperation.h"
+#include "gtk/gtk.h"
+#include "gtk/gtkprinter-private.h"
 
-#include "gtkprintbackend.h"
 #include "gtkprintbackendfile.h"
-
-#include "gtkprinter.h"
-#include "gtkprinter-private.h"
 
 typedef struct _GtkPrintBackendFileClass GtkPrintBackendFileClass;
 

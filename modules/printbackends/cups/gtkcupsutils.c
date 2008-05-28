@@ -20,8 +20,8 @@
  */
 
 #include "config.h"
+#include <gtk/gtk.h>
 #include "gtkcupsutils.h"
-#include "gtkdebug.h"
 
 #include <errno.h>
 #include <unistd.h>

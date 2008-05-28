@@ -1,3 +1,11 @@
+2008-05-28  Michael Natterer  <mitch@gimp.org>
+
+	* modules/printbackends/cups/gtkcupsutils.c
+	* modules/printbackends/cups/gtkprintbackendcups.c
+	* modules/printbackends/file/gtkprintbackendfile.c
+	* modules/printbackends/lpr/gtkprintbackendlpr.c: include
+	<gtk/gtk.h> instead of individual files.
+
 2008-05-28  Michael Natterer  <mitch@imendio.com>
 
 	* demos/testpixbuf.c: include <gdk-pixbuf/gdk-pixbuf.h> instead of
