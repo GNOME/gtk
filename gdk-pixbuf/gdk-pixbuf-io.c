@@ -466,6 +466,10 @@ gdk_pixbuf_io_init (void)
 				have_error = TRUE;
 			}			
 			module->info->description = g_strdup (tmp_buf->str);
+
+			if (scan_string (&p, tmp_buf)) {
+				module->info->license = g_strdup (tmp_buf->str);
+			}
 		}
 		else if (!module->info->mime_types) {
 			int n = 1;
