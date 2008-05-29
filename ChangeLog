@@ -1,3 +1,26 @@
+2008-05-29  Michael Natterer  <mitch@imendio.org>
+
+	* gtk/Makefile.am
+	* gtk/gtkunixprint.h: add a single-include header for the unix
+	print stuff.
+
+	* gtk/gtkpagesetupunixdialog.h
+	* gtk/gtkprinter.h
+	* gtk/gtkprintjob.h
+	* gtk/gtkprintunixdialog.h: add single-include guards that #error
+	out if GTK_DISABLE_SINGLE_INCLUDES is defined and any of these
+	files is included individually.
+
+	* gtk/gtkprintbackend.h
+	* gtk/gtkprinter-private.h
+	* modules/printbackends/cups/gtkprintbackendcups.c
+	* modules/printbackends/cups/gtkprintercups.h
+	* modules/printbackends/lpr/gtkprintbackendlpr.c
+	* tests/buildertest.c
+	* tests/defaultvaluetest.c
+	* docs/tools/widgets.c: include <gtk/gtkunixprint.h> instead of
+	individual files.
+
 2008-05-28  Michael Natterer  <mitch@imendio.com>
 
 	* gtk/gtk*.h: whitespace cleanup: remove trailing whitespace and

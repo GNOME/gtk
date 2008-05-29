@@ -337,7 +337,8 @@ gtk_unix_print_public_h_sources =    \
 	gtkpagesetupunixdialog.h	\
 	gtkprintunixdialog.h		\
 	gtkprinter.h			\
-	gtkprintjob.h
+	gtkprintjob.h			\
+	gtkunixprint.h
 endif
 
 # Installed header files without compatibility guarantees

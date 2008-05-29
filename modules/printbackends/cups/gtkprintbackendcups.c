@@ -41,7 +41,7 @@
 
 #include <gtk/gtk.h>
 #include <gtk/gtkprintbackend.h>
-#include <gtk/gtkprinter.h>
+#include <gtk/gtkunixprint.h>
 #include <gtk/gtkprinter-private.h>
 
 #include "gtkprintbackendcups.h"

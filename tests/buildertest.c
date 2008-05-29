@@ -26,7 +26,6 @@
 
 #include <gtk/gtk.h>
 #include <gdk/gdkkeysyms.h>
-#include <gtk/gtkprintjob.h>
 
 /* Copied from gtkiconfactory.c; keep in sync! */
 struct _GtkIconSet

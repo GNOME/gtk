@@ -34,7 +34,6 @@
 #include <glib/gi18n-lib.h>
 
 #include <gtk/gtk.h>
-#include "gtkprinter.h"
 #include "gtkprinter-private.h"
 
 #include "gtkprintbackendlpr.h"

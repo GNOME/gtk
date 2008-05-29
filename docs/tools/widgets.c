@@ -1,5 +1,4 @@
-#include <gtk/gtkprintunixdialog.h>
-#include <gtk/gtkpagesetupunixdialog.h>
+#include <gtk/gtkunixprint.h>
 #include <gdk/gdkkeysyms.h>
 #include <X11/Xatom.h>
 #include <gdkx.h>

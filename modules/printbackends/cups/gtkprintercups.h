@@ -24,7 +24,7 @@
 #include <cups/cups.h>
 #include <cups/ppd.h>
 
-#include "gtkprinter.h"
+#include <gtk/gtkunixprint.h>
 
 G_BEGIN_DECLS
 

@@ -22,18 +22,16 @@
 #define __GTK_PRINT_BACKEND_H__
 
 /* This is a "semi-private" header; it is meant only for
- * alternate GtkPrintDialog backend modules; no stability guarantees 
+ * alternate GtkPrintDialog backend modules; no stability guarantees
  * are made at this point
  */
 #ifndef GTK_PRINT_BACKEND_ENABLE_UNSUPPORTED
 #error "GtkPrintBackend is not supported API for general use"
 #endif
 
-#include <cairo.h>
 #include <gtk/gtk.h>
-
-#include "gtkprinteroptionset.h"
-#include "gtkprintjob.h"
+#include <gtk/gtkunixprint.h>
+#include <gtk/gtkprinteroptionset.h>
 
 G_BEGIN_DECLS
 

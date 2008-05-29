@@ -22,9 +22,8 @@
 #define __GTK_PRINTER_PRIVATE_H__
 
 #include <gtk/gtk.h>
-#include "gtkprinter.h"
+#include <gtk/gtkunixprint.h>
 #include "gtkprinteroptionset.h"
-#include "gtkprintjob.h"
 
 G_BEGIN_DECLS
 

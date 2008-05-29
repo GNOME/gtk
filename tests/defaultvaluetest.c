@@ -22,7 +22,7 @@
 #define GTK_ENABLE_BROKEN
 #include <string.h>
 #include <gtk/gtk.h>
-#include <gtk/gtkprintunixdialog.h>
+#include <gtk/gtkunixprint.h>
 
 static void
 check_property (const char *output,
