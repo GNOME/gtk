@@ -1,3 +1,7 @@
+2008-05-29  Matthias Clasen <mclasen@redhat.com>
+
+	* tests/Makefile.am: Don't add testmountoperation to TEST_PROGS.
+
 2008-05-29  Tor Lillqvist  <tml@novell.com>
 
 	Bug 535526 - updateiconcache.c: using open/close without prototype
