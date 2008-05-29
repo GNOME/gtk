@@ -107,6 +107,9 @@ INCLUDES = \
 	$(GTK_DEBUG_FLAGS)	\
 	$(GTK_DEP_CFLAGS)
 
+CPPFLAGS += \
+	-UGTK_DISABLE_SINGLE_INCLUDES
+
 GTKDOC_LIBS = \
 	$(top_builddir)/gdk-pixbuf/libgdk_pixbuf-$(GTK_API_VERSION).la	\
 	$(top_builddir)/gdk/$(gdktargetlib)        			\
