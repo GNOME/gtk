@@ -18,6 +18,7 @@
  */
 
 #include <gtk/gtk.h>
+#include <gio/gio.h>
 
 static void
 drag_begin (GtkWidget      *widget,
@@ -103,6 +104,8 @@ main (int argc, char **argv)
   GtkIconSource *iconsource;
   gchar *icon_name = "gnome-terminal";
   gchar *anim_filename = NULL;
+  GIcon *icon;
+  GFile *file;
 
   gtk_init (&argc, &argv);
 
@@ -173,6 +176,20 @@ main (int argc, char **argv)
   gtk_image_set_pixel_size (GTK_IMAGE (image), 30);
   gtk_table_attach_defaults (GTK_TABLE (table), image, 2, 3, 4, 5);
 
+  label = gtk_label_new ("GTK_IMAGE_GICON");
+  gtk_table_attach_defaults (GTK_TABLE (table), label, 0, 1, 5, 6);
+  icon = g_themed_icon_new_with_default_fallbacks ("folder-remote");
+  image = gtk_image_new_from_gicon (icon, GTK_ICON_SIZE_DIALOG);
+  g_object_unref (icon);
+  gtk_table_attach_defaults (GTK_TABLE (table), image, 1, 2, 5, 6);
+  file = g_file_new_for_path ("apple-red.png");
+  icon = g_file_icon_new (file);
+  image = gtk_image_new_from_gicon (icon, GTK_ICON_SIZE_DIALOG);
+  g_object_unref (icon);
+  gtk_image_set_pixel_size (GTK_IMAGE (image), 30);
+  gtk_table_attach_defaults (GTK_TABLE (table), image, 2, 3, 5, 6);
+
+  
   if (anim_filename)
     {
       label = gtk_label_new ("GTK_IMAGE_ANIMATION (from file)");

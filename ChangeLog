@@ -1,3 +1,12 @@
+2008-05-27  Matthias Clasen  <mclasen@redhat.com>
+
+	Bug 522084 – GIcon support for GtkIconTheme & GtkImage
+
+	* gtk/gtkicontheme.[hc]: Add support for GIcon based lookups.
+	* gtk/gtkimage.[hc]: Allow setting an image from a GIcon.
+	* gtk/gtk.symbols: Additions
+	* tests/testimage.c: Add a GIcon test
+
 2008-05-29  Michael Natterer  <mitch@imendio.org>
 
 	* gtk/Makefile.am
