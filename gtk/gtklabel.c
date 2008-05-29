@@ -1558,6 +1558,8 @@ gtk_label_set_attributes_internal (GtkLabel      *label,
 static void
 gtk_label_recalculate (GtkLabel *label)
 {
+  guint keyval = label->mnemonic_keyval;
+
   if (label->use_markup)
     set_markup (label, label->label, label->use_underline);
   else
@@ -1576,11 +1578,12 @@ gtk_label_recalculate (GtkLabel *label)
     }
 
   if (!label->use_underline)
-    {
-      guint keyval = label->mnemonic_keyval;
+    label->mnemonic_keyval = GDK_VoidSymbol;
 
-      label->mnemonic_keyval = GDK_VoidSymbol;
+  if (keyval != label->mnemonic_keyval)
+    {
       gtk_label_setup_mnemonic (label, keyval);
+      g_object_notify (G_OBJECT (label), "mnemonic-keyval");
     }
 
   gtk_label_clear_layout (label);  
@@ -1671,19 +1674,13 @@ void
 gtk_label_set_label (GtkLabel    *label,
 		     const gchar *str)
 {
-  guint last_keyval;
-
   g_return_if_fail (GTK_IS_LABEL (label));
   g_return_if_fail (str != NULL);
 
   g_object_freeze_notify (G_OBJECT (label));
 
-  last_keyval = label->mnemonic_keyval;
-
   gtk_label_set_label_internal (label, g_strdup (str));
   gtk_label_recalculate (label);
-  if (last_keyval != label->mnemonic_keyval)
-    gtk_label_setup_mnemonic (label, last_keyval);
 
   g_object_thaw_notify (G_OBJECT (label));
 }
@@ -1799,18 +1796,15 @@ void
 gtk_label_set_markup_with_mnemonic (GtkLabel    *label,
 				    const gchar *str)
 {
-  guint last_keyval;
   g_return_if_fail (GTK_IS_LABEL (label));
 
   g_object_freeze_notify (G_OBJECT (label));
 
-  last_keyval = label->mnemonic_keyval;
   gtk_label_set_label_internal (label, g_strdup (str ? str : ""));
   gtk_label_set_use_markup_internal (label, TRUE);
   gtk_label_set_use_underline_internal (label, TRUE);
   
   gtk_label_recalculate (label);
-  gtk_label_setup_mnemonic (label, last_keyval);
 
   g_object_thaw_notify (G_OBJECT (label));
 }
@@ -3007,12 +3001,9 @@ gtk_label_parse_uline (GtkLabel    *label,
 		       const gchar *str)
 {
   guint keyval;
-  guint orig_keyval;
   
   g_return_val_if_fail (GTK_IS_LABEL (label), GDK_VoidSymbol);
   g_return_val_if_fail (str != NULL, GDK_VoidSymbol);
-
-  orig_keyval = label->mnemonic_keyval;
 
   g_object_freeze_notify (G_OBJECT (label));
   
@@ -3023,9 +3014,12 @@ gtk_label_parse_uline (GtkLabel    *label,
   gtk_label_recalculate (label);
 
   keyval = label->mnemonic_keyval;
-  label->mnemonic_keyval = GDK_VoidSymbol;
-  
-  gtk_label_setup_mnemonic (label, orig_keyval);
+  if (keyval != GDK_VoidSymbol)
+    {
+      label->mnemonic_keyval = GDK_VoidSymbol;
+      gtk_label_setup_mnemonic (label, keyval);
+      g_object_notify (G_OBJECT (label), "mnemonic-keyval");
+    }
   
   g_object_thaw_notify (G_OBJECT (label));
 
@@ -3052,8 +3046,6 @@ gtk_label_set_text_with_mnemonic (GtkLabel    *label,
   g_return_if_fail (GTK_IS_LABEL (label));
   g_return_if_fail (str != NULL);
 
-  last_keyval = label->mnemonic_keyval;
-
   g_object_freeze_notify (G_OBJECT (label));
 
   gtk_label_set_label_internal (label, g_strdup (str ? str : ""));
@@ -3061,8 +3053,6 @@ gtk_label_set_text_with_mnemonic (GtkLabel    *label,
   gtk_label_set_use_underline_internal (label, TRUE);
   
   gtk_label_recalculate (label);
-
-  gtk_label_setup_mnemonic (label, last_keyval);
 
   g_object_thaw_notify (G_OBJECT (label));
 }
@@ -4010,8 +4000,6 @@ gtk_label_set_use_underline (GtkLabel *label,
 
   gtk_label_set_use_underline_internal (label, setting);
   gtk_label_recalculate (label);
-  if (label->use_underline)
-    gtk_label_setup_mnemonic (label, label->mnemonic_keyval);
 }
 
 /**

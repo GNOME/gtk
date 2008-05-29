@@ -1,3 +1,13 @@
+2008-05-29  Jan Arne Petersen  <jpetersen@jpetersen.org>
+
+	Bug 56355 – GtkLabel - Not all changes propagate correctly
+
+	* gtk/gtklabel.c: (gtk_label_recalculate), (gtk_label_set_label),
+	(gtk_label_set_markup_with_mnemonic), (gtk_label_parse_uline),
+	(gtk_label_set_text_with_mnemonic), (gtk_label_set_use_underline):
+	Call gtk_label_setup_mnemonic from gtk_label_recalculate. Add
+	notifications of mnemonic-keyval changes.
+
 2008-05-27  Matthias Clasen  <mclasen@redhat.com>
 
 	Bug 522084 – GIcon support for GtkIconTheme & GtkImage
