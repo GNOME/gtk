@@ -58,6 +58,16 @@ symbol GDK_MULTIHEAD_SAFE by using the command line option
 <literal>-DGTK_MULTIHEAD_SAFE=1</literal>.
 </para>
 
+<para>
+The recommended way of using GTK+ has always been to only include the
+toplevel headers <filename>gtk.h</filename>, <filename>gdk.h</filename>, 
+<filename>gdk-pixbuf.h</filename>.
+If you want to make sure that your program follows this recommended
+practise, you can define the preprocessor symbols GTK_DISABLE_SINGLE_INCLUDES
+and GDK_PIXBUF_DISABLE_SINGLE_INCLUDES to make GTK+ generate an error
+when individual headers are directly included. 
+</para>
+
 </refsect1>
 </refentry>
 

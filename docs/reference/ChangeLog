@@ -1,5 +1,9 @@
 2008-05-28  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/compiling.sgml: Explains single includes
+
+2008-05-28  Matthias Clasen  <mclasen@redhat.com>
+
 	Bug 535250 - GtkToolButton reference page says "label" where 
 	it should say "icon", uses underscores
 
