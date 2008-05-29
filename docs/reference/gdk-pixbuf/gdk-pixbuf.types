@@ -1,5 +1,4 @@
 #include <gdk-pixbuf/gdk-pixbuf.h>
-#include <gdk-pixbuf/gdk-pixbuf-loader.h>
 
 gdk_pixbuf_get_type
 gdk_pixbuf_loader_get_type
