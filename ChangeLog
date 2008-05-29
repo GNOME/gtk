@@ -1,3 +1,11 @@
+2008-05-29  Tor Lillqvist  <tml@novell.com>
+
+	Bug 535526 - updateiconcache.c: using open/close without prototype
+
+	* gtk/updateiconcache.c: Include <io.h> if _MSC_VER. Also, use
+	g_utime() instead of utime() for UTF-8 pathname support on Windows
+	when available.
+
 2008-05-29  Jan Arne Petersen  <jpetersen@jpetersen.org>
 
 	Bug 56355 – GtkLabel - Not all changes propagate correctly

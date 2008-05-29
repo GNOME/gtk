@@ -31,6 +31,7 @@
 #endif
 #include <errno.h>
 #ifdef _MSC_VER
+#include <io.h>
 #include <sys/utime.h>
 #else
 #include <utime.h>
@@ -1547,8 +1548,12 @@ build_cache (const gchar *path)
 
   utime_buf.actime = path_stat.st_atime;
   utime_buf.modtime = cache_stat.st_mtime;
+#if GLIB_CHECK_VERSION (2, 17, 1)
+  g_utime (path, &utime_buf);
+#else
   utime (path, &utime_buf);
-  
+#endif
+
   if (!quiet)
     g_printerr (_("Cache file created successfully.\n"));
 }
