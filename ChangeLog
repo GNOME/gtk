@@ -3,8 +3,8 @@
 	Bug 535526 - updateiconcache.c: using open/close without prototype
 
 	* gtk/updateiconcache.c: Include <io.h> if _MSC_VER. Also, use
-	g_utime() instead of utime() for UTF-8 pathname support on Windows
-	when available.
+	g_utime() when available instead of utime() for UTF-8 pathname
+	support on Windows.
 
 2008-05-29  Jan Arne Petersen  <jpetersen@jpetersen.org>
 
