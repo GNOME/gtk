@@ -2205,7 +2205,7 @@ list_store_text (GMarkupParseContext *context,
   gint i;
   GError *tmp_error = NULL;
   gchar *string;
-  
+
   if (!data->is_data)
     return;
 
@@ -2213,7 +2213,7 @@ list_store_text (GMarkupParseContext *context,
 
   string = g_strndup (text, text_len);
   if (!gtk_builder_value_from_string_type (data->builder,
-					   data->column_types[info->id],
+					   data->column_types[i],
 					   string,
 					   &data->values[i],
 					   &tmp_error))
@@ -2222,7 +2222,7 @@ list_store_text (GMarkupParseContext *context,
 		   tmp_error->domain,
 		   tmp_error->code,
 		   "Could not convert '%s' to type %s: %s\n",
-		   text, g_type_name (data->column_types[info->id]),
+		   text, g_type_name (data->column_types[i]),
 		   tmp_error->message);
       g_error_free (tmp_error);
     }
