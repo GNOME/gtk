@@ -2,6 +2,15 @@
 
 	Merge from trunk:
 
+	Bug 534694 – Col id in GtkListStore could be out of range
+
+	* gtk/gtkliststore.c (list_store_start_element): Fix up error handling
+	a bit. Pointed out by Jan Arne Petersen.
+
+2008-05-25  Johan Dahlin  <johan@gnome.org>
+
+	Merge from trunk:
+
 	* gtk/gtkliststore.c: (list_store_text): Use type of the correct
 	column (#529535).
 	* tests/buildertest.c: (test_list_store): Add test.
