@@ -545,6 +545,31 @@ gboolean test_list_store (void)
     "    </data>"
     "  </object>"
     "</interface>";
+  const char buffer3[] = 
+    "<interface>"
+    "  <object class=\"GtkListStore\" id=\"liststore1\">"
+    "    <columns>"
+    "      <column type=\"gchararray\"/>"
+    "      <column type=\"gchararray\"/>"
+    "      <column type=\"gint\"/>"
+    "    </columns>"
+    "    <data>"
+    "      <row>"
+    "        <col id=\"1\" context=\"foo\">Doe</col>"
+    "        <col id=\"0\" translatable=\"yes\">John</col>"
+    "        <col id=\"2\" comment=\"foobar\">25</col>"
+    "      </row>"
+    "      <row>"
+    "        <col id=\"2\">50</col>"
+    "        <col id=\"1\">Dole</col>"
+    "        <col id=\"0\">Johan</col>"
+    "      </row>"
+    "      <row>"
+    "        <col id=\"2\">19</col>"
+    "      </row>"
+    "    </data>"
+    "  </object>"
+    "</interface>";
   GtkBuilder *builder;
   GObject *store;
   GtkTreeIter iter;
@@ -594,6 +619,52 @@ gboolean test_list_store (void)
   g_return_val_if_fail (age == 50, FALSE);
   g_return_val_if_fail (gtk_tree_model_iter_next (GTK_TREE_MODEL (store), &iter) == FALSE, FALSE);
   
+  builder = builder_new_from_string (buffer3, -1, NULL);
+  store = gtk_builder_get_object (builder, "liststore1");
+  g_assert (gtk_tree_model_get_n_columns (GTK_TREE_MODEL (store)) == 3);
+  g_assert (gtk_tree_model_get_column_type (GTK_TREE_MODEL (store), 0) == G_TYPE_STRING);
+  g_assert (gtk_tree_model_get_column_type (GTK_TREE_MODEL (store), 1) == G_TYPE_STRING);
+  g_assert (gtk_tree_model_get_column_type (GTK_TREE_MODEL (store), 2) == G_TYPE_INT);
+  
+  g_assert (gtk_tree_model_get_iter_first (GTK_TREE_MODEL (store), &iter) == TRUE);
+  gtk_tree_model_get (GTK_TREE_MODEL (store), &iter,
+                      0, &surname,
+                      1, &lastname,
+                      2, &age,
+                      -1);
+  g_assert (surname != NULL);
+  g_assert (strcmp (surname, "John") == 0);
+  g_free (surname);
+  g_assert (lastname != NULL);
+  g_assert (strcmp (lastname, "Doe") == 0);
+  g_free (lastname);
+  g_assert (age == 25);
+  g_assert (gtk_tree_model_iter_next (GTK_TREE_MODEL (store), &iter) == TRUE);
+  
+  gtk_tree_model_get (GTK_TREE_MODEL (store), &iter,
+                      0, &surname,
+                      1, &lastname,
+                      2, &age,
+                      -1);
+  g_assert (surname != NULL);
+  g_assert (strcmp (surname, "Johan") == 0);
+  g_free (surname);
+  g_assert (lastname != NULL);
+  g_assert (strcmp (lastname, "Dole") == 0);
+  g_free (lastname);
+  g_assert (age == 50);
+  g_assert (gtk_tree_model_iter_next (GTK_TREE_MODEL (store), &iter) == TRUE);
+  
+  gtk_tree_model_get (GTK_TREE_MODEL (store), &iter,
+                      0, &surname,
+                      1, &lastname,
+                      2, &age,
+                      -1);
+  g_assert (surname == NULL);
+  g_assert (lastname == NULL);
+  g_assert (age == 19);
+  g_assert (gtk_tree_model_iter_next (GTK_TREE_MODEL (store), &iter) == FALSE);
+
   g_object_unref (builder);
 
   return TRUE;
