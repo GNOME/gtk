@@ -1,3 +1,12 @@
+2008-05-30  Michael Natterer  <mitch@imendio.com>
+
+	* gtk/gtkmountoperation.h
+	* gtk/gtkshow.h
+	* gtk/gtktestutils.h
+	* gtk/gtktoolshell.h: no need to allow disabling single includes
+	conditionally in these new files. Simply forbid including them
+	individually from the beginning.
+
 2008-05-30  Tor Lillqvist  <tml@novell.com>
 
 	Bug 533108 - leak of GDI region in function 'handle_wm_paint'
