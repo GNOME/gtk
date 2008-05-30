@@ -2,7 +2,6 @@
 
 #include <glib.h>
 #include <atk/atk.h>
-#include <atk/atkselection.h>
 #include <gtk/gtk.h>
 #include "testlib.h"
 

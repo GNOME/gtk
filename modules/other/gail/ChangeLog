@@ -1,3 +1,13 @@
+2008-05-30  Michael Natterer  <mitch@imendio.com>
+
+	* gailcellparent.h
+	* gailfactory.h
+	* tests/testnotebook.c
+	* tests/testtext.c
+	* tests/testtoplevel.c
+	* tests/testvalues.c: include <atk/atk.h> instead of individual
+	files from ATK.
+
 2008-05-28  Michael Natterer  <mitch@imendio.com>
 
 	* gailwidget.h: include <gtk/gtk.h> instead of

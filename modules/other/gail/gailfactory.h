@@ -23,7 +23,7 @@
 #define _GAIL_FACTORY_H__
 
 #include <glib-object.h>
-#include <atk/atkobject.h>
+#include <atk/atk.h>
 
 #define _GAIL_IMPLEMENT_FACTORY_CREATE_ACCESSIBLE(GAIL_TYPE, TYPE) \
 { \

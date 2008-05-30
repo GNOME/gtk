@@ -21,8 +21,7 @@
 #ifndef __GAIL_CELL_PARENT_H__
 #define __GAIL_CELL_PARENT_H__
 
-#include <atk/atkobject.h>
-#include <atk/atkutil.h>
+#include <atk/atk.h>
 #include <gail/gailcell.h>
 
 G_BEGIN_DECLS

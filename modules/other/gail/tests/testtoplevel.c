@@ -1,5 +1,4 @@
 #include <atk/atk.h>
-#include <atk/atkvalue.h>
 #include <gtk/gtk.h>
 #include "testlib.h"
 

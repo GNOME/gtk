@@ -1,6 +1,5 @@
 #include <string.h>
 #include <atk/atk.h>
-#include <atk/atkvalue.h>
 #include <gtk/gtk.h>
 
 static void _traverse_children (AtkObject *obj);

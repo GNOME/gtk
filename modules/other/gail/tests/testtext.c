@@ -1,4 +1,4 @@
-#include <atk/atkeditabletext.h>
+#include <atk/atk.h>
 #include "testtextlib.h"
 
 #define NUM_VALID_ROLES 6  
