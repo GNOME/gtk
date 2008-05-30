@@ -1933,6 +1933,7 @@ handle_wm_paint (MSG        *msg,
   if (GetUpdateRgn (msg->hwnd, hrgn, FALSE) == ERROR)
     {
       WIN32_GDI_FAILED ("GetUpdateRgn");
+      DeleteObject (hrgn);
       return;
     }
 
@@ -2005,6 +2006,7 @@ handle_wm_paint (MSG        *msg,
 	    }
 	}
 
+      DeleteObject (hrgn);
       return;
     }
 
