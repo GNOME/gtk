@@ -2006,7 +2006,7 @@ gtk_widget_class_init (GtkWidgetClass *klass)
    * Returns: %TRUE to stop other handlers from being invoked for the event.
    *   %FALSE to propagate the event further.
    *
-   * Since: 2.16
+   * Since: 2.14
    */
   widget_signals[DAMAGE_EVENT] =
     g_signal_new ("damage_event",
