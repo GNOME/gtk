@@ -1,5 +1,7 @@
 2008-05-30  Michael Natterer  <mitch@imendio.com>
 
+	* gdk/gdkapplaunchcontext.h
+	* gdk/gdktestutils.h
 	* gtk/gtkmountoperation.h
 	* gtk/gtkshow.h
 	* gtk/gtktestutils.h
