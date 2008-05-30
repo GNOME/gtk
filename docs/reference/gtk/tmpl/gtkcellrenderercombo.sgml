@@ -40,6 +40,15 @@ The #GtkCellRendererCombo cell renderer was added in GTK+ 2.6.
 </para>
 
 
+<!-- ##### SIGNAL GtkCellRendererCombo::changed ##### -->
+<para>
+
+</para>
+
+@cellrenderercombo: the object which received the signal.
+@arg1: 
+@arg2: 
+
 <!-- ##### ARG GtkCellRendererCombo:has-entry ##### -->
 <para>
 

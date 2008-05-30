@@ -1,7 +1,7 @@
 General Information
 ===================
 
-This is GTK+ version 2.13.0. GTK+ is a multi-platform toolkit for
+This is GTK+ version 2.13.1. GTK+ is a multi-platform toolkit for
 creating graphical user interfaces. Offering a complete set of widgets,
 GTK+ is suitable for projects ranging from small one-off projects to
 complete application suites.
@@ -26,6 +26,15 @@ Installation
 
 See the file 'INSTALL'
 
+
+Release notes for 2.14
+======================
+
+* gtkitemfactory.h is now completely deprecated.
+  As gtkactiongroup.h and gtkstock.h no longer include the gtkitemfactory.h
+  header, this might break application using gtk_item_factory_* symbols
+  without including gtkitemfactory.h - even though this behaviour has never
+  been supported in the first place.
 
 Release notes for 2.12
 ======================

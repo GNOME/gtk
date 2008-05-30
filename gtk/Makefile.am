@@ -750,7 +750,8 @@ gtk_built_public_sources =			\
 gtk_built_private_headers =			\
 	gtkalias.h				\
 	gtkmarshalers.h				\
-	gtkbuiltincache.h
+	gtkbuiltincache.h			\
+	gtkimcontextsimpleseqs.h
 
 gtk_built_sources =				\
 	gtkaliasdef.c				\

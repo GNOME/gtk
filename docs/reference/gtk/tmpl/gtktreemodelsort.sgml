@@ -168,6 +168,7 @@ This should not be accessed directly.  Use the accessor functions below.
 @tree_model_sort: 
 @sort_iter: 
 @child_iter: 
+@Returns: 
 
 
 <!-- ##### FUNCTION gtk_tree_model_sort_convert_path_to_child_path ##### -->

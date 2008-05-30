@@ -4,8 +4,8 @@ Prerequisites
 GTK+ requires the following packages:
 
  - The GLib, Pango, ATK and cairo libraries, available at the same 
-   location as GTK+. GTK+ 2.13.0 requires at least GLib 2.12, 
-   Pango 1.13, ATK 1.9 and cairo 1.2.
+   location as GTK+. GTK+ 2.13.1 requires at least GLib 2.15.0, 
+   Pango 1.20, ATK 1.13.0 and cairo 1.6.0.
 
  - The TIFF, PNG, and JPEG image loading libraries. You most
    likely have these installed on your system already. If not
@@ -20,8 +20,8 @@ GTK+ requires the following packages:
 Simple install procedure
 ========================
 
-  % gzip -cd gtk+-2.13.0.tar.gz | tar xvf - # unpack the sources
-  % cd gtk+-2.13.0			   # change to the toplevel directory
+  % gzip -cd gtk+-2.13.1.tar.gz | tar xvf - # unpack the sources
+  % cd gtk+-2.13.1			   # change to the toplevel directory
   % ./configure				   # run the `configure' script
   % make				   # build GTK+
   [ Become root if necessary ]

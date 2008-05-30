@@ -720,6 +720,15 @@ The "Reverse Portrait Orientation" item.
 @Since: 2.10
 
 
+<!-- ##### MACRO GTK_STOCK_PAGE_SETUP ##### -->
+<para>
+The "Page Setup" item.
+<inlinegraphic fileref="gtk-page-setup.png" format="PNG"></inlinegraphic>
+</para>
+
+@Since: 2.14
+
+
 <!-- ##### MACRO GTK_STOCK_PASTE ##### -->
 <para>
 The "Paste" item.
@@ -742,7 +751,7 @@ The "Print" item.
 <inlinegraphic fileref="gtk-print.png" format="PNG"></inlinegraphic>
 </para>
 
- 
+
 
 <!-- ##### MACRO GTK_STOCK_PRINT_ERROR ##### -->
 <para>

@@ -538,7 +538,7 @@ How to compile GTK+ itself
           These options can be used to explicitly control whether
           the cups print backend should be built.
         </para>
-      </formalparap>
+      </formalpara>
 
       <formalpara>
         <title><systemitem>--with-xinput</systemitem></title>

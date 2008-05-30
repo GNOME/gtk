@@ -846,7 +846,7 @@ typedef struct {
   PangoAttrList *attrs;
 } PangoParserData;
 
-PangoAttribute *
+static PangoAttribute *
 attribute_from_text (GtkBuilder   *builder,
 		     const gchar  *name, 
 		     const gchar  *value,

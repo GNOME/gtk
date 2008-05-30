@@ -223,6 +223,11 @@ Sharing settings between applications
 
 </para>
 
+<!-- ##### ARG GtkSettings:gtk-recent-files-max-age ##### -->
+<para>
+
+</para>
+
 <!-- ##### ARG GtkSettings:gtk-scrolled-window-placement ##### -->
 <para>
 

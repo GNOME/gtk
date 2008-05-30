@@ -258,6 +258,15 @@ Printing support was added in GTK+ 2.10.
 @Returns: 
 
 
+<!-- ##### FUNCTION gtk_printer_get_default_page_size ##### -->
+<para>
+
+</para>
+
+@printer: 
+@Returns: 
+
+
 <!-- ##### USER_FUNCTION GtkPrinterFunc ##### -->
 <para>
 The type of function passed to gtk_enumerate_printers().

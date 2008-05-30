@@ -153,6 +153,15 @@ internal child "accessible" of a <structname>GtkWidget</structname>.
 @event: 
 @Returns: %TRUE to stop other handlers from being invoked for the event. %FALSE to propagate the event further.
 
+<!-- ##### SIGNAL GtkWidget::damage-event ##### -->
+<para>
+
+</para>
+
+@widget: the object which received the signal.
+@event: 
+@Returns: 
+
 <!-- ##### SIGNAL GtkWidget::delete-event ##### -->
 <para>
 
@@ -2609,6 +2618,16 @@ This function is deprecated; it does nothing.
 </para>
 
 @widget: 
+
+
+<!-- ##### FUNCTION gtk_widget_get_snapshot ##### -->
+<para>
+
+</para>
+
+@widget: 
+@clip_rect: 
+@Returns: 
 
 
 <!-- ##### FUNCTION gtk_requisition_copy ##### -->
