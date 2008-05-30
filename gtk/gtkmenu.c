@@ -280,7 +280,8 @@ get_attach_info (GtkWidget *child)
   if (!ai)
     {
       ai = g_slice_new0 (AttachInfo);
-      g_object_set_data_full (object, I_(ATTACH_INFO_KEY), ai, attach_info_free);
+      g_object_set_data_full (object, I_(ATTACH_INFO_KEY), ai,
+                              (GDestroyNotify) attach_info_free);
     }
 
   return ai;
