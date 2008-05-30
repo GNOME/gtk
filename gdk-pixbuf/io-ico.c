@@ -1184,7 +1184,7 @@ gdk_pixbuf__ico_image_save (FILE          *f,
 	return TRUE;
 }
 
-#ifndef INCLUDE_png
+#ifndef INCLUDE_ico
 #define MODULE_ENTRY(function) G_MODULE_EXPORT void function
 #else
 #define MODULE_ENTRY(function) void _gdk_pixbuf__ico_ ## function

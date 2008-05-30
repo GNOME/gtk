@@ -262,7 +262,7 @@ jasper_image_load_increment (gpointer data, const guchar *buf, guint size, GErro
 	return TRUE;
 }
 
-#ifndef INCLUDE_png
+#ifndef INCLUDE_jasper
 #define MODULE_ENTRY(function) G_MODULE_EXPORT void function
 #else
 #define MODULE_ENTRY(function) void _gdk_pixbuf__jasper_ ## function

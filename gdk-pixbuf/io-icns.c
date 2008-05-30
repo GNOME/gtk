@@ -364,7 +364,7 @@ icns_image_load (FILE *f, GError ** error)
   return pixbuf;
 }
 
-#ifndef INCLUDE_png
+#ifndef INCLUDE_icns
 #define MODULE_ENTRY(function) G_MODULE_EXPORT void function
 #else
 #define MODULE_ENTRY(function) void _gdk_pixbuf__icns_ ## function

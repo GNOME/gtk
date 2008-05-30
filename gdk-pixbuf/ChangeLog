@@ -1,5 +1,11 @@
 2008-05-29  Matthias Clasen <mclasen@redhat.com>
 
+	* io-jasper.c:
+	* io-ico.c:
+	* io-icns.c: Use the correct INCLUDE_ macros.
+
+2008-05-29  Matthias Clasen <mclasen@redhat.com>
+
 	* === Released 2.13.1 ===
 
 2008-05-29  Matthias Clasen  <mclasen@redhat.com>
