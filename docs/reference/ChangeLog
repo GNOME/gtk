@@ -1,3 +1,7 @@
+2008-05-29  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/building.sgml: Document added configure options
+
 2008-05-29  Michael Natterer  <mitch@imendio.com>
 
 	* gtk/Makefile.am (CPPFLAGS): add -UGTK_DISABLE_SINGLE_INCLUDES so

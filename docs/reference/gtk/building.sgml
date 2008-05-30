@@ -170,7 +170,7 @@ How to compile GTK+ itself
 	  The GLib library provides core non-graphical functionality
 	  such as high level data types, Unicode manipulation, and
 	  an object and type system to C programs. It is available
-	  from the <ulink url="ftp://ftp.gtk.org/pub/gtk/v2.6/">GTK+
+	  from the <ulink url="ftp://ftp.gtk.org/pub/glib/">GTK+
 	  FTP site.</ulink>
 	</para>
       </listitem>
@@ -178,7 +178,7 @@ How to compile GTK+ itself
 	<para>
 	  <ulink url="http://www.pango.org">Pango</ulink> is a library
 	  for internationalized text handling. It is available from
-	  the <ulink url="ftp://ftp.gtk.org/pub/gtk/v2.6/">GTK+ FTP
+	  the <ulink url="ftp://ftp.gtk.org/pub/pango/">GTK+ FTP
 	  site.</ulink>. 
 	</para>
       </listitem>
@@ -188,7 +188,7 @@ How to compile GTK+ itself
 	  interfaces allowing accessibility technologies such as
 	  screen readers to interact with a graphical user interface.
 	  It is available from the <ulink
-	  url="ftp://ftp.gtk.org/pub/gtk/v2.6/">GTK+ FTP site.</ulink>
+	  url="ftp://ftp.gtk.org/pub/atk/">GTK+ FTP site.</ulink>
 	</para>
       </listitem>
       <listitem>
@@ -310,6 +310,9 @@ How to compile GTK+ itself
 	    <arg>--with-included-loaders==LOADER1,LOADER2,...</arg>
 	  </group>
 	  <group>
+	    <arg>--with-included-immodules=MODULE1,MODULE2,...</arg>
+	  </group>
+	  <group>
 	    <arg>--enable-debug=[no|minimum|yes]</arg>
 	  </group>
           <group>
@@ -339,6 +342,10 @@ How to compile GTK+ itself
 	  <group>
 	    <arg>--disable-gtk-doc</arg>
 	    <arg>--enable-gtk-doc</arg>
+	  </group>
+	  <group>
+	    <arg>--disable-cups</arg>
+	    <arg>--enable-cups</arg>
 	  </group>
           <group>
             <arg>--with-xinput=[no|yes]</arg>
@@ -374,6 +381,15 @@ How to compile GTK+ itself
          This option allows you to specify which image loaders you
          want to include; for example, you might include only the PNG
          loader to create a smaller GdkPixbuf binary.
+	</para>
+      </formalpara>
+
+      <formalpara>
+	<title><systemitem>--with-included-immodules</systemitem></title>
+
+	<para>
+         This option allows you to specify which input method modules you
+         want to include. 
 	</para>
       </formalpara>
 
@@ -511,6 +527,18 @@ How to compile GTK+ itself
 	  will be installed.
 	</para>
       </formalpara>
+
+      <formalpara>
+	<title><systemitem>--disable-cups</systemitem> and
+	  <systemitem>--enable-cups</systemitem></title>
+
+	<para>
+          By default the <command>configure</command> script will try
+          to build the cups print backend if the cups libraries are found.
+          These options can be used to explicitly control whether
+          the cups print backend should be built.
+        </para>
+      </formalparap>
 
       <formalpara>
         <title><systemitem>--with-xinput</systemitem></title>
