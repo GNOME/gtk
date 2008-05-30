@@ -1,5 +1,9 @@
 2008-05-29  Matthias Clasen <mclasen@redhat.com>
 
+	* NEWS: Updates
+
+2008-05-29  Matthias Clasen <mclasen@redhat.com>
+
 	* gtk/gtkwidget.c: s/2.16/2.14/ in Since tags
 
 2008-05-29  Matthias Clasen <mclasen@redhat.com>

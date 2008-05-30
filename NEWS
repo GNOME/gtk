@@ -1,3 +1,66 @@
+Overview of Changes from GTK+ 2.13.0 to 2.13.1
+==============================================
+
+ * Add GtkMountOperation, a subclass of GMountOperation that
+   can show password dialogs when mounting volumes
+
+ * Add GDI+-based pixbuf loaders for bmp, emf, gif, ico, jpeg, tiff, wmf
+
+ * Add support for pixmap redirection, new api includes the 
+   gtk_widget_get_snapshot() function and the GtkWidget::damage-event 
+   signal and the lower-level gdk_window_redirect_to_drawable() and
+   gdk_window_remove_redirection() functions
+
+ * Add gtk_show_uri(), a replacement for gnome_vfs_url_show() and
+   gnome_url_show()
+
+ * Add a "changed" signal to GtkCellRendererCombo
+ 
+ * Sync keysyms and compose sequences with recent X.org 
+
+ * GtkBuilder
+   - supports custom stock icons 
+   - supports Pango attributes in labels
+ 
+ * GtkRecentManager
+   - uses GIO to monitor .recently-used.xbel
+   - limits the growth of .recently-used.xbel with a 
+     gtk-recent-files-max-age setting
+
+ * Filechooser autocompletion has been reworked
+
+ * The cups print backend displays printer status information
+ 
+ * On OS X, accelerators are displayed using Unicode characters,
+   matching the native behaviour
+
+ * GtkIconTheme and GtkImage support GIcon
+
+ * Bugs fixed: too many to list here
+ 
+ * New and updated translations:
+ Arabic (ar)
+ Valencian-Catalan (ca)
+ German (de)
+ Canadian English (en_CA)
+ British English (en_GB)
+ Spanish (es)
+ Estonian (et)
+ Galician (gl)
+ Hebrew (he)
+ Hungarian (hu)
+ Kannada (kn)
+ Norwegian bokmål (nb)
+ Dutch (nl)
+ Norwegian Nynorsk (nn)
+ Occitan (oc)
+ Slovak (sk)
+ Albanian (sq)
+ Swedish (sv)
+ Telugu (te)
+ Vietnamese (vi)
+
+
 Overview of Changes from GTK+ 2.12.x to 2.13.0
 ==============================================
 
@@ -4261,4 +4324,4 @@ What is new in GTK+ 1.1.0:
 * Legions of bug fixes, memory leaks, segfaults, of-by-something errors...
   including those that already went into the 1.0.x branch.
 * A big bunch of features and cosmetic fixups that just got lost in
-  the masses of changes.
+  the masses of changesonfigure problem when cross-compiling
