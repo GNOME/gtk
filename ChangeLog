@@ -1,3 +1,10 @@
+2008-05-30  Tor Lillqvist  <tml@novell.com>
+
+	Bug 533108 - leak of GDI region in function 'handle_wm_paint'
+
+	* gdk/win32/gdkevents-win32.c (handle_wm_paint): Patch by Daniel
+	Atallah.
+
 2008-05-28  Kristian Rietveld  <kris@imendio.com>
 
 	Merge from trunk:
