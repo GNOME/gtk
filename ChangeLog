@@ -1,3 +1,8 @@
+2008-05-30  Tor Lillqvist  <tml@novell.com>
+
+	* modules/engines/ms-windows/msw_style.h
+	* modules/engines/ms-windows/msw_rc_style.h: Include gtk.h.
+
 2008-05-30  Michael Natterer  <mitch@imendio.com>
 
 	* gtk/gtkmenu.c (get_attach_info): cast attach_info_free() to

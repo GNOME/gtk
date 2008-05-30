@@ -23,7 +23,7 @@
 #ifndef MSW_STYLE_H
 #define MSW_STYLE_H
 
-#include "gtk/gtkstyle.h"
+#include "gtk/gtk.h"
 
 typedef struct _MswStyle MswStyle;
 typedef struct _MswStyleClass MswStyleClass;
