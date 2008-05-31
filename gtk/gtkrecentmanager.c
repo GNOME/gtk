@@ -764,7 +764,16 @@ gtk_recent_manager_add_item_query_info (GObject      *source_object,
 
   if (file_info)
     {
-      recent_data.mime_type = g_content_type_get_mime_type (g_file_info_get_content_type (file_info));
+      gchar *content_type;
+
+      content_type = g_file_info_get_attribute_as_string (file_info, G_FILE_ATTRIBUTE_STANDARD_FAST_CONTENT_TYPE);
+
+      if (G_LIKELY (content_type))
+        recent_data.mime_type = g_content_type_get_mime_type (content_type);
+      else
+        recent_data.mime_type = g_strdup (GTK_RECENT_DEFAULT_MIME);
+
+      g_free (content_type);
       g_object_unref (file_info);
     }
   else
