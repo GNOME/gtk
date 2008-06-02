@@ -2,6 +2,16 @@
 
 	Merge from trunk:
 
+	Bug 106574 - Inconsistent increment behavior for gtkspinbutton
+
+	* gtk/gtkspinbutton.c (gtk_spin_button_real_value_change):
+	Commit the entry text before doing an increment. Patch by
+	Björn Lindqvist.
+
+2008-06-02  Matthias Clasen <mclasen@redhat.com> 
+
+	Merge from trunk:
+
 	Bug 531008 – Crash in gtkprintunixdialog.c
 
 	* gtk/gtkprintunixdialog.c: Disconnect signal handlers when

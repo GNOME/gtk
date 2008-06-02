@@ -1255,7 +1255,15 @@ static void
 gtk_spin_button_real_change_value (GtkSpinButton *spin,
 				   GtkScrollType  scroll)
 {
-  gdouble old_value = spin->adjustment->value;
+  gdouble old_value;
+
+  /* When the key binding is activated, there may be an outstanding
+   * value, so we first have to commit what is currently written in
+   * the spin buttons text entry. See #106574
+   */
+  gtk_spin_button_update (spin);
+
+  old_value = spin->adjustment->value;
 
   /* We don't test whether the entry is editable, since
    * this key binding conceptually corresponds to changing
