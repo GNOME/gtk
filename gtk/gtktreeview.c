@@ -15589,7 +15589,8 @@ gtk_tree_view_set_tooltip_query_cb (GtkWidget  *widget,
 				    GtkTooltip *tooltip,
 				    gpointer    data)
 {
-  gchar *str;
+  GValue value = { 0, };
+  GValue transformed = { 0, };
   GtkTreeIter iter;
   GtkTreePath *path;
   GtkTreeModel *model;
@@ -15601,19 +15602,34 @@ gtk_tree_view_set_tooltip_query_cb (GtkWidget  *widget,
 					  &model, &path, &iter))
     return FALSE;
 
-  gtk_tree_model_get (model, &iter, tree_view->priv->tooltip_column, &str, -1);
+  gtk_tree_model_get_value (model, &iter,
+                            tree_view->priv->tooltip_column, &value);
 
-  if (!str)
+  g_value_init (&transformed, G_TYPE_STRING);
+
+  if (!g_value_transform (&value, &transformed))
     {
+      g_value_unset (&value);
       gtk_tree_path_free (path);
+
       return FALSE;
     }
 
-  gtk_tooltip_set_markup (tooltip, str);
+  g_value_unset (&value);
+
+  if (!g_value_get_string (&transformed))
+    {
+      g_value_unset (&transformed);
+      gtk_tree_path_free (path);
+
+      return FALSE;
+    }
+
+  gtk_tooltip_set_markup (tooltip, g_value_get_string (&transformed));
   gtk_tree_view_set_tooltip_row (tree_view, tooltip, path);
 
   gtk_tree_path_free (path);
-  g_free (str);
+  g_value_unset (&transformed);
 
   return TRUE;
 }
