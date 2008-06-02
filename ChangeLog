@@ -2,6 +2,14 @@
 
 	Merge from trunk:
 
+	* gtk/gtksearchenginetracker.c: (_gtk_search_engine_tracker_new):
+	check that tracker is actually working before using it. Fixes
+	bug #479197.
+
+2008-06-02  Matthias Clasen <mclasen@redhat.com> 
+
+	Merge from trunk:
+
 	* gtk/gtkfilechooserdefault.c:
 	(shortcuts_activate_volume_mount_cb): Ignore G_IO_ERROR_FAILED_HANDLED
 	errors (#532262).

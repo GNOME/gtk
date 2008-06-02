@@ -35,6 +35,7 @@ typedef void (*TrackerArrayReply) (char **result, GError *error, gpointer user_d
 
 static TrackerClient * (*tracker_connect) (gboolean enable_warnings) = NULL;
 static void	       (*tracker_disconnect) (TrackerClient *client) = NULL;
+static int             (*tracker_get_version) (TrackerClient *client, GError **error) = NULL;
 static void            (*tracker_cancel_last_call) (TrackerClient *client) = NULL;
 
 static void (*tracker_search_metadata_by_text_async) (TrackerClient *client, 
@@ -56,6 +57,7 @@ static struct TrackerDlMapping
 #define MAP(a) { #a, (gpointer *)&a }
   MAP (tracker_connect),
   MAP (tracker_disconnect),
+  MAP (tracker_get_version),
   MAP (tracker_cancel_last_call),
   MAP (tracker_search_metadata_by_text_async),
   MAP (tracker_search_metadata_by_text_and_location_async),
@@ -285,6 +287,7 @@ _gtk_search_engine_tracker_new (void)
 {
   GtkSearchEngineTracker *engine;
   TrackerClient *tracker_client;
+  GError *err = NULL;
 
   open_libtracker ();
 
@@ -295,6 +298,18 @@ _gtk_search_engine_tracker_new (void)
   
   if (!tracker_client)
     return NULL;
+
+  if (!tracker_get_version)
+    return NULL;
+
+  tracker_get_version (tracker_client, &err);
+
+  if (err != NULL)
+    {
+      g_error_free (err);
+      tracker_disconnect (tracker_client);
+      return NULL;
+    }
 
   engine = g_object_new (GTK_TYPE_SEARCH_ENGINE_TRACKER, NULL);
 
