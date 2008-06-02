@@ -2235,7 +2235,17 @@ gtk_text_view_set_editable (GtkTextView *text_view,
 
   if (text_view->editable != setting)
     {
+      if (!setting)
+	{
+	  gtk_text_view_reset_im_context(text_view);
+	  if (GTK_WIDGET_HAS_FOCUS (text_view))
+	    gtk_im_context_focus_out (text_view->im_context);
+	}
+
       text_view->editable = setting;
+
+      if (setting && GTK_WIDGET_HAS_FOCUS (text_view))
+	gtk_im_context_focus_in (text_view->im_context);
 
       if (text_view->layout)
         {
@@ -4334,9 +4344,12 @@ gtk_text_view_focus_in_event (GtkWidget *widget, GdkEventFocus *event)
 		    "direction_changed",
 		    G_CALLBACK (keymap_direction_changed), text_view);
   gtk_text_view_check_keymap_direction (text_view);
-  
-  text_view->need_im_reset = TRUE;
-  gtk_im_context_focus_in (GTK_TEXT_VIEW (widget)->im_context);
+
+  if (text_view->editable)
+    {
+      text_view->need_im_reset = TRUE;
+      gtk_im_context_focus_in (GTK_TEXT_VIEW (widget)->im_context);
+    }
 
   return FALSE;
 }
@@ -4362,8 +4375,11 @@ gtk_text_view_focus_out_event (GtkWidget *widget, GdkEventFocus *event)
 					keymap_direction_changed,
 					text_view);
 
-  text_view->need_im_reset = TRUE;
-  gtk_im_context_focus_out (GTK_TEXT_VIEW (widget)->im_context);
+  if (text_view->editable)
+    {
+      text_view->need_im_reset = TRUE;
+      gtk_im_context_focus_out (GTK_TEXT_VIEW (widget)->im_context);
+    }
 
   return FALSE;
 }
