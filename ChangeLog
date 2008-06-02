@@ -2,6 +2,15 @@
 
 	Merge from trunk:
 
+	Bug 387972 – gtkassistant drawing problem
+
+	* gtk/gtkassistant.c (gtk_assistant_size_allocate): Make
+	GtkAssistant work better in glade.
+
+2008-06-02  Matthias Clasen <mclasen@redhat.com>
+
+	Merge from trunk:
+
 	Bug 529841 – incorrect position in directfb
 
 	* gdk/directfb/gdkwindow-directfb.c: fix y = abs_x
