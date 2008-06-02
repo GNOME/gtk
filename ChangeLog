@@ -2,6 +2,18 @@
 
 	Merge from trunk:
 
+	Bug 523562 - gtk-update-icon-cache core dumps when run concurrently and
+	when options are missing
+
+	* gtk/updateiconcache.c: Open the cache file (O_CREAT | O_EXCL) so
+	that other processes that try to open it will fail gracefully.  Also
+	fix a crasher caused by lack of a NULL check.  Report and patch
+	by Erwann Chenede.
+
+2008-06-02  Matthias Clasen <mclasen@redhat.com> 
+
+	Merge from trunk:
+
 	Bug 526635 - _gdk_window_get_toplevel handles FOREIGN windows
 
 	* gdk/x11/gdkwindow-x11.c (_gdk_window_get_toplevel): Check

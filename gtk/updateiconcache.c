@@ -25,11 +25,13 @@
 #include <string.h>
 #include <sys/types.h>
 #include <sys/stat.h>
+#include <fcntl.h>
 #ifdef HAVE_UNISTD_H
 #include <unistd.h>
 #endif
 #include <errno.h>
 #ifdef _MSC_VER
+#include <io.h>
 #include <sys/utime.h>
 #else
 #include <utime.h>
@@ -1435,16 +1437,32 @@ build_cache (const gchar *path)
   struct stat path_stat, cache_stat;
   struct utimbuf utime_buf;
   GList *directories = NULL;
-  
+  int fd;
+#ifndef G_OS_WIN32
+  mode_t mode = S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH;
+#else
+  int mode = _S_IWRITE | _S_IREAD;
+#endif
+#ifndef _O_BINARY
+#define _O_BINARY 0
+#endif
+
   tmp_cache_path = g_build_filename (path, "."CACHE_NAME, NULL);
-  cache = g_fopen (tmp_cache_path, "wb");
-  
+
+  if ((fd = open (tmp_cache_path, O_WRONLY | O_CREAT | O_EXCL | O_TRUNC | _O_BINARY, mode)) == -1)
+    {
+      g_printerr (_("Failed to open file %s : %s\n"), tmp_cache_path, g_strerror (errno));
+      exit (1);
+    }
+
+  cache = fdopen (fd, "wb");
+
   if (!cache)
     {
       g_printerr (_("Failed to write cache file: %s\n"), g_strerror (errno));
       exit (1);
     }
-
+  
   files = g_hash_table_new (g_str_hash, g_str_equal);
   image_data_hash = g_hash_table_new (g_str_hash, g_str_equal);
   icon_data_hash = g_hash_table_new (g_str_hash, g_str_equal);
@@ -1457,6 +1475,7 @@ build_cache (const gchar *path)
       /* Empty table, just close and remove the file */
 
       fclose (cache);
+      close (fd);
       g_unlink (tmp_cache_path);
       exit (0);
     }
@@ -1464,6 +1483,7 @@ build_cache (const gchar *path)
   /* FIXME: Handle failure */
   retval = write_file (cache, files, directories);
   fclose (cache);
+  close (fd);
 
   g_list_foreach (directories, (GFunc)g_free, NULL);
   g_list_free (directories);
@@ -1528,8 +1548,12 @@ build_cache (const gchar *path)
 
   utime_buf.actime = path_stat.st_atime;
   utime_buf.modtime = cache_stat.st_mtime;
+#if GLIB_CHECK_VERSION (2, 17, 1)
+  g_utime (path, &utime_buf);
+#else
   utime (path, &utime_buf);
-  
+#endif
+
   if (!quiet)
     g_printerr (_("Cache file created successfully.\n"));
 }
@@ -1655,8 +1679,16 @@ main (int argc, char **argv)
 
   if (!ignore_theme_index && !has_theme_index (path))
     {
-      g_printerr (_("No theme index file in '%s'.\n"
+      if (path)
+	{
+	  g_printerr (_("No theme index file."));
+	}
+      else
+	{
+	  g_printerr (_("No theme index file in '%s'.\n"
 		    "If you really want to create an icon cache here, use --ignore-theme-index.\n"), path);
+	}
+
       return 1;
     }
   
