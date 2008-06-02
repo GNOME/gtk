@@ -2,6 +2,18 @@
 
 	Merge from trunk:
 
+	Bug 56355 – GtkLabel - Not all changes propagate correctly
+
+	* gtk/gtklabel.c: (gtk_label_recalculate), (gtk_label_set_label),
+	(gtk_label_set_markup_with_mnemonic), (gtk_label_parse_uline),
+	(gtk_label_set_text_with_mnemonic), (gtk_label_set_use_underline):
+	Call gtk_label_setup_mnemonic from gtk_label_recalculate. Add
+	notifications of mnemonic-keyval changes.
+
+2008-06-02  Matthias Clasen <mclasen@redhat.com> 
+
+	Merge from trunk:
+
 	Bug 511217 - potential memory corruption after refreshing a tree_view
 
 	* gtk/gtktreeview.c (cancel_arrow_animation): Reset
