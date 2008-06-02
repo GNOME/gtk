@@ -1,3 +1,19 @@
+2008-06-02  Matthias Clasen <mclasen@redhat.com> 
+
+	Merge from trunk:
+
+	* gtk/gtkfilechooserdefault.c:
+	(shortcuts_activate_volume_mount_cb): Ignore G_IO_ERROR_FAILED_HANDLED
+	errors (#532262).
+
+2008-06-02  Matthias Clasen <mclasen@redhat.com>
+
+	Merge from trunk:
+
+	* gtk/gtkfilechooserdefault.c: (location_toggle_popup_handler): Don't
+	try to toggle the visibility of the location entry field in search and 
+	recent mode (#526422).
+
 2008-06-02  Matthias Clasen <mclasen@redhat.com>
 
 	Merge from trunk:
