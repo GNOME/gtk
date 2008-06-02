@@ -2,6 +2,15 @@
 
 	Merge from trunk:
 
+	Bug 531008 – Crash in gtkprintunixdialog.c
+
+	* gtk/gtkprintunixdialog.c: Disconnect signal handlers when
+	the dialog closes. Patch by Yevgen Muntyan.
+
+2008-06-02  Matthias Clasen <mclasen@redhat.com> 
+
+	Merge from trunk:
+
 	Bug 523562 - gtk-update-icon-cache core dumps when run concurrently and
 	when options are missing
 
