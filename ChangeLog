@@ -2,6 +2,14 @@
 
 	Merge from trunk:
 
+	Bug 529841 – incorrect position in directfb
+
+	* gdk/directfb/gdkwindow-directfb.c: fix y = abs_x
+
+2008-06-02  Matthias Clasen <mclasen@redhat.com>
+
+	Merge from trunk:
+
 	* gtk/gtktooltips.c (gtk_tooltips_destroy): no need to 
 	g_return_if_fail (tooltips != NULL)
 
