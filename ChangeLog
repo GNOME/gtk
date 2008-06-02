@@ -1,3 +1,9 @@
+2008-06-02  Michael Natterer  <mitch@imendio.com>
+
+	* gtk/gtksignal.h: put back #include <gtk/gtkmarshal.h>, it's not
+	in <gtk/gtk.h>. Fixes stuff that uses deprecated cruft.
+	(bug #536126).
+
 2008-05-31  Emmanuele Bassi  <ebassi@gnome.org>
 
 	Bug 535830 – wrong content type adding an item

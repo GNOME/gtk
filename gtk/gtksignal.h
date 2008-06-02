@@ -30,6 +30,7 @@
 #define __GTK_SIGNAL_H__
 
 #include <gtk/gtk.h>
+#include <gtk/gtkmarshal.h>
 
 G_BEGIN_DECLS
 
