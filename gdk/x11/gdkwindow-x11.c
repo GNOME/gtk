@@ -3424,6 +3424,7 @@ gdk_window_get_frame_extents (GdkWindow    *window,
   gint i;
   guint ww, wh, wb, wd;
   gint wx, wy;
+  gboolean got_frame_extents = FALSE;
   
   g_return_if_fail (GDK_IS_WINDOW (window));
   g_return_if_fail (rect != NULL);
@@ -3449,14 +3450,59 @@ gdk_window_get_frame_extents (GdkWindow    *window,
   if (GDK_WINDOW_DESTROYED (private))
     return;
 
-  gdk_error_trap_push();
-  
-  /* use NETWM_VIRTUAL_ROOTS if available */
-  display = gdk_drawable_get_display (window);
-  root = GDK_WINDOW_XROOTWIN (window);
-
   nvroots = 0;
   vroots = NULL;
+
+  gdk_error_trap_push();
+  
+  display = gdk_drawable_get_display (window);
+  xwindow = GDK_WINDOW_XID (window);
+
+  /* first try: use _NET_FRAME_EXTENTS */
+  if (XGetWindowProperty (GDK_DISPLAY_XDISPLAY (display), xwindow,
+			  gdk_x11_get_xatom_by_name_for_display (display,
+								 "_NET_FRAME_EXTENTS"),
+			  0, G_MAXLONG, False, XA_CARDINAL, &type_return,
+			  &format_return, &nitems_return, &bytes_after_return,
+			  &data)
+      == Success)
+    {
+      if ((type_return == XA_CARDINAL) && (format_return == 32) &&
+	  (nitems_return == 4) && (data))
+        {
+	  guint32 *ldata = (guint32 *) data;
+	  got_frame_extents = TRUE;
+
+	  /* try to get the real client window geometry */
+	  if (XGetGeometry (GDK_DISPLAY_XDISPLAY (display), xwindow,
+			    &root, &wx, &wy, &ww, &wh, &wb, &wd))
+	    {
+	      rect->x = wx;
+	      rect->y = wy;
+	      rect->width = ww;
+	      rect->height = wh;
+	    }
+
+	  /* _NET_FRAME_EXTENTS format is left, right, top, bottom */
+	  rect->x -= ldata[0];
+	  rect->y -= ldata[2];
+	  rect->width += ldata[0] + ldata[1];
+	  rect->height += ldata[2] + ldata[3];
+	}
+
+      if (data)
+	XFree (data);
+    }
+
+  if (got_frame_extents)
+    goto out;
+
+  /* no frame extents property available, which means we either have a WM that
+     is not EWMH compliant or is broken - try fallback and walk up the window
+     tree to get our window's parent which hopefully is the window frame */
+
+  /* use NETWM_VIRTUAL_ROOTS if available */
+  root = GDK_WINDOW_XROOTWIN (window);
 
   if (XGetWindowProperty (GDK_DISPLAY_XDISPLAY (display), root,
 			  gdk_x11_get_xatom_by_name_for_display (display, 
@@ -3482,7 +3528,7 @@ gdk_window_get_frame_extents (GdkWindow    *window,
       if (!XQueryTree (GDK_DISPLAY_XDISPLAY (display), xwindow,
 		       &root, &xparent,
 		       &children, &nchildren))
-	goto fail;
+	goto out;
       
       if (children)
 	XFree (children);
@@ -3508,7 +3554,7 @@ gdk_window_get_frame_extents (GdkWindow    *window,
       rect->height = wh;
     }
 
- fail:
+ out:
   if (vroots)
     XFree (vroots);
 

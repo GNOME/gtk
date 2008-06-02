@@ -2,6 +2,16 @@
 
 	Merge from trunk:
 
+	Bug 524110 - Gdk should not assume reparenting WMs when retrieving
+	window frame extents
+
+	* gdk/x11/gdkwindow-x11.c (gdk_window_get_frame_extents):
+	Use _NET_FRAME_EXTENTS, if available.  Patch by Danny Baumann.
+
+2008-06-02  Matthias Clasen <mclasen@redhat.com> 
+
+	Merge from trunk:
+
 	Bug 522269 - Evince windows sometimes incorrectly unmaximized,
 	caused by missing flag initialization
 
