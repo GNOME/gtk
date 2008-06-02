@@ -5148,6 +5148,14 @@ location_mode_set (GtkFileChooserDefault *impl,
 static void
 location_toggle_popup_handler (GtkFileChooserDefault *impl)
 {
+  /* when in search or recent files mode, we are not showing the
+   * location_entry_box container, so there's no point in switching
+   * to it.
+   */
+  if (impl->operation_mode == OPERATION_MODE_SEARCH ||
+      impl->operation_mode == OPERATION_MODE_RECENT)
+    return;
+
   /* If the file entry is not visible, show it.
    * If it is visible, turn it off only if it is focused.  Otherwise, switch to the entry.
    */
@@ -10382,7 +10390,7 @@ shortcuts_activate_get_info_cb (GtkFileSystemHandle *handle,
 
   data->impl->shortcuts_activate_iter_handle = NULL;
 
-  if (cancelled)
+  if (cancelled || g_error_matches (error, G_FILE_ERROR, G_FILE_ERROR_INTR))
     goto out;
 
   if (!error && gtk_file_info_get_is_folder (info))
