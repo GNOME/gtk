@@ -2,6 +2,19 @@
 
 	Merge from trunk:
 
+	Bug 535453 - gdk_pixbuf_format_get_license returns NULL for
+	any of the loaders
+
+	* queryloaders.c (write_loader_info): Add the license info
+	after the description.
+
+	* gdk-pixbuf-io.c (gdk_pixbuf_io_init): Read the license info
+	from the module file. Reported by Andrey Tsyvarev.
+
+2008-06-02  Matthias Clasen <mclasen@redhat.com>
+
+	Merge from trunk:
+
 	* gdk-pixbuf-io.c (gdk_pixbuf_new_from_xpm_data): Guard
 	against NULL pointer. (#467051, Gian Mario Tagliaretti)
 
