@@ -1,3 +1,10 @@
+2008-06-02  Matthias Clasen <mclasen@redhat.com>
+
+	Merge from trunk:
+
+	* gtk/gtktooltips.c (gtk_tooltips_destroy): no need to 
+	g_return_if_fail (tooltips != NULL)
+
 2008-03-20  Tor Lillqvist  <tml@novell.com>
 
 	Merge from trunk:
