@@ -2,6 +2,16 @@
 
 	Merge from trunk:
 
+	Bug 522269 - Evince windows sometimes incorrectly unmaximized,
+	caused by missing flag initialization
+
+	* gdk/x11/gdkwindow-x11.c (set_initial_hints): Initialize
+	top-level private flags correctly.  Patch by Danny Baumann.
+
+2008-06-02  Matthias Clasen <mclasen@redhat.com> 
+
+	Merge from trunk:
+
 	Bug 534463 - non-editable GtkTextView should not call
 	gtk_im_context_focus_in in focus event
 
