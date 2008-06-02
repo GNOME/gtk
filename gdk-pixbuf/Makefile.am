@@ -586,7 +586,8 @@ BUILT_SOURCES = 		\
 	gdk-pixbuf-enum-types.h \
 	gdk-pixbuf-enum-types.c \
 	gdk-pixbuf-marshal.h 	\
-	gdk-pixbuf-marshal.c
+	gdk-pixbuf-marshal.c	\
+	gdk-pixbuf-features.h
 
 CLEANFILES =
 MAINTAINERCLEANFILES = 		\
