@@ -1,3 +1,14 @@
+2008-03-20  Tor Lillqvist  <tml@novell.com>
+
+	Merge from trunk:
+
+	Bug 314084 - GTK+ dialogs should not be placed partially offscreen
+
+	* gtk/gtkwindow.c (clamp): New function. Clamps a window position
+	in one dimension, or centered in case it doesn't fit.
+	(clamp_window_to_rectangle): Simplify. Call clamp() for x and y
+	dimensions.
+
 2008-05-25  Johan Dahlin  <johan@gnome.org>
 
 	Merge from trunk:

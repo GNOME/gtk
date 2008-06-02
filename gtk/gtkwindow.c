@@ -5516,27 +5516,40 @@ center_window_on_monitor (GtkWindow *window,
 }
 
 static void
+clamp (gint *base,
+       gint  extent,
+       gint  clamp_base,
+       gint  clamp_extent)
+{
+  if (extent > clamp_extent)
+    /* Center */
+    *base = clamp_base + clamp_extent/2 - extent/2;
+  else if (*base < clamp_base)
+    *base = clamp_base;
+  else if (*base + extent > clamp_base + clamp_extent)
+    *base = clamp_base + clamp_extent - extent;
+}
+
+static void
 clamp_window_to_rectangle (gint               *x,
                            gint               *y,
                            gint                w,
                            gint                h,
                            const GdkRectangle *rect)
 {
-  gint outside_w, outside_h;
-  
-  outside_w = (*x + w) - (rect->x + rect->width);
-  if (outside_w > 0)
-    *x -= outside_w;
+#ifdef DEBUGGING_OUTPUT
+  g_print ("%s: %+d%+d %dx%d: %+d%+d: %dx%d", __FUNCTION__, rect->x, rect->y, rect->width, rect->height, *x, *y, w, h);
+#endif
 
-  outside_h = (*y + h) - (rect->y + rect->height);
-  if (outside_h > 0)
-    *y -= outside_h; 
-
-  /* if larger than the screen, center on the screen. */
-  if (*x < rect->x)
-    *x += (rect->x - *x) / 2;
-  if (*y < rect->y)
-    *y += (rect->y - *y) / 2;
+  /* If it is too large, center it. If it fits on the monitor but is
+   * partially outside, move it to the closest edge. Do this
+   * separately in x and y directions.
+   */
+  clamp (x, w, rect->x, rect->width);
+  clamp (y, h, rect->y, rect->height);
+#ifdef DEBUGGING_OUTPUT
+  g_print (" ==> %+d%+d: %dx%d\n", *x, *y, w, h);
+#endif
 }
 
 
