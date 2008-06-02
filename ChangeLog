@@ -2,6 +2,16 @@
 
 	Merge from trunk:
 
+	Bug 511217 - potential memory corruption after refreshing a tree_view
+
+	* gtk/gtktreeview.c (cancel_arrow_animation): Reset
+	expanded_collapsed_node when canceling the animation.
+	Patch by Nicholas Setton.
+
+2008-06-02  Matthias Clasen <mclasen@redhat.com> 
+
+	Merge from trunk:
+
 	Bug 106574 - Inconsistent increment behavior for gtkspinbutton
 
 	* gtk/gtkspinbutton.c (gtk_spin_button_real_value_change):
