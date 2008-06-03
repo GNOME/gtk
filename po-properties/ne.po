@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-properties.HEAD\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-03-12 01:41-0400\n"
+"POT-Creation-Date: 2008-06-03 17:51-0400\n"
 "PO-Revision-Date: 2005-05-15 15:47+0545\n"
 "Last-Translator: Ganesh Ghimire <gghimire@gmail.com>\n"
 "Language-Team: Nepali <info@mpp.org.np>\n"
@@ -3604,7 +3604,7 @@ msgstr ""
 msgid "Printer settings"
 msgstr ""
 
-#: gtk/gtkprintjob.c:143 gtk/gtkprintjob.c:144 gtk/gtkprintunixdialog.c:241
+#: gtk/gtkprintjob.c:143 gtk/gtkprintjob.c:144 gtk/gtkprintunixdialog.c:246
 #, fuzzy
 msgid "Page Setup"
 msgstr "पन्नाको आकार"
@@ -3628,11 +3628,11 @@ msgstr "पूर्वनिर्धारित उचाई"
 msgid "The GtkPageSetup used by default"
 msgstr ""
 
-#: gtk/gtkprintoperation.c:896 gtk/gtkprintunixdialog.c:259
+#: gtk/gtkprintoperation.c:896 gtk/gtkprintunixdialog.c:264
 msgid "Print Settings"
 msgstr ""
 
-#: gtk/gtkprintoperation.c:897 gtk/gtkprintunixdialog.c:260
+#: gtk/gtkprintoperation.c:897 gtk/gtkprintunixdialog.c:265
 msgid "The GtkPrintSettings used for initializing the dialog"
 msgstr ""
 
@@ -3655,12 +3655,12 @@ msgstr "प्रसारणमार्गहरुको संख्या"
 msgid "The number of pages in the document."
 msgstr "टेवलमा पंक्तिहरुको संख्या"
 
-#: gtk/gtkprintoperation.c:962 gtk/gtkprintunixdialog.c:249
+#: gtk/gtkprintoperation.c:962 gtk/gtkprintunixdialog.c:254
 #, fuzzy
 msgid "Current Page"
 msgstr "विद्यमान अल्फा"
 
-#: gtk/gtkprintoperation.c:963 gtk/gtkprintunixdialog.c:250
+#: gtk/gtkprintoperation.c:963 gtk/gtkprintunixdialog.c:255
 #, fuzzy
 msgid "The current page in the document"
 msgstr "मिलानका लागि पन्नाको आकार"
@@ -3739,16 +3739,16 @@ msgstr "रङ्गदानि प्रथा"
 msgid "Label for the tab containing custom widgets."
 msgstr ""
 
-#: gtk/gtkprintunixdialog.c:242
+#: gtk/gtkprintunixdialog.c:247
 msgid "The GtkPageSetup to use"
 msgstr ""
 
-#: gtk/gtkprintunixdialog.c:267
+#: gtk/gtkprintunixdialog.c:272
 #, fuzzy
 msgid "Selected Printer"
 msgstr "छानिएको वर्ष"
 
-#: gtk/gtkprintunixdialog.c:268
+#: gtk/gtkprintunixdialog.c:273
 #, fuzzy
 msgid "The GtkPrinter which is selected"
 msgstr "आइटम जुन चाँही भरखरै सक्रिय भएको छ"

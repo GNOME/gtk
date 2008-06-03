@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-properties.HEAD\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-03-12 01:41-0400\n"
+"POT-Creation-Date: 2008-06-03 17:51-0400\n"
 "PO-Revision-Date: 2007-09-11 09:40+0200\n"
 "Last-Translator: Arangel Angov <arangel@linux.net.mk>\n"
 "Language-Team: Macedonian <ossm-members@hedona.on.net.mk>\n"
@@ -3593,7 +3593,7 @@ msgstr "Поставувања"
 msgid "Printer settings"
 msgstr "Поставувања на печатачот"
 
-#: gtk/gtkprintjob.c:143 gtk/gtkprintjob.c:144 gtk/gtkprintunixdialog.c:241
+#: gtk/gtkprintjob.c:143 gtk/gtkprintjob.c:144 gtk/gtkprintunixdialog.c:246
 msgid "Page Setup"
 msgstr "Поставување на страница"
 
@@ -3617,11 +3617,11 @@ msgstr "Стандардно поставување на страница"
 msgid "The GtkPageSetup used by default"
 msgstr "GtkPageSetup поставувањето кое стандардно се користи"
 
-#: gtk/gtkprintoperation.c:896 gtk/gtkprintunixdialog.c:259
+#: gtk/gtkprintoperation.c:896 gtk/gtkprintunixdialog.c:264
 msgid "Print Settings"
 msgstr "Поставувања за печатење"
 
-#: gtk/gtkprintoperation.c:897 gtk/gtkprintunixdialog.c:260
+#: gtk/gtkprintoperation.c:897 gtk/gtkprintunixdialog.c:265
 msgid "The GtkPrintSettings used for initializing the dialog"
 msgstr ""
 "GtkPrintSettings поставувањата кои се користат за иницијализирање на "
@@ -3643,11 +3643,11 @@ msgstr "Број на страници"
 msgid "The number of pages in the document."
 msgstr "Бројот на страници во документот."
 
-#: gtk/gtkprintoperation.c:962 gtk/gtkprintunixdialog.c:249
+#: gtk/gtkprintoperation.c:962 gtk/gtkprintunixdialog.c:254
 msgid "Current Page"
 msgstr "Тековна страница"
 
-#: gtk/gtkprintoperation.c:963 gtk/gtkprintunixdialog.c:250
+#: gtk/gtkprintoperation.c:963 gtk/gtkprintunixdialog.c:255
 msgid "The current page in the document"
 msgstr "Тековната страница во документот"
 
@@ -3724,15 +3724,15 @@ msgstr "Сопствена ознака на јазичето"
 msgid "Label for the tab containing custom widgets."
 msgstr "Ознака на јазичето кое содржи прилагодени графички контроли."
 
-#: gtk/gtkprintunixdialog.c:242
+#: gtk/gtkprintunixdialog.c:247
 msgid "The GtkPageSetup to use"
 msgstr "GtkPageSetup поставувањето кое ќе се употребува"
 
-#: gtk/gtkprintunixdialog.c:267
+#: gtk/gtkprintunixdialog.c:272
 msgid "Selected Printer"
 msgstr "Избран печатач"
 
-#: gtk/gtkprintunixdialog.c:268
+#: gtk/gtkprintunixdialog.c:273
 msgid "The GtkPrinter which is selected"
 msgstr "GtkPrinter печатачот кој е избран"
 

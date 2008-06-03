@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-03-15 14:28+0900\n"
+"POT-Creation-Date: 2008-06-03 17:51-0400\n"
 "PO-Revision-Date: 2008-03-15 14:28+0900\n"
 "Last-Translator: Changwoo Ryu <cwryu@debian.org>\n"
 "Language-Team: Gnome Korea <gnome-kr-hackers@lists.kldp.net>\n"
@@ -73,7 +73,7 @@ msgstr "설정할 GDK 디버깅 플래그"
 #. Placeholder in --gdk-no-debug=FLAGS in --help output
 #. Placeholder in --gtk-debug=FLAGS in --help output
 #. Placeholder in --gtk-no-debug=FLAGS in --help output
-#: gdk/gdk.c:140 ../gdk/gdk.c:143 ../gtk/gtkmain.c:434 ../gtk/gtkmain.c:437
+#: gdk/gdk.c:140 gdk/gdk.c:143 gtk/gtkmain.c:434 gtk/gtkmain.c:437
 msgid "FLAGS"
 msgstr "<플래그>"
 
@@ -230,19 +230,19 @@ msgstr "KP_Delete"
 msgid "keyboard label|Delete"
 msgstr "Delete"
 
-#: gdk-pixbuf/gdk-pixbuf-animation.c:154 ../gdk-pixbuf/gdk-pixbuf-io.c:847
-#: gdk-pixbuf/gdk-pixbuf-io.c:1105 ../tests/testfilechooser.c:218
+#: gdk-pixbuf/gdk-pixbuf-animation.c:154 gdk-pixbuf/gdk-pixbuf-io.c:851
+#: gdk-pixbuf/gdk-pixbuf-io.c:1109 tests/testfilechooser.c:218
 #, c-format
 msgid "Failed to open file '%s': %s"
 msgstr "파일 '%s' 열기 실패 : %s"
 
-#: gdk-pixbuf/gdk-pixbuf-animation.c:167 ../gdk-pixbuf/gdk-pixbuf-io.c:859
+#: gdk-pixbuf/gdk-pixbuf-animation.c:167 gdk-pixbuf/gdk-pixbuf-io.c:863
 #, c-format
 msgid "Image file '%s' contains no data"
 msgstr "그림 파일 '%s'에 데이타가 없습니다"
 
-#: gdk-pixbuf/gdk-pixbuf-animation.c:209 ../gdk-pixbuf/gdk-pixbuf-io.c:896
-#: gdk-pixbuf/gdk-pixbuf-io.c:1156 ../tests/testfilechooser.c:263
+#: gdk-pixbuf/gdk-pixbuf-animation.c:209 gdk-pixbuf/gdk-pixbuf-io.c:900
+#: gdk-pixbuf/gdk-pixbuf-io.c:1160 tests/testfilechooser.c:263
 #, c-format
 msgid ""
 "Failed to load image '%s': reason not known, probably a corrupt image file"
@@ -258,12 +258,12 @@ msgstr ""
 "움직이는 그림 '%s' 읽기 실패 : 이유를 알 수 없습니다, 아마 움직이는 그림파일"
 "이 깨졌을 것입니다"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:527
+#: gdk-pixbuf/gdk-pixbuf-io.c:531
 #, c-format
 msgid "Unable to load image-loading module: %s: %s"
 msgstr "그림 읽기 모듈을 읽을 수 없습니다: %s: %s"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:542
+#: gdk-pixbuf/gdk-pixbuf-io.c:546
 #, c-format
 msgid ""
 "Image-loading module %s does not export the proper interface; perhaps it's "
@@ -272,57 +272,57 @@ msgstr ""
 "%s 그림 읽기 모듈이 올바른 인터페이스를 내놓지 않습니다; 아마 다른 GTK 버전"
 "의 모듈일 것입니다"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:659 ../gdk-pixbuf/gdk-pixbuf-io.c:688
+#: gdk-pixbuf/gdk-pixbuf-io.c:663 gdk-pixbuf/gdk-pixbuf-io.c:692
 #, c-format
 msgid "Image type '%s' is not supported"
 msgstr "그림 형식 '%s'을(를) 지원하지 않습니다"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:728
+#: gdk-pixbuf/gdk-pixbuf-io.c:732
 #, c-format
 msgid "Couldn't recognize the image file format for file '%s'"
 msgstr "파일 '%s'의 그림파일 형식을 알 수 없습니다"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:736
+#: gdk-pixbuf/gdk-pixbuf-io.c:740
 #, c-format
 msgid "Unrecognized image file format"
 msgstr "알 수 없는 그림 파일 형식"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:905
+#: gdk-pixbuf/gdk-pixbuf-io.c:909
 #, c-format
 msgid "Failed to load image '%s': %s"
 msgstr "그림 '%s' 읽기 실패: %s"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:1384
+#: gdk-pixbuf/gdk-pixbuf-io.c:1390
 #, c-format
 msgid "Error writing to image file: %s"
 msgstr "그림 파일을 쓰는 중 오류가 발생했습니다: %s"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:1430 ../gdk-pixbuf/gdk-pixbuf-io.c:1561
+#: gdk-pixbuf/gdk-pixbuf-io.c:1436 gdk-pixbuf/gdk-pixbuf-io.c:1567
 #, c-format
 msgid "This build of gdk-pixbuf does not support saving the image format: %s"
 msgstr "gtk-pixbuf의 이 빌드에서는 그림 형식 저장을 지원하지 않습니다: %s"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:1464
+#: gdk-pixbuf/gdk-pixbuf-io.c:1470
 #, c-format
 msgid "Insufficient memory to save image to callback"
 msgstr "콜백에 그림을 저장하기에는 메모리가 부족합니다"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:1477
+#: gdk-pixbuf/gdk-pixbuf-io.c:1483
 #, c-format
 msgid "Failed to open temporary file"
 msgstr "임시 파일을 여는 데 실패했습니다"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:1503
+#: gdk-pixbuf/gdk-pixbuf-io.c:1509
 #, c-format
 msgid "Failed to read from temporary file"
 msgstr "임시 파일을 읽는 데 실패했습니다"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:1738
+#: gdk-pixbuf/gdk-pixbuf-io.c:1744
 #, c-format
 msgid "Failed to open '%s' for writing: %s"
 msgstr "쓰기용 '%s' 열기 실패: %s"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:1763
+#: gdk-pixbuf/gdk-pixbuf-io.c:1769
 #, c-format
 msgid ""
 "Failed to close '%s' while writing image, all data may not have been saved: %"
@@ -331,7 +331,7 @@ msgstr ""
 "그림을 저장하는 동안 '%s'을(를) 닫는데 실패하였습니다, 모든 데이타가 저장되"
 "지 않았을 것입니다: %s"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:1983 ../gdk-pixbuf/gdk-pixbuf-io.c:2033
+#: gdk-pixbuf/gdk-pixbuf-io.c:1989 gdk-pixbuf/gdk-pixbuf-io.c:2039
 #, c-format
 msgid "Insufficient memory to save image into a buffer"
 msgstr "버퍼에 그림을 저장하기에는 메모리가 부족합니다"
@@ -360,7 +360,7 @@ msgstr "잘못된 그림 헤더"
 msgid "Image format unknown"
 msgstr "알 수 없는 그림 형식"
 
-#: gdk-pixbuf/gdk-pixdata.c:157 ../gdk-pixbuf/gdk-pixdata.c:487
+#: gdk-pixbuf/gdk-pixdata.c:157 gdk-pixbuf/gdk-pixdata.c:487
 #, c-format
 msgid "Image pixel data corrupt"
 msgstr "잘못된 그림 픽셀 데이타"
@@ -381,22 +381,19 @@ msgstr "움직이는 그림안에 뜻밖의 아이콘 부분이 있습니다"
 msgid "Unsupported animation type"
 msgstr "지원하지 않는 움직이는 그림 형식"
 
-#: gdk-pixbuf/io-ani.c:348 ../gdk-pixbuf/io-ani.c:406
-#: gdk-pixbuf/io-ani.c:432 ../gdk-pixbuf/io-ani.c:455
-#: gdk-pixbuf/io-ani.c:482 ../gdk-pixbuf/io-ani.c:569
+#: gdk-pixbuf/io-ani.c:348 gdk-pixbuf/io-ani.c:406 gdk-pixbuf/io-ani.c:432
+#: gdk-pixbuf/io-ani.c:455 gdk-pixbuf/io-ani.c:482 gdk-pixbuf/io-ani.c:569
 #, c-format
 msgid "Invalid header in animation"
 msgstr "움직이는 그림의 헤더가 잘못되었습니다"
 
-#: gdk-pixbuf/io-ani.c:358 ../gdk-pixbuf/io-ani.c:380
-#: gdk-pixbuf/io-ani.c:464 ../gdk-pixbuf/io-ani.c:491
-#: gdk-pixbuf/io-ani.c:542 ../gdk-pixbuf/io-ani.c:614
+#: gdk-pixbuf/io-ani.c:358 gdk-pixbuf/io-ani.c:380 gdk-pixbuf/io-ani.c:464
+#: gdk-pixbuf/io-ani.c:491 gdk-pixbuf/io-ani.c:542 gdk-pixbuf/io-ani.c:614
 #, c-format
 msgid "Not enough memory to load animation"
 msgstr "움직이는 그림을 읽어 들이는 데 메모리가 부족합니다"
 
-#: gdk-pixbuf/io-ani.c:398 ../gdk-pixbuf/io-ani.c:424
-#: gdk-pixbuf/io-ani.c:443
+#: gdk-pixbuf/io-ani.c:398 gdk-pixbuf/io-ani.c:424 gdk-pixbuf/io-ani.c:443
 #, c-format
 msgid "Malformed chunk in animation"
 msgstr "움직이는 그림에 잘못된 부분이 있습니다"
@@ -405,14 +402,13 @@ msgstr "움직이는 그림에 잘못된 부분이 있습니다"
 msgid "The ANI image format"
 msgstr "ANI 그림 형식"
 
-#: gdk-pixbuf/io-bmp.c:230 ../gdk-pixbuf/io-bmp.c:267
-#: gdk-pixbuf/io-bmp.c:338 ../gdk-pixbuf/io-bmp.c:370
-#: gdk-pixbuf/io-bmp.c:393 ../gdk-pixbuf/io-bmp.c:496
+#: gdk-pixbuf/io-bmp.c:230 gdk-pixbuf/io-bmp.c:267 gdk-pixbuf/io-bmp.c:338
+#: gdk-pixbuf/io-bmp.c:370 gdk-pixbuf/io-bmp.c:393 gdk-pixbuf/io-bmp.c:496
 #, c-format
 msgid "BMP image has bogus header data"
 msgstr "BMP 그림이 잘못된 헤더 데이타를 가지고 있습니다"
 
-#: gdk-pixbuf/io-bmp.c:241 ../gdk-pixbuf/io-bmp.c:433
+#: gdk-pixbuf/io-bmp.c:241 gdk-pixbuf/io-bmp.c:433
 #, c-format
 msgid "Not enough memory to load bitmap image"
 msgstr "비트맵 그림을 읽는데 메모리가 충분하지 않습니다"
@@ -427,7 +423,7 @@ msgstr "BMP 그림이 지원되지 않는 헤더 크기를 가지고 있습니�
 msgid "Topdown BMP images cannot be compressed"
 msgstr "톱다운 BMP 그림은 압축할 수 없습니다"
 
-#: gdk-pixbuf/io-bmp.c:717 ../gdk-pixbuf/io-pnm.c:709
+#: gdk-pixbuf/io-bmp.c:717 gdk-pixbuf/io-pnm.c:709
 #, c-format
 msgid "Premature end-of-file encountered"
 msgstr "파일이 갑작스럽게 끝났습니다"
@@ -451,8 +447,7 @@ msgstr "BMP 그림 형식"
 msgid "Failure reading GIF: %s"
 msgstr "GIF 읽는 중 실패: %s"
 
-#: gdk-pixbuf/io-gif.c:496 ../gdk-pixbuf/io-gif.c:1477
-#: gdk-pixbuf/io-gif.c:1638
+#: gdk-pixbuf/io-gif.c:496 gdk-pixbuf/io-gif.c:1477 gdk-pixbuf/io-gif.c:1638
 #, c-format
 msgid "GIF file was missing some data (perhaps it was truncated somehow?)"
 msgstr "GIF 파일에 데이타가 부족합니다 (중간에 잘린 파일?)"
@@ -482,8 +477,8 @@ msgstr "잘못된 코드 발견"
 msgid "Circular table entry in GIF file"
 msgstr "GIF 파일에 순환 테이블 항목"
 
-#: gdk-pixbuf/io-gif.c:866 ../gdk-pixbuf/io-gif.c:1464
-#: gdk-pixbuf/io-gif.c:1511 ../gdk-pixbuf/io-gif.c:1626
+#: gdk-pixbuf/io-gif.c:866 gdk-pixbuf/io-gif.c:1464 gdk-pixbuf/io-gif.c:1511
+#: gdk-pixbuf/io-gif.c:1626
 #, c-format
 msgid "Not enough memory to load GIF file"
 msgstr "GIF 파일을 읽는데 메모리가 충분하지 않습니다"
@@ -524,15 +519,13 @@ msgstr "GIF 그림이 잘려져 있거나 불완전합니다."
 msgid "The GIF image format"
 msgstr "GIF 그림 형식"
 
-#: gdk-pixbuf/io-ico.c:217 ../gdk-pixbuf/io-ico.c:277
-#: gdk-pixbuf/io-ico.c:346 ../gdk-pixbuf/io-ico.c:409
-#: gdk-pixbuf/io-ico.c:439
+#: gdk-pixbuf/io-ico.c:217 gdk-pixbuf/io-ico.c:277 gdk-pixbuf/io-ico.c:346
+#: gdk-pixbuf/io-ico.c:409 gdk-pixbuf/io-ico.c:439
 #, c-format
 msgid "Not enough memory to load icon"
 msgstr "아이콘을 읽어 들이는 데 메모리가 부족합니다"
 
-#: gdk-pixbuf/io-ico.c:254 ../gdk-pixbuf/io-ico.c:267
-#: gdk-pixbuf/io-ico.c:336
+#: gdk-pixbuf/io-ico.c:254 gdk-pixbuf/io-ico.c:267 gdk-pixbuf/io-ico.c:336
 #, c-format
 msgid "Invalid header in icon"
 msgstr "아이콘의 헤더가 잘못되었습니다"
@@ -595,13 +588,13 @@ msgstr ""
 "그림을 읽어들이기에 메모리가 부족합니다.  메모리를 확보하려면 실행중인 프로그"
 "램을 끝내보십시오"
 
-#: gdk-pixbuf/io-jpeg.c:570 ../gdk-pixbuf/io-jpeg.c:776
+#: gdk-pixbuf/io-jpeg.c:570 gdk-pixbuf/io-jpeg.c:776
 #, c-format
 msgid "Unsupported JPEG color space (%s)"
 msgstr "지원하지 않는 JPEG 색 공간 (%s)"
 
-#: gdk-pixbuf/io-jpeg.c:668 ../gdk-pixbuf/io-jpeg.c:944
-#: gdk-pixbuf/io-jpeg.c:1177 ../gdk-pixbuf/io-jpeg.c:1186
+#: gdk-pixbuf/io-jpeg.c:668 gdk-pixbuf/io-jpeg.c:944 gdk-pixbuf/io-jpeg.c:1177
+#: gdk-pixbuf/io-jpeg.c:1186
 #, c-format
 msgid "Couldn't allocate memory for loading JPEG file"
 msgstr "JPEG파일을 읽는 중 메모리 할당을 할 수 없습니다"
@@ -635,7 +628,7 @@ msgstr "JPEG 그림 형식"
 msgid "Couldn't allocate memory for header"
 msgstr "헤더에 필요한 메모리를 할당할 수 없습니다"
 
-#: gdk-pixbuf/io-pcx.c:202 ../gdk-pixbuf/io-pcx.c:560
+#: gdk-pixbuf/io-pcx.c:202 gdk-pixbuf/io-pcx.c:560
 #, c-format
 msgid "Couldn't allocate memory for context buffer"
 msgstr "컨텍스트 버퍼에 필요한 메모리를 할당할 수 없습니다"
@@ -645,12 +638,12 @@ msgstr "컨텍스트 버퍼에 필요한 메모리를 할당할 수 없습니다
 msgid "Image has invalid width and/or height"
 msgstr "그림의 폭이나 높이, 혹은 둘 다 잘못되었습니다"
 
-#: gdk-pixbuf/io-pcx.c:613 ../gdk-pixbuf/io-pcx.c:674
+#: gdk-pixbuf/io-pcx.c:613 gdk-pixbuf/io-pcx.c:674
 #, c-format
 msgid "Image has unsupported bpp"
 msgstr "그림의 픽셀당 비트수를 지원하지 않습니다"
 
-#: gdk-pixbuf/io-pcx.c:618 ../gdk-pixbuf/io-pcx.c:626
+#: gdk-pixbuf/io-pcx.c:618 gdk-pixbuf/io-pcx.c:626
 #, c-format
 msgid "Image has unsupported number of %d-bit planes"
 msgstr "그림의 %d비트 플레인을 지원하지 않습니다"
@@ -689,7 +682,7 @@ msgstr "PCX 그림 형식"
 msgid "Bits per channel of PNG image is invalid."
 msgstr "PNG 그림의 채널 당 비트수가 잘못되었습니다."
 
-#: gdk-pixbuf/io-png.c:136 ../gdk-pixbuf/io-png.c:618
+#: gdk-pixbuf/io-png.c:136 gdk-pixbuf/io-png.c:618
 #, c-format
 msgid "Transformed PNG has zero width or height."
 msgstr "변환된 PNG의 너비나 높이가 0입니다."
@@ -810,8 +803,7 @@ msgstr "PNM 파일의 최대 색 값이 0입니다"
 msgid "Maximum color value in PNM file is too large"
 msgstr "PNM 파일의 최대 색 값이 너무 큽니다"
 
-#: gdk-pixbuf/io-pnm.c:429 ../gdk-pixbuf/io-pnm.c:459
-#: gdk-pixbuf/io-pnm.c:504
+#: gdk-pixbuf/io-pnm.c:429 gdk-pixbuf/io-pnm.c:459 gdk-pixbuf/io-pnm.c:504
 #, c-format
 msgid "Raw PNM image type is invalid"
 msgstr "원시 PNM 그림 형식이 잘못되었습니다"
@@ -821,7 +813,7 @@ msgstr "원시 PNM 그림 형식이 잘못되었습니다"
 msgid "PNM image loader does not support this PNM subformat"
 msgstr "PNM 그림 읽어들이기가 이 PNM 서브포맷을 지원하지 않습니다"
 
-#: gdk-pixbuf/io-pnm.c:741 ../gdk-pixbuf/io-pnm.c:968
+#: gdk-pixbuf/io-pnm.c:741 gdk-pixbuf/io-pnm.c:968
 #, c-format
 msgid "Raw PNM formats require exactly one whitespace before sample data"
 msgstr "원시 PNM 형식에서는 견본 데이터 앞에 정확히 한 개의 공백이 와야 합니다"
@@ -865,7 +857,7 @@ msgstr "RAS 그림의 형식을 알 수 없습니다"
 msgid "unsupported RAS image variation"
 msgstr "지원하지 않는 RAS 그림 형식"
 
-#: gdk-pixbuf/io-ras.c:171 ../gdk-pixbuf/io-ras.c:200
+#: gdk-pixbuf/io-ras.c:171 gdk-pixbuf/io-ras.c:200
 #, c-format
 msgid "Not enough memory to load RAS image"
 msgstr "RAS 그림을 읽어들이는데 메모리가 충분하지 않습니다"
@@ -924,9 +916,8 @@ msgstr "TGA 헤더 메모리를 할당할 수 없습니다"
 msgid "TGA image has invalid dimensions"
 msgstr "TGA 그림의 크기가 잘못되었습니다"
 
-#: gdk-pixbuf/io-tga.c:773 ../gdk-pixbuf/io-tga.c:782
-#: gdk-pixbuf/io-tga.c:792 ../gdk-pixbuf/io-tga.c:802
-#: gdk-pixbuf/io-tga.c:809
+#: gdk-pixbuf/io-tga.c:773 gdk-pixbuf/io-tga.c:782 gdk-pixbuf/io-tga.c:792
+#: gdk-pixbuf/io-tga.c:802 gdk-pixbuf/io-tga.c:809
 #, c-format
 msgid "TGA image type not supported"
 msgstr "TGA 그림 형식은 지원하지 않습니다"
@@ -958,13 +949,12 @@ msgstr "그림 높이를 얻을 수 없습니다 (틀린 TIFF 파일)"
 msgid "Width or height of TIFF image is zero"
 msgstr "TIFF 그림의 너비나 높이가 0입니다"
 
-#: gdk-pixbuf/io-tiff.c:184 ../gdk-pixbuf/io-tiff.c:193
+#: gdk-pixbuf/io-tiff.c:184 gdk-pixbuf/io-tiff.c:193
 #, c-format
 msgid "Dimensions of TIFF image too large"
 msgstr "TIFF 그림의 크기가 너무 큽니다"
 
-#: gdk-pixbuf/io-tiff.c:217 ../gdk-pixbuf/io-tiff.c:229
-#: gdk-pixbuf/io-tiff.c:541
+#: gdk-pixbuf/io-tiff.c:217 gdk-pixbuf/io-tiff.c:229 gdk-pixbuf/io-tiff.c:541
 #, c-format
 msgid "Insufficient memory to open TIFF file"
 msgstr "TIFF 파일 여는데 메모리 부족"
@@ -977,11 +967,11 @@ msgstr "TIFF 파일에서 RGB 데이타 읽기 실패"
 msgid "Failed to open TIFF image"
 msgstr "TIFF 그림 열기 실패"
 
-#: gdk-pixbuf/io-tiff.c:343 ../gdk-pixbuf/io-tiff.c:722
+#: gdk-pixbuf/io-tiff.c:343 gdk-pixbuf/io-tiff.c:722
 msgid "TIFFClose operation failed"
 msgstr "TIFFClose 작업 실패"
 
-#: gdk-pixbuf/io-tiff.c:473 ../gdk-pixbuf/io-tiff.c:486
+#: gdk-pixbuf/io-tiff.c:473 gdk-pixbuf/io-tiff.c:486
 msgid "Failed to load TIFF image"
 msgstr "TIFF 그림을 읽어들이는 데 실패"
 
@@ -1077,8 +1067,7 @@ msgstr "XPM 파일이 잘못된 픽셀당 문자 수를 가지고 있습니다"
 msgid "XPM file has invalid number of colors"
 msgstr "XPM 파일이 잘못된 색 개수를 가지고 있습니다"
 
-#: gdk-pixbuf/io-xpm.c:522 ../gdk-pixbuf/io-xpm.c:531
-#: gdk-pixbuf/io-xpm.c:583
+#: gdk-pixbuf/io-xpm.c:522 gdk-pixbuf/io-xpm.c:531 gdk-pixbuf/io-xpm.c:583
 #, c-format
 msgid "Cannot allocate memory for loading XPM image"
 msgstr "XPM 그림을 읽어들이는 데 필요한 메모리를 할당할 수 없습니다"
@@ -1132,7 +1121,7 @@ msgstr "<색>"
 msgid "Make X calls synchronous"
 msgstr "X 호출을 동기로 함"
 
-#: gtk/gtkaboutdialog.c:264 ../gtk/gtkaboutdialog.c:2101
+#: gtk/gtkaboutdialog.c:264 gtk/gtkaboutdialog.c:2101
 msgid "License"
 msgstr "사용권"
 
@@ -1307,7 +1296,7 @@ msgstr "2000"
 #. * digits.  That needs support from your system and locale definition
 #. * too.
 #.
-#: gtk/gtkcalendar.c:1626 ../gtk/gtkcalendar.c:2204
+#: gtk/gtkcalendar.c:1626 gtk/gtkcalendar.c:2204
 #, c-format
 msgid "calendar:day:digits|%d"
 msgstr "%d"
@@ -1323,7 +1312,7 @@ msgstr "%d"
 #. * digits.  That needs support from your system and locale definition
 #. * too.
 #.
-#: gtk/gtkcalendar.c:1660 ../gtk/gtkcalendar.c:2078
+#: gtk/gtkcalendar.c:1660 gtk/gtkcalendar.c:2078
 #, c-format
 msgid "calendar:week:digits|%d"
 msgstr "%d"
@@ -1355,17 +1344,17 @@ msgstr "없음"
 #. * an accelerator when the cell is clicked to change the
 #. * acelerator.
 #.
-#: gtk/gtkcellrendereraccel.c:368 ../gtk/gtkcellrendereraccel.c:580
+#: gtk/gtkcellrendereraccel.c:368 gtk/gtkcellrendereraccel.c:580
 msgid "New accelerator..."
 msgstr "새 단축키..."
 
 #. do not translate the part before the |
-#: gtk/gtkcellrendererprogress.c:362 ../gtk/gtkcellrendererprogress.c:449
+#: gtk/gtkcellrendererprogress.c:362 gtk/gtkcellrendererprogress.c:449
 #, c-format
 msgid "progress bar label|%d %%"
 msgstr "%d %%"
 
-#: gtk/gtkcolorbutton.c:189 ../gtk/gtkcolorbutton.c:560
+#: gtk/gtkcolorbutton.c:189 gtk/gtkcolorbutton.c:560
 msgid "Pick a Color"
 msgstr "색 고르기"
 
@@ -1471,7 +1460,7 @@ msgstr "색에서 파랑 빛의 양."
 msgid "Op_acity:"
 msgstr "투명도(_A):"
 
-#: gtk/gtkcolorsel.c:1977 ../gtk/gtkcolorsel.c:1987
+#: gtk/gtkcolorsel.c:1977 gtk/gtkcolorsel.c:1987
 msgid "Transparency of the color."
 msgstr "색의 투명한 정도."
 
@@ -1499,11 +1488,11 @@ msgstr "색상환"
 msgid "Color Selection"
 msgstr "색 선택"
 
-#: gtk/gtkentry.c:5255 ../gtk/gtktextview.c:7653
+#: gtk/gtkentry.c:5255 gtk/gtktextview.c:7669
 msgid "Input _Methods"
 msgstr "입력기(_M)"
 
-#: gtk/gtkentry.c:5269 ../gtk/gtktextview.c:7667
+#: gtk/gtkentry.c:5269 gtk/gtktextview.c:7683
 msgid "_Insert Unicode Control Character"
 msgstr "유니코드 제어 문자 넣기(_I)"
 
@@ -1511,7 +1500,7 @@ msgstr "유니코드 제어 문자 넣기(_I)"
 msgid "Select A File"
 msgstr "파일을 선택하십시오"
 
-#: gtk/gtkfilechooserbutton.c:69 ../gtk/gtkfilechooserdefault.c:1973
+#: gtk/gtkfilechooserbutton.c:69 gtk/gtkfilechooserdefault.c:1973
 msgid "Desktop"
 msgstr "바탕 화면"
 
@@ -1523,8 +1512,8 @@ msgstr "(없음)"
 msgid "Other..."
 msgstr "기타..."
 
-#: gtk/gtkfilechooser.c:1697 ../gtk/gtkfilechooser.c:1741
-#: gtk/gtkfilechooser.c:1816 ../gtk/gtkfilechooser.c:1860
+#: gtk/gtkfilechooser.c:1697 gtk/gtkfilechooser.c:1741
+#: gtk/gtkfilechooser.c:1816 gtk/gtkfilechooser.c:1860
 #, c-format
 msgid "Invalid filename: %s"
 msgstr "잘못된 파일 이름: %s"
@@ -1625,7 +1614,7 @@ msgstr "위치"
 msgid "_Places"
 msgstr "위치(_P)"
 
-#: gtk/gtkfilechooserdefault.c:4028 ../gtk/gtkstock.c:297
+#: gtk/gtkfilechooserdefault.c:4028 gtk/gtkstock.c:297
 msgid "_Add"
 msgstr "더하기(_A)"
 
@@ -1633,7 +1622,7 @@ msgstr "더하기(_A)"
 msgid "Add the selected folder to the Bookmarks"
 msgstr "선택한 폴더를 책갈피에 추가합니다"
 
-#: gtk/gtkfilechooserdefault.c:4040 ../gtk/gtkstock.c:385
+#: gtk/gtkfilechooserdefault.c:4040 gtk/gtkstock.c:385
 msgid "_Remove"
 msgstr "지우기(_R)"
 
@@ -1658,7 +1647,7 @@ msgstr "책갈피에 추가(_A)"
 msgid "Show _Hidden Files"
 msgstr "숨긴 파일 표시(_H)"
 
-#: gtk/gtkfilechooserdefault.c:4596 ../gtk/gtkfilesel.c:729
+#: gtk/gtkfilechooserdefault.c:4596 gtk/gtkfilesel.c:729
 msgid "Files"
 msgstr "파일"
 
@@ -1675,7 +1664,7 @@ msgid "Modified"
 msgstr "고쳐짐"
 
 #. Label
-#: gtk/gtkfilechooserdefault.c:4904 ../gtk/gtkprinteroptionwidget.c:786
+#: gtk/gtkfilechooserdefault.c:4904 gtk/gtkprinteroptionwidget.c:786
 msgid "_Name:"
 msgstr "이름(_N):"
 
@@ -1683,123 +1672,123 @@ msgstr "이름(_N):"
 msgid "_Browse for other folders"
 msgstr "다른 폴더 찾아보기(_B)"
 
-#: gtk/gtkfilechooserdefault.c:5212
+#: gtk/gtkfilechooserdefault.c:5220
 msgid "Type a file name"
 msgstr "파일 이름을 입력하십시오"
 
 #. Create Folder
-#: gtk/gtkfilechooserdefault.c:5249
+#: gtk/gtkfilechooserdefault.c:5257
 msgid "Create Fo_lder"
 msgstr "폴더 만들기(_L)"
 
-#: gtk/gtkfilechooserdefault.c:5259
+#: gtk/gtkfilechooserdefault.c:5267
 msgid "_Location:"
 msgstr "위치(_L):"
 
-#: gtk/gtkfilechooserdefault.c:5497
+#: gtk/gtkfilechooserdefault.c:5505
 msgid "Save in _folder:"
 msgstr "폴더에 저장(_F):"
 
-#: gtk/gtkfilechooserdefault.c:5499
+#: gtk/gtkfilechooserdefault.c:5507
 msgid "Create in _folder:"
 msgstr "폴더에 만들기(_F):"
 
-#: gtk/gtkfilechooserdefault.c:7106
+#: gtk/gtkfilechooserdefault.c:7114
 #, c-format
 msgid "Cannot change to folder because it is not local"
 msgstr "로컬 폴더가 아니므로 폴더로 이동할 수 없습니다"
 
-#: gtk/gtkfilechooserdefault.c:7722 ../gtk/gtkfilechooserdefault.c:7743
+#: gtk/gtkfilechooserdefault.c:7730 gtk/gtkfilechooserdefault.c:7751
 #, c-format
 msgid "Shortcut %s already exists"
 msgstr "%s 바로 가기가 이미 있습니다"
 
-#: gtk/gtkfilechooserdefault.c:7833
+#: gtk/gtkfilechooserdefault.c:7841
 #, c-format
 msgid "Shortcut %s does not exist"
 msgstr "%s 바로 가기가 없습니다"
 
-#: gtk/gtkfilechooserdefault.c:8088 ../gtk/gtkprintunixdialog.c:354
+#: gtk/gtkfilechooserdefault.c:8096 gtk/gtkprintunixdialog.c:356
 #, c-format
 msgid "A file named \"%s\" already exists.  Do you want to replace it?"
 msgstr "이름이 \"%s\"인 파일이 이미 있습니다.  이 파일을 바꾸시겠습니까?"
 
-#: gtk/gtkfilechooserdefault.c:8091 ../gtk/gtkprintunixdialog.c:358
+#: gtk/gtkfilechooserdefault.c:8099 gtk/gtkprintunixdialog.c:360
 #, c-format
 msgid ""
 "The file already exists in \"%s\".  Replacing it will overwrite its contents."
 msgstr ""
 "\"%s\" 안에 파일이 이미 있습니다.  파일을 바꾸면 그 내용을 덮어 쓰게 됩니다."
 
-#: gtk/gtkfilechooserdefault.c:8096 ../gtk/gtkprintunixdialog.c:365
+#: gtk/gtkfilechooserdefault.c:8104 gtk/gtkprintunixdialog.c:367
 msgid "_Replace"
 msgstr "바꾸기(_R)"
 
-#: gtk/gtkfilechooserdefault.c:8899
+#: gtk/gtkfilechooserdefault.c:8907
 msgid "Could not start the search process"
 msgstr "찾기 작업을 시작할 수 없습니다"
 
-#: gtk/gtkfilechooserdefault.c:8900
+#: gtk/gtkfilechooserdefault.c:8908
 msgid ""
 "The program was not able to create a connection to the indexer daemon.  "
 "Please make sure it is running."
 msgstr ""
 "프로그램이 인덱스 데몬에 연결할 수 없습니다. 데몬이 실행 중인지 확인하십시오."
 
-#: gtk/gtkfilechooserdefault.c:8914
+#: gtk/gtkfilechooserdefault.c:8922
 msgid "Could not send the search request"
 msgstr "찾기 요청을 보낼 수 없습니다"
 
 #. Label
-#: gtk/gtkfilechooserdefault.c:9342
+#: gtk/gtkfilechooserdefault.c:9350
 msgid "_Search:"
 msgstr "찾기(_S):"
 
-#: gtk/gtkfilechooserdefault.c:10295
+#: gtk/gtkfilechooserdefault.c:10303
 #, c-format
 msgid "Could not mount %s"
 msgstr "%s을(를) 마운트할 수 없습니다"
 
-#: gtk/gtkfilechooserdefault.c:10899
+#: gtk/gtkfilechooserdefault.c:10907
 msgid "Type name of new folder"
 msgstr "새 폴더의 이름을 넣으십시오"
 
-#: gtk/gtkfilechooserdefault.c:10947
+#: gtk/gtkfilechooserdefault.c:10955
 #, c-format
 msgid "%d byte"
 msgid_plural "%d bytes"
 msgstr[0] "%d바이트"
 
-#: gtk/gtkfilechooserdefault.c:10949
+#: gtk/gtkfilechooserdefault.c:10957
 #, c-format
 msgid "%.1f KB"
 msgstr "%.1f KB"
 
-#: gtk/gtkfilechooserdefault.c:10951
+#: gtk/gtkfilechooserdefault.c:10959
 #, c-format
 msgid "%.1f MB"
 msgstr "%.1f MB"
 
-#: gtk/gtkfilechooserdefault.c:10953
+#: gtk/gtkfilechooserdefault.c:10961
 #, c-format
 msgid "%.1f GB"
 msgstr "%.1f GB"
 
-#: gtk/gtkfilechooserdefault.c:11054 ../gtk/gtkfilechooserdefault.c:11076
-#: gtk/gtkfilechooserdefault.c:11147
+#: gtk/gtkfilechooserdefault.c:11062 gtk/gtkfilechooserdefault.c:11084
+#: gtk/gtkfilechooserdefault.c:11155
 msgid "Unknown"
 msgstr "모름"
 
-#: gtk/gtkfilechooserdefault.c:11094
+#: gtk/gtkfilechooserdefault.c:11102
 msgid "Today at %H:%M"
 msgstr "오늘 %H:%M"
 
-#: gtk/gtkfilechooserdefault.c:11096
+#: gtk/gtkfilechooserdefault.c:11104
 msgid "Yesterday at %H:%M"
 msgstr "어제 %H:%M"
 
-#: gtk/gtkfilechoosersettings.c:262 ../gtk/gtkfilesel.c:1408
-#: gtk/gtkfilesel.c:1417 ../gtk/gtkfilesystemunix.c:1048
+#: gtk/gtkfilechoosersettings.c:262 gtk/gtkfilesel.c:1408
+#: gtk/gtkfilesel.c:1417 gtk/gtkfilesystemunix.c:1048
 #: gtk/gtkfilesystemwin32.c:1227
 #, c-format
 msgid "Error creating folder '%s': %s"
@@ -1817,7 +1806,7 @@ msgstr "폴더(_D)"
 msgid "_Files"
 msgstr "파일(_F)"
 
-#: gtk/gtkfilesel.c:820 ../gtk/gtkfilesel.c:2207
+#: gtk/gtkfilesel.c:820 gtk/gtkfilesel.c:2207
 #, c-format
 msgid "Folder unreadable: %s"
 msgstr "폴더를 읽을 수 없음: %s"
@@ -1864,13 +1853,13 @@ msgstr "폴더 이름(_F):"
 msgid "C_reate"
 msgstr "만들기(_R)"
 
-#: gtk/gtkfilesel.c:1533 ../gtk/gtkfilesel.c:1640 ../gtk/gtkfilesel.c:1653
+#: gtk/gtkfilesel.c:1533 gtk/gtkfilesel.c:1640 gtk/gtkfilesel.c:1653
 #, c-format
 msgid "The filename \"%s\" contains symbols that are not allowed in filenames"
 msgstr ""
 "파일 이름 \"%s\"에 파일 이름으로 허용되지 않는 문자가 포함되어 있습니다"
 
-#: gtk/gtkfilesel.c:1536 ../gtk/gtkfilesel.c:1546
+#: gtk/gtkfilesel.c:1536 gtk/gtkfilesel.c:1546
 #, c-format
 msgid "Error deleting file '%s': %s"
 msgstr "'%s' 파일을 지우는 중 오류: %s"
@@ -1951,14 +1940,14 @@ msgstr "루트 폴더를 가져올 수 없습니다"
 msgid "(Empty)"
 msgstr "(빈 파일)"
 
-#: gtk/gtkfilesystemunix.c:961 ../gtk/gtkfilesystemunix.c:1209
-#: gtk/gtkfilesystemunix.c:2197 ../gtk/gtkfilesystemunix.c:2237
-#: gtk/gtkfilesystemwin32.c:2305 ../gtk/gtkfilesystemwin32.c:2355
+#: gtk/gtkfilesystemunix.c:961 gtk/gtkfilesystemunix.c:1209
+#: gtk/gtkfilesystemunix.c:2198 gtk/gtkfilesystemunix.c:2238
+#: gtk/gtkfilesystemwin32.c:2305 gtk/gtkfilesystemwin32.c:2355
 #, c-format
 msgid "Error getting information for '%s': %s"
 msgstr "'%s'에 대한 정보를 가져오는 데 오류가 발생했습니다: %s"
 
-#: gtk/gtkfilesystemunix.c:1154 ../gtk/gtkfilesystemwin32.c:1334
+#: gtk/gtkfilesystemunix.c:1154 gtk/gtkfilesystemwin32.c:1334
 #, c-format
 msgid "This file system does not support mounting"
 msgstr "이 파일 시스템은 마운트를 지원하지 않습니다"
@@ -1967,7 +1956,7 @@ msgstr "이 파일 시스템은 마운트를 지원하지 않습니다"
 msgid "File System"
 msgstr "파일시스템"
 
-#: gtk/gtkfilesystemunix.c:1330 ../gtk/gtkfilesystemwin32.c:1644
+#: gtk/gtkfilesystemunix.c:1330 gtk/gtkfilesystemwin32.c:1644
 #, c-format
 msgid ""
 "The name \"%s\" is not valid because it contains the character \"%s\". "
@@ -1976,17 +1965,17 @@ msgstr ""
 "\"%s\"(이)라는 이름은 쓸 수 없습니다. 이름에 \"%s\" 문자가 들어 있습니다. 다"
 "른 이름을 사용하십시오."
 
-#: gtk/gtkfilesystemunix.c:1879 ../gtk/gtkfilesystemwin32.c:1985
+#: gtk/gtkfilesystemunix.c:1880 gtk/gtkfilesystemwin32.c:1985
 #, c-format
 msgid "Bookmark saving failed: %s"
 msgstr "책갈피 저장이 실패했습니다: %s"
 
-#: gtk/gtkfilesystemunix.c:1934 ../gtk/gtkfilesystemwin32.c:2040
+#: gtk/gtkfilesystemunix.c:1935 gtk/gtkfilesystemwin32.c:2040
 #, c-format
 msgid "'%s' already exists in the bookmarks list"
 msgstr "책갈피 목록에 '%s'이(가) 이미 있습니다"
 
-#: gtk/gtkfilesystemunix.c:2006 ../gtk/gtkfilesystemwin32.c:2112
+#: gtk/gtkfilesystemunix.c:2007 gtk/gtkfilesystemwin32.c:2112
 #, c-format
 msgid "'%s' does not exist in the bookmarks list"
 msgstr "책갈피 목록에 '%s'이(가) 없습니다"
@@ -2006,7 +1995,7 @@ msgstr "네트워크 드라이브 (%s)"
 msgid "%s (%s)"
 msgstr "%s (%s)"
 
-#: gtk/gtkfontbutton.c:145 ../gtk/gtkfontbutton.c:267
+#: gtk/gtkfontbutton.c:145 gtk/gtkfontbutton.c:267
 msgid "Pick a Font"
 msgstr "글꼴 고르기"
 
@@ -2156,7 +2145,7 @@ msgstr "휠(_W):"
 msgid "none"
 msgstr "없음"
 
-#: gtk/gtkinputdialog.c:616 ../gtk/gtkinputdialog.c:652
+#: gtk/gtkinputdialog.c:616 gtk/gtkinputdialog.c:652
 msgid "(disabled)"
 msgstr "(사용 안함)"
 
@@ -2235,13 +2224,12 @@ msgstr "화살표 간격"
 msgid "Scroll arrow spacing"
 msgstr "스크롤 화살표 간격"
 
-#: gtk/gtknotebook.c:4405 ../gtk/gtknotebook.c:6911
+#: gtk/gtknotebook.c:4404 gtk/gtknotebook.c:6910
 #, c-format
 msgid "Page %u"
 msgstr "%u페이지"
 
-#: gtk/gtkpagesetup.c:571 ../gtk/gtkpapersize.c:825
-#: gtk/gtkpapersize.c:865
+#: gtk/gtkpagesetup.c:571 gtk/gtkpapersize.c:825 gtk/gtkpapersize.c:865
 #, c-format
 msgid "Not a valid page setup file"
 msgstr "올바른 페이지 설정 파일이 아닙니다"
@@ -2264,11 +2252,11 @@ msgstr ""
 "<b>모든 프린터</b>\n"
 "문서 인쇄용"
 
-#: gtk/gtkpagesetupunixdialog.c:883 ../gtk/gtkpagesetupunixdialog.c:1395
+#: gtk/gtkpagesetupunixdialog.c:883 gtk/gtkpagesetupunixdialog.c:1395
 msgid "mm"
 msgstr "mm"
 
-#: gtk/gtkpagesetupunixdialog.c:885 ../gtk/gtkpagesetupunixdialog.c:1393
+#: gtk/gtkpagesetupunixdialog.c:885 gtk/gtkpagesetupunixdialog.c:1393
 msgid "inch"
 msgstr "인치"
 
@@ -2303,7 +2291,7 @@ msgstr "용지 크기(_P):"
 msgid "_Orientation:"
 msgstr "방향(_O):"
 
-#: gtk/gtkpagesetupunixdialog.c:1121 ../gtk/gtkprintunixdialog.c:2306
+#: gtk/gtkpagesetupunixdialog.c:1121 gtk/gtkprintunixdialog.c:2315
 msgid "Page Setup"
 msgstr "페이지 설정"
 
@@ -2431,7 +2419,8 @@ msgstr "오류 발생 완료"
 msgid "Preparing %d"
 msgstr "%d 페이지 준비하는 중"
 
-#: gtk/gtkprintoperation.c:1987 ../gtk/gtkprintoperation.c:2241
+#: gtk/gtkprintoperation.c:1987 gtk/gtkprintoperation.c:2241
+#, c-format
 msgid "Preparing"
 msgstr "준비 중"
 
@@ -2441,14 +2430,16 @@ msgid "Printing %d"
 msgstr "%d 페이지 인쇄하는 중"
 
 #: gtk/gtkprintoperation-unix.c:243
+#, c-format
 msgid "Error launching preview"
 msgstr "미리 보기 실행 오류"
 
 #: gtk/gtkprintoperation-unix.c:281
+#, c-format
 msgid "Error printing"
 msgstr "인쇄 오류"
 
-#: gtk/gtkprintoperation-unix.c:388 ../gtk/gtkprintoperation-win32.c:1395
+#: gtk/gtkprintoperation-unix.c:388 gtk/gtkprintoperation-win32.c:1395
 msgid "Application"
 msgstr "프로그램"
 
@@ -2472,7 +2463,7 @@ msgstr "사용자 조작 필요"
 msgid "Custom size"
 msgstr "사용자 지정 크기"
 
-#: gtk/gtkprintoperation-win32.c:1485 ../gtk/gtkprintoperation-win32.c:1508
+#: gtk/gtkprintoperation-win32.c:1485 gtk/gtkprintoperation-win32.c:1508
 #: gtk/gtkprintoperation-win32.c:1556
 #, c-format
 msgid "Not enough free memory"
@@ -2503,35 +2494,35 @@ msgstr "알 수 없는 오류가 있습니다"
 msgid "Error from StartDoc"
 msgstr "StartDoc에 오류가 있습니다"
 
-#: gtk/gtkprintunixdialog.c:1634
+#: gtk/gtkprintunixdialog.c:1643
 msgid "Printer"
 msgstr "프린터"
 
-#: gtk/gtkprintunixdialog.c:1642
+#: gtk/gtkprintunixdialog.c:1651
 msgid "Location"
 msgstr "위치"
 
-#: gtk/gtkprintunixdialog.c:1651
+#: gtk/gtkprintunixdialog.c:1660
 msgid "Status"
 msgstr "상태"
 
-#: gtk/gtkprintunixdialog.c:1673
+#: gtk/gtkprintunixdialog.c:1682
 msgid "Print Pages"
 msgstr "인쇄 페이지"
 
-#: gtk/gtkprintunixdialog.c:1677
+#: gtk/gtkprintunixdialog.c:1686
 msgid "_All"
 msgstr "모두(_A)"
 
-#: gtk/gtkprintunixdialog.c:1684
+#: gtk/gtkprintunixdialog.c:1693
 msgid "C_urrent"
 msgstr "현재(_U)"
 
-#: gtk/gtkprintunixdialog.c:1693
+#: gtk/gtkprintunixdialog.c:1702
 msgid "Ra_nge"
 msgstr "범위(_N)"
 
-#: gtk/gtkprintunixdialog.c:1694
+#: gtk/gtkprintunixdialog.c:1703
 msgid ""
 "Specify one or more page ranges,\n"
 " e.g. 1-3,7,11"
@@ -2539,141 +2530,141 @@ msgstr ""
 "페이지 범위를 지정하십시오.\n"
 " 예) 1-3,7,11"
 
-#: gtk/gtkprintunixdialog.c:1713
+#: gtk/gtkprintunixdialog.c:1722
 msgid "Copies"
 msgstr "인쇄 매수"
 
 #. FIXME chpe: too much space between Copies and spinbutton, put those 2 in a hbox and make it span 2 columns
-#: gtk/gtkprintunixdialog.c:1718
+#: gtk/gtkprintunixdialog.c:1727
 msgid "Copie_s:"
 msgstr "인쇄 매수(_S):"
 
-#: gtk/gtkprintunixdialog.c:1736
+#: gtk/gtkprintunixdialog.c:1745
 msgid "C_ollate"
 msgstr "한 부씩 인쇄(_O)"
 
-#: gtk/gtkprintunixdialog.c:1744
+#: gtk/gtkprintunixdialog.c:1753
 msgid "_Reverse"
 msgstr "마지막 페이지부터(_R)"
 
-#: gtk/gtkprintunixdialog.c:1761
+#: gtk/gtkprintunixdialog.c:1770
 msgid "General"
 msgstr "일반"
 
-#: gtk/gtkprintunixdialog.c:2162
+#: gtk/gtkprintunixdialog.c:2171
 msgid "Layout"
 msgstr "배치"
 
-#: gtk/gtkprintunixdialog.c:2166
+#: gtk/gtkprintunixdialog.c:2175
 msgid "Pages per _side:"
 msgstr "한 장당 페이지 수(_S):"
 
-#: gtk/gtkprintunixdialog.c:2182
+#: gtk/gtkprintunixdialog.c:2191
 msgid "T_wo-sided:"
 msgstr "양면(_W):"
 
-#: gtk/gtkprintunixdialog.c:2197
+#: gtk/gtkprintunixdialog.c:2206
 msgid "_Only print:"
 msgstr "다음만 인쇄(_O):"
 
 #. In enum order
-#: gtk/gtkprintunixdialog.c:2212
+#: gtk/gtkprintunixdialog.c:2221
 msgid "All sheets"
 msgstr "모든 페이지"
 
-#: gtk/gtkprintunixdialog.c:2213
+#: gtk/gtkprintunixdialog.c:2222
 msgid "Even sheets"
 msgstr "짝수 페이지"
 
-#: gtk/gtkprintunixdialog.c:2214
+#: gtk/gtkprintunixdialog.c:2223
 msgid "Odd sheets"
 msgstr "홀수 페이지"
 
-#: gtk/gtkprintunixdialog.c:2217
+#: gtk/gtkprintunixdialog.c:2226
 msgid "Sc_ale:"
 msgstr "크기 조정(_A):"
 
-#: gtk/gtkprintunixdialog.c:2244
+#: gtk/gtkprintunixdialog.c:2253
 msgid "Paper"
 msgstr "용지"
 
-#: gtk/gtkprintunixdialog.c:2248
+#: gtk/gtkprintunixdialog.c:2257
 msgid "Paper _type:"
 msgstr "용지 종류(_T):"
 
-#: gtk/gtkprintunixdialog.c:2263
+#: gtk/gtkprintunixdialog.c:2272
 msgid "Paper _source:"
 msgstr "용지 공급(_S):"
 
-#: gtk/gtkprintunixdialog.c:2278
+#: gtk/gtkprintunixdialog.c:2287
 msgid "Output t_ray:"
 msgstr "출력 트레이(_R):"
 
-#: gtk/gtkprintunixdialog.c:2329
+#: gtk/gtkprintunixdialog.c:2338
 msgid "Job Details"
 msgstr "작업 상세 정보"
 
-#: gtk/gtkprintunixdialog.c:2335
+#: gtk/gtkprintunixdialog.c:2344
 msgid "Pri_ority:"
 msgstr "우선순위(_O):"
 
-#: gtk/gtkprintunixdialog.c:2350
+#: gtk/gtkprintunixdialog.c:2359
 msgid "_Billing info:"
 msgstr "요금 정보(_B):"
 
-#: gtk/gtkprintunixdialog.c:2368
+#: gtk/gtkprintunixdialog.c:2377
 msgid "Print Document"
 msgstr "문서 인쇄"
 
-#: gtk/gtkprintunixdialog.c:2374
+#: gtk/gtkprintunixdialog.c:2383
 msgid "_Now"
 msgstr "지금(_N)"
 
-#: gtk/gtkprintunixdialog.c:2381
+#: gtk/gtkprintunixdialog.c:2390
 msgid "A_t:"
 msgstr "시각(_T):"
 
-#: gtk/gtkprintunixdialog.c:2396
+#: gtk/gtkprintunixdialog.c:2405
 msgid "On _hold"
 msgstr "보류(_H)"
 
-#: gtk/gtkprintunixdialog.c:2415
+#: gtk/gtkprintunixdialog.c:2424
 msgid "Add Cover Page"
 msgstr "표지 사용"
 
-#: gtk/gtkprintunixdialog.c:2421
+#: gtk/gtkprintunixdialog.c:2430
 msgid "Be_fore:"
 msgstr "앞에(_F):"
 
-#: gtk/gtkprintunixdialog.c:2436
+#: gtk/gtkprintunixdialog.c:2445
 msgid "_After:"
 msgstr "뒤에(_A):"
 
-#: gtk/gtkprintunixdialog.c:2451
+#: gtk/gtkprintunixdialog.c:2460
 msgid "Job"
 msgstr "작업"
 
-#: gtk/gtkprintunixdialog.c:2517
+#: gtk/gtkprintunixdialog.c:2526
 msgid "Advanced"
 msgstr "고급"
 
-#: gtk/gtkprintunixdialog.c:2552
+#: gtk/gtkprintunixdialog.c:2561
 msgid "Image Quality"
 msgstr "그림 화질"
 
-#: gtk/gtkprintunixdialog.c:2555
+#: gtk/gtkprintunixdialog.c:2564
 msgid "Color"
 msgstr "색"
 
-#: gtk/gtkprintunixdialog.c:2558
+#: gtk/gtkprintunixdialog.c:2567
 msgid "Finishing"
 msgstr "마무리"
 
-#: gtk/gtkprintunixdialog.c:2568
+#: gtk/gtkprintunixdialog.c:2577
 msgid "Some of the settings in the dialog conflict"
 msgstr "대화 상자의 설정이 충돌합니다"
 
-#: gtk/gtkprintunixdialog.c:2591
+#: gtk/gtkprintunixdialog.c:2600
 msgid "Print"
 msgstr "인쇄"
 
@@ -2690,13 +2681,13 @@ msgstr "이 단추가 속한 그룹의 라디오 도구 단추."
 msgid "Unable to find include file: \"%s\""
 msgstr "include 파일을 찾을 수 없습니다: \"%s\""
 
-#: gtk/gtkrc.c:3494 ../gtk/gtkrc.c:3497
+#: gtk/gtkrc.c:3494 gtk/gtkrc.c:3497
 #, c-format
 msgid "Unable to locate image file in pixmap_path: \"%s\""
 msgstr "그림 파일을 pixmap_path에서 찾을 수 없음: \"%s\""
 
-#: gtk/gtkrecentaction.c:155 ../gtk/gtkrecentaction.c:163
-#: gtk/gtkrecentchoosermenu.c:554 ../gtk/gtkrecentchoosermenu.c:562
+#: gtk/gtkrecentaction.c:155 gtk/gtkrecentaction.c:163
+#: gtk/gtkrecentchoosermenu.c:554 gtk/gtkrecentchoosermenu.c:562
 #, c-format
 msgid "This function is not implemented for widgets of class '%s'"
 msgstr "이 기능은 '%s' 클래스의 위젯에서 구현되지 않았습니다"
@@ -2705,7 +2696,7 @@ msgstr "이 기능은 '%s' 클래스의 위젯에서 구현되지 않았습니�
 msgid "Select which type of documents are shown"
 msgstr "어떤 종류의 문서를 표시할 지 선택합니다"
 
-#: gtk/gtkrecentchooserdefault.c:1107 ../gtk/gtkrecentchooserdefault.c:1144
+#: gtk/gtkrecentchooserdefault.c:1107 gtk/gtkrecentchooserdefault.c:1144
 #, c-format
 msgid "No item for URI '%s' found"
 msgstr "'%s' URI에 대한 항목이 없습니다"
@@ -2752,7 +2743,7 @@ msgstr "개인 리소스 표시(_P)"
 msgid "No items found"
 msgstr "항목이 없습니다"
 
-#: gtk/gtkrecentchoosermenu.c:474 ../gtk/gtkrecentchoosermenu.c:530
+#: gtk/gtkrecentchoosermenu.c:474 gtk/gtkrecentchoosermenu.c:530
 #, c-format
 msgid "No recently used resource found with URI `%s'"
 msgstr "`%s' URI에 최근에 사용한 리소스가 없습니다"
@@ -2788,8 +2779,8 @@ msgstr "_%d. %s"
 msgid "recent menu label|%d. %s"
 msgstr "%d. %s"
 
-#: gtk/gtkrecentmanager.c:1041 ../gtk/gtkrecentmanager.c:1187
-#: gtk/gtkrecentmanager.c:1197 ../gtk/gtkrecentmanager.c:1250
+#: gtk/gtkrecentmanager.c:1041 gtk/gtkrecentmanager.c:1187
+#: gtk/gtkrecentmanager.c:1197 gtk/gtkrecentmanager.c:1250
 #, c-format
 msgid "Unable to find an item with URI '%s'"
 msgstr "'%s' URI로 항목을 찾을 수 없습니다"
@@ -3188,12 +3179,12 @@ msgstr "%s의 일렬화 데이터를 해제하는 데 오류가 발생했습니�
 msgid "No deserialize function found for format %s"
 msgstr "%s 형식에 대해 일렬화 해제 기능이 없습니다"
 
-#: gtk/gtktextbufferserialize.c:796 ../gtk/gtktextbufferserialize.c:822
+#: gtk/gtktextbufferserialize.c:796 gtk/gtktextbufferserialize.c:822
 #, c-format
 msgid "Both \"id\" and \"name\" were found on the <%s> element"
 msgstr "<%s> 엘리먼트에 \"id\"와 \"name\"이 모두 있습니다"
 
-#: gtk/gtktextbufferserialize.c:806 ../gtk/gtktextbufferserialize.c:832
+#: gtk/gtktextbufferserialize.c:806 gtk/gtktextbufferserialize.c:832
 #, c-format
 msgid "The attribute \"%s\" was found twice on the <%s> element"
 msgstr "\"%s\" 속성이 <%s> 엘리먼트에 두 개 있습니다"
@@ -3213,7 +3204,7 @@ msgstr "<%s> 엘리먼트에 \"id\" 혹은 \"name\" 속성이 없습니다"
 msgid "Attribute \"%s\" repeated twice on the same <%s> element"
 msgstr "\"%s\" 속성이 같은 <%s> 엘리먼트에 두 번 나왔습니다"
 
-#: gtk/gtktextbufferserialize.c:961 ../gtk/gtktextbufferserialize.c:986
+#: gtk/gtktextbufferserialize.c:961 gtk/gtktextbufferserialize.c:986
 #, c-format
 msgid "Attribute \"%s\" is invalid on <%s> element in this context"
 msgstr "\"%s\" 속성은 이 경우에 <%s> 엘리먼트에 쓰는 게 잘못되었습니다"
@@ -3232,8 +3223,8 @@ msgstr "이름 없는 태그가 있고 태그를 새로 만들 수는 없습니�
 msgid "Tag \"%s\" does not exist in buffer and tags can not be created."
 msgstr "\"%s\" 태그가 버퍼에 없고 태그를 새로 만들 수는 없습니다."
 
-#: gtk/gtktextbufferserialize.c:1144 ../gtk/gtktextbufferserialize.c:1219
-#: gtk/gtktextbufferserialize.c:1320 ../gtk/gtktextbufferserialize.c:1394
+#: gtk/gtktextbufferserialize.c:1144 gtk/gtktextbufferserialize.c:1219
+#: gtk/gtktextbufferserialize.c:1320 gtk/gtktextbufferserialize.c:1394
 #, c-format
 msgid "Element <%s> is not allowed below <%s>"
 msgstr "<%s> 엘리먼트는 <%s> 아래에 쓸 수 없습니다"
@@ -3276,7 +3267,7 @@ msgstr "\"%s\" 태그의 우선 순위 \"%s\"이(가) 잘못되었습니다"
 msgid "Outermost element in text must be <text_view_markup> not <%s>"
 msgstr "가장 바깥에는 <text_view_markup>이 와야 하고 <%s>이(가) 되면 안 됩니다"
 
-#: gtk/gtktextbufferserialize.c:1358 ../gtk/gtktextbufferserialize.c:1374
+#: gtk/gtktextbufferserialize.c:1358 gtk/gtktextbufferserialize.c:1374
 #, c-format
 msgid "A <%s> element has already been specified"
 msgstr "<%s> 엘리먼트가 이미 지정되었습니다"
@@ -3854,7 +3845,7 @@ msgid "paper size|10x14"
 msgstr "10x14"
 
 #. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:187 ../gtk/paper_names_offsets.c:189
+#: gtk/paper_names_offsets.c:187 gtk/paper_names_offsets.c:189
 msgid "paper size|10x15"
 msgstr "10x15"
 
@@ -4213,96 +4204,106 @@ msgstr "ROC 16k"
 msgid "paper size|ROC 8k"
 msgstr "ROC 8k"
 
-#: gtk/updateiconcache.c:490 ../gtk/updateiconcache.c:550
+#: gtk/updateiconcache.c:492 gtk/updateiconcache.c:552
 #, c-format
 msgid "different idatas found for symlinked '%s' and '%s'\n"
 msgstr "심볼릭 링크가 걸린 '%s' 및 '%s'의 idata가 다릅니다\n"
 
-#: gtk/updateiconcache.c:1372
+#: gtk/updateiconcache.c:1374
 #, c-format
 msgid "Failed to write header\n"
 msgstr "헤더를 쓰는 데 실패\n"
 
-#: gtk/updateiconcache.c:1378
+#: gtk/updateiconcache.c:1380
 #, c-format
 msgid "Failed to write hash table\n"
 msgstr "해시 테이블을 쓰는 데 실패\n"
 
-#: gtk/updateiconcache.c:1384
+#: gtk/updateiconcache.c:1386
 #, c-format
 msgid "Failed to write folder index\n"
 msgstr "폴더 인덱스를 쓰는 데 실패\n"
 
-#: gtk/updateiconcache.c:1392
+#: gtk/updateiconcache.c:1394
 #, c-format
 msgid "Failed to rewrite header\n"
 msgstr "헤더를 다시 쓰는 데 실패\n"
 
-#: gtk/updateiconcache.c:1444
+#: gtk/updateiconcache.c:1454
+#, fuzzy, c-format
+msgid "Failed to open file %s : %s\n"
+msgstr "파일 '%s' 열기 실패 : %s"
+
+#: gtk/updateiconcache.c:1462
 #, c-format
 msgid "Failed to write cache file: %s\n"
 msgstr "캐시 파일을 쓰는 데 실패: %s\n"
 
-#: gtk/updateiconcache.c:1479
+#: gtk/updateiconcache.c:1499
 #, c-format
 msgid "The generated cache was invalid.\n"
 msgstr "만들어진 캐시가 잘못되었습니다.\n"
 
-#: gtk/updateiconcache.c:1493
+#: gtk/updateiconcache.c:1513
 #, c-format
 msgid "Could not rename %s to %s: %s, removing %s then.\n"
 msgstr "%s의 이름을 %s(으)로 바꿀 수 없습니다: %s, %s을(를) 지웁니다.\n"
 
-#: gtk/updateiconcache.c:1505
+#: gtk/updateiconcache.c:1525
 #, c-format
 msgid "Could not rename %s to %s: %s\n"
 msgstr "%s의 이름을 %s(으)로 바꿀 수 없습니다: %s\n"
 
-#: gtk/updateiconcache.c:1512
+#: gtk/updateiconcache.c:1532
 #, c-format
 msgid "Could not rename %s back to %s: %s.\n"
 msgstr "%s의 이름을 %s(으)로 되돌릴 수 없습니다: %s.\n"
 
-#: gtk/updateiconcache.c:1534
+#: gtk/updateiconcache.c:1558
 #, c-format
 msgid "Cache file created successfully.\n"
 msgstr "캐시 파일을 성공적으로 만들었습니다.\n"
 
-#: gtk/updateiconcache.c:1573
+#: gtk/updateiconcache.c:1597
 msgid "Overwrite an existing cache, even if up to date"
 msgstr "캐시가 최신이더라도 현재 캐시를 덮어 씁니다"
 
-#: gtk/updateiconcache.c:1574
+#: gtk/updateiconcache.c:1598
 msgid "Don't check for the existence of index.theme"
 msgstr "index.theme 파일이 있는 지 검사하지 않습니다"
 
-#: gtk/updateiconcache.c:1575
+#: gtk/updateiconcache.c:1599
 msgid "Don't include image data in the cache"
 msgstr "캐시에 그림 데이터를 포함하지 않습니다"
 
-#: gtk/updateiconcache.c:1576
+#: gtk/updateiconcache.c:1600
 msgid "Output a C header file"
 msgstr "C 헤더 파일을 출력합니다"
 
-#: gtk/updateiconcache.c:1577
+#: gtk/updateiconcache.c:1601
 msgid "Turn off verbose output"
 msgstr "자세히 출력하지 않습니다"
 
-#: gtk/updateiconcache.c:1578
+#: gtk/updateiconcache.c:1602
 msgid "Validate existing icon cache"
 msgstr "현재 아이콘 캐시 확인"
 
-#: gtk/updateiconcache.c:1641
+#: gtk/updateiconcache.c:1665
 #, c-format
 msgid "File not found: %s\n"
 msgstr "파일이 없습니다: %s\n"
 
-#: gtk/updateiconcache.c:1647
+#: gtk/updateiconcache.c:1671
 #, c-format
 msgid "Not a valid icon cache: %s\n"
 msgstr "올바른 아이콘 캐시가 아닙니다: %s\n"
 
-#: gtk/updateiconcache.c:1658
+#: gtk/updateiconcache.c:1684
+#, c-format
+msgid "No theme index file."
+msgstr ""
+
+#: gtk/updateiconcache.c:1688
 #, c-format
 msgid ""
 "No theme index file in '%s'.\n"

@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-properties.HEAD.gu\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-03-12 01:41-0400\n"
+"POT-Creation-Date: 2008-06-03 17:51-0400\n"
 "PO-Revision-Date: 2007-09-11 12:11+0530\n"
 "Last-Translator: Ankit Patel <ankit@redhat.com>\n"
 "Language-Team: Gujarati <fedora-trans-gu@redhat.com>\n"
@@ -3551,7 +3551,7 @@ msgstr "સુયોજનો"
 msgid "Printer settings"
 msgstr "પ્રિન્ટર સુયોજનો"
 
-#: gtk/gtkprintjob.c:143 gtk/gtkprintjob.c:144 gtk/gtkprintunixdialog.c:241
+#: gtk/gtkprintjob.c:143 gtk/gtkprintjob.c:144 gtk/gtkprintunixdialog.c:246
 msgid "Page Setup"
 msgstr "પાનાં સુયોજન"
 
@@ -3575,11 +3575,11 @@ msgstr "મૂળભૂત પાનાં સુયોજન"
 msgid "The GtkPageSetup used by default"
 msgstr "GtkPageSetup મૂળભૂત રીતે વપરાય છે"
 
-#: gtk/gtkprintoperation.c:896 gtk/gtkprintunixdialog.c:259
+#: gtk/gtkprintoperation.c:896 gtk/gtkprintunixdialog.c:264
 msgid "Print Settings"
 msgstr "છાપન સુયોજનો"
 
-#: gtk/gtkprintoperation.c:897 gtk/gtkprintunixdialog.c:260
+#: gtk/gtkprintoperation.c:897 gtk/gtkprintunixdialog.c:265
 msgid "The GtkPrintSettings used for initializing the dialog"
 msgstr "GtkPrintSettings એ સંવાદનો આરંભ કરવા માટે વપરાય છે"
 
@@ -3599,11 +3599,11 @@ msgstr "પાનાંઓની સંખ્યા"
 msgid "The number of pages in the document."
 msgstr "દસ્તાવેજમાં પાનાંઓની સંખ્યા."
 
-#: gtk/gtkprintoperation.c:962 gtk/gtkprintunixdialog.c:249
+#: gtk/gtkprintoperation.c:962 gtk/gtkprintunixdialog.c:254
 msgid "Current Page"
 msgstr "વર્તમાન પાનું"
 
-#: gtk/gtkprintoperation.c:963 gtk/gtkprintunixdialog.c:250
+#: gtk/gtkprintoperation.c:963 gtk/gtkprintunixdialog.c:255
 msgid "The current page in the document"
 msgstr "દસ્તાવેજમાં વર્તમાન પાનું"
 
@@ -3677,15 +3677,15 @@ msgstr "વૈવિધ્યપૂર્ણ ટેબ લેબલ"
 msgid "Label for the tab containing custom widgets."
 msgstr "વૈવિધ્યપૂર્ણ વિજેટોને સમાવતી ટેબ માટેનું લેબલ."
 
-#: gtk/gtkprintunixdialog.c:242
+#: gtk/gtkprintunixdialog.c:247
 msgid "The GtkPageSetup to use"
 msgstr "વાપરવા માટેનું GtkPageSetup"
 
-#: gtk/gtkprintunixdialog.c:267
+#: gtk/gtkprintunixdialog.c:272
 msgid "Selected Printer"
 msgstr "પસંદ કરેલ પ્રિન્ટર"
 
-#: gtk/gtkprintunixdialog.c:268
+#: gtk/gtkprintunixdialog.c:273
 msgid "The GtkPrinter which is selected"
 msgstr "GtkPrinter કે જે પસંદ થયેલ છે"
 

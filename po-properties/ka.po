@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ka\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-03-12 01:41-0400\n"
+"POT-Creation-Date: 2008-06-03 17:51-0400\n"
 "PO-Revision-Date: 2008-03-19 16:31+0100\n"
 "Last-Translator: Vladimer Sichinava ვლადიმერ სიჭინავა <vsichi@gnome.org>\n"
 "Language-Team: Georgian <http://mail.gnome.org/mailman/listinfo/gnome-ge-"
@@ -3564,7 +3564,7 @@ msgstr "პარამეტრები"
 msgid "Printer settings"
 msgstr "საბეჭდის პარამეტრები"
 
-#: gtk/gtkprintjob.c:143 gtk/gtkprintjob.c:144 gtk/gtkprintunixdialog.c:241
+#: gtk/gtkprintjob.c:143 gtk/gtkprintjob.c:144 gtk/gtkprintunixdialog.c:246
 msgid "Page Setup"
 msgstr "გვერდის გამართვა"
 
@@ -3586,11 +3586,11 @@ msgstr "ნაგულისხმები გვერდის პარა�
 msgid "The GtkPageSetup used by default"
 msgstr ""
 
-#: gtk/gtkprintoperation.c:896 gtk/gtkprintunixdialog.c:259
+#: gtk/gtkprintoperation.c:896 gtk/gtkprintunixdialog.c:264
 msgid "Print Settings"
 msgstr "ბეჭდვის პარამეტრები"
 
-#: gtk/gtkprintoperation.c:897 gtk/gtkprintunixdialog.c:260
+#: gtk/gtkprintoperation.c:897 gtk/gtkprintunixdialog.c:265
 msgid "The GtkPrintSettings used for initializing the dialog"
 msgstr ""
 
@@ -3610,11 +3610,11 @@ msgstr "გვერდების რაოდენობა"
 msgid "The number of pages in the document."
 msgstr "დოკუმენტში გვერდების რაოდენობა."
 
-#: gtk/gtkprintoperation.c:962 gtk/gtkprintunixdialog.c:249
+#: gtk/gtkprintoperation.c:962 gtk/gtkprintunixdialog.c:254
 msgid "Current Page"
 msgstr "მიმდინარე გვერდი"
 
-#: gtk/gtkprintoperation.c:963 gtk/gtkprintunixdialog.c:250
+#: gtk/gtkprintoperation.c:963 gtk/gtkprintunixdialog.c:255
 msgid "The current page in the document"
 msgstr "დოკუმენტის მიმდინარე გვერდი"
 
@@ -3686,15 +3686,15 @@ msgstr "ჩასართის ჩასწორებადი წარწ�
 msgid "Label for the tab containing custom widgets."
 msgstr ""
 
-#: gtk/gtkprintunixdialog.c:242
+#: gtk/gtkprintunixdialog.c:247
 msgid "The GtkPageSetup to use"
 msgstr ""
 
-#: gtk/gtkprintunixdialog.c:267
+#: gtk/gtkprintunixdialog.c:272
 msgid "Selected Printer"
 msgstr "ამორჩეული საბეჭდი"
 
-#: gtk/gtkprintunixdialog.c:268
+#: gtk/gtkprintunixdialog.c:273
 msgid "The GtkPrinter which is selected"
 msgstr "ამორჩეული GtkPrinter"
 
@@ -6521,19 +6521,19 @@ msgstr "შეტანის მეთოდის სტატუსის ს
 msgid "How to draw the input method statusbar"
 msgstr "შეტანის მეთოდის სტატუსის გრაფიკული გამოსახულება"
 
-msgid ""
-"A number between 0.0 and 1.0 specifying the horizontal alignment of the text "
-"in the progress widget"
-msgstr ""
-"მნიშვნელობა 0.0 და 1.0 შორის, რომელიც მიმდინარეობის მაჩვენებლის მართვის "
-"ელემენტში განივ განთავსებას მიუთითებს"
+#~ msgid ""
+#~ "A number between 0.0 and 1.0 specifying the horizontal alignment of the "
+#~ "text in the progress widget"
+#~ msgstr ""
+#~ "მნიშვნელობა 0.0 და 1.0 შორის, რომელიც მიმდინარეობის მაჩვენებლის მართვის "
+#~ "ელემენტში განივ განთავსებას მიუთითებს"
 
-msgid ""
-"A number between 0.0 and 1.0 specifying the vertical alignment of the text "
-"in the progress widget"
-msgstr ""
-"მნიშვნელობა 0.0 და 1.0 შორის, რომელიც მიმდინარეობის მაჩვენებლის მართვის "
-"ელემენტში ვერტიკალურ განთავსებას მიუთითებს"
+#~ msgid ""
+#~ "A number between 0.0 and 1.0 specifying the vertical alignment of the "
+#~ "text in the progress widget"
+#~ msgstr ""
+#~ "მნიშვნელობა 0.0 და 1.0 შორის, რომელიც მიმდინარეობის მაჩვენებლის მართვის "
+#~ "ელემენტში ვერტიკალურ განთავსებას მიუთითებს"
 
 #~ msgid "Details Width"
 #~ msgstr "დეტალების სიგანე"
