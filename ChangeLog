@@ -1,3 +1,15 @@
+2008-06-02  Matthias Clasen  <mclasen@redhat.com>
+
+	* NEWS: Updates
+
+2008-06-02  Matthias Clasen  <mclasen@redhat.com>
+
+	Bug 536092 – GtkEntryCompletion's popup window should set type hint
+
+	* gtk/gtkentrycompletion.c (gtk_entry_completion_init): Set
+	a type hint on the popup window to help compiz.
+	Patch by Vaclav Slavik.
+
 2008-06-02  Matthias Clasen <mclasen@redhat.com> 
 
 	gtk/gtkfilechooserdefault.c: Revert the fix for #532262, since
