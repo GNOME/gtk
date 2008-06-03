@@ -1,3 +1,10 @@
+2008-06-03  Federico Mena Quintero  <federico@novell.com>
+
+	* gtk/gtkfilechooserentry.c (install_completion_feedback_timer):
+	If the user presses Tab while the completion feedback window is
+	active, then we'll assert.  Remove the assertion and just re-set
+	the timer.  Fixes https://bugzilla.novell.com/show_bug.cgi?id=355225
+
 2008-06-03  Colin Walters  <walters@redhat.com>
 	
 	Bug 535303 – add _get_implementation to GtkStatusIcon

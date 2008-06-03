@@ -939,7 +939,8 @@ completion_feedback_timeout_cb (gpointer data)
 static void
 install_completion_feedback_timer (GtkFileChooserEntry *chooser_entry)
 {
-  g_assert (chooser_entry->completion_feedback_timeout_id == 0);
+  if (chooser_entry->completion_feedback_timeout_id != 0)
+    g_source_remove (chooser_entry->completion_feedback_timeout_id);
 
   chooser_entry->completion_feedback_timeout_id = gdk_threads_add_timeout (COMPLETION_FEEDBACK_TIMEOUT_MS,
 									   completion_feedback_timeout_cb,
