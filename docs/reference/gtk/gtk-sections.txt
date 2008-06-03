@@ -3402,6 +3402,7 @@ gtk_status_icon_get_blinking
 gtk_status_icon_is_embedded
 gtk_status_icon_position_menu
 gtk_status_icon_get_geometry
+gtk_status_icon_get_x11_window_id
 
 <SUBSECTION Standard>
 GTK_TYPE_STATUS_ICON

@@ -41,6 +41,10 @@
 #include "gtkprivate.h"
 #include "gtkwidget.h"
 
+#ifdef GDK_WINDOWING_X11
+#include "gdk/x11/gdkx.h"
+#endif
+
 #ifdef GDK_WINDOWING_WIN32
 #include "gtkicontheme.h"
 #include "gtklabel.h"
@@ -2095,6 +2099,36 @@ gtk_status_icon_get_geometry (GtkStatusIcon    *status_icon,
 #endif /* GDK_WINDOWING_X11 */
 }
 
+/**
+ * gtk_status_icon_get_x11_window_id:
+ * @status_icon: a #GtkStatusIcon
+ *
+ * This function is only useful on the X11/freedesktop.org platform.
+ * It returns a window ID for the widget in the underlying
+ * status icon implementation.  This is useful for the Galago 
+ * notification service, which can send a window ID in the protocol 
+ * in order for the server to position notification windows 
+ * pointing to a status icon reliably.
+ *
+ * This function is not intended for other use cases which are
+ * more likely to be met by one of the non-X11 specific methods, such
+ * as gtk_status_icon_position_menu().
+ *
+ * Return value: An 32 bit unsigned integer identifier for the 
+ * underlying X11 Window
+ *
+ * Since: 2.14
+ */
+guint32
+gtk_status_icon_get_x11_window_id (GtkStatusIcon *status_icon)
+{
+#ifdef GDK_WINDOWING_X11
+  gtk_widget_realize (GTK_WIDGET (status_icon->priv->tray_icon));
+  return GDK_WINDOW_XID (GTK_WIDGET (status_icon->priv->tray_icon)->window);
+#else
+  return 0;
+#endif
+}
 
 #define __GTK_STATUS_ICON_C__
 #include "gtkaliasdef.c"

@@ -122,6 +122,8 @@ gboolean              gtk_status_icon_get_geometry       (GtkStatusIcon      *st
 							  GdkRectangle       *area,
 							  GtkOrientation     *orientation);
 
+guint32               gtk_status_icon_get_x11_window_id  (GtkStatusIcon      *status_icon);
+
 G_END_DECLS
 
 #endif /* __GTK_STATUS_ICON_H__ */

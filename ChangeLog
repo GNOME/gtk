@@ -1,3 +1,13 @@
+2008-06-03  Colin Walters  <walters@redhat.com>
+	
+	Bug 535303 – add _get_implementation to GtkStatusIcon
+
+	* gtk/gtkstatusicon.c (gtk_status_icon_get_x11_window_id): New
+	function to retrieve internal X11 window ID, useful for libnotify.
+	* gtk/gtkstatusicon.h: Prototype it.
+	* docs/reference/gtk/gtk-sections.txt: Add to docs.
+	* gtk/gtk.symbols: Export it.
+
 2008-06-03  Tor Lillqvist  <tml@novell.com>
 
 	* gtk/updateiconcache.c (build_cache): Use g_open().
