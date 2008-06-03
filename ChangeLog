@@ -1,4 +1,9 @@
 2008-06-02  Matthias Clasen  <mclasen@redhat.com>
+	
+	* gtk/gtkprintunixdialog.c: Include gtkmessagedialog.h for
+	the overwrite confirmation dialog.
+
+2008-06-02  Matthias Clasen  <mclasen@redhat.com>
 
 	* NEWS: Updates
 

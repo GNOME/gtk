@@ -36,6 +36,7 @@
 #include "gtkiconfactory.h"
 #include "gtkimage.h"
 #include "gtktreeselection.h"
+#include "gtkmessagedialog.h"
 #include "gtknotebook.h"
 #include "gtkscrolledwindow.h"
 #include "gtkcombobox.h"
