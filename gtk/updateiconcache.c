@@ -1449,7 +1449,7 @@ build_cache (const gchar *path)
 
   tmp_cache_path = g_build_filename (path, "."CACHE_NAME, NULL);
 
-  if ((fd = open (tmp_cache_path, O_WRONLY | O_CREAT | O_EXCL | O_TRUNC | _O_BINARY, mode)) == -1)
+  if ((fd = g_open (tmp_cache_path, O_WRONLY | O_CREAT | O_EXCL | O_TRUNC | _O_BINARY, mode)) == -1)
     {
       g_printerr (_("Failed to open file %s : %s\n"), tmp_cache_path, g_strerror (errno));
       exit (1);

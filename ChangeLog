@@ -1,3 +1,7 @@
+2008-06-03  Tor Lillqvist  <tml@novell.com>
+
+	* gtk/updateiconcache.c (build_cache): Use g_open().
+
 2008-06-03  Michael Natterer  <mitch@imendio.com>
 
 	* gtk/gtkclist.h
