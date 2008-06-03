@@ -1,3 +1,13 @@
+2008-06-02  Claudio Saavedra  <csaavedra@igalia.com>
+
+	Merge from trunk:
+
+        Bug 535862 – gtk_action_create_icon can't create icons from the
+        icon themes
+
+        * gtk/gtkaction.c: (gtk_action_create_icon): Look for the icon in
+        the default factories as it's supposed.
+
 2008-06-02  Matthias Clasen <mclasen@redhat.com> 
 
 	Merge from trunk:

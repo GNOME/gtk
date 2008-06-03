@@ -921,7 +921,8 @@ gtk_action_create_icon (GtkAction *action, GtkIconSize icon_size)
 {
   g_return_val_if_fail (GTK_IS_ACTION (action), NULL);
 
-  if (action->private_data->stock_id)
+  if (action->private_data->stock_id &&
+      gtk_icon_factory_lookup_default (action->private_data->stock_id))
     return gtk_image_new_from_stock (action->private_data->stock_id, icon_size);
   else if (action->private_data->icon_name)
     return gtk_image_new_from_icon_name (action->private_data->icon_name, icon_size);
