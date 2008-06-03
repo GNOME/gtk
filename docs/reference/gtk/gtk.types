@@ -111,6 +111,7 @@ gtk_printer_get_type
 gtk_print_context_get_type
 gtk_print_job_get_type
 gtk_print_operation_get_type
+gtk_print_operation_preview_get_type
 gtk_print_settings_get_type
 gtk_print_unix_dialog_get_type
 gtk_progress_bar_get_type
