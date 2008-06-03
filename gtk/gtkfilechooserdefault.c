@@ -10298,15 +10298,12 @@ shortcuts_activate_volume_mount_cb (GtkFileSystemHandle *handle,
 
   if (error)
     {
-      if (!g_error_matches (error, G_IO_ERROR, G_IO_ERROR_FAILED_HANDLED))
-        {
-          char *msg;
+      char *msg;
 
-          msg = g_strdup_printf (_("Could not mount %s"),
-                                 gtk_file_system_volume_get_display_name (impl->file_system, volume));
-          error_message (impl, msg, error->message);
-          g_free (msg);
-        }
+      msg = g_strdup_printf (_("Could not mount %s"),
+                             gtk_file_system_volume_get_display_name (impl->file_system, volume));
+      error_message (impl, msg, error->message);
+      g_free (msg);
 
       goto out;
     }

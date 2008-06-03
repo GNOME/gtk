@@ -1,3 +1,8 @@
+2008-06-02  Matthias Clasen <mclasen@redhat.com> 
+
+	gtk/gtkfilechooserdefault.c: Revert the fix for #532262, since
+	we don't depend on GIO in the 2.12 branch.
+
 2008-06-02  Claudio Saavedra  <csaavedra@igalia.com>
 
 	Merge from trunk:
