@@ -1,4 +1,3 @@
-
 /* GTK - The GIMP Toolkit
  * gtkprinteroptionset.h: printer option set
  * Copyright (C) 2006, Red Hat, Inc.
@@ -23,7 +22,7 @@
 #define __GTK_PRINTER_OPTION_SET_H__
 
 /* This is a "semi-private" header; it is meant only for
- * alternate GtkPrintDialog backend modules; no stability guarantees 
+ * alternate GtkPrintDialog backend modules; no stability guarantees
  * are made at this point
  */
 #ifndef GTK_PRINT_BACKEND_ENABLE_UNSUPPORTED

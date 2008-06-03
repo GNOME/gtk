@@ -1,3 +1,7 @@
+2008-06-03  Michael Natterer  <mitch@imendio.com>
+
+	* gtk/gtkprinteroptionset.h: remove newline at beginning of file.
+
 2008-06-02  Matthias Clasen  <mclasen@redhat.com>
 	
 	Bug 536092 – GtkEntryCompletion's popup window should set type hint
