@@ -153,7 +153,7 @@ _gdk_x11_window_get_toplevel (GdkWindow *window)
   
   g_return_val_if_fail (GDK_IS_WINDOW (window), NULL);
 
-  if (!WINDOW_IS_TOPLEVEL (window));
+  if (GDK_WINDOW_TYPE (window) == GDK_WINDOW_CHILD)
     return NULL;
 
   private = (GdkWindowObject *)window;

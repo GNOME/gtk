@@ -1,3 +1,7 @@
+2008-06-03  Matthias Clasen  <mclasen@redhat.com>
+
+	Revert the fix for 526635 - it causes segfaults.
+
 2008-06-02  Matthias Clasen  <mclasen@redhat.com>
 	
 	* gtk/gtkprintunixdialog.c: Include gtkmessagedialog.h for
