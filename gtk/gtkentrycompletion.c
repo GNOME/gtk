@@ -505,6 +505,7 @@ gtk_entry_completion_init (GtkEntryCompletion *completion)
   /* pack it all */
   priv->popup_window = gtk_window_new (GTK_WINDOW_POPUP);
   gtk_window_set_resizable (GTK_WINDOW (priv->popup_window), FALSE);
+  gtk_window_set_type_hint(GTK_WINDOW(priv->popup_window), GDK_WINDOW_TYPE_HINT_COMBO);
   g_signal_connect (priv->popup_window, "key_press_event",
                     G_CALLBACK (gtk_entry_completion_popup_key_event),
                     completion);

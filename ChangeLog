@@ -1,3 +1,11 @@
+2008-06-02  Matthias Clasen  <mclasen@redhat.com>
+	
+	Bug 536092 – GtkEntryCompletion's popup window should set type hint
+
+	* gtk/gtkentrycompletion.c (gtk_entry_completion_init): Set
+	a type hint on the popup window to help compiz.
+	Patch by Vaclav Slavik.
+
 2008-06-02  Claudio Saavedra  <csaavedra@igalia.com>
 
 	Bug 535862 – gtk_action_create_icon can't create icons from the
