@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.13.x\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-05-30 00:22-0400\n"
+"POT-Creation-Date: 2008-06-03 18:52-0400\n"
 "PO-Revision-Date: 2008-05-06 17:51+0200\n"
 "Last-Translator: Kjartan Maraas <kmaraas@gnome.org>\n"
 "Language-Team: Norwegian Bokmål <i18n-nb@lister.ping.uio.no>\n"
@@ -1928,23 +1928,23 @@ msgstr "%H.%M"
 msgid "Yesterday at %H:%M"
 msgstr "I går kl. %H.%M"
 
-#: gtk/gtkfilechooserentry.c:650 gtk/gtkfilechooserentry.c:1095
+#: gtk/gtkfilechooserentry.c:650 gtk/gtkfilechooserentry.c:1096
 msgid "Invalid path"
 msgstr "Ugyldig sti"
 
-#: gtk/gtkfilechooserentry.c:1057
+#: gtk/gtkfilechooserentry.c:1058
 msgid "No match"
 msgstr "Ingen treff"
 
-#: gtk/gtkfilechooserentry.c:1065
+#: gtk/gtkfilechooserentry.c:1066
 msgid "Sole completion"
 msgstr "Eneste fullføring"
 
-#: gtk/gtkfilechooserentry.c:1077
+#: gtk/gtkfilechooserentry.c:1078
 msgid "Complete, but not unique"
 msgstr "Fullført men ikke unik"
 
-#: gtk/gtkfilechooserentry.c:1110
+#: gtk/gtkfilechooserentry.c:1111
 msgid "Completing..."
 msgstr "Fullfører..."
 
@@ -2977,8 +2977,8 @@ msgstr "_%d. %s"
 msgid "recent menu label|%d. %s"
 msgstr "%d. %s"
 
-#: gtk/gtkrecentmanager.c:1008 gtk/gtkrecentmanager.c:1154
-#: gtk/gtkrecentmanager.c:1164 gtk/gtkrecentmanager.c:1217
+#: gtk/gtkrecentmanager.c:1017 gtk/gtkrecentmanager.c:1163
+#: gtk/gtkrecentmanager.c:1173 gtk/gtkrecentmanager.c:1226
 #, c-format
 msgid "Unable to find an item with URI '%s'"
 msgstr "Kan ikke finne en oppføring med URI «%s»"

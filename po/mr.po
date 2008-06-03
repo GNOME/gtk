@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+.gtk-2-12.mr\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-05-30 00:22-0400\n"
+"POT-Creation-Date: 2008-06-03 18:52-0400\n"
 "PO-Revision-Date: 2008-01-07 18:14+0530\n"
 "Last-Translator: sandeep shedmake <sandeep.shedmake@gmail.com>\n"
 "Language-Team: marathi\n"
@@ -2161,26 +2161,26 @@ msgid "Yesterday at %H:%M"
 msgstr "काल %H:%M यावेळी"
 
 # gtk/gtkfilesel.c:2986
-#: gtk/gtkfilechooserentry.c:650 gtk/gtkfilechooserentry.c:1095
+#: gtk/gtkfilechooserentry.c:650 gtk/gtkfilechooserentry.c:1096
 #, fuzzy
 msgid "Invalid path"
 msgstr "अवैध URI"
 
-#: gtk/gtkfilechooserentry.c:1057
+#: gtk/gtkfilechooserentry.c:1058
 msgid "No match"
 msgstr ""
 
 # gtk/gtkfontsel.c:1253
-#: gtk/gtkfilechooserentry.c:1065
+#: gtk/gtkfilechooserentry.c:1066
 #, fuzzy
 msgid "Sole completion"
 msgstr "फोन्ट निवडणे"
 
-#: gtk/gtkfilechooserentry.c:1077
+#: gtk/gtkfilechooserentry.c:1078
 msgid "Complete, but not unique"
 msgstr ""
 
-#: gtk/gtkfilechooserentry.c:1110
+#: gtk/gtkfilechooserentry.c:1111
 msgid "Completing..."
 msgstr ""
 
@@ -3344,8 +3344,8 @@ msgid "recent menu label|%d. %s"
 msgstr "अलीकडील मेन्यू लेबल|%d. %s"
 
 # gtk/gtkrc.c:2270
-#: gtk/gtkrecentmanager.c:1008 gtk/gtkrecentmanager.c:1154
-#: gtk/gtkrecentmanager.c:1164 gtk/gtkrecentmanager.c:1217
+#: gtk/gtkrecentmanager.c:1017 gtk/gtkrecentmanager.c:1163
+#: gtk/gtkrecentmanager.c:1173 gtk/gtkrecentmanager.c:1226
 #, c-format
 msgid "Unable to find an item with URI '%s'"
 msgstr "URI '%s' साठी बाब शोधण्यास असमर्थ"

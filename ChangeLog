@@ -1,3 +1,7 @@
+2008-06-03  Matthias Clasen  <mclasen@redhat.com>
+
+	* === Released 2.13.2 ===
+
 2008-06-03  Federico Mena Quintero  <federico@novell.com>
 
 	* gtk/gtkfilechooserentry.c (install_completion_feedback_timer):

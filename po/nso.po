@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.8-branch\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-05-30 00:22-0400\n"
+"POT-Creation-Date: 2008-06-03 18:52-0400\n"
 "PO-Revision-Date: 2004-11-30 16:02+0200\n"
 "Last-Translator: Zuza Software Foundation <info@translate.org.za>\n"
 "Language-Team: Northern Sotho <translate-discuss-nso@lists.sourceforge.net>\n"
@@ -1991,25 +1991,25 @@ msgstr ""
 msgid "Yesterday at %H:%M"
 msgstr "Maabane"
 
-#: gtk/gtkfilechooserentry.c:650 gtk/gtkfilechooserentry.c:1095
+#: gtk/gtkfilechooserentry.c:650 gtk/gtkfilechooserentry.c:1096
 #, fuzzy
 msgid "Invalid path"
 msgstr "UTF-8 yeo e sego ya kgonthe"
 
-#: gtk/gtkfilechooserentry.c:1057
+#: gtk/gtkfilechooserentry.c:1058
 msgid "No match"
 msgstr ""
 
-#: gtk/gtkfilechooserentry.c:1065
+#: gtk/gtkfilechooserentry.c:1066
 #, fuzzy
 msgid "Sole completion"
 msgstr "Kgetho ya Mmala"
 
-#: gtk/gtkfilechooserentry.c:1077
+#: gtk/gtkfilechooserentry.c:1078
 msgid "Complete, but not unique"
 msgstr ""
 
-#: gtk/gtkfilechooserentry.c:1110
+#: gtk/gtkfilechooserentry.c:1111
 msgid "Completing..."
 msgstr ""
 
@@ -3095,8 +3095,8 @@ msgstr ""
 msgid "recent menu label|%d. %s"
 msgstr ""
 
-#: gtk/gtkrecentmanager.c:1008 gtk/gtkrecentmanager.c:1154
-#: gtk/gtkrecentmanager.c:1164 gtk/gtkrecentmanager.c:1217
+#: gtk/gtkrecentmanager.c:1017 gtk/gtkrecentmanager.c:1163
+#: gtk/gtkrecentmanager.c:1173 gtk/gtkrecentmanager.c:1226
 #, fuzzy, c-format
 msgid "Unable to find an item with URI '%s'"
 msgstr "Ga e kgone go hwetša go akaretša faele: \"%s\""

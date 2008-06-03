@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-properties\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-05-30 00:22-0400\n"
+"POT-Creation-Date: 2008-06-03 18:52-0400\n"
 "PO-Revision-Date: 2007-08-07 03:17+0300\n"
 "Last-Translator: Baris Cicek <baris@teamforce.name.tr>\n"
 "Language-Team: Turkish <gnome-turk@gnome.org>\n"
@@ -107,7 +107,7 @@ msgstr "GDK için öntanımlı görüntü"
 
 # gtk/gtkinputdialog.c:243
 #: gdk/gdkpango.c:490 gtk/gtkinvisible.c:86 gtk/gtkmountoperation.c:176
-#: gtk/gtkstatusicon.c:231 gtk/gtkwindow.c:600
+#: gtk/gtkstatusicon.c:235 gtk/gtkwindow.c:600
 msgid "Screen"
 msgstr "Ekran"
 
@@ -325,13 +325,13 @@ msgstr "Bu eylemi belirten parçalar için gösterilecek olan depo simgesi."
 
 # gtk/gtkfontsel.c:185
 #: gtk/gtkaction.c:258 gtk/gtkcellrendererpixbuf.c:172 gtk/gtkimage.c:230
-#: gtk/gtkprinter.c:168 gtk/gtkstatusicon.c:204 gtk/gtkwindow.c:592
+#: gtk/gtkprinter.c:168 gtk/gtkstatusicon.c:208 gtk/gtkwindow.c:592
 msgid "Icon Name"
 msgstr "Simge İsmi"
 
 # gtk/gtkwidget.c:393
 #: gtk/gtkaction.c:259 gtk/gtkcellrendererpixbuf.c:173 gtk/gtkimage.c:231
-#: gtk/gtkstatusicon.c:205
+#: gtk/gtkstatusicon.c:209
 msgid "The name of the icon from the icon theme"
 msgstr "Simge temasından simgenin ismi"
 
@@ -399,7 +399,7 @@ msgid "Whether the action is enabled."
 msgstr "Eylemin etkin olup olmaması."
 
 # gtk/gtktreeview.c:481 gtk/gtktreeviewcolumn.c:171 gtk/gtkwidget.c:442
-#: gtk/gtkaction.c:320 gtk/gtkactiongroup.c:184 gtk/gtkstatusicon.c:247
+#: gtk/gtkaction.c:320 gtk/gtkactiongroup.c:184 gtk/gtkstatusicon.c:251
 #: gtk/gtktreeviewcolumn.c:191 gtk/gtkwidget.c:513
 msgid "Visible"
 msgstr "Görünür"
@@ -1351,7 +1351,7 @@ msgstr "Pixbuf Genişletici Kapalı"
 msgid "Pixbuf for closed expander"
 msgstr "Kapalı genişletici için pixbuf"
 
-#: gtk/gtkcellrendererpixbuf.c:136 gtk/gtkimage.c:172 gtk/gtkstatusicon.c:196
+#: gtk/gtkcellrendererpixbuf.c:136 gtk/gtkimage.c:172 gtk/gtkstatusicon.c:200
 msgid "Stock ID"
 msgstr "Depo Kimliği"
 
@@ -1361,7 +1361,7 @@ msgstr "Taranacak depo simgesinin depo numarası"
 
 # gtk/gtkfontsel.c:310
 #: gtk/gtkcellrendererpixbuf.c:144 gtk/gtkrecentmanager.c:250
-#: gtk/gtkstatusicon.c:221
+#: gtk/gtkstatusicon.c:225
 msgid "Size"
 msgstr "Boyut"
 
@@ -1442,7 +1442,7 @@ msgstr "Düşey hizalama; 0'dan (üst) 1'e (alt) kadar."
 
 # gtk/gtkprogressbar.c:139 gtk/gtktoolbar.c:223
 #: gtk/gtkcellrendererprogress.c:221 gtk/gtkiconview.c:731
-#: gtk/gtkprogressbar.c:130 gtk/gtkstatusicon.c:279 gtk/gtktoolbar.c:494
+#: gtk/gtkprogressbar.c:130 gtk/gtkstatusicon.c:283 gtk/gtktoolbar.c:494
 #: gtk/gtktrayicon-x11.c:96
 msgid "Orientation"
 msgstr "Yön"
@@ -2209,7 +2209,7 @@ msgstr "Çoklu kutunun alt çevresinde çerçeve çizmesi"
 msgid "Whether the combo box grabs focus when it is clicked with the mouse"
 msgstr "Çoklu kutunun fare ile tıklandığında odağı yakalaması"
 
-#: gtk/gtkcombobox.c:803 gtk/gtkmenu.c:490
+#: gtk/gtkcombobox.c:803 gtk/gtkmenu.c:491
 msgid "Tearoff Title"
 msgstr "Ayıraç Başlığı"
 
@@ -2811,7 +2811,7 @@ msgstr "Düğme parçasının istenen genişliği, karakter olarak."
 
 # gtk/gtkfilesel.c:502
 #: gtk/gtkfilesel.c:525 gtk/gtkimage.c:163 gtk/gtkrecentmanager.c:219
-#: gtk/gtkstatusicon.c:188
+#: gtk/gtkstatusicon.c:192
 msgid "Filename"
 msgstr "Dosya adı"
 
@@ -3154,11 +3154,11 @@ msgid "Opacity of the selection box"
 msgstr "Seçim kutusunun matlığı"
 
 # gtk/gtkcellrendererpixbuf.c:102 gtk/gtkcellrenderertextpixbuf.c:125
-#: gtk/gtkimage.c:131 gtk/gtkstatusicon.c:180
+#: gtk/gtkimage.c:131 gtk/gtkstatusicon.c:184
 msgid "Pixbuf"
 msgstr "Pixbuf"
 
-#: gtk/gtkimage.c:132 gtk/gtkstatusicon.c:181
+#: gtk/gtkimage.c:132 gtk/gtkstatusicon.c:185
 msgid "A GdkPixbuf to display"
 msgstr "Gösterilecek GdkPixbuf"
 
@@ -3189,11 +3189,11 @@ msgid "Mask bitmap to use with GdkImage or GdkPixmap"
 msgstr "GdkImage ya da GdkPixmap ile kullanılacak maske biteşlemi"
 
 # gdk-pixbuf/io-tiff.c:411
-#: gtk/gtkimage.c:164 gtk/gtkstatusicon.c:189
+#: gtk/gtkimage.c:164 gtk/gtkstatusicon.c:193
 msgid "Filename to load and display"
 msgstr "Yüklenecek ve gösterilecek dosya"
 
-#: gtk/gtkimage.c:173 gtk/gtkstatusicon.c:197
+#: gtk/gtkimage.c:173 gtk/gtkstatusicon.c:201
 msgid "Stock ID for a stock image to display"
 msgstr "Gösterilecek bir depo resmi için depo kimliği"
 
@@ -3245,11 +3245,11 @@ msgid "The GIcon being displayed"
 msgstr "Gösterilecek simge kümesi"
 
 # gtk/gtkcurve.c:120
-#: gtk/gtkimage.c:255 gtk/gtkstatusicon.c:212
+#: gtk/gtkimage.c:255 gtk/gtkstatusicon.c:216
 msgid "Storage type"
 msgstr "Saklama türü"
 
-#: gtk/gtkimage.c:256 gtk/gtkstatusicon.c:213
+#: gtk/gtkimage.c:256 gtk/gtkstatusicon.c:217
 msgid "The representation being used for image data"
 msgstr "Resim verisi için kullanılan sunum"
 
@@ -3428,131 +3428,131 @@ msgstr "Düzenin genişliği"
 msgid "The height of the layout"
 msgstr "Düzenin yüksekliği"
 
-#: gtk/gtkmenu.c:491
+#: gtk/gtkmenu.c:492
 msgid ""
 "A title that may be displayed by the window manager when this menu is torn-"
 "off"
 msgstr ""
 "Bu menü ayrıldığında pencere yöneticisi tarafından gösterilebilecek başlık"
 
-#: gtk/gtkmenu.c:505
+#: gtk/gtkmenu.c:506
 msgid "Tearoff State"
 msgstr "Ayıraç Durumu"
 
-#: gtk/gtkmenu.c:506
+#: gtk/gtkmenu.c:507
 msgid "A boolean that indicates whether the menu is torn-off"
 msgstr "Menünün ayrı olup olmadığını belirten mantıksal değer"
 
 # gtk/gtkmenubar.c:162 gtk/gtktoolbar.c:250
-#: gtk/gtkmenu.c:512
+#: gtk/gtkmenu.c:513
 msgid "Vertical Padding"
 msgstr "Dikey Doldurma"
 
 # gtk/gtkmisc.c:128
-#: gtk/gtkmenu.c:513
+#: gtk/gtkmenu.c:514
 msgid "Extra space at the top and bottom of the menu"
 msgstr "Menünü altına ve üstüne eklenecek boşluk"
 
 # gtk/gtkalignment.c:102
-#: gtk/gtkmenu.c:521
+#: gtk/gtkmenu.c:522
 msgid "Horizontal Padding"
 msgstr "Yatay Doldurma"
 
 # gtk/gtkmisc.c:128
-#: gtk/gtkmenu.c:522
+#: gtk/gtkmenu.c:523
 msgid "Extra space at the left and right edges of the menu"
 msgstr "Menünü sağına ve soluna eklenecek boşluk"
 
 # gtk/gtkalignment.c:130
-#: gtk/gtkmenu.c:530
+#: gtk/gtkmenu.c:531
 msgid "Vertical Offset"
 msgstr "Düşey Ofset"
 
-#: gtk/gtkmenu.c:531
+#: gtk/gtkmenu.c:532
 msgid ""
 "When the menu is a submenu, position it this number of pixels offset "
 "vertically"
 msgstr "Menü alt menü olduğunda, bu sayıdaki düşey ofsette onu konumlandır"
 
 # gtk/gtkalignment.c:121
-#: gtk/gtkmenu.c:539
+#: gtk/gtkmenu.c:540
 msgid "Horizontal Offset"
 msgstr "Yatay Ofset"
 
-#: gtk/gtkmenu.c:540
+#: gtk/gtkmenu.c:541
 msgid ""
 "When the menu is a submenu, position it this number of pixels offset "
 "horizontally"
 msgstr "Menü alt menü olduğunda, bu sayıdaki yatay ofsette onu konumlandır"
 
 # gtk/gtknotebook.c:375
-#: gtk/gtkmenu.c:548
+#: gtk/gtkmenu.c:549
 msgid "Double Arrows"
 msgstr "Çift Ok"
 
-#: gtk/gtkmenu.c:549
+#: gtk/gtkmenu.c:550
 msgid "When scrolling, always show both arrows."
 msgstr "Kaydırılırken, her zaman iki oku da göster."
 
-#: gtk/gtkmenu.c:557
+#: gtk/gtkmenu.c:558
 msgid "Left Attach"
 msgstr "Sol Ek"
 
-#: gtk/gtkmenu.c:558 gtk/gtktable.c:174
+#: gtk/gtkmenu.c:559 gtk/gtktable.c:174
 msgid "The column number to attach the left side of the child to"
 msgstr "Altın sol tarafına eklenecek sütun sayısı"
 
-#: gtk/gtkmenu.c:565
+#: gtk/gtkmenu.c:566
 msgid "Right Attach"
 msgstr "Sağ Ek"
 
-#: gtk/gtkmenu.c:566
+#: gtk/gtkmenu.c:567
 msgid "The column number to attach the right side of the child to"
 msgstr "Altın sağ tarafına eklenecek sütun sayısı"
 
-#: gtk/gtkmenu.c:573
+#: gtk/gtkmenu.c:574
 msgid "Top Attach"
 msgstr "Üst Ek"
 
-#: gtk/gtkmenu.c:574
+#: gtk/gtkmenu.c:575
 msgid "The row number to attach the top of the child to"
 msgstr "Altın üstüne eklenecek satır sayısı"
 
-#: gtk/gtkmenu.c:581
+#: gtk/gtkmenu.c:582
 msgid "Bottom Attach"
 msgstr "Alt Ek"
 
-#: gtk/gtkmenu.c:582 gtk/gtktable.c:195
+#: gtk/gtkmenu.c:583 gtk/gtktable.c:195
 msgid "The row number to attach the bottom of the child to"
 msgstr "Altın, alt tarafına eklenecek satır sayısı"
 
 # gtk/gtkmenubar.c:147
-#: gtk/gtkmenu.c:669
+#: gtk/gtkmenu.c:670
 msgid "Can change accelerators"
 msgstr "Hızlandırıcılar değiştirilebilir"
 
-#: gtk/gtkmenu.c:670
+#: gtk/gtkmenu.c:671
 msgid ""
 "Whether menu accelerators can be changed by pressing a key over the menu item"
 msgstr ""
 "Menü hızlandırıcıları menü öğesi için belirtilen bir tuşla değiştirilebilsin"
 
-#: gtk/gtkmenu.c:675
+#: gtk/gtkmenu.c:676
 msgid "Delay before submenus appear"
 msgstr "Alt menüler belirmeden önceki bekleme süresi"
 
-#: gtk/gtkmenu.c:676
+#: gtk/gtkmenu.c:677
 msgid ""
 "Minimum time the pointer must stay over a menu item before the submenu appear"
 msgstr ""
 "Alt menünün belirmesi için imlecin menünün üzerinde kalması gereken en az "
 "süre"
 
-#: gtk/gtkmenu.c:683
+#: gtk/gtkmenu.c:684
 msgid "Delay before hiding a submenu"
 msgstr "Bir alt menüyü saklamadan önceki bekleme süresi"
 
-#: gtk/gtkmenu.c:684
+#: gtk/gtkmenu.c:685
 msgid ""
 "The time before hiding a submenu when the pointer is moving towards the "
 "submenu"
@@ -4081,7 +4081,7 @@ msgstr "Daralt"
 msgid "If TRUE, the child can be made smaller than its requisition"
 msgstr "Eğer TRUE ise, alt gereksinimlerinden daha da küçük olabilir"
 
-#: gtk/gtkplug.c:146 gtk/gtkstatusicon.c:263
+#: gtk/gtkplug.c:146 gtk/gtkstatusicon.c:267
 msgid "Embedded"
 msgstr "Gömülü"
 
@@ -5590,35 +5590,35 @@ msgid "Style of bevel around the statusbar text"
 msgstr "Durum çubuğu metni etrafındaki kenar biçemi"
 
 # gtk/gtkwindow.c:333
-#: gtk/gtkstatusicon.c:222
+#: gtk/gtkstatusicon.c:226
 msgid "The size of the icon"
 msgstr "Simgenin boyutu"
 
-#: gtk/gtkstatusicon.c:232
+#: gtk/gtkstatusicon.c:236
 msgid "The screen where this status icon will be displayed"
 msgstr "Durum simgesinin gösterileceği ekran"
 
-#: gtk/gtkstatusicon.c:239
+#: gtk/gtkstatusicon.c:243
 msgid "Blinking"
 msgstr "Yanıp Sönme"
 
 # gtk/gtkwidget.c:443
-#: gtk/gtkstatusicon.c:240
+#: gtk/gtkstatusicon.c:244
 msgid "Whether or not the status icon is blinking"
 msgstr "Durum simgesinin yanıp sönmesi"
 
 # gtk/gtkwidget.c:443
-#: gtk/gtkstatusicon.c:248
+#: gtk/gtkstatusicon.c:252
 msgid "Whether or not the status icon is visible"
 msgstr "Durum simgesinin görünürlüğü"
 
 # gtk/gtkwidget.c:443
-#: gtk/gtkstatusicon.c:264
+#: gtk/gtkstatusicon.c:268
 msgid "Whether or not the status icon is embedded"
 msgstr "Durum simgesinin gömülü olup olmaması"
 
 # gtk/gtktoolbar.c:224
-#: gtk/gtkstatusicon.c:280 gtk/gtktrayicon-x11.c:97
+#: gtk/gtkstatusicon.c:284 gtk/gtktrayicon-x11.c:97
 msgid "The orientation of the tray"
 msgstr "Tepsinin yönü"
 

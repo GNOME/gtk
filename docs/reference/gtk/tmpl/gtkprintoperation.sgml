@@ -543,6 +543,23 @@ also serves as destroy notify for @data.
 </para>
 
 
+<!-- ##### SIGNAL GtkPrintOperationPreview::got-page-size ##### -->
+<para>
+
+</para>
+
+@printoperationpreview: the object which received the signal.
+@arg1: 
+@arg2: 
+
+<!-- ##### SIGNAL GtkPrintOperationPreview::ready ##### -->
+<para>
+
+</para>
+
+@printoperationpreview: the object which received the signal.
+@arg1: 
+
 <!-- ##### FUNCTION gtk_print_operation_preview_end_preview ##### -->
 <para>
 

@@ -1,3 +1,29 @@
+Overview of Changes from GTK+ 2.13.1 to 2.13.2
+==============================================
+
+ * Fix an oversight in the header cleanup that went into 2.13.1, which
+   removed gtkmarshal.h from the set of headers pulled in by gtk.h
+ 
+ * Add a function to retrieve the XID of a status icon, to allow
+   notification bubbles to follow the icon
+ 
+ * Bugs fixed:
+ 533108 leak of GDI region in function 'handle_wm_paint'
+ 530146 Setting non-string tooltip with gtk_tree_view_set_tooltip_column...
+ 535830 wrong content type adding an item
+ 536126 gtk.h don't include gtkmarshal.h
+ 535497 Print preview doesn't work
+ 535862 gtk_action_create_icon can't create icons from the icon themes
+ 536092 GtkEntryCompletion's popup window should set type hint
+ 535303 add _get_implementation to GtkStatusIcon
+
+ * Updated translations:
+ Estonian (et)
+ Galician (gl)
+ Italian (it)
+ Vietnamese (vi)
+
+
 Overview of Changes from GTK+ 2.13.0 to 2.13.1
 ==============================================
 

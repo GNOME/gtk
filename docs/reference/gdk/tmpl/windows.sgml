@@ -1667,3 +1667,32 @@ End:
 -->
 
 
+<!-- ##### STRUCT GdkWindowRedirect ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### FUNCTION gdk_window_redirect_to_drawable ##### -->
+<para>
+
+</para>
+
+@window: 
+@drawable: 
+@src_x: 
+@src_y: 
+@dest_x: 
+@dest_y: 
+@width: 
+@height: 
+
+
+<!-- ##### FUNCTION gdk_window_remove_redirection ##### -->
+<para>
+
+</para>
+
+@window: 
+
+

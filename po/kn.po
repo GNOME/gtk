@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kn\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-05-30 00:22-0400\n"
+"POT-Creation-Date: 2008-06-03 18:52-0400\n"
 "PO-Revision-Date: 2008-05-08 13:25+0530\n"
 "Last-Translator: Shankar Prasad <svenkate@redhat.com>\n"
 "Language-Team: Kannada <en@li.org>\n"
@@ -1937,23 +1937,23 @@ msgstr "%H:%M"
 msgid "Yesterday at %H:%M"
 msgstr "ನಿನ್ನೆ %H:%M ಗೆ"
 
-#: gtk/gtkfilechooserentry.c:650 gtk/gtkfilechooserentry.c:1095
+#: gtk/gtkfilechooserentry.c:650 gtk/gtkfilechooserentry.c:1096
 msgid "Invalid path"
 msgstr "ಅಮಾನ್ಯ ಮಾರ್ಗ"
 
-#: gtk/gtkfilechooserentry.c:1057
+#: gtk/gtkfilechooserentry.c:1058
 msgid "No match"
 msgstr "ಯಾವುದೂ ತಾಳೆಯಾಗುತ್ತಿಲ್ಲ"
 
-#: gtk/gtkfilechooserentry.c:1065
+#: gtk/gtkfilechooserentry.c:1066
 msgid "Sole completion"
 msgstr "ಕೇವಲ ಒಂದರ ಪೂರ್ಣಗೊಳಿಕೆ"
 
-#: gtk/gtkfilechooserentry.c:1077
+#: gtk/gtkfilechooserentry.c:1078
 msgid "Complete, but not unique"
 msgstr "ಪೂರ್ಣಗೊಂಡಿದೆ, ಆದರೆ ವಿಶಿಷ್ಟವಾಗಿಲ್ಲ"
 
-#: gtk/gtkfilechooserentry.c:1110
+#: gtk/gtkfilechooserentry.c:1111
 msgid "Completing..."
 msgstr "ಪೂರ್ಣಗೊಳಿಸಲಾಗುತ್ತಿದೆ..."
 
@@ -2990,8 +2990,8 @@ msgstr "_%d. %s"
 msgid "recent menu label|%d. %s"
 msgstr "%d. %s"
 
-#: gtk/gtkrecentmanager.c:1008 gtk/gtkrecentmanager.c:1154
-#: gtk/gtkrecentmanager.c:1164 gtk/gtkrecentmanager.c:1217
+#: gtk/gtkrecentmanager.c:1017 gtk/gtkrecentmanager.c:1163
+#: gtk/gtkrecentmanager.c:1173 gtk/gtkrecentmanager.c:1226
 #, c-format
 msgid "Unable to find an item with URI '%s'"
 msgstr "URI '%s' ನೊಂದಿಗಿನ ಒಂದು ಅಂಶವನ್ನು ಪತ್ತೆಮಾಡಲಾಗಿಲ್ಲ"

@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+.HEAD.dz\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-05-30 00:22-0400\n"
+"POT-Creation-Date: 2008-06-03 18:52-0400\n"
 "PO-Revision-Date: 2006-08-09 10:30+0530\n"
 "Last-Translator: Mindu Dorji\n"
 "Language-Team: DZONGKHA <pgeyleg@dit.gov.bt>\n"
@@ -1942,25 +1942,25 @@ msgstr ""
 msgid "Yesterday at %H:%M"
 msgstr "ཁ་རྩང༌།"
 
-#: gtk/gtkfilechooserentry.c:650 gtk/gtkfilechooserentry.c:1095
+#: gtk/gtkfilechooserentry.c:650 gtk/gtkfilechooserentry.c:1096
 #, fuzzy
 msgid "Invalid path"
 msgstr "ནུས་མེད་ཡུ་ཨརཨའི།"
 
-#: gtk/gtkfilechooserentry.c:1057
+#: gtk/gtkfilechooserentry.c:1058
 msgid "No match"
 msgstr ""
 
-#: gtk/gtkfilechooserentry.c:1065
+#: gtk/gtkfilechooserentry.c:1066
 #, fuzzy
 msgid "Sole completion"
 msgstr "ཚོས་གཞིའི་སེལ་འཐུ།"
 
-#: gtk/gtkfilechooserentry.c:1077
+#: gtk/gtkfilechooserentry.c:1078
 msgid "Complete, but not unique"
 msgstr ""
 
-#: gtk/gtkfilechooserentry.c:1110
+#: gtk/gtkfilechooserentry.c:1111
 msgid "Completing..."
 msgstr ""
 
@@ -2999,8 +2999,8 @@ msgstr ""
 msgid "recent menu label|%d. %s"
 msgstr ""
 
-#: gtk/gtkrecentmanager.c:1008 gtk/gtkrecentmanager.c:1154
-#: gtk/gtkrecentmanager.c:1164 gtk/gtkrecentmanager.c:1217
+#: gtk/gtkrecentmanager.c:1017 gtk/gtkrecentmanager.c:1163
+#: gtk/gtkrecentmanager.c:1173 gtk/gtkrecentmanager.c:1226
 #, c-format
 msgid "Unable to find an item with URI '%s'"
 msgstr "ཡུ་ཨར་ཨའི་'%s'དང་གཅིག་ཁར་ རྣམ་གྲངས་ཅིག་འཚོལ་མ་ཐོབ།"

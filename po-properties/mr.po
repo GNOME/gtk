@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+.mr\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-05-30 00:22-0400\n"
+"POT-Creation-Date: 2008-06-03 18:52-0400\n"
 "PO-Revision-Date: 2004-03-13 14:59+0530\n"
 "Last-Translator: Jitendra Shah <jitendras@vsnl.com>\n"
 "Language-Team:  Marathi <www.indictrans.org>\n"
@@ -109,7 +109,7 @@ msgstr ""
 
 # gtk/gtkinputdialog.c:246
 #: gdk/gdkpango.c:490 gtk/gtkinvisible.c:86 gtk/gtkmountoperation.c:176
-#: gtk/gtkstatusicon.c:231 gtk/gtkwindow.c:600
+#: gtk/gtkstatusicon.c:235 gtk/gtkwindow.c:600
 msgid "Screen"
 msgstr "पडदा"
 
@@ -341,14 +341,14 @@ msgstr "हा फोन्ट दाखविणारी x अक्षरम�
 
 # gtk/gtksettings.c:215
 #: gtk/gtkaction.c:258 gtk/gtkcellrendererpixbuf.c:172 gtk/gtkimage.c:230
-#: gtk/gtkprinter.c:168 gtk/gtkstatusicon.c:204 gtk/gtkwindow.c:592
+#: gtk/gtkprinter.c:168 gtk/gtkstatusicon.c:208 gtk/gtkwindow.c:592
 #, fuzzy
 msgid "Icon Name"
 msgstr "फोन्टचे नाव"
 
 # gtk/gtkwidget.c:391
 #: gtk/gtkaction.c:259 gtk/gtkcellrendererpixbuf.c:173 gtk/gtkimage.c:231
-#: gtk/gtkstatusicon.c:205
+#: gtk/gtkstatusicon.c:209
 #, fuzzy
 msgid "The name of the icon from the icon theme"
 msgstr "विडगेटचे नाव"
@@ -416,7 +416,7 @@ msgid "Whether the action is enabled."
 msgstr "विडगेट दिसतो का"
 
 # gtk/gtktreeview.c:538 gtk/gtktreeviewcolumn.c:174 gtk/gtkwidget.c:423
-#: gtk/gtkaction.c:320 gtk/gtkactiongroup.c:184 gtk/gtkstatusicon.c:247
+#: gtk/gtkaction.c:320 gtk/gtkactiongroup.c:184 gtk/gtkstatusicon.c:251
 #: gtk/gtktreeviewcolumn.c:191 gtk/gtkwidget.c:513
 msgid "Visible"
 msgstr "दर्शनीय"
@@ -1460,7 +1460,7 @@ msgid "Pixbuf for closed expander"
 msgstr "बंद झालेल्या विस्तारकासाठी बिंदूसाठा"
 
 # gtk/gtkimage.c:170
-#: gtk/gtkcellrendererpixbuf.c:136 gtk/gtkimage.c:172 gtk/gtkstatusicon.c:196
+#: gtk/gtkcellrendererpixbuf.c:136 gtk/gtkimage.c:172 gtk/gtkstatusicon.c:200
 msgid "Stock ID"
 msgstr "ID साठा"
 
@@ -1470,7 +1470,7 @@ msgstr ""
 
 # gtk/gtkfontsel.c:333
 #: gtk/gtkcellrendererpixbuf.c:144 gtk/gtkrecentmanager.c:250
-#: gtk/gtkstatusicon.c:221
+#: gtk/gtkstatusicon.c:225
 #, fuzzy
 msgid "Size"
 msgstr "आकार(_z):"
@@ -1554,7 +1554,7 @@ msgstr "वरच्या ओळींची दिशा ० (वरपास�
 
 # gtk/gtkprogressbar.c:139 gtk/gtktoolbar.c:224
 #: gtk/gtkcellrendererprogress.c:221 gtk/gtkiconview.c:731
-#: gtk/gtkprogressbar.c:130 gtk/gtkstatusicon.c:279 gtk/gtktoolbar.c:494
+#: gtk/gtkprogressbar.c:130 gtk/gtkstatusicon.c:283 gtk/gtktoolbar.c:494
 #: gtk/gtktrayicon-x11.c:96
 msgid "Orientation"
 msgstr "कल"
@@ -2350,7 +2350,7 @@ msgid "Whether the combo box grabs focus when it is clicked with the mouse"
 msgstr "माउस वापरुन लेबलमधील मजकुर निवडता येईल का?"
 
 # gtk/gtkmenu.c:191
-#: gtk/gtkcombobox.c:803 gtk/gtkmenu.c:490
+#: gtk/gtkcombobox.c:803 gtk/gtkmenu.c:491
 msgid "Tearoff Title"
 msgstr "शिर्षक उडवा"
 
@@ -2994,7 +2994,7 @@ msgstr ""
 
 # gtk/gtkfilesel.c:536 gtk/gtkimage.c:161
 #: gtk/gtkfilesel.c:525 gtk/gtkimage.c:163 gtk/gtkrecentmanager.c:219
-#: gtk/gtkstatusicon.c:188
+#: gtk/gtkstatusicon.c:192
 msgid "Filename"
 msgstr "फाइलचे नाव"
 
@@ -3381,12 +3381,12 @@ msgid "Opacity of the selection box"
 msgstr "विन्डोचे शीर्षक"
 
 # gtk/gtkimage.c:129
-#: gtk/gtkimage.c:131 gtk/gtkstatusicon.c:180
+#: gtk/gtkimage.c:131 gtk/gtkstatusicon.c:184
 msgid "Pixbuf"
 msgstr "अक्षरबिंदुसंच"
 
 # gtk/gtkimage.c:130
-#: gtk/gtkimage.c:132 gtk/gtkstatusicon.c:181
+#: gtk/gtkimage.c:132 gtk/gtkstatusicon.c:185
 #, fuzzy
 msgid "A GdkPixbuf to display"
 msgstr "प्रदर्शित करण्यासाठी Gdk अक्षरबिंदु"
@@ -3424,13 +3424,13 @@ msgid "Mask bitmap to use with GdkImage or GdkPixmap"
 msgstr "Gdkप्रतिमा किंवा Gdk अक्षरबिंदु समवेत वापरण्याचा मुखवटा"
 
 # gtk/gtkimage.c:162
-#: gtk/gtkimage.c:164 gtk/gtkstatusicon.c:189
+#: gtk/gtkimage.c:164 gtk/gtkstatusicon.c:193
 #, fuzzy
 msgid "Filename to load and display"
 msgstr "सुरुकरण्यासाठी आणि प्रदर्शित करण्यासाठी फाइलचे नाव"
 
 # gtk/gtkimage.c:171
-#: gtk/gtkimage.c:173 gtk/gtkstatusicon.c:197
+#: gtk/gtkimage.c:173 gtk/gtkstatusicon.c:201
 #, fuzzy
 msgid "Stock ID for a stock image to display"
 msgstr "ID साठा प्रतिमा प्रदर्शित करण्यासाठी लागणाऱ्या ID प्रतिमेचा साठा"
@@ -3492,12 +3492,12 @@ msgid "The GIcon being displayed"
 msgstr "प्रदर्शित कराव्या लागणाऱ्या आइकानचा संच"
 
 # gtk/gtkimage.c:203
-#: gtk/gtkimage.c:255 gtk/gtkstatusicon.c:212
+#: gtk/gtkimage.c:255 gtk/gtkstatusicon.c:216
 msgid "Storage type"
 msgstr "संग्रहण प्रकार"
 
 # gtk/gtkimage.c:204
-#: gtk/gtkimage.c:256 gtk/gtkstatusicon.c:213
+#: gtk/gtkimage.c:256 gtk/gtkstatusicon.c:217
 #, fuzzy
 msgid "The representation being used for image data"
 msgstr "प्रतिमा माहिती वापरण्यासाठीचे प्रयुक्त प्रस्तुतिकरण"
@@ -3690,7 +3690,7 @@ msgid "The height of the layout"
 msgstr "रचनेची ऊंची"
 
 # gtk/gtkmenu.c:192
-#: gtk/gtkmenu.c:491
+#: gtk/gtkmenu.c:492
 #, fuzzy
 msgid ""
 "A title that may be displayed by the window manager when this menu is torn-"
@@ -3698,135 +3698,135 @@ msgid ""
 msgstr "हा मेनु काढुन टाकल्यानंतर विन्डो मॅनेजर असे शिर्षक देता येतेकृती बंद"
 
 # gtk/gtkmenu.c:191
-#: gtk/gtkmenu.c:505
+#: gtk/gtkmenu.c:506
 #, fuzzy
 msgid "Tearoff State"
 msgstr "शिर्षक उडवा"
 
 # gtk/gtkmenu.c:192
-#: gtk/gtkmenu.c:506
+#: gtk/gtkmenu.c:507
 #, fuzzy
 msgid "A boolean that indicates whether the menu is torn-off"
 msgstr "हा मेनु काढुन टाकल्यानंतर विन्डो मॅनेजर असे शिर्षक देता येतेकृती बंद"
 
 # gtk/gtkalignment.c:112
-#: gtk/gtkmenu.c:512
+#: gtk/gtkmenu.c:513
 #, fuzzy
 msgid "Vertical Padding"
 msgstr "ओळींची उभी रचना"
 
 # gtk/gtkmisc.c:128
-#: gtk/gtkmenu.c:513
+#: gtk/gtkmenu.c:514
 #, fuzzy
 msgid "Extra space at the top and bottom of the menu"
 msgstr "अक्षररुपात, विडगेटची वरील आणि खालील बाजू जोडण्यासाठी लागणारी मोकळी जागा"
 
 # gtk/gtkalignment.c:102
-#: gtk/gtkmenu.c:521
+#: gtk/gtkmenu.c:522
 #, fuzzy
 msgid "Horizontal Padding"
 msgstr "ओळींची आडवी रचना"
 
 # gtk/gtkmisc.c:128
-#: gtk/gtkmenu.c:522
+#: gtk/gtkmenu.c:523
 #, fuzzy
 msgid "Extra space at the left and right edges of the menu"
 msgstr "अक्षररुपात, विडगेटची वरील आणि खालील बाजू जोडण्यासाठी लागणारी मोकळी जागा"
 
 # gtk/gtkalignment.c:130
-#: gtk/gtkmenu.c:530
+#: gtk/gtkmenu.c:531
 #, fuzzy
 msgid "Vertical Offset"
 msgstr "ओळींची उभी रचना "
 
-#: gtk/gtkmenu.c:531
+#: gtk/gtkmenu.c:532
 msgid ""
 "When the menu is a submenu, position it this number of pixels offset "
 "vertically"
 msgstr ""
 
 # gtk/gtkalignment.c:121
-#: gtk/gtkmenu.c:539
+#: gtk/gtkmenu.c:540
 #, fuzzy
 msgid "Horizontal Offset"
 msgstr "आडव्या रेषेचे प्रमाण"
 
-#: gtk/gtkmenu.c:540
+#: gtk/gtkmenu.c:541
 msgid ""
 "When the menu is a submenu, position it this number of pixels offset "
 "horizontally"
 msgstr ""
 
 # gtk/gtknotebook.c:413
-#: gtk/gtkmenu.c:548
+#: gtk/gtkmenu.c:549
 #, fuzzy
 msgid "Double Arrows"
 msgstr "सीमा दाखवा"
 
-#: gtk/gtkmenu.c:549
+#: gtk/gtkmenu.c:550
 msgid "When scrolling, always show both arrows."
 msgstr ""
 
-#: gtk/gtkmenu.c:557
+#: gtk/gtkmenu.c:558
 msgid "Left Attach"
 msgstr ""
 
-#: gtk/gtkmenu.c:558 gtk/gtktable.c:174
+#: gtk/gtkmenu.c:559 gtk/gtktable.c:174
 msgid "The column number to attach the left side of the child to"
 msgstr ""
 
-#: gtk/gtkmenu.c:565
+#: gtk/gtkmenu.c:566
 msgid "Right Attach"
 msgstr ""
 
-#: gtk/gtkmenu.c:566
+#: gtk/gtkmenu.c:567
 msgid "The column number to attach the right side of the child to"
 msgstr ""
 
-#: gtk/gtkmenu.c:573
+#: gtk/gtkmenu.c:574
 msgid "Top Attach"
 msgstr ""
 
-#: gtk/gtkmenu.c:574
+#: gtk/gtkmenu.c:575
 msgid "The row number to attach the top of the child to"
 msgstr ""
 
 # gtk/gtkstock.c:290
-#: gtk/gtkmenu.c:581
+#: gtk/gtkmenu.c:582
 #, fuzzy
 msgid "Bottom Attach"
 msgstr "खालच्या भागात(_B)"
 
-#: gtk/gtkmenu.c:582 gtk/gtktable.c:195
+#: gtk/gtkmenu.c:583 gtk/gtktable.c:195
 msgid "The row number to attach the bottom of the child to"
 msgstr ""
 
 # gtk/gtkmenu.c:260
-#: gtk/gtkmenu.c:669
+#: gtk/gtkmenu.c:670
 msgid "Can change accelerators"
 msgstr "वेगकारके बदलले जाऊ शकतात का"
 
 # gtk/gtkmenu.c:261
-#: gtk/gtkmenu.c:670
+#: gtk/gtkmenu.c:671
 #, fuzzy
 msgid ""
 "Whether menu accelerators can be changed by pressing a key over the menu item"
 msgstr "मेनूवरील एखादे बटण दाबून मेनुमधील गतीकारके बदलता येईल का?"
 
-#: gtk/gtkmenu.c:675
+#: gtk/gtkmenu.c:676
 msgid "Delay before submenus appear"
 msgstr ""
 
-#: gtk/gtkmenu.c:676
+#: gtk/gtkmenu.c:677
 msgid ""
 "Minimum time the pointer must stay over a menu item before the submenu appear"
 msgstr ""
 
-#: gtk/gtkmenu.c:683
+#: gtk/gtkmenu.c:684
 msgid "Delay before hiding a submenu"
 msgstr ""
 
-#: gtk/gtkmenu.c:684
+#: gtk/gtkmenu.c:685
 msgid ""
 "The time before hiding a submenu when the pointer is moving towards the "
 "submenu"
@@ -4396,7 +4396,7 @@ msgstr "आकुंचित करावे"
 msgid "If TRUE, the child can be made smaller than its requisition"
 msgstr ""
 
-#: gtk/gtkplug.c:146 gtk/gtkstatusicon.c:263
+#: gtk/gtkplug.c:146 gtk/gtkstatusicon.c:267
 msgid "Embedded"
 msgstr ""
 
@@ -5980,39 +5980,39 @@ msgid "Style of bevel around the statusbar text"
 msgstr "स्थिती सुचक पट्टी वरील मजकुराभोवतीची उठाव शैली"
 
 # gtk/gtkwindow.c:417
-#: gtk/gtkstatusicon.c:222
+#: gtk/gtkstatusicon.c:226
 #, fuzzy
 msgid "The size of the icon"
 msgstr "विन्डोचे शीर्षक"
 
-#: gtk/gtkstatusicon.c:232
+#: gtk/gtkstatusicon.c:236
 msgid "The screen where this status icon will be displayed"
 msgstr ""
 
-#: gtk/gtkstatusicon.c:239
+#: gtk/gtkstatusicon.c:243
 msgid "Blinking"
 msgstr ""
 
 # gtk/gtkwidget.c:424
-#: gtk/gtkstatusicon.c:240
+#: gtk/gtkstatusicon.c:244
 #, fuzzy
 msgid "Whether or not the status icon is blinking"
 msgstr "विडगेट दिसतो का"
 
 # gtk/gtkwidget.c:424
-#: gtk/gtkstatusicon.c:248
+#: gtk/gtkstatusicon.c:252
 #, fuzzy
 msgid "Whether or not the status icon is visible"
 msgstr "विडगेट दिसतो का"
 
 # gtk/gtkwidget.c:424
-#: gtk/gtkstatusicon.c:264
+#: gtk/gtkstatusicon.c:268
 #, fuzzy
 msgid "Whether or not the status icon is embedded"
 msgstr "विडगेट दिसतो का"
 
 # gtk/gtktoolbar.c:225
-#: gtk/gtkstatusicon.c:280 gtk/gtktrayicon-x11.c:97
+#: gtk/gtkstatusicon.c:284 gtk/gtktrayicon-x11.c:97
 #, fuzzy
 msgid "The orientation of the tray"
 msgstr "टूलबारची  दिशा"

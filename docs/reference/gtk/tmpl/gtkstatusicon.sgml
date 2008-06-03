@@ -349,3 +349,12 @@ on Win32 doesn't allow to embed arbitrary widgets.
 @Returns: 
 
 
+<!-- ##### FUNCTION gtk_status_icon_get_x11_window_id ##### -->
+<para>
+
+</para>
+
+@status_icon: 
+@Returns: 
+
+
