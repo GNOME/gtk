@@ -1,5 +1,14 @@
 2008-06-03  Michael Natterer  <mitch@imendio.com>
 
+	* gtk/gtkclist.h
+	* gtk/gtkctree.h: revert includes to how they have been before the
+	GTK_DISABLE_SINGLE_INCLUDES changes. Apparently I missed the fact
+	that you can't include <gtk/gtk.h> from two headers where one is a
+	parent class of the other and expect them both to be includable
+	individually.
+
+2008-06-03  Michael Natterer  <mitch@imendio.com>
+
 	* gtk/gtkprinteroptionset.h: remove newline at beginning of file.
 
 2008-06-02  Matthias Clasen  <mclasen@redhat.com>
