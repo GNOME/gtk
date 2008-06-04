@@ -1,3 +1,10 @@
+2008-06-05  Tor Lillqvist  <tml@novell.com>
+
+	Merge from trunk:
+
+	* modules/engines/ms-windows/msw_style.c (draw_box): Check that
+	the widget is a GtkButton before casting.
+
 2008-06-03  Matthias Clasen  <mclasen@redhat.com>
 
 	* configure.in: Bump version
