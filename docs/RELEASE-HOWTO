@@ -1,45 +1,92 @@
 How to do a GTK+ release?
 =========================
 
-Make sure you have Owen's special autoconf and libtool RPMs, available at:
-http://people.redhat.com/otaylor/gtk/autotools/.
-
+Make sure you have suitable versions of autoconf and libtool.
 Also make sure you have the following packages installed with all their
-dependencies (I used the RPM package names from RedHat 9):
+dependencies:
 * gtk-doc
-* linuxdoc-tools
 * docbook-utils
-
 Without those packages make distcheck will *not* pass.
 
 
-0) Blow away your gtk+ directory, check a new version out
-1) autogen and build it, make sure to enable docs.
-2) Update NEWS based on the various ChangeLog files
-3) Verify that the version in configure.in has been bumped after the last
-release. (Note that this is critical, a slip-up here will cause the soname 
-to change).
-4) Make sure that make check is happy (If you don't do it here, make distcheck
-will also catch it, but it is kind of disheartening to see make distcheck fail
-due to an extraneous symbol after watching it build the docs for an hour...)
-5) Add === Released 2.x.y === at the top of all ChangeLog files
-6) make distcheck
-7) Fix broken stuff found by 5) repeat
-8) cvs commit; you'll have a bunch of po file changes, and maybe some
-doc changes too (NOTE: be sure to use cvs with compression, else you'll
-end up waiting for a long time :).
-9) If 7) fails because someone else committed inbetween, curse, cvs up,
-fix conflicts and go to 5)
-10) type 'cvs tag GTK_2_x_y' in the toplevel directory
-11) You now have the tarball, and the CVS tag, now upload the tarball to
-gnome.org and gtk.org
-12) Go to the gnome-announce list archives, find the last announce message,
-create a new message in the same form, replacing version numbers, commentary
-at the top about "what this release is about" and the Summary of changes.
-13) Send it to gnome-announce-list, gtk-list, gtk-app-devel-list and
-gtk-devel-list. Set reply-to to gnome-hackers.
-14) Bump the version number in configure.in. 
-15) Create a new milestone in bugzilla and move the remaining bugs from the
-2.x.y milestone over to the new one.
-16) Add a link to the release announcement to www.gtk.org which lives in
-the gtk-web cvs module.
+ 0) Blow away your gtk+ directory, check a new version out
+
+ 1) autogen and build it, make sure to enable docs by specifying 
+    --enable-gtk-doc --enable-man
+
+ 2) Update NEWS based on the various ChangeLog files; follow the format
+    of prior entries. This includes finding noteworthy new features,
+    collecting summaries for all the fixed bugs that are referenced
+    and collecting all updated translations. 
+    Also collect the names of all contributors that are mentioned. 
+    We don't discriminate between bug reporters, patch writers, 
+    committers, etc. Anybody who is mentioned in ChangeLog gets
+    credits, but only real names, not email addresses or nicknames.
+
+ 3) Verify that the version in configure.in has been bumped after the last
+    release. (Note that this is critical, a slip-up here will cause the 
+    soname to change).
+
+ 4) Make sure that make check is happy (If you don't do it here, make distcheck
+    will also catch it, but it is kind of disheartening to see make distcheck 
+    fail due to an extraneous symbol after watching it build the docs for an 
+    hour...). 
+    Typical problems to expect here (depending on whether this is a devel 
+    snapshot or a stable release):
+    * forgotten source files
+    * new symbols missing from .symbols files
+    * symbols that are exported by should be private (static or _-prefixed)
+
+ 5) If this is a devel release, make sure that the docs for new symbols
+    are in good shape. Look at the -unused.txt files and add stuff found
+    there to the corresponding -sections.txt file. Make sure that all
+    new symbols have proper Since: tags, and that there is an index
+    in the main -docs.sgml for the next stable version.
+
+ 6) Add === Released 2.x.y === at the top of all ChangeLog files
+
+ 7) make distcheck
+
+ 8) Fix broken stuff found by 7), repeat
+
+ 9) svn commit; you'll have a bunch of po file changes, ChangeLog updates,
+    and maybe some doc changes too
+
+10) If 7) fails because someone else committed inbetween, curse, svn up,
+    fix conflicts and go to 7)
+
+11) Now you've got the tarball. Check that the tarball size looks
+    reasonable compared to previous releases. If the size goes down
+    a lot, likely the docs went missing for some reason. If the size
+    goes up by a lot, something else may be wrong.
+
+11) Tag the release. The command for doing that looks like
+
+      svn cp svn+ssh://matthiasc@svn.gnome.org/svn/gtk+/branches/gtk-2-12 \
+             svn+ssh://matthiasc@svn.gnome.org/svn/gtk+/tags/GTK_2_12_10
+
+12) Bump the version number in configure.in and commit this change 
+    with a ChangeLog entry
+
+13) Upload the tarball to master.gnome.org and run install-module to transfer
+    it to download.gnome.org. If you don't have an account on master.gnome.org,
+    find someone who can do it for you. The command for this looks like
+  
+      scp gtk+-2.12.10.tar.gz matthiasc@master.gnome.org:
+      ssh matthiasc@master.gnome.org
+      install-module gtk+-2.12.10.tar.gz
+
+14) Get the bz2 tarball and the .md5sum files back from master.gnome.org 
+    You can probably also create it locally, but I've experienced md5 
+    mismatches when doing so
+
+15) Go to the gnome-announce list archives, find the last announce message,
+    create a new message in the same form, replacing version numbers, 
+    commentary at the top about "what this release is about" and the 
+    Summary of changes.
+
+16) Send it to gnome-announce-list, gtk-list, gtk-app-devel-list and
+    gtk-devel-list. Set reply-to to gnome-hackers.
+
+17) Add a link to the release announcement to www.gtk.org which lives 
+    in the gtk-web cvs module.
