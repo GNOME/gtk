@@ -1,3 +1,8 @@
+2008-06-05  Johan Dahlin  <jdahlin@async.com.br>
+
+	* gtk/gtkbuilder.h (enum): Add the new version mismatch error
+	constant to the end of the list, to avoid breaking the stable ABI
+
 2008-06-05  Michael Natterer  <mitch@imendio.com>
 
 	* configure.in: add -DATK_DISABLE_SINGLE_INCLUDES to CPPFLAGS.
