@@ -98,7 +98,7 @@
 /* #undef HAVE_MMAP */
 
 /* Define to 1 is libjpeg supports progressive JPEG */
-#define HAVE_PROGRESSIVE_JPEG 1
+/* #undef HAVE_PROGRESSIVE_JPEG */
 
 /* Define to 1 if you have the <pwd.h> header file. */
 /* #undef HAVE_PWD_H */
@@ -242,7 +242,7 @@
 #define PACKAGE_NAME "gtk+"
 
 /* Define to the full name and version of this package. */
-#define PACKAGE_STRING "gtk+ 2.13.1"
+#define PACKAGE_STRING "gtk+ @GTK_MAJOR_VERSION@.@GTK_MINOR_VERSION@.@GTK_MICRO_VERSION@"
 
 /* Define to the one symbol short name of this package. */
 #define PACKAGE_TARNAME "gtk+"

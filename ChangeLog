@@ -1,3 +1,8 @@
+2008-06-06  Tor Lillqvist  <tml@novell.com>
+
+	* config.h.win32.in: Slight update to match what configure
+	produces.
+
 2008-06-05  Johan Dahlin  <jdahlin@async.com.br>
 
 	* gtk/gtkbuilder.h (enum): Add the new version mismatch error
