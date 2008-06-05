@@ -1,3 +1,7 @@
+2008-06-05  Michael Natterer  <mitch@imendio.com>
+
+	* configure.in: add -DATK_DISABLE_SINGLE_INCLUDES to CPPFLAGS.
+
 2008-06-05  Li Yuan  <li.yuan@sun.com>
 
 	* gail-uninstalled.pc.in:
