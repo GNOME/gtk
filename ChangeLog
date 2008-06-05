@@ -1,3 +1,9 @@
+2008-06-05  Li Yuan  <li.yuan@sun.com>
+
+	* gail-uninstalled.pc.in:
+	Bug #536430. Patch from Damien Carbery <damien.carbery@sun.com>.
+	Correct paths to gail headers and libraries in gail-uninstalled.pc.in.
+
 2008-06-03  Matthias Clasen  <mclasen@redhat.com>
 
 	* docs/RELEASE-HOWTO: Update a bit
