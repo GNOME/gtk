@@ -1,3 +1,9 @@
+2008-06-06  Li Yuan  <li.yuan@sun.com>
+
+	* gail/gaillabel.c: (gail_label_real_notify_gtk):
+	Before emitting "text_caret_moved", change the cursor to the
+	changed bound. Bug #536927.
+
 2008-05-30  Michael Natterer  <mitch@imendio.com>
 
 	* gailcellparent.h

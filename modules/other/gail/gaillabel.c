@@ -325,13 +325,19 @@ gail_label_real_notify_gtk (GObject           *obj,
     }
   else if (strcmp (pspec->name, "cursor-position") == 0)
     {
-      gint start, end;
+      gint start, end, tmp;
       gboolean text_caret_moved = FALSE;
       gboolean selection_changed = FALSE;
-      gboolean is_start = TRUE;
 
       gail_obj = G_OBJECT (atk_obj);
       label = GTK_LABEL (widget);
+
+      if (gail_label->selection_bound != -1 && gail_label->selection_bound < gail_label->cursor_position)
+        {
+          tmp = gail_label->selection_bound;
+          gail_label->selection_bound = gail_label->cursor_position;
+          gail_label->cursor_position = tmp;
+        }
 
       if (gtk_label_get_selection_bounds (label, &start, &end))
         {
@@ -339,9 +345,15 @@ gail_label_real_notify_gtk (GObject           *obj,
               end != gail_label->selection_bound)
             {
               if (end != gail_label->selection_bound)
-                is_start = FALSE;
-              gail_label->selection_bound = end;
-              gail_label->cursor_position = start;
+                {
+                  gail_label->selection_bound = start;
+                  gail_label->cursor_position = end;
+                }
+              else
+                {
+                  gail_label->selection_bound = end;
+                  gail_label->cursor_position = start;
+                }
               text_caret_moved = TRUE;
               if (start != end)
                 selection_changed = TRUE;
@@ -358,10 +370,14 @@ gail_label_real_notify_gtk (GObject           *obj,
               if (gail_label->selection_bound != -1 && end != gail_label->selection_bound)
                 {
                   text_caret_moved = TRUE;
-                  is_start = FALSE;
+                  gail_label->cursor_position = end;
+                  gail_label->selection_bound = start;
                 }
-              gail_label->cursor_position = start;
-              gail_label->selection_bound = end;
+              else
+                {
+                  gail_label->cursor_position = start;
+                  gail_label->selection_bound = end;
+                }
             }
           else
             {
@@ -375,7 +391,7 @@ gail_label_real_notify_gtk (GObject           *obj,
         }
         if (text_caret_moved)
           g_signal_emit_by_name (gail_obj, "text_caret_moved", 
-                                 is_start ? gail_label->cursor_position : gail_label->selection_bound);
+                                 gail_label->cursor_position);
         if (selection_changed)
           g_signal_emit_by_name (gail_obj, "text_selection_changed");
 
