@@ -1,3 +1,8 @@
+2008-06-06  Ross Burton  <ross@burtonini.com>
+
+	* gtk/gtkwindow.c:
+	Fix trivial typo in documentation.
+
 2008-06-06  Tor Lillqvist  <tml@novell.com>
 
 	* config.h.win32.in: Slight update to match what configure
