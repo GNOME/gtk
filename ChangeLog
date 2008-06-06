@@ -1,3 +1,15 @@
+2008-06-06  Behdad Esfahbod  <behdad@gnome.org>
+
+	Bug 536185 – monitor font configuration
+
+	* configure.in:
+	* gdk/x11/gdksettings.c:
+	* gtk/gtksettings.c (gtk_settings_class_init),
+	(gtk_settings_notify), (settings_update_fontconfig):
+	Monitor xsettings key Fontconfig/Timestamp and upon change,
+	reread fontconfig configuration, clear Pango's caches, and
+	redraw all widgets.
+
 2008-06-06  Ross Burton  <ross@burtonini.com>
 
 	* gtk/gtkwindow.c:

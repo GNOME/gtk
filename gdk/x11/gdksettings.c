@@ -69,7 +69,8 @@ static const char gdk_settings_names[] =
   "Gtk/EnableAccels\0"        "gtk-enable-accels\0"
   "Gtk/EnableMnemonics\0"     "gtk-enable-mnemonics\0"
   "Gtk/ScrolledWindowPlacement\0" "gtk-scrolled-window-placement\0"
-  "Gtk/IMModule\0"            "gtk-im-module\0";
+  "Gtk/IMModule\0"            "gtk-im-module\0"
+  "Fontconfig/Timestamp\0"    "gtk-fontconfig-timestamp\0";
 
 
 static const struct
@@ -116,5 +117,6 @@ static const struct
   { 1326, 1343 },
   { 1361, 1381 },
   { 1402, 1430 },
-  { 1460, 1473 }
+  { 1460, 1473 },
+  { 1487, 1508 }
 };

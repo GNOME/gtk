@@ -16,6 +16,8 @@
  * Software Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
 
+#define PANGO_ENABLE_BACKEND /* for pango_fc_font_map_cache_clear() */
+
 #include <config.h>
 
 #include <string.h>
@@ -30,6 +32,7 @@
 
 #ifdef GDK_WINDOWING_X11
 #include "x11/gdkx.h"
+#include <pango/pangofc-fontmap.h>
 #endif
 
 #define DEFAULT_TIMEOUT_INITIAL 200
@@ -108,7 +111,8 @@ enum {
   PROP_ENABLE_ACCELS,
   PROP_RECENT_FILES_LIMIT,
   PROP_IM_MODULE,
-  PROP_RECENT_FILES_MAX_AGE
+  PROP_RECENT_FILES_MAX_AGE,
+  PROP_FONTCONFIG_TIMESTAMP
 };
 
 
@@ -134,6 +138,7 @@ static void    settings_update_modules           (GtkSettings           *setting
 static void    settings_update_cursor_theme      (GtkSettings           *settings);
 static void    settings_update_resolution        (GtkSettings           *settings);
 static void    settings_update_font_options      (GtkSettings           *settings);
+static gboolean settings_update_fontconfig       (GtkSettings           *settings);
 #endif
 static void    settings_update_color_scheme      (GtkSettings *settings);
 
@@ -841,6 +846,17 @@ gtk_settings_class_init (GtkSettingsClass *class)
  							       GTK_PARAM_READWRITE),
 					     NULL);
   g_assert (result == PROP_RECENT_FILES_MAX_AGE);
+
+  result = settings_install_property_parser (class,
+					     g_param_spec_int ("gtk-fontconfig-timestamp",
+ 							       P_("Fontconfig configuration timestamp"),
+ 							       P_("Timestamp of current fontconfig configuration"),
+ 							       G_MININT, G_MAXINT, 0,
+ 							       GTK_PARAM_READWRITE),
+					     NULL);
+  
+  g_assert (result == PROP_FONTCONFIG_TIMESTAMP);
+  
 }
 
 static void
@@ -1053,6 +1069,10 @@ gtk_settings_notify (GObject    *object,
     case PROP_XFT_RGBA:
       settings_update_font_options (settings);
       gtk_rc_reset_styles (GTK_SETTINGS (object));
+      break;
+    case PROP_FONTCONFIG_TIMESTAMP:
+      if (settings_update_fontconfig (settings))
+	gtk_rc_reset_styles (GTK_SETTINGS (object));
       break;
     case PROP_CURSOR_THEME_NAME:
     case PROP_CURSOR_THEME_SIZE:
@@ -1950,6 +1970,43 @@ settings_update_font_options (GtkSettings *settings)
   
   cairo_font_options_destroy (options);
 }
+
+#ifdef GDK_WINDOWING_X11
+static gboolean
+settings_update_fontconfig (GtkSettings *settings)
+{
+  static guint    last_update_timestamp;
+  static gboolean last_update_needed;
+
+  gint timestamp;
+
+  g_object_get (settings,
+		"gtk-fontconfig-timestamp", &timestamp,
+		NULL);
+
+  /* if timestamp is the same as last_update_timestamp, we already have
+   * updated fontconig on this timestamp (another screen requested it perhaps?),
+   * just return the cached result.*/
+
+  if (timestamp != last_update_timestamp)
+    {
+      PangoFontMap *fontmap = pango_cairo_font_map_get_default ();
+      gboolean update_needed = FALSE;
+
+      if (PANGO_IS_FC_FONT_MAP (fontmap) &&
+	  !FcConfigUptoDate (NULL) && FcInitReinitialize ())
+	{
+	  update_needed = TRUE;
+	  pango_fc_font_map_cache_clear (PANGO_FC_FONT_MAP (fontmap));
+	}
+
+      last_update_timestamp = timestamp;
+      last_update_needed = update_needed;
+    }
+
+  return last_update_needed;
+}
+#endif /* GDK_WINDOWING_X11 */
 
 static void
 settings_update_resolution (GtkSettings *settings)
