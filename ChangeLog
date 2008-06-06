@@ -1,3 +1,13 @@
+2008-06-06  Matthias Clasen  <mclasen@redhat.com>
+
+	Merge frum trunk:
+
+	Bug 536757 – regression: openoffice.org menus are placed at wrong
+	position since 2.12.10
+
+	* gdk/x11/gdkwindow-x11.c (gdk_window_get_frame_extents):
+	Return the right coordinates.
+
 2008-06-05  Tor Lillqvist  <tml@novell.com>
 
 	Merge from trunk:
