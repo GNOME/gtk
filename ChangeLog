@@ -1,3 +1,11 @@
+2008-06-07  Tor Lillqvist  <tml@novell.com>
+
+	Bug 536990 - updateiconcache.c: 'close ()' is redundant
+
+	* gtk/updateiconcache.c (build_cache): Drop redundant close()
+	calls. fclose() on a fdopen()ed strema closes the underlying file
+	descriptor.
+
 2008-06-06  Matthias Clasen  <mclasen@redhat.com>
 
 	Bug 536757 – regression: openoffice.org menus are placed at wrong
