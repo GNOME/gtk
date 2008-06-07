@@ -64,7 +64,6 @@ static void gtk_menu_item_get_property   (GObject          *object,
 					  guint             prop_id,
 					  GValue           *value,
 					  GParamSpec       *pspec);
-static void gtk_menu_item_finalize       (GObject          *object);
 static void gtk_menu_item_destroy        (GtkObject        *object);
 static void gtk_menu_item_size_request   (GtkWidget        *widget,
 					  GtkRequisition   *requisition);
@@ -123,7 +122,6 @@ gtk_menu_item_class_init (GtkMenuItemClass *klass)
 
   gobject_class->set_property = gtk_menu_item_set_property;
   gobject_class->get_property = gtk_menu_item_get_property;
-  gobject_class->finalize = gtk_menu_item_finalize;
 
   object_class->destroy = gtk_menu_item_destroy;
 
@@ -359,16 +357,6 @@ gtk_menu_item_get_property (GObject    *object,
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
     }
-}
-
-static void
-gtk_menu_item_finalize (GObject *object)
-{
-  GtkMenuItem *menu_item = GTK_MENU_ITEM (object);
-
-  g_free (menu_item->accel_path);
-
-  G_OBJECT_CLASS (gtk_menu_item_parent_class)->finalize (object);
 }
 
 static void
@@ -1567,14 +1555,19 @@ _gtk_menu_item_refresh_accel_path (GtkMenuItem   *menu_item,
       path = menu_item->accel_path;
       if (!path && prefix)
 	{
-	  gchar *postfix = NULL;
+	  const gchar *postfix = NULL;
+          gchar *new_path;
 
 	  /* try to construct one from label text */
 	  gtk_container_foreach (GTK_CONTAINER (menu_item),
 				 gtk_menu_item_accel_name_foreach,
 				 &postfix);
-	  menu_item->accel_path = postfix ? g_strconcat (prefix, "/", postfix, NULL) : NULL;
-	  path = menu_item->accel_path;
+          if (postfix)
+            {
+              new_path = g_strconcat (prefix, "/", postfix, NULL);
+              path = menu_item->accel_path = g_intern_string (new_path);
+              g_free (new_path);
+            }
 	}
       if (path)
 	gtk_widget_set_accel_path (widget, path, accel_group);
@@ -1603,6 +1596,10 @@ _gtk_menu_item_refresh_accel_path (GtkMenuItem   *menu_item,
  *
  * Note that you do need to set an accelerator on the parent menu with
  * gtk_menu_set_accel_group() for this to work.
+ *
+ * Note that @accel_path string will be stored in a #GQuark. Therefore, if you
+ * pass a static string, you can save some memory by interning it first with 
+ * g_intern_static_string().
  */
 void
 gtk_menu_item_set_accel_path (GtkMenuItem *menu_item,
@@ -1618,9 +1615,7 @@ gtk_menu_item_set_accel_path (GtkMenuItem *menu_item,
   widget = GTK_WIDGET (menu_item);
 
   /* store new path */
-  old_accel_path = menu_item->accel_path;
-  menu_item->accel_path = g_strdup (accel_path);
-  g_free (old_accel_path);
+  menu_item->accel_path = g_intern_string (accel_path);
 
   /* forget accelerators associated with old path */
   gtk_widget_set_accel_path (widget, NULL, NULL);

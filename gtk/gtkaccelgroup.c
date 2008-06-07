@@ -525,6 +525,10 @@ gtk_accel_group_connect (GtkAccelGroup	*accel_group,
  * for the path.
  *
  * The signature used for the @closure is that of #GtkAccelGroupActivate.
+ * 
+ * Note that @accel_path string will be stored in a #GQuark. Therefore, if you
+ * pass a static string, you can save some memory by interning it first with 
+ * g_intern_static_string().
  */
 void
 gtk_accel_group_connect_by_path (GtkAccelGroup	*accel_group,

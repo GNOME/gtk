@@ -1,3 +1,17 @@
+2008-06-08  Christian Persch <chpe@gnome.org>
+
+	Bug 535608 – do not string-copy accel paths in the menu code
+
+        * gtk/gtkaccelgroup.c:
+        * gtk/gtkaccelmap.c:
+        * gtk/gtkaction.c:
+        * gtk/gtkmenu.c:
+        * gtk/gtkmenuitem.c:
+        * gtk/gtkwidget.c:  Don't store the accel path as a string in
+        gtkmenu/gtkmenuitem. The accel path will be interned anyway, so
+        keeping a string copy around is just a waste of memory.
+        Improve the documentation to mention this.
+
 2008-06-07  Tor Lillqvist  <tml@novell.com>
 
 	Bug 536990 - updateiconcache.c: 'close ()' is redundant

@@ -152,7 +152,6 @@ static void     gtk_menu_get_child_property(GtkContainer     *container,
                                             GValue           *value,
                                             GParamSpec       *pspec);
 static void     gtk_menu_destroy           (GtkObject        *object);
-static void     gtk_menu_finalize          (GObject          *object);
 static void     gtk_menu_realize           (GtkWidget        *widget);
 static void     gtk_menu_unrealize         (GtkWidget        *widget);
 static void     gtk_menu_size_request      (GtkWidget        *widget,
@@ -438,7 +437,6 @@ gtk_menu_class_init (GtkMenuClass *class)
   GtkMenuShellClass *menu_shell_class = GTK_MENU_SHELL_CLASS (class);
   GtkBindingSet *binding_set;
   
-  gobject_class->finalize = gtk_menu_finalize;
   gobject_class->set_property = gtk_menu_set_property;
   gobject_class->get_property = gtk_menu_get_property;
 
@@ -961,16 +959,6 @@ gtk_menu_destroy (GtkObject *object)
     }
 
   GTK_OBJECT_CLASS (gtk_menu_parent_class)->destroy (object);
-}
-
-static void
-gtk_menu_finalize (GObject *object)
-{
-  GtkMenu *menu = GTK_MENU (object);
-
-  g_free (menu->accel_path);
-  
-  G_OBJECT_CLASS (gtk_menu_parent_class)->finalize (object);
 }
 
 static void
@@ -1646,6 +1634,10 @@ gtk_menu_real_can_activate_accel (GtkWidget *widget,
  * Assigning accel paths to menu items then enables the user to change
  * their accelerators at runtime. More details about accelerator paths
  * and their default setups can be found at gtk_accel_map_add_entry().
+ * 
+ * Note that @accel_path string will be stored in a #GQuark. Therefore, if you
+ * pass a static string, you can save some memory by interning it first with 
+ * g_intern_static_string().
  */
 void
 gtk_menu_set_accel_path (GtkMenu     *menu,
@@ -1657,9 +1649,7 @@ gtk_menu_set_accel_path (GtkMenu     *menu,
   if (accel_path)
     g_return_if_fail (accel_path[0] == '<' && strchr (accel_path, '/')); /* simplistic check */
 
-  old_accel_path = menu->accel_path;
-  menu->accel_path = g_strdup (accel_path);
-  g_free (old_accel_path);
+  menu->accel_path = g_intern_string (accel_path);
   if (menu->accel_path)
     _gtk_menu_refresh_accel_paths (menu, FALSE);
 }

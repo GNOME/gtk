@@ -4344,6 +4344,10 @@ destroy_accel_path (gpointer data)
  * Even when you you aren't using #GtkUIManager, if you only want to
  * set up accelerators on menu items gtk_menu_item_set_accel_path()
  * provides a somewhat more convenient interface.
+ * 
+ * Note that @accel_path string will be stored in a #GQuark. Therefore, if you
+ * pass a static string, you can save some memory by interning it first with 
+ * g_intern_static_string().
  **/
 void
 gtk_widget_set_accel_path (GtkWidget     *widget,

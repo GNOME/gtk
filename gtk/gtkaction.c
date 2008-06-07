@@ -119,9 +119,7 @@ G_DEFINE_TYPE_WITH_CODE (GtkAction, gtk_action, G_TYPE_OBJECT,
 						gtk_action_buildable_init))
 
 
-static GQuark      accel_path_id  = 0;
 static GQuark      quark_gtk_action_proxy  = 0;
-static const gchar accel_path_key[] = "GtkAction::accel_path";
 static const gchar gtk_action_proxy_key[] = "gtk-action";
 
 static void gtk_action_finalize     (GObject *object);
@@ -176,7 +174,6 @@ gtk_action_class_init (GtkActionClass *klass)
 {
   GObjectClass *gobject_class;
 
-  accel_path_id = g_quark_from_static_string (accel_path_key);
   quark_gtk_action_proxy = g_quark_from_static_string (gtk_action_proxy_key);
 
   gobject_class = G_OBJECT_CLASS (klass);
@@ -1661,6 +1658,10 @@ gtk_action_set_action_group (GtkAction	    *action,
  * Sets the accel path for this action.  All proxy widgets associated
  * with the action will have this accel path, so that their
  * accelerators are consistent.
+ *
+ * Note that @accel_path string will be stored in a #GQuark. Therefore, if you
+ * pass a static string, you can save some memory by interning it first with 
+ * g_intern_static_string().
  *
  * Since: 2.4
  */
