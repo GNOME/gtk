@@ -1475,7 +1475,6 @@ build_cache (const gchar *path)
       /* Empty table, just close and remove the file */
 
       fclose (cache);
-      close (fd);
       g_unlink (tmp_cache_path);
       exit (0);
     }
@@ -1483,7 +1482,6 @@ build_cache (const gchar *path)
   /* FIXME: Handle failure */
   retval = write_file (cache, files, directories);
   fclose (cache);
-  close (fd);
 
   g_list_foreach (directories, (GFunc)g_free, NULL);
   g_list_free (directories);
