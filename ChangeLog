@@ -1,3 +1,11 @@
+2008-06-08  Kristian Rietveld  <kris@imendio.com>
+
+	Merge from trunk:
+
+	* gtk/gtktreeviewcolumn.c (gtk_tree_view_column_update_button):
+	always determine what arrow to show if show_sort_indicator is true.
+	(#352738, Chris Vine).
+
 2008-06-07  Tor Lillqvist  <tml@novell.com>
 
 	Bug 536990 - updateiconcache.c: 'close ()' is redundant
