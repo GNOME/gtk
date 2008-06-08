@@ -12217,6 +12217,8 @@ gtk_tree_view_real_collapse_row (GtkTreeView *tree_view,
       gtk_tree_path_free (lsc);
     }
 
+  remove_expand_collapse_timeout (tree_view);
+
   if (gtk_tree_view_unref_and_check_selection_tree (tree_view, node->children))
     {
       _gtk_rbtree_remove (node->children);
@@ -12224,8 +12226,6 @@ gtk_tree_view_real_collapse_row (GtkTreeView *tree_view,
     }
   else
     _gtk_rbtree_remove (node->children);
-
-  remove_expand_collapse_timeout (tree_view);
   
   if (animate)
     add_expand_collapse_timeout (tree_view, tree, node, FALSE);
