@@ -1,3 +1,13 @@
+2008-06-09  Kristian Rietveld  <kris@gtk.org>
+
+	Bug 526987 - GtkCellRendererCombo should allow model to be NULL
+
+	* gtk/gtkcellrenderercombo.c (gtk_cell_renderer_combo_class_init),
+	(gtk_cell_renderer_combo_set_property),
+	(gtk_cell_renderer_combo_editing_done),
+	(gtk_cell_renderer_combo_start_editing): introduce private class
+	struct, allow model to be set to NULL.
+
 2008-06-08  Björn Lindqvist  <bjourne@gmail.com>
 
 	Bug 131920 – gtkNotebook sends incorrect switch_page value
