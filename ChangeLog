@@ -1,3 +1,11 @@
+2008-06-08  Kristian Rietveld  <kris@gtk.org>
+
+	Bug 488119 - critical warnings from gtk_tree_view_get_visible_range
+
+	* gtk/gtktreeview.c (gtk_tree_view_get_visible_range): only try to
+	find path if we found valid nodes, return FALSE otherwise.  (Patch
+	from Matthias Clasen).
+
 2008-06-08  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtkrecentmanager.c:

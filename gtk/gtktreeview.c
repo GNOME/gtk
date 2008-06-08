@@ -13237,18 +13237,24 @@ gtk_tree_view_get_visible_range (GtkTreeView  *tree_view,
 {
   GtkRBTree *tree;
   GtkRBNode *node;
-
+  gboolean retval;
+  
   g_return_val_if_fail (GTK_IS_TREE_VIEW (tree_view), FALSE);
 
   if (!tree_view->priv->tree)
     return FALSE;
+
+  retval = TRUE;
 
   if (start_path)
     {
       _gtk_rbtree_find_offset (tree_view->priv->tree,
                                TREE_WINDOW_Y_TO_RBTREE_Y (tree_view, 0),
                                &tree, &node);
-      *start_path = _gtk_tree_view_find_path (tree_view, tree, node);
+      if (node)
+        *start_path = _gtk_tree_view_find_path (tree_view, tree, node);
+      else
+        retval = FALSE;
     }
 
   if (end_path)
@@ -13261,10 +13267,13 @@ gtk_tree_view_get_visible_range (GtkTreeView  *tree_view,
         y = TREE_WINDOW_Y_TO_RBTREE_Y (tree_view, tree_view->priv->vadjustment->page_size) - 1;
 
       _gtk_rbtree_find_offset (tree_view->priv->tree, y, &tree, &node);
-      *end_path = _gtk_tree_view_find_path (tree_view, tree, node);
+      if (node)
+        *end_path = _gtk_tree_view_find_path (tree_view, tree, node);
+      else
+        retval = FALSE;
     }
 
-  return TRUE;
+  return retval;
 }
 
 static void
