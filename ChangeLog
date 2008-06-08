@@ -1,3 +1,11 @@
+2008-06-08  Björn Lindqvist  <bjourne@gmail.com>
+
+	Bug 131920 – gtkNotebook sends incorrect switch_page value
+
+	* gtk/gtknotebook.c (gtk_notebook_real_remove): Make switch-page
+	signal send correct page index when page index 0 is active and
+	removed. (#131920, Samuel Fogh)
+
 2008-06-08  Kristian Rietveld  <kris@gtk.org>
 
 	Bug 536730 - memory corruption in gtktreeview

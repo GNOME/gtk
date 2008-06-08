@@ -4323,9 +4323,11 @@ gtk_notebook_real_remove (GtkNotebook *notebook,
   priv = GTK_NOTEBOOK_GET_PRIVATE (notebook);
   destroying = GTK_OBJECT_FLAGS (notebook) & GTK_IN_DESTRUCTION;
   
-  next_list = gtk_notebook_search_page (notebook, list, STEP_PREV, TRUE);
+  next_list = gtk_notebook_search_page (notebook, list, STEP_NEXT, TRUE);
   if (!next_list)
-    next_list = gtk_notebook_search_page (notebook, list, STEP_NEXT, TRUE);
+    next_list = gtk_notebook_search_page (notebook, list, STEP_PREV, TRUE);
+
+  notebook->children = g_list_remove_link (notebook->children, list);
 
   if (notebook->cur_page == list->data)
     { 
@@ -4370,7 +4372,6 @@ gtk_notebook_real_remove (GtkNotebook *notebook,
   if (!page->default_menu)
     g_object_unref (page->menu_label);
   
-  notebook->children = g_list_remove_link (notebook->children, list);
   g_list_free (list);
 
   if (page->last_focus_child)
