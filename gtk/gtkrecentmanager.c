@@ -41,11 +41,6 @@
 #include "gtkmarshalers.h"
 #include "gtkalias.h"
 
-#ifdef G_OS_UNIX
-#define XDG_PREFIX _gtk_xdg
-#include "xdgmime/xdgmime.h"
-#endif
-
 /* the file where we store the recently used items */
 #define GTK_RECENTLY_USED_FILE	".recently-used.xbel"
 

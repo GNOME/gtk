@@ -27,11 +27,6 @@
 
 #include "gtkalias.h"
 
-#ifdef G_OS_UNIX
-#define XDG_PREFIX _gtk_xdg
-#include "xdgmime/xdgmime.h"
-#endif
-
 typedef struct _GtkFileFilterClass GtkFileFilterClass;
 typedef struct _FilterRule FilterRule;
 
@@ -381,12 +376,8 @@ gtk_file_filter_filter (GtkFileFilter           *filter,
       switch (rule->type)
 	{
 	case FILTER_RULE_MIME_TYPE:
-	  if (filter_info->mime_type != NULL
-#ifdef G_OS_UNIX
-	      && xdg_mime_mime_type_subclass (filter_info->mime_type, rule->u.mime_type))
-#else
-	      && strcmp (rule->u.mime_type, filter_info->mime_type) == 0)
-#endif
+	  if (filter_info->mime_type != NULL &&
+              g_content_type_is_a (filter_info->mime_type, rule->u.mime_type))
 	    return TRUE;
 	  break;
 	case FILTER_RULE_PATTERN:

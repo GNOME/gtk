@@ -1,3 +1,10 @@
+2008-06-08  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtkrecentmanager.c:
+	* gtk/gtkrecentfilter.c:
+	* gtk/gtkfilefilter.c: Replace uses of xdgmime with
+	g_content_type.
+	
 2008-06-08  Christian Persch <chpe@gnome.org>
 
 	Bug 535608 – do not string-copy accel paths in the menu code
