@@ -1510,7 +1510,7 @@
 2008-04-11  Tristan Van Berkom <tvb@gnome.org>
 
 	* gtk/gtklabel.c: Added <attributes> / <attribute>
-	custom tags to parse pango attributes into labels.
+	custom tags to parse pango attributes into labels (#527486).
 
 	* tests/buildertest.c: Added tests for GtkLabel custom
 	tag parsing.
