@@ -1,15 +1,15 @@
 # Thai translation for gtk+.
-# Copyright (C) 2003-2007 Free Software Foundation, Inc.
+# Copyright (C) 2003-2008 Free Software Foundation, Inc.
 # This file is distributed under the same license as the gtk+ package.
 # Paisa Seeluangsawat <paisa@users.sf.net>, 2003, 2004.
-# Theppitak Karoonboonyanan <thep@linux.thai.net>, 2005-2007.
+# Theppitak Karoonboonyanan <thep@linux.thai.net>, 2005-2008.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2008-06-03 18:52-0400\n"
-"PO-Revision-Date: 2007-09-06 15:17+0700\n"
+"PO-Revision-Date: 2008-06-10 17:10+0700\n"
 "Last-Translator: Theppitak Karoonboonyanan <thep@linux.thai.net>\n"
 "Language-Team: Thai <thai-l10n@googlegroups.com>\n"
 "MIME-Version: 1.0\n"
@@ -293,7 +293,7 @@ msgstr "ไม่สามารถเปิดรูป '%s': %s"
 #: gdk-pixbuf/gdk-pixbuf-io.c:1601 gdk-pixbuf/io-gdip-utils.c:935
 #, c-format
 msgid "Error writing to image file: %s"
-msgstr "เกิดข้อผิดพลาด ขณะเขียนแฟ้มรูป: %s"
+msgstr "เกิดข้อผิดพลาดขณะเขียนแฟ้มรูป: %s"
 
 #: gdk-pixbuf/gdk-pixbuf-io.c:1647 gdk-pixbuf/gdk-pixbuf-io.c:1778
 #, c-format
@@ -333,9 +333,9 @@ msgid "Insufficient memory to save image into a buffer"
 msgstr "หน่วยความจำไม่พอที่จะอ่านรูปลงในบัฟเฟอร์"
 
 #: gdk-pixbuf/gdk-pixbuf-io.c:2297
-#, fuzzy, c-format
+#, c-format
 msgid "Error writing to image stream"
-msgstr "เกิดข้อผิดพลาด ขณะเขียนแฟ้มรูป: %s"
+msgstr "เกิดข้อผิดพลาดขณะเขียนสตรีมรูป"
 
 #: gdk-pixbuf/gdk-pixbuf-loader.c:330
 #, c-format
@@ -574,59 +574,57 @@ msgid "The ICO image format"
 msgstr "แฟ้มรูปชนิด ICO"
 
 #: gdk-pixbuf/io-icns.c:345
-#, fuzzy, c-format
+#, c-format
 msgid "Error reading ICNS image: %s"
-msgstr "มีข้อผิดพลาดขณะอ่านแฟ้มรูป PNG: %s"
+msgstr "เกิดข้อผิดพลาดขณะอ่านแฟ้มรูป ICNS: %s"
 
 #: gdk-pixbuf/io-icns.c:362
-#, fuzzy, c-format
+#, c-format
 msgid "Could not decode ICNS file"
-msgstr "เลือกแฟ้มไม่สำเร็จ"
+msgstr "ไม่สามารถอ่านรหัสแฟ้ม ICNS"
 
 #: gdk-pixbuf/io-icns.c:395
-#, fuzzy
 msgid "The ICNS image format"
-msgstr "แฟ้มรูปชนิด ICO"
+msgstr "แฟ้มรูปชนิด ICNS"
 
 #: gdk-pixbuf/io-jasper.c:74
-#, fuzzy, c-format
+#, c-format
 msgid "Couldn't allocate memory for stream"
-msgstr "หน่วยความจำไม่พอสำหรับข้อมูลส่วนหัว"
+msgstr "ไม่สามารถจองหน่วยความจำสำหรับสตรีม"
 
 #: gdk-pixbuf/io-jasper.c:103
-#, fuzzy, c-format
+#, c-format
 msgid "Couldn't decode image"
-msgstr "แปลงชื่อแฟ้มไม่สำเร็จ"
+msgstr "ไม่สามารถอ่านรหัสภาพ"
 
 #: gdk-pixbuf/io-jasper.c:121
-#, fuzzy, c-format
+#, c-format
 msgid "Transformed JPEG2000 has zero width or height"
-msgstr "รูป JPEG ที่แปลงมามีความกว้างหรือความสูงเป็นศูนย์"
+msgstr "รูป JPEG2000 ที่แปลงมามีความกว้างหรือความสูงเป็นศูนย์"
 
 #: gdk-pixbuf/io-jasper.c:134
-#, fuzzy, c-format
+#, c-format
 msgid "Image type currently not supported"
-msgstr "ไม่รองรับรูปชนิด '%s'"
+msgstr "ยังไม่รองรับรูปชนิดนี้"
 
 #: gdk-pixbuf/io-jasper.c:145 gdk-pixbuf/io-jasper.c:152
-#, fuzzy, c-format
+#, c-format
 msgid "Couldn't allocate memory for color profile"
-msgstr "หน่วยความจำไม่พอสำหรับอ่านรูป JPEG นี้"
+msgstr "ไม่สามารถจองหน่วยความจำสำหรับโพรไฟล์สี"
 
 #: gdk-pixbuf/io-jasper.c:177
-#, fuzzy, c-format
+#, c-format
 msgid "Insufficient memory to open JPEG 2000 file"
-msgstr "หน่วยความจำไม่พอจะเปิดแฟ้ม TIFF"
+msgstr "หน่วยความจำไม่พอจะเปิดแฟ้ม JPEG 2000"
 
 #: gdk-pixbuf/io-jasper.c:258
-#, fuzzy, c-format
+#, c-format
 msgid "Couldn't allocate memory to buffer image data"
-msgstr "หน่วยความจำไม่พอสำหรับข้อมูลเส้นนอนของภาพ"
+msgstr "ไม่สามารถจองหน่วยความจำสำหรับพักข้อมูลภาพ"
 
 #: gdk-pixbuf/io-jasper.c:302
-#, fuzzy
 msgid "The JPEG 2000 image format"
-msgstr "แฟ้มรูปชนิด JPEG"
+msgstr "แฟ้มรูปชนิด JPEG 2000"
 
 #: gdk-pixbuf/io-jpeg.c:117
 #, c-format
@@ -1133,60 +1131,58 @@ msgid "The XPM image format"
 msgstr "แฟ้มรูปชนิด XPM"
 
 #: gdk-pixbuf/io-gdip-emf.c:59
-#, fuzzy
 msgid "The EMF image format"
-msgstr "แฟ้มรูปชนิด BMP"
+msgstr "แฟ้มรูปชนิด EMF"
 
 #: gdk-pixbuf/io-gdip-utils.c:212
-#, fuzzy, c-format
+#, c-format
 msgid "Could not allocate memory: %s"
-msgstr "หน่วยความจำไม่พอสำหรับข้อมูลส่วนหัว"
+msgstr "ไม่สามารถจองหน่วยความจำ: %s"
 
 #: gdk-pixbuf/io-gdip-utils.c:237 gdk-pixbuf/io-gdip-utils.c:350
 #: gdk-pixbuf/io-gdip-utils.c:383
-#, fuzzy, c-format
+#, c-format
 msgid "Could not create stream: %s"
-msgstr "ไม่สามารถสร้างโฟลเดอร์: %s"
+msgstr "ไม่สามารถสร้างสตรีม: %s"
 
 #: gdk-pixbuf/io-gdip-utils.c:251
-#, fuzzy, c-format
+#, c-format
 msgid "Could not seek stream: %s"
-msgstr "ลบรายการไม่สำเร็จ"
+msgstr "ไม่สามารถเลื่อนตำแหน่งในสตรีม: %s"
 
 #: gdk-pixbuf/io-gdip-utils.c:263
-#, fuzzy, c-format
+#, c-format
 msgid "Could not read from stream: %s"
-msgstr "ไม่สามารถเปลี่ยนชื่อ %s ไปเป็น %s: %s\n"
+msgstr "ไม่สามารถอ่านข้อมูลจากสตรีม: %s"
 
 #: gdk-pixbuf/io-gdip-utils.c:736
-#, fuzzy, c-format
+#, c-format
 msgid "Couldn't create pixbuf"
-msgstr "สร้างพิกซ์บัฟใหม่ไม่สำเร็จ"
+msgstr "สร้างพิกซ์บัฟไม่สำเร็จ"
 
 #: gdk-pixbuf/io-gdip-utils.c:798
-#, fuzzy, c-format
+#, c-format
 msgid "Couldn't load bitmap"
-msgstr "แปลงชื่อแฟ้มไม่สำเร็จ"
+msgstr "โหลดบิตแมปไม่สำเร็จ"
 
 #: gdk-pixbuf/io-gdip-utils.c:821
-#, fuzzy, c-format
+#, c-format
 msgid "Couldn't load metafile"
-msgstr "แปลงชื่อแฟ้มไม่สำเร็จ"
+msgstr "โหลด metafile ไม่สำเร็จ"
 
 #: gdk-pixbuf/io-gdip-utils.c:980
-#, fuzzy, c-format
+#, c-format
 msgid "Unsupported image format for GDI+"
-msgstr "ไม่รองรับรูป RAS ชนิดย่อยนี้"
+msgstr "รูปแบบภาพที่ GDI+ ไม่รองรับ"
 
 #: gdk-pixbuf/io-gdip-utils.c:987
-#, fuzzy, c-format
+#, c-format
 msgid "Couldn't save"
-msgstr "บันทึกที่เหลือไม่สำเร็จ"
+msgstr "บันทึกไม่สำเร็จ"
 
 #: gdk-pixbuf/io-gdip-wmf.c:58
-#, fuzzy
 msgid "The WMF image format"
-msgstr "แฟ้มรูปชนิด WBMP"
+msgstr "แฟ้มรูปชนิด WMF"
 
 #. Description of --sync in --help output
 #: gdk/win32/gdkmain-win32.c:54
@@ -1224,20 +1220,20 @@ msgid "Make X calls synchronous"
 msgstr "เรียกใช้ X แบบประสานเวลา"
 
 #: gdk/x11/gdkapplaunchcontext-x11.c:303
-#, fuzzy, c-format
+#, c-format
 msgid "Starting %s"
-msgstr "กำลังพิมพ์ %d"
+msgstr "กำลังเริ่ม %s"
 
 #: gdk/x11/gdkapplaunchcontext-x11.c:305
-#, fuzzy, c-format
+#, c-format
 msgid "Opening %s"
-msgstr "เปิด '%s'"
+msgstr "กำลังเปิด %s"
 
 #: gdk/x11/gdkapplaunchcontext-x11.c:308
 #, c-format
 msgid "Opening %d Item"
 msgid_plural "Opening %d Items"
-msgstr[0] ""
+msgstr[0] "กำลังเปิด %d รายการ"
 
 #: gtk/gtkaboutdialog.c:264 gtk/gtkaboutdialog.c:2106
 msgid "License"
@@ -1888,33 +1884,31 @@ msgstr "ไม่รู้จัก"
 
 #: gtk/gtkfilechooserdefault.c:11156
 msgid "%H:%M"
-msgstr ""
+msgstr "%H:%M น."
 
 #: gtk/gtkfilechooserdefault.c:11158
 msgid "Yesterday at %H:%M"
 msgstr "เมื่อวาน %H:%M น."
 
 #: gtk/gtkfilechooserentry.c:650 gtk/gtkfilechooserentry.c:1096
-#, fuzzy
 msgid "Invalid path"
-msgstr "URI ไม่ถูกต้อง"
+msgstr "พาธไม่ถูกต้อง"
 
 #: gtk/gtkfilechooserentry.c:1058
 msgid "No match"
-msgstr ""
+msgstr "ไม่มีรายการที่ตรง"
 
 #: gtk/gtkfilechooserentry.c:1066
-#, fuzzy
 msgid "Sole completion"
-msgstr "เลือกสี"
+msgstr "เติมเต็มโดยมีเพียงรายการเดียว"
 
 #: gtk/gtkfilechooserentry.c:1078
 msgid "Complete, but not unique"
-msgstr ""
+msgstr "เติมเต็ม แต่ไม่ได้มีแค่รายการเดียว"
 
 #: gtk/gtkfilechooserentry.c:1111
 msgid "Completing..."
-msgstr ""
+msgstr "กำลังเติมเต็ม..."
 
 #: gtk/gtkfilechoosersettings.c:262 gtk/gtkfilesel.c:1348
 #: gtk/gtkfilesel.c:1357 gtk/gtkfilesystemunix.c:1048
@@ -2198,13 +2192,12 @@ msgid "Failed to load icon"
 msgstr "โหลดไอคอนไม่สำเร็จ"
 
 #: gtk/gtkimmodule.c:515
-#, fuzzy
 msgid "Simple"
-msgstr "ขนาด"
+msgstr "อย่างง่าย"
 
 #: gtk/gtkimmulticontext.c:542
 msgid "input method menu|System"
-msgstr ""
+msgstr "ระบบ"
 
 #: gtk/gtkinputdialog.c:190
 msgid "Input"
@@ -2344,44 +2337,40 @@ msgid "Show GTK+ Options"
 msgstr "แสดงตัวเลือกของ GTK+"
 
 #: gtk/gtkmountoperation.c:476
-#, fuzzy
 msgid "Co_nnect"
 msgstr "เ_ชื่อมต่อ"
 
 #: gtk/gtkmountoperation.c:520
 msgid "Connect _anonymously"
-msgstr ""
+msgstr "เชื่อมต่อแบบ_นิรนาม"
 
 #: gtk/gtkmountoperation.c:529
 msgid "Connect as u_ser:"
-msgstr ""
+msgstr "เชื่อมต่อในนา_มผู้ใช้:"
 
 #: gtk/gtkmountoperation.c:566
-#, fuzzy
 msgid "_Username:"
-msgstr "เ_ปลี่ยนชื่อ"
+msgstr "ชื่_อผู้ใช้:"
 
 #: gtk/gtkmountoperation.c:570
-#, fuzzy
 msgid "_Domain:"
-msgstr "_ตำแหน่ง:"
+msgstr "โ_ดเมน:"
 
 #: gtk/gtkmountoperation.c:575
-#, fuzzy
 msgid "_Password:"
-msgstr "แรง_กด:"
+msgstr "_รหัสผ่าน::"
 
 #: gtk/gtkmountoperation.c:590
 msgid "_Forget password immediately"
-msgstr ""
+msgstr "_ทิ้งรหัสผ่านทันที"
 
 #: gtk/gtkmountoperation.c:598
 msgid "_Remember password until you logout"
-msgstr ""
+msgstr "_จำรหัสผ่านไว้จนกว่าจะออก"
 
 #: gtk/gtkmountoperation.c:606
 msgid "_Remember forever"
-msgstr ""
+msgstr "จำรหัสผ่านไว้_ตลอดไป"
 
 #: gtk/gtknotebook.c:828
 msgid "Arrow spacing"
@@ -2674,24 +2663,20 @@ msgid "Status"
 msgstr "สถานะ"
 
 #: gtk/gtkprintunixdialog.c:1704
-#, fuzzy
 msgid "Range"
-msgstr "_ช่วง"
+msgstr "ช่วง"
 
 #: gtk/gtkprintunixdialog.c:1708
-#, fuzzy
 msgid "_All Pages"
-msgstr "ทุกหน้า"
+msgstr "ทุ_กหน้า"
 
 #: gtk/gtkprintunixdialog.c:1715
-#, fuzzy
 msgid "C_urrent Page"
-msgstr "_ปัจจุบัน"
+msgstr "หน้า_ปัจจุบัน"
 
 #: gtk/gtkprintunixdialog.c:1724
-#, fuzzy
 msgid "Pag_es:"
-msgstr "ที่หลักๆ"
+msgstr "_หน้า:"
 
 #: gtk/gtkprintunixdialog.c:1725
 msgid ""
@@ -3233,9 +3218,8 @@ msgid "Reverse portrait"
 msgstr "แนวตั้งกลับด้าน"
 
 #: gtk/gtkstock.c:377
-#, fuzzy
 msgid "Page Set_up"
-msgstr "ตั้งหน้ากระดาษ"
+msgstr "ตั้ง_หน้ากระดาษ"
 
 #: gtk/gtkstock.c:378
 msgid "_Paste"
@@ -4405,9 +4389,9 @@ msgid "Failed to rewrite header\n"
 msgstr "เขียนข้อมูลส่วนหัวซ้ำไม่สำเร็จ\n"
 
 #: gtk/updateiconcache.c:1454
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to open file %s : %s\n"
-msgstr "เปิดแฟ้ม '%s' ไม่สำเร็จ: %s"
+msgstr "เปิดแฟ้ม %s ไม่สำเร็จ: %s\n"
 
 #: gtk/updateiconcache.c:1462
 #, c-format
@@ -4476,7 +4460,7 @@ msgstr "ไม่ใช่แคชของไอคอนที่ใช้ก
 #: gtk/updateiconcache.c:1684
 #, c-format
 msgid "No theme index file."
-msgstr ""
+msgstr "ไม่มีแฟ้มดัชนีของชุดตกแต่ง"
 
 #: gtk/updateiconcache.c:1688
 #, c-format
@@ -4545,67 +4529,67 @@ msgstr "X Input Method"
 #: modules/printbackends/cups/gtkprintbackendcups.c:1063
 #, c-format
 msgid "Printer '%s' is low on toner."
-msgstr ""
+msgstr "เครื่องพิมพ์ '%s' หมึกเหลือน้อย"
 
 #: modules/printbackends/cups/gtkprintbackendcups.c:1064
 #, c-format
 msgid "Printer '%s' has no toner left."
-msgstr ""
+msgstr "เครื่องพิมพ์ '%s' หมึกหมด"
 
 #: modules/printbackends/cups/gtkprintbackendcups.c:1065
 #, c-format
 msgid "Printer '%s' is low on developer."
-msgstr ""
+msgstr "เครื่องพิมพ์ '%s' ตัว develop เหลือน้อย"
 
 #: modules/printbackends/cups/gtkprintbackendcups.c:1066
 #, c-format
 msgid "Printer '%s' is out of developer."
-msgstr ""
+msgstr "เครื่องพิมพ์ '%s' ตัว develop หมด"
 
 #: modules/printbackends/cups/gtkprintbackendcups.c:1067
 #, c-format
 msgid "Printer '%s' is low on at least one marker supply."
-msgstr ""
+msgstr "เครื่องพิมพ์ '%s' วัสดุพิมพ์บางอย่างเหลือน้อย"
 
 #: modules/printbackends/cups/gtkprintbackendcups.c:1068
 #, c-format
 msgid "Printer '%s' is out of at least one marker supply."
-msgstr ""
+msgstr "เครื่องพิมพ์ '%s' วัสดุพิมพ์บางอย่างหมด"
 
 #: modules/printbackends/cups/gtkprintbackendcups.c:1069
 #, c-format
 msgid "The cover is open on printer '%s'."
-msgstr ""
+msgstr "ฝาเครื่องเปิดอยู่ที่เครื่องพิมพ์ '%s'"
 
 #: modules/printbackends/cups/gtkprintbackendcups.c:1070
 #, c-format
 msgid "The door is open on printer '%s'."
-msgstr ""
+msgstr "ประตูเปิดอยู่ที่เครื่องพิมพ์ '%s'"
 
 #: modules/printbackends/cups/gtkprintbackendcups.c:1071
 #, c-format
 msgid "Printer '%s' is low on paper."
-msgstr ""
+msgstr "เครื่องพิมพ์ '%s' เหลือกระดาษน้อย"
 
 #: modules/printbackends/cups/gtkprintbackendcups.c:1072
 #, c-format
 msgid "Printer '%s' is out of paper."
-msgstr ""
+msgstr "เครื่องพิมพ์ '%s' กระดาษหมด"
 
 #: modules/printbackends/cups/gtkprintbackendcups.c:1073
-#, fuzzy, c-format
+#, c-format
 msgid "Printer '%s' is currently off-line."
-msgstr "เครื่องพิมพ์ไม่ได้เชื่อมต่อ"
+msgstr "เครื่องพิมพ์ '%s' ออฟไลน์อยู่"
 
 #: modules/printbackends/cups/gtkprintbackendcups.c:1074
 #, c-format
 msgid "Printer '%s' may not be connected."
-msgstr ""
+msgstr "เครื่องพิมพ์ '%s' อาจไม่ได้เชื่อมต่อ"
 
 #: modules/printbackends/cups/gtkprintbackendcups.c:1075
 #, c-format
 msgid "There is a problem on printer '%s'."
-msgstr ""
+msgstr "มีปัญหากับเครื่องพิมพ์ '%s'"
 
 #: modules/printbackends/cups/gtkprintbackendcups.c:1845
 msgid "Two Sided"
@@ -4685,9 +4669,9 @@ msgid "Unclassified"
 msgstr "ยังไม่คัดแยก"
 
 #: modules/printbackends/cups/gtkprintbackendcups.c:2621
-#, fuzzy, c-format
+#, c-format
 msgid "Custom %sx%s"
-msgstr "กำหนดเอง %2fx%.2f"
+msgstr "กำหนดเอง %sx%s"
 
 #. default filename used for print-to-file
 #: modules/printbackends/file/gtkprintbackendfile.c:235
