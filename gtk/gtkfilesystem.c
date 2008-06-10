@@ -1697,6 +1697,7 @@ gtk_file_system_volume_render_icon (GtkFileSystemVolume  *volume,
 				    GError              **error)
 {
   GIcon *icon = NULL;
+  GdkPixbuf *pixbuf;
 
   DEBUG ("volume_get_icon_name");
 
@@ -1713,6 +1714,7 @@ gtk_file_system_volume_render_icon (GtkFileSystemVolume  *volume,
 
       file = g_mount_get_root (mount);
       icon = get_icon_for_special_directory (file);
+      g_object_unref (file);
 
       if (!icon)
 	icon = g_mount_get_icon (mount);
@@ -1721,7 +1723,11 @@ gtk_file_system_volume_render_icon (GtkFileSystemVolume  *volume,
   if (!icon)
     return NULL;
 
-  return get_pixbuf_from_gicon (icon, widget, icon_size, error);
+  pixbuf = get_pixbuf_from_gicon (icon, widget, icon_size, error);
+
+  g_object_unref (icon);
+
+  return pixbuf;
 }
 
 void

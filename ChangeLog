@@ -1,3 +1,8 @@
+2008-06-10  Paolo Borelli  <pborelli@katamail.com>
+
+	* gtk/gtkfilesystem.c (gtk_file_system_volume_render_icon): do not
+	leak the GIcon.
+
 2008-06-10  Carlos Garnacho  <carlos@imendio.com>
 
 	* configure.in:
