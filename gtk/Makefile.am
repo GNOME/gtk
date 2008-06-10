@@ -1,19 +1,14 @@
 # Makefile.am for gtk+/gtk
 include $(top_srcdir)/Makefile.decl
 
-xdgmimedir =
-
-if OS_UNIX
-xdgmimedir += xdgmime
 if USE_QUARTZ
 GTK_PRINT_PREVIEW_COMMAND="open -a /Applications/Preview.app %f"
 else
 GTK_PRINT_PREVIEW_COMMAND="evince --unlink-tempfile --preview --print-settings %s %f"
 endif
-endif
 
-SUBDIRS = theme-bits $(xdgmimedir) . tests
-DIST_SUBDIRS=theme-bits xdgmime tests
+SUBDIRS = theme-bits . tests
+DIST_SUBDIRS=theme-bits tests
 
 if HAVE_CUPS
 GTK_PRINT_BACKENDS=file,cups
@@ -115,10 +110,6 @@ libadd =								\
 	$(top_builddir)/gdk/$(gdktargetlib)				\
 	$(GTK_DEP_LIBS)
 deps =
-
-if OS_UNIX
-libadd += xdgmime/libxdgmime.la
-endif
 
 # libtool stuff: set version and export symbols for resolving
 # since automake doesn't support conditionalized libsomething_la_LDFLAGS

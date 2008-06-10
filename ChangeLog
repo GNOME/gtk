@@ -1,5 +1,12 @@
 2008-06-10  Carlos Garnacho  <carlos@imendio.com>
 
+	* configure.in:
+	* gtk/Makefile.am:
+	* gtk/xdgmime: removed local xdgmime copy as Matthias suggested in bug
+	#520874, comment #8. It's no longer used directly by GTK+.
+
+2008-06-10  Carlos Garnacho  <carlos@imendio.com>
+
 	Bug 520874 - Should use gio directly.
 
 	* gtk/gtkfilesystem.[ch]: Turn into a private object, which mostly

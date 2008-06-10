@@ -2004,7 +2004,6 @@ gtk/gtkversion.h
 gtk/gtk-win32.rc
 gtk/theme-bits/Makefile
 gtk/tests/Makefile
-gtk/xdgmime/Makefile
 modules/Makefile
 modules/other/Makefile
 modules/other/gail/Makefile
