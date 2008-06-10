@@ -42,13 +42,13 @@ typedef enum {
 } GtkFileSystemModelColumns;
 
 GtkFileSystemModel *_gtk_file_system_model_new              (GtkFileSystem      *file_system,
-							     const GtkFilePath  *root_path,
+							     GFile              *root_file,
 							     gint                max_depth,
-							     GtkFileInfoType     types,
+							     const gchar        *attributes,
 							     GError            **error);
-const GtkFileInfo * _gtk_file_system_model_get_info         (GtkFileSystemModel *model,
+GFileInfo *         _gtk_file_system_model_get_info         (GtkFileSystemModel *model,
 							     GtkTreeIter        *iter);
-const GtkFilePath * _gtk_file_system_model_get_path          (GtkFileSystemModel *model,
+GFile *             _gtk_file_system_model_get_file         (GtkFileSystemModel *model,
 							     GtkTreeIter        *iter);
 void                _gtk_file_system_model_set_show_hidden  (GtkFileSystemModel *model,
 							     gboolean            show_hidden);
@@ -58,8 +58,8 @@ void                _gtk_file_system_model_set_show_files   (GtkFileSystemModel 
 							     gboolean            show_files);
 
 typedef gboolean (*GtkFileSystemModelFilter) (GtkFileSystemModel *model,
-					      GtkFilePath        *path,
-					      const GtkFileInfo  *info,
+					      GFile              *file,
+					      GFileInfo          *info,
 					      gpointer            user_data);
 
 void     _gtk_file_system_model_set_filter (GtkFileSystemModel      *model,
@@ -72,7 +72,7 @@ typedef void (*GtkFileSystemModelPathFunc) (GtkFileSystemModel *model,
 					    gpointer            user_data);
 
 void     _gtk_file_system_model_path_do (GtkFileSystemModel        *model,
-					 const GtkFilePath         *path,
+					 GFile                     *file,
 					 GtkFileSystemModelPathFunc func,
 					 gpointer                   user_data);
 

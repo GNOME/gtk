@@ -21,7 +21,6 @@
 #include <config.h>
 #include "gtkfilechooser.h"
 #include "gtkfilechooserprivate.h"
-#include "gtkfilesystem.h"
 #include "gtkintl.h"
 #include "gtktypebuiltins.h"
 #include "gtkprivate.h"
@@ -30,7 +29,7 @@
 
 static void gtk_file_chooser_class_init (gpointer g_iface);
 
-static GtkFilePath *gtk_file_chooser_get_path         (GtkFileChooser *chooser);
+static GFile *gtk_file_chooser_get_file (GtkFileChooser *chooser);
 
 GType
 gtk_file_chooser_get_type (void)
@@ -446,18 +445,17 @@ gtk_file_chooser_get_select_multiple (GtkFileChooser *chooser)
 gchar *
 gtk_file_chooser_get_filename (GtkFileChooser *chooser)
 {
-  GtkFileSystem *file_system;
-  GtkFilePath *path;
+  GFile *file;
   gchar *result = NULL;
-  
+
   g_return_val_if_fail (GTK_IS_FILE_CHOOSER (chooser), NULL);
 
-  file_system = _gtk_file_chooser_get_file_system (chooser);
-  path = gtk_file_chooser_get_path (chooser);
-  if (path)
+  file = gtk_file_chooser_get_file (chooser);
+
+  if (file)
     {
-      result = gtk_file_system_path_to_filename (file_system, path);
-      gtk_file_path_free (path);
+      result = g_file_get_basename (file);
+      g_object_unref (file);
     }
 
   return result;
@@ -535,23 +533,15 @@ gboolean
 gtk_file_chooser_select_filename (GtkFileChooser *chooser,
 				  const gchar    *filename)
 {
-  GtkFileSystem *file_system;
-  GtkFilePath *path;
+  GFile *file;
   gboolean result;
   
   g_return_val_if_fail (GTK_IS_FILE_CHOOSER (chooser), FALSE);
   g_return_val_if_fail (filename != NULL, FALSE);
 
-  file_system = _gtk_file_chooser_get_file_system (chooser);
-
-  path = gtk_file_system_filename_to_path (file_system, filename);
-  if (path)
-    {
-      result = _gtk_file_chooser_select_path (chooser, path, NULL);
-      gtk_file_path_free (path);
-    }
-  else
-    result = FALSE;
+  file = g_file_new_for_path (filename);
+  result = _gtk_file_chooser_select_file (chooser, file, NULL);
+  g_object_unref (file);
 
   return result;
 }
@@ -571,39 +561,32 @@ void
 gtk_file_chooser_unselect_filename (GtkFileChooser *chooser,
 				    const char     *filename)
 {
-  GtkFileSystem *file_system;
-  GtkFilePath *path;
-  
+  GFile *file;
+
   g_return_if_fail (GTK_IS_FILE_CHOOSER (chooser));
   g_return_if_fail (filename != NULL);
 
-  file_system = _gtk_file_chooser_get_file_system (chooser);
-
-  path = gtk_file_system_filename_to_path (file_system, filename);
-  if (path)
-    {
-      _gtk_file_chooser_unselect_path (chooser, path);
-      gtk_file_path_free (path);
-    }
+  file = g_file_new_for_path (filename);
+  _gtk_file_chooser_unselect_file (chooser, file);
+  g_object_unref (file);
 }
 
-/* Converts a list of GtkFilePath* to a list of strings using the specified function */
+/* Converts a list of GFile* to a list of strings using the specified function */
 static GSList *
-file_paths_to_strings (GtkFileSystem *fs,
-		       GSList        *paths,
-		       gchar *      (*convert_func) (GtkFileSystem *fs, const GtkFilePath *path))
+files_to_strings (GSList  *files,
+		  gchar * (*convert_func) (GFile *file))
 {
   GSList *strings;
 
   strings = NULL;
 
-  for (; paths; paths = paths->next)
+  for (; files; files = files->next)
     {
-      GtkFilePath *path;
+      GFile *file;
       gchar *string;
 
-      path = paths->data;
-      string = (* convert_func) (fs, path);
+      file = files->data;
+      string = (* convert_func) (file);
 
       if (string)
 	strings = g_slist_prepend (strings, string);
@@ -630,17 +613,16 @@ file_paths_to_strings (GtkFileSystem *fs,
 GSList *
 gtk_file_chooser_get_filenames (GtkFileChooser *chooser)
 {
-  GtkFileSystem *file_system;
-  GSList *paths;
-  GSList *result;
+  GSList *files, *result;
   
   g_return_val_if_fail (GTK_IS_FILE_CHOOSER (chooser), NULL);
 
-  file_system = _gtk_file_chooser_get_file_system (chooser);
-  paths = _gtk_file_chooser_get_paths (chooser);
+  files = _gtk_file_chooser_get_files (chooser);
 
-  result = file_paths_to_strings (file_system, paths, gtk_file_system_path_to_filename);
-  gtk_file_paths_free (paths);
+  result = files_to_strings (files, g_file_get_path);
+  g_slist_foreach (files, (GFunc) g_object_unref, NULL);
+  g_slist_free (files);
+
   return result;
 }
 
@@ -662,23 +644,15 @@ gboolean
 gtk_file_chooser_set_current_folder (GtkFileChooser *chooser,
 				     const gchar    *filename)
 {
-  GtkFileSystem *file_system;
-  GtkFilePath *path;
+  GFile *file;
   gboolean result;
   
   g_return_val_if_fail (GTK_IS_FILE_CHOOSER (chooser), FALSE);
   g_return_val_if_fail (filename != NULL, FALSE);
 
-  file_system = _gtk_file_chooser_get_file_system (chooser);
-
-  path = gtk_file_system_filename_to_path (file_system, filename);
-  if (path)
-    {
-      result = _gtk_file_chooser_set_current_folder_path (chooser, path, NULL);
-      gtk_file_path_free (path);
-    }
-  else
-    result = FALSE;
+  file = g_file_new_for_path (filename);
+  result = _gtk_file_chooser_set_current_folder_file (chooser, file, NULL);
+  g_object_unref (file);
 
   return result;
 }
@@ -709,20 +683,17 @@ gtk_file_chooser_set_current_folder (GtkFileChooser *chooser,
 gchar *
 gtk_file_chooser_get_current_folder (GtkFileChooser *chooser)
 {
-  GtkFileSystem *file_system;
-  GtkFilePath *path;
+  GFile *file;
   gchar *filename;
   
   g_return_val_if_fail (GTK_IS_FILE_CHOOSER (chooser), NULL);
 
-  file_system = _gtk_file_chooser_get_file_system (chooser);
-
-  path = _gtk_file_chooser_get_current_folder_path (chooser);
-  if (!path)
+  file = _gtk_file_chooser_get_current_folder_file (chooser);
+  if (!file)
     return NULL;
 
-  filename = gtk_file_system_path_to_filename (file_system, path);
-  gtk_file_path_free (path);
+  filename = g_file_get_path (file);
+  g_object_unref (file);
 
   return filename;
 }
@@ -773,18 +744,16 @@ gtk_file_chooser_set_current_name  (GtkFileChooser *chooser,
 gchar *
 gtk_file_chooser_get_uri (GtkFileChooser *chooser)
 {
-  GtkFileSystem *file_system;
-  GtkFilePath *path;
+  GFile *file;
   gchar *result = NULL;
   
   g_return_val_if_fail (GTK_IS_FILE_CHOOSER (chooser), NULL);
 
-  file_system = _gtk_file_chooser_get_file_system (chooser);
-  path = gtk_file_chooser_get_path (chooser);
-  if (path)
+  file = gtk_file_chooser_get_file (chooser);
+  if (file)
     {
-      result = gtk_file_system_path_to_uri (file_system, path);
-      gtk_file_path_free (path);
+      result = g_file_get_uri (file);
+      g_object_unref (file);
     }
 
   return result;
@@ -861,23 +830,15 @@ gboolean
 gtk_file_chooser_select_uri (GtkFileChooser *chooser,
 			     const char     *uri)
 {
-  GtkFileSystem *file_system;
-  GtkFilePath *path;
+  GFile *file;
   gboolean result;
   
   g_return_val_if_fail (GTK_IS_FILE_CHOOSER (chooser), FALSE);
   g_return_val_if_fail (uri != NULL, FALSE);
 
-  file_system = _gtk_file_chooser_get_file_system (chooser);
-
-  path = gtk_file_system_uri_to_path (file_system, uri);
-  if (path)
-    {
-      result = _gtk_file_chooser_select_path (chooser, path, NULL);
-      gtk_file_path_free (path);
-    }
-  else
-    result = FALSE;
+  file = g_file_new_for_uri (uri);
+  result = _gtk_file_chooser_select_file (chooser, file, NULL);
+  g_object_unref (file);
 
   return result;
 }
@@ -897,20 +858,14 @@ void
 gtk_file_chooser_unselect_uri (GtkFileChooser *chooser,
 			       const char     *uri)
 {
-  GtkFileSystem *file_system;
-  GtkFilePath *path;
-  
+  GFile *file;
+
   g_return_if_fail (GTK_IS_FILE_CHOOSER (chooser));
   g_return_if_fail (uri != NULL);
 
-  file_system = _gtk_file_chooser_get_file_system (chooser);
-
-  path = gtk_file_system_uri_to_path (file_system, uri);
-  if (path)
-    {
-      _gtk_file_chooser_unselect_path (chooser, path);
-      gtk_file_path_free (path);
-    }
+  file = g_file_new_for_uri (uri);
+  _gtk_file_chooser_unselect_file (chooser, file);
+  g_object_unref (file);
 }
 
 /**
@@ -962,17 +917,16 @@ gtk_file_chooser_unselect_all (GtkFileChooser *chooser)
 GSList *
 gtk_file_chooser_get_uris (GtkFileChooser *chooser)
 {
-  GtkFileSystem *file_system;
-  GSList *paths;
-  GSList *result;
+  GSList *files, *result;
   
   g_return_val_if_fail (GTK_IS_FILE_CHOOSER (chooser), NULL);
 
-  file_system = _gtk_file_chooser_get_file_system (chooser);
-  paths = _gtk_file_chooser_get_paths (chooser);
+  files = _gtk_file_chooser_get_files (chooser);
 
-  result = file_paths_to_strings (file_system, paths, gtk_file_system_path_to_uri);
-  gtk_file_paths_free (paths);
+  result = files_to_strings (files, g_file_get_uri);
+  g_slist_foreach (files, (GFunc) g_object_unref, NULL);
+  g_slist_free (files);
+
   return result;
 }
 
@@ -994,23 +948,15 @@ gboolean
 gtk_file_chooser_set_current_folder_uri (GtkFileChooser *chooser,
 					 const gchar    *uri)
 {
-  GtkFileSystem *file_system;
-  GtkFilePath *path;
+  GFile *file;
   gboolean result;
   
   g_return_val_if_fail (GTK_IS_FILE_CHOOSER (chooser), FALSE);
   g_return_val_if_fail (uri != NULL, FALSE);
 
-  file_system = _gtk_file_chooser_get_file_system (chooser);
-
-  path = gtk_file_system_uri_to_path (file_system, uri);
-  if (path)
-    {
-      result = _gtk_file_chooser_set_current_folder_path (chooser, path, NULL);
-      gtk_file_path_free (path);
-    }
-  else
-    result = FALSE;
+  file = g_file_new_for_path (uri);
+  result = _gtk_file_chooser_set_current_folder_file (chooser, file, NULL);
+  g_object_unref (file);
 
   return result;
 }
@@ -1040,31 +986,28 @@ gtk_file_chooser_set_current_folder_uri (GtkFileChooser *chooser,
 gchar *
 gtk_file_chooser_get_current_folder_uri (GtkFileChooser *chooser)
 {
-  GtkFileSystem *file_system;
-  GtkFilePath *path;
+  GFile *file;
   gchar *uri;
   
   g_return_val_if_fail (GTK_IS_FILE_CHOOSER (chooser), NULL);
 
-  file_system = _gtk_file_chooser_get_file_system (chooser);
-
-  path = _gtk_file_chooser_get_current_folder_path (chooser);
-  if (!path)
+  file = _gtk_file_chooser_get_current_folder_file (chooser);
+  if (!file)
     return NULL;
 
-  uri = gtk_file_system_path_to_uri (file_system, path);
-  gtk_file_path_free (path);
+  uri = g_file_get_uri (file);
+  g_object_unref (file);
 
   return uri;
 }
 
 /**
- * _gtk_file_chooser_set_current_folder_path:
+ * _gtk_file_chooser_set_current_folder_file:
  * @chooser: a #GtkFileChooser
- * @path: the #GtkFilePath for the new folder
+ * @file: the #GFile for the new folder
  * @error: location to store error, or %NULL.
  * 
- * Sets the current folder for @chooser from a #GtkFilePath.
+ * Sets the current folder for @chooser from a #GFile.
  * Internal function, see gtk_file_chooser_set_current_folder_uri().
  *
  * Return value: %TRUE if the folder could be changed successfully, %FALSE
@@ -1073,31 +1016,30 @@ gtk_file_chooser_get_current_folder_uri (GtkFileChooser *chooser)
  * Since: 2.4
  **/
 gboolean
-_gtk_file_chooser_set_current_folder_path (GtkFileChooser    *chooser,
-					   const GtkFilePath *path,
-					   GError           **error)
+_gtk_file_chooser_set_current_folder_file (GtkFileChooser  *chooser,
+					   GFile           *file,
+					   GError         **error)
 {
   g_return_val_if_fail (GTK_IS_FILE_CHOOSER (chooser), FALSE);
-  g_return_val_if_fail (path != NULL, FALSE);
+  g_return_val_if_fail (G_IS_FILE (file), FALSE);
   g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
 
-  return GTK_FILE_CHOOSER_GET_IFACE (chooser)->set_current_folder (chooser, path, error);
+  return GTK_FILE_CHOOSER_GET_IFACE (chooser)->set_current_folder (chooser, file, error);
 }
 
 /**
- * _gtk_file_chooser_get_current_folder_path:
+ * _gtk_file_chooser_get_current_folder_file:
  * @chooser: a #GtkFileChooser
  * 
- * Gets the current folder of @chooser as #GtkFilePath.
+ * Gets the current folder of @chooser as #GFile.
  * See gtk_file_chooser_get_current_folder_uri().
  * 
- * Return value: the #GtkFilePath for the current folder.
- * Free with gtk_file_path_free().
+ * Return value: the #GFile for the current folder.
  *
  * Since: 2.4
  */
-GtkFilePath *
-_gtk_file_chooser_get_current_folder_path (GtkFileChooser *chooser)
+GFile *
+_gtk_file_chooser_get_current_folder_file (GtkFileChooser *chooser)
 {
   g_return_val_if_fail (GTK_IS_FILE_CHOOSER (chooser), NULL);
 
@@ -1105,9 +1047,9 @@ _gtk_file_chooser_get_current_folder_path (GtkFileChooser *chooser)
 }
 
 /**
- * _gtk_file_chooser_select_path:
+ * _gtk_file_chooser_select_file:
  * @chooser: a #GtkFileChooser
- * @path: the path to select
+ * @file: the file to select
  * @error: location to store error, or %NULL
  * 
  * Selects the file referred to by @path. An internal function. See
@@ -1119,15 +1061,15 @@ _gtk_file_chooser_get_current_folder_path (GtkFileChooser *chooser)
  * Since: 2.4
  **/
 gboolean
-_gtk_file_chooser_select_path (GtkFileChooser    *chooser,
-			       const GtkFilePath *path,
-			       GError           **error)
+_gtk_file_chooser_select_file (GtkFileChooser  *chooser,
+			       GFile           *file,
+			       GError         **error)
 {
   g_return_val_if_fail (GTK_IS_FILE_CHOOSER (chooser), FALSE);
-  g_return_val_if_fail (path != NULL, FALSE);
+  g_return_val_if_fail (G_IS_FILE (file), FALSE);
   g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
 
-  return GTK_FILE_CHOOSER_GET_IFACE (chooser)->select_path (chooser, path, error);
+  return GTK_FILE_CHOOSER_GET_IFACE (chooser)->select_file (chooser, file, error);
 }
 
 /**
@@ -1141,49 +1083,52 @@ _gtk_file_chooser_select_path (GtkFileChooser    *chooser,
  * Since: 2.4
  **/
 void
-_gtk_file_chooser_unselect_path (GtkFileChooser    *chooser,
-				 const GtkFilePath *path)
+_gtk_file_chooser_unselect_file (GtkFileChooser *chooser,
+				 GFile          *file)
 {
   g_return_if_fail (GTK_IS_FILE_CHOOSER (chooser));
+  g_return_if_fail (G_IS_FILE (file));
 
-  GTK_FILE_CHOOSER_GET_IFACE (chooser)->unselect_path (chooser, path);
+  GTK_FILE_CHOOSER_GET_IFACE (chooser)->unselect_file (chooser, file);
 }
 
 /**
- * _gtk_file_chooser_get_paths:
+ * _gtk_file_chooser_get_files:
  * @chooser: a #GtkFileChooser
  * 
  * Lists all the selected files and subfolders in the current folder of @chooser
- * as #GtkFilePath. An internal function, see gtk_file_chooser_get_uris().
+ * as #GFile. An internal function, see gtk_file_chooser_get_uris().
  * 
- * Return value: a #GSList containing a #GtkFilePath for each selected
+ * Return value: a #GSList containing a #GFile for each selected
  *   file and subfolder in the current folder.  Free the returned list
- *   with g_slist_free(), and the paths with gtk_file_path_free().
+ *   with g_slist_free(), and the files with g_object_unref().
  *
  * Since: 2.4
  **/
 GSList *
-_gtk_file_chooser_get_paths (GtkFileChooser *chooser)
+_gtk_file_chooser_get_files (GtkFileChooser *chooser)
 {
   g_return_val_if_fail (GTK_IS_FILE_CHOOSER (chooser), NULL);
 
-  return GTK_FILE_CHOOSER_GET_IFACE (chooser)->get_paths (chooser);
+  return GTK_FILE_CHOOSER_GET_IFACE (chooser)->get_files (chooser);
 }
 
-static GtkFilePath *
-gtk_file_chooser_get_path (GtkFileChooser *chooser)
+static GFile *
+gtk_file_chooser_get_file (GtkFileChooser *chooser)
 {
   GSList *list;
-  GtkFilePath *result = NULL;
+  GFile *result = NULL;
   
   g_return_val_if_fail (GTK_IS_FILE_CHOOSER (chooser), NULL);
 
-  list = _gtk_file_chooser_get_paths (chooser);
+  list = _gtk_file_chooser_get_files (chooser);
   if (list)
     {
       result = list->data;
       list = g_slist_delete_link (list, list);
-      gtk_file_paths_free (list);
+
+      g_slist_foreach (list, (GFunc) g_object_unref, NULL);
+      g_slist_free (list);
     }
 
   return result;
@@ -1364,29 +1309,29 @@ gtk_file_chooser_get_use_preview_label (GtkFileChooser *chooser)
 }
 
 /**
- * gtk_file_chooser_get_preview_filename:
+ * gtk_file_chooser_get_preview_file:
  * @chooser: a #GtkFileChooser
  * 
  * Gets the filename that should be previewed in a custom preview
  * Internal function, see gtk_file_chooser_get_preview_uri().
  * 
- * Return value: the #GtkFilePath for the file to preview, or %NULL if no file
+ * Return value: the #GFile for the file to preview, or %NULL if no file
  *  is selected. Free with gtk_file_path_free().
  *
  * Since: 2.4
  **/
-GtkFilePath *
-_gtk_file_chooser_get_preview_path (GtkFileChooser *chooser)
+GFile *
+_gtk_file_chooser_get_preview_file (GtkFileChooser *chooser)
 {
   g_return_val_if_fail (GTK_IS_FILE_CHOOSER (chooser), NULL);
 
-  return GTK_FILE_CHOOSER_GET_IFACE (chooser)->get_preview_path (chooser);
+  return GTK_FILE_CHOOSER_GET_IFACE (chooser)->get_preview_file (chooser);
 }
 
 /**
  * _gtk_file_chooser_add_shortcut_folder:
  * @chooser: a #GtkFileChooser
- * @path: path of the folder to add
+ * @file: file for the folder to add
  * @error: location to store error, or %NULL
  * 
  * Adds a folder to be displayed with the shortcut folders in a file chooser.
@@ -1398,20 +1343,20 @@ _gtk_file_chooser_get_preview_path (GtkFileChooser *chooser)
  * Since: 2.4
  **/
 gboolean
-_gtk_file_chooser_add_shortcut_folder (GtkFileChooser    *chooser,
-				       const GtkFilePath *path,
-				       GError           **error)
+_gtk_file_chooser_add_shortcut_folder (GtkFileChooser  *chooser,
+				       GFile           *file,
+				       GError         **error)
 {
   g_return_val_if_fail (GTK_IS_FILE_CHOOSER (chooser), FALSE);
-  g_return_val_if_fail (path != NULL, FALSE);
+  g_return_val_if_fail (G_IS_FILE (file), FALSE);
 
-  return GTK_FILE_CHOOSER_GET_IFACE (chooser)->add_shortcut_folder (chooser, path, error);
+  return GTK_FILE_CHOOSER_GET_IFACE (chooser)->add_shortcut_folder (chooser, file, error);
 }
 
 /**
  * _gtk_file_chooser_remove_shortcut_folder:
  * @chooser: a #GtkFileChooser
- * @path: path of the folder to remove
+ * @file: file for the folder to remove
  * @error: location to store error, or %NULL
  * 
  * Removes a folder from the shortcut folders in a file chooser.  Internal
@@ -1423,14 +1368,14 @@ _gtk_file_chooser_add_shortcut_folder (GtkFileChooser    *chooser,
  * Since: 2.4
  **/
 gboolean
-_gtk_file_chooser_remove_shortcut_folder (GtkFileChooser    *chooser,
-					  const GtkFilePath *path,
-					  GError           **error)
+_gtk_file_chooser_remove_shortcut_folder (GtkFileChooser  *chooser,
+					  GFile           *file,
+					  GError         **error)
 {
   g_return_val_if_fail (GTK_IS_FILE_CHOOSER (chooser), FALSE);
-  g_return_val_if_fail (path != NULL, FALSE);
+  g_return_val_if_fail (G_IS_FILE (file), FALSE);
 
-  return GTK_FILE_CHOOSER_GET_IFACE (chooser)->remove_shortcut_folder (chooser, path, error);
+  return GTK_FILE_CHOOSER_GET_IFACE (chooser)->remove_shortcut_folder (chooser, file, error);
 }
 
 /**
@@ -1449,18 +1394,16 @@ _gtk_file_chooser_remove_shortcut_folder (GtkFileChooser    *chooser,
 char *
 gtk_file_chooser_get_preview_filename (GtkFileChooser *chooser)
 {
-  GtkFileSystem *file_system;
-  GtkFilePath *path;
+  GFile *file;
   gchar *result = NULL;
   
   g_return_val_if_fail (GTK_IS_FILE_CHOOSER (chooser), NULL);
 
-  file_system = _gtk_file_chooser_get_file_system (chooser);
-  path = _gtk_file_chooser_get_preview_path (chooser);
-  if (path)
+  file =_gtk_file_chooser_get_preview_file (chooser);
+  if (file)
     {
-      result = gtk_file_system_path_to_filename (file_system, path);
-      gtk_file_path_free (path);
+      result = g_file_get_path (file);
+      g_object_unref (file);
     }
 
   return result;
@@ -1481,18 +1424,16 @@ gtk_file_chooser_get_preview_filename (GtkFileChooser *chooser)
 char *
 gtk_file_chooser_get_preview_uri (GtkFileChooser *chooser)
 {
-  GtkFileSystem *file_system;
-  GtkFilePath *path;
+  GFile *file;
   gchar *result = NULL;
   
   g_return_val_if_fail (GTK_IS_FILE_CHOOSER (chooser), NULL);
 
-  file_system = _gtk_file_chooser_get_file_system (chooser);
-  path = _gtk_file_chooser_get_preview_path (chooser);
-  if (path)
+  file = _gtk_file_chooser_get_preview_file (chooser);
+  if (file)
     {
-      result = gtk_file_system_path_to_uri (file_system, path);
-      gtk_file_path_free (path);
+      result = g_file_get_uri (file);
+      g_object_unref (file);
     }
 
   return result;
@@ -1682,26 +1623,15 @@ gtk_file_chooser_add_shortcut_folder (GtkFileChooser    *chooser,
 				      const char        *folder,
 				      GError           **error)
 {
-  GtkFilePath *path;
+  GFile *file;
   gboolean result;
 
   g_return_val_if_fail (GTK_IS_FILE_CHOOSER (chooser), FALSE);
   g_return_val_if_fail (folder != NULL, FALSE);
 
-  path = gtk_file_system_filename_to_path (_gtk_file_chooser_get_file_system (chooser), folder);
-  if (!path)
-    {
-      g_set_error (error,
-		   GTK_FILE_CHOOSER_ERROR,
-		   GTK_FILE_CHOOSER_ERROR_BAD_FILENAME,
-		   _("Invalid filename: %s"),
-		   folder);
-      return FALSE;
-    }
-
-  result = GTK_FILE_CHOOSER_GET_IFACE (chooser)->add_shortcut_folder (chooser, path, error);
-
-  gtk_file_path_free (path);
+  file = g_file_new_for_path (folder);
+  result = GTK_FILE_CHOOSER_GET_IFACE (chooser)->add_shortcut_folder (chooser, file, error);
+  g_object_unref (file);
 
   return result;
 }
@@ -1726,26 +1656,15 @@ gtk_file_chooser_remove_shortcut_folder (GtkFileChooser    *chooser,
 					 const char        *folder,
 					 GError           **error)
 {
-  GtkFilePath *path;
+  GFile *file;
   gboolean result;
 
   g_return_val_if_fail (GTK_IS_FILE_CHOOSER (chooser), FALSE);
   g_return_val_if_fail (folder != NULL, FALSE);
 
-  path = gtk_file_system_filename_to_path (_gtk_file_chooser_get_file_system (chooser), folder);
-  if (!path)
-    {
-      g_set_error (error,
-		   GTK_FILE_CHOOSER_ERROR,
-		   GTK_FILE_CHOOSER_ERROR_BAD_FILENAME,
-		   _("Invalid filename: %s"),
-		   folder);
-      return FALSE;
-    }
-
-  result = GTK_FILE_CHOOSER_GET_IFACE (chooser)->remove_shortcut_folder (chooser, path, error);
-
-  gtk_file_path_free (path);
+  file = g_file_new_for_path (folder);
+  result = GTK_FILE_CHOOSER_GET_IFACE (chooser)->remove_shortcut_folder (chooser, file, error);
+  g_object_unref (file);
 
   return result;
 }
@@ -1773,10 +1692,10 @@ gtk_file_chooser_list_shortcut_folders (GtkFileChooser *chooser)
 
   folders = GTK_FILE_CHOOSER_GET_IFACE (chooser)->list_shortcut_folders (chooser);
 
-  result = file_paths_to_strings (_gtk_file_chooser_get_file_system (chooser),
-				  folders,
-				  gtk_file_system_path_to_filename);
-  gtk_file_paths_free (folders);
+  result = files_to_strings (folders, g_file_get_path);
+  g_slist_foreach (folders, (GFunc) g_object_unref, NULL);
+  g_slist_free (folders);
+
   return result;
 }
 
@@ -1801,26 +1720,15 @@ gtk_file_chooser_add_shortcut_folder_uri (GtkFileChooser    *chooser,
 					  const char        *uri,
 					  GError           **error)
 {
-  GtkFilePath *path;
+  GFile *file;
   gboolean result;
 
   g_return_val_if_fail (GTK_IS_FILE_CHOOSER (chooser), FALSE);
   g_return_val_if_fail (uri != NULL, FALSE);
 
-  path = gtk_file_system_uri_to_path (_gtk_file_chooser_get_file_system (chooser), uri);
-  if (!path)
-    {
-      g_set_error (error,
-		   GTK_FILE_CHOOSER_ERROR,
-		   GTK_FILE_CHOOSER_ERROR_BAD_FILENAME,
-		   _("Invalid filename: %s"),
-		   uri);
-      return FALSE;
-    }
-
-  result = GTK_FILE_CHOOSER_GET_IFACE (chooser)->add_shortcut_folder (chooser, path, error);
-
-  gtk_file_path_free (path);
+  file = g_file_new_for_uri (uri);
+  result = GTK_FILE_CHOOSER_GET_IFACE (chooser)->add_shortcut_folder (chooser, file, error);
+  g_object_unref (file);
 
   return result;
 }
@@ -1845,26 +1753,15 @@ gtk_file_chooser_remove_shortcut_folder_uri (GtkFileChooser    *chooser,
 					     const char        *uri,
 					     GError           **error)
 {
-  GtkFilePath *path;
+  GFile *file;
   gboolean result;
 
   g_return_val_if_fail (GTK_IS_FILE_CHOOSER (chooser), FALSE);
   g_return_val_if_fail (uri != NULL, FALSE);
 
-  path = gtk_file_system_uri_to_path (_gtk_file_chooser_get_file_system (chooser), uri);
-  if (!path)
-    {
-      g_set_error (error,
-		   GTK_FILE_CHOOSER_ERROR,
-		   GTK_FILE_CHOOSER_ERROR_BAD_FILENAME,
-		   _("Invalid filename: %s"),
-		   uri);
-      return FALSE;
-    }
-
-  result = GTK_FILE_CHOOSER_GET_IFACE (chooser)->remove_shortcut_folder (chooser, path, error);
-
-  gtk_file_path_free (path);
+  file = g_file_new_for_uri (uri);
+  result = GTK_FILE_CHOOSER_GET_IFACE (chooser)->remove_shortcut_folder (chooser, file, error);
+  g_object_unref (file);
 
   return result;
 }
@@ -1892,10 +1789,10 @@ gtk_file_chooser_list_shortcut_folder_uris (GtkFileChooser *chooser)
 
   folders = GTK_FILE_CHOOSER_GET_IFACE (chooser)->list_shortcut_folders (chooser);
 
-  result = file_paths_to_strings (_gtk_file_chooser_get_file_system (chooser),
-				  folders,
-				  gtk_file_system_path_to_uri);
-  gtk_file_paths_free (folders);
+  result = files_to_strings (folders, g_file_get_uri);
+  g_slist_foreach (folders, (GFunc) g_object_unref, NULL);
+  g_slist_free (folders);
+
   return result;
 }
 

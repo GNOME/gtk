@@ -52,10 +52,6 @@
 
 #include "gtkfilechooserbutton.h"
 
-#ifdef G_OS_WIN32
-#include "gtkfilesystemwin32.h"
-#endif
-
 #include "gtkprivate.h"
 #include "gtkalias.h"
 
@@ -102,7 +98,7 @@ enum
   TYPE_COLUMN,
   DATA_COLUMN,
   IS_FOLDER_COLUMN,
-  HANDLE_COLUMN,
+  CANCELLABLE_COLUMN,
   NUM_COLUMNS
 };
 
@@ -143,7 +139,7 @@ struct _GtkFileChooserButtonPrivate
 
   gchar *backend;
   GtkFileSystem *fs;
-  GtkFilePath *old_path;
+  GFile *old_file;
 
   gulong combo_box_changed_id;
   gulong dialog_file_activated_id;
@@ -152,9 +148,9 @@ struct _GtkFileChooserButtonPrivate
   gulong fs_volumes_changed_id;
   gulong fs_bookmarks_changed_id;
 
-  GtkFileSystemHandle *dnd_select_folder_handle;
-  GtkFileSystemHandle *update_button_handle;
-  GSList *change_icon_theme_handles;
+  GCancellable *dnd_select_folder_cancellable;
+  GCancellable *update_button_cancellable;
+  GSList *change_icon_theme_cancellables;
 
   gint icon_size;
 
@@ -195,10 +191,10 @@ enum
 /* GtkFileChooserIface Functions */
 static void     gtk_file_chooser_button_file_chooser_iface_init (GtkFileChooserIface *iface);
 static gboolean gtk_file_chooser_button_add_shortcut_folder     (GtkFileChooser      *chooser,
-								 const GtkFilePath   *path,
+								 GFile               *file,
 								 GError             **error);
 static gboolean gtk_file_chooser_button_remove_shortcut_folder  (GtkFileChooser      *chooser,
-								 const GtkFilePath   *path,
+								 GFile               *file,
 								 GError             **error);
 
 /* GObject Functions */
@@ -240,8 +236,8 @@ static void     gtk_file_chooser_button_screen_changed     (GtkWidget        *wi
 
 /* Utility Functions */
 static GtkIconTheme *get_icon_theme               (GtkWidget            *widget);
-static void          set_info_for_path_at_iter         (GtkFileChooserButton *fs,
-							const GtkFilePath    *path,
+static void          set_info_for_file_at_iter         (GtkFileChooserButton *fs,
+							GFile                *file,
 							GtkTreeIter          *iter);
 
 static gint          model_get_type_position      (GtkFileChooserButton *button,
@@ -255,7 +251,7 @@ static void          model_add_volumes            (GtkFileChooserButton *button,
 static void          model_add_bookmarks          (GtkFileChooserButton *button,
 						   GSList               *bookmarks);
 static void          model_update_current_folder  (GtkFileChooserButton *button,
-						   const GtkFilePath    *path);
+						   GFile                *file);
 static void          model_remove_rows            (GtkFileChooserButton *button,
 						   gint                  pos,
 						   gint                  n_rows);
@@ -486,7 +482,7 @@ gtk_file_chooser_button_init (GtkFileChooserButton *button)
 					G_TYPE_CHAR,	 /* Row Type */
 					G_TYPE_POINTER	 /* Volume || Path */,
 					G_TYPE_BOOLEAN   /* Is Folder? */,
-					G_TYPE_POINTER	 /* handle */));
+					G_TYPE_POINTER	 /* cancellable */));
 
   priv->combo_box = gtk_combo_box_new ();
   priv->combo_box_changed_id =
@@ -537,16 +533,16 @@ gtk_file_chooser_button_file_chooser_iface_init (GtkFileChooserIface *iface)
 }
 
 static gboolean
-gtk_file_chooser_button_add_shortcut_folder (GtkFileChooser     *chooser,
-					     const GtkFilePath  *path,
-					     GError            **error)
+gtk_file_chooser_button_add_shortcut_folder (GtkFileChooser  *chooser,
+					     GFile           *file,
+					     GError         **error)
 {
   GtkFileChooser *delegate;
   gboolean retval;
 
   delegate = g_object_get_qdata (G_OBJECT (chooser),
 				 GTK_FILE_CHOOSER_DELEGATE_QUARK);
-  retval = _gtk_file_chooser_add_shortcut_folder (delegate, path, error);
+  retval = _gtk_file_chooser_add_shortcut_folder (delegate, file, error);
 
   if (retval)
     {
@@ -563,10 +559,10 @@ gtk_file_chooser_button_add_shortcut_folder (GtkFileChooser     *chooser,
 			  ICON_COLUMN, NULL,
 			  DISPLAY_NAME_COLUMN, _(FALLBACK_DISPLAY_NAME),
 			  TYPE_COLUMN, ROW_TYPE_SHORTCUT,
-			  DATA_COLUMN, gtk_file_path_copy (path),
+			  DATA_COLUMN, g_object_ref (file),
 			  IS_FOLDER_COLUMN, FALSE,
 			  -1);
-      set_info_for_path_at_iter (button, path, &iter);
+      set_info_for_file_at_iter (button, file, &iter);
       priv->n_shortcuts++;
 
       gtk_tree_model_filter_refilter (GTK_TREE_MODEL_FILTER (priv->filter_model));
@@ -576,9 +572,9 @@ gtk_file_chooser_button_add_shortcut_folder (GtkFileChooser     *chooser,
 }
 
 static gboolean
-gtk_file_chooser_button_remove_shortcut_folder (GtkFileChooser     *chooser,
-						const GtkFilePath  *path,
-						GError            **error)
+gtk_file_chooser_button_remove_shortcut_folder (GtkFileChooser  *chooser,
+						GFile           *file,
+						GError         **error)
 {
   GtkFileChooser *delegate;
   gboolean retval;
@@ -586,7 +582,7 @@ gtk_file_chooser_button_remove_shortcut_folder (GtkFileChooser     *chooser,
   delegate = g_object_get_qdata (G_OBJECT (chooser),
 				 GTK_FILE_CHOOSER_DELEGATE_QUARK);
 
-  retval = _gtk_file_chooser_remove_shortcut_folder (delegate, path, error);
+  retval = _gtk_file_chooser_remove_shortcut_folder (delegate, file, error);
 
   if (retval)
     {
@@ -609,8 +605,7 @@ gtk_file_chooser_button_remove_shortcut_folder (GtkFileChooser     *chooser,
 			      -1);
 
 	  if (type == ROW_TYPE_SHORTCUT &&
-	      data &&
-	      gtk_file_path_compare (data, path) == 0)
+	      data && g_file_equal (data, file))
 	    {
 	      model_free_row_data (GTK_FILE_CHOOSER_BUTTON (chooser), &iter);
 	      gtk_list_store_remove (GTK_LIST_STORE (priv->model), &iter);
@@ -728,7 +723,8 @@ gtk_file_chooser_button_constructor (GType                  type,
 
   list = gtk_file_system_list_bookmarks (priv->fs);
   model_add_bookmarks (button, list);
-  gtk_file_paths_free (list);
+  g_slist_foreach (list, (GFunc) g_object_unref, NULL);
+  g_slist_free (list);
 
   model_add_other (button);
 
@@ -899,8 +895,8 @@ gtk_file_chooser_button_finalize (GObject *object)
   GtkFileChooserButton *button = GTK_FILE_CHOOSER_BUTTON (object);
   GtkFileChooserButtonPrivate *priv = button->priv;
 
-  if (priv->old_path)
-    gtk_file_path_free (priv->old_path);
+  if (priv->old_file)
+    g_object_unref (priv->old_file);
 
   if (G_OBJECT_CLASS (gtk_file_chooser_button_parent_class)->finalize != NULL)
     (*G_OBJECT_CLASS (gtk_file_chooser_button_parent_class)->finalize) (object);
@@ -930,27 +926,27 @@ gtk_file_chooser_button_destroy (GtkObject *object)
     }
   while (gtk_tree_model_iter_next (priv->model, &iter));
 
-  if (priv->dnd_select_folder_handle)
+  if (priv->dnd_select_folder_cancellable)
     {
-      gtk_file_system_cancel_operation (priv->dnd_select_folder_handle);
-      priv->dnd_select_folder_handle = NULL;
+      g_cancellable_cancel (priv->dnd_select_folder_cancellable);
+      priv->dnd_select_folder_cancellable = NULL;
     }
 
-  if (priv->update_button_handle)
+  if (priv->update_button_cancellable)
     {
-      gtk_file_system_cancel_operation (priv->update_button_handle);
-      priv->update_button_handle = NULL;
+      g_cancellable_cancel (priv->update_button_cancellable);
+      priv->update_button_cancellable = NULL;
     }
 
-  if (priv->change_icon_theme_handles)
+  if (priv->change_icon_theme_cancellables)
     {
-      for (l = priv->change_icon_theme_handles; l; l = l->next)
+      for (l = priv->change_icon_theme_cancellables; l; l = l->next)
         {
-          GtkFileSystemHandle *handle = GTK_FILE_SYSTEM_HANDLE (l->data);
-          gtk_file_system_cancel_operation (handle);
+	  GCancellable *cancellable = G_CANCELLABLE (l->data);
+	  g_cancellable_cancel (cancellable);
         }
-      g_slist_free (priv->change_icon_theme_handles);
-      priv->change_icon_theme_handles = NULL;
+      g_slist_free (priv->change_icon_theme_cancellables);
+      priv->change_icon_theme_cancellables = NULL;
     }
 
   if (priv->model)
@@ -984,45 +980,48 @@ gtk_file_chooser_button_destroy (GtkObject *object)
 
 struct DndSelectFolderData
 {
+  GtkFileSystem *file_system;
   GtkFileChooserButton *button;
   GtkFileChooserAction action;
-  GtkFilePath *path;
+  GFile *file;
   gchar **uris;
   guint i;
   gboolean selected;
 };
 
 static void
-dnd_select_folder_get_info_cb (GtkFileSystemHandle *handle,
-			       const GtkFileInfo   *info,
-			       const GError        *error,
-			       gpointer             user_data)
+dnd_select_folder_get_info_cb (GCancellable *cancellable,
+			       GFileInfo    *info,
+			       const GError *error,
+			       gpointer      user_data)
 {
-  gboolean cancelled = handle->cancelled;
+  gboolean cancelled = g_cancellable_is_cancelled (cancellable);
   struct DndSelectFolderData *data = user_data;
 
-  if (handle != data->button->priv->dnd_select_folder_handle)
+  if (cancellable != data->button->priv->dnd_select_folder_cancellable)
     {
       g_object_unref (data->button);
-      gtk_file_path_free (data->path);
+      g_object_unref (data->file);
       g_strfreev (data->uris);
       g_free (data);
 
-      g_object_unref (handle);
+      g_object_unref (cancellable);
       return;
     }
 
-  data->button->priv->dnd_select_folder_handle = NULL;
+  data->button->priv->dnd_select_folder_cancellable = NULL;
 
   if (!cancelled && !error && info != NULL)
     {
-      data->selected = 
-	(((data->action == GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER &&
-	   gtk_file_info_get_is_folder (info)) ||
-	  (data->action == GTK_FILE_CHOOSER_ACTION_OPEN &&
-	   !gtk_file_info_get_is_folder (info))) &&
-	 _gtk_file_chooser_select_path (GTK_FILE_CHOOSER (data->button->priv->dialog),
-					data->path, NULL));
+      gboolean is_folder;
+
+      is_folder = (g_file_info_get_file_type (info) == G_FILE_TYPE_DIRECTORY);
+
+      data->selected =
+	(((data->action == GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER && is_folder) ||
+	  (data->action == GTK_FILE_CHOOSER_ACTION_OPEN && !is_folder)) &&
+	 _gtk_file_chooser_select_file (GTK_FILE_CHOOSER (data->button->priv->dialog),
+					data->file, NULL));
     }
   else
     data->selected = FALSE;
@@ -1030,26 +1029,25 @@ dnd_select_folder_get_info_cb (GtkFileSystemHandle *handle,
   if (data->selected || data->uris[++data->i] == NULL)
     {
       g_object_unref (data->button);
-      gtk_file_path_free (data->path);
+      g_object_unref (data->file);
       g_strfreev (data->uris);
       g_free (data);
 
-      g_object_unref (handle);
+      g_object_unref (cancellable);
       return;
     }
 
-  if (data->path)
-    gtk_file_path_free (data->path);
+  if (data->file)
+    g_object_unref (data->file);
 
-  data->path = gtk_file_system_uri_to_path (handle->file_system,
-					    data->uris[data->i]);
+  data->file = g_file_new_for_uri (data->uris[data->i]);
 
-  data->button->priv->dnd_select_folder_handle =
-    gtk_file_system_get_info (handle->file_system, data->path,
-			      GTK_FILE_INFO_IS_FOLDER,
+  data->button->priv->dnd_select_folder_cancellable =
+    gtk_file_system_get_info (data->file_system, data->file,
+			      "standard::type",
 			      dnd_select_folder_get_info_cb, user_data);
 
-  g_object_unref (handle);
+  g_object_unref (cancellable);
 }
 
 static void
@@ -1063,7 +1061,7 @@ gtk_file_chooser_button_drag_data_received (GtkWidget	     *widget,
 {
   GtkFileChooserButton *button = GTK_FILE_CHOOSER_BUTTON (widget);
   GtkFileChooserButtonPrivate *priv = button->priv;
-  GtkFilePath *path;
+  GFile *file;
   gchar *text;
 
   if (GTK_WIDGET_CLASS (gtk_file_chooser_button_parent_class)->drag_data_received != NULL)
@@ -1093,27 +1091,28 @@ gtk_file_chooser_button_drag_data_received (GtkWidget	     *widget,
 	info->i = 0;
 	info->uris = uris;
 	info->selected = FALSE;
+	info->file_system = priv->fs;
 	g_object_get (priv->dialog, "action", &info->action, NULL);
 
-	info->path = gtk_file_system_uri_to_path (priv->fs,
-						  info->uris[info->i]);
+	info->file = g_file_new_for_uri (info->uris[info->i]);
 
-	if (priv->dnd_select_folder_handle)
-	  gtk_file_system_cancel_operation (priv->dnd_select_folder_handle);
+	if (priv->dnd_select_folder_cancellable)
+	  g_cancellable_cancel (priv->dnd_select_folder_cancellable);
 
-	priv->dnd_select_folder_handle =
-	  gtk_file_system_get_info (priv->fs, info->path,
-				    GTK_FILE_INFO_IS_FOLDER,
+	priv->dnd_select_folder_cancellable =
+	  gtk_file_system_get_info (priv->fs, info->file,
+				    "standard::type",
 				    dnd_select_folder_get_info_cb, info);
       }
       break;
 
     case TEXT_PLAIN:
       text = (char*) gtk_selection_data_get_text (data);
-      path = gtk_file_path_new_steal (text);
-      _gtk_file_chooser_select_path (GTK_FILE_CHOOSER (priv->dialog), path,
+      file = g_file_new_for_uri (text);
+      _gtk_file_chooser_select_file (GTK_FILE_CHOOSER (priv->dialog), file,
 				     NULL);
-      gtk_file_path_free (path);
+      g_object_unref (file);
+      g_free (text);
       break;
 
     default:
@@ -1212,26 +1211,25 @@ struct ChangeIconThemeData
 };
 
 static void
-change_icon_theme_get_info_cb (GtkFileSystemHandle *handle,
-			       const GtkFileInfo   *info,
-			       const GError        *error,
-			       gpointer             user_data)
+change_icon_theme_get_info_cb (GCancellable *cancellable,
+			       GFileInfo    *info,
+			       const GError *error,
+			       gpointer      user_data)
 {
-  gboolean cancelled = handle->cancelled;
+  gboolean cancelled = g_cancellable_is_cancelled (cancellable);
   GdkPixbuf *pixbuf;
   struct ChangeIconThemeData *data = user_data;
 
-  if (!g_slist_find (data->button->priv->change_icon_theme_handles, handle))
+  if (!g_slist_find (data->button->priv->change_icon_theme_cancellables, cancellable))
     goto out;
 
-  data->button->priv->change_icon_theme_handles =
-    g_slist_remove (data->button->priv->change_icon_theme_handles, handle);
+  data->button->priv->change_icon_theme_cancellables =
+    g_slist_remove (data->button->priv->change_icon_theme_cancellables, cancellable);
 
   if (cancelled || error)
     goto out;
 
-  pixbuf = gtk_file_info_render_icon (info, GTK_WIDGET (data->button),
-				      data->button->priv->icon_size, NULL);
+  pixbuf = gtk_file_info_render_icon (info, GTK_WIDGET (data->button), data->button->priv->icon_size);
 
   if (pixbuf)
     {
@@ -1263,7 +1261,7 @@ out:
   gtk_tree_row_reference_free (data->row_ref);
   g_free (data);
 
-  g_object_unref (handle);
+  g_object_unref (cancellable);
 }
 
 static void
@@ -1276,13 +1274,13 @@ change_icon_theme (GtkFileChooserButton *button)
   GSList *l;
   gint width = 0, height = 0;
 
-  for (l = button->priv->change_icon_theme_handles; l; l = l->next)
+  for (l = button->priv->change_icon_theme_cancellables; l; l = l->next)
     {
-      GtkFileSystemHandle *handle = GTK_FILE_SYSTEM_HANDLE (l->data);
-      gtk_file_system_cancel_operation (handle);
+      GCancellable *cancellable = G_CANCELLABLE (l->data);
+      g_cancellable_cancel (cancellable);
     }
-  g_slist_free (button->priv->change_icon_theme_handles);
-  button->priv->change_icon_theme_handles = NULL;
+  g_slist_free (button->priv->change_icon_theme_cancellables);
+  button->priv->change_icon_theme_cancellables = NULL;
 
   settings = gtk_settings_get_for_screen (gtk_widget_get_screen (GTK_WIDGET (button)));
 
@@ -1318,10 +1316,10 @@ change_icon_theme (GtkFileChooserButton *button)
 	case ROW_TYPE_CURRENT_FOLDER:
 	  if (data)
 	    {
-	      if (gtk_file_system_path_is_local (priv->fs, (GtkFilePath *)data))
+	      if (g_file_is_native (G_FILE (data)))
 		{
 		  GtkTreePath *path;
-		  GtkFileSystemHandle *handle;
+		  GCancellable *cancellable;
 		  struct ChangeIconThemeData *info;		  
 		  
 		  info = g_new0 (struct ChangeIconThemeData, 1);
@@ -1329,13 +1327,14 @@ change_icon_theme (GtkFileChooserButton *button)
 		  path = gtk_tree_model_get_path (priv->model, &iter);
 		  info->row_ref = gtk_tree_row_reference_new (priv->model, path);
 		  gtk_tree_path_free (path);
-		  
-		  handle =
-		    gtk_file_system_get_info (priv->fs, data, GTK_FILE_INFO_ICON,
+
+		  cancellable =
+		    gtk_file_system_get_info (priv->fs, data,
+					      "standard::icon",
 					      change_icon_theme_get_info_cb,
 					      info);
-		  button->priv->change_icon_theme_handles =
-		    g_slist_append (button->priv->change_icon_theme_handles, handle);
+		  button->priv->change_icon_theme_cancellables =
+		    g_slist_append (button->priv->change_icon_theme_cancellables, cancellable);
 		  pixbuf = NULL;
 		}
 	      else
@@ -1353,7 +1352,7 @@ change_icon_theme (GtkFileChooserButton *button)
 	  break;
 	case ROW_TYPE_VOLUME:
 	  if (data)
-	    pixbuf = gtk_file_system_volume_render_icon (priv->fs, data,
+	    pixbuf = gtk_file_system_volume_render_icon (data,
 							 GTK_WIDGET (button),
 							 priv->icon_size,
 							 NULL);
@@ -1430,17 +1429,18 @@ struct SetDisplayNameData
 };
 
 static void
-set_info_get_info_cb (GtkFileSystemHandle *handle,
-		      const GtkFileInfo   *info,
-		      const GError        *error,
-		      gpointer             callback_data)
+set_info_get_info_cb (GCancellable *cancellable,
+		      GFileInfo    *info,
+		      const GError *error,
+		      gpointer      callback_data)
 {
-  gboolean cancelled = handle->cancelled;
+  gboolean cancelled = g_cancellable_is_cancelled (cancellable);
   GdkPixbuf *pixbuf;
   GtkTreePath *path;
   GtkTreeIter iter;
-  GtkFileSystemHandle *model_handle;
+  GCancellable *model_cancellable;
   struct SetDisplayNameData *data = callback_data;
+  gboolean is_folder;
 
   if (!data->button->priv->model)
     /* button got destroyed */
@@ -1448,37 +1448,38 @@ set_info_get_info_cb (GtkFileSystemHandle *handle,
 
   path = gtk_tree_row_reference_get_path (data->row_ref);
   if (!path)
-    /* Handle doesn't exist anymore in the model */
+    /* Cancellable doesn't exist anymore in the model */
     goto out;
 
   gtk_tree_model_get_iter (data->button->priv->model, &iter, path);
   gtk_tree_path_free (path);
 
-  /* Validate the handle */
+  /* Validate the cancellable */
   gtk_tree_model_get (data->button->priv->model, &iter,
-		      HANDLE_COLUMN, &model_handle,
+		      CANCELLABLE_COLUMN, &model_cancellable,
 		      -1);
-  if (handle != model_handle)
+  if (cancellable != model_cancellable)
     goto out;
 
   gtk_list_store_set (GTK_LIST_STORE (data->button->priv->model), &iter,
-		      HANDLE_COLUMN, NULL,
+		      CANCELLABLE_COLUMN, NULL,
 		      -1);
 
   if (cancelled || error)
     /* There was an error, leave the fallback name in there */
     goto out;
 
-  pixbuf = gtk_file_info_render_icon (info, GTK_WIDGET (data->button),
-				      data->button->priv->icon_size, NULL);
+  pixbuf = gtk_file_info_render_icon (info, GTK_WIDGET (data->button), data->button->priv->icon_size);
 
   if (!data->label)
-    data->label = g_strdup (gtk_file_info_get_display_name (info));
+    data->label = g_strdup (g_file_info_get_display_name (info));
+
+  is_folder = (g_file_info_get_file_type (info) == G_FILE_TYPE_DIRECTORY);
 
   gtk_list_store_set (GTK_LIST_STORE (data->button->priv->model), &iter,
 		      ICON_COLUMN, pixbuf,
 		      DISPLAY_NAME_COLUMN, data->label,
-		      IS_FOLDER_COLUMN, gtk_file_info_get_is_folder (info),
+		      IS_FOLDER_COLUMN, is_folder,
 		      -1);
 
   if (pixbuf)
@@ -1490,32 +1491,32 @@ out:
   gtk_tree_row_reference_free (data->row_ref);
   g_free (data);
 
-  g_object_unref (handle);
+  g_object_unref (cancellable);
 }
 
 static void
-set_info_for_path_at_iter (GtkFileChooserButton *button,
-			   const GtkFilePath    *path,
+set_info_for_file_at_iter (GtkFileChooserButton *button,
+			   GFile                *file,
 			   GtkTreeIter          *iter)
 {
   struct SetDisplayNameData *data;
   GtkTreePath *tree_path;
-  GtkFileSystemHandle *handle;
+  GCancellable *cancellable;
 
   data = g_new0 (struct SetDisplayNameData, 1);
   data->button = g_object_ref (button);
-  data->label = gtk_file_system_get_bookmark_label (button->priv->fs, path);
+  data->label = gtk_file_system_get_bookmark_label (button->priv->fs, file);
 
   tree_path = gtk_tree_model_get_path (button->priv->model, iter);
   data->row_ref = gtk_tree_row_reference_new (button->priv->model, tree_path);
   gtk_tree_path_free (tree_path);
 
-  handle = gtk_file_system_get_info (button->priv->fs, path,
-				     GTK_FILE_INFO_DISPLAY_NAME | GTK_FILE_INFO_IS_FOLDER | GTK_FILE_INFO_ICON,
-				     set_info_get_info_cb, data);
+  cancellable = gtk_file_system_get_info (button->priv->fs, file,
+					  "standard::type,standard::icon,standard::display-name",
+					  set_info_get_info_cb, data);
 
   gtk_list_store_set (GTK_LIST_STORE (button->priv->model), iter,
-		      HANDLE_COLUMN, handle,
+		      CANCELLABLE_COLUMN, cancellable,
 		      -1);
 }
 
@@ -1579,16 +1580,16 @@ model_free_row_data (GtkFileChooserButton *button,
 {
   gchar type;
   gpointer data;
-  GtkFileSystemHandle *handle;
+  GCancellable *cancellable;
 
   gtk_tree_model_get (button->priv->model, iter,
 		      TYPE_COLUMN, &type,
 		      DATA_COLUMN, &data,
-		      HANDLE_COLUMN, &handle,
+		      CANCELLABLE_COLUMN, &cancellable,
 		      -1);
 
-  if (handle)
-    gtk_file_system_cancel_operation (handle);
+  if (cancellable)
+    g_cancellable_cancel (cancellable);
 
   switch (type)
     {
@@ -1596,10 +1597,10 @@ model_free_row_data (GtkFileChooserButton *button,
     case ROW_TYPE_SHORTCUT:
     case ROW_TYPE_BOOKMARK:
     case ROW_TYPE_CURRENT_FOLDER:
-      gtk_file_path_free (data);
+      g_object_unref (data);
       break;
     case ROW_TYPE_VOLUME:
-      gtk_file_system_volume_free (button->priv->fs, data);
+      gtk_file_system_volume_free (data);
       break;
     default:
       break;
@@ -1607,16 +1608,16 @@ model_free_row_data (GtkFileChooserButton *button,
 }
 
 static void
-model_add_special_get_info_cb (GtkFileSystemHandle *handle,
-			       const GtkFileInfo   *info,
-			       const GError        *error,
-			       gpointer             user_data)
+model_add_special_get_info_cb (GCancellable *cancellable,
+			       GFileInfo    *info,
+			       const GError *error,
+			       gpointer      user_data)
 {
-  gboolean cancelled = handle->cancelled;
+  gboolean cancelled = g_cancellable_is_cancelled (cancellable);
   GtkTreeIter iter;
   GtkTreePath *path;
   GdkPixbuf *pixbuf;
-  GtkFileSystemHandle *model_handle;
+  GCancellable *model_cancellable;
   struct ChangeIconThemeData *data = user_data;
   gchar *name;
 
@@ -1626,27 +1627,26 @@ model_add_special_get_info_cb (GtkFileSystemHandle *handle,
 
   path = gtk_tree_row_reference_get_path (data->row_ref);
   if (!path)
-    /* Handle doesn't exist anymore in the model */
+    /* Cancellable doesn't exist anymore in the model */
     goto out;
 
   gtk_tree_model_get_iter (data->button->priv->model, &iter, path);
   gtk_tree_path_free (path);
 
   gtk_tree_model_get (data->button->priv->model, &iter,
-		      HANDLE_COLUMN, &model_handle,
+		      CANCELLABLE_COLUMN, &model_cancellable,
 		      -1);
-  if (handle != model_handle)
+  if (cancellable != model_cancellable)
     goto out;
 
   gtk_list_store_set (GTK_LIST_STORE (data->button->priv->model), &iter,
-		      HANDLE_COLUMN, NULL,
+		      CANCELLABLE_COLUMN, NULL,
 		      -1);
 
   if (cancelled || error)
     goto out;
 
-  pixbuf = gtk_file_info_render_icon (info, GTK_WIDGET (data->button),
-				      data->button->priv->icon_size, NULL);
+  pixbuf = gtk_file_info_render_icon (info, GTK_WIDGET (data->button), data->button->priv->icon_size);
 
   if (pixbuf)
     {
@@ -1661,7 +1661,7 @@ model_add_special_get_info_cb (GtkFileSystemHandle *handle,
                       -1);
   if (!name)
     gtk_list_store_set (GTK_LIST_STORE (data->button->priv->model), &iter,
-  		        DISPLAY_NAME_COLUMN, gtk_file_info_get_display_name (info),
+  		        DISPLAY_NAME_COLUMN, g_file_info_get_display_name (info),
 		        -1);
   g_free (name);
    
@@ -1670,7 +1670,7 @@ out:
   gtk_tree_row_reference_free (data->row_ref);
   g_free (data);
 
-  g_object_unref (handle);
+  g_object_unref (cancellable);
 }
 
 static inline void
@@ -1680,7 +1680,7 @@ model_add_special (GtkFileChooserButton *button)
   const gchar *desktopdir;
   GtkListStore *store;
   GtkTreeIter iter;
-  GtkFilePath *path;
+  GFile *file;
   gint pos;
 
   store = GTK_LIST_STORE (button->priv->model);
@@ -1691,10 +1691,10 @@ model_add_special (GtkFileChooserButton *button)
   if (homedir)
     {
       GtkTreePath *tree_path;
-      GtkFileSystemHandle *handle;
+      GCancellable *cancellable;
       struct ChangeIconThemeData *info;
 
-      path = gtk_file_system_filename_to_path (button->priv->fs, homedir);
+      file = g_file_new_for_path (homedir);
       gtk_list_store_insert (store, &iter, pos);
       pos++;
 
@@ -1705,17 +1705,17 @@ model_add_special (GtkFileChooserButton *button)
 						  tree_path);
       gtk_tree_path_free (tree_path);
 
-      handle = gtk_file_system_get_info (button->priv->fs, path,
-					 GTK_FILE_INFO_DISPLAY_NAME | GTK_FILE_INFO_ICON,
-					 model_add_special_get_info_cb, info);
+      cancellable = gtk_file_system_get_info (button->priv->fs, file,
+					      "standard::icon,standard::display-name",
+					      model_add_special_get_info_cb, info);
 
       gtk_list_store_set (store, &iter,
 			  ICON_COLUMN, NULL,
 			  DISPLAY_NAME_COLUMN, NULL,
 			  TYPE_COLUMN, ROW_TYPE_SPECIAL,
-			  DATA_COLUMN, path,
+			  DATA_COLUMN, file,
 			  IS_FOLDER_COLUMN, TRUE,
-			  HANDLE_COLUMN, handle,
+			  CANCELLABLE_COLUMN, cancellable,
 			  -1);
 
       button->priv->n_special++;
@@ -1726,10 +1726,10 @@ model_add_special (GtkFileChooserButton *button)
   if (desktopdir)
     {
       GtkTreePath *tree_path;
-      GtkFileSystemHandle *handle;
+      GCancellable *cancellable;
       struct ChangeIconThemeData *info;
 
-      path = gtk_file_system_filename_to_path (button->priv->fs, desktopdir);
+      file = g_file_new_for_path (desktopdir);
       gtk_list_store_insert (store, &iter, pos);
       pos++;
 
@@ -1740,17 +1740,17 @@ model_add_special (GtkFileChooserButton *button)
 						  tree_path);
       gtk_tree_path_free (tree_path);
 
-      handle = gtk_file_system_get_info (button->priv->fs, path,
-					 GTK_FILE_INFO_DISPLAY_NAME | GTK_FILE_INFO_ICON,
-					 model_add_special_get_info_cb, info);
+      cancellable = gtk_file_system_get_info (button->priv->fs, file,
+					      "standard::icon,standard::display-name",
+					      model_add_special_get_info_cb, info);
 
       gtk_list_store_set (store, &iter,
 			  TYPE_COLUMN, ROW_TYPE_SPECIAL,
 			  ICON_COLUMN, NULL,
 			  DISPLAY_NAME_COLUMN, _(DESKTOP_DISPLAY_NAME),
-			  DATA_COLUMN, path,
+			  DATA_COLUMN, file,
 			  IS_FOLDER_COLUMN, TRUE,
-			  HANDLE_COLUMN, handle,
+			  CANCELLABLE_COLUMN, cancellable,
 			  -1);
 
       button->priv->n_special++;
@@ -1786,31 +1786,24 @@ model_add_volumes (GtkFileChooserButton *button,
 
       if (local_only)
 	{
-	  if (gtk_file_system_volume_get_is_mounted (file_system, volume))
+	  if (gtk_file_system_volume_is_mounted (volume))
 	    {
-	      GtkFilePath *base_path;
+	      GFile *base_file;
 
-	      base_path = gtk_file_system_volume_get_base_path (file_system, volume);
-	      if (base_path != NULL)
+	      base_file = gtk_file_system_volume_get_root (volume);
+	      if (base_file != NULL && !g_file_is_native (base_file))
 		{
-		  gboolean is_local = gtk_file_system_path_is_local (file_system, base_path);
-		  gtk_file_path_free (base_path);
-
-		  if (!is_local)
-		    {
-		      gtk_file_system_volume_free (file_system, volume);
-		      continue;
-		    }
+		  gtk_file_system_volume_free (volume);
+		  continue;
 		}
 	    }
 	}
 
-      pixbuf = gtk_file_system_volume_render_icon (file_system,
-						   volume,
+      pixbuf = gtk_file_system_volume_render_icon (volume,
 						   GTK_WIDGET (button),
 						   button->priv->icon_size,
 						   NULL);
-      display_name = gtk_file_system_volume_get_display_name (file_system, volume);
+      display_name = gtk_file_system_volume_get_display_name (volume);
 
       gtk_list_store_insert (store, &iter, pos);
       gtk_list_store_set (store, &iter,
@@ -1830,7 +1823,7 @@ model_add_volumes (GtkFileChooserButton *button,
     }
 }
 
-extern gchar * _gtk_file_chooser_label_for_uri (const gchar *uri);
+extern gchar * _gtk_file_chooser_label_for_file (const gchar *uri);
 
 static void
 model_add_bookmarks (GtkFileChooserButton *button,
@@ -1851,21 +1844,21 @@ model_add_bookmarks (GtkFileChooserButton *button,
 
   for (l = bookmarks; l; l = l->next)
     {
-      GtkFilePath *path;
+      GFile *file;
 
-      path = l->data;
+      file = l->data;
 
-      if (gtk_file_system_path_is_local (button->priv->fs, path))
+      if (g_file_is_native (file))
 	{
 	  gtk_list_store_insert (store, &iter, pos);
 	  gtk_list_store_set (store, &iter,
 			      ICON_COLUMN, NULL,
 			      DISPLAY_NAME_COLUMN, _(FALLBACK_DISPLAY_NAME),
 			      TYPE_COLUMN, ROW_TYPE_BOOKMARK,
-			      DATA_COLUMN, gtk_file_path_copy (path),
+			      DATA_COLUMN, g_object_ref (file),
 			      IS_FOLDER_COLUMN, FALSE,
 			      -1);
-	  set_info_for_path_at_iter (button, path, &iter);
+	  set_info_for_file_at_iter (button, file, &iter);
 	}
       else
 	{
@@ -1881,15 +1874,9 @@ model_add_bookmarks (GtkFileChooserButton *button,
 	   * If we switch to a better bookmarks file format (XBEL), we
 	   * should use mime info to get a better icon.
 	   */
-	  label = gtk_file_system_get_bookmark_label (button->priv->fs, path);
+	  label = gtk_file_system_get_bookmark_label (button->priv->fs, file);
 	  if (!label)
-	    {
-	      gchar *uri;
-
-	      uri = gtk_file_system_path_to_uri (button->priv->fs, path);
-	      label = _gtk_file_chooser_label_for_uri (uri);
-	      g_free (uri);
-	    }
+	    label = _gtk_file_chooser_label_for_file (file);
 
 	  icon_theme = gtk_icon_theme_get_for_screen (gtk_widget_get_screen (GTK_WIDGET (button)));
 	  pixbuf = gtk_icon_theme_load_icon (icon_theme, "gnome-fs-share", 
@@ -1900,7 +1887,7 @@ model_add_bookmarks (GtkFileChooserButton *button,
 			      ICON_COLUMN, pixbuf,
 			      DISPLAY_NAME_COLUMN, label,
 			      TYPE_COLUMN, ROW_TYPE_BOOKMARK,
-			      DATA_COLUMN, gtk_file_path_copy (path),
+			      DATA_COLUMN, g_object_ref (file),
 			      IS_FOLDER_COLUMN, TRUE,
 			      -1);
 
@@ -1931,13 +1918,13 @@ model_add_bookmarks (GtkFileChooserButton *button,
 
 static void
 model_update_current_folder (GtkFileChooserButton *button,
-			     const GtkFilePath    *path)
+			     GFile                *file)
 {
   GtkListStore *store;
   GtkTreeIter iter;
   gint pos;
 
-  if (!path) 
+  if (!file)
     return;
 
   store = GTK_LIST_STORE (button->priv->model);
@@ -1968,16 +1955,16 @@ model_update_current_folder (GtkFileChooserButton *button,
       model_free_row_data (button, &iter);
     }
 
-  if (gtk_file_system_path_is_local (button->priv->fs, path))
+  if (g_file_is_native (file))
     {
       gtk_list_store_set (store, &iter,
 			  ICON_COLUMN, NULL,
 			  DISPLAY_NAME_COLUMN, _(FALLBACK_DISPLAY_NAME),
 			  TYPE_COLUMN, ROW_TYPE_CURRENT_FOLDER,
-			  DATA_COLUMN, gtk_file_path_copy (path),
+			  DATA_COLUMN, g_object_ref (file),
 			  IS_FOLDER_COLUMN, FALSE,
 			  -1);
-      set_info_for_path_at_iter (button, path, &iter);
+      set_info_for_file_at_iter (button, file, &iter);
     }
   else
     {
@@ -1990,18 +1977,13 @@ model_update_current_folder (GtkFileChooserButton *button,
        * If we switch to a better bookmarks file format (XBEL), we
        * should use mime info to get a better icon.
        */
-      label = gtk_file_system_get_bookmark_label (button->priv->fs, path);
+      label = gtk_file_system_get_bookmark_label (button->priv->fs, file);
       if (!label)
-	{
-	  gchar *uri;
-	  
-	  uri = gtk_file_system_path_to_uri (button->priv->fs, path);
-	  label = _gtk_file_chooser_label_for_uri (uri);
-	  g_free (uri);
-	}
-      
+	label = _gtk_file_chooser_label_for_file (file);
+
       icon_theme = gtk_icon_theme_get_for_screen (gtk_widget_get_screen (GTK_WIDGET (button)));
-      if (gtk_file_system_path_is_local (button->priv->fs, path)) 
+
+      if (g_file_is_native (file))
 	  pixbuf = gtk_icon_theme_load_icon (icon_theme, "gnome-fs-directory", 
 					     button->priv->icon_size, 0, NULL);
       else
@@ -2012,10 +1994,10 @@ model_update_current_folder (GtkFileChooserButton *button,
 			  ICON_COLUMN, pixbuf,
 			  DISPLAY_NAME_COLUMN, label,
 			  TYPE_COLUMN, ROW_TYPE_CURRENT_FOLDER,
-			  DATA_COLUMN, gtk_file_path_copy (path),
+			  DATA_COLUMN, g_object_ref (file),
 			  IS_FOLDER_COLUMN, TRUE,
 			  -1);
-      
+
       g_free (label);
       g_object_unref (pixbuf);
     }
@@ -2080,15 +2062,15 @@ model_remove_rows (GtkFileChooserButton *button,
 
 /* Filter Model */
 static inline gboolean
-test_if_path_is_visible (GtkFileSystem     *fs,
-			 const GtkFilePath *path,
-			 gboolean           local_only,
-			 gboolean           is_folder)
+test_if_file_is_visible (GtkFileSystem *fs,
+			 GFile         *file,
+			 gboolean       local_only,
+			 gboolean       is_folder)
 {
-  if (!path)
+  if (!file)
     return FALSE;
 
-  if (local_only && !gtk_file_system_path_is_local (fs, path))
+  if (local_only && !g_file_is_native (file))
     return FALSE;
 
   if (!is_folder)
@@ -2126,25 +2108,22 @@ filter_model_visible_func (GtkTreeModel *model,
     case ROW_TYPE_SPECIAL:
     case ROW_TYPE_SHORTCUT:
     case ROW_TYPE_BOOKMARK:
-      retval = test_if_path_is_visible (priv->fs, data, local_only, is_folder);
+      retval = test_if_file_is_visible (priv->fs, data, local_only, is_folder);
       break;
     case ROW_TYPE_VOLUME:
       {
 	retval = TRUE;
 	if (local_only)
 	  {
-	    if (gtk_file_system_volume_get_is_mounted (priv->fs, data))
+	    if (gtk_file_system_volume_is_mounted (data))
 	      {
-		GtkFilePath *base_path;
-		
-		base_path = gtk_file_system_volume_get_base_path (priv->fs, data);
-		if (base_path)
-		  {
-		    gboolean is_local = gtk_file_system_path_is_local (priv->fs, base_path);
-		    
-		    gtk_file_path_free (base_path);
+		GFile *base_file;
 
-		    if (!is_local)
+		base_file = gtk_file_system_volume_get_root (data);
+
+		if (base_file)
+		  {
+		    if (!g_file_is_native (base_file))
 		      retval = FALSE;
 		  }
 		else
@@ -2200,13 +2179,13 @@ static void
 update_combo_box (GtkFileChooserButton *button)
 {
   GtkFileChooserButtonPrivate *priv = button->priv;
-  GSList *paths;
+  GSList *files;
   GtkTreeIter iter;
   gboolean row_found;
 
   gtk_tree_model_get_iter_first (priv->filter_model, &iter);
 
-  paths = _gtk_file_chooser_get_paths (GTK_FILE_CHOOSER (priv->dialog));
+  files = _gtk_file_chooser_get_files (GTK_FILE_CHOOSER (priv->dialog));
 
   row_found = FALSE;
 
@@ -2229,21 +2208,21 @@ update_combo_box (GtkFileChooserButton *button)
 	case ROW_TYPE_SHORTCUT:
 	case ROW_TYPE_BOOKMARK:
 	case ROW_TYPE_CURRENT_FOLDER:
-	  row_found = (paths &&
-		       paths->data &&
-		       gtk_file_path_compare (data, paths->data) == 0);
+	  row_found = (files &&
+		       files->data &&
+		       g_file_equal (data, files->data));
 	  break;
 	case ROW_TYPE_VOLUME:
 	  {
-	    GtkFilePath *base_path;
+	    GFile *base_file;
 
-	    base_path = gtk_file_system_volume_get_base_path (priv->fs, data);
-            if (base_path)
+	    base_file = gtk_file_system_volume_get_root (data);
+            if (base_file)
               {
-	        row_found = (paths &&
-			     paths->data &&
-			     gtk_file_path_compare (base_path, paths->data) == 0);
-	        gtk_file_path_free (base_path);
+	        row_found = (files &&
+			     files->data &&
+			     g_file_equal (base_file, files->data));
+		g_object_unref (base_file);
               }
 	  }
 	  break;
@@ -2264,12 +2243,12 @@ update_combo_box (GtkFileChooserButton *button)
   while (!row_found && gtk_tree_model_iter_next (priv->filter_model, &iter));
 
   /* If it hasn't been found already, update & select the current-folder row. */
-  if (!row_found && paths && paths->data)
+  if (!row_found && files && files->data)
     {
       GtkTreeIter filter_iter;
       gint pos;
     
-      model_update_current_folder (button, paths->data);
+      model_update_current_folder (button, files->data);
       gtk_tree_model_filter_refilter (GTK_TREE_MODEL_FILTER (priv->filter_model));
 
       pos = model_get_type_position (button, ROW_TYPE_CURRENT_FOLDER);
@@ -2283,33 +2262,34 @@ update_combo_box (GtkFileChooserButton *button)
       g_signal_handler_unblock (priv->combo_box, priv->combo_box_changed_id);
     }
 
-  gtk_file_paths_free (paths);
+  g_slist_foreach (files, (GFunc) g_object_unref, NULL);
+  g_slist_free (files);
 }
 
 /* Button */
 static void
-update_label_get_info_cb (GtkFileSystemHandle *handle,
-			  const GtkFileInfo   *info,
-			  const GError        *error,
-			  gpointer             data)
+update_label_get_info_cb (GCancellable *cancellable,
+			  GFileInfo    *info,
+			  const GError *error,
+			  gpointer      data)
 {
-  gboolean cancelled = handle->cancelled;
+  gboolean cancelled = g_cancellable_is_cancelled (cancellable);
   GdkPixbuf *pixbuf;
   GtkFileChooserButton *button = data;
   GtkFileChooserButtonPrivate *priv = button->priv;
 
-  if (handle != priv->update_button_handle)
+  if (cancellable != priv->update_button_cancellable)
     goto out;
 
-  priv->update_button_handle = NULL;
+  priv->update_button_cancellable = NULL;
 
   if (cancelled || error)
     goto out;
 
-  gtk_label_set_text (GTK_LABEL (priv->label), gtk_file_info_get_display_name (info));
+  gtk_label_set_text (GTK_LABEL (priv->label), g_file_info_get_display_name (info));
 
-  pixbuf = gtk_file_info_render_icon (info, GTK_WIDGET (priv->image),
-				      priv->icon_size, NULL);
+  pixbuf = gtk_file_info_render_icon (info, GTK_WIDGET (priv->image), priv->icon_size);
+
   if (!pixbuf)
     pixbuf = gtk_icon_theme_load_icon (get_icon_theme (GTK_WIDGET (priv->image)),
 				       FALLBACK_ICON_NAME,
@@ -2321,7 +2301,7 @@ update_label_get_info_cb (GtkFileSystemHandle *handle,
 
 out:
   g_object_unref (button);
-  g_object_unref (handle);
+  g_object_unref (cancellable);
 }
 
 static void
@@ -2330,55 +2310,54 @@ update_label_and_image (GtkFileChooserButton *button)
   GtkFileChooserButtonPrivate *priv = button->priv;
   GdkPixbuf *pixbuf;
   gchar *label_text;
-  GSList *paths;
+  GSList *files;
 
-  paths = _gtk_file_chooser_get_paths (GTK_FILE_CHOOSER (priv->dialog));
+  files = _gtk_file_chooser_get_files (GTK_FILE_CHOOSER (priv->dialog));
   label_text = NULL;
   pixbuf = NULL;
 
-  if (paths && paths->data)
+  if (files && files->data)
     {
-      GtkFilePath *path;
+      GFile *file;
       GtkFileSystemVolume *volume = NULL;
-    
-      path = paths->data;
 
-      volume = gtk_file_system_get_volume_for_path (priv->fs, path);
+      file = files->data;
+
+      volume = gtk_file_system_get_volume_for_file (priv->fs, file);
       if (volume)
 	{
-	  GtkFilePath *base_path;
+	  GFile *base_file;
 
-	  base_path = gtk_file_system_volume_get_base_path (priv->fs, volume);
-	  if (base_path && gtk_file_path_compare (base_path, path) == 0)
+	  base_file = gtk_file_system_volume_get_root (volume);
+	  if (base_file && g_file_equal (base_file, file))
 	    {
-	      label_text = gtk_file_system_volume_get_display_name (priv->fs,
-								    volume);
-	      pixbuf = gtk_file_system_volume_render_icon (priv->fs, volume,
+	      label_text = gtk_file_system_volume_get_display_name (volume);
+	      pixbuf = gtk_file_system_volume_render_icon (volume,
 							   GTK_WIDGET (button),
 							   priv->icon_size,
 							   NULL);
 	    }
 
-	  if (base_path)
-	    gtk_file_path_free (base_path);
+	  if (base_file)
+	    g_object_unref (base_file);
 
-	  gtk_file_system_volume_free (priv->fs, volume);
+	  gtk_file_system_volume_free (volume);
 
 	  if (label_text)
 	    goto out;
 	}
 
-      if (priv->update_button_handle)
+      if (priv->update_button_cancellable)
 	{
-	  gtk_file_system_cancel_operation (priv->update_button_handle);
-	  priv->update_button_handle = NULL;
+	  g_cancellable_cancel (priv->update_button_cancellable);
+	  priv->update_button_cancellable = NULL;
 	}
-	  
-      if (gtk_file_system_path_is_local (priv->fs, path))
+
+      if (g_file_is_native (file))
 	{
-	  priv->update_button_handle =
-	    gtk_file_system_get_info (priv->fs, path,
-				      GTK_FILE_INFO_DISPLAY_NAME | GTK_FILE_INFO_ICON,
+	  priv->update_button_cancellable =
+	    gtk_file_system_get_info (priv->fs, file,
+				      "standard::icon,standard::display-name",
 				      update_label_get_info_cb,
 				      g_object_ref (button));
 	}
@@ -2386,7 +2365,7 @@ update_label_and_image (GtkFileChooserButton *button)
 	{
 	  GdkPixbuf *pixbuf;
 
-	  label_text = gtk_file_system_get_bookmark_label (button->priv->fs, path);
+	  label_text = gtk_file_system_get_bookmark_label (button->priv->fs, file);
 	  
 	  pixbuf = gtk_icon_theme_load_icon (get_icon_theme (GTK_WIDGET (priv->image)), 
 					     "gnome-fs-regular",
@@ -2399,7 +2378,8 @@ update_label_and_image (GtkFileChooserButton *button)
 	}
     }
 out:
-  gtk_file_paths_free (paths);
+  g_slist_foreach (files, (GFunc) g_object_unref, NULL);
+  g_slist_free (files);
 
   if (label_text)
     {
@@ -2456,7 +2436,8 @@ fs_bookmarks_changed_cb (GtkFileSystem *fs,
   priv->has_bookmark_separator = FALSE;
   priv->n_bookmarks = 0;
   model_add_bookmarks (user_data, bookmarks);
-  gtk_file_paths_free (bookmarks);
+  g_slist_foreach (bookmarks, (GFunc) g_object_unref, NULL);
+  g_slist_free (bookmarks);
 
   gtk_tree_model_filter_refilter (GTK_TREE_MODEL_FILTER (priv->filter_model));
 
@@ -2491,7 +2472,7 @@ open_dialog (GtkFileChooserButton *button)
 
   if (!priv->active)
     {
-      GSList *paths;
+      GSList *files;
 
       g_signal_handler_block (priv->dialog,
 			      priv->dialog_folder_changed_id);
@@ -2499,13 +2480,14 @@ open_dialog (GtkFileChooserButton *button)
 			      priv->dialog_file_activated_id);
       g_signal_handler_block (priv->dialog,
 			      priv->dialog_selection_changed_id);
-      paths = _gtk_file_chooser_get_paths (GTK_FILE_CHOOSER (priv->dialog));
-      if (paths)
+      files = _gtk_file_chooser_get_files (GTK_FILE_CHOOSER (priv->dialog));
+      if (files)
 	{
-	  if (paths->data)
-	    priv->old_path = gtk_file_path_copy (paths->data);
+	  if (files->data)
+	    priv->old_file = g_object_ref (files->data);
 
-	  gtk_file_paths_free (paths);
+	  g_slist_foreach (files, (GFunc) g_object_unref, NULL);
+	  g_slist_free (files);
 	}
 
       priv->active = TRUE;
@@ -2545,20 +2527,20 @@ combo_box_changed_cb (GtkComboBox *combo_box,
 	case ROW_TYPE_CURRENT_FOLDER:
 	  gtk_file_chooser_unselect_all (GTK_FILE_CHOOSER (priv->dialog));
 	  if (data)
-	    _gtk_file_chooser_set_current_folder_path (GTK_FILE_CHOOSER (priv->dialog),
+	    _gtk_file_chooser_set_current_folder_file (GTK_FILE_CHOOSER (priv->dialog),
 						       data, NULL);
 	  break;
 	case ROW_TYPE_VOLUME:
 	  {
-	    GtkFilePath *base_path;
+	    GFile *base_file;
 
 	    gtk_file_chooser_unselect_all (GTK_FILE_CHOOSER (priv->dialog));
-	    base_path = gtk_file_system_volume_get_base_path (priv->fs, data);
-	    if (base_path)
+	    base_file = gtk_file_system_volume_get_root (data);
+	    if (base_file)
 	      {
-		_gtk_file_chooser_set_current_folder_path (GTK_FILE_CHOOSER (priv->dialog),
-							   base_path, NULL);
-		gtk_file_path_free (base_path);
+		_gtk_file_chooser_set_current_folder_file (GTK_FILE_CHOOSER (priv->dialog),
+							   base_file, NULL);
+		g_object_unref (base_file);
 	      }
 	  }
 	  break;
@@ -2647,9 +2629,8 @@ dialog_notify_cb (GObject    *dialog,
 
 	  /* If the path isn't local but we're in local-only mode now, remove
 	   * the custom-folder row */
-	  if (data &&
-	      (!gtk_file_system_path_is_local (priv->fs, data) &&
-	       gtk_file_chooser_get_local_only (GTK_FILE_CHOOSER (priv->dialog))))
+	  if (data && g_file_is_native (G_FILE (data)) &&
+	      gtk_file_chooser_get_local_only (GTK_FILE_CHOOSER (priv->dialog)))
 	    {
 	      pos--;
 	      model_remove_rows (user_data, pos, 2);
@@ -2685,17 +2666,17 @@ dialog_response_cb (GtkDialog *dialog,
       g_signal_emit_by_name (user_data, "current-folder-changed");
       g_signal_emit_by_name (user_data, "selection-changed");
     }
-  else if (priv->old_path)
+  else if (priv->old_file)
     {
       switch (gtk_file_chooser_get_action (GTK_FILE_CHOOSER (dialog)))
 	{
 	case GTK_FILE_CHOOSER_ACTION_OPEN:
-	  _gtk_file_chooser_select_path (GTK_FILE_CHOOSER (dialog), priv->old_path,
+	  _gtk_file_chooser_select_file (GTK_FILE_CHOOSER (dialog), priv->old_file,
 					 NULL);
 	  break;
 	case GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER:
-	  _gtk_file_chooser_set_current_folder_path (GTK_FILE_CHOOSER (dialog),
-						     priv->old_path, NULL);
+	  _gtk_file_chooser_set_current_folder_file (GTK_FILE_CHOOSER (dialog),
+						     priv->old_file, NULL);
 	  break;
 	default:
 	  g_assert_not_reached ();
@@ -2705,10 +2686,10 @@ dialog_response_cb (GtkDialog *dialog,
   else
     gtk_file_chooser_unselect_all (GTK_FILE_CHOOSER (dialog));
 
-  if (priv->old_path)
+  if (priv->old_file)
     {
-      gtk_file_path_free (priv->old_path);
-      priv->old_path = NULL;
+      g_object_unref (priv->old_file);
+      priv->old_file = NULL;
     }
 
   update_label_and_image (user_data);

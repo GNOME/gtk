@@ -1,3 +1,30 @@
+2008-06-10  Carlos Garnacho  <carlos@imendio.com>
+
+	Bug 520874 - Should use gio directly.
+
+	* gtk/gtkfilesystem.[ch]: Turn into a private object, which mostly
+	provides helper functions for asynchronous calls, folder abstraction
+	and uniform handling of volumes/drives/mounts.
+
+	* gtk/gtkfilesystemwin32.[ch]:
+	* gtk/gtkfilesystemunix.[ch]: Removed, these are no longer required.
+
+	* gtk/gtkfilechooser.c:
+	* gtk/gtkfilechooserbutton.c:
+	* gtk/gtkfilechooserdefault.c:
+	* gtk/gtkfilechooserentry.[ch]:
+	* gtk/gtkfilechooserprivate.h:
+	* gtk/gtkfilechooserutils.c:
+	* gtk/gtkfilesystemmodel.[ch]:
+	* gtk/gtkpathbar.[ch]: Use GIO internally. Adapt to GtkFileSystem API.
+	Do not load filesystem implementation modules.
+
+	* gtk/Makefile.am:
+	* gtk/gtk.symbols: the gtkfilesystem.h private header isn't installed
+	anymore, nor the unix/win32 implementations.
+
+	* README.in: Add blurb about these changes.
+
 2008-06-09  Kristian Rietveld  <kris@gtk.org>
 
 	Bug 526987 - GtkCellRendererCombo should allow model to be NULL

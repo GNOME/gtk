@@ -36,6 +36,12 @@ Release notes for 2.14
   without including gtkitemfactory.h - even though this behaviour has never
   been supported in the first place.
 
+* The GtkFileSystem semi-private interface has been removed.
+  The GTK+ filechooser implementation now uses GIO directly, which has
+  rendered external filesystem implementations unnecessary. Consequently,
+  the GtkFileSystem interface is no longer available, nor the filechooser
+  will load any GtkFileSystem implementation.
+
 Release notes for 2.12
 ======================
 

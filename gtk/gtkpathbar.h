@@ -41,11 +41,11 @@ struct _GtkPathBar
   GtkContainer parent;
 
   GtkFileSystem *file_system;
-  GtkFilePath *root_path;
-  GtkFilePath *home_path;
-  GtkFilePath *desktop_path;
+  GFile *root_file;
+  GFile *home_file;
+  GFile *desktop_file;
 
-  GtkFileSystemHandle *set_path_handle;
+  GCancellable *get_info_cancellable;
 
   GdkPixbuf *root_icon;
   GdkPixbuf *home_icon;
@@ -76,16 +76,16 @@ struct _GtkPathBarClass
   GtkContainerClass parent_class;
 
   void (* path_clicked) (GtkPathBar  *path_bar,
-			 GtkFilePath *file_path,
-			 GtkFilePath *child_path,
+			 GFile       *file,
+			 GFile       *child_file,
 			 gboolean     child_is_hidden);
 };
 
 GType    gtk_path_bar_get_type (void) G_GNUC_CONST;
 void     _gtk_path_bar_set_file_system (GtkPathBar         *path_bar,
 					GtkFileSystem      *file_system);
-gboolean _gtk_path_bar_set_path        (GtkPathBar         *path_bar,
-					const GtkFilePath  *file_path,
+gboolean _gtk_path_bar_set_file        (GtkPathBar         *path_bar,
+					GFile              *file,
 					gboolean            keep_trail,
 					GError            **error);
 void     _gtk_path_bar_up              (GtkPathBar *path_bar);

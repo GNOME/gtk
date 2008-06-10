@@ -57,14 +57,14 @@ struct _GtkFileChooserEntry
   GtkFileChooserAction action;
 
   GtkFileSystem *file_system;
-  GtkFilePath *base_folder;
+  GFile *base_folder;
+  GFile *current_folder_file;
   gchar *file_part;
   gint file_part_pos;
 
   /* Folder being loaded or already loaded */
-  GtkFilePath *current_folder_path;
-  GtkFileFolder *current_folder;
-  GtkFileSystemHandle *load_folder_handle;
+  GtkFolder *current_folder;
+  GCancellable *load_folder_cancellable;
 
   LoadCompleteAction load_complete_action;
 
@@ -84,7 +84,7 @@ struct _GtkFileChooserEntry
 enum
 {
   DISPLAY_NAME_COLUMN,
-  PATH_COLUMN,
+  FILE_COLUMN,
   N_COLUMNS
 };
 
@@ -134,8 +134,8 @@ static gboolean completion_match_func     (GtkEntryCompletion  *comp,
 					   const char          *key,
 					   GtkTreeIter         *iter,
 					   gpointer             data);
-static char    *maybe_append_separator_to_path (GtkFileChooserEntry *chooser_entry,
-						GtkFilePath         *path,
+static char    *maybe_append_separator_to_file (GtkFileChooserEntry *chooser_entry,
+						GFile               *file,
 						gchar               *display_name);
 
 typedef enum {
@@ -145,7 +145,7 @@ typedef enum {
 
 static void refresh_current_folder_and_file_part (GtkFileChooserEntry *chooser_entry,
 						  RefreshMode refresh_mode);
-static void finished_loading_cb (GtkFileFolder *folder,
+static void finished_loading_cb (GFile         *file,
 				 gpointer       data);
 static void autocomplete (GtkFileChooserEntry *chooser_entry);
 static void install_start_autocompletion_idle (GtkFileChooserEntry *chooser_entry);
@@ -230,8 +230,15 @@ gtk_file_chooser_entry_finalize (GObject *object)
 {
   GtkFileChooserEntry *chooser_entry = GTK_FILE_CHOOSER_ENTRY (object);
 
-  gtk_file_path_free (chooser_entry->base_folder);
-  gtk_file_path_free (chooser_entry->current_folder_path);
+  if (chooser_entry->base_folder)
+    g_object_unref (chooser_entry->base_folder);
+
+  if (chooser_entry->current_folder)
+    g_object_unref (chooser_entry->current_folder);
+
+  if (chooser_entry->current_folder_file)
+    g_object_unref (chooser_entry->current_folder_file);
+
   g_free (chooser_entry->file_part);
 
   G_OBJECT_CLASS (_gtk_file_chooser_entry_parent_class)->finalize (object);
@@ -256,10 +263,10 @@ gtk_file_chooser_entry_dispose (GObject *object)
       chooser_entry->completion_store = NULL;
     }
 
-  if (chooser_entry->load_folder_handle)
+  if (chooser_entry->load_folder_cancellable)
     {
-      gtk_file_system_cancel_operation (chooser_entry->load_folder_handle);
-      chooser_entry->load_folder_handle = NULL;
+      g_cancellable_cancel (chooser_entry->load_folder_cancellable);
+      chooser_entry->load_folder_cancellable = NULL;
     }
 
   if (chooser_entry->current_folder)
@@ -287,23 +294,23 @@ match_selected_callback (GtkEntryCompletion  *completion,
 			 GtkFileChooserEntry *chooser_entry)
 {
   char *display_name;
-  GtkFilePath *path;
+  GFile *file;
   gint pos;
   
   gtk_tree_model_get (model, iter,
 		      DISPLAY_NAME_COLUMN, &display_name,
-		      PATH_COLUMN, &path,
+		      FILE_COLUMN, &file,
 		      -1);
 
-  if (!display_name || !path)
+  if (!display_name || !file)
     {
       /* these shouldn't complain if passed NULL */
-      gtk_file_path_free (path);
+      g_object_unref (file);
       g_free (display_name);
       return FALSE;
     }
 
-  display_name = maybe_append_separator_to_path (chooser_entry, path, display_name);
+  display_name = maybe_append_separator_to_file (chooser_entry, file, display_name);
 
   pos = chooser_entry->file_part_pos;
 
@@ -316,7 +323,7 @@ match_selected_callback (GtkEntryCompletion  *completion,
 			    &pos);
   gtk_editable_set_position (GTK_EDITABLE (chooser_entry), -1);
 
-  gtk_file_path_free (path);
+  g_object_unref (file);
   g_free (display_name);
 
   return TRUE;
@@ -411,36 +418,35 @@ beep (GtkFileChooserEntry *chooser_entry)
 
 /* This function will append a directory separator to paths to
  * display_name iff the path associated with it is a directory.
- * maybe_append_separator_to_path will g_free the display_name and
+ * maybe_append_separator_to_file will g_free the display_name and
  * return a new one if needed.  Otherwise, it will return the old one.
  * You should be safe calling
  *
- * display_name = maybe_append_separator_to_path (entry, path, display_name);
+ * display_name = maybe_append_separator_to_file (entry, file, display_name);
  * ...
  * g_free (display_name);
  */
 static char *
-maybe_append_separator_to_path (GtkFileChooserEntry *chooser_entry,
-				GtkFilePath         *path,
+maybe_append_separator_to_file (GtkFileChooserEntry *chooser_entry,
+				GFile               *file,
 				gchar               *display_name)
 {
-  if (!g_str_has_suffix (display_name, G_DIR_SEPARATOR_S) && path)
+  if (!g_str_has_suffix (display_name, G_DIR_SEPARATOR_S) && file)
     {
-      GtkFileInfo *info;
-	    
-      info = gtk_file_folder_get_info (chooser_entry->current_folder,
-				       path, NULL); /* NULL-GError */
+      GFileInfo *info;
+
+      info = gtk_folder_get_info (chooser_entry->current_folder, file);
 
       if (info)
 	{
-	  if (gtk_file_info_get_is_folder (info))
+	  if (g_file_info_get_file_type (info) == G_FILE_TYPE_DIRECTORY)
 	    {
 	      gchar *tmp = display_name;
 	      display_name = g_strconcat (tmp, G_DIR_SEPARATOR_S, NULL);
 	      g_free (tmp);
 	    }
-	  
-	  gtk_file_info_free (info);
+
+	  g_object_unref (info);
 	}
     }
 
@@ -466,7 +472,7 @@ trim_dir_separator_suffix (const char *str)
 static gboolean
 find_common_prefix (GtkFileChooserEntry *chooser_entry,
 		    gchar               **common_prefix_ret,
-		    GtkFilePath         **unique_path_ret,
+		    GFile               **unique_file_ret,
 		    gboolean             *is_complete_not_unique_ret,
 		    gboolean             *prefix_expands_the_file_part_ret,
 		    GError              **error)
@@ -476,11 +482,11 @@ find_common_prefix (GtkFileChooserEntry *chooser_entry,
   gboolean parsed;
   gboolean valid;
   char *text_up_to_cursor;
-  GtkFilePath *parsed_folder_path;
+  GFile *parsed_folder_file;
   char *parsed_file_part;
 
   *common_prefix_ret = NULL;
-  *unique_path_ret = NULL;
+  *unique_file_ret = NULL;
   *is_complete_not_unique_ret = FALSE;
   *prefix_expands_the_file_part_ret = FALSE;
 
@@ -491,7 +497,7 @@ find_common_prefix (GtkFileChooserEntry *chooser_entry,
   parsed = gtk_file_system_parse (chooser_entry->file_system,
 				  chooser_entry->base_folder,
 				  text_up_to_cursor,
-				  &parsed_folder_path,
+				  &parsed_folder_file,
 				  &parsed_file_part,
 				  error);
 
@@ -500,11 +506,11 @@ find_common_prefix (GtkFileChooserEntry *chooser_entry,
   if (!parsed)
     return FALSE;
 
-  g_assert (parsed_folder_path != NULL
-	    && chooser_entry->current_folder_path != NULL
-	    && gtk_file_path_compare (parsed_folder_path, chooser_entry->current_folder_path) == 0);
+  g_assert (parsed_folder_file != NULL
+	    && chooser_entry->current_folder != NULL
+	    && g_file_equal (parsed_folder_file, chooser_entry->current_folder_file));
 
-  gtk_file_path_free (parsed_folder_path);
+  g_object_unref (parsed_folder_file);
 
   /* First pass: find the common prefix */
 
@@ -513,12 +519,12 @@ find_common_prefix (GtkFileChooserEntry *chooser_entry,
   while (valid)
     {
       gchar *display_name;
-      GtkFilePath *path;
+      GFile *file;
 
       gtk_tree_model_get (GTK_TREE_MODEL (chooser_entry->completion_store),
 			  &iter,
 			  DISPLAY_NAME_COLUMN, &display_name,
-			  PATH_COLUMN, &path,
+			  FILE_COLUMN, &file,
 			  -1);
 
       if (g_str_has_prefix (display_name, parsed_file_part))
@@ -526,7 +532,7 @@ find_common_prefix (GtkFileChooserEntry *chooser_entry,
 	  if (!*common_prefix_ret)
 	    {
 	      *common_prefix_ret = trim_dir_separator_suffix (display_name);
-	      *unique_path_ret = gtk_file_path_copy (path);
+	      *unique_file_ret = g_object_ref (file);
 	    }
 	  else
 	    {
@@ -541,13 +547,16 @@ find_common_prefix (GtkFileChooserEntry *chooser_entry,
 
 	      *p = '\0';
 
-	      gtk_file_path_free (*unique_path_ret);
-	      *unique_path_ret = NULL;
+	      if (*unique_file_ret)
+		{
+		  g_object_unref (*unique_file_ret);
+		  *unique_file_ret = NULL;
+		}
 	    }
 	}
 
       g_free (display_name);
-      gtk_file_path_free (path);
+      g_object_unref (file);
       valid = gtk_tree_model_iter_next (GTK_TREE_MODEL (chooser_entry->completion_store), &iter);
     }
 
@@ -629,7 +638,7 @@ append_common_prefix (GtkFileChooserEntry *chooser_entry,
 		      gboolean             show_errors)
 {
   gchar *common_prefix;
-  GtkFilePath *unique_path;
+  GFile *unique_file;
   gboolean is_complete_not_unique;
   gboolean prefix_expands_the_file_part;
   GError *error;
@@ -642,7 +651,7 @@ append_common_prefix (GtkFileChooserEntry *chooser_entry,
     return NO_MATCH;
 
   error = NULL;
-  if (!find_common_prefix (chooser_entry, &common_prefix, &unique_path, &is_complete_not_unique, &prefix_expands_the_file_part, &error))
+  if (!find_common_prefix (chooser_entry, &common_prefix, &unique_file, &is_complete_not_unique, &prefix_expands_the_file_part, &error))
     {
       if (show_errors)
 	{
@@ -657,14 +666,14 @@ append_common_prefix (GtkFileChooserEntry *chooser_entry,
 
   have_result = FALSE;
 
-  if (unique_path)
+  if (unique_file)
     {
       if (!char_after_cursor_is_directory_separator (chooser_entry))
-	common_prefix = maybe_append_separator_to_path (chooser_entry,
-							unique_path,
+	common_prefix = maybe_append_separator_to_file (chooser_entry,
+							unique_file,
 							common_prefix);
 
-      gtk_file_path_free (unique_path);
+      g_object_unref (unique_file);
 
       if (common_prefix)
 	{
@@ -1036,7 +1045,7 @@ explicitly_complete (GtkFileChooserEntry *chooser_entry)
   CommonPrefixResult result;
 
   g_assert (chooser_entry->current_folder != NULL);
-  g_assert (gtk_file_folder_is_finished_loading (chooser_entry->current_folder));
+  g_assert (gtk_folder_is_finished_loading (chooser_entry->current_folder));
 
   /* FIXME: see what Emacs does in case there is no common prefix, or there is more than one match:
    *
@@ -1088,7 +1097,7 @@ start_explicit_completion (GtkFileChooserEntry *chooser_entry)
 {
   refresh_current_folder_and_file_part (chooser_entry, REFRESH_UP_TO_CURSOR_POSITION);
 
-  if (!chooser_entry->current_folder_path)
+  if (!chooser_entry->current_folder_file)
     {
       /* Here, no folder path means we couldn't parse what the user typed. */
 
@@ -1100,7 +1109,7 @@ start_explicit_completion (GtkFileChooserEntry *chooser_entry)
     }
 
   if (chooser_entry->current_folder
-      && gtk_file_folder_is_finished_loading (chooser_entry->current_folder))
+      && gtk_folder_is_finished_loading (chooser_entry->current_folder))
     {
       explicitly_complete (chooser_entry);
     }
@@ -1201,47 +1210,46 @@ discard_completion_store (GtkFileChooserEntry *chooser_entry)
 static void
 populate_completion_store (GtkFileChooserEntry *chooser_entry)
 {
-  GSList *paths;
+  GSList *files;
   GSList *tmp_list;
 
   discard_completion_store (chooser_entry);
 
-  if (!gtk_file_folder_list_children (chooser_entry->current_folder, &paths, NULL)) /* NULL-GError */
-    return;
+  files = gtk_folder_list_children (chooser_entry->current_folder);
 
   chooser_entry->completion_store = gtk_list_store_new (N_COLUMNS,
 							G_TYPE_STRING,
-							GTK_TYPE_FILE_PATH);
+							G_TYPE_FILE);
 
-  for (tmp_list = paths; tmp_list; tmp_list = tmp_list->next)
+  for (tmp_list = files; tmp_list; tmp_list = tmp_list->next)
     {
-      GtkFileInfo *info;
-      GtkFilePath *path;
+      GFileInfo *info;
+      GFile *file;
 
-      path = tmp_list->data;
+      file = tmp_list->data;
 
-      info = gtk_file_folder_get_info (chooser_entry->current_folder,
-				       path,
-				       NULL); /* NULL-GError */
+      info = gtk_folder_get_info (chooser_entry->current_folder, file);
+
       if (info)
 	{
-	  gchar *display_name = g_strdup (gtk_file_info_get_display_name (info));
+	  gchar *display_name = g_strdup (g_file_info_get_display_name (info));
 	  GtkTreeIter iter;
 
-          display_name = maybe_append_separator_to_path (chooser_entry, path, display_name);
+          display_name = maybe_append_separator_to_file (chooser_entry, file, display_name);
 
 	  gtk_list_store_append (chooser_entry->completion_store, &iter);
 	  gtk_list_store_set (chooser_entry->completion_store, &iter,
 			      DISPLAY_NAME_COLUMN, display_name,
-			      PATH_COLUMN, path,
+			      FILE_COLUMN, file,
 			      -1);
 
-	  gtk_file_info_free (info);
+	  g_object_unref (info);
           g_free (display_name);
 	}
     }
 
-  gtk_file_paths_free (paths);
+  g_slist_foreach (files, (GFunc) g_object_unref, NULL);
+  g_slist_free (files);
 
   gtk_tree_sortable_set_sort_column_id (GTK_TREE_SORTABLE (chooser_entry->completion_store),
 					DISPLAY_NAME_COLUMN, GTK_SORT_ASCENDING);
@@ -1287,8 +1295,8 @@ finish_folder_load (GtkFileChooserEntry *chooser_entry)
 
 /* Callback when the current folder finishes loading */
 static void
-finished_loading_cb (GtkFileFolder *folder,
-		     gpointer       data)
+finished_loading_cb (GFile    *file,
+		     gpointer  data)
 {
   GtkFileChooserEntry *chooser_entry = GTK_FILE_CHOOSER_ENTRY (data);
 
@@ -1297,18 +1305,18 @@ finished_loading_cb (GtkFileFolder *folder,
 
 /* Callback when the current folder's handle gets obtained (not necessarily loaded completely) */
 static void
-load_directory_get_folder_callback (GtkFileSystemHandle *handle,
-				    GtkFileFolder       *folder,
-				    const GError        *error,
-				    gpointer             data)
+load_directory_get_folder_callback (GCancellable  *cancellable,
+				    GtkFolder     *folder,
+				    const GError  *error,
+				    gpointer       data)
 {
-  gboolean cancelled = handle->cancelled;
+  gboolean cancelled = g_cancellable_is_cancelled (cancellable);
   GtkFileChooserEntry *chooser_entry = data;
 
-  if (handle != chooser_entry->load_folder_handle)
+  if (cancellable != chooser_entry->load_folder_cancellable)
     goto out;
 
-  chooser_entry->load_folder_handle = NULL;
+  chooser_entry->load_folder_cancellable = NULL;
 
   if (error)
     {
@@ -1326,19 +1334,22 @@ load_directory_get_folder_callback (GtkFileSystemHandle *handle,
 	  pop_up_completion_feedback (chooser_entry, error->message);
 	}
 
-      gtk_file_path_free (chooser_entry->current_folder_path);
-      chooser_entry->current_folder_path = NULL;
+      if (chooser_entry->current_folder)
+	{
+	  g_object_unref (chooser_entry->current_folder);
+	  chooser_entry->current_folder = NULL;
+	}
     }
 
   if (cancelled || error)
     goto out;
 
   g_assert (folder != NULL);
-  chooser_entry->current_folder = folder;
+  chooser_entry->current_folder = g_object_ref (folder);
 
   discard_completion_store (chooser_entry);
 
-  if (gtk_file_folder_is_finished_loading (chooser_entry->current_folder))
+  if (gtk_folder_is_finished_loading (chooser_entry->current_folder))
     finish_folder_load (chooser_entry);
   else
     g_signal_connect (chooser_entry->current_folder, "finished-loading",
@@ -1346,37 +1357,37 @@ load_directory_get_folder_callback (GtkFileSystemHandle *handle,
 
 out:
   g_object_unref (chooser_entry);
-  g_object_unref (handle);
+  g_object_unref (cancellable);
 }
 
 static void
 start_loading_current_folder (GtkFileChooserEntry *chooser_entry)
 {
-  if (chooser_entry->current_folder_path == NULL ||
+  if (chooser_entry->current_folder_file == NULL ||
       chooser_entry->file_system == NULL)
     return;
 
   g_assert (chooser_entry->current_folder == NULL);
-  g_assert (chooser_entry->load_folder_handle == NULL);
+  g_assert (chooser_entry->load_folder_cancellable == NULL);
 
-  chooser_entry->load_folder_handle =
+  chooser_entry->load_folder_cancellable =
     gtk_file_system_get_folder (chooser_entry->file_system,
-			        chooser_entry->current_folder_path,
-			        GTK_FILE_INFO_DISPLAY_NAME | GTK_FILE_INFO_IS_FOLDER,
+			        chooser_entry->current_folder_file,
+				"standard::name,standard::display-name,standard::type",
 			        load_directory_get_folder_callback,
 			        g_object_ref (chooser_entry));
 }
 
 static void
 reload_current_folder (GtkFileChooserEntry *chooser_entry,
-		       GtkFilePath         *folder_path,
+		       GFile               *folder_file,
 		       gboolean             force_reload)
 {
   gboolean reload = FALSE;
 
-  if (chooser_entry->current_folder_path)
+  if (chooser_entry->current_folder_file)
     {
-      if ((folder_path && gtk_file_path_compare (folder_path, chooser_entry->current_folder_path) != 0)
+      if ((folder_file && !g_file_equal (folder_file, chooser_entry->current_folder_file))
 	  || force_reload)
 	{
 	  reload = TRUE;
@@ -1386,23 +1397,23 @@ reload_current_folder (GtkFileChooserEntry *chooser_entry,
 	   */
 	  if (chooser_entry->current_folder)
 	    {
-	      if (chooser_entry->load_folder_handle)
+	      if (chooser_entry->load_folder_cancellable)
 		{
-		  gtk_file_system_cancel_operation (chooser_entry->load_folder_handle);
-		  chooser_entry->load_folder_handle = NULL;
+		  g_cancellable_cancel (chooser_entry->load_folder_cancellable);
+		  chooser_entry->load_folder_cancellable = NULL;
 		}
 
 	      g_object_unref (chooser_entry->current_folder);
 	      chooser_entry->current_folder = NULL;
 	    }
 
-	  gtk_file_path_free (chooser_entry->current_folder_path);
-	  chooser_entry->current_folder_path = gtk_file_path_copy (folder_path);
+	  g_object_unref (chooser_entry->current_folder_file);
+	  chooser_entry->current_folder_file = g_object_ref (folder_file);
 	}
     }
   else
     {
-      chooser_entry->current_folder_path = gtk_file_path_copy (folder_path);
+      chooser_entry->current_folder_file = (folder_file) ? g_object_ref (folder_file) : NULL;
       reload = TRUE;
     }
 
@@ -1417,7 +1428,7 @@ refresh_current_folder_and_file_part (GtkFileChooserEntry *chooser_entry,
   GtkEditable *editable;
   gint end_pos;
   gchar *text;
-  GtkFilePath *folder_path;
+  GFile *folder_file;
   gchar *file_part;
   gsize total_len, file_part_len;
   gint file_part_pos;
@@ -1445,9 +1456,9 @@ refresh_current_folder_and_file_part (GtkFileChooserEntry *chooser_entry,
       !chooser_entry->base_folder ||
       !gtk_file_system_parse (chooser_entry->file_system,
 			      chooser_entry->base_folder, text,
-			      &folder_path, &file_part, NULL)) /* NULL-GError */
+			      &folder_file, &file_part, NULL)) /* NULL-GError */
     {
-      folder_path = gtk_file_path_copy (chooser_entry->base_folder);
+      folder_file = (chooser_entry->base_folder) ? g_object_ref (chooser_entry->base_folder) : NULL;
       file_part = g_strdup ("");
       file_part_pos = -1;
     }
@@ -1468,15 +1479,17 @@ refresh_current_folder_and_file_part (GtkFileChooserEntry *chooser_entry,
   chooser_entry->file_part = file_part;
   chooser_entry->file_part_pos = file_part_pos;
 
-  reload_current_folder (chooser_entry, folder_path, file_part_pos == -1);
-  gtk_file_path_free (folder_path);
+  reload_current_folder (chooser_entry, folder_file, file_part_pos == -1);
+
+  if (folder_file)
+    g_object_unref (folder_file);
 }
 
 static void
 autocomplete (GtkFileChooserEntry *chooser_entry)
 {
   g_assert (chooser_entry->current_folder != NULL);
-  g_assert (gtk_file_folder_is_finished_loading (chooser_entry->current_folder));
+  g_assert (gtk_folder_is_finished_loading (chooser_entry->current_folder));
   g_assert (gtk_editable_get_position (GTK_EDITABLE (chooser_entry)) == GTK_ENTRY (chooser_entry)->text_length);
 
   append_common_prefix (chooser_entry, TRUE, FALSE);
@@ -1495,7 +1508,7 @@ start_autocompletion (GtkFileChooserEntry *chooser_entry)
       return;
     }
 
-  if (gtk_file_folder_is_finished_loading (chooser_entry->current_folder))
+  if (gtk_folder_is_finished_loading (chooser_entry->current_folder))
     autocomplete (chooser_entry);
   else
     chooser_entry->load_complete_action = LOAD_COMPLETE_AUTOCOMPLETE;
@@ -1634,18 +1647,21 @@ _gtk_file_chooser_entry_set_file_system (GtkFileChooserEntry *chooser_entry,
 /**
  * _gtk_file_chooser_entry_set_base_folder:
  * @chooser_entry: a #GtkFileChooserEntry
- * @path: path of a folder in the chooser entries current file system.
+ * @file: file for a folder in the chooser entries current file system.
  *
  * Sets the folder with respect to which completions occur.
  **/
 void
 _gtk_file_chooser_entry_set_base_folder (GtkFileChooserEntry *chooser_entry,
-					 const GtkFilePath   *path)
+					 GFile               *file)
 {
   if (chooser_entry->base_folder)
-    gtk_file_path_free (chooser_entry->base_folder);
+    g_object_unref (chooser_entry->base_folder);
 
-  chooser_entry->base_folder = gtk_file_path_copy (path);
+  chooser_entry->base_folder = file;
+
+  if (chooser_entry->base_folder)
+    g_object_ref (chooser_entry->base_folder);
 
   clear_completions (chooser_entry);
   _gtk_file_chooser_entry_select_filename (chooser_entry);
@@ -1663,14 +1679,14 @@ _gtk_file_chooser_entry_set_base_folder (GtkFileChooserEntry *chooser_entry,
  * path that doesn't point to a folder in the file system, it will
  * be %NULL.
  *
- * Return value: the path of current folder - this value is owned by the
+ * Return value: the file for the current folder - this value is owned by the
  *  chooser entry and must not be modified or freed.
  **/
-const GtkFilePath *
+GFile *
 _gtk_file_chooser_entry_get_current_folder (GtkFileChooserEntry *chooser_entry)
 {
   commit_completion_and_refresh (chooser_entry);
-  return chooser_entry->current_folder_path;
+  return chooser_entry->current_folder_file;
 }
 
 /**
@@ -1679,7 +1695,7 @@ _gtk_file_chooser_entry_get_current_folder (GtkFileChooserEntry *chooser_entry)
  *
  * Gets the non-folder portion of whatever the user has entered
  * into the file selector. What is returned is a UTF-8 string,
- * and if a filename path is needed, gtk_file_system_make_path()
+ * and if a filename path is needed, g_file_get_child_for_display_name()
  * must be used
   *
  * Return value: the entered filename - this value is owned by the
@@ -1771,20 +1787,20 @@ _gtk_file_chooser_entry_get_action (GtkFileChooserEntry *chooser_entry)
 
 gboolean
 _gtk_file_chooser_entry_get_is_folder (GtkFileChooserEntry *chooser_entry,
-				       const GtkFilePath   *path)
+				       GFile               *file)
 {
   gboolean retval = FALSE;
 
   if (chooser_entry->current_folder)
     {
-      GtkFileInfo *file_info;
+      GFileInfo *file_info;
 
-      file_info = gtk_file_folder_get_info (chooser_entry->current_folder,
-					    path, NULL);
+      file_info = gtk_folder_get_info (chooser_entry->current_folder, file);
+
       if (file_info)
         {
-	  retval = gtk_file_info_get_is_folder (file_info);
-	  gtk_file_info_free (file_info);
+	  retval = (g_file_info_get_file_type (file_info) == G_FILE_TYPE_DIRECTORY);
+	  g_object_unref (file_info);
 	}
     }
 

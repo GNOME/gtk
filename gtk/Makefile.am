@@ -344,8 +344,7 @@ endif
 # Installed header files without compatibility guarantees
 # that are not included in gtk/gtk.h
 gtk_semi_private_h_sources =    \
-	gtktextlayout.h		\
-	gtkfilesystem.h
+	gtktextlayout.h
 
 # GTK+ header files that don't get installed
 gtk_private_h_sources =		\
@@ -361,8 +360,8 @@ gtk_private_h_sources =		\
 	gtkfilechooserprivate.h	\
 	gtkfilechoosersettings.h \
 	gtkfilechooserutils.h	\
+	gtkfilesystem.h		\
 	gtkfilesystemmodel.h	\
-	gtkfilesystemunix.h	\
 	gtkhsv.h		\
 	gtkiconcache.h		\
 	gtkintl.h		\
@@ -654,7 +653,6 @@ gtk_c_sources = $(gtk_base_c_sources)
 gtk_all_c_sources = $(gtk_base_c_sources)
 
 gtk_os_unix_c_sources = \
-	gtkfilesystemunix.c		\
 	gtkpagesetupunixdialog.c	\
 	gtkprinter.c			\
 	gtkprinteroption.c		\
@@ -669,7 +667,6 @@ gtk_os_unix_c_sources = \
 gtk_all_c_sources += $(gtk_os_unix_c_sources)
 if OS_UNIX
 gtk_private_h_sources += \
-	gtkfilesystemunix.h		\
 	gtkiconcachevalidator.h		\
 	gtkprintbackend.h		\
 	gtkprinter-private.h		\
@@ -682,12 +679,11 @@ gtk_c_sources += $(gtk_os_unix_c_sources)
 endif
 
 gtk_os_win32_c_sources = \
-	gtkfilesystemwin32.c		\
 	gtkprint-win32.c		\
 	gtkprintoperation-win32.c
 gtk_all_c_sources += $(gtk_os_win32_c_sources)
 if OS_WIN32
-gtk_private_h_sources += gtkfilesystemwin32.h gtkprint-win32.h
+gtk_private_h_sources += gtkprint-win32.h
 gtk_c_sources += $(gtk_os_win32_c_sources)
 endif
 
@@ -1242,8 +1238,6 @@ EXTRA_DIST +=                   \
 	gtkwin32embed.h		\
 	gtkwin32embedwidget.h	\
 	gtkwin32embedwidget.c	\
-	gtkfilesystemwin32.h	\
-	gtkfilesystemwin32.c	\
 	gtkprint-win32.h	\
 	gtkprint-win32.c	\
 	gtksearchenginequartz.h \
