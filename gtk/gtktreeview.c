@@ -92,10 +92,10 @@ typedef struct _TreeViewDragInfo TreeViewDragInfo;
 struct _TreeViewDragInfo
 {
   GdkModifierType start_button_mask;
-  GtkTargetList *source_target_list;
+  GtkTargetList *_unused_source_target_list;
   GdkDragAction source_actions;
 
-  GtkTargetList *dest_target_list;
+  GtkTargetList *_unused_dest_target_list;
 
   guint source_set : 1;
   guint dest_set : 1;
@@ -6539,28 +6539,8 @@ get_info (GtkTreeView *tree_view)
 }
 
 static void
-clear_source_info (TreeViewDragInfo *di)
-{
-  if (di->source_target_list)
-    gtk_target_list_unref (di->source_target_list);
-
-  di->source_target_list = NULL;
-}
-
-static void
-clear_dest_info (TreeViewDragInfo *di)
-{
-  if (di->dest_target_list)
-    gtk_target_list_unref (di->dest_target_list);
-
-  di->dest_target_list = NULL;
-}
-
-static void
 destroy_info (TreeViewDragInfo *di)
 {
-  clear_source_info (di);
-  clear_dest_info (di);
   g_slice_free (TreeViewDragInfo, di);
 }
 
@@ -6783,7 +6763,8 @@ set_destination_row (GtkTreeView    *tree_view,
       return FALSE; /* no longer a drop site */
     }
 
-  *target = gtk_drag_dest_find_target (widget, context, di->dest_target_list);
+  *target = gtk_drag_dest_find_target (widget, context,
+                                       gtk_drag_dest_get_target_list (widget));
   if (*target == GDK_NONE)
     {
       return FALSE;
@@ -6932,6 +6913,7 @@ static gboolean
 gtk_tree_view_maybe_begin_dragging_row (GtkTreeView      *tree_view,
                                         GdkEventMotion   *event)
 {
+  GtkWidget *widget = GTK_WIDGET (tree_view);
   GdkDragContext *context;
   TreeViewDragInfo *di;
   GtkTreePath *path = NULL;
@@ -6948,7 +6930,7 @@ gtk_tree_view_maybe_begin_dragging_row (GtkTreeView      *tree_view,
   if (tree_view->priv->pressed_button < 0)
     goto out;
 
-  if (!gtk_drag_check_threshold (GTK_WIDGET (tree_view),
+  if (!gtk_drag_check_threshold (widget,
                                  tree_view->priv->press_start_x,
                                  tree_view->priv->press_start_y,
                                  event->x, event->y))
@@ -6985,8 +6967,8 @@ gtk_tree_view_maybe_begin_dragging_row (GtkTreeView      *tree_view,
 
   retval = TRUE;
 
-  context = gtk_drag_begin (GTK_WIDGET (tree_view),
-                            di->source_target_list,
+  context = gtk_drag_begin (widget,
+                            gtk_drag_source_get_target_list (widget),
                             di->source_actions,
                             button,
                             (GdkEvent*)event);
@@ -12384,11 +12366,6 @@ gtk_tree_view_row_expanded (GtkTreeView *tree_view,
   return (node->children != NULL);
 }
 
-static const GtkTargetEntry row_targets[] = {
-  { "GTK_TREE_MODEL_ROW", GTK_TARGET_SAME_WIDGET, 0 }
-};
-
-
 /**
  * gtk_tree_view_get_reorderable:
  * @tree_view: a #GtkTreeView
@@ -12435,6 +12412,10 @@ gtk_tree_view_set_reorderable (GtkTreeView *tree_view,
 
   if (reorderable)
     {
+      const GtkTargetEntry row_targets[] = {
+        { "GTK_TREE_MODEL_ROW", GTK_TARGET_SAME_WIDGET, 0 }
+      };
+
       gtk_tree_view_enable_model_drag_source (tree_view,
 					      GDK_BUTTON1_MASK,
 					      row_targets,
@@ -13316,12 +13297,9 @@ gtk_tree_view_enable_model_drag_source (GtkTreeView              *tree_view,
 		       actions);
 
   di = ensure_info (tree_view);
-  clear_source_info (di);
 
   di->start_button_mask = start_button_mask;
-  di->source_target_list = gtk_target_list_new (targets, n_targets);
   di->source_actions = actions;
-
   di->source_set = TRUE;
 
   unset_reorderable (tree_view);
@@ -13354,11 +13332,6 @@ gtk_tree_view_enable_model_drag_dest (GtkTreeView              *tree_view,
                      actions);
 
   di = ensure_info (tree_view);
-  clear_dest_info (di);
-
-  if (targets)
-    di->dest_target_list = gtk_target_list_new (targets, n_targets);
-
   di->dest_set = TRUE;
 
   unset_reorderable (tree_view);
@@ -13384,7 +13357,6 @@ gtk_tree_view_unset_rows_drag_source (GtkTreeView *tree_view)
       if (di->source_set)
         {
           gtk_drag_source_unset (GTK_WIDGET (tree_view));
-          clear_source_info (di);
           di->source_set = FALSE;
         }
 
@@ -13415,7 +13387,6 @@ gtk_tree_view_unset_rows_drag_dest (GtkTreeView *tree_view)
       if (di->dest_set)
         {
           gtk_drag_dest_unset (GTK_WIDGET (tree_view));
-          clear_dest_info (di);
           di->dest_set = FALSE;
         }
 

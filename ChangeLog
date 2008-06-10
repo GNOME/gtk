@@ -1,5 +1,17 @@
 2008-06-10  Christian Persch  <chpe@gnome.org>
 
+	* gtk/gtktreeview.c: (destroy_info), (set_destination_row),
+	(gtk_tree_view_maybe_begin_dragging_row),
+	(gtk_tree_view_set_reorderable),
+	(gtk_tree_view_enable_model_drag_source),
+	(gtk_tree_view_enable_model_drag_dest),
+	(gtk_tree_view_unset_rows_drag_source),
+	(gtk_tree_view_unset_rows_drag_dest): Make
+	gtk_tree_view_enable_model_drag_[source|dest] compatible with
+	gtk_drag_[source|dest]_add_*_targets. Bug #506853.
+
+2008-06-10  Christian Persch  <chpe@gnome.org>
+
 	* gtk/gtktreeview.c: (gtk_tree_view_button_release_drag_column),
 	(dest_row_free), (set_dest_row), (ensure_info),
 	(gtk_tree_view_remove), (gtk_tree_view_put),
