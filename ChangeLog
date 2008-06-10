@@ -1,5 +1,10 @@
 2008-06-10  Paolo Borelli  <pborelli@katamail.com>
 
+	* gtk/gtkfilechooser.c (gtk_file_chooser_set_current_folder_uri)
+	use g_file_new_for_uri.
+
+2008-06-10  Paolo Borelli  <pborelli@katamail.com>
+
 	* gtk/gtkfilesystem.c (gtk_file_system_volume_render_icon): do not
 	leak the GIcon.
 

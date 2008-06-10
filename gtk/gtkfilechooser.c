@@ -954,7 +954,7 @@ gtk_file_chooser_set_current_folder_uri (GtkFileChooser *chooser,
   g_return_val_if_fail (GTK_IS_FILE_CHOOSER (chooser), FALSE);
   g_return_val_if_fail (uri != NULL, FALSE);
 
-  file = g_file_new_for_path (uri);
+  file = g_file_new_for_uri (uri);
   result = _gtk_file_chooser_set_current_folder_file (chooser, file, NULL);
   g_object_unref (file);
 
