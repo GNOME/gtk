@@ -496,6 +496,7 @@ gail_text_view_set_caret_offset (AtkText *text,
 
   gtk_text_buffer_get_iter_at_offset (buffer,  &pos_itr, offset);
   gtk_text_buffer_place_cursor (buffer, &pos_itr);
+  gtk_text_view_scroll_to_iter (view, &pos_itr, 0, FALSE, 0, 0);
   return TRUE;
 }
 

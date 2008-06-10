@@ -1,3 +1,9 @@
+2008-06-10  Li Yuan  <li.yuan@sun.com>
+
+	* gailtextview.c: (gail_text_view_set_caret_offset):
+	Automatically scroll text caret to make it visible, when AT
+	sets its offset.
+
 2008-06-06  Li Yuan  <li.yuan@sun.com>
 
 	* gail/gaillabel.c: (gail_label_real_notify_gtk):
