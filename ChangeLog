@@ -1,3 +1,11 @@
+2008-06-10  Christian Persch  <chpe@gnome.org>
+
+	* gtk/gtktreeview.c: (gtk_tree_view_button_release_drag_column),
+	(dest_row_free), (set_dest_row), (ensure_info),
+	(gtk_tree_view_remove), (gtk_tree_view_put),
+	(gtk_tree_view_set_column_drag_info): Use GSlice. Patch from
+	bug #506853.
+
 2008-06-10  Paolo Borelli  <pborelli@katamail.com>
 
 	* gtk/gtkfilechooser.c (gtk_file_chooser_set_current_folder_uri)

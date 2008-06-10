@@ -2848,6 +2848,7 @@ gtk_tree_view_button_release_drag_column (GtkWidget      *widget,
 					  GdkEventButton *event)
 {
   GtkTreeView *tree_view;
+  GList *l;
   gboolean rtl;
 
   tree_view = GTK_TREE_VIEW (widget);
@@ -2890,7 +2891,8 @@ gtk_tree_view_button_release_drag_column (GtkWidget      *widget,
   tree_view->priv->drag_column = NULL;
   gdk_window_hide (tree_view->priv->drag_window);
 
-  g_list_foreach (tree_view->priv->column_drag_info, (GFunc) g_free, NULL);
+  for (l = tree_view->priv->column_drag_info; l != NULL; l = l->next)
+    g_slice_free (GtkTreeViewColumnReorder, l->data);
   g_list_free (tree_view->priv->column_drag_info);
   tree_view->priv->column_drag_info = NULL;
   tree_view->priv->cur_reorder = NULL;
@@ -6437,9 +6439,9 @@ get_source_row (GdkDragContext *context)
 typedef struct
 {
   GtkTreeRowReference *dest_row;
-  gboolean             path_down_mode;
-  gboolean             empty_view_drop;
-  gboolean             drop_append_mode;
+  guint                path_down_mode   : 1;
+  guint                empty_view_drop  : 1;
+  guint                drop_append_mode : 1;
 }
 DestRow;
 
@@ -6449,9 +6451,8 @@ dest_row_free (gpointer data)
   DestRow *dr = (DestRow *)data;
 
   gtk_tree_row_reference_free (dr->dest_row);
-  g_free (dr);
+  g_slice_free (DestRow, dr);
 }
-
 
 static void
 set_dest_row (GdkDragContext *context,
@@ -6470,12 +6471,12 @@ set_dest_row (GdkDragContext *context,
       return;
     }
 
-  dr = g_new0 (DestRow, 1);
+  dr = g_slice_new (DestRow);
 
   dr->dest_row = gtk_tree_row_reference_new (model, dest_row);
-  dr->path_down_mode = path_down_mode;
-  dr->empty_view_drop = empty_view_drop;
-  dr->drop_append_mode = drop_append_mode;
+  dr->path_down_mode = path_down_mode != FALSE;
+  dr->empty_view_drop = empty_view_drop != FALSE;
+  dr->drop_append_mode = drop_append_mode != FALSE;
 
   g_object_set_data_full (G_OBJECT (context), I_("gtk-tree-view-dest-row"),
                           dr, (GDestroyNotify) dest_row_free);
@@ -6560,7 +6561,7 @@ destroy_info (TreeViewDragInfo *di)
 {
   clear_source_info (di);
   clear_dest_info (di);
-  g_free (di);
+  g_slice_free (TreeViewDragInfo, di);
 }
 
 static TreeViewDragInfo*
@@ -6572,7 +6573,7 @@ ensure_info (GtkTreeView *tree_view)
 
   if (di == NULL)
     {
-      di = g_new0 (TreeViewDragInfo, 1);
+      di = g_slice_new0 (TreeViewDragInfo);
 
       g_object_set_data_full (G_OBJECT (tree_view),
                               I_("gtk-tree-view-drag-info"),
@@ -7434,7 +7435,7 @@ gtk_tree_view_remove (GtkContainer *container,
 
 	  tree_view->priv->children = g_list_remove_link (tree_view->priv->children, tmp_list);
 	  g_list_free_1 (tmp_list);
-	  g_free (child);
+	  g_slice_free (GtkTreeViewChild, child);
 	  return;
 	}
 
@@ -8039,7 +8040,7 @@ gtk_tree_view_put (GtkTreeView *tree_view,
   g_return_if_fail (GTK_IS_TREE_VIEW (tree_view));
   g_return_if_fail (GTK_IS_WIDGET (child_widget));
 
-  child = g_new (GtkTreeViewChild, 1);
+  child = g_slice_new (GtkTreeViewChild);
 
   child->widget = child_widget;
   child->x = x;
@@ -9176,7 +9177,7 @@ gtk_tree_view_set_column_drag_info (GtkTreeView       *tree_view,
 	  left_column = cur_column;
 	  continue;
 	}
-      reorder = g_new (GtkTreeViewColumnReorder, 1);
+      reorder = g_slice_new0 (GtkTreeViewColumnReorder);
       reorder->left_column = left_column;
       left_column = reorder->right_column = cur_column;
 
@@ -9188,7 +9189,7 @@ gtk_tree_view_set_column_drag_info (GtkTreeView       *tree_view,
       ((left_column != column) &&
        (* tree_view->priv->column_drop_func) (tree_view, column, left_column, NULL, tree_view->priv->column_drop_func_data)))
     {
-      reorder = g_new (GtkTreeViewColumnReorder, 1);
+      reorder = g_slice_new0 (GtkTreeViewColumnReorder);
       reorder->left_column = left_column;
       reorder->right_column = NULL;
       tree_view->priv->column_drag_info = g_list_append (tree_view->priv->column_drag_info, reorder);
@@ -9208,7 +9209,7 @@ gtk_tree_view_set_column_drag_info (GtkTreeView       *tree_view,
        ((GtkTreeViewColumnReorder *)tree_view->priv->column_drag_info->next->data)->left_column == column))
     {
       for (tmp_list = tree_view->priv->column_drag_info; tmp_list; tmp_list = tmp_list->next)
-	g_free (tmp_list->data);
+	g_slice_free (GtkTreeViewColumnReorder, tmp_list->data);
       g_list_free (tree_view->priv->column_drag_info);
       tree_view->priv->column_drag_info = NULL;
       return;
